@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9BC30C4338F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 01:06:32 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E661AC4320A
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 01:06:43 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 54B5360EE9
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 01:06:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 54B5360EE9
+	by mail.kernel.org (Postfix) with ESMTPS id ADE8B60F58
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 01:06:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org ADE8B60F58
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3363C60B44;
-	Wed,  4 Aug 2021 01:06:32 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 806B640E58;
+	Wed,  4 Aug 2021 01:06:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XjBKgC-0SpQK; Wed,  4 Aug 2021 01:06:30 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id WgPqoNnVx0XR; Wed,  4 Aug 2021 01:06:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4CDB060B4A;
-	Wed,  4 Aug 2021 01:06:29 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 96A8440E53;
+	Wed,  4 Aug 2021 01:06:41 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1A68F1BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:22:55 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 400AF1BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:22:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D498940EB3
+ by smtp2.osuosl.org (Postfix) with ESMTP id E186A4149D
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MWhJK5cKuJbo for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:10:47 +0000 (UTC)
+ with ESMTP id lKQUadVJLmnj for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:10:46 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id AEBEE40F2A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5360A40EAE
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:32 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 0EF8087C2D; Tue,  3 Aug 2021 21:10:25 +0000 (UTC)
+ id A556387C2D; Tue,  3 Aug 2021 21:10:24 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sun, 1 Aug 2021 11:35:20 +0200
+Date: Sun, 1 Aug 2021 00:02:50 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: b8fbe933051609f4b906ef713a41a8741cf82476
-X-Git-Newrev: 2203d1b3ce7654c8224e1b18d45d2b8e36f5c1f4
+X-Git-Oldrev: be38432532b23275869a3a914c0ad0031323259c
+X-Git-Newrev: b6b572eb4f35d5385a14760428cc13d9962825a7
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211025.0EF8087C2D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/intel-mediasdk: bump
- version to 21.2.3
+Message-Id: <20210803211024.A556387C2D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/gtest: drop
+ unrecognized option
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,72 +70,31 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2203d1b3ce7654c8224e1b18d45d2b8e36f5c1f4
+commit: https://git.buildroot.net/buildroot/commit/?id=b6b572eb4f35d5385a14760428cc13d9962825a7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Rebased patch.
+BUILD_GTEST has been dropped from gtest since version 1.8.1 and
+https://github.com/google/googletest/commit/aff0379441a392d618ec87b6d55a29070e97eaf1
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/intel-mediasdk/0001-Don-t-force-fstack-protector.patch | 6 ++++--
- package/intel-mediasdk/intel-mediasdk.hash                     | 2 +-
- package/intel-mediasdk/intel-mediasdk.mk                       | 2 +-
- 3 files changed, 6 insertions(+), 4 deletions(-)
+ package/gtest/gtest.mk | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/package/intel-mediasdk/0001-Don-t-force-fstack-protector.patch b/package/intel-mediasdk/0001-Don-t-force-fstack-protector.patch
-index a33c218c0a..a7e3b70294 100644
---- a/package/intel-mediasdk/0001-Don-t-force-fstack-protector.patch
-+++ b/package/intel-mediasdk/0001-Don-t-force-fstack-protector.patch
-@@ -7,6 +7,8 @@ This allows the environment to decide whether SSP should be used or
- not, for example to support toolchains that don't have SSP support.
+diff --git a/package/gtest/gtest.mk b/package/gtest/gtest.mk
+index 29c85e698f..474d127312 100644
+--- a/package/gtest/gtest.mk
++++ b/package/gtest/gtest.mk
+@@ -44,8 +44,6 @@ ifeq ($(BR2_STATIC_LIBS),)
+ GTEST_CONF_OPTS += -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+ endif
  
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+[Bernd: rebased for 21.2.3]
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- ---
-  api/mfx_dispatch/linux/CMakeLists.txt | 2 +-
-  builder/FindPackages.cmake            | 4 ++--
-@@ -16,7 +18,7 @@ diff --git a/api/mfx_dispatch/linux/CMakeLists.txt b/api/mfx_dispatch/linux/CMak
- index 15a4bd9a..4415f840 100644
- --- a/api/mfx_dispatch/linux/CMakeLists.txt
- +++ b/api/mfx_dispatch/linux/CMakeLists.txt
--@@ -100,7 +100,7 @@ target_link_libraries(mfx dl)
-+@@ -101,7 +101,7 @@ target_link_libraries(mfx dl)
-  get_api_version(MFX_VERSION_MAJOR MFX_VERSION_MINOR)
-  
-  set_target_properties( mfx PROPERTIES LINK_FLAGS
-@@ -38,7 +40,7 @@ index 7e36ae2d..5b8b9b9d 100644
-  #  message( STATUS "Libva located at: ${PKG_LIBVA_LIBRARY_DIRS}" )
-  
-    if( ARGV1 MATCHES hw AND Linux )
--@@ -448,7 +448,7 @@ function(configure_dependencies target dependencies variant)
-+@@ -445,7 +445,7 @@ function(configure_dependencies target dependencies variant)
-    endforeach()
-  
-    set(SCOPE_CFLAGS ${SCOPE_CFLAGS} PARENT_SCOPE)
-diff --git a/package/intel-mediasdk/intel-mediasdk.hash b/package/intel-mediasdk/intel-mediasdk.hash
-index 27cfdda08d..7ae892b3bf 100644
---- a/package/intel-mediasdk/intel-mediasdk.hash
-+++ b/package/intel-mediasdk/intel-mediasdk.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  f7750bd3a307d796e71a3d4ebb16a730b2e9364669513e110e9ec59af159b4cd  intel-mediasdk-21.2.2.tar.gz
-+sha256  7791be83e5e9f6d55f31d6ad9037012fc78b846724644b9db2087d1b7dfec078  intel-mediasdk-21.2.3.tar.gz
- sha256  dfd67773578903698f9ff4a61eb8f2d84810cbecd56f3f3cee8c649f813b6ea6  LICENSE
-diff --git a/package/intel-mediasdk/intel-mediasdk.mk b/package/intel-mediasdk/intel-mediasdk.mk
-index c3412d622d..0aff54cafe 100644
---- a/package/intel-mediasdk/intel-mediasdk.mk
-+++ b/package/intel-mediasdk/intel-mediasdk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--INTEL_MEDIASDK_VERSION = 21.2.2
-+INTEL_MEDIASDK_VERSION = 21.2.3
- INTEL_MEDIASDK_SITE = http://github.com/Intel-Media-SDK/MediaSDK/archive
- INTEL_MEDIASDK_LICENSE = MIT
- INTEL_MEDIASDK_LICENSE_FILES = LICENSE
+-GTEST_CONF_OPTS += -DBUILD_GTEST=ON
+-
+ ifeq ($(BR2_PACKAGE_GTEST_GMOCK),y)
+ GTEST_CONF_OPTS += -DBUILD_GMOCK=ON
+ else
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
