@@ -7,60 +7,58 @@ X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 85851C4338F
-	for <buildroot@archiver.kernel.org>; Sat, 31 Jul 2021 20:39:48 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 74010C4338F
+	for <buildroot@archiver.kernel.org>; Sat, 31 Jul 2021 20:40:01 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2C45260F92
-	for <buildroot@archiver.kernel.org>; Sat, 31 Jul 2021 20:39:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2C45260F92
+	by mail.kernel.org (Postfix) with ESMTPS id 3308F61019
+	for <buildroot@archiver.kernel.org>; Sat, 31 Jul 2021 20:40:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3308F61019
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=busybox.net
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EC778400C3;
-	Sat, 31 Jul 2021 20:39:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0371D606C6;
+	Sat, 31 Jul 2021 20:40:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9yfgZ6FdsMJx; Sat, 31 Jul 2021 20:39:46 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 4Y29y8Im0zMe; Sat, 31 Jul 2021 20:40:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CF0F8400F1;
-	Sat, 31 Jul 2021 20:39:45 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 02D201BF34F
- for <buildroot@lists.busybox.net>; Sat, 31 Jul 2021 20:39:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 495A1605F1;
+	Sat, 31 Jul 2021 20:39:59 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 0F2111BF34F
+ for <buildroot@lists.busybox.net>; Sat, 31 Jul 2021 20:39:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E6DA583267
- for <buildroot@lists.busybox.net>; Sat, 31 Jul 2021 20:39:34 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id F0F75605F1
+ for <buildroot@lists.busybox.net>; Sat, 31 Jul 2021 20:39:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=heine.tech
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KqeJSHUXQlhA for <buildroot@lists.busybox.net>;
- Sat, 31 Jul 2021 20:39:34 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id n02Hhemwy839 for <buildroot@lists.busybox.net>;
+ Sat, 31 Jul 2021 20:39:36 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
 Received: from mail.heine.tech (mail.heine.tech [195.201.24.99])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3A16D831C1
- for <buildroot@buildroot.org>; Sat, 31 Jul 2021 20:39:34 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 52D67605E5
+ for <buildroot@buildroot.org>; Sat, 31 Jul 2021 20:39:36 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 09F921827C5; Sat, 31 Jul 2021 22:39:29 +0200 (CEST)
+ with ESMTPSA id 93AFC1827C4; Sat, 31 Jul 2021 22:39:33 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=heine.tech; s=dkim;
- t=1627763970; h=from:subject:date:message-id:to:cc:mime-version:
+ t=1627763974; h=from:subject:date:message-id:to:cc:mime-version:
  content-transfer-encoding:in-reply-to:references;
- bh=SRa8FhQ2GnEHkS+Qa76ebtZKzcsDugO9VetdMJVsPjI=;
- b=b9nRCfA2MYD8Pd4HKWNiydHLxGPifq4c4Rweh2TUaxfgr0tEuORtouDbKBu6yz0JL7OgB7
- gZ8mN5TPqWoJjnnErLmH/fJjm/KgaNob/yXWrS+b9YJmowqUgCFD9MmI6LIC2WM5/8Wfk1
- ImfZMXpfLxvPo+W4DXjYv5u6SD9POkM=
+ bh=ViCNRw22GIGKWvBzEia+MsJNhTsCEJPSFg2xvz9AZyY=;
+ b=XYW/n++816IpQOKu6xAPO5K0P3t6lPkoZEL/EG1JnzA+WxvR8ceF9/QcTye/vlJiJK9RVO
+ ZnhQcH4NENSTemV5vJ4/AqM0hp+knSw/4e52OeUmWHUZsrZsoTFRSm09WNHk3L7EsOaexn
+ WI3YjrN05ou5N9p6NWr8lKCylNb7070=
 To: buildroot@buildroot.org
-Date: Sat, 31 Jul 2021 22:38:03 +0200
-Message-Id: <20210731203814.68125-2-buildroot@heine.tech>
+Date: Sat, 31 Jul 2021 22:38:04 +0200
+Message-Id: <20210731203814.68125-3-buildroot@heine.tech>
 In-Reply-To: <20210731203814.68125-1-buildroot@heine.tech>
 References: <20210731203814.68125-1-buildroot@heine.tech>
 MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.2
-Subject: [Buildroot] [PATCH 01/10] package/bluez5_utils: make tools optional
+Subject: [Buildroot] [PATCH 02/10] package/bluez5_utils: drop default y
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,95 +81,70 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-The tools are currently always build and installed. In many cases
-those tools are not needed in a production system. So make this
-step optional. This saves up to 2MB on the target.
+as discussed on the mailinglist this drops the default y
+entry for the now optional plugins and tools.
+This might break backward compatibility but gives new users
+a smaller initial footprint.
 
-Further tweak the deprecated option. It has effects when the --enable-tools
-is set as well as when --enable-client is set. So explain this in the
-options description and update the install step for gatttool to only be
-added when client is enabled.
+further add a select for the options that required the HID
+plugin at runtime.
 
 Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 ---
- package/bluez5_utils/Config.in       | 16 +++++++++++++---
- package/bluez5_utils/bluez5_utils.mk | 13 +++++++++++--
- 2 files changed, 24 insertions(+), 5 deletions(-)
+ package/bluez5_utils/Config.in | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
 diff --git a/package/bluez5_utils/Config.in b/package/bluez5_utils/Config.in
-index 40973e13cd..30e70fa03f 100644
+index 30e70fa03f..a8232279bd 100644
 --- a/package/bluez5_utils/Config.in
 +++ b/package/bluez5_utils/Config.in
-@@ -43,13 +43,23 @@ config BR2_PACKAGE_BLUEZ5_UTILS_MONITOR
+@@ -39,7 +39,6 @@ config BR2_PACKAGE_BLUEZ5_UTILS_CLIENT
+ 
+ config BR2_PACKAGE_BLUEZ5_UTILS_MONITOR
+ 	bool "build monitor utility"
+-	default y
  	help
  	  Build monitor utility btmon.
  
-+config BR2_PACKAGE_BLUEZ5_UTILS_TOOLS
-+	bool "build tools"
-+	help
-+	  Build tools like bluemoon, btattach, hex2hcd, l2test,
-+	  l2ping, mpris-proxy, rctest.
-+
- config BR2_PACKAGE_BLUEZ5_UTILS_DEPRECATED
- 	bool "install deprecated tools"
--	depends on BR2_PACKAGE_BLUEZ5_UTILS_CLIENT
-+	depends on BR2_PACKAGE_BLUEZ5_UTILS_CLIENT || BR2_PACKAGE_BLUEZ5_UTILS_TOOLS
+@@ -70,7 +69,6 @@ config BR2_PACKAGE_BLUEZ5_UTILS_EXPERIMENTAL
+ 
+ config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_AUDIO
+ 	bool "build audio plugins (a2dp and avrcp)"
+-	default y
  	help
--	  Build deprecated tools. These currently include:
-+	  Build deprecated tools.
-+
-+	  When "build tools" is selected these tools are installed:
- 	  hciattach, hciconfig, hcitool, hcidump, rfcomm, sdptool,
--	  ciptool, gatttool.
-+	  ciptool.
-+
-+	  When CLI client is enabled "gatttool" is installed.
+ 	  Build plugins for audio profiles (for A2DP and AVRCP).
  
- config BR2_PACKAGE_BLUEZ5_UTILS_EXPERIMENTAL
- 	bool "build experimental tools"
-diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
-index 3551b14a69..5f5a7f44c9 100644
---- a/package/bluez5_utils/bluez5_utils.mk
-+++ b/package/bluez5_utils/bluez5_utils.mk
-@@ -20,7 +20,6 @@ BLUEZ5_UTILS_DEPENDENCIES = \
- 	libglib2
+@@ -81,14 +79,12 @@ config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_HEALTH
  
- BLUEZ5_UTILS_CONF_OPTS = \
--	--enable-tools \
- 	--enable-library \
- 	--disable-cups \
- 	--disable-manpages \
-@@ -46,6 +45,12 @@ else
- BLUEZ5_UTILS_CONF_OPTS += --disable-monitor
- endif
+ config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_HID
+ 	bool "build hid plugin"
+-	default y
+ 	select BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_HOG
+ 	help
+ 	  Build plugin for HID (input) profiles.
  
-+ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_TOOLS),y)
-+BLUEZ5_UTILS_CONF_OPTS += --enable-tools
-+else
-+BLUEZ5_UTILS_CONF_OPTS += --disable-tools
-+endif
-+
- # experimental plugins
- ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_EXPERIMENTAL),y)
- BLUEZ5_UTILS_CONF_OPTS += --enable-experimental
-@@ -125,12 +130,16 @@ else
- BLUEZ5_UTILS_CONF_OPTS += --disable-sixaxis
- endif
+ config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_HOG
+ 	bool "build hog plugin"
+-	default y
+ 	help
+ 	  Build plugin for HoG (input) profiles.
  
--# install gatttool (For some reason upstream choose not to do it by default)
- ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_DEPRECATED),y)
-+# install gatttool (For some reason upstream choose not to do it by default)
-+# gattool depends on the client for readline
-+ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_CLIENT),y)
- define BLUEZ5_UTILS_INSTALL_GATTTOOL
- 	$(INSTALL) -D -m 0755 $(@D)/attrib/gatttool $(TARGET_DIR)/usr/bin/gatttool
- endef
- BLUEZ5_UTILS_POST_INSTALL_TARGET_HOOKS += BLUEZ5_UTILS_INSTALL_GATTTOOL
-+endif
-+
- # hciattach_bcm43xx defines default firmware path in `/etc/firmware`, but
- # Broadcom firmware blobs are usually located in `/lib/firmware`.
- BLUEZ5_UTILS_CONF_ENV += \
+@@ -130,6 +126,7 @@ config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_SAP
+ config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_SIXAXIS
+ 	bool "build sixaxis plugin"
+ 	depends on BR2_PACKAGE_HAS_UDEV
++	select BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_HID # runtime
+ 	help
+ 	  Build sixaxis plugin (support Sony Dualshock
+ 	  controller)
+@@ -145,6 +142,7 @@ config BR2_PACKAGE_BLUEZ5_UTILS_TEST
+ config BR2_PACKAGE_BLUEZ5_UTILS_TOOLS_HID2HCI
+ 	bool "build hid2hci tool"
+ 	depends on BR2_PACKAGE_HAS_UDEV
++	select BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_HID # runtime
+ 	help
+ 	  Build hid2hci tool
+ 
 -- 
 2.32.0
 
