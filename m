@@ -7,55 +7,55 @@ X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_2
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B87DC4338F
-	for <buildroot@archiver.kernel.org>; Sat, 31 Jul 2021 09:12:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 54FF3C4338F
+	for <buildroot@archiver.kernel.org>; Sat, 31 Jul 2021 09:13:07 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 21EDC6103B
-	for <buildroot@archiver.kernel.org>; Sat, 31 Jul 2021 09:12:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 21EDC6103B
+	by mail.kernel.org (Postfix) with ESMTPS id 18C0261040
+	for <buildroot@archiver.kernel.org>; Sat, 31 Jul 2021 09:13:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 18C0261040
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F2AD683BAA;
-	Sat, 31 Jul 2021 09:12:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E869783942;
+	Sat, 31 Jul 2021 09:13:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id J3IZylT8FlBF; Sat, 31 Jul 2021 09:12:53 +0000 (UTC)
+	with ESMTP id ohQDJEvf7zFo; Sat, 31 Jul 2021 09:13:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 50BF483942;
-	Sat, 31 Jul 2021 09:12:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 96E9A83BC1;
+	Sat, 31 Jul 2021 09:13:04 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 567651BF2F3
- for <buildroot@lists.busybox.net>; Sat, 31 Jul 2021 09:11:36 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6AB5B1BF2F3
+ for <buildroot@lists.busybox.net>; Sat, 31 Jul 2021 09:11:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3DB1D40277
- for <buildroot@lists.busybox.net>; Sat, 31 Jul 2021 09:11:36 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 57FEB4026D
+ for <buildroot@lists.busybox.net>; Sat, 31 Jul 2021 09:11:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pYUDhlD1TbLL for <buildroot@lists.busybox.net>;
- Sat, 31 Jul 2021 09:11:35 +0000 (UTC)
+ with ESMTP id ada6rqDuDYA4 for <buildroot@lists.busybox.net>;
+ Sat, 31 Jul 2021 09:11:39 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C845D40299
- for <buildroot@buildroot.org>; Sat, 31 Jul 2021 09:11:34 +0000 (UTC)
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D966340277
+ for <buildroot@buildroot.org>; Sat, 31 Jul 2021 09:11:38 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay12.mail.gandi.net (Postfix) with ESMTPSA id 660D4200007;
- Sat, 31 Jul 2021 09:11:31 +0000 (UTC)
-Date: Sat, 31 Jul 2021 11:11:29 +0200
+ by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 81B6FE0008;
+ Sat, 31 Jul 2021 09:11:36 +0000 (UTC)
+Date: Sat, 31 Jul 2021 11:11:34 +0200
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20210731111129.7e636b16@windsurf>
-In-Reply-To: <20210731072033.252992-1-fontaine.fabrice@gmail.com>
-References: <20210731072033.252992-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210731111134.4070c309@windsurf>
+In-Reply-To: <20210731080051.505781-1-fontaine.fabrice@gmail.com>
+References: <20210731080051.505781-1-fontaine.fabrice@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/pkcs11-helper: fix build with
- libnss
+Subject: Re: [Buildroot] [PATCH 1/1] package/freerdp: fix uclibc build
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -67,26 +67,26 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-On Sat, 31 Jul 2021 09:20:33 +0200
+On Sat, 31 Jul 2021 10:00:51 +0200
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Build is broken since bump of libnss to version 3.68 in commit
-> 0a73b9b962421ce7a72c88e5f5bbd8849f21b041
+> Fix build failure with uclibc raised since bump to version 2.4.0 in
+> commit 196b29f3273035888d8743075be453649ad82e93
 > 
 > Fixes:
->  - http://autobuild.buildroot.org/results/1e8113d638fcb73538329511eeac9f5e7cb04d6a
+>  - http://autobuild.buildroot.org/results/31e770a330158035e24b7b952bec0030138482b7
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  .../0001-nss-use-nss-pkcs11-h.patch           | 62 +++++++++++++++++++
->  1 file changed, 62 insertions(+)
->  create mode 100644 package/pkcs11-helper/0001-nss-use-nss-pkcs11-h.patch
+>  ...ude-winpr-file.h-fix-build-on-uclibc.patch | 39 +++++++++++++++++++
+>  1 file changed, 39 insertions(+)
+>  create mode 100644 package/freerdp/0003-winpr-include-winpr-file.h-fix-build-on-uclibc.patch
 
 Applied to master, thanks.
 
