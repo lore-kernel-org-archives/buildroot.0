@@ -2,57 +2,56 @@ Return-Path: <SRS0=zrjq=MX=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D0C44C4338F
-	for <buildroot@archiver.kernel.org>; Sat, 31 Jul 2021 22:00:13 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D8B5FC4338F
+	for <buildroot@archiver.kernel.org>; Sat, 31 Jul 2021 22:04:58 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 758C060F56
-	for <buildroot@archiver.kernel.org>; Sat, 31 Jul 2021 22:00:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 758C060F56
+	by mail.kernel.org (Postfix) with ESMTPS id 73FF760241
+	for <buildroot@archiver.kernel.org>; Sat, 31 Jul 2021 22:04:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 73FF760241
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 45B5A403DF;
-	Sat, 31 Jul 2021 22:00:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2C1E483404;
+	Sat, 31 Jul 2021 22:04:58 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id hWk3HU7xx7Xf; Sat, 31 Jul 2021 22:04:57 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6E29883280;
+	Sat, 31 Jul 2021 22:04:56 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 64D521BF2C1
+ for <buildroot@lists.busybox.net>; Sat, 31 Jul 2021 22:04:54 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5329D4027B
+ for <buildroot@lists.busybox.net>; Sat, 31 Jul 2021 22:04:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id M9HkQIj8Rcee; Sat, 31 Jul 2021 22:00:12 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A832F403D8;
-	Sat, 31 Jul 2021 22:00:11 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6D80E1BF5E6
- for <buildroot@lists.busybox.net>; Sat, 31 Jul 2021 22:00:10 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5BFC840124
- for <buildroot@lists.busybox.net>; Sat, 31 Jul 2021 22:00:10 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id H0vr2jo4fnmZ for <buildroot@lists.busybox.net>;
- Sat, 31 Jul 2021 22:00:09 +0000 (UTC)
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RWmAP755GkT9 for <buildroot@lists.busybox.net>;
+ Sat, 31 Jul 2021 22:04:53 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 349D9400C3
- for <buildroot@buildroot.org>; Sat, 31 Jul 2021 22:00:09 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id AEE07401CE
+ for <buildroot@buildroot.org>; Sat, 31 Jul 2021 22:04:53 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 67DFE8A39F; Sat, 31 Jul 2021 22:00:08 +0000 (UTC)
+ id E32E58A3F4; Sat, 31 Jul 2021 22:04:52 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sat, 31 Jul 2021 23:59:39 +0200
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 4c35085470291250d9e075f4bc9686ae9982a3bb
-X-Git-Newrev: 9c76f35500d88c75949c0bab64621b7eb79efa9f
+Date: Sun, 1 Aug 2021 00:02:49 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: b61c0830c3b4bd6f6a64be543ce6f13f88bb4fa7
+X-Git-Newrev: 88556ef3b43b174684b45078e64b3fb15f808a59
 X-Patchwork-Hint: ignore
-Message-Id: <20210731220008.67DFE8A39F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/util-linux: bump
- version to 2.36.2
+Message-Id: <20210731220452.E32E58A3F4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/neard: update url
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,43 +69,32 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9c76f35500d88c75949c0bab64621b7eb79efa9f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=88556ef3b43b174684b45078e64b3fb15f808a59
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For details see [1].
+01.org url is permission denied. There seems to be no project page
+anymore. Use kernel.org repo with cleaner https url.
 
-[1] http://lkml.iu.edu/hypermail/linux/kernel/2102.1/07236.html
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/util-linux/util-linux.hash | 2 +-
- package/util-linux/util-linux.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/neard/Config.in | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/package/util-linux/util-linux.hash b/package/util-linux/util-linux.hash
-index c5f5c69a4d..3f9fe39818 100644
---- a/package/util-linux/util-linux.hash
-+++ b/package/util-linux/util-linux.hash
-@@ -1,5 +1,5 @@
- # From https://www.kernel.org/pub/linux/utils/util-linux/v2.36/sha256sums.asc
--sha256  09fac242172cd8ec27f0739d8d192402c69417617091d8c6e974841568f37eed  util-linux-2.36.1.tar.xz
-+sha256  f7516ba9d8689343594356f0e5e1a5f0da34adfbc89023437735872bb5024c5f  util-linux-2.36.2.tar.xz
- # License files, locally calculated
- sha256  869660b5269f4f40a8a679da7f403ea3a6e71d46087aab5e14871b09bcb55955  README.licensing
- sha256  9b718a9460fed5952466421235bc79eb49d4e9eacc920d7a9dd6285ab8fd6c6d  Documentation/licenses/COPYING.BSD-3-Clause
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index 09acaca1a7..4bc7a11294 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -8,7 +8,7 @@
- # util-linux-libs/util-linux-libs.mk needs to be updated accordingly as well.
+diff --git a/package/neard/Config.in b/package/neard/Config.in
+index 277e467ced..a60fb3f8f6 100644
+--- a/package/neard/Config.in
++++ b/package/neard/Config.in
+@@ -13,9 +13,7 @@ config BR2_PACKAGE_NEARD
+ 	  daemon is a part of the NFC stack provided by the Linux NFC
+ 	  project.
  
- UTIL_LINUX_VERSION_MAJOR = 2.36
--UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR).1
-+UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR).2
- UTIL_LINUX_SOURCE = util-linux-$(UTIL_LINUX_VERSION).tar.xz
- UTIL_LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/util-linux/v$(UTIL_LINUX_VERSION_MAJOR)
+-	  http://git.kernel.org/?p=network/nfc/neard.git;a=summary
+-
+-	  https://01.org/linux-nfc/
++	  https://git.kernel.org/pub/scm/network/nfc/neard.git
+ 
+ if BR2_PACKAGE_NEARD
  
 _______________________________________________
 buildroot mailing list
