@@ -8,85 +8,82 @@ X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 810E8C4338F
-	for <buildroot@archiver.kernel.org>; Sat, 31 Jul 2021 08:38:14 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 07E10C4338F
+	for <buildroot@archiver.kernel.org>; Sat, 31 Jul 2021 08:49:46 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2B4D46103B
-	for <buildroot@archiver.kernel.org>; Sat, 31 Jul 2021 08:38:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2B4D46103B
+	by mail.kernel.org (Postfix) with ESMTPS id A180F60FE7
+	for <buildroot@archiver.kernel.org>; Sat, 31 Jul 2021 08:49:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A180F60FE7
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D531940286;
-	Sat, 31 Jul 2021 08:38:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 652CE834BA;
+	Sat, 31 Jul 2021 08:49:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wSZohskou04J; Sat, 31 Jul 2021 08:38:12 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id YdSD1ePQZTKT; Sat, 31 Jul 2021 08:49:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CA4124026D;
-	Sat, 31 Jul 2021 08:38:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C434883415;
+	Sat, 31 Jul 2021 08:49:43 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3ECAD1BF836
- for <buildroot@lists.busybox.net>; Sat, 31 Jul 2021 08:38:10 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4E49D1BF836
+ for <buildroot@lists.busybox.net>; Sat, 31 Jul 2021 08:49:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2C9D6830FB
- for <buildroot@lists.busybox.net>; Sat, 31 Jul 2021 08:38:10 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4755E83415
+ for <buildroot@lists.busybox.net>; Sat, 31 Jul 2021 08:49:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HmA5Ex9M9t7Y for <buildroot@lists.busybox.net>;
- Sat, 31 Jul 2021 08:38:09 +0000 (UTC)
+ with ESMTP id UvrgL13xSVvp for <buildroot@lists.busybox.net>;
+ Sat, 31 Jul 2021 08:49:41 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
- [IPv6:2a00:1450:4864:20::435])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 49357829BB
- for <buildroot@buildroot.org>; Sat, 31 Jul 2021 08:38:09 +0000 (UTC)
-Received: by mail-wr1-x435.google.com with SMTP id k4so3605094wrc.0
- for <buildroot@buildroot.org>; Sat, 31 Jul 2021 01:38:09 -0700 (PDT)
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
+ [IPv6:2a00:1450:4864:20::429])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 34D53833CA
+ for <buildroot@buildroot.org>; Sat, 31 Jul 2021 08:49:41 +0000 (UTC)
+Received: by mail-wr1-x429.google.com with SMTP id n12so14467071wrr.2
+ for <buildroot@buildroot.org>; Sat, 31 Jul 2021 01:49:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=1PCl1k1qzbfJBwDHkbJrLFPD+PyP8sglSUPnb97vBfc=;
- b=Zp/rS7ZaosMMSsWYgayh3tTEAbnR7a/VpepXyJxNcldrHwh/feTHf/qkR4dNYijQHo
- NvcNJZcq9mVxoA1Trkytqj+E7cMa/B3jNrDiSuCHjuzQBN1+bdpc6SRmad2oyryKQL2D
- DSG8MWb5EpJKVXVkyHVDjNjaOXu8nisvpgb1QmpYKOl6j3mQkscVaPKad8ComtPteyi8
- eE/IxhRHPCyRd627INPeuZ8uECUI5xNlEYSs8IDt52e5q0gt08f1oTJ8RQ+ny3Ri6Wvc
- Wso9NtH2YiPR7+hxQNt2NJfph+NlKOzclspXSt2XWhRK21KI2FXJMW9j2FTgum+tW5N4
- XGXg==
+ bh=TluVO97RQrqg4off005EDOwGOQhoTiix7q/oVC7H6/s=;
+ b=pO/xFrmhmrXTsO3uiso4ertlOo3p1isH8Hf/oHMZImJDPfp9zvZevgk9wDD3/7MhBO
+ z6SZx/MyE9UBdzPKNJ4TvfZE9VAIFdafvednISaUYGh1lQfwKplxM9xrwEgLfuycREqK
+ QUeDscQ8CLMXIRg3jAGPG1u/ncTqYTGtox6PTdxKcgYo4BDGqRCS/6x+pw5JQErgFxBc
+ kaPWd9mOFmcTuGkdgHyer8qiQfzfY10DyXLxr7SM8l2yoyFrXvMwW5Gbd03fLl9ybkw9
+ j+FU7MVN27I7QtLdRSPV4QP+ZYgk9QfbHbn2E0nnTFBYtEG9+C3xyBNtslLA0wLBU0bz
+ Q28w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=1PCl1k1qzbfJBwDHkbJrLFPD+PyP8sglSUPnb97vBfc=;
- b=QtuBs3xanITDoRh2XpWCpdxCJZL4w8CiOZHTQCU8c8n+ruTtJH8OjluSjyhZrAiKta
- v2S3WFjWu4cXfRT3kPgiS5T3QImdlbD8fNoJdyzZ8tcmIy3SQWbIxha88i4UXMAJHb1z
- T/AJVoIOjZI13avxdqmKjv+0qQUjUrROzbvica11+xfSwMl/Plu6HtyqGWbn4FJMhlXR
- yydsVOM/UoGOhcT0//h4E5pE86x8Egp66qBv/kUumR7lDyAFFi3go1wPCledbvfZOfcW
- a0roh0/WzqrZL+2aDmznVPR6LnsK+sIviE13ws4adJ9E7FuM35zlU+qZXiFwjqOlrlqC
- 9+Ag==
-X-Gm-Message-State: AOAM532vqIXQOO9ZQLSdWwNq6kIwyWgSOxgYg4K21p2w7INWpgNGUrEQ
- smEvQbywYV5XxT30Q1VcF11VSKz77BOGAw==
-X-Google-Smtp-Source: ABdhPJwdMxEx6iJyNAhnj0h43zgtgZLU6Vg2Zv7Gu+PTRPC5sXCIN0M6v0hL6fXWUh8sn3+t0uvjKQ==
-X-Received: by 2002:a05:6000:1818:: with SMTP id
- m24mr7283423wrh.49.1627720687195; 
- Sat, 31 Jul 2021 01:38:07 -0700 (PDT)
+ bh=TluVO97RQrqg4off005EDOwGOQhoTiix7q/oVC7H6/s=;
+ b=lKwbGDr5IpQqARKYapFirF95EX/ZuRJbZm1m2k/92lIJddqBHhr/6wa9h0CIPzDtei
+ CAWC8viiLq+2hREb5b7y9p/Xhd4MjwIhCbW0eNEF9PmTn2gMLyOZzKS+0olBY5xXe/jN
+ KYnxP6l+p6+FfDIP0Z2XwN2yVSoCYvyAdFelQArmwc7rB8ltkjVFJOlbAV1g9ohas733
+ sh4TnRxGSzaD93OkL37aaHcZ9XSz3WajlmEnS/2WmUomVcKahhTOoRJ7W6fy3hcYJYa9
+ tsvl2uXYzuvi5891Wv348Q8vIIBTBmrrkyktBvJLbxYi15MOvN1yV7vOccpmeXjErjLW
+ iJZg==
+X-Gm-Message-State: AOAM533IE0fNk0KUjHlsVaM5nbv42iS+V4hNekVXzOt6B7w69OhAmGh4
+ LFDs+pn+0B5cVw8hfJ1RCI4yNsZ95zpBbQ==
+X-Google-Smtp-Source: ABdhPJwYS6tyJATfQ2E1+PTrgbgVI+qnfnQA5io6gzMTJE86bRI8bdfFEqmTLAzlKQMXJKmyJ2GKqg==
+X-Received: by 2002:a5d:6186:: with SMTP id j6mr7526452wru.115.1627721379149; 
+ Sat, 31 Jul 2021 01:49:39 -0700 (PDT)
 Received: from kali.home (pop.92-184-116-151.mobile.abo.orange.fr.
  [92.184.116.151])
- by smtp.gmail.com with ESMTPSA id v15sm4281318wmj.11.2021.07.31.01.38.06
+ by smtp.gmail.com with ESMTPSA id z17sm4443259wrt.47.2021.07.31.01.49.38
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 31 Jul 2021 01:38:06 -0700 (PDT)
+ Sat, 31 Jul 2021 01:49:38 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 31 Jul 2021 10:37:59 +0200
-Message-Id: <20210731083759.623465-1-fontaine.fabrice@gmail.com>
+Date: Sat, 31 Jul 2021 10:49:31 +0200
+Message-Id: <20210731084931.623919-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/apcupsd: fix SELinux
+Subject: [Buildroot] [PATCH 1/1] package/collectd: fix SELinux
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,37 +95,38 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-Add apache module as for now it is unconditionally used in apcupsd.fc to
-fix build failure raised since dc8b2905f1161918b856a9aff01a0607a50184ab
+Add apache module as for now it is unconditionally used in collectd.fc
+to fix build failure raised since
+4f20ad546fd89e8e2dee7b40ebea9878e72d082f
 
 Fixes:
- - No autobuilder failures yet
+ - http://autobuild.buildroot.org/results/94d8adab9fd0083e24d5112ae7daa56e7944793b
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/apcupsd/apcupsd.mk | 2 +-
+ package/collectd/collectd.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/apcupsd/apcupsd.mk b/package/apcupsd/apcupsd.mk
-index 34815ffc1c..502d1b7152 100644
---- a/package/apcupsd/apcupsd.mk
-+++ b/package/apcupsd/apcupsd.mk
-@@ -9,7 +9,7 @@ APCUPSD_SITE = http://downloads.sourceforge.net/project/apcupsd/apcupsd%20-%20St
- APCUPSD_LICENSE = GPL-2.0
- APCUPSD_LICENSE_FILES = COPYING
- APCUPSD_CPE_ID_VENDOR = apcupsd
--APCUPSD_SELINUX_MODULES = apcupsd
-+APCUPSD_SELINUX_MODULES = apache apcupsd
- APCUPSD_CONF_OPTS = --disable-test
+diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
+index 9901abfd16..9bfbc784ab 100644
+--- a/package/collectd/collectd.mk
++++ b/package/collectd/collectd.mk
+@@ -13,7 +13,7 @@ COLLECTD_INSTALL_STAGING = YES
+ COLLECTD_LICENSE = MIT (daemon, plugins), GPL-2.0 (plugins), LGPL-2.1 (plugins)
+ COLLECTD_LICENSE_FILES = COPYING
+ COLLECTD_CPE_ID_VENDOR = collectd
+-COLLECTD_SELINUX_MODULES = collectd
++COLLECTD_SELINUX_MODULES = apache collectd
  
- ifneq ($(BR2_PACKAGE_APCUPSD_MODBUS_USB)$(BR2_PACKAGE_APCUPSD_USB),)
+ # These require unmet dependencies, are fringe, pointless or deprecated
+ COLLECTD_PLUGINS_DISABLE = \
 -- 
 2.30.2
 
