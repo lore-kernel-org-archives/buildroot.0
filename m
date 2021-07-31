@@ -2,57 +2,56 @@ Return-Path: <SRS0=sxUg=M3=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 49757C4338F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:58:58 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C383BC4338F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:59:10 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1215F60F38
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:58:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1215F60F38
+	by mail.kernel.org (Postfix) with ESMTPS id 8BEA260F38
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:59:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8BEA260F38
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E44754248C;
-	Wed,  4 Aug 2021 00:58:57 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5D86C40630;
+	Wed,  4 Aug 2021 00:59:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cub8Mq6QD4vk; Wed,  4 Aug 2021 00:58:57 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id z0Qk_yfsUNNL; Wed,  4 Aug 2021 00:59:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3BDB04250A;
-	Wed,  4 Aug 2021 00:58:56 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 73BDF40330;
+	Wed,  4 Aug 2021 00:59:08 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1D9121BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:22:19 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2F3BD1BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:22:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 54AF840FB5
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8132D40F27
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WlkjlZ9m5Bcm for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:10:44 +0000 (UTC)
+ with ESMTP id om2426Dy1AFZ for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:10:45 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7919141465
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8ECAA41468
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:31 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id BDBDD87E2D; Tue,  3 Aug 2021 21:10:23 +0000 (UTC)
+ id DFB3887C2D; Tue,  3 Aug 2021 21:10:23 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
 Date: Sat, 31 Jul 2021 11:11:11 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 6b78d020851a3bf74a825db09d39e215bf54e5c3
-X-Git-Newrev: 60e11d60b05b9fdb2a454454ed967e0acfa100f0
+X-Git-Oldrev: 7905ac1f3458e9eea9762101625d372d6311ad79
+X-Git-Newrev: b3a68c2cf8695b156a215fa6d0dcb7bfa7df44e5
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211023.BDBDD87E2D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/freerdp: fix uclibc
- build
+Message-Id: <20210803211023.DFB3887C2D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/apcupsd: fix SELinux
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,66 +69,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=60e11d60b05b9fdb2a454454ed967e0acfa100f0
+commit: https://git.buildroot.net/buildroot/commit/?id=b3a68c2cf8695b156a215fa6d0dcb7bfa7df44e5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fix build failure with uclibc raised since bump to version 2.4.0 in
-commit 196b29f3273035888d8743075be453649ad82e93
+Add apache module as for now it is unconditionally used in apcupsd.fc to
+fix build failure raised since dc8b2905f1161918b856a9aff01a0607a50184ab
 
 Fixes:
- - http://autobuild.buildroot.org/results/31e770a330158035e24b7b952bec0030138482b7
+ - No autobuilder failures yet
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...-include-winpr-file.h-fix-build-on-uclibc.patch | 39 ++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
+ package/apcupsd/apcupsd.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/freerdp/0003-winpr-include-winpr-file.h-fix-build-on-uclibc.patch b/package/freerdp/0003-winpr-include-winpr-file.h-fix-build-on-uclibc.patch
-new file mode 100644
-index 0000000000..d8dfe13d1b
---- /dev/null
-+++ b/package/freerdp/0003-winpr-include-winpr-file.h-fix-build-on-uclibc.patch
-@@ -0,0 +1,39 @@
-+From 21036304f909eae9f7506f48703ba1c74724342b Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 31 Jul 2021 09:49:27 +0200
-+Subject: [PATCH] winpr/include/winpr/file.h: fix build on uclibc
-+
-+Include stdio.h to fix the following build failure with uclibc raised
-+since version 2.4.0 and
-+https://github.com/FreeRDP/FreeRDP/commit/eb6777ea69b022c9e43a1576a2192a1cb807b1e6:
-+
-+In file included from /tmp/instance-0/output-1/build/freerdp-2.4.0/winpr/libwinpr/utils/lodepng/lodepng.c:30:
-+/tmp/instance-0/output-1/build/freerdp-2.4.0/winpr/include/winpr/file.h:524:11: error: unknown type name 'FILE'
-+ WINPR_API FILE* winpr_fopen(const char* path, const char* mode);
-+           ^~~~
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/31e770a330158035e24b7b952bec0030138482b7
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/FreeRDP/FreeRDP/pull/7205]
-+---
-+ winpr/include/winpr/file.h | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/winpr/include/winpr/file.h b/winpr/include/winpr/file.h
-+index 48a29f9f5..79c9b392c 100644
-+--- a/winpr/include/winpr/file.h
-++++ b/winpr/include/winpr/file.h
-+@@ -30,6 +30,8 @@
-+ 
-+ #ifndef _WIN32
-+ 
-++#include <stdio.h>
-++
-+ #ifndef MAX_PATH
-+ #define MAX_PATH 260
-+ #endif
-+-- 
-+2.30.2
-+
+diff --git a/package/apcupsd/apcupsd.mk b/package/apcupsd/apcupsd.mk
+index 34815ffc1c..502d1b7152 100644
+--- a/package/apcupsd/apcupsd.mk
++++ b/package/apcupsd/apcupsd.mk
+@@ -9,7 +9,7 @@ APCUPSD_SITE = http://downloads.sourceforge.net/project/apcupsd/apcupsd%20-%20St
+ APCUPSD_LICENSE = GPL-2.0
+ APCUPSD_LICENSE_FILES = COPYING
+ APCUPSD_CPE_ID_VENDOR = apcupsd
+-APCUPSD_SELINUX_MODULES = apcupsd
++APCUPSD_SELINUX_MODULES = apache apcupsd
+ APCUPSD_CONF_OPTS = --disable-test
+ 
+ ifneq ($(BR2_PACKAGE_APCUPSD_MODBUS_USB)$(BR2_PACKAGE_APCUPSD_USB),)
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
