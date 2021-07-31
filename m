@@ -2,57 +2,57 @@ Return-Path: <SRS0=jXvl=M2=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6754CC4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:36:26 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 13640C4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:36:38 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2A26E61037
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:36:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2A26E61037
+	by mail.kernel.org (Postfix) with ESMTPS id D6E4761037
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:36:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D6E4761037
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0354483C8F;
-	Tue,  3 Aug 2021 22:36:25 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A40C740475;
+	Tue,  3 Aug 2021 22:36:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oG2kClvrCMcX; Tue,  3 Aug 2021 22:36:24 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id vhBRzIkfUoPU; Tue,  3 Aug 2021 22:36:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6D77783C8C;
-	Tue,  3 Aug 2021 22:36:23 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A46A01BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:11:32 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9509B40209;
+	Tue,  3 Aug 2021 22:36:35 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 01D531BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:11:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 97D1360A5F
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:23 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id BEBC340598
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id K0d0-HAiK0mj for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:10:22 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8oqGpHeK36mj for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:10:32 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id EBC0960902
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:22 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1138740592
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:32 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 41F7783FBA; Tue,  3 Aug 2021 21:10:15 +0000 (UTC)
+ id 5B67B87884; Tue,  3 Aug 2021 21:10:24 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sat, 24 Jul 2021 09:53:08 +0200
+Date: Sat, 31 Jul 2021 23:50:00 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: b350246df61671fa8f6b177e5015d4d2ac13f5d1
-X-Git-Newrev: 950a09fc56e76499258a843472d4fd5d1a08bf25
+X-Git-Oldrev: 28c118814dbc394a4600f025b8e0f0f38b0d9eae
+X-Git-Newrev: ddd0330fe1360de5843f72306d2c766e3b4e6124
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211015.41F7783FBA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/bluez5_utils: fix mesh
- build with musl
+Message-Id: <20210803211024.5B67B87884@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/olsr: backport
+ upstream patch to fix compat with gpsd 3.21
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,63 +70,68 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=950a09fc56e76499258a843472d4fd5d1a08bf25
+commit: https://git.buildroot.net/buildroot/commit/?id=ddd0330fe1360de5843f72306d2c766e3b4e6124
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-when compiling with mesh support and musl toolchain the build fails
-due to a missing include of limits.h for PATH_MAX in mesh-cfgtest.c.
+Since the update of gpsd to 3.21, olsr was failing to build with:
 
-Patch submitted upstream:
-https://lore.kernel.org/linux-bluetooth/20210723081039.30396-1-bluez@heine.tech
+src/gpsdclient.c: In function 'nmeaInfoFromGpsd':
+src/gpsdclient.c:373:14: error: 'struct gps_data_t' has no member named 'status'
+  373 |   if (gpsdata->status == STATUS_NO_FIX) {
+      |              ^~
+
+This is due to an API change in gpsd. This commit fixes that by
+backporting an upstream commit from olsr.
 
 Fixes:
-http://autobuild.buildroot.net/results/20cc47f54de0b0d4bdf108c3715c590ae8ab476f/
-http://autobuild.buildroot.net/results/003968b25906579dbcf5a95d1e43fec0ab504ef5/
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+  http://autobuild.buildroot.net/results/d8c5564b24ff5b646cdd786d07b3a45ce5fa01ea/
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0001-tools-mesh-cfgtest-include-limits.h.patch | 33 ++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+ ...4-pud-adapt-gpsdclient.c-to-new-gpsd-3.21.patch | 35 ++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-diff --git a/package/bluez5_utils/0001-tools-mesh-cfgtest-include-limits.h.patch b/package/bluez5_utils/0001-tools-mesh-cfgtest-include-limits.h.patch
+diff --git a/package/olsr/0004-pud-adapt-gpsdclient.c-to-new-gpsd-3.21.patch b/package/olsr/0004-pud-adapt-gpsdclient.c-to-new-gpsd-3.21.patch
 new file mode 100644
-index 0000000000..26c7f85e0c
+index 0000000000..8001343941
 --- /dev/null
-+++ b/package/bluez5_utils/0001-tools-mesh-cfgtest-include-limits.h.patch
-@@ -0,0 +1,33 @@
-+From 5158827fded7cb4daf550a5956aff0c74f6c38fc Mon Sep 17 00:00:00 2001
-+From: Michael Nosthoff <bluez@heine.tech>
-+Date: Thu, 22 Jul 2021 21:36:13 +0200
-+Subject: [PATCH BlueZ] tools/mesh-cfgtest: include limits.h
++++ b/package/olsr/0004-pud-adapt-gpsdclient.c-to-new-gpsd-3.21.patch
+@@ -0,0 +1,35 @@
++From 2f9ee6079b20fb5d3884472825a40c5c65550fa2 Mon Sep 17 00:00:00 2001
++From: Nick Hainke <vincent@systemli.org>
++Date: Sun, 30 May 2021 19:13:48 +0200
++Subject: [PATCH] pud: adapt gpsdclient.c to new gpsd 3.21
 +
-+mesh-cfgtest.c uses PATH_MAX so it should include limits.h.
++As mentioned:
++"Move gps_data_t->status to gps_fix_t.status for better fix merging"
++https://gitlab.com/gpsd/gpsd/-/commit/29991d6ffeb41ecfc8297db68bb68be0128c8514
 +
-+fixes compilation error when enabling mesh support with musl-based
-+toolchains observed in buildroot autobuilders.
-+
-+http://autobuild.buildroot.net/results/20cc47f54de0b0d4bdf108c3715c590ae8ab476f/
-+http://autobuild.buildroot.net/results/003968b25906579dbcf5a95d1e43fec0ab504ef5/
-+
-+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
++Signed-off-by: Nick Hainke <vincent@systemli.org>
++Upstream: 79a28cdb4083b66c5d3a5f9c0d70dbdc86c0420c
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 +---
-+ tools/mesh-cfgtest.c | 1 +
-+ 1 file changed, 1 insertion(+)
++ lib/pud/src/gpsdclient.c | 4 ++++
++ 1 file changed, 4 insertions(+)
 +
-+diff --git a/tools/mesh-cfgtest.c b/tools/mesh-cfgtest.c
-+index fa0474faa..116ab7f16 100644
-+--- a/tools/mesh-cfgtest.c
-++++ b/tools/mesh-cfgtest.c
-+@@ -21,6 +21,7 @@
-+ #include <ftw.h>
-+ #include <getopt.h>
-+ #include <libgen.h>
-++#include <limits.h>
-+ #include <signal.h>
-+ #include <stdio.h>
-+ #include <time.h>
++diff --git a/lib/pud/src/gpsdclient.c b/lib/pud/src/gpsdclient.c
++index 2a7a26ee..a2a9cee0 100644
++--- a/lib/pud/src/gpsdclient.c
+++++ b/lib/pud/src/gpsdclient.c
++@@ -370,7 +370,11 @@ void nmeaInfoFromGpsd(struct gps_data_t *gpsdata, NmeaInfo *info, struct GpsdCon
++           );
++ 
++   gpsdata->set &= ~STATUS_SET; /* always valid */
+++  #if GPSD_API_MAJOR_VERSION >= 10
+++  if (gpsdata->fix.status == STATUS_NO_FIX) {
+++  #else
++   if (gpsdata->status == STATUS_NO_FIX) {
+++  #endif
++     nmeaInfoClear(info);
++     nmeaTimeSet(&info->utc, &info->present, NULL);
++     return;
 +-- 
-+2.32.0
++2.31.1
 +
 _______________________________________________
 buildroot mailing list
