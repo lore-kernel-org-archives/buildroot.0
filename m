@@ -2,56 +2,60 @@ Return-Path: <SRS0=zrjq=MX=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-20.2 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_2 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E94B5C4338F
-	for <buildroot@archiver.kernel.org>; Sat, 31 Jul 2021 10:18:04 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E24A1C4338F
+	for <buildroot@archiver.kernel.org>; Sat, 31 Jul 2021 10:18:17 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9B28F60FE7
-	for <buildroot@archiver.kernel.org>; Sat, 31 Jul 2021 10:18:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9B28F60FE7
+	by mail.kernel.org (Postfix) with ESMTPS id 99AEC60F46
+	for <buildroot@archiver.kernel.org>; Sat, 31 Jul 2021 10:18:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 99AEC60F46
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 617584029B;
-	Sat, 31 Jul 2021 10:18:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 68DD3403FB;
+	Sat, 31 Jul 2021 10:18:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9XzlxMlSXeLW; Sat, 31 Jul 2021 10:18:03 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 9PwxgtoWVIt5; Sat, 31 Jul 2021 10:18:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 613AE4026D;
-	Sat, 31 Jul 2021 10:18:02 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 532E31BF388
- for <buildroot@lists.busybox.net>; Sat, 31 Jul 2021 10:18:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B4E5940428;
+	Sat, 31 Jul 2021 10:18:15 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A60091BF388
+ for <buildroot@lists.busybox.net>; Sat, 31 Jul 2021 10:18:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4F76583B34
- for <buildroot@lists.busybox.net>; Sat, 31 Jul 2021 10:18:01 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 94CEE60731
+ for <buildroot@lists.busybox.net>; Sat, 31 Jul 2021 10:18:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UAFeNXUD0u4h for <buildroot@lists.busybox.net>;
- Sat, 31 Jul 2021 10:18:00 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 982F483B2C
- for <buildroot@buildroot.org>; Sat, 31 Jul 2021 10:18:00 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id BE5B78A365; Sat, 31 Jul 2021 10:17:58 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9IYL8vREljF9 for <buildroot@lists.busybox.net>;
+ Sat, 31 Jul 2021 10:18:14 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id AB64E606E6
+ for <buildroot@buildroot.org>; Sat, 31 Jul 2021 10:18:13 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id B72B0240006;
+ Sat, 31 Jul 2021 10:18:11 +0000 (UTC)
+Date: Sat, 31 Jul 2021 12:18:10 +0200
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: buildroot@buildroot.org
-Date: Sat, 31 Jul 2021 12:17:55 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4d8ee4456a805c3ef626918abb6e4c49379ac0ec
-X-Git-Newrev: 8fb6678e0d49330e5495af27a048c0799ba8bb08
-X-Patchwork-Hint: ignore
-Message-Id: <20210731101758.BE5B78A365@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/tftpd: bump to latest git commit
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20210731121810.281556a4@windsurf>
+In-Reply-To: <20210718215516.3296585-1-fontaine.fabrice@gmail.com>
+References: <20210718215516.3296585-1-fontaine.fabrice@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/tftpd: bump to latest git commit
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,65 +67,35 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8fb6678e0d49330e5495af27a048c0799ba8bb08
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sun, 18 Jul 2021 23:55:16 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-- Update indention in hash file (two spaces)
-- This will fix a static build failure with gcc-10 thanks to
-  https://git.kernel.org/pub/scm/network/tftp/tftp-hpa.git/commit/?id=18ac1e26f756dd47fef33f5f706b0ec8fa696216
+> - Update indention in hash file (two spaces)
+> - This will fix a static build failure with gcc-10 thanks to
+>   https://git.kernel.org/pub/scm/network/tftp/tftp-hpa.git/commit/?id=18ac1e26f756dd47fef33f5f706b0ec8fa696216
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/913e8b75422c8beba60df5ea2e2c9e431364566e
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/tftpd/tftpd.hash | 6 +++---
+>  package/tftpd/tftpd.mk   | 7 ++++---
+>  2 files changed, 7 insertions(+), 6 deletions(-)
 
-Fixes:
- - http://autobuild.buildroot.org/results/913e8b75422c8beba60df5ea2e2c9e431364566e
+Applied to master, thanks.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/tftpd/tftpd.hash | 6 +++---
- package/tftpd/tftpd.mk   | 7 ++++---
- 2 files changed, 7 insertions(+), 6 deletions(-)
-
-diff --git a/package/tftpd/tftpd.hash b/package/tftpd/tftpd.hash
-index c876b2edc2..3cccb0f20e 100644
---- a/package/tftpd/tftpd.hash
-+++ b/package/tftpd/tftpd.hash
-@@ -1,5 +1,5 @@
--# From https://www.kernel.org/pub/software/network/tftp/tftp-hpa/sha256sums.asc
--sha256	afee361df96a2f88344e191f6a25480fd714e1d28d176c3f10cc43fa206b718b	tftp-hpa-5.2.tar.xz
-+# Locally calculated
-+sha256  c86520c30dab0b6bcbae021ab26d2ac63227696596d37a9b02aa3e56ec5c2e77  tftpd-b2b34cecc8cbc18ff6f1fc00bda6ae6e9011e6c7-br1.tar.gz
- 
- # Hash for license file
--sha256	5efef82650b8ece733e37790fc70f05e426c9e1ef9640d4ebcb04867bd3f5e28	tftpd/tftpd.c
-+sha256  67754ebd8f265571d3226ac97e521b1bd6fd8a61363ecd4ab7806a6f90efab92  tftpd/tftpd.c
-diff --git a/package/tftpd/tftpd.mk b/package/tftpd/tftpd.mk
-index 494e963d64..ffd52ce0d0 100644
---- a/package/tftpd/tftpd.mk
-+++ b/package/tftpd/tftpd.mk
-@@ -4,14 +4,15 @@
- #
- ################################################################################
- 
--TFTPD_VERSION = 5.2
--TFTPD_SOURCE = tftp-hpa-$(TFTPD_VERSION).tar.xz
--TFTPD_SITE = $(BR2_KERNEL_MIRROR)/software/network/tftp/tftp-hpa
-+TFTPD_VERSION = b2b34cecc8cbc18ff6f1fc00bda6ae6e9011e6c7
-+TFTPD_SITE = git://git.kernel.org/pub/scm/network/tftp/tftp-hpa.git
- TFTPD_CONF_OPTS = --without-tcpwrappers
- TFTPD_LICENSE = BSD-4-Clause
- TFTPD_LICENSE_FILES = tftpd/tftpd.c
- TFTPD_CPE_ID_VENDOR = tftpd-hpa_project
- TFTPD_CPE_ID_PRODUCT = tftpd-hpa
-+# From git
-+TFTPD_AUTORECONF = YES
- 
- define TFTPD_INSTALL_TARGET_CMDS
- 	$(INSTALL) -D $(@D)/tftp/tftp $(TARGET_DIR)/usr/bin/tftp
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
