@@ -2,57 +2,57 @@ Return-Path: <SRS0=sxUg=M3=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AA5CDC4338F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:59:23 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EDEBBC4338F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:59:35 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 63F3160F38
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:59:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 63F3160F38
+	by mail.kernel.org (Postfix) with ESMTPS id AE8AE60F56
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:59:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org AE8AE60F56
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3D28542519;
-	Wed,  4 Aug 2021 00:59:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8A0766F914;
+	Wed,  4 Aug 2021 00:59:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id P9vX-p-B37An; Wed,  4 Aug 2021 00:59:22 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 8LEuEd_pvOPB; Wed,  4 Aug 2021 00:59:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8CB284250E;
-	Wed,  4 Aug 2021 00:59:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C8B9960B2F;
+	Wed,  4 Aug 2021 00:59:33 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3379C1BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:22:21 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 441341BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:22:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 91D3740FB2
+ by smtp2.osuosl.org (Postfix) with ESMTP id A6E0640F12
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ykz7NbytDaQ5 for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:10:44 +0000 (UTC)
+ with ESMTP id QDW6LNb-Ryvb for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:10:47 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3B05E40F12
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:31 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7610B40EB0
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:32 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 7F37987C2D; Tue,  3 Aug 2021 21:10:23 +0000 (UTC)
+ id CD25287C2D; Tue,  3 Aug 2021 21:10:24 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Fri, 30 Jul 2021 23:36:52 +0200
+Date: Sun, 1 Aug 2021 00:02:50 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 46fde0f29363edd8233c4b20b97a702838aa541e
-X-Git-Newrev: 806b26950d51de22ffbbed0c975e7317982eeb30
+X-Git-Oldrev: 62cab101356c97432da482e168adaf065de65c4f
+X-Git-Newrev: e7c8da37fe70e10b5ca19267331e0f820445952a
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211023.7F37987C2D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/go: security bump
- version to 1.16.6
+Message-Id: <20210803211024.CD25287C2D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/dtc: bump to version
+ 1.6.1
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,70 +65,53 @@ List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0523151326489481788=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
---===============0523151326489481788==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=806b26950d51de22ffbbed0c975e7317982eeb30
+commit: https://git.buildroot.net/buildroot/commit/?id=e7c8da37fe70e10b5ca19267331e0f820445952a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-These minor releases include a security fix according to the new security policy (#44918).
+This will fix a build failure with gcc 11
 
-crypto/tls clients can panic when provided a certificate of the wrong type for the negotiated parameters.
-net/http clients performing HTTPS requests are also affected. The panic can be triggered by an attacker
-in a privileged network position without access to the server certificate's private key, as long as a trusted
-ECDSA or Ed25519 certificate for the server exists (or can be issued), or the client is configured with
-Config.InsecureSkipVerify. Clients that disable all TLS_RSA cipher suites (that is, TLS 1.0–1.2 cipher
-suites without ECDHE), as well as TLS 1.3-only clients, are unaffected.
+https://github.com/dgibson/dtc/releases/tag/v1.6.1
 
-This is CVE-2021-34558.
+Fixes:
+ - http://autobuild.buildroot.org/results/59305de179a5bde415cfd42d75e005b36b7ec4f6
 
-View the release notes for more information:
-
-https://golang.org/doc/devel/release.html#go1.16.minor
-
-Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/go/go.hash | 2 +-
- package/go/go.mk   | 2 +-
+ package/dtc/dtc.hash | 2 +-
+ package/dtc/dtc.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index bc6147bb52..cd7f2b3813 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
-@@ -1,3 +1,3 @@
- # From https://golang.org/dl/
--sha256  7bfa7e5908c7cc9e75da5ddf3066d7cbcf3fd9fa51945851325eebc17f50ba80  go1.16.5.src.tar.gz
-+sha256  a3a5d4bc401b51db065e4f93b523347a4d343ae0c0b08a65c3423b05a138037d  go1.16.6.src.tar.gz
- sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index 4252691343..7d6355df92 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
+diff --git a/package/dtc/dtc.hash b/package/dtc/dtc.hash
+index 902ce1baf9..29b7e0b121 100644
+--- a/package/dtc/dtc.hash
++++ b/package/dtc/dtc.hash
+@@ -1,5 +1,5 @@
+ # from https://www.kernel.org/pub/software/utils/dtc/sha256sums.asc
+-sha256  10503b0217e1b07933e29e8d347a00015b2431bea5f59afe0bed3af30340c82d  dtc-1.6.0.tar.xz
++sha256  65cec529893659a49a89740bb362f507a3b94fc8cd791e76a8d6a2b6f3203473  dtc-1.6.1.tar.xz
+ 
+ # Hash for license files
+ sha256  78e1e1ce5728a990d59c7de61d4741c49185d5129daf783b386380a214328d68  README.license
+diff --git a/package/dtc/dtc.mk b/package/dtc/dtc.mk
+index 749abc6cac..53f9c9c8df 100644
+--- a/package/dtc/dtc.mk
++++ b/package/dtc/dtc.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GO_VERSION = 1.16.5
-+GO_VERSION = 1.16.6
- GO_SITE = https://storage.googleapis.com/golang
- GO_SOURCE = go$(GO_VERSION).src.tar.gz
- 
-
---===============0523151326489481788==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-DTC_VERSION = 1.6.0
++DTC_VERSION = 1.6.1
+ DTC_SOURCE = dtc-$(DTC_VERSION).tar.xz
+ DTC_SITE = https://www.kernel.org/pub/software/utils/dtc
+ DTC_LICENSE = GPL-2.0+ or BSD-2-Clause (library)
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
 http://lists.busybox.net/mailman/listinfo/buildroot
-
---===============0523151326489481788==--
