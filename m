@@ -7,51 +7,51 @@ X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 71620C4338F
-	for <buildroot@archiver.kernel.org>; Sat, 31 Jul 2021 09:11:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C53A1C4338F
+	for <buildroot@archiver.kernel.org>; Sat, 31 Jul 2021 09:12:04 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 24A6B6103B
-	for <buildroot@archiver.kernel.org>; Sat, 31 Jul 2021 09:11:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 24A6B6103B
+	by mail.kernel.org (Postfix) with ESMTPS id 79E9D60EC0
+	for <buildroot@archiver.kernel.org>; Sat, 31 Jul 2021 09:12:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 79E9D60EC0
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EBC5F60733;
-	Sat, 31 Jul 2021 09:11:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 50999606A0;
+	Sat, 31 Jul 2021 09:12:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id whIVbQAzIW1d; Sat, 31 Jul 2021 09:11:51 +0000 (UTC)
+	with ESMTP id QEg2wU-nk1Uh; Sat, 31 Jul 2021 09:12:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 55FC960711;
-	Sat, 31 Jul 2021 09:11:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A623A60733;
+	Sat, 31 Jul 2021 09:12:02 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id EECD11BF95A
- for <buildroot@lists.busybox.net>; Sat, 31 Jul 2021 09:11:21 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id EE28A1BF2F3
+ for <buildroot@lists.busybox.net>; Sat, 31 Jul 2021 09:11:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DC73C40286
- for <buildroot@lists.busybox.net>; Sat, 31 Jul 2021 09:11:21 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E87BF40286
+ for <buildroot@lists.busybox.net>; Sat, 31 Jul 2021 09:11:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4d9xs4syLo_C for <buildroot@lists.busybox.net>;
+ with ESMTP id 25FSasaEKmIw for <buildroot@lists.busybox.net>;
  Sat, 31 Jul 2021 09:11:21 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0829440277
- for <buildroot@buildroot.org>; Sat, 31 Jul 2021 09:11:21 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 001B74026D
+ for <buildroot@buildroot.org>; Sat, 31 Jul 2021 09:11:20 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 54E718A338; Sat, 31 Jul 2021 09:11:19 +0000 (UTC)
+ id 4C3DD887C6; Sat, 31 Jul 2021 09:11:19 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
 Date: Sat, 31 Jul 2021 11:11:11 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7905ac1f3458e9eea9762101625d372d6311ad79
-X-Git-Newrev: b3a68c2cf8695b156a215fa6d0dcb7bfa7df44e5
+X-Git-Oldrev: bca1912e1f8e4386862b8cfa6460769ab6f02dd1
+X-Git-Newrev: 7905ac1f3458e9eea9762101625d372d6311ad79
 X-Patchwork-Hint: ignore
-Message-Id: <20210731091119.54E718A338@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/apcupsd: fix SELinux
+Message-Id: <20210731091119.4C3DD887C6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/cvs: fix SELinux
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,34 +69,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b3a68c2cf8695b156a215fa6d0dcb7bfa7df44e5
+commit: https://git.buildroot.net/buildroot/commit/?id=7905ac1f3458e9eea9762101625d372d6311ad79
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add apache module as for now it is unconditionally used in apcupsd.fc to
-fix build failure raised since dc8b2905f1161918b856a9aff01a0607a50184ab
+Add apache module as for now it is unconditionally used in cvs.fc
 
 Fixes:
- - No autobuilder failures yet
+ - http://autobuild.buildroot.org/results/838266bef1deec560e336d03a64d64fa1990c344
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/apcupsd/apcupsd.mk | 2 +-
+ package/cvs/cvs.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/apcupsd/apcupsd.mk b/package/apcupsd/apcupsd.mk
-index 34815ffc1c..502d1b7152 100644
---- a/package/apcupsd/apcupsd.mk
-+++ b/package/apcupsd/apcupsd.mk
-@@ -9,7 +9,7 @@ APCUPSD_SITE = http://downloads.sourceforge.net/project/apcupsd/apcupsd%20-%20St
- APCUPSD_LICENSE = GPL-2.0
- APCUPSD_LICENSE_FILES = COPYING
- APCUPSD_CPE_ID_VENDOR = apcupsd
--APCUPSD_SELINUX_MODULES = apcupsd
-+APCUPSD_SELINUX_MODULES = apache apcupsd
- APCUPSD_CONF_OPTS = --disable-test
+diff --git a/package/cvs/cvs.mk b/package/cvs/cvs.mk
+index 8200997d3a..bd1e04eee0 100644
+--- a/package/cvs/cvs.mk
++++ b/package/cvs/cvs.mk
+@@ -11,7 +11,7 @@ CVS_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/
+ CVS_LICENSE = GPL-1.0+, LGPL-2.0+, LGPL-2.1+ (glob)
+ CVS_LICENSE_FILES = COPYING COPYING.LIB lib/glob-libc.h
+ CVS_CPE_ID_VENDOR = gnu
+-CVS_SELINUX_MODULES = cvs
++CVS_SELINUX_MODULES = apache cvs
+ CVS_DEPENDENCIES = ncurses
  
- ifneq ($(BR2_PACKAGE_APCUPSD_MODBUS_USB)$(BR2_PACKAGE_APCUPSD_USB),)
+ CVS_CONF_ENV = \
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
