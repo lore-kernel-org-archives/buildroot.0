@@ -2,57 +2,57 @@ Return-Path: <SRS0=zrjq=MX=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C499CC4338F
-	for <buildroot@archiver.kernel.org>; Sat, 31 Jul 2021 18:56:53 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 90F53C4338F
+	for <buildroot@archiver.kernel.org>; Sat, 31 Jul 2021 19:54:36 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1E2E761040
-	for <buildroot@archiver.kernel.org>; Sat, 31 Jul 2021 18:56:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1E2E761040
+	by mail.kernel.org (Postfix) with ESMTPS id 15AAC60F35
+	for <buildroot@archiver.kernel.org>; Sat, 31 Jul 2021 19:54:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 15AAC60F35
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D93BD8355C;
-	Sat, 31 Jul 2021 18:56:52 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QZ1JmVudMPuZ; Sat, 31 Jul 2021 18:56:51 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D4D3683542;
-	Sat, 31 Jul 2021 18:56:50 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id BF1B71BF352
- for <buildroot@lists.busybox.net>; Sat, 31 Jul 2021 18:56:30 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AF562607B0
- for <buildroot@lists.busybox.net>; Sat, 31 Jul 2021 18:56:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C218560780;
+	Sat, 31 Jul 2021 19:54:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 934L5eS1G6pQ for <buildroot@lists.busybox.net>;
- Sat, 31 Jul 2021 18:56:29 +0000 (UTC)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id iR-joppLclKL; Sat, 31 Jul 2021 19:54:34 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 10B1D606B6;
+	Sat, 31 Jul 2021 19:54:34 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 8CD981BF83A
+ for <buildroot@lists.busybox.net>; Sat, 31 Jul 2021 19:54:32 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7B6E540240
+ for <buildroot@lists.busybox.net>; Sat, 31 Jul 2021 19:54:32 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zUi-HRfiQ3z1 for <buildroot@lists.busybox.net>;
+ Sat, 31 Jul 2021 19:54:31 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id F19AD607AD
- for <buildroot@buildroot.org>; Sat, 31 Jul 2021 18:56:29 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6FB65400C3
+ for <buildroot@buildroot.org>; Sat, 31 Jul 2021 19:54:31 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 746C08908B; Sat, 31 Jul 2021 18:56:29 +0000 (UTC)
+ id D6E2B86194; Sat, 31 Jul 2021 19:54:30 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sat, 31 Jul 2021 20:56:16 +0200
+Date: Sat, 31 Jul 2021 21:53:49 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: de669abcb40ea20a685c7269efd79f94ee95381d
-X-Git-Newrev: a6a1810711f8d634fe04ab33d24929595d227782
+X-Git-Oldrev: a6a1810711f8d634fe04ab33d24929595d227782
+X-Git-Newrev: 28c118814dbc394a4600f025b8e0f0f38b0d9eae
 X-Patchwork-Hint: ignore
-Message-Id: <20210731185629.746C08908B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/exiv2: fix patch with stack
- protector flag
+Message-Id: <20210731195430.D6E2B86194@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/cegui: add missing <string.h>
+ include
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,93 +70,63 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a6a1810711f8d634fe04ab33d24929595d227782
+commit: https://git.buildroot.net/buildroot/commit/?id=28c118814dbc394a4600f025b8e0f0f38b0d9eae
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-One of the files have CRLF line endings, which have been lost in the
-process, causing build issues. Also, we update the upstream status of
-the patch.
+Backport an upstream patch to fix a missing <string.h> include.
 
 Fixes:
 
-  http://autobuild.buildroot.net/results/31744f8476819c725f8c0024529515bb8059582d/
+  http://autobuild.buildroot.net/results/7507b3c5cdcae04804a750f688057adae93cd329/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...001-add-BUILD_WITH_STACK_PROTECTOR-option.patch | 40 ++++++++++++----------
- 1 file changed, 21 insertions(+), 19 deletions(-)
+ .../0001-XMLParser.cpp-include-string.h.patch      | 37 ++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
 
-diff --git a/package/exiv2/0001-add-BUILD_WITH_STACK_PROTECTOR-option.patch b/package/exiv2/0001-add-BUILD_WITH_STACK_PROTECTOR-option.patch
-index c82061661b..18684ebbfa 100644
---- a/package/exiv2/0001-add-BUILD_WITH_STACK_PROTECTOR-option.patch
-+++ b/package/exiv2/0001-add-BUILD_WITH_STACK_PROTECTOR-option.patch
-@@ -1,6 +1,6 @@
--From 8651c9f823ace70b6609b10aeef0c0740636b570 Mon Sep 17 00:00:00 2001
-+From 4bb57da5fb0bb0d7e747b9e325e9ec0876ffc1f9 Mon Sep 17 00:00:00 2001
- From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Thu, 1 Jul 2021 19:31:25 +0200
-+Date: Sat, 31 Jul 2021 16:36:50 +0200
- Subject: [PATCH] add BUILD_WITH_STACK_PROTECTOR option
- 
- Add BUILD_WITH_STACK_PROTECTOR to avoid the following build failure with
-@@ -15,38 +15,40 @@ enable SSP support
- Fixes:
-  - http://autobuild.buildroot.org/results/ae4635899124c602c70d2b342a76f95c34aa4a3d
- 
-+Upstream: https://github.com/Exiv2/exiv2/commit/f31c0eba098889899d29b7b0da830aee2b62a7b8
- Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/Exiv2/exiv2/pull/1756]
- ---
-  CMakeLists.txt            | 1 +
-- cmake/compilerFlags.cmake | 2 +-
-- 2 files changed, 2 insertions(+), 1 deletion(-)
-+ cmake/compilerFlags.cmake | 4 ++--
-+ 2 files changed, 3 insertions(+), 2 deletions(-)
- 
- diff --git a/CMakeLists.txt b/CMakeLists.txt
--index 9fe8b5f9..aabb3dca 100644
-+index 6f0da06a..0746ee14 100644
- --- a/CMakeLists.txt
- +++ b/CMakeLists.txt
--@@ -52,6 +52,7 @@ mark_as_advanced(
-+@@ -47,6 +47,7 @@ mark_as_advanced(
-      EXIV2_TEAM_USE_SANITIZERS
-  )
-  
- +option( BUILD_WITH_STACK_PROTECTOR    "Build with stack protector"                            ON )
-  option( BUILD_WITH_CCACHE             "Use ccache to speed up compilations"                   OFF )
-  option( BUILD_WITH_COVERAGE           "Add compiler flags to generate coverage stats"         OFF )
-- include(cmake/gcovr.cmake REQUIRED)
+diff --git a/package/cegui/0001-XMLParser.cpp-include-string.h.patch b/package/cegui/0001-XMLParser.cpp-include-string.h.patch
+new file mode 100644
+index 0000000000..e117d6220d
+--- /dev/null
++++ b/package/cegui/0001-XMLParser.cpp-include-string.h.patch
+@@ -0,0 +1,37 @@
++From b98ed87225fa3c0f156b0798ca5c285d8fa8fac1 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Tue, 15 Jun 2021 07:27:41 +0200
++Subject: [PATCH] XMLParser.cpp: include string.h
++
++Include string.h to avoid the following build failure:
++
++/home/buildroot/autobuild/run/instance-3/output-1/build/cegui-00b4e1fe174da53b7ed726ab5970ba51bd5b5ee0/cegui/src/XMLParserModules/RapidXML/XMLParser.cpp:73:5: error: 'memcpy' was not declared in this scope
++   73 |     memcpy(buf, source.getDataPtr(), size);
++      |     ^~~~~~
++
++Fixes:
++ - http://autobuild.buildroot.org/results/1cb09e5f52435efc505c61707b2d5d2ee871524b
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Upstream: 628f7edf4b420f752f1965ea11e5e747e3ff93b0
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ cegui/src/XMLParserModules/RapidXML/XMLParser.cpp | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/cegui/src/XMLParserModules/RapidXML/XMLParser.cpp b/cegui/src/XMLParserModules/RapidXML/XMLParser.cpp
++index 810ea6bbf..59822fc80 100644
++--- a/cegui/src/XMLParserModules/RapidXML/XMLParser.cpp
+++++ b/cegui/src/XMLParserModules/RapidXML/XMLParser.cpp
++@@ -38,6 +38,8 @@
++ #include "CEGUI/Logger.h"
++ #include "CEGUI/Exceptions.h"
 + 
- diff --git a/cmake/compilerFlags.cmake b/cmake/compilerFlags.cmake
--index c8a85c59..20f6ac53 100644
-+index 35faf501..0a646e50 100644
- --- a/cmake/compilerFlags.cmake
- +++ b/cmake/compilerFlags.cmake
--@@ -44,7 +44,7 @@ if ( MINGW OR UNIX OR MSYS ) # MINGW, Linux, APPLE, CYGWIN
--             if(HAS_FCF_PROTECTION)
--                 add_compile_options(-fcf-protection)
--             endif()
---            if(HAS_FSTACK_PROTECTOR_STRONG)
--+            if(BUILD_WITH_STACK_PROTECTOR AND HAS_FSTACK_PROTECTOR_STRONG)
--                 add_compile_options(-fstack-protector-strong)
--             endif()
--         endif()
-+@@ -33,8 +33,8 @@ if ( MINGW OR UNIX OR MSYS ) # MINGW, Linux, APPLE, CYGWIN
-+             endif()
-+             if(HAS_FCF_PROTECTION)
-+                 add_compile_options(-fcf-protection)
-+-            endif()
-+-            if(HAS_FSTACK_PROTECTOR_STRONG)
-++              endif()
-++	    if(BUILD_WITH_STACK_PROTECTOR AND HAS_FSTACK_PROTECTOR_STRONG)
-+                 add_compile_options(-fstack-protector-strong)
-+             endif()
-+         endif()
- -- 
--2.30.2
+++#include <string.h>
+++
++ // Start of CEGUI namespace section
++ namespace CEGUI
++ {
++-- 
 +2.31.1
- 
++
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
