@@ -2,77 +2,85 @@ Return-Path: <SRS0=zrjq=MX=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.5 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
+	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 09155C4338F
-	for <buildroot@archiver.kernel.org>; Sat, 31 Jul 2021 11:22:02 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D84AC4338F
+	for <buildroot@archiver.kernel.org>; Sat, 31 Jul 2021 11:29:30 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id AD13160EC0
-	for <buildroot@archiver.kernel.org>; Sat, 31 Jul 2021 11:22:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org AD13160EC0
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
+	by mail.kernel.org (Postfix) with ESMTPS id 9BFEC60184
+	for <buildroot@archiver.kernel.org>; Sat, 31 Jul 2021 11:29:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9BFEC60184
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 769C16075D;
-	Sat, 31 Jul 2021 11:22:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5FD3583B35;
+	Sat, 31 Jul 2021 11:29:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 74CxcfeydSbr; Sat, 31 Jul 2021 11:22:00 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id VMXyvp84E7Dw; Sat, 31 Jul 2021 11:29:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 96E8260754;
-	Sat, 31 Jul 2021 11:21:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9862F83B10;
+	Sat, 31 Jul 2021 11:29:27 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3321E1BF846
- for <buildroot@lists.busybox.net>; Sat, 31 Jul 2021 11:21:58 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1BE4C1BF846
+ for <buildroot@lists.busybox.net>; Sat, 31 Jul 2021 11:29:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 224188376D
- for <buildroot@lists.busybox.net>; Sat, 31 Jul 2021 11:21:58 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0AC2E83B10
+ for <buildroot@lists.busybox.net>; Sat, 31 Jul 2021 11:29:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6Pd7Pd0WBPP8 for <buildroot@lists.busybox.net>;
- Sat, 31 Jul 2021 11:21:54 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8B87E83750
- for <buildroot@buildroot.org>; Sat, 31 Jul 2021 11:21:54 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:bd5f:2690:7a2e:30fd])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id 9E16E780316;
- Sat, 31 Jul 2021 13:21:46 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1627730512;
- bh=tyxun0wHIy1kg/BcjDNmZZPTYbxGaDUmbaUXHaBKG5I=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=BFY6+n4dt2Wsk/QwL2mFi44Zzf4foJ3NxZ16UvGca7GDZrFy+Ozbu7ndGohLMy/BB
- /j3uiqt0vmDpa4XqUYyT5GLe3RxC2D/Mq+czSoPj+B/cO7pl6X3BTPCX9JhkDMJyhu
- b42LOL5frptidgewUkaaaXuBx5TcwLgvZ6t8kplkwKLkaML1dxvxhLBRLo1JPgUBrk
- KeHXVzpLndGJJjSi8+TJ1kK77v89BK7ijxW56NGDKLE+A1GpsqtISuQ9ks4ud+Bc8q
- rLy159ZjMtYkjQ1DTDMlGqNW0qQ6Fnct6B8TdIgHHIAr3v480v3VBR7+Q+LauOSWuk
- 5a9B6yWjUtfEA==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 31 Jul 2021 13:21:46 +0200
-Date: Sat, 31 Jul 2021 13:21:46 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20210731112146.GL3189549@scaer>
-References: <20210726185110.3333950-1-james.hilliard1@gmail.com>
+ with ESMTP id LNXDdXuQgAVF for <buildroot@lists.busybox.net>;
+ Sat, 31 Jul 2021 11:29:25 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com
+ [IPv6:2a00:1450:4864:20::134])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C1E31838DB
+ for <buildroot@buildroot.org>; Sat, 31 Jul 2021 11:29:24 +0000 (UTC)
+Received: by mail-lf1-x134.google.com with SMTP id h2so23575927lfu.4
+ for <buildroot@buildroot.org>; Sat, 31 Jul 2021 04:29:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc:content-transfer-encoding;
+ bh=YBxqcAjsqYNE29czq7gSDGHOpcsoCOnkpmIBZgTzzwc=;
+ b=SXosm6b3+DJTMYJRHnRWahiOoC5raUjb8G57WreDhlJ1PsvEQJGHJ/QEkniInYpqWV
+ WBqtzvXPQ+hayk58+WH/9STkcpBvVWgK11Uxq0UHlf5r4xXwXoYm7t5eQsoEhQjdZLXz
+ 71D6x3NnyQuuOrC7pfiTBtkR+HLciHDS9n2nXpvtq5wFZILRv1pVcPNWOedO1wlK5Bhv
+ 54Rb2Cu1u54mvdTMNuHpcGikUIQWyZ0yFnRlBcF/vghKnVvzF2Xgbwq6aC4Le/CbEkrw
+ v+4ADHRvj9qoU5dPVahJLeVn5/SPgW+RJozUHjOcxChnoOlj3/aM5+oct88EiSQCgNHu
+ 82lg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc:content-transfer-encoding;
+ bh=YBxqcAjsqYNE29czq7gSDGHOpcsoCOnkpmIBZgTzzwc=;
+ b=bOTYQUqjpRAoocLS3rkEYffRtJwknY9K+v3djAx5R7VO9Pzr4NVcwPd1hDZKp+cXXM
+ 15S+qn3UPkJGaWWpYQUN72HkQMDv2ZPhpV2Yc7FDV6R8n+kX/A+nbIjkCf65EXKR8Krp
+ UlGrKQsBV7qqVvS1MKfUOHQ7LyNwFy5kM9y2WolzebGZu3p6aN4oMsVol/AOzvReeq7z
+ wPg9LoR1n1/++MA247EHAIf5Eup03l3fMml98fc9KbEK23NSlXlv80KerZvjgbpCV7jx
+ IhLYd+neRBYkaaXL74iVL6WFoVMe9/6bPyDgPeu/GMTrmf4KBtcNEQXxom6vzvt9tr+I
+ AQWw==
+X-Gm-Message-State: AOAM530K4iUOBWTctvPViVvGADpvB19X1/K7pd4RbrrzZ6cXS2tP2Lsw
+ 55dJlw+dYQBUa+0zf3TsSb6NOaZDXbkVq47uFEk=
+X-Google-Smtp-Source: ABdhPJyYAKnAnpTQ2FtCC5jC80IUFwdHgc90w0afOS5/UMDZyT/b69q+vnnaOh2N+aoW5DNXwSQ2fSuqtu7hUxwMDJM=
+X-Received: by 2002:a19:e002:: with SMTP id x2mr5445919lfg.84.1627730962480;
+ Sat, 31 Jul 2021 04:29:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20210726185110.3333950-1-james.hilliard1@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH v2 1/1] package/system-config-printer: new
- package
+References: <20210701174719.112866-1-fontaine.fabrice@gmail.com>
+ <20210731095320.GJ3189549@scaer>
+In-Reply-To: <20210731095320.GJ3189549@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 31 Jul 2021 13:29:10 +0200
+Message-ID: <CAPi7W80vYLg88Tf1H0J0YFWvSQJgCpjBr8AV0VbAk+a9RRdRLQ@mail.gmail.com>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Subject: Re: [Buildroot] [PATCH 1/1] package/exiv2: fix build without SSP
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,132 +92,116 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Buildroot Mailing List <buildroot@buildroot.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-James, All,
-
-On 2021-07-26 12:51 -0600, James Hilliard spake thusly:
-> This package has some udev tools to assist with printer autodetection.
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
-> Changes v1 -> v2:
->   - update patch to merged upstream version
-> ---
->  package/Config.in                             |  1 +
->  ...n-to-disable-xmlto-manual-generation.patch | 73 +++++++++++++++++++
->  package/system-config-printer/Config.in       |  7 ++
->  .../system-config-printer.hash                |  3 +
->  .../system-config-printer.mk                  | 32 ++++++++
->  5 files changed, 116 insertions(+)
->  create mode 100644 package/system-config-printer/0001-Add-option-to-disable-xmlto-manual-generation.patch
->  create mode 100644 package/system-config-printer/Config.in
->  create mode 100644 package/system-config-printer/system-config-printer.hash
->  create mode 100644 package/system-config-printer/system-config-printer.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index 12b1323fc2..2bd507c993 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -2116,6 +2116,7 @@ menu "Networking applications"
->  	source "package/ctorrent/Config.in"
->  	source "package/cups/Config.in"
->  	source "package/cups-filters/Config.in"
-> +	source "package/system-config-printer/Config.in"
->  	source "package/dante/Config.in"
->  	source "package/darkhttpd/Config.in"
->  	source "package/dehydrated/Config.in"
-> diff --git a/package/system-config-printer/0001-Add-option-to-disable-xmlto-manual-generation.patch b/package/system-config-printer/0001-Add-option-to-disable-xmlto-manual-generation.patch
-> new file mode 100644
-> index 0000000000..e2cf395811
-> --- /dev/null
-> +++ b/package/system-config-printer/0001-Add-option-to-disable-xmlto-manual-generation.patch
-> @@ -0,0 +1,73 @@
-> +From 731c8d7e1f9edb527785d61f74031a5e5846554b Mon Sep 17 00:00:00 2001
-> +From: James Hilliard <james.hilliard1@gmail.com>
-> +Date: Sun, 25 Jul 2021 16:30:59 -0600
-> +Subject: [PATCH] Add option to disable xmlto manual generation.
-> +
-> +Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> +[james.hilliard1@gmail.com: backport from upstream commit
-> +95e0b461f5a46c74b00287aca65732ea2fc9d69b]
-> +---
-> + Makefile.am  | 7 ++++++-
-> + configure.ac | 5 +++++
-
-This patch touches configure.ac and Makefile.am, so...
-
-[--SNIP--]
-> diff --git a/package/system-config-printer/system-config-printer.mk b/package/system-config-printer/system-config-printer.mk
-> new file mode 100644
-> index 0000000000..5a796515e3
-> --- /dev/null
-> +++ b/package/system-config-printer/system-config-printer.mk
-> @@ -0,0 +1,32 @@
-> +################################################################################
-> +#
-> +# system-config-printer
-> +#
-> +################################################################################
-> +
-> +SYSTEM_CONFIG_PRINTER_VERSION = 1.5.15
-> +SYSTEM_CONFIG_PRINTER_SOURCE = system-config-printer-$(SYSTEM_CONFIG_PRINTER_VERSION).tar.xz
-> +SYSTEM_CONFIG_PRINTER_SITE = https://github.com/OpenPrinting/system-config-printer/releases/download/v$(SYSTEM_CONFIG_PRINTER_VERSION)
-> +SYSTEM_CONFIG_PRINTER_LICENSE = GPL-2.0
-> +SYSTEM_CONFIG_PRINTER_LICENSE_FILES = COPYING
-> +SYSTEM_CONFIG_PRINTER_DEPENDENCIES = cups
-
-... you need: SYSTEM_CONFIG_PRINTER_AUTORECONF = YES
-
-Otherwise, the autotools ,achinery will try to run autorconf on its
-own, and may/will fail because it is goign to be using the host's
-autoreconf et al., without the envirnement and options we need in the
-Buildroot context.
-
-Care to have a look and respin, please?
-
-Regards,
-Yann E. MORIN.
-
-> +ifeq ($(BR2_PACKAGE_LIBGLIB2),y)
-> +SYSTEM_CONFIG_PRINTER_DEPENDENCIES += libglib2
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_LIBGLIB2)$(BR2_PACKAGE_LIBUSB)$(BR2_PACKAGE_HAS_UDEV),yyy)
-> +SYSTEM_CONFIG_PRINTER_CONF_OPTS = --with-udev-rules=yes
-> +SYSTEM_CONFIG_PRINTER_DEPENDENCIES += libusb udev
-> +else
-> +SYSTEM_CONFIG_PRINTER_CONF_OPTS = --with-udev-rules=no
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_SYSTEMD),y)
-> +SYSTEM_CONFIG_PRINTER_CONF_OPTS += --with-systemdsystemunitdir=/usr/lib/systemd/system
-> +SYSTEM_CONFIG_PRINTER_DEPENDENCIES += systemd
-> +else
-> +SYSTEM_CONFIG_PRINTER_CONF_OPTS += --with-systemdsystemunitdir=no
-> +endif
-> +
-> +$(eval $(autotools-package))
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
-_______________________________________________
-buildroot mailing list
-buildroot@busybox.net
-http://lists.busybox.net/mailman/listinfo/buildroot
+WWFubiwKCkxlIHNhbS4gMzEganVpbC4gMjAyMSDDoCAxMTo1MywgWWFubiBFLiBNT1JJTiA8eWFu
+bi5tb3Jpbi4xOTk4QGZyZWUuZnI+IGEgw6ljcml0IDoKPgo+IEZhYnJpY2UsIEFsbCwKPgo+IE9u
+IDIwMjEtMDctMDEgMTk6NDcgKzAyMDAsIEZhYnJpY2UgRm9udGFpbmUgc3Bha2UgdGh1c2x5Ogo+
+ID4gQnVpbGQgd2l0aG91dCBTU1AgZmFpbHMgc2luY2UgYnVtcCB0byB2ZXJzaW9uIDAuMjcuNCBp
+biBjb21taXQKPiA+IGJjYWNlNDI5NDI2ZWU5MWFhYzU2ZjNkY2MzM2I2OWUyMjE0MWQzODQKPiA+
+Cj4gPiBUaGlzIGlzIGR1ZSB0byB0aGUgZmFjdCB0aGF0Cj4gPiBodHRwczovL2dpdGh1Yi5jb20v
+RXhpdjIvZXhpdjIvY29tbWl0L2JiZTBiNzA4NDBjZjI4YjdkZDhjMGI3ZTliYjFiNzQxYWVkYTJl
+ZmQKPiA+IHJlbW92ZWQgdGhlIHdyb25nIEdDQ18gcHJlZml4IGZyb20gSEFTX0ZTVEFDS19QUk9U
+RUNUT1JfU1RST05HIHZhcmlhYmxlCj4gPgo+ID4gRml4ZXM6Cj4gPiAgLSBodHRwOi8vYXV0b2J1
+aWxkLmJ1aWxkcm9vdC5vcmcvcmVzdWx0cy9hZTQ2MzU4OTkxMjRjNjAyYzcwZDJiMzQyYTc2Zjk1
+YzM0YWE0YTNkCj4gPgo+ID4gU2lnbmVkLW9mZi1ieTogRmFicmljZSBGb250YWluZSA8Zm9udGFp
+bmUuZmFicmljZUBnbWFpbC5jb20+Cj4gPiAtLS0KPiA+ICAuLi5kZC1CVUlMRF9XSVRIX1NUQUNL
+X1BST1RFQ1RPUi1vcHRpb24ucGF0Y2ggfCA1MiArKysrKysrKysrKysrKysrKysrCj4KPiBUaGlz
+IHBhdGNoIGRvZXMgbm90IGFwcGx5Ogo+Cj4gICAgID4+PiBleGl2MiAwLjI3LjQgUGF0Y2hpbmcK
+Pgo+ICAgICBBcHBseWluZyAwMDAxLWFkZC1CVUlMRF9XSVRIX1NUQUNLX1BST1RFQ1RPUi1vcHRp
+b24ucGF0Y2ggdXNpbmcgcGF0Y2g6Cj4gICAgIHBhdGNoaW5nIGZpbGUgQ01ha2VMaXN0cy50eHQK
+PiAgICAgSHVuayAjMSBzdWNjZWVkZWQgYXQgNDcgd2l0aCBmdXp6IDEgKG9mZnNldCAtNSBsaW5l
+cykuCj4gICAgIHBhdGNoaW5nIGZpbGUgY21ha2UvY29tcGlsZXJGbGFncy5jbWFrZQo+ICAgICBI
+dW5rICMxIEZBSUxFRCBhdCA0NCAoZGlmZmVyZW50IGxpbmUgZW5kaW5ncykuCj4gICAgIDEgb3V0
+IG9mIDEgaHVuayBGQUlMRUQgLS0gc2F2aW5nIHJlamVjdHMgdG8gZmlsZSBjbWFrZS9jb21waWxl
+ckZsYWdzLmNtYWtlLnJlago+ICAgICBtYWtlWzFdOiAqKiogW3BhY2thZ2UvcGtnLWdlbmVyaWMu
+bWs6MjI3OiAvaG9tZS95bW9yaW4vZGV2L2J1aWxkcm9vdC9PL2J1aWxkL2V4aXYyLTAuMjcuNC8u
+c3RhbXBfcGF0Y2hlZF0gRXJyb3IgMQo+ICAgICBtYWtlOiAqKiogW01ha2VmaWxlOjIzOiBfYWxs
+XSBFcnJvciAyCj4KPiBDb3VsZCB5b3UgbG9vayBpbnRvIHRoaXMsIHBsZWFzZT8KSSBjYW4ndCBm
+aXggaXQgYXMgaXQgaXMgZHVlIHRvIGdpdCBzZW5kLWVtYWlsIHdoaWNoIHJlcGxhY2VzIExGCmxp
+bmUtZW5kaW5ncyBieSBDUkxGLgo+Cj4gUmVnYXJkcywKPiBZYW5uIEUuIE1PUklOLgo+Cj4gPiAg
+cGFja2FnZS9leGl2Mi9leGl2Mi5tayAgICAgICAgICAgICAgICAgICAgICAgIHwgIDQgKy0KPiA+
+ICAyIGZpbGVzIGNoYW5nZWQsIDU1IGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkKPiA+ICBj
+cmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9leGl2Mi8wMDAxLWFkZC1CVUlMRF9XSVRIX1NUQUNL
+X1BST1RFQ1RPUi1vcHRpb24ucGF0Y2gKPiA+Cj4gPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9leGl2
+Mi8wMDAxLWFkZC1CVUlMRF9XSVRIX1NUQUNLX1BST1RFQ1RPUi1vcHRpb24ucGF0Y2ggYi9wYWNr
+YWdlL2V4aXYyLzAwMDEtYWRkLUJVSUxEX1dJVEhfU1RBQ0tfUFJPVEVDVE9SLW9wdGlvbi5wYXRj
+aAo+ID4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPiA+IGluZGV4IDAwMDAwMDAwMDAuLmFjZWQ1YWIz
+MTEKPiA+IC0tLSAvZGV2L251bGwKPiA+ICsrKyBiL3BhY2thZ2UvZXhpdjIvMDAwMS1hZGQtQlVJ
+TERfV0lUSF9TVEFDS19QUk9URUNUT1Itb3B0aW9uLnBhdGNoCj4gPiBAQCAtMCwwICsxLDUyIEBA
+Cj4gPiArRnJvbSA4NjUxYzlmODIzYWNlNzBiNjYwOWIxMGFlZWYwYzA3NDA2MzZiNTcwIE1vbiBT
+ZXAgMTcgMDA6MDA6MDAgMjAwMQo+ID4gK0Zyb206IEZhYnJpY2UgRm9udGFpbmUgPGZvbnRhaW5l
+LmZhYnJpY2VAZ21haWwuY29tPgo+ID4gK0RhdGU6IFRodSwgMSBKdWwgMjAyMSAxOTozMToyNSAr
+MDIwMAo+ID4gK1N1YmplY3Q6IFtQQVRDSF0gYWRkIEJVSUxEX1dJVEhfU1RBQ0tfUFJPVEVDVE9S
+IG9wdGlvbgo+ID4gKwo+ID4gK0FkZCBCVUlMRF9XSVRIX1NUQUNLX1BST1RFQ1RPUiB0byBhdm9p
+ZCB0aGUgZm9sbG93aW5nIGJ1aWxkIGZhaWx1cmUgd2l0aAo+ID4gK3Rvb2xjaGFpbnMgdGhhdCBk
+b24ndCBzdXBwb3J0IHN0YWNrLXByb3RlY3RvcjoKPiA+ICsKPiA+ICsvaG9tZS9idWlsZHJvb3Qv
+YXV0b2J1aWxkL2luc3RhbmNlLTMvb3V0cHV0LTEvaG9zdC9vcHQvZXh0LXRvb2xjaGFpbi9iaW4v
+Li4vbGliL2djYy9taXBzZWwtYnVpbGRyb290LWxpbnV4LXVjbGliYy85LjMuMC8uLi8uLi8uLi8u
+Li9taXBzZWwtYnVpbGRyb290LWxpbnV4LXVjbGliYy9iaW4vbGQ6IHV0aWxzLmNwcDooLnRleHQu
+X1pOU3Q3X19jeHgxMTEyYmFzaWNfc3RyaW5nSWNTdDExY2hhcl90cmFpdHNJY0VTYUljRUUxMl9N
+X2NvbnN0cnVjdElQY0VFdlRfUzdfU3QyMGZvcndhcmRfaXRlcmF0b3JfdGFnW19aTlN0N19fY3h4
+MTExMmJhc2ljX3N0cmluZ0ljU3QxMWNoYXJfdHJhaXRzSWNFU2FJY0VFMTJfTV9jb25zdHJ1Y3RJ
+UGNFRXZUX1M3X1N0MjBmb3J3YXJkX2l0ZXJhdG9yX3RhZ10rMHhkMCk6IHVuZGVmaW5lZCByZWZl
+cmVuY2UgdG8gYF9fc3RhY2tfY2hrX2ZhaWwnCj4gPiArCj4gPiArSW5kZWVkLCBzdXBwb3J0IGZv
+ciAtZnN0YWNrLXByb3RlY3Rvci1zdHJvbmcgY2FuJ3QgYmUgZGV0ZWN0ZWQgdGhyb3VnaAo+ID4g
+K2NoZWNrX2N4eF9jb21waWxlcl9mbGFnIGFzIHNvbWUgdG9vbGNoYWlucyBuZWVkIHRvIGxpbmsg
+d2l0aCAtbHNzcCB0bwo+ID4gK2VuYWJsZSBTU1Agc3VwcG9ydAo+ID4gKwo+ID4gK0ZpeGVzOgo+
+ID4gKyAtIGh0dHA6Ly9hdXRvYnVpbGQuYnVpbGRyb290Lm9yZy9yZXN1bHRzL2FlNDYzNTg5OTEy
+NGM2MDJjNzBkMmIzNDJhNzZmOTVjMzRhYTRhM2QKPiA+ICsKPiA+ICtTaWduZWQtb2ZmLWJ5OiBG
+YWJyaWNlIEZvbnRhaW5lIDxmb250YWluZS5mYWJyaWNlQGdtYWlsLmNvbT4KPiA+ICtbVXBzdHJl
+YW0gc3RhdHVzOiBodHRwczovL2dpdGh1Yi5jb20vRXhpdjIvZXhpdjIvcHVsbC8xNzU2XQo+ID4g
+Ky0tLQo+ID4gKyBDTWFrZUxpc3RzLnR4dCAgICAgICAgICAgIHwgMSArCj4gPiArIGNtYWtlL2Nv
+bXBpbGVyRmxhZ3MuY21ha2UgfCAyICstCj4gPiArIDIgZmlsZXMgY2hhbmdlZCwgMiBpbnNlcnRp
+b25zKCspLCAxIGRlbGV0aW9uKC0pCj4gPiArCj4gPiArZGlmZiAtLWdpdCBhL0NNYWtlTGlzdHMu
+dHh0IGIvQ01ha2VMaXN0cy50eHQKPiA+ICtpbmRleCA5ZmU4YjVmOS4uYWFiYjNkY2EgMTAwNjQ0
+Cj4gPiArLS0tIGEvQ01ha2VMaXN0cy50eHQKPiA+ICsrKysgYi9DTWFrZUxpc3RzLnR4dAo+ID4g
+K0BAIC01Miw2ICs1Miw3IEBAIG1hcmtfYXNfYWR2YW5jZWQoCj4gPiArICAgICBFWElWMl9URUFN
+X1VTRV9TQU5JVElaRVJTCj4gPiArICkKPiA+ICsKPiA+ICsrb3B0aW9uKCBCVUlMRF9XSVRIX1NU
+QUNLX1BST1RFQ1RPUiAgICAiQnVpbGQgd2l0aCBzdGFjayBwcm90ZWN0b3IiICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgIE9OICkKPiA+ICsgb3B0aW9uKCBCVUlMRF9XSVRIX0NDQUNIRSAgICAg
+ICAgICAgICAiVXNlIGNjYWNoZSB0byBzcGVlZCB1cCBjb21waWxhdGlvbnMiICAgICAgICAgICAg
+ICAgICAgIE9GRiApCj4gPiArIG9wdGlvbiggQlVJTERfV0lUSF9DT1ZFUkFHRSAgICAgICAgICAg
+IkFkZCBjb21waWxlciBmbGFncyB0byBnZW5lcmF0ZSBjb3ZlcmFnZSBzdGF0cyIgICAgICAgICBP
+RkYgKQo+ID4gKyBpbmNsdWRlKGNtYWtlL2djb3ZyLmNtYWtlIFJFUVVJUkVEKQo+ID4gK2RpZmYg
+LS1naXQgYS9jbWFrZS9jb21waWxlckZsYWdzLmNtYWtlIGIvY21ha2UvY29tcGlsZXJGbGFncy5j
+bWFrZQo+ID4gK2luZGV4IGM4YTg1YzU5Li4yMGY2YWM1MyAxMDA2NDQKPiA+ICstLS0gYS9jbWFr
+ZS9jb21waWxlckZsYWdzLmNtYWtlCj4gPiArKysrIGIvY21ha2UvY29tcGlsZXJGbGFncy5jbWFr
+ZQo+ID4gK0BAIC00NCw3ICs0NCw3IEBAIGlmICggTUlOR1cgT1IgVU5JWCBPUiBNU1lTICkgIyBN
+SU5HVywgTGludXgsIEFQUExFLCBDWUdXSU4KPiA+ICsgICAgICAgICAgICAgaWYoSEFTX0ZDRl9Q
+Uk9URUNUSU9OKQo+ID4gKyAgICAgICAgICAgICAgICAgYWRkX2NvbXBpbGVfb3B0aW9ucygtZmNm
+LXByb3RlY3Rpb24pCj4gPiArICAgICAgICAgICAgIGVuZGlmKCkKPiA+ICstICAgICAgICAgICAg
+aWYoSEFTX0ZTVEFDS19QUk9URUNUT1JfU1RST05HKQo+ID4gKysgICAgICAgICAgICBpZihCVUlM
+RF9XSVRIX1NUQUNLX1BST1RFQ1RPUiBBTkQgSEFTX0ZTVEFDS19QUk9URUNUT1JfU1RST05HKQo+
+ID4gKyAgICAgICAgICAgICAgICAgYWRkX2NvbXBpbGVfb3B0aW9ucygtZnN0YWNrLXByb3RlY3Rv
+ci1zdHJvbmcpCj4gPiArICAgICAgICAgICAgIGVuZGlmKCkKPiA+ICsgICAgICAgICBlbmRpZigp
+Cj4gPiArLS0KPiA+ICsyLjMwLjIKPiA+ICsKPiA+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2V4aXYy
+L2V4aXYyLm1rIGIvcGFja2FnZS9leGl2Mi9leGl2Mi5tawo+ID4gaW5kZXggNTJiZjAzZmM2My4u
+MzMyMjJlNjM4MSAxMDA2NDQKPiA+IC0tLSBhL3BhY2thZ2UvZXhpdjIvZXhpdjIubWsKPiA+ICsr
+KyBiL3BhY2thZ2UvZXhpdjIvZXhpdjIubWsKPiA+IEBAIC0xMiw3ICsxMiw5IEBAIEVYSVYyX0xJ
+Q0VOU0UgPSBHUEwtMi4wKwo+ID4gIEVYSVYyX0xJQ0VOU0VfRklMRVMgPSBDT1BZSU5HCj4gPiAg
+RVhJVjJfQ1BFX0lEX1ZFTkRPUiA9IGV4aXYyCj4gPgo+ID4gLUVYSVYyX0NPTkZfT1BUUyArPSAt
+REVYSVYyX0JVSUxEX1NBTVBMRVM9T0ZGCj4gPiArRVhJVjJfQ09ORl9PUFRTICs9IFwKPiA+ICsg
+ICAgIC1EQlVJTERfV0lUSF9TVEFDS19QUk9URUNUT1I9T0ZGIFwKPiA+ICsgICAgIC1ERVhJVjJf
+QlVJTERfU0FNUExFUz1PRkYKPiA+Cj4gPiAgaWZlcSAoJChCUjJfUEFDS0FHRV9FWElWMl9MRU5T
+REFUQSkseSkKPiA+ICBFWElWMl9DT05GX09QVFMgKz0gLURFWElWMl9FTkFCTEVfTEVOU0RBVEE9
+T04KPiA+IC0tCj4gPiAyLjMwLjIKPiA+Cj4gPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fXwo+ID4gYnVpbGRyb290IG1haWxpbmcgbGlzdAo+ID4gYnVpbGRy
+b290QGJ1c3lib3gubmV0Cj4gPiBodHRwOi8vbGlzdHMuYnVzeWJveC5uZXQvbWFpbG1hbi9saXN0
+aW5mby9idWlsZHJvb3QKPgo+IC0tCj4gLi0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0t
+LS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0tLS4KPiB8ICBZYW5u
+IEUuIE1PUklOICB8IFJlYWwtVGltZSBFbWJlZGRlZCB8IC8iXCBBU0NJSSBSSUJCT04gfCBFcmlj
+cycgY29uc3BpcmFjeTogfAo+IHwgKzMzIDY2MiAzNzYgMDU2IHwgU29mdHdhcmUgIERlc2lnbmVy
+IHwgXCAvIENBTVBBSUdOICAgICB8ICBfX18gICAgICAgICAgICAgICB8Cj4gfCArMzMgNTYxIDA5
+OSA0MjcgYC0tLS0tLS0tLS0tLS4tLS0tLS0tOiAgWCAgQUdBSU5TVCAgICAgIHwgIFxlLyAgVGhl
+cmUgaXMgbm8gIHwKPiB8IGh0dHA6Ly95bW9yaW4uaXMtYS1nZWVrLm9yZy8gfCBfLypcXyB8IC8g
+XCBIVE1MIE1BSUwgICAgfCAgIHYgICBjb25zcGlyYWN5LiAgfAo+ICctLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS1eLS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0tLS1eLS0tLS0tLS0tLS0tLS0t
+LS0tLS0nCkJlc3QgUmVnYXJkcywKCkZhYnJpY2UKX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVz
+eWJveC5uZXQKaHR0cDovL2xpc3RzLmJ1c3lib3gubmV0L21haWxtYW4vbGlzdGluZm8vYnVpbGRy
+b290Cg==
