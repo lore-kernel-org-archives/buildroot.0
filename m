@@ -7,51 +7,52 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 16F4FC4338F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:58:08 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F310C4338F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:58:20 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id CE2ED60F58
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:58:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org CE2ED60F58
+	by mail.kernel.org (Postfix) with ESMTPS id 07C5760F38
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 00:58:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 07C5760F38
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A95756F94F;
-	Wed,  4 Aug 2021 00:58:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DBE85424FC;
+	Wed,  4 Aug 2021 00:58:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id W2uy6ZFn3iGc; Wed,  4 Aug 2021 00:58:07 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 1sSwXUZl1ELW; Wed,  4 Aug 2021 00:58:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0327A6F94A;
-	Wed,  4 Aug 2021 00:58:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 43DAD424F6;
+	Wed,  4 Aug 2021 00:58:18 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id CE9E01BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:22:14 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id DEDF81BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:22:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0097D40EAD
+ by smtp2.osuosl.org (Postfix) with ESMTP id 12EB740EB2
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fhwsjUir6oka for <buildroot@lists.busybox.net>;
+ with ESMTP id 3ysDUL4MraRu for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:10:46 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 38D2740EB2
+ by smtp2.osuosl.org (Postfix) with ESMTP id 478724069F
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:32 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 7A88087C2D; Tue,  3 Aug 2021 21:10:24 +0000 (UTC)
+ id 8EE0E87E2D; Tue,  3 Aug 2021 21:10:24 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sun, 1 Aug 2021 00:02:49 +0200
+Date: Sun, 1 Aug 2021 00:02:50 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: b61c0830c3b4bd6f6a64be543ce6f13f88bb4fa7
-X-Git-Newrev: 88556ef3b43b174684b45078e64b3fb15f808a59
+X-Git-Oldrev: 867e7a040ce1907cdc74d2040845ef155ede57d1
+X-Git-Newrev: 047d7cb173ac9fa9f2c53886166a7b41fbf21909
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211024.7A88087C2D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/neard: update url
+Message-Id: <20210803211024.8EE0E87E2D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/swupdate: needs
+ dynamic libary
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,32 +70,75 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=88556ef3b43b174684b45078e64b3fb15f808a59
+commit: https://git.buildroot.net/buildroot/commit/?id=047d7cb173ac9fa9f2c53886166a7b41fbf21909
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-01.org url is permission denied. There seems to be no project page
-anymore. Use kernel.org repo with cleaner https url.
+dynamic library is needed since bump to version 2021.04 in commit
+2c6b0359c3b819fadb4437b2d780e95c32fdab21 and
+https://github.com/sbabic/swupdate/commit/f802cfa427686c5c90245ae08da36f4c7e31862f
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+Fixes:
+ - http://autobuild.buildroot.org/results/e4b937c7421024bfcc4fbfa1a90f016134d3307f
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/neard/Config.in | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ package/swupdate/Config.in   | 5 +++--
+ package/swupdate/swupdate.mk | 9 +--------
+ 2 files changed, 4 insertions(+), 10 deletions(-)
 
-diff --git a/package/neard/Config.in b/package/neard/Config.in
-index 277e467ced..a60fb3f8f6 100644
---- a/package/neard/Config.in
-+++ b/package/neard/Config.in
-@@ -13,9 +13,7 @@ config BR2_PACKAGE_NEARD
- 	  daemon is a part of the NFC stack provided by the Linux NFC
- 	  project.
+diff --git a/package/swupdate/Config.in b/package/swupdate/Config.in
+index e87f695861..f601e45fcd 100644
+--- a/package/swupdate/Config.in
++++ b/package/swupdate/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_SWUPDATE
+ 	bool "swupdate"
++	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU # fork()
+ 	# swupdate requires a parser and uses libconfig as default
+@@ -70,6 +71,6 @@ config BR2_PACKAGE_SWUPDATE_INSTALL_WEBSITE
+ 	  installed to /var/www/swupdate.
+ endif
  
--	  http://git.kernel.org/?p=network/nfc/neard.git;a=summary
+-comment "swupdate needs a toolchain w/ threads"
++comment "swupdate needs a toolchain w/ dynamic library, threads"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
+index fe967d7fd7..402aa0a91f 100644
+--- a/package/swupdate/swupdate.mk
++++ b/package/swupdate/swupdate.mk
+@@ -93,7 +93,7 @@ else
+ SWUPDATE_MAKE_ENV += HAVE_LIBWEBSOCKETS=n
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_HAS_LUAINTERPRETER):$(BR2_STATIC_LIBS),y:)
++ifeq ($(BR2_PACKAGE_HAS_LUAINTERPRETER),y)
+ SWUPDATE_DEPENDENCIES += luainterpreter host-pkgconf
+ # defines the base name for the pkg-config file ("lua" or "luajit")
+ define SWUPDATE_SET_LUA_VERSION
+@@ -185,19 +185,12 @@ SWUPDATE_BUILD_CONFIG = $(@D)/.config
+ SWUPDATE_KCONFIG_FILE = $(call qstrip,$(BR2_PACKAGE_SWUPDATE_CONFIG))
+ SWUPDATE_KCONFIG_EDITORS = menuconfig xconfig gconfig nconfig
+ 
+-ifeq ($(BR2_STATIC_LIBS),y)
+-define SWUPDATE_PREFER_STATIC
+-	$(call KCONFIG_ENABLE_OPT,CONFIG_STATIC)
+-endef
+-endif
 -
--	  https://01.org/linux-nfc/
-+	  https://git.kernel.org/pub/scm/network/nfc/neard.git
+ SWUPDATE_MAKE_OPTS = \
+ 	CROSS_COMPILE="$(TARGET_CROSS)" \
+ 	CONFIG_EXTRA_CFLAGS="$(TARGET_CFLAGS)" \
+ 	CONFIG_EXTRA_LDFLAGS="$(TARGET_LDFLAGS)"
  
- if BR2_PACKAGE_NEARD
+ define SWUPDATE_KCONFIG_FIXUP_CMDS
+-	$(SWUPDATE_PREFER_STATIC)
+ 	$(SWUPDATE_SET_LUA_VERSION)
+ endef
  
 _______________________________________________
 buildroot mailing list
