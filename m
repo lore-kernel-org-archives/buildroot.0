@@ -2,88 +2,59 @@ Return-Path: <SRS0=tdpc=MY=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.5 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
-	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_2 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7057CC4338F
-	for <buildroot@archiver.kernel.org>; Sun,  1 Aug 2021 09:57:49 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 39AE0C4338F
+	for <buildroot@archiver.kernel.org>; Sun,  1 Aug 2021 10:07:44 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2C4DF6109F
-	for <buildroot@archiver.kernel.org>; Sun,  1 Aug 2021 09:57:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2C4DF6109F
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id E54406054F
+	for <buildroot@archiver.kernel.org>; Sun,  1 Aug 2021 10:07:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E54406054F
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EF6FA83C40;
-	Sun,  1 Aug 2021 09:57:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 925256072D;
+	Sun,  1 Aug 2021 10:07:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id od8bYtfh_e5r; Sun,  1 Aug 2021 09:57:48 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ttFli4lQx8ME; Sun,  1 Aug 2021 10:07:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4C41683C2E;
-	Sun,  1 Aug 2021 09:57:47 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B9FF01BF8B4
- for <buildroot@lists.busybox.net>; Sun,  1 Aug 2021 09:57:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B9580606F3;
+	Sun,  1 Aug 2021 10:07:25 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 138A01BF8B4
+ for <buildroot@lists.busybox.net>; Sun,  1 Aug 2021 10:07:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9B5EF83C2E
- for <buildroot@lists.busybox.net>; Sun,  1 Aug 2021 09:57:45 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E9D31415BF
+ for <buildroot@lists.busybox.net>; Sun,  1 Aug 2021 10:07:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zx-KU7ODhQ3U for <buildroot@lists.busybox.net>;
- Sun,  1 Aug 2021 09:57:44 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
- [IPv6:2a00:1450:4864:20::42c])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9417383C02
- for <buildroot@busybox.net>; Sun,  1 Aug 2021 09:57:44 +0000 (UTC)
-Received: by mail-wr1-x42c.google.com with SMTP id n12so17754791wrr.2
- for <buildroot@busybox.net>; Sun, 01 Aug 2021 02:57:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=XRT+8H/hFIUmNUeRxh5V/jOE4Dx3ky2LFXmiYv3uo2o=;
- b=V5+E/aE3U6YwzN0E+yVb5cA/Fxufcp1vHbqx/toF7D03Iz2TxzCKGuWvJOtNyJfKF4
- KPkLP1AyWBP6cux6ufXDpRJaJk4mHcpk81NeDUHHZJlW0FRDocF6lSyshaakTeKyrdnl
- B3Gc/mFbOc0LRENRDAX16aw3rqEJ2z1N4zbyrvpDK3b08ZAO+36MvlN1BL8K0Hi/7Rh1
- fg6Vwpf4854zSDH+RiHHZDRLEhZWvUtJRV0wc2yymWdpf7PgkefiOHOectxJSPnXsOzt
- cmGcwKr66OqEKkjvlmvEk/HOVUSM4MCn1wgQvabbnMwEr+LeF9Q19qqKR+ArR1YpsyhY
- nTvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=XRT+8H/hFIUmNUeRxh5V/jOE4Dx3ky2LFXmiYv3uo2o=;
- b=YZF4QBhxt7nY3k6QfSMdsDB20ucu/Y3rJE3gRru/3MtijnBw67X9lrJO6AnpBugDRm
- +N+ixLkoxrkVPhBJ2wcFdCWfOwdxKbzexhMrfLT//vENqXQ2B268FtIeKHZG/S8zWlpH
- +f88W9nYYyoAoJF2mYcLKa6BMd6ujiKPcFCxPPGTweAhyaxnImvpGMsW+BjvX/jJ2EwS
- /7qMAvYvd6aDVve3xZJGw753yWZnbIsI2NogptFVHvPQ7wYANUsbaZd8XsHprqayRh35
- SK1l2JDhZHxPcjWyTJPTEjXMSZ5wzAQeKUqGf1QfLu5suUfzkteNPaVGDz5rcxxASl3c
- 14aA==
-X-Gm-Message-State: AOAM5331bFG7e0DGEjz2hXmDsOFkFRjM0z12neYvM+JgjLM/aB0v5PaP
- RcJrubwd4zSoteWJU/caNNDcOYiao0o=
-X-Google-Smtp-Source: ABdhPJx1Jx2Z8qbpS29HGQ8tTh99xh/sr0/YVzbnPtddGXu+SA4cPkAfiRyTR1MKqHO0YvuQMrJhHQ==
-X-Received: by 2002:a5d:6043:: with SMTP id j3mr11852432wrt.417.1627811862460; 
- Sun, 01 Aug 2021 02:57:42 -0700 (PDT)
-Received: from vm-user.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
- by smtp.gmail.com with ESMTPSA id j1sm7803417wrm.86.2021.08.01.02.57.41
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 01 Aug 2021 02:57:42 -0700 (PDT)
-From: Francois Perrad <fperrad@gmail.com>
-X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
-To: buildroot@busybox.net
-Date: Sun,  1 Aug 2021 11:57:34 +0200
-Message-Id: <20210801095734.3213451-1-francois.perrad@gadz.org>
-X-Mailer: git-send-email 2.30.2
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LK2nvus345C5 for <buildroot@lists.busybox.net>;
+ Sun,  1 Aug 2021 10:07:20 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id F1E99404BD
+ for <buildroot@busybox.net>; Sun,  1 Aug 2021 10:07:18 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by relay12.mail.gandi.net (Postfix) with ESMTPSA id ED21A200003;
+ Sun,  1 Aug 2021 10:06:35 +0000 (UTC)
+Date: Sun, 1 Aug 2021 12:06:34 +0200
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+To: Francois Perrad <fperrad@gmail.com>
+Message-ID: <20210801120634.245316d7@windsurf>
+In-Reply-To: <20210801095734.3213451-1-francois.perrad@gadz.org>
+References: <20210801095734.3213451-1-francois.perrad@gadz.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/lua-lunix: fix build with recent gcc
+Subject: Re: [Buildroot] [PATCH] package/lua-lunix: fix build with recent gcc
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,60 +66,40 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@busybox.net
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-see http://autobuild.buildroot.net/results/749a11d5289c6fec3b2f236b9073fc1ab730d090/
-
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- ...ctl-instead-of-deprecated-sys-sysctl.patch | 31 +++++++++++++++++++
- 1 file changed, 31 insertions(+)
- create mode 100644 package/lua-lunix/0003-use-linux-sysctl-instead-of-deprecated-sys-sysctl.patch
-
-diff --git a/package/lua-lunix/0003-use-linux-sysctl-instead-of-deprecated-sys-sysctl.patch b/package/lua-lunix/0003-use-linux-sysctl-instead-of-deprecated-sys-sysctl.patch
-new file mode 100644
-index 000000000..e2369bdfb
---- /dev/null
-+++ b/package/lua-lunix/0003-use-linux-sysctl-instead-of-deprecated-sys-sysctl.patch
-@@ -0,0 +1,31 @@
-+Fetched from https://github.com/wahern/lunix/pull/18
-+
-+From 99b02b08d3f1a53e58b558b9f2250225e569a550 Mon Sep 17 00:00:00 2001
-+From: Tiago Seco <tiago@seco.ws>
-+Date: Sun, 20 Jun 2021 11:20:23 +0200
-+Subject: [PATCH] use <linux/sysctl.h> instead of deprectaed <sys/sysctl.h> for
-+ linux systems
-+
-+---
-+ lunix-rel-20170920/src/unix.c | 6 +++++-
-+ 1 file changed, 5 insertions(+), 1 deletion(-)
-+
-+diff --git a/lunix-rel-20170920/src/unix.c b/lunix-rel-20170920/src/unix.c
-+index bea4d14..dfa26a3 100644
-+--- a/lunix-rel-20170920/src/unix.c
-++++ b/lunix-rel-20170920/src/unix.c
-+@@ -560,7 +560,11 @@
-+ #endif
-+ 
-+ #if HAVE_SYS_SYSCTL_H
-+-#include <sys/sysctl.h> /* CTL_KERN KERN_RANDOM RANDOM_UUID sysctl(2) */
-++#ifdef __linux__
-++#include <linux/sysctl.h> /* CTL_KERN KERN_RANDOM RANDOM_UUID sysctl(2) */
-++#else
-++#include <sys/sysctl.h>
-++#endif
-+ #endif
-+ 
-+ #if HAVE_IFADDRS_H
-+-- 
-+2.30.2
--- 
-2.30.2
-
-_______________________________________________
-buildroot mailing list
-buildroot@busybox.net
-http://lists.busybox.net/mailman/listinfo/buildroot
+SGVsbG8gRnJhbsOnb2lzLAoKVGhhbmtzIGZvciB0aGUgcGF0Y2ghIEhvd2V2ZXIsIHRoZXJlIGFy
+ZSBhIGZldyBmb3JtYXR0aW5nIGlzc3Vlcywgc2VlCmJlbG93LgoKT24gU3VuLCAgMSBBdWcgMjAy
+MSAxMTo1NzozNCArMDIwMApGcmFuY29pcyBQZXJyYWQgPGZwZXJyYWRAZ21haWwuY29tPiB3cm90
+ZToKCj4gc2VlIGh0dHA6Ly9hdXRvYnVpbGQuYnVpbGRyb290Lm5ldC9yZXN1bHRzLzc0OWExMWQ1
+Mjg5YzZmZWMzYjJmMjM2YjkwNzNmYzFhYjczMGQwOTAvCgpUaGlzIHNob3VsZCBiZToKCkZpeGVz
+OgoKICBodHRwOi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5uZXQvcmVzdWx0cy83NDlhMTFkNTI4OWM2
+ZmVjM2IyZjIzNmI5MDczZmMxYWI3MzBkMDkwLwoKVGhlIGZhY3QgdGhhdCB0aGVyZSBpcyB0aGUg
+IkZpeGVzIiB3b3JkIGVuc3VyZXMgdGhhdCBwYXRjaHdvcmsKaWRlbnRpZmllcyBpdCBhcyBhIHBh
+dGNoIHRoYXQgZml4ZXMgc29tZXRoaW5nLgoKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9sdWEtbHVu
+aXgvMDAwMy11c2UtbGludXgtc3lzY3RsLWluc3RlYWQtb2YtZGVwcmVjYXRlZC1zeXMtc3lzY3Rs
+LnBhdGNoIGIvcGFja2FnZS9sdWEtbHVuaXgvMDAwMy11c2UtbGludXgtc3lzY3RsLWluc3RlYWQt
+b2YtZGVwcmVjYXRlZC1zeXMtc3lzY3RsLnBhdGNoCj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPiBp
+bmRleCAwMDAwMDAwMDAuLmUyMzY5YmRmYgo+IC0tLSAvZGV2L251bGwKPiArKysgYi9wYWNrYWdl
+L2x1YS1sdW5peC8wMDAzLXVzZS1saW51eC1zeXNjdGwtaW5zdGVhZC1vZi1kZXByZWNhdGVkLXN5
+cy1zeXNjdGwucGF0Y2gKPiBAQCAtMCwwICsxLDMxIEBACj4gK0ZldGNoZWQgZnJvbSBodHRwczov
+L2dpdGh1Yi5jb20vd2FoZXJuL2x1bml4L3B1bGwvMTgKClRoaXMgc2hvdWxkIGdvLi4uCgo+ICsK
+PiArRnJvbSA5OWIwMmIwOGQzZjFhNTNlNThiNTU4YjlmMjI1MDIyNWU1NjlhNTUwIE1vbiBTZXAg
+MTcgMDA6MDA6MDAgMjAwMQo+ICtGcm9tOiBUaWFnbyBTZWNvIDx0aWFnb0BzZWNvLndzPgo+ICtE
+YXRlOiBTdW4sIDIwIEp1biAyMDIxIDExOjIwOjIzICswMjAwCj4gK1N1YmplY3Q6IFtQQVRDSF0g
+dXNlIDxsaW51eC9zeXNjdGwuaD4gaW5zdGVhZCBvZiBkZXByZWN0YWVkIDxzeXMvc3lzY3RsLmg+
+IGZvcgo+ICsgbGludXggc3lzdGVtcwo+ICsKCi4uLiBoZXJlLiBPdGhlcndpc2UgeW91IGJyZWFr
+IHRoZSBwYXRjaCB3aGljaCBjYW5ub3QgYmUgYXBwbGllZCB3aXRoCiJnaXQgYW0iIGFueW1vcmUu
+CgpBbHNvLCB5b3UgbmVlZCB0byBhZGQgeW91ciBTaWduZWQtb2ZmLWJ5IGxpbmUgaW4gdGhlIHBh
+dGNoLiBOb3RlIHRoYXQKdGhpcyBwYXJ0aWN1bGFyIGlzc3VlIGlzIHJlcG9ydGVkIGJ5ICJtYWtl
+IGNoZWNrLXBhY2thZ2UiLgoKQ291bGQgeW91IGFkanVzdCB0aG9zZSBtaW5vciBkZXRhaWxzIGFu
+ZCBzZW5kIGFuIHVwZGF0ZWQgdmVyc2lvbj8KClRoYW5rcyBhIGxvdCEKClRob21hcwotLSAKVGhv
+bWFzIFBldGF6em9uaSwgY28tb3duZXIgYW5kIENFTywgQm9vdGxpbgpFbWJlZGRlZCBMaW51eCBh
+bmQgS2VybmVsIGVuZ2luZWVyaW5nCmh0dHBzOi8vYm9vdGxpbi5jb20KX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApi
+dWlsZHJvb3RAYnVzeWJveC5uZXQKaHR0cDovL2xpc3RzLmJ1c3lib3gubmV0L21haWxtYW4vbGlz
+dGluZm8vYnVpbGRyb290Cg==
