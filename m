@@ -2,57 +2,57 @@ Return-Path: <SRS0=sxUg=M3=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,
 	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B8159C4338F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 01:06:56 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0CC1CC4338F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 01:07:09 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 882FA60EE9
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 01:06:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 882FA60EE9
+	by mail.kernel.org (Postfix) with ESMTPS id C15D960F6F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 01:07:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C15D960F6F
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 556A8424F7;
-	Wed,  4 Aug 2021 01:06:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9D04460B54;
+	Wed,  4 Aug 2021 01:07:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 80wXfr8k7o_A; Wed,  4 Aug 2021 01:06:55 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id EISYH8zJdRUp; Wed,  4 Aug 2021 01:07:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 91190424F4;
-	Wed,  4 Aug 2021 01:06:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D191660B51;
+	Wed,  4 Aug 2021 01:07:06 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 19D801BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:22:57 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2CCED1BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:22:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EF23340EAE
+ by smtp2.osuosl.org (Postfix) with ESMTP id F090D40F2A
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id H9xs8BPVifJ4 for <buildroot@lists.busybox.net>;
+ with ESMTP id nid4GQwgO3Ra for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:10:50 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3A401414C9
+ by smtp2.osuosl.org (Postfix) with ESMTP id 212134025C
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:34 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 8F34289015; Tue,  3 Aug 2021 21:10:26 +0000 (UTC)
+ id 7730987884; Tue,  3 Aug 2021 21:10:26 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 1 Aug 2021 20:47:05 +0200
+Date: Sun, 1 Aug 2021 16:20:51 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 0239ea5615a24469b6160f371fbec2735c89d4af
-X-Git-Newrev: b4f0a0d603176b45e52d7d6e695af269a356f413
+X-Git-Oldrev: bb75c4b541fac144b53b63248e235f22ba1d25ad
+X-Git-Newrev: 4634e84978a3e64e9050021d209a41cd88a1ad16
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211026.8F34289015@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libfreeimage: fix
- build with gcc 11
+Message-Id: <20210803211026.7730987884@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/rtl_433: new package
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,41 +70,119 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b4f0a0d603176b45e52d7d6e695af269a356f413
+commit: https://git.buildroot.net/buildroot/commit/?id=4634e84978a3e64e9050021d209a41cd88a1ad16
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fix the following build failure with gcc 11:
+rtl_433 (despite the name) is a generic data receiver, mainly for the
+433.92 MHz, 868 MHz (SRD), 315 MHz, 345 MHz, and 915 MHz ISM bands.
 
-In file included from Source/FreeImage/../OpenEXR/IlmImf/ImfHeader.h:51,
-                 from Source/FreeImage/../OpenEXR/IlmImf/ImfOutputFile.h:46,
-                 from Source/FreeImage/PluginEXR.cpp:33:
-Source/OpenEXR/Imath/ImathVec.h:228:41: error: ISO C++17 does not allow dynamic exception specifications
-  228 |     const Vec2 &        normalizeExc () throw (IEX_NAMESPACE::MathExc);
-      |                                         ^~~~~
-
-Fixes:
- - http://autobuild.buildroot.org/results/953cd07402fe2f99f2361a3b4a7b086a88e0d72d
+https://github.com/merbanan/rtl_433
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[yann.morin.1998@free.fr: forcibly disable building docs and tests]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libfreeimage/libfreeimage.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ DEVELOPERS                   |  1 +
+ package/Config.in            |  1 +
+ package/rtl_433/Config.in    | 16 ++++++++++++++++
+ package/rtl_433/rtl_433.hash |  4 ++++
+ package/rtl_433/rtl_433.mk   | 32 ++++++++++++++++++++++++++++++++
+ 5 files changed, 54 insertions(+)
 
-diff --git a/package/libfreeimage/libfreeimage.mk b/package/libfreeimage/libfreeimage.mk
-index 91299084a1..4775f92109 100644
---- a/package/libfreeimage/libfreeimage.mk
-+++ b/package/libfreeimage/libfreeimage.mk
-@@ -20,7 +20,8 @@ define LIBFREEIMAGE_EXTRACT_CMDS
- endef
- 
- define LIBFREEIMAGE_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) \
-+		CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11" $(MAKE) -C $(@D)
- endef
- 
- define LIBFREEIMAGE_INSTALL_STAGING_CMDS
+diff --git a/DEVELOPERS b/DEVELOPERS
+index e73f2dfd7a..1547ff123b 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -912,6 +912,7 @@ F:	package/python-jedi/
+ F:	package/python-parso/
+ F:	package/python-yatl/
+ F:	package/rocksdb/
++F:	package/rtl_433/
+ F:	package/rygel/
+ F:	package/safeclib/
+ F:	package/snort3/
+diff --git a/package/Config.in b/package/Config.in
+index 2598565234..046c04e994 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2071,6 +2071,7 @@ menu "Miscellaneous"
+ 	source "package/proj/Config.in"
+ 	source "package/qemu/Config.in"
+ 	source "package/qpdf/Config.in"
++	source "package/rtl_433/Config.in"
+ 	source "package/shared-mime-info/Config.in"
+ 	source "package/sunwait/Config.in"
+ 	source "package/taskd/Config.in"
+diff --git a/package/rtl_433/Config.in b/package/rtl_433/Config.in
+new file mode 100644
+index 0000000000..5664227c82
+--- /dev/null
++++ b/package/rtl_433/Config.in
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_RTL_433
++	bool "rtl_433"
++	depends on BR2_USE_MMU # fork()
++	depends on !BR2_STATIC_LIBS
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_PACKAGE_LIBOPENSSL_ENABLE_PSK if BR2_PACKAGE_LIBOPENSSL
++	help
++	  rtl_433 (despite the name) is a generic data receiver, mainly
++	  for the 433.92 MHz, 868 MHz (SRD), 315 MHz, 345 MHz, and 915
++	  MHz ISM bands.
++
++	  https://github.com/merbanan/rtl_433
++
++comment "rtl_433 needs a toolchain w/ dynamic library, threads"
++	depends on BR2_USE_MMU
++	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/rtl_433/rtl_433.hash b/package/rtl_433/rtl_433.hash
+new file mode 100644
+index 0000000000..9ace444b78
+--- /dev/null
++++ b/package/rtl_433/rtl_433.hash
+@@ -0,0 +1,4 @@
++# Locally calculated
++sha256  d8b87535b4e65264018771b6b288259d81137482fc938d01e0c03ac071c03bd5  rtl_433-21.05.tar.gz
++# License file, locally calculated
++sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/rtl_433/rtl_433.mk b/package/rtl_433/rtl_433.mk
+new file mode 100644
+index 0000000000..e6d28721fa
+--- /dev/null
++++ b/package/rtl_433/rtl_433.mk
+@@ -0,0 +1,32 @@
++################################################################################
++#
++# rtl_433
++#
++################################################################################
++
++RTL_433_VERSION = 21.05
++RTL_433_SITE = $(call github,merbanan,rtl_433,$(RTL_433_VERSION))
++RTL_433_LICENSE = GPL-2.0+
++RTL_433_LICENSE_FILES = COPYING
++
++RTL_433_CONF_OPTS = \
++	-DBUILD_DOCUMENTATION=OFF \
++	-DBUILD_TESTING=OFF \
++	-DBUILD_TESTING_ANALYZER=OFF \
++	-DENABLE_SOAPYSDR=OFF
++
++ifeq ($(BR2_PACKAGE_LIBRTLSDR),y)
++RTL_433_DEPENDENCIES += librtlsdr
++RTL_433_CONF_OPTS += -DENABLE_RTLSDR=ON
++else
++RTL_433_CONF_OPTS += -DENABLE_RTLSDR=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++RTL_433_DEPENDENCIES += openssl
++RTL_433_CONF_OPTS += -DENABLE_OPENSSL=ON
++else
++RTL_433_CONF_OPTS += -DENABLE_OPENSSL=OFF
++endif
++
++$(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
