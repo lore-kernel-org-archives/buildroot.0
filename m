@@ -7,51 +7,51 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D556AC4338F
-	for <buildroot@archiver.kernel.org>; Sun,  1 Aug 2021 09:42:27 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 881C6C4338F
+	for <buildroot@archiver.kernel.org>; Sun,  1 Aug 2021 09:42:40 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9E1F161059
-	for <buildroot@archiver.kernel.org>; Sun,  1 Aug 2021 09:42:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9E1F161059
+	by mail.kernel.org (Postfix) with ESMTPS id 518BD60EE9
+	for <buildroot@archiver.kernel.org>; Sun,  1 Aug 2021 09:42:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 518BD60EE9
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 728B6415D0;
-	Sun,  1 Aug 2021 09:42:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2630E607C2;
+	Sun,  1 Aug 2021 09:42:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EXf9baESAfO7; Sun,  1 Aug 2021 09:42:26 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id BJTOlNeD-QGY; Sun,  1 Aug 2021 09:42:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B972D415B0;
-	Sun,  1 Aug 2021 09:42:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 86E36605E6;
+	Sun,  1 Aug 2021 09:42:38 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B16F71BF8B4
- for <buildroot@lists.busybox.net>; Sun,  1 Aug 2021 09:38:55 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7474A1BF8B4
+ for <buildroot@lists.busybox.net>; Sun,  1 Aug 2021 09:39:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7AF3D415B3
- for <buildroot@lists.busybox.net>; Sun,  1 Aug 2021 09:38:52 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 645D3402F7
+ for <buildroot@lists.busybox.net>; Sun,  1 Aug 2021 09:39:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GMpo-fCforM4 for <buildroot@lists.busybox.net>;
- Sun,  1 Aug 2021 09:38:49 +0000 (UTC)
+ with ESMTP id jg4mNT60HMTJ for <buildroot@lists.busybox.net>;
+ Sun,  1 Aug 2021 09:39:40 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 53F5F415C9
- for <buildroot@buildroot.org>; Sun,  1 Aug 2021 09:38:47 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id BF783402F6
+ for <buildroot@buildroot.org>; Sun,  1 Aug 2021 09:39:40 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 6C34487BD2; Sun,  1 Aug 2021 09:38:45 +0000 (UTC)
+ id D64368A402; Sun,  1 Aug 2021 09:39:38 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sun, 1 Aug 2021 11:37:01 +0200
+Date: Sun, 1 Aug 2021 11:39:30 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b1af56fddc556973aada3f220812a3bcd386146f
-X-Git-Newrev: 64ace4e5f146c34c3315c9c89659a3caeb3a657a
+X-Git-Oldrev: 55050bec76babb6b064ea7d2308eaaf5a006ae99
+X-Git-Newrev: 64bd00d086e6cac8d675e879139409fab3b56abd
 X-Patchwork-Hint: ignore
-Message-Id: <20210801093845.6C34487BD2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libgtk3: bump to version 3.24.30
+Message-Id: <20210801093938.D64368A402@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/pppd: add SELinux module
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,55 +69,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=64ace4e5f146c34c3315c9c89659a3caeb3a657a
+commit: https://git.buildroot.net/buildroot/commit/?id=64bd00d086e6cac8d675e879139409fab3b56abd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Support for pppd is added by the services/ppp module in the SELinux
+refpolicy.
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libgtk3/0002-fix-introspection-check.patch | 2 +-
- package/libgtk3/libgtk3.hash                       | 4 ++--
- package/libgtk3/libgtk3.mk                         | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+ package/pppd/pppd.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/libgtk3/0002-fix-introspection-check.patch b/package/libgtk3/0002-fix-introspection-check.patch
-index 90f5facbb0..450505c914 100644
---- a/package/libgtk3/0002-fix-introspection-check.patch
-+++ b/package/libgtk3/0002-fix-introspection-check.patch
-@@ -14,7 +14,7 @@ Signed-off-by: Hadrien Boutteville <hadrien.boutteville@gmail.com>
+diff --git a/package/pppd/pppd.mk b/package/pppd/pppd.mk
+index 08560090b5..098c6a8e6f 100644
+--- a/package/pppd/pppd.mk
++++ b/package/pppd/pppd.mk
+@@ -12,6 +12,7 @@ PPPD_LICENSE_FILES = \
+ 	pppdump/bsd-comp.c pppd/ccp.c pppd/plugins/passprompt.c
+ PPPD_CPE_ID_VENDOR = samba
+ PPPD_CPE_ID_PRODUCT = ppp
++PPPD_SELINUX_MODULES = ppp
  
- --- a/configure.ac
- +++ b/configure.ac
--@@ -1685,7 +1685,10 @@
-+@@ -1650,7 +1650,10 @@
-  # GObject introspection
-  ##################################################
- 
-diff --git a/package/libgtk3/libgtk3.hash b/package/libgtk3/libgtk3.hash
-index d5638780de..1493998686 100644
---- a/package/libgtk3/libgtk3.hash
-+++ b/package/libgtk3/libgtk3.hash
-@@ -1,5 +1,5 @@
--# From https://download.gnome.org/sources/gtk+/3.24/gtk+-3.24.29.sha256sum
--sha256  f57ec4ade8f15cab0c23a80dcaee85b876e70a8823d9105f067ce335a8268caa  gtk+-3.24.29.tar.xz
-+# From https://download.gnome.org/sources/gtk+/3.24/gtk+-3.24.30.sha256sum
-+sha256  ba75bfff320ad1f4cfbee92ba813ec336322cc3c660d406aad014b07087a3ba9  gtk+-3.24.30.tar.xz
- 
- # Hash for license file:
- sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
-diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
-index 0c40bff80e..80a2affd87 100644
---- a/package/libgtk3/libgtk3.mk
-+++ b/package/libgtk3/libgtk3.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- LIBGTK3_VERSION_MAJOR = 3.24
--LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).29
-+LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).30
- LIBGTK3_SOURCE = gtk+-$(LIBGTK3_VERSION).tar.xz
- LIBGTK3_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk+/$(LIBGTK3_VERSION_MAJOR)
- LIBGTK3_LICENSE = LGPL-2.0+
+ # 0001-pppd-Fix-bounds-check.patch
+ PPPD_IGNORE_CVES += CVE-2020-8597
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
