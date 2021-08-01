@@ -7,63 +7,63 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 484C3C4338F
-	for <buildroot@archiver.kernel.org>; Sun,  1 Aug 2021 06:39:29 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 24526C4338F
+	for <buildroot@archiver.kernel.org>; Sun,  1 Aug 2021 06:43:33 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id E58BB60F9D
-	for <buildroot@archiver.kernel.org>; Sun,  1 Aug 2021 06:39:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E58BB60F9D
+	by mail.kernel.org (Postfix) with ESMTPS id BA3F061050
+	for <buildroot@archiver.kernel.org>; Sun,  1 Aug 2021 06:43:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org BA3F061050
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=t-online.de
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B217E607BE;
-	Sun,  1 Aug 2021 06:39:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 87A1F83BF7;
+	Sun,  1 Aug 2021 06:43:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LQmJhfsJSz-H; Sun,  1 Aug 2021 06:39:28 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id cvdT0y9wbXa4; Sun,  1 Aug 2021 06:43:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 03610607B5;
-	Sun,  1 Aug 2021 06:39:27 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C02BD1BF86B
- for <buildroot@lists.busybox.net>; Sun,  1 Aug 2021 06:39:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0751B83183;
+	Sun,  1 Aug 2021 06:43:30 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A04F61BF86B
+ for <buildroot@lists.busybox.net>; Sun,  1 Aug 2021 06:43:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B86C740197
- for <buildroot@lists.busybox.net>; Sun,  1 Aug 2021 06:39:24 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8FB0683183
+ for <buildroot@lists.busybox.net>; Sun,  1 Aug 2021 06:43:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yKrMDPEmjtQt for <buildroot@lists.busybox.net>;
- Sun,  1 Aug 2021 06:39:24 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DvWsjFvLihSy for <buildroot@lists.busybox.net>;
+ Sun,  1 Aug 2021 06:43:28 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mailout09.t-online.de (mailout09.t-online.de [194.25.134.84])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E93534158B
- for <buildroot@buildroot.org>; Sun,  1 Aug 2021 06:39:23 +0000 (UTC)
-Received: from fwd13.aul.t-online.de (fwd13.aul.t-online.de [172.20.27.62])
- by mailout09.t-online.de (Postfix) with SMTP id 5A7FA4A7B
- for <buildroot@buildroot.org>; Sun,  1 Aug 2021 08:38:48 +0200 (CEST)
+Received: from mailout10.t-online.de (mailout10.t-online.de [194.25.134.21])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 93C30830B8
+ for <buildroot@buildroot.org>; Sun,  1 Aug 2021 06:43:28 +0000 (UTC)
+Received: from fwd04.aul.t-online.de (fwd04.aul.t-online.de [172.20.26.149])
+ by mailout10.t-online.de (Postfix) with SMTP id DAE6211750
+ for <buildroot@buildroot.org>; Sun,  1 Aug 2021 08:43:25 +0200 (CEST)
 Received: from fli4l.lan.fli4l
- (r3Q8C+ZVrhSaG6s5ACGY-x1EHdFTruhoY1pQHo-n533HTmgOJGQLHjzS9GOKD7VwWI@[79.214.201.246])
- by fwd13.t-online.de with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1mA57V-04tr2e0; Sun, 1 Aug 2021 08:38:45 +0200
-Received: from mahler.lan.fli4l ([192.168.1.1]:34236)
+ (GMGZW0ZZZh1tVNokmAh7HtPYOTx3IcXj7PpHalpeCFQ+eBs2UKpuGzZIpXy2zvowJ4@[79.214.201.246])
+ by fwd04.t-online.de with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
+ esmtp id 1mA5C1-0f43pg0; Sun, 1 Aug 2021 08:43:25 +0200
+Received: from mahler.lan.fli4l ([192.168.1.1]:34240)
  by fli4l.lan.fli4l with esmtp (Exim 4.94.2)
- (envelope-from <bernd.kuhls@t-online.de>) id 1mA57U-0005oi-R4
- for buildroot@buildroot.org; Sun, 01 Aug 2021 08:38:45 +0200
+ (envelope-from <bernd.kuhls@t-online.de>) id 1mA5C0-0006cZ-Nj
+ for buildroot@buildroot.org; Sun, 01 Aug 2021 08:43:24 +0200
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Sun,  1 Aug 2021 08:38:44 +0200
-Message-Id: <20210801063844.14313-1-bernd.kuhls@t-online.de>
+Date: Sun,  1 Aug 2021 08:43:24 +0200
+Message-Id: <20210801064324.15610-1-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-ID: r3Q8C+ZVrhSaG6s5ACGY-x1EHdFTruhoY1pQHo-n533HTmgOJGQLHjzS9GOKD7VwWI
-X-TOI-EXPURGATEID: 150726::1627799925-00014A6A-CC00F72D/0/0 CLEAN NORMAL
-X-TOI-MSGID: 4778fc6b-618b-4ad2-b4c9-e19469df9d30
-Subject: [Buildroot] [PATCH 1/1] package/fetchmail: security bump version to
- 6.4.20
+X-ID: GMGZW0ZZZh1tVNokmAh7HtPYOTx3IcXj7PpHalpeCFQ+eBs2UKpuGzZIpXy2zvowJ4
+X-TOI-EXPURGATEID: 150726::1627800205-00000C79-0E1496AE/0/0 CLEAN NORMAL
+X-TOI-MSGID: 44590711-0ce6-47cb-8ede-5f552115f629
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xapp_fonttosfnt: bump version
+ to 1.2.2
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,45 +80,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-Fixes CVE-2021-36386:
-https://sourceforge.net/p/fetchmail/mailman/message/37327393/
-
 Release notes:
-https://sourceforge.net/p/fetchmail/mailman/message/37327392/
+https://lists.x.org/archives/xorg-announce/2021-June/003093.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/fetchmail/fetchmail.hash | 6 +++---
- package/fetchmail/fetchmail.mk   | 2 +-
+ package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.hash | 6 +++---
+ package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.mk   | 2 +-
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/fetchmail/fetchmail.hash b/package/fetchmail/fetchmail.hash
-index 8f092a3f80..41d71088ba 100644
---- a/package/fetchmail/fetchmail.hash
-+++ b/package/fetchmail/fetchmail.hash
-@@ -1,6 +1,6 @@
--# From https://sourceforge.net/p/fetchmail/mailman/message/37267719/
--sha256  cd8d11a3d103e50caa2ec64bcda6307eb3d0783a4d4dfd88e668b81aaf9d6b5f  fetchmail-6.4.19.tar.xz
-+# From https://sourceforge.net/p/fetchmail/mailman/message/37327392/
-+sha256  c82141ae2e8f0039ceb0c5c2eda43c5e93ad0bf7f9c6bb628092b3be74386176  fetchmail-6.4.20.tar.xz
- # From https://sourceforge.net/projects/fetchmail/files/branch_6.4/
--sha1  bb6959f0cf1f6d689c2ba3834c5bba72e4f9ec07  fetchmail-6.4.19.tar.xz
-+sha1  ac6a6c4afa105e097d025340cf78b32e0c3b0c8e  fetchmail-6.4.20.tar.xz
- # Locally computed:
- sha256  6346b5aa04e258fa4326272ea92372d796b4382aa963535ae98a3bb5f8cd5aeb  COPYING
-diff --git a/package/fetchmail/fetchmail.mk b/package/fetchmail/fetchmail.mk
-index 10a544413f..7d276bccff 100644
---- a/package/fetchmail/fetchmail.mk
-+++ b/package/fetchmail/fetchmail.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.hash b/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.hash
+index 7faa797fde..72077bee60 100644
+--- a/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.hash
++++ b/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2020-October/003062.html
+-sha256  07c835f1f98d7b462be8f1493d072b62418282421be18197e50579c70b0c259b  fonttosfnt-1.2.1.tar.bz2
+-sha512  3d4ece61e31d4a5ed56923ecc1883e80a9308d2062d37345cb5be081bc2b004aadebf99a989601749a63e03eb641e0522d07773a57bca0b4710ed453e4f20742  fonttosfnt-1.2.1.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2021-June/003093.html
++sha256  1a1bb4ef25856dea7de3d491ae7231493225b400bee0f6a1f949017ffd203a64  fonttosfnt-1.2.2.tar.bz2
++sha512  ceac6ccb064043d46f9f16f31fb89c6cbf7f026d049f7b5325d6af97e809b4cd068e6149413bb328c0af601a98b5070e21d469888a6853f6cabecd5b46f60240  fonttosfnt-1.2.2.tar.bz2
+ # Locally computed
+ sha256  f83378580cb7909a98b52bf5cd6a29f4894d76318c5c5312dd3f17a3e92beef1  COPYING
+diff --git a/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.mk b/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.mk
+index bafc524901..9fdccbb843 100644
+--- a/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.mk
++++ b/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- FETCHMAIL_VERSION_MAJOR = 6.4
--FETCHMAIL_VERSION = $(FETCHMAIL_VERSION_MAJOR).19
-+FETCHMAIL_VERSION = $(FETCHMAIL_VERSION_MAJOR).20
- FETCHMAIL_SOURCE = fetchmail-$(FETCHMAIL_VERSION).tar.xz
- FETCHMAIL_SITE = http://downloads.sourceforge.net/project/fetchmail/branch_$(FETCHMAIL_VERSION_MAJOR)
- FETCHMAIL_LICENSE = GPL-2.0; some exceptions are mentioned in COPYING
+-XAPP_FONTTOSFNT_VERSION = 1.2.1
++XAPP_FONTTOSFNT_VERSION = 1.2.2
+ XAPP_FONTTOSFNT_SOURCE = fonttosfnt-$(XAPP_FONTTOSFNT_VERSION).tar.bz2
+ XAPP_FONTTOSFNT_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_FONTTOSFNT_LICENSE = MIT
 -- 
 2.30.2
 
