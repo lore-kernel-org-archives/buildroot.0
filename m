@@ -2,57 +2,57 @@ Return-Path: <SRS0=sxUg=M3=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E661AC4320A
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 01:06:43 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B8159C4338F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 01:06:56 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id ADE8B60F58
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 01:06:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org ADE8B60F58
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
+	by mail.kernel.org (Postfix) with ESMTPS id 882FA60EE9
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 01:06:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 882FA60EE9
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 806B640E58;
-	Wed,  4 Aug 2021 01:06:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 556A8424F7;
+	Wed,  4 Aug 2021 01:06:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WgPqoNnVx0XR; Wed,  4 Aug 2021 01:06:42 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 80wXfr8k7o_A; Wed,  4 Aug 2021 01:06:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 96A8440E53;
-	Wed,  4 Aug 2021 01:06:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 91190424F4;
+	Wed,  4 Aug 2021 01:06:54 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 400AF1BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:22:56 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 19D801BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:22:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E186A4149D
+ by smtp2.osuosl.org (Postfix) with ESMTP id EF23340EAE
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lKQUadVJLmnj for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:10:46 +0000 (UTC)
+ with ESMTP id H9xs8BPVifJ4 for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:10:50 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5360A40EAE
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:32 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3A401414C9
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:34 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id A556387C2D; Tue,  3 Aug 2021 21:10:24 +0000 (UTC)
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ id 8F34289015; Tue,  3 Aug 2021 21:10:26 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 1 Aug 2021 00:02:50 +0200
+Date: Sun, 1 Aug 2021 20:47:05 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: be38432532b23275869a3a914c0ad0031323259c
-X-Git-Newrev: b6b572eb4f35d5385a14760428cc13d9962825a7
+X-Git-Oldrev: 0239ea5615a24469b6160f371fbec2735c89d4af
+X-Git-Newrev: b4f0a0d603176b45e52d7d6e695af269a356f413
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211024.A556387C2D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/gtest: drop
- unrecognized option
+Message-Id: <20210803211026.8F34289015@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libfreeimage: fix
+ build with gcc 11
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,31 +70,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b6b572eb4f35d5385a14760428cc13d9962825a7
+commit: https://git.buildroot.net/buildroot/commit/?id=b4f0a0d603176b45e52d7d6e695af269a356f413
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-BUILD_GTEST has been dropped from gtest since version 1.8.1 and
-https://github.com/google/googletest/commit/aff0379441a392d618ec87b6d55a29070e97eaf1
+Fix the following build failure with gcc 11:
+
+In file included from Source/FreeImage/../OpenEXR/IlmImf/ImfHeader.h:51,
+                 from Source/FreeImage/../OpenEXR/IlmImf/ImfOutputFile.h:46,
+                 from Source/FreeImage/PluginEXR.cpp:33:
+Source/OpenEXR/Imath/ImathVec.h:228:41: error: ISO C++17 does not allow dynamic exception specifications
+  228 |     const Vec2 &        normalizeExc () throw (IEX_NAMESPACE::MathExc);
+      |                                         ^~~~~
+
+Fixes:
+ - http://autobuild.buildroot.org/results/953cd07402fe2f99f2361a3b4a7b086a88e0d72d
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/gtest/gtest.mk | 2 --
- 1 file changed, 2 deletions(-)
+ package/libfreeimage/libfreeimage.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/gtest/gtest.mk b/package/gtest/gtest.mk
-index 29c85e698f..474d127312 100644
---- a/package/gtest/gtest.mk
-+++ b/package/gtest/gtest.mk
-@@ -44,8 +44,6 @@ ifeq ($(BR2_STATIC_LIBS),)
- GTEST_CONF_OPTS += -DCMAKE_POSITION_INDEPENDENT_CODE=ON
- endif
+diff --git a/package/libfreeimage/libfreeimage.mk b/package/libfreeimage/libfreeimage.mk
+index 91299084a1..4775f92109 100644
+--- a/package/libfreeimage/libfreeimage.mk
++++ b/package/libfreeimage/libfreeimage.mk
+@@ -20,7 +20,8 @@ define LIBFREEIMAGE_EXTRACT_CMDS
+ endef
  
--GTEST_CONF_OPTS += -DBUILD_GTEST=ON
--
- ifeq ($(BR2_PACKAGE_GTEST_GMOCK),y)
- GTEST_CONF_OPTS += -DBUILD_GMOCK=ON
- else
+ define LIBFREEIMAGE_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) \
++		CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11" $(MAKE) -C $(@D)
+ endef
+ 
+ define LIBFREEIMAGE_INSTALL_STAGING_CMDS
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
