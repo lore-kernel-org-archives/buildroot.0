@@ -2,56 +2,91 @@ Return-Path: <SRS0=tdpc=MY=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,
-	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
+	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 70977C4338F
-	for <buildroot@archiver.kernel.org>; Sun,  1 Aug 2021 11:15:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CAE8EC4338F
+	for <buildroot@archiver.kernel.org>; Sun,  1 Aug 2021 11:42:18 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 138AC61057
-	for <buildroot@archiver.kernel.org>; Sun,  1 Aug 2021 11:15:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 138AC61057
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
+	by mail.kernel.org (Postfix) with ESMTPS id 6CBBE60EBB
+	for <buildroot@archiver.kernel.org>; Sun,  1 Aug 2021 11:42:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6CBBE60EBB
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C430660774;
-	Sun,  1 Aug 2021 11:15:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2CE64607B4;
+	Sun,  1 Aug 2021 11:42:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KGZpnq-QZVzu; Sun,  1 Aug 2021 11:15:38 +0000 (UTC)
+	with ESMTP id o45QGk4JcwZh; Sun,  1 Aug 2021 11:42:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D2C126060A;
-	Sun,  1 Aug 2021 11:15:37 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id ADDA21BF303
- for <buildroot@lists.busybox.net>; Sun,  1 Aug 2021 11:15:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9BC496079A;
+	Sun,  1 Aug 2021 11:42:16 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 6094F1BF303
+ for <buildroot@lists.busybox.net>; Sun,  1 Aug 2021 11:42:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9C21783BFD
- for <buildroot@lists.busybox.net>; Sun,  1 Aug 2021 11:15:25 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 501F4403EA
+ for <buildroot@lists.busybox.net>; Sun,  1 Aug 2021 11:42:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1oiyE7lBLVKB for <buildroot@lists.busybox.net>;
- Sun,  1 Aug 2021 11:15:23 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id E42BC83ACF
- for <buildroot@buildroot.org>; Sun,  1 Aug 2021 11:15:23 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id D08618A412; Sun,  1 Aug 2021 11:15:21 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id q9Nky1auibfB for <buildroot@lists.busybox.net>;
+ Sun,  1 Aug 2021 11:42:13 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
+ [IPv6:2a00:1450:4864:20::32a])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8C90F403E0
+ for <buildroot@buildroot.org>; Sun,  1 Aug 2021 11:42:13 +0000 (UTC)
+Received: by mail-wm1-x32a.google.com with SMTP id
+ d131-20020a1c1d890000b02902516717f562so9274907wmd.3
+ for <buildroot@buildroot.org>; Sun, 01 Aug 2021 04:42:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=zwVym9KyFhsdZKK08dYmVFDpTt7fnfW/zR+MZZf2RY8=;
+ b=DS7dvC1u1vkabinxo1bvPH2qvAzKYEPRs44Otj0wpuxKeaK4pE6Z3NvmsOcLOp3gp5
+ yPrQo4Et/7dzJaOjWEyhUKYhsV8PDHcKSo7Wos0lvlVouhYTnVkIG/rVrXj+S/ewJDhR
+ MNNUWKcirIhQIVCgF+X+LRjcQGoHXnxTitgyIzyURNZAKCDyi7XmW4hz98vAoa3nfC1z
+ ENbCiJ5EO8ZZvZ20PosbjfXt920g4Xs+IkuU32ecriizBOPV5GFsAzynaFKV/nHdA7Tx
+ cwOtNmEbxG/bvAfk/HwXtmFUGKTJMRXpqnxVOwFQC6yVRZffpmP8M5CGZAg+WvL2E959
+ x4vg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=zwVym9KyFhsdZKK08dYmVFDpTt7fnfW/zR+MZZf2RY8=;
+ b=jPJ/G4n5SNB2ujoeNT4KkfXDaAmOE5xcFyun1LhT8Xah+XjzZt2QM9JynYd4IJuOym
+ QvorIxFxjq68b8y1J2Wm1xfyMAApkp21XDWmhNx6tIDvwqHpK8uPtSvCUpcUvW9VAQ1p
+ gIqUNRDHTphdCAdKQNsT7qOOqpcvAoLPq5186WG8KAU8//vPVEkz1kfspsHzTvS7yyMW
+ fE5E8ltPzPQEmojDWZDabtjgh90+Wwl94rvATXJ83ylVJnURlGGQSXqjGK0e/gv2ZB/Z
+ MLBk9xzcvC4Zsc3B+cmAup622Fqfo50HfESf6xRMjcLi/dn4F54vt4kQ5+xQVu1S0QoW
+ VLeA==
+X-Gm-Message-State: AOAM531rbjHWcY1aQzLMhNNwTXjvl3pKBjqLUNUr+RUguc6pNVTQuEUP
+ /PZpZh0GmgOGi7gUg8bgEBb+797J/YVK7g==
+X-Google-Smtp-Source: ABdhPJzZNkOYFduSVz3gvhXa8slsn8QDHax8kNQPX0N1rcCgDLdebxWJkRApKXziBLa7iyfKPCAa+w==
+X-Received: by 2002:a7b:cf2e:: with SMTP id m14mr12105384wmg.95.1627818131177; 
+ Sun, 01 Aug 2021 04:42:11 -0700 (PDT)
+Received: from kali.home (pop.92-184-116-62.mobile.abo.orange.fr.
+ [92.184.116.62])
+ by smtp.gmail.com with ESMTPSA id s1sm7148280wmj.8.2021.08.01.04.42.10
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 01 Aug 2021 04:42:10 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 1 Aug 2021 13:15:09 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 64bd00d086e6cac8d675e879139409fab3b56abd
-X-Git-Newrev: 4a3f27b1933451ff6e76d4b5c0bdcb4d3028e93d
-X-Patchwork-Hint: ignore
-Message-Id: <20210801111521.D08618A412@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libsoil: remove package
+Date: Sun,  1 Aug 2021 13:42:00 +0200
+Message-Id: <20210801114200.2762991-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH 1/1] package/rpcbind: add SELinux module
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,205 +98,36 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-MIME-Version: 1.0
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4a3f27b1933451ff6e76d4b5c0bdcb4d3028e93d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Support for rpcbind is added by the services/rpcbind module in the
+SELinux refpolicy.
 
-All kodi screensavers previously needing libsoil removed the dependency.
-
-For reference:
-https://github.com/xbmc/screensaver.matrixtrails/commit/92a0d44e9151cfce3be74e81a3e39f0688d69b7a
-https://github.com/xbmc/screensaver.asterwave/commit/8a778873754de09c93031408c71b3c40d198f3bc
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- Config.in.legacy                        |  7 +++++
- DEVELOPERS                              |  1 -
- package/Config.in                       |  1 -
- package/libsoil/0001-fix-makefile.patch | 40 --------------------------
- package/libsoil/Config.in               | 12 --------
- package/libsoil/libsoil.hash            |  4 ---
- package/libsoil/libsoil.mk              | 50 ---------------------------------
- 7 files changed, 7 insertions(+), 108 deletions(-)
+ package/rpcbind/rpcbind.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 5233785209..891eee98cc 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,13 @@ endif
+diff --git a/package/rpcbind/rpcbind.mk b/package/rpcbind/rpcbind.mk
+index 725075f962..2eee116755 100644
+--- a/package/rpcbind/rpcbind.mk
++++ b/package/rpcbind/rpcbind.mk
+@@ -10,6 +10,7 @@ RPCBIND_SOURCE = rpcbind-$(RPCBIND_VERSION).tar.bz2
+ RPCBIND_LICENSE = BSD-3-Clause
+ RPCBIND_LICENSE_FILES = COPYING
+ RPCBIND_CPE_ID_VENDOR = rpcbind_project
++RPCBIND_SELINUX_MODULES = rpcbind
  
- comment "Legacy options removed in 2021.08"
- 
-+config BR2_PACKAGE_LIBSOIL
-+	bool "libsoil package removed"
-+	select BR2_LEGACY
-+	help
-+	  The libsoil package was removed. All packages needing
-+	  libsoil removed the dependency.
-+
- config BR2_PACKAGE_CLAPACK
- 	bool "cblas/clapack package removed"
- 	select BR2_LEGACY
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 869f66f028..e73f2dfd7a 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -386,7 +386,6 @@ F:	package/libpng/
- F:	package/libsidplay2/
- F:	package/libsilk/
- F:	package/libsndfile/
--F:	package/libsoil/
- F:	package/libsoundtouch/
- F:	package/libsquish/
- F:	package/libudfread/
-diff --git a/package/Config.in b/package/Config.in
-index 5941e35c05..fb7021f89d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1509,7 +1509,6 @@ menu "Graphics"
- 	source "package/libqrencode/Config.in"
- 	source "package/libraw/Config.in"
- 	source "package/librsvg/Config.in"
--	source "package/libsoil/Config.in"
- 	source "package/libsvg/Config.in"
- 	source "package/libsvg-cairo/Config.in"
- 	source "package/libsvgtiny/Config.in"
-diff --git a/package/libsoil/0001-fix-makefile.patch b/package/libsoil/0001-fix-makefile.patch
-deleted file mode 100644
-index 310d26448b..0000000000
---- a/package/libsoil/0001-fix-makefile.patch
-+++ /dev/null
-@@ -1,40 +0,0 @@
--Various makefile fixes to allow cross compilation
--
--Partly ported from
--http://anonscm.debian.org/cgit/pkg-games/libsoil.git/tree/debian/patches/linking_correctly.patch
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--
--diff -uNr soil.org/projects/makefile/alternate_Makefile.txt soil/projects/makefile/alternate_Makefile.txt
----- soil.org/projects/makefile/alternate_Makefile.txt	2008-07-07 18:13:28.000000000 +0200
--+++ soil/projects/makefile/alternate_Makefile.txt	2015-11-07 11:15:04.140106336 +0100
--@@ -1,8 +1,8 @@
-- MAKE = make
---CC = gcc
---INSTALL_FILE = install -p -o root -g root -m 644
---INSTALL_DIR = install -p -o root -g root -d
---LN = ln -s
--+CC = $(GCC)
--+INSTALL_FILE = $(INSTALL) -m 644
--+INSTALL_DIR = $(INSTALL) -d
--+LN = ln -sf
-- RM = rm -fv
-- CFLAGS += -c -O2 -Wall
-- LDFLAGS +=
--@@ -23,13 +23,13 @@
-- all: $(OFILES) lib
-- 
-- %.o: %.c
---	$(CC) $(CFLAGS) $< -o $@
--+	$(CC) $(CFLAGS) -c -fPIC $< -o $@
-- 
-- lib: $(OFILES)
-- 	# create static library
---	ar -cvq $(LIBNAME).a $(OFILES)
--+	$(AR) -cvq $(LIBNAME).a $(OFILES)
-- 	# create shared library
---	gcc -shared -Wl,-soname,$(LIBNAME).so.$(MAJOR) -o $(LIBNAME).so.$(VERSION) $(OFILES)
--+	$(CC) -shared -Wl,-soname,$(LIBNAME).so.$(MAJOR) -o $(LIBNAME).so.$(VERSION) $(OFILES) -lGL -lm
-- 
-- install:
-- 	$(INSTALL_DIR) $(DESTDIR)/$(INCLUDEDIR)
-diff --git a/package/libsoil/Config.in b/package/libsoil/Config.in
-deleted file mode 100644
-index aea0cc3548..0000000000
---- a/package/libsoil/Config.in
-+++ /dev/null
-@@ -1,12 +0,0 @@
--config BR2_PACKAGE_LIBSOIL
--	bool "libsoil"
--	depends on BR2_PACKAGE_HAS_LIBGL
--	depends on !BR2_STATIC_LIBS
--	help
--	  SOIL is a tiny C library used primarily for uploading
--	  textures into OpenGL.
--
--	  http://www.lonesock.net/soil.html
--
--comment "libsoil needs an OpenGL backend and a toolchain w/ dynamic library"
--	depends on !BR2_PACKAGE_HAS_LIBGL || BR2_STATIC_LIBS
-diff --git a/package/libsoil/libsoil.hash b/package/libsoil/libsoil.hash
-deleted file mode 100644
-index 2596cd6b4d..0000000000
---- a/package/libsoil/libsoil.hash
-+++ /dev/null
-@@ -1,4 +0,0 @@
--# Locally calculated
--sha256  a2305b8d64f6d636e36d669bbdb0ca5445d1345c754b3d61d3f037dad2e5f701  soil.zip
--sha256  a53f0508cafb544aa0b11c241c1000055bd9d827d19712f4de08898e36f29728  src/stb_image_aug.c
--sha256  449ba815b6f610660515246d029f5d08b45178fe8f9f9f520939edad85a7935e  src/image_helper.c
-diff --git a/package/libsoil/libsoil.mk b/package/libsoil/libsoil.mk
-deleted file mode 100644
-index 2945edd8dd..0000000000
---- a/package/libsoil/libsoil.mk
-+++ /dev/null
-@@ -1,50 +0,0 @@
--################################################################################
--#
--# libsoil
--#
--################################################################################
--
--LIBSOIL_VERSION = 20080707
--LIBSOIL_SOURCE = soil.zip
--LIBSOIL_SITE = http://www.lonesock.net/files
--LIBSOIL_INSTALL_STAGING = YES
--LIBSOIL_DEPENDENCIES = libgl
--LIBSOIL_LICENSE = Public Domain, MIT
--LIBSOIL_LICENSE_FILES = src/stb_image_aug.c src/image_helper.c
--LIBSOIL_MAKEFILE = ../projects/makefile/alternate_Makefile.txt
--
--define LIBSOIL_EXTRACT_CMDS
--	$(UNZIP) -d $(@D) $(LIBSOIL_DL_DIR)/$(LIBSOIL_SOURCE)
--	mv $(@D)/Simple\ OpenGL\ Image\ Library/* $(@D)
--endef
--
--# gnu patch < v2.5.9 doesn't correctly handle spaces in file names,
--# and we want to patch the 'alternate Makefile.txt' file, so rename
--# the file (and patch the renamed file) for compatibility with older
--# distributions
--define REMOVE_SPACE_FROM_FILENAME
--	cd $(@D)/projects/makefile/ && \
--		mv "alternate Makefile.txt" alternate_Makefile.txt
--endef
--LIBSOIL_POST_EXTRACT_HOOKS += REMOVE_SPACE_FROM_FILENAME
--
--define LIBSOIL_BUILD_CMDS
--	$(MAKE) $(TARGET_CONFIGURE_OPTS) -f $(LIBSOIL_MAKEFILE) \
--		-C $(@D)/src
--endef
--
--define LIBSOIL_INSTALL_STAGING_CMDS
--	$(MAKE) $(TARGET_CONFIGURE_OPTS) -f $(LIBSOIL_MAKEFILE) \
--		DESTDIR=$(STAGING_DIR) install \
--		INSTALL=$(INSTALL) \
--		-C $(@D)/src
--endef
--
--define LIBSOIL_INSTALL_TARGET_CMDS
--	$(MAKE) $(TARGET_CONFIGURE_OPTS) -f $(LIBSOIL_MAKEFILE) \
--		DESTDIR=$(TARGET_DIR) install \
--		INSTALL=$(INSTALL) \
--		-C $(@D)/src
--endef
--
--$(eval $(generic-package))
+ RPCBIND_CONF_ENV += \
+ 	CFLAGS="$(TARGET_CFLAGS) `$(PKG_CONFIG_HOST_BINARY) --cflags libtirpc`"
+-- 
+2.30.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
