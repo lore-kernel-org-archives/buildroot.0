@@ -2,92 +2,60 @@ Return-Path: <SRS0=tdpc=MY=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.5 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
-	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-21.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6527CC4338F
-	for <buildroot@archiver.kernel.org>; Sun,  1 Aug 2021 21:46:36 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4DB32C4338F
+	for <buildroot@archiver.kernel.org>; Sun,  1 Aug 2021 21:52:13 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1F3A360F8F
-	for <buildroot@archiver.kernel.org>; Sun,  1 Aug 2021 21:46:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1F3A360F8F
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id 8505C60FC1
+	for <buildroot@archiver.kernel.org>; Sun,  1 Aug 2021 21:52:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8505C60FC1
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CBCFB60749;
-	Sun,  1 Aug 2021 21:46:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 48DA2838D7;
+	Sun,  1 Aug 2021 21:52:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vcflitqa8_Bp; Sun,  1 Aug 2021 21:46:34 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id IVIczbCVa_Ds; Sun,  1 Aug 2021 21:52:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E1D6360697;
-	Sun,  1 Aug 2021 21:46:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6ADD9838AF;
+	Sun,  1 Aug 2021 21:52:10 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0E5CB1BF36B
- for <buildroot@lists.busybox.net>; Sun,  1 Aug 2021 21:46:21 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8B9AD1BF36B
+ for <buildroot@lists.busybox.net>; Sun,  1 Aug 2021 21:52:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EFF20403B7
- for <buildroot@lists.busybox.net>; Sun,  1 Aug 2021 21:46:19 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7B0434046B
+ for <buildroot@lists.busybox.net>; Sun,  1 Aug 2021 21:52:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Lv1jLvBcHwRe for <buildroot@lists.busybox.net>;
- Sun,  1 Aug 2021 21:46:19 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
- [IPv6:2a00:1450:4864:20::42e])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B745F403BF
- for <buildroot@buildroot.org>; Sun,  1 Aug 2021 21:46:18 +0000 (UTC)
-Received: by mail-wr1-x42e.google.com with SMTP id h13so5612697wrp.1
- for <buildroot@buildroot.org>; Sun, 01 Aug 2021 14:46:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=s6U4sdqBuE6OLb5gTmy42dPgK2K8Zod/uGJrlqJR+yM=;
- b=mhUpWtFUiBtdggk8iW7omonxhGjXWhvvHSC+7CQG8oOptQ7rf2FyrDVX2quREb2Yj2
- cjd8o/yxQHBYhr3tNXcJyuMPuzXHgZszyVPaDqVGadu2oQ1cg7NiqR7t76HiKJ0GIXLI
- YYbfpfR5ddEozxIrNGziFJzLLeyR6Gv9K13B3UXaMxWp8mHnjkd0EyblE8wxiatGYsm+
- M4k9c+BI3MfKRDOCqNTPSuADWFWhi1djPKFM42zn0V+AWvc+4IzE6j4IM5tMp1k26wri
- qMOThbKPw7j5HUPL+1KSXJ8BM32g0ah1PIBnxwiTQeNRkmBxEPxQNy00CycU9GERK1i8
- i59g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=s6U4sdqBuE6OLb5gTmy42dPgK2K8Zod/uGJrlqJR+yM=;
- b=fA3rL7VXnOLjOzeBROwc6IDwOB8Pw67hAPKu3cMFW7Mk+XfFU49EhYa/8GrnJOEtbs
- ltjcssyUepshs/uqt55CY10aLnM0NI0c2x0/fmudfbDaxdd7RZdW3si4RmPk5D/YuuQ1
- NPMEgmDSmqLfYV83AZIa1bdhKgJ9S8JuTP82Y46SMVXcKuNd1UiJhLyT8NCXasywy8iy
- vICRrRXNG/Br7h9JESwTH79v0oW14fC12AOPDEJivA1PN7MP8yeLWE/t8pPJ0Iw+gs+S
- H1JY/SBQ+vYZyu4K+HIoHVcnxsK9OHb/TCE9UbpS18/bskZsjBffUK7iD5vWuE3WHOH3
- yPRw==
-X-Gm-Message-State: AOAM530OE1lG0fJfWMkLZNZCUqI4o21s7oB1jFSUyZRgzuLRwBU6ogzs
- e/Jy4qseSzhP2hoR37aIMwGgJtWFewId8A==
-X-Google-Smtp-Source: ABdhPJzEfQyk908SBygncQ7P7erm76zpzVChw3FI5f+p05i6AjlkRyjkzrwG+zjK+WOF6lQ+ee338Q==
-X-Received: by 2002:a5d:6389:: with SMTP id p9mr14525468wru.1.1627854376810;
- Sun, 01 Aug 2021 14:46:16 -0700 (PDT)
-Received: from kali.home (pop.92-184-106-87.mobile.abo.orange.fr.
- [92.184.106.87])
- by smtp.gmail.com with ESMTPSA id a16sm9348632wrx.7.2021.08.01.14.46.15
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 01 Aug 2021 14:46:16 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Sun,  1 Aug 2021 23:46:01 +0200
-Message-Id: <20210801214601.566970-2-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210801214601.566970-1-fontaine.fabrice@gmail.com>
-References: <20210801214601.566970-1-fontaine.fabrice@gmail.com>
+ with ESMTP id ZsVSSKHg0zzC for <buildroot@lists.busybox.net>;
+ Sun,  1 Aug 2021 21:52:07 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C690C40466
+ for <buildroot@buildroot.org>; Sun,  1 Aug 2021 21:52:06 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 33DFD20003;
+ Sun,  1 Aug 2021 21:52:03 +0000 (UTC)
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Buildroot List <buildroot@buildroot.org>
+Date: Sun,  1 Aug 2021 23:51:58 +0200
+Message-Id: <20210801215159.2435224-1-thomas.petazzoni@bootlin.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 2/2] package/irqbalance: bump to version 1.8.0
+Subject: [Buildroot] [PATCH v2] package/libmodsecurity: fix build with
+ libmaxminddb
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,168 +67,184 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Karoly Kasza <kaszak@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Frank Vanbever <frank.vanbever@essensium.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-- Drop first patch (already in version)
-- Update indentation in hash file (two spaces)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-https://github.com/Irqbalance/irqbalance/releases/tag/v1.8.0
+Build with libmaxminddb is broken since bump to version 3.0.5 in commit
+464d0be380c84ac7c3f1684e49153c3868280d7e because of
+https://github.com/SpiderLabs/ModSecurity/commit/785958f9b5089b918c7d054cbcc2fe4a3c7b3788
+
+So revert this commit until upstream answer to comment to
+https://github.com/SpiderLabs/ModSecurity/issues/2131
+
+Reverting this commit requires autoreconfiguring, which itself causes
+lots of warnings as configure.ac queries git to know the version of
+various parts of libmodsecurity. However, it turns out that those
+versions are only used to be displayed in the output of the configure
+script, which is quite useless. The only one that is referenced
+elsewhere is LIBINJECTION_VERSION, but it's in fact a different thing:
+it is defined by others/libinjection/src/libinjection_sqli.c.
+
+The only variable that was AC_SUBST() and therefore visible elsewhere
+was MSC_GIT_VERSION, but it is not used anywhere in the code base,
+except in the configure script itself.
+
+Note that one patch is 0001 and the other 0003, because there was
+already a 0002 patch.
+
+Fixes:
+ - http://autobuild.buildroot.org/results/4c639fd967faa06f8ae362bacd38f3409c47267c
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...gure.ac-use-pkg-config-to-find-numa.patch} |   0
- ...ix-uint64_t-printf-format-use-PRIu64.patch | 105 ------------------
- package/irqbalance/irqbalance.hash            |   4 +-
- package/irqbalance/irqbalance.mk              |   2 +-
- 4 files changed, 3 insertions(+), 108 deletions(-)
- rename package/irqbalance/{0002-configure.ac-use-pkg-config-to-find-numa.patch => 0001-configure.ac-use-pkg-config-to-find-numa.patch} (100%)
- delete mode 100644 package/irqbalance/0001-fix-uint64_t-printf-format-use-PRIu64.patch
+ ...-drop-usage-of-git-at-configure-time.patch | 79 +++++++++++++++++++
+ ...Revert-Fix-maxminddb-link-on-FreeBSD.patch | 28 +++++++
+ package/libmodsecurity/libmodsecurity.mk      |  2 +
+ 3 files changed, 109 insertions(+)
+ create mode 100644 package/libmodsecurity/0001-configure.ac-drop-usage-of-git-at-configure-time.patch
+ create mode 100644 package/libmodsecurity/0003-Revert-Fix-maxminddb-link-on-FreeBSD.patch
 
-diff --git a/package/irqbalance/0002-configure.ac-use-pkg-config-to-find-numa.patch b/package/irqbalance/0001-configure.ac-use-pkg-config-to-find-numa.patch
-similarity index 100%
-rename from package/irqbalance/0002-configure.ac-use-pkg-config-to-find-numa.patch
-rename to package/irqbalance/0001-configure.ac-use-pkg-config-to-find-numa.patch
-diff --git a/package/irqbalance/0001-fix-uint64_t-printf-format-use-PRIu64.patch b/package/irqbalance/0001-fix-uint64_t-printf-format-use-PRIu64.patch
-deleted file mode 100644
-index 95a9616c71..0000000000
---- a/package/irqbalance/0001-fix-uint64_t-printf-format-use-PRIu64.patch
-+++ /dev/null
-@@ -1,105 +0,0 @@
--From 0cdc7a22d5156440fecff14c438d4e24261ac793 Mon Sep 17 00:00:00 2001
--From: Peter Seiderer <ps.report@gmx.net>
--Date: Sat, 20 Feb 2021 23:38:56 +0100
--Subject: [PATCH] fix uint64_t printf format (use PRIu64)
--
--Fixes (on arm 32-bit):
--
--  $ irqbalance-ui
--  Invalid data sent.  Unexpected token: (null)TYPE
--
--And strace showed the following:
--
--  237   sendmsg(3, {msg_name=NULL, msg_namelen=0, msg_iov=[{iov_base="stats", iov_len=5}], msg_iovlen=1, msg_control=[{cmsg_len=24, cmsg_level=SOL_SOCKET, cmsg_type=SCM_CREDENTIALS, cmsg_data={pid=237, uid=0, gid=0}}], msg_controllen=24, msg_flags=0}, 0) = 5
--  237   recv(3, "TYPE 3 NUMBER -1 LOAD 0 SAVE_MODE 0 (null)TYPE 2 NUMBER 0 LOAD 0 SAVE_MODE 0 (null)TYPE 1 NUMBER 0 LOAD 0 SAVE_MODE 0 (null)TYPE 0 NUMBER 3 LOAD 0 SAVE_MODE 0 (null)TYPE 1 NUMBER 1 LOAD 0 SAVE_MODE 0 (null)TYPE 0 NUMBER 1 LOAD 0 SAVE_MODE 0 (null)TYPE 1 NUMBER 2 LOAD 0 SAVE_MODE 0 (null)TYPE 0 NUMBER 2 LOAD 0 SAVE_MODE 0 (null)TYPE 1 NUMBER 3 LOAD 0 SAVE_MODE 0 (null)TYPE 0 NUMBER 0 LOAD 0 SAVE_MODE 0 (null)", 8192, 0) = 411
--
--[backported from upstream]
--Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-----
-- cputree.c    | 3 ++-
-- irqbalance.c | 5 +++--
-- ui/ui.c      | 5 +++--
-- 3 files changed, 8 insertions(+), 5 deletions(-)
--
--diff --git a/cputree.c b/cputree.c
--index fda0200..a8dba73 100644
----- a/cputree.c
--+++ b/cputree.c
--@@ -33,6 +33,7 @@
-- #include <sys/types.h>
-- #include <sys/stat.h>
-- #include <dirent.h>
--+#include <inttypes.h>
-- 
-- #include <glib.h>
-- 
--@@ -417,7 +418,7 @@ static void dump_irq(struct irq_info *info, void *data)
-- 		indent[i] = log_indent[0];
-- 
-- 	indent[i] = '\0';
---	log(TO_CONSOLE, LOG_INFO, "%sInterrupt %i node_num is %d (%s/%lu:%lu) \n", indent,
--+	log(TO_CONSOLE, LOG_INFO, "%sInterrupt %i node_num is %d (%s/%" PRIu64 ":%" PRIu64 ") \n", indent,
-- 	    info->irq, irq_numa_node(info)->number, classes[info->class], info->load, (info->irq_count - info->last_irq_count));
-- 	free(indent);
-- }
--diff --git a/irqbalance.c b/irqbalance.c
--index 9baa955..458bb07 100644
----- a/irqbalance.c
--+++ b/irqbalance.c
--@@ -34,6 +34,7 @@
-- #include <sys/socket.h>
-- #include <sys/un.h>
-- #include <fcntl.h>
--+#include <inttypes.h>
-- #ifdef HAVE_GETOPT_LONG 
-- #include <getopt.h>
-- #endif
--@@ -357,7 +358,7 @@ void get_irq_data(struct irq_info *irq, void *data)
-- 	*irqdata = newptr;
-- 
-- 	sprintf(*irqdata + strlen(*irqdata),
---			"IRQ %d LOAD %lu DIFF %lu CLASS %d ", irq->irq, irq->load,
--+			"IRQ %d LOAD %" PRIu64 " DIFF %" PRIu64 " CLASS %d ", irq->irq, irq->load,
-- 			(irq->irq_count - irq->last_irq_count), irq->class);
-- }
-- 
--@@ -395,7 +396,7 @@ void get_object_stat(struct topo_obj *object, void *data)
-- 
-- 	*stats = newptr;
-- 
---	sprintf(*stats + strlen(*stats), "TYPE %d NUMBER %d LOAD %lu SAVE_MODE %d %s",
--+	sprintf(*stats + strlen(*stats), "TYPE %d NUMBER %d LOAD %" PRIu64 " SAVE_MODE %d %s",
-- 			object->obj_type, object->number, object->load,
-- 			object->powersave_mode, irq_data ? irq_data : "");
-- 	free(irq_data);
--diff --git a/ui/ui.c b/ui/ui.c
--index 06ec472..4cf68bf 100644
----- a/ui/ui.c
--+++ b/ui/ui.c
--@@ -1,4 +1,5 @@
-- 
--+#include <inttypes.h>
-- #include <string.h>
-- #include "ui.h"
-- 
--@@ -563,7 +564,7 @@ void settings()
-- 
-- 	char info[128] = "Current sleep interval between rebalancing: \0";
-- 	uint8_t sleep_input_offset = strlen(info) + 3;
---	snprintf(info + strlen(info), 128 - strlen(info), "%lu\n", setup.sleep);
--+	snprintf(info + strlen(info), 128 - strlen(info), "%" PRIu64 "\n", setup.sleep);
-- 	attrset(COLOR_PAIR(1));
-- 	mvprintw(2, 3, info);
-- 	print_all_cpus();
--@@ -588,7 +589,7 @@ void settings()
-- 			if(new_sleep != setup.sleep) {
-- 				setup.sleep = new_sleep;
-- 				char settings_data[128];
---				snprintf(settings_data, 128, "%s %lu", SET_SLEEP, new_sleep);
--+				snprintf(settings_data, 128, "%s %" PRIu64, SET_SLEEP, new_sleep);
-- 				send_settings(settings_data);
-- 			}
-- 			break;
---- 
--2.25.1
--
-diff --git a/package/irqbalance/irqbalance.hash b/package/irqbalance/irqbalance.hash
-index 587173ca65..49118f8c7d 100644
---- a/package/irqbalance/irqbalance.hash
-+++ b/package/irqbalance/irqbalance.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 28f2ad35945b93d90f4a5bad95b4c0871a0f644375f746ec16f61045b9ec970e  irqbalance-1.7.0.tar.gz
--sha256 32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-+sha256  2e7ddb9687a6a5cc1f41626659eac2ad9d6b5875629156b92f693bd404d8ae63  irqbalance-1.8.0.tar.gz
-+sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-diff --git a/package/irqbalance/irqbalance.mk b/package/irqbalance/irqbalance.mk
-index eb7c3e9f3b..1efc0b7fa2 100644
---- a/package/irqbalance/irqbalance.mk
-+++ b/package/irqbalance/irqbalance.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libmodsecurity/0001-configure.ac-drop-usage-of-git-at-configure-time.patch b/package/libmodsecurity/0001-configure.ac-drop-usage-of-git-at-configure-time.patch
+new file mode 100644
+index 0000000000..14767fb28e
+--- /dev/null
++++ b/package/libmodsecurity/0001-configure.ac-drop-usage-of-git-at-configure-time.patch
+@@ -0,0 +1,79 @@
++From a2116312068b6b2c5732dfebde19b751cc81d4f3 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Sun, 1 Aug 2021 23:21:35 +0200
++Subject: [PATCH] configure.ac: drop usage of git at configure time
++
++The usage of git is only to print some messages at configure time,
++which is not very useful, and causes a significant number of warning
++when regenerating the configure script.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ configure.ac | 23 -----------------------
++ 1 file changed, 23 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index 20163e1e..14e5892a 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -3,7 +3,6 @@
++ 
++ # Get the hash of the last commit, to be used if it is not an
++ # official release.
++-AC_DEFUN([MSC_GIT_HASH], m4_esyscmd_s(git log -1 --format="%h" --abbrev-commit))
++ AC_DEFUN([MSC_MAJOR], m4_esyscmd_s(cat headers/modsecurity/modsecurity.h | grep "define MODSECURITY_MAJOR " | awk {'print $3'} | sed 's/\"//g'))
++ AC_DEFUN([MSC_MINOR], m4_esyscmd_s(cat headers/modsecurity/modsecurity.h | grep "define MODSECURITY_MINOR " | awk {'print $3'} | sed 's/\"//g'))
++ AC_DEFUN([MSC_PATCHLEVEL], m4_esyscmd_s(cat headers/modsecurity/modsecurity.h | grep "define MODSECURITY_PATCHLEVEL " | awk {'print $3'} | sed 's/\"//g'))
++@@ -25,9 +24,6 @@ m4_define([msc_version],
++ m4_define([msc_version_with_patchlevel],
++     [msc_version_major.msc_version_minor.msc_version_patchlevel])
++ 
++-m4_define([msc_version_git],
++-    [m4_esyscmd_s(git describe)])
++-
++ m4_define([msc_version_info],
++     [msc_version_c_plus_a:msc_version_patchlevel:msc_version_minor])
++ 
++@@ -73,11 +69,6 @@ AC_MSG_ERROR([\
++ 
++    ])
++ fi
++-# Libinjection version
++-AC_DEFUN([LIBINJECTION_VERSION], m4_esyscmd_s(cd "others/libinjection" && git describe && cd ../..))
++-
++-# SecLang test version
++-AC_DEFUN([SECLANG_TEST_VERSION], m4_esyscmd_s(cd "test/test-cases/secrules-language-tests" && git log -1 --format="%h" --abbrev-commit && cd ../../..))
++ 
++ 
++ # Check for yajl
++@@ -217,10 +208,6 @@ AC_SUBST([MSC_VERSION_WITH_PATCHLEVEL])
++ MSC_VERSION=msc_version
++ AC_SUBST([MSC_VERSION])
++ 
++-MSC_GIT_VERSION=msc_version_git
++-AC_SUBST([MSC_GIT_VERSION])
++-
++-
++ AC_ARG_ENABLE(debug-logs,
++     [AC_HELP_STRING([--disable-debug-logs],[Turn off the SecDebugLog feature])],
++ 
++@@ -412,16 +399,6 @@ AC_OUTPUT
++ 
++ 
++ # Print a fancy summary
++-echo " "
++-echo " "
++-echo "ModSecurity - ${MSC_GIT_VERSION} for $PLATFORM"
++-echo " "
++-echo " Mandatory dependencies"
++-echo -n "   + libInjection                                  ...."
++-echo LIBINJECTION_VERSION
++-echo -n "   + SecLang tests                                 ...."
++-echo SECLANG_TEST_VERSION
++-
++ echo " "
++ echo " Optional dependencies"
++ 
++-- 
++2.31.1
++
+diff --git a/package/libmodsecurity/0003-Revert-Fix-maxminddb-link-on-FreeBSD.patch b/package/libmodsecurity/0003-Revert-Fix-maxminddb-link-on-FreeBSD.patch
+new file mode 100644
+index 0000000000..9608e3d935
+--- /dev/null
++++ b/package/libmodsecurity/0003-Revert-Fix-maxminddb-link-on-FreeBSD.patch
+@@ -0,0 +1,28 @@
++From 6737dc133cb4811a000c02b4e0a92b72f0b220ee Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 16 Jul 2021 19:12:51 +0200
++Subject: [PATCH] Revert "Fix maxminddb link on FreeBSD"
++
++This reverts commit 785958f9b5089b918c7d054cbcc2fe4a3c7b3788.
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ build/libmaxmind.m4 | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/build/libmaxmind.m4 b/build/libmaxmind.m4
++index 656fc250..02820b5a 100644
++--- a/build/libmaxmind.m4
+++++ b/build/libmaxmind.m4
++@@ -10,7 +10,7 @@ dnl  MAXMIND_VERSION
++ AC_DEFUN([PROG_MAXMIND], [
++ 
++ # Possible names for the maxmind library/package (pkg-config)
++-MAXMIND_POSSIBLE_LIB_NAMES="maxminddb maxmind"
+++MAXMIND_POSSIBLE_LIB_NAMES="libmaxminddb maxminddb maxmind"
++ 
++ # Possible extensions for the library
++ MAXMIND_POSSIBLE_EXTENSIONS="so la sl dll dylib"
++-- 
++2.30.2
++
+diff --git a/package/libmodsecurity/libmodsecurity.mk b/package/libmodsecurity/libmodsecurity.mk
+index b2637257b6..66e7e522a1 100644
+--- a/package/libmodsecurity/libmodsecurity.mk
++++ b/package/libmodsecurity/libmodsecurity.mk
+@@ -12,6 +12,8 @@ LIBMODSECURITY_LICENSE = Apache-2.0
+ LIBMODSECURITY_LICENSE_FILES = LICENSE
+ LIBMODSECURITY_CPE_ID_VENDOR = trustwave
+ LIBMODSECURITY_CPE_ID_PRODUCT = modsecurity
++# We're patching build/libmaxmind.m4
++LIBMODSECURITY_AUTORECONF = YES
  
--IRQBALANCE_VERSION = 1.7.0
-+IRQBALANCE_VERSION = 1.8.0
- IRQBALANCE_SITE = $(call github,irqbalance,irqbalance,v$(IRQBALANCE_VERSION))
- IRQBALANCE_LICENSE = GPL-2.0
- IRQBALANCE_LICENSE_FILES = COPYING
+ LIBMODSECURITY_DEPENDENCIES = pcre
+ LIBMODSECURITY_CONF_OPTS = \
 -- 
-2.30.2
+2.31.1
 
 _______________________________________________
 buildroot mailing list
