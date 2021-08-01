@@ -2,91 +2,92 @@ Return-Path: <SRS0=tdpc=MY=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.5 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
 	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
 	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5338CC4338F
-	for <buildroot@archiver.kernel.org>; Sun,  1 Aug 2021 08:29:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 98F69C4338F
+	for <buildroot@archiver.kernel.org>; Sun,  1 Aug 2021 08:30:23 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id F2BCE60F59
-	for <buildroot@archiver.kernel.org>; Sun,  1 Aug 2021 08:29:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org F2BCE60F59
+	by mail.kernel.org (Postfix) with ESMTPS id 49E4C60F59
+	for <buildroot@archiver.kernel.org>; Sun,  1 Aug 2021 08:30:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 49E4C60F59
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id ABFB5400A8;
-	Sun,  1 Aug 2021 08:29:31 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1A8BB402F1;
+	Sun,  1 Aug 2021 08:30:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LV1IBzH0iW_g; Sun,  1 Aug 2021 08:29:30 +0000 (UTC)
+	with ESMTP id iCwN4jYdTuPo; Sun,  1 Aug 2021 08:30:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B0964400C2;
-	Sun,  1 Aug 2021 08:29:29 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3C55F1BF42D
- for <buildroot@lists.busybox.net>; Sun,  1 Aug 2021 08:29:28 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2AA6E402F2;
+	Sun,  1 Aug 2021 08:30:21 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id EBCFF1BF42D
+ for <buildroot@lists.busybox.net>; Sun,  1 Aug 2021 08:30:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2B84E605EF
- for <buildroot@lists.busybox.net>; Sun,  1 Aug 2021 08:29:28 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E87D183777
+ for <buildroot@lists.busybox.net>; Sun,  1 Aug 2021 08:30:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Ok4NYIIW1Iot for <buildroot@lists.busybox.net>;
- Sun,  1 Aug 2021 08:29:27 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xA27HcudprZ5 for <buildroot@lists.busybox.net>;
+ Sun,  1 Aug 2021 08:30:14 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
- [IPv6:2a00:1450:4864:20::331])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E182C605E6
- for <buildroot@buildroot.org>; Sun,  1 Aug 2021 08:29:26 +0000 (UTC)
-Received: by mail-wm1-x331.google.com with SMTP id
- l4-20020a05600c1d04b02902506f89ad2dso9975705wms.1
- for <buildroot@buildroot.org>; Sun, 01 Aug 2021 01:29:26 -0700 (PDT)
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
+ [IPv6:2a00:1450:4864:20::32f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 99B7A836F6
+ for <buildroot@busybox.net>; Sun,  1 Aug 2021 08:30:14 +0000 (UTC)
+Received: by mail-wm1-x32f.google.com with SMTP id
+ i10-20020a05600c354ab029025a0f317abfso2109547wmq.3
+ for <buildroot@busybox.net>; Sun, 01 Aug 2021 01:30:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=MPItw34gX8vFcap4cDXlulm3AoqtXczFHT6XeNi+ynY=;
- b=cFHp8/eIkNnwbDEuNuOt7KeU+Mr10As1M+tKO84OKnDyzQbSMC5/MdGdWaVR5Hpf+z
- +7pQ3K2D/FwUR3wgpAZVIOp9qQfRTQdxsfu4TjelQD/Ep/ujARy3KX8hQjsj+Octntmx
- UwBLZa5Yc5vnzeZdjSUhLDHib7wjV9oO0UzQxqGxZNh+2lINO93DQFIhFyjVcxJS06A5
- BoplslJKWhQxXf71ZhuKr2vYxQnb7oBKg/aJvWMPLc0owj66cyjgb2Fk/fk7zos0AgjH
- 3RnwqHyCb+y0uIq1h6EYsFPrksUplgE0cnbA6iXG0fHf/Xnq8Di2H757MElKOoAUx43/
- z8GA==
+ bh=cBVF4AjJhKGq4GQ+6ky1WkzkoqPk5qAltApspF8FZrg=;
+ b=oQ5crrv9BchZ9pVjQZD2ALzSY+0Enk7AuB6kSf4gTIfgFSeBQa3Is3mWYdnAdYiv/2
+ csC1aiyAAeTyP4WYlOfXq49UK+sHy9bD1icPNP/42Sz0AKfRHJZfM2zxQj2XWQOyU6QY
+ qj3HQFO7D7w9EOxu4cA1L45UuYpr/Ip638wy3uaG7nlGAFvUB2gx3pehjvNEf10gf79A
+ UhXPu5B4+0IJsCrSXxEQSgg3cFWnYT9ypPKAMm6GqgbNRqbMH6bZqXWUAxgAHS7VFdTP
+ lqKfw6AxMZPu43NeCbwIuak+6GkkFIZZQPPXPJgxhOWxe0Vb/qwmU5eGgvr4U2skCwVu
+ fw/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=MPItw34gX8vFcap4cDXlulm3AoqtXczFHT6XeNi+ynY=;
- b=R2Aw8htxuGxLm80IRHqlQ/eKnb7mjB2TIH2ZDkwSgawXxk5Mb8KqqyST4PpkTfKQjb
- 0e+uzJ02+1ZsFwQSWz3phWryELTGqDc3N2YU5OJvXaB/njubPlD3LeD7lSW9eXbqwIBL
- q32hHXPTAfDGrFtpigHZEIiqpq9yA7kTAbkSBhLfdQAe2lmf5aazRV+V06BjsMhnHkHo
- p7GaX6Tc5m0+7D3ZGdYxqFZbV2KExcqmu6NUrU2E2AzDVWfeXb0T+yZRB7JW0s/gCze9
- P2xdlQgnq08O9VfT90gNcWZEUf2r4QZOMUY/Pq1RXY2PLmblmF7/BoXd4r8jlMIQ0Wm/
- zMQQ==
-X-Gm-Message-State: AOAM532c2tk4vYVVwHJhWFgn0jq3BbJKKcDnkwCEIHPW6G2ll/mGxSHz
- 9kdIYwLuhUepGjXt1TlrXspRNum75d4LEQ==
-X-Google-Smtp-Source: ABdhPJxG7xzspYLgZDjZT47JpHXNt2F++X+K50FPQKqWHVKeQXPR2K03+84n+lIeYSKlxrBm/5BluA==
-X-Received: by 2002:a1c:7907:: with SMTP id l7mr11422881wme.87.1627806564881; 
- Sun, 01 Aug 2021 01:29:24 -0700 (PDT)
-Received: from kali.home (pop.92-184-116-243.mobile.abo.orange.fr.
- [92.184.116.243])
- by smtp.gmail.com with ESMTPSA id l4sm503782wrw.32.2021.08.01.01.29.23
+ bh=cBVF4AjJhKGq4GQ+6ky1WkzkoqPk5qAltApspF8FZrg=;
+ b=gsVqRVW6JnRfRLy+Xrd3yBdg6IICVLV62PwIDaVJuY4HBGGYYfzCItjMDyIyCMznQ6
+ M6uXDwtHGGzA+2Sk1AO3QHgip6T608gkuE94e4Rkgy2XYbZWC0nL480iwNwrdNFOP8AV
+ uu1Bakr/3sZs9QzAq2+QezsjK3all3bZCAU6XWD077Y6+bSFY0Ub33TQGqZz9ZtKLiKI
+ CS/iYQbt9aYPfp5aAdjSnWjgfWKLaNOoIoIStisVp4JvgqKuFQHExL27Bxg/N10MhWsk
+ NKLTy1JB75Sk2Oi/0/WAiaD4HZiecz32OLCASIgARP0f25ZGqu0oFVoe3+72MTpOAcR9
+ OEIw==
+X-Gm-Message-State: AOAM530OWpOUsW1A2qrzzAilAZVi8HMGdlsAd28sOY1fxGbnQy7zf0aA
+ UTS2xS+i10aTvQFOQp+uKbYcbVXVAdk=
+X-Google-Smtp-Source: ABdhPJyWj31OYjKtuYkmNblfEwPYISw6QKjSec4odZN9DK0k9b4KNk1FmHVKPBHLprEZk6j4d8UFdg==
+X-Received: by 2002:a05:600c:259:: with SMTP id
+ 25mr8129565wmj.57.1627806612847; 
+ Sun, 01 Aug 2021 01:30:12 -0700 (PDT)
+Received: from vm-user.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
+ by smtp.gmail.com with ESMTPSA id v5sm7544587wrd.74.2021.08.01.01.30.12
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 01 Aug 2021 01:29:24 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Sun,  1 Aug 2021 10:29:19 +0200
-Message-Id: <20210801082919.2716993-1-fontaine.fabrice@gmail.com>
+ Sun, 01 Aug 2021 01:30:12 -0700 (PDT)
+From: Francois Perrad <fperrad@gmail.com>
+X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
+To: buildroot@busybox.net
+Date: Sun,  1 Aug 2021 10:29:56 +0200
+Message-Id: <20210801082956.3113190-1-francois.perrad@gadz.org>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/cegui: needs gcc >= 5
+Subject: [Buildroot] [PATCH] package/libgtk3: bump to version 3.24.30
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,55 +99,56 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Bartosz Bilas <b.bilas@grinn-global.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-cegui needs gcc >= 5 since bump to current master in commit
-352a8b3fe8b1d78073b1119369f10688e00bc859 and
-https://github.com/cegui/cegui/commit/17f7f6156eb0ba903d5ae926e372b8c5c26d8c68
-or the build will fail on:
-
-/home/buildroot/autobuild/instance-1/output-1/build/cegui-00b4e1fe174da53b7ed726ab5970ba51bd5b5ee0/cegui/src/widgets/Spinner.cpp: In member function 'virtual CEGUI::String CEGUI::Spinner::getTextFromValue() const':
-/home/buildroot/autobuild/instance-1/output-1/build/cegui-00b4e1fe174da53b7ed726ab5970ba51bd5b5ee0/cegui/src/widgets/Spinner.cpp:310:116: error: 'defaultfloat' is not a member of 'std'
-             tmp << std::fixed << std::setprecision(d_precision) << d_currentValue << std::setprecision(defPrec) << std::defaultfloat;
-                                                                                                                    ^
-
-defaultfloat is not available before gcc 5 and
-https://github.com/gcc-mirror/gcc/commit/c4b64f5bcac6f7d5e1ae7d3026a3e228fb8adbbd
-
-Fixes:
- - http://autobuild.buildroot.org/results/006ce109980a76870d2347e53307082b36d9904a
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/cegui/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ package/libgtk3/0002-fix-introspection-check.patch | 2 +-
+ package/libgtk3/libgtk3.hash                       | 4 ++--
+ package/libgtk3/libgtk3.mk                         | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/cegui/Config.in b/package/cegui/Config.in
-index 1bd0ee1cc3..20b865835b 100644
---- a/package/cegui/Config.in
-+++ b/package/cegui/Config.in
-@@ -1,11 +1,13 @@
--comment "cegui needs a toolchain w/ C++, threads, dynamic library, wchar"
-+comment "cegui needs a toolchain w/ C++, threads, dynamic library, wchar, gcc >= 5"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP \
--			|| BR2_STATIC_LIBS || !BR2_USE_WCHAR
-+			|| BR2_STATIC_LIBS || !BR2_USE_WCHAR \
-+			|| !BR2_TOOLCHAIN_GCC_AT_LEAST_5
+diff --git a/package/libgtk3/0002-fix-introspection-check.patch b/package/libgtk3/0002-fix-introspection-check.patch
+index 90f5facbb..450505c91 100644
+--- a/package/libgtk3/0002-fix-introspection-check.patch
++++ b/package/libgtk3/0002-fix-introspection-check.patch
+@@ -14,7 +14,7 @@ Signed-off-by: Hadrien Boutteville <hadrien.boutteville@gmail.com>
  
- config BR2_PACKAGE_CEGUI
- 	bool "cegui"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on !BR2_STATIC_LIBS
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # C++11 PR59987
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_WCHAR
- 	select BR2_PACKAGE_GLM
+ --- a/configure.ac
+ +++ b/configure.ac
+-@@ -1685,7 +1685,10 @@
++@@ -1650,7 +1650,10 @@
+  # GObject introspection
+  ##################################################
+ 
+diff --git a/package/libgtk3/libgtk3.hash b/package/libgtk3/libgtk3.hash
+index d5638780d..149399868 100644
+--- a/package/libgtk3/libgtk3.hash
++++ b/package/libgtk3/libgtk3.hash
+@@ -1,5 +1,5 @@
+-# From https://download.gnome.org/sources/gtk+/3.24/gtk+-3.24.29.sha256sum
+-sha256  f57ec4ade8f15cab0c23a80dcaee85b876e70a8823d9105f067ce335a8268caa  gtk+-3.24.29.tar.xz
++# From https://download.gnome.org/sources/gtk+/3.24/gtk+-3.24.30.sha256sum
++sha256  ba75bfff320ad1f4cfbee92ba813ec336322cc3c660d406aad014b07087a3ba9  gtk+-3.24.30.tar.xz
+ 
+ # Hash for license file:
+ sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
+diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
+index 0c40bff80..80a2affd8 100644
+--- a/package/libgtk3/libgtk3.mk
++++ b/package/libgtk3/libgtk3.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LIBGTK3_VERSION_MAJOR = 3.24
+-LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).29
++LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).30
+ LIBGTK3_SOURCE = gtk+-$(LIBGTK3_VERSION).tar.xz
+ LIBGTK3_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk+/$(LIBGTK3_VERSION_MAJOR)
+ LIBGTK3_LICENSE = LGPL-2.0+
 -- 
 2.30.2
 
