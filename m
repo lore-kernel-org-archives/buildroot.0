@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C2A0FC4338F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 01:00:41 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 02470C4338F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 01:00:54 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 8FD4E60F22
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 01:00:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8FD4E60F22
+	by mail.kernel.org (Postfix) with ESMTPS id C311360F22
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 01:00:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C311360F22
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 676B46F92A;
-	Wed,  4 Aug 2021 01:00:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9AD6B84391;
+	Wed,  4 Aug 2021 01:00:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uwkf1riiQGaJ; Wed,  4 Aug 2021 01:00:40 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id lQDscrU67paK; Wed,  4 Aug 2021 01:00:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A18856F91A;
-	Wed,  4 Aug 2021 01:00:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 000B28435C;
+	Wed,  4 Aug 2021 01:00:51 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 12C0B1BF9AA
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:22:27 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 204371BF9AA
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:22:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 717FB40EAA
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7BA6F40FB6
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id r-zc4YF_lUxX for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:10:44 +0000 (UTC)
+ with ESMTP id jhe3oAfjkYsR for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:10:47 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4CE3141460
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:31 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B23D9414A0
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:32 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id A060687884; Tue,  3 Aug 2021 21:10:23 +0000 (UTC)
+ id 0563587884; Tue,  3 Aug 2021 21:10:25 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Fri, 30 Jul 2021 23:43:24 +0200
+Date: Sun, 1 Aug 2021 11:35:19 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 196b29f3273035888d8743075be453649ad82e93
-X-Git-Newrev: 92f9eb53ba25ea15815493702a5c76c1338fd40e
+X-Git-Oldrev: bc5a45c25f590926c7609e766916a838f32258cf
+X-Git-Newrev: b8fbe933051609f4b906ef713a41a8741cf82476
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211023.A060687884@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/i2c-tools: bump to
- version 4.3
+Message-Id: <20210803211025.0563587884@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/{mesa3d,
+ mesa3d-headers}: bump version to 21.1.6
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,97 +70,60 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=92f9eb53ba25ea15815493702a5c76c1338fd40e
+commit: https://git.buildroot.net/buildroot/commit/?id=b8fbe933051609f4b906ef713a41a8741cf82476
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Drop upstream patch.
+Release notes:
+https://lists.freedesktop.org/archives/mesa-announce/2021-July/000640.html
 
-Update README hash for text changes that are not related to license.
-
-Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Cc: Matt Weber <matthew.weber@collins.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...s-i2ctransfer-add-check-for-returned-leng.patch | 41 ----------------------
- package/i2c-tools/i2c-tools.hash                   |  4 +--
- package/i2c-tools/i2c-tools.mk                     |  2 +-
- 3 files changed, 3 insertions(+), 44 deletions(-)
+ package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+ package/mesa3d/mesa3d.hash               | 6 +++---
+ package/mesa3d/mesa3d.mk                 | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/i2c-tools/0001-Revert-tools-i2ctransfer-add-check-for-returned-leng.patch b/package/i2c-tools/0001-Revert-tools-i2ctransfer-add-check-for-returned-leng.patch
-deleted file mode 100644
-index 7173efe219..0000000000
---- a/package/i2c-tools/0001-Revert-tools-i2ctransfer-add-check-for-returned-leng.patch
-+++ /dev/null
-@@ -1,41 +0,0 @@
--From 06a1909ae1e8ae1edc70dc48dd22a32ba5eceecb Mon Sep 17 00:00:00 2001
--From: Wolfram Sang <wsa+renesas@sang-engineering.com>
--Date: Tue, 9 Feb 2021 12:05:56 +0100
--Subject: [PATCH] Revert "tools: i2ctransfer: add check for returned length
-- from driver"
--
--This reverts commit 34806fc4e7090b34e32fa1110d546ab5ce01a6a0. It was
--developed against an experimental kernel. The regular kernel does not
--update the new message length to userspace, so the check is always false
--positive. We can't change the kernel behaviour because it would break
--the ABI. So revert this commit.
--
--Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
--Signed-off-by: Wolfram Sang <wsa@kernel.org>
--[Peter: drop CHANGES update]
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-----
-- tools/i2ctransfer.c | 7 +------
-- 1 file changed, 1 insertions(+), 6 deletions(-)
--
--diff --git a/tools/i2ctransfer.c b/tools/i2ctransfer.c
--index f2a4df8..b0e8d43 100644
----- a/tools/i2ctransfer.c
--+++ b/tools/i2ctransfer.c
--@@ -88,12 +88,7 @@ static void print_msgs(struct i2c_msg *msgs, __u32 nmsgs, unsigned flags)
-- 		int recv_len = msgs[i].flags & I2C_M_RECV_LEN;
-- 		int print_buf = (read && (flags & PRINT_READ_BUF)) ||
-- 				(!read && (flags & PRINT_WRITE_BUF));
---		__u16 len = msgs[i].len;
---
---		if (recv_len && print_buf && len != msgs[i].buf[0] + 1) {
---			fprintf(stderr, "Correcting wrong msg length after recv_len! Please fix the I2C driver and/or report.\n");
---			len = msgs[i].buf[0] + 1;
---		}
--+		__u16 len = recv_len ? msgs[i].buf[0] + 1 : msgs[i].len;
-- 
-- 		if (flags & PRINT_HEADER) {
-- 			fprintf(output, "msg %u: addr 0x%02x, %s, len ",
---- 
--2.20.1
--
-diff --git a/package/i2c-tools/i2c-tools.hash b/package/i2c-tools/i2c-tools.hash
-index 150bdb2e63..9bfdacb3f1 100644
---- a/package/i2c-tools/i2c-tools.hash
-+++ b/package/i2c-tools/i2c-tools.hash
-@@ -1,7 +1,7 @@
- # From https://www.kernel.org/pub/software/utils/i2c-tools/sha256sums.asc
--sha256  37f2dabc7082d185903ff21d1f584b5dcb4dd2eb2c879bbd8d7c50ae900dacd6  i2c-tools-4.2.tar.xz
-+sha256  1f899e43603184fac32f34d72498fc737952dbc9c97a8dd9467fadfdf4600cf9  i2c-tools-4.3.tar.xz
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 6cf50e23de..64587b4bcd 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
  
- # License files
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
--sha256  370e8bc3d45744170cc4b12dc5135b107fa40a00179a19973fbd714146dec04c  README
-+sha256  2293b6e9076984d02184ff620baac557143e16cfa47d88f0a791d05a1271742c  README
-diff --git a/package/i2c-tools/i2c-tools.mk b/package/i2c-tools/i2c-tools.mk
-index 8936f6c4f6..7565349f5e 100644
---- a/package/i2c-tools/i2c-tools.mk
-+++ b/package/i2c-tools/i2c-tools.mk
-@@ -4,7 +4,7 @@
- #
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 21.1.5
++MESA3D_HEADERS_VERSION = 21.1.6
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://archive.mesa3d.org
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index bf744377e4..4b63e0cece 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2021-July/000637.html
+-sha256  022c7293074aeeced2278c872db4fa693147c70f8595b076cf3f1ef81520766d  mesa-21.1.5.tar.xz
+-sha512  d9e0e1b6a1d717febee2aa67b06620c9a21e061ea7e594be5b4c382db1ed6f5acf5d13a75a9f2bba9c32621466ebc816708606e16e8b34700d987158fd8f0b7b  mesa-21.1.5.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2021-July/000640.html
++sha256  b1cb0122f911dfa9fe1f209a7061378c61a1448a280e711511ca72dad9999e37  mesa-21.1.6.tar.xz
++sha512  5daf389aad4fe7ab3574f6af3aabc62ba8b3034004a0a0853dcc18ef6c8003d2f2195cc377dc57b30863ae4cf158149e3156247445ca2b11e401700011cb878c  mesa-21.1.6.tar.xz
+ 
+ # License
+ sha256  998437f3f75f0c542046f83c1cb349408122268168fb13eb4ae6967aa18b7d98  docs/license.rst
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 65eeef9827..6a53d203ef 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--I2C_TOOLS_VERSION = 4.2
-+I2C_TOOLS_VERSION = 4.3
- I2C_TOOLS_SOURCE = i2c-tools-$(I2C_TOOLS_VERSION).tar.xz
- I2C_TOOLS_SITE = https://www.kernel.org/pub/software/utils/i2c-tools
- I2C_TOOLS_LICENSE = GPL-2.0+, GPL-2.0 (py-smbus), LGPL-2.1+ (libi2c)
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 21.1.5
++MESA3D_VERSION = 21.1.6
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://archive.mesa3d.org
+ MESA3D_LICENSE = MIT, SGI, Khronos
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
