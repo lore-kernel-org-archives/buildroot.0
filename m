@@ -8,70 +8,68 @@ X-Spam-Status: No, score=-12.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6214FC4338F
-	for <buildroot@archiver.kernel.org>; Sun,  1 Aug 2021 20:25:33 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AA517C4338F
+	for <buildroot@archiver.kernel.org>; Sun,  1 Aug 2021 20:25:45 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 13B1060FC1
-	for <buildroot@archiver.kernel.org>; Sun,  1 Aug 2021 20:25:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 13B1060FC1
+	by mail.kernel.org (Postfix) with ESMTPS id 6817360FC1
+	for <buildroot@archiver.kernel.org>; Sun,  1 Aug 2021 20:25:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6817360FC1
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DBD9983848;
-	Sun,  1 Aug 2021 20:25:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 40AA840471;
+	Sun,  1 Aug 2021 20:25:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nGJ1OECGHbGE; Sun,  1 Aug 2021 20:25:32 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Lp5p_wfgOzAt; Sun,  1 Aug 2021 20:25:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 36BDA837DA;
-	Sun,  1 Aug 2021 20:25:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 917D0403BF;
+	Sun,  1 Aug 2021 20:25:43 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8DB721BF5A2
- for <buildroot@lists.busybox.net>; Sun,  1 Aug 2021 20:25:22 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 981EC1BF5A2
+ for <buildroot@lists.busybox.net>; Sun,  1 Aug 2021 20:25:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7D9D640382
- for <buildroot@lists.busybox.net>; Sun,  1 Aug 2021 20:25:22 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8821E4046B
+ for <buildroot@lists.busybox.net>; Sun,  1 Aug 2021 20:25:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3-Slf6AwV0wd for <buildroot@lists.busybox.net>;
- Sun,  1 Aug 2021 20:25:21 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp4.osuosl.org (Postfix) with ESMTPS id ABF2440377
- for <buildroot@buildroot.org>; Sun,  1 Aug 2021 20:25:21 +0000 (UTC)
+ with ESMTP id lfNDCD2gsV41 for <buildroot@lists.busybox.net>;
+ Sun,  1 Aug 2021 20:25:33 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id BC251403AE
+ for <buildroot@buildroot.org>; Sun,  1 Aug 2021 20:25:33 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b51:cb00:89a2:641e:9d1f:2c0d])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id E78625FF95;
- Sun,  1 Aug 2021 22:25:13 +0200 (CEST)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id 3B5D65FF88;
+ Sun,  1 Aug 2021 22:25:28 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1627849520;
- bh=+xLPWU0mKIsB1eDMXq/TXUh6uuCg5pJnsWGWfb8n1eI=;
+ s=smtp-20201208; t=1627849532;
+ bh=sOjvUGOAo0CC8YsuHRThZwZxpUX86waKOPcVxTk3KMk=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=q1rfk/HJlhL0OU2g40BIG+Pph/FffxQvBL8psBqzutlOT/jZLtNAJVT+ShHWshX7x
- QCOWEY+VAoRkN7Q4dJa3R3YNZlxvErZjPMyWIbnOm1KCywAnLzRlPTSBM3zHDT/tWe
- yegSFMFwxZEx16+QoM0rs7dgcUfs9wA5/dIXd4A/W2jKnfxAlAHvHd22xqiW2+DXWi
- 83TwFfGrxILdcoDzfqtOyNrscYVa9u6ddpkVIid0nwPHfwcsR4TaFHkbUqRQvCuOGy
- qthmkvZnSPJUHhFhG/imSAMkT6Ca73JYdm2o4Tk6Gs//i2dFvEw06mrpEjsVOITprl
- xKRMoXtjJw9XQ==
+ b=ODcFkOhj3b26R3DiDzUt5xRxRSHe2oCGgCxLR5/x/wCVsHpFOHOfnI8DVOus62U1u
+ yPeNGJ+/vV2nyT7KZpR8ons9I4aETtSanXdtCebYLR2kU8oNPowO6OTPcO9P3CY5FE
+ NxDtRiXpnJrj15GThiDHeLRAwIy6Sa82sNoBvtOobRIN63pnYQciD4gntD/JxB4H5U
+ WEtHwAyHXDvhrDcL+40lTkO0eGUUYIgoItpBxYY7tRrSyqc9WvDXyRouBT/9TTNgO8
+ QeLtzQyxPbN+Tn71RCKexRXbFtwHIgLSko7ivRI7g2flfn17eskVnixbZGZxBaCP03
+ USWhwOyOGEDoA==
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 01 Aug 2021 22:25:13 +0200
-Date: Sun, 1 Aug 2021 22:25:13 +0200
+ Sun, 01 Aug 2021 22:25:27 +0200
+Date: Sun, 1 Aug 2021 22:25:27 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20210801202513.GL3189549@scaer>
-References: <20210801195820.3928625-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210801202527.GM3189549@scaer>
+References: <20210801200052.3968967-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20210801195820.3928625-1-fontaine.fabrice@gmail.com>
+In-Reply-To: <20210801200052.3968967-1-fontaine.fabrice@gmail.com>
 User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 1/1] package/samba4: add SELinux module
+Subject: Re: [Buildroot] [PATCH 1/1] package/vsftpd: add SELinux module
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,7 +81,7 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
@@ -91,8 +89,8 @@ Sender: "buildroot" <buildroot-bounces@busybox.net>
 
 Fabrice, All,
 
-On 2021-08-01 21:58 +0200, Fabrice Fontaine spake thusly:
-> Support for samba4 is added by the services/samba module in the SELinux
+On 2021-08-01 22:00 +0200, Fabrice Fontaine spake thusly:
+> Support for vsftpd is added by the services/ftp module in the SELinux
 > refpolicy.
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
@@ -103,21 +101,21 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/samba4/samba4.mk | 1 +
+>  package/vsftpd/vsftpd.mk | 1 +
 >  1 file changed, 1 insertion(+)
 > 
-> diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-> index ffb582e14d..21daa034af 100644
-> --- a/package/samba4/samba4.mk
-> +++ b/package/samba4/samba4.mk
-> @@ -12,6 +12,7 @@ SAMBA4_LICENSE = GPL-3.0+
->  SAMBA4_LICENSE_FILES = COPYING
->  SAMBA4_CPE_ID_VENDOR = samba
->  SAMBA4_CPE_ID_PRODUCT = samba
-> +SAMBA4_SELINUX_MODULES = samba
->  SAMBA4_DEPENDENCIES = \
->  	host-e2fsprogs host-flex host-heimdal host-nfs-utils \
->  	host-perl host-perl-parse-yapp host-python3 \
+> diff --git a/package/vsftpd/vsftpd.mk b/package/vsftpd/vsftpd.mk
+> index 181f82f397..8daf07c62a 100644
+> --- a/package/vsftpd/vsftpd.mk
+> +++ b/package/vsftpd/vsftpd.mk
+> @@ -10,6 +10,7 @@ VSFTPD_LIBS = -lcrypt
+>  VSFTPD_LICENSE = GPL-2.0
+>  VSFTPD_LICENSE_FILES = COPYING
+>  VSFTPD_CPE_ID_VENDOR = vsftpd_project
+> +VSFTPD_SELINUX_MODULES = ftp
+>  
+>  define VSFTPD_DISABLE_UTMPX
+>  	$(SED) 's/.*VSF_BUILD_UTMPX/#undef VSF_BUILD_UTMPX/' $(@D)/builddefs.h
 > -- 
 > 2.30.2
 > 
