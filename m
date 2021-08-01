@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 02470C4338F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 01:00:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9AAE1C4338F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 01:01:06 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id C311360F22
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 01:00:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C311360F22
+	by mail.kernel.org (Postfix) with ESMTPS id 4F6C860F22
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 01:01:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4F6C860F22
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9AD6B84391;
-	Wed,  4 Aug 2021 01:00:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F3D5A843D6;
+	Wed,  4 Aug 2021 01:01:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lQDscrU67paK; Wed,  4 Aug 2021 01:00:52 +0000 (UTC)
+	with ESMTP id rJeeX1Jn-n-O; Wed,  4 Aug 2021 01:01:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 000B28435C;
-	Wed,  4 Aug 2021 01:00:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4226D843A1;
+	Wed,  4 Aug 2021 01:01:04 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 204371BF9AA
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:22:28 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 40D001BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:22:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7BA6F40FB6
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9D21140FB8
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jhe3oAfjkYsR for <buildroot@lists.busybox.net>;
+ with ESMTP id Gz_WcC2K_X-h for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:10:47 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B23D9414A0
+ by smtp2.osuosl.org (Postfix) with ESMTP id E7192414B5
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:32 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 0563587884; Tue,  3 Aug 2021 21:10:25 +0000 (UTC)
+ id 464E587884; Tue,  3 Aug 2021 21:10:25 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sun, 1 Aug 2021 11:35:19 +0200
+Date: Sun, 1 Aug 2021 11:35:29 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: bc5a45c25f590926c7609e766916a838f32258cf
-X-Git-Newrev: b8fbe933051609f4b906ef713a41a8741cf82476
+X-Git-Oldrev: 447292ee00a57430a8b4869bbfc8c78f481422d9
+X-Git-Newrev: 581687e34b067c8dac06335dbae640a23b9e505c
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211025.0563587884@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/{mesa3d,
- mesa3d-headers}: bump version to 21.1.6
+Message-Id: <20210803211025.464E587884@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/ibrdtn: fix build with
+ gcc 11
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,60 +70,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b8fbe933051609f4b906ef713a41a8741cf82476
+commit: https://git.buildroot.net/buildroot/commit/?id=581687e34b067c8dac06335dbae640a23b9e505c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Release notes:
-https://lists.freedesktop.org/archives/mesa-announce/2021-July/000640.html
+Fix the following build failure with gcc 11:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+In file included from ../../ibrdtn/data/PrimaryBlock.h:30,
+                 from ../../ibrdtn/data/Serializer.h:27,
+                 from ../../ibrdtn/data/Block.h:29,
+                 from ../../ibrdtn/data/Bundle.h:27,
+                 from ../../ibrdtn/api/Client.h:26,
+                 from Client.cpp:22:
+/tmp/instance-0/output-1/host/bin/../arm-buildroot-linux-gnueabihf/sysroot/usr/include/ibrcommon-1.0/ibrcommon/thread/Mutex.h:43:40: error: ISO C++17 does not allow dynamic exception specifications
+   43 |                 virtual void trylock() throw (MutexException) = 0;
+      |                                        ^~~~~
+
+Fixes:
+ - http://autobuild.buildroot.org/results/c2d9033c68b5c1407d2cf87b98dff61958b8e7b6
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mesa3d-headers/mesa3d-headers.mk | 2 +-
- package/mesa3d/mesa3d.hash               | 6 +++---
- package/mesa3d/mesa3d.mk                 | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ package/ibrdtn/ibrdtn.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index 6cf50e23de..64587b4bcd 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
+diff --git a/package/ibrdtn/ibrdtn.mk b/package/ibrdtn/ibrdtn.mk
+index 3f805c4024..99ff92d442 100644
+--- a/package/ibrdtn/ibrdtn.mk
++++ b/package/ibrdtn/ibrdtn.mk
+@@ -10,6 +10,7 @@ IBRDTN_INSTALL_STAGING = YES
+ IBRDTN_LICENSE = Apache-2.0
+ IBRDTN_LICENSE_FILES = COPYING
+ IBRDTN_DEPENDENCIES = ibrcommon host-pkgconf
++IBRDTN_CONF_ENV = CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11"
  
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 21.1.5
-+MESA3D_HEADERS_VERSION = 21.1.6
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://archive.mesa3d.org
- MESA3D_HEADERS_DL_SUBDIR = mesa3d
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index bf744377e4..4b63e0cece 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,6 +1,6 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2021-July/000637.html
--sha256  022c7293074aeeced2278c872db4fa693147c70f8595b076cf3f1ef81520766d  mesa-21.1.5.tar.xz
--sha512  d9e0e1b6a1d717febee2aa67b06620c9a21e061ea7e594be5b4c382db1ed6f5acf5d13a75a9f2bba9c32621466ebc816708606e16e8b34700d987158fd8f0b7b  mesa-21.1.5.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2021-July/000640.html
-+sha256  b1cb0122f911dfa9fe1f209a7061378c61a1448a280e711511ca72dad9999e37  mesa-21.1.6.tar.xz
-+sha512  5daf389aad4fe7ab3574f6af3aabc62ba8b3034004a0a0853dcc18ef6c8003d2f2195cc377dc57b30863ae4cf158149e3156247445ca2b11e401700011cb878c  mesa-21.1.6.tar.xz
- 
- # License
- sha256  998437f3f75f0c542046f83c1cb349408122268168fb13eb4ae6967aa18b7d98  docs/license.rst
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 65eeef9827..6a53d203ef 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 21.1.5
-+MESA3D_VERSION = 21.1.6
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://archive.mesa3d.org
- MESA3D_LICENSE = MIT, SGI, Khronos
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
+ IBRDTN_CONF_OPTS += --with-compression
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
