@@ -2,92 +2,91 @@ Return-Path: <SRS0=tdpc=MY=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-18.5 required=3.0 tests=BAYES_00,
 	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
 	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D5D93C4338F
-	for <buildroot@archiver.kernel.org>; Sun,  1 Aug 2021 13:26:57 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 460EAC4338F
+	for <buildroot@archiver.kernel.org>; Sun,  1 Aug 2021 13:33:43 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 855096052B
-	for <buildroot@archiver.kernel.org>; Sun,  1 Aug 2021 13:26:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 855096052B
+	by mail.kernel.org (Postfix) with ESMTPS id DD4E460EEA
+	for <buildroot@archiver.kernel.org>; Sun,  1 Aug 2021 13:33:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org DD4E460EEA
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4386F83C37;
-	Sun,  1 Aug 2021 13:26:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 99E0D4050F;
+	Sun,  1 Aug 2021 13:33:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id v8zbWXHILrj2; Sun,  1 Aug 2021 13:26:56 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id uRXCYiEOfHYW; Sun,  1 Aug 2021 13:33:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id ABA4B83BB3;
-	Sun,  1 Aug 2021 13:26:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E50FE404F7;
+	Sun,  1 Aug 2021 13:33:40 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A02031BF35E
- for <buildroot@lists.busybox.net>; Sun,  1 Aug 2021 13:26:54 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C522C1BF578
+ for <buildroot@lists.busybox.net>; Sun,  1 Aug 2021 13:33:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8CF6D40155
- for <buildroot@lists.busybox.net>; Sun,  1 Aug 2021 13:26:54 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B2DD2400DB
+ for <buildroot@lists.busybox.net>; Sun,  1 Aug 2021 13:33:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp2.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8_MFjDi6o9xN for <buildroot@lists.busybox.net>;
- Sun,  1 Aug 2021 13:26:53 +0000 (UTC)
+ with ESMTP id MjgvaMuAUVCl for <buildroot@lists.busybox.net>;
+ Sun,  1 Aug 2021 13:33:36 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
- [IPv6:2a00:1450:4864:20::331])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4B36A400FC
- for <buildroot@buildroot.org>; Sun,  1 Aug 2021 13:26:53 +0000 (UTC)
-Received: by mail-wm1-x331.google.com with SMTP id
- i10-20020a05600c354ab029025a0f317abfso2358257wmq.3
- for <buildroot@buildroot.org>; Sun, 01 Aug 2021 06:26:53 -0700 (PDT)
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
+ [IPv6:2a00:1450:4864:20::430])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 75C0E400D2
+ for <buildroot@buildroot.org>; Sun,  1 Aug 2021 13:33:36 +0000 (UTC)
+Received: by mail-wr1-x430.google.com with SMTP id c16so18099622wrp.13
+ for <buildroot@buildroot.org>; Sun, 01 Aug 2021 06:33:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=/WwJsKZNtXI1SrBH2vDZ//XpOarUUvjvAUlsy0OBrGY=;
- b=sOQ2UmoCp7b5ESNGqIThBd9BPZn6VfRzMlvV6d+JW1syehWDuVyVyo1as+/WAtZjRl
- hkBWS0mIjDBWbLUiLUB2IB0GOpOg1bpBJ0sFedzgJPXwoNoG4XWKM9Rjc2pOvXq4erAr
- 4cY/4qegxIDxLvgWsGG9YKQ8DTWKlcfk+HWWD69oU3bwHUyT6FtONBq2+UzirY5UJ7J6
- derzY3pGds7l5J6FHnoTyDAh5rLzjI1K02Q0LkJbVron3llmHAVFmEFaam+1WjtUaZg7
- CZKL4k50dT+Ob4V29iLMi7F/ed9tj6QXtAT+W7IGCfaBdJgd4Kfh9dYv9qxT2xmiTUL7
- 8CjA==
+ bh=1GzBQAPKaczSYC1yl4os0Y8ILUkzovx311DShoFG4GM=;
+ b=GN/I5MUQmIluyZS/ewLbND9jQdFBQ6jXVw4INBekSMO/tj0qelVGHB4AAL52d1+uNC
+ Dfs4IfmnJHvkXMsR40OQOqHf9y9pO6CAa9y60Y2la3N1ZsUG8gvrKBxMvbCHiFhCoY5k
+ FZSvX02AEs2N0hZBwZdPmZsGPjd19qJTiT1D1GPv/bWDA5jWHyIoFTGv1LSNFfKi9CJb
+ MDvD16UypQ2uToS5YOndWi0OA2g3pz9sskjYVed97kan8vEdmY+NzMyGb9tOVJGApxji
+ uqTHm9c8e9C/o+bOOhSeRCNZVe76cwxMLN+eRWN0WLa+9Q1pdZjeDrpzDExflDyCzJds
+ mzTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=/WwJsKZNtXI1SrBH2vDZ//XpOarUUvjvAUlsy0OBrGY=;
- b=dTSNUc7Z5vHGtm8TCot02p/4EpkLSNeqOkYkINO4wV+Dc4vxT9D4XHtQsj43prkeii
- mW+yFlYf7+wNAuj+wtrp+QE9s9/z/3aR3bwD71aAklgpq5Gt4gL111xYyYMfBIBrgmv1
- VlG198SaeqFDg7vGbVN2/xH8bz30KVFtbWDb6IKQwVGfgVb8xgoKmgNJuVQoDqEesSqL
- IziXY3yCO2wyh7sUjiVT7RorheW6dq51V5x8wYYaPr5meQueyGxYkCU1ZszP0ZcsE5ft
- J/t5tYu0EksRb1ZT7zcYJdrtxz1niRkqzZuEOHd563z/o4DwIJE13y8mm4zBnxHjIS5x
- CnxA==
-X-Gm-Message-State: AOAM5324AizJ/8qtrlWIq1w+hjAyBo85ZeqMheD//cpH8h8H23SxwjR1
- aJRYQr8lykPdlO3dH0AtlugDr8QKwYN7RA==
-X-Google-Smtp-Source: ABdhPJwLfkz5QiZC1lBji3C9zVb69+wW+P/LpR2Je5uZSfUFTIyCekKchw//Dyp9JPj2RjNwle71WQ==
-X-Received: by 2002:a7b:c041:: with SMTP id u1mr11923506wmc.95.1627824411104; 
- Sun, 01 Aug 2021 06:26:51 -0700 (PDT)
+ bh=1GzBQAPKaczSYC1yl4os0Y8ILUkzovx311DShoFG4GM=;
+ b=FSmmh2fUWngW7rDOL22tDSoIoIH4gWXe+2B7iNvVku5RUI2E0e+ONRr+GxsqKBzEDn
+ Bzy1EagtjeZHyodDvt55mjWbRN/GuWBFeVhIHNmNX+BbhSHhfCARGfs3rm0WjW+q4Olx
+ MzpMKu6mC7dB+T1WIZ8hS/xecIZAqTwngReASDs+UNckx6K7aziRJuBLlsm+dItPajAJ
+ HM8WDwt+fVdbfVTItJ+VqPqJYs1frSiuIq+b/pcrc/QgUtSIbSQywfr8+SzlOW5AbN8I
+ XchlqueeyKJ+2duhQN0cEvqSsFqtc+m85gdCM6vYl1fevoV4HDdXqgXz3QDSeRg3oBf3
+ vEkA==
+X-Gm-Message-State: AOAM531YW3mIMuMH3/he5giBDd0hvwUoNKmSrR5EkNGbvxBw9O0LhXVc
+ IAc5lliPJtE27qlABVhgQFcHUQPimuGFFg==
+X-Google-Smtp-Source: ABdhPJx2Y2QJ5pKNSfXIWgkjhAoVtyuLWrAEdtqdKcItKIdrmCrPUr/oyKXumkWBp8reLHdsa3U6Hw==
+X-Received: by 2002:adf:f202:: with SMTP id p2mr12697387wro.240.1627824814420; 
+ Sun, 01 Aug 2021 06:33:34 -0700 (PDT)
 Received: from kali.home (pop.92-184-116-155.mobile.abo.orange.fr.
  [92.184.116.155])
- by smtp.gmail.com with ESMTPSA id h14sm8088839wrp.55.2021.08.01.06.26.49
+ by smtp.gmail.com with ESMTPSA id s14sm7243142wmc.25.2021.08.01.06.33.33
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 01 Aug 2021 06:26:50 -0700 (PDT)
+ Sun, 01 Aug 2021 06:33:33 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun,  1 Aug 2021 15:26:45 +0200
-Message-Id: <20210801132645.3623057-1-fontaine.fabrice@gmail.com>
+Date: Sun,  1 Aug 2021 15:33:24 +0200
+Message-Id: <20210801133324.3658611-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/wireshark: security bump to version
- 3.4.7
+Subject: [Buildroot] [PATCH 1/1] package/s390-tools: add libxml2 optional
+ dependency
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,51 +98,58 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Alexander Egorenkov <egorenar@linux.ibm.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-Fix CVE-2021-22235: Crash in DNP dissector in Wireshark 3.4.0 to 3.4.6
-and 3.2.0 to 3.2.14 allows denial of service via packet injection or
-crafted capture file
+libxml2 is an optional dependency which is enabled by default since
+version 2.17.0 and
+https://github.com/ibm-s390-linux/s390-tools/commit/56fecf1832c3ebc4626ddf5c598762833c362d5e
 
-https://www.wireshark.org/security/wnpa-sec-2021-06.html
+Also set PATH to avoid the following build failures related to
+curl-config and xml2-config:
+
+/bin/sh: 1: curl-config: not found
+Error: libcurl is not built with the OpenSSL backend
+make[2]: *** [Makefile:54: check-dep-libekmfweb] Error 1
+
+Fixes:
+ - http://autobuild.buildroot.org/results/cfb46d7547c22f0a23aca2286dc5a1d2c20aadfc
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/wireshark/wireshark.hash | 6 +++---
- package/wireshark/wireshark.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/s390-tools/s390-tools.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
-index ddb0f1954a..0876703e49 100644
---- a/package/wireshark/wireshark.hash
-+++ b/package/wireshark/wireshark.hash
-@@ -1,6 +1,6 @@
--# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.4.6.txt
--sha1  20596183210daeb0070ae43716529caf81c6187a  wireshark-3.4.6.tar.xz
--sha256  12a678208f8cb009e6b9d96026e41a6ef03c7ad086b9e1029f42053b249b4628  wireshark-3.4.6.tar.xz
-+# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.4.7.txt
-+sha1  3fa4bb774030442b9908243a9927d38479c52bf5  wireshark-3.4.7.tar.xz
-+sha256  6c4cee51ef997cb9d9aaee84113525a5629157d3c743d7c4e320000de804a09d  wireshark-3.4.7.tar.xz
+diff --git a/package/s390-tools/s390-tools.mk b/package/s390-tools/s390-tools.mk
+index b5843fe0d6..3d3f24c181 100644
+--- a/package/s390-tools/s390-tools.mk
++++ b/package/s390-tools/s390-tools.mk
+@@ -15,6 +15,7 @@ S390_TOOLS_MAKE_OPTS = \
+ 	CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE" \
+ 	LINK="$(TARGET_CC)" \
+ 	LINKXX="$(TARGET_CXX)" \
++	PATH="$(STAGING_DIR)/usr/bin:$(BR_PATH)" \
+ 	WARNINGS=
  
- # Locally calculated
- sha256  7cdbed2b697efaa45576a033f1ac0e73cd045644a91c79bbf41d4a7d81dac7bf  COPYING
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index 8b0ab4bfbe..e852083de6 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ ifeq ($(BR2_PACKAGE_LIBCURL),y)
+@@ -56,6 +57,13 @@ else
+ S390_TOOLS_MAKE_OPTS += HAVE_GLIB2=0
+ endif
  
--WIRESHARK_VERSION = 3.4.6
-+WIRESHARK_VERSION = 3.4.7
- WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.xz
- WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
- WIRESHARK_LICENSE = wireshark license
++ifeq ($(BR2_PACKAGE_LIBXML2),y)
++S390_TOOLS_DEPENDENCIES += libxml2
++S390_TOOLS_MAKE_OPTS += HAVE_LIBXML2=1
++else
++S390_TOOLS_MAKE_OPTS += HAVE_LIBXML2=0
++endif
++
+ ifeq ($(BR2_PACKAGE_NCURSES),y)
+ S390_TOOLS_DEPENDENCIES += ncurses
+ S390_TOOLS_MAKE_OPTS += HAVE_NCURSES=1
 -- 
 2.30.2
 
