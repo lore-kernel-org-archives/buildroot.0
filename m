@@ -2,56 +2,57 @@ Return-Path: <SRS0=tdpc=MY=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,TVD_SPACE_RATIO autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4FFE3C4338F
-	for <buildroot@archiver.kernel.org>; Sun,  1 Aug 2021 09:39:45 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D012C4338F
+	for <buildroot@archiver.kernel.org>; Sun,  1 Aug 2021 09:39:58 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 12D0C61058
-	for <buildroot@archiver.kernel.org>; Sun,  1 Aug 2021 09:39:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 12D0C61058
+	by mail.kernel.org (Postfix) with ESMTPS id 110F461059
+	for <buildroot@archiver.kernel.org>; Sun,  1 Aug 2021 09:39:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 110F461059
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DACE740236;
-	Sun,  1 Aug 2021 09:39:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D169A6075A;
+	Sun,  1 Aug 2021 09:39:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IOqrX9tTvfx4; Sun,  1 Aug 2021 09:39:43 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id vrlG2FYvsk1R; Sun,  1 Aug 2021 09:39:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C2F2A4010A;
-	Sun,  1 Aug 2021 09:39:42 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 11EC31BF8B4
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3259A605C9;
+	Sun,  1 Aug 2021 09:39:56 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 349D71BF977
  for <buildroot@lists.busybox.net>; Sun,  1 Aug 2021 09:38:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0F93E836A5
+ by smtp4.osuosl.org (Postfix) with ESMTP id 24443415B6
  for <buildroot@lists.busybox.net>; Sun,  1 Aug 2021 09:38:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kE7agOry3Gd0 for <buildroot@lists.busybox.net>;
- Sun,  1 Aug 2021 09:38:47 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kBWl4tgVPC2S for <buildroot@lists.busybox.net>;
+ Sun,  1 Aug 2021 09:38:46 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4B54C836AE
- for <buildroot@buildroot.org>; Sun,  1 Aug 2021 09:38:47 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E59F3415B3
+ for <buildroot@buildroot.org>; Sun,  1 Aug 2021 09:38:46 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 62B418A395; Sun,  1 Aug 2021 09:38:45 +0000 (UTC)
+ id 08A67890DE; Sun,  1 Aug 2021 09:38:45 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sun, 1 Aug 2021 11:37:00 +0200
+Date: Sun, 1 Aug 2021 11:35:22 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 33c8cb0204ff44cb507ba6b8b4aa3476d668b873
-X-Git-Newrev: b1af56fddc556973aada3f220812a3bcd386146f
+X-Git-Oldrev: 2203d1b3ce7654c8224e1b18d45d2b8e36f5c1f4
+X-Git-Newrev: 135252b53762daafdae26481abbbef0f440599a2
 X-Patchwork-Hint: ignore
-Message-Id: <20210801093845.62B418A395@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/cegui: needs gcc >= 5
+Message-Id: <20210801093845.08A67890DE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xserver_xorg-server: bump
+ version to 1.20.13
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,51 +70,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b1af56fddc556973aada3f220812a3bcd386146f
+commit: https://git.buildroot.net/buildroot/commit/?id=135252b53762daafdae26481abbbef0f440599a2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cegui needs gcc >= 5 since bump to current master in commit
-352a8b3fe8b1d78073b1119369f10688e00bc859 and
-https://github.com/cegui/cegui/commit/17f7f6156eb0ba903d5ae926e372b8c5c26d8c68
-or the build will fail on:
+Release notes:
+https://lists.x.org/archives/xorg-announce/2021-July/003100.html
 
-/home/buildroot/autobuild/instance-1/output-1/build/cegui-00b4e1fe174da53b7ed726ab5970ba51bd5b5ee0/cegui/src/widgets/Spinner.cpp: In member function 'virtual CEGUI::String CEGUI::Spinner::getTextFromValue() const':
-/home/buildroot/autobuild/instance-1/output-1/build/cegui-00b4e1fe174da53b7ed726ab5970ba51bd5b5ee0/cegui/src/widgets/Spinner.cpp:310:116: error: 'defaultfloat' is not a member of 'std'
-             tmp << std::fixed << std::setprecision(d_precision) << d_currentValue << std::setprecision(defPrec) << std::defaultfloat;
-                                                                                                                    ^
-
-defaultfloat is not available before gcc 5 and
-https://github.com/gcc-mirror/gcc/commit/c4b64f5bcac6f7d5e1ae7d3026a3e228fb8adbbd
-
-Fixes:
- - http://autobuild.buildroot.org/results/006ce109980a76870d2347e53307082b36d9904a
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/cegui/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ package/x11r7/xserver_xorg-server/xserver_xorg-server.hash | 6 +++---
+ package/x11r7/xserver_xorg-server/xserver_xorg-server.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/cegui/Config.in b/package/cegui/Config.in
-index 1bd0ee1cc3..20b865835b 100644
---- a/package/cegui/Config.in
-+++ b/package/cegui/Config.in
-@@ -1,11 +1,13 @@
--comment "cegui needs a toolchain w/ C++, threads, dynamic library, wchar"
-+comment "cegui needs a toolchain w/ C++, threads, dynamic library, wchar, gcc >= 5"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP \
--			|| BR2_STATIC_LIBS || !BR2_USE_WCHAR
-+			|| BR2_STATIC_LIBS || !BR2_USE_WCHAR \
-+			|| !BR2_TOOLCHAIN_GCC_AT_LEAST_5
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
+index 167d3fa591..8eb56ba027 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.x.org/archives/xorg-announce/2021-July/003098.html
+-sha256  336dc093431d81ecc03fa36af771f1181334f2746b7de7796f3cc6a8fa9e8cac  xorg-server-1.20.12.tar.xz
+-sha512  98350c42fb1f10c965663c1c8d4b225689a6a63163d788d454aa71b28b9cc8fcf9709a932f882358a13ca0c277c0c15812d05919092b4c32828d4ed61cca0406  xorg-server-1.20.12.tar.xz
++# From https://lists.x.org/archives/xorg-announce/2021-July/003100.html
++sha256  40aa4e96a56a81a301f15a9b10e06a22700f12b42d9e0e453c7f11d354386300  xorg-server-1.20.13.tar.xz
++sha512  4e0b7bd4e070dc52cb2c51c2056feb133de2c0487d359392ed63abba9702910cd2e2983e9415973d8d6e9672eac78be6f39202687fc56610877914ce722554b3  xorg-server-1.20.13.tar.xz
  
- config BR2_PACKAGE_CEGUI
- 	bool "cegui"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on !BR2_STATIC_LIBS
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # C++11 PR59987
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_WCHAR
- 	select BR2_PACKAGE_GLM
+ # Locally calculated
+ sha256  4cc0447a22635c7b2f1a93fec4aa94f1970fadeb72a063de006b51cf4963a06f  COPYING
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index 26cc1c07b5..c326230be0 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XSERVER_XORG_SERVER_VERSION = 1.20.12
++XSERVER_XORG_SERVER_VERSION = 1.20.13
+ XSERVER_XORG_SERVER_SOURCE = xorg-server-$(XSERVER_XORG_SERVER_VERSION).tar.xz
+ XSERVER_XORG_SERVER_SITE = https://xorg.freedesktop.org/archive/individual/xserver
+ XSERVER_XORG_SERVER_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
