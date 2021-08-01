@@ -8,84 +8,84 @@ X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 67390C4338F
-	for <buildroot@archiver.kernel.org>; Sun,  1 Aug 2021 12:15:47 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1820CC4338F
+	for <buildroot@archiver.kernel.org>; Sun,  1 Aug 2021 12:19:53 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2794061040
-	for <buildroot@archiver.kernel.org>; Sun,  1 Aug 2021 12:15:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2794061040
+	by mail.kernel.org (Postfix) with ESMTPS id 97216610CC
+	for <buildroot@archiver.kernel.org>; Sun,  1 Aug 2021 12:19:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 97216610CC
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E25E4401CF;
-	Sun,  1 Aug 2021 12:15:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 61C2D6076C;
+	Sun,  1 Aug 2021 12:19:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yG-5BfZGco0J; Sun,  1 Aug 2021 12:15:46 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id E9KrMRmzKXnR; Sun,  1 Aug 2021 12:19:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 05AE640236;
-	Sun,  1 Aug 2021 12:15:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B8B9060699;
+	Sun,  1 Aug 2021 12:19:50 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 73F681BF2EF
- for <buildroot@lists.busybox.net>; Sun,  1 Aug 2021 12:15:43 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 013A91BF2EF
+ for <buildroot@lists.busybox.net>; Sun,  1 Aug 2021 12:19:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6273140236
- for <buildroot@lists.busybox.net>; Sun,  1 Aug 2021 12:15:43 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id EC235401CF
+ for <buildroot@lists.busybox.net>; Sun,  1 Aug 2021 12:19:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iy_5aeW2kk-R for <buildroot@lists.busybox.net>;
- Sun,  1 Aug 2021 12:15:42 +0000 (UTC)
+ with ESMTP id LlCJc5HxL6rF for <buildroot@lists.busybox.net>;
+ Sun,  1 Aug 2021 12:19:47 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
- [IPv6:2a00:1450:4864:20::32b])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 113FE401CF
- for <buildroot@buildroot.org>; Sun,  1 Aug 2021 12:15:41 +0000 (UTC)
-Received: by mail-wm1-x32b.google.com with SMTP id
- d131-20020a1c1d890000b02902516717f562so9306721wmd.3
- for <buildroot@buildroot.org>; Sun, 01 Aug 2021 05:15:41 -0700 (PDT)
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
+ [IPv6:2a00:1450:4864:20::32f])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B2EB440155
+ for <buildroot@buildroot.org>; Sun,  1 Aug 2021 12:19:47 +0000 (UTC)
+Received: by mail-wm1-x32f.google.com with SMTP id x17so2490323wmc.5
+ for <buildroot@buildroot.org>; Sun, 01 Aug 2021 05:19:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=Py5NhvQpAui3NllQ/CYoZ6/lhlkwrs2QNn6pMkQ9lZs=;
- b=CkuJNCGWI63xP8PdmJb2KTEUKwJpsvw7z/MWMTEGsc2ph2J8yEfbLOM2J3t/gGyPc9
- CDktU+/HnTNh+IIYNxPWaBo2H2Vvew5D3SK7Aw0elTKnDw6tG92nKfS43zq73ZgihHg8
- BxbNsRMGPyhcLfcFVbzIGqkCW4RDVioxldYjm0r621WV/WW2XZ/JmFranjcEkFJVQHGR
- qbD2O4GXJSgkJLdv/dKBeMaB2QITLGFuKOxeTOMRkgqLbukuAfwM0VsokyNKOm7K1c23
- 3vVsf3Xp1wntVRWcRBKGG2zvxYT31jjZSnTLhHWdbC3Y4wx184z9vDC9pVQDFsumuOMk
- 6zxA==
+ bh=1rEK+pmukhVEO4uGiGh6nvq6ul/SIrUsHr9kHIwXIBo=;
+ b=HoR+nltr5WL4k6OVCxVPUF5W8jWXdaJ9oH8pLiV4lk1qTr23Pk3dTs7pkqRdESmb63
+ r9EFLLlGdPo5p6NwOqk5qw6yYGnwohVTAMl0+Yx42EGnY9yKjhNFKQAMUVVew2VPF9Yi
+ NjQP50rbERB/ul07jKWcclSeT+J5nP5HyEHcabRU/euZchrOJoefXx7v6EQioIrUc9dF
+ EoiDE91Ewn7hA2lV8hsdB9/TraqwLq5mnko5Ye8OSEXlGPHouoIDRqnD9LNbCTY0gwlL
+ CG4MtawRP89UrTMLDp6dFd2wO/hI+jgHOop56Ap4uu+NIc9epxEfKNpx7SbTBsJ5/vnl
+ dPzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=Py5NhvQpAui3NllQ/CYoZ6/lhlkwrs2QNn6pMkQ9lZs=;
- b=KHV80ngKONezA1lUTjkaRYVEJC6Hi3NduhkHNMYNXEIEYFhS2XacDugQpESPuDyxqa
- sMk7X0a8YYpnbn0uqg3p09iwZoJOqWTFHE7oMo69W+L+SI9L/PRp/K9r26Kq+EC856g5
- DoHvtjhZDLi5NGzh3MckHRN2zz5Branjph5kgcXr+UhcQBTGvJGPorGRRz4yzBLcZCQu
- zGLFypE7uWjVsvLLqIBawfZwj47wfmR6Hib01iDPB1zhMbJrcol8B6irFBD4m9NyQQI8
- zQmq9/uPWMJdq9lJ7+lapdrkHv1j61Tgwzd6V5KK70fJB0aL+PowxqSMuqzFLxGs8pE2
- 6lZA==
-X-Gm-Message-State: AOAM530N4Qm3UJkn852hm6AaiMbQ2YRgOzVCgBSjYSBLMo8D7B7JmiTr
- VshV4sO/CFntVJ6dzfoHOjapRL0PL+2H8Q==
-X-Google-Smtp-Source: ABdhPJwXpumjwEL14WvmfUdzzpKGxOHTuvw9YRE9w+OoUNmFDbe58z698Rznaovh4+mh0WnI0IailQ==
-X-Received: by 2002:a05:600c:a08:: with SMTP id
- z8mr11973797wmp.52.1627820139835; 
- Sun, 01 Aug 2021 05:15:39 -0700 (PDT)
+ bh=1rEK+pmukhVEO4uGiGh6nvq6ul/SIrUsHr9kHIwXIBo=;
+ b=GNgiXXHfXFVxrzbDMZ4FpR2tdbo5E0LQvcYiek27iIe3XDdRCx5zOTzJ1gDNclnvcd
+ PP5OVCthcZpb6YKSAfUqS76AKbLruFKsDnw6OIupO5o2CJKUFHZH3F0LdOc1Q14FLcZv
+ wh5AlkSaDcWEs64Nn1qjznibrsqL3+RDgcEzB58eYgd1v2676azEePWA4RKzrVE15FzB
+ qKFNd88cs19i+hZxjPZobZmAUj2n+V0egJyYAVGr1TEqHnZQSm5pB0v7tt+a8cQmdX8C
+ oAx4EEQri4fNyJyawFdu66FeXberdqarMRVwIYFbrjHh7jn42Sei3w8JOZGkplDUnTOW
+ OLuA==
+X-Gm-Message-State: AOAM533lm4dfYpeW1ivBP3k2QoIbtYPJ+6Q955EJh8alsMPrWL3MaiuV
+ W8LQ0tuhlPw2Te7nB4aN7H7j07WzZ/epNQ==
+X-Google-Smtp-Source: ABdhPJxk3v9RRbjagbOqL5DLbW1RjfJsGWb/tEONCLT/vxh6YpgQ5N4KXG1br8sLoSmOxJNsfYoWRA==
+X-Received: by 2002:a7b:c7d1:: with SMTP id z17mr12194269wmk.50.1627820385697; 
+ Sun, 01 Aug 2021 05:19:45 -0700 (PDT)
 Received: from kali.home (pop.92-184-116-62.mobile.abo.orange.fr.
  [92.184.116.62])
- by smtp.gmail.com with ESMTPSA id j4sm8004905wrt.24.2021.08.01.05.15.39
+ by smtp.gmail.com with ESMTPSA id v12sm7712473wrq.59.2021.08.01.05.19.44
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 01 Aug 2021 05:15:39 -0700 (PDT)
+ Sun, 01 Aug 2021 05:19:45 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun,  1 Aug 2021 14:15:28 +0200
-Message-Id: <20210801121528.3056060-1-fontaine.fabrice@gmail.com>
+Date: Sun,  1 Aug 2021 14:19:36 +0200
+Message-Id: <20210801121936.3060829-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/postgresql: add SELinux module
+Subject: [Buildroot] [PATCH 1/1] package/libfreeimage: fix build with gcc 11
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,33 +97,44 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Peter Seiderer <ps.report@gmx.net>,
+Cc: =?UTF-8?q?R=C3=A9mi=20R=C3=A9rolle?= <remi.rerolle@gmail.com>,
  Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-Support for postgresql is added by the services/postgresql module in the
-SELinux refpolicy.
+Fix the following build failure with gcc 11:
+
+In file included from Source/FreeImage/../OpenEXR/IlmImf/ImfHeader.h:51,
+                 from Source/FreeImage/../OpenEXR/IlmImf/ImfOutputFile.h:46,
+                 from Source/FreeImage/PluginEXR.cpp:33:
+Source/OpenEXR/Imath/ImathVec.h:228:41: error: ISO C++17 does not allow dynamic exception specifications
+  228 |     const Vec2 &        normalizeExc () throw (IEX_NAMESPACE::MathExc);
+      |                                         ^~~~~
+
+Fixes:
+ - http://autobuild.buildroot.org/results/953cd07402fe2f99f2361a3b4a7b086a88e0d72d
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/postgresql/postgresql.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/libfreeimage/libfreeimage.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index cab5553805..143bcd895a 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -10,6 +10,7 @@ POSTGRESQL_SITE = https://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
- POSTGRESQL_LICENSE = PostgreSQL
- POSTGRESQL_LICENSE_FILES = COPYRIGHT
- POSTGRESQL_CPE_ID_VENDOR = postgresql
-+POSTGRESQL_SELINUX_MODULES = postgresql
- POSTGRESQL_INSTALL_STAGING = YES
- POSTGRESQL_CONFIG_SCRIPTS = pg_config
- POSTGRESQL_CONF_ENV = \
+diff --git a/package/libfreeimage/libfreeimage.mk b/package/libfreeimage/libfreeimage.mk
+index 91299084a1..4775f92109 100644
+--- a/package/libfreeimage/libfreeimage.mk
++++ b/package/libfreeimage/libfreeimage.mk
+@@ -20,7 +20,8 @@ define LIBFREEIMAGE_EXTRACT_CMDS
+ endef
+ 
+ define LIBFREEIMAGE_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) \
++		CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11" $(MAKE) -C $(@D)
+ endef
+ 
+ define LIBFREEIMAGE_INSTALL_STAGING_CMDS
 -- 
 2.30.2
 
