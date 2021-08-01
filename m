@@ -8,62 +8,63 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 88440C4338F
-	for <buildroot@archiver.kernel.org>; Sun,  1 Aug 2021 06:13:44 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 85E38C4338F
+	for <buildroot@archiver.kernel.org>; Sun,  1 Aug 2021 06:32:54 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2C35161059
-	for <buildroot@archiver.kernel.org>; Sun,  1 Aug 2021 06:13:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2C35161059
+	by mail.kernel.org (Postfix) with ESMTPS id 0E65661057
+	for <buildroot@archiver.kernel.org>; Sun,  1 Aug 2021 06:32:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0E65661057
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=t-online.de
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E524C4021E;
-	Sun,  1 Aug 2021 06:13:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B5FA3607B9;
+	Sun,  1 Aug 2021 06:32:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ab1F24UeaW0C; Sun,  1 Aug 2021 06:13:42 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id VHWCkgSLQkJi; Sun,  1 Aug 2021 06:32:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AB53840260;
-	Sun,  1 Aug 2021 06:13:41 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 05DE21BF86B
- for <buildroot@lists.busybox.net>; Sun,  1 Aug 2021 06:13:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 01497607C2;
+	Sun,  1 Aug 2021 06:32:51 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 11EDE1BF86B
+ for <buildroot@lists.busybox.net>; Sun,  1 Aug 2021 06:32:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E80D340260
- for <buildroot@lists.busybox.net>; Sun,  1 Aug 2021 06:13:39 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0E15A4158B
+ for <buildroot@lists.busybox.net>; Sun,  1 Aug 2021 06:32:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Zc23ptFGShsn for <buildroot@lists.busybox.net>;
- Sun,  1 Aug 2021 06:13:38 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HvAQvY02cQv8 for <buildroot@lists.busybox.net>;
+ Sun,  1 Aug 2021 06:32:49 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mailout11.t-online.de (mailout11.t-online.de [194.25.134.85])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6A6A24021E
- for <buildroot@buildroot.org>; Sun,  1 Aug 2021 06:13:38 +0000 (UTC)
-Received: from fwd19.aul.t-online.de (fwd19.aul.t-online.de [172.20.27.65])
- by mailout11.t-online.de (Postfix) with SMTP id E95168EE7
- for <buildroot@buildroot.org>; Sun,  1 Aug 2021 08:12:28 +0200 (CEST)
+Received: from mailout08.t-online.de (mailout08.t-online.de [194.25.134.20])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 39A7F405AA
+ for <buildroot@buildroot.org>; Sun,  1 Aug 2021 06:32:49 +0000 (UTC)
+Received: from fwd20.aul.t-online.de (fwd20.aul.t-online.de [172.20.26.140])
+ by mailout08.t-online.de (Postfix) with SMTP id 2E5D685C;
+ Sun,  1 Aug 2021 08:32:46 +0200 (CEST)
 Received: from fli4l.lan.fli4l
- (bposkwZOwh4W7Fm3C6RKUzRGqiPB07y5AttTA3YsLwJH3oRX5moZKgH1ZqZSYVtZJ0@[79.214.201.246])
- by fwd19.t-online.de with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1mA4i2-3I4UKG0; Sun, 1 Aug 2021 08:12:26 +0200
-Received: from mahler.lan.fli4l ([192.168.1.1]:34092)
+ (Z2qe4BZc8h2CzJe1dkDJqKtGMmTO-SXAj7BQTUumJji2eChyzTKzTuPGGPERdLKwwT@[79.214.201.246])
+ by fwd20.t-online.de with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
+ esmtp id 1mA51e-2PLkuG0; Sun, 1 Aug 2021 08:32:42 +0200
+Received: from mahler.lan.fli4l ([192.168.1.1]:34230)
  by fli4l.lan.fli4l with esmtp (Exim 4.94.2)
- (envelope-from <bernd.kuhls@t-online.de>) id 1mA4i1-0001Km-SR
- for buildroot@buildroot.org; Sun, 01 Aug 2021 08:12:26 +0200
+ (envelope-from <bernd.kuhls@t-online.de>)
+ id 1mA51e-0004jU-1w; Sun, 01 Aug 2021 08:32:42 +0200
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Sun,  1 Aug 2021 08:12:25 +0200
-Message-Id: <20210801061225.4718-1-bernd.kuhls@t-online.de>
+Date: Sun,  1 Aug 2021 08:32:42 +0200
+Message-Id: <20210801063242.12325-1-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-ID: bposkwZOwh4W7Fm3C6RKUzRGqiPB07y5AttTA3YsLwJH3oRX5moZKgH1ZqZSYVtZJ0
-X-TOI-EXPURGATEID: 150726::1627798346-0000782A-492E8F8B/0/0 CLEAN NORMAL
-X-TOI-MSGID: 3a3199c1-4070-4b4f-819c-c6550f103df7
-Subject: [Buildroot] [PATCH v2 1/1] package/libsoil: remove package
+X-ID: Z2qe4BZc8h2CzJe1dkDJqKtGMmTO-SXAj7BQTUumJji2eChyzTKzTuPGGPERdLKwwT
+X-TOI-EXPURGATEID: 150726::1627799562-00000BA7-1877C405/0/0 CLEAN NORMAL
+X-TOI-MSGID: 7d163b7e-5fd4-460b-aead-8a93e6b729cf
+Subject: [Buildroot] [PATCH 1/1] package/intel-mediasdk: bump version to
+ 21.2.3
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,206 +76,74 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
+Cc: Louis-Paul Cordier <lpdev@cordier.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-All kodi screensavers previously needing libsoil removed the dependency.
-
-For reference:
-https://github.com/xbmc/screensaver.matrixtrails/commit/92a0d44e9151cfce3be74e81a3e39f0688d69b7a
-https://github.com/xbmc/screensaver.asterwave/commit/8a778873754de09c93031408c71b3c40d198f3bc
+Rebased patch.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-v2: Fixed typo in Config.in.legacy
+ .../intel-mediasdk/0001-Don-t-force-fstack-protector.patch  | 6 ++++--
+ package/intel-mediasdk/intel-mediasdk.hash                  | 2 +-
+ package/intel-mediasdk/intel-mediasdk.mk                    | 2 +-
+ 3 files changed, 6 insertions(+), 4 deletions(-)
 
- Config.in.legacy                        |  7 ++++
- DEVELOPERS                              |  1 -
- package/Config.in                       |  1 -
- package/libsoil/0001-fix-makefile.patch | 40 --------------------
- package/libsoil/Config.in               | 12 ------
- package/libsoil/libsoil.hash            |  4 --
- package/libsoil/libsoil.mk              | 50 -------------------------
- 7 files changed, 7 insertions(+), 108 deletions(-)
- delete mode 100644 package/libsoil/0001-fix-makefile.patch
- delete mode 100644 package/libsoil/Config.in
- delete mode 100644 package/libsoil/libsoil.hash
- delete mode 100644 package/libsoil/libsoil.mk
-
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 5233785209..891eee98cc 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,13 @@ endif
+diff --git a/package/intel-mediasdk/0001-Don-t-force-fstack-protector.patch b/package/intel-mediasdk/0001-Don-t-force-fstack-protector.patch
+index a33c218c0a..a7e3b70294 100644
+--- a/package/intel-mediasdk/0001-Don-t-force-fstack-protector.patch
++++ b/package/intel-mediasdk/0001-Don-t-force-fstack-protector.patch
+@@ -7,6 +7,8 @@ This allows the environment to decide whether SSP should be used or
+ not, for example to support toolchains that don't have SSP support.
  
- comment "Legacy options removed in 2021.08"
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++[Bernd: rebased for 21.2.3]
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ ---
+  api/mfx_dispatch/linux/CMakeLists.txt | 2 +-
+  builder/FindPackages.cmake            | 4 ++--
+@@ -16,7 +18,7 @@ diff --git a/api/mfx_dispatch/linux/CMakeLists.txt b/api/mfx_dispatch/linux/CMak
+ index 15a4bd9a..4415f840 100644
+ --- a/api/mfx_dispatch/linux/CMakeLists.txt
+ +++ b/api/mfx_dispatch/linux/CMakeLists.txt
+-@@ -100,7 +100,7 @@ target_link_libraries(mfx dl)
++@@ -101,7 +101,7 @@ target_link_libraries(mfx dl)
+  get_api_version(MFX_VERSION_MAJOR MFX_VERSION_MINOR)
+  
+  set_target_properties( mfx PROPERTIES LINK_FLAGS
+@@ -38,7 +40,7 @@ index 7e36ae2d..5b8b9b9d 100644
+  #  message( STATUS "Libva located at: ${PKG_LIBVA_LIBRARY_DIRS}" )
+  
+    if( ARGV1 MATCHES hw AND Linux )
+-@@ -448,7 +448,7 @@ function(configure_dependencies target dependencies variant)
++@@ -445,7 +445,7 @@ function(configure_dependencies target dependencies variant)
+    endforeach()
+  
+    set(SCOPE_CFLAGS ${SCOPE_CFLAGS} PARENT_SCOPE)
+diff --git a/package/intel-mediasdk/intel-mediasdk.hash b/package/intel-mediasdk/intel-mediasdk.hash
+index 27cfdda08d..7ae892b3bf 100644
+--- a/package/intel-mediasdk/intel-mediasdk.hash
++++ b/package/intel-mediasdk/intel-mediasdk.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  f7750bd3a307d796e71a3d4ebb16a730b2e9364669513e110e9ec59af159b4cd  intel-mediasdk-21.2.2.tar.gz
++sha256  7791be83e5e9f6d55f31d6ad9037012fc78b846724644b9db2087d1b7dfec078  intel-mediasdk-21.2.3.tar.gz
+ sha256  dfd67773578903698f9ff4a61eb8f2d84810cbecd56f3f3cee8c649f813b6ea6  LICENSE
+diff --git a/package/intel-mediasdk/intel-mediasdk.mk b/package/intel-mediasdk/intel-mediasdk.mk
+index c3412d622d..0aff54cafe 100644
+--- a/package/intel-mediasdk/intel-mediasdk.mk
++++ b/package/intel-mediasdk/intel-mediasdk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+config BR2_PACKAGE_LIBSOIL
-+	bool "libsoil package removed"
-+	select BR2_LEGACY
-+	help
-+	  The libsoil package was removed. All packages needing
-+	  libsoil removed the dependency.
-+
- config BR2_PACKAGE_CLAPACK
- 	bool "cblas/clapack package removed"
- 	select BR2_LEGACY
-diff --git a/DEVELOPERS b/DEVELOPERS
-index adfcc96059..114e133e94 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -387,7 +387,6 @@ F:	package/libpng/
- F:	package/libsidplay2/
- F:	package/libsilk/
- F:	package/libsndfile/
--F:	package/libsoil/
- F:	package/libsoundtouch/
- F:	package/libsquish/
- F:	package/libudfread/
-diff --git a/package/Config.in b/package/Config.in
-index 5066690a81..09cac91fb0 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1512,7 +1512,6 @@ menu "Graphics"
- 	source "package/libqrencode/Config.in"
- 	source "package/libraw/Config.in"
- 	source "package/librsvg/Config.in"
--	source "package/libsoil/Config.in"
- 	source "package/libsvg/Config.in"
- 	source "package/libsvg-cairo/Config.in"
- 	source "package/libsvgtiny/Config.in"
-diff --git a/package/libsoil/0001-fix-makefile.patch b/package/libsoil/0001-fix-makefile.patch
-deleted file mode 100644
-index 310d26448b..0000000000
---- a/package/libsoil/0001-fix-makefile.patch
-+++ /dev/null
-@@ -1,40 +0,0 @@
--Various makefile fixes to allow cross compilation
--
--Partly ported from
--http://anonscm.debian.org/cgit/pkg-games/libsoil.git/tree/debian/patches/linking_correctly.patch
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--
--diff -uNr soil.org/projects/makefile/alternate_Makefile.txt soil/projects/makefile/alternate_Makefile.txt
----- soil.org/projects/makefile/alternate_Makefile.txt	2008-07-07 18:13:28.000000000 +0200
--+++ soil/projects/makefile/alternate_Makefile.txt	2015-11-07 11:15:04.140106336 +0100
--@@ -1,8 +1,8 @@
-- MAKE = make
---CC = gcc
---INSTALL_FILE = install -p -o root -g root -m 644
---INSTALL_DIR = install -p -o root -g root -d
---LN = ln -s
--+CC = $(GCC)
--+INSTALL_FILE = $(INSTALL) -m 644
--+INSTALL_DIR = $(INSTALL) -d
--+LN = ln -sf
-- RM = rm -fv
-- CFLAGS += -c -O2 -Wall
-- LDFLAGS +=
--@@ -23,13 +23,13 @@
-- all: $(OFILES) lib
-- 
-- %.o: %.c
---	$(CC) $(CFLAGS) $< -o $@
--+	$(CC) $(CFLAGS) -c -fPIC $< -o $@
-- 
-- lib: $(OFILES)
-- 	# create static library
---	ar -cvq $(LIBNAME).a $(OFILES)
--+	$(AR) -cvq $(LIBNAME).a $(OFILES)
-- 	# create shared library
---	gcc -shared -Wl,-soname,$(LIBNAME).so.$(MAJOR) -o $(LIBNAME).so.$(VERSION) $(OFILES)
--+	$(CC) -shared -Wl,-soname,$(LIBNAME).so.$(MAJOR) -o $(LIBNAME).so.$(VERSION) $(OFILES) -lGL -lm
-- 
-- install:
-- 	$(INSTALL_DIR) $(DESTDIR)/$(INCLUDEDIR)
-diff --git a/package/libsoil/Config.in b/package/libsoil/Config.in
-deleted file mode 100644
-index aea0cc3548..0000000000
---- a/package/libsoil/Config.in
-+++ /dev/null
-@@ -1,12 +0,0 @@
--config BR2_PACKAGE_LIBSOIL
--	bool "libsoil"
--	depends on BR2_PACKAGE_HAS_LIBGL
--	depends on !BR2_STATIC_LIBS
--	help
--	  SOIL is a tiny C library used primarily for uploading
--	  textures into OpenGL.
--
--	  http://www.lonesock.net/soil.html
--
--comment "libsoil needs an OpenGL backend and a toolchain w/ dynamic library"
--	depends on !BR2_PACKAGE_HAS_LIBGL || BR2_STATIC_LIBS
-diff --git a/package/libsoil/libsoil.hash b/package/libsoil/libsoil.hash
-deleted file mode 100644
-index 2596cd6b4d..0000000000
---- a/package/libsoil/libsoil.hash
-+++ /dev/null
-@@ -1,4 +0,0 @@
--# Locally calculated
--sha256  a2305b8d64f6d636e36d669bbdb0ca5445d1345c754b3d61d3f037dad2e5f701  soil.zip
--sha256  a53f0508cafb544aa0b11c241c1000055bd9d827d19712f4de08898e36f29728  src/stb_image_aug.c
--sha256  449ba815b6f610660515246d029f5d08b45178fe8f9f9f520939edad85a7935e  src/image_helper.c
-diff --git a/package/libsoil/libsoil.mk b/package/libsoil/libsoil.mk
-deleted file mode 100644
-index 2945edd8dd..0000000000
---- a/package/libsoil/libsoil.mk
-+++ /dev/null
-@@ -1,50 +0,0 @@
--################################################################################
--#
--# libsoil
--#
--################################################################################
--
--LIBSOIL_VERSION = 20080707
--LIBSOIL_SOURCE = soil.zip
--LIBSOIL_SITE = http://www.lonesock.net/files
--LIBSOIL_INSTALL_STAGING = YES
--LIBSOIL_DEPENDENCIES = libgl
--LIBSOIL_LICENSE = Public Domain, MIT
--LIBSOIL_LICENSE_FILES = src/stb_image_aug.c src/image_helper.c
--LIBSOIL_MAKEFILE = ../projects/makefile/alternate_Makefile.txt
--
--define LIBSOIL_EXTRACT_CMDS
--	$(UNZIP) -d $(@D) $(LIBSOIL_DL_DIR)/$(LIBSOIL_SOURCE)
--	mv $(@D)/Simple\ OpenGL\ Image\ Library/* $(@D)
--endef
--
--# gnu patch < v2.5.9 doesn't correctly handle spaces in file names,
--# and we want to patch the 'alternate Makefile.txt' file, so rename
--# the file (and patch the renamed file) for compatibility with older
--# distributions
--define REMOVE_SPACE_FROM_FILENAME
--	cd $(@D)/projects/makefile/ && \
--		mv "alternate Makefile.txt" alternate_Makefile.txt
--endef
--LIBSOIL_POST_EXTRACT_HOOKS += REMOVE_SPACE_FROM_FILENAME
--
--define LIBSOIL_BUILD_CMDS
--	$(MAKE) $(TARGET_CONFIGURE_OPTS) -f $(LIBSOIL_MAKEFILE) \
--		-C $(@D)/src
--endef
--
--define LIBSOIL_INSTALL_STAGING_CMDS
--	$(MAKE) $(TARGET_CONFIGURE_OPTS) -f $(LIBSOIL_MAKEFILE) \
--		DESTDIR=$(STAGING_DIR) install \
--		INSTALL=$(INSTALL) \
--		-C $(@D)/src
--endef
--
--define LIBSOIL_INSTALL_TARGET_CMDS
--	$(MAKE) $(TARGET_CONFIGURE_OPTS) -f $(LIBSOIL_MAKEFILE) \
--		DESTDIR=$(TARGET_DIR) install \
--		INSTALL=$(INSTALL) \
--		-C $(@D)/src
--endef
--
--$(eval $(generic-package))
+-INTEL_MEDIASDK_VERSION = 21.2.2
++INTEL_MEDIASDK_VERSION = 21.2.3
+ INTEL_MEDIASDK_SITE = http://github.com/Intel-Media-SDK/MediaSDK/archive
+ INTEL_MEDIASDK_LICENSE = MIT
+ INTEL_MEDIASDK_LICENSE_FILES = LICENSE
 -- 
 2.30.2
 
