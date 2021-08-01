@@ -2,56 +2,90 @@ Return-Path: <SRS0=tdpc=MY=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,
-	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.5 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
+	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C3CEC4338F
-	for <buildroot@archiver.kernel.org>; Sun,  1 Aug 2021 14:25:03 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EE8ACC4338F
+	for <buildroot@archiver.kernel.org>; Sun,  1 Aug 2021 18:16:25 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 33C74610A7
-	for <buildroot@archiver.kernel.org>; Sun,  1 Aug 2021 14:25:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 33C74610A7
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
+	by mail.kernel.org (Postfix) with ESMTPS id 73B9660F36
+	for <buildroot@archiver.kernel.org>; Sun,  1 Aug 2021 18:16:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 73B9660F36
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 06EE26070B;
-	Sun,  1 Aug 2021 14:25:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 16BA94048E;
+	Sun,  1 Aug 2021 18:16:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id W2DRoNCA0ace; Sun,  1 Aug 2021 14:25:02 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id znFb-mQfligR; Sun,  1 Aug 2021 18:16:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3300B606D4;
-	Sun,  1 Aug 2021 14:25:01 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B7E2C1BF44A
- for <buildroot@lists.busybox.net>; Sun,  1 Aug 2021 14:24:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 786524047B;
+	Sun,  1 Aug 2021 18:16:23 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 7F1331BF3CB
+ for <buildroot@lists.busybox.net>; Sun,  1 Aug 2021 18:16:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A0ECD40109
- for <buildroot@lists.busybox.net>; Sun,  1 Aug 2021 14:24:59 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7BC688382F
+ for <buildroot@lists.busybox.net>; Sun,  1 Aug 2021 18:16:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id s2GuEkzC63y7 for <buildroot@lists.busybox.net>;
- Sun,  1 Aug 2021 14:24:58 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 95263400FC
- for <buildroot@buildroot.org>; Sun,  1 Aug 2021 14:24:58 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 348ED8A48F; Sun,  1 Aug 2021 14:24:56 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Sun, 1 Aug 2021 16:20:51 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: bb75c4b541fac144b53b63248e235f22ba1d25ad
-X-Git-Newrev: 4634e84978a3e64e9050021d209a41cd88a1ad16
-X-Patchwork-Hint: ignore
-Message-Id: <20210801142456.348ED8A48F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/rtl_433: new package
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dWRRR0ahrboF for <buildroot@lists.busybox.net>;
+ Sun,  1 Aug 2021 18:16:20 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
+ [IPv6:2a00:1450:4864:20::42d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 72CEC8354B
+ for <buildroot@busybox.net>; Sun,  1 Aug 2021 18:16:20 +0000 (UTC)
+Received: by mail-wr1-x42d.google.com with SMTP id k4so7869146wrc.0
+ for <buildroot@busybox.net>; Sun, 01 Aug 2021 11:16:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=nYJyX+v6dNCyCup1FLi7NYXKaBq4nUGgBFy86mY25/M=;
+ b=BvCxCk4Q0AqBdB3WVUbsOFB4LAIrDIi8blFKkAurlwj9M+kCuGa6kZLSWSCJ/WJQJb
+ 9/mI5Bw98ZNpLQ05An/ls5QeJ+dM2bv1XiiUiY6wi+/Y3rLNHQt+WU7S49HPic5K0pOv
+ PNyOmWwlAkuFNTK2w6ga4jy1SKQSmoWIrOgKZEOjRQScZUdFr+qoQPCQm+UnbCDwVLC4
+ aw0vo9rF8b1+1HJGr1E79+5taHVxELqT2TTNa4Ug0q/XV4UXkD3wV6xCdAk87do7ZFS3
+ Lf8vi+uAa5snZ1Ta0R1Q5Z3dxmEqSrA6DTSNf49KRcJtfF6Xms+VWRIxGm5gtU/GCZDs
+ cLwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=nYJyX+v6dNCyCup1FLi7NYXKaBq4nUGgBFy86mY25/M=;
+ b=Mgv8EdPQw0RkAEN8Gl+DUFYcHahL4tRCDZqQB+o6/KG09N1w6vSUP269mIKDp2caUV
+ rzm5D9cGUrNRIHTsPOEKeY1ZafD++D4JueIOXrF2Ik6gxSv+r8P66Npg1o9N5NElBOkD
+ PqzH33xzn9rPP1oeqPUC8q2OOn4HM3dNRgL78YaiD3l9kK0VftF+Y7e10Zxq/EjCeFm7
+ JabsZgyAmP0FRzH20ZL5qrwSAsrhlhSOoSwB86/6k1h2PHcBG4lo6f3nbnPl42uliBCw
+ 97PxYj8f44W/h+8AnClGRkLta7xhbHHwT2SVAfv7b/MbPtDDNkcHQky+CI4o0SONQmNF
+ Lv8w==
+X-Gm-Message-State: AOAM533sjRi8S5fnGSxo46Aa6/rbfJ4r4Svx7Gno61KwoNXB/mjVLKdT
+ jyyC07ri22zrAKrelXjWNc6z6/Uq734=
+X-Google-Smtp-Source: ABdhPJxNJAFexwAHO4KsYCvXxjmmHIVG9K+BsGRizuxqmadYvjG7cAMImPLUxxdOj8iFWSWUaST5Cg==
+X-Received: by 2002:a5d:4284:: with SMTP id k4mr13995243wrq.407.1627841778482; 
+ Sun, 01 Aug 2021 11:16:18 -0700 (PDT)
+Received: from vm-user.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
+ by smtp.gmail.com with ESMTPSA id x16sm8903114wru.40.2021.08.01.11.16.17
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 01 Aug 2021 11:16:17 -0700 (PDT)
+From: Francois Perrad <fperrad@gmail.com>
+X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
+To: buildroot@busybox.net
+Date: Sun,  1 Aug 2021 18:51:07 +0200
+Message-Id: <20210801165107.3294045-1-francois.perrad@gadz.org>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH v2] package/lua-lunix: fix build with recent gcc
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,125 +97,58 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4634e84978a3e64e9050021d209a41cd88a1ad16
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-rtl_433 (despite the name) is a generic data receiver, mainly for the
-433.92 MHz, 868 MHz (SRD), 315 MHz, 345 MHz, and 915 MHz ISM bands.
-
-https://github.com/merbanan/rtl_433
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-[yann.morin.1998@free.fr: forcibly disable building docs and tests]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Fixes: http://autobuild.buildroot.net/results/749a11d5289c6fec3b2f236b9073fc1ab730d090/
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- DEVELOPERS                   |  1 +
- package/Config.in            |  1 +
- package/rtl_433/Config.in    | 16 ++++++++++++++++
- package/rtl_433/rtl_433.hash |  4 ++++
- package/rtl_433/rtl_433.mk   | 32 ++++++++++++++++++++++++++++++++
- 5 files changed, 54 insertions(+)
+ ...ctl-instead-of-deprecated-sys-sysctl.patch | 31 +++++++++++++++++++
+ 1 file changed, 31 insertions(+)
+ create mode 100644 package/lua-lunix/0003-use-linux-sysctl-instead-of-deprecated-sys-sysctl.patch
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index e73f2dfd7a..1547ff123b 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -912,6 +912,7 @@ F:	package/python-jedi/
- F:	package/python-parso/
- F:	package/python-yatl/
- F:	package/rocksdb/
-+F:	package/rtl_433/
- F:	package/rygel/
- F:	package/safeclib/
- F:	package/snort3/
-diff --git a/package/Config.in b/package/Config.in
-index 2598565234..046c04e994 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2071,6 +2071,7 @@ menu "Miscellaneous"
- 	source "package/proj/Config.in"
- 	source "package/qemu/Config.in"
- 	source "package/qpdf/Config.in"
-+	source "package/rtl_433/Config.in"
- 	source "package/shared-mime-info/Config.in"
- 	source "package/sunwait/Config.in"
- 	source "package/taskd/Config.in"
-diff --git a/package/rtl_433/Config.in b/package/rtl_433/Config.in
+diff --git a/package/lua-lunix/0003-use-linux-sysctl-instead-of-deprecated-sys-sysctl.patch b/package/lua-lunix/0003-use-linux-sysctl-instead-of-deprecated-sys-sysctl.patch
 new file mode 100644
-index 0000000000..5664227c82
+index 000000000..7a904884d
 --- /dev/null
-+++ b/package/rtl_433/Config.in
-@@ -0,0 +1,16 @@
-+config BR2_PACKAGE_RTL_433
-+	bool "rtl_433"
-+	depends on BR2_USE_MMU # fork()
-+	depends on !BR2_STATIC_LIBS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_PACKAGE_LIBOPENSSL_ENABLE_PSK if BR2_PACKAGE_LIBOPENSSL
-+	help
-+	  rtl_433 (despite the name) is a generic data receiver, mainly
-+	  for the 433.92 MHz, 868 MHz (SRD), 315 MHz, 345 MHz, and 915
-+	  MHz ISM bands.
++++ b/package/lua-lunix/0003-use-linux-sysctl-instead-of-deprecated-sys-sysctl.patch
+@@ -0,0 +1,31 @@
++From 99b02b08d3f1a53e58b558b9f2250225e569a550 Mon Sep 17 00:00:00 2001
++From: Tiago Seco <tiago@seco.ws>
++Date: Sun, 20 Jun 2021 11:20:23 +0200
++Subject: [PATCH] use <linux/sysctl.h> instead of deprectaed <sys/sysctl.h> for
++ linux systems
 +
-+	  https://github.com/merbanan/rtl_433
++Fetched from https://github.com/wahern/lunix/pull/18
++Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
++---
++ lunix-rel-20170920/src/unix.c | 6 +++++-
++ 1 file changed, 5 insertions(+), 1 deletion(-)
 +
-+comment "rtl_433 needs a toolchain w/ dynamic library, threads"
-+	depends on BR2_USE_MMU
-+	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/rtl_433/rtl_433.hash b/package/rtl_433/rtl_433.hash
-new file mode 100644
-index 0000000000..9ace444b78
---- /dev/null
-+++ b/package/rtl_433/rtl_433.hash
-@@ -0,0 +1,4 @@
-+# Locally calculated
-+sha256  d8b87535b4e65264018771b6b288259d81137482fc938d01e0c03ac071c03bd5  rtl_433-21.05.tar.gz
-+# License file, locally calculated
-+sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/rtl_433/rtl_433.mk b/package/rtl_433/rtl_433.mk
-new file mode 100644
-index 0000000000..e6d28721fa
---- /dev/null
-+++ b/package/rtl_433/rtl_433.mk
-@@ -0,0 +1,32 @@
-+################################################################################
-+#
-+# rtl_433
-+#
-+################################################################################
-+
-+RTL_433_VERSION = 21.05
-+RTL_433_SITE = $(call github,merbanan,rtl_433,$(RTL_433_VERSION))
-+RTL_433_LICENSE = GPL-2.0+
-+RTL_433_LICENSE_FILES = COPYING
-+
-+RTL_433_CONF_OPTS = \
-+	-DBUILD_DOCUMENTATION=OFF \
-+	-DBUILD_TESTING=OFF \
-+	-DBUILD_TESTING_ANALYZER=OFF \
-+	-DENABLE_SOAPYSDR=OFF
-+
-+ifeq ($(BR2_PACKAGE_LIBRTLSDR),y)
-+RTL_433_DEPENDENCIES += librtlsdr
-+RTL_433_CONF_OPTS += -DENABLE_RTLSDR=ON
-+else
-+RTL_433_CONF_OPTS += -DENABLE_RTLSDR=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+RTL_433_DEPENDENCIES += openssl
-+RTL_433_CONF_OPTS += -DENABLE_OPENSSL=ON
-+else
-+RTL_433_CONF_OPTS += -DENABLE_OPENSSL=OFF
-+endif
-+
-+$(eval $(cmake-package))
++diff --git a/lunix-rel-20170920/src/unix.c b/lunix-rel-20170920/src/unix.c
++index bea4d14..dfa26a3 100644
++--- a/lunix-rel-20170920/src/unix.c
+++++ b/lunix-rel-20170920/src/unix.c
++@@ -560,7 +560,11 @@
++ #endif
++ 
++ #if HAVE_SYS_SYSCTL_H
++-#include <sys/sysctl.h> /* CTL_KERN KERN_RANDOM RANDOM_UUID sysctl(2) */
+++#ifdef __linux__
+++#include <linux/sysctl.h> /* CTL_KERN KERN_RANDOM RANDOM_UUID sysctl(2) */
+++#else
+++#include <sys/sysctl.h>
+++#endif
++ #endif
++ 
++ #if HAVE_IFADDRS_H
++-- 
++2.30.2
+-- 
+2.30.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
