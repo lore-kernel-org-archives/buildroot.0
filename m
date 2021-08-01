@@ -2,76 +2,56 @@ Return-Path: <SRS0=tdpc=MY=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4FF69C4338F
-	for <buildroot@archiver.kernel.org>; Sun,  1 Aug 2021 20:26:10 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F08AC4338F
+	for <buildroot@archiver.kernel.org>; Sun,  1 Aug 2021 20:30:13 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id E63AC60E97
-	for <buildroot@archiver.kernel.org>; Sun,  1 Aug 2021 20:26:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E63AC60E97
+	by mail.kernel.org (Postfix) with ESMTPS id 226CD61057
+	for <buildroot@archiver.kernel.org>; Sun,  1 Aug 2021 20:30:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 226CD61057
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C33228394A;
-	Sun,  1 Aug 2021 20:26:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E7D9E40490;
+	Sun,  1 Aug 2021 20:30:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hDSvxTFFkgeF; Sun,  1 Aug 2021 20:26:09 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 31D4083848;
-	Sun,  1 Aug 2021 20:26:08 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A51401BF5A2
- for <buildroot@lists.busybox.net>; Sun,  1 Aug 2021 20:26:02 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 953E1403C5
- for <buildroot@lists.busybox.net>; Sun,  1 Aug 2021 20:26:02 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LvTDGythzooI for <buildroot@lists.busybox.net>;
- Sun,  1 Aug 2021 20:26:01 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B5DF7403BF
- for <buildroot@buildroot.org>; Sun,  1 Aug 2021 20:26:01 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:89a2:641e:9d1f:2c0d])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id 40C235FF88;
- Sun,  1 Aug 2021 22:25:56 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1627849560;
- bh=kZQtAoxgibP2inc6QL6xMVDSdDViukL4Cu7WJX4qhHE=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=vYYnVux1+bdP8fQlzHgt6/yKh3FzwW4LZAckH4jkodgwdDZPZ6FjDPjmEryyHa0vn
- NAT9eAOh1ajrkF43Q/gDt1lOysUs2mdBBk+ZvJXMSYJko9yQZjFBBEQkWcIW5kNO9N
- E8dDbwYqkAHtl5qn/TqLjWeRmctEuw996aOUAkqjnVm0pGmTb7OloUljqUE11XPhfZ
- Jqz91mhz1PHxLJoxE5cCzFLbT0d5kWLBWsK3PwXWPjd2WiMf8JU5t0yqO6e38fOndV
- qzC07RamEe4LAugjGm8YB10BXdRbRUc+kpl5ZVyz94DrN7cbypbsEGECY7C5Xv5r6H
- oeX2GnFE2Vb1g==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 01 Aug 2021 22:25:55 +0200
-Date: Sun, 1 Aug 2021 22:25:55 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20210801202555.GO3189549@scaer>
-References: <20210801200431.3987173-1-fontaine.fabrice@gmail.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20210801200431.3987173-1-fontaine.fabrice@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 1/1] package/tftpd: add SELinux module
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 5-ejNEslAghs; Sun,  1 Aug 2021 20:30:12 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4EF0E40444;
+	Sun,  1 Aug 2021 20:30:11 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 157EF1BF5A2
+ for <buildroot@lists.busybox.net>; Sun,  1 Aug 2021 20:30:09 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1144F40101
+ for <buildroot@lists.busybox.net>; Sun,  1 Aug 2021 20:30:09 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id nSOspBqM1f2E for <buildroot@lists.busybox.net>;
+ Sun,  1 Aug 2021 20:30:08 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 33B61400DF
+ for <buildroot@buildroot.org>; Sun,  1 Aug 2021 20:30:08 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id 34E1A8A4D7; Sun,  1 Aug 2021 20:30:05 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sun, 1 Aug 2021 22:28:01 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: bc0a2a5885e94ae316be413a6e24a14a1ad3c11e
+X-Git-Newrev: 1b149b05cdb5cb1c54b3b78aeb2a2537f2e34fcb
+X-Patchwork-Hint: ignore
+Message-Id: <20210801203005.34E1A8A4D7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/fio: needs gcc >= 4.9
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,56 +63,53 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=1b149b05cdb5cb1c54b3b78aeb2a2537f2e34fcb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-08-01 22:04 +0200, Fabrice Fontaine spake thusly:
-> Support for tftpd is added by the services/tftp module in the SELinux
-> refpolicy.
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+fio needs gcc >= 4.9 since version 3.22 and
+https://github.com/axboe/fio/commit/bb012314f734b9de3b2fc198db2c4e3e060db240
+as a result build fails since bump to version 3.27 in commit
+5c788892102f0e22c9b5694facca0576b09f5ef4
 
-Applied to master, thanks.
+Fixes:
+ - http://autobuild.buildroot.org/results/01a1e2f4c02e86f3c5b0eb333ed5f4dd6568edf8
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/fio/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-> ---
->  package/tftpd/tftpd.mk | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/tftpd/tftpd.mk b/package/tftpd/tftpd.mk
-> index ffd52ce0d0..42b5f17821 100644
-> --- a/package/tftpd/tftpd.mk
-> +++ b/package/tftpd/tftpd.mk
-> @@ -11,6 +11,7 @@ TFTPD_LICENSE = BSD-4-Clause
->  TFTPD_LICENSE_FILES = tftpd/tftpd.c
->  TFTPD_CPE_ID_VENDOR = tftpd-hpa_project
->  TFTPD_CPE_ID_PRODUCT = tftpd-hpa
-> +TFTPD_SELINUX_MODULES = tftp
->  # From git
->  TFTPD_AUTORECONF = YES
->  
-> -- 
-> 2.30.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/fio/Config.in b/package/fio/Config.in
+index 8da227db7c..7825209b4c 100644
+--- a/package/fio/Config.in
++++ b/package/fio/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_FIO
+ 	bool "fio"
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on !BR2_STATIC_LIBS
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C11/stdatomic.h
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	# fio uses fallocate() which becomes fallocate64() while compiling with
+@@ -13,8 +14,9 @@ config BR2_PACKAGE_FIO
+ 
+ 	  http://git.kernel.dk/?p=fio.git;a=summary
+ 
+-comment "fio needs a toolchain w/ dynamic library, threads"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
++comment "fio needs a toolchain w/ dynamic library, threads, gcc >= 4.9"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_nios2
+ 	depends on BR2_USE_MMU
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
