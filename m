@@ -8,85 +8,84 @@ X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4AF72C4338F
-	for <buildroot@archiver.kernel.org>; Sun,  1 Aug 2021 11:44:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 146C6C4338F
+	for <buildroot@archiver.kernel.org>; Sun,  1 Aug 2021 11:44:52 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 0AC93610CC
-	for <buildroot@archiver.kernel.org>; Sun,  1 Aug 2021 11:44:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0AC93610CC
+	by mail.kernel.org (Postfix) with ESMTPS id B6132610CC
+	for <buildroot@archiver.kernel.org>; Sun,  1 Aug 2021 11:44:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B6132610CC
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D60D160699;
-	Sun,  1 Aug 2021 11:44:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 90683607C2;
+	Sun,  1 Aug 2021 11:44:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id owU6YQg5vI0Z; Sun,  1 Aug 2021 11:44:02 +0000 (UTC)
+	with ESMTP id DEcGFtgBcWfl; Sun,  1 Aug 2021 11:44:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4038D605BC;
-	Sun,  1 Aug 2021 11:44:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0A1FB6075A;
+	Sun,  1 Aug 2021 11:44:50 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B94B71BF303
- for <buildroot@lists.busybox.net>; Sun,  1 Aug 2021 11:43:59 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5DF291BF303
+ for <buildroot@lists.busybox.net>; Sun,  1 Aug 2021 11:44:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B6470403EC
- for <buildroot@lists.busybox.net>; Sun,  1 Aug 2021 11:43:59 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5AFA2403BD
+ for <buildroot@lists.busybox.net>; Sun,  1 Aug 2021 11:44:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp4.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rPZocHigrSOk for <buildroot@lists.busybox.net>;
- Sun,  1 Aug 2021 11:43:59 +0000 (UTC)
+ with ESMTP id k5x7h4Br2GFy for <buildroot@lists.busybox.net>;
+ Sun,  1 Aug 2021 11:44:47 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
- [IPv6:2a00:1450:4864:20::329])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C1C8A403EA
- for <buildroot@buildroot.org>; Sun,  1 Aug 2021 11:43:58 +0000 (UTC)
-Received: by mail-wm1-x329.google.com with SMTP id
- f14-20020a05600c154eb02902519e4abe10so11984727wmg.4
- for <buildroot@buildroot.org>; Sun, 01 Aug 2021 04:43:58 -0700 (PDT)
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
+ [IPv6:2a00:1450:4864:20::434])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9C5CA40390
+ for <buildroot@buildroot.org>; Sun,  1 Aug 2021 11:44:47 +0000 (UTC)
+Received: by mail-wr1-x434.google.com with SMTP id d8so17913425wrm.4
+ for <buildroot@buildroot.org>; Sun, 01 Aug 2021 04:44:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=wPvLBJh/BZP4yV49KTGsGpoFZguS9Zmukdwi3hJkSXA=;
- b=oCeM+uMoX7C96bIjwMB7qDQxmlh6DWL8fwYxV2/OpGU0UpQSVtVYwRq63T/QDFtw5P
- T7ktKcwFA0P5z/6Kz1+XMMmsEvQFBtzUJ+9sSWHtzFOR1WlMTBG9dE+xvw5xLp6JEFeM
- J+xdqtgMh5M4+i1p9vTbagr4TVTOg9WOHaqbTI8MPhrXyYxhSVgb8l9079wLyc71ccW0
- wglfc5gCwk4UdMAGaiFNHM45yH+XOd5jcaM8tIoaB6BYqdf+syis6JL6Md8sEnPdvCew
- BCubSQUcGyR+ub6eACEJEWaCCeP8IugwDBQudFkJzi3cziWZZTCxjQnXOPIyr8M4tDKQ
- pb8A==
+ bh=9DUhVLAhfP025JyVA2Cm+0FtW1HQfRDAMuAVKZAEnGs=;
+ b=eDEyd65lEIrerZT8dnmnAcOuAQXVbo9OCEGyy4s2xn+snxmdt7jnE/lP+oKwCWmNBF
+ gDgFXp/v8IZX38ybWpu9G0mrlShUErCvC1/1OzEgPvYpRQA1UFLgR+a1KpjLDxSbLwax
+ gFo8ScjqXLPwCQnefARhyAmPgEiDaunve66MFeU+g7RN4VmaSNCP673Ke3Fjy+8IfPCo
+ 3N2nZyjboY59udi8pj154ZwKnvAtu/c/CMNHmMVmUCkrlONPsKjMYaq66Qijz55aR/ps
+ w66EAAh/r6/V1R+v3Sjy0+5I556xKtpVsORADdDQ0qcniLedA7WgjUMxS5o5qkJj/CT8
+ W80A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=wPvLBJh/BZP4yV49KTGsGpoFZguS9Zmukdwi3hJkSXA=;
- b=SSE03049yj2li4RxotnJQaOx+TzVxpyvoNkQNTIeGyhCtW1gK5uqyVtm5CI5/nWVik
- tqWx8ueqfkvn8K3REYmfGvfQLEk55CPZg27R6na2dh/2bqqOWnsQ5d7rNWNEhA/+Mbnp
- NuNALl7kVdThLB6hOAxKnh53fXjJeKa8o3e6OEdupRHBBYwMzdEG7MshJ3u21NajRVrk
- 1DyGkwD27YtHqy7x7wRy4Qjak0xX9p/U3ed+7mZoC5NDGwm6Ola0mL/VZzsASKzkzcH+
- IHtJ5lw8bOogOabLtoki79bqlIz0CxurNz5RqH0q/Ut26IK4cRRPsSAFSGtT1A5F/1Lg
- 5PxQ==
-X-Gm-Message-State: AOAM533GmsTH1JTHAF9eCvgZnqj7eTCkRltoTCuPl0nWKGw4SKR7mtO6
- v4ktQR+kv3cXRCw/bV39gq47qE5ITnHnpA==
-X-Google-Smtp-Source: ABdhPJznXIUTaZXKWvdeZpEsdI2TdOkXSBd51UqsxdVimxHQ/nyeKPVMPxbxmZss+bhYZUpDJvBCcw==
-X-Received: by 2002:a1c:4b18:: with SMTP id y24mr385796wma.49.1627818236784;
- Sun, 01 Aug 2021 04:43:56 -0700 (PDT)
+ bh=9DUhVLAhfP025JyVA2Cm+0FtW1HQfRDAMuAVKZAEnGs=;
+ b=WLCx/Ibpnr+kB8we8tU1NJ/jEZEaMECFb0hkAW+YxT5Lz+YUBGJSwL/+jLqBx9nqQs
+ Zz6YLh9G9RCdgcfj1YaedHnYbCD1R7C24DUML6b9PLnT2rwK8Nn6lau/8ua1jaU59gxw
+ h53xtgOLjThFJoAd6iIpo2BQIBKV+GeOPXse2QusplLN3COhewQI4kdgmpniJxn6MxXA
+ X+s7kSx23hvo3HerkQS3KlqNXmkZSZj1JXDIbfnmiMZmTvE/exYlPnNHetHLBSSoy57Z
+ CuUOQncRwqD8f+j39KcLuL8Ud1hvcT6KujpgIzUa6tefmqeKGyH6uixMHNNnKsm0YDpQ
+ hzAw==
+X-Gm-Message-State: AOAM5303zCeaoprdyTdpg/eHHmJgzA/obd8KiQz1+oao437efKWtlR6A
+ CCqqZ3T3dfJXrnu850c3t3fGS+78lZlrzg==
+X-Google-Smtp-Source: ABdhPJxH+EZExWbw0DsvorkE2loyy1rpypMDIRY04Wj4L6HSfFKONVas93aYGKVMCgkX2zBP37BrEg==
+X-Received: by 2002:adf:fa11:: with SMTP id m17mr12429003wrr.150.1627818285645; 
+ Sun, 01 Aug 2021 04:44:45 -0700 (PDT)
 Received: from kali.home (pop.92-184-116-62.mobile.abo.orange.fr.
  [92.184.116.62])
- by smtp.gmail.com with ESMTPSA id w9sm6988529wmc.19.2021.08.01.04.43.56
+ by smtp.gmail.com with ESMTPSA id a12sm3564712wmj.22.2021.08.01.04.44.44
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 01 Aug 2021 04:43:56 -0700 (PDT)
+ Sun, 01 Aug 2021 04:44:45 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun,  1 Aug 2021 13:43:52 +0200
-Message-Id: <20210801114352.2763317-1-fontaine.fabrice@gmail.com>
+Date: Sun,  1 Aug 2021 13:44:39 +0200
+Message-Id: <20210801114439.2763436-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/smstools3: add SELinux module
+Subject: [Buildroot] [PATCH 1/1] package/ulogd: add SELinux module
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -104,26 +103,26 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-Support for smstools3 is added by the services/smstools module in the
-SELinux refpolicy.
+Support for ulogd is added by the services/ulogd module in the SELinux
+refpolicy.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/smstools3/smstools3.mk | 1 +
+ package/ulogd/ulogd.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/smstools3/smstools3.mk b/package/smstools3/smstools3.mk
-index 87d189baa8..d13900bc03 100644
---- a/package/smstools3/smstools3.mk
-+++ b/package/smstools3/smstools3.mk
-@@ -8,6 +8,7 @@ SMSTOOLS3_VERSION = 3.1.21
- SMSTOOLS3_SITE = http://smstools3.kekekasvi.com/packages
- SMSTOOLS3_LICENSE = GPL-2.0+
- SMSTOOLS3_LICENSE_FILES = doc/license.html LICENSE
-+SMSTOOLS3_SELINUX_MODULES = smstools
+diff --git a/package/ulogd/ulogd.mk b/package/ulogd/ulogd.mk
+index 1b86c12773..c00a53f3d5 100644
+--- a/package/ulogd/ulogd.mk
++++ b/package/ulogd/ulogd.mk
+@@ -13,6 +13,7 @@ ULOGD_DEPENDENCIES = host-pkgconf \
+ 	libnfnetlink
+ ULOGD_LICENSE = GPL-2.0
+ ULOGD_LICENSE_FILES = COPYING
++ULOGD_SELINUX_MODULES = ulogd
  
- SMSTOOLS3_CFLAGS = $(TARGET_CFLAGS)
- SMSTOOLS3_CFLAGS += -D NUMBER_OF_MODEMS=$(BR2_PACKAGE_SMSTOOLS3_NB_MODEMS)
+ # DB backends need threads
+ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
 -- 
 2.30.2
 
