@@ -2,57 +2,57 @@ Return-Path: <SRS0=sxUg=M3=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.4 required=3.0 tests=BAYES_00,DATE_IN_PAST_24_48,
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,TVD_SPACE_RATIO,URIBL_BLOCKED
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BF714C4338F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 01:11:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 22FB4C4338F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 01:11:33 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 89EB4601FD
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 01:11:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 89EB4601FD
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
+	by mail.kernel.org (Postfix) with ESMTPS id E3C6F60F58
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 01:11:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E3C6F60F58
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 67E8F60B5A;
-	Wed,  4 Aug 2021 01:11:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B9CAE60B6B;
+	Wed,  4 Aug 2021 01:11:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ortpVKiaPNRT; Wed,  4 Aug 2021 01:11:19 +0000 (UTC)
+	with ESMTP id B0NbEOijy5kF; Wed,  4 Aug 2021 01:11:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B390460B51;
-	Wed,  4 Aug 2021 01:11:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F1AD160B5A;
+	Wed,  4 Aug 2021 01:11:30 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C8AB71BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:23:16 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D97F21BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:23:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CC889414B9
+ by smtp2.osuosl.org (Postfix) with ESMTP id E792C414BA
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id o582jahzrZlW for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:10:51 +0000 (UTC)
+ with ESMTP id Eh_WpIKkCpdL for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:10:47 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7D7EA414FD
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:35 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id C43E240EB6
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:32 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id D37DE85E9B; Tue,  3 Aug 2021 21:10:27 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ id 19DAA87E2D; Tue,  3 Aug 2021 21:10:25 +0000 (UTC)
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Mon, 2 Aug 2021 18:29:15 +0200
+Date: Sun, 1 Aug 2021 11:35:22 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 69d2d1d91e44d6bc80690b82811d0447e81ed31b
-X-Git-Newrev: 3be90cd5b1262b992030513f7f0f6331b2364257
+X-Git-Oldrev: 2203d1b3ce7654c8224e1b18d45d2b8e36f5c1f4
+X-Git-Newrev: 135252b53762daafdae26481abbbef0f440599a2
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211027.D37DE85E9B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/irqbalance: use
- pkg-config to find numa
+Message-Id: <20210803211025.19DAA87E2D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next]
+ package/x11r7/xserver_xorg-server: bump version to 1.20.13
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,73 +70,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3be90cd5b1262b992030513f7f0f6331b2364257
+commit: https://git.buildroot.net/buildroot/commit/?id=135252b53762daafdae26481abbbef0f440599a2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Use pkg-config to find numa to avoid the following build failure when
-checking for numa_available:
+Release notes:
+https://lists.x.org/archives/xorg-announce/2021-July/003100.html
 
-configure:9667: checking for numa_available in -lnuma
-configure:9692: /tmp/instance-7/output-1/host/bin/microblazeel-linux-gcc -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -static -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -static conftest.c -lnuma   >&5
-/tmp/instance-7/output-1/host/opt/ext-toolchain/bin/../lib/gcc/microblazeel-buildroot-linux-uclibc/9.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: /tmp/instance-7/output-1/host/microblazeel-buildroot-linux-uclibc/sysroot/usr/lib/libnuma.a(libnuma.o): in function `numa_node_to_cpus_v1':
-(.text+0x2a80): undefined reference to `__atomic_fetch_and_1'
-/tmp/instance-7/output-1/host/opt/ext-toolchain/bin/../lib/gcc/microblazeel-buildroot-linux-uclibc/9.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: /tmp/instance-7/output-1/host/microblazeel-buildroot-linux-uclibc/sysroot/usr/lib/libnuma.a(libnuma.o): in function `numa_node_to_cpus_v2':
-(.text+0x2ddc): undefined reference to `__atomic_fetch_and_1'
-collect2: error: ld returned 1 exit status
-
-Fixes:
- - http://autobuild.buildroot.org/results/577a63432fba2f9ae1ed2c6c2a77c5ce54ac5521
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...-configure.ac-use-pkg-config-to-find-numa.patch | 38 ++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
+ package/x11r7/xserver_xorg-server/xserver_xorg-server.hash | 6 +++---
+ package/x11r7/xserver_xorg-server/xserver_xorg-server.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/irqbalance/0002-configure.ac-use-pkg-config-to-find-numa.patch b/package/irqbalance/0002-configure.ac-use-pkg-config-to-find-numa.patch
-new file mode 100644
-index 0000000000..751367ccfb
---- /dev/null
-+++ b/package/irqbalance/0002-configure.ac-use-pkg-config-to-find-numa.patch
-@@ -0,0 +1,38 @@
-+From 274cb8ea470a10ce46b783e77784b0eb08cf20d8 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 1 Aug 2021 23:26:01 +0200
-+Subject: [PATCH] configure.ac: use pkg-config to find numa
-+
-+Use pkg-config to find numa and fallback to current mechanism.
-+Thanks to pkg-config, numa dependencies such as -latomic will be
-+retrieved.
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/Irqbalance/irqbalance/pull/188]
-+---
-+ configure.ac | 9 ++++++++-
-+ 1 file changed, 8 insertions(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index c45b9ce..50c62ba 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -23,7 +23,14 @@ AC_CHECK_HEADERS([numa.h])
-+ 
-+ AC_CHECK_FUNCS(getopt_long)
-+ 
-+-AC_CHECK_LIB(numa, numa_available)
-++PKG_CHECK_MODULES([NUMA], [numa], [has_numa=yes], [AC_CHECK_LIB(numa, numa_available)])
-++AS_IF([test "x$has_numa" = "xyes"], [
-++  AC_SUBST([NUMA_CFLAGS])
-++  AC_SUBST([NUMA_LIBS])
-++  LIBS="$LIBS $NUMA_LIBS"
-++  AC_SUBST([LIBS])
-++])
-++
-+ AC_CHECK_LIB(m, floor)
-+ 
-+ PKG_CHECK_MODULES([GLIB2], [glib-2.0], [], [AC_MSG_ERROR([glib-2.0 is required])])
-+-- 
-+2.30.2
-+
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
+index 167d3fa591..8eb56ba027 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.x.org/archives/xorg-announce/2021-July/003098.html
+-sha256  336dc093431d81ecc03fa36af771f1181334f2746b7de7796f3cc6a8fa9e8cac  xorg-server-1.20.12.tar.xz
+-sha512  98350c42fb1f10c965663c1c8d4b225689a6a63163d788d454aa71b28b9cc8fcf9709a932f882358a13ca0c277c0c15812d05919092b4c32828d4ed61cca0406  xorg-server-1.20.12.tar.xz
++# From https://lists.x.org/archives/xorg-announce/2021-July/003100.html
++sha256  40aa4e96a56a81a301f15a9b10e06a22700f12b42d9e0e453c7f11d354386300  xorg-server-1.20.13.tar.xz
++sha512  4e0b7bd4e070dc52cb2c51c2056feb133de2c0487d359392ed63abba9702910cd2e2983e9415973d8d6e9672eac78be6f39202687fc56610877914ce722554b3  xorg-server-1.20.13.tar.xz
+ 
+ # Locally calculated
+ sha256  4cc0447a22635c7b2f1a93fec4aa94f1970fadeb72a063de006b51cf4963a06f  COPYING
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index 26cc1c07b5..c326230be0 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XSERVER_XORG_SERVER_VERSION = 1.20.12
++XSERVER_XORG_SERVER_VERSION = 1.20.13
+ XSERVER_XORG_SERVER_SOURCE = xorg-server-$(XSERVER_XORG_SERVER_VERSION).tar.xz
+ XSERVER_XORG_SERVER_SITE = https://xorg.freedesktop.org/archive/individual/xserver
+ XSERVER_XORG_SERVER_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
