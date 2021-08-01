@@ -7,51 +7,51 @@ X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A1B67C4338F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 01:04:52 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DFBD2C4338F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 01:05:05 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 6785860EE9
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 01:04:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6785860EE9
+	by mail.kernel.org (Postfix) with ESMTPS id 9A17E60EE9
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 01:05:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9A17E60EE9
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 40E7E842BE;
-	Wed,  4 Aug 2021 01:04:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6F5DC60B50;
+	Wed,  4 Aug 2021 01:05:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GhBqIZPIr8FO; Wed,  4 Aug 2021 01:04:51 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id E4bW4QY-ScZu; Wed,  4 Aug 2021 01:05:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A9D978424F;
-	Wed,  4 Aug 2021 01:04:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D1F6960B44;
+	Wed,  4 Aug 2021 01:05:02 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 39BA51BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:22:47 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 807241BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:22:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3D6C640F25
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5709040F29
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id F6DcI-YqBcF5 for <buildroot@lists.busybox.net>;
+ with ESMTP id Sy_qJxPkM8hs for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:10:49 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E25A040F29
+ by smtp2.osuosl.org (Postfix) with ESMTP id E7AA940EC1
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:33 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 4378988453; Tue,  3 Aug 2021 21:10:26 +0000 (UTC)
+ id 3A2DB85F3C; Tue,  3 Aug 2021 21:10:26 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 1 Aug 2021 15:03:51 +0200
+Date: Sun, 1 Aug 2021 15:03:49 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: ca53ce905e4409358dd3b6364a58051250f4bf12
-X-Git-Newrev: fcf01c247d1501ad4071364eaa1db0e5470cbc4a
+X-Git-Oldrev: 21755a2a83759302f0a8e29426099032216ee524
+X-Git-Newrev: ca53ce905e4409358dd3b6364a58051250f4bf12
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211026.4378988453@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/vnstat: add SELinux
+Message-Id: <20210803211026.3A2DB85F3C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/quagga: add SELinux
  module
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
@@ -70,30 +70,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fcf01c247d1501ad4071364eaa1db0e5470cbc4a
+commit: https://git.buildroot.net/buildroot/commit/?id=ca53ce905e4409358dd3b6364a58051250f4bf12
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Support for vnstat is added by the services/vnstatd module in the
-SELinux refpolicy.
+Support for quagga is added by the services/zebra module in the SELinux
+refpolicy.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/vnstat/vnstat.mk | 1 +
+ package/quagga/quagga.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/vnstat/vnstat.mk b/package/vnstat/vnstat.mk
-index c5836cf037..7f5ff67b82 100644
---- a/package/vnstat/vnstat.mk
-+++ b/package/vnstat/vnstat.mk
-@@ -8,6 +8,7 @@ VNSTAT_VERSION = 2.7
- VNSTAT_SITE = http://humdi.net/vnstat
- VNSTAT_LICENSE = GPL-2.0
- VNSTAT_LICENSE_FILES = COPYING
-+VNSTAT_SELINUX_MODULES = vnstatd
- VNSTAT_DEPENDENCIES = host-pkgconf sqlite
- VNSTAT_CONF_OPTS = --disable-extra-paths
+diff --git a/package/quagga/quagga.mk b/package/quagga/quagga.mk
+index adf8085054..97297baff8 100644
+--- a/package/quagga/quagga.mk
++++ b/package/quagga/quagga.mk
+@@ -11,6 +11,7 @@ QUAGGA_DEPENDENCIES = host-gawk host-pkgconf
+ QUAGGA_LICENSE = GPL-2.0+
+ QUAGGA_LICENSE_FILES = COPYING
+ QUAGGA_CPE_ID_VENDOR = quagga
++QUAGGA_SELINUX_MODULES = zebra
  
+ # We need to override the sysconf and localstate directories so that
+ # quagga can create files as the quagga user without extra
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
