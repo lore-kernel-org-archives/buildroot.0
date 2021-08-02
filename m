@@ -7,51 +7,52 @@ X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EE762C4338F
-	for <buildroot@archiver.kernel.org>; Mon,  2 Aug 2021 15:15:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B30BC4320A
+	for <buildroot@archiver.kernel.org>; Mon,  2 Aug 2021 15:16:07 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B906860FF2
-	for <buildroot@archiver.kernel.org>; Mon,  2 Aug 2021 15:15:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B906860FF2
+	by mail.kernel.org (Postfix) with ESMTPS id DC81D60F51
+	for <buildroot@archiver.kernel.org>; Mon,  2 Aug 2021 15:16:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org DC81D60F51
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9424C6082E;
-	Mon,  2 Aug 2021 15:15:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B798160852;
+	Mon,  2 Aug 2021 15:16:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id aBRbx6wwlGfx; Mon,  2 Aug 2021 15:15:53 +0000 (UTC)
+	with ESMTP id jnLmyDVcLjNa; Mon,  2 Aug 2021 15:16:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EE8B96081B;
-	Mon,  2 Aug 2021 15:15:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 27C5660844;
+	Mon,  2 Aug 2021 15:16:05 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D66BA1BF4D5
- for <buildroot@lists.busybox.net>; Mon,  2 Aug 2021 15:14:27 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 177D21BF981
+ for <buildroot@lists.busybox.net>; Mon,  2 Aug 2021 15:14:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C644B401CC
+ by smtp4.osuosl.org (Postfix) with ESMTP id D2D99401CE
  for <buildroot@lists.busybox.net>; Mon,  2 Aug 2021 15:14:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YTeNwIAYuK5q for <buildroot@lists.busybox.net>;
+ with ESMTP id loi1TsBaB7YM for <buildroot@lists.busybox.net>;
  Mon,  2 Aug 2021 15:14:23 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9E82C4052D
+ by smtp4.osuosl.org (Postfix) with ESMTP id E86D740561
  for <buildroot@buildroot.org>; Mon,  2 Aug 2021 15:14:23 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id CF79F8A579; Mon,  2 Aug 2021 15:14:18 +0000 (UTC)
+ id 3481D8A57A; Mon,  2 Aug 2021 15:14:19 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Mon, 2 Aug 2021 17:09:32 +0200
+Date: Mon, 2 Aug 2021 17:13:04 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 78428b24a8c482639f9b1e5383bd301ef1a0eab6
-X-Git-Newrev: 7dcadf5c2897f1a2644db3db0bdb3443e3edc4f2
+X-Git-Oldrev: d773c3e9ffcf12b737306c234e2ad4654310057f
+X-Git-Newrev: 92024d4448f3cdd4974de0ac4317394f3760c7a8
 X-Patchwork-Hint: ignore
-Message-Id: <20210802151418.CF79F8A579@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/cwiid: select BlueZ HID plugin
+Message-Id: <20210802151419.3481D8A57A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/supertuxkart: enable BlueZ HID
+ Plugin
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,29 +70,29 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7dcadf5c2897f1a2644db3db0bdb3443e3edc4f2
+commit: https://git.buildroot.net/buildroot/commit/?id=92024d4448f3cdd4974de0ac4317394f3760c7a8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-the HID plugin now needs to be explictly enabled.
+When BlueZ is enabled ensure to select the BlueZ HID Plugin for wiimote support.
 
 Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/cwiid/Config.in | 1 +
+ package/supertuxkart/Config.in | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/cwiid/Config.in b/package/cwiid/Config.in
-index 374a91ffd6..e03248c722 100644
---- a/package/cwiid/Config.in
-+++ b/package/cwiid/Config.in
-@@ -7,6 +7,7 @@ config BR2_PACKAGE_CWIID
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4 # bluez5_utils
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # bluez5_utils
- 	select BR2_PACKAGE_BLUEZ5_UTILS
-+	select BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_HID # runtime
+diff --git a/package/supertuxkart/Config.in b/package/supertuxkart/Config.in
+index 99f2310d82..8af006d632 100644
+--- a/package/supertuxkart/Config.in
++++ b/package/supertuxkart/Config.in
+@@ -25,6 +25,7 @@ config BR2_PACKAGE_SUPERTUXKART
+ 	select BR2_PACKAGE_OPENAL
+ 	select BR2_PACKAGE_XLIB_LIBXRANDR
+ 	select BR2_PACKAGE_ZLIB
++	select BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_HID if BR2_PACKAGE_BLUEZ5_UTILS # runtime
  	help
- 	  A collection of Linux tools written in C for interfacing to
- 	  the Nintendo Wiimote.
+ 	  Karts. Nitro. Action! SuperTuxKart is a free 3D arcade kart
+ 	  racer with multiple karts, tracks and modes you can play.
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
