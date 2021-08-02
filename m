@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-12.4 required=3.0 tests=BAYES_00,DATE_IN_PAST_24_48,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 061DBC4338F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 01:10:07 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F03EC4338F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 01:10:19 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id BBF0560F8F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 01:10:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org BBF0560F8F
+	by mail.kernel.org (Postfix) with ESMTPS id 7174E60F93
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 01:10:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7174E60F93
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 892B340E73;
-	Wed,  4 Aug 2021 01:10:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 50B8784420;
+	Wed,  4 Aug 2021 01:10:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wnw2IWORutyp; Wed,  4 Aug 2021 01:10:05 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id EMSlfG7jYdvf; Wed,  4 Aug 2021 01:10:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AA4F440E6E;
-	Wed,  4 Aug 2021 01:10:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A13968441D;
+	Wed,  4 Aug 2021 01:10:17 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2BBA21BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:23:11 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3F3E41BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:23:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 507B640F41
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5ECC9414A3
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ljLn3idptJ1l for <buildroot@lists.busybox.net>;
+ with ESMTP id 76J7nfVOzCif for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:10:51 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 381AD414F8
+ by smtp2.osuosl.org (Postfix) with ESMTP id 75803414F7
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:35 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 7AB6289015; Tue,  3 Aug 2021 21:10:27 +0000 (UTC)
+ id C8A7E88453; Tue,  3 Aug 2021 21:10:27 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Mon, 2 Aug 2021 17:09:32 +0200
+Date: Mon, 2 Aug 2021 18:29:15 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 78428b24a8c482639f9b1e5383bd301ef1a0eab6
-X-Git-Newrev: 7dcadf5c2897f1a2644db3db0bdb3443e3edc4f2
+X-Git-Oldrev: 001949f6b52330a18d3bfe5ed0983843e1ae1669
+X-Git-Newrev: 69d2d1d91e44d6bc80690b82811d0447e81ed31b
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211027.7AB6289015@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/cwiid: select BlueZ
- HID plugin
+Message-Id: <20210803211027.C8A7E88453@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libodb: fix build with
+ gcc 11
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,29 +70,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7dcadf5c2897f1a2644db3db0bdb3443e3edc4f2
+commit: https://git.buildroot.net/buildroot/commit/?id=69d2d1d91e44d6bc80690b82811d0447e81ed31b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-the HID plugin now needs to be explictly enabled.
+GCC 11 defaults to C++17. Fix the following build failure with gcc 11:
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+In file included from details/shared-ptr/base.cxx:5:
+../odb/details/shared-ptr/base.hxx:38:49: error: ISO C++17 does not allow dynamic exception specifications
+   38 | operator new (std::size_t, odb::details::share) throw (std::bad_alloc);
+      |                                                 ^~~~~
+
+Fixes:
+ - http://autobuild.buildroot.org/results/cfd5f92f0aa923815edba5fbfcd5b7b312d9d40e
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/cwiid/Config.in | 1 +
+ package/libodb/libodb.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/cwiid/Config.in b/package/cwiid/Config.in
-index 374a91ffd6..e03248c722 100644
---- a/package/cwiid/Config.in
-+++ b/package/cwiid/Config.in
-@@ -7,6 +7,7 @@ config BR2_PACKAGE_CWIID
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4 # bluez5_utils
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # bluez5_utils
- 	select BR2_PACKAGE_BLUEZ5_UTILS
-+	select BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_HID # runtime
- 	help
- 	  A collection of Linux tools written in C for interfacing to
- 	  the Nintendo Wiimote.
+diff --git a/package/libodb/libodb.mk b/package/libodb/libodb.mk
+index f36d8957c0..11ca9de866 100644
+--- a/package/libodb/libodb.mk
++++ b/package/libodb/libodb.mk
+@@ -11,5 +11,6 @@ LIBODB_SITE = https://www.codesynthesis.com/download/odb/$(LIBODB_VERSION_MAJOR)
+ LIBODB_INSTALL_STAGING = YES
+ LIBODB_LICENSE = GPL-2.0
+ LIBODB_LICENSE_FILES = LICENSE
++LIBODB_CONF_ENV = CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11"
+ 
+ $(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
