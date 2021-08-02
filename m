@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-17.4 required=3.0 tests=BAYES_00,DATE_IN_PAST_24_48,
 	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 09A86C4338F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 01:13:29 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1DD18C4338F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 01:13:42 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id CBE6761037
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 01:13:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org CBE6761037
+	by mail.kernel.org (Postfix) with ESMTPS id D4B8061037
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 01:13:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D4B8061037
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A5B2A8429A;
-	Wed,  4 Aug 2021 01:13:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AA81742508;
+	Wed,  4 Aug 2021 01:13:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jt7WyoxFwLj1; Wed,  4 Aug 2021 01:13:27 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id L8Mz6lhXahWn; Wed,  4 Aug 2021 01:13:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DF2F4844B8;
-	Wed,  4 Aug 2021 01:13:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5A86E42512;
+	Wed,  4 Aug 2021 01:13:39 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id BDAF21BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:23:26 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id CE7821BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:23:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A72F040533
+ by smtp2.osuosl.org (Postfix) with ESMTP id D0623414BD
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SbAAXeflVY-X for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:10:52 +0000 (UTC)
+ with ESMTP id DpjsR6doQdfH for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:10:50 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 977F8414FE
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:35 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E72B640ECA
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:34 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id DDDB8878C2; Tue,  3 Aug 2021 21:10:27 +0000 (UTC)
+ id 38E89878C2; Tue,  3 Aug 2021 21:10:27 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Mon, 2 Aug 2021 18:29:50 +0200
+Date: Mon, 2 Aug 2021 15:29:07 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 3be90cd5b1262b992030513f7f0f6331b2364257
-X-Git-Newrev: 814ebe83e766f93b748d0481f8fa7a9e4fabb767
+X-Git-Oldrev: 4510c38431ba5e0dcd52ef0307011b048b7d46d2
+X-Git-Newrev: 62f0232980c8168631b29f27edf612af8109c691
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211027.DDDB8878C2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/irqbalance: bump to
- version 1.8.0
+Message-Id: <20210803211027.38E89878C2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/binutils: add version
+ 2.37
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,161 +70,576 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=814ebe83e766f93b748d0481f8fa7a9e4fabb767
+commit: https://git.buildroot.net/buildroot/commit/?id=62f0232980c8168631b29f27edf612af8109c691
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-- Drop first patch (already in version)
-- Update indentation in hash file (two spaces)
+State of the patches:
 
-https://github.com/Irqbalance/irqbalance/releases/tag/v1.8.0
+- 0001-sh-conf.patch
+  Refreshed
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+- 0002-poison-system-directories.patch
+  Refreshed, but needed some adaptations as the bfd_boolean type no
+  longer exists, and the standard "bool" type is now used instead.
+
+- 0003-or1k-Fix-issue-with-plt-link-failure-for-local-calls.patch
+  Drop, present in 2.37, merged upstream as
+  a76ef689b60405e494cb99e198acf3c82f467f7d
+
+- 0004-or1k-Implement-relocation-R_OR1K_GOT_AHI16-for-gotha.patch
+  Drop, present in 2.37, merged upstream as
+  0b3e14c90283c5d234884d0ebe8510bc3c9bc687
+
+- 0005-or1k-Avoid-R_OR1K_GOT16-overflow-failures-in-presenc.patch
+  Drop, present in 2.37, merged upstream as
+  3c3de29b048bca6b4aa4235c647b9328e71801b6
+
+- 0006-or1k-Support-large-plt_relocs-when-generating-plt-en.patch
+  Drop, present in 2.37, merged upstream as
+  284a1309021a0ef4c29f198470d95652f02b13f0
+
+- 0007-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch
+  Refreshed
+
+- 0008-or1k-fix-pc-relative-relocation-against-dynamic-on-P.patch
+  Refreshed
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- ...configure.ac-use-pkg-config-to-find-numa.patch} |   0
- ...001-fix-uint64_t-printf-format-use-PRIu64.patch | 105 ---------------------
- package/irqbalance/irqbalance.hash                 |   4 +-
- package/irqbalance/irqbalance.mk                   |   2 +-
- 4 files changed, 3 insertions(+), 108 deletions(-)
+ package/binutils/2.37/0001-sh-conf.patch           |  48 ++++
+ .../2.37/0002-poison-system-directories.patch      | 306 +++++++++++++++++++++
+ ...lf32-or1k-fix-building-with-gcc-version-5.patch |  50 ++++
+ ...-relative-relocation-against-dynamic-on-P.patch |  59 ++++
+ package/binutils/Config.in.host                    |   8 +
+ package/binutils/binutils.hash                     |   1 +
+ 6 files changed, 472 insertions(+)
 
-diff --git a/package/irqbalance/0002-configure.ac-use-pkg-config-to-find-numa.patch b/package/irqbalance/0001-configure.ac-use-pkg-config-to-find-numa.patch
-similarity index 100%
-rename from package/irqbalance/0002-configure.ac-use-pkg-config-to-find-numa.patch
-rename to package/irqbalance/0001-configure.ac-use-pkg-config-to-find-numa.patch
-diff --git a/package/irqbalance/0001-fix-uint64_t-printf-format-use-PRIu64.patch b/package/irqbalance/0001-fix-uint64_t-printf-format-use-PRIu64.patch
-deleted file mode 100644
-index 95a9616c71..0000000000
---- a/package/irqbalance/0001-fix-uint64_t-printf-format-use-PRIu64.patch
-+++ /dev/null
-@@ -1,105 +0,0 @@
--From 0cdc7a22d5156440fecff14c438d4e24261ac793 Mon Sep 17 00:00:00 2001
--From: Peter Seiderer <ps.report@gmx.net>
--Date: Sat, 20 Feb 2021 23:38:56 +0100
--Subject: [PATCH] fix uint64_t printf format (use PRIu64)
--
--Fixes (on arm 32-bit):
--
--  $ irqbalance-ui
--  Invalid data sent.  Unexpected token: (null)TYPE
--
--And strace showed the following:
--
--  237   sendmsg(3, {msg_name=NULL, msg_namelen=0, msg_iov=[{iov_base="stats", iov_len=5}], msg_iovlen=1, msg_control=[{cmsg_len=24, cmsg_level=SOL_SOCKET, cmsg_type=SCM_CREDENTIALS, cmsg_data={pid=237, uid=0, gid=0}}], msg_controllen=24, msg_flags=0}, 0) = 5
--  237   recv(3, "TYPE 3 NUMBER -1 LOAD 0 SAVE_MODE 0 (null)TYPE 2 NUMBER 0 LOAD 0 SAVE_MODE 0 (null)TYPE 1 NUMBER 0 LOAD 0 SAVE_MODE 0 (null)TYPE 0 NUMBER 3 LOAD 0 SAVE_MODE 0 (null)TYPE 1 NUMBER 1 LOAD 0 SAVE_MODE 0 (null)TYPE 0 NUMBER 1 LOAD 0 SAVE_MODE 0 (null)TYPE 1 NUMBER 2 LOAD 0 SAVE_MODE 0 (null)TYPE 0 NUMBER 2 LOAD 0 SAVE_MODE 0 (null)TYPE 1 NUMBER 3 LOAD 0 SAVE_MODE 0 (null)TYPE 0 NUMBER 0 LOAD 0 SAVE_MODE 0 (null)", 8192, 0) = 411
--
--[backported from upstream]
--Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-----
-- cputree.c    | 3 ++-
-- irqbalance.c | 5 +++--
-- ui/ui.c      | 5 +++--
-- 3 files changed, 8 insertions(+), 5 deletions(-)
--
--diff --git a/cputree.c b/cputree.c
--index fda0200..a8dba73 100644
----- a/cputree.c
--+++ b/cputree.c
--@@ -33,6 +33,7 @@
-- #include <sys/types.h>
-- #include <sys/stat.h>
-- #include <dirent.h>
--+#include <inttypes.h>
-- 
-- #include <glib.h>
-- 
--@@ -417,7 +418,7 @@ static void dump_irq(struct irq_info *info, void *data)
-- 		indent[i] = log_indent[0];
-- 
-- 	indent[i] = '\0';
---	log(TO_CONSOLE, LOG_INFO, "%sInterrupt %i node_num is %d (%s/%lu:%lu) \n", indent,
--+	log(TO_CONSOLE, LOG_INFO, "%sInterrupt %i node_num is %d (%s/%" PRIu64 ":%" PRIu64 ") \n", indent,
-- 	    info->irq, irq_numa_node(info)->number, classes[info->class], info->load, (info->irq_count - info->last_irq_count));
-- 	free(indent);
-- }
--diff --git a/irqbalance.c b/irqbalance.c
--index 9baa955..458bb07 100644
----- a/irqbalance.c
--+++ b/irqbalance.c
--@@ -34,6 +34,7 @@
-- #include <sys/socket.h>
-- #include <sys/un.h>
-- #include <fcntl.h>
--+#include <inttypes.h>
-- #ifdef HAVE_GETOPT_LONG 
-- #include <getopt.h>
-- #endif
--@@ -357,7 +358,7 @@ void get_irq_data(struct irq_info *irq, void *data)
-- 	*irqdata = newptr;
-- 
-- 	sprintf(*irqdata + strlen(*irqdata),
---			"IRQ %d LOAD %lu DIFF %lu CLASS %d ", irq->irq, irq->load,
--+			"IRQ %d LOAD %" PRIu64 " DIFF %" PRIu64 " CLASS %d ", irq->irq, irq->load,
-- 			(irq->irq_count - irq->last_irq_count), irq->class);
-- }
-- 
--@@ -395,7 +396,7 @@ void get_object_stat(struct topo_obj *object, void *data)
-- 
-- 	*stats = newptr;
-- 
---	sprintf(*stats + strlen(*stats), "TYPE %d NUMBER %d LOAD %lu SAVE_MODE %d %s",
--+	sprintf(*stats + strlen(*stats), "TYPE %d NUMBER %d LOAD %" PRIu64 " SAVE_MODE %d %s",
-- 			object->obj_type, object->number, object->load,
-- 			object->powersave_mode, irq_data ? irq_data : "");
-- 	free(irq_data);
--diff --git a/ui/ui.c b/ui/ui.c
--index 06ec472..4cf68bf 100644
----- a/ui/ui.c
--+++ b/ui/ui.c
--@@ -1,4 +1,5 @@
-- 
--+#include <inttypes.h>
-- #include <string.h>
-- #include "ui.h"
-- 
--@@ -563,7 +564,7 @@ void settings()
-- 
-- 	char info[128] = "Current sleep interval between rebalancing: \0";
-- 	uint8_t sleep_input_offset = strlen(info) + 3;
---	snprintf(info + strlen(info), 128 - strlen(info), "%lu\n", setup.sleep);
--+	snprintf(info + strlen(info), 128 - strlen(info), "%" PRIu64 "\n", setup.sleep);
-- 	attrset(COLOR_PAIR(1));
-- 	mvprintw(2, 3, info);
-- 	print_all_cpus();
--@@ -588,7 +589,7 @@ void settings()
-- 			if(new_sleep != setup.sleep) {
-- 				setup.sleep = new_sleep;
-- 				char settings_data[128];
---				snprintf(settings_data, 128, "%s %lu", SET_SLEEP, new_sleep);
--+				snprintf(settings_data, 128, "%s %" PRIu64, SET_SLEEP, new_sleep);
-- 				send_settings(settings_data);
-- 			}
-- 			break;
---- 
--2.25.1
--
-diff --git a/package/irqbalance/irqbalance.hash b/package/irqbalance/irqbalance.hash
-index 587173ca65..49118f8c7d 100644
---- a/package/irqbalance/irqbalance.hash
-+++ b/package/irqbalance/irqbalance.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 28f2ad35945b93d90f4a5bad95b4c0871a0f644375f746ec16f61045b9ec970e  irqbalance-1.7.0.tar.gz
--sha256 32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-+sha256  2e7ddb9687a6a5cc1f41626659eac2ad9d6b5875629156b92f693bd404d8ae63  irqbalance-1.8.0.tar.gz
-+sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-diff --git a/package/irqbalance/irqbalance.mk b/package/irqbalance/irqbalance.mk
-index eb7c3e9f3b..1efc0b7fa2 100644
---- a/package/irqbalance/irqbalance.mk
-+++ b/package/irqbalance/irqbalance.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/binutils/2.37/0001-sh-conf.patch b/package/binutils/2.37/0001-sh-conf.patch
+new file mode 100644
+index 0000000000..fcc597e4d9
+--- /dev/null
++++ b/package/binutils/2.37/0001-sh-conf.patch
+@@ -0,0 +1,48 @@
++From 33f3c1f804efc2e4f97849081589efb70cda31e5 Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@gmail.com>
++Date: Fri, 25 Dec 2015 11:38:13 +0100
++Subject: [PATCH] sh-conf
++
++Likewise, binutils has no idea about any of these new targets either, so we
++fix that up too.. now we're able to actually build a real toolchain for
++sh2a_nofpu- and other more ineptly named toolchains (and yes, there are more
++inept targets than that one, really. Go look, I promise).
++
++[Romain: rebase on top of 2.32]
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++[Thomas: rebase on top of 2.29, in which sh64 support was removed.]
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ configure    | 2 +-
++ configure.ac | 2 +-
++ 2 files changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/configure b/configure
++index 3dd206525a7..6881ce632f5 100755
++--- a/configure
+++++ b/configure
++@@ -3892,7 +3892,7 @@ case "${target}" in
++   nvptx*-*-*)
++     noconfigdirs="$noconfigdirs target-libssp target-libstdc++-v3 target-libobjc"
++     ;;
++-  sh-*-*)
+++  sh*-*-*)
++     case "${target}" in
++       sh*-*-elf)
++          ;;
++diff --git a/configure.ac b/configure.ac
++index 797a624621e..1f9256bbf18 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -1175,7 +1175,7 @@ case "${target}" in
++   nvptx*-*-*)
++     noconfigdirs="$noconfigdirs target-libssp target-libstdc++-v3 target-libobjc"
++     ;;
++-  sh-*-*)
+++  sh*-*-*)
++     case "${target}" in
++       sh*-*-elf)
++          ;;
++-- 
++2.31.1
++
+diff --git a/package/binutils/2.37/0002-poison-system-directories.patch b/package/binutils/2.37/0002-poison-system-directories.patch
+new file mode 100644
+index 0000000000..1a5fe46575
+--- /dev/null
++++ b/package/binutils/2.37/0002-poison-system-directories.patch
+@@ -0,0 +1,306 @@
++From 4d8705ddb55897e8a74b617ab95736d520d9e1ea Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@gmail.com>
++Date: Fri, 25 Dec 2015 11:45:38 +0100
++Subject: [PATCH] poison-system-directories
++
++Patch adapted to binutils 2.23.2 and extended to use
++BR_COMPILER_PARANOID_UNSAFE_PATH by Thomas Petazzoni.
++
++[Romain: rebase on top of 2.33.1]
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++[Gustavo: adapt to binutils 2.25]
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++Upstream-Status: Inappropriate [distribution: codesourcery]
++
++Patch originally created by Mark Hatle, forward-ported to
++binutils 2.21 by Scott Garman.
++
++purpose:  warn for uses of system directories when cross linking
++
++Code Merged from Sourcery G++ binutils 2.19 - 4.4-277
++
++2008-07-02  Joseph Myers  <joseph@codesourcery.com>
++
++    ld/
++    * ld.h (args_type): Add error_poison_system_directories.
++    * ld.texinfo (--error-poison-system-directories): Document.
++    * ldfile.c (ldfile_add_library_path): Check
++    command_line.error_poison_system_directories.
++    * ldmain.c (main): Initialize
++    command_line.error_poison_system_directories.
++    * lexsup.c (enum option_values): Add
++    OPTION_ERROR_POISON_SYSTEM_DIRECTORIES.
++    (ld_options): Add --error-poison-system-directories.
++    (parse_args): Handle new option.
++
++2007-06-13  Joseph Myers  <joseph@codesourcery.com>
++
++    ld/
++    * config.in: Regenerate.
++    * ld.h (args_type): Add poison_system_directories.
++    * ld.texinfo (--no-poison-system-directories): Document.
++    * ldfile.c (ldfile_add_library_path): Check
++    command_line.poison_system_directories.
++    * ldmain.c (main): Initialize
++    command_line.poison_system_directories.
++    * lexsup.c (enum option_values): Add
++    OPTION_NO_POISON_SYSTEM_DIRECTORIES.
++    (ld_options): Add --no-poison-system-directories.
++    (parse_args): Handle new option.
++
++2007-04-20  Joseph Myers  <joseph@codesourcery.com>
++
++    Merge from Sourcery G++ binutils 2.17:
++
++    2007-03-20  Joseph Myers  <joseph@codesourcery.com>
++    Based on patch by Mark Hatle <mark.hatle@windriver.com>.
++    ld/
++    * configure.ac (--enable-poison-system-directories): New option.
++    * configure, config.in: Regenerate.
++    * ldfile.c (ldfile_add_library_path): If
++    ENABLE_POISON_SYSTEM_DIRECTORIES defined, warn for use of /lib,
++    /usr/lib, /usr/local/lib or /usr/X11R6/lib.
++
++Signed-off-by: Mark Hatle <mark.hatle@windriver.com>
++Signed-off-by: Scott Garman <scott.a.garman@intel.com>
++---
++ ld/config.in    |  3 +++
++ ld/configure    | 14 ++++++++++++++
++ ld/configure.ac | 10 ++++++++++
++ ld/ld.h         |  8 ++++++++
++ ld/ld.texi      | 12 ++++++++++++
++ ld/ldfile.c     | 17 +++++++++++++++++
++ ld/ldlex.h      |  2 ++
++ ld/ldmain.c     |  2 ++
++ ld/lexsup.c     | 21 +++++++++++++++++++++
++ 9 files changed, 89 insertions(+)
++
++diff --git a/ld/config.in b/ld/config.in
++index 26d55a00d47..ffad464783c 100644
++--- a/ld/config.in
+++++ b/ld/config.in
++@@ -43,6 +43,9 @@
++    language is requested. */
++ #undef ENABLE_NLS
++ 
+++/* Define to warn for use of native system library directories */
+++#undef ENABLE_POISON_SYSTEM_DIRECTORIES
+++
++ /* Additional extension a shared object might have. */
++ #undef EXTRA_SHLIB_EXTENSION
++ 
++diff --git a/ld/configure b/ld/configure
++index c197aaef3cb..882263aa43f 100755
++--- a/ld/configure
+++++ b/ld/configure
++@@ -829,6 +829,7 @@ with_lib_path
++ enable_targets
++ enable_64_bit_bfd
++ with_sysroot
+++enable_poison_system_directories
++ enable_gold
++ enable_got
++ enable_compressed_debug_sections
++@@ -1498,6 +1499,8 @@ Optional Features:
++   --enable-checking       enable run-time checks
++   --enable-targets        alternative target configurations
++   --enable-64-bit-bfd     64-bit support (on hosts with narrower word sizes)
+++  --enable-poison-system-directories
+++                          warn for use of native system library directories
++   --enable-gold[=ARG]     build gold [ARG={default,yes,no}]
++   --enable-got=<type>     GOT handling scheme (target, single, negative,
++                           multigot)
++@@ -15236,7 +15239,18 @@ else
++ fi
++ 
++ 
+++# Check whether --enable-poison-system-directories was given.
+++if test "${enable_poison_system_directories+set}" = set; then :
+++  enableval=$enable_poison_system_directories;
+++else
+++  enable_poison_system_directories=no
+++fi
+++
+++if test "x${enable_poison_system_directories}" = "xyes"; then
++ 
+++$as_echo "#define ENABLE_POISON_SYSTEM_DIRECTORIES 1" >>confdefs.h
+++
+++fi
++ 
++ # Check whether --enable-got was given.
++ if test "${enable_got+set}" = set; then :
++diff --git a/ld/configure.ac b/ld/configure.ac
++index 8ea97c43cd4..0f246db67d8 100644
++--- a/ld/configure.ac
+++++ b/ld/configure.ac
++@@ -106,6 +106,16 @@ AC_SUBST(use_sysroot)
++ AC_SUBST(TARGET_SYSTEM_ROOT)
++ AC_SUBST(TARGET_SYSTEM_ROOT_DEFINE)
++ 
+++AC_ARG_ENABLE([poison-system-directories],
+++         AS_HELP_STRING([--enable-poison-system-directories],
+++                [warn for use of native system library directories]),,
+++         [enable_poison_system_directories=no])
+++if test "x${enable_poison_system_directories}" = "xyes"; then
+++  AC_DEFINE([ENABLE_POISON_SYSTEM_DIRECTORIES],
+++       [1],
+++       [Define to warn for use of native system library directories])
+++fi
+++
++ dnl Use --enable-gold to decide if this linker should be the default.
++ dnl "install_as_default" is set to false if gold is the default linker.
++ dnl "installed_linker" is the installed BFD linker name.
++diff --git a/ld/ld.h b/ld/ld.h
++index 35fafebfaed..74e66405de6 100644
++--- a/ld/ld.h
+++++ b/ld/ld.h
++@@ -162,6 +162,14 @@ typedef struct
++      in the linker script.  */
++   bool force_group_allocation;
++ 
+++  /* If TRUE (the default) warn for uses of system directories when
+++     cross linking.  */
+++  bool poison_system_directories;
+++
+++  /* If TRUE (default FALSE) give an error for uses of system
+++     directories when cross linking instead of a warning.  */
+++  bool error_poison_system_directories;
+++
++   /* Big or little endian as set on command line.  */
++   enum endian_enum endian;
++ 
++diff --git a/ld/ld.texi b/ld/ld.texi
++index dd8f571d4e4..3ab210b41b9 100644
++--- a/ld/ld.texi
+++++ b/ld/ld.texi
++@@ -2863,6 +2863,18 @@ string identifying the original linked file does not change.
++ 
++ Passing @code{none} for @var{style} disables the setting from any
++ @code{--build-id} options earlier on the command line.
+++
+++@kindex --no-poison-system-directories
+++@item --no-poison-system-directories
+++Do not warn for @option{-L} options using system directories such as
+++@file{/usr/lib} when cross linking.  This option is intended for use
+++in chroot environments when such directories contain the correct
+++libraries for the target system rather than the host.
+++
+++@kindex --error-poison-system-directories
+++@item --error-poison-system-directories
+++Give an error instead of a warning for @option{-L} options using
+++system directories when cross linking.
++ @end table
++ 
++ @c man end
++diff --git a/ld/ldfile.c b/ld/ldfile.c
++index 9d0af06f1f6..7cdd3b1c1b1 100644
++--- a/ld/ldfile.c
+++++ b/ld/ldfile.c
++@@ -117,6 +117,23 @@ ldfile_add_library_path (const char *name, bool cmdline)
++     new_dirs->name = concat (ld_sysroot, name + strlen ("$SYSROOT"), (const char *) NULL);
++   else
++     new_dirs->name = xstrdup (name);
+++
+++#ifdef ENABLE_POISON_SYSTEM_DIRECTORIES
+++  if (command_line.poison_system_directories
+++  && ((!strncmp (name, "/lib", 4))
+++      || (!strncmp (name, "/usr/lib", 8))
+++      || (!strncmp (name, "/usr/local/lib", 14))
+++      || (!strncmp (name, "/usr/X11R6/lib", 14))))
+++   {
+++     if (command_line.error_poison_system_directories)
+++       einfo (_("%X%P: error: library search path \"%s\" is unsafe for "
+++            "cross-compilation\n"), name);
+++     else
+++       einfo (_("%P: warning: library search path \"%s\" is unsafe for "
+++            "cross-compilation\n"), name);
+++   }
+++#endif
+++
++ }
++ 
++ /* Try to open a BFD for a lang_input_statement.  */
++diff --git a/ld/ldlex.h b/ld/ldlex.h
++index 9e8bf5fb835..2f0fadfe0a3 100644
++--- a/ld/ldlex.h
+++++ b/ld/ldlex.h
++@@ -163,6 +163,8 @@ enum option_values
++   OPTION_CTF_VARIABLES,
++   OPTION_NO_CTF_VARIABLES,
++   OPTION_CTF_SHARE_TYPES,
+++  OPTION_NO_POISON_SYSTEM_DIRECTORIES,
+++  OPTION_ERROR_POISON_SYSTEM_DIRECTORIES,
++ };
++ 
++ /* The initial parser states.  */
++diff --git a/ld/ldmain.c b/ld/ldmain.c
++index 42660eb9a3c..1aef9387f93 100644
++--- a/ld/ldmain.c
+++++ b/ld/ldmain.c
++@@ -321,6 +321,8 @@ main (int argc, char **argv)
++   command_line.warn_mismatch = true;
++   command_line.warn_search_mismatch = true;
++   command_line.check_section_addresses = -1;
+++  command_line.poison_system_directories = true;
+++  command_line.error_poison_system_directories = false;
++ 
++   /* We initialize DEMANGLING based on the environment variable
++      COLLECT_NO_DEMANGLE.  The gcc collect2 program will demangle the
++diff --git a/ld/lexsup.c b/ld/lexsup.c
++index 00274c500d0..4f23b3a2da2 100644
++--- a/ld/lexsup.c
+++++ b/ld/lexsup.c
++@@ -595,6 +595,14 @@ static const struct ld_option ld_options[] =
++ 		   "                                <method> is: share-unconflicted (default),\n"
++ 		   "                                             share-duplicated"),
++     TWO_DASHES },
+++  { {"no-poison-system-directories", no_argument, NULL,
+++    OPTION_NO_POISON_SYSTEM_DIRECTORIES},
+++    '\0', NULL, N_("Do not warn for -L options using system directories"),
+++    TWO_DASHES },
+++  { {"error-poison-system-directories", no_argument, NULL,
+++    OPTION_ERROR_POISON_SYSTEM_DIRECTORIES},
+++    '\0', NULL, N_("Give an error for -L options using system directories"),
+++    TWO_DASHES },
++ };
++ 
++ #define OPTION_COUNT ARRAY_SIZE (ld_options)
++@@ -607,6 +615,7 @@ parse_args (unsigned argc, char **argv)
++   int ingroup = 0;
++   char *default_dirlist = NULL;
++   char *shortopts;
+++  char *BR_paranoid_env;
++   struct option *longopts;
++   struct option *really_longopts;
++   int last_optind;
++@@ -1643,6 +1652,14 @@ parse_args (unsigned argc, char **argv)
++ 	  }
++ 	  break;
++ 
+++	case OPTION_NO_POISON_SYSTEM_DIRECTORIES:
+++	  command_line.poison_system_directories = false;
+++	  break;
+++
+++	case OPTION_ERROR_POISON_SYSTEM_DIRECTORIES:
+++	  command_line.error_poison_system_directories = true;
+++	  break;
+++
++ 	case OPTION_PUSH_STATE:
++ 	  input_flags.pushed = xmemdup (&input_flags,
++ 					sizeof (input_flags),
++@@ -1788,6 +1805,10 @@ parse_args (unsigned argc, char **argv)
++       command_line.soname = NULL;
++     }
++ 
+++  BR_paranoid_env = getenv("BR_COMPILER_PARANOID_UNSAFE_PATH");
+++  if (BR_paranoid_env && strlen(BR_paranoid_env) > 0)
+++    command_line.error_poison_system_directories = true;
+++
++   while (ingroup)
++     {
++       einfo (_("%P: missing --end-group; added as last command line option\n"));
++-- 
++2.31.1
++
+diff --git a/package/binutils/2.37/0003-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch b/package/binutils/2.37/0003-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch
+new file mode 100644
+index 0000000000..bfd531b818
+--- /dev/null
++++ b/package/binutils/2.37/0003-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch
+@@ -0,0 +1,50 @@
++From ef4ba1da823e8366ea4f126f50885a44ebf4dcf0 Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@benettiengineering.com>
++Date: Wed, 9 Jun 2021 17:28:27 +0200
++Subject: [PATCH] bfd/elf32-or1k: fix building with gcc version < 5
++
++Gcc version >= 5 has standard C mode not set to -std=gnu11, so if we use
++an old compiler(i.e. gcc 4.9) build fails on:
++```
++elf32-or1k.c:2251:3: error: 'for' loop initial declarations are only allowed in
++C99 or C11 mode
++    for (size_t i = 0; i < insn_count; i++)
++    ^
++```
++
++So let's declare `size_t i` at the top of the function instead of inside
++for loop.
++
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++---
++ bfd/elf32-or1k.c | 5 +++--
++ 1 file changed, 3 insertions(+), 2 deletions(-)
++
++diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
++index 4ae7f324d33..32063ab0289 100644
++--- a/bfd/elf32-or1k.c
+++++ b/bfd/elf32-or1k.c
++@@ -2244,9 +2244,10 @@ or1k_write_plt_entry (bfd *output_bfd, bfd_byte *contents, unsigned insnj,
++ {
++   unsigned nodelay = elf_elfheader (output_bfd)->e_flags & EF_OR1K_NODELAY;
++   unsigned output_insns[PLT_MAX_INSN_COUNT];
+++  size_t i;
++ 
++   /* Copy instructions into the output buffer.  */
++-  for (size_t i = 0; i < insn_count; i++)
+++  for (i = 0; i < insn_count; i++)
++     output_insns[i] = insns[i];
++ 
++   /* Honor the no-delay-slot setting.  */
++@@ -2277,7 +2278,7 @@ or1k_write_plt_entry (bfd *output_bfd, bfd_byte *contents, unsigned insnj,
++     }
++ 
++   /* Write out the output buffer.  */
++-  for (size_t i = 0; i < (insn_count+1); i++)
+++  for (i = 0; i < (insn_count+1); i++)
++     bfd_put_32 (output_bfd, output_insns[i], contents + (i*4));
++ }
++ 
++-- 
++2.31.1
++
+diff --git a/package/binutils/2.37/0004-or1k-fix-pc-relative-relocation-against-dynamic-on-P.patch b/package/binutils/2.37/0004-or1k-fix-pc-relative-relocation-against-dynamic-on-P.patch
+new file mode 100644
+index 0000000000..779baeab63
+--- /dev/null
++++ b/package/binutils/2.37/0004-or1k-fix-pc-relative-relocation-against-dynamic-on-P.patch
+@@ -0,0 +1,59 @@
++From 203b80f8dbdd3ddb860114b03351a0dea28c978f Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@benettiengineering.com>
++Date: Sat, 10 Jul 2021 17:57:34 +0200
++Subject: [PATCH] or1k: fix pc-relative relocation against dynamic on PC
++ relative 26 bit relocation
++
++When building openal we were seeing the assert failure:
++
++/home/buildroot/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/or1k-buildroot-linux-uclibc/9.3.0/../../../../or1k-buildroot-linux-uclibc/bin/ld: CMakeFiles/OpenAL.dir/al/source.cpp.o:
++pc-relative relocation against dynamic symbol alSourcePausev
++/home/buildroot/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/or1k-buildroot-linux-uclibc/9.3.0/../../../../or1k-buildroot-linux-uclibc/bin/ld: CMakeFiles/OpenAL.dir/al/source.cpp.o:
++pc-relative relocation against dynamic symbol alSourceStopv
++/home/buildroot/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/or1k-buildroot-linux-uclibc/9.3.0/../../../../or1k-buildroot-linux-uclibc/bin/ld: CMakeFiles/OpenAL.dir/al/source.cpp.o:
++pc-relative relocation against dynamic symbol alSourceRewindv
++/home/buildroot/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/or1k-buildroot-linux-uclibc/9.3.0/../../../../or1k-buildroot-linux-uclibc/bin/ld: CMakeFiles/OpenAL.dir/al/source.cpp.o:
++pc-relative relocation against dynamic symbol alSourcePlayv
++collect2: error: ld returned 1 exit status
++
++This happens because in R_OR1K_INSN_REL_26 case we can't reference local
++symbol as previously done but we need to make sure that calls to actual
++symbol always call the version of current object.
++
++bfd/Changelog:
++
++	* elf32-or1k.c (or1k_elf_relocate_section): use a separate entry
++	  in switch case R_OR1K_INSN_REL_26 where we need to check for
++	  !SYMBOL_CALLS_LOCAL() instead of !SYMBOL_REFERENCES_LOCAL().
++
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++---
++ bfd/elf32-or1k.c | 12 ++++++++++++
++ 1 file changed, 12 insertions(+)
++
++diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
++index 32063ab0289..67252394173 100644
++--- a/bfd/elf32-or1k.c
+++++ b/bfd/elf32-or1k.c
++@@ -1543,6 +1543,18 @@ or1k_elf_relocate_section (bfd *output_bfd,
++ 	  break;
++ 
++ 	case R_OR1K_INSN_REL_26:
+++	  /* For a non-shared link, these will reference plt or call the
+++	     version of actual object.  */
+++	  if (bfd_link_pic (info) && !SYMBOL_CALLS_LOCAL (info, h))
+++	    {
+++	      _bfd_error_handler
+++		(_("%pB: pc-relative relocation against dynamic symbol %s"),
+++		 input_bfd, name);
+++	      ret_val = FALSE;
+++	      bfd_set_error (bfd_error_bad_value);
+++	    }
+++	  break;
+++
++ 	case R_OR1K_PCREL_PG21:
++ 	case R_OR1K_LO13:
++ 	case R_OR1K_SLO13:
++-- 
++2.31.1
++
+diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
+index d6909617c7..6190ee4d97 100644
+--- a/package/binutils/Config.in.host
++++ b/package/binutils/Config.in.host
+@@ -38,6 +38,13 @@ config BR2_BINUTILS_VERSION_2_36_X
+ 	# https://github.com/uclinux-dev/elf2flt/issues/12
+ 	depends on !BR2_BINFMT_FLAT
  
--IRQBALANCE_VERSION = 1.7.0
-+IRQBALANCE_VERSION = 1.8.0
- IRQBALANCE_SITE = $(call github,irqbalance,irqbalance,v$(IRQBALANCE_VERSION))
- IRQBALANCE_LICENSE = GPL-2.0
- IRQBALANCE_LICENSE_FILES = COPYING
++config BR2_BINUTILS_VERSION_2_37_X
++	bool "binutils 2.37"
++	depends on !BR2_csky
++	# https://github.com/uclinux-dev/elf2flt/pull/16
++	# https://github.com/uclinux-dev/elf2flt/issues/12
++	depends on !BR2_BINFMT_FLAT
++
+ config BR2_BINUTILS_VERSION_ARC
+ 	bool "binutils arc (2.34.50)"
+ 	depends on BR2_arc
+@@ -56,6 +63,7 @@ config BR2_BINUTILS_VERSION
+ 	default "2.34"		if BR2_BINUTILS_VERSION_2_34_X
+ 	default "2.35.2"	if BR2_BINUTILS_VERSION_2_35_X
+ 	default "2.36.1"	if BR2_BINUTILS_VERSION_2_36_X
++	default "2.37"		if BR2_BINUTILS_VERSION_2_37_X
+ 
+ config BR2_BINUTILS_ENABLE_LTO
+ 	bool
+diff --git a/package/binutils/binutils.hash b/package/binutils/binutils.hash
+index 20462b3809..cc62fdcdaf 100644
+--- a/package/binutils/binutils.hash
++++ b/package/binutils/binutils.hash
+@@ -3,6 +3,7 @@ sha512  d326408f12a03d9a61a9de56584c2af12f81c2e50d2d7e835d51565df8314df01575724a
+ sha512  2c7976939dcf5e8c5b7374cccd39bfe803b1bec73c6abfa0eb17c24e1942574c6bdb874c66a092a82adc443182eacd8a5a8001c19a76101f0c7ba40c27de0bbd  binutils-2.34.tar.xz
+ sha512  9974ede5978d32e0d68fef23da48fa00bd06b0bff7ec45b00ca075c126d6bbe0cf2defc03ecc3f17bc6cc85b64271a13009c4049d7ba17de26e84e3a6e2c0348  binutils-2.35.2.tar.xz
+ sha512  cc24590bcead10b90763386b6f96bb027d7594c659c2d95174a6352e8b98465a50ec3e4088d0da038428abe059bbc4ae5f37b269f31a40fc048072c8a234f4e9  binutils-2.36.1.tar.xz
++sha512  5c11aeef6935860a6819ed3a3c93371f052e52b4bdc5033da36037c1544d013b7f12cb8d561ec954fe7469a68f1b66f1a3cd53d5a3af7293635a90d69edd15e7  binutils-2.37.tar.xz
+ 
+ # Locally calculated (fetched from Github)
+ sha512  76a8227a19218435319c660e4983ea17985194b7f496f163e97543e7f6fd3e9249241fdc05a16ba512fba96a1d846c1f7b080983404d821d6215f10e7f11e238  binutils-gdb-arc-2020.09-release.tar.gz
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
