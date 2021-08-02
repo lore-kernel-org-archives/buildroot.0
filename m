@@ -2,57 +2,57 @@ Return-Path: <SRS0=jXvl=M2=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+X-Spam-Status: No, score=-12.4 required=3.0 tests=BAYES_00,DATE_IN_PAST_24_48,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D9BDC4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:31:54 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AE065C4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:32:04 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 13A5260F22
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:31:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 13A5260F22
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
+	by mail.kernel.org (Postfix) with ESMTPS id 7E10460240
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:32:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7E10460240
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E500540666;
-	Tue,  3 Aug 2021 22:31:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4BC10607E4;
+	Tue,  3 Aug 2021 22:32:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tOnJVaQetxg7; Tue,  3 Aug 2021 22:31:51 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id HT9XAc1XyXvX; Tue,  3 Aug 2021 22:32:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D9C194069C;
-	Tue,  3 Aug 2021 22:31:49 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 32C691BF9C1
+	by smtp3.osuosl.org (Postfix) with ESMTP id 50E8E60681;
+	Tue,  3 Aug 2021 22:32:02 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 598091BF349
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:11:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2461840555
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:29 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E96C083AE2
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dpoP1cktEK_I for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:10:28 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id U4xDMX0VOyNx for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:10:35 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7FA6A4058A
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:28 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 574D883AC5
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:35 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id C999C87C2D; Tue,  3 Aug 2021 21:10:20 +0000 (UTC)
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ id A18F185E9B; Tue,  3 Aug 2021 21:10:27 +0000 (UTC)
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Mon, 26 Jul 2021 23:42:23 +0200
+Date: Mon, 2 Aug 2021 17:12:37 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: c19c8861a1c492a1ed5a03e0013d1243fd3fe937
-X-Git-Newrev: b436b82411305839abc76bb438fe92661a067526
+X-Git-Oldrev: da138092c56b35354ac2ae75815483d25c0cf7db
+X-Git-Newrev: 632885260b9ff8db40cf3dfc318b9634eb7ccabd
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211020.C999C87C2D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/open62541: bump
- version to 1.2.2
+Message-Id: <20210803211027.A18F185E9B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/pulseaudio: enable
+ BlueZ Audio Plugins
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,62 +70,29 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b436b82411305839abc76bb438fe92661a067526
+commit: https://git.buildroot.net/buildroot/commit/?id=632885260b9ff8db40cf3dfc318b9634eb7ccabd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Scott Fan <fancp2007@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .../0002-arch-posix-CMakeLists.txt-fix-build-without-threads.patch   | 2 +-
- package/open62541/open62541.hash                                     | 2 +-
- package/open62541/open62541.mk                                       | 5 ++---
- 3 files changed, 4 insertions(+), 5 deletions(-)
+When BlueZ is enabled ensure to select the BlueZ Audio Plugins.
 
-diff --git a/package/open62541/0002-arch-posix-CMakeLists.txt-fix-build-without-threads.patch b/package/open62541/0002-arch-posix-CMakeLists.txt-fix-build-without-threads.patch
-index 94ee76ad92..bdf3608041 100644
---- a/package/open62541/0002-arch-posix-CMakeLists.txt-fix-build-without-threads.patch
-+++ b/package/open62541/0002-arch-posix-CMakeLists.txt-fix-build-without-threads.patch
-@@ -29,7 +29,7 @@ index bb24757c..a53c9f2c 100644
-            ua_architecture_append_to_library(m)
- -          #TODO - Error on first make run if pthread is included conditional?
- -          ua_architecture_append_to_library(pthread)
--           if(UA_ENABLE_MULTITHREADING OR UA_BUILD_UNIT_TESTS)
-+           if(UA_MULTITHREADING OR UA_BUILD_UNIT_TESTS)
-              ua_architecture_append_to_library(pthread)
-            endif()
- -- 
-diff --git a/package/open62541/open62541.hash b/package/open62541/open62541.hash
-index 3da8c8f5fb..5aa340ac18 100644
---- a/package/open62541/open62541.hash
-+++ b/package/open62541/open62541.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  36273793e5247586fadaa73c0edad89be610100cbc839d1fb5f567f20c3cbc44  open62541-1.0-br1.tar.gz
-+sha256  c59c85b519a18350f5014b6e7b7545ee144ceeb15094e75b0b7ecec7dce43dd0  open62541-v1.2.2-br1.tar.gz
- sha256  fab3dd6bdab226f1c08630b1dd917e11fcb4ec5e1e020e2c16f83a0a13863e85  LICENSE
-diff --git a/package/open62541/open62541.mk b/package/open62541/open62541.mk
-index 3f75196817..9c6468d443 100644
---- a/package/open62541/open62541.mk
-+++ b/package/open62541/open62541.mk
-@@ -4,8 +4,7 @@
- #
- ################################################################################
- 
--OPEN62541_VERSION = 1.0
--OPEN62541_DL_VERSION = v$(OPEN62541_VERSION)
-+OPEN62541_VERSION = v1.2.2
- OPEN62541_SITE_METHOD = git
- OPEN62541_SITE = git://github.com/open62541/open62541.git
- OPEN62541_GIT_SUBMODULES = YES
-@@ -19,7 +18,7 @@ OPEN62541_LICENSE_FILES = LICENSE
- OPEN62541_CONF_OPTS = \
- 	-DCMAKE_BUILD_TYPE=Release \
- 	-DGIT_EXECUTABLE=NO \
--	-DOPEN62541_VERSION=v$(OPEN62541_VERSION) \
-+	-DOPEN62541_VERSION=$(OPEN62541_VERSION) \
- 	-DUA_ENABLE_HARDENING=OFF
- 
- ifeq ($(BR2_PACKAGE_OPEN62541_UA_NAMESPACE_ZERO_MINIMAL),y)
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/pulseaudio/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/pulseaudio/Config.in b/package/pulseaudio/Config.in
+index 6600006a60..dcc88f3841 100644
+--- a/package/pulseaudio/Config.in
++++ b/package/pulseaudio/Config.in
+@@ -14,6 +14,7 @@ config BR2_PACKAGE_PULSEAUDIO
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_USE_MMU # fork()
++	select BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_AUDIO if BR2_PACKAGE_BLUEZ5_UTILS # runtime
+ 	select BR2_PACKAGE_LIBTOOL
+ 	select BR2_PACKAGE_LIBSNDFILE
+ 	select BR2_PACKAGE_PULSEAUDIO_ENABLE_ATOMIC
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
