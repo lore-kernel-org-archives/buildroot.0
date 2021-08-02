@@ -2,56 +2,78 @@ Return-Path: <SRS0=hSOo=MZ=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.0 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F466C4338F
-	for <buildroot@archiver.kernel.org>; Mon,  2 Aug 2021 16:34:46 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B114C4338F
+	for <buildroot@archiver.kernel.org>; Mon,  2 Aug 2021 16:37:15 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id F3B4B6100A
-	for <buildroot@archiver.kernel.org>; Mon,  2 Aug 2021 16:34:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org F3B4B6100A
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
+	by mail.kernel.org (Postfix) with ESMTPS id 4868C61050
+	for <buildroot@archiver.kernel.org>; Mon,  2 Aug 2021 16:37:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4868C61050
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CBBBD83CE6;
-	Mon,  2 Aug 2021 16:34:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0D6DB40542;
+	Mon,  2 Aug 2021 16:37:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id feb4DLc8Eete; Mon,  2 Aug 2021 16:34:43 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3eTstLeebJ2e; Mon,  2 Aug 2021 16:37:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0A6E083AEE;
-	Mon,  2 Aug 2021 16:34:42 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 138321BF34B
- for <buildroot@lists.busybox.net>; Mon,  2 Aug 2021 16:34:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6FF7F40535;
+	Mon,  2 Aug 2021 16:37:13 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 56F831BF34B
+ for <buildroot@lists.busybox.net>; Mon,  2 Aug 2021 16:37:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3BE42600CA
- for <buildroot@lists.busybox.net>; Mon,  2 Aug 2021 16:34:17 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4675483CEB
+ for <buildroot@lists.busybox.net>; Mon,  2 Aug 2021 16:37:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xf0WXfJd1w9q for <buildroot@lists.busybox.net>;
- Mon,  2 Aug 2021 16:34:16 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id E2C636082E
- for <buildroot@buildroot.org>; Mon,  2 Aug 2021 16:34:14 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 028508A58D; Mon,  2 Aug 2021 16:34:10 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-To: buildroot@buildroot.org
-Date: Mon, 2 Aug 2021 18:29:50 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3be90cd5b1262b992030513f7f0f6331b2364257
-X-Git-Newrev: 814ebe83e766f93b748d0481f8fa7a9e4fabb767
-X-Patchwork-Hint: ignore
-Message-Id: <20210802163410.028508A58D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/irqbalance: bump to version 1.8.0
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=free.fr
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gRP-JQo-LxK4 for <buildroot@lists.busybox.net>;
+ Mon,  2 Aug 2021 16:37:11 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E6A9E83CE6
+ for <buildroot@buildroot.org>; Mon,  2 Aug 2021 16:37:10 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:f475:5bfa:f4b3:5a3a])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id E84BD5FFA2;
+ Mon,  2 Aug 2021 18:37:01 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+ s=smtp-20201208; t=1627922228;
+ bh=1GTJ8VFCZ1qvx48DHfBE8ZszN8zG03qShvSCXoTG85Y=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=rA+YbR4pZSMoZcbf3iLJe7M11ZRLyKDcvjeFCREMYu/58Lk88GTOVBw51tTkij4jU
+ h8RT4YF6OMQ0/4ftuGFhLWU3M+HeCSb0FFVrW+YlQPl5tM8jxMLrN5lv2L7ND68Rh3
+ fAwB9R9IVddEqXZ268O0yCIlptgMCoeCIRr2LP7R0c7VJuGF/z4orvsI6JSs+0WcUd
+ pbefAnczw8LjCHEoz7NBseo6+AXPWwfRzfYwUdRuxTtCeu8mxfQlq0drFOIHMXT+1N
+ RiOVfZ5Xv1/l/KDNB3qm37AmRQr4ws9SNYTSI+r4NxqGm/WH3U+qvksCLO6l6+spco
+ ill9bDSXYAc1A==
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Mon, 02 Aug 2021 18:37:01 +0200
+Date: Mon, 2 Aug 2021 18:37:01 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Eugen.Hristev@microchip.com
+Message-ID: <20210802163701.GB27036@scaer>
+References: <20210730103908.11270-1-eugen.hristev@microchip.com>
+ <20210730234234.31bc6aa0@windsurf>
+ <8bc0814b-6d8a-4e96-7d8c-b6d476f1a42f@microchip.com>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <8bc0814b-6d8a-4e96-7d8c-b6d476f1a42f@microchip.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+Subject: Re: [Buildroot] [PATCH] boot/at91bootstrap3: updated to released
+ 4.0.0 final version
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,167 +85,46 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-MIME-Version: 1.0
+Cc: thomas.petazzoni@bootlin.com, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=814ebe83e766f93b748d0481f8fa7a9e4fabb767
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Eugen, All,
 
-- Drop first patch (already in version)
-- Update indentation in hash file (two spaces)
+On 2021-08-02 06:57 +0000, Eugen.Hristev@microchip.com spake thusly:
+> On 7/31/21 12:42 AM, Thomas Petazzoni wrote:
+> > On Fri, 30 Jul 2021 13:39:08 +0300
+> > Eugen Hristev via buildroot <buildroot@busybox.net> wrote:
+> >> Update to AT91Bootstrap 4.0.0 version.
+> >> This package is now released under MIT license.
+> >> -AT91BOOTSTRAP3_LICENSE = Atmel License
+> >> +AT91BOOTSTRAP3_LICENSE = MIT
+> > While this change is correct for at91bootstrap 4.x, I don't think it's
+> > true for at91bootstrap 3.x, so I suppose this should instead be
+> > conditional?
+> The plan is to also switch at91bootstrap3 to the same license.
+> So if you want, you can hold the patch until I update bootstrap3 as well.
 
-https://github.com/Irqbalance/irqbalance/releases/tag/v1.8.0
+The problem will remain for custom versions. Indeed, users can select
+any arbitrary git tree and git commit, and for those, we have no way to
+know whether they are from before or after the change in licensing
+terms.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- ...configure.ac-use-pkg-config-to-find-numa.patch} |   0
- ...001-fix-uint64_t-printf-format-use-PRIu64.patch | 105 ---------------------
- package/irqbalance/irqbalance.hash                 |   4 +-
- package/irqbalance/irqbalance.mk                   |   2 +-
- 4 files changed, 3 insertions(+), 108 deletions(-)
+As such, we will still want to have a conditional block, like I proposed
+as a reply to Thomas.
 
-diff --git a/package/irqbalance/0002-configure.ac-use-pkg-config-to-find-numa.patch b/package/irqbalance/0001-configure.ac-use-pkg-config-to-find-numa.patch
-similarity index 100%
-rename from package/irqbalance/0002-configure.ac-use-pkg-config-to-find-numa.patch
-rename to package/irqbalance/0001-configure.ac-use-pkg-config-to-find-numa.patch
-diff --git a/package/irqbalance/0001-fix-uint64_t-printf-format-use-PRIu64.patch b/package/irqbalance/0001-fix-uint64_t-printf-format-use-PRIu64.patch
-deleted file mode 100644
-index 95a9616c71..0000000000
---- a/package/irqbalance/0001-fix-uint64_t-printf-format-use-PRIu64.patch
-+++ /dev/null
-@@ -1,105 +0,0 @@
--From 0cdc7a22d5156440fecff14c438d4e24261ac793 Mon Sep 17 00:00:00 2001
--From: Peter Seiderer <ps.report@gmx.net>
--Date: Sat, 20 Feb 2021 23:38:56 +0100
--Subject: [PATCH] fix uint64_t printf format (use PRIu64)
--
--Fixes (on arm 32-bit):
--
--  $ irqbalance-ui
--  Invalid data sent.  Unexpected token: (null)TYPE
--
--And strace showed the following:
--
--  237   sendmsg(3, {msg_name=NULL, msg_namelen=0, msg_iov=[{iov_base="stats", iov_len=5}], msg_iovlen=1, msg_control=[{cmsg_len=24, cmsg_level=SOL_SOCKET, cmsg_type=SCM_CREDENTIALS, cmsg_data={pid=237, uid=0, gid=0}}], msg_controllen=24, msg_flags=0}, 0) = 5
--  237   recv(3, "TYPE 3 NUMBER -1 LOAD 0 SAVE_MODE 0 (null)TYPE 2 NUMBER 0 LOAD 0 SAVE_MODE 0 (null)TYPE 1 NUMBER 0 LOAD 0 SAVE_MODE 0 (null)TYPE 0 NUMBER 3 LOAD 0 SAVE_MODE 0 (null)TYPE 1 NUMBER 1 LOAD 0 SAVE_MODE 0 (null)TYPE 0 NUMBER 1 LOAD 0 SAVE_MODE 0 (null)TYPE 1 NUMBER 2 LOAD 0 SAVE_MODE 0 (null)TYPE 0 NUMBER 2 LOAD 0 SAVE_MODE 0 (null)TYPE 1 NUMBER 3 LOAD 0 SAVE_MODE 0 (null)TYPE 0 NUMBER 0 LOAD 0 SAVE_MODE 0 (null)", 8192, 0) = 411
--
--[backported from upstream]
--Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-----
-- cputree.c    | 3 ++-
-- irqbalance.c | 5 +++--
-- ui/ui.c      | 5 +++--
-- 3 files changed, 8 insertions(+), 5 deletions(-)
--
--diff --git a/cputree.c b/cputree.c
--index fda0200..a8dba73 100644
----- a/cputree.c
--+++ b/cputree.c
--@@ -33,6 +33,7 @@
-- #include <sys/types.h>
-- #include <sys/stat.h>
-- #include <dirent.h>
--+#include <inttypes.h>
-- 
-- #include <glib.h>
-- 
--@@ -417,7 +418,7 @@ static void dump_irq(struct irq_info *info, void *data)
-- 		indent[i] = log_indent[0];
-- 
-- 	indent[i] = '\0';
---	log(TO_CONSOLE, LOG_INFO, "%sInterrupt %i node_num is %d (%s/%lu:%lu) \n", indent,
--+	log(TO_CONSOLE, LOG_INFO, "%sInterrupt %i node_num is %d (%s/%" PRIu64 ":%" PRIu64 ") \n", indent,
-- 	    info->irq, irq_numa_node(info)->number, classes[info->class], info->load, (info->irq_count - info->last_irq_count));
-- 	free(indent);
-- }
--diff --git a/irqbalance.c b/irqbalance.c
--index 9baa955..458bb07 100644
----- a/irqbalance.c
--+++ b/irqbalance.c
--@@ -34,6 +34,7 @@
-- #include <sys/socket.h>
-- #include <sys/un.h>
-- #include <fcntl.h>
--+#include <inttypes.h>
-- #ifdef HAVE_GETOPT_LONG 
-- #include <getopt.h>
-- #endif
--@@ -357,7 +358,7 @@ void get_irq_data(struct irq_info *irq, void *data)
-- 	*irqdata = newptr;
-- 
-- 	sprintf(*irqdata + strlen(*irqdata),
---			"IRQ %d LOAD %lu DIFF %lu CLASS %d ", irq->irq, irq->load,
--+			"IRQ %d LOAD %" PRIu64 " DIFF %" PRIu64 " CLASS %d ", irq->irq, irq->load,
-- 			(irq->irq_count - irq->last_irq_count), irq->class);
-- }
-- 
--@@ -395,7 +396,7 @@ void get_object_stat(struct topo_obj *object, void *data)
-- 
-- 	*stats = newptr;
-- 
---	sprintf(*stats + strlen(*stats), "TYPE %d NUMBER %d LOAD %lu SAVE_MODE %d %s",
--+	sprintf(*stats + strlen(*stats), "TYPE %d NUMBER %d LOAD %" PRIu64 " SAVE_MODE %d %s",
-- 			object->obj_type, object->number, object->load,
-- 			object->powersave_mode, irq_data ? irq_data : "");
-- 	free(irq_data);
--diff --git a/ui/ui.c b/ui/ui.c
--index 06ec472..4cf68bf 100644
----- a/ui/ui.c
--+++ b/ui/ui.c
--@@ -1,4 +1,5 @@
-- 
--+#include <inttypes.h>
-- #include <string.h>
-- #include "ui.h"
-- 
--@@ -563,7 +564,7 @@ void settings()
-- 
-- 	char info[128] = "Current sleep interval between rebalancing: \0";
-- 	uint8_t sleep_input_offset = strlen(info) + 3;
---	snprintf(info + strlen(info), 128 - strlen(info), "%lu\n", setup.sleep);
--+	snprintf(info + strlen(info), 128 - strlen(info), "%" PRIu64 "\n", setup.sleep);
-- 	attrset(COLOR_PAIR(1));
-- 	mvprintw(2, 3, info);
-- 	print_all_cpus();
--@@ -588,7 +589,7 @@ void settings()
-- 			if(new_sleep != setup.sleep) {
-- 				setup.sleep = new_sleep;
-- 				char settings_data[128];
---				snprintf(settings_data, 128, "%s %lu", SET_SLEEP, new_sleep);
--+				snprintf(settings_data, 128, "%s %" PRIu64, SET_SLEEP, new_sleep);
-- 				send_settings(settings_data);
-- 			}
-- 			break;
---- 
--2.25.1
--
-diff --git a/package/irqbalance/irqbalance.hash b/package/irqbalance/irqbalance.hash
-index 587173ca65..49118f8c7d 100644
---- a/package/irqbalance/irqbalance.hash
-+++ b/package/irqbalance/irqbalance.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 28f2ad35945b93d90f4a5bad95b4c0871a0f644375f746ec16f61045b9ec970e  irqbalance-1.7.0.tar.gz
--sha256 32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-+sha256  2e7ddb9687a6a5cc1f41626659eac2ad9d6b5875629156b92f693bd404d8ae63  irqbalance-1.8.0.tar.gz
-+sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-diff --git a/package/irqbalance/irqbalance.mk b/package/irqbalance/irqbalance.mk
-index eb7c3e9f3b..1efc0b7fa2 100644
---- a/package/irqbalance/irqbalance.mk
-+++ b/package/irqbalance/irqbalance.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IRQBALANCE_VERSION = 1.7.0
-+IRQBALANCE_VERSION = 1.8.0
- IRQBALANCE_SITE = $(call github,irqbalance,irqbalance,v$(IRQBALANCE_VERSION))
- IRQBALANCE_LICENSE = GPL-2.0
- IRQBALANCE_LICENSE_FILES = COPYING
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
