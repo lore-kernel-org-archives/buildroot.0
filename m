@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-12.4 required=3.0 tests=BAYES_00,DATE_IN_PAST_24_48,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E592C4338F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 01:10:44 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 35883C4338F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 01:10:56 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B6C4E60F58
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 01:10:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B6C4E60F58
+	by mail.kernel.org (Postfix) with ESMTPS id EE7CF60F56
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 01:10:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org EE7CF60F56
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 93AF8424D6;
-	Wed,  4 Aug 2021 01:10:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CF4C08443F;
+	Wed,  4 Aug 2021 01:10:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LePGkLyJVYJn; Wed,  4 Aug 2021 01:10:42 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 8d5d8QIpxszS; Wed,  4 Aug 2021 01:10:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0C587424CE;
-	Wed,  4 Aug 2021 01:10:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5221184447;
+	Wed,  4 Aug 2021 01:10:54 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 39B8D1BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:23:13 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 506711BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:23:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6B40F414B4
+ by smtp2.osuosl.org (Postfix) with ESMTP id 990D640F42
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rcO_pserGp34 for <buildroot@lists.busybox.net>;
+ with ESMTP id ub8P_OP48MOW for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:10:51 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6340440F42
+ by smtp2.osuosl.org (Postfix) with ESMTP id 380A6414F6
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:35 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id B3D5785E9B; Tue,  3 Aug 2021 21:10:27 +0000 (UTC)
+ id 8CF9F878C2; Tue,  3 Aug 2021 21:10:27 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Mon, 2 Aug 2021 17:13:04 +0200
+Date: Mon, 2 Aug 2021 17:10:42 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: d773c3e9ffcf12b737306c234e2ad4654310057f
-X-Git-Newrev: 92024d4448f3cdd4974de0ac4317394f3760c7a8
+X-Git-Oldrev: a3f9fb6085993f9c48dd827e844795aad12e5306
+X-Git-Newrev: cc02541b30d658c2b84d90715dbd4b8395e6614a
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211027.B3D5785E9B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/supertuxkart: enable
- BlueZ HID Plugin
+Message-Id: <20210803211027.8CF9F878C2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/brltty: enable bluez
+ HID plugin
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,29 +70,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=92024d4448f3cdd4974de0ac4317394f3760c7a8
+commit: https://git.buildroot.net/buildroot/commit/?id=cc02541b30d658c2b84d90715dbd4b8395e6614a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-When BlueZ is enabled ensure to select the BlueZ HID Plugin for wiimote support.
+brltty builds with bluetooth support when bluez is enabled.
+Ensure the HID Plugin is enabled.
 
 Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/supertuxkart/Config.in | 1 +
+ package/brltty/Config.in | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/supertuxkart/Config.in b/package/supertuxkart/Config.in
-index 99f2310d82..8af006d632 100644
---- a/package/supertuxkart/Config.in
-+++ b/package/supertuxkart/Config.in
-@@ -25,6 +25,7 @@ config BR2_PACKAGE_SUPERTUXKART
- 	select BR2_PACKAGE_OPENAL
- 	select BR2_PACKAGE_XLIB_LIBXRANDR
- 	select BR2_PACKAGE_ZLIB
+diff --git a/package/brltty/Config.in b/package/brltty/Config.in
+index de11af3bbe..c728cb7e20 100644
+--- a/package/brltty/Config.in
++++ b/package/brltty/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_BRLTTY
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_USE_MMU # fork()
 +	select BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_HID if BR2_PACKAGE_BLUEZ5_UTILS # runtime
  	help
- 	  Karts. Nitro. Action! SuperTuxKart is a free 3D arcade kart
- 	  racer with multiple karts, tracks and modes you can play.
+ 	  A daemon providing access to the Linux console for a blind
+ 	  person using a refreshable braille display.
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
