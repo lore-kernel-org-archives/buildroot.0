@@ -2,56 +2,57 @@ Return-Path: <SRS0=sxUg=M3=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.4 required=3.0 tests=BAYES_00,DATE_IN_PAST_24_48,
+X-Spam-Status: No, score=-17.4 required=3.0 tests=BAYES_00,DATE_IN_PAST_24_48,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 68474C4338F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 01:12:14 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C96CBC4338F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 01:12:26 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 28E8461050
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 01:12:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 28E8461050
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
+	by mail.kernel.org (Postfix) with ESMTPS id 8F9866109F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 01:12:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8F9866109F
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F0ABF84467;
-	Wed,  4 Aug 2021 01:12:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6802F4252A;
+	Wed,  4 Aug 2021 01:12:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id p2NjroZ3-5KL; Wed,  4 Aug 2021 01:12:13 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id xVzF6aFvFv2h; Wed,  4 Aug 2021 01:12:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 41D6E844A8;
-	Wed,  4 Aug 2021 01:12:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AAE1B42516;
+	Wed,  4 Aug 2021 01:12:24 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 785721BF9AA
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:23:20 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8A1F21BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:23:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6313940653
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7AB68414BC
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AinxXrudg5yG for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:10:51 +0000 (UTC)
+ with ESMTP id epZzMJ32sRuY for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:10:52 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 14F12414F1
+ by smtp2.osuosl.org (Postfix) with ESMTP id B70B54044C
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:35 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 5C23985E9B; Tue,  3 Aug 2021 21:10:27 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ id 0BD058B442; Tue,  3 Aug 2021 21:10:28 +0000 (UTC)
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Mon, 2 Aug 2021 16:00:43 +0200
+Date: Mon, 2 Aug 2021 22:09:11 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 594f5218e757e4f5aa92c0206efae78e94fb6568
-X-Git-Newrev: 03c148c8dec4e8c3fa13fcde4a730b3ab97f3f10
+X-Git-Oldrev: b9a9ce7119c67de4337b49554aa4a5552992d669
+X-Git-Newrev: f7a316e0fbd6261e4a655002aadb6d58bb664e5f
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211027.5C23985E9B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/bird: needs autoreconf
+Message-Id: <20210803211028.0BD058B442@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/optee-client: add
+ dependency on headers >= 4.3
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,67 +70,122 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=03c148c8dec4e8c3fa13fcde4a730b3ab97f3f10
+commit: https://git.buildroot.net/buildroot/commit/?id=f7a316e0fbd6261e4a655002aadb6d58bb664e5f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Since the bump to version 2.0.8 in commit
-f5906644b45269b1a5fe109cb64fad837e4fbff2, bird uses a home-grown "GNU Autoconf
-2.69e" instead of standard autoconf 2.69 to generate the configure
-script. This fork seems to generate incorrect code: it uses
+Since upstream commit 5da4da99e0bb3d694e93046207ae4ce3b5545043, in
+3.13.0, OP-TEE client unconditionally uses the MMC_IOC_MULTI_CMD
+ioctl(). But this ioctl() was only introduced in kernel 4.3, so
+earlier kernels did not have this definition.
 
-ac_test_CFLAGS=${CFLAGS+y}
+This was clearly known when upstream started using this ioctl. From
+the upstream commit 5da4da99e0bb3d694e93046207ae4ce3b5545043 commit
+log:
 
-to remember if CFLAGS was saved, while standard autoconf uses
+    As MMC_IOC_MULTI_CMD is available since linux 4.3, we should be safe to
+    use it by default on read / write block operations.
 
-ac_test_CFLAGS=${CFLAGS+set}
-
-The configure.ac code itself, however, uses
-
-if test "$ac_test_CFLAGS" != set ; then
-
-to check if CFLAGS was overridden.
-
-Thus, Buildroot's CFLAGS are not taken into account and this leads to
-the following build failure:
-
-checking for glob.h... no
-configure: error: glob.h not found.
-
-This build failure is raised because -g0 and -g are both passed to gcc:
-
-configure:5207: checking for glob.h
-configure:5230: /data/buildroot-autobuilder/instance-0/output-1/host/bin/mips64el-linux-gcc -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os -g0  -pthread -fno-strict-aliasing -fno-strict-overflow -flto -Wall -Wextra -Wstrict-prototypes -Wno-parentheses -Wno-pointer-sign -Wno-missing-field-initializers -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -pthread -flto=4 -g conftest.c  >&5
-/data/buildroot-autobuilder/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/mips64el-buildroot-linux-uclibc/8.4.0/../../../../mips64el-buildroot-linux-uclibc/bin/ld: /tmp/ccDboxph.ltrans0.ltrans.o:(.debug_info+0x2a): undefined reference to `conftest.c.0943dc99'
-/data/buildroot-autobuilder/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/mips64el-buildroot-linux-uclibc/8.4.0/../../../../mips64el-buildroot-linux-uclibc/bin/ld: /tmp/ccDboxph.ltrans0.ltrans.o:(.debug_info+0x2f): undefined reference to `conftest.c.0943dc99'
-
--g0 is passed by buildroot and -g is passed by bird if
-$ac_test_CFLAGS" != set (since version 2.0.7 and
-https://gitlab.nic.cz/labs/bird/-/commit/cc95b4594ac924b40325a4f1adcae5312179db40)
-
-To fix this, we can simply run autoreconf and generate a correct
-configure script.
+So let's propagate this dependency into Buildroot.
 
 Fixes:
- - http://autobuild.buildroot.org/results/1d2acc9f6b8830adc8b62d6b2e55837abae561a9
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+  http://autobuild.buildroot.net/results/bd270a6793df499d5f52959e3de17f8a92d88305/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/bird/bird.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/optee-benchmark/Config.in | 6 ++++--
+ package/optee-client/Config.in    | 6 ++++--
+ package/optee-examples/Config.in  | 6 ++++--
+ package/optee-test/Config.in      | 5 +++--
+ 4 files changed, 15 insertions(+), 8 deletions(-)
 
-diff --git a/package/bird/bird.mk b/package/bird/bird.mk
-index a8b9b18b50..7d7002d5f2 100644
---- a/package/bird/bird.mk
-+++ b/package/bird/bird.mk
-@@ -11,6 +11,7 @@ BIRD_LICENSE_FILES = README
- BIRD_CPE_ID_VENDOR = nic
- BIRD_SELINUX_MODULES = bird
- BIRD_DEPENDENCIES = host-flex host-bison
-+BIRD_AUTORECONF = YES
+diff --git a/package/optee-benchmark/Config.in b/package/optee-benchmark/Config.in
+index 0257392d3a..2070582fbb 100644
+--- a/package/optee-benchmark/Config.in
++++ b/package/optee-benchmark/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_OPTEE_BENCHMARK
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # optee-client
+ 	depends on !BR2_STATIC_LIBS # optee-client
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_3 # optee-client
+ 	select BR2_PACKAGE_OPTEE_CLIENT
+ 	select BR2_PACKAGE_LIBYAML
+ 	help
+@@ -13,6 +14,7 @@ config BR2_PACKAGE_OPTEE_BENCHMARK
  
- ifeq ($(BR2_PACKAGE_BIRD_CLIENT),y)
- BIRD_CONF_OPTS += --enable-client
+ 	  http://github.com/linaro-swg/optee_benchmark
+ 
+-comment "optee-benchmark needs a toolchain w/ threads, dynamic library"
++comment "optee-benchmark needs a toolchain w/ threads, dynamic library, headers >= 4.3"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
++		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_3
+diff --git a/package/optee-client/Config.in b/package/optee-client/Config.in
+index d2fda18df8..2765f49308 100644
+--- a/package/optee-client/Config.in
++++ b/package/optee-client/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_OPTEE_CLIENT
+ 	bool "optee-client"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_STATIC_LIBS # dlfcn.h
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_3 # MMC_IOC_MULTI_CMD
+ 	help
+ 	  Enable the OP-TEE client package that brings non-secure
+ 	  client application resources for OP-TEE support. OP-TEE
+@@ -26,5 +27,6 @@ config BR2_PACKAGE_OPTEE_CLIENT_TEE_FS_PATH
+ 
+ endif
+ 
+-comment "optee-client needs a toolchain w/ threads, dynamic library"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
++comment "optee-client needs a toolchain w/ threads, dynamic library, headers >= 4.3"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
++		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_3
+diff --git a/package/optee-examples/Config.in b/package/optee-examples/Config.in
+index 859cd6632e..843981a458 100644
+--- a/package/optee-examples/Config.in
++++ b/package/optee-examples/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_OPTEE_EXAMPLES
+ 	depends on BR2_TARGET_OPTEE_OS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # optee-client
+ 	depends on !BR2_STATIC_LIBS # optee-client
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_3 # optee-client
+ 	select BR2_PACKAGE_OPTEE_CLIENT
+ 	select BR2_TARGET_OPTEE_OS_SDK
+ 	help
+@@ -19,6 +20,7 @@ config BR2_PACKAGE_OPTEE_EXAMPLES
+ 
+ 	  https://github.com/linaro-swg/optee_examples
+ 
+-comment "optee-examples needs a toolchain w/ threads, dynamic library"
++comment "optee-examples needs a toolchain w/ threads, dynamic library, headers >= 4.3"
+ 	depends on BR2_TARGET_OPTEE_OS
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
++		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_3
+diff --git a/package/optee-test/Config.in b/package/optee-test/Config.in
+index cfcf74939d..cf36d19fab 100644
+--- a/package/optee-test/Config.in
++++ b/package/optee-test/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_OPTEE_TEST
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # optee-client
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on !BR2_STATIC_LIBS # optee-client
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_3 # optee-client
+ 	select BR2_PACKAGE_OPTEE_CLIENT
+ 	select BR2_TARGET_OPTEE_OS_SDK
+ 	help
+@@ -24,7 +25,7 @@ config BR2_PACKAGE_OPTEE_TEST
+ 
+ 	  http://github.com/OP-TEE/optee_test
+ 
+-comment "optee-test needs a toolchain w/ threads, C++, dynamic library"
++comment "optee-test needs a toolchain w/ threads, C++, dynamic library, headers >= 4.3"
+ 	depends on BR2_TARGET_OPTEE_OS
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || \
+-		BR2_STATIC_LIBS
++		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_3
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
