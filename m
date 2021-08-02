@@ -2,91 +2,94 @@ Return-Path: <SRS0=hSOo=MZ=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
+X-Spam-Status: No, score=-15.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 18D8CC4338F
-	for <buildroot@archiver.kernel.org>; Mon,  2 Aug 2021 16:23:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4BAD7C4338F
+	for <buildroot@archiver.kernel.org>; Mon,  2 Aug 2021 16:29:41 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id AD3D560F9E
-	for <buildroot@archiver.kernel.org>; Mon,  2 Aug 2021 16:23:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org AD3D560F9E
+	by mail.kernel.org (Postfix) with ESMTPS id 0590D60FC1
+	for <buildroot@archiver.kernel.org>; Mon,  2 Aug 2021 16:29:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0590D60FC1
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 762AB60841;
-	Mon,  2 Aug 2021 16:23:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CF1B16082B;
+	Mon,  2 Aug 2021 16:29:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id s0gyhBirBvwI; Mon,  2 Aug 2021 16:23:10 +0000 (UTC)
+	with ESMTP id 6aec_BYmUtgy; Mon,  2 Aug 2021 16:29:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C849D60838;
-	Mon,  2 Aug 2021 16:23:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2FC7B60644;
+	Mon,  2 Aug 2021 16:29:39 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4FB621BF34B
- for <buildroot@lists.busybox.net>; Mon,  2 Aug 2021 16:22:57 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D64A71BF34B
+ for <buildroot@lists.busybox.net>; Mon,  2 Aug 2021 16:29:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3EA8660838
- for <buildroot@lists.busybox.net>; Mon,  2 Aug 2021 16:22:57 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C579360644
+ for <buildroot@lists.busybox.net>; Mon,  2 Aug 2021 16:29:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vZtHZldhcLXv for <buildroot@lists.busybox.net>;
- Mon,  2 Aug 2021 16:22:56 +0000 (UTC)
+ with ESMTP id 8Qy2KdofHeiP for <buildroot@lists.busybox.net>;
+ Mon,  2 Aug 2021 16:29:37 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com
- [IPv6:2a00:1450:4864:20::534])
- by smtp3.osuosl.org (Postfix) with ESMTPS id F13F66063C
- for <buildroot@buildroot.org>; Mon,  2 Aug 2021 16:22:55 +0000 (UTC)
-Received: by mail-ed1-x534.google.com with SMTP id y7so23011873eda.5
- for <buildroot@buildroot.org>; Mon, 02 Aug 2021 09:22:55 -0700 (PDT)
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com
+ [IPv6:2a00:1450:4864:20::52c])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id CDC3760635
+ for <buildroot@buildroot.org>; Mon,  2 Aug 2021 16:29:36 +0000 (UTC)
+Received: by mail-ed1-x52c.google.com with SMTP id y12so25300955edo.6
+ for <buildroot@buildroot.org>; Mon, 02 Aug 2021 09:29:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=o8zBHik4P4nKEZQoMllyLLXJO4AFczR8GmjaaSAQ9B4=;
- b=HXizXi58iWVPz4z6AE/9YAHEZlC6Jwhlz+hZjppbhPf4lhL3m4FromegL7amEmwhVV
- MiZOFqqT2+Vyz14Uch3vmLfCOpNQgwUc8GqnXgO+K19kllhRbUzj67BRPKaN+BWzSO+e
- Lkh9FCdDwKwEZA0S/2iJa/fChIVOruqyElfM79vKoEKZteVxORmdOMs4CDBw3AAm7Oa2
- wFghdHJNbeixp3YThASNadeqliSQ2GUQHMdvO5Bvm0WguKxjIaEBMTqm893zLztGDZta
- 04BFLgOrou2ZmrXBWPp6v85AM9U0KhZY35oxfk3iDtI+nPEpwBRVK5tNptqcdbQUf8Vo
- ZFPg==
+ h=subject:to:references:from:organization:message-id:date:user-agent
+ :mime-version:in-reply-to:content-language:content-transfer-encoding;
+ bh=EA/EItTk/cKatOSXtVUy6kUTmRKQO7iv0gfoiWIORfU=;
+ b=VDCfwkUVfsAwRlT7vRX04APsA0jVRtwHFjRJN8Zo9vhJZ5kRXYh26EUh6Qvbx/eJYv
+ xtdqoKUaZPUzHsULn3dj40NCzNB8HM8/1gZxZ7hvj8sP3i/4FQ02QfJZys867maM+FV/
+ NFV8hezFDNfTorDwK+D94FY8r7hJWGZwxYDsoeYbfkOPVqGeuuJc0fb/URVpcEZknhFc
+ 03XjXmN0oEVYh4KEi3BUd+1tD5WHneNcO/UjwlwHK+ifYvQg9ITjtoLFXprdCkh5SE1f
+ HptCvPV0mEU228oLCnHC+4a/3CXai+kk4rXoWKcqW5BqHO1Aeq0jF5zHpj3NBXHwdgGB
+ cXgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=o8zBHik4P4nKEZQoMllyLLXJO4AFczR8GmjaaSAQ9B4=;
- b=s+bI6HcDmO4auA5GyuvZA0McILbccNYVXPpfPEjzJJMpE1/MCQCmm4C4Kuxn2O/Wum
- TpFMQe8KDjnObQyp+cBqjQlMga2fcav8IjX/pzirXMNyY1LxzTX73md8S3jIhimnKZ7H
- mCGAWcvJ74k5kFdcvO2sNCFco08zQf2UcqUUfbqRhg+mQQtbpOhTTzcs3EwkSLkOe0Ii
- UjZzHECw08IVX0/PGfFjMMopguG9VkUn12kx3NGxQoyJMpR4B80vdgvurBDlX+1XlhPS
- vREwJevPOQrkbcJ5eXkZY+rCelcAeYXqJNOWjGyEs8Am3ExDFn9s+7IjKHN7NVh/47MG
- yE6A==
-X-Gm-Message-State: AOAM5303tP81eBu/7TVXkNHJq06NymBNQWfZoGS0GaawXyN/m92aVU+u
- 1KmSoI8ZJAM3TECf4PEMVjtAilhGloFpKjorvkA=
-X-Google-Smtp-Source: ABdhPJzd3g71nGtsZ46upTd3XI7PyU/oSzC3pN3nLhQVGeoKGL5oT7k3ljdZS1vyYYQfbdmoudBztw==
-X-Received: by 2002:a50:cdcb:: with SMTP id h11mr20644634edj.366.1627921374184; 
- Mon, 02 Aug 2021 09:22:54 -0700 (PDT)
-Received: from localhost.localdomain
+ h=x-gm-message-state:subject:to:references:from:organization
+ :message-id:date:user-agent:mime-version:in-reply-to
+ :content-language:content-transfer-encoding;
+ bh=EA/EItTk/cKatOSXtVUy6kUTmRKQO7iv0gfoiWIORfU=;
+ b=PPdjsP6T3Z0MOfRzNWZPqpQhINVgQhwv7bpzYx5zyn3ahbKh79k55Xvoy/9n0mUU3H
+ EpJlQ6+UMhO8ATZnTWRCbP8tkATfEu7b+E8NHrN1TXIcHfua7so5DJPkN2fYz0zdbJfM
+ 7sIE1jwxw++EK6keIy0+tYDNExn+q/VBP8Sxs7UH5NkkiU6KrTy5EJTb5JqiRHGkjyme
+ /awwsnErmaJpHrG03/QYKUzxr5ccQGPMXoKb65mOSGij6AsG3I24jEuI5IW2XelkC3ja
+ CTjmqUbIa6XoaNpOLyb3dmh27lzJCayH28lHCy2IhZwPEUeyyVA+IW1mdZcTz+H1ug16
+ ji8w==
+X-Gm-Message-State: AOAM530MEiVfRAWNztlbPvxWJ/Dzehl26A0kyfTj3DRHo/NZZ8EUxPco
+ zREtTmqJb8KeAg9cF6lLGUwAA4sq+fRi4gRIRcg=
+X-Google-Smtp-Source: ABdhPJza95kMa6h0OHDWBFP9kMEYiE/UYrGWuvHUrTmq6Jvwkska00HWezdHRmX2PpAlcV3gTSQgLA==
+X-Received: by 2002:a50:f61b:: with SMTP id c27mr19873252edn.96.1627921775063; 
+ Mon, 02 Aug 2021 09:29:35 -0700 (PDT)
+Received: from ?IPv6:2001:1c01:3101:8300:5100:9bb9:68ea:c9f3?
  (2001-1c01-3101-8300-5100-9bb9-68ea-c9f3.cable.dynamic.v6.ziggo.nl.
  [2001:1c01:3101:8300:5100:9bb9:68ea:c9f3])
- by smtp.gmail.com with ESMTPSA id b25sm6485928edv.9.2021.08.02.09.22.53
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 02 Aug 2021 09:22:53 -0700 (PDT)
-From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
-To: buildroot@buildroot.org
-Date: Mon,  2 Aug 2021 18:22:44 +0200
-Message-Id: <20210802162244.620782-2-arnout@mind.be>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210802162244.620782-1-arnout@mind.be>
-References: <20210802162244.620782-1-arnout@mind.be>
+ by smtp.gmail.com with ESMTPSA id g19sm6592374edu.75.2021.08.02.09.29.34
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Mon, 02 Aug 2021 09:29:34 -0700 (PDT)
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+References: <20210801212949.382493-1-fontaine.fabrice@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+Message-ID: <100a9d35-dbfc-51b3-53bc-63785bd9c17c@mind.be>
+Date: Mon, 2 Aug 2021 18:29:33 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Subject: [Buildroot] [RFC 2/2] docs/manual/migrating.txt: add "individual
- packages" section
+In-Reply-To: <20210801212949.382493-1-fontaine.fabrice@gmail.com>
+Content-Language: en-GB
+Subject: Re: [Buildroot] [PATCH 1/1] package/libodb: fix build with gcc 11
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,77 +101,47 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Michael Nosthoff <buildroot@heine.tech>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-Add a section to the migrating documentation to explain what changed in
-individual packages and how it may affect your build.
 
-This section is organised per package, not per Buildroot release,
-because in general it's easier to check package per package if anything
-changed than to check release per release for all your packages.
 
-The idea is that every time a package is changed in a way that is not
-immediately obvious (mainly: affects runtime but not build time), it is
-mentioned in this section. This may include:
+On 01/08/2021 23:29, Fabrice Fontaine wrote:
+> Fix the following build failure with gcc 11:
+> 
+> In file included from details/shared-ptr/base.cxx:5:
+> ../odb/details/shared-ptr/base.hxx:38:49: error: ISO C++17 does not allow dynamic exception specifications
+>    38 | operator new (std::size_t, odb::details::share) throw (std::bad_alloc);
+>       |                                                 ^~~~~
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/cfd5f92f0aa923815edba5fbfcd5b7b312d9d40e
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-- a new version of the package got a new name due to API
-  incompatibilities;
-- the default behaviour or config optoins of the package changed;
-- the Buildroot integration (e.g. configuration file, init script) of
-  the package changed;
-- what is installed by the package is changed (e.g. executable is
-  renamed or removed).
+ Applied to master, thanks.
 
-To start with, add the recent changes of the installation defaults of
-bluez5_utils.
+ Regards,
+ Arnout
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- docs/manual/migrating.txt | 15 +++++++++++++--
- 1 file changed, 13 insertions(+), 2 deletions(-)
-
-diff --git a/docs/manual/migrating.txt b/docs/manual/migrating.txt
-index 9fd7d7e676..36e4aa4724 100644
---- a/docs/manual/migrating.txt
-+++ b/docs/manual/migrating.txt
-@@ -22,8 +22,8 @@ To migrate from an older Buildroot version, take the following steps.
-   the existing +.config+.
- . If anything is enabled in the Legacy menu, check its help text,
-   unselect it, and save the configuration.
--. Review the CHANGES file to see if any of your packages and features
--  are affected by the changes.
-+. Review the individual packages section below to see if any of your
-+  packages are affected by the changes.
- . Build in the new Buildroot environment.
- . Fix build issues in external packages (usually due to updated
-   dependencies).
-@@ -36,6 +36,17 @@ To migrate from an older Buildroot version, take the following steps.
- . Run +make savedefconfig+ and verify that what is selected really is
-   what you intended to enable.
- 
-+[[migrating-packages]]
-+=== Individual packages
-+
-+This section describes changes to individual packages. For all packages
-+that are built in your configuration, check below if changes are needed.
-+
-+==== bluez5_utils
-+
-+Since 2021.08, the tools and all plugins are optional and default off.
-+Make sure to enable the plugins you require.
-+
- [[br2-external-converting]]
- === Migrating to 2016.11
- 
--- 
-2.31.1
-
+> ---
+>  package/libodb/libodb.mk | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/libodb/libodb.mk b/package/libodb/libodb.mk
+> index f36d8957c0..11ca9de866 100644
+> --- a/package/libodb/libodb.mk
+> +++ b/package/libodb/libodb.mk
+> @@ -11,5 +11,6 @@ LIBODB_SITE = https://www.codesynthesis.com/download/odb/$(LIBODB_VERSION_MAJOR)
+>  LIBODB_INSTALL_STAGING = YES
+>  LIBODB_LICENSE = GPL-2.0
+>  LIBODB_LICENSE_FILES = LICENSE
+> +LIBODB_CONF_ENV = CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11"
+>  
+>  $(eval $(autotools-package))
+> 
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
