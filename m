@@ -2,62 +2,91 @@ Return-Path: <SRS0=hSOo=MZ=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-20.2 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_2 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
+	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 26F83C4338F
-	for <buildroot@archiver.kernel.org>; Mon,  2 Aug 2021 20:24:08 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C76B3C4338F
+	for <buildroot@archiver.kernel.org>; Mon,  2 Aug 2021 20:44:16 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D3E2A610A8
-	for <buildroot@archiver.kernel.org>; Mon,  2 Aug 2021 20:24:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D3E2A610A8
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
+	by mail.kernel.org (Postfix) with ESMTPS id 79AC560F35
+	for <buildroot@archiver.kernel.org>; Mon,  2 Aug 2021 20:44:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 79AC560F35
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AEF5E83D84;
-	Mon,  2 Aug 2021 20:24:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DCE0E405F0;
+	Mon,  2 Aug 2021 20:44:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EdhnJZ9UHZkq; Mon,  2 Aug 2021 20:24:06 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ocF-WEdXgQe6; Mon,  2 Aug 2021 20:44:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 001C683D79;
-	Mon,  2 Aug 2021 20:24:05 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E13CD1BF303
- for <buildroot@lists.busybox.net>; Mon,  2 Aug 2021 20:24:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4A226405E4;
+	Mon,  2 Aug 2021 20:44:14 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 5DCA61BF303
+ for <buildroot@lists.busybox.net>; Mon,  2 Aug 2021 20:44:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DC39C40184
- for <buildroot@lists.busybox.net>; Mon,  2 Aug 2021 20:24:04 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 494F2831A9
+ for <buildroot@lists.busybox.net>; Mon,  2 Aug 2021 20:44:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YBZjPmvGZzpf for <buildroot@lists.busybox.net>;
- Mon,  2 Aug 2021 20:24:03 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 57BBC400ED
- for <buildroot@buildroot.org>; Mon,  2 Aug 2021 20:24:03 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id E2FB2E0007;
- Mon,  2 Aug 2021 20:23:59 +0000 (UTC)
-Date: Mon, 2 Aug 2021 22:23:58 +0200
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, "Yann E. MORIN"
- <yann.morin.1998@free.fr>, Buildroot List <buildroot@buildroot.org>
-Message-ID: <20210802222358.2e7d14b0@windsurf>
-In-Reply-To: <20210801215159.2435224-1-thomas.petazzoni@bootlin.com>
-References: <20210801215159.2435224-1-thomas.petazzoni@bootlin.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Y7TBntNoucxJ for <buildroot@lists.busybox.net>;
+ Mon,  2 Aug 2021 20:44:11 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
+ [IPv6:2a00:1450:4864:20::429])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 05AC283139
+ for <buildroot@buildroot.org>; Mon,  2 Aug 2021 20:44:10 +0000 (UTC)
+Received: by mail-wr1-x429.google.com with SMTP id k4so12098743wrc.0
+ for <buildroot@buildroot.org>; Mon, 02 Aug 2021 13:44:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=FBmzKiWULuzSed0hVzJyfqP+uJLDfq7pxXZ+gEFcxWM=;
+ b=oVCFc7TM+AnUqJnYgQhSsdeB/zlMsAAQhJrh3GhCpVxh0vv4J85jU6UC4IrEr4I9yw
+ 8mDWWo0Z5yJf9k7PstjcjI4xG9XjPQT7I9Em7Zw2Wl0tFB4t/Azng45PrKffR42+cyZk
+ uOpsDqR68DQAd/f82j3da3+WODor2Hk5sZ1Vk4HQD9pOmt9aDIGFBlPmbY7lg4d7w1mj
+ oveXlNGVf/M2HX4PuOIef3PumZDsH35RMBNzDf2G0A5S+hbE4pBc8tJe50J+MIMSik5z
+ 2vchgcA34tmM8zUVVeKxnNLp6NnSO31iIaY8sejv5txgEdy8/BXiIhseysrk6zWOJYIa
+ ee7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=FBmzKiWULuzSed0hVzJyfqP+uJLDfq7pxXZ+gEFcxWM=;
+ b=X8jlLE5xhLD/SERnRriaVChjUkkvlZuS4loBZpyW2mPZo+CDf7Ou5hSZLlXREb+DB4
+ NQNKgA9eGOlOzWDHIWsebc1/B2zxoCoCk8cJrXqWpUDrpPR0z3XBMp4OlBZwabFJzWvC
+ vhZl7kA+K5ipoXfqVA5ZzLdIAVVTiZg26aRuOFxTOCM+jejwuyOHRZvoNCi/Pt2QHyNR
+ +g4ZH9Pp2dCq7DTe6vpruut1WXbKWrHWzXVGOIC7olnEYInrj2NL5PXNfpG6bN7FI6Uh
+ 7oqFgRYbyzev6LueGwChG0FI31ExLUXJcJEbynlru/p6aMIseyfmtciCX01zWU02eseI
+ X75Q==
+X-Gm-Message-State: AOAM531MxeLAHCgONmRMXo1NDYvbsm1LeRR88sVJG7I46JpBRvCDKV2i
+ n2q2O72h2ZFxpJNOFN0EPNDMH6fVCe5UdQ==
+X-Google-Smtp-Source: ABdhPJzQ5E+B1ehOjJhZPm9uPH8DcEPrzP+QntxXDd4NHzcuUrRbX1AGquph9N+AEQl9pX/OHrNO0g==
+X-Received: by 2002:a05:6000:1c4:: with SMTP id
+ t4mr18846304wrx.79.1627937048962; 
+ Mon, 02 Aug 2021 13:44:08 -0700 (PDT)
+Received: from kali.home (pop.92-184-116-137.mobile.abo.orange.fr.
+ [92.184.116.137])
+ by smtp.gmail.com with ESMTPSA id n8sm402664wms.11.2021.08.02.13.44.07
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 02 Aug 2021 13:44:08 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Mon,  2 Aug 2021 22:44:00 +0200
+Message-Id: <20210802204400.1597406-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v2] package/libmodsecurity: fix build with
- libmaxminddb
+Subject: [Buildroot] [PATCH 1/1] package/openzwave: set back -fPIC
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,59 +98,50 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Frank Vanbever <frank.vanbever@essensium.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-On Sun,  1 Aug 2021 23:51:58 +0200
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+Set back -fPIC in CFLAGS which was wrongly removed as a side effect of
+commit c5ca521e232eae31276e7a12d17f0cf9d9c0108f
 
-> From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> 
-> Build with libmaxminddb is broken since bump to version 3.0.5 in commit
-> 464d0be380c84ac7c3f1684e49153c3868280d7e because of
-> https://github.com/SpiderLabs/ModSecurity/commit/785958f9b5089b918c7d054cbcc2fe4a3c7b3788
-> 
-> So revert this commit until upstream answer to comment to
-> https://github.com/SpiderLabs/ModSecurity/issues/2131
-> 
-> Reverting this commit requires autoreconfiguring, which itself causes
-> lots of warnings as configure.ac queries git to know the version of
-> various parts of libmodsecurity. However, it turns out that those
-> versions are only used to be displayed in the output of the configure
-> script, which is quite useless. The only one that is referenced
-> elsewhere is LIBINJECTION_VERSION, but it's in fact a different thing:
-> it is defined by others/libinjection/src/libinjection_sqli.c.
-> 
-> The only variable that was AC_SUBST() and therefore visible elsewhere
-> was MSC_GIT_VERSION, but it is not used anywhere in the code base,
-> except in the configure script itself.
-> 
-> Note that one patch is 0001 and the other 0003, because there was
-> already a 0002 patch.
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/4c639fd967faa06f8ae362bacd38f3409c47267c
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  ...-drop-usage-of-git-at-configure-time.patch | 79 +++++++++++++++++++
->  ...Revert-Fix-maxminddb-link-on-FreeBSD.patch | 28 +++++++
->  package/libmodsecurity/libmodsecurity.mk      |  2 +
->  3 files changed, 109 insertions(+)
->  create mode 100644 package/libmodsecurity/0001-configure.ac-drop-usage-of-git-at-configure-time.patch
->  create mode 100644 package/libmodsecurity/0003-Revert-Fix-maxminddb-link-on-FreeBSD.patch
+Fixes:
+ - http://autobuild.buildroot.org/results/161f53574697016ab8bdb91aaaf4a2be5410ebb0
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/openzwave/openzwave.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Thomas
+diff --git a/package/openzwave/openzwave.mk b/package/openzwave/openzwave.mk
+index 9c28c0a13b..0f639635dd 100644
+--- a/package/openzwave/openzwave.mk
++++ b/package/openzwave/openzwave.mk
+@@ -23,7 +23,7 @@ OPENZWAVE_INSTALL_STAGING = YES
+ # the correct directory otherwise openzwave will install configuration files in
+ # $(PREFIX)/etc/openzwave.
+ # Disable doxygen documentation.
+-# Set {DEBUG,RELEASE}_CFLAGS to an empty value to remove -Werror.
++# Set {DEBUG,RELEASE}_CFLAGS to remove -Werror.
+ OPENZWAVE_MAKE_OPTS = \
+ 	CROSS_COMPILE="$(TARGET_CROSS)" \
+ 	PREFIX=/usr \
+@@ -31,8 +31,8 @@ OPENZWAVE_MAKE_OPTS = \
+ 	pkgconfigdir=/usr/lib/pkgconfig \
+ 	sysconfdir=/etc/openzwave \
+ 	DOXYGEN= \
+-	DEBUG_CFLAGS= \
+-	RELEASE_CFLAGS= \
++	DEBUG_CFLAGS="-fPIC" \
++	RELEASE_CFLAGS="-fPIC" \
+ 	USE_BI_TXML=0
+ 
+ ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.30.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
