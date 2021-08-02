@@ -2,97 +2,74 @@ Return-Path: <SRS0=hSOo=MZ=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 58B8EC4338F
-	for <buildroot@archiver.kernel.org>; Mon,  2 Aug 2021 15:41:27 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E2697C4320A
+	for <buildroot@archiver.kernel.org>; Mon,  2 Aug 2021 15:49:03 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B3CE2610FB
-	for <buildroot@archiver.kernel.org>; Mon,  2 Aug 2021 15:41:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B3CE2610FB
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
+	by mail.kernel.org (Postfix) with ESMTPS id 7168660F50
+	for <buildroot@archiver.kernel.org>; Mon,  2 Aug 2021 15:49:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7168660F50
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=green-communications.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7B6D860651;
-	Mon,  2 Aug 2021 15:41:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2D14283AFD;
+	Mon,  2 Aug 2021 15:49:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id U5Mvsc0hKa0X; Mon,  2 Aug 2021 15:41:25 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id vZ18fzTgKz64; Mon,  2 Aug 2021 15:49:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C1DAD607A1;
-	Mon,  2 Aug 2021 15:41:24 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 962841BF4D5
- for <buildroot@lists.busybox.net>; Mon,  2 Aug 2021 15:41:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 36E3883A91;
+	Mon,  2 Aug 2021 15:49:01 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 3C3CC1BF4D5
+ for <buildroot@lists.busybox.net>; Mon,  2 Aug 2021 15:48:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 836C3403C3
- for <buildroot@lists.busybox.net>; Mon,  2 Aug 2021 15:41:23 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 37402400EF
+ for <buildroot@lists.busybox.net>; Mon,  2 Aug 2021 15:48:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yMWNu7oAgCFb for <buildroot@lists.busybox.net>;
- Mon,  2 Aug 2021 15:41:22 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com
- [IPv6:2a00:1450:4864:20::532])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9C298403C1
- for <buildroot@buildroot.org>; Mon,  2 Aug 2021 15:41:22 +0000 (UTC)
-Received: by mail-ed1-x532.google.com with SMTP id f13so25008008edq.13
- for <buildroot@buildroot.org>; Mon, 02 Aug 2021 08:41:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=subject:to:cc:references:from:organization:message-id:date
- :user-agent:mime-version:in-reply-to:content-language
- :content-transfer-encoding;
- bh=gnDADaGs1toBSORL/jhgVqHMgHRXl/NEfvdYfgbZDHA=;
- b=SEHproO1X/qNS0sot9JMkNm13S9FXSmKUVP8KHJc+U7oyjU29KnRZWZA2KHfSy7vSO
- P9tbgt8qmOhuQqm330wgr7K3cYRBU0IM0QLki4OamKPFBy+cRJUGV3CadyRfDfXT+M6j
- Za6rhzN61/XikAVrzsrPcei/AHKXtx5d2BBCNpLhhcG4bTf+qu9JUxMcAr+qYxYhcV8B
- x6Ff0bull55JeyPscFUETO7TAmTZI/NjIiPzpkigf2WxDdvbIa4xtQAbK2vMOy5Cddy2
- Tmmsgtg6gk01bIeDyZlz1HIDo14dHdNm8QnEZyZgA0YwErs8Rlqd3PpMJ2VdXsdjgTRN
- qAYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:subject:to:cc:references:from:organization
- :message-id:date:user-agent:mime-version:in-reply-to
- :content-language:content-transfer-encoding;
- bh=gnDADaGs1toBSORL/jhgVqHMgHRXl/NEfvdYfgbZDHA=;
- b=dqSKigYXl3Y2NlISPZFlGzixsULl1E/Bc81FVPikkK5EpwPfb3bd8FcniMKAFKHaR9
- eFonFQ+Ro2VCcw2EQV++AxyTFJXdKKygCCOBaUJKjwlGjWAZB1qodL/je6goOqPAJg45
- ke425M050UQYDzg0c9fXHPGHGGuMF/6b4Bi34tOUEwK85qBhmlGKydmXUgxE+oqBouci
- 8INavxTIsi2iQicN5X1L9nmpJHN3W85plf3NTv3uXWv43t+mejZfEkh2GaEb++s5iSQ0
- b3j15HkSFZZFkP6RB3bAqCFgzhHZV+0rba2o0OdHKlevu6rBs7bZn7G0/4HiNPsEzMP7
- ql0Q==
-X-Gm-Message-State: AOAM531ODV3kPj8iw3EnH5dNb7fDvvt29KoqaZ6MfAHrbBw/HELEG/nq
- 627eTutOowWsnY6qGlCtrhL2aA==
-X-Google-Smtp-Source: ABdhPJzeljad20iB9Rx92FAQorA4CdHW29hT+smqgL2M9RoDMY6fRfVKJIb+7i5BuKjebfwjZaO5KQ==
-X-Received: by 2002:a50:ed14:: with SMTP id j20mr19606272eds.323.1627918880649; 
- Mon, 02 Aug 2021 08:41:20 -0700 (PDT)
-Received: from ?IPv6:2001:1c01:3101:8300:5100:9bb9:68ea:c9f3?
- (2001-1c01-3101-8300-5100-9bb9-68ea-c9f3.cable.dynamic.v6.ziggo.nl.
- [2001:1c01:3101:8300:5100:9bb9:68ea:c9f3])
- by smtp.gmail.com with ESMTPSA id z8sm4750927ejd.94.2021.08.02.08.41.20
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 02 Aug 2021 08:41:20 -0700 (PDT)
-To: Michael Nosthoff <buildroot@heine.tech>, buildroot@buildroot.org
-References: <20210731203814.68125-1-buildroot@heine.tech>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-Message-ID: <6cc0d6e1-68c2-fae0-3a70-47c7222e42f4@mind.be>
-Date: Mon, 2 Aug 2021 17:41:19 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DMwxcDztNQ1h for <buildroot@lists.busybox.net>;
+ Mon,  2 Aug 2021 15:48:58 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 85B73400A4
+ for <buildroot@buildroot.org>; Mon,  2 Aug 2021 15:48:57 +0000 (UTC)
+Received: from houde.tangerine ([141.98.255.145]) by mrelayeu.kundenserver.de
+ (mreue109 [212.227.15.184]) with ESMTPSA (Nemesis) id
+ 1Mt6x5-1mzfR63M6L-00tSBR; Mon, 02 Aug 2021 17:48:54 +0200
+From: Thomas Claveirole <thomas.claveirole@green-communications.fr>
+To: buildroot@buildroot.org
+Date: Mon,  2 Aug 2021 17:48:12 +0200
+Message-Id: <20210802154812.408921-1-thomas.claveirole@green-communications.fr>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-In-Reply-To: <20210731203814.68125-1-buildroot@heine.tech>
-Content-Language: en-GB
-Subject: Re: [Buildroot] [PATCH 00/10] Slimming BlueZ defaults
+X-Provags-ID: V03:K1:ZgHwQFqM6yrO4e1O6pYhtaH5VOMnKyaSFC1bUsQ9gZdtJX05AVb
+ MQiX9x7Xkt9pw7PHcUnjoAchDcOlsEX2Yo8FfW56rH/TAD6N1jwG0yNLN6cM37korQBixsZ
+ D2A+oXsb/94xLQJ5GZEAyvCaZTMKfOC+w2yOkvXkVAlPscZwyVYOEgecsqgQJNgLsDmkkFQ
+ swTndHG0GnFqemA+dzgvA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:QGIwF4+m13U=:GCYtW21PJ9ROmCrysd7E5R
+ fH/zjsx9MnJk1wtrwdIWWy4waKJIWbrh6vS6HczgTiE7UO1FN1KTYE6+ilzM+tiojwt/I0anw
+ PkOa4riPMPBWUiaDc3yADApCzH6j1uGNgpLY0DIEPtmXoY71W9Hn1Ie6pto1qttMU6w6lr2S7
+ M1hWcfHfk9GfmNdeXo43L1kTMKq6dmfX1LOUNtXG2J8F5u565o4LaM8WaYhMUqXIKJt9+HYbe
+ xIr69iOozIFcRsW/C+vMoHhBjCOGCYwWJO+wnjnuGoD4W4PPulzHFWlAJSKxv4OKQu2tP+vP6
+ GahH7Gy75JHRcoS6l7XRO70VxdhEBgQFgXn8aKLuRdgKoRfScq2nNpTxcwc1pQOjcRPMzLVqL
+ f5dCRfw41vBWH+xcupzQ4zPxPu3aqL+b6m7Fj2ll9jq079RbXILhjluAzs+ZK/kMv/FpTvPRC
+ EWsFgijxGJ/8vY6J2gswuXO8WoWFqg7Aw9E0HjPDV90MqWv1z1IF7Ij+1qo8557z/GVL8CZuD
+ 7Kk8J63bh8N8eV2yFcfH+e5W+TW7bEKzy5hVyYAqxOekNdcV1TsmF6ODlRIasw5nJ7lzjV1XV
+ r0x52FYl3LX/VV6AcH6on7b6Q4ScZ7v97zwDikJMQEOHNXCmPCeEqbgOVb9hBAWDBRKEM8mX0
+ XOm1NiJhhMGlmXHsjjIJds7mmv8YX2IwiCOLxeH8ih1rsPC3e9fLj5U+7z68Y2u4Yv6Xvz2Pr
+ VN0Fr36h5kfQ5VEIE76Y6uDtyOYEvf1laADBXIZLbuaH2pdR+pmLEyO2+W2PcBTkyl3qQlBDW
+ ifN6DBQncY8J5Vg4pyHSnwqPgeT5RAcYYYgL2NoITnSZwQkyhwaYWiNLraRC7u/E5BuXtXTwN
+ PazsjcsvA5S4fWfvtBZMFnCUkRdTVLMv58MgRMrxQ=
+Subject: [Buildroot] [PATCH 1/1] package/vuejs-router: new package
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -104,72 +81,105 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
+Cc: Thomas Claveirole <thomas.claveirole@green-communications.fr>,
+ Johan Oudinet <johan.oudinet@gmail.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
+Vue Router is the official router for Vue.js.
 
+Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
+---
+ DEVELOPERS                             |  1 +
+ package/Config.in                      |  5 +++++
+ package/vuejs-router/Config.in         |  6 ++++++
+ package/vuejs-router/vuejs-router.hash |  3 +++
+ package/vuejs-router/vuejs-router.mk   | 19 +++++++++++++++++++
+ 5 files changed, 34 insertions(+)
+ create mode 100644 package/vuejs-router/Config.in
+ create mode 100644 package/vuejs-router/vuejs-router.hash
+ create mode 100644 package/vuejs-router/vuejs-router.mk
 
-On 31/07/2021 22:38, Michael Nosthoff wrote:
-> As discussed in the follow-up of the previous patches to the BlueZ Package
-> I did the following:
-> 
-> * Make the build of the tools optional
-> * remove the 'default y' line from the new options
-> * skim threw the packages and see which ones would require the now optional plugins
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 1547ff123b..6d336c8661 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2591,6 +2591,7 @@ F:	package/x265/
+ N:	Thomas Claveirole <thomas.claveirole@green-communications.fr>
+ F:	package/fcgiwrap/
+ F:	package/openlayers/
++F:	package/vuejs-router/
+ 
+ N:	Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+ F:	docs/manual/
+diff --git a/package/Config.in b/package/Config.in
+index 046c04e994..9612dc9ff2 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1639,6 +1639,11 @@ endif
+ 	source "package/openlayers/Config.in"
+ 	source "package/popperjs/Config.in"
+ 	source "package/vuejs/Config.in"
++if BR2_PACKAGE_VUEJS
++menu "External Vue.js plugins"
++	source "package/vuejs-router/Config.in"
++endmenu
++endif
+ endmenu
+ 
+ menu "JSON/XML"
+diff --git a/package/vuejs-router/Config.in b/package/vuejs-router/Config.in
+new file mode 100644
+index 0000000000..ac79b3ea61
+--- /dev/null
++++ b/package/vuejs-router/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_VUEJS_ROUTER
++	bool "vuejs-router"
++	help
++	  The official router for Vue.js.
++
++	  http://router.vuejs.org
+diff --git a/package/vuejs-router/vuejs-router.hash b/package/vuejs-router/vuejs-router.hash
+new file mode 100644
+index 0000000000..62b16505ea
+--- /dev/null
++++ b/package/vuejs-router/vuejs-router.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256  d85cb70686cad36a087ad9586f1839c9997f707eb0065445fb1ea3d9218494f6  vue-router-4.0.10.tgz
++sha256  9c0015250f592a09d7787efc07152afcf661fff6bda2554359f6d00987828c02  LICENSE
+diff --git a/package/vuejs-router/vuejs-router.mk b/package/vuejs-router/vuejs-router.mk
+new file mode 100644
+index 0000000000..60e751e1d1
+--- /dev/null
++++ b/package/vuejs-router/vuejs-router.mk
+@@ -0,0 +1,19 @@
++################################################################################
++#
++# vuejs-router
++#
++################################################################################
++
++VUEJS_ROUTER_VERSION = 4.0.10
++VUEJS_ROUTER_SOURCE = vue-router-$(VUEJS_ROUTER_VERSION).tgz
++VUEJS_ROUTER_SITE = https://registry.npmjs.org/vue-router/-
++VUEJS_ROUTER_LICENSE = MIT
++VUEJS_ROUTER_LICENSE_FILES = LICENSE
++
++# Install .prod.js as .js
++define VUEJS_ROUTER_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 644 -D $(@D)/dist/vue-router.global.prod.js \
++		$(TARGET_DIR)/var/www/vue-router.js
++endef
++
++$(eval $(generic-package))
+-- 
+2.32.0
 
- Series applied to master, thanks!
-
-
-> None of the modified packages failed to build with the new defaults. But looking at
-> what these packages do at runtime I suppose they require either the audio or the HID
-> plugins.
-> 
-> If anyone knows one (or more) of those altered packages in detail I would be happy
-> to get feedback on the changes.
-
- I've applied the series to master regardless. If the automatic select bothers
-someone, they can send a patch.
-
-> 
-> What I left out for now is how to communicate these changes to the user on upgrade.
-
- I'm cooking an RFC patch for that. Stay tuned.
-
- Regards,
- Arnout
-
-> 
-> Regards,
-> Michael
-> 
-> Michael Nosthoff (10):
->   package/bluez5_utils: make tools optional
->   package/bluez5_utils: drop default y
->   package/cwiid: select BlueZ HID plugin
->   package/bluez-alsa: select BlueZ audio plugins
->   package/brltty: enable bluez HID plugin
->   package/gstreamer1/gst1-plugins-bad: enable BlueZ Audio
->   package/pulseaudio: enable BlueZ Audio Plugins
->   package/pipewire: enable BlueZ Audio Plugins
->   package/supertuxkart: enable BlueZ HID Plugin
->   package/kodi: enable BlueZ Audio and HID plugins
-> 
->  package/bluez-alsa/Config.in                  |  1 +
->  package/bluez5_utils/Config.in                | 22 +++++++++++++------
->  package/bluez5_utils/bluez5_utils.mk          | 13 +++++++++--
->  package/brltty/Config.in                      |  1 +
->  package/cwiid/Config.in                       |  1 +
->  package/gstreamer1/gst1-plugins-bad/Config.in |  1 +
->  package/kodi/Config.in                        |  2 ++
->  package/pipewire/Config.in                    |  1 +
->  package/pulseaudio/Config.in                  |  1 +
->  package/supertuxkart/Config.in                |  1 +
->  10 files changed, 35 insertions(+), 9 deletions(-)
-> 
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
