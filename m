@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A1910C4338F
-	for <buildroot@archiver.kernel.org>; Mon,  2 Aug 2021 20:00:49 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A2ED1C4338F
+	for <buildroot@archiver.kernel.org>; Mon,  2 Aug 2021 20:11:46 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 29AFD60FC2
-	for <buildroot@archiver.kernel.org>; Mon,  2 Aug 2021 20:00:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 29AFD60FC2
+	by mail.kernel.org (Postfix) with ESMTPS id 3DCF260EFF
+	for <buildroot@archiver.kernel.org>; Mon,  2 Aug 2021 20:11:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3DCF260EFF
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E2D0D607F8;
-	Mon,  2 Aug 2021 20:00:48 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id E8YWVra8A1k8; Mon,  2 Aug 2021 20:00:46 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A7ED96082A;
-	Mon,  2 Aug 2021 20:00:45 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id BED551BF989
- for <buildroot@lists.busybox.net>; Mon,  2 Aug 2021 20:00:44 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id ABCBF405C6
- for <buildroot@lists.busybox.net>; Mon,  2 Aug 2021 20:00:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F3744405F0;
+	Mon,  2 Aug 2021 20:11:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EYHNpPlNtHkP for <buildroot@lists.busybox.net>;
- Mon,  2 Aug 2021 20:00:43 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 16AovzoizeCZ; Mon,  2 Aug 2021 20:11:45 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 571E1405EB;
+	Mon,  2 Aug 2021 20:11:44 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id BD8D01BF303
+ for <buildroot@lists.busybox.net>; Mon,  2 Aug 2021 20:11:42 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id AD6C483D08
+ for <buildroot@lists.busybox.net>; Mon,  2 Aug 2021 20:11:42 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yJbC41R7slBv for <buildroot@lists.busybox.net>;
+ Mon,  2 Aug 2021 20:11:42 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id BC006405C4
- for <buildroot@buildroot.org>; Mon,  2 Aug 2021 20:00:43 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 00E4983CDB
+ for <buildroot@buildroot.org>; Mon,  2 Aug 2021 20:11:41 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 78E648A5A2; Mon,  2 Aug 2021 20:00:38 +0000 (UTC)
+ id A78A88A5C8; Mon,  2 Aug 2021 20:11:36 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Mon, 2 Aug 2021 21:59:27 +0200
+Date: Mon, 2 Aug 2021 22:07:20 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 814ebe83e766f93b748d0481f8fa7a9e4fabb767
-X-Git-Newrev: 321a850bc7347b1b40289ef5a79ca738d51c81c8
+X-Git-Oldrev: 321a850bc7347b1b40289ef5a79ca738d51c81c8
+X-Git-Newrev: b9a9ce7119c67de4337b49554aa4a5552992d669
 X-Patchwork-Hint: ignore
-Message-Id: <20210802200038.78E648A5A2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/optee-client: add dependency on
- !BR2_STATIC_LIBS
+Message-Id: <20210802201136.A78A88A5C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/optee-test: fix Config.in comment
+ on dependencies
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,106 +70,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=321a850bc7347b1b40289ef5a79ca738d51c81c8
+commit: https://git.buildroot.net/buildroot/commit/?id=b9a9ce7119c67de4337b49554aa4a5552992d669
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since OP-TEE client 3.13.0, <dlfcn.h> is unconditionally used, so we
-need to add a !BR2_STATIC_LIBS dependency to optee-client and its
-reverse dependencies.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/169cf630866cb84d711d68877bb83c897e1d2814/
+The comment did not take into account the dynamic library dependency,
+fix that.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/optee-benchmark/Config.in | 5 +++--
- package/optee-client/Config.in    | 5 +++--
- package/optee-examples/Config.in  | 5 +++--
- package/optee-test/Config.in      | 4 +++-
- 4 files changed, 12 insertions(+), 7 deletions(-)
+ package/optee-test/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/optee-benchmark/Config.in b/package/optee-benchmark/Config.in
-index 5fd365a9e3..0257392d3a 100644
---- a/package/optee-benchmark/Config.in
-+++ b/package/optee-benchmark/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_OPTEE_BENCHMARK
- 	bool "optee-benchmark"
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # optee-client
-+	depends on !BR2_STATIC_LIBS # optee-client
- 	select BR2_PACKAGE_OPTEE_CLIENT
- 	select BR2_PACKAGE_LIBYAML
- 	help
-@@ -12,6 +13,6 @@ config BR2_PACKAGE_OPTEE_BENCHMARK
- 
- 	  http://github.com/linaro-swg/optee_benchmark
- 
--comment "optee-benchmark needs a toolchain w/ threads"
-+comment "optee-benchmark needs a toolchain w/ threads, dynamic library"
- 	depends on BR2_USE_MMU
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-diff --git a/package/optee-client/Config.in b/package/optee-client/Config.in
-index 1ef0a1401e..d2fda18df8 100644
---- a/package/optee-client/Config.in
-+++ b/package/optee-client/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_OPTEE_CLIENT
- 	bool "optee-client"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_STATIC_LIBS # dlfcn.h
- 	help
- 	  Enable the OP-TEE client package that brings non-secure
- 	  client application resources for OP-TEE support. OP-TEE
-@@ -25,5 +26,5 @@ config BR2_PACKAGE_OPTEE_CLIENT_TEE_FS_PATH
- 
- endif
- 
--comment "optee-client needs a toolchain w/ threads"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+comment "optee-client needs a toolchain w/ threads, dynamic library"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-diff --git a/package/optee-examples/Config.in b/package/optee-examples/Config.in
-index c0fecfdf50..859cd6632e 100644
---- a/package/optee-examples/Config.in
-+++ b/package/optee-examples/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_OPTEE_EXAMPLES
- 	bool "optee-examples"
- 	depends on BR2_TARGET_OPTEE_OS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # optee-client
-+	depends on !BR2_STATIC_LIBS # optee-client
- 	select BR2_PACKAGE_OPTEE_CLIENT
- 	select BR2_TARGET_OPTEE_OS_SDK
- 	help
-@@ -18,6 +19,6 @@ config BR2_PACKAGE_OPTEE_EXAMPLES
- 
- 	  https://github.com/linaro-swg/optee_examples
- 
--comment "optee-examples needs a toolchain w/ threads"
-+comment "optee-examples needs a toolchain w/ threads, dynamic library"
- 	depends on BR2_TARGET_OPTEE_OS
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
 diff --git a/package/optee-test/Config.in b/package/optee-test/Config.in
-index 357a6b0c57..5d23885f45 100644
+index 5d23885f45..cfcf74939d 100644
 --- a/package/optee-test/Config.in
 +++ b/package/optee-test/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_OPTEE_TEST
- 	depends on BR2_TARGET_OPTEE_OS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # optee-client
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_STATIC_LIBS # optee-client
- 	select BR2_PACKAGE_OPTEE_CLIENT
- 	select BR2_TARGET_OPTEE_OS_SDK
- 	help
-@@ -25,4 +26,5 @@ config BR2_PACKAGE_OPTEE_TEST
+@@ -24,7 +24,7 @@ config BR2_PACKAGE_OPTEE_TEST
  
- comment "optee-test needs a toolchain w/ threads and C++"
+ 	  http://github.com/OP-TEE/optee_test
+ 
+-comment "optee-test needs a toolchain w/ threads and C++"
++comment "optee-test needs a toolchain w/ threads, C++, dynamic library"
  	depends on BR2_TARGET_OPTEE_OS
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || \
-+		BR2_STATIC_LIBS
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || \
+ 		BR2_STATIC_LIBS
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
