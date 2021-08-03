@@ -2,123 +2,61 @@ Return-Path: <SRS0=jXvl=M2=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A652C4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 07:10:55 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EFBA9C4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 07:28:45 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D28E260F70
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 07:10:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D28E260F70
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.ibm.com
+	by mail.kernel.org (Postfix) with ESMTPS id 3082560F70
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 07:28:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3082560F70
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A300582C3E;
-	Tue,  3 Aug 2021 07:10:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DAF97606C4;
+	Tue,  3 Aug 2021 07:28:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-X-Amavis-Alert: BAD HEADER SECTION, Duplicate header field: "In-Reply-To"
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id F6y7BVDkDyh4; Tue,  3 Aug 2021 07:10:53 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id C3hQvz_UdQ67; Tue,  3 Aug 2021 07:28:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CB8EE82BC3;
-	Tue,  3 Aug 2021 07:10:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EF7BA606E0;
+	Tue,  3 Aug 2021 07:28:42 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4BE481BF35B
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 07:10:51 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id CAC161BF35B
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 07:28:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4842C402A0
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 07:10:51 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B9021403AF
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 07:28:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-X-Amavis-Alert: BAD HEADER SECTION, Duplicate header field: "Cc"
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=ibm.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lemf__Jbaj8P for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 07:10:49 +0000 (UTC)
+ with ESMTP id r_MsbeaSNJk0 for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 07:28:40 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com
- [148.163.158.5])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1930540291
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 07:10:48 +0000 (UTC)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
- by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id
- 17373IaG031544
- for <buildroot@buildroot.org>; Tue, 3 Aug 2021 03:10:47 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com;
- h=from : to : cc : cc :
- subject : in-reply-to : in-reply-to : references : date : message-id :
- content-type : mime-version; s=pp1;
- bh=bn5aNo5a0tuBWljJRkJm2B4VUEz575DvFR1ctQuqWNg=;
- b=P0OeZVo8AUVOjQ4j+kLnx62PP2Lo3OnGW6C24AcIm1vOkEkSJLS9K6WWy3aHEoamMYzR
- e63HAcA873RYaMYy8bEKjyH69Rifcyii1oW47ck1a8JkIVEjZbXutNd+ilAartVY0PmA
- esSiUnai8pp4CLWLw+yy8KePQm9UDh5Ea/N0BJt6tD6d/iSy6AG23K8OK/sHfuT+A2Zc
- fhJ0Fami24yN66K/rWI+lsJeM7L6RUg6O4CdDTBEWFpcbi0dWg6vU3qk1VM5M1LWVBxs
- pIaNTZCqOexB9qdRQ4lS6zstwGBy7LmV+mKsDixo+aeSqAaU6cSanyHt0pakXUsqcMNc KQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
- by mx0b-001b2d01.pphosted.com with ESMTP id 3a6keanahv-1
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
- for <buildroot@buildroot.org>; Tue, 03 Aug 2021 03:10:47 -0400
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
- by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 17373Nr9032144
- for <buildroot@buildroot.org>; Tue, 3 Aug 2021 03:10:47 -0400
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com
- [149.81.74.108])
- by mx0b-001b2d01.pphosted.com with ESMTP id 3a6keanahd-1
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
- Tue, 03 Aug 2021 03:10:47 -0400
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
- by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 17379PUJ032137;
- Tue, 3 Aug 2021 07:10:45 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com
- (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
- by ppma05fra.de.ibm.com with ESMTP id 3a4x58dw01-1
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
- Tue, 03 Aug 2021 07:10:45 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com
- [9.149.105.59])
- by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id
- 1737AgL352756750
- (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
- Tue, 3 Aug 2021 07:10:42 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
- by IMSVA (Postfix) with ESMTP id A4B15A408A;
- Tue,  3 Aug 2021 07:10:42 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
- by IMSVA (Postfix) with ESMTP id 89C36A406E;
- Tue,  3 Aug 2021 07:10:42 +0000 (GMT)
-Received: from localhost (unknown [9.171.48.220])
- by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
- Tue,  3 Aug 2021 07:10:42 +0000 (GMT)
-From: Alexander Egorenkov <egorenar@linux.ibm.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-In-Reply-To: <20210801204650.75712-1-fontaine.fabrice@gmail.com>
-In-Reply-To: 
-References: <20210801204650.75712-1-fontaine.fabrice@gmail.com>
-Date: Tue, 03 Aug 2021 09:10:42 +0200
-Message-ID: <8735rr3swd.fsf@oc8242746057.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: BNtmnTe4D4OJF_lsGwzpKP0Q7Zv3egGO
-X-Proofpoint-GUID: 2GUnhU16Wb2pTwJfdXOGBoy3o4qc5Ctf
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5438C4031C
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 07:28:40 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 3CEDAFF807;
+ Tue,  3 Aug 2021 07:28:36 +0000 (UTC)
+Date: Tue, 3 Aug 2021 09:28:35 +0200
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Message-ID: <20210803092835.0e4d2663@windsurf>
+In-Reply-To: <0c80668e-d1c0-3516-4a9e-54e6eb32cfd8@benettiengineering.com>
+References: <20210802060946.C27006062D@smtp3.osuosl.org>
+ <20210802234647.6f3df99d@windsurf>
+ <0c80668e-d1c0-3516-4a9e-54e6eb32cfd8@benettiengineering.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391, 18.0.790
- definitions=2021-08-03_02:2021-08-02,
- 2021-08-03 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- malwarescore=0 clxscore=1015
- lowpriorityscore=0 phishscore=0 impostorscore=0 suspectscore=0 bulkscore=0
- spamscore=0 mlxscore=0 mlxlogscore=999 priorityscore=1501 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2107140000
- definitions=main-2108030047
-Subject: Re: [Buildroot] [PATCH v2,
- 1/2] package/s390-tools: fix build with curl
+Subject: Re: [Buildroot] Some analysis of the major build failure reasons
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -130,128 +68,139 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: , Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
+ James Hilliard <james.hilliard1@gmail.com>,
+ Giulio Benetti <giulio.benetti@micronovasrl.com>,
+ Adam Duskett <aduskett@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+Hello Giulio,
 
-> Build with curl is broken since bump to version 2.17.0 in commit
-> eab9110afbef9c39569c4cc988aed15c48f7ce44 and
-> https://github.com/ibm-s390-linux/s390-tools/commit/56fecf1832c3ebc4626ddf5c598762833c362d5e
->
-> Fixes:
->  - http://autobuild.buildroot.org/results/cfb46d7547c22f0a23aca2286dc5a1d2c20aadfc
->
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
-> Changes v1 -> v2 (after review of Yann E. Morin):
->  - Split patch
->  - Add CURL_CONFIG and XML2_CONFI
->
->  ...lient-Makefile-add-CURL-XML2-_CONFIG.patch | 71 +++++++++++++++++++
->  package/s390-tools/s390-tools.mk              |  1 +
->  2 files changed, 72 insertions(+)
->  create mode 100644 package/s390-tools/0003-libkmipclient-Makefile-add-CURL-XML2-_CONFIG.patch
->
-> diff --git a/package/s390-tools/0003-libkmipclient-Makefile-add-CURL-XML2-_CONFIG.patch b/package/s390-tools/0003-libkmipclient-Makefile-add-CURL-XML2-_CONFIG.patch
-> new file mode 100644
-> index 0000000000..2f6ea5a11c
-> --- /dev/null
-> +++ b/package/s390-tools/0003-libkmipclient-Makefile-add-CURL-XML2-_CONFIG.patch
-> @@ -0,0 +1,71 @@
-> +From 49cd01dc97740b299119f32c822ccfd989ea7ec9 Mon Sep 17 00:00:00 2001
-> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +Date: Sun, 1 Aug 2021 21:50:21 +0200
-> +Subject: [PATCH] libkmipclient/Makefile: add {CURL,XML2}_CONFIG
-> +
-> +Add CURL_CONFIG and XML2_CONFIG to allow the user to configure the
-> +binaries used in check-dep-libkmipclient
-> +
-> +This will allow the user to avoid the following build failures raised
-> +since version 2.17.0 and
-> +https://github.com/ibm-s390-linux/s390-tools/commit/56fecf1832c3ebc4626ddf5c598762833c362d5e:
-> +
-> +/bin/sh: 1: curl-config: not found
-> +Error: libcurl is not built with the OpenSSL backend
-> +make[2]: *** [Makefile:54: check-dep-libekmfweb] Error 1
-> +
-> +Fixes:
-> + - http://autobuild.buildroot.org/results/cfb46d7547c22f0a23aca2286dc5a1d2c20aadfc
-> +
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +[Upstream status: https://github.com/ibm-s390-linux/s390-tools/pull/121]
-> +---
-> + libkmipclient/Makefile | 13 ++++++++-----
-> + 1 file changed, 8 insertions(+), 5 deletions(-)
-> +
-> +diff --git a/libkmipclient/Makefile b/libkmipclient/Makefile
-> +index 36efecb..addd096 100644
-> +--- a/libkmipclient/Makefile
-> ++++ b/libkmipclient/Makefile
-> +@@ -50,6 +50,9 @@ detect-openssl-version.dep:
-> + 	echo "}" >> $(TMPFILE)
-> + 	mv $(TMPFILE) $@
-> + 
-> ++CURL_CONFIG ?= curl-config
-> ++XML2_CONFIG ?= xml2-config
-> ++
-> + check-dep-libkmipclient: detect-openssl-version.dep
-> + 	$(call check_dep, \
-> + 		"libkmipclient", \
-> +@@ -67,14 +70,14 @@ check-dep-libkmipclient: detect-openssl-version.dep
-> + 		"libxml/tree.h", \
-> + 		"libxml2-devel", \
-> + 		"HAVE_LIBXML2=0", \
-> +-		`xml2-config --cflags` `xml2-config --libs`)
-> ++		`$(XML2_CONFIG) --cflags` `$(XML2_CONFIG) --libs`)
-> + 	$(call check_dep, \
-> + 		"libkmipclient", \
-> + 		"curl/curl.h", \
-> + 		"libcurl-devel", \
-> + 		"HAVE_LIBCURL=0" \
-> +-		`curl-config --cflags` `curl-config --libs`)
-> +-	curl-config --ssl-backends | grep OpenSSL >/dev/null 2>&1 || { echo "Error: libcurl is not built with the OpenSSL backend"; exit 1; }
-> ++		`$(CURL_CONFIG) --cflags` `$(CURL_CONFIG) --libs`)
-> ++	$(CURL_CONFIG) --ssl-backends | grep OpenSSL >/dev/null 2>&1 || { echo "Error: libcurl is not built with the OpenSSL backend"; exit 1; }
-> + 	touch check-dep-libkmipclient
-> + 
-> + skip-libkmipclient-openssl:
-> +@@ -104,8 +107,8 @@ tls.o: check-dep-libkmipclient tls.c kmip.h utils.h $(rootdir)include/kmipclient
-> + names.o: check-dep-libkmipclient names.c names.h utils.h $(rootdir)include/kmipclient/kmipclient.h
-> + utils.o: check-dep-libkmipclient utils.c names.h utils.h $(rootdir)include/kmipclient/kmipclient.h
-> + 
-> +-libkmipclient.so.$(VERSION): ALL_CFLAGS += -fPIC `xml2-config --cflags` `curl-config --cflags`
-> +-libkmipclient.so.$(VERSION): LDLIBS = -ljson-c -lcrypto -lssl `xml2-config --libs` `curl-config --libs`
-> ++libkmipclient.so.$(VERSION): ALL_CFLAGS += -fPIC `$(XML2_CONFIG) --cflags` `$(CURL_CONFIG) --cflags`
-> ++libkmipclient.so.$(VERSION): LDLIBS = -ljson-c -lcrypto -lssl `$(XML2_CONFIG) --libs` `$(CURL_CONFIG) --libs`
-> + libkmipclient.so.$(VERSION): ALL_LDFLAGS += -shared -Wl,--version-script=libkmipclient.map \
-> + 	-Wl,-z,defs,-Bsymbolic -Wl,-soname,libkmipclient.so.$(VERM)
-> + libkmipclient.so.$(VERSION): kmip.o request.o response.o attribute.o key.o ttlv.o json.o \
-> +-- 
-> +2.30.2
-> +
-> diff --git a/package/s390-tools/s390-tools.mk b/package/s390-tools/s390-tools.mk
-> index 7f7df0542e..71a7f2223c 100644
-> --- a/package/s390-tools/s390-tools.mk
-> +++ b/package/s390-tools/s390-tools.mk
-> @@ -20,6 +20,7 @@ S390_TOOLS_MAKE_OPTS = \
->  ifeq ($(BR2_PACKAGE_LIBCURL),y)
->  S390_TOOLS_DEPENDENCIES += libcurl
->  S390_TOOLS_MAKE_OPTS += \
-> +	CURL_CONFIG=$(STAGING_DIR)/usr/bin/curl-config \
->  	HAVE_CURL=1 \
->  	HAVE_LIBCURL=1
->  else
-> -- 
-> 2.30.2
+On Tue, 3 Aug 2021 00:56:24 +0200
+Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
 
-Thanks for fixing it.
+> > I have investigated this. It fails only on sh4, due an internal
+> > compiler error. It only occurs at -Os, at -O0 and -O2 it builds fine. I
+> > have reported gcc bug
+> > https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101737 for this. Since I
+> > tested only with gcc 9.3.0 for now, I've started a build with gcc 11.x,
+> > to see how it goes.
+> > 
+> > Based on the result, I'll send a patch adding a new
+> > BR2_TOOLCHAIN_GCC_HAS_BUG_101737 and disable -Os on pixman on SuperH
+> > based on this.  
+> 
+> I can do that since I've treated a lot of gcc bugs. Is it ok?
 
-Regards
-Alex
+Oh yes, sure! In the mean time, I have confirmed that gcc 11.1.0 is
+also affected by the same issue, and I have updated the gcc bug with
+that information. So to me, it seems like all gcc versions are affected.
+
+> >>                         unknown | 31  
+> > 
+> > I did not look into these for now.  
+> 
+> I've taken a look into the last ones of today(the 31 ones)
+> @James: lot of your builds simply stuck after Make has finished(not on 
+> linking but exactly on 'make: Leaving directory').
+> 
+> I've noticed it time ago some time, and now it became very more 
+> frequent. This is 9/10 your autobuilder giving that problem.
+> And this happens at different Build Duration:
+> http://autobuild.buildroot.net/?reason=unknown
+> Also I see you use /tmp/ folder but I don't see anyone else doing that. 
+> Isn't it maybe that your distro automatically cleans /tmp folder up? Or 
+> it is mapped somewhere where disk gets full randomly?
+> I would move it to a specific user folder(i.e. buildroot user) and that 
+> should fix the problem. If you're trying to do such thing to save disk 
+> space I tell you that I've already done it time ago with this patch that 
+> now needs to be rebased:
+> https://patchwork.ozlabs.org/project/buildroot/patch/20180919114541.17670-1-giulio.benetti@micronovasrl.com/
+> But in my case NOK was clear. I'm pretty sure /tmp/ is the problem.
+
+No, I don't think there is any problem with the use of /tmp. The
+"unknown" build failures are typically build failures with top-level
+parallel build enabled.
+
+If you take
+http://autobuild.buildroot.net/results/4ee/4eead81391d76edcdd2823e439f9b8d165b9b7ef/
+which is the latest "unknown" build issue at the time of writing this
+e-mail, it has BR2_PER_PACKAGE_DIRECTORIES=y. We enable
+BR2_PER_PACKAGE_DIRECTORIES for a subset of the builds, and then for
+the builds that have BR2_PER_PACKAGE_DIRECTORIES enabled, for a subset
+of them, we use top-level parallel build.
+
+However, when there is top-level parallel build enabled, the output is
+quite messy (due to multiple packages being built in parallel). And due
+to that, the build-end.log may not actually contain the actual build
+failure as the failure may be visible much earlier in the build output.
+
+If you check these "unknown" build failures, they all have
+BR2_PER_PACKAGE_DIRECTORIES enabled, which really hints at a top-level
+parallel build issue.
+
+Perhaps what I should do is cook a patch that keeps the full build log
+file for builds that use top-level parallel build, so that we have a
+chance to debug these. The problem is going to be the disk-space
+consumption on my server, but I guess I could do something that
+compresses the build log after X days or something like that.
+
+> On @Thomas autobuilder I see failure for:
+> - optee-client(already found NOK):
+> http://autobuild.buildroot.net/results/5e9/5e91bc53c3fbcd2ed232db79dc5c947394d66a1e/
+> - failure on fetching as mentioned above
+> 
+> >>                    zeromq-4.3.4 | 30  
+> > 
+> > Giulio: this is happening only on or1k, with a binutils assert. Do you
+> > think this is solved by your or1k fixes?  
+> 
+> It is. Those build failures are due to the use of binutils-2.33.1 that 
+> have not patches for or1k. While all the other binutils versions have
+> local or upstreamed or1k patches.
+> 
+> Of course this can still happen with actual external Bootlin or1k 
+> toolchain that use exactly binutils-2.33.1 not patched. So the problem 
+> will be solved once you recompile and bump them with patches provided. I 
+> still see that we're on 2020.08-1:
+> https://git.buildroot.net/buildroot/tree/toolchain/toolchain-external/toolchain-external-bootlin/toolchain-external-bootlin.mk#n586
+
+Yes, I have worked on rebuilding the toolchains with 2021.05 + a few
+patches, but I have a runtime issue with Microblaze + glibc, which
+doesn't boot (well the kernel boots, but not user-space). Microblaze +
+uclibc or musl works fine.
+
+I guess I should probably not delay further the release of 2021.05
+toolchains, and leave just the Microblaze/glibc toolchains to 2020.08.
+
+> NOTE:
+> I also add libnss-3.68 new bug on Aarch64_BE to be fixed. I'm already 
+> working on it on spare time.
+
+Great!
+
+> PS: I've found my autobuilders stopped, I think I've forgotten to 
+> restart the daemon after updating the Distro. Now they're up and running.
+
+OK, thanks. That being said, additional autobuilders at the moment are
+probably not that important: compared to the CPU power made available
+by James through its super high-performance 63 machines, additional
+"regular" machines added to the autobuilder pool are not going to help
+much.
+
+However, they are going to definitely help when James will no longer
+have access to those machines.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
