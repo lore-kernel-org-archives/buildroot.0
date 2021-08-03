@@ -2,77 +2,92 @@ Return-Path: <SRS0=jXvl=M2=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-18.6 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
+	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 800DBC432BE
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 12:48:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 88BA4C4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 13:01:43 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 16C9F60F8F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 12:48:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 16C9F60F8F
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=benettiengineering.com
+	by mail.kernel.org (Postfix) with ESMTPS id 4AB3860F58
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 13:01:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4AB3860F58
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C1B05600C7;
-	Tue,  3 Aug 2021 12:48:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1758B60794;
+	Tue,  3 Aug 2021 13:01:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Mpc0oklr_fdG; Tue,  3 Aug 2021 12:48:41 +0000 (UTC)
+	with ESMTP id lqg8iBewHoZu; Tue,  3 Aug 2021 13:01:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D01F6605DE;
-	Tue,  3 Aug 2021 12:48:40 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 118C01BF29F
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 12:48:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 58E3B6077B;
+	Tue,  3 Aug 2021 13:01:41 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 3D2DD1BF29F
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 13:01:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F2076605DE
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 12:48:38 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 293D940341
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 13:01:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1FxyaR6sX0om for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 12:48:37 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtpcmd01-sp1.aruba.it (smtpcmd01-sp1.aruba.it [62.149.158.218])
- by smtp3.osuosl.org (Postfix) with ESMTP id B81AB600C7
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 12:48:36 +0000 (UTC)
-Received: from [192.168.126.129] ([146.241.149.252])
- by Aruba Outgoing Smtp  with ESMTPSA
- id AtqUmw3zurXl6AtqUmp9if; Tue, 03 Aug 2021 14:48:35 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1627994915; bh=yhsUKLMwTojnF1eP9WaD1Xz5/YMjxwGqrfOZ8h4KlW8=;
- h=Subject:From:To:Date:MIME-Version:Content-Type;
- b=dHXq6p5Rqf+dl7f85DiEx+21GeD5o+Mea03GZHpeph0OFctmV/dSz9ypPJ58Ctncm
- nQr2Vr4gEunQzB1X0yOT1cICk8280CYI9+NyWy3wqCPxrhNaK2d1448IAK8198eAtL
- xLMQfF2zTWn1h2ajwMxRueZub8gGv8ikwAkjOk7kgfcNjY82m2mBkhZ4flDrJ4kQsB
- lSL7G4x5gYH8+dkGbUgCLOCXBmd4Hu+TeWxufq72FDm6bG8GquZjPTwKlGFn+gFLKI
- b42eljQ3Z+r1U7Mm6zIsUYsL6zratWLhyeJz5gwzmuQjQ3yzOVtG918G+S3/uNpwoz
- oL1lvVGddMJ7g==
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20210802060946.C27006062D@smtp3.osuosl.org>
- <20210802234647.6f3df99d@windsurf>
- <0c80668e-d1c0-3516-4a9e-54e6eb32cfd8@benettiengineering.com>
- <20210803092835.0e4d2663@windsurf>
- <b12d517a-762e-8a2f-c418-f7ffc865b4e7@benettiengineering.com>
-Message-ID: <4629534e-1c5b-2e18-45fe-ef532e38ce5a@benettiengineering.com>
-Date: Tue, 3 Aug 2021 14:48:34 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yLwqe2JtiTgo for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 13:01:38 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
+ [IPv6:2a00:1450:4864:20::332])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E3B67400F2
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 13:01:37 +0000 (UTC)
+Received: by mail-wm1-x332.google.com with SMTP id n11so12442078wmd.2
+ for <buildroot@buildroot.org>; Tue, 03 Aug 2021 06:01:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=btKTgXVGy/yI4Sc29BZbHfUnj34F34v5QikU3Rqjy4o=;
+ b=mSc6yp8ylxZqAggV7g/tk29xYI4wLPCY4oZvosupfMjJRSBMC/4K2j22+MLmIOInXP
+ qe9QGF8/wJJ3JyfMumcwZ5RV/xiRczRc+CaTDvtc98U0/eEc5sA40CB5XBQX6hO6DbQA
+ iCwO1WTYdYdy30l2yXySy6SWcxcGfl/pqLjXspMUeHh5UyePO3xy93s1EiF+PwqxVPTS
+ f9TNHefE2hOA/j2/g89uHVpkKMb8yOsVk+WChoAB/Fa7BjlyKYGA3UWgldB0U8+AEHjf
+ bgKulENeks5PGtIEuvakt7EbFV5pu3z1LLd4qYwmM+JW3YS52sfT4r8eaRBBCG81vHxh
+ lkWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=btKTgXVGy/yI4Sc29BZbHfUnj34F34v5QikU3Rqjy4o=;
+ b=t69tq7S2I/PbG96Z1WB0hrwrO0oQBzo4XaH9pN6OpKS9pSKpbnlAU+4Ba+l+slP6e7
+ mx1/nlUHxehuvMcIvc+1vBPevuqE5CPoqJo09YNm8lO0gh4PjsnMAOKs72Y2wKQ/Jo2Z
+ CS0yNeSHHpcQMLKHr17CDlkRW45U/ZCNSUJ+IwNbX9vl8Ku1ltNN2VueVsUi9PHGpT3p
+ 1D1bMERr70MckojS4ls5daOelA5Mz1T7NbFxtXbvd8ZEzUmjptfkzWGnFpeCavHI7QFN
+ nf56k9Dxk6IA8KloX3BU/jG0Xz714sxyQbWW3jCJXJJBio1wBfaZayX18O5qCzeTDplE
+ dmzg==
+X-Gm-Message-State: AOAM5325kIxIUHu0zSnMuB0Hyyg73lB6BfK8OgmVyMcL+NpUWhF96KUY
+ orvkIDLhnAckA/wQtAX8q/5DuCUG9ZZx1Q==
+X-Google-Smtp-Source: ABdhPJxL1Br3sqsJFwMe36VmfVZrtBRVWHk1mj6RhozdHjRvEN8+SPDC12AOm9+NW13FrP2GGjPQAA==
+X-Received: by 2002:a05:600c:3795:: with SMTP id
+ o21mr21847975wmr.90.1627995695868; 
+ Tue, 03 Aug 2021 06:01:35 -0700 (PDT)
+Received: from kali.home (pop.92-184-97-255.mobile.abo.orange.fr.
+ [92.184.97.255])
+ by smtp.gmail.com with ESMTPSA id l9sm14340653wro.92.2021.08.03.06.01.18
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 03 Aug 2021 06:01:19 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Tue,  3 Aug 2021 15:01:10 +0200
+Message-Id: <20210803130110.3399543-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-In-Reply-To: <b12d517a-762e-8a2f-c418-f7ffc865b4e7@benettiengineering.com>
-Content-Language: en-US
-X-CMAE-Envelope: MS4wfJ1XqF08emXQxnNvpbQrKffL/Z1AS28Cv/Z7LXaME8+Xcuqk+F/ikQayDLv/eWLWVD6dXlD8Nw9m+7/kh1clafK5jjk9RqIGM1JpVH68UhA5T3A3MRt5
- +OxuiNgZoKTb+ZHXrbRZ94awqFNgNC2bw3qVKKlf37px5OeRvJxi4TkTZ7oFjGW8kmGIC6uFw7QeWhKXLsp/fN5H69ynN6nSalCjjNf0dt7ED7dXsLSzCDMR
- dH3FDn9I5KDCmrw5sCBCUQmX0mMgrlWZHgFnzQHq2pBe4S/wFEBMj8orkWHHYzc23hks/w3V+qxxsLI3vt1Zr5o+wv4Wv6uovM6FN417bqZajHJ/O9H29z/G
- c2tWUz18Y1RYuk9BT6ep0t+sQNG75JzNQPHkUMl4BQ6nF2JFvcU=
-Subject: Re: [Buildroot] Some analysis of the major build failure reasons
+Subject: [Buildroot] [PATCH 1/1] package/s390-tools: fix build with latest
+ binutils
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,173 +99,65 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
- James Hilliard <james.hilliard1@gmail.com>,
- Giulio Benetti <giulio.benetti@micronovasrl.com>,
- Adam Duskett <aduskett@gmail.com>, buildroot@buildroot.org
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Alexander Egorenkov <egorenar@linux.ibm.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-Hello Thomas,
+Fix the following build failure with latest binutils:
 
-On 8/3/21 2:24 PM, Giulio Benetti wrote:
-> On 8/3/21 9:28 AM, Thomas Petazzoni wrote:
->> Hello Giulio,
->>
->> On Tue, 3 Aug 2021 00:56:24 +0200
->> Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
->>
->>>> I have investigated this. It fails only on sh4, due an internal
->>>> compiler error. It only occurs at -Os, at -O0 and -O2 it builds fine. I
->>>> have reported gcc bug
->>>> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101737 for this. Since I
->>>> tested only with gcc 9.3.0 for now, I've started a build with gcc 11.x,
->>>> to see how it goes.
->>>>
->>>> Based on the result, I'll send a patch adding a new
->>>> BR2_TOOLCHAIN_GCC_HAS_BUG_101737 and disable -Os on pixman on SuperH
->>>> based on this.
->>>
->>> I can do that since I've treated a lot of gcc bugs. Is it ok?
->>
->> Oh yes, sure! In the mean time, I have confirmed that gcc 11.1.0 is
->> also affected by the same issue, and I have updated the gcc bug with
->> that information. So to me, it seems like all gcc versions are affected.
-> 
-> Great, I've sent this patchset for it:
-> https://patchwork.ozlabs.org/project/buildroot/list/?series=256392
-> 
->>>>>                           unknown | 31
->>>>
->>>> I did not look into these for now.
->>>
->>> I've taken a look into the last ones of today(the 31 ones)
->>> @James: lot of your builds simply stuck after Make has finished(not on
->>> linking but exactly on 'make: Leaving directory').
->>>
->>> I've noticed it time ago some time, and now it became very more
->>> frequent. This is 9/10 your autobuilder giving that problem.
->>> And this happens at different Build Duration:
->>> http://autobuild.buildroot.net/?reason=unknown
->>> Also I see you use /tmp/ folder but I don't see anyone else doing that.
->>> Isn't it maybe that your distro automatically cleans /tmp folder up? Or
->>> it is mapped somewhere where disk gets full randomly?
->>> I would move it to a specific user folder(i.e. buildroot user) and that
->>> should fix the problem. If you're trying to do such thing to save disk
->>> space I tell you that I've already done it time ago with this patch that
->>> now needs to be rebased:
->>> https://patchwork.ozlabs.org/project/buildroot/patch/20180919114541.17670-1-giulio.benetti@micronovasrl.com/
->>> But in my case NOK was clear. I'm pretty sure /tmp/ is the problem.
->>
->> No, I don't think there is any problem with the use of /tmp. The
->> "unknown" build failures are typically build failures with top-level
->> parallel build enabled.
->>
->> If you take
->> http://autobuild.buildroot.net/results/4ee/4eead81391d76edcdd2823e439f9b8d165b9b7ef/
->> which is the latest "unknown" build issue at the time of writing this
->> e-mail, it has BR2_PER_PACKAGE_DIRECTORIES=y. We enable
->> BR2_PER_PACKAGE_DIRECTORIES for a subset of the builds, and then for
->> the builds that have BR2_PER_PACKAGE_DIRECTORIES enabled, for a subset
->> of them, we use top-level parallel build.
->>
->> However, when there is top-level parallel build enabled, the output is
->> quite messy (due to multiple packages being built in parallel). And due
->> to that, the build-end.log may not actually contain the actual build
->> failure as the failure may be visible much earlier in the build output.
->>
->> If you check these "unknown" build failures, they all have
->> BR2_PER_PACKAGE_DIRECTORIES enabled, which really hints at a top-level
->> parallel build issue.
-> 
-> +1
-> 
->> Perhaps what I should do is cook a patch that keeps the full build log
->> file for builds that use top-level parallel build, so that we have a
->> chance to debug these. The problem is going to be the disk-space
->> consumption on my server, but I guess I could do something that
->> compresses the build log after X days or something like that.
->>
->>> On @Thomas autobuilder I see failure for:
->>> - optee-client(already found NOK):
->>> http://autobuild.buildroot.net/results/5e9/5e91bc53c3fbcd2ed232db79dc5c947394d66a1e/
->>> - failure on fetching as mentioned above
->>>
->>>>>                      zeromq-4.3.4 | 30
->>>>
->>>> Giulio: this is happening only on or1k, with a binutils assert. Do you
->>>> think this is solved by your or1k fixes?
->>>
->>> It is. Those build failures are due to the use of binutils-2.33.1 that
->>> have not patches for or1k. While all the other binutils versions have
->>> local or upstreamed or1k patches.
->>>
->>> Of course this can still happen with actual external Bootlin or1k
->>> toolchain that use exactly binutils-2.33.1 not patched. So the problem
->>> will be solved once you recompile and bump them with patches provided. I
->>> still see that we're on 2020.08-1:
->>> https://git.buildroot.net/buildroot/tree/toolchain/toolchain-external/toolchain-external-bootlin/toolchain-external-bootlin.mk#n586
->>
->> Yes, I have worked on rebuilding the toolchains with 2021.05 + a few
->> patches, but I have a runtime issue with Microblaze + glibc, which
->> doesn't boot (well the kernel boots, but not user-space). Microblaze +
->> uclibc or musl works fine.
->>
->> I guess I should probably not delay further the release of 2021.05
->> toolchains, and leave just the Microblaze/glibc toolchains to 2020.08.
-> 
-> As you wish, now we have OpenRisc Buildroot toolchain working, so maybe
-> we don't need to hurry up. It stayed there for long times with bugs.
-> It' only annoying seeing those autobuilders NOK, but we know the reason
-> why they are there.
-> 
->>> NOTE:
->>> I also add libnss-3.68 new bug on Aarch64_BE to be fixed. I'm already
->>> working on it on spare time.
->>
->> Great! >> PS: I've found my autobuilders stopped, I think I've forgotten to
->>> restart the daemon after updating the Distro. Now they're up and running.
->>
->> OK, thanks. That being said, additional autobuilders at the moment are
->> probably not that important: compared to the CPU power made available
->> by James through its super high-performance 63 machines, additional
->> "regular" machines added to the autobuilder pool are not going to help
->> much.
-> 
-> Wow, now I understand why James has so many build!
-> 
->> However, they are going to definitely help when James will no longer
->> have access to those machines.
-> 
-> +1
-> 
-> Fabrice preceded me for gpsd as you've noticed:
-> https://patchwork.ozlabs.org/project/buildroot/patch/20210803120714.2797624-1-fontaine.fabrice@gmail.com/
-> 
-> 
-> And I'm working on libfuse3 right now.
+/tmp/instance-16/output-1/host/bin/s390x-buildroot-linux-gnu-ld: Error: unable to disambiguate: -no-pie (did you mean --no-pie ?)
+make[3]: *** [Makefile:113: data.o] Error 1
 
-This ^^^ "error: symver is only supported on ELF platforms" seems gcc 
-related. On meson check if symver is supported everything is based on 
-the macro __has_attribute(symver) that must work as expected, while in 
-the code we have something like the following that fails with that error:
-```
-__attribute__ ((symver ("fuse_new@FUSE_3.0")))
-void func1(void)
-{
+Fixes:
+ - http://autobuild.buildroot.org/results/90100519d696c49441669117276fb8084796544b
 
-}
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...kefile-no-pie-is-not-a-valid-ld-flag.patch | 29 +++++++++++++++++++
+ 1 file changed, 29 insertions(+)
+ create mode 100644 package/s390-tools/0004-zipl-boot-Makefile-no-pie-is-not-a-valid-ld-flag.patch
 
-```
-
-So I try to patch microblaze gcc.
-
-Best regards
+diff --git a/package/s390-tools/0004-zipl-boot-Makefile-no-pie-is-not-a-valid-ld-flag.patch b/package/s390-tools/0004-zipl-boot-Makefile-no-pie-is-not-a-valid-ld-flag.patch
+new file mode 100644
+index 0000000000..fcdf06088a
+--- /dev/null
++++ b/package/s390-tools/0004-zipl-boot-Makefile-no-pie-is-not-a-valid-ld-flag.patch
+@@ -0,0 +1,29 @@
++From 9fd3c733c645be13a2e39a3bae3983f88530b48d Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Lukas=20M=C3=A4rdian?= <lukas.maerdian@canonical.com>
++Date: Thu, 7 Jan 2021 12:46:22 +0100
++Subject: [PATCH] zipl/boot/Makefile: -no-pie is not a valid ld flag
++
++The "-no-pie" option never has been a valid flag of ld. It breaks the build with newer binutils.
++See:
++https://sourceware.org/bugzilla/show_bug.cgi?id=27050
++https://bugs.launchpad.net/ubuntu/+source/s390-tools/+bug/1907789
++
++[Retrieved from: https://github.com/ibm-s390-linux/s390-tools/pull/106]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ zipl/boot/Makefile | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/zipl/boot/Makefile b/zipl/boot/Makefile
++index a2e5f190..b81df778 100644
++--- a/zipl/boot/Makefile
+++++ b/zipl/boot/Makefile
++@@ -109,7 +109,7 @@ stage3.bin:	stage3.exec
++ 		$< $@
++ 
++ data.o: $(FILES)
++-	$(LD) $(NO_PIE_LDFLAGS) -r -b binary -o data.o $(FILES)
+++	$(LD) -r -b binary -o data.o $(FILES)
++ 
++ data.h: data.o
++ 	rm -f data.h
 -- 
-Giulio Benetti
-Benetti Engineering sas
+2.30.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
