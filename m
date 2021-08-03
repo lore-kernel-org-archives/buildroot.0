@@ -2,57 +2,57 @@ Return-Path: <SRS0=jXvl=M2=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+X-Spam-Status: No, score=-17.2 required=3.0 tests=BAYES_00,DATE_IN_PAST_03_06,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F22EC4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:40:09 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D624C4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:40:21 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D5064601FD
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:40:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D5064601FD
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
+	by mail.kernel.org (Postfix) with ESMTPS id 06716601FD
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 22:40:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 06716601FD
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B303383C19;
-	Tue,  3 Aug 2021 22:40:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D997F4069D;
+	Tue,  3 Aug 2021 22:40:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AQUFpeE4TLLa; Tue,  3 Aug 2021 22:40:08 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ma_nWLAixbHI; Tue,  3 Aug 2021 22:40:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1D12583BC6;
-	Tue,  3 Aug 2021 22:40:07 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id DE44F1BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:11:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3F5D04069A;
+	Tue,  3 Aug 2021 22:40:19 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 217461BF9AA
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:11:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3BE3160A6A
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:25 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9310B40249
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PtNzXsjQX1Si for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:10:24 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WH36fsd4_-RY for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:10:35 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8211260A36
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:24 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id DFDB34049A
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:35 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id CC89E83FBA; Tue,  3 Aug 2021 21:10:16 +0000 (UTC)
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ id 35C9385E9B; Tue,  3 Aug 2021 21:10:28 +0000 (UTC)
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sun, 25 Jul 2021 14:59:08 +0200
+Date: Tue, 3 Aug 2021 17:49:28 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 5d46f5b29dcc10d707b386bcc60a870b239107e2
-X-Git-Newrev: 1a19e267296380185648a4850eb502b401d4990d
+X-Git-Oldrev: ff55c323af59bcaee3af949fd126bbec1889d1b2
+X-Git-Newrev: 0e8c810431dfedb59205afe3e597680588b4f575
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211016.CC89E83FBA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/webkitgtk: security
- bump to version 2.32.3
+Message-Id: <20210803211028.35C9385E9B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/msgpack: bump to
+ version 3.3.0
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,58 +70,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1a19e267296380185648a4850eb502b401d4990d
+commit: https://git.buildroot.net/buildroot/commit/?id=0e8c810431dfedb59205afe3e597680588b4f575
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This is a minor release which provides fixes for CVE-2021-21775,
-CVE-2021-21779, CVE-2021-30663, CVE-2021-30665, CVE-2021-30689,
-CVE-2021-30720, CVE-2021-30734, CVE-2021-30744, CVE-2021-30749,
-CVE-2021-30795, CVE-2021-30797, and CVE-2021-30799.
+https://github.com/msgpack/msgpack-c/releases/tag/cpp-3.3.0
 
-Full release notes can be found at:
-
-  https://webkitgtk.org/2021/07/23/webkitgtk2.32.3-released.html
-
-An accompanying security advisory has been published at:
-
-  https://webkitgtk.org/security/WSA-2021-0004.html
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/webkitgtk/webkitgtk.hash | 8 ++++----
- package/webkitgtk/webkitgtk.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/msgpack/msgpack.hash | 2 +-
+ package/msgpack/msgpack.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
-index dd950bbabe..1208dfce6c 100644
---- a/package/webkitgtk/webkitgtk.hash
-+++ b/package/webkitgtk/webkitgtk.hash
-@@ -1,7 +1,7 @@
--# From https://webkitgtk.org/releases/webkitgtk-2.32.2.tar.xz.sums
--md5  6dbf813fefd79c551be47b1312f27cec  webkitgtk-2.32.2.tar.xz
--sha1  958777627972b18501e5520d0aba9e274a2b151f  webkitgtk-2.32.2.tar.xz
--sha256  1790f86975bdef957ba9a12fc09202de8f55c885ee38467afc50d2bdb7a6c5cd  webkitgtk-2.32.2.tar.xz
-+# From https://webkitgtk.org/releases/webkitgtk-2.32.3.tar.xz.sums
-+md5  f31b802de421865ea9f1391ec8190519  webkitgtk-2.32.3.tar.xz
-+sha1  9c9b2cb2638ea40706765768dd5cb3c95ab46dcb  webkitgtk-2.32.3.tar.xz
-+sha256  c1f496f5ac654efe4cef62fbd4f2fbeeef265a07c5e7419e5d2900bfeea52cbc  webkitgtk-2.32.3.tar.xz
- 
- # Hashes for license files:
- sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index c3fbedf654..8102b1e74d 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/msgpack/msgpack.hash b/package/msgpack/msgpack.hash
+index 3829a70222..5d432ba0ec 100644
+--- a/package/msgpack/msgpack.hash
++++ b/package/msgpack/msgpack.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+-sha256  464f46744a6be778626d11452c4db3c2d09461080c6db42e358e21af19d542f6  msgpack-3.2.1.tar.gz
++sha256  6e114d12a5ddb8cb11f669f83f32246e484a8addd0ce93f274996f1941c1f07b  msgpack-3.3.0.tar.gz
+ sha256  664550b43996452a5a2c7471bb0ff77185a58c69ccafa60f983dc4c162e1ee22  COPYING
+ sha256  c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  LICENSE_1_0.txt
+diff --git a/package/msgpack/msgpack.mk b/package/msgpack/msgpack.mk
+index 81670deddc..996b5a2f7c 100644
+--- a/package/msgpack/msgpack.mk
++++ b/package/msgpack/msgpack.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--WEBKITGTK_VERSION = 2.32.2
-+WEBKITGTK_VERSION = 2.32.3
- WEBKITGTK_SITE = https://www.webkitgtk.org/releases
- WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
- WEBKITGTK_INSTALL_STAGING = YES
+-MSGPACK_VERSION = 3.2.1
+-MSGPACK_SITE = $(call github,msgpack,msgpack-c,cpp-$(MSGPACK_VERSION))
++MSGPACK_VERSION = 3.3.0
++MSGPACK_SITE = https://github.com/msgpack/msgpack-c/releases/download/cpp-$(MSGPACK_VERSION)
+ MSGPACK_LICENSE = BSL-1.0
+ MSGPACK_LICENSE_FILES = COPYING LICENSE_1_0.txt
+ MSGPACK_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
