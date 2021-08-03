@@ -2,57 +2,57 @@ Return-Path: <SRS0=jXvl=M2=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C43EC4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 14:39:00 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0EDEBC4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 14:39:13 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2436560F92
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 14:39:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2436560F92
+	by mail.kernel.org (Postfix) with ESMTPS id D2BE760F58
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 14:39:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D2BE760F58
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E96CD400F2;
-	Tue,  3 Aug 2021 14:38:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AF9AC40537;
+	Tue,  3 Aug 2021 14:39:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dh6ReKTlOWTy; Tue,  3 Aug 2021 14:38:59 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id azQEULrGLFNt; Tue,  3 Aug 2021 14:39:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F103C4018B;
-	Tue,  3 Aug 2021 14:38:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 279A040546;
+	Tue,  3 Aug 2021 14:39:11 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 6F2901BF35A
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 14:35:48 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 81D781BF35A
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 14:35:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D1D1B830E2
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 14:35:46 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D0265830E6
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 14:35:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QgRM1oOz_gUu for <buildroot@lists.busybox.net>;
+ with ESMTP id 4T3AiLeBqq9D for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 14:35:42 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id AF918830E6
+ by smtp1.osuosl.org (Postfix) with ESMTP id A010083192
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 14:35:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id A105B8A6B5; Tue,  3 Aug 2021 14:35:35 +0000 (UTC)
+ id 900638A6B4; Tue,  3 Aug 2021 14:35:35 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 3 Aug 2021 16:28:01 +0200
+Date: Tue, 3 Aug 2021 16:28:00 +0200
 X-Git-Refname: refs/heads/2021.05.x
-X-Git-Oldrev: b1df9ce436b97c1211156a5a81d2d69238b1d3c8
-X-Git-Newrev: 9408dc26951bbf9946fbf7208669e38013339ecb
+X-Git-Oldrev: d9992a914df2231def3063267404f9c3444e8fff
+X-Git-Newrev: b1df9ce436b97c1211156a5a81d2d69238b1d3c8
 X-Patchwork-Hint: ignore
-Message-Id: <20210803143535.A105B8A6B5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.05.x] package/suricata:
- security bump to version 6.0.3
+Message-Id: <20210803143535.900638A6B4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.05.x] package/libhtp: bump to
+ version 0.5.38
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,47 +70,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9408dc26951bbf9946fbf7208669e38013339ecb
+commit: https://git.buildroot.net/buildroot/commit/?id=b1df9ce436b97c1211156a5a81d2d69238b1d3c8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
 
-Various security, performance, accuracy and stability issues have been
-fixed, including a critical evasion assigned CVE-2021-35063.
-
-https://forum.suricata.io/t/suricata-6-0-3-and-5-0-7-released/1489
+https://github.com/OISF/libhtp/releases/tag/0.5.38
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 4c429c3f8c322381991a58fcc37c01da9eb5e8a6)
+(cherry picked from commit 48c9adbe70846388bb20aa7a481cfb53fea9d0d6)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/suricata/suricata.hash | 2 +-
- package/suricata/suricata.mk   | 2 +-
+ package/libhtp/libhtp.hash | 2 +-
+ package/libhtp/libhtp.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/suricata/suricata.hash b/package/suricata/suricata.hash
-index 8395177811..74cc7435cb 100644
---- a/package/suricata/suricata.hash
-+++ b/package/suricata/suricata.hash
-@@ -1,5 +1,5 @@
+diff --git a/package/libhtp/libhtp.hash b/package/libhtp/libhtp.hash
+index 805cd4f1f3..91c20697df 100644
+--- a/package/libhtp/libhtp.hash
++++ b/package/libhtp/libhtp.hash
+@@ -1,3 +1,3 @@
  # Locally computed:
--sha256  5e4647a07cb31b5d6d0049972a45375c137de908a964a44e2d6d231fa3ad4b52  suricata-6.0.2.tar.gz
-+sha256  daf134bb2d7c980035e9ae60f7aaf313323a809340009f26e48110ccde81f602  suricata-6.0.3.tar.gz
- 
- # Hash for license files:
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/suricata/suricata.mk b/package/suricata/suricata.mk
-index ab8f27c313..ebeaa68d34 100644
---- a/package/suricata/suricata.mk
-+++ b/package/suricata/suricata.mk
+-sha256  0f8296ce9db815bbedc1c8a0b738dd25146fdaf910995a8c5f8e147799902b7e  libhtp-0.5.37.tar.gz
++sha256  8365f338fdf5ef0f3b37f3cb4e2670d218c843eccc42aa87119819c0f018ef39  libhtp-0.5.38.tar.gz
+ sha256  87c93904e5434c81622ea690c2b90097b9f162aaa92a96542649a157dbf98d15  LICENSE
+diff --git a/package/libhtp/libhtp.mk b/package/libhtp/libhtp.mk
+index 7520346031..982ffe81cb 100644
+--- a/package/libhtp/libhtp.mk
++++ b/package/libhtp/libhtp.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SURICATA_VERSION = 6.0.2
-+SURICATA_VERSION = 6.0.3
- SURICATA_SITE = https://www.openinfosecfoundation.org/download
- SURICATA_LICENSE = GPL-2.0
- SURICATA_LICENSE_FILES = COPYING LICENSE
+-LIBHTP_VERSION = 0.5.37
++LIBHTP_VERSION = 0.5.38
+ LIBHTP_SITE = $(call github,OISF,libhtp,$(LIBHTP_VERSION))
+ LIBHTP_LICENSE = BSD-3-Clause
+ LIBHTP_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
