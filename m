@@ -2,57 +2,58 @@ Return-Path: <SRS0=jXvl=M2=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_05,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0EDEBC4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 14:39:13 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 81AA8C432BE
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 14:39:25 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D2BE760F58
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 14:39:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D2BE760F58
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
+	by mail.kernel.org (Postfix) with ESMTPS id 2695761040
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 14:39:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2695761040
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=grinn-global.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AF9AC40537;
-	Tue,  3 Aug 2021 14:39:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F3116607E4;
+	Tue,  3 Aug 2021 14:39:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id azQEULrGLFNt; Tue,  3 Aug 2021 14:39:12 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Paei_a8Jzr0j; Tue,  3 Aug 2021 14:39:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 279A040546;
-	Tue,  3 Aug 2021 14:39:11 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 81D781BF35A
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 14:35:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6616E607AF;
+	Tue,  3 Aug 2021 14:39:23 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 18DE91BF35A
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 14:37:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D0265830E6
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 14:35:47 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 073544035A
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 14:37:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4T3AiLeBqq9D for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 14:35:42 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id A010083192
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 14:35:42 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 900638A6B4; Tue,  3 Aug 2021 14:35:35 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id q7ZglQ6UTAHd for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 14:37:03 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from mail.grinn-global.com (mail.grinn-global.com [77.55.128.204])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id BB3F940352
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 14:37:03 +0000 (UTC)
+X-Virus-Scanned: by amavisd-new using ClamAV (7)
+Received: from bartekk-pc.lan (host-81-161-202-20.oxylion.net.pl
+ [81.161.202.20])
+ by server220076.nazwa.pl (Postfix) with ESMTP id 344071C57AE;
+ Tue,  3 Aug 2021 16:37:01 +0200 (CEST)
+From: Bartosz Bilas <b.bilas@grinn-global.com>
 To: buildroot@buildroot.org
-Date: Tue, 3 Aug 2021 16:28:00 +0200
-X-Git-Refname: refs/heads/2021.05.x
-X-Git-Oldrev: d9992a914df2231def3063267404f9c3444e8fff
-X-Git-Newrev: b1df9ce436b97c1211156a5a81d2d69238b1d3c8
-X-Patchwork-Hint: ignore
-Message-Id: <20210803143535.900638A6B4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.05.x] package/libhtp: bump to
- version 0.5.38
+Date: Tue,  3 Aug 2021 16:36:54 +0200
+Message-Id: <20210803143654.550783-1-b.bilas@grinn-global.com>
+X-Mailer: git-send-email 2.32.0
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH] package/cegui: disable OpenGLES renderer
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,48 +65,42 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-MIME-Version: 1.0
+Cc: Bartosz Bilas <b.bilas@grinn-global.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b1df9ce436b97c1211156a5a81d2d69238b1d3c8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
+Support of OpenGLES generates tons of autobuilders failures
+so let's disable it till upstream finds a solution for that.
 
-https://github.com/OISF/libhtp/releases/tag/0.5.38
+Fixes:
+ http://autobuild.buildroot.net/results/41d/41d10c09472fbb8481a72c4f8bed789bb15bb3c2//
+ http://autobuild.buildroot.net/results/9a8/9a8122b4d3d0aa9d71cdf8d21359411b130741f8//
+ http://autobuild.buildroot.net/results/7e5/7e5dd79b48abde09bf4633b196579da5561f9fa1//
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 48c9adbe70846388bb20aa7a481cfb53fea9d0d6)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+and many more...
+
+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
 ---
- package/libhtp/libhtp.hash | 2 +-
- package/libhtp/libhtp.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/cegui/cegui.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/libhtp/libhtp.hash b/package/libhtp/libhtp.hash
-index 805cd4f1f3..91c20697df 100644
---- a/package/libhtp/libhtp.hash
-+++ b/package/libhtp/libhtp.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  0f8296ce9db815bbedc1c8a0b738dd25146fdaf910995a8c5f8e147799902b7e  libhtp-0.5.37.tar.gz
-+sha256  8365f338fdf5ef0f3b37f3cb4e2670d218c843eccc42aa87119819c0f018ef39  libhtp-0.5.38.tar.gz
- sha256  87c93904e5434c81622ea690c2b90097b9f162aaa92a96542649a157dbf98d15  LICENSE
-diff --git a/package/libhtp/libhtp.mk b/package/libhtp/libhtp.mk
-index 7520346031..982ffe81cb 100644
---- a/package/libhtp/libhtp.mk
-+++ b/package/libhtp/libhtp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBHTP_VERSION = 0.5.37
-+LIBHTP_VERSION = 0.5.38
- LIBHTP_SITE = $(call github,OISF,libhtp,$(LIBHTP_VERSION))
- LIBHTP_LICENSE = BSD-3-Clause
- LIBHTP_LICENSE_FILES = LICENSE
+diff --git a/package/cegui/cegui.mk b/package/cegui/cegui.mk
+index 127d3b0fad..2e56322374 100644
+--- a/package/cegui/cegui.mk
++++ b/package/cegui/cegui.mk
+@@ -13,6 +13,7 @@ CEGUI_CONF_OPTS = \
+ 	-DCEGUI_HAS_MINIZIP_RESOURCE_PROVIDER=OFF \
+ 	-DCEGUI_BUILD_RENDERER_IRRLICHT=OFF \
+ 	-DCEGUI_BUILD_RENDERER_OGRE=OFF \
++	-DCEGUI_BUILD_RENDERER_OPENGLES=OFF \
+ 	-DCEGUI_BUILD_XMLPARSER_XERCES=OFF \
+ 	-DCEGUI_USE_FRIBIDI=OFF \
+ 	-DCEGUI_SAMPLES_ENABLED=OFF \
+-- 
+2.32.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
