@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D35B5C432BE
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 20:48:11 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E8456C4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 20:48:23 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9E46260EC0
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 20:48:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9E46260EC0
+	by mail.kernel.org (Postfix) with ESMTPS id AF9F4600CD
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 20:48:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org AF9F4600CD
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5CFA2608F4;
-	Tue,  3 Aug 2021 20:48:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7D70C404BB;
+	Tue,  3 Aug 2021 20:48:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ajPKQ0MR0-je; Tue,  3 Aug 2021 20:48:10 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 0CBq5bfGzCKw; Tue,  3 Aug 2021 20:48:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A3456608D5;
-	Tue,  3 Aug 2021 20:48:09 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8A4E91BF83C
+	by smtp4.osuosl.org (Postfix) with ESMTP id DB1964049A;
+	Tue,  3 Aug 2021 20:48:21 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 9AE621BF9AA
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 20:48:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 869DF83187
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8B34A40435
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 20:48:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PFVPG2Alo4Tg for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Nk1KTFsQmlNq for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 20:48:07 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id C90BA83112
+ by smtp4.osuosl.org (Postfix) with ESMTP id E68AE404A6
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 20:48:07 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 239CC8B3CD; Tue,  3 Aug 2021 20:48:00 +0000 (UTC)
+ id 439A98B3CD; Tue,  3 Aug 2021 20:48:00 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 3 Aug 2021 22:39:56 +0200
+Date: Tue, 3 Aug 2021 22:42:21 +0200
 X-Git-Refname: refs/heads/2021.05.x
-X-Git-Oldrev: f79cb5116c537856a3987379b1555584f31e0c1e
-X-Git-Newrev: 4b4ac2a50970f71d327c6f04ac61221149f6b94e
+X-Git-Oldrev: 57c22491e3f3a0897e7c6b92a37dae1c4fddc7a7
+X-Git-Newrev: f49f99b647b47db89eb1a68c0211e8d222ffbe0a
 X-Patchwork-Hint: ignore
-Message-Id: <20210803204800.239CC8B3CD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.05.x] package/feh: add
- FEH_CPE_ID_VENDOR
+Message-Id: <20210803204800.439A98B3CD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.05.x] package/libuci: ignore
+ CVE-2019-15513
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,33 +70,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4b4ac2a50970f71d327c6f04ac61221149f6b94e
+commit: https://git.buildroot.net/buildroot/commit/?id=f49f99b647b47db89eb1a68c0211e8d222ffbe0a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
 
-cpe:2.3:a:feh_project:feh is a valid CPE identifier for this package:
-
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Afeh_project%3Afeh
+CVE-2019-15513 was fixed upstream in 2015 with commit
+19e29ffc15dbd958e8e6a648ee0982c68353516f, which is older than the commit
+we currently use in LIBUCI_VERSION.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[yann.morin.1998@free.fr: reword comment and commit log]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 74adec4f3ab01336f24e8d1430c7a648bc8f5505)
+(cherry picked from commit 46273a8eb92171b3c70a6b2750549329a0d4ccba)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/feh/feh.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/libuci/libuci.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/feh/feh.mk b/package/feh/feh.mk
-index df59e67d52..f27509330d 100644
---- a/package/feh/feh.mk
-+++ b/package/feh/feh.mk
-@@ -10,6 +10,7 @@ FEH_SITE = http://feh.finalrewind.org
- FEH_DEPENDENCIES = imlib2 libpng xlib_libXt
- FEH_LICENSE = MIT
- FEH_LICENSE_FILES = COPYING
-+FEH_CPE_ID_VENDOR = feh_project
+diff --git a/package/libuci/libuci.mk b/package/libuci/libuci.mk
+index a8922a96e1..0d0b78036e 100644
+--- a/package/libuci/libuci.mk
++++ b/package/libuci/libuci.mk
+@@ -12,6 +12,9 @@ LIBUCI_CPE_ID_VENDOR = openwrt
+ LIBUCI_INSTALL_STAGING = YES
+ LIBUCI_DEPENDENCIES = libubox
  
- ifeq ($(BR2_PACKAGE_LIBCURL),y)
- FEH_DEPENDENCIES += libcurl
++# Fixed in commit 19e29ffc15dbd958e8e6a648ee0982c68353516f, older than LIBUCI_VERSION
++LIBUCI_IGNORE_CVES += CVE-2019-15513
++
+ ifeq ($(BR2_PACKAGE_LUA_5_1),y)
+ LIBUCI_DEPENDENCIES += lua
+ LIBUCI_CONF_OPTS += -DBUILD_LUA=ON \
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
