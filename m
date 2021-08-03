@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A7C6DC4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 14:37:20 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 542EEC4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 14:37:33 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 7687260F58
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 14:37:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7687260F58
+	by mail.kernel.org (Postfix) with ESMTPS id 14941600D4
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 14:37:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 14941600D4
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4516040361;
-	Tue,  3 Aug 2021 14:37:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E5C80607E4;
+	Tue,  3 Aug 2021 14:37:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JjOqntUZe7F4; Tue,  3 Aug 2021 14:37:19 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 6uiQ2edP61FB; Tue,  3 Aug 2021 14:37:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2A34740352;
-	Tue,  3 Aug 2021 14:37:18 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 597961BF866
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 14:35:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5771D607C5;
+	Tue,  3 Aug 2021 14:37:31 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 0CCDB1BF35A
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 14:35:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 282BE404A9
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 14:35:40 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0917960690
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 14:35:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rif0tJ0ls1SL for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 14:35:38 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZCNPHNYFZlof for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 14:35:42 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6561F40525
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 14:35:35 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 631A460643
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 14:35:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 54C20868A9; Tue,  3 Aug 2021 14:35:28 +0000 (UTC)
+ id 54F218A6B2; Tue,  3 Aug 2021 14:35:35 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 3 Aug 2021 16:28:56 +0200
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 14e08599bb3d1ede0960ab80d704b58900008eb0
-X-Git-Newrev: 89c0282e43a787a501b57ece2b9ad2e388129511
+Date: Tue, 3 Aug 2021 16:19:01 +0200
+X-Git-Refname: refs/heads/2021.05.x
+X-Git-Oldrev: 0eadf4f0ac339e3e8881ea1b3b060fae0dc33506
+X-Git-Newrev: f130b98997a398ad6f24ee849149c9cb0d8978b7
 X-Patchwork-Hint: ignore
-Message-Id: <20210803143528.54C20868A9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/linuxptp: add
- LINUXPTP_CPE_ID_VENDOR
+Message-Id: <20210803143535.54F218A6B2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.05.x] package/gcr: fix
+ introspection option
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,34 +70,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=89c0282e43a787a501b57ece2b9ad2e388129511
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=f130b98997a398ad6f24ee849149c9cb0d8978b7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
 
-cpe:2.3:a:linuxptp_project:linuxptp is a valid CPE identifier for this
-package:
+introspection option was wrongly named --with-introspection instead of
+--enable-introspection since commit
+d4e7c720aa78dbe659db82f4eb38ff58ebae4c57:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alinuxptp_project%3Alinuxptp
+configure: WARNING: unrecognized options: --disable-doc, --disable-docs, --disable-documentation, --with-xmlto, --with-fop, --enable-ipv6, --with-introspection
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 9d3dd830585610b1253ad66f921fab0ad059fda4)
+(cherry picked from commit a0a59c6451ec5ac75c277f186de2655196a1fe6c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linuxptp/linuxptp.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/gcr/gcr.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/linuxptp/linuxptp.mk b/package/linuxptp/linuxptp.mk
-index da23631d20..048dd0b896 100644
---- a/package/linuxptp/linuxptp.mk
-+++ b/package/linuxptp/linuxptp.mk
-@@ -9,6 +9,7 @@ LINUXPTP_SOURCE = linuxptp-$(LINUXPTP_VERSION).tgz
- LINUXPTP_SITE = http://downloads.sourceforge.net/linuxptp
- LINUXPTP_LICENSE = GPL-2.0+
- LINUXPTP_LICENSE_FILES = COPYING
-+LINUXPTP_CPE_ID_VENDOR = linuxptp_project
+diff --git a/package/gcr/gcr.mk b/package/gcr/gcr.mk
+index 97a0e22064..7f71614bca 100644
+--- a/package/gcr/gcr.mk
++++ b/package/gcr/gcr.mk
+@@ -25,9 +25,9 @@ GCR_LICENSE_FILES = COPYING
  
- LINUXPTP_MAKE_ENV = \
- 	$(TARGET_MAKE_ENV) \
+ ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
+ GCR_DEPENDENCIES += gobject-introspection host-libxslt
+-GCR_CONF_OPTS += --with-introspection
++GCR_CONF_OPTS += --enable-introspection
+ else
+-GCR_CONF_OPTS += --without-introspection
++GCR_CONF_OPTS += --disable-introspection
+ endif
+ 
+ # Only the X11 backend is supported for the simple GUI
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
