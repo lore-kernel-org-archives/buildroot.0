@@ -7,51 +7,51 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C2136C4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 20:22:27 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C3CBC432BE
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 20:34:31 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 49C3960FA0
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 20:22:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 49C3960FA0
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
+	by mail.kernel.org (Postfix) with ESMTPS id 800F0610FB
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 20:34:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 800F0610FB
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0E50783777;
-	Tue,  3 Aug 2021 20:22:27 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0F56C40442;
+	Tue,  3 Aug 2021 20:34:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YQGxHl2w2PcL; Tue,  3 Aug 2021 20:22:26 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 98iviexm4HaM; Tue,  3 Aug 2021 20:34:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 568BB8374F;
-	Tue,  3 Aug 2021 20:22:25 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 356FE1BF83C
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 20:22:23 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 05EF7400E7;
+	Tue,  3 Aug 2021 20:34:28 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E1BB81BF83C
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 20:34:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2318B8374F
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 20:22:23 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id D90C8400E7
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 20:34:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NQMKtelHeUNV for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 20:22:22 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lyM0LrfjraEy for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 20:34:24 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4284D836D5
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 20:22:22 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 9ADCE8B03F; Tue,  3 Aug 2021 20:22:14 +0000 (UTC)
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8B9B040001
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 20:34:24 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4052)
+ id DA4098B3A4; Tue,  3 Aug 2021 20:34:16 +0000 (UTC)
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Tue, 3 Aug 2021 22:21:22 +0200
+Date: Tue, 3 Aug 2021 22:32:45 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 315ce3264840f827ea15970d7957b170d4cfa171
-X-Git-Newrev: a3ac2a0f5d6313065b254f9c008feb68425dfa26
+X-Git-Oldrev: a3ac2a0f5d6313065b254f9c008feb68425dfa26
+X-Git-Newrev: b8f52c1974266fb27abeef0caffe22034ee571f4
 X-Patchwork-Hint: ignore
-Message-Id: <20210803202214.9ADCE8B03F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] CHANGES: prepare for 2021.08-rc1
+Message-Id: <20210803203416.DA4098B3A4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/rtl_433: force Release build
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,79 +69,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a3ac2a0f5d6313065b254f9c008feb68425dfa26
+commit: https://git.buildroot.net/buildroot/commit/?id=b8f52c1974266fb27abeef0caffe22034ee571f4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- CHANGES | 57 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 57 insertions(+)
+Force Release build to avoid the following build failure which is raised
+since the addition of the package in commit
+4634e84978a3e64e9050021d209a41cd88a1ad16:
 
-diff --git a/CHANGES b/CHANGES
-index 91487cc058..9c0b1b19b9 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,60 @@
-+2021.08-rc8, to be released
-+
-+	Numerous package updates.
-+
-+	Toolchain:
-+
-+        - add support for gcc 11.x, gcc 10.x is now the default, gcc
-+	  9.x updated to 9.4.0, removed gcc 8.x support except for
-+	  PowerPC SPE
-+
-+	- add support for binutils 2.37, binutils 2.36.x is now the
-+          default, binutils 2.34 removed.
-+
-+	- glibc updated to 2.33
-+
-+        - gdb enabled on NIOS II, gdbserver enabled on RISC-V.
-+
-+	Bootloaders/firmware: support for building the EDK II UEFI
-+	firmware, support for building AT91Bootstrap 4.x.
-+
-+	New BR2_ENABLE_RUNTIME_DEBUG option, that controls whether
-+	packages should be compiled with runtime debugging
-+	information (which is different than debugging symbols).
-+
-+	Many features of the bluez5_utils package have been made
-+	optional, and default to disabled. Users of bluez5_utils are
-+	encouraged to review their configuration.
-+
-+	Many packages (over 70) updated to enable the appropriate
-+	SELinux refpolicy module when SELinux support is enabled.
-+
-+	Many packages updated to select the appropriate OpenSSL
-+	features after many OpenSSL ciphers/features have been made
-+	optional.
-+
-+	New defconfigs: kontron_pitx_imx8m, microchip_sama5d2_icp,
-+	qemu_aarch64_sbsa, raspberrypicm4io, raspberrypicm4io_64,
-+	terasic_de10nano_cyclone5, uevm5432.
-+
-+	New packages: alsa-plugins, apg, bmap-tools, daq3, edk2,
-+	edk2-platforms, gumbo-parser, libbpf, libosmium, libpsl,
-+	libqb, libtalloc, libvirt, lua-linux, lua-zlib, mupdf,
-+	opencv4, osm2pgsql, poke, python-augeas, python-dbus-next,
-+	python-pymupdf, rtl_433, rtl8812au-aircrack-ng, seatd, snort3,
-+	system-config-printer, usbguard, xml-security-c, xmrig.
-+
-+	Removed packages: clapack, libsoil.
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#13326: regarding dtc error in buildroot source code
-+	#13661: host-python2 build fails on aarch64
-+	#13836: package build failure when target install set to no on
-+	        pkg-generic pkg types
-+	#13846: BR2_PACKAGE_LVM2_STANDARD_INSTALL should be default to
-+	        y as before
-+
- 2021.05, released June 6th, 2021
+/tmp/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/i586-buildroot-linux-musl/9.3.0/../../../../i586-buildroot-linux-musl/bin/ld: cannot find -lasan
+/tmp/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/i586-buildroot-linux-musl/9.3.0/../../../../i586-buildroot-linux-musl/bin/ld: cannot find -lubsan
+
+Fixes:
+ - http://autobuild.buildroot.org/results/83274082879f9599bc106e12a253f4b9229ea00b
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/rtl_433/rtl_433.mk | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/package/rtl_433/rtl_433.mk b/package/rtl_433/rtl_433.mk
+index e6d28721fa..df00c09518 100644
+--- a/package/rtl_433/rtl_433.mk
++++ b/package/rtl_433/rtl_433.mk
+@@ -9,7 +9,9 @@ RTL_433_SITE = $(call github,merbanan,rtl_433,$(RTL_433_VERSION))
+ RTL_433_LICENSE = GPL-2.0+
+ RTL_433_LICENSE_FILES = COPYING
  
- 	Various fixes.
++# Force Release build to remove ASAN.
+ RTL_433_CONF_OPTS = \
++	-DCMAKE_BUILD_TYPE=Release \
+ 	-DBUILD_DOCUMENTATION=OFF \
+ 	-DBUILD_TESTING=OFF \
+ 	-DBUILD_TESTING_ANALYZER=OFF \
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
