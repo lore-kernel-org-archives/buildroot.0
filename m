@@ -2,57 +2,57 @@ Return-Path: <SRS0=jXvl=M2=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	TVD_SPACE_RATIO autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A1779C4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 15:16:44 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 13598C4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 15:16:57 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 681BC60525
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 15:16:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 681BC60525
+	by mail.kernel.org (Postfix) with ESMTPS id AB98B60184
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 15:16:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org AB98B60184
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3F9FB607D1;
-	Tue,  3 Aug 2021 15:16:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 88BE040447;
+	Tue,  3 Aug 2021 15:16:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EUOEiniZd0hU; Tue,  3 Aug 2021 15:16:43 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id meuMzbmW6Dbn; Tue,  3 Aug 2021 15:16:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 98CF1607C0;
-	Tue,  3 Aug 2021 15:16:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D979440435;
+	Tue,  3 Aug 2021 15:16:54 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8DACC1BF9AA
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 15:15:58 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A57961BF304
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 15:15:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7C8BE82572
+ by smtp1.osuosl.org (Postfix) with ESMTP id 92947817AF
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 15:15:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vrp3u8v4-xYr for <buildroot@lists.busybox.net>;
+ with ESMTP id l_phzvr5UroC for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 15:15:57 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id D285B817AF
+ by smtp1.osuosl.org (Postfix) with ESMTP id DE633817F5
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 15:15:57 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id B476F8A734; Tue,  3 Aug 2021 15:15:50 +0000 (UTC)
+ id C01B186D21; Tue,  3 Aug 2021 15:15:50 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 3 Aug 2021 17:08:16 +0200
+Date: Tue, 3 Aug 2021 17:13:40 +0200
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 04cd33ab53c36b65ef97bcfa75cf6f667c876fc3
-X-Git-Newrev: 4e2ffdef881b93223a3dfc87da8280c0d5bb236a
+X-Git-Oldrev: 4e2ffdef881b93223a3dfc87da8280c0d5bb236a
+X-Git-Newrev: a75b0ffd89834906647d9d55a567c989310539bd
 X-Patchwork-Hint: ignore
-Message-Id: <20210803151550.B476F8A734@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/libnice: add
- gobject-introspection optional dependency
+Message-Id: <20210803151550.C01B186D21@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/mpg123: remove
+ --disable-lfs-alias option
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,42 +70,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4e2ffdef881b93223a3dfc87da8280c0d5bb236a
+commit: https://git.buildroot.net/buildroot/commit/?id=a75b0ffd89834906647d9d55a567c989310539bd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-gobject-introspection is an optional dependency which is enabled by
-default since version 0.1.8 and
-https://github.com/libnice/libnice/commit/0388646bdba5f91bb6bb509f5a1c6e9e3f068555
+Commit 56b28d3ee1e5 (mpg123: bump to version 1.13.1) added the
+--disable-lfs-alias option, without explaining why it was needed.
 
-Fixes:
- - http://autobuild.buildroot.org/results/1cba7aa233e19472a69ffc2d8f7324d363a22deb
+However, this causes undefined references for apps that want to link
+against mpg123.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit aade2fd293fc8a13bc5665fa70a4002ddac9aae6)
+The help for that option is pretty explicit that this is a dangerous
+option to use:
+
+    disable alias wrappers for largefile bitness (mpg123_seek_32 or
+    mpg123_seek_64 in addition to mpg123_seek, or the other way around;
+    It is a mess, do not play with this!)
+
+The default is that it is enabled, so leave it at it.
+
+Signed-off-by: Bruno Marie <gameblabla@protonmail.com>
+[yann.morin.1998@free.fr: rework commit log]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 49e436f4823ed982a9a4fadeb00e1159d55f7939)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libnice/libnice.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/mpg123/mpg123.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/libnice/libnice.mk b/package/libnice/libnice.mk
-index 8cbf003529..8292250938 100644
---- a/package/libnice/libnice.mk
-+++ b/package/libnice/libnice.mk
-@@ -22,6 +22,13 @@ LIBNICE_CONF_OPTS += \
- LIBNICE_DEPENDENCIES += openssl
- endif
- 
-+ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
-+LIBNICE_CONF_OPTS += --enable-introspection
-+LIBNICE_DEPENDENCIES += gobject-introspection
-+else
-+LIBNICE_CONF_OPTS += --disable-introspection
-+endif
-+
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE),y)
- LIBNICE_CONF_OPTS += --with-gstreamer
- LIBNICE_DEPENDENCIES += gst1-plugins-base
+diff --git a/package/mpg123/mpg123.mk b/package/mpg123/mpg123.mk
+index 9aa9cd1c10..fbb011c2c2 100644
+--- a/package/mpg123/mpg123.mk
++++ b/package/mpg123/mpg123.mk
+@@ -7,7 +7,6 @@
+ MPG123_VERSION = 1.25.15
+ MPG123_SOURCE = mpg123-$(MPG123_VERSION).tar.bz2
+ MPG123_SITE = http://downloads.sourceforge.net/project/mpg123/mpg123/$(MPG123_VERSION)
+-MPG123_CONF_OPTS = --disable-lfs-alias
+ MPG123_INSTALL_STAGING = YES
+ MPG123_LICENSE = LGPL-2.1
+ MPG123_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
