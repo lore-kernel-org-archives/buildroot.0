@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E00EFC4338F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 01:14:46 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8DD57C4338F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 01:14:59 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id A34FE61037
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 01:14:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A34FE61037
+	by mail.kernel.org (Postfix) with ESMTPS id 5AB3060F8F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 01:14:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5AB3060F8F
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7B44A42393;
-	Wed,  4 Aug 2021 01:14:46 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2CB5540685;
+	Wed,  4 Aug 2021 01:14:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ja0q_uN1e1Gn; Wed,  4 Aug 2021 01:14:45 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id glQ0Zi-rpjQ5; Wed,  4 Aug 2021 01:14:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B16754225C;
-	Wed,  4 Aug 2021 01:14:44 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 391FB40673;
+	Wed,  4 Aug 2021 01:14:57 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B2D5D1BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:23:32 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2D6CC1BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:23:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 45F7340493
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9892F40F52
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6xqveRX5iOJi for <buildroot@lists.busybox.net>;
+ with ESMTP id snL4bYdQX16v for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:10:54 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9112941514
+ by smtp2.osuosl.org (Postfix) with ESMTP id A56C241517
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:36 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id DC21E84394; Tue,  3 Aug 2021 21:10:28 +0000 (UTC)
+ id 054D8878C2; Tue,  3 Aug 2021 21:10:29 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Tue, 3 Aug 2021 22:49:16 +0200
+Date: Tue, 3 Aug 2021 23:09:25 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: d7a260f8bc94f1577006c0dab1e3289242039f4d
-X-Git-Newrev: bef605b08a40efa5e4d5e9845822141a00b8eef3
+X-Git-Oldrev: 3d8df5aababc9e50604588b0c99ceaa761d7ac97
+X-Git-Newrev: a2de01e75a934f3b56c2a1331ceaac95f3face46
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211028.DC21E84394@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/armadillo: allow to
- select between lapack or openblas
+Message-Id: <20210803211029.054D8878C2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/strace: bump to
+ version 5.13
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,110 +70,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bef605b08a40efa5e4d5e9845822141a00b8eef3
+commit: https://git.buildroot.net/buildroot/commit/?id=a2de01e75a934f3b56c2a1331ceaac95f3face46
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-armadillo can use lapack or openblas as BLAS provider. LAPACK support is
-optional.
-
-This patch
-- adds an _ARCH_SUPPORTS variable to check if one is available
-- adds an option to choose lapack or openblas as BLAS provider
-
-The choice is required since applications may potentially need lapack.
-
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/armadillo/Config.in    | 34 ++++++++++++++++++++++++++--------
- package/armadillo/armadillo.mk | 18 +++++++++++++++++-
- 2 files changed, 43 insertions(+), 9 deletions(-)
+ package/strace/strace.hash | 4 ++--
+ package/strace/strace.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/armadillo/Config.in b/package/armadillo/Config.in
-index b2b61a3233..7aed4fd02f 100644
---- a/package/armadillo/Config.in
-+++ b/package/armadillo/Config.in
-@@ -1,20 +1,38 @@
- comment "armadillo needs a toolchain w/ C++"
-+	depends on BR2_PACKAGE_OPENBLAS_ARCH_SUPPORTS
- 	depends on !BR2_INSTALL_LIBSTDCPP
--	depends on !BR2_powerpc
--	depends on !BR2_m68k_cf
+diff --git a/package/strace/strace.hash b/package/strace/strace.hash
+index f7a634000c..93c9b57f46 100644
+--- a/package/strace/strace.hash
++++ b/package/strace/strace.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking signature with RSA key 0xA8041FA839E16E36
+-# https://strace.io/files/5.12/strace-5.12.tar.xz.asc
+-sha256  29171edf9d252f89c988a4c340dfdec662f458cb8c63d85431d64bab5911e7c4  strace-5.12.tar.xz
++# https://strace.io/files/5.13/strace-5.13.tar.xz.asc
++sha256  5acc34888b9d510ad6ac915d4a8df08f51cf1ae920ea24649f6a4bb984d0b656  strace-5.13.tar.xz
+ sha256  f847d5ef26ad1151ca63bb88536b23a4cac5040c67917f3d5ee7ea1316e2b736  COPYING
+ sha256  7c379436436a562834aa7d2f5dcae1f80a25230fa74201046ca1fba4367d39aa  LGPL-2.1-or-later
+diff --git a/package/strace/strace.mk b/package/strace/strace.mk
+index 810f55e82b..29736678d8 100644
+--- a/package/strace/strace.mk
++++ b/package/strace/strace.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--comment "armadillo needs a glibc toolchain w/ C++"
--	depends on BR2_powerpc
--	depends on !BR2_INSTALL_LIBSTDCPP || BR2_TOOLCHAIN_USES_UCLIBC
-+comment "armadillo needs a toolchain w/ fortran, C++"
-+	depends on !BR2_PACKAGE_OPENBLAS_ARCH_SUPPORTS # otherwise, see comment above
-+	depends on BR2_PACKAGE_LAPACK_ARCH_SUPPORTS
-+	depends on !BR2_TOOLCHAIN_HAS_FORTRAN || !BR2_INSTALL_LIBSTDCPP
- 
- config BR2_PACKAGE_ARMADILLO
- 	bool "armadillo"
-+	depends on BR2_PACKAGE_OPENBLAS_ARCH_SUPPORTS || \
-+		(BR2_PACKAGE_LAPACK_ARCH_SUPPORTS && BR2_TOOLCHAIN_HAS_FORTRAN)
- 	depends on BR2_INSTALL_LIBSTDCPP
--	depends on !BR2_powerpc || BR2_TOOLCHAIN_USES_GLIBC # clapack
--	depends on !BR2_m68k_cf # clapack
--	select BR2_PACKAGE_CLAPACK
- 	help
- 	  Armadillo: An Open Source C++ Linear Algebra Library for
- 	  Fast Prototyping and Computationally Intensive Experiments.
- 
- 	  http://arma.sourceforge.net/
-+
-+if BR2_PACKAGE_ARMADILLO
-+
-+choice
-+	prompt "BLAS implementation"
-+
-+config BR2_PACKAGE_ARMADILLO_OPENBLAS
-+	bool "openblas"
-+	depends on BR2_PACKAGE_OPENBLAS_ARCH_SUPPORTS
-+	select BR2_PACKAGE_OPENBLAS
-+
-+config BR2_PACKAGE_ARMADILLO_LAPACK
-+	bool "lapack"
-+	depends on BR2_PACKAGE_LAPACK_ARCH_SUPPORTS && BR2_TOOLCHAIN_HAS_FORTRAN
-+	select BR2_PACKAGE_LAPACK
-+
-+endchoice
-+
-+endif
-diff --git a/package/armadillo/armadillo.mk b/package/armadillo/armadillo.mk
-index 624b842ef6..dcac2bf8cd 100644
---- a/package/armadillo/armadillo.mk
-+++ b/package/armadillo/armadillo.mk
-@@ -7,11 +7,27 @@
- ARMADILLO_VERSION = 9.900.2
- ARMADILLO_SOURCE = armadillo-$(ARMADILLO_VERSION).tar.xz
- ARMADILLO_SITE = https://downloads.sourceforge.net/project/arma
--ARMADILLO_DEPENDENCIES = clapack
- ARMADILLO_INSTALL_STAGING = YES
- ARMADILLO_LICENSE = Apache-2.0
- ARMADILLO_LICENSE_FILES = LICENSE.txt
- 
- ARMADILLO_CONF_OPTS = -DDETECT_HDF5=false
- 
-+# blas support may be provided by lapack (libblas.a) or openblas (libopenblas.a)
-+ARMADILLO_CONF_OPTS += -DBLAS_FOUND=ON
-+ifeq ($(BR2_PACKAGE_ARMADILLO_OPENBLAS),y)
-+ARMADILLO_CONF_OPTS += -DBLAS_LIBRARIES=-lopenblas
-+ARMADILLO_DEPENDENCIES = openblas
-+else
-+# Since BR2_PACKAGE_LAPACK is selected in this case, the dependency on it is
-+# added below.
-+ARMADILLO_CONF_OPTS += -DBLAS_LIBRARIES=-lblas
-+endif
-+
-+# lapack support is optional and can only be provided by lapack, not openblas
-+ifeq ($(BR2_PACKAGE_LAPACK),y)
-+ARMADILLO_CONF_OPTS += -DLAPACK_FOUND=ON
-+ARMADILLO_DEPENDENCIES += lapack
-+endif
-+
- $(eval $(cmake-package))
+-STRACE_VERSION = 5.12
++STRACE_VERSION = 5.13
+ STRACE_SOURCE = strace-$(STRACE_VERSION).tar.xz
+ STRACE_SITE = https://strace.io/files/$(STRACE_VERSION)
+ STRACE_LICENSE = LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
