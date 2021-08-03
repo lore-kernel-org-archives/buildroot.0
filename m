@@ -2,96 +2,97 @@ Return-Path: <SRS0=jXvl=M2=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
+X-Spam-Status: No, score=-20.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0481AC4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 16:08:34 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 46F48C4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 16:10:07 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id BB52F61101
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 16:08:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org BB52F61101
+	by mail.kernel.org (Postfix) with ESMTPS id F089961078
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 16:10:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org F089961078
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 86D6D40171;
-	Tue,  3 Aug 2021 16:08:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C844C60830;
+	Tue,  3 Aug 2021 16:10:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1RZBMYhZAaL9; Tue,  3 Aug 2021 16:08:32 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id mGjrv_JxzWA3; Tue,  3 Aug 2021 16:10:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8225C40253;
-	Tue,  3 Aug 2021 16:08:31 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 11B161BF868
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 16:08:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E372A60658;
+	Tue,  3 Aug 2021 16:10:04 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B47881BF868
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 16:10:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id F39A44019A
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 16:08:29 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A331E82E9C
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 16:10:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AQVg7q9aapZR for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 16:08:26 +0000 (UTC)
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id b5TjTiUyL126 for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 16:10:01 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com
- [IPv6:2a00:1450:4864:20::534])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2539140171
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 16:08:26 +0000 (UTC)
-Received: by mail-ed1-x534.google.com with SMTP id p21so29649566edi.9
- for <buildroot@buildroot.org>; Tue, 03 Aug 2021 09:08:25 -0700 (PDT)
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com
+ [IPv6:2a00:1450:4864:20::62b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8376882CCA
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 16:10:01 +0000 (UTC)
+Received: by mail-ej1-x62b.google.com with SMTP id go31so37068347ejc.6
+ for <buildroot@buildroot.org>; Tue, 03 Aug 2021 09:10:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=subject:to:cc:references:from:organization:message-id:date
- :user-agent:mime-version:in-reply-to:content-language
- :content-transfer-encoding;
- bh=ed5y9y7F83niOUAyZGT7icYuhVU/nfGNN6wuDXpzm7k=;
- b=N9KABmRCnxLgFJU07s/qZD/+sgo82qbOS7JuZZZHlhE3V4CF+S1yhKbqpQpzywIprC
- ZmpZJ2QJaZ+pENmUTdA7aMqUvkC3gBD+kbOg7ZRPuwyihL/gbhe+3XfUxw6jwzlZziTr
- A9dDvh5gNJGlPhhbDPxJDRSpMUPMXYQgN2kaNAoU9uIfxEI5w4dUkxVtZhvwawi6APbr
- Oqgmy+39eTcTa0pWgnWX4IqZgbzEXN22iFbZ5Op63LDgyhT9F1x6xaUd7xtQ2Af2at+m
- I33PPL6+UR/bRCy/O3dU8qlsSERqX8chwzOvw4FxtWTglSrfERzReaKySHjKjqUG28Hj
- sJ8A==
+ h=subject:to:references:from:organization:message-id:date:user-agent
+ :mime-version:in-reply-to:content-language:content-transfer-encoding;
+ bh=ffm0TjKtztmfXqzECgCu4fqmctUl4WvJ9IscfmxZfqw=;
+ b=aRSBjEfMZiwrZCmykUSFrwd7ZV+6Pxc27B3q+TupvEhjN8TWq4EPH3Uyx63yLj3+oO
+ z0c36tDmPeUSxa8jeO3HxOtnoAFy6LvHeQs4RvfqVssu+TF2LtmBsX468VcoAAGAEyg/
+ 45ZQaRZ3Jqi1/CppDQkPeZLKxCxX3psjk9LYhxth+WjtoDK/ZWZhs4ACoANGyp2sKdbc
+ 4R+Jlu7azDBkc8BmyRLcNPjCYrCy6sg2hAUty8u78L5h0FNZ9aYsaTPuLQP6zV7bR0ox
+ wh5P2ZhWEqLe+k0Xx+ONMRO4cGwtWkFEsAdGfvI9cee5bdGrN+qARTQyEKSH76U/ij/B
+ oG3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
- h=x-gm-message-state:subject:to:cc:references:from:organization
+ h=x-gm-message-state:subject:to:references:from:organization
  :message-id:date:user-agent:mime-version:in-reply-to
  :content-language:content-transfer-encoding;
- bh=ed5y9y7F83niOUAyZGT7icYuhVU/nfGNN6wuDXpzm7k=;
- b=o6+z4s1DoWjO/zFJoc9Zmg6rKkQaTnr+auY1Fq6k6rHYiOTj//GZAyFRe++GfpRZq8
- ZmTOVd+W/IfT0T0oCZcdC+NU74vTYImZymnyYm6FcHtFl0z35R3uz4kn5iDC6oSQpvtW
- LI04dQst22pRc8gHvgrrvzTeHPs0NUJ45SXLAxSZq5vFFL+Jpo3IaJW1aznwRuZXm2/8
- 6KJoArDozReDTvaSrTKNLMf3/bLWDj8fzfUw6KaK0AuL9zcDWSaVVhhWBmdRnsM2A4a8
- zu4ZZPf6OdJ3DjIy2Bze/9SshGJYN2jGP0ShK8tpZN4Q7+sp17MTzC20NCwybWYgZ3Ln
- H6xA==
-X-Gm-Message-State: AOAM530Yw+QyypS9+PZNnEvFRtShLsiVLNc37ccTAoriRtmYR6Sqvkgy
- /AxaDUqX/W0kmu3JBLSk4eczwA==
-X-Google-Smtp-Source: ABdhPJybL1bworo2OzccVtfZOAY7q3b1QQaa2NPdV8YOKEtvJ/0AQmw509Ae6Xs7NYPpgRbT4OsR+w==
-X-Received: by 2002:a05:6402:b6e:: with SMTP id
- cb14mr20280069edb.239.1628006904231; 
- Tue, 03 Aug 2021 09:08:24 -0700 (PDT)
+ bh=ffm0TjKtztmfXqzECgCu4fqmctUl4WvJ9IscfmxZfqw=;
+ b=AprleisI8D8LwrJD51Nj6nlQgllke8IANwiNRpp39RZ7pxvykBXSjfw7gc5YMOYyng
+ CRKR82VlGxqU95EvPWFSXVuoGWOaVFCp73xvs/innens+umWxv4vueG6QQBkX6Ttwerr
+ Eeh5xsk15jBhephO+lKE3k1y/HD04IN7f+WebVM+BCLfjJq6qhEkwdgWtBhOAXWt8awP
+ NqruOIcVI2ek3ZyxC/6QHAU48RscPFeUyGhNl6CTk2N4Q/UOvjyf3bhDwKXZJ78u5t9U
+ u9Yh5qmIlGF7dZnrn1LxAjkJ0ziIV83sVIHb267JWKNcDfzGlrEPZzDF+7j/BFQ2OB56
+ wBpg==
+X-Gm-Message-State: AOAM531HJY0EAx7cFS4Glp75onUdURZjyt+eP3WBKQmsA06iQQGRWWrn
+ BA4ai8hPKDsX3TZFjBNx4GJir1Z4Pm6qRKe5f7Y=
+X-Google-Smtp-Source: ABdhPJxCpM7MAM8amBV5OaKUUE5oAJkXGYBISpOzmbsd81j66xM9zoM2mHfx8kDpbe/KqDTavIP4XQ==
+X-Received: by 2002:a17:906:8cd:: with SMTP id
+ o13mr12444839eje.341.1628006999728; 
+ Tue, 03 Aug 2021 09:09:59 -0700 (PDT)
 Received: from ?IPv6:2001:1c01:3101:8300:5100:9bb9:68ea:c9f3?
  (2001-1c01-3101-8300-5100-9bb9-68ea-c9f3.cable.dynamic.v6.ziggo.nl.
  [2001:1c01:3101:8300:5100:9bb9:68ea:c9f3])
- by smtp.gmail.com with ESMTPSA id u22sm8337253edo.77.2021.08.03.09.08.23
+ by smtp.gmail.com with ESMTPSA id i10sm8220031edf.12.2021.08.03.09.09.59
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 03 Aug 2021 09:08:23 -0700 (PDT)
+ Tue, 03 Aug 2021 09:09:59 -0700 (PDT)
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-References: <20210802093458.1531166-1-fontaine.fabrice@gmail.com>
+References: <20210802075841.1371561-1-fontaine.fabrice@gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-Message-ID: <80b79e25-f27a-d86f-d592-854974e81425@mind.be>
-Date: Tue, 3 Aug 2021 18:08:23 +0200
+Message-ID: <bd87bb92-fa97-7915-c359-5e7d68e5071a@mind.be>
+Date: Tue, 3 Aug 2021 18:09:59 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.11.0
 MIME-Version: 1.0
-In-Reply-To: <20210802093458.1531166-1-fontaine.fabrice@gmail.com>
+In-Reply-To: <20210802075841.1371561-1-fontaine.fabrice@gmail.com>
 Content-Language: en-GB
-Subject: Re: [Buildroot] [PATCH 1/1] package/refpolicy: fix build with ftp
+Subject: Re: [Buildroot] [PATCH 1/1] package/open62541: disable -Werror
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,7 +104,6 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Antoine Tenart <atenart@kernel.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
@@ -111,77 +111,111 @@ Sender: "buildroot" <buildroot-bounces@busybox.net>
 
 
 
-On 02/08/2021 11:34, Fabrice Fontaine wrote:
-> Fix build failure raised since commit
-> 61a47bb1037ac20772f4e0106aab956adffeee12
+On 02/08/2021 09:58, Fabrice Fontaine wrote:
+> Disable -Werror to avoid the following build failures raised since bump
+> to version 1.2.2 in commit b436b82411305839abc76bb438fe92661a067526:
+> 
+> /tmp/instance-0/output-1/build/open62541-v1.2.2/arch/network_tcp.c: In function 'connection_recv':
+> /tmp/instance-0/output-1/build/open62541-v1.2.2/arch/network_tcp.c:96:5: error: conversion to 'unsigned int' from 'int' may change the sign of the result [-Werror=sign-conversion]
+>    96 |     UA_fd_set(connection->sockfd, &fdset);
+>       |     ^~~~~~~~~
+> 
+> /tmp/instance-6/output-1/build/open62541-v1.2.2/plugins/ua_pubsub_udp.c: In function 'UA_PubSubChannelUDPMC_receive':
+> /tmp/instance-6/output-1/build/open62541-v1.2.2/plugins/ua_pubsub_udp.c:477:21: error: conversion to '__suseconds_t' {aka 'int'} from 'UA_UInt32' {aka 'unsigned int'} may change the sign of the result [-Werror=sign-conversion]
+>   477 |     tmptv.tv_usec = (long int)(timeout % 1000000);
+>       |                     ^
 > 
 > Fixes:
->  - http://autobuild.buildroot.org/results/bde34d81a04b5ea96722dc56249089dce7e65b74
+>  - http://autobuild.buildroot.org/results/911811de81d8abb2a31feb8f27af1592641c6fbc
+>  - http://autobuild.buildroot.org/results/f0187b3f2d62e955fddeef4e90f84ba4fd642bd2
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
  Applied to master, thanks.
 
- What's the upstream status of the patch?
-
  Regards,
  Arnout
 
 > ---
->  ...es-services-ftp-te-make-ssh-optional.patch | 44 +++++++++++++++++++
->  1 file changed, 44 insertions(+)
->  create mode 100644 package/refpolicy/0004-policy-modules-services-ftp-te-make-ssh-optional.patch
+>  ...4-CMakeLists.txt-add-UA_FORCE_WERROR.patch | 54 +++++++++++++++++++
+>  package/open62541/open62541.mk                |  3 +-
+>  2 files changed, 56 insertions(+), 1 deletion(-)
+>  create mode 100644 package/open62541/0004-CMakeLists.txt-add-UA_FORCE_WERROR.patch
 > 
-> diff --git a/package/refpolicy/0004-policy-modules-services-ftp-te-make-ssh-optional.patch b/package/refpolicy/0004-policy-modules-services-ftp-te-make-ssh-optional.patch
+> diff --git a/package/open62541/0004-CMakeLists.txt-add-UA_FORCE_WERROR.patch b/package/open62541/0004-CMakeLists.txt-add-UA_FORCE_WERROR.patch
 > new file mode 100644
-> index 0000000000..9269c7aff8
+> index 0000000000..f912445b7f
 > --- /dev/null
-> +++ b/package/refpolicy/0004-policy-modules-services-ftp-te-make-ssh-optional.patch
-> @@ -0,0 +1,44 @@
-> +From f26d4bc1b2a7b781c67891cb3bf4579c6582d630 Mon Sep 17 00:00:00 2001
+> +++ b/package/open62541/0004-CMakeLists.txt-add-UA_FORCE_WERROR.patch
+> @@ -0,0 +1,54 @@
+> +From a439daafdc98391eed13e23f93ecfca81d71c731 Mon Sep 17 00:00:00 2001
 > +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +Date: Fri, 30 Jul 2021 22:40:20 +0200
-> +Subject: [PATCH] policy/modules/services/ftp.te: make ssh optional
+> +Date: Mon, 2 Aug 2021 09:49:48 +0200
+> +Subject: [PATCH] CMakeLists.txt: add UA_FORCE_WERROR
 > +
-> +Make ssh optional to avoid the following build failure:
+> +Allow the user to disable -Werror to avoid the following build failures:
 > +
-> + Compiling targeted policy.30
-> + env LD_LIBRARY_PATH="/home/fabrice/buildroot/output/host/lib:/home/fabrice/buildroot/output/host/usr/lib" /home/fabrice/buildroot/output/host/usr/bin/checkpolicy -c 30 -U deny -S -O -E policy.conf -o policy.30
-> + policy/modules/services/ftp.te:484:ERROR 'type ssh_home_t is not within scope' at token ';' on line 92051:
-> + 	allow sftpd_t ssh_home_t:dir { open read getattr lock search ioctl add_name remove_name write };
-> + #line 484
-> + checkpolicy:  error(s) encountered while parsing configuration
+> +/tmp/instance-0/output-1/build/open62541-v1.2.2/arch/network_tcp.c: In function 'connection_recv':
+> +/tmp/instance-0/output-1/build/open62541-v1.2.2/arch/network_tcp.c:96:5: error: conversion to 'unsigned int' from 'int' may change the sign of the result [-Werror=sign-conversion]
+> +   96 |     UA_fd_set(connection->sockfd, &fdset);
+> +      |     ^~~~~~~~~
+> +
+> +/tmp/instance-6/output-1/build/open62541-v1.2.2/plugins/ua_pubsub_udp.c: In function 'UA_PubSubChannelUDPMC_receive':
+> +/tmp/instance-6/output-1/build/open62541-v1.2.2/plugins/ua_pubsub_udp.c:477:21: error: conversion to '__suseconds_t' {aka 'int'} from 'UA_UInt32' {aka 'unsigned int'} may change the sign of the result [-Werror=sign-conversion]
+> +  477 |     tmptv.tv_usec = (long int)(timeout % 1000000);
+> +      |                     ^
+> +
+> +Fixes:
+> + - http://autobuild.buildroot.org/results/911811de81d8abb2a31feb8f27af1592641c6fbc
+> + - http://autobuild.buildroot.org/results/f0187b3f2d62e955fddeef4e90f84ba4fd642bd2
 > +
 > +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +[Upstream status: https://github.com/open62541/open62541/pull/4572]
 > +---
-> + policy/modules/services/ftp.te | 10 ++++++----
-> + 1 file changed, 6 insertions(+), 4 deletions(-)
+> + CMakeLists.txt | 6 +++++-
+> + 1 file changed, 5 insertions(+), 1 deletion(-)
 > +
-> +diff --git a/policy/modules/services/ftp.te b/policy/modules/services/ftp.te
-> +index 0d84da71cf..5686b22581 100644
-> +--- a/policy/modules/services/ftp.te
-> ++++ b/policy/modules/services/ftp.te
-> +@@ -481,10 +481,6 @@ tunable_policy(`sftpd_full_access',`
-> + 	files_manage_non_auth_files(sftpd_t)
-> + ')
+> +diff --git a/CMakeLists.txt b/CMakeLists.txt
+> +index bc839f27..963460d0 100644
+> +--- a/CMakeLists.txt
+> ++++ b/CMakeLists.txt
+> +@@ -292,6 +292,8 @@ if(UA_FORCE_CPP)
+> +     add_definitions(-D__STDC_CONSTANT_MACROS) # We need the UINT32_C define
+> + endif()
 > + 
-> +-tunable_policy(`sftpd_write_ssh_home',`
-> +-	ssh_manage_home_files(sftpd_t)
-> +-')
-> +-
-> + tunable_policy(`use_samba_home_dirs',`
-> + 	fs_list_cifs(sftpd_t)
-> + 	fs_read_cifs_files(sftpd_t)
-> +@@ -496,3 +492,9 @@ tunable_policy(`use_nfs_home_dirs',`
-> + 	fs_read_nfs_files(sftpd_t)
-> + 	fs_read_nfs_symlinks(ftpd_t)
-> + ')
+> ++option(UA_FORCE_WERROR "Force compilation with -Werror" ON)
 > ++
-> ++optional_policy(`
-> ++	tunable_policy(`sftpd_write_ssh_home',`
-> ++		ssh_manage_home_files(sftpd_t)
-> ++	')
-> ++')
+> + #General PubSub setup
+> + option(UA_ENABLE_PUBSUB "Enable the PubSub protocol" OFF)
+> + 
+> +@@ -589,7 +591,9 @@ if(NOT UA_FORCE_CPP AND (CMAKE_COMPILER_IS_GNUCC OR "x${CMAKE_C_COMPILER_ID}" ST
+> +     check_add_cc_flag("-Wall")      # Warnings
+> +     check_add_cc_flag("-Wextra")    # More warnings
+> +     check_add_cc_flag("-Wpedantic") # Standard compliance
+> +-    check_add_cc_flag("-Werror")    # All warnings are errors
+> ++    if(UA_FORCE_WERROR)
+> ++        check_add_cc_flag("-Werror")    # All warnings are errors
+> ++    endif()
+> + 
+> +     check_add_cc_flag("-Wno-static-in-inline") # Clang doesn't like the use of static inline methods inside static inline methods
+> +     check_add_cc_flag("-Wno-overlength-strings") # May happen in the nodeset compiler when complex values are directly encoded
+> +-- 
+> +2.30.2
+> +
+> diff --git a/package/open62541/open62541.mk b/package/open62541/open62541.mk
+> index 9c6468d443..671ec3b2dc 100644
+> --- a/package/open62541/open62541.mk
+> +++ b/package/open62541/open62541.mk
+> @@ -19,7 +19,8 @@ OPEN62541_CONF_OPTS = \
+>  	-DCMAKE_BUILD_TYPE=Release \
+>  	-DGIT_EXECUTABLE=NO \
+>  	-DOPEN62541_VERSION=$(OPEN62541_VERSION) \
+> -	-DUA_ENABLE_HARDENING=OFF
+> +	-DUA_ENABLE_HARDENING=OFF \
+> +	-DUA_FORCE_WERROR=OFF
+>  
+>  ifeq ($(BR2_PACKAGE_OPEN62541_UA_NAMESPACE_ZERO_MINIMAL),y)
+>  OPEN62541_CONF_OPTS += -DUA_NAMESPACE_ZERO=MINIMAL
 > 
 _______________________________________________
 buildroot mailing list
