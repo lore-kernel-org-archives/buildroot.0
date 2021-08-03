@@ -7,51 +7,51 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 40402C4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 15:51:06 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 66712C4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 15:51:18 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id EAA0860F0F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 15:51:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org EAA0860F0F
+	by mail.kernel.org (Postfix) with ESMTPS id 27EEB60EFD
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 15:51:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 27EEB60EFD
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C124F607D8;
-	Tue,  3 Aug 2021 15:51:05 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id k3utc6tykpaM; Tue,  3 Aug 2021 15:51:05 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1C69D60794;
-	Tue,  3 Aug 2021 15:51:04 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 74AEA1BF304
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 15:51:02 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 713F583033
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 15:51:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F1C60837A4;
+	Tue,  3 Aug 2021 15:51:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lrRFA9DIaZqA for <buildroot@lists.busybox.net>;
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id fUl5FTWVn5mF; Tue,  3 Aug 2021 15:51:17 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5B44383139;
+	Tue,  3 Aug 2021 15:51:16 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 8A3D21BF9AA
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 15:51:02 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 763AD607B3
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 15:51:02 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TCSM53ZcA4o5 for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 15:51:01 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id D166182F8B
+ by smtp3.osuosl.org (Postfix) with ESMTP id C35E260794
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 15:51:01 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 9FCA78AB6A; Tue,  3 Aug 2021 15:50:54 +0000 (UTC)
+ id 9146B8AB46; Tue,  3 Aug 2021 15:50:54 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Tue, 3 Aug 2021 17:47:44 +0200
+Date: Tue, 3 Aug 2021 17:45:33 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2def1ccccbece30f53c4b98d8e806c5f77b2c47f
-X-Git-Newrev: ff55c323af59bcaee3af949fd126bbec1889d1b2
+X-Git-Oldrev: 94b6fbd5823cbf94f2f76e402b0d73b473a8b64f
+X-Git-Newrev: 2def1ccccbece30f53c4b98d8e806c5f77b2c47f
 X-Patchwork-Hint: ignore
-Message-Id: <20210803155054.9FCA78AB6A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libjson: fix build with gcc 11
+Message-Id: <20210803155054.9146B8AB46@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/opencv4: do not detect ccache
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,41 +69,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ff55c323af59bcaee3af949fd126bbec1889d1b2
+commit: https://git.buildroot.net/buildroot/commit/?id=2def1ccccbece30f53c4b98d8e806c5f77b2c47f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-GCC 11 defaults to C++17. Fix the following build failure with gcc 11:
+OpenCV-4's buildsystem will try to detect ccache and use it if
+available. This may yield a system-installed ccache.
 
-In file included from _internal/Source/JSONDefs.h:12,
-                 from _internal/Source/JSONDebug.h:4,
-                 from _internal/Source/JSONNode.h:4,
-                 from _internal/Source/JSONNode.cpp:1:
-_internal/Source/JSONDefs/GNU_C.h:58:28: error: ISO C++17 does not allow dynamic exception specifications
-   58 |     #define json_throws(x) throw(x)
-      |                            ^~~~~
+However, in Buildroot, ccache is entirely hidden away and handled in the
+toolchain wrapper.
 
-Fixes:
- - http://autobuild.buildroot.org/results/1e66dff705bbb38e7e0f0e5864ce794b4345dcc6
+Forcibly disable detection of ccache.
+
+Commit 505e7f47715c77d8586444a4fefe4a190b77aaad already applied this
+change to opencv3.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/libjson/libjson.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/opencv4/opencv4.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/libjson/libjson.mk b/package/libjson/libjson.mk
-index d04ddc40f3..73268c9ccf 100644
---- a/package/libjson/libjson.mk
-+++ b/package/libjson/libjson.mk
-@@ -11,7 +11,7 @@ LIBJSON_INSTALL_STAGING = YES
- LIBJSON_LICENSE = BSD-2-Clause
- LIBJSON_LICENSE_FILES = License.txt
- 
--LIBJSON_CXXFLAGS = $(TARGET_CFLAGS) -DNDEBUG
-+LIBJSON_CXXFLAGS = $(TARGET_CFLAGS) -DNDEBUG -std=c++11
- 
- ifeq ($(BR2_STATIC_LIBS),y)
- LIBJSON_MAKE_OPTS += SHARED=0
+diff --git a/package/opencv4/opencv4.mk b/package/opencv4/opencv4.mk
+index 3cc6c05769..040fc63e4e 100644
+--- a/package/opencv4/opencv4.mk
++++ b/package/opencv4/opencv4.mk
+@@ -49,6 +49,7 @@ endif
+ # OpenCV build options
+ OPENCV4_CONF_OPTS += \
+ 	-DBUILD_WITH_STATIC_CRT=OFF \
++	-DENABLE_CCACHE=OFF \
+ 	-DENABLE_COVERAGE=OFF \
+ 	-DENABLE_FAST_MATH=ON \
+ 	-DENABLE_IMPL_COLLECTION=OFF \
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
