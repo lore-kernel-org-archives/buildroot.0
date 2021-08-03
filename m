@@ -2,61 +2,88 @@ Return-Path: <SRS0=jXvl=M2=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EFBA9C4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 07:28:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E6FD8C432BE
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 08:16:28 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 3082560F70
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 07:28:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3082560F70
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
+	by mail.kernel.org (Postfix) with ESMTPS id 06DC960C41
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 08:16:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 06DC960C41
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=jms.id.au
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DAF97606C4;
-	Tue,  3 Aug 2021 07:28:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AF42560710;
+	Tue,  3 Aug 2021 08:16:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id C3hQvz_UdQ67; Tue,  3 Aug 2021 07:28:43 +0000 (UTC)
+	with ESMTP id CWWU8CjEmWB0; Tue,  3 Aug 2021 08:16:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EF7BA606E0;
-	Tue,  3 Aug 2021 07:28:42 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id CAC161BF35B
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 07:28:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 02835606B8;
+	Tue,  3 Aug 2021 08:16:26 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 551B81BF357
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 08:16:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B9021403AF
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 07:28:41 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 51AD7606B8
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 08:16:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id r_MsbeaSNJk0 for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 07:28:40 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5438C4031C
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 07:28:40 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 3CEDAFF807;
- Tue,  3 Aug 2021 07:28:36 +0000 (UTC)
-Date: Tue, 3 Aug 2021 09:28:35 +0200
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <20210803092835.0e4d2663@windsurf>
-In-Reply-To: <0c80668e-d1c0-3516-4a9e-54e6eb32cfd8@benettiengineering.com>
-References: <20210802060946.C27006062D@smtp3.osuosl.org>
- <20210802234647.6f3df99d@windsurf>
- <0c80668e-d1c0-3516-4a9e-54e6eb32cfd8@benettiengineering.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8eG6EzlhnKJl for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 08:16:23 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com
+ [IPv6:2607:f8b0:4864:20::635])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 58947605DF
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 08:16:23 +0000 (UTC)
+Received: by mail-pl1-x635.google.com with SMTP id e21so22756825pla.5
+ for <buildroot@buildroot.org>; Tue, 03 Aug 2021 01:16:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
+ h=sender:from:to:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=fyn5923vOi/P0Ao+FzEGLatRF/8TeOfl5oWcK3Cr68U=;
+ b=mS95dtlTk/s77witSEYmiFkqTZiLzrGdWJ82IvRTUNoP+GTJqkVqCPq587OBS2eaE4
+ ohi6ISybiaYD51vhR6bqNdM432cZYkk3nHWnIqn4PN9NPQb35gLlLwt5zTtQ/DHeOJ7P
+ QTXU6fvrm5qrCUuAgkxM2kUX2MyVzSdSyN15XPcrFhnISmbABCTg1vwu2hnbqifsk0t6
+ 9/oUdLzlXVpbIO+zCHoGJCXd8LUKVSO7xsiFbMSn1OvPDjDQagcIgs+qyhfgYdHUZJMe
+ rCP5mnMr1eboCkxsxM/xM6WVeaBkFJ0eZiDJGrGYTNgeWftv3ms8XI8Qklp6Gf4JbR97
+ aucw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:sender:from:to:subject:date:message-id
+ :mime-version:content-transfer-encoding;
+ bh=fyn5923vOi/P0Ao+FzEGLatRF/8TeOfl5oWcK3Cr68U=;
+ b=OAZW4+XLCcDIKjp0pRyDZa+0V35HIxVB9OCV+JpOsGp4c+pRIJtR/2LQKy/UadP9Dv
+ Fbq7UYGjGp2ku/3t9MMrJ8icfpJriOAvi4hmrlQ05SjNrrgExwWFE5nP6YRET1zPUDjN
+ AX8mruDV8Ll2z2PYVtK0rTIXnL9CRY45XEtWvnKvt8sLlXktFi6dd/gG9iKyOYwurZEH
+ Mpmq5Wd3m/bmcYMF841QEldVWCg2wWiHmtLCykr/tAfg+j6hPgs4iixXu7MMC0J0tBP3
+ Eq0V9inO1WNxEJZTTAeH1QDjEQjC1RIPqLAFuzU0co/APhTxkKJVE0g/TssednjTZDKG
+ tXUg==
+X-Gm-Message-State: AOAM53054CSQCljrApIo43E1xEtR2mJgNtPaf+ox5TRYcYLMomGotVt1
+ k23h02ZFWm7SY8PxQWZhLWDBwd7PWvA=
+X-Google-Smtp-Source: ABdhPJywqZ8lNYvxFVXIfhe/a1PhWwJs/BWtpqMQHB+eDnMpBtwtZCTkzJ9F4iiNkl5J8Ufci8CURg==
+X-Received: by 2002:a17:90b:1049:: with SMTP id
+ gq9mr3219900pjb.163.1627978581895; 
+ Tue, 03 Aug 2021 01:16:21 -0700 (PDT)
+Received: from voyager.lan ([45.124.203.15])
+ by smtp.gmail.com with ESMTPSA id bj6sm1845287pjb.53.2021.08.03.01.16.19
+ for <buildroot@buildroot.org>
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 03 Aug 2021 01:16:20 -0700 (PDT)
+From: Joel Stanley <joel@jms.id.au>
+To: buildroot@buildroot.org
+Date: Tue,  3 Aug 2021 17:46:15 +0930
+Message-Id: <20210803081615.879069-1-joel@jms.id.au>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Subject: Re: [Buildroot] Some analysis of the major build failure reasons
+Subject: [Buildroot] [PATCH] package/pdbg: Fix alignment error on autobuilder
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,139 +95,72 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
- James Hilliard <james.hilliard1@gmail.com>,
- Giulio Benetti <giulio.benetti@micronovasrl.com>,
- Adam Duskett <aduskett@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-Hello Giulio,
+The autobuilder fails when building for sh because of an alignment issue
+in assembly that includes an external data file.
 
-On Tue, 3 Aug 2021 00:56:24 +0200
-Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+ http://autobuild.buildroot.net/results/457b88c4ba85edb42b3a36cce48bf90712f590bf/
 
-> > I have investigated this. It fails only on sh4, due an internal
-> > compiler error. It only occurs at -Os, at -O0 and -O2 it builds fine. I
-> > have reported gcc bug
-> > https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101737 for this. Since I
-> > tested only with gcc 9.3.0 for now, I've started a build with gcc 11.x,
-> > to see how it goes.
-> > 
-> > Based on the result, I'll send a patch adding a new
-> > BR2_TOOLCHAIN_GCC_HAS_BUG_101737 and disable -Os on pixman on SuperH
-> > based on this.  
-> 
-> I can do that since I've treated a lot of gcc bugs. Is it ok?
+This fix has been submitted upstream.
 
-Oh yes, sure! In the mean time, I have confirmed that gcc 11.1.0 is
-also affected by the same issue, and I have updated the gcc bug with
-that information. So to me, it seems like all gcc versions are affected.
+Signed-off-by: Joel Stanley <joel@jms.id.au>
+---
+ .../pdbg/0001-template-Fix-alignment.patch    | 39 +++++++++++++++++++
+ 1 file changed, 39 insertions(+)
+ create mode 100644 package/pdbg/0001-template-Fix-alignment.patch
 
-> >>                         unknown | 31  
-> > 
-> > I did not look into these for now.  
-> 
-> I've taken a look into the last ones of today(the 31 ones)
-> @James: lot of your builds simply stuck after Make has finished(not on 
-> linking but exactly on 'make: Leaving directory').
-> 
-> I've noticed it time ago some time, and now it became very more 
-> frequent. This is 9/10 your autobuilder giving that problem.
-> And this happens at different Build Duration:
-> http://autobuild.buildroot.net/?reason=unknown
-> Also I see you use /tmp/ folder but I don't see anyone else doing that. 
-> Isn't it maybe that your distro automatically cleans /tmp folder up? Or 
-> it is mapped somewhere where disk gets full randomly?
-> I would move it to a specific user folder(i.e. buildroot user) and that 
-> should fix the problem. If you're trying to do such thing to save disk 
-> space I tell you that I've already done it time ago with this patch that 
-> now needs to be rebased:
-> https://patchwork.ozlabs.org/project/buildroot/patch/20180919114541.17670-1-giulio.benetti@micronovasrl.com/
-> But in my case NOK was clear. I'm pretty sure /tmp/ is the problem.
-
-No, I don't think there is any problem with the use of /tmp. The
-"unknown" build failures are typically build failures with top-level
-parallel build enabled.
-
-If you take
-http://autobuild.buildroot.net/results/4ee/4eead81391d76edcdd2823e439f9b8d165b9b7ef/
-which is the latest "unknown" build issue at the time of writing this
-e-mail, it has BR2_PER_PACKAGE_DIRECTORIES=y. We enable
-BR2_PER_PACKAGE_DIRECTORIES for a subset of the builds, and then for
-the builds that have BR2_PER_PACKAGE_DIRECTORIES enabled, for a subset
-of them, we use top-level parallel build.
-
-However, when there is top-level parallel build enabled, the output is
-quite messy (due to multiple packages being built in parallel). And due
-to that, the build-end.log may not actually contain the actual build
-failure as the failure may be visible much earlier in the build output.
-
-If you check these "unknown" build failures, they all have
-BR2_PER_PACKAGE_DIRECTORIES enabled, which really hints at a top-level
-parallel build issue.
-
-Perhaps what I should do is cook a patch that keeps the full build log
-file for builds that use top-level parallel build, so that we have a
-chance to debug these. The problem is going to be the disk-space
-consumption on my server, but I guess I could do something that
-compresses the build log after X days or something like that.
-
-> On @Thomas autobuilder I see failure for:
-> - optee-client(already found NOK):
-> http://autobuild.buildroot.net/results/5e9/5e91bc53c3fbcd2ed232db79dc5c947394d66a1e/
-> - failure on fetching as mentioned above
-> 
-> >>                    zeromq-4.3.4 | 30  
-> > 
-> > Giulio: this is happening only on or1k, with a binutils assert. Do you
-> > think this is solved by your or1k fixes?  
-> 
-> It is. Those build failures are due to the use of binutils-2.33.1 that 
-> have not patches for or1k. While all the other binutils versions have
-> local or upstreamed or1k patches.
-> 
-> Of course this can still happen with actual external Bootlin or1k 
-> toolchain that use exactly binutils-2.33.1 not patched. So the problem 
-> will be solved once you recompile and bump them with patches provided. I 
-> still see that we're on 2020.08-1:
-> https://git.buildroot.net/buildroot/tree/toolchain/toolchain-external/toolchain-external-bootlin/toolchain-external-bootlin.mk#n586
-
-Yes, I have worked on rebuilding the toolchains with 2021.05 + a few
-patches, but I have a runtime issue with Microblaze + glibc, which
-doesn't boot (well the kernel boots, but not user-space). Microblaze +
-uclibc or musl works fine.
-
-I guess I should probably not delay further the release of 2021.05
-toolchains, and leave just the Microblaze/glibc toolchains to 2020.08.
-
-> NOTE:
-> I also add libnss-3.68 new bug on Aarch64_BE to be fixed. I'm already 
-> working on it on spare time.
-
-Great!
-
-> PS: I've found my autobuilders stopped, I think I've forgotten to 
-> restart the daemon after updating the Distro. Now they're up and running.
-
-OK, thanks. That being said, additional autobuilders at the moment are
-probably not that important: compared to the CPU power made available
-by James through its super high-performance 63 machines, additional
-"regular" machines added to the autobuilder pool are not going to help
-much.
-
-However, they are going to definitely help when James will no longer
-have access to those machines.
-
-Best regards,
-
-Thomas
+diff --git a/package/pdbg/0001-template-Fix-alignment.patch b/package/pdbg/0001-template-Fix-alignment.patch
+new file mode 100644
+index 000000000000..e95d8344e2d6
+--- /dev/null
++++ b/package/pdbg/0001-template-Fix-alignment.patch
+@@ -0,0 +1,39 @@
++From 0080d0a64da274207bc341491f87863952bb6e3b Mon Sep 17 00:00:00 2001
++From: Joel Stanley <joel@jms.id.au>
++Date: Tue, 3 Aug 2021 17:28:17 +0930
++Subject: [PATCH] template: Fix alignment
++
++The assembler complains about unaliged data:
++
++ ./template.S: Assembler messages:
++ ./template.S:21: Error: misaligned data
++
++If the included data is not an aligned size, the the symbols following
++will be unaligned.
++
++We lost the alignment directive in commit 5f3deee1289e ("template: new
++libfdt requires 8-byte aligned fdt"), so add it back as it was before
++that commit.
++
++Reported by the buildroot autobuilder.
++
++Signed-off-by: Joel Stanley <joel@jms.id.au>
++---
++ template.S | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/template.S b/template.S
++index ecf9bba0656d..df8c064d6bc0 100644
++--- a/template.S
+++++ b/template.S
++@@ -17,6 +17,7 @@
++ SYM_START(SYMBOL_PREFIX):
++ .incbin FILENAME
++ SYM_END(SYMBOL_PREFIX):
+++.align 4
++ SYM_SIZE(SYMBOL_PREFIX):
++ 	.long	SYM_END(SYMBOL_PREFIX) - SYM_START(SYMBOL_PREFIX)
++ .globl SYM_START(SYMBOL_PREFIX)
++-- 
++2.32.0
++
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.32.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
