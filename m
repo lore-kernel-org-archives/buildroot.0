@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B3CAC4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 20:13:29 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EAB1EC4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 20:13:41 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 565F2601FD
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 20:13:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 565F2601FD
+	by mail.kernel.org (Postfix) with ESMTPS id B27BA60F45
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 20:13:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B27BA60F45
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3226C404DB;
-	Tue,  3 Aug 2021 20:13:29 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id k-DsUsMZ_U5Z; Tue,  3 Aug 2021 20:13:28 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8B05B40470;
-	Tue,  3 Aug 2021 20:13:27 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id BC0101BF83C
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 20:13:17 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AAAA983A79
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 20:13:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8202A83A82;
+	Tue,  3 Aug 2021 20:13:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mq_xBgLHe0xM for <buildroot@lists.busybox.net>;
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id H9ucA7hVZrFk; Tue,  3 Aug 2021 20:13:40 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id D423683A79;
+	Tue,  3 Aug 2021 20:13:39 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E1F5C1BF9AA
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 20:13:17 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id CFB1D401FA
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 20:13:17 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rVPQTto9uE8Y for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 20:13:16 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id DAB5A839BF
+ by smtp2.osuosl.org (Postfix) with ESMTP id D1EF6400C7
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 20:13:16 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 46E698B392; Tue,  3 Aug 2021 20:13:09 +0000 (UTC)
+ id 3D39E8B391; Tue,  3 Aug 2021 20:13:09 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 3 Aug 2021 22:08:20 +0200
+Date: Tue, 3 Aug 2021 22:08:04 +0200
 X-Git-Refname: refs/heads/2021.05.x
-X-Git-Oldrev: 91811cbb3887e13b665b85af868cae2612716f48
-X-Git-Newrev: f79cb5116c537856a3987379b1555584f31e0c1e
+X-Git-Oldrev: bc736868776671549d62ddd95d74f9785e0a4dd1
+X-Git-Newrev: 91811cbb3887e13b665b85af868cae2612716f48
 X-Patchwork-Hint: ignore
-Message-Id: <20210803201309.46E698B392@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.05.x] boot/uboot: add missing
- dependency to host-pkgconf
+Message-Id: <20210803201309.3D39E8B391@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.05.x] boot/uboot: fix uboot
+ building host tools on x86 architecture
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,60 +70,72 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f79cb5116c537856a3987379b1555584f31e0c1e
+commit: https://git.buildroot.net/buildroot/commit/?id=91811cbb3887e13b665b85af868cae2612716f48
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
 
-Commit 2eaa6d0f3629 (boot/uboot: fix uboot building host tools on x86
-architecture) added use of $(PKG_CONFIG_HOST_BINARY), but forgot to add
-the corresponding build-ordr dependency.
+The make all command run the tools/makefile on the process.
+This makefile use "pkg-config" command to support static link.
+The issue is the use of pkg-config configured for crosscompiling
+to build binaries tools for host architecture.
+To fix it, I add pkg-config environment variable to configure it for host.
 
-Add this missing depenency now.
+Add a test to avoid future regress on the build of U-boot.
 
-Additionally, the associated test had an explicit host pkgconf enbled in
-its configuration. This is superfluous now that uboot properly depends
-on host-pkgconf, so drop that from the test.
-
-Note: it hapenned to work, because host-pkgconf, when explicitly enabled
-in the configuration, and without per-package directories, would build
-before uboot and thus be available. This would fail with PPD, though,
-and thus would break for TLPB.
-
-Reported-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
+[yann.morin.1998@free.fr:
+  - fix mixed space-TAB indentation
+  - fix check-package
+]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Kory Maincent <kory.maincent@bootlin.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit d0edfec1e27b7b1b1cb46221e71cae1537f58440)
+(cherry picked from commit 2eaa6d0f36291f49ab56a734a4851a6ffe8e8803)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/uboot/uboot.mk                                           | 2 +-
- support/testing/tests/package/test_uboot_openssl_pkgconfig.py | 1 -
- 2 files changed, 1 insertion(+), 2 deletions(-)
+ boot/uboot/uboot.mk                                  |  5 +++++
+ .../tests/package/test_uboot_openssl_pkgconfig.py    | 20 ++++++++++++++++++++
+ 2 files changed, 25 insertions(+)
 
 diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index a7eaedb06f..a8a8bedc01 100644
+index dbe82e65b1..a7eaedb06f 100644
 --- a/boot/uboot/uboot.mk
 +++ b/boot/uboot/uboot.mk
-@@ -17,7 +17,7 @@ UBOOT_CPE_ID_PRODUCT = u-boot
- UBOOT_INSTALL_IMAGES = YES
- 
- # u-boot 2020.01+ needs make 4.0+
--UBOOT_DEPENDENCIES = $(BR2_MAKE_HOST_DEPENDENCY)
-+UBOOT_DEPENDENCIES = host-pkgconf $(BR2_MAKE_HOST_DEPENDENCY)
- UBOOT_MAKE = $(BR2_MAKE)
- 
- ifeq ($(UBOOT_VERSION),custom)
+@@ -307,6 +307,11 @@ define UBOOT_BUILD_CMDS
+ 		cp -f $(UBOOT_CUSTOM_DTS_PATH) $(@D)/arch/$(UBOOT_ARCH)/dts/
+ 	)
+ 	$(TARGET_CONFIGURE_OPTS) \
++		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
++		PKG_CONFIG_SYSROOT_DIR="/" \
++		PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
++		PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 \
++		PKG_CONFIG_LIBDIR="$(HOST_DIR)/lib/pkgconfig:$(HOST_DIR)/share/pkgconfig" \
+ 		$(UBOOT_MAKE) -C $(@D) $(UBOOT_MAKE_OPTS) \
+ 		$(UBOOT_MAKE_TARGET)
+ 	$(if $(BR2_TARGET_UBOOT_FORMAT_SD),
 diff --git a/support/testing/tests/package/test_uboot_openssl_pkgconfig.py b/support/testing/tests/package/test_uboot_openssl_pkgconfig.py
-index de2d83f5b8..55a45f44fc 100644
---- a/support/testing/tests/package/test_uboot_openssl_pkgconfig.py
+new file mode 100644
+index 0000000000..de2d83f5b8
+--- /dev/null
 +++ b/support/testing/tests/package/test_uboot_openssl_pkgconfig.py
-@@ -12,7 +12,6 @@ class TestUbootOpensslPkgConfig(infra.basetest.BRTest):
-         BR2_TARGET_UBOOT=y
-         BR2_TARGET_UBOOT_BOARD_DEFCONFIG="efi-x86_payload64"
-         BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
--        BR2_PACKAGE_HOST_PKGCONF=y
-         """
- 
-     def test_run(self):
+@@ -0,0 +1,20 @@
++import os
++
++import infra.basetest
++
++
++class TestUbootOpensslPkgConfig(infra.basetest.BRTest):
++    config = infra.basetest.MINIMAL_CONFIG + \
++        """
++        BR2_x86_64=y
++        BR2_x86_atom=y
++        BR2_PACKAGE_OPENSSL=y
++        BR2_TARGET_UBOOT=y
++        BR2_TARGET_UBOOT_BOARD_DEFCONFIG="efi-x86_payload64"
++        BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
++        BR2_PACKAGE_HOST_PKGCONF=y
++        """
++
++    def test_run(self):
++        img = os.path.join(self.builddir, "images", "u-boot.bin")
++        self.assertTrue(os.path.exists(img))
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
