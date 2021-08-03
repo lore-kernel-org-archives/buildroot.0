@@ -2,96 +2,103 @@ Return-Path: <SRS0=sxUg=M3=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A57EFC4338F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 01:20:55 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 89353C4338F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 01:21:08 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 67FCC600D4
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 01:20:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 67FCC600D4
+	by mail.kernel.org (Postfix) with ESMTPS id 4593F600D4
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 01:21:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4593F600D4
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4285E404F4;
-	Wed,  4 Aug 2021 01:20:55 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1940740694;
+	Wed,  4 Aug 2021 01:21:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QIflk7s3QvZr; Wed,  4 Aug 2021 01:20:54 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id dTjcHzzJ5iKv; Wed,  4 Aug 2021 01:21:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 90DF1424D7;
-	Wed,  4 Aug 2021 01:20:53 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 060151BF9AA
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:48:04 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E8527400C7;
+	Wed,  4 Aug 2021 01:21:05 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1B27A1BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:49:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 030BA405C6
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:48:04 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D4FC7835B1
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:49:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xL7LXBMmhyaI for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:48:03 +0000 (UTC)
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id EPzMKYDNRjjm for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:49:29 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com
- [IPv6:2a00:1450:4864:20::530])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 55099405BF
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:48:03 +0000 (UTC)
-Received: by mail-ed1-x530.google.com with SMTP id b7so947397edu.3
- for <buildroot@buildroot.org>; Tue, 03 Aug 2021 14:48:03 -0700 (PDT)
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com
+ [IPv6:2a00:1450:4864:20::634])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id F0DEA837A4
+ for <buildroot@busybox.net>; Tue,  3 Aug 2021 21:49:28 +0000 (UTC)
+Received: by mail-ej1-x634.google.com with SMTP id qk33so648696ejc.12
+ for <buildroot@busybox.net>; Tue, 03 Aug 2021 14:49:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=subject:to:cc:references:from:organization:message-id:date
  :user-agent:mime-version:in-reply-to:content-language
  :content-transfer-encoding;
- bh=UrNZqcQlIvNxn16tI2tlAy+c06VLyaUjnHHoMz8hndY=;
- b=PRH5iR523jscOilvMyxt1qE4ucsHhrTUNVmED1HNOnHx+TbPEaRJdvL5rnFUcotEcu
- DU0JfZlvSicPFB4HxQGS450MhpkkLmeX1Zfp1VUf2t9S5YIJy1bqDN84rYjFd/wfZSkj
- lG8ykky3+89YZ2N+F7D4jwXCDSvtEZ4zwZ6M5Ys40gGeTY2Ky6UTZ9wYrWEin/glTSLG
- xQisfhOWhOOHrhpAKUEAIEeR2aQsei23szRKH9VaNXDNFfBU97u6GkXA7EkBROgxJ+w/
- Fe/iGxWyfVrHMXOw0WdHLNg8FE2Sz5R1TLSR9nt1yS+xE2dXwZP9Bp61cXKiU8exk1le
- fU6w==
+ bh=E0ViVrMpeQ97dq89bPBPhFyo2JED96undTIK96GFC0c=;
+ b=AJKVtzoy+EsKRKlZVEfeU9YfTlTMwDsEMVoHhvQx1grKcD34zS403w+OOJgqiqNGz5
+ 1+6fL9B33lN8UxDcQierDgMyAwNzpDPZzHt0T+xhxE5frH/beLY+OSmwPAa10nYalyCd
+ tePtLZaLpD2UFNQLNyojg7DY/+b6hRDVzyqT6ELiP3KxS+p+Od/Y697RQvOAXHBIiP+R
+ qWyH8AfIwLvW0x4FNMP3qB2rjPMabKtb0Nk9wIBQp2YDJ96aOYKH37qelcgqI2Sd2h3k
+ OELhlAjMkdiphc04N8GahMB+57rOFgXUuB8y89b3lD2isNdBU+J4m+HAxlAWCU+6aKxq
+ EKsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:subject:to:cc:references:from:organization
  :message-id:date:user-agent:mime-version:in-reply-to
  :content-language:content-transfer-encoding;
- bh=UrNZqcQlIvNxn16tI2tlAy+c06VLyaUjnHHoMz8hndY=;
- b=rEoBGXDBlAC8bUd+xD6rJ4PGJDi2t5tLjTPgl7X7MBKTNbfVi9ti+jjI4oFB/eRGeD
- YOplZAliV9D0veYEU9ylsDxN9CHkEES4FE7aIuf3Faso0oSfLGW+7m/ZSJYlHvZHyM33
- LEO0N6rxK2BY/VBLH37QPPebcGcSpPPGyZuVYc5sTrIiZMbVzroHFNn25lEOoH+Y0doO
- AzlL3VJAmqjsiAUOwMTd9fcJbNACGJ6Ojy1/1fWJW/aj8cF+8HUhR5tvYQOG93UVqRnh
- GIKYNhjCL65ssu4B7U8IBVw6/6sHtTK4WRL9e28biLNEy8Z+Jdx4HnAvEFZOBNA33m1/
- cmFA==
-X-Gm-Message-State: AOAM5305cvVzu9dhFnICKM35VBgWDI1FEuBkdmLZu24V/aXRB8aoKc0H
- P9NY6hPOmoc8ehXEnEAvWiQLtw==
-X-Google-Smtp-Source: ABdhPJyB6ApQmGkclv+mZ+yOyo7Xn3rfEAQv2aO67QZXww/Cdy90v9p1YGuvJO2KpKGquh0jQabptA==
-X-Received: by 2002:aa7:dbc8:: with SMTP id v8mr27452949edt.242.1628027281561; 
- Tue, 03 Aug 2021 14:48:01 -0700 (PDT)
+ bh=E0ViVrMpeQ97dq89bPBPhFyo2JED96undTIK96GFC0c=;
+ b=NA8m71iWNFnkduhPwRFo4KfTu4V+dAHbQn3bePPpdslyRL7NQuiZz4kq2BKOfV00xn
+ 5/kGUNnoM6gnDeMc+8Swd5CNnFmeT/HSCl1dD+qgE8lknEt9HXg/bdbf91FDeEkTSt83
+ dIJ0n4AmlgN8WzYxo80A3tXRWaNlzZUbyOhcplyPVRF6Axvn/+nh0ktuXoy24irC6+xo
+ vAAcMQWsWsrW+ydVusHSYX03I4LHFiNte/4Fwk4GQ8VwiepYCcF1PsutvhJ0G9KIwzB2
+ RivwSve+iJPH6Qhxvz2ddRFep0RHpuq3ntk1C41+rdSQfXmwkw/SBcXIZ0B3FYG2OKC9
+ wJlQ==
+X-Gm-Message-State: AOAM531m/wNErAdrg7+yjE0sjzBX6vRUopf4eeupFlbpoTaygXTVxpv7
+ cJEiq/aQRAVCmY+9MdQw00iZqnOZMwOraVTVkC0=
+X-Google-Smtp-Source: ABdhPJy/2v/CmKWm3dOpqbm/+B67Ibt4+yG2suy+khE+92ZiNt/r1PQW1JRFd05iA1NsEHG4x03Vnw==
+X-Received: by 2002:a17:906:1789:: with SMTP id
+ t9mr22827293eje.61.1628027367170; 
+ Tue, 03 Aug 2021 14:49:27 -0700 (PDT)
 Received: from ?IPv6:2001:1c01:3101:8300:5100:9bb9:68ea:c9f3?
  (2001-1c01-3101-8300-5100-9bb9-68ea-c9f3.cable.dynamic.v6.ziggo.nl.
  [2001:1c01:3101:8300:5100:9bb9:68ea:c9f3])
- by smtp.gmail.com with ESMTPSA id c6sm87849ede.48.2021.08.03.14.48.00
+ by smtp.gmail.com with ESMTPSA id o7sm46023ejy.48.2021.08.03.14.49.26
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 03 Aug 2021 14:48:01 -0700 (PDT)
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-References: <20210803135447.32589-1-fontaine.fabrice@gmail.com>
+ Tue, 03 Aug 2021 14:49:26 -0700 (PDT)
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20210725111231.359830-1-arnout@mind.be>
+ <20210725111231.359830-3-arnout@mind.be>
+ <20210725175709.7338b4a5@x230_1.trabucayre.com>
+ <fd67895e-5c9e-62bc-7a4b-dd41bed13c0d@mind.be>
+ <20210803225739.15e612d5@windsurf>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-Message-ID: <a38a761e-8060-2ffd-12a0-f3913ee55985@mind.be>
-Date: Tue, 3 Aug 2021 23:48:00 +0200
+Message-ID: <5dbd8521-3ef1-2330-2d98-56fc934badec@mind.be>
+Date: Tue, 3 Aug 2021 23:49:25 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.11.0
 MIME-Version: 1.0
-In-Reply-To: <20210803135447.32589-1-fontaine.fabrice@gmail.com>
+In-Reply-To: <20210803225739.15e612d5@windsurf>
 Content-Language: en-GB
-Subject: Re: [Buildroot] [PATCH 1/1] package/libodb-boost: fix build with
- gcc 11
+Subject: Re: [Buildroot] [PATCH v5 3/3] package/armadillo: allow to select
+ between lapack or openblas
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,7 +110,7 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Kamel Bouhara <kamel.bouhara@gmail.com>
+Cc: buildroot@busybox.net
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
@@ -111,32 +118,70 @@ Sender: "buildroot" <buildroot-bounces@busybox.net>
 
 
 
-On 03/08/2021 15:54, Fabrice Fontaine wrote:
-> Fixes:
->  - No autobuilder failures yet
+On 03/08/2021 22:57, Thomas Petazzoni wrote:
+> Hello,
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> On Mon, 26 Jul 2021 08:24:37 +0200
+> Arnout Vandecappelle <arnout@mind.be> wrote:
+> 
+>>> fortran is only required if lapack has to be used: if lapack is said as optional this is
+>>> maybe not required ?  
+>>
+>>  Oh, I intended to insert a comment there but apparently forgot: We need either
+>> openblas (which doesn't require fortran) or lapack (which does require fortran).
+>> Therefore, on architectures which do support openblas, we should have a comment
+>> that just says "C++", while on architectures that don't support openblas (but do
+>> support lapack) we should have a comment that says "C++ and Fortran".
+> 
+> ... but this is exactly what your patch does:
 
- I accidentally applied this to master after all :-) Oh well, it'll probably be OK.
+ I meant a "#" comment, not a "comment" comment :-)
+
 
  Regards,
  Arnout
 
-> ---
->  package/libodb-boost/libodb-boost.mk | 1 +
->  1 file changed, 1 insertion(+)
 > 
-> diff --git a/package/libodb-boost/libodb-boost.mk b/package/libodb-boost/libodb-boost.mk
-> index 679c9d7a38..bac5f1e78f 100644
-> --- a/package/libodb-boost/libodb-boost.mk
-> +++ b/package/libodb-boost/libodb-boost.mk
-> @@ -12,5 +12,6 @@ LIBODB_BOOST_INSTALL_STAGING = YES
->  LIBODB_BOOST_LICENSE = GPL-2.0
->  LIBODB_BOOST_LICENSE_FILES = LICENSE
->  LIBODB_BOOST_DEPENDENCIES = boost libodb
-> +LIBODB_BOOST_CONF_ENV = CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11"
->  
->  $(eval $(autotools-package))
+> comment "armadillo needs a toolchain w/ C++"
+>         depends on BR2_PACKAGE_OPENBLAS_ARCH_SUPPORTS
+>         depends on !BR2_INSTALL_LIBSTDCPP
+> 
+> comment "armadillo needs a toolchain w/ fortran, C++"
+>         depends on !BR2_PACKAGE_OPENBLAS_ARCH_SUPPORTS # otherwise, see comment above
+>         depends on BR2_PACKAGE_LAPACK_ARCH_SUPPORTS
+>         depends on !BR2_TOOLCHAIN_HAS_FORTRAN || !BR2_INSTALL_LIBSTDCPP
+> 
+> If we're on an arch supported by openblas, "needs a toolchain w/ C++"
+> is displayed.
+> 
+> If we're on an arch not supported by openblas, but supported by lapack,
+> "needs a toolchain w/ fortran, C++" is displayed.
+> 
+> So it all looks good to me.
+> 
+> 
+>>> It's an open question:
+>>> until now armadillo was always built with blas and lapack support provided by
+>>> clapack. To avoid breaking current behaviour (lapack support) why not
+>>> considering selecting lapack package unconditionaly and let user choise for
+>>> blas support? I know the main issue is the dependency to fortran...  
+>>
+>>  What you're basically saying is that in the choice between lapack and openblas,
+>> lapack should be the default, right?
+>>
+>>  Can you maybe explain a bit what your original reason for this patch was?
+>> Armadillo basically hides the BLAS implementation, so unless it's buggy, you
+>> shouldn't even notice which implementation is behind. Also, the lapack package
+>> itself says that you should not use its BLAS implementation but you should use a
+>> better one instead.
+> 
+> I was also confused by Gwenhael's comment, including with his reply to
+> your question. So at this point, I've applied your patch as-is, we can
+> always improve/fix later on if needed.
+> 
+> Best regards,
+> 
+> Thomas
 > 
 _______________________________________________
 buildroot mailing list
