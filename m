@@ -7,51 +7,52 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E7F0CC4338F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 01:17:10 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3558BC4338F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 01:17:23 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id A9F6C60524
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 01:17:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A9F6C60524
+	by mail.kernel.org (Postfix) with ESMTPS id E410F60524
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 01:17:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E410F60524
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 865FE60B4B;
-	Wed,  4 Aug 2021 01:17:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BD9328442C;
+	Wed,  4 Aug 2021 01:17:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EZ--CdhkBbEr; Wed,  4 Aug 2021 01:17:09 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3U-2yFRr8fcK; Wed,  4 Aug 2021 01:17:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F333E60B33;
-	Wed,  4 Aug 2021 01:17:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2ACF484411;
+	Wed,  4 Aug 2021 01:17:21 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 23E391BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:24:33 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 914061BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:24:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1DC1D4057E
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:17:31 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id BD6FE40481
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:19:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PeTA7xxur7G3 for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 21:17:30 +0000 (UTC)
+ with ESMTP id hvtMAmBXXQq2 for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 21:19:46 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 30299404ED
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:17:30 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id BED5140480
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:19:46 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 765D38B451; Tue,  3 Aug 2021 21:17:22 +0000 (UTC)
+ id 07E998B462; Tue,  3 Aug 2021 21:19:39 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Tue, 3 Aug 2021 23:16:27 +0200
+Date: Tue, 3 Aug 2021 23:18:45 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a484c19721f2591b41062b87356a3c7ff1c969e2
-X-Git-Newrev: 53b25aa393bfefc9487b814af0f55a8a4235c3df
+X-Git-Oldrev: 53b25aa393bfefc9487b814af0f55a8a4235c3df
+X-Git-Newrev: 922cd6f64c6923793f136b7cbe00e456575defd0
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211722.765D38B451@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/pipewire: add libdrm dependency
+Message-Id: <20210803211939.07E998B462@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gpsd: fix workaround for gcc bug
+ 68485
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,43 +65,81 @@ List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============8393620385943914393=="
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=53b25aa393bfefc9487b814af0f55a8a4235c3df
+--===============8393620385943914393==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=922cd6f64c6923793f136b7cbe00e456575defd0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The libcamera option requires libdrm, require and depend on it
-when available for libcamera plugin.
+Workaround for gcc bug 68485 doesn't work anymore since bump to version
+3.21 in commit 5b3e72139952e0c953c8649cca55571cec5f3836 because CXXFLAGS
+is appended after CFLAGS and does not contain -O0:
+
+/tmp/instance-7/output-1/host/bin/microblazeel-linux-gcc -o rtcm2_json.os -c --sysroot=/tmp/instance-7/output-1/host/microblazeel-buildroot-linux-uclibc/sysroot -pthread -Wall -Wcast-align -Wextra -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wvla -O0 -Os -g0 -pthread -fPIC -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -I/tmp/instance-7/output-1/host/microblazeel-buildroot-linux-uclibc/sysroot/usr/include/dbus-1.0 -I/tmp/instance-7/output-1/host/microblazeel-buildroot-linux-uclibc/sysroot/usr/lib/dbus-1.0/include rtcm2_json.c
+during RTL pass: reload
+rtcm2_json.c: In function ‘json_rtcm2_read’:
+rtcm2_json.c:267:1: internal compiler error: in gen_reg_rtx, at emit-rtl.c:1155
+  267 | }
+      | ^
+
+It should be noted that GPSD_CXXFLAGS was added 5 years ago with commit
+b4c050e9afed7a8dc302e6e1014cc4ffb508590d but was not actually used in
+that commit or any later.
 
 Fixes:
- - http://autobuild.buildroot.net/results/e3bc1d9aa69af1d2cdeee7709df318fccbaa5476
+ - http://autobuild.buildroot.org/results/fab33f25b08fa218af91640fdbd8c0dcf1d07228
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/pipewire/pipewire.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/gpsd/gpsd.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/package/pipewire/pipewire.mk b/package/pipewire/pipewire.mk
-index b316d482d9..2317398088 100644
---- a/package/pipewire/pipewire.mk
-+++ b/package/pipewire/pipewire.mk
-@@ -95,9 +95,9 @@ else
- PIPEWIRE_CONF_OPTS += -Dv4l2=disabled
+diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
+index 0fbb5dfa1d..45f6d35ef8 100644
+--- a/package/gpsd/gpsd.mk
++++ b/package/gpsd/gpsd.mk
+@@ -16,6 +16,7 @@ GPSD_DEPENDENCIES = host-python3 host-scons host-pkgconf
+ 
+ GPSD_LDFLAGS = $(TARGET_LDFLAGS)
+ GPSD_CFLAGS = $(TARGET_CFLAGS)
++GPSD_CXXFLAGS = $(TARGET_CXXFLAGS)
+ 
+ GPSD_SCONS_ENV = $(TARGET_CONFIGURE_OPTS)
+ 
+@@ -46,6 +47,7 @@ endif
+ 
+ ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_68485),y)
+ GPSD_CFLAGS += -O0
++GPSD_CXXFLAGS += -O0
  endif
  
--ifeq ($(BR2_PACKAGE_LIBCAMERA)$(BR2_PACKAGE_HAS_UDEV),yy)
-+ifeq ($(BR2_PACKAGE_LIBCAMERA)$(BR2_PACKAGE_LIBDRM)$(BR2_PACKAGE_HAS_UDEV),yyy)
- PIPEWIRE_CONF_OPTS += -Dlibcamera=enabled
--PIPEWIRE_DEPENDENCIES += libcamera
-+PIPEWIRE_DEPENDENCIES += libcamera libdrm
- else
- PIPEWIRE_CONF_OPTS += -Dlibcamera=disabled
- endif
+ # If libusb is available build it before so the package can use it
+@@ -203,7 +205,8 @@ endif
+ GPSD_SCONS_ENV += \
+ 	LDFLAGS="$(GPSD_LDFLAGS)" \
+ 	CFLAGS="$(GPSD_CFLAGS)" \
+-	CCFLAGS="$(GPSD_CFLAGS)"
++	CCFLAGS="$(GPSD_CFLAGS)" \
++	CXXFLAGS="$(GPSD_CXXFLAGS)"
+ 
+ define GPSD_BUILD_CMDS
+ 	(cd $(@D); \
+
+--===============8393620385943914393==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
 http://lists.busybox.net/mailman/listinfo/buildroot
+
+--===============8393620385943914393==--
