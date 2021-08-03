@@ -2,92 +2,96 @@ Return-Path: <SRS0=jXvl=M2=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.6 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
-	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 81139C4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 09:19:33 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D10DC4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 09:19:52 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 36B9A603E7
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 09:19:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 36B9A603E7
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id 02A49603E7
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 09:19:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 02A49603E7
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 040B860717;
-	Tue,  3 Aug 2021 09:19:33 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B88E84027A;
+	Tue,  3 Aug 2021 09:19:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id euDDYXOS_1ZW; Tue,  3 Aug 2021 09:19:32 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id FTlEqYapOh9p; Tue,  3 Aug 2021 09:19:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4E8DD6063E;
-	Tue,  3 Aug 2021 09:19:31 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1B7091BF2B0
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 09:19:30 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B367540219;
+	Tue,  3 Aug 2021 09:19:49 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 22D841BF2B0
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 09:19:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0AF17401BA
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 09:19:30 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1FA676072C
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 09:19:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Brq3a4eXpdDm for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 09:19:29 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7CmD610QNUJK for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 09:19:47 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
- [IPv6:2a00:1450:4864:20::32a])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 11733401B6
- for <buildroot@buildroot.org>; Tue,  3 Aug 2021 09:19:28 +0000 (UTC)
-Received: by mail-wm1-x32a.google.com with SMTP id
- e25-20020a05600c4b99b0290253418ba0fbso1691622wmp.1
- for <buildroot@buildroot.org>; Tue, 03 Aug 2021 02:19:28 -0700 (PDT)
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com
+ [IPv6:2a00:1450:4864:20::632])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2B99D6063E
+ for <buildroot@buildroot.org>; Tue,  3 Aug 2021 09:19:47 +0000 (UTC)
+Received: by mail-ej1-x632.google.com with SMTP id e19so35345041ejs.9
+ for <buildroot@buildroot.org>; Tue, 03 Aug 2021 02:19:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=fU/d0Fmz/dLMeoreZNWTQHyFznrGOzAjtHeYolFI0Mo=;
- b=gyZLFtHJSiC1Z4CK8izwG/619mYU5LGDBjuxV4f7anyD1YrHTQJs4BM6zoC4IBhp4l
- QEhEQq3Ku+dxqT5DkZgC/h/SZYyAqB4I3atYcw26EXB4EmcHqB9swEHmLCxekmiZ7a1M
- kErhdDSFBSXNpx06FILbAN7WIgcc6U4REQRRiuetxMAI7ujJKiJjHY/FXnh/wNpHR5uw
- WFWtnnTQq9vYm174Mzoqk6ZPMsHnexmTBqa/47oECTInoC6zOyQbUbNA4aKM8f2m0qYK
- huyGpjp1hXBRkGg09cr5IS2SEhs24EqYWxqW8cNn4tcZebMLRhCrTUJQubufKnLMbyxz
- re7A==
+ h=sender:from:to:cc:subject:references:date:in-reply-to:message-id
+ :user-agent:mime-version;
+ bh=G2NTgZJHUQvPNPHvPfG1b0lVLtD0p7GP4sclKHG0MmI=;
+ b=Ci11Z/PauPYzDSPdVTtW/HuykaH2AEBSM2RT58ZKEL/lsezcR0pbdX6DRaq9Y0/oBg
+ l+1Gt7W3CcHOki6KAj/ALkGeJ/YWCEtQBsUR1VNCWfCflz6P1CWW/fLKHx8yFWPQSUSp
+ kat1/4pg0Hm3eEX2SZ9r0o9T6K8lCR/g36QUyEhxlAj9pmxrfAkNxhKmE8eJF+EUlLVf
+ X7IPv+C26ZJ1nM+UuKH+dnAPjD4oJFBTwOLmrj/fNzr120tYvO/eqVGEYUoijmgOYFWJ
+ 1cAKmm0crRXPTtqxFPIAaspjBlxdavCGKpplC9v2sapQblE7QFgWvVDrG4QHB666/s5c
+ zmDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=fU/d0Fmz/dLMeoreZNWTQHyFznrGOzAjtHeYolFI0Mo=;
- b=V0f0omKMgmsC23R5k51/T18/df7riq1u4yDd5G69Pc4lpk7qW5j/RdLpc056Ln80Xe
- o7LtZb/rRJsWmAepNycrZ6itpnQpQM+oLGO/yz62guWZx4yEBR6sLOrxTAzPU7P2uu4u
- 2iIuATQbRfKVXLHF+D8vi92suIN9duSPs57zI91fL2dY1vdL3P2LhNVhKLS1r7PsCJzg
- JvDWqLJ6vhT1uBODqPBTRV43P6rtzmBSOYxOFzUBbGTiQha0ZgrCK5dJOH+sIDHblJ5a
- qKZY0jpa8E6Oqil4tuAIAjBugNm3wTTwXSB9cpIRi6M2zUWMdNXcpBoAuv4X7QCbbTgC
- +wJw==
-X-Gm-Message-State: AOAM532hEqrHc2FvrO9G0Wg5tKyYe3tD8zYd52NsMj8hFOmI25DGNw/e
- ZP3XoY9Eu68j1ZGxa+UWQhxY+psMg7ODpA==
-X-Google-Smtp-Source: ABdhPJyPsUKcxtYo1EITrl9DxdVd7nVYP1oywjRDXpCEoTUnoDon6Ws9uc7ANk7GIpLgukLok14eMQ==
-X-Received: by 2002:a7b:c94c:: with SMTP id i12mr3250939wml.148.1627982366866; 
- Tue, 03 Aug 2021 02:19:26 -0700 (PDT)
-Received: from kali.home (pop.92-184-116-144.mobile.abo.orange.fr.
- [92.184.116.144])
- by smtp.gmail.com with ESMTPSA id j19sm2717970wmi.3.2021.08.03.02.19.25
+ h=x-gm-message-state:sender:from:to:cc:subject:references:date
+ :in-reply-to:message-id:user-agent:mime-version;
+ bh=G2NTgZJHUQvPNPHvPfG1b0lVLtD0p7GP4sclKHG0MmI=;
+ b=bZsoMtltI+GN/WgjPX2UutMN9IMNhPKJGkrvJvi58WIOpsy8cc0JFUcrJ5RfsVg0n3
+ pUcrZwqBRxVKkNnJdNSsG1fiB+mn83CuAPWUXXokvwVv9eigif7oU0pATWYSRv1Jd2JM
+ aEWlLRr0/XIHDhWJUNpZMcZVmsIfZ3C4mOsYVamDQTlmsK/VhAFn3+Tkh7A9rAvTXGTr
+ QDLK6LVuIcq4FidwVdy2S0jbDBoHv+ppyWa3f+jGcTVfCeSPQctgkSNNeQz4iFb+ZhnI
+ KfyWpQez194+3t6bNl8msY7py9jlBcRYtRbz3uFZV5P89Dj17bJNIqQB+KaoOO1qA98l
+ am5w==
+X-Gm-Message-State: AOAM5318WsNo/BlIwfT1pTaVm7m9WQdRtCcQalE2TlyOxmS2gY42CiZV
+ RCbR6PGOvAh6z29D99qW02o=
+X-Google-Smtp-Source: ABdhPJz03/UbzIq43g4K6j8aacmvJNWDUE3cK5/r5ihnmeZbaDtrExtXomRirGdOl9+pTAPnuJHfUQ==
+X-Received: by 2002:a17:906:5959:: with SMTP id
+ g25mr19077636ejr.243.1627982385324; 
+ Tue, 03 Aug 2021 02:19:45 -0700 (PDT)
+Received: from dell.be.48ers.dk ([195.162.189.230])
+ by smtp.gmail.com with ESMTPSA id h10sm6777464edb.74.2021.08.03.02.19.43
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 03 Aug 2021 02:19:26 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Tue,  3 Aug 2021 11:19:18 +0200
-Message-Id: <20210803091918.2777403-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.30.2
+ Tue, 03 Aug 2021 02:19:44 -0700 (PDT)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
+ (envelope-from <peter@korsgaard.com>)
+ id 1mAqaN-0000oS-9u; Tue, 03 Aug 2021 11:19:43 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: James Hilliard <james.hilliard1@gmail.com>
+References: <20210708111627.3795182-1-james.hilliard1@gmail.com>
+Date: Tue, 03 Aug 2021 11:19:43 +0200
+In-Reply-To: <20210708111627.3795182-1-james.hilliard1@gmail.com> (James
+ Hilliard's message of "Thu, 8 Jul 2021 05:16:27 -0600")
+Message-ID: <87wnp2yjf4.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/gpsd: fix workaround for gcc bug
- 68485
+Subject: Re: [Buildroot] [PATCH 1/1] package/{chrony, ntp,
+ openntpd}: turn off DNSSEC validation
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,51 +103,32 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-V29ya2Fyb3VuZCBmb3IgZ2NjIGJ1ZyA2ODQ4NSBkb2Vzbid0IHdvcmsgYW55bW9yZSBzaW5jZSBi
-dW1wIHRvIHZlcnNpb24KMy4yMSBpbiBjb21taXQgNWIzZTcyMTM5OTUyZTBjOTUzYzg2NDljY2E1
-NTU3MWNlYzVmMzgzNiBiZWNhdXNlIC1PMCBpcwptb3ZlZCBiZWZvcmUgLU9zIChwcm9iYWJseSBi
-eSBzb21lIG9ic2N1cmUgc2NvbnMgZnVuY3Rpb24pOgoKL3RtcC9pbnN0YW5jZS03L291dHB1dC0x
-L2hvc3QvYmluL21pY3JvYmxhemVlbC1saW51eC1nY2MgLW8gcnRjbTJfanNvbi5vcyAtYyAtLXN5
-c3Jvb3Q9L3RtcC9pbnN0YW5jZS03L291dHB1dC0xL2hvc3QvbWljcm9ibGF6ZWVsLWJ1aWxkcm9v
-dC1saW51eC11Y2xpYmMvc3lzcm9vdCAtcHRocmVhZCAtV2FsbCAtV2Nhc3QtYWxpZ24gLVdleHRy
-YSAtV2ltcGxpY2l0LWZhbGx0aHJvdWdoIC1XbWlzc2luZy1kZWNsYXJhdGlvbnMgLVdtaXNzaW5n
-LXByb3RvdHlwZXMgLVduby1taXNzaW5nLWZpZWxkLWluaXRpYWxpemVycyAtV25vLXVuaW5pdGlh
-bGl6ZWQgLVdwb2ludGVyLWFyaXRoIC1XcmV0dXJuLXR5cGUgLVdzdHJpY3QtcHJvdG90eXBlcyAt
-V3ZsYSAtTzAgLU9zIC1nMCAtcHRocmVhZCAtZlBJQyAtRF9MQVJHRUZJTEVfU09VUkNFIC1EX0xB
-UkdFRklMRTY0X1NPVVJDRSAtRF9GSUxFX09GRlNFVF9CSVRTPTY0IC1JL3RtcC9pbnN0YW5jZS03
-L291dHB1dC0xL2hvc3QvbWljcm9ibGF6ZWVsLWJ1aWxkcm9vdC1saW51eC11Y2xpYmMvc3lzcm9v
-dC91c3IvaW5jbHVkZS9kYnVzLTEuMCAtSS90bXAvaW5zdGFuY2UtNy9vdXRwdXQtMS9ob3N0L21p
-Y3JvYmxhemVlbC1idWlsZHJvb3QtbGludXgtdWNsaWJjL3N5c3Jvb3QvdXNyL2xpYi9kYnVzLTEu
-MC9pbmNsdWRlIHJ0Y20yX2pzb24uYwpkdXJpbmcgUlRMIHBhc3M6IHJlbG9hZApydGNtMl9qc29u
-LmM6IEluIGZ1bmN0aW9uIOKAmGpzb25fcnRjbTJfcmVhZOKAmToKcnRjbTJfanNvbi5jOjI2Nzox
-OiBpbnRlcm5hbCBjb21waWxlciBlcnJvcjogaW4gZ2VuX3JlZ19ydHgsIGF0IGVtaXQtcnRsLmM6
-MTE1NQogIDI2NyB8IH0KICAgICAgfCBeCgpGaXhlczoKIC0gaHR0cDovL2F1dG9idWlsZC5idWls
-ZHJvb3Qub3JnL3Jlc3VsdHMvZmFiMzNmMjViMDhmYTIxOGFmOTE2NDBmZGJkOGMwZGNmMWQwNzIy
-OAoKU2lnbmVkLW9mZi1ieTogRmFicmljZSBGb250YWluZSA8Zm9udGFpbmUuZmFicmljZUBnbWFp
-bC5jb20+Ci0tLQogcGFja2FnZS9ncHNkL2dwc2QubWsgfCA5ICsrKysrKy0tLQogMSBmaWxlIGNo
-YW5nZWQsIDYgaW5zZXJ0aW9ucygrKSwgMyBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9wYWNr
-YWdlL2dwc2QvZ3BzZC5tayBiL3BhY2thZ2UvZ3BzZC9ncHNkLm1rCmluZGV4IDBmYmI1ZGZhMWQu
-LmRmMWYyNzNjZTUgMTAwNjQ0Ci0tLSBhL3BhY2thZ2UvZ3BzZC9ncHNkLm1rCisrKyBiL3BhY2th
-Z2UvZ3BzZC9ncHNkLm1rCkBAIC0xNSw5ICsxNSw2IEBAIEdQU0RfSU5TVEFMTF9TVEFHSU5HID0g
-WUVTCiBHUFNEX0RFUEVOREVOQ0lFUyA9IGhvc3QtcHl0aG9uMyBob3N0LXNjb25zIGhvc3QtcGtn
-Y29uZgogCiBHUFNEX0xERkxBR1MgPSAkKFRBUkdFVF9MREZMQUdTKQotR1BTRF9DRkxBR1MgPSAk
-KFRBUkdFVF9DRkxBR1MpCi0KLUdQU0RfU0NPTlNfRU5WID0gJChUQVJHRVRfQ09ORklHVVJFX09Q
-VFMpCiAKIEdQU0RfU0NPTlNfT1BUUyA9IFwKIAlhcmNoPSQoQVJDSCkgXApAQCAtNDUsNyArNDIs
-MTMgQEAgR1BTRF9TQ09OU19PUFRTICs9IGxpYmdwc21tPW5vCiBlbmRpZgogCiBpZmVxICgkKEJS
-Ml9UT09MQ0hBSU5fSEFTX0dDQ19CVUdfNjg0ODUpLHkpCisjIEZpbHRlciBvdXQgYW55IG9wdGlt
-aXNhdGlvbiBmbGFncyB0byBiZSBzdXJlIHRoYXQgLU8wIHdpbGwgYmUgdXNlZAorR1BTRF9TQ09O
-U19FTlYgKz0gJChmaWx0ZXItb3V0IC1PJSwkKFRBUkdFVF9DT05GSUdVUkVfT1BUUykpCitHUFNE
-X0NGTEFHUyArPSAkKGZpbHRlci1vdXQgLU8lLCQoVEFSR0VUX0NGTEFHUykpCiBHUFNEX0NGTEFH
-UyArPSAtTzAKK2Vsc2UKK0dQU0RfU0NPTlNfRU5WICs9ICQoVEFSR0VUX0NPTkZJR1VSRV9PUFRT
-KQorR1BTRF9DRkxBR1MgKz0gJChUQVJHRVRfQ0ZMQUdTKQogZW5kaWYKIAogIyBJZiBsaWJ1c2Ig
-aXMgYXZhaWxhYmxlIGJ1aWxkIGl0IGJlZm9yZSBzbyB0aGUgcGFja2FnZSBjYW4gdXNlIGl0Ci0t
-IAoyLjMwLjIKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-CmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1c3lib3gubmV0Cmh0dHA6Ly9saXN0
-cy5idXN5Ym94Lm5ldC9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+>>>>> "James" == James Hilliard <james.hilliard1@gmail.com> writes:
+
+ > We have a chicken and egg problem: validation of DNSSEC signatures
+ > doesn't work without a correct clock, but to set the correct clock we
+ > need to contact NTP servers which requires resolving a hostname, which
+ > would normally require DNSSEC validation.
+
+ > Let's break the cycle by excluding NTP hostname resolution from
+ > validation for now.
+
+ > Details:
+ > https://github.com/systemd/systemd/commit/abf4e5c1d3ad767bc0ed67883e8e4d916af095ec
+
+ > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+
+Committed to 2021.02.x and 2021.05.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
+_______________________________________________
+buildroot mailing list
+buildroot@busybox.net
+http://lists.busybox.net/mailman/listinfo/buildroot
