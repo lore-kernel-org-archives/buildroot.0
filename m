@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E8456C4338F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 20:48:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 28054C4338F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 20:48:36 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id AF9F4600CD
-	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 20:48:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org AF9F4600CD
+	by mail.kernel.org (Postfix) with ESMTPS id E72AD60EC0
+	for <buildroot@archiver.kernel.org>; Tue,  3 Aug 2021 20:48:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E72AD60EC0
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7D70C404BB;
-	Tue,  3 Aug 2021 20:48:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C0DFF4049A;
+	Tue,  3 Aug 2021 20:48:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0CBq5bfGzCKw; Tue,  3 Aug 2021 20:48:22 +0000 (UTC)
+	with ESMTP id MA9qDhTAWdP7; Tue,  3 Aug 2021 20:48:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DB1964049A;
-	Tue,  3 Aug 2021 20:48:21 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9AE621BF9AA
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2D8AD404BB;
+	Tue,  3 Aug 2021 20:48:34 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E1E7D1BF83C
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 20:48:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8B34A40435
+ by smtp2.osuosl.org (Postfix) with ESMTP id D02DE400E7
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 20:48:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Nk1KTFsQmlNq for <buildroot@lists.busybox.net>;
- Tue,  3 Aug 2021 20:48:07 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id J3Q-ZFk0os2G for <buildroot@lists.busybox.net>;
+ Tue,  3 Aug 2021 20:48:08 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id E68AE404A6
+ by smtp2.osuosl.org (Postfix) with ESMTP id F0C554015B
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 20:48:07 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 439A98B3CD; Tue,  3 Aug 2021 20:48:00 +0000 (UTC)
+ id 4EA658B3CE; Tue,  3 Aug 2021 20:48:00 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 3 Aug 2021 22:42:21 +0200
+Date: Tue, 3 Aug 2021 22:45:13 +0200
 X-Git-Refname: refs/heads/2021.05.x
-X-Git-Oldrev: 57c22491e3f3a0897e7c6b92a37dae1c4fddc7a7
-X-Git-Newrev: f49f99b647b47db89eb1a68c0211e8d222ffbe0a
+X-Git-Oldrev: f49f99b647b47db89eb1a68c0211e8d222ffbe0a
+X-Git-Newrev: 070936595070910bd61a461784909153e079462b
 X-Patchwork-Hint: ignore
-Message-Id: <20210803204800.439A98B3CD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.05.x] package/libuci: ignore
- CVE-2019-15513
+Message-Id: <20210803204800.4EA658B3CE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.05.x] package/dovecot: ignore
+ CVE-2016-4983
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,36 +70,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f49f99b647b47db89eb1a68c0211e8d222ffbe0a
+commit: https://git.buildroot.net/buildroot/commit/?id=070936595070910bd61a461784909153e079462b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
 
-CVE-2019-15513 was fixed upstream in 2015 with commit
-19e29ffc15dbd958e8e6a648ee0982c68353516f, which is older than the commit
-we currently use in LIBUCI_VERSION.
+CVE-2016-4983 is an issue in a postinstall script in the dovecot rpm,
+which is part of the Red Hat packaging and not part of upstream dovecot
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-[yann.morin.1998@free.fr: reword comment and commit log]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 46273a8eb92171b3c70a6b2750549329a0d4ccba)
+(cherry picked from commit 948e71689a0dc900ad2afa026e9e80e78086c157)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libuci/libuci.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ package/dovecot/dovecot.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/libuci/libuci.mk b/package/libuci/libuci.mk
-index a8922a96e1..0d0b78036e 100644
---- a/package/libuci/libuci.mk
-+++ b/package/libuci/libuci.mk
-@@ -12,6 +12,9 @@ LIBUCI_CPE_ID_VENDOR = openwrt
- LIBUCI_INSTALL_STAGING = YES
- LIBUCI_DEPENDENCIES = libubox
+diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
+index 93d04fc8a1..cb1cc990a1 100644
+--- a/package/dovecot/dovecot.mk
++++ b/package/dovecot/dovecot.mk
+@@ -18,6 +18,10 @@ DOVECOT_DEPENDENCIES = \
+ # add host-gettext for AM_ICONV macro
+ DOVECOT_DEPENDENCIES += host-gettext
  
-+# Fixed in commit 19e29ffc15dbd958e8e6a648ee0982c68353516f, older than LIBUCI_VERSION
-+LIBUCI_IGNORE_CVES += CVE-2019-15513
++# CVE-2016-4983 is an issue in a postinstall script in the dovecot rpm, which
++# is part of the Red Hat packaging and not part of upstream dovecot
++DOVECOT_IGNORE_CVES += CVE-2016-4983
 +
- ifeq ($(BR2_PACKAGE_LUA_5_1),y)
- LIBUCI_DEPENDENCIES += lua
- LIBUCI_CONF_OPTS += -DBUILD_LUA=ON \
+ DOVECOT_CONF_ENV = \
+ 	RPCGEN=__disable_RPCGEN_rquota \
+ 	i_cv_epoll_works=yes \
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
