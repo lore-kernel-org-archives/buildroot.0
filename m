@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-17.2 required=3.0 tests=BAYES_00,DATE_IN_PAST_03_06,
 	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8543BC4338F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 01:13:03 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1C4E4C4338F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 01:13:16 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 4AED761037
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 01:13:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4AED761037
+	by mail.kernel.org (Postfix) with ESMTPS id D3B9960F58
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 01:13:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D3B9960F58
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2540460B70;
-	Wed,  4 Aug 2021 01:13:03 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A35D94063F;
+	Wed,  4 Aug 2021 01:13:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lVzU3FDZVFLh; Wed,  4 Aug 2021 01:13:02 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id JlrFStc-7Glg; Wed,  4 Aug 2021 01:13:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5A34160B5F;
-	Wed,  4 Aug 2021 01:13:01 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 97DE2405A2;
+	Wed,  4 Aug 2021 01:13:13 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B20811BF349
- for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:23:24 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id BA49D1BF349
+ for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:23:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3E23940EC5
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5442F40F4D
  for <buildroot@lists.busybox.net>; Tue,  3 Aug 2021 21:10:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id oFp8k1PbUWhT for <buildroot@lists.busybox.net>;
+ with ESMTP id x5YTFeSP6oZa for <buildroot@lists.busybox.net>;
  Tue,  3 Aug 2021 21:10:53 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 29A94414C7
+ by smtp2.osuosl.org (Postfix) with ESMTP id 139BE4150B
  for <buildroot@buildroot.org>; Tue,  3 Aug 2021 21:10:36 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 75FD6875FF; Tue,  3 Aug 2021 21:10:28 +0000 (UTC)
+ id 6A41489015; Tue,  3 Aug 2021 21:10:28 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Tue, 3 Aug 2021 18:04:20 +0200
+Date: Tue, 3 Aug 2021 17:56:47 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 4b2be770b8a853a7dd97b5788d837f0d84923fa1
-X-Git-Newrev: b1fce2f871c472de1acf25ae2a663e61f4e921f1
+X-Git-Oldrev: 14377e38871704554f1dc324b690de5d7ef3c029
+X-Git-Newrev: 4b2be770b8a853a7dd97b5788d837f0d84923fa1
 X-Patchwork-Hint: ignore
-Message-Id: <20210803211028.75FD6875FF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/fluxbox: fix build
- with gcc 11
+Message-Id: <20210803211028.6A41489015@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/ripgrep: add
+ workaround for cargo bug #3349
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,56 +70,51 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b1fce2f871c472de1acf25ae2a663e61f4e921f1
+commit: https://git.buildroot.net/buildroot/commit/?id=4b2be770b8a853a7dd97b5788d837f0d84923fa1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fix the following build failure with gcc 11:
-
-util/fluxbox-remote.cc: In function 'int main(int, char**)':
-util/fluxbox-remote.cc:76:32: error: ordered comparison of pointer with integer zero ('unsigned char*' and 'int')
-   76 |             && text_prop.value > 0
-      |                ~~~~~~~~~~~~~~~~^~~
+To fix this bug we have to use an undocumented test variable to enable
+the nightly target-applies-to-host feature so that the target linker
+doesn't get used for host binaries like the build-script.
 
 Fixes:
- - http://autobuild.buildroot.org/results/6e718bb662aa4961ea264eb81e4b7e7b20485e30
+error: failed to run custom build command for `ripgrep v0.8.1 (/home/buildroot/buildroot/output/build/ripgrep-0.8.1)`
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Caused by:
+  process didn't exit successfully: `/home/buildroot/buildroot/output/build/ripgrep-0.8.1/target/release/build/ripgrep-59eeb7069534e1ef/build-script-build` (exit status: 1)
+  --- stderr
+  /home/buildroot/buildroot/output/build/ripgrep-0.8.1/target/release/build/ripgrep-59eeb7069534e1ef/build-script-build: /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.33' not found (required by /home/buildroot/buildroot/output/build/ripgrep-0.8.1/target/release/build/ripgrep-59eeb7069534e1ef/build-script-build)
+
+Details:
+https://github.com/rust-lang/cargo/issues/3349
+https://github.com/rust-lang/cargo/pull/9322
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/fluxbox/0001-fixes-bug-1138.patch | 25 +++++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
+ package/ripgrep/ripgrep.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/package/fluxbox/0001-fixes-bug-1138.patch b/package/fluxbox/0001-fixes-bug-1138.patch
-new file mode 100644
-index 0000000000..9c02e93350
---- /dev/null
-+++ b/package/fluxbox/0001-fixes-bug-1138.patch
-@@ -0,0 +1,25 @@
-+From 22866c4d30f5b289c429c5ca88d800200db4fc4f Mon Sep 17 00:00:00 2001
-+From: John Sennesael <john@aminking.com>
-+Date: Mon, 2 Nov 2015 15:14:32 -0600
-+Subject: [PATCH] fixes bug #1138
-+
-+[Retrieved from:
-+https://github.com/fluxbox/fluxbox/commit/22866c4d30f5b289c429c5ca88d800200db4fc4f]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ util/fluxbox-remote.cc | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/util/fluxbox-remote.cc b/util/fluxbox-remote.cc
-+index 59852e6a..504015b5 100644
-+--- a/util/fluxbox-remote.cc
-++++ b/util/fluxbox-remote.cc
-+@@ -73,7 +73,7 @@ int main(int argc, char **argv) {
-+     if (strcmp(cmd, "result") == 0) {
-+         XTextProperty text_prop;
-+         if (XGetTextProperty(disp, root, &text_prop, atom_result) != 0
-+-            && text_prop.value > 0
-++            && text_prop.value != 0
-+             && text_prop.nitems > 0) {
-+ 
-+             printf("%s", text_prop.value);
+diff --git a/package/ripgrep/ripgrep.mk b/package/ripgrep/ripgrep.mk
+index 2cc578383d..450bb020e3 100644
+--- a/package/ripgrep/ripgrep.mk
++++ b/package/ripgrep/ripgrep.mk
+@@ -11,11 +11,14 @@ RIPGREP_LICENSE_FILES = LICENSE-MIT
+ RIPGREP_CPE_ID_VENDOR = ripgrep_project
+ 
+ RIPGREP_DEPENDENCIES = host-rustc
+-RIPGREP_CARGO_ENV = CARGO_HOME=$(HOST_DIR)/share/cargo
++RIPGREP_CARGO_ENV = CARGO_HOME=$(HOST_DIR)/share/cargo \
++	__CARGO_TEST_CHANNEL_OVERRIDE_DO_NOT_USE_THIS="nightly" \
++	CARGO_TARGET_APPLIES_TO_HOST="false"
+ 
+ RIPGREP_BIN_DIR = target/$(RUSTC_TARGET_NAME)/$(RIPGREP_CARGO_BIN_SUBDIR)
+ 
+ RIPGREP_CARGO_OPTS = \
++	-Z target-applies-to-host \
+ 	--target=$(RUSTC_TARGET_NAME) \
+ 	--manifest-path=$(@D)/Cargo.toml
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
