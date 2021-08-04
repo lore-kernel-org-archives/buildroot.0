@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 39E06C4338F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 19:43:06 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B6B0C4338F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 19:43:18 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9818360F58
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 19:43:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9818360F58
+	by mail.kernel.org (Postfix) with ESMTPS id 9CA7B60F58
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 19:43:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9CA7B60F58
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 57BB740637;
-	Wed,  4 Aug 2021 19:43:05 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id J9wFiVPOE-TW; Wed,  4 Aug 2021 19:43:04 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C08B3405D6;
-	Wed,  4 Aug 2021 19:43:03 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 80E081BF3FB
- for <buildroot@lists.busybox.net>; Wed,  4 Aug 2021 19:43:01 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7034D60A69
- for <buildroot@lists.busybox.net>; Wed,  4 Aug 2021 19:43:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 624BB606AA;
+	Wed,  4 Aug 2021 19:43:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7cJLKTXB2-VZ for <buildroot@lists.busybox.net>;
- Wed,  4 Aug 2021 19:43:00 +0000 (UTC)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id MTFCm0wskp4t; Wed,  4 Aug 2021 19:43:16 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id DA54F60645;
+	Wed,  4 Aug 2021 19:43:15 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id DA5021BF3FB
+ for <buildroot@lists.busybox.net>; Wed,  4 Aug 2021 19:43:01 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id D717983B4E
+ for <buildroot@lists.busybox.net>; Wed,  4 Aug 2021 19:43:01 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id iPZhzdK2ynDM for <buildroot@lists.busybox.net>;
+ Wed,  4 Aug 2021 19:43:01 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id BCED46063A
- for <buildroot@buildroot.org>; Wed,  4 Aug 2021 19:43:00 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3470883B4A
+ for <buildroot@buildroot.org>; Wed,  4 Aug 2021 19:43:01 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id CD5268B6DB; Wed,  4 Aug 2021 19:42:50 +0000 (UTC)
+ id 49D678B6DB; Wed,  4 Aug 2021 19:42:51 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Wed, 4 Aug 2021 21:41:53 +0200
+Date: Wed, 4 Aug 2021 21:42:10 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: a2de01e75a934f3b56c2a1331ceaac95f3face46
-X-Git-Newrev: 4545ec800a2c417211a09a35adb57880e01a28c1
+X-Git-Oldrev: 4945784fbd4bb1e44803d81447dfabd67efed3d3
+X-Git-Newrev: 613827c5b0a2bf71320047954639dc9003524db0
 X-Patchwork-Hint: ignore
-Message-Id: <20210804194250.CD5268B6DB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/netsnmp: add SELinux
- module
+Message-Id: <20210804194251.49D678B6DB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/xscreensaver: add
+ SELinux module
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,30 +70,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4545ec800a2c417211a09a35adb57880e01a28c1
+commit: https://git.buildroot.net/buildroot/commit/?id=613827c5b0a2bf71320047954639dc9003524db0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Support for netsnmp is added by the services/snmp module in the SELinux
-refpolicy.
+Support for xscreensaver is added by the apps/xscreensaver module in the
+SELinux refpolicy.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/netsnmp/netsnmp.mk | 1 +
+ package/xscreensaver/xscreensaver.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/netsnmp/netsnmp.mk b/package/netsnmp/netsnmp.mk
-index 1a9a776033..985cfeac72 100644
---- a/package/netsnmp/netsnmp.mk
-+++ b/package/netsnmp/netsnmp.mk
-@@ -11,6 +11,7 @@ NETSNMP_LICENSE = Various BSD-like
- NETSNMP_LICENSE_FILES = COPYING
- NETSNMP_CPE_ID_VENDOR = net-snmp
- NETSNMP_CPE_ID_PRODUCT = $(NETSNMP_CPE_ID_VENDOR)
-+NETSNMP_SELINUX_MODULES = snmp
- NETSNMP_INSTALL_STAGING = YES
- NETSNMP_CONF_ENV = \
- 	ac_cv_NETSNMP_CAN_USE_SYSCTL=no \
+diff --git a/package/xscreensaver/xscreensaver.mk b/package/xscreensaver/xscreensaver.mk
+index c3c9ec89c3..d2c34679cd 100644
+--- a/package/xscreensaver/xscreensaver.mk
++++ b/package/xscreensaver/xscreensaver.mk
+@@ -11,6 +11,7 @@ XSCREENSAVER_SITE = https://www.jwz.org/xscreensaver
+ XSCREENSAVER_LICENSE = MIT-like, GPL-2.0+
+ XSCREENSAVER_LICENSE_FILES = hacks/screenhack.h hacks/glx/chessmodels.h
+ XSCREENSAVER_CPE_ID_VENDOR = xscreensaver_project
++XSCREENSAVER_SELINUX_MODULES = xscreensaver
+ 
+ XSCREENSAVER_DEPENDENCIES = \
+ 	gdk-pixbuf \
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
