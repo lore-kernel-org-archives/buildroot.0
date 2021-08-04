@@ -2,72 +2,80 @@ Return-Path: <SRS0=sxUg=M3=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-20.2 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.2 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A6F56C4338F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 10:02:37 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4DA52C4320E
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 10:04:59 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 0473861029
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 10:02:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0473861029
+	by mail.kernel.org (Postfix) with ESMTPS id 88CCD61029
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 10:04:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 88CCD61029
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=benettiengineering.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BA5574023E;
-	Wed,  4 Aug 2021 10:02:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5FF7983566;
+	Wed,  4 Aug 2021 10:04:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jnDWDn7R51YE; Wed,  4 Aug 2021 10:02:35 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id zDRw1TRDlyzk; Wed,  4 Aug 2021 10:04:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C8D7B40334;
-	Wed,  4 Aug 2021 10:02:34 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6E4431BF4DA
- for <buildroot@lists.busybox.net>; Wed,  4 Aug 2021 10:02:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 69E3B831CA;
+	Wed,  4 Aug 2021 10:04:56 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A5C621BF418
+ for <buildroot@lists.busybox.net>; Wed,  4 Aug 2021 10:04:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6310340332
- for <buildroot@lists.busybox.net>; Wed,  4 Aug 2021 10:02:32 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 94DA560685
+ for <buildroot@lists.busybox.net>; Wed,  4 Aug 2021 10:04:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ExZM_OYZmvjB for <buildroot@lists.busybox.net>;
- Wed,  4 Aug 2021 10:02:30 +0000 (UTC)
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=aruba.it
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fjRur47djaz9 for <buildroot@lists.busybox.net>;
+ Wed,  4 Aug 2021 10:04:54 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
 Received: from smtpcmd0872.aruba.it (smtpcmd0872.aruba.it [62.149.156.72])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4C3D24023E
- for <buildroot@buildroot.org>; Wed,  4 Aug 2021 10:02:30 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1D05B6067B
+ for <buildroot@buildroot.org>; Wed,  4 Aug 2021 10:04:53 +0000 (UTC)
 Received: from [192.168.126.129] ([146.241.149.252])
  by Aruba Outgoing Smtp  with ESMTPSA
- id BDjGmj3vOiG5UBDjGm9UBX; Wed, 04 Aug 2021 12:02:27 +0200
+ id BDlamj6jWiG5UBDlbm9WYp; Wed, 04 Aug 2021 12:04:52 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1628071347; bh=1YgKPfSPQRYFI/qxp27V9juaq/TYuOaSeWQ/j9NNSrE=;
- h=Subject:To:From:Date:MIME-Version:Content-Type;
- b=I5QE4VvZ9O1vB3UoKY2VtfmGDSv7tgcdFPTep52xNegcfaAGZj6X3VhXQAXCyHVFM
- JtJojmmXqL8XTRGsXaDkGT/1CHc1VvUjjz0zFM7r2MU8JwemgntlZOv/oDdUOeFJxV
- 787ckuH/h0WLa/0vpn5fZFUnqOVHyI8EBfIQbRCE6LPJ5EQk0uzM28tNWfQJ/lo+Yn
- dsWj0/xgzUynN7XlEAmc0b35JcVKKHTZeH95A9KjorG8X4I/qt9LlAKnbkACtjM5G7
- VcPsFhuE1fxg18J+2lcao94Kt8v6NKXuKXN+fnbEIc/R1Ne8tVbt5BIjVKG7QpbUbC
- HDfCOD1Qdnv1Q==
-To: buildroot@buildroot.org
-References: <20210803224106.1619032-1-giulio.benetti@benettiengineering.com>
+ t=1628071492; bh=1S33+nIfa/J2BOiES0AaN0derm1b7pB4Fp+v7rAhyQo=;
+ h=Subject:From:To:Date:MIME-Version:Content-Type;
+ b=bca+M7EfGFpWcBHzYoOO9+3RJBoudpv6LSIyekzlKYijHrHig6KyDnglf9nHw70Dz
+ 5X7NgQUFb/b4Rnrp6X0Uq4cWJMctMmUBFJ371v1X8l2ipFjsg+CkVubbHep6B++b38
+ cIxbwtet9sbuTCRLc5hzOwwVAurXL+VVVFF4pXZGkKd2poF+xJUENuboo/AcP82nQS
+ TTtE0BItTeoskH046PmUVRjLT5RPxtMZN9hEXo6sP9jrr8U/YXa/lPkdda0btsObIP
+ s65lmX0I3dDDCthf/YPNGKjZjRSY1MySzgqJiQugi+q3Bb/9lxzxdTTIqk/OE4nK5/
+ 2+YzxGRwPlW6w==
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <a1456d9e-cb0b-ebdb-f015-91babb192cca@benettiengineering.com>
-Date: Wed, 4 Aug 2021 12:02:25 +0200
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20210802060946.C27006062D@smtp3.osuosl.org>
+ <20210802234647.6f3df99d@windsurf>
+ <0c80668e-d1c0-3516-4a9e-54e6eb32cfd8@benettiengineering.com>
+ <20210803092835.0e4d2663@windsurf>
+ <b12d517a-762e-8a2f-c418-f7ffc865b4e7@benettiengineering.com>
+ <4629534e-1c5b-2e18-45fe-ef532e38ce5a@benettiengineering.com>
+Message-ID: <6d4c5bec-d363-63a0-67d8-4f05e910e6ce@benettiengineering.com>
+Date: Wed, 4 Aug 2021 12:04:50 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.11.0
 MIME-Version: 1.0
-In-Reply-To: <20210803224106.1619032-1-giulio.benetti@benettiengineering.com>
+In-Reply-To: <4629534e-1c5b-2e18-45fe-ef532e38ce5a@benettiengineering.com>
 Content-Language: en-US
-X-CMAE-Envelope: MS4wfAghjUNH65eYW6U2sm1lYxsdkUl69+imT5Omi/wq6PIH2y3qMoMugTmwQRSaQZB8UkP1pW6Nu2Q7Fq34sXixlENwpmVgYFSzhVAMOrfkpRMMbIZxZHzM
- +n//8DdmGPpSR7of8HkokJDL+go9iw/egzVe5JIcnZcxg2EhCG5SqYhxRUwQyirCRKyZs3q06mT8c2OaJg6UWeNPH3EqRXReLXT09aM5jlxG4QqEgIiIq6Fm
-Subject: Re: [Buildroot] [PATCH] package/libfuse3: fix build failure on
- Microblaze due to wrong symver attribute detection
+X-CMAE-Envelope: MS4wfB7Kp6xVsSEPI2vnuIO0HkxiB1yzT2UsNAIDILJKuK+Ot4yjTk7AxHTHQL/e9HcDptpKYumxJCZSymo8jcoIUnWtlZ/JCovifx4PmdY8wkKMSzaWmiR/
+ 81Vj4UmDzBBU44QD6mzDCGcNcATC8e3HdPmq/mxhavQvnqm93Ua+59fS6LD0NOXgZtLmyoU0MdW9z3fe4YivrfMYOyQ0tO0U9LhkSm4haZritV+ZKzA2EZwX
+ TJIHTzjzMHw24BTITd6a2vr2JvY3QAKOdZRGDqAvRvyEQ0imaA6qDELtPr/l68/VSuGGknUD0eelOps/SzCc4qhoJ3rNniP91iHNRfHPqQtQciHrkcegC1ii
+ whwbEFIE+jIb4XhydWhriqKfZZn7l1oZkdv2GlKWWqDaG6LkEKg=
+Subject: Re: [Buildroot] Some analysis of the major build failure reasons
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,112 +87,194 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Asaf Kahlon <asafka7@gmail.com>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
+ James Hilliard <james.hilliard1@gmail.com>,
+ Giulio Benetti <giulio.benetti@micronovasrl.com>,
+ Adam Duskett <aduskett@gmail.com>, buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-I've forgotten to add...
+Hello Thomas,
 
-On 8/4/21 12:41 AM, Giulio Benetti wrote:
-> Add a patch to fix symver wrong detection. As explained into the patch
-> pending upstream[1] __has attribute() gives false positive when an
-> attribute is not supported[2] and this leads to assuming symver attribute
-> is present but it's not. This consequentely leads to build failure. I.e.
-> Microblaze doesn't really support it since it doesn't include include
-> elfos.h in config.gcc that determine symver to be available.
+On 8/3/21 2:48 PM, Giulio Benetti wrote:
+> Hello Thomas,
 > 
-> [1]: https://github.com/libfuse/libfuse/pull/620
-> [2]: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101766
+> On 8/3/21 2:24 PM, Giulio Benetti wrote:
+>> On 8/3/21 9:28 AM, Thomas Petazzoni wrote:
+>>> Hello Giulio,
+>>>
+>>> On Tue, 3 Aug 2021 00:56:24 +0200
+>>> Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+>>>
+>>>>> I have investigated this. It fails only on sh4, due an internal
+>>>>> compiler error. It only occurs at -Os, at -O0 and -O2 it builds fine. I
+>>>>> have reported gcc bug
+>>>>> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101737 for this. Since I
+>>>>> tested only with gcc 9.3.0 for now, I've started a build with gcc 11.x,
+>>>>> to see how it goes.
+>>>>>
+>>>>> Based on the result, I'll send a patch adding a new
+>>>>> BR2_TOOLCHAIN_GCC_HAS_BUG_101737 and disable -Os on pixman on SuperH
+>>>>> based on this.
+>>>>
+>>>> I can do that since I've treated a lot of gcc bugs. Is it ok?
+>>>
+>>> Oh yes, sure! In the mean time, I have confirmed that gcc 11.1.0 is
+>>> also affected by the same issue, and I have updated the gcc bug with
+>>> that information. So to me, it seems like all gcc versions are affected.
+>>
+>> Great, I've sent this patchset for it:
+>> https://patchwork.ozlabs.org/project/buildroot/list/?series=256392
+>>
+>>>>>>                            unknown | 31
+>>>>>
+>>>>> I did not look into these for now.
+>>>>
+>>>> I've taken a look into the last ones of today(the 31 ones)
+>>>> @James: lot of your builds simply stuck after Make has finished(not on
+>>>> linking but exactly on 'make: Leaving directory').
+>>>>
+>>>> I've noticed it time ago some time, and now it became very more
+>>>> frequent. This is 9/10 your autobuilder giving that problem.
+>>>> And this happens at different Build Duration:
+>>>> http://autobuild.buildroot.net/?reason=unknown
+>>>> Also I see you use /tmp/ folder but I don't see anyone else doing that.
+>>>> Isn't it maybe that your distro automatically cleans /tmp folder up? Or
+>>>> it is mapped somewhere where disk gets full randomly?
+>>>> I would move it to a specific user folder(i.e. buildroot user) and that
+>>>> should fix the problem. If you're trying to do such thing to save disk
+>>>> space I tell you that I've already done it time ago with this patch that
+>>>> now needs to be rebased:
+>>>> https://patchwork.ozlabs.org/project/buildroot/patch/20180919114541.17670-1-giulio.benetti@micronovasrl.com/
+>>>> But in my case NOK was clear. I'm pretty sure /tmp/ is the problem.
+>>>
+>>> No, I don't think there is any problem with the use of /tmp. The
+>>> "unknown" build failures are typically build failures with top-level
+>>> parallel build enabled.
+>>>
+>>> If you take
+>>> http://autobuild.buildroot.net/results/4ee/4eead81391d76edcdd2823e439f9b8d165b9b7ef/
+>>> which is the latest "unknown" build issue at the time of writing this
+>>> e-mail, it has BR2_PER_PACKAGE_DIRECTORIES=y. We enable
+>>> BR2_PER_PACKAGE_DIRECTORIES for a subset of the builds, and then for
+>>> the builds that have BR2_PER_PACKAGE_DIRECTORIES enabled, for a subset
+>>> of them, we use top-level parallel build.
+>>>
+>>> However, when there is top-level parallel build enabled, the output is
+>>> quite messy (due to multiple packages being built in parallel). And due
+>>> to that, the build-end.log may not actually contain the actual build
+>>> failure as the failure may be visible much earlier in the build output.
+>>>
+>>> If you check these "unknown" build failures, they all have
+>>> BR2_PER_PACKAGE_DIRECTORIES enabled, which really hints at a top-level
+>>> parallel build issue.
+>>
+>> +1
+>>
+>>> Perhaps what I should do is cook a patch that keeps the full build log
+>>> file for builds that use top-level parallel build, so that we have a
+>>> chance to debug these. The problem is going to be the disk-space
+>>> consumption on my server, but I guess I could do something that
+>>> compresses the build log after X days or something like that.
+>>>
+>>>> On @Thomas autobuilder I see failure for:
+>>>> - optee-client(already found NOK):
+>>>> http://autobuild.buildroot.net/results/5e9/5e91bc53c3fbcd2ed232db79dc5c947394d66a1e/
+>>>> - failure on fetching as mentioned above
+>>>>
+>>>>>>                       zeromq-4.3.4 | 30
+>>>>>
+>>>>> Giulio: this is happening only on or1k, with a binutils assert. Do you
+>>>>> think this is solved by your or1k fixes?
+>>>>
+>>>> It is. Those build failures are due to the use of binutils-2.33.1 that
+>>>> have not patches for or1k. While all the other binutils versions have
+>>>> local or upstreamed or1k patches.
+>>>>
+>>>> Of course this can still happen with actual external Bootlin or1k
+>>>> toolchain that use exactly binutils-2.33.1 not patched. So the problem
+>>>> will be solved once you recompile and bump them with patches provided. I
+>>>> still see that we're on 2020.08-1:
+>>>> https://git.buildroot.net/buildroot/tree/toolchain/toolchain-external/toolchain-external-bootlin/toolchain-external-bootlin.mk#n586
+>>>
+>>> Yes, I have worked on rebuilding the toolchains with 2021.05 + a few
+>>> patches, but I have a runtime issue with Microblaze + glibc, which
+>>> doesn't boot (well the kernel boots, but not user-space). Microblaze +
+>>> uclibc or musl works fine.
+>>>
+>>> I guess I should probably not delay further the release of 2021.05
+>>> toolchains, and leave just the Microblaze/glibc toolchains to 2020.08.
+>>
+>> As you wish, now we have OpenRisc Buildroot toolchain working, so maybe
+>> we don't need to hurry up. It stayed there for long times with bugs.
+>> It' only annoying seeing those autobuilders NOK, but we know the reason
+>> why they are there.
+>>
+>>>> NOTE:
+>>>> I also add libnss-3.68 new bug on Aarch64_BE to be fixed. I'm already
+>>>> working on it on spare time.
+>>>
+>>> Great! >> PS: I've found my autobuilders stopped, I think I've forgotten to
+>>>> restart the daemon after updating the Distro. Now they're up and running.
+>>>
+>>> OK, thanks. That being said, additional autobuilders at the moment are
+>>> probably not that important: compared to the CPU power made available
+>>> by James through its super high-performance 63 machines, additional
+>>> "regular" machines added to the autobuilder pool are not going to help
+>>> much.
+>>
+>> Wow, now I understand why James has so many build!
+>>
+>>> However, they are going to definitely help when James will no longer
+>>> have access to those machines.
+>>
+>> +1
+>>
+>> Fabrice preceded me for gpsd as you've noticed:
+>> https://patchwork.ozlabs.org/project/buildroot/patch/20210803120714.2797624-1-fontaine.fabrice@gmail.com/
+>>
+>>
+>> And I'm working on libfuse3 right now.
+> 
+> This ^^^ "error: symver is only supported on ELF platforms" seems gcc
+> related. On meson check if symver is supported everything is based on
+> the macro __has_attribute(symver) that must work as expected, while in
+> the code we have something like the following that fails with that error:
+> ```
+> __attribute__ ((symver ("fuse_new@FUSE_3.0")))
+> void func1(void)
+> {
+> 
+> }
+> 
+> ```
+> 
+> So I try to patch microblaze gcc.
 
-Fixes:
-http://autobuild.buildroot.net/results/d6c/d6cfaf2aafaeda3c12d127f6a2d2e175b25e654f/
+This is fixed by this patch:
+https://patchwork.ozlabs.org/project/buildroot/patch/20210803224106.1619032-1-giulio.benetti@benettiengineering.com/
 
-can you please reword while committing? Otherwise I can send a v2.
+I've opened a gcc bug, but they state that __has_attribute() gives false 
+positives:
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101766
+So basically I've only changed how libfuse3 meson check if symver is 
+available. Patch has been merged:
+https://github.com/libfuse/libfuse/pull/620
 
-Also the PR[1] has been merged.
+Need some more time to fix libnss Aarch64 BE and eventually trying to 
+re-enable the parallel build that seems to be fixed in version 3.61:
+https://bugzilla.mozilla.org/show_bug.cgi?id=1688374
+and I've retried to send a patch. I'll try to loop a build in 1 of my 
+autobuilders before sending that. Also, I can't access Mozilla Bugzilla 
+and I'm waiting for them to re-enable it, otherwise I can't access and 
+give bug a number and consequently upstream.
 
-Kind regards
+Best regards
 -- 
 Giulio Benetti
 Benetti Engineering sas
-
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> ---
->   ...on.build-fix-wrong-.symver-detection.patch | 61 +++++++++++++++++++
->   1 file changed, 61 insertions(+)
->   create mode 100644 package/libfuse3/0001-meson.build-fix-wrong-.symver-detection.patch
-> 
-> diff --git a/package/libfuse3/0001-meson.build-fix-wrong-.symver-detection.patch b/package/libfuse3/0001-meson.build-fix-wrong-.symver-detection.patch
-> new file mode 100644
-> index 0000000000..da20c26f19
-> --- /dev/null
-> +++ b/package/libfuse3/0001-meson.build-fix-wrong-.symver-detection.patch
-> @@ -0,0 +1,61 @@
-> +From 3aba09a5c56e017746c5c1652dbc845f4db7374a Mon Sep 17 00:00:00 2001
-> +From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> +Date: Tue, 3 Aug 2021 23:39:46 +0200
-> +Subject: [PATCH] meson.build: fix wrong .symver detection
-> +
-> +As pointed here [1] __has_attribute() is broken for many attributes and
-> +if it doesn't support the specific attribute it returns true, so we
-> +can't really rely on that for this check. This lead to Buildroot
-> +libfuse3 build failure [2] where that shows up with:
-> +```
-> +error: symver is only supported on ELF platforms
-> +```
-> +Indeed Microblaze doesn't support ELF since it doesn't include elfos.h,
-> +but __has_attribute(symver) returns true.
-> +
-> +So let's substitute the #ifdef __has_attribute() with a stronger test on
-> +a function foo() with __attribute__((symver ("test@TEST"))).
-> +
-> +[1]: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101766
-> +[2]: http://autobuild.buildroot.net/results/d6c/d6cfaf2aafaeda3c12d127f6a2d2e175b25e654f/build-end.log
-> +
-> +Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> +---
-> + meson.build | 16 +++++++---------
-> + 1 file changed, 7 insertions(+), 9 deletions(-)
-> +
-> +diff --git a/meson.build b/meson.build
-> +index b0250ee..a7281f3 100644
-> +--- a/meson.build
-> ++++ b/meson.build
-> +@@ -96,20 +96,18 @@ endif
-> + # to have __has_attribute, then they are too old to support symver)
-> + # other compilers might not have __has_attribute, but in those cases
-> + # it is safe for this check to fail and for us to fallback to the old _asm_
-> +-# method for symver
-> ++# method for symver. Anyway the attributes not supported by __has_attribute()
-> ++# unfortunately return true giving a false positive. So let's try to build
-> ++# using __attribute__ ((symver )) and see the result.
-> + code = '''
-> +-#if defined __has_attribute
-> +-# if !__has_attribute (symver)
-> +-# error symver attribute not supported
-> +-# endif
-> +-#else
-> +-#error __has_attribute not defined, assume we do not have symver
-> +-#endif
-> ++__attribute__ ((symver ("test@TEST")))
-> ++void foo(void) {
-> ++}
-> +
-> + int main(void) {
-> +     return 0;
-> + }'''
-> +-if cc.compiles(code, args: [ '-O0', '-c'])
-> ++if cc.compiles(code, args: [ '-O0', '-c', '-Werror'])
-> +      message('Compiler supports symver attribute')
-> +      add_project_arguments('-DHAVE_SYMVER_ATTRIBUTE', language: 'c')
-> + else
-> +--
-> +2.25.1
-> +
-> 
-
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
