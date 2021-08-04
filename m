@@ -2,95 +2,57 @@ Return-Path: <SRS0=sxUg=M3=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1DBDEC4338F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 07:48:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AEA2CC4338F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 07:49:32 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 4FB1060F14
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 07:48:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4FB1060F14
+	by mail.kernel.org (Postfix) with ESMTPS id 37F8960F25
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 07:49:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 37F8960F25
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EAB2483ADC;
-	Wed,  4 Aug 2021 07:48:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 05AD482CAC;
+	Wed,  4 Aug 2021 07:49:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id b4D23G8Jdh6W; Wed,  4 Aug 2021 07:48:28 +0000 (UTC)
+	with ESMTP id LCAwmqp2KSGa; Wed,  4 Aug 2021 07:49:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EB64F83AD7;
-	Wed,  4 Aug 2021 07:48:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1B9D482B81;
+	Wed,  4 Aug 2021 07:49:30 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id AFC631BF954
- for <buildroot@lists.busybox.net>; Wed,  4 Aug 2021 07:48:26 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5F9D21BF954
+ for <buildroot@lists.busybox.net>; Wed,  4 Aug 2021 07:49:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9DD8D4014B
- for <buildroot@lists.busybox.net>; Wed,  4 Aug 2021 07:48:26 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5A6FB4014B
+ for <buildroot@lists.busybox.net>; Wed,  4 Aug 2021 07:49:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gi5HiYOtRN-q for <buildroot@lists.busybox.net>;
- Wed,  4 Aug 2021 07:48:24 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
- [IPv6:2a00:1450:4864:20::42d])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 7787F400FD
- for <buildroot@buildroot.org>; Wed,  4 Aug 2021 07:48:24 +0000 (UTC)
-Received: by mail-wr1-x42d.google.com with SMTP id h14so1129325wrx.10
- for <buildroot@buildroot.org>; Wed, 04 Aug 2021 00:48:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
- h=sender:from:to:cc:subject:references:date:in-reply-to:message-id
- :user-agent:mime-version;
- bh=fxZO1JGj6CpLv6UKLyd1jGJEzcPOTeG/Y4fW5K0fT2Q=;
- b=YatqGUc3iiNcwJPROtb0d0H8goKBcEGSlVFf6KVZdds6H20W0IepqRmTLWMuFbzgZI
- XsvDa7KlWylAgKyCM/0AcxF6NxneMxuhDDjkCLnfhjYyco9VqQiVDBaocTe3Tm63IbB0
- 88wHYsNmoQ8u2TrgfudSHqnr7D/1w0KFqum027/4QUO0rTI/Mi8Mq5eifdsIhmfeBI34
- A10F+62SAxFAKVBs/EgeoDxj0DyggdtHKgPtmAx0fxx/puQVTz8YqfMWsc/0QMaySToo
- 1dgPPlZ2FQ3hvNnlBGI/x2Rbp3q33g90ni8l98KVVJW1B8lfBWlE0UeqctdosbtC29t1
- AU/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:sender:from:to:cc:subject:references:date
- :in-reply-to:message-id:user-agent:mime-version;
- bh=fxZO1JGj6CpLv6UKLyd1jGJEzcPOTeG/Y4fW5K0fT2Q=;
- b=YEaxADv9B+dmjUtL9oMHBYKiigFGQoBuJv3YDDe7oLT6hz4Exi3RDjunxVSzThEeiW
- lm4SuuyvqTx/k+vAUDlH3wNzc8EywZyUPw/HjjVpprLVAwZoadp5WZfMnhbay1J+v85G
- L2qqPVIERhAm34S92VD6j4MGCR++HdQVJmyWiKyAabkTUfmyRSE7HUwKNtSgcUdLAVYa
- fGo1xg1mvwn+9xSBlMV77MPyhhLOWxc7WHOtXalTIk0/pgYogaebQc0RPms9ZSgtnTNu
- UH9pcnrcqaRbyJB9G0eTn0/rPB2Rksnctg7RXCCo8AhJTzNUloF20V6IGbLbIQkF6YFI
- sjtA==
-X-Gm-Message-State: AOAM530LHxeg/TSw7Tx5Ig0NH0gLpNafPPRwp8VZ1k6TCIt3MMtoPZf3
- K+dLJ1HPkQ9KfYOAknAcIV0=
-X-Google-Smtp-Source: ABdhPJwe3t06PfcngEB8rXl+6PaIfx8z5sAIzLHgB1mzfL8iMqNgrgw+SIOuDPB5V0vj6vZ01Isghw==
-X-Received: by 2002:a05:6000:54c:: with SMTP id
- b12mr26161275wrf.319.1628063302558; 
- Wed, 04 Aug 2021 00:48:22 -0700 (PDT)
-Received: from dell.be.48ers.dk ([195.162.189.230])
- by smtp.gmail.com with ESMTPSA id x15sm1463610wrs.57.2021.08.04.00.48.21
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 04 Aug 2021 00:48:21 -0700 (PDT)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
- (envelope-from <peter@korsgaard.com>)
- id 1mBBdU-0007cA-He; Wed, 04 Aug 2021 09:48:20 +0200
+ with ESMTP id yQA5MzA4_e00 for <buildroot@lists.busybox.net>;
+ Wed,  4 Aug 2021 07:49:26 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id DDCA2400FD
+ for <buildroot@buildroot.org>; Wed,  4 Aug 2021 07:49:26 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 1CC1C81353; Wed,  4 Aug 2021 07:49:17 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Peter Seiderer <ps.report@gmx.net>
-References: <20210618183150.618-1-ps.report@gmx.net>
-Date: Wed, 04 Aug 2021 09:48:20 +0200
-In-Reply-To: <20210618183150.618-1-ps.report@gmx.net> (Peter Seiderer's
- message of "Fri, 18 Jun 2021 20:31:49 +0200")
-Message-ID: <87v94ltzuj.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v1 1/2] package/sane-backends: fix uclibc
- compile (missing stdarg.h include for va_list/va_start/va_end)
+To: buildroot@buildroot.org
+Date: Wed, 4 Aug 2021 09:47:39 +0200
+X-Git-Refname: refs/heads/2021.05.x
+X-Git-Oldrev: 070936595070910bd61a461784909153e079462b
+X-Git-Newrev: 957bd21bc611ed188eb593c9f81b50984222b92c
+X-Patchwork-Hint: ignore
+Message-Id: <20210804074918.1CC1C81353@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.05.x] package/sane-backends:
+ fix uclibc compile due to missing stdarg.h include
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,24 +64,228 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============7091875633028395013=="
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
->>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
+--===============7091875633028395013==
+Content-Type: text/plain
 
- > Add missing stdarg.h include for va_list/va_start/va_end.
- > Fixes:
+commit: https://git.buildroot.net/buildroot/commit/?id=957bd21bc611ed188eb593c9f81b50984222b92c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
 
- >   - http://autobuild.buildroot.net/results/88f4ea971875b1a5eb88662326d9343341eaaea2
+Add missing stdarg.h include for va_list/va_start/va_end.
 
-Committed to 2021.05.x, thanks.
+Fixes:
 
--- 
-Bye, Peter Korsgaard
+  - http://autobuild.buildroot.net/results/88f4ea971875b1a5eb88662326d9343341eaaea2
+
+  microtek.c: In function ‘MDBG_INIT’:
+  microtek.c:163:3: error: unknown type name ‘va_list’
+    163 |   va_list ap;
+        |   ^~~~~~~
+  microtek.c:78:1: note: ‘va_list’ is defined in header ‘<stdarg.h>’; did you forget to ‘#include <stdarg.h>’?
+     77 | #include "microtek.h"
+    +++ |+#include <stdarg.h>
+     78 |
+  microtek.c:164:3: warning: implicit declaration of function ‘va_start’; did you mean ‘sane_start’? [-Wimplicit-function-declaration]
+    164 |   va_start(ap, format);
+        |   ^~~~~~~~
+        |   sane_start
+  microtek.c:165:54: warning: passing argument 4 of ‘vsnprintf’ makes pointer from integer without a cast [-Wint-conversion]
+    165 |   vsnprintf(_mdebug_string, MAX_MDBG_LENGTH, format, ap);
+        |                                                      ^~
+        |                                                      |
+        |                                                      int
+  In file included from ../include/sane/sanei_config.h:50,
+                   from microtek.c:70:
+  .../host/x86_64-buildroot-linux-uclibc/sysroot/usr/include/stdio.h:359:57: note: expected ‘__va_list_tag *’ but argument is of type ‘int’
+    359 |         const char *__restrict __format, __gnuc_va_list __arg)
+        |                                          ~~~~~~~~~~~~~~~^~~~~
+  microtek.c:166:3: warning: implicit declaration of function ‘va_end’ [-Wimplicit-function-declaration]
+    166 |   va_end(ap);
+        |   ^~~~~~
+
+and
+
+  sm3600-scanutil.c: In function ‘debug_printf’:
+  sm3600-scanutil.c:69:3: error: unknown type name ‘va_list’
+     69 |   va_list ap;
+        |   ^~~~~~~
+  sm3600-scanutil.c:48:1: note: ‘va_list’ is defined in header ‘<stdarg.h>’; did you forget to ‘#include <stdarg.h>’?
+     47 | #include "sm3600-scantool.h"
+    +++ |+#include <stdarg.h>
+     48 |
+  sm3600-scanutil.c:75:3: warning: implicit declaration of function ‘va_start’; did you mean ‘sane_start’? [-Wimplicit-function-decla
+ration]
+     75 |   va_start(ap,szFormat);
+        |   ^~~~~~~~
+        |   sane_start
+  sm3600-scanutil.c:76:28: warning: passing argument 3 of ‘vfprintf’ makes pointer from integer without a cast [-Wint-conversion]
+     76 |   vfprintf(stderr,szFormat,ap);
+        |                            ^~
+        |                            |
+        |                            int
+  In file included from ../include/sane/sanei_config.h:50,
+                   from sm3600.c:70:
+  .../host/x86_64-buildroot-linux-uclibc/sysroot/usr/include/stdio.h:339:23: note: expected ‘__va_list_tag *’ but argument is of type
+ ‘int’
+    339 |        __gnuc_va_list __arg);
+        |        ~~~~~~~~~~~~~~~^~~~~
+  In file included from sm3600.c:94:
+  sm3600-scanutil.c:77:3: warning: implicit declaration of function ‘va_end’ [-Wimplicit-function-declaration]
+     77 |   va_end(ap);
+        |   ^~~~~~
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 7bb4f886abfc227c704accbb880059bb8fc85064)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...rotek-fix-uclibc-compile-include-stdarg.h.patch | 58 +++++++++++++++++++++
+ ...600-scanutil-fix-uclibc-compile-include-s.patch | 59 ++++++++++++++++++++++
+ 2 files changed, 117 insertions(+)
+
+diff --git a/package/sane-backends/0004-backend-microtek-fix-uclibc-compile-include-stdarg.h.patch b/package/sane-backends/0004-backend-microtek-fix-uclibc-compile-include-stdarg.h.patch
+new file mode 100644
+index 0000000000..c5af162469
+--- /dev/null
++++ b/package/sane-backends/0004-backend-microtek-fix-uclibc-compile-include-stdarg.h.patch
+@@ -0,0 +1,58 @@
++From 145e16008e7479ea58278e55f71d6dfcd4db714b Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Fri, 18 Jun 2021 19:51:45 +0200
++Subject: [PATCH] backend/microtek: fix uclibc compile (include stdarg.h for
++ va_list/va_start/va_end)
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Fixes:
++
++  microtek.c: In function ‘MDBG_INIT’:
++  microtek.c:163:3: error: unknown type name ‘va_list’
++    163 |   va_list ap;
++        |   ^~~~~~~
++  microtek.c:78:1: note: ‘va_list’ is defined in header ‘<stdarg.h>’; did you forget to ‘#include <stdarg.h>’?
++     77 | #include "microtek.h"
++    +++ |+#include <stdarg.h>
++     78 |
++  microtek.c:164:3: warning: implicit declaration of function ‘va_start’; did you mean ‘sane_start’? [-Wimplicit-function-declaration]
++    164 |   va_start(ap, format);
++        |   ^~~~~~~~
++        |   sane_start
++  microtek.c:165:54: warning: passing argument 4 of ‘vsnprintf’ makes pointer from integer without a cast [-Wint-conversion]
++    165 |   vsnprintf(_mdebug_string, MAX_MDBG_LENGTH, format, ap);
++        |                                                      ^~
++        |                                                      |
++        |                                                      int
++  In file included from ../include/sane/sanei_config.h:50,
++                   from microtek.c:70:
++  .../host/x86_64-buildroot-linux-uclibc/sysroot/usr/include/stdio.h:359:57: note: expected ‘__va_list_tag *’ but argument is of type ‘int’
++    359 |         const char *__restrict __format, __gnuc_va_list __arg)
++        |                                          ~~~~~~~~~~~~~~~^~~~~
++  microtek.c:166:3: warning: implicit declaration of function ‘va_end’ [-Wimplicit-function-declaration]
++    166 |   va_end(ap);
++        |   ^~~~~~
++
++[Upstream: https://gitlab.com/sane-project/backends/-/merge_requests/638]
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ backend/microtek.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/backend/microtek.c b/backend/microtek.c
++index 200a69c1a..63560179c 100644
++--- a/backend/microtek.c
+++++ b/backend/microtek.c
++@@ -57,6 +57,7 @@
++ 
++ #include "../include/sane/config.h"
++ 
+++#include <stdarg.h>
++ #include <stdlib.h>
++ #include <string.h>
++ #include <unistd.h>
++-- 
++2.31.1
++
+diff --git a/package/sane-backends/0005-backend-sm3600-scanutil-fix-uclibc-compile-include-s.patch b/package/sane-backends/0005-backend-sm3600-scanutil-fix-uclibc-compile-include-s.patch
+new file mode 100644
+index 0000000000..0ea9de245e
+--- /dev/null
++++ b/package/sane-backends/0005-backend-sm3600-scanutil-fix-uclibc-compile-include-s.patch
+@@ -0,0 +1,59 @@
++From 7dafc52dda96fa68f39058b10eec3d822fd5ea9d Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Fri, 18 Jun 2021 19:56:56 +0200
++Subject: [PATCH] backend/sm3600-scanutil: fix uclibc compile (include stdarg.h
++ for va_list/va_start/va_end)
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Fixes:
++
++  sm3600-scanutil.c: In function ‘debug_printf’:
++  sm3600-scanutil.c:69:3: error: unknown type name ‘va_list’
++     69 |   va_list ap;
++        |   ^~~~~~~
++  sm3600-scanutil.c:48:1: note: ‘va_list’ is defined in header ‘<stdarg.h>’; did you forget to ‘#include <stdarg.h>’?
++     47 | #include "sm3600-scantool.h"
++    +++ |+#include <stdarg.h>
++     48 |
++  sm3600-scanutil.c:75:3: warning: implicit declaration of function ‘va_start’; did you mean ‘sane_start’? [-Wimplicit-function-declaration]
++     75 |   va_start(ap,szFormat);
++        |   ^~~~~~~~
++        |   sane_start
++  sm3600-scanutil.c:76:28: warning: passing argument 3 of ‘vfprintf’ makes pointer from integer without a cast [-Wint-conversion]
++     76 |   vfprintf(stderr,szFormat,ap);
++        |                            ^~
++        |                            |
++        |                            int
++  In file included from ../include/sane/sanei_config.h:50,
++                   from sm3600.c:70:
++  .../host/x86_64-buildroot-linux-uclibc/sysroot/usr/include/stdio.h:339:23: note: expected ‘__va_list_tag *’ but argument is of type ‘int’
++    339 |        __gnuc_va_list __arg);
++        |        ~~~~~~~~~~~~~~~^~~~~
++  In file included from sm3600.c:94:
++  sm3600-scanutil.c:77:3: warning: implicit declaration of function ‘va_end’ [-Wimplicit-function-declaration]
++     77 |   va_end(ap);
++        |   ^~~~~~
++
++[Upstream: https://gitlab.com/sane-project/backends/-/merge_requests/638]
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ backend/sm3600-scanutil.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/backend/sm3600-scanutil.c b/backend/sm3600-scanutil.c
++index 6fe67ed0c..616bf3f4c 100644
++--- a/backend/sm3600-scanutil.c
+++++ b/backend/sm3600-scanutil.c
++@@ -43,6 +43,7 @@ Userspace scan tool for the Microtek 3600 scanner
++ 
++ ====================================================================== */
++ 
+++#include <stdarg.h>
++ #include <unistd.h>
++ #include "sm3600-scantool.h"
++ 
++-- 
++2.31.1
++
+
+--===============7091875633028395013==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
 http://lists.busybox.net/mailman/listinfo/buildroot
+
+--===============7091875633028395013==--
