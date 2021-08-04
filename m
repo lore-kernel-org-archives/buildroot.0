@@ -2,57 +2,57 @@ Return-Path: <SRS0=sxUg=M3=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,TVD_SPACE_RATIO,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F2770C4338F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 12:36:52 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E818C4338F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 12:37:05 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B351060F22
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 12:36:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B351060F22
+	by mail.kernel.org (Postfix) with ESMTPS id 2FD1260F22
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 12:37:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2FD1260F22
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8EC0860A41;
-	Wed,  4 Aug 2021 12:36:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0405383C9D;
+	Wed,  4 Aug 2021 12:37:05 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id YPJMX-QA7gDN; Wed,  4 Aug 2021 12:37:04 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5EFDB83CA6;
+	Wed,  4 Aug 2021 12:37:03 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 0CBF51BF2A9
+ for <buildroot@lists.busybox.net>; Wed,  4 Aug 2021 12:34:51 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 09BC160671
+ for <buildroot@lists.busybox.net>; Wed,  4 Aug 2021 12:34:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hFsabPAYB4Xm; Wed,  4 Aug 2021 12:36:51 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9F8F8608C6;
-	Wed,  4 Aug 2021 12:36:50 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8ACA81BF2A9
- for <buildroot@lists.busybox.net>; Wed,  4 Aug 2021 12:34:49 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E276440431
- for <buildroot@lists.busybox.net>; Wed,  4 Aug 2021 12:34:47 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id h_JAB669Uvd0 for <buildroot@lists.busybox.net>;
- Wed,  4 Aug 2021 12:34:43 +0000 (UTC)
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TyeCd0srT_Ve for <buildroot@lists.busybox.net>;
+ Wed,  4 Aug 2021 12:34:48 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5235340458
- for <buildroot@buildroot.org>; Wed,  4 Aug 2021 12:34:43 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 47858608C6
+ for <buildroot@buildroot.org>; Wed,  4 Aug 2021 12:34:48 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 17E338B4D7; Wed,  4 Aug 2021 12:34:34 +0000 (UTC)
+ id 2299B8B4E5; Wed,  4 Aug 2021 12:34:39 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 4 Aug 2021 14:24:36 +0200
-X-Git-Refname: refs/heads/2021.05.x
-X-Git-Oldrev: b2b72a0aa4662a47bf1d012df7811ff97486e103
-X-Git-Newrev: 73043721115bdaba10206df79a482d3c2adae276
+Date: Wed, 4 Aug 2021 14:32:53 +0200
+X-Git-Refname: refs/heads/2021.02.x
+X-Git-Oldrev: 9d46c05d1d5a3b5bf14ae5e3c80cba565b935496
+X-Git-Newrev: 29fd7523fb876148187427e68b2c381e9f463092
 X-Patchwork-Hint: ignore
-Message-Id: <20210804123434.17E338B4D7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.05.x] package/binutils: fix
- building or1k with host gcc version < 5
+Message-Id: <20210804123439.2299B8B4E5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/wireless-regdb:
+ bump version to 2021.04.21
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,252 +70,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=73043721115bdaba10206df79a482d3c2adae276
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=29fd7523fb876148187427e68b2c381e9f463092
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Add patches to fix building on hosts that provide gcc version < 5
-(i.e. 4.9), otherwise they fail due to missing default '-std=gnu11' option
-on variable declaration inside for loops.
-
-The patch is pending upstream:
-https://sourceware.org/pipermail/binutils/2021-June/116884.html
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 747e2eed880b70c085bb93b34a6e1558ae49b6d0)
+(cherry picked from commit e93cf29a702b9a778b851a158be7eff657f1e9a8)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...lf32-or1k-fix-building-with-gcc-version-5.patch | 50 ++++++++++++++++++++++
- ...lf32-or1k-fix-building-with-gcc-version-5.patch | 50 ++++++++++++++++++++++
- ...lf32-or1k-fix-building-with-gcc-version-5.patch | 50 ++++++++++++++++++++++
- ...lf32-or1k-fix-building-with-gcc-version-5.patch | 50 ++++++++++++++++++++++
- 4 files changed, 200 insertions(+)
+ package/wireless-regdb/wireless-regdb.hash | 2 +-
+ package/wireless-regdb/wireless-regdb.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/binutils/2.32/0014-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch b/package/binutils/2.32/0014-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch
-new file mode 100644
-index 0000000000..c3978e22fa
---- /dev/null
-+++ b/package/binutils/2.32/0014-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch
-@@ -0,0 +1,50 @@
-+From c3003947e4bad18faea4337fd2073feeb30ee078 Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Wed, 9 Jun 2021 17:28:27 +0200
-+Subject: [PATCH] bfd/elf32-or1k: fix building with gcc version < 5
-+
-+Gcc version >= 5 has standard C mode not set to -std=gnu11, so if we use
-+an old compiler(i.e. gcc 4.9) build fails on:
-+```
-+elf32-or1k.c:2251:3: error: 'for' loop initial declarations are only allowed in
-+C99 or C11 mode
-+    for (size_t i = 0; i < insn_count; i++)
-+    ^
-+```
-+
-+So let's declare `size_t i` at the top of the function instead of inside
-+for loop.
-+
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ bfd/elf32-or1k.c | 5 +++--
-+ 1 file changed, 3 insertions(+), 2 deletions(-)
-+
-+diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
-+index 4ae7f324d33..32063ab0289 100644
-+--- a/bfd/elf32-or1k.c
-++++ b/bfd/elf32-or1k.c
-+@@ -2244,9 +2244,10 @@ or1k_write_plt_entry (bfd *output_bfd, bfd_byte *contents, unsigned insnj,
-+ {
-+   unsigned nodelay = elf_elfheader (output_bfd)->e_flags & EF_OR1K_NODELAY;
-+   unsigned output_insns[PLT_MAX_INSN_COUNT];
-++  size_t i;
-+ 
-+   /* Copy instructions into the output buffer.  */
-+-  for (size_t i = 0; i < insn_count; i++)
-++  for (i = 0; i < insn_count; i++)
-+     output_insns[i] = insns[i];
-+ 
-+   /* Honor the no-delay-slot setting.  */
-+@@ -2277,7 +2278,7 @@ or1k_write_plt_entry (bfd *output_bfd, bfd_byte *contents, unsigned insnj,
-+     }
-+ 
-+   /* Write out the output buffer.  */
-+-  for (size_t i = 0; i < (insn_count+1); i++)
-++  for (i = 0; i < (insn_count+1); i++)
-+     bfd_put_32 (output_bfd, output_insns[i], contents + (i*4));
-+ }
-+ 
-+-- 
-+2.25.1
-+
-diff --git a/package/binutils/2.34/0007-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch b/package/binutils/2.34/0007-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch
-new file mode 100644
-index 0000000000..c3978e22fa
---- /dev/null
-+++ b/package/binutils/2.34/0007-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch
-@@ -0,0 +1,50 @@
-+From c3003947e4bad18faea4337fd2073feeb30ee078 Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Wed, 9 Jun 2021 17:28:27 +0200
-+Subject: [PATCH] bfd/elf32-or1k: fix building with gcc version < 5
-+
-+Gcc version >= 5 has standard C mode not set to -std=gnu11, so if we use
-+an old compiler(i.e. gcc 4.9) build fails on:
-+```
-+elf32-or1k.c:2251:3: error: 'for' loop initial declarations are only allowed in
-+C99 or C11 mode
-+    for (size_t i = 0; i < insn_count; i++)
-+    ^
-+```
-+
-+So let's declare `size_t i` at the top of the function instead of inside
-+for loop.
-+
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ bfd/elf32-or1k.c | 5 +++--
-+ 1 file changed, 3 insertions(+), 2 deletions(-)
-+
-+diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
-+index 4ae7f324d33..32063ab0289 100644
-+--- a/bfd/elf32-or1k.c
-++++ b/bfd/elf32-or1k.c
-+@@ -2244,9 +2244,10 @@ or1k_write_plt_entry (bfd *output_bfd, bfd_byte *contents, unsigned insnj,
-+ {
-+   unsigned nodelay = elf_elfheader (output_bfd)->e_flags & EF_OR1K_NODELAY;
-+   unsigned output_insns[PLT_MAX_INSN_COUNT];
-++  size_t i;
-+ 
-+   /* Copy instructions into the output buffer.  */
-+-  for (size_t i = 0; i < insn_count; i++)
-++  for (i = 0; i < insn_count; i++)
-+     output_insns[i] = insns[i];
-+ 
-+   /* Honor the no-delay-slot setting.  */
-+@@ -2277,7 +2278,7 @@ or1k_write_plt_entry (bfd *output_bfd, bfd_byte *contents, unsigned insnj,
-+     }
-+ 
-+   /* Write out the output buffer.  */
-+-  for (size_t i = 0; i < (insn_count+1); i++)
-++  for (i = 0; i < (insn_count+1); i++)
-+     bfd_put_32 (output_bfd, output_insns[i], contents + (i*4));
-+ }
-+ 
-+-- 
-+2.25.1
-+
-diff --git a/package/binutils/2.35.2/0007-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch b/package/binutils/2.35.2/0007-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch
-new file mode 100644
-index 0000000000..c3978e22fa
---- /dev/null
-+++ b/package/binutils/2.35.2/0007-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch
-@@ -0,0 +1,50 @@
-+From c3003947e4bad18faea4337fd2073feeb30ee078 Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Wed, 9 Jun 2021 17:28:27 +0200
-+Subject: [PATCH] bfd/elf32-or1k: fix building with gcc version < 5
-+
-+Gcc version >= 5 has standard C mode not set to -std=gnu11, so if we use
-+an old compiler(i.e. gcc 4.9) build fails on:
-+```
-+elf32-or1k.c:2251:3: error: 'for' loop initial declarations are only allowed in
-+C99 or C11 mode
-+    for (size_t i = 0; i < insn_count; i++)
-+    ^
-+```
-+
-+So let's declare `size_t i` at the top of the function instead of inside
-+for loop.
-+
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ bfd/elf32-or1k.c | 5 +++--
-+ 1 file changed, 3 insertions(+), 2 deletions(-)
-+
-+diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
-+index 4ae7f324d33..32063ab0289 100644
-+--- a/bfd/elf32-or1k.c
-++++ b/bfd/elf32-or1k.c
-+@@ -2244,9 +2244,10 @@ or1k_write_plt_entry (bfd *output_bfd, bfd_byte *contents, unsigned insnj,
-+ {
-+   unsigned nodelay = elf_elfheader (output_bfd)->e_flags & EF_OR1K_NODELAY;
-+   unsigned output_insns[PLT_MAX_INSN_COUNT];
-++  size_t i;
-+ 
-+   /* Copy instructions into the output buffer.  */
-+-  for (size_t i = 0; i < insn_count; i++)
-++  for (i = 0; i < insn_count; i++)
-+     output_insns[i] = insns[i];
-+ 
-+   /* Honor the no-delay-slot setting.  */
-+@@ -2277,7 +2278,7 @@ or1k_write_plt_entry (bfd *output_bfd, bfd_byte *contents, unsigned insnj,
-+     }
-+ 
-+   /* Write out the output buffer.  */
-+-  for (size_t i = 0; i < (insn_count+1); i++)
-++  for (i = 0; i < (insn_count+1); i++)
-+     bfd_put_32 (output_bfd, output_insns[i], contents + (i*4));
-+ }
-+ 
-+-- 
-+2.25.1
-+
-diff --git a/package/binutils/2.36.1/0007-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch b/package/binutils/2.36.1/0007-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch
-new file mode 100644
-index 0000000000..c3978e22fa
---- /dev/null
-+++ b/package/binutils/2.36.1/0007-bfd-elf32-or1k-fix-building-with-gcc-version-5.patch
-@@ -0,0 +1,50 @@
-+From c3003947e4bad18faea4337fd2073feeb30ee078 Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Wed, 9 Jun 2021 17:28:27 +0200
-+Subject: [PATCH] bfd/elf32-or1k: fix building with gcc version < 5
-+
-+Gcc version >= 5 has standard C mode not set to -std=gnu11, so if we use
-+an old compiler(i.e. gcc 4.9) build fails on:
-+```
-+elf32-or1k.c:2251:3: error: 'for' loop initial declarations are only allowed in
-+C99 or C11 mode
-+    for (size_t i = 0; i < insn_count; i++)
-+    ^
-+```
-+
-+So let's declare `size_t i` at the top of the function instead of inside
-+for loop.
-+
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ bfd/elf32-or1k.c | 5 +++--
-+ 1 file changed, 3 insertions(+), 2 deletions(-)
-+
-+diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
-+index 4ae7f324d33..32063ab0289 100644
-+--- a/bfd/elf32-or1k.c
-++++ b/bfd/elf32-or1k.c
-+@@ -2244,9 +2244,10 @@ or1k_write_plt_entry (bfd *output_bfd, bfd_byte *contents, unsigned insnj,
-+ {
-+   unsigned nodelay = elf_elfheader (output_bfd)->e_flags & EF_OR1K_NODELAY;
-+   unsigned output_insns[PLT_MAX_INSN_COUNT];
-++  size_t i;
-+ 
-+   /* Copy instructions into the output buffer.  */
-+-  for (size_t i = 0; i < insn_count; i++)
-++  for (i = 0; i < insn_count; i++)
-+     output_insns[i] = insns[i];
-+ 
-+   /* Honor the no-delay-slot setting.  */
-+@@ -2277,7 +2278,7 @@ or1k_write_plt_entry (bfd *output_bfd, bfd_byte *contents, unsigned insnj,
-+     }
-+ 
-+   /* Write out the output buffer.  */
-+-  for (size_t i = 0; i < (insn_count+1); i++)
-++  for (i = 0; i < (insn_count+1); i++)
-+     bfd_put_32 (output_bfd, output_insns[i], contents + (i*4));
-+ }
-+ 
-+-- 
-+2.25.1
-+
+diff --git a/package/wireless-regdb/wireless-regdb.hash b/package/wireless-regdb/wireless-regdb.hash
+index 5403110be4..d941fc3b1a 100644
+--- a/package/wireless-regdb/wireless-regdb.hash
++++ b/package/wireless-regdb/wireless-regdb.hash
+@@ -1,4 +1,4 @@
+ # From https://www.kernel.org/pub/software/network/wireless-regdb/sha256sums.asc
+-sha256  b4164490d82ff7b0086e812ac42ab27baf57be24324d4c0ee1c5dd6ba27f2a52  wireless-regdb-2020.11.20.tar.xz
++sha256  9e4c02b2a9710df4dbdb327c39612e8cbbae6495987afeddaebab28c1ea3d8fa  wireless-regdb-2021.04.21.tar.xz
+ # Locally computed
+ sha256  678b0df753c86198fc496d1f1033429bbd57f101472132ee7eaaf9f5e0a7fae1  LICENSE
+diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
+index 2f9e91df3e..49a3824ce8 100644
+--- a/package/wireless-regdb/wireless-regdb.mk
++++ b/package/wireless-regdb/wireless-regdb.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WIRELESS_REGDB_VERSION = 2020.11.20
++WIRELESS_REGDB_VERSION = 2021.04.21
+ WIRELESS_REGDB_SOURCE = wireless-regdb-$(WIRELESS_REGDB_VERSION).tar.xz
+ WIRELESS_REGDB_SITE = $(BR2_KERNEL_MIRROR)/software/network/wireless-regdb
+ WIRELESS_REGDB_LICENSE = ISC
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
