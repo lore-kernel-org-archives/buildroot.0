@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E32AC4338F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 18:10:33 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 72BD5C4338F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 18:10:46 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 463B760F35
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 18:10:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 463B760F35
+	by mail.kernel.org (Postfix) with ESMTPS id 3FFE660C41
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 18:10:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3FFE660C41
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 183F2401D2;
-	Wed,  4 Aug 2021 18:10:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1AF9D60A7D;
+	Wed,  4 Aug 2021 18:10:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id do_RlL4dtK-8; Wed,  4 Aug 2021 18:10:32 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 8pxFA0WN3QL0; Wed,  4 Aug 2021 18:10:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 14F02404FF;
-	Wed,  4 Aug 2021 18:10:31 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 10E1B1BF381
+	by smtp3.osuosl.org (Postfix) with ESMTP id 65A6F60A63;
+	Wed,  4 Aug 2021 18:10:44 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1D3BA1BF9C1
  for <buildroot@lists.busybox.net>; Wed,  4 Aug 2021 18:06:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 60E4083B2B
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9E735608B5
  for <buildroot@lists.busybox.net>; Wed,  4 Aug 2021 18:06:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id paBDJP0GQ6mK for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id UE2368bVYxyL for <buildroot@lists.busybox.net>;
  Wed,  4 Aug 2021 18:06:45 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id AB3E183B81
+ by smtp3.osuosl.org (Postfix) with ESMTP id A84CA60A7A
  for <buildroot@buildroot.org>; Wed,  4 Aug 2021 18:06:45 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id E921C8B616; Wed,  4 Aug 2021 18:06:35 +0000 (UTC)
+ id F380B8B549; Wed,  4 Aug 2021 18:06:35 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 4 Aug 2021 19:51:23 +0200
+Date: Wed, 4 Aug 2021 19:52:48 +0200
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 553d09b967c60afaf260accaec9bfbbcc082d909
-X-Git-Newrev: 7b67d493c92da83a92efa10a7bd0bd61b106cad2
+X-Git-Oldrev: 7b67d493c92da83a92efa10a7bd0bd61b106cad2
+X-Git-Newrev: 50f44aea9e41cfb96c0cc167e8a1ad984aa6652a
 X-Patchwork-Hint: ignore
-Message-Id: <20210804180635.E921C8B616@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/nbd: bump to
- version 3.21
+Message-Id: <20210804180635.F380B8B549@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/proxychains-ng:
+ bump to version 4.14
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,83 +70,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7b67d493c92da83a92efa10a7bd0bd61b106cad2
+commit: https://git.buildroot.net/buildroot/commit/?id=50f44aea9e41cfb96c0cc167e8a1ad984aa6652a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-- Drop patch (already in version)
-- Update indentation in hash file (two spaces)
+https://github.com/rofl0r/proxychains-ng/blob/v4.14/README
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 2016df2ed258f1d88cc9dfdb97fcc67ea3dc119a)
+(cherry picked from commit 35953d1e61aa8581be09c9dca39365955b10590e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...lose-the-file-descriptor-before-returning.patch | 25 ----------------------
- package/nbd/nbd.hash                               | 10 ++++-----
- package/nbd/nbd.mk                                 |  2 +-
- 3 files changed, 6 insertions(+), 31 deletions(-)
+ package/proxychains-ng/proxychains-ng.hash | 6 ++----
+ package/proxychains-ng/proxychains-ng.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/package/nbd/0001-Also-close-the-file-descriptor-before-returning.patch b/package/nbd/0001-Also-close-the-file-descriptor-before-returning.patch
-deleted file mode 100644
-index 70330c8e91..0000000000
---- a/package/nbd/0001-Also-close-the-file-descriptor-before-returning.patch
-+++ /dev/null
-@@ -1,25 +0,0 @@
--From d2480de925e83c8bf60faa96141f4198bdf7f619 Mon Sep 17 00:00:00 2001
--From: Wouter Verhelst <w@uter.be>
--Date: Fri, 2 Aug 2019 10:33:00 +0200
--Subject: [PATCH] Also close the file descriptor before returning
--
--Coverity CID#1162721
--[Retrieved from:
--https://github.com/NetworkBlockDevice/nbd/commit/d2480de925e83c8bf60faa96141f4198bdf7f619]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- nbd-client.c | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/nbd-client.c b/nbd-client.c
--index e9ec0a86..94035886 100644
----- a/nbd-client.c
--+++ b/nbd-client.c
--@@ -930,6 +930,7 @@ void disconnect(char* device) {
-- 	if (ioctl(nbd, NBD_CLEAR_SOCK)<0)
-- 		err("Ioctl failed: %m\n");
-- 	printf("done\n");
--+	close(nbd);
-- }
-- 
-- #if HAVE_NETLINK
-diff --git a/package/nbd/nbd.hash b/package/nbd/nbd.hash
-index d856953c22..f0df35bc27 100644
---- a/package/nbd/nbd.hash
-+++ b/package/nbd/nbd.hash
-@@ -1,7 +1,7 @@
--# From http://sourceforge.net/projects/nbd/files/nbd/3.20/
--md5	910fe6c152f8c30ad8608388e6a4ce89	nbd-3.20.tar.xz
--sha1	9240430266ff4bfb2316ef6d880056a9974a59fd	nbd-3.20.tar.xz
-+# From http://sourceforge.net/projects/nbd/files/nbd/3.21/
-+md5  c51c4c500fe1ed84c3d5d5dd2ca71d23  nbd-3.21.tar.xz
-+sha1  88c3296d43d20d7bda97e0f1bab0243a4f6fa880  nbd-3.21.tar.xz
- 
- # Locally calculated
--sha256	e0e1b3538ab7ae5accf56180afd1a9887d415b98d21223b8ad42592b4af7d6cd	nbd-3.20.tar.xz
--sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
-+sha256  e7688af39d91733bbcd2db08062c44fe503d004e51528740139c44aff6a6bef9  nbd-3.21.tar.xz
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/nbd/nbd.mk b/package/nbd/nbd.mk
-index 6c77bffdfe..0a7f08b2cf 100644
---- a/package/nbd/nbd.mk
-+++ b/package/nbd/nbd.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/proxychains-ng/proxychains-ng.hash b/package/proxychains-ng/proxychains-ng.hash
+index 9781b77af1..779f6b626d 100644
+--- a/package/proxychains-ng/proxychains-ng.hash
++++ b/package/proxychains-ng/proxychains-ng.hash
+@@ -1,6 +1,4 @@
+-# From https://sourceforge.net/projects/proxychains-ng/files/
+-md5 34d840eb184e96bff418201c28a935c5  proxychains-ng-4.11.tar.bz2
+-sha1 00bc3dc18f2b638c79112c99f082a7a2878beaad  proxychains-ng-4.11.tar.bz2
++# From https://github.com/rofl0r/proxychains-ng/releases/tag/v4.14
++sha512  75a1a4629d2b7ebac9b909a694b395339cf669fa4e23bfcc57938e46377b5619f31c9651d2bc457d1ad10ec1be7747981106392bf8bf65999cb7bb9c748d7e95  proxychains-ng-4.14.tar.xz
+ # Locally computed:
+-sha256  dcc4149808cd1fb5d9663cc09791f478805816b1f017381f424414c47f6376b6  proxychains-ng-4.11.tar.bz2
+ sha256  86728623caeff60e9bcc37e03b432fd191de927eed48a72a3bb4ac4e53fe20df  COPYING
+diff --git a/package/proxychains-ng/proxychains-ng.mk b/package/proxychains-ng/proxychains-ng.mk
+index 0437f7d911..bb7c9ff687 100644
+--- a/package/proxychains-ng/proxychains-ng.mk
++++ b/package/proxychains-ng/proxychains-ng.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--NBD_VERSION = 3.20
-+NBD_VERSION = 3.21
- NBD_SOURCE = nbd-$(NBD_VERSION).tar.xz
- NBD_SITE = http://downloads.sourceforge.net/project/nbd/nbd/$(NBD_VERSION)
- NBD_CONF_OPTS = --enable-lfs
+-PROXYCHAINS_NG_VERSION = 4.11
+-PROXYCHAINS_NG_SOURCE = proxychains-ng-$(PROXYCHAINS_NG_VERSION).tar.bz2
++PROXYCHAINS_NG_VERSION = 4.14
++PROXYCHAINS_NG_SOURCE = proxychains-ng-$(PROXYCHAINS_NG_VERSION).tar.xz
+ PROXYCHAINS_NG_SITE = http://downloads.sourceforge.net/project/proxychains-ng
+ PROXYCHAINS_NG_LICENSE = GPL-2.0+
+ PROXYCHAINS_NG_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
