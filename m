@@ -2,57 +2,88 @@ Return-Path: <SRS0=sxUg=M3=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.5 required=3.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+	DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 29BCFC4338F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 11:12:15 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B860C4338F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 11:22:12 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D550960FC4
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 11:12:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D550960FC4
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
+	by mail.kernel.org (Postfix) with ESMTPS id C7A5B60184
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 11:22:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C7A5B60184
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AF8EA83C50;
-	Wed,  4 Aug 2021 11:12:14 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 84B054035E;
+	Wed,  4 Aug 2021 11:22:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JkLqe6GW_O3q; Wed,  4 Aug 2021 11:12:14 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id jawXBkh2srVx; Wed,  4 Aug 2021 11:22:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 12F6483B55;
-	Wed,  4 Aug 2021 11:12:13 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 809E540176;
+	Wed,  4 Aug 2021 11:22:09 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 15B131BF327
- for <buildroot@lists.busybox.net>; Wed,  4 Aug 2021 11:11:14 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4D7631BF327
+ for <buildroot@lists.busybox.net>; Wed,  4 Aug 2021 11:22:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BE4D2403F0
- for <buildroot@lists.busybox.net>; Wed,  4 Aug 2021 11:11:13 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 488C540176
+ for <buildroot@lists.busybox.net>; Wed,  4 Aug 2021 11:22:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id q6YVggWsqmhe for <buildroot@lists.busybox.net>;
- Wed,  4 Aug 2021 11:11:11 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id C968940176
- for <buildroot@buildroot.org>; Wed,  4 Aug 2021 11:11:11 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id A731E8B4BB; Wed,  4 Aug 2021 11:11:02 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Wed, 4 Aug 2021 13:01:18 +0200
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 0c5202ae046ff1d1b2997c2f40cd55f4aa0b8a79
-X-Git-Newrev: 44ea3c1fff3b0512ad3d9af89dde672bdc879ed1
-X-Patchwork-Hint: ignore
-Message-Id: <20210804111102.A731E8B4BB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/uboot-tools:
- concat files before passing to env image tool
+ with ESMTP id GAxSLHD_-RFm for <buildroot@lists.busybox.net>;
+ Wed,  4 Aug 2021 11:22:05 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
+ [IPv6:2a00:1450:4864:20::32d])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 69088400F8
+ for <buildroot@buildroot.org>; Wed,  4 Aug 2021 11:22:05 +0000 (UTC)
+Received: by mail-wm1-x32d.google.com with SMTP id k4so985399wms.3
+ for <buildroot@buildroot.org>; Wed, 04 Aug 2021 04:22:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
+ h=content-transfer-encoding:from:mime-version:subject:date:message-id
+ :references:cc:in-reply-to:to;
+ bh=R49VTtXNVYE08G5Drkww9jyI9q8UgSf/d00XL7sTNCQ=;
+ b=Yw8HKCLV7BTSv8J1y0cmpG8rn81xPiiQLFtumg6RqIex+ZPdYA9BR45U4WqPaLGdgX
+ 9trqgcr51HeWpPT+30uLBSVbMlSjFlJ2Nu4apNgAi1vqGZ/0SbJgendAO3mOB8tTPr6K
+ v29/lb19BEI+LI1FxiYkCOwgf/vbSES0oMDEwfHusB66LKTXr+v7of9B25VfnOrntBCQ
+ efHskMngiKhiv0lk66t4AMTdsShzYSWXHjVWNJLtTN9GE+FcRH0LQfTjfcS/B2cJQvIO
+ 6eQgud7o147JFcnSA8mP3uJCiaKa0zOhrKYdPdh6NvH0yXBW57lXbBbsWCpOnFViZ6Ce
+ qhsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:content-transfer-encoding:from:mime-version
+ :subject:date:message-id:references:cc:in-reply-to:to;
+ bh=R49VTtXNVYE08G5Drkww9jyI9q8UgSf/d00XL7sTNCQ=;
+ b=W1k/sPGQ3jaE5UsSuw8f90w4ATr/2mVti/9KJWPKQg1kToiXjismZm0ZOGiz1EUeZG
+ +uRus6oG+rBFzF90D0ZNCXnN4H0ScYZdnOFdxunaL7pSAGoIHcx92KnCC9Pdeysl/Wbo
+ iHBh0pgYZNc0EUKSBs9yAX9526s/U5j8A5kxXgwbEWY4Syd1FrOM5syZPTA/Lp339pOV
+ 9/uI30VWeV53q5oa4BCTKf35QpwVwq1OxiMikqjQUKJGGtU/Zfo9bdj4sqc0vEBRy8wC
+ lxnu5t7UCTrJ6Qe30ygy1sopgIzkVT6Q8bv6M/ZcM96zn7wOfb6EdyHpdramT5dcn1mW
+ wQLQ==
+X-Gm-Message-State: AOAM533N1td9NPI1F4RwfDAM8pRFsZ4N5HZ4ysdq6LEjsf0AL+3Upl1M
+ UL0VmvIc79JQK/zfKv1bAhU=
+X-Google-Smtp-Source: ABdhPJxAd9Sz5tRbYu6MjkI4aX+/I0v9RP1zyHY5aLkWBCR8rPRZ0/0t4pzgx4zoDeD/GgQarQAsaQ==
+X-Received: by 2002:a7b:c412:: with SMTP id k18mr2887380wmi.145.1628076123505; 
+ Wed, 04 Aug 2021 04:22:03 -0700 (PDT)
+Received: from smtpclient.apple (89-87-110-57.abo.bbox.fr. [89.87.110.57])
+ by smtp.gmail.com with ESMTPSA id y66sm2007496wmy.39.2021.08.04.04.22.02
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 04 Aug 2021 04:22:02 -0700 (PDT)
+From: romain.tisserand@gmail.com
+Mime-Version: 1.0 (1.0)
+Date: Wed, 4 Aug 2021 13:22:01 +0200
+Message-Id: <FCD28833-3B71-45C0-B50F-616321BE4B19@gmail.com>
+References: <063f8d9b-4124-6f76-1208-0300b63df38b@mind.be>
+In-Reply-To: <063f8d9b-4124-6f76-1208-0300b63df38b@mind.be>
+To: Arnout Vandecappelle <arnout@mind.be>
+X-Mailer: iPhone Mail (18F72)
+Subject: Re: [Buildroot] An issue with alsa-plugins + alsa-utils
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,47 +95,33 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Gleb Mazovetskiy <glex.spb@gmail.com>, buildroot@buildroot.org,
+ cedric.chepied@gmail.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=44ea3c1fff3b0512ad3d9af89dde672bdc879ed1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
-
-Fix BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SOURCE so that files are actually concatenated
-as described in the help text.
-
-Signed-off-by: Mirza Kapetanovic <mirza.kapetanovic@gmail.com>
-Reviewed-by: Matthew Weber <matthew.weber@collins.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit d8f5a017b83265f96e154ac0e75ecb5a6fbdf8a5)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/uboot-tools/uboot-tools.mk | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
-index c4006fe3de..b0fc9276b2 100644
---- a/package/uboot-tools/uboot-tools.mk
-+++ b/package/uboot-tools/uboot-tools.mk
-@@ -152,11 +152,12 @@ endif #BR_BUILDING
- 
- define HOST_UBOOT_TOOLS_GENERATE_ENVIMAGE
- 	$(HOST_UBOOT_TOOLS_GENERATE_ENV_DEFAULTS)
--	$(@D)/tools/mkenvimage -s $(BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SIZE) \
-+	cat $(UBOOT_TOOLS_GENERATE_ENV_FILE) | \
-+		$(@D)/tools/mkenvimage -s $(BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SIZE) \
- 		$(if $(BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_REDUNDANT),-r) \
- 		$(if $(filter "BIG",$(BR2_ENDIAN)),-b) \
- 		-o $(@D)/tools/uboot-env.bin \
--		$(UBOOT_TOOLS_GENERATE_ENV_FILE)
-+		-
- endef
- define HOST_UBOOT_TOOLS_INSTALL_ENVIMAGE
- 	$(INSTALL) -m 0755 -D $(@D)/tools/uboot-env.bin $(BINARIES_DIR)/uboot-env.bin
-_______________________________________________
-buildroot mailing list
-buildroot@busybox.net
-http://lists.busybox.net/mailman/listinfo/buildroot
+VGhhbmtzIGZvciB0aGUgaW5zaWdodCAhCkkgYWN0dWFsbHkgc3R1bWJsZWQgb24gdGhpcyBiZWNh
+dXNlIG9mIHRoZSByZWNlbnQgYWRkaXRpb24gb2YgYWxzYS1wbHVnaW5zIHBhY2thZ2UuCgpCZXN0
+IFJlZ2FyZHMsClJvbWFpbiBUaXNzZXJhbmQKCkVudm95w6kgZGUgbW9uIGlQaG9uZQoKPiBMZSA0
+IGFvw7t0IDIwMjEgw6AgMTI6NTMsIEFybm91dCBWYW5kZWNhcHBlbGxlIDxhcm5vdXRAbWluZC5i
+ZT4gYSDDqWNyaXQgOgo+IAo+IO+7vwo+IAo+PiBPbiAwNC8wOC8yMDIxIDEyOjEyLCBHbGViIE1h
+em92ZXRza2l5IHdyb3RlOgo+PiBIaSwKPj4gCj4+IFRoaXMgaXMgYW4gaXNzdWUgb3JpZ2luYWxs
+eSByZXBvcnRlZCB0byBtZSBieSBSb21haW4gVGlzc2VyYW5kIG9uIERpc2NvcmQ6Cj4+IAo+PiAx
+LiBhbHNhLXBsdWdpbnMgY29waWVzIHNvbWUgZmlsZXMgJChUQVJHRVRfRElSKS91c3Ivc2hhcmUv
+YWxzYS9hbHNhLmNvbmYuZAo+PiAyLiBhbHNhLXV0aWxzIHJlbW92ZXMgdGhlc2UgZmlsZXMgZHVy
+aW5nIGluc3RhbGxhdGlvbiAoIHxybSAtcmYKPj4gJChUQVJHRVRfRElSKS91c3Ivc2hhcmUvYWxz
+YS87fCkKPj4gCj4+IENlZHJpYywgY2FuIHlvdSBwbGVhc2UgaGF2ZSBhIGxvb2s/Cj4+IAo+PiBJ
+IHRoaW5rIGEgZ29vZCBvcHRpb24gbWF5IGJlIHRvIG5vdCByZW1vdmUgdGhlIHwkKFRBUkdFVF9E
+SVIpL3Vzci9zaGFyZS9hbHNhL3wKPj4gZGlyZWN0b3J5IGluIGFsc2EtdXRpbHMubWsgPGh0dHA6
+Ly9hbHNhLXV0aWxzLm1rPgo+IAo+IFBldGVyIGRpZCB0aGUgInJtIC1yZiIgMTEgeWVhcnMgYWdv
+IGFzIHBhcnQgb2YgdGhlIGZpeCBmb3IKPiBodHRwczovL2J1Z3MuYnVpbGRyb290Lm9yZy9zaG93
+X2J1Zy5jZ2k/aWQ9MTU3Mwo+IGJ1dCBJIHRoaW5rIHRoZSBpbnRlbnRpb24gd2FzIGp1c3QgdG8g
+bWFrZSBzdXJlIHRoYXQgeW91IGNvdWxkIHVuY29uZmlndXJlIHNvbWUKPiBvcHRpb25zLCByZWJ1
+aWxkIGFscy11dGlscyBhbmQgaXQgd291bGQgbGVhdmUgb25seSB0aGUgY29uZmlndXJlZCB1dGls
+cy4gVGhhdCdzCj4gYSBzY2VuYXJpbyB0aGF0IGRvZXNuJ3Qgd29yayBhbnl3YXksIHNvIGl0J3Mg
+T0sgdG8gcmVtb3ZlIHRoZSBybS4KPiAKPiBSZWdhcmRzLAo+IEFybm91dApfX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0
+CmJ1aWxkcm9vdEBidXN5Ym94Lm5ldApodHRwOi8vbGlzdHMuYnVzeWJveC5uZXQvbWFpbG1hbi9s
+aXN0aW5mby9idWlsZHJvb3QK
