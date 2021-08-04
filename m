@@ -4,55 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-17.7 required=3.0 tests=BAYES_00,DATE_IN_PAST_12_24,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 60721C4338F
-	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 19:58:20 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ADB0BC4338F
+	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 19:58:32 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1C5F060720
-	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 19:58:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1C5F060720
+	by mail.kernel.org (Postfix) with ESMTPS id 7261960F02
+	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 19:58:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7261960F02
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D47EA60ABE;
-	Thu,  5 Aug 2021 19:58:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 426D040680;
+	Thu,  5 Aug 2021 19:58:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id f_o6oCX_2qOb; Thu,  5 Aug 2021 19:58:19 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id wb69J9c93cxx; Thu,  5 Aug 2021 19:58:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 18AB260A75;
-	Thu,  5 Aug 2021 19:58:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 72B4E40670;
+	Thu,  5 Aug 2021 19:58:30 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1081B1BF361
- for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 19:50:06 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 274961BF361
+ for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 19:50:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6234A83B85
+ by smtp1.osuosl.org (Postfix) with ESMTP id B612F828E3
  for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 19:49:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dCGJEKg_Q5XT for <buildroot@lists.busybox.net>;
+ with ESMTP id 1Wz-Ov-VsU-f for <buildroot@lists.busybox.net>;
  Thu,  5 Aug 2021 19:49:52 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0611D83B61
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9161883B77
  for <buildroot@buildroot.org>; Thu,  5 Aug 2021 19:49:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id B97318904D; Thu,  5 Aug 2021 19:49:39 +0000 (UTC)
+ id 50C2C87DA7; Thu,  5 Aug 2021 19:49:39 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Wed, 4 Aug 2021 23:18:08 +0200
+Date: Wed, 4 Aug 2021 22:40:13 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 1478126052566c5c5f2e360cb1d7b45c99c41dcb
-X-Git-Newrev: 2b5dc4e32ed1d1f125b64c6cdaf81db4f320400f
+X-Git-Oldrev: 03889590606e4a5aa3adf990e5b31c82c49ccf12
+X-Git-Newrev: 5227649cb63fb26d62ef17d78a6df69eab9bef18
 X-Patchwork-Hint: ignore
-Message-Id: <20210805194939.B97318904D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libuwsc: fix build
- with gcc 11
+Message-Id: <20210805194939.50C2C87DA7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/azure-iot-sdk-c: fix
+ build with gcc 11
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,61 +70,69 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2b5dc4e32ed1d1f125b64c6cdaf81db4f320400f
+commit: https://git.buildroot.net/buildroot/commit/?id=5227649cb63fb26d62ef17d78a6df69eab9bef18
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Fix the following build failure with gcc 11:
 
-/tmp/instance-1/output-1/build/libuwsc-3.3.5/src/lua/uwsc_lua.c: In function 'uwsc_lua_on':
-/tmp/instance-1/output-1/build/libuwsc-3.3.5/src/lua/uwsc_lua.c:177:5: error: this 'else' clause does not guard... [-Werror=misleading-indentation]
-  177 |     else
-      |     ^~~~
-/tmp/instance-1/output-1/build/libuwsc-3.3.5/src/lua/uwsc_lua.c:180:9: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'else'
-  180 |         return 0;
-      |         ^~~~~~
+/tmp/instance-7/output-1/build/azure-iot-sdk-c-LTS_01_2021_Ref01/c-utility/src/hmac.c:211:43: error: argument 2 of type 'uint8_t *' {aka 'unsigned char *'} declared as a pointer [-Werror=array-parameter=]
+  211 | int hmacResult(HMACContext *ctx, uint8_t *digest)
+      |                                  ~~~~~~~~~^~~~~~
+In file included from /tmp/instance-7/output-1/build/azure-iot-sdk-c-LTS_01_2021_Ref01/c-utility/src/hmac.c:13:
+/tmp/instance-7/output-1/build/azure-iot-sdk-c-LTS_01_2021_Ref01/c-utility/inc/azure_c_shared_utility/sha.h:252:42: note: previously declared as an array 'uint8_t[64]' {aka 'unsigned char[64]'}
+  252 | int hmacResult(HMACContext *ctx, uint8_t digest[USHAMaxHashSize]);
+      |                                  ~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~
 
 Fixes:
- - http://autobuild.buildroot.org/results/1b031667e6d184493ea55ea6630272af4e475375
+ - http://autobuild.buildroot.org/results/11a6eebd0deea679683a93a5c8355d00acdfe51e
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/libuwsc/0002-fix-bad-indentation.patch | 27 ++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+ ...hmac-c-fix-mismatching-function-prototype.patch | 35 ++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-diff --git a/package/libuwsc/0002-fix-bad-indentation.patch b/package/libuwsc/0002-fix-bad-indentation.patch
+diff --git a/package/azure-iot-sdk-c/0001-hmac-c-fix-mismatching-function-prototype.patch b/package/azure-iot-sdk-c/0001-hmac-c-fix-mismatching-function-prototype.patch
 new file mode 100644
-index 0000000000..f33f944d06
+index 0000000000..0c262e6c46
 --- /dev/null
-+++ b/package/libuwsc/0002-fix-bad-indentation.patch
-@@ -0,0 +1,27 @@
-+From 8cb416140741a596235b8acc46b2b119b13ebfab Mon Sep 17 00:00:00 2001
-+From: Rosen Penev <rosenp@gmail.com>
-+Date: Tue, 6 Jul 2021 21:01:52 -0700
-+Subject: [PATCH] fix bad indentation
++++ b/package/azure-iot-sdk-c/0001-hmac-c-fix-mismatching-function-prototype.patch
+@@ -0,0 +1,35 @@
++From 3a7997af72e7a4f70109d1639e6725b39046443e Mon Sep 17 00:00:00 2001
++From: Francesco Giancane <30423178+fgiancane8@users.noreply.github.com>
++Date: Fri, 2 Jul 2021 20:47:38 +0200
++Subject: [PATCH] hmac.c: fix mismatching function prototype (#537)
 +
-+Fixes error with GCC11.
++The reported function raises a warning when compilers assert the flag
++`-Warray-parameter=`, signaling that an array-type argument was promoted
++to a pointer-type argument.
 +
++While in practice in most C implementations this is correct, fixing the
++warning (and, in this case, indicating the maximum size for the array)
++would represent a best-practice for finding out-of-bound accesses or
++identifying wrongly-sized arrays passed in the function.
++
++Signed-off-by: Francesco Giancane <francesco.giancane@accenture.com>
 +[Retrieved from:
-+https://github.com/zhaojh329/libuwsc/commit/8cb416140741a596235b8acc46b2b119b13ebfab]
++https://github.com/Azure/azure-c-shared-utility/commit/3a7997af72e7a4f70109d1639e6725b39046443e]
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 +---
-+ src/lua/uwsc_lua.c | 2 +-
++ src/hmac.c | 2 +-
 + 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/src/lua/uwsc_lua.c b/src/lua/uwsc_lua.c
-+index de6932e..84689fe 100644
-+--- a/src/lua/uwsc_lua.c
-++++ b/src/lua/uwsc_lua.c
-+@@ -178,7 +178,7 @@ static int uwsc_lua_on(lua_State *L)
-+     else
-+         luaL_argcheck(L, false, 2, "available event name: open message error close");
++diff --git a/src/hmac.c b/src/hmac.c
++index 53f2411f8..160af9d2f 100644
++--- a/c-utility/src/hmac.c
+++++ b/c-utility/src/hmac.c
++@@ -208,7 +208,7 @@ int hmacFinalBits(HMACContext *ctx,
++ *   sha Error Code.
++ *
++ */
++-int hmacResult(HMACContext *ctx, uint8_t *digest)
+++int hmacResult(HMACContext *ctx, uint8_t digest[USHAMaxHashSize])
++ {
++     if (!ctx) return shaNull;
 + 
-+-	return 0;
-++    return 0;
-+ }
-+ 
-+ static int __uwsc_lua_send(lua_State *L, int op)
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
