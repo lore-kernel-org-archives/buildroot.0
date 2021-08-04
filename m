@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 09AAEC4338F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 19:44:44 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AB70FC4320A
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 19:44:56 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id C2D7660F58
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 19:44:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C2D7660F58
+	by mail.kernel.org (Postfix) with ESMTPS id 731D260F58
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 19:44:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 731D260F58
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9B8AA4058A;
-	Wed,  4 Aug 2021 19:44:43 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 394CF40553;
+	Wed,  4 Aug 2021 19:44:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jcfXU_7Cp3Ad; Wed,  4 Aug 2021 19:44:43 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 6d-vlx9niLB7; Wed,  4 Aug 2021 19:44:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 15DE0404F9;
-	Wed,  4 Aug 2021 19:44:42 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 523B3402A9;
+	Wed,  4 Aug 2021 19:44:54 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2728C1BF3FB
- for <buildroot@lists.busybox.net>; Wed,  4 Aug 2021 19:43:07 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3938D1BF3FB
+ for <buildroot@lists.busybox.net>; Wed,  4 Aug 2021 19:43:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2A8D960776
+ by smtp3.osuosl.org (Postfix) with ESMTP id 333106063A
  for <buildroot@lists.busybox.net>; Wed,  4 Aug 2021 19:43:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TXjdtKegmzhJ for <buildroot@lists.busybox.net>;
- Wed,  4 Aug 2021 19:43:01 +0000 (UTC)
+ with ESMTP id ykqn8HXYpPdD for <buildroot@lists.busybox.net>;
+ Wed,  4 Aug 2021 19:43:00 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3D28C60A50
- for <buildroot@buildroot.org>; Wed,  4 Aug 2021 19:43:01 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id D452D60645
+ for <buildroot@buildroot.org>; Wed,  4 Aug 2021 19:43:00 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 6221E8B6DB; Wed,  4 Aug 2021 19:42:51 +0000 (UTC)
+ id E53858B6DB; Wed,  4 Aug 2021 19:42:50 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Wed, 4 Aug 2021 21:42:14 +0200
+Date: Wed, 4 Aug 2021 21:41:57 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: a778fbb8ad794ea513101c493971497e20f1bbec
-X-Git-Newrev: bf44a11cf67fde4ba96928a2a4196103b7ec4ef3
+X-Git-Oldrev: e4eaa1bdb2af99b58eba4601621132e4eef3710c
+X-Git-Newrev: 1c671ef163daf2c7de6727f4b8d743c850bfb801
 X-Patchwork-Hint: ignore
-Message-Id: <20210804194251.6221E8B6DB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/pulseaudio: add
- SELinux module
+Message-Id: <20210804194250.E53858B6DB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/pcsc-lite: add SELinux
+ module
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,30 +70,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bf44a11cf67fde4ba96928a2a4196103b7ec4ef3
+commit: https://git.buildroot.net/buildroot/commit/?id=1c671ef163daf2c7de6727f4b8d743c850bfb801
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Support for pulseaudio is added by the apps/pulseaudio module in the
+Support for pcsc-lite is added by the services/pcscd module in the
 SELinux refpolicy.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/pulseaudio/pulseaudio.mk | 1 +
+ package/pcsc-lite/pcsc-lite.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/pulseaudio/pulseaudio.mk b/package/pulseaudio/pulseaudio.mk
-index 19e08f55ae..372cd98da8 100644
---- a/package/pulseaudio/pulseaudio.mk
-+++ b/package/pulseaudio/pulseaudio.mk
-@@ -11,6 +11,7 @@ PULSEAUDIO_INSTALL_STAGING = YES
- PULSEAUDIO_LICENSE = LGPL-2.1+ (specific license for modules, see LICENSE file)
- PULSEAUDIO_LICENSE_FILES = LICENSE GPL LGPL
- PULSEAUDIO_CPE_ID_VENDOR = pulseaudio
-+PULSEAUDIO_SELINUX_MODULES = pulseaudio
- PULSEAUDIO_CONF_OPTS = \
- 	--disable-default-build-tests \
- 	--disable-legacy-database-entry-format \
+diff --git a/package/pcsc-lite/pcsc-lite.mk b/package/pcsc-lite/pcsc-lite.mk
+index 3091da41a4..94f38b3d85 100644
+--- a/package/pcsc-lite/pcsc-lite.mk
++++ b/package/pcsc-lite/pcsc-lite.mk
+@@ -11,6 +11,7 @@ PCSC_LITE_INSTALL_STAGING = YES
+ PCSC_LITE_DEPENDENCIES = host-pkgconf
+ PCSC_LITE_LICENSE = BSD-2-Clause (auth), BSD-3-Clause, GPL-3.0+ (demo, spy, tests), ISC (simclist)
+ PCSC_LITE_LICENSE_FILES = COPYING GPL-3.0.txt
++PCSC_LITE_SELINUX_MODULES = pcscd
+ 
+ # - libudev and libusb are optional
+ # - libudev and libusb can't be used together
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
