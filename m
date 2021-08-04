@@ -2,96 +2,94 @@ Return-Path: <SRS0=sxUg=M3=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
+X-Spam-Status: No, score=-13.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8DC51C4338F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 12:29:24 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 68F00C4338F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 12:31:10 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 14CE760E8D
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 12:29:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 14CE760E8D
+	by mail.kernel.org (Postfix) with ESMTPS id EA23160720
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 12:31:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org EA23160720
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CA7B7403B2;
-	Wed,  4 Aug 2021 12:29:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B8D1183B16;
+	Wed,  4 Aug 2021 12:31:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vRmfzOppEAj1; Wed,  4 Aug 2021 12:29:22 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AFD564010B;
-	Wed,  4 Aug 2021 12:29:21 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 39C031BF2A9
- for <buildroot@lists.busybox.net>; Wed,  4 Aug 2021 12:29:20 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2FCF181CA3
- for <buildroot@lists.busybox.net>; Wed,  4 Aug 2021 12:29:20 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eOS_th8ZPGKH for <buildroot@lists.busybox.net>;
- Wed,  4 Aug 2021 12:29:19 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id lpNIRuleNOzw; Wed,  4 Aug 2021 12:31:09 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 26BBC83B11;
+	Wed,  4 Aug 2021 12:31:08 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 494B21BF2A9
+ for <buildroot@lists.busybox.net>; Wed,  4 Aug 2021 12:31:06 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3EEF3403B2
+ for <buildroot@lists.busybox.net>; Wed,  4 Aug 2021 12:31:06 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bvlpSOcEoyOd for <buildroot@lists.busybox.net>;
+ Wed,  4 Aug 2021 12:31:05 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
- [IPv6:2a00:1450:4864:20::334])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9010181BCB
- for <buildroot@buildroot.org>; Wed,  4 Aug 2021 12:29:19 +0000 (UTC)
-Received: by mail-wm1-x334.google.com with SMTP id
- h24-20020a1ccc180000b029022e0571d1a0so1346369wmb.5
- for <buildroot@buildroot.org>; Wed, 04 Aug 2021 05:29:19 -0700 (PDT)
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
+ [IPv6:2a00:1450:4864:20::42a])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 28A214010B
+ for <buildroot@buildroot.org>; Wed,  4 Aug 2021 12:31:05 +0000 (UTC)
+Received: by mail-wr1-x42a.google.com with SMTP id h13so2057253wrp.1
+ for <buildroot@buildroot.org>; Wed, 04 Aug 2021 05:31:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
  h=sender:from:to:cc:subject:references:date:in-reply-to:message-id
  :user-agent:mime-version;
- bh=+j6CBZRH2lYoe4OrxgtsBJ7+MTs+jo7Q94dWz7mb6Rg=;
- b=QRaik/iC+T1sjJPBHkMT/DxSSBvK2xrNrOU6P9CX52XakIxGhA2s6PPpUVzr2OmTxi
- 91rzXhm3vyzp6a24HHu7YLSz478nbbdseL22ksgNmKWO9hnZa31/iWRv9So0v24ycvhx
- P2qrE+wwsNnZtduT/XWG3vFP2btPAQ1ik8a8xeJUUQmo3dI9Tn5EZVpC2vxE2hUmaLb1
- VzaLHKxce5teSOODsk1HjMUVkfDpgBw8NPMx3FA2EUQIccSHFMpZlv1Q470avxiUJctt
- ai8GTfNBahvCJrcGIw9g2KFxYjosUe4x83v811eq5RcLX6+iqDlMPCWv5PdWdrD3Y8nK
- YyIA==
+ bh=1cEnFujSGzYEhKFulqGMupAEMvAQjCeSQPraAeYUqY8=;
+ b=hHqaLFK08iJdTBxqgfQGP8FMp8wuLAPA0rgjNTs3J2aFwB7gKdH8z5OBP92uqCTH0A
+ s/IdBRN48EZFvHF+N1oixdsgwnKFtjzNthf/5DTBxBTX6kI7FRT8N7CvfzLuXIsB3D+n
+ PwU3y5TIJYyCGjbZCayfekMaY25gGLaIsRXH8BOpby50xp0Zc235lWKTsfWQUehTo9PM
+ xeHtHfx04AU7/HfTYC98+Q45O8Wnh3AX/ndpemsQN9gxfzJTQh0JgG63k6YBtpf0tVme
+ t9BQtQ6hwul51qg/NHvHoGlkb6ELoHRLgIDC4IzLGGN7W71476C0bAv2+8FzGzaJbN10
+ QdmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:sender:from:to:cc:subject:references:date
  :in-reply-to:message-id:user-agent:mime-version;
- bh=+j6CBZRH2lYoe4OrxgtsBJ7+MTs+jo7Q94dWz7mb6Rg=;
- b=iSwuwZgKLJluz6HikyMGt4OXXmBJMo8QJotMY0YNFhBePXDpRA2XHmYflrczWgifc2
- njumKv7QZ4YW/cy06EmL+UtxgYqAQockY5g7Y3JXj1clcp1L9Ej42XbZI/+RYXbHZ02t
- Nw/UJP0+tKGLi/pK/n2YXmxgZoNgnOFGZoEWxenQ52+8zwjgrd0qd6Nha00cGl11IF+o
- EEgZw9ZGX4IaidoRpwC82P39dwVIOedLTsGVIjpns8L0oD8Xpo/16qLImAaRWrq7ZMNt
- dHOVwscD0ao9W7iou7xIrJWrJB0Qs7Ei6L9dSIYgGL/lPPhRhaczgK1VgEnEVmmG7DIb
- SKog==
-X-Gm-Message-State: AOAM530mK3PkcIsNr5TMrmqG3TCgXmGO+Of3bEgJlo7FGcK5cvf2EWqD
- RaXkSkIIOPgwkA8UE6tV8+wIn/MjZIM=
-X-Google-Smtp-Source: ABdhPJyIP5wGRs0Q6ubt7L70z2S57wVRaqsZM4GOAnLd3bCfcw8eakYstKzpk6GTblVB3eN4KXTacw==
-X-Received: by 2002:a7b:c4d2:: with SMTP id g18mr9335321wmk.55.1628080157840; 
- Wed, 04 Aug 2021 05:29:17 -0700 (PDT)
+ bh=1cEnFujSGzYEhKFulqGMupAEMvAQjCeSQPraAeYUqY8=;
+ b=Rz7nathPkTc7Yj5GJZk347T9lkbtUg/daT47OrPBXZv/tGo+kwOKQQtxPxSaq/aHGx
+ h3Fgb0Zui4S4GRZNVvp/9Tlo0MWlo0ZBVJwoHHaILvYTIVa42u+v7fYfo2hT8xV+AMXJ
+ mN6/EHMXNscqMwinbnrCjD3ViY6ubywWaoxTb1879SpPPpeCu1p8ug8qzXXTyFjaJ3mB
+ tO5t/wTujibdLo6C5zAE50pK0jidV9hzcFDmVYMkUh+yogAXNuiCrseNzgl1IRKFZY+B
+ KeRit2+teO+SbEnPzxRYUa/5z9wziHsdp4zAn5qejRSc2vOfwEKgLrTsqSYToXnvutb4
+ olNw==
+X-Gm-Message-State: AOAM533lEsET7SUsQ6hcBhBZc56K/0EH+TTpqp8HmneJq68MgSeppUZh
+ lzLtkfLDmZQRDq7Kc52vPTeAhRvEsmQ=
+X-Google-Smtp-Source: ABdhPJxncXGdsUleVh/0ULeZGb9+dHgW5Y5nnZWqSR5Fx289UJfGmFo+uI6/Rrs1WFEu3L20pQnpiA==
+X-Received: by 2002:adf:f5d1:: with SMTP id k17mr28967629wrp.123.1628080263342; 
+ Wed, 04 Aug 2021 05:31:03 -0700 (PDT)
 Received: from dell.be.48ers.dk ([195.162.189.230])
- by smtp.gmail.com with ESMTPSA id g5sm5619432wmh.31.2021.08.04.05.29.17
+ by smtp.gmail.com with ESMTPSA id u11sm2408613wrp.26.2021.08.04.05.31.02
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 04 Aug 2021 05:29:17 -0700 (PDT)
+ Wed, 04 Aug 2021 05:31:02 -0700 (PDT)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
  (envelope-from <peter@korsgaard.com>)
- id 1mBG1M-0001pB-Ht; Wed, 04 Aug 2021 14:29:16 +0200
+ id 1mBG33-0001wm-DU; Wed, 04 Aug 2021 14:31:01 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-References: <20210701050101.23916-1-gwenj@trabucayre.com>
- <20210701050101.23916-2-gwenj@trabucayre.com>
-Date: Wed, 04 Aug 2021 14:29:16 +0200
-In-Reply-To: <20210701050101.23916-2-gwenj@trabucayre.com> (Gwenhael
- Goavec-Merou's message of "Thu, 1 Jul 2021 07:01:01 +0200")
-Message-ID: <87a6lxtmub.fsf@dell.be.48ers.dk>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20210619172148.295788-1-fontaine.fabrice@gmail.com>
+Date: Wed, 04 Aug 2021 14:30:56 +0200
+In-Reply-To: <20210619172148.295788-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 19 Jun 2021 19:21:47 +0200")
+Message-ID: <875ywltmrj.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 2/2] package/gqrx: fix comment dependency
+Subject: Re: [Buildroot] [PATCH 1/2] package/libndp: drop patch
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,21 +101,19 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>,
- buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
->>>>> "Gwenhael" == Gwenhael Goavec-Merou <gwenj@trabucayre.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
- > comment message for gqrx is always displayed. This is due to an invert
- > dependency: GQRX depends on !BR2_STATIC_LIBS so comment must depends on
- > BR2_STATIC_LIBS
+ > Patch is not needed since bump to version 1.7 in commit
+ > 6274f4191335cf8c9b88796f59da8af04e3abf7a and
+ > https://github.com/jpirko/libndp/commit/94e9a082d76414f82794b0c9817d0c24e3868275
 
- > Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed to 2021.02.x and 2021.05.x, thanks.
 
