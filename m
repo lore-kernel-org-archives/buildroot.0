@@ -2,57 +2,57 @@ Return-Path: <SRS0=sxUg=M3=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-13.2 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,URI_NOVOWEL
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B8A35C4338F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 18:08:04 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 19EDFC4320E
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 18:08:16 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 7E78260F0F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 18:08:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7E78260F0F
+	by mail.kernel.org (Postfix) with ESMTPS id D91A060F0F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 18:08:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D91A060F0F
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 54B7F60751;
-	Wed,  4 Aug 2021 18:08:04 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9FAC640137;
+	Wed,  4 Aug 2021 18:08:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nZmEUXr_mDga; Wed,  4 Aug 2021 18:08:02 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3Uh3B0A7q2Ga; Wed,  4 Aug 2021 18:08:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 682F860776;
-	Wed,  4 Aug 2021 18:08:01 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 12BC71BF9C1
+	by smtp2.osuosl.org (Postfix) with ESMTP id A97D6404FF;
+	Wed,  4 Aug 2021 18:08:13 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 42EBE1BF9D1
  for <buildroot@lists.busybox.net>; Wed,  4 Aug 2021 18:06:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0291F83A7E
- for <buildroot@lists.busybox.net>; Wed,  4 Aug 2021 18:06:42 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 99C5B401D2
+ for <buildroot@lists.busybox.net>; Wed,  4 Aug 2021 18:06:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uyA-GnqHVYl2 for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Jos3IZFDP23P for <buildroot@lists.busybox.net>;
  Wed,  4 Aug 2021 18:06:39 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 444AB83B2B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 718AF4052E
  for <buildroot@buildroot.org>; Wed,  4 Aug 2021 18:06:39 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 813C48B5F4; Wed,  4 Aug 2021 18:06:29 +0000 (UTC)
+ id AF3008B5FA; Wed,  4 Aug 2021 18:06:29 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 4 Aug 2021 19:49:41 +0200
+Date: Wed, 4 Aug 2021 20:04:08 +0200
 X-Git-Refname: refs/heads/2021.05.x
-X-Git-Oldrev: 678ad6ca8c8dea2e7218bb4cf437c1b31ffce05c
-X-Git-Newrev: ca61981722afc41454be3bd4d445bf27bd4a2357
+X-Git-Oldrev: 986c11f0b5e98cb6267e73bd0308243827b787fc
+X-Git-Newrev: b1d4fe8795c4ca23aa1911ef5e66d5d53cfafd6c
 X-Patchwork-Hint: ignore
-Message-Id: <20210804180629.813C48B5F4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.05.x] package/bind: add SELinux
- module
+Message-Id: <20210804180629.AF3008B5FA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.05.x] package/libxmlrpc: bump
+ version to 1.51.07
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,32 +70,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ca61981722afc41454be3bd4d445bf27bd4a2357
+commit: https://git.buildroot.net/buildroot/commit/?id=b1d4fe8795c4ca23aa1911ef5e66d5d53cfafd6c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
 
-Support for bind is added by the services/bind module in the SELinux
-refpolicy.
+Changelog ([1]):
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+  - Abyss: fix bug: wild memory reference when server times out waiting for
+    request header. Introduced with Release 1.44 (December 2015).
+
+[1] http://xmlrpc-c.sourceforge.net/change_super_stable.html
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit c7fd40c7d8975df91f311309fc1bed897c571e1c)
+(cherry picked from commit 0e22d2101e1601d118b4003190f0c7e951cc932a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/bind/bind.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/libxmlrpc/libxmlrpc.hash | 2 +-
+ package/libxmlrpc/libxmlrpc.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index d01a557609..a5c246a54a 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
-@@ -13,6 +13,7 @@ BIND_CONFIG_SCRIPTS = bind9-config isc-config.sh
- BIND_LICENSE = MPL-2.0
- BIND_LICENSE_FILES = COPYRIGHT
- BIND_CPE_ID_VENDOR = isc
-+BIND_SELINUX_MODULES = bind
- # Only applies to RHEL6.x with DNSSEC validation on
- BIND_IGNORE_CVES = CVE-2017-3139
- # Library CVE and not used by bind but used by ISC DHCP
+diff --git a/package/libxmlrpc/libxmlrpc.hash b/package/libxmlrpc/libxmlrpc.hash
+index 13e3b0b534..7034773204 100644
+--- a/package/libxmlrpc/libxmlrpc.hash
++++ b/package/libxmlrpc/libxmlrpc.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  06dcd87d9c88374559369ffbe83b3139cf41418c1a2d03f20e08808085f89fd0  xmlrpc-c-1.51.06.tgz
++sha256  84d20ae33f927582f821d61c0b9194aefbf1d7924590a13fa9da5ae1698aded9  xmlrpc-c-1.51.07.tgz
+ sha256  db7a6d3f187b218c3534010a83424c6bcdef88e6a0b6b1aa3a8762238bd642e6  doc/COPYING
+diff --git a/package/libxmlrpc/libxmlrpc.mk b/package/libxmlrpc/libxmlrpc.mk
+index c74d8a854c..0871b6e710 100644
+--- a/package/libxmlrpc/libxmlrpc.mk
++++ b/package/libxmlrpc/libxmlrpc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBXMLRPC_VERSION = 1.51.06
++LIBXMLRPC_VERSION = 1.51.07
+ LIBXMLRPC_SOURCE = xmlrpc-c-$(LIBXMLRPC_VERSION).tgz
+ LIBXMLRPC_SITE = http://downloads.sourceforge.net/project/xmlrpc-c/Xmlrpc-c%20Super%20Stable/$(LIBXMLRPC_VERSION)
+ LIBXMLRPC_LICENSE = BSD-3-Clause (xml-rpc main code and abyss web server), BSD like (lib/expat), Python 1.5.2 license (parts of xmlrpc_base64.c)
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
