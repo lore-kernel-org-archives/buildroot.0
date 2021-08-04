@@ -2,57 +2,57 @@ Return-Path: <SRS0=evmZ=M4=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DATE_IN_PAST_12_24,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A85FC4338F
-	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 19:56:15 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 20C45C4338F
+	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 19:56:27 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9821760F02
-	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 19:56:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9821760F02
+	by mail.kernel.org (Postfix) with ESMTPS id CA17360EBB
+	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 19:56:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org CA17360EBB
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6EE3F83BCB;
-	Thu,  5 Aug 2021 19:56:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A4ED44066C;
+	Thu,  5 Aug 2021 19:56:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kBpH9oMsF8ax; Thu,  5 Aug 2021 19:56:13 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id wITpKTyFmdBD; Thu,  5 Aug 2021 19:56:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AA0E283AD0;
-	Thu,  5 Aug 2021 19:56:12 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E4CF41BF361
- for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 19:49:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 00A0F40676;
+	Thu,  5 Aug 2021 19:56:25 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 9845D1BF361
+ for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 19:50:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A86B840526
+ by smtp1.osuosl.org (Postfix) with ESMTP id 60FE083B65
  for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 19:49:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id g1XH8sEXW_Gm for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8GKiJMtEdZVH for <buildroot@lists.busybox.net>;
  Thu,  5 Aug 2021 19:49:52 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B19824053C
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0EAFF83B83
  for <buildroot@buildroot.org>; Thu,  5 Aug 2021 19:49:52 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 6F56483738; Thu,  5 Aug 2021 19:49:40 +0000 (UTC)
+ id CF3B08B54B; Thu,  5 Aug 2021 19:49:39 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Thu, 5 Aug 2021 21:06:29 +0200
+Date: Wed, 4 Aug 2021 23:24:43 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 38f9f5bb303acdaedb96c9ecaa5324a9674073c5
-X-Git-Newrev: 96865f02d4d770da40d33ebc6421e15721bf3f94
+X-Git-Oldrev: a24bc1d9b8cf5bd3304452ab37e13769ef1bc6b4
+X-Git-Newrev: a8a01212089e44731a4f8f5577f5c0d1df4b5942
 X-Patchwork-Hint: ignore
-Message-Id: <20210805194940.6F56483738@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/qpdf: fix
- CVE-2021-36978
+Message-Id: <20210805194939.CF3B08B54B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/shairport-sync: use
+ --without-foo options
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,126 +70,71 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=96865f02d4d770da40d33ebc6421e15721bf3f94
+commit: https://git.buildroot.net/buildroot/commit/?id=a8a01212089e44731a4f8f5577f5c0d1df4b5942
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-QPDF 9.x through 9.1.1 and 10.x through 10.0.4 has a heap-based buffer
-overflow in Pl_ASCII85Decoder::write (called from Pl_AES_PDF::flush and
-Pl_AES_PDF::finish) when a certain downstream write fails.
+Use --without-foo options to disable unused features, as they have been
+fixed since version 3.3.8
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- ...ines-to-be-safe-if-downstream-write-fails.patch | 86 ++++++++++++++++++++++
- package/qpdf/qpdf.mk                               |  3 +
- 2 files changed, 89 insertions(+)
+ package/shairport-sync/shairport-sync.mk | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
 
-diff --git a/package/qpdf/0002-Fix-some-pipelines-to-be-safe-if-downstream-write-fails.patch b/package/qpdf/0002-Fix-some-pipelines-to-be-safe-if-downstream-write-fails.patch
-new file mode 100644
-index 0000000000..70017350f2
---- /dev/null
-+++ b/package/qpdf/0002-Fix-some-pipelines-to-be-safe-if-downstream-write-fails.patch
-@@ -0,0 +1,86 @@
-+From dc92574c10f3e2516ec6445b88c5d584f40df4e5 Mon Sep 17 00:00:00 2001
-+From: Jay Berkenbilt <ejb@ql.org>
-+Date: Mon, 4 Jan 2021 11:55:28 -0500
-+Subject: [PATCH] Fix some pipelines to be safe if downstream write fails (fuzz
-+ issue 28262)
-+
-+[Retrieved (and updated to remove updates on ChangeLog and fuzz) from:
-+https://github.com/qpdf/qpdf/commit/dc92574c10f3e2516ec6445b88c5d584f40df4e5]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ ChangeLog                     |   6 ++++++
-+ fuzz/qpdf_extra/28262.fuzz    | Bin 0 -> 40395 bytes
-+ libqpdf/Pl_AES_PDF.cc         |   2 +-
-+ libqpdf/Pl_ASCII85Decoder.cc  |   7 +++++--
-+ libqpdf/Pl_ASCIIHexDecoder.cc |   6 ++++--
-+ libqpdf/Pl_Count.cc           |   2 +-
-+ 6 files changed, 17 insertions(+), 6 deletions(-)
-+ create mode 100644 fuzz/qpdf_extra/28262.fuzz
-+
-+diff --git a/libqpdf/Pl_AES_PDF.cc b/libqpdf/Pl_AES_PDF.cc
-+index 18cf3a4d..2865f804 100644
-+--- a/libqpdf/Pl_AES_PDF.cc
-++++ b/libqpdf/Pl_AES_PDF.cc
-+@@ -238,6 +238,6 @@ Pl_AES_PDF::flush(bool strip_padding)
-+ 	    }
-+ 	}
-+     }
-+-    getNext()->write(this->outbuf, bytes);
-+     this->offset = 0;
-++    getNext()->write(this->outbuf, bytes);
-+ }
-+diff --git a/libqpdf/Pl_ASCII85Decoder.cc b/libqpdf/Pl_ASCII85Decoder.cc
-+index b8df3e87..9d9f6704 100644
-+--- a/libqpdf/Pl_ASCII85Decoder.cc
-++++ b/libqpdf/Pl_ASCII85Decoder.cc
-+@@ -119,10 +119,13 @@ Pl_ASCII85Decoder::flush()
-+ 
-+     QTC::TC("libtests", "Pl_ASCII85Decoder partial flush",
-+ 	    (this->pos == 5) ? 0 : 1);
-+-    getNext()->write(outbuf, this->pos - 1);
-+-
-++    // Reset before calling getNext()->write in case that throws an
-++    // exception.
-++    auto t = this->pos - 1;
-+     this->pos = 0;
-+     memset(this->inbuf, 117, 5);
-++
-++    getNext()->write(outbuf, t);
-+ }
-+ 
-+ void
-+diff --git a/libqpdf/Pl_ASCIIHexDecoder.cc b/libqpdf/Pl_ASCIIHexDecoder.cc
-+index f20a9769..7845268e 100644
-+--- a/libqpdf/Pl_ASCIIHexDecoder.cc
-++++ b/libqpdf/Pl_ASCIIHexDecoder.cc
-+@@ -97,12 +97,14 @@ Pl_ASCIIHexDecoder::flush()
-+ 
-+     QTC::TC("libtests", "Pl_ASCIIHexDecoder partial flush",
-+ 	    (this->pos == 2) ? 0 : 1);
-+-    getNext()->write(&ch, 1);
-+-
-++    // Reset before calling getNext()->write in case that throws an
-++    // exception.
-+     this->pos = 0;
-+     this->inbuf[0] = '0';
-+     this->inbuf[1] = '0';
-+     this->inbuf[2] = '\0';
-++
-++    getNext()->write(&ch, 1);
-+ }
-+ 
-+ void
-+diff --git a/libqpdf/Pl_Count.cc b/libqpdf/Pl_Count.cc
-+index 8077092a..c35619b8 100644
-+--- a/libqpdf/Pl_Count.cc
-++++ b/libqpdf/Pl_Count.cc
-+@@ -27,8 +27,8 @@ Pl_Count::write(unsigned char* buf, size_t len)
-+     if (len)
-+     {
-+ 	this->m->count += QIntC::to_offset(len);
-+-	getNext()->write(buf, len);
-+ 	this->m->last_char = buf[len - 1];
-++	getNext()->write(buf, len);
-+     }
-+ }
-+ 
-diff --git a/package/qpdf/qpdf.mk b/package/qpdf/qpdf.mk
-index ec3d3f89a3..c96bf6bf2e 100644
---- a/package/qpdf/qpdf.mk
-+++ b/package/qpdf/qpdf.mk
-@@ -14,6 +14,9 @@ QPDF_DEPENDENCIES = host-pkgconf zlib jpeg
+diff --git a/package/shairport-sync/shairport-sync.mk b/package/shairport-sync/shairport-sync.mk
+index adc584d554..ba8b44a621 100644
+--- a/package/shairport-sync/shairport-sync.mk
++++ b/package/shairport-sync/shairport-sync.mk
+@@ -28,14 +28,16 @@ SHAIRPORT_SYNC_CONF_ENV += LIBS="$(SHAIRPORT_SYNC_CONF_LIBS)"
+ # libavahi-client.
+ ifeq ($(BR2_PACKAGE_AVAHI_DAEMON)$(BR2_PACKAGE_DBUS),yy)
+ SHAIRPORT_SYNC_DEPENDENCIES += avahi
+-SHAIRPORT_SYNC_CONF_OPTS += --with-avahi
++SHAIRPORT_SYNC_CONF_OPTS += --with-avahi --without-tinysvcmdns
+ else
+-SHAIRPORT_SYNC_CONF_OPTS += --with-tinysvcmdns
++SHAIRPORT_SYNC_CONF_OPTS += --without-avahi --with-tinysvcmdns
+ endif
  
- QPDF_CONF_OPTS = --with-random=/dev/urandom
+ ifeq ($(BR2_PACKAGE_LIBDAEMON),y)
+ SHAIRPORT_SYNC_DEPENDENCIES += libdaemon
+ SHAIRPORT_SYNC_CONF_OPTS += --with-libdaemon
++else
++SHAIRPORT_SYNC_CONF_OPTS += --without-libdaemon
+ endif
  
-+# 0002-Fix-some-pipelines-to-be-safe-if-downstream-write-fails.patch
-+QPDF_IGNORE_CVES += CVE-2021-36978
-+
- ifeq ($(BR2_PACKAGE_GNUTLS),y)
- QPDF_CONF_OPTS += --enable-crypto-gnutls
- QPDF_DEPENDENCIES += gnutls
+ # OpenSSL or mbedTLS
+@@ -54,21 +56,29 @@ endif
+ ifeq ($(BR2_PACKAGE_SHAIRPORT_SYNC_CONVOLUTION),y)
+ SHAIRPORT_SYNC_DEPENDENCIES += libsndfile
+ SHAIRPORT_SYNC_CONF_OPTS += --with-convolution
++else
++SHAIRPORT_SYNC_CONF_OPTS += --without-convolution
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_SHAIRPORT_SYNC_DBUS),y)
+ SHAIRPORT_SYNC_DEPENDENCIES += libglib2
+ SHAIRPORT_SYNC_CONF_OPTS += --with-dbus-interface --with-mpris-interface
++else
++SHAIRPORT_SYNC_CONF_OPTS += --without-dbus-interface --without-mpris-interface
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_SHAIRPORT_SYNC_LIBSOXR),y)
+ SHAIRPORT_SYNC_DEPENDENCIES += libsoxr
+ SHAIRPORT_SYNC_CONF_OPTS += --with-soxr
++else
++SHAIRPORT_SYNC_CONF_OPTS += --without-soxr
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_SHAIRPORT_SYNC_MQTT),y)
+ SHAIRPORT_SYNC_DEPENDENCIES += avahi dbus mosquitto
+ SHAIRPORT_SYNC_CONF_OPTS += --with-mqtt-client
++else
++SHAIRPORT_SYNC_CONF_OPTS += --without-mqtt-client
+ endif
+ 
+ define SHAIRPORT_SYNC_INSTALL_TARGET_CMDS
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
