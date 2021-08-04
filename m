@@ -8,80 +8,83 @@ X-Spam-Status: No, score=-10.5 required=3.0 tests=BAYES_00,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4BD75C4338F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 21:36:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C41D2C4338F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 21:51:38 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 036AF60C3F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 21:36:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 036AF60C3F
+	by mail.kernel.org (Postfix) with ESMTPS id 49FE86105A
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 21:51:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 49FE86105A
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C4B41401FF;
-	Wed,  4 Aug 2021 21:36:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0D0D1403B8;
+	Wed,  4 Aug 2021 21:51:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QvfNEcVRtpRw; Wed,  4 Aug 2021 21:36:17 +0000 (UTC)
+	with ESMTP id ZJabKIDPS-Hr; Wed,  4 Aug 2021 21:51:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 712EE4020C;
-	Wed,  4 Aug 2021 21:36:16 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 953811BF5DB
- for <buildroot@lists.busybox.net>; Wed,  4 Aug 2021 21:36:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 36909403A0;
+	Wed,  4 Aug 2021 21:51:36 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 909191BF5DB
+ for <buildroot@lists.busybox.net>; Wed,  4 Aug 2021 21:51:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 83FDA8399E
- for <buildroot@lists.busybox.net>; Wed,  4 Aug 2021 21:36:14 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 801EA605C8
+ for <buildroot@lists.busybox.net>; Wed,  4 Aug 2021 21:51:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vX5uqGf45Jgg for <buildroot@lists.busybox.net>;
- Wed,  4 Aug 2021 21:36:11 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id aKWlJ8BaIHDa for <buildroot@lists.busybox.net>;
+ Wed,  4 Aug 2021 21:51:34 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com
- [IPv6:2607:f8b0:4864:20::131])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C1D1382B75
- for <buildroot@buildroot.org>; Wed,  4 Aug 2021 21:36:11 +0000 (UTC)
-Received: by mail-il1-x131.google.com with SMTP id r5so2992158ilc.13
- for <buildroot@buildroot.org>; Wed, 04 Aug 2021 14:36:11 -0700 (PDT)
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com
+ [IPv6:2607:f8b0:4864:20::230])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 37E53605C2
+ for <buildroot@buildroot.org>; Wed,  4 Aug 2021 21:51:34 +0000 (UTC)
+Received: by mail-oi1-x230.google.com with SMTP id n16so4631964oij.2
+ for <buildroot@buildroot.org>; Wed, 04 Aug 2021 14:51:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
  h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=Zoumac9V81j8pb2IQRxJwiRfUEns9S9yHZu5txrozK8=;
- b=ZVZBqkcNFBa8HJKxC2n1NZ0bbZceZpbwJGUFWk4yVD7D72YaIuV9jL08l8WUXZzYlJ
- Xqhhalmk5ns0Cm3PGgmC9m66gYpfyC7o6dDw0C+gBxXslu2IAcadH7/neqQ43JKzvxts
- 7pfEWLZKKRkjdNjlcahWNAsCmfwEEZ9BGhuwEdADqn1YTjXdqqKCNKJ6q8o+nXHMMzgT
- smaBvowhIuK998MVdiU5bl0EHjjxYHwzECr9aNHZV9G6DAybp7yhx2wDE33jU1Xl8jrc
- +5J8wHuXmgrdQxCJL0nMYidQz6RY2XdXZsSiL/YaKrXFT9kOiXTq2621Yh9cOukV1SYz
- qbVg==
+ :cc; bh=c6QIlXaEQMlkvRO5ngNjF7+LIJJO6++5l1EqTsms03o=;
+ b=IWN1P2IKnVnvr7D6B97vfjnQKkzfHYw6G8sZPF2Sp8JAto0gj7sj+vCMKwXEzKpneT
+ 2uYQtM3zYKlDsGakMh6ERcfVqp9V7EGFbavF3EF9OknNfjECUBS9gpwRYhHC+3bpHebV
+ Kpc4Q0VHPd8Pu1KsdhphedYmakdraCowxTBWYEChfc49xc4oifttyS5uJoI0rCULHI92
+ p+SmqriRhF5KKEFHE9nztWHRFBL07gqNX3dOAcmUlIlXVJTMM9wW3t/NjYDZrQYqMeRi
+ z38XeYXQvmF8FwJVikXV/HjSwxw2kgA/gG3ksD3aGVC3OD46t8SriqZnehdtVByBey1i
+ wrDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:mime-version:references:in-reply-to:from:date
  :message-id:subject:to:cc;
- bh=Zoumac9V81j8pb2IQRxJwiRfUEns9S9yHZu5txrozK8=;
- b=eciCCW2xulZGNas120G3Wk5HKRfU1nJfPgfwcU4ktTBXxuXqL27oEjjCnE+pxLH57E
- d1/VYVpReg6gAE7ACnwI1DIYv51SCXRMdKYlkLtN/80wHrmaTBQGgh4G43ICmsY+YIX2
- 3u/yy+RT98rD7VJ93GDYwoK1mDGYK2pitfZLnODRHIrfk34frIVN7StaIkQBhwN6j/bY
- MIp3MiheSP63qCeAEum0desA9pT5DN9WN/mvqco6+4kuCF7KSTynsHjMglfXZeBluyIu
- AJepReTznIDRctEm71VMskk3gjj/t8aA2D7NAk7CAP1SJL7HWVQTdw5PeY6Rj5JpeIKG
- R/wQ==
-X-Gm-Message-State: AOAM533QPG+wEnmQWx4SGc0xdzoDjA/jXtjR0qMRYDdG/N2CSEbQKZP+
- 9170zi3MeIOFPNgtSbT59//rN1EUZVIGnXoWgT0=
-X-Google-Smtp-Source: ABdhPJzLqfDEzdCqGl2FDkXA75yFyoxthqNRwxrgY31ackDBWRjrxuK3ggXdYXTjPP8VgNpsZIEJgDe9MmzH4VF3Ua0=
-X-Received: by 2002:a92:8707:: with SMTP id m7mr1278381ild.177.1628112970877; 
- Wed, 04 Aug 2021 14:36:10 -0700 (PDT)
+ bh=c6QIlXaEQMlkvRO5ngNjF7+LIJJO6++5l1EqTsms03o=;
+ b=W56cmQpweLKdIpNw4iKbXmpfMufjRoEUjHMvW7yPCYn8zjk5T7O05dwi1tka1uyXZw
+ KcELT0z6VUu0E/lZ4NnhMB8BJ00YXBinCu1xv4Mi7BIVpMwHlfQsHIp+Mr7WZgf9DDrb
+ HjTGL6wdjRqiKIo9wm5FsWXORoeCLs0ocLOYsvquHUCvDh2wNWMbm/nbbMUt+E4HDmIy
+ JOHxKe8Oz0o5kt4IHKkEOPML/SZ3chOXp38zdUDnCoqUiNHgnSwTD9CRnBXsiO8N3MuE
+ 15wO9oornQJrrwZgtthCeq8ou8gHuGtCz7LDjuyaN6CygERi8rTUU5TIal1vSVjQBvli
+ VUiQ==
+X-Gm-Message-State: AOAM532u7rV/53eU3eLFA70Y6Vj6Usdxl2/8M/vFsTgTw4semOiendak
+ Y5IU+sSIJZVQeOwK45cxyiv4bTlJpsF3hsG9ykY=
+X-Google-Smtp-Source: ABdhPJy4ao+962J1sFu0hF5fRrgl2K6nyyGzk6v/B3TRscqkJ5MhwvKsv151MgKOIUHl8rssfu9gwROzWVVswIm2kxE=
+X-Received: by 2002:a05:6808:1807:: with SMTP id
+ bh7mr1088898oib.157.1628113893267; 
+ Wed, 04 Aug 2021 14:51:33 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210804172259.9143-1-petr.vorel@gmail.com>
-In-Reply-To: <20210804172259.9143-1-petr.vorel@gmail.com>
-From: Alistair Francis <alistair23@gmail.com>
-Date: Thu, 5 Aug 2021 07:35:44 +1000
-Message-ID: <CAKmqyKMe1XOPsR2WvjJSvyJA6caRJj5HfhPC1=Ge0JgeEAu7=w@mail.gmail.com>
-To: Petr Vorel <petr.vorel@gmail.com>
-Subject: Re: [Buildroot] [RFC][PATCH 1/1] package/glibc: bump version to
- 2.34-5-g9995d0588f4f9adc68419224d2b3698e2ca4f77e
+References: <20210617091456.272611-1-nolange79@gmail.com>
+ <20210617091456.272611-4-nolange79@gmail.com>
+ <8319327f-3d70-6ce0-b478-f53ae14013f4@mind.be>
+In-Reply-To: <8319327f-3d70-6ce0-b478-f53ae14013f4@mind.be>
+From: Norbert Lange <nolange79@gmail.com>
+Date: Wed, 4 Aug 2021 23:51:21 +0200
+Message-ID: <CADYdroM-qUgwmw9STdnPG6SM0rEL9_=crWX1zb_X5WZHws5srw@mail.gmail.com>
+To: Arnout Vandecappelle <arnout@mind.be>
+Subject: Re: [Buildroot] [PATCH v4 1/3] package/zstd: rework build and
+ install
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,95 +96,221 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Maxim Kochetkov <fido_max@inbox.ru>, Romain Naour <romain.naour@gmail.com>,
+Cc: Andrey Smirnov <andrew.smirnov@gmail.com>,
  buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-On Thu, Aug 5, 2021 at 3:23 AM Petr Vorel <petr.vorel@gmail.com> wrote:
+Am Mi., 4. Aug. 2021 um 15:01 Uhr schrieb Arnout Vandecappelle <arnout@mind.be>:
 >
-> Also upgrade to on RISC-V (that could have been done in d5ce3b5db5)
+>  Hi Norbert,
 >
-> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-> ---
-> Hi,
+>  Sorry for not responding earlier - I apparently mis-filed this series and it
+> went off my backlog. It's only by looking at Fabrice's later patch that I
+> discovered this one again.
 >
-> I tested it with building pc_x86_64_efi_defconfig, adding nfs-utils,
-> ltp-testsuite and few other tools. Not sure if this is enough for
-> testing.
 >
-> Kind regards,
-> Petr
+> On 17/06/2021 11:14, Norbert Lange wrote:
+> > 1.5.0 uses Threads by default for cli tool and DSO,
+> > so override that in case the toolchain has none.
 >
->  .../glibc.hash                                            | 7 -------
->  .../glibc.hash                                            | 2 +-
->  package/glibc/glibc.mk                                    | 8 +-------
->  3 files changed, 2 insertions(+), 15 deletions(-)
->  delete mode 100644 package/glibc/2.32.9000-69-gbd394d131c10c9ec22c6424197b79410042eed99/glibc.hash
->  rename package/glibc/{2.33-46-gedfd11197ecf3629bbb4b66c5814da09a61a7f9f => 2.34-5-g9995d0588f4f9adc68419224d2b3698e2ca4f77e}/glibc.hash (70%)
->
-> diff --git a/package/glibc/2.32.9000-69-gbd394d131c10c9ec22c6424197b79410042eed99/glibc.hash b/package/glibc/2.32.9000-69-gbd394d131c10c9ec22c6424197b79410042eed99/glibc.hash
-> deleted file mode 100644
-> index 558591522e..0000000000
-> --- a/package/glibc/2.32.9000-69-gbd394d131c10c9ec22c6424197b79410042eed99/glibc.hash
-> +++ /dev/null
-> @@ -1,7 +0,0 @@
-> -# Locally calculated (fetched from Github)
-> -sha256 c3828224d69a42f5b6982cbec8ae01cf494fe975ce9023e36ff2c10a2fb93e42 glibc-2.32.9000-69-gbd394d131c10c9ec22c6424197b79410042eed99.tar.gz
-> -
-> -# Hashes for license files
-> -sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-> -sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-> -sha256  b33d0bd9f685b46853548814893a6135e74430d12f6d94ab3eba42fc591f83bc  LICENSES
-> diff --git a/package/glibc/2.33-46-gedfd11197ecf3629bbb4b66c5814da09a61a7f9f/glibc.hash b/package/glibc/2.34-5-g9995d0588f4f9adc68419224d2b3698e2ca4f77e/glibc.hash
-> similarity index 70%
-> rename from package/glibc/2.33-46-gedfd11197ecf3629bbb4b66c5814da09a61a7f9f/glibc.hash
-> rename to package/glibc/2.34-5-g9995d0588f4f9adc68419224d2b3698e2ca4f77e/glibc.hash
-> index 4b8d8297ec..8b5aacb535 100644
-> --- a/package/glibc/2.33-46-gedfd11197ecf3629bbb4b66c5814da09a61a7f9f/glibc.hash
-> +++ b/package/glibc/2.34-5-g9995d0588f4f9adc68419224d2b3698e2ca4f77e/glibc.hash
-> @@ -1,5 +1,5 @@
->  # Locally calculated (fetched from Github)
-> -sha256  3e2004b16ec6b79a19a88ed4736719ef9e419f9d8e7013faced654c0339e23dc  glibc-2.33-46-gedfd11197ecf3629bbb4b66c5814da09a61a7f9f.tar.gz
-> +sha256  77af51b251591d013ad4634863a42ac8ce62f4b2c7c29cba38a2ad5098d2727f  glibc-2.34-5-g9995d0588f4f9adc68419224d2b3698e2ca4f77e.tar.gz
->
->  # Hashes for license files
->  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-> diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-> index 1c8c409878..320848bd01 100644
-> --- a/package/glibc/glibc.mk
-> +++ b/package/glibc/glibc.mk
-> @@ -11,13 +11,7 @@ else
->  # Generate version string using:
->  #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
->  # When updating the version, please also update localedef
-> -ifeq ($(BR2_RISCV_32),y)
-> -# RISC-V 32-bit (RV32) requires glibc 2.33 or newer
-> -# Until 2.33 is released, just use master
-> -GLIBC_VERSION = 2.32.9000-69-gbd394d131c10c9ec22c6424197b79410042eed99
-> -else
-> -GLIBC_VERSION = 2.33-46-gedfd11197ecf3629bbb4b66c5814da09a61a7f9f
-> -endif
-> +GLIBC_VERSION = 2.34-5-g9995d0588f4f9adc68419224d2b3698e2ca4f77e
+>  It helps if you include a Fixes: tag in the commit message - that way it's
+> visible in patchwork that this patch fixes something and it's going to be
+> applied faster. Also the subject line suggests that the patch is just
+> refactoring, not fixing anything.
 
-Woo! For the RISC-V part
-
-Reviewed-by: Alistair Francis <alistair.francis@wdc.com>
-
-Alistair
-
->  # Upstream doesn't officially provide an https download link.
->  # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
->  # sometimes the connection times out. So use an unofficial github mirror.
-> --
-> 2.32.0
+It was a fix for a part of the series, so nothing to fix
+unless only a part gets applied.
 >
-> _______________________________________________
-> buildroot mailing list
-> buildroot@busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+> > make sure that everything is built in the build step,
+> > and fail the install if files are missing
+> > instead of lazily building them.
+> >
+> > Signed-off-by: Norbert Lange <nolange79@gmail.com>
+> >
+> > ---
+> > v3->v4:
+> > *   revert to previous scheme of BR2_TOOLCHAIN_HAS_THREADS
+> >     fixing build options for both static and shared libs.
+> > v2->v3:
+> > *   use normal = for assignment
+> > v1->v2:
+> > *   rebased against upstream/master
+> >
+> > Signed-off-by: Norbert Lange <nolange79@gmail.com>
+> > ---
+> >  package/zstd/zstd.mk | 45 ++++++++++++++++++++++++--------------------
+> >  1 file changed, 25 insertions(+), 20 deletions(-)
+> >
+> > diff --git a/package/zstd/zstd.mk b/package/zstd/zstd.mk
+> > index 2a876376a2..5674e85bfe 100644
+> > --- a/package/zstd/zstd.mk
+> > +++ b/package/zstd/zstd.mk
+> > @@ -12,11 +12,7 @@ ZSTD_LICENSE_FILES = LICENSE COPYING
+> >  ZSTD_CPE_ID_VENDOR = facebook
+> >  ZSTD_CPE_ID_PRODUCT = zstandard
+> >
+> > -ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+> > -ZSTD_OPTS += HAVE_THREAD=1
+> > -else
+> > -ZSTD_OPTS += HAVE_THREAD=0
+> > -endif
+> > +ZSTD_OPTS += PREFIX=/usr
+>
+>  I think that this is not just refactoring, but is actually needed for the .pc
+> file which is now built during the build step instead of the install step. Is
+> that correct? In that case, please mention it in the commit message.
+
+yes, pragmatically it should be around for build and install,
+even if its just used in one sport for now.
+
+>
+> >
+> >  ifeq ($(BR2_PACKAGE_ZLIB),y)
+> >  ZSTD_DEPENDENCIES += zlib
+> > @@ -39,43 +35,52 @@ else
+> >  ZSTD_OPTS += HAVE_LZ4=0
+> >  endif
+> >
+> > -ifeq ($(BR2_STATIC_LIBS),y)
+> > -ZSTD_BUILD_LIBS = libzstd.a
+> > -ZSTD_INSTALL_LIBS = install-static
+> > -else ifeq ($(BR2_SHARED_LIBS),y)
+> > -ZSTD_BUILD_LIBS = libzstd
+> > -ZSTD_INSTALL_LIBS = install-shared
+> > -else
+> > -ZSTD_BUILD_LIBS = libzstd.a libzstd
+> > -ZSTD_INSTALL_LIBS = install-static install-shared
+> > +ZSTD_BUILD_PROG_TARGET = zstd-release
+> > +
+> > +ifeq ($(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
+> > +ZSTD_BUILD_LIBS += libzstd.a
+> > +ZSTD_INSTALL_LIBS += install-static
+> > +endif
+> > +ifeq ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
+> > +ZSTD_BUILD_LIBS += libzstd
+> > +ZSTD_INSTALL_LIBS += install-shared
+>
+>  AFAICS this change doesn't actually change anything, it's just rewriting. You
+> may claim the result is better, but it's really a matter of taste. We generally
+> want to avoid making changes that are just "it looks nicer" if there's no real
+> benefit (which can be, for example, a follow-up patch makes use of the new
+> structure and would be more complicated in the old structure).
+>
+>  For sure, such a change should be in a separate patch that doesn't do any
+> functional change at the same time.
+
+Ack
+
+>
+> >  endif
+> >
+> > +# Since v1.5.0 the dynamic library is built for
+> > +# multithreading, while the static library is not.
+> > +#
+> >  # The HAVE_THREAD flag is read by the 'programs' makefile but not by  the 'lib'
+> >  # one. Building a multi-threaded binary with a library (which defaults to
+> >  # single-threaded) gives a runtime error when compressing files.
+> >  # The 'lib' makefile provides specific '%-mt' targets for this purpose.
+> >  ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+> > +ZSTD_OPTS += HAVE_THREAD=1
+> >  ZSTD_BUILD_LIBS := $(addsuffix -mt,$(ZSTD_BUILD_LIBS))
+> > +else
+> > +ZSTD_OPTS += HAVE_THREAD=0
+> > +ZSTD_BUILD_LIBS := $(addsuffix -nomt,$(ZSTD_BUILD_LIBS))
+> >  endif
+> >
+> >  define ZSTD_BUILD_CMDS
+> >       $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
+> > -             -C $(@D)/lib $(ZSTD_BUILD_LIBS)
+> > +             -C $(@D)/lib $(addsuffix -release,$(ZSTD_BUILD_LIBS) libzstd.pc)
+>
+>  There's no explanation about the -release suffix in the commit message.
+
+the 'default' target is lib-release zstd-release. No big functional effect.
+
+>
+>  Since we already do override assignment to ZSTD_BUILD_LIBS, I think it would be
+> nicer to put
+>
+> ZSTD_BUILD_LIBS := $(addsuffix -release,$(ZSTD_BUILD_LIBS))
+>
+> just after the threads condition above.
+
+Ack
+>
+>
+> >       $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
+> > -             -C $(@D) zstd
+> > +             -C $(@D)/programs $(ZSTD_BUILD_PROG_TARGET)
+>
+>  This change of building top-level to building in the programs subdirectory is
+> also not clearly explained in the commit message (I mean *why* this is changed,
+> not simply that it is changed).
+>
+> >  endef
+> >
+> >  define ZSTD_INSTALL_STAGING_CMDS
+> > +     [ -e $(@D)/lib/libzstd.pc ]
+>
+>  This command serves no purpose.
+>
+>  I understand that it's a way for you to "assert" that the pc file is indeed
+> built, but because you added it in the build commands we can be pretty sure that
+> it's going to be there.
+>
+>  We normally don't have any assert like that in our install commands. It's also
+> pretty pointless - you probably discovered that it was being built at
+> installation time by looking at the build log, and that's the only way that
+> you'd discover that *that* is the file that needs to be checked. If this ever
+> breaks again, it's more than likely due to a different file.
+
+its supposed to be a reminder to check if things break later, you easily
+miss if some things are build during installation.
+But ok.
+>
+>
+> >       $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
+> > -             DESTDIR=$(STAGING_DIR) PREFIX=/usr -C $(@D)/lib \
+> > -             install-pc install-includes $(ZSTD_INSTALL_LIBS)
+> > +             -C $(@D)/lib DESTDIR=$(STAGING_DIR) $(ZSTD_INSTALL_LIBS) \
+> > +             install-pc install-includes
+>
+>  Other than the PREFIX which is now part of ZSTD_OPTS, I believe nothing
+> actually changed here, right? Please try to keep the diff small in such a case.
+
+Ack
+
+>
+> >  endef
+> >
+> >  define ZSTD_INSTALL_TARGET_CMDS
+> > +     [ -e $(@D)/programs/zstd ]
+>
+>  Again, not needed.
+>
+> >       $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
+> > -             DESTDIR=$(TARGET_DIR) PREFIX=/usr -C $(@D)/programs install
+> > +             -C $(@D)/programs DESTDIR=$(TARGET_DIR) install
+>
+>  Again, spurious reordering of the options.
+>
+>
+>  Regards,
+>  Arnout
+>
+> >       $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
+> > -             DESTDIR=$(TARGET_DIR) PREFIX=/usr -C $(@D)/lib $(ZSTD_INSTALL_LIBS)
+> > +             -C $(@D)/lib DESTDIR=$(TARGET_DIR) $(ZSTD_INSTALL_LIBS)
+> >  endef
+> >
+> >  HOST_ZSTD_OPTS += PREFIX=$(HOST_DIR)
+> >
+
+Norbert
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
