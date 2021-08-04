@@ -7,51 +7,51 @@ X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 73FEBC433F5
-	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 18:25:31 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9FB03C433F5
+	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 18:25:43 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 172DD60F21
-	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 18:25:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 172DD60F21
+	by mail.kernel.org (Postfix) with ESMTPS id 2759460F56
+	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 18:25:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2759460F56
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B9D6481B60;
-	Sat,  4 Sep 2021 18:25:30 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BD53B401E5;
+	Sat,  4 Sep 2021 18:25:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LIDod9zWctWe; Sat,  4 Sep 2021 18:25:30 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 5GjJ9h4J1wMh; Sat,  4 Sep 2021 18:25:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 26AE181B01;
-	Sat,  4 Sep 2021 18:25:29 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 903701BF95A
+	by smtp2.osuosl.org (Postfix) with ESMTP id E9D0940153;
+	Sat,  4 Sep 2021 18:25:40 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 92C571BF95F
  for <buildroot@lists.busybox.net>; Sat,  4 Sep 2021 18:25:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8042F60731
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8017282A2D
  for <buildroot@lists.busybox.net>; Sat,  4 Sep 2021 18:25:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6SJi0gL13j2B for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZegX1ntmXFaW for <buildroot@lists.busybox.net>;
  Sat,  4 Sep 2021 18:25:14 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9D76A605D9
+ by smtp1.osuosl.org (Postfix) with ESMTP id C15C981B01
  for <buildroot@buildroot.org>; Sat,  4 Sep 2021 18:25:14 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 733B38834C; Sat,  4 Sep 2021 18:23:52 +0000 (UTC)
+ id 8A4488834C; Sat,  4 Sep 2021 18:23:52 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Wed, 4 Aug 2021 21:42:03 +0200
+Date: Wed, 4 Aug 2021 21:42:06 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 60de609d1770c3ad66b780a8d7a33b5dd41565fa
-X-Git-Newrev: 664f83ec7d1a0d026c03efbe35a6d6fe40c82eec
+X-Git-Oldrev: 975ab2fa88a0c94b362499ea8ad99222f335fb45
+X-Git-Newrev: 5c89c2386deff575e3e71b4ed10915e5a439e8aa
 X-Patchwork-Hint: ignore
-Message-Id: <20210904182352.733B38834C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/rpm: add SELinux module
+Message-Id: <20210904182352.8A4488834C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/screen: add SELinux module
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,30 +70,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=664f83ec7d1a0d026c03efbe35a6d6fe40c82eec
+commit: https://git.buildroot.net/buildroot/commit/?id=5c89c2386deff575e3e71b4ed10915e5a439e8aa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Support for rpm is added by the admin/rpm module in the SELinux
+Support for screen is added by the apps/screen module in the SELinux
 refpolicy.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/rpm/rpm.mk | 1 +
+ package/screen/screen.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/rpm/rpm.mk b/package/rpm/rpm.mk
-index 0d8c14a09e..ae324fbeef 100644
---- a/package/rpm/rpm.mk
-+++ b/package/rpm/rpm.mk
-@@ -20,6 +20,7 @@ RPM_DEPENDENCIES = \
- RPM_LICENSE = GPL-2.0 or LGPL-2.0 (library only)
- RPM_LICENSE_FILES = COPYING
- RPM_CPE_ID_VENDOR = rpm
-+RPM_SELINUX_MODULES = rpm
- 
- # Don't set --{dis,en}-openmp as upstream wants to abort the build if
- # --enable-openmp is provided and OpenMP is < 4.5:
+diff --git a/package/screen/screen.mk b/package/screen/screen.mk
+index f75f92cb47..843c71fc2a 100644
+--- a/package/screen/screen.mk
++++ b/package/screen/screen.mk
+@@ -9,6 +9,7 @@ SCREEN_SITE = $(BR2_GNU_MIRROR)/screen
+ SCREEN_LICENSE = GPL-3.0+
+ SCREEN_LICENSE_FILES = COPYING
+ SCREEN_CPE_ID_VENDOR = gnu
++SCREEN_SELINUX_MODULES = screen
+ SCREEN_DEPENDENCIES = ncurses
+ SCREEN_AUTORECONF = YES
+ SCREEN_CONF_ENV = CFLAGS="$(TARGET_CFLAGS)"
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
