@@ -7,55 +7,54 @@ X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_2
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CCF85C4338F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 19:46:24 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A5D5C4320A
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 19:46:37 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 8EC616023B
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 19:46:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8EC616023B
+	by mail.kernel.org (Postfix) with ESMTPS id 0617F60F58
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 19:46:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0617F60F58
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 681AD41576;
-	Wed,  4 Aug 2021 19:46:24 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C3F80402A9;
+	Wed,  4 Aug 2021 19:46:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Dd1OEKMXPYss; Wed,  4 Aug 2021 19:46:23 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 8ByyQmJWICih; Wed,  4 Aug 2021 19:46:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B1D27414C9;
-	Wed,  4 Aug 2021 19:46:22 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A0CCC1BF3FB
- for <buildroot@lists.busybox.net>; Wed,  4 Aug 2021 19:44:41 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 03F2240553;
+	Wed,  4 Aug 2021 19:46:34 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 946921BF3FB
+ for <buildroot@lists.busybox.net>; Wed,  4 Aug 2021 19:44:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8E04E83B4E
- for <buildroot@lists.busybox.net>; Wed,  4 Aug 2021 19:44:41 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 82BC1402A9
+ for <buildroot@lists.busybox.net>; Wed,  4 Aug 2021 19:44:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Gg7PhtCcVYSE for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id e_2Ks43PMPia for <buildroot@lists.busybox.net>;
  Wed,  4 Aug 2021 19:44:41 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
 Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B1DA982E95
- for <buildroot@buildroot.org>; Wed,  4 Aug 2021 19:44:40 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6A01D40298
+ for <buildroot@buildroot.org>; Wed,  4 Aug 2021 19:44:41 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay10.mail.gandi.net (Postfix) with ESMTPSA id E6F7B24000B;
- Wed,  4 Aug 2021 19:44:38 +0000 (UTC)
-Date: Wed, 4 Aug 2021 21:43:43 +0200
+ by relay10.mail.gandi.net (Postfix) with ESMTPSA id A5F08240004;
+ Wed,  4 Aug 2021 19:44:39 +0000 (UTC)
+Date: Wed, 4 Aug 2021 21:44:06 +0200
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20210804214343.1d383224@windsurf>
-In-Reply-To: <20210803220702.366412-1-fontaine.fabrice@gmail.com>
-References: <20210803220702.366412-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210804214406.48dfe48f@windsurf>
+In-Reply-To: <20210804103024.934798-1-fontaine.fabrice@gmail.com>
+References: <20210804103024.934798-1-fontaine.fabrice@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/x11r7/xserver_xorg-server: add
- SELinux module
+Subject: Re: [Buildroot] [PATCH 1/1] package/xscreensaver: add SELinux module
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -67,21 +66,21 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
+Cc: Simon Dawson <spdawson@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-On Wed,  4 Aug 2021 00:07:02 +0200
+On Wed,  4 Aug 2021 12:30:24 +0200
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Support for xserver_xorg-server is added by the services/xserver module
-> in the SELinux refpolicy.
+> Support for xscreensaver is added by the apps/xscreensaver module in the
+> SELinux refpolicy.
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/x11r7/xserver_xorg-server/xserver_xorg-server.mk | 1 +
+>  package/xscreensaver/xscreensaver.mk | 1 +
 >  1 file changed, 1 insertion(+)
 
 Applied to next, thanks.
