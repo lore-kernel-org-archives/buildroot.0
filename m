@@ -2,57 +2,57 @@ Return-Path: <SRS0=sxUg=M3=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 72BD5C4338F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 18:10:46 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AD530C4338F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 18:10:58 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 3FFE660C41
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 18:10:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3FFE660C41
+	by mail.kernel.org (Postfix) with ESMTPS id 6FCE560EBC
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 18:10:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6FCE560EBC
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1AF9D60A7D;
-	Wed,  4 Aug 2021 18:10:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4B18183CBF;
+	Wed,  4 Aug 2021 18:10:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8pxFA0WN3QL0; Wed,  4 Aug 2021 18:10:45 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id niz-huBOLxmU; Wed,  4 Aug 2021 18:10:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 65A6F60A63;
-	Wed,  4 Aug 2021 18:10:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A609F83C73;
+	Wed,  4 Aug 2021 18:10:56 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1D3BA1BF9C1
- for <buildroot@lists.busybox.net>; Wed,  4 Aug 2021 18:06:50 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1D4F11BF381
+ for <buildroot@lists.busybox.net>; Wed,  4 Aug 2021 18:06:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9E735608B5
+ by smtp3.osuosl.org (Postfix) with ESMTP id A903460A57
  for <buildroot@lists.busybox.net>; Wed,  4 Aug 2021 18:06:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UE2368bVYxyL for <buildroot@lists.busybox.net>;
+ with ESMTP id c6as4n2Fw4jG for <buildroot@lists.busybox.net>;
  Wed,  4 Aug 2021 18:06:45 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id A84CA60A7A
+ by smtp3.osuosl.org (Postfix) with ESMTP id A253F60A78
  for <buildroot@buildroot.org>; Wed,  4 Aug 2021 18:06:45 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id F380B8B549; Wed,  4 Aug 2021 18:06:35 +0000 (UTC)
+ id DE9F98B549; Wed,  4 Aug 2021 18:06:35 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 4 Aug 2021 19:52:48 +0200
+Date: Wed, 4 Aug 2021 19:49:33 +0200
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 7b67d493c92da83a92efa10a7bd0bd61b106cad2
-X-Git-Newrev: 50f44aea9e41cfb96c0cc167e8a1ad984aa6652a
+X-Git-Oldrev: 68aa77bf52b558b0ea71a9bebd02c2285685b22a
+X-Git-Newrev: 553d09b967c60afaf260accaec9bfbbcc082d909
 X-Patchwork-Hint: ignore
-Message-Id: <20210804180635.F380B8B549@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/proxychains-ng:
- bump to version 4.14
+Message-Id: <20210804180635.DE9F98B549@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/bind: add SELinux
+ module
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,48 +70,32 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=50f44aea9e41cfb96c0cc167e8a1ad984aa6652a
+commit: https://git.buildroot.net/buildroot/commit/?id=553d09b967c60afaf260accaec9bfbbcc082d909
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-https://github.com/rofl0r/proxychains-ng/blob/v4.14/README
+Support for bind is added by the services/bind module in the SELinux
+refpolicy.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 35953d1e61aa8581be09c9dca39365955b10590e)
+(cherry picked from commit c7fd40c7d8975df91f311309fc1bed897c571e1c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/proxychains-ng/proxychains-ng.hash | 6 ++----
- package/proxychains-ng/proxychains-ng.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 6 deletions(-)
+ package/bind/bind.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/proxychains-ng/proxychains-ng.hash b/package/proxychains-ng/proxychains-ng.hash
-index 9781b77af1..779f6b626d 100644
---- a/package/proxychains-ng/proxychains-ng.hash
-+++ b/package/proxychains-ng/proxychains-ng.hash
-@@ -1,6 +1,4 @@
--# From https://sourceforge.net/projects/proxychains-ng/files/
--md5 34d840eb184e96bff418201c28a935c5  proxychains-ng-4.11.tar.bz2
--sha1 00bc3dc18f2b638c79112c99f082a7a2878beaad  proxychains-ng-4.11.tar.bz2
-+# From https://github.com/rofl0r/proxychains-ng/releases/tag/v4.14
-+sha512  75a1a4629d2b7ebac9b909a694b395339cf669fa4e23bfcc57938e46377b5619f31c9651d2bc457d1ad10ec1be7747981106392bf8bf65999cb7bb9c748d7e95  proxychains-ng-4.14.tar.xz
- # Locally computed:
--sha256  dcc4149808cd1fb5d9663cc09791f478805816b1f017381f424414c47f6376b6  proxychains-ng-4.11.tar.bz2
- sha256  86728623caeff60e9bcc37e03b432fd191de927eed48a72a3bb4ac4e53fe20df  COPYING
-diff --git a/package/proxychains-ng/proxychains-ng.mk b/package/proxychains-ng/proxychains-ng.mk
-index 0437f7d911..bb7c9ff687 100644
---- a/package/proxychains-ng/proxychains-ng.mk
-+++ b/package/proxychains-ng/proxychains-ng.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--PROXYCHAINS_NG_VERSION = 4.11
--PROXYCHAINS_NG_SOURCE = proxychains-ng-$(PROXYCHAINS_NG_VERSION).tar.bz2
-+PROXYCHAINS_NG_VERSION = 4.14
-+PROXYCHAINS_NG_SOURCE = proxychains-ng-$(PROXYCHAINS_NG_VERSION).tar.xz
- PROXYCHAINS_NG_SITE = http://downloads.sourceforge.net/project/proxychains-ng
- PROXYCHAINS_NG_LICENSE = GPL-2.0+
- PROXYCHAINS_NG_LICENSE_FILES = COPYING
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index d01a557609..a5c246a54a 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -13,6 +13,7 @@ BIND_CONFIG_SCRIPTS = bind9-config isc-config.sh
+ BIND_LICENSE = MPL-2.0
+ BIND_LICENSE_FILES = COPYRIGHT
+ BIND_CPE_ID_VENDOR = isc
++BIND_SELINUX_MODULES = bind
+ # Only applies to RHEL6.x with DNSSEC validation on
+ BIND_IGNORE_CVES = CVE-2017-3139
+ # Library CVE and not used by bind but used by ISC DHCP
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
