@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 240FBC4338F
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 13:56:59 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 08534C4338F
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 13:57:12 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D9E1F601FD
-	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 13:56:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D9E1F601FD
+	by mail.kernel.org (Postfix) with ESMTPS id C0BF660F14
+	for <buildroot@archiver.kernel.org>; Wed,  4 Aug 2021 13:57:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C0BF660F14
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B87A760A59;
-	Wed,  4 Aug 2021 13:56:58 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SmSwId6zbFNu; Wed,  4 Aug 2021 13:56:58 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2D71560A41;
-	Wed,  4 Aug 2021 13:56:57 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 63FD01BF82C
- for <buildroot@lists.busybox.net>; Wed,  4 Aug 2021 13:56:23 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5DAF74025F
- for <buildroot@lists.busybox.net>; Wed,  4 Aug 2021 13:56:23 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8B94B404D1;
+	Wed,  4 Aug 2021 13:57:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pTbX6et2CEQz for <buildroot@lists.busybox.net>;
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 8lmo7a2uMoVe; Wed,  4 Aug 2021 13:57:10 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6C10640482;
+	Wed,  4 Aug 2021 13:57:09 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 667EB1BF9C1
+ for <buildroot@lists.busybox.net>; Wed,  4 Aug 2021 13:56:23 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 53BD24062F
+ for <buildroot@lists.busybox.net>; Wed,  4 Aug 2021 13:56:23 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZU3d1FppOrhy for <buildroot@lists.busybox.net>;
  Wed,  4 Aug 2021 13:56:22 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 645B840159
+ by smtp4.osuosl.org (Postfix) with ESMTP id 55713405E0
  for <buildroot@buildroot.org>; Wed,  4 Aug 2021 13:56:22 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 0FE8E8B51D; Wed,  4 Aug 2021 13:56:13 +0000 (UTC)
+ id 0184E8B51C; Wed,  4 Aug 2021 13:56:13 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 4 Aug 2021 15:51:07 +0200
+Date: Wed, 4 Aug 2021 15:43:23 +0200
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 1824f3b1340a6c0f2ed4fb6b54c6ab6397ed623c
-X-Git-Newrev: 1847e17688c8341503c1a59576349fb5625ebb61
+X-Git-Oldrev: da13f7e99f20ceb0ff0446823b30147b3b099d83
+X-Git-Newrev: 1824f3b1340a6c0f2ed4fb6b54c6ab6397ed623c
 X-Patchwork-Hint: ignore
-Message-Id: <20210804135613.0FE8E8B51D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/nodejs: bump to
- version 12.22.3
+Message-Id: <20210804135613.0184E8B51C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/mpv: fix
+ reproducible build issues
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,43 +70,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1847e17688c8341503c1a59576349fb5625ebb61
+commit: https://git.buildroot.net/buildroot/commit/?id=1824f3b1340a6c0f2ed4fb6b54c6ab6397ed623c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Do not include the build date when creating reproducible builds.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit e5db5a472e997bdf58ef0ddf370055b83287778a)
+(cherry picked from commit 083b48194fc7d46278bb6c33355322bf02eaec47)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/nodejs/nodejs.hash | 4 ++--
- package/nodejs/nodejs.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/mpv/mpv.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-index 1e03587715..d94942e7c0 100644
---- a/package/nodejs/nodejs.hash
-+++ b/package/nodejs/nodejs.hash
-@@ -1,5 +1,5 @@
--# From https://nodejs.org/dist/v12.22.1/SHASUMS256.txt
--sha256  dd650df7773a6ed3e390320ba51ef33cba6499f0e9397709ea3d1debdcbcb989  node-v12.22.1.tar.xz
-+# From https://nodejs.org/dist/v12.22.3/SHASUMS256.txt
-+sha256  350211fae3a688f41889680c8efcf689353a2e36b62b9dc2b408340986857190  node-v12.22.3.tar.xz
+diff --git a/package/mpv/mpv.mk b/package/mpv/mpv.mk
+index 25ac783b52..30f377054f 100644
+--- a/package/mpv/mpv.mk
++++ b/package/mpv/mpv.mk
+@@ -28,6 +28,10 @@ MPV_CONF_OPTS = \
+ 	--disable-uchardet \
+ 	--disable-vapoursynth
  
- # Hash for license file
- sha256  221417a7ca275112a5ac54639b36ee3c5184e74631ea1e1b01b701293b655190  LICENSE
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index 108fce0926..2731a7c667 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NODEJS_VERSION = 12.22.1
-+NODEJS_VERSION = 12.22.3
- NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
- NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
- NODEJS_DEPENDENCIES = host-python host-nodejs c-ares \
++ifeq ($(BR2_REPRODUCIBLE),y)
++MPV_CONF_OPTS += --disable-build-date
++endif
++
+ ifeq ($(BR2_STATIC_LIBS),y)
+ MPV_CONF_OPTS += --disable-libmpv-shared --enable-libmpv-static
+ else
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
