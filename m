@@ -1,73 +1,83 @@
 Return-Path: <SRS0=evmZ=M4=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-13.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Level: **
+X-Spam-Status: No, score=2.5 required=3.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+	DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,HTML_MESSAGE,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B365FC4338F
-	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 07:06:01 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2AFDFC4338F
+	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 07:15:24 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 0A28060EE4
-	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 07:06:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0A28060EE4
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=benettiengineering.com
+	by mail.kernel.org (Postfix) with ESMTPS id CD05160F58
+	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 07:15:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org CD05160F58
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C951782C1E;
-	Thu,  5 Aug 2021 07:06:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9E94A4032A;
+	Thu,  5 Aug 2021 07:15:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7WvQQBgeDTSm; Thu,  5 Aug 2021 07:05:59 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id LpCMEPChxtzq; Thu,  5 Aug 2021 07:15:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1B12082798;
-	Thu,  5 Aug 2021 07:05:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F168A40330;
+	Thu,  5 Aug 2021 07:15:21 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D6F861BF859
- for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 07:05:56 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2136A1BF859
+ for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 07:15:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C6FE482798
- for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 07:05:56 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1110682F32
+ for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 07:15:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id szy3sIly0PPO for <buildroot@lists.busybox.net>;
- Thu,  5 Aug 2021 07:05:55 +0000 (UTC)
-X-Greylist: delayed 00:07:09 by SQLgrey-1.8.0
-Received: from smtpcmd0641.aruba.it (smtpcmd0641.aruba.it [62.149.156.41])
- by smtp1.osuosl.org (Postfix) with ESMTP id E9E1D826FF
- for <buildroot@buildroot.org>; Thu,  5 Aug 2021 07:05:54 +0000 (UTC)
-Received: from smtpclient.apple ([146.241.149.252])
- by Aruba Outgoing Smtp  with ESMTPA
- id BXKxmSQvIxC2nBXKxmMT8s; Thu, 05 Aug 2021 08:58:42 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1628146722; bh=mM++5V/5JxsVhCAvXRciMDGiQ2dphmGvgAjT3sUAkyQ=;
- h=Content-Type:From:Mime-Version:Subject:Date:To;
- b=ZWI6nkAB8R6xccIxt3RNpKnvyu+n/9P2i00bNWVRtlMHKxVS07Y0zXrkAl4GsoChI
- wFa9caZpOSG8iCwJ8aZo6nkUwUrjBTTF4Uin3JubPiDyY1LlAZ1nIUd9PexevM7rjl
- qVgDj4dXkXu6kc3p6H8NFGikPgqXv/eCzJbVXu/3Nld02b5ANJWS3mvb7WU8yYN2bC
- PNUa6ElJhdKCcxXmXQpHbsyOmj1oa/DIxfOEV8S/geOZ51eZoX1h2QB+5DPmuMJAgT
- owp1q2AfAhYUdViFYq1Bd8MxyVbsXBXITjoyEw1VmnR/DYP1gZSdTsCKV7bQkL1UBQ
- gr1H1MwM4uRVQ==
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Mime-Version: 1.0 (1.0)
-Date: Thu, 5 Aug 2021 08:58:39 +0200
-Message-Id: <B9F86A76-6A01-44DB-8445-0A92A3BC7EEB@benettiengineering.com>
-References: <d9f6c6d8-566f-0d84-f935-58130ab7fde8@mind.be>
-In-Reply-To: <d9f6c6d8-566f-0d84-f935-58130ab7fde8@mind.be>
-To: Arnout Vandecappelle <arnout@mind.be>
-X-Mailer: iPhone Mail (18F72)
-X-CMAE-Envelope: MS4wfM1HEqdxYf9i0jljq9j7QK9Ly4sH2Jnba0zVG20XvGgHElzTcG8uE39QhlnOLHQXbNyF2xAlpbAnkRWqIw8VPYOqGrqHaIfwXo9p81DefuPMR0bzWhKP
- o9trqx6BGRlNlJTnxmMFRo15v28vP+riwXN8cjHiESpqaethWWQtyxNQ+yxGbyzgPaoc1u4+0PsFPBM3uDoi0aPJ0IGrXrjGqZ1dqCdv1VTmUtVnPitLkW1m
- 9u2c86Mh9C9mgAMUI5ubOlF+rWatW3vEXmf/OErTSG9rfJXPpbuBFd4evhcWgQwgXpbQ0XbIrc5nQVqvyMGqKTnW9Z1ytMIJ5TWXGq0n4cTkDHLxZPDIBf/q
- /xR4zO1VT/16kPCW9Upmjw6QbwFJxcQdYEWy/OwW2UhuTQbI83Y=
-Subject: Re: [Buildroot] [PATCH 2/2] package/pixman: fix build failure due
- to gcc bug 101737
+ with ESMTP id YSesfTAPzDEy for <buildroot@lists.busybox.net>;
+ Thu,  5 Aug 2021 07:15:19 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com
+ [IPv6:2607:f8b0:4864:20::72e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6088B82F13
+ for <buildroot@busybox.net>; Thu,  5 Aug 2021 07:15:19 +0000 (UTC)
+Received: by mail-qk1-x72e.google.com with SMTP id x3so5339779qkl.6
+ for <buildroot@busybox.net>; Thu, 05 Aug 2021 00:15:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
+ h=mime-version:from:date:message-id:subject:to;
+ bh=oumtfj/g6Qg1z+OSKvLSgHxVseEL4mZBoqzR4qFIB/M=;
+ b=a1JTIybLb/FqFS56oEI3HyaH5yU9ttrqAQ6FyzCqb1MGKLZACQ+sQi28qSTvqvGlfN
+ /Ds67ZK9s3ci3QM9ytaUKQ+le8Cq56ECLsdCLROSGdD4OyjeUbWYLiEGAJcpbJ6IITwD
+ qgbdAeXeAnxYZdTzYKCJpbiM/Q1vnBlhwqM1/yjF8Qn1f6jhh4OEvqS6IvGoItWs16Dg
+ Dqfcae698MqkqbHgP6oVEdahzA3M4A4HOG4BvkDOaBpE5Z9mm0pzqR8uBZITnpCmxR+i
+ 8SAYHuEZDWuZN7Gvj8jEeQLwAxhdwxDwiUs4chD2XagTgFC32oMnvr5ny6l2n6/UZ55v
+ 5X5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+ bh=oumtfj/g6Qg1z+OSKvLSgHxVseEL4mZBoqzR4qFIB/M=;
+ b=HGP9Q50Tbws6gPvvWRlxEDn0yvc2nfJ+Mh8tF2D+zPB+Lhu2vPxVhXvK23HeujDEXh
+ Iz8kIYh/RdbdqKAK1f/BbymnvoSx6JWojWRibvE/qnL/ex9LFl2c6JvdwL58tWZ2zdXT
+ 0LovPaFMOEgCnultvC2R9xqQFU4MLt8FDrcoviBi7xDO/jvZRo+wUkKGsLsnmdbWHRId
+ Dg1C1wytBvppWO3TM5z+wY2tOVN5f1oLDyggXwzkKweBgPoARU/0lOjEL9oGCDyJ6VEW
+ 49qruMqVMHmugvP1ix9DpmgLdFRvgdFNClndMXXtNmDmRVEbuEGcUOmgGGYqU59V6Mjs
+ 8ocg==
+X-Gm-Message-State: AOAM533QIlYJfxxAUQJGRNZQkwsysxyob2cdkcbxzlfhmSP3saYkrWw7
+ FKE/dNo2WUhtjjPWjjlhlhepAwmshiQh5a/8iG55EfjqyLY=
+X-Google-Smtp-Source: ABdhPJxKhJAbEOtrIsF238AJVNjeX+NqL/x7fIYlM22rCN/1ZF8dknVEp1znVW37pkuT6n5bhGRtWrqYDg/oHSIYWJw=
+X-Received: by 2002:a05:620a:b44:: with SMTP id
+ x4mr1868905qkg.11.1628147717869; 
+ Thu, 05 Aug 2021 00:15:17 -0700 (PDT)
+MIME-Version: 1.0
+From: Jacques Samoun <jacques.samoun33@gmail.com>
+Date: Thu, 5 Aug 2021 10:15:07 +0300
+Message-ID: <CACaKL1xhm-6xZFX3Qk27pbZbKiJJ6cN8TMgvhXJnEny5EVri_A@mail.gmail.com>
+To: buildroot@busybox.net
+Subject: [Buildroot] Common header files / code between packages
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,57 +89,69 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
- Romain Naour <romain.naour@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
- buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============7812112360862131774=="
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-SGkgQXJub3V0LCBUaG9tYXMsCgo+IElsIGdpb3JubyA0IGFnbyAyMDIxLCBhbGxlIG9yZSAyMjoy
-OCwgQXJub3V0IFZhbmRlY2FwcGVsbGUgPGFybm91dEBtaW5kLmJlPiBoYSBzY3JpdHRvOgo+IAo+
-IO+7vyBIaSBHaXVsaW8sCj4gCj4+IE9uIDAzLzA4LzIwMjEgMTA6NDIsIEdpdWxpbyBCZW5ldHRp
-IHdyb3RlOgo+PiBUaGUgcGl4bWFuIHBhY2thZ2UgZXhoaWJpdHMgZ2NjIGJ1ZyAxMDE3Mzcgd2hl
-biBidWlsdCBmb3IgdGhlIFNINAo+PiBhcmNoaXRlY3R1cmUgd2l0aCBvcHRpbWl6YXRpb24gZW5h
-YmxlZCwgd2hpY2ggY2F1c2VzIGEgYnVpbGQgZmFpbHVyZS4KPj4gCj4+IEFzIGRvbmUgZm9yIG90
-aGVyIHBhY2thZ2VzIGluIEJ1aWxkcm9vdCB3b3JrIGFyb3VuZCB0aGlzIGdjYyBidWcgYnkKPj4g
-c2V0dGluZyBvcHRpbWl6YXRpb24gdG8gLU8wIGlmIEJSMl9UT09MQ0hBSU5fSEFTX0dDQ19CVUdf
-MTAxNzM3PXkuCj4+IEFsc28gbGV0J3MgYWRkIFBJWE1BTl9DRkxBR1MgYW5kIHBhc3MgdGhlIENv
-ZGVzb3VyY2VyeSB3b3JrIGFyb3VuZCBDRkxBR1MKPj4gdG8gaXQgZm9yIGNvbnNpc3RlbmN5IGxp
-a2Ugd2UgZG8gZm9yIHRoZSByZXN0IG9mIHRoZSBwYWNrYWdlcy4KPj4gCj4+IEZpeGVzOgo+PiBo
-dHRwOi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5uZXQvcmVzdWx0cy9iMjAvYjIwODY5YmJiNDhlZGIx
-ZjBhODQ3ZWE5ZTJlMWEwNDYyZDYzNTBiZS8KPj4gCj4+IFNpZ25lZC1vZmYtYnk6IEdpdWxpbyBC
-ZW5ldHRpIDxnaXVsaW8uYmVuZXR0aUBiZW5ldHRpZW5naW5lZXJpbmcuY29tPgo+PiAtLS0KPj4g
-cGFja2FnZS9waXhtYW4vcGl4bWFuLm1rIHwgMTAgKysrKysrKysrLQo+PiAxIGZpbGUgY2hhbmdl
-ZCwgOSBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0pCj4+IAo+PiBkaWZmIC0tZ2l0IGEvcGFj
-a2FnZS9waXhtYW4vcGl4bWFuLm1rIGIvcGFja2FnZS9waXhtYW4vcGl4bWFuLm1rCj4+IGluZGV4
-IGQ5OTAwNWVjYjcuLjZmYWI1Mzk1OTMgMTAwNjQ0Cj4+IC0tLSBhL3BhY2thZ2UvcGl4bWFuL3Bp
-eG1hbi5tawo+PiArKysgYi9wYWNrYWdlL3BpeG1hbi9waXhtYW4ubWsKPj4gQEAgLTQ0LDEyICs0
-NCwyMCBAQCBpZm5lcSAoJChCUjJfaXdtbXh0KSx5KQo+PiBQSVhNQU5fQ09ORl9PUFRTICs9IC0t
-ZGlzYWJsZS1hcm0taXdtbXh0Cj4+IGVuZGlmCj4+IAo+PiArUElYTUFOX0NGTEFHUyA9ICQoVEFS
-R0VUX0NGTEFHUykKPj4gKwo+PiAjIHRvb2xjaGFpbiBnZXRzIGNvbmZ1c2VkIGFib3V0IFRMUyBh
-Y2Nlc3MgdGhyb3VnaCBHT1QgKFBJQyksIHNvIGRpc2FibGUgVExTCj4+ICMgbW92aGkgICAgcjQs
-ICVnb3RfaGlhZGooJXRsc19sZG8oZmFzdF9wYXRoX2NhY2hlKSkKPj4gIyB7c3RhbmRhcmQgaW5w
-dXR9OjE3MjogRXJyb3I6IGJhZCBleHByZXNzaW9uCj4+IGlmZXEgKCQoQlIyX1RPT0xDSEFJTl9F
-WFRFUk5BTF9DT0RFU09VUkNFUllfTklPU0lJKSx5KQo+PiAtUElYTUFOX0NPTkZfRU5WICs9IENG
-TEFHUz0iJChUQVJHRVRfQ0ZMQUdTKSAtRFBJWE1BTl9OT19UTFMiCj4+ICtQSVhNQU5fQ0ZMQUdT
-ICs9IC1EUElYTUFOX05PX1RMUwo+PiArZW5kaWYKPj4gKwo+PiAraWZlcSAoJChCUjJfVE9PTENI
-QUlOX0hBU19HQ0NfQlVHXzEwMTczNykseSkKPiAKPiBJIGJlbGlldmUgVGhvbWFzJ3MgZXhwZXJp
-bWVudHMgc2hvd2VkIHRoYXQgaXQgb25seSBvY2N1cnMgdW5kZXIgLU9zLiBTbyBJIHRoaW5rCj4g
-d2Ugc2hvdWxkIGRvIHRoaXMgY29uZGl0aW9uYWxseSB1bmRlciBCUjJfT1BUSU1JWkVfUywgYW5k
-IHVzZSAtTzIgcmF0aGVyIHRoYW4gLU8wLgoKWWVzLCB5b3XigJlyZSByaWdodCwgYnV0IGF0IGEg
-Y2VydGFpbiBwb2ludCwgaWYgSSByZW1lbWJlciBjb3JyZWN0bHksIHdl4oCZdmUgZGVjaWRlZCB0
-byB1bmlmb3JtIHRoaXMga2luZCB3b3JrLWFyb3VuZHMgdXNpbmcgLU8wLAogaW5kZWVkIHNvbWUg
-b3RoZXIgZ2NjIGJ1ZyBjb3VsZCBiZSBzb2x2ZWQgZGlmZmVyZW50bHkgYnV0IHdlIGtlcHQgLU8w
-IHdheSB0byBoYXZlIGEg4oCcc3RhbmRhcmTigJ0gc29sdXRpb24uCgpXaGF0IGRvIHlvdSB0aGlu
-ayBhYm91dCBpdD8KCk90aGVyd2lzZSBJIGRvIGFzIHlvdeKAmXZlIGRlc2NyaWJlZCBhYm92ZSwg
-bm8gcHJvYmxlbS4KCkJlc3QgcmVnYXJkcwpHaXVsaW8gQmVuZXR0aQoKPiAKPiAKPiBSZWdhcmRz
-LAo+IEFybm91dAo+IAo+PiArUElYTUFOX0NGTEFHUyArPSAtTzAKPj4gZW5kaWYKPj4gCj4+ICtQ
-SVhNQU5fQ09ORl9PUFRTICs9IENGTEFHUz0iJChQSVhNQU5fQ0ZMQUdTKSIKPj4gKwo+PiAkKGV2
-YWwgJChhdXRvdG9vbHMtcGFja2FnZSkpCj4+ICQoZXZhbCAkKGhvc3QtYXV0b3Rvb2xzLXBhY2th
-Z2UpKQo+PiAKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-CmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1c3lib3gubmV0Cmh0dHA6Ly9saXN0
-cy5idXN5Ym94Lm5ldC9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+--===============7812112360862131774==
+Content-Type: multipart/alternative; boundary="0000000000005d968e05c8caaeed"
+
+--0000000000005d968e05c8caaeed
+Content-Type: text/plain; charset="UTF-8"
+
+Hello,
+
+my development consists of a kernel driver and an companion user space
+layer.
+They are build each in 2 separate packages. Using external tree build.
+
+The problem is, i would like to share some include files between both
+package (kernel driver and user space layer).
+So far, i solved that by adding a common folder containing the include
+files, and making it part of each package, so it builds OK.
+
+Now, a third package, whose code is completely outside the first 2 is
+willing also to use this include file. The only way i found so far, is to
+put explicit relative path referring from one package to the one other, but
+this is ugly. Moreover, the path depends on the version of the packages, so
+can break easily.
+There must be a better way (STAGING DIR ?)  but i couldn't find.
+
+Can anybody give me an hint ?
+Thanks,
+Jacques
+
+--0000000000005d968e05c8caaeed
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Hello,<br><div><br></div><div>my development consists of a=
+ kernel driver and an companion user space layer.</div><div>They are build =
+each in 2 separate packages. Using external=C2=A0tree build.</div><div><br>=
+</div><div>The problem is, i would like to share some include files between=
+ both package=C2=A0(kernel driver and user space layer).</div><div>So far, =
+i solved that by adding a common folder containing the include files, and m=
+aking it part of each package, so it builds OK.</div><div><br></div><div>No=
+w, a third package, whose code is completely outside the first 2 is willing=
+ also to use this include file. The only way i found so far, is to put expl=
+icit relative path referring from one package to the one other, but this is=
+ ugly. Moreover, the path depends on the version of the packages, so can br=
+eak easily.</div><div>There must be a better way (STAGING=C2=A0DIR ?)=C2=A0=
+ but i couldn&#39;t find.</div><div><br></div><div>Can anybody give me an h=
+int ?</div><div>Thanks,</div><div>Jacques</div><div><br></div><div><br></di=
+v><div><br></div><div><br></div></div>
+
+--0000000000005d968e05c8caaeed--
+
+--===============7812112360862131774==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@busybox.net
+http://lists.busybox.net/mailman/listinfo/buildroot
+
+--===============7812112360862131774==--
