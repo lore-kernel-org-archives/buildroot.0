@@ -7,51 +7,51 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C440C4338F
-	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 11:11:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D90AFC4338F
+	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 11:11:46 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2184D61102
-	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 11:11:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2184D61102
+	by mail.kernel.org (Postfix) with ESMTPS id 9EFE3610FF
+	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 11:11:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9EFE3610FF
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EBFB140405;
-	Thu,  5 Aug 2021 11:11:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7BB4940455;
+	Thu,  5 Aug 2021 11:11:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pikOS5X0hwxF; Thu,  5 Aug 2021 11:11:30 +0000 (UTC)
+	with ESMTP id visAzb3sVvIF; Thu,  5 Aug 2021 11:11:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 636304041F;
-	Thu,  5 Aug 2021 11:11:29 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6779E1BF844
- for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 11:11:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 59994404E3;
+	Thu,  5 Aug 2021 11:11:43 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 9611E1BF844
+ for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 11:11:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 626884029F
- for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 11:11:27 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9275460A7F
+ for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 11:11:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id E9hH50uMZXGU for <buildroot@lists.busybox.net>;
- Thu,  5 Aug 2021 11:11:24 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jEv6Alqo7HV5 for <buildroot@lists.busybox.net>;
+ Thu,  5 Aug 2021 11:11:30 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id DF29B40294
- for <buildroot@buildroot.org>; Thu,  5 Aug 2021 11:11:24 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id F0BC860A7C
+ for <buildroot@buildroot.org>; Thu,  5 Aug 2021 11:11:30 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 71D1B8B804; Thu,  5 Aug 2021 11:11:13 +0000 (UTC)
+ id 882698B827; Thu,  5 Aug 2021 11:11:19 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 5 Aug 2021 13:08:43 +0200
-X-Git-Refname: refs/heads/2021.05.x
-X-Git-Oldrev: 35a7dabfd0e64ba4bdb687172664dd7ff7413510
-X-Git-Newrev: f57f74c0b923cd021e367ae48692ed232fdd8939
+Date: Thu, 5 Aug 2021 13:08:09 +0200
+X-Git-Refname: refs/heads/2021.02.x
+X-Git-Oldrev: 27e2d2d98a9de9ca5f31b9ee1ab8a486c494dd58
+X-Git-Newrev: c4e934ca71f7817ea1f24aca718696823ef2cce6
 X-Patchwork-Hint: ignore
-Message-Id: <20210805111113.71D1B8B804@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.05.x] package/gdb: fix gdb
+Message-Id: <20210805111119.882698B827@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/gdb: fix gdb
  segfault with Python 3.9 support
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
@@ -70,8 +70,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f57f74c0b923cd021e367ae48692ed232fdd8939
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=c4e934ca71f7817ea1f24aca718696823ef2cce6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
 When enabling Python 3 support in gdb < 10, gdb segfaults at startup.
 
