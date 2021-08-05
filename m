@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C97D1C4338F
-	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 20:17:03 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B99FC4338F
+	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 20:17:16 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 6183E61052
-	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 20:17:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6183E61052
+	by mail.kernel.org (Postfix) with ESMTPS id 029C861104
+	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 20:17:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 029C861104
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 172894060A;
-	Thu,  5 Aug 2021 20:17:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A21C683A9F;
+	Thu,  5 Aug 2021 20:17:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Z6gufnC3FP4w; Thu,  5 Aug 2021 20:17:02 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id WGJn7UHSxW4U; Thu,  5 Aug 2021 20:17:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6E7A44041F;
-	Thu,  5 Aug 2021 20:17:01 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 0B0A71BF3FD
+	by smtp1.osuosl.org (Postfix) with ESMTP id EBACA83A8C;
+	Thu,  5 Aug 2021 20:17:13 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id AC8371BF3FD
  for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 20:16:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0833160780
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9D9B64064F
  for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 20:16:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UaT77V-HqOls for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id i5r8YYoWne5N for <buildroot@lists.busybox.net>;
  Thu,  5 Aug 2021 20:16:10 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 57D9160600
+ by smtp4.osuosl.org (Postfix) with ESMTP id 716E9405E9
  for <buildroot@buildroot.org>; Thu,  5 Aug 2021 20:16:10 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 0C0738C586; Thu,  5 Aug 2021 20:15:58 +0000 (UTC)
+ id 2548F8212B; Thu,  5 Aug 2021 20:15:58 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 5 Aug 2021 22:07:23 +0200
+Date: Thu, 5 Aug 2021 22:12:57 +0200
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: f544f572c77b028dd87636036bfa240dfcaaa0a7
-X-Git-Newrev: 1c3a1e49d4196e55db6c6c1c16286374f6f0d102
+X-Git-Oldrev: 8c23c3a59ea0123e270ebfdce57dc93217defc19
+X-Git-Newrev: c6d8a76cac2d1d40be7b9bc883b3cad608a3b1f4
 X-Patchwork-Hint: ignore
-Message-Id: <20210805201558.0C0738C586@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] utils/scanpypi: allow
- installation of commands without 'main' method
+Message-Id: <20210805201558.2548F8212B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/monit: add
+ MONIT_CPE_ID_VENDOR
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,81 +70,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1c3a1e49d4196e55db6c6c1c16286374f6f0d102
+commit: https://git.buildroot.net/buildroot/commit/?id=c6d8a76cac2d1d40be7b9bc883b3cad608a3b1f4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-In case the setup.py file of a python package does not directly call the
-'setup' method, utils/scanpypi was hoping there be a 'main' function which
-would do the work, normally called via a construct like:
+cpe:2.3:a:mmonit:monit is a valid CPE identifier for this package:
 
-    if __name__ == '__main__':
-        main()
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Ammonit%3Amonit
 
-However, this construct is nonstandard, and there are packages in PyPI which
-call 'setup()' directly from the 'if' statement, without a main() method.
-
-But scanpypi does not actually need to make such assumption: when loading
-the module, it can decide the name to be '__main__', just as if setup.py
-would be loaded interactively.
-
-Additionally, remove some logic seemingly related to the previous trick of
-calling 'main'. There should not be a problem in keeping already loaded
-modules in sys.modules, as this is the purpose of sys.modules.
-
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit e43c0509442c746bea305aa2b0a5f7ff5adfd142)
+(cherry picked from commit 2ef4b2e1e6d070bad65de3a2831d8246ff4ed176)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- utils/scanpypi | 21 ++++++---------------
- 1 file changed, 6 insertions(+), 15 deletions(-)
+ package/monit/monit.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/utils/scanpypi b/utils/scanpypi
-index fac22d66e8..04c43f9311 100755
---- a/utils/scanpypi
-+++ b/utils/scanpypi
-@@ -299,7 +299,7 @@ class BuildrootPackage():
-         os.chdir(self.tmp_extract)
-         sys.path.insert(0,self.tmp_extract)
-         s_file, s_path, s_desc = imp.find_module('setup', [self.tmp_extract])
--        setup = imp.load_module('setup', s_file, s_path, s_desc)
-+        setup = imp.load_module('__main__', s_file, s_path, s_desc)
-         if self.metadata_name in self.setup_args:
-             pass
-         elif self.metadata_name.replace('_', '-') in self.setup_args:
-@@ -309,19 +309,10 @@ class BuildrootPackage():
-         try:
-             self.setup_metadata = self.setup_args[self.metadata_name]
-         except KeyError:
--            # This means setup was not called which most likely mean that it is
--            # called through the if __name__ == '__main__' directive.
--            # In this case, we can only pray that it is called through a
--            # function called main() in setup.py.
--            setup.main()  # Will raise AttributeError if not found
--            self.setup_metadata = self.setup_args[self.metadata_name]
--        # Here we must remove the module the hard way.
--        # We must do this because of a very specific case: if a package calls
--        # setup from the __main__ but does not come with a 'main()' function,
--        # for some reason setup.main() will successfully call the main
--        # function of a previous package...
--        sys.modules.pop('setup', None)
--        del setup
-+            # This means setup was not called
-+            print('ERROR: Could not determine package metadata for {pkg}.\n'
-+                  .format(pkg=self.real_name))
-+            raise
-         os.chdir(current_dir)
-         sys.path.remove(self.tmp_extract)
- 
-@@ -706,7 +697,7 @@ def main():
-                 else:
-                     raise
-                 continue
--            except AttributeError as error:
-+            except (AttributeError, KeyError) as error:
-                 print('Error: Could not install package {pkg}: {error}'.format(
-                     pkg=package.real_name, error=error))
-                 continue
+diff --git a/package/monit/monit.mk b/package/monit/monit.mk
+index 93e310ff78..b9e131a363 100644
+--- a/package/monit/monit.mk
++++ b/package/monit/monit.mk
+@@ -8,6 +8,7 @@ MONIT_VERSION = 5.26.0
+ MONIT_SITE = http://mmonit.com/monit/dist
+ MONIT_LICENSE = AGPL-3.0 with OpenSSL exception
+ MONIT_LICENSE_FILES = COPYING
++MONIT_CPE_ID_VENDOR = mmonit
+ #
+ # Touching Makefile.am:
+ MONIT_AUTORECONF = YES
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
