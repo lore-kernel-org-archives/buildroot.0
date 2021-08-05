@@ -4,55 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 30917C4338F
-	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 19:43:49 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 935E2C4338F
+	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 19:44:01 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9F1D260ED6
-	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 19:43:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9F1D260ED6
+	by mail.kernel.org (Postfix) with ESMTPS id 29C1560ED6
+	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 19:44:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 29C1560ED6
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5688783B7D;
-	Thu,  5 Aug 2021 19:43:48 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NfAq_cDrL6oj; Thu,  5 Aug 2021 19:43:47 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BCDAB83B77;
-	Thu,  5 Aug 2021 19:43:46 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1248E1C113E
- for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 19:43:32 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 022AB405F5
- for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 19:43:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EBAF7405F5;
+	Thu,  5 Aug 2021 19:44:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zPwRr0qmFOle for <buildroot@lists.busybox.net>;
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id NLpYv5DmoZAJ; Thu,  5 Aug 2021 19:44:00 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 34B3E40628;
+	Thu,  5 Aug 2021 19:43:59 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1477F1C1148
+ for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 19:43:32 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0474E83B5A
+ for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 19:43:32 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id s-whzBO5LVGB for <buildroot@lists.busybox.net>;
  Thu,  5 Aug 2021 19:43:31 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3D53A405E9
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2271E83B77
  for <buildroot@buildroot.org>; Thu,  5 Aug 2021 19:43:31 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id F26CC83CB1; Thu,  5 Aug 2021 19:43:18 +0000 (UTC)
+ id D46A88B8E5; Thu,  5 Aug 2021 19:43:18 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 5 Aug 2021 21:41:31 +0200
+Date: Thu, 5 Aug 2021 20:53:29 +0200
 X-Git-Refname: refs/heads/2021.05.x
-X-Git-Oldrev: 423d3a4346f69b978eff95e391e15f819cdb570f
-X-Git-Newrev: f79c32fbc1f32313ec7a2c533ec02470645f5fd7
+X-Git-Oldrev: 15b1a0b6572263740f74d15161fcda6223755931
+X-Git-Newrev: abdce1651994d1730282a1b020fa4cb97c1cbc70
 X-Patchwork-Hint: ignore
-Message-Id: <20210805194318.F26CC83CB1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.05.x] package/samba4: needs
- host-flex
+Message-Id: <20210805194318.D46A88B8E5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.05.x] package/libnfnetlink: fix
+ build on musl
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,41 +70,143 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f79c32fbc1f32313ec7a2c533ec02470645f5fd7
+commit: https://git.buildroot.net/buildroot/commit/?id=abdce1651994d1730282a1b020fa4cb97c1cbc70
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
 
-host-flex is needed to avoid the following build failure since bump to
-version 4.14.3 in commit 7df2611e9e93f9c3efea39bf0b5c217564618a28 due to
-https://gitlab.com/samba-team/samba/-/commit/942c0d2128cb8e64a9354dde6bdae82a1c1c3d88
-
-Checking for flex
-Checking for program 'flex'                                                                     : not found
-Embedded Heimdal build requires flex but it was not found.  Install flex or use --with-system-mitkrb5 or --with-system-heimdalkrb5
+Include upstream patch to fix build failure with suricata raised since
+bump to version 6.0.3 in commit 4c429c3f8c322381991a58fcc37c01da9eb5e8a6
 
 Fixes:
- - http://autobuild.buildroot.org/results/b9ed8be51a0eef77d6e48755861ae266c3b9f811
+ - http://autobuild.buildroot.org/results/0b960f40b5d7e4bb0c4ba20638fe66a9e0964ab3
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 0ba7a0fd52dd0633b50a11686ebe486c9a6f33f8)
+(cherry picked from commit 2ce779f91819941c0b34a1d3821cad7575415b3e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/samba4/samba4.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../0002-include-Sync-with-kernel-headers.patch    | 114 +++++++++++++++++++++
+ 1 file changed, 114 insertions(+)
 
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 69f4ad26e5..c612ac23ba 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -13,7 +13,7 @@ SAMBA4_LICENSE_FILES = COPYING
- SAMBA4_CPE_ID_VENDOR = samba
- SAMBA4_CPE_ID_PRODUCT = samba
- SAMBA4_DEPENDENCIES = \
--	host-e2fsprogs host-heimdal host-nfs-utils \
-+	host-e2fsprogs host-flex host-heimdal host-nfs-utils \
- 	host-perl host-perl-parse-yapp host-python3 \
- 	cmocka e2fsprogs gnutls popt zlib \
- 	$(if $(BR2_PACKAGE_LIBAIO),libaio) \
+diff --git a/package/libnfnetlink/0002-include-Sync-with-kernel-headers.patch b/package/libnfnetlink/0002-include-Sync-with-kernel-headers.patch
+new file mode 100644
+index 0000000000..f9e9c2e2ea
+--- /dev/null
++++ b/package/libnfnetlink/0002-include-Sync-with-kernel-headers.patch
+@@ -0,0 +1,114 @@
++From 7a1a07c0028a1c88cd7716a058697c552a563b24 Mon Sep 17 00:00:00 2001
++From: Felix Janda <felix.janda@posteo.de>
++Date: Sat, 16 May 2015 14:49:07 +0200
++Subject: include: Sync with kernel headers
++
++Signed-off-by: Felix Janda <felix.janda@posteo.de>
++Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
++
++[Retrieved from:
++https://git.netfilter.org/libnfnetlink/commit/?id=7a1a07c0028a1c88cd7716a058697c552a563b24]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ include/libnfnetlink/linux_nfnetlink.h        | 44 ++++-----------------------
++ include/libnfnetlink/linux_nfnetlink_compat.h | 12 ++++----
++ 2 files changed, 12 insertions(+), 44 deletions(-)
++
++diff --git a/include/libnfnetlink/linux_nfnetlink.h b/include/libnfnetlink/linux_nfnetlink.h
++index 76a8550..44a38d6 100644
++--- a/include/libnfnetlink/linux_nfnetlink.h
+++++ b/include/libnfnetlink/linux_nfnetlink.h
++@@ -25,9 +25,9 @@ enum nfnetlink_groups {
++ /* General form of address family dependent message.
++  */
++ struct nfgenmsg {
++-	u_int8_t  nfgen_family;		/* AF_xxx */
++-	u_int8_t  version;		/* nfnetlink version */
++-	u_int16_t    res_id;		/* resource id */
+++	__u8  nfgen_family;		/* AF_xxx */
+++	__u8  version;		/* nfnetlink version */
+++	__be16    res_id;		/* resource id */
++ };
++ 
++ #define NFNETLINK_V0	0
++@@ -46,40 +46,8 @@ struct nfgenmsg {
++ #define NFNL_SUBSYS_CTNETLINK_EXP	2
++ #define NFNL_SUBSYS_QUEUE		3
++ #define NFNL_SUBSYS_ULOG		4
++-#define NFNL_SUBSYS_COUNT		5
+++#define NFNL_SUBSYS_OSF			5
+++#define NFNL_SUBSYS_IPSET		6
+++#define NFNL_SUBSYS_COUNT		7
++ 
++-#ifdef __KERNEL__
++-
++-#include <linux/netlink.h>
++-#include <linux/capability.h>
++-#include <net/netlink.h>
++-
++-struct nfnl_callback
++-{
++-	int (*call)(struct sock *nl, struct sk_buff *skb, 
++-		struct nlmsghdr *nlh, struct nlattr *cda[]);
++-	const struct nla_policy *policy;	/* netlink attribute policy */
++-	const u_int16_t attr_count;		/* number of nlattr's */
++-};
++-
++-struct nfnetlink_subsystem
++-{
++-	const char *name;
++-	__u8 subsys_id;			/* nfnetlink subsystem ID */
++-	__u8 cb_count;			/* number of callbacks */
++-	const struct nfnl_callback *cb;	/* callback for individual types */
++-};
++-
++-extern int nfnetlink_subsys_register(const struct nfnetlink_subsystem *n);
++-extern int nfnetlink_subsys_unregister(const struct nfnetlink_subsystem *n);
++-
++-extern int nfnetlink_has_listeners(unsigned int group);
++-extern int nfnetlink_send(struct sk_buff *skb, u32 pid, unsigned group, 
++-			  int echo);
++-extern int nfnetlink_unicast(struct sk_buff *skb, u_int32_t pid, int flags);
++-
++-#define MODULE_ALIAS_NFNL_SUBSYS(subsys) \
++-	MODULE_ALIAS("nfnetlink-subsys-" __stringify(subsys))
++-
++-#endif	/* __KERNEL__ */
++ #endif	/* _NFNETLINK_H */
++diff --git a/include/libnfnetlink/linux_nfnetlink_compat.h b/include/libnfnetlink/linux_nfnetlink_compat.h
++index e145176..74b9e55 100644
++--- a/include/libnfnetlink/linux_nfnetlink_compat.h
+++++ b/include/libnfnetlink/linux_nfnetlink_compat.h
++@@ -1,6 +1,8 @@
++ #ifndef _NFNETLINK_COMPAT_H
++ #define _NFNETLINK_COMPAT_H
++-#ifndef __KERNEL__
+++
+++#include <linux/types.h>
+++
++ /* Old nfnetlink macros for userspace */
++ 
++ /* nfnetlink groups: Up to 32 maximum */
++@@ -18,10 +20,9 @@
++  * ! nfnetlink use the same attributes methods. - J. Schulist.
++  */
++ 
++-struct nfattr
++-{
++-	u_int16_t nfa_len;
++-	u_int16_t nfa_type;	/* we use 15 bits for the type, and the highest
+++struct nfattr {
+++	__u16 nfa_len;
+++	__u16 nfa_type;	/* we use 15 bits for the type, and the highest
++ 				 * bit to indicate whether the payload is nested */
++ };
++ 
++@@ -57,5 +58,4 @@ struct nfattr
++         + NLMSG_ALIGN(sizeof(struct nfgenmsg))))
++ #define NFM_PAYLOAD(n)  NLMSG_PAYLOAD(n, sizeof(struct nfgenmsg))
++ 
++-#endif /* ! __KERNEL__ */
++ #endif /* _NFNETLINK_COMPAT_H */
++-- 
++cgit v1.2.3
++
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
