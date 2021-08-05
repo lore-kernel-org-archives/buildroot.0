@@ -8,84 +8,82 @@ X-Spam-Status: No, score=-18.5 required=3.0 tests=BAYES_00,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E6FAC43216
-	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 09:00:08 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C92CEC432BE
+	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 09:09:36 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id CCCBC61029
-	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 09:00:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org CCCBC61029
+	by mail.kernel.org (Postfix) with ESMTPS id 774D161029
+	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 09:09:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 774D161029
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A0AE9825BF;
-	Thu,  5 Aug 2021 09:00:07 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 31E88401BA;
+	Thu,  5 Aug 2021 09:09:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YS06nGdhD0zI; Thu,  5 Aug 2021 09:00:06 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id hbCt66Xk_wiJ; Thu,  5 Aug 2021 09:09:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EA06F8343F;
-	Thu,  5 Aug 2021 09:00:05 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0831D1BF865
- for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 09:00:05 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 083F24013C;
+	Thu,  5 Aug 2021 09:09:34 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id F19851BF852
+ for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 09:09:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 04DE48343F
- for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 09:00:05 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id DC5014013C
+ for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 09:09:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Q5fYjsjjGSEK for <buildroot@lists.busybox.net>;
- Thu,  5 Aug 2021 09:00:04 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id S7l8pkuyq6CE for <buildroot@lists.busybox.net>;
+ Thu,  5 Aug 2021 09:09:31 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
- [IPv6:2a00:1450:4864:20::32a])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1F65F825D3
- for <buildroot@buildroot.org>; Thu,  5 Aug 2021 09:00:03 +0000 (UTC)
-Received: by mail-wm1-x32a.google.com with SMTP id
- h24-20020a1ccc180000b029022e0571d1a0so3146337wmb.5
- for <buildroot@buildroot.org>; Thu, 05 Aug 2021 02:00:03 -0700 (PDT)
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
+ [IPv6:2a00:1450:4864:20::42e])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 77B18400AF
+ for <buildroot@buildroot.org>; Thu,  5 Aug 2021 09:09:30 +0000 (UTC)
+Received: by mail-wr1-x42e.google.com with SMTP id z4so5533879wrv.11
+ for <buildroot@buildroot.org>; Thu, 05 Aug 2021 02:09:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=/r7Ep4UdXjsSOBLf43lDyco5E+fdU0WXPV4WhdKrFu8=;
- b=Il6ggb8UCCGDgQ+5WU0sFAubJo67oMOZ+H84m6vfGrUGhc/M4N48xDLvCqBHgZ5aIU
- V75GVxs21x+mFLCvYWtZ1bIHZk0X9RIDqrLlsyPc7psHTL8RtJCqOsJCAq2Gr/bWtkN/
- q7AYVlm4YtVoNFfUTRGdFrGzF9WnhUwlPOT9YqRKfXD4LsSSAb6dkh30gcWdg76VcE4s
- pGATsprINuZUp+brbSLk1YVNuV4GsrM9PJcTpotKc0hPRqFTHCn033iMvhirSTR4RDDz
- 1r0lSfbcHfwmVVgRxU5fflB8Fv034X/R9I5sEKtjkuY/4ziwlxjBxlXKyJg7C8d5DEal
- W1LQ==
+ bh=4IlXItuZxrTMjMoIl3a/CA5caK0genkfLi6fdUwdDG8=;
+ b=Q41a9lzuhfyw9uVagK/Y/f9ubczwtX1Sb+/xkezog3E+tX0Zpt/PlLZrgNHUojrZqJ
+ qbFULFeTy9JFSvzsPwEQ0ljBuqDYKlSG762GlEUJXhUUltN891K2UV4BNWXMmcm7Ldlq
+ HfC0rgjGfSPvNi20V7KscUo7p76lHrm7jm0Tc/zcVwmxJmYpUNlsTByVfUY/LW1i8KxM
+ uquHNGVxvOI5yu29GbsICxkUEsaHwenLmVQlutGgT7fUEH0a2ApJhDtzG1ua7MR2MKcn
+ h7HXuF2XOnOrPonguzEQ+Z5NKQACUGZkqM5XP5aOah7w53iY3migbDGd/MoUBEMUgWOM
+ 9XVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=/r7Ep4UdXjsSOBLf43lDyco5E+fdU0WXPV4WhdKrFu8=;
- b=NoMYWN/sBBtgUrAlC3dO42jDLUtsU2OjAmI2HKdbF/a3nqY0A2MFeXIZbup9lzjoVo
- P7VKsQDEPmGTaKDaPbQuqInKvQr3U3J1SWHxGafhTfmRDhPwXzvTxh/HOdZXOXD13zPb
- BX87nlaXsnAPY8pLGM19/7lahjjiFS4L6Z3JOcmqnT1ZXsGrdfOpuYF2MqsiXVt0pvXI
- ZgMifsY3hPbzxAjIHkbAjTb36WycdYAjdtuJEcP0TAJ8Y1kT+Y+H6tlj5FGiFpBZFqlC
- qKUzAvwAKwUaFr0Ts56twfmkMfPa4PJFC5vYMTX9nrZs2Q9rknt/KPZvQ2EJ4rDCr7eD
- d1bg==
-X-Gm-Message-State: AOAM53265StYy1bKyN7ZdDgQKOCi3LoLmlt4UiR2BeiEc7v1eeajFgIQ
- ZDXajyK3hX2d9v8EqQEW+XFrkHgq4BlAdA==
-X-Google-Smtp-Source: ABdhPJy1UASU8T1uQ9hGLOSicC82qranr+6wqhRPwENWKlMYDGDxxAyIFQ+KLl94zN/z8zAoqcJtWQ==
-X-Received: by 2002:a05:600c:4105:: with SMTP id
- j5mr14148677wmi.86.1628154002123; 
- Thu, 05 Aug 2021 02:00:02 -0700 (PDT)
+ bh=4IlXItuZxrTMjMoIl3a/CA5caK0genkfLi6fdUwdDG8=;
+ b=OuC4LRiUdO2F1K9d3MsRNLbRx8gHQy01HNsA/KE+rnpfBL0k1CK8pqSTswD9IEotpK
+ 9kxjHWG4lcwdobW8w77Z5d7G9RoVZODx0gIoLnpWGKaxEnyZs5EiFoVtYYvjlw4p0zqO
+ /5kLtN6wmvf5fHPqrnMnsKSBbFUWIvNuAC/gdIcOWYCD8DaQcwlG1+cmDn6s5YhKY8ax
+ 8k7RR4u9y4CPeq1tiJEmH2oLxteB7g4jZ6pe1ZYq4YwAwXP/1OtqQHkENREf4yvqA6b4
+ 8230XBGSYMMbmzceQ6cs76o7NPuPyppReT8QPaJVorRHfCiuDMzIhEIk6St0iVTSzOyy
+ 2O+Q==
+X-Gm-Message-State: AOAM5315qNk+2bdpjHJS6BzFI440rolo1UjPni1QL+aFSw0tNHdytB6H
+ rAhen19jHBwFvmlQdOejy3WTFUjmooM0Sw==
+X-Google-Smtp-Source: ABdhPJzMHm86WXBdBxS8yOa72LrGJEfHvW3oa4RgTG8iK/zJCCk9z/gfcBIAqvbQ6nNUszFJgkiMpg==
+X-Received: by 2002:adf:f4ca:: with SMTP id h10mr3903815wrp.3.1628154568980;
+ Thu, 05 Aug 2021 02:09:28 -0700 (PDT)
 Received: from kali.home (pop.92-184-97-192.mobile.abo.orange.fr.
  [92.184.97.192])
- by smtp.gmail.com with ESMTPSA id b15sm5514771wrx.73.2021.08.05.02.00.01
+ by smtp.gmail.com with ESMTPSA id c2sm5388920wrs.60.2021.08.05.02.09.28
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 05 Aug 2021 02:00:01 -0700 (PDT)
+ Thu, 05 Aug 2021 02:09:28 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu,  5 Aug 2021 10:59:55 +0200
-Message-Id: <20210805085955.2105652-1-fontaine.fabrice@gmail.com>
+Date: Thu,  5 Aug 2021 11:09:20 +0200
+Message-Id: <20210805090920.2107925-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/uhd: fix build with gcc 11
+Subject: [Buildroot] [PATCH 1/1] package/qpdf: fix CVE-2021-36978
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,65 +95,130 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>,
+Cc: Olivier Schonken <olivier.schonken@gmail.com>,
  Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-Fix the following build failure with gcc 11:
-
-In file included from /tmp/instance-4/output-1/build/uhd-3.15.0.0/host/lib/usrp/dboard/e3xx/e3xx_ad9361_iface.hpp:14,
-                 from /tmp/instance-4/output-1/build/uhd-3.15.0.0/host/lib/usrp/dboard/e3xx/e3xx_ad9361_iface.cpp:7:
-/tmp/instance-4/output-1/build/uhd-3.15.0.0/host/lib/include/uhdlib/utils/rpc.hpp: In function 'bool {anonymous}::await_rpc_connected_state(std::shared_ptr<rpc::client>, std::chrono::milliseconds)':
-/tmp/instance-4/output-1/build/uhd-3.15.0.0/host/lib/include/uhdlib/utils/rpc.hpp:28:27: error: 'sleep_for' is not a member of 'std::this_thread'
-   28 |         std::this_thread::sleep_for(std::chrono::milliseconds(1));
-      |                           ^~~~~~~~~
-
-Fixes:
- - http://autobuild.buildroot.org/results/1591ff7fabb09e4eb79f3aa293fbb228c255c45b
+QPDF 9.x through 9.1.1 and 10.x through 10.0.4 has a heap-based buffer
+overflow in Pl_ASCII85Decoder::write (called from Pl_AES_PDF::flush and
+Pl_AES_PDF::finish) when a certain downstream write fails.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...-lib-Fix-missing-includes-in-rpc-hpp.patch | 28 +++++++++++++++++++
- 1 file changed, 28 insertions(+)
- create mode 100644 package/uhd/0004-lib-Fix-missing-includes-in-rpc-hpp.patch
+ ...to-be-safe-if-downstream-write-fails.patch | 86 +++++++++++++++++++
+ package/qpdf/qpdf.mk                          |  3 +
+ 2 files changed, 89 insertions(+)
+ create mode 100644 package/qpdf/0002-Fix-some-pipelines-to-be-safe-if-downstream-write-fails.patch
 
-diff --git a/package/uhd/0004-lib-Fix-missing-includes-in-rpc-hpp.patch b/package/uhd/0004-lib-Fix-missing-includes-in-rpc-hpp.patch
+diff --git a/package/qpdf/0002-Fix-some-pipelines-to-be-safe-if-downstream-write-fails.patch b/package/qpdf/0002-Fix-some-pipelines-to-be-safe-if-downstream-write-fails.patch
 new file mode 100644
-index 0000000000..b287beec71
+index 0000000000..70017350f2
 --- /dev/null
-+++ b/package/uhd/0004-lib-Fix-missing-includes-in-rpc-hpp.patch
-@@ -0,0 +1,28 @@
-+From 9c4d9d826a6f40f199c526afd5ec168d5d088591 Mon Sep 17 00:00:00 2001
-+From: Martin Braun <martin.braun@ettus.com>
-+Date: Fri, 29 Jan 2021 12:23:50 +0100
-+Subject: [PATCH] lib: Fix missing includes in rpc.hpp
++++ b/package/qpdf/0002-Fix-some-pipelines-to-be-safe-if-downstream-write-fails.patch
+@@ -0,0 +1,86 @@
++From dc92574c10f3e2516ec6445b88c5d584f40df4e5 Mon Sep 17 00:00:00 2001
++From: Jay Berkenbilt <ejb@ql.org>
++Date: Mon, 4 Jan 2021 11:55:28 -0500
++Subject: [PATCH] Fix some pipelines to be safe if downstream write fails (fuzz
++ issue 28262)
 +
-+[Retrieved from:
-+https://github.com/EttusResearch/uhd/commit/9c4d9d826a6f40f199c526afd5ec168d5d088591]
++[Retrieved (and updated to remove updates on ChangeLog and fuzz) from:
++https://github.com/qpdf/qpdf/commit/dc92574c10f3e2516ec6445b88c5d584f40df4e5]
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 +---
-+ host/lib/include/uhdlib/utils/rpc.hpp | 4 ++++
-+ 1 file changed, 4 insertions(+)
++ ChangeLog                     |   6 ++++++
++ fuzz/qpdf_extra/28262.fuzz    | Bin 0 -> 40395 bytes
++ libqpdf/Pl_AES_PDF.cc         |   2 +-
++ libqpdf/Pl_ASCII85Decoder.cc  |   7 +++++--
++ libqpdf/Pl_ASCIIHexDecoder.cc |   6 ++++--
++ libqpdf/Pl_Count.cc           |   2 +-
++ 6 files changed, 17 insertions(+), 6 deletions(-)
++ create mode 100644 fuzz/qpdf_extra/28262.fuzz
 +
-+diff --git a/host/lib/include/uhdlib/utils/rpc.hpp b/host/lib/include/uhdlib/utils/rpc.hpp
-+index e87a2ee324..ca89c10547 100644
-+--- a/host/lib/include/uhdlib/utils/rpc.hpp
-++++ b/host/lib/include/uhdlib/utils/rpc.hpp
-+@@ -12,7 +12,11 @@
-+ #include <rpc/client.h>
-+ #include <rpc/rpc_error.h>
-+ #include <boost/format.hpp>
-++#include <chrono>
-+ #include <memory>
-++#include <mutex>
-++#include <string>
-++#include <thread>
++diff --git a/libqpdf/Pl_AES_PDF.cc b/libqpdf/Pl_AES_PDF.cc
++index 18cf3a4d..2865f804 100644
++--- a/libqpdf/Pl_AES_PDF.cc
+++++ b/libqpdf/Pl_AES_PDF.cc
++@@ -238,6 +238,6 @@ Pl_AES_PDF::flush(bool strip_padding)
++ 	    }
++ 	}
++     }
++-    getNext()->write(this->outbuf, bytes);
++     this->offset = 0;
+++    getNext()->write(this->outbuf, bytes);
++ }
++diff --git a/libqpdf/Pl_ASCII85Decoder.cc b/libqpdf/Pl_ASCII85Decoder.cc
++index b8df3e87..9d9f6704 100644
++--- a/libqpdf/Pl_ASCII85Decoder.cc
+++++ b/libqpdf/Pl_ASCII85Decoder.cc
++@@ -119,10 +119,13 @@ Pl_ASCII85Decoder::flush()
 + 
-+ namespace {
++     QTC::TC("libtests", "Pl_ASCII85Decoder partial flush",
++ 	    (this->pos == 5) ? 0 : 1);
++-    getNext()->write(outbuf, this->pos - 1);
++-
+++    // Reset before calling getNext()->write in case that throws an
+++    // exception.
+++    auto t = this->pos - 1;
++     this->pos = 0;
++     memset(this->inbuf, 117, 5);
+++
+++    getNext()->write(outbuf, t);
++ }
 + 
++ void
++diff --git a/libqpdf/Pl_ASCIIHexDecoder.cc b/libqpdf/Pl_ASCIIHexDecoder.cc
++index f20a9769..7845268e 100644
++--- a/libqpdf/Pl_ASCIIHexDecoder.cc
+++++ b/libqpdf/Pl_ASCIIHexDecoder.cc
++@@ -97,12 +97,14 @@ Pl_ASCIIHexDecoder::flush()
++ 
++     QTC::TC("libtests", "Pl_ASCIIHexDecoder partial flush",
++ 	    (this->pos == 2) ? 0 : 1);
++-    getNext()->write(&ch, 1);
++-
+++    // Reset before calling getNext()->write in case that throws an
+++    // exception.
++     this->pos = 0;
++     this->inbuf[0] = '0';
++     this->inbuf[1] = '0';
++     this->inbuf[2] = '\0';
+++
+++    getNext()->write(&ch, 1);
++ }
++ 
++ void
++diff --git a/libqpdf/Pl_Count.cc b/libqpdf/Pl_Count.cc
++index 8077092a..c35619b8 100644
++--- a/libqpdf/Pl_Count.cc
+++++ b/libqpdf/Pl_Count.cc
++@@ -27,8 +27,8 @@ Pl_Count::write(unsigned char* buf, size_t len)
++     if (len)
++     {
++ 	this->m->count += QIntC::to_offset(len);
++-	getNext()->write(buf, len);
++ 	this->m->last_char = buf[len - 1];
+++	getNext()->write(buf, len);
++     }
++ }
++ 
+diff --git a/package/qpdf/qpdf.mk b/package/qpdf/qpdf.mk
+index ec3d3f89a3..c96bf6bf2e 100644
+--- a/package/qpdf/qpdf.mk
++++ b/package/qpdf/qpdf.mk
+@@ -14,6 +14,9 @@ QPDF_DEPENDENCIES = host-pkgconf zlib jpeg
+ 
+ QPDF_CONF_OPTS = --with-random=/dev/urandom
+ 
++# 0002-Fix-some-pipelines-to-be-safe-if-downstream-write-fails.patch
++QPDF_IGNORE_CVES += CVE-2021-36978
++
+ ifeq ($(BR2_PACKAGE_GNUTLS),y)
+ QPDF_CONF_OPTS += --enable-crypto-gnutls
+ QPDF_DEPENDENCIES += gnutls
 -- 
 2.30.2
 
