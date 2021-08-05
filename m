@@ -2,97 +2,56 @@ Return-Path: <SRS0=evmZ=M4=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EBA01C4338F
-	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 19:23:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 611C1C4338F
+	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 19:23:46 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 85E3760ED6
-	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 19:23:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 85E3760ED6
+	by mail.kernel.org (Postfix) with ESMTPS id EF21860ED6
+	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 19:23:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org EF21860ED6
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 597D560A54;
-	Thu,  5 Aug 2021 19:23:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BF0F560A60;
+	Thu,  5 Aug 2021 19:23:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GmgOxf-6Osqv; Thu,  5 Aug 2021 19:23:00 +0000 (UTC)
+	with ESMTP id mqeXhgGGoVk0; Thu,  5 Aug 2021 19:23:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C08C660A60;
-	Thu,  5 Aug 2021 19:22:59 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4F1D71BF361
- for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 19:22:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2664E608B8;
+	Thu,  5 Aug 2021 19:23:44 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 592A31BF361
+ for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 19:23:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3D0DB60AF3
- for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 19:22:20 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 48AB640578
+ for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 19:23:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nUdStJbyOpDv for <buildroot@lists.busybox.net>;
- Thu,  5 Aug 2021 19:22:19 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com
- [IPv6:2a00:1450:4864:20::629])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7C80260A6D
- for <buildroot@buildroot.org>; Thu,  5 Aug 2021 19:22:19 +0000 (UTC)
-Received: by mail-ej1-x629.google.com with SMTP id o5so11356601ejy.2
- for <buildroot@buildroot.org>; Thu, 05 Aug 2021 12:22:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=subject:to:references:from:organization:message-id:date:user-agent
- :mime-version:in-reply-to:content-language:content-transfer-encoding;
- bh=Hhex5NgYaH/+C1nBzDrOnPObZz+gMupKTrjD6AcLgiU=;
- b=HZ63iFyz4rC2Dii/RFgbw1Dq+I9Zyj0QqQSK9yo0uPbjNpKJgo/jHw5trzHtTOaWZc
- yHvZfV5QdqX/8AEllY99hvAt/S4DLJ3wxpwLSaMWDj+dOMRaO0bh7MnSdTtjy4LhSnm+
- KAXoDDOdxNFRwBq1A2jEdUUav334TRlv7aKTTcdoLXqW5bjQu9lbiOvlcrwEqOYktSf2
- IoVDsEA00CF9QfzEZ3GSwrI/ElqKLAxYA0DmFWCDGI2sq59JuJMWtI1mrufhPPduMjsQ
- xqwaUja2/oAaFhtkcjWyj+y/5IQrkp9asoyKaUpYb52eVwMOmGfsfCRx774E/LptGViG
- eezQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:subject:to:references:from:organization
- :message-id:date:user-agent:mime-version:in-reply-to
- :content-language:content-transfer-encoding;
- bh=Hhex5NgYaH/+C1nBzDrOnPObZz+gMupKTrjD6AcLgiU=;
- b=uAFK2ZLsR2aeMwTxfO4ayOjYTqJ2Ye/sadtM3uQDpP49UcBBZL/z9GH0Yf55JbMBLU
- 276pLZAIZvxxaal1izvoiL7UgOCTIcP2y1fDB4u1CJPTp73evOIFSRMZtBzMFEYfs/li
- /myKDYgo/UHTIInmT8uvUkxKmQIillf+IAEzJIpNshVZ6Bm72gSwlQzrYqYOJXaD3RUB
- EONuS3KeX1ZtIRPb8ZLuK1A8R235MSWJvPqvkjlE3VgbLLvH1ImthW+xk6zdgl6Z2z64
- yMVozsGddazvIkhgXgdZe4y4GTEMk6jJGeyy4zxn4wD1X3P7Tbdii49QHcfHLTQPzoUh
- KiOQ==
-X-Gm-Message-State: AOAM533HT+GpKIEV+obHU5Wg+xtkkCRTnlEnPb0bhJE+unGiS9wJZlSm
- tBVTvMyTKYWhTXyNRpHkcA4XrxsPMVM8adrkQfQ=
-X-Google-Smtp-Source: ABdhPJx60+4MwTRvw7kpV+8JVX2SJN4tzP24PssCputtyo3oinMzXgNGXfxSCZO+oKAhi/fQG5wNHA==
-X-Received: by 2002:a17:906:5ac5:: with SMTP id
- x5mr6273352ejs.271.1628191337730; 
- Thu, 05 Aug 2021 12:22:17 -0700 (PDT)
-Received: from ?IPv6:2001:1c01:3101:8300:5100:9bb9:68ea:c9f3?
- (2001-1c01-3101-8300-5100-9bb9-68ea-c9f3.cable.dynamic.v6.ziggo.nl.
- [2001:1c01:3101:8300:5100:9bb9:68ea:c9f3])
- by smtp.gmail.com with ESMTPSA id o23sm2738387eds.75.2021.08.05.12.22.17
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Thu, 05 Aug 2021 12:22:17 -0700 (PDT)
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- buildroot@buildroot.org
-References: <20210805173439.4172080-1-giulio.benetti@benettiengineering.com>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-Message-ID: <648416a2-29ee-a48c-098e-045d4ae74758@mind.be>
-Date: Thu, 5 Aug 2021 21:22:16 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
-MIME-Version: 1.0
-In-Reply-To: <20210805173439.4172080-1-giulio.benetti@benettiengineering.com>
-Content-Language: en-GB
-Subject: Re: [Buildroot] [PATCH] DEVELOPERS: add Giulio Benetti to libfuse3
- package
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id YRE4Yew_Ra8Y for <buildroot@lists.busybox.net>;
+ Thu,  5 Aug 2021 19:23:41 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 95E7E40478
+ for <buildroot@buildroot.org>; Thu,  5 Aug 2021 19:23:41 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4052)
+ id 595808B109; Thu,  5 Aug 2021 19:23:29 +0000 (UTC)
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+To: buildroot@buildroot.org
+Date: Thu, 5 Aug 2021 21:23:12 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 344101ddb1d4531f7d41e4e1206b581804b86bb9
+X-Git-Newrev: d54341fc33b6c02d01d31e8ddb938556867308a9
+X-Patchwork-Hint: ignore
+Message-Id: <20210805192329.595808B109@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/pistache: fix build with gcc 11
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -104,40 +63,77 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
+commit: https://git.buildroot.net/buildroot/commit/?id=d54341fc33b6c02d01d31e8ddb938556867308a9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Fix the following build failure with gcc 11:
 
-On 05/08/2021 19:34, Giulio Benetti wrote:
-> Add myself as libfuse3 package maintainer.
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+In file included from /tmp/instance-3/output-1/build/pistache-f2f5a50fbfb5b8ef6cf1d3d2a9d442a8270e375d/src/../include/pistache/async.h:10,
+                 from /tmp/instance-3/output-1/build/pistache-f2f5a50fbfb5b8ef6cf1d3d2a9d442a8270e375d/src/../include/pistache/client.h:9,
+                 from /tmp/instance-3/output-1/build/pistache-f2f5a50fbfb5b8ef6cf1d3d2a9d442a8270e375d/src/client/client.cc:7:
+/tmp/instance-3/output-1/build/pistache-f2f5a50fbfb5b8ef6cf1d3d2a9d442a8270e375d/src/../include/pistache/typeid.h:26:12: error: expected type-specifier before 'size_t'
+   26 |   operator size_t() const { return reinterpret_cast<size_t>(id_); }
+      |            ^~~~~~
 
- Applied to master, thanks.
+Fixes:
+ - http://autobuild.buildroot.org/results/2443559df8c2357476e4cbdbebb08280cbb80a3b
 
- Regards,
- Arnout
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ ...include-pistache-typeid.h-include-cstddef.patch | 38 ++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
 
-> ---
->  DEVELOPERS | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 1547ff123b..bb39abefab 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -1052,6 +1052,7 @@ F:	package/xapian/
->  
->  N:	Giulio Benetti <giulio.benetti@benettiengineering.com>
->  F:	package/at/
-> +F:	package/libfuse3/
->  F:	package/libnspr/
->  F:	package/libnss/
->  F:	package/minicom/
-> 
+diff --git a/package/pistache/0003-include-pistache-typeid.h-include-cstddef.patch b/package/pistache/0003-include-pistache-typeid.h-include-cstddef.patch
+new file mode 100644
+index 0000000000..be06ca760a
+--- /dev/null
++++ b/package/pistache/0003-include-pistache-typeid.h-include-cstddef.patch
+@@ -0,0 +1,38 @@
++From 37291201ed948e9d65993a717c59bb14f4187e13 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Thu, 5 Aug 2021 19:02:56 +0200
++Subject: [PATCH] include/pistache/typeid.h: include cstddef
++
++Include cstddef to avoid the following build failure with gcc 11:
++
++In file included from /tmp/instance-3/output-1/build/pistache-f2f5a50fbfb5b8ef6cf1d3d2a9d442a8270e375d/src/../include/pistache/async.h:10,
++                 from /tmp/instance-3/output-1/build/pistache-f2f5a50fbfb5b8ef6cf1d3d2a9d442a8270e375d/src/../include/pistache/client.h:9,
++                 from /tmp/instance-3/output-1/build/pistache-f2f5a50fbfb5b8ef6cf1d3d2a9d442a8270e375d/src/client/client.cc:7:
++/tmp/instance-3/output-1/build/pistache-f2f5a50fbfb5b8ef6cf1d3d2a9d442a8270e375d/src/../include/pistache/typeid.h:26:12: error: expected type-specifier before 'size_t'
++   26 |   operator size_t() const { return reinterpret_cast<size_t>(id_); }
++      |            ^~~~~~
++
++Fixes:
++ - http://autobuild.buildroot.org/results/2443559df8c2357476e4cbdbebb08280cbb80a3b
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/pistacheio/pistache/pull/965]
++---
++ include/pistache/typeid.h | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/include/pistache/typeid.h b/include/pistache/typeid.h
++index 10353ca..893e7c1 100644
++--- a/include/pistache/typeid.h
+++++ b/include/pistache/typeid.h
++@@ -7,6 +7,7 @@
++ 
++ #pragma once
++ 
+++#include <cstddef>
++ #include <functional>
++ 
++ namespace Pistache
++-- 
++2.30.2
++
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
