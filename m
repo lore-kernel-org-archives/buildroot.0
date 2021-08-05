@@ -2,162 +2,77 @@ Return-Path: <SRS0=evmZ=M4=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_2
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4EFA9C4338F
-	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 20:10:03 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 17F33C4338F
+	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 20:11:49 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D0DCB60EE4
-	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 20:10:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D0DCB60EE4
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=busybox.net
+	by mail.kernel.org (Postfix) with ESMTPS id ADCB660EC0
+	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 20:11:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org ADCB660EC0
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 881F2835B1;
-	Thu,  5 Aug 2021 20:10:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 74AE7405AF;
+	Thu,  5 Aug 2021 20:11:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wGj3Y8LNU2F4; Thu,  5 Aug 2021 20:10:01 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id dVlZi8dg6zz1; Thu,  5 Aug 2021 20:11:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C80558350A;
-	Thu,  5 Aug 2021 20:10:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A613040574;
+	Thu,  5 Aug 2021 20:11:46 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 32DFD1BF3FD
- for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 20:09:59 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id F0D761BF3FD
+ for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 20:11:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2189C400CD
- for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 20:09:59 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id DEE2D400CD
+ for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 20:11:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=calian.com
+ dkim=pass (2048-bit key) header.d=free.fr
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sIjXfN6IxLXz for <buildroot@lists.busybox.net>;
- Thu,  5 Aug 2021 20:09:58 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from mx0d-0054df01.pphosted.com (mx0d-0054df01.pphosted.com
- [67.231.150.19])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E52B0401CA
- for <buildroot@buildroot.org>; Thu,  5 Aug 2021 20:09:57 +0000 (UTC)
-Received: from pps.filterd (m0209000.ppops.net [127.0.0.1])
- by mx0c-0054df01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 175AO6NB027530; 
- Thu, 5 Aug 2021 16:09:56 -0400
-Received: from can01-qb1-obe.outbound.protection.outlook.com
- (mail-qb1can01lp2053.outbound.protection.outlook.com [104.47.60.53])
- by mx0c-0054df01.pphosted.com with ESMTP id 3a8a458aqg-1
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
- Thu, 05 Aug 2021 16:09:56 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GBvVjorTEQPFvdo6C7LBP7i6oJsaOcpE1zjwcuUFAn6/+Qr8MuOm+GdZXk1Xabi2iOVmdWVFABtnsJhibRd2qDDaU3p38rtvqSZf0R5M2ARUQSl7YKEzTe12dER1uWBmfOfsYxIuVEzcCCPgSJazKlJAofn68bCY6iKIGg6AJ5ghXJB5hqpB+cYOvVY6tHJAQscP56c1qYOWIY+X/JeIuYaI1rzPTCXLU5ISc6yXldvk7OgRdjbONCONRiR0SoKYr+SXe4ZX4ixGp4zqQRbqZ0LvThlxXSbqSYT6NhHIJeTTEJND5cXps+c6Se9U2fKQfzCFX3a4Leo9TbTKg1X5nw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Up85BcQGzSSF4QeV6aWgMSMeMbfN8wiIkbv6SPYPpag=;
- b=LFpeuQRxJbKziuW/a2JLC556IaWPGwp3GSIavhXGUpZ9MQPcCsCip/igM/8IhjWK78Xi0/twTxJuMVvWZ/PjSmbspL5qnlRpzA4j5QwAmfbq0OX6jZeVHhmbHBf+5utJP4GAtVxUMhlGP2QT+IUvXYlnNbVgzqQr4HwOF7Ttmd5BaZ3i5MsX+KIrxWk9RGDrbNlTMYUXVZseBBwwY9wa9DvvZsCHeVOMFqzQXS3YNefR3WF04poRbSBxRKFl+pF6Q2LJZ7jveV/udZ4PNttku4vD7Wt5ptKZuZ4qF1pOtxFp888/2ON9xoGNKBtcj56OmKErAu/GrnFKYpH+NnoZ1g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=calian.com; dmarc=pass action=none header.from=calian.com;
- dkim=pass header.d=calian.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=calian.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Up85BcQGzSSF4QeV6aWgMSMeMbfN8wiIkbv6SPYPpag=;
- b=yceFCjRH6v3YWOeMJTIKU42UuIhjytcS20Wc0rzNBv3nF17PQUqFmC3pN3wZNxjFlnMUQiCGl+1GHYJa9pJ9YvfqQXRiR//4WauTiGOBy3FvWAoVOoNS9KhQLphYaN3lfn4A6C0L+E5NiUyp6PMP767cScC9RdoQ7H5nKpTep34=
-Received: from YQXPR01MB5049.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:c01:27::23)
- by YQXPR01MB3717.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:c00:49::28)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4373.22; Thu, 5 Aug
- 2021 20:09:55 +0000
-Received: from YQXPR01MB5049.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::88bb:860e:2f3a:e007]) by YQXPR01MB5049.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::88bb:860e:2f3a:e007%7]) with mapi id 15.20.4373.027; Thu, 5 Aug 2021
- 20:09:55 +0000
-To: "buildroot@buildroot.org" <buildroot@buildroot.org>
-Thread-Topic: Serious time jump bug found in gpsd 3.20+
-Thread-Index: AQHXijXbnj0pdbOw/UeRUouuTiGjlw==
-Date: Thu, 5 Aug 2021 20:09:55 +0000
-Message-ID: <4a27ed904dd80b00498185003c9a7bb26dc9a128.camel@calian.com>
-Accept-Language: en-CA, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-authentication-results: buildroot.org; dkim=none (message not signed)
- header.d=none;buildroot.org; dmarc=none action=none header.from=calian.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 065bb03e-6554-4f9a-cb8f-08d9584cfe1d
-x-ms-traffictypediagnostic: YQXPR01MB3717:
-x-microsoft-antispam-prvs: <YQXPR01MB3717FDB4EBA521F346330BBBECF29@YQXPR01MB3717.CANPRD01.PROD.OUTLOOK.COM>
-x-ms-oob-tlc-oobclassifiers: OLM:2803;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: pwqHpMJDHpIEECnc24CNDDnL8GtNOSciRSZJ8/iawTWeP0wcRg/1UTtFUwRPbjja3/fwmfFD9gE/zzbsv9n8Ra2gqWeeH+r8aXQ1NglSOmR9XbyrJj08ocVIaJ5DoDUfKQUqVLKxtqoQBRT5tl5lm5toI5RWSaUKbz8u2N0MM3CeSY+aVvPIu5tHgg6yvWJwMqHc8UTXK7lhk729DH1/26C0q7IuzDVUXjh1GZ3K4rzbe7cOwyiJbZox/R7I/25uqkuc1KVtcPdk3qwP23D63QJQ7YTmhJ3C8Eb+E7qi63bGTKgym8OKVa3T085HKSd2J+QESbBJ8ptIXu3ZHYNl4UgtV0SXYODNr3ov574TONIJSuHJLtpDKAxfo6GJU7x+6C5z5b2pTWHNbe8l+JQF8CtJ83qTzGp3MPsXUkG1xSQ3iKgkBoApwqUiEhG70sh1xbVcORLkv/goCE98qVxdnIf+wKC5pjSQZsONBSFfcRoaA+Ooks0C4CyOPoU9o1EFsBoo6ckILgSLWjk2siW1UWWfj8ufv6PJC/Oxu6eB5z5mUK4meMgMFdiIzOmBQ/XoThU/HScosTG4zbs/B1eRvvzqDTNTNgzeCAn4shjmUCaNfYuwA3I0aIsVe84lPvkmFJU/raf2ubWFvO8JrnAGRUJDWvI2e9uW+aFPi+Zjo0SMmzRG+XIMXZdMDHwXHYUGig+Z8oPiW3Xpt38bnedapG3//NXDPdK69rpbN0BOYJdQl4UVaDVPyepQMeWfJLRu6OQt8KsNOGSaYN7I/cduvG3VTK43kBKe1CXpGOSpu2INT4CAPvmdaY7B2+8VmDQ8zpm9SUBS4NbUhn7CYsBPyxc+JFUr9VMKwiwyXsVrbB8=
-x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:YQXPR01MB5049.CANPRD01.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
- SFS:(4636009)(376002)(346002)(136003)(366004)(39850400004)(396003)(6506007)(6486002)(86362001)(6512007)(186003)(64756008)(66556008)(8936002)(66446008)(8676002)(66476007)(76116006)(26005)(91956017)(44832011)(66946007)(316002)(2616005)(4326008)(71200400001)(38100700002)(5660300002)(6916009)(966005)(15974865002)(2906002)(122000001)(38070700005)(36756003)(83380400001)(478600001)(99106002)(18886075002);
- DIR:OUT; SFP:1101; 
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?U09NQUd5cVZYSHFxNkg3ZGZCay9GSTNGakZpK1N2YmYzOGxRYjNqcTJyM2dG?=
- =?utf-8?B?QXUwT1VNOFVvUVg5UXhyVTBPR28zOS93U00xamRuaXJScVRzQWkwKzJVRWNV?=
- =?utf-8?B?UFdDMFpEVEM3R3gyVExLbVU0L0VwZEgxM2xhakNMbnhVVjdaaW5NZWhYc2FQ?=
- =?utf-8?B?Q1JDdmtPam1CU2hVRzZ5YnVaNngzSmt5UG0zTGxkV0FoZUNhSDJRWjE5cnZx?=
- =?utf-8?B?VG1LNWFJQWNjZzM0MXZmdlJkaFZzMlE5dHIwaGlhM3VxTGZoZFJOa0Nsb3hO?=
- =?utf-8?B?TkpMcG9xT2JEa2NZQlJjNFBCdHljSjhhcUJWSG03cjhiUEx1SWZnL3VZNjNa?=
- =?utf-8?B?OXRFTFdEL0JXOGp3L0RRWjBESU5NN3luU1pSd3V6R3lGSEhyVVNMRHNPd29T?=
- =?utf-8?B?aDZ4eEk0eWJZRTYxY0RqNVlOYThFVGpYMWIySitMUDl0U1BRMHN0T3BFbGJO?=
- =?utf-8?B?bUN0Vk5MenlVaGZEZ1hYU1g2WWdZcmhuR0VQSTdwd2p1TGlwdGpLWndiWFFy?=
- =?utf-8?B?RWVqbkRWN1BzeVg2bC9FdmtzT042SHlpdUgzNWszWE00WnI4NVl1MGZHa0Uv?=
- =?utf-8?B?WXVPYjEyWGpOaW9IbzBtbDAyVnp2L0JCTitJSkQ3bWgxdVdrMGF3TnVoK2dI?=
- =?utf-8?B?NlNyMlBuenU0enlKajU5a2pRMWw0aHNubndXRUp0cUF4ejV5SS8yaU1BOTBu?=
- =?utf-8?B?TjNDQTR3WGk3a2NYS1VKbTJ1T3RhdjQvZ3hObldnOXB6Y1VVdHdpMkhTaTVl?=
- =?utf-8?B?T1NwL2RTdkFvTUtTQTRva1lxM1JxOUZQdkxvQWIwQitvaUdHZElFQ3A4MnFZ?=
- =?utf-8?B?bVJtNXo2MkN0cFowbnhRTUQ2Wnp2RThWNWs0bDRTbmxmMEZYWVpEZDV1M3g0?=
- =?utf-8?B?SXpEMVJESlBDSzFSTWJycUFzQVJNMmE2Qldub2VkbnlZcStORjFlcjZpb1Bo?=
- =?utf-8?B?T0NnMEVsOFE0WkkzeklvQk5VNVcvd2xpR1Z4VUdYUWZDczdjQ1RTSWdPSGRh?=
- =?utf-8?B?TVp3U0ZQTGgva3dGS1hlZkdLaUpXNGc5VzgycEljVmtwZmJPNEFoSzJwL2k0?=
- =?utf-8?B?QVFtWVQ5R0dtL0J5WkxKQTR1UzlRWitOUUNsSDZzU1dyMUpma1NnN1NWcWRI?=
- =?utf-8?B?dmlrZ09GczZqNHM0NmRhRmdzdjR4NGdQQjNnNDhaSEE4cERQMjFWdHlaaDdO?=
- =?utf-8?B?ZFUySGUxODFSVlhhSjhOekNUUEx3Q1ZxQVRCMVQ2Z2ZwKzJyT2JaMEdtWEtu?=
- =?utf-8?B?K3AxTUlMZG9XeDM1ZEthVGl0MHpmSkp3K1kxckc3UjBKMUdlcHhJRmQ3aWlq?=
- =?utf-8?B?bVRjZTM3Y2NiN0pzcWZDUXdRVFo3NkZWdWVkTytnY2wwU1VwMzdzbm5Ucitn?=
- =?utf-8?B?aDJubTQwNGlWWUhzeExnaFJVU3lNbVlhaVpZaTBLKy9ETDBlY29ic3ZQM2xH?=
- =?utf-8?B?cTJYVVZNc0poUE5xcjRaV0tqZEJYaVY1Tnl0WnBJUFA1dkoxVnpQTytIUmh3?=
- =?utf-8?B?S3JvQmFTQWtzaG9wRkNNenhNWmFNRTViK09oNElHVmZEVU45L3djdXVHSTMy?=
- =?utf-8?B?WGtmNjVyd0JlS2pldHpCNmZLYUE1cENWdDV0TG5lYWRqZTU4aEdBcWdTelc4?=
- =?utf-8?B?MmxkdGU0YWE3NThpSWZKK1MyUGtGM1N1NEt4SGZJdWIxVUZuY3F6bjBOdVcx?=
- =?utf-8?B?a2VHMzVTTVJtcG53MHcwTG1TRndpMFl3QmNYeUVyc1BnQXJzc1J2OTBpTG04?=
- =?utf-8?Q?reKhs4Fn0K+hamoDbj4Jd+uCxj1iC/wVuR35Ywj?=
-x-ms-exchange-transport-forked: True
-Content-ID: <8C9ED4DAA84D4D4085AC99E1D432849D@CANPRD01.PROD.OUTLOOK.COM>
+ with ESMTP id k7HZMvyK-d3e for <buildroot@lists.busybox.net>;
+ Thu,  5 Aug 2021 20:11:43 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5DFFC40287
+ for <buildroot@buildroot.org>; Thu,  5 Aug 2021 20:11:43 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:70be:8b43:5d22:5801])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 586E8B0053D;
+ Thu,  5 Aug 2021 22:11:37 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+ s=smtp-20201208; t=1628194301;
+ bh=VQUrqfCgVajORLSfH7JFnkQeC2Z1f/Lptf4a3IZF9c0=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=KyPwug6TAr6RLximHDvmoc5SLGM076hi65p6hB/LqvCY26ylATfxOYBhPEyX3CSMz
+ rV+0l4zAgrcJeZUvaEWW8sQvob0FB6fvWkVsSV7ed6hsapOSN4mW12WNYRbvdAgAm0
+ 4m4XFNB/4aV8tZdQxuPECP7PcMxURCllwrhvUrryH0YJFBDXKlpr3F8rVnzCY8eZ1D
+ s1CoifHoMuGiILNyKo5F01nLcX3uXXhrSEDxWnFay1K0f6gTpRk1W+lL1lBEeLJDju
+ dY4KIq+q29zQJJS7fPm1npSIcyTucJ7dJo8NjSl0FNF5r1hPvdvoczGe0oCIrjPxQd
+ gLbFscQv2IESA==
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Thu, 05 Aug 2021 22:11:37 +0200
+Date: Thu, 5 Aug 2021 22:11:37 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: illia.bitkov@mind.be
+Message-ID: <20210805201137.GP27036@scaer>
+References: <20210805161653.2213689-1-illia.bitkov@mind.be>
 MIME-Version: 1.0
-X-OriginatorOrg: calian.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: YQXPR01MB5049.CANPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 065bb03e-6554-4f9a-cb8f-08d9584cfe1d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Aug 2021 20:09:55.2993 (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 23b57807-562f-49ad-92c4-3bb0f07a1fdf
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 30rP//3EUgCY+2EsQlU8Ur90QZ9bkFM19PId3NDN8Qzn1C32kofvM9/zE6JC2wGSrIdgwZnHXwNSeSchKnsqXyJFIa05M+H09MybmasJQ3o=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: YQXPR01MB3717
-X-Proofpoint-GUID: VAe94pxUnGRwkC3U3b9It5qVLXtX4Wz6
-X-Proofpoint-ORIG-GUID: VAe94pxUnGRwkC3U3b9It5qVLXtX4Wz6
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.391,FMLib:17.0.607.475
- definitions=2021-08-05_10,2021-08-05_02,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- lowpriorityscore=0
- phishscore=0 mlxlogscore=703 clxscore=1011 spamscore=0 priorityscore=1501
- adultscore=0 impostorscore=0 malwarescore=0 mlxscore=0 bulkscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2107140000 definitions=main-2108050119
-Subject: [Buildroot] Serious time jump bug found in gpsd 3.20+
+Content-Disposition: inline
+In-Reply-To: <20210805161653.2213689-1-illia.bitkov@mind.be>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+Subject: Re: [Buildroot] [PATCH 1/1] package/libcap: fix build failure due
+ to unessesary patch
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -169,39 +84,200 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-From: Robert Hancock via buildroot <buildroot@busybox.net>
-Reply-To: Robert Hancock <robert.hancock@calian.com>
-Cc: "bernd.kuhls@t-online.de" <bernd.kuhls@t-online.de>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-A heads up to the Buildroot community about a significant bug that has been
-found in versions 3.20 and newer of the gpsd package, and which is fixed in
-version 3.23 (not yet released, supposed to be shortly):
+Illia, All,
 
-https://gitlab.com/gpsd/gpsd/-/issues/144
+On 2021-08-05 18:16 +0200, illia.bitkov@mind.be spake thusly:
+> From: Illia Bitkov <illia.bitkov@mind.be>
+> 
+> Fix the following build failure which is raised since bump
+> to version 2.52 in commit 38b0759432070f7a57c0fab84d44a07caead6f06
+> 
+> 	Applying 0001-Permit-compilation-with-std-c89.patch using patch:
+> 	patching file Makefile
+> 	Reversed (or previously applied) patch detected!  Skipping patch.
+> 	1 out of 1 hunk ignored -- saving rejects to file Makefile.rej
+> 	patching file libcap/cap_test.c
+> 	Reversed (or previously applied) patch detected!  Skipping patch.
+> 	1 out of 1 hunk ignored -- saving rejects to file libcap/cap_test.c.rej
+> 	patching file psx/psx.c
+> 	Reversed (or previously applied) patch detected!  Skipping patch.
+> 	1 out of 1 hunk ignored -- saving rejects to file psx/psx.c.rej
+> 	patching file tests/exploit.c
+> 	Reversed (or previously applied) patch detected!  Skipping patch.
+> 	2 out of 2 hunks ignored -- saving rejects to file tests/exploit.c.rej
+> 	patching file tests/libcap_launch_test.c
+> 	Reversed (or previously applied) patch detected!  Skipping patch.
+> 	1 out of 1 hunk ignored -- saving rejects to file tests/libcap_launch_test.c.rej
+> 	patching file tests/uns_test.c
+> 	Reversed (or previously applied) patch detected!  Skipping patch.
+> 	1 out of 1 hunk ignored -- saving rejects to file tests/uns_test.c.rej
+> 
+> Problem is because patch was integrated into package repo
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/2f619b233e2cfb4d7eeb3cc178c849c74d11f2ca/
+> Signed-off-by: Illia Bitkov <illia.bitkov@mind.be>
 
-This will cause the calculated GPS time (and NTP time, if synchronizing to it)
-to jump from 2021 back to 2002 when GPS week 2180 arrives on October 24, 2021,
-with potentially disastrous results for applications depending on accurate time
-keeping.
+Applied to next, thanks.
 
-A patch has now been added to the gpsd repository to fix it (note that the
-commit message incorrectly refers to 2020 rather than 2021 as pointed out by a
-commenter): 
-https://gitlab.com/gpsd/gpsd/-/commit/7f30d88d04dc62b8bd6265ad1d09d72d220f97f6
+Regards,
+Yann E. MORIN.
 
-I am not sure if the best solution for Buildroot is to just update the package
-when released, or apply the specific patch to fix the issue? Currently
-Buildroot master is on 3.21 and the 2021.02.x LTS branch is on 3.20, both of
-which are affected.
+> ---
+>  ...0001-Permit-compilation-with-std-c89.patch | 123 ------------------
+>  1 file changed, 123 deletions(-)
+>  delete mode 100644 package/libcap/0001-Permit-compilation-with-std-c89.patch
+> 
+> diff --git a/package/libcap/0001-Permit-compilation-with-std-c89.patch b/package/libcap/0001-Permit-compilation-with-std-c89.patch
+> deleted file mode 100644
+> index 0219f09f52..0000000000
+> --- a/package/libcap/0001-Permit-compilation-with-std-c89.patch
+> +++ /dev/null
+> @@ -1,123 +0,0 @@
+> -From 06ec53d0c9fcddcc071a0e07731e6c83238400e6 Mon Sep 17 00:00:00 2001
+> -From: "Andrew G. Morgan" <morgan@kernel.org>
+> -Date: Mon, 21 Jun 2021 17:46:43 -0700
+> -Subject: Permit compilation with -std=c89.
+> -
+> -Tested with
+> -
+> -  make COPTS="-O2 -std=c89" clean all test sudotest
+> -
+> -This addresses the issue reported by Byron Stanoszek:
+> -
+> -  https://bugzilla.kernel.org/show_bug.cgi?id=213541
+> -
+> -Signed-off-by: Andrew G. Morgan <morgan@kernel.org>
+> -
+> -[Retrieved from:
+> -https://git.kernel.org/pub/scm/linux/kernel/git/morgan/libcap.git/commit/?id=06ec53d0c9fcddcc071a0e07731e6c83238400e6]
+> -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ----
+> - Makefile                   | 1 +
+> - libcap/cap_test.c          | 1 +
+> - psx/psx.c                  | 2 +-
+> - tests/exploit.c            | 9 +++++++--
+> - tests/libcap_launch_test.c | 6 +++---
+> - tests/uns_test.c           | 3 ++-
+> - 6 files changed, 15 insertions(+), 7 deletions(-)
+> -
+> -diff --git a/Makefile b/Makefile
+> -index 9666bf0..984d502 100644
+> ---- a/Makefile
+> -+++ b/Makefile
+> -@@ -68,6 +68,7 @@ endif
+> - distcheck:
+> - 	./distcheck.sh
+> - 	$(MAKE) DYNAMIC=yes clean all test sudotest
+> -+	$(MAKE) DYNAMIC=no COPTS="-O2 -std=c89" clean all test sudotest
+> - 	$(MAKE) PAM_CAP=no CC=/usr/local/musl/bin/musl-gcc clean all test sudotest
+> - 	$(MAKE) clean all test sudotest
+> - 	$(MAKE) distclean
+> -diff --git a/libcap/cap_test.c b/libcap/cap_test.c
+> -index c9e83de..a717217 100644
+> ---- a/libcap/cap_test.c
+> -+++ b/libcap/cap_test.c
+> -@@ -79,4 +79,5 @@ int main(int argc, char **argv) {
+> - 	exit(1);
+> -     }
+> -     printf("cap_test PASS\n");
+> -+    exit(0);
+> - }
+> -diff --git a/psx/psx.c b/psx/psx.c
+> -index 12dbbc5..90dcc50 100644
+> ---- a/psx/psx.c
+> -+++ b/psx/psx.c
+> -@@ -229,7 +229,7 @@ static void psx_syscall_start(void) {
+> -     psx_tracker.psx_sig = SIGSYS;
+> - 
+> -     psx_confirm_sigaction();
+> --    psx_do_registration(); // register the main thread.
+> -+    psx_do_registration(); /* register the main thread. */
+> - 
+> -     psx_tracker.initialized = 1;
+> - }
+> -diff --git a/tests/exploit.c b/tests/exploit.c
+> -index 28bac88..814337c 100644
+> ---- a/tests/exploit.c
+> -+++ b/tests/exploit.c
+> -@@ -16,6 +16,10 @@
+> -  * to execute arbitrary code. As such, if all but one thread drops
+> -  * privilege, privilege escalation is somewhat trivial.
+> -  */
+> -+
+> -+/* as per "man sigaction" */
+> -+#define _POSIX_C_SOURCE 200809L
+> -+
+> - #include <pthread.h>
+> - #include <signal.h>
+> - #include <stdio.h>
+> -@@ -148,7 +152,8 @@ int main(int argc, char **argv) {
+> -     if (greatest_len != 1) {
+> - 	printf("exploit succeeded\n");
+> - 	exit(1);
+> --    } else {
+> --	printf("exploit failed\n");
+> -     }
+> -+
+> -+    printf("exploit failed\n");
+> -+    exit(0);
+> - }
+> -diff --git a/tests/libcap_launch_test.c b/tests/libcap_launch_test.c
+> -index 6cbfc43..5286979 100644
+> ---- a/tests/libcap_launch_test.c
+> -+++ b/tests/libcap_launch_test.c
+> -@@ -199,10 +199,10 @@ int main(int argc, char **argv) {
+> -     cap_free(final);
+> -     cap_free(orig);
+> - 
+> --    if (success) {
+> --	printf("cap_launch_test: PASSED\n");
+> --    } else {
+> -+    if (!success) {
+> - 	printf("cap_launch_test: FAILED\n");
+> - 	exit(1);
+> -     }
+> -+    printf("cap_launch_test: PASSED\n");
+> -+    exit(0);
+> - }
+> -diff --git a/tests/uns_test.c b/tests/uns_test.c
+> -index 41aa0a6..d8f5415 100644
+> ---- a/tests/uns_test.c
+> -+++ b/tests/uns_test.c
+> -@@ -115,7 +115,8 @@ int main(int argc, char **argv)
+> -     }
+> -     close(fds.from[0]);
+> - 
+> --    for (int i=0; i<2; i++) {
+> -+    int i;
+> -+    for (i=0; i<2; i++) {
+> - 	char *map_file;
+> - 	if (asprintf(&map_file, file_formats[i], pid) < 0) {
+> - 	    perror("allocate string");
+> --- 
+> -cgit 1.2.3-1.el7
+> -
+> -- 
+> 2.25.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-Robert Hancock
-Senior Hardware Designer, Calian Advanced Technologies
-www.calian.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
