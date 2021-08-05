@@ -2,57 +2,64 @@ Return-Path: <SRS0=evmZ=M4=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.2 required=3.0 tests=BAYES_00,DATE_IN_PAST_03_06,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+X-Spam-Status: No, score=-10.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 02528C4338F
-	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 19:59:19 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E96EBC4320A
+	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 19:59:31 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id AA86160720
-	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 19:59:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org AA86160720
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
+	by mail.kernel.org (Postfix) with ESMTPS id 5834B61104
+	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 19:59:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5834B61104
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 77CED81BB4;
-	Thu,  5 Aug 2021 19:59:18 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1A2F740532;
+	Thu,  5 Aug 2021 19:59:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id M4Tdn3wb5h85; Thu,  5 Aug 2021 19:59:17 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id gEZSDZDj8UCI; Thu,  5 Aug 2021 19:59:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B955A81AC1;
-	Thu,  5 Aug 2021 19:59:16 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 24DB240529;
+	Thu,  5 Aug 2021 19:59:29 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2C0D81BF361
- for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 19:50:10 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id CF7191BF361
+ for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 19:51:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5111F83B83
- for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 19:49:56 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id BD9DF83B63
+ for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 19:51:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9R6mp-973MGR for <buildroot@lists.busybox.net>;
- Thu,  5 Aug 2021 19:49:52 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4E23A83BA5
- for <buildroot@buildroot.org>; Thu,  5 Aug 2021 19:49:52 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 17A3683738; Thu,  5 Aug 2021 19:49:40 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-To: buildroot@buildroot.org
-Date: Thu, 5 Aug 2021 18:47:45 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 08d1536202b4a80e974e23ee62a898bc511a64c6
-X-Git-Newrev: 63ecfad96ad653e445d57632c81f5f27fa1761ca
-X-Patchwork-Hint: ignore
-Message-Id: <20210805194940.17A3683738@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/usbguard: needs at
- least a crypto backend
+ with ESMTP id 1iWrUezw9Hyu for <buildroot@lists.busybox.net>;
+ Thu,  5 Aug 2021 19:51:33 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D198183B83
+ for <buildroot@busybox.net>; Thu,  5 Aug 2021 19:51:32 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 57EF8FF806;
+ Thu,  5 Aug 2021 19:51:30 +0000 (UTC)
+Date: Thu, 5 Aug 2021 21:51:29 +0200
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+To: =?UTF-8?B?SsOpcsOpbXk=?= ROSEN <jeremy.rosen@smile.fr>
+Message-ID: <20210805215129.02980925@windsurf>
+In-Reply-To: <CAFvCimX4eYVpcRqAFinCcU65qn3F8a-vE0O+1D1uzw0nPQMNMA@mail.gmail.com>
+References: <20191122093930.7933-1-p.debruijn@unilogic.nl>
+ <20191125221009.4c31d0d6@windsurf>
+ <CAFvCimXVERj+Gd1y-NyVvcSKYsP0iDWrSG9UORE8j56ZK5Arog@mail.gmail.com>
+ <CAFvCimX4eYVpcRqAFinCcU65qn3F8a-vE0O+1D1uzw0nPQMNMA@mail.gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH] package/php: select SYSTEMD_TMPFILES for
+ PHP_SAPI_FPM
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,84 +71,30 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@busybox.net, Pascal de Bruijn <p.debruijn@unilogic.nl>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=63ecfad96ad653e445d57632c81f5f27fa1761ca
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-Since its addition in commit fbff7d7289cc95db991184f890f4ca1fcf8a101e,
-usbguard needs a crypto backend otherwise the build will fail on:
-
-checking for sodium... no
-checking for libcrypto... no
-checking for powerpc-buildroot-linux-uclibc-libgcrypt-config... no
-checking for libgcrypt-config... no
-checking for LIBGCRYPT - version >= 1.5.0... no
-configure: error: The selected crypto backend library is not available.
-
-So select sodium as the default crypto backend as this is the default
-choice in configure.ac.
-
-Fixes:
- - http://autobuild.buildroot.org/results/fb9865e2c65ea1dd9a657e1181a6c8c49481fda7
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/usbguard/Config.in   |  1 +
- package/usbguard/usbguard.mk | 14 +++++---------
- 2 files changed, 6 insertions(+), 9 deletions(-)
-
-diff --git a/package/usbguard/Config.in b/package/usbguard/Config.in
-index 58ee5c4b25..41f19dc1a0 100644
---- a/package/usbguard/Config.in
-+++ b/package/usbguard/Config.in
-@@ -8,6 +8,7 @@ config BR2_PACKAGE_USBGUARD
- 	depends on !BR2_TOOLCHAIN_USES_MUSL
- 	select BR2_PACKAGE_PROTOBUF
- 	select BR2_PACKAGE_LIBQB
-+	select BR2_PACKAGE_LIBSODIUM if !BR2_PACKAGE_LIBGCRYPT && !BR2_PACKAGE_LIBOPENSSL
- 	help
- 	  The USBGuard software framework
- 
-diff --git a/package/usbguard/usbguard.mk b/package/usbguard/usbguard.mk
-index 1518f92fc5..a0d1c8446f 100644
---- a/package/usbguard/usbguard.mk
-+++ b/package/usbguard/usbguard.mk
-@@ -18,23 +18,19 @@ USBGUARD_CONF_OPTS = \
- 
- USBGUARD_DEPENDENCIES += libqb protobuf
- 
--ifeq ($(BR2_PACKAGE_LIBOPENSSL),y)
-+ifeq ($(BR2_PACKAGE_LIBSODIUM),y)
-+USBGUARD_CONF_OPTS += --with-crypto-library=sodium
-+USBGUARD_DEPENDENCIES += libsodium
-+else ifeq ($(BR2_PACKAGE_LIBOPENSSL),y)
- USBGUARD_CONF_OPTS += --with-crypto-library=openssl
- USBGUARD_DEPENDENCIES += libopenssl
--endif
--
--ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
-+else ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
- USBGUARD_CONF_ENV += \
- 	ac_cv_path_LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config
- USBGUARD_CONF_OPTS += --with-crypto-library=gcrypt
- USBGUARD_DEPENDENCIES += libgcrypt
- endif
- 
--ifeq ($(BR2_PACKAGE_LIBSODIUM),y)
--USBGUARD_CONF_OPTS += --with-crypto-library=sodium
--USBGUARD_DEPENDENCIES += libsodium
--endif
--
- ifeq ($(BR2_PACKAGE_SYSTEMD),y)
- USBGUARD_CONF_OPTS += --enable-systemd
- USBGUARD_DEPENDENCIES += systemd
-_______________________________________________
-buildroot mailing list
-buildroot@busybox.net
-http://lists.busybox.net/mailman/listinfo/buildroot
+SGVsbG8gSsOpcsOpbXksCgpPbiBXZWQsIDQgRGVjIDIwMTkgMDk6NTM6NTMgKzAxMDAKSsOpcsOp
+bXkgUk9TRU4gPGplcmVteS5yb3NlbkBzbWlsZS5mcj4gd3JvdGU6Cgo+IE9rLCBmb3IgdGhlIHNw
+ZWNpYWwgY2FzZSBvZiBQSFAsIHRoaXMgaGFzIGJlZW4gZml4ZWQgdXBzdHJlYW0gd2l0aAo+IAo+
+IGh0dHBzOi8vZ2l0aHViLmNvbS9zeXN0ZW1kL3N5c3RlbWQvcHVsbC8xNDIwNwo+IAo+IFRoZSBv
+ZmZpY2lhbCB3b3JkIGZyb20gdXBzdHJlYW0gaXMgInllcyB0bXBmaWxlcyBpcyBvcHRpb25hbCBi
+dXQgaXQgc2hvdWxkCj4gYWx3YXlzIGJlIGhlcmUgZXhjZXB0IGZvciByZWFsbHkgdGlueSBlbWJl
+ZGRlZCBzeXN0ZW1zIgo+IAo+IFNvIHdlIGFyZSBnb29kICh0bXBmaWxlJ3MgZGVmYXVsdCBpcyBh
+Y3RpdmF0ZWQpCj4gCj4gSWRlYWxseSwgd2Ugc2hvdWxkIGJhY2twb3J0IHRoYXQgUFIgdW50aWwg
+dXBzdHJlYW0gYWRkcyBpdCB0bwo+IHN5c3RlbWQtc3RhYmxlLgoKSXQncyBiZWVuIGEgd2hpbGUg
+YWdvLCBidXQgaWYgSSB1bmRlcnN0YW5kIGNvcnJlY3RseSB3aGF0IHlvdSBzYWlkLApiZWNhdXNl
+IFBSMTQyMDcgaGFzIGJlZW4gbWVyZ2VkIHVwc3RyZWFtLCB3ZSBubyBsb25nZXIgbmVlZCBhYnNv
+bHV0ZWx5Cm5lZWQgdG1wZmlsZXMgc3VwcG9ydCBpbiBzeXN0ZW1kIGZvciBQSFAncyBGUE0gaW50
+ZXJmYWNlIHRvIHdvcmsuIFdlJ3JlCm5vdyB1c2luZyBhIG11Y2ggbmV3ZXIgc3lzdGVtZCB2ZXJz
+aW9uIGluIEJ1aWxkcm9vdCwgd2hpY2ggbXVzdCBoYXZlClBSMTQyMDcgYXBwbGllZC4KClNvIEkn
+dmUgbWFya2VkIHRoaXMgcGF0Y2ggYXMgUmVqZWN0ZWQuIFBhc2NhbCwgaWYgeW91IGRpc2FncmVl
+IGFuZApzdGlsbCBzZWUgYSBwcm9ibGVtLCBkbyBub3QgaGVzaXRhdGUgdG8gcmVzdWJtaXQgdGhl
+IHBhdGNoLgoKVGhhbmtzIGEgbG90LAoKVGhvbWFzCi0tIApUaG9tYXMgUGV0YXp6b25pLCBjby1v
+d25lciBhbmQgQ0VPLCBCb290bGluCkVtYmVkZGVkIExpbnV4IGFuZCBLZXJuZWwgZW5naW5lZXJp
+bmcKaHR0cHM6Ly9ib290bGluLmNvbQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidXN5Ym94Lm5l
+dApodHRwOi8vbGlzdHMuYnVzeWJveC5uZXQvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
