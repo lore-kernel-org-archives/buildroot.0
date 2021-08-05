@@ -2,58 +2,57 @@ Return-Path: <SRS0=evmZ=M4=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.7 required=3.0 tests=BAYES_00,DATE_IN_PAST_12_24,
-	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 436ADC4338F
-	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 19:54:34 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A2586C4338F
+	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 19:54:46 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D1C1760F02
-	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 19:54:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D1C1760F02
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
+	by mail.kernel.org (Postfix) with ESMTPS id 2C36C603E7
+	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 19:54:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2C36C603E7
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9919182871;
-	Thu,  5 Aug 2021 19:54:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E79B8402E8;
+	Thu,  5 Aug 2021 19:54:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zsLMhtdL8_lg; Thu,  5 Aug 2021 19:54:32 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id lhgpioGkNTdD; Thu,  5 Aug 2021 19:54:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E93E9827A9;
-	Thu,  5 Aug 2021 19:54:31 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 74CFB1BF361
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4594340274;
+	Thu,  5 Aug 2021 19:54:44 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D07E71BF361
  for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 19:49:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E47F583BA8
- for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 19:49:52 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5CEEE40532
+ for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 19:49:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SGMtAkSmk1T5 for <buildroot@lists.busybox.net>;
- Thu,  5 Aug 2021 19:49:51 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ltsTeN3voXph for <buildroot@lists.busybox.net>;
+ Thu,  5 Aug 2021 19:49:52 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 684CC83B63
- for <buildroot@buildroot.org>; Thu,  5 Aug 2021 19:49:51 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6AB3B40529
+ for <buildroot@buildroot.org>; Thu,  5 Aug 2021 19:49:52 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 32A4687DA7; Thu,  5 Aug 2021 19:49:39 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id 2756B83738; Thu,  5 Aug 2021 19:49:40 +0000 (UTC)
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Wed, 4 Aug 2021 22:04:37 +0200
+Date: Thu, 5 Aug 2021 18:51:31 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: f23129ee1e3ceb2cdbe751efed9faedbfae67d56
-X-Git-Newrev: e17946b409c84afd15c7de47df2c8ad4dd648fae
+X-Git-Oldrev: 63ecfad96ad653e445d57632c81f5f27fa1761ca
+X-Git-Newrev: 1116a3060955c36c43a8bea5f1f00ea4effb4e48
 X-Patchwork-Hint: ignore
-Message-Id: <20210805194939.32A4687DA7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python3: add patch to
- fix highly parallel builds
+Message-Id: <20210805194940.2756B83738@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libebml: fix build
+ with gcc 11
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,74 +70,90 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e17946b409c84afd15c7de47df2c8ad4dd648fae
+commit: https://git.buildroot.net/buildroot/commit/?id=1116a3060955c36c43a8bea5f1f00ea4effb4e48
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Highly parallel host-python3 builds sometimes fail with:
+Fix the following build failure with gcc 11:
 
-Exception in thread Thread-1:
-Traceback (most recent call last):
-  File "/tmp/instance-3/output-1/host/lib/python3.9/threading.py", line 973, in _bootstrap_inner
-    self.run()
-  File "/tmp/instance-3/output-1/host/lib/python3.9/concurrent/futures/process.py", line 317, in run
-    result_item, is_broken, cause = self.wait_result_broken_or_wakeup()
-  File "/tmp/instance-3/output-1/host/lib/python3.9/concurrent/futures/process.py", line 376, in wait_result_broken_or_wakeup
-    worker_sentinels = [p.sentinel for p in self.processes.values()]
-  File "/tmp/instance-3/output-1/host/lib/python3.9/concurrent/futures/process.py", line 376, in <listcomp>
-    worker_sentinels = [p.sentinel for p in self.processes.values()]
-RuntimeError: dictionary changed size during iteration
+/tmp/instance-0/output-1/build/libebml-1.4.2/src/EbmlString.cpp: In member function 'virtual filepos_t libebml::EbmlString::ReadData(libebml::IOCallback&, libebml::ScopeMode)':
+/tmp/instance-0/output-1/build/libebml-1.4.2/src/EbmlString.cpp:147:41: error: 'numeric_limits' is not a member of 'std'
+  147 |     auto Buffer = (GetSize() + 1 < std::numeric_limits<std::size_t>::max()) ? new (std::nothrow) char[GetSize() + 1] : nullptr;
+      |                                         ^~~~~~~~~~~~~~
+/tmp/instance-0/output-1/build/libebml-1.4.2/src/EbmlString.cpp:147:67: error: expected primary-expression before '>' token
+  147 |     auto Buffer = (GetSize() + 1 < std::numeric_limits<std::size_t>::max()) ? new (std::nothrow) char[GetSize() + 1] : nullptr;
+      |                                                                   ^
+/tmp/instance-0/output-1/build/libebml-1.4.2/src/EbmlString.cpp:147:70: error: '::max' has not been declared; did you mean 'std::max'?
+  147 |     auto Buffer = (GetSize() + 1 < std::numeric_limits<std::size_t>::max()) ? new (std::nothrow) char[GetSize() + 1] : nullptr;
+      |                                                                      ^~~
+      |                                                                      std::max
 
-During the compile_all.py step of host-python3. This issue is reported
-upstream at https://bugs.python.org/issue43498, and while not yet
-fixed upstream, a PR was proposed with a possible fix for it. Seems
-the PR seems reasonable, let's give it a chance and see if it improves
-the situation.
+Fixes:
+ - http://autobuild.buildroot.org/results/3a28507127eae47994ca62e2b656da32bd2fb1f8
 
-Hopefully Fixes:
-
-  http://autobuild.buildroot.net/results/ae6c4ab292589a4e4442dfb0a1286349a9bf4d29/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- ...ary-iteration-error-in-_ExecutorManagerTh.patch | 29 ++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
+ ...riate-header-files-for-std-numeric_limits.patch | 52 ++++++++++++++++++++++
+ 1 file changed, 52 insertions(+)
 
-diff --git a/package/python3/0036-Fix-dictionary-iteration-error-in-_ExecutorManagerTh.patch b/package/python3/0036-Fix-dictionary-iteration-error-in-_ExecutorManagerTh.patch
+diff --git a/package/libebml/0001-include-appropriate-header-files-for-std-numeric_limits.patch b/package/libebml/0001-include-appropriate-header-files-for-std-numeric_limits.patch
 new file mode 100644
-index 0000000000..fbe44c7753
+index 0000000000..83d1b92051
 --- /dev/null
-+++ b/package/python3/0036-Fix-dictionary-iteration-error-in-_ExecutorManagerTh.patch
-@@ -0,0 +1,29 @@
-+From 331966be70c371b268a4fcce9e97280cd869f137 Mon Sep 17 00:00:00 2001
-+From: Jakub Kulik <kulikjak@gmail.com>
-+Date: Mon, 15 Mar 2021 08:49:28 +0100
-+Subject: [PATCH] Fix dictionary iteration error in _ExecutorManagerThread
++++ b/package/libebml/0001-include-appropriate-header-files-for-std-numeric_limits.patch
+@@ -0,0 +1,52 @@
++From f0bfd53647961e799a43d918c46cf3b6bff89806 Mon Sep 17 00:00:00 2001
++From: Moritz Bunkus <mo@bunkus.online>
++Date: Sat, 27 Feb 2021 20:36:52 +0100
++Subject: [PATCH] include appropriate header files for std::numeric_limits
 +
-+[Thomas: Taken from upstream pull request
-+https://github.com/python/cpython/pull/24868, which is aimed at fixing
-+https://bugs.python.org/issue43498]
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Fixes #80.
++
++[Retrieved from:
++https://github.com/Matroska-Org/libebml/commit/f0bfd53647961e799a43d918c46cf3b6bff89806]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 +---
-+ Lib/concurrent/futures/process.py | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++ ChangeLog                 | 4 ++++
++ src/EbmlString.cpp        | 1 +
++ src/EbmlUnicodeString.cpp | 1 +
++ 3 files changed, 6 insertions(+)
 +
-+diff --git a/Lib/concurrent/futures/process.py b/Lib/concurrent/futures/process.py
-+index 90bc98bf2ec..e3b36dff572 100644
-+--- a/Lib/concurrent/futures/process.py
-++++ b/Lib/concurrent/futures/process.py
-+@@ -373,7 +373,7 @@ class _ExecutorManagerThread(threading.Thread):
-+         assert not self.thread_wakeup._closed
-+         wakeup_reader = self.thread_wakeup._reader
-+         readers = [result_reader, wakeup_reader]
-+-        worker_sentinels = [p.sentinel for p in self.processes.values()]
-++        worker_sentinels = [p.sentinel for p in self.processes.copy().values()]
-+         ready = mp.connection.wait(readers + worker_sentinels)
++diff --git a/ChangeLog b/ChangeLog
++index 034cf86..e4b13a9 100644
++--- a/ChangeLog
+++++ b/ChangeLog
++@@ -1,3 +1,7 @@
+++2021-02-27  Moritz Bunkus  <mo@bunkus.online>
+++
+++        * Fix compilation with g++ 11. Fixes #80.
+++
++ 2021-02-21 Steve Lhomme <slhomme@matroska.org>
 + 
-+         cause = None
-+-- 
-+2.31.1
-+
++         * Remove Coremake project files
++diff --git a/src/EbmlString.cpp b/src/EbmlString.cpp
++index 27e55fd..4c05fcf 100644
++--- a/src/EbmlString.cpp
+++++ b/src/EbmlString.cpp
++@@ -34,6 +34,7 @@
++   \author Steve Lhomme     <robux4 @ users.sf.net>
++ */
++ #include <cassert>
+++#include <limits>
++ 
++ #include "ebml/EbmlString.h"
++ 
++diff --git a/src/EbmlUnicodeString.cpp b/src/EbmlUnicodeString.cpp
++index 496a16a..99fc073 100644
++--- a/src/EbmlUnicodeString.cpp
+++++ b/src/EbmlUnicodeString.cpp
++@@ -36,6 +36,7 @@
++ */
++ 
++ #include <cassert>
+++#include <limits>
++ 
++ #include "ebml/EbmlUnicodeString.h"
++ 
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
