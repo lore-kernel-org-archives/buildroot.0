@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 23000C432BE
-	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:08:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D2240C4320A
+	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:08:51 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id E38AB60FD9
-	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:08:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E38AB60FD9
+	by mail.kernel.org (Postfix) with ESMTPS id 9390360FD8
+	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:08:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9390360FD8
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B494E4077C;
-	Thu, 26 Aug 2021 22:08:37 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 333E34077F;
+	Thu, 26 Aug 2021 22:08:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CWh0-iKvrgFG; Thu, 26 Aug 2021 22:08:33 +0000 (UTC)
+	with ESMTP id ZKbv3l4TGM1O; Thu, 26 Aug 2021 22:08:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5FD1A4077F;
-	Thu, 26 Aug 2021 22:08:32 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3DD3E1C1148
- for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 22:02:39 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3F91740795;
+	Thu, 26 Aug 2021 22:08:45 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0F7DB1BF33E
+ for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 22:02:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 21A3382D40
- for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 22:02:37 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id BE99340777
+ for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 22:02:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GSpoYbHC9eGx for <buildroot@lists.busybox.net>;
- Thu, 26 Aug 2021 22:02:33 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dSrw5wuOojkE for <buildroot@lists.busybox.net>;
+ Thu, 26 Aug 2021 22:02:32 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 461DC82BE7
- for <buildroot@buildroot.org>; Thu, 26 Aug 2021 22:02:31 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 553AD40780
+ for <buildroot@buildroot.org>; Thu, 26 Aug 2021 22:02:28 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 9ADC68DC50; Thu, 26 Aug 2021 22:01:29 +0000 (UTC)
+ id A97388DC50; Thu, 26 Aug 2021 22:01:26 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sun, 15 Aug 2021 09:23:44 +0200
+Date: Thu, 5 Aug 2021 23:47:32 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: ff619b5c4212000e8bd511bcdb060531c0b4ceab
-X-Git-Newrev: 1be9d2eb4ad5164d4443e9b63aeaec832bb18adc
+X-Git-Oldrev: cb340dfbdc771d71a3fbe89492ea229459d55681
+X-Git-Newrev: b72401692e1ea73a37fcf4c0b421b654e8a2100f
 X-Patchwork-Hint: ignore
-Message-Id: <20210826220129.9ADC68DC50@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/nginx-naxsi: fix build
- without x_forwarded_for
+Message-Id: <20210826220126.A97388DC50@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libesmtp: security
+ bump to version 1.1.0
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,95 +70,102 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1be9d2eb4ad5164d4443e9b63aeaec832bb18adc
+commit: https://git.buildroot.net/buildroot/commit/?id=b72401692e1ea73a37fcf4c0b421b654e8a2100f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fix the following build failure without x_forwarded_for raised since
-bump to version 1.3 in commit 3335c8d8685119ebb5b2a9a6e575f3a5337c4d90:
+After more than a decade, libESMTP version 1.0.6 is superceded. Despite
+proving robust a little bitrot has occurred, especially regarding
+OpenSSL support. The original application data APIs are prone to memory
+leaks and are deprecated in favour of safer replacements. Version 1.1
+updates libESMTP without breaking API and ABI compatibility and
+provides a basis for future development.
 
-/home/buildroot/autobuild/instance-3/output-1/build/nginx-naxsi-1.3/naxsi_src/naxsi_runtime.c: In function 'ngx_http_naxsi_data_parse':
-/home/buildroot/autobuild/instance-3/output-1/build/nginx-naxsi-1.3/naxsi_src/naxsi_runtime.c:2846:20: error: 'ngx_http_headers_in_t' has no member named 'x_forwarded_for'
-   if (r->headers_in.x_forwarded_for.nelts >= 1) {
-                    ^
+In addition to updates to the codebase, documentation is modernised and
+is more comprehensive.
 
-Fixes:
- - http://autobuild.buildroot.org/results/cdbc1536f6b5de3d4c836efa2f0dcaf0cdbb1462
+All libESMTP users are encouraged to upgrade from version 1.0.6.
+
+- Update license files
+- Update indentation in hash file (two spaces)
+- Switch to meson-package
+- Handle threads and tls meson options
+- libesmtp-config has been dropped:
+  https://github.com/libesmtp/libESMTP/issues/8
+- Fix CVE-2019-19977: libESMTP through 1.0.6 mishandles domain copying
+  into a fixed-size buffer in ntlm_build_type_2 in ntlm/ntlmstruct.c, as
+  demonstrated by a stack-based buffer over-read.
+
+https://github.com/libesmtp/libESMTP/releases/tag/v1.1.0
+https://libesmtp.github.io/changes-since-v1.0.6.html
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...axsi_runtime.c-fix-build-without-x_forwar.patch | 63 ++++++++++++++++++++++
- 1 file changed, 63 insertions(+)
+ package/libesmtp/Config.in     |  1 +
+ package/libesmtp/libesmtp.hash |  6 +++---
+ package/libesmtp/libesmtp.mk   | 24 +++++++++++++++++-------
+ 3 files changed, 21 insertions(+), 10 deletions(-)
 
-diff --git a/package/nginx-naxsi/0001-naxsi_src-naxsi_runtime.c-fix-build-without-x_forwar.patch b/package/nginx-naxsi/0001-naxsi_src-naxsi_runtime.c-fix-build-without-x_forwar.patch
-new file mode 100644
-index 0000000000..238a01923d
---- /dev/null
-+++ b/package/nginx-naxsi/0001-naxsi_src-naxsi_runtime.c-fix-build-without-x_forwar.patch
-@@ -0,0 +1,63 @@
-+From 8ea5218b07f715e9616a846bf305633ef1b3aa2a Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 14 Aug 2021 11:46:08 +0200
-+Subject: [PATCH] naxsi_src/naxsi_runtime.c: fix build without x_forwarded_for
+diff --git a/package/libesmtp/Config.in b/package/libesmtp/Config.in
+index db2dc8ec9c..5c6a412134 100644
+--- a/package/libesmtp/Config.in
++++ b/package/libesmtp/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_LIBESMTP
+ 	bool "libesmtp"
+ 	depends on !BR2_STATIC_LIBS
++	select BR2_PACKAGE_LIBOPENSSL_ENABLE_MD4 if BR2_PACKAGE_LIBOPENSSL
+ 	help
+ 	  Library for sending emails through SMTP.
+ 
+diff --git a/package/libesmtp/libesmtp.hash b/package/libesmtp/libesmtp.hash
+index 9e1ca22b5b..596ed4eaca 100644
+--- a/package/libesmtp/libesmtp.hash
++++ b/package/libesmtp/libesmtp.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256	d0a61a5c52d99fa7ce7d00ed0a07e341dbda67101dbed1ab0cdae3f37db4eb0b	libesmtp-1.0.6.tar.bz2
+-sha256	32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670	COPYING
+-sha256	f18a0811fa0e220ccbc42f661545e77f0388631e209585ed582a1c693029c6aa	COPYING.LIB
++sha256  32bc3614ca12d21c7d933f32d43410e8744b6f91fdca7732da9877a385e4e6c3  libesmtp-1.1.0.tar.gz
++sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  COPYING.GPL
++sha256  20c17d8b8c48a600800dfd14f95d5cb9ff47066a9641ddeab48dc54aec96e331  LICENSE
+diff --git a/package/libesmtp/libesmtp.mk b/package/libesmtp/libesmtp.mk
+index 1f5cdec191..10fe7bf324 100644
+--- a/package/libesmtp/libesmtp.mk
++++ b/package/libesmtp/libesmtp.mk
+@@ -4,14 +4,24 @@
+ #
+ ################################################################################
+ 
+-LIBESMTP_VERSION = 1.0.6
+-LIBESMTP_SOURCE = libesmtp-$(LIBESMTP_VERSION).tar.bz2
+-LIBESMTP_SITE = http://sources.buildroot.net/libesmtp
++LIBESMTP_VERSION = 1.1.0
++LIBESMTP_SITE = $(call github,libesmtp,libESMTP,v$(LIBESMTP_VERSION))
+ LIBESMTP_INSTALL_STAGING = YES
+-LIBESMTP_CONFIG_SCRIPTS = libesmtp-config
+-LIBESMTP_DEPENDENCIES = $(if $(BR2_PACKAGE_OPENSSL),openssl)
+ LIBESMTP_LICENSE = GPL-2.0+ (examples), LGPL-2.1+ (library)
+-LIBESMTP_LICENSE_FILES = COPYING COPYING.LIB
++LIBESMTP_LICENSE_FILES = COPYING.GPL LICENSE
+ LIBESMTP_CPE_ID_VENDOR = libesmtp_project
+ 
+-$(eval $(autotools-package))
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++LIBESMTP_CONF_OPTS += -Dtls=enabled
++LIBESMTP_DEPENDENCIES += openssl
++else
++LIBESMTP_CONF_OPTS += -Dtls=disabled
++endif
 +
-+x_forwarded_for is not available if realip, geo, geoip or proxy modules
-+aren't enabled resulting in the following build failure since version
-+1.1a and
-+https://github.com/nbs-system/naxsi/commit/07a056ccd36bc3c5c40dc17991db226cb8cf6241:
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
++LIBESMTP_CONF_OPTS += -Dpthreads=enabled
++else
++LIBESMTP_CONF_OPTS += -Dpthreads=disabled
++endif
 +
-+/home/buildroot/autobuild/instance-3/output-1/build/nginx-naxsi-1.3/naxsi_src/naxsi_runtime.c: In function 'ngx_http_naxsi_data_parse':
-+/home/buildroot/autobuild/instance-3/output-1/build/nginx-naxsi-1.3/naxsi_src/naxsi_runtime.c:2846:20: error: 'ngx_http_headers_in_t' has no member named 'x_forwarded_for'
-+   if (r->headers_in.x_forwarded_for.nelts >= 1) {
-+                    ^
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/cdbc1536f6b5de3d4c836efa2f0dcaf0cdbb1462
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/nbs-system/naxsi/pull/568]
-+---
-+ naxsi_src/naxsi_runtime.c | 7 ++++++-
-+ 1 file changed, 6 insertions(+), 1 deletion(-)
-+
-+diff --git a/naxsi_src/naxsi_runtime.c b/naxsi_src/naxsi_runtime.c
-+index 28e0b29..6a723d2 100644
-+--- a/naxsi_src/naxsi_runtime.c
-++++ b/naxsi_src/naxsi_runtime.c
-+@@ -2842,10 +2842,12 @@ ngx_http_naxsi_data_parse(ngx_http_request_ctx_t* ctx, ngx_http_request_t* r)
-+   unsigned int      n = 0;
-+   ngx_table_elt_t** h = NULL;
-+   ngx_array_t       a;
-++#if (NGX_HTTP_X_FORWARDED_FOR)
-+   if (r->headers_in.x_forwarded_for.nelts >= 1) {
-+     a = r->headers_in.x_forwarded_for;
-+     n = a.nelts;
-+   }
-++#endif
-+   if (n >= 1)
-+     h = a.elts;
-+   if (n >= 1) {
-+@@ -2879,6 +2881,7 @@ ngx_http_naxsi_update_current_ctx_status(ngx_http_request_ctx_t*    ctx,
-+ 
-+   /*cr, sc, cf, ctx*/
-+   if (cf->check_rules && ctx->special_scores) {
-++#if (NGX_HTTP_X_FORWARDED_FOR)
-+     if (r->headers_in.x_forwarded_for.nelts >= 1) {
-+       a = r->headers_in.x_forwarded_for;
-+       n = a.nelts;
-+@@ -2896,7 +2899,9 @@ ngx_http_naxsi_update_current_ctx_status(ngx_http_request_ctx_t*    ctx,
-+         memcpy(ip.data, h[0]->value.data, ip.len);
-+         ignore = nx_can_ignore_ip(&ip, cf) || nx_can_ignore_cidr(&ip, cf);
-+       }
-+-    } else {
-++    } else
-++#endif
-++    {
-+       ngx_str_t* ip = &r->connection->addr_text;
-+       NX_DEBUG(_debug_whitelist_ignore,
-+                NGX_LOG_DEBUG_HTTP,
-+-- 
-+2.30.2
-+
++$(eval $(meson-package))
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
