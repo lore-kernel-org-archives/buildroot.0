@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 54C39C4338F
-	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 20:16:03 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D6EBBC4338F
+	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 20:16:15 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id A805061004
-	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 20:16:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A805061004
+	by mail.kernel.org (Postfix) with ESMTPS id 8F48E60EE7
+	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 20:16:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8F48E60EE7
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 715074041F;
-	Thu,  5 Aug 2021 20:16:02 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 392E3400CD;
+	Thu,  5 Aug 2021 20:16:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WcRD3JioOMtM; Thu,  5 Aug 2021 20:16:01 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id nQzkjIHxlPd8; Thu,  5 Aug 2021 20:16:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BBC974056C;
-	Thu,  5 Aug 2021 20:16:00 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 86C631BF3FD
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2F6714035F;
+	Thu,  5 Aug 2021 20:16:13 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 8C44E1C113E
  for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 20:15:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 764B540571
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7A07E83837
  for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 20:15:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ltZfB3f5st9N for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id YDPKUS1fQbww for <buildroot@lists.busybox.net>;
  Thu,  5 Aug 2021 20:15:58 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 284B04041F
+ by smtp1.osuosl.org (Postfix) with ESMTP id 15D4183437
  for <buildroot@buildroot.org>; Thu,  5 Aug 2021 20:15:58 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id CF0118C55A; Thu,  5 Aug 2021 20:15:45 +0000 (UTC)
+ id BABF28C53D; Thu,  5 Aug 2021 20:15:45 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 5 Aug 2021 22:12:05 +0200
+Date: Thu, 5 Aug 2021 22:05:38 +0200
 X-Git-Refname: refs/heads/2021.05.x
-X-Git-Oldrev: caa26c05096602789f35f7608a7ed3662749b8fa
-X-Git-Newrev: 331c383b0326fd04cbaade4e6ae941846349426e
+X-Git-Oldrev: f79c32fbc1f32313ec7a2c533ec02470645f5fd7
+X-Git-Newrev: 827fafa7aaa230951296e18e65f06de21df963dd
 X-Patchwork-Hint: ignore
-Message-Id: <20210805201545.CF0118C55A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.05.x] package/iodine: add
- IODINE_CPE_ID_VENDOR
+Message-Id: <20210805201545.BABF28C53D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.05.x] utils/scanpypi: add
+ setup.py script directory as sys.path[0]
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,33 +70,75 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=331c383b0326fd04cbaade4e6ae941846349426e
+commit: https://git.buildroot.net/buildroot/commit/?id=827fafa7aaa230951296e18e65f06de21df963dd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
 
-cpe:2.3:a:kryo:iodine is a valid CPE identifier for this package:
+Even though the directory containing a package's setup.py was added to
+sys.path, some setup.py implementations rely on the fact that it is placed
+in sys.path[0].
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Akryo%3Aiodine
+An example package is 'cram' which failed to be added with scanpypi:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+    Traceback (most recent call last):
+      File "utils/scanpypi", line 756, in <module>
+        main()
+      File "utils/scanpypi", line 703, in main
+        package.load_setup()
+      File "utils/scanpypi", line 303, in load_setup
+        setup = imp.load_module('setup', s_file, s_path, s_desc)
+      File "/usr/lib/python3.8/imp.py", line 234, in load_module
+        return load_source(name, filename, file)
+      File "/usr/lib/python3.8/imp.py", line 171, in load_source
+        module = _load(spec)
+      File "<frozen importlib._bootstrap>", line 702, in _load
+      File "<frozen importlib._bootstrap>", line 671, in _load_unlocked
+      File "<frozen importlib._bootstrap_external>", line 783, in exec_module
+      File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+      File "/tmp/scanpypi-2pzc5wb_/python-cram/cram-0.7/setup.py", line 44, in <module>
+        long_description=long_description(),
+      File "/tmp/scanpypi-2pzc5wb_/python-cram/cram-0.7/setup.py", line 20, in long_description
+        return open(os.path.join(sys.path[0], 'README.rst')).read()
+    FileNotFoundError: [Errno 2] No such file or directory: '.../buildroot/utils/README.rst'
+
+The corresponding code from cram's setup.py is:
+
+    def long_description():
+        """Get the long description from the README"""
+        return open(os.path.join(sys.path[0], 'README.rst')).read()
+
+Indeed, the Python documentation says:
+
+https://docs.python.org/3.8/library/sys.html#sys.path
+    "...
+    As initialized upon program startup, the first item of this list,
+    path[0], is the directory containing the script that was used to invoke
+    the Python interpreter.
+    ..."
+
+Fix this by inserting explicitly at index 0 instead of appending to
+sys.path.
+
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 4c42db433ded2dc6bbb8252fed49c99928dc3462)
+(cherry picked from commit ad042904f45201370b886ef5762ff75a93dc8395)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/iodine/iodine.mk | 1 +
- 1 file changed, 1 insertion(+)
+ utils/scanpypi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/iodine/iodine.mk b/package/iodine/iodine.mk
-index 711d709c1d..5de6389189 100644
---- a/package/iodine/iodine.mk
-+++ b/package/iodine/iodine.mk
-@@ -9,6 +9,7 @@ IODINE_SITE = http://code.kryo.se/iodine
- IODINE_DEPENDENCIES = zlib
- IODINE_LICENSE = MIT
- IODINE_LICENSE_FILES = README
-+IODINE_CPE_ID_VENDOR = kryo
- 
- IODINE_CFLAGS = $(TARGET_CFLAGS)
- 
+diff --git a/utils/scanpypi b/utils/scanpypi
+index 8327fc3fc5..fac22d66e8 100755
+--- a/utils/scanpypi
++++ b/utils/scanpypi
+@@ -297,7 +297,7 @@ class BuildrootPackage():
+         """
+         current_dir = os.getcwd()
+         os.chdir(self.tmp_extract)
+-        sys.path.append(self.tmp_extract)
++        sys.path.insert(0,self.tmp_extract)
+         s_file, s_path, s_desc = imp.find_module('setup', [self.tmp_extract])
+         setup = imp.load_module('setup', s_file, s_path, s_desc)
+         if self.metadata_name in self.setup_args:
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
