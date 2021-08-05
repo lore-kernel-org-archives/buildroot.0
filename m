@@ -2,91 +2,88 @@ Return-Path: <SRS0=evmZ=M4=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
-	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B275C4338F
-	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 09:22:59 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B607BC432BE
+	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 09:41:35 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id E8B5F60EE9
-	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 09:22:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E8B5F60EE9
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id 2537D60F25
+	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 09:41:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2537D60F25
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=busybox.net
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A44E5400AF;
-	Thu,  5 Aug 2021 09:22:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E22B08374F;
+	Thu,  5 Aug 2021 09:41:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QfiUtQUUXI2Q; Thu,  5 Aug 2021 09:22:57 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id NEd9xarQDoIz; Thu,  5 Aug 2021 09:41:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 767BF401B0;
-	Thu,  5 Aug 2021 09:22:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 089DC83759;
+	Thu,  5 Aug 2021 09:41:31 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 81BAB1BF852
- for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 09:22:44 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0A8C01BF852
+ for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 09:41:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 700FD400AF
- for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 09:22:44 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id EB9C6401BA
+ for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 09:41:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=libero.it
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fD68DRrG2pte for <buildroot@lists.busybox.net>;
- Thu,  5 Aug 2021 09:22:43 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
- [IPv6:2a00:1450:4864:20::432])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D5FA7401B0
- for <buildroot@buildroot.org>; Thu,  5 Aug 2021 09:22:40 +0000 (UTC)
-Received: by mail-wr1-x432.google.com with SMTP id m12so5573161wru.12
- for <buildroot@buildroot.org>; Thu, 05 Aug 2021 02:22:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=f1F058CNO7Lsp+9hWkGOgv8URdBHSQ20HjjdJ6QbPtA=;
- b=IFcc5zd07byVmFkbG3xID8O/vHgw59Mcc+L97sCqgiJJ1KTFaX5mS6PatFWYM4KSqB
- qaOUFCtIO8dPVC0HsweO7OU8CIKLVO9p6xULlIMy3DfmcbHbxKW3nfDgoXGTKcXncUUB
- e8AsgfU1pDvWx4JIuvFleDnwEpku8x/DN0pSZsxq3wcQb0ZYic6TNbmP5e3ISVJzPtcd
- PJFtK4tnZ508/Gc0RqKxcbu+HxFeNorbBrKywbKxp/SYuUs3tEEook2ZI5EBom3QZyBi
- a+TO9fFK0BR4Fs89gmtwudMUkV51Ez4T/v8PtnpXwnJFstXbFUgmI8MKfDPSx1Ulv24i
- RM7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=f1F058CNO7Lsp+9hWkGOgv8URdBHSQ20HjjdJ6QbPtA=;
- b=uD9uAfKx1qAXq85Iio3/yxJMAoiAPbNU+21mEldXSaR5N9SKIh5TfSi5AvYyeH9OqF
- Hs24ILThhcTGVC08f86fzYDInJHUcU3IXFvBwdq2kzyUyGdXTkeW0FDKkla7XS1MP000
- 7c+LMIJAsInmOJ6Qrs3i94CYkqeGREXdeNmR1xWP+Qdhi6DaiaHDJWGYpKxl/afXU8o2
- CtKrDiYf6UreP7ppdys2I+AE1fzBCokNCj5EnhysiQ8AdXUNjQJ80V4L2yQC14Rj0pav
- kBM4HaVsQt7ZgPsd3C1QRswY2AUHHQVGKGfJVQqXXRjiqYTZkdQz2zHQENZvFyu6J1On
- +1ng==
-X-Gm-Message-State: AOAM5339fVTfW00US5vyxbRaBLNEdaNRlFiTsgbmPK6D78NNmylv8/w+
- Pq2A3Dsnqq8Srr6GPURM4OBjJ2bAXA9onw==
-X-Google-Smtp-Source: ABdhPJwZLwSM01DpZQiegZWNPKIc9SE4ZuH7LScjmt0lvu+PDNtcosIjgyrUcCbpl8LYLVdFgUMJGA==
-X-Received: by 2002:a05:6000:256:: with SMTP id
- m22mr4044513wrz.395.1628155358847; 
- Thu, 05 Aug 2021 02:22:38 -0700 (PDT)
-Received: from kali.home (pop.92-184-97-192.mobile.abo.orange.fr.
- [92.184.97.192])
- by smtp.gmail.com with ESMTPSA id v6sm5351430wru.50.2021.08.05.02.22.38
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 05 Aug 2021 02:22:38 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Thu,  5 Aug 2021 11:22:26 +0200
-Message-Id: <20210805092226.2110638-2-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210805092226.2110638-1-fontaine.fabrice@gmail.com>
-References: <20210805092226.2110638-1-fontaine.fabrice@gmail.com>
+ with ESMTP id jm3mA2DtJL03 for <buildroot@lists.busybox.net>;
+ Thu,  5 Aug 2021 09:41:28 +0000 (UTC)
+X-Greylist: delayed 00:08:14 by SQLgrey-1.8.0
+Received: from libero.it (smtp-35-i2.italiaonline.it [213.209.12.35])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D0B66400AF
+ for <buildroot@buildroot.org>; Thu,  5 Aug 2021 09:41:27 +0000 (UTC)
+Received: from oxapps-17-098.iol.local ([10.101.8.108])
+ by smtp-35.iol.local with ESMTPA
+ id BZkTmZ54a8HOxBZkTmfpuP; Thu, 05 Aug 2021 11:33:09 +0200
+x-libjamoibt: 1601
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=libero.it; s=s2021;
+ t=1628155990; bh=xLbg9ShIJVu0MzAlD7XKyfQ3RGeZgQWYdXIPRVS2P/k=;
+ h=From;
+ b=VSJwqP5/xH2t0VKPiPM7rTPcctUOi0dp2Iid30n+5K+xdxlamWQj86RvTdkYOX0RV
+ N8QCAb18aA7eiu6fEqB2nCcW9PHUNRy3P7PbrYExOraBBvQHmoT1L4/XwCNgk4qIPC
+ IHBZ6Bh0pFnMPCdi90HdFprktIrT7hFPlhJ4f4KtmobPCF7weY1rioCZKk1Oa0rEio
+ da87UcLbv4UiB1Yq25arc3v+VYUNNw6bpopYMudrJBWxSegmVm6SHLFqhAP5UBe06X
+ zhVw3353coFYmXIBeahwJRp3FU4TSVjBJ1F6a7I74RZFFlOHqMomvltpbxsBCSuhi4
+ 6jostioKl5NuQ==
+X-CNFS-Analysis: v=2.4 cv=LfD5VhTi c=1 sm=1 tr=0 ts=610bb056 cx=a_exe
+ a=NIaCDMyvpSx5HZmal66lBw==:117 a=C-c6dMTymFoA:10 a=IkcTkHD0fZMA:10
+ a=vesc6bHxzc4A:10 a=8b9GpE9nAAAA:8 a=YRHvXXt1AAAA:8 a=VwQbUJbxAAAA:8
+ a=fTnYrhqveZHa3fzFH_EA:9 a=QEXdDO2ut3YA:10 a=T3LWEMljR5ZiDmsYVIUa:22
+ a=9bw_jnHfPby8klRCszyn:22 a=AjGcO6oz07-iQ99wixmX:22
+Date: Thu, 5 Aug 2021 11:33:09 +0200 (CEST)
+To: Christophe Priouzeau <christophe.priouzeau@foss.st.com>,
+ "arnout@mind.be" <arnout@mind.be>,
+ "buildroot@buildroot.org" <buildroot@buildroot.org>
+Message-ID: <1281282770.53388.1628155989700@mail1.libero.it>
+In-Reply-To: <75375410-bac1-15cd-0348-860c6e961b1b@foss.st.com>
+References: <20210716164243.17988-1-dariobin@libero.it>
+ <AM0PR10MB281725F849F235E2E68BCF22E3E19@AM0PR10MB2817.EURPRD10.PROD.OUTLOOK.COM>
+ <75375410-bac1-15cd-0348-860c6e961b1b@foss.st.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2,2/2] package/mupdf: fix CVE-2021-37220
+X-Priority: 3
+Importance: Normal
+X-Mailer: Open-Xchange Mailer v7.10.3-Rev34
+X-Originating-IP: 185.33.57.41
+X-Originating-Client: open-xchange-appsuite
+x-libjamsun: j4wOKMc7oNJWPF4/YtY1XQkPJ/UjdJ9S
+x-libjamv: 9JkuSf5iLL4=
+X-CMAE-Envelope: MS4xfPBznv07NW/Ff7o3l4EGr7VmeFRrcOBUl5pEEsf1mYBtfUUCzdN6dkgjLCS9dT57ElMKFEW0fLBVFTzkeQ1wfnn41gcPRBr7bxW9/rW/xFY5WV7dpHYC
+ VuI/hUquxJsB6J8tdvkk4itZ2PlLwnhJUR+EymlCBJDW9TeWyiIN4rUx7iEBIKLBJ8w1QlgKx3Zy6q6V5tBvUG/zU93/LzRSRpBclEbI0sytEaEJrdezN8LY
+ B1vMsg1zItK2lxx7XsiwtgH+WBngaUNkVyvhNXUMdcM=
+Subject: Re: [Buildroot] [RESEND,
+ PATCH 1/2] configs/stm32f469_disco: enable Linux DRM support
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,170 +95,165 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Dario Binacchi via buildroot <buildroot@busybox.net>
+Reply-To: Dario Binacchi <dariobin@libero.it>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-MuPDF through 1.18.1 has an out-of-bounds write because the cached color
-converter does not properly consider the maximum key size of a hash
-table. This can, for example, be seen with crafted "mutool draw" input.
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
-Changes v1 -> v2:
- - Add Signed-off-by and upstream link in patch
-
- ...x-key-size-in-cached-color-converter.patch | 119 ++++++++++++++++++
- package/mupdf/mupdf.mk                        |   3 +
- 2 files changed, 122 insertions(+)
- create mode 100644 package/mupdf/0003-Bug-703791-Stay-within-hash-table-max-key-size-in-cached-color-converter.patch
-
-diff --git a/package/mupdf/0003-Bug-703791-Stay-within-hash-table-max-key-size-in-cached-color-converter.patch b/package/mupdf/0003-Bug-703791-Stay-within-hash-table-max-key-size-in-cached-color-converter.patch
-new file mode 100644
-index 0000000000..5335f140d6
---- /dev/null
-+++ b/package/mupdf/0003-Bug-703791-Stay-within-hash-table-max-key-size-in-cached-color-converter.patch
-@@ -0,0 +1,119 @@
-+From f5712c9949d026e4b891b25837edd2edc166151f Mon Sep 17 00:00:00 2001
-+From: Tor Andersson <tor.andersson@artifex.com>
-+Date: Tue, 20 Apr 2021 14:46:48 +0200
-+Subject: [PATCH] Bug 703791: Stay within hash table max key size in cached
-+ color converter.
-+
-+[Retrieved from:
-+http://git.ghostscript.com/?p=mupdf.git;h=f5712c9949d026e4b891b25837edd2edc166151f]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ include/mupdf/fitz/hash.h |  2 ++
-+ source/fitz/colorspace.c  | 40 ++++++++++++++++++++++++---------------
-+ source/fitz/hash.c        |  7 +++----
-+ 3 files changed, 30 insertions(+), 19 deletions(-)
-+
-+diff --git a/include/mupdf/fitz/hash.h b/include/mupdf/fitz/hash.h
-+index e92eb0458..feb37a5e4 100644
-+--- a/include/mupdf/fitz/hash.h
-++++ b/include/mupdf/fitz/hash.h
-+@@ -5,6 +5,8 @@
-+ #include "mupdf/fitz/context.h"
-+ #include "mupdf/fitz/output.h"
-+ 
-++#define FZ_HASH_TABLE_KEY_LENGTH 48
-++
-+ /**
-+ 	Generic hash-table with fixed-length keys.
-+ 
-+diff --git a/source/fitz/colorspace.c b/source/fitz/colorspace.c
-+index af454caf1..f4db9d3d2 100644
-+--- a/source/fitz/colorspace.c
-++++ b/source/fitz/colorspace.c
-+@@ -1025,23 +1025,30 @@ typedef struct fz_cached_color_converter
-+ static void fz_cached_color_convert(fz_context *ctx, fz_color_converter *cc_, const float *ss, float *ds)
-+ {
-+ 	fz_cached_color_converter *cc = cc_->opaque;
-+-	float *val = fz_hash_find(ctx, cc->hash, ss);
-+-	int n = cc->base.ds->n * sizeof(float);
-+-
-+-	if (val)
-++	if (cc->hash)
-+ 	{
-+-		memcpy(ds, val, n);
-+-		return;
-+-	}
-++		float *val = fz_hash_find(ctx, cc->hash, ss);
-++		int n = cc->base.ds->n * sizeof(float);
-+ 
-+-	cc->base.convert(ctx, &cc->base, ss, ds);
-++		if (val)
-++		{
-++			memcpy(ds, val, n);
-++			return;
-++		}
-+ 
-+-	val = Memento_label(fz_malloc_array(ctx, cc->base.ds->n, float), "cached_color_convert");
-+-	memcpy(val, ds, n);
-+-	fz_try(ctx)
-+-		fz_hash_insert(ctx, cc->hash, ss, val);
-+-	fz_catch(ctx)
-+-		fz_free(ctx, val);
-++		cc->base.convert(ctx, &cc->base, ss, ds);
-++
-++		val = Memento_label(fz_malloc_array(ctx, cc->base.ds->n, float), "cached_color_convert");
-++		memcpy(val, ds, n);
-++		fz_try(ctx)
-++			fz_hash_insert(ctx, cc->hash, ss, val);
-++		fz_catch(ctx)
-++			fz_free(ctx, val);
-++	}
-++	else
-++	{
-++		cc->base.convert(ctx, &cc->base, ss, ds);
-++	}
-+ }
-+ 
-+ void fz_init_cached_color_converter(fz_context *ctx, fz_color_converter *cc, fz_colorspace *ss, fz_colorspace *ds, fz_colorspace *is, fz_color_params params)
-+@@ -1060,7 +1067,10 @@ void fz_init_cached_color_converter(fz_context *ctx, fz_color_converter *cc, fz_
-+ 	fz_try(ctx)
-+ 	{
-+ 		fz_find_color_converter(ctx, &cached->base, ss, ds, is, params);
-+-		cached->hash = fz_new_hash_table(ctx, 256, n * sizeof(float), -1, fz_free);
-++		if (n * sizeof(float) <= FZ_HASH_TABLE_KEY_LENGTH)
-++			cached->hash = fz_new_hash_table(ctx, 256, n * sizeof(float), -1, fz_free);
-++		else
-++			fz_warn(ctx, "colorspace has too many components to be cached");
-+ 	}
-+ 	fz_catch(ctx)
-+ 	{
-+diff --git a/source/fitz/hash.c b/source/fitz/hash.c
-+index 882b886c9..287d43f03 100644
-+--- a/source/fitz/hash.c
-++++ b/source/fitz/hash.c
-+@@ -11,11 +11,9 @@
-+ 	and removed frequently.
-+ */
-+ 
-+-enum { MAX_KEY_LEN = 48 };
-+-
-+ typedef struct
-+ {
-+-	unsigned char key[MAX_KEY_LEN];
-++	unsigned char key[FZ_HASH_TABLE_KEY_LENGTH];
-+ 	void *val;
-+ } fz_hash_entry;
-+ 
-+@@ -50,7 +48,8 @@ fz_new_hash_table(fz_context *ctx, int initialsize, int keylen, int lock, fz_has
-+ {
-+ 	fz_hash_table *table;
-+ 
-+-	assert(keylen <= MAX_KEY_LEN);
-++	if (keylen > FZ_HASH_TABLE_KEY_LENGTH)
-++		fz_throw(ctx, FZ_ERROR_GENERIC, "hash table key length too large");
-+ 
-+ 	table = fz_malloc_struct(ctx, fz_hash_table);
-+ 	table->keylen = keylen;
-+-- 
-+2.17.1
-+
-diff --git a/package/mupdf/mupdf.mk b/package/mupdf/mupdf.mk
-index d3d9d3b101..c9d5b4a162 100644
---- a/package/mupdf/mupdf.mk
-+++ b/package/mupdf/mupdf.mk
-@@ -25,6 +25,9 @@ MUPDF_DEPENDENCIES = \
- # 0002-Bug-703366-Fix-double-free-of-object-during-linearization.patch
- MUPDF_IGNORE_CVES += CVE-2021-3407
- 
-+# 0003-Bug-703791-Stay-within-hash-table-max-key-size-in-cached-color-converter.patch
-+MUPDF_IGNORE_CVES += CVE-2021-37220
-+
- # The pkg-config name for gumbo-parser is `gumbo`.
- MUPDF_PKG_CONFIG_PACKAGES = \
- 	freetype2 \
--- 
-2.30.2
-
-_______________________________________________
-buildroot mailing list
-buildroot@busybox.net
-http://lists.busybox.net/mailman/listinfo/buildroot
+SGkgQWxsCgpKdXN0IGEgZ2VudGxlIHBpbmcsIHRoYW5rcy4KCkJlc3QgcmVnYXJkcy4KRGFyaW8K
+Cj4gSWwgMTkvMDcvMjAyMSAxMDo0MiBDaHJpc3RvcGhlIFByaW91emVhdSA8Y2hyaXN0b3BoZS5w
+cmlvdXplYXVAZm9zcy5zdC5jb20+IGhhIHNjcml0dG86Cj4gCj4gIAo+IE9rLCBmb3IgbWUsIGp1
+c3QgbmVlZCB0byBrZWVwIGluIG1lbW9yeSB0byByZW1vdmUgcGF0Y2ggd2hlbiB0aGUgc3VwcG9y
+dCAKPiBvZiBrZXJuZWwgNS4xNCB3aWxsIGJlIHByZXNlbnQuCj4gCj4gQWNrZWQtYnk6IENocmlz
+dG9waGUgUHJpb3V6ZWF1IDxjaHJpc3RvcGhlLnByaW91emVhdUBmb3NzLnN0LmNvbT4KPiBSZWdh
+cmRzCj4gQ2hyaXN0b3BoZSBQcmlvdXplYXUKPiAKPiBPbiA3LzE5LzIxIDEwOjM3IEFNLCBDaHJp
+c3RvcGhlIFBSSU9VWkVBVSB3cm90ZToKPiA+IAo+ID4gLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCj4gPiAqRnJv
+bToqIERhcmlvIEJpbmFjY2hpIDxkYXJpb2JpbkBsaWJlcm8uaXQ+Cj4gPiAqU2VudDoqIEZyaWRh
+eSwgSnVseSAxNiwgMjAyMSA2OjQyIFBNCj4gPiAqVG86KiBidWlsZHJvb3RAYnVpbGRyb290Lm9y
+ZyA8YnVpbGRyb290QGJ1aWxkcm9vdC5vcmc+Cj4gPiAqQ2M6KiBDaHJpc3RvcGhlIFBSSU9VWkVB
+VSA8Y2hyaXN0b3BoZS5wcmlvdXplYXVAc3QuY29tPjsgRGFyaW8gQmluYWNjaGkgCj4gPiA8ZGFy
+aW9iaW5AbGliZXJvLml0Pgo+ID4gKlN1YmplY3Q6KiBbUkVTRU5ELCBQQVRDSCAxLzJdIGNvbmZp
+Z3Mvc3RtMzJmNDY5X2Rpc2NvOiBlbmFibGUgTGludXggRFJNIAo+ID4gc3VwcG9ydAo+ID4gVGhl
+IHBhdGNoIHRvIGJlIGFwcGxpZWQgdG8gdGhlIEtlcm5lbCBoYXMgYmVlbiBpbmZvcm1hbGx5IGFw
+cHJvdmVkIGJ5Cj4gPiBhbiBTVCBtYWludGFpbmVyIGFzIGNhbiBiZSBzZWVuIGZyb20gWzFdIGFu
+ZCBbMl0uCj4gPiAKPiA+IEFmdGVyIExpbnV4IGJvb3RzLCAvZGV2L2ZiMCB3aWxsIGJlIGFjY2Vz
+c2libGUuIFlvdSBjYW4gY29udHJvbCB0aGUKPiA+IGJyaWdodG5lc3Mgb2YgdGhlIGRpc3BsYXkg
+YWZ0ZXIgZW5hYmxpbmcgdGhlIGZyYW1lYnVmZmVyIGJ5IHJ1bm5pbmcgdGhlCj4gPiBmb2xsb3dp
+bmcgY29tbWFuZHM6Cj4gPiAKPiA+IH4gIyBlY2hvIDAgMCA+IC9zeXMvY2xhc3MvZ3JhcGhpY3Mv
+ZmIwL3Bhbgo+ID4gfiAjIGVjaG8gMjU1ID4vc3lzL2NsYXNzL2JhY2tsaWdodC80MDAxNmMwMC5k
+c2kuMC9icmlnaHRuZXNzCj4gPiAKPiA+IFRoZSBicmlnaHRuZXNzIHJhbmdlcyBmcm9tIDAgdG8g
+MjU1LCBhcyB5b3UgY2FuIHNlZSBydW5uaW5nIHRoZQo+ID4gY29tbWFuZDoKPiA+IAo+ID4gfiAj
+IGNhdCAvc3lzL2NsYXNzL2JhY2tsaWdodC80MDAxNmMwMC5kc2kuMC9tYXhfYnJpZ2h0bmVzcwo+
+ID4gCj4gPiBbMV0gaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvcGF0Y2h3b3JrL3BhdGNoLzE0NTA1
+MjQvIAo+ID4gPGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL3BhdGNod29yay9wYXRjaC8xNDUwNTI0
+Lz4KPiA+IFsyXSBodHRwczovL2xvcmUua2VybmVsLm9yZy9wYXRjaHdvcmsvcGF0Y2gvMTQ1MDk2
+NC8gCj4gPiA8aHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvcGF0Y2h3b3JrL3BhdGNoLzE0NTA5NjQv
+Pgo+ID4gCj4gPiBTaWduZWQtb2ZmLWJ5OiBEYXJpbyBCaW5hY2NoaSA8ZGFyaW9iaW5AbGliZXJv
+Lml0Pgo+IEFja2VkLWJ5OiBDaHJpc3RvcGhlIFByaW91emVhdSA8Y2hyaXN0b3BoZS5wcmlvdXpl
+YXVAZm9zcy5zdC5jb20+Cj4gPiAtLS0KPiA+ICDCoC4uLi9zdG0zMmY0NjktZGlzY28vbGludXgu
+ZnJhZ21lbnTCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHzCoCA3ICstCj4gPiAgwqAuLi4tcG9zdC1k
+aXZpc29yLXNldHVwLWZvci1JMlMtU0FJLVBMTHMucGF0Y2ggfCA4NiArKysrKysrKysrKysrKysr
+KysrCj4gPiAgwqBjb25maWdzL3N0bTMyZjQ2OV9kaXNjb19kZWZjb25maWfCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqAgfMKgIDEgKwo+ID4gIMKgMyBmaWxlcyBjaGFuZ2VkLCA5MyBpbnNlcnRpb25z
+KCspLCAxIGRlbGV0aW9uKC0pCj4gPiAgwqBjcmVhdGUgbW9kZSAxMDA2NDQgCj4gPiBib2FyZC9z
+dG1pY3JvZWxlY3Ryb25pY3Mvc3RtMzJmNDY5LWRpc2NvL3BhdGNoZXMvbGludXgvMDAwMS1jbGst
+c3RtMzJmNC1maXgtcG9zdC1kaXZpc29yLXNldHVwLWZvci1JMlMtU0FJLVBMTHMucGF0Y2gKPiA+
+IAo+ID4gZGlmZiAtLWdpdCBhL2JvYXJkL3N0bWljcm9lbGVjdHJvbmljcy9zdG0zMmY0NjktZGlz
+Y28vbGludXguZnJhZ21lbnQgCj4gPiBiL2JvYXJkL3N0bWljcm9lbGVjdHJvbmljcy9zdG0zMmY0
+NjktZGlzY28vbGludXguZnJhZ21lbnQKPiA+IGluZGV4IDkwZjVlOGE4ZmYuLmZmYTRkNjIwNWYg
+MTAwNjQ0Cj4gPiAtLS0gYS9ib2FyZC9zdG1pY3JvZWxlY3Ryb25pY3Mvc3RtMzJmNDY5LWRpc2Nv
+L2xpbnV4LmZyYWdtZW50Cj4gPiArKysgYi9ib2FyZC9zdG1pY3JvZWxlY3Ryb25pY3Mvc3RtMzJm
+NDY5LWRpc2NvL2xpbnV4LmZyYWdtZW50Cj4gPiBAQCAtMSArMSw2IEBACj4gPiAtIyBDT05GSUdf
+WElQX0tFUk5FTCBpcyBub3Qgc2V0Cj4gPiBcIE5vIG5ld2xpbmUgYXQgZW5kIG9mIGZpbGUKPiA+
+ICsjIENPTkZJR19YSVBfS0VSTkVMIGlzIG5vdCBzZXQKPiA+ICtDT05GSUdfRFJNPXkKPiA+ICtD
+T05GSUdfRFJNX1NUTT15Cj4gPiArQ09ORklHX0RSTV9TVE1fRFNJPXkKPiA+ICtDT05GSUdfRFJN
+X1BBTkVMX09SSVNFVEVDSF9PVE04MDA5QT15Cj4gPiArQ09ORklHX0JBQ0tMSUdIVF9DTEFTU19E
+RVZJQ0U9eQo+ID4gZGlmZiAtLWdpdCAKPiA+IGEvYm9hcmQvc3RtaWNyb2VsZWN0cm9uaWNzL3N0
+bTMyZjQ2OS1kaXNjby9wYXRjaGVzL2xpbnV4LzAwMDEtY2xrLXN0bTMyZjQtZml4LXBvc3QtZGl2
+aXNvci1zZXR1cC1mb3ItSTJTLVNBSS1QTExzLnBhdGNoIAo+ID4gYi9ib2FyZC9zdG1pY3JvZWxl
+Y3Ryb25pY3Mvc3RtMzJmNDY5LWRpc2NvL3BhdGNoZXMvbGludXgvMDAwMS1jbGstc3RtMzJmNC1m
+aXgtcG9zdC1kaXZpc29yLXNldHVwLWZvci1JMlMtU0FJLVBMTHMucGF0Y2gKPiA+IG5ldyBmaWxl
+IG1vZGUgMTAwNjQ0Cj4gPiBpbmRleCAwMDAwMDAwMDAwLi4zNGUzOThiODFkCj4gPiAtLS0gL2Rl
+di9udWxsCj4gPiArKysgCj4gPiBiL2JvYXJkL3N0bWljcm9lbGVjdHJvbmljcy9zdG0zMmY0Njkt
+ZGlzY28vcGF0Y2hlcy9saW51eC8wMDAxLWNsay1zdG0zMmY0LWZpeC1wb3N0LWRpdmlzb3Itc2V0
+dXAtZm9yLUkyUy1TQUktUExMcy5wYXRjaAo+ID4gQEAgLTAsMCArMSw4NiBAQAo+ID4gK0Zyb20g
+NDYzYzNhMGNiZjE4ZmQxYmRkMmM5YTNjMzcwYzQ4NGI2Y2FiOTdiNSBNb24gU2VwIDE3IDAwOjAw
+OjAwIDIwMDEKPiA+ICtGcm9tOiBEYXJpbyBCaW5hY2NoaSA8ZGFyaW9iaW5AbGliZXJvLml0Pgo+
+ID4gK0RhdGU6IE1vbiwgMjEgSnVuIDIwMjEgMjM6NDA6NDcgKzAyMDAKPiA+ICtTdWJqZWN0OiBb
+UEFUQ0ggdjJdIGNsazogc3RtMzJmNDogZml4IHBvc3QgZGl2aXNvciBzZXR1cCBmb3IgSTJTL1NB
+SSBQTExzCj4gPiArCj4gPiArRW5hYmxpbmcgdGhlIGZyYW1lYnVmZmVyIGxlYWRzIHRvIGEgc3lz
+dGVtIGhhbmcuIFJ1bm5pbmcsIGFzIGEgZGVidWcKPiA+ICtoYWNrLCB0aGUgc3RvcmVfcGFuKCkg
+ZnVuY3Rpb24gaW4gZHJpdmVycy92aWRlby9mYmRldi9jb3JlL2Zic3lzZnMuYwo+ID4gK3dpdGhv
+dXQgdGFraW5nIHRoZSBjb25zb2xlX2xvY2ssIGFsbG93cyB0byBzZWUgdGhlIGNyYXNoIGJhY2t0
+cmFjZSBvbgo+ID4gK3RoZSBzZXJpYWwgbGluZS4KPiA+ICsKPiA+ICt+ICMgZWNobyAwIDAgPiAv
+c3lzL2NsYXNzL2dyYXBoaWNzL2ZiMC9wYW4KPiA+ICsKPiA+ICtbwqDCoMKgIDkuNzE5NDE0XSBV
+bmhhbmRsZWQgZXhjZXB0aW9uOiBJUFNSID0gMDAwMDAwMDUgTFIgPSBmZmZmZmZmMQo+ID4gK1vC
+oMKgwqAgOS43MjY5MzddIENQVTogMCBQSUQ6IDQ5IENvbW06IHNoIE5vdCB0YWludGVkIDUuMTMu
+MC1yYzUgIzkKPiA+ICtbwqDCoMKgIDkuNzMzMDA4XSBIYXJkd2FyZSBuYW1lOiBTVE0zMiAoRGV2
+aWNlIFRyZWUgU3VwcG9ydCkKPiA+ICtbwqDCoMKgIDkuNzM4Mjk2XSBQQyBpcyBhdCBjbGtfZ2F0
+ZV9pc19lbmFibGVkKzB4MC8weDI4Cj4gPiArW8KgwqDCoCA5Ljc0MzQyNl0gTFIgaXMgYXQgc3Rt
+MzJmNF9wbGxfZGl2X3NldF9yYXRlKzB4Zi8weDM4Cj4gPiArW8KgwqDCoCA5Ljc0ODg1N10gcGMg
+OiBbPDAwMTFlNGJlPl3CoMKgwqAgbHIgOiBbPDAwMTFmOWUzPl3CoMKgwqAgcHNyOiAwMTAwMDAw
+Ygo+ID4gK1vCoMKgwqAgOS43NTUzNzNdIHNwIDogMDBiYzdiZTDCoCBpcCA6IDAwMDAwMDAwwqAg
+ZnAgOiAwMDFmM2FjNAo+ID4gK1vCoMKgwqAgOS43NjA4MTJdIHIxMDogMDAyNjEwZDDCoCByOSA6
+IDAxZWZlOTIwwqAgcjggOiAwMDU0MDU2MAo+ID4gK1vCoMKgwqAgOS43NjYyNjldIHI3IDogMDJl
+N2RkYjDCoCByNiA6IDAxNzNlZWQ4wqAgcjUgOiAwMDAwMDAwMMKgIHI0IDogMDA0MDI3YzAKPiA+
+ICtbwqDCoMKgIDkuNzczMDgxXSByMyA6IDAwMTFlNGJmwqAgcjIgOiAwMmU3ZGRiMMKgIHIxIDog
+MDE3M2VlZDjCoCByMCA6IDFkMzI2N2I4Cj4gPiArW8KgwqDCoCA5Ljc3OTkxMV0geFBTUjogMDEw
+MDAwMGIKPiA+ICtbwqDCoMKgIDkuNzgyNzE5XSBDUFU6IDAgUElEOiA0OSBDb21tOiBzaCBOb3Qg
+dGFpbnRlZCA1LjEzLjAtcmM1ICM5Cj4gPiArW8KgwqDCoCA5Ljc4ODc5MV0gSGFyZHdhcmUgbmFt
+ZTogU1RNMzIgKERldmljZSBUcmVlIFN1cHBvcnQpCj4gPiArW8KgwqDCoCA5Ljc5NDEyMF0gWzww
+MDAwYWZhMT5dICh1bndpbmRfYmFja3RyYWNlKSBmcm9tIFs8MDAwMGEzM2Y+XSAKPiA+IChzaG93
+X3N0YWNrKzB4Yi8weGMpCj4gPiArW8KgwqDCoCA5LjgwMjQyMV0gWzwwMDAwYTMzZj5dIChzaG93
+X3N0YWNrKSBmcm9tIFs8MDAwMGE4ZGY+XSAKPiA+IChfX2ludmFsaWRfZW50cnkrMHg0Yi8weDRj
+KQo+ID4gKwo+ID4gK1RoZSBgcGxsX251bScgZmllbGQgaW4gdGhlIHBvc3RfZGl2X2RhdGEgY29u
+ZmlndXJhdGlvbiBjb250YWluZWQgYSB3cm9uZwo+ID4gK3ZhbHVlIHdoaWNoIGFsc28gcmVmZXJl
+bmNlZCBhbiB1bmluaXRpYWxpemVkIGhhcmR3YXJlIGNsb2NrIHdoZW4KPiA+ICtjbGtfcmVnaXN0
+ZXJfcGxsX2RpdigpIHdhcyBjYWxsZWQuCj4gPiArCj4gPiArRml4ZXM6IDUxNzYzM2VmNjMwZSAo
+ImNsazogc3RtMzJmNDogQWRkIHBvc3QgZGl2aXNvciBmb3IgSTJTICYgU0FJIFBMTHMiKQo+ID4g
+K1NpZ25lZC1vZmYtYnk6IERhcmlvIEJpbmFjY2hpIDxkYXJpb2JpbkBsaWJlcm8uaXQ+Cj4gPiAr
+Cj4gPiArLS0tCj4gPiArCj4gPiArQ2hhbmdlcyBpbiB2MjoKPiA+ICstIENoYW5nZcKgICd1OCBw
+bGxfbnVtJyBmcm9tICdzdG0zMmY0X3BsbF9wb3N0X2Rpdl9kYXRhJyBzdHJ1Y3R1cmUgaW50bwo+
+ID4gK8KgICdpbnQgcGxsX2lkeCcuCj4gPiArCj4gPiArIGRyaXZlcnMvY2xrL2Nsay1zdG0zMmY0
+LmMgfCAxMCArKysrKy0tLS0tCj4gPiArIDEgZmlsZSBjaGFuZ2VkLCA1IGluc2VydGlvbnMoKyks
+IDUgZGVsZXRpb25zKC0pCj4gPiArCj4gPiArZGlmZiAtLWdpdCBhL2RyaXZlcnMvY2xrL2Nsay1z
+dG0zMmY0LmMgYi9kcml2ZXJzL2Nsay9jbGstc3RtMzJmNC5jCj4gPiAraW5kZXggMTgxMTdjZTVm
+Zjg1Li41Yzc1ZTNkOTA2YzIgMTAwNjQ0Cj4gPiArLS0tIGEvZHJpdmVycy9jbGsvY2xrLXN0bTMy
+ZjQuYwo+ID4gKysrKyBiL2RyaXZlcnMvY2xrL2Nsay1zdG0zMmY0LmMKPiA+ICtAQCAtNTI2LDcg
+KzUyNiw3IEBAIHN0cnVjdCBzdG0zMmY0X3BsbCB7Cj4gPiArCj4gPiArIHN0cnVjdCBzdG0zMmY0
+X3BsbF9wb3N0X2Rpdl9kYXRhIHsKPiA+ICvCoMKgwqDCoMKgwqDCoCBpbnQgaWR4Owo+ID4gKy3C
+oMKgwqDCoMKgIHU4IHBsbF9udW07Cj4gPiArK8KgwqDCoMKgwqAgaW50IHBsbF9pZHg7Cj4gPiAr
+wqDCoMKgwqDCoMKgwqAgY29uc3QgY2hhciAqbmFtZTsKPiA+ICvCoMKgwqDCoMKgwqDCoCBjb25z
+dCBjaGFyICpwYXJlbnQ7Cj4gPiArwqDCoMKgwqDCoMKgwqAgdTggZmxhZzsKPiA+ICtAQCAtNTU3
+LDEzICs1NTcsMTMgQEAgc3RhdGljIGNvbnN0IHN0cnVjdCBjbGtfZGl2X3RhYmxlIAo+ID4gcG9z
+dF9kaXZyX3RhYmxlW10gPSB7Cj4gPiArCj4gPiArICNkZWZpbmUgTUFYX1BPU1RfRElWIDMKPiA+
+ICsgc3RhdGljIGNvbnN0IHN0cnVjdCBzdG0zMmY0X3BsbF9wb3N0X2Rpdl9kYXRhICAKPiA+IHBv
+c3RfZGl2X2RhdGFbTUFYX1BPU1RfRElWXSA9IHsKPiA+ICstwqDCoMKgwqDCoCB7IENMS19JMlNR
+X1BESVYsIFBMTF9JMlMsICJwbGxpMnMtcS1kaXYiLCAicGxsaTJzLXEiLAo+ID4gKyvCoMKgwqDC
+oMKgIHsgQ0xLX0kyU1FfUERJViwgUExMX1ZDT19JMlMsICJwbGxpMnMtcS1kaXYiLCAicGxsaTJz
+LXEiLAo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBDTEtfU0VUX1JBVEVfUEFS
+RU5ULCBTVE0zMkY0X1JDQ19EQ0tDRkdSLCAwLCA1LCAwLCBOVUxMfSwKPiA+ICsKPiA+ICstwqDC
+oMKgwqDCoCB7IENMS19TQUlRX1BESVYsIFBMTF9TQUksICJwbGxzYWktcS1kaXYiLCAicGxsc2Fp
+LXEiLAo+ID4gKyvCoMKgwqDCoMKgIHsgQ0xLX1NBSVFfUERJViwgUExMX1ZDT19TQUksICJwbGxz
+YWktcS1kaXYiLCAicGxsc2FpLXEiLAo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oCBDTEtfU0VUX1JBVEVfUEFSRU5ULCBTVE0zMkY0X1JDQ19EQ0tDRkdSLCA4LCA1LCAwLCBOVUxM
+IH0sCj4gPiArCj4gPiArLcKgwqDCoMKgwqAgeyBOT19JRFgsIFBMTF9TQUksICJwbGxzYWktci1k
+aXYiLCAicGxsc2FpLXIiLCBDTEtfU0VUX1JBVEVfUEFSRU5ULAo+ID4gKyvCoMKgwqDCoMKgIHsg
+Tk9fSURYLCBQTExfVkNPX1NBSSwgInBsbHNhaS1yLWRpdiIsICJwbGxzYWktciIsIAo+ID4gQ0xL
+X1NFVF9SQVRFX1BBUkVOVCwKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgU1RN
+MzJGNF9SQ0NfRENLQ0ZHUiwgMTYsIDIsIDAsIHBvc3RfZGl2cl90YWJsZSB9LAo+ID4gKyB9Owo+
+ID4gKwo+ID4gK0BAIC0xNzc0LDcgKzE3NzQsNyBAQCBzdGF0aWMgdm9pZCBfX2luaXQgc3RtMzJm
+NF9yY2NfaW5pdChzdHJ1Y3QgCj4gPiBkZXZpY2Vfbm9kZSAqbnApCj4gPiArwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgcG9zdF9k
+aXYtPndpZHRoLAo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgIHBvc3RfZGl2LT5mbGFnX2RpdiwKPiA+ICvCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBwb3N0
+X2Rpdi0+ZGl2X3RhYmxlLAo+ID4gKy3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGNsa3NbcG9zdF9kaXYtPnBsbF9udW1dLAo+ID4gKyvC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+IGNsa3NbcG9zdF9kaXYtPnBsbF9pZHhdLAo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgICZzdG0zMmY0X2Nsa19sb2NrKTsK
+PiA+ICsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgaWYgKHBvc3RfZGl2LT5p
+ZHggIT0gTk9fSURYKQo+ID4gKy0tCj4gPiArMi4xNy4xCj4gPiArCj4gPiBkaWZmIC0tZ2l0IGEv
+Y29uZmlncy9zdG0zMmY0NjlfZGlzY29fZGVmY29uZmlnIAo+ID4gYi9jb25maWdzL3N0bTMyZjQ2
+OV9kaXNjb19kZWZjb25maWcKPiA+IGluZGV4IGU1MzhhNjY0ZTIuLjE0NDBhZWZkOTUgMTAwNjQ0
+Cj4gPiAtLS0gYS9jb25maWdzL3N0bTMyZjQ2OV9kaXNjb19kZWZjb25maWcKPiA+ICsrKyBiL2Nv
+bmZpZ3Mvc3RtMzJmNDY5X2Rpc2NvX2RlZmNvbmZpZwo+ID4gQEAgLTEsNiArMSw3IEBACj4gPiAg
+wqBCUjJfYXJtPXkKPiA+ICDCoEJSMl9jb3J0ZXhfbTQ9eQo+ID4gIMKgQlIyX1BBQ0tBR0VfSE9T
+VF9MSU5VWF9IRUFERVJTX0NVU1RPTV81XzEyPXkKPiA+ICtCUjJfR0xPQkFMX1BBVENIX0RJUj0i
+Ym9hcmQvc3RtaWNyb2VsZWN0cm9uaWNzL3N0bTMyZjQ2OS1kaXNjby9wYXRjaGVzIgo+ID4gIMKg
+QlIyX1JPT1RGU19QT1NUX0JVSUxEX1NDUklQVD0iYm9hcmQvc3RtaWNyb2VsZWN0cm9uaWNzL2Nv
+bW1vbi9zdG0zMmY0eHgvc3RtMzItcG9zdC1idWlsZC5zaCBib2FyZC9zdG1pY3JvZWxlY3Ryb25p
+Y3Mvc3RtMzJmNDY5LWRpc2NvL3Bvc3QtYnVpbGQuc2giCj4gPiAgwqBCUjJfUk9PVEZTX1BPU1Rf
+SU1BR0VfU0NSSVBUPSJzdXBwb3J0L3NjcmlwdHMvZ2VuaW1hZ2Uuc2giCj4gPiAgwqBCUjJfUk9P
+VEZTX1BPU1RfU0NSSVBUX0FSR1M9Ii1jIAo+ID4gYm9hcmQvc3RtaWNyb2VsZWN0cm9uaWNzL3N0
+bTMyZjQ2OS1kaXNjby9nZW5pbWFnZS5jZmciCj4gPiAtLSAKPiA+IDIuMTcuMQo+ID4gCj4gPiAK
+PiA+IFNUIFJlc3RyaWN0ZWQKPiA+IAo+IAo+IAo+IC0tIAo+IEJlc3QgcmVnYXJkcyAvIENvcmRp
+YWxlbWVudCwKPiAKPiBDaHJpc3RvcGhlIFByaW91emVhdSB8IFRlbDogKzMzIDI0NDAyNzMyMAo+
+IFNUTWljcm9lbGVjdHJvbmljcwo+IFNUIG9ubGluZTogd3d3LnN0LmNvbTxodHRwOi8vd3d3LnN0
+LmNvbS8+Cl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1
+aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1c3lib3gubmV0Cmh0dHA6Ly9saXN0cy5i
+dXN5Ym94Lm5ldC9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
