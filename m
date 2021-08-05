@@ -2,88 +2,97 @@ Return-Path: <SRS0=evmZ=M4=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.5 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
-	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.2 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7DDC0C4338F
-	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 20:26:09 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 78965C4338F
+	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 20:27:06 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 399FE60231
-	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 20:26:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 399FE60231
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id B58FF60231
+	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 20:27:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B58FF60231
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C0C74404FF;
-	Thu,  5 Aug 2021 20:26:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7921583AA4;
+	Thu,  5 Aug 2021 20:27:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AeSHQVqFLpcL; Thu,  5 Aug 2021 20:26:07 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id tGaXFYjrX_fV; Thu,  5 Aug 2021 20:27:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CAD9840287;
-	Thu,  5 Aug 2021 20:26:06 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id BEC3A1BF3FD
- for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 20:26:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BB08A83A9B;
+	Thu,  5 Aug 2021 20:27:03 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 7BFC41BF3FD
+ for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 20:27:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AD7FF400CD
- for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 20:26:05 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6B2AC83A9B
+ for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 20:27:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Y4la-XYftRAt for <buildroot@lists.busybox.net>;
- Thu,  5 Aug 2021 20:26:03 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id tRclJj1WYpuz for <buildroot@lists.busybox.net>;
+ Thu,  5 Aug 2021 20:27:01 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
- [IPv6:2a00:1450:4864:20::436])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 743A040287
- for <buildroot@buildroot.org>; Thu,  5 Aug 2021 20:26:03 +0000 (UTC)
-Received: by mail-wr1-x436.google.com with SMTP id z4so8136367wrv.11
- for <buildroot@buildroot.org>; Thu, 05 Aug 2021 13:26:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
- h=from:to:cc:subject:date:message-id:mime-version
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com
+ [IPv6:2a00:1450:4864:20::52d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 736EC83A99
+ for <buildroot@buildroot.org>; Thu,  5 Aug 2021 20:27:01 +0000 (UTC)
+Received: by mail-ed1-x52d.google.com with SMTP id g21so10166229edb.4
+ for <buildroot@buildroot.org>; Thu, 05 Aug 2021 13:27:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=subject:to:cc:references:from:organization:message-id:date
+ :user-agent:mime-version:in-reply-to:content-language
  :content-transfer-encoding;
- bh=kVhg0QTbVN+xkZ6JHEljUvVySictkvUCB/vz3j+ZKB8=;
- b=g5AiOR69Sa2M2h/QMAYiQxywmjyC4uoRdt8S4WO9wA/MSpdherKz3gnzX6Ms77AENX
- 5ij4PdEvw98QEscTZMYznjafy9R/8jZ4c5MXWJY6u42VzzP2G8bfJaNKukE6b8aMmKF1
- R+hyh/cRN/tbxb3d5L+sJOFtPIeGAcCcytbPyQCASmKXFbiVdWMTS8SBSoNSTS5J7/Uw
- TBLyq5Ajoh2qvmXUBDWjKwTNWWwupLWl+AX72AQMgNtuhRfU4AE/GKdErLm3Ag9w+dGg
- 5My1ZOp+VUM/pu2NpZIgXy2q7g0RV9qHwWSNXGmf3WlQ6faoHowcjz0wwXykryAmZHKE
- tn8A==
+ bh=vzgGbif8H9itXOlJjrVZ2P3RnrOrxPcT4ytrff1PwvM=;
+ b=bqJXtGG096/WTayssTHTa7glVQyP/yc9wsnwwZWAQLGdYRaghoEHEOPf2h1AAcZnJF
+ reHX4TYgvkjdkAAw0m163pZ5beJyIyNz2FBswWhH5vAccsbaQCNd3NPT502ZFT1zdibc
+ xLMxItL4WpfWOnpaT/w0Th701+chnLVAToys/toWRHqw9PJ5p+GZvFlVJFWrPxnuj3Mt
+ xP2qo7Om4Q8jM8skcdtL73xAbaGSOsLtOfqGocZGEDQVd8deNjrMrOBMgS8KuRi9RRVv
+ mKDOFzbcGdDzmVR+5KjWEF/bcvN5Kh0C66/gewKbY4momiq3O3sYWu/uZhzp0GAZs3+s
+ 1hNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=kVhg0QTbVN+xkZ6JHEljUvVySictkvUCB/vz3j+ZKB8=;
- b=DqXIwbe2lSqObE/JlI1O0oQ2RwVyFPLMeDGEtrDOwydO+JfyQ5xKaKMWmsxqujAlim
- F05kq0BlQH3U6v3mCy37DRp/vJpbE/UXN5X2l+pPU4gUgpQACzHyvvVFt+vXwl4zEwDF
- V4JInZKrlWkxkTqupdQsaUTSDC3i7MoEPpFccRZHyVdSLov+EWxi6JaDqGP1Zs8heZMN
- LZSmdb3ZcRTmavRjA8Qgr7zh0Ih6LfnyncE0CX/tzIDo8yZp+QZa0R/iMDIcsl+vpsYw
- D9V1uYV2+dTSc0xfhjLxd271k0r0/uKF3jIZLgQ/VWr5NTQt16X9pkD015Gv7PvnnqR2
- sVWQ==
-X-Gm-Message-State: AOAM532HT/Lwr/dkAlr8BJQP9ywRdN6Nlb3CQSbbTHhh/hyrVlLERH3J
- 51E0GtmvnwUwbSjLalJ2uAL9c46jJbDNoA==
-X-Google-Smtp-Source: ABdhPJy856jB42vqMIS7mjAdF/q9AgwDBvjmfbhMgaUtac4/TSKZwCmzESX/1UHUqTuRYFE7SmwitQ==
-X-Received: by 2002:a5d:4dc7:: with SMTP id f7mr7378474wru.118.1628195161412; 
- Thu, 05 Aug 2021 13:26:01 -0700 (PDT)
-Received: from kali.home (pop.92-184-97-59.mobile.abo.orange.fr.
- [92.184.97.59])
- by smtp.gmail.com with ESMTPSA id q124sm2050930wma.42.2021.08.05.13.26.00
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 05 Aug 2021 13:26:00 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Thu,  5 Aug 2021 22:25:17 +0200
-Message-Id: <20210805202517.2665707-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.30.2
+ h=x-gm-message-state:subject:to:cc:references:from:organization
+ :message-id:date:user-agent:mime-version:in-reply-to
+ :content-language:content-transfer-encoding;
+ bh=vzgGbif8H9itXOlJjrVZ2P3RnrOrxPcT4ytrff1PwvM=;
+ b=Fhd/g1GyIVnxpXAVecgHQMtcI23uft/3FLnUd+rey6Ql2j/Xioei6xP0X/MNbo2Sq4
+ pkTqfEgYBImyIBMJNB6Enm921GCUdFu4JwkBcaz04y5tE/iW+cVfNqlg84secUBN/m1H
+ jTeqPnUYZHUJwt/LIWUJPwkUHg5jjXS3j6+FFy9lvOadYp8qqHBKU47a425WgedR6M2V
+ QEDtsnNLFhi1NqqwMpdKjJrJI29hL0CBrufxMnrBKWTBBz1ubbqIiITALqwSqOLqO+/8
+ lywyvZCw4HYcE+T+IJdqflPpVr1Tekwu0B8Ga2RHwudNGY2ObN24Ue5EFuGfWaGVbapw
+ cjRA==
+X-Gm-Message-State: AOAM530Xuw5TEAkaCNPQUafY7/geLwwFQx3awVtyXt53t9hDfd1/JkUG
+ Vn9gj096jlzF5m0V5fHDAP/MsOIvO//EUFvGoNI=
+X-Google-Smtp-Source: ABdhPJwfneUKy34QONwqWX6GbI6RzcAYZUkCC7wF9IqKXnxQw8gGEdeTR0GBfmr3bq3Ou55Iq4C11A==
+X-Received: by 2002:a05:6402:498:: with SMTP id
+ k24mr9166948edv.25.1628195219702; 
+ Thu, 05 Aug 2021 13:26:59 -0700 (PDT)
+Received: from ?IPv6:2001:1c01:3101:8300:5100:9bb9:68ea:c9f3?
+ (2001-1c01-3101-8300-5100-9bb9-68ea-c9f3.cable.dynamic.v6.ziggo.nl.
+ [2001:1c01:3101:8300:5100:9bb9:68ea:c9f3])
+ by smtp.gmail.com with ESMTPSA id x42sm2816117edy.86.2021.08.05.13.26.59
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Thu, 05 Aug 2021 13:26:59 -0700 (PDT)
+To: Robert Hancock <robert.hancock@calian.com>,
+ "buildroot@buildroot.org" <buildroot@buildroot.org>
+References: <4a27ed904dd80b00498185003c9a7bb26dc9a128.camel@calian.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+Message-ID: <202fcb4f-1edb-30bd-806d-e530619d510d@mind.be>
+Date: Thu, 5 Aug 2021 22:26:58 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/libebml: fix patch
+In-Reply-To: <4a27ed904dd80b00498185003c9a7bb26dc9a128.camel@calian.com>
+Content-Language: en-GB
+Subject: Re: [Buildroot] Serious time jump bug found in gpsd 3.20+
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,56 +104,45 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: "bernd.kuhls@t-online.de" <bernd.kuhls@t-online.de>,
+ Peter Korsgaard <jacmet@sunsite.dk>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-Fix patch added by commit 1116a3060955c36c43a8bea5f1f00ea4effb4e48
 
-Fixes:
- - http://autobuild.buildroot.org/results/997d0d6204ad7a5456f25392257c8d876a1289ca
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...riate-header-files-for-std-numeric_limits.patch | 14 +-------------
- 1 file changed, 1 insertion(+), 13 deletions(-)
+On 05/08/2021 22:09, Robert Hancock via buildroot wrote:
+> A heads up to the Buildroot community about a significant bug that has been
+> found in versions 3.20 and newer of the gpsd package, and which is fixed in
+> version 3.23 (not yet released, supposed to be shortly):
+> 
+> https://gitlab.com/gpsd/gpsd/-/issues/144
+> 
+> This will cause the calculated GPS time (and NTP time, if synchronizing to it)
+> to jump from 2021 back to 2002 when GPS week 2180 arrives on October 24, 2021,
+> with potentially disastrous results for applications depending on accurate time
+> keeping.
+> 
+> A patch has now been added to the gpsd repository to fix it (note that the
+> commit message incorrectly refers to 2020 rather than 2021 as pointed out by a
+> commenter): 
+> https://gitlab.com/gpsd/gpsd/-/commit/7f30d88d04dc62b8bd6265ad1d09d72d220f97f6
+> 
+> I am not sure if the best solution for Buildroot is to just update the package
+> when released, or apply the specific patch to fix the issue? Currently
+> Buildroot master is on 3.21 and the 2021.02.x LTS branch is on 3.20, both of
+> which are affected.
 
-diff --git a/package/libebml/0001-include-appropriate-header-files-for-std-numeric_limits.patch b/package/libebml/0001-include-appropriate-header-files-for-std-numeric_limits.patch
-index 83d1b92051..c7e789c02e 100644
---- a/package/libebml/0001-include-appropriate-header-files-for-std-numeric_limits.patch
-+++ b/package/libebml/0001-include-appropriate-header-files-for-std-numeric_limits.patch
-@@ -5,7 +5,7 @@ Subject: [PATCH] include appropriate header files for std::numeric_limits
- 
- Fixes #80.
- 
--[Retrieved from:
-+[Retrieved (and updated to remove ChangeLog update) from:
- https://github.com/Matroska-Org/libebml/commit/f0bfd53647961e799a43d918c46cf3b6bff89806]
- Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- ---
-@@ -14,18 +14,6 @@ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-  src/EbmlUnicodeString.cpp | 1 +
-  3 files changed, 6 insertions(+)
- 
--diff --git a/ChangeLog b/ChangeLog
--index 034cf86..e4b13a9 100644
----- a/ChangeLog
--+++ b/ChangeLog
--@@ -1,3 +1,7 @@
--+2021-02-27  Moritz Bunkus  <mo@bunkus.online>
--+
--+        * Fix compilation with g++ 11. Fixes #80.
--+
-- 2021-02-21 Steve Lhomme <slhomme@matroska.org>
-- 
--         * Remove Coremake project files
- diff --git a/src/EbmlString.cpp b/src/EbmlString.cpp
- index 27e55fd..4c05fcf 100644
- --- a/src/EbmlString.cpp
--- 
-2.30.2
+ For master, I think we can still afford to update to 3.23.
+
+ For 2021.05.x and 2021.02.x, we'll need to backport the patch. Unless if Peter
+thinks that in this case (since upstream's policy is "always update to latest")
+it's OK to just bump it there as well?
+
+ Regards,
+ Arnout
 
 _______________________________________________
 buildroot mailing list
