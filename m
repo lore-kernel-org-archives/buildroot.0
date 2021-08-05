@@ -8,83 +8,84 @@ X-Spam-Status: No, score=-18.5 required=3.0 tests=BAYES_00,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B9BDFC4338F
-	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 08:59:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E6FAC43216
+	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 09:00:08 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 658F160F38
-	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 08:59:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 658F160F38
+	by mail.kernel.org (Postfix) with ESMTPS id CCCBC61029
+	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 09:00:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org CCCBC61029
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 329F781A5F;
-	Thu,  5 Aug 2021 08:59:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A0AE9825BF;
+	Thu,  5 Aug 2021 09:00:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BftKHzpofBKf; Thu,  5 Aug 2021 08:59:15 +0000 (UTC)
+	with ESMTP id YS06nGdhD0zI; Thu,  5 Aug 2021 09:00:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5A5BC818A1;
-	Thu,  5 Aug 2021 08:59:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EA06F8343F;
+	Thu,  5 Aug 2021 09:00:05 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4B5F21BF20B
- for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 08:59:12 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0831D1BF865
+ for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 09:00:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 47FE283947
- for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 08:59:12 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 04DE48343F
+ for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 09:00:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EADR2l4uIN_S for <buildroot@lists.busybox.net>;
- Thu,  5 Aug 2021 08:59:11 +0000 (UTC)
+ with ESMTP id Q5fYjsjjGSEK for <buildroot@lists.busybox.net>;
+ Thu,  5 Aug 2021 09:00:04 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
- [IPv6:2a00:1450:4864:20::329])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 55679838C9
- for <buildroot@buildroot.org>; Thu,  5 Aug 2021 08:59:11 +0000 (UTC)
-Received: by mail-wm1-x329.google.com with SMTP id
- l11-20020a7bcf0b0000b0290253545c2997so3149471wmg.4
- for <buildroot@buildroot.org>; Thu, 05 Aug 2021 01:59:11 -0700 (PDT)
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
+ [IPv6:2a00:1450:4864:20::32a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1F65F825D3
+ for <buildroot@buildroot.org>; Thu,  5 Aug 2021 09:00:03 +0000 (UTC)
+Received: by mail-wm1-x32a.google.com with SMTP id
+ h24-20020a1ccc180000b029022e0571d1a0so3146337wmb.5
+ for <buildroot@buildroot.org>; Thu, 05 Aug 2021 02:00:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=WMUpNiFWrYlKcmxqbVvG9zxzwwZXP1QmoZrTZ1v+tDk=;
- b=Qhz1wWSS6GTm+Ni+tMWPhVX8xUib6kJ3Ply/h+sD3tyw2uoXsXVgIHU9uA9wNtA8o6
- EqVGiRDEMPgOQeYc0TQrivqLHZN9PP8l9TUrfdPfNswuE/rnGXti/Dbh22a0ryZHhyBl
- aRVswQV/gxawZLCrqJ0aHSDgp9YSArXNf6cQ70/lMDTMRJj9C98ToHaWiW6u5CQ+gzE3
- ncUdbHz1hMgLOhFOM1t0de0iyv4jl5pOlUgsz5Ep4hV+IFfsK1IJSshnL+mi6DiPLVOr
- NUD4ydAzz5IaVyNQVpLruxoBq5ELJJbAHGZd7n0c4lL3j+khveodc6BqU9QRr1PCuvfG
- JNmg==
+ bh=/r7Ep4UdXjsSOBLf43lDyco5E+fdU0WXPV4WhdKrFu8=;
+ b=Il6ggb8UCCGDgQ+5WU0sFAubJo67oMOZ+H84m6vfGrUGhc/M4N48xDLvCqBHgZ5aIU
+ V75GVxs21x+mFLCvYWtZ1bIHZk0X9RIDqrLlsyPc7psHTL8RtJCqOsJCAq2Gr/bWtkN/
+ q7AYVlm4YtVoNFfUTRGdFrGzF9WnhUwlPOT9YqRKfXD4LsSSAb6dkh30gcWdg76VcE4s
+ pGATsprINuZUp+brbSLk1YVNuV4GsrM9PJcTpotKc0hPRqFTHCn033iMvhirSTR4RDDz
+ 1r0lSfbcHfwmVVgRxU5fflB8Fv034X/R9I5sEKtjkuY/4ziwlxjBxlXKyJg7C8d5DEal
+ W1LQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=WMUpNiFWrYlKcmxqbVvG9zxzwwZXP1QmoZrTZ1v+tDk=;
- b=L2gqEO0abHi0ylpN1KuONVj0IQfqF941DjnID1nbXJF6P/5mnbXPyqoGHOZDmRClny
- ECBP9N0PWoK68ax4GlMIh76BsybHP8krwglXvgEQay4opoITfg5kojiZBczMo6PpTZkt
- FWfGb8MUt9DHURTNO6u/dIGRGNj2uGwZc0HgGp9e7MxT82TN4X2xD9HWh+vgNoNjuSBg
- Xk669xarUfgJKdPjG/JMl7uhkyLK85k1lc4BuSmL6o1zGKnJfN01SWv2KZ03q9n0Jya8
- 4l/gI+u+L5zTl88f5K9d38leDVjvjSSZL5j5APf0CJTJB4s1AJ6j7FfRJn9o/4aSapwP
- u9nA==
-X-Gm-Message-State: AOAM53070IPsV8E/zfai0Ds9gfF0lUTLJE9PKkaCQ0NRL2VHU59RcZsY
- 7Fbi8WIcqAcMmD6ZrfTgeRu77pm/Sy7Orw==
-X-Google-Smtp-Source: ABdhPJzgjS0NdbpX3J7TmsKcIKzQtc/IdZ/yEYq8OB00BpENAt5Pv1rRLtYCX93vlejial8L+SHNmg==
-X-Received: by 2002:a1c:7709:: with SMTP id t9mr14013093wmi.161.1628153949300; 
- Thu, 05 Aug 2021 01:59:09 -0700 (PDT)
+ bh=/r7Ep4UdXjsSOBLf43lDyco5E+fdU0WXPV4WhdKrFu8=;
+ b=NoMYWN/sBBtgUrAlC3dO42jDLUtsU2OjAmI2HKdbF/a3nqY0A2MFeXIZbup9lzjoVo
+ P7VKsQDEPmGTaKDaPbQuqInKvQr3U3J1SWHxGafhTfmRDhPwXzvTxh/HOdZXOXD13zPb
+ BX87nlaXsnAPY8pLGM19/7lahjjiFS4L6Z3JOcmqnT1ZXsGrdfOpuYF2MqsiXVt0pvXI
+ ZgMifsY3hPbzxAjIHkbAjTb36WycdYAjdtuJEcP0TAJ8Y1kT+Y+H6tlj5FGiFpBZFqlC
+ qKUzAvwAKwUaFr0Ts56twfmkMfPa4PJFC5vYMTX9nrZs2Q9rknt/KPZvQ2EJ4rDCr7eD
+ d1bg==
+X-Gm-Message-State: AOAM53265StYy1bKyN7ZdDgQKOCi3LoLmlt4UiR2BeiEc7v1eeajFgIQ
+ ZDXajyK3hX2d9v8EqQEW+XFrkHgq4BlAdA==
+X-Google-Smtp-Source: ABdhPJy1UASU8T1uQ9hGLOSicC82qranr+6wqhRPwENWKlMYDGDxxAyIFQ+KLl94zN/z8zAoqcJtWQ==
+X-Received: by 2002:a05:600c:4105:: with SMTP id
+ j5mr14148677wmi.86.1628154002123; 
+ Thu, 05 Aug 2021 02:00:02 -0700 (PDT)
 Received: from kali.home (pop.92-184-97-192.mobile.abo.orange.fr.
  [92.184.97.192])
- by smtp.gmail.com with ESMTPSA id r133sm10272199wma.18.2021.08.05.01.59.07
+ by smtp.gmail.com with ESMTPSA id b15sm5514771wrx.73.2021.08.05.02.00.01
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 05 Aug 2021 01:59:08 -0700 (PDT)
+ Thu, 05 Aug 2021 02:00:01 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu,  5 Aug 2021 10:58:54 +0200
-Message-Id: <20210805085854.2105405-1-fontaine.fabrice@gmail.com>
+Date: Thu,  5 Aug 2021 10:59:55 +0200
+Message-Id: <20210805085955.2105652-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2,1/1] package/libebml: fix build with gcc 11
+Subject: [Buildroot] [PATCH 1/1] package/uhd: fix build with gcc 11
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,7 +97,8 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
@@ -104,75 +106,55 @@ Sender: "buildroot" <buildroot-bounces@busybox.net>
 
 Fix the following build failure with gcc 11:
 
-/tmp/instance-0/output-1/build/libebml-1.4.2/src/EbmlString.cpp: In member function 'virtual filepos_t libebml::EbmlString::ReadData(libebml::IOCallback&, libebml::ScopeMode)':
-/tmp/instance-0/output-1/build/libebml-1.4.2/src/EbmlString.cpp:147:41: error: 'numeric_limits' is not a member of 'std'
-  147 |     auto Buffer = (GetSize() + 1 < std::numeric_limits<std::size_t>::max()) ? new (std::nothrow) char[GetSize() + 1] : nullptr;
-      |                                         ^~~~~~~~~~~~~~
-/tmp/instance-0/output-1/build/libebml-1.4.2/src/EbmlString.cpp:147:67: error: expected primary-expression before '>' token
-  147 |     auto Buffer = (GetSize() + 1 < std::numeric_limits<std::size_t>::max()) ? new (std::nothrow) char[GetSize() + 1] : nullptr;
-      |                                                                   ^
-/tmp/instance-0/output-1/build/libebml-1.4.2/src/EbmlString.cpp:147:70: error: '::max' has not been declared; did you mean 'std::max'?
-  147 |     auto Buffer = (GetSize() + 1 < std::numeric_limits<std::size_t>::max()) ? new (std::nothrow) char[GetSize() + 1] : nullptr;
-      |                                                                      ^~~
-      |                                                                      std::max
+In file included from /tmp/instance-4/output-1/build/uhd-3.15.0.0/host/lib/usrp/dboard/e3xx/e3xx_ad9361_iface.hpp:14,
+                 from /tmp/instance-4/output-1/build/uhd-3.15.0.0/host/lib/usrp/dboard/e3xx/e3xx_ad9361_iface.cpp:7:
+/tmp/instance-4/output-1/build/uhd-3.15.0.0/host/lib/include/uhdlib/utils/rpc.hpp: In function 'bool {anonymous}::await_rpc_connected_state(std::shared_ptr<rpc::client>, std::chrono::milliseconds)':
+/tmp/instance-4/output-1/build/uhd-3.15.0.0/host/lib/include/uhdlib/utils/rpc.hpp:28:27: error: 'sleep_for' is not a member of 'std::this_thread'
+   28 |         std::this_thread::sleep_for(std::chrono::milliseconds(1));
+      |                           ^~~~~~~~~
 
 Fixes:
- - http://autobuild.buildroot.org/results/3a28507127eae47994ca62e2b656da32bd2fb1f8
+ - http://autobuild.buildroot.org/results/1591ff7fabb09e4eb79f3aa293fbb228c255c45b
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Changes v1 -> v2:
- - Remove ChangeLog update from patch
+ ...-lib-Fix-missing-includes-in-rpc-hpp.patch | 28 +++++++++++++++++++
+ 1 file changed, 28 insertions(+)
+ create mode 100644 package/uhd/0004-lib-Fix-missing-includes-in-rpc-hpp.patch
 
- ...-header-files-for-std-numeric_limits.patch | 40 +++++++++++++++++++
- 1 file changed, 40 insertions(+)
- create mode 100644 package/libebml/0001-include-appropriate-header-files-for-std-numeric_limits.patch
-
-diff --git a/package/libebml/0001-include-appropriate-header-files-for-std-numeric_limits.patch b/package/libebml/0001-include-appropriate-header-files-for-std-numeric_limits.patch
+diff --git a/package/uhd/0004-lib-Fix-missing-includes-in-rpc-hpp.patch b/package/uhd/0004-lib-Fix-missing-includes-in-rpc-hpp.patch
 new file mode 100644
-index 0000000000..c7e789c02e
+index 0000000000..b287beec71
 --- /dev/null
-+++ b/package/libebml/0001-include-appropriate-header-files-for-std-numeric_limits.patch
-@@ -0,0 +1,40 @@
-+From f0bfd53647961e799a43d918c46cf3b6bff89806 Mon Sep 17 00:00:00 2001
-+From: Moritz Bunkus <mo@bunkus.online>
-+Date: Sat, 27 Feb 2021 20:36:52 +0100
-+Subject: [PATCH] include appropriate header files for std::numeric_limits
++++ b/package/uhd/0004-lib-Fix-missing-includes-in-rpc-hpp.patch
+@@ -0,0 +1,28 @@
++From 9c4d9d826a6f40f199c526afd5ec168d5d088591 Mon Sep 17 00:00:00 2001
++From: Martin Braun <martin.braun@ettus.com>
++Date: Fri, 29 Jan 2021 12:23:50 +0100
++Subject: [PATCH] lib: Fix missing includes in rpc.hpp
 +
-+Fixes #80.
-+
-+[Retrieved (and updated to remove ChangeLog update) from:
-+https://github.com/Matroska-Org/libebml/commit/f0bfd53647961e799a43d918c46cf3b6bff89806]
++[Retrieved from:
++https://github.com/EttusResearch/uhd/commit/9c4d9d826a6f40f199c526afd5ec168d5d088591]
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 +---
-+ ChangeLog                 | 4 ++++
-+ src/EbmlString.cpp        | 1 +
-+ src/EbmlUnicodeString.cpp | 1 +
-+ 3 files changed, 6 insertions(+)
++ host/lib/include/uhdlib/utils/rpc.hpp | 4 ++++
++ 1 file changed, 4 insertions(+)
 +
-+diff --git a/src/EbmlString.cpp b/src/EbmlString.cpp
-+index 27e55fd..4c05fcf 100644
-+--- a/src/EbmlString.cpp
-++++ b/src/EbmlString.cpp
-+@@ -34,6 +34,7 @@
-+   \author Steve Lhomme     <robux4 @ users.sf.net>
-+ */
-+ #include <cassert>
-++#include <limits>
++diff --git a/host/lib/include/uhdlib/utils/rpc.hpp b/host/lib/include/uhdlib/utils/rpc.hpp
++index e87a2ee324..ca89c10547 100644
++--- a/host/lib/include/uhdlib/utils/rpc.hpp
+++++ b/host/lib/include/uhdlib/utils/rpc.hpp
++@@ -12,7 +12,11 @@
++ #include <rpc/client.h>
++ #include <rpc/rpc_error.h>
++ #include <boost/format.hpp>
+++#include <chrono>
++ #include <memory>
+++#include <mutex>
+++#include <string>
+++#include <thread>
 + 
-+ #include "ebml/EbmlString.h"
-+ 
-+diff --git a/src/EbmlUnicodeString.cpp b/src/EbmlUnicodeString.cpp
-+index 496a16a..99fc073 100644
-+--- a/src/EbmlUnicodeString.cpp
-++++ b/src/EbmlUnicodeString.cpp
-+@@ -36,6 +36,7 @@
-+ */
-+ 
-+ #include <cassert>
-++#include <limits>
-+ 
-+ #include "ebml/EbmlUnicodeString.h"
++ namespace {
 + 
 -- 
 2.30.2
