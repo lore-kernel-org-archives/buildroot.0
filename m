@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B72B2C4338F
-	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 11:07:47 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F816C4338F
+	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 11:08:00 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 7B1B961004
-	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 11:07:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7B1B961004
+	by mail.kernel.org (Postfix) with ESMTPS id D1D4961107
+	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 11:07:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D1D4961107
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5217D60A73;
-	Thu,  5 Aug 2021 11:07:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A486183A90;
+	Thu,  5 Aug 2021 11:07:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pVF3qbjw7RNZ; Thu,  5 Aug 2021 11:07:46 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ycROUd_w6aGG; Thu,  5 Aug 2021 11:07:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9E2F660609;
-	Thu,  5 Aug 2021 11:07:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 102AB83A6E;
+	Thu,  5 Aug 2021 11:07:58 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 444FB1BF844
- for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 11:07:08 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id BCD161BF844
+ for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 11:07:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BFE6F60AA5
- for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 11:07:06 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3251660A73
+ for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 11:07:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YBou925FUnCF for <buildroot@lists.busybox.net>;
+ with ESMTP id 5h9-MZA59t9l for <buildroot@lists.busybox.net>;
  Thu,  5 Aug 2021 11:07:05 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 146B260A8E
- for <buildroot@buildroot.org>; Thu,  5 Aug 2021 11:07:05 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 059C960A7C
+ for <buildroot@buildroot.org>; Thu,  5 Aug 2021 11:07:04 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 9B3558B7A3; Thu,  5 Aug 2021 11:06:53 +0000 (UTC)
+ id 8F5C88B79F; Thu,  5 Aug 2021 11:06:53 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 5 Aug 2021 12:58:29 +0200
+Date: Thu, 5 Aug 2021 12:47:49 +0200
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: cd2f7d0ab26655de585fbb21fd8cef7f0cc72cf1
-X-Git-Newrev: da9ea44cdbae8e797043eb6a5f0c7e7d5cb5ec8d
+X-Git-Oldrev: 0898fde96832ade8b7143f64dd4a1ad7e37cb20f
+X-Git-Newrev: cd2f7d0ab26655de585fbb21fd8cef7f0cc72cf1
 X-Patchwork-Hint: ignore
-Message-Id: <20210805110653.9B3558B7A3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] Config.in: add
- BR2_PIC_PIE_ARCH_SUPPORTS hidden option
+Message-Id: <20210805110653.8F5C88B79F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/postgresql: add
+ cflags_sl option to pg_config
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,70 +70,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=da9ea44cdbae8e797043eb6a5f0c7e7d5cb5ec8d
+commit: https://git.buildroot.net/buildroot/commit/?id=cd2f7d0ab26655de585fbb21fd8cef7f0cc72cf1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-The nios2 architecture is already excluded from PIC/PIE due to issues,
-and we're going to also exclude Microblaze, so let's introduce a
-BR2_PIC_PIE_ARCH_SUPPORTS hidden boolean to facilitate adding this new
-architecture exclusion.
+Some external packages call pg_config to determine the installed
+PostgreSQL cflags_sl option. Add this output to Buildroots own
+pg_config, so these packages correctly compile.
 
+Default value is defined at src/template/linux as:
+
+Extra CFLAGS for code that will go into a shared library
+CFLAGS_SL="-fPIC"
+
+Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 70dd4bd156bac2bde07751dc3c4d5da9b14d7d7c)
+(cherry picked from commit ed4cfbb7730b0172f1e503a279e214810eec049f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Config.in | 15 ++++++++++-----
- 1 file changed, 10 insertions(+), 5 deletions(-)
+ package/postgresql/pg_config | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/Config.in b/Config.in
-index 18a90b3f62..d0be8ada88 100644
---- a/Config.in
-+++ b/Config.in
-@@ -713,10 +713,15 @@ endmenu
- 
- comment "Security Hardening Options"
- 
--config BR2_PIC_PIE
--	bool "Build code with PIC/PIE"
-+config BR2_PIC_PIE_ARCH_SUPPORTS
-+	bool
-+	default y
- 	# Nios2 toolchains produce non working binaries with -fPIC
- 	depends on !BR2_nios2
-+
-+config BR2_PIC_PIE
-+	bool "Build code with PIC/PIE"
-+	depends on BR2_PIC_PIE_ARCH_SUPPORTS
- 	depends on BR2_SHARED_LIBS
- 	depends on BR2_TOOLCHAIN_SUPPORTS_PIE
- 	help
-@@ -724,7 +729,7 @@ config BR2_PIC_PIE
- 	  Position-Independent Executables (PIE).
- 
- comment "PIC/PIE needs a toolchain w/ PIE"
--	depends on !BR2_nios2
-+	depends on BR2_PIC_PIE_ARCH_SUPPORTS
- 	depends on BR2_SHARED_LIBS
- 	depends on !BR2_TOOLCHAIN_SUPPORTS_PIE
- 
-@@ -811,7 +816,7 @@ config BR2_RELRO_PARTIAL
- 
- config BR2_RELRO_FULL
- 	bool "Full"
--	depends on !BR2_nios2 # BR2_PIC_PIE
-+	depends on BR2_PIC_PIE_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_SUPPORTS_PIE
- 	select BR2_PIC_PIE
- 	help
-@@ -820,7 +825,7 @@ config BR2_RELRO_FULL
- 	  program loading, i.e every time an executable is started.
- 
- comment "RELRO Full needs a toolchain w/ PIE"
--	depends on !BR2_nios2
-+	depends on BR2_PIC_PIE_ARCH_SUPPORTS
- 	depends on !BR2_TOOLCHAIN_SUPPORTS_PIE
- 
- endchoice
+diff --git a/package/postgresql/pg_config b/package/postgresql/pg_config
+index 3b0cb35f2c..099f1ee390 100644
+--- a/package/postgresql/pg_config
++++ b/package/postgresql/pg_config
+@@ -31,6 +31,10 @@ case "$1" in
+   --cflags)
+ 	echo "@TARGET_CFLAGS@"
+ 	;;
++  --cflags_sl)
++	# defined at src/template/linux
++	echo "-fPIC"
++	;;
+   --cc)
+ 	echo "@TARGET_CC@"
+ 	;;
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
