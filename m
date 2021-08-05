@@ -2,100 +2,92 @@ Return-Path: <SRS0=evmZ=M4=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-21.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2BA3AC4338F
-	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 15:55:31 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F3CD3C4338F
+	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 16:17:09 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 7B19361131
-	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 15:55:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7B19361131
+	by mail.kernel.org (Postfix) with ESMTPS id 25BAA60F58
+	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 16:17:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 25BAA60F58
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 500284036E;
-	Thu,  5 Aug 2021 15:55:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E1CB460871;
+	Thu,  5 Aug 2021 16:17:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qS4dP7jHuGFQ; Thu,  5 Aug 2021 15:55:29 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 87DAE403A8;
-	Thu,  5 Aug 2021 15:55:28 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 055771BF471
- for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 15:55:27 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E6CE060767
- for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 15:55:26 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FrjRoG4MCuUZ for <buildroot@lists.busybox.net>;
- Thu,  5 Aug 2021 15:55:25 +0000 (UTC)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id vgz4P9lhG8KT; Thu,  5 Aug 2021 16:17:07 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 002D360ADB;
+	Thu,  5 Aug 2021 16:17:06 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 177521BF574
+ for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 16:17:06 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1426A405E9
+ for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 16:17:06 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id n7VfLD4ZkN8l for <buildroot@lists.busybox.net>;
+ Thu,  5 Aug 2021 16:17:05 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com
- [IPv6:2a00:1450:4864:20::62e])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1568C6069D
- for <buildroot@buildroot.org>; Thu,  5 Aug 2021 15:55:24 +0000 (UTC)
-Received: by mail-ej1-x62e.google.com with SMTP id e19so10362263ejs.9
- for <buildroot@buildroot.org>; Thu, 05 Aug 2021 08:55:24 -0700 (PDT)
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com
+ [IPv6:2a00:1450:4864:20::341])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E4FEF405E0
+ for <buildroot@buildroot.org>; Thu,  5 Aug 2021 16:17:04 +0000 (UTC)
+Received: by mail-wm1-x341.google.com with SMTP id
+ k38-20020a05600c1ca6b029025af5e0f38bso6733576wms.5
+ for <buildroot@buildroot.org>; Thu, 05 Aug 2021 09:17:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=subject:to:references:from:organization:message-id:date:user-agent
- :mime-version:in-reply-to:content-language:content-transfer-encoding;
- bh=zDSe1YSeGhnsqcqiiHdNmwKCmumfSZa6WfTfBzFpeME=;
- b=aP0L76AZggW0QfLx4HKwEt1N/dZzkqZJYnUEdcTV5cB473Gwi2imBUQ01zr9/QEy5Z
- yKcZ8IfihUk9BZHITnCK3JlvZtRAEAws1lcLKlOMAzCr6mpuHBb3ZxIbHwUk52L3HS4i
- eT9n/MiCigNbL36kFzlsjcvpd0jXn0ogncrWND3P79F924/It3zbE5EtxGIiJNrR2vsQ
- b7gcRc+OanIfqWgSdHFls1TyRVXnF3x9zogqDIHlWtdj/eHh5vy3IFkiyQNTsflSFg/X
- NxzhSgfd6Jq+pRPLBBfX/WaAGy5p3/q4CvGRkagqMrCLuk/qM0aJwCeGN/k9omi219B1
- R3Kg==
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=bIfH6J4LeZJJtkbTwihvvAGbhud438iHom3AZyimgeI=;
+ b=f4fonPkr6KgS/FGiTz/VU+WuYlHv2cw4sh942JveYrIFUnlwoFxa/NIq6XzlWExz6+
+ HfPI6YkgP2JXKInf3AJS1g5HM5VujXJKjZmUjGPi7DIJ/r0qvmgvJv7nQrtIVxjFBING
+ BSZPx0z7NpZhV3TEEE3zmhOxG/LrkJvLJYwA/y6XeQzZRmCpTdDlnjSAdDHe1TwUoa7B
+ J3sq1GlrzF5xX5z1BivP6g47v+/UVCknB5sBsOGvyJguxZaV6BDVxp66d4DihUW4qRmD
+ 3hhpIhynenLsmofQh3Mv72T5jdb/rnffXjqAtJ7KQd7OnFcDwpvTptV+umOdkRqbr81B
+ w+tQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
- h=x-gm-message-state:subject:to:references:from:organization
- :message-id:date:user-agent:mime-version:in-reply-to
- :content-language:content-transfer-encoding;
- bh=zDSe1YSeGhnsqcqiiHdNmwKCmumfSZa6WfTfBzFpeME=;
- b=gO3fmDjjO00AiA4jJcUpwumniXIlhQHfANKLTGTilsN4J1xb9mTX7PNZxHANqVs+mR
- NaSLBZxIx+ZU3k1DHMZJCyq/1F4g0k8q2JHKwlx9e7gUWgXf16eArScP0P/yL936GARO
- RNXNLg5cRVUst1eIkzLTYbUgH5vWEbEuu7hEP0v7hK2m8N/bYaefKfrwwbap8QRtjcOm
- 0R/vuBI7fwD6xMoKj1ca+ANpxNEg0w4j3KctyH6CL1aJ41o/dXgl2ed2Lwl1BQ7BkjSP
- jJTi37v59NJGOIFDWgNB/FE2Mtx5reWKDf2fMJLpkw6RRjA9L+BKHyGH5gVTD5UBTNaW
- IDIg==
-X-Gm-Message-State: AOAM530zoTrOCy3OOSH1BN9YTRlhiXSNJ1+0XNcCjadw95VqjIl3dVZF
- m8VjPD1d+f/2vAr4OIENSFYvEEW5YheIKDSA3vg=
-X-Google-Smtp-Source: ABdhPJwjsdkxIq3a6wO1zvGB/CCAZUAE4slUyaHF/DKucvPQ79C2Ny0jcPsrxBLKyB5YZC1AhGf9yg==
-X-Received: by 2002:a17:906:b7d2:: with SMTP id
- fy18mr5669900ejb.0.1628178922923; 
- Thu, 05 Aug 2021 08:55:22 -0700 (PDT)
-Received: from ?IPv6:2001:1c01:3101:8300:5100:9bb9:68ea:c9f3?
- (2001-1c01-3101-8300-5100-9bb9-68ea-c9f3.cable.dynamic.v6.ziggo.nl.
- [2001:1c01:3101:8300:5100:9bb9:68ea:c9f3])
- by smtp.gmail.com with ESMTPSA id fi23sm1813254ejc.83.2021.08.05.08.55.22
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Thu, 05 Aug 2021 08:55:22 -0700 (PDT)
-To: Jacques Samoun <jacques.samoun33@gmail.com>,
- Buildroot Mailing List <buildroot@buildroot.org>
-References: <CACaKL1xhm-6xZFX3Qk27pbZbKiJJ6cN8TMgvhXJnEny5EVri_A@mail.gmail.com>
- <e59ce01b-a6cc-3904-98bd-70418088591d@mind.be>
- <CACaKL1wAxCZptaDqUxWdpx4VZTDisRRsOOvDC76HACjwg44kmA@mail.gmail.com>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-Message-ID: <5e535c6f-c555-6e3f-fcd9-21d0aa7e4021@mind.be>
-Date: Thu, 5 Aug 2021 17:55:21 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=bIfH6J4LeZJJtkbTwihvvAGbhud438iHom3AZyimgeI=;
+ b=iiNaqXtL/84bwEzCzCiGtvVg1+pdMjw/H15n/OAid7wfEqmc7B0bJoYXHXgKYpL8Mb
+ dwgemU1O41yrBd83hkfHXoCPQrw96e82PY/jQLaxt0Gh54kNVabV3n3xo8FBos2MWi3h
+ p6OtuSbSbzSQiiQNR4phnAEoVseMDhwHZ5ZjsR/wMzQIDIam/x+RDwhi6LRjlrEgEtzP
+ 7BIEFPlUyq5U8V3nYEs4YoPVM5DAOqUU91oCZbJolLs91BvVgkqipQEyP7zR98iF0GUo
+ 4sQlX7nBBU9N5bZSbCyBlz5lOUEgoxY+cKjFaj+IExCpphPb+MYl7z5foNQGafT48Eod
+ 9wvg==
+X-Gm-Message-State: AOAM533T6s4o1GH5jaX4SV7DQQ2Zziqvip4vwmFDKmfyyAS10W+4llfS
+ 4weul1ulf+0Sf1Z9CGnbLbIy5tqZh7r+L27euG8=
+X-Google-Smtp-Source: ABdhPJwp38zoNh0/XV9xcLKV77XNCZVVOoKhzU97aecweHbFkOhJ3dPd6fN5dJm0bvRFrdDaQ4Pwfw==
+X-Received: by 2002:a7b:c932:: with SMTP id h18mr5828002wml.152.1628180222887; 
+ Thu, 05 Aug 2021 09:17:02 -0700 (PDT)
+Received: from localhost.localdomain
+ (ptr-81imx1hcj9kuonvus06.18120a2.ip6.access.telenet.be.
+ [2a02:1811:c06:d300:a112:27e5:4992:2446])
+ by smtp.gmail.com with ESMTPSA id p5sm7393000wrd.25.2021.08.05.09.17.02
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 05 Aug 2021 09:17:02 -0700 (PDT)
+From: illia.bitkov@mind.be
+To: buildroot@buildroot.org
+Date: Thu,  5 Aug 2021 18:16:53 +0200
+Message-Id: <20210805161653.2213689-1-illia.bitkov@mind.be>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <CACaKL1wAxCZptaDqUxWdpx4VZTDisRRsOOvDC76HACjwg44kmA@mail.gmail.com>
-Content-Language: en-GB
-Subject: Re: [Buildroot] Common header files / code between packages
+Subject: [Buildroot] [PATCH 1/1] package/libcap: fix build failure due to
+ unessesary patch
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -107,77 +99,180 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Illia Bitkov <illia.bitkov@mind.be>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-IEhpIEphY3F1ZXMsCgogUGxlYXNlIHJlcGx5IHdpdGggdGhlIGxpc3QgaW4gQ2MuIFRoZSBmZWVk
-YmFjayBtYXkgYmUgdXNlZnVsIGZvciBvdGhlcnMgYXMgd2VsbC4KCgpPbiAwNS8wOC8yMDIxIDE0
-OjQ2LCBKYWNxdWVzIFNhbW91biB3cm90ZToKPiBUaGFua3MgQXJub3V0LAo+IAo+IHRoaXMgc2Vl
-bXMgZGVmaW5pdGVseSBhIGJldHRlciB3YXkuwqAKPiAKPiBDYW4gaSBhc2sgYSBzdWJzaWRpYXJ5
-wqBvbmU6IHdoYXQgaWYgeW91IHdhbnQgdG8gc2hhcmUgc29tZSBjb2RlIHBhY2thZ2UuCj4gRm9y
-IGV4YW1wbGUsIGkgY3JhZnRlZCBhIHNwZWNpYWxpemVkIGJ1ZmZlcnMgcGFja2FnZSAoMSBDIGZp
-bGXCoCsgMSBoZWFkZXIgZmlsZSkuCj4gCj4gQm90aCB0aGUgdXNlciBzcGFjZSBwYXJ0IGFuZCB0
-aGXCoCBkcml2ZXIgdXNlIHRoaXMgc2FtZSBjb2RlIChhcyB0aGV5IHNoYXJlCj4gYnVmZmVycyBh
-bmQgaGFuZGxlIHRoZW0gaW4gYSBjb25zdW1lci9wcm9kdWNlciBtb2RlKS4KPiBNeSBjdXJyZW50
-IGFwcHJvYWNoIGlzIGp1c3QgdGhhdCBlYWNoIHBhY2thZ2UgZ2V0cyBhIGNvcHkgb2YgdGhpcyBj
-b2RlLCB0aGVuIGl0Cj4gaXMgYnVpbHQuCj4gRG8geW91IGZlZWwgdGhpcyBpcyB0aGUgcmlnaHQg
-YXBwcm9hY2ggPwoKIFNoYXJpbmcgY29kZSBiZXR3ZWVuIHBhY2thZ2VzIGlzIG5vcm1hbGx5IGRv
-bmUgYnkgbWFraW5nIGl0IGEgbGlicmFyeSBhbmQKaW5zdGFsbGluZyBpdCB0byBTVEFHSU5HX0RJ
-Ui4gSG93ZXZlciwgdGhpcyBpcyBub3QgcG9zc2libGUgZm9yIHNoYXJpbmcgY29kZQpiZXR3ZWVu
-IHRoZSBrZXJuZWwgKG1vZHVsZSkgYW5kIHVzZXJzcGFjZSwgYmVjYXVzZSB0aGUgY29tcGlsZXIg
-b3B0aW9ucyBmb3IKYnVpbGRpbmcgaXQgZm9yIHRoZSBrZXJuZWwgYXJlIGRpZmZlcmVudCBmcm9t
-IHRoZSBvbmVzIHVzZWQgZm9yIHVzZXJzcGFjZS4KCiBIb3dldmVyLCB5b3UgY291bGQgY29tcGls
-ZSBpdCB0d2ljZSBhcyBwYXJ0IG9mIHRoZSBrZXJuZWwgbW9kdWxlIGJ1aWxkOiBvbmNlIGFzCnBh
-cnQgb2YgdGhlIGtlcm5lbCBtb2R1bGUsIGFuZCBvbmNlIG1vcmUgKHByb2JhYmx5IGluIGEgZGlm
-ZmVyZW50IE1ha2VmaWxlKSB0bwpjcmVhdGUgdGhlIGxpYnJhcnkuIFRoZW4geW91IGluc3RhbGwg
-dGhhdCBsaWJyYXJ5IGFuZCBpdCBjYW4gYmUgdXNlZCBieSB0aGUKdXNlcnNwYWNlIHBhY2thZ2Uu
-CgogSXQncyBub3QgZXhhY3RseSB0cml2aWFsIHRvIGRvIHRoaXMgKG5vdCByZWFsbHkgZGlmZmlj
-dWx0IGVpdGhlciB0aG91Z2gpLiBTbyBpZgp0aGlzIGlzIGEgcHJpdmF0ZSBwYWNrYWdlLCB5b3Ug
-bWF5IGJlIGJldHRlciBvZmYganVzdCBjb3B5aW5nIGl0LCBvciBzaGFyaW5nIGl0CnRocm91Z2gg
-ZS5nLiBhIGdpdCBzdWJtb2R1bGUuIE9yIGV2ZW4ganVzdCB1c2luZyBpdCBmcm9tIHRoZSBvdGhl
-cidzIGJ1aWxkCmRpcmVjdG9yeSwgbGlrZSB5b3Ugc3VnZ2VzdGVkIGJlZm9yZS4gVWdseSBidXQg
-aXQgd29ya3MgOi0pCgogUmVnYXJkcywKIEFybm91dAoKCj4gCj4gSmFjcXVlcwo+IAo+IAo+IE9u
-IFRodSwgQXVnIDUsIDIwMjEgYXQgMToxNSBQTSBBcm5vdXQgVmFuZGVjYXBwZWxsZSA8YXJub3V0
-QG1pbmQuYmUKPiA8bWFpbHRvOmFybm91dEBtaW5kLmJlPj4gd3JvdGU6Cj4gCj4gCj4gCj4gICAg
-IE9uIDA1LzA4LzIwMjEgMDk6MTUsIEphY3F1ZXMgU2Ftb3VuIHdyb3RlOgo+ICAgICA+IEhlbGxv
-LAo+ICAgICA+Cj4gICAgID4gbXkgZGV2ZWxvcG1lbnQgY29uc2lzdHMgb2YgYSBrZXJuZWwgZHJp
-dmVyIGFuZCBhbiBjb21wYW5pb24gdXNlciBzcGFjZSBsYXllci4KPiAgICAgPiBUaGV5IGFyZSBi
-dWlsZCBlYWNoIGluIDIgc2VwYXJhdGUgcGFja2FnZXMuIFVzaW5nIGV4dGVybmFswqB0cmVlIGJ1
-aWxkLgo+ICAgICA+Cj4gICAgID4gVGhlIHByb2JsZW0gaXMsIGkgd291bGQgbGlrZSB0byBzaGFy
-ZSBzb21lIGluY2x1ZGUgZmlsZXMgYmV0d2VlbiBib3RoCj4gICAgID4gcGFja2FnZcKgKGtlcm5l
-bCBkcml2ZXIgYW5kIHVzZXIgc3BhY2UgbGF5ZXIpLgo+ICAgICA+IFNvIGZhciwgaSBzb2x2ZWQg
-dGhhdCBieSBhZGRpbmcgYSBjb21tb24gZm9sZGVyIGNvbnRhaW5pbmcgdGhlIGluY2x1ZGUgZmls
-ZXMsCj4gICAgID4gYW5kIG1ha2luZyBpdCBwYXJ0IG9mIGVhY2ggcGFja2FnZSwgc28gaXQgYnVp
-bGRzIE9LLgo+IAo+ICAgICDCoEkgdGhpbmsgYSBtb3JlIGNvbW1vbiB3YXkgaXMgZm9yIHRoZSBr
-ZXJuZWwgbW9kdWxlIHBhY2thZ2UgdG8gYWxzbyBpbnN0YWxsIHRoZQo+ICAgICBzaGFyZWQgaW5j
-bHVkZSBmaWxlcyAodG8gJChTVEFHSU5HX0RJUikvdXNyL2luY2x1ZGUvbGludXgpLiBjcnlwdG9k
-ZXYtbGludXggaXMKPiAgICAgYW4gZXhhbXBsZSBvZiB0aGF0Lgo+IAo+ICAgICDCoEl0J3MgZXZl
-biBwb3NzaWJsZSB0byBtYWtlIHRoZSBrZXJuZWwgbW9kdWxlIHBhY2thZ2UgYnVpbGQgdGhlIGtl
-cm5lbCBtb2R1bGUKPiAgICAgb25seSBpZiBhIGtlcm5lbCBpcyBidWlsdCwgYW5kIG1ha2UgaXQg
-dG8gaW5zdGFsbCB0aGUgaGVhZGVycyByZWdhcmRsZXNzIG9mCj4gICAgIHdoZXRoZXIgYSBrZXJu
-ZWwgaXMgYnVpbHQuIFRoYXQgd2F5LCB5b3UgY2FuIGhhdmUgYSBidWlsZHJvb3QgY29uZmlndXJh
-dGlvbiB0aGF0Cj4gICAgIG9ubHkgYnVpbGRzIHRoZSB1c2Vyc3BhY2Ugd2l0aG91dCBrZXJuZWwu
-IGZ3dHMgaXMgYW4gZXhhbXBsZSBvZiB0aGF0IChpdCBkb2Vzbid0Cj4gICAgIGluc3RhbGwgaGVh
-ZGVycyB0aG91Z2gpLgo+IAo+IAo+IAo+ICAgICA+Cj4gICAgID4gTm93LCBhIHRoaXJkIHBhY2th
-Z2UsIHdob3NlIGNvZGUgaXMgY29tcGxldGVseSBvdXRzaWRlIHRoZSBmaXJzdCAyIGlzIHdpbGxp
-bmcKPiAgICAgPiBhbHNvIHRvIHVzZSB0aGlzIGluY2x1ZGUgZmlsZS4gVGhlIG9ubHkgd2F5IGkg
-Zm91bmQgc28gZmFyLCBpcyB0byBwdXQgZXhwbGljaXQKPiAgICAgPiByZWxhdGl2ZSBwYXRoIHJl
-ZmVycmluZyBmcm9tIG9uZSBwYWNrYWdlIHRvIHRoZSBvbmUgb3RoZXIsIGJ1dCB0aGlzIGlzIHVn
-bHkuCj4gICAgID4gTW9yZW92ZXIsIHRoZSBwYXRoIGRlcGVuZHMgb24gdGhlIHZlcnNpb24gb2Yg
-dGhlIHBhY2thZ2VzLCBzbyBjYW4gYnJlYWsKPiAgICAgZWFzaWx5Lgo+ICAgICA+IFRoZXJlIG11
-c3QgYmUgYSBiZXR0ZXIgd2F5IChTVEFHSU5HwqBESVIgPynCoCBidXQgaSBjb3VsZG4ndCBmaW5k
-Lgo+IAo+ICAgICDCoEluc3RhbGwgdGhlIGhlYWRlcnMgdG8gJChTVEFHSU5HX0RJUikvdXNyL2lu
-Y2x1ZGUvbGludXggKG9yIC91c3IvaW5jbHVkZSBpZgo+ICAgICB0aGF0IGlzIG1vcmUgYXBwcm9w
-cmlhdGUpLgo+IAo+IAo+ICAgICDCoFJlZ2FyZHMsCj4gICAgIMKgQXJub3V0Cj4gCj4gICAgID4K
-PiAgICAgPiBDYW4gYW55Ym9keSBnaXZlIG1lIGFuIGhpbnQgPwo+ICAgICA+IFRoYW5rcywKPiAg
-ICAgPiBKYWNxdWVzCj4gICAgID4KPiAgICAgPgo+ICAgICA+Cj4gICAgID4KPiAgICAgPgo+ICAg
-ICA+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4gICAg
-ID4gYnVpbGRyb290IG1haWxpbmcgbGlzdAo+ICAgICA+IGJ1aWxkcm9vdEBidXN5Ym94Lm5ldCA8
-bWFpbHRvOmJ1aWxkcm9vdEBidXN5Ym94Lm5ldD4KPiAgICAgPiBodHRwOi8vbGlzdHMuYnVzeWJv
-eC5uZXQvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QKPiAgICAgPGh0dHA6Ly9saXN0cy5idXN5
-Ym94Lm5ldC9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdD4KPiAgICAgPgo+IApfX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBs
-aXN0CmJ1aWxkcm9vdEBidXN5Ym94Lm5ldApodHRwOi8vbGlzdHMuYnVzeWJveC5uZXQvbWFpbG1h
-bi9saXN0aW5mby9idWlsZHJvb3QK
+From: Illia Bitkov <illia.bitkov@mind.be>
+
+Fix the following build failure which is raised since bump
+to version 2.52 in commit 38b0759432070f7a57c0fab84d44a07caead6f06
+
+	Applying 0001-Permit-compilation-with-std-c89.patch using patch:
+	patching file Makefile
+	Reversed (or previously applied) patch detected!  Skipping patch.
+	1 out of 1 hunk ignored -- saving rejects to file Makefile.rej
+	patching file libcap/cap_test.c
+	Reversed (or previously applied) patch detected!  Skipping patch.
+	1 out of 1 hunk ignored -- saving rejects to file libcap/cap_test.c.rej
+	patching file psx/psx.c
+	Reversed (or previously applied) patch detected!  Skipping patch.
+	1 out of 1 hunk ignored -- saving rejects to file psx/psx.c.rej
+	patching file tests/exploit.c
+	Reversed (or previously applied) patch detected!  Skipping patch.
+	2 out of 2 hunks ignored -- saving rejects to file tests/exploit.c.rej
+	patching file tests/libcap_launch_test.c
+	Reversed (or previously applied) patch detected!  Skipping patch.
+	1 out of 1 hunk ignored -- saving rejects to file tests/libcap_launch_test.c.rej
+	patching file tests/uns_test.c
+	Reversed (or previously applied) patch detected!  Skipping patch.
+	1 out of 1 hunk ignored -- saving rejects to file tests/uns_test.c.rej
+
+Problem is because patch was integrated into package repo
+
+Fixes:
+http://autobuild.buildroot.net/results/2f619b233e2cfb4d7eeb3cc178c849c74d11f2ca/
+Signed-off-by: Illia Bitkov <illia.bitkov@mind.be>
+---
+ ...0001-Permit-compilation-with-std-c89.patch | 123 ------------------
+ 1 file changed, 123 deletions(-)
+ delete mode 100644 package/libcap/0001-Permit-compilation-with-std-c89.patch
+
+diff --git a/package/libcap/0001-Permit-compilation-with-std-c89.patch b/package/libcap/0001-Permit-compilation-with-std-c89.patch
+deleted file mode 100644
+index 0219f09f52..0000000000
+--- a/package/libcap/0001-Permit-compilation-with-std-c89.patch
++++ /dev/null
+@@ -1,123 +0,0 @@
+-From 06ec53d0c9fcddcc071a0e07731e6c83238400e6 Mon Sep 17 00:00:00 2001
+-From: "Andrew G. Morgan" <morgan@kernel.org>
+-Date: Mon, 21 Jun 2021 17:46:43 -0700
+-Subject: Permit compilation with -std=c89.
+-
+-Tested with
+-
+-  make COPTS="-O2 -std=c89" clean all test sudotest
+-
+-This addresses the issue reported by Byron Stanoszek:
+-
+-  https://bugzilla.kernel.org/show_bug.cgi?id=213541
+-
+-Signed-off-by: Andrew G. Morgan <morgan@kernel.org>
+-
+-[Retrieved from:
+-https://git.kernel.org/pub/scm/linux/kernel/git/morgan/libcap.git/commit/?id=06ec53d0c9fcddcc071a0e07731e6c83238400e6]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- Makefile                   | 1 +
+- libcap/cap_test.c          | 1 +
+- psx/psx.c                  | 2 +-
+- tests/exploit.c            | 9 +++++++--
+- tests/libcap_launch_test.c | 6 +++---
+- tests/uns_test.c           | 3 ++-
+- 6 files changed, 15 insertions(+), 7 deletions(-)
+-
+-diff --git a/Makefile b/Makefile
+-index 9666bf0..984d502 100644
+---- a/Makefile
+-+++ b/Makefile
+-@@ -68,6 +68,7 @@ endif
+- distcheck:
+- 	./distcheck.sh
+- 	$(MAKE) DYNAMIC=yes clean all test sudotest
+-+	$(MAKE) DYNAMIC=no COPTS="-O2 -std=c89" clean all test sudotest
+- 	$(MAKE) PAM_CAP=no CC=/usr/local/musl/bin/musl-gcc clean all test sudotest
+- 	$(MAKE) clean all test sudotest
+- 	$(MAKE) distclean
+-diff --git a/libcap/cap_test.c b/libcap/cap_test.c
+-index c9e83de..a717217 100644
+---- a/libcap/cap_test.c
+-+++ b/libcap/cap_test.c
+-@@ -79,4 +79,5 @@ int main(int argc, char **argv) {
+- 	exit(1);
+-     }
+-     printf("cap_test PASS\n");
+-+    exit(0);
+- }
+-diff --git a/psx/psx.c b/psx/psx.c
+-index 12dbbc5..90dcc50 100644
+---- a/psx/psx.c
+-+++ b/psx/psx.c
+-@@ -229,7 +229,7 @@ static void psx_syscall_start(void) {
+-     psx_tracker.psx_sig = SIGSYS;
+- 
+-     psx_confirm_sigaction();
+--    psx_do_registration(); // register the main thread.
+-+    psx_do_registration(); /* register the main thread. */
+- 
+-     psx_tracker.initialized = 1;
+- }
+-diff --git a/tests/exploit.c b/tests/exploit.c
+-index 28bac88..814337c 100644
+---- a/tests/exploit.c
+-+++ b/tests/exploit.c
+-@@ -16,6 +16,10 @@
+-  * to execute arbitrary code. As such, if all but one thread drops
+-  * privilege, privilege escalation is somewhat trivial.
+-  */
+-+
+-+/* as per "man sigaction" */
+-+#define _POSIX_C_SOURCE 200809L
+-+
+- #include <pthread.h>
+- #include <signal.h>
+- #include <stdio.h>
+-@@ -148,7 +152,8 @@ int main(int argc, char **argv) {
+-     if (greatest_len != 1) {
+- 	printf("exploit succeeded\n");
+- 	exit(1);
+--    } else {
+--	printf("exploit failed\n");
+-     }
+-+
+-+    printf("exploit failed\n");
+-+    exit(0);
+- }
+-diff --git a/tests/libcap_launch_test.c b/tests/libcap_launch_test.c
+-index 6cbfc43..5286979 100644
+---- a/tests/libcap_launch_test.c
+-+++ b/tests/libcap_launch_test.c
+-@@ -199,10 +199,10 @@ int main(int argc, char **argv) {
+-     cap_free(final);
+-     cap_free(orig);
+- 
+--    if (success) {
+--	printf("cap_launch_test: PASSED\n");
+--    } else {
+-+    if (!success) {
+- 	printf("cap_launch_test: FAILED\n");
+- 	exit(1);
+-     }
+-+    printf("cap_launch_test: PASSED\n");
+-+    exit(0);
+- }
+-diff --git a/tests/uns_test.c b/tests/uns_test.c
+-index 41aa0a6..d8f5415 100644
+---- a/tests/uns_test.c
+-+++ b/tests/uns_test.c
+-@@ -115,7 +115,8 @@ int main(int argc, char **argv)
+-     }
+-     close(fds.from[0]);
+- 
+--    for (int i=0; i<2; i++) {
+-+    int i;
+-+    for (i=0; i<2; i++) {
+- 	char *map_file;
+- 	if (asprintf(&map_file, file_formats[i], pid) < 0) {
+- 	    perror("allocate string");
+--- 
+-cgit 1.2.3-1.el7
+-
+-- 
+2.25.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@busybox.net
+http://lists.busybox.net/mailman/listinfo/buildroot
