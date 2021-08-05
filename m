@@ -2,88 +2,91 @@ Return-Path: <SRS0=evmZ=M4=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.5 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
 	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
 	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C92CEC432BE
-	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 09:09:36 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EFA9EC4338F
+	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 09:19:53 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 774D161029
-	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 09:09:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 774D161029
+	by mail.kernel.org (Postfix) with ESMTPS id 985C560E53
+	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 09:19:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 985C560E53
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 31E88401BA;
-	Thu,  5 Aug 2021 09:09:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 65B8F835E9;
+	Thu,  5 Aug 2021 09:19:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hbCt66Xk_wiJ; Thu,  5 Aug 2021 09:09:35 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rwpCvx-O1x8d; Thu,  5 Aug 2021 09:19:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 083F24013C;
-	Thu,  5 Aug 2021 09:09:34 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id F19851BF852
- for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 09:09:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B1CA88339C;
+	Thu,  5 Aug 2021 09:19:51 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id D789D1BF852
+ for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 09:19:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DC5014013C
- for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 09:09:32 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D41F04023C
+ for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 09:19:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id S7l8pkuyq6CE for <buildroot@lists.busybox.net>;
- Thu,  5 Aug 2021 09:09:31 +0000 (UTC)
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DQT8-KGs49Vh for <buildroot@lists.busybox.net>;
+ Thu,  5 Aug 2021 09:19:49 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
- [IPv6:2a00:1450:4864:20::42e])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 77B18400AF
- for <buildroot@buildroot.org>; Thu,  5 Aug 2021 09:09:30 +0000 (UTC)
-Received: by mail-wr1-x42e.google.com with SMTP id z4so5533879wrv.11
- for <buildroot@buildroot.org>; Thu, 05 Aug 2021 02:09:30 -0700 (PDT)
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
+ [IPv6:2a00:1450:4864:20::32e])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1038340222
+ for <buildroot@buildroot.org>; Thu,  5 Aug 2021 09:19:49 +0000 (UTC)
+Received: by mail-wm1-x32e.google.com with SMTP id b128so2874332wmb.4
+ for <buildroot@buildroot.org>; Thu, 05 Aug 2021 02:19:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=4IlXItuZxrTMjMoIl3a/CA5caK0genkfLi6fdUwdDG8=;
- b=Q41a9lzuhfyw9uVagK/Y/f9ubczwtX1Sb+/xkezog3E+tX0Zpt/PlLZrgNHUojrZqJ
- qbFULFeTy9JFSvzsPwEQ0ljBuqDYKlSG762GlEUJXhUUltN891K2UV4BNWXMmcm7Ldlq
- HfC0rgjGfSPvNi20V7KscUo7p76lHrm7jm0Tc/zcVwmxJmYpUNlsTByVfUY/LW1i8KxM
- uquHNGVxvOI5yu29GbsICxkUEsaHwenLmVQlutGgT7fUEH0a2ApJhDtzG1ua7MR2MKcn
- h7HXuF2XOnOrPonguzEQ+Z5NKQACUGZkqM5XP5aOah7w53iY3migbDGd/MoUBEMUgWOM
- 9XVQ==
+ bh=zxdl6tm3JrmBY93hzasxgMIRJ+Rr2CQ3452IA4kPPHc=;
+ b=d+vGHQm8csxKqGFR9HCxL4z6SoR6esDDPpeS9TFhukWTvdnz025kWf/R82zKfG4cWt
+ R2h93ii/bUx/ok4ssZyp61AjPabbM6aGAOOEcguDZje7N5SmopBKKymB5R81NTdKRZjf
+ nmqsnCPdD951EWQpwNo7IJWJDUZM+M90IewFpZIVgrnBNF1Bd9Gk2Vjbe/KHrIAocKEb
+ vLT2eYjsJzLKtusCRDGrY/n3Zokzl8L+6fNCq9AyivWvtRDPR9rxATBJ2qVGJyBEYsIB
+ nep95Pb5S8wAMQBsAkeeAM2kr96d1Vwao1QLtXVD1lXldv4FxVHhDGONNVnC9WqkDs6x
+ TM4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=4IlXItuZxrTMjMoIl3a/CA5caK0genkfLi6fdUwdDG8=;
- b=OuC4LRiUdO2F1K9d3MsRNLbRx8gHQy01HNsA/KE+rnpfBL0k1CK8pqSTswD9IEotpK
- 9kxjHWG4lcwdobW8w77Z5d7G9RoVZODx0gIoLnpWGKaxEnyZs5EiFoVtYYvjlw4p0zqO
- /5kLtN6wmvf5fHPqrnMnsKSBbFUWIvNuAC/gdIcOWYCD8DaQcwlG1+cmDn6s5YhKY8ax
- 8k7RR4u9y4CPeq1tiJEmH2oLxteB7g4jZ6pe1ZYq4YwAwXP/1OtqQHkENREf4yvqA6b4
- 8230XBGSYMMbmzceQ6cs76o7NPuPyppReT8QPaJVorRHfCiuDMzIhEIk6St0iVTSzOyy
- 2O+Q==
-X-Gm-Message-State: AOAM5315qNk+2bdpjHJS6BzFI440rolo1UjPni1QL+aFSw0tNHdytB6H
- rAhen19jHBwFvmlQdOejy3WTFUjmooM0Sw==
-X-Google-Smtp-Source: ABdhPJzMHm86WXBdBxS8yOa72LrGJEfHvW3oa4RgTG8iK/zJCCk9z/gfcBIAqvbQ6nNUszFJgkiMpg==
-X-Received: by 2002:adf:f4ca:: with SMTP id h10mr3903815wrp.3.1628154568980;
- Thu, 05 Aug 2021 02:09:28 -0700 (PDT)
+ bh=zxdl6tm3JrmBY93hzasxgMIRJ+Rr2CQ3452IA4kPPHc=;
+ b=JYiVNFh4l10ID+eHzOIP0r46S6el5m6DNDBwW114HDio+gsHFj2Y6X0NMLCunNF/Di
+ q5uqTk468t7GAJexf3KemOvaLrnySNTvauGbwwFQ1h4bBQqly85nKZD1iK2nPSQ2gQ6e
+ cQVYRq0Lug7oyaTLTVtThRKUEwilJd2PPC3+IS/vpIYRZGyasvT/4qS3PvFlgL/6BhF9
+ 2SD0EOLwl3LT6Bi9AvlS2GBNQujYlhUwJ7tDm5qlEsH3qHXWUowYRPzlaMYFYOXz8dAr
+ RNCJQ3Qa89ULfyU+xW+jsKvub+4k6XbM3R9r1RPbl8RPhLrQYoTp8zBxOSgnW8vJQBgS
+ OkHw==
+X-Gm-Message-State: AOAM532h9iFYTN4b+DFwZnzQxnbIvGt3CPpdu66K/dKzsiJMBNVNEL9p
+ lCFjAAz+n28JxF1m8yGv06C2ZEUzJpvarg==
+X-Google-Smtp-Source: ABdhPJz9pS7xo+nsRru6gbgCHsMfKmHrjp2cBEW9gi3snvvpA9P5wU1H+WTaJIZrPw2w7LMX2D4fog==
+X-Received: by 2002:a05:600c:4a12:: with SMTP id
+ c18mr14011384wmp.3.1628155186939; 
+ Thu, 05 Aug 2021 02:19:46 -0700 (PDT)
 Received: from kali.home (pop.92-184-97-192.mobile.abo.orange.fr.
  [92.184.97.192])
- by smtp.gmail.com with ESMTPSA id c2sm5388920wrs.60.2021.08.05.02.09.28
+ by smtp.gmail.com with ESMTPSA id f15sm5383412wrp.12.2021.08.05.02.19.46
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 05 Aug 2021 02:09:28 -0700 (PDT)
+ Thu, 05 Aug 2021 02:19:46 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu,  5 Aug 2021 11:09:20 +0200
-Message-Id: <20210805090920.2107925-1-fontaine.fabrice@gmail.com>
+Date: Thu,  5 Aug 2021 11:19:37 +0200
+Message-Id: <20210805091938.2110379-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/qpdf: fix CVE-2021-36978
+Subject: [Buildroot] [PATCH 1/2] package/mupdf: renumber second patch
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,130 +98,40 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Olivier Schonken <olivier.schonken@gmail.com>,
+Cc: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>,
  Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-QPDF 9.x through 9.1.1 and 10.x through 10.0.4 has a heap-based buffer
-overflow in Pl_ASCII85Decoder::write (called from Pl_AES_PDF::flush and
-Pl_AES_PDF::finish) when a certain downstream write fails.
+Fix mistake in second patch number added by commit
+d7d23710facd789c8986de055e30792af2591f2c
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...to-be-safe-if-downstream-write-fails.patch | 86 +++++++++++++++++++
- package/qpdf/qpdf.mk                          |  3 +
- 2 files changed, 89 insertions(+)
- create mode 100644 package/qpdf/0002-Fix-some-pipelines-to-be-safe-if-downstream-write-fails.patch
+ ...703366-Fix-double-free-of-object-during-linearization.patch} | 0
+ package/mupdf/mupdf.mk                                          | 2 +-
+ 2 files changed, 1 insertion(+), 1 deletion(-)
+ rename package/mupdf/{0001-Bug-703366-Fix-double-free-of-object-during-linearization.patch => 0002-Bug-703366-Fix-double-free-of-object-during-linearization.patch} (100%)
 
-diff --git a/package/qpdf/0002-Fix-some-pipelines-to-be-safe-if-downstream-write-fails.patch b/package/qpdf/0002-Fix-some-pipelines-to-be-safe-if-downstream-write-fails.patch
-new file mode 100644
-index 0000000000..70017350f2
---- /dev/null
-+++ b/package/qpdf/0002-Fix-some-pipelines-to-be-safe-if-downstream-write-fails.patch
-@@ -0,0 +1,86 @@
-+From dc92574c10f3e2516ec6445b88c5d584f40df4e5 Mon Sep 17 00:00:00 2001
-+From: Jay Berkenbilt <ejb@ql.org>
-+Date: Mon, 4 Jan 2021 11:55:28 -0500
-+Subject: [PATCH] Fix some pipelines to be safe if downstream write fails (fuzz
-+ issue 28262)
-+
-+[Retrieved (and updated to remove updates on ChangeLog and fuzz) from:
-+https://github.com/qpdf/qpdf/commit/dc92574c10f3e2516ec6445b88c5d584f40df4e5]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ ChangeLog                     |   6 ++++++
-+ fuzz/qpdf_extra/28262.fuzz    | Bin 0 -> 40395 bytes
-+ libqpdf/Pl_AES_PDF.cc         |   2 +-
-+ libqpdf/Pl_ASCII85Decoder.cc  |   7 +++++--
-+ libqpdf/Pl_ASCIIHexDecoder.cc |   6 ++++--
-+ libqpdf/Pl_Count.cc           |   2 +-
-+ 6 files changed, 17 insertions(+), 6 deletions(-)
-+ create mode 100644 fuzz/qpdf_extra/28262.fuzz
-+
-+diff --git a/libqpdf/Pl_AES_PDF.cc b/libqpdf/Pl_AES_PDF.cc
-+index 18cf3a4d..2865f804 100644
-+--- a/libqpdf/Pl_AES_PDF.cc
-++++ b/libqpdf/Pl_AES_PDF.cc
-+@@ -238,6 +238,6 @@ Pl_AES_PDF::flush(bool strip_padding)
-+ 	    }
-+ 	}
-+     }
-+-    getNext()->write(this->outbuf, bytes);
-+     this->offset = 0;
-++    getNext()->write(this->outbuf, bytes);
-+ }
-+diff --git a/libqpdf/Pl_ASCII85Decoder.cc b/libqpdf/Pl_ASCII85Decoder.cc
-+index b8df3e87..9d9f6704 100644
-+--- a/libqpdf/Pl_ASCII85Decoder.cc
-++++ b/libqpdf/Pl_ASCII85Decoder.cc
-+@@ -119,10 +119,13 @@ Pl_ASCII85Decoder::flush()
-+ 
-+     QTC::TC("libtests", "Pl_ASCII85Decoder partial flush",
-+ 	    (this->pos == 5) ? 0 : 1);
-+-    getNext()->write(outbuf, this->pos - 1);
-+-
-++    // Reset before calling getNext()->write in case that throws an
-++    // exception.
-++    auto t = this->pos - 1;
-+     this->pos = 0;
-+     memset(this->inbuf, 117, 5);
-++
-++    getNext()->write(outbuf, t);
-+ }
-+ 
-+ void
-+diff --git a/libqpdf/Pl_ASCIIHexDecoder.cc b/libqpdf/Pl_ASCIIHexDecoder.cc
-+index f20a9769..7845268e 100644
-+--- a/libqpdf/Pl_ASCIIHexDecoder.cc
-++++ b/libqpdf/Pl_ASCIIHexDecoder.cc
-+@@ -97,12 +97,14 @@ Pl_ASCIIHexDecoder::flush()
-+ 
-+     QTC::TC("libtests", "Pl_ASCIIHexDecoder partial flush",
-+ 	    (this->pos == 2) ? 0 : 1);
-+-    getNext()->write(&ch, 1);
-+-
-++    // Reset before calling getNext()->write in case that throws an
-++    // exception.
-+     this->pos = 0;
-+     this->inbuf[0] = '0';
-+     this->inbuf[1] = '0';
-+     this->inbuf[2] = '\0';
-++
-++    getNext()->write(&ch, 1);
-+ }
-+ 
-+ void
-+diff --git a/libqpdf/Pl_Count.cc b/libqpdf/Pl_Count.cc
-+index 8077092a..c35619b8 100644
-+--- a/libqpdf/Pl_Count.cc
-++++ b/libqpdf/Pl_Count.cc
-+@@ -27,8 +27,8 @@ Pl_Count::write(unsigned char* buf, size_t len)
-+     if (len)
-+     {
-+ 	this->m->count += QIntC::to_offset(len);
-+-	getNext()->write(buf, len);
-+ 	this->m->last_char = buf[len - 1];
-++	getNext()->write(buf, len);
-+     }
-+ }
-+ 
-diff --git a/package/qpdf/qpdf.mk b/package/qpdf/qpdf.mk
-index ec3d3f89a3..c96bf6bf2e 100644
---- a/package/qpdf/qpdf.mk
-+++ b/package/qpdf/qpdf.mk
-@@ -14,6 +14,9 @@ QPDF_DEPENDENCIES = host-pkgconf zlib jpeg
+diff --git a/package/mupdf/0001-Bug-703366-Fix-double-free-of-object-during-linearization.patch b/package/mupdf/0002-Bug-703366-Fix-double-free-of-object-during-linearization.patch
+similarity index 100%
+rename from package/mupdf/0001-Bug-703366-Fix-double-free-of-object-during-linearization.patch
+rename to package/mupdf/0002-Bug-703366-Fix-double-free-of-object-during-linearization.patch
+diff --git a/package/mupdf/mupdf.mk b/package/mupdf/mupdf.mk
+index 294cd8a61b..d3d9d3b101 100644
+--- a/package/mupdf/mupdf.mk
++++ b/package/mupdf/mupdf.mk
+@@ -22,7 +22,7 @@ MUPDF_DEPENDENCIES = \
+ 	xlib_libX11 \
+ 	zlib
  
- QPDF_CONF_OPTS = --with-random=/dev/urandom
+-# 0001-Bug-703366-Fix-double-free-of-object-during-linearization.patch
++# 0002-Bug-703366-Fix-double-free-of-object-during-linearization.patch
+ MUPDF_IGNORE_CVES += CVE-2021-3407
  
-+# 0002-Fix-some-pipelines-to-be-safe-if-downstream-write-fails.patch
-+QPDF_IGNORE_CVES += CVE-2021-36978
-+
- ifeq ($(BR2_PACKAGE_GNUTLS),y)
- QPDF_CONF_OPTS += --enable-crypto-gnutls
- QPDF_DEPENDENCIES += gnutls
+ # The pkg-config name for gumbo-parser is `gumbo`.
 -- 
 2.30.2
 
