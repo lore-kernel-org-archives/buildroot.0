@@ -2,92 +2,104 @@ Return-Path: <SRS0=evmZ=M4=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-21.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.2 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F3CD3C4338F
-	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 16:17:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F121AC4338F
+	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 16:27:52 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 25BAA60F58
-	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 16:17:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 25BAA60F58
+	by mail.kernel.org (Postfix) with ESMTPS id 68D7961158
+	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 16:27:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 68D7961158
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E1CB460871;
-	Thu,  5 Aug 2021 16:17:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3A6EE6065D;
+	Thu,  5 Aug 2021 16:27:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vgz4P9lhG8KT; Thu,  5 Aug 2021 16:17:07 +0000 (UTC)
+	with ESMTP id 9UJYpv8a3tgR; Thu,  5 Aug 2021 16:27:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 002D360ADB;
-	Thu,  5 Aug 2021 16:17:06 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 177521BF574
- for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 16:17:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 960E760ADB;
+	Thu,  5 Aug 2021 16:27:50 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 77A3C1BF574
+ for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 16:27:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1426A405E9
- for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 16:17:06 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 63F3660ADB
+ for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 16:27:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id n7VfLD4ZkN8l for <buildroot@lists.busybox.net>;
- Thu,  5 Aug 2021 16:17:05 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id EDvnxl-eoPOG for <buildroot@lists.busybox.net>;
+ Thu,  5 Aug 2021 16:27:46 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com
- [IPv6:2a00:1450:4864:20::341])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E4FEF405E0
- for <buildroot@buildroot.org>; Thu,  5 Aug 2021 16:17:04 +0000 (UTC)
-Received: by mail-wm1-x341.google.com with SMTP id
- k38-20020a05600c1ca6b029025af5e0f38bso6733576wms.5
- for <buildroot@buildroot.org>; Thu, 05 Aug 2021 09:17:04 -0700 (PDT)
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com
+ [IPv6:2a00:1450:4864:20::635])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 523D36065D
+ for <buildroot@buildroot.org>; Thu,  5 Aug 2021 16:27:46 +0000 (UTC)
+Received: by mail-ej1-x635.google.com with SMTP id go31so10557248ejc.6
+ for <buildroot@buildroot.org>; Thu, 05 Aug 2021 09:27:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=from:to:cc:subject:date:message-id:mime-version
+ h=subject:to:cc:references:from:organization:message-id:date
+ :user-agent:mime-version:in-reply-to:content-language
  :content-transfer-encoding;
- bh=bIfH6J4LeZJJtkbTwihvvAGbhud438iHom3AZyimgeI=;
- b=f4fonPkr6KgS/FGiTz/VU+WuYlHv2cw4sh942JveYrIFUnlwoFxa/NIq6XzlWExz6+
- HfPI6YkgP2JXKInf3AJS1g5HM5VujXJKjZmUjGPi7DIJ/r0qvmgvJv7nQrtIVxjFBING
- BSZPx0z7NpZhV3TEEE3zmhOxG/LrkJvLJYwA/y6XeQzZRmCpTdDlnjSAdDHe1TwUoa7B
- J3sq1GlrzF5xX5z1BivP6g47v+/UVCknB5sBsOGvyJguxZaV6BDVxp66d4DihUW4qRmD
- 3hhpIhynenLsmofQh3Mv72T5jdb/rnffXjqAtJ7KQd7OnFcDwpvTptV+umOdkRqbr81B
- w+tQ==
+ bh=5XDnv47JwD1mr8mEBQuFezZVpm4u1N2Kc+4xm+KITIM=;
+ b=QsnyZuhXWP+O7SW4dK050jCU8MuIIe5yLS7e1gklAGWOz+oSG3dHrBwUM/ulfwnqom
+ GvYvvaY1f4e8l7pgHD8P+OjipJ1sXc3dVV10f5hRpzh3glKSTigLz8y+J0DKaumxhaBc
+ YugpSomr3HvCFnf5n7UpqHPhiiL6Du74oIzhk84NTe5C9ruOXuNhzK0LEe9TE5Rf37bT
+ u4+h1CZN7hgwGm9RLLEbbUu3eYEEQeFQdy5ttO52tuNrU0YBFmj4Vxd0uEz7ekowvpwd
+ naFqDNkTZ/0ZyJRViJM3zgb5Cw5tWuUYhrDvZfTVsLTLJdv4fXQPvJUllG/niqfKz0Ie
+ KnxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=bIfH6J4LeZJJtkbTwihvvAGbhud438iHom3AZyimgeI=;
- b=iiNaqXtL/84bwEzCzCiGtvVg1+pdMjw/H15n/OAid7wfEqmc7B0bJoYXHXgKYpL8Mb
- dwgemU1O41yrBd83hkfHXoCPQrw96e82PY/jQLaxt0Gh54kNVabV3n3xo8FBos2MWi3h
- p6OtuSbSbzSQiiQNR4phnAEoVseMDhwHZ5ZjsR/wMzQIDIam/x+RDwhi6LRjlrEgEtzP
- 7BIEFPlUyq5U8V3nYEs4YoPVM5DAOqUU91oCZbJolLs91BvVgkqipQEyP7zR98iF0GUo
- 4sQlX7nBBU9N5bZSbCyBlz5lOUEgoxY+cKjFaj+IExCpphPb+MYl7z5foNQGafT48Eod
- 9wvg==
-X-Gm-Message-State: AOAM533T6s4o1GH5jaX4SV7DQQ2Zziqvip4vwmFDKmfyyAS10W+4llfS
- 4weul1ulf+0Sf1Z9CGnbLbIy5tqZh7r+L27euG8=
-X-Google-Smtp-Source: ABdhPJwp38zoNh0/XV9xcLKV77XNCZVVOoKhzU97aecweHbFkOhJ3dPd6fN5dJm0bvRFrdDaQ4Pwfw==
-X-Received: by 2002:a7b:c932:: with SMTP id h18mr5828002wml.152.1628180222887; 
- Thu, 05 Aug 2021 09:17:02 -0700 (PDT)
-Received: from localhost.localdomain
- (ptr-81imx1hcj9kuonvus06.18120a2.ip6.access.telenet.be.
- [2a02:1811:c06:d300:a112:27e5:4992:2446])
- by smtp.gmail.com with ESMTPSA id p5sm7393000wrd.25.2021.08.05.09.17.02
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 05 Aug 2021 09:17:02 -0700 (PDT)
-From: illia.bitkov@mind.be
-To: buildroot@buildroot.org
-Date: Thu,  5 Aug 2021 18:16:53 +0200
-Message-Id: <20210805161653.2213689-1-illia.bitkov@mind.be>
-X-Mailer: git-send-email 2.25.1
+ h=x-gm-message-state:subject:to:cc:references:from:organization
+ :message-id:date:user-agent:mime-version:in-reply-to
+ :content-language:content-transfer-encoding;
+ bh=5XDnv47JwD1mr8mEBQuFezZVpm4u1N2Kc+4xm+KITIM=;
+ b=VBvKEQg8BV5Rs1ct3PCXPqX3GWNgreCVka7QkxAEpGtrFFDl/yM/roU7ckHlNZozX8
+ JzZpy/oznbzSdL39dS/CklWL9o4dpq84QOcD//yH3+Tu2AlidKrqc8EWiV6R9Ez7jKwe
+ qhdk8pON2QsYhFkCWHlIWC+ayN1g2o7+a84YatwZ/uB4y7O0TWoVFAapYeG9UXR2lhMe
+ xe6e/c04IMhd8X3i17bAJ1wTfDYU7tLNGmtuTlL38yUFX8Ammh00yR5P5j0NOdJkycs6
+ R6EvxtN6a1cVv+/2dpvfJ71zk6mWhaZ6lnaBRgwiyyWhTxItYS1MeKN70NPcbTpp4Qmw
+ uytA==
+X-Gm-Message-State: AOAM531j65B/xQffPWi/3rMrz5Y9Ko4IavG/zc0ZmxoynKtOwIS1upRm
+ Y72e06vOJAhyXZrVMMJrzj8KysnsW7ercQRO8ZM=
+X-Google-Smtp-Source: ABdhPJzQ/1YLcGysHEK5Oiw7AnqIDBhb9QtJ4jBkzYMwlsVIj6vfethRN1R9W7SNWoLrlhK2f6/C8w==
+X-Received: by 2002:a17:906:ecf7:: with SMTP id
+ qt23mr5709387ejb.64.1628180864398; 
+ Thu, 05 Aug 2021 09:27:44 -0700 (PDT)
+Received: from ?IPv6:2001:1c01:3101:8300:5100:9bb9:68ea:c9f3?
+ (2001-1c01-3101-8300-5100-9bb9-68ea-c9f3.cable.dynamic.v6.ziggo.nl.
+ [2001:1c01:3101:8300:5100:9bb9:68ea:c9f3])
+ by smtp.gmail.com with ESMTPSA id c28sm1869046ejc.102.2021.08.05.09.27.43
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Thu, 05 Aug 2021 09:27:43 -0700 (PDT)
+To: Pascal de Bruijn <p.debruijn@unilogic.nl>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20210805085353.3457-1-p.debruijn@unilogic.nl>
+ <20210805085353.3457-3-p.debruijn@unilogic.nl>
+ <20210805153149.3b72eb3f@windsurf>
+ <AM0PR07MB39874E7C25C042D0F51C8BC09DF29@AM0PR07MB3987.eurprd07.prod.outlook.com>
+ <20210805160140.4fcc15ce@windsurf>
+ <AM0PR07MB39876E0E73FD0E7059D1D5CB9DF29@AM0PR07MB3987.eurprd07.prod.outlook.com>
+ <20210805161020.5fde871c@windsurf>
+ <AM0PR07MB39879D2B6747974F28FAA7579DF29@AM0PR07MB3987.eurprd07.prod.outlook.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+Message-ID: <1dab04a3-644c-d583-049d-2a1a3f3f8f6f@mind.be>
+Date: Thu, 5 Aug 2021 18:27:43 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/libcap: fix build failure due to
- unessesary patch
+In-Reply-To: <AM0PR07MB39879D2B6747974F28FAA7579DF29@AM0PR07MB3987.eurprd07.prod.outlook.com>
+Content-Language: en-GB
+Subject: Re: [Buildroot] [PATCH 3/3] package/php: enable opcache jit
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,178 +111,48 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Illia Bitkov <illia.bitkov@mind.be>
+Cc: "aduskett@gmail.com" <aduskett@gmail.com>,
+ "buildroot@buildroot.org" <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-From: Illia Bitkov <illia.bitkov@mind.be>
 
-Fix the following build failure which is raised since bump
-to version 2.52 in commit 38b0759432070f7a57c0fab84d44a07caead6f06
 
-	Applying 0001-Permit-compilation-with-std-c89.patch using patch:
-	patching file Makefile
-	Reversed (or previously applied) patch detected!  Skipping patch.
-	1 out of 1 hunk ignored -- saving rejects to file Makefile.rej
-	patching file libcap/cap_test.c
-	Reversed (or previously applied) patch detected!  Skipping patch.
-	1 out of 1 hunk ignored -- saving rejects to file libcap/cap_test.c.rej
-	patching file psx/psx.c
-	Reversed (or previously applied) patch detected!  Skipping patch.
-	1 out of 1 hunk ignored -- saving rejects to file psx/psx.c.rej
-	patching file tests/exploit.c
-	Reversed (or previously applied) patch detected!  Skipping patch.
-	2 out of 2 hunks ignored -- saving rejects to file tests/exploit.c.rej
-	patching file tests/libcap_launch_test.c
-	Reversed (or previously applied) patch detected!  Skipping patch.
-	1 out of 1 hunk ignored -- saving rejects to file tests/libcap_launch_test.c.rej
-	patching file tests/uns_test.c
-	Reversed (or previously applied) patch detected!  Skipping patch.
-	1 out of 1 hunk ignored -- saving rejects to file tests/uns_test.c.rej
+On 05/08/2021 16:47, Pascal de Bruijn wrote:
+> Hey,
+> 
+>>     > In ed355dec (PATCH 2/3) the following line is what makes opcache actually
+>>     work:
+>> 
+>>     What is ed355dec ? I don't have any commit with that reference in
+>>     Buildroot. If it's the reference of the commit of PATCH 2/3 in your
+>>     Buildroot Git repository, then it doesn't make sense to reference it,
+>>     as this commit won't have the same hash when we'll apply your patch,
+>>     i.e ed355dec means nothing expect just to you locally.
+> 
+> I know, which is why I referenced both. So I'm referencing the second of three
+> patches in my recently submitted series regarding package/php.
+> 
+>>     > PHP_CHECK_LIBRARY(rt, shm_unlink,
+>>     [PHP_ADD_LIBRARY(rt,1,OPCACHE_SHARED_LIBADD)])
+>> 
+>>     And what is this doing ? Again shm_unlink() is no longer in librt, it's
+>>     in libc since glibc 2.17 (if I remember correctly).
+> 
+> PHP_CHECK_LIBRARY(rt, shm_unlink, [PHP_ADD_LIBRARY(rt,1,OPCACHE_SHARED_LIBADD)])
+> is executed for non-cross-compiles, and with my patch also executes for
+> cross-compiles.
+> 
+> Though I haven't looked deeply into the PHP specific autotools macros...
+> https://github.com/php/php-src/blob/PHP-8.0.9/build/php.m4#L1507
 
-Problem is because patch was integrated into package repo
+ This bit is indeed useless with modern glibc, but all libc still install an
+(empty?) librt for backward compatibility, so it doesn't hurt either.
 
-Fixes:
-http://autobuild.buildroot.net/results/2f619b233e2cfb4d7eeb3cc178c849c74d11f2ca/
-Signed-off-by: Illia Bitkov <illia.bitkov@mind.be>
----
- ...0001-Permit-compilation-with-std-c89.patch | 123 ------------------
- 1 file changed, 123 deletions(-)
- delete mode 100644 package/libcap/0001-Permit-compilation-with-std-c89.patch
-
-diff --git a/package/libcap/0001-Permit-compilation-with-std-c89.patch b/package/libcap/0001-Permit-compilation-with-std-c89.patch
-deleted file mode 100644
-index 0219f09f52..0000000000
---- a/package/libcap/0001-Permit-compilation-with-std-c89.patch
-+++ /dev/null
-@@ -1,123 +0,0 @@
--From 06ec53d0c9fcddcc071a0e07731e6c83238400e6 Mon Sep 17 00:00:00 2001
--From: "Andrew G. Morgan" <morgan@kernel.org>
--Date: Mon, 21 Jun 2021 17:46:43 -0700
--Subject: Permit compilation with -std=c89.
--
--Tested with
--
--  make COPTS="-O2 -std=c89" clean all test sudotest
--
--This addresses the issue reported by Byron Stanoszek:
--
--  https://bugzilla.kernel.org/show_bug.cgi?id=213541
--
--Signed-off-by: Andrew G. Morgan <morgan@kernel.org>
--
--[Retrieved from:
--https://git.kernel.org/pub/scm/linux/kernel/git/morgan/libcap.git/commit/?id=06ec53d0c9fcddcc071a0e07731e6c83238400e6]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- Makefile                   | 1 +
-- libcap/cap_test.c          | 1 +
-- psx/psx.c                  | 2 +-
-- tests/exploit.c            | 9 +++++++--
-- tests/libcap_launch_test.c | 6 +++---
-- tests/uns_test.c           | 3 ++-
-- 6 files changed, 15 insertions(+), 7 deletions(-)
--
--diff --git a/Makefile b/Makefile
--index 9666bf0..984d502 100644
----- a/Makefile
--+++ b/Makefile
--@@ -68,6 +68,7 @@ endif
-- distcheck:
-- 	./distcheck.sh
-- 	$(MAKE) DYNAMIC=yes clean all test sudotest
--+	$(MAKE) DYNAMIC=no COPTS="-O2 -std=c89" clean all test sudotest
-- 	$(MAKE) PAM_CAP=no CC=/usr/local/musl/bin/musl-gcc clean all test sudotest
-- 	$(MAKE) clean all test sudotest
-- 	$(MAKE) distclean
--diff --git a/libcap/cap_test.c b/libcap/cap_test.c
--index c9e83de..a717217 100644
----- a/libcap/cap_test.c
--+++ b/libcap/cap_test.c
--@@ -79,4 +79,5 @@ int main(int argc, char **argv) {
-- 	exit(1);
--     }
--     printf("cap_test PASS\n");
--+    exit(0);
-- }
--diff --git a/psx/psx.c b/psx/psx.c
--index 12dbbc5..90dcc50 100644
----- a/psx/psx.c
--+++ b/psx/psx.c
--@@ -229,7 +229,7 @@ static void psx_syscall_start(void) {
--     psx_tracker.psx_sig = SIGSYS;
-- 
--     psx_confirm_sigaction();
---    psx_do_registration(); // register the main thread.
--+    psx_do_registration(); /* register the main thread. */
-- 
--     psx_tracker.initialized = 1;
-- }
--diff --git a/tests/exploit.c b/tests/exploit.c
--index 28bac88..814337c 100644
----- a/tests/exploit.c
--+++ b/tests/exploit.c
--@@ -16,6 +16,10 @@
--  * to execute arbitrary code. As such, if all but one thread drops
--  * privilege, privilege escalation is somewhat trivial.
--  */
--+
--+/* as per "man sigaction" */
--+#define _POSIX_C_SOURCE 200809L
--+
-- #include <pthread.h>
-- #include <signal.h>
-- #include <stdio.h>
--@@ -148,7 +152,8 @@ int main(int argc, char **argv) {
--     if (greatest_len != 1) {
-- 	printf("exploit succeeded\n");
-- 	exit(1);
---    } else {
---	printf("exploit failed\n");
--     }
--+
--+    printf("exploit failed\n");
--+    exit(0);
-- }
--diff --git a/tests/libcap_launch_test.c b/tests/libcap_launch_test.c
--index 6cbfc43..5286979 100644
----- a/tests/libcap_launch_test.c
--+++ b/tests/libcap_launch_test.c
--@@ -199,10 +199,10 @@ int main(int argc, char **argv) {
--     cap_free(final);
--     cap_free(orig);
-- 
---    if (success) {
---	printf("cap_launch_test: PASSED\n");
---    } else {
--+    if (!success) {
-- 	printf("cap_launch_test: FAILED\n");
-- 	exit(1);
--     }
--+    printf("cap_launch_test: PASSED\n");
--+    exit(0);
-- }
--diff --git a/tests/uns_test.c b/tests/uns_test.c
--index 41aa0a6..d8f5415 100644
----- a/tests/uns_test.c
--+++ b/tests/uns_test.c
--@@ -115,7 +115,8 @@ int main(int argc, char **argv)
--     }
--     close(fds.from[0]);
-- 
---    for (int i=0; i<2; i++) {
--+    int i;
--+    for (i=0; i<2; i++) {
-- 	char *map_file;
-- 	if (asprintf(&map_file, file_formats[i], pid) < 0) {
-- 	    perror("allocate string");
---- 
--cgit 1.2.3-1.el7
--
--- 
-2.25.1
+ Regards,
+ Arnout
 
 _______________________________________________
 buildroot mailing list
