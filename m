@@ -2,57 +2,57 @@ Return-Path: <SRS0=evmZ=M4=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D3ACAC4338F
-	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 11:07:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D7A46C4338F
+	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 11:07:35 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9ABB461004
-	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 11:07:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9ABB461004
+	by mail.kernel.org (Postfix) with ESMTPS id 9F0D861004
+	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 11:07:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9F0D861004
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 70F268385D;
-	Thu,  5 Aug 2021 11:07:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4C85C83A8D;
+	Thu,  5 Aug 2021 11:07:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id W80UBJKPP4WT; Thu,  5 Aug 2021 11:07:21 +0000 (UTC)
+	with ESMTP id WDIAgS18Gno7; Thu,  5 Aug 2021 11:07:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E355E83083;
-	Thu,  5 Aug 2021 11:07:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4846083A89;
+	Thu,  5 Aug 2021 11:07:33 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2FD051C1135
- for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 11:07:06 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2CB7F1BF844
+ for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 11:07:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1CD5A60A98
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5668E60A85
  for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 11:07:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VRz5KjHkj10Z for <buildroot@lists.busybox.net>;
+ with ESMTP id eNpnXC2Ngu1T for <buildroot@lists.busybox.net>;
  Thu,  5 Aug 2021 11:07:05 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 193C260A92
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2466060AA0
  for <buildroot@buildroot.org>; Thu,  5 Aug 2021 11:07:05 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id A634F8B79F; Thu,  5 Aug 2021 11:06:53 +0000 (UTC)
+ id C04FC8B79F; Thu,  5 Aug 2021 11:06:53 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 5 Aug 2021 12:58:46 +0200
+Date: Thu, 5 Aug 2021 13:06:08 +0200
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: da9ea44cdbae8e797043eb6a5f0c7e7d5cb5ec8d
-X-Git-Newrev: 65f936159cabb2ed2efe1cb413c126e2e58cd522
+X-Git-Oldrev: 4e52a97875d355109568e23b789b739765fdafee
+X-Git-Newrev: 27e2d2d98a9de9ca5f31b9ee1ab8a486c494dd58
 X-Patchwork-Hint: ignore
-Message-Id: <20210805110653.A634F8B79F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] Config.in: disable
- PIC/PIE for microblaze
+Message-Id: <20210805110653.C04FC8B79F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/mariadb: provide
+ native compiled mariadb_config
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,42 +70,51 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=65f936159cabb2ed2efe1cb413c126e2e58cd522
+commit: https://git.buildroot.net/buildroot/commit/?id=27e2d2d98a9de9ca5f31b9ee1ab8a486c494dd58
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-As reported by Toolchain-builder project [1], the system doesn't
-boot when PIC/PIE is enabled for glibc based toolchain (the init
-process hang).
+- overwrite cross-compiled mariadb_config executable (used from the
+  mysql_config script) by a native/host compiled one
 
-Also, hardening features may not be wanted or possible for such
-slow soft-core cpus [2].
+Fixes (qt5base configure):
 
-Like for NiosII, disable BR2_PIC_PIE.
+  Trying source 0 (type mysqlConfig) of library mysql ...
+  + .../host/aarch64-buildroot-linux-gnu/sysroot/usr/bin/mysql_config --version
+  > .../host/aarch64-buildroot-linux-gnu/sysroot/usr/bin/mysql_config: line 100: \
+    .../host/aarch64-buildroot-linux-gnu/sysroot/usr/bin/mariadb_config: cannot execute binary file: Exec format error
 
-[1] https://gitlab.com/bootlin/toolchains-builder/-/pipelines/318038406
-[2] http://lists.busybox.net/pipermail/buildroot/2021-June/312416.html
+  with
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+  $ file host/aarch64-buildroot-linux-gnu/sysroot/usr/bin/mariadb_config
+  host/aarch64-buildroot-linux-gnu/sysroot/usr/bin/mariadb_config: ELF 64-bit LSB pie executable, ARM aarch64, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-aarch64.so.1, for GNU/Linux 5.10.0, with debug_info, not stripped
+
+Reported-by: Scott Bartolett <SBartolett@thorlabs.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit d120f844604da2295bb7bd8fc6c1f4efbe8b5792)
+(cherry picked from commit 11b4552d8a9a19816748558f98cf44b7b189428d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ package/mariadb/mariadb.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/Config.in b/Config.in
-index d0be8ada88..48c373af9f 100644
---- a/Config.in
-+++ b/Config.in
-@@ -716,6 +716,8 @@ comment "Security Hardening Options"
- config BR2_PIC_PIE_ARCH_SUPPORTS
- 	bool
- 	default y
-+	# Microblaze glibc toolchains don't work with PIC/PIE enabled
-+	depends on !BR2_microblaze
- 	# Nios2 toolchains produce non working binaries with -fPIC
- 	depends on !BR2_nios2
+diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
+index ade73ccfe0..374b3dc352 100644
+--- a/package/mariadb/mariadb.mk
++++ b/package/mariadb/mariadb.mk
+@@ -135,5 +135,13 @@ endef
  
+ MARIADB_POST_INSTALL_TARGET_HOOKS += MARIADB_POST_INSTALL
+ 
++# overwrite cross-compiled mariadb_config executable by an native one
++define MARIADB_POST_STAGING_INSTALL
++	$(HOSTCC) -I$(@D)/libmariadb/include \
++		-o $(STAGING_DIR)/usr/bin/mariadb_config \
++		$(@D)/libmariadb/mariadb_config/mariadb_config.c
++endef
++MARIADB_POST_INSTALL_STAGING_HOOKS += MARIADB_POST_STAGING_INSTALL
++
+ $(eval $(cmake-package))
+ $(eval $(host-cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
