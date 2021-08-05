@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AFA38C4338F
-	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 10:08:12 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7AF95C4338F
+	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 10:08:25 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 7CEA16105A
-	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 10:08:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7CEA16105A
+	by mail.kernel.org (Postfix) with ESMTPS id 3886C61102
+	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 10:08:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3886C61102
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5633760A59;
-	Thu,  5 Aug 2021 10:08:12 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 04C7640277;
+	Thu,  5 Aug 2021 10:08:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mqD6ZGnOBVRB; Thu,  5 Aug 2021 10:08:11 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Z1eKxLbKzkYb; Thu,  5 Aug 2021 10:08:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C171460A51;
-	Thu,  5 Aug 2021 10:08:10 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B72BF1C1135
+	by smtp2.osuosl.org (Postfix) with ESMTP id 00E9A40286;
+	Thu,  5 Aug 2021 10:08:22 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id EAE171BF298
  for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 10:07:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B40AC60A3A
+ by smtp2.osuosl.org (Postfix) with ESMTP id D999C40327
  for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 10:07:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vQMu8VsP01AX for <buildroot@lists.busybox.net>;
- Thu,  5 Aug 2021 10:07:12 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fbGzAxbDtW4w for <buildroot@lists.busybox.net>;
+ Thu,  5 Aug 2021 10:07:11 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 16AE960A39
- for <buildroot@buildroot.org>; Thu,  5 Aug 2021 10:07:12 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id EC6F3402A8
+ for <buildroot@buildroot.org>; Thu,  5 Aug 2021 10:07:11 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id BD42E8B57F; Thu,  5 Aug 2021 10:07:00 +0000 (UTC)
+ id 9D3E98B768; Thu,  5 Aug 2021 10:07:00 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 5 Aug 2021 12:02:31 +0200
+Date: Thu, 5 Aug 2021 11:46:16 +0200
 X-Git-Refname: refs/heads/2021.05.x
-X-Git-Oldrev: 85a83452c15203a13a78f0b7ca730849588d5474
-X-Git-Newrev: 75c040a60a1b3185ac25a27b174022bc1c5b4253
+X-Git-Oldrev: b2559a2502c267d8bbddd5f6e57daa5a56eb7af5
+X-Git-Newrev: 6da85ad2e8c4257975b7d9485a2bb9d2407c039f
 X-Patchwork-Hint: ignore
-Message-Id: <20210805100700.BD42E8B57F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.05.x] package/uclibc: add
- nconfig as a kconfig editor
+Message-Id: <20210805100700.9D3E98B768@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.05.x] package/polkit: add init
+ S50polkit script
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,29 +70,92 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=75c040a60a1b3185ac25a27b174022bc1c5b4253
+commit: https://git.buildroot.net/buildroot/commit/?id=6da85ad2e8c4257975b7d9485a2bb9d2407c039f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 5e960d5c7c90d98e44d292159082d887910795f5)
+The Polkit source does not come with non-systemd init script. Add one that is
+modeled after package/busybox/S01syslogd.
+
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 82712c5862badbc905346afb6ad08c4d4ff47dfb)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/uclibc/uclibc.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/polkit/S50polkit | 51 ++++++++++++++++++++++++++++++++++++++++++++++++
+ package/polkit/polkit.mk |  5 +++++
+ 2 files changed, 56 insertions(+)
 
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index a7c96684d0..d22164106c 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -30,6 +30,7 @@ ifndef UCLIBC_CONFIG_FILE
- UCLIBC_CONFIG_FILE = $(call qstrip,$(BR2_UCLIBC_CONFIG))
- endif
+diff --git a/package/polkit/S50polkit b/package/polkit/S50polkit
+new file mode 100755
+index 0000000000..f07e2d613b
+--- /dev/null
++++ b/package/polkit/S50polkit
+@@ -0,0 +1,51 @@
++#!/bin/sh
++
++DAEMON="polkitd"
++DAEMON_PATH="/usr/lib/polkit-1/${DAEMON}"
++PIDFILE="/var/run/${DAEMON}.pid"
++POLKITD_ARGS="--no-debug"
++
++# polkitd does not create a pidfile, so pass "-n" in the command line
++# and use "-m" to instruct start-stop-daemon to create one.
++start() {
++	printf 'Starting %s: ' "${DAEMON}"
++	# shellcheck disable=SC2086 # we need the word splitting
++	start-stop-daemon -bmSqp "$PIDFILE" -x ${DAEMON_PATH} -- ${POLKITD_ARGS}
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
++}
++
++stop() {
++	printf 'Stopping %s: ' "${DAEMON}"
++	start-stop-daemon -Kqp "$PIDFILE"
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		rm -f "$PIDFILE"
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
++}
++
++restart() {
++	stop
++	sleep 1
++	start
++}
++
++case "$1" in
++	start|stop|restart|reload)
++		"$1";;
++	reload)
++		# Restart, since there is no true "reload" feature.
++		restart;;
++	*)
++		echo "Usage: $0 {start|stop|restart|reload}"
++		exit 1
++esac
+diff --git a/package/polkit/polkit.mk b/package/polkit/polkit.mk
+index bf9b5a7112..e00b634b7f 100644
+--- a/package/polkit/polkit.mk
++++ b/package/polkit/polkit.mk
+@@ -57,4 +57,9 @@ define POLKIT_INSTALL_INIT_SYSTEMD
  
-+UCLIBC_KCONFIG_EDITORS = menuconfig nconfig
- UCLIBC_KCONFIG_FILE = $(UCLIBC_CONFIG_FILE)
- UCLIBC_KCONFIG_FRAGMENT_FILES = $(call qstrip,$(BR2_UCLIBC_CONFIG_FRAGMENT_FILES))
+ endef
  
++define POLKIT_INSTALL_INIT_SYSV
++	$(INSTALL) -D -m 0755 package/polkit/S50polkit \
++		$(TARGET_DIR)/etc/init.d/S50polkit
++endef
++
+ $(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
