@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D7A46C4338F
-	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 11:07:35 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B72B2C4338F
+	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 11:07:47 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9F0D861004
-	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 11:07:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9F0D861004
+	by mail.kernel.org (Postfix) with ESMTPS id 7B1B961004
+	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 11:07:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7B1B961004
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4C85C83A8D;
-	Thu,  5 Aug 2021 11:07:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5217D60A73;
+	Thu,  5 Aug 2021 11:07:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WDIAgS18Gno7; Thu,  5 Aug 2021 11:07:34 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id pVF3qbjw7RNZ; Thu,  5 Aug 2021 11:07:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4846083A89;
-	Thu,  5 Aug 2021 11:07:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9E2F660609;
+	Thu,  5 Aug 2021 11:07:45 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2CB7F1BF844
- for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 11:07:07 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 444FB1BF844
+ for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 11:07:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5668E60A85
+ by smtp3.osuosl.org (Postfix) with ESMTP id BFE6F60AA5
  for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 11:07:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eNpnXC2Ngu1T for <buildroot@lists.busybox.net>;
+ with ESMTP id YBou925FUnCF for <buildroot@lists.busybox.net>;
  Thu,  5 Aug 2021 11:07:05 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2466060AA0
+ by smtp3.osuosl.org (Postfix) with ESMTP id 146B260A8E
  for <buildroot@buildroot.org>; Thu,  5 Aug 2021 11:07:05 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id C04FC8B79F; Thu,  5 Aug 2021 11:06:53 +0000 (UTC)
+ id 9B3558B7A3; Thu,  5 Aug 2021 11:06:53 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 5 Aug 2021 13:06:08 +0200
+Date: Thu, 5 Aug 2021 12:58:29 +0200
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 4e52a97875d355109568e23b789b739765fdafee
-X-Git-Newrev: 27e2d2d98a9de9ca5f31b9ee1ab8a486c494dd58
+X-Git-Oldrev: cd2f7d0ab26655de585fbb21fd8cef7f0cc72cf1
+X-Git-Newrev: da9ea44cdbae8e797043eb6a5f0c7e7d5cb5ec8d
 X-Patchwork-Hint: ignore
-Message-Id: <20210805110653.C04FC8B79F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/mariadb: provide
- native compiled mariadb_config
+Message-Id: <20210805110653.9B3558B7A3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] Config.in: add
+ BR2_PIC_PIE_ARCH_SUPPORTS hidden option
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,51 +70,70 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=27e2d2d98a9de9ca5f31b9ee1ab8a486c494dd58
+commit: https://git.buildroot.net/buildroot/commit/?id=da9ea44cdbae8e797043eb6a5f0c7e7d5cb5ec8d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-- overwrite cross-compiled mariadb_config executable (used from the
-  mysql_config script) by a native/host compiled one
+The nios2 architecture is already excluded from PIC/PIE due to issues,
+and we're going to also exclude Microblaze, so let's introduce a
+BR2_PIC_PIE_ARCH_SUPPORTS hidden boolean to facilitate adding this new
+architecture exclusion.
 
-Fixes (qt5base configure):
-
-  Trying source 0 (type mysqlConfig) of library mysql ...
-  + .../host/aarch64-buildroot-linux-gnu/sysroot/usr/bin/mysql_config --version
-  > .../host/aarch64-buildroot-linux-gnu/sysroot/usr/bin/mysql_config: line 100: \
-    .../host/aarch64-buildroot-linux-gnu/sysroot/usr/bin/mariadb_config: cannot execute binary file: Exec format error
-
-  with
-
-  $ file host/aarch64-buildroot-linux-gnu/sysroot/usr/bin/mariadb_config
-  host/aarch64-buildroot-linux-gnu/sysroot/usr/bin/mariadb_config: ELF 64-bit LSB pie executable, ARM aarch64, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-aarch64.so.1, for GNU/Linux 5.10.0, with debug_info, not stripped
-
-Reported-by: Scott Bartolett <SBartolett@thorlabs.com>
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 11b4552d8a9a19816748558f98cf44b7b189428d)
+(cherry picked from commit 70dd4bd156bac2bde07751dc3c4d5da9b14d7d7c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mariadb/mariadb.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ Config.in | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
 
-diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
-index ade73ccfe0..374b3dc352 100644
---- a/package/mariadb/mariadb.mk
-+++ b/package/mariadb/mariadb.mk
-@@ -135,5 +135,13 @@ endef
+diff --git a/Config.in b/Config.in
+index 18a90b3f62..d0be8ada88 100644
+--- a/Config.in
++++ b/Config.in
+@@ -713,10 +713,15 @@ endmenu
  
- MARIADB_POST_INSTALL_TARGET_HOOKS += MARIADB_POST_INSTALL
+ comment "Security Hardening Options"
  
-+# overwrite cross-compiled mariadb_config executable by an native one
-+define MARIADB_POST_STAGING_INSTALL
-+	$(HOSTCC) -I$(@D)/libmariadb/include \
-+		-o $(STAGING_DIR)/usr/bin/mariadb_config \
-+		$(@D)/libmariadb/mariadb_config/mariadb_config.c
-+endef
-+MARIADB_POST_INSTALL_STAGING_HOOKS += MARIADB_POST_STAGING_INSTALL
+-config BR2_PIC_PIE
+-	bool "Build code with PIC/PIE"
++config BR2_PIC_PIE_ARCH_SUPPORTS
++	bool
++	default y
+ 	# Nios2 toolchains produce non working binaries with -fPIC
+ 	depends on !BR2_nios2
 +
- $(eval $(cmake-package))
- $(eval $(host-cmake-package))
++config BR2_PIC_PIE
++	bool "Build code with PIC/PIE"
++	depends on BR2_PIC_PIE_ARCH_SUPPORTS
+ 	depends on BR2_SHARED_LIBS
+ 	depends on BR2_TOOLCHAIN_SUPPORTS_PIE
+ 	help
+@@ -724,7 +729,7 @@ config BR2_PIC_PIE
+ 	  Position-Independent Executables (PIE).
+ 
+ comment "PIC/PIE needs a toolchain w/ PIE"
+-	depends on !BR2_nios2
++	depends on BR2_PIC_PIE_ARCH_SUPPORTS
+ 	depends on BR2_SHARED_LIBS
+ 	depends on !BR2_TOOLCHAIN_SUPPORTS_PIE
+ 
+@@ -811,7 +816,7 @@ config BR2_RELRO_PARTIAL
+ 
+ config BR2_RELRO_FULL
+ 	bool "Full"
+-	depends on !BR2_nios2 # BR2_PIC_PIE
++	depends on BR2_PIC_PIE_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_SUPPORTS_PIE
+ 	select BR2_PIC_PIE
+ 	help
+@@ -820,7 +825,7 @@ config BR2_RELRO_FULL
+ 	  program loading, i.e every time an executable is started.
+ 
+ comment "RELRO Full needs a toolchain w/ PIE"
+-	depends on !BR2_nios2
++	depends on BR2_PIC_PIE_ARCH_SUPPORTS
+ 	depends on !BR2_TOOLCHAIN_SUPPORTS_PIE
+ 
+ endchoice
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
