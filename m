@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2533DC4338F
-	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 10:07:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5EF4DC4338F
+	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 10:08:00 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id CCE1C6105A
-	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 10:07:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org CCE1C6105A
+	by mail.kernel.org (Postfix) with ESMTPS id 2BA7960F35
+	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 10:08:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2BA7960F35
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A3B4F83896;
-	Thu,  5 Aug 2021 10:07:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F0BC8838C0;
+	Thu,  5 Aug 2021 10:07:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gYyry5axzY8n; Thu,  5 Aug 2021 10:07:47 +0000 (UTC)
+	with ESMTP id yiJmpCP0Hwvm; Thu,  5 Aug 2021 10:07:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0B1B0837BC;
-	Thu,  5 Aug 2021 10:07:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2CFF783A4C;
+	Thu,  5 Aug 2021 10:07:58 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 999251BF298
- for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 10:07:08 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9D4321BF298
+ for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 10:07:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8A55883478
+ by smtp1.osuosl.org (Postfix) with ESMTP id 95D358376B
  for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 10:07:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tkzaPf7cLfZ1 for <buildroot@lists.busybox.net>;
+ with ESMTP id 3niV1TDRojh9 for <buildroot@lists.busybox.net>;
  Thu,  5 Aug 2021 10:07:06 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 532498376B
+ by smtp1.osuosl.org (Postfix) with ESMTP id 576EC837BC
  for <buildroot@buildroot.org>; Thu,  5 Aug 2021 10:07:06 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 0463F8B25B; Thu,  5 Aug 2021 10:06:55 +0000 (UTC)
+ id 1690E8B4AF; Thu,  5 Aug 2021 10:06:55 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 5 Aug 2021 12:02:24 +0200
+Date: Thu, 5 Aug 2021 12:06:12 +0200
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 5bec5af819da06bdf26ae531a20d8740d10654b5
-X-Git-Newrev: ce09a48e3e09a26b540efcfccccfa0dfa2bda8d3
+X-Git-Oldrev: ce09a48e3e09a26b540efcfccccfa0dfa2bda8d3
+X-Git-Newrev: 0898fde96832ade8b7143f64dd4a1ad7e37cb20f
 X-Patchwork-Hint: ignore
-Message-Id: <20210805100655.0463F8B25B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/uclibc: add
- nconfig as a kconfig editor
+Message-Id: <20210805100655.1690E8B4AF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/python-pysftp:
+ add missing C++ dependency from paramiko
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,29 +70,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ce09a48e3e09a26b540efcfccccfa0dfa2bda8d3
+commit: https://git.buildroot.net/buildroot/commit/?id=0898fde96832ade8b7143f64dd4a1ad7e37cb20f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 5e960d5c7c90d98e44d292159082d887910795f5)
+python-paramiko has a dependency on C++ support, which was added in
+commit 2d7b73cf75daedd4a198a75546308fedae7c9467 in 2016.
+
+When python-pysftp was added in commit
+3b920487bad119abf5bfb10a237cedd3b5278c10 in 2020, this C++ dependency
+was not propagated, even though python-pysftp selects python-paramiko.
+
+This commit fixes this issue by propagating the dependency, which
+fixes this warning:
+
+WARNING: unmet direct dependencies detected for BR2_PACKAGE_PYTHON_PARAMIKO
+  Depends on [n]: (BR2_PACKAGE_PYTHON [=n] || BR2_PACKAGE_PYTHON3 [=y]) && BR2_PACKAGE_PYTHON3 [=y] && BR2_INSTALL_LIBSTDCPP [=n]
+  Selected by [y]:
+  - BR2_PACKAGE_PYTHON_PYSFTP [=y] && (BR2_PACKAGE_PYTHON [=n] || BR2_PACKAGE_PYTHON3 [=y]) && BR2_PACKAGE_PYTHON3 [=y]
+
+That occurs with configuration with C++ disabled, but python-pysftp
+enabled.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 8d1a72866a9eab1502a9cf4ebcf86e35cf8fc7db)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/uclibc/uclibc.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/python-pysftp/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index a7c96684d0..d22164106c 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -30,6 +30,7 @@ ifndef UCLIBC_CONFIG_FILE
- UCLIBC_CONFIG_FILE = $(call qstrip,$(BR2_UCLIBC_CONFIG))
- endif
+diff --git a/package/python-pysftp/Config.in b/package/python-pysftp/Config.in
+index 06f883f602..0866df3055 100644
+--- a/package/python-pysftp/Config.in
++++ b/package/python-pysftp/Config.in
+@@ -1,7 +1,11 @@
+ config BR2_PACKAGE_PYTHON_PYSFTP
+ 	bool "python-pysftp"
++	depends on BR2_INSTALL_LIBSTDCPP # python-paramiko
+ 	select BR2_PACKAGE_PYTHON_PARAMIKO # runtime
+ 	help
+ 	  A friendly face on SFTP.
  
-+UCLIBC_KCONFIG_EDITORS = menuconfig nconfig
- UCLIBC_KCONFIG_FILE = $(UCLIBC_CONFIG_FILE)
- UCLIBC_KCONFIG_FRAGMENT_FILES = $(call qstrip,$(BR2_UCLIBC_CONFIG_FRAGMENT_FILES))
- 
+ 	  https://bitbucket.org/dundeemt/pysftp
++
++comment "python-pysftp needs a toolchain w/ C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
