@@ -2,56 +2,57 @@ Return-Path: <SRS0=evmZ=M4=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 78FC4C4338F
-	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 19:57:54 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ED797C4338F
+	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 19:58:06 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1D5D460F02
-	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 19:57:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1D5D460F02
+	by mail.kernel.org (Postfix) with ESMTPS id ABC2660F02
+	for <buildroot@archiver.kernel.org>; Thu,  5 Aug 2021 19:58:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org ABC2660F02
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CA32583BF5;
-	Thu,  5 Aug 2021 19:57:53 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6E7B240529;
+	Thu,  5 Aug 2021 19:58:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id d9nWnPqHadq2; Thu,  5 Aug 2021 19:57:53 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id q_IrH9RCV6XA; Thu,  5 Aug 2021 19:58:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4420E83BCB;
-	Thu,  5 Aug 2021 19:57:52 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 80E4B4034D;
+	Thu,  5 Aug 2021 19:58:04 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 94B361BF361
- for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 19:50:04 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2EF1D1BF361
+ for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 19:50:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E8A2C83BA7
- for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 19:49:53 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0D18282B24
+ for <buildroot@lists.busybox.net>; Thu,  5 Aug 2021 19:49:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eEkHIVoDJkgX for <buildroot@lists.busybox.net>;
+ with ESMTP id uhw44UxEJuRH for <buildroot@lists.busybox.net>;
  Thu,  5 Aug 2021 19:49:53 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1C74482B24
- for <buildroot@buildroot.org>; Thu,  5 Aug 2021 19:49:53 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E268E83BAE
+ for <buildroot@buildroot.org>; Thu,  5 Aug 2021 19:49:52 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id D8A0E85C25; Thu,  5 Aug 2021 19:49:40 +0000 (UTC)
+ id 9DE548345B; Thu,  5 Aug 2021 19:49:40 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Thu, 5 Aug 2021 21:48:15 +0200
+Date: Thu, 5 Aug 2021 21:15:45 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: a8a9b12766a434e7d70cd246689d4de11d440875
-X-Git-Newrev: 838bc2c0fb37a3fb9b6137694413961b49b24e67
+X-Git-Oldrev: 69143ccce0e6def08e10460b4d2ad68e8aa07062
+X-Git-Newrev: e39ad96136a8c340b3aea6b036024e28f14584f3
 X-Patchwork-Hint: ignore
-Message-Id: <20210805194940.D8A0E85C25@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] Merge branch 'master' into next
+Message-Id: <20210805194940.9DE548345B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next]
+ package/x11r7/xlib_libxshmfence: disable on riscv32
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,10 +70,69 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=838bc2c0fb37a3fb9b6137694413961b49b24e67
+commit: https://git.buildroot.net/buildroot/commit/?id=e39ad96136a8c340b3aea6b036024e28f14584f3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
+xlib_libxshmfence unconditionally uses SYS_futex which raises the
+following build failure on riscv32:
+
+xshmfence_futex.h:58:17: error: 'SYS_futex' undeclared (first use in this function); did you mean 'sys_futex'?
+   58 |  return syscall(SYS_futex, addr1, op, val1, timeout, addr2, val3);
+      |                 ^~~~~~~~~
+      |                 sys_futex
+
+Fixes:
+ - http://autobuild.buildroot.org/results/b3523e35fde0fac04b96a6278cbc6ffdfe56f7d1
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/mesa3d/Config.in                    | 3 ++-
+ package/x11r7/xlib_libxshmfence/Config.in   | 3 +++
+ package/x11r7/xserver_xorg-server/Config.in | 3 ++-
+ 3 files changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index 41c90c49af..eb7c1eef46 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -65,7 +65,8 @@ config BR2_PACKAGE_MESA3D_DRI_DRIVER
+ 		!BR2_PACKAGE_MESA3D_OPENGL_GLX && \
+ 		!BR2_PACKAGE_MESA3D_OPENGL_EGL
+ 	select BR2_PACKAGE_XLIB_LIBXSHMFENCE if \
+-		(BR2_PACKAGE_XORG7 && BR2_TOOLCHAIN_HAS_SYNC_4)
++		(BR2_PACKAGE_XORG7 && BR2_TOOLCHAIN_HAS_SYNC_4 && \
++			!BR2_RISCV_32)
+ 
+ config BR2_PACKAGE_MESA3D_VULKAN_DRIVER
+ 	bool
+diff --git a/package/x11r7/xlib_libxshmfence/Config.in b/package/x11r7/xlib_libxshmfence/Config.in
+index 710476b357..7823bda7c0 100644
+--- a/package/x11r7/xlib_libxshmfence/Config.in
++++ b/package/x11r7/xlib_libxshmfence/Config.in
+@@ -1,5 +1,8 @@
+ config BR2_PACKAGE_XLIB_LIBXSHMFENCE
+ 	bool "libxshmfence"
++	# Due to use of SYS_futex - can be enabled again when upstream
++	# adds SYS_futex64 as an alternative
++	depends on !BR2_RISCV_32
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	select BR2_PACKAGE_XORGPROTO
+ 	help
+diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
+index fcd3d0ae00..4dc15435a8 100644
+--- a/package/x11r7/xserver_xorg-server/Config.in
++++ b/package/x11r7/xserver_xorg-server/Config.in
+@@ -53,7 +53,8 @@ config BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	select BR2_PACKAGE_LIBDRM
+ 	select BR2_PACKAGE_LIBPCIACCESS
+-	select BR2_PACKAGE_XLIB_LIBXSHMFENCE if BR2_TOOLCHAIN_HAS_SYNC_4
++	select BR2_PACKAGE_XLIB_LIBXSHMFENCE if \
++		(BR2_TOOLCHAIN_HAS_SYNC_4 && !BR2_RISCV_32)
+ 	help
+ 	  This variant of the X.org server is the full-blown variant,
+ 	  as used by desktop GNU/Linux distributions. The drivers (for
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
