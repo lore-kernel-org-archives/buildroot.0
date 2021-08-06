@@ -8,83 +8,86 @@ X-Spam-Status: No, score=-18.5 required=3.0 tests=BAYES_00,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A6454C4338F
-	for <buildroot@archiver.kernel.org>; Fri,  6 Aug 2021 21:11:03 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B596C4338F
+	for <buildroot@archiver.kernel.org>; Fri,  6 Aug 2021 21:25:23 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 4D25660F42
-	for <buildroot@archiver.kernel.org>; Fri,  6 Aug 2021 21:11:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4D25660F42
+	by mail.kernel.org (Postfix) with ESMTPS id 1C1226108D
+	for <buildroot@archiver.kernel.org>; Fri,  6 Aug 2021 21:25:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1C1226108D
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0E094401B9;
-	Fri,  6 Aug 2021 21:11:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CC2B94059F;
+	Fri,  6 Aug 2021 21:25:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1jYTjzg3fxAD; Fri,  6 Aug 2021 21:11:02 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 22dyFI5ebYpO; Fri,  6 Aug 2021 21:25:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 28ED8401CF;
-	Fri,  6 Aug 2021 21:11:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 88829404FC;
+	Fri,  6 Aug 2021 21:25:20 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C1A521BF5B5
- for <buildroot@lists.busybox.net>; Fri,  6 Aug 2021 21:10:59 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 869371BF5B5
+ for <buildroot@lists.busybox.net>; Fri,  6 Aug 2021 21:25:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B0543401CF
- for <buildroot@lists.busybox.net>; Fri,  6 Aug 2021 21:10:59 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 74722401CF
+ for <buildroot@lists.busybox.net>; Fri,  6 Aug 2021 21:25:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id R528DWtGy5I2 for <buildroot@lists.busybox.net>;
- Fri,  6 Aug 2021 21:10:58 +0000 (UTC)
+ with ESMTP id VtPd1v3CXCLY for <buildroot@lists.busybox.net>;
+ Fri,  6 Aug 2021 21:25:17 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
- [IPv6:2a00:1450:4864:20::429])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A591B401B9
- for <buildroot@buildroot.org>; Fri,  6 Aug 2021 21:10:58 +0000 (UTC)
-Received: by mail-wr1-x429.google.com with SMTP id p5so12663189wro.7
- for <buildroot@buildroot.org>; Fri, 06 Aug 2021 14:10:58 -0700 (PDT)
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
+ [IPv6:2a00:1450:4864:20::32a])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 2CD12400DF
+ for <buildroot@buildroot.org>; Fri,  6 Aug 2021 21:25:17 +0000 (UTC)
+Received: by mail-wm1-x32a.google.com with SMTP id
+ f9-20020a05600c1549b029025b0f5d8c6cso9855274wmg.4
+ for <buildroot@buildroot.org>; Fri, 06 Aug 2021 14:25:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=omlnOrfjRXlSGbhZvMwpJrpntiFj41K1t4gdgOHcxQY=;
- b=DgVwQ78MtzZFEE8Z7bBpg+n0k3J2eNFn9vjEoCuqLlgJSnBxk9uhENrLCfwP4MfRsN
- byHW3gBSXvxsGZU+sHtbebAfKCj+3L6iwHEqCWUjCeGOmVoIHEgB3M2Cig/muA4Bul18
- 3wEKo46DUAs25S0p/NNakdlUTFk3/DVvznqWVx9nitg0+p5dMc3pJPpBWYnsy9ZCG0T0
- iXxMpFuk6g9ND9vI0og+knIxr6y2QkEvGNWy0uFVS0JvLt7qWjfQYN6GbE4NAFOYpwEA
- tUTsv8pW0D0SxVbQQC17ee2nRuO/Pd7zGrqwVRv/ccP49WMuIHZ1/bWiSq3he6UBwSZH
- uG/Q==
+ bh=gXt+nFhM/YCxBUzd7TrfXtJ9w3/SaQUlyUp3RMVKtlg=;
+ b=Oxt2jgPk6NiOJezDI2ajkvaiQTmFjIWSRcbVHcqI9QRxuOHsL7MoqDh6AV1s7T3pwS
+ YTFIGXynUhCL0TFSGT4OtP9gnFR/pbp0tbTj8YRfLTYQ4VNgxS6cCNVtk4WGx7VcxaqL
+ eaYcHMUnG+gcYcQ/yQX3sixa6c1sK5VUEA+D3jdxblL98exasgG15iXWdbDfaO7bJQoj
+ u0IqkVZU7vyG6SNxwLQ8m0mxKUSwfgdVZ6OrFNl8UlI9lzoDVAICQQtzG+FojmxZYbNe
+ nrx3fy6CvXTWK3VpxMdRFFo86liatxA+i8sVjxAJjp7YSmzPgYE6Ii0g17CzdHPlbrmd
+ ZaTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=omlnOrfjRXlSGbhZvMwpJrpntiFj41K1t4gdgOHcxQY=;
- b=JfJvsQQ0JzW8htSXhJN2eqjDo6t3Q0tWWVwWzAN4H7EEUb1OjwXGBiiBeDu+Nbd0JX
- wO7lnWiYRhc5+/xwYsGWlWJMJxmxfytHMjaP2DaFdLITk7qvFKTXTrGWdJ9a5hgYDalS
- 1U8xqiI1Rne2vxHcLIHjqZUG1K4aJTPvUArO3aKaEzNx6e+g4JVLJxVrtmV6nJTFF9x9
- KSPLlzCBm6MQIzPoMDKKWpL76xJcATMch3zUIszXM+YKi6G3zXJYmB7wDeKJT942rvsp
- qj6zP0qeT7LVzSC3q+1aqz7EncJoKaJwvxjpzJC2t8yn4Ln/EjFgqXyg+wF9vK07q1YT
- jCkg==
-X-Gm-Message-State: AOAM531nsdKXkuXwPzEQm2Nvo3alpx/BJ5pHa/3KwAZxs0JnE3Sf7kpx
- 1gJBhO14jCY7Pwtc0R+JjvpYA47TABc29A==
-X-Google-Smtp-Source: ABdhPJwCQUkzKqJ0ViRbVHZmZ1tjTfrQdQ+k+Nzio0+b9TOPxJrQr2p4Nf1uIVjgk9ePL3pCefUjNA==
-X-Received: by 2002:a5d:4410:: with SMTP id z16mr12665406wrq.173.1628284256631; 
- Fri, 06 Aug 2021 14:10:56 -0700 (PDT)
+ bh=gXt+nFhM/YCxBUzd7TrfXtJ9w3/SaQUlyUp3RMVKtlg=;
+ b=cBHvI8H3V7WbFUgBWSyv6pw2bpI79f/zrEj2juNUv3V7VP80R6ztl18mKkXaeasCtx
+ MpgjNQ+UX2mypLgnitSdDXgV03dUjgsuNd9tXRXUsxLXX8KTcaSELn2fwXQwyUuhgAs/
+ CwXHSw9473srfTGzOXVnD0XAEr7blDBFoYhaMPBJN+ugMibki+JnXiaz81B6Po9ZSuRa
+ jC6AnmTznLAHlcZR79zVAdY9FM0C/0cFg2mGcIkZwSITK/ATeaEP8b3l9i+/s6hMhR97
+ pTQ9xnb2Jyqei+kAjGMQZPihfq4FDaZNrg0Pg+5AeAyilGq6uMZXyEMdxVDEKMatgCbn
+ VINw==
+X-Gm-Message-State: AOAM5310RPe00077FiP9gPDZ85VVE+NqNXBu2F+nnOAb4lJjducwVWkR
+ q+gzSPXZjzigXiPnmh6qvvLdttPivTdo/g==
+X-Google-Smtp-Source: ABdhPJzKIxukPOC4Tg35LT6WXzVrE3QnU39mhuPnTzmNjOJ+B6nMt5ANkEroz9svq2BSL9hk59wtlg==
+X-Received: by 2002:a05:600c:4f0d:: with SMTP id
+ l13mr5187668wmq.18.1628285115161; 
+ Fri, 06 Aug 2021 14:25:15 -0700 (PDT)
 Received: from kali.home (pop.92-184-97-136.mobile.abo.orange.fr.
  [92.184.97.136])
- by smtp.gmail.com with ESMTPSA id 129sm9482367wmz.26.2021.08.06.14.10.55
+ by smtp.gmail.com with ESMTPSA id w5sm12448370wro.45.2021.08.06.14.25.14
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 06 Aug 2021 14:10:56 -0700 (PDT)
+ Fri, 06 Aug 2021 14:25:14 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri,  6 Aug 2021 23:10:48 +0200
-Message-Id: <20210806211048.115264-1-fontaine.fabrice@gmail.com>
+Date: Fri,  6 Aug 2021 23:25:06 +0200
+Message-Id: <20210806212506.116451-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/qemu: disable vhost-user with
- uclibc-ng
+Subject: [Buildroot] [PATCH 1/1] package/xen: fix build with gcc 11
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,45 +99,72 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>,
+Cc: Alistair Francis <alistair@alistair23.me>,
+ Matt Weber <matthew.weber@collins.com>,
  Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-Disable vhost-user on uclibc-ng as it raises build failures since bump
-to version 6.0.0 in commit 6b86c9335fc3ff381878156c6243454d4b688df9 and
-https://github.com/qemu/qemu/commit/810033be083040591fee2fc09f2f294670ed1930
+Fix the following build failure with gcc 11:
 
-The issue is that F_ADD_SEALS and F_SEAL_xxx variables are not defined on
-uclibc-ng (even if MFD_ALLOW_SEALING is defined) resulting in the
-following build failure:
-
-../subprojects/libvhost-user/libvhost-user.c:1637:22: error: 'F_ADD_SEALS' undeclared (first use in this function)
- 1637 |     ret = fcntl(*fd, F_ADD_SEALS, flags);
-      |                      ^~~~~~~~~~~
+linux.c:165:50: error: argument 7 of type 'const xen_pfn_t[]' {aka 'const long long unsigned int[]'} declared as an ordinary array [-Werror=vla-parameter]
+  165 |                                  const xen_pfn_t arr[/*num*/], int err[/*num*/])
+      |                                  ~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+In file included from linux.c:29:
+private.h:35:50: note: previously declared as a variable length array 'const xen_pfn_t[num]' {aka 'const long long unsigned int[num]'}
+   35 |                                  const xen_pfn_t arr[num], int err[num]);
+      |                                  ~~~~~~~~~~~~~~~~^~~~~~~~
 
 Fixes:
- - http://autobuild.buildroot.org/results/9f393539931b51191cf7128e5c618c2398fc86c1
+ - http://autobuild.buildroot.org/results/f70d060cf50254694113f19f50a8ef96ef33dd1a
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/qemu/qemu.mk | 1 +
- 1 file changed, 1 insertion(+)
+ ...osdep_xenforeignmemory_map-prototype.patch | 33 +++++++++++++++++++
+ 1 file changed, 33 insertions(+)
+ create mode 100644 package/xen/0002-libs-foreignmemory-Fix-osdep_xenforeignmemory_map-prototype.patch
 
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index b2a9420b21..1854aed201 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
-@@ -201,6 +201,7 @@ define QEMU_CONFIGURE_CMDS
- 			--disable-capstone \
- 			--with-git-submodules=ignore \
- 			--disable-opengl \
-+			$(if $(BR2_TOOLCHAIN_USES_UCLIBC),--disable-vhost-user,--enable-vhost-user) \
- 			--disable-vhost-user-blk-server \
- 			--disable-virtiofsd \
- 			--disable-tests \
+diff --git a/package/xen/0002-libs-foreignmemory-Fix-osdep_xenforeignmemory_map-prototype.patch b/package/xen/0002-libs-foreignmemory-Fix-osdep_xenforeignmemory_map-prototype.patch
+new file mode 100644
+index 0000000000..170d1c22c2
+--- /dev/null
++++ b/package/xen/0002-libs-foreignmemory-Fix-osdep_xenforeignmemory_map-prototype.patch
+@@ -0,0 +1,33 @@
++From 5d3e4ebb5c71477d74a0c503438545a0126d3863 Mon Sep 17 00:00:00 2001
++From: Anthony PERARD <anthony.perard@citrix.com>
++Date: Tue, 1 Jun 2021 16:41:47 +0100
++Subject: [PATCH] libs/foreignmemory: Fix osdep_xenforeignmemory_map prototype
++
++Commit cf8c4d3d13b8 made some preparation to have one day
++variable-length-array argument, but didn't declare the array in the
++function prototype the same way as in the function definition. And now
++GCC 11 complains about it.
++
++Fixes: cf8c4d3d13b8 ("tools/libs/foreignmemory: pull array length argument to map forward")
++Signed-off-by: Anthony PERARD <anthony.perard@citrix.com>
++Reviewed-by: Jan Beulich <jbeulich@suse.com>
++[Retrieved from:
++https://github.com/xen-project/xen/commit/5d3e4ebb5c71477d74a0c503438545a0126d3863]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ tools/libs/foreignmemory/private.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/tools/libs/foreignmemory/private.h b/tools/libs/foreignmemory/private.h
++index 1ee3626dd278..5bb0cefb0987 100644
++--- a/tools/libs/foreignmemory/private.h
+++++ b/tools/libs/foreignmemory/private.h
++@@ -32,7 +32,7 @@ int osdep_xenforeignmemory_close(xenforeignmemory_handle *fmem);
++ void *osdep_xenforeignmemory_map(xenforeignmemory_handle *fmem,
++                                  uint32_t dom, void *addr,
++                                  int prot, int flags, size_t num,
++-                                 const xen_pfn_t arr[num], int err[num]);
+++                                 const xen_pfn_t arr[/*num*/], int err[/*num*/]);
++ int osdep_xenforeignmemory_unmap(xenforeignmemory_handle *fmem,
++                                  void *addr, size_t num);
++ 
 -- 
 2.30.2
 
