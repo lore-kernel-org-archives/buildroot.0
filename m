@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 68B0FC4338F
-	for <buildroot@archiver.kernel.org>; Fri,  6 Aug 2021 21:04:59 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C2B7AC4338F
+	for <buildroot@archiver.kernel.org>; Fri,  6 Aug 2021 21:05:11 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2599E61186
-	for <buildroot@archiver.kernel.org>; Fri,  6 Aug 2021 21:04:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2599E61186
+	by mail.kernel.org (Postfix) with ESMTPS id 75B9461184
+	for <buildroot@archiver.kernel.org>; Fri,  6 Aug 2021 21:05:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 75B9461184
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E8A3F60AD2;
-	Fri,  6 Aug 2021 21:04:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4197D40463;
+	Fri,  6 Aug 2021 21:05:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mw10jrI0YrsH; Fri,  6 Aug 2021 21:04:58 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id jQpmxTHxde7B; Fri,  6 Aug 2021 21:05:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1AC0560B3C;
-	Fri,  6 Aug 2021 21:04:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 95638404A8;
+	Fri,  6 Aug 2021 21:05:09 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 86E6C1BF3AF
- for <buildroot@lists.busybox.net>; Fri,  6 Aug 2021 21:03:05 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 243931BF3AF
+ for <buildroot@lists.busybox.net>; Fri,  6 Aug 2021 21:03:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id EF80460A9D
- for <buildroot@lists.busybox.net>; Fri,  6 Aug 2021 21:03:02 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5900260AA8
+ for <buildroot@lists.busybox.net>; Fri,  6 Aug 2021 21:03:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id p6n_a6SSchfS for <buildroot@lists.busybox.net>;
- Fri,  6 Aug 2021 21:03:02 +0000 (UTC)
+ with ESMTP id 95-bJE_lXzsx for <buildroot@lists.busybox.net>;
+ Fri,  6 Aug 2021 21:03:01 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id A9B4C60AA8
+ by smtp3.osuosl.org (Postfix) with ESMTP id 60A7260A78
  for <buildroot@buildroot.org>; Fri,  6 Aug 2021 21:03:01 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id CA0898C990; Fri,  6 Aug 2021 21:02:46 +0000 (UTC)
+ id AECBD8704B; Fri,  6 Aug 2021 21:02:46 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 6 Aug 2021 22:38:53 +0200
+Date: Fri, 6 Aug 2021 22:27:31 +0200
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 7d8ab4f46070f26c335e10bfc7b1f6bda04be6bd
-X-Git-Newrev: cc989eb4dd7834b747952f11f4d99c4269bb6c68
+X-Git-Oldrev: 4f7057bde0bb6bdf40e1d640d69404bf27174007
+X-Git-Newrev: c3497ff702297f03ca25b392fbe4334bdc3af516
 X-Patchwork-Hint: ignore
-Message-Id: <20210806210246.CA0898C990@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x]
- docs/manual/resources.txt: change pastebin site URL
+Message-Id: <20210806210246.AECBD8704B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/nmap: fix ncat on
+ Unix socket
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,32 +70,57 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cc989eb4dd7834b747952f11f4d99c4269bb6c68
+commit: https://git.buildroot.net/buildroot/commit/?id=c3497ff702297f03ca25b392fbe4334bdc3af516
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-code.bulix.org no longer exists, suggest paste.ack.tf instead, as an
-example.
+Starting with nmap 7.91, ncat segfaults on an attempt to use it for a
+Unix-domain socket (`ncat -U path`). The fix has been committed to nmap
+in r38121.
 
+Signed-off-by: Alexey Neyman <stilor@att.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 0a954d441218daa6bbafb74d30539e6b14f193b8)
+(cherry picked from commit 2f99483a59edc4e0ad9482551b3af2d8f4be1793)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/manual/resources.txt | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/nmap/0002-ncat-unix-socket.patch | 30 ++++++++++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
-diff --git a/docs/manual/resources.txt b/docs/manual/resources.txt
-index e621b6b069..e90a49b2ab 100644
---- a/docs/manual/resources.txt
-+++ b/docs/manual/resources.txt
-@@ -32,7 +32,7 @@ hosted on https://www.oftc.net/WebChat/[OFTC]. It is a useful place to
- ask quick questions or discuss on certain topics.
- +
- When asking for help on IRC, share relevant logs or pieces of code
--using a code sharing website, such as http://code.bulix.org.
-+using a code sharing website, such as https://paste.ack.tf/.
- +
- Note that for certain questions, posting to the mailing list may be
- better as it will reach more people, both developers and users.
+diff --git a/package/nmap/0002-ncat-unix-socket.patch b/package/nmap/0002-ncat-unix-socket.patch
+new file mode 100644
+index 0000000000..b6484ebeea
+--- /dev/null
++++ b/package/nmap/0002-ncat-unix-socket.patch
+@@ -0,0 +1,30 @@
++ChangeLog:
++
++o [Ncat][GH#2154] Ncat no longer crashes when used with Unix domain sockets.
++
++Backported from: r38121
++
++Signed-off-by: Alexey Neyman <stilor@att.net>
++
++Index: ncat/ncat_main.c
++===================================================================
++--- a/ncat/ncat_main.c	(revision 38120)
+++++ b/ncat/ncat_main.c	(revision 38121)
++@@ -846,7 +846,7 @@
++             targetaddrs->addr.un.sun_family = AF_UNIX;
++             strncpy(targetaddrs->addr.un.sun_path, argv[optind], sizeof(targetaddrs->addr.un.sun_path));
++             targetaddrs->addrlen = SUN_LEN(&targetaddrs->addr.un);
++-            o.target = argv[optind];
+++            o.sslservername = o.target = argv[optind];
++             optind++;
++         } else
++ #endif
++@@ -865,7 +865,7 @@
++                 targetaddrs->addr.vm.svm_cid = long_cid;
++ 
++                 targetaddrs->addrlen = sizeof(targetaddrs->addr.vm);
++-                o.target = argv[optind];
+++                o.sslservername = o.target = argv[optind];
++                 optind++;
++             }
++         } else
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
