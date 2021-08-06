@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E85CC4338F
-	for <buildroot@archiver.kernel.org>; Fri,  6 Aug 2021 21:05:36 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BF6BAC4338F
+	for <buildroot@archiver.kernel.org>; Fri,  6 Aug 2021 21:05:48 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2A79761186
-	for <buildroot@archiver.kernel.org>; Fri,  6 Aug 2021 21:05:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2A79761186
+	by mail.kernel.org (Postfix) with ESMTPS id 784FA61184
+	for <buildroot@archiver.kernel.org>; Fri,  6 Aug 2021 21:05:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 784FA61184
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 00C6F40692;
-	Fri,  6 Aug 2021 21:05:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 48C8A83AB2;
+	Fri,  6 Aug 2021 21:05:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ApcSJaFzoM7L; Fri,  6 Aug 2021 21:05:35 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id w2_rb_cH8QqN; Fri,  6 Aug 2021 21:05:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4D8A84062C;
-	Fri,  6 Aug 2021 21:05:34 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 359D31BF3AF
+	by smtp1.osuosl.org (Postfix) with ESMTP id 94B3B83A79;
+	Fri,  6 Aug 2021 21:05:46 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5B9B71C1162
  for <buildroot@lists.busybox.net>; Fri,  6 Aug 2021 21:03:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 22ACF60AA2
+ by smtp2.osuosl.org (Postfix) with ESMTP id 43EF640544
  for <buildroot@lists.busybox.net>; Fri,  6 Aug 2021 21:03:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ep0zCDs3i0dq for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Bz_9n14t-0kD for <buildroot@lists.busybox.net>;
  Fri,  6 Aug 2021 21:03:11 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 54C8C60A9D
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6F72D402C6
  for <buildroot@buildroot.org>; Fri,  6 Aug 2021 21:03:11 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 93F228C9AC; Fri,  6 Aug 2021 21:02:56 +0000 (UTC)
+ id AF35686DE4; Fri,  6 Aug 2021 21:02:56 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 6 Aug 2021 21:48:46 +0200
+Date: Fri, 6 Aug 2021 22:13:29 +0200
 X-Git-Refname: refs/heads/2021.05.x
-X-Git-Oldrev: 757304eb36197b04f97afcad52833662c52badc0
-X-Git-Newrev: 36de16d66766cef1174a1f5bb1d02c60a3f651de
+X-Git-Oldrev: 2d8ba74fe3172395c4a62f1afb79c3eac6abd7e6
+X-Git-Newrev: ecba2d0b6c26f20f34ef648504497bca401200fc
 X-Patchwork-Hint: ignore
-Message-Id: <20210806210256.93F228C9AC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.05.x]
- package/x11r7/xserver_xorg-server: bump version to 1.20.12
+Message-Id: <20210806210256.AF35686DE4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.05.x] utils/scanpypi: fix
+ flake8 errors
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,52 +70,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=36de16d66766cef1174a1f5bb1d02c60a3f651de
+commit: https://git.buildroot.net/buildroot/commit/?id=ecba2d0b6c26f20f34ef648504497bca401200fc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
 
-Release notes:
-https://lists.x.org/archives/xorg-announce/2021-July/003098.html
+Commit e43c0509442c746bea305aa2b0a5f7ff5adfd142 introduced two flake8
+errors:
 
-Follow upstream switch to .xz tarballs.
+utils/scanpypi:300:26: E231 missing whitespace after ','
+utils/scanpypi:302:9: F841 local variable 'setup' is assigned to but never used
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 5141b64eb36e1f9a7683c702f020d11990bf041a)
+The first one is easily fixed. The second one needs a little bit of
+explanation. Before commit e43c0509, the return value of
+imp.load_module() was used to be able to explicitly call the 'setup'
+function in it in case the metadata was not populated. Since that
+commit, calling that function is no longer needed, since setup.py is
+executed in exactly the same way as when it's run from the command line,
+so if that doesn't work, it's completely broken anyway. Therefore, we
+can simply discard the return value of imp.load_module().
+
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit f982f7043419dea2d21ebe20c1b383633a517674)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xserver_xorg-server/xserver_xorg-server.hash | 6 +++---
- package/x11r7/xserver_xorg-server/xserver_xorg-server.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ utils/scanpypi | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-index 9876255c8e..167d3fa591 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-@@ -1,6 +1,6 @@
--# From https://lists.x.org/archives/xorg-announce/2021-April/003081.html
--sha256  914c796e3ffabe1af48071d40ccc85e92117c97a9082ed1df29e4d64e3c34c49  xorg-server-1.20.11.tar.bz2
--sha512  1017015b9fd5d53788abe3641d877e6df8609841fa5c1847c0a5e133ddcc1b758a5d695304ebd36828099ec201a85b6b70b46f5ea4f81c5bd3a16fa6e175e3c2  xorg-server-1.20.11.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2021-July/003098.html
-+sha256  336dc093431d81ecc03fa36af771f1181334f2746b7de7796f3cc6a8fa9e8cac  xorg-server-1.20.12.tar.xz
-+sha512  98350c42fb1f10c965663c1c8d4b225689a6a63163d788d454aa71b28b9cc8fcf9709a932f882358a13ca0c277c0c15812d05919092b4c32828d4ed61cca0406  xorg-server-1.20.12.tar.xz
- 
- # Locally calculated
- sha256  4cc0447a22635c7b2f1a93fec4aa94f1970fadeb72a063de006b51cf4963a06f  COPYING
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index ae17dd535e..26cc1c07b5 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--XSERVER_XORG_SERVER_VERSION = 1.20.11
--XSERVER_XORG_SERVER_SOURCE = xorg-server-$(XSERVER_XORG_SERVER_VERSION).tar.bz2
-+XSERVER_XORG_SERVER_VERSION = 1.20.12
-+XSERVER_XORG_SERVER_SOURCE = xorg-server-$(XSERVER_XORG_SERVER_VERSION).tar.xz
- XSERVER_XORG_SERVER_SITE = https://xorg.freedesktop.org/archive/individual/xserver
- XSERVER_XORG_SERVER_LICENSE = MIT
- XSERVER_XORG_SERVER_LICENSE_FILES = COPYING
+diff --git a/utils/scanpypi b/utils/scanpypi
+index 04c43f9311..9dede4e119 100755
+--- a/utils/scanpypi
++++ b/utils/scanpypi
+@@ -297,9 +297,9 @@ class BuildrootPackage():
+         """
+         current_dir = os.getcwd()
+         os.chdir(self.tmp_extract)
+-        sys.path.insert(0,self.tmp_extract)
++        sys.path.insert(0, self.tmp_extract)
+         s_file, s_path, s_desc = imp.find_module('setup', [self.tmp_extract])
+-        setup = imp.load_module('__main__', s_file, s_path, s_desc)
++        imp.load_module('__main__', s_file, s_path, s_desc)
+         if self.metadata_name in self.setup_args:
+             pass
+         elif self.metadata_name.replace('_', '-') in self.setup_args:
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
