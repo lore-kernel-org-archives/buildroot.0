@@ -2,57 +2,57 @@ Return-Path: <SRS0=2n7N=M5=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 09866C4338F
-	for <buildroot@archiver.kernel.org>; Fri,  6 Aug 2021 21:04:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 68B0FC4338F
+	for <buildroot@archiver.kernel.org>; Fri,  6 Aug 2021 21:04:59 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B7D1661184
-	for <buildroot@archiver.kernel.org>; Fri,  6 Aug 2021 21:04:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B7D1661184
+	by mail.kernel.org (Postfix) with ESMTPS id 2599E61186
+	for <buildroot@archiver.kernel.org>; Fri,  6 Aug 2021 21:04:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2599E61186
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8647360766;
-	Fri,  6 Aug 2021 21:04:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E8A3F60AD2;
+	Fri,  6 Aug 2021 21:04:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IbXq-hbkQ8Gr; Fri,  6 Aug 2021 21:04:45 +0000 (UTC)
+	with ESMTP id mw10jrI0YrsH; Fri,  6 Aug 2021 21:04:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9042960AA2;
-	Fri,  6 Aug 2021 21:04:44 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 83BE61C1162
- for <buildroot@lists.busybox.net>; Fri,  6 Aug 2021 21:03:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1AC0560B3C;
+	Fri,  6 Aug 2021 21:04:57 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 86E6C1BF3AF
+ for <buildroot@lists.busybox.net>; Fri,  6 Aug 2021 21:03:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9D4E583A79
+ by smtp3.osuosl.org (Postfix) with ESMTP id EF80460A9D
  for <buildroot@lists.busybox.net>; Fri,  6 Aug 2021 21:03:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rB_T9HBn29yg for <buildroot@lists.busybox.net>;
- Fri,  6 Aug 2021 21:03:01 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id p6n_a6SSchfS for <buildroot@lists.busybox.net>;
+ Fri,  6 Aug 2021 21:03:02 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9D63F83AA6
+ by smtp3.osuosl.org (Postfix) with ESMTP id A9B4C60AA8
  for <buildroot@buildroot.org>; Fri,  6 Aug 2021 21:03:01 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id DDD058C98F; Fri,  6 Aug 2021 21:02:46 +0000 (UTC)
+ id CA0898C990; Fri,  6 Aug 2021 21:02:46 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 6 Aug 2021 22:42:15 +0200
+Date: Fri, 6 Aug 2021 22:38:53 +0200
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 22eb1e5a920cbd9a7121b3e2851ae9f5a256a360
-X-Git-Newrev: f74dba08d8bbe68b81293246b0631cac1336c794
+X-Git-Oldrev: 7d8ab4f46070f26c335e10bfc7b1f6bda04be6bd
+X-Git-Newrev: cc989eb4dd7834b747952f11f4d99c4269bb6c68
 X-Patchwork-Hint: ignore
-Message-Id: <20210806210246.DDD058C98F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/fail2ban: fix
- CVE-2021-32749
+Message-Id: <20210806210246.CA0898C990@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x]
+ docs/manual/resources.txt: change pastebin site URL
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,209 +70,32 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f74dba08d8bbe68b81293246b0631cac1336c794
+commit: https://git.buildroot.net/buildroot/commit/?id=cc989eb4dd7834b747952f11f4d99c4269bb6c68
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-fail2ban is a daemon to ban hosts that cause multiple authentication
-errors. In versions 0.9.7 and prior, 0.10.0 through 0.10.6, and 0.11.0
-through 0.11.2, there is a vulnerability that leads to possible remote
-code execution in the mailing action mail-whois. Command `mail` from
-mailutils package used in mail actions like `mail-whois` can execute
-command if unescaped sequences (`\n~`) are available in "foreign" input
-(for instance in whois output). To exploit the vulnerability, an
-attacker would need to insert malicious characters into the response
-sent by the whois server, either via a MITM attack or by taking over a
-whois server. The issue is patched in versions 0.10.7 and 0.11.3. As a
-workaround, one may avoid the usage of action `mail-whois` or patch the
-vulnerability manually.
+code.bulix.org no longer exists, suggest paste.ack.tf instead, as an
+example.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 6a7decee50fb402a28aa2e95e63a74cbcf3d6b26)
+(cherry picked from commit 0a954d441218daa6bbafb74d30539e6b14f193b8)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...e-RCE-vulnerability-unset-escape-variable.patch | 158 +++++++++++++++++++++
- package/fail2ban/fail2ban.mk                       |   3 +
- 2 files changed, 161 insertions(+)
+ docs/manual/resources.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/fail2ban/0001-fixed-possible-RCE-vulnerability-unset-escape-variable.patch b/package/fail2ban/0001-fixed-possible-RCE-vulnerability-unset-escape-variable.patch
-new file mode 100644
-index 0000000000..6d44f41d85
---- /dev/null
-+++ b/package/fail2ban/0001-fixed-possible-RCE-vulnerability-unset-escape-variable.patch
-@@ -0,0 +1,158 @@
-+From 410a6ce5c80dd981c22752da034f2529b5eee844 Mon Sep 17 00:00:00 2001
-+From: sebres <serg.brester@sebres.de>
-+Date: Mon, 21 Jun 2021 17:12:53 +0200
-+Subject: [PATCH] fixed possible RCE vulnerability, unset escape variable
-+ (default tilde) stops consider "~" char after new-line as composing escape
-+ sequence
-+
-+[Retrieved from:
-+https://github.com/fail2ban/fail2ban/commit/410a6ce5c80dd981c22752da034f2529b5eee844]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ config/action.d/complain.conf         | 2 +-
-+ config/action.d/dshield.conf          | 2 +-
-+ config/action.d/mail-buffered.conf    | 8 ++++----
-+ config/action.d/mail-whois-lines.conf | 2 +-
-+ config/action.d/mail-whois.conf       | 6 +++---
-+ config/action.d/mail.conf             | 6 +++---
-+ 6 files changed, 13 insertions(+), 13 deletions(-)
-+
-+diff --git a/config/action.d/complain.conf b/config/action.d/complain.conf
-+index 3a5f882c9f..4d73b05859 100644
-+--- a/config/action.d/complain.conf
-++++ b/config/action.d/complain.conf
-+@@ -102,7 +102,7 @@ logpath = /dev/null
-+ # Notes.:  Your system mail command. Is passed 2 args: subject and recipient
-+ # Values:  CMD
-+ #
-+-mailcmd = mail -s
-++mailcmd = mail -E 'set escape' -s
-+ 
-+ # Option:  mailargs
-+ # Notes.:  Additional arguments to mail command. e.g. for standard Unix mail:
-+diff --git a/config/action.d/dshield.conf b/config/action.d/dshield.conf
-+index c128bef348..3d5a7a53a9 100644
-+--- a/config/action.d/dshield.conf
-++++ b/config/action.d/dshield.conf
-+@@ -179,7 +179,7 @@ tcpflags =
-+ # Notes.:  Your system mail command. Is passed 2 args: subject and recipient
-+ # Values:  CMD
-+ #
-+-mailcmd = mail -s
-++mailcmd = mail -E 'set escape' -s
-+ 
-+ # Option:  mailargs
-+ # Notes.:  Additional arguments to mail command. e.g. for standard Unix mail:
-+diff --git a/config/action.d/mail-buffered.conf b/config/action.d/mail-buffered.conf
-+index 325f185b2f..79b841049c 100644
-+--- a/config/action.d/mail-buffered.conf
-++++ b/config/action.d/mail-buffered.conf
-+@@ -17,7 +17,7 @@ actionstart = printf %%b "Hi,\n
-+               The jail <name> has been started successfully.\n
-+               Output will be buffered until <lines> lines are available.\n
-+               Regards,\n
-+-              Fail2Ban"|mail -s "[Fail2Ban] <name>: started on <fq-hostname>" <dest>
-++              Fail2Ban"|mail -E 'set escape' -s "[Fail2Ban] <name>: started on <fq-hostname>" <dest>
-+ 
-+ # Option:  actionstop
-+ # Notes.:  command executed at the stop of jail (or at the end of Fail2Ban)
-+@@ -28,13 +28,13 @@ actionstop = if [ -f <tmpfile> ]; then
-+                  These hosts have been banned by Fail2Ban.\n
-+                  `cat <tmpfile>`
-+                  Regards,\n
-+-                 Fail2Ban"|mail -s "[Fail2Ban] <name>: Summary from <fq-hostname>" <dest>
-++                 Fail2Ban"|mail -E 'set escape' -s "[Fail2Ban] <name>: Summary from <fq-hostname>" <dest>
-+                  rm <tmpfile>
-+              fi
-+              printf %%b "Hi,\n
-+              The jail <name> has been stopped.\n
-+              Regards,\n
-+-             Fail2Ban"|mail -s "[Fail2Ban] <name>: stopped on <fq-hostname>" <dest>
-++             Fail2Ban"|mail -E 'set escape' -s "[Fail2Ban] <name>: stopped on <fq-hostname>" <dest>
-+ 
-+ # Option:  actioncheck
-+ # Notes.:  command executed once before each actionban command
-+@@ -55,7 +55,7 @@ actionban = printf %%b "`date`: <ip> (<failures> failures)\n" >> <tmpfile>
-+                 These hosts have been banned by Fail2Ban.\n
-+                 `cat <tmpfile>`
-+                 \nRegards,\n
-+-                Fail2Ban"|mail -s "[Fail2Ban] <name>: Summary" <dest>
-++                Fail2Ban"|mail -E 'set escape' -s "[Fail2Ban] <name>: Summary" <dest>
-+                 rm <tmpfile>
-+             fi
-+ 
-+diff --git a/config/action.d/mail-whois-lines.conf b/config/action.d/mail-whois-lines.conf
-+index 3a3e56b2c7..d2818cb9b9 100644
-+--- a/config/action.d/mail-whois-lines.conf
-++++ b/config/action.d/mail-whois-lines.conf
-+@@ -72,7 +72,7 @@ actionunban =
-+ # Notes.:  Your system mail command. Is passed 2 args: subject and recipient
-+ # Values:  CMD
-+ #
-+-mailcmd = mail -s
-++mailcmd = mail -E 'set escape' -s
-+ 
-+ # Default name of the chain
-+ #
-+diff --git a/config/action.d/mail-whois.conf b/config/action.d/mail-whois.conf
-+index 7fea34c40d..ab33b616dc 100644
-+--- a/config/action.d/mail-whois.conf
-++++ b/config/action.d/mail-whois.conf
-+@@ -20,7 +20,7 @@ norestored = 1
-+ actionstart = printf %%b "Hi,\n
-+               The jail <name> has been started successfully.\n
-+               Regards,\n
-+-              Fail2Ban"|mail -s "[Fail2Ban] <name>: started on <fq-hostname>" <dest>
-++              Fail2Ban"|mail -E 'set escape' -s "[Fail2Ban] <name>: started on <fq-hostname>" <dest>
-+ 
-+ # Option:  actionstop
-+ # Notes.:  command executed at the stop of jail (or at the end of Fail2Ban)
-+@@ -29,7 +29,7 @@ actionstart = printf %%b "Hi,\n
-+ actionstop = printf %%b "Hi,\n
-+              The jail <name> has been stopped.\n
-+              Regards,\n
-+-             Fail2Ban"|mail -s "[Fail2Ban] <name>: stopped on <fq-hostname>" <dest>
-++             Fail2Ban"|mail -E 'set escape' -s "[Fail2Ban] <name>: stopped on <fq-hostname>" <dest>
-+ 
-+ # Option:  actioncheck
-+ # Notes.:  command executed once before each actionban command
-+@@ -49,7 +49,7 @@ actionban = printf %%b "Hi,\n
-+             Here is more information about <ip> :\n
-+             `%(_whois_command)s`\n
-+             Regards,\n
-+-            Fail2Ban"|mail -s "[Fail2Ban] <name>: banned <ip> from <fq-hostname>" <dest>
-++            Fail2Ban"|mail -E 'set escape' -s "[Fail2Ban] <name>: banned <ip> from <fq-hostname>" <dest>
-+ 
-+ # Option:  actionunban
-+ # Notes.:  command executed when unbanning an IP. Take care that the
-+diff --git a/config/action.d/mail.conf b/config/action.d/mail.conf
-+index 5d8c0e154c..f4838ddcb6 100644
-+--- a/config/action.d/mail.conf
-++++ b/config/action.d/mail.conf
-+@@ -16,7 +16,7 @@ norestored = 1
-+ actionstart = printf %%b "Hi,\n
-+               The jail <name> has been started successfully.\n
-+               Regards,\n
-+-              Fail2Ban"|mail -s "[Fail2Ban] <name>: started  on <fq-hostname>" <dest>
-++              Fail2Ban"|mail -E 'set escape' -s "[Fail2Ban] <name>: started  on <fq-hostname>" <dest>
-+ 
-+ # Option:  actionstop
-+ # Notes.:  command executed at the stop of jail (or at the end of Fail2Ban)
-+@@ -25,7 +25,7 @@ actionstart = printf %%b "Hi,\n
-+ actionstop = printf %%b "Hi,\n
-+              The jail <name> has been stopped.\n
-+              Regards,\n
-+-             Fail2Ban"|mail -s "[Fail2Ban] <name>: stopped on <fq-hostname>" <dest>
-++             Fail2Ban"|mail -E 'set escape' -s "[Fail2Ban] <name>: stopped on <fq-hostname>" <dest>
-+ 
-+ # Option:  actioncheck
-+ # Notes.:  command executed once before each actionban command
-+@@ -43,7 +43,7 @@ actionban = printf %%b "Hi,\n
-+             The IP <ip> has just been banned by Fail2Ban after
-+             <failures> attempts against <name>.\n
-+             Regards,\n
-+-            Fail2Ban"|mail -s "[Fail2Ban] <name>: banned <ip> from <fq-hostname>" <dest>
-++            Fail2Ban"|mail -E 'set escape' -s "[Fail2Ban] <name>: banned <ip> from <fq-hostname>" <dest>
-+ 
-+ # Option:  actionunban
-+ # Notes.:  command executed when unbanning an IP. Take care that the
-diff --git a/package/fail2ban/fail2ban.mk b/package/fail2ban/fail2ban.mk
-index 0e465e9c0b..a856d220e4 100644
---- a/package/fail2ban/fail2ban.mk
-+++ b/package/fail2ban/fail2ban.mk
-@@ -11,6 +11,9 @@ FAIL2BAN_LICENSE_FILES = COPYING
- FAIL2BAN_CPE_ID_VENDOR = fail2ban
- FAIL2BAN_SETUP_TYPE = distutils
- 
-+# 0001-fixed-possible-RCE-vulnerability-unset-escape-variable.patch
-+FAIL2BAN_IGNORE_CVES += CVE-2021-32749
-+
- ifeq ($(BR2_PACKAGE_PYTHON3),y)
- define FAIL2BAN_PYTHON_2TO3
- 	$(HOST_DIR)/bin/2to3 --write --nobackups --no-diffs $(@D)/bin/* $(@D)/fail2ban
+diff --git a/docs/manual/resources.txt b/docs/manual/resources.txt
+index e621b6b069..e90a49b2ab 100644
+--- a/docs/manual/resources.txt
++++ b/docs/manual/resources.txt
+@@ -32,7 +32,7 @@ hosted on https://www.oftc.net/WebChat/[OFTC]. It is a useful place to
+ ask quick questions or discuss on certain topics.
+ +
+ When asking for help on IRC, share relevant logs or pieces of code
+-using a code sharing website, such as http://code.bulix.org.
++using a code sharing website, such as https://paste.ack.tf/.
+ +
+ Note that for certain questions, posting to the mailing list may be
+ better as it will reach more people, both developers and users.
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
