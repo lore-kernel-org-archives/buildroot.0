@@ -2,57 +2,57 @@ Return-Path: <SRS0=2n7N=M5=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,TVD_SPACE_RATIO,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E5410C4320E
-	for <buildroot@archiver.kernel.org>; Fri,  6 Aug 2021 21:03:05 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A15AC4338F
+	for <buildroot@archiver.kernel.org>; Fri,  6 Aug 2021 21:03:19 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 59F7961186
-	for <buildroot@archiver.kernel.org>; Fri,  6 Aug 2021 21:03:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 59F7961186
+	by mail.kernel.org (Postfix) with ESMTPS id AF23E61184
+	for <buildroot@archiver.kernel.org>; Fri,  6 Aug 2021 21:03:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org AF23E61184
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 15FBA4032B;
-	Fri,  6 Aug 2021 21:03:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4CDC86FB71;
+	Fri,  6 Aug 2021 21:03:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QVfRmKfZLorm; Fri,  6 Aug 2021 21:03:04 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 7FSeDTqaQJsZ; Fri,  6 Aug 2021 21:03:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2EDD3401CF;
-	Fri,  6 Aug 2021 21:03:03 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 140B71BF3AF
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8E7E060AA2;
+	Fri,  6 Aug 2021 21:03:16 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 2B7C21C1162
  for <buildroot@lists.busybox.net>; Fri,  6 Aug 2021 21:03:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 027E740636
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1A16660AB0
  for <buildroot@lists.busybox.net>; Fri,  6 Aug 2021 21:03:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ufWU9sPIjwky for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WRFYL4ZKv9ph for <buildroot@lists.busybox.net>;
  Fri,  6 Aug 2021 21:03:01 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 395EB4059F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 567AF6080E
  for <buildroot@buildroot.org>; Fri,  6 Aug 2021 21:03:01 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 74B7F8C990; Fri,  6 Aug 2021 21:02:46 +0000 (UTC)
+ id A470885BF8; Fri,  6 Aug 2021 21:02:46 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 6 Aug 2021 21:47:28 +0200
+Date: Fri, 6 Aug 2021 22:13:22 +0200
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 856f1996f576fbf9ee7362858d328af7f67e9656
-X-Git-Newrev: 4cc8b8c47ebd09fb1e485d2e4d47003f66f5f46a
+X-Git-Oldrev: 3727d7175c90411ba37cc646cdeede401ed5417e
+X-Git-Newrev: 4f7057bde0bb6bdf40e1d640d69404bf27174007
 X-Patchwork-Hint: ignore
-Message-Id: <20210806210246.74B7F8C990@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x]
- package/x11r7/xlib_libX11: bump version to 1.7.2
+Message-Id: <20210806210246.A470885BF8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] utils/scanpypi: fix
+ flake8 errors
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,48 +70,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4cc8b8c47ebd09fb1e485d2e4d47003f66f5f46a
+commit: https://git.buildroot.net/buildroot/commit/?id=4f7057bde0bb6bdf40e1d640d69404bf27174007
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Release notes:
-https://lists.x.org/archives/xorg-announce/2021-June/003092.html
+Commit e43c0509442c746bea305aa2b0a5f7ff5adfd142 introduced two flake8
+errors:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit df0637171886c2da1c4bdb5b3bf3ae4d29549ad1)
+utils/scanpypi:300:26: E231 missing whitespace after ','
+utils/scanpypi:302:9: F841 local variable 'setup' is assigned to but never used
+
+The first one is easily fixed. The second one needs a little bit of
+explanation. Before commit e43c0509, the return value of
+imp.load_module() was used to be able to explicitly call the 'setup'
+function in it in case the metadata was not populated. Since that
+commit, calling that function is no longer needed, since setup.py is
+executed in exactly the same way as when it's run from the command line,
+so if that doesn't work, it's completely broken anyway. Therefore, we
+can simply discard the return value of imp.load_module().
+
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit f982f7043419dea2d21ebe20c1b383633a517674)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xlib_libX11/xlib_libX11.hash | 6 +++---
- package/x11r7/xlib_libX11/xlib_libX11.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ utils/scanpypi | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/x11r7/xlib_libX11/xlib_libX11.hash b/package/x11r7/xlib_libX11/xlib_libX11.hash
-index b87b2498e8..7aeef33446 100644
---- a/package/x11r7/xlib_libX11/xlib_libX11.hash
-+++ b/package/x11r7/xlib_libX11/xlib_libX11.hash
-@@ -1,6 +1,6 @@
--# From https://lists.x.org/archives/xorg-announce/2021-May/003089.html
--sha256  e64e43deaa562cbfb0d5ada64670ec09c6fac7935262dcd77bbc6d984a535d47  libX11-1.7.1.tar.bz2
--sha512  a76f0a82fce6f9b50646a7cd7ec5ee046650f225816050226068a7548fa083ef07d146d40faaf44e033c59c17b0fda5ffdee3a127dac3ab56cee02133819aa3d  libX11-1.7.1.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2021-June/003092.html
-+sha256  1cfa35e37aaabbe4792e9bb690468efefbfbf6b147d9c69d6f90d13c3092ea6c  libX11-1.7.2.tar.bz2
-+sha512  d01e5c1848c76218605e5af2d353de6b301a251555b52a38dbe930e6635d5e8a92d1486eb6d328ad5d42a5939e0d16868ffa19a75e5a7863d1a32e0d0727bdc7  libX11-1.7.2.tar.bz2
- 
- # Locally computed
- sha256  2daec087a88e7c9b8082557cdeebad5bbb8155a4137472f0b22e269cd99d0c1e  COPYING
-diff --git a/package/x11r7/xlib_libX11/xlib_libX11.mk b/package/x11r7/xlib_libX11/xlib_libX11.mk
-index 39d9dc2cc7..aa3ebf1593 100644
---- a/package/x11r7/xlib_libX11/xlib_libX11.mk
-+++ b/package/x11r7/xlib_libX11/xlib_libX11.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XLIB_LIBX11_VERSION = 1.7.1
-+XLIB_LIBX11_VERSION = 1.7.2
- XLIB_LIBX11_SOURCE = libX11-$(XLIB_LIBX11_VERSION).tar.bz2
- XLIB_LIBX11_SITE = https://xorg.freedesktop.org/archive/individual/lib
- XLIB_LIBX11_LICENSE = MIT
+diff --git a/utils/scanpypi b/utils/scanpypi
+index 04c43f9311..9dede4e119 100755
+--- a/utils/scanpypi
++++ b/utils/scanpypi
+@@ -297,9 +297,9 @@ class BuildrootPackage():
+         """
+         current_dir = os.getcwd()
+         os.chdir(self.tmp_extract)
+-        sys.path.insert(0,self.tmp_extract)
++        sys.path.insert(0, self.tmp_extract)
+         s_file, s_path, s_desc = imp.find_module('setup', [self.tmp_extract])
+-        setup = imp.load_module('__main__', s_file, s_path, s_desc)
++        imp.load_module('__main__', s_file, s_path, s_desc)
+         if self.metadata_name in self.setup_args:
+             pass
+         elif self.metadata_name.replace('_', '-') in self.setup_args:
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
