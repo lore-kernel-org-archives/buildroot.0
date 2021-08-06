@@ -2,57 +2,57 @@ Return-Path: <SRS0=2n7N=M5=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D1D8FC4338F
-	for <buildroot@archiver.kernel.org>; Fri,  6 Aug 2021 21:06:00 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2BCBCC4338F
+	for <buildroot@archiver.kernel.org>; Fri,  6 Aug 2021 21:06:13 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 8F7DC61104
-	for <buildroot@archiver.kernel.org>; Fri,  6 Aug 2021 21:06:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8F7DC61104
+	by mail.kernel.org (Postfix) with ESMTPS id D3F0761104
+	for <buildroot@archiver.kernel.org>; Fri,  6 Aug 2021 21:06:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D3F0761104
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 641AF406AD;
-	Fri,  6 Aug 2021 21:06:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AAEC083AC1;
+	Fri,  6 Aug 2021 21:06:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LSIf1IesKjP2; Fri,  6 Aug 2021 21:05:59 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id VkgdpXCI-PWz; Fri,  6 Aug 2021 21:06:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C5046406A9;
-	Fri,  6 Aug 2021 21:05:58 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6677B1C116E
- for <buildroot@lists.busybox.net>; Fri,  6 Aug 2021 21:03:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1141783ABD;
+	Fri,  6 Aug 2021 21:06:11 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 2BCDE1BF3AF
+ for <buildroot@lists.busybox.net>; Fri,  6 Aug 2021 21:03:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 565FC40628
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5F983402C6
  for <buildroot@lists.busybox.net>; Fri,  6 Aug 2021 21:03:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id B8Vgb3BkjooL for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id iwOdg3SGCA-Q for <buildroot@lists.busybox.net>;
  Fri,  6 Aug 2021 21:03:11 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A6E7F4064F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 652B4401CF
  for <buildroot@buildroot.org>; Fri,  6 Aug 2021 21:03:11 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id E786388212; Fri,  6 Aug 2021 21:02:56 +0000 (UTC)
+ id A39B78C9AF; Fri,  6 Aug 2021 21:02:56 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 6 Aug 2021 22:44:18 +0200
+Date: Fri, 6 Aug 2021 21:52:54 +0200
 X-Git-Refname: refs/heads/2021.05.x
-X-Git-Oldrev: d5959eb8e5148c0645cbb74e330578f22961270c
-X-Git-Newrev: d1118e42895df84c220167872fe88b94e9936183
+X-Git-Oldrev: 36de16d66766cef1174a1f5bb1d02c60a3f651de
+X-Git-Newrev: 2d8ba74fe3172395c4a62f1afb79c3eac6abd7e6
 X-Patchwork-Hint: ignore
-Message-Id: <20210806210256.E786388212@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.05.x] package/go: security bump
- version to 1.16.6
+Message-Id: <20210806210256.A39B78C9AF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.05.x] package/libkrb5: security
+ bump to version 1.18.4
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,72 +65,59 @@ List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1252734497810232147=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
---===============1252734497810232147==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=d1118e42895df84c220167872fe88b94e9936183
+commit: https://git.buildroot.net/buildroot/commit/?id=2d8ba74fe3172395c4a62f1afb79c3eac6abd7e6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
 
-These minor releases include a security fix according to the new security policy (#44918).
+- Fix a denial of service attack against the KDC encrypted challenge
+  code [CVE-2021-36222].
+- Fix a memory leak when gss_inquire_cred() is called without a
+  credential handle.
+- Update indentation in hash file (two spaces)
+- Update hash of NOTICE (update in year:
+  https://github.com/krb5/krb5/commit/9cbfdf65e1718849cb03844d65930e5138e88195)
 
-crypto/tls clients can panic when provided a certificate of the wrong type for the negotiated parameters.
-net/http clients performing HTTPS requests are also affected. The panic can be triggered by an attacker
-in a privileged network position without access to the server certificate's private key, as long as a trusted
-ECDSA or Ed25519 certificate for the server exists (or can be issued), or the client is configured with
-Config.InsecureSkipVerify. Clients that disable all TLS_RSA cipher suites (that is, TLS 1.0–1.2 cipher
-suites without ECDHE), as well as TLS 1.3-only clients, are unaffected.
+https://web.mit.edu/kerberos/krb5-1.18/krb5-1.18.4.html
 
-This is CVE-2021-34558.
-
-View the release notes for more information:
-
-https://golang.org/doc/devel/release.html#go1.16.minor
-
-Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 806b26950d51de22ffbbed0c975e7317982eeb30)
+(cherry picked from commit b65220f56677c0df2646a6d56c9b3e28732dc054)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/go/go.hash | 2 +-
- package/go/go.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libkrb5/libkrb5.hash | 4 ++--
+ package/libkrb5/libkrb5.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index bc6147bb52..cd7f2b3813 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
-@@ -1,3 +1,3 @@
- # From https://golang.org/dl/
--sha256  7bfa7e5908c7cc9e75da5ddf3066d7cbcf3fd9fa51945851325eebc17f50ba80  go1.16.5.src.tar.gz
-+sha256  a3a5d4bc401b51db065e4f93b523347a4d343ae0c0b08a65c3423b05a138037d  go1.16.6.src.tar.gz
- sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index 4252691343..7d6355df92 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/libkrb5/libkrb5.hash b/package/libkrb5/libkrb5.hash
+index e5b24a3f70..860f828793 100644
+--- a/package/libkrb5/libkrb5.hash
++++ b/package/libkrb5/libkrb5.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256	e61783c292b5efd9afb45c555a80dd267ac67eebabca42185362bee6c4fbd719  krb5-1.18.3.tar.gz
++sha256  66085e2f594751e77e82e0dbf7bbc344320fb48a9df2a633cfdd8f7d6da99fc8  krb5-1.18.4.tar.gz
+ 
+ # Hash for license file:
+-sha256	b7a5f14a8719bce5e49a761998aa55438fc890fb40f71228d6a49546f6d5690d  NOTICE
++sha256  7fba8b076bdc2cfef1d0813c5d4067d76d5be60c32d84de22d5d1cf451744feb  NOTICE
+diff --git a/package/libkrb5/libkrb5.mk b/package/libkrb5/libkrb5.mk
+index 794cedd33c..89f219d913 100644
+--- a/package/libkrb5/libkrb5.mk
++++ b/package/libkrb5/libkrb5.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--GO_VERSION = 1.16.5
-+GO_VERSION = 1.16.6
- GO_SITE = https://storage.googleapis.com/golang
- GO_SOURCE = go$(GO_VERSION).src.tar.gz
- 
-
---===============1252734497810232147==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+ LIBKRB5_VERSION_MAJOR = 1.18
+-LIBKRB5_VERSION = $(LIBKRB5_VERSION_MAJOR).3
++LIBKRB5_VERSION = $(LIBKRB5_VERSION_MAJOR).4
+ LIBKRB5_SITE = https://web.mit.edu/kerberos/dist/krb5/$(LIBKRB5_VERSION_MAJOR)
+ LIBKRB5_SOURCE = krb5-$(LIBKRB5_VERSION).tar.gz
+ LIBKRB5_SUBDIR = src
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
 http://lists.busybox.net/mailman/listinfo/buildroot
-
---===============1252734497810232147==--
