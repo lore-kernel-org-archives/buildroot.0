@@ -2,91 +2,142 @@ Return-Path: <SRS0=2n7N=M5=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
-	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+X-Spam-Status: No, score=-16.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BC80BC4338F
-	for <buildroot@archiver.kernel.org>; Fri,  6 Aug 2021 14:36:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 78600C4338F
+	for <buildroot@archiver.kernel.org>; Fri,  6 Aug 2021 14:39:49 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 5DD63611C5
-	for <buildroot@archiver.kernel.org>; Fri,  6 Aug 2021 14:36:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5DD63611C5
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id CBE19611C5
+	for <buildroot@archiver.kernel.org>; Fri,  6 Aug 2021 14:39:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org CBE19611C5
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=theobroma-systems.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2ACBC83A9F;
-	Fri,  6 Aug 2021 14:36:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 88ACB82CFD;
+	Fri,  6 Aug 2021 14:39:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IosT0FTgONAr; Fri,  6 Aug 2021 14:36:56 +0000 (UTC)
+	with ESMTP id 8KOSrt2NvpDx; Fri,  6 Aug 2021 14:39:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2D9E483AA6;
-	Fri,  6 Aug 2021 14:36:55 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4E6821BF321
- for <buildroot@lists.busybox.net>; Fri,  6 Aug 2021 14:36:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CB46583005;
+	Fri,  6 Aug 2021 14:39:46 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id BAD871BF321
+ for <buildroot@lists.busybox.net>; Fri,  6 Aug 2021 14:39:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3DB38401FE
- for <buildroot@lists.busybox.net>; Fri,  6 Aug 2021 14:36:54 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id AA93060783
+ for <buildroot@lists.busybox.net>; Fri,  6 Aug 2021 14:39:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id isPZ7Jdgnqbk for <buildroot@lists.busybox.net>;
- Fri,  6 Aug 2021 14:36:53 +0000 (UTC)
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (1024-bit key) header.d=cherrycloud.onmicrosoft.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id v4iPmYeqhH4j for <buildroot@lists.busybox.net>;
+ Fri,  6 Aug 2021 14:39:44 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
- [IPv6:2a00:1450:4864:20::429])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5A171401F9
- for <buildroot@buildroot.org>; Fri,  6 Aug 2021 14:36:53 +0000 (UTC)
-Received: by mail-wr1-x429.google.com with SMTP id n12so1316928wrr.2
- for <buildroot@buildroot.org>; Fri, 06 Aug 2021 07:36:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=d779WfQ4vt5OAtsgvM8X4x96/q6GFV18h+7yNmYgoT4=;
- b=dSt3v8FaGbakyXeL1JVygSW2EV2AGFOKB25IBuPkukjju5uEvZ1F6VHv31VULsoLvf
- YVYpuIXXzdDdLrqjGNUhHFhLv+UFphitXsL5sVqJtA5dxRN+ZOluSOkWoI3eugfJsxd7
- aHKnZwC7txsdGI6cITgIEN29ySw5yEoh+BvFkuEg/sy9zroft9S9aeIiv7MD1LKjgzav
- 70CgkT3VqvPoSHmnRPI9PA6j83U6lc8skztYfm0DZDqJZdMra2FzeBzMrcpmIXoU4wbp
- DtL9PYC71jR6VXLXExhoB4EvgWBXxo4nqMwRvbX2+Okr5ELlLxAIVmjSuknUmakDACv3
- zSdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=d779WfQ4vt5OAtsgvM8X4x96/q6GFV18h+7yNmYgoT4=;
- b=T0k/DT4HXyvKXHem87dJWCMWVjM0SCVzmyRfXdrrx1rHwmtUSz27nydDb0zadH7t0r
- +ZCwIugISFJoKnAMHoqLZ7Os6S7TdcMFkGrWXBPykusBs6T9RAfq5m7jPt5OJIOsXRzJ
- 3HHY7GNGWx/HfocW78IW99+nm8ynC6zML5DM0HAgfu4Xchc6uuRFmk9qm4wD+tHUwF/s
- a1VYhoLsgnNfvdgH9n1jCHcCCSyD02jlXhpyyawYGYvS7MYfgU179S6IgLh1DPNJutff
- 76Ka5ksdGidx9ZksWMSxowFyXDUggNnTNkk+ryHrlQtLJCb735PkD8xg/98WKa6xSu44
- HmPw==
-X-Gm-Message-State: AOAM531I06m8a0fMs4qUbDvdGoh+XRApsNOt5C8hSKixnoPQhYwe6DtO
- JYCKWoLVlRjKrukdzXxpakwEhUBpPMC58w==
-X-Google-Smtp-Source: ABdhPJxfENeO0UIeqw8muZ/pG5IB5L414K9aUoid1gQZV/fAZJ0L1EKz0R5VsAisxuWWMhymdU+7bg==
-X-Received: by 2002:adf:eecf:: with SMTP id a15mr11386185wrp.269.1628260611275; 
- Fri, 06 Aug 2021 07:36:51 -0700 (PDT)
-Received: from kali.home (pop.92-184-97-49.mobile.abo.orange.fr.
- [92.184.97.49])
- by smtp.gmail.com with ESMTPSA id h14sm9710343wrp.55.2021.08.06.07.36.50
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 06 Aug 2021 07:36:50 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Received: from EUR03-DB5-obe.outbound.protection.outlook.com
+ (mail-db5eur03on0602.outbound.protection.outlook.com
+ [IPv6:2a01:111:f400:fe0a::602])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 41DF86066E
+ for <buildroot@buildroot.org>; Fri,  6 Aug 2021 14:39:44 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HLNqh3D2eXXf97Qg6WtujmGHv/dKjYUS2rTx09n05jP9ATQXWAEIBJWb5obnAB05hFzoQlMcFF6xQKWboG2kgBWRTMvHDjviNnOJ/3E+aqeMW990lKTw1O4TN4CBW+05vAqWSmyugxjm+9S1Ck1Dz4S0Ska6s+TdN+AEJESguD/AabJBAei1Loqro+hozKDexKwTFHhcGjN3ylfdkZVONdUU8CvBewFCc76t5WY0Ihs1zKnCTw1/eNqgPYnv/3SQxuXbAJAeQvpUrQ+9OOT7oJTF5iFZxxVJUu4mieTeOZqHDxyvlj63Zr496qHDXlWLNZbKdpAbaZNgyKX2WzGvCA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=gelaiMxyOxtIGnXBbJmSOQBgBuqzZnxocQ702c8zPs0=;
+ b=UL4vFFA7FC5yfHz9Dv7o0HEKxfIoTGsfI46ejwo4DN9+w+6/0/1bBPhLODpBEwrzA7iqml3en4U+Y2yuECzsCLM6IPtyPq2qyk27WEtqk+BUciYQ1uv6FOEUftnZZ61SCNPAfA2CPg0qAoitZq4fGSblmMgNGwYs3VM9NpMC9dAGzQ4bBkIdUohQWsAPtVzjzFmmYcypw7DB1dPnEHFXrkgRNSXagn0+q9+a3PWGrfya78zFoe9ywcGAPT9xquztjhxUCTQCWdByD73+sj7FoC4WnrM5ZSb2rI9mgJDySddn7BfWuw8VrBX/b2xnqaFVKUw5UC/E2nXjynU4EdHYHw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=theobroma-systems.com; dmarc=pass action=none
+ header.from=theobroma-systems.com; dkim=pass header.d=theobroma-systems.com;
+ arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=cherrycloud.onmicrosoft.com; s=selector2-cherrycloud-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=gelaiMxyOxtIGnXBbJmSOQBgBuqzZnxocQ702c8zPs0=;
+ b=HFp62aoP98wyowOX0IL0OXkymgETznwZXV9PoZHRCZlP3kEpOuRb1PhXvYfCJqaDfY7pxWYlagaBIBOP4pIifjTDY2p17FHiMjfEWF/CgY9CzoNoc5gBmnHjdrJswn4RcmPh/4cElgH70mHErFRUe1W2jejxiLS453coQBdkWdc=
+Authentication-Results: buildroot.org; dkim=none (message not signed)
+ header.d=none;buildroot.org; dmarc=none action=none
+ header.from=theobroma-systems.com;
+Received: from AM0PR0402MB3348.eurprd04.prod.outlook.com
+ (2603:10a6:208:24::24) by AM8PR04MB7794.eurprd04.prod.outlook.com
+ (2603:10a6:20b:247::24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4394.17; Fri, 6 Aug
+ 2021 14:39:40 +0000
+Received: from AM0PR0402MB3348.eurprd04.prod.outlook.com
+ ([fe80::459d:3240:1c4e:b920]) by AM0PR0402MB3348.eurprd04.prod.outlook.com
+ ([fe80::459d:3240:1c4e:b920%6]) with mapi id 15.20.4394.016; Fri, 6 Aug 2021
+ 14:39:40 +0000
+From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
 To: buildroot@buildroot.org
-Date: Fri,  6 Aug 2021 16:36:41 +0200
-Message-Id: <20210806143641.3449707-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.30.2
+Date: Fri,  6 Aug 2021 16:38:39 +0200
+Message-Id: <20210806143839.2905163-1-quentin.schulz@theobroma-systems.com>
+X-Mailer: git-send-email 2.31.1
+X-ClientProxiedBy: FR3P281CA0068.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:4b::15) To AM0PR0402MB3348.eurprd04.prod.outlook.com
+ (2603:10a6:208:24::24)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: add -latomic to
- libavformat.pc
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from localhost.localdomain (92.42.140.82) by
+ FR3P281CA0068.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10:4b::15) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4415.4 via Frontend Transport; Fri, 6 Aug 2021 14:39:40 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: ca6aa8ab-f11b-48da-35d5-08d958e805f4
+X-MS-TrafficTypeDiagnostic: AM8PR04MB7794:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <AM8PR04MB7794E43BFEE96AB1F12A363EC2F39@AM8PR04MB7794.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: rcrJxislyOqAlEy8P/Z2iFwxY+uN9fS+oAuPYkC7zsVzhOoF6vjp5V1tVMCUzcgbJ5FJ3qwQjBnGslZFJqfm13CxH7YA6BcIQrc37t+NlXuTjk+Fz/yzxJ/4DDyqALglD+KdhZ7jQKtrmMbxKHpcjVi+cZPKZGiBCWeMFNXsEWg958AnUOtLH/y+poTKhHFxjJw/wsIU2J4YG8E0Qwa8F1P9x2oqCbY1RhAnCmHndaTohun/AeC3VqKIkYBIzsr80z8NCMAOrvNlnTFKItGaHwdXdnAObdxMjoIyfSEnGPl0UU9nX5Zxz/yIn2eGpftDL9OVNB7eBtJy+TJQQgyIcAIVLOKQ667H/L2tdcDxMzg+OdyVYVkGvyavkVX5nlXveEpOiOmBcFPAyMFBJ5lAaV0PCXFgHMGc8D+2afIapzDdOogaIopey+DFcBrL2v09Yl3H3bABGJOcVw6iGf2vyq7+QAIhVBtrTgLr0Epz8EpPpk3/jouBMdg5SGcAXRwLA/DBoiDQHcLZtPdIdDNPPSefScS8u1rX4H9O77l/YuyiM/Lmi7wviFB8pyq1LF2iA/OA0a/5lQz8MOD91qf75VykyrAjA7CkZxUvA2SwTdRRwMFPJ1gCJ+g7G4b6RIR9avtVDbivXiXRJWmR90ljXzj2gTABqKBJDS3q3YwWscYuHF/1g+jtvsy8JGtXvGaDHeLPwzXXMkDnnnGjCZNfUA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:AM0PR0402MB3348.eurprd04.prod.outlook.com; PTR:; CAT:NONE;
+ SFS:(39830400003)(396003)(376002)(346002)(366004)(136003)(8676002)(2616005)(6916009)(2906002)(956004)(5660300002)(86362001)(36756003)(44832011)(6486002)(316002)(54906003)(66476007)(66946007)(6512007)(1076003)(8936002)(26005)(186003)(6506007)(66556008)(4326008)(478600001)(52116002)(83380400001)(38100700002)(38350700002);
+ DIR:OUT; SFP:1101; 
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?41kFVyUsXtLQYH7l2MDB0nbGZMa0zgQ5rIHTZSLGH8UyKkRM7kVpA6Eecr+H?=
+ =?us-ascii?Q?uTZLnNU4DdnR39IAdIb8cyVEnN60kNfqZbb00FQsmweho9Mwc4kf6VWltc3E?=
+ =?us-ascii?Q?5U4Sf+59+iLMZ1sROw9B5XrDvrHvud3fNiCzWJD5iHgAQ2i2rk6oDBWU1aqA?=
+ =?us-ascii?Q?CHsO1YkZnr1o6/aUkM/mSMPYJpSrqE5QGFtDm5RYNCT0DpN9u0J7Xb+dH+OM?=
+ =?us-ascii?Q?tELnw4GxxW1LEqsJaWB0E0frkRE6p7w/3MW9BwKLeQeEYnNzqOZTvfKp45pj?=
+ =?us-ascii?Q?n5swGARhBL7+3RKbyZnO8RXVZ2j5rAnRN1nTvA65vrT5QwV3R7BYo0V7cd5G?=
+ =?us-ascii?Q?vE7mvIYpaelO7MA0AyRYP+0rfIhtg0amtg1cKXEIYudz+GwK8rofXcOeMgGy?=
+ =?us-ascii?Q?bjFLRFlI7xaiLyurZz6f4lqLueYyZ3vdg4HxqczCdoCWK/gZi8oMUXJy2wG8?=
+ =?us-ascii?Q?EB3AK0ugYzY2YrNSOQ5rwB9VDr+H8EpcYu0K5rm8T94mgTeRqBnQdxS2JR54?=
+ =?us-ascii?Q?PflMjZn19UGPwsYffmmy8OJCmM5wucuLEczEOd4bkS2+9lK28s4jtw2YEVOq?=
+ =?us-ascii?Q?ZK34U1vOuPoS8CBYQNPBdfn6nsiFzSxebV3dKMapDpHoPwpxm15LzWFxkZnp?=
+ =?us-ascii?Q?X/UNjDdjwgj2vs6/jO4v3zkW6Na/2UGCMxie24ul+OblX2fyeVDr+l4ygYTk?=
+ =?us-ascii?Q?aa+3b7yZE+Ku1DgcXkSwWFOKbUiS4wbNjcl5Eq/PY/c4BGFEls+QYtd4g8rP?=
+ =?us-ascii?Q?LX+oEI8Ra2LBLMUJNC9qC/P9yzkyCjVfp13ebSkL849nxrNJaNOB0NX1Vyjx?=
+ =?us-ascii?Q?6tNbMEUSdvV7ja06Ns6ag8p8L2JUQVC1EZC29wSYdpMCckbEhGrz9R3X8cst?=
+ =?us-ascii?Q?FUpx86fxLwX72fUCdvRo9r66kKBzqXnvLnjuFy/18SnRhrOpg8NavJeomiFt?=
+ =?us-ascii?Q?Qqq1K9zRKo9ZuL1AiCEC3OkSwGa/VWWpqV25nu3nHMHDyAAEbciNVq+ZIFLB?=
+ =?us-ascii?Q?c1+ozBXoViV+1nDZ1CHTAroZvuY2T4wFq7xsZ6DjMwOQNLXxbKfzBZM4eFfj?=
+ =?us-ascii?Q?4a6GKMRBQ/8WjBYGujYpxpQ0E+8xo03xhjqI3bZ5Ydkkd6S0ZoXfoBYtGGaY?=
+ =?us-ascii?Q?SNsaU9eolfdQ/mivW8AF0qUa2j14XrxTXSR9Y21ldCKnZaFZGkMcXOdxf3WC?=
+ =?us-ascii?Q?Awk8w8yckDsDLJ8KB/iDyaBRAeku720t/s+HqPf9HxMubpEeHzMhvQrf17vp?=
+ =?us-ascii?Q?CZtg9FNVeNzGIVh1telowQc7EhZbnRgrk2otEou7MbIWuqOgPUXuelN2RPBm?=
+ =?us-ascii?Q?pTrlIL7ss02LzKcwZ9UZlyj4?=
+X-OriginatorOrg: theobroma-systems.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ca6aa8ab-f11b-48da-35d5-08d958e805f4
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR0402MB3348.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Aug 2021 14:39:40.6026 (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 5e0e1b52-21b5-4e7b-83bb-514ec460677e
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: vGeU5Y4sv0Dbs4MuZKuuAGudd/+NAfmjxgts73Bchy7d5SqIRSwaxao0YMM2Hu4wR0qYwyH1yVUGhyc70h4IcuUMYfk6Y+H5wcDwFslDd4/JeuzQMU+xkgI7LcnNF4Vj
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR04MB7794
+Subject: [Buildroot] [PATCH] package/qt5/qt5base: do not link against host
+ libatomic when building host tools within qt5* target packages
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,71 +149,53 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
- Mahyar Koshkouei <mahyar.koshkouei@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Quentin Schulz <quentin.schulz@theobroma-systems.com>,
+ Peter Seiderer <ps.report@gmx.net>, Quentin Schulz <foss@0leil.net>,
+ Julien Corjon <corjon.j@ecagroup.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
--latomic was added to extralibs to fix static build of ffmpeg in commit
-fc8798197b57488a852e2c14b4677b5eb0114a0b. However, extralibs is not
-added to libavformat.pc resulting in the following static build failure
-of motion:
+qt5declarative builds qmltyperegistrar for the host as part of its build
+process.
+When building qt target packages (which is the case for qt5declarative),
+-spec devices/linux-buildroot-g++ is passed to qmake in QT5_QMAKE
+variable and this spec currently has -latomic in its LIBS.
 
-/home/buildroot/autobuild/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/9.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: /home/buildroot/autobuild/instance-1/output-1/host/bin/../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libavformat.a(fifo.o): in function `fifo_init':
-/home/buildroot/autobuild/instance-1/output-1/build/ffmpeg-4.4/libavformat/fifo.c:519: undefined reference to `__atomic_store_8'
+This -latomic makes it to the build of the host build of
+qmltyperegistrar which is not useful.
 
-So add a patch to add extralibs (and so -latomic) to libavformat.pc
+This was discovered on Fedora 34 where libatomic is not pulled with gcc
+package, therefore was missing on the host machine.
 
-Fixes:
- - http://autobuild.buildroot.org/results/62ec618e40081a250b8129ec6f5a178eb06fba1d
+This makes sure that -latomic is not added for host build of qt
+packages.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes: 7d286be4f9 ("package/qt5base: link with -latomic when needed")
+
+Cc: Quentin Schulz <foss@0leil.net>
+Suggested-by: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
 ---
- ...-add-extralibs-to-extralibs_avformat.patch | 30 +++++++++++++++++++
- 1 file changed, 30 insertions(+)
- create mode 100644 package/ffmpeg/0004-configure-add-extralibs-to-extralibs_avformat.patch
+ package/qt5/qt5base/qt5base.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/ffmpeg/0004-configure-add-extralibs-to-extralibs_avformat.patch b/package/ffmpeg/0004-configure-add-extralibs-to-extralibs_avformat.patch
-new file mode 100644
-index 0000000000..f4a2f75e59
---- /dev/null
-+++ b/package/ffmpeg/0004-configure-add-extralibs-to-extralibs_avformat.patch
-@@ -0,0 +1,30 @@
-+From 2aee898241246d293bed9b609926b4a8014dfcb9 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 6 Aug 2021 09:17:20 +0200
-+Subject: [PATCH] configure: add extralibs to extralibs_avformat
-+
-+Add extralibs to extralibs_avformat to allow applications such as motion
-+to retrieve ffmpeg dependencies such as -latomic through pkg-config
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: not upstreamable]
-+---
-+ configure | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/configure b/configure
-+index 0bb3a7cf2b..cb366c3ba6 100755
-+--- a/configure
-++++ b/configure
-+@@ -7604,7 +7604,7 @@ LIBPREF=${LIBPREF}
-+ LIBSUF=${LIBSUF}
-+ extralibs_avutil="$avutil_extralibs"
-+ extralibs_avcodec="$avcodec_extralibs"
-+-extralibs_avformat="$avformat_extralibs"
-++extralibs_avformat="$avformat_extralibs $extralibs"
-+ extralibs_avdevice="$avdevice_extralibs"
-+ extralibs_avfilter="$avfilter_extralibs"
-+ extralibs_avresample="$avresample_extralibs"
-+-- 
-+2.30.2
-+
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index 8b55aa3098..9da3de468a 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -277,7 +277,7 @@ QT5BASE_ARCH_CONFIG_FILE = $(@D)/mkspecs/devices/linux-buildroot-g++/arch.conf
+ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+ # Qt 5.8 needs atomics, which on various architectures are in -latomic
+ define QT5BASE_CONFIGURE_ARCH_CONFIG
+-	printf 'LIBS += -latomic\n' >$(QT5BASE_ARCH_CONFIG_FILE)
++	printf '!host_build { \n LIBS += -latomic\n }' >$(QT5BASE_ARCH_CONFIG_FILE)
+ endef
+ endif
+ 
 -- 
-2.30.2
+2.31.1
 
 _______________________________________________
 buildroot mailing list
