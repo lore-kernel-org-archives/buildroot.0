@@ -2,57 +2,57 @@ Return-Path: <SRS0=2n7N=M5=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,TVD_SPACE_RATIO,URIBL_BLOCKED
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2BCBCC4338F
-	for <buildroot@archiver.kernel.org>; Fri,  6 Aug 2021 21:06:13 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 53B64C4338F
+	for <buildroot@archiver.kernel.org>; Fri,  6 Aug 2021 21:06:25 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D3F0761104
-	for <buildroot@archiver.kernel.org>; Fri,  6 Aug 2021 21:06:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D3F0761104
+	by mail.kernel.org (Postfix) with ESMTPS id 1444361165
+	for <buildroot@archiver.kernel.org>; Fri,  6 Aug 2021 21:06:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1444361165
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AAEC083AC1;
-	Fri,  6 Aug 2021 21:06:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DCF5560B24;
+	Fri,  6 Aug 2021 21:06:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VkgdpXCI-PWz; Fri,  6 Aug 2021 21:06:12 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 5jXVDkCxS9Wh; Fri,  6 Aug 2021 21:06:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1141783ABD;
-	Fri,  6 Aug 2021 21:06:11 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2BCDE1BF3AF
+	by smtp3.osuosl.org (Postfix) with ESMTP id 34FAF60B0E;
+	Fri,  6 Aug 2021 21:06:23 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 725CB1BF3AF
  for <buildroot@lists.busybox.net>; Fri,  6 Aug 2021 21:03:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5F983402C6
- for <buildroot@lists.busybox.net>; Fri,  6 Aug 2021 21:03:12 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 62A1E40628
+ for <buildroot@lists.busybox.net>; Fri,  6 Aug 2021 21:03:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iwOdg3SGCA-Q for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xuqs6KfPqv3k for <buildroot@lists.busybox.net>;
  Fri,  6 Aug 2021 21:03:11 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 652B4401CF
+ by smtp4.osuosl.org (Postfix) with ESMTP id 481C84062C
  for <buildroot@buildroot.org>; Fri,  6 Aug 2021 21:03:11 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id A39B78C9AF; Fri,  6 Aug 2021 21:02:56 +0000 (UTC)
+ id 885CD8C9AB; Fri,  6 Aug 2021 21:02:56 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 6 Aug 2021 21:52:54 +0200
+Date: Fri, 6 Aug 2021 21:47:09 +0200
 X-Git-Refname: refs/heads/2021.05.x
-X-Git-Oldrev: 36de16d66766cef1174a1f5bb1d02c60a3f651de
-X-Git-Newrev: 2d8ba74fe3172395c4a62f1afb79c3eac6abd7e6
+X-Git-Oldrev: 9607a7412bfa12b88bea4063330d4f04bf154234
+X-Git-Newrev: 757304eb36197b04f97afcad52833662c52badc0
 X-Patchwork-Hint: ignore
-Message-Id: <20210806210256.A39B78C9AF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.05.x] package/libkrb5: security
- bump to version 1.18.4
+Message-Id: <20210806210256.885CD8C9AB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.05.x]
+ package/x11r7/xlib_libX11: bump version to 1.7.2
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,53 +70,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2d8ba74fe3172395c4a62f1afb79c3eac6abd7e6
+commit: https://git.buildroot.net/buildroot/commit/?id=757304eb36197b04f97afcad52833662c52badc0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
 
-- Fix a denial of service attack against the KDC encrypted challenge
-  code [CVE-2021-36222].
-- Fix a memory leak when gss_inquire_cred() is called without a
-  credential handle.
-- Update indentation in hash file (two spaces)
-- Update hash of NOTICE (update in year:
-  https://github.com/krb5/krb5/commit/9cbfdf65e1718849cb03844d65930e5138e88195)
+Release notes:
+https://lists.x.org/archives/xorg-announce/2021-June/003092.html
 
-https://web.mit.edu/kerberos/krb5-1.18/krb5-1.18.4.html
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit b65220f56677c0df2646a6d56c9b3e28732dc054)
+(cherry picked from commit df0637171886c2da1c4bdb5b3bf3ae4d29549ad1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libkrb5/libkrb5.hash | 4 ++--
- package/libkrb5/libkrb5.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/x11r7/xlib_libX11/xlib_libX11.hash | 6 +++---
+ package/x11r7/xlib_libX11/xlib_libX11.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libkrb5/libkrb5.hash b/package/libkrb5/libkrb5.hash
-index e5b24a3f70..860f828793 100644
---- a/package/libkrb5/libkrb5.hash
-+++ b/package/libkrb5/libkrb5.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--sha256	e61783c292b5efd9afb45c555a80dd267ac67eebabca42185362bee6c4fbd719  krb5-1.18.3.tar.gz
-+sha256  66085e2f594751e77e82e0dbf7bbc344320fb48a9df2a633cfdd8f7d6da99fc8  krb5-1.18.4.tar.gz
+diff --git a/package/x11r7/xlib_libX11/xlib_libX11.hash b/package/x11r7/xlib_libX11/xlib_libX11.hash
+index b87b2498e8..7aeef33446 100644
+--- a/package/x11r7/xlib_libX11/xlib_libX11.hash
++++ b/package/x11r7/xlib_libX11/xlib_libX11.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.x.org/archives/xorg-announce/2021-May/003089.html
+-sha256  e64e43deaa562cbfb0d5ada64670ec09c6fac7935262dcd77bbc6d984a535d47  libX11-1.7.1.tar.bz2
+-sha512  a76f0a82fce6f9b50646a7cd7ec5ee046650f225816050226068a7548fa083ef07d146d40faaf44e033c59c17b0fda5ffdee3a127dac3ab56cee02133819aa3d  libX11-1.7.1.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2021-June/003092.html
++sha256  1cfa35e37aaabbe4792e9bb690468efefbfbf6b147d9c69d6f90d13c3092ea6c  libX11-1.7.2.tar.bz2
++sha512  d01e5c1848c76218605e5af2d353de6b301a251555b52a38dbe930e6635d5e8a92d1486eb6d328ad5d42a5939e0d16868ffa19a75e5a7863d1a32e0d0727bdc7  libX11-1.7.2.tar.bz2
  
- # Hash for license file:
--sha256	b7a5f14a8719bce5e49a761998aa55438fc890fb40f71228d6a49546f6d5690d  NOTICE
-+sha256  7fba8b076bdc2cfef1d0813c5d4067d76d5be60c32d84de22d5d1cf451744feb  NOTICE
-diff --git a/package/libkrb5/libkrb5.mk b/package/libkrb5/libkrb5.mk
-index 794cedd33c..89f219d913 100644
---- a/package/libkrb5/libkrb5.mk
-+++ b/package/libkrb5/libkrb5.mk
-@@ -5,7 +5,7 @@
+ # Locally computed
+ sha256  2daec087a88e7c9b8082557cdeebad5bbb8155a4137472f0b22e269cd99d0c1e  COPYING
+diff --git a/package/x11r7/xlib_libX11/xlib_libX11.mk b/package/x11r7/xlib_libX11/xlib_libX11.mk
+index 39d9dc2cc7..aa3ebf1593 100644
+--- a/package/x11r7/xlib_libX11/xlib_libX11.mk
++++ b/package/x11r7/xlib_libX11/xlib_libX11.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- LIBKRB5_VERSION_MAJOR = 1.18
--LIBKRB5_VERSION = $(LIBKRB5_VERSION_MAJOR).3
-+LIBKRB5_VERSION = $(LIBKRB5_VERSION_MAJOR).4
- LIBKRB5_SITE = https://web.mit.edu/kerberos/dist/krb5/$(LIBKRB5_VERSION_MAJOR)
- LIBKRB5_SOURCE = krb5-$(LIBKRB5_VERSION).tar.gz
- LIBKRB5_SUBDIR = src
+-XLIB_LIBX11_VERSION = 1.7.1
++XLIB_LIBX11_VERSION = 1.7.2
+ XLIB_LIBX11_SOURCE = libX11-$(XLIB_LIBX11_VERSION).tar.bz2
+ XLIB_LIBX11_SITE = https://xorg.freedesktop.org/archive/individual/lib
+ XLIB_LIBX11_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
