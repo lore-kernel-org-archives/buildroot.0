@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7FCA4C4338F
-	for <buildroot@archiver.kernel.org>; Fri,  6 Aug 2021 21:03:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 15B7FC4338F
+	for <buildroot@archiver.kernel.org>; Fri,  6 Aug 2021 21:03:44 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 24D0261104
-	for <buildroot@archiver.kernel.org>; Fri,  6 Aug 2021 21:03:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 24D0261104
+	by mail.kernel.org (Postfix) with ESMTPS id BA0A5611B0
+	for <buildroot@archiver.kernel.org>; Fri,  6 Aug 2021 21:03:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org BA0A5611B0
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E803C60729;
-	Fri,  6 Aug 2021 21:03:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 88B6D60AF3;
+	Fri,  6 Aug 2021 21:03:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vQNw5SJL-e1y; Fri,  6 Aug 2021 21:03:30 +0000 (UTC)
+	with ESMTP id F_IXBTGEFsJi; Fri,  6 Aug 2021 21:03:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2807960AA2;
-	Fri,  6 Aug 2021 21:03:29 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 507B91C116E
+	by smtp3.osuosl.org (Postfix) with ESMTP id C93EB60B02;
+	Fri,  6 Aug 2021 21:03:41 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 5510B1BF3AF
  for <buildroot@lists.busybox.net>; Fri,  6 Aug 2021 21:03:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4A3C4401CF
+ by smtp1.osuosl.org (Postfix) with ESMTP id 40AB083ABD
  for <buildroot@lists.busybox.net>; Fri,  6 Aug 2021 21:03:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id j44BeGmy-t4Y for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6JX5Wbvmkgec for <buildroot@lists.busybox.net>;
  Fri,  6 Aug 2021 21:03:01 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4495E401B9
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5C71F83A5E
  for <buildroot@buildroot.org>; Fri,  6 Aug 2021 21:03:01 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 81B3A8C994; Fri,  6 Aug 2021 21:02:46 +0000 (UTC)
+ id 989518C990; Fri,  6 Aug 2021 21:02:46 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 6 Aug 2021 21:48:26 +0200
+Date: Fri, 6 Aug 2021 22:05:36 +0200
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 4cc8b8c47ebd09fb1e485d2e4d47003f66f5f46a
-X-Git-Newrev: 9802df87ba66d6e86561a0a5a3b4d8c5f587279c
+X-Git-Oldrev: 736f6ff61ace16eeba90b505d3aaf163e0d1f180
+X-Git-Newrev: 3727d7175c90411ba37cc646cdeede401ed5417e
 X-Patchwork-Hint: ignore
-Message-Id: <20210806210246.81B3A8C994@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x]
- package/x11r7/xserver_xorg-server: bump version to 1.20.12
+Message-Id: <20210806210246.989518C990@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/htop: fix sources
+ location
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,52 +70,56 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9802df87ba66d6e86561a0a5a3b4d8c5f587279c
+commit: https://git.buildroot.net/buildroot/commit/?id=3727d7175c90411ba37cc646cdeede401ed5417e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Release notes:
-https://lists.x.org/archives/xorg-announce/2021-July/003098.html
+Change sources location from bintray to github since bintray doesn't
+work anymore.
+Use commit hash for version instead of git tag to avoid breaking
+existing source caches.
 
-Follow upstream switch to .xz tarballs.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Daniil Stas <daniil.stas@posteo.net>
+Cc: Baruch Siach <baruch@tkos.co.il>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 5141b64eb36e1f9a7683c702f020d11990bf041a)
+(cherry picked from commit 7332bc6eb092a18c506e614fc950c5b697ba1114)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xserver_xorg-server/xserver_xorg-server.hash | 6 +++---
- package/x11r7/xserver_xorg-server/xserver_xorg-server.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/htop/htop.hash |  2 +-
+ package/htop/htop.mk   | 10 ++++++++--
+ 2 files changed, 9 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-index 9876255c8e..167d3fa591 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-@@ -1,6 +1,6 @@
--# From https://lists.x.org/archives/xorg-announce/2021-April/003081.html
--sha256  914c796e3ffabe1af48071d40ccc85e92117c97a9082ed1df29e4d64e3c34c49  xorg-server-1.20.11.tar.bz2
--sha512  1017015b9fd5d53788abe3641d877e6df8609841fa5c1847c0a5e133ddcc1b758a5d695304ebd36828099ec201a85b6b70b46f5ea4f81c5bd3a16fa6e175e3c2  xorg-server-1.20.11.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2021-July/003098.html
-+sha256  336dc093431d81ecc03fa36af771f1181334f2746b7de7796f3cc6a8fa9e8cac  xorg-server-1.20.12.tar.xz
-+sha512  98350c42fb1f10c965663c1c8d4b225689a6a63163d788d454aa71b28b9cc8fcf9709a932f882358a13ca0c277c0c15812d05919092b4c32828d4ed61cca0406  xorg-server-1.20.12.tar.xz
- 
+diff --git a/package/htop/htop.hash b/package/htop/htop.hash
+index 647feabb8e..34d95eb7a1 100644
+--- a/package/htop/htop.hash
++++ b/package/htop/htop.hash
+@@ -1,3 +1,3 @@
  # Locally calculated
- sha256  4cc0447a22635c7b2f1a93fec4aa94f1970fadeb72a063de006b51cf4963a06f  COPYING
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index ae17dd535e..26cc1c07b5 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -4,8 +4,8 @@
+-sha256  19535f8f01ac08be2df880c93c9cedfc50fa92320d48e3ef92a30b6edc4d1917  htop-3.0.5.tar.gz
++sha256  123476d56a5e6a219654eebb6b2ec747dfa364f39c01a6475bf8030a25c81bff  htop-ce6d60e7def146c13d0b8bca4642e7401a0a8995.tar.gz
+ sha256  c228cc14df980a23ea0c3c9ac957b904dd6a8514f6283db403de22e9179471be  COPYING
+diff --git a/package/htop/htop.mk b/package/htop/htop.mk
+index aa2ff24750..bb2bcb29ae 100644
+--- a/package/htop/htop.mk
++++ b/package/htop/htop.mk
+@@ -4,9 +4,15 @@
  #
  ################################################################################
  
--XSERVER_XORG_SERVER_VERSION = 1.20.11
--XSERVER_XORG_SERVER_SOURCE = xorg-server-$(XSERVER_XORG_SERVER_VERSION).tar.bz2
-+XSERVER_XORG_SERVER_VERSION = 1.20.12
-+XSERVER_XORG_SERVER_SOURCE = xorg-server-$(XSERVER_XORG_SERVER_VERSION).tar.xz
- XSERVER_XORG_SERVER_SITE = https://xorg.freedesktop.org/archive/individual/xserver
- XSERVER_XORG_SERVER_LICENSE = MIT
- XSERVER_XORG_SERVER_LICENSE_FILES = COPYING
+-HTOP_VERSION = 3.0.5
+-HTOP_SITE = https://dl.bintray.com/htop/source
++# This commit hash corresponds to version 3.0.5.
++# htop sources were moved from bintray to github and the sources tar archive
++# was also changed (the build process requires `HTOP_AUTORECONF = YES` now). We
++# use commit hash instead of git tag here to avoid breaking existing source
++# caches
++HTOP_VERSION = ce6d60e7def146c13d0b8bca4642e7401a0a8995
++HTOP_SITE = $(call github,htop-dev,htop,$(HTOP_VERSION))
+ HTOP_DEPENDENCIES = ncurses
++HTOP_AUTORECONF = YES
+ # Prevent htop build system from searching the host paths
+ HTOP_CONF_ENV = HTOP_NCURSES_CONFIG_SCRIPT=$(STAGING_DIR)/usr/bin/$(NCURSES_CONFIG_SCRIPTS)
+ HTOP_LICENSE = GPL-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
