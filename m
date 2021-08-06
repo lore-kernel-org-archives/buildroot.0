@@ -2,92 +2,92 @@ Return-Path: <SRS0=2n7N=M5=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.5 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
 	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
 	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 016B8C4338F
-	for <buildroot@archiver.kernel.org>; Fri,  6 Aug 2021 17:27:20 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 287AFC4338F
+	for <buildroot@archiver.kernel.org>; Fri,  6 Aug 2021 18:44:23 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id A198061102
-	for <buildroot@archiver.kernel.org>; Fri,  6 Aug 2021 17:27:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A198061102
+	by mail.kernel.org (Postfix) with ESMTPS id CAA9460ED6
+	for <buildroot@archiver.kernel.org>; Fri,  6 Aug 2021 18:44:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org CAA9460ED6
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 47F214014A;
-	Fri,  6 Aug 2021 17:27:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 898CE82B1A;
+	Fri,  6 Aug 2021 18:44:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EU9WnceYA4J1; Fri,  6 Aug 2021 17:27:18 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1E22C40243;
-	Fri,  6 Aug 2021 17:27:17 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E036C1BF3FC
- for <buildroot@lists.busybox.net>; Fri,  6 Aug 2021 17:27:14 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CD19883A8C
- for <buildroot@lists.busybox.net>; Fri,  6 Aug 2021 17:27:14 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kWX80VQg2Ea1 for <buildroot@lists.busybox.net>;
- Fri,  6 Aug 2021 17:27:12 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rI2-sM4cQLZC; Fri,  6 Aug 2021 18:44:21 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id D82EB8274D;
+	Fri,  6 Aug 2021 18:44:20 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D29B01BF83B
+ for <buildroot@lists.busybox.net>; Fri,  6 Aug 2021 18:44:18 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id CFC1D605CB
+ for <buildroot@lists.busybox.net>; Fri,  6 Aug 2021 18:44:18 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DHYV763V4chC for <buildroot@lists.busybox.net>;
+ Fri,  6 Aug 2021 18:44:18 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
- [IPv6:2a00:1450:4864:20::335])
- by smtp1.osuosl.org (Postfix) with ESMTPS id EB39983A6D
- for <buildroot@buildroot.org>; Fri,  6 Aug 2021 17:27:11 +0000 (UTC)
-Received: by mail-wm1-x335.google.com with SMTP id
- i10-20020a05600c354ab029025a0f317abfso9490789wmq.3
- for <buildroot@buildroot.org>; Fri, 06 Aug 2021 10:27:11 -0700 (PDT)
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
+ [IPv6:2a00:1450:4864:20::32b])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id EB8F160067
+ for <buildroot@buildroot.org>; Fri,  6 Aug 2021 18:44:17 +0000 (UTC)
+Received: by mail-wm1-x32b.google.com with SMTP id
+ d131-20020a1c1d890000b02902516717f562so6746872wmd.3
+ for <buildroot@buildroot.org>; Fri, 06 Aug 2021 11:44:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=g0UC19yeXWyoD51l7e37UGjw+TyJ9Fu87AB3/WF4xUQ=;
- b=HZS6Lisfm9Hnw2iJtsHTMqn3OAWcJ7gtEPbxcgPOUP5a555X12+wJ1EfPPF7sy4/9x
- zwIGcAyd6Hsf56iWe06rR2UZdnHOuBAsKwHZ58r1XJf6Cdoy21N6peO7Le6qGEVu2DJs
- xxYncGIz23l8APKHWRMbciydpt7NPzexzZwaW7Rlta52yloMF+3pK7aSRPPB6xvdegLZ
- wjIP6ZDsNdLNyJDEaCKRm4nwtAcVZtf0Sl6hyHEFPDKdWStSnBrT8lFcLaxzQfkcYiK7
- O83EuaTw1PiT1ZgO2BupmnSUOfVvEFSqmxw8triZAFxq/iDjZbp+PL+bCcRmu7QJtW3r
- cPfQ==
+ bh=/WMoSgSQ07UPGG1jVkOZQcB+UnrK3JN2z3N8/LEonPg=;
+ b=jty8KFav8qOKsdRthXUM9UNCwGPSsXA045kfTnycWEPoLSQzLMABkoIqC8rANBOw7v
+ 8g3SWiqV00rgoRkCjIjyX9yoGwEscioUDH/cbAtRHDdSO7Vzx7pjm/cyFE6lFXqFCZ0a
+ htVuNx6aXcSZTBWAdSjDkpCw2RHYDfVzlRWjFKirUH+eLMGcLO01cW7QbZKgfDGWoyMm
+ pED1kBAQY4KHEEmNl0TyNbC7hJdbOyBu16strNPPwC5GUPxjIvWaE8kpKff2KA6ji+uw
+ jxCht2Vixpw1tyfQ8eUDvUAIInrYG9iZu8SeY6C/MhFT0wkukjLNkfS0zWGA1AmfBmdi
+ O51Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=g0UC19yeXWyoD51l7e37UGjw+TyJ9Fu87AB3/WF4xUQ=;
- b=gkWBBofu9+TRnCmbzah6Co9PNqywvyuKb6LmusAoPO3ONBUF9UALshsn0/aX/bEx1f
- lrGGmjLWGNptjCNOncyXt2bjjjQ03asYA8SIqWSc3kdIIjxMDfCAXfuwoA7AgWc1gWrq
- bT+tEqC2f0ZXOpKg8SUEgVIeP6oSDd6jplvvUog9PNd30KCWJ5ciuOiL6u25/bYk4RZf
- M4c0JN9tvyRUgg9EY4vIxder4QLmx64jwQ4e5PgUEX9P59uvhbJiJKUTD3PzxtlXEfRD
- BrsszDVEOqBZLDGkj5zuBxpBsGYe+3xpJMyTz6crcPbjIkhVgmsJJ/B6T9dmoIVJfgNp
- 0SQg==
-X-Gm-Message-State: AOAM532APrUZMSD52nm8/MhapuSB0x7uiCODdmx7q/u7m7hxQgk/LtZd
- sppEAAYmk8AoBqhW7V8CNlzpMQbWFdP+lA==
-X-Google-Smtp-Source: ABdhPJwCxKLcFs3jspDdRl0UMYxdP8l9GhhHZSUOrZjlrxqGYzNn4tlO/CkGqyIgvGSNMgs1pmN68g==
-X-Received: by 2002:a05:600c:2942:: with SMTP id
- n2mr4347515wmd.161.1628270829898; 
- Fri, 06 Aug 2021 10:27:09 -0700 (PDT)
+ bh=/WMoSgSQ07UPGG1jVkOZQcB+UnrK3JN2z3N8/LEonPg=;
+ b=dpGLTtpu5MScif7qMut0uIm9nTMpYVUzdvWOf44bVQ/mQmZ7f5LP7hr2hdNykrOYLU
+ tzQHYwekaKbtub2IC1hq1tp1Q06u7JbH4gZDz6/U+NqYGRKMIyNIypdX7ugadNBsd0V2
+ GWL1qzawhWTzGTxYeugTiJLpdJZWb99qE+iMVu1xQlAi/L8PYmMewUZGW7qBlSZBYZg1
+ F6WzIyVkMge14o4CZ8ZCnL8A5wifIJ+pvBXJBfH5zraVCAJJG+a2KB8Qq/4q3uG1LlZs
+ /SO+LD30hK4K4QNZjSRoSnou2KbeLXGtZpc8Fb0ccC9OW1Ru0u/8NjQR8/ZMaETfC92M
+ NSuw==
+X-Gm-Message-State: AOAM5314oIqyFNh79tZKrMMBApZSJTxIhXjXVbjFSirc+FTcZ9WLCshx
+ B7md1MRMnhulr8ACtreWhozj4vqVnNi87g==
+X-Google-Smtp-Source: ABdhPJyYkLn8nNQhv6JIOUgymSY0SJEpnxBmpEMrar0ncfplOP3EHv27BiFmLI5ChFXUaPj6uu5z5w==
+X-Received: by 2002:a05:600c:350a:: with SMTP id
+ h10mr3508900wmq.89.1628275455763; 
+ Fri, 06 Aug 2021 11:44:15 -0700 (PDT)
 Received: from kali.home (pop.92-184-97-157.mobile.abo.orange.fr.
  [92.184.97.157])
- by smtp.gmail.com with ESMTPSA id n18sm10325972wrt.78.2021.08.06.10.27.08
+ by smtp.gmail.com with ESMTPSA id d5sm10228210wre.77.2021.08.06.11.44.14
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 06 Aug 2021 10:27:09 -0700 (PDT)
+ Fri, 06 Aug 2021 11:44:15 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri,  6 Aug 2021 19:26:38 +0200
-Message-Id: <20210806172638.3566272-1-fontaine.fabrice@gmail.com>
+Date: Fri,  6 Aug 2021 20:44:11 +0200
+Message-Id: <20210806184411.4062961-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/mutt: link with -latomic if needed
+Subject: [Buildroot] [PATCH 1/1] package/guile: fix build on riscv32
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -105,40 +105,59 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-Link with -latomic if needed to avoid the following build failure with
-openssl:
+Fix the following build failure on riscv32:
 
-configure:10549: checking for X509_STORE_CTX_new in -lcrypto
-configure:10574: /tmp/instance-0/output-1/host/bin/sparc-linux-gcc -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os -g0  -static -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -I/tmp/instance-0/output-1/host/sparc-buildroot-linux-uclibc/sysroot/usr/include  -static -L/tmp/instance-0/output-1/host/sparc-buildroot-linux-uclibc/sysroot/usr/lib conftest.c -lcrypto -lz  >&5
-/tmp/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/9.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: /tmp/instance-0/output-1/host/sparc-buildroot-linux-uclibc/sysroot/usr/lib/libcrypto.a(x509cset.o): in function `X509_CRL_up_ref':
-x509cset.c:(.text+0xfc): undefined reference to `__atomic_fetch_add_4'
-
-Ideally, mutt should use pkg-config but upstream don't want to use it:
-https://gitlab.com/muttmua/mutt/-/merge_requests/25
+system/base/target.scm:132:16: In procedure triplet-pointer-size:
+unknown CPU word size "riscv32"
 
 Fixes:
- - http://autobuild.buildroot.org/results/e357984853f8ca879156245717fadbeaa9b0dbae
+ - http://autobuild.buildroot.org/results/6705630c1484239ec8b73d57ebc2e2570fbfc8f8
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/mutt/mutt.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ ...stem-base-target.scm-support-riscv32.patch | 33 +++++++++++++++++++
+ 1 file changed, 33 insertions(+)
+ create mode 100644 package/guile/0004-module-system-base-target.scm-support-riscv32.patch
 
-diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
-index a8734855f8..66616f032c 100644
---- a/package/mutt/mutt.mk
-+++ b/package/mutt/mutt.mk
-@@ -12,6 +12,10 @@ MUTT_CPE_ID_VENDOR = mutt
- MUTT_DEPENDENCIES = ncurses
- MUTT_CONF_OPTS = --disable-doc --disable-smtp
- 
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+MUTT_CONF_ENV += LIBS=-latomic
-+endif
+diff --git a/package/guile/0004-module-system-base-target.scm-support-riscv32.patch b/package/guile/0004-module-system-base-target.scm-support-riscv32.patch
+new file mode 100644
+index 0000000000..cadd040f12
+--- /dev/null
++++ b/package/guile/0004-module-system-base-target.scm-support-riscv32.patch
+@@ -0,0 +1,33 @@
++From 995a5e1da735b75733f059615c593c330b534d80 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 6 Aug 2021 19:49:37 +0200
++Subject: [PATCH] module/system/base/target.scm: support riscv32
 +
- ifeq ($(BR2_PACKAGE_LIBICONV),y)
- MUTT_DEPENDENCIES += libiconv
- MUTT_CONF_OPTS += --enable-iconv
++Fix the following build failure on riscv32:
++
++system/base/target.scm:132:16: In procedure triplet-pointer-size:
++unknown CPU word size "riscv32"
++
++Fixes:
++ - http://autobuild.buildroot.org/results/6705630c1484239ec8b73d57ebc2e2570fbfc8f8
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ module/system/base/target.scm | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/module/system/base/target.scm b/module/system/base/target.scm
++index 2088cd866..5544e234f 100644
++--- a/module/system/base/target.scm
+++++ b/module/system/base/target.scm
++@@ -121,6 +121,7 @@
++           ((member cpu '("sparc" "powerpc" "mips" "mipsel" "nios2" "m68k" "sh3" "sh4")) 4)
++           ((member cpu '("s390x" "alpha")) 8)
++           ((string-match "^arm.*" cpu) 4)
+++          ((string-match "^riscv.*" cpu) 8)
++           (else (error "unknown CPU word size" cpu)))))
++ 
++ (define (triplet-cpu t)
++-- 
++2.30.2
++
 -- 
 2.30.2
 
