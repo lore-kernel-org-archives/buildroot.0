@@ -2,96 +2,89 @@ Return-Path: <SRS0=HCTk=M6=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
+	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1CB4FC4338F
-	for <buildroot@archiver.kernel.org>; Sat,  7 Aug 2021 19:30:48 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EF4EFC4338F
+	for <buildroot@archiver.kernel.org>; Sat,  7 Aug 2021 19:41:07 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 59FA760F44
-	for <buildroot@archiver.kernel.org>; Sat,  7 Aug 2021 19:30:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 59FA760F44
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
+	by mail.kernel.org (Postfix) with ESMTPS id 7C1F160EE8
+	for <buildroot@archiver.kernel.org>; Sat,  7 Aug 2021 19:41:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7C1F160EE8
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1A5F2403F4;
-	Sat,  7 Aug 2021 19:30:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3B20F60657;
+	Sat,  7 Aug 2021 19:41:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WSCFPYLGUezD; Sat,  7 Aug 2021 19:30:46 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id a3nYp0Zy77xn; Sat,  7 Aug 2021 19:41:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 757EF40361;
-	Sat,  7 Aug 2021 19:30:45 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id F055A1BF3AB
- for <buildroot@lists.busybox.net>; Sat,  7 Aug 2021 19:30:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8685260652;
+	Sat,  7 Aug 2021 19:41:05 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A8DED1BF3AB
+ for <buildroot@lists.busybox.net>; Sat,  7 Aug 2021 19:41:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DA96482F51
- for <buildroot@lists.busybox.net>; Sat,  7 Aug 2021 19:30:43 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 98BED60652
+ for <buildroot@lists.busybox.net>; Sat,  7 Aug 2021 19:41:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id v3PvF6KdHl5d for <buildroot@lists.busybox.net>;
- Sat,  7 Aug 2021 19:30:42 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 29dai5pmkBOM for <buildroot@lists.busybox.net>;
+ Sat,  7 Aug 2021 19:41:02 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com
- [IPv6:2a00:1450:4864:20::529])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A68FC82EA4
- for <buildroot@buildroot.org>; Sat,  7 Aug 2021 19:30:42 +0000 (UTC)
-Received: by mail-ed1-x529.google.com with SMTP id p21so18255577edi.9
- for <buildroot@buildroot.org>; Sat, 07 Aug 2021 12:30:42 -0700 (PDT)
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
+ [IPv6:2a00:1450:4864:20::42b])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A8AB7605C8
+ for <buildroot@buildroot.org>; Sat,  7 Aug 2021 19:41:02 +0000 (UTC)
+Received: by mail-wr1-x42b.google.com with SMTP id l18so15729841wrv.5
+ for <buildroot@buildroot.org>; Sat, 07 Aug 2021 12:41:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
- h=sender:from:to:cc:subject:references:date:in-reply-to:message-id
- :user-agent:mime-version;
- bh=Z64shwPcKQ6nVoHN1ms86UqvIY3vfKmIxYgwdzzS9KU=;
- b=PmJSf+RXUcg2Ws8P9WFN3jlDxqTM4SHbvsHz/AKGeqLG2d36cQGDLYGyBa2Xt4KRkp
- Qo5kBqX5RaVnKVLdlCmBeIv4UEBZmyhuzs4aGPL4YVfnDMEiWKnigKudyUD9zMk83FXt
- qisLQZqmDhnmOTokd1XcU4YxI3Um09gfmcZn7xwgD+x6ukZTOq2Isv/F6Mdiuvo+ejYS
- qiYcH5Si8Wyicy3sCLArAQSKxX3qaZhWfPikJEKfSD6V/7NaohCfi64qRVhO+P3WNr2y
- UpirmbOkzM5b3x5HruDSAbdoYIwGdBcED7gNTrpW2s17bEqaDL59gvI5JaQLEx0kk5HM
- r7qg==
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=j3fmQpsTBJeauUVMVsmBt7upBGISlkNLwzc9nC7VmaI=;
+ b=hE7vFFbaaN3E0OnlpDxhBo7uxg2Rt2drdImJt1Z+xMc/5kiZyaUXOQOfkUBxCqjvlH
+ WpiAMMyzUNIfBbmAFoqtyR20kEowz/4RBQMt/aNQL4dQNsrIAYjirllgYCttdy/ci6Nw
+ 4joQd48A5yDO5bw3cHB6E0iQakkt6Tb0heIn2lHgJSJrvkh467rSHL0nB/CO3YhCxl9h
+ iD+k9/CibXc6bh9sV+jK4RL5fHpEgfVxsFk4bVJcOas9p4H+MpU2Hd7aIofMaZQMxItY
+ OxwJiWtEbJZuF+a4D/pJurasjmMIRJd91vwjFCVXFNlwHV6g1rAqEyABTL8wHv2Fas87
+ 2ijg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
- h=x-gm-message-state:sender:from:to:cc:subject:references:date
- :in-reply-to:message-id:user-agent:mime-version;
- bh=Z64shwPcKQ6nVoHN1ms86UqvIY3vfKmIxYgwdzzS9KU=;
- b=qNQzLd3ZbRFXvdg08mQhd5UGf+J3pdHpc/o7RtilWzAqQBUEJ1zlJ9A7M7SoElk1kf
- 3fJxymAeAG6c1fy1kOL1WWXat24gcKUbLSpKg3F986R92FXuy6psaj7aE8/9mXxl5hlY
- J5VQC7Kmq2pUFLcUibRyULLaNa9pF2H9gVAyZgC/PbLaVWV+Nc61sBAZic0PYtm2byMW
- OVbHt/yGFw7bAyPRGzAaBTUT/Cy7e5qWfC89YS1/ymghR1qpOq/cGIEe/OgkR5Ne4hcl
- M6XrjXXMXAYcNCg+BO0PFi1XRrHyquLKCrVkifyQAWHDqv1Y0C3TcfXxXDHGkjgzqptn
- dXdg==
-X-Gm-Message-State: AOAM533Imnlf3b7tIN4QbCaaGGwD8stTuBpv26B3P54GKOsYl1eO/WoB
- jQzDN0tyPme97ZIJd9mZ24b5ioQ3BLfkNA==
-X-Google-Smtp-Source: ABdhPJzjbxEDoJEBIAtRaVlukk8QqFbhKNFEnttI9J38n5qCLeOVbdUQejlvlELFcRIWOFZpJWfL6g==
-X-Received: by 2002:a05:6402:1d30:: with SMTP id
- dh16mr19988962edb.224.1628364640955; 
- Sat, 07 Aug 2021 12:30:40 -0700 (PDT)
-Received: from dell.be.48ers.dk ([195.162.189.230])
- by smtp.gmail.com with ESMTPSA id e27sm4078193ejc.41.2021.08.07.12.30.39
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=j3fmQpsTBJeauUVMVsmBt7upBGISlkNLwzc9nC7VmaI=;
+ b=SO1o4IX2mqIfVX+uZ850vWdMVz3lc+lQfP9jI2h2QdCpLXrAsM+gfT5q/7XmTohBkQ
+ zuG1383rzQQ6kGvqjWNC48wJMV7QwOrYMr4iJbTT5Kw0GNFqTkc89zC9o2j4g7OyCtzZ
+ 0+focj5k+6OQ6IZS1WTlKEBq8gJUN3gchYbkscYoQBrTrjPEhQAOJydo6QAvUCWnUgwV
+ eKNHdVv0ZRmOic9NPwjMrd0+LX4dmYo9FHsEz+fRMJK92Qt7F36/QZlIbwqaw2dqbDfj
+ /WSqH9mlBW8TO5kzqqZAmHUFQMYcPPGna8yTwow7/halPeznqN668vaXEwn3sTizlrN8
+ qlJg==
+X-Gm-Message-State: AOAM530hVv7On+zGbIgv5FS00DQrYlNR7cNadkPoPs2VV5w0TRQY4JX3
+ 66/VWP/tizXCr9RqfrLo414iwlw+AJ/OSA==
+X-Google-Smtp-Source: ABdhPJwPJCh6dkmOKp/grCKAvzJWdONo9cJcgN+zWre6tSbDzBT2lQg0SXJ30qDe5Y+p9O9toAOV3Q==
+X-Received: by 2002:adf:f110:: with SMTP id r16mr16861785wro.358.1628365260573; 
+ Sat, 07 Aug 2021 12:41:00 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-417-221.w2-10.abo.wanadoo.fr.
+ [2.10.242.221])
+ by smtp.gmail.com with ESMTPSA id o12sm9522975wrm.84.2021.08.07.12.40.59
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 07 Aug 2021 12:30:40 -0700 (PDT)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
- (envelope-from <peter@korsgaard.com>)
- id 1mCS1n-0005ax-CB; Sat, 07 Aug 2021 21:30:39 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Bernd Kuhls <bernd.kuhls@t-online.de>
-References: <20210720172911.15840-1-bernd.kuhls@t-online.de>
-Date: Sat, 07 Aug 2021 21:30:39 +0200
-In-Reply-To: <20210720172911.15840-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Tue, 20 Jul 2021 19:29:11 +0200")
-Message-ID: <87czqpdpcw.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+ Sat, 07 Aug 2021 12:41:00 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sat,  7 Aug 2021 21:40:31 +0200
+Message-Id: <20210807194031.1501659-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/mesa3d: DRI drivers need either
- glx, egl or gbm
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/ffmpeg: add -latomic to pkg-config files
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,30 +96,93 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>, buildroot@buildroot.org
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
+ Mahyar Koshkouei <mahyar.koshkouei@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+-latomic was added to extralibs to fix static build of ffmpeg in commit
+fc8798197b57488a852e2c14b4677b5eb0114a0b. However, extralibs is not
+added to libavformat.pc resulting in the following static build failure
+of motion:
 
- > Fixes build error:
- > ../output-1/build/mesa3d-21.1.5/meson.build:520:4:
- >  ERROR: Problem encountered: building dri drivers require at least one windowing system
+/home/buildroot/autobuild/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/9.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: /home/buildroot/autobuild/instance-1/output-1/host/bin/../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libavformat.a(fifo.o): in function `fifo_init':
+/home/buildroot/autobuild/instance-1/output-1/build/ffmpeg-4.4/libavformat/fifo.c:519: undefined reference to `__atomic_store_8'
 
- > OSMesa is not seen as a valid windowing system for DRI drivers anymore:
- > https://cgit.freedesktop.org/mesa/mesa/commit/meson.build?h=21.1&id=ee802372180a2b4460cc7abb53438e45c6b6f1e4
+So add a patch to add extralibs (and so -latomic) to all pkg-config
+files
 
- > Fixes:
- > http://autobuild.buildroot.net/results/46e3a66ddc13a064e512aad0f3afd8655889ab9d/
+Fixes:
+ - http://autobuild.buildroot.org/results/62ec618e40081a250b8129ec6f5a178eb06fba1d
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+Changes v1 -> v2 (after review of Yann E. Morin):
+ - Add extralibs to all pkg-config files and not only libavformat.pc
 
-Committed to 2021.05.x, thanks.
+ ...igure-add-extralibs-to-extralibs_xxx.patch | 47 +++++++++++++++++++
+ 1 file changed, 47 insertions(+)
+ create mode 100644 package/ffmpeg/0004-configure-add-extralibs-to-extralibs_xxx.patch
 
+diff --git a/package/ffmpeg/0004-configure-add-extralibs-to-extralibs_xxx.patch b/package/ffmpeg/0004-configure-add-extralibs-to-extralibs_xxx.patch
+new file mode 100644
+index 0000000000..dbc19c1cec
+--- /dev/null
++++ b/package/ffmpeg/0004-configure-add-extralibs-to-extralibs_xxx.patch
+@@ -0,0 +1,47 @@
++From 0c288853630b7b4e004774c39945d4a804afcfa8 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 6 Aug 2021 09:17:20 +0200
++Subject: [PATCH] configure: add extralibs to extralibs_xxx
++
++Add extralibs to extralibs_xxx (e.g. extralibs_avformat) to allow
++applications such as motion to retrieve ffmpeg dependencies such as
++-latomic through pkg-config
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: not upstreamable]
++---
++ configure | 18 +++++++++---------
++ 1 file changed, 9 insertions(+), 9 deletions(-)
++
++diff --git a/configure b/configure
++index 0bb3a7cf2b..3bda99e415 100755
++--- a/configure
+++++ b/configure
++@@ -7602,15 +7602,15 @@ rpath=$(enabled rpath && echo "-Wl,-rpath,\${libdir}")
++ source_path=${source_path}
++ LIBPREF=${LIBPREF}
++ LIBSUF=${LIBSUF}
++-extralibs_avutil="$avutil_extralibs"
++-extralibs_avcodec="$avcodec_extralibs"
++-extralibs_avformat="$avformat_extralibs"
++-extralibs_avdevice="$avdevice_extralibs"
++-extralibs_avfilter="$avfilter_extralibs"
++-extralibs_avresample="$avresample_extralibs"
++-extralibs_postproc="$postproc_extralibs"
++-extralibs_swscale="$swscale_extralibs"
++-extralibs_swresample="$swresample_extralibs"
+++extralibs_avutil="$avutil_extralibs $extralibs"
+++extralibs_avcodec="$avcodec_extralibs $extralibs"
+++extralibs_avformat="$avformat_extralibs $extralibs"
+++extralibs_avdevice="$avdevice_extralibs $extralibs"
+++extralibs_avfilter="$avfilter_extralibs $extralibs"
+++extralibs_avresample="$avresample_extralibs $extralibs"
+++extralibs_postproc="$postproc_extralibs $extralibs"
+++extralibs_swscale="$swscale_extralibs $extralibs"
+++extralibs_swresample="$swresample_extralibs $extralibs"
++ EOF
++ 
++ for lib in $LIBRARY_LIST; do
++-- 
++2.30.2
++
 -- 
-Bye, Peter Korsgaard
+2.30.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
