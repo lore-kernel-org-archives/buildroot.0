@@ -2,89 +2,95 @@ Return-Path: <SRS0=HCTk=M6=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.5 required=3.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-	DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B260C4338F
-	for <buildroot@archiver.kernel.org>; Sat,  7 Aug 2021 17:30:55 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 237FFC4338F
+	for <buildroot@archiver.kernel.org>; Sat,  7 Aug 2021 17:55:32 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 0A146600EF
-	for <buildroot@archiver.kernel.org>; Sat,  7 Aug 2021 17:30:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0A146600EF
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id 8317860F0F
+	for <buildroot@archiver.kernel.org>; Sat,  7 Aug 2021 17:55:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8317860F0F
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CC6F9827A8;
-	Sat,  7 Aug 2021 17:30:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3983360642;
+	Sat,  7 Aug 2021 17:55:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7QmjNroCKELh; Sat,  7 Aug 2021 17:30:54 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Ox3KEDEBrV-M; Sat,  7 Aug 2021 17:55:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0DBD182881;
-	Sat,  7 Aug 2021 17:30:53 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9760E1BF39E
- for <buildroot@lists.busybox.net>; Sat,  7 Aug 2021 17:30:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A6B5C605AC;
+	Sat,  7 Aug 2021 17:55:29 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id EDECB1BF39E
+ for <buildroot@lists.busybox.net>; Sat,  7 Aug 2021 17:55:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 942A9402BD
- for <buildroot@lists.busybox.net>; Sat,  7 Aug 2021 17:30:51 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D9A4282F39
+ for <buildroot@lists.busybox.net>; Sat,  7 Aug 2021 17:55:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0hbqXfKEXCy8 for <buildroot@lists.busybox.net>;
- Sat,  7 Aug 2021 17:30:50 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id z3ZRGO9xXfHF for <buildroot@lists.busybox.net>;
+ Sat,  7 Aug 2021 17:55:28 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com
- [IPv6:2a00:1450:4864:20::131])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8F3AE402A6
- for <buildroot@buildroot.org>; Sat,  7 Aug 2021 17:30:50 +0000 (UTC)
-Received: by mail-lf1-x131.google.com with SMTP id t9so24839620lfc.6
- for <buildroot@buildroot.org>; Sat, 07 Aug 2021 10:30:50 -0700 (PDT)
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com
+ [IPv6:2a00:1450:4864:20::535])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id CFCB282F19
+ for <buildroot@buildroot.org>; Sat,  7 Aug 2021 17:55:27 +0000 (UTC)
+Received: by mail-ed1-x535.google.com with SMTP id f13so17994520edq.13
+ for <buildroot@buildroot.org>; Sat, 07 Aug 2021 10:55:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc:content-transfer-encoding;
- bh=VXfuHHa2pUt5S61NtF2MjoN2qjIdw0TJUOhchs0NL68=;
- b=K7YRoGuByOl/TfEo0MHGS0QTV+J3fwF6IQvCT7a/BUs6MgX6iETmz1kpLvNZIW3Kn0
- l2f9M2xZqoxYpwoKWxyC7uruOidcOwi11boewxNBYyKrkxCGREVXXQCvIwxeOaLZa9Y3
- E/FceICc2Zn89mBGQMswztbTKv0QkY1+G97quzDpRD3246aXo4xXlcTLeixk6OCoSyJr
- ZkAervYb0/KrKxcwM/aR98XDGaloo6nylU8hWZL3EoYCe0Rte5VcRJhpA2DsdDitzD5w
- +67gRlD3m50fftKydTaciMk0hTL0A7+T1cD3PdBl4LTwbP9rqDu7f4OhrBMyPZTIQqCh
- 4lXg==
+ h=sender:from:to:cc:subject:references:date:in-reply-to:message-id
+ :user-agent:mime-version;
+ bh=JJ2YWdTJkK7FA+jHAvOdtU1BcGHDpye0FqXv3xX2Qw0=;
+ b=k5IB2RVv0lUoQCinchwiNDOp05WOZLdmAY+uwpDFe46wp2n/mEhOMqI60ZyzszAWv5
+ 7HWQfowpKe25ro9GGCzRkPd7qXVb8v4ZoyQro7pkY9G/bt4EzyEspD0DiwWrgEgbamBf
+ o4ITe5o/4TZKz7UxPhu74393pL2rN/4ckRVmzlkozhzEvNJC3IxOXsauDErR0h7ttAPB
+ m69NO13wHTM2I75pbQ+Y3QhJgEdFac38xLRQ4SOMOxQX9X2X2SV5ERKAYkgtoRHbZ6gX
+ Xa0PXx7OLKXlGSPkX2sN8Pk/2odQ5jHy/2SzOQlYXc7v8cSaDDWEBHYJAxLLr6FG7lVw
+ FZiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc:content-transfer-encoding;
- bh=VXfuHHa2pUt5S61NtF2MjoN2qjIdw0TJUOhchs0NL68=;
- b=HsObTa7Cvw8h1PnQz5+VgBQ/qUl2Zn+468a2h0WjErAHkt0wHScmNnLpf7DfdxE6Jc
- tfaOYMcTkT3yUl8ZIJOMvR32p6s/YUTmfKpE8amJfHVfyX2lwRrYifWxIu8nGhnl5yIr
- 3/M1GP8GpSfWwZB7MTncQKtQ/eHxXjqC8XgYXXAjPjFB6BnJVAY4p4zmZF5skyMmxGom
- uWUHTPCOHUkOm4xbPfNUodG0FFTD5Fkqokd6+jgQ5PoYrD+xmVeLB0jfpDqBI/qdHmbI
- fH+BVMl1stKeBdT8/ZISuKh61QkGWm+zlWHZ42nfeLgKYgrzqLaStYad88uw+QgCQnr0
- Ryyg==
-X-Gm-Message-State: AOAM532Argwp0qKSVztNlTAe1JlMl9uXh2Y2M/XX3Ro8RGwetuBh/hn8
- l8w0wmnIPncfxijEABNu/kV7HzrNOgMamrs8pMYFlEDazUs=
-X-Google-Smtp-Source: ABdhPJyE3NjoNb5SNr3Vb3jnHh5To+BplaM57avgFGRmN9FYEcjofVvhwiHaamJZMUNyqiln7swRFlkQMB7vSgeCqDw=
-X-Received: by 2002:a05:6512:318c:: with SMTP id
- i12mr12127010lfe.155.1628357448337; 
- Sat, 07 Aug 2021 10:30:48 -0700 (PDT)
+ h=x-gm-message-state:sender:from:to:cc:subject:references:date
+ :in-reply-to:message-id:user-agent:mime-version;
+ bh=JJ2YWdTJkK7FA+jHAvOdtU1BcGHDpye0FqXv3xX2Qw0=;
+ b=ImnFGaITy7Wtbi83K8Wv1liNjGjN/KNM0BFDd/GSvsIbgTTF6/k+ulM2np57rqQivk
+ u+Ci7egVNLf7UPPt32JaP13z+mFDZ/rXXnkqG/efgBuVr5sxXVHJR858i8pnQ2xruW5Y
+ HuI9BAOtmSo8erqcLr0SA7XmDyM3+fpRYz13quK6ea8J/xxWHwyGJ0jKoiyBwcJzMAUU
+ wdbMKHtag6NozIPoauSRTOhBPFy33I4ZyVE9Hl4YuBipjNMJ4TjwVJrAXfsylWnL/GWG
+ i7a4qBi4fo1Hz/l3TD4SN4WJ7Zj8IG6kpu6JXcAEvODxJlLGxGfnrEcrEy7+T0QEHua9
+ IJIQ==
+X-Gm-Message-State: AOAM531Y9WNMFADjJCBUnVzP0s3WPlBthRLxrAmg1ncbpojUh2u+KotP
+ YQveiuyaYzDPzBR4ABMWpGI=
+X-Google-Smtp-Source: ABdhPJwaqtcOlG8vp8sL+PIe2TWfLDTackixnmoY7zci4aqD8kWV6dcxg9v4AV+k22UNEbDUqwHDDg==
+X-Received: by 2002:a05:6402:7da:: with SMTP id
+ u26mr20254959edy.270.1628358926041; 
+ Sat, 07 Aug 2021 10:55:26 -0700 (PDT)
+Received: from dell.be.48ers.dk ([195.162.189.230])
+ by smtp.gmail.com with ESMTPSA id v21sm500463ejw.85.2021.08.07.10.55.25
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 07 Aug 2021 10:55:25 -0700 (PDT)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
+ (envelope-from <peter@korsgaard.com>)
+ id 1mCQXc-0004GO-HH; Sat, 07 Aug 2021 19:55:24 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20210801080430.2591526-1-fontaine.fabrice@gmail.com>
+Date: Sat, 07 Aug 2021 19:55:24 +0200
+In-Reply-To: <20210801080430.2591526-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 1 Aug 2021 10:04:30 +0200")
+Message-ID: <87bl69f8c3.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-References: <20210806184411.4062961-1-fontaine.fabrice@gmail.com>
- <20210807085303.GU27036@scaer>
- <CAPi7W81cMuZYxxLKYW22N6-htbfCaXYkHoJCmnV-izpjCvSMew@mail.gmail.com>
- <20210807171249.GE27036@scaer>
-In-Reply-To: <20210807171249.GE27036@scaer>
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 7 Aug 2021 19:30:35 +0200
-Message-ID: <CAPi7W805DspE_i1aD+UR-f9eH02jc21mH13M3DwFBLxfGWWOYw@mail.gmail.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Subject: Re: [Buildroot] [PATCH 1/1] package/guile: fix build on riscv32
+Subject: Re: [Buildroot] [PATCH 1/1] package/ibrdtn: fix build with gcc 11
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,66 +102,35 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Buildroot Mailing List <buildroot@buildroot.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-WWFubiwKCkxlIHNhbS4gNyBhb8O7dCAyMDIxIMOgIDE5OjEyLCBZYW5uIEUuIE1PUklOIDx5YW5u
-Lm1vcmluLjE5OThAZnJlZS5mcj4gYSDDqWNyaXQgOgo+Cj4gRmFicmljZSwgQWxsLAo+Cj4gT24g
-MjAyMS0wOC0wNyAxNzowOCArMDIwMCwgRmFicmljZSBGb250YWluZSBzcGFrZSB0aHVzbHk6Cj4g
-PiBMZSBzYW0uIDcgYW/Du3QgMjAyMSDDoCAxMDo1MywgWWFubiBFLiBNT1JJTiA8eWFubi5tb3Jp
-bi4xOTk4QGZyZWUuZnI+IGEgw6ljcml0IDoKPiA+ID4gT24gMjAyMS0wOC0wNiAyMDo0NCArMDIw
-MCwgRmFicmljZSBGb250YWluZSBzcGFrZSB0aHVzbHk6Cj4gPiA+ID4gRml4IHRoZSBmb2xsb3dp
-bmcgYnVpbGQgZmFpbHVyZSBvbiByaXNjdjMyOgo+ID4gPiA+IHN5c3RlbS9iYXNlL3RhcmdldC5z
-Y206MTMyOjE2OiBJbiBwcm9jZWR1cmUgdHJpcGxldC1wb2ludGVyLXNpemU6Cj4gPiA+ID4gdW5r
-bm93biBDUFUgd29yZCBzaXplICJyaXNjdjMyIgo+IFstLVNOSVAtLV0KPiA+ID4gPiArKyAgICAg
-ICAgICAoKHN0cmluZy1tYXRjaCAiXnJpc2N2LioiIGNwdSkgOCkKPiA+ID4gQXJlIHlvdSBzdXJl
-IHRoYXQgYSAzMi1iaXQgQ1BVIHdpbGwgaGF2ZSA4LWJ5dGUgd2lkZSB3b3Jkcz8gSSB3b3VsZAo+
-ID4gPiBoYXZlIG5hdHVycmFsbHkgZXhwZWN0ZWQgdGhlbSB0byBiZSBqdXN0IDQtYnl0ZSB3aWRl
-Li4uCj4gPiBBcyBJJ20gbm90IGFuIGV4cGVydCBpbiByaXNjdiwgSSBzZWFyY2hlZCBvbiB3aWtp
-cGVkaWEgYW5kIGhlcmUgaXMgYW4KPiA+IGV4dHJhY3Qgb2YgaHR0cHM6Ly9lbi53aWtpcGVkaWEu
-b3JnL3dpa2kvUklTQy1WOgo+ID4gIk1lbW9yeSBpcyBhZGRyZXNzZWQgYXMgOC1iaXQgYnl0ZXMs
-IHdpdGggd29yZHMgYmVpbmcgaW4gbGl0dGxlLWVuZGlhbiBvcmRlciIKPiA+IEl0IHdvdWxkIGJl
-IGdyZWF0IGlmIGEgcmlzY3YgZXhwZXJ0IGNvdWxkIGNvbmZpcm0gb3Igbm90IHRoaXMgaW5mb3Jt
-YXRpb24uCj4KPiBTbywgeWVzLiBSZS1yZWFkIHRoYXQgY2FyZWZ1bGx5Ogo+Cj4gICAtIDgtYml0
-IGJ5dGVzLiBJLmUuIGEgYnl0ZSBpcyA4IGJpdHMKPgo+ICAgLSB3b3JkcyBiZWluZyBpbiBsaXR0
-bGUtZW5kaWFuIG9yZGVyCj4KPiBUaGF0IGluZGVlZCBzYXlzIG5vdGhpbmcgYWJvdXQgd29yZCBz
-aXplIGluIGJ5dGVzIChub3QgaW4gYml0cyEpLgo+Cj4gSSBtaWdodCBiZSB3cm9uZywgYnV0IG9u
-IGEgMzItYml0IGFyY2gsIHdvcmRzIGFyZSBhbHdheXMgNC1ieXRlcyB3aWRlcywKPiBpLmUuIDMy
-IGJpdHMsIHdoaWxlIG9uIGEgNjQtYml0IGFyY2hpdGVjdXRyZSwgd29yZHMgYXJlIDgtYnl0ZSB3
-aWRlLAo+IGkuZS4gNjQgYml0cy4KPgo+IFNvLCBJIHdvdWxkIHdhZ2VyIHRoYXQgcmlzY3YzMiBo
-YXMgNC1ieXRlIHdpZGUsIGllIDMyLWJpdCB3aWRlLCB3b3Jkcy4KVGhhbmtzIGZvciBzcG90dGlu
-ZyBteSBtaXN0YWtlLCBJJ2xsIHJlc2VuZCBhIHYyLgo+Cj4gUmVnYXJkcywKPiBZYW5uIEUuIE1P
-UklOLgo+Cj4gPiA+IElmIGh0aXMgaXMgaW5kZWVkIHRoZSBjYXNlLCB0aGVuIHBsZWFzZSBleHBs
-YWluIHRoYXQgaW4gdGhlIHBhdGNoIGNvbW1pdAo+ID4gPiBsb2cuLi4KPiA+ID4KPiA+ID4gUmVn
-YXJkcywKPiA+ID4gWWFubiBFLiBNT1JJTi4KPiA+ID4KPiA+ID4gPiArICAgICAgICAgICAoZWxz
-ZSAoZXJyb3IgInVua25vd24gQ1BVIHdvcmQgc2l6ZSIgY3B1KSkpKSkKPiA+ID4gPiArCj4gPiA+
-ID4gKyAoZGVmaW5lICh0cmlwbGV0LWNwdSB0KQo+ID4gPiA+ICstLQo+ID4gPiA+ICsyLjMwLjIK
-PiA+ID4gPiArCj4gPiA+ID4gLS0KPiA+ID4gPiAyLjMwLjIKPiA+ID4gPgo+ID4gPiA+IF9fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4gPiA+ID4gYnVpbGRy
-b290IG1haWxpbmcgbGlzdAo+ID4gPiA+IGJ1aWxkcm9vdEBidXN5Ym94Lm5ldAo+ID4gPiA+IGh0
-dHA6Ly9saXN0cy5idXN5Ym94Lm5ldC9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo+ID4gPgo+
-ID4gPiAtLQo+ID4gPiAuLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLS0uLS0t
-LS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS0tLgo+ID4gPiB8ICBZYW5uIEUuIE1P
-UklOICB8IFJlYWwtVGltZSBFbWJlZGRlZCB8IC8iXCBBU0NJSSBSSUJCT04gfCBFcmljcycgY29u
-c3BpcmFjeTogfAo+ID4gPiB8ICszMyA2NjIgMzc2IDA1NiB8IFNvZnR3YXJlICBEZXNpZ25lciB8
-IFwgLyBDQU1QQUlHTiAgICAgfCAgX19fICAgICAgICAgICAgICAgfAo+ID4gPiB8ICszMyA1NjEg
-MDk5IDQyNyBgLS0tLS0tLS0tLS0tLi0tLS0tLS06ICBYICBBR0FJTlNUICAgICAgfCAgXGUvICBU
-aGVyZSBpcyBubyAgfAo+ID4gPiB8IGh0dHA6Ly95bW9yaW4uaXMtYS1nZWVrLm9yZy8gfCBfLypc
-XyB8IC8gXCBIVE1MIE1BSUwgICAgfCAgIHYgICBjb25zcGlyYWN5LiAgfAo+ID4gPiAnLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tXi0tLS0tLS1eLS0tLS0tLS0tLS0tLS0tLS0tXi0tLS0t
-LS0tLS0tLS0tLS0tLS0tJwo+ID4gQmVzdCBSZWdhcmRzLAo+ID4KPiA+IEZhYnJpY2UKPgo+IC0t
-Cj4gLi0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0t
-LS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0tLS4KPiB8ICBZYW5uIEUuIE1PUklOICB8IFJlYWwtVGlt
-ZSBFbWJlZGRlZCB8IC8iXCBBU0NJSSBSSUJCT04gfCBFcmljcycgY29uc3BpcmFjeTogfAo+IHwg
-KzMzIDY2MiAzNzYgMDU2IHwgU29mdHdhcmUgIERlc2lnbmVyIHwgXCAvIENBTVBBSUdOICAgICB8
-ICBfX18gICAgICAgICAgICAgICB8Cj4gfCArMzMgNTYxIDA5OSA0MjcgYC0tLS0tLS0tLS0tLS4t
-LS0tLS0tOiAgWCAgQUdBSU5TVCAgICAgIHwgIFxlLyAgVGhlcmUgaXMgbm8gIHwKPiB8IGh0dHA6
-Ly95bW9yaW4uaXMtYS1nZWVrLm9yZy8gfCBfLypcXyB8IC8gXCBIVE1MIE1BSUwgICAgfCAgIHYg
-ICBjb25zcGlyYWN5LiAgfAo+ICctLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS1eLS0tLS0t
-LV4tLS0tLS0tLS0tLS0tLS0tLS1eLS0tLS0tLS0tLS0tLS0tLS0tLS0nCkJlc3QgUmVnYXJkcywK
-CkZhYnJpY2UKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18K
-YnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVzeWJveC5uZXQKaHR0cDovL2xpc3Rz
-LmJ1c3lib3gubmV0L21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+
+ > Fix the following build failure with gcc 11:
+ > In file included from ../../ibrdtn/data/PrimaryBlock.h:30,
+ >                  from ../../ibrdtn/data/Serializer.h:27,
+ >                  from ../../ibrdtn/data/Block.h:29,
+ >                  from ../../ibrdtn/data/Bundle.h:27,
+ >                  from ../../ibrdtn/api/Client.h:26,
+ >                  from Client.cpp:22:
+ > /tmp/instance-0/output-1/host/bin/../arm-buildroot-linux-gnueabihf/sysroot/usr/include/ibrcommon-1.0/ibrcommon/thread/Mutex.h:43:40: error: ISO C++17 does not allow dynamic exception specifications
+ >    43 |                 virtual void trylock() throw (MutexException) = 0;
+ >       |                                        ^~~~~
+
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/c2d9033c68b5c1407d2cf87b98dff61958b8e7b6
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed to 2021.02.x and 2021.05.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
+_______________________________________________
+buildroot mailing list
+buildroot@busybox.net
+http://lists.busybox.net/mailman/listinfo/buildroot
