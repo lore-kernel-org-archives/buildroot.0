@@ -2,57 +2,92 @@ Return-Path: <SRS0=HCTk=M6=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
+	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3DF98C4338F
-	for <buildroot@archiver.kernel.org>; Sat,  7 Aug 2021 17:21:36 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DC0BBC4338F
+	for <buildroot@archiver.kernel.org>; Sat,  7 Aug 2021 17:23:13 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id DDCBF61050
-	for <buildroot@archiver.kernel.org>; Sat,  7 Aug 2021 17:21:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org DDCBF61050
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
+	by mail.kernel.org (Postfix) with ESMTPS id 88DC36101C
+	for <buildroot@archiver.kernel.org>; Sat,  7 Aug 2021 17:23:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 88DC36101C
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B18B783A56;
-	Sat,  7 Aug 2021 17:21:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 441B060657;
+	Sat,  7 Aug 2021 17:23:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lDNlsogd4RVJ; Sat,  7 Aug 2021 17:21:34 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 2vWZWiETYg08; Sat,  7 Aug 2021 17:23:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 020F18398E;
-	Sat,  7 Aug 2021 17:21:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 932E6605E2;
+	Sat,  7 Aug 2021 17:23:11 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2CE241BF39E
- for <buildroot@lists.busybox.net>; Sat,  7 Aug 2021 17:19:48 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7F0101BF39E
+ for <buildroot@lists.busybox.net>; Sat,  7 Aug 2021 17:23:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 07C3A401D0
- for <buildroot@lists.busybox.net>; Sat,  7 Aug 2021 17:19:46 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7A37F40168
+ for <buildroot@lists.busybox.net>; Sat,  7 Aug 2021 17:23:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mSt_cc_kqcz2 for <buildroot@lists.busybox.net>;
- Sat,  7 Aug 2021 17:19:44 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 405B5401E9
- for <buildroot@buildroot.org>; Sat,  7 Aug 2021 17:19:44 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 930258CA2D; Sat,  7 Aug 2021 17:19:27 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ with ESMTP id s8r6-z-lwiBa for <buildroot@lists.busybox.net>;
+ Sat,  7 Aug 2021 17:23:09 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
+ [IPv6:2a00:1450:4864:20::32d])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 815DF40019
+ for <buildroot@buildroot.org>; Sat,  7 Aug 2021 17:23:09 +0000 (UTC)
+Received: by mail-wm1-x32d.google.com with SMTP id
+ k38-20020a05600c1ca6b029025af5e0f38bso11223925wms.5
+ for <buildroot@buildroot.org>; Sat, 07 Aug 2021 10:23:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=Y4hJY/zaJ5VXdDd0s4C658RJFfwfrTcczXRHeP1KCOg=;
+ b=mCONzurZngLtvslieTvn/VadJbO2MqEyKOgK+7MwvYQGQP4O7odOEUf1H+IuUROmqy
+ 0DlcWQA+fbbR5u8WqBZ2ClH4m5aU8KvJDqzD4vl12Nz1H6Wk30CgbfsfZGRSg9dSPn+L
+ sUbJMl2/QcGmBVGocRuKCoaqL6ZqVf55zSrrshADPrHewxTYxWP/1ffpHcfKnbz4NO4a
+ AtU03YW7P88cs+TLibjlS+Kp1ppFfsF6RH8P1BP/NrO4kkgLhsIKR9mLc95CdKeEn8Iq
+ gKq1lAji+/T4pmYJO1fRA9m/OigMCN6AcbVenEToZtx6inG7fJG6+q5T0zk9jr4UX16r
+ f9KA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=Y4hJY/zaJ5VXdDd0s4C658RJFfwfrTcczXRHeP1KCOg=;
+ b=T7BGcJjx/jKfJHFeDQq/KwNuXUL5CjnSpo5DTpN7s+TdSKY7ocAFcZYWC5jFcVzJEE
+ nFvMFT5qvUF6FImZ/yKNZVrd0I7IDw+NaX54BtNY27ew9zQHrOuL3CUqxh7tJoq2i9Wq
+ tnBCCvzIVypROWKc+YsL6MkechHd+eVB402VM69pZTPJ/+t9hkfNWFxAbjN65y2eqWCF
+ g+OtDZwPfnBh8ZQLVdgrFfuixxW4fMDLYu79FDMHpAzOlXdMNvB/MmOIilClA34C788r
+ Tn5ZomJkNRzUwnANvJ5Jtwb84y1KU9dvhD4s5zX2haMnWd6dwkPuVA70Fgt5x6ER7s+1
+ q6Cg==
+X-Gm-Message-State: AOAM533Z6pIO9TotGYrOCRpoFdCvmuaDgRoEeceGFyqXF9iDqiQYvVUY
+ KibKkmeVzR0VFYJSWufZccXJ3ZgBFAZVHg==
+X-Google-Smtp-Source: ABdhPJxLOCFO+/ztBd3hDQeRaqhPMU/pzIOI8AVNSTfaz2n47WiEsiCXVRvSNFNEZWm3EfXV5aA9cw==
+X-Received: by 2002:a05:600c:35d1:: with SMTP id
+ r17mr8659368wmq.175.1628356987224; 
+ Sat, 07 Aug 2021 10:23:07 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-417-221.w2-10.abo.wanadoo.fr.
+ [2.10.242.221])
+ by smtp.gmail.com with ESMTPSA id c10sm16947492wml.44.2021.08.07.10.23.06
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 07 Aug 2021 10:23:06 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 7 Aug 2021 19:17:25 +0200
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: b319277b236dc230016c8d285762c1fba00487a7
-X-Git-Newrev: df7a1c585a11a5d7674490337ec3492af000adad
-X-Patchwork-Hint: ignore
-Message-Id: <20210807171927.930258CA2D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/fetchmail: bump
- version to 6.4.19
+Date: Sat,  7 Aug 2021 19:22:58 +0200
+Message-Id: <20210807172258.972482-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH 1/1] package/libvirt: needs xsltproc
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,58 +99,40 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-MIME-Version: 1.0
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Jared Bents <jared.bents@rockwellcollins.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=df7a1c585a11a5d7674490337ec3492af000adad
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+libvirt needs xsltproc since its addition in commit
+ccfc90e1010e42e6529afae3a5ea8bf7226dabc1
 
-Updated license hash due to upstream typo fix:
-https://sourceforge.net/p/fetchmail/git/ci/2409d4f0baa90c6303d1e600772e500fc397a561/
+Fixes:
+ - No autobuilder failures yet
 
-Release notes:
-https://sourceforge.net/p/fetchmail/mailman/message/37267719/
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 9fea6712f5df2e5fe4255f7a6b297aa972bebfc0)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/fetchmail/fetchmail.hash | 8 ++++----
- package/fetchmail/fetchmail.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/libvirt/libvirt.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/fetchmail/fetchmail.hash b/package/fetchmail/fetchmail.hash
-index 698d83c88b..8f092a3f80 100644
---- a/package/fetchmail/fetchmail.hash
-+++ b/package/fetchmail/fetchmail.hash
-@@ -1,6 +1,6 @@
--# From https://sourceforge.net/p/fetchmail/mailman/message/37249830/
--sha256  302dc9bcdc6927dedf375d2baaead2347557faa70d98b1da83f2409fa6fb259f  fetchmail-6.4.18.tar.xz
-+# From https://sourceforge.net/p/fetchmail/mailman/message/37267719/
-+sha256  cd8d11a3d103e50caa2ec64bcda6307eb3d0783a4d4dfd88e668b81aaf9d6b5f  fetchmail-6.4.19.tar.xz
- # From https://sourceforge.net/projects/fetchmail/files/branch_6.4/
--sha1  1fd3e4f30bd9ba7bdcaed5edfca080dc6f66377e  fetchmail-6.4.18.tar.xz
-+sha1  bb6959f0cf1f6d689c2ba3834c5bba72e4f9ec07  fetchmail-6.4.19.tar.xz
- # Locally computed:
--sha256  8e3ec4863456a26fcd1cf84fadd4146efcb2fd8515bcec482e0f2b7060108895  COPYING
-+sha256  6346b5aa04e258fa4326272ea92372d796b4382aa963535ae98a3bb5f8cd5aeb  COPYING
-diff --git a/package/fetchmail/fetchmail.mk b/package/fetchmail/fetchmail.mk
-index 6fe9b5b3d7..7233da98a5 100644
---- a/package/fetchmail/fetchmail.mk
-+++ b/package/fetchmail/fetchmail.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/libvirt/libvirt.mk b/package/libvirt/libvirt.mk
+index feb2d6aa84..d99e538008 100644
+--- a/package/libvirt/libvirt.mk
++++ b/package/libvirt/libvirt.mk
+@@ -10,7 +10,7 @@ LIBVIRT_SOURCE = libvirt-$(LIBVIRT_VERSION).tar.xz
+ LIBVIRT_LICENSE = LGPL-2.1+
+ LIBVIRT_LICENSE_FILES = COPYING
+ LIBVIRT_CPE_ID_VENDOR = redhat
+-LIBVIRT_DEPENDENCIES = host-nfs-utils host-pkgconf host-python-docutils \
++LIBVIRT_DEPENDENCIES = host-libxslt host-nfs-utils host-pkgconf host-python-docutils \
+ 	gnutls libglib2 libpciaccess libtirpc libxml2 udev zlib
  
- FETCHMAIL_VERSION_MAJOR = 6.4
--FETCHMAIL_VERSION = $(FETCHMAIL_VERSION_MAJOR).18
-+FETCHMAIL_VERSION = $(FETCHMAIL_VERSION_MAJOR).19
- FETCHMAIL_SOURCE = fetchmail-$(FETCHMAIL_VERSION).tar.xz
- FETCHMAIL_SITE = http://downloads.sourceforge.net/project/fetchmail/branch_$(FETCHMAIL_VERSION_MAJOR)
- FETCHMAIL_LICENSE = GPL-2.0; some exceptions are mentioned in COPYING
+ LIBVIRT_CONF_ENV += \
+-- 
+2.30.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
