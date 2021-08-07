@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 014D3C4338F
-	for <buildroot@archiver.kernel.org>; Sat,  7 Aug 2021 18:14:46 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9667FC4338F
+	for <buildroot@archiver.kernel.org>; Sat,  7 Aug 2021 18:14:58 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B5FBA61057
-	for <buildroot@archiver.kernel.org>; Sat,  7 Aug 2021 18:14:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B5FBA61057
+	by mail.kernel.org (Postfix) with ESMTPS id 5310961004
+	for <buildroot@archiver.kernel.org>; Sat,  7 Aug 2021 18:14:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5310961004
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 87DB7834B9;
-	Sat,  7 Aug 2021 18:14:45 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1FA884039C;
+	Sat,  7 Aug 2021 18:14:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hSKOQE_oe4AN; Sat,  7 Aug 2021 18:14:44 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id fm2bdOmljNpw; Sat,  7 Aug 2021 18:14:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E2322827B5;
-	Sat,  7 Aug 2021 18:14:43 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B151B1BF964
- for <buildroot@lists.busybox.net>; Sat,  7 Aug 2021 18:11:57 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2C1D040389;
+	Sat,  7 Aug 2021 18:14:56 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 224041BF403
+ for <buildroot@lists.busybox.net>; Sat,  7 Aug 2021 18:11:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9EFA840330
- for <buildroot@lists.busybox.net>; Sat,  7 Aug 2021 18:11:56 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 11FA240112
+ for <buildroot@lists.busybox.net>; Sat,  7 Aug 2021 18:11:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PnKWo_RrACid for <buildroot@lists.busybox.net>;
- Sat,  7 Aug 2021 18:11:55 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id aiOitiKkRRDd for <buildroot@lists.busybox.net>;
+ Sat,  7 Aug 2021 18:11:56 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D2335403BF
- for <buildroot@buildroot.org>; Sat,  7 Aug 2021 18:11:55 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0F92B401D0
+ for <buildroot@buildroot.org>; Sat,  7 Aug 2021 18:11:56 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 0D47E83FF0; Sat,  7 Aug 2021 18:11:39 +0000 (UTC)
+ id 3F9EA87753; Sat,  7 Aug 2021 18:11:39 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 7 Aug 2021 19:56:34 +0200
+Date: Sat, 7 Aug 2021 20:11:17 +0200
 X-Git-Refname: refs/heads/2021.05.x
-X-Git-Oldrev: bde89f9a0fa34e07a7203e73b489d8569498ac46
-X-Git-Newrev: 1f4fad7c587b140ee301cc28bd083a32e520aea6
+X-Git-Oldrev: 75aae80a2eb3898d523843a664857baeade327db
+X-Git-Newrev: bc94b32a90b2eee72582d06682626c41c2dcadd8
 X-Patchwork-Hint: ignore
-Message-Id: <20210807181139.0D47E83FF0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.05.x] package/ibrdtn-tools: fix
- build with gcc 11
+Message-Id: <20210807181139.3F9EA87753@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.05.x] package/wireshark:
+ security bump to version 3.4.7
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,32 +70,51 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1f4fad7c587b140ee301cc28bd083a32e520aea6
+commit: https://git.buildroot.net/buildroot/commit/?id=bc94b32a90b2eee72582d06682626c41c2dcadd8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
 
-Fixes:
- - No autobuilder failures yet
+Fix CVE-2021-22235: Crash in DNP dissector in Wireshark 3.4.0 to 3.4.6
+and 3.2.0 to 3.2.14 allows denial of service via packet injection or
+crafted capture file
+
+https://www.wireshark.org/security/wnpa-sec-2021-06.html
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 278072520c76bae03916cdcd2f5d3324f4626c5f)
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit bb75c4b541fac144b53b63248e235f22ba1d25ad)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ibrdtn-tools/ibrdtn-tools.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/wireshark/wireshark.hash | 6 +++---
+ package/wireshark/wireshark.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/ibrdtn-tools/ibrdtn-tools.mk b/package/ibrdtn-tools/ibrdtn-tools.mk
-index 97ec3c9e17..77dbfc1032 100644
---- a/package/ibrdtn-tools/ibrdtn-tools.mk
-+++ b/package/ibrdtn-tools/ibrdtn-tools.mk
-@@ -9,6 +9,7 @@ IBRDTN_TOOLS_SITE = https://www.ibr.cs.tu-bs.de/projects/ibr-dtn/releases
- IBRDTN_TOOLS_LICENSE = Apache-2.0
- IBRDTN_TOOLS_LICENSE_FILES = COPYING
- IBRDTN_TOOLS_DEPENDENCIES = ibrcommon ibrdtn host-pkgconf
-+IBRDTN_TOOLS_CONF_ENV = CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11"
+diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
+index ddb0f1954a..0876703e49 100644
+--- a/package/wireshark/wireshark.hash
++++ b/package/wireshark/wireshark.hash
+@@ -1,6 +1,6 @@
+-# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.4.6.txt
+-sha1  20596183210daeb0070ae43716529caf81c6187a  wireshark-3.4.6.tar.xz
+-sha256  12a678208f8cb009e6b9d96026e41a6ef03c7ad086b9e1029f42053b249b4628  wireshark-3.4.6.tar.xz
++# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.4.7.txt
++sha1  3fa4bb774030442b9908243a9927d38479c52bf5  wireshark-3.4.7.tar.xz
++sha256  6c4cee51ef997cb9d9aaee84113525a5629157d3c743d7c4e320000de804a09d  wireshark-3.4.7.tar.xz
  
- ifeq ($(BR2_STATIC_LIBS),y)
- IBRDTN_TOOLS_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) -pthread"
+ # Locally calculated
+ sha256  7cdbed2b697efaa45576a033f1ac0e73cd045644a91c79bbf41d4a7d81dac7bf  COPYING
+diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+index 8b0ab4bfbe..e852083de6 100644
+--- a/package/wireshark/wireshark.mk
++++ b/package/wireshark/wireshark.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WIRESHARK_VERSION = 3.4.6
++WIRESHARK_VERSION = 3.4.7
+ WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.xz
+ WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
+ WIRESHARK_LICENSE = wireshark license
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
