@@ -2,76 +2,88 @@ Return-Path: <SRS0=HCTk=M6=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.5 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
+	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ABE4EC4338F
-	for <buildroot@archiver.kernel.org>; Sat,  7 Aug 2021 21:20:27 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 54D1DC4338F
+	for <buildroot@archiver.kernel.org>; Sat,  7 Aug 2021 21:33:11 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 4AAC260F42
-	for <buildroot@archiver.kernel.org>; Sat,  7 Aug 2021 21:20:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4AAC260F42
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
+	by mail.kernel.org (Postfix) with ESMTPS id E36B46101D
+	for <buildroot@archiver.kernel.org>; Sat,  7 Aug 2021 21:33:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E36B46101D
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1821A606F2;
-	Sat,  7 Aug 2021 21:20:27 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8821C40188;
+	Sat,  7 Aug 2021 21:33:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oiWQF2K1DEAt; Sat,  7 Aug 2021 21:20:26 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id GzBM6SwIag16; Sat,  7 Aug 2021 21:33:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6FB7E60656;
-	Sat,  7 Aug 2021 21:20:25 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 712A240160;
+	Sat,  7 Aug 2021 21:33:08 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 79DAA1BF3BC
- for <buildroot@lists.busybox.net>; Sat,  7 Aug 2021 21:20:21 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 159C71BF3BC
+ for <buildroot@lists.busybox.net>; Sat,  7 Aug 2021 21:33:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 687954017C
- for <buildroot@lists.busybox.net>; Sat,  7 Aug 2021 21:20:21 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0B3D540160
+ for <buildroot@lists.busybox.net>; Sat,  7 Aug 2021 21:33:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Tu8qaMhHWt6X for <buildroot@lists.busybox.net>;
- Sat,  7 Aug 2021 21:20:20 +0000 (UTC)
+ with ESMTP id 9gAw7m6Yyt9z for <buildroot@lists.busybox.net>;
+ Sat,  7 Aug 2021 21:33:05 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 276DA400EF
- for <buildroot@buildroot.org>; Sat,  7 Aug 2021 21:20:20 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:6435:5a60:3dd3:9849])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id A12697802BE;
- Sat,  7 Aug 2021 23:20:11 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1628371218;
- bh=vl5mMoFcovC0b8GgxcPLU0FTiAZIppQZGGQluDmpPug=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=lGX92SZnut0ZSVPikooXVt0nONo3cSE5VAJlhrnPV8XW/m8Q+nrD5S4zUu/0+NUe8
- c3TWpIC77e/78leGV8Qbqfw7AQGUMYEZkdPCBPbAnHo75PdxlJI5gnVi+6jjDqmC8N
- bwmICbKnTAIBDGijtinJtM7BE0r0Gu3SP2AfhKSlAGP+qgNasL7QbLPHUDHF3fiYL+
- UxytrPx1DcqIGHIEY27hG9LesBDI4FBq876w+bWdLsoRG+79DTI5QEbib7crlCz0ny
- nv0f3NiFZJr+z1J6kxz/z6xEaSFkU8bbP2H79tzk6HPZLJTUSo/cEhq5KfNzuKv3BK
- ET8OhZLUOeLvQ==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 07 Aug 2021 23:20:11 +0200
-Date: Sat, 7 Aug 2021 23:20:11 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20210807212011.GG27036@scaer>
-References: <20210807172359.974226-1-fontaine.fabrice@gmail.com>
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
+ [IPv6:2a00:1450:4864:20::434])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id AB8CC400CC
+ for <buildroot@buildroot.org>; Sat,  7 Aug 2021 21:33:05 +0000 (UTC)
+Received: by mail-wr1-x434.google.com with SMTP id b11so15946680wrx.6
+ for <buildroot@buildroot.org>; Sat, 07 Aug 2021 14:33:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=+RKFJDK32wOXVr1ucPExc4rgILYqotif/Wn/Ue2+E8Q=;
+ b=jGsLv4RW7Y4TlXJJAjSZESarxd1JzYlOVdYEsBbfodOAqMAd+nbKm1C4NKJgmuqNN+
+ EX9aj1Enmy4MlA8wnhhHQsTRXUwPSXSbhL9WjIRgy5HDVaRIcRgUUe3YR5FQIcG0Q6P7
+ YLQILdToqgyDaC9vIILDZYIn0uZS6+4b+3wy0rkU3YfzHxr1hL3HIPq/BOVLYVMx6hVZ
+ ZszahoVvoeQS9tzBe6DEPlpUMCkq3nhRPgwzkqEsmLVgOfPXomgqfs4prXvVB+I/hR6M
+ k+cxO2TFQ8k9gS+dxWWp1t8c026xkA8kZQjeTpZWQW69+6ANwUCMaFAZwAt/OYQ5JwTr
+ TvSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=+RKFJDK32wOXVr1ucPExc4rgILYqotif/Wn/Ue2+E8Q=;
+ b=pi7bBZL66E+KPhEtDxVSdl5QY9fZPqdshXjFZcOeWLJhIFh+5OTAZGQ5S/U9Y4egSJ
+ j7q3gfUv+V3ACJ/Df3cAMYWeSPrOheqdo7W+s0flo/HeHET+tl5H4cN7RpuRmGEekzqw
+ 7KctDj4JKlrL0ru21z/APOwto6uatjvpSqvXoMVRxX8+5eHt8DIToLGCK5FaLQeMwKwA
+ HmoP+bI37+vuMnf7eXyxtNrIkQgsDTPOwepRmvfdGGZnDR9w2siqN2v490z/RVoEvBu2
+ 51/+4TqrF97vVaI5ESzrv1zgDFFnitVTY88eVWoIvnOOJ3X/7KSGj49qGswIOJMK62u6
+ HkaA==
+X-Gm-Message-State: AOAM531OPdsabuPOIQhCCnDhkAkN98QzFxulMX/IG/0olssUzNUi8I0l
+ WB/g7YO+s2rwFbia4QWeW5WclCpFliMLvQ==
+X-Google-Smtp-Source: ABdhPJwBLiOyVetu28c6FvKG6tiwsCXpKdREFwPLQpwJdNXmU6GaolyOedD25eJFHgw3sYqz+eWw4w==
+X-Received: by 2002:a5d:54c7:: with SMTP id x7mr17165374wrv.77.1628371983454; 
+ Sat, 07 Aug 2021 14:33:03 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-417-221.w2-10.abo.wanadoo.fr.
+ [2.10.242.221])
+ by smtp.gmail.com with ESMTPSA id a11sm34628wrw.67.2021.08.07.14.33.02
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 07 Aug 2021 14:33:02 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sat,  7 Aug 2021 23:32:54 +0200
+Message-Id: <20210807213254.2103314-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20210807172359.974226-1-fontaine.fabrice@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 1/1] package/libvirt: disable stack-protector
+Subject: [Buildroot] [PATCH 1/1] package/libnss: fix build on ARM big endian
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,77 +95,89 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Jared Bents <jared.bents@rockwellcollins.com>, buildroot@buildroot.org
+Cc: Joseph Kogut <joseph.kogut@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-Fabrice, All,
+Fix the follownig build failure on ARM big endian raised since bump to
+version 3.68 in commit 0a73b9b962421ce7a72c88e5f5bbd8849f21b041:
 
-On 2021-08-07 19:23 +0200, Fabrice Fontaine spake thusly:
-> Set warning_level to 1 instead of the default value of 2 to disable
-> stack-protector and avoid the following build failure since the addition
-> of the package in commit ccfc90e1010e42e6529afae3a5ea8bf7226dabc1:
-> 
-> /tmp/instance-5/output-1/host/opt/ext-toolchain/bin/../lib/gcc/i686-buildroot-linux-uclibc/9.3.0/../../../../i686-buildroot-linux-uclibc/bin/ld: tests/commandhelper.p/commandhelper.c.o: in function `printInput':
-> commandhelper.c:(.text+0xad): undefined reference to `__stack_chk_guard'
+Linux2.6_aarch64_aarch64_be-linux-gnu-gcc_glibc_PTH_64_DBG.OBJ/Linux_SINGLE_SHLIB/sha256-armv8.o: In function `SHA256_Compress_Native':
+sha256-armv8.c:(.text.SHA256_Compress_Native+0x0): multiple definition of `SHA256_Compress_Native'
+Linux2.6_aarch64_aarch64_be-linux-gnu-gcc_glibc_PTH_64_DBG.OBJ/Linux_SINGLE_SHLIB/sha512.o:sha512.c:(.text.SHA256_Compress_Native+0x0): first defined here
+Linux2.6_aarch64_aarch64_be-linux-gnu-gcc_glibc_PTH_64_DBG.OBJ/Linux_SINGLE_SHLIB/sha256-armv8.o: In function `SHA256_Update_Native':
+sha256-armv8.c:(.text.SHA256_Update_Native+0x0): multiple definition of `SHA256_Update_Native'
+Linux2.6_aarch64_aarch64_be-linux-gnu-gcc_glibc_PTH_64_DBG.OBJ/Linux_SINGLE_SHLIB/sha512.o:sha512.c:(.text.SHA256_Update_Native+0x0): first defined here
 
-It is sad that they misuse the warning-level option to drive the use
-of SSP.
+Fixes:
+ - http://autobuild.buildroot.org/results/237aba0c16a34fec1b0fe50fe08cace438eda1bf
 
-That change is however relatively recent:
-    https://gitlab.com/libvirt/libvirt/-/commit/a9461d456c9017322fd10ecc9539c6788a27d476
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...2.c-fix-SHA256-redefinition-on-ARM-b.patch | 47 +++++++++++++++++++
+ 1 file changed, 47 insertions(+)
+ create mode 100644 package/libnss/0001-lib-freebl-sha512.c-fix-SHA256-redefinition-on-ARM-b.patch
 
-and that commit only speaks about honouring warning-level for warnings.
-It looks like the SSP settings got wrongly pulled into that conditional
-blovk by chance only.
-
-Probably, they would not be opposed to a fix that gets SSP back out of
-the wanrning-level condition, maybe with an option of its own...
-
-Could you look into that, please?
-
-In the meantime: applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> Fixes:
->  - http://autobuild.buildroot.org/results/a2657eb18b579752c8217ab356adcb52931f6785
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/libvirt/libvirt.mk | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/libvirt/libvirt.mk b/package/libvirt/libvirt.mk
-> index a0fd5af951..198e64d24c 100644
-> --- a/package/libvirt/libvirt.mk
-> +++ b/package/libvirt/libvirt.mk
-> @@ -51,6 +51,7 @@ LIBVIRT_CONF_OPTS = \
->  	-Dsysctl_config=enabled \
->  	-Dtest_coverage=false \
->  	-Dudev=enabled \
-> +	-Dwarning_level=1 \
->  	-Dwireshark_dissector=disabled
->  
->  ifeq ($(BR2_PACKAGE_ATTR),y)
-> -- 
-> 2.30.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/libnss/0001-lib-freebl-sha512.c-fix-SHA256-redefinition-on-ARM-b.patch b/package/libnss/0001-lib-freebl-sha512.c-fix-SHA256-redefinition-on-ARM-b.patch
+new file mode 100644
+index 0000000000..f925f20051
+--- /dev/null
++++ b/package/libnss/0001-lib-freebl-sha512.c-fix-SHA256-redefinition-on-ARM-b.patch
+@@ -0,0 +1,47 @@
++From 434d79c52db5b680accc531572319bd7094fa470 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 7 Aug 2021 23:19:01 +0200
++Subject: [PATCH] lib/freebl/sha512.c: fix SHA256 redefinition on ARM big
++ endian
++
++For an unknown reason, SHA256_{Compress,Update}_Native are defined in
++lib/freebl/sha512.c if IS_LITTLE_ENDIAN is undefined since version 3.68
++and
++https://github.com/nss-dev/nss/commit/e1e00f21f2d73e0d5d27651ad5606efa5714abe4
++
++This raises the following build failure on ARM big endian:
++
++Linux2.6_aarch64_aarch64_be-linux-gnu-gcc_glibc_PTH_64_DBG.OBJ/Linux_SINGLE_SHLIB/sha256-armv8.o: In function `SHA256_Compress_Native':
++sha256-armv8.c:(.text.SHA256_Compress_Native+0x0): multiple definition of `SHA256_Compress_Native'
++Linux2.6_aarch64_aarch64_be-linux-gnu-gcc_glibc_PTH_64_DBG.OBJ/Linux_SINGLE_SHLIB/sha512.o:sha512.c:(.text.SHA256_Compress_Native+0x0): first defined here
++Linux2.6_aarch64_aarch64_be-linux-gnu-gcc_glibc_PTH_64_DBG.OBJ/Linux_SINGLE_SHLIB/sha256-armv8.o: In function `SHA256_Update_Native':
++sha256-armv8.c:(.text.SHA256_Update_Native+0x0): multiple definition of `SHA256_Update_Native'
++Linux2.6_aarch64_aarch64_be-linux-gnu-gcc_glibc_PTH_64_DBG.OBJ/Linux_SINGLE_SHLIB/sha512.o:sha512.c:(.text.SHA256_Update_Native+0x0): first defined here
++
++Revert this change as it seems completely unrelated to the commit title
++"Bug 1655493 - Support SHA2 HW acceleration using Intel SHA Extension"
++
++Fixes:
++ - http://autobuild.buildroot.org/results/237aba0c16a34fec1b0fe50fe08cace438eda1bf
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ nss/lib/freebl/sha512.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/nss/lib/freebl/sha512.c b/nss/lib/freebl/sha512.c
++index 946ab9f7f..3ec414b52 100644
++--- a/nss/lib/freebl/sha512.c
+++++ b/nss/lib/freebl/sha512.c
++@@ -164,7 +164,7 @@ static void SHA256_Compress_Generic(SHA256Context *ctx);
++ static void SHA256_Update_Generic(SHA256Context *ctx, const unsigned char *input,
++                                   unsigned int inputLen);
++ 
++-#if !defined(USE_HW_SHA2) || !defined(IS_LITTLE_ENDIAN)
+++#if !defined(USE_HW_SHA2)
++ void
++ SHA256_Compress_Native(SHA256Context *ctx)
++ {
++-- 
++2.30.2
++
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.30.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
