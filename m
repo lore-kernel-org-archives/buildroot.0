@@ -2,93 +2,58 @@ Return-Path: <SRS0=HCTk=M6=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
-	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A3EBC4338F
-	for <buildroot@archiver.kernel.org>; Sat,  7 Aug 2021 08:58:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B334C4338F
+	for <buildroot@archiver.kernel.org>; Sat,  7 Aug 2021 08:58:39 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 4F8C560F10
-	for <buildroot@archiver.kernel.org>; Sat,  7 Aug 2021 08:58:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4F8C560F10
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id D778E610CB
+	for <buildroot@archiver.kernel.org>; Sat,  7 Aug 2021 08:58:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D778E610CB
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 208F340411;
-	Sat,  7 Aug 2021 08:58:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A38A5404C3;
+	Sat,  7 Aug 2021 08:58:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EbgJNtcMHYAh; Sat,  7 Aug 2021 08:58:20 +0000 (UTC)
+	with ESMTP id qDSHHrhc3dIX; Sat,  7 Aug 2021 08:58:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 64CAB40496;
-	Sat,  7 Aug 2021 08:58:19 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 910FA1BF2FA
- for <buildroot@lists.busybox.net>; Sat,  7 Aug 2021 08:58:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D1E59404BF;
+	Sat,  7 Aug 2021 08:58:36 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 463271BF2FA
+ for <buildroot@lists.busybox.net>; Sat,  7 Aug 2021 08:58:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8C46F83AFE
- for <buildroot@lists.busybox.net>; Sat,  7 Aug 2021 08:58:06 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 35F4D606AE
+ for <buildroot@lists.busybox.net>; Sat,  7 Aug 2021 08:58:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qqHy7RFwbFtz for <buildroot@lists.busybox.net>;
- Sat,  7 Aug 2021 08:58:06 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
- [IPv6:2a00:1450:4864:20::32f])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0783483A81
- for <buildroot@busybox.net>; Sat,  7 Aug 2021 08:58:04 +0000 (UTC)
-Received: by mail-wm1-x32f.google.com with SMTP id
- l11-20020a7bcf0b0000b0290253545c2997so7700641wmg.4
- for <buildroot@busybox.net>; Sat, 07 Aug 2021 01:58:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=i95dkSwF581Ke0BjGCGeZLbr1BO1CEI6/jN7y7GBQtk=;
- b=nsW961nAPmljTw6dzP1Epq1Iv9pxq4NDCh8CfbepsACb4JA2R8LKsGpwe3gZMg3l/a
- 627gVLuzQ7vzlzxDnm+ysc+Os5oBDAQ54qjX8korW+qbHxDyWmZhqAZz+ZJXdjCxgzH8
- Wi4nPTGlL/bT7UJ5SR8O218zO5fZb3dyfGwCvPT/A8KxrFU9oog8DDlcdkoiK9wT3vBx
- EmrA16zXF9SL8auTWak5bN7J7ET75vZ9BFctO+Oo9AI13QDcpG3T11BBM3D1LDt2cYSM
- 3oBS6A+j0w90+p1mg2s46U6BrssooXw+hX0S8V+nhI98Sua4xLJIu8B/hirqkC2r2tdt
- zE5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=i95dkSwF581Ke0BjGCGeZLbr1BO1CEI6/jN7y7GBQtk=;
- b=h1Y1FW9e8p83++dQDMlB+6ipsHD7/evLMJMkbT/WS8nm3S6krOFebNV+BJ7kGRIaha
- gTKHAMIS75aqC5neuPqZ7y0vG8/NGFhaIIi2RtLPcuQq+FsikBKE36GFuTSp6/Bd0mGE
- m62ftfhPmaafKP/h6pxKNenbu/AMbQAqlOOHU6BhFPrxudp6c5LUCfzHU8POHC1bvRm4
- 2KDgSWoW70XDsq6XXi4TJ2fNMv5g5gB6XrCf4XOfikKP+5uer2opGdXt4c/cugxGV1Wu
- wxSxWskgh9d89kUWKTL61OwqICLTPzOai1OWIpKaLHFogIF22yqm9YwOAA+jALZk2CJC
- 00Ig==
-X-Gm-Message-State: AOAM530CnmtO816ZDEEOclJAGbJRKNdUTGab0sCtrLmmE+wlFrnWxX1T
- oDq7xK28tHDKs/G/3pFbERXi7SkNIPc=
-X-Google-Smtp-Source: ABdhPJyheWK4VutWv0mEnfJqJJOdYnyxwNHp6MIIVzhefeWURbYKXYWbQtw0iOXjcvm7/kXIWQQ7cQ==
-X-Received: by 2002:a7b:cb98:: with SMTP id m24mr7270782wmi.24.1628326683293; 
- Sat, 07 Aug 2021 01:58:03 -0700 (PDT)
-Received: from vm-user.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
- by smtp.gmail.com with ESMTPSA id t16sm12718110wmi.13.2021.08.07.01.58.02
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 07 Aug 2021 01:58:03 -0700 (PDT)
-From: Francois Perrad <fperrad@gmail.com>
-X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
-To: buildroot@busybox.net
-Date: Sat,  7 Aug 2021 10:57:52 +0200
-Message-Id: <20210807085752.3269-2-francois.perrad@gadz.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210807085752.3269-1-francois.perrad@gadz.org>
-References: <20210807085752.3269-1-francois.perrad@gadz.org>
-MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v4 2/2] package/luaossl: force no sysctl
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Av19XrrLUbwX for <buildroot@lists.busybox.net>;
+ Sat,  7 Aug 2021 08:58:34 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6844D605B0
+ for <buildroot@buildroot.org>; Sat,  7 Aug 2021 08:58:34 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id 7C2B18C978; Sat,  7 Aug 2021 08:58:18 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sat, 7 Aug 2021 10:57:51 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 80f5a6ca924740b8daca86f9a48c4e41b6295826
+X-Git-Newrev: 8e7232bbc578e34ddde4bd371131ec89a291c7ca
+X-Patchwork-Hint: ignore
+Message-Id: <20210807085818.7C2B18C978@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/s390-tools: properly fix build
+ with libcurl
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,56 +65,105 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-same issue as with lua-lunix
+commit: https://git.buildroot.net/buildroot/commit/?id=8e7232bbc578e34ddde4bd371131ec89a291c7ca
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Update third patch to fix the following build failure:
+
+/bin/sh: 1: curl-config: not found
+make[2]: Leaving directory '/tmp/instance-2/output-1/build/s390-tools-2.17.0/libvmdump'
+Error: libcurl is not built with the OpenSSL backend
+make[2]: *** [Makefile:54: check-dep-libekmfweb] Error 1
+
+Fixes:
+ - http://autobuild.buildroot.org/results/b4ebe39e54f80b26bc81b249bfa643140c41d0bd
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/luaossl/0001-force-no-sysctl.patch | 28 ++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
- create mode 100644 package/luaossl/0001-force-no-sysctl.patch
+ ...h => 0003-Makefile-add-CURL-XML2-_CONFIG.patch} | 47 ++++++++++++++++++----
+ 1 file changed, 40 insertions(+), 7 deletions(-)
 
-diff --git a/package/luaossl/0001-force-no-sysctl.patch b/package/luaossl/0001-force-no-sysctl.patch
-new file mode 100644
-index 000000000..558d0dce7
---- /dev/null
-+++ b/package/luaossl/0001-force-no-sysctl.patch
-@@ -0,0 +1,28 @@
-+From d701a8f40bef389f8caf5ea67651179fa55a6e0b Mon Sep 17 00:00:00 2001
-+From: Francois Perrad <francois.perrad@gadz.org>
-+Date: Wed, 4 Aug 2021 14:56:51 +0200
-+Subject: [PATCH] force no sysctl
-+
-+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-+---
-+ luaossl-rel-20200709/luaossl-20200709-0.rockspec | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/luaossl-rel-20200709/luaossl-20200709-0.rockspec b/luaossl-rel-20200709/luaossl-20200709-0.rockspec
-+index fb66acb..c0073b0 100644
-+--- a/luaossl-rel-20200709/luaossl-20200709-0.rockspec
-++++ b/luaossl-rel-20200709/luaossl-20200709-0.rockspec
-+@@ -114,6 +114,10 @@ build = {
-+ 						nil, nil, nil, nil;
-+ 						"dl";
-+ 					};
-++					defines = {
-++						nil, nil, nil, nil;
-++						"HAVE_SYS_SYSCTL_H=0";
-++					};
-+ 				};
-+ 			};
-+ 		};
-+-- 
-+2.30.2
-+
--- 
-2.30.2
-
+diff --git a/package/s390-tools/0003-libkmipclient-Makefile-add-CURL-XML2-_CONFIG.patch b/package/s390-tools/0003-Makefile-add-CURL-XML2-_CONFIG.patch
+similarity index 59%
+rename from package/s390-tools/0003-libkmipclient-Makefile-add-CURL-XML2-_CONFIG.patch
+rename to package/s390-tools/0003-Makefile-add-CURL-XML2-_CONFIG.patch
+index 2f6ea5a11c..4ac0b8b029 100644
+--- a/package/s390-tools/0003-libkmipclient-Makefile-add-CURL-XML2-_CONFIG.patch
++++ b/package/s390-tools/0003-Makefile-add-CURL-XML2-_CONFIG.patch
+@@ -1,7 +1,7 @@
+-From 49cd01dc97740b299119f32c822ccfd989ea7ec9 Mon Sep 17 00:00:00 2001
++From c2c310e93a5af148d37323f8d873e5656dea8b64 Mon Sep 17 00:00:00 2001
+ From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Date: Sun, 1 Aug 2021 21:50:21 +0200
+-Subject: [PATCH] libkmipclient/Makefile: add {CURL,XML2}_CONFIG
++Subject: [PATCH] Makefile: add {CURL,XML2}_CONFIG
+ 
+ Add CURL_CONFIG and XML2_CONFIG to allow the user to configure the
+ binaries used in check-dep-libkmipclient
+@@ -20,11 +20,47 @@ Fixes:
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ [Upstream status: https://github.com/ibm-s390-linux/s390-tools/pull/121]
+ ---
++ libekmfweb/Makefile    | 10 ++++++----
+  libkmipclient/Makefile | 13 ++++++++-----
+- 1 file changed, 8 insertions(+), 5 deletions(-)
++ 2 files changed, 14 insertions(+), 9 deletions(-)
+ 
++diff --git a/libekmfweb/Makefile b/libekmfweb/Makefile
++index 8e12fb56..1c776996 100644
++--- a/libekmfweb/Makefile
+++++ b/libekmfweb/Makefile
++@@ -47,6 +47,8 @@ detect-openssl-version.dep:
++ 	echo "}" >> $(TMPFILE)
++ 	mv $(TMPFILE) $@
++ 
+++CURL_CONFIG ?= curl-config
+++
++ check-dep-libekmfweb: detect-openssl-version.dep
++ 	$(call check_dep, \
++ 		"libekmfweb", \
++@@ -64,8 +66,8 @@ check-dep-libekmfweb: detect-openssl-version.dep
++ 		"curl/curl.h", \
++ 		"libcurl-devel", \
++ 		"HAVE_LIBCURL=0" \
++-		`curl-config --cflags` `curl-config --libs`)
++-	curl-config --ssl-backends | grep OpenSSL >/dev/null 2>&1 || { echo "Error: libcurl is not built with the OpenSSL backend"; exit 1; }
+++		`$(CURL_CONFIG) --cflags` `$(CURL_CONFIG) --libs`)
+++	$(CURL_CONFIG) --ssl-backends | grep OpenSSL >/dev/null 2>&1 || { echo "Error: libcurl is not built with the OpenSSL backend"; exit 1; }
++ 	touch check-dep-libekmfweb
++ 
++ skip-libekmfweb-openssl:
++@@ -83,8 +85,8 @@ ekmfweb.o: check-dep-libekmfweb ekmfweb.c utilities.h cca.h $(rootdir)include/ek
++ utilities.o: check-dep-libekmfweb utilities.c utilities.h $(rootdir)include/ekmfweb/ekmfweb.h
++ cca.o: check-dep-libekmfweb cca.c cca.h utilities.h $(rootdir)include/ekmfweb/ekmfweb.h
++ 
++-libekmfweb.so.$(VERSION): ALL_CFLAGS += -fPIC `curl-config --cflags`
++-libekmfweb.so.$(VERSION): LDLIBS = -ljson-c -lcrypto -lssl `curl-config --libs` -ldl
+++libekmfweb.so.$(VERSION): ALL_CFLAGS += -fPIC `$(CURL_CONFIG) --cflags`
+++libekmfweb.so.$(VERSION): LDLIBS = -ljson-c -lcrypto -lssl `$(CURL_CONFIG) --libs` -ldl
++ libekmfweb.so.$(VERSION): ALL_LDFLAGS += -shared -Wl,--version-script=libekmfweb.map \
++ 	-Wl,-z,defs,-Bsymbolic -Wl,-soname,libekmfweb.so.$(VERM)
++ libekmfweb.so.$(VERSION): ekmfweb.o utilities.o cca.o $(libs)
+ diff --git a/libkmipclient/Makefile b/libkmipclient/Makefile
+-index 36efecb..addd096 100644
++index 36efecb4..addd0965 100644
+ --- a/libkmipclient/Makefile
+ +++ b/libkmipclient/Makefile
+ @@ -50,6 +50,9 @@ detect-openssl-version.dep:
+@@ -66,6 +102,3 @@ index 36efecb..addd096 100644
+  libkmipclient.so.$(VERSION): ALL_LDFLAGS += -shared -Wl,--version-script=libkmipclient.map \
+  	-Wl,-z,defs,-Bsymbolic -Wl,-soname,libkmipclient.so.$(VERM)
+  libkmipclient.so.$(VERSION): kmip.o request.o response.o attribute.o key.o ttlv.o json.o \
+--- 
+-2.30.2
+-
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
