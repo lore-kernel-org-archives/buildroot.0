@@ -8,86 +8,84 @@ X-Spam-Status: No, score=-18.5 required=3.0 tests=BAYES_00,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 443D8C4338F
-	for <buildroot@archiver.kernel.org>; Sat,  7 Aug 2021 15:29:21 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F385C4338F
+	for <buildroot@archiver.kernel.org>; Sat,  7 Aug 2021 15:59:15 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D426460F5A
-	for <buildroot@archiver.kernel.org>; Sat,  7 Aug 2021 15:29:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D426460F5A
+	by mail.kernel.org (Postfix) with ESMTPS id 1CD4260FD8
+	for <buildroot@archiver.kernel.org>; Sat,  7 Aug 2021 15:59:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1CD4260FD8
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8D8AD4000B;
-	Sat,  7 Aug 2021 15:29:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BA9D9837C0;
+	Sat,  7 Aug 2021 15:59:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id z60yQ3WGHPx7; Sat,  7 Aug 2021 15:29:19 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id JRB7SxFQfE-X; Sat,  7 Aug 2021 15:59:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6EBB240197;
-	Sat,  7 Aug 2021 15:29:18 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id DF3F61BF2A2
- for <buildroot@lists.busybox.net>; Sat,  7 Aug 2021 15:29:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 11A82835C4;
+	Sat,  7 Aug 2021 15:59:13 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 3E9C71BF28E
+ for <buildroot@lists.busybox.net>; Sat,  7 Aug 2021 15:59:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C97DC605DB
- for <buildroot@lists.busybox.net>; Sat,  7 Aug 2021 15:29:16 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2620F40373
+ for <buildroot@lists.busybox.net>; Sat,  7 Aug 2021 15:59:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Ll3ASEv6lxTl for <buildroot@lists.busybox.net>;
- Sat,  7 Aug 2021 15:29:16 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id m8FpGIiYK9Co for <buildroot@lists.busybox.net>;
+ Sat,  7 Aug 2021 15:59:11 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
- [IPv6:2a00:1450:4864:20::332])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D15EF605CD
- for <buildroot@buildroot.org>; Sat,  7 Aug 2021 15:29:15 +0000 (UTC)
-Received: by mail-wm1-x332.google.com with SMTP id
- o7-20020a05600c5107b0290257f956e02dso11106894wms.1
- for <buildroot@buildroot.org>; Sat, 07 Aug 2021 08:29:15 -0700 (PDT)
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
+ [IPv6:2a00:1450:4864:20::32c])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 180DA4028B
+ for <buildroot@buildroot.org>; Sat,  7 Aug 2021 15:59:11 +0000 (UTC)
+Received: by mail-wm1-x32c.google.com with SMTP id x17so7536903wmc.5
+ for <buildroot@buildroot.org>; Sat, 07 Aug 2021 08:59:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=Ji86GOoXD1UHQbTbjmvCGwBqeXrQtPW++g9bbcogbv0=;
- b=RJK2TGt87HHCAjMIrLJhH5eZq5/0z24i3FQjvyCXtSxXFTIo1LVky7CqP+wEjBllla
- MgUfnSBn0z5fXZPvbbhpl/hLbD5i6ASbc5mb6EyeYbgXYA3BhmiyYiK3leRCiTG+4YRj
- nml3XknBhC8yx07rdI8vKH9+lANeZoNgaPDtdqb+2nFryTZMyvEJ6w+C7gFyA+crds7F
- 15QSpDLIh7sJ9viynkhWF+3iGc/tw7QuQ/qV7piUSIP/XrC4g5G2R2xM5u13bUtR/GX3
- fVqDPdVDmZ4AxWYYifi4LRQZ3ImINxE38KHf4lN0bAhcbnM+HzEWLZzKv/ruKIT3cS2q
- sv5A==
+ bh=caVzZ5i9izQmw0nTtvYBiirJdKvPTLx/FNxijnfQmMo=;
+ b=dgqOz9HqWMW7DgYIIe8ME7Oq4SPAtPFV0hJD/WU+z+HNCfPM98mHEvbr4IJGSZw0qQ
+ GLs5hHI1eN4IcYYQwTgTANZnfSTfEjm9tiBD43V0ErAgDs2q7DHVbv2nc1Ak7QTJ3c7k
+ OkPxC/Ya+6HIi5G/7pRJWFOTatdbSXqrAbAewpMFBQFm3PQ3g/iGiCpiFDpdBkNmMjTJ
+ T8VDvhkLHIQlhApmb3zjWxt1IFO/71p4t/OAmNuXvR0vtHhraMp6sXzkk9TPVCifSKJx
+ mcUyUyl1WamLGhJ3VlHMcyIzXPV8lsr9UtJdczJVMMaxvbPvx0Rrj96a7oUdy10Uxz4D
+ DBdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=Ji86GOoXD1UHQbTbjmvCGwBqeXrQtPW++g9bbcogbv0=;
- b=lYXgk629CET24swT4JrI6CXKCSuZ544Q33Tnp9BWEzCO9VZbvO/x62zHDyThim25yT
- /bIV7iNSFxcMadX0astpTojwVstfl1BKpBnD1r9NLxe1hBQt5YjS1b5fUNvsalWYzrmk
- Uv47/rWZ8h9q/SEfTIgcj1ycNfjMlCg4IE1PhZXUYfVF6K6C9g9Utu4TB+5LWuf9dfDM
- 3TFd1bWSAvoDcE3eBVV+YJ0DxH2yimzR3Gp9OwvGM+ekovREDm2bDMqkrFbecM8XGzhI
- UaKnQYUGXHoKzRKhCiVXWA5ka3DBjalmWIH7Ourp2hNKEh+mIN1vFZB9QsNRXF25I7Xt
- nYqw==
-X-Gm-Message-State: AOAM533J7gsXBIzHMagEN/vPqEc5ZoR8HmXxUbUKJZ64Wt7QsKQwYZyb
- i7C44JFT6Fq37RAxYnDa8t5CzHHtR16jFw==
-X-Google-Smtp-Source: ABdhPJyiRUNuHRCtyy7lU5CXwiQnG+Nmhx7b4Pm//Mo4q3JMBByevdQFbTz/Rt6cuhlgzuHBVCqBqw==
-X-Received: by 2002:a05:600c:4f0f:: with SMTP id
- l15mr1318901wmq.106.1628350153632; 
- Sat, 07 Aug 2021 08:29:13 -0700 (PDT)
+ bh=caVzZ5i9izQmw0nTtvYBiirJdKvPTLx/FNxijnfQmMo=;
+ b=B/rBUEeXeBnIxl7GN3R0om4z+IG9i4iOpTc1yQmkezEsEG5OAn+zl18/oLgwLtbfdZ
+ +z5kgAjBcHSCUgRKM+wD9pfok5QkHNLYKnEWvcVuyi7jp9lMrlvojwGmH2BcOUMJoBHD
+ iw+2jMf6puBRT/E7EJ7e56rxx9ujmWxpBiaRdO4VQBYs4UUt0TpwTKfC8Jo5dYTkUQxQ
+ aNKJfYBCgKxD+gY+tB7Vf0mgMaGOKgtoZshJF9NNLj59pSR67z05WEnZDGaZIB95ngUP
+ /wXLrMM+NH077NyNze5Y2ju+s2aM5OMUmvIW7hQBSti89ghYbyXbp3jrx5BAWAcSXM9B
+ GksA==
+X-Gm-Message-State: AOAM5300VbBJ80hDBIdHLrZPQZ5jONF0okhkyWklkaqw8FJty4davYQ3
+ QS5U/hk778uJ/lwCO3Oba7/CGPgSwyU2yQ==
+X-Google-Smtp-Source: ABdhPJykwLhecMUu76SC5cZZUgQ6TOkduD7Gh5eB1RK64AtG5m/zN7/GQ8VZX3KsDbYxyYZ2CO1ZaQ==
+X-Received: by 2002:a1c:20ce:: with SMTP id g197mr25851713wmg.46.1628351948913; 
+ Sat, 07 Aug 2021 08:59:08 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-417-221.w2-10.abo.wanadoo.fr.
  [2.10.242.221])
- by smtp.gmail.com with ESMTPSA id m64sm14170359wmm.41.2021.08.07.08.29.12
+ by smtp.gmail.com with ESMTPSA id h16sm13340023wre.52.2021.08.07.08.59.08
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 07 Aug 2021 08:29:13 -0700 (PDT)
+ Sat, 07 Aug 2021 08:59:08 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat,  7 Aug 2021 17:28:47 +0200
-Message-Id: <20210807152847.225678-1-fontaine.fabrice@gmail.com>
+Date: Sat,  7 Aug 2021 17:57:04 +0200
+Message-Id: <20210807155704.488812-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/bullet: fix musl build
+Subject: [Buildroot] [PATCH 1/1] package/ogre: fix build on musl
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -106,75 +104,101 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-Fix the following build failure on musl raised since bump to version
-3.0.9 in commit 28b4947ed8f53c4edfbf8fef9304dc76480c01ca:
+Fix the following build failure on musl raised since the addition of the
+package in commit eb91fa730c5d92202c38514345e86315e138944c:
 
-In file included from /tmp/instance-5/output-1/build/bullet-3.09/src/LinearMath/btScalar.h:289,
-                 from /tmp/instance-5/output-1/build/bullet-3.09/src/LinearMath/btVector3.h:19,
-                 from /tmp/instance-5/output-1/build/bullet-3.09/src/LinearMath/btConvexHullComputer.h:18,
-                 from /tmp/instance-5/output-1/build/bullet-3.09/Extras/VHACD/src/VHACD.cpp:28:
-/tmp/instance-5/output-1/build/bullet-3.09/Extras/BulletRobotics/../../Extras/VHACD/inc/vhacdMutex.h: In constructor 'VHACD::Mutex::Mutex()':
-/tmp/instance-5/output-1/build/bullet-3.09/Extras/BulletRobotics/../../Extras/VHACD/inc/vhacdMutex.h:97:54: error: 'PTHREAD_MUTEX_RECURSIVE_NP' was not declared in this scope; did you mean 'PTHREAD_MUTEX_RECURSIVE'?
-   97 |   VHACD_VERIFY(pthread_mutexattr_settype(&mutexAttr, PTHREAD_MUTEX_RECURSIVE_NP) == 0);
-      |                                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+/tmp/instance-1/output-1/build/ogre-1.12.0/OgreMain/src/OgreStringConverter.cpp: In static member function 'static bool Ogre::StringConverter::parse(const String&, Ogre::int32&)':
+/tmp/instance-1/output-1/build/ogre-1.12.0/OgreMain/src/OgreStringConverter.cpp:253:22: error: 'strtol_l' was not declared in this scope; did you mean 'strtold_l'?
+  253 |         ret = (int32)strtol_l(val.c_str(), &end, 0, _numLocale);
+      |                      ^~~~~~~~
+      |                      strtold_l
 
 Fixes:
- - http://autobuild.buildroot.org/results/79cd2024b3dfc8d3e896cdacf67fb891df81ca6e
+ - http://autobuild.buildroot.org/results/491f89e45610a7752c0700ac02b80a92b7876ec3
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...HACD-inc-vhacdMutex.h-fix-musl-build.patch | 42 +++++++++++++++++++
- 1 file changed, 42 insertions(+)
- create mode 100644 package/bullet/0001-Extras-VHACD-inc-vhacdMutex.h-fix-musl-build.patch
+ .../0002-Checks-for-strtol_l-function.patch   | 71 +++++++++++++++++++
+ 1 file changed, 71 insertions(+)
+ create mode 100644 package/ogre/0002-Checks-for-strtol_l-function.patch
 
-diff --git a/package/bullet/0001-Extras-VHACD-inc-vhacdMutex.h-fix-musl-build.patch b/package/bullet/0001-Extras-VHACD-inc-vhacdMutex.h-fix-musl-build.patch
+diff --git a/package/ogre/0002-Checks-for-strtol_l-function.patch b/package/ogre/0002-Checks-for-strtol_l-function.patch
 new file mode 100644
-index 0000000000..d01bb97d99
+index 0000000000..540530ee9e
 --- /dev/null
-+++ b/package/bullet/0001-Extras-VHACD-inc-vhacdMutex.h-fix-musl-build.patch
-@@ -0,0 +1,42 @@
-+From dd37b97e79aea231ae026ac93c6ca4c7a2667582 Mon Sep 17 00:00:00 2001
++++ b/package/ogre/0002-Checks-for-strtol_l-function.patch
+@@ -0,0 +1,71 @@
++From 3f182b7e743662ec3fa63e1c7f213171d99485ba Mon Sep 17 00:00:00 2001
 +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 7 Aug 2021 17:11:24 +0200
-+Subject: [PATCH] Extras/VHACD/inc/vhacdMutex.h: fix musl build
++Date: Mon, 10 Feb 2020 21:45:58 +0100
++Subject: [PATCH] Checks for strtol_l function
 +
-+Fix the following build failure on musl (which does not provide
-+PTHREAD_MUTEX_RECURSIVE_NP):
++strtol_l (and strtoul_l, strtoll_l, strtoull_l) are not always available
++(for example on musl) so check for strtol_l and reuse android fallback if
++needed to avoid the following build failure:
 +
-+In file included from /tmp/instance-5/output-1/build/bullet-3.09/src/LinearMath/btScalar.h:289,
-+                 from /tmp/instance-5/output-1/build/bullet-3.09/src/LinearMath/btVector3.h:19,
-+                 from /tmp/instance-5/output-1/build/bullet-3.09/src/LinearMath/btConvexHullComputer.h:18,
-+                 from /tmp/instance-5/output-1/build/bullet-3.09/Extras/VHACD/src/VHACD.cpp:28:
-+/tmp/instance-5/output-1/build/bullet-3.09/Extras/BulletRobotics/../../Extras/VHACD/inc/vhacdMutex.h: In constructor 'VHACD::Mutex::Mutex()':
-+/tmp/instance-5/output-1/build/bullet-3.09/Extras/BulletRobotics/../../Extras/VHACD/inc/vhacdMutex.h:97:54: error: 'PTHREAD_MUTEX_RECURSIVE_NP' was not declared in this scope; did you mean 'PTHREAD_MUTEX_RECURSIVE'?
-+   97 |   VHACD_VERIFY(pthread_mutexattr_settype(&mutexAttr, PTHREAD_MUTEX_RECURSIVE_NP) == 0);
-+      |                                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
++/home/buildroot/autobuild/instance-1/output-1/build/ogre-1.12.0/OgreMain/src/OgreStringConverter.cpp: In static member function 'static bool Ogre::StringConverter::parse(const String&, Ogre::int32&)':
++/home/buildroot/autobuild/instance-1/output-1/build/ogre-1.12.0/OgreMain/src/OgreStringConverter.cpp:253:22: error: 'strtol_l' was not declared in this scope
++         ret = (int32)strtol_l(val.c_str(), &end, 0, _numLocale);
++                      ^~~~~~~~
 +
 +Fixes:
-+ - http://autobuild.buildroot.org/results/79cd2024b3dfc8d3e896cdacf67fb891df81ca6e
++ - http://autobuild.buildroot.org/results/107cffe41081ce46441dec8699d6ad0f152bc152
 +
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/bulletphysics/bullet3/pull/3930]
++[Retrieved from:
++https://github.com/OGRECave/ogre/commit/3f182b7e743662ec3fa63e1c7f213171d99485ba]
 +---
-+ Extras/VHACD/inc/vhacdMutex.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++ CMake/ConfigureBuild.cmake             | 7 +++++++
++ CMake/Templates/OgreBuildSettings.h.in | 2 ++
++ OgreMain/include/OgreString.h          | 3 +++
++ 3 files changed, 12 insertions(+)
 +
-+diff --git a/Extras/VHACD/inc/vhacdMutex.h b/Extras/VHACD/inc/vhacdMutex.h
-+index 4d1ad2a7d..78c111383 100644
-+--- a/Extras/VHACD/inc/vhacdMutex.h
-++++ b/Extras/VHACD/inc/vhacdMutex.h
-+@@ -69,7 +69,7 @@
-+ #include <pthread.h>
++diff --git a/CMake/ConfigureBuild.cmake b/CMake/ConfigureBuild.cmake
++index ab049a525ae..73606c997c1 100644
++--- a/CMake/ConfigureBuild.cmake
+++++ b/CMake/ConfigureBuild.cmake
++@@ -133,6 +133,13 @@ if(SDL2_FOUND OR EMSCRIPTEN)
++     set(OGRE_BITES_HAVE_SDL 1)
++ endif()
++ 
+++# determine if strtol_l is supported
+++include(CheckFunctionExists)
+++CHECK_FUNCTION_EXISTS(strtol_l HAVE_STRTOL_L)
+++if (NOT HAVE_STRTOL_L)
+++  set(OGRE_NO_LOCALE_STRCONVERT 1)
+++endif ()
+++
++ # generate OgreBuildSettings.h
++ configure_file(${OGRE_TEMPLATES_DIR}/OgreComponents.h.in ${PROJECT_BINARY_DIR}/include/OgreComponents.h @ONLY)
++ configure_file(${OGRE_TEMPLATES_DIR}/OgreBuildSettings.h.in ${PROJECT_BINARY_DIR}/include/OgreBuildSettings.h @ONLY)
++diff --git a/CMake/Templates/OgreBuildSettings.h.in b/CMake/Templates/OgreBuildSettings.h.in
++index a491d09624c..95eb1b71d64 100644
++--- a/CMake/Templates/OgreBuildSettings.h.in
+++++ b/CMake/Templates/OgreBuildSettings.h.in
++@@ -107,4 +107,6 @@ WARNING: Disabling this will make the samples unusable.
++ 
++ #cmakedefine01 OGRE_NO_QUAD_BUFFER_STEREO
++ 
+++#cmakedefine01 OGRE_NO_LOCALE_STRCONVERT
+++
++ #endif
++diff --git a/OgreMain/include/OgreString.h b/OgreMain/include/OgreString.h
++index a81c220012e..1f544195dee 100644
++--- a/OgreMain/include/OgreString.h
+++++ b/OgreMain/include/OgreString.h
++@@ -46,8 +46,11 @@ THE SOFTWARE.
++ #   define strnicmp strncasecmp
 + #endif
 + 
-+-#if defined(__APPLE__)
-++#if defined(__APPLE__) || !defined(__GLIBC__)
-+ #define PTHREAD_MUTEX_RECURSIVE_NP PTHREAD_MUTEX_RECURSIVE
-+ #endif
-+ 
-+-- 
-+2.30.2
-+
+++#if OGRE_PLATFORM == OGRE_PLATFORM_ANDROID || OGRE_PLATFORM == OGRE_PLATFORM_EMSCRIPTEN || \
+++	(OGRE_PLATFORM == OGRE_PLATFORM_LINUX && OGRE_NO_LOCALE_STRCONVERT == 1)
++ #if OGRE_PLATFORM == OGRE_PLATFORM_ANDROID || OGRE_PLATFORM == OGRE_PLATFORM_EMSCRIPTEN
++ #   define locale_t int
+++#endif
++ #   define strtod_l(ptr, end, l) strtod(ptr, end)
++ #   define strtoul_l(ptr, end, base, l) strtoul(ptr, end, base)
++ #   define strtol_l(ptr, end, base, l) strtol(ptr, end, base)
 -- 
 2.30.2
 
