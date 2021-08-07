@@ -2,77 +2,75 @@ Return-Path: <SRS0=HCTk=M6=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,HTML_MESSAGE,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 52898C4338F
-	for <buildroot@archiver.kernel.org>; Sat,  7 Aug 2021 08:56:01 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E649AC4338F
+	for <buildroot@archiver.kernel.org>; Sat,  7 Aug 2021 08:56:18 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id E1CCB60E52
-	for <buildroot@archiver.kernel.org>; Sat,  7 Aug 2021 08:56:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E1CCB60E52
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
+	by mail.kernel.org (Postfix) with ESMTPS id 8D768600D4
+	for <buildroot@archiver.kernel.org>; Sat,  7 Aug 2021 08:56:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8D768600D4
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gadz.org
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A4EC840411;
-	Sat,  7 Aug 2021 08:56:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5639582BC4;
+	Sat,  7 Aug 2021 08:56:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id z0O4hekoRFnu; Sat,  7 Aug 2021 08:55:59 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id BrjjvGZm-Eyb; Sat,  7 Aug 2021 08:56:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DB4A4402C3;
-	Sat,  7 Aug 2021 08:55:58 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 582DA1BF2FA
- for <buildroot@lists.busybox.net>; Sat,  7 Aug 2021 08:55:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 72AFC82FE4;
+	Sat,  7 Aug 2021 08:56:16 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id AB4251BF2FA
+ for <buildroot@lists.busybox.net>; Sat,  7 Aug 2021 08:56:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 54C58606AE
- for <buildroot@lists.busybox.net>; Sat,  7 Aug 2021 08:55:57 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9A3B982A0B
+ for <buildroot@lists.busybox.net>; Sat,  7 Aug 2021 08:56:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2xYwfuIuPHkB for <buildroot@lists.busybox.net>;
- Sat,  7 Aug 2021 08:55:56 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4EBC5605B0
- for <buildroot@buildroot.org>; Sat,  7 Aug 2021 08:55:56 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:f16c:16be:6f47:5c9a])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 131EE13F87E;
- Sat,  7 Aug 2021 10:55:50 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1628326554;
- bh=Oldz7Lcnra5v3w+FVl85y7qQmbgiGTcakOV17SOu0WA=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=h9PAqB7ZteSUURrmG+Icx4fp2vjcc4oAmqcjtX4y3SGQ77RpuaxLE/2/cnobA/wky
- LoPsIF/pJrJ762odnAligUgeV38tqLVRs9VILCJiDE2TfzQYH3rRL4vFlMG2MbB3HD
- V1DMLkajl9khyETFYdGsb2LVIywsBmlYwghGdeeP8XLW2MKfSEy5Ad8iDI3TIck9O6
- eSzn68VG8zu1dkGiX/+h2y8+sePK0muMxFAuSPaXjvPXr9eZfMxIc1UE7mQp4n75Im
- NgNGY8pfHBPUzVAX54Q0G3aFZx8AqQYdZ6FrA6UhXziMz2Le0nN0xQjfEkmjB/gaV4
- +8GeTmE3O8NDQ==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 07 Aug 2021 10:55:49 +0200
-Date: Sat, 7 Aug 2021 10:55:49 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20210807085549.GV27036@scaer>
-References: <20210806172638.3566272-1-fontaine.fabrice@gmail.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id v6imn8T3In3p for <buildroot@lists.busybox.net>;
+ Sat,  7 Aug 2021 08:56:13 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com
+ [209.85.208.169])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 77F99829DC
+ for <buildroot@busybox.net>; Sat,  7 Aug 2021 08:56:13 +0000 (UTC)
+Received: by mail-lj1-f169.google.com with SMTP id x7so3993492ljn.10
+ for <buildroot@busybox.net>; Sat, 07 Aug 2021 01:56:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=+5OnM8GgkgBHSW+0YAO40jbhg3uCEHY7yxhM9yI6woo=;
+ b=VrvcWVz/EF7QhDVT12dYQlmyDuss112yTUTm08aLG5O4EayJ9K08C9vniizdGLJC9H
+ XA5BaSRBxAmSlaXmHYh/sh8fDWEewjxoqJ6JCiDMg9LOnamt9NkE1TwsGU/A4ZnD6L4D
+ trnX14bW0W05PowRNEgNfI5ya3WXGN98JcTNkEmLNOBxXf4ZAnyAmjiRI4BZUWjDDmMg
+ cGvOOQnN8LkK09MZ0B9fSd8hfTvh9mhfa6WIpS5pIx16wcEpopxXfQcbmdKv5EDRMYRq
+ Ff7V24FrVlVQseM9AQBMPKtFvR7EzUp0u2GYr4NLBOVjBr8kIUWqEpSLj+SEGj4vqzEo
+ 6WHg==
+X-Gm-Message-State: AOAM5323IEX2m6Tx1jaPWWFDG/UtaDENHDEva/d9b9vOkf3KoZ8sNZOk
+ juA1rIGj+a5sfuKHFi01zQrVjX+z8G7auUE57tLkGg==
+X-Google-Smtp-Source: ABdhPJwWFjJPRgOfMmaBfL1q7gpVDqfSyG3KHiKMHQwzl+4nY98tOtGLs88UQ5aD0oFsJn1Um0TRvmkRH6gwZKQ7FJ0=
+X-Received: by 2002:a2e:8250:: with SMTP id j16mr9380772ljh.164.1628326571123; 
+ Sat, 07 Aug 2021 01:56:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20210806172638.3566272-1-fontaine.fabrice@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 1/1] package/mutt: link with -latomic if
- needed
+References: <20210804134635.262095-1-francois.perrad@gadz.org>
+ <379b58ad-76ee-8601-d5b6-8a6cdf294818@mind.be>
+In-Reply-To: <379b58ad-76ee-8601-d5b6-8a6cdf294818@mind.be>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Sat, 7 Aug 2021 10:55:59 +0200
+Message-ID: <CAB0FRstwhGpbUDDKzDR2AgR9DCbC+QwRd2oEAJ+kTSubcdr9vQ@mail.gmail.com>
+To: Arnout Vandecappelle <arnout@mind.be>
+Subject: Re: [Buildroot] [PATCH v3 1/2] package/lua-lunix: fix build with
+ recent gcc
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,73 +82,244 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot <buildroot@busybox.net>, Francois Perrad <fperrad@gmail.com>
+Content-Type: multipart/mixed; boundary="===============2360325210242797734=="
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-Fabrice, All,
+--===============2360325210242797734==
+Content-Type: multipart/alternative; boundary="000000000000d9bbef05c8f45223"
 
-On 2021-08-06 19:26 +0200, Fabrice Fontaine spake thusly:
-> Link with -latomic if needed to avoid the following build failure with
-> openssl:
-> 
-> configure:10549: checking for X509_STORE_CTX_new in -lcrypto
-> configure:10574: /tmp/instance-0/output-1/host/bin/sparc-linux-gcc -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os -g0  -static -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -I/tmp/instance-0/output-1/host/sparc-buildroot-linux-uclibc/sysroot/usr/include  -static -L/tmp/instance-0/output-1/host/sparc-buildroot-linux-uclibc/sysroot/usr/lib conftest.c -lcrypto -lz  >&5
-> /tmp/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/9.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: /tmp/instance-0/output-1/host/sparc-buildroot-linux-uclibc/sysroot/usr/lib/libcrypto.a(x509cset.o): in function `X509_CRL_up_ref':
-> x509cset.c:(.text+0xfc): undefined reference to `__atomic_fetch_add_4'
-> 
-> Ideally, mutt should use pkg-config but upstream don't want to use it:
-> https://gitlab.com/muttmua/mutt/-/merge_requests/25
+--000000000000d9bbef05c8f45223
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Too sad... :-/
+Le jeu. 5 ao=C3=BBt 2021 =C3=A0 19:05, Arnout Vandecappelle <arnout@mind.be=
+> a =C3=A9crit :
 
-> Fixes:
->  - http://autobuild.buildroot.org/results/e357984853f8ca879156245717fadbeaa9b0dbae
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>
+>
+> On 04/08/2021 15:46, Francois Perrad wrote:
+> > Fixes:
+> http://autobuild.buildroot.net/results/749a11d5289c6fec3b2f236b9073fc1ab7=
+30d090/
+> > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> > ---
+> >  package/lua-lunix/0003-force-no-sysctl.patch | 32 ++++++++++++++++++++
+> >  1 file changed, 32 insertions(+)
+> >  create mode 100644 package/lua-lunix/0003-force-no-sysctl.patch
+> >
+> > diff --git a/package/lua-lunix/0003-force-no-sysctl.patch
+> b/package/lua-lunix/0003-force-no-sysctl.patch
+> > new file mode 100644
+> > index 000000000..3467e2713
+> > --- /dev/null
+> > +++ b/package/lua-lunix/0003-force-no-sysctl.patch
+> > @@ -0,0 +1,32 @@
+> > +From d9b65e306478f5d2356ef90eab8191984534238a Mon Sep 17 00:00:00 2001
+> > +From: Francois Perrad <francois.perrad@gadz.org>
+> > +Date: Wed, 4 Aug 2021 15:27:05 +0200
+> > +Subject: [PATCH] force no sysctl
+> > +
+> > +Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> > +---
+> > + lunix-rel-20170920/lunix-20170920-1.rockspec | 9 +++++++++
+> > + 1 file changed, 9 insertions(+)
+> > +
+> > +diff --git a/lunix-rel-20170920/lunix-20170920-1.rockspec
+> b/lunix-rel-20170920/lunix-20170920-1.rockspec
+> > +index 76cafeb..e42fd34 100644
+> > +--- a/lunix-rel-20170920/lunix-20170920-1.rockspec
+> > ++++ b/lunix-rel-20170920/lunix-20170920-1.rockspec
+> > +@@ -35,5 +35,14 @@ build =3D {
+> > +                             };
+> > +                     };
+> > +             };
+> > ++            linux =3D {
+> > ++                    modules =3D {
+> > ++                            ["unix"] =3D {
+> > ++                                    defines =3D {nil, nil, nil;
+> > ++                                            "HAVE_SYS_SYSCTL_H=3D0";
+>
+>  That's a really dirty way of setting a define...
+>
+>  Unless this patch is accepted upstream (unlikely, given that there was n=
+o
+> maintainer activity on [1] since more than a month), a much better way
+> IMHO is
+> to set it from the .mk file:
+>
+> LUA_LUNIX_BUILD_OPTS =3D CFLAGS=3D"$(TARGET_CFLAGS) -DHAVE_SYS_SYSCTL_H=
+=3D0"
+>
+>
+It looks elegant but it doesn't work, because CFLAGS is already set in
+pkg-luarocks.mk
 
-Applied to master, thanks.
+The file lunix-20170920-1.rockspec is not a part of the upstream project (
+https://25thandclement.com/~william/projects/releases/lunix-20170920.tgz or
+https://github.com/wahern/lunix).
+It was created by the author of Luarocks package, it is only available on
+https://luarocks.org/modules/daurnimator/lunix
+So, my patch cannot be upstreamed, but it is currently the only way to do.
 
-Regards,
-Yann E. MORIN.
+Fran=C3=A7ois
 
-> ---
->  package/mutt/mutt.mk | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
-> index a8734855f8..66616f032c 100644
-> --- a/package/mutt/mutt.mk
-> +++ b/package/mutt/mutt.mk
-> @@ -12,6 +12,10 @@ MUTT_CPE_ID_VENDOR = mutt
->  MUTT_DEPENDENCIES = ncurses
->  MUTT_CONF_OPTS = --disable-doc --disable-smtp
->  
-> +ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-> +MUTT_CONF_ENV += LIBS=-latomic
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_LIBICONV),y)
->  MUTT_DEPENDENCIES += libiconv
->  MUTT_CONF_OPTS += --enable-iconv
-> -- 
-> 2.30.2
-> 
+
+> (This may not work though, depending on the order of the flags added by
+> luarocks.)
+>
+>
+>  Regards,
+>  Arnout
+>
+> > ++                                    };
+> > ++                            };
+> > ++                    };
+> > ++            };
+> > +     };
+> > + }
+> > +--
+> > +2.30.2
+> > +
+> >
 > _______________________________________________
 > buildroot mailing list
 > buildroot@busybox.net
 > http://lists.busybox.net/mailman/listinfo/buildroot
+>
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+--000000000000d9bbef05c8f45223
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div dir=3D"ltr"><br></div><br><div class=3D"gmail_quote">=
+<div dir=3D"ltr" class=3D"gmail_attr">Le=C2=A0jeu. 5 ao=C3=BBt 2021 =C3=A0=
+=C2=A019:05, Arnout Vandecappelle &lt;<a href=3D"mailto:arnout@mind.be">arn=
+out@mind.be</a>&gt; a =C3=A9crit=C2=A0:<br></div><blockquote class=3D"gmail=
+_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204=
+,204);padding-left:1ex"><br>
+<br>
+On 04/08/2021 15:46, Francois Perrad wrote:<br>
+&gt; Fixes: <a href=3D"http://autobuild.buildroot.net/results/749a11d5289c6=
+fec3b2f236b9073fc1ab730d090/" rel=3D"noreferrer" target=3D"_blank">http://a=
+utobuild.buildroot.net/results/749a11d5289c6fec3b2f236b9073fc1ab730d090/</a=
+><br>
+&gt; Signed-off-by: Francois Perrad &lt;<a href=3D"mailto:francois.perrad@g=
+adz.org" target=3D"_blank">francois.perrad@gadz.org</a>&gt;<br>
+&gt; ---<br>
+&gt;=C2=A0 package/lua-lunix/0003-force-no-sysctl.patch | 32 ++++++++++++++=
+++++++<br>
+&gt;=C2=A0 1 file changed, 32 insertions(+)<br>
+&gt;=C2=A0 create mode 100644 package/lua-lunix/0003-force-no-sysctl.patch<=
+br>
+&gt; <br>
+&gt; diff --git a/package/lua-lunix/0003-force-no-sysctl.patch b/package/lu=
+a-lunix/0003-force-no-sysctl.patch<br>
+&gt; new file mode 100644<br>
+&gt; index 000000000..3467e2713<br>
+&gt; --- /dev/null<br>
+&gt; +++ b/package/lua-lunix/0003-force-no-sysctl.patch<br>
+&gt; @@ -0,0 +1,32 @@<br>
+&gt; +From d9b65e306478f5d2356ef90eab8191984534238a Mon Sep 17 00:00:00 200=
+1<br>
+&gt; +From: Francois Perrad &lt;<a href=3D"mailto:francois.perrad@gadz.org"=
+ target=3D"_blank">francois.perrad@gadz.org</a>&gt;<br>
+&gt; +Date: Wed, 4 Aug 2021 15:27:05 +0200<br>
+&gt; +Subject: [PATCH] force no sysctl<br>
+&gt; +<br>
+&gt; +Signed-off-by: Francois Perrad &lt;<a href=3D"mailto:francois.perrad@=
+gadz.org" target=3D"_blank">francois.perrad@gadz.org</a>&gt;<br>
+&gt; +---<br>
+&gt; + lunix-rel-20170920/lunix-20170920-1.rockspec | 9 +++++++++<br>
+&gt; + 1 file changed, 9 insertions(+)<br>
+&gt; +<br>
+&gt; +diff --git a/lunix-rel-20170920/lunix-20170920-1.rockspec b/lunix-rel=
+-20170920/lunix-20170920-1.rockspec<br>
+&gt; +index 76cafeb..e42fd34 100644<br>
+&gt; +--- a/lunix-rel-20170920/lunix-20170920-1.rockspec<br>
+&gt; ++++ b/lunix-rel-20170920/lunix-20170920-1.rockspec<br>
+&gt; +@@ -35,5 +35,14 @@ build =3D {<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
+ =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0};<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
+ =C2=A0};<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0};<br>
+&gt; ++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 linux =3D {<br>
+&gt; ++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 modules =3D {<br>
+&gt; ++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 [&quot;unix&quot;] =3D {<br>
+&gt; ++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 defines =3D {ni=
+l, nil, nil;<br>
+&gt; ++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 &quot;HAVE_SYS_SYSCTL_H=3D0&quot;;<br>
+<br>
+=C2=A0That&#39;s a really dirty way of setting a define...<br>
+<br>
+=C2=A0Unless this patch is accepted upstream (unlikely, given that there wa=
+s no<br>
+maintainer activity on [1] since more than a month), a much better way IMHO=
+ is<br>
+to set it from the .mk file:<br>
+<br>
+LUA_LUNIX_BUILD_OPTS =3D CFLAGS=3D&quot;$(TARGET_CFLAGS) -DHAVE_SYS_SYSCTL_=
+H=3D0&quot;<br>
+<br></blockquote><div><br></div><div>It looks elegant but it doesn&#39;t wo=
+rk, because CFLAGS is already set in <a href=3D"http://pkg-luarocks.mk">pkg=
+-luarocks.mk</a><br><br>The file lunix-20170920-1.rockspec is not a part of=
+ the upstream project (<a href=3D"https://25thandclement.com/~william/proje=
+cts/releases/lunix-20170920.tgz">https://25thandclement.com/~william/projec=
+ts/releases/lunix-20170920.tgz</a> or <a href=3D"https://github.com/wahern/=
+lunix">https://github.com/wahern/lunix</a>).<br>It was created by the autho=
+r of Luarocks package, it is only available on <a href=3D"https://luarocks.=
+org/modules/daurnimator/lunix">https://luarocks.org/modules/daurnimator/lun=
+ix</a><br>So, my patch cannot be upstreamed, but it is currently the only w=
+ay to do.<br><br>Fran=C3=A7ois<br></div><div>=C2=A0</div><blockquote class=
+=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rg=
+b(204,204,204);padding-left:1ex">
+(This may not work though, depending on the order of the flags added by lua=
+rocks.)<br>
+<br>
+<br>
+=C2=A0Regards,<br>
+=C2=A0Arnout<br>
+<br>
+&gt; ++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 };<br>
+&gt; ++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 };<br>
+&gt; ++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 };<br>
+&gt; ++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 };<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0};<br>
+&gt; + }<br>
+&gt; +-- <br>
+&gt; +2.30.2<br>
+&gt; +<br>
+&gt; <br>
+_______________________________________________<br>
+buildroot mailing list<br>
+<a href=3D"mailto:buildroot@busybox.net" target=3D"_blank">buildroot@busybo=
+x.net</a><br>
+<a href=3D"http://lists.busybox.net/mailman/listinfo/buildroot" rel=3D"nore=
+ferrer" target=3D"_blank">http://lists.busybox.net/mailman/listinfo/buildro=
+ot</a><br>
+</blockquote></div></div>
+
+--000000000000d9bbef05c8f45223--
+
+--===============2360325210242797734==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
 http://lists.busybox.net/mailman/listinfo/buildroot
+
+--===============2360325210242797734==--
