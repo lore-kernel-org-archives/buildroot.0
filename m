@@ -8,83 +8,85 @@ X-Spam-Status: No, score=-18.5 required=3.0 tests=BAYES_00,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C9821C4338F
-	for <buildroot@archiver.kernel.org>; Sat,  7 Aug 2021 16:22:23 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D65E3C4338F
+	for <buildroot@archiver.kernel.org>; Sat,  7 Aug 2021 16:28:21 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 7687A60BD3
-	for <buildroot@archiver.kernel.org>; Sat,  7 Aug 2021 16:22:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7687A60BD3
+	by mail.kernel.org (Postfix) with ESMTPS id 7E21060F02
+	for <buildroot@archiver.kernel.org>; Sat,  7 Aug 2021 16:28:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7E21060F02
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 29193838B6;
-	Sat,  7 Aug 2021 16:22:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1ECAF607F0;
+	Sat,  7 Aug 2021 16:28:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cxJ35eaoQ1jY; Sat,  7 Aug 2021 16:22:22 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id q7s9R0JCaHPr; Sat,  7 Aug 2021 16:28:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 809FD838B2;
-	Sat,  7 Aug 2021 16:22:21 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B8EEA1BF5AD
- for <buildroot@lists.busybox.net>; Sat,  7 Aug 2021 16:22:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6014F607EA;
+	Sat,  7 Aug 2021 16:28:19 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 6847B1BF5AD
+ for <buildroot@lists.busybox.net>; Sat,  7 Aug 2021 16:28:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A231F838B2
- for <buildroot@lists.busybox.net>; Sat,  7 Aug 2021 16:22:20 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 53AEF607EA
+ for <buildroot@lists.busybox.net>; Sat,  7 Aug 2021 16:28:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ff8qkoEjW8OJ for <buildroot@lists.busybox.net>;
- Sat,  7 Aug 2021 16:22:19 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id L0Mos9TFMAbk for <buildroot@lists.busybox.net>;
+ Sat,  7 Aug 2021 16:28:17 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
- [IPv6:2a00:1450:4864:20::42a])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9904C838AF
- for <buildroot@busybox.net>; Sat,  7 Aug 2021 16:22:19 +0000 (UTC)
-Received: by mail-wr1-x42a.google.com with SMTP id k29so2490319wrd.7
- for <buildroot@busybox.net>; Sat, 07 Aug 2021 09:22:19 -0700 (PDT)
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
+ [IPv6:2a00:1450:4864:20::32e])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 01534607A1
+ for <buildroot@buildroot.org>; Sat,  7 Aug 2021 16:28:16 +0000 (UTC)
+Received: by mail-wm1-x32e.google.com with SMTP id
+ m28-20020a05600c3b1cb02902b5a8c22575so8065314wms.0
+ for <buildroot@buildroot.org>; Sat, 07 Aug 2021 09:28:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=5qkiPg5fL9Nln02Ie6fHZAYqagTBmC+JW8e9k6Mw/lE=;
- b=V+8xUiajQY0nw1QkZvUV+6ja99Fhw+87PZDGgEfGOE/lAQIRfhzvon4ZLOJrnvVu5+
- tjJSdbxw0iqwQA4oskXNPTa+JpevCfT5QA3WtcI4fuX39q0V94u3vGQFbLguZ44EU2Uo
- IrubBsZ3Un8S1HYywiyAPl96/5E4WP3iM+MwR3xCowPaSR+OGLTuVE6fhfF8Lxg9fWHE
- i3Mmud0QJOC6SYKONANuPVEhJ0ZSRXbsiXBScGtYdaVNO92v4R2Adcf7kLgawxrnUh5g
- t0XKeVsjv117imzZo37Azk5PEDBmrQSNUJfCziXkD7WWj1X0o+RpvjVnXcgKKEJu9G2M
- pzzg==
+ bh=8A5IOPelNE9SGHPocKBg0HC+y5D19jnssdzCBudSMeE=;
+ b=OiB6cVLX3AaUZhUFGLbB32ugfZUzZDWj5nmx2q4JDcTYxd524zI2cKP2+yGKG1Q6W0
+ NJoZvTRiG7LqjVZv0ulGJktXcHFxk0hC4ixt3YAT41HGxpTxtROAqEOZ77ncHaRVSf9e
+ 82VE9bNs1KzMV1e0G9MoLqHEYbUe3WNbLK7vpdwf2EQpeFpLrN8/Zwt2elbW8USlbDkg
+ L74HLpkGVboLkfEsCGiPfOIjXuUOWdNHeUjkkGKTf3heaTrXLtNfKjbj/69Ze8Y1Emlm
+ Ajx+Ix+qO1z9nGO/zyDXKQdV2lZdAQZlawclrp0NgnJaTVYNdbM0YmD/RjRBu+2ja63g
+ hMpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=5qkiPg5fL9Nln02Ie6fHZAYqagTBmC+JW8e9k6Mw/lE=;
- b=CS6Uy8CO/Q8FQvY6UXG/0NbQZqB05A0aZLD6ge3cjsvjZFoLvQ0l61J2tR6MnIwJen
- +wtv2YJdreOWA/VLV8i58MCsqnvpFu7d7YO2JjLr/kjSXFRzkD9YPkcV8CB5X9BoEUli
- WOZqTRkzrNp6BEwbUCZAWBhQFZ3hxJQK/T/zmwUq5TZ1JgxxKHAJfMescO2BZMQ7Xvm0
- 4B1BkMGe4UvtRVzxzDCM4BylFdTLB8t1wh02f8BttgbIDqLU9urjuWK/44Yr7Rnf39aK
- GLU3k0ClrpSeVS3GHjK9kCavjd1m95eBTfmmTS8zhVTK17pLNLceEwnHpellYCbtlLdB
- ZtgA==
-X-Gm-Message-State: AOAM531si+6DcTh6b2XZ4DejeyVprFWOnQTkyhbHhHxAYE4bnJckWjqg
- qGRGY555fHOqMN4XBkbpC8T+LyL/jDQ=
-X-Google-Smtp-Source: ABdhPJyp9wD5fDn+1GOmFGVF01bOba7L9M22zHRkAlE09gwiOHAGGlM6jpxHOdpaLNN5W8C5/+BHiQ==
-X-Received: by 2002:a5d:6991:: with SMTP id g17mr16499311wru.253.1628353337777; 
- Sat, 07 Aug 2021 09:22:17 -0700 (PDT)
-Received: from vm-user.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
- by smtp.gmail.com with ESMTPSA id z5sm15061467wmp.26.2021.08.07.09.22.17
+ bh=8A5IOPelNE9SGHPocKBg0HC+y5D19jnssdzCBudSMeE=;
+ b=eShVNMxI1zpfdN/LWhcr7BBlGFRYjejX/pSJZUkJkjUFS3zHJo9KvJnGanr43iGGIN
+ IHro0tmrb+ADG5oqzoMZwqkRoH6XIcPO0m7n7FbT5xXyXcZ+WHt/97ssGhVg9jTHB7UQ
+ VRtLPmYEj/vfoey6+RRHYYHiu1/xkLGmLMni0KqTSh8l7P3gkPoJ1lH0xuLdy1heoHd9
+ rPbh8jkjaZFvAfx7RtNh8iuvW05gBLQSKNGC9Cso+rOA6zYU9wwkxwG+3LP6uTWo/7f4
+ 2r2V+BwbbhM3t7nxvewbtIwibnLdqOJ8/52vJ9TRenAf9woLaHEHmS3zHVgys1jtfyKm
+ WITQ==
+X-Gm-Message-State: AOAM530AGFeKruD/lcMR8vmAtKh4nypXzozfd8Xlg2hn/dKNi0wvSqaT
+ awVGWaTggrMmkHs3BaEJrebpwpEDStvTKg==
+X-Google-Smtp-Source: ABdhPJwG87nAEW29p4J81PcGMugI0pHOGo10JGq4mQ03CI+i/EzTKFFEzPn4KS5aOMqQkJNkI10vXQ==
+X-Received: by 2002:a05:600c:3ba2:: with SMTP id
+ n34mr8826246wms.119.1628353694965; 
+ Sat, 07 Aug 2021 09:28:14 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-417-221.w2-10.abo.wanadoo.fr.
+ [2.10.242.221])
+ by smtp.gmail.com with ESMTPSA id w13sm16164268wru.72.2021.08.07.09.28.14
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 07 Aug 2021 09:22:17 -0700 (PDT)
-From: Francois Perrad <fperrad@gmail.com>
-X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
-To: buildroot@busybox.net
-Date: Sat,  7 Aug 2021 18:22:02 +0200
-Message-Id: <20210807162202.154898-1-francois.perrad@gadz.org>
+ Sat, 07 Aug 2021 09:28:14 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sat,  7 Aug 2021 18:27:42 +0200
+Message-Id: <20210807162742.490256-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] Partial revert "configs/olimex_a20_olinuxino:
- switch to extlinux.conf"
+Subject: [Buildroot] [PATCH 1/1] package/libvirt: aarch64 needs headers >=
+ 4.11
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,84 +98,45 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Jared Bents <jared.bents@rockwellcollins.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-Old scripts are still used by a10_olinuxino & a20_olinuxino_micro
+libvirt unconditionally uses HWCAP_CPUID on arm which is only available
+since kernel 4.11 and
+https://github.com/torvalds/linux/commit/77c97b4ee21290f5f083173d957843b615abbff2
+resulting in the following build failure since the addition of the
+packahe in commit ccfc90e1010e42e6529afae3a5ea8bf7226dabc1:
 
-Fixes olimex_a20_olinuxino_micro
-see https://gitlab.com/buildroot.org/buildroot/-/jobs/1478738568
+../src/cpu/cpu_arm.c: In function 'virCPUarmCpuDataFromRegs':
+../src/cpu/cpu_arm.c:562:20: error: 'HWCAP_CPUID' undeclared (first use in this function); did you mean 'HWCAP_PMULL'?
+     if (!(hwcaps & HWCAP_CPUID)) {
+                    ^~~~~~~~~~~
+                    HWCAP_PMULL
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Fixes:
+ - http://autobuild.buildroot.org/results/85bf7b4dad73a748bf439e63874eb64d9a53088f
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- board/olimex/a10_olinuxino/boot.cmd      | 6 +-----
- board/olimex/a10_olinuxino/post-build.sh | 4 +---
- board/olimex/a20_olinuxino/boot.cmd      | 5 +++++
- board/olimex/a20_olinuxino/post-build.sh | 3 +++
- 4 files changed, 10 insertions(+), 8 deletions(-)
- mode change 100644 => 120000 board/olimex/a10_olinuxino/boot.cmd
- mode change 100755 => 120000 board/olimex/a10_olinuxino/post-build.sh
- create mode 100644 board/olimex/a20_olinuxino/boot.cmd
- create mode 100755 board/olimex/a20_olinuxino/post-build.sh
+ package/libvirt/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/board/olimex/a10_olinuxino/boot.cmd b/board/olimex/a10_olinuxino/boot.cmd
-deleted file mode 100644
-index 44d9239a94..0000000000
---- a/board/olimex/a10_olinuxino/boot.cmd
-+++ /dev/null
-@@ -1,5 +0,0 @@
--setenv bootargs console=ttyS0,115200 root=/dev/mmcblk0p1 rootwait panic=10 ${extra}
--ext4load mmc 0 0x49000000 /boot/${fdtfile}
--ext4load mmc 0 0x46000000 /boot/zImage
--env set fdt_high ffffffff
--bootz 0x46000000 - 0x49000000
-diff --git a/board/olimex/a10_olinuxino/boot.cmd b/board/olimex/a10_olinuxino/boot.cmd
-new file mode 120000
-index 0000000000..612c745500
---- /dev/null
-+++ b/board/olimex/a10_olinuxino/boot.cmd
-@@ -0,0 +1 @@
-+../a20_olinuxino/boot.cmd
-\ No newline at end of file
-diff --git a/board/olimex/a10_olinuxino/post-build.sh b/board/olimex/a10_olinuxino/post-build.sh
-deleted file mode 100755
-index d3f612f811..0000000000
---- a/board/olimex/a10_olinuxino/post-build.sh
-+++ /dev/null
-@@ -1,3 +0,0 @@
--#!/bin/sh
--
--cp $BINARIES_DIR/boot.scr $TARGET_DIR/boot/boot.scr
-diff --git a/board/olimex/a10_olinuxino/post-build.sh b/board/olimex/a10_olinuxino/post-build.sh
-new file mode 120000
-index 0000000000..b346896024
---- /dev/null
-+++ b/board/olimex/a10_olinuxino/post-build.sh
-@@ -0,0 +1 @@
-+../a20_olinuxino/post-build.sh
-\ No newline at end of file
-diff --git a/board/olimex/a20_olinuxino/boot.cmd b/board/olimex/a20_olinuxino/boot.cmd
-new file mode 100644
-index 0000000000..44d9239a94
---- /dev/null
-+++ b/board/olimex/a20_olinuxino/boot.cmd
-@@ -0,0 +1,5 @@
-+setenv bootargs console=ttyS0,115200 root=/dev/mmcblk0p1 rootwait panic=10 ${extra}
-+ext4load mmc 0 0x49000000 /boot/${fdtfile}
-+ext4load mmc 0 0x46000000 /boot/zImage
-+env set fdt_high ffffffff
-+bootz 0x46000000 - 0x49000000
-diff --git a/board/olimex/a20_olinuxino/post-build.sh b/board/olimex/a20_olinuxino/post-build.sh
-new file mode 100755
-index 0000000000..d3f612f811
---- /dev/null
-+++ b/board/olimex/a20_olinuxino/post-build.sh
-@@ -0,0 +1,3 @@
-+#!/bin/sh
-+
-+cp $BINARIES_DIR/boot.scr $TARGET_DIR/boot/boot.scr
+diff --git a/package/libvirt/Config.in b/package/libvirt/Config.in
+index 2f191882cc..e231511906 100644
+--- a/package/libvirt/Config.in
++++ b/package/libvirt/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_LIBVIRT_ARCH_SUPPORTS
+ 	bool
+-	default y if BR2_aarch64
++	default y if BR2_aarch64 && BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_11
+ 	default y if BR2_i386
+ 	default y if BR2_x86_64
+ 	depends on BR2_USE_MMU # fork()
 -- 
 2.30.2
 
