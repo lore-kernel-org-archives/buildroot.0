@@ -2,57 +2,57 @@ Return-Path: <SRS0=2pYX=NR=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F8F8C432BE
-	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:09:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D2D13C432BE
+	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:09:43 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1655760FD8
-	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:09:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1655760FD8
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
+	by mail.kernel.org (Postfix) with ESMTPS id 92A8460FD8
+	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:09:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 92A8460FD8
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C2A5F407AA;
-	Thu, 26 Aug 2021 22:09:29 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 661E740788;
+	Thu, 26 Aug 2021 22:09:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id P3iysi_ls1Hw; Thu, 26 Aug 2021 22:09:25 +0000 (UTC)
+	with ESMTP id gc4upwNocNqi; Thu, 26 Aug 2021 22:09:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C20B04079C;
-	Thu, 26 Aug 2021 22:09:23 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4F1761BF33E
- for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 22:02:40 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6E97B4078D;
+	Thu, 26 Aug 2021 22:09:37 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1DB071BF33E
+ for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 22:02:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 23F2982BC8
- for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 22:02:37 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0069440780
+ for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 22:02:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5dMI6KPInNSa for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id v7EqgZ4qK2N7 for <buildroot@lists.busybox.net>;
  Thu, 26 Aug 2021 22:02:32 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9CF4C82BE5
- for <buildroot@buildroot.org>; Thu, 26 Aug 2021 22:02:30 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 95C2B4077B
+ for <buildroot@buildroot.org>; Thu, 26 Aug 2021 22:02:28 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id F27098DC50; Thu, 26 Aug 2021 22:01:28 +0000 (UTC)
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ id 041628DC50; Thu, 26 Aug 2021 22:01:27 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Thu, 12 Aug 2021 23:41:49 +0200
+Date: Sat, 7 Aug 2021 11:49:47 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 6c4aee714f5bf5d40365d2677b5a9cd35b66b849
-X-Git-Newrev: 5ec34a1a0595dd676e2da3e85bfcb2a921388fec
+X-Git-Oldrev: 8e7232bbc578e34ddde4bd371131ec89a291c7ca
+X-Git-Newrev: 83eb121ae58d03f7b7e0e846fc2ba3fa57b12efc
 X-Patchwork-Hint: ignore
-Message-Id: <20210826220128.F27098DC50@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/flatbuffers: fix
- locale independent on musl
+Message-Id: <20210826220127.041628DC50@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libesmtp: requires DES
+ support in openssl
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,89 +70,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5ec34a1a0595dd676e2da3e85bfcb2a921388fec
+commit: https://git.buildroot.net/buildroot/commit/?id=83eb121ae58d03f7b7e0e846fc2ba3fa57b12efc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fix locale indepdendent which is enabled on musl since version 1.11.0
-and
-https://github.com/google/flatbuffers/commit/5f32f948102e65eaeea461b44f3b43f96c7a7a5a
-resulting in the following build failure on snort3 since bump to version
-3.1.6 in commit	e66f2fd310374779d415fa683813cc5f5ccf6be9:
-
-In file included from /tmp/instance-0/output-1/host/x86_64-buildroot-linux-musl/sysroot/usr/include/flatbuffers/flexbuffers.h:24,
-                 from /tmp/instance-0/output-1/host/x86_64-buildroot-linux-musl/sysroot/usr/include/flatbuffers/idl.h:26,
-                 from /tmp/instance-0/output-1/build/snort3-3.1.6.0/src/network_inspectors/perf_monitor/fbs_formatter.cc:29:
-/tmp/instance-0/output-1/host/x86_64-buildroot-linux-musl/sysroot/usr/include/flatbuffers/util.h: In function 'void flatbuffers::strtoval_impl(int64_t*, const char*, char**, int)':
-/tmp/instance-0/output-1/host/x86_64-buildroot-linux-musl/sysroot/usr/include/flatbuffers/util.h:258:12: error: 'strtoll_l' was not declared in this scope; did you mean 'strcoll_l'?
-  258 |     *val = __strtoll_impl(str, endptr, base);
-      |            ^~~~~~~~~~~~~~
+Enable DES in openssl to fix build failure raised since bump to version
+1.1.0 in commit b72401692e1ea73a37fcf4c0b421b654e8a2100f
 
 Fixes:
- - http://autobuild.buildroot.org/results/68045b83e94f8caa337b1af7ed5f493ac1a55c47
+ - http://autobuild.buildroot.org/results/52bce321552d23c10617c4ba4dc5b290e1d43dd5
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- ...lude-flatbuffers-base.h-fix-build-on-musl.patch | 51 ++++++++++++++++++++++
- 1 file changed, 51 insertions(+)
+ package/libesmtp/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/flatbuffers/0001-include-flatbuffers-base.h-fix-build-on-musl.patch b/package/flatbuffers/0001-include-flatbuffers-base.h-fix-build-on-musl.patch
-new file mode 100644
-index 0000000000..b4bc0e12de
---- /dev/null
-+++ b/package/flatbuffers/0001-include-flatbuffers-base.h-fix-build-on-musl.patch
-@@ -0,0 +1,51 @@
-+From 0315cef04a5a8a953072691faa48af9acb6009bd Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Tue, 10 Aug 2021 13:39:58 +0200
-+Subject: [PATCH] include/flatbuffers/base.h: fix build on musl
-+
-+Build of applications using flatbuffers such as snort3 are broken on
-+musl since version 1.11.0 and
-+https://github.com/google/flatbuffers/commit/5f32f948102e65eaeea461b44f3b43f96c7a7a5a
-+because strtoll_l (and strtoull_l) are not available on musl.
-+flatbuffers checks for the availability of strtoull_l in CMakeLists.txt
-+so flatbuffers builds successfully but for applications using
-+flatbuffers, the result of this check is not available and
-+FLATBUFFERS_LOCALE_INDEPENDENT is set to 1 resulting in the following
-+build failure:
-+
-+In file included from /tmp/instance-0/output-1/host/x86_64-buildroot-linux-musl/sysroot/usr/include/flatbuffers/flexbuffers.h:24,
-+                 from /tmp/instance-0/output-1/host/x86_64-buildroot-linux-musl/sysroot/usr/include/flatbuffers/idl.h:26,
-+                 from /tmp/instance-0/output-1/build/snort3-3.1.6.0/src/network_inspectors/perf_monitor/fbs_formatter.cc:29:
-+/tmp/instance-0/output-1/host/x86_64-buildroot-linux-musl/sysroot/usr/include/flatbuffers/util.h: In function 'void flatbuffers::strtoval_impl(int64_t*, const char*, char**, int)':
-+/tmp/instance-0/output-1/host/x86_64-buildroot-linux-musl/sysroot/usr/include/flatbuffers/util.h:258:12: error: 'strtoll_l' was not declared in this scope; did you mean 'strcoll_l'?
-+  258 |     *val = __strtoll_impl(str, endptr, base);
-+      |            ^~~~~~~~~~~~~~
-+
-+Fix this failure by checking if __GNUC__ is defined before setting
-+FLATBUFFERS_LOCALE_INDEPENDENT to 1.
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/68045b83e94f8caa337b1af7ed5f493ac1a55c47
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/google/flatbuffers/pull/6773]
-+---
-+ include/flatbuffers/base.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/include/flatbuffers/base.h b/include/flatbuffers/base.h
-+index de7898dc..101c7598 100644
-+--- a/include/flatbuffers/base.h
-++++ b/include/flatbuffers/base.h
-+@@ -266,7 +266,7 @@ namespace flatbuffers {
-+ #ifndef FLATBUFFERS_LOCALE_INDEPENDENT
-+   // Enable locale independent functions {strtof_l, strtod_l,strtoll_l, strtoull_l}.
-+   #if ((defined(_MSC_VER) && _MSC_VER >= 1800)            || \
-+-       (defined(_XOPEN_VERSION) && (_XOPEN_VERSION>=700)) && (!defined(__ANDROID_API__) || (defined(__ANDROID_API__) && (__ANDROID_API__>=21))))
-++       (defined(__GLIBC__) && defined(_XOPEN_VERSION) && (_XOPEN_VERSION>=700)) && (!defined(__ANDROID_API__) || (defined(__ANDROID_API__) && (__ANDROID_API__>=21))))
-+     #define FLATBUFFERS_LOCALE_INDEPENDENT 1
-+   #else
-+     #define FLATBUFFERS_LOCALE_INDEPENDENT 0
-+-- 
-+2.30.2
-+
+diff --git a/package/libesmtp/Config.in b/package/libesmtp/Config.in
+index 5c6a412134..c631d127e0 100644
+--- a/package/libesmtp/Config.in
++++ b/package/libesmtp/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_LIBESMTP
+ 	bool "libesmtp"
+ 	depends on !BR2_STATIC_LIBS
++	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES if BR2_PACKAGE_LIBOPENSSL
+ 	select BR2_PACKAGE_LIBOPENSSL_ENABLE_MD4 if BR2_PACKAGE_LIBOPENSSL
+ 	help
+ 	  Library for sending emails through SMTP.
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
