@@ -2,73 +2,84 @@ Return-Path: <SRS0=HCTk=M6=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-20.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.5 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
+	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 92F0FC4338F
-	for <buildroot@archiver.kernel.org>; Sat,  7 Aug 2021 21:55:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 043DDC4338F
+	for <buildroot@archiver.kernel.org>; Sat,  7 Aug 2021 23:22:05 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id F024061057
-	for <buildroot@archiver.kernel.org>; Sat,  7 Aug 2021 21:55:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org F024061057
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=benettiengineering.com
+	by mail.kernel.org (Postfix) with ESMTPS id 9D62061050
+	for <buildroot@archiver.kernel.org>; Sat,  7 Aug 2021 23:22:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9D62061050
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B43E3606EC;
-	Sat,  7 Aug 2021 21:55:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 54A2060628;
+	Sat,  7 Aug 2021 23:22:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Np5od7wz5uv6; Sat,  7 Aug 2021 21:55:08 +0000 (UTC)
+	with ESMTP id Sug57bbQRhXB; Sat,  7 Aug 2021 23:22:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CDD5460689;
-	Sat,  7 Aug 2021 21:55:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A2AEC6064A;
+	Sat,  7 Aug 2021 23:22:02 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D1B821BF3BC
- for <buildroot@lists.busybox.net>; Sat,  7 Aug 2021 21:55:05 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6F4FE1BF283
+ for <buildroot@lists.busybox.net>; Sat,  7 Aug 2021 23:22:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CBD2560689
- for <buildroot@lists.busybox.net>; Sat,  7 Aug 2021 21:55:05 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 582F86064A
+ for <buildroot@lists.busybox.net>; Sat,  7 Aug 2021 23:22:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 04ovWgRv2GXN for <buildroot@lists.busybox.net>;
- Sat,  7 Aug 2021 21:55:04 +0000 (UTC)
-X-Greylist: delayed 00:07:03 by SQLgrey-1.8.0
-Received: from smtpcmd10102.aruba.it (smtpcmd10102.aruba.it [62.149.156.102])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0953A6064A
- for <buildroot@buildroot.org>; Sat,  7 Aug 2021 21:55:03 +0000 (UTC)
-Received: from [192.168.126.129] ([146.241.149.252])
- by Aruba Outgoing Smtp  with ESMTPSA
- id CUAgmlY90nyXHCUAgm7khR; Sat, 07 Aug 2021 23:47:59 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1628372879; bh=TmyQXXqj3UnKLr7CBaklueng067i3QCsnKGQ4MKPmIU=;
- h=Subject:To:From:Date:MIME-Version:Content-Type;
- b=VnJpzQbFavthrz4BWaPKRmSq0xVaq2JYetSuvB3THHS9rdhVfuAc6X/IUFgx/NTAc
- 4ua8i/JLjoXnjXkVDdF393OWT/UFOBRudw4FHFqfeMJ7Z8dZkY1IoOyIP5XqcqlDmt
- cG5QzjCkHAPBvYHldaj1vKT0qlDo2gJd9xR0xUEebN/NNR3jcg1G4bCMhAwa4Mlgfz
- CZrYAx07gsZnmlGo3wXLdMQpFTGPkse+LjeW1GpGGId8JM1M3Gl9+FP5steByHiT5q
- hBnNQv713MQYbNzC8CtIF40tDt3SXn6uq1iPzn+7KnHdyCW8n3Yvjv5v9Xdd74ePrm
- RmXySr/ag+3yw==
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-References: <20210807213254.2103314-1-fontaine.fabrice@gmail.com>
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <352f1f15-f569-cd20-db72-3b47b2949084@benettiengineering.com>
-Date: Sat, 7 Aug 2021 23:47:58 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+ with ESMTP id zyk9_caZFubK for <buildroot@lists.busybox.net>;
+ Sat,  7 Aug 2021 23:21:59 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com
+ [IPv6:2607:f8b0:4864:20::d2c])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6420360628
+ for <buildroot@buildroot.org>; Sat,  7 Aug 2021 23:21:59 +0000 (UTC)
+Received: by mail-io1-xd2c.google.com with SMTP id s184so20378089ios.2
+ for <buildroot@buildroot.org>; Sat, 07 Aug 2021 16:21:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=dN9lm4ESvCM9XJP15ZoGOML38N8QxD6vW9unCats0wk=;
+ b=iXvjdGVNODu2+uuojGozGEn8MeeoeEZqL8TbPH25NDT5D/ba5KuLsO9Un55/kri2Fx
+ uWBKusIS+DIiZyXF5Im2dQ5cKjeRptlMsXJ7R0fPIYNGCVDOTqqGvDWMiEOtw5aUp6nE
+ JG+cxmFLn3fiFSGb3O4Rg7waibaWQnd4cLpRuXlvFeztX85RW6mlQ3SDxJL8MBojSChv
+ EJqWhHnHpHd8kd5C072N8LMATuNje09jwkgu8T1wof1xDFrICz6E5bIjPuWAEDRpYaep
+ PzffHOGXGhgxz5juHQV3pB+bnTtFzoBf+5Qmtj5Dsu51kgqjoZLXgsGxMflC5lg9oNFD
+ EMng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=dN9lm4ESvCM9XJP15ZoGOML38N8QxD6vW9unCats0wk=;
+ b=jUss1spOqHqvr8dKm2e10dZl4Lp2j7YAkChcJX65pCF/hSnN8w5o2wNjarmgqsMh2+
+ kgUi9JsIFKTeb/f6Oh7NLhfqhumazf/5HLIcxL0M/TZfp0BCxgH1G/it9eFfPj2KfiFK
+ FT4oroU7wNh6vce61lNkRzTlqTBVIf3EvHv4TU4gRh0g37CDHTNnjDOJJqIffhMt7FEd
+ sVz7g8HbPjoiHwE7gAkRSmom1wWw2ncgEFLB1m2MelszfWkWnqRZaCBgdLnRMeilIpMK
+ v/nI8BE1MhQYq1Fptvr9eU3j2Xw3iqAaphlAmF+bKs5QxpeN08pagR5gb0vQMG7irGVZ
+ TLzA==
+X-Gm-Message-State: AOAM53323mYeylUDmMu+oRlR5hnKi9FICbD6y515UuD9xH7tUuX0eStx
+ 43vLXC3MgWiGJtvCjpWVK5dfngxFB4bYN7Fo+Xk=
+X-Google-Smtp-Source: ABdhPJzApQJbQKuoHRj8VQZUzjDKjQ8OoNDbhD3f0OH8CbaYaybYLcQFGijCviXf90+r9X2G2klSoUCcrjQ7I1jSPmQ=
+X-Received: by 2002:a92:d84e:: with SMTP id h14mr620861ilq.267.1628378518424; 
+ Sat, 07 Aug 2021 16:21:58 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20210807213254.2103314-1-fontaine.fabrice@gmail.com>
-Content-Language: en-US
-X-CMAE-Envelope: MS4wfJKaJBCyGQHK9H14amsq73s4NScnk6RxW8DKTeGY0Zr/2cBJJLTplMJ4KSGiwUnDWnzblFOMr1njU4QB3Q+KU2GqXdZEXHjoUaN4AB4pt6z0hNu5txgR
- HmkiPK4Cbh0+OQJHeVC2+47FiuS7mN2gGln6lhCJu8pThWsL8hZCacpYALMGCzzmJWgpB75ixDNWkf4ZrVlZ8N/P9oJM8uncG3AgNZXA5AJXbPflO70pnncS
- Qfrt8Uo34mlfTgpGYnyEkW5fAoga3vF1ORO9qmrB3SHztHw6ISOyfKqBxkjDkkPJ
-Subject: Re: [Buildroot] [PATCH 1/1] package/libnss: fix build on ARM big
- endian
+References: <20210806184411.4062961-1-fontaine.fabrice@gmail.com>
+ <20210807085303.GU27036@scaer>
+In-Reply-To: <20210807085303.GU27036@scaer>
+From: Alistair Francis <alistair23@gmail.com>
+Date: Sun, 8 Aug 2021 09:21:30 +1000
+Message-ID: <CAKmqyKMgaCH0q1ZuX3dDO2-r9f55FmHLdNdK2nKghNF7mApk0g@mail.gmail.com>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Subject: Re: [Buildroot] [PATCH 1/1] package/guile: fix build on riscv32
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,119 +91,76 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Joseph Kogut <joseph.kogut@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ buildroot <buildroot@buildroot.org>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-Hi Fabrice,
+On Sat, Aug 7, 2021 at 6:53 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>
+> Fabrice, All,
+>
+> On 2021-08-06 20:44 +0200, Fabrice Fontaine spake thusly:
+> > Fix the following build failure on riscv32:
+> >
+> > system/base/target.scm:132:16: In procedure triplet-pointer-size:
+> > unknown CPU word size "riscv32"
+> >
+> > Fixes:
+> >  - http://autobuild.buildroot.org/results/6705630c1484239ec8b73d57ebc2e2570fbfc8f8
+> >
+> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > ---
+> >  ...stem-base-target.scm-support-riscv32.patch | 33 +++++++++++++++++++
+> >  1 file changed, 33 insertions(+)
+> >  create mode 100644 package/guile/0004-module-system-base-target.scm-support-riscv32.patch
+> >
+> > diff --git a/package/guile/0004-module-system-base-target.scm-support-riscv32.patch b/package/guile/0004-module-system-base-target.scm-support-riscv32.patch
+> > new file mode 100644
+> > index 0000000000..cadd040f12
+> > --- /dev/null
+> > +++ b/package/guile/0004-module-system-base-target.scm-support-riscv32.patch
+> > @@ -0,0 +1,33 @@
+> > +From 995a5e1da735b75733f059615c593c330b534d80 Mon Sep 17 00:00:00 2001
+> > +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > +Date: Fri, 6 Aug 2021 19:49:37 +0200
+> > +Subject: [PATCH] module/system/base/target.scm: support riscv32
+> > +
+> > +Fix the following build failure on riscv32:
+> > +
+> > +system/base/target.scm:132:16: In procedure triplet-pointer-size:
+> > +unknown CPU word size "riscv32"
+> > +
+> > +Fixes:
+> > + - http://autobuild.buildroot.org/results/6705630c1484239ec8b73d57ebc2e2570fbfc8f8
+> > +
+> > +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > +---
+> > + module/system/base/target.scm | 1 +
+> > + 1 file changed, 1 insertion(+)
+> > +
+> > +diff --git a/module/system/base/target.scm b/module/system/base/target.scm
+> > +index 2088cd866..5544e234f 100644
+> > +--- a/module/system/base/target.scm
+> > ++++ b/module/system/base/target.scm
+> > +@@ -121,6 +121,7 @@
+> > +           ((member cpu '("sparc" "powerpc" "mips" "mipsel" "nios2" "m68k" "sh3" "sh4")) 4)
+> > +           ((member cpu '("s390x" "alpha")) 8)
+> > +           ((string-match "^arm.*" cpu) 4)
+> > ++          ((string-match "^riscv.*" cpu) 8)
+>
+> Are you sure that a 32-bit CPU will have 8-byte wide words? I would
+> have naturrally expected them to be just 4-byte wide...
+>
+> If htis is indeed the case, then please explain that in the patch commit
+> log...
 
-On 8/7/21 11:32 PM, Fabrice Fontaine wrote:
-> Fix the follownig build failure on ARM big endian raised since bump to
-> version 3.68 in commit 0a73b9b962421ce7a72c88e5f5bbd8849f21b041:
-> 
-> Linux2.6_aarch64_aarch64_be-linux-gnu-gcc_glibc_PTH_64_DBG.OBJ/Linux_SINGLE_SHLIB/sha256-armv8.o: In function `SHA256_Compress_Native':
-> sha256-armv8.c:(.text.SHA256_Compress_Native+0x0): multiple definition of `SHA256_Compress_Native'
-> Linux2.6_aarch64_aarch64_be-linux-gnu-gcc_glibc_PTH_64_DBG.OBJ/Linux_SINGLE_SHLIB/sha512.o:sha512.c:(.text.SHA256_Compress_Native+0x0): first defined here
-> Linux2.6_aarch64_aarch64_be-linux-gnu-gcc_glibc_PTH_64_DBG.OBJ/Linux_SINGLE_SHLIB/sha256-armv8.o: In function `SHA256_Update_Native':
-> sha256-armv8.c:(.text.SHA256_Update_Native+0x0): multiple definition of `SHA256_Update_Native'
-> Linux2.6_aarch64_aarch64_be-linux-gnu-gcc_glibc_PTH_64_DBG.OBJ/Linux_SINGLE_SHLIB/sha512.o:sha512.c:(.text.SHA256_Update_Native+0x0): first defined here
-> 
-> Fixes:
->   - http://autobuild.buildroot.org/results/237aba0c16a34fec1b0fe50fe08cace438eda1bf
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->   ...2.c-fix-SHA256-redefinition-on-ARM-b.patch | 47 +++++++++++++++++++
->   1 file changed, 47 insertions(+)
->   create mode 100644 package/libnss/0001-lib-freebl-sha512.c-fix-SHA256-redefinition-on-ARM-b.patch
-> 
-> diff --git a/package/libnss/0001-lib-freebl-sha512.c-fix-SHA256-redefinition-on-ARM-b.patch b/package/libnss/0001-lib-freebl-sha512.c-fix-SHA256-redefinition-on-ARM-b.patch
-> new file mode 100644
-> index 0000000000..f925f20051
-> --- /dev/null
-> +++ b/package/libnss/0001-lib-freebl-sha512.c-fix-SHA256-redefinition-on-ARM-b.patch
-> @@ -0,0 +1,47 @@
-> +From 434d79c52db5b680accc531572319bd7094fa470 Mon Sep 17 00:00:00 2001
-> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +Date: Sat, 7 Aug 2021 23:19:01 +0200
-> +Subject: [PATCH] lib/freebl/sha512.c: fix SHA256 redefinition on ARM big
-> + endian
-> +
-> +For an unknown reason, SHA256_{Compress,Update}_Native are defined in
-> +lib/freebl/sha512.c if IS_LITTLE_ENDIAN is undefined since version 3.68
-> +and
-> +https://github.com/nss-dev/nss/commit/e1e00f21f2d73e0d5d27651ad5606efa5714abe4
-> +
-> +This raises the following build failure on ARM big endian:
-> +
-> +Linux2.6_aarch64_aarch64_be-linux-gnu-gcc_glibc_PTH_64_DBG.OBJ/Linux_SINGLE_SHLIB/sha256-armv8.o: In function `SHA256_Compress_Native':
-> +sha256-armv8.c:(.text.SHA256_Compress_Native+0x0): multiple definition of `SHA256_Compress_Native'
-> +Linux2.6_aarch64_aarch64_be-linux-gnu-gcc_glibc_PTH_64_DBG.OBJ/Linux_SINGLE_SHLIB/sha512.o:sha512.c:(.text.SHA256_Compress_Native+0x0): first defined here
-> +Linux2.6_aarch64_aarch64_be-linux-gnu-gcc_glibc_PTH_64_DBG.OBJ/Linux_SINGLE_SHLIB/sha256-armv8.o: In function `SHA256_Update_Native':
-> +sha256-armv8.c:(.text.SHA256_Update_Native+0x0): multiple definition of `SHA256_Update_Native'
-> +Linux2.6_aarch64_aarch64_be-linux-gnu-gcc_glibc_PTH_64_DBG.OBJ/Linux_SINGLE_SHLIB/sha512.o:sha512.c:(.text.SHA256_Update_Native+0x0): first defined here
-> +
-> +Revert this change as it seems completely unrelated to the commit title
-> +"Bug 1655493 - Support SHA2 HW acceleration using Intel SHA Extension"
+It should be 4-byte words for riscv32. Basically the same as 32-bit
+arm except when it comes to time_t types (which are always 64-bits).
 
-I'm not completely sure about this, since I remember most of armv8 
-accelerations only work for LITTLE_ENDIAN. But I can't login to the 
-Mozilla Bugzilla because of two factor authentication I've never enabled 
-and I've asked help to fix this days ago with no answer. Do you have 
-access to it?
-
-Can you please clarify if that acceleration is valid on BIG_ENDIAN too?
-It's not written anywhere, but more than one lib/freebl/ lib 
-acceleration has been done only for LITTLE_ENDIAN. What worries me is 
-the hash table at the top that *maybe* is only suitable for LITTLE_ENDIAN:
-https://hg.mozilla.org/projects/nss/file/tip/lib/freebl/sha256-armv8.c#l24
-
-For example check this patch I've sent time ago:
-https://hg.mozilla.org/projects/nss/rev/fa0d958de0c3cf99a7ec66e819b128c7bc88ff9f
-and the related bug:
-https://bugzilla.mozilla.org/show_bug.cgi?id=1580126
-
-That makes me believe that is only LITTLE_ENDIAN compatible also due to 
-this:
-https://hg.mozilla.org/projects/nss/file/tip/lib/freebl/sha512.c#l167
-
-BUT I can't reach anyone, and they don't sign off the commits, so no 
-e-mail to CC. Maybe you can through Mozilla Bugzilla?
-
-Thanks in advance
-Best regards
--- 
-Giulio Benetti
-Benetti Engineering sas
-
-> +Fixes:
-> + - http://autobuild.buildroot.org/results/237aba0c16a34fec1b0fe50fe08cace438eda1bf
-> +
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +---
-> + nss/lib/freebl/sha512.c | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/nss/lib/freebl/sha512.c b/nss/lib/freebl/sha512.c
-> +index 946ab9f7f..3ec414b52 100644
-> +--- a/nss/lib/freebl/sha512.c
-> ++++ b/nss/lib/freebl/sha512.c
-> +@@ -164,7 +164,7 @@ static void SHA256_Compress_Generic(SHA256Context *ctx);
-> + static void SHA256_Update_Generic(SHA256Context *ctx, const unsigned char *input,
-> +                                   unsigned int inputLen);
-> +
-> +-#if !defined(USE_HW_SHA2) || !defined(IS_LITTLE_ENDIAN)
-> ++#if !defined(USE_HW_SHA2)
-> + void
-> + SHA256_Compress_Native(SHA256Context *ctx)
-> + {
-> +--
-> +2.30.2
-> +
-> 
-
+Alistair
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
