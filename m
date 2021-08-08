@@ -7,92 +7,91 @@ X-Spam-Status: No, score=-8.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 24DF7C4338F
-	for <buildroot@archiver.kernel.org>; Sun,  8 Aug 2021 19:05:51 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 269B0C4338F
+	for <buildroot@archiver.kernel.org>; Sun,  8 Aug 2021 19:12:21 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id BFA9760FC1
-	for <buildroot@archiver.kernel.org>; Sun,  8 Aug 2021 19:05:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org BFA9760FC1
+	by mail.kernel.org (Postfix) with ESMTPS id BC27960E96
+	for <buildroot@archiver.kernel.org>; Sun,  8 Aug 2021 19:12:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org BC27960E96
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8AA1E60607;
-	Sun,  8 Aug 2021 19:05:50 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6CFB14019A;
+	Sun,  8 Aug 2021 19:12:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Su_mFxH0hjV3; Sun,  8 Aug 2021 19:05:46 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id cgJuZqKuOMu3; Sun,  8 Aug 2021 19:12:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9EFB360601;
-	Sun,  8 Aug 2021 19:05:45 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 16C971BF3C3
- for <buildroot@lists.busybox.net>; Sun,  8 Aug 2021 19:04:57 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7B6FF4012D;
+	Sun,  8 Aug 2021 19:12:18 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 19BBD1BF3C3
+ for <buildroot@lists.busybox.net>; Sun,  8 Aug 2021 19:12:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1332440296
- for <buildroot@lists.busybox.net>; Sun,  8 Aug 2021 19:04:57 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0B29A82C98
+ for <buildroot@lists.busybox.net>; Sun,  8 Aug 2021 19:12:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ugPz7A4J31FX for <buildroot@lists.busybox.net>;
- Sun,  8 Aug 2021 19:04:56 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WQ3_BblJJROZ for <buildroot@lists.busybox.net>;
+ Sun,  8 Aug 2021 19:12:15 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com
- [IPv6:2a00:1450:4864:20::52c])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D113340235
- for <buildroot@buildroot.org>; Sun,  8 Aug 2021 19:04:55 +0000 (UTC)
-Received: by mail-ed1-x52c.google.com with SMTP id bo19so1903513edb.9
- for <buildroot@buildroot.org>; Sun, 08 Aug 2021 12:04:55 -0700 (PDT)
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com
+ [IPv6:2a00:1450:4864:20::62c])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4DD0C82C91
+ for <buildroot@buildroot.org>; Sun,  8 Aug 2021 19:12:15 +0000 (UTC)
+Received: by mail-ej1-x62c.google.com with SMTP id e19so25011493ejs.9
+ for <buildroot@buildroot.org>; Sun, 08 Aug 2021 12:12:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
  h=sender:from:to:cc:subject:references:date:in-reply-to:message-id
  :user-agent:mime-version;
- bh=YeM24lYG476VaiKxvhFy/TDI/KdPjSL4eIrZ3SMzCGw=;
- b=IoJFNsYZZ+oMiEYo8OfU8s2l7TIKq/ZaWXnJAzSc96eN+A2gUuzzdmxGFUywFTGpSs
- VdCBpqo73UXvqNXQ/xgPV4LnaYqOurPZ3G4+DHIh+c0PLcAKGRtvAWe7pKI0YEsAcbX8
- ABPyALW3wyP0SkROHoKkw5U+R+3la+VMjtW4zgdlOJ3yCKFiC37/v4CF2p1col207+6I
- q9xEppcB8WwsKZndc3fZaqt2OCUR7Virg7RWAHeGZufxqWdJ+s2Qn9t3xZ3fGgB4yn0M
- 2ebJkNxyfhkelGrhVTxYHX/uFO0k3hNBLBFVb/8dvC/dXu8TKOFQVJJlPSYU10DEuUBu
- AtBw==
+ bh=gE+4o4YTYxjqU/GGw/f/iKpkLa0jVDIItL9CadH8QV0=;
+ b=iE+9cs7u1+pokNAdvKGWAUWnqjrVJO0dGjyF0JMTubjlKLz104mk1xhDVG1x+epK33
+ j8KcM2wHOdOXRbqi44+GFTNxODBP16BEPIhxA6A8hYRe0pKpFbg0IYeuYzzKfXbDNLXY
+ s/o8eu9aQZC/0ksPATjW61iQNY7Hc5vMW5/gXvL4Qxaa3XsuXs4MCa56v85uhwTgT+0P
+ Jdl5VTNp1Jah50iDHEyfLJPr19wyGLTcY4bFsFXhi9gTqO08Exgcaf9cnw0NxgmYM9yl
+ 5ykMiAfL+/tqnRiybbAvvIhzRx3ZQx+57+KBrhtnKGbBaxQ11DVH3GcNQBAqC2fGdsS5
+ tkUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:sender:from:to:cc:subject:references:date
  :in-reply-to:message-id:user-agent:mime-version;
- bh=YeM24lYG476VaiKxvhFy/TDI/KdPjSL4eIrZ3SMzCGw=;
- b=VBaTpFBOFmIOF7LfYAkkL4b6edPjxeReCm8W6E2/jh90rI35rAJPHwcEzpC67diM5P
- WtPLwztjfYXl6OkAGDGX8Fcucm1T9N03Ea6faQ+FVuXl64TQkNX6Ln4Wcrt+LTU14bRh
- DviQOaThAlceOCoLE/G7e3bZuXwL3F+85RxxK2p8LAaWMTj8P/1VsjUdXZ4wlVZUoinU
- NuW9gtwL0/WC6/cGjCl1quQRlmJpJ6vqPTYzpE2YvDCXhHvik8f7GkfX3TOIRR6Q2SE8
- DhVPxqT6GHGJmo9p1EVQocv6UqlwDR+4bLPDymrKi2FLyh+Vi2HF8t/uQF8NGb4KJdIX
- 9+kQ==
-X-Gm-Message-State: AOAM531/67xVHzvflA51n0vn61OE9gtWfxvFtaCPlUq9VALnNhw46F0u
- yXgTdGKTQRO0jdoprm4EBDRtwoPdJjydmw==
-X-Google-Smtp-Source: ABdhPJycKS3tZg5rZTF2Q2IYnBp1BruNkTSinWIxe0EcUpzGphwA2haxkE6hTV2gVl6T6HRGMcSyoQ==
-X-Received: by 2002:a05:6402:c8a:: with SMTP id
- cm10mr24450265edb.192.1628449494070; 
- Sun, 08 Aug 2021 12:04:54 -0700 (PDT)
+ bh=gE+4o4YTYxjqU/GGw/f/iKpkLa0jVDIItL9CadH8QV0=;
+ b=f6bqcmjSUIjMLm8FRR7zoXVnSpHWsus/Tm9epOEvEvuPfYHUDJsx4Eja5Fm1h+7eqy
+ 7m2GxC+q/3M+KExI4NUly08V40Uum5VrMj1Lyqaf+aPm0l12QG4FOACefXzIZWvHSMfJ
+ DnBivAMOWT5P6Pqf9LyE2Ie/HXAZA7exmg78OFNDNkHxYCosV55DIp9CCj0ZQg2zQYaT
+ NV1u0AdHtSCVPxgIdRutm5Bhh2ov1VseFQui2ZZDuShvLJ7HHoZt5T4FEM1OHk5vIuD6
+ PPIBwbO7LeidGW1+kMB/AoCRP2OjY/57XTbrlhsX5796Wp6OuzNSgKfVSCx0j3PMn+Wf
+ h0pA==
+X-Gm-Message-State: AOAM533r8qGEj5i+GBEJHqV+h/oq2A3EUddeTjjdHpCIXMZ566WpDoXM
+ keyBWWtYxulIsX2EkBKdiELqMW0XTHCRQg==
+X-Google-Smtp-Source: ABdhPJyFQ25UgDQFDpaoP1UE1QbARZuxUNi8K8ncawjrqTh1edPh0JQNWmuKiZlqja4BecSgdNxung==
+X-Received: by 2002:a17:906:16cb:: with SMTP id
+ t11mr18825519ejd.16.1628449933554; 
+ Sun, 08 Aug 2021 12:12:13 -0700 (PDT)
 Received: from dell.be.48ers.dk ([195.162.189.230])
- by smtp.gmail.com with ESMTPSA id l19sm421805edb.86.2021.08.08.12.04.53
+ by smtp.gmail.com with ESMTPSA id t15sm5201778ejf.119.2021.08.08.12.12.12
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 08 Aug 2021 12:04:53 -0700 (PDT)
+ Sun, 08 Aug 2021 12:12:12 -0700 (PDT)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
  (envelope-from <peter@korsgaard.com>)
- id 1mCo6O-0003D3-UD; Sun, 08 Aug 2021 21:04:52 +0200
+ id 1mCoDT-0003NW-OH; Sun, 08 Aug 2021 21:12:11 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-References: <20210803084245.2740449-1-giulio.benetti@benettiengineering.com>
- <20210803084245.2740449-3-giulio.benetti@benettiengineering.com>
-Date: Sun, 08 Aug 2021 21:04:52 +0200
-In-Reply-To: <20210803084245.2740449-3-giulio.benetti@benettiengineering.com>
- (Giulio Benetti's message of "Tue, 3 Aug 2021 10:42:45 +0200")
-Message-ID: <877dgvbvvv.fsf@dell.be.48ers.dk>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20210804204358.1465897-1-fontaine.fabrice@gmail.com>
+Date: Sun, 08 Aug 2021 21:12:11 +0200
+In-Reply-To: <20210804204358.1465897-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Wed, 4 Aug 2021 22:43:58 +0200")
+Message-ID: <8735rjbvjo.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 2/2] package/pixman: fix build failure due
- to gcc bug 101737
+Subject: Re: [Buildroot] [PATCH 1/1] package/libqmi: add
+ gobject-introspection optional dependency
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -104,30 +103,20 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
- Romain Naour <romain.naour@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
- buildroot@buildroot.org
+Cc: Matt Weber <matthew.weber@collins.com>,
+ Aleksander Morgado <aleksander@aleksander.es>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
->>>>> "Giulio" == Giulio Benetti <giulio.benetti@benettiengineering.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > The pixman package exhibits gcc bug 101737 when built for the SH4
- > architecture with optimization enabled, which causes a build failure.
+ > gobject-introspection is an optional dependency (enabled by default)
+ > since version 1.26.0 and
+ > https://gitlab.freedesktop.org/mobile-broadband/libqmi/-/commit/2aa0badc79595c92981793d18f05c99485156a6b
 
- > As done for other packages in Buildroot work around this gcc bug by
- > setting optimization to -O0 if BR2_TOOLCHAIN_HAS_GCC_BUG_101737=y.
- > Also let's add PIXMAN_CFLAGS and pass the Codesourcery work around CFLAGS
- > to it for consistency like we do for the rest of the packages.
-
- > Fixes:
- > http://autobuild.buildroot.net/results/b20/b20869bbb48edb1f0a847ea9e2e1a0462d6350be/
-
- > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed to 2021.02.x and 2021.05.x, thanks.
 
