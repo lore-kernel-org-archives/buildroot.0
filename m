@@ -2,57 +2,60 @@ Return-Path: <SRS0=BoAS=M7=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_2 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 64470C4338F
-	for <buildroot@archiver.kernel.org>; Sun,  8 Aug 2021 20:36:33 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 74CAFC4338F
+	for <buildroot@archiver.kernel.org>; Sun,  8 Aug 2021 20:36:46 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id E9AA160F4B
-	for <buildroot@archiver.kernel.org>; Sun,  8 Aug 2021 20:36:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E9AA160F4B
+	by mail.kernel.org (Postfix) with ESMTPS id 1513D60F38
+	for <buildroot@archiver.kernel.org>; Sun,  8 Aug 2021 20:36:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1513D60F38
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BF7566059D;
-	Sun,  8 Aug 2021 20:36:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D123482B75;
+	Sun,  8 Aug 2021 20:36:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DPcbx1D5gZp7; Sun,  8 Aug 2021 20:36:30 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id bq2gU2amnqSZ; Sun,  8 Aug 2021 20:36:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D4C07605A4;
-	Sun,  8 Aug 2021 20:36:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 22A4382CD4;
+	Sun,  8 Aug 2021 20:36:44 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0E6AA1BF422
- for <buildroot@lists.busybox.net>; Sun,  8 Aug 2021 20:36:28 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 697021BF422
+ for <buildroot@lists.busybox.net>; Sun,  8 Aug 2021 20:36:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id F07DA401BD
- for <buildroot@lists.busybox.net>; Sun,  8 Aug 2021 20:36:27 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 57B66401BD
+ for <buildroot@lists.busybox.net>; Sun,  8 Aug 2021 20:36:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LYncU_0QchxC for <buildroot@lists.busybox.net>;
- Sun,  8 Aug 2021 20:36:26 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id DA9A8400AE
- for <buildroot@buildroot.org>; Sun,  8 Aug 2021 20:36:26 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 713828D2F3; Sun,  8 Aug 2021 20:36:07 +0000 (UTC)
+ with ESMTP id Z7Ia1Ps53QId for <buildroot@lists.busybox.net>;
+ Sun,  8 Aug 2021 20:36:41 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 014B1400AE
+ for <buildroot@buildroot.org>; Sun,  8 Aug 2021 20:36:40 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by relay12.mail.gandi.net (Postfix) with ESMTPSA id 1BBE9200003;
+ Sun,  8 Aug 2021 20:36:36 +0000 (UTC)
+Date: Sun, 8 Aug 2021 22:36:36 +0200
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: buildroot@buildroot.org
-Date: Sun, 8 Aug 2021 22:35:55 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a364ebd7f0b87a02971cefb68c0fc98939dceef2
-X-Git-Newrev: 2d991fd7b23f66e3a88c02177bf28d5587061ac8
-X-Patchwork-Hint: ignore
-Message-Id: <20210808203607.713828D2F3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/qt5/qt5base: fix libatomic
- handling to not affect host builds
+To: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+Message-ID: <20210808223636.465b7c2f@windsurf>
+In-Reply-To: <20210806143839.2905163-1-quentin.schulz@theobroma-systems.com>
+References: <20210806143839.2905163-1-quentin.schulz@theobroma-systems.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH] package/qt5/qt5base: do not link against
+ host libatomic when building host tools within qt5* target packages
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,53 +67,47 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-MIME-Version: 1.0
+Cc: Peter Seiderer <ps.report@gmx.net>, Quentin Schulz <foss@0leil.net>,
+ Julien Corjon <corjon.j@ecagroup.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2d991fd7b23f66e3a88c02177bf28d5587061ac8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri,  6 Aug 2021 16:38:39 +0200
+Quentin Schulz <quentin.schulz@theobroma-systems.com> wrote:
 
-qt5declarative builds qmltyperegistrar for the host as part of its build
-process.
-When building qt target packages (which is the case for qt5declarative),
--spec devices/linux-buildroot-g++ is passed to qmake in QT5_QMAKE
-variable and this spec currently has -latomic in its LIBS.
+> qt5declarative builds qmltyperegistrar for the host as part of its build
+> process.
+> When building qt target packages (which is the case for qt5declarative),
+> -spec devices/linux-buildroot-g++ is passed to qmake in QT5_QMAKE
+> variable and this spec currently has -latomic in its LIBS.
+> 
+> This -latomic makes it to the build of the host build of
+> qmltyperegistrar which is not useful.
+> 
+> This was discovered on Fedora 34 where libatomic is not pulled with gcc
+> package, therefore was missing on the host machine.
+> 
+> This makes sure that -latomic is not added for host build of qt
+> packages.
+> 
+> Fixes: 7d286be4f9 ("package/qt5base: link with -latomic when needed")
+> 
+> Cc: Quentin Schulz <foss@0leil.net>
+> Suggested-by: Arnout Vandecappelle <arnout@mind.be>
+> Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+> ---
+>  package/qt5/qt5base/qt5base.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-This -latomic makes it to the build of the host build of
-qmltyperegistrar which is not useful.
+Applied to master, thanks.
 
-This was discovered on Fedora 34 where libatomic is not pulled with gcc
-package, therefore was missing on the host machine.
-
-This makes sure that -latomic is not added for host build of qt
-packages.
-
-Fixes: 7d286be4f9 ("package/qt5base: link with -latomic when needed")
-
-Cc: Quentin Schulz <foss@0leil.net>
-Suggested-by: Arnout Vandecappelle <arnout@mind.be>
-Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/qt5/qt5base/qt5base.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index 8b55aa3098..9da3de468a 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -277,7 +277,7 @@ QT5BASE_ARCH_CONFIG_FILE = $(@D)/mkspecs/devices/linux-buildroot-g++/arch.conf
- ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
- # Qt 5.8 needs atomics, which on various architectures are in -latomic
- define QT5BASE_CONFIGURE_ARCH_CONFIG
--	printf 'LIBS += -latomic\n' >$(QT5BASE_ARCH_CONFIG_FILE)
-+	printf '!host_build { \n LIBS += -latomic\n }' >$(QT5BASE_ARCH_CONFIG_FILE)
- endef
- endif
- 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
