@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A7FDC4338F
-	for <buildroot@archiver.kernel.org>; Sun,  8 Aug 2021 19:47:43 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BB352C4338F
+	for <buildroot@archiver.kernel.org>; Sun,  8 Aug 2021 19:55:08 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2E48560EBC
-	for <buildroot@archiver.kernel.org>; Sun,  8 Aug 2021 19:47:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2E48560EBC
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
+	by mail.kernel.org (Postfix) with ESMTPS id 0E5D360EBC
+	for <buildroot@archiver.kernel.org>; Sun,  8 Aug 2021 19:55:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0E5D360EBC
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0088782CDD;
-	Sun,  8 Aug 2021 19:47:43 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B7C6A400AE;
+	Sun,  8 Aug 2021 19:55:07 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id wxw3mI9VyxRr; Sun,  8 Aug 2021 19:55:06 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id DC9E54012D;
+	Sun,  8 Aug 2021 19:55:05 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 073F71BF3C3
+ for <buildroot@lists.busybox.net>; Sun,  8 Aug 2021 19:55:04 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 04AB1829DB
+ for <buildroot@lists.busybox.net>; Sun,  8 Aug 2021 19:55:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8oBf_HbyLs3C; Sun,  8 Aug 2021 19:47:42 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4F9E782C7C;
-	Sun,  8 Aug 2021 19:47:41 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 065C21BF3C3
- for <buildroot@lists.busybox.net>; Sun,  8 Aug 2021 19:47:28 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0300040289
- for <buildroot@lists.busybox.net>; Sun,  8 Aug 2021 19:47:28 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Gd6tR7z_EOcd for <buildroot@lists.busybox.net>;
- Sun,  8 Aug 2021 19:47:27 +0000 (UTC)
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id oG4o0t79bcXH for <buildroot@lists.busybox.net>;
+ Sun,  8 Aug 2021 19:55:03 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4F57640288
- for <buildroot@buildroot.org>; Sun,  8 Aug 2021 19:47:27 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 0405E8D2AC; Sun,  8 Aug 2021 19:47:08 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0A7AB82948
+ for <buildroot@buildroot.org>; Sun,  8 Aug 2021 19:55:03 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id AE2B98D2BA; Sun,  8 Aug 2021 19:54:43 +0000 (UTC)
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sun, 8 Aug 2021 21:46:39 +0200
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: abffd2c23cdb599eb10a45424b77072c7ef3f6b6
-X-Git-Newrev: 12e583a1773ffd7a07141fbe47a7ffcf74a7093f
+Date: Sun, 8 Aug 2021 21:54:54 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 5f432df7e2d26d6d57d750cbee1a573c1f886e26
+X-Git-Newrev: c90de229584c294d9a40d95acc9ce8905231fcd4
 X-Patchwork-Hint: ignore
-Message-Id: <20210808194708.0405E8D2AC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/glibc: security
- bump to version 2.32-50-g737efa27fca5c97f5
+Message-Id: <20210808195443.AE2B98D2BA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/pulseview: fix build with libglib
+ >= 2.68
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,48 +70,98 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=12e583a1773ffd7a07141fbe47a7ffcf74a7093f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=c90de229584c294d9a40d95acc9ce8905231fcd4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes the following security issue:
+Fix the following build failure with libglib >= 2.68 raised since commit
+c72524fb1b1c6b7dd1b1f511eea0fdf5a39dd3a0:
 
-- CVE-2021-33574: The mq_notify function has a potential use-after-free
-  issue when using a notification type of SIGEV_THREAD and a thread
-  attribute with a non-default affinity mask.
+In file included from /tmp/instance-0/output-1/host/mips64el-buildroot-linux-uclibc/sysroot/usr/include/glib-2.0/glib/gatomic.h:31,
+                 from /tmp/instance-0/output-1/host/mips64el-buildroot-linux-uclibc/sysroot/usr/include/glib-2.0/glib/gthread.h:32,
+                 from /tmp/instance-0/output-1/host/mips64el-buildroot-linux-uclibc/sysroot/usr/include/glib-2.0/glib/gasyncqueue.h:32,
+                 from /tmp/instance-0/output-1/host/mips64el-buildroot-linux-uclibc/sysroot/usr/include/glib-2.0/glib.h:32,
+                 from /tmp/instance-0/output-1/host/mips64el-buildroot-linux-uclibc/sysroot/usr/include/libsigrokdecode/libsigrokdecode.h:25,
+                 from /tmp/instance-0/output-1/build/pulseview-0.4.2/pv/data/decode/annotation.cpp:21:
+/tmp/instance-0/output-1/host/opt/ext-toolchain/mips64el-buildroot-linux-uclibc/include/c++/8.4.0/type_traits:56:3: error: template with C linkage
+   template<typename _Tp, _Tp __v>
+   ^~~~~~~~
+/tmp/instance-0/output-1/build/pulseview-0.4.2/pv/data/decode/annotation.cpp:20:1: note: 'extern "C"' linkage started here
+ extern "C" {
+ ^~~~~~~~~~
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/33cbaaeefd8637bac4ad0fbbfae7c369de4875d2
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../glibc.hash                                                          | 2 +-
- package/glibc/glibc.mk                                                  | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...-build-due-to-C-template-behind-C-linkage.patch | 58 ++++++++++++++++++++++
+ 1 file changed, 58 insertions(+)
 
-diff --git a/package/glibc/2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2/glibc.hash b/package/glibc/2.32-50-g737efa27fca5c97f566a2005687fda7d6659cd2e/glibc.hash
-similarity index 70%
-rename from package/glibc/2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2/glibc.hash
-rename to package/glibc/2.32-50-g737efa27fca5c97f566a2005687fda7d6659cd2e/glibc.hash
-index b1d5243fcc..5e00ef7c04 100644
---- a/package/glibc/2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2/glibc.hash
-+++ b/package/glibc/2.32-50-g737efa27fca5c97f566a2005687fda7d6659cd2e/glibc.hash
-@@ -1,5 +1,5 @@
- # Locally calculated (fetched from Github)
--sha256  f4710e9a435a7b83e1d23dd75434f0d36b898eba9b4249c946c32b467d852fd4  glibc-2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2.tar.gz
-+sha256  b634d38ace90752eeecb93246d71c0673bab0db8dfbd69333479ae7b10d63410  glibc-2.32-50-g737efa27fca5c97f566a2005687fda7d6659cd2e.tar.gz
- 
- # Hashes for license files
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index f84f670fc0..14c3f03597 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -16,7 +16,7 @@ ifeq ($(BR2_RISCV_32),y)
- # Until 2.33 is released, just use master
- GLIBC_VERSION = 2.32.9000-69-gbd394d131c10c9ec22c6424197b79410042eed99
- else
--GLIBC_VERSION = 2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2
-+GLIBC_VERSION = 2.32-50-g737efa27fca5c97f566a2005687fda7d6659cd2e
- endif
- # Upstream doesn't officially provide an https download link.
- # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
+diff --git a/package/pulseview/0002-Fix-broken-build-due-to-C-template-behind-C-linkage.patch b/package/pulseview/0002-Fix-broken-build-due-to-C-template-behind-C-linkage.patch
+new file mode 100644
+index 0000000000..16d4cfdb00
+--- /dev/null
++++ b/package/pulseview/0002-Fix-broken-build-due-to-C-template-behind-C-linkage.patch
+@@ -0,0 +1,58 @@
++From ed643f0b4ac587204a5243451cda181ee1405d62 Mon Sep 17 00:00:00 2001
++From: =?utf8?q?Stefan=20Br=C3=BCns?= <stefan.bruens@rwth-aachen.de>
++Date: Wed, 28 Apr 2021 02:14:47 +0200
++Subject: [PATCH] Fix broken build due to C++ template behind C linkage
++
++glib/gatomic.h since 2.68 includes type_traits, which causes a compilation
++error:
++In file included from /usr/include/glib-2.0/glib/gatomic.h:31,
++                 from /usr/include/glib-2.0/glib/gthread.h:32,
++                 from /usr/include/glib-2.0/glib/gasyncqueue.h:32,
++                 from /usr/include/glib-2.0/glib.h:32,
++                 from /usr/include/libsigrokdecode/libsigrokdecode.h:25,
++                 from /home/abuild/rpmbuild/BUILD/pulseview-0.4.2/pv/data/decode/annotation.cpp:21:
++/usr/include/c++/10/type_traits:2308:3: error: template with C linkage
++2308 |   template<typename _CTp, typename _Rp>
++
++As libsigrokdecode.h declares extern C linkage itself where necessary,
++remove it from pulseviews include statements from the last two occasions.
++
++[Retrieved from:
++https://sigrok.org/gitweb/?p=pulseview.git;a=commit;h=ed643f0b4ac587204a5243451cda181ee1405d62]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ pv/data/decode/annotation.cpp  | 2 --
++ pv/views/trace/decodetrace.cpp | 2 --
++ 2 files changed, 4 deletions(-)
++
++diff --git a/pv/data/decode/annotation.cpp b/pv/data/decode/annotation.cpp
++index 7f233478..f8a5c47b 100644
++--- a/pv/data/decode/annotation.cpp
+++++ b/pv/data/decode/annotation.cpp
++@@ -17,9 +17,7 @@
++  * along with this program; if not, see <http://www.gnu.org/licenses/>.
++  */
++ 
++-extern "C" {
++ #include <libsigrokdecode/libsigrokdecode.h>
++-}
++ 
++ #include <cassert>
++ #include <vector>
++diff --git a/pv/views/trace/decodetrace.cpp b/pv/views/trace/decodetrace.cpp
++index 409f1d28..888064d0 100644
++--- a/pv/views/trace/decodetrace.cpp
+++++ b/pv/views/trace/decodetrace.cpp
++@@ -17,9 +17,7 @@
++  * along with this program; if not, see <http://www.gnu.org/licenses/>.
++  */
++ 
++-extern "C" {
++ #include <libsigrokdecode/libsigrokdecode.h>
++-}
++ 
++ #include <limits>
++ #include <mutex>
++-- 
++2.24.0.rc2
++
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
