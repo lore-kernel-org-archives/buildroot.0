@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B7540C4338F
-	for <buildroot@archiver.kernel.org>; Sun,  8 Aug 2021 09:58:59 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 64705C432BE
+	for <buildroot@archiver.kernel.org>; Sun,  8 Aug 2021 09:59:11 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 6550360FF2
-	for <buildroot@archiver.kernel.org>; Sun,  8 Aug 2021 09:58:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6550360FF2
+	by mail.kernel.org (Postfix) with ESMTPS id 27CE760FF2
+	for <buildroot@archiver.kernel.org>; Sun,  8 Aug 2021 09:59:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 27CE760FF2
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2D8236076B;
-	Sun,  8 Aug 2021 09:58:58 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id F251840101;
+	Sun,  8 Aug 2021 09:59:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1X_0ogF66wLr; Sun,  8 Aug 2021 09:58:57 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id tuwJE-WvydvQ; Sun,  8 Aug 2021 09:59:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 77709605CD;
-	Sun,  8 Aug 2021 09:58:56 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E26A11BF408
- for <buildroot@lists.busybox.net>; Sun,  8 Aug 2021 09:55:15 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id CFA4840249;
+	Sun,  8 Aug 2021 09:59:08 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 16E751BF97E
+ for <buildroot@lists.busybox.net>; Sun,  8 Aug 2021 09:55:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C6F2F82C98
- for <buildroot@lists.busybox.net>; Sun,  8 Aug 2021 09:55:13 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id F0D1D4024D
+ for <buildroot@lists.busybox.net>; Sun,  8 Aug 2021 09:55:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hLIESmbsDxHo for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Wdnv4B_OwZix for <buildroot@lists.busybox.net>;
  Sun,  8 Aug 2021 09:55:12 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 03BA182CA5
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2DC934025C
  for <buildroot@buildroot.org>; Sun,  8 Aug 2021 09:55:12 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id A47EB8D215; Sun,  8 Aug 2021 09:54:53 +0000 (UTC)
+ id CCB158D215; Sun,  8 Aug 2021 09:54:53 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 8 Aug 2021 11:50:17 +0200
+Date: Sun, 8 Aug 2021 11:54:08 +0200
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 96b35a7f214d34502bcd00b4e7f189965fee4ee7
-X-Git-Newrev: f96446ffbdf0894a4a028e6e9becf246b55879f7
+X-Git-Oldrev: ef695ddfac08299a20e8818263e81c49fc544c63
+X-Git-Newrev: fe3d8c5f6018bd8e74e3d6f59fe96f9ef7efb408
 X-Patchwork-Hint: ignore
-Message-Id: <20210808095453.A47EB8D215@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/qpdf: fix
- CVE-2021-36978
+Message-Id: <20210808095453.CCB158D215@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/python3: add
+ patch to fix highly parallel builds
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,128 +70,76 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f96446ffbdf0894a4a028e6e9becf246b55879f7
+commit: https://git.buildroot.net/buildroot/commit/?id=fe3d8c5f6018bd8e74e3d6f59fe96f9ef7efb408
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-QPDF 9.x through 9.1.1 and 10.x through 10.0.4 has a heap-based buffer
-overflow in Pl_ASCII85Decoder::write (called from Pl_AES_PDF::flush and
-Pl_AES_PDF::finish) when a certain downstream write fails.
+Highly parallel host-python3 builds sometimes fail with:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 96865f02d4d770da40d33ebc6421e15721bf3f94)
+Exception in thread Thread-1:
+Traceback (most recent call last):
+  File "/tmp/instance-3/output-1/host/lib/python3.9/threading.py", line 973, in _bootstrap_inner
+    self.run()
+  File "/tmp/instance-3/output-1/host/lib/python3.9/concurrent/futures/process.py", line 317, in run
+    result_item, is_broken, cause = self.wait_result_broken_or_wakeup()
+  File "/tmp/instance-3/output-1/host/lib/python3.9/concurrent/futures/process.py", line 376, in wait_result_broken_or_wakeup
+    worker_sentinels = [p.sentinel for p in self.processes.values()]
+  File "/tmp/instance-3/output-1/host/lib/python3.9/concurrent/futures/process.py", line 376, in <listcomp>
+    worker_sentinels = [p.sentinel for p in self.processes.values()]
+RuntimeError: dictionary changed size during iteration
+
+During the compile_all.py step of host-python3. This issue is reported
+upstream at https://bugs.python.org/issue43498, and while not yet
+fixed upstream, a PR was proposed with a possible fix for it. Seems
+the PR seems reasonable, let's give it a chance and see if it improves
+the situation.
+
+Hopefully Fixes:
+
+  http://autobuild.buildroot.net/results/ae6c4ab292589a4e4442dfb0a1286349a9bf4d29/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit e17946b409c84afd15c7de47df2c8ad4dd648fae)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...ines-to-be-safe-if-downstream-write-fails.patch | 86 ++++++++++++++++++++++
- package/qpdf/qpdf.mk                               |  3 +
- 2 files changed, 89 insertions(+)
+ ...ary-iteration-error-in-_ExecutorManagerTh.patch | 29 ++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
 
-diff --git a/package/qpdf/0002-Fix-some-pipelines-to-be-safe-if-downstream-write-fails.patch b/package/qpdf/0002-Fix-some-pipelines-to-be-safe-if-downstream-write-fails.patch
+diff --git a/package/python3/0036-Fix-dictionary-iteration-error-in-_ExecutorManagerTh.patch b/package/python3/0036-Fix-dictionary-iteration-error-in-_ExecutorManagerTh.patch
 new file mode 100644
-index 0000000000..70017350f2
+index 0000000000..fbe44c7753
 --- /dev/null
-+++ b/package/qpdf/0002-Fix-some-pipelines-to-be-safe-if-downstream-write-fails.patch
-@@ -0,0 +1,86 @@
-+From dc92574c10f3e2516ec6445b88c5d584f40df4e5 Mon Sep 17 00:00:00 2001
-+From: Jay Berkenbilt <ejb@ql.org>
-+Date: Mon, 4 Jan 2021 11:55:28 -0500
-+Subject: [PATCH] Fix some pipelines to be safe if downstream write fails (fuzz
-+ issue 28262)
++++ b/package/python3/0036-Fix-dictionary-iteration-error-in-_ExecutorManagerTh.patch
+@@ -0,0 +1,29 @@
++From 331966be70c371b268a4fcce9e97280cd869f137 Mon Sep 17 00:00:00 2001
++From: Jakub Kulik <kulikjak@gmail.com>
++Date: Mon, 15 Mar 2021 08:49:28 +0100
++Subject: [PATCH] Fix dictionary iteration error in _ExecutorManagerThread
 +
-+[Retrieved (and updated to remove updates on ChangeLog and fuzz) from:
-+https://github.com/qpdf/qpdf/commit/dc92574c10f3e2516ec6445b88c5d584f40df4e5]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Thomas: Taken from upstream pull request
++https://github.com/python/cpython/pull/24868, which is aimed at fixing
++https://bugs.python.org/issue43498]
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 +---
-+ ChangeLog                     |   6 ++++++
-+ fuzz/qpdf_extra/28262.fuzz    | Bin 0 -> 40395 bytes
-+ libqpdf/Pl_AES_PDF.cc         |   2 +-
-+ libqpdf/Pl_ASCII85Decoder.cc  |   7 +++++--
-+ libqpdf/Pl_ASCIIHexDecoder.cc |   6 ++++--
-+ libqpdf/Pl_Count.cc           |   2 +-
-+ 6 files changed, 17 insertions(+), 6 deletions(-)
-+ create mode 100644 fuzz/qpdf_extra/28262.fuzz
++ Lib/concurrent/futures/process.py | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/libqpdf/Pl_AES_PDF.cc b/libqpdf/Pl_AES_PDF.cc
-+index 18cf3a4d..2865f804 100644
-+--- a/libqpdf/Pl_AES_PDF.cc
-++++ b/libqpdf/Pl_AES_PDF.cc
-+@@ -238,6 +238,6 @@ Pl_AES_PDF::flush(bool strip_padding)
-+ 	    }
-+ 	}
-+     }
-+-    getNext()->write(this->outbuf, bytes);
-+     this->offset = 0;
-++    getNext()->write(this->outbuf, bytes);
-+ }
-+diff --git a/libqpdf/Pl_ASCII85Decoder.cc b/libqpdf/Pl_ASCII85Decoder.cc
-+index b8df3e87..9d9f6704 100644
-+--- a/libqpdf/Pl_ASCII85Decoder.cc
-++++ b/libqpdf/Pl_ASCII85Decoder.cc
-+@@ -119,10 +119,13 @@ Pl_ASCII85Decoder::flush()
++diff --git a/Lib/concurrent/futures/process.py b/Lib/concurrent/futures/process.py
++index 90bc98bf2ec..e3b36dff572 100644
++--- a/Lib/concurrent/futures/process.py
+++++ b/Lib/concurrent/futures/process.py
++@@ -373,7 +373,7 @@ class _ExecutorManagerThread(threading.Thread):
++         assert not self.thread_wakeup._closed
++         wakeup_reader = self.thread_wakeup._reader
++         readers = [result_reader, wakeup_reader]
++-        worker_sentinels = [p.sentinel for p in self.processes.values()]
+++        worker_sentinels = [p.sentinel for p in self.processes.copy().values()]
++         ready = mp.connection.wait(readers + worker_sentinels)
 + 
-+     QTC::TC("libtests", "Pl_ASCII85Decoder partial flush",
-+ 	    (this->pos == 5) ? 0 : 1);
-+-    getNext()->write(outbuf, this->pos - 1);
-+-
-++    // Reset before calling getNext()->write in case that throws an
-++    // exception.
-++    auto t = this->pos - 1;
-+     this->pos = 0;
-+     memset(this->inbuf, 117, 5);
-++
-++    getNext()->write(outbuf, t);
-+ }
-+ 
-+ void
-+diff --git a/libqpdf/Pl_ASCIIHexDecoder.cc b/libqpdf/Pl_ASCIIHexDecoder.cc
-+index f20a9769..7845268e 100644
-+--- a/libqpdf/Pl_ASCIIHexDecoder.cc
-++++ b/libqpdf/Pl_ASCIIHexDecoder.cc
-+@@ -97,12 +97,14 @@ Pl_ASCIIHexDecoder::flush()
-+ 
-+     QTC::TC("libtests", "Pl_ASCIIHexDecoder partial flush",
-+ 	    (this->pos == 2) ? 0 : 1);
-+-    getNext()->write(&ch, 1);
-+-
-++    // Reset before calling getNext()->write in case that throws an
-++    // exception.
-+     this->pos = 0;
-+     this->inbuf[0] = '0';
-+     this->inbuf[1] = '0';
-+     this->inbuf[2] = '\0';
-++
-++    getNext()->write(&ch, 1);
-+ }
-+ 
-+ void
-+diff --git a/libqpdf/Pl_Count.cc b/libqpdf/Pl_Count.cc
-+index 8077092a..c35619b8 100644
-+--- a/libqpdf/Pl_Count.cc
-++++ b/libqpdf/Pl_Count.cc
-+@@ -27,8 +27,8 @@ Pl_Count::write(unsigned char* buf, size_t len)
-+     if (len)
-+     {
-+ 	this->m->count += QIntC::to_offset(len);
-+-	getNext()->write(buf, len);
-+ 	this->m->last_char = buf[len - 1];
-++	getNext()->write(buf, len);
-+     }
-+ }
-+ 
-diff --git a/package/qpdf/qpdf.mk b/package/qpdf/qpdf.mk
-index ec3d3f89a3..c96bf6bf2e 100644
---- a/package/qpdf/qpdf.mk
-+++ b/package/qpdf/qpdf.mk
-@@ -14,6 +14,9 @@ QPDF_DEPENDENCIES = host-pkgconf zlib jpeg
- 
- QPDF_CONF_OPTS = --with-random=/dev/urandom
- 
-+# 0002-Fix-some-pipelines-to-be-safe-if-downstream-write-fails.patch
-+QPDF_IGNORE_CVES += CVE-2021-36978
++         cause = None
++-- 
++2.31.1
 +
- ifeq ($(BR2_PACKAGE_GNUTLS),y)
- QPDF_CONF_OPTS += --enable-crypto-gnutls
- QPDF_DEPENDENCIES += gnutls
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
