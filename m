@@ -2,57 +2,57 @@ Return-Path: <SRS0=2pYX=NR=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.4 required=3.0 tests=BAYES_00,DATE_IN_PAST_24_48,
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F2FE0C432BE
-	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:22:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E106C432BE
+	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:22:29 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B0E8D60F4C
-	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:22:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B0E8D60F4C
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
+	by mail.kernel.org (Postfix) with ESMTPS id CA00B60E93
+	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:22:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org CA00B60E93
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8C15D614D7;
-	Thu, 26 Aug 2021 22:22:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 936A261509;
+	Thu, 26 Aug 2021 22:22:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QnMS9bwcB4kl; Thu, 26 Aug 2021 22:22:12 +0000 (UTC)
+	with ESMTP id TvFqBxCSoRvU; Thu, 26 Aug 2021 22:22:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8CAA4614E6;
-	Thu, 26 Aug 2021 22:22:10 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 86B8F1BF33E
- for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 22:02:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BE42A614F0;
+	Thu, 26 Aug 2021 22:22:22 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1ABF01BF33E
+ for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 22:03:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7697C82B8C
- for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 22:02:42 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E7A7940791
+ for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 22:02:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8ZTMIfk4yub5 for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hIcmBcPm7PQh for <buildroot@lists.busybox.net>;
  Thu, 26 Aug 2021 22:02:37 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id AC98882D2F
- for <buildroot@buildroot.org>; Thu, 26 Aug 2021 22:02:35 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1194140798
+ for <buildroot@buildroot.org>; Thu, 26 Aug 2021 22:02:30 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 0B6538DC52; Thu, 26 Aug 2021 22:01:34 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ id 66B078DAA6; Thu, 26 Aug 2021 22:01:28 +0000 (UTC)
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Wed, 25 Aug 2021 22:20:29 +0200
+Date: Sun, 8 Aug 2021 23:25:54 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: d133fdc3c52fb0e47757c77f9db6947d9994ace2
-X-Git-Newrev: 206c098f78da33cade7c2b8b6f8b71368c937c74
+X-Git-Oldrev: ef37a144798dacd62743f189e462543d2013aa88
+X-Git-Newrev: 878fbd5fbf9683be2bb021e857ce119f78e80f94
 X-Patchwork-Hint: ignore
-Message-Id: <20210826220134.0B6538DC52@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] configs/pc_x86_64_{efi,
- bios}_defconfig: update kernel to 4.19.204
+Message-Id: <20210826220128.66B078DAA6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] Partial revert
+ "configs/olimex_a20_olinuxino: switch to extlinux.conf"
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,68 +70,67 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=206c098f78da33cade7c2b8b6f8b71368c937c74
+commit: https://git.buildroot.net/buildroot/commit/?id=878fbd5fbf9683be2bb021e857ce119f78e80f94
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-gcc 10.x is now used by default but the kernel 4.18.10 used by
-pc_x86_64_{efi,bios}_defconfig doesn't build with it.
+Old scripts are still used by a10_olinuxino & a20_olinuxino_micro
 
-Bump the kernel to 4.19.204 release that contains a lot of
-fixes for newer gcc.
+Fixes olimex_a20_olinuxino_micro
+see https://gitlab.com/buildroot.org/buildroot/-/jobs/1478738568
 
-Fixes:
-https://gitlab.com/kubu93/buildroot/-/jobs/1525741062
-https://gitlab.com/kubu93/buildroot/-/jobs/1525741060
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/pc_x86_64_bios_defconfig | 6 +++---
- configs/pc_x86_64_efi_defconfig  | 6 +++---
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ board/olimex/a10_olinuxino/boot.cmd                         | 6 +-----
+ board/olimex/a10_olinuxino/post-build.sh                    | 4 +---
+ board/olimex/{a10_olinuxino => a20_olinuxino}/boot.cmd      | 0
+ board/olimex/{a10_olinuxino => a20_olinuxino}/post-build.sh | 0
+ 4 files changed, 2 insertions(+), 8 deletions(-)
 
-diff --git a/configs/pc_x86_64_bios_defconfig b/configs/pc_x86_64_bios_defconfig
-index 1c1f7a3666..3290a1dda0 100644
---- a/configs/pc_x86_64_bios_defconfig
-+++ b/configs/pc_x86_64_bios_defconfig
-@@ -23,13 +23,13 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/pc/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/pc/genimage-bios.cfg"
- 
--# Linux headers same as kernel, a 4.18 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_18=y
-+# Linux headers same as kernel, a 4.19 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.18.10"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.204"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/pc/linux.config"
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
-diff --git a/configs/pc_x86_64_efi_defconfig b/configs/pc_x86_64_efi_defconfig
-index 984fc8f92f..18d2c477d5 100644
---- a/configs/pc_x86_64_efi_defconfig
-+++ b/configs/pc_x86_64_efi_defconfig
-@@ -25,13 +25,13 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/pc/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/pc/post-image-efi.sh"
- 
--# Linux headers same as kernel, a 4.18 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_18=y
-+# Linux headers same as kernel, a 4.19 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.18.10"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.204"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/pc/linux.config"
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
+diff --git a/board/olimex/a10_olinuxino/boot.cmd b/board/olimex/a10_olinuxino/boot.cmd
+deleted file mode 100644
+index 44d9239a94..0000000000
+--- a/board/olimex/a10_olinuxino/boot.cmd
++++ /dev/null
+@@ -1,5 +0,0 @@
+-setenv bootargs console=ttyS0,115200 root=/dev/mmcblk0p1 rootwait panic=10 ${extra}
+-ext4load mmc 0 0x49000000 /boot/${fdtfile}
+-ext4load mmc 0 0x46000000 /boot/zImage
+-env set fdt_high ffffffff
+-bootz 0x46000000 - 0x49000000
+diff --git a/board/olimex/a10_olinuxino/boot.cmd b/board/olimex/a10_olinuxino/boot.cmd
+new file mode 120000
+index 0000000000..612c745500
+--- /dev/null
++++ b/board/olimex/a10_olinuxino/boot.cmd
+@@ -0,0 +1 @@
++../a20_olinuxino/boot.cmd
+\ No newline at end of file
+diff --git a/board/olimex/a10_olinuxino/post-build.sh b/board/olimex/a10_olinuxino/post-build.sh
+deleted file mode 100755
+index d3f612f811..0000000000
+--- a/board/olimex/a10_olinuxino/post-build.sh
++++ /dev/null
+@@ -1,3 +0,0 @@
+-#!/bin/sh
+-
+-cp $BINARIES_DIR/boot.scr $TARGET_DIR/boot/boot.scr
+diff --git a/board/olimex/a10_olinuxino/post-build.sh b/board/olimex/a10_olinuxino/post-build.sh
+new file mode 120000
+index 0000000000..b346896024
+--- /dev/null
++++ b/board/olimex/a10_olinuxino/post-build.sh
+@@ -0,0 +1 @@
++../a20_olinuxino/post-build.sh
+\ No newline at end of file
+diff --git a/board/olimex/a10_olinuxino/boot.cmd b/board/olimex/a20_olinuxino/boot.cmd
+similarity index 100%
+copy from board/olimex/a10_olinuxino/boot.cmd
+copy to board/olimex/a20_olinuxino/boot.cmd
+diff --git a/board/olimex/a10_olinuxino/post-build.sh b/board/olimex/a20_olinuxino/post-build.sh
+similarity index 100%
+copy from board/olimex/a10_olinuxino/post-build.sh
+copy to board/olimex/a20_olinuxino/post-build.sh
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
