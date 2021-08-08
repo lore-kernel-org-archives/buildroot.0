@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 21E3DC4338F
-	for <buildroot@archiver.kernel.org>; Sun,  8 Aug 2021 19:34:33 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 005E8C4338F
+	for <buildroot@archiver.kernel.org>; Sun,  8 Aug 2021 19:34:45 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id CFAD260EB5
-	for <buildroot@archiver.kernel.org>; Sun,  8 Aug 2021 19:34:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org CFAD260EB5
+	by mail.kernel.org (Postfix) with ESMTPS id 7967460EB9
+	for <buildroot@archiver.kernel.org>; Sun,  8 Aug 2021 19:34:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7967460EB9
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9CC3E40220;
-	Sun,  8 Aug 2021 19:34:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4AC9B6071F;
+	Sun,  8 Aug 2021 19:34:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AlTq246bPs6X; Sun,  8 Aug 2021 19:34:31 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id qLOSYh3LCy-A; Sun,  8 Aug 2021 19:34:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 54193401F2;
-	Sun,  8 Aug 2021 19:34:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 939FE600D4;
+	Sun,  8 Aug 2021 19:34:42 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 98D311BF97F
- for <buildroot@lists.busybox.net>; Sun,  8 Aug 2021 19:33:53 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7C3FD1BF3C3
+ for <buildroot@lists.busybox.net>; Sun,  8 Aug 2021 19:33:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 811E24020A
+ by smtp2.osuosl.org (Postfix) with ESMTP id C281A401BD
  for <buildroot@lists.busybox.net>; Sun,  8 Aug 2021 19:33:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uqaWeKlYUEs4 for <buildroot@lists.busybox.net>;
+ with ESMTP id wgV-tZ_7xFX6 for <buildroot@lists.busybox.net>;
  Sun,  8 Aug 2021 19:33:52 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4366B401BD
+ by smtp2.osuosl.org (Postfix) with ESMTP id A00B740203
  for <buildroot@buildroot.org>; Sun,  8 Aug 2021 19:33:52 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id EBD588D253; Sun,  8 Aug 2021 19:33:32 +0000 (UTC)
+ id 57F4D8D253; Sun,  8 Aug 2021 19:33:33 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 8 Aug 2021 21:02:36 +0200
+Date: Sun, 8 Aug 2021 21:30:24 +0200
 X-Git-Refname: refs/heads/2021.05.x
-X-Git-Oldrev: 78a6a0907cf83b6a33a18d42569fc1f573baa947
-X-Git-Newrev: dc6e0f75d98dfb0ec4c675f30d85161fca19394b
+X-Git-Oldrev: 2c851a1048c7325a26ad26c7db1b6b56de7a46bf
+X-Git-Newrev: fb9c660f5224a152fe222678d1661a090fe3076f
 X-Patchwork-Hint: ignore
-Message-Id: <20210808193332.EBD588D253@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.05.x] toolchain: introduce
- BR2_TOOLCHAIN_HAS_GCC_BUG_101737
+Message-Id: <20210808193333.57F4D8D253@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.05.x] {linux,
+ linux-headers}: bump 4.{4, 9, 14, 19}.x / 5.{4, 10, 12, 13}.x series
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,42 +70,88 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dc6e0f75d98dfb0ec4c675f30d85161fca19394b
+commit: https://git.buildroot.net/buildroot/commit/?id=fb9c660f5224a152fe222678d1661a090fe3076f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
 
-pixman package fails to build for the SH4 architecture with optimization
-enabled with gcc up to 11.1.0:
-http://autobuild.buildroot.net/results/b20/b20869bbb48edb1f0a847ea9e2e1a0462d6350be/
+Includes fixes for the recent "Sequoia" seq_file vulnerability
+(CVE-2021-33909):
 
-It's been reported upstream:
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101737
+https://lwn.net/Articles/863729/
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 4b22106fb5e199aa26f148b0b159aecb7da7f7e0)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 79e230178b57b1b871fa8c888b65b10d1bf31912)
+[Peter: drop 5.13.x bump]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- toolchain/Config.in | 7 +++++++
- 1 file changed, 7 insertions(+)
+ linux/Config.in                      |  2 +-
+ linux/linux.hash                     | 14 +++++++-------
+ package/linux-headers/Config.in.host | 14 +++++++-------
+ 3 files changed, 15 insertions(+), 15 deletions(-)
 
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index 0181ef07de..60328c8aa5 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -176,6 +176,13 @@ config BR2_TOOLCHAIN_HAS_GCC_BUG_99140
- 	bool
- 	default y if BR2_nios2 && !BR2_TOOLCHAIN_GCC_AT_LEAST_8
+diff --git a/linux/Config.in b/linux/Config.in
+index 035699663c..02036252b0 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -125,7 +125,7 @@ endif
  
-+# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101737
-+# ICE: SH4 -Os causes internal compiler error. This bug
-+# still exists in gcc = 11.1.0
-+config BR2_TOOLCHAIN_HAS_GCC_BUG_101737
-+	bool
-+	default y if BR2_sh4
-+
- config BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	bool
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "5.12.10" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "5.12.19" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "4.19.182-cip45" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "4.19.165-cip41-rt18" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/linux.hash b/linux/linux.hash
+index d7493545ef..e4369b5902 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,13 +1,13 @@
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+-sha256  c8d499fc53ed14838994ec2f51591ae40d64cce68559cd897be8acbeeee7630f  linux-5.12.10.tar.xz
++sha256  e9381cd3525a02f5b895f74147e2440be443ecd45484c6c64075046bc6f94c73  linux-5.12.19.tar.xz
+ sha256  11027c6114eb916edbcc37897226fb6263b2931911d2d5093550473ce1a57600  linux-5.11.22.tar.xz
+-sha256  83b81e433ba2f8ee143064fb163699ee857e26dd789006bc1e9edf1ccd0bd403  linux-5.10.43.tar.xz
+-sha256  17ee750a4aeb1c883d721e730d1f7e2855124585e2f47766864a1359a7ebe33c  linux-5.4.125.tar.xz
++sha256  00bbaeaac17f82d9a6d93cbc42cafd39d3b2fa3a6087333503d2344fa5e3142d  linux-5.10.57.tar.xz
++sha256  0471d0ccb7953cdae7d235192588ac5d72344851969962676d1703e69084a37f  linux-5.4.139.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+-sha256  d13fa552be602825c443fcca90d6bdd72f4ebef809889ef015dba4593d3224ab  linux-4.4.272.tar.xz
+-sha256  f8bf0c390ae40ca736e104f10f744446bc534bf87ba1b6dbb2b7c9a8bece1058  linux-4.9.272.tar.xz
+-sha256  e4eae297a6fefefd8ce4781d98178a7c1ee51ca0a4c8a7e46e61b121fbab8b2a  linux-4.14.236.tar.xz
+-sha256  aaaebdccf599f77148fe170642fa7dc2452cf994b5cbbb4d39cab9e7f4058896  linux-4.19.194.tar.xz
++sha256  4bdf66494be66a1da857f09b40b95026a0388e373fb01a206c60f67834746cb4  linux-4.4.279.tar.xz
++sha256  21edb57dea0fe04a51fcfb6d4e8c0c052787a20015bc74a0a0e63329601f2e07  linux-4.9.279.tar.xz
++sha256  7f235d454d703112e86574150652807f42abead92f3837da32ea86b4f148b371  linux-4.14.243.tar.xz
++sha256  f2827d0506622fcae0dae0bc72b2f016469210f50c2d3dd1bdd1211a813dca27  linux-4.19.202.tar.xz
+ # Locally computed
+ sha256  9f1de83c5c2bb582a33bd4ee892d45671901cd06af9dc159f0f499f1b5265b20  linux-cip-4.19.182-cip45.tar.gz
+ sha256  0eeba6d6ecc45cf8f16458842b64d22e7064b9de9c31c11d1c395b08a47e3855  linux-cip-4.19.165-cip41-rt18.tar.gz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 8eb12c545c..f82c525009 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -362,14 +362,14 @@ endchoice
  
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "4.4.272"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.272"	if BR2_KERNEL_HEADERS_4_9
+-	default "4.14.236"	if BR2_KERNEL_HEADERS_4_14
+-	default "4.19.194"	if BR2_KERNEL_HEADERS_4_19
+-	default "5.4.125"	if BR2_KERNEL_HEADERS_5_4
+-	default "5.10.43"	if BR2_KERNEL_HEADERS_5_10
++	default "4.4.279"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.279"	if BR2_KERNEL_HEADERS_4_9
++	default "4.14.243"	if BR2_KERNEL_HEADERS_4_14
++	default "4.19.202"	if BR2_KERNEL_HEADERS_4_19
++	default "5.4.139"	if BR2_KERNEL_HEADERS_5_4
++	default "5.10.57"	if BR2_KERNEL_HEADERS_5_10
+ 	default "5.11.22"	if BR2_KERNEL_HEADERS_5_11
+-	default "5.12.10"	if BR2_KERNEL_HEADERS_5_12
++	default "5.12.19"	if BR2_KERNEL_HEADERS_5_12
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
