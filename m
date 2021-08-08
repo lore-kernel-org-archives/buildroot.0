@@ -2,92 +2,73 @@ Return-Path: <SRS0=BoAS=M7=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-21.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
+X-Spam-Status: No, score=-15.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 66EE1C4338F
-	for <buildroot@archiver.kernel.org>; Sun,  8 Aug 2021 18:02:36 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F4D2C4338F
+	for <buildroot@archiver.kernel.org>; Sun,  8 Aug 2021 18:13:12 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B46F460E97
-	for <buildroot@archiver.kernel.org>; Sun,  8 Aug 2021 18:02:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B46F460E97
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
+	by mail.kernel.org (Postfix) with ESMTPS id 779F360EE9
+	for <buildroot@archiver.kernel.org>; Sun,  8 Aug 2021 18:13:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 779F360EE9
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5ABA782CE5;
-	Sun,  8 Aug 2021 18:02:35 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2A693400F2;
+	Sun,  8 Aug 2021 18:13:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PgmUUbZ7jXpK; Sun,  8 Aug 2021 18:02:34 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9144F8274D;
-	Sun,  8 Aug 2021 18:02:33 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A67BB1BF575
- for <buildroot@lists.busybox.net>; Sun,  8 Aug 2021 18:02:32 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 94E9040171
- for <buildroot@lists.busybox.net>; Sun,  8 Aug 2021 18:02:32 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zUihXHNUB9fl for <buildroot@lists.busybox.net>;
- Sun,  8 Aug 2021 18:02:30 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com
- [IPv6:2a00:1450:4864:20::536])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 35627400F2
- for <buildroot@buildroot.org>; Sun,  8 Aug 2021 18:02:30 +0000 (UTC)
-Received: by mail-ed1-x536.google.com with SMTP id cf5so21081768edb.2
- for <buildroot@buildroot.org>; Sun, 08 Aug 2021 11:02:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
- h=sender:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=6BzWtJSlub+zLgv7scK+NlKP1qWuPTEKpUj+BiLEZBM=;
- b=bLSdJtQhKgp12qvPlM9nnc9Xgfog/kzkvi8qOayrDllZ0EyOcoA9DP6F2lChqXjTWN
- TfQOpgRsy0xCOOoCOJQ4P6iThFn2TL6qyrl+fAUmV8R+kKTG/MxMIduuLgyT8LEfM53P
- huwTEw0eU3Mcu49zAaCBkHJO0sxmlB0SV9RcqevkgYLge9zMte/m/uuTeSD0E6Xv3TOx
- Rv2UYCIxiJoCs78QPS0w5B6y2fmBN+mZOumpb5Nuw8Z1wupu2DLEi3ru2qkmDZ1XEbCu
- cVExOemTKvwglN0KINSDOm85Fd8JZI0HQPrO4N1z28smoqRJjw3EE3SbRtQrW59qLpeU
- 018w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
- :mime-version:content-transfer-encoding;
- bh=6BzWtJSlub+zLgv7scK+NlKP1qWuPTEKpUj+BiLEZBM=;
- b=Eg4J1xY58wL2UjH+KvhgtLVvMUnG1CZdzyrtC6i6muWbiuDifyv+EXZhU0slEA3ip0
- t1sNVZ2S7ivqABAevjvITZ9pN9q8s0i1t/ZJ7fqEuONeCAD0AM+sijwm5dYS+ImjSmX9
- VfSThiJXQxDIuYQrAkyGxpPf/WvQRoHjEOQzI4yjbRtm4l2iZ1KOcwjbrXgTrMN9r2Nx
- PDgSkAOBH7dOv8sKolRFEhN8blGnJPrzrTfh6cPJKRKDfymG62kaq7A0aPYEeIzFgF92
- MW2gwXzVD3u6Az48W1u8SyXVGN72LlKyzOoxORbm+GfOYHvYKlIMZg8QMbEpqVFfXNtE
- OdwQ==
-X-Gm-Message-State: AOAM531HW/P84xg/BQsBOADaE/WMJv2Uxw7AZ8vAU/bMNzcwGUEcqApr
- XqUkYFFp4fNxTTuOqfqAnvVYaqHUVAut3g==
-X-Google-Smtp-Source: ABdhPJzpDGvVaPrYPx+8UrFsKArq9bwfpNVu17ai2T9bVkHkRtHysaOHvyHjkeDM/fi4ZbQ3eJxguw==
-X-Received: by 2002:a05:6402:5145:: with SMTP id
- n5mr24861373edd.178.1628445748310; 
- Sun, 08 Aug 2021 11:02:28 -0700 (PDT)
-Received: from dell.be.48ers.dk ([195.162.189.230])
- by smtp.gmail.com with ESMTPSA id bm26sm5186026ejb.16.2021.08.08.11.02.27
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 08 Aug 2021 11:02:27 -0700 (PDT)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
- (envelope-from <peko@dell.be.48ers.dk>)
- id 1mCn7y-0006YC-JX; Sun, 08 Aug 2021 20:02:26 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sun,  8 Aug 2021 20:02:23 +0200
-Message-Id: <20210808180223.25135-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.20.1
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id k463Jq5_BAta; Sun,  8 Aug 2021 18:13:10 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1AF9A40171;
+	Sun,  8 Aug 2021 18:13:09 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 4189A1BF4D8
+ for <buildroot@lists.busybox.net>; Sun,  8 Aug 2021 18:13:07 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 310FB6064D
+ for <buildroot@lists.busybox.net>; Sun,  8 Aug 2021 18:13:07 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (1024-bit key) header.d=ideasonboard.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 19g5V1boLlnl for <buildroot@lists.busybox.net>;
+ Sun,  8 Aug 2021 18:13:05 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com
+ [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C7049605A8
+ for <buildroot@buildroot.org>; Sun,  8 Aug 2021 18:13:05 +0000 (UTC)
+Received: from [192.168.1.111] (91-158-153-130.elisa-laajakaista.fi
+ [91.158.153.130])
+ by perceval.ideasonboard.com (Postfix) with ESMTPSA id BEF8B4A3;
+ Sun,  8 Aug 2021 20:13:01 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+ s=mail; t=1628446382;
+ bh=CFEbBo1tSk/nxe4UZOE8SJq0aVPCqNhPiUXCvAInPOY=;
+ h=To:Cc:References:From:Subject:Date:In-Reply-To:From;
+ b=vH2ZiPlq+b7T2TdqNsgf5hgEtu0KgE4W5g1MElVNrQaB3e9mg3AT/4LDT4+W8lnNq
+ P0qU7HDfW6n0zNxVqaBH1UiznvqnHV6CvSYIe+EEuHEA3LenARB3Uzz+SIWOqZHFqP
+ nuJbQFuxpENmJF8bnfYG9Le0vrjx18SkDzr0rUwQ=
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+References: <20210806125047.1832422-1-tomi.valkeinen@ideasonboard.com>
+ <20210806125047.1832422-2-tomi.valkeinen@ideasonboard.com>
+ <20210808092935.GK27036@scaer>
+From: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Message-ID: <ee9c4a7c-82c2-3b5e-7e41-0bad306e80fe@ideasonboard.com>
+Date: Sun, 8 Aug 2021 21:12:59 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/nodejs: security bump to version 12.22.4
+In-Reply-To: <20210808092935.GK27036@scaer>
+Content-Language: en-US
+Subject: Re: [Buildroot] [PATCH 2/2] package/kmsxx: update to latest
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,166 +80,81 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Daniel Price <daniel.price@gmail.com>,
- James Hilliard <james.hilliard1@gmail.com>, Martin Bark <martin@barkynet.com>
-Content-Type: text/plain; charset="us-ascii"
+Cc: Peter Seiderer <ps.report@gmx.net>, buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-Fixes the following security issues:
+Hi,
 
-- CVE-2021-22930: Use after free on close http2 on stream canceling (High)
+On 08/08/2021 12:29, Yann E. MORIN wrote:
+> Tomi, All,
+> 
+> On 2021-08-06 15:50 +0300, Tomi Valkeinen spake thusly:
+>> We can drop all the patches as they have been sorted out in upstream.
+>>
+>> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+>> ---
+> [--SNIP--]
+>> diff --git a/package/kmsxx/kmsxx.mk b/package/kmsxx/kmsxx.mk
+>> index 871ecaf85c..ab0158d1ed 100644
+>> --- a/package/kmsxx/kmsxx.mk
+>> +++ b/package/kmsxx/kmsxx.mk
+>> @@ -4,7 +4,7 @@
+>>   #
+>>   ################################################################################
+>>   
+>> -KMSXX_VERSION = 548905611c130ea9d31929a0caf7a198d8bac462
+>> +KMSXX_VERSION = 824bbb1f4cd062d66b457faca50f904b34dfd96c
+>>   KMSXX_SITE = $(call github,tomba,kmsxx,$(KMSXX_VERSION))
+>>   KMSXX_LICENSE = MPL-2.0
+>>   KMSXX_LICENSE_FILES = LICENSE
+>> @@ -13,9 +13,7 @@ KMSXX_DEPENDENCIES = fmt libdrm host-pkgconf
+>>   KMSXX_CONF_OPTS = \
+>>   	-Dkmscube=false \
+>>   	-Dpykms=disabled \
+>> -	-Domap=disabled \
+>> -	-Duse-system-fmt=true \
+>> -	-Duse-system-pybind11=true
+> 
+> Those options have been dropped upstream. Does that mean that they now
+> always use a system-provided fmt and pybind11, or that they always use
+> their bundled versions?
+> 
+> The answer is mixed.
+> 
+> For fmt, the option was dropped entirely, and upstream dropped their
+> bundled version in fdffbcdc0b0e (Use system libfmt). So we can indeed
+> drop -Duse-system-fmt=true.
+> 
+> But for pybind11, the option we added in our patch, was added with a
+> different name upstream. We had 'use-system-pybind11' as a boolean, they
+> added 'system-pybind11' as a feature.
+> 
+> Applied to next, with the above changes. Thanks.
 
-  Node.js is vulnerable to a use after free attack where an attacker might
-  be able to exploit the memory corruption, to change process behavior.
+Actually, looks like I messed up a bit. I was probably a bit tired on 
+Friday...
 
-Drop 0002-Fix-build-with-ICU-68.patch as this is now fixed upstream since
-https://github.com/nodejs/node/commit/e459c79b02
+- I didn't push kms++ 824bbb1f4cd062d66b457faca50f904b34dfd96c to master 
+branch. But it's in 'travis' branch, so it's available for fetching.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../nodejs/0002-Fix-build-with-ICU-68.patch   | 101 ------------------
- package/nodejs/nodejs.hash                    |   4 +-
- package/nodejs/nodejs.mk                      |   2 +-
- 3 files changed, 3 insertions(+), 104 deletions(-)
- delete mode 100644 package/nodejs/0002-Fix-build-with-ICU-68.patch
+- I dropped both system-fmt and system-pybind11 options, as they didn't 
+seem necessary [*]. However, I forgot to remove system-pybind11 from 
+meson_options.txt, even if it's not used anywhere.
 
-diff --git a/package/nodejs/0002-Fix-build-with-ICU-68.patch b/package/nodejs/0002-Fix-build-with-ICU-68.patch
-deleted file mode 100644
-index 2d6ac010d2..0000000000
---- a/package/nodejs/0002-Fix-build-with-ICU-68.patch
-+++ /dev/null
-@@ -1,101 +0,0 @@
--From 1504de672ec44080d08a97c479a23727a9c31d8b Mon Sep 17 00:00:00 2001
--From: James Hilliard <james.hilliard1@gmail.com>
--Date: Mon, 19 Jul 2021 03:35:30 -0600
--Subject: [PATCH] Fix build with ICU >= 68.
--
--Adapted from:
--https://chromium-review.googlesource.com/c/v8/v8/+/2477751
--
--Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
--[Upstream status:
--https://github.com/nodejs/node/pull/39440]
-----
-- deps/v8/src/objects/js-list-format.cc | 32 +++++++++++++++++++++++++++
-- 1 file changed, 32 insertions(+)
--
--diff --git a/deps/v8/src/objects/js-list-format.cc b/deps/v8/src/objects/js-list-format.cc
--index 4f303b1874..2101f8e507 100644
----- a/deps/v8/src/objects/js-list-format.cc
--+++ b/deps/v8/src/objects/js-list-format.cc
--@@ -29,6 +29,7 @@ namespace v8 {
-- namespace internal {
-- 
-- namespace {
--+#if U_ICU_VERSION_MAJOR_NUM < 68
-- const char* kStandard = "standard";
-- const char* kOr = "or";
-- const char* kUnit = "unit";
--@@ -41,8 +42,24 @@ const char* kUnitNarrow = "unit-narrow";
-- 
-- const char* GetIcuStyleString(JSListFormat::Style style,
--                               JSListFormat::Type type) {
--+#else
--+UListFormatterWidth GetIcuWidth(JSListFormat::Style style) {
--+  switch (style) {
--+    case JSListFormat::Style::LONG:
--+      return ULISTFMT_WIDTH_WIDE;
--+    case JSListFormat::Style::SHORT:
--+      return ULISTFMT_WIDTH_SHORT;
--+    case JSListFormat::Style::NARROW:
--+      return ULISTFMT_WIDTH_NARROW;
--+  }
--+  UNREACHABLE();
--+}
--+
--+UListFormatterType GetIcuType(JSListFormat::Type type) {
--+#endif
--   switch (type) {
--     case JSListFormat::Type::CONJUNCTION:
--+#if U_ICU_VERSION_MAJOR_NUM < 68
--       switch (style) {
--         case JSListFormat::Style::LONG:
--           return kStandard;
--@@ -51,7 +68,11 @@ const char* GetIcuStyleString(JSListFormat::Style style,
--         case JSListFormat::Style::NARROW:
--           return kStandardNarrow;
--       }
--+#else
--+      return ULISTFMT_TYPE_AND;
--+#endif
--     case JSListFormat::Type::DISJUNCTION:
--+#if U_ICU_VERSION_MAJOR_NUM < 68
--       switch (style) {
--         case JSListFormat::Style::LONG:
--           return kOr;
--@@ -60,7 +81,11 @@ const char* GetIcuStyleString(JSListFormat::Style style,
--         case JSListFormat::Style::NARROW:
--           return kOrNarrow;
--       }
--+#else
--+      return ULISTFMT_TYPE_OR;
--+#endif
--     case JSListFormat::Type::UNIT:
--+#if U_ICU_VERSION_MAJOR_NUM < 68
--       switch (style) {
--         case JSListFormat::Style::LONG:
--           return kUnit;
--@@ -69,6 +94,9 @@ const char* GetIcuStyleString(JSListFormat::Style style,
--         case JSListFormat::Style::NARROW:
--           return kUnitNarrow;
--       }
--+#else
--+      return ULISTFMT_TYPE_UNITS;
--+#endif
--   }
--   UNREACHABLE();
-- }
--@@ -170,7 +198,11 @@ MaybeHandle<JSListFormat> JSListFormat::New(Isolate* isolate, Handle<Map> map,
--   icu::Locale icu_locale = r.icu_locale;
--   UErrorCode status = U_ZERO_ERROR;
--   icu::ListFormatter* formatter = icu::ListFormatter::createInstance(
--+#if U_ICU_VERSION_MAJOR_NUM < 68
--       icu_locale, GetIcuStyleString(style_enum, type_enum), status);
--+#else
--+      icu_locale, GetIcuType(type_enum), GetIcuWidth(style_enum), status);
--+#endif
--   if (U_FAILURE(status)) {
--     delete formatter;
--     FATAL("Failed to create ICU list formatter, are ICU data files missing?");
---- 
--2.25.1
--
-diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-index d94942e7c0..7d11a8d104 100644
---- a/package/nodejs/nodejs.hash
-+++ b/package/nodejs/nodejs.hash
-@@ -1,5 +1,5 @@
--# From https://nodejs.org/dist/v12.22.3/SHASUMS256.txt
--sha256  350211fae3a688f41889680c8efcf689353a2e36b62b9dc2b408340986857190  node-v12.22.3.tar.xz
-+# From https://nodejs.org/dist/v12.22.4/SHASUMS256.txt
-+sha256  44cd4eab131e5282fc923e9e720d983a0b44c12e4aa4f6c3598dc97ae1e4cd4c  node-v12.22.4.tar.xz
- 
- # Hash for license file
- sha256  221417a7ca275112a5ac54639b36ee3c5184e74631ea1e1b01b701293b655190  LICENSE
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index 2731a7c667..08d2f6d7c1 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NODEJS_VERSION = 12.22.3
-+NODEJS_VERSION = 12.22.4
- NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
- NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
- NODEJS_DEPENDENCIES = host-python host-nodejs c-ares \
--- 
-2.20.1
+- My patch descriptions were shamefully terse. Sorry about that.
 
+  Tomi
+
+[*] For fmt, I didn't see a need for using meson subproject at all, as 
+fmt seems to be available "everywhere", and afaics it's been quite 
+stable. For pybind11, I still like to keep the option for meson 
+subproject to easily test/use specific versions. However, this doesn't 
+need an option in meson-option.txt, as the behavior of the 
+fallback-to-subproject can be managed with meson commandline options. 
+Also, if 'pykms' option is set to disabled, pybind11 is skipped also.
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
