@@ -2,57 +2,57 @@ Return-Path: <SRS0=2pYX=NR=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E4304C432BE
-	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:16:19 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BA59DC432BE
+	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:16:31 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id ADBB260184
-	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:16:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org ADBB260184
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
+	by mail.kernel.org (Postfix) with ESMTPS id 7930960FE7
+	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:16:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7930960FE7
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8AC50614C6;
-	Thu, 26 Aug 2021 22:16:19 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4C8BE4078C;
+	Thu, 26 Aug 2021 22:16:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LgTDhi2qPhUA; Thu, 26 Aug 2021 22:16:14 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id tg75U7kRhUT3; Thu, 26 Aug 2021 22:16:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CF2D7614CE;
-	Thu, 26 Aug 2021 22:16:13 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 7B2551BF33E
+	by smtp2.osuosl.org (Postfix) with ESMTP id DF7E040799;
+	Thu, 26 Aug 2021 22:16:25 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 8D1B91C1135
  for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 22:02:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 21D2F426AC
- for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 22:02:42 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 32E8140777
+ for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 22:02:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CUAcfvrHdkNr for <buildroot@lists.busybox.net>;
- Thu, 26 Aug 2021 22:02:37 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id NHrYHacDckzX for <buildroot@lists.busybox.net>;
+ Thu, 26 Aug 2021 22:02:36 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C8048426BE
- for <buildroot@buildroot.org>; Thu, 26 Aug 2021 22:02:35 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6599C4078C
+ for <buildroot@buildroot.org>; Thu, 26 Aug 2021 22:02:29 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 2922E8DC52; Thu, 26 Aug 2021 22:01:34 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ id B63158DC52; Thu, 26 Aug 2021 22:01:27 +0000 (UTC)
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Thu, 26 Aug 2021 22:53:43 +0200
+Date: Sun, 8 Aug 2021 22:18:14 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: edcf8b6d5fc9e6e15e4153a7bd9a479696a6e408
-X-Git-Newrev: c4e1a075101914f8e0d47f8bb9c06bea13ba0fd2
+X-Git-Oldrev: 2e16ecfa990006308e638685fbea3800706c0f84
+X-Git-Newrev: 3e524755a943e1d22b404c256deeb137fd895100
 X-Patchwork-Hint: ignore
-Message-Id: <20210826220134.2922E8DC52@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/ushare: fix build
- without msgfmt
+Message-Id: <20210826220127.B63158DC52@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libnss: fix build on
+ ARM big endian
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,109 +70,81 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c4e1a075101914f8e0d47f8bb9c06bea13ba0fd2
+commit: https://git.buildroot.net/buildroot/commit/?id=3e524755a943e1d22b404c256deeb137fd895100
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fix the following build failure without /usr/bin/msgfmt raised since the
-addition of ushare in commit 74097fd659154499612f21fabeda4e3e7c8fdbfc:
+Fix the follownig build failure on ARM big endian raised since bump to
+version 3.68 in commit 0a73b9b962421ce7a72c88e5f5bbd8849f21b041:
 
-make[3]: Entering directory `/home/buildroot/autobuild/run/instance-3/output-1/build/ushare-2.1/po'
-/usr/bin/msgfmt -c --statistics -o fr.gmo fr.po
-make[3]: /usr/bin/msgfmt: Command not found
-
-To fix this build failure, set GMSGFMT to $(HOST_DIR)/bin/msgfmt and
-don't build po files if NLS is disabled
+Linux2.6_aarch64_aarch64_be-linux-gnu-gcc_glibc_PTH_64_DBG.OBJ/Linux_SINGLE_SHLIB/sha256-armv8.o: In function `SHA256_Compress_Native':
+sha256-armv8.c:(.text.SHA256_Compress_Native+0x0): multiple definition of `SHA256_Compress_Native'
+Linux2.6_aarch64_aarch64_be-linux-gnu-gcc_glibc_PTH_64_DBG.OBJ/Linux_SINGLE_SHLIB/sha512.o:sha512.c:(.text.SHA256_Compress_Native+0x0): first defined here
+Linux2.6_aarch64_aarch64_be-linux-gnu-gcc_glibc_PTH_64_DBG.OBJ/Linux_SINGLE_SHLIB/sha256-armv8.o: In function `SHA256_Update_Native':
+sha256-armv8.c:(.text.SHA256_Update_Native+0x0): multiple definition of `SHA256_Update_Native'
+Linux2.6_aarch64_aarch64_be-linux-gnu-gcc_glibc_PTH_64_DBG.OBJ/Linux_SINGLE_SHLIB/sha512.o:sha512.c:(.text.SHA256_Update_Native+0x0): first defined here
 
 Fixes:
- - http://autobuild.buildroot.org/results/9f6b5b8f38386135bacd2d8f6e97c1fea77bbe69
+ - http://autobuild.buildroot.org/results/237aba0c16a34fec1b0fe50fe08cace438eda1bf
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...1-Don-t-build-po-files-if-NLS-is-disabled.patch | 47 ++++++++++++++++++++++
- package/ushare/ushare.mk                           |  9 ++++-
- 2 files changed, 54 insertions(+), 2 deletions(-)
+ ...sha512.c-fix-SHA256-redefinition-on-ARM-b.patch | 47 ++++++++++++++++++++++
+ 1 file changed, 47 insertions(+)
 
-diff --git a/package/ushare/0001-Don-t-build-po-files-if-NLS-is-disabled.patch b/package/ushare/0001-Don-t-build-po-files-if-NLS-is-disabled.patch
+diff --git a/package/libnss/0001-lib-freebl-sha512.c-fix-SHA256-redefinition-on-ARM-b.patch b/package/libnss/0001-lib-freebl-sha512.c-fix-SHA256-redefinition-on-ARM-b.patch
 new file mode 100644
-index 0000000000..f0fa89998f
+index 0000000000..f925f20051
 --- /dev/null
-+++ b/package/ushare/0001-Don-t-build-po-files-if-NLS-is-disabled.patch
++++ b/package/libnss/0001-lib-freebl-sha512.c-fix-SHA256-redefinition-on-ARM-b.patch
 @@ -0,0 +1,47 @@
-+From 977171781f5d49e61b46c0241fb67cbb7d666498 Mon Sep 17 00:00:00 2001
++From 434d79c52db5b680accc531572319bd7094fa470 Mon Sep 17 00:00:00 2001
 +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 22 Aug 2021 10:44:48 +0200
-+Subject: [PATCH] Don't build po files if NLS is disabled
++Date: Sat, 7 Aug 2021 23:19:01 +0200
++Subject: [PATCH] lib/freebl/sha512.c: fix SHA256 redefinition on ARM big
++ endian
++
++For an unknown reason, SHA256_{Compress,Update}_Native are defined in
++lib/freebl/sha512.c if IS_LITTLE_ENDIAN is undefined since version 3.68
++and
++https://github.com/nss-dev/nss/commit/e1e00f21f2d73e0d5d27651ad5606efa5714abe4
++
++This raises the following build failure on ARM big endian:
++
++Linux2.6_aarch64_aarch64_be-linux-gnu-gcc_glibc_PTH_64_DBG.OBJ/Linux_SINGLE_SHLIB/sha256-armv8.o: In function `SHA256_Compress_Native':
++sha256-armv8.c:(.text.SHA256_Compress_Native+0x0): multiple definition of `SHA256_Compress_Native'
++Linux2.6_aarch64_aarch64_be-linux-gnu-gcc_glibc_PTH_64_DBG.OBJ/Linux_SINGLE_SHLIB/sha512.o:sha512.c:(.text.SHA256_Compress_Native+0x0): first defined here
++Linux2.6_aarch64_aarch64_be-linux-gnu-gcc_glibc_PTH_64_DBG.OBJ/Linux_SINGLE_SHLIB/sha256-armv8.o: In function `SHA256_Update_Native':
++sha256-armv8.c:(.text.SHA256_Update_Native+0x0): multiple definition of `SHA256_Update_Native'
++Linux2.6_aarch64_aarch64_be-linux-gnu-gcc_glibc_PTH_64_DBG.OBJ/Linux_SINGLE_SHLIB/sha512.o:sha512.c:(.text.SHA256_Update_Native+0x0): first defined here
++
++Revert this change as it seems completely unrelated to the commit title
++"Bug 1655493 - Support SHA2 HW acceleration using Intel SHA Extension"
++
++Fixes:
++ - http://autobuild.buildroot.org/results/237aba0c16a34fec1b0fe50fe08cace438eda1bf
 +
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/ddugovic/uShare/pull/12]
 +---
-+ Makefile  | 7 +++++--
-+ configure | 1 +
-+ 2 files changed, 6 insertions(+), 2 deletions(-)
++ nss/lib/freebl/sha512.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/Makefile b/Makefile
-+index ebd8f91..6686cfd 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -14,10 +14,13 @@ EXTRADIST = AUTHORS \
-+ 	    THANKS \
-+ 	    TODO \
++diff --git a/nss/lib/freebl/sha512.c b/nss/lib/freebl/sha512.c
++index 946ab9f7f..3ec414b52 100644
++--- a/nss/lib/freebl/sha512.c
+++++ b/nss/lib/freebl/sha512.c
++@@ -164,7 +164,7 @@ static void SHA256_Compress_Generic(SHA256Context *ctx);
++ static void SHA256_Update_Generic(SHA256Context *ctx, const unsigned char *input,
++                                   unsigned int inputLen);
 + 
-+-SUBDIRS = po \
-+-	  scripts \
-++SUBDIRS = scripts \
-+ 	  src \
-+ 
-++ifeq ($(NLS),yes)
-++SUBDIRS += po
-++endif
-++
-+ all:
-+ 	for subdir in $(SUBDIRS); do \
-+ 	  $(MAKE) -C $$subdir $@; \
-+diff --git a/configure b/configure
-+index 4a3efe0..162a776 100755
-+--- a/configure
-++++ b/configure
-+@@ -723,6 +723,7 @@ append_config "LDFLAGS=$LDFLAGS"
-+ append_config "INSTALL=$INSTALL"
-+ 
-+ append_config "DEBUG=$debug"
-++append_config "NLS=$nls"
-+ 
-+ 
-+ echolog "Creating $CONFIG_H ..."
++-#if !defined(USE_HW_SHA2) || !defined(IS_LITTLE_ENDIAN)
+++#if !defined(USE_HW_SHA2)
++ void
++ SHA256_Compress_Native(SHA256Context *ctx)
++ {
 +-- 
-+2.32.0
++2.30.2
 +
-diff --git a/package/ushare/ushare.mk b/package/ushare/ushare.mk
-index a4c9711600..df9da223ec 100644
---- a/package/ushare/ushare.mk
-+++ b/package/ushare/ushare.mk
-@@ -18,7 +18,12 @@ USHARE_CONF_OPTS = \
- 	--sysconfdir=/etc \
- 	--disable-strip
- 
--ifeq ($(BR2_SYSTEM_ENABLE_NLS),)
-+USHARE_MAKE_OPTS = LDFLAGS="$(TARGET_LDFLAGS) $(USHARE_LDFLAGS)"
-+
-+ifeq ($(BR2_SYSTEM_ENABLE_NLS),y)
-+USHARE_CONF_OPTS += --enable-nls
-+USHARE_MAKE_OPTS += GMSGFMT="$(HOST_DIR)/bin/msgfmt"
-+else
- USHARE_CONF_OPTS += --disable-nls
- endif
- 
-@@ -31,7 +36,7 @@ define USHARE_CONFIGURE_CMDS
- endef
- 
- define USHARE_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) LDFLAGS="$(TARGET_LDFLAGS) $(USHARE_LDFLAGS)" -C $(@D)
-+	$(TARGET_MAKE_ENV) $(MAKE) $(USHARE_MAKE_OPTS) -C $(@D)
- endef
- 
- define USHARE_INSTALL_TARGET_CMDS
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
