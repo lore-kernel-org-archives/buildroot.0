@@ -2,57 +2,56 @@ Return-Path: <SRS0=2pYX=NR=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,URI_HEX autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B00ABC432BE
-	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:20:26 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E6C13C432BE
+	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:20:38 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 7DF7F60FE7
-	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:20:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7DF7F60FE7
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
+	by mail.kernel.org (Postfix) with ESMTPS id B155C60184
+	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:20:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B155C60184
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 55E1F80E13;
-	Thu, 26 Aug 2021 22:20:26 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8r35lmQKcB21; Thu, 26 Aug 2021 22:20:22 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 133C182BF4;
-	Thu, 26 Aug 2021 22:20:21 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E8F371C113E
- for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 22:02:55 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 35B1C6149D
- for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 22:02:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8D23B6149A;
+	Thu, 26 Aug 2021 22:20:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6sbf9EVHVjHe for <buildroot@lists.busybox.net>;
- Thu, 26 Aug 2021 22:02:38 +0000 (UTC)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id cPxRjEc9pGv6; Thu, 26 Aug 2021 22:20:34 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5C70A614A7;
+	Thu, 26 Aug 2021 22:20:33 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 71FCB1BF33E
+ for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 22:02:56 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 06D8E4078D
+ for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 22:02:41 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3vwFFsjHPbEp for <buildroot@lists.busybox.net>;
+ Thu, 26 Aug 2021 22:02:37 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id DCEB6614B4
- for <buildroot@buildroot.org>; Thu, 26 Aug 2021 22:02:35 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E2E5B40795
+ for <buildroot@buildroot.org>; Thu, 26 Aug 2021 22:02:29 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 3D8998DC50; Thu, 26 Aug 2021 22:01:34 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ id 437068DC52; Thu, 26 Aug 2021 22:01:28 +0000 (UTC)
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Thu, 26 Aug 2021 23:09:17 +0200
+Date: Sun, 8 Aug 2021 23:20:21 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 42a3fee35e67d8d946f52a82bfa88ee6fd9f04b6
-X-Git-Newrev: fa1a4bbf09e8650cc73773fe2cf08d0b5216d6c1
+X-Git-Oldrev: 84333281cd923308781fd40887c94cd33386b12a
+X-Git-Newrev: 05442cd78492259944d73fb52d7bca3b5ff9e0e6
 X-Patchwork-Hint: ignore
-Message-Id: <20210826220134.3D8998DC50@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] docs/website: use lore for ml
- search
+Message-Id: <20210826220128.437068DC52@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/bullet: fix musl build
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,36 +69,78 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fa1a4bbf09e8650cc73773fe2cf08d0b5216d6c1
+commit: https://git.buildroot.net/buildroot/commit/?id=05442cd78492259944d73fb52d7bca3b5ff9e0e6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-the nabble.com link is dead and lore has a good search.
-So use lore for the search form.
+Fix the following build failure on musl raised since bump to version
+3.0.9 in commit 28b4947ed8f53c4edfbf8fef9304dc76480c01ca:
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+In file included from /tmp/instance-5/output-1/build/bullet-3.09/src/LinearMath/btScalar.h:289,
+                 from /tmp/instance-5/output-1/build/bullet-3.09/src/LinearMath/btVector3.h:19,
+                 from /tmp/instance-5/output-1/build/bullet-3.09/src/LinearMath/btConvexHullComputer.h:18,
+                 from /tmp/instance-5/output-1/build/bullet-3.09/Extras/VHACD/src/VHACD.cpp:28:
+/tmp/instance-5/output-1/build/bullet-3.09/Extras/BulletRobotics/../../Extras/VHACD/inc/vhacdMutex.h: In constructor 'VHACD::Mutex::Mutex()':
+/tmp/instance-5/output-1/build/bullet-3.09/Extras/BulletRobotics/../../Extras/VHACD/inc/vhacdMutex.h:97:54: error: 'PTHREAD_MUTEX_RECURSIVE_NP' was not declared in this scope; did you mean 'PTHREAD_MUTEX_RECURSIVE'?
+   97 |   VHACD_VERIFY(pthread_mutexattr_settype(&mutexAttr, PTHREAD_MUTEX_RECURSIVE_NP) == 0);
+      |                                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Fixes:
+ - http://autobuild.buildroot.org/results/79cd2024b3dfc8d3e896cdacf67fb891df81ca6e
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- docs/website/support.html | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+ ...ras-VHACD-inc-vhacdMutex.h-fix-musl-build.patch | 42 ++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
 
-diff --git a/docs/website/support.html b/docs/website/support.html
-index 97ca296836..90231f601c 100644
---- a/docs/website/support.html
-+++ b/docs/website/support.html
-@@ -59,11 +59,8 @@
- 		    list, since there is a good chance someone else has asked the same question
- 		    before.</p>
- 
--		  <form method="get" action="http://buildroot-busybox.2317881.n4.nabble.com/template/NamlServlet.jtp">
--		    <input type="text" name="query">
--		    <input type="hidden" name="macro" value="search_page">
--		    <input type="hidden" name="node" value="2">
--		    <input type="hidden" name="sort" value="date">
-+		  <form method="get" action="https://lore.kernel.org/buildroot/">
-+		    <input type="text" name="q">
- 		    <button type="submit" class="btn btn-default">Submit</button>
- 		  </form>
- 		</div>
+diff --git a/package/bullet/0001-Extras-VHACD-inc-vhacdMutex.h-fix-musl-build.patch b/package/bullet/0001-Extras-VHACD-inc-vhacdMutex.h-fix-musl-build.patch
+new file mode 100644
+index 0000000000..d01bb97d99
+--- /dev/null
++++ b/package/bullet/0001-Extras-VHACD-inc-vhacdMutex.h-fix-musl-build.patch
+@@ -0,0 +1,42 @@
++From dd37b97e79aea231ae026ac93c6ca4c7a2667582 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 7 Aug 2021 17:11:24 +0200
++Subject: [PATCH] Extras/VHACD/inc/vhacdMutex.h: fix musl build
++
++Fix the following build failure on musl (which does not provide
++PTHREAD_MUTEX_RECURSIVE_NP):
++
++In file included from /tmp/instance-5/output-1/build/bullet-3.09/src/LinearMath/btScalar.h:289,
++                 from /tmp/instance-5/output-1/build/bullet-3.09/src/LinearMath/btVector3.h:19,
++                 from /tmp/instance-5/output-1/build/bullet-3.09/src/LinearMath/btConvexHullComputer.h:18,
++                 from /tmp/instance-5/output-1/build/bullet-3.09/Extras/VHACD/src/VHACD.cpp:28:
++/tmp/instance-5/output-1/build/bullet-3.09/Extras/BulletRobotics/../../Extras/VHACD/inc/vhacdMutex.h: In constructor 'VHACD::Mutex::Mutex()':
++/tmp/instance-5/output-1/build/bullet-3.09/Extras/BulletRobotics/../../Extras/VHACD/inc/vhacdMutex.h:97:54: error: 'PTHREAD_MUTEX_RECURSIVE_NP' was not declared in this scope; did you mean 'PTHREAD_MUTEX_RECURSIVE'?
++   97 |   VHACD_VERIFY(pthread_mutexattr_settype(&mutexAttr, PTHREAD_MUTEX_RECURSIVE_NP) == 0);
++      |                                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
++
++Fixes:
++ - http://autobuild.buildroot.org/results/79cd2024b3dfc8d3e896cdacf67fb891df81ca6e
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/bulletphysics/bullet3/pull/3930]
++---
++ Extras/VHACD/inc/vhacdMutex.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/Extras/VHACD/inc/vhacdMutex.h b/Extras/VHACD/inc/vhacdMutex.h
++index 4d1ad2a7d..78c111383 100644
++--- a/Extras/VHACD/inc/vhacdMutex.h
+++++ b/Extras/VHACD/inc/vhacdMutex.h
++@@ -69,7 +69,7 @@
++ #include <pthread.h>
++ #endif
++ 
++-#if defined(__APPLE__)
+++#if defined(__APPLE__) || !defined(__GLIBC__)
++ #define PTHREAD_MUTEX_RECURSIVE_NP PTHREAD_MUTEX_RECURSIVE
++ #endif
++ 
++-- 
++2.30.2
++
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
