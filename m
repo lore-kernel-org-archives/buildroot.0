@@ -4,55 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,TVD_SPACE_RATIO autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C1FF3C4338F
-	for <buildroot@archiver.kernel.org>; Sun,  8 Aug 2021 19:36:12 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 244ACC4338F
+	for <buildroot@archiver.kernel.org>; Sun,  8 Aug 2021 19:36:25 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 773C860EBB
-	for <buildroot@archiver.kernel.org>; Sun,  8 Aug 2021 19:36:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 773C860EBB
+	by mail.kernel.org (Postfix) with ESMTPS id C06B760EB7
+	for <buildroot@archiver.kernel.org>; Sun,  8 Aug 2021 19:36:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C06B760EB7
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4BCE282E5F;
-	Sun,  8 Aug 2021 19:36:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9165160727;
+	Sun,  8 Aug 2021 19:36:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FcxoPoDcLd6K; Sun,  8 Aug 2021 19:36:11 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id k1u6qGV7UlLz; Sun,  8 Aug 2021 19:36:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9871682E4C;
-	Sun,  8 Aug 2021 19:36:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E25666070C;
+	Sun,  8 Aug 2021 19:36:22 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B38C31BF3C3
- for <buildroot@lists.busybox.net>; Sun,  8 Aug 2021 19:34:02 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1C4661BF3C3
+ for <buildroot@lists.busybox.net>; Sun,  8 Aug 2021 19:34:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B009882D12
+ by smtp1.osuosl.org (Postfix) with ESMTP id D005882CA3
  for <buildroot@lists.busybox.net>; Sun,  8 Aug 2021 19:34:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zVmu20KaTUau for <buildroot@lists.busybox.net>;
+ with ESMTP id 09WniRiU_W6b for <buildroot@lists.busybox.net>;
  Sun,  8 Aug 2021 19:34:01 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5CD0B82CA3
+ by smtp1.osuosl.org (Postfix) with ESMTP id 795F782CDD
  for <buildroot@buildroot.org>; Sun,  8 Aug 2021 19:34:01 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 158A38D27B; Sun,  8 Aug 2021 19:33:42 +0000 (UTC)
+ id 331B48D27B; Sun,  8 Aug 2021 19:33:42 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 8 Aug 2021 21:02:05 +0200
+Date: Sun, 8 Aug 2021 21:16:43 +0200
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 129c4ecdc3c89eb486caec4943d2221d6b90e1ca
-X-Git-Newrev: d06f5f0a5f6059607ca8b27f0ad5c6484ca69573
+X-Git-Oldrev: 0175b49f0c341ad1129aab658f3f7cd5338db738
+X-Git-Newrev: 82c0a9a248b932a11e0863863c4129b2b11f0c5b
 X-Patchwork-Hint: ignore
-Message-Id: <20210808193342.158A38D27B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/pixman: fix build
- failure due to gcc bug 101737
+Message-Id: <20210808193342.331B48D27B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/ltp-testsuite:
+ renumber patch
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,54 +70,24 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d06f5f0a5f6059607ca8b27f0ad5c6484ca69573
+commit: https://git.buildroot.net/buildroot/commit/?id=82c0a9a248b932a11e0863863c4129b2b11f0c5b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-The pixman package exhibits gcc bug 101737 when built for the SH4
-architecture with optimization enabled, which causes a build failure.
+Commit 84968aa4954b308ed67adde305e0fc5c801edc9e forgot to renumber
+remaining patch
 
-As done for other packages in Buildroot work around this gcc bug by
-setting optimization to -O0 if BR2_TOOLCHAIN_HAS_GCC_BUG_101737=y.
-Also let's add PIXMAN_CFLAGS and pass the Codesourcery work around CFLAGS
-to it for consistency like we do for the rest of the packages.
-
-Fixes:
-http://autobuild.buildroot.net/results/b20/b20869bbb48edb1f0a847ea9e2e1a0462d6350be/
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit a8a9b12766a434e7d70cd246689d4de11d440875)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit a9d585a41701d5ef1df7955faf0ee057132769e6)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pixman/pixman.mk | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ ...bc.patch => 0001-lapi-Add-sysinfo.h-to-fix-build-with-MUSL-libc.patch} | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
 
-diff --git a/package/pixman/pixman.mk b/package/pixman/pixman.mk
-index d99005ecb7..6fab539593 100644
---- a/package/pixman/pixman.mk
-+++ b/package/pixman/pixman.mk
-@@ -44,12 +44,20 @@ ifneq ($(BR2_iwmmxt),y)
- PIXMAN_CONF_OPTS += --disable-arm-iwmmxt
- endif
- 
-+PIXMAN_CFLAGS = $(TARGET_CFLAGS)
-+
- # toolchain gets confused about TLS access through GOT (PIC), so disable TLS
- # movhi	r4, %got_hiadj(%tls_ldo(fast_path_cache))
- # {standard input}:172: Error: bad expression
- ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII),y)
--PIXMAN_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -DPIXMAN_NO_TLS"
-+PIXMAN_CFLAGS += -DPIXMAN_NO_TLS
-+endif
-+
-+ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_101737),y)
-+PIXMAN_CFLAGS += -O0
- endif
- 
-+PIXMAN_CONF_OPTS += CFLAGS="$(PIXMAN_CFLAGS)"
-+
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+diff --git a/package/ltp-testsuite/0002-lapi-Add-sysinfo.h-to-fix-build-with-MUSL-libc.patch b/package/ltp-testsuite/0001-lapi-Add-sysinfo.h-to-fix-build-with-MUSL-libc.patch
+similarity index 100%
+rename from package/ltp-testsuite/0002-lapi-Add-sysinfo.h-to-fix-build-with-MUSL-libc.patch
+rename to package/ltp-testsuite/0001-lapi-Add-sysinfo.h-to-fix-build-with-MUSL-libc.patch
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
