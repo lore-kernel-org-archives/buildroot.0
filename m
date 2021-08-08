@@ -7,51 +7,51 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C858C4338F
-	for <buildroot@archiver.kernel.org>; Sun,  8 Aug 2021 09:56:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B663FC4338F
+	for <buildroot@archiver.kernel.org>; Sun,  8 Aug 2021 09:57:03 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 36AD460F35
-	for <buildroot@archiver.kernel.org>; Sun,  8 Aug 2021 09:56:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 36AD460F35
+	by mail.kernel.org (Postfix) with ESMTPS id 6D80360EC0
+	for <buildroot@archiver.kernel.org>; Sun,  8 Aug 2021 09:57:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6D80360EC0
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EFF4A82CA5;
-	Sun,  8 Aug 2021 09:56:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3C4FF836F1;
+	Sun,  8 Aug 2021 09:57:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id W9cysSlFAedw; Sun,  8 Aug 2021 09:56:50 +0000 (UTC)
+	with ESMTP id 7SeUAgZsdWPV; Sun,  8 Aug 2021 09:57:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4B3E0832EB;
-	Sun,  8 Aug 2021 09:56:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 89FD283638;
+	Sun,  8 Aug 2021 09:57:01 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D6B091BF408
- for <buildroot@lists.busybox.net>; Sun,  8 Aug 2021 09:55:04 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 70C831BF408
+ for <buildroot@lists.busybox.net>; Sun,  8 Aug 2021 09:55:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 99D9440285
+ by smtp2.osuosl.org (Postfix) with ESMTP id C20D640261
  for <buildroot@lists.busybox.net>; Sun,  8 Aug 2021 09:55:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7VRnpKunfzfo for <buildroot@lists.busybox.net>;
+ with ESMTP id SX1-xQ4ywG_A for <buildroot@lists.busybox.net>;
  Sun,  8 Aug 2021 09:55:00 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id EB8E540261
+ by smtp2.osuosl.org (Postfix) with ESMTP id F0EE540274
  for <buildroot@buildroot.org>; Sun,  8 Aug 2021 09:55:00 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 949688D207; Sun,  8 Aug 2021 09:54:42 +0000 (UTC)
+ id ABA3084BBC; Sun,  8 Aug 2021 09:54:42 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 8 Aug 2021 11:31:05 +0200
+Date: Sun, 8 Aug 2021 11:36:09 +0200
 X-Git-Refname: refs/heads/2021.05.x
-X-Git-Oldrev: 3c1a3a8b92d0df8cac981fc06f00af2d0120a6b7
-X-Git-Newrev: 9f4a31eda47d6feaea1048d6cd80b17003612aef
+X-Git-Oldrev: fc39b42252c89bffcf2feced8060273e93485eea
+X-Git-Newrev: 969c5b5e5dcf0b1b994db6b35cbb9790e6734bd6
 X-Patchwork-Hint: ignore
-Message-Id: <20210808095442.949688D207@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.05.x] package/libodb-boost: fix
+Message-Id: <20210808095442.ABA3084BBC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.05.x] package/libodb-mysql: fix
  build with gcc 11
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
@@ -70,29 +70,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9f4a31eda47d6feaea1048d6cd80b17003612aef
+commit: https://git.buildroot.net/buildroot/commit/?id=969c5b5e5dcf0b1b994db6b35cbb9790e6734bd6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
 
 Fixes:
- - No autobuilder failures yet
+http://autobuild.buildroot.net/results/8f0/8f0e3b604ff9809e3b415036b8d99521db33c4db
+http://autobuild.buildroot.net/results/d03/d038b79e719c37a93d635c6b61443033094d8716
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 25d602a6a66bfecf17da0ca5edf589ace95e58db)
+(cherry picked from commit 506bace2fe1f1236b9888f4cc7bd32d1c81760f0)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libodb-boost/libodb-boost.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/libodb-mysql/libodb-mysql.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/libodb-boost/libodb-boost.mk b/package/libodb-boost/libodb-boost.mk
-index 679c9d7a38..bac5f1e78f 100644
---- a/package/libodb-boost/libodb-boost.mk
-+++ b/package/libodb-boost/libodb-boost.mk
-@@ -12,5 +12,6 @@ LIBODB_BOOST_INSTALL_STAGING = YES
- LIBODB_BOOST_LICENSE = GPL-2.0
- LIBODB_BOOST_LICENSE_FILES = LICENSE
- LIBODB_BOOST_DEPENDENCIES = boost libodb
-+LIBODB_BOOST_CONF_ENV = CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11"
+diff --git a/package/libodb-mysql/libodb-mysql.mk b/package/libodb-mysql/libodb-mysql.mk
+index a9040c65f8..88b6f4cb31 100644
+--- a/package/libodb-mysql/libodb-mysql.mk
++++ b/package/libodb-mysql/libodb-mysql.mk
+@@ -12,6 +12,8 @@ LIBODB_MYSQL_INSTALL_STAGING = YES
+ LIBODB_MYSQL_LICENSE = GPL-2.0
+ LIBODB_MYSQL_LICENSE_FILES = LICENSE
+ LIBODB_MYSQL_DEPENDENCIES = libodb mysql
+-LIBODB_MYSQL_CONF_ENV = LIBS=`$(STAGING_DIR)/usr/bin/mysql_config --libs`
++LIBODB_MYSQL_CONF_ENV = \
++	CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11" \
++	LIBS=`$(STAGING_DIR)/usr/bin/mysql_config --libs`
  
  $(eval $(autotools-package))
 _______________________________________________
