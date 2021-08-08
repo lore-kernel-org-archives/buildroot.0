@@ -2,93 +2,95 @@ Return-Path: <SRS0=BoAS=M7=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A83BC4338F
-	for <buildroot@archiver.kernel.org>; Sun,  8 Aug 2021 18:59:17 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C1715C4338F
+	for <buildroot@archiver.kernel.org>; Sun,  8 Aug 2021 19:04:56 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 7B1DE60462
-	for <buildroot@archiver.kernel.org>; Sun,  8 Aug 2021 18:59:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7B1DE60462
+	by mail.kernel.org (Postfix) with ESMTPS id 48F4B60FC1
+	for <buildroot@archiver.kernel.org>; Sun,  8 Aug 2021 19:04:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 48F4B60FC1
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2DBAD40296;
-	Sun,  8 Aug 2021 18:59:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0B36B60601;
+	Sun,  8 Aug 2021 19:04:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rrtF0r_wJ2cq; Sun,  8 Aug 2021 18:59:15 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id DfaYqqZcdV6v; Sun,  8 Aug 2021 19:04:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 841BF40279;
-	Sun,  8 Aug 2021 18:59:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7C0BD605BA;
+	Sun,  8 Aug 2021 19:04:54 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C5A1D1BF281
- for <buildroot@lists.busybox.net>; Sun,  8 Aug 2021 18:59:13 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0C9931BF3C3
+ for <buildroot@lists.busybox.net>; Sun,  8 Aug 2021 19:04:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B3034606C4
- for <buildroot@lists.busybox.net>; Sun,  8 Aug 2021 18:59:13 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 00C11605BA
+ for <buildroot@lists.busybox.net>; Sun,  8 Aug 2021 19:04:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XaUW704PijmD for <buildroot@lists.busybox.net>;
- Sun,  8 Aug 2021 18:59:12 +0000 (UTC)
+ with ESMTP id bEsrBiBLQ2wn for <buildroot@lists.busybox.net>;
+ Sun,  8 Aug 2021 19:04:51 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com
- [IPv6:2a00:1450:4864:20::634])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C51E4605CE
- for <buildroot@buildroot.org>; Sun,  8 Aug 2021 18:59:12 +0000 (UTC)
-Received: by mail-ej1-x634.google.com with SMTP id go31so25006206ejc.6
- for <buildroot@buildroot.org>; Sun, 08 Aug 2021 11:59:12 -0700 (PDT)
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com
+ [IPv6:2a00:1450:4864:20::52a])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id EC5B660591
+ for <buildroot@buildroot.org>; Sun,  8 Aug 2021 19:04:50 +0000 (UTC)
+Received: by mail-ed1-x52a.google.com with SMTP id i6so21256012edu.1
+ for <buildroot@buildroot.org>; Sun, 08 Aug 2021 12:04:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
- h=sender:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=z6mYMsPFK+hvG4SAbrVLNbu2AQeLcHytEPeX+5Rw4yg=;
- b=WNQ7biYT5QesXV07g/phngRI76PGv70ut0J//fD7ruP8leMsP7eLgzzPjtyW2yk1b0
- vhTc0sg8md0gByIO5HcMJXJgea04lmJT+tO3ZDGhHmjk7wwGb96j214Wv1y615avPqEc
- nSK9K/pj1aLPBWrKGOkVDEUAOyt6jEhT5vZBcWJzz0UZyO8lrMZCjvAfp9F7xtM1R03g
- 3WDWuW9hMZrtWnPyfy3/6nWk4UCkERtw2Pxm32JfRHdmtlwkaA/NFQzbK6o+sAHsFYPd
- mzes4WqrpwiobUnbtWt8C33JFbvkJE1NSUX5U/z6n3Jve33Tj+g9mUc19waRRQAnyoaX
- IV5Q==
+ h=sender:from:to:cc:subject:references:date:in-reply-to:message-id
+ :user-agent:mime-version;
+ bh=hubLdBRAtWXqujlNzw+k+3cxomYeI21MsCkNxKEa2P8=;
+ b=Y249qYyo1oYx5OgtFIyrcBVboBPO6ipaxZDpH6QM8IiKrlVt94gWiYFbMjziCS1+te
+ dKpWj+wpmSgeaLRnS88bxzmfS0T6++ddgIkpKD17PRDayVLNQ+sNHO9MEc4REL7RnNXg
+ HlVOPziMEIfqveIejaszRdU7dM/vRmgZwp6r9ThTKLClyI1S51p9Ym/VaNBbDIlZrmT9
+ +mLfYNKLUlINYtdVxQuLXkF8v/z68GnpXLwwzRM7te4++SLGrLPrt8eLWr6XdxWUoc7M
+ NlUxVjZKijBnKpREExD1xlHwqHoKIgpID24DF4xmdutNkqXg6CSul+npkweZthEp/Vuj
+ os3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
- h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
- :mime-version:content-transfer-encoding;
- bh=z6mYMsPFK+hvG4SAbrVLNbu2AQeLcHytEPeX+5Rw4yg=;
- b=j6gMtoAa1F59vFLvQEH22T65ZJh8V2hKS7utodOxKPds77OcHNPTdLU9frCinQ8bXX
- 5P3rs3I8HiuGZsvQ5ab4Hr9AXjgg2+nIIFlIZfKk+MP304FBxRuk8wcN9MlAeZ1ZhyIN
- NAiRe2NDJHFC4W+yR3rnd8wOHsitc6rs1hj1l4ZxDXC3wN3qVkLJICXIETYw0XNAwkZg
- 4uk4VW7qBM504HeikblOdwcJsPXzugbEdnWx5LVj0OAQnR6093I0ecQPYA+3RqR8lAS+
- IcwMKK8PPd2RI42+xGT1NOdpf9LLVhbQHj38YVY7MqoFXoJSlJsNEquSkmwTBGoUibFC
- sMQg==
-X-Gm-Message-State: AOAM530YS2i6+giQa84mtobFOdT/4o5mjjd+3QIf8/aOzn0CaVKFuKK9
- J4en0nlojA1eeW0bRCeT+0fPKyaW+b73Tg==
-X-Google-Smtp-Source: ABdhPJyN4tAiBNeHTw6PNDge35Lcpk79Y2zYNH0ASkDPXAbDPM0wlCwOtVGBfMJS0R3fbe8QIgWDLQ==
-X-Received: by 2002:a17:906:76c1:: with SMTP id
- q1mr19818845ejn.156.1628449150950; 
- Sun, 08 Aug 2021 11:59:10 -0700 (PDT)
+ h=x-gm-message-state:sender:from:to:cc:subject:references:date
+ :in-reply-to:message-id:user-agent:mime-version;
+ bh=hubLdBRAtWXqujlNzw+k+3cxomYeI21MsCkNxKEa2P8=;
+ b=GKsVk9ZKOOYtZYwgz4wHHNwO0HBKseXVt7iKYWz3aUf4a9gliJWrPD0/hM6qJgpvsS
+ 2RGAClil68oMnVLNlKchhDmkk49D4xMbzn0wn75Ef5QNOqkEytFq2WhxHD2YeYKhZ2c5
+ 3zlQ0Y/cA1jhtnJSU4WtW+lfG5HTWoipFs3wbxxcARU6L/+klu2UdTRRr+rxxPmaX/Pu
+ TJ3tNjZDWtsrlKfzRIq/H2qwabOtRgfQ9+y+XE56NrFMFe++9zehRU8lNPOmbwNDAyaf
+ 5/PiN5nPXFlbr3Ud4Ge86LqKfTtHoLhQ/gZjG2WSi2XukB6Vz4P3bX6RT4tw70eYhkW3
+ 8TVg==
+X-Gm-Message-State: AOAM530f4SKVSvM+gv49/t60UrgfjMc65LRkOWMSdcbj0lxHhwfAFWiY
+ OE/Wfajydz8Xggi/qM23JE0=
+X-Google-Smtp-Source: ABdhPJyftzXG9g89n7qk9wHl617wx9MkE+sg4NiuKYwgeeH+8MLdg7grPCeCqnYDRDLT9w5fsGWudg==
+X-Received: by 2002:a05:6402:1778:: with SMTP id
+ da24mr25219454edb.385.1628449489208; 
+ Sun, 08 Aug 2021 12:04:49 -0700 (PDT)
 Received: from dell.be.48ers.dk ([195.162.189.230])
- by smtp.gmail.com with ESMTPSA id p23sm7152479edw.94.2021.08.08.11.59.09
+ by smtp.gmail.com with ESMTPSA id s7sm6976966edu.23.2021.08.08.12.04.48
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 08 Aug 2021 11:59:10 -0700 (PDT)
+ Sun, 08 Aug 2021 12:04:48 -0700 (PDT)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
- (envelope-from <peko@dell.be.48ers.dk>)
- id 1mCo0r-00032B-4W; Sun, 08 Aug 2021 20:59:09 +0200
+ (envelope-from <peter@korsgaard.com>)
+ id 1mCo6J-0003Cu-Vd; Sun, 08 Aug 2021 21:04:47 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sun,  8 Aug 2021 20:59:04 +0200
-Message-Id: <20210808185905.11617-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.20.1
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+References: <20210803084245.2740449-1-giulio.benetti@benettiengineering.com>
+ <20210803084245.2740449-2-giulio.benetti@benettiengineering.com>
+Date: Sun, 08 Aug 2021 21:04:47 +0200
+In-Reply-To: <20210803084245.2740449-2-giulio.benetti@benettiengineering.com>
+ (Giulio Benetti's message of "Tue, 3 Aug 2021 10:42:44 +0200")
+Message-ID: <87bl67bvw0.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH-2021.02.x] package/glibc: security bump to
- version 2.32-50-g737efa27fca5c97f5
+Subject: Re: [Buildroot] [PATCH 1/2] toolchain: introduce
+ BR2_TOOLCHAIN_HAS_GCC_BUG_101737
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,55 +103,30 @@ List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
 Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
- Romain Naour <romain.naour@gmail.com>
+ Romain Naour <romain.naour@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-Fixes the following security issue:
+>>>>> "Giulio" == Giulio Benetti <giulio.benetti@benettiengineering.com> writes:
 
-- CVE-2021-33574: The mq_notify function has a potential use-after-free
-  issue when using a notification type of SIGEV_THREAD and a thread
-  attribute with a non-default affinity mask.
+ > pixman package fails to build for the SH4 architecture with optimization
+ > enabled with gcc up to 11.1.0:
+ > http://autobuild.buildroot.net/results/b20/b20869bbb48edb1f0a847ea9e2e1a0462d6350be/
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../glibc.hash                                                  | 2 +-
- package/glibc/glibc.mk                                          | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
- rename package/glibc/{2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2 => 2.32-50-g737efa27fca5c97f566a2005687fda7d6659cd2e}/glibc.hash (70%)
+ > It's been reported upstream:
+ > https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101737
 
-diff --git a/package/glibc/2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2/glibc.hash b/package/glibc/2.32-50-g737efa27fca5c97f566a2005687fda7d6659cd2e/glibc.hash
-similarity index 70%
-rename from package/glibc/2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2/glibc.hash
-rename to package/glibc/2.32-50-g737efa27fca5c97f566a2005687fda7d6659cd2e/glibc.hash
-index b1d5243fcc..5e00ef7c04 100644
---- a/package/glibc/2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2/glibc.hash
-+++ b/package/glibc/2.32-50-g737efa27fca5c97f566a2005687fda7d6659cd2e/glibc.hash
-@@ -1,5 +1,5 @@
- # Locally calculated (fetched from Github)
--sha256  f4710e9a435a7b83e1d23dd75434f0d36b898eba9b4249c946c32b467d852fd4  glibc-2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2.tar.gz
-+sha256  b634d38ace90752eeecb93246d71c0673bab0db8dfbd69333479ae7b10d63410  glibc-2.32-50-g737efa27fca5c97f566a2005687fda7d6659cd2e.tar.gz
- 
- # Hashes for license files
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index f84f670fc0..14c3f03597 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -16,7 +16,7 @@ ifeq ($(BR2_RISCV_32),y)
- # Until 2.33 is released, just use master
- GLIBC_VERSION = 2.32.9000-69-gbd394d131c10c9ec22c6424197b79410042eed99
- else
--GLIBC_VERSION = 2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2
-+GLIBC_VERSION = 2.32-50-g737efa27fca5c97f566a2005687fda7d6659cd2e
- endif
- # Upstream doesn't officially provide an https download link.
- # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
+ > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+
+Committed to 2021.02.x and 2021.05.x, thanks.
+
 -- 
-2.20.1
-
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
