@@ -8,84 +8,85 @@ X-Spam-Status: No, score=-13.6 required=3.0 tests=BAYES_00,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A96EC4338F
-	for <buildroot@archiver.kernel.org>; Sun,  8 Aug 2021 10:13:21 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6279CC4338F
+	for <buildroot@archiver.kernel.org>; Sun,  8 Aug 2021 10:19:07 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 91E9161002
-	for <buildroot@archiver.kernel.org>; Sun,  8 Aug 2021 10:13:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 91E9161002
+	by mail.kernel.org (Postfix) with ESMTPS id 0FF2C61004
+	for <buildroot@archiver.kernel.org>; Sun,  8 Aug 2021 10:19:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0FF2C61004
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 477614016C;
-	Sun,  8 Aug 2021 10:13:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C1881403E5;
+	Sun,  8 Aug 2021 10:19:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VElNbPK3Mhxb; Sun,  8 Aug 2021 10:13:19 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id NJSHeejmAt1H; Sun,  8 Aug 2021 10:19:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 44CD54023F;
-	Sun,  8 Aug 2021 10:13:18 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id AAF611BF38E
- for <buildroot@lists.busybox.net>; Sun,  8 Aug 2021 10:13:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 123A04039C;
+	Sun,  8 Aug 2021 10:19:05 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 674661BF38E
+ for <buildroot@lists.busybox.net>; Sun,  8 Aug 2021 10:19:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A658282C75
- for <buildroot@lists.busybox.net>; Sun,  8 Aug 2021 10:13:16 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 567B4606C8
+ for <buildroot@lists.busybox.net>; Sun,  8 Aug 2021 10:19:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qtjknf5JJgmV for <buildroot@lists.busybox.net>;
- Sun,  8 Aug 2021 10:13:14 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Q-A6caKg4KPk for <buildroot@lists.busybox.net>;
+ Sun,  8 Aug 2021 10:19:02 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com
- [IPv6:2607:f8b0:4864:20::d2f])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A2B6F82C5E
- for <buildroot@buildroot.org>; Sun,  8 Aug 2021 10:13:14 +0000 (UTC)
-Received: by mail-io1-xd2f.google.com with SMTP id d22so22193844ioy.11
- for <buildroot@buildroot.org>; Sun, 08 Aug 2021 03:13:14 -0700 (PDT)
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
+ [IPv6:2a00:1450:4864:20::336])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 55D0B606C2
+ for <buildroot@buildroot.org>; Sun,  8 Aug 2021 10:19:02 +0000 (UTC)
+Received: by mail-wm1-x336.google.com with SMTP id n11so8534870wmd.2
+ for <buildroot@buildroot.org>; Sun, 08 Aug 2021 03:19:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=TEMnDoQkR03e9qnrrN5V1n/ioELwFXQa0G8n9eCftZA=;
- b=doh6055Az2HtTiZglHhEfuIwdwWAsllpTYD4v1xCTbb4ZDU+3VuLPfI2j7mMB6SKLR
- xa+xUARedrjHFnJRHNkyQuVC/Wi80b1OUE2zkIQ1bfIV3r1kQzjYePR5uzGHJR7obMVw
- M74W+x0NCybi/iIGsIlVSZRqMzvW7Qn76NbmVYOTHFDBMffCeg9eKFvT9qdIDqt0EFdI
- LcShx8yEziwjnGK3PDpwALjZQy65dzYwsyMPqqVEwIAdng+lrk85ZWTAg9XsD6Gof5qU
- 9NJ3hu+/SphzKhSJTxAi7lwckotH0zHqT0aJVZPgZIxXyR9CvE/jxmdEn+FdADBaKeMG
- bI7A==
+ bh=6bl1g0RSGidFo44F4i2vGykYw9vYUQvdOmvIa8ovgq0=;
+ b=ll8fyPxBb5IdiNR+AVfPuhPd+o+DZOKsWuonEE5N6bbklSVRxPSzUg4TtpNHVajFEH
+ F8uCQrXKfVNV0g+Ydpev5gILfoX9ww4tvP0SqbITG8sIf7RJmfSr31K3EOBGlnNa1WA0
+ B5CZzJefPu0OH2S1A1/79yJlcOcTYh/jEMLue7b3ARpJ6nvNlsxWDUZdXFrzTbMXaWEg
+ YPMu214uxnyGcMa9zn542rWbKQXc3FIeU3wl8G3CDQ7wESSoSctsFAI6+2jEJhewwaam
+ A3z3HWRpCBnXzLcQJWiFI/8qkdokjb35aHPlTuU5IeFbqRKVagizN8PjQMhQC42nio6J
+ usEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=TEMnDoQkR03e9qnrrN5V1n/ioELwFXQa0G8n9eCftZA=;
- b=K7kaThW82nbQ7VVc6xUV5IqYiVTBAgaSpchjR9eMCOB+jFonfWxmt3/Kz1FyQcrvsh
- VXuv+iqaXhM3k1uDPGaWgixoizlD2JYAbA0yH8pOPGZ9CTbiNtPCs0Ydtqw7rIgVsMM7
- quNbzHn/pNErScH1/WveWmZIK4FkHwJf/yZpqqlVNM9qaPhG4DNvxiiiCSnyGXi42Fcj
- y5OHzWGV+n1FvE2FAqh/NEXDloPGAb2SvUckDdETL+U9n6FoOp/Sff5RLViVZyFQHAIC
- V5/atdOCjjFb+2XOPUADjh/6RN5Un6HffXaavda10i4ydtntnMoUnHJ9H0b9GGn7z7AN
- Gt2Q==
-X-Gm-Message-State: AOAM530Jf5lPMiXCrhyVvgp45gFBFq0KcsdBj1mrBTFN9wOYiSGvvsfz
- Sodoidjmgt2b3G+BOiEizSyOvdhXA3I=
-X-Google-Smtp-Source: ABdhPJxISsFtn4lYm5SgUGhSk0fdPWZZeKtHhvFgRO9BHm7NhYyt/6ZdcJE2A/CMAc0XwFAeFBTqbw==
-X-Received: by 2002:a92:190f:: with SMTP id 15mr115205ilz.45.1628417593430;
- Sun, 08 Aug 2021 03:13:13 -0700 (PDT)
-Received: from james-x399.localdomain (97-118-178-184.hlrn.qwest.net.
- [97.118.178.184])
- by smtp.gmail.com with ESMTPSA id g20sm7570333ilk.81.2021.08.08.03.13.12
+ bh=6bl1g0RSGidFo44F4i2vGykYw9vYUQvdOmvIa8ovgq0=;
+ b=Dmf4inRJ5R6MZyfL7Hphaa3zZjfUdMLWr+vKmhA29sW6NUqJMrG16CHTymZTed1Odo
+ PsB2A2iGufJDb4Pg7XzeXoIQtn9O48LyrtjATvodi0mOwxYgJJJj4V0hsge3WAcrYQtM
+ I1SekXUiq7u/0VgB8pAyWS9MP29NBRaFz3YHWfoYStKg9oI3SNNiz0RfHIlwaXnOg0EI
+ R6Yd+uHbiLe3fS0cz1H29pbfEpSO70Xc18BTeoCPCPZMNVAGparpfKyvESHt90yr0QZF
+ q+vWZaXRwMGTha74OkQNhczGQ8Fnua2gQ4ddOm8xoFMt1nGR3MSmGNB6oa758TBb9g5S
+ esUg==
+X-Gm-Message-State: AOAM530wHdYuDOyKdXkl6iBlXjiq6WVUb3mvzVuc05iI79OXb/v0ahDq
+ CE07Wxtng23iGcGRsKH3uBJfzdslejuVsg==
+X-Google-Smtp-Source: ABdhPJxy4gNqY/XNr6iOLMsSA7rAA2zdOScz3x1TaGuHV746dQAmEUlF6pb4H9fR10r+IUn/71aobA==
+X-Received: by 2002:a7b:cc8b:: with SMTP id p11mr28381660wma.164.1628417940229; 
+ Sun, 08 Aug 2021 03:19:00 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-417-221.w2-10.abo.wanadoo.fr.
+ [2.10.242.221])
+ by smtp.gmail.com with ESMTPSA id z5sm17084074wmp.26.2021.08.08.03.18.59
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 08 Aug 2021 03:13:13 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
+ Sun, 08 Aug 2021 03:18:59 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun,  8 Aug 2021 04:13:11 -0600
-Message-Id: <20210808101311.3416344-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.25.1
+Date: Sun,  8 Aug 2021 12:16:50 +0200
+Message-Id: <20210808101650.3501748-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/python-txaio: bump to version 21.2.1
+Subject: [Buildroot] [PATCH 1/1] package/gobject-introspection: fix
+ datarootdir
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,51 +98,57 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Mauro Condarelli <mc5686@mclink.it>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Asaf Kahlon <asafka7@gmail.com>
+Cc: Anisse Astier <anisse@astier.eu>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/python-txaio/python-txaio.hash | 4 ++--
- package/python-txaio/python-txaio.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+datarootdir has been removed since version 1.66 and
+https://gitlab.gnome.org/GNOME/gobject-introspection/-/commit/a88b1ac548516ab25140a2e9dea8cac894bbac93
+resulting in the following build failures with autotools-based
+applications using introspection (e.g. libmediaart or libsecret) if
+gobject-introspection is not installed on host since commit
+abc110e3624aa4e8a9bd8595b3fdc0aec60845e0:
 
-diff --git a/package/python-txaio/python-txaio.hash b/package/python-txaio/python-txaio.hash
-index 15b1f5f2c9..5e05f02d3a 100644
---- a/package/python-txaio/python-txaio.hash
-+++ b/package/python-txaio/python-txaio.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/txaio/json
--md5  c998be8d5837218c809266c0fce94687  txaio-20.4.1.tar.gz
--sha256  17938f2bca4a9cabce61346758e482ca4e600160cbc28e861493eac74a19539d  txaio-20.4.1.tar.gz
-+md5  7e80b80ed7797245a5eef803043bdede  txaio-21.2.1.tar.gz
-+sha256  7d6f89745680233f1c4db9ddb748df5e88d2a7a37962be174c0fd04c8dba1dc8  txaio-21.2.1.tar.gz
- # Locally computed sha256 checksums
- sha256  0387eefce570453daaa60633f28676003731eeca28b2d0a0071c628e3a0004ef  LICENSE
-diff --git a/package/python-txaio/python-txaio.mk b/package/python-txaio/python-txaio.mk
-index 2dd028f4f7..750d9e3d3d 100644
---- a/package/python-txaio/python-txaio.mk
-+++ b/package/python-txaio/python-txaio.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+make[3]: *** No rule to make target 'MediaArt-2.0.typelib', needed by 'all'.  Stop.
+
+or
+
+Makefile:2917: /usr/share/gobject-introspection-1.0/Makefile.introspection: No such file or directory
+
+Fixes:
+ - http://autobuild.buildroot.org/results/70585b81fd6aa78e2aa6e5173f35c0f26a1408a9
+ - http://autobuild.buildroot.org/results/95aa8e189f3326ecae6133e298c56ffcbbc3198f
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/gobject-introspection/gobject-introspection.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/gobject-introspection/gobject-introspection.mk b/package/gobject-introspection/gobject-introspection.mk
+index d8138b2e96..fbc545b3c7 100644
+--- a/package/gobject-introspection/gobject-introspection.mk
++++ b/package/gobject-introspection/gobject-introspection.mk
+@@ -116,12 +116,12 @@ define GOBJECT_INTROSPECTION_INSTALL_WRAPPERS
  
--PYTHON_TXAIO_VERSION = 20.4.1
-+PYTHON_TXAIO_VERSION = 21.2.1
- PYTHON_TXAIO_SOURCE = txaio-$(PYTHON_TXAIO_VERSION).tar.gz
--PYTHON_TXAIO_SITE = https://files.pythonhosted.org/packages/e7/dd/c0c90b080c3fad0ac8e2382eddbe86591d4fa1a5c1aea652de0adf245fc0
-+PYTHON_TXAIO_SITE = https://files.pythonhosted.org/packages/c5/39/2e715062283f8443d8ceeea32276db71741664d78d43c3edd3675498e926
- PYTHON_TXAIO_LICENSE = MIT
- PYTHON_TXAIO_LICENSE_FILES = LICENSE
- PYTHON_TXAIO_SETUP_TYPE = setuptools
+ 	# Gobject-introspection installs Makefile.introspection in
+ 	# $(STAGING_DIR)/usr/share which is needed for autotools-based programs to
+-	# build .gir and .typelib files. Unfortuantly, gobject-introspection-1.0.pc
++	# build .gir and .typelib files. Unfortunately, gobject-introspection-1.0.pc
+ 	# uses $(prefix)/share as the directory, which
+ 	# causes the host /usr/share being used instead of $(STAGING_DIR)/usr/share.
+-	# Change datarootdir to $(libdir)/../share which will prefix $(STAGING_DIR)
++	# Change datadir to $(libdir)/../share which will prefix $(STAGING_DIR)
+ 	# to the correct location.
+-	$(SED) "s%datarootdir=.*%datarootdir=\$${libdir}/../share%g" \
++	$(SED) "s%datadir=.*%datadir=\$${libdir}/../share%g" \
+ 		$(STAGING_DIR)/usr/lib/pkgconfig/gobject-introspection-1.0.pc
+ 
+ 	# By default, girdir and typelibdir use datadir and libdir as their prefix,
 -- 
-2.25.1
+2.30.2
 
 _______________________________________________
 buildroot mailing list
