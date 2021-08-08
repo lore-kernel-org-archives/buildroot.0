@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C897C4338F
-	for <buildroot@archiver.kernel.org>; Sun,  8 Aug 2021 09:56:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C858C4338F
+	for <buildroot@archiver.kernel.org>; Sun,  8 Aug 2021 09:56:51 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id BB85560EC0
-	for <buildroot@archiver.kernel.org>; Sun,  8 Aug 2021 09:56:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org BB85560EC0
+	by mail.kernel.org (Postfix) with ESMTPS id 36AD460F35
+	for <buildroot@archiver.kernel.org>; Sun,  8 Aug 2021 09:56:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 36AD460F35
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8FCF482F9B;
-	Sun,  8 Aug 2021 09:56:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EFF4A82CA5;
+	Sun,  8 Aug 2021 09:56:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id k3fcOMdXijXM; Sun,  8 Aug 2021 09:56:37 +0000 (UTC)
+	with ESMTP id W9cysSlFAedw; Sun,  8 Aug 2021 09:56:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DC16082CA5;
-	Sun,  8 Aug 2021 09:56:36 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 00E411BF408
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4B3E0832EB;
+	Sun,  8 Aug 2021 09:56:49 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D6B091BF408
  for <buildroot@lists.busybox.net>; Sun,  8 Aug 2021 09:55:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EB34E82C98
+ by smtp2.osuosl.org (Postfix) with ESMTP id 99D9440285
  for <buildroot@lists.busybox.net>; Sun,  8 Aug 2021 09:55:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id e_inba4Qyof2 for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7VRnpKunfzfo for <buildroot@lists.busybox.net>;
  Sun,  8 Aug 2021 09:55:00 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id D732582C1E
+ by smtp2.osuosl.org (Postfix) with ESMTP id EB8E540261
  for <buildroot@buildroot.org>; Sun,  8 Aug 2021 09:55:00 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 7D6A08D205; Sun,  8 Aug 2021 09:54:42 +0000 (UTC)
+ id 949688D207; Sun,  8 Aug 2021 09:54:42 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 8 Aug 2021 11:26:59 +0200
+Date: Sun, 8 Aug 2021 11:31:05 +0200
 X-Git-Refname: refs/heads/2021.05.x
-X-Git-Oldrev: 5d5f3484d62333e51ff7cd7bd24a2c0f47977c46
-X-Git-Newrev: 2f132f14161410f771298df7fee0188de3148829
+X-Git-Oldrev: 3c1a3a8b92d0df8cac981fc06f00af2d0120a6b7
+X-Git-Newrev: 9f4a31eda47d6feaea1048d6cd80b17003612aef
 X-Patchwork-Hint: ignore
-Message-Id: <20210808095442.7D6A08D205@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.05.x] package/wireshark: link
- with -latomic if needed
+Message-Id: <20210808095442.949688D207@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.05.x] package/libodb-boost: fix
+ build with gcc 11
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,41 +70,31 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2f132f14161410f771298df7fee0188de3148829
+commit: https://git.buildroot.net/buildroot/commit/?id=9f4a31eda47d6feaea1048d6cd80b17003612aef
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
 
-Fix the following build failure raised since bump to version 3.4.7 in
-commit bb75c4b541fac144b53b63248e235f22ba1d25ad:
-
-/tmp/instance-5/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/9.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: ui/qt/CMakeFiles/qtui.dir/sequence_diagram.cpp.o: undefined reference to symbol '__atomic_compare_exchange_4@@LIBATOMIC_1.0'
-/tmp/instance-5/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/9.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: /tmp/instance-5/output-1/host/sparc-buildroot-linux-uclibc/sysroot/lib/libatomic.so.1: error adding symbols: DSO missing from command line
-
 Fixes:
- - http://autobuild.buildroot.org/results/6617ee0e0046a0452a1515b89e9c704b1c125ec4
+ - No autobuilder failures yet
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 0344be5299259c9f3e2e928b51af6868948e78bc)
+(cherry picked from commit 25d602a6a66bfecf17da0ca5edf589ace95e58db)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wireshark/wireshark.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/libodb-boost/libodb-boost.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index e852083de6..6ee4b20391 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
-@@ -43,6 +43,10 @@ endef
+diff --git a/package/libodb-boost/libodb-boost.mk b/package/libodb-boost/libodb-boost.mk
+index 679c9d7a38..bac5f1e78f 100644
+--- a/package/libodb-boost/libodb-boost.mk
++++ b/package/libodb-boost/libodb-boost.mk
+@@ -12,5 +12,6 @@ LIBODB_BOOST_INSTALL_STAGING = YES
+ LIBODB_BOOST_LICENSE = GPL-2.0
+ LIBODB_BOOST_LICENSE_FILES = LICENSE
+ LIBODB_BOOST_DEPENDENCIES = boost libodb
++LIBODB_BOOST_CONF_ENV = CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11"
  
- WIRESHARK_PRE_BUILD_HOOKS += WIRESHARK_BUILD_LEMON_TOOL
- 
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+WIRESHARK_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
-+endif
-+
- ifeq ($(BR2_GCC_ENABLE_LTO),y)
- WIRESHARK_CONF_OPTS += -DENABLE_LTO=ON
- else
+ $(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
