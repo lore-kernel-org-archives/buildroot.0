@@ -7,51 +7,52 @@ X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 14699C432BE
-	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:19:25 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DE4AAC432BE
+	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:19:36 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D48CF60FE7
-	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:19:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D48CF60FE7
+	by mail.kernel.org (Postfix) with ESMTPS id 9EB0560FF2
+	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:19:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9EB0560FF2
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B1561614B4;
-	Thu, 26 Aug 2021 22:19:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 79D7240267;
+	Thu, 26 Aug 2021 22:19:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id q14lR4ip_Fhh; Thu, 26 Aug 2021 22:19:20 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id l4lzPojNbmgr; Thu, 26 Aug 2021 22:19:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1754C6149A;
-	Thu, 26 Aug 2021 22:19:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4162A426D6;
+	Thu, 26 Aug 2021 22:19:31 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 658691C1135
- for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 22:02:53 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1B3D71C1135
+ for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 22:02:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C4B1E40789
+ by smtp2.osuosl.org (Postfix) with ESMTP id DFB524078B
  for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 22:02:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OAsh7q8au49Q for <buildroot@lists.busybox.net>;
+ with ESMTP id NQ6R6PMlitHP for <buildroot@lists.busybox.net>;
  Thu, 26 Aug 2021 22:02:37 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id BCF9040793
+ by smtp2.osuosl.org (Postfix) with ESMTP id BEA4E40794
  for <buildroot@buildroot.org>; Thu, 26 Aug 2021 22:02:29 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 2B61F8DC52; Thu, 26 Aug 2021 22:01:28 +0000 (UTC)
+ id 1FE6D8DC50; Thu, 26 Aug 2021 22:01:28 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sun, 8 Aug 2021 23:06:40 +0200
+Date: Sun, 8 Aug 2021 22:37:12 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 27b032941ab4b5ea81cee7f9e10e21ffea258616
-X-Git-Newrev: c9b496bf180c21ede9efda694f2dc88af05ddd16
+X-Git-Oldrev: 2d991fd7b23f66e3a88c02177bf28d5587061ac8
+X-Git-Newrev: 27b032941ab4b5ea81cee7f9e10e21ffea258616
 X-Patchwork-Hint: ignore
-Message-Id: <20210826220128.2B61F8DC52@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libvirt: nss needs yajl
+Message-Id: <20210826220128.1FE6D8DC50@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/prelink-cross: fix
+ handling of TLS offsets for s390 arch
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,38 +70,76 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c9b496bf180c21ede9efda694f2dc88af05ddd16
+commit: https://git.buildroot.net/buildroot/commit/?id=27b032941ab4b5ea81cee7f9e10e21ffea258616
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-nss can't be built without yajl since the additoon of the package in
-commit ccfc90e1010e42e6529afae3a5ea8bf7226dabc1:
-
-../output-1/build/libvirt-7.4.0/meson.build:1986:6: ERROR: Problem encountered: Can't build nss plugin without yajl
+/tmp/instance-1/output-1/host/sbin/prelink-rtld: error while loading
+shared libraries: /lib64/libc.so.6: cannot handle TLS data
+ERROR: can't resolve libraries to shared libraries: glib-2.0, gobject-2.0
+ninja: build stopped: subcommand failed.
+make: *** [package/pkg-generic.mk:270:
+/tmp/instance-1/output-1/build/gobject-introspection-1.68.0/.stamp_built]
+Error 1
+make: Leaving directory '/tmp/instance-1/buildroot'
 
 Fixes:
- - http://autobuild.buildroot.org/results/18db9ec30d5e60fbe9f5096c3fd1a30396e11856
+- http://autobuild.buildroot.org/results/7614f5928e845331d7295349da891a76f1786b79/
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libvirt/libvirt.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ ...-tls.c-Fix-TLS-offsets-computation-for-s3.patch | 43 ++++++++++++++++++++++
+ 1 file changed, 43 insertions(+)
 
-diff --git a/package/libvirt/libvirt.mk b/package/libvirt/libvirt.mk
-index 108996942d..b36cf3fb60 100644
---- a/package/libvirt/libvirt.mk
-+++ b/package/libvirt/libvirt.mk
-@@ -187,8 +187,8 @@ else
- LIBVIRT_CONF_OPTS += -Dlibssh=disabled
- endif
- 
--# Can't build nss plugin without network
--ifeq ($(BR2_PACKAGE_LIBNSS),y)
-+# Can't build nss plugin without network or yajl
-+ifeq ($(BR2_PACKAGE_LIBNSS)$(BR2_PACKAGE_YAJL),yy)
- LIBVIRT_CONF_OPTS += -Dnss=enabled
- LIBVIRT_DEPENDENCIES += libnss
- else
+diff --git a/package/prelink-cross/0001-src-rtld-dl-tls.c-Fix-TLS-offsets-computation-for-s3.patch b/package/prelink-cross/0001-src-rtld-dl-tls.c-Fix-TLS-offsets-computation-for-s3.patch
+new file mode 100644
+index 0000000000..cea1357d1d
+--- /dev/null
++++ b/package/prelink-cross/0001-src-rtld-dl-tls.c-Fix-TLS-offsets-computation-for-s3.patch
+@@ -0,0 +1,43 @@
++From 4064f77d2f550762cbf220fec7c26a8ce4219ea4 Mon Sep 17 00:00:00 2001
++From: Alexander Egorenkov <egorenar@linux.ibm.com>
++Date: Sun, 8 Aug 2021 11:19:52 +0200
++Subject: [PATCH] src/rtld/dl-tls.c: Fix TLS offsets computation for s390 arch
++
++rtld_determine_tlsoffsets() didn't handle s390 arch properly by falling
++back to the default case. If TLS_TCB_AT_TP is 1, then set offset to -1.
++
++From glibc's sysdeps/s390/nptl/tls.h:
++-------------------------------------
++/* The TCB can have any size and the memory following the address the
++   thread pointer points to is unspecified.  Allocate the TCB there.  */
++define TLS_TCB_AT_TP	1
++define TLS_DTV_AT_TP	0
++
++This lead to the following error:
++---------------------------------
++prelink-rtld: error while loading shared libraries: /lib64/libc.so.6: cannot handle TLS data
++
++Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
++---
++ src/rtld/dl-tls.c | 5 +++++
++ 1 file changed, 5 insertions(+)
++
++diff --git a/src/rtld/dl-tls.c b/src/rtld/dl-tls.c
++index 280cee45f950..29422dcfd25e 100644
++--- a/src/rtld/dl-tls.c
+++++ b/src/rtld/dl-tls.c
++@@ -143,6 +143,11 @@ rtld_determine_tlsoffsets (int e_machine, struct r_scope_elem *search_list)
++       tls_tcb_size = 0;
++       break;
++ 
+++    case EM_S390:
+++      tls_tcb_at_tp = 1;
+++      tls_tcb_size = -1;
+++      break;
+++
++     default:
++       /* Hope there's no TLS!  */
++       for (i = 0; i < search_list->r_nlist; i++)
++-- 
++2.31.1
++
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
