@@ -4,55 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,TVD_SPACE_RATIO autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B8B0CC4338F
-	for <buildroot@archiver.kernel.org>; Sun,  8 Aug 2021 19:37:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F57FC4338F
+	for <buildroot@archiver.kernel.org>; Sun,  8 Aug 2021 19:37:36 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 65E1C60EBB
-	for <buildroot@archiver.kernel.org>; Sun,  8 Aug 2021 19:37:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 65E1C60EBB
+	by mail.kernel.org (Postfix) with ESMTPS id CF98A60EBB
+	for <buildroot@archiver.kernel.org>; Sun,  8 Aug 2021 19:37:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org CF98A60EBB
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 25E17402DD;
-	Sun,  8 Aug 2021 19:37:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 972A340331;
+	Sun,  8 Aug 2021 19:37:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DXvf77AlTmIU; Sun,  8 Aug 2021 19:37:22 +0000 (UTC)
+	with ESMTP id Y4fyp4sGLNen; Sun,  8 Aug 2021 19:37:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 76D39402CE;
-	Sun,  8 Aug 2021 19:37:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D5C5B40306;
+	Sun,  8 Aug 2021 19:37:33 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2F4961BF3C3
- for <buildroot@lists.busybox.net>; Sun,  8 Aug 2021 19:34:07 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1B79A1BF3C3
+ for <buildroot@lists.busybox.net>; Sun,  8 Aug 2021 19:34:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0A99982D07
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3389882CDD
  for <buildroot@lists.busybox.net>; Sun,  8 Aug 2021 19:34:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4yyfbK_Vqu35 for <buildroot@lists.busybox.net>;
- Sun,  8 Aug 2021 19:34:02 +0000 (UTC)
+ with ESMTP id ITviMLz7YDRQ for <buildroot@lists.busybox.net>;
+ Sun,  8 Aug 2021 19:34:01 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 924D282CEC
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6DFCA82CC7
  for <buildroot@buildroot.org>; Sun,  8 Aug 2021 19:34:01 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 59F99852B2; Sun,  8 Aug 2021 19:33:42 +0000 (UTC)
+ id 26EB687416; Sun,  8 Aug 2021 19:33:42 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 8 Aug 2021 21:27:37 +0200
+Date: Sun, 8 Aug 2021 21:11:57 +0200
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: deccccf5a0254363bfe74a7f1155d94d030be78a
-X-Git-Newrev: 4a7eb93b7d2b1f2d07149747e202ab456c363de9
+X-Git-Oldrev: d06f5f0a5f6059607ca8b27f0ad5c6484ca69573
+X-Git-Newrev: 0175b49f0c341ad1129aab658f3f7cd5338db738
 X-Patchwork-Hint: ignore
-Message-Id: <20210808193342.59F99852B2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/guile: fix build
- on riscv32
+Message-Id: <20210808193342.26EB687416@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/libqmi: add
+ gobject-introspection optional dependency
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,64 +70,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4a7eb93b7d2b1f2d07149747e202ab456c363de9
+commit: https://git.buildroot.net/buildroot/commit/?id=0175b49f0c341ad1129aab658f3f7cd5338db738
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Fix the following build failure on riscv32:
-
-system/base/target.scm:132:16: In procedure triplet-pointer-size:
-unknown CPU word size "riscv32"
-
-Fixes:
- - http://autobuild.buildroot.org/results/6705630c1484239ec8b73d57ebc2e2570fbfc8f8
+gobject-introspection is an optional dependency (enabled by default)
+since version 1.26.0 and
+https://gitlab.freedesktop.org/mobile-broadband/libqmi/-/commit/2aa0badc79595c92981793d18f05c99485156a6b
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 55f1afe6db597ed5d943d57d0b6acf1bbfb77a34)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit af34a67be6ae5d399e6894e7825a30df71365773)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...le-system-base-target.scm-support-riscv32.patch | 33 ++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+ package/libqmi/libqmi.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/guile/0004-module-system-base-target.scm-support-riscv32.patch b/package/guile/0004-module-system-base-target.scm-support-riscv32.patch
-new file mode 100644
-index 0000000000..a988d2d995
---- /dev/null
-+++ b/package/guile/0004-module-system-base-target.scm-support-riscv32.patch
-@@ -0,0 +1,33 @@
-+From 6142350d7c0562b0525462abdd41309ae0faa2eb Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 6 Aug 2021 19:49:37 +0200
-+Subject: [PATCH] module/system/base/target.scm: support riscv32
+diff --git a/package/libqmi/libqmi.mk b/package/libqmi/libqmi.mk
+index a49b8615d3..1be9cf457f 100644
+--- a/package/libqmi/libqmi.mk
++++ b/package/libqmi/libqmi.mk
+@@ -16,6 +16,13 @@ LIBQMI_DEPENDENCIES = libglib2
+ 
+ LIBQMI_CONF_OPTS = --disable-Werror
+ 
++ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
++LIBQMI_DEPENDENCIES += gobject-introspection
++LIBQMI_CONF_OPTS += --enable-introspection
++else
++LIBQMI_CONF_OPTS += --disable-introspection
++endif
 +
-+Fix the following build failure on riscv32:
-+
-+system/base/target.scm:132:16: In procedure triplet-pointer-size:
-+unknown CPU word size "riscv32"
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/6705630c1484239ec8b73d57ebc2e2570fbfc8f8
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ module/system/base/target.scm | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/module/system/base/target.scm b/module/system/base/target.scm
-+index 2088cd866..dba46664d 100644
-+--- a/module/system/base/target.scm
-++++ b/module/system/base/target.scm
-+@@ -116,6 +116,7 @@
-+ 
-+           ((string-match "^x86_64-.*-gnux32" triplet) 4)  ; x32
-+ 
-++          ((string-match "32$" cpu) 4)
-+           ((string-match "64$" cpu) 8)
-+           ((string-match "64_?[lbe][lbe]$" cpu) 8)
-+           ((member cpu '("sparc" "powerpc" "mips" "mipsel" "nios2" "m68k" "sh3" "sh4")) 4)
-+-- 
-+2.30.2
-+
+ # if libgudev available, request udev support for a better
+ # qmi-firmware-update experience
+ ifeq ($(BR2_PACKAGE_LIBGUDEV),y)
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
