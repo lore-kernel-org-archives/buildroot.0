@@ -2,56 +2,60 @@ Return-Path: <SRS0=BoAS=M7=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-20.3 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_2 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D69DCC4338F
-	for <buildroot@archiver.kernel.org>; Sun,  8 Aug 2021 21:47:06 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 879AFC4338F
+	for <buildroot@archiver.kernel.org>; Sun,  8 Aug 2021 21:47:19 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 64D4360F25
-	for <buildroot@archiver.kernel.org>; Sun,  8 Aug 2021 21:47:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 64D4360F25
+	by mail.kernel.org (Postfix) with ESMTPS id DC5BE60F25
+	for <buildroot@archiver.kernel.org>; Sun,  8 Aug 2021 21:47:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org DC5BE60F25
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 19979402E5;
-	Sun,  8 Aug 2021 21:47:06 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rCnTphU2jH8a; Sun,  8 Aug 2021 21:47:05 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6632A402E7;
-	Sun,  8 Aug 2021 21:47:04 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B58611BF42E
- for <buildroot@lists.busybox.net>; Sun,  8 Aug 2021 21:47:02 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A34B64010F
- for <buildroot@lists.busybox.net>; Sun,  8 Aug 2021 21:47:02 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8DACE4016E;
+	Sun,  8 Aug 2021 21:47:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4CWUgo5UFFWP for <buildroot@lists.busybox.net>;
- Sun,  8 Aug 2021 21:47:01 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A7E0E400AE
- for <buildroot@buildroot.org>; Sun,  8 Aug 2021 21:47:01 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 28D618D333; Sun,  8 Aug 2021 21:46:42 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id K13xJI6Jim4E; Sun,  8 Aug 2021 21:47:17 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9A76E4010F;
+	Sun,  8 Aug 2021 21:47:16 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 374F51BF42E
+ for <buildroot@lists.busybox.net>; Sun,  8 Aug 2021 21:47:14 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2789282C2E
+ for <buildroot@lists.busybox.net>; Sun,  8 Aug 2021 21:47:14 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id szqlASvwCzmR for <buildroot@lists.busybox.net>;
+ Sun,  8 Aug 2021 21:47:13 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1D33782B24
+ for <buildroot@busybox.net>; Sun,  8 Aug 2021 21:47:12 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id AFC8920004;
+ Sun,  8 Aug 2021 21:47:09 +0000 (UTC)
+Date: Sun, 8 Aug 2021 23:47:08 +0200
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: buildroot@buildroot.org
-Date: Sun, 8 Aug 2021 23:25:54 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ef37a144798dacd62743f189e462543d2013aa88
-X-Git-Newrev: 878fbd5fbf9683be2bb021e857ce119f78e80f94
-X-Patchwork-Hint: ignore
-Message-Id: <20210808214642.28D618D333@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] Partial revert
+To: Francois Perrad <fperrad@gmail.com>
+Message-ID: <20210808234708.4a90f3b8@windsurf>
+In-Reply-To: <20210807162202.154898-1-francois.perrad@gadz.org>
+References: <20210807162202.154898-1-francois.perrad@gadz.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH] Partial revert
  "configs/olimex_a20_olinuxino: switch to extlinux.conf"
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
@@ -64,73 +68,39 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@busybox.net
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=878fbd5fbf9683be2bb021e857ce119f78e80f94
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat,  7 Aug 2021 18:22:02 +0200
+Francois Perrad <fperrad@gmail.com> wrote:
 
-Old scripts are still used by a10_olinuxino & a20_olinuxino_micro
+> Old scripts are still used by a10_olinuxino & a20_olinuxino_micro
+> 
+> Fixes olimex_a20_olinuxino_micro
+> see https://gitlab.com/buildroot.org/buildroot/-/jobs/1478738568
+> 
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  board/olimex/a10_olinuxino/boot.cmd      | 6 +-----
+>  board/olimex/a10_olinuxino/post-build.sh | 4 +---
+>  board/olimex/a20_olinuxino/boot.cmd      | 5 +++++
+>  board/olimex/a20_olinuxino/post-build.sh | 3 +++
+>  4 files changed, 10 insertions(+), 8 deletions(-)
+>  mode change 100644 => 120000 board/olimex/a10_olinuxino/boot.cmd
+>  mode change 100755 => 120000 board/olimex/a10_olinuxino/post-build.sh
+>  create mode 100644 board/olimex/a20_olinuxino/boot.cmd
+>  create mode 100755 board/olimex/a20_olinuxino/post-build.sh
 
-Fixes olimex_a20_olinuxino_micro
-see https://gitlab.com/buildroot.org/buildroot/-/jobs/1478738568
+Applied to master, thanks.
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- board/olimex/a10_olinuxino/boot.cmd                         | 6 +-----
- board/olimex/a10_olinuxino/post-build.sh                    | 4 +---
- board/olimex/{a10_olinuxino => a20_olinuxino}/boot.cmd      | 0
- board/olimex/{a10_olinuxino => a20_olinuxino}/post-build.sh | 0
- 4 files changed, 2 insertions(+), 8 deletions(-)
-
-diff --git a/board/olimex/a10_olinuxino/boot.cmd b/board/olimex/a10_olinuxino/boot.cmd
-deleted file mode 100644
-index 44d9239a94..0000000000
---- a/board/olimex/a10_olinuxino/boot.cmd
-+++ /dev/null
-@@ -1,5 +0,0 @@
--setenv bootargs console=ttyS0,115200 root=/dev/mmcblk0p1 rootwait panic=10 ${extra}
--ext4load mmc 0 0x49000000 /boot/${fdtfile}
--ext4load mmc 0 0x46000000 /boot/zImage
--env set fdt_high ffffffff
--bootz 0x46000000 - 0x49000000
-diff --git a/board/olimex/a10_olinuxino/boot.cmd b/board/olimex/a10_olinuxino/boot.cmd
-new file mode 120000
-index 0000000000..612c745500
---- /dev/null
-+++ b/board/olimex/a10_olinuxino/boot.cmd
-@@ -0,0 +1 @@
-+../a20_olinuxino/boot.cmd
-\ No newline at end of file
-diff --git a/board/olimex/a10_olinuxino/post-build.sh b/board/olimex/a10_olinuxino/post-build.sh
-deleted file mode 100755
-index d3f612f811..0000000000
---- a/board/olimex/a10_olinuxino/post-build.sh
-+++ /dev/null
-@@ -1,3 +0,0 @@
--#!/bin/sh
--
--cp $BINARIES_DIR/boot.scr $TARGET_DIR/boot/boot.scr
-diff --git a/board/olimex/a10_olinuxino/post-build.sh b/board/olimex/a10_olinuxino/post-build.sh
-new file mode 120000
-index 0000000000..b346896024
---- /dev/null
-+++ b/board/olimex/a10_olinuxino/post-build.sh
-@@ -0,0 +1 @@
-+../a20_olinuxino/post-build.sh
-\ No newline at end of file
-diff --git a/board/olimex/a10_olinuxino/boot.cmd b/board/olimex/a20_olinuxino/boot.cmd
-similarity index 100%
-copy from board/olimex/a10_olinuxino/boot.cmd
-copy to board/olimex/a20_olinuxino/boot.cmd
-diff --git a/board/olimex/a10_olinuxino/post-build.sh b/board/olimex/a20_olinuxino/post-build.sh
-similarity index 100%
-copy from board/olimex/a10_olinuxino/post-build.sh
-copy to board/olimex/a20_olinuxino/post-build.sh
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
