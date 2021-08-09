@@ -2,182 +2,90 @@ Return-Path: <SRS0=uMfR=NA=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DAD48C4338F
-	for <buildroot@archiver.kernel.org>; Mon,  9 Aug 2021 05:55:04 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 53FEEC4338F
+	for <buildroot@archiver.kernel.org>; Mon,  9 Aug 2021 05:56:07 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 8473961056
-	for <buildroot@archiver.kernel.org>; Mon,  9 Aug 2021 05:55:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8473961056
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=busybox.net
+	by mail.kernel.org (Postfix) with ESMTPS id D091560F35
+	for <buildroot@archiver.kernel.org>; Mon,  9 Aug 2021 05:56:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D091560F35
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=unikie.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4407240203;
-	Mon,  9 Aug 2021 05:55:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9D57E82A7F;
+	Mon,  9 Aug 2021 05:56:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id z0LEfqGVK7Q2; Mon,  9 Aug 2021 05:55:03 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3276D401EF;
-	Mon,  9 Aug 2021 05:55:02 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5E0261BF39A
- for <buildroot@lists.busybox.net>; Mon,  9 Aug 2021 05:55:01 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4DE41826C2
- for <buildroot@lists.busybox.net>; Mon,  9 Aug 2021 05:55:01 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=microchip.com header.b="JBNZ+WHu";
- dkim=pass (1024-bit key) header.d=microchiptechnology.onmicrosoft.com
- header.b="A7pcNosK"
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nwdkJbEvIeqN for <buildroot@lists.busybox.net>;
- Mon,  9 Aug 2021 05:55:00 +0000 (UTC)
-X-Greylist: delayed 00:07:07 by SQLgrey-1.8.0
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com
- [68.232.154.123])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1479582661
- for <buildroot@busybox.net>; Mon,  9 Aug 2021 05:54:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
- d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
- t=1628488500; x=1660024500;
- h=from:to:cc:subject:date:message-id:references:
- in-reply-to:content-id:content-transfer-encoding: mime-version;
- bh=pFKhWFFsLdkt3YiiUgkwuVSHS8LSgh0Ezh2NUcd3Xhg=;
- b=JBNZ+WHuMZsGfSFqvbfyhEnQXcWeGbH7Kg2jS52rx8W2U66gtA/wadZN
- eRYrtkmwbJ5PKaYkBsggYFCqhQxNo/wYpOSM4w/5VNN7wq3udcEVDRbho
- aPPT84KvwCvih0q3OtV/FSqYH4PfRInGU2RFP9C8f41HAUJ0tQ9/lccf8
- WzbrDWbEasRMJWo87eT7VsgFyzM+VeM27+xmV8o/6XqolSPMKAosCE70R
- ZklCrkHnAEbAQqsVO5jRMLw69aZ33u/kFUaUhry1+zvlVOBqdUnxhUwvS
- qFVvaOPeCUQK/1MsIJsQEjS530HHfqhY7UqEkLIS+IH2OToBrkZFYE40q A==;
-IronPort-SDR: HT1+XFpmObSQAwW9ym+TXT4V5bP/9oRgE5vb4ixI4LywiPM6H9kpvvEq/IF/JBJQkH8YpmKw2M
- gvd/MfIKc5or2G7F0tqes3lKwree6RnHC29h4Negg9bG9ezD4yNpHHNXWQ6RckBG12mbqNHDqB
- oNcjxjzsrIVrtSDQpc0ak4r1wVJxNNdbsT4wldudEU9cLKGbZZosBCbXu/LnUqsyCIsJRdlgxV
- utWRvFDc2lOLArhe9FSETOh3GDmL1Ynx/8/squPf7ObtbhOZYAN1zTl7cvgKonaX57NAg3hdzi
- hP/6IanpsaJWGof7uQUqnAUJ
-X-IronPort-AV: E=Sophos;i="5.84,305,1620716400"; d="scan'208";a="127551284"
-Received: from smtpout.microchip.com (HELO email.microchip.com)
- ([198.175.253.82])
- by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256;
- 08 Aug 2021 22:47:52 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Sun, 8 Aug 2021 22:47:51 -0700
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.71) with Microsoft SMTP Server
- (version=TLS1_2, 
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2 via Frontend
- Transport; Sun, 8 Aug 2021 22:47:51 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nr7smz5ZuHrhusQlitpyGT66x8qAobRL677/vWGUFaj1bwSj6nOzwvtrVTzAn1USyvrLmopQzCVHWsN7dK5BOYUNx4QdYffN8Ruq+rU8HNQH7/wY3q3MzQXuthTo38gwy6v5uuTrAWqNWa6/4nT4zPBvvmk6I9KvSoPw2e2fbLVnMazyO3SkYn5tUrj0eIlmOS+KbYxL45r2OuKUmXCoRgCWBHqISjjS6JooHnOth7vOHEnV3fGEjOU0XkG/kKdLAF+GuKpt9l4SD3/b6D9cFlchgShocCIXBPylThEEKJvWwwKblhP+BP9wB/ptuYns8DXNztBD+mVHRG1TPet/vw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pFKhWFFsLdkt3YiiUgkwuVSHS8LSgh0Ezh2NUcd3Xhg=;
- b=gGsu91DjLeBXygWrAVaaKOPauwxYwaOgZt6tKrjt5XZcBlTnL8ji0BebvN1tvXmW8is+xDZzx0LZYsWE1b6S42B57q3y3AiY/5yRZgBX2IfUquucofOOiIGanjobeKC510QGgUuMUeQIhX18WkglarYRLaCQi4mXLVos3cNuYIljk0tVwaMLi3jlOmxvavCe/IkTvZOwdSA0aAEpc3dVfVODdHfds+Z8pKtLstnLuMSSrhF7aaBwPO2FMRiMHdZhpH+q8TFSOi2yTyxJ4bBrYAl3FioMiFYqaWVyc64mS1uyDOIQ/6s6xSk5dQAjVZwEaP/EPeESH9HFhJFGdwif6A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id zPAalfrkRZeV; Mon,  9 Aug 2021 05:56:05 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id C146482A4E;
+	Mon,  9 Aug 2021 05:56:04 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 842C11BF39A
+ for <buildroot@lists.busybox.net>; Mon,  9 Aug 2021 05:56:02 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 73FD9606A6
+ for <buildroot@lists.busybox.net>; Mon,  9 Aug 2021 05:56:02 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=unikie-com.20150623.gappssmtp.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LA1agnwgDYsR for <buildroot@lists.busybox.net>;
+ Mon,  9 Aug 2021 05:56:01 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com
+ [IPv6:2a00:1450:4864:20::132])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 8E2306068B
+ for <buildroot@buildroot.org>; Mon,  9 Aug 2021 05:56:01 +0000 (UTC)
+Received: by mail-lf1-x132.google.com with SMTP id x27so8883310lfu.5
+ for <buildroot@buildroot.org>; Sun, 08 Aug 2021 22:56:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pFKhWFFsLdkt3YiiUgkwuVSHS8LSgh0Ezh2NUcd3Xhg=;
- b=A7pcNosKbhfpp8SwrIoZFABPOOmEw2aZuSfA0nDxvz8Xlnf4lVu9Vdyd0Pp0odoZzDMaJEz9e/+0XnN97A28B5Yac/gRL3Wx8HJP6pLDrk+wJ8F0cH6N6D2AQ0K56K20HxkXjyreinPQ0Bg4ebnjNiZOEvZVdm1zsxSJtDDss4o=
-Received: from BN7PR11MB2770.namprd11.prod.outlook.com (2603:10b6:406:b4::20)
- by BN6PR11MB1554.namprd11.prod.outlook.com (2603:10b6:405:b::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4394.21; Mon, 9 Aug
- 2021 05:47:48 +0000
-Received: from BN7PR11MB2770.namprd11.prod.outlook.com
- ([fe80::9da2:a1c1:ed5e:c478]) by BN7PR11MB2770.namprd11.prod.outlook.com
- ([fe80::9da2:a1c1:ed5e:c478%3]) with mapi id 15.20.4394.022; Mon, 9 Aug 2021
- 05:47:48 +0000
-To: <thomas.petazzoni@bootlin.com>, <bonet@grenoble.cnrs.fr>
-Thread-Topic: Microchip Buildroot defconfig issues: fixes needed
-Thread-Index: AQHXi3aqqf/ud0CPbkCbRj+foOY9d6tqrTyA
-Date: Mon, 9 Aug 2021 05:47:48 +0000
-Message-ID: <c25884c3-7d6a-da98-786f-3d4250e4fe65@microchip.com>
-References: <20210807070519.BBD0882F39@smtp1.osuosl.org>
- <68ad9a9b-54a1-1f6a-88c3-d6c171340b70@grenoble.cnrs.fr>
- <20210807122609.2b3d3930@windsurf>
-In-Reply-To: <20210807122609.2b3d3930@windsurf>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
-authentication-results: bootlin.com; dkim=none (message not signed)
- header.d=none;bootlin.com; dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: a5b76412-0fa4-490c-f3dd-08d95af9385e
-x-ms-traffictypediagnostic: BN6PR11MB1554:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <BN6PR11MB1554897EAE9A1C8BA5561344EFF69@BN6PR11MB1554.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: MvpRzk3wNnPqsZwJiqkg5pGzD784JGsC447xOesObR8Bo4iDYHY09oxCnNMMG6E3hL2L6AvfJ+KaqGCPQ8XYVnrcwlipVk1rA2/NsGdHB308Y0HodvdWiKUH0kW2fcDnYnWWK89lr/8zyrnlYPFf48RuIuy6XPkdkgzkHcLsld4U7T9WBYMJWLrTlhxvCUpLWBX++4Pwpmhq4B0hegB0bPV4GIOLtyyy4wq4+hvtByan496Xu1nXgQL0Jr7RJPQ9O9b6WJMKUkP9+BDFuRtDBzaTom7JdMXJ3EDqKjItxpdrbA4W6c8ebOx+yFLyODO7Q+ytqKDXjDYFcGZvszAMoz1t7nsN2raIzkvAVQgV3bPSUjnl97jeaiqdhdvx9JPU8cGEdW8XINkqN8zzlZFLxMNNP5xZl8OgUQDveZ6NJIkCDCpN3JuErLB43OShkb3hQibGoO8U4MHYegQMJ/bKJvI+AbCL0wBeKeJHHbSKFvZpwbJ2i2Xgktxj/PO4K0UApxSCs95DaCkCX/FmUEyb2OzRXfOZVIrIs4TKji0sFMyPKlPmxXOqjzjp5MIo+OMiF1gBNOe4tmY48TIXh5Pe+zTJc4oQ8HehB9/0qtyn29mmzI3sVnN2qeTIdKDfITuOx9MgpvLkUmczG7/w46u2a33Cc7u5l/ijcqVpsKzonqTnoABNQiTKXLyDqcsZ6P4m/NXbnE2q0WZ7e6a76YLT74ZxgSWOgoe5o5wtNTAGUm8vwkAmiKuOS76HrNPxbV4B8dHZVOvwStkJ/Rc6MrXVl2lyF8Pwh9PYqBDqL6Bc2UfzRDN2wug3CdaNxhe5Gf8zw7mrEWqCkR6WOCKtlMeldX6z7xaqrmE7J2h2AkUpVxM=
-x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:BN7PR11MB2770.namprd11.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(376002)(366004)(136003)(346002)(396003)(39860400002)(8936002)(478600001)(66476007)(38070700005)(64756008)(316002)(4326008)(8676002)(71200400001)(2616005)(6486002)(6512007)(66556008)(66446008)(38100700002)(122000001)(5660300002)(76116006)(91956017)(53546011)(110136005)(54906003)(66946007)(6506007)(2906002)(31696002)(186003)(83380400001)(31686004)(86362001)(36756003)(966005)(45980500001)(43740500002);
- DIR:OUT; SFP:1101; 
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?N01HTXFqVXVrcS9HcXZ4cXVucDd1Z2g3bUtPWGdWd2pwVHRTRU9iS0s3aUVx?=
- =?utf-8?B?QTA1UkthdHI5NEpDdmpNeG56dktaVXlueHJjeUtYMWQ4MWVtMHhIUGx0VlZB?=
- =?utf-8?B?ZVdYdkhPYnVhRysvWFpCYXQwTm5jakkwS3JUUlM3ZzE5OWZmYkFvcmw4UlBl?=
- =?utf-8?B?czc1ZW5wRm40Y0ZCdmh6VENDd2RmMFhoSEJnaE9HeVA4cmFnQmxRb3Zna0xF?=
- =?utf-8?B?TVNLclZWK3BIbXVGSzgrK21IMUVEVjg3clhDY2lYYlhDc2xENkQ1bGRYaTA1?=
- =?utf-8?B?Yi9ZRHJJNzFDbjFZU2VKbnZpQVpKUmFYbkQ2cTFlV290bExwVkg3Q0F4V0Ez?=
- =?utf-8?B?Y1dnemczMXg2SnkxQTlFbXdrL0oxTlplbDhwSkJGb2xNQlhnRmVwM2JhOUps?=
- =?utf-8?B?NEJDeDVkWTI1SE52WFVjTHBVcHY1SlZiclYwTUVIMms0eEhCNWxYUmVrY216?=
- =?utf-8?B?K0pzejhoNEw2dFdCTFh5VUFORjRyWldOSk5wOVJyeld4UFBjN2dESGxYWi83?=
- =?utf-8?B?a1FtMlZFZEhTR0JnT2FYVTdyQ3BaNWY0L1N5YU1DZmtvM0JNczRCRkd5MDN0?=
- =?utf-8?B?SVdhNzdSU09KcnNlcXZOWFFSTGRkT2JSZDdBWnRFam1XSlQvdWs1RkxxQXVK?=
- =?utf-8?B?UzY1MkFub0ZheWVrZXdpVkVGM25OdUI1enBFSzg1a083dU1ZeHdMdlNMam9G?=
- =?utf-8?B?VVA0U3gvUTFqc2k2QWJLVS8vU0MrUXl5TE9uRXhVaHBnNnI4YUxKVWRYRHFX?=
- =?utf-8?B?ckJpWSs5Z2djS2RsbnRLZjlKWXhSUkp1ZTJGTkNKeUJIZXVHMWNYMzg0SmNT?=
- =?utf-8?B?WlVCWnF5V0lkZm1OL05MRGpWcVVVaHJjVFVUUkw3SGhBT09zdm9GNm5mZVdM?=
- =?utf-8?B?TGdENERydXEya0NqY0N6eVNteDFybHo0S2t0Y0ZsL3ZDbXRPclJUK1NleWtL?=
- =?utf-8?B?S2I3RE5nTjc3SExLN2llNWVjWTBSQzlCRy9SRDFLZ1FoR2MwUWZGUzRpajhV?=
- =?utf-8?B?UGZLVm9MeWpKb1dXT0JpSVpOQ2tWUnBaL1FRSjQ0RnJVK0d3K3dFcjR5c3py?=
- =?utf-8?B?Vk1kQnBEd3ZOQkxtUXFIam1jWGQ0bXo3UmxqMjNOUGlsYTFsVTJpcHZXb21v?=
- =?utf-8?B?cVMzRjBqOWVSVkgzTHJxRHBEYnFqOSs4Z1o5VmJPNkt4OFYxR3pYbHV2bHhh?=
- =?utf-8?B?ODVESlhhUUpnV0lZcjF1R3hmcStSdGM2SWZNSGxEV050aUlubjRLbSt1NkVL?=
- =?utf-8?B?SmhPejZ0VzZjbWs3b012QWZsNERGMmJ6YVp1M3M2cWhpTVVLMkxCdXZqSjFG?=
- =?utf-8?B?QXJKbUl0N2paaG5LWnduMGxDbzltSXZwUVV4VDU5NDFLTlBOMFJwb2c2bzN1?=
- =?utf-8?B?ak1DdC9pTWEzMHRRdE5FTkh1YmFMWlFDODRzdm84RWRRMERDSGFwZnE4NGky?=
- =?utf-8?B?aFB2N21DT0c5aHhRclZNL2lGd3JueVdzbEhqblhPdTNvMS9FN1BQM0JmQjlw?=
- =?utf-8?B?dFZiSU5KdkRCQkxEanpvb2xQMjRUbXNPM1ZjeHVydTlETy9mRzlsV2NjeC9s?=
- =?utf-8?B?YjhoUllMNVQ3Vy9RYVczWGlYaEhoeWJzOTlML2dvbFJud1Z0R1pMWXJCUHh4?=
- =?utf-8?B?RmVIRFBOSkYxc0UwK05QZmtHNmZyKzZ2dFByM1dsMVNEUjB6Yi9oSzRaaVBY?=
- =?utf-8?B?SkdCRnprYlJZV2pucmxjaHpiSjl1RGd1TmtYdlVwbmNMSVFrdFhDY3dqR1Vr?=
- =?utf-8?B?WnplTzVlUUYvbGw3VmI0UHg3dzNJTjJTL0ZJR3hpVDNqcGcveG1POHEzZEpv?=
- =?utf-8?Q?ZvsoUJA5slo7q5c2lgbbvP8amIToJH1PnzYfk=3D?=
-Content-ID: <E1625CE86D80B4489249F1C727AA4E3A@namprd11.prod.outlook.com>
+ d=unikie-com.20150623.gappssmtp.com; s=20150623;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=eo74NSEjhcEz4XnjSqZGtpC9YOaBJG5luYZGeXmHlMc=;
+ b=vaKS/TkJ5Ts3KSgYr6uK0RLVrj62bX2+XKqlqzvJpKmIDfeZk1u0fVxBC5/Mr6FkQN
+ zusaP057OmaPEgi/zFyU0htrWAb4U4wFihdxaFvqUflytlTHFL1w0mXQjGW4oOxV4eC5
+ VCubtcX0pQB7N5Mujz5xEZsHKlyGrCu4VXZYeuQDs8lpYiTHozKq38GQlSQocPI5mG/4
+ qMuDjoPRFJMjWvLAFKobpoddRJToFhOViOlJXQC1YmsBt2Kvk6W9LjmdbdDjSZXduyj/
+ ASs3updRVWFHgDGBdPLIVaCBtS0t++Xj8eMmlBtmOhw1ZC3y2iE9eEnAnRVqNlv0zaYT
+ ZBBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=eo74NSEjhcEz4XnjSqZGtpC9YOaBJG5luYZGeXmHlMc=;
+ b=mVqwOTwSEbtzWUvHoO7lBdFjoRbjUmPw+Pe/i+M7RdzUbG26pcZPg6p/Egq2SRJiRh
+ pxnWNPYkZ9Z/VzIbiUkuy4fLJ8EkQ7H67qvmAUd5xLU6rSZJl6Bx4/Y2NoesutqGxPag
+ Thmxb43EgyoNzA+339LB06Xg+wh4pQeSMvlPvqaRds8FeXNVoE64UQ5UIDPDKiyI4QG4
+ wHOCL2lLFHI0GjzyXc8TjUP+mBEugejckYOPKCVsldjb6/yAZzvDZR9Jx0dz1baAG6ul
+ PJVsvdGKLOvUhcWcfGsfWyqLFIBdCicFjlMMntIkPYxQmCJVn+Y0lzKgIQckeIJueRN0
+ WAKg==
+X-Gm-Message-State: AOAM530v7gb3MlWdYQ+dSUDs9OeEdtPY19elmYrBwVfYQdakOtNLHTt+
+ QKl0Jdc155f6lOv+LdJY7DDDfuN+biqqz5bh
+X-Google-Smtp-Source: ABdhPJyAxNwoif5vksJexAoQQLzUqHm36iw3LHGpEuxgbvhKnL+T+TUXrsGd/MQkqmx50eYNLQOHsw==
+X-Received: by 2002:a19:c350:: with SMTP id t77mr15836397lff.142.1628488559283; 
+ Sun, 08 Aug 2021 22:55:59 -0700 (PDT)
+Received: from Unikie-T14-Gen-2i.madriguera.foxhound.fi
+ (88-113-104-240.elisa-laajakaista.fi. [88.113.104.240])
+ by smtp.googlemail.com with ESMTPSA id n12sm1481484ljq.35.2021.08.08.22.55.58
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 08 Aug 2021 22:55:58 -0700 (PDT)
+From: =?UTF-8?q?Jos=C3=A9=20Pekkarinen?= <jose.pekkarinen@unikie.com>
+To: buildroot@buildroot.org
+Date: Mon,  9 Aug 2021 08:55:57 +0300
+Message-Id: <20210809055557.8698-1-jose.pekkarinen@unikie.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN7PR11MB2770.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a5b76412-0fa4-490c-f3dd-08d95af9385e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Aug 2021 05:47:48.8129 (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: wX9nRQOORXJakQQQmfJD3f+BNddGTMQ7HvaNC6xa4TOJkba9pFvDN3V9QSvtiPT9+ifH1ouEsRGdy8bb3yiS+tHgEBfHPekNIcJxML2YwVY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR11MB1554
-Subject: Re: [Buildroot] Microchip Buildroot defconfig issues: fixes needed
+Subject: [Buildroot] [PATCH] package/restorecond: Add new init script
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -189,98 +97,83 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-From: Ludovic Desroches via buildroot <buildroot@busybox.net>
-Reply-To: Ludovic.Desroches@microchip.com
-Cc: buildroot@busybox.net, biagio.hkr@gmail.com
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: =?UTF-8?q?Jos=C3=A9=20Pekkarinen?= <jose.pekkarinen@unikie.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-On 07/08/2021 12:26, Thomas Petazzoni wrote:
-> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
-> 
-> Hello,
-> 
-> Thanks Edgar for your investigation!
-> 
-> On Sat, 7 Aug 2021 12:20:59 +0200
-> Edgar Bonet <bonet@grenoble.cnrs.fr> wrote:
-> 
->> Hello!
->>
->> On 2021-08-07, the autobuilder wrote:
->>> Detail of defconfig failures for master
->>> [list of 48 failing defconfigs]
->>
->> The 32 defconfigs that use AT91Bootstrap all failed. I just checked
->> their failure reasons. The following three failed before the build
->> started, because of check-dotconfig.py reporting missing entries in
->> .config:
->>
->>   - microchip_sam9x60ek_mmc_dev_defconfig
->>   - microchip_sama5d2_icp_mmc_defconfig
->>   - microchip_sama5d2_icp_mmc_dev_defconfig
-> 
-> I'll have a look into these.
-> 
->>   - acmesystems_acqua_a5_256mb_defconfig
->>   - acmesystems_acqua_a5_512mb_defconfig
->>   - acmesystems_aria_g25_128mb_defconfig
->>   - acmesystems_aria_g25_256mb_defconfig
->>   - acmesystems_arietta_g25_128mb_defconfig
->>   - acmesystems_arietta_g25_256mb_defconfig
->>   - at91sam9260eknf_defconfig
->>   - at91sam9g20dfc_defconfig
->>   - at91sam9g45m10ek_defconfig
->>   - at91sam9rlek_defconfig
->>   - at91sam9x5ek_defconfig
->>   - at91sam9x5ek_dev_defconfig
->>   - at91sam9x5ek_mmc_defconfig
->>   - at91sam9x5ek_mmc_dev_defconfig
->>   - atmel_sama5d27_som1_ek_mmc_dev_defconfig
->>   - atmel_sama5d2_xplained_mmc_defconfig
->>   - atmel_sama5d2_xplained_mmc_dev_defconfig
->>   - atmel_sama5d3_xplained_defconfig
->>   - atmel_sama5d3_xplained_dev_defconfig
->>   - atmel_sama5d3_xplained_mmc_defconfig
->>   - atmel_sama5d3_xplained_mmc_dev_defconfig
->>   - atmel_sama5d3xek_defconfig
->>   - atmel_sama5d4_xplained_defconfig
->>   - atmel_sama5d4_xplained_dev_defconfig
->>   - atmel_sama5d4_xplained_mmc_defconfig
->>   - atmel_sama5d4_xplained_mmc_dev_defconfig
->>   - microchip_sam9x60ek_mmc_defconfig
->>   - microchip_sama5d27_wlsom1_ek_mmc_defconfig
->>   - microchip_sama5d27_wlsom1_ek_mmc_dev_defconfig
->>
->> Failed because of AT91Bootstrap issue #127, as described here:
->> http://lists.busybox.net/pipermail/buildroot/2021-August/620375.html
-> 
-> Biagio, Ludovic, could you fix those issues on the acmesystems and
-> atmel/microchip defconfigs ?
-> 
-> If they are not fixed by the release (end of August), we would have to
-> drop the failing defconfigs.
-
-Hi Thomas,
-
-Okay we'll handle it.
-
-Regards,
-Ludovic
-
-> 
-> Thanks a lot,
-> 
-> Thomas
-> --
-> Thomas Petazzoni, co-owner and CEO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-> 
-
-_______________________________________________
-buildroot mailing list
-buildroot@busybox.net
-http://lists.busybox.net/mailman/listinfo/buildroot
+VGhlIGN1cnJlbnQgcmVzdG9yZWNvbmQgdXBzdHJlYW0gaW5pdCBzY3JpcHQgaXMgbm8KZ29vZCBm
+aXQgZm9yIHRoZSB1c2VyIHNwYWNlIGdlbmVyYXRlZCBieSBidWlsZHJvb3QsCnRoaXMgc2NyaXB0
+IGlzIGFuIGV4dGVuc2lvbiBvZiB0aGUgb3JpZ2luYWwsIHRoYXQKYnJpbmdzIHNvbWUgY2hhbmdl
+cyBmcm9tIHRoZSBkZWJpYW4gaW5pdCBzY3JpcHQgdG8KdXNlIHN0YXJ0LXN0b3AtZGFlbW9uIGlu
+c3RlYWQgb2YgZGFlbW9uLCB3aGlsZQpyZW1vdmluZyBkZXBlbmRlbmNpZXMgb24gL2V0Yy9yYy5k
+L2luaXQuZC9mdW5jdGlvbnMKYW5kIC9saWIvbHNiL2luaXQtZnVuY3Rpb25zLgoKU2lnbmVkLW9m
+Zi1ieTogSm9zw6kgUGVra2FyaW5lbiA8am9zZS5wZWtrYXJpbmVuQHVuaWtpZS5jb20+Ci0tLQog
+cGFja2FnZS9yZXN0b3JlY29uZC9TMDJyZXN0b3JlY29uZCB8IDExMyArKysrKysrKysrKysrKysr
+KysrKysrKysrKysrKwogcGFja2FnZS9yZXN0b3JlY29uZC9yZXN0b3JlY29uZC5tayB8ICAgNCAr
+LQogMiBmaWxlcyBjaGFuZ2VkLCAxMTUgaW5zZXJ0aW9ucygrKSwgMiBkZWxldGlvbnMoLSkKIGNy
+ZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL3Jlc3RvcmVjb25kL1MwMnJlc3RvcmVjb25kCgpkaWZm
+IC0tZ2l0IGEvcGFja2FnZS9yZXN0b3JlY29uZC9TMDJyZXN0b3JlY29uZCBiL3BhY2thZ2UvcmVz
+dG9yZWNvbmQvUzAycmVzdG9yZWNvbmQKbmV3IGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggMDAwMDAw
+MDAwMC4uMjRlZTMwODUzZgotLS0gL2Rldi9udWxsCisrKyBiL3BhY2thZ2UvcmVzdG9yZWNvbmQv
+UzAycmVzdG9yZWNvbmQKQEAgLTAsMCArMSwxMTMgQEAKKyMhL2Jpbi9zaAorIworIyByZXN0b3Jl
+Y29uZDoJCURhZW1vbiB1c2VkIHRvIG1haW50YWluIHBhdGggZmlsZSBjb250ZXh0CisjCisjIGNo
+a2NvbmZpZzoJLSAxMiA4NworIyBkZXNjcmlwdGlvbjoJcmVzdG9yZWNvbmQgdXNlcyBpbm90aWZ5
+IHRvIGxvb2sgZm9yIGNyZWF0aW9uIG9mIG5ldyBmaWxlcyBcCisjIGxpc3RlZCBpbiB0aGUgL2V0
+Yy9zZWxpbnV4L3Jlc3RvcmVjb25kLmNvbmYgZmlsZSwgYW5kIHJlc3RvcmVzIHRoZSBcCisjIGNv
+cnJlY3Qgc2VjdXJpdHkgY29udGV4dC4KKyMKKyMgcHJvY2Vzc25hbWU6IC91c3Ivc2Jpbi9yZXN0
+b3JlY29uZAorIyBjb25maWc6IC9ldGMvc2VsaW51eC9yZXN0b3JlY29uZC5jb25mCisjIHBpZGZp
+bGU6IC9ydW4vcmVzdG9yZWNvbmQucGlkCisjCisjIFJldHVybiB2YWx1ZXMgYWNjb3JkaW5nIHRv
+IExTQiBmb3IgYWxsIGNvbW1hbmRzIGJ1dCBzdGF0dXM6CisjIDAgLSBzdWNjZXNzCisjIDEgLSBn
+ZW5lcmljIG9yIHVuc3BlY2lmaWVkIGVycm9yCisjIDIgLSBpbnZhbGlkIG9yIGV4Y2VzcyBhcmd1
+bWVudChzKQorIyAzIC0gdW5pbXBsZW1lbnRlZCBmZWF0dXJlIChlLmcuICJyZWxvYWQiKQorIyA0
+IC0gaW5zdWZmaWNpZW50IHByaXZpbGVnZQorIyA1IC0gcHJvZ3JhbSBpcyBub3QgaW5zdGFsbGVk
+CisjIDYgLSBwcm9ncmFtIGlzIG5vdCBjb25maWd1cmVkCisjIDcgLSBwcm9ncmFtIGlzIG5vdCBy
+dW5uaW5nCisKK1BBVEg9L3NiaW46L2JpbjovdXNyL2JpbjovdXNyL3NiaW4KK0RFU0M9IlNFTGlu
+dXggZmlsZSBjb250ZXh0IG1haW50YWluaW5nIGRhZW1vbiIKK05BTUU9cmVzdG9yZWNvbmQKK0RB
+RU1PTj0vdXNyL3NiaW4vJE5BTUUKK0RBRU1PTl9BUkdTPSIiCitQSURGSUxFPS92YXIvcnVuLyRO
+QU1FLnBpZAorTE9DS0ZJTEU9L3Zhci9ydW4vJE5BTUUucGlkCitTQ1JJUFROQU1FPS9ldGMvaW5p
+dC5kLyROQU1FCisKK1sgLXggL3Vzci9zYmluL3NlbGludXhlbmFibGVkIF0gJiYgL3Vzci9zYmlu
+L3NlbGludXhlbmFibGVkIHx8IGV4aXQgNworCisjIENoZWNrIHRoYXQgd2UgYXJlIHJvb3QgLi4u
+IHNvIG5vbi1yb290IHVzZXJzIHN0b3AgaGVyZQordGVzdCAkRVVJRCA9IDAgIHx8IGV4aXQgNAor
+Cit0ZXN0IC14IC91c3Ivc2Jpbi9yZXN0b3JlY29uZCAgfHwgZXhpdCA1Cit0ZXN0IC1mIC9ldGMv
+c2VsaW51eC9yZXN0b3JlY29uZC5jb25mICB8fCBleGl0IDYKKworUkVUVkFMPTAKKworc3RhcnQo
+KQoreworCSMgUmV0dXJuCisJIyAgIDAgaWYgZGFlbW9uIGhhcyBiZWVuIHN0YXJ0ZWQKKwkjICAg
+MSBpZiBkYWVtb24gd2FzIGFscmVhZHkgcnVubmluZworCSMgICAyIGlmIGRhZW1vbiBjb3VsZCBu
+b3QgYmUgc3RhcnRlZAorCXN0YXJ0LXN0b3AtZGFlbW9uIC0tc3RhcnQgLS1xdWlldCAtLXBpZGZp
+bGUgJFBJREZJTEUgLS1leGVjICREQUVNT04gLS10ZXN0ID4gL2Rldi9udWxsIFwKKwkJfHwgcmV0
+dXJuIDEKKwlzdGFydC1zdG9wLWRhZW1vbiAtLXN0YXJ0IC0tcXVpZXQgLS1waWRmaWxlICRQSURG
+SUxFIC0tZXhlYyAkREFFTU9OIC0tIFwKKwkJJERBRU1PTl9BUkdTIFwKKwkJfHwgcmV0dXJuIDIK
+Kwl0b3VjaCAkTE9DS0ZJTEUKKwlyZXR1cm4gIiRSRVRWQUwiCit9CisKK3N0b3AoKQoreworCSMg
+UmV0dXJuCisJIyAgIDAgaWYgZGFlbW9uIGhhcyBiZWVuIHN0b3BwZWQKKwkjICAgMSBpZiBkYWVt
+b24gd2FzIGFscmVhZHkgc3RvcHBlZAorCSMgICAyIGlmIGRhZW1vbiBjb3VsZCBub3QgYmUgc3Rv
+cHBlZAorCSMgICBvdGhlciBpZiBhIGZhaWx1cmUgb2NjdXJyZWQKKwlzdGFydC1zdG9wLWRhZW1v
+biAtLXN0b3AgLS1xdWlldCAtLXJldHJ5PVRFUk0vMzAvS0lMTC81IC0tcGlkZmlsZSAkUElERklM
+RSAtLW5hbWUgJE5BTUUKKwlSRVRWQUw9IiQ/IgorCVsgIiRSRVRWQUwiID0gMiBdICYmIHJldHVy
+biAyCisKKwlybSAtZiAkUElERklMRQorCXJtIC1mICRMT0NLRklMRQorCXJldHVybiAiJFJFVFZB
+TCIKK30KKworcmVzdGFydCgpCit7CisgICAgc3RvcAorICAgIHN0YXJ0Cit9CisKKyMgU2VlIGhv
+dyB3ZSB3ZXJlIGNhbGxlZC4KK2Nhc2UgIiQxIiBpbgorICBzdGFydCkKKwllY2hvIC1uICQiU3Rh
+cnRpbmcgcmVzdG9yZWNvbmQ6ICIKKwlzdGFydAorICAgIGNhc2UgIiQ/IiBpbgorICAgICAgICAw
+fDEpIGVjaG8gIk9rISIgOzsKKyAgICAgICAgMikgZWNobyAiRmFpbGVkIiA7OworICAgIGVzYWMK
+Kwk7OworICBzdG9wKQorCWVjaG8gLW4gJCJTaHV0dGluZyBkb3duIHJlc3RvcmVjb25kOiAiCisJ
+c3RvcAorICAgIGNhc2UgIiQ/IiBpbgorICAgICAgICAwfDEpIGVjaG8gIk9rISIgOzsKKyAgICAg
+ICAgMikgZWNobyAiRmFpbGVkIiA7OworICAgIGVzYWMKKwk7OworICBzdGF0dXMpCisJc3RhdHVz
+IHJlc3RvcmVjb25kCisJUkVUVkFMPSQ/CisJOzsKKyAgZm9yY2UtcmVsb2FkfHJlc3RhcnR8cmVs
+b2FkKQorCXJlc3RhcnQKKwk7OworICBjb25kcmVzdGFydCkKKwlbIC1lIC92YXIvbG9jay9zdWJz
+eXMvcmVzdG9yZWNvbmQgXSAmJiByZXN0YXJ0IHx8IDoKKwk7OworICAqKQorICAgICAgICBlY2hv
+ICQiVXNhZ2U6ICQwIHtzdGFydHxzdG9wfHJlc3RhcnR8Zm9yY2UtcmVsb2FkfHN0YXR1c3xjb25k
+cmVzdGFydH0iCisgICAgICAgIFJFVFZBTD0zCitlc2FjCisKK2V4aXQgJFJFVFZBTApkaWZmIC0t
+Z2l0IGEvcGFja2FnZS9yZXN0b3JlY29uZC9yZXN0b3JlY29uZC5tayBiL3BhY2thZ2UvcmVzdG9y
+ZWNvbmQvcmVzdG9yZWNvbmQubWsKaW5kZXggN2FiN2U5NzhkZC4uM2M2ZmI1N2VhNiAxMDA2NDQK
+LS0tIGEvcGFja2FnZS9yZXN0b3JlY29uZC9yZXN0b3JlY29uZC5taworKysgYi9wYWNrYWdlL3Jl
+c3RvcmVjb25kL3Jlc3RvcmVjb25kLm1rCkBAIC0yNyw4ICsyNyw4IEBAIGRlZmluZSBSRVNUT1JF
+Q09ORF9CVUlMRF9DTURTCiBlbmRlZgogCiBkZWZpbmUgUkVTVE9SRUNPTkRfSU5TVEFMTF9JTklU
+X1NZU1YKLQkkKElOU1RBTEwpIC1tIDA3NTUgLUQgJChARCkvcmVzdG9yZWNvbmQuaW5pdCBcCi0J
+CSQoVEFSR0VUX0RJUikvZXRjL2luaXQuZC9TMjByZXN0b3JlY29uZAorCSQoSU5TVEFMTCkgLW0g
+MDc1NSAtRCBwYWNrYWdlL3Jlc3RvcmVjb25kL1MwMnJlc3RvcmVjb25kIFwKKwkJJChUQVJHRVRf
+RElSKS9ldGMvaW5pdC5kL1MwMnJlc3RvcmVjb25kCiBlbmRlZgogCiBkZWZpbmUgUkVTVE9SRUNP
+TkRfSU5TVEFMTF9JTklUX1NZU1RFTUQKLS0gCjIuMjUuMQoKX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJv
+b3RAYnVzeWJveC5uZXQKaHR0cDovL2xpc3RzLmJ1c3lib3gubmV0L21haWxtYW4vbGlzdGluZm8v
+YnVpbGRyb290Cg==
