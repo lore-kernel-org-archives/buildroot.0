@@ -2,56 +2,73 @@ Return-Path: <SRS0=7M6N=NB=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-21.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E9B2C4338F
-	for <buildroot@archiver.kernel.org>; Tue, 10 Aug 2021 09:19:17 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 14C85C4338F
+	for <buildroot@archiver.kernel.org>; Tue, 10 Aug 2021 10:22:42 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 8576E6056B
-	for <buildroot@archiver.kernel.org>; Tue, 10 Aug 2021 09:19:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8576E6056B
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
+	by mail.kernel.org (Postfix) with ESMTPS id A331960F94
+	for <buildroot@archiver.kernel.org>; Tue, 10 Aug 2021 10:22:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A331960F94
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=busybox.net
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 34E00403F5;
-	Tue, 10 Aug 2021 09:19:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 59B5F605EB;
+	Tue, 10 Aug 2021 10:22:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id L68HWV94Pf3Q; Tue, 10 Aug 2021 09:19:11 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id mZX-z-D6dlUr; Tue, 10 Aug 2021 10:22:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B572D403FE;
-	Tue, 10 Aug 2021 09:19:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CD3D860602;
+	Tue, 10 Aug 2021 10:22:36 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A2C4C1BF9B6
- for <buildroot@lists.busybox.net>; Tue, 10 Aug 2021 09:18:56 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 02CAF1BF2FD
+ for <buildroot@lists.busybox.net>; Tue, 10 Aug 2021 10:22:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9EB164027D
- for <buildroot@lists.busybox.net>; Tue, 10 Aug 2021 09:18:56 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id F1FE1401BA
+ for <buildroot@lists.busybox.net>; Tue, 10 Aug 2021 10:22:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (1024-bit key) header.d=inbox.ru
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MyAnBeY-cxFH for <buildroot@lists.busybox.net>;
- Tue, 10 Aug 2021 09:18:52 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3BC9940263
- for <buildroot@buildroot.org>; Tue, 10 Aug 2021 09:18:52 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 3E4888D37E; Tue, 10 Aug 2021 09:18:29 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ with ESMTP id cSqYOB0w2cs9 for <buildroot@lists.busybox.net>;
+ Tue, 10 Aug 2021 10:22:29 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtp30.i.mail.ru (smtp30.i.mail.ru [94.100.177.90])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9F761400EC
+ for <buildroot@buildroot.org>; Tue, 10 Aug 2021 10:22:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=inbox.ru;
+ s=mail3; 
+ h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:Cc:To:From:From:Subject:Content-Type:Content-Transfer-Encoding:To:Cc;
+ bh=jjoUzI/kcXHMMWc6FoOdqvyXm/OXzQTXq+rJYCFI+SU=; 
+ t=1628590949;x=1629196349; 
+ b=kKchm/u6inZOZOCqznxMuY0UqUe7rVlftHG0laYqyRI3sumnNB/BQ9i1IE/RSYkdfTmUHYz5Ax311r1oBZDtawNtC0RmO4QEUoJVpK+HMAzRH0Wn/VTr17+HlhGMMWPHDcTOJ0Gq+8at/54DtAb7Fd0Ftqg/jc1XOiV+6qeDxg8=;
+Received: by smtp30.i.mail.ru with esmtpa (envelope-from <fido_max@inbox.ru>)
+ id 1mDOtu-0002A8-OG; Tue, 10 Aug 2021 13:22:27 +0300
 To: buildroot@buildroot.org
-Date: Tue, 10 Aug 2021 09:48:00 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 73e570a290374602814d53f8d3b2ca21079ad71a
-X-Git-Newrev: 5284a826aee8a908f4df63640605c0246942b6b0
-X-Patchwork-Hint: ignore
-Message-Id: <20210810091829.3E4888D37E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] Update for 2021.05.1
+Date: Tue, 10 Aug 2021 13:24:40 +0300
+Message-Id: <20210810102440.829901-1-fido_max@inbox.ru>
+X-Mailer: git-send-email 2.31.1
+MIME-Version: 1.0
+Authentication-Results: smtp30.i.mail.ru; auth=pass smtp.auth=fido_max@inbox.ru
+ smtp.mailfrom=fido_max@inbox.ru
+X-7564579A: B8F34718100C35BD
+X-77F55803: 4F1203BC0FB41BD92087353F0EC44DD9F9A2272A1D086A28553D1D5C4B4124EF182A05F53808504064E6FF920C24332C5C1540BA2A16EBF7CFBBAC94601131A755248FFE1BCBCE38
+X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE79A02CDD1178524C2EA1F7E6F0F101C67BD4B6F7A4D31EC0BCC500DACC3FED6E28638F802B75D45FF8AA50765F7900637B2BC59D094D41B978638F802B75D45FF36EB9D2243A4F8B5A6FCA7DBDB1FC311F39EFFDF887939037866D6147AF826D89453A20180C1051C6DC5E5CADF40A3996F9789CCF6C18C3F8528715B7D10C86878DA827A17800CE75C266B62551496319FA2833FD35BB23D9E625A9149C048EE33AC447995A7AD182CC0D3CB04F14752D2E47CDBA5A96583BD4B6F7A4D31EC0BC014FD901B82EE079FA2833FD35BB23D27C277FBC8AE2E8B60CDF180582EB8FBA471835C12D1D977C4224003CC836476EB9C4185024447017B076A6E789B0E975F5C1EE8F4F765FC112FDFC3C1A25714D81D268191BDAD3DBD4B6F7A4D31EC0BEA7A3FFF5B025636D81D268191BDAD3D78DA827A17800CE70BFC8670DAA9A89CEC76A7562686271EEC990983EF5C03292E808ACE2090B5E14AD6D5ED66289B5259CC434672EE63711DD303D21008E298D5E8D9A59859A8B6B372FE9A2E580EFC725E5C173C3A84C3C9BE88FFEDFA497A35872C767BF85DA2F004C90652538430E4A6367B16DE6309
+X-B7AD71C0: AC4F5C86D027EB782CDD5689AFBDA7A213B5FB47DCBC3458F0AFF96BAACF4158235E5A14AD4A4A4625E192CAD1D9E79D94463893BF8742D06FD88C369EB6E950
+X-C1DE0DAB: C20DE7B7AB408E4181F030C43753B8186998911F362727C414F749A5E30D975C6B668463F4F89F8637F680D5D7CE889A4FA2A16FF3C857E59C2B6934AE262D3EE7EAB7254005DCED2465BA557073FD9C1E0A4E2319210D9B64D260DF9561598F01A9E91200F654B0B66DA94168EAEAEF8E8E86DC7131B365E7726E8460B7C23C
+X-C8649E89: 4E36BF7865823D7055A7F0CF078B5EC49A30900B95165D34103A2CD2CFC42C67AE5BBE4225A0254B75071D15278D303A072181277AA4617EA30BE7CF335BB8FE1D7E09C32AA3244CAEE497D8AD6F12383BE578B75D2D350930363D8B7DA7DD44729B2BEF169E0186
+X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2biojGhQhWEp1aB+75Do4xJRkjg==
+X-Mailru-Sender: 11C2EC085EDE56FA9C10FA2967F5AB249002DA95AD8BE4EB979024F70394749764A2BD06C83A47E3EE9242D420CFEBFD3DDE9B364B0DF2891A624F84B2C74EDA4239CF2AF0A6D4F80DA7A0AF5A3A8387
+X-Mras: Ok
+Subject: [Buildroot] [PATCH] package/libgeos: bump version to 3.9.1
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,100 +80,106 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-MIME-Version: 1.0
+From: Maxim Kochetkov via buildroot <buildroot@busybox.net>
+Reply-To: Maxim Kochetkov <fido_max@inbox.ru>
+Cc: Maxim Kochetkov <fido_max@inbox.ru>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5284a826aee8a908f4df63640605c0246942b6b0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Remove upstream patch.
+Add myself to DEVELOPERS
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit d5127a4de714d6608e897b4585e5ab5d3d5bd965)
-[Peter: drop Makefile change]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
 ---
- CHANGES                  | 52 ++++++++++++++++++++++++++++++++++++++++++++++++
- support/misc/Vagrantfile |  2 +-
- 2 files changed, 53 insertions(+), 1 deletion(-)
+ DEVELOPERS                                    |  1 +
+ ...-CMakeLists.txt-add-BUILD_BENCHMARKS.patch | 37 -------------------
+ package/libgeos/libgeos.hash                  |  2 +-
+ package/libgeos/libgeos.mk                    |  2 +-
+ 4 files changed, 3 insertions(+), 39 deletions(-)
+ delete mode 100644 package/libgeos/0001-CMakeLists.txt-add-BUILD_BENCHMARKS.patch
 
-diff --git a/CHANGES b/CHANGES
-index cb35b7b255..5dab63c755 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -55,6 +55,58 @@
- 	#13846: BR2_PACKAGE_LVM2_STANDARD_INSTALL should be default to
- 	        y as before
+diff --git a/DEVELOPERS b/DEVELOPERS
+index bb39abefab..04fe6edbc6 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1868,6 +1868,7 @@ N:	Max Filippov <jcmvbkbc@gmail.com>
+ F:	arch/Config.in.xtensa
  
-+2021.05.1, released August 10, 2021
-+
-+	Important / security related fixes.
-+
-+	Toolchain: Disable PIC/PIE for Microblaze (like for NIOS II)
-+	as it is not currently working.
-+
-+	binutils: fix linker assert failure on OpenRisc, or1k build
-+	issue with gcc < 5
-+
-+	gdb: Enable on NIOS II
-+
-+	utils/scanpypi: Various improvements
-+
-+	Defconfigs: stm32f469_disco: Fix kernel boot issue, Microchip
-+	sam9x60ek mmc_dev: Add missing toolchain/system options
-+
-+	Updated/fixed packages: arm-trusted-firmware, apache, audit,
-+	avahi, bind, binutils, bird, bluez5_utils, boinc, busybox,
-+	chrony, clamav, connman, cryptsetup, dnsmasq, docker-cli,
-+	docker-engine, dovecot, dovecot-pigeonhole, e2fsprogs, exiv2,
-+	fail2ban, fb-test-app, feh, fetchmail, ffmpeg, flac, fluxbox,
-+	gawk, gcc, gcr, gdb, gdk-pixbuf, gesftpserver, glibc, go,
-+	gptfdisk, gqrx, granite, grub2, guile, hdparm, heirloom-mailx,
-+	htop, ibrcommon, ibrdtn, ibrdtn-tools, ibrdtnd,
-+	intel-microcode, iodine, irqbalance, keepalived, kexec-tools,
-+	libass, libconfig, libcurl, libfreeimage, libfuse3, libgcrypt,
-+	libgudev, libhtp, libinput, libjson, libgtk3, libkrb5,
-+	libloki, libmodsecurity, libndp, libnetfilter-log,
-+	libnfnetlink, libnice, libodb, libodb-boost, libodb-mysql,
-+	libodb-pgsql, libpcap, libqmi, libqrtr-glib, libressl,
-+	librsvg, libtasn1, libtirpc, libuci, libxmlrpc,
-+	linux-firmware, linuxptp, lrzsz, lvm2, mariadb, mesa3d,
-+	mbedtls, monit, mono, mosquitto, mpd, mpg123, mpv, nbd,
-+	netsnmp, nettle, nmap, nodejs, ntp, openntpd, openpgm,
-+	openswan, pango, pcre2, perl-crypt-openssl-rsa, php, pixman,
-+	postgresql, proxychains-ng, putty, python,
-+	python-dataproperty, python-django, python-pysftp,
-+	python-urllib3, python3, qpdf, redis, ripgrep, rsync, ruby,
-+	samba4, sane-backends, slirp, spice, squid, suricata, tcpdump,
-+	tftpd, thrift, tor, tpm2-tools, trinity, uboot, uboot-tools,
-+	uclibc, vlc, wireless-regdb, wireshark, wolfssl,
-+	xapp_fonttosfnt, xlib_libX11, xlib_libxshmfence,
-+	xserver_xorg-server
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#13586: grub failure with BR2_OPTIMIZE_3
-+	#13661: host-python2 build fails on aarch64
-+	#13836: package build failure when target install set to no..
-+	#13846: BR2_PACKAGE_LVM2_STANDARD_INSTALL should be default to..
-+
- 2021.05, released June 6th, 2021
- 
- 	Various fixes.
-diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
-index 84803ed250..89726c5f8b 100644
---- a/support/misc/Vagrantfile
-+++ b/support/misc/Vagrantfile
-@@ -5,7 +5,7 @@
+ N:	Maxim Kochetkov <fido_max@inbox.ru>
++F:	package/libgeos/
+ F:	package/libosmium/
+ F:	package/osm2pgsql/
+ F:	package/postgis/
+diff --git a/package/libgeos/0001-CMakeLists.txt-add-BUILD_BENCHMARKS.patch b/package/libgeos/0001-CMakeLists.txt-add-BUILD_BENCHMARKS.patch
+deleted file mode 100644
+index 94748dcdbd..0000000000
+--- a/package/libgeos/0001-CMakeLists.txt-add-BUILD_BENCHMARKS.patch
++++ /dev/null
+@@ -1,37 +0,0 @@
+-From 16848d6da27140caf922f71a233f96a508fb061e Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sun, 24 Jan 2021 12:38:37 +0100
+-Subject: [PATCH] CMakeLists.txt: add BUILD_BENCHMARKS
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/libgeos/geos/pull/395]
+----
+- CMakeLists.txt | 5 ++++-
+- 1 file changed, 4 insertions(+), 1 deletion(-)
+-
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index c8b39bac..8ca6b829 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -48,6 +48,7 @@ option(BUILD_SHARED_LIBS "Build GEOS with shared libraries" ON)
+- set(CMAKE_CXX_STANDARD 11 CACHE STRING "C++ standard version to use (default is 11)")
+- 
+- ## GEOS custom variables
+-+option(BUILD_BENCHMARKS "Build GEOS benchmarks" ON)
+- cmake_dependent_option(GEOS_BUILD_DEVELOPER
+-   "Build with compilation flags useful for development" ON
+-   "GEOS_BUILD_FROM_GIT" OFF)
+-@@ -292,7 +293,9 @@ endif()
+- #-----------------------------------------------------------------------------
+- # Benchmarks
+- #-----------------------------------------------------------------------------
+--add_subdirectory(benchmarks)
+-+if(BUILD_BENCHMARKS)
+-+  add_subdirectory(benchmarks)
+-+endif()
+- 
+- #-----------------------------------------------------------------------------
+- # Utils
+--- 
+-2.29.2
+-
+diff --git a/package/libgeos/libgeos.hash b/package/libgeos/libgeos.hash
+index 5b5e44c7c5..3508ba9077 100644
+--- a/package/libgeos/libgeos.hash
++++ b/package/libgeos/libgeos.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  bd8082cf12f45f27630193c78bdb5a3cba847b81e72b20268356c2a4fc065269  geos-3.9.0.tar.bz2
++sha256  7e630507dcac9dc07565d249a26f06a15c9f5b0c52dd29129a0e3d381d7e382a  geos-3.9.1.tar.bz2
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/libgeos/libgeos.mk b/package/libgeos/libgeos.mk
+index a355732af8..ab2035c62a 100644
+--- a/package/libgeos/libgeos.mk
++++ b/package/libgeos/libgeos.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- # Buildroot version to use
--RELEASE='2021.05'
-+RELEASE='2021.05.1'
- 
- ### Change here for more memory/cores ###
- VM_MEMORY=2048
+-LIBGEOS_VERSION = 3.9.0
++LIBGEOS_VERSION = 3.9.1
+ LIBGEOS_SITE = http://download.osgeo.org/geos
+ LIBGEOS_SOURCE = geos-$(LIBGEOS_VERSION).tar.bz2
+ LIBGEOS_LICENSE = LGPL-2.1
+-- 
+2.31.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
