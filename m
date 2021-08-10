@@ -2,95 +2,56 @@ Return-Path: <SRS0=7M6N=NB=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.7 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
-	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 03BD6C4338F
-	for <buildroot@archiver.kernel.org>; Tue, 10 Aug 2021 06:46:18 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EF819C4338F
+	for <buildroot@archiver.kernel.org>; Tue, 10 Aug 2021 07:33:48 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9AC5161052
-	for <buildroot@archiver.kernel.org>; Tue, 10 Aug 2021 06:46:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9AC5161052
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id 67EBE6101E
+	for <buildroot@archiver.kernel.org>; Tue, 10 Aug 2021 07:33:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 67EBE6101E
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E1853401AD;
-	Tue, 10 Aug 2021 06:46:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2930A607D1;
+	Tue, 10 Aug 2021 07:33:48 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rzXWeemlMBw8; Tue, 10 Aug 2021 07:33:44 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8FF8160818;
+	Tue, 10 Aug 2021 07:33:43 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 3845F1BF30B
+ for <buildroot@lists.busybox.net>; Tue, 10 Aug 2021 07:33:41 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 258A840201
+ for <buildroot@lists.busybox.net>; Tue, 10 Aug 2021 07:33:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ADIZ0aRL6pnF; Tue, 10 Aug 2021 06:46:10 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3904A403AC;
-	Tue, 10 Aug 2021 06:46:09 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8EA511BF30D
- for <buildroot@lists.busybox.net>; Tue, 10 Aug 2021 06:45:57 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 78E4640261
- for <buildroot@lists.busybox.net>; Tue, 10 Aug 2021 06:45:57 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lsCxUrGdVpf3 for <buildroot@lists.busybox.net>;
- Tue, 10 Aug 2021 06:45:52 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com
- [IPv6:2607:f8b0:4864:20::22b])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2AB6C4025C
- for <buildroot@buildroot.org>; Tue, 10 Aug 2021 06:45:52 +0000 (UTC)
-Received: by mail-oi1-x22b.google.com with SMTP id u10so27497936oiw.4
- for <buildroot@buildroot.org>; Mon, 09 Aug 2021 23:45:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=PxuS0ksrVlYVPS7QMXDBZ0mb1Bin0oVP+1OxPGY5w5Q=;
- b=jyAjdRZS5LKyVCH9rRBBcKMzjB1JQ5belAWYzx2DNREycNRPT6Ev3x7ZAajb17SLY5
- QcpSeLX8vkENH+TE5LjbjdQwt2OLUkuVqqnrMx33h52LVqQbniS1jjBhTXzSPNdgshUH
- gPA0VFh/t9NyTad2OQibm4LowsvcEdOQMkC0tv68UgCr00NXEEUFvceG3jVzoHyI99Ov
- yAQeM8N3nCK4+TPQyl8zMB34u1XDddxTp80TKhhL6Y16nnQS/TXYswCYqtRvC3xmpM9+
- pH+dxpWH1mwlNq5GuZzSORW1S1MA8K0/AjowEWz054r9RUunkCwbyNZbG1iRSeE3S8Zp
- CdGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=PxuS0ksrVlYVPS7QMXDBZ0mb1Bin0oVP+1OxPGY5w5Q=;
- b=dsWCcQn4ZzFH5/vl9WT3EgkJMbKwiMXQH3kStticXugkCmCDpnTkNjO+U81ht65Jdn
- 6GDyAVnwlXh7acLkVOrb9vxln5rI5aULgvrgViy9xjSHsWaPO1hXxd9zSg40Hyb6Dg3n
- 7Ztrcl6ZJdDx5MhiYLu7B7E8oft91qCcnkjTeyj+TKHIYXOW2deBCGaBnR3RMSxEa0TT
- 3oq/96x4c5H6m9B3fxmQ1dAJMnzvLBwxDj2R+SpeCkUzt9Qu7GXQZtB+TCoWUaAa0Adi
- W+vmXAvg7/H+k1Zv0UUNPLf7V/JCoCh9tZZDaR1ji9FDCHdGivR1bViBGvvRBam4jE+D
- QzuA==
-X-Gm-Message-State: AOAM533TRB9z7WAbxSJ06rc9uF9rSbrcsvOkTajbzy1CMLZhIsY1Wo2p
- i8wGlmUotjHE9fVMnxTqjWUwDWwu59k=
-X-Google-Smtp-Source: ABdhPJwIm1KfrBVN/dutXNN765J/baAR9TiclMtJcScJKWstnTkMiUfj8Hx5Ee0plSiXhc8KN91UiA==
-X-Received: by 2002:a05:6808:610:: with SMTP id
- y16mr7235042oih.100.1628577950981; 
- Mon, 09 Aug 2021 23:45:50 -0700 (PDT)
-Received: from james-x399.localdomain (97-118-178-184.hlrn.qwest.net.
- [97.118.178.184])
- by smtp.gmail.com with ESMTPSA id i8sm3461677otk.51.2021.08.09.23.45.50
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 09 Aug 2021 23:45:50 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1Mtq0Dw0ywmr for <buildroot@lists.busybox.net>;
+ Tue, 10 Aug 2021 07:33:36 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id B37A0403B1
+ for <buildroot@buildroot.org>; Tue, 10 Aug 2021 07:33:36 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id E2C148D3A9; Tue, 10 Aug 2021 07:33:13 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 10 Aug 2021 00:45:47 -0600
-Message-Id: <20210810064547.2579380-2-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210810064547.2579380-1-james.hilliard1@gmail.com>
-References: <20210810064547.2579380-1-james.hilliard1@gmail.com>
-MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 2/2] package/linux-tools: add host-bpftool
- support
+Date: Tue, 10 Aug 2021 09:32:54 +0200
+X-Git-Refname: refs/heads/2021.05.x
+X-Git-Oldrev: 04ce5e9d35deaa04ecd4667c17044a8a20cf1e11
+X-Git-Newrev: d5127a4de714d6608e897b4585e5ab5d3d5bd965
+X-Patchwork-Hint: ignore
+Message-Id: <20210810073313.E2C148D3A9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.05.x] Update for 2021.05.1
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,158 +63,111 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-This will be required for building systemd with bpf support.
+commit: https://git.buildroot.net/buildroot/commit/?id=d5127a4de714d6608e897b4585e5ab5d3d5bd965
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in.host                       |  1 +
- package/linux-tools/Config.in.host           | 11 +++++++++++
- package/linux-tools/linux-tool-bpftool.mk.in | 20 ++++++++++++++++++++
- package/linux-tools/linux-tools.mk           | 17 +++++++++++++++++
- 4 files changed, 49 insertions(+)
- create mode 100644 package/linux-tools/Config.in.host
+ CHANGES                  | 52 ++++++++++++++++++++++++++++++++++++++++++++++++
+ Makefile                 |  4 ++--
+ support/misc/Vagrantfile |  2 +-
+ 3 files changed, 55 insertions(+), 3 deletions(-)
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 8d443ea255..98cc67b238 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -45,6 +45,7 @@ menu "Host utilities"
- 	source "package/jsmin/Config.in.host"
- 	source "package/kmod/Config.in.host"
- 	source "package/libp11/Config.in.host"
-+	source "package/linux-tools/Config.in.host"
- 	source "package/lld/Config.in.host"
- 	source "package/lpc3250loader/Config.in.host"
- 	source "package/lttng-babeltrace/Config.in.host"
-diff --git a/package/linux-tools/Config.in.host b/package/linux-tools/Config.in.host
-new file mode 100644
-index 0000000000..b228f9b02d
---- /dev/null
-+++ b/package/linux-tools/Config.in.host
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_HOST_LINUX_TOOLS
-+	bool
+diff --git a/CHANGES b/CHANGES
+index c7ae5fbfc3..ebc454c9f1 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,55 @@
++2021.05.1, released August 10, 2021
 +
-+config BR2_PACKAGE_HOST_LINUX_TOOLS_BPFTOOL
-+	bool "host bpftool"
-+	select BR2_PACKAGE_HOST_LINUX_TOOLS
-+	help
-+	  bpftool is a tool for for inspection and simple manipulation
-+	  of eBPF programs and maps.
++	Important / security related fixes.
 +
-+	  These tools are available only from kernel version 4.15.
-diff --git a/package/linux-tools/linux-tool-bpftool.mk.in b/package/linux-tools/linux-tool-bpftool.mk.in
-index 0c4d3693a3..c5e6fb97db 100644
---- a/package/linux-tools/linux-tool-bpftool.mk.in
-+++ b/package/linux-tools/linux-tool-bpftool.mk.in
-@@ -5,6 +5,7 @@
++	Toolchain: Disable PIC/PIE for Microblaze (like for NIOS II)
++	as it is not currently working.
++
++	binutils: fix linker assert failure on OpenRisc, or1k build
++	issue with gcc < 5
++
++	gdb: Enable on NIOS II
++
++	utils/scanpypi: Various improvements
++
++	Defconfigs: stm32f469_disco: Fix kernel boot issue, Microchip
++	sam9x60ek mmc_dev: Add missing toolchain/system options
++
++	Updated/fixed packages: arm-trusted-firmware, apache, audit,
++	avahi, bind, binutils, bird, bluez5_utils, boinc, busybox,
++	chrony, clamav, connman, cryptsetup, dnsmasq, docker-cli,
++	docker-engine, dovecot, dovecot-pigeonhole, e2fsprogs, exiv2,
++	fail2ban, fb-test-app, feh, fetchmail, ffmpeg, flac, fluxbox,
++	gawk, gcc, gcr, gdb, gdk-pixbuf, gesftpserver, glibc, go,
++	gptfdisk, gqrx, granite, grub2, guile, hdparm, heirloom-mailx,
++	htop, ibrcommon, ibrdtn, ibrdtn-tools, ibrdtnd,
++	intel-microcode, iodine, irqbalance, keepalived, kexec-tools,
++	libass, libconfig, libcurl, libfreeimage, libfuse3, libgcrypt,
++	libgudev, libhtp, libinput, libjson, libgtk3, libkrb5,
++	libloki, libmodsecurity, libndp, libnetfilter-log,
++	libnfnetlink, libnice, libodb, libodb-boost, libodb-mysql,
++	libodb-pgsql, libpcap, libqmi, libqrtr-glib, libressl,
++	librsvg, libtasn1, libtirpc, libuci, libxmlrpc,
++	linux-firmware, linuxptp, lrzsz, lvm2, mariadb, mesa3d,
++	mbedtls, monit, mono, mosquitto, mpd, mpg123, mpv, nbd,
++	netsnmp, nettle, nmap, nodejs, ntp, openntpd, openpgm,
++	openswan, pango, pcre2, perl-crypt-openssl-rsa, php, pixman,
++	postgresql, proxychains-ng, putty, python,
++	python-dataproperty, python-django, python-pysftp,
++	python-urllib3, python3, qpdf, redis, ripgrep, rsync, ruby,
++	samba4, sane-backends, slirp, spice, squid, suricata, tcpdump,
++	tftpd, thrift, tor, tpm2-tools, trinity, uboot, uboot-tools,
++	uclibc, vlc, wireless-regdb, wireshark, wolfssl,
++	xapp_fonttosfnt, xlib_libX11, xlib_libxshmfence,
++	xserver_xorg-server
++
++	Issues resolved (http://bugs.uclibc.org):
++
++	#13586: grub failure with BR2_OPTIMIZE_3
++	#13661: host-python2 build fails on aarch64
++	#13836: package build failure when target install set to no..
++	#13846: BR2_PACKAGE_LVM2_STANDARD_INSTALL should be default to..
++
+ 2021.05, released June 6th, 2021
+ 
+ 	Various fixes.
+diff --git a/Makefile b/Makefile
+index 255d37e74f..259706719a 100644
+--- a/Makefile
++++ b/Makefile
+@@ -92,9 +92,9 @@ all:
+ .PHONY: all
+ 
+ # Set and export the version string
+-export BR2_VERSION := 2021.05
++export BR2_VERSION := 2021.05.1
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1623014000
++BR2_VERSION_EPOCH = 1628580000
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
+index 84803ed250..89726c5f8b 100644
+--- a/support/misc/Vagrantfile
++++ b/support/misc/Vagrantfile
+@@ -5,7 +5,7 @@
  ################################################################################
  
- LINUX_TOOLS += bpftool
-+HOST_LINUX_TOOLS += host-bpftool
+ # Buildroot version to use
+-RELEASE='2021.05'
++RELEASE='2021.05.1'
  
- BPFTOOL_DEPENDENCIES = binutils elfutils
- 
-@@ -17,6 +18,9 @@ BPFTOOL_DEPENDENCIES += zlib
- endif
- 
- BPFTOOL_MAKE_OPTS = $(LINUX_MAKE_FLAGS)
-+HOST_BPFTOOL_MAKE_OPTS = $(HOST_MAKE_FLAGS) \
-+	CFLAGS="$(HOST_CFLAGS)" \
-+	LDFLAGS="$(HOST_LDFLAGS)"
- 
- define BPFTOOL_BUILD_CMDS
- 	$(Q)if ! grep install $(LINUX_DIR)/tools/bpf/bpftool/Makefile >/dev/null 2>&1 ; then \
-@@ -29,9 +33,25 @@ define BPFTOOL_BUILD_CMDS
- 		$(BPFTOOL_MAKE_OPTS)
- endef
- 
-+define HOST_BPFTOOL_BUILD_CMDS
-+	$(Q)if ! grep install $(HOST_LINUX_HEADERS_DIR)/tools/bpf/bpftool/Makefile >/dev/null 2>&1 ; then \
-+		echo "Your kernel version is too old and does not have install section in the bpf tools." ; \
-+		echo "At least kernel 4.15 must be used." ; \
-+		exit 1 ; \
-+	fi
-+
-+	$(HOST_MAKE_ENV) $(MAKE1) -C $(HOST_LINUX_HEADERS_DIR) \
-+		$(HOST_BPFTOOL_MAKE_OPTS) \
-+		tools/bpf/bpftool
-+endef
-+
- define BPFTOOL_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE1) -C $(LINUX_DIR)/tools/bpf/bpftool \
- 		$(BPFTOOL_MAKE_OPTS) \
- 		DESTDIR=$(TARGET_DIR) \
- 		install
- endef
-+
-+define HOST_BPFTOOL_INSTALL_CMDS
-+	$(INSTALL) -m 0755 -D $(HOST_LINUX_HEADERS_DIR)/tools/bpf/bpftool/bpftool $(HOST_DIR)/usr/sbin/bpftool
-+endef
-diff --git a/package/linux-tools/linux-tools.mk b/package/linux-tools/linux-tools.mk
-index 81b1fbc176..0375883d95 100644
---- a/package/linux-tools/linux-tools.mk
-+++ b/package/linux-tools/linux-tools.mk
-@@ -21,6 +21,7 @@ include $(sort $(wildcard package/linux-tools/*.mk.in))
- 
- # We only need the kernel to be extracted, not actually built
- LINUX_TOOLS_PATCH_DEPENDENCIES = linux
-+HOST_LINUX_TOOLS_DEPENDENCIES = host-linux-headers
- 
- # Install Linux kernel tools in the staging directory since some tools
- # may install shared libraries and headers (e.g. cpupower).
-@@ -34,6 +35,10 @@ LINUX_TOOLS_POST_BUILD_HOOKS += $(foreach tool,$(LINUX_TOOLS),\
- 	$(if $(BR2_PACKAGE_LINUX_TOOLS_$(call UPPERCASE,$(tool))),\
- 		$(call UPPERCASE,$(tool))_BUILD_CMDS))
- 
-+HOST_LINUX_TOOLS_POST_BUILD_HOOKS += $(foreach tool,$(LINUX_TOOLS),\
-+	$(if $(BR2_PACKAGE_HOST_LINUX_TOOLS_$(call UPPERCASE,$(tool))),\
-+		HOST_$(call UPPERCASE,$(tool))_BUILD_CMDS))
-+
- LINUX_TOOLS_POST_INSTALL_STAGING_HOOKS += $(foreach tool,$(LINUX_TOOLS),\
- 	$(if $(BR2_PACKAGE_LINUX_TOOLS_$(call UPPERCASE,$(tool))),\
- 		$(call UPPERCASE,$(tool))_INSTALL_STAGING_CMDS))
-@@ -42,6 +47,10 @@ LINUX_TOOLS_POST_INSTALL_TARGET_HOOKS += $(foreach tool,$(LINUX_TOOLS),\
- 	$(if $(BR2_PACKAGE_LINUX_TOOLS_$(call UPPERCASE,$(tool))),\
- 		$(call UPPERCASE,$(tool))_INSTALL_TARGET_CMDS))
- 
-+HOST_LINUX_TOOLS_POST_INSTALL_HOOKS += $(foreach tool,$(LINUX_TOOLS),\
-+	$(if $(BR2_PACKAGE_HOST_LINUX_TOOLS_$(call UPPERCASE,$(tool))),\
-+		HOST_$(call UPPERCASE,$(tool))_INSTALL_CMDS))
-+
- define LINUX_TOOLS_LINUX_CONFIG_FIXUPS
- 	$(foreach tool,$(LINUX_TOOLS),\
- 		$(if $(BR2_PACKAGE_LINUX_TOOLS_$(call UPPERCASE,$(tool))),\
-@@ -49,6 +58,13 @@ define LINUX_TOOLS_LINUX_CONFIG_FIXUPS
- 	)
- endef
- 
-+define HOST_LINUX_TOOLS_LINUX_CONFIG_FIXUPS
-+	$(foreach tool,$(LINUX_TOOLS),\
-+		$(if $(BR2_PACKAGE_HOST_LINUX_TOOLS_$(call UPPERCASE,$(tool))),\
-+			$(HOST_$(call UPPERCASE,$(tool))_LINUX_CONFIG_FIXUPS))
-+	)
-+endef
-+
- define LINUX_TOOLS_INSTALL_INIT_SYSTEMD
- 	$(foreach tool,$(LINUX_TOOLS),\
- 		$(if $(BR2_PACKAGE_LINUX_TOOLS_$(call UPPERCASE,$(tool))),\
-@@ -72,3 +88,4 @@ define LINUX_TOOLS_INSTALL_INIT_OPENRC
- endef
- 
- $(eval $(generic-package))
-+$(eval $(host-generic-package))
--- 
-2.25.1
-
+ ### Change here for more memory/cores ###
+ VM_MEMORY=2048
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
