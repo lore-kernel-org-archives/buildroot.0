@@ -2,77 +2,93 @@ Return-Path: <SRS0=trv6=NC=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
+X-Spam-Status: No, score=-8.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ADABAC4338F
-	for <buildroot@archiver.kernel.org>; Wed, 11 Aug 2021 07:43:12 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D78EC4338F
+	for <buildroot@archiver.kernel.org>; Wed, 11 Aug 2021 08:26:29 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 3882560EB5
-	for <buildroot@archiver.kernel.org>; Wed, 11 Aug 2021 07:43:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3882560EB5
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
+	by mail.kernel.org (Postfix) with ESMTPS id 85A10601FE
+	for <buildroot@archiver.kernel.org>; Wed, 11 Aug 2021 08:26:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 85A10601FE
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D913B605D8;
-	Wed, 11 Aug 2021 07:43:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0BFA48322A;
+	Wed, 11 Aug 2021 08:26:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jmmtM6v90H7x; Wed, 11 Aug 2021 07:43:08 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 194126086C;
-	Wed, 11 Aug 2021 07:43:05 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D9D6B1BF577
- for <buildroot@lists.busybox.net>; Wed, 11 Aug 2021 07:43:03 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C9397831E7
- for <buildroot@lists.busybox.net>; Wed, 11 Aug 2021 07:43:03 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=ideasonboard.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WGAeokLpg6FZ for <buildroot@lists.busybox.net>;
- Wed, 11 Aug 2021 07:42:58 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com
- [213.167.242.64])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C6BA88318C
- for <buildroot@buildroot.org>; Wed, 11 Aug 2021 07:42:58 +0000 (UTC)
-Received: from [192.168.1.111] (91-158-153-130.elisa-laajakaista.fi
- [91.158.153.130])
- by perceval.ideasonboard.com (Postfix) with ESMTPSA id 157E1EE;
- Wed, 11 Aug 2021 09:42:55 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
- s=mail; t=1628667775;
- bh=GsNWYfuNhYiXhheeuc9slYnJqnBDoiXg0g5BuU9Zvb0=;
- h=To:Cc:References:From:Subject:Date:In-Reply-To:From;
- b=g/UiGUcXEtsRHMATKpLJ2KKnV1exMj82ldXFFAtMHG1j6XOCHQQR4doNPcLbkxSIe
- LGRro2v7vZRUUJcGy7TCcAg95jC4/fK/2N+rUDlwGX47Hm4Tiv6fWoJ+cCAkZ2u7bV
- Pwja85PnE51ZnwgadrRzKMDzMLdwT99mShC1Px1U=
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-References: <20210806125047.1832422-1-tomi.valkeinen@ideasonboard.com>
- <20210806125047.1832422-2-tomi.valkeinen@ideasonboard.com>
- <20210808092935.GK27036@scaer>
- <ee9c4a7c-82c2-3b5e-7e41-0bad306e80fe@ideasonboard.com>
- <20210808203351.GN27036@scaer>
- <b94a85b6-1483-2f18-9cf2-55e97764dd40@ideasonboard.com>
- <20210810193930.GT27036@scaer>
-From: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Message-ID: <e96e4967-da6d-143b-f0fc-9a6ea997018a@ideasonboard.com>
-Date: Wed, 11 Aug 2021 10:42:52 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Mb_a4ufN-4CB; Wed, 11 Aug 2021 08:26:24 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3A9A0829AF;
+	Wed, 11 Aug 2021 08:26:23 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id EB6E81BF4E2
+ for <buildroot@lists.busybox.net>; Wed, 11 Aug 2021 08:26:21 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id E826260716
+ for <buildroot@lists.busybox.net>; Wed, 11 Aug 2021 08:26:21 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pJHMPpYXD0TV for <buildroot@lists.busybox.net>;
+ Wed, 11 Aug 2021 08:26:17 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com
+ [IPv6:2a00:1450:4864:20::52b])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9C7966067A
+ for <buildroot@buildroot.org>; Wed, 11 Aug 2021 08:26:17 +0000 (UTC)
+Received: by mail-ed1-x52b.google.com with SMTP id y7so2519197eda.5
+ for <buildroot@buildroot.org>; Wed, 11 Aug 2021 01:26:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
+ h=sender:from:to:subject:date:message-id:user-agent:mime-version
+ :content-transfer-encoding;
+ bh=VhiCy5R0e+wZU1eSjxhhPjk1x6gLSP+B6TYKVx3DA7o=;
+ b=Vza/E5teaXIEOWLK7kkzBo95FHfXvs1aV1pJ1i7idEY/thLZ0ftYb9JWPSd+rtQVhm
+ v5YJen4VFV1vU1X9a2O7VRbi1jvxYUZwsYhv3Ar8m7ZDlElXpzuc7c1NHwbLhiTPHngF
+ AWIXes39awpnXHUDEOC9X+48IMX+r9a6d/KmMIcBEAF0V3L9YpDkuQCcsryNW3Yroxt3
+ k5tikF+61M4hbELKjC+OIXLkdM3j0t3z677DI39r78qn9xhJApE5yr5ZBihY5bo3slDk
+ saLzAqODhJn+iq5Szgl6l3+KEUDw+9POTNYR1NelNt4X4sVniU+Ftbf5XTjFydEwyJvQ
+ zchg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:sender:from:to:subject:date:message-id
+ :user-agent:mime-version:content-transfer-encoding;
+ bh=VhiCy5R0e+wZU1eSjxhhPjk1x6gLSP+B6TYKVx3DA7o=;
+ b=V6ptGRv6pVQ+VmaEHJtZM6hcbeT8Q8WSR+Wu/7fkM23Ipx16RsL3iD/qRmt46exQRr
+ 3hR2mLkieceHFZigR8vBo66apgZiuVIuo6DzampLPdYeZQZSdMkq9JxEPfZfF8gQ10D6
+ ktp614hvgcylP684GwiLvtrgFXQpXBn90MIZ1xJIggfVAHNf7cFDabJfqRi4IiWH16Ar
+ /uTm5OQaxjGIeOlm0N9yoW67UpJrqKlZWLRx3Pmeh5V5HVZ6PzYNgfD/S8ZKuweN9kkS
+ ADeZWC+/D9rmCZ605WkRW1BT+yUhQrDSNVFEQksj9SdPKkajsvZM0IaBl/lXh3TL9kI9
+ ItSA==
+X-Gm-Message-State: AOAM530xKM+QvEDeezoZTZaBX+/fXHu/5veRCeFyNFuK+V/ntAPbqQcn
+ oABesQcsRjE4ilcOD2BFKZNTdfpoqph/dg==
+X-Google-Smtp-Source: ABdhPJx5YKXVx5IIokaU3O0+DtlJtPotTzmbGXOcBulEDTtqsd7MJGq6JrqabYKTLafYpV0x0M6jMg==
+X-Received: by 2002:a05:6402:12c4:: with SMTP id
+ k4mr9940749edx.240.1628670375588; 
+ Wed, 11 Aug 2021 01:26:15 -0700 (PDT)
+Received: from dell.be.48ers.dk ([195.162.189.230])
+ by smtp.gmail.com with ESMTPSA id lw22sm7835088ejb.74.2021.08.11.01.26.13
+ for <buildroot@buildroot.org>
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 11 Aug 2021 01:26:14 -0700 (PDT)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
+ (envelope-from <peter@korsgaard.com>) id 1mDjYy-0008MC-Nc
+ for buildroot@buildroot.org; Wed, 11 Aug 2021 10:26:12 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Wed, 11 Aug 2021 10:26:12 +0200
+Message-ID: <87pmuk75gb.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-In-Reply-To: <20210810193930.GT27036@scaer>
-Content-Language: en-US
-Subject: Re: [Buildroot] [PATCH 2/2] package/kmsxx: update to latest
+Subject: [Buildroot] Buildroot 2021.02.4 released
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,142 +100,74 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Peter Seiderer <ps.report@gmx.net>, buildroot@buildroot.org
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-Hi,
-
-On 10/08/2021 22:39, Yann E. MORIN wrote:
-> Tomi, All,
-> 
-> On 2021-08-09 09:23 +0300, Tomi Valkeinen spake thusly:
->> And I'd love to enable the python bindings for kms++ in buildroot, but I
->> didn't manage to get meson find buildroot's pybind11. I'll look at that more
->> at some point. I think the problem is that meson should find pybind11 using
->> cmake (apparently that can be used to find dependencies...), but when
->> building kms++, meson just says:
->>
->> CMake binary for MachineChoice.HOST is not cached
->> CMake binary missing from cross or native file, or env var undefined.
->> Default target is not allowed for cross use
->> Found CMake: NO
-> 
-> Could you try to add:
-> 
->      KMSXX_DEPENDENCIES += $(BR2_CMAKE_HOST_DEPENDENCY)
-> 
-> To see if that would solve the issue?
-
-I did get a bit forward, but not much. I think this also needs to be 
-added, to package/meson/cross-compilation.conf.in:
-
-cmake = '@HOST_DIR@/bin/cmake'
-
-This helps meson to find cmake, but then the problems wrt. pybind11 and 
-python started. I don't think cmake managed to find the .cmake files 
-installed by buildroot's pybind11 package, so I just hacked and copied
-
-<output>/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/python3.9/site-packages/pybind11/share/cmake/pybind11
-
-to
-
-<output>/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/cmake/
-
-so that they are in similar place as from Ubuntu's pybind11 package.
-
-I think that helped cmake find them, but then I'm seeing "Python config 
-failure: Python is 64-bit, chosen compiler is 32-bit" error from 
-pybind11's cmake files.
-
-I also tried to change buildroot's python-pybind package to be a 
-cmake-package, instead of python-package (thinking that perhaps it'll 
-install the files to correct place), but again go the 64/32-bit error.
-
-At this point I gave up, as I don't have much experience with cmake (and 
-it's horrible =).
-
->> On 08/08/2021 23:33, Yann E. MORIN wrote:
->>> I am by far not a meson expert, so when you say "the fallback-to-subproject
->>> can be managed with meson commandline options", I'd be much interested
->>> in hos to do that, so that in Buildrot we know how to forcibly forbid
->>> bundled sub-projects (or wraps?) to be used...
->> https://mesonbuild.com/Subprojects.html#commandline-options
->> So, buildroot could globally define "--wrap-mode=nodownload" for meson to
->> prevent download of the subprojects.
-> 
-> Shouldn't we instead use:   --wrap-mode=nofallback
-> 
-> This entirely prevent use of wraps, even those that are already present
-> (e.g. because an upstream packager would have added them when generating
-> the release tarball for example).
-
-Yes, I that makes sense too. I was thinking that the reason to avoid 
-fallback is to avoid downloading unverified source code. nodownload does 
-that, as if the subproject is packaged in the release tarball, it's 
-"verified" in the same way the source of the package itself is, i.e. the 
-exact code is known at the time the buildroot package is made, and the 
-hash file checks the subproject too.
-
-But if the intention is to make sure all packages use the same version 
-of a library, then nofallback is better.
-
->> Developers who need the functionality
->> of 'use-system-pybind11' option can use
->> "--force-fallback-for=list,of,dependencies".
-> 
-> This should only be done in conjunction with --wrap-mode=nodownload
-> 
->> And at least for me, the download doesn't even work inside buildroot:
->>
->> Downloading pybind11 source from
->> https://github.com/pybind/pybind11/archive/v2.6.0.zip
->> <urlopen error unknown url type: https>
->                              ,------^^^^^
-> I think the error lies there: meson is written in python3, and is
-> executed with our host-python3, which we only conditionally build it
-> with support for TLS:
-> 
->     package/python3/python3.mk:
->     46 ifeq ($(BR2_PACKAGE_HOST_PYTHON3_SSL),y)
->     47 HOST_PYTHON3_DEPENDENCIES += host-openssl
->     48 else
->     49 HOST_PYTHON3_CONF_OPTS += --disable-openssl
->     50 endif
-> 
-> So, this is a good thing that this is not available by default: wraps
-> can only be downloaded from insecure sites, which if the meson wrapDB is
-> properly curated, should not happen. And thus, it should not be possible
-> to ever download any wrap at all! Aha. Aha! AHA! MUAHAHA! ;-]
-> 
-> But jokes aside, try setting BR2_PACKAGE_HOST_PYTHON3_SSL=y, and I would
-> guess downloading wraps would be come possible (although this would be a
-> very bad idea).
-
-Then I get:
-
-<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify 
-failed: unable to get local issuer certificate (_ssl.c:1129)>
-
-I guess root certs are missing?
-
-This would be nice to have working for the cases where buildroot doesn't 
-have the subproject package available (or working, as is the case here 
-with pybind11). Even if mainline buildroot doesn't allow subproject 
-downloads, it's nice to have it locally.
-
-In my case, I had to remove the subproject stuff from kms++, add 
-pybind11 back as a git submodule (which does work in buildroot), and 
-then use that kms++ version with buildroot to get a rootfs with kms++ 
-with py-bindings.
-
-But I also understand that this is probably a bit of a corner case, and 
-no one else is interested =).
-
-  Tomi
-_______________________________________________
-buildroot mailing list
-buildroot@busybox.net
-http://lists.busybox.net/mailman/listinfo/buildroot
+SGksCgpCdWlsZHJvb3QgaXMgYSBzaW1wbGUgdG9vbCBmb3IgY3JlYXRpbmcgY29tcGxldGUgZW1i
+ZWRkZWQgTGludXggc3lzdGVtcwooaHR0cDovL2J1aWxkcm9vdC5vcmcpLgoKQnVpbGRyb290IDIw
+MjEuMDIuNCBpcyByZWxlYXNlZCAtIEdvIGRvd25sb2FkIGl0IGF0OgoKaHR0cDovL2J1aWxkcm9v
+dC5vcmcvZG93bmxvYWRzL2J1aWxkcm9vdC0yMDIxLjAyLjQudGFyLmd6CgpvcgoKaHR0cDovL2J1
+aWxkcm9vdC5vcmcvZG93bmxvYWRzL2J1aWxkcm9vdC0yMDIxLjAyLjQudGFyLmJ6MgoKT3IgZ2V0
+IGl0IGZyb20gR2l0OgoKZ2l0Oi8vZ2l0LmJ1aWxkcm9vdC5vcmcvYnVpbGRyb290CgpCdWlsZHJv
+b3QgMjAyMS4wMi40IGlzIGEgYnVnZml4IHJlbGVhc2Ugb24gdGhlIGN1cnJlbnQgbG9uZyB0ZXJt
+CnJlbGVhc2UsIGZpeGluZyBhIG51bWJlciBvZiBpbXBvcnRhbnQgLyBzZWN1cml0eSByZWxhdGVk
+IGlzc3VlcwpkaXNjb3ZlcmVkIHNpbmNlIHRoZSAyMDIxLjAyLjMgcmVsZWFzZS4gTm90aWNlIHRo
+YXQgbm8gcmVsZWFzZSB3YXMgbWFkZQppbiBKdWx5LCBzbyB0aGlzIHJlbGVhc2UgaXMgYmlnZ2Vy
+IHRoYW4gbm9ybWFsLgoKLSBUb29sY2hhaW46IERpc2FibGUgUElDL1BJRSBmb3IgTWljcm9ibGF6
+ZSAobGlrZSBmb3IgTklPUyBJSSkgYXMgaXQgaXMKICBub3QgY3VycmVudGx5IHdvcmtpbmcuCgot
+IGJpbnV0aWxzOiBmaXggbGlua2VyIGFzc2VydCBmYWlsdXJlIG9uIE9wZW5SaXNjLCBvcjFrIGJ1
+aWxkCiAgaXNzdWUgd2l0aCBnY2MgPCA1CgotIGdkYjogRW5hYmxlIGZvciBOSU9TIElJCgotIFNl
+Y3VyaXR5IGZpeGVzIGZvciBhdmFoaSwgZG92ZWNvdCwgZG92ZWNvdC1waWdlb25ob2xlLCBleGl2
+MiwKICBmYWlsMmJhbiwgZmV0Y2htYWlsLCBnbGliYywgZ28sIGludGVsLW1pY3JvY29kZSwgbGli
+Y3VybCwgbGliZ2NyeXB0LAogIGxpYmtyYjUsIGxpYm1vZHNlY3VyaXR5LCBsaWJ0YXNuMSwgbGli
+eG1scnBjLCBsaW51eHB0cCwgbWJlZHRscywKICBtb3NxdWl0dG8sIG5vZGVqcywgcGhwLCBwdXR0
+eSwgcHl0aG9uLWRqYW5nbywgcHl0aG9uLXVybGxpYjMsIHFwZGYsCiAgcmVkaXMsIHJ1YnksIHNs
+aXJwLCBzcGljZSwgc3VyaWNhdGEsIHRocmlmdCwgdG9yLCB0cG0yLXRvb2xzLAogIHdpcmVzaGFy
+aywgd29sZnNzbAoKLSBGaXhlcyBmb3IgZG93bmxvYWQvY29tcGlsYXRpb24vcnVudGltZS9saWNl
+bnNlIGlzc3VlcyBpbiBhcGFjaGUsCiAgYXJtLXRydXN0ZWQtZmlybXdhcmUsIGF1ZGl0LCBhdmFo
+aSwgYmluZCwgYmludXRpbHMsIGJpcmQsIGJvaW5jLAogIGJ1c3lib3gsIGJsdWV6NV91dGlscywg
+Y2hyb255LCBjbGFtYXYsIGNyeXB0c2V0dXAsIGN3aWlkLCBkbnNtYXNxLAogIGRvY2tlci1jbGks
+IGRvY2tlci1lbmdpbmUsIGUyZnNwcm9ncywgZmxhYywgZmx1eGJveCwgZ2F3aywgZ2NjLCBnY3Is
+CiAgZ2RiLCBnZGstcGl4YnVmLCBnZXNmdHBzZXJ2ZXIsIGdwdGZkaXNrLCBncmFuaXRlLCBncnVi
+MiwgZ3VpbGUsCiAgaGRwYXJtLCBpYnJjb21tb24sIGlicmR0biwgaWJyZHRuLXRvb2xzLCBpYnJk
+dG5kLCBpcnFiYWxhbmNlLAogIGtlZXBhbGl2ZWQsIGxpYmFzcywgbGliY29uZmlnLCBsaWJmdXNl
+MywgbGliZ3RrMywgbGliZ3VkZXYsIGxpYmh0cCwKICBsaWJqc29uLCBsaWJsb2tpLCBsaWJuZHAs
+IGxpYm5ldGZpbHRlci1sb2csIGxpYm5mbmV0ZmlsdGVyLCBsaWJuaWNlLAogIGxpYm9kYiwgbGli
+b2RiLWJvb3N0LCBsaWJvZGItbXlzcWwsIGxpYm9kYi1wZ3NxbCwgbGlicGNhcCwgbGlicW1pLAog
+IGxpYnJlc3NsLCBsaWJyc3ZnLCBsaWJ1Y2ksIGxpbnV4LWZpcm13YXJlLCBsdm0yLCBtYXJpYWRi
+LCBtb25vLCBtcGQsCiAgbXBnMTIzLCBtcHYsIG5iZCwgbmVhcmQsIG5ldHNubXAsIG5ldHRsZSwg
+bmdpbngtbW9kc2VjdXJpdHksIG5tYXAsCiAgbnRwLCBvcGVubnRwZCwgb3BlbnBnbSwgb3BlbnN3
+YW4sIHBhbmdvLCBwaXhtYW4sCiAgcGVybC1jcnlwdC1vcGVuc3NsLXJzYSwgcG9sa2l0LCBwb3N0
+Z3Jlc3FsLCBwcm94eWNoYWlucy1uZywgcHl0aG9uLAogIHB5dGhvbi1kYXRhcHJvcGVydHksIHB5
+dGhvbi1weXNmdHAsIHB5dGhvbjMsIHNhbWJhNCwgdGNwZHVtcCwgdGZ0cGQsCiAgdG9yLCB2bGMs
+IHVib290LCB1Ym9vdC10b29scywgdWNsaWJjLCB1dGlsLWxpbnV4LCB3aXJlbGVzcy1yZWdkYiwK
+ICB4YXBwX2ZvbnR0b3NmbnQsIHhsaWJfbGliWDExLCB4bGliX2xpYnhzaG1mZW5jZSwgeHNlcnZl
+cl94b3JnLXNlcnZlcgoKRm9yIG1vcmUgZGV0YWlscywgc2VlIHRoZSBDSEFOR0VTIGZpbGU6Cgpo
+dHRwczovL2dpdC5idWlsZHJvb3QubmV0L2J1aWxkcm9vdC9wbGFpbi9DSEFOR0VTP2lkPTIwMjEu
+MDIuNAoKVXNlcnMgb2YgdGhlIGFmZmVjdGVkIHBhY2thZ2VzIGFyZSBzdHJvbmdseSBlbmNvdXJh
+Z2VkIHRvIHVwZ3JhZGUuCgpNYW55IHRoYW5rcyB0byBhbGwgdGhlIHBlb3BsZSBjb250cmlidXRp
+bmcgdG8gdGhpcyByZWxlYXNlOgoKZ2l0IHNob3J0bG9nIC1zbiAyMDIxLjAyLjMuLgoKICAgIDkz
+ICBGYWJyaWNlIEZvbnRhaW5lCiAgICAxOCAgQmVybmQgS3VobHMKICAgIDEzICBQZXRlciBLb3Jz
+Z2FhcmQKICAgIDEwICBUaG9tYXMgUGV0YXp6b25pCiAgICAgOCAgR2l1bGlvIEJlbmV0dGkKICAg
+ICA3ICBGcmFuY29pcyBQZXJyYWQKICAgICA2ICBQZXRlciBTZWlkZXJlcgogICAgIDUgIFlhbm4g
+RS4gTU9SSU4KICAgICA0ICBSb21haW4gTmFvdXIKICAgICAzICBCYXJ1Y2ggU2lhY2gKICAgICAz
+ICBKYW1lcyBIaWxsaWFyZAogICAgIDMgIE1pY2hhZWwgTm9zdGhvZmYKICAgICAzICBUaG9tYXMg
+RGUgU2NoYW1waGVsZWlyZQogICAgIDMgIFRpdG91YW4gQ2hyaXN0b3BoZQogICAgIDIgIEFkYW0g
+RHVza2V0dAogICAgIDIgIEFybm91dCBWYW5kZWNhcHBlbGxlIChFc3NlbnNpdW0vTWluZCkKICAg
+ICAyICBDaHJpc3RpYW4gU3Rld2FydAogICAgIDEgIEFsZXhhbmRlciBEYWhsCiAgICAgMSAgQWxl
+eGV5IE5leW1hbgogICAgIDEgIEFuZHJlYXMgSGlsc2UKICAgICAxICBBbmRyZWFzIE5hdW1hbm4K
+ICAgICAxICBBbmRyw6kgWndpbmcKICAgICAxICBBbmR5IFNoZXZjaGVua28KICAgICAxICBBc2Fm
+IEthaGxvbgogICAgIDEgIEJydW5vIE1hcmllCiAgICAgMSAgQ2hyaXN0b3BoZSBQcmlvdXplYXUK
+ICAgICAxICBEYW5paWwgU3RhcwogICAgIDEgIERhcmlvIEJpbmFjY2hpCiAgICAgMSAgRXJpY28g
+TnVuZXMKICAgICAxICBHZW9mZiBMZXZhbmQKICAgICAxICBHd2VuaGFlbCBHb2F2ZWMtTWVyb3UK
+ICAgICAxICBIZWlrbyBUaGllcnkKICAgICAxICBIZXJ2ZSBDb2RpbmEKICAgICAxICBIdWJlcnQg
+TGFjb3RlCiAgICAgMSAgSm9obiBLZWVwaW5nCiAgICAgMSAgSm9zw6kgUGVra2FyaW5lbgogICAg
+IDEgIErDtnJnIEtyYXVzZQogICAgIDEgIEtvcnkgTWFpbmNlbnQKICAgICAxICBNYXhpbSBLb2No
+ZXRrb3YKICAgICAxICBNaWNoYWVsIEZpc2NoZXIKICAgICAxICBNaXJ6YSBLYXBldGFub3ZpYwog
+ICAgIDEgIFBldHIgVm9yZWwKICAgICAxICBSYXBoYcOrbCBNw6lsb3R0ZQogICAgIDEgIFNlcmdl
+eSBNYXR5dWtldmljaAoKLS0gCkJ5ZSwgUGV0ZXIgS29yc2dhYXJkCl9fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVp
+bGRyb290QGJ1c3lib3gubmV0Cmh0dHA6Ly9saXN0cy5idXN5Ym94Lm5ldC9tYWlsbWFuL2xpc3Rp
+bmZvL2J1aWxkcm9vdAo=
