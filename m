@@ -7,51 +7,51 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 969D8C4338F
-	for <buildroot@archiver.kernel.org>; Wed, 11 Aug 2021 08:35:37 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E2F44C4338F
+	for <buildroot@archiver.kernel.org>; Wed, 11 Aug 2021 08:35:49 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1888560F55
-	for <buildroot@archiver.kernel.org>; Wed, 11 Aug 2021 08:35:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1888560F55
+	by mail.kernel.org (Postfix) with ESMTPS id A057B60527
+	for <buildroot@archiver.kernel.org>; Wed, 11 Aug 2021 08:35:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A057B60527
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D3972401B1;
-	Wed, 11 Aug 2021 08:35:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 657C88321B;
+	Wed, 11 Aug 2021 08:35:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id c5gVpA2R_Mr8; Wed, 11 Aug 2021 08:35:32 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id p04hmuar8Kg7; Wed, 11 Aug 2021 08:35:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EA77A40249;
-	Wed, 11 Aug 2021 08:35:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4AA3D829AF;
+	Wed, 11 Aug 2021 08:35:44 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 93ECF1BF4E2
- for <buildroot@lists.busybox.net>; Wed, 11 Aug 2021 08:35:30 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 470CB1BF4E2
+ for <buildroot@lists.busybox.net>; Wed, 11 Aug 2021 08:35:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 80950402AC
- for <buildroot@lists.busybox.net>; Wed, 11 Aug 2021 08:35:30 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3B1A7402AC
+ for <buildroot@lists.busybox.net>; Wed, 11 Aug 2021 08:35:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id oNfJCwon_5qK for <buildroot@lists.busybox.net>;
+ with ESMTP id QV-SFh9fSf_V for <buildroot@lists.busybox.net>;
  Wed, 11 Aug 2021 08:35:26 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1E3A0402D8
+ by smtp2.osuosl.org (Postfix) with ESMTP id 235BD402E0
  for <buildroot@buildroot.org>; Wed, 11 Aug 2021 08:35:26 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id CA4DD8D3C0; Wed, 11 Aug 2021 08:35:00 +0000 (UTC)
+ id D727D81D80; Wed, 11 Aug 2021 08:35:00 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 11 Aug 2021 10:33:02 +0200
+Date: Wed, 11 Aug 2021 10:35:05 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ef377fca04051eb46f63080201fdfc14c60c9bab
-X-Git-Newrev: 817148b8191b6e7536c945128d7b86ae97eee8ba
+X-Git-Oldrev: 817148b8191b6e7536c945128d7b86ae97eee8ba
+X-Git-Newrev: e2d2cd94e09618831a4d5edad83b420cf287478c
 X-Patchwork-Hint: ignore
-Message-Id: <20210811083500.CA4DD8D3C0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] Update for 2021.02.4
+Message-Id: <20210811083500.D727D81D80@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] docs/website: update for 2021.02.4
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,79 +69,96 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=817148b8191b6e7536c945128d7b86ae97eee8ba
+commit: https://git.buildroot.net/buildroot/commit/?id=e2d2cd94e09618831a4d5edad83b420cf287478c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 004a792dcf10e6c474070c9571f7504411e786cc)
-[Peter: drop Makefile change]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- CHANGES | 51 +++++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 51 insertions(+)
+ docs/website/download.html | 18 +++++++++---------
+ docs/website/news.html     | 19 +++++++++++++++++++
+ 2 files changed, 28 insertions(+), 9 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index 5dab63c755..568fe37552 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -253,6 +253,57 @@
- 	#13751: libopenssl (static): huge drop in performance in newer ..
- 	#13771: package htop has undeclared dependency on host python
+diff --git a/docs/website/download.html b/docs/website/download.html
+index 3f8a765ed6..68d12b88e5 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -8,37 +8,37 @@
+     <div class="panel-heading">Download</div>
+     <div class="panel-body">
  
-+2021.02.4, released August 10th, 2021
-+
-+	Important / security related fixes.
-+
-+	Toolchain: Disable PIC/PIE for Microblaze (like for NIOS II)
-+	as it is not currently working.
-+
-+	binutils: fix linker assert failure on OpenRisc, or1k build
-+	issue with gcc < 5
-+
-+	gdb: Enable on NIOS II
-+
-+	utils/scanpypi: Various improvements
-+
-+	Defconfigs: stm32f469_disco: Fix kernel boot issue, Microchip
-+	sam9x60ek mmc_dev: Add missing toolchain/system options
-+
-+	Updated/fixed packages: apache, arm-trusted-firmware, audit,
-+	avahi, bind, binutils, bird, bluez5_utils, boinc, busybox,
-+	chrony, clamav, cryptsetup, cwiid, dnsmasq, docker-cli,
-+	docker-engine, dovecot, dovecot-pigeonhole, e2fsprogs, exiv2,
-+	fail2ban, fb-test-app, feh, fetchmail, flac, fluxbox, gawk,
-+	gcc, gcr, gdb, gdk-pixbuf, gesftpserver, glibc, go, gptfdisk,
-+	granite, grub2, gqrx, guile, hdparm, heirloom-mailx,
-+	ibrcommon, ibrdtn, ibrdtn-tools, ibrdtnd, intel-microcode,
-+	iodine, irqbalance, keepalived, libass, libconfig, libcurl,
-+	libfreeimage, libfuse3, libgcrypt, libgtk3, libgudev, libhtp,
-+	libjson, libkrb5, libloki, libmodsecurity, libndp,
-+	libnetfilter-log, libnfnetlink, libnice, libodb, libodb-boost,
-+	libodb-mysql, libodb-pgsql, libpcap, libqmi, libressl,
-+	librsvg, libtasn1, libtirpc, libuci, libxmlrpc,
-+	linux-firmware, linuxptp, lrzsz, ltp-testsuite, lvm2, mariadb,
-+	mbedtls, monit, mono, mosquitto, mpd, mpg123, mpv, nbd, neard,
-+	netsnmp, nettle, nginx-modsecurity, nmap, nodejs, ntp,
-+	openntpd, openpgm, openswan, pango, pcre2,
-+	perl-crypt-openssl-rsa, php, pixman, polkit, postgresql,
-+	proxychains-ng, putty, python, python-django,
-+	python-dataproperty, python-pysftp, python-urllib3, python3,
-+	qpdf, redis, ripgrep, ruby, samba4, spice, slirp, suricata,
-+	sysdig, tcpdump, tftpd, thrift, tor, tpm2-tools, trinity,
-+	uboot, uboot-tools, uclibc, util-linux, vlc, wireless-regdb,
-+	wireshark, wolfssl, xapp_fonttosfnt, xlib_libX11,
-+	xlib_libxshmfence, xserver_xorg-server
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#13586: grub failure with BR2_OPTIMIZE_3
-+	#13661: host-python2 build fails on aarch64
-+	#13836: package build failure when target install set to no..
-+	#13846: BR2_PACKAGE_LVM2_STANDARD_INSTALL should be default to..
-+
- 2021.02.3, released June 12th, 2021
+-      <h3 style="text-align: center;">Latest long term support release: <b>2021.02.3</b></h3>
++      <h3 style="text-align: center;">Latest long term support release: <b>2021.02.4</b></h3>
  
- 	Important / security related fixes.
+       <div class="row mt centered">
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2021.02.3.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2021.02.4.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2021.02.3.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2021.02.4.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+-	  <h3><a href="/downloads/buildroot-2021.02.3.tar.gz">buildroot-2021.02.3.tar.gz</a></h3>
+-	  <p><a href="/downloads/buildroot-2021.02.3.tar.gz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2021.02.4.tar.gz">buildroot-2021.02.4.tar.gz</a></h3>
++	  <p><a href="/downloads/buildroot-2021.02.4.tar.gz.sign">PGP signature</a></p>
+ 	</div>
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2021.02.3.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2021.02.4.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2021.02.3.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2021.02.4.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2021.02.3.tar.bz2">buildroot-2021.02.3.tar.bz2</a></h3>
+-	  <p><a href="/downloads/buildroot-2021.02.3.tar.bz2.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2021.02.4.tar.bz2">buildroot-2021.02.4.tar.bz2</a></h3>
++	  <p><a href="/downloads/buildroot-2021.02.4.tar.bz2.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+ 
+diff --git a/docs/website/news.html b/docs/website/news.html
+index d1b83efb7f..73d27df6a6 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,25 @@
+ <h2>News</h2>
+ <ul class="timeline">
+ 
++  <li>
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2021.02.4 released</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>11 August 2021</small></p>
++      </div>
++      <div class="timeline-body">
++	<p>The 2021.02.4 bugfix release is out, fixing a number of important /
++	  security related issues discovered since the 2021.02.3 release. See the
++	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2021.02.4">CHANGES</a>
++	  file for more details, read the
++	  <a href="http://lists.busybox.net/pipermail/buildroot/2021-August/620747.html">announcement</a>
++	  and go to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2021.02.4.tar.bz2">2021.02.4 release</a>.</p>
++      </div>
++    </div>
++  </li>
++
+   <li class="timeline-inverted">
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
