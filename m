@@ -7,51 +7,51 @@ X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 20A56C432BE
-	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:07:39 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0469CC432BE
+	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:07:50 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D40FF60FD8
-	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:07:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D40FF60FD8
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
+	by mail.kernel.org (Postfix) with ESMTPS id 98D5860FDC
+	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:07:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 98D5860FDC
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A057D40779;
-	Thu, 26 Aug 2021 22:07:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 63E4682C3B;
+	Thu, 26 Aug 2021 22:07:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2fy5SaP8mS7D; Thu, 26 Aug 2021 22:07:34 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ZvFXurV5HsL4; Thu, 26 Aug 2021 22:07:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 043914077F;
-	Thu, 26 Aug 2021 22:07:30 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1C5171C113E
+	by smtp1.osuosl.org (Postfix) with ESMTP id E30D682C5E;
+	Thu, 26 Aug 2021 22:07:43 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1F3A71C1148
  for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 22:02:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 929D0426A9
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1F12682D12
  for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 22:02:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Amc7HTkIOz2H for <buildroot@lists.busybox.net>;
- Thu, 26 Aug 2021 22:02:33 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TRdlHVBIAu0d for <buildroot@lists.busybox.net>;
+ Thu, 26 Aug 2021 22:02:32 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B49B7426B8
- for <buildroot@buildroot.org>; Thu, 26 Aug 2021 22:02:31 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5848982BC8
+ for <buildroot@buildroot.org>; Thu, 26 Aug 2021 22:02:30 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 1523E8DC50; Thu, 26 Aug 2021 22:01:30 +0000 (UTC)
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ id AD4FD8DC50; Thu, 26 Aug 2021 22:01:28 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 15 Aug 2021 18:03:22 +0200
+Date: Wed, 11 Aug 2021 10:33:02 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: dc894fca1cd9ba835bb49bf87899d2459e938c00
-X-Git-Newrev: 829ecf7d794b454a9fa9557b2420d624e3d3bb14
+X-Git-Oldrev: ef377fca04051eb46f63080201fdfc14c60c9bab
+X-Git-Newrev: 817148b8191b6e7536c945128d7b86ae97eee8ba
 X-Patchwork-Hint: ignore
-Message-Id: <20210826220130.1523E8DC50@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] DEVELOPERS: drop Sven Fischer
+Message-Id: <20210826220128.AD4FD8DC50@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] Update for 2021.02.4
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,31 +69,79 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=829ecf7d794b454a9fa9557b2420d624e3d3bb14
+commit: https://git.buildroot.net/buildroot/commit/?id=817148b8191b6e7536c945128d7b86ae97eee8ba
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Sven has privately asked to no longer receive notifications related to
-this package.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 004a792dcf10e6c474070c9571f7504411e786cc)
+[Peter: drop Makefile change]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS | 3 ---
- 1 file changed, 3 deletions(-)
+ CHANGES | 51 +++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 51 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index bb39abefab..af97de02de 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2567,9 +2567,6 @@ F:	configs/rock_pi_n10_defconfig
- F:	configs/rockpro64_defconfig
- F:	package/arm-gnu-a-toolchain/
+diff --git a/CHANGES b/CHANGES
+index 5dab63c755..568fe37552 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -253,6 +253,57 @@
+ 	#13751: libopenssl (static): huge drop in performance in newer ..
+ 	#13771: package htop has undeclared dependency on host python
  
--N:	Sven Fischer <sven@leiderfischer.de>
--F:	package/qt5/qt5remoteobjects/
--
- N:	Sven Haardiek <sven.haardiek@iotec-gmbh.de>
- F:	package/lcdproc/
- F:	package/python-influxdb/
++2021.02.4, released August 10th, 2021
++
++	Important / security related fixes.
++
++	Toolchain: Disable PIC/PIE for Microblaze (like for NIOS II)
++	as it is not currently working.
++
++	binutils: fix linker assert failure on OpenRisc, or1k build
++	issue with gcc < 5
++
++	gdb: Enable on NIOS II
++
++	utils/scanpypi: Various improvements
++
++	Defconfigs: stm32f469_disco: Fix kernel boot issue, Microchip
++	sam9x60ek mmc_dev: Add missing toolchain/system options
++
++	Updated/fixed packages: apache, arm-trusted-firmware, audit,
++	avahi, bind, binutils, bird, bluez5_utils, boinc, busybox,
++	chrony, clamav, cryptsetup, cwiid, dnsmasq, docker-cli,
++	docker-engine, dovecot, dovecot-pigeonhole, e2fsprogs, exiv2,
++	fail2ban, fb-test-app, feh, fetchmail, flac, fluxbox, gawk,
++	gcc, gcr, gdb, gdk-pixbuf, gesftpserver, glibc, go, gptfdisk,
++	granite, grub2, gqrx, guile, hdparm, heirloom-mailx,
++	ibrcommon, ibrdtn, ibrdtn-tools, ibrdtnd, intel-microcode,
++	iodine, irqbalance, keepalived, libass, libconfig, libcurl,
++	libfreeimage, libfuse3, libgcrypt, libgtk3, libgudev, libhtp,
++	libjson, libkrb5, libloki, libmodsecurity, libndp,
++	libnetfilter-log, libnfnetlink, libnice, libodb, libodb-boost,
++	libodb-mysql, libodb-pgsql, libpcap, libqmi, libressl,
++	librsvg, libtasn1, libtirpc, libuci, libxmlrpc,
++	linux-firmware, linuxptp, lrzsz, ltp-testsuite, lvm2, mariadb,
++	mbedtls, monit, mono, mosquitto, mpd, mpg123, mpv, nbd, neard,
++	netsnmp, nettle, nginx-modsecurity, nmap, nodejs, ntp,
++	openntpd, openpgm, openswan, pango, pcre2,
++	perl-crypt-openssl-rsa, php, pixman, polkit, postgresql,
++	proxychains-ng, putty, python, python-django,
++	python-dataproperty, python-pysftp, python-urllib3, python3,
++	qpdf, redis, ripgrep, ruby, samba4, spice, slirp, suricata,
++	sysdig, tcpdump, tftpd, thrift, tor, tpm2-tools, trinity,
++	uboot, uboot-tools, uclibc, util-linux, vlc, wireless-regdb,
++	wireshark, wolfssl, xapp_fonttosfnt, xlib_libX11,
++	xlib_libxshmfence, xserver_xorg-server
++
++	Issues resolved (http://bugs.uclibc.org):
++
++	#13586: grub failure with BR2_OPTIMIZE_3
++	#13661: host-python2 build fails on aarch64
++	#13836: package build failure when target install set to no..
++	#13846: BR2_PACKAGE_LVM2_STANDARD_INSTALL should be default to..
++
+ 2021.02.3, released June 12th, 2021
+ 
+ 	Important / security related fixes.
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
