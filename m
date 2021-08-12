@@ -7,56 +7,55 @@ X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_2
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E376C4338F
-	for <buildroot@archiver.kernel.org>; Thu, 12 Aug 2021 21:48:40 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 98E81C4338F
+	for <buildroot@archiver.kernel.org>; Thu, 12 Aug 2021 21:49:12 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 15BAE60F57
-	for <buildroot@archiver.kernel.org>; Thu, 12 Aug 2021 21:48:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 15BAE60F57
+	by mail.kernel.org (Postfix) with ESMTPS id 3C02D60F91
+	for <buildroot@archiver.kernel.org>; Thu, 12 Aug 2021 21:49:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3C02D60F91
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 84C2F405BF;
-	Thu, 12 Aug 2021 21:48:38 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 006A7401D3;
+	Thu, 12 Aug 2021 21:49:12 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id mD7QEyFFgJkK; Thu, 12 Aug 2021 21:49:08 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6A646401DA;
+	Thu, 12 Aug 2021 21:49:07 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 9642C1BF354
+ for <buildroot@lists.busybox.net>; Thu, 12 Aug 2021 21:49:05 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 85A7F405E7
+ for <buildroot@lists.busybox.net>; Thu, 12 Aug 2021 21:49:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8AzfcwN2kZ4I; Thu, 12 Aug 2021 21:48:34 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 117EB405E7;
-	Thu, 12 Aug 2021 21:48:32 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 57E511BF354
- for <buildroot@lists.busybox.net>; Thu, 12 Aug 2021 21:48:23 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 54C2F6140C
- for <buildroot@lists.busybox.net>; Thu, 12 Aug 2021 21:48:23 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BVtHgWee39pP for <buildroot@lists.busybox.net>;
- Thu, 12 Aug 2021 21:48:19 +0000 (UTC)
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id tr6Cq8JLbSuH for <buildroot@lists.busybox.net>;
+ Thu, 12 Aug 2021 21:49:01 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp3.osuosl.org (Postfix) with ESMTPS id BE5296140A
- for <buildroot@buildroot.org>; Thu, 12 Aug 2021 21:48:18 +0000 (UTC)
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id F1F0140560
+ for <buildroot@buildroot.org>; Thu, 12 Aug 2021 21:49:00 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id CE516C0003;
- Thu, 12 Aug 2021 21:48:16 +0000 (UTC)
-Date: Thu, 12 Aug 2021 23:48:15 +0200
+ by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id D025A1C0004;
+ Thu, 12 Aug 2021 21:48:58 +0000 (UTC)
+Date: Thu, 12 Aug 2021 23:48:57 +0200
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20210812234815.4f23b2c0@windsurf>
-In-Reply-To: <20210809224214.2966469-1-fontaine.fabrice@gmail.com>
-References: <20210809224214.2966469-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210812234857.7ffdf865@windsurf>
+In-Reply-To: <20210809201156.1595045-1-fontaine.fabrice@gmail.com>
+References: <20210809201156.1595045-1-fontaine.fabrice@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/gobject-introspection: fix
- gidatadir
+Subject: Re: [Buildroot] [PATCH 1/1] package/mongodb: fix build with gcc 11
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,23 +67,36 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Anisse Astier <anisse@astier.eu>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-On Tue, 10 Aug 2021 00:42:14 +0200
+On Mon,  9 Aug 2021 22:11:56 +0200
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Since commit 521d387640d704f24caee51841388d98bcac739b gidatadir is
-> wrongly set to ${libdir}/../share, set it back to
-> ${datadir}/gobject-introspection-1.0
+> Fix the following build failure with gcc 11:
+> 
+> In file included from src/mongo/db/query/plan_cache.h:36,
+>                  from src/mongo/db/catalog/collection_info_cache.h:33,
+>                  from src/mongo/db/catalog/collection.h:42,
+>                  from src/mongo/db/exec/requires_collection_stage.h:32,
+>                  from src/mongo/db/exec/delete.h:32,
+>                  from src/mongo/db/query/internal_plans.h:33,
+>                  from src/mongo/db/query/internal_plans.cpp:32:
+> src/mongo/db/exec/plan_stats.h:214:10: error: 'optional' in namespace 'std' does not name a template type
+>   214 |     std::optional<std::string> replanReason;
+>       |          ^~~~~~~~
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/8c0875fa413923504515a83d8b679366418c2444
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/gobject-introspection/gobject-introspection.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  ...c-plan_stats.h-fix-build-with-gcc-11.patch | 44 +++++++++++++++++++
+>  1 file changed, 44 insertions(+)
+>  create mode 100644 package/mongodb/0002-src-mongo-db-exec-plan_stats.h-fix-build-with-gcc-11.patch
 
 Applied to master, thanks.
 
