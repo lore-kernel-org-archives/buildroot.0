@@ -7,51 +7,52 @@ X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 978D6C4338F
-	for <buildroot@archiver.kernel.org>; Thu, 12 Aug 2021 21:51:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 72597C4338F
+	for <buildroot@archiver.kernel.org>; Thu, 12 Aug 2021 21:52:05 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 4AEE96108C
-	for <buildroot@archiver.kernel.org>; Thu, 12 Aug 2021 21:51:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4AEE96108C
+	by mail.kernel.org (Postfix) with ESMTPS id 316796108C
+	for <buildroot@archiver.kernel.org>; Thu, 12 Aug 2021 21:52:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 316796108C
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0470661408;
-	Thu, 12 Aug 2021 21:51:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 53F3861436;
+	Thu, 12 Aug 2021 21:52:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gi_hjVJ8YAuJ; Thu, 12 Aug 2021 21:51:46 +0000 (UTC)
+	with ESMTP id L6I1Ry31nE07; Thu, 12 Aug 2021 21:51:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 680796140A;
-	Thu, 12 Aug 2021 21:51:45 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 360E51BF354
+	by smtp3.osuosl.org (Postfix) with ESMTP id 723AE61411;
+	Thu, 12 Aug 2021 21:51:57 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5A5861C1135
  for <buildroot@lists.busybox.net>; Thu, 12 Aug 2021 21:51:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 331FB61408
+ by smtp2.osuosl.org (Postfix) with ESMTP id 48F944023D
  for <buildroot@lists.busybox.net>; Thu, 12 Aug 2021 21:51:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id S4NdjYtgqDNg for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dIK7QSp54fe0 for <buildroot@lists.busybox.net>;
  Thu, 12 Aug 2021 21:51:27 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 85DD26140C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 90168401D3
  for <buildroot@buildroot.org>; Thu, 12 Aug 2021 21:51:27 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 9B6868D488; Thu, 12 Aug 2021 21:50:58 +0000 (UTC)
+ id A56038D48A; Thu, 12 Aug 2021 21:50:58 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Thu, 12 Aug 2021 23:49:19 +0200
+Date: Thu, 12 Aug 2021 23:51:19 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 884a415ccb66c04767ad40d82b713f499a9bb8a7
-X-Git-Newrev: 6b04d4f22cf5dbc75042b67859c8d2c8d8bbdc49
+X-Git-Oldrev: 6b04d4f22cf5dbc75042b67859c8d2c8d8bbdc49
+X-Git-Newrev: ca2e12b4fc5215c8e4f261ef9b0b2d5761f9472c
 X-Patchwork-Hint: ignore
-Message-Id: <20210812215058.9B6868D488@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/tpm2-tools: fix build with gcc 4.8
+Message-Id: <20210812215058.A56038D48A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/qemu: add libfuse3 optional
+ dependency
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,81 +70,117 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6b04d4f22cf5dbc75042b67859c8d2c8d8bbdc49
+commit: https://git.buildroot.net/buildroot/commit/?id=ca2e12b4fc5215c8e4f261ef9b0b2d5761f9472c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix the following build failure with gcc 4.8 raised since bump to
-version 4.3.2 in commit	91aa6efa8588bf7617cc4a640eb55052b524ceb7:
+libfuse3 is an optional dependency which is enabled by default since
+version 6.0.0 and
+https://gitlab.com/qemu-project/qemu/-/commit/0c9b70d5900a5108e899edfdd6f3790f8cb6bdc2
 
-lib/tpm2_eventlog_yaml.c: In function 'yaml_uefi_var_unicodename':
-lib/tpm2_eventlog_yaml.c:130:5: error: 'for' loop initial declarations are only allowed in C99 mode
-     for(size_t i = 0; i < data->UnicodeNameLength; ++i, tmp += ret) {
-     ^
-lib/tpm2_eventlog_yaml.c:130:5: note: use option -std=c99 or -std=gnu99 to compile your code
-lib/tpm2_eventlog_yaml.c: In function 'yaml_specid_algs':
-lib/tpm2_eventlog_yaml.c:335:5: error: 'for' loop initial declarations are only allowed in C99 mode
-     for (size_t i = 0; i < count; ++i, ++alg) {
-     ^
+So add this dependency and fix the following build failures on musl
+raised since bump to version 6.0.0 in commit
+6b86c9335fc3ff381878156c6243454d4b688df9:
+
+../block/export/fuse.c: In function 'fuse_fallocate':
+../block/export/fuse.c:563:23: error: 'FALLOC_FL_ZERO_RANGE' undeclared (first use in this function)
+  563 |     } else if (mode & FALLOC_FL_ZERO_RANGE) {
+      |                       ^~~~~~~~~~~~~~~~~~~~
+../block/export/fuse.c:563:23: note: each undeclared identifier is reported only once for each function it appears in
+../block/export/fuse.c: In function 'fuse_lseek':
+../block/export/fuse.c:639:19: error: 'SEEK_HOLE' undeclared (first use in this function)
+  639 |     if (whence != SEEK_HOLE && whence != SEEK_DATA) {
+      |                   ^~~~~~~~~
+../block/export/fuse.c:639:42: error: 'SEEK_DATA' undeclared (first use in this function); did you mean 'SEEK_SET'?
+  639 |     if (whence != SEEK_HOLE && whence != SEEK_DATA) {
+      |                                          ^~~~~~~~~
+      |                                          SEEK_SET
 
 Fixes:
- - http://autobuild.buildroot.org/results/018c75cfbb34006c0bca52dcc255ad6f9cc43b77
+ - http://autobuild.buildroot.org/results/0196609043bd37543e6a0d17ffc2254302ea7ba3
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0001-configure-make-build-gnu99.patch          | 30 ++++++++++++++++++++++
- package/tpm2-tools/tpm2-tools.mk                   |  2 ++
- 2 files changed, 32 insertions(+)
+ .../0005-block-export-fuse.c-fix-musl-build.patch  | 46 ++++++++++++++++++++++
+ package/qemu/qemu.mk                               | 13 ++++++
+ 2 files changed, 59 insertions(+)
 
-diff --git a/package/tpm2-tools/0001-configure-make-build-gnu99.patch b/package/tpm2-tools/0001-configure-make-build-gnu99.patch
+diff --git a/package/qemu/0005-block-export-fuse.c-fix-musl-build.patch b/package/qemu/0005-block-export-fuse.c-fix-musl-build.patch
 new file mode 100644
-index 0000000000..37ca6c5873
+index 0000000000..0da6b3ff73
 --- /dev/null
-+++ b/package/tpm2-tools/0001-configure-make-build-gnu99.patch
-@@ -0,0 +1,30 @@
-+From 521c3cc506b18c5c84d86e1e90d1daee39849b0c Mon Sep 17 00:00:00 2001
-+From: William Roberts <william.c.roberts@intel.com>
-+Date: Mon, 8 Feb 2021 11:57:28 -0600
-+Subject: [PATCH] configure: make build gnu99
++++ b/package/qemu/0005-block-export-fuse.c-fix-musl-build.patch
+@@ -0,0 +1,46 @@
++From 4d5280c066eb46a31556044fb52c2618928b0019 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Mon, 9 Aug 2021 10:04:07 +0200
++Subject: [PATCH] block/export/fuse.c: fix musl build
 +
-+Signed-off-by: William Roberts <william.c.roberts@intel.com>
++Fix the following build failure on musl raised since version 6.0.0 and
++https://gitlab.com/qemu-project/qemu/-/commit/4ca37a96a75aafe7a37ba51ab1912b09b7190a6b
++because musl does not define FALLOC_FL_ZERO_RANGE:
 +
-+[Retrieved from:
-+https://github.com/tpm2-software/tpm2-tools/commit/521c3cc506b18c5c84d86e1e90d1daee39849b0c
-+and updated to set gnu99 instead of c99 as done by
-+https://github.com/tpm2-software/tpm2-tools/commit/5d0267428e96989afce406d096994ec5091ee107]
++../block/export/fuse.c: In function 'fuse_fallocate':
++../block/export/fuse.c:563:23: error: 'FALLOC_FL_ZERO_RANGE' undeclared (first use in this function)
++  563 |     } else if (mode & FALLOC_FL_ZERO_RANGE) {
++      |                       ^~~~~~~~~~~~~~~~~~~~
++
++Fixes:
++ - http://autobuild.buildroot.org/results/b96e3d364fd1f8bbfb18904a742e73327d308f64
++
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: sent to qemu-devel@nongnu.org]
 +---
-+ configure.ac | 3 +++
-+ 1 file changed, 3 insertions(+)
++ block/export/fuse.c | 2 ++
++ 1 file changed, 2 insertions(+)
 +
-+diff --git a/configure.ac b/configure.ac
-+index dc15b5595..25039a0d9 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -287,6 +287,9 @@ AC_DEFUN([add_c_flag], [
-+ # -D_GNU_SOURCE is required for execvpe() in options.c
-+ add_c_flag([-D_GNU_SOURCE], [AC_MSG_ERROR([Cannot enable -D_GNU_SOURCE])])
-+ 
-++# Enable gnu99 mode, since we use some of these features.
-++add_c_flag([-std=gnu99], [AC_MSG_ERROR([Cannot enable -std=gnu99])])
-++
-+ # Best attempt compiler options that are on newer versions of GCC that
-+ # we can't widely enforce without killing other peoples builds.
-+ # Works with gcc only. Needs to be disabled on BSD and clang
-diff --git a/package/tpm2-tools/tpm2-tools.mk b/package/tpm2-tools/tpm2-tools.mk
-index 981a89a737..41f5bcf201 100644
---- a/package/tpm2-tools/tpm2-tools.mk
-+++ b/package/tpm2-tools/tpm2-tools.mk
-@@ -11,6 +11,8 @@ TPM2_TOOLS_LICENSE_FILES = doc/LICENSE
- TPM2_TOOLS_CPE_ID_VENDOR = tpm2-tools_project
- TPM2_TOOLS_SELINUX_MODULES = tpm2
- TPM2_TOOLS_DEPENDENCIES = libcurl openssl tpm2-tss host-pkgconf util-linux
-+# We're patching configure.ac
-+TPM2_TOOLS_AUTORECONF = YES
++diff --git a/block/export/fuse.c b/block/export/fuse.c
++index ada9e263eb..07e31129a6 100644
++--- a/block/export/fuse.c
+++++ b/block/export/fuse.c
++@@ -635,6 +635,7 @@ static void fuse_fallocate(fuse_req_t req, fuse_ino_t inode, int mode,
++             offset += size;
++             length -= size;
++         } while (ret == 0 && length > 0);
+++#ifdef FALLOC_FL_ZERO_RANGE
++     } else if (mode & FALLOC_FL_ZERO_RANGE) {
++         if (!(mode & FALLOC_FL_KEEP_SIZE) && offset + length > blk_len) {
++             /* No need for zeroes, we are going to write them ourselves */
++@@ -654,6 +655,7 @@ static void fuse_fallocate(fuse_req_t req, fuse_ino_t inode, int mode,
++             offset += size;
++             length -= size;
++         } while (ret == 0 && length > 0);
+++#endif
++     } else if (!mode) {
++         /* We can only fallocate at the EOF with a truncate */
++         if (offset < blk_len) {
++-- 
++2.30.2
++
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index 50ace104ce..88516678d1 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -90,6 +90,19 @@ else
+ QEMU_OPTS += --disable-tools
+ endif
  
- # -fstack-protector-all and FORTIFY_SOURCE=2 is used by
- # default. Disable that so the BR2_SSP_* / BR2_FORTIFY_SOURCE_* options
++ifeq ($(BR2_PACKAGE_LIBFUSE3),y)
++QEMU_OPTS += --enable-fuse
++QEMU_DEPENDENCIES += libfuse3
++# musl does not support SEEK_HOLE/SEEK_DATA
++ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
++QEMU_OPTS += --disable-fuse-lseek
++else
++QEMU_OPTS += --enable-fuse-lseek
++endif
++else
++QEMU_OPTS += --disable-fuse --disable-fuse-lseek
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
+ QEMU_OPTS += --enable-seccomp
+ QEMU_DEPENDENCIES += libseccomp
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
