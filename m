@@ -7,82 +7,83 @@ X-Spam-Status: No, score=-16.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E362BC4338F
-	for <buildroot@archiver.kernel.org>; Thu, 12 Aug 2021 13:41:46 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 42F40C432BE
+	for <buildroot@archiver.kernel.org>; Thu, 12 Aug 2021 14:18:18 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D9D9A61077
-	for <buildroot@archiver.kernel.org>; Thu, 12 Aug 2021 13:41:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D9D9A61077
+	by mail.kernel.org (Postfix) with ESMTPS id 46769610FC
+	for <buildroot@archiver.kernel.org>; Thu, 12 Aug 2021 14:18:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 46769610FC
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=amarulasolutions.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A0AC480D3A;
-	Thu, 12 Aug 2021 13:41:45 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id EF3CA40762;
+	Thu, 12 Aug 2021 14:18:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dTBG600qvR9n; Thu, 12 Aug 2021 13:41:42 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id acmLaVSczhZV; Thu, 12 Aug 2021 14:18:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 462A880D3C;
-	Thu, 12 Aug 2021 13:41:41 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 944351BF3A9
- for <buildroot@lists.busybox.net>; Thu, 12 Aug 2021 13:41:39 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 48FF240764;
+	Thu, 12 Aug 2021 14:18:12 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id ED44B1BF3A8
+ for <buildroot@lists.busybox.net>; Thu, 12 Aug 2021 14:18:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 911174032A
- for <buildroot@lists.busybox.net>; Thu, 12 Aug 2021 13:41:39 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id DC2478299D
+ for <buildroot@lists.busybox.net>; Thu, 12 Aug 2021 14:18:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (1024-bit key) header.d=amarulasolutions.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pl1eGfnb8Yd0 for <buildroot@lists.busybox.net>;
- Thu, 12 Aug 2021 13:41:34 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9St29qoPBklb for <buildroot@lists.busybox.net>;
+ Thu, 12 Aug 2021 14:18:06 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com
- [IPv6:2a00:1450:4864:20::62f])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5D153401BE
- for <buildroot@buildroot.org>; Thu, 12 Aug 2021 13:41:33 +0000 (UTC)
-Received: by mail-ej1-x62f.google.com with SMTP id b15so11619450ejg.10
- for <buildroot@buildroot.org>; Thu, 12 Aug 2021 06:41:33 -0700 (PDT)
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
+ [IPv6:2a00:1450:4864:20::331])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id BBC0482861
+ for <buildroot@buildroot.org>; Thu, 12 Aug 2021 14:18:05 +0000 (UTC)
+Received: by mail-wm1-x331.google.com with SMTP id
+ k5-20020a05600c1c85b02902e699a4d20cso4710500wms.2
+ for <buildroot@buildroot.org>; Thu, 12 Aug 2021 07:18:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=amarulasolutions.com; s=google;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=uEBHHhxb8x4n4bempf3LuikE52lqDz9HVUUdRHzPRGg=;
- b=fYpEEqyXz7hv9kZ7Wrzf1VFBdpRv7XjKn6pt8/WqpH2QyqwD1aLYrL2U+SMWpQOjvz
- SjMsUFppcXxdTqHrzTHbi5mOkVX/CiTPmouXRpnAKtMbqeGMJrxNX3WhRtmcdVd/au5e
- LxiW83OSOnc7EN8yOQZ8LWxlyT/NdsEINgk6o=
+ bh=Y8jP36PRZ6Q+UkiDHwsehfZghoQ6eJ1so70f4QyCbIM=;
+ b=L9k+Y43LO8uARMHSrnSfng2krtrYqyNWuVtOwlssQRdNi8ThcCAnpFFyoW5UbM0XCG
+ FcAMHexe50sYTnvahD0Ho+rRQLU60RHKtvL/Wpnj4XsRdyvykSUCiQ+iSEB2B2izEVVU
+ 64BAIt+ejszi7ZMn+/m8w9Tsu/+vbqQRFH/o8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=uEBHHhxb8x4n4bempf3LuikE52lqDz9HVUUdRHzPRGg=;
- b=aop/cbEUgWG1T/FCDlODLsSSO3IyHpo4m7XMHQF/ZM8e45L1GyH6feo4K287wxZXvU
- U8RO6R9SenIFLR3a1j9j4RDWkV+lga1eloLHQq4pRPGhkOzG6uMfjMr+53zC5p916tfE
- IoVP4H00/wArAHvTXBhypz6KVcYgaAfeQePq51tfQi6vw/V6CcBBuhlA2cVA1VraIjw2
- gXCc+99f5FXfirUlI8l4CSppvzDipn7RTGZyMRDzOsfN9zKaInoZvhzgreoe6g5Cd1PD
- eTzPGeXOvdp32SBAgVLmJzeJgRwfbRsu2eDSxnUiLLLrUPMppkWHS4iJtY5W5+ABylPl
- ljww==
-X-Gm-Message-State: AOAM533CgCTIHaPVE5xq5yruEMVSwsviGTNqgbxJf/jR/itV9k0wU3JP
- U5R1ZK2Nv4uIl/09wUr/Kgbzgxrn5ZWszw==
-X-Google-Smtp-Source: ABdhPJyd3cQzcWRy6kYwd925whTYFP4TM8A+VdBaXTw7ZlL5WyuHw9gkrkS3yO1soNS2SfBlU2llgw==
-X-Received: by 2002:a17:906:a195:: with SMTP id
- s21mr3769222ejy.181.1628775692012; 
- Thu, 12 Aug 2021 06:41:32 -0700 (PDT)
+ bh=Y8jP36PRZ6Q+UkiDHwsehfZghoQ6eJ1so70f4QyCbIM=;
+ b=lnGb2QhrZjnGI+qfo+9JCZvLefeTR/NjMKKWgAy9H5+TbmaOTE3prpF8meE7h7mY1v
+ LZ5ndsNCEIkx97+XPinr+t2I0vLWrEd6fqyxE8dWryXyet0mzoY89FEcMzM4Ng3Jjftr
+ fbpypTeOdIhh+M2kyfyF7EG1w7fCMJV09yURdY6GQX7wnmdELVh130EN2nOuWdlqvyiu
+ oM3SayYoQyKcOFHiZmH4q/HonNdJz0ZVQnZgh3IgDq1IH/I/Gkwby9z3aGz5tZcWBaRi
+ t2YVh9ltSd0CA3J9CEvVWJJB/el5FLxhxBdYjhCBkBDhbCrdoXscLP9C4zexTm9jJ2Pr
+ pCNw==
+X-Gm-Message-State: AOAM533Ovcu48yTZ/6cyQqbq7aYBEnLA01Q9zWAioy1A+F6WMP4m0hEo
+ 9PyM88f1HVrlUq9LO5M+AzP+KD3vLyrr2w==
+X-Google-Smtp-Source: ABdhPJyWhfzzTOZd8xlVZVRMY8FeKia4H7DqYcewpmPcrJ02tKWt1mOtznkxxpB38iEHcMeIizfynA==
+X-Received: by 2002:a7b:c92e:: with SMTP id h14mr4381515wml.82.1628777883854; 
+ Thu, 12 Aug 2021 07:18:03 -0700 (PDT)
 Received: from localhost.localdomain ([37.160.45.80])
- by smtp.gmail.com with ESMTPSA id ck17sm652221edb.88.2021.08.12.06.41.31
+ by smtp.gmail.com with ESMTPSA id 19sm3186953wmj.23.2021.08.12.07.18.03
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 12 Aug 2021 06:41:31 -0700 (PDT)
+ Thu, 12 Aug 2021 07:18:03 -0700 (PDT)
 From: Angelo Compagnucci <angelo@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Thu, 12 Aug 2021 15:41:28 +0200
-Message-Id: <20210812134128.863664-1-angelo@amarulasolutions.com>
+Date: Thu, 12 Aug 2021 16:18:00 +0200
+Message-Id: <20210812141801.959504-1-angelo@amarulasolutions.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/python-pillow: bump to version 8.3.1
+Subject: [Buildroot] [PATCH 1/2] package/python-pydal: bump to version
+ v20200321.1
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,37 +103,32 @@ Sender: "buildroot" <buildroot-bounces@busybox.net>
 
 Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 ---
- package/python-pillow/python-pillow.hash | 4 ++--
- package/python-pillow/python-pillow.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-pydal/python-pydal.hash | 2 +-
+ package/python-pydal/python-pydal.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-pillow/python-pillow.hash b/package/python-pillow/python-pillow.hash
-index 562cb2c1a2..fb1ec53a00 100644
---- a/package/python-pillow/python-pillow.hash
-+++ b/package/python-pillow/python-pillow.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pillow/json
--md5  21c03274a9f59b9c00419852a8faebe7  Pillow-8.2.0.tar.gz
--sha256	a787ab10d7bb5494e5f76536ac460741788f1fbce851068d73a87ca7c35fc3e1  Pillow-8.2.0.tar.gz
-+md5  e42fc66e41b5309436a573af49cec47c  Pillow-8.3.1.tar.gz
-+sha256	2cac53839bfc5cece8fdbe7f084d5e3ee61e1303cccc86511d351adcb9e2c792  Pillow-8.3.1.tar.gz
- # Locally computed sha256 checksums
- sha256	5bb11d96b393a698df70018069a986248021f286344c437a13f299c3daf1dfd4  LICENSE
-diff --git a/package/python-pillow/python-pillow.mk b/package/python-pillow/python-pillow.mk
-index 42607e0bbd..a55a937c11 100644
---- a/package/python-pillow/python-pillow.mk
-+++ b/package/python-pillow/python-pillow.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/python-pydal/python-pydal.hash b/package/python-pydal/python-pydal.hash
+index 224f32856f..911734c8bf 100644
+--- a/package/python-pydal/python-pydal.hash
++++ b/package/python-pydal/python-pydal.hash
+@@ -1,3 +1,3 @@
+ # sha256 locally computed
+-sha256  df54be164bcdab8ffc8db88cb72333cc4b27997ce58c302dd8ade36462d799ea  python-pydal-20200910.1.tar.gz
++sha256  32faf0b7123bc19b5f70da654fc99a22f4ce6fb20f5e4b38aba819e0ab4060aa  python-pydal-20200321.1.tar.gz
+ sha256  1f711e93f1e0c2eec576e2e60597dc2ed6f0a661e4749c6b8a39f0d4a72be468  LICENSE.txt
+diff --git a/package/python-pydal/python-pydal.mk b/package/python-pydal/python-pydal.mk
+index 2cac839a9e..2aeade322e 100644
+--- a/package/python-pydal/python-pydal.mk
++++ b/package/python-pydal/python-pydal.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_PILLOW_VERSION = 8.2.0
--PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/21/23/af6bac2a601be6670064a817273d4190b79df6f74d8012926a39bc7aa77f
-+PYTHON_PILLOW_VERSION = 8.3.1
-+PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/8f/7d/1e9c2d8989c209edfd10f878da1af956059a1caab498e5bc34fa11b83f71
- PYTHON_PILLOW_SOURCE = Pillow-$(PYTHON_PILLOW_VERSION).tar.gz
- PYTHON_PILLOW_LICENSE = HPND
- PYTHON_PILLOW_LICENSE_FILES = LICENSE
+-PYTHON_PYDAL_VERSION = 20200910.1
++PYTHON_PYDAL_VERSION = 20200321.1
+ PYTHON_PYDAL_SITE = $(call github,web2py,pydal,v$(PYTHON_PYDAL_VERSION))
+ PYTHON_PYDAL_LICENSE = BSD-3-Clause
+ PYTHON_PYDAL_LICENSE_FILES = LICENSE.txt
 -- 
 2.25.1
 
