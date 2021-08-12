@@ -1,82 +1,58 @@
 Return-Path: <SRS0=gEIP=ND=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-X-Spam-Level: **
-X-Spam-Status: No, score=2.5 required=3.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-	DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,HTML_MESSAGE,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Level: 
+X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 59FACC4338F
-	for <buildroot@archiver.kernel.org>; Thu, 12 Aug 2021 15:23:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4DFB8C4338F
+	for <buildroot@archiver.kernel.org>; Thu, 12 Aug 2021 21:17:30 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id E542F6108C
-	for <buildroot@archiver.kernel.org>; Thu, 12 Aug 2021 15:23:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E542F6108C
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id C94146108C
+	for <buildroot@archiver.kernel.org>; Thu, 12 Aug 2021 21:17:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C94146108C
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9434E400E1;
-	Thu, 12 Aug 2021 15:23:14 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7B65E401D3;
+	Thu, 12 Aug 2021 21:17:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id aVQChUKsPc9P; Thu, 12 Aug 2021 15:23:10 +0000 (UTC)
+	with ESMTP id NcaGf365oZYp; Thu, 12 Aug 2021 21:17:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8DB324017A;
-	Thu, 12 Aug 2021 15:23:09 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id AB6321BF313
- for <buildroot@lists.busybox.net>; Thu, 12 Aug 2021 15:23:08 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 159DB40233;
+	Thu, 12 Aug 2021 21:17:25 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E1C391BF36A
+ for <buildroot@lists.busybox.net>; Thu, 12 Aug 2021 21:17:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A84BD83143
- for <buildroot@lists.busybox.net>; Thu, 12 Aug 2021 15:23:08 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id CA330401D3
+ for <buildroot@lists.busybox.net>; Thu, 12 Aug 2021 21:17:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Sg3d65AQHbUg for <buildroot@lists.busybox.net>;
- Thu, 12 Aug 2021 15:23:06 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
- [IPv6:2a00:1450:4864:20::434])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 939F283118
- for <buildroot@busybox.net>; Thu, 12 Aug 2021 15:23:06 +0000 (UTC)
-Received: by mail-wr1-x434.google.com with SMTP id r7so8937288wrs.0
- for <buildroot@busybox.net>; Thu, 12 Aug 2021 08:23:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
- h=mime-version:from:date:message-id:subject:to;
- bh=p+5qJEQuFGSifaID0ohXPadmgnEeB1bE33mDK3U00pg=;
- b=ErtADTX+tpkxRmMymgKqaVjTdXydviPDIo1Z4GBp1DwKIjWESJtON6DWMaBdjdqH7n
- YU356MTeEUxkxZXjLhsz70TDyHtizF5fypztHWsICoQzXfQi9ateQiQThNadaI9/I6Ae
- VQtcyISYcY/6e1k0QRekoc9ise0bkfrO5pOvuym5NJ0Q9bdEMU65W+uXLRx45Hnyifxt
- wYeNu9HNyZbFLxHx7gOabBYj69Pbj+REabJg059/Ga3iml5zN7Me1+yYDGrDSl+oKw2g
- FpmjCHvQi6lHlU0+MdnyWdgGkcXa2xpic/zWQRqiH02I10C9/+GkRxcZjO7VIYl5Ttr4
- 914g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
- bh=p+5qJEQuFGSifaID0ohXPadmgnEeB1bE33mDK3U00pg=;
- b=Ma4LqWjrsLMEiHt3+GuHzMsNMMNcw1to4prkJX5vGIifoEDc7ddvUIX663mqJbAvIe
- GvBdbOcad1clLE5Zys2b7Dj1awOLP7cEGNkjf46LuiEiCMZrKmiIbuxFSkV8ELqMypNg
- fO5s54ZQYC3gsHuGPXThJo6hE20+Y1j8RtcwP+hFf/lE5cnifWAHZ0z+BgRiR+HLXJba
- Az7n7HJpRjab43QSc1ZbJ6XsLGuujnw8PY96Q6otf251e/e1//FCLNQA7pwN2vqFJ1O7
- ol87Zs2rHw6QBry0Q/sg9LzLAByBeDXBYzKf9SNcaqn7GWT0QNRbwbdlHpk8NFQCchM+
- mmTg==
-X-Gm-Message-State: AOAM531LS/KGk3Jjw4fnCiN+2qWCLhGTWQR28DzJBMnG5qX/6HFRIE+r
- Efb+J6wM284NvgpLBFoBo6tm2HFPgYdC4POSnbfZXzFDU3pFLg==
-X-Google-Smtp-Source: ABdhPJzATSsLR4z1ahGUD2vg6NlfDOeupQevhHtyqoOTFx8WymkfggGSEYFQCeg4jBd0uDAb8wYbb9qZZKnzSQBofKU=
-X-Received: by 2002:a5d:4a50:: with SMTP id v16mr4620932wrs.77.1628781784657; 
- Thu, 12 Aug 2021 08:23:04 -0700 (PDT)
-MIME-Version: 1.0
-From: Pragash Jeyaratnam <pragash.jeyaratnam@gmail.com>
-Date: Thu, 12 Aug 2021 11:22:53 -0400
-Message-ID: <CALYA+YsoegQmZDZN48WLCmdcY2k3Opyxn6EDUedmkspTuqDbew@mail.gmail.com>
-To: buildroot@busybox.net
-Subject: [Buildroot] Installing pyyaml with Buildroot
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Sw7XC-QGRo2G for <buildroot@lists.busybox.net>;
+ Thu, 12 Aug 2021 21:17:17 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id E21AD40233
+ for <buildroot@buildroot.org>; Thu, 12 Aug 2021 21:17:17 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 0EC6587D77; Thu, 12 Aug 2021 21:16:48 +0000 (UTC)
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+To: buildroot@buildroot.org
+Date: Thu, 12 Aug 2021 23:17:00 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: e2d2cd94e09618831a4d5edad83b420cf287478c
+X-Git-Newrev: 74196b7d059684e555a87e5409c21c56c727066b
+X-Patchwork-Hint: ignore
+Message-Id: <20210812211649.0EC6587D77@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/xenomai: fix build on arc and
+ riscv32
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -88,60 +64,180 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============2885360603287523207=="
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============3471585999338775586=="
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
---===============2885360603287523207==
-Content-Type: multipart/alternative; boundary="000000000000b0f0de05c95e4fa0"
+--===============3471585999338775586==
+Content-Type: text/plain
 
---000000000000b0f0de05c95e4fa0
-Content-Type: text/plain; charset="UTF-8"
+commit: https://git.buildroot.net/buildroot/commit/?id=74196b7d059684e555a87e5409c21c56c727066b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi,
+Fix the following build failures on arc and riscv32:
 
-I am running into the following error when trying to install pyyaml with
-buildroot 2021.05 configuration.
+latency.c: In function 'display':
+latency.c:326:21: error: format '%ld' expects argument of type 'long int', but argument 2 has type 'time_t' {aka 'long long int'} [-Werror=format=]
+  326 |         ("RTT|  %.2ld:%.2ld:%.2ld  (%s, %Ld us period, "
+      |                 ~~~~^
+      |                     |
+      |                     long int
+      |                 %.2lld
+  327 |          "priority %d)\n", dt / 3600,
+      |                            ~~~~~~~~~
+      |                               |
+      |                               time_t {aka long long int}
 
-x86_64-buildroot-linux-gnu-gcc.br_real: error: yaml/_yaml.c: No such file
-or directory
-Error compiling module, falling back to pure Python
-pjeyaratnam@proteus:~/branches/sonic3/build/dist$ make yaml-cpp-build
-mkdir -p
-/home/pjeyaratnam/branches/sonic3/build/dist/per-package/yaml-cpp/host
-mkdir -p /home/pjeyaratnam/branches/sonic3/build/dist/per-package
+altency.c: In function ‘display’:
+altency.c:262:21: error: format ‘%ld’ expects argument of type ‘long int’, but argument 2 has type ‘time_t’ {aka ‘long long int’} [-Werror=format=]
+  262 |         ("RTT|  %.2ld:%.2ld:%.2ld  (%s, %Ld us period, "
+      |                 ~~~~^
+      |                     |
+      |                     long int
+      |                 %.2lld
+  263 |          "priority %d)\n", dt / 3600,
+      |                            ~~~~~~~~~
+      |                               |
+      |                               time_t {aka long long int}
 
-Mysetup is
-Python3 enabled
-LIBYAML enabled. 0.2.5
-pyyaml: 5.4.1
+Fixes:
+ - http://autobuild.buildroot.org/results/448efe22e8fe058a1b354a3c124874e30b9ce138
 
-Would it be possible for anyone to point in the right direction on
-installing pyyaml on this setup ?
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../0002-Add-disable-demo-testsuite-options.patch  | 94 ++++++++++++++++++++++
+ package/xenomai/xenomai.mk                         |  7 +-
+ 2 files changed, 100 insertions(+), 1 deletion(-)
 
-Regards,
-Pragash
+diff --git a/package/xenomai/3.0.10/0002-Add-disable-demo-testsuite-options.patch b/package/xenomai/3.0.10/0002-Add-disable-demo-testsuite-options.patch
+new file mode 100644
+index 0000000000..0a817503b6
+--- /dev/null
++++ b/package/xenomai/3.0.10/0002-Add-disable-demo-testsuite-options.patch
+@@ -0,0 +1,94 @@
++From 702697cafcec735e55f075594a2990204c8ea17d Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Tue, 10 Aug 2021 18:01:48 +0200
++Subject: [PATCH] Add --disable-{demo,testsuite} options
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Allow the user to disable demo and testsuite to avoid the following
++build failures on arc and riscv32:
++
++latency.c: In function 'display':
++latency.c:326:21: error: format '%ld' expects argument of type 'long int', but argument 2 has type 'time_t' {aka 'long long int'} [-Werror=format=]
++  326 |         ("RTT|  %.2ld:%.2ld:%.2ld  (%s, %Ld us period, "
++      |                 ~~~~^
++      |                     |
++      |                     long int
++      |                 %.2lld
++  327 |          "priority %d)\n", dt / 3600,
++      |                            ~~~~~~~~~
++      |                               |
++      |                               time_t {aka long long int}
++
++altency.c: In function ‘display’:
++altency.c:262:21: error: format ‘%ld’ expects argument of type ‘long int’, but argument 2 has type ‘time_t’ {aka ‘long long int’} [-Werror=format=]
++  262 |         ("RTT|  %.2ld:%.2ld:%.2ld  (%s, %Ld us period, "
++      |                 ~~~~^
++      |                     |
++      |                     long int
++      |                 %.2lld
++  263 |          "priority %d)\n", dt / 3600,
++      |                            ~~~~~~~~~
++      |                               |
++      |                               time_t {aka long long int}
++
++Fixes:
++ - http://autobuild.buildroot.org/results/448efe22e8fe058a1b354a3c124874e30b9ce138
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ Makefile.am  | 12 ++++++++++--
++ configure.ac | 12 ++++++++++++
++ 2 files changed, 22 insertions(+), 2 deletions(-)
++
++diff --git a/Makefile.am b/Makefile.am
++index 891e53f66..604644277 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -6,9 +6,17 @@ SUBDIRS = 		\
++ 	config		\
++ 	include		\
++ 	scripts		\
++-	testsuite	\
++-	utils		\
+++	utils
+++
+++if XENO_ENABLE_DEMO
+++SUBDIRS += 		\
++ 	demo
+++endif
+++
+++if XENO_ENABLE_TESTSUITE
+++SUBDIRS += 		\
+++	testsuite
+++endif
++ 
++ EXTRA_DIST = kernel debian
++ 
++diff --git a/configure.ac b/configure.ac
++index bd5fd5ba9..29dfd16e5 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -200,6 +200,18 @@ test \! x$debug_mode = x && AC_DEFINE(CONFIG_XENO_DEBUG,1,[config])
++ AM_CONDITIONAL(XENO_DEBUG_FULL,[test x$debug_mode = xfull])
++ test x$debug_mode = xfull && AC_DEFINE(CONFIG_XENO_DEBUG_FULL,1,[config])
++ 
+++dnl Demo (default: on)
+++
+++AC_ARG_ENABLE(demo,
+++	AS_HELP_STRING([--disable-demo], [Disable demo]))
+++AM_CONDITIONAL(XENO_ENABLE_DEMO,[test x$enable_demo != xno])
+++
+++dnl Testsuite (default: on)
+++
+++AC_ARG_ENABLE(testsuite,
+++	AS_HELP_STRING([--disable-testsuite], [Disable testsuite]))
+++AM_CONDITIONAL(XENO_ENABLE_TESTSUITE,[test x$enable_testsuite != xno])
+++
++ dnl Low resolution clock (default: off)
++ 
++ unset lores_clock
++-- 
++2.30.2
++
+diff --git a/package/xenomai/xenomai.mk b/package/xenomai/xenomai.mk
+index 7e3b130085..c1ad0c5df6 100644
+--- a/package/xenomai/xenomai.mk
++++ b/package/xenomai/xenomai.mk
+@@ -16,6 +16,8 @@ else
+ XENOMAI_SOURCE = xenomai-$(XENOMAI_VERSION).tar.bz2
+ XENOMAI_SITE = http://xenomai.org/downloads/xenomai/stable
+ endif
++# We're patching configure.ac
++XENOMAI_AUTORECONF = YES
+ 
+ # Exclude all from the hash check, but the latest version.
+ ifeq ($(BR2_PACKAGE_XENOMAI)$(BR2_PACKAGE_XENOMAI_LATEST_VERSION),y)
+@@ -37,7 +39,10 @@ XENOMAI_INSTALL_STAGING = YES
+ XENOMAI_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install-user
+ XENOMAI_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) install-user
+ 
+-XENOMAI_CONF_OPTS += --includedir=/usr/include/xenomai/
++XENOMAI_CONF_OPTS += \
++	--disable-demo \
++	--disable-testsuite \
++	--includedir=/usr/include/xenomai/
+ 
+ ifeq ($(BR2_PACKAGE_XENOMAI_MERCURY),y)
+ XENOMAI_CONF_OPTS += --with-core=mercury
 
---000000000000b0f0de05c95e4fa0
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">Hi,=C2=A0<div><br></div><div>I am running into the followi=
-ng error when trying to install pyyaml with buildroot 2021.05 configuration=
-.</div><div><br></div><div>x86_64-buildroot-linux-gnu-gcc.br_real: error: y=
-aml/_yaml.c: No such file or directory<br>Error compiling module, falling b=
-ack to pure Python<br>pjeyaratnam@proteus:~/branches/sonic3/build/dist$ mak=
-e yaml-cpp-build<br>mkdir -p /home/pjeyaratnam/branches/sonic3/build/dist/p=
-er-package/yaml-cpp/host<br>mkdir -p /home/pjeyaratnam/branches/sonic3/buil=
-d/dist/per-package<br></div><div><br></div><div>Mysetup is</div><div>Python=
-3 enabled</div><div>LIBYAML enabled. 0.2.5</div><div>pyyaml: 5.4.1</div><di=
-v><br></div><div>Would it be possible for anyone to point in the right dire=
-ction on installing pyyaml on this setup ?</div><div><br></div><div>Regards=
-,</div><div>Pragash</div><div><br></div></div>
-
---000000000000b0f0de05c95e4fa0--
-
---===============2885360603287523207==
+--===============3471585999338775586==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -152,4 +248,4 @@ buildroot mailing list
 buildroot@busybox.net
 http://lists.busybox.net/mailman/listinfo/buildroot
 
---===============2885360603287523207==--
+--===============3471585999338775586==--
