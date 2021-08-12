@@ -7,85 +7,82 @@ X-Spam-Status: No, score=-16.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 135C6C4338F
-	for <buildroot@archiver.kernel.org>; Thu, 12 Aug 2021 14:18:38 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 36948C4338F
+	for <buildroot@archiver.kernel.org>; Thu, 12 Aug 2021 14:29:57 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id AA502610A3
-	for <buildroot@archiver.kernel.org>; Thu, 12 Aug 2021 14:18:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org AA502610A3
+	by mail.kernel.org (Postfix) with ESMTPS id 485816109D
+	for <buildroot@archiver.kernel.org>; Thu, 12 Aug 2021 14:29:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 485816109D
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=amarulasolutions.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AB0F44012C;
-	Thu, 12 Aug 2021 14:18:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F26C480CBA;
+	Thu, 12 Aug 2021 14:29:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bMYsgJaZ32a9; Thu, 12 Aug 2021 14:18:27 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 081A140764;
-	Thu, 12 Aug 2021 14:18:24 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D77BC1BF3A8
- for <buildroot@lists.busybox.net>; Thu, 12 Aug 2021 14:18:11 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C739582861
- for <buildroot@lists.busybox.net>; Thu, 12 Aug 2021 14:18:11 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=amarulasolutions.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DdTXMDmxO5j8 for <buildroot@lists.busybox.net>;
- Thu, 12 Aug 2021 14:18:07 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 8ox02kn7bpND; Thu, 12 Aug 2021 14:29:52 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1409C80CA7;
+	Thu, 12 Aug 2021 14:29:51 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 57C041BF3A8
+ for <buildroot@lists.busybox.net>; Thu, 12 Aug 2021 14:29:50 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 47617605D8
+ for <buildroot@lists.busybox.net>; Thu, 12 Aug 2021 14:29:50 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (1024-bit key) header.d=amarulasolutions.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5JXhBe_m5YC6 for <buildroot@lists.busybox.net>;
+ Thu, 12 Aug 2021 14:29:45 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
- [IPv6:2a00:1450:4864:20::329])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 12E9E82998
- for <buildroot@buildroot.org>; Thu, 12 Aug 2021 14:18:06 +0000 (UTC)
-Received: by mail-wm1-x329.google.com with SMTP id
- l34-20020a05600c1d22b02902573c214807so7276719wms.2
- for <buildroot@buildroot.org>; Thu, 12 Aug 2021 07:18:06 -0700 (PDT)
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com
+ [IPv6:2a00:1450:4864:20::62d])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 33BE76080D
+ for <buildroot@buildroot.org>; Thu, 12 Aug 2021 14:29:45 +0000 (UTC)
+Received: by mail-ej1-x62d.google.com with SMTP id z20so11995182ejf.5
+ for <buildroot@buildroot.org>; Thu, 12 Aug 2021 07:29:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=amarulasolutions.com; s=google;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=hF+jXaEbiIw32equP3UEVg9TblU6b63hJ+XggFFrmFA=;
- b=gwR8P+WlUdp048B6DZDBJkJEvviuZsKN3nc/nixMBTFrtsyBUwcnndUhUa07xJcC2L
- TRjxh0KnLwq0FrcWgVYLg/iVj7WwTlVw+y7x59eBFICzkRXiHR0KyPwscEOq6OZfSWIK
- C/EtY/w9X0/JBLcehDbPOa3bm68Kmn57BEI1w=
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=NO1lsHOhnoQmTHpGeVn+3B23FZQtKi0mi/1bx1HIa+Y=;
+ b=pALOv9tfmcnljXvwe0w5v2P1ODyYf3yeCapiAXpNVUYU+4y4VfoDGKaFAHw2C32YG5
+ ZaH8WpHX/qsISWI25U7TR0aL7MyErEV+0Ds7v1xJDg4kIggo0lfQ4Q+YoFrWSP2+hKBO
+ XziRV0WUXNYNNe2KgMXWocRNo4p4V5dTWq7TI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=hF+jXaEbiIw32equP3UEVg9TblU6b63hJ+XggFFrmFA=;
- b=BVBXufrZzYPcsGet35tsyYTVf+2qq1/fx4T5CEIJmUTLTXaN6XGyqSyKkCdsTbuDiT
- nfWRseKJ3gJXRp2nvcaNyVFcxL8tTsyOSkIMB58STsL0I/AX0FGZDcfCNwsIuGCbBvYn
- F6RFBhH6/hlEviOi1DQdfBxXKNp7ydGOd6v9WXQRfdSGEbd9DEIyjna7pM5t3/ePYCSL
- pHcM46TFKpCvvx9qr2S12aLeIr4+UoP/Rbw0SXshotjGhuuXo/K9QmZxYKIJBMuGytBa
- x4LrAx98yWDqwWNGE6m9M+Dm69sSb2drNj/Oh2z3jEOnorcB2lxNofEx6+AkiepEh1iA
- haqg==
-X-Gm-Message-State: AOAM533ky2op5yBPRGF0N534f3DUfysT9V2AInjvZhN2IHBKAQ/DqBcy
- R3LVNiigg1Nrr79uTP3mlyiENXAqZ0AKgg==
-X-Google-Smtp-Source: ABdhPJzlqP+JKDVz2n+APxwAy4aiGV9Q8SxyURXMZql4WwnWBivRnva4LAseQTHlKdnjUhctrLSEiw==
-X-Received: by 2002:a7b:c114:: with SMTP id w20mr4413841wmi.85.1628777884944; 
- Thu, 12 Aug 2021 07:18:04 -0700 (PDT)
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=NO1lsHOhnoQmTHpGeVn+3B23FZQtKi0mi/1bx1HIa+Y=;
+ b=MxP8GR7rYIewkqkO7BGYUS2iAfYJs2iFKoAiFOZgUwHKzAhCz6KF157NmUgbiSvMC3
+ V62b9xnHGQYjKtrqtKgJn0iZLTd8NrlrCUMTBpglJSnMi5dEedkRnpWo85Q5uxDP2jRY
+ vnfHcICrPY93G1YgOkBVit1DbS4Z4BrOd3RfP6sRru3+2Xol+5M9Xx8+yvhxyaDdya7v
+ F2/KnbziHTkqFToindm9d6GK0vEvJ61niNs3yYzbxna346OA7/Qz6QhIybu2ZOPLUseK
+ XPmApU5JuYxkju2tM+ahhxu8smcBPjGJMe5TrR6BMCTfxW+50sJi2mrpzuSrb9exvTI7
+ 15yA==
+X-Gm-Message-State: AOAM531MbpmDCBRozbBvVJwmEhkldRlCsgSE0Bueq7hrhs62dTeWzOOP
+ geU26q3qRUFEeIESumpAx1WGQ76Iw6pzeA==
+X-Google-Smtp-Source: ABdhPJzuqyMZqnKZzAP9PaGYuRlLh7O8tmKcSNjbdMSSU08jPH7o1jjElhmA3nBoS2hTwuA7WetSFg==
+X-Received: by 2002:a17:907:98b4:: with SMTP id
+ ju20mr3934144ejc.366.1628778583384; 
+ Thu, 12 Aug 2021 07:29:43 -0700 (PDT)
 Received: from localhost.localdomain ([37.160.45.80])
- by smtp.gmail.com with ESMTPSA id 19sm3186953wmj.23.2021.08.12.07.18.04
+ by smtp.gmail.com with ESMTPSA id la23sm885943ejc.63.2021.08.12.07.29.42
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 12 Aug 2021 07:18:04 -0700 (PDT)
+ Thu, 12 Aug 2021 07:29:43 -0700 (PDT)
 From: Angelo Compagnucci <angelo@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Thu, 12 Aug 2021 16:18:01 +0200
-Message-Id: <20210812141801.959504-2-angelo@amarulasolutions.com>
+Date: Thu, 12 Aug 2021 16:29:40 +0200
+Message-Id: <20210812142940.1008312-1-angelo@amarulasolutions.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210812141801.959504-1-angelo@amarulasolutions.com>
-References: <20210812141801.959504-1-angelo@amarulasolutions.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 2/2] package/python-web2py: bump to version
- v2.21.1
+Subject: [Buildroot] [PATCH] package/sshguard: bump to version 2.4.2
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -105,32 +102,34 @@ Sender: "buildroot" <buildroot-bounces@busybox.net>
 
 Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 ---
- package/python-web2py/python-web2py.hash | 2 +-
- package/python-web2py/python-web2py.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/sshguard/sshguard.hash | 4 ++--
+ package/sshguard/sshguard.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-web2py/python-web2py.hash b/package/python-web2py/python-web2py.hash
-index 4ff85668a1..2ef52b0a5c 100644
---- a/package/python-web2py/python-web2py.hash
-+++ b/package/python-web2py/python-web2py.hash
-@@ -1,3 +1,3 @@
- # sha256 locally computed
--sha256 e3f05266b4b97650b76bfb85028df5e2194955674c9b98cfc065c72ed5791690  python-web2py-2.20.4.tar.gz
-+sha256 44556376468139de874e9c29c9ef56e60ecd5f7536c7bee46d74b1f9d4178825  python-web2py-2.21.1.tar.gz
- sha256 2aae96826184a492bc799add49aed7b29036e7aba2d2294fb65053bd30fe55fe  LICENSE
-diff --git a/package/python-web2py/python-web2py.mk b/package/python-web2py/python-web2py.mk
-index 26214a8110..910efbe617 100644
---- a/package/python-web2py/python-web2py.mk
-+++ b/package/python-web2py/python-web2py.mk
+diff --git a/package/sshguard/sshguard.hash b/package/sshguard/sshguard.hash
+index 9bbb41336f..b1752f1c68 100644
+--- a/package/sshguard/sshguard.hash
++++ b/package/sshguard/sshguard.hash
+@@ -1,4 +1,4 @@
+-# sha256 from https://sourceforge.net/projects/sshguard/files/sshguard/2.4.1/sshguard-2.4.1.sha256
+-sha256  875d02e6e67dced614790ed5e36aef1160edea940f353a79306cbb1852af3c67  sshguard-2.4.1.tar.gz
++# sha256 from https://sourceforge.net/projects/sshguard/files/sshguard/2.4.2/sshguard-2.4.2.sha256
++sha256  2770b776e5ea70a9bedfec4fd84d57400afa927f0f7522870d2dcbbe1ace37e8  sshguard-2.4.2.tar.gz
+ # Locally calculated
+ sha256  c3ae64f12153a1bc55bc234d09f40a08ab0e0149fffc972c0b7f02d5a12c1a5c  COPYING
+diff --git a/package/sshguard/sshguard.mk b/package/sshguard/sshguard.mk
+index 3616fba780..d27c76e63f 100644
+--- a/package/sshguard/sshguard.mk
++++ b/package/sshguard/sshguard.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_WEB2PY_VERSION = 2.20.4
-+PYTHON_WEB2PY_VERSION = 2.21.1
- PYTHON_WEB2PY_SITE = $(call github,web2py,web2py,v$(PYTHON_WEB2PY_VERSION))
- PYTHON_WEB2PY_LICENSE = LGPL-3.0
- PYTHON_WEB2PY_LICENSE_FILES = LICENSE
+-SSHGUARD_VERSION = 2.4.1
++SSHGUARD_VERSION = 2.4.2
+ SSHGUARD_SITE = https://sourceforge.net/projects/sshguard/files/sshguard/$(SSHGUARD_VERSION)
+ SSHGUARD_LICENSE = ISC, Public Domain (fnv hash), BSD-3-Clause (SimCList)
+ SSHGUARD_LICENSE_FILES = COPYING
 -- 
 2.25.1
 
