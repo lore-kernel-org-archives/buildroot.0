@@ -2,57 +2,61 @@ Return-Path: <SRS0=gEIP=ND=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_2
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DED2BC4338F
-	for <buildroot@archiver.kernel.org>; Thu, 12 Aug 2021 21:48:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E376C4338F
+	for <buildroot@archiver.kernel.org>; Thu, 12 Aug 2021 21:48:40 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9661260F57
-	for <buildroot@archiver.kernel.org>; Thu, 12 Aug 2021 21:48:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9661260F57
+	by mail.kernel.org (Postfix) with ESMTPS id 15BAE60F57
+	for <buildroot@archiver.kernel.org>; Thu, 12 Aug 2021 21:48:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 15BAE60F57
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 53E5D40521;
-	Thu, 12 Aug 2021 21:48:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 84C2F405BF;
+	Thu, 12 Aug 2021 21:48:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rtgvx8_12BJl; Thu, 12 Aug 2021 21:48:20 +0000 (UTC)
+	with ESMTP id 8AzfcwN2kZ4I; Thu, 12 Aug 2021 21:48:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DAB4840560;
-	Thu, 12 Aug 2021 21:48:19 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DD8421BF354
- for <buildroot@lists.busybox.net>; Thu, 12 Aug 2021 21:48:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 117EB405E7;
+	Thu, 12 Aug 2021 21:48:32 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 57E511BF354
+ for <buildroot@lists.busybox.net>; Thu, 12 Aug 2021 21:48:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CC72040560
- for <buildroot@lists.busybox.net>; Thu, 12 Aug 2021 21:48:17 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 54C2F6140C
+ for <buildroot@lists.busybox.net>; Thu, 12 Aug 2021 21:48:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8lRDqme_0waN for <buildroot@lists.busybox.net>;
- Thu, 12 Aug 2021 21:48:13 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3525340521
- for <buildroot@buildroot.org>; Thu, 12 Aug 2021 21:48:13 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 4DAE58D474; Thu, 12 Aug 2021 21:47:44 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id BVtHgWee39pP for <buildroot@lists.busybox.net>;
+ Thu, 12 Aug 2021 21:48:19 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id BE5296140A
+ for <buildroot@buildroot.org>; Thu, 12 Aug 2021 21:48:18 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id CE516C0003;
+ Thu, 12 Aug 2021 21:48:16 +0000 (UTC)
+Date: Thu, 12 Aug 2021 23:48:15 +0200
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: buildroot@buildroot.org
-Date: Thu, 12 Aug 2021 23:48:04 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c786507f076fdebcf49d150ff72ed95102dc7497
-X-Git-Newrev: 34da8f96141f14abd98bc4cab3fa05c0b7a0a895
-X-Patchwork-Hint: ignore
-Message-Id: <20210812214744.4DAE58D474@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gobject-introspection: fix
- exec_prefix
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20210812234815.4f23b2c0@windsurf>
+In-Reply-To: <20210809224214.2966469-1-fontaine.fabrice@gmail.com>
+References: <20210809224214.2966469-1-fontaine.fabrice@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/gobject-introspection: fix
+ gidatadir
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,58 +68,31 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-MIME-Version: 1.0
+Cc: Anisse Astier <anisse@astier.eu>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=34da8f96141f14abd98bc4cab3fa05c0b7a0a895
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue, 10 Aug 2021 00:42:14 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-exec_prefix has been removed since version 1.66 and
-https://gitlab.gnome.org/GNOME/gobject-introspection/-/commit/a88b1ac548516ab25140a2e9dea8cac894bbac93
-resulting in the following build failure with rygel because libgee
-installs Gee-0.8.gir in
-output/host/aarch64-buildroot-linux-gnu/sysroot/share/gir-1.0/Gee-0.8.gir
-instead of
-output/host/aarch64-buildroot-linux-gnu/sysroot/usr/share/gir-1.0/Gee-0.8.gir:
+> Since commit 521d387640d704f24caee51841388d98bcac739b gidatadir is
+> wrongly set to ${libdir}/../share, set it back to
+> ${datadir}/gobject-introspection-1.0
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/gobject-introspection/gobject-introspection.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Could not find GIR file 'Gee-0.8.gir'; check XDG_DATA_DIRS or use --includedir
-error parsing file RygelCore-2.6.gir: Failed to parse included gir Gee-0.8
-If the above error message is about missing .so libraries, then setting up GIR_EXTRA_LIBS_PATH in the .mk file should help.
-Typically like this: PKG_MAKE_ENV += GIR_EXTRA_LIBS_PATH="$(@D)/.libs"
+Applied to master, thanks.
 
-So replace exec_prefix by prefix
-
-Fixes:
- - http://autobuild.buildroot.org/results/b04b27bbb84fa6ab9a8441e7bd94aad45226dce9
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/gobject-introspection/gobject-introspection.mk | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/gobject-introspection/gobject-introspection.mk b/package/gobject-introspection/gobject-introspection.mk
-index fbc545b3c7..f56d0c5eff 100644
---- a/package/gobject-introspection/gobject-introspection.mk
-+++ b/package/gobject-introspection/gobject-introspection.mk
-@@ -127,11 +127,11 @@ define GOBJECT_INTROSPECTION_INSTALL_WRAPPERS
- 	# By default, girdir and typelibdir use datadir and libdir as their prefix,
- 	# of which pkg-config appends the sysroot directory. This results in files
- 	# being installed in $(STAGING_DIR)/$(STAGING_DIR)/path/to/files.
--	# Changing the prefix to exec_prefix prevents this error.
--	$(SED) "s%girdir=.*%girdir=\$${exec_prefix}/share/gir-1.0%g" \
-+	# Changing the prefix to prefix prevents this error.
-+	$(SED) "s%girdir=.*%girdir=\$${prefix}/share/gir-1.0%g" \
- 		$(STAGING_DIR)/usr/lib/pkgconfig/gobject-introspection-1.0.pc
- 
--	$(SED) "s%typelibdir=.*%typelibdir=\$${exec_prefix}/lib/girepository-1.0%g" \
-+	$(SED) "s%typelibdir=.*%typelibdir=\$${prefix}/lib/girepository-1.0%g" \
- 		$(STAGING_DIR)/usr/lib/pkgconfig/gobject-introspection-1.0.pc
- endef
- GOBJECT_INTROSPECTION_POST_INSTALL_STAGING_HOOKS += GOBJECT_INTROSPECTION_INSTALL_WRAPPERS
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
