@@ -2,56 +2,56 @@ Return-Path: <SRS0=jfQC=N2=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EA1D4C433F5
-	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 18:30:46 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E157C4332F
+	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 18:30:59 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id BD04D60FA0
-	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 18:30:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org BD04D60FA0
+	by mail.kernel.org (Postfix) with ESMTPS id 6E62560FD7
+	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 18:30:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6E62560FD7
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8B4214017C;
-	Sat,  4 Sep 2021 18:30:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 448AF605EC;
+	Sat,  4 Sep 2021 18:30:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YXLFH0i1MFhe; Sat,  4 Sep 2021 18:30:45 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3fXKOwZfomBf; Sat,  4 Sep 2021 18:30:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9EC8A4013E;
-	Sat,  4 Sep 2021 18:30:44 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 253D51BF5DD
+	by smtp3.osuosl.org (Postfix) with ESMTP id 835556075F;
+	Sat,  4 Sep 2021 18:30:57 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 370651BF95A
  for <buildroot@lists.busybox.net>; Sat,  4 Sep 2021 18:25:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CE4B64024F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 89CE360731
  for <buildroot@lists.busybox.net>; Sat,  4 Sep 2021 18:25:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id r-pEKm8JvQwc for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id am1jw71DlVHW for <buildroot@lists.busybox.net>;
  Sat,  4 Sep 2021 18:25:15 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4638F401B2
+ by smtp3.osuosl.org (Postfix) with ESMTP id CC6686061B
  for <buildroot@buildroot.org>; Sat,  4 Sep 2021 18:25:15 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 0EA088834A; Sat,  4 Sep 2021 18:23:53 +0000 (UTC)
+ id 969398834C; Sat,  4 Sep 2021 18:23:53 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Wed, 4 Aug 2021 22:17:18 +0200
+Date: Fri, 13 Aug 2021 15:07:04 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 250f33d0ff4b7f687cd7c00d0b66c02c410ae59b
-X-Git-Newrev: 908072116163561ce8b1803a1c32ad88b75bcaeb
+X-Git-Oldrev: 43b69dbac811e509ad38c959b0238d565669de6a
+X-Git-Newrev: b7f9192acf4fca94eac40266aa15ffdd1e708ae1
 X-Patchwork-Hint: ignore
-Message-Id: <20210904182353.0EA088834A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/vuejs: bump version to 3.1.5
+Message-Id: <20210904182353.969398834C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/apparmor: bump to version 3.0.3
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,42 +70,68 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=908072116163561ce8b1803a1c32ad88b75bcaeb
+commit: https://git.buildroot.net/buildroot/commit/?id=b7f9192acf4fca94eac40266aa15ffdd1e708ae1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
+This patch bumps apparmor and libapparmor to maintenance release 3.0.3
+
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/vuejs/vuejs.hash | 3 ++-
- package/vuejs/vuejs.mk   | 3 ++-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ package/apparmor/apparmor.hash       | 2 +-
+ package/apparmor/apparmor.mk         | 2 +-
+ package/libapparmor/libapparmor.hash | 2 +-
+ package/libapparmor/libapparmor.mk   | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/vuejs/vuejs.hash b/package/vuejs/vuejs.hash
-index db4a5bbe3e..c2804961d2 100644
---- a/package/vuejs/vuejs.hash
-+++ b/package/vuejs/vuejs.hash
-@@ -1,2 +1,3 @@
- # Locally computed
--sha256  a69f04bf138af09a956150675151edb9354aeec8bd627c21cbcfa646248214fa  vue-3.0.5.tgz
-+sha256  ddd5e07483d18d2abd645c01200f57d5ffd1c3bf262cdb9f9e1a66a7b855d84a  vue-3.1.5.tgz
-+sha256  1bb85cc9b13b81ef41c81c51866172fc345e0503c86726a6755b796590b70175  LICENSE
-diff --git a/package/vuejs/vuejs.mk b/package/vuejs/vuejs.mk
-index 43b45e00b7..18e12f69d4 100644
---- a/package/vuejs/vuejs.mk
-+++ b/package/vuejs/vuejs.mk
-@@ -4,10 +4,11 @@
- #
- ################################################################################
+diff --git a/package/apparmor/apparmor.hash b/package/apparmor/apparmor.hash
+index ddbe87c569..88280cbfcf 100644
+--- a/package/apparmor/apparmor.hash
++++ b/package/apparmor/apparmor.hash
+@@ -1,5 +1,5 @@
+ # From: https://gitlab.com/apparmor/apparmor/-/wikis/home#userspace
+-sha256  8fada772d9a60989525594346d9aa22af938daafc1781adce9a1acb3c75bdf24  apparmor-3.0.1.tar.gz
++sha256  153db05d8f491e0596022663c19fb1166806cb473b3c6f0a7279feda2ec25a59  apparmor-3.0.3.tar.gz
  
--VUEJS_VERSION = 3.0.5
-+VUEJS_VERSION = 3.1.5
- VUEJS_SOURCE = vue-$(VUEJS_VERSION).tgz
- VUEJS_SITE = https://registry.npmjs.org/vue/-
- VUEJS_LICENSE = MIT
-+VUEJS_LICENSE_FILES = LICENSE
+ # locally computed
+ sha256  a7e0cdcbea5c14927cedfc600d46526bdcbb1eb0a4d951e2ea53c2a6de159cb4  LICENSE
+diff --git a/package/apparmor/apparmor.mk b/package/apparmor/apparmor.mk
+index 6c23e1bb89..400ea349ae 100644
+--- a/package/apparmor/apparmor.mk
++++ b/package/apparmor/apparmor.mk
+@@ -6,7 +6,7 @@
  
- # Install .min.js as .js
- define VUEJS_INSTALL_TARGET_CMDS
+ # When updating the version here, please also update the libapparmor package
+ APPARMOR_VERSION_MAJOR = 3.0
+-APPARMOR_VERSION = $(APPARMOR_VERSION_MAJOR).1
++APPARMOR_VERSION = $(APPARMOR_VERSION_MAJOR).3
+ APPARMOR_SITE = https://launchpad.net/apparmor/$(APPARMOR_VERSION_MAJOR)/$(APPARMOR_VERSION)/+download
+ APPARMOR_DL_SUBDIR = libapparmor
+ APPARMOR_LICENSE = GPL-2.0
+diff --git a/package/libapparmor/libapparmor.hash b/package/libapparmor/libapparmor.hash
+index 37e1ff5228..6a19aef77a 100644
+--- a/package/libapparmor/libapparmor.hash
++++ b/package/libapparmor/libapparmor.hash
+@@ -1,5 +1,5 @@
+ # From: https://gitlab.com/apparmor/apparmor/-/wikis/home#userspace
+-sha256  8fada772d9a60989525594346d9aa22af938daafc1781adce9a1acb3c75bdf24  apparmor-3.0.1.tar.gz
++sha256  153db05d8f491e0596022663c19fb1166806cb473b3c6f0a7279feda2ec25a59  apparmor-3.0.3.tar.gz
+ 
+ # locally computed
+ sha256  a7e0cdcbea5c14927cedfc600d46526bdcbb1eb0a4d951e2ea53c2a6de159cb4  LICENSE
+diff --git a/package/libapparmor/libapparmor.mk b/package/libapparmor/libapparmor.mk
+index 255432e455..0d5822a56d 100644
+--- a/package/libapparmor/libapparmor.mk
++++ b/package/libapparmor/libapparmor.mk
+@@ -6,7 +6,7 @@
+ 
+ # When updating the version here, please also update the apparmor package
+ LIBAPPARMOR_VERSION_MAJOR = 3.0
+-LIBAPPARMOR_VERSION = $(LIBAPPARMOR_VERSION_MAJOR).1
++LIBAPPARMOR_VERSION = $(LIBAPPARMOR_VERSION_MAJOR).3
+ LIBAPPARMOR_SOURCE = apparmor-$(LIBAPPARMOR_VERSION).tar.gz
+ LIBAPPARMOR_SITE = https://launchpad.net/apparmor/$(LIBAPPARMOR_VERSION_MAJOR)/$(LIBAPPARMOR_VERSION)/+download
+ LIBAPPARMOR_LICENSE = LGPL-2.1
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
