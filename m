@@ -2,57 +2,57 @@ Return-Path: <SRS0=2pYX=NR=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 83253C432BE
-	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:13:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C9D9C432BE
+	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:13:15 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 37EE160FD9
-	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:13:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 37EE160FD9
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
+	by mail.kernel.org (Postfix) with ESMTPS id CDA4860231
+	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:13:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org CDA4860231
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 096F4426DA;
-	Thu, 26 Aug 2021 22:13:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A558842705;
+	Thu, 26 Aug 2021 22:13:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3-8s27BiLHuu; Thu, 26 Aug 2021 22:12:58 +0000 (UTC)
+	with ESMTP id D7C-cv35Xc_Q; Thu, 26 Aug 2021 22:13:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0C623426EE;
-	Thu, 26 Aug 2021 22:12:56 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1DEE71C1135
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7AFD7426F9;
+	Thu, 26 Aug 2021 22:13:08 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 7E73F1BF33E
  for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 22:02:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C79084077C
- for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 22:02:37 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7E29E426B8
+ for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 22:02:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zZpTPssvqkC1 for <buildroot@lists.busybox.net>;
- Thu, 26 Aug 2021 22:02:32 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id GbuPbYFmP3Ht for <buildroot@lists.busybox.net>;
+ Thu, 26 Aug 2021 22:02:33 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1B0B740787
- for <buildroot@buildroot.org>; Thu, 26 Aug 2021 22:02:29 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2DBE0426B5
+ for <buildroot@buildroot.org>; Thu, 26 Aug 2021 22:02:31 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 7D4688DC50; Thu, 26 Aug 2021 22:01:27 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 8263E8DC52; Thu, 26 Aug 2021 22:01:29 +0000 (UTC)
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sun, 8 Aug 2021 21:34:42 +0200
+Date: Fri, 13 Aug 2021 15:05:48 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 79e230178b57b1b871fa8c888b65b10d1bf31912
-X-Git-Newrev: ca92d31cff4281c968e505fc588c5a480e7f5843
+X-Git-Oldrev: 4f857798a6f77df260a70343fe23e83a2083e569
+X-Git-Newrev: 081b6db8c3ef942e0c29d2f472a6199edbee7346
 X-Patchwork-Hint: ignore
-Message-Id: <20210826220127.7D4688DC50@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/nodejs: security bump
- to version 12.22.4
+Message-Id: <20210826220129.8263E8DC52@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/postgis: bump version
+ to 3.1.3
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,158 +70,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ca92d31cff4281c968e505fc588c5a480e7f5843
+commit: https://git.buildroot.net/buildroot/commit/?id=081b6db8c3ef942e0c29d2f472a6199edbee7346
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes the following security issues:
+Release-notes: https://postgis.net/2021/07/02/postgis-3.1.3/
 
-- CVE-2021-22930: Use after free on close http2 on stream canceling (High)
-
-  Node.js is vulnerable to a use after free attack where an attacker might
-  be able to exploit the memory corruption, to change process behavior.
-
-Drop 0002-Fix-build-with-ICU-68.patch as this is now fixed upstream since
-https://github.com/nodejs/node/commit/e459c79b02
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/nodejs/0002-Fix-build-with-ICU-68.patch | 101 ------------------------
- package/nodejs/nodejs.hash                      |   4 +-
- package/nodejs/nodejs.mk                        |   2 +-
- 3 files changed, 3 insertions(+), 104 deletions(-)
+ package/postgis/postgis.hash | 2 +-
+ package/postgis/postgis.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/nodejs/0002-Fix-build-with-ICU-68.patch b/package/nodejs/0002-Fix-build-with-ICU-68.patch
-deleted file mode 100644
-index 2d6ac010d2..0000000000
---- a/package/nodejs/0002-Fix-build-with-ICU-68.patch
-+++ /dev/null
-@@ -1,101 +0,0 @@
--From 1504de672ec44080d08a97c479a23727a9c31d8b Mon Sep 17 00:00:00 2001
--From: James Hilliard <james.hilliard1@gmail.com>
--Date: Mon, 19 Jul 2021 03:35:30 -0600
--Subject: [PATCH] Fix build with ICU >= 68.
--
--Adapted from:
--https://chromium-review.googlesource.com/c/v8/v8/+/2477751
--
--Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
--[Upstream status:
--https://github.com/nodejs/node/pull/39440]
-----
-- deps/v8/src/objects/js-list-format.cc | 32 +++++++++++++++++++++++++++
-- 1 file changed, 32 insertions(+)
--
--diff --git a/deps/v8/src/objects/js-list-format.cc b/deps/v8/src/objects/js-list-format.cc
--index 4f303b1874..2101f8e507 100644
----- a/deps/v8/src/objects/js-list-format.cc
--+++ b/deps/v8/src/objects/js-list-format.cc
--@@ -29,6 +29,7 @@ namespace v8 {
-- namespace internal {
-- 
-- namespace {
--+#if U_ICU_VERSION_MAJOR_NUM < 68
-- const char* kStandard = "standard";
-- const char* kOr = "or";
-- const char* kUnit = "unit";
--@@ -41,8 +42,24 @@ const char* kUnitNarrow = "unit-narrow";
-- 
-- const char* GetIcuStyleString(JSListFormat::Style style,
--                               JSListFormat::Type type) {
--+#else
--+UListFormatterWidth GetIcuWidth(JSListFormat::Style style) {
--+  switch (style) {
--+    case JSListFormat::Style::LONG:
--+      return ULISTFMT_WIDTH_WIDE;
--+    case JSListFormat::Style::SHORT:
--+      return ULISTFMT_WIDTH_SHORT;
--+    case JSListFormat::Style::NARROW:
--+      return ULISTFMT_WIDTH_NARROW;
--+  }
--+  UNREACHABLE();
--+}
--+
--+UListFormatterType GetIcuType(JSListFormat::Type type) {
--+#endif
--   switch (type) {
--     case JSListFormat::Type::CONJUNCTION:
--+#if U_ICU_VERSION_MAJOR_NUM < 68
--       switch (style) {
--         case JSListFormat::Style::LONG:
--           return kStandard;
--@@ -51,7 +68,11 @@ const char* GetIcuStyleString(JSListFormat::Style style,
--         case JSListFormat::Style::NARROW:
--           return kStandardNarrow;
--       }
--+#else
--+      return ULISTFMT_TYPE_AND;
--+#endif
--     case JSListFormat::Type::DISJUNCTION:
--+#if U_ICU_VERSION_MAJOR_NUM < 68
--       switch (style) {
--         case JSListFormat::Style::LONG:
--           return kOr;
--@@ -60,7 +81,11 @@ const char* GetIcuStyleString(JSListFormat::Style style,
--         case JSListFormat::Style::NARROW:
--           return kOrNarrow;
--       }
--+#else
--+      return ULISTFMT_TYPE_OR;
--+#endif
--     case JSListFormat::Type::UNIT:
--+#if U_ICU_VERSION_MAJOR_NUM < 68
--       switch (style) {
--         case JSListFormat::Style::LONG:
--           return kUnit;
--@@ -69,6 +94,9 @@ const char* GetIcuStyleString(JSListFormat::Style style,
--         case JSListFormat::Style::NARROW:
--           return kUnitNarrow;
--       }
--+#else
--+      return ULISTFMT_TYPE_UNITS;
--+#endif
--   }
--   UNREACHABLE();
-- }
--@@ -170,7 +198,11 @@ MaybeHandle<JSListFormat> JSListFormat::New(Isolate* isolate, Handle<Map> map,
--   icu::Locale icu_locale = r.icu_locale;
--   UErrorCode status = U_ZERO_ERROR;
--   icu::ListFormatter* formatter = icu::ListFormatter::createInstance(
--+#if U_ICU_VERSION_MAJOR_NUM < 68
--       icu_locale, GetIcuStyleString(style_enum, type_enum), status);
--+#else
--+      icu_locale, GetIcuType(type_enum), GetIcuWidth(style_enum), status);
--+#endif
--   if (U_FAILURE(status)) {
--     delete formatter;
--     FATAL("Failed to create ICU list formatter, are ICU data files missing?");
---- 
--2.25.1
--
-diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-index d94942e7c0..7d11a8d104 100644
---- a/package/nodejs/nodejs.hash
-+++ b/package/nodejs/nodejs.hash
-@@ -1,5 +1,5 @@
--# From https://nodejs.org/dist/v12.22.3/SHASUMS256.txt
--sha256  350211fae3a688f41889680c8efcf689353a2e36b62b9dc2b408340986857190  node-v12.22.3.tar.xz
-+# From https://nodejs.org/dist/v12.22.4/SHASUMS256.txt
-+sha256  44cd4eab131e5282fc923e9e720d983a0b44c12e4aa4f6c3598dc97ae1e4cd4c  node-v12.22.4.tar.xz
- 
- # Hash for license file
- sha256  221417a7ca275112a5ac54639b36ee3c5184e74631ea1e1b01b701293b655190  LICENSE
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index 2731a7c667..08d2f6d7c1 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
+diff --git a/package/postgis/postgis.hash b/package/postgis/postgis.hash
+index 8a8e47ffcc..15983565b4 100644
+--- a/package/postgis/postgis.hash
++++ b/package/postgis/postgis.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  2cdd3760176926704b4eb25ff3357543c9637dee74425a49082906857c7e0732  postgis-3.1.2.tar.gz
++sha256  71e929553bb73a0413206a0f92df5180ac6579c500d8ddce3a03559f1b349fcb  postgis-3.1.3.tar.gz
+ sha256  55b69f22e1752830dd565852dc7ff242daf289dbd3a6bfede5db43f90d2e28c9  LICENSE.TXT
+diff --git a/package/postgis/postgis.mk b/package/postgis/postgis.mk
+index a0acf62e05..b3d97b2774 100644
+--- a/package/postgis/postgis.mk
++++ b/package/postgis/postgis.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--NODEJS_VERSION = 12.22.3
-+NODEJS_VERSION = 12.22.4
- NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
- NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
- NODEJS_DEPENDENCIES = host-python host-nodejs c-ares \
+-POSTGIS_VERSION = 3.1.2
++POSTGIS_VERSION = 3.1.3
+ POSTGIS_SITE = https://download.osgeo.org/postgis/source
+ # parallel build issues
+ POSTGIS_MAKE = $(MAKE1)
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
