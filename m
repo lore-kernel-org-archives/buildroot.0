@@ -7,52 +7,51 @@ X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E5B0C433EF
-	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 18:31:11 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 61D94C433FE
+	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 18:31:23 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 4082860F9C
-	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 18:31:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4082860F9C
+	by mail.kernel.org (Postfix) with ESMTPS id 30C9960F56
+	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 18:31:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 30C9960F56
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1553D83168;
-	Sat,  4 Sep 2021 18:31:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 03B8E60770;
+	Sat,  4 Sep 2021 18:31:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id soTX1VqHn152; Sat,  4 Sep 2021 18:31:10 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id o2ISngbSM5ln; Sat,  4 Sep 2021 18:31:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 55C1C82FCE;
-	Sat,  4 Sep 2021 18:31:09 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 701E61BF5DD
- for <buildroot@lists.busybox.net>; Sat,  4 Sep 2021 18:25:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5474760760;
+	Sat,  4 Sep 2021 18:31:21 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1520A1BF5DD
+ for <buildroot@lists.busybox.net>; Sat,  4 Sep 2021 18:25:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0322A81A1C
- for <buildroot@lists.busybox.net>; Sat,  4 Sep 2021 18:25:18 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 94AC16061B
+ for <buildroot@lists.busybox.net>; Sat,  4 Sep 2021 18:25:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id r0ApCBzeH_Xl for <buildroot@lists.busybox.net>;
- Sat,  4 Sep 2021 18:25:17 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id I93snsW7zTgT for <buildroot@lists.busybox.net>;
+ Sat,  4 Sep 2021 18:25:16 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4D61A82A2D
- for <buildroot@buildroot.org>; Sat,  4 Sep 2021 18:25:17 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id EFE9160751
+ for <buildroot@buildroot.org>; Sat,  4 Sep 2021 18:25:15 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 16D118834D; Sat,  4 Sep 2021 18:23:55 +0000 (UTC)
+ id C23598834C; Sat,  4 Sep 2021 18:23:53 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Thu, 19 Aug 2021 23:27:32 +0200
+Date: Fri, 13 Aug 2021 15:11:51 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 68933bf19560c180379c34906281d49187a4e6ea
-X-Git-Newrev: 82f5b3724bfe3ab262a384af61f3d2faf9c6c0a5
+X-Git-Oldrev: 38a154f142d6dd752c6661ad60f62c62fca60ca3
+X-Git-Newrev: 37f75b756182dd17871d1cd9e8bca83f326de690
 X-Patchwork-Hint: ignore
-Message-Id: <20210904182355.16D118834D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] boot/arm-trusted-firmware: Add
- out-of-source ATF device tree support
+Message-Id: <20210904182353.C23598834C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/tvheadend: always use host-python3
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,56 +70,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=82f5b3724bfe3ab262a384af61f3d2faf9c6c0a5
+commit: https://git.buildroot.net/buildroot/commit/?id=37f75b756182dd17871d1cd9e8bca83f326de690
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Similarly to Uboot, this patch adds the ability to copy in and build
-out-of-source device tree sources during an ATF build.
+According to
+https://elinux.org/Buildroot:Python2Packages#Python_in_the_build_system
+tvheadend needs to be updated to follow
+"We aim at removing dependencies on host-python(2) where possible"
 
-Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- boot/arm-trusted-firmware/Config.in               | 9 +++++++++
- boot/arm-trusted-firmware/arm-trusted-firmware.mk | 5 +++++
- 2 files changed, 14 insertions(+)
+ package/tvheadend/tvheadend.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/boot/arm-trusted-firmware/Config.in b/boot/arm-trusted-firmware/Config.in
-index 7e46a10270..20a121c2fc 100644
---- a/boot/arm-trusted-firmware/Config.in
-+++ b/boot/arm-trusted-firmware/Config.in
-@@ -68,6 +68,15 @@ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM
- 	help
- 	  Target plaform to build for.
+diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+index b694c44e3b..cd8fedf1f0 100644
+--- a/package/tvheadend/tvheadend.mk
++++ b/package/tvheadend/tvheadend.mk
+@@ -12,7 +12,7 @@ TVHEADEND_DEPENDENCIES = \
+ 	host-gettext \
+ 	host-pkgconf \
+ 	host-pngquant \
+-	$(if $(BR2_PACKAGE_PYTHON3),host-python3,host-python) \
++	host-python3 \
+ 	openssl
  
-+config BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_DTS_PATH
-+	string "Device Tree Source file paths"
-+	help
-+	  Space-separated list of paths to device tree source files
-+	  that will be copied to fdts/ before starting the build.
-+
-+	  To use this device tree source file, the ATF configuration
-+	  file must refer to it.
-+
- config BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP
- 	bool "Build FIP image"
- 	help
-diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-index 1f08f5dabb..d1eb72e7ae 100644
---- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-+++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-@@ -162,7 +162,12 @@ endif
- ARM_TRUSTED_FIRMWARE_MAKE_TARGETS += \
- 	$(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_TARGETS))
- 
-+ARM_TRUSTED_FIRMWARE_CUSTOM_DTS_PATH = $(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_DTS_PATH))
-+
- define ARM_TRUSTED_FIRMWARE_BUILD_CMDS
-+	$(if $(ARM_TRUSTED_FIRMWARE_CUSTOM_DTS_PATH),
-+		cp -f $(ARM_TRUSTED_FIRMWARE_CUSTOM_DTS_PATH) $(@D)/fdts/
-+	)
- 	$(ARM_TRUSTED_FIRMWARE_BUILD_FIPTOOL)
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(ARM_TRUSTED_FIRMWARE_MAKE_OPTS) \
- 		$(ARM_TRUSTED_FIRMWARE_MAKE_TARGETS)
+ ifeq ($(BR2_PACKAGE_AVAHI),y)
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
