@@ -7,63 +7,63 @@ X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A388DC4338F
-	for <buildroot@archiver.kernel.org>; Fri, 13 Aug 2021 04:36:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0EDD0C4338F
+	for <buildroot@archiver.kernel.org>; Fri, 13 Aug 2021 04:40:02 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 215EE60EB5
-	for <buildroot@archiver.kernel.org>; Fri, 13 Aug 2021 04:36:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 215EE60EB5
+	by mail.kernel.org (Postfix) with ESMTPS id 9A58960E9B
+	for <buildroot@archiver.kernel.org>; Fri, 13 Aug 2021 04:40:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9A58960E9B
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=t-online.de
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D3AE6605E2;
-	Fri, 13 Aug 2021 04:36:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5467F60778;
+	Fri, 13 Aug 2021 04:40:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Tr_rOr2gN2F1; Fri, 13 Aug 2021 04:36:11 +0000 (UTC)
+	with ESMTP id u2kRVQ-xQALU; Fri, 13 Aug 2021 04:39:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6285B60640;
-	Fri, 13 Aug 2021 04:36:10 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 612141BF302
- for <buildroot@lists.busybox.net>; Fri, 13 Aug 2021 04:36:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D3355607A1;
+	Fri, 13 Aug 2021 04:39:56 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 3B5BF1BF302
+ for <buildroot@lists.busybox.net>; Fri, 13 Aug 2021 04:39:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5B70F4035C
- for <buildroot@lists.busybox.net>; Fri, 13 Aug 2021 04:36:08 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2B4F580DD0
+ for <buildroot@lists.busybox.net>; Fri, 13 Aug 2021 04:39:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Fs1t3MX_hLXj for <buildroot@lists.busybox.net>;
- Fri, 13 Aug 2021 04:36:04 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id w-B_AhIMKFxb for <buildroot@lists.busybox.net>;
+ Fri, 13 Aug 2021 04:39:50 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mailout04.t-online.de (mailout04.t-online.de [194.25.134.18])
- by smtp2.osuosl.org (Postfix) with ESMTPS id EE58C400D2
- for <buildroot@buildroot.org>; Fri, 13 Aug 2021 04:36:03 +0000 (UTC)
-Received: from fwd07.aul.t-online.de (fwd07.aul.t-online.de [172.20.27.150])
- by mailout04.t-online.de (Postfix) with SMTP id E00F57F4A;
- Fri, 13 Aug 2021 06:35:59 +0200 (CEST)
+Received: from mailout09.t-online.de (mailout09.t-online.de [194.25.134.84])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1272A80D9B
+ for <buildroot@buildroot.org>; Fri, 13 Aug 2021 04:39:49 +0000 (UTC)
+Received: from fwd27.aul.t-online.de (fwd27.aul.t-online.de [172.20.26.132])
+ by mailout09.t-online.de (Postfix) with SMTP id 4F5515FE5;
+ Fri, 13 Aug 2021 06:38:53 +0200 (CEST)
 Received: from fli4l.lan.fli4l
- (TQVBKeZUrh8bqfRIhUUulaSEyoIIdI7sENjIZ4gjV7Htn4cqOZIZ-A9OmNxkzcwZEo@[79.214.196.191])
- by fwd07.t-online.de with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1mEOvE-0YB0sa0; Fri, 13 Aug 2021 06:35:56 +0200
-Received: from mahler.lan.fli4l ([192.168.1.1]:56000)
+ (Tz2XXeZYYhj+E+8VyRg0DodSQFVT4cLiimfz2UV4IYmKLayR2iheRtbqIHsN7ZewlW@[79.214.196.191])
+ by fwd27.t-online.de with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
+ esmtp id 1mEOxx-0EsI2C0; Fri, 13 Aug 2021 06:38:45 +0200
+Received: from mahler.lan.fli4l ([192.168.1.1]:56002)
  by fli4l.lan.fli4l with esmtp (Exim 4.94.2)
  (envelope-from <bernd.kuhls@t-online.de>)
- id 1mEOvD-0006Ub-N1; Fri, 13 Aug 2021 06:35:56 +0200
+ id 1mEOxx-0006wp-2B; Fri, 13 Aug 2021 06:38:45 +0200
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Fri, 13 Aug 2021 06:35:55 +0200
-Message-Id: <20210813043555.35590-1-bernd.kuhls@t-online.de>
+Date: Fri, 13 Aug 2021 06:38:44 +0200
+Message-Id: <20210813043844.36723-1-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-ID: TQVBKeZUrh8bqfRIhUUulaSEyoIIdI7sENjIZ4gjV7Htn4cqOZIZ-A9OmNxkzcwZEo
-X-TOI-EXPURGATEID: 150726::1628829356-00011901-1F7121E6/0/0 CLEAN NORMAL
-X-TOI-MSGID: 850aaf57-c5f9-4989-bc9c-d9e5323881d6
-Subject: [Buildroot] [PATCH 1/1] package/postgresql: security bump version
- to 13.4
+X-ID: Tz2XXeZYYhj+E+8VyRg0DodSQFVT4cLiimfz2UV4IYmKLayR2iheRtbqIHsN7ZewlW
+X-TOI-EXPURGATEID: 150726::1628829526-000107BB-C8B7756C/0/0 CLEAN NORMAL
+X-TOI-MSGID: 6e283506-e1d3-4dad-866c-ae298d368a12
+Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
+ mesa3d-headers}: bump version to 21.1.7
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,49 +75,63 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Peter Seiderer <ps.report@gmx.net>
+Cc: Romain Naour <romain.naour@gmail.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-Release notes:
-https://www.postgresql.org/about/news/postgresql-134-128-1113-1018-9623-and-14-beta-3-released-2277/
-
-Fixes CVE-2021-3677:
-https://www.postgresql.org/support/security/CVE-2021-3677/
+Release notes for this bugfix release:
+https://lists.freedesktop.org/archives/mesa-announce/2021-August/000642.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/postgresql/postgresql.hash | 4 ++--
- package/postgresql/postgresql.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+ package/mesa3d/mesa3d.hash               | 6 +++---
+ package/mesa3d/mesa3d.mk                 | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
-index caa8a1f5e7..2dcc1823d6 100644
---- a/package/postgresql/postgresql.hash
-+++ b/package/postgresql/postgresql.hash
-@@ -1,5 +1,5 @@
--# From https://ftp.postgresql.org/pub/source/v13.3/postgresql-13.3.tar.bz2.sha256
--sha256  3cd9454fa8c7a6255b6743b767700925ead1b9ab0d7a0f9dcb1151010f8eb4a1  postgresql-13.3.tar.bz2
-+# From https://ftp.postgresql.org/pub/source/v13.4/postgresql-13.4.tar.bz2.sha256
-+sha256  ea93e10390245f1ce461a54eb5f99a48d8cabd3a08ce4d652ec2169a357bc0cd  postgresql-13.4.tar.bz2
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 64587b4bcd..f569b53285 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
  
- # License file, Locally calculated
- sha256  31ccadc0a70e8e0e8a35c5833567b64388dfe34987d962e1911554e271294105  COPYRIGHT
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index 143bcd895a..3b6c6e21e7 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -4,7 +4,7 @@
- #
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 21.1.6
++MESA3D_HEADERS_VERSION = 21.1.7
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://archive.mesa3d.org
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index 4b63e0cece..3ff58f028e 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2021-July/000640.html
+-sha256  b1cb0122f911dfa9fe1f209a7061378c61a1448a280e711511ca72dad9999e37  mesa-21.1.6.tar.xz
+-sha512  5daf389aad4fe7ab3574f6af3aabc62ba8b3034004a0a0853dcc18ef6c8003d2f2195cc377dc57b30863ae4cf158149e3156247445ca2b11e401700011cb878c  mesa-21.1.6.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2021-August/000642.html
++sha256  e9e67c10654f2e4bf15b944bb048007a614292aa4792b1b7512eb700b7b3a7bb  mesa-21.1.7.tar.xz
++sha512  1fd677437f292c30fbf08bfef8c1088557841f426090ccba20ab2a222b08fb5c3ec48a7a0301466e03a23019d09414c700a4f5e299479cacd6972a9f3ba030c8  mesa-21.1.7.tar.xz
+ 
+ # License
+ sha256  998437f3f75f0c542046f83c1cb349408122268168fb13eb4ae6967aa18b7d98  docs/license.rst
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 7ad82a43a5..ceffe8daf8 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--POSTGRESQL_VERSION = 13.3
-+POSTGRESQL_VERSION = 13.4
- POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
- POSTGRESQL_SITE = https://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
- POSTGRESQL_LICENSE = PostgreSQL
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 21.1.6
++MESA3D_VERSION = 21.1.7
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://archive.mesa3d.org
+ MESA3D_LICENSE = MIT, SGI, Khronos
 -- 
 2.30.2
 
