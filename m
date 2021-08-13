@@ -7,51 +7,51 @@ X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 06B61C433EF
-	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 18:30:11 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0320CC433EF
+	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 18:30:23 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id C94B960F5D
-	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 18:30:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C94B960F5D
+	by mail.kernel.org (Postfix) with ESMTPS id BFF7D60F5D
+	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 18:30:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org BFF7D60F5D
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9722860760;
-	Sat,  4 Sep 2021 18:30:10 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sn9U8jccw9b2; Sat,  4 Sep 2021 18:30:09 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 07DAB6070B;
-	Sat,  4 Sep 2021 18:30:08 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0B5171BF5DD
- for <buildroot@lists.busybox.net>; Sat,  4 Sep 2021 18:25:22 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 80E4082A3B
- for <buildroot@lists.busybox.net>; Sat,  4 Sep 2021 18:25:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 93CD58305C;
+	Sat,  4 Sep 2021 18:30:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Z33VkFG6Rdvk for <buildroot@lists.busybox.net>;
- Sat,  4 Sep 2021 18:25:16 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id bimyL_2Jdbfw; Sat,  4 Sep 2021 18:30:21 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id C698B82EA2;
+	Sat,  4 Sep 2021 18:30:20 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 145201BF95A
+ for <buildroot@lists.busybox.net>; Sat,  4 Sep 2021 18:25:22 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 723CC6075F
+ for <buildroot@lists.busybox.net>; Sat,  4 Sep 2021 18:25:16 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Hb2Pe0if_yNF for <buildroot@lists.busybox.net>;
+ Sat,  4 Sep 2021 18:25:15 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id D9FA581A1C
- for <buildroot@buildroot.org>; Sat,  4 Sep 2021 18:25:16 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B47DA605B7
+ for <buildroot@buildroot.org>; Sat,  4 Sep 2021 18:25:15 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id A34638834C; Sat,  4 Sep 2021 18:23:54 +0000 (UTC)
+ id 8B6B58834D; Sat,  4 Sep 2021 18:23:53 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Thu, 19 Aug 2021 22:36:15 +0200
+Date: Fri, 13 Aug 2021 15:05:12 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6b408a4d80053ee7915f42670409d7e2c9c88e05
-X-Git-Newrev: 3bb1d7572462ff336666297a22bc181318693968
+X-Git-Oldrev: 0610d838d82a46141d762a498b09762e8f423c68
+X-Git-Newrev: 43b69dbac811e509ad38c959b0238d565669de6a
 X-Patchwork-Hint: ignore
-Message-Id: <20210904182354.A34638834C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/fmt: bump version to 8.0.1
+Message-Id: <20210904182353.8B6B58834D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libgeos: bump version to 3.9.1
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,38 +70,98 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3bb1d7572462ff336666297a22bc181318693968
+commit: https://git.buildroot.net/buildroot/commit/?id=43b69dbac811e509ad38c959b0238d565669de6a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+Remove upstream patch.
+Add myself to DEVELOPERS
+
+Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/fmt/fmt.hash | 2 +-
- package/fmt/fmt.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ DEVELOPERS                                         |  1 +
+ .../0001-CMakeLists.txt-add-BUILD_BENCHMARKS.patch | 37 ----------------------
+ package/libgeos/libgeos.hash                       |  2 +-
+ package/libgeos/libgeos.mk                         |  2 +-
+ 4 files changed, 3 insertions(+), 39 deletions(-)
 
-diff --git a/package/fmt/fmt.hash b/package/fmt/fmt.hash
-index 7947a17456..e735704023 100644
---- a/package/fmt/fmt.hash
-+++ b/package/fmt/fmt.hash
+diff --git a/DEVELOPERS b/DEVELOPERS
+index b82f36f776..a102ce4af4 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1871,6 +1871,7 @@ N:	Max Filippov <jcmvbkbc@gmail.com>
+ F:	arch/Config.in.xtensa
+ 
+ N:	Maxim Kochetkov <fido_max@inbox.ru>
++F:	package/libgeos/
+ F:	package/libosmium/
+ F:	package/osm2pgsql/
+ F:	package/postgis/
+diff --git a/package/libgeos/0001-CMakeLists.txt-add-BUILD_BENCHMARKS.patch b/package/libgeos/0001-CMakeLists.txt-add-BUILD_BENCHMARKS.patch
+deleted file mode 100644
+index 94748dcdbd..0000000000
+--- a/package/libgeos/0001-CMakeLists.txt-add-BUILD_BENCHMARKS.patch
++++ /dev/null
+@@ -1,37 +0,0 @@
+-From 16848d6da27140caf922f71a233f96a508fb061e Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sun, 24 Jan 2021 12:38:37 +0100
+-Subject: [PATCH] CMakeLists.txt: add BUILD_BENCHMARKS
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/libgeos/geos/pull/395]
+----
+- CMakeLists.txt | 5 ++++-
+- 1 file changed, 4 insertions(+), 1 deletion(-)
+-
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index c8b39bac..8ca6b829 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -48,6 +48,7 @@ option(BUILD_SHARED_LIBS "Build GEOS with shared libraries" ON)
+- set(CMAKE_CXX_STANDARD 11 CACHE STRING "C++ standard version to use (default is 11)")
+- 
+- ## GEOS custom variables
+-+option(BUILD_BENCHMARKS "Build GEOS benchmarks" ON)
+- cmake_dependent_option(GEOS_BUILD_DEVELOPER
+-   "Build with compilation flags useful for development" ON
+-   "GEOS_BUILD_FROM_GIT" OFF)
+-@@ -292,7 +293,9 @@ endif()
+- #-----------------------------------------------------------------------------
+- # Benchmarks
+- #-----------------------------------------------------------------------------
+--add_subdirectory(benchmarks)
+-+if(BUILD_BENCHMARKS)
+-+  add_subdirectory(benchmarks)
+-+endif()
+- 
+- #-----------------------------------------------------------------------------
+- # Utils
+--- 
+-2.29.2
+-
+diff --git a/package/libgeos/libgeos.hash b/package/libgeos/libgeos.hash
+index 5b5e44c7c5..3508ba9077 100644
+--- a/package/libgeos/libgeos.hash
++++ b/package/libgeos/libgeos.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256  5d98c504d0205f912e22449ecdea776b78ce0bb096927334f80781e720084c9f  fmt-7.1.3.zip
-+sha256  a627a56eab9554fc1e5dd9a623d0768583b3a383ff70a4312ba68f94c9d415bf  fmt-8.0.1.zip
- sha256  825c9324e70f8c839c8ba910543dd4a7daee243b86ef960594c11381a19980b8  LICENSE.rst
-diff --git a/package/fmt/fmt.mk b/package/fmt/fmt.mk
-index 332957982f..6ec86de7f3 100644
---- a/package/fmt/fmt.mk
-+++ b/package/fmt/fmt.mk
+-sha256  bd8082cf12f45f27630193c78bdb5a3cba847b81e72b20268356c2a4fc065269  geos-3.9.0.tar.bz2
++sha256  7e630507dcac9dc07565d249a26f06a15c9f5b0c52dd29129a0e3d381d7e382a  geos-3.9.1.tar.bz2
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/libgeos/libgeos.mk b/package/libgeos/libgeos.mk
+index a355732af8..ab2035c62a 100644
+--- a/package/libgeos/libgeos.mk
++++ b/package/libgeos/libgeos.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--FMT_VERSION = 7.1.3
-+FMT_VERSION = 8.0.1
- FMT_SITE = https://github.com/fmtlib/fmt/releases/download/$(FMT_VERSION)
- FMT_SOURCE = fmt-$(FMT_VERSION).zip
- FMT_LICENSE = MIT with exception
+-LIBGEOS_VERSION = 3.9.0
++LIBGEOS_VERSION = 3.9.1
+ LIBGEOS_SITE = http://download.osgeo.org/geos
+ LIBGEOS_SOURCE = geos-$(LIBGEOS_VERSION).tar.bz2
+ LIBGEOS_LICENSE = LGPL-2.1
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
