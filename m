@@ -2,91 +2,89 @@ Return-Path: <SRS0=c1N3=NF=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.5 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
 	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
 	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E28F2C4338F
-	for <buildroot@archiver.kernel.org>; Sat, 14 Aug 2021 20:44:12 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C0DDC4338F
+	for <buildroot@archiver.kernel.org>; Sat, 14 Aug 2021 21:01:12 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9F60A60F51
-	for <buildroot@archiver.kernel.org>; Sat, 14 Aug 2021 20:44:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9F60A60F51
+	by mail.kernel.org (Postfix) with ESMTPS id 0E4626056B
+	for <buildroot@archiver.kernel.org>; Sat, 14 Aug 2021 21:01:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0E4626056B
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 59523401BB;
-	Sat, 14 Aug 2021 20:44:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C632C60626;
+	Sat, 14 Aug 2021 21:01:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id f4MSBHVm9x5Z; Sat, 14 Aug 2021 20:44:08 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id mzUGygwsUGAY; Sat, 14 Aug 2021 21:01:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9D360401D8;
-	Sat, 14 Aug 2021 20:44:07 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 30B2C1BF311
- for <buildroot@lists.busybox.net>; Sat, 14 Aug 2021 20:44:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 599E66062B;
+	Sat, 14 Aug 2021 21:01:07 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 61BEB1BF958
+ for <buildroot@lists.busybox.net>; Sat, 14 Aug 2021 21:01:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2DD7680EB5
- for <buildroot@lists.busybox.net>; Sat, 14 Aug 2021 20:44:06 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 514626062B
+ for <buildroot@lists.busybox.net>; Sat, 14 Aug 2021 21:01:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9SvvL0UrGkJ2 for <buildroot@lists.busybox.net>;
- Sat, 14 Aug 2021 20:44:02 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XHye6akxQRS4 for <buildroot@lists.busybox.net>;
+ Sat, 14 Aug 2021 21:01:00 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
- [IPv6:2a00:1450:4864:20::336])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 154CE80EAD
- for <buildroot@buildroot.org>; Sat, 14 Aug 2021 20:44:02 +0000 (UTC)
-Received: by mail-wm1-x336.google.com with SMTP id
- q11-20020a7bce8b0000b02902e6880d0accso12110771wmj.0
- for <buildroot@buildroot.org>; Sat, 14 Aug 2021 13:44:01 -0700 (PDT)
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
+ [IPv6:2a00:1450:4864:20::32d])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A8D9B60626
+ for <buildroot@buildroot.org>; Sat, 14 Aug 2021 21:01:00 +0000 (UTC)
+Received: by mail-wm1-x32d.google.com with SMTP id
+ l34-20020a05600c1d22b02902573c214807so12109204wms.2
+ for <buildroot@buildroot.org>; Sat, 14 Aug 2021 14:01:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=SwOt+NOSgXzahIPRE6pEJpiC5hD938z8agjSidAwKuk=;
- b=p5Ek0BCACM7x7ZBhqY+5w6yfUaQZvfuxYwM5/uBIIUtYw+aouX7NCFNoNmgjK/ySV9
- sROVZH8KBJaKkW0OhlffYT30wE5gqhwZBkftnP2vUXsnDeAWkI/Xj1Uohc6Px8Cjx7Ej
- gzExGTMvprrrCVCV2UuZwcvr7K9kBtS6vv4FJulEGQtebteK+cEw0BGud2jWo2QSJrgt
- nFch4KIJcB62k+aJNnGtJkTDuF25HIgPzjkvTf7FPhGECpF6teDSFXHWliQY30aa+x7m
- e7QHXilfwy2MLCVrU0xZxTLzFDdEfBirnfES1RfXRgzi1e1IzwlEUGuorYinpfvGrStn
- YuzQ==
+ bh=scJWLulaP6JPoBDINAcFFPgj5XkW9ofRXFYJFsh+/fk=;
+ b=A/K+pIF2n3nr6ek1LpqkSbjsOhOpxj3DWRzh6CUEgpPGnX61HBzgYFsGPjSG/NTTGZ
+ H79zq0CZHDjVNhjE6OBAuAim6tEKFgumr7BOXvyEu5kiVFD0ECzC9L9k6g7BzkHAlyAK
+ JbqTWwZTplFQqQ9oYdLh+Yd/1edW3fs7OglCQcygC8TJ37WuJNNA8VZ3DJXejLEsjE3x
+ gaNDeI7do6B7VgqDKIjibwIkfZFERYaFp1YwGu56c+meMXVUysVs1hYgo8M6RWOVYLUK
+ fV9ncOjVrUu2+RHSuqBcqTFeqXNxNbmO7f7wjbASyWOaYkd6GtK1fvWIYmeleLCfFGKY
+ jwYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=SwOt+NOSgXzahIPRE6pEJpiC5hD938z8agjSidAwKuk=;
- b=hSMvAa0UWQkRWtIR/I0OfjluWuUr3oP+7KMIUbhbygiqzCUf0IYYLlnuzTrcOUDS8X
- 1BgZzqEy6Yq0JhTtU0pxPziPDwoSOavXqhBxf8Zmld9y0g1yrh7KZMNAuq+0iSV/pVWM
- 4RX9ScnD3NoMMnP2YyP56JsPQCK1WdMFkrN6L0bG5utf3g1jHiMjKrNq2794+t3tXwBh
- 5lwF/BlIzwujttUdyHPAGVYOnJK/sMh7J9YSFxXW80mfFPDYuOEwcO1phrlSZGECDT9i
- /sX38Ga/xlRiv5RYtzGun0jDIU8Q+CWEy4wrH8KNyZLQ4Xg3B2ZgCQWAk/hj9sBpQpz7
- 0HTg==
-X-Gm-Message-State: AOAM530bnccu5EABVgwzydarpnfR5z/SMqFdSLDQR+TTtpJugpq0zUHp
- NhItrawVLOXS7+kwnqD0KQGwzgtw0bC1tg==
-X-Google-Smtp-Source: ABdhPJwIh+yQJV9vaSRtfNciBVtSr4lzel95fAeJHdPOBygtHLR7XmJYnTe/MSmQnao5GotmKO/Sew==
-X-Received: by 2002:a1c:2504:: with SMTP id l4mr8338840wml.55.1628973840070;
- Sat, 14 Aug 2021 13:44:00 -0700 (PDT)
+ bh=scJWLulaP6JPoBDINAcFFPgj5XkW9ofRXFYJFsh+/fk=;
+ b=BFC1RhvYUZS16o0K3WbZZsftKSEi+KE4qEZCFUZfl1DsWX1D9rSSrkxqLCDOSCbkJs
+ doLovbP1z3YjZ0T/FQQNi2Jbx1ZA2DcEOlvrBwpigDiQlX/TQRLBOI84QnIunVfyJgni
+ QOCulKlckwqke9fowL0wpCZFf9ZgvwpHEAVgISDBrBDKJBRmjokHx9TNP2QLD3GSkTVp
+ Jzmuc0JgJcbvotkxVTZEogJtuQGJijKUj5XBzjZinJk2+YNN4MkegkFWnAQf9PQSMZI2
+ ox6qwmSIUGaRpcRPt0UvLaegLY7gQrDi/+oeypBh7QhzhSijdJDzZZnq3aYeA4Ox5WMQ
+ HtVw==
+X-Gm-Message-State: AOAM530Mb9gSHHz5xqVZz1By/Sp+CqBqKZfNx8e+CS3wKqsc6hJIGWVO
+ +pWfd+Y6u6/lsXEhsbPF4OG0wCW4pU0c6Q==
+X-Google-Smtp-Source: ABdhPJxuAVX1UpST2DkNLlHAX8rLSPTuZP56rp7ncZ51m7XFvo4WvgWy0YEEHjf1d7XVWpdDIk8NPA==
+X-Received: by 2002:a1c:c918:: with SMTP id f24mr8280288wmb.92.1628974858635; 
+ Sat, 14 Aug 2021 14:00:58 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-417-221.w2-10.abo.wanadoo.fr.
  [2.10.242.221])
- by smtp.gmail.com with ESMTPSA id o17sm5065587wmp.13.2021.08.14.13.43.59
+ by smtp.gmail.com with ESMTPSA id t8sm6744975wrx.27.2021.08.14.14.00.58
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 14 Aug 2021 13:43:59 -0700 (PDT)
+ Sat, 14 Aug 2021 14:00:58 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 14 Aug 2021 22:43:54 +0200
-Message-Id: <20210814204354.352402-1-fontaine.fabrice@gmail.com>
+Date: Sat, 14 Aug 2021 23:00:41 +0200
+Message-Id: <20210814210042.354849-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/gd: fix CVE-2021-38115
+Subject: [Buildroot] [PATCH 1/2] package/sylpheed: add SYLPHEED_CPE_ID_VENDOR
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -104,66 +102,28 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-read_header_tga in gd_tga.c in the GD Graphics Library (aka LibGD)
-through 2.3.2 allows remote attackers to cause a denial of service
-(out-of-bounds read) via a crafted TGA file.
+cpe:2.3:a:sylpheed_project:sylpheed is a valid CPE identifier for this
+package:
+
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Asylpheed_project%3Asylpheed
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...-of-bands-in-reading-tga-header-file.patch | 29 +++++++++++++++++++
- package/gd/gd.mk                              |  3 ++
- 2 files changed, 32 insertions(+)
- create mode 100644 package/gd/0001-fix-read-out-of-bands-in-reading-tga-header-file.patch
+ package/sylpheed/sylpheed.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/gd/0001-fix-read-out-of-bands-in-reading-tga-header-file.patch b/package/gd/0001-fix-read-out-of-bands-in-reading-tga-header-file.patch
-new file mode 100644
-index 0000000000..a42bfb402e
---- /dev/null
-+++ b/package/gd/0001-fix-read-out-of-bands-in-reading-tga-header-file.patch
-@@ -0,0 +1,29 @@
-+From 8b111b2b4a4842179be66db68d84dda91a246032 Mon Sep 17 00:00:00 2001
-+From: maryam ebrahimzadeh <maryam.ebr@student.sharif.edu>
-+Date: Mon, 19 Jul 2021 10:07:13 +0430
-+Subject: [PATCH] fix read out-of-bands in reading tga header file
-+
-+[Retrieved from:
-+https://github.com/libgd/libgd/commit/8b111b2b4a4842179be66db68d84dda91a246032]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ src/gd_tga.c | 6 +++++-
-+ 1 file changed, 5 insertions(+), 1 deletion(-)
-+
-+diff --git a/src/gd_tga.c b/src/gd_tga.c
-+index cae9428da..286febb28 100644
-+--- a/src/gd_tga.c
-++++ b/src/gd_tga.c
-+@@ -191,7 +191,11 @@ int read_header_tga(gdIOCtx *ctx, oTga *tga)
-+ 			return -1;
-+ 		}
-+ 
-+-		gdGetBuf(tga->ident, tga->identsize, ctx);
-++		
-++		if (gdGetBuf(tga->ident, tga->identsize, ctx) != tga->identsize) {
-++			gd_error("fail to read header ident");
-++			return -1;
-++		}
-+ 	}
-+ 
-+ 	return 1;
-diff --git a/package/gd/gd.mk b/package/gd/gd.mk
-index 2df81e6d37..90f966c294 100644
---- a/package/gd/gd.mk
-+++ b/package/gd/gd.mk
-@@ -15,6 +15,9 @@ GD_CPE_ID_PRODUCT = libgd
- GD_CONF_OPTS = --without-x --disable-rpath --disable-werror
- GD_DEPENDENCIES = host-pkgconf
+diff --git a/package/sylpheed/sylpheed.mk b/package/sylpheed/sylpheed.mk
+index 0453fba521..2f8a7aeff9 100644
+--- a/package/sylpheed/sylpheed.mk
++++ b/package/sylpheed/sylpheed.mk
+@@ -10,6 +10,7 @@ SYLPHEED_SOURCE = sylpheed-$(SYLPHEED_VERSION).tar.xz
+ SYLPHEED_SITE = http://sylpheed.sraoss.jp/sylpheed/v$(SYLPHEED_VERSION_MAJOR)
+ SYLPHEED_LICENSE = GPL-2.0+ (executables), LGPL-2.1+ (library, attachment plugin)
+ SYLPHEED_LICENSE_FILES = COPYING COPYING.LIB
++SYLPHEED_CPE_ID_VENDOR = sylpheed_project
+ SYLPHEED_CONF_OPTS = --disable-gtkspell --disable-gpgme
+ SYLPHEED_DEPENDENCIES = host-pkgconf libgtk2
  
-+# 0001-fix-read-out-of-bands-in-reading-tga-header-file.patch
-+GD_IGNORE_CVES += CVE-2021-38115
-+
- # gd forgets to link utilities with -pthread even though it uses
- # pthreads, causing linking errors with static linking
- ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
 -- 
 2.30.2
 
