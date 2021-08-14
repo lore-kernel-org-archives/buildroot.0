@@ -8,85 +8,83 @@ X-Spam-Status: No, score=-18.5 required=3.0 tests=BAYES_00,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DA339C4338F
-	for <buildroot@archiver.kernel.org>; Sat, 14 Aug 2021 20:38:40 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AC573C4338F
+	for <buildroot@archiver.kernel.org>; Sat, 14 Aug 2021 20:43:52 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 73AD360EB2
-	for <buildroot@archiver.kernel.org>; Sat, 14 Aug 2021 20:38:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 73AD360EB2
+	by mail.kernel.org (Postfix) with ESMTPS id 61CEA60EB5
+	for <buildroot@archiver.kernel.org>; Sat, 14 Aug 2021 20:43:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 61CEA60EB5
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 33069605C7;
-	Sat, 14 Aug 2021 20:38:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1ACDE40340;
+	Sat, 14 Aug 2021 20:43:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3DKoP1nk8Vuz; Sat, 14 Aug 2021 20:38:36 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id am-zo24vwJV5; Sat, 14 Aug 2021 20:43:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 729856062D;
-	Sat, 14 Aug 2021 20:38:35 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 6BADE1BF311
- for <buildroot@lists.busybox.net>; Sat, 14 Aug 2021 20:38:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 82DB440346;
+	Sat, 14 Aug 2021 20:43:47 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B22131BF311
+ for <buildroot@lists.busybox.net>; Sat, 14 Aug 2021 20:43:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5AEC180E27
- for <buildroot@lists.busybox.net>; Sat, 14 Aug 2021 20:38:34 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 94C3C40346
+ for <buildroot@lists.busybox.net>; Sat, 14 Aug 2021 20:43:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Izg3Tp4df7U1 for <buildroot@lists.busybox.net>;
- Sat, 14 Aug 2021 20:38:30 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id o6QfuTaycTXm for <buildroot@lists.busybox.net>;
+ Sat, 14 Aug 2021 20:43:41 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
- [IPv6:2a00:1450:4864:20::32d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id CB7FD80E1E
- for <buildroot@buildroot.org>; Sat, 14 Aug 2021 20:38:29 +0000 (UTC)
-Received: by mail-wm1-x32d.google.com with SMTP id
- 79-20020a1c0452000000b002e6cf79e572so2829722wme.1
- for <buildroot@buildroot.org>; Sat, 14 Aug 2021 13:38:29 -0700 (PDT)
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
+ [IPv6:2a00:1450:4864:20::42a])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 71F9640340
+ for <buildroot@buildroot.org>; Sat, 14 Aug 2021 20:43:41 +0000 (UTC)
+Received: by mail-wr1-x42a.google.com with SMTP id q10so18053224wro.2
+ for <buildroot@buildroot.org>; Sat, 14 Aug 2021 13:43:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=OeP9jF3OFTvLSqHf1xma1FVFKVfECRltxoj0VohzjCA=;
- b=pqwx0F/clQFCBgyQrnLWW0BUja4SZTQineF99J1jH7PrlL/7SYdMa93f6SZBbQlRGl
- U2PXlbfz3fstz2knCGs7S4zpoN/8/Bv6sd/A8CbeErB+fDUx2Cq9FFFxQpZ1eLd8aLgr
- tRJoU5S2SjzQ0uUA+WvQ9/4MABWk4Z4EmZEqDNrQdcJOvVw7+6Oe4c6WLUXyJx+4Ucyr
- 0bh+rab+flGejqfwg8yqKG4hWvTdPqCaoRdXW76263ZXfR06lPy0SaGze3mVEzVDFHw7
- 0FPWyNKKLusDrdik11es5nJbU9ZpBSL1DEL+AbjqmiRt511c8ZL/VTl+BBARM5TTAuCQ
- SueQ==
+ bh=SwOt+NOSgXzahIPRE6pEJpiC5hD938z8agjSidAwKuk=;
+ b=mhvJSyLMCS3A3EUXk9dbyKd14fF4bZlok1j7bO5aKzw4m/X1Eb8YZJkhZoLR5ysGEb
+ HusVJKyhLmtIReKUWH2V3AVar58mvasDrAbMx8N6l1UDc6YtZ9+k6Wotlf1DCyWUncmh
+ W/PFLSaJqCLY3s1+2/leDPhsVKdC0Zt5fPv8VPOcm1BAhDWieQ8ydTSqhIdyZnpRYsjR
+ bOBzm9jZVO8lagzKqwb/ZLJ46GkJw7LehQaY9J75p/lwRTcwVXdFGn2rP48z8DBKQMad
+ 0w97uCjylb2cGJ2ZJAb1ZRtV6xC7R4xOUMbnmIIs0SzUj2TPODFhWaQwi11DTTs+iPNA
+ bzIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=OeP9jF3OFTvLSqHf1xma1FVFKVfECRltxoj0VohzjCA=;
- b=b2by7WABMzylR0j2ObfAJb1V0YLnm5ZMwqBXj/iCSssc2JjRg5xy4uRfCK1CanAMZ1
- pepTNAiOhTxyUmCeOOZeJWx9WvmYxt/bHSW75q9NZ6o2GihW6vCOoUc/H1ge2AhRX9hW
- tUqBDn+nyt6aPF4WGMuUYDCeTERycXpmHFZXnp/2BdB0tVD4T4yXp4mbwmCzBbaELEup
- Wh0yV9x2Pl+piFX57ylW1NRBLCqcZAKz3Dxb0bNQvuM7vW/52875trZXphogcRLut+hS
- ftZ2fkQQIuE6KQRnFoxs+Asd2+kyWN8UUX6yM39WTi23D9FIlcA4OaPlpmIfIUurZ8Rv
- hi7g==
-X-Gm-Message-State: AOAM530WwYUI8KrbGOJngPrClrTbMF94OOZWwoi2oEaxWgt4dSimoz9N
- w+ApLBGT9zjqLDzjty1aRvLoOwveZlxHsA==
-X-Google-Smtp-Source: ABdhPJwtiD3DX3rXwSSVlhLou+d2RqEXoGmBJ2+xje6ngQd/6GLO82fa0EsGAhtzcQDNKnPGIuhalA==
-X-Received: by 2002:a7b:c2fa:: with SMTP id e26mr8501760wmk.102.1628973507782; 
- Sat, 14 Aug 2021 13:38:27 -0700 (PDT)
+ bh=SwOt+NOSgXzahIPRE6pEJpiC5hD938z8agjSidAwKuk=;
+ b=qYlYWSQdjBd2sJM1D+1Zek0ikP3HyX/qf/cr2ha3D4udlmnngh1vOgKosJyKnJZt5r
+ w7cZYxTzbHrj4xvj07/3dPoe0UzHnOhlPqW6ogxYtqDqJL+KaPsBd1ht7Q+JGmnXoKT/
+ Qd8C/p5WT2cJTeOE1mcBxwYsiH+twINHQ+8p0hlX7LZJ6pCKtx21+N4WY93sMG+8H517
+ rhROhq0N0HVrMKokQR5LGfeaOhIZNyaO5iCDJyGczw1jKiGDMkSG6Ok808HWxPfMq5JW
+ g5or1Ds4XLBUb6z82TcpjV4a5jfE6H6fauSkABqJIQuG4Jle+gzZuAGcY+FAnxnXRvkO
+ HODw==
+X-Gm-Message-State: AOAM533ugsKGHvqhZXpWx/hHGYlZTofnhvamej74mhtXCsEiDa/ayHSU
+ tcJP79c17j3pqPY06C6O6hQVGUOkapXhAg==
+X-Google-Smtp-Source: ABdhPJwA3DH7DiC2j4qVwWP7h2vnzGgICJLpMIUzyTUhrrOQxYUyTJX9gxZKfslIDhbkckCFHhJPmQ==
+X-Received: by 2002:a05:6000:1086:: with SMTP id
+ y6mr9947977wrw.406.1628973819480; 
+ Sat, 14 Aug 2021 13:43:39 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-417-221.w2-10.abo.wanadoo.fr.
  [2.10.242.221])
- by smtp.gmail.com with ESMTPSA id e6sm5896155wrx.87.2021.08.14.13.38.26
+ by smtp.gmail.com with ESMTPSA id i21sm5911981wrb.62.2021.08.14.13.43.38
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 14 Aug 2021 13:38:27 -0700 (PDT)
+ Sat, 14 Aug 2021 13:43:39 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 14 Aug 2021 22:37:25 +0200
-Message-Id: <20210814203725.351569-1-fontaine.fabrice@gmail.com>
+Date: Sat, 14 Aug 2021 22:43:34 +0200
+Message-Id: <20210814204334.352335-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/libbpf: needs headers >= 4.13
+Subject: [Buildroot] [PATCH 1/1] package/gd: fix CVE-2021-38115
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,55 +96,72 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-Since its addition in commit f7b8508e4fe9c96bf679cc5423cc1500b6523e83,
-libbpf unconditionally uses TCA_BPF_ID which is only available since
-kernel 4.13 and
-https://github.com/torvalds/linux/commit/e86283071fb0eed28136adb52997888f4beb202b:
-
-netlink.c: In function '__get_tc_info':
-netlink.c:515:11: error: 'TCA_BPF_ID' undeclared (first use in this function); did you mean 'TCA_BPF_FD'?
-  515 |  if (!tbb[TCA_BPF_ID])
-      |           ^~~~~~~~~~
-      |           TCA_BPF_FD
-
-Fixes:
- - http://autobuild.buildroot.org/results/14996a0b7b9b65d0d6d5717d6da8922752789749
+read_header_tga in gd_tga.c in the GD Graphics Library (aka LibGD)
+through 2.3.2 allows remote attackers to cause a denial of service
+(out-of-bounds read) via a crafted TGA file.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libbpf/Config.in | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ ...-of-bands-in-reading-tga-header-file.patch | 29 +++++++++++++++++++
+ package/gd/gd.mk                              |  3 ++
+ 2 files changed, 32 insertions(+)
+ create mode 100644 package/gd/0001-fix-read-out-of-bands-in-reading-tga-header-file.patch
 
-diff --git a/package/libbpf/Config.in b/package/libbpf/Config.in
-index 9eadf0254a..3aa6679b3a 100644
---- a/package/libbpf/Config.in
-+++ b/package/libbpf/Config.in
-@@ -13,6 +13,7 @@ config BR2_PACKAGE_LIBBPF
- 	depends on BR2_USE_WCHAR # elfutils
- 	depends on !BR2_STATIC_LIBS # elfutils
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # elfutils
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_13
- 	depends on BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC # elfutils
- 	select BR2_PACKAGE_ELFUTILS
- 	select BR2_PACKAGE_ZLIB
-@@ -24,8 +25,9 @@ config BR2_PACKAGE_LIBBPF
+diff --git a/package/gd/0001-fix-read-out-of-bands-in-reading-tga-header-file.patch b/package/gd/0001-fix-read-out-of-bands-in-reading-tga-header-file.patch
+new file mode 100644
+index 0000000000..a42bfb402e
+--- /dev/null
++++ b/package/gd/0001-fix-read-out-of-bands-in-reading-tga-header-file.patch
+@@ -0,0 +1,29 @@
++From 8b111b2b4a4842179be66db68d84dda91a246032 Mon Sep 17 00:00:00 2001
++From: maryam ebrahimzadeh <maryam.ebr@student.sharif.edu>
++Date: Mon, 19 Jul 2021 10:07:13 +0430
++Subject: [PATCH] fix read out-of-bands in reading tga header file
++
++[Retrieved from:
++https://github.com/libgd/libgd/commit/8b111b2b4a4842179be66db68d84dda91a246032]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ src/gd_tga.c | 6 +++++-
++ 1 file changed, 5 insertions(+), 1 deletion(-)
++
++diff --git a/src/gd_tga.c b/src/gd_tga.c
++index cae9428da..286febb28 100644
++--- a/src/gd_tga.c
+++++ b/src/gd_tga.c
++@@ -191,7 +191,11 @@ int read_header_tga(gdIOCtx *ctx, oTga *tga)
++ 			return -1;
++ 		}
++ 
++-		gdGetBuf(tga->ident, tga->identsize, ctx);
+++		
+++		if (gdGetBuf(tga->ident, tga->identsize, ctx) != tga->identsize) {
+++			gd_error("fail to read header ident");
+++			return -1;
+++		}
++ 	}
++ 
++ 	return 1;
+diff --git a/package/gd/gd.mk b/package/gd/gd.mk
+index 2df81e6d37..90f966c294 100644
+--- a/package/gd/gd.mk
++++ b/package/gd/gd.mk
+@@ -15,6 +15,9 @@ GD_CPE_ID_PRODUCT = libgd
+ GD_CONF_OPTS = --without-x --disable-rpath --disable-werror
+ GD_DEPENDENCIES = host-pkgconf
  
- 	  https://github.com/libbpf/libbpf
- 
--comment "libbpf needs a uClibc or glibc toolchain w/ wchar, dynamic library, threads"
-+comment "libbpf needs a uClibc or glibc toolchain w/ wchar, dynamic library, threads, headers >= 4.13"
- 	depends on BR2_PACKAGE_LIBBPF_ARCH_SUPPORTS
- 	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS \
- 		|| !BR2_TOOLCHAIN_HAS_THREADS \
-+		|| !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_13 \
- 		|| !(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC)
++# 0001-fix-read-out-of-bands-in-reading-tga-header-file.patch
++GD_IGNORE_CVES += CVE-2021-38115
++
+ # gd forgets to link utilities with -pthread even though it uses
+ # pthreads, causing linking errors with static linking
+ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
 -- 
 2.30.2
 
