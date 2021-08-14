@@ -2,91 +2,69 @@ Return-Path: <SRS0=c1N3=NF=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.5 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
-	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-20.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7CD32C4338F
-	for <buildroot@archiver.kernel.org>; Sat, 14 Aug 2021 10:43:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D3CA8C432BE
+	for <buildroot@archiver.kernel.org>; Sat, 14 Aug 2021 11:35:21 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 32F7060EB5
-	for <buildroot@archiver.kernel.org>; Sat, 14 Aug 2021 10:43:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 32F7060EB5
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id 307DE60F36
+	for <buildroot@archiver.kernel.org>; Sat, 14 Aug 2021 11:35:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 307DE60F36
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=busybox.net
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E0F6A400C7;
-	Sat, 14 Aug 2021 10:43:41 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D7EA6400C7;
+	Sat, 14 Aug 2021 11:35:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ERX1zXDbFakA; Sat, 14 Aug 2021 10:43:38 +0000 (UTC)
+	with ESMTP id 15cDLC1YCiVX; Sat, 14 Aug 2021 11:35:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3AB9D40278;
-	Sat, 14 Aug 2021 10:43:37 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 23854400FD;
+	Sat, 14 Aug 2021 11:35:16 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 390891BF3D6
- for <buildroot@lists.busybox.net>; Sat, 14 Aug 2021 10:43:35 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 02F4B1BF228
+ for <buildroot@lists.busybox.net>; Sat, 14 Aug 2021 11:35:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 21B75606EF
- for <buildroot@lists.busybox.net>; Sat, 14 Aug 2021 10:43:35 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E72D7605EE
+ for <buildroot@lists.busybox.net>; Sat, 14 Aug 2021 11:35:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
+ dkim=pass (1024-bit key) header.d=heine.tech
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id R-eqpuFPui7i for <buildroot@lists.busybox.net>;
- Sat, 14 Aug 2021 10:43:31 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
- [IPv6:2a00:1450:4864:20::429])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 08CB5606CF
- for <buildroot@buildroot.org>; Sat, 14 Aug 2021 10:43:30 +0000 (UTC)
-Received: by mail-wr1-x429.google.com with SMTP id k29so16679697wrd.7
- for <buildroot@buildroot.org>; Sat, 14 Aug 2021 03:43:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=6wSV4DZ/+6Gu3n3hCzM0au/+0eQSCb+Ps69IPhPZ5Ak=;
- b=ggwtKukSjviVMANqD9xAwQSxeBaJM5QlrLu89fBHe62yrzOHF2eymAlf3rdg6T5WK2
- uCD/k1dliH1BbxjsxfYFxeA8hO8ZJGM2uuNnvUXFF558UjZP1EVyLgJuJPA81ltePEOp
- TdOHaudKC92ZXhXqkQU60iGEBfNM0Y9oMtPNojpKpBmsPdMbNUvZWrzY1CnclyhMeufI
- ZMVFU9jL/f/aw7+RFVzynQn+E9ikvJOYAXOllsl/dzMYVr76B6BLOjtDcRptz2Lt7Mwf
- QVYGRktQuuvW+7kT4Ng8g7JGo9bVjOHMh/Xd2AKv8ljFpK5XpdyCWZoq3T4+ib05DQYS
- u5sg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=6wSV4DZ/+6Gu3n3hCzM0au/+0eQSCb+Ps69IPhPZ5Ak=;
- b=iIzG5lExZEIQSSm1yYfanFwnBuHIOhsY2JrzW8alpwBAe5UFevaw7rI6u+PjWN/D/Z
- vldSzUK3/GjyRgWoGHImhmpyviQph45M4UAegELgjK2e4991pUoEeAGCMKPO0xzhIkOq
- eoc4lHrIAeEsosEn6Y0eUYIAUc4chKaXX3E5mw1g1w1pckV8WSIhsO4VBvPZett4s+sp
- PAvKUzuEJLIWoYQOOwVEAjoyCuelsTd0CDV/9cdO8B04MVBeg0eLZWK3atMKglIRmZJq
- TZf3cY2k2oKbAPTgcaGE0PAYsajC512dLBcC3op7ldHmBvhgjK4hVPcDio84V0QLpOfM
- e5Qg==
-X-Gm-Message-State: AOAM531lx0Szp4PGx6OcFfyyobaDbXL7U8tecbjWxRHH4qpnyHQoaGhx
- 0Gx08pvDPXmC5H6/WJw3m0Ii+V4MW2DWDg==
-X-Google-Smtp-Source: ABdhPJzJWWY9PA+S/prlIVcBP8+MBOkOdXV9/gwpJQVgUlXcr/SANCSDx2C25Kj8/HC0wziuxfP9rA==
-X-Received: by 2002:adf:fc50:: with SMTP id e16mr8011101wrs.382.1628937809028; 
- Sat, 14 Aug 2021 03:43:29 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-417-221.w2-10.abo.wanadoo.fr.
- [2.10.242.221])
- by smtp.gmail.com with ESMTPSA id w9sm3952169wmc.19.2021.08.14.03.43.28
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 14 Aug 2021 03:43:28 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Sat, 14 Aug 2021 12:43:17 +0200
-Message-Id: <20210814104317.349769-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.30.2
+ with ESMTP id tybqjxgu_ApM for <buildroot@lists.busybox.net>;
+ Sat, 14 Aug 2021 11:35:10 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from mail.heine.tech (mail.heine.tech [195.201.24.99])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2DE6A605C5
+ for <buildroot@buildroot.org>; Sat, 14 Aug 2021 11:35:09 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 26CC51814BB; Sat, 14 Aug 2021 13:35:05 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=heine.tech; s=dkim;
+ t=1628940906; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ content-transfer-encoding:content-language:in-reply-to:references;
+ bh=olNOv8psLHgIeVCAdy/v830MNJ9ijXxNqaz9QiOSLf4=;
+ b=Cw4E5iCPBIMVs890Ud93FMDdrpIJLNWpdn2VIqwCLRNcLyGdc+utT/nWSVJ8Nm89/2uFzN
+ oawemoJoUTP3XCX5GgDnr7+7dhAjhLQSKoHRBKhBkcXCU3VZdcZSOr683uThyLlZEfCxSV
+ XX7TdV5X4hvHF2abwPG7YjhBO7agWCs=
+To: Asaf Kahlon <asafka7@gmail.com>
+References: <20210813212813.4931-1-buildroot@heine.tech>
+ <CALFsTFV9cMZHPHfD-73-z3JuNNEs87=_DPNKXvayjKXLbtj7oQ@mail.gmail.com>
+Message-ID: <56c837aa-fd93-14db-0fe0-b94455e7c018@heine.tech>
+Date: Sat, 14 Aug 2021 13:35:03 +0200
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.12.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/nginx-naxsi: fix build without
- x_forwarded_for
+In-Reply-To: <CALFsTFV9cMZHPHfD-73-z3JuNNEs87=_DPNKXvayjKXLbtj7oQ@mail.gmail.com>
+Content-Language: en-US
+X-Last-TLS-Session-Version: TLSv1.3
+Subject: Re: [Buildroot] [PATCH] package/spdlog: bump version to 1.9.2
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,101 +76,68 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Samuel Martin <s.martin49@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
+From: Michael Nosthoff via buildroot <buildroot@busybox.net>
+Reply-To: Michael Nosthoff <buildroot@heine.tech>
+Cc: buildroot <buildroot@buildroot.org>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-Fix the following build failure without x_forwarded_for raised since
-bump to version 1.3 in commit 3335c8d8685119ebb5b2a9a6e575f3a5337c4d90:
+Hi Asaf,
 
-/home/buildroot/autobuild/instance-3/output-1/build/nginx-naxsi-1.3/naxsi_src/naxsi_runtime.c: In function 'ngx_http_naxsi_data_parse':
-/home/buildroot/autobuild/instance-3/output-1/build/nginx-naxsi-1.3/naxsi_src/naxsi_runtime.c:2846:20: error: 'ngx_http_headers_in_t' has no member named 'x_forwarded_for'
-   if (r->headers_in.x_forwarded_for.nelts >= 1) {
-                    ^
+On 14.08.21 07:50, Asaf Kahlon wrote:
+> Hello,
+>
+> On Sat, Aug 14, 2021 at 12:28 AM Michael Nosthoff <buildroot@heine.tech> wrote:
+>> Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+>> ---
+>>   package/spdlog/spdlog.hash | 2 +-
+>>   package/spdlog/spdlog.mk   | 2 +-
+>>   2 files changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/package/spdlog/spdlog.hash b/package/spdlog/spdlog.hash
+>> index 5d1ff2f520..02756fc98c 100644
+>> --- a/package/spdlog/spdlog.hash
+>> +++ b/package/spdlog/spdlog.hash
+>> @@ -1,3 +1,3 @@
+>>   # Locally calculated
+>> -sha256  944d0bd7c763ac721398dca2bb0f3b5ed16f67cef36810ede5061f35a543b4b8  spdlog-1.8.5.tar.gz
+>> +sha256  6fff9215f5cb81760be4cc16d033526d1080427d236e86d70bb02994f85e3d38  spdlog-1.9.2.tar.gz
+>>   sha256  a7241a379cb98d37788f82c2fc2e484c3ae85dae881fd3406f0637644850926f  LICENSE
+>> diff --git a/package/spdlog/spdlog.mk b/package/spdlog/spdlog.mk
+>> index ee875ae560..b5dfc0c7b4 100644
+>> --- a/package/spdlog/spdlog.mk
+>> +++ b/package/spdlog/spdlog.mk
+>> @@ -4,7 +4,7 @@
+>>   #
+>>   ################################################################################
+>>
+>> -SPDLOG_VERSION = 1.8.5
+>> +SPDLOG_VERSION = 1.9.2
+>>   SPDLOG_SITE = $(call github,gabime,spdlog,v$(SPDLOG_VERSION))
+>>   SPDLOG_LICENSE = MIT
+>>   SPDLOG_LICENSE_FILES = LICENSE
+>> --
+>> 2.32.0
+>>
+> This patch seems fine, but it's not really independent because the
+> compilation fails until a newer version of fmt is used.
+> So ideally there should be a small series with both patches.
 
-Fixes:
- - http://autobuild.buildroot.org/results/cdbc1536f6b5de3d4c836efa2f0dcaf0cdbb1462
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...runtime.c-fix-build-without-x_forwar.patch | 63 +++++++++++++++++++
- 1 file changed, 63 insertions(+)
- create mode 100644 package/nginx-naxsi/0001-naxsi_src-naxsi_runtime.c-fix-build-without-x_forwar.patch
+That's interesting, 1.9.0 compiles fine with fmt 7.x but 1.9.1 and 1.9.2 
+fail. I don't think this is intentional as
+there are #defines in the code to maintain backwards compatibility [0].
+I'll report this to spdlog. But for buildroot I guess we're good to go 
+when bumping both packages at once.
+I'll resubmit as patch series.
 
-diff --git a/package/nginx-naxsi/0001-naxsi_src-naxsi_runtime.c-fix-build-without-x_forwar.patch b/package/nginx-naxsi/0001-naxsi_src-naxsi_runtime.c-fix-build-without-x_forwar.patch
-new file mode 100644
-index 0000000000..238a01923d
---- /dev/null
-+++ b/package/nginx-naxsi/0001-naxsi_src-naxsi_runtime.c-fix-build-without-x_forwar.patch
-@@ -0,0 +1,63 @@
-+From 8ea5218b07f715e9616a846bf305633ef1b3aa2a Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 14 Aug 2021 11:46:08 +0200
-+Subject: [PATCH] naxsi_src/naxsi_runtime.c: fix build without x_forwarded_for
-+
-+x_forwarded_for is not available if realip, geo, geoip or proxy modules
-+aren't enabled resulting in the following build failure since version
-+1.1a and
-+https://github.com/nbs-system/naxsi/commit/07a056ccd36bc3c5c40dc17991db226cb8cf6241:
-+
-+/home/buildroot/autobuild/instance-3/output-1/build/nginx-naxsi-1.3/naxsi_src/naxsi_runtime.c: In function 'ngx_http_naxsi_data_parse':
-+/home/buildroot/autobuild/instance-3/output-1/build/nginx-naxsi-1.3/naxsi_src/naxsi_runtime.c:2846:20: error: 'ngx_http_headers_in_t' has no member named 'x_forwarded_for'
-+   if (r->headers_in.x_forwarded_for.nelts >= 1) {
-+                    ^
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/cdbc1536f6b5de3d4c836efa2f0dcaf0cdbb1462
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/nbs-system/naxsi/pull/568]
-+---
-+ naxsi_src/naxsi_runtime.c | 7 ++++++-
-+ 1 file changed, 6 insertions(+), 1 deletion(-)
-+
-+diff --git a/naxsi_src/naxsi_runtime.c b/naxsi_src/naxsi_runtime.c
-+index 28e0b29..6a723d2 100644
-+--- a/naxsi_src/naxsi_runtime.c
-++++ b/naxsi_src/naxsi_runtime.c
-+@@ -2842,10 +2842,12 @@ ngx_http_naxsi_data_parse(ngx_http_request_ctx_t* ctx, ngx_http_request_t* r)
-+   unsigned int      n = 0;
-+   ngx_table_elt_t** h = NULL;
-+   ngx_array_t       a;
-++#if (NGX_HTTP_X_FORWARDED_FOR)
-+   if (r->headers_in.x_forwarded_for.nelts >= 1) {
-+     a = r->headers_in.x_forwarded_for;
-+     n = a.nelts;
-+   }
-++#endif
-+   if (n >= 1)
-+     h = a.elts;
-+   if (n >= 1) {
-+@@ -2879,6 +2881,7 @@ ngx_http_naxsi_update_current_ctx_status(ngx_http_request_ctx_t*    ctx,
-+ 
-+   /*cr, sc, cf, ctx*/
-+   if (cf->check_rules && ctx->special_scores) {
-++#if (NGX_HTTP_X_FORWARDED_FOR)
-+     if (r->headers_in.x_forwarded_for.nelts >= 1) {
-+       a = r->headers_in.x_forwarded_for;
-+       n = a.nelts;
-+@@ -2896,7 +2899,9 @@ ngx_http_naxsi_update_current_ctx_status(ngx_http_request_ctx_t*    ctx,
-+         memcpy(ip.data, h[0]->value.data, ip.len);
-+         ignore = nx_can_ignore_ip(&ip, cf) || nx_can_ignore_cidr(&ip, cf);
-+       }
-+-    } else {
-++    } else
-++#endif
-++    {
-+       ngx_str_t* ip = &r->connection->addr_text;
-+       NX_DEBUG(_debug_whitelist_ignore,
-+                NGX_LOG_DEBUG_HTTP,
-+-- 
-+2.30.2
-+
--- 
-2.30.2
+Regards,
+Michael
+
+
+[0] https://github.com/gabime/spdlog/blob/v1.x/include/spdlog/common.h#L38
 
 _______________________________________________
 buildroot mailing list
