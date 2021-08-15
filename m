@@ -2,71 +2,88 @@ Return-Path: <SRS0=DPgg=NG=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.9 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLACK,USER_AGENT_GIT
+X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
+	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 35171C4338F
-	for <buildroot@archiver.kernel.org>; Sun, 15 Aug 2021 18:11:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 65C4AC4338F
+	for <buildroot@archiver.kernel.org>; Sun, 15 Aug 2021 19:54:01 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 7549A6120E
-	for <buildroot@archiver.kernel.org>; Sun, 15 Aug 2021 18:11:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7549A6120E
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=benettiengineering.com
+	by mail.kernel.org (Postfix) with ESMTPS id CA91C6135F
+	for <buildroot@archiver.kernel.org>; Sun, 15 Aug 2021 19:54:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org CA91C6135F
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 36542402DD;
-	Sun, 15 Aug 2021 18:11:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7BB444033D;
+	Sun, 15 Aug 2021 19:54:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wdQLbF65XJZj; Sun, 15 Aug 2021 18:11:13 +0000 (UTC)
+	with ESMTP id 3IlraMAakJrC; Sun, 15 Aug 2021 19:53:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C15CA40302;
-	Sun, 15 Aug 2021 18:11:12 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5C06F1BF488
- for <buildroot@lists.busybox.net>; Sun, 15 Aug 2021 18:11:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F17BF40332;
+	Sun, 15 Aug 2021 19:53:55 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 994BB1BF28D
+ for <buildroot@lists.busybox.net>; Sun, 15 Aug 2021 19:53:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4A6FB400F7
- for <buildroot@lists.busybox.net>; Sun, 15 Aug 2021 18:11:11 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 882E54035B
+ for <buildroot@lists.busybox.net>; Sun, 15 Aug 2021 19:53:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=aruba.it
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id P7fo7aKwed3W for <buildroot@lists.busybox.net>;
- Sun, 15 Aug 2021 18:11:06 +0000 (UTC)
-X-Greylist: delayed 00:07:02 by SQLgrey-1.8.0
-Received: from smtpcmd02111.aruba.it (smtpcmd02111.aruba.it [62.149.158.111])
- by smtp2.osuosl.org (Postfix) with ESMTP id E53BF400AF
- for <buildroot@buildroot.org>; Sun, 15 Aug 2021 18:11:05 +0000 (UTC)
-Received: from ubuntu.localdomain ([89.164.16.86])
- by Aruba Outgoing Smtp  with ESMTPSA
- id FKUJmj1YkqG1wFKUKmDcgG; Sun, 15 Aug 2021 20:04:02 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1629050642; bh=8Oi+c2CPLMpAywKn4jYDmvXuYurNWX1qA/FItL/z9sI=;
- h=From:To:Subject:Date:MIME-Version;
- b=XW4APn2XrokrvPpogNsJWLoq0/J8S1iTz8u96eGw1fC8Fgk0bT9Sts6CFcAUUXn6f
- 1vwQrAuE4G+Npq8qtsO0je30amDH18ESPg4YeTgIsf5MQU1nPajVWz+KG4PfB/mARK
- /gIQsnLY240M6EbvwLg8gZ8spVAJCdLO1+34s8l66yFIzGgQnaKl0eTs5XsBbK3Ayw
- IKuQ/PGYDL9+0kmuwx3nx0OIpXimZrmyQnsXegCA6/Z3do/izCMwjJqmAUcfFBllSa
- u7kXfpWzNB+pMXSE9S+hbNtMUAWti1YoU7s9rDYXQpZCf7fLWgnOJ+ktxxS99UXzUT
- uLE3r/CvnlqgQ==
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id S7Ni7PrSQqLe for <buildroot@lists.busybox.net>;
+ Sun, 15 Aug 2021 19:53:50 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
+ [IPv6:2a00:1450:4864:20::42f])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id F11DA40332
+ for <buildroot@buildroot.org>; Sun, 15 Aug 2021 19:53:49 +0000 (UTC)
+Received: by mail-wr1-x42f.google.com with SMTP id r6so20755184wrt.4
+ for <buildroot@buildroot.org>; Sun, 15 Aug 2021 12:53:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=AML2vSSkimuVHzIBhEres9UOJMz8tGvWI7dLcbCb2Kk=;
+ b=Szdp7jSbastp1OyTm8WELGeU3uRZX0PT9XvUAL5DIetDPYPszFxW4Agpj4yrjZMdmY
+ ZG+7UqXMAwrChOAbm7s3OagNjKmxlac5La1yfJoKl7cRmie5pvLwuBy/l5JoZ49twiRd
+ KJrF3mHLkKK1YJ+rIdR73ROfWSf90s/7QOcJM5GnmOjlU2mte3ps3PE6LuJRYLyD5XB1
+ VF7mx9xXyu28n494IJdTY3vTN3XrViIr/hvLnXsP6NYsw5mFVTRZdgY7E5E9MMifIEPp
+ B7lThL4bV+cEwDMsA+Vac8UH8no0/kOZeZeo9QanTKPFzGqqXAiQ1FgHMnTGzZY7oYbu
+ RWyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=AML2vSSkimuVHzIBhEres9UOJMz8tGvWI7dLcbCb2Kk=;
+ b=FfduCnu9DVP/PAerLgn9p02dtu8ixQLYFY0NFUHeGJvt762gTzdhlnsNiQTbYT43Jm
+ 2uXyJ/HlQgoGfcYqzts/lSssD2b5t+tevDfiQ9fmTgQGL8Fzl/djC+bkoQOqNm91m+u9
+ oOnMD9dPxo9G8yECtvR2RT+EPwLotKZ4cPen6I1VL7Brq3kzlRmFUhirDqepZVcgZxQs
+ y9mFrAdOGhM5Zb/7adEWroHpjnrc/VLMWoUrVttknQQqaPEmHh5Kt2uiDArT8WybA48K
+ YF9fSO11nXW6K9l951sS9iIqIeb/+BOBZwThAYIJ+kgdttLT1jv+tqhe3a7vbmOjugw3
+ /SEA==
+X-Gm-Message-State: AOAM530kLEnG54B4FVasxuowXt1kaA9m7ddMuoKbDyj/uHPTA5W/v5ID
+ 9AhpsIUDffQmgwI/MmzczP5vg0Fic7kdpgNy
+X-Google-Smtp-Source: ABdhPJxDlDORT8qYu3JM9z3+UefoUZMfWqWDDwEUUdd8mzE55GiBvUJtjaXBVlS1vtIg6rZdnZ4nyA==
+X-Received: by 2002:adf:eb89:: with SMTP id t9mr15180940wrn.66.1629057227908; 
+ Sun, 15 Aug 2021 12:53:47 -0700 (PDT)
+Received: from asaf.. ([2a10:8002:6b25:0:1cf4:dfbd:c158:8c1c])
+ by smtp.gmail.com with ESMTPSA id a11sm9431169wrq.6.2021.08.15.12.53.46
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 15 Aug 2021 12:53:47 -0700 (PDT)
+From: Asaf Kahlon <asafka7@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 15 Aug 2021 20:03:59 +0200
-Message-Id: <20210815180359.1575824-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.25.1
+Date: Sun, 15 Aug 2021 22:53:35 +0300
+Message-Id: <20210815195340.12027-1-asafka7@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4wfA044QnXcrzxImv6Aya5xOpyhyP5dKJLrMJbrSF4+0Qa1vuTHBoQoMqhdmXm+iaBD8COzH4lwYX4mLBwLigvnlefrQAKmLKcJ50HIObWTh+in/jInvmF
- a6EUz02gJgeLtdEaB8xxDkPjs5qljOxit0eSgfJfIr9Tc0FdLPZFoW3sCV74KMrVkguH/7zuIe5xK1AMXghgLBUYT1nUER5NEozlDXoTfh4JuOfBwtD6cSxq
- 47lLhn9YkbgyNJfaVtOLeFMgnZrHvZDzX7jbMpbsGavkUATM3nJ7PVxC+MBpiWY3RuMKp9WOTmV4JaAfS3VY0sm7sBmFYL52agjULYPWMeE=
-Subject: [Buildroot] [PATCH] package/gcc: add OpenRisc patches for gcc
- version 11.1.0
+Subject: [Buildroot] [PATCH 1/1] package/python-cryptography: depend comment
+ on BR2_PACKAGE_PYTHON3
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,308 +95,32 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-At the moment of gcc 11.1.0 release the OpenRisc patches for -mcmodel=large
-were still pending. They have been upstreamed yesterday as pointed in gcc
-bugzilla[1]. So they will be part of gcc 11.3.0 or maybe before on 11.2.
-2. Anyway at the moment if we try to build packages libgeos and protobuf
-with OpenRisc gcc 11.1.0 it fails due to missing -mcmodel=large. So let's
-add OpenRisc patches for it as done for all the previous versions.
+The user shouldn't view the comment on the python2 menu.
 
-Fixes:
-still not appeared on autobuilers
-
-[1]: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=99783
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- ...-mcmodel-option-to-handle-large-GOTs.patch | 200 ++++++++++++++++++
- ...-cmodel-large-when-building-crtstuff.patch |  60 ++++++
- 2 files changed, 260 insertions(+)
- create mode 100644 package/gcc/11.1.0/0002-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch
- create mode 100644 package/gcc/11.1.0/0003-or1k-Use-cmodel-large-when-building-crtstuff.patch
+ package/python-cryptography/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/gcc/11.1.0/0002-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch b/package/gcc/11.1.0/0002-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch
-new file mode 100644
-index 0000000000..6e32f953a3
---- /dev/null
-+++ b/package/gcc/11.1.0/0002-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch
-@@ -0,0 +1,200 @@
-+From eff8110674ef193481d3657456a262beeb9951ff Mon Sep 17 00:00:00 2001
-+From: Stafford Horne <shorne@gmail.com>
-+Date: Tue, 6 Apr 2021 05:47:17 +0900
-+Subject: [PATCH] or1k: Add mcmodel option to handle large GOTs
-+
-+When building libgeos we get an error with:
-+
-+    linux-uclibc/9.3.0/crtbeginS.o: in function `__do_global_dtors_aux':
-+    crtstuff.c:(.text+0x118): relocation truncated to fit: R_OR1K_GOT16 against symbol `__cxa_finalize' defined in .text section in
-+    /home/shorne/work/openrisc/3eb9f9d0f6d8274b2d19753c006bd83f7d536e3c/output/host/or1k-buildroot-linux-uclibc/sysroot/lib/libc.so.
-+
-+This is caused by GOT code having a limit of 64k.  In OpenRISC this
-+looks to be the only relocation code pattern to be limited to 64k.
-+
-+This patch allows specifying a new option -mcmodel=large which can be
-+used to generate 2 more instructions to construct 32-bit addresses for
-+up to 4G GOTs.
-+
-+gcc/ChangeLog:
-+
-+	PR target/99783
-+	* config/or1k/or1k-opts.h: New file.
-+	* config/or1k/or1k.c (or1k_legitimize_address_1, print_reloc):
-+	Support generating gotha relocations if -mcmodel=large is
-+	specified.
-+	* config/or1k/or1k.h (TARGET_CMODEL_SMALL, TARGET_CMODEL_LARGE):
-+	New macros.
-+	* config/or1k/or1k.opt (mcmodel=): New option.
-+	* doc/invoke.texi (OpenRISC Options): Document mcmodel.
-+
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ gcc/config/or1k/or1k-opts.h | 30 ++++++++++++++++++++++++++++++
-+ gcc/config/or1k/or1k.c      | 11 +++++++++--
-+ gcc/config/or1k/or1k.h      |  7 +++++++
-+ gcc/config/or1k/or1k.opt    | 19 +++++++++++++++++++
-+ gcc/doc/invoke.texi         | 12 +++++++++++-
-+ 5 files changed, 76 insertions(+), 3 deletions(-)
-+ create mode 100644 gcc/config/or1k/or1k-opts.h
-+
-+diff --git a/gcc/config/or1k/or1k-opts.h b/gcc/config/or1k/or1k-opts.h
-+new file mode 100644
-+index 00000000000..f791b894fdd
-+--- /dev/null
-++++ b/gcc/config/or1k/or1k-opts.h
-+@@ -0,0 +1,30 @@
-++/* Definitions for option handling for OpenRISC.
-++   Copyright (C) 2021 Free Software Foundation, Inc.
-++   Contributed by Stafford Horne.
-++
-++   This file is part of GCC.
-++
-++   GCC is free software; you can redistribute it and/or modify it
-++   under the terms of the GNU General Public License as published
-++   by the Free Software Foundation; either version 3, or (at your
-++   option) any later version.
-++
-++   GCC is distributed in the hope that it will be useful, but WITHOUT
-++   ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
-++   or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
-++   License for more details.
-++
-++   You should have received a copy of the GNU General Public License
-++   along with GCC; see the file COPYING3.  If not see
-++   <http://www.gnu.org/licenses/>.  */
-++
-++#ifndef GCC_OR1K_OPTS_H
-++#define GCC_OR1K_OPTS_H
-++
-++/* The OpenRISC code generation models available.  */
-++enum or1k_cmodel_type {
-++  CMODEL_SMALL,
-++  CMODEL_LARGE
-++};
-++
-++#endif /* GCC_OR1K_OPTS_H */
-+diff --git a/gcc/config/or1k/or1k.c b/gcc/config/or1k/or1k.c
-+index e772a7addea..27d3fa17995 100644
-+--- a/gcc/config/or1k/or1k.c
-++++ b/gcc/config/or1k/or1k.c
-+@@ -750,7 +750,14 @@ or1k_legitimize_address_1 (rtx x, rtx scratch)
-+ 	    {
-+ 	      base = gen_sym_unspec (base, UNSPEC_GOT);
-+ 	      crtl->uses_pic_offset_table = 1;
-+-	      t2 = gen_rtx_LO_SUM (Pmode, pic_offset_table_rtx, base);
-++	      if (TARGET_CMODEL_LARGE)
-++		{
-++	          emit_insn (gen_rtx_SET (t1, gen_rtx_HIGH (Pmode, base)));
-++	          emit_insn (gen_add3_insn (t1, t1, pic_offset_table_rtx));
-++	          t2 = gen_rtx_LO_SUM (Pmode, t1, base);
-++		}
-++	      else
-++	        t2 = gen_rtx_LO_SUM (Pmode, pic_offset_table_rtx, base);
-+ 	      t2 = gen_const_mem (Pmode, t2);
-+ 	      emit_insn (gen_rtx_SET (t1, t2));
-+ 	      base = t1;
-+@@ -1089,7 +1096,7 @@ print_reloc (FILE *stream, rtx x, HOST_WIDE_INT add, reloc_kind kind)
-+      no special markup.  */
-+   static const char * const relocs[RKIND_MAX][RTYPE_MAX] = {
-+     { "lo", "got", "gotofflo", "tpofflo", "gottpofflo", "tlsgdlo" },
-+-    { "ha", NULL,  "gotoffha", "tpoffha", "gottpoffha", "tlsgdhi" },
-++    { "ha", "gotha", "gotoffha", "tpoffha", "gottpoffha", "tlsgdhi" },
-+   };
-+   reloc_type type = RTYPE_DIRECT;
-+ 
-+diff --git a/gcc/config/or1k/or1k.h b/gcc/config/or1k/or1k.h
-+index fe01ab81ead..669907e7e74 100644
-+--- a/gcc/config/or1k/or1k.h
-++++ b/gcc/config/or1k/or1k.h
-+@@ -21,6 +21,8 @@
-+ #ifndef GCC_OR1K_H
-+ #define GCC_OR1K_H
-+ 
-++#include "config/or1k/or1k-opts.h"
-++
-+ /* Names to predefine in the preprocessor for this target machine.  */
-+ #define TARGET_CPU_CPP_BUILTINS()		\
-+   do						\
-+@@ -37,6 +39,11 @@
-+     }						\
-+   while (0)
-+ 
-++#define TARGET_CMODEL_SMALL \
-++  (or1k_code_model == CMODEL_SMALL)
-++#define TARGET_CMODEL_LARGE \
-++  (or1k_code_model == CMODEL_LARGE)
-++
-+ /* Storage layout.  */
-+ 
-+ #define DEFAULT_SIGNED_CHAR 1
-+diff --git a/gcc/config/or1k/or1k.opt b/gcc/config/or1k/or1k.opt
-+index 6bd0f3eee6d..cc23e3b8856 100644
-+--- a/gcc/config/or1k/or1k.opt
-++++ b/gcc/config/or1k/or1k.opt
-+@@ -21,6 +21,9 @@
-+ ; See the GCC internals manual (options.texi) for a description of
-+ ; this file's format.
-+ 
-++HeaderInclude
-++config/or1k/or1k-opts.h
-++
-+ mhard-div
-+ Target RejectNegative InverseMask(SOFT_DIV)
-+ Enable generation of hardware divide (l.div, l.divu) instructions.  This is the
-+@@ -63,6 +66,22 @@ When -mhard-float is selected, enables generation of unordered floating point
-+ compare and set flag (lf.sfun*) instructions.  By default functions from libgcc
-+ are used to perform unordered floating point compare and set flag operations.
-+ 
-++mcmodel=
-++Target RejectNegative Joined Enum(or1k_cmodel_type) Var(or1k_code_model) Init(CMODEL_SMALL)
-++Specify the code model used for accessing memory addresses.  Specifying large
-++enables generating binaries with large global offset tables.  By default the
-++value is small.
-++
-++Enum
-++Name(or1k_cmodel_type) Type(enum or1k_cmodel_type)
-++Known code model types (for use with the -mcmodel= option):
-++
-++EnumValue
-++Enum(or1k_cmodel_type) String(small) Value(CMODEL_SMALL)
-++
-++EnumValue
-++Enum(or1k_cmodel_type) String(large) Value(CMODEL_LARGE)
-++
-+ mcmov
-+ Target RejectNegative Mask(CMOV)
-+ Enable generation of conditional move (l.cmov) instructions.  By default the
-+diff --git a/gcc/doc/invoke.texi b/gcc/doc/invoke.texi
-+index 57b97a0838c..d8a6b0b60c9 100644
-+--- a/gcc/doc/invoke.texi
-++++ b/gcc/doc/invoke.texi
-+@@ -1141,7 +1141,8 @@ Objective-C and Objective-C++ Dialects}.
-+ @gccoptlist{-mboard=@var{name}  -mnewlib  -mhard-mul  -mhard-div @gol
-+ -msoft-mul  -msoft-div @gol
-+ -msoft-float  -mhard-float  -mdouble-float -munordered-float @gol
-+--mcmov  -mror  -mrori  -msext  -msfimm  -mshftimm}
-++-mcmov  -mror  -mrori  -msext  -msfimm  -mshftimm @gol
-++-mcmodel=@var{code-model}}
-+ 
-+ @emph{PDP-11 Options}
-+ @gccoptlist{-mfpu  -msoft-float  -mac0  -mno-ac0  -m40  -m45  -m10 @gol
-+@@ -26684,6 +26685,15 @@ Enable generation of shift with immediate (@code{l.srai}, @code{l.srli},
-+ @code{l.slli}) instructions.  By default extra instructions will be generated
-+ to store the immediate to a register first.
-+ 
-++@item -mcmodel=small
-++@opindex mcmodel=small
-++Generate OpenRISC code for the small model: The GOT is limited to 64k. This is
-++the default model.
-++
-++@item -mcmodel=large
-++@opindex mcmodel=large
-++Generate OpenRISC code for the large model: The GOT may grow up to 4G in size.
-++
-+ 
-+ @end table
-+ 
-+-- 
-+2.25.1
-+
-diff --git a/package/gcc/11.1.0/0003-or1k-Use-cmodel-large-when-building-crtstuff.patch b/package/gcc/11.1.0/0003-or1k-Use-cmodel-large-when-building-crtstuff.patch
-new file mode 100644
-index 0000000000..00dd5de2a3
---- /dev/null
-+++ b/package/gcc/11.1.0/0003-or1k-Use-cmodel-large-when-building-crtstuff.patch
-@@ -0,0 +1,60 @@
-+From da8a9d695b3c4b9397b5d9a27660bfa48af8d707 Mon Sep 17 00:00:00 2001
-+From: Stafford Horne <shorne@gmail.com>
-+Date: Wed, 21 Apr 2021 05:33:15 +0900
-+Subject: [PATCH] or1k: Use cmodel=large when building crtstuff
-+
-+When linking gcc runtime objects into large binaries the link may fail
-+with the below errors.  This will happen even if we are building with
-+-mcmodel=large.
-+
-+    /home/shorne/work/openrisc/output/host/lib/gcc/or1k-buildroot-linux-uclibc/10.3.0/crtbeginS.o: in function `deregister_tm_clones':
-+    crtstuff.c:(.text+0x3c): relocation truncated to fit: R_OR1K_GOT16 against undefined symbol `_ITM_deregisterTMCloneTable'
-+    /home/shorne/work/openrisc/output/host/lib/gcc/or1k-buildroot-linux-uclibc/10.3.0/crtbeginS.o: in function `register_tm_clones':
-+    crtstuff.c:(.text+0xc0): relocation truncated to fit: R_OR1K_GOT16 against undefined symbol `_ITM_registerTMCloneTable'
-+
-+This patch builds the gcc crtstuff binaries always with the
-+-mcmodel=large option to ensure they can be linked into large binaries.
-+
-+libgcc/ChangeLog:
-+
-+	PR target/99783
-+	* config.host (or1k-*, tmake_file): Add or1k/t-crtstuff.
-+	* config/or1k/t-crtstuff: New file.
-+
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ libgcc/config.host            | 4 ++--
-+ libgcc/config/or1k/t-crtstuff | 2 ++
-+ 2 files changed, 4 insertions(+), 2 deletions(-)
-+ create mode 100644 libgcc/config/or1k/t-crtstuff
-+
-+diff --git a/libgcc/config.host b/libgcc/config.host
-+index 50f00062232..8ca7a00082a 100644
-+--- a/libgcc/config.host
-++++ b/libgcc/config.host
-+@@ -1119,12 +1119,12 @@ nios2-*-*)
-+ 	extra_parts="$extra_parts crti.o crtn.o"
-+ 	;;
-+ or1k-*-linux*)
-+-	tmake_file="$tmake_file or1k/t-or1k"
-++	tmake_file="$tmake_file or1k/t-or1k or1k/t-crtstuff"
-+ 	tmake_file="$tmake_file t-softfp-sfdf t-softfp"
-+ 	md_unwind_header=or1k/linux-unwind.h
-+ 	;;
-+ or1k-*-*)
-+-	tmake_file="$tmake_file or1k/t-or1k"
-++	tmake_file="$tmake_file or1k/t-or1k or1k/t-crtstuff"
-+ 	tmake_file="$tmake_file t-softfp-sfdf t-softfp"
-+ 	;;
-+ pdp11-*-*)
-+diff --git a/libgcc/config/or1k/t-crtstuff b/libgcc/config/or1k/t-crtstuff
-+new file mode 100644
-+index 00000000000..dcae7f3498e
-+--- /dev/null
-++++ b/libgcc/config/or1k/t-crtstuff
-+@@ -0,0 +1,2 @@
-++# Compile crtbeginS.o and crtendS.o with -mcmodel=large
-++CRTSTUFF_T_CFLAGS_S += -mcmodel=large
-+-- 
-+2.25.1
-+
+diff --git a/package/python-cryptography/Config.in b/package/python-cryptography/Config.in
+index 5a2e6da900..da4252d6da 100644
+--- a/package/python-cryptography/Config.in
++++ b/package/python-cryptography/Config.in
+@@ -17,4 +17,5 @@ config BR2_PACKAGE_PYTHON_CRYPTOGRAPHY
+ 	  https://cryptography.io
+ 
+ comment "python-cryptography needs a toolchain w/ C++"
++	depends on BR2_PACKAGE_PYTHON3
+ 	depends on !BR2_INSTALL_LIBSTDCPP
 -- 
-2.25.1
+2.30.2
 
 _______________________________________________
 buildroot mailing list
