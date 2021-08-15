@@ -2,56 +2,56 @@ Return-Path: <SRS0=DPgg=NG=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 624EBC4338F
-	for <buildroot@archiver.kernel.org>; Sun, 15 Aug 2021 14:53:00 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CDD69C4338F
+	for <buildroot@archiver.kernel.org>; Sun, 15 Aug 2021 14:53:18 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 82B5A6115A
-	for <buildroot@archiver.kernel.org>; Sun, 15 Aug 2021 14:52:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 82B5A6115A
+	by mail.kernel.org (Postfix) with ESMTPS id 951DA6115A
+	for <buildroot@archiver.kernel.org>; Sun, 15 Aug 2021 14:53:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 951DA6115A
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2F6BB40387;
-	Sun, 15 Aug 2021 14:52:59 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4D5D740248;
+	Sun, 15 Aug 2021 14:53:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id abaLR5hzcNyd; Sun, 15 Aug 2021 14:52:55 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id WdzaFz15bUSt; Sun, 15 Aug 2021 14:53:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AA1E240329;
-	Sun, 15 Aug 2021 14:52:54 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 246321BF376
+	by smtp2.osuosl.org (Postfix) with ESMTP id CE42440266;
+	Sun, 15 Aug 2021 14:53:06 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 68D351BF376
  for <buildroot@lists.busybox.net>; Sun, 15 Aug 2021 14:52:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1341C80B7B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 57CFE40329
  for <buildroot@lists.busybox.net>; Sun, 15 Aug 2021 14:52:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vESZp_PtXckA for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id u4-sM6KshnK4 for <buildroot@lists.busybox.net>;
  Sun, 15 Aug 2021 14:52:48 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 893D880BA5
+ by smtp4.osuosl.org (Postfix) with ESMTP id ACB8040283
  for <buildroot@buildroot.org>; Sun, 15 Aug 2021 14:52:48 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 3CBD08C9FC; Sun, 15 Aug 2021 14:52:13 +0000 (UTC)
+ id 6347E8C9FC; Sun, 15 Aug 2021 14:52:13 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sun, 15 Aug 2021 16:52:23 +0200
+Date: Sun, 15 Aug 2021 16:52:26 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 634dcbd50dd5cf4b25153689e61bcba45163c841
-X-Git-Newrev: d55535622ffd5b138782ad90e785252c6b5b4a1b
+X-Git-Oldrev: d77aba25a55560d4c15bf319d6dc24619232a8ee
+X-Git-Newrev: 770ff2bc25404fb219221b843de2a0b35d2522eb
 X-Patchwork-Hint: ignore
-Message-Id: <20210815145213.3CBD08C9FC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/jszip: add JSZIP_CPE_ID_VENDOR
+Message-Id: <20210815145213.6347E8C9FC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/terminology: set eet path
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,32 +69,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d55535622ffd5b138782ad90e785252c6b5b4a1b
+commit: https://git.buildroot.net/buildroot/commit/?id=770ff2bc25404fb219221b843de2a0b35d2522eb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cpe:2.3:a:jszip_project:jszip is a valid CPE identifier for this
-package:
+Set eet path to avoid the following build failure raised since bump to
+version 1.9.0 in commit	6ac557a54bb4613e79728ad96724e7681c9c3c18 and
+https://git.enlightenment.org/apps/terminology.git/commit/?id=f15dd2881a5e87e7f3b03594983826f7480c12e7:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Ajszip_project%3Ajszip
+/home/buildroot/autobuild/instance-2/output-1/build/terminology-1.9.0/data/colorschemes/add_color_scheme.sh: 30: /home/buildroot/autobuild/instance-2/output-1/build/terminology-1.9.0/data/colorschemes/add_color_scheme.sh: /usr/bin/eet: not found
+
+Fixes:
+ - http://autobuild.buildroot.org/results/767acf73e4eade48cd3fdb43e9dd599ba7ef9661
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/jszip/jszip.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/terminology/terminology.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/jszip/jszip.mk b/package/jszip/jszip.mk
-index 13ea377169..a93766be11 100644
---- a/package/jszip/jszip.mk
-+++ b/package/jszip/jszip.mk
-@@ -8,6 +8,7 @@ JSZIP_VERSION = 3.2.2
- JSZIP_SITE = $(call github,Stuk,jszip,v$(JSZIP_VERSION))
- JSZIP_LICENSE = MIT or GPL-3.0
- JSZIP_LICENSE_FILES = LICENSE.markdown
-+JSZIP_CPE_ID_VENDOR = jszip_project
+diff --git a/package/terminology/terminology.mk b/package/terminology/terminology.mk
+index c17a6b0771..29b59fb39e 100644
+--- a/package/terminology/terminology.mk
++++ b/package/terminology/terminology.mk
+@@ -12,7 +12,9 @@ TERMINOLOGY_LICENSE_FILES = COPYING
+ TERMINOLOGY_CPE_ID_VENDOR = enlightenment
  
- # 0001-fix-Use-a-null-prototype-object-for-this-files.patch
- JSZIP_IGNORE_CVES += CVE-2021-23413
+ TERMINOLOGY_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES) efl host-pkgconf
+-TERMINOLOGY_CONF_OPTS = -Dedje-cc=$(HOST_DIR)/bin/edje_cc
++TERMINOLOGY_CONF_OPTS = \
++	-Dedje-cc=$(HOST_DIR)/bin/edje_cc \
++	-Deet=$(HOST_DIR)/bin/eet
+ 
+ ifeq ($(BR2_SYSTEM_ENABLE_NLS),y)
+ TERMINOLOGY_CONF_OPTS += -Dnls=true
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
