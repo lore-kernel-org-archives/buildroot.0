@@ -7,92 +7,74 @@ X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BB252C4338F
-	for <buildroot@archiver.kernel.org>; Tue, 17 Aug 2021 20:55:34 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 793A9C4338F
+	for <buildroot@archiver.kernel.org>; Tue, 17 Aug 2021 20:56:45 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2569760EB5
-	for <buildroot@archiver.kernel.org>; Tue, 17 Aug 2021 20:55:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2569760EB5
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
+	by mail.kernel.org (Postfix) with ESMTPS id 00B0D61008
+	for <buildroot@archiver.kernel.org>; Tue, 17 Aug 2021 20:56:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 00B0D61008
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=benettiengineering.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D60E9400DE;
-	Tue, 17 Aug 2021 20:55:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C92F980BE5;
+	Tue, 17 Aug 2021 20:56:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pva1KtgH2KoW; Tue, 17 Aug 2021 20:55:30 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2AEBB40112;
-	Tue, 17 Aug 2021 20:55:29 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4622B1BF95A
- for <buildroot@lists.busybox.net>; Tue, 17 Aug 2021 20:55:27 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4268780C2A
- for <buildroot@lists.busybox.net>; Tue, 17 Aug 2021 20:55:27 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZJsIJIxx7JhQ for <buildroot@lists.busybox.net>;
- Tue, 17 Aug 2021 20:55:22 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com
- [IPv6:2a00:1450:4864:20::52c])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 838B780BE5
- for <buildroot@busybox.net>; Tue, 17 Aug 2021 20:55:22 +0000 (UTC)
-Received: by mail-ed1-x52c.google.com with SMTP id v2so22975357edq.10
- for <buildroot@busybox.net>; Tue, 17 Aug 2021 13:55:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=subject:to:references:from:organization:message-id:date:user-agent
- :mime-version:in-reply-to:content-language:content-transfer-encoding;
- bh=leTCD8KoSRkvHWLsLtjFas4ybt3v3hkiGDTMk3t1lfg=;
- b=anHRYKXRXn5QU2RI78OmE1Sw00XSMqFf4g+eYwWb6400HmAlE5xvF21UamTm1GnyoN
- n+qgLHB04X9vm1Yz48ug1NftXD1mTmwzAEttZK13Zl6lBEEx9HGvVWwII3QReMAgLqOp
- QRwnThSAhJVe5MKSg+/pVWIu07XxXGdeZan8oBuzkUMTpHC7N4ZZ0g7FQJu3W3TbMYCb
- qBcr9EIb6Y78ypJfh52Ix1uWNhQ61uBSIShS7xPvL7WEh9Ky/bqRWb8JMTNnqIPCj9+E
- roDDA/3dxH3HhEUgSYm2z3Ctd9XT9rK/DcxY0n1yPGgb3tTWs+48/bwSbDSZhLYr9JMJ
- 4Hxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:subject:to:references:from:organization
- :message-id:date:user-agent:mime-version:in-reply-to
- :content-language:content-transfer-encoding;
- bh=leTCD8KoSRkvHWLsLtjFas4ybt3v3hkiGDTMk3t1lfg=;
- b=cn9FNr3fcWNIqMjdNR3EstSaZ9tBAevihdQuexwgk8hgQQLLm/THKwNQu57TCxGPMq
- eYJvXL6/3oMLNNVzZRSweAdPIxJbdCknlmAI2/CGndjJ0KkET+FzuktqzdHOnx6dhQgg
- EAwv0JXuPqWtQbj2NtZOxOz49/MIE59tKqvAoTxnc25exY1OxbUw0MNVEzUk5Raeh6CO
- KHSjuFVr0UutcvrFYTdcCdzxgoGv48QnBRKbc2opgXW90PhG58eOwCsPWHfUFjHMbYVq
- xgXRsW/6yBUdoiR3kmYeg3eUnag6clcir5XNbDYClDBSF1zmpiV81wF+zxuI82DIuzye
- hXzA==
-X-Gm-Message-State: AOAM5335XwM7eLX7kRcCcCK1j3COMh3rwKOVLOn59PQ6cYp/HALfjyst
- 2KPZHQP38aEDFZsTcqq3VMYpz1IiZXmkhg==
-X-Google-Smtp-Source: ABdhPJwSNpm5JskcoU3Ws0QbKLADteO3eRxGL3BjSM5uw7Dy1+s9xmf3tEcTIWToXyyTPvBsjKi4NA==
-X-Received: by 2002:a05:6402:1d19:: with SMTP id
- dg25mr6004566edb.153.1629233720633; 
- Tue, 17 Aug 2021 13:55:20 -0700 (PDT)
-Received: from ?IPv6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
- (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id c28sm1172229ejc.102.2021.08.17.13.55.19
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 17 Aug 2021 13:55:20 -0700 (PDT)
-To: Francois Perrad <fperrad@gmail.com>, buildroot@busybox.net
-References: <20210815135249.231896-1-francois.perrad@gadz.org>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-Message-ID: <92ad8dbd-77c2-6a5c-6ca2-b91b5632a1a0@mind.be>
-Date: Tue, 17 Aug 2021 22:55:19 +0200
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id pLNkp4IXKZsb; Tue, 17 Aug 2021 20:56:40 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 08CB080C2A;
+	Tue, 17 Aug 2021 20:56:39 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 967D41BF95A
+ for <buildroot@lists.busybox.net>; Tue, 17 Aug 2021 20:56:38 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8632440370
+ for <buildroot@lists.busybox.net>; Tue, 17 Aug 2021 20:56:38 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=aruba.it
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id w2bVzQZJUvZ7 for <buildroot@lists.busybox.net>;
+ Tue, 17 Aug 2021 20:56:33 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtpcmd0651.aruba.it (smtpcmd0651.aruba.it [62.149.156.51])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4EB5940304
+ for <buildroot@buildroot.org>; Tue, 17 Aug 2021 20:56:32 +0000 (UTC)
+Received: from [192.168.47.129] ([89.164.10.249])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id G68Km5TrYxC2nG68Km18Vp; Tue, 17 Aug 2021 22:56:31 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+ t=1629233791; bh=U4+x1kgzDv2hglrhR5zld2v9v3azooHwRMj/oTRX3co=;
+ h=Subject:To:From:Date:MIME-Version:Content-Type;
+ b=AB66ajQYNPEc2EHEjZIbqSN9ycWg5bsK88SMLN2uwiotSWFwmOPT9FPCkQNhUVZzm
+ mmWbExVyXmilJ5J5vyTUTkjgrcLOa8Z7ar42UNXPL99cX0pRhiClZmkXK7aQIdveJi
+ GixLBvR5nmVkvr+BQ8I540EwXa3z3IZ6JuEz4MkcnaVu5YZl8gr644zECguFmRKFga
+ 0vZGg7ag+xlCdnMDUrJlEIBW7fY61aOlKUNTHeUvRfiWJM8mRFq6AF54caVXwIJ6ya
+ pCWasQ6qfavwJ5CRFeGP2iXQa5dsDi09xW77uRae89NawF5ty5nO1IGRwgUOj15GxJ
+ xf1hVDrqSrOmw==
+To: Arnout Vandecappelle <arnout@mind.be>, buildroot@buildroot.org
+References: <20210726235656.1df4ddeb@windsurf>
+ <20210726223435.2906458-1-giulio.benetti@benettiengineering.com>
+ <20210726223435.2906458-2-giulio.benetti@benettiengineering.com>
+ <b89f7acd-3549-f167-f984-b08a5a597a18@mind.be>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Message-ID: <dafc15e4-91e2-976b-d173-c2856b167709@benettiengineering.com>
+Date: Tue, 17 Aug 2021 22:56:28 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.11.0
 MIME-Version: 1.0
-In-Reply-To: <20210815135249.231896-1-francois.perrad@gadz.org>
-Content-Language: en-GB
-Subject: Re: [Buildroot] [PATCH] package/vsftpd: fix build with libressl
+In-Reply-To: <b89f7acd-3549-f167-f984-b08a5a597a18@mind.be>
+Content-Language: en-US
+X-CMAE-Envelope: MS4wfC/xAz7+utsgJxhw2PVNDX8MLQQKnZiznIyieNfFb0z+rmzL5IZ7KqK3hHgjqFjJAYr2rifDFq8ZKZnHRg1Z3mA1o+KUUAHSsWYQbnEp/cA90H50PhGF
+ eAXvNvJ2/asLQ063kP1ZajvuYKgcd4E6KPsqnpsvCHJEYORo95IgngYmeeonGQ/liodGyGZt2Q9n5UUOnz20BAZinW5uQjkJZrPVJ1L+rRfRJbzrmWjw94GR
+ 5hqbJmyOfpaZQaV6XYyZ0gvYwr715vBMheOC2J5XvVDCNmqmPT0bnsG/7TUYHblBw9FGA2wqkwULO729k10SVBNs5s45W/fh30TJTI+5TEZjFhRG3VvLqkyX
+ EQLRimt6QR/kFfy40MNvm8+cc3cf8epDNVkAAoRGWOwgOO7ssuMFFRf/1IPpHTG3DVpPIMzZCUiic4GpQ7jI0rIyye5BkUCmgpt+SCcA6ERntulDFcw=
+Subject: Re: [Buildroot] [PATCH v2 1/3] package/libgeos: fix build failure
+ due to missing -mcmodel=large
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -104,62 +86,78 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
+Cc: Michael Nosthoff <buildroot@heine.tech>,
+ Maxim Kochetkov <fido_max@inbox.ru>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Romain Naour <romain.naour@gmail.com>, Matt Weber <matthew.weber@collins.com>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
+Hi Arnout,
 
-
-On 15/08/2021 15:52, Francois Perrad wrote:
-> Fixes the following error:
-> ssl.c: In function 'ssl_init':
-> ssl.c:98:18: error: 'SSL_OP_NO_TLSv1_3' undeclared (first use in this function); did you mean 'SSL_OP_NO_TLSv1_1'?
+On 8/17/21 10:34 PM, Arnout Vandecappelle wrote:
 > 
-> in ssl.h (libressl), the definition of SSL_OP_NO_TLSv1_3 is under the condition LIBRESSL_HAS_TLS1_3 or LIBRESSL_INTERNAL
 > 
-> with libopenssl, this definition is unconditional
+> On 27/07/2021 00:34, Giulio Benetti wrote:
+>> When building libgeos for or1k -mcmodel=large is needed to link, so let's
+>> add that gcc option in case we're building for or1k.
+>>
+>> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+>> ---
+>>   package/libgeos/libgeos.mk | 4 ++++
+>>   1 file changed, 4 insertions(+)
+>>
+>> diff --git a/package/libgeos/libgeos.mk b/package/libgeos/libgeos.mk
+>> index a355732af8..43211d0434 100644
+>> --- a/package/libgeos/libgeos.mk
+>> +++ b/package/libgeos/libgeos.mk
+>> @@ -23,6 +23,10 @@ ifeq ($(BR2_arm)$(BR2_armeb),y)
+>>   LIBGEOS_CONF_OPTS += -DDISABLE_GEOS_INLINE=ON
+>>   endif
+>>   
+>> +ifeq ($(BR2_or1k),y)
+>> +LIBGEOS_CXXFLAGS += -mcmodel=large
 > 
-> this issue appears with vsftpd 3.0.4
+>   According to git, -mcmodel was added to GCC after the 11.2.0 release. Are you
+> sure that this works?
 > 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/vsftpd/vsftpd.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>   Oooh, we have a patch that adds it. But that patch is missing for 11.1.0 for
+> some reason. Romain, you apparently didn't carry any of our patches when you
+> added GCC 11 in 2ab88dac293aed5adf2504e8b182f9d8a306b935. The commit message
+> doesn't say anything. Do you remember anything about the patches? The patch was
+> added to master on May 21 and you only submitted the GCC bump on June 12, but
+> perhaps you already had it lying around for a while?
 > 
-> diff --git a/package/vsftpd/vsftpd.mk b/package/vsftpd/vsftpd.mk
-> index 8daf07c62..e36ba299c 100644
-> --- a/package/vsftpd/vsftpd.mk
-> +++ b/package/vsftpd/vsftpd.mk
-> @@ -41,7 +41,7 @@ VSFTPD_LIBS += -lpam
->  endif
->  
->  define VSFTPD_BUILD_CMDS
-> -	$(TARGET_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
-> +	$(TARGET_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS) -DLIBRESSL_HAS_TLS1_3" \
+>   Giulio, maybe you can port the patch to 11.1.0?
 
- I don't think this is how the libressl feature flags are supposed to be used. I
-think you're supposed to patch opensslfeatures.h before building libressl.
-AFAIU, the flags are indented to tell client applications which features are
-available in the library, so vsftpd could do something like
+You've read into my mind :-), I've sent it yesterday:
+https://patchwork.ozlabs.org/project/buildroot/list/?series=258108
 
-#ifdef LIBRESSL_HAS_TLS1_3
-... do something with SSL_OP_NO_TLSv1_3
-#endif
+and that is valid for both libgeos and profobuf.
 
- So I think a better solution would be to patch libressl to enable the two
-feature flags (TLS1_3 and DTLS1_2).
+Best regards!
+-- 
+Giulio Benetti
+Benetti Engineering sas
 
- But I could be wrong, of course.
-
- Regards,
- Arnout
-
-
->  		LDFLAGS="$(TARGET_LDFLAGS)" LIBS="$(VSFTPD_LIBS)" -C $(@D)
->  endef
->  
+>   Regards,
+>   Arnout
 > 
+>> +endif
+>> +
+>>   LIBGEOS_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(LIBGEOS_CXXFLAGS)"
+>>   
+>>   $(eval $(cmake-package))
+>>
+> _______________________________________________
+> buildroot mailing list
+> buildroot@busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
