@@ -7,55 +7,55 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9EB8DC4338F
-	for <buildroot@archiver.kernel.org>; Tue, 17 Aug 2021 08:41:05 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 45BC5C4338F
+	for <buildroot@archiver.kernel.org>; Tue, 17 Aug 2021 08:41:17 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 63FAE60F41
-	for <buildroot@archiver.kernel.org>; Tue, 17 Aug 2021 08:41:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 63FAE60F41
+	by mail.kernel.org (Postfix) with ESMTPS id 12D1860EFE
+	for <buildroot@archiver.kernel.org>; Tue, 17 Aug 2021 08:41:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 12D1860EFE
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3BD2360859;
-	Tue, 17 Aug 2021 08:41:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DB70C40272;
+	Tue, 17 Aug 2021 08:41:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZzYQDNEOFjQB; Tue, 17 Aug 2021 08:41:00 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id LpvKqspe5SCL; Tue, 17 Aug 2021 08:41:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D69B060802;
-	Tue, 17 Aug 2021 08:40:59 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 83F491BF2AE
- for <buildroot@lists.busybox.net>; Tue, 17 Aug 2021 08:39:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0D4A8404C4;
+	Tue, 17 Aug 2021 08:41:12 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id AC0551BF2AE
+ for <buildroot@lists.busybox.net>; Tue, 17 Aug 2021 08:39:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 73B8A80E5A
- for <buildroot@lists.busybox.net>; Tue, 17 Aug 2021 08:39:57 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9C0A440259
+ for <buildroot@lists.busybox.net>; Tue, 17 Aug 2021 08:39:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9WVCux8LRRjn for <buildroot@lists.busybox.net>;
- Tue, 17 Aug 2021 08:39:53 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xQ7bIyvnS01Q for <buildroot@lists.busybox.net>;
+ Tue, 17 Aug 2021 08:39:58 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
 Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
  [217.70.183.201])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E35F480C2B
- for <buildroot@buildroot.org>; Tue, 17 Aug 2021 08:39:52 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D174F401F2
+ for <buildroot@buildroot.org>; Tue, 17 Aug 2021 08:39:57 +0000 (UTC)
 Received: (Authenticated sender: herve.codina@bootlin.com)
- by relay8-d.mail.gandi.net (Postfix) with ESMTPA id 81A601BF208;
- Tue, 17 Aug 2021 08:39:50 +0000 (UTC)
+ by relay8-d.mail.gandi.net (Postfix) with ESMTPA id 90D401BF20F;
+ Tue, 17 Aug 2021 08:39:55 +0000 (UTC)
 From: Herve Codina <herve.codina@bootlin.com>
 To: buildroot@buildroot.org
-Date: Tue, 17 Aug 2021 10:39:20 +0200
-Message-Id: <20210817083930.3718711-7-herve.codina@bootlin.com>
+Date: Tue, 17 Aug 2021 10:39:23 +0200
+Message-Id: <20210817083930.3718711-10-herve.codina@bootlin.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210817083930.3718711-1-herve.codina@bootlin.com>
 References: <20210817083930.3718711-1-herve.codina@bootlin.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v3 06/16] package/pkg-qmake.mk: Move
- QT5_QT_CONF_FIXUP to post-prepare hook
+Subject: [Buildroot] [PATCH v3 09/16] Makefile: rsync global {TARGET,
+ HOST}_DIR using exclusion file list
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,41 +78,87 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-QT5_QT_CONF_FIXUP tweaks files for per-package directory build.
-This is typically the kind of operation expected to be in
-post-prepare hook.
+On a per-package build, rsync final {TARGET,HOST}_DIR using
+exclusion file list computed for each packages.
+
+This exclusion list allows to rsync only files generated by a given
+package. This is needed to avoid any overwrites in final
+{TARGET,HOST}_DIR.
+
+As we rsync only files generated by each packages, we need to
+to do this rsync recursively on each dependencies to collect
+all needed files. This is done based on existing
+<PKG>_FINAL_RECURSIVE_DEPENDENCIES
 
 Signed-off-by: Herve Codina <herve.codina@bootlin.com>
 ---
-New patch in this v3 series.
-As said previously in
-https://lore.kernel.org/buildroot/b1d0c5a5-f76f-e38e-0257-1300f6a30eab@andin.de/
-This patch moves Qt5 fixup to <PKG>_POST_PREPARE_HOOKS (old <PKG>_PER_PACKAGE_TWEAK_HOOKS
-mentioned in discussion).
+Changes v1 to v2:
+ - Added a note in the commit message related to why this exclusion
+   list is needed.
+ - Added $(Q) to mkdir and rsync
+ - Changed indentations to make calls more readable
 
- package/pkg-qmake.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Changes v2 to v3:
+None
 
-diff --git a/package/pkg-qmake.mk b/package/pkg-qmake.mk
-index a77286fe3a..deb033c1d6 100644
---- a/package/pkg-qmake.mk
-+++ b/package/pkg-qmake.mk
-@@ -56,13 +56,14 @@ $(2)_DEPENDENCIES 		+= host-perl
- $(2)_PRE_CONFIGURE_HOOKS        += QT_HEADERS_SYNC_HOOK
- endif
+ Makefile | 34 ++++++++++++++++++++++++++++++++--
+ 1 file changed, 32 insertions(+), 2 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 3923e5875f..32fad004fe 100644
+--- a/Makefile
++++ b/Makefile
+@@ -725,10 +725,33 @@ TARGET_DIR_FILES_LISTS = $(sort $(wildcard $(BUILD_DIR)/*/.files-list.txt))
+ HOST_DIR_FILES_LISTS = $(sort $(wildcard $(BUILD_DIR)/*/.files-list-host.txt))
+ STAGING_DIR_FILES_LISTS = $(sort $(wildcard $(BUILD_DIR)/*/.files-list-staging.txt))
  
-+$(2)_POST_PREPARE_HOOKS += QT5_QT_CONF_FIXUP
++ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),y)
++# rsync the contents of per-package directories
++# $1: space-separated list of packages to rsync from
++# $2: 'host' or 'target'
++# $3: destination directory
++# $4: exclude file list to use
++define per-package-rsync-delta
++	$(Q)mkdir -p $(3)
++	$(foreach pkg,$(1),\
++		$(Q)rsync -a --link-dest=$(PER_PACKAGE_DIR)/$(pkg)/$(strip $(2))/ \
++			--filter='merge $($(call UPPERCASE,$(pkg))_DIR)/$(strip $(4))' \
++			$(PER_PACKAGE_DIR)/$(pkg)/$(strip $(2))/ \
++			$(3)$(sep))
++endef
++endif
 +
- #
- # Configure step. Only define it if not already defined by the package
- # .mk file.
- #
- ifndef $(2)_CONFIGURE_CMDS
- define $(2)_CONFIGURE_CMDS
--	$$(QT5_QT_CONF_FIXUP)
- 	cd $$($(2)_BUILDDIR) && \
- 	$$(TARGET_MAKE_ENV) $$($(2)_CONF_ENV) $$(QT5_QMAKE) $$($(2)_CONF_OPTS)
- endef
+ .PHONY: host-finalize
+ host-finalize: $(PACKAGES) $(HOST_DIR) $(HOST_DIR_SYMLINK)
+ 	@$(call MESSAGE,"Finalizing host directory")
+-	$(call per-package-rsync,$(sort $(PACKAGES)),host,$(HOST_DIR))
++	$(call per-package-rsync-delta, \
++		$(sort $(foreach pkg, $(PACKAGES), \
++			$(pkg) $($(call UPPERCASE,$(pkg))_FINAL_RECURSIVE_DEPENDENCIES)) \
++		), \
++		host, \
++		$(HOST_DIR), \
++		.files-final-rsync-host.exclude_rsync \
++	)
+ 
+ .PHONY: staging-finalize
+ staging-finalize: $(STAGING_DIR_SYMLINK)
+@@ -736,7 +759,14 @@ staging-finalize: $(STAGING_DIR_SYMLINK)
+ .PHONY: target-finalize
+ target-finalize: $(PACKAGES) $(TARGET_DIR) host-finalize
+ 	@$(call MESSAGE,"Finalizing target directory")
+-	$(call per-package-rsync,$(sort $(PACKAGES)),target,$(TARGET_DIR))
++	$(call per-package-rsync-delta, \
++		$(sort $(foreach pkg, $(PACKAGES), \
++			$(pkg) $($(call UPPERCASE,$(pkg))_FINAL_RECURSIVE_DEPENDENCIES)) \
++		), \
++		target, \
++		$(TARGET_DIR), \
++		.files-final-rsync.exclude_rsync \
++	)
+ 	$(foreach hook,$(TARGET_FINALIZE_HOOKS),$($(hook))$(sep))
+ 	rm -rf $(TARGET_DIR)/usr/include $(TARGET_DIR)/usr/share/aclocal \
+ 		$(TARGET_DIR)/usr/lib/pkgconfig $(TARGET_DIR)/usr/share/pkgconfig \
 -- 
 2.31.1
 
