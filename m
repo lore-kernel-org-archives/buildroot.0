@@ -7,55 +7,55 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5EC45C4338F
-	for <buildroot@archiver.kernel.org>; Tue, 17 Aug 2021 08:42:31 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AC01EC4338F
+	for <buildroot@archiver.kernel.org>; Tue, 17 Aug 2021 08:42:43 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 28C0C60F39
-	for <buildroot@archiver.kernel.org>; Tue, 17 Aug 2021 08:42:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 28C0C60F39
+	by mail.kernel.org (Postfix) with ESMTPS id 7ABD560FA0
+	for <buildroot@archiver.kernel.org>; Tue, 17 Aug 2021 08:42:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7ABD560FA0
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 01F2840533;
-	Tue, 17 Aug 2021 08:42:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 50F56607F8;
+	Tue, 17 Aug 2021 08:42:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BThueMiIeE5R; Tue, 17 Aug 2021 08:42:26 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id MEEbBS333YxB; Tue, 17 Aug 2021 08:42:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9A96D40539;
-	Tue, 17 Aug 2021 08:42:25 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0D0F61BF2AE
+	by smtp3.osuosl.org (Postfix) with ESMTP id 000C7607FB;
+	Tue, 17 Aug 2021 08:42:37 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 3EA881BF2AE
  for <buildroot@lists.busybox.net>; Tue, 17 Aug 2021 08:40:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id F114081024
- for <buildroot@lists.busybox.net>; Tue, 17 Aug 2021 08:40:28 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3B8CB40287
+ for <buildroot@lists.busybox.net>; Tue, 17 Aug 2021 08:40:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jEwXxGvN2T23 for <buildroot@lists.busybox.net>;
- Tue, 17 Aug 2021 08:40:28 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fyNz0aFVUwQu for <buildroot@lists.busybox.net>;
+ Tue, 17 Aug 2021 08:40:24 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
 Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
  [217.70.183.201])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0BF3781008
- for <buildroot@buildroot.org>; Tue, 17 Aug 2021 08:40:27 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id CBB01404C4
+ for <buildroot@buildroot.org>; Tue, 17 Aug 2021 08:40:22 +0000 (UTC)
 Received: (Authenticated sender: herve.codina@bootlin.com)
- by relay8-d.mail.gandi.net (Postfix) with ESMTPA id AB2AD1BF203;
- Tue, 17 Aug 2021 08:40:25 +0000 (UTC)
+ by relay8-d.mail.gandi.net (Postfix) with ESMTPA id 4927C1BF206;
+ Tue, 17 Aug 2021 08:40:20 +0000 (UTC)
 From: Herve Codina <herve.codina@bootlin.com>
 To: buildroot@buildroot.org
-Date: Tue, 17 Aug 2021 10:39:30 +0200
-Message-Id: <20210817083930.3718711-17-herve.codina@bootlin.com>
+Date: Tue, 17 Aug 2021 10:39:27 +0200
+Message-Id: <20210817083930.3718711-14-herve.codina@bootlin.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210817083930.3718711-1-herve.codina@bootlin.com>
 References: <20210817083930.3718711-1-herve.codina@bootlin.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v3 16/16] package/pkg-generic.mk: move
- fixup-libtool-files to post-prepare hook
+Subject: [Buildroot] [PATCH v3 13/16] support/testing/infra: add
+ log_file_path() function
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,66 +78,66 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-This commit moves fixup-libtool-files to the post-prepare hook
-infrastructure.
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
+Some tests will need to grep through the build log to verify that some
+features are working are expected. In order to allow them to open the
+build log, we provide a new function called log_file_path(), which
+returns the path to the log file if available.
+
+We also use this function in open_log_file().
+
+Note that open_log_file() cannot be used directly to grep through the
+log file at the end of a build: because it opens in "a+" mode, it
+greps starting from the end of the file.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Herve Codina <herve.codina@bootlin.com>
 ---
-New patch in this v3 series.
+New patch in this v2 series
 
-This modification was mentionned in the previous review
-https://lore.kernel.org/buildroot/20210625092704.GJ2852@scaer/
+This patch is retrieved from Thomas's work.
+The first version was discussed
+https://patchwork.ozlabs.org/project/buildroot/patch/20200430095249.782597-10-thomas.petazzoni@bootlin.com/
 
- package/pkg-generic.mk | 20 ++++++++++++--------
- 1 file changed, 12 insertions(+), 8 deletions(-)
+This new version was not already submitted by Thomas or I missed it.
+Compared to the first version, this patch use a more python-like
+syntax as proposed by Yann in the previous review.
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index bb9f395f27..d8ca8aaf31 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -92,14 +92,19 @@ endif
+Changes v2 to v3:
+None
+
+ support/testing/infra/__init__.py | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
+
+diff --git a/support/testing/infra/__init__.py b/support/testing/infra/__init__.py
+index b10a7601a3..1f003f24c6 100644
+--- a/support/testing/infra/__init__.py
++++ b/support/testing/infra/__init__.py
+@@ -10,17 +10,18 @@ ARTIFACTS_URL = "http://autobuild.buildroot.net/artefacts/"
+ BASE_DIR = os.path.realpath(os.path.join(os.path.dirname(__file__), "../../.."))
  
- # Make sure .la files only reference the current per-package
- # directory.
--
--# $1: package name (lower case)
--# $2: staging directory of the package
-+#
-+# Can't use $(foreach d, $(HOST_DIR)/lib* $(STAGING_DIR)/usr/lib*, ...)
-+# because those directories may be created in the same recipe this macro will
-+# be expanded in.
-+# Additionally, either or both may be missing, which would make find whine and
-+# fail.
-+# So we just use HOST_DIR as a starting point, and filter on the two directories
-+# of interest.
- ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),y)
--define fixup-libtool-files
--	$(Q)find $(2) \( -path '$(2)/lib*' -o -path '$(2)/usr/lib*' \) \
-+define FIXUP_LIBTOOL_FILES
-+	$(Q)find $(HOST_DIR) \( -path '$(HOST_DIR)/lib*' -o -path '$(STAGING_DIR)/usr/lib*' \) \
- 		-name "*.la" -print0 | xargs -0 --no-run-if-empty \
--		$(SED) "s:$(PER_PACKAGE_DIR)/[^/]\+/:$(PER_PACKAGE_DIR)/$(1)/:g"
-+		$(SED) "s:$(PER_PACKAGE_DIR)/[^/]\+/:$(PER_PACKAGE_DIR)/$($(PKG)_NAME)/:g"
- endef
- endif
  
-@@ -226,8 +231,6 @@ define prepare-pre-configure
- 	@$(call pkg_size_before,$(TARGET_DIR))
- 	@$(call pkg_size_before,$(STAGING_DIR),-staging)
- 	@$(call pkg_size_before,$(HOST_DIR),-host)
--	$(call fixup-libtool-files,$(NAME),$(HOST_DIR))
--	$(call fixup-libtool-files,$(NAME),$(STAGING_DIR))
- 	$(foreach hook,$($(PKG)_POST_PREPARE_HOOKS),$(call $(hook))$(sep))
- 	@$(call pkg_detect_overwrite_before,$(TARGET_DIR))
- 	@$(call pkg_detect_overwrite_before,$(HOST_DIR),-host)
-@@ -923,6 +926,7 @@ $(2)_POST_LEGAL_INFO_HOOKS      ?=
- $(2)_TARGET_FINALIZE_HOOKS      ?=
- $(2)_ROOTFS_PRE_CMD_HOOKS       ?=
++def log_file_path(builddir, stage, logtofile=True):
++    """Return path to log file"""
++    return "{}-{}.log".format(builddir, stage) if logtofile else None
++
++
+ def open_log_file(builddir, stage, logtofile=True):
+     """
+     Open a file for logging and return its handler.
+     If logtofile is True, returns sys.stdout. Otherwise opens a file
+     with a suitable name in the build directory.
+     """
+-    if logtofile:
+-        fhandle = open("{}-{}.log".format(builddir, stage), 'a+')
+-    else:
+-        fhandle = sys.stdout
+-    return fhandle
++    return open(log_file_path(builddir, stage, logtofile), 'a+') if logtofile else sys.stdout
  
-+$(2)_POST_PREPARE_HOOKS += FIXUP_LIBTOOL_FILES
- $(2)_POST_PREPARE_HOOKS += FIXUP_PYTHON_SYSCONFIGDATA
  
- ifeq ($$($(2)_TYPE),target)
+ def basepath(relpath=""):
 -- 
 2.31.1
 
