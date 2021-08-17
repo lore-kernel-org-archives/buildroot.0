@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 16410C432BE
-	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:28:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 85A9BC432BE
+	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:29:13 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id C7DF760E93
-	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:28:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C7DF760E93
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
+	by mail.kernel.org (Postfix) with ESMTPS id 448AB60E93
+	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:29:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 448AB60E93
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9674640786;
-	Thu, 26 Aug 2021 22:28:58 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 13124407CF;
+	Thu, 26 Aug 2021 22:29:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NN3BTl0zPEvn; Thu, 26 Aug 2021 22:28:54 +0000 (UTC)
+	with ESMTP id Pvkilgn-UdeG; Thu, 26 Aug 2021 22:29:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 50CB640790;
-	Thu, 26 Aug 2021 22:28:53 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 194D04079A;
+	Thu, 26 Aug 2021 22:29:06 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7033F1BF33E
- for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 22:03:31 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 03ED11BF33E
+ for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 22:03:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3726A407AD
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6F3A840765
  for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 22:02:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fRjwC2s8pyfJ for <buildroot@lists.busybox.net>;
- Thu, 26 Aug 2021 22:02:48 +0000 (UTC)
+ with ESMTP id glUYj8bwvoCq for <buildroot@lists.busybox.net>;
+ Thu, 26 Aug 2021 22:02:46 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 40E11407B9
- for <buildroot@buildroot.org>; Thu, 26 Aug 2021 22:02:33 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id CF27B407B4
+ for <buildroot@buildroot.org>; Thu, 26 Aug 2021 22:02:32 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 94A3C8DC50; Thu, 26 Aug 2021 22:01:31 +0000 (UTC)
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ id 2B42C8DC50; Thu, 26 Aug 2021 22:01:31 +0000 (UTC)
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Thu, 19 Aug 2021 22:39:44 +0200
+Date: Tue, 17 Aug 2021 23:12:28 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 9f591542452f2af2bb333dc24b34e85f6921ece4
-X-Git-Newrev: 8d0fcab12831140a409971d7cb4ecf95c874a5f9
+X-Git-Oldrev: bdbb113cd28e9ab17fe067da50484648b84408b8
+X-Git-Newrev: 2fc6db12279d43d6c5a7f196c02c5303668d510c
 X-Patchwork-Hint: ignore
-Message-Id: <20210826220131.94A3C8DC50@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] DEVELOPERS: add myself to
- toolchain topics/packages
+Message-Id: <20210826220131.2B42C8DC50@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] boot/at91bootstrap3: bump 3.x
+ series to 3.10.3
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,40 +70,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8d0fcab12831140a409971d7cb4ecf95c874a5f9
+commit: https://git.buildroot.net/buildroot/commit/?id=2fc6db12279d43d6c5a7f196c02c5303668d510c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Since I've dealt and deal with toolchain bugs and their work-around
-very often add myself to toolchain topic(toolchain/) as well as
-package/binutils and package/gcc.
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Ludovic Desroches <ludovic.desroches@microchip.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- DEVELOPERS | 3 +++
- 1 file changed, 3 insertions(+)
+ boot/at91bootstrap3/Config.in           | 4 ++--
+ boot/at91bootstrap3/at91bootstrap3.hash | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index af97de02de..5f90dbfc1f 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1052,6 +1052,8 @@ F:	package/xapian/
+diff --git a/boot/at91bootstrap3/Config.in b/boot/at91bootstrap3/Config.in
+index f44597bc00..edacc00675 100644
+--- a/boot/at91bootstrap3/Config.in
++++ b/boot/at91bootstrap3/Config.in
+@@ -22,7 +22,7 @@ config BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
+ 	bool "4.0.0-rc2"
  
- N:	Giulio Benetti <giulio.benetti@benettiengineering.com>
- F:	package/at/
-+F:	package/binutils/
-+F:	package/gcc/
- F:	package/libfuse3/
- F:	package/libnspr/
- F:	package/libnss/
-@@ -1060,6 +1062,7 @@ F:	package/nfs-utils/
- F:	package/sunxi-mali-mainline/
- F:	package/sunxi-mali-mainline-driver/
- F:	package/udisks/
-+F:	toolchain/
+ config BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION_3X
+-	bool "3.10.2"
++	bool "3.10.3"
  
- N:	Gregory Dymarek <gregd72002@gmail.com>
- F:	package/ding-libs/
+ config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
+ 	bool "Custom Git repository"
+@@ -55,7 +55,7 @@ endif
+ config BR2_TARGET_AT91BOOTSTRAP3_VERSION
+ 	string
+ 	default "v4.0.0-rc2" if BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
+-	default "v3.10.2" if BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION_3X
++	default "v3.10.3" if BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION_3X
+ 	default BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION \
+ 		if BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
+ 	default "custom"	if BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL
+diff --git a/boot/at91bootstrap3/at91bootstrap3.hash b/boot/at91bootstrap3/at91bootstrap3.hash
+index 8b7453bbd4..71c579de28 100644
+--- a/boot/at91bootstrap3/at91bootstrap3.hash
++++ b/boot/at91bootstrap3/at91bootstrap3.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  33e4ba431af93a4fc2e81c1458cd31901b9f69c583ebe4c74ca78c0846479bfd  at91bootstrap3-v3.10.2.tar.gz
++sha256  b6ae5bcaacc5a949f400182e036ae053049638444a3ba8b1dd154ec5f7898d8e  at91bootstrap3-v3.10.3.tar.gz
+ sha256  b5d5f042297cad0d091f7d8734e61eb9ec7b6020898e086503fb5f8bc71fb9fc  at91bootstrap3-v4.0.0-rc2.tar.gz
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
