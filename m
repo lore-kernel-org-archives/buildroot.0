@@ -2,56 +2,57 @@ Return-Path: <SRS0=2pYX=NR=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A869C432BE
-	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:06:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 02D98C432BE
+	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:07:12 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id C12EC60FD9
-	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:06:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C12EC60FD9
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
+	by mail.kernel.org (Postfix) with ESMTPS id 9536F60FD9
+	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:07:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9536F60FD9
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9A80042682;
-	Thu, 26 Aug 2021 22:06:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 675DD426C8;
+	Thu, 26 Aug 2021 22:07:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8IzzqhuOwRZX; Thu, 26 Aug 2021 22:06:54 +0000 (UTC)
+	with ESMTP id SdNVbQOAuv2I; Thu, 26 Aug 2021 22:07:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 706CE426C8;
-	Thu, 26 Aug 2021 22:06:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 91186426CF;
+	Thu, 26 Aug 2021 22:07:05 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 97D6D1BF33E
- for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 22:02:37 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 033951BF33E
+ for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 22:02:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5CD9661495
- for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 22:02:34 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 890E9614B6
+ for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 22:02:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0G9g2wd7lakO for <buildroot@lists.busybox.net>;
- Thu, 26 Aug 2021 22:02:29 +0000 (UTC)
+ with ESMTP id 9l5FhC7akAnW for <buildroot@lists.busybox.net>;
+ Thu, 26 Aug 2021 22:02:33 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D96F8614A0
- for <buildroot@buildroot.org>; Thu, 26 Aug 2021 22:02:29 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id BF6AB614A7
+ for <buildroot@buildroot.org>; Thu, 26 Aug 2021 22:02:31 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 388DA8DC50; Thu, 26 Aug 2021 22:01:28 +0000 (UTC)
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ id 1FBB98DC52; Thu, 26 Aug 2021 22:01:30 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 8 Aug 2021 23:14:21 +0200
+Date: Tue, 17 Aug 2021 08:51:46 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: c9b496bf180c21ede9efda694f2dc88af05ddd16
-X-Git-Newrev: 84333281cd923308781fd40887c94cd33386b12a
+X-Git-Oldrev: 829ecf7d794b454a9fa9557b2420d624e3d3bb14
+X-Git-Newrev: 825eec010c150d09e2b112bdbc7b36d19b23f031
 X-Patchwork-Hint: ignore
-Message-Id: <20210826220128.388DA8DC50@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/ogre: fix build on musl
+Message-Id: <20210826220130.1FBB98DC52@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/go: security bump to
+ version 1.16.7
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,104 +70,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=84333281cd923308781fd40887c94cd33386b12a
+commit: https://git.buildroot.net/buildroot/commit/?id=825eec010c150d09e2b112bdbc7b36d19b23f031
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fix the following build failure on musl raised since the addition of the
-package in commit eb91fa730c5d92202c38514345e86315e138944c:
+go1.16.7 (released 2021-08-05) includes a security fix to the
+net/http/httputil package, as well as bug fixes to the compiler, the
+linker, the runtime, the go command, and the net/http package.
 
-/tmp/instance-1/output-1/build/ogre-1.12.0/OgreMain/src/OgreStringConverter.cpp: In static member function 'static bool Ogre::StringConverter::parse(const String&, Ogre::int32&)':
-/tmp/instance-1/output-1/build/ogre-1.12.0/OgreMain/src/OgreStringConverter.cpp:253:22: error: 'strtol_l' was not declared in this scope; did you mean 'strtold_l'?
-  253 |         ret = (int32)strtol_l(val.c_str(), &end, 0, _numLocale);
-      |                      ^~~~~~~~
-      |                      strtold_l
+https://golang.org/doc/devel/release#go1.16
 
-Fixes:
- - http://autobuild.buildroot.org/results/491f89e45610a7752c0700ac02b80a92b7876ec3
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../ogre/0002-Checks-for-strtol_l-function.patch   | 71 ++++++++++++++++++++++
- 1 file changed, 71 insertions(+)
+ package/go/go.hash | 2 +-
+ package/go/go.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ogre/0002-Checks-for-strtol_l-function.patch b/package/ogre/0002-Checks-for-strtol_l-function.patch
-new file mode 100644
-index 0000000000..540530ee9e
---- /dev/null
-+++ b/package/ogre/0002-Checks-for-strtol_l-function.patch
-@@ -0,0 +1,71 @@
-+From 3f182b7e743662ec3fa63e1c7f213171d99485ba Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 10 Feb 2020 21:45:58 +0100
-+Subject: [PATCH] Checks for strtol_l function
-+
-+strtol_l (and strtoul_l, strtoll_l, strtoull_l) are not always available
-+(for example on musl) so check for strtol_l and reuse android fallback if
-+needed to avoid the following build failure:
-+
-+/home/buildroot/autobuild/instance-1/output-1/build/ogre-1.12.0/OgreMain/src/OgreStringConverter.cpp: In static member function 'static bool Ogre::StringConverter::parse(const String&, Ogre::int32&)':
-+/home/buildroot/autobuild/instance-1/output-1/build/ogre-1.12.0/OgreMain/src/OgreStringConverter.cpp:253:22: error: 'strtol_l' was not declared in this scope
-+         ret = (int32)strtol_l(val.c_str(), &end, 0, _numLocale);
-+                      ^~~~~~~~
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/107cffe41081ce46441dec8699d6ad0f152bc152
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/OGRECave/ogre/commit/3f182b7e743662ec3fa63e1c7f213171d99485ba]
-+---
-+ CMake/ConfigureBuild.cmake             | 7 +++++++
-+ CMake/Templates/OgreBuildSettings.h.in | 2 ++
-+ OgreMain/include/OgreString.h          | 3 +++
-+ 3 files changed, 12 insertions(+)
-+
-+diff --git a/CMake/ConfigureBuild.cmake b/CMake/ConfigureBuild.cmake
-+index ab049a525ae..73606c997c1 100644
-+--- a/CMake/ConfigureBuild.cmake
-++++ b/CMake/ConfigureBuild.cmake
-+@@ -133,6 +133,13 @@ if(SDL2_FOUND OR EMSCRIPTEN)
-+     set(OGRE_BITES_HAVE_SDL 1)
-+ endif()
-+ 
-++# determine if strtol_l is supported
-++include(CheckFunctionExists)
-++CHECK_FUNCTION_EXISTS(strtol_l HAVE_STRTOL_L)
-++if (NOT HAVE_STRTOL_L)
-++  set(OGRE_NO_LOCALE_STRCONVERT 1)
-++endif ()
-++
-+ # generate OgreBuildSettings.h
-+ configure_file(${OGRE_TEMPLATES_DIR}/OgreComponents.h.in ${PROJECT_BINARY_DIR}/include/OgreComponents.h @ONLY)
-+ configure_file(${OGRE_TEMPLATES_DIR}/OgreBuildSettings.h.in ${PROJECT_BINARY_DIR}/include/OgreBuildSettings.h @ONLY)
-+diff --git a/CMake/Templates/OgreBuildSettings.h.in b/CMake/Templates/OgreBuildSettings.h.in
-+index a491d09624c..95eb1b71d64 100644
-+--- a/CMake/Templates/OgreBuildSettings.h.in
-++++ b/CMake/Templates/OgreBuildSettings.h.in
-+@@ -107,4 +107,6 @@ WARNING: Disabling this will make the samples unusable.
-+ 
-+ #cmakedefine01 OGRE_NO_QUAD_BUFFER_STEREO
-+ 
-++#cmakedefine01 OGRE_NO_LOCALE_STRCONVERT
-++
-+ #endif
-+diff --git a/OgreMain/include/OgreString.h b/OgreMain/include/OgreString.h
-+index a81c220012e..1f544195dee 100644
-+--- a/OgreMain/include/OgreString.h
-++++ b/OgreMain/include/OgreString.h
-+@@ -46,8 +46,11 @@ THE SOFTWARE.
-+ #   define strnicmp strncasecmp
-+ #endif
-+ 
-++#if OGRE_PLATFORM == OGRE_PLATFORM_ANDROID || OGRE_PLATFORM == OGRE_PLATFORM_EMSCRIPTEN || \
-++	(OGRE_PLATFORM == OGRE_PLATFORM_LINUX && OGRE_NO_LOCALE_STRCONVERT == 1)
-+ #if OGRE_PLATFORM == OGRE_PLATFORM_ANDROID || OGRE_PLATFORM == OGRE_PLATFORM_EMSCRIPTEN
-+ #   define locale_t int
-++#endif
-+ #   define strtod_l(ptr, end, l) strtod(ptr, end)
-+ #   define strtoul_l(ptr, end, base, l) strtoul(ptr, end, base)
-+ #   define strtol_l(ptr, end, base, l) strtol(ptr, end, base)
+diff --git a/package/go/go.hash b/package/go/go.hash
+index cd7f2b3813..0db83167ee 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,3 +1,3 @@
+ # From https://golang.org/dl/
+-sha256  a3a5d4bc401b51db065e4f93b523347a4d343ae0c0b08a65c3423b05a138037d  go1.16.6.src.tar.gz
++sha256  1a9f2894d3d878729f7045072f30becebe243524cf2fce4e0a7b248b1e0654ac  go1.16.7.src.tar.gz
+ sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index 7d6355df92..82d9729e2b 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GO_VERSION = 1.16.6
++GO_VERSION = 1.16.7
+ GO_SITE = https://storage.googleapis.com/golang
+ GO_SOURCE = go$(GO_VERSION).src.tar.gz
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
