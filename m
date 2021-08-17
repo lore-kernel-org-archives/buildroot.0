@@ -2,57 +2,57 @@ Return-Path: <SRS0=2pYX=NR=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9BB1AC432BE
-	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:11:48 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 64D68C432BE
+	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:12:01 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 60B6960FD9
-	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:11:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 60B6960FD9
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
+	by mail.kernel.org (Postfix) with ESMTPS id D02C360FD9
+	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:12:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D02C360FD9
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 301FF40797;
-	Thu, 26 Aug 2021 22:11:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A610F402A4;
+	Thu, 26 Aug 2021 22:12:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7ghSjq6UK_sB; Thu, 26 Aug 2021 22:11:43 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id xU78r2ok5ZGz; Thu, 26 Aug 2021 22:11:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 826C3407A0;
-	Thu, 26 Aug 2021 22:11:42 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8763E1C1135
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3C4F3426C4;
+	Thu, 26 Aug 2021 22:11:55 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D63D31BF33E
  for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 22:02:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CCDAC82BD6
- for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 22:02:37 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 77F76614A9
+ for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 22:02:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LrGYZLX12eCf for <buildroot@lists.busybox.net>;
- Thu, 26 Aug 2021 22:02:33 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id soiefIWPGEeh for <buildroot@lists.busybox.net>;
+ Thu, 26 Aug 2021 22:02:34 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6162582C33
- for <buildroot@buildroot.org>; Thu, 26 Aug 2021 22:02:31 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id EF9AE614AE
+ for <buildroot@buildroot.org>; Thu, 26 Aug 2021 22:02:32 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id B680B8DC50; Thu, 26 Aug 2021 22:01:29 +0000 (UTC)
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ id 507CE8DC52; Thu, 26 Aug 2021 22:01:31 +0000 (UTC)
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sun, 15 Aug 2021 09:25:39 +0200
+Date: Tue, 17 Aug 2021 23:20:22 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 7b30697b316ea4e336abebeea34d5c6447688630
-X-Git-Newrev: 634dcbd50dd5cf4b25153689e61bcba45163c841
+X-Git-Oldrev: 8ac2e5e46fd38b2da8cc292587e91d7b3d4710bf
+X-Git-Newrev: 743f3a4c54ae96c75eb2bd55f9bf4d8a13d853e7
 X-Patchwork-Hint: ignore
-Message-Id: <20210826220129.B680B8DC50@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/sylpheed: fix
- CVE-2021-37746
+Message-Id: <20210826220131.507CE8DC52@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/postgresql: security
+ bump version to 13.4
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,77 +70,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=634dcbd50dd5cf4b25153689e61bcba45163c841
+commit: https://git.buildroot.net/buildroot/commit/?id=743f3a4c54ae96c75eb2bd55f9bf4d8a13d853e7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-textview_uri_security_check in textview.c in Claws Mail before 3.18.0,
-and Sylpheed through 3.7.0, does not have sufficient link checks before
-accepting a click.
+Release notes:
+https://www.postgresql.org/about/news/postgresql-134-128-1113-1018-9623-and-14-beta-3-released-2277/
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Fixes CVE-2021-3677:
+https://www.postgresql.org/support/security/CVE-2021-3677/
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- ...arden-link-checker-before-accepting-click.patch | 37 ++++++++++++++++++++++
- package/sylpheed/sylpheed.mk                       |  3 ++
- 2 files changed, 40 insertions(+)
+ package/postgresql/postgresql.hash | 4 ++--
+ package/postgresql/postgresql.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/sylpheed/0001-harden-link-checker-before-accepting-click.patch b/package/sylpheed/0001-harden-link-checker-before-accepting-click.patch
-new file mode 100644
-index 0000000000..fe3375bc91
---- /dev/null
-+++ b/package/sylpheed/0001-harden-link-checker-before-accepting-click.patch
-@@ -0,0 +1,37 @@
-+From ac286a71ed78429e16c612161251b9ea90ccd431 Mon Sep 17 00:00:00 2001
-+From: Paul <paul@claws-mail.org>
-+Date: Sun, 23 May 2021 12:16:40 +0100
-+Subject: [PATCH] harden link checker before accepting click
-+
-+[Retrieved from:
-+https://git.claws-mail.org/?p=claws.git;a=commit;h=ac286a71ed78429e16c612161251b9ea90ccd431]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ src/textview.c | 4 +++-
-+ 1 file changed, 3 insertions(+), 1 deletion(-)
-+
-+diff --git a/src/textview.c b/src/textview.c
-+index 62ad46eaf..3cdf5d911 100644
-+--- a/src/textview.c
-++++ b/src/textview.c
-+@@ -2885,7 +2885,7 @@ gboolean textview_uri_security_check(TextView *textview, ClickableText *uri)
-+ 	gboolean retval = TRUE;
-+ 
-+ 	if (is_uri_string(uri->uri) == FALSE)
-+-		return TRUE;
-++		return FALSE;
-+ 
-+ 	visible_str = textview_get_visible_uri(textview, uri);
-+ 	if (visible_str == NULL)
-+@@ -2922,6 +2922,8 @@ gboolean textview_uri_security_check(TextView *textview, ClickableText *uri)
-+ 		if (aval == G_ALERTALTERNATE)
-+ 			retval = TRUE;
-+ 	}
-++	if (strlen(uri->uri) > get_uri_len(uri->uri))
-++		retval = FALSE;
-+ 
-+ 	g_free(visible_str);
-+ 
-+-- 
-+2.25.1
-+
-diff --git a/package/sylpheed/sylpheed.mk b/package/sylpheed/sylpheed.mk
-index 2f8a7aeff9..a7c7adade3 100644
---- a/package/sylpheed/sylpheed.mk
-+++ b/package/sylpheed/sylpheed.mk
-@@ -14,6 +14,9 @@ SYLPHEED_CPE_ID_VENDOR = sylpheed_project
- SYLPHEED_CONF_OPTS = --disable-gtkspell --disable-gpgme
- SYLPHEED_DEPENDENCIES = host-pkgconf libgtk2
+diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
+index caa8a1f5e7..2dcc1823d6 100644
+--- a/package/postgresql/postgresql.hash
++++ b/package/postgresql/postgresql.hash
+@@ -1,5 +1,5 @@
+-# From https://ftp.postgresql.org/pub/source/v13.3/postgresql-13.3.tar.bz2.sha256
+-sha256  3cd9454fa8c7a6255b6743b767700925ead1b9ab0d7a0f9dcb1151010f8eb4a1  postgresql-13.3.tar.bz2
++# From https://ftp.postgresql.org/pub/source/v13.4/postgresql-13.4.tar.bz2.sha256
++sha256  ea93e10390245f1ce461a54eb5f99a48d8cabd3a08ce4d652ec2169a357bc0cd  postgresql-13.4.tar.bz2
  
-+# 0001-harden-link-checker-before-accepting-click.patch
-+SYLPHEED_IGNORE_CVES += CVE-2021-37746
-+
- # Remove the -I$(includedir) from the Makefiles
- # because it refers to the host /usr/include.
- define SYLPHEED_PRECONFIGURE
+ # License file, Locally calculated
+ sha256  31ccadc0a70e8e0e8a35c5833567b64388dfe34987d962e1911554e271294105  COPYRIGHT
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index 143bcd895a..3b6c6e21e7 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-POSTGRESQL_VERSION = 13.3
++POSTGRESQL_VERSION = 13.4
+ POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
+ POSTGRESQL_SITE = https://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
+ POSTGRESQL_LICENSE = PostgreSQL
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
