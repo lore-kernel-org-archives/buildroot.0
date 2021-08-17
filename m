@@ -2,57 +2,58 @@ Return-Path: <SRS0=2pYX=NR=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+X-Spam-Status: No, score=-12.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 92415C432BE
-	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:27:45 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BD4A6C432BE
+	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:27:57 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 438A660E93
-	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:27:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 438A660E93
+	by mail.kernel.org (Postfix) with ESMTPS id 837E160FD9
+	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:27:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 837E160FD9
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1C7574071D;
-	Thu, 26 Aug 2021 22:27:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5C83A614C9;
+	Thu, 26 Aug 2021 22:27:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8VP047UWQmGd; Thu, 26 Aug 2021 22:27:40 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id MnLrQhJi5gMl; Thu, 26 Aug 2021 22:27:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6504F40786;
-	Thu, 26 Aug 2021 22:27:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3A7C4614CC;
+	Thu, 26 Aug 2021 22:27:52 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 584F21BF33E
- for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 22:03:25 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A27861BF33E
+ for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 22:03:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 19A934071D
+ by smtp2.osuosl.org (Postfix) with ESMTP id 26779407A2
  for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 22:02:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yfqArLQFUbto for <buildroot@lists.busybox.net>;
+ with ESMTP id f8nOyXXI4Sks for <buildroot@lists.busybox.net>;
  Thu, 26 Aug 2021 22:02:45 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5517F407AF
+ by smtp2.osuosl.org (Postfix) with ESMTP id 70C41407B6
  for <buildroot@buildroot.org>; Thu, 26 Aug 2021 22:02:32 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id B653A8DC52; Thu, 26 Aug 2021 22:01:30 +0000 (UTC)
+ id C24538DC50; Thu, 26 Aug 2021 22:01:30 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
 Date: Tue, 17 Aug 2021 21:55:53 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 4cf2d745974c0fa5fc9ba6cb091a7d0c5981bd62
-X-Git-Newrev: 6a932714d31440203b707394e1927f05c49f40e1
+X-Git-Oldrev: 6a932714d31440203b707394e1927f05c49f40e1
+X-Git-Newrev: bdb0b251bca194ceeb7b8707df29594a2ad2daf5
 X-Patchwork-Hint: ignore
-Message-Id: <20210826220130.B653A8DC52@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-keyring: depend
- comment on BR2_PACKAGE_PYTHON3
+Message-Id: <20210826220130.C24538DC50@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-pyopenssl:
+ depend comment on BR2_PACKAGE_PYTHON3
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,25 +71,25 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6a932714d31440203b707394e1927f05c49f40e1
+commit: https://git.buildroot.net/buildroot/commit/?id=bdb0b251bca194ceeb7b8707df29594a2ad2daf5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The user shouldn't view the comment on the python2 menu.
+The user shouldn't see the comment on the python2 menu.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-keyring/Config.in | 1 +
+ package/python-pyopenssl/Config.in | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/python-keyring/Config.in b/package/python-keyring/Config.in
-index 18fad84007..f7bb1ae820 100644
---- a/package/python-keyring/Config.in
-+++ b/package/python-keyring/Config.in
-@@ -11,4 +11,5 @@ config BR2_PACKAGE_PYTHON_KEYRING
- 	  https://pypi.python.org/pypi/keyring
+diff --git a/package/python-pyopenssl/Config.in b/package/python-pyopenssl/Config.in
+index 95630f2461..99ea4e9408 100644
+--- a/package/python-pyopenssl/Config.in
++++ b/package/python-pyopenssl/Config.in
+@@ -10,4 +10,5 @@ config BR2_PACKAGE_PYTHON_PYOPENSSL
+ 	  https://github.com/pyca/pyopenssl
  
- comment "python-keyring needs a toolchain w/ C++"
+ comment "python-pyopenssl needs a toolchain w/ C++"
 +	depends on BR2_PACKAGE_PYTHON3
  	depends on !BR2_INSTALL_LIBSTDCPP
 _______________________________________________
