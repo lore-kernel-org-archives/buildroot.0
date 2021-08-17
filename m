@@ -2,57 +2,58 @@ Return-Path: <SRS0=2pYX=NR=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4CE51C432BE
-	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:14:03 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 74FEEC432BE
+	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:14:15 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 06A7C60231
-	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:14:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 06A7C60231
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
+	by mail.kernel.org (Postfix) with ESMTPS id 3AB5760231
+	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:14:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3AB5760231
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CC29A426AF;
-	Thu, 26 Aug 2021 22:14:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1103880BE9;
+	Thu, 26 Aug 2021 22:14:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id I0ZRaUKOzffN; Thu, 26 Aug 2021 22:13:58 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3i5xON5fW2uC; Thu, 26 Aug 2021 22:14:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A7E27426B1;
-	Thu, 26 Aug 2021 22:13:57 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8EB551BF33E
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8F92282F11;
+	Thu, 26 Aug 2021 22:14:09 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id AB21C1C1135
  for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 22:02:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 83275426AF
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1964582C35
  for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 22:02:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MpgFcakelKlJ for <buildroot@lists.busybox.net>;
- Thu, 26 Aug 2021 22:02:34 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id BzYNLs52hy_6 for <buildroot@lists.busybox.net>;
+ Thu, 26 Aug 2021 22:02:33 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8FAB8426AD
- for <buildroot@buildroot.org>; Thu, 26 Aug 2021 22:02:34 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8F20382CFD
+ for <buildroot@buildroot.org>; Thu, 26 Aug 2021 22:02:32 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id E44E58DC52; Thu, 26 Aug 2021 22:01:32 +0000 (UTC)
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ id E47178DC50; Thu, 26 Aug 2021 22:01:30 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 20 Aug 2021 23:27:15 +0200
+Date: Tue, 17 Aug 2021 21:55:53 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 5cfaf5e23ea63291b1fb0debfec9204a10e1451b
-X-Git-Newrev: 181a5e229b347c1996eeca7d7727ee66bc566f01
+X-Git-Oldrev: c86130313b28492807e32f00c6a01a99519f7c12
+X-Git-Newrev: bf716f3d51c20510ddbd66181d104a3ea3ac9325
 X-Patchwork-Hint: ignore
-Message-Id: <20210826220132.E44E58DC52@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libressl: always
- expose SSL_OP_NO_TLSv1_3
+Message-Id: <20210826220130.E47178DC50@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-treq: depend
+ comment on BR2_PACKAGE_PYTHON3
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,60 +71,27 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=181a5e229b347c1996eeca7d7727ee66bc566f01
+commit: https://git.buildroot.net/buildroot/commit/?id=bf716f3d51c20510ddbd66181d104a3ea3ac9325
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes the build of vsftpd 3.0.4
+The user shouldn't see the comment on the python2 menu.
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- .../0001-always-expose-SSL_OP_NO_TLSv1_3.patch     | 37 ++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
+ package/python-treq/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/libressl/0001-always-expose-SSL_OP_NO_TLSv1_3.patch b/package/libressl/0001-always-expose-SSL_OP_NO_TLSv1_3.patch
-new file mode 100644
-index 0000000000..f34ae85834
---- /dev/null
-+++ b/package/libressl/0001-always-expose-SSL_OP_NO_TLSv1_3.patch
-@@ -0,0 +1,37 @@
-+always expose SSL_OP_NO_TLSv1_3
-+
-+like in OpenSSL, see https://github.com/openssl/openssl/blob/master/include/openssl/ssl.h.in#L399
-+
-+like SSL_OP_NO_DTLSv1_2, see commit "Expose various DTLSv1.2 specific functions and defines"
-+
-+this change fixes the compilation of vsftpd 3.0.4 & 3.0.5, which fails with the following error:
-+```
-+ssl.c: In function 'ssl_init':
-+ssl.c:98:18: error: 'SSL_OP_NO_TLSv1_3' undeclared (first use in this function); did you mean 'SSL_OP_NO_TLSv1_1'?
-+```
-+
-+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-+Fetched from: https://github.com/libressl-portable/openbsd/pull/124
-+---
-+ include/openssl/ssl.h | 4 ----
-+ 1 file changed, 4 deletions(-)
-+
-+diff --git a/include/openssl/ssl.h b/include/openssl/ssl.h
-+index 46f24b2ea..4048a6e63 100644
-+--- a/include/openssl/ssl.h
-++++ b/include/openssl/ssl.h
-+@@ -516,11 +516,7 @@ typedef int (*tls_session_secret_cb_fn)(SSL *s, void *secret, int *secret_len,
-+ #define SSL_OP_NO_TLSv1					0x04000000L
-+ #define SSL_OP_NO_TLSv1_2				0x08000000L
-+ #define SSL_OP_NO_TLSv1_1				0x10000000L
-+-
-+-#if defined(LIBRESSL_HAS_TLS1_3) || defined(LIBRESSL_INTERNAL)
-+ #define SSL_OP_NO_TLSv1_3				0x20000000L
-+-#endif
-+-
-+ #define SSL_OP_NO_DTLSv1				0x40000000L
-+ #define SSL_OP_NO_DTLSv1_2				0x80000000L
-+ 
-+-- 
-+2.30.2
-+
+diff --git a/package/python-treq/Config.in b/package/python-treq/Config.in
+index 47719f92bf..02c26a53f7 100644
+--- a/package/python-treq/Config.in
++++ b/package/python-treq/Config.in
+@@ -18,4 +18,5 @@ config BR2_PACKAGE_PYTHON_TREQ
+ 	  https://github.com/twisted/treq
+ 
+ comment "python-treq needs a toolchain w/ C++"
++	depends on BR2_PACKAGE_PYTHON3
+ 	depends on !BR2_INSTALL_LIBSTDCPP
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
