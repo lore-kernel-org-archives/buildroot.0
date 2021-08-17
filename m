@@ -7,55 +7,55 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A4D8C4338F
-	for <buildroot@archiver.kernel.org>; Tue, 17 Aug 2021 08:40:04 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3EF40C4338F
+	for <buildroot@archiver.kernel.org>; Tue, 17 Aug 2021 08:40:16 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 0236D60EFE
-	for <buildroot@archiver.kernel.org>; Tue, 17 Aug 2021 08:40:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0236D60EFE
+	by mail.kernel.org (Postfix) with ESMTPS id 05EF760EFE
+	for <buildroot@archiver.kernel.org>; Tue, 17 Aug 2021 08:40:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 05EF760EFE
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CE22480C2B;
-	Tue, 17 Aug 2021 08:40:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D32B1401EF;
+	Tue, 17 Aug 2021 08:40:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id b9Ghgj3FKtno; Tue, 17 Aug 2021 08:39:59 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id n5gnUQrDeByw; Tue, 17 Aug 2021 08:40:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 79C9980E5A;
-	Tue, 17 Aug 2021 08:39:58 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6BDE21BF2AE
- for <buildroot@lists.busybox.net>; Tue, 17 Aug 2021 08:39:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 85B4640287;
+	Tue, 17 Aug 2021 08:40:10 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 08C961BF2AE
+ for <buildroot@lists.busybox.net>; Tue, 17 Aug 2021 08:39:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5B9D6607FC
- for <buildroot@lists.busybox.net>; Tue, 17 Aug 2021 08:39:46 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id EBCFF401F2
+ for <buildroot@lists.busybox.net>; Tue, 17 Aug 2021 08:39:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5j7avBzarFce for <buildroot@lists.busybox.net>;
- Tue, 17 Aug 2021 08:39:42 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PUW4pcXbnZe1 for <buildroot@lists.busybox.net>;
+ Tue, 17 Aug 2021 08:39:45 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
 Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
  [217.70.183.201])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C8744607F8
- for <buildroot@buildroot.org>; Tue, 17 Aug 2021 08:39:41 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8847440181
+ for <buildroot@buildroot.org>; Tue, 17 Aug 2021 08:39:45 +0000 (UTC)
 Received: (Authenticated sender: herve.codina@bootlin.com)
- by relay8-d.mail.gandi.net (Postfix) with ESMTPA id EF2B41BF20A;
- Tue, 17 Aug 2021 08:39:38 +0000 (UTC)
+ by relay8-d.mail.gandi.net (Postfix) with ESMTPA id D3AB91BF20E;
+ Tue, 17 Aug 2021 08:39:42 +0000 (UTC)
 From: Herve Codina <herve.codina@bootlin.com>
 To: buildroot@buildroot.org
-Date: Tue, 17 Aug 2021 10:39:15 +0200
-Message-Id: <20210817083930.3718711-2-herve.codina@bootlin.com>
+Date: Tue, 17 Aug 2021 10:39:16 +0200
+Message-Id: <20210817083930.3718711-3-herve.codina@bootlin.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210817083930.3718711-1-herve.codina@bootlin.com>
 References: <20210817083930.3718711-1-herve.codina@bootlin.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v3 01/16] package/pkg-python: fix
- PKG_PYTHON_FIXUP_SYSCONFIGDATA
+Subject: [Buildroot] [PATCH v3 02/16] package/pkg-python: invalidate
+ precompiled _sysconfigdata*.pyc
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,57 +78,54 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-Find used by PKG_PYTHON_FIXUP_SYSCONFIGDATA can fail if directories
-are not present. This failure is silently ignored because find is
-on the LHS of a pipe.
+For per-package directories, we fixup the _sysconfigdata*.py files, so
+that they get proper path pointing to the current package's direcotry
+structure.
 
-This commit fixes the find failure. HOST_DIR is used as the starting
-point and the search is filtered on the expected directories.
+However, the corresponding, pre-compiled blobs _sysconfigdata*.pyc were
+left around, and thus are inconsistent with their source. They might
+also be regenerated when a package would install a python module; this
+regeneration would trigger the soon-to-be-introduced overwrite
+detection.
 
-This commit also adds -print0 and the $(Q) verbosity flag as minor
-changes.
+This commit simply removes _sysconfigdata*.pyc files; they will anyway
+be regenerated by the PYTHON{,3}_CREATE_PYC_FILES target finalize hooks.
+This is an efficient way to guarantee the consistency between the source
+and precompiled versions, and to not trigger the overwrite detection.
 
 Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+[yann.morin.1998@free.frs: reword the commit log]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
+Changes from v1 to v2:
+ - Used separate shells for the two 'find' commands.
+ - Used '-deleted' to remove files
 
-New patch in this v3 series.
+Changes v2 to v3:
+ - Reworked the find command to avoid failure highlighted in 836528f03eb89fdc64432f7a7470145ddf553b8c
+   and reverted in b928074e2d83f5b873bf1ba381b212dfad9bf207.
+ - Used find syntax discussed in the previous review.
+   https://lore.kernel.org/buildroot/20210709084820.37830e5f@bootlin.com/
+ - Kept Yann's commit log.
 
-The find failure was highlighted in 836528f03eb89fdc64432f7a7470145ddf553b8c
-and reverted in b928074e2d83f5b873bf1ba381b212dfad9bf207.
-
- package/pkg-python.mk | 17 ++++++++++++++---
- 1 file changed, 14 insertions(+), 3 deletions(-)
+ package/pkg-python.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/package/pkg-python.mk b/package/pkg-python.mk
-index 59a48e5a87..cd48402e02 100644
+index cd48402e02..0f65bd0f75 100644
 --- a/package/pkg-python.mk
 +++ b/package/pkg-python.mk
-@@ -92,11 +92,22 @@ HOST_PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS = \
- 	--root=/ \
- 	--single-version-externally-managed
- 
-+# Make sure python _sysconfigdata*.py files only reference the current
-+# per-package directory.
-+#
-+# Can't use $(foreach d, $(HOST_DIR)/lib/python* $(STAGING_DIR)/usr/lib/python*, ...)
-+# because those directories may be created in the same recipe this macro will
-+# be expanded in.
-+# Additionally, either or both may be missing, which would make find whine and
-+# fail.
-+# So we just use HOST_DIR as a starting point, and filter on the two directories
-+# of interest.
- ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),y)
+@@ -106,7 +106,9 @@ ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),y)
  define PKG_PYTHON_FIXUP_SYSCONFIGDATA
--	find $(HOST_DIR)/lib/python* $(STAGING_DIR)/usr/lib/python* \
--		-name "_sysconfigdata*.py" | xargs --no-run-if-empty \
--		$(SED) "s:$(PER_PACKAGE_DIR)/[^/]\+/:$(PER_PACKAGE_DIR)/$($(PKG)_NAME)/:g"
-+	$(Q)find $(HOST_DIR) \
-+		\( -path '$(HOST_DIR)/lib/python*' -o -path '$(STAGING_DIR)/usr/lib/python*' \) \
-+		-name "_sysconfigdata*.py" -print0 | xargs -0 --no-run-if-empty \
-+		$(SED) 's:$(PER_PACKAGE_DIR)/[^/]\+/:$(PER_PACKAGE_DIR)/$($(PKG)_NAME)/:g'
+ 	$(Q)find $(HOST_DIR) \
+ 		\( -path '$(HOST_DIR)/lib/python*' -o -path '$(STAGING_DIR)/usr/lib/python*' \) \
+-		-name "_sysconfigdata*.py" -print0 | xargs -0 --no-run-if-empty \
++		\(    \( -name "_sysconfigdata*.pyc" -delete \) \
++		   -o \( -name "_sysconfigdata*.py" -print0 \) \) \
++		| xargs -0 --no-run-if-empty \
+ 		$(SED) 's:$(PER_PACKAGE_DIR)/[^/]\+/:$(PER_PACKAGE_DIR)/$($(PKG)_NAME)/:g'
  endef
  endif
- 
 -- 
 2.31.1
 
