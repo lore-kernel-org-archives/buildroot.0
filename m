@@ -2,93 +2,93 @@ Return-Path: <SRS0=Hlwc=NJ=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2AAA3C4338F
-	for <buildroot@archiver.kernel.org>; Wed, 18 Aug 2021 16:11:41 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 509C4C4338F
+	for <buildroot@archiver.kernel.org>; Wed, 18 Aug 2021 16:56:11 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id BAC89610A6
-	for <buildroot@archiver.kernel.org>; Wed, 18 Aug 2021 16:11:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org BAC89610A6
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmx.net
+	by mail.kernel.org (Postfix) with ESMTPS id A8D6B606A5
+	for <buildroot@archiver.kernel.org>; Wed, 18 Aug 2021 16:56:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A8D6B606A5
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6E47B404BA;
-	Wed, 18 Aug 2021 16:11:40 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 664E140276;
+	Wed, 18 Aug 2021 16:56:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JYGebJlC6MBv; Wed, 18 Aug 2021 16:11:36 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Xbw0c6TOkDhZ; Wed, 18 Aug 2021 16:56:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7F749405F7;
-	Wed, 18 Aug 2021 16:11:35 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B23611BF836
- for <buildroot@lists.busybox.net>; Wed, 18 Aug 2021 16:11:33 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C6F6740285;
+	Wed, 18 Aug 2021 16:56:05 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 2DC371BF836
+ for <buildroot@lists.busybox.net>; Wed, 18 Aug 2021 16:56:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A26C280D88
- for <buildroot@lists.busybox.net>; Wed, 18 Aug 2021 16:11:33 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1C62D40284
+ for <buildroot@lists.busybox.net>; Wed, 18 Aug 2021 16:56:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=gmx.net
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id th3R2SOp7TY3 for <buildroot@lists.busybox.net>;
- Wed, 18 Aug 2021 16:11:32 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 40F2580D78
- for <buildroot@busybox.net>; Wed, 18 Aug 2021 16:11:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
- s=badeba3b8450; t=1629303087;
- bh=7QPInlwyRbEzN1InX29RxYa/jbkhsGLNMaoNR4GoBLs=;
- h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
- b=hGv0AqD5lgvOhzJKIYeZ7EBQHfdTMxtKDJ17bn6T8Z2W3fYugEVbQfA/27reyYlXb
- yXcgFwmbNAABOk7dV465F++iF0m+TuSMaULrkZIWUN3x6D/v3EX5Lchh0npizQlvUa
- /Uzk6zZWpETZlM+GD6Ccky8cMmsJYVs5BdLI5i3U=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from localhost ([62.216.209.105]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1M7sDq-1mCWY12MaI-0054dM; Wed, 18
- Aug 2021 18:11:27 +0200
-Date: Wed, 18 Aug 2021 18:11:26 +0200
-From: Peter Seiderer <ps.report@gmx.net>
-To: Scott Bartolett <SBartolett@thorlabs.com>
-Message-ID: <20210818181126.38fe82d9@gmx.net>
-In-Reply-To: <SJ0PR08MB6542F7DD403856DB9A0CDA0CB8FF9@SJ0PR08MB6542.namprd08.prod.outlook.com>
-References: <SJ0PR08MB6542DE17A6C96CC4B1B9A6A5B8FE9@SJ0PR08MB6542.namprd08.prod.outlook.com>
- <20210817201014.235cf403@gmx.net>
- <SJ0PR08MB6542F7DD403856DB9A0CDA0CB8FF9@SJ0PR08MB6542.namprd08.prod.outlook.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-suse-linux-gnu)
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id EiU8HkkzdYsX for <buildroot@lists.busybox.net>;
+ Wed, 18 Aug 2021 16:55:59 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com
+ [IPv6:2a00:1450:4864:20::631])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5E19440252
+ for <buildroot@buildroot.org>; Wed, 18 Aug 2021 16:55:59 +0000 (UTC)
+Received: by mail-ej1-x631.google.com with SMTP id x11so6523992ejv.0
+ for <buildroot@buildroot.org>; Wed, 18 Aug 2021 09:55:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
+ h=sender:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=W4X6fU24iSbZ4BKTHTiyQR+z18cmZX7gZG8JKY4rEys=;
+ b=tKKMReRqk/vH/xHxkPtAC7nRPoyU96p2qc5x8dI+i1fyTa3x9Ru0ydAUJnNynHGBvj
+ PMxlYEhBFHHIKUDmEtBWZW9c+DJR27m0iBujBR38fS1QQcNwTXi7Rp1yLdHvBBABd/7O
+ akkWR0OV1poxabNU2VuWuZDCq1RdFLOtIMQm1boqOzlO32ygEUE9yvJKBjGVr1hj5pQl
+ F9ULJAHvzblZEPHp4aIgh1oCjf8VOCn/sn7j2s8aSN+T25dPWQm8WTS9IUVnQrls2sTC
+ TzcIQKa1mVI98nZLF6qu+chSvGpxFni7Mga4NjB5DwI7RNa+xYV3l+5KV26UzJG9ubCz
+ ea2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+ :mime-version:content-transfer-encoding;
+ bh=W4X6fU24iSbZ4BKTHTiyQR+z18cmZX7gZG8JKY4rEys=;
+ b=iCsvJU8B9pi/DEL4vGA/WJv9u7ZdyTlxcXgJwfSoEwoLLRB/iIkNWuhnMmbS3kgF47
+ QZW1EmdLO8EsCsBZs3n1fJgCt9aeZjCPDAiqPxxcA+3j3bNh1q4nqzLprnrhSHaEDoLd
+ Cs118KeWM5VA+WLUN1zdXrVb9PvDQbGCITGeHi195xi+TJ1zS1dO3kQttp+iCIETs2S5
+ +1mUZ7SoLydorZRu+Vbu+fpOqA/XyGvunGJYdsRXUcnq8j1SbRkmNeoG7OJ4GYJ/nYP+
+ WuyFijGPSjhAKDgdJlQfcdVY+WVpOANVSgxLu1HLEHXybBxsndl0enYIApK7rrfBpLio
+ KrWQ==
+X-Gm-Message-State: AOAM532V61hPkOj9saGlt3tnOjWibR4Bbrnrf6LzVqTj6vIUNqi4Ji7N
+ GdfpP6ljMK5uOxixlVdo0ZVw59bCsqo=
+X-Google-Smtp-Source: ABdhPJwJreXgJdvW7CzP5ZCKTsXJaY9D1pg8oOW8v5k03zwXvaLAnRoUOyXYhWikVOaHMXDQbklguQ==
+X-Received: by 2002:a17:906:2305:: with SMTP id
+ l5mr10915163eja.72.1629305757512; 
+ Wed, 18 Aug 2021 09:55:57 -0700 (PDT)
+Received: from dell.be.48ers.dk (d51a5bc31.access.telenet.be. [81.165.188.49])
+ by smtp.gmail.com with ESMTPSA id
+ g23sm139207ejm.26.2021.08.18.09.55.56
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 18 Aug 2021 09:55:56 -0700 (PDT)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
+ (envelope-from <peko@dell.be.48ers.dk>)
+ id 1mGOr5-0001s6-TY; Wed, 18 Aug 2021 18:55:55 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Wed, 18 Aug 2021 18:55:54 +0200
+Message-Id: <20210818165555.7148-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:07oIUGyMhBheTUjAHy0/hONliubS2d9FIz9X6AzS5I0apriYF5w
- lU70Y6IwsnBXVK+W4M0YlgqChTmwhwaiIVdIQ8CsebDh1hRALYaxESpId8SDOmHRQv7Zg8g
- MXGbsdMiJs87/OAy177H2MurDaFdOu8O5SrjuL2hH0KSjhA5WGJKZ2bZxLgy2/FZ7VIX10y
- cIw7tJvJSrlnrIrfSCcbw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Hk/j2Ug2xvQ=:Su48MUyA0PrGbrkN56Xl1a
- uKGmpciFVD9oZbMIeDSaIg+iD/Q4TSb/wXu3Trk+CAw9cQeCIRtSgVsNLDsbZBqbhWx3emglR
- IpgFAgCQUZtFdwjEpH/MSpcGsk6WqR5XN5d2jc1XMzaXtBEcnQ4F+nLwFUFCY2j/NkcFQd95v
- UYhS7p1eYnSgJkDMr1pX+dfzIwzmxFiGZNR6mPY4YwrHsPVSmMfMpscKJzUIS6Iqv9SeRXQKi
- Ul/UhqjKNXdSCZy7/LGDdFvsOog3WeAEne4FsoWtUV38t9+hf10FxQXXu3Xe6xwv5QM3M1W8V
- YtW+YcvnOaTmMhxfYa7/2o65RDiHjvP+aebkf1MGFQGFnZZbcDLJaJn5P7WQpEmFbDFD5tFZJ
- 4PpR6si9XZ3vfhinsyye2iRRuDir1rXO6MUj0JTHcJfueUwH94r3o/PndTdcIzsvQoX6utPpv
- IAIwG6rlkFlCHcwhKoRdHYgkZbaX1VaaLY1H1jUpTUNR1cjCzz2uVwFIeCgAQiFGq2wTw4tWk
- AiOfvKzPoZ8U8wiS6ccmObjCYgGZBRf0rxjC1q4B5OWp+fJwdudSNCLKDPcLjIfMdXYRyz9H1
- iHuObPIkp0efaBxzK5hmmG0efPdLVfbWATbl0Z2gdJq11w4p8xLXaHEvOYX0IS/jdncT7KTkm
- N7tpm95yqL07L08FosmV6kpGAYiqg1hZIB8BZ56iBVUQ9qE3H42Xu59yWO0ZmcRKijIKL35TH
- loWQyy9SQp3PzYydZ33U128zavaWuR4B8fQLYuQUtLzYKcXyRRQqQVka6PqWbGRF5NvdGZNtN
- 9EmUFfyYD2FUYS6a4O879XjIPDZ8crOBdpEaljez/FDLDWYzC1h+S0QAHFNB+bTqO8N7ahWBB
- 8lTkyi+Lo8wBtVK6yjL/BB45nMQk5rv3keNXIlmuvoNwBlx42lHKw5XG2gmDbsRRmdhS7PC5F
- yLEuWfKABEwOKWg83oQVVRVVzKeBG8nhYQ2d23Q1dhl1RBI8E+UbxHLJC+rN+W6N/otTO5MBe
- 2d920wyhbC+D6HHIjopb24l2R4ihib6C+6FE88lgVtXGAUXzgy1NAPc0JYzaUOzQ0uHOa9913
- JjXagNWxXA+tMccVPr5xizu9VL9UAQRWFBiiBD2ijE9iJonyec5GHJwaEDiY34xeu7h8lChtv
- aK/UdemiLSEnvZxJSH+DtErPgGCXyBFgrSOwzAmNoyxNAo3g==
-Subject: Re: [Buildroot] EGLFS Could Not Find DRM Device!
+Subject: [Buildroot] [PATCH] package/haproxy: security bump to version 2.4.3
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,78 +100,68 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: "buildroot@busybox.net" <buildroot@busybox.net>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-Hello Scott,
+Fixes the following security issues:
 
-On Wed, 18 Aug 2021 13:08:28 +0000, Scott Bartolett <SBartolett@thorlabs.com> wrote:
+- CVE-2021-39240: An issue was discovered in HAProxy 2.2 before 2.2.16, 2.3
+  before 2.3.13, and 2.4 before 2.4.3.  It does not ensure that the scheme
+  and path portions of a URI have the expected characters.  For example, the
+  authority field (as observed on a target HTTP/2 server) might differ from
+  what the routing rules were intended to achieve.
 
-> Hi Peter,
->
-> On a raspbian install I find the file vc4-kms-v3d.dtbo.  However on the buildroot install, I do not find any files that match vc4-kms-v3d*.   I've searched for and enabled additional items in the buildroot config that might be related, but nothing has helped yet.
+- CVE-2021-39241: An issue was discovered in HAProxy 2.0 before 2.0.24, 2.2
+  before 2.2.16, 2.3 before 2.3.13, and 2.4 before 2.4.3.  An HTTP method
+  name may contain a space followed by the name of a protected resource.  It
+  is possible that a server would interpret this as a request for that
+  protected resource, such as in the "GET /admin?  HTTP/1.1 /static/images
+  HTTP/1.1" example.
 
-The buildroot config option is name BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS,
-do not forget to do a full re-build of the rpi-firmware package after enabling...
+- CVE-2021-39242: An issue was discovered in HAProxy 2.2 before 2.2.16, 2.3
+  before 2.3.13, and 2.4 before 2.4.3.  It can lead to a situation with an
+  attacker-controlled HTTP Host header, because a mismatch between Host and
+  authority is mishandled.
 
-For inclusion of the overlay files to the target/SD-card boot/first partition
-check/add the 'rpi-firmware/overlays' entry in the genimage file (see e.g.
-board/raspberrypi3/genimage-raspberrypi3.cfg for an example)...
+For more details, see the advisory:
+https://www.mail-archive.com/haproxy@formilux.org/msg41041.html
 
-Regards,
-Peter
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/haproxy/haproxy.hash | 4 ++--
+ package/haproxy/haproxy.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
->
-> Thanks,
-> Scott
->
->
-> -----Original Message-----
-> From: Peter Seiderer [mailto:ps.report@gmx.net]
-> Sent: Tuesday, August 17, 2021 2:10 PM
-> To: Scott Bartolett <SBartolett@thorlabs.com>
-> Cc: buildroot@busybox.net
-> Subject: Re: [Buildroot] EGLFS Could Not Find DRM Device!
->
-> Hello Scott,
->
-> On Tue, 17 Aug 2021 17:47:49 +0000, Scott Bartolett <SBartolett@thorlabs.com> wrote:
->
-> > Hi all,
-> >
-> > I'm trying to run a Qt5 application on a Raspberry Pi running buildroot.  The application runs fine when I use the platform plugin linuxfb.  But when I try to use eglfs I'm getting the error that the DRM Device is not found.  I see this error message mentioned often when doing a search, but so far have not found any solution that works for me.  I've selected:
-> > BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_V3D
-> > BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4
-> > BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_KMSRO
-> > BR2_PACKAGE_MESA3D_OPENGL_ES
-> > BR2_PACKAGE_QT5BASE_OPENGL_ES2
-> > BR2_PACKAGE_QT5BASE_EGLFS
-> >
-> > Does anyone have any suggestions?
->
-> Edit the config.txt file on the first/boot partition on the SD card and add (for RPi4):
->
-> 	dtoverlay=vc4-kms-v3d-pi4
->
-> or (for Rpi3,...):
->
-> 	dtoverlay=vc4-kms-v3d
->
-> See [1] for details...
->
-> Regards,
-> Peter
->
-> [1] https://nam02.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgithub.com%2Fraspberrypi%2Ffirmware%2Fblob%2Fmaster%2Fboot%2Foverlays%2FREADME&amp;data=04%7C01%7CSBartolett%40thorlabs.com%7C919da371d81c4cb2c6b308d961aa4771%7C411510044224448aa787d4279c1f087d%7C0%7C0%7C637648206254285944%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C1000&amp;sdata=QZiffVLIgJEx40pM6%2BtT7y9teGDYDYaqrl8T%2Fz861rM%3D&amp;reserved=0
->
-> >
-> > Thanks,
-> > Scott
-> >
->
+diff --git a/package/haproxy/haproxy.hash b/package/haproxy/haproxy.hash
+index 849d362dc0..9edf5def08 100644
+--- a/package/haproxy/haproxy.hash
++++ b/package/haproxy/haproxy.hash
+@@ -1,5 +1,5 @@
+-# From: http://www.haproxy.org/download/2.4/src/haproxy-2.4.2.tar.gz.sha256
+-sha256  edf9788f7f3411498e3d7b21777036b4dc14183e95c8e2ce7577baa0ea4ea2aa  haproxy-2.4.2.tar.gz
++# From: http://www.haproxy.org/download/2.4/src/haproxy-2.4.3.tar.gz.sha256
++sha256  ce479380be5464faa881dcd829618931b60130ffeb01c88bc2bf95e230046405  haproxy-2.4.3.tar.gz
+ # Locally computed:
+ sha256  0717ca51fceaa25ac9e5ccc62e0c727dcf27796057201fb5fded56a25ff6ca28  LICENSE
+ sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  doc/lgpl.txt
+diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
+index 4c02b6d334..85d4fa7e8d 100644
+--- a/package/haproxy/haproxy.mk
++++ b/package/haproxy/haproxy.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ HAPROXY_VERSION_MAJOR = 2.4
+-HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).2
++HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).3
+ HAPROXY_SITE = http://www.haproxy.org/download/$(HAPROXY_VERSION_MAJOR)/src
+ HAPROXY_LICENSE = GPL-2.0+ and LGPL-2.1+ with exceptions
+ HAPROXY_LICENSE_FILES = LICENSE doc/lgpl.txt doc/gpl.txt
+-- 
+2.20.1
 
 _______________________________________________
 buildroot mailing list
