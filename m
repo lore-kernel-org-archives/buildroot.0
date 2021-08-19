@@ -7,59 +7,53 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 20928C4338F
-	for <buildroot@archiver.kernel.org>; Thu, 19 Aug 2021 14:33:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F0437C4338F
+	for <buildroot@archiver.kernel.org>; Thu, 19 Aug 2021 15:37:42 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id AE310610FA
-	for <buildroot@archiver.kernel.org>; Thu, 19 Aug 2021 14:33:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org AE310610FA
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=busybox.net
+	by mail.kernel.org (Postfix) with ESMTPS id 3D88A6101A
+	for <buildroot@archiver.kernel.org>; Thu, 19 Aug 2021 15:37:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3D88A6101A
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=tkos.co.il
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6110B6139A;
-	Thu, 19 Aug 2021 14:33:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EAC97613AD;
+	Thu, 19 Aug 2021 15:37:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BrYqNayOyghg; Thu, 19 Aug 2021 14:33:15 +0000 (UTC)
+	with ESMTP id EReyGWmCwwCk; Thu, 19 Aug 2021 15:37:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C5420613A0;
-	Thu, 19 Aug 2021 14:33:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4886A613B5;
+	Thu, 19 Aug 2021 15:37:37 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2AFF01BF42D
- for <buildroot@lists.busybox.net>; Thu, 19 Aug 2021 14:33:13 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8A4DA1BF4E4
+ for <buildroot@lists.busybox.net>; Thu, 19 Aug 2021 15:37:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1298480F5E
- for <buildroot@lists.busybox.net>; Thu, 19 Aug 2021 14:33:13 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7586B80F4D
+ for <buildroot@lists.busybox.net>; Thu, 19 Aug 2021 15:37:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jZqrJlq8Q0pL for <buildroot@lists.busybox.net>;
- Thu, 19 Aug 2021 14:33:08 +0000 (UTC)
-X-Greylist: delayed 00:07:08 by SQLgrey-1.8.0
-Received: from ch3vs04.rockwellcollins.com (ch3vs04.rockwellcollins.com
- [205.175.226.52])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 78FD181069
- for <buildroot@buildroot.org>; Thu, 19 Aug 2021 14:33:08 +0000 (UTC)
-IronPort-SDR: FYs87xgDpIu5tst4ZFlzUYdfqndB5YnI7BLRy2K+BsNw7BGGRCB5uV9JW/cNWFO8exS8ayUWG4
- zCEPFFXKRJJqB/CUYtPtleyXG7JLNJg4Uo8k9CeGIdyfgDfvK8UAh031pws5eM7O2kjGBYysti
- cobO0bcC9E2rXPk4NOHdWMKGEfxUsebRHlewEU1UKmvPdft2YHfw+ezcppHg6vV7AK8pSERVjd
- JJumeDoCz9Lfawl6FTcD/LBvzpKiaqo7npZGEwA8m57MTuI194Fvfahj8YxJMuCqhIB3dS8/Lc
- GDU=
-Received: from ofwch3n02.rockwellcollins.com (HELO
- crulimr02.rockwellcollins.com) ([205.175.226.14])
- by ch3vs04.rockwellcollins.com with ESMTP; 19 Aug 2021 09:26:00 -0500
-X-Received: from biscuits.rockwellcollins.com (biscuits.rockwellcollins.lab
- [10.148.119.137])
- by crulimr02.rockwellcollins.com (Postfix) with ESMTP id 9BC086029B;
- Thu, 19 Aug 2021 09:25:59 -0500 (CDT)
-To: buildroot@buildroot.org
-Date: Thu, 19 Aug 2021 09:25:58 -0500
-Message-Id: <20210819142558.10417-1-matthew.weber@collins.com>
-X-Mailer: git-send-email 2.17.1
-Subject: [Buildroot] [PATCH] package/eigen: override Fortran path
+ with ESMTP id CkATddi5-ZnM for <buildroot@lists.busybox.net>;
+ Thu, 19 Aug 2021 15:37:30 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from mx.tkos.co.il (guitar.tcltek.co.il [192.115.133.116])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5ACDD80F49
+ for <buildroot@busybox.net>; Thu, 19 Aug 2021 15:37:30 +0000 (UTC)
+Received: from tarshish.tkos.co.il (unknown [10.0.8.2])
+ (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+ (No client certificate requested)
+ by mx.tkos.co.il (Postfix) with ESMTPS id DB21444034A;
+ Thu, 19 Aug 2021 18:37:23 +0300 (IDT)
+From: Baruch Siach <baruch@tkos.co.il>
+To: buildroot@busybox.net
+Date: Thu, 19 Aug 2021 18:37:13 +0300
+Message-Id: <d02163811a2366e3353bbf83e03e44436fd85eaf.1629387433.git.baruch@tkos.co.il>
+X-Mailer: git-send-email 2.32.0
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH next] package/usbutils: bump to version 014
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,47 +65,58 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-From: Matthew Weber via buildroot <buildroot@busybox.net>
-Reply-To: Matthew Weber <matthew.weber@collins.com>
-Cc: Matthew Weber <matthew.weber@collins.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-The language detection is falling back to the host system
-Fortran compiler. An example of this is in RHEL7.9
-(gcc4.8.5 20150623 (Red Hat 4.8.5-44)).
+Drop autoreconf; tarball now ships the configure script.
 
-This patch bypasses detection and points to the location
-where the compiler would be installed (if present). In the
-cases where it doesn't exist, the detection falls through
-and leaves Fortran disabled.
+Rename license files and update hashes. Added SPDX markers. No license
+change.
 
-Fixes:
-http://autobuild.buildroot.net/results/8354da225d1e5e337aa7ea62a7e6524fb5f1135f/
-
-Signed-off-by: Matthew Weber <matthew.weber@collins.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/eigen/eigen.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/usbutils/usbutils.hash | 6 +++---
+ package/usbutils/usbutils.mk   | 6 ++----
+ 2 files changed, 5 insertions(+), 7 deletions(-)
 
-diff --git a/package/eigen/eigen.mk b/package/eigen/eigen.mk
-index c9998da357..5c726c9d71 100644
---- a/package/eigen/eigen.mk
-+++ b/package/eigen/eigen.mk
-@@ -15,6 +15,7 @@ EIGEN_SUPPORTS_IN_SOURCE_BUILD = NO
+diff --git a/package/usbutils/usbutils.hash b/package/usbutils/usbutils.hash
+index 96426aeea21e..f5d55bb4a0ac 100644
+--- a/package/usbutils/usbutils.hash
++++ b/package/usbutils/usbutils.hash
+@@ -1,5 +1,5 @@
+ # From https://www.kernel.org/pub/linux/utils/usb/usbutils/sha256sums.asc
+-sha256  9e23494fcc78b7a80ee29a07dd179c95ae2f71509c35728dbbabc2d1cca41338  usbutils-013.tar.xz
++sha256  3a079cfad60560227b67192482d7813bf96326fcbb66c04254839715f276fc69  usbutils-014.tar.xz
+ # Locally calculated
+-sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSES/GPL-2.0.txt
+-sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  LICENSES/GPL-3.0.txt
++sha256  91412672119c72352b76c1d48fa1a8b7cdc7f70be7929e468c8805db468e23e4  LICENSES/GPL-2.0-only.txt
++sha256  4631da83311d27f99078d0d102e31bd34a4fcbcc2dae2aa40f1454a5b48125dc  LICENSES/GPL-3.0-only.txt
+diff --git a/package/usbutils/usbutils.mk b/package/usbutils/usbutils.mk
+index ef5fd1201393..50b1a5a0ccb7 100644
+--- a/package/usbutils/usbutils.mk
++++ b/package/usbutils/usbutils.mk
+@@ -4,14 +4,12 @@
+ #
+ ################################################################################
  
- # Default Eigen CMake installs .pc file in /usr/share/pkgconfig
- # change it to /usr/lib/pkgconfig, to be consistent with other packages.
--EIGEN_CONF_OPTS = -DPKGCONFIG_INSTALL_DIR=/usr/lib/pkgconfig
-+EIGEN_CONF_OPTS = -DPKGCONFIG_INSTALL_DIR=/usr/lib/pkgconfig \
-+	-DCMAKE_Fortran_COMPILER=${TARGET_FC}
+-USBUTILS_VERSION = 013
++USBUTILS_VERSION = 014
+ USBUTILS_SOURCE = usbutils-$(USBUTILS_VERSION).tar.xz
+ USBUTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/usb/usbutils
+ USBUTILS_DEPENDENCIES = host-pkgconf libusb udev
+ USBUTILS_LICENSE = GPL-2.0+ (utils) GPL-2.0 or GPL-3.0 (lsusb.py)
+-USBUTILS_LICENSE_FILES = LICENSES/GPL-2.0.txt LICENSES/GPL-3.0.txt
+-# Missing configure script
+-USBUTILS_AUTORECONF = YES
++USBUTILS_LICENSE_FILES = LICENSES/GPL-2.0-only.txt LICENSES/GPL-3.0-only.txt
  
- $(eval $(cmake-package))
+ # Nice lsusb.py script only if there's python 3.x
+ ifeq ($(BR2_PACKAGE_PYTHON3),)
 -- 
-2.17.1
+2.32.0
 
 _______________________________________________
 buildroot mailing list
