@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 80DCFC432BE
-	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:31:16 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7890CC432BE
+	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:31:29 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 4DF1760524
-	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:31:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4DF1760524
+	by mail.kernel.org (Postfix) with ESMTPS id 3BB5560F4C
+	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:31:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3BB5560F4C
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0DA9040797;
-	Thu, 26 Aug 2021 22:31:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0E35D614BE;
+	Thu, 26 Aug 2021 22:31:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jgwvYDOh9J-Z; Thu, 26 Aug 2021 22:31:11 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id NP_BjJvexya3; Thu, 26 Aug 2021 22:31:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CBD9B4079E;
-	Thu, 26 Aug 2021 22:31:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 77E66614C1;
+	Thu, 26 Aug 2021 22:31:23 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1005A1BF33E
- for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 22:03:42 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 113D91BF33E
+ for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 22:03:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 00EA4407B2
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0ED6A407AE
  for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 22:02:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nrA29jhb1OEt for <buildroot@lists.busybox.net>;
+ with ESMTP id QXkUe8Rm4p9D for <buildroot@lists.busybox.net>;
  Thu, 26 Aug 2021 22:02:49 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 83958407BB
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9A211407BE
  for <buildroot@buildroot.org>; Thu, 26 Aug 2021 22:02:33 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id E59BA8DC71; Thu, 26 Aug 2021 22:01:31 +0000 (UTC)
+ id 086138DC50; Thu, 26 Aug 2021 22:01:32 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Thu, 19 Aug 2021 22:49:30 +0200
+Date: Thu, 19 Aug 2021 22:51:46 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: d19077677fc71fc8c8cd73945606f773d907a99a
-X-Git-Newrev: a380e058338b5fc006cb76544a4b080e52cc0f4b
+X-Git-Oldrev: da4d8fc407b57736e2746f236df43baa102b85a7
+X-Git-Newrev: 2ee1063136edd030f1c4a8ca88d0a80d98ce8719
 X-Patchwork-Hint: ignore
-Message-Id: <20210826220131.E59BA8DC71@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/haproxy: security bump
- to version 2.4.3
+Message-Id: <20210826220132.086138DC50@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/gdb: bump version 10.x
+ to 10.2
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,64 +70,65 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a380e058338b5fc006cb76544a4b080e52cc0f4b
+commit: https://git.buildroot.net/buildroot/commit/?id=2ee1063136edd030f1c4a8ca88d0a80d98ce8719
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes the following security issues:
-
-- CVE-2021-39240: An issue was discovered in HAProxy 2.2 before 2.2.16, 2.3
-  before 2.3.13, and 2.4 before 2.4.3.  It does not ensure that the scheme
-  and path portions of a URI have the expected characters.  For example, the
-  authority field (as observed on a target HTTP/2 server) might differ from
-  what the routing rules were intended to achieve.
-
-- CVE-2021-39241: An issue was discovered in HAProxy 2.0 before 2.0.24, 2.2
-  before 2.2.16, 2.3 before 2.3.13, and 2.4 before 2.4.3.  An HTTP method
-  name may contain a space followed by the name of a protected resource.  It
-  is possible that a server would interpret this as a request for that
-  protected resource, such as in the "GET /admin?  HTTP/1.1 /static/images
-  HTTP/1.1" example.
-
-- CVE-2021-39242: An issue was discovered in HAProxy 2.2 before 2.2.16, 2.3
-  before 2.3.13, and 2.4 before 2.4.3.  It can lead to a situation with an
-  attacker-controlled HTTP Host header, because a mismatch between Host and
-  authority is mishandled.
-
-For more details, see the advisory:
-https://www.mail-archive.com/haproxy@formilux.org/msg41041.html
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Michael Fischer <mf@go-sys.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/haproxy/haproxy.hash | 4 ++--
- package/haproxy/haproxy.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ .../0001-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch     | 0
+ .../0002-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch     | 0
+ package/gdb/{10.1 => 10.2}/0003-use-asm-sgidefs.h.patch                 | 0
+ package/gdb/{10.1 => 10.2}/0004-gdbserver-fix-build-for-m68k.patch      | 0
+ .../{10.1 => 10.2}/0005-nat-fork-inferior-include-linux-ptrace.h.patch  | 0
+ package/gdb/Config.in.host                                              | 2 +-
+ package/gdb/gdb.hash                                                    | 2 +-
+ 7 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/haproxy/haproxy.hash b/package/haproxy/haproxy.hash
-index 849d362dc0..9edf5def08 100644
---- a/package/haproxy/haproxy.hash
-+++ b/package/haproxy/haproxy.hash
-@@ -1,5 +1,5 @@
--# From: http://www.haproxy.org/download/2.4/src/haproxy-2.4.2.tar.gz.sha256
--sha256  edf9788f7f3411498e3d7b21777036b4dc14183e95c8e2ce7577baa0ea4ea2aa  haproxy-2.4.2.tar.gz
-+# From: http://www.haproxy.org/download/2.4/src/haproxy-2.4.3.tar.gz.sha256
-+sha256  ce479380be5464faa881dcd829618931b60130ffeb01c88bc2bf95e230046405  haproxy-2.4.3.tar.gz
- # Locally computed:
- sha256  0717ca51fceaa25ac9e5ccc62e0c727dcf27796057201fb5fded56a25ff6ca28  LICENSE
- sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  doc/lgpl.txt
-diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
-index 4c02b6d334..85d4fa7e8d 100644
---- a/package/haproxy/haproxy.mk
-+++ b/package/haproxy/haproxy.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/gdb/10.1/0001-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch b/package/gdb/10.2/0001-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch
+similarity index 100%
+rename from package/gdb/10.1/0001-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch
+rename to package/gdb/10.2/0001-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch
+diff --git a/package/gdb/10.1/0002-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch b/package/gdb/10.2/0002-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch
+similarity index 100%
+rename from package/gdb/10.1/0002-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch
+rename to package/gdb/10.2/0002-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch
+diff --git a/package/gdb/10.1/0003-use-asm-sgidefs.h.patch b/package/gdb/10.2/0003-use-asm-sgidefs.h.patch
+similarity index 100%
+rename from package/gdb/10.1/0003-use-asm-sgidefs.h.patch
+rename to package/gdb/10.2/0003-use-asm-sgidefs.h.patch
+diff --git a/package/gdb/10.1/0004-gdbserver-fix-build-for-m68k.patch b/package/gdb/10.2/0004-gdbserver-fix-build-for-m68k.patch
+similarity index 100%
+rename from package/gdb/10.1/0004-gdbserver-fix-build-for-m68k.patch
+rename to package/gdb/10.2/0004-gdbserver-fix-build-for-m68k.patch
+diff --git a/package/gdb/10.1/0005-nat-fork-inferior-include-linux-ptrace.h.patch b/package/gdb/10.2/0005-nat-fork-inferior-include-linux-ptrace.h.patch
+similarity index 100%
+rename from package/gdb/10.1/0005-nat-fork-inferior-include-linux-ptrace.h.patch
+rename to package/gdb/10.2/0005-nat-fork-inferior-include-linux-ptrace.h.patch
+diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
+index 9814f3a79b..56943267bb 100644
+--- a/package/gdb/Config.in.host
++++ b/package/gdb/Config.in.host
+@@ -91,5 +91,5 @@ config BR2_GDB_VERSION
+ 	default "4ecb98fbc2f94dbe01b69384afbc515107de73df" if BR2_csky
+ 	default "8.3.1"    if BR2_GDB_VERSION_8_3
+ 	default "9.2"      if BR2_GDB_VERSION_9_2 || (!BR2_PACKAGE_HOST_GDB && !BR2_riscv)
+-	default "10.1"	   if BR2_GDB_VERSION_10 || (!BR2_PACKAGE_HOST_GDB && BR2_riscv)
++	default "10.2"	   if BR2_GDB_VERSION_10 || (!BR2_PACKAGE_HOST_GDB && BR2_riscv)
+ 	depends on BR2_PACKAGE_GDB || BR2_PACKAGE_HOST_GDB
+diff --git a/package/gdb/gdb.hash b/package/gdb/gdb.hash
+index 3b4845d64c..c45ee7329f 100644
+--- a/package/gdb/gdb.hash
++++ b/package/gdb/gdb.hash
+@@ -1,7 +1,7 @@
+ # From ftp://gcc.gnu.org/pub/gdb/releases/sha512.sum
+ sha512  9053a2dc6b9eb921907afbc4cecc75d635aa76df5e8c4f0e5824ccf57cb206b299c19b127fff000b65c334826ff8304a54ff6098428365a8e997cca886c39e9a  gdb-8.3.1.tar.xz
+ sha512  73635f00f343117aa5e2436f1e1597099e2bfb31ef7bb162b273fa1ea282c3fa9b0f52762e70bfc7ad0334addb8d159e9ac7cbe5998ca4f755ea8cf90714d274  gdb-9.2.tar.xz
+-sha512  0dc54380435c6853db60f1e388b94836d294dfa9ad7f518385a27db4edd03cb970f8717d5f1e9c9a0d4a33d7fcf91bc2e5d6c9cf9e4b561dcc74e65b806c1537  gdb-10.1.tar.xz
++sha512  3653762ac008e065c37cd641653184c9ff7ce51ee2222ade1122bec9d6cc64dffd4fb74888ef11ac1942064a08910e96b7865112ad37f4602eb0a16bed074caa  gdb-10.2.tar.xz
  
- HAPROXY_VERSION_MAJOR = 2.4
--HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).2
-+HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).3
- HAPROXY_SITE = http://www.haproxy.org/download/$(HAPROXY_VERSION_MAJOR)/src
- HAPROXY_LICENSE = GPL-2.0+ and LGPL-2.1+ with exceptions
- HAPROXY_LICENSE_FILES = LICENSE doc/lgpl.txt doc/gpl.txt
+ # Locally calculated (fetched from Github)
+ sha512  5a2acf2fd33ab2ff589e1037ca40abda54328997dcff26b2b49b874bd3be980be5a63342962254f3c3bda98e32ce7a33af704d37353352833dee193135600458  gdb-arc-2020.09-release-gdb.tar.gz
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
