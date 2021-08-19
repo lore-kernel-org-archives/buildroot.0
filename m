@@ -2,88 +2,60 @@ Return-Path: <SRS0=aU6e=NK=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,HTML_MESSAGE,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-18.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D9AECC4338F
-	for <buildroot@archiver.kernel.org>; Thu, 19 Aug 2021 12:13:09 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B74A1C4338F
+	for <buildroot@archiver.kernel.org>; Thu, 19 Aug 2021 13:14:37 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 12593610A7
-	for <buildroot@archiver.kernel.org>; Thu, 19 Aug 2021 12:13:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 12593610A7
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
+	by mail.kernel.org (Postfix) with ESMTPS id 119106112D
+	for <buildroot@archiver.kernel.org>; Thu, 19 Aug 2021 13:14:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 119106112D
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=busybox.net
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BEDCF60B91;
-	Thu, 19 Aug 2021 12:13:07 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id CA5B9404A0;
+	Thu, 19 Aug 2021 13:14:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id f_glcYtzwkRD; Thu, 19 Aug 2021 12:13:04 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ocM_GdXfRHmB; Thu, 19 Aug 2021 13:14:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 60988606EF;
-	Thu, 19 Aug 2021 12:13:03 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2EAF1404A9;
+	Thu, 19 Aug 2021 13:14:32 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A4A8B1BF280
- for <buildroot@lists.busybox.net>; Thu, 19 Aug 2021 12:13:01 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D036A1BF3CB
+ for <buildroot@lists.busybox.net>; Thu, 19 Aug 2021 13:14:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 92A7A400FD
- for <buildroot@lists.busybox.net>; Thu, 19 Aug 2021 12:13:01 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id CB298404A9
+ for <buildroot@lists.busybox.net>; Thu, 19 Aug 2021 13:14:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id X-UnDm0JJ0HA for <buildroot@lists.busybox.net>;
- Thu, 19 Aug 2021 12:12:56 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com
- [IPv6:2607:f8b0:4864:20::d33])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 7D77E400F2
- for <buildroot@buildroot.org>; Thu, 19 Aug 2021 12:12:55 +0000 (UTC)
-Received: by mail-io1-xd33.google.com with SMTP id z1so7374543ioh.7
- for <buildroot@buildroot.org>; Thu, 19 Aug 2021 05:12:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=uEKDTRT5QJir60rkKc3LlwjMpNm3xptSnrdsjNohCJ4=;
- b=gwvc0Z8ESt/MSWNrQsBK9P+BdMkqkdiy0Cd0+82TDkFkr6V9oylRn1Fuc55e7tpTQa
- CYJtHAugBCXg/hEvMV7zmlsRd5AADt9D0y2gCzBuG+9DZ8V4dUP+aOsqAmHaJjxSD92T
- sMHJkBm3WauN4Nz86mfS3sXU2B1eo5g6tBLiYSBY++7BIcQ9lIExhJJOMkLW3W/Bbj0P
- pymjl2RAARf0CrE7NRgfBcD9jLjZe/U01ucjFBHEYvhC5rjAdxyW2syCXbzWRsTIwrpv
- ww41peGrjxm78ThVQs69HbbQT6ziHE4kQTyrNj9oA1dM2cANgcmMGBzAvUCaKcKSVFhj
- ibmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=uEKDTRT5QJir60rkKc3LlwjMpNm3xptSnrdsjNohCJ4=;
- b=hvM4ovqC2AVVs/J1VAMfggPNOqvprAk3/3ivuW3eZbEGPHL9aQdXsYamxgDbaINHIW
- me8p5E77NRGob5vZja9DsX4BFdNETiq6eCxq6zSpduwNBL3cfHMUNbL7gYSjZMZeUdqi
- 8IjHmd/gmRvqyVUNg4Uq7WBen+BZzYCu2aC9EvOEmYOLuM0B8E4DjXrDxj5W7+VDiN6i
- Hsxq2N0AWHYwfDDtlsgxa6qipr/v4Jqqwrd3j607pLFu5Yrh2fLQxG/I5WKemItIX3bg
- und5lYnvlXAgBbBdd//iBEAgYKu9hgaNRUER1ZqPwlK6Em2zO/ZKXJkwoPmqpx7H+dC3
- Ngag==
-X-Gm-Message-State: AOAM533Ois4Tc1UHN213SeJACfuwPt66lHyBphRSlrMkDB2Q+ck7JU3d
- BM/gztbmZ0KU+w+1XkGDQM1ecdxBUTZJU5VRvhLXzg==
-X-Google-Smtp-Source: ABdhPJwAdqN/qu6aoNeChW6owfWgddknbosMpCS8Uz3jx2kcUotWAuVIjUKSv5VXxSsEXqiU1XFj2gRkyTHPV34Kz7I=
-X-Received: by 2002:a05:6638:349e:: with SMTP id
- t30mr8410137jal.142.1629375174685; 
- Thu, 19 Aug 2021 05:12:54 -0700 (PDT)
+ with ESMTP id ACUswkNmiU5P for <buildroot@lists.busybox.net>;
+ Thu, 19 Aug 2021 13:14:25 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from mail.heine.tech (mail.heine.tech [IPv6:2a01:4f8:1c0c:5073::1])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8633A404A0
+ for <buildroot@buildroot.org>; Thu, 19 Aug 2021 13:14:25 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id C38871814BC; Thu, 19 Aug 2021 15:14:18 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=heine.tech; s=dkim;
+ t=1629378861; h=from:subject:date:message-id:to:cc:mime-version:
+ content-transfer-encoding; bh=UqTT4OGHhFalmUxbYk0GA+a0vXFbg147ntoaGRgqBwQ=;
+ b=uXazbSaiyqV8TaxfVws1hy7NSG4ldp8pYifFrtp3f/re/LP1kT2gZ/1lwyPrZPF13XtvIr
+ s0HsxMuXbm+IlsxvdGn8kM7614MD4Kf9SrCMIpP1wgY5U6GlqM/rKR+whfTBQyByIgIVfs
+ xqPaPcOCkNof51UNvKxB5hHw5aOqdzw=
+To: buildroot@buildroot.org
+Date: Thu, 19 Aug 2021 15:12:44 +0200
+Message-Id: <20210819131246.38791-1-buildroot@heine.tech>
 MIME-Version: 1.0
-References: <20210818190345.2081421-1-illia.bitkov@mind.be>
- <20210819000511.401a2bc1@windsurf>
- <CA+vtFZP41G3kTPaCoQbPvqAMsy3nKvev0E6C1PokyeWGE=0mvg@mail.gmail.com>
-In-Reply-To: <CA+vtFZP41G3kTPaCoQbPvqAMsy3nKvev0E6C1PokyeWGE=0mvg@mail.gmail.com>
-From: Illia Bitkov <illia.bitkov@mind.be>
-Date: Thu, 19 Aug 2021 14:12:43 +0200
-Message-ID: <CA+vtFZOujJoJpugJ0z0e-pwrXZmiPVi0MxGBvtLXteigF3maFw@mail.gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [Buildroot] [PATCH 1/1] package/mono: force internal
- libatomic-ops for some arm variants
+X-Last-TLS-Session-Version: TLSv1.2
+Subject: [Buildroot] [PATCH v2] package/boost: bump version to 1.77.0
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,213 +67,435 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>, buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============7050317353738797385=="
+From: Michael Nosthoff via buildroot <buildroot@busybox.net>
+Reply-To: Michael Nosthoff <buildroot@heine.tech>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>, Marcin Bis <marcin@bis.org.pl>,
+ Michael Nosthoff <buildroot@heine.tech>, Bartosz Golaszewski <brgl@bgdev.pl>,
+ Maxim Kochetkov <fido_max@inbox.ru>, Fabio Urquiza <fabiorush@gmail.com>,
+ Romain Naour <romain.naour@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
---===============7050317353738797385==
-Content-Type: multipart/alternative; boundary="0000000000007e4bc305c9e878d1"
+* drop 0001-fenv.patch, issue [0] was marked fixed since boost 1.64 (commit [1])
+* drop upstreamed patch 0002
+* filesystem now depends on boost-atomic
+* math broke the build without always lockfree atomic ints, disable for now. reported at [2].
 
---0000000000007e4bc305c9e878d1
-Content-Type: text/plain; charset="UTF-8"
+[0] https://svn.boost.org/trac/boost/ticket/11756
+[1] https://github.com/boostorg/test/commit/cb2a1c2488dc77b9baf1b05781208a9639dfcd69
+[2] https://github.com/boostorg/math/issues/673
 
-Hello Thomas, All
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 
-On Thu, Aug 19, 2021 at 12:05 AM Thomas Petazzoni <
-thomas.petazzoni@bootlin.com> wrote:
+---
 
-> Hello Illia,
->
-> On Wed, 18 Aug 2021 21:03:45 +0200
-> Illia Bitkov <illia.bitkov@mind.be> wrote:
->
-> > Fixes:
-> >
-> http://autobuild.buildroot.net/results/18b017dd5b9c1d8d6c91303ea4f1fdd3e1b086e0/
-> >
-> http://autobuild.buildroot.net/results/1d262e9ad5bf8bf437bc3f2a709d84acf854d298/
-> > Signed-off-by: Illia Bitkov <illia.bitkov@mind.be>
->
+v2: add BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS to packages selecting boost-filesystem
 
-Thanks a lot, but this needs more explanation. Why is libatomic_ops not
-> working for those platforms ?
->
->
-Currently I don't have a clear answer. I've tested building external
-libatomic-ops with configuration keys I've taken from the build of internal
-one. I'll look into them more.
-Also I think I'll try to downgrade lib to version used in mono(7.6.10 ->
-7.4.2)
-I suspect it currently doesn't build mono on the whole ARMv5 but I've
-failed to test it.
+compile-tested with these defconfigs:
 
+BR2_arm=y
+BR2_cortex_a15=y
+BR2_ARM_FPU_NEON=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_UCLIBC_BLEEDING_EDGE=y
+BR2_PACKAGE_BOOST=y
+BR2_PACKAGE_BOOST_CONTRACT=y
+BR2_PACKAGE_BOOST_COROUTINE=y
+BR2_PACKAGE_BOOST_EXCEPTION=y
+BR2_PACKAGE_BOOST_FIBER=y
+BR2_PACKAGE_BOOST_GRAPH=y
+BR2_PACKAGE_BOOST_GRAPH_PARALLEL=y
+BR2_PACKAGE_BOOST_IOSTREAMS=y
+BR2_PACKAGE_BOOST_JSON=y
+BR2_PACKAGE_BOOST_LOCALE=y
+BR2_PACKAGE_BOOST_LOG=y
+BR2_PACKAGE_BOOST_MATH=y
+BR2_PACKAGE_BOOST_MPI=y
+BR2_PACKAGE_BOOST_NOWIDE=y
+BR2_PACKAGE_BOOST_PROGRAM_OPTIONS=y
+BR2_PACKAGE_BOOST_RANDOM=y
+BR2_PACKAGE_BOOST_SERIALIZATION=y
+BR2_PACKAGE_BOOST_STACKTRACE=y
+BR2_PACKAGE_BOOST_TEST=y
+BR2_PACKAGE_BOOST_TYPE_ERASURE=y
+BR2_PACKAGE_BOOST_WAVE=y
 
-> > ---
-> >  package/mono/Config.in |  2 +-
-> >  package/mono/mono.mk   | 10 ++++++++--
-> >  2 files changed, 9 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/package/mono/Config.in b/package/mono/Config.in
-> > index 44b8cf8581..3f26bd4092 100644
-> > --- a/package/mono/Config.in
-> > +++ b/package/mono/Config.in
-> > @@ -16,7 +16,7 @@ config BR2_PACKAGE_MONO
-> >       depends on BR2_INSTALL_LIBSTDCPP
-> >       depends on BR2_TOOLCHAIN_HAS_THREADS
-> >       depends on !BR2_STATIC_LIBS
-> > -     select BR2_PACKAGE_LIBATOMIC_OPS
-> > +     select BR2_PACKAGE_LIBATOMIC_OPS if !BR2_xscale && !BR2_arm926t
-> >       help
-> >         An open source, cross-platform, implementation of C#
-> >         and the CLR that is binary compatible with Microsoft.NET.
-> > diff --git a/package/mono/mono.mk b/package/mono/mono.mk
-> > index 27f7886224..e697ed7ea2 100644
-> > --- a/package/mono/mono.mk
-> > +++ b/package/mono/mono.mk
-> > @@ -43,8 +43,14 @@ endif
-> >
-> >  MONO_DEPENDENCIES += \
-> >       host-mono \
-> > -     $(if $(BR2_PACKAGE_LIBUNWIND),libunwind) \
-> > -     libatomic_ops
-> > +     $(if $(BR2_PACKAGE_LIBUNWIND),libunwind)
-> > +
-> > +ifeq ($(BR2_xscale)$(BR2_arm926t),nn)
->
-> This is wrong, options never have the value "n"
->
-> Thanks, I'll fix it
+BR2_nios2=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+BR2_PACKAGE_BOOST=y
+BR2_PACKAGE_BOOST_CONTRACT=y
+BR2_PACKAGE_BOOST_DATE_TIME=y
+BR2_PACKAGE_BOOST_EXCEPTION=y
+BR2_PACKAGE_BOOST_GRAPH=y
+BR2_PACKAGE_BOOST_GRAPH_PARALLEL=y
+BR2_PACKAGE_BOOST_IOSTREAMS=y
+BR2_PACKAGE_BOOST_JSON=y
+BR2_PACKAGE_BOOST_LOCALE=y
+BR2_PACKAGE_BOOST_MPI=y
+BR2_PACKAGE_BOOST_NOWIDE=y
+BR2_PACKAGE_BOOST_PROGRAM_OPTIONS=y
+BR2_PACKAGE_BOOST_RANDOM=y
+BR2_PACKAGE_BOOST_SERIALIZATION=y
+BR2_PACKAGE_BOOST_STACKTRACE=y
+BR2_PACKAGE_BOOST_TEST=y
 
+BR2_sh=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_SH_SH4_UCLIBC_STABLE=y
+BR2_PACKAGE_BOOST=y
+BR2_PACKAGE_BOOST_CONTRACT=y
+BR2_PACKAGE_BOOST_EXCEPTION=y
+BR2_PACKAGE_BOOST_GRAPH=y
+BR2_PACKAGE_BOOST_GRAPH_PARALLEL=y
+BR2_PACKAGE_BOOST_IOSTREAMS=y
+BR2_PACKAGE_BOOST_JSON=y
+BR2_PACKAGE_BOOST_LOCALE=y
+BR2_PACKAGE_BOOST_LOG=y
+BR2_PACKAGE_BOOST_MATH=y
+BR2_PACKAGE_BOOST_MPI=y
+BR2_PACKAGE_BOOST_NOWIDE=y
+BR2_PACKAGE_BOOST_PROGRAM_OPTIONS=y
+BR2_PACKAGE_BOOST_RANDOM=y
+BR2_PACKAGE_BOOST_SERIALIZATION=y
+BR2_PACKAGE_BOOST_STACKTRACE=y
+BR2_PACKAGE_BOOST_TEST=y
+BR2_PACKAGE_BOOST_TYPE_ERASURE=y
+BR2_PACKAGE_BOOST_WAVE=y
 
+BR2_microblazeel=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_PACKAGE_BOOST=y
+BR2_PACKAGE_BOOST_CONTRACT=y
+BR2_PACKAGE_BOOST_EXCEPTION=y
+BR2_PACKAGE_BOOST_GRAPH=y
+BR2_PACKAGE_BOOST_GRAPH_PARALLEL=y
+BR2_PACKAGE_BOOST_IOSTREAMS=y
+BR2_PACKAGE_BOOST_JSON=y
+BR2_PACKAGE_BOOST_LOCALE=y
+BR2_PACKAGE_BOOST_LOG=y
+BR2_PACKAGE_BOOST_MATH=y
+BR2_PACKAGE_BOOST_MPI=y
+BR2_PACKAGE_BOOST_NOWIDE=y
+BR2_PACKAGE_BOOST_PROGRAM_OPTIONS=y
+BR2_PACKAGE_BOOST_RANDOM=y
+BR2_PACKAGE_BOOST_SERIALIZATION=y
+BR2_PACKAGE_BOOST_STACKTRACE=y
+BR2_PACKAGE_BOOST_TEST=y
+BR2_PACKAGE_BOOST_TYPE_ERASURE=y
+BR2_PACKAGE_BOOST_WAVE=y
 
-> > +MONO_DEPENDENCIES += libatomic_ops
-> > +else
-> > +#force use of internal libatomic-ops
-> > +MONO_CONF_OPTS += --with-libatomic-ops=no
-> > +endif
->
-> Thanks,
->
-> Thomas
-> --
-> Thomas Petazzoni, co-owner and CEO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+BR2_arm=y
+BR2_cortex_a15=y
+BR2_ARM_FPU_NEON=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+BR2_PACKAGE_BOOST=y
+BR2_PACKAGE_BOOST_FILESYSTEM=y
+---
+ package/bitcoin/Config.in                     |  2 +-
+ package/boost/0001-fenv.patch                 | 37 ----------------
+ ...2-src-event-cpp-fix-build-on-riscv32.patch | 42 -------------------
+ package/boost/Config.in                       |  3 ++
+ package/boost/boost.hash                      |  4 +-
+ package/boost/boost.mk                        |  2 +-
+ package/botan/Config.in                       |  4 +-
+ package/cc-tool/Config.in                     |  1 +
+ package/i2pd/Config.in                        |  3 ++
+ package/mongodb/Config.in                     |  2 +
+ package/osm2pgsql/Config.in                   |  2 +
+ package/pulseview/Config.in                   |  2 +
+ package/supertux/Config.in                    |  2 +
+ 13 files changed, 21 insertions(+), 85 deletions(-)
+ delete mode 100644 package/boost/0001-fenv.patch
+ delete mode 100644 package/boost/0002-src-event-cpp-fix-build-on-riscv32.patch
 
---0000000000007e4bc305c9e878d1
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div>Hello Thomas, All<br></div><div><br></div><div class=
-=3D"gmail_quote"><span class=3D"gmail-im"><div dir=3D"ltr" class=3D"gmail_a=
-ttr">On Thu, Aug 19, 2021 at 12:05 AM Thomas Petazzoni &lt;<a href=3D"mailt=
-o:thomas.petazzoni@bootlin.com" target=3D"_blank">thomas.petazzoni@bootlin.=
-com</a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote" style=3D"marg=
-in:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1e=
-x">Hello Illia,<br>
-<br>
-On Wed, 18 Aug 2021 21:03:45 +0200<br>
-Illia Bitkov &lt;<a href=3D"mailto:illia.bitkov@mind.be" target=3D"_blank">=
-illia.bitkov@mind.be</a>&gt; wrote:<br>
-<br>
-&gt; Fixes:<br>
-&gt; <a href=3D"http://autobuild.buildroot.net/results/18b017dd5b9c1d8d6c91=
-303ea4f1fdd3e1b086e0/" rel=3D"noreferrer" target=3D"_blank">http://autobuil=
-d.buildroot.net/results/18b017dd5b9c1d8d6c91303ea4f1fdd3e1b086e0/</a><br>
-&gt; <a href=3D"http://autobuild.buildroot.net/results/1d262e9ad5bf8bf437bc=
-3f2a709d84acf854d298/" rel=3D"noreferrer" target=3D"_blank">http://autobuil=
-d.buildroot.net/results/1d262e9ad5bf8bf437bc3f2a709d84acf854d298/</a><br>
-&gt; Signed-off-by: Illia Bitkov &lt;<a href=3D"mailto:illia.bitkov@mind.be=
-" target=3D"_blank">illia.bitkov@mind.be</a>&gt;<br>
-=C2=A0</blockquote><blockquote class=3D"gmail_quote" style=3D"margin:0px 0p=
-x 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">
-Thanks a lot, but this needs more explanation. Why is libatomic_ops not<br>
-working for those platforms ?<br>=C2=A0 <br></blockquote></span><div>Curren=
-tly
- I don&#39;t have a clear answer. I&#39;ve tested building external=20
-libatomic-ops with configuration keys I&#39;ve taken from the build of=20
-internal one. I&#39;ll look into them more.</div><div>Also I think I&#39;ll=
- try to downgrade lib to version used in mono(7.6.10 -&gt; 7.4.2)</div><div=
->I suspect it currently doesn&#39;t build mono on the whole ARMv5 but I&#39=
-;ve failed to test it.<br></div><div><div class=3D"gmail-im"><div>=C2=A0</d=
-iv><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;bord=
-er-left:1px solid rgb(204,204,204);padding-left:1ex">
-&gt; ---<br>
-&gt;=C2=A0 package/mono/Config.in |=C2=A0 2 +-<br>
-&gt;=C2=A0 package/mono/<a href=3D"http://mono.mk" rel=3D"noreferrer" targe=
-t=3D"_blank">mono.mk</a>=C2=A0 =C2=A0| 10 ++++++++--<br>
-&gt;=C2=A0 2 files changed, 9 insertions(+), 3 deletions(-)<br>
-&gt; <br>
-&gt; diff --git a/package/mono/Config.in b/package/mono/Config.in<br>
-&gt; index 44b8cf8581..3f26bd4092 100644<br>
-&gt; --- a/package/mono/Config.in<br>
-&gt; +++ b/package/mono/Config.in<br>
-&gt; @@ -16,7 +16,7 @@ config BR2_PACKAGE_MONO<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0depends on BR2_INSTALL_LIBSTDCPP<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0depends on BR2_TOOLCHAIN_HAS_THREADS<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0depends on !BR2_STATIC_LIBS<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0select BR2_PACKAGE_LIBATOMIC_OPS<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0select BR2_PACKAGE_LIBATOMIC_OPS if !BR2_xscale &=
-amp;&amp; !BR2_arm926t<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0help<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0An open source, cross-platform, imple=
-mentation of C#<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0and the CLR that is binary compatible=
- with Microsoft.NET.<br>
-&gt; diff --git a/package/mono/<a href=3D"http://mono.mk" rel=3D"noreferrer=
-" target=3D"_blank">mono.mk</a> b/package/mono/<a href=3D"http://mono.mk" r=
-el=3D"noreferrer" target=3D"_blank">mono.mk</a><br>
-&gt; index 27f7886224..e697ed7ea2 100644<br>
-&gt; --- a/package/mono/<a href=3D"http://mono.mk" rel=3D"noreferrer" targe=
-t=3D"_blank">mono.mk</a><br>
-&gt; +++ b/package/mono/<a href=3D"http://mono.mk" rel=3D"noreferrer" targe=
-t=3D"_blank">mono.mk</a><br>
-&gt; @@ -43,8 +43,14 @@ endif<br>
-&gt;=C2=A0 <br>
-&gt;=C2=A0 MONO_DEPENDENCIES +=3D \<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0host-mono \<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0$(if $(BR2_PACKAGE_LIBUNWIND),libunwind) \<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0libatomic_ops<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0$(if $(BR2_PACKAGE_LIBUNWIND),libunwind)<br>
-&gt; +<br>
-&gt; +ifeq ($(BR2_xscale)$(BR2_arm926t),nn)<br>
-<br>
-This is wrong, options never have the value &quot;n&quot;<br>
-<br></blockquote></div></div><div>Thanks, I&#39;ll fix it<div class=3D"gmai=
-l-yj6qo gmail-ajU"><div id=3D"gmail-:uw" class=3D"gmail-ajR" role=3D"button=
-" tabindex=3D"0" aria-label=3D"Hide expanded content" aria-expanded=3D"true=
-"><img class=3D"gmail-ajT" src=3D"https://ssl.gstatic.com/ui/v1/icons/mail/=
-images/cleardot.gif"></div></div><div class=3D"gmail-adL"><br></div></div><=
-div class=3D"gmail-adL"><div class=3D"gmail-im"><div>=C2=A0</div><blockquot=
-e class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px s=
-olid rgb(204,204,204);padding-left:1ex">
-&gt; +MONO_DEPENDENCIES +=3D libatomic_ops<br>
-&gt; +else<br>
-&gt; +#force use of internal libatomic-ops<br>
-&gt; +MONO_CONF_OPTS +=3D --with-libatomic-ops=3Dno<br>
-&gt; +endif<br>
-<br>
-Thanks,<br>
-<br>
-Thomas<br>
--- <br>
-Thomas Petazzoni, co-owner and CEO, Bootlin<br>
-Embedded Linux and Kernel engineering<br>
-<a href=3D"https://bootlin.com" rel=3D"noreferrer" target=3D"_blank">https:=
-//bootlin.com</a></blockquote></div></div></div></div>
-
---0000000000007e4bc305c9e878d1--
-
---===============7050317353738797385==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/package/bitcoin/Config.in b/package/bitcoin/Config.in
+index 7ce4f80656..a344811d6b 100644
+--- a/package/bitcoin/Config.in
++++ b/package/bitcoin/Config.in
+@@ -10,7 +10,7 @@ config BR2_PACKAGE_BITCOIN_ARCH_SUPPORTS
+ config BR2_PACKAGE_BITCOIN
+ 	bool "bitcoin"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-thread
++	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-thread, boost-filesystem
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::future
+ 	depends on BR2_PACKAGE_BITCOIN_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # boost
+diff --git a/package/boost/0001-fenv.patch b/package/boost/0001-fenv.patch
+deleted file mode 100644
+index 9dc7848c93..0000000000
+--- a/package/boost/0001-fenv.patch
++++ /dev/null
+@@ -1,37 +0,0 @@
+-Disable fenv.h in certain configurations
+-
+-The boost build system does not properly test whether fenv.h is
+-available, and if it is, if it supports all the features used by
+-Boost. This causes build failures with uClibc (reported upstream at
+-https://svn.boost.org/trac/boost/ticket/11756) but also with glibc on
+-specific architectures that don't have a full fenv implementation,
+-such as NIOSII or Microblaze.
+-
+-To address this, we forcefully disable the use of fenv support in the
+-affected configurations.
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-[Thomas: add Microblaze/NIOSII exclusions.]
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-
+-Index: b/boost/config/platform/linux.hpp
+-===================================================================
+---- a/boost/config/platform/linux.hpp
+-+++ b/boost/config/platform/linux.hpp
+-@@ -48,6 +48,16 @@
+- #endif
+- 
+- //
+-+// uClibc has no support for fenv.h, and also a few architectures
+-+// don't have fenv.h support at all (or incomplete support) even with
+-+// glibc.
+-+
+-+//
+-+#if defined(__UCLIBC__) || defined(__nios2__) || defined(__microblaze__)
+-+#  define BOOST_NO_FENV_H
+-+#endif
+-+
+-+//
+- // If glibc is past version 2 then we definitely have
+- // gettimeofday, earlier versions may or may not have it:
+- //
+diff --git a/package/boost/0002-src-event-cpp-fix-build-on-riscv32.patch b/package/boost/0002-src-event-cpp-fix-build-on-riscv32.patch
+deleted file mode 100644
+index f1b84284ee..0000000000
+--- a/package/boost/0002-src-event-cpp-fix-build-on-riscv32.patch
++++ /dev/null
+@@ -1,42 +0,0 @@
+-From d2061419501bdd6761e9380ed5b91233f6c4e67e Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Fri, 21 May 2021 21:30:04 +0200
+-Subject: [PATCH] src/event.cpp: fix build on riscv32
+-
+-riscv32 fails to build because __NR_futex is not defined on this
+-architecture:
+-
+-libs/log/src/event.cpp: In member function 'void boost::log::v2_mt_posix::aux::futex_based_event::wait()':
+-libs/log/src/event.cpp:38:29: error: '__NR_futex' was not declared in this scope
+-   38 | #define BOOST_LOG_SYS_FUTEX __NR_futex
+-      |                             ^~~~~~~~~~
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/8c8135fd7c0517c66c9b3975c494da6d7934cc1b
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Retrieved from:
+-https://github.com/boostorg/log/commit/d2061419501bdd6761e9380ed5b91233f6c4e67e]
+----
+- src/event.cpp | 7 ++++++-
+- 1 file changed, 6 insertions(+), 1 deletion(-)
+-
+-diff --git a/libs/log/src/event.cpp b/libs/log/src/event.cpp
+-index 5485154d7..f576648c6 100644
+---- a/libs/log/src/event.cpp
+-+++ b/libs/log/src/event.cpp
+-@@ -34,8 +34,13 @@
+- // Some Android NDKs (Google NDK and older Crystax.NET NDK versions) don't define SYS_futex
+- #if defined(SYS_futex)
+- #define BOOST_LOG_SYS_FUTEX SYS_futex
+--#else
+-+#elif defined(__NR_futex)
+- #define BOOST_LOG_SYS_FUTEX __NR_futex
+-+// riscv32 defines a different system call instead of __NR_futex
+-+#elif defined(__NR_futex_time64)
+-+#define BOOST_LOG_SYS_FUTEX __NR_futex_time64
+-+#else
+-+#error "Unable to find a suitable futex"
+- #endif
+- 
+- #if defined(FUTEX_WAIT_PRIVATE)
+diff --git a/package/boost/Config.in b/package/boost/Config.in
+index 9248c574f4..d9ce841a92 100644
+--- a/package/boost/Config.in
++++ b/package/boost/Config.in
+@@ -163,6 +163,8 @@ comment "boost-fiber needs a toolchain not affected by GCC bug 64735"
+ 
+ config BR2_PACKAGE_BOOST_FILESYSTEM
+ 	bool "boost-filesystem"
++	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-atomic
++	select BR2_PACKAGE_BOOST_ATOMIC
+ 	select BR2_PACKAGE_BOOST_SYSTEM
+ 	help
+ 	  The Boost Filesystem Library provides portable facilities to
+@@ -252,6 +254,7 @@ comment "boost-log needs a toolchain not affected by GCC bug 64735"
+ 
+ config BR2_PACKAGE_BOOST_MATH
+ 	bool "boost-math"
++	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
+ 	help
+ 	  Boost.Math includes several contributions in the domain of
+ 	  mathematics:
+diff --git a/package/boost/boost.hash b/package/boost/boost.hash
+index e6d44a76b6..96419506cd 100644
+--- a/package/boost/boost.hash
++++ b/package/boost/boost.hash
+@@ -1,5 +1,5 @@
+-# From https://www.boost.org/users/history/version_1_74_0.html
+-sha256  953db31e016db7bb207f11432bef7df100516eeb746843fa0486a222e3fd49cb  boost_1_75_0.tar.bz2
++# From https://www.boost.org/users/history/version_1_77_0.html
++sha256  fc9f85fc030e233142908241af7a846e60630aa7388de9a5fafb1f3a26840854  boost_1_77_0.tar.bz2
+ 
+ # Locally computed
+ sha256  c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  LICENSE_1_0.txt
+diff --git a/package/boost/boost.mk b/package/boost/boost.mk
+index e72ddf897c..98ec30f98f 100644
+--- a/package/boost/boost.mk
++++ b/package/boost/boost.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BOOST_VERSION = 1.75.0
++BOOST_VERSION = 1.77.0
+ BOOST_SOURCE = boost_$(subst .,_,$(BOOST_VERSION)).tar.bz2
+ BOOST_SITE = https://boostorg.jfrog.io/artifactory/main/release/$(BOOST_VERSION)/source
+ BOOST_INSTALL_STAGING = YES
+diff --git a/package/botan/Config.in b/package/botan/Config.in
+index 341fa7c622..635fe1836d 100644
+--- a/package/botan/Config.in
++++ b/package/botan/Config.in
+@@ -18,8 +18,8 @@ config BR2_PACKAGE_BOTAN
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_PACKAGE_BOTAN_ARCH_SUPPORTS
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::future
+-	select BR2_PACKAGE_BOOST_FILESYSTEM if BR2_PACKAGE_BOOST
+-	select BR2_PACKAGE_BOOST_SYSTEM if BR2_PACKAGE_BOOST
++	select BR2_PACKAGE_BOOST_FILESYSTEM if BR2_PACKAGE_BOOST && BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
++	select BR2_PACKAGE_BOOST_SYSTEM if BR2_PACKAGE_BOOST && BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
+ 	select BR2_PACKAGE_LIBOPENSSL_ENABLE_RC4 if BR2_PACKAGE_LIBOPENSSL
+ 	select BR2_PACKAGE_LIBOPENSSL_ENABLE_RMD160 if BR2_PACKAGE_LIBOPENSSL
+ 	help
+diff --git a/package/cc-tool/Config.in b/package/cc-tool/Config.in
+index 2661592d7f..511c9fa086 100644
+--- a/package/cc-tool/Config.in
++++ b/package/cc-tool/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_CC_TOOL
+ 	bool "cc-tool"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-filesystem
+ 	depends on BR2_USE_WCHAR # boost-filesystem
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libusb
+ 	select BR2_PACKAGE_LIBUSB
+diff --git a/package/i2pd/Config.in b/package/i2pd/Config.in
+index 5b9ac33e28..c1ba08ef75 100644
+--- a/package/i2pd/Config.in
++++ b/package/i2pd/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_I2PD
+ 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+ 	# pthread_condattr_setclock
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
++	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-filesystem
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR # boost
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # exception_ptr
+@@ -28,10 +29,12 @@ config BR2_PACKAGE_I2PD
+ comment "i2pd needs a toolchain w/ C++, NPTL, wchar"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
++	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
+ 	depends on !BR2_INSTALL_LIBSTDCPP || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_USE_WCHAR
+ 
+ comment "i2pd needs exception_ptr"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
++	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
+ 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+diff --git a/package/mongodb/Config.in b/package/mongodb/Config.in
+index 493c592413..dc97335d69 100644
+--- a/package/mongodb/Config.in
++++ b/package/mongodb/Config.in
+@@ -11,6 +11,7 @@ config BR2_PACKAGE_MONGODB
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC # needs glibc malloc_usable_size
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-filesystem
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # C++17
+ 	select BR2_PACKAGE_BOOST
+@@ -39,3 +40,4 @@ comment "mongodb needs a glibc toolchain w/ wchar, threads, C++, gcc >= 7"
+ 		!BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_USES_GLIBC || \
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_7
+ 	depends on BR2_PACKAGE_MONGODB_ARCH_SUPPORTS
++	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
+diff --git a/package/osm2pgsql/Config.in b/package/osm2pgsql/Config.in
+index 1f1200cf46..70d59e6c6f 100644
+--- a/package/osm2pgsql/Config.in
++++ b/package/osm2pgsql/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_OSM2PGSQL
+ 	depends on BR2_INSTALL_LIBSTDCPP # boost, fmt, libosmium, protozero
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11, libosmium, protozero
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # boost, libosmium
++	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-filesystem
+ 	depends on BR2_USE_WCHAR # boost, fmt, libosmium
+ 	select BR2_PACKAGE_BOOST
+ 	select BR2_PACKAGE_BOOST_SYSTEM
+@@ -22,5 +23,6 @@ config BR2_PACKAGE_OSM2PGSQL
+ 	  https://osm2pgsql.org
+ 
+ comment "osm2pgsql needs a toolchain w/ C++,  wchar, threads, gcc >= 4.7"
++	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/pulseview/Config.in b/package/pulseview/Config.in
+index b8d94332a3..e7a73e3765 100644
+--- a/package/pulseview/Config.in
++++ b/package/pulseview/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_PULSEVIEW
+ 	# libsigrok->libglib2:
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-filesystem
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	# libsigrok->libzip
+@@ -32,6 +33,7 @@ config BR2_PACKAGE_PULSEVIEW
+ comment "pulseview needs a toolchain w/ locale, wchar, threads, dynamic library, C++, gcc >= 4.9, host gcc >= 4.9"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_PACKAGE_QT5
++	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
+ 	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || !BR2_USE_WCHAR \
+ 		|| !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP \
+ 		|| BR2_STATIC_LIBS || !BR2_ENABLE_LOCALE || \
+diff --git a/package/supertux/Config.in b/package/supertux/Config.in
+index 5cacdd658e..285f19694b 100644
+--- a/package/supertux/Config.in
++++ b/package/supertux/Config.in
+@@ -6,6 +6,7 @@ config BR2_PACKAGE_SUPERTUX
+ 	depends on BR2_PACKAGE_XORG7 # libglew, SDL2 OpenGL (GLX)
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_6 # C++14
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # openal
++	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-filesystem
+ 	depends on BR2_USE_MMU # SDL2 OpenGL (GLX)
+ 	depends on !BR2_STATIC_LIBS # SDL2
+ 	depends on BR2_USE_WCHAR # Boost
+@@ -36,6 +37,7 @@ comment "supertux needs OpenGL and a toolchain w/ C++, gcc >= 6, NPTL, dynamic l
+ 	depends on BR2_PACKAGE_OPENAL_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_XORG7
+ 	depends on BR2_USE_MMU
++	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_PACKAGE_HAS_LIBGL || \
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_6 || !BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
+ 		BR2_STATIC_LIBS || !BR2_USE_WCHAR
+-- 
+2.33.0
 
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
 http://lists.busybox.net/mailman/listinfo/buildroot
-
---===============7050317353738797385==--
