@@ -7,52 +7,51 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 552D5C4338F
-	for <buildroot@archiver.kernel.org>; Thu, 19 Aug 2021 20:52:03 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6649BC4338F
+	for <buildroot@archiver.kernel.org>; Thu, 19 Aug 2021 20:52:16 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1C92E60200
-	for <buildroot@archiver.kernel.org>; Thu, 19 Aug 2021 20:52:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1C92E60200
+	by mail.kernel.org (Postfix) with ESMTPS id 29170610A0
+	for <buildroot@archiver.kernel.org>; Thu, 19 Aug 2021 20:52:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 29170610A0
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E90A6404BE;
-	Thu, 19 Aug 2021 20:52:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F29D081A24;
+	Thu, 19 Aug 2021 20:52:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ssDJqZSOA-yQ; Thu, 19 Aug 2021 20:51:59 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 9tffvM5ZpCeg; Thu, 19 Aug 2021 20:52:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5A82F424F7;
-	Thu, 19 Aug 2021 20:51:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6CAC681A34;
+	Thu, 19 Aug 2021 20:52:10 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 575E11BF297
- for <buildroot@lists.busybox.net>; Thu, 19 Aug 2021 20:51:57 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 826391BF297
+ for <buildroot@lists.busybox.net>; Thu, 19 Aug 2021 20:51:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 47881819B8
+ by smtp1.osuosl.org (Postfix) with ESMTP id 70541819B8
  for <buildroot@lists.busybox.net>; Thu, 19 Aug 2021 20:51:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id llFMc_RXGEtg for <buildroot@lists.busybox.net>;
+ with ESMTP id MOMFFg0na9sv for <buildroot@lists.busybox.net>;
  Thu, 19 Aug 2021 20:51:52 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id C629081A16
+ by smtp1.osuosl.org (Postfix) with ESMTP id CC93A81A24
  for <buildroot@buildroot.org>; Thu, 19 Aug 2021 20:51:52 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 7F5E68D5D6; Thu, 19 Aug 2021 20:51:07 +0000 (UTC)
+ id 88C2B8D5CA; Thu, 19 Aug 2021 20:51:07 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Thu, 19 Aug 2021 22:50:18 +0200
+Date: Thu, 19 Aug 2021 22:51:46 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a380e058338b5fc006cb76544a4b080e52cc0f4b
-X-Git-Newrev: da4d8fc407b57736e2746f236df43baa102b85a7
+X-Git-Oldrev: da4d8fc407b57736e2746f236df43baa102b85a7
+X-Git-Newrev: 2ee1063136edd030f1c4a8ca88d0a80d98ce8719
 X-Patchwork-Hint: ignore
-Message-Id: <20210819205107.7F5E68D5D6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] Revert "package/libshout: enable optional
- dependency for libressl"
+Message-Id: <20210819205107.88C2B8D5CA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gdb: bump version 10.x to 10.2
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,34 +69,65 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=da4d8fc407b57736e2746f236df43baa102b85a7
+commit: https://git.buildroot.net/buildroot/commit/?id=2ee1063136edd030f1c4a8ca88d0a80d98ce8719
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This reverts commit 46b8fb7500ecca65a79507318fd3052208559c09 indeed if
-libressl is selected as the openssl provider, the BR2_PACKAGE_OPENSSL
-conditition will always be used and the BR2_PACKAGE_LIBRESSL condition
-will never be triggered. Moreover, libressl provides a pkg-config file.
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Michael Fischer <mf@go-sys.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libshout/libshout.mk | 3 ---
- 1 file changed, 3 deletions(-)
+ .../0001-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch     | 0
+ .../0002-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch     | 0
+ package/gdb/{10.1 => 10.2}/0003-use-asm-sgidefs.h.patch                 | 0
+ package/gdb/{10.1 => 10.2}/0004-gdbserver-fix-build-for-m68k.patch      | 0
+ .../{10.1 => 10.2}/0005-nat-fork-inferior-include-linux-ptrace.h.patch  | 0
+ package/gdb/Config.in.host                                              | 2 +-
+ package/gdb/gdb.hash                                                    | 2 +-
+ 7 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libshout/libshout.mk b/package/libshout/libshout.mk
-index 57d26390c5..4afb762de6 100644
---- a/package/libshout/libshout.mk
-+++ b/package/libshout/libshout.mk
-@@ -33,9 +33,6 @@ endif
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- LIBSHOUT_CONF_OPTS += --with-openssl
- LIBSHOUT_DEPENDENCIES += openssl
--else ifeq ($(BR2_PACKAGE_LIBRESSL),y)
--LIBSHOUT_CONF_OPTS += --with-openssl=$(STAGING_DIR)/lib
--LIBSHOUT_DEPENDENCIES += libressl
- else
- LIBSHOUT_CONF_OPTS += --without-openssl
- endif
+diff --git a/package/gdb/10.1/0001-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch b/package/gdb/10.2/0001-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch
+similarity index 100%
+rename from package/gdb/10.1/0001-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch
+rename to package/gdb/10.2/0001-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch
+diff --git a/package/gdb/10.1/0002-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch b/package/gdb/10.2/0002-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch
+similarity index 100%
+rename from package/gdb/10.1/0002-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch
+rename to package/gdb/10.2/0002-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch
+diff --git a/package/gdb/10.1/0003-use-asm-sgidefs.h.patch b/package/gdb/10.2/0003-use-asm-sgidefs.h.patch
+similarity index 100%
+rename from package/gdb/10.1/0003-use-asm-sgidefs.h.patch
+rename to package/gdb/10.2/0003-use-asm-sgidefs.h.patch
+diff --git a/package/gdb/10.1/0004-gdbserver-fix-build-for-m68k.patch b/package/gdb/10.2/0004-gdbserver-fix-build-for-m68k.patch
+similarity index 100%
+rename from package/gdb/10.1/0004-gdbserver-fix-build-for-m68k.patch
+rename to package/gdb/10.2/0004-gdbserver-fix-build-for-m68k.patch
+diff --git a/package/gdb/10.1/0005-nat-fork-inferior-include-linux-ptrace.h.patch b/package/gdb/10.2/0005-nat-fork-inferior-include-linux-ptrace.h.patch
+similarity index 100%
+rename from package/gdb/10.1/0005-nat-fork-inferior-include-linux-ptrace.h.patch
+rename to package/gdb/10.2/0005-nat-fork-inferior-include-linux-ptrace.h.patch
+diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
+index 9814f3a79b..56943267bb 100644
+--- a/package/gdb/Config.in.host
++++ b/package/gdb/Config.in.host
+@@ -91,5 +91,5 @@ config BR2_GDB_VERSION
+ 	default "4ecb98fbc2f94dbe01b69384afbc515107de73df" if BR2_csky
+ 	default "8.3.1"    if BR2_GDB_VERSION_8_3
+ 	default "9.2"      if BR2_GDB_VERSION_9_2 || (!BR2_PACKAGE_HOST_GDB && !BR2_riscv)
+-	default "10.1"	   if BR2_GDB_VERSION_10 || (!BR2_PACKAGE_HOST_GDB && BR2_riscv)
++	default "10.2"	   if BR2_GDB_VERSION_10 || (!BR2_PACKAGE_HOST_GDB && BR2_riscv)
+ 	depends on BR2_PACKAGE_GDB || BR2_PACKAGE_HOST_GDB
+diff --git a/package/gdb/gdb.hash b/package/gdb/gdb.hash
+index 3b4845d64c..c45ee7329f 100644
+--- a/package/gdb/gdb.hash
++++ b/package/gdb/gdb.hash
+@@ -1,7 +1,7 @@
+ # From ftp://gcc.gnu.org/pub/gdb/releases/sha512.sum
+ sha512  9053a2dc6b9eb921907afbc4cecc75d635aa76df5e8c4f0e5824ccf57cb206b299c19b127fff000b65c334826ff8304a54ff6098428365a8e997cca886c39e9a  gdb-8.3.1.tar.xz
+ sha512  73635f00f343117aa5e2436f1e1597099e2bfb31ef7bb162b273fa1ea282c3fa9b0f52762e70bfc7ad0334addb8d159e9ac7cbe5998ca4f755ea8cf90714d274  gdb-9.2.tar.xz
+-sha512  0dc54380435c6853db60f1e388b94836d294dfa9ad7f518385a27db4edd03cb970f8717d5f1e9c9a0d4a33d7fcf91bc2e5d6c9cf9e4b561dcc74e65b806c1537  gdb-10.1.tar.xz
++sha512  3653762ac008e065c37cd641653184c9ff7ce51ee2222ade1122bec9d6cc64dffd4fb74888ef11ac1942064a08910e96b7865112ad37f4602eb0a16bed074caa  gdb-10.2.tar.xz
+ 
+ # Locally calculated (fetched from Github)
+ sha512  5a2acf2fd33ab2ff589e1037ca40abda54328997dcff26b2b49b874bd3be980be5a63342962254f3c3bda98e32ce7a33af704d37353352833dee193135600458  gdb-arc-2020.09-release-gdb.tar.gz
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
