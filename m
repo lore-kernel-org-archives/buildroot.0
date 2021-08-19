@@ -2,57 +2,76 @@ Return-Path: <SRS0=aU6e=NK=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-12.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 09B05C4338F
-	for <buildroot@archiver.kernel.org>; Thu, 19 Aug 2021 20:49:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1DFA9C4338F
+	for <buildroot@archiver.kernel.org>; Thu, 19 Aug 2021 20:50:42 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B4C6C6108E
-	for <buildroot@archiver.kernel.org>; Thu, 19 Aug 2021 20:49:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B4C6C6108E
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
+	by mail.kernel.org (Postfix) with ESMTPS id D2AD4610A0
+	for <buildroot@archiver.kernel.org>; Thu, 19 Aug 2021 20:50:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D2AD4610A0
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8DCB080ED7;
-	Thu, 19 Aug 2021 20:49:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AE60380ED7;
+	Thu, 19 Aug 2021 20:50:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id iJrY59JJ50fE; Thu, 19 Aug 2021 20:49:44 +0000 (UTC)
+	with ESMTP id 1kbSeX9yJqt5; Thu, 19 Aug 2021 20:50:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2798C80CF5;
-	Thu, 19 Aug 2021 20:49:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4362480F0E;
+	Thu, 19 Aug 2021 20:50:36 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 786141BF297
- for <buildroot@lists.busybox.net>; Thu, 19 Aug 2021 20:49:41 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2E51A1BF297
+ for <buildroot@lists.busybox.net>; Thu, 19 Aug 2021 20:50:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 73FDB4011B
- for <buildroot@lists.busybox.net>; Thu, 19 Aug 2021 20:49:41 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 27FFF4011B
+ for <buildroot@lists.busybox.net>; Thu, 19 Aug 2021 20:50:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=free.fr
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fDi1suxOB6lS for <buildroot@lists.busybox.net>;
- Thu, 19 Aug 2021 20:49:36 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A3FDE40001
- for <buildroot@buildroot.org>; Thu, 19 Aug 2021 20:49:36 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 620758D5CB; Thu, 19 Aug 2021 20:48:51 +0000 (UTC)
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: buildroot@buildroot.org
-Date: Thu, 19 Aug 2021 22:49:30 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d19077677fc71fc8c8cd73945606f773d907a99a
-X-Git-Newrev: a380e058338b5fc006cb76544a4b080e52cc0f4b
-X-Patchwork-Hint: ignore
-Message-Id: <20210819204851.620758D5CB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/haproxy: security bump to version
- 2.4.3
+ with ESMTP id O-jNImQV3OPC for <buildroot@lists.busybox.net>;
+ Thu, 19 Aug 2021 20:50:30 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D8F6840001
+ for <buildroot@buildroot.org>; Thu, 19 Aug 2021 20:50:29 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:9904:2733:9b91:ffcc])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPSA id 1C12320036C;
+ Thu, 19 Aug 2021 22:50:22 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+ s=smtp-20201208; t=1629406228;
+ bh=V8yXqJjPWD/UdAY+DTOn0n8+Js3v0abIOMEvOALgDBo=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=oM4xygALNIFwHkZl7bEfZfsjZdvUyGLR4HEi3UvdFhykR2VKaHsmq+ISyiu1r690w
+ uJRnJnniIhLi19Xx5W3WUDyAr+rtRfIZj+5QblccodB80VQny7x8JEWFaQ6UYVMo+f
+ yaJkuwU6bcS5SwHHe8iD5yq21VfcPEvbkw2rWL3lQbKS87l2Ubj0NgwfZ9jPZjkqEm
+ mPpjEp4KB95F5sno9ainNhi1LHl7Kikjq8DC4S6qDn1lY2haQtiSrWazyi7HbYEVFK
+ 3QXUMQvPPyB1KY+096bKAHOPiZnjlepNtecY0zOKpjcWfITO+lpkHYCsiRquyfVUKk
+ cq5C9DfzVy1Cw==
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Thu, 19 Aug 2021 22:50:21 +0200
+Date: Thu, 19 Aug 2021 22:50:21 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Message-ID: <20210819205021.GE27036@scaer>
+References: <20210818202212.684857-1-thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20210818202212.684857-1-thomas.petazzoni@bootlin.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+Subject: Re: [Buildroot] [PATCH] package/sentry-cli: remove package
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,70 +83,148 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-MIME-Version: 1.0
+Cc: Joseph Kogut <joseph.kogut@gmail.com>,
+ Buildroot List <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a380e058338b5fc006cb76544a4b080e52cc0f4b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Thomas, All,
 
-Fixes the following security issues:
+On 2021-08-18 22:22 +0200, Thomas Petazzoni spake thusly:
+> This package has had build failures for a very long time, and these
+> issues have not been fixed, and it is now the number 1 build failure
+> reason in our autobuilders. It is time to acknowledge that the package
+> needs to be removed.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-- CVE-2021-39240: An issue was discovered in HAProxy 2.2 before 2.2.16, 2.3
-  before 2.3.13, and 2.4 before 2.4.3.  It does not ensure that the scheme
-  and path portions of a URI have the expected characters.  For example, the
-  authority field (as observed on a target HTTP/2 server) might differ from
-  what the routing rules were intended to achieve.
+Indeed, this is a bit sad that we have to remove a package, but since
+noone ever fixed the issues with it, meh...
 
-- CVE-2021-39241: An issue was discovered in HAProxy 2.0 before 2.0.24, 2.2
-  before 2.2.16, 2.3 before 2.3.13, and 2.4 before 2.4.3.  An HTTP method
-  name may contain a space followed by the name of a protected resource.  It
-  is possible that a server would interpret this as a request for that
-  protected resource, such as in the "GET /admin?  HTTP/1.1 /static/images
-  HTTP/1.1" example.
+I was pondering whether it was material for master or next, but then I
+decided master, because we do not want a release with a known-broken,
+never-to-be-fixed package.
 
-- CVE-2021-39242: An issue was discovered in HAProxy 2.2 before 2.2.16, 2.3
-  before 2.3.13, and 2.4 before 2.4.3.  It can lead to a situation with an
-  attacker-controlled HTTP Host header, because a mismatch between Host and
-  authority is mishandled.
+Applied to master, thanks.
 
-For more details, see the advisory:
-https://www.mail-archive.com/haproxy@formilux.org/msg41041.html
+Regards,
+Yann E. MORIN.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/haproxy/haproxy.hash | 4 ++--
- package/haproxy/haproxy.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+> ---
+>  DEVELOPERS                         |  1 -
+>  package/Config.in.host             |  1 -
+>  package/sentry-cli/Config.in.host  | 10 ----------
+>  package/sentry-cli/sentry-cli.hash |  3 ---
+>  package/sentry-cli/sentry-cli.mk   | 32 ------------------------------
+>  5 files changed, 47 deletions(-)
+>  delete mode 100644 package/sentry-cli/Config.in.host
+>  delete mode 100644 package/sentry-cli/sentry-cli.hash
+>  delete mode 100644 package/sentry-cli/sentry-cli.mk
+> 
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index af97de02de..64cd29d7d1 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -1441,7 +1441,6 @@ F:	package/python-schedule/
+>  F:	package/python-sentry-sdk/
+>  F:	package/python-websockets/
+>  F:	package/python-xlib/
+> -F:	package/sentry-cli/
+>  F:	package/sentry-native/
+>  F:	package/unclutter-xfixes/
+>  
+> diff --git a/package/Config.in.host b/package/Config.in.host
+> index 8d443ea255..551352482e 100644
+> --- a/package/Config.in.host
+> +++ b/package/Config.in.host
+> @@ -79,7 +79,6 @@ menu "Host utilities"
+>  	source "package/s6-rc/Config.in.host"
+>  	source "package/sam-ba/Config.in.host"
+>  	source "package/sdbusplus/Config.in.host"
+> -	source "package/sentry-cli/Config.in.host"
+>  	source "package/squashfs/Config.in.host"
+>  	source "package/sunxi-tools/Config.in.host"
+>  	source "package/swig/Config.in.host"
+> diff --git a/package/sentry-cli/Config.in.host b/package/sentry-cli/Config.in.host
+> deleted file mode 100644
+> index 3124015367..0000000000
+> --- a/package/sentry-cli/Config.in.host
+> +++ /dev/null
+> @@ -1,10 +0,0 @@
+> -config BR2_PACKAGE_HOST_SENTRY_CLI
+> -	bool "host sentry-cli"
+> -	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
+> -	select BR2_PACKAGE_HOST_RUSTC
+> -	help
+> -	  Official Sentry command line interface
+> -
+> -	  For managing debug information files and source maps.
+> -
+> -	  https://docs.sentry.io/cli/
+> diff --git a/package/sentry-cli/sentry-cli.hash b/package/sentry-cli/sentry-cli.hash
+> deleted file mode 100644
+> index 3b0733a276..0000000000
+> --- a/package/sentry-cli/sentry-cli.hash
+> +++ /dev/null
+> @@ -1,3 +0,0 @@
+> -# locally calculated
+> -sha256  5d0f7acf6a139d1c1716b9a8ff76c8bfaab09104ba663c957bb9a5dba2ffbabd  sentry-cli-1.57.0.tar.gz
+> -sha256  9503def7b54ceb6e3cd182fd59bc05d3a30d7eae481e65aaba4b495133c83c14  LICENSE
+> diff --git a/package/sentry-cli/sentry-cli.mk b/package/sentry-cli/sentry-cli.mk
+> deleted file mode 100644
+> index 7e53f16026..0000000000
+> --- a/package/sentry-cli/sentry-cli.mk
+> +++ /dev/null
+> @@ -1,32 +0,0 @@
+> -################################################################################
+> -#
+> -# sentry-cli
+> -#
+> -################################################################################
+> -
+> -SENTRY_CLI_VERSION = 1.57.0
+> -SENTRY_CLI_SITE = $(call github,getsentry,sentry-cli,$(SENTRY_CLI_VERSION))
+> -SENTRY_CLI_LICENSE = BSD-3-clause
+> -SENTRY_CLI_LICENSE_FILES = LICENSE
+> -
+> -HOST_SENTRY_CLI_DEPENDENCIES = host-rustc host-zlib
+> -
+> -HOST_SENTRY_CLI_CARGO_ENV = \
+> -	CARGO_HOME=$(HOST_DIR)/share/cargo \
+> -	RUSTFLAGS="$(addprefix -C link-args=,$(HOST_LDFLAGS))"
+> -
+> -HOST_SENTRY_CLI_CARGO_OPTS = \
+> -	--release \
+> -	--manifest-path=$(@D)/Cargo.toml
+> -
+> -define HOST_SENTRY_CLI_BUILD_CMDS
+> -	$(HOST_MAKE_ENV) $(HOST_SENTRY_CLI_CARGO_ENV) \
+> -		cargo build $(HOST_SENTRY_CLI_CARGO_OPTS)
+> -endef
+> -
+> -define HOST_SENTRY_CLI_INSTALL_CMDS
+> -	$(INSTALL) -D -m 0755 $(@D)/target/release/sentry-cli \
+> -		$(HOST_DIR)/bin/sentry-cli
+> -endef
+> -
+> -$(eval $(host-generic-package))
+> -- 
+> 2.31.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-diff --git a/package/haproxy/haproxy.hash b/package/haproxy/haproxy.hash
-index 849d362dc0..9edf5def08 100644
---- a/package/haproxy/haproxy.hash
-+++ b/package/haproxy/haproxy.hash
-@@ -1,5 +1,5 @@
--# From: http://www.haproxy.org/download/2.4/src/haproxy-2.4.2.tar.gz.sha256
--sha256  edf9788f7f3411498e3d7b21777036b4dc14183e95c8e2ce7577baa0ea4ea2aa  haproxy-2.4.2.tar.gz
-+# From: http://www.haproxy.org/download/2.4/src/haproxy-2.4.3.tar.gz.sha256
-+sha256  ce479380be5464faa881dcd829618931b60130ffeb01c88bc2bf95e230046405  haproxy-2.4.3.tar.gz
- # Locally computed:
- sha256  0717ca51fceaa25ac9e5ccc62e0c727dcf27796057201fb5fded56a25ff6ca28  LICENSE
- sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  doc/lgpl.txt
-diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
-index 4c02b6d334..85d4fa7e8d 100644
---- a/package/haproxy/haproxy.mk
-+++ b/package/haproxy/haproxy.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- HAPROXY_VERSION_MAJOR = 2.4
--HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).2
-+HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).3
- HAPROXY_SITE = http://www.haproxy.org/download/$(HAPROXY_VERSION_MAJOR)/src
- HAPROXY_LICENSE = GPL-2.0+ and LGPL-2.1+ with exceptions
- HAPROXY_LICENSE_FILES = LICENSE doc/lgpl.txt doc/gpl.txt
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
