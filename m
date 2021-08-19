@@ -2,61 +2,75 @@ Return-Path: <SRS0=aU6e=NK=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-17.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_2 autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 60562C4338F
-	for <buildroot@archiver.kernel.org>; Thu, 19 Aug 2021 21:41:58 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8353EC4338F
+	for <buildroot@archiver.kernel.org>; Thu, 19 Aug 2021 21:42:21 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 137866108F
-	for <buildroot@archiver.kernel.org>; Thu, 19 Aug 2021 21:41:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 137866108F
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
+	by mail.kernel.org (Postfix) with ESMTPS id 1DD9C6108F
+	for <buildroot@archiver.kernel.org>; Thu, 19 Aug 2021 21:42:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1DD9C6108F
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D65CF60639;
-	Thu, 19 Aug 2021 21:41:57 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D9E9D401BB;
+	Thu, 19 Aug 2021 21:42:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sZcnGYWXy7B2; Thu, 19 Aug 2021 21:41:54 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id XFsBDaUup9b6; Thu, 19 Aug 2021 21:42:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3A02F60775;
-	Thu, 19 Aug 2021 21:41:53 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6A5BF1BF4D5
- for <buildroot@lists.busybox.net>; Thu, 19 Aug 2021 21:41:51 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4AA4D401D8;
+	Thu, 19 Aug 2021 21:42:16 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B030E1BF4D5
+ for <buildroot@lists.busybox.net>; Thu, 19 Aug 2021 21:42:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 59CDB60775
- for <buildroot@lists.busybox.net>; Thu, 19 Aug 2021 21:41:51 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9E66F401D8
+ for <buildroot@lists.busybox.net>; Thu, 19 Aug 2021 21:42:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bPXbvnzw-ZXj for <buildroot@lists.busybox.net>;
- Thu, 19 Aug 2021 21:41:47 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0B00E60639
- for <buildroot@buildroot.org>; Thu, 19 Aug 2021 21:41:46 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id B91FE1C0004;
- Thu, 19 Aug 2021 21:41:43 +0000 (UTC)
-Date: Thu, 19 Aug 2021 23:41:42 +0200
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
-Message-ID: <20210819234142.7ea85d89@windsurf>
-In-Reply-To: <20210812105258.21582-1-zajec5@gmail.com>
-References: <20210812105258.21582-1-zajec5@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wx2WcowRgWpv for <buildroot@lists.busybox.net>;
+ Thu, 19 Aug 2021 21:42:10 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D993E401BB
+ for <buildroot@buildroot.org>; Thu, 19 Aug 2021 21:42:09 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:9904:2733:9b91:ffcc])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPSA id A64BD2003AE;
+ Thu, 19 Aug 2021 23:42:00 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+ s=smtp-20201208; t=1629409327;
+ bh=iZm6Hx8nVQoyAzWNYfKwcQq93az+eLJwdRLxWFRbFAA=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=UKyTdNNPWdRDW6/jQ4VJjEdPSJTX96IQM63lFe6WO/wm83XdDe3RJ2pVrkAsjYMBa
+ DS1i6W/cSes8BIHSudiP4Cmuv6/D4i+Bni+zjIfqehF45s+p3x9Iq9mJ6aquBIzOky
+ 3cezHpVHsVPUPmySpMl4BQcXSkSiWv9ev/S7BMEgxpaVS6gLXoJ1dwIPrRgYAdochQ
+ WGGEfv2CYF6dhGBY0AuWyA6sU+IaFiUltSt+QciQsVwD0ctTUeYi6LPpuLfOsohYBn
+ s3opGhtDo8t7xP9xhINZakUrFnbaEC+aw3N7SQ9jOV5NKBhl00SQcY2vVSoepGYtWR
+ Ud9zwNsMvbOmA==
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Thu, 19 Aug 2021 23:42:00 +0200
+Date: Thu, 19 Aug 2021 23:42:00 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20210819214200.GJ27036@scaer>
+References: <20210807162742.490256-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] board/broadcom: add support for BCM4908
- platform devices
+Content-Disposition: inline
+In-Reply-To: <20210807162742.490256-1-fontaine.fabrice@gmail.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+Subject: Re: [Buildroot] [PATCH 1/1] package/libvirt: aarch64 needs headers
+ >= 4.11
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,54 +82,83 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
- buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Jared Bents <jared.bents@rockwellcollins.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-SGVsbG8gUmFmYcWCLAoKT24gVGh1LCAxMiBBdWcgMjAyMSAxMjo1Mjo1OCArMDIwMApSYWZhxYIg
-TWnFgmVja2kgPHphamVjNUBnbWFpbC5jb20+IHdyb3RlOgoKPiBGcm9tOiBSYWZhxYIgTWnFgmVj
-a2kgPHJhZmFsQG1pbGVja2kucGw+Cj4gCj4gQkNNNDkwOCBpcyBCcm9hZGNvbSdzIDY0LWJpdCBw
-bGF0Zm9ybSB3aXRoIEJyb2FkY29tJ3Mgb3duIEJyYWhtYS1CNTMKPiBDUFUocykuIEl0J3MgbW9z
-dGx5IHVzZWQgZm9yIGhvbWUgcm91dGVycy4KPiAKPiBLZXJuZWwgY29uZmlnIGlzIGEgbWluaW1h
-bCBzZXR1cCByZXF1aXJlZCB0byBzdXBwb3J0IG9uLVNvQyBibG9ja3MgbGlrZQo+IE5BTkQgY29u
-dHJvbGxlciwgRXRoZXJuZXQsIHN3aXRjaCwgVVNCLgo+IAo+IFRvIG1ha2Uga2VybmVscyA1LjEy
-KyBib290IHRob3NlIGJvYXJkcyByZXF1aXJlIGEgaGFja3kgcGF0Y2ggbW9kaWZ5aW5nCj4gaHlw
-LXN0dWIuUy4gVGhhdCBib290aW5nIHByb2JsZW0gd2lsbCBob3BlZnVsbHkgZ2V0IGZpeGVzIG9u
-IGRheSBpbgo+IHVwc3RyZWFtIGtlcm5lbCBjb2RlLgo+IAo+IFNpZ25lZC1vZmYtYnk6IFJhZmHF
-giBNacWCZWNraSA8cmFmYWxAbWlsZWNraS5wbD4KCkhlcmUgYWdhaW4gdGhpcyBkZWZjb25maWcg
-ZG9lcyBub3QgYnVpbGQgYW55IGJvb3Rsb2FkZXIuIE1vc3QgQnVpbGRyb290CmRlZmNvbmZpZ3Mg
-bm9ybWFsbHkgdHJ5IHRvIGJ1aWxkIHRoZSB3aG9sZSBzb2Z0d2FyZSBzdGFjaywgaW5jbHVkaW5n
-CnRoZSBib290bG9hZGVyL2Zpcm13YXJlLiBBbnkgcmVhc29uIG5vdCB0byBkbyBzbyBoZXJlPyBB
-bHNvIHdoeSBpcyBhbgppbml0cmFtZnMgdXNlZD8KCj4gLS0tCj4gIGJvYXJkL2Jyb2FkY29tL2Jj
-bTQ5MDgvbGludXguY29uZmlnICAgICAgICAgICB8IDQyICsrKysrKysrKysrKysrKysrKysKPiAg
-Li4uLzAwMDEtYXJtNjQtZG9uLXQtaXNzdWUtSFZDLW9uLWJvb3QucGF0Y2ggIHwgMzIgKysrKysr
-KysrKysrKysKPiAgY29uZmlncy9icm9hZGNvbV9iY200OTA4X2RlZmNvbmZpZyAgICAgICAgICAg
-IHwgMTIgKysrKysrCj4gIDMgZmlsZXMgY2hhbmdlZCwgODYgaW5zZXJ0aW9ucygrKQoKYm9hcmQv
-YnJvYWRjb20vYmNtNDkwOC9yZWFkbWUudHh0IG5lZWRlZCwgYXMgd2VsbCBhcyBhbiB1cGRhdGUg
-dG8gdGhlCkRFVkVMT1BFUlMgZmlsZS4KCgo+ICsrKyBiL2JvYXJkL2Jyb2FkY29tL2JjbTQ5MDgv
-bGludXguY29uZmlnCj4gQEAgLTAsMCArMSw0MiBAQAo+ICtDT05GSUdfQkxLX0RFVl9JTklUUkQ9
-eQo+ICtDT05GSUdfSU5JVFJBTUZTX1NPVVJDRT0iJHtCUl9CSU5BUklFU19ESVJ9L3Jvb3Rmcy5j
-cGlvIgoKTm90IG5lZWRlZCwgd2lsbCBiZSBhZGRlZCBieSBCdWlsZHJvb3QuCgoKPiBkaWZmIC0t
-Z2l0IGEvY29uZmlncy9icm9hZGNvbV9iY200OTA4X2RlZmNvbmZpZyBiL2NvbmZpZ3MvYnJvYWRj
-b21fYmNtNDkwOF9kZWZjb25maWcKPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDAwMDAw
-MDAuLmM2MzEwZGUKPiAtLS0gL2Rldi9udWxsCj4gKysrIGIvY29uZmlncy9icm9hZGNvbV9iY200
-OTA4X2RlZmNvbmZpZwo+IEBAIC0wLDAgKzEsMTIgQEAKPiArQlIyX2FhcmNoNjQ9eQo+ICtCUjJf
-TElOVVhfS0VSTkVMPXkKPiArQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fVkVSU0lPTj15Cj4gK0JS
-Ml9MSU5VWF9LRVJORUxfQ1VTVE9NX1ZFUlNJT05fVkFMVUU9IjUuMTMuOSIKPiArQlIyX0xJTlVY
-X0tFUk5FTF9VU0VfQ1VTVE9NX0NPTkZJRz15Cj4gK0JSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX0NP
-TkZJR19GSUxFPSJib2FyZC9icm9hZGNvbS9iY200OTA4L2xpbnV4LmNvbmZpZyIKPiArQlIyX0xJ
-TlVYX0tFUk5FTF9EVFNfU1VQUE9SVD15Cj4gK0JSMl9MSU5VWF9LRVJORUxfSU5UUkVFX0RUU19O
-QU1FPSJicm9hZGNvbS9iY200OTA4L2JjbTQ5MDYtbmV0Z2Vhci1yODAwMHAgYnJvYWRjb20vYmNt
-NDkwOC9iY200OTA2LXRwbGluay1hcmNoZXItYzIzMDAtdjEgYnJvYWRjb20vYmNtNDkwOC9iY200
-OTA4LWFzdXMtZ3QtYWM1MzAwIgo+ICtCUjJfUEFDS0FHRV9MSU5VWF9GSVJNV0FSRT15CgpBZGRl
-ZCwgYnV0IG5vIGZpcm13YXJlIGVuYWJsZWQ/Cgo+ICtCUjJfUEFDS0FHRV9CUklER0VfVVRJTFM9
-eQoKTm90IG5lZWRlZC4KCj4gK0JSMl9UQVJHRVRfUk9PVEZTX0lOSVRSQU1GUz15Cj4gKyMgQlIy
-X1RBUkdFVF9ST09URlNfVEFSIGlzIG5vdCBzZXQKCkJlc3QgcmVnYXJkcywKClRob21hcwotLSAK
-VGhvbWFzIFBldGF6em9uaSwgY28tb3duZXIgYW5kIENFTywgQm9vdGxpbgpFbWJlZGRlZCBMaW51
-eCBhbmQgS2VybmVsIGVuZ2luZWVyaW5nCmh0dHBzOi8vYm9vdGxpbi5jb20KX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlz
-dApidWlsZHJvb3RAYnVzeWJveC5uZXQKaHR0cDovL2xpc3RzLmJ1c3lib3gubmV0L21haWxtYW4v
-bGlzdGluZm8vYnVpbGRyb290Cg==
+Fabrice, All,
+
+On 2021-08-07 18:27 +0200, Fabrice Fontaine spake thusly:
+> libvirt unconditionally uses HWCAP_CPUID on arm which is only available
+> since kernel 4.11 and
+> https://github.com/torvalds/linux/commit/77c97b4ee21290f5f083173d957843b615abbff2
+> resulting in the following build failure since the addition of the
+> packahe in commit ccfc90e1010e42e6529afae3a5ea8bf7226dabc1:
+> 
+> ../src/cpu/cpu_arm.c: In function 'virCPUarmCpuDataFromRegs':
+> ../src/cpu/cpu_arm.c:562:20: error: 'HWCAP_CPUID' undeclared (first use in this function); did you mean 'HWCAP_PMULL'?
+>      if (!(hwcaps & HWCAP_CPUID)) {
+>                     ^~~~~~~~~~~
+>                     HWCAP_PMULL
+
+The isue was a bit broader than that: libvirt needs headers >= 3.12 for
+all architectures, but AArch64, for which it requires 4.11.
+
+The 3.12 requirement was overlooked when the package was added with
+ccfc90e1010e, though, but was present in the comment.
+
+So I've added that too.
+
+> Fixes:
+>  - http://autobuild.buildroot.org/results/85bf7b4dad73a748bf439e63874eb64d9a53088f
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/libvirt/Config.in | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/libvirt/Config.in b/package/libvirt/Config.in
+> index 2f191882cc..e231511906 100644
+> --- a/package/libvirt/Config.in
+> +++ b/package/libvirt/Config.in
+> @@ -1,6 +1,6 @@
+>  config BR2_PACKAGE_LIBVIRT_ARCH_SUPPORTS
+>  	bool
+> -	default y if BR2_aarch64
+> +	default y if BR2_aarch64 && BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_11
+
+I've moved that part to the main symbol, since it is more logical to
+have there, especially since there is a more global dependency on
+headers 3.12 now.
+
+Applied to master, thanks.
+
+And damn, I forgot to update the comment! Grr... :-(
+
+Regards,
+Yann E. MORIN.
+
+>  	default y if BR2_i386
+>  	default y if BR2_x86_64
+>  	depends on BR2_USE_MMU # fork()
+> -- 
+> 2.30.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
+_______________________________________________
+buildroot mailing list
+buildroot@busybox.net
+http://lists.busybox.net/mailman/listinfo/buildroot
