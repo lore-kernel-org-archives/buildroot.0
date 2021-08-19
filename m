@@ -1,72 +1,88 @@
-Return-Path: <SRS0=Hlwc=NJ=busybox.net=buildroot-bounces@kernel.org>
+Return-Path: <SRS0=aU6e=NK=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-21.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.0 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A518BC4338F
-	for <buildroot@archiver.kernel.org>; Wed, 18 Aug 2021 23:59:23 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 531B2C4338F
+	for <buildroot@archiver.kernel.org>; Thu, 19 Aug 2021 00:01:54 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id CDBAE60FE8
-	for <buildroot@archiver.kernel.org>; Wed, 18 Aug 2021 23:59:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org CDBAE60FE8
+	by mail.kernel.org (Postfix) with ESMTPS id 9CF5061056
+	for <buildroot@archiver.kernel.org>; Thu, 19 Aug 2021 00:01:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9CF5061056
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=benettiengineering.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 79262400E0;
-	Wed, 18 Aug 2021 23:59:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 622FE80DA0;
+	Thu, 19 Aug 2021 00:01:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id M73A8CCsLL7K; Wed, 18 Aug 2021 23:59:18 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DAB9840200;
-	Wed, 18 Aug 2021 23:59:17 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E2EB61BF215
- for <buildroot@lists.busybox.net>; Wed, 18 Aug 2021 23:59:15 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DAF7480D82
- for <buildroot@lists.busybox.net>; Wed, 18 Aug 2021 23:59:15 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=aruba.it
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3uzoQAlF_wzA for <buildroot@lists.busybox.net>;
- Wed, 18 Aug 2021 23:59:11 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id VH5S8uEOUsCr; Thu, 19 Aug 2021 00:01:49 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id EFA9380DA6;
+	Thu, 19 Aug 2021 00:01:48 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 956FC1BF909
+ for <buildroot@lists.busybox.net>; Thu, 19 Aug 2021 00:01:47 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 842224031E
+ for <buildroot@lists.busybox.net>; Thu, 19 Aug 2021 00:01:47 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=aruba.it
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kLDY2NvTX0Lz for <buildroot@lists.busybox.net>;
+ Thu, 19 Aug 2021 00:01:43 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtpcmd10111.aruba.it (smtpcmd10111.aruba.it [62.149.156.111])
- by smtp1.osuosl.org (Postfix) with ESMTP id 393AC80D88
- for <buildroot@buildroot.org>; Wed, 18 Aug 2021 23:59:10 +0000 (UTC)
-Received: from ubuntu.localdomain ([89.164.22.37])
+Received: from smtpcmd01-ws.aruba.it (smtpcmd01-ws.aruba.it [62.149.158.241])
+ by smtp4.osuosl.org (Postfix) with ESMTP id BE38740310
+ for <buildroot@buildroot.org>; Thu, 19 Aug 2021 00:01:42 +0000 (UTC)
+Received: from [192.168.47.129] ([89.164.22.37])
  by Aruba Outgoing Smtp  with ESMTPSA
- id GVSdm1LOrnyXHGVSemekLz; Thu, 19 Aug 2021 01:59:08 +0200
+ id GVV5m4q3MZx06GVV5miYNi; Thu, 19 Aug 2021 02:01:41 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1629331148; bh=t6upcFVJVOBl3buQsVhlv0kUkrAJPY7PqNHpz1y32Ew=;
- h=From:To:Subject:Date:MIME-Version;
- b=KoKSkkgs+LIxFMxlRg3AlhBjsGAN8QueruKIlSABwtuS0foH8BKpDhPDszgnycTBz
- 3KsKAMAbk0/eaJZqYjH/knQ47n8iFCv9Z8Ds4nAIytdiWmRepo9lJbypbDhkBj/Z2Z
- 2RJnd8Ac5Pg7/d056ySu4CvFghBvWzTOs65PWOVHl4p1bQw7FenS0lWuY/HgjKPSn4
- vxqE0RUHqT04/CZgaDub0cipdSj3/5K2Oapq8F4U69kOlDWFt/vdqHp2tHYcwlFqNC
- 3vkzYK2As1vkNXsQ99Sg9p9Gwq4U+yXTI9YMjAGaT/yZzlStW9KO3K31JSwepPD1FL
- 6UNxqZvxBtHUg==
+ t=1629331301; bh=wmHIXzFb9PVd/pi+W+cDeQcAFuEfcpk+MUKoaSrSKKg=;
+ h=Subject:From:To:Date:MIME-Version:Content-Type;
+ b=KE2AKGpNnNsvCyNuxMilXTfEDXezr+yq4sbJt6wWKgmFUbID6JsTYMczIn6zLDRee
+ jozYDoSPXE//5Mld8/2vhdPKpYykqMFm4IRA9Fr7zuKgDdVwScfNhFYCfsNpOPJ/m8
+ LtRb3DALK+o/WqNfZSIdKBUG5+mgkPD2ZdXYbZsHHewn9QowxJcP/dQCv1ckYYiXxk
+ 1AIrb+aSQfuZmbHtFWNHsuGorwluupi/Ud0ACqpRy4eOaegEHnQ/ehAv4asxBezJ0D
+ 1YSKh1KAgxrpYAHD7wTgcBfbsKaLFRbb+dsDsRm2IHX4Zncq/FmWKsgyMsrjioYEAq
+ 01oxJ2jQTGWgw==
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-To: buildroot@buildroot.org
-Date: Thu, 19 Aug 2021 01:59:07 +0200
-Message-Id: <20210818235907.906265-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.25.1
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org, 
+ Matthew Weber <matthew.weber@rockwellcollins.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Adam Duskett <aduskett@gmail.com>, Herve Codina <herve.codina@bootlin.com>,
+ Giulio Benetti <giulio.benetti@micronovasrl.com>,
+ Bernd Kuhls <bernd.kuhls@t-online.de>,
+ Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>,
+ Arnout Vandecappelle <arnout@mind.be>,
+ Eric Le Bihan <eric.le.bihan.dev@free.fr>
+References: <20210818065730.330904074D@smtp4.osuosl.org>
+ <20210818234453.03d2237a@windsurf>
+ <412e2832-62e5-8cbe-6a85-e797b3281978@benettiengineering.com>
+Message-ID: <546f93de-44cb-4cb3-5540-fbf228b564de@benettiengineering.com>
+Date: Thu, 19 Aug 2021 02:01:39 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4wfAVo1CgbAvPrb5sN30QbFuctHcUc7T9N4F7lXO4TZ97BoRz6vShI84yU+83WTVfmzR0t4xYzgOVDqpGryABJV2gwqDyGWMGDWuaL8MT91PgMEsMcIR2Z
- BCI2X7Av+b5DiWUGJO22wFSc+yC+mBB2U7tMlAINQDJ1p68Dpui6u/tY/SNFHj28QhOjUbZZ/m28rvz8HOkhS7ufiCuC0o1p76pXUefLv6Cb7uEiBdGQc9hU
- qVY8TB1ZXmEks4wjpKEVcgRJe6uH9xFBrQmN7S6aL9tp8PNDnxC90no7JRYqvvWg
-Subject: [Buildroot] [PATCH] package/openvmtools: fix time_t build failure
- on 32-bit platforms
+In-Reply-To: <412e2832-62e5-8cbe-6a85-e797b3281978@benettiengineering.com>
+Content-Language: en-US
+X-CMAE-Envelope: MS4wfJVVqZtSgzMDOGTHMhpPHqsbFtvgSn1n34h1BDki+j8oFw0ASntif128M29+GOlUIu6cWXFYIGOWbGNDwOkljHE4myhX/V8uzPDjM0BJy72kqahjNzq4
+ ERD9brmThS7zMogmT7F99NeTMMGnZaLQsszCo0DU3cAu3a7SNNiVXB7P8oAyMvHORIQgAdLHRLY1WFtHPK9GFtEGTeFfK9VCNQ/do300vgnW5lwwTOwrlNyE
+ InJ+oIjuYQPf4KlJo671D8AN4LmQcik3gDsf6RnWJmQXBeCeckZXrSj+JCutdezkgj9LwHvTjU6L8JpCHcj5lGoyt2M7bWeV05+Y8/5leorx1EeLYra78rBs
+ 8dosf9OU2eMFLD+h6DjSKU2TnUUC43jUeYnCFzlgoWSaOzO8wawJcoD5AFgDKZVgmFl41fo3mqD1H+oU5CNDy/hdDHp6YWrIR8RuvvBOYmvfyr3aF3Pa7kXi
+ R6Zdsg/j7NdeN9nw79W0jP9RTbUxOUlIFQMoSiMIDVyix1NYiBA7sSzXq2nODXjZPP31dFOVt9H0rmkn2z+4F1eSYYwWFcDWT5d+WaNSzeA8wH/TOSFzmHoy
+ Kic=
+Subject: Re: [Buildroot] Analysis of build results for 2021-08-17
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,116 +94,95 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Karoly Kasza <kaszak@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-Add upstream pending patch[1] to fix time_t on 32-bit platform.
-
-[1]: https://github.com/vmware/open-vm-tools/pull/387
-
-Fixes:
-http://autobuild.buildroot.net/results/eb3dfe679536b578a0f16762312a96ada7162095/
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- ...FromNtTimeNsec-aware-of-64-bit-time_.patch | 80 +++++++++++++++++++
- 1 file changed, 80 insertions(+)
- create mode 100644 package/openvmtools/0012-Make-HgfsConvertFromNtTimeNsec-aware-of-64-bit-time_.patch
-
-diff --git a/package/openvmtools/0012-Make-HgfsConvertFromNtTimeNsec-aware-of-64-bit-time_.patch b/package/openvmtools/0012-Make-HgfsConvertFromNtTimeNsec-aware-of-64-bit-time_.patch
-new file mode 100644
-index 0000000000..dbe2c29a2b
---- /dev/null
-+++ b/package/openvmtools/0012-Make-HgfsConvertFromNtTimeNsec-aware-of-64-bit-time_.patch
-@@ -0,0 +1,80 @@
-+From 3f0580f2546de8be7acf1bc78a55a257bc638ebe Mon Sep 17 00:00:00 2001
-+From: Bartosz Brachaczek <b.brachaczek@gmail.com>
-+Date: Tue, 12 Nov 2019 14:31:08 +0100
-+Subject: [PATCH] Make HgfsConvertFromNtTimeNsec aware of 64-bit time_t on i386
-+
-+I verified that this function behaves as expected on x86_64, i386 with
-+32-bit time_t, and i386 with 64-bit time_t for the following values of
-+ntTtime:
-+
-+UNIX_EPOCH-1, UNIX_EPOCH, UNIX_EPOCH+1, UNIX_S32_MAX-1, UNIX_S32_MAX,
-+UNIX_S32_MAX+1, UNIX_S32_MAX*2+1
-+
-+I did not verify whether the use of Div643264 is optimal, performance
-+wise.
-+
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ lib/hgfs/hgfsUtil.c | 34 +++++++++++++++++++---------------
-+ 1 file changed, 19 insertions(+), 15 deletions(-)
-+
-+diff --git a/lib/hgfs/hgfsUtil.c b/lib/hgfs/hgfsUtil.c
-+index cc580ab8..49b10040 100644
-+--- a/lib/hgfs/hgfsUtil.c
-++++ b/lib/hgfs/hgfsUtil.c
-+@@ -110,23 +110,21 @@ HgfsConvertFromNtTimeNsec(struct timespec *unixTime, // OUT: Time in UNIX format
-+ 			  uint64 ntTime) // IN: Time in Windows NT format
-+ {
-+ #ifdef __i386__
-+-   uint32 sec;
-+-   uint32 nsec;
-++   uint64 sec64;
-++   uint32 sec32, nsec;
-++#endif
-+ 
-+    ASSERT(unixTime);
-+-   /* We assume that time_t is 32bit */
-+-   ASSERT_ON_COMPILE(sizeof (unixTime->tv_sec) == 4);
-+ 
-+-   /* Cap NT time values that are outside of Unix time's range */
-++   if (sizeof (unixTime->tv_sec) == 4) {
-++      /* Cap NT time values that are outside of Unix time's range */
-+ 
-+-   if (ntTime >= UNIX_S32_MAX) {
-+-      unixTime->tv_sec = 0x7FFFFFFF;
-+-      unixTime->tv_nsec = 0;
-+-      return 1;
-++      if (ntTime >= UNIX_S32_MAX) {
-++         unixTime->tv_sec = 0x7FFFFFFF;
-++         unixTime->tv_nsec = 0;
-++         return 1;
-++      }
-+    }
-+-#else
-+-   ASSERT(unixTime);
-+-#endif
-+ 
-+    if (ntTime < UNIX_EPOCH) {
-+       unixTime->tv_sec = 0;
-+@@ -135,9 +133,15 @@ HgfsConvertFromNtTimeNsec(struct timespec *unixTime, // OUT: Time in UNIX format
-+    }
-+ 
-+ #ifdef __i386__
-+-   Div643232(ntTime - UNIX_EPOCH, 10000000, &sec, &nsec);
-+-   unixTime->tv_sec = sec;
-+-   unixTime->tv_nsec = nsec * 100;
-++   if (sizeof (unixTime->tv_sec) == 4) {
-++      Div643232(ntTime - UNIX_EPOCH, 10000000, &sec32, &nsec);
-++      unixTime->tv_sec = sec32;
-++      unixTime->tv_nsec = nsec * 100;
-++   } else {
-++      Div643264(ntTime - UNIX_EPOCH, 10000000, &sec64, &nsec);
-++      unixTime->tv_sec = sec64;
-++      unixTime->tv_nsec = nsec * 100;
-++   }
-+ #else
-+    unixTime->tv_sec = (ntTime - UNIX_EPOCH) / 10000000;
-+    unixTime->tv_nsec = ((ntTime - UNIX_EPOCH) % 10000000) * 100;
-+-- 
-+2.25.1
-+
--- 
-2.25.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@busybox.net
-http://lists.busybox.net/mailman/listinfo/buildroot
+T24gOC8xOS8yMSAxMjoyNCBBTSwgR2l1bGlvIEJlbmV0dGkgd3JvdGU6Cj4gSGVsbG8gVGhvbWFz
+LAo+IAo+IE9uIDgvMTgvMjEgMTE6NDQgUE0sIFRob21hcyBQZXRhenpvbmkgd3JvdGU6Cj4+IEhl
+bGxvLAo+Pgo+PiBNYXR0LCBGYWJyaWNlLCBBZGFtLCBIZXJ2w6ksIEdpdWxpbywgQmVybmQsIEd3
+ZW5oYWVsLCBBcm5vdXQsIEVyaWMsIHNlZQo+PiBiZWxvdyEgOi0pCj4+Cj4+IE9uIFdlZCwgMTgg
+QXVnIDIwMjEgMDY6NTc6MjIgLTAwMDAKPj4gVGhvbWFzIFBldGF6em9uaSA8dGhvbWFzLnBldGF6
+em9uaUBib290bGluLmNvbT4gd3JvdGU6Cj4+Cj4+PiAgICAgICAgIGJyYW5jaCB8ICBPSyB8IE5P
+SyB8IFRJTSB8IFRPVCB8Cj4+PiAgICAgMjAyMS4wMi54ICB8IDM0ICB8ICA3ICB8ICAwICB8IDQx
+ICB8Cj4+PiAgICAgMjAyMS4wNS54ICB8IDM1ICB8ICA3ICB8ICAwICB8IDQyICB8Cj4+PiAgICAg
+ICBtYXN0ZXIgICB8IDE4NiB8IDMwICB8ICA1ICB8IDIyMSB8Cj4+Cj4+IFdlJ3JlIGRvaW5nIHJl
+YWxseSBnb29kIG9uIHRoZSBtYXN0ZXIgYnJhbmNoIG5vdy4gTGV0J3Mgc2VlIHdoYXQgd2UKPj4g
+aGF2ZSBsZWZ0IQo+Pgo+IAo+IFtTTklQXQo+IAo+Pj4gICAgICAgbTY4ayAgICAgfCAgICAgIGxp
+Ym1vZHNlY3VyaXR5LTMuMC41ICAgICAgfCBOT0sgfCBodHRwOi8vYXV0b2J1aWxkLmJ1aWxkcm9v
+dC5uZXQvcmVzdWx0cy9iOTI5ODBhNTYzZmU3ZWUzMzFlNzBmMjg4Y2UwNDFiZTBiZjI5ZDQwIHwK
+Pj4KPj4gL3RtcC9jY2l4OThnOS5zOiBBc3NlbWJsZXIgbWVzc2FnZXM6Cj4+IC90bXAvY2NpeDk4
+ZzkuczogRmF0YWwgZXJyb3I6IFRyaWVkIHRvIGNvbnZlcnQgUEMgcmVsYXRpdmUgYnJhbmNoIHRv
+IGFic29sdXRlIGp1bXAKPj4KPj4gQW5vdGhlciB0b29sY2hhaW4gaXNzdWUuLi4gQWRkaW5nIEdp
+dWxpbyBpbiB0aGUgbG9vcC4KPj4KPiAKPiBJJ20gcmVwcm9kdWNpbmcgaXQgbm93Lgo+IAo+Pj4g
+ICAgICAgb3IxayAgICAgfCAgICAgICAgIG9wZW5hbC0xLjIxLjEgICAgICAgICAgfCBOT0sgfCBo
+dHRwOi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5uZXQvcmVzdWx0cy82YTI4MDlmOGVlZmRlZWFjYThh
+NGM2MTEzMGE4ZDg1NTExNjg1Y2ZjIHwKPj4KPj4gL2RhdGEvYnVpbGRyb290LWF1dG9idWlsZGVy
+L2luc3RhbmNlLTAvb3V0cHV0LTEvcGVyLXBhY2thZ2Uvb3BlbmFsL2hvc3Qvb3B0L2V4dC10b29s
+Y2hhaW4vYmluLy4uL2xpYi9nY2Mvb3Ixay1idWlsZHJvb3QtbGludXgtdWNsaWJjLzkuMy4wLy4u
+Ly4uLy4uLy4uL29yMWstYnVpbGRyb290LWxpbnV4LXVjbGliYy9iaW4vbGQ6IENNYWtlRmlsZXMv
+T3BlbkFMLmRpci9hbC9maWx0ZXIuY3BwLm86IHBjLXJlbGF0aXZlIHJlbG9jYXRpb24gYWdhaW5z
+dCBkeW5hbWljIHN5bWJvbCBhbEZpbHRlcmkKPj4gL2RhdGEvYnVpbGRyb290LWF1dG9idWlsZGVy
+L2luc3RhbmNlLTAvb3V0cHV0LTEvcGVyLXBhY2thZ2Uvb3BlbmFsL2hvc3Qvb3B0L2V4dC10b29s
+Y2hhaW4vYmluLy4uL2xpYi9nY2Mvb3Ixay1idWlsZHJvb3QtbGludXgtdWNsaWJjLzkuMy4wLy4u
+Ly4uLy4uLy4uL29yMWstYnVpbGRyb290LWxpbnV4LXVjbGliYy9iaW4vbGQ6IENNYWtlRmlsZXMv
+T3BlbkFMLmRpci9hbC9maWx0ZXIuY3BwLm86IHBjLXJlbGF0aXZlIHJlbG9jYXRpb24gYWdhaW5z
+dCBkeW5hbWljIHN5bWJvbCBhbEdldEZpbHRlcmkKPj4gL2RhdGEvYnVpbGRyb290LWF1dG9idWls
+ZGVyL2luc3RhbmNlLTAvb3V0cHV0LTEvcGVyLXBhY2thZ2Uvb3BlbmFsL2hvc3Qvb3B0L2V4dC10
+b29sY2hhaW4vYmluLy4uL2xpYi9nY2Mvb3Ixay1idWlsZHJvb3QtbGludXgtdWNsaWJjLzkuMy4w
+Ly4uLy4uLy4uLy4uL29yMWstYnVpbGRyb290LWxpbnV4LXVjbGliYy9iaW4vbGQ6IGZpbmFsIGxp
+bmsgZmFpbGVkOiBiYWQgdmFsdWUKPj4gY29sbGVjdDI6IGVycm9yOiBsZCByZXR1cm5lZCAxIGV4
+aXQgc3RhdHVzCj4+Cj4+IFRvb2xjaGFpbiBpc3N1ZS4gR2l1bGlvLCBhbiBpZGVhID8KPiAKPiBU
+aGlzIHdhaXRzIGZvciB5b3UgdG8gcmVsZWFzZSBuZXcgT3BlblJpc2MgQm9vdGxpbiB0b29sY2hh
+aW4uIEF0Cj4gQnVpbGRyb290IGxldmVsIGFsbCBPcGVuUmlzYyBwYXRjaGVzIHdlJ3JlIGNvdmVy
+ZWQob24gZ2NjIDExLjEuMCB0b28KPiBmcm9tIHllc3RlcmRheSkuIFNvIHdpdGggdGhhdCB5b3Ug
+c2hvdWxkIGJlIGFibGUgdG8gY3JlYXRlIHRoZSBuZXcKPiBCb290bGluIE9wZW5SaXNjIFRvb2xj
+aGFpbiB0aGF0IHdpbGwgYWxzbyBlbmFibGUgLW1jbW9kZWw9bGFyZ2UgZm9yCj4gbGliZ2VvcyBh
+bmQgcHJvdG9idWYsIGJhc2ljYWxseSB0aGV5IHdpbGwgYmUgYm90aCByZS1lbmFibGVkIGZvcgo+
+IE9wZW5SaXNjIDotKQo+IAo+Pj4gICAgICAgaTU4NiAgICAgfCAgb3BlbnZtdG9vbHMtMTAuMy41
+LTEwNDMwMTQ3ICAgfCBOT0sgfCBodHRwOi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5uZXQvcmVzdWx0
+cy9lYjNkZmU2Nzk1MzZiNTc4YTBmMTY3NjIzMTJhOTZhZGE3MTYyMDk1IHwKPj4KPj4gL2hvbWUv
+YnVpbGRyb290L2F1dG9idWlsZC9pbnN0YW5jZS0zL291dHB1dC0xL2J1aWxkL29wZW52bXRvb2xz
+LTEwLjMuNS0xMDQzMDE0Ny9saWIvaW5jbHVkZS92bV9hc3NlcnQuaDozMzE6NzogZXJyb3I6IHN0
+YXRpYyBhc3NlcnRpb24gZmFpbGVkOiAic2l6ZW9mICh1bml4VGltZS0+dHZfc2VjKSA9PSA0Igo+
+PiAgICAgMzMxIHwgICAgICAgX1N0YXRpY19hc3NlcnQoZSwgI2UpOyBcCj4+Cj4+IEFub3RoZXIg
+cGFja2FnZSBub3QgcmVhZHkgd2l0aCA2NC1iaXQgdGltZV90IGl0IHNlZW1zLgo+IAo+IFllcAo+
+IAo+PiBXZSBjbGVhcmx5IGRvbid0IGhhdmUgdGhlIGxhdGVzdCB2ZXJzaW9uIG9mIG9wZW4tdm0t
+dG9vbHMsIGJ1dCBpdAo+PiBoYXNuJ3QgYmVlbiBmaXhlZCB1cHN0cmVhbToKPj4gaHR0cHM6Ly9n
+aXRodWIuY29tL3Ztd2FyZS9vcGVuLXZtLXRvb2xzL2Jsb2IvbWFzdGVyL29wZW4tdm0tdG9vbHMv
+bGliL2hnZnMvaGdmc1V0aWwuYyNMMTE3Cj4+Cj4+IFRoaXMgaXNzdWUgaXMgZGlzY3Vzc2VkIGF0
+Cj4+IGh0dHBzOi8vZ2l0aHViLmNvbS92bXdhcmUvb3Blbi12bS10b29scy9pc3N1ZXMvNDMwLiBU
+aGUKPj4gbWV0YS1vcGVuZW1iZWRkZWQgbGF5ZXIgaGFzIHRoZSBwYXRjaAo+PiAuL21ldGEtbmV0
+d29ya2luZy9yZWNpcGVzLXN1cHBvcnQvb3Blbi12bS10b29scy9vcGVuLXZtLXRvb2xzLzAwMDEt
+TWFrZS1IZ2ZzQ29udmVydEZyb21OdFRpbWVOc2VjLWF3YXJlLW9mLTY0LWJpdC10aW1lXy5wYXRj
+aAo+PiB0byBmaXggdGhpcy4KPj4KPj4gQW55b25lIHZvbHVudGVlcmluZyB0byBmaXggdGhpcz8K
+Pj4KPiAKPiBJIGNhbiBkbyB0aGF0LiBPbmx5IHRoYXQgcGF0Y2ggVVJMIGlzIGJyb2tlbiBidXQg
+dGhlcmUgaXMgYSBQUiBmb3IgdGhhdAo+IHRvIHRha2UgdGhlIHBhdGNoOgo+IGh0dHBzOi8vZ2l0
+aHViLmNvbS92bXdhcmUvb3Blbi12bS10b29scy9wdWxsLzM4Ny9jb21taXRzLzNmMDU4MGYyNTQ2
+ZGU4YmU3YWNmMWJjNzhhNTVhMjU3YmM2MzhlYmUKPiBJIGNhbiBkZWFsIHdpdGggaXQuCgpUaGlz
+IGlzIGZpeGVkIGJ5OgpodHRwczovL3BhdGNod29yay5vemxhYnMub3JnL3Byb2plY3QvYnVpbGRy
+b290L3BhdGNoLzIwMjEwODE4MjM1OTA3LjkwNjI2NS0xLWdpdWxpby5iZW5ldHRpQGJlbmV0dGll
+bmdpbmVlcmluZy5jb20vCi0tIApHaXVsaW8gQmVuZXR0aQpCZW5ldHRpIEVuZ2luZWVyaW5nIHNh
+cwoKPiBBbHNvIHdlIGRvbid0IGhhdmUgYSBtYWludGFpbmVyIGZvciBpdCwgbWF5YmUgSSBjYW4K
+PiBiZSB0aGUgb25lLgo+IAo+Pj4gICAgICAgb3IxayAgICAgfCAgICAgICAgICAgIHVua25vd24g
+ICAgICAgICAgICAgfCBOT0sgfCBodHRwOi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5uZXQvcmVzdWx0
+cy85MmMwODZiMGM1YzJhMjk4YTgyYTZlYjljMjg5ZGM1M2M1OGE1ZTVlIHwKPj4KPj4gVG9wLWxl
+dmVsIHBhcmFsbGVsIGJ1aWxkLCBubyBpZGVhIHdoYXQgdGhlIGlzc3VlIGlzLgo+IAo+IENhbiBz
+b21lYm9keSBwb2ludCBtZSBzb21lIGlkZWEgb24gaG93IHRvIGFwcHJvYWNoIFRvcC1sZXZlbCBw
+YXJhbGxlbAo+IGJ1aWxkIGRlYnVnZ2luZz8gSSBhbHNvIGhhdmUgc29tZSB1ZGlza3MgcGFja2Fn
+ZSBmYWlsdXJlIGR1ZSB0byB0aGF0Lgo+IEkgbWVhbiwgbm93IHdoYXQgSSBkbyBpcyAuL2JyX3Jl
+cHJvZHVjZV9idWlsZCBTSEExLCB0aGVuIEkgQ1RSTC1DIGFuZDoKPiAjIGNkIFNIQTEKPiAjIGNk
+IG91dHB1dAo+ICMgbWFrZSBwYWNrYWdlLXRoYXQtZmFpbHMKPiAKPiBCdXQgd2l0aCBUb3AtbGV2
+ZWwgSSBoYXZlIG1vcmUgb3V0cHV0LXgsIGhvdyBjYW4gSSByZWlzc3VlIHRoZSBjb21tYW5kCj4g
+YW5kIGFyZSB0aGVyZSBhbnkgdHJpY2sgdG8gZGVidWcgaXQ/Cj4gCj4+PiAgICAgICBvcjFrICAg
+ICB8ICAgICAgICAgIHplcm9tcS00LjMuNCAgICAgICAgICB8IE5PSyB8IGh0dHA6Ly9hdXRvYnVp
+bGQuYnVpbGRyb290Lm5ldC9yZXN1bHRzL2Y2ZDljM2IxZTdiZTBlM2M3MjJmNzliYWQ3Yjg5Yzdm
+MWJkMGYyZjAgfAo+Pj4gICAgICAgb3IxayAgICAgfCAgICAgICAgICB6ZXJvbXEtNC4zLjQgICAg
+ICAgICAgfCBOT0sgfCBodHRwOi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5uZXQvcmVzdWx0cy9jNmI0
+ZjM3ZTMwYjdjNmY4MDNkMzJlNmQ5ZDBkZWM4ZTE1ZTdlYzMwIHwKPj4KPj4gR2l1bGlvID8KPiAK
+PiBIZXJlIGlzIHRoZSBzYW1lIHRoYXQgZ29lcyBmb3Igb3BlbmFsLCBleHRlcm5hbCBCb290bGlu
+IE9wZW5SaXNjCj4gVG9vbGNoYWluIHVwZGF0ZWQgbXVzdCBzb2x2ZSBpdC4KPiAKPiBCZXN0IHJl
+Z2FyZHMKPiAKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+CmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1c3lib3gubmV0Cmh0dHA6Ly9saXN0
+cy5idXN5Ym94Lm5ldC9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
