@@ -2,84 +2,90 @@ Return-Path: <SRS0=aU6e=NK=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
+	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6CC24C4338F
-	for <buildroot@archiver.kernel.org>; Thu, 19 Aug 2021 05:30:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 454E5C4338F
+	for <buildroot@archiver.kernel.org>; Thu, 19 Aug 2021 07:08:39 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 49195610FA
-	for <buildroot@archiver.kernel.org>; Thu, 19 Aug 2021 05:30:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 49195610FA
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=jms.id.au
+	by mail.kernel.org (Postfix) with ESMTPS id C210A610A7
+	for <buildroot@archiver.kernel.org>; Thu, 19 Aug 2021 07:08:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C210A610A7
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0625460649;
-	Thu, 19 Aug 2021 05:30:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8289360B90;
+	Thu, 19 Aug 2021 07:08:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id eniE09TTBgfu; Thu, 19 Aug 2021 05:30:48 +0000 (UTC)
+	with ESMTP id zdzJJFEzUMAC; Thu, 19 Aug 2021 07:08:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 88C0D6070A;
-	Thu, 19 Aug 2021 05:30:47 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C51AD1BF94B
- for <buildroot@lists.busybox.net>; Thu, 19 Aug 2021 05:30:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EB41B60BA3;
+	Thu, 19 Aug 2021 07:08:33 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 8372B1BF2B8
+ for <buildroot@lists.busybox.net>; Thu, 19 Aug 2021 07:08:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B2FE640183
- for <buildroot@lists.busybox.net>; Thu, 19 Aug 2021 05:30:45 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8078980C2A
+ for <buildroot@lists.busybox.net>; Thu, 19 Aug 2021 07:08:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=jms.id.au
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nWPbNe-UdHpd for <buildroot@lists.busybox.net>;
- Thu, 19 Aug 2021 05:30:40 +0000 (UTC)
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xBBQwFOo0S-7 for <buildroot@lists.busybox.net>;
+ Thu, 19 Aug 2021 07:08:28 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com
- [IPv6:2607:f8b0:4864:20::735])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 8B66B400E7
- for <buildroot@buildroot.org>; Thu, 19 Aug 2021 05:30:40 +0000 (UTC)
-Received: by mail-qk1-x735.google.com with SMTP id n11so5940626qkk.1
- for <buildroot@buildroot.org>; Wed, 18 Aug 2021 22:30:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jms.id.au; s=google;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=/C7OOgnMvNWNjXog+c84BeyMvX/7wrYiqLi7RQUnrR4=;
- b=QKCA8ydgkfZcCae8b1prsmBD6tQbq5fRLIymSxXsZZufj/O2CmfDz429e1NrqHIft/
- AX1J2vWe+D/ZLZ3C6QFCt22zGqzKuDaTS7juioRnTjsgysjmIrtP9srkMgt32odR8rPL
- eUzmFLwHNVC6HsyJ0VpxVYLvFOk2w6kOcoyn4=
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
+ [IPv6:2a00:1450:4864:20::431])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0021980D96
+ for <buildroot@buildroot.org>; Thu, 19 Aug 2021 07:08:27 +0000 (UTC)
+Received: by mail-wr1-x431.google.com with SMTP id f5so7352937wrm.13
+ for <buildroot@buildroot.org>; Thu, 19 Aug 2021 00:08:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=e7s2I30XF9mYb8clE8HjAybFsL79PM2jLqrPFH09nLI=;
+ b=qY1lSY22p4t3/nZej6u70jqwyD34Wb2Nx0KAvrgpyQWM4ZQtBcCgIlIbJAfNhx6wp1
+ m6ZeVFXqRqy5zP6rIKt67o5/dHZlY/SXEBsC3LTBEgTsC4XV+uDc5LhWv07jEsQH5IK6
+ 8kUM9MyeiqkLNz5govPpgZh6q/LHUjGAW3+1WFboy3JZekV83b27PXiM12aTeQqOXjhX
+ 3G5PigSN8S3AoBj/bE+36KN/+za27/K8EhkdIJl3NYc7er0cfuz8P9GNU/NNshZK1v+D
+ /CsXrlfLp1rpk6XvjSJICgvFSuLDArU0q9N7JQVYbPPXmfCP+Oz5ZdHo1SJjQ7K1xQCC
+ qz0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=/C7OOgnMvNWNjXog+c84BeyMvX/7wrYiqLi7RQUnrR4=;
- b=XIeoYawXnLDCQW6605f/m7pTSiz+yKUwa1i5dbU5Mb8vttAQaiRlY5s8Bb8HJd2tot
- R+KR9kwgGFKnbJMhjYlBhVc8UgaCYzc4nihMx+KkZC2uwkpjBbMn0bQb5FS6oU5HsOwb
- TWJ8HW8L8GpUhZLuGKfOKaasfHoUeJ7ZCzc4BKxXkxlGpElp04+iZURTPhnmKYC5s6ym
- w+k8HdPL+KDt6Q3JLY/ze5IoU/5DLIt5/tF9VtgW2ufdYKMsglZD14YQYY0S/+8zItYd
- SP+A/CYLeIo6lj2DWRGWKRiMe+GeY2bsfFwfhXyBKt6tXklJ3w0nVLkZRFi1sXdhKWG6
- EuRQ==
-X-Gm-Message-State: AOAM533xtGws3tkbvzYxJRC/d2wHDXq5ejVBvoNpTCiTVRH/yEF6efe6
- HNY0woYggqGL8xrZnQCgIOV7n2zLIgKbO4b0Fs9fqrFT
-X-Google-Smtp-Source: ABdhPJy3bWigwyi6eppDLAi4ScLXarGL/zI2IaDF5o4tbVY+aE/irA2HkapbUF7Iyv/1jKiWXdeeNflKpwU9jaI1EkY=
-X-Received: by 2002:ae9:e407:: with SMTP id q7mr2050250qkc.55.1629351039148;
- Wed, 18 Aug 2021 22:30:39 -0700 (PDT)
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=e7s2I30XF9mYb8clE8HjAybFsL79PM2jLqrPFH09nLI=;
+ b=Q653d48hqPxXcc8nOt8onLtggrYJeljTkIc43ywP0ZROiusYr9esA2Cv+NJXEb57kg
+ 1pek644qEGz9DNE32Q2tduD61p0BPotChefRmTgWo3Zq8aVyKejzOdo9Hl5L3RvPJfPN
+ c5USsxl+UXwVCThw9mg3DtlbGym75GTMlyrajOgsfXFiF2l/8chM9tjBLwYbqaQTkOqA
+ BZwbQiN4f77pj7IJpFt9KIpg/JElTwiAqyS4HAF3lkYobhhpqob1vLq9g1kzDG34P8Vs
+ J+UCo+BHWcEH0m8A/wDzqdg7CHnhb+kRxEU4hH7+LbAZmr1aO0O99GUrqvA2/V148Wmp
+ yHHw==
+X-Gm-Message-State: AOAM533Q7cXs8IR9jWooj2K/wpScU2lylhJoQX6bJo6wLSoirloXui1r
+ RF/qVSyO3WSKICwyTVinaS4TMu6DWuK1oQ==
+X-Google-Smtp-Source: ABdhPJxOarxqLa0Ggo08/1eydLjXCpmOw0Al+Tppx/6PQ68Fe1qxESwg9O/iscRiF5o5UTzcK0DfdQ==
+X-Received: by 2002:a5d:4dc3:: with SMTP id f3mr1933880wru.302.1629356905732; 
+ Thu, 19 Aug 2021 00:08:25 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-417-221.w2-10.abo.wanadoo.fr.
+ [2.10.242.221])
+ by smtp.gmail.com with ESMTPSA id g9sm1810024wmk.34.2021.08.19.00.08.24
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 19 Aug 2021 00:08:25 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Thu, 19 Aug 2021 09:08:07 +0200
+Message-Id: <20210819070807.618276-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20210803081615.879069-1-joel@jms.id.au>
- <a67de0fb-78da-bbe6-e2f7-a58c126ee43c@mind.be>
- <CACPK8Xf9-KOSRourfGbqjFLciO4oVazz4Hv2Cf-bO8phhrcSug@mail.gmail.com>
- <489e7bc6-dbf1-b12d-23ff-7dfa478ab69e@mind.be>
-In-Reply-To: <489e7bc6-dbf1-b12d-23ff-7dfa478ab69e@mind.be>
-From: Joel Stanley <joel@jms.id.au>
-Date: Thu, 19 Aug 2021 05:30:26 +0000
-Message-ID: <CACPK8Xd4P+FJ=Cb6ONdayFsrP7GHe46OcsT1rRprmQ9XdmGiQQ@mail.gmail.com>
-To: Arnout Vandecappelle <arnout@mind.be>
-Subject: Re: [Buildroot] [PATCH] package/pdbg: Fix alignment error on
- autobuilder
+Subject: [Buildroot] [PATCH 1/1] package/libvirt: fix NLS build
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,60 +97,54 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Jared Bents <jared.bents@rockwellcollins.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-On Thu, 5 Aug 2021 at 11:43, Arnout Vandecappelle <arnout@mind.be> wrote:
->
->
->
-> On 05/08/2021 00:50, Joel Stanley wrote:
-> > On Wed, 4 Aug 2021 at 20:46, Arnout Vandecappelle <arnout@mind.be> wrote:
-> >>
-> >>
-> >>
-> >> On 03/08/2021 10:16, Joel Stanley wrote:
-> >>> The autobuilder fails when building for sh because of an alignment issue
-> >>> in assembly that includes an external data file.
-> >>>
-> >>>  http://autobuild.buildroot.net/results/457b88c4ba85edb42b3a36cce48bf90712f590bf/
-> >>>
-> >>> This fix has been submitted upstream.
-> >>
-> >>  Has it? I'm looking at the PRs and issues on github and can't find anything. Is
-> >> there some other upstream that I can't find?
-> >
-> > The project development happens on a mailing list, like all sensible projects:
-> >
-> >  https://lists.ozlabs.org/pipermail/pdbg/2021-August/002373.html
->
->  Our Config.in help text refers to the github repo, and I couldn't find anything
-> about a mailing list in the README (or a specific contribution document). If
-> you're close to pdbg upstream, perhaps suggest an update to the README as well?
+Fix the following build failure raised since the addition of the package
+in commit ccfc90e1010e42e6529afae3a5ea8bf7226dabc1:
 
-That's a good suggestion, I've done this and Amitay has merged it into
-the repository.
+/tmp/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/i686-buildroot-linux-uclibc/9.3.0/../../../../i686-buildroot-linux-uclibc/bin/ld: src/util/libvirt_util.a(viralloc.c.o): in function `virInsertElementsN':
+viralloc.c:(.text+0x167): undefined reference to `libintl_dgettext'
 
->
-> >
-> >  http://patchwork.ozlabs.org/project/pdbg/patch/20210803080305.866765-1-joel@jms.id.au/
->
->  In the future, it's nice to include such a reference in the patch itself.
-> That's obviously a bit of a catch-22, so what I do is:
->
-> - prepare git commit;
-> - send to upstream;
-> - git format-patch -N -o <buildroot>
-> - edit the generated patch(es) and add the upstream reference below the SoB.
+Fixes:
+ - http://autobuild.buildroot.net/results/2349c55a4a42f08ca52700c60cda3065b0c4bd88
 
-I'll keep that in mind.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libvirt/libvirt.mk | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-Cheers,
+diff --git a/package/libvirt/libvirt.mk b/package/libvirt/libvirt.mk
+index 93eab849cc..be1ef34798 100644
+--- a/package/libvirt/libvirt.mk
++++ b/package/libvirt/libvirt.mk
+@@ -21,7 +21,10 @@ LIBVIRT_DEPENDENCIES = \
+ 	libtirpc \
+ 	libxml2 \
+ 	udev \
+-	zlib
++	zlib \
++	$(TARGET_NLS_DEPENDENCIES)
++
++LIBVIRT_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
+ 
+ LIBVIRT_CONF_ENV += \
+ 	CFLAGS="$(TARGET_CFLAGS) `$(PKG_CONFIG_HOST_BINARY) --cflags libtirpc`" \
+@@ -49,6 +52,7 @@ LIBVIRT_CONF_OPTS = \
+ 	-Dinit_script=$(if $(BR2_INIT_SYSTEMD),systemd,none) \
+ 	-Dlogin_shell=disabled \
+ 	-Dnetcf=disabled \
++	-Dnls=$(if $(BR2_SYSTEM_ENABLE_NLS),enabled,disabled) \
+ 	-Dnumad=disabled \
+ 	-Dopenwsman=disabled \
+ 	-Dpciaccess=enabled \
+-- 
+2.30.2
 
-Joel
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
