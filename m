@@ -2,61 +2,57 @@ Return-Path: <SRS0=aU6e=NK=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_2 autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 78640C4338F
-	for <buildroot@archiver.kernel.org>; Thu, 19 Aug 2021 20:51:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 552D5C4338F
+	for <buildroot@archiver.kernel.org>; Thu, 19 Aug 2021 20:52:03 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 3E3036108E
-	for <buildroot@archiver.kernel.org>; Thu, 19 Aug 2021 20:51:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3E3036108E
+	by mail.kernel.org (Postfix) with ESMTPS id 1C92E60200
+	for <buildroot@archiver.kernel.org>; Thu, 19 Aug 2021 20:52:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1C92E60200
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1043D4043F;
-	Thu, 19 Aug 2021 20:51:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E90A6404BE;
+	Thu, 19 Aug 2021 20:52:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 49B-yUh_hoBs; Thu, 19 Aug 2021 20:51:28 +0000 (UTC)
+	with ESMTP id ssDJqZSOA-yQ; Thu, 19 Aug 2021 20:51:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5B8B84048C;
-	Thu, 19 Aug 2021 20:51:27 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9162A1BF297
- for <buildroot@lists.busybox.net>; Thu, 19 Aug 2021 20:51:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5A82F424F7;
+	Thu, 19 Aug 2021 20:51:58 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 575E11BF297
+ for <buildroot@lists.busybox.net>; Thu, 19 Aug 2021 20:51:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 80BE560775
- for <buildroot@lists.busybox.net>; Thu, 19 Aug 2021 20:51:26 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 47881819B8
+ for <buildroot@lists.busybox.net>; Thu, 19 Aug 2021 20:51:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LectGs5fR3Qx for <buildroot@lists.busybox.net>;
- Thu, 19 Aug 2021 20:51:21 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 9A185605E9
- for <buildroot@buildroot.org>; Thu, 19 Aug 2021 20:51:21 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id D9136E0003;
- Thu, 19 Aug 2021 20:51:19 +0000 (UTC)
-Date: Thu, 19 Aug 2021 22:51:18 +0200
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id llFMc_RXGEtg for <buildroot@lists.busybox.net>;
+ Thu, 19 Aug 2021 20:51:52 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id C629081A16
+ for <buildroot@buildroot.org>; Thu, 19 Aug 2021 20:51:52 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 7F5E68D5D6; Thu, 19 Aug 2021 20:51:07 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20210819225118.361fe904@windsurf>
-In-Reply-To: <20210817221530.2343233-1-fontaine.fabrice@gmail.com>
-References: <20210817221530.2343233-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] Revert "package/libshout: enable
- optional dependency for libressl"
+To: buildroot@buildroot.org
+Date: Thu, 19 Aug 2021 22:50:18 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: a380e058338b5fc006cb76544a4b080e52cc0f4b
+X-Git-Newrev: da4d8fc407b57736e2746f236df43baa102b85a7
+X-Patchwork-Hint: ignore
+Message-Id: <20210819205107.7F5E68D5D6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] Revert "package/libshout: enable optional
+ dependency for libressl"
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,41 +64,40 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-On Wed, 18 Aug 2021 00:15:30 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=da4d8fc407b57736e2746f236df43baa102b85a7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> This reverts commit 46b8fb7500ecca65a79507318fd3052208559c09 indeed if
-> libressl is selected as the openssl provider, the BR2_PACKAGE_OPENSSL
-> conditition will always be used and the BR2_PACKAGE_LIBRESSL condition
-> will never be triggered. Moreover, libressl provides a pkg-config file.
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/libshout/libshout.mk | 3 ---
->  1 file changed, 3 deletions(-)
+This reverts commit 46b8fb7500ecca65a79507318fd3052208559c09 indeed if
+libressl is selected as the openssl provider, the BR2_PACKAGE_OPENSSL
+conditition will always be used and the BR2_PACKAGE_LIBRESSL condition
+will never be triggered. Moreover, libressl provides a pkg-config file.
 
-I've applied to master, because you're right, what
-46b8fb7500ecca65a79507318fd3052208559c09 has added is a no-op, because
-BR2_PACKAGE_LIBRESSL cannot be 'y' without BR2_PACKAGE_OPENSSL also
-being 'y'.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libshout/libshout.mk | 3 ---
+ 1 file changed, 3 deletions(-)
 
-However, could you look at the autobuilder issue that
-46b8fb7500ecca65a79507318fd3052208559c09 was intended to fix, and see
-what is the proper fix for it ?
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libshout/libshout.mk b/package/libshout/libshout.mk
+index 57d26390c5..4afb762de6 100644
+--- a/package/libshout/libshout.mk
++++ b/package/libshout/libshout.mk
+@@ -33,9 +33,6 @@ endif
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ LIBSHOUT_CONF_OPTS += --with-openssl
+ LIBSHOUT_DEPENDENCIES += openssl
+-else ifeq ($(BR2_PACKAGE_LIBRESSL),y)
+-LIBSHOUT_CONF_OPTS += --with-openssl=$(STAGING_DIR)/lib
+-LIBSHOUT_DEPENDENCIES += libressl
+ else
+ LIBSHOUT_CONF_OPTS += --without-openssl
+ endif
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
