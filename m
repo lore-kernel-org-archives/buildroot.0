@@ -2,57 +2,56 @@ Return-Path: <SRS0=2pYX=NR=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BA59DC432BE
-	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:16:31 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A3FFCC432BE
+	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:16:44 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 7930960FE7
-	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:16:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7930960FE7
+	by mail.kernel.org (Postfix) with ESMTPS id 6E99060184
+	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:16:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6E99060184
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4C8BE4078C;
-	Thu, 26 Aug 2021 22:16:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4CA50614CB;
+	Thu, 26 Aug 2021 22:16:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tg75U7kRhUT3; Thu, 26 Aug 2021 22:16:26 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 1X0IytXC1rVA; Thu, 26 Aug 2021 22:16:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DF7E040799;
-	Thu, 26 Aug 2021 22:16:25 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8D1B91C1135
+	by smtp3.osuosl.org (Postfix) with ESMTP id D7B82614D3;
+	Thu, 26 Aug 2021 22:16:38 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id D197E1BF33E
  for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 22:02:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 32E8140777
+ by smtp1.osuosl.org (Postfix) with ESMTP id E340482ADD
  for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 22:02:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NHrYHacDckzX for <buildroot@lists.busybox.net>;
- Thu, 26 Aug 2021 22:02:36 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9JdN938uLPFa for <buildroot@lists.busybox.net>;
+ Thu, 26 Aug 2021 22:02:37 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6599C4078C
- for <buildroot@buildroot.org>; Thu, 26 Aug 2021 22:02:29 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7011F82ACD
+ for <buildroot@buildroot.org>; Thu, 26 Aug 2021 22:02:33 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id B63158DC52; Thu, 26 Aug 2021 22:01:27 +0000 (UTC)
+ id C28D38DC50; Thu, 26 Aug 2021 22:01:31 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sun, 8 Aug 2021 22:18:14 +0200
+Date: Thu, 19 Aug 2021 22:46:42 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 2e16ecfa990006308e638685fbea3800706c0f84
-X-Git-Newrev: 3e524755a943e1d22b404c256deeb137fd895100
+X-Git-Oldrev: 338a9b655dd955131c1af8fccebabfb4be1857d6
+X-Git-Newrev: 8831c0db9e81db6f53e44597b7b4e74bff43d0cf
 X-Patchwork-Hint: ignore
-Message-Id: <20210826220127.B63158DC52@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libnss: fix build on
- ARM big endian
+Message-Id: <20210826220131.C28D38DC50@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libvirt: fix NLS build
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,81 +69,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3e524755a943e1d22b404c256deeb137fd895100
+commit: https://git.buildroot.net/buildroot/commit/?id=8831c0db9e81db6f53e44597b7b4e74bff43d0cf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fix the follownig build failure on ARM big endian raised since bump to
-version 3.68 in commit 0a73b9b962421ce7a72c88e5f5bbd8849f21b041:
+Fix the following build failure raised since the addition of the package
+in commit ccfc90e1010e42e6529afae3a5ea8bf7226dabc1:
 
-Linux2.6_aarch64_aarch64_be-linux-gnu-gcc_glibc_PTH_64_DBG.OBJ/Linux_SINGLE_SHLIB/sha256-armv8.o: In function `SHA256_Compress_Native':
-sha256-armv8.c:(.text.SHA256_Compress_Native+0x0): multiple definition of `SHA256_Compress_Native'
-Linux2.6_aarch64_aarch64_be-linux-gnu-gcc_glibc_PTH_64_DBG.OBJ/Linux_SINGLE_SHLIB/sha512.o:sha512.c:(.text.SHA256_Compress_Native+0x0): first defined here
-Linux2.6_aarch64_aarch64_be-linux-gnu-gcc_glibc_PTH_64_DBG.OBJ/Linux_SINGLE_SHLIB/sha256-armv8.o: In function `SHA256_Update_Native':
-sha256-armv8.c:(.text.SHA256_Update_Native+0x0): multiple definition of `SHA256_Update_Native'
-Linux2.6_aarch64_aarch64_be-linux-gnu-gcc_glibc_PTH_64_DBG.OBJ/Linux_SINGLE_SHLIB/sha512.o:sha512.c:(.text.SHA256_Update_Native+0x0): first defined here
+/tmp/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/i686-buildroot-linux-uclibc/9.3.0/../../../../i686-buildroot-linux-uclibc/bin/ld: src/util/libvirt_util.a(viralloc.c.o): in function `virInsertElementsN':
+viralloc.c:(.text+0x167): undefined reference to `libintl_dgettext'
 
 Fixes:
- - http://autobuild.buildroot.org/results/237aba0c16a34fec1b0fe50fe08cace438eda1bf
+ - http://autobuild.buildroot.net/results/2349c55a4a42f08ca52700c60cda3065b0c4bd88
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...sha512.c-fix-SHA256-redefinition-on-ARM-b.patch | 47 ++++++++++++++++++++++
- 1 file changed, 47 insertions(+)
+ package/libvirt/libvirt.mk | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/package/libnss/0001-lib-freebl-sha512.c-fix-SHA256-redefinition-on-ARM-b.patch b/package/libnss/0001-lib-freebl-sha512.c-fix-SHA256-redefinition-on-ARM-b.patch
-new file mode 100644
-index 0000000000..f925f20051
---- /dev/null
-+++ b/package/libnss/0001-lib-freebl-sha512.c-fix-SHA256-redefinition-on-ARM-b.patch
-@@ -0,0 +1,47 @@
-+From 434d79c52db5b680accc531572319bd7094fa470 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 7 Aug 2021 23:19:01 +0200
-+Subject: [PATCH] lib/freebl/sha512.c: fix SHA256 redefinition on ARM big
-+ endian
+diff --git a/package/libvirt/libvirt.mk b/package/libvirt/libvirt.mk
+index b36cf3fb60..1b420771f5 100644
+--- a/package/libvirt/libvirt.mk
++++ b/package/libvirt/libvirt.mk
+@@ -21,7 +21,10 @@ LIBVIRT_DEPENDENCIES = \
+ 	libtirpc \
+ 	libxml2 \
+ 	udev \
+-	zlib
++	zlib \
++	$(TARGET_NLS_DEPENDENCIES)
 +
-+For an unknown reason, SHA256_{Compress,Update}_Native are defined in
-+lib/freebl/sha512.c if IS_LITTLE_ENDIAN is undefined since version 3.68
-+and
-+https://github.com/nss-dev/nss/commit/e1e00f21f2d73e0d5d27651ad5606efa5714abe4
-+
-+This raises the following build failure on ARM big endian:
-+
-+Linux2.6_aarch64_aarch64_be-linux-gnu-gcc_glibc_PTH_64_DBG.OBJ/Linux_SINGLE_SHLIB/sha256-armv8.o: In function `SHA256_Compress_Native':
-+sha256-armv8.c:(.text.SHA256_Compress_Native+0x0): multiple definition of `SHA256_Compress_Native'
-+Linux2.6_aarch64_aarch64_be-linux-gnu-gcc_glibc_PTH_64_DBG.OBJ/Linux_SINGLE_SHLIB/sha512.o:sha512.c:(.text.SHA256_Compress_Native+0x0): first defined here
-+Linux2.6_aarch64_aarch64_be-linux-gnu-gcc_glibc_PTH_64_DBG.OBJ/Linux_SINGLE_SHLIB/sha256-armv8.o: In function `SHA256_Update_Native':
-+sha256-armv8.c:(.text.SHA256_Update_Native+0x0): multiple definition of `SHA256_Update_Native'
-+Linux2.6_aarch64_aarch64_be-linux-gnu-gcc_glibc_PTH_64_DBG.OBJ/Linux_SINGLE_SHLIB/sha512.o:sha512.c:(.text.SHA256_Update_Native+0x0): first defined here
-+
-+Revert this change as it seems completely unrelated to the commit title
-+"Bug 1655493 - Support SHA2 HW acceleration using Intel SHA Extension"
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/237aba0c16a34fec1b0fe50fe08cace438eda1bf
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ nss/lib/freebl/sha512.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/nss/lib/freebl/sha512.c b/nss/lib/freebl/sha512.c
-+index 946ab9f7f..3ec414b52 100644
-+--- a/nss/lib/freebl/sha512.c
-++++ b/nss/lib/freebl/sha512.c
-+@@ -164,7 +164,7 @@ static void SHA256_Compress_Generic(SHA256Context *ctx);
-+ static void SHA256_Update_Generic(SHA256Context *ctx, const unsigned char *input,
-+                                   unsigned int inputLen);
-+ 
-+-#if !defined(USE_HW_SHA2) || !defined(IS_LITTLE_ENDIAN)
-++#if !defined(USE_HW_SHA2)
-+ void
-+ SHA256_Compress_Native(SHA256Context *ctx)
-+ {
-+-- 
-+2.30.2
-+
++LIBVIRT_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
+ 
+ LIBVIRT_CONF_ENV += \
+ 	CFLAGS="$(TARGET_CFLAGS) `$(PKG_CONFIG_HOST_BINARY) --cflags libtirpc`" \
+@@ -49,6 +52,7 @@ LIBVIRT_CONF_OPTS = \
+ 	-Dinit_script=$(if $(BR2_INIT_SYSTEMD),systemd,none) \
+ 	-Dlogin_shell=disabled \
+ 	-Dnetcf=disabled \
++	-Dnls=$(if $(BR2_SYSTEM_ENABLE_NLS),enabled,disabled) \
+ 	-Dnumad=disabled \
+ 	-Dopenwsman=disabled \
+ 	-Dpciaccess=enabled \
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
