@@ -2,58 +2,57 @@ Return-Path: <SRS0=2pYX=NR=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
-	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 74FEEC432BE
-	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:14:15 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A509AC432BE
+	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:14:27 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 3AB5760231
-	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:14:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3AB5760231
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
+	by mail.kernel.org (Postfix) with ESMTPS id 6ECFF60FD9
+	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:14:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6ECFF60FD9
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1103880BE9;
-	Thu, 26 Aug 2021 22:14:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 48AA0426C2;
+	Thu, 26 Aug 2021 22:14:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3i5xON5fW2uC; Thu, 26 Aug 2021 22:14:10 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id aIKIf__KQfTE; Thu, 26 Aug 2021 22:14:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8F92282F11;
-	Thu, 26 Aug 2021 22:14:09 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id AB21C1C1135
- for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 22:02:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 84301426C5;
+	Thu, 26 Aug 2021 22:14:21 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 073141BF33E
+ for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 22:02:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1964582C35
+ by smtp3.osuosl.org (Postfix) with ESMTP id C926E614AE
  for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 22:02:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BzYNLs52hy_6 for <buildroot@lists.busybox.net>;
- Thu, 26 Aug 2021 22:02:33 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pHNshkK2Mu4k for <buildroot@lists.busybox.net>;
+ Thu, 26 Aug 2021 22:02:34 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8F20382CFD
- for <buildroot@buildroot.org>; Thu, 26 Aug 2021 22:02:32 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B3D9161487
+ for <buildroot@buildroot.org>; Thu, 26 Aug 2021 22:02:33 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id E47178DC50; Thu, 26 Aug 2021 22:01:30 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id 1492F8DC50; Thu, 26 Aug 2021 22:01:32 +0000 (UTC)
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Tue, 17 Aug 2021 21:55:53 +0200
+Date: Thu, 19 Aug 2021 22:53:22 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: c86130313b28492807e32f00c6a01a99519f7c12
-X-Git-Newrev: bf716f3d51c20510ddbd66181d104a3ea3ac9325
+X-Git-Oldrev: 2ee1063136edd030f1c4a8ca88d0a80d98ce8719
+X-Git-Newrev: 709004563b200a6b9456143de9722d99f4c5054b
 X-Patchwork-Hint: ignore
-Message-Id: <20210826220130.E47178DC50@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-treq: depend
- comment on BR2_PACKAGE_PYTHON3
+Message-Id: <20210826220132.1492F8DC50@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/gdb: fix build of gdb
+ on riscv
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,27 +70,79 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bf716f3d51c20510ddbd66181d104a3ea3ac9325
+commit: https://git.buildroot.net/buildroot/commit/?id=709004563b200a6b9456143de9722d99f4c5054b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The user shouldn't see the comment on the python2 menu.
+Build of gdb on riscv without host-gdb is broken since commit
+4ecd247ead22a6cfb87a4ffafc4be05201328aef because BR2_GDB_VERSION_10 is
+never defined if BR2_PACKAGE_HOST_GDB is not selected resulting in the
+following build failure:
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+/bin/bash: line 0: cd: /tmp/instance-0/output-1/build/gdb-10.1/gdb/gdbserver: No such file or directory
+
+So add a BR2_PACKAGE_GDB_TOPLEVEL hidden option as suggested by Thomas
+Petazzoni.
+
+Fixes:
+ - http://autobuild.buildroot.org/results/ce47d616ee79d5f735779570ebc3b4a9c0f64c6a
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-treq/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/gdb/Config.in.host |  9 +++++++++
+ package/gdb/gdb.mk         | 11 +----------
+ 2 files changed, 10 insertions(+), 10 deletions(-)
 
-diff --git a/package/python-treq/Config.in b/package/python-treq/Config.in
-index 47719f92bf..02c26a53f7 100644
---- a/package/python-treq/Config.in
-+++ b/package/python-treq/Config.in
-@@ -18,4 +18,5 @@ config BR2_PACKAGE_PYTHON_TREQ
- 	  https://github.com/twisted/treq
+diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
+index 56943267bb..142bf1458a 100644
+--- a/package/gdb/Config.in.host
++++ b/package/gdb/Config.in.host
+@@ -93,3 +93,12 @@ config BR2_GDB_VERSION
+ 	default "9.2"      if BR2_GDB_VERSION_9_2 || (!BR2_PACKAGE_HOST_GDB && !BR2_riscv)
+ 	default "10.2"	   if BR2_GDB_VERSION_10 || (!BR2_PACKAGE_HOST_GDB && BR2_riscv)
+ 	depends on BR2_PACKAGE_GDB || BR2_PACKAGE_HOST_GDB
++
++# recent gdb versions (>= 10) have gdbserver moved at the top-level,
++# which requires a different build logic.
++config BR2_PACKAGE_GDB_TOPLEVEL
++	bool
++	default y if BR2_arc
++	default y if BR2_GDB_VERSION_10
++	default y if !BR2_PACKAGE_HOST_GDB && BR2_riscv
++	depends on BR2_PACKAGE_GDB || BR2_PACKAGE_HOST_GDB
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index 17e10e8b16..f9010019f5 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -8,19 +8,10 @@ GDB_VERSION = $(call qstrip,$(BR2_GDB_VERSION))
+ GDB_SITE = $(BR2_GNU_MIRROR)/gdb
+ GDB_SOURCE = gdb-$(GDB_VERSION).tar.xz
  
- comment "python-treq needs a toolchain w/ C++"
-+	depends on BR2_PACKAGE_PYTHON3
- 	depends on !BR2_INSTALL_LIBSTDCPP
+-# recent gdb versions (>= 10) have gdbserver moved at the top-level,
+-# which requires a different build logic.
+-ifeq ($(BR2_GDB_VERSION_10),y)
+-GDB_GDBSERVER_TOPLEVEL = y
+-endif
+-
+ ifeq ($(BR2_arc),y)
+ GDB_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,binutils-gdb,$(GDB_VERSION))
+ GDB_SOURCE = gdb-$(GDB_VERSION).tar.gz
+ GDB_FROM_GIT = y
+-# recent gdb versions (>= 10) have gdbserver moved at the top-level,
+-# which requires a different build logic.
+-GDB_GDBSERVER_TOPLEVEL = y
+ endif
+ 
+ ifeq ($(BR2_csky),y)
+@@ -35,7 +26,7 @@ GDB_CPE_ID_VENDOR = gnu
+ 
+ # On gdb < 10, if you want to build only gdbserver, you need to
+ # configure only gdb/gdbserver.
+-ifeq ($(BR2_PACKAGE_GDB_DEBUGGER)$(GDB_GDBSERVER_TOPLEVEL),)
++ifeq ($(BR2_PACKAGE_GDB_DEBUGGER)$(BR2_PACKAGE_GDB_TOPLEVEL),)
+ GDB_SUBDIR = gdb/gdbserver
+ 
+ # When we want to build the full gdb, or for very recent versions of
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
