@@ -2,57 +2,57 @@ Return-Path: <SRS0=aU6e=NK=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6FF38C4338F
-	for <buildroot@archiver.kernel.org>; Thu, 19 Aug 2021 20:37:42 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BA8A5C4338F
+	for <buildroot@archiver.kernel.org>; Thu, 19 Aug 2021 20:37:54 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 3DBBE60720
-	for <buildroot@archiver.kernel.org>; Thu, 19 Aug 2021 20:37:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3DBBE60720
+	by mail.kernel.org (Postfix) with ESMTPS id 7D03D6108B
+	for <buildroot@archiver.kernel.org>; Thu, 19 Aug 2021 20:37:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7D03D6108B
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 16C53401B3;
-	Thu, 19 Aug 2021 20:37:42 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4C93A404D8;
+	Thu, 19 Aug 2021 20:37:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id q85ngmM2JOri; Thu, 19 Aug 2021 20:37:37 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id mFHmTZKGVXtC; Thu, 19 Aug 2021 20:37:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2FC0540292;
-	Thu, 19 Aug 2021 20:37:36 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 98D2D1BF297
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2D546404E8;
+	Thu, 19 Aug 2021 20:37:48 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C45D91C113E
  for <buildroot@lists.busybox.net>; Thu, 19 Aug 2021 20:37:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 88C95613D2
+ by smtp1.osuosl.org (Postfix) with ESMTP id B43F7817AF
  for <buildroot@lists.busybox.net>; Thu, 19 Aug 2021 20:37:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2NNqu_jl4vT9 for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9g4SzNE792Ih for <buildroot@lists.busybox.net>;
  Thu, 19 Aug 2021 20:37:18 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 82B9F60642
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8CFEE8169B
  for <buildroot@buildroot.org>; Thu, 19 Aug 2021 20:37:18 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 45E638D53C; Thu, 19 Aug 2021 20:36:33 +0000 (UTC)
+ id 50C3D8D53D; Thu, 19 Aug 2021 20:36:33 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Thu, 19 Aug 2021 22:36:31 +0200
+Date: Thu, 19 Aug 2021 22:36:55 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: ab3b93bc9f2335388e00ab986ddf22eeb7a35ebd
-X-Git-Newrev: daa90d691844c2fc3c853d5e45f81a5530bbbed2
+X-Git-Oldrev: daa90d691844c2fc3c853d5e45f81a5530bbbed2
+X-Git-Newrev: 5d4cf52204b7c5c4366ec029f83c87610722f6f0
 X-Patchwork-Hint: ignore
-Message-Id: <20210819203633.45E638D53C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/ipset: bump to version
- 7.15
+Message-Id: <20210819203633.50C3D8D53D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/ripgrep: bump to
+ version 13.0.0
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,75 +70,180 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=daa90d691844c2fc3c853d5e45f81a5530bbbed2
+commit: https://git.buildroot.net/buildroot/commit/?id=5d4cf52204b7c5c4366ec029f83c87610722f6f0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This includes the following changes:
+Also adds patch to make the jemalloc feature optional on musl, due to
+toolchains not being supported by upstream project.
 
-7.15
-    - Kernel part changes
-        - netfilter: ipset: Fix maximal range check in hash_ipportnet4_uadt() (Nathan Chancellor)
-
-7.14
-    - Userspace changes
-        - Add missing function to libipset.map and bump library version (reported by Jan Engelhardt)
-    - Kernel part changes
-        - 64bit division isn't allowed on 32bit, replace it with shift
-
-7.13
-    - Userspace changes
-        - When parsing protocols by number, do not check it in /etc/protocols.
-        - Add missing hunk to patch "Allow specifying protocols by number"
-    - Kernel part changes
-        - Limit the maximal range of consecutive elements to add/delete fix
-
-7.12
-    - Userspace changes
-        - Allow specifying protocols by number (Haw Loeung)
-        - Fix example in ipset.8 manpage discovered by Pablo Neira Ayuso.
-        - tests: add tests ipset to nftables (Pablo Neira Ayuso)
-        - add ipset to nftables translation infrastructure (Pablo Neira Ayuso)
-        - lib: Detach restore routine from parser (Pablo Neira Ayuso)
-        - lib: split parser from command execution (Pablo Neira Ayuso)
-        - Fix patch "Parse port before trying by service name"
-    - Kernel part changes
-        - Limit the maximal range of consecutive elements to add/delete (reported by Brad Spengler)
-        - Backport "netfilter: use nfnetlink_unicast()"
-        - Backport "netfilter: nfnetlink: consolidate callback type"
-        - Backport "netfilter: nfnetlink: add struct nfnl_info and pass it to callbacks"
-        - Backport "netfilter: add helper function to set up the nfnetlink header and use it"
-
-Signed-off-by: Pierre-Jean Texier <texier.pj2@gmail.com>
+Signed-off-by: Sam Voss <sam.voss@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/ipset/ipset.hash | 4 ++--
- package/ipset/ipset.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...loc-allocator-behind-a-cargo-feature-flag.patch | 131 +++++++++++++++++++++
+ package/ripgrep/ripgrep.hash                       |   4 +-
+ package/ripgrep/ripgrep.mk                         |   2 +-
+ 3 files changed, 134 insertions(+), 3 deletions(-)
 
-diff --git a/package/ipset/ipset.hash b/package/ipset/ipset.hash
-index afe83f6dce..9c251be27e 100644
---- a/package/ipset/ipset.hash
-+++ b/package/ipset/ipset.hash
-@@ -1,4 +1,4 @@
--# From https://ipset.netfilter.org/ipset-7.11.tar.bz2.sha512sum.txt
--sha512  20890de32c17c04d9d3ae42fff64acfe21a252974bee5843ae39bdda707fcef55fde11cffccab9f987bf7e18f5445443c46c50eb854fb6f93f172f7bad07f922  ipset-7.11.tar.bz2
-+# From https://ipset.netfilter.org/ipset-7.15.tar.bz2.sha512sum.txt
-+sha512  0fc936d971c30a0925c585d506c8840e782fdaeec09bc8fd249e874fe838fa55a4dbb697f6e1423a6769abf07a1ce2195abc37cb641e8e4ad70f1b4c7130916a  ipset-7.15.tar.bz2
+diff --git a/package/ripgrep/0001-puts-jemalloc-allocator-behind-a-cargo-feature-flag.patch b/package/ripgrep/0001-puts-jemalloc-allocator-behind-a-cargo-feature-flag.patch
+new file mode 100644
+index 0000000000..e2ba68f389
+--- /dev/null
++++ b/package/ripgrep/0001-puts-jemalloc-allocator-behind-a-cargo-feature-flag.patch
+@@ -0,0 +1,131 @@
++From 68c2a4d7a5d9b46f65121958fdb12d5270bfd1b6 Mon Sep 17 00:00:00 2001
++From: Jonathan Stites <mail@jonstites.com>
++Date: Wed, 6 May 2020 12:55:35 +0000
++Subject: [PATCH] puts jemalloc allocator behind a cargo feature flag
++
++Retrieved from: https://github.com/BurntSushi/ripgrep/pull/1569
++
++Moves jemalloc behind a feature for musl builds, where it is not
++supported by the upstream project, so ripgrep will fail to build.
++
++Signed-off-by: Sam Voss <sam.voss@gmail.com>
++---
++ .github/workflows/ci.yml      | 6 ++++++
++ .github/workflows/release.yml | 8 +++++++-
++ Cargo.toml                    | 8 +++++++-
++ README.md                     | 9 +++++++++
++ crates/core/main.rs           | 8 ++++++--
++ 5 files changed, 35 insertions(+), 4 deletions(-)
++
++diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml
++index ab154ec..aa567d9 100644
++--- a/.github/workflows/ci.yml
+++++ b/.github/workflows/ci.yml
++@@ -149,6 +149,12 @@ jobs:
++       if: matrix.target != ''
++       run: ${{ env.CARGO }} test --verbose --workspace ${{ env.TARGET_FLAGS }}
++ 
+++    - name: Run tests with jemalloc (Musl)
+++      # We only use the jemalloc allocator when building with musl.
+++      # The system allocator is good enough for other platforms.
+++      if: matrix.os == 'nightly-musl'
+++      run: ${{ env.CARGO }} test --verbose --all --features jemalloc ${{ env.TARGET_FLAGS }}
+++
++     - name: Test for existence of build artifacts (Windows)
++       if: matrix.os == 'windows-2019'
++       shell: bash
++diff --git a/.github/workflows/release.yml b/.github/workflows/release.yml
++index 7cfb6a4..ad6b82d 100644
++--- a/.github/workflows/release.yml
+++++ b/.github/workflows/release.yml
++@@ -133,7 +133,13 @@ jobs:
++         echo "target flag is: ${{ env.TARGET_FLAGS }}"
++         echo "target dir is: ${{ env.TARGET_DIR }}"
++ 
++-    - name: Build release binary
+++    - name: Build release binary (linux)
+++      if: matrix.build == 'linux'
+++      # Use jemalloc allocator for much better performance over the musl default allocator
+++      run: ${{ env.CARGO }} build --verbose --release --features "pcre2 jemalloc" ${{ env.TARGET_FLAGS }}
+++
+++    - name: Build release binary (non-linux)
+++      if: matrix.build != 'linux'
++       run: ${{ env.CARGO }} build --verbose --release --features pcre2 ${{ env.TARGET_FLAGS }}
++ 
++     - name: Strip release binary (linux and macos)
++diff --git a/Cargo.toml b/Cargo.toml
++index fb78fcb..0d34b1e 100644
++--- a/Cargo.toml
+++++ b/Cargo.toml
++@@ -56,8 +56,9 @@ version = "2.33.0"
++ default-features = false
++ features = ["suggestions"]
++ 
++-[target.'cfg(all(target_env = "musl", target_pointer_width = "64"))'.dependencies.jemallocator]
+++[dependencies.jemallocator]
++ version = "0.3.0"
+++optional = true
++ 
++ [build-dependencies]
++ lazy_static = "1.1.0"
++@@ -75,6 +76,11 @@ walkdir = "2"
++ [features]
++ simd-accel = ["grep/simd-accel"]
++ pcre2 = ["grep/pcre2"]
+++# The jemalloc allocator is used for improved
+++# performance on x86 musl builds.
+++# Cargo does not yet support platform-specific features
+++# https://github.com/rust-lang/cargo/issues/1197
+++jemalloc = ["jemallocator"]
++ 
++ [profile.release]
++ debug = 1
++diff --git a/README.md b/README.md
++index 46938bc..9917b29 100644
++--- a/README.md
+++++ b/README.md
++@@ -406,6 +406,15 @@ build a static executable with MUSL and with PCRE2, then you will need to have
++ `musl-gcc` installed, which might be in a separate package from the actual
++ MUSL library, depending on your Linux distribution.
++ 
+++When building with the MUSL target on Linux, it is recommended to use the
+++jemalloc allocator for performance:
+++
+++```
+++$ rustup target add x86_64-unknown-linux-musl
+++$ cargo build --release --target x86_64-unknown-linux-musl --features jemalloc
+++```
+++
+++
++ 
++ ### Running tests
++ 
++diff --git a/crates/core/main.rs b/crates/core/main.rs
++index 47385de..c9dae5a 100644
++--- a/crates/core/main.rs
+++++ b/crates/core/main.rs
++@@ -31,7 +31,7 @@ mod subject;
++ // have the fastest version of everything. Its goal is to be small and amenable
++ // to static compilation.) Even though ripgrep isn't particularly allocation
++ // heavy, musl's allocator appears to slow down ripgrep quite a bit. Therefore,
++-// when building with musl, we use jemalloc.
+++// we expose a feature for using jemalloc when building with musl.
++ //
++ // We don't unconditionally use jemalloc because it can be nice to use the
++ // system's default allocator by default. Moreover, jemalloc seems to increase
++@@ -39,7 +39,11 @@ mod subject;
++ //
++ // Moreover, we only do this on 64-bit systems since jemalloc doesn't support
++ // i686.
++-#[cfg(all(target_env = "musl", target_pointer_width = "64"))]
+++#[cfg(all(
+++    target_env = "musl",
+++    target_pointer_width = "64",
+++    feature = "jemalloc"
+++))]
++ #[global_allocator]
++ static ALLOC: jemallocator::Jemalloc = jemallocator::Jemalloc;
++ 
++-- 
++2.32.0
++
+diff --git a/package/ripgrep/ripgrep.hash b/package/ripgrep/ripgrep.hash
+index 0841c0185c..b2f03a95e6 100644
+--- a/package/ripgrep/ripgrep.hash
++++ b/package/ripgrep/ripgrep.hash
+@@ -1,3 +1,3 @@
  # Locally calculated
- sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
-diff --git a/package/ipset/ipset.mk b/package/ipset/ipset.mk
-index 07f865d4ec..4eda65e81b 100644
---- a/package/ipset/ipset.mk
-+++ b/package/ipset/ipset.mk
+-sha256 7035379fce0c1e32552e8ee528b92c3d01b8d3935ea31d26c51a73287be74bb3 ripgrep-0.8.1.tar.gz
+-sha256 0f96a83840e146e43c0ec96a22ec1f392e0680e6c1226e6f3ba87e0740af850f LICENSE-MIT
++sha256 0fb17aaf285b3eee8ddab17b833af1e190d73de317ff9648751ab0660d763ed2  ripgrep-13.0.0.tar.gz
++sha256 0f96a83840e146e43c0ec96a22ec1f392e0680e6c1226e6f3ba87e0740af850f  LICENSE-MIT
+diff --git a/package/ripgrep/ripgrep.mk b/package/ripgrep/ripgrep.mk
+index 450bb020e3..2d9dd3ee2f 100644
+--- a/package/ripgrep/ripgrep.mk
++++ b/package/ripgrep/ripgrep.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--IPSET_VERSION = 7.11
-+IPSET_VERSION = 7.15
- IPSET_SOURCE = ipset-$(IPSET_VERSION).tar.bz2
- IPSET_SITE = http://ipset.netfilter.org
- IPSET_DEPENDENCIES = libmnl host-pkgconf
+-RIPGREP_VERSION = 0.8.1
++RIPGREP_VERSION = 13.0.0
+ RIPGREP_SITE = $(call github,burntsushi,ripgrep,$(RIPGREP_VERSION))
+ RIPGREP_LICENSE = MIT
+ RIPGREP_LICENSE_FILES = LICENSE-MIT
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
