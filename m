@@ -2,57 +2,61 @@ Return-Path: <SRS0=aU6e=NK=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_2 autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9BF81C4338F
-	for <buildroot@archiver.kernel.org>; Thu, 19 Aug 2021 20:45:55 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B26E9C4338F
+	for <buildroot@archiver.kernel.org>; Thu, 19 Aug 2021 20:46:44 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 5EDBB604AC
-	for <buildroot@archiver.kernel.org>; Thu, 19 Aug 2021 20:45:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5EDBB604AC
+	by mail.kernel.org (Postfix) with ESMTPS id 707C4610A0
+	for <buildroot@archiver.kernel.org>; Thu, 19 Aug 2021 20:46:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 707C4610A0
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1F1BB4011B;
-	Thu, 19 Aug 2021 20:45:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 461E081882;
+	Thu, 19 Aug 2021 20:46:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HdFtQ_Eus2VO; Thu, 19 Aug 2021 20:45:51 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id EK6qe07ZKBrl; Thu, 19 Aug 2021 20:46:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6F8AD4011D;
-	Thu, 19 Aug 2021 20:45:50 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1B9821BF297
- for <buildroot@lists.busybox.net>; Thu, 19 Aug 2021 20:45:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8E9FE818A1;
+	Thu, 19 Aug 2021 20:46:39 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 2A4E31BF297
+ for <buildroot@lists.busybox.net>; Thu, 19 Aug 2021 20:46:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0B8D0403CA
- for <buildroot@lists.busybox.net>; Thu, 19 Aug 2021 20:45:49 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 276FE81882
+ for <buildroot@lists.busybox.net>; Thu, 19 Aug 2021 20:46:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yV3dqf1S7rV6 for <buildroot@lists.busybox.net>;
- Thu, 19 Aug 2021 20:45:44 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 174414035A
- for <buildroot@buildroot.org>; Thu, 19 Aug 2021 20:45:44 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id C8C0F8D58B; Thu, 19 Aug 2021 20:44:58 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id AvdIMHYl3B2p for <buildroot@lists.busybox.net>;
+ Thu, 19 Aug 2021 20:46:34 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D1EB2818A1
+ for <buildroot@busybox.net>; Thu, 19 Aug 2021 20:46:33 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 9D093E0002;
+ Thu, 19 Aug 2021 20:46:30 +0000 (UTC)
+Date: Thu, 19 Aug 2021 22:46:29 +0200
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: buildroot@buildroot.org
-Date: Thu, 19 Aug 2021 22:45:14 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b785de9f3f4f87732a657ded2809706763502163
-X-Git-Newrev: 338a9b655dd955131c1af8fccebabfb4be1857d6
-X-Patchwork-Hint: ignore
-Message-Id: <20210819204458.C8C0F8D58B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] boot/at91bootstrap3: update to final 4.0.0
- version
+To: Eugen Hristev via buildroot <buildroot@busybox.net>
+Message-ID: <20210819224629.191c13bc@windsurf>
+In-Reply-To: <20210819113522.250804-1-eugen.hristev@microchip.com>
+References: <20210819113522.250804-1-eugen.hristev@microchip.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH v2] boot/at91bootstrap3: updated to released
+ 4.0.0 final version
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,77 +68,36 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-MIME-Version: 1.0
+Cc: Eugen Hristev <eugen.hristev@microchip.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=338a9b655dd955131c1af8fccebabfb4be1857d6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu, 19 Aug 2021 14:35:22 +0300
+Eugen Hristev via buildroot <buildroot@busybox.net> wrote:
 
-Update to AT91Bootstrap 4.0.0 version.
+> Update to AT91Bootstrap 4.0.0 version.
+> 
+> This package is now released under MIT license.
+> 
+> Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+> ---
+> Changes in v2:
+> - Added conditional license block according to version
 
-This package is now released under MIT license, and a license file was
-added.
+Thanks, I have applied to master, but I've made a change to use the
+license file which is now available in the at91bootstrap code base.
 
-Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- boot/at91bootstrap3/Config.in           | 4 ++--
- boot/at91bootstrap3/at91bootstrap3.hash | 3 ++-
- boot/at91bootstrap3/at91bootstrap3.mk   | 5 +++++
- 3 files changed, 9 insertions(+), 3 deletions(-)
+This means this change will be in 2021.08.
 
-diff --git a/boot/at91bootstrap3/Config.in b/boot/at91bootstrap3/Config.in
-index edacc00675..650d3a23c8 100644
---- a/boot/at91bootstrap3/Config.in
-+++ b/boot/at91bootstrap3/Config.in
-@@ -19,7 +19,7 @@ choice
- 	prompt "AT91 Bootstrap 3+ version"
- 
- config BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
--	bool "4.0.0-rc2"
-+	bool "4.0.0"
- 
- config BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION_3X
- 	bool "3.10.3"
-@@ -54,7 +54,7 @@ endif
- 
- config BR2_TARGET_AT91BOOTSTRAP3_VERSION
- 	string
--	default "v4.0.0-rc2" if BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
-+	default "v4.0.0" if BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
- 	default "v3.10.3" if BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION_3X
- 	default BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION \
- 		if BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
-diff --git a/boot/at91bootstrap3/at91bootstrap3.hash b/boot/at91bootstrap3/at91bootstrap3.hash
-index 71c579de28..e611f163c9 100644
---- a/boot/at91bootstrap3/at91bootstrap3.hash
-+++ b/boot/at91bootstrap3/at91bootstrap3.hash
-@@ -1,3 +1,4 @@
- # Locally calculated
- sha256  b6ae5bcaacc5a949f400182e036ae053049638444a3ba8b1dd154ec5f7898d8e  at91bootstrap3-v3.10.3.tar.gz
--sha256  b5d5f042297cad0d091f7d8734e61eb9ec7b6020898e086503fb5f8bc71fb9fc  at91bootstrap3-v4.0.0-rc2.tar.gz
-+sha256  08c5b95df28be7f2e0439fb2b77fe27524f97c499850641e4540c07ea0b2c25d  at91bootstrap3-v4.0.0.tar.gz
-+sha256  5a3809b1c2ba13b7242572322951311c584419f1f8516f665d6c06f0668d78de  LICENSES/MIT.txt
-diff --git a/boot/at91bootstrap3/at91bootstrap3.mk b/boot/at91bootstrap3/at91bootstrap3.mk
-index b253129dfb..1e2a3a44b0 100644
---- a/boot/at91bootstrap3/at91bootstrap3.mk
-+++ b/boot/at91bootstrap3/at91bootstrap3.mk
-@@ -19,7 +19,12 @@ else
- AT91BOOTSTRAP3_SITE = $(call github,linux4sam,at91bootstrap,$(AT91BOOTSTRAP3_VERSION))
- endif
- 
-+ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION),y)
-+AT91BOOTSTRAP3_LICENSE = MIT
-+AT91BOOTSTRAP3_LICENSE_FILES = LICENSES/MIT.txt
-+else ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION_3X),y)
- AT91BOOTSTRAP3_LICENSE = Atmel License
-+endif
- 
- AT91BOOTSTRAP3_CPE_ID_VENDOR = linux4sam
- AT91BOOTSTRAP3_CPE_ID_PRODUCT = at91bootstrap
+Best regards,
+
+Thomas Petazzoni
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
