@@ -7,51 +7,51 @@ X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D56B8C433F5
-	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 18:28:08 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CEB4CC433F5
+	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 18:28:20 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 95F1D60F4C
-	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 18:28:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 95F1D60F4C
+	by mail.kernel.org (Postfix) with ESMTPS id 99CE460F56
+	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 18:28:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 99CE460F56
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 682D742542;
-	Sat,  4 Sep 2021 18:28:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 46B6860760;
+	Sat,  4 Sep 2021 18:28:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JdMNg6eSyv1n; Sat,  4 Sep 2021 18:28:07 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 4bHRJA6-jFDO; Sat,  4 Sep 2021 18:28:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AD68D4255C;
-	Sat,  4 Sep 2021 18:28:06 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 11A791BF95F
+	by smtp3.osuosl.org (Postfix) with ESMTP id 88A3C6071E;
+	Sat,  4 Sep 2021 18:28:18 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 6D6F31BF5DD
  for <buildroot@lists.busybox.net>; Sat,  4 Sep 2021 18:25:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C1B8281B60
- for <buildroot@lists.busybox.net>; Sat,  4 Sep 2021 18:25:15 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5C137404A6
+ for <buildroot@lists.busybox.net>; Sat,  4 Sep 2021 18:25:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PYXBBzejQQNF for <buildroot@lists.busybox.net>;
- Sat,  4 Sep 2021 18:25:15 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fmtF4cmbT0XO for <buildroot@lists.busybox.net>;
+ Sat,  4 Sep 2021 18:25:16 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2477E81D24
- for <buildroot@buildroot.org>; Sat,  4 Sep 2021 18:25:15 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B3DB1404A5
+ for <buildroot@buildroot.org>; Sat,  4 Sep 2021 18:25:16 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id E1A178834A; Sat,  4 Sep 2021 18:23:52 +0000 (UTC)
+ id 7CEAF8834A; Sat,  4 Sep 2021 18:23:54 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Wed, 4 Aug 2021 21:57:12 +0200
+Date: Thu, 19 Aug 2021 22:33:16 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b5b3582bb0c5207c09b26c91c6a8c155aa089e55
-X-Git-Newrev: d292d139cd5e44d0d70eb89fae3f5ff1d74b336a
+X-Git-Oldrev: 43c19b1e39aa3f2db2c4d90b9c83861c93c400ff
+X-Git-Newrev: b3b610b72ea2bf865631dc92992fb87748814d4c
 X-Patchwork-Hint: ignore
-Message-Id: <20210904182352.E1A178834A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gensio: bump to version 2.2.8
+Message-Id: <20210904182354.7CEAF8834A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/usbutils: bump to version 014
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,44 +70,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d292d139cd5e44d0d70eb89fae3f5ff1d74b336a
+commit: https://git.buildroot.net/buildroot/commit/?id=b3b610b72ea2bf865631dc92992fb87748814d4c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Drop autoreconf; tarball now ships the configure script.
+
+Rename license files and update hashes. Added SPDX markers. No license
+change.
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/gensio/gensio.hash | 6 +++---
- package/gensio/gensio.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/usbutils/usbutils.hash | 6 +++---
+ package/usbutils/usbutils.mk   | 6 ++----
+ 2 files changed, 5 insertions(+), 7 deletions(-)
 
-diff --git a/package/gensio/gensio.hash b/package/gensio/gensio.hash
-index 03bd85cd0f..94f964faad 100644
---- a/package/gensio/gensio.hash
-+++ b/package/gensio/gensio.hash
-@@ -1,7 +1,7 @@
- # From https://sourceforge.net/projects/ser2net/files/ser2net/
--md5  3d1135a7bd7a3aca48493997fed1f1a0  gensio-2.2.4.tar.gz
--sha1  3c59d94e48c0a8ec5ed57ebb4ea95f3709d108ac  gensio-2.2.4.tar.gz
-+md5  0adab57c4fbb55a280595f6541f202da  gensio-2.2.8.tar.gz
-+sha1  3030b398eef379579680240d0c732d88fdad72a8  gensio-2.2.8.tar.gz
- # Locally computed:
--sha256  36cadbc790e03e4150a12bca14b20215afdff0a0f8deaf85c10434dca54d0493  gensio-2.2.4.tar.gz
-+sha256  d495bfdacd30e8fe3879b29baab034eb553e606dbf145243989c97e83ad83115  gensio-2.2.8.tar.gz
- sha256  501f3108e6c03e5a0a5585ebaaa369171aead5319cd0a7a4dc1f66211c1f09f1  COPYING
- sha256  dcac7d447dd81ab96d28dce00a07a6486e623f7ded94e2a2a8e83312405cdf89  COPYING.LIB
-diff --git a/package/gensio/gensio.mk b/package/gensio/gensio.mk
-index 0b2bb63956..9163c6a37b 100644
---- a/package/gensio/gensio.mk
-+++ b/package/gensio/gensio.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/usbutils/usbutils.hash b/package/usbutils/usbutils.hash
+index 96426aeea2..f5d55bb4a0 100644
+--- a/package/usbutils/usbutils.hash
++++ b/package/usbutils/usbutils.hash
+@@ -1,5 +1,5 @@
+ # From https://www.kernel.org/pub/linux/utils/usb/usbutils/sha256sums.asc
+-sha256  9e23494fcc78b7a80ee29a07dd179c95ae2f71509c35728dbbabc2d1cca41338  usbutils-013.tar.xz
++sha256  3a079cfad60560227b67192482d7813bf96326fcbb66c04254839715f276fc69  usbutils-014.tar.xz
+ # Locally calculated
+-sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSES/GPL-2.0.txt
+-sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  LICENSES/GPL-3.0.txt
++sha256  91412672119c72352b76c1d48fa1a8b7cdc7f70be7929e468c8805db468e23e4  LICENSES/GPL-2.0-only.txt
++sha256  4631da83311d27f99078d0d102e31bd34a4fcbcc2dae2aa40f1454a5b48125dc  LICENSES/GPL-3.0-only.txt
+diff --git a/package/usbutils/usbutils.mk b/package/usbutils/usbutils.mk
+index ef5fd12013..50b1a5a0cc 100644
+--- a/package/usbutils/usbutils.mk
++++ b/package/usbutils/usbutils.mk
+@@ -4,14 +4,12 @@
  #
  ################################################################################
  
--GENSIO_VERSION = 2.2.4
-+GENSIO_VERSION = 2.2.8
- GENSIO_SITE = http://downloads.sourceforge.net/project/ser2net/ser2net
- GENSIO_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (tools)
- GENSIO_LICENSE_FILES = COPYING.LIB COPYING
+-USBUTILS_VERSION = 013
++USBUTILS_VERSION = 014
+ USBUTILS_SOURCE = usbutils-$(USBUTILS_VERSION).tar.xz
+ USBUTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/usb/usbutils
+ USBUTILS_DEPENDENCIES = host-pkgconf libusb udev
+ USBUTILS_LICENSE = GPL-2.0+ (utils) GPL-2.0 or GPL-3.0 (lsusb.py)
+-USBUTILS_LICENSE_FILES = LICENSES/GPL-2.0.txt LICENSES/GPL-3.0.txt
+-# Missing configure script
+-USBUTILS_AUTORECONF = YES
++USBUTILS_LICENSE_FILES = LICENSES/GPL-2.0-only.txt LICENSES/GPL-3.0-only.txt
+ 
+ # Nice lsusb.py script only if there's python 3.x
+ ifeq ($(BR2_PACKAGE_PYTHON3),)
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
