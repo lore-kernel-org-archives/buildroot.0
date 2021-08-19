@@ -2,77 +2,57 @@ Return-Path: <SRS0=aU6e=NK=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 79918C4338F
-	for <buildroot@archiver.kernel.org>; Thu, 19 Aug 2021 20:43:46 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9BF81C4338F
+	for <buildroot@archiver.kernel.org>; Thu, 19 Aug 2021 20:45:55 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 36A3661075
-	for <buildroot@archiver.kernel.org>; Thu, 19 Aug 2021 20:43:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 36A3661075
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
+	by mail.kernel.org (Postfix) with ESMTPS id 5EDBB604AC
+	for <buildroot@archiver.kernel.org>; Thu, 19 Aug 2021 20:45:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5EDBB604AC
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0342A817FF;
-	Thu, 19 Aug 2021 20:43:46 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1F1BB4011B;
+	Thu, 19 Aug 2021 20:45:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NLZ7Ff42MCpR; Thu, 19 Aug 2021 20:43:42 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id HdFtQ_Eus2VO; Thu, 19 Aug 2021 20:45:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 367DC81A30;
-	Thu, 19 Aug 2021 20:43:41 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 945611BF297
- for <buildroot@lists.busybox.net>; Thu, 19 Aug 2021 20:43:39 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6F8AD4011D;
+	Thu, 19 Aug 2021 20:45:50 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1B9821BF297
+ for <buildroot@lists.busybox.net>; Thu, 19 Aug 2021 20:45:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 81E59605D1
- for <buildroot@lists.busybox.net>; Thu, 19 Aug 2021 20:43:39 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0B8D0403CA
+ for <buildroot@lists.busybox.net>; Thu, 19 Aug 2021 20:45:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pO3NYRUYiZeM for <buildroot@lists.busybox.net>;
- Thu, 19 Aug 2021 20:43:35 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
- by smtp3.osuosl.org (Postfix) with ESMTPS id CE0AC613D2
- for <buildroot@buildroot.org>; Thu, 19 Aug 2021 20:43:34 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:9904:2733:9b91:ffcc])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPSA id 9C8152003B4;
- Thu, 19 Aug 2021 22:43:26 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1629405812;
- bh=VEzzWpT6Tf92nLL8nTRfcUK1gyUMVL877rBbsXcjJao=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=CwqzQMqxNPJxLffPaVr2+aV9VzdrFwImJuxXBxXw3V3TF172d+zJJwFdAPMeZ8OMI
- J5he4BkRS7BRXTRYMJlqWIkJYUog8yBzfzna8yPZLvX77C/ctEILMEZKvOlhhKu4lo
- nTYH0uj2fxwZCPZUfFrHsG1QM/Yc4csZQKJaA82vG2PzWR5oPnGYkTTgqTwlKlWOkA
- sGGEhj41o7wdhFI+vVNs+rkd25qCzkKHon554YQvWVBnHCJ52dK1722+I/DkewEwpc
- V34/+0SFNJEiBbiLeVtsGLpmJYHQwGLWvqvoFfdCgWPC1otaKzriVeOFkt0Qx9YsPQ
- SShNn8xJeICxQ==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Thu, 19 Aug 2021 22:43:26 +0200
-Date: Thu, 19 Aug 2021 22:43:26 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20210819204326.GD27036@scaer>
-References: <20210819160351.1045591-1-fontaine.fabrice@gmail.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20210819160351.1045591-1-fontaine.fabrice@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 1/1] package/mpv: fix build of vaapi with
- egl-drm
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yV3dqf1S7rV6 for <buildroot@lists.busybox.net>;
+ Thu, 19 Aug 2021 20:45:44 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 174414035A
+ for <buildroot@buildroot.org>; Thu, 19 Aug 2021 20:45:44 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id C8C0F8D58B; Thu, 19 Aug 2021 20:44:58 +0000 (UTC)
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+To: buildroot@buildroot.org
+Date: Thu, 19 Aug 2021 22:45:14 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: b785de9f3f4f87732a657ded2809706763502163
+X-Git-Newrev: 338a9b655dd955131c1af8fccebabfb4be1857d6
+X-Patchwork-Hint: ignore
+Message-Id: <20210819204458.C8C0F8D58B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] boot/at91bootstrap3: update to final 4.0.0
+ version
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,74 +64,77 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Mahyar Koshkouei <mahyar.koshkouei@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=338a9b655dd955131c1af8fccebabfb4be1857d6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-08-19 18:03 +0200, Fabrice Fontaine spake thusly:
-> Build of vaapi with egl-drm is broken since commit
-> 6ec47c4e59c7c8c57e972dab985c8a2ba0bf7174 because egl-drm is a part of gl
-> group which is only enabled if BR2_PACKAGE_HAS_LIBGL or
-> BR2_PACKAGE_HAS_LIBGLES are set:
-> https://github.com/mpv-player/mpv/blob/ec0006bfa1aaf608a7141929f2871c89ac7a15d6/wscript#L572
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/e5c15228f42a73f8c34b26630b2074c30e5f5966
+Update to AT91Bootstrap 4.0.0 version.
 
-This issue is about missing X11, so I am not sure I see the relation
-with this change...
+This package is now released under MIT license, and a license file was
+added.
 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/mpv/mpv.mk | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/package/mpv/mpv.mk b/package/mpv/mpv.mk
-> index 91e31dd150..f8ecaeb78a 100644
-> --- a/package/mpv/mpv.mk
-> +++ b/package/mpv/mpv.mk
-> @@ -148,6 +148,9 @@ MPV_DEPENDENCIES += libgl
->  else ifeq ($(BR2_PACKAGE_HAS_LIBGLES),y)
->  MPV_CONF_OPTS += --enable-gl
->  MPV_DEPENDENCIES += libgles
-> +else ifeq ($(BR2_PACKAGE_HAS_LIBEGL),y)
-> +MPV_CONF_OPTS += --enable-gl
-> +MPV_DEPENDENCIES += libegl
+Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ boot/at91bootstrap3/Config.in           | 4 ++--
+ boot/at91bootstrap3/at91bootstrap3.hash | 3 ++-
+ boot/at91bootstrap3/at91bootstrap3.mk   | 5 +++++
+ 3 files changed, 9 insertions(+), 3 deletions(-)
 
-Here, you are checking with BR2_PACKAGE_HAS_LIBEGL, but in the previous
-patch, as noted by Thomas, you used BR2_PACKAGE_MESA3D_OPENGL_EGL.
-
-Any reason for the discrepancy?
-
-And looking from further away, it looks like the two problems are really
-related one to the other, and so maybe need to be fixed in the same
-patch...
-
-Regards,
-Yann E. MORIN.
-
->  else
->  MPV_CONF_OPTS += --disable-gl
->  endif
-> -- 
-> 2.30.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/boot/at91bootstrap3/Config.in b/boot/at91bootstrap3/Config.in
+index edacc00675..650d3a23c8 100644
+--- a/boot/at91bootstrap3/Config.in
++++ b/boot/at91bootstrap3/Config.in
+@@ -19,7 +19,7 @@ choice
+ 	prompt "AT91 Bootstrap 3+ version"
+ 
+ config BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
+-	bool "4.0.0-rc2"
++	bool "4.0.0"
+ 
+ config BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION_3X
+ 	bool "3.10.3"
+@@ -54,7 +54,7 @@ endif
+ 
+ config BR2_TARGET_AT91BOOTSTRAP3_VERSION
+ 	string
+-	default "v4.0.0-rc2" if BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
++	default "v4.0.0" if BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
+ 	default "v3.10.3" if BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION_3X
+ 	default BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION \
+ 		if BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
+diff --git a/boot/at91bootstrap3/at91bootstrap3.hash b/boot/at91bootstrap3/at91bootstrap3.hash
+index 71c579de28..e611f163c9 100644
+--- a/boot/at91bootstrap3/at91bootstrap3.hash
++++ b/boot/at91bootstrap3/at91bootstrap3.hash
+@@ -1,3 +1,4 @@
+ # Locally calculated
+ sha256  b6ae5bcaacc5a949f400182e036ae053049638444a3ba8b1dd154ec5f7898d8e  at91bootstrap3-v3.10.3.tar.gz
+-sha256  b5d5f042297cad0d091f7d8734e61eb9ec7b6020898e086503fb5f8bc71fb9fc  at91bootstrap3-v4.0.0-rc2.tar.gz
++sha256  08c5b95df28be7f2e0439fb2b77fe27524f97c499850641e4540c07ea0b2c25d  at91bootstrap3-v4.0.0.tar.gz
++sha256  5a3809b1c2ba13b7242572322951311c584419f1f8516f665d6c06f0668d78de  LICENSES/MIT.txt
+diff --git a/boot/at91bootstrap3/at91bootstrap3.mk b/boot/at91bootstrap3/at91bootstrap3.mk
+index b253129dfb..1e2a3a44b0 100644
+--- a/boot/at91bootstrap3/at91bootstrap3.mk
++++ b/boot/at91bootstrap3/at91bootstrap3.mk
+@@ -19,7 +19,12 @@ else
+ AT91BOOTSTRAP3_SITE = $(call github,linux4sam,at91bootstrap,$(AT91BOOTSTRAP3_VERSION))
+ endif
+ 
++ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION),y)
++AT91BOOTSTRAP3_LICENSE = MIT
++AT91BOOTSTRAP3_LICENSE_FILES = LICENSES/MIT.txt
++else ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION_3X),y)
+ AT91BOOTSTRAP3_LICENSE = Atmel License
++endif
+ 
+ AT91BOOTSTRAP3_CPE_ID_VENDOR = linux4sam
+ AT91BOOTSTRAP3_CPE_ID_PRODUCT = at91bootstrap
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
