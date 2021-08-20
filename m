@@ -2,57 +2,56 @@ Return-Path: <SRS0=2pYX=NR=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ECFB5C432BE
-	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:18:47 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ECBA0C432BE
+	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:19:00 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B0AA560FE7
-	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:18:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B0AA560FE7
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
+	by mail.kernel.org (Postfix) with ESMTPS id 9958E6101C
+	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:19:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9958E6101C
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8811382F31;
-	Thu, 26 Aug 2021 22:18:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 73FF3426D2;
+	Thu, 26 Aug 2021 22:19:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ArnAkx3NWdzp; Thu, 26 Aug 2021 22:18:43 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id iRwBnQzpdulC; Thu, 26 Aug 2021 22:18:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3A8D582F32;
-	Thu, 26 Aug 2021 22:18:42 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id BC0E61BF33E
+	by smtp4.osuosl.org (Postfix) with ESMTP id A3196426D7;
+	Thu, 26 Aug 2021 22:18:54 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id F2BAF1C1135
  for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 22:02:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6D77E4078A
- for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 22:02:40 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B050A82C38
+ for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 22:02:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5cuSSLdHDq4b for <buildroot@lists.busybox.net>;
- Thu, 26 Aug 2021 22:02:36 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Ik0c0_yZNYqL for <buildroot@lists.busybox.net>;
+ Thu, 26 Aug 2021 22:02:37 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8F19B40791
- for <buildroot@buildroot.org>; Thu, 26 Aug 2021 22:02:29 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3077A82BA7
+ for <buildroot@buildroot.org>; Thu, 26 Aug 2021 22:02:34 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id F134C8DC50; Thu, 26 Aug 2021 22:01:27 +0000 (UTC)
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ id 856558DC50; Thu, 26 Aug 2021 22:01:32 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 8 Aug 2021 22:29:26 +0200
+Date: Fri, 20 Aug 2021 09:55:41 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 93be993591d2f45bbcab7cb88271ff081dec9bac
-X-Git-Newrev: 23bead3e3aa68d96be0b485e7b91c96eaab56b67
+X-Git-Oldrev: 6aa318d91e66731d66dca485c4c30391fe0e2423
+X-Git-Newrev: 66eb8cd0fb8de2f033ba03a57e82a64f49f6eff6
 X-Patchwork-Hint: ignore
-Message-Id: <20210826220127.F134C8DC50@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/seatd: fix build with
- gcc < 7
+Message-Id: <20210826220132.856558DC50@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/mcrypt: drop package
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,86 +64,336 @@ List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============8843604954812507104=="
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=23bead3e3aa68d96be0b485e7b91c96eaab56b67
+--===============8843604954812507104==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=66eb8cd0fb8de2f033ba03a57e82a64f49f6eff6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Since its addition in commit daae31149017cbf8b03634cfc56da132f7e1ad83,
-seatd fails to build with gcc < 7 because it unconditonally uses
--Wimplicit-fallthrough which is only available since gcc 7.1 and
-https://github.com/gcc-mirror/gcc/commit/81fea426da8c4687bb32e6894dc26f00ae211822
-resulting in the following build failure:
-
-arm-none-linux-gnueabi-gcc: error: unrecognized command line option '-Wimplicit-fallthrough'
-
-Fixes:
- - http://autobuild.buildroot.org/results/0ee6816a7cceebdafd07612677a594bdf68e0790
+Drop mcrypt which is a cryptographic package that is not maintained
+anymore. Here is an extract of https://en.wikipedia.org/wiki/Mcrypt:
+"The last update to libmcrypt was in 2007, despite years of unmerged
+patches. These facts have led security experts to declare mcrypt
+abandonware and discourage its use in new development."
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- .../0003-meson.build-fix-build-with-gcc-7.patch    | 48 ++++++++++++++++++++++
- 1 file changed, 48 insertions(+)
+ Config.in.legacy                        | 10 ++++
+ package/Config.in                       |  1 -
+ package/mcrypt/0001-CVE-2012-4409.patch | 25 ---------
+ package/mcrypt/0002-CVE-2012-4426.patch | 35 ------------
+ package/mcrypt/0003-CVE-2012-4527.patch | 99 ---------------------------------
+ package/mcrypt/0004-no-rpath.patch      | 17 ------
+ package/mcrypt/Config.in                | 12 ----
+ package/mcrypt/mcrypt.hash              |  3 -
+ package/mcrypt/mcrypt.mk                | 24 --------
+ 9 files changed, 10 insertions(+), 216 deletions(-)
 
-diff --git a/package/seatd/0003-meson.build-fix-build-with-gcc-7.patch b/package/seatd/0003-meson.build-fix-build-with-gcc-7.patch
-new file mode 100644
-index 0000000000..0e9f437cc3
---- /dev/null
-+++ b/package/seatd/0003-meson.build-fix-build-with-gcc-7.patch
-@@ -0,0 +1,48 @@
-+From 0b32c33978fbe8772df6d185c9b9d646c442dc5d Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 8 Aug 2021 19:00:35 +0200
-+Subject: [PATCH] meson.build: fix build with gcc < 7
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 54476acf9a..7cb0c40782 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,16 @@ endif
+ 
+ comment "Legacy options removed in 2021.08"
+ 
++config BR2_PACKAGE_MCRYPT
++	bool "mcrypt package was removed"
++	select BR2_LEGACY
++	help
++	  This package has been removed as "the last update to libmcrypt
++	  was in 2007, despite years of unmerged patches. These facts
++	  have led security experts to declare mcrypt abandonware and
++	  discourage its use in new development" (extract from
++	  https://en.wikipedia.org/wiki/Mcrypt).
 +
-+Test if -Wimplicit-fallthrough is available before using it as it has
-+been added only since gcc 7.1 and
-+https://github.com/gcc-mirror/gcc/commit/81fea426da8c4687bb32e6894dc26f00ae211822
-+and so it will raise the following build failure with gcc < 7:
-+
-+arm-none-linux-gnueabi-gcc: error: unrecognized command line option '-Wimplicit-fallthrough'
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/0ee6816a7cceebdafd07612677a594bdf68e0790
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/kennylevinsen/seatd/pull/1]
-+---
-+ meson.build | 6 +++++-
-+ 1 file changed, 5 insertions(+), 1 deletion(-)
-+
-+diff --git a/meson.build b/meson.build
-+index 1131b4b..c366a59 100644
-+--- a/meson.build
-++++ b/meson.build
-+@@ -31,7 +31,6 @@ add_project_arguments(
-+ 		'-Wold-style-definition', # nop
-+ 		'-Wpointer-arith',
-+ 		'-Wstrict-prototypes',
-+-		'-Wimplicit-fallthrough',
-+ 		'-Wmissing-prototypes',
-+ 		'-Wno-unknown-warning-option',
-+ 		'-Wno-unused-command-line-argument',
-+@@ -45,6 +44,11 @@ add_project_arguments(
-+ 	language: 'c',
-+ )
-+ 
-++cc = meson.get_compiler('c')
-++if cc.has_argument('-Wimplicit-fallthrough')
-++	add_project_arguments('-Wimplicit-fallthrough' , language : 'c')
-++endif
-++
-+ if ['debugoptimized', 'release', 'minsize'].contains(get_option('buildtype'))
-+ 	add_project_arguments('-D_FORTIFY_SOURCE=2', language: 'c')
-+ endif
-+-- 
-+2.30.2
-+
+ config BR2_PACKAGE_PHP_EXT_MCRYPT
+ 	bool "PHP mcrypt extension removed"
+ 	select BR2_LEGACY
+diff --git a/package/Config.in b/package/Config.in
+index 046c04e994..6fcdcc38d7 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2065,7 +2065,6 @@ menu "Miscellaneous"
+ 	source "package/gsettings-desktop-schemas/Config.in"
+ 	source "package/haveged/Config.in"
+ 	source "package/linux-syscall-support/Config.in"
+-	source "package/mcrypt/Config.in"
+ 	source "package/mobile-broadband-provider-info/Config.in"
+ 	source "package/netdata/Config.in"
+ 	source "package/proj/Config.in"
+diff --git a/package/mcrypt/0001-CVE-2012-4409.patch b/package/mcrypt/0001-CVE-2012-4409.patch
+deleted file mode 100644
+index 97c658bb2d..0000000000
+--- a/package/mcrypt/0001-CVE-2012-4409.patch
++++ /dev/null
+@@ -1,25 +0,0 @@
+-From 3efb40e17ce4f76717ae17a1ce1e1f747ddf59fd Mon Sep 17 00:00:00 2001
+-From: Alon Bar-Lev <alon.barlev@gmail.com>
+-Date: Sat, 22 Dec 2012 22:37:06 +0200
+-Subject: [PATCH] cleanup: buffer overflow
+-
+----
+- src/extra.c |    2 ++
+- 1 files changed, 2 insertions(+), 0 deletions(-)
+-
+-diff --git a/src/extra.c b/src/extra.c
+-index 3082f82..c7a1ac0 100644
+---- a/src/extra.c
+-+++ b/src/extra.c
+-@@ -241,6 +241,8 @@ int check_file_head(FILE * fstream, char *algorithm, char *mode,
+- 		if (m_getbit(6, flags) == 1) { /* if the salt bit is set */
+- 			if (m_getbit(0, sflag) != 0) { /* if the first bit is set */
+- 				*salt_size = m_setbit(0, sflag, 0);
+-+				if (*salt_size > sizeof(tmp_buf))
+-+					err_quit(_("Salt is too long\n"));
+- 				if (*salt_size > 0) {
+- 					fread(tmp_buf, 1, *salt_size,
+- 					      fstream);
+--- 
+-1.7.8.6
+-
+diff --git a/package/mcrypt/0002-CVE-2012-4426.patch b/package/mcrypt/0002-CVE-2012-4426.patch
+deleted file mode 100644
+index 708d4a579e..0000000000
+--- a/package/mcrypt/0002-CVE-2012-4426.patch
++++ /dev/null
+@@ -1,35 +0,0 @@
+-Patch taken from gentoo.
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+---- a/src/errors.c
+-+++ b/src/errors.c
+-@@ -25,24 +25,24 @@
+- 
+- void err_quit(char *errmsg)
+- {
+--	fprintf(stderr, errmsg);
+-+	fprintf(stderr, "%s", errmsg);
+- 	exit(-1);
+- }
+- 
+- void err_warn(char *errmsg)
+- {
+- 	if (quiet <= 1)
+--		fprintf(stderr, errmsg);
+-+		fprintf(stderr, "%s", errmsg);
+- }
+- 
+- void err_info(char *errmsg)
+- {
+- 	if (quiet == 0)
+--		fprintf(stderr, errmsg);
+-+		fprintf(stderr, "%s", errmsg);
+- }
+- 
+- void err_crit(char *errmsg)
+- {
+- 	if (quiet <= 2)
+--		fprintf(stderr, errmsg);
+-+		fprintf(stderr, "%s", errmsg);
+- }
+diff --git a/package/mcrypt/0003-CVE-2012-4527.patch b/package/mcrypt/0003-CVE-2012-4527.patch
+deleted file mode 100644
+index a8cf6f449a..0000000000
+--- a/package/mcrypt/0003-CVE-2012-4527.patch
++++ /dev/null
+@@ -1,99 +0,0 @@
+-Fix for CVE-2012-4527.
+-Authored by Attila Bogar and Jean-Michel Vourgère <jmv_deb@nirgal.com>
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+-diff -Nura mcrypt-2.6.8.orig/src/mcrypt.c mcrypt-2.6.8/src/mcrypt.c
+---- mcrypt-2.6.8.orig/src/mcrypt.c	2013-01-14 19:15:49.465925072 -0300
+-+++ mcrypt-2.6.8/src/mcrypt.c	2013-01-14 19:28:13.711478000 -0300
+-@@ -44,7 +44,9 @@
+- static char rcsid[] =
+-     "$Id: mcrypt.c,v 1.2 2007/11/07 17:10:21 nmav Exp $";
+- 
+--char tmperr[128];
+-+/* Temporary error message can contain one file name and 1k of text */
+-+#define ERRWIDTH ((PATH_MAX)+1024)
+-+char tmperr[ERRWIDTH];
+- unsigned int stream_flag = FALSE;
+- char *keymode = NULL;
+- char *mode = NULL;
+-@@ -482,7 +484,7 @@
+- #ifdef HAVE_STAT
+-       if (stream_flag == FALSE) {
+- 	 if (is_normal_file(file[i]) == FALSE) {
+--	    sprintf(tmperr,
+-+	    snprintf(tmperr, ERRWIDTH,
+- 		    _
+- 		    ("%s: %s is not a regular file. Skipping...\n"),
+- 		    program_name, file[i]);
+-@@ -501,7 +503,7 @@
+- 	    dinfile = file[i];
+- 	 if ((isatty(fileno((FILE *) (stdin))) == 1)
+- 	     && (stream_flag == TRUE) && (force == 0)) {	/* not a tty */
+--	    sprintf(tmperr,
+-+	    snprintf(tmperr, ERRWIDTH,
+- 		    _
+- 		    ("%s: Encrypted data will not be read from a terminal.\n"),
+- 		    program_name);
+-@@ -520,7 +522,7 @@
+- 	    einfile = file[i];
+- 	 if ((isatty(fileno((FILE *) (stdout))) == 1)
+- 	     && (stream_flag == TRUE) && (force == 0)) {	/* not a tty */
+--	    sprintf(tmperr,
+-+	    snprintf(tmperr, ERRWIDTH,
+- 		    _
+- 		    ("%s: Encrypted data will not be written to a terminal.\n"),
+- 		    program_name);
+-@@ -544,7 +546,7 @@
+- 	    strcpy(outfile, einfile);
+- 	    /* if file has already the .nc ignore it */
+- 	    if (strstr(outfile, ".nc") != NULL) {
+--	       sprintf(tmperr,
+-+	       snprintf(tmperr, ERRWIDTH,
+- 		       _
+- 		       ("%s: file %s has the .nc suffix... skipping...\n"),
+- 		       program_name, outfile);
+-@@ -590,10 +592,10 @@
+- 
+- 	 if (x == 0) {
+- 	    if (stream_flag == FALSE) {
+--	       sprintf(tmperr, _("File %s was decrypted.\n"), dinfile);
+-+	       snprintf(tmperr, ERRWIDTH, _("File %s was decrypted.\n"), dinfile);
+- 	       err_warn(tmperr);
+- 	    } else {
+--	       sprintf(tmperr, _("Stdin was decrypted.\n"));
+-+	       snprintf(tmperr, ERRWIDTH, _("Stdin was decrypted.\n"));
+- 	       err_warn(tmperr);
+- 	    }
+- #ifdef HAVE_STAT
+-@@ -610,7 +612,7 @@
+- 
+- 	 } else {
+- 	    if (stream_flag == FALSE) {
+--	       sprintf(tmperr,
+-+	       snprintf(tmperr, ERRWIDTH,
+- 		       _
+- 		       ("File %s was NOT decrypted successfully.\n"),
+- 		       dinfile);
+-@@ -636,10 +638,10 @@
+- 
+- 	 if (x == 0) {
+- 	    if (stream_flag == FALSE) {
+--	       sprintf(tmperr, _("File %s was encrypted.\n"), einfile);
+-+	       snprintf(tmperr, ERRWIDTH, _("File %s was encrypted.\n"), einfile);
+- 	       err_warn(tmperr);
+- 	    } else {
+--	       sprintf(tmperr, _("Stdin was encrypted.\n"));
+-+	       snprintf(tmperr, ERRWIDTH, _("Stdin was encrypted.\n"));
+- 	       err_warn(tmperr);
+- 	    }
+- #ifdef HAVE_STAT
+-@@ -655,7 +657,7 @@
+- 
+- 	 } else {
+- 	    if (stream_flag == FALSE) {
+--	       sprintf(tmperr,
+-+	       snprintf(tmperr, ERRWIDTH,
+- 		       _
+- 		       ("File %s was NOT encrypted successfully.\n"),
+- 		       einfile);
+diff --git a/package/mcrypt/0004-no-rpath.patch b/package/mcrypt/0004-no-rpath.patch
+deleted file mode 100644
+index a0813bcf00..0000000000
+--- a/package/mcrypt/0004-no-rpath.patch
++++ /dev/null
+@@ -1,17 +0,0 @@
+-Patch out rpath hardcoding since it completely ignores --disable-rpath
+-and other configure ways.
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+-diff -Nura mcrypt-2.6.8.orig/config.rpath mcrypt-2.6.8/config.rpath
+---- mcrypt-2.6.8.orig/config.rpath	2013-01-07 13:05:22.626883480 -0300
+-+++ mcrypt-2.6.8/config.rpath	2013-01-07 13:12:47.196090608 -0300
+-@@ -153,7 +153,7 @@
+-   # here allows them to be overridden if necessary.
+-   # Unlike libtool, we use -rpath here, not --rpath, since the documented
+-   # option of GNU ld is called -rpath, not --rpath.
+--  hardcode_libdir_flag_spec='${wl}-rpath ${wl}$libdir'
+-+  hardcode_libdir_flag_spec=
+-   case "$host_os" in
+-     aix3* | aix4* | aix5*)
+-       # On AIX/PPC, the GNU linker is very broken
+diff --git a/package/mcrypt/Config.in b/package/mcrypt/Config.in
+deleted file mode 100644
+index e3b9541f04..0000000000
+--- a/package/mcrypt/Config.in
++++ /dev/null
+@@ -1,12 +0,0 @@
+-config BR2_PACKAGE_MCRYPT
+-	bool "mcrypt"
+-	depends on BR2_USE_MMU # fork()
+-	select BR2_PACKAGE_LIBMCRYPT
+-	select BR2_PACKAGE_LIBMHASH
+-	help
+-	  MCrypt is a replacement for the old crypt() package and
+-	  crypt(1) command, with extensions.
+-	  It allows developers to use a wide range of encryption
+-	  functions, without making drastic changes to their code.
+-
+-	  http://mcrypt.sourceforge.net/
+diff --git a/package/mcrypt/mcrypt.hash b/package/mcrypt/mcrypt.hash
+deleted file mode 100644
+index c6c8871f4f..0000000000
+--- a/package/mcrypt/mcrypt.hash
++++ /dev/null
+@@ -1,3 +0,0 @@
+-# Locally computed:
+-sha256  5145aa844e54cca89ddab6fb7dd9e5952811d8d787c4f4bf27eb261e6c182098  mcrypt-2.6.8.tar.gz
+-sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/mcrypt/mcrypt.mk b/package/mcrypt/mcrypt.mk
+deleted file mode 100644
+index a04b973750..0000000000
+--- a/package/mcrypt/mcrypt.mk
++++ /dev/null
+@@ -1,24 +0,0 @@
+-################################################################################
+-#
+-# mcrypt
+-#
+-################################################################################
+-
+-MCRYPT_VERSION = 2.6.8
+-MCRYPT_SITE = http://downloads.sourceforge.net/project/mcrypt/MCrypt/$(MCRYPT_VERSION)
+-MCRYPT_DEPENDENCIES = libmcrypt libmhash \
+-	$(if $(BR2_PACKAGE_ZLIB),zlib) \
+-	$(if $(BR2_PACKAGE_LIBICONV),libiconv) \
+-	$(TARGET_NLS_DEPENDENCIES)
+-MCRYPT_CONF_OPTS = --with-libmcrypt-prefix=$(STAGING_DIR)/usr
+-MCRYPT_LICENSE = GPL-3.0
+-MCRYPT_LICENSE_FILES = COPYING
+-
+-# 0001-CVE-2012-4409.patch
+-MCRYPT_IGNORE_CVES += CVE-2012-4409
+-# 0002-CVE-2012-4426.patch
+-MCRYPT_IGNORE_CVES += CVE-2012-4426
+-# 0003-CVE-2012-4527.patch
+-MCRYPT_IGNORE_CVES += CVE-2012-4527
+-
+-$(eval $(autotools-package))
+
+--===============8843604954812507104==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
 http://lists.busybox.net/mailman/listinfo/buildroot
+
+--===============8843604954812507104==--
