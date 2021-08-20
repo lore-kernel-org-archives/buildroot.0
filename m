@@ -2,90 +2,93 @@ Return-Path: <SRS0=3r6m=NL=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.5 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-18.5 required=3.0 tests=BAYES_00,
 	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
 	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 956C0C4338F
-	for <buildroot@archiver.kernel.org>; Fri, 20 Aug 2021 08:12:33 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 20C39C4338F
+	for <buildroot@archiver.kernel.org>; Fri, 20 Aug 2021 10:05:00 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 455FF61051
-	for <buildroot@archiver.kernel.org>; Fri, 20 Aug 2021 08:12:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 455FF61051
+	by mail.kernel.org (Postfix) with ESMTPS id C6BD3610D2
+	for <buildroot@archiver.kernel.org>; Fri, 20 Aug 2021 10:04:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C6BD3610D2
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 09716613D4;
-	Fri, 20 Aug 2021 08:12:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9C0E8403ED;
+	Fri, 20 Aug 2021 10:04:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ar0D9s9x5Mpe; Fri, 20 Aug 2021 08:12:29 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id y-fOtvR4jsPr; Fri, 20 Aug 2021 10:04:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E0610613D7;
-	Fri, 20 Aug 2021 08:12:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CE43840257;
+	Fri, 20 Aug 2021 10:04:54 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id EAABD1BF2C0
- for <buildroot@lists.busybox.net>; Fri, 20 Aug 2021 08:12:26 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 95E9B1BF39D
+ for <buildroot@lists.busybox.net>; Fri, 20 Aug 2021 10:04:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D76C280E63
- for <buildroot@lists.busybox.net>; Fri, 20 Aug 2021 08:12:26 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8503280E51
+ for <buildroot@lists.busybox.net>; Fri, 20 Aug 2021 10:04:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zuN6JF71933q for <buildroot@lists.busybox.net>;
- Fri, 20 Aug 2021 08:12:22 +0000 (UTC)
+ with ESMTP id PaGlBFj-5frJ for <buildroot@lists.busybox.net>;
+ Fri, 20 Aug 2021 10:04:50 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com
- [IPv6:2607:f8b0:4864:20::333])
- by smtp1.osuosl.org (Postfix) with ESMTPS id BD471817D3
- for <buildroot@buildroot.org>; Fri, 20 Aug 2021 08:12:22 +0000 (UTC)
-Received: by mail-ot1-x333.google.com with SMTP id
- y14-20020a0568302a0e00b0051acbdb2869so5286822otu.2
- for <buildroot@buildroot.org>; Fri, 20 Aug 2021 01:12:22 -0700 (PDT)
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
+ [IPv6:2a00:1450:4864:20::336])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 669CB80E37
+ for <buildroot@busybox.net>; Fri, 20 Aug 2021 10:04:50 +0000 (UTC)
+Received: by mail-wm1-x336.google.com with SMTP id
+ f9-20020a05600c1549b029025b0f5d8c6cso8692933wmg.4
+ for <buildroot@busybox.net>; Fri, 20 Aug 2021 03:04:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=nkmsrqYwj1gj88dF596NhZ/KP53M52XspGSch+AxcJ0=;
- b=Q8r9QvI92Ei9+swHDlHejE9EQBnRYXm1Vv4yIOtZ9zwtG81KHQxjZeZBTmpvmvunCI
- wMm4jYqmbxnPBd0S0u7GxW0u599jCtVMkmdHwAYu/5/fb8LEqkC9Uu3B4iwkjRuDaYcb
- uAvvzln+wDWm5wzNbiBbmur46/zJT41mGvr371Ti2YS+LcKqIO4cbBcoW2Ao6N+WTLZv
- SlOhuQ/1sGFGzSf4hoErt1OwRZkOVr5ZflnExZMtV8PkZjd/ZbH07tuhP2JzV/pKlcRr
- 6De1yq5PW+ov/lCljnEkGeZehoFQwIyX/xCqUnPChzWglX0k46ss/XwInZX/yCISMWs3
- 1G5w==
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=ytGZcN3FYr1Hq8hbv6zum5Fw4dOMDwn1GYqWa8JsLAE=;
+ b=qXhgEU4xp/oXEizSbB8qlw/i5xUnxRn9n0OcfAiACFsf9M3I8NueUgiCxO7eo90zBm
+ Pw8yB41+2uQpIedXfYenRTiYhwaFwP9OkeFk5RdA5TqrYpzPn1fTFqWz4lz0m+peBVFX
+ GE5o1zZQINxe1NeD9Mp55GzetRo/O7JrFhjLufNQ0xfJwoHiBhE7aV78cmLf1hpspnyM
+ xS48ZTIpVweSiYc7VBsqXsgI/5Q6lMd8K7fXrydjIC03F60kSr4+cYRyqZm1vzwel+qZ
+ /z4zEbDGgiraMKChQL+eX0JGqk7dhw15biNqfbgTTM0P3hLkU4AH2nUhQeSqzUn7hW7u
+ zzFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=nkmsrqYwj1gj88dF596NhZ/KP53M52XspGSch+AxcJ0=;
- b=jZpqIU1TU5aCEQxfRduF4GtZaz0KTm3C187jTlmVqQ6R7cLgV3IT+4/irtixNouEqw
- UIfh0w5INdMgt0TFlE7jr+k6RkcqEEuOV40Jj5oZgbKcVJ+E3ZdE1u6dNPfTKztRUxp1
- QkO0rpWgp+UlH7ibjhsV3ECvSS7DKLUJGyBJfRtZNmUWjxebiILjgRd7A0eHVPEsLZ3n
- 5JuG+jiyyePhJ97peYkAqPcPmiyCR/UTqTJBWnp5M3d3fBa10DJ/cPxaMVRBxy05asDn
- a8zIOl+X9pjh/BftcIiSnnvehB27gUvOOBcS5+7HnbsFlFakmkYHc/cKsBuNIUTedh1p
- OrJA==
-X-Gm-Message-State: AOAM530mEZxN6Pfeo5cTt3fFaMzHtVaNhuUoay6iVGfx8tsFnfHZ5wJD
- mj/n2CM4GGkjZIF1pi1khG9TEtLAPDMergUBBqM=
-X-Google-Smtp-Source: ABdhPJymbAPcalQqWHgKZWWK3WLdedxf0xGwErDqtPgRRPCjS2o9/Io1T65IVFLDucMBk3/qMBz5tlRpixV+tsfc+4g=
-X-Received: by 2002:a05:6830:156:: with SMTP id
- j22mr7432776otp.75.1629447141750; 
- Fri, 20 Aug 2021 01:12:21 -0700 (PDT)
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=ytGZcN3FYr1Hq8hbv6zum5Fw4dOMDwn1GYqWa8JsLAE=;
+ b=euyOe2gR0NitWPle32lf+q5MJnYyoC0WFdtsIOrqgQLsj542Spybv+DwBgyYsSp2C7
+ fCfx6S2vVHTYbT7pLywA4N+e5e9IkFki5bznLbYH0HZxnMjl598jdjc9p4Vl4jsBdv/i
+ lF0G4UuZqdHtlQOE/iefr17oilm4pU0hT5sCzYsUp8gSGKxgBJBML7mTC1p69FXU3Kq7
+ Qhbo+hgFYJn9zOL37CS4hcgQJFrAMntPLBm/FmWd87RaM7/YOsPKWvqdGudiGtas3tK3
+ tJs4bad1tIuFq5M/p2FrwsygZnahMsYC0ravOuZ12zDRnQgKGNLAW3hr/uSsSxygkeVL
+ 1dPQ==
+X-Gm-Message-State: AOAM532pBw/+cizrs4iepU1jyaQIQq8xh8J2hu6zMe3fRXvdDMoV383G
+ Wq8FKzEDlis2vCVPX8EchJSWJB9aFUk=
+X-Google-Smtp-Source: ABdhPJwc2nNMlQH32Wq10GIjypzcAEflzn3qgbYfx64ZLewyrI+i8+WbpxL7F0D5djK8xPDRd54aeQ==
+X-Received: by 2002:a05:600c:3641:: with SMTP id
+ y1mr2957557wmq.43.1629453888703; 
+ Fri, 20 Aug 2021 03:04:48 -0700 (PDT)
+Received: from vm-user.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
+ by smtp.gmail.com with ESMTPSA id t8sm6375168wrx.27.2021.08.20.03.04.47
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 20 Aug 2021 03:04:48 -0700 (PDT)
+From: Francois Perrad <fperrad@gmail.com>
+X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
+To: buildroot@busybox.net
+Date: Fri, 20 Aug 2021 12:04:39 +0200
+Message-Id: <20210820100439.273885-1-francois.perrad@gadz.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20210802123300.564709-1-arnout@mind.be>
- <CADYdroNf7PmpdHsfO_Hxz9ynWsLEcFVL9oX=+2nCMykuV3fNmw@mail.gmail.com>
- <20210819233145.1802a72f@windsurf>
-In-Reply-To: <20210819233145.1802a72f@windsurf>
-From: Norbert Lange <nolange79@gmail.com>
-Date: Fri, 20 Aug 2021 10:12:10 +0200
-Message-ID: <CADYdroPApJp8pKFONJQLKpy09trqXP8TsSEBKKdAXbvZJtHDAQ@mail.gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [Buildroot] [PATCH for-next] package/gtest: remove partial host
- package
+Subject: [Buildroot] [PATCH] package/libressl: always expose
+ SSL_OP_NO_TLSv1_3
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,64 +100,65 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-Am Do., 19. Aug. 2021 um 23:31 Uhr schrieb Thomas Petazzoni
-<thomas.petazzoni@bootlin.com>:
->
-> Hello Norbert,
->
-> On Mon, 2 Aug 2021 15:09:06 +0200
-> Norbert Lange <nolange79@gmail.com> wrote:
->
-> > >  $(eval $(cmake-package))
-> >
-> > add this here:
-> > $(eval $(host-cmake-package))
-> >
-> > It works, and I see no particular reason not to allow the host package.
-> >
-> > > -# The host package does not build anything, just installs gmock_gen stuff, so
-> > > -# it does not need to be a host-cmake-package.
-> > > -$(eval $(host-generic-package))
-> > > --
-> > > 2.31.1
-> > >
-> >
-> > With this change the patch is identical to my local version, and thus
-> > Reviewed-by: Norbert Lange <nolange79@gmail.com>
->
-> Are you saying that you are using the gmock_gen script in your
-> workflow? If so, how does that fit with the commit description from
-> Arnout, which says:
+Fixes the build of vsftpd 3.0.4
 
-I am saying that I agree with the patch, not that I use the script.
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ ...0001-always-expose-SSL_OP_NO_TLSv1_3.patch | 37 +++++++++++++++++++
+ 1 file changed, 37 insertions(+)
+ create mode 100644 package/libressl/0001-always-expose-SSL_OP_NO_TLSv1_3.patch
 
->
->   This script, however, is no longer maintained and is not needed for most
->   practical uses of gmock. Even if it is used, its output is meant to be
->   hand-edited, so it shouldn't be used as part of the build flow.
+diff --git a/package/libressl/0001-always-expose-SSL_OP_NO_TLSv1_3.patch b/package/libressl/0001-always-expose-SSL_OP_NO_TLSv1_3.patch
+new file mode 100644
+index 000000000..f34ae8583
+--- /dev/null
++++ b/package/libressl/0001-always-expose-SSL_OP_NO_TLSv1_3.patch
+@@ -0,0 +1,37 @@
++always expose SSL_OP_NO_TLSv1_3
++
++like in OpenSSL, see https://github.com/openssl/openssl/blob/master/include/openssl/ssl.h.in#L399
++
++like SSL_OP_NO_DTLSv1_2, see commit "Expose various DTLSv1.2 specific functions and defines"
++
++this change fixes the compilation of vsftpd 3.0.4 & 3.0.5, which fails with the following error:
++```
++ssl.c: In function 'ssl_init':
++ssl.c:98:18: error: 'SSL_OP_NO_TLSv1_3' undeclared (first use in this function); did you mean 'SSL_OP_NO_TLSv1_1'?
++```
++
++Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
++Fetched from: https://github.com/libressl-portable/openbsd/pull/124
++---
++ include/openssl/ssl.h | 4 ----
++ 1 file changed, 4 deletions(-)
++
++diff --git a/include/openssl/ssl.h b/include/openssl/ssl.h
++index 46f24b2ea..4048a6e63 100644
++--- a/include/openssl/ssl.h
+++++ b/include/openssl/ssl.h
++@@ -516,11 +516,7 @@ typedef int (*tls_session_secret_cb_fn)(SSL *s, void *secret, int *secret_len,
++ #define SSL_OP_NO_TLSv1					0x04000000L
++ #define SSL_OP_NO_TLSv1_2				0x08000000L
++ #define SSL_OP_NO_TLSv1_1				0x10000000L
++-
++-#if defined(LIBRESSL_HAS_TLS1_3) || defined(LIBRESSL_INTERNAL)
++ #define SSL_OP_NO_TLSv1_3				0x20000000L
++-#endif
++-
++ #define SSL_OP_NO_DTLSv1				0x40000000L
++ #define SSL_OP_NO_DTLSv1_2				0x80000000L
++ 
++-- 
++2.30.2
++
+-- 
+2.30.2
 
-My original patch [2] did only install the script if python2/3
-was built with buildroot. I had a similar commit message then,
-suggesting the removal.
-
-The script is only used to create some boilerplate code automatically,
-but any reference of it is already removed from the docs [1].
-To be clear, this was used manually and only one time when writing a test.
-
-Given that the script is old and unmaintained, C++ is evolving,
-its only a matter of time when parsing using this script turns into a
-hit-and-miss.
-
-Norbert
-
-[1] - https://github.com/google/googletest/blob/master/docs/gmock_for_dummies.md#writing-the-mock-class
-[2] - http://lists.busybox.net/pipermail/buildroot/2021-July/616335.html
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
