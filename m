@@ -2,56 +2,57 @@ Return-Path: <SRS0=jfQC=N2=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.6 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BFD71C433EF
-	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 18:42:55 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 358FAC433F5
+	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 18:43:08 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 935A860E52
-	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 18:42:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 935A860E52
+	by mail.kernel.org (Postfix) with ESMTPS id ECD0560E52
+	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 18:43:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org ECD0560E52
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7313A4274B;
-	Sat,  4 Sep 2021 18:42:55 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BFC704013E;
+	Sat,  4 Sep 2021 18:43:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cYkEZzGL4FNe; Sat,  4 Sep 2021 18:42:54 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id OXPTsNxrTXVV; Sat,  4 Sep 2021 18:43:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B14F44274C;
-	Sat,  4 Sep 2021 18:42:53 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D21FC4022D;
+	Sat,  4 Sep 2021 18:43:05 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1066A1BF5DD
- for <buildroot@lists.busybox.net>; Sat,  4 Sep 2021 18:25:58 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 03F9F1BF5DD
+ for <buildroot@lists.busybox.net>; Sat,  4 Sep 2021 18:25:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id F120240266
- for <buildroot@lists.busybox.net>; Sat,  4 Sep 2021 18:25:19 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0212B4026C
+ for <buildroot@lists.busybox.net>; Sat,  4 Sep 2021 18:25:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id D7XOTbsOQ-R4 for <buildroot@lists.busybox.net>;
- Sat,  4 Sep 2021 18:25:19 +0000 (UTC)
+ with ESMTP id 20F_YVbNXw1K for <buildroot@lists.busybox.net>;
+ Sat,  4 Sep 2021 18:25:18 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B49A940277
+ by smtp2.osuosl.org (Postfix) with ESMTP id 755134013E
  for <buildroot@buildroot.org>; Sat,  4 Sep 2021 18:25:17 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 7E0658834C; Sat,  4 Sep 2021 18:23:55 +0000 (UTC)
+ id 3D6CB8834C; Sat,  4 Sep 2021 18:23:55 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Tue, 24 Aug 2021 23:55:47 +0200
+Date: Fri, 20 Aug 2021 23:37:39 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6976d7df495943ad8d46372a7b46b936754b996b
-X-Git-Newrev: b9ed05a03fbbdca6d5c0e638479b5cdd49e65ff5
+X-Git-Oldrev: 1c52337143309d0ffd58a7f06ef85fdfdaa5a7a2
+X-Git-Newrev: 1e09dd3e4439579ec4d984dc79c7a05153074ecd
 X-Patchwork-Hint: ignore
-Message-Id: <20210904182355.7E0658834C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mpd: bump to version 0.22.10
+Message-Id: <20210904182355.3D6CB8834C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/freescale-imx/imx-gpu-viv: drop
+ pkg-config files installation
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,55 +66,43 @@ List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0382481209981307675=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
---===============0382481209981307675==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=b9ed05a03fbbdca6d5c0e638479b5cdd49e65ff5
+commit: https://git.buildroot.net/buildroot/commit/?id=1e09dd3e4439579ec4d984dc79c7a05153074ecd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Jörg Krause <joerg.krause@embedded.rocks>
+We manually install pkg-config files from
+$(@D)/gpu-core/usr/lib/pkgconfig to the STAGING_DIR right after
+copying the entire $(@D)/gpu-core/usr/* files to STAGING_DIR. This
+makes the manual copying of pkg-config files pretty useless.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Reviewed-by: Gary Bisson <gary.bisson@boundarydevices.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mpd/mpd.hash | 2 +-
- package/mpd/mpd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk | 5 -----
+ 1 file changed, 5 deletions(-)
 
-diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
-index 1079ccf367..3847fc6724 100644
---- a/package/mpd/mpd.hash
-+++ b/package/mpd/mpd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256  9617ed08c9ffafcf5f925819251f6b90df3f4f73cf2838c41033e1962104286d  mpd-0.22.8.tar.xz
-+sha256  07c82535e9999c3d4a099d8e652c88724635125b3c9f265ba9b6f2974ff9e614  mpd-0.22.10.tar.xz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index e5e5097048..62e31860c0 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
+index 51b04f82d4..9d974cac41 100644
+--- a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
++++ b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
+@@ -75,11 +75,6 @@ endef
  
- MPD_VERSION_MAJOR = 0.22
--MPD_VERSION = $(MPD_VERSION_MAJOR).8
-+MPD_VERSION = $(MPD_VERSION_MAJOR).10
- MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
- MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
- MPD_DEPENDENCIES = host-pkgconf boost
-
---===============0382481209981307675==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+ define IMX_GPU_VIV_INSTALL_STAGING_CMDS
+ 	cp -r $(@D)/gpu-core/usr/* $(STAGING_DIR)/usr
+-	for lib in egl gbm glesv1_cm glesv2 vg; do \
+-		$(INSTALL) -m 0644 -D \
+-			$(@D)/gpu-core/usr/lib/pkgconfig/$${lib}.pc \
+-			$(STAGING_DIR)/usr/lib/pkgconfig/$${lib}.pc; \
+-	done
+ endef
+ 
+ ifeq ($(BR2_PACKAGE_IMX_GPU_VIV_EXAMPLES),y)
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============0382481209981307675==--
