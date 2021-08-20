@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E1F5C433F5
-	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 18:35:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C6F9C433EF
+	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 18:36:03 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 5CB69600D0
-	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 18:35:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5CB69600D0
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
+	by mail.kernel.org (Postfix) with ESMTPS id 5438E6023F
+	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 18:36:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5438E6023F
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3DED682AF5;
-	Sat,  4 Sep 2021 18:35:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 330DE83336;
+	Sat,  4 Sep 2021 18:36:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lNLktYn8GDfl; Sat,  4 Sep 2021 18:35:50 +0000 (UTC)
+	with ESMTP id UCaUzswewjuA; Sat,  4 Sep 2021 18:36:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 792D780F2D;
-	Sat,  4 Sep 2021 18:35:49 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 45AA31BF5DD
- for <buildroot@lists.busybox.net>; Sat,  4 Sep 2021 18:25:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 66259834DE;
+	Sat,  4 Sep 2021 18:36:01 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 0EDAB1BF5DD
+ for <buildroot@lists.busybox.net>; Sat,  4 Sep 2021 18:25:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DC97C4028C
- for <buildroot@lists.busybox.net>; Sat,  4 Sep 2021 18:25:17 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2DEE4605D9
+ for <buildroot@lists.busybox.net>; Sat,  4 Sep 2021 18:25:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xkJ2-unZrZZ5 for <buildroot@lists.busybox.net>;
- Sat,  4 Sep 2021 18:25:16 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id EHMLBLSbso0e for <buildroot@lists.busybox.net>;
+ Sat,  4 Sep 2021 18:25:17 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A9F1440167
- for <buildroot@buildroot.org>; Sat,  4 Sep 2021 18:25:15 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8697260760
+ for <buildroot@buildroot.org>; Sat,  4 Sep 2021 18:25:17 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 631568834C; Sat,  4 Sep 2021 18:23:53 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ id 4FDB58834D; Sat,  4 Sep 2021 18:23:55 +0000 (UTC)
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Thu, 5 Aug 2021 22:35:24 +0200
+Date: Fri, 20 Aug 2021 23:37:42 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 208e98beb2d550529d39b098ebd6a692d6ce822d
-X-Git-Newrev: 3418a068befff3cf15c0a49ba1539a162f6bce53
+X-Git-Oldrev: 880228044b1ee3f16b5e7fee065e8a2f57d31ee6
+X-Git-Newrev: a75ef4ade159a00c329d376a86390e2a69051d47
 X-Patchwork-Hint: ignore
-Message-Id: <20210904182353.631568834C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] utils/test-pkg: remove configurations that
- are skipped
+Message-Id: <20210904182355.4FDB58834D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/freescale-imx/imx-gpu-viv: use
+ make loops instead of shell loops
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,44 +71,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3418a068befff3cf15c0a49ba1539a162f6bce53
+commit: https://git.buildroot.net/buildroot/commit/?id=a75ef4ade159a00c329d376a86390e2a69051d47
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When the config fragment provided by the user is not usable with a
-specific toolchain configuration, the resulting .config file was kept
-around.
+We generally prefer using make loops instead of shell loops. They
+bring automatic error handling, as they abort the loop when there is
+an error, without the need for "|| exit 1".
 
-In a follow up commit, we'll need to know, from outside test-pkg, if a
-specific configuration was indeed usable or not.
-
-So, unless if the user actually requested to keep the build directories,
-remove the .config file when it contains a configration that would be
-skipped.
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Romain Naour <romain.naour@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Reviewed-by: Gary Bisson <gary.bisson@boundarydevices.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- utils/test-pkg | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/utils/test-pkg b/utils/test-pkg
-index a317d8c17a..54c6c5e8fe 100755
---- a/utils/test-pkg
-+++ b/utils/test-pkg
-@@ -161,6 +161,10 @@ build_one() {
-     # done in the same locale.
-     comm -23 <(sort "${cfg}") <(sort "${dir}/.config") >"${dir}/missing.config"
-     if [ -s "${dir}/missing.config" ]; then
-+        if [ ${keep} -ne 1 ]; then
-+            # Invalid configuration, drop it
-+            rm -f "${dir}/.config"
-+        fi
-         return 1
-     fi
-     # Remove file, it's empty anyway.
+diff --git a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
+index df39d3ddc2..fec19523a3 100644
+--- a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
++++ b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
+@@ -52,9 +52,9 @@ define IMX_GPU_VIV_FIXUP_PKGCONFIG
+ endef
+ else ifeq ($(IMX_GPU_VIV_LIB_TARGET),x11)
+ define IMX_GPU_VIV_FIXUP_PKGCONFIG
+-	for lib in egl gbm glesv1_cm glesv2 vg; do \
+-		ln -sf $${lib}_x11.pc $(@D)/gpu-core/usr/lib/pkgconfig/$${lib}.pc || exit 1; \
+-	done
++	$(foreach lib,egl gbm glesv1_cm glesv2 vg, \
++		ln -sf $(lib)_x11.pc $(@D)/gpu-core/usr/lib/pkgconfig/$(lib).pc
++	)
+ endef
+ endif
+ 
+@@ -63,9 +63,9 @@ endif
+ # Make sure these commands are idempotent.
+ define IMX_GPU_VIV_BUILD_CMDS
+ 	cp -dpfr $(@D)/gpu-core/usr/lib/$(IMX_GPU_VIV_LIB_TARGET)/* $(@D)/gpu-core/usr/lib/
+-	for backend in fb x11 wayland; do \
+-		$(RM) -r $(@D)/gpu-core/usr/lib/$$backend ; \
+-	done
++	$(foreach backend,fb x11 wayland, \
++		$(RM) -r $(@D)/gpu-core/usr/lib/$(backend)
++	)
+ 	$(IMX_GPU_VIV_FIXUP_PKGCONFIG)
+ endef
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
