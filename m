@@ -2,92 +2,80 @@ Return-Path: <SRS0=3r6m=NL=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+X-Spam-Status: No, score=-6.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8DA02C4338F
-	for <buildroot@archiver.kernel.org>; Fri, 20 Aug 2021 13:43:37 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A03B8C4338F
+	for <buildroot@archiver.kernel.org>; Fri, 20 Aug 2021 14:33:50 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 459C061130
-	for <buildroot@archiver.kernel.org>; Fri, 20 Aug 2021 13:43:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 459C061130
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=boundarydevices.com
+	by mail.kernel.org (Postfix) with ESMTPS id EC44E61101
+	for <buildroot@archiver.kernel.org>; Fri, 20 Aug 2021 14:33:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org EC44E61101
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=benettiengineering.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 14AB14051A;
-	Fri, 20 Aug 2021 13:43:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B394C403FC;
+	Fri, 20 Aug 2021 14:33:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SgSa3DWkdhwA; Fri, 20 Aug 2021 13:43:33 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id PTnlIfhaYz7a; Fri, 20 Aug 2021 14:33:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 197E640524;
-	Fri, 20 Aug 2021 13:43:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 377D840634;
+	Fri, 20 Aug 2021 14:33:45 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id CDFDA1BF35C
- for <buildroot@lists.busybox.net>; Fri, 20 Aug 2021 13:43:30 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A65411BF371
+ for <buildroot@lists.busybox.net>; Fri, 20 Aug 2021 14:33:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CB488613F7
- for <buildroot@lists.busybox.net>; Fri, 20 Aug 2021 13:43:30 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9488960614
+ for <buildroot@lists.busybox.net>; Fri, 20 Aug 2021 14:33:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=boundarydevices.com
+ dkim=pass (2048-bit key) header.d=aruba.it
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ojOqNfEenlWH for <buildroot@lists.busybox.net>;
- Fri, 20 Aug 2021 13:43:26 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com
- [IPv6:2607:f8b0:4864:20::32b])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B921A60618
- for <buildroot@buildroot.org>; Fri, 20 Aug 2021 13:43:26 +0000 (UTC)
-Received: by mail-ot1-x32b.google.com with SMTP id
- i3-20020a056830210300b0051af5666070so3971552otc.4
- for <buildroot@buildroot.org>; Fri, 20 Aug 2021 06:43:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=boundarydevices.com; s=google;
- h=date:from:to:cc:subject:message-id:references:mime-version
- :content-disposition:in-reply-to;
- bh=EaRx1Grgx62imgTgKbMHFSLeOJ5ho+stwxuvnkYYZtE=;
- b=WcLF/qXB6DQZJhf0QVBLjR8o3a+Q7uOl+B8Ib0n3i/39aRFScCilYe4UsO0ajRYf1L
- fGU316zdX7BB9YriapTZn77lAzJNsnRppH/3taTRcmBZBEgz4mTeMKt66kzIFpvT+lcM
- DQ127JbupNx69CTx7/YutxLtvMfhF5pYDjzaU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:date:from:to:cc:subject:message-id:references
- :mime-version:content-disposition:in-reply-to;
- bh=EaRx1Grgx62imgTgKbMHFSLeOJ5ho+stwxuvnkYYZtE=;
- b=WVjhIogPOye5xL/7Gz2OZpjax1bwq1nHKqSZKNZZWppCf0jAcOZQ/odxsTMivGmLuA
- 1kP7Zz1BwXS+dwEcljP1HDh+mj/BUm2e0MWmHtjmbrCKn5VPy5etlKolV8SNCgu96Hdl
- NBklhqJWoRS8tO7gvxarg0kyL8ZSLlQjFM0OzXkGkry4oGTeh/lyQQXcYCDwCAZy5k8q
- /dd2puO6+PbsDi7YLvtQWIPpPuXIvxFETZ6+RmzYZ4ldXA7IKWZLrujyM7vLCXSApCQh
- BbSZ0HM4owfWvPmynOpjOpJuVKqmgx8a+GI6ZmqU88FjQyGSGR6yWvs8aMof756pNXFC
- CdTA==
-X-Gm-Message-State: AOAM533ElJbaUy3s4ZR4mH41ntpRa/qlb4Catp8dAXxEjJM5mrZeQwIa
- 3P8KiZZJaTuqytAqz7vwR8gcqQ==
-X-Google-Smtp-Source: ABdhPJzSe1Ks94Qk6v+DOjaz3JZZ5hJdLhf+WAxI0weeJqrcB+MtFuX/gVWmXbS2bOEw0s4Fr2/W9g==
-X-Received: by 2002:aca:31c1:: with SMTP id x184mr3038236oix.8.1629467005836; 
- Fri, 20 Aug 2021 06:43:25 -0700 (PDT)
-Received: from p1g2 (2a01cb000f5a8200e371e4a5048c8b22.ipv6.abo.wanadoo.fr.
- [2a01:cb00:f5a:8200:e371:e4a5:48c:8b22])
- by smtp.gmail.com with ESMTPSA id o68sm1474114ota.33.2021.08.20.06.43.24
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 20 Aug 2021 06:43:25 -0700 (PDT)
-Date: Fri, 20 Aug 2021 15:43:21 +0200
-From: Gary Bisson <gary.bisson@boundarydevices.com>
+ with ESMTP id T6arKri2KHKt for <buildroot@lists.busybox.net>;
+ Fri, 20 Aug 2021 14:33:38 +0000 (UTC)
+X-Greylist: delayed 00:07:02 by SQLgrey-1.8.0
+Received: from smtpcmd14171.aruba.it (smtpcmd14171.aruba.it [62.149.156.171])
+ by smtp3.osuosl.org (Postfix) with ESMTP id E8410613FB
+ for <buildroot@buildroot.org>; Fri, 20 Aug 2021 14:33:37 +0000 (UTC)
+Received: from [192.168.47.129] ([89.164.181.120])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id H5TZm3h2arIRlH5TZmrfNv; Fri, 20 Aug 2021 16:26:33 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+ t=1629469593; bh=bmbBxl04/weRxRPjBBIPLlWYmJX9uNyyrg3uCq3EbBg=;
+ h=Subject:To:From:Date:MIME-Version:Content-Type;
+ b=nse9zUmHgcKW7fidm2eQC2PuWFxlTBunIHtCV1vhbd2rhAQoqNKQhbIB0il6ZoGgi
+ Dq+KFQGPxHC6r1bz0RwdL8Hy5NQbBF8HD3bWpaflRV9HG9wfWQIzXy25dpDnF8aFLw
+ e5fUc2RmY75ZAI3sjvKd6fmObpVyuQc2+KprXhqFeU3JM7QqRaSRYTfa1cRzSrZ7G7
+ OHH5TNYr/HdV+4PwSiH1YI8LGV9nRvZCwD5H9t8kH8fiHK4S8Iu71wV5kkylqcTvC6
+ hvx+SNH3/MFEV1QJ6JRdAOhiBY/LvmcfU34np4bBhMqZUwwo91ywPRIA5Uu8WZ9csO
+ X47/qJNs2TASg==
 To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Message-ID: <YR+xeRHpdQYxbnbQ@p1g2>
-References: <20210805212736.2799576-1-thomas.petazzoni@bootlin.com>
- <20210805212736.2799576-4-thomas.petazzoni@bootlin.com>
+References: <20210818065730.330904074D@smtp4.osuosl.org>
+ <20210818234453.03d2237a@windsurf>
+ <412e2832-62e5-8cbe-6a85-e797b3281978@benettiengineering.com>
+ <20210819152852.760ec08d@windsurf>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Message-ID: <f4e339cb-a699-afd1-5d5c-68bd1ea147fc@benettiengineering.com>
+Date: Fri, 20 Aug 2021 16:26:29 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20210805212736.2799576-4-thomas.petazzoni@bootlin.com>
-Subject: Re: [Buildroot] [PATCH 4/4] package/freescale-imx/imx-gpu-viv: use
- make loops instead of shell loops
+In-Reply-To: <20210819152852.760ec08d@windsurf>
+Content-Language: en-US
+X-CMAE-Envelope: MS4wfJq8RmNUk298QB4Orke830k58gMwZs8VHGNavH8DUmRl3RZK3lKIW9BrMY65sJEwKHvOjZ0d1FhNiKSqnbrpmhCjYpafV/Lvqfb4BTrRSiQA+nD//ALi
+ SiYN2q6FlVMZDfSpq7gsHPnLxeZYypNRmVoz5NWj8i5dPKaz6pL7NpoatrChJrchMUpwS/xZufvArX/ztyzy+URO+08zcOTp9TV2TMYhwV3QARO14b5au5w1
+ /Fs2kV5OMixHwHyudeUlS0/m2yZnfrGm3pV/6oQwkRPiRsR7wBfWHOBCsEFssYlQVhWOZjVMHkaepv4vyhUX3PjKNFWqAS+Xr/tFgzfbu9W8zPghsHOWW+fJ
+ LHRoz/pKLgLLwetB2zz6yqfzlIxFIivtA51MoD5aoizmLfqINwXX44G/dNhwf6lXuTrmdfIzQ2i4jozAdfpkkMFzzH7HeiZcdQTghFNuLq0Dhg+1kyshX65q
+ pYTM5mkEQnhvj+9RorOO1BNRy5uOsL167Tv07/eYpCu5dIN+bPbvVDCeE05Na1iGPzYvZ+w9Xhm3opqegs8WqdojuN0cvQ148xdPTdmo86TxwKq297tfUrT/
+ n/jCWkp3isEdYESmK47nD14P
+Subject: Re: [Buildroot] Analysis of build results for 2021-08-17
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,28 +87,43 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Refik Tuzakli <tuzakli.refik@gmail.com>,
- Gary Bisson <bisson.gary@gmail.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
+ Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ Herve Codina <herve.codina@bootlin.com>,
+ Matthew Weber <matthew.weber@rockwellcollins.com>,
+ Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org,
+ Giulio Benetti <giulio.benetti@micronovasrl.com>,
+ Adam Duskett <aduskett@gmail.com>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-Hi,
+Hello Thomas,
 
-On Thu, Aug 05, 2021 at 11:27:35PM +0200, Thomas Petazzoni wrote:
-> We generally prefer using make loops instead of shell loops. They
-> bring automatic error handling, as they abort the loop when there is
-> an error, without the need for "|| exit 1".
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+On 8/19/21 3:28 PM, Thomas Petazzoni wrote:
+>>>>       or1k     |            unknown             | NOK | http://autobuild.buildroot.net/results/92c086b0c5c2a298a82a6eb9c289dc53c58a5e5e |
+>>>
+>>> Top-level parallel build, no idea what the issue is.
 
-Same, not sure why shell loops were used in the first place.
+This doesn't show up on my pc, but instead it ends up with openal 
+package build failure due to Bootlin toolchain not updated.
 
-Reviewed-by: Gary Bisson <gary.bisson@boundarydevices.com>
+Basically I can't reach lapack to build because it fails early on 
+openal. And most of all it doesn't build with parallel top-level simply 
+using br-reproduce-build found here(I only have output/ instead of 
+output-1/ and output-2):
+https://git.buildroot.net/buildroot-test/plain/utils/br-reproduce-build
 
-Regards,
-Gary
+I remember that other build with top parallel but not this. Can somebody 
+double check and tell me if it build with top parallel?
+Also because on Autobuilder it shows output-1/
+
+Thanks in advance!
+-- 
+Giulio Benetti
+Benetti Engineering sas
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
