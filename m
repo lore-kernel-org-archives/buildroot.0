@@ -7,51 +7,52 @@ X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ED0CDC433EF
-	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 18:35:26 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AC1BDC433EF
+	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 18:35:39 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B9553600D0
-	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 18:35:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B9553600D0
+	by mail.kernel.org (Postfix) with ESMTPS id 6FA1F60F4C
+	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 18:35:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6FA1F60F4C
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8D26D401E3;
-	Sat,  4 Sep 2021 18:35:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 40C5E60767;
+	Sat,  4 Sep 2021 18:35:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dBB5ogtCGesy; Sat,  4 Sep 2021 18:35:25 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id fT48Aa96p3Ce; Sat,  4 Sep 2021 18:35:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CBAD34013E;
-	Sat,  4 Sep 2021 18:35:24 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id F13EA1BF5DD
- for <buildroot@lists.busybox.net>; Sat,  4 Sep 2021 18:25:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9D8E66075F;
+	Sat,  4 Sep 2021 18:35:37 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1D9DF1BF95A
+ for <buildroot@lists.busybox.net>; Sat,  4 Sep 2021 18:25:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D89D7401FD
- for <buildroot@lists.busybox.net>; Sat,  4 Sep 2021 18:25:17 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 17A556073A
+ for <buildroot@lists.busybox.net>; Sat,  4 Sep 2021 18:25:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gd5nulb2aMKs for <buildroot@lists.busybox.net>;
- Sat,  4 Sep 2021 18:25:16 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id N7jfnluq-650 for <buildroot@lists.busybox.net>;
+ Sat,  4 Sep 2021 18:25:17 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 050D040171
- for <buildroot@buildroot.org>; Sat,  4 Sep 2021 18:25:16 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5F3AE60769
+ for <buildroot@buildroot.org>; Sat,  4 Sep 2021 18:25:17 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id CC0248834C; Sat,  4 Sep 2021 18:23:53 +0000 (UTC)
+ id 334668834D; Sat,  4 Sep 2021 18:23:55 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Fri, 13 Aug 2021 15:12:43 +0200
+Date: Fri, 20 Aug 2021 23:37:35 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 37f75b756182dd17871d1cd9e8bca83f326de690
-X-Git-Newrev: 4e6084833816701fa940afb22f2b1ed64a163c93
+X-Git-Oldrev: 99896b841b30043f05a7dd2e9d9a9a48376f3aa3
+X-Git-Newrev: 1c52337143309d0ffd58a7f06ef85fdfdaa5a7a2
 X-Patchwork-Hint: ignore
-Message-Id: <20210904182353.CC0248834C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libinput: bump version to 1.18.1
+Message-Id: <20210904182355.334668834D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/freescale-imx/imx-gpu-viv: move
+ pkg-config files fixup to the build step
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,47 +71,64 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4e6084833816701fa940afb22f2b1ed64a163c93
+commit: https://git.buildroot.net/buildroot/commit/?id=1c52337143309d0ffd58a7f06ef85fdfdaa5a7a2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For details see [1].
+The fixup of the pkg-config files modifies files in the build
+directory (@D) but is done in the staging installation step, which
+doesn't make much sense, especially since the build step already has
+some fixup logic. So we move the fixup logic of the pkg-config files
+into the build step.
 
-[1] https://lists.freedesktop.org/archives/wayland-devel/2021-August/041934.html
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Reviewed-by: Gary Bisson <gary.bisson@boundarydevices.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libinput/libinput.hash | 6 +++---
- package/libinput/libinput.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk | 22 +++++++++++-----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
-index 7958cbac88..8b6a5466ed 100644
---- a/package/libinput/libinput.hash
-+++ b/package/libinput/libinput.hash
-@@ -1,6 +1,6 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2021-June/041849.html
--sha256  18c6a286583268d39841348e561fbb4713bde0c643b360f5d8a3f27800afdb9a  libinput-1.18.0.tar.xz
--sha512  9a834f075d7a1f892416bb6b241eb052f749d3aa883c4b39c0f1c9616c115d6b9a541b587508646fddaf0d3fe57af92fe4629b522d1d51196499e7b523e0aa90  libinput-1.18.0.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2021-August/041934.html
-+sha256  9ca14021fbc2523bc0610582c51f368321592040b6ca63becc2fa1ea11f1a7cb  libinput-1.18.1.tar.xz
-+sha512  450e38c0f8245aa0165a8047d25aebee646332f0f2ed442bb2d1bd3e723c2082b6d00d6e3bda308981ece8e29b5cddbd56eab900d2b7497705a45fc27b281828  libinput-1.18.1.tar.xz
+diff --git a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
+index 103c0341e3..51b04f82d4 100644
+--- a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
++++ b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
+@@ -42,16 +42,6 @@ define IMX_GPU_VIV_EXTRACT_CMDS
+ 	$(call FREESCALE_IMX_EXTRACT_HELPER,$(IMX_GPU_VIV_DL_DIR)/$(IMX_GPU_VIV_SOURCE))
+ endef
  
- # License files
- sha256  80de50b2022a840db044c56db804ca3565600a692c0714babface587acc6d1b0  COPYING
-diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
-index 32b822edb7..844a4ae8ba 100644
---- a/package/libinput/libinput.mk
-+++ b/package/libinput/libinput.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+-# Instead of building, we fix up the inconsistencies that exist
+-# in the upstream archive here. We also remove unused backend files.
+-# Make sure these commands are idempotent.
+-define IMX_GPU_VIV_BUILD_CMDS
+-	cp -dpfr $(@D)/gpu-core/usr/lib/$(IMX_GPU_VIV_LIB_TARGET)/* $(@D)/gpu-core/usr/lib/
+-	for backend in fb x11 wayland; do \
+-		$(RM) -r $(@D)/gpu-core/usr/lib/$$backend ; \
+-	done
+-endef
+-
+ ifeq ($(IMX_GPU_VIV_LIB_TARGET),fb)
+ define IMX_GPU_VIV_FIXUP_PKGCONFIG
+ 	ln -sf egl_linuxfb.pc $(@D)/gpu-core/usr/lib/pkgconfig/egl.pc
+@@ -72,9 +62,19 @@ define IMX_GPU_VIV_FIXUP_PKGCONFIG
+ endef
+ endif
  
--LIBINPUT_VERSION = 1.18.0
-+LIBINPUT_VERSION = 1.18.1
- LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
- LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
- LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
++# Instead of building, we fix up the inconsistencies that exist
++# in the upstream archive here. We also remove unused backend files.
++# Make sure these commands are idempotent.
++define IMX_GPU_VIV_BUILD_CMDS
++	cp -dpfr $(@D)/gpu-core/usr/lib/$(IMX_GPU_VIV_LIB_TARGET)/* $(@D)/gpu-core/usr/lib/
++	for backend in fb x11 wayland; do \
++		$(RM) -r $(@D)/gpu-core/usr/lib/$$backend ; \
++	done
++	$(IMX_GPU_VIV_FIXUP_PKGCONFIG)
++endef
++
+ define IMX_GPU_VIV_INSTALL_STAGING_CMDS
+ 	cp -r $(@D)/gpu-core/usr/* $(STAGING_DIR)/usr
+-	$(IMX_GPU_VIV_FIXUP_PKGCONFIG)
+ 	for lib in egl gbm glesv1_cm glesv2 vg; do \
+ 		$(INSTALL) -m 0644 -D \
+ 			$(@D)/gpu-core/usr/lib/pkgconfig/$${lib}.pc \
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
