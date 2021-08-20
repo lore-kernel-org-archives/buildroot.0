@@ -2,91 +2,84 @@ Return-Path: <SRS0=3r6m=NL=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+X-Spam-Status: No, score=-10.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,HTML_MESSAGE,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E206C4338F
-	for <buildroot@archiver.kernel.org>; Fri, 20 Aug 2021 11:23:39 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 56D3EC4338F
+	for <buildroot@archiver.kernel.org>; Fri, 20 Aug 2021 12:09:26 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 94F8E60EBD
-	for <buildroot@archiver.kernel.org>; Fri, 20 Aug 2021 11:23:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 94F8E60EBD
+	by mail.kernel.org (Postfix) with ESMTPS id C06A560F25
+	for <buildroot@archiver.kernel.org>; Fri, 20 Aug 2021 12:09:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C06A560F25
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=unikie.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4D0C86125A;
-	Fri, 20 Aug 2021 11:23:38 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 775084011C;
+	Fri, 20 Aug 2021 12:09:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OIY-nuQJedBl; Fri, 20 Aug 2021 11:23:34 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id vgLdvfmFTKtl; Fri, 20 Aug 2021 12:09:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A62F0613B7;
-	Fri, 20 Aug 2021 11:23:33 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E876C1BF363
- for <buildroot@lists.busybox.net>; Fri, 20 Aug 2021 11:23:31 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A49E3401B4;
+	Fri, 20 Aug 2021 12:09:20 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id EAAC81BF35D
+ for <buildroot@lists.busybox.net>; Fri, 20 Aug 2021 12:09:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D84B581022
- for <buildroot@lists.busybox.net>; Fri, 20 Aug 2021 11:23:31 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E5DFB4011C
+ for <buildroot@lists.busybox.net>; Fri, 20 Aug 2021 12:09:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=unikie-com.20150623.gappssmtp.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id N4NEQz343Qvn for <buildroot@lists.busybox.net>;
- Fri, 20 Aug 2021 11:23:27 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Ui1YStkzetMS for <buildroot@lists.busybox.net>;
+ Fri, 20 Aug 2021 12:09:14 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com
- [IPv6:2a00:1450:4864:20::12d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id BF7C28101D
- for <buildroot@buildroot.org>; Fri, 20 Aug 2021 11:23:26 +0000 (UTC)
-Received: by mail-lf1-x12d.google.com with SMTP id f10so5114082lfv.6
- for <buildroot@buildroot.org>; Fri, 20 Aug 2021 04:23:26 -0700 (PDT)
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com
+ [IPv6:2a00:1450:4864:20::536])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 912AB40107
+ for <buildroot@buildroot.org>; Fri, 20 Aug 2021 12:09:14 +0000 (UTC)
+Received: by mail-ed1-x536.google.com with SMTP id s3so1434891edd.11
+ for <buildroot@buildroot.org>; Fri, 20 Aug 2021 05:09:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=unikie-com.20150623.gappssmtp.com; s=20150623;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=pnfg50UdPiNFI7zPhx0dLwsWlh8dH4Bc0HuYE2qaKTA=;
- b=INaUnGjvpGDC92B7htwl0euX0gB45dlccUxIe+PZGW7F96bYe2WDo8lZpW3aOmN0Ne
- ZSAMyFEr0isvXcY4SSYCPlKosHvvSLVbAUHCuRiY0VcLQMpiEZO/321Ez1UO0rgg23Ni
- XgYoNMuYbG8hI9WhGREGydsGII9kv4kkO2Q8ze46UjfT3fE8u8kVZLnUoRAfR4DYEZJe
- erBXZO8PmwIG0EGqsxw66wCtcIFp+4oyzYlpygVS8E9mDsylEO29TIp8d9YI0pAb2RE+
- RdLHnTb1yVlEOV46f/Jj+E63toATAHbefWvORiWQqnFVHSu/W7/WnYsvVVHljo+8DwSQ
- aN/w==
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=Q2ylXh67hnSOafY44HRVhyIRIOGKBOB1Eoswu13Y4Cw=;
+ b=XjOvdN6W0mvDRuqRw9gPQOqC14sfzjwhOYK2uG4VHqzsSWxMaH7YXOY4RSyBBbLxZb
+ xUT641mMerRAec7san4rB2MSfLsLNkub/Bv+8NZXUagtO2ntbr9lm2vtchyqlQ61pyii
+ wYI2YRKDn2wY2BsAe4kPdI2Z6lQFYFKZZ8o7Sz2C8C2RvrZs8zGNATT8+GGCY8YisAH/
+ gRvqOkuB6wwkJBBj5j1rUMofLxHUlCG0Rd93oeFOUK81dz3MwesEl2cfIw5fO9/K53xI
+ mhB/bh5wWZ1G8cDysvv80fi0l4BJoxkgzc4S7JY8b9/lH00/xNG9H7quwQwrKmLEQ/uh
+ ZRcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=pnfg50UdPiNFI7zPhx0dLwsWlh8dH4Bc0HuYE2qaKTA=;
- b=Cpv5z9pZ2HCfSk3/RYZEPCtDeKutfWcpmjdeF9vKcFMFqRNVeJL2/VGs91rT7fFfQH
- mRA9UicLEQ9ZevfELSWqiYCkKrm9j2zJXxJmifALYbTYSDC7k4dremdh83pr5zVXNvKZ
- q/LnPDwYYdres66HWy7f1Zn9kFpv2mGY/ZymmynobVAio4ih32Qz1G4Aaxl87HcKGFUE
- 40F+8dndq5tTnmP8ALE+OI4SwqGlzV/6Su84PiBjxqp30vp5bi/5pfdCNmQYTwJeIX7e
- Zu8F7J0a7KtSmbEgE9SMnNC+HMNapCV3cwnmQi3QzBLJ3qcZoeM250kQBCdYB3wmzttb
- EN1g==
-X-Gm-Message-State: AOAM531gZKxFXGPx/OiCOYJxT/BvlHGu+IwDGtp5ij/0lAa82WBiXs3v
- 05EP7uhfBcyKFIMqBN7dupZ3zvCWUGwjN0Qu
-X-Google-Smtp-Source: ABdhPJxl/itKxuSQ7MmLmNyb9GAd0tPvslLgjEdbypLAFm538ufI0r0joRBbjT7PqatiTUPs90hb3w==
-X-Received: by 2002:a05:6512:3e2a:: with SMTP id
- i42mr14703654lfv.535.1629458604549; 
- Fri, 20 Aug 2021 04:23:24 -0700 (PDT)
-Received: from Unikie-T14-Gen-2i.madriguera.foxhound.fi
- (88-113-104-240.elisa-laajakaista.fi. [88.113.104.240])
- by smtp.googlemail.com with ESMTPSA id g14sm603643lfu.61.2021.08.20.04.23.24
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 20 Aug 2021 04:23:24 -0700 (PDT)
-From: =?UTF-8?q?Jos=C3=A9=20Pekkarinen?= <jose.pekkarinen@unikie.com>
-To: buildroot@buildroot.org
-Date: Fri, 20 Aug 2021 14:23:22 +0300
-Message-Id: <20210820112322.5762-1-jose.pekkarinen@unikie.com>
-X-Mailer: git-send-email 2.25.1
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=Q2ylXh67hnSOafY44HRVhyIRIOGKBOB1Eoswu13Y4Cw=;
+ b=dCCYq68Zowyp9fR9wDCi0oiGHyxRvdL2mOmmxEYfwIBZVh6WIQi3oJQq2hKP5ph0cQ
+ uh62YkbAk7xPuJtNojtHrMOzRb3SnoEshaZ5wG8NeTxjRJOdZFhF0ZgH4VgzUEAXW7gm
+ WjJqmhO7LoPDWrCjkvTes5H+N9vYHx3y1FvFKL8+5kkNo+6qLb1y2R4kSTKiBZRF8Gj4
+ oDr5AVu2Y4SIAh2JUSjrSAydYTsK5WU4TfTsNVfRmbM4xMJ7qDX8RYzmcSAw+cFVX3ij
+ 6xzyoANGzEvCUk55TUS4kEGKcgHQYQhJ8/DJLaRdX0ZbEL/NgXxXPoIiIFSlu8EDOfNr
+ 6NLg==
+X-Gm-Message-State: AOAM5336VQXz5oblx3MYHV+ayXWBYN23rhOrjWvP7jlVwPRv+BzuDZQ9
+ PncxBEsG32ngGzlkXRpPzzmHq6Rk3kQsO/1gE7X1zgu0RUyB+g==
+X-Google-Smtp-Source: ABdhPJxAgssXIQ78fLGMbBbJRaP9GCTa31gOM8R3jrrI3lZYUtQrBLfb43Ckks9lTXaHOlgpV1rsoMkGdIan8v/pS6A=
+X-Received: by 2002:aa7:cb19:: with SMTP id s25mr22401650edt.194.1629461352799; 
+ Fri, 20 Aug 2021 05:09:12 -0700 (PDT)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2] package/restorecond: Add new init script
+References: <20210809055557.8698-1-jose.pekkarinen@unikie.com>
+ <20210819232156.688fdc7d@windsurf>
+In-Reply-To: <20210819232156.688fdc7d@windsurf>
+From: =?UTF-8?Q?Jos=C3=A9_Pekkarinen?= <jose.pekkarinen@unikie.com>
+Date: Fri, 20 Aug 2021 15:09:01 +0300
+Message-ID: <CAJPV9MqLKCFuYvtfaxs=rOwDWWFWXHiK+ECYSfqQYOuUpHF5hg@mail.gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [Buildroot] [PATCH] package/restorecond: Add new init script
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,62 +91,308 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: =?UTF-8?q?Jos=C3=A9=20Pekkarinen?= <jose.pekkarinen@unikie.com>,
- thomas.petazzoni@bootlin.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============3163029285488983484=="
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-VGhlIGN1cnJlbnQgcmVzdG9yZWNvbmQgdXBzdHJlYW0gaW5pdCBzY3JpcHQgaXMgbm8KZ29vZCBm
-aXQgZm9yIHRoZSB1c2VyIHNwYWNlIGdlbmVyYXRlZCBieSBidWlsZHJvb3QsCnRoaXMgc2NyaXB0
-IGlzIGFuIGV4dGVuc2lvbiBvZiB0aGUgb3JpZ2luYWwsIHRoYXQKYnJpbmdzIHNvbWUgY2hhbmdl
-cyBmcm9tIHRoZSBkZWJpYW4gaW5pdCBzY3JpcHQgdG8KdXNlIHN0YXJ0LXN0b3AtZGFlbW9uIGlu
-c3RlYWQgb2YgZGFlbW9uLCB3aGlsZQpyZW1vdmluZyBkZXBlbmRlbmNpZXMgb24gL2V0Yy9yYy5k
-L2luaXQuZC9mdW5jdGlvbnMKYW5kIC9saWIvbHNiL2luaXQtZnVuY3Rpb25zLgoKU2lnbmVkLW9m
-Zi1ieTogSm9zw6kgUGVra2FyaW5lbiA8am9zZS5wZWtrYXJpbmVuQHVuaWtpZS5jb20+Ci0tLQpb
-IHYxIC0+IHYyIF0gTW92ZWQgdG8gdXBzdHJlYW0gc2NyaXB0IHRlbXBsYXRlCgogcGFja2FnZS9y
-ZXN0b3JlY29uZC9TMDJyZXN0b3JlY29uZCB8IDc1ICsrKysrKysrKysrKysrKysrKysrKysrKysr
-KysrKwogcGFja2FnZS9yZXN0b3JlY29uZC9yZXN0b3JlY29uZC5tayB8ICA0ICstCiAyIGZpbGVz
-IGNoYW5nZWQsIDc3IGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0pCiBjcmVhdGUgbW9kZSAx
-MDA2NDQgcGFja2FnZS9yZXN0b3JlY29uZC9TMDJyZXN0b3JlY29uZAoKZGlmZiAtLWdpdCBhL3Bh
-Y2thZ2UvcmVzdG9yZWNvbmQvUzAycmVzdG9yZWNvbmQgYi9wYWNrYWdlL3Jlc3RvcmVjb25kL1Mw
-MnJlc3RvcmVjb25kCm5ldyBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4IDAwMDAwMDAwMDAuLmFlNWFj
-YmY3M2EKLS0tIC9kZXYvbnVsbAorKysgYi9wYWNrYWdlL3Jlc3RvcmVjb25kL1MwMnJlc3RvcmVj
-b25kCkBAIC0wLDAgKzEsNzUgQEAKKyMhL2Jpbi9zaAorCitEQUVNT049cmVzdG9yZWNvbmQKK1BJ
-REZJTEU9L3Zhci9ydW4vJERBRU1PTi5waWQKKworUkVTVE9SRUNPTkRfQVJHUz0iIgorCitzdGFy
-dCgpCit7CisJIyBSZXR1cm4KKwkjICAgMCBpZiBkYWVtb24gaGFzIGJlZW4gc3RhcnRlZAorCSMg
-ICAxIGlmIGRhZW1vbiB3YXMgYWxyZWFkeSBydW5uaW5nCisJIyAgIDIgaWYgZGFlbW9uIGNvdWxk
-IG5vdCBiZSBzdGFydGVkCisJcHJpbnRmICdTdGFydGluZyAlczogJyAiJERBRU1PTiIKKwlzdGFy
-dC1zdG9wLWRhZW1vbiAtYiAtbSAtUyAtcSAtcCAiJFBJREZJTEUiIC14ICIvdXNyL3NiaW4vJERB
-RU1PTiIgXAorCQktLSAkUkVTVE9SRUNPTkRfQVJHUworCXN0YXR1cz0kPworCWlmIFsgIiRzdGF0
-dXMiIC1lcSAwIF07IHRoZW4KKwkJZWNobyAiT0siCisJZWxzZQorCQllY2hvICJGQUlMIgorCWZp
-CisJcmV0dXJuICIkc3RhdHVzIgorfQorCitzdG9wKCkKK3sKKwkjIFJldHVybgorCSMgICAwIGlm
-IGRhZW1vbiBoYXMgYmVlbiBzdG9wcGVkCisJIyAgIDEgaWYgZGFlbW9uIHdhcyBhbHJlYWR5IHN0
-b3BwZWQKKwkjICAgMiBpZiBkYWVtb24gY291bGQgbm90IGJlIHN0b3BwZWQKKwkjICAgb3RoZXIg
-aWYgYSBmYWlsdXJlIG9jY3VycmVkCisJcHJpbnRmICdTdG9wcGluZyAlczogJyAiJERBRU1PTiIK
-KwlzdGFydC1zdG9wLWRhZW1vbiAtSyAtcSAtcCAkUElERklMRSAtUiBURVJNLzMwL0tJTEwvNSAt
-biAkREFFTU9OCisJc3RhdHVzPSQ/CisJaWYgWyAiJHN0YXR1cyIgLWVxIDAgXTsgdGhlbgorCQly
-bSAtZiAiJFBJREZJTEUiCisJCWVjaG8gIk9LIgorCWVsc2UKKwkJZWNobyAiRkFJTCIKKwlmaQor
-CXJldHVybiAiJHN0YXR1cyIKK30KKworcmVzdGFydCgpCit7CisJc3RvcAorCXNsZWVwIDEKKwlz
-dGFydAorfQorCitjaGVja19zdGF0dXMoKQoreworCXN0YXJ0LXN0b3AtZGFlbW9uIC1LIC10IC1w
-ICRQSURGSUxFIC1uICREQUVNT04KKwlzdGF0dXM9JD8KKwlpZiBbICIkc3RhdHVzIiAtZXEgMCBd
-OyB0aGVuCisJCWVjaG8gIlJVTk5JTkciCisJZWxzZQorCQllY2hvICJTVE9QUEVEIgorCWZpCit9
-CisKK2Nhc2UgIiQxIiBpbgorCXN0YXJ0fHN0b3B8cmVzdGFydCkKKwkJIiQxIjs7CisJc3RhdHVz
-KQorCQljaGVja19zdGF0dXM7OworCWZvcmNlLXJlbG9hZHxyZXN0YXJ0fHJlbG9hZCkKKwkJcmVz
-dGFydDs7CisJY29uZHJlc3RhcnQpCisJCVsgLWUgL3Zhci9sb2NrL3N1YnN5cy9yZXN0b3JlY29u
-ZCBdICYmIHJlc3RhcnQgfHwgOjs7CisJKikKKwkJZWNobyAkIlVzYWdlOiAkMCB7c3RhcnR8c3Rv
-cHxyZXN0YXJ0fGZvcmNlLXJlbG9hZHxzdGF0dXN8Y29uZHJlc3RhcnR9IgorCQlleGl0IDEKK2Vz
-YWMKZGlmZiAtLWdpdCBhL3BhY2thZ2UvcmVzdG9yZWNvbmQvcmVzdG9yZWNvbmQubWsgYi9wYWNr
-YWdlL3Jlc3RvcmVjb25kL3Jlc3RvcmVjb25kLm1rCmluZGV4IDdhYjdlOTc4ZGQuLjNjNmZiNTdl
-YTYgMTAwNjQ0Ci0tLSBhL3BhY2thZ2UvcmVzdG9yZWNvbmQvcmVzdG9yZWNvbmQubWsKKysrIGIv
-cGFja2FnZS9yZXN0b3JlY29uZC9yZXN0b3JlY29uZC5tawpAQCAtMjcsOCArMjcsOCBAQCBkZWZp
-bmUgUkVTVE9SRUNPTkRfQlVJTERfQ01EUwogZW5kZWYKIAogZGVmaW5lIFJFU1RPUkVDT05EX0lO
-U1RBTExfSU5JVF9TWVNWCi0JJChJTlNUQUxMKSAtbSAwNzU1IC1EICQoQEQpL3Jlc3RvcmVjb25k
-LmluaXQgXAotCQkkKFRBUkdFVF9ESVIpL2V0Yy9pbml0LmQvUzIwcmVzdG9yZWNvbmQKKwkkKElO
-U1RBTEwpIC1tIDA3NTUgLUQgcGFja2FnZS9yZXN0b3JlY29uZC9TMDJyZXN0b3JlY29uZCBcCisJ
-CSQoVEFSR0VUX0RJUikvZXRjL2luaXQuZC9TMDJyZXN0b3JlY29uZAogZW5kZWYKIAogZGVmaW5l
-IFJFU1RPUkVDT05EX0lOU1RBTExfSU5JVF9TWVNURU1ECi0tIAoyLjI1LjEKCl9fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxp
-c3QKYnVpbGRyb290QGJ1c3lib3gubmV0Cmh0dHA6Ly9saXN0cy5idXN5Ym94Lm5ldC9tYWlsbWFu
-L2xpc3RpbmZvL2J1aWxkcm9vdAo=
+--===============3163029285488983484==
+Content-Type: multipart/alternative; boundary="0000000000001c100305c9fc8949"
+
+--0000000000001c100305c9fc8949
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+On Fri, Aug 20, 2021 at 12:21 AM Thomas Petazzoni <
+thomas.petazzoni@bootlin.com> wrote:
+
+> Hello Jos=C3=A9,
+>
+> On Mon,  9 Aug 2021 08:55:57 +0300
+> Jos=C3=A9 Pekkarinen <jose.pekkarinen@unikie.com> wrote:
+>
+> > The current restorecond upstream init script is no
+> > good fit for the user space generated by buildroot,
+> > this script is an extension of the original, that
+> > brings some changes from the debian init script to
+> > use start-stop-daemon instead of daemon, while
+> > removing dependencies on /etc/rc.d/init.d/functions
+> > and /lib/lsb/init-functions.
+> >
+> > Signed-off-by: Jos=C3=A9 Pekkarinen <jose.pekkarinen@unikie.com>
+>
+> Thanks a lot, but unfortunately your proposed script still doesn't
+> follow the model/template of package/busybox/S01syslogd. Could you try
+> to follow the template as closely as possible ?
+>
+> > diff --git a/package/restorecond/S02restorecond
+> b/package/restorecond/S02restorecond
+> > new file mode 100644
+> > index 0000000000..24ee30853f
+> > --- /dev/null
+> > +++ b/package/restorecond/S02restorecond
+> > @@ -0,0 +1,113 @@
+> > +#!/bin/sh
+> > +#
+> > +# restorecond:               Daemon used to maintain path file context
+> > +#
+> > +# chkconfig: - 12 87
+> > +# description:       restorecond uses inotify to look for creation of
+> new files \
+> > +# listed in the /etc/selinux/restorecond.conf file, and restores the \
+> > +# correct security context.
+> > +#
+> > +# processname: /usr/sbin/restorecond
+> > +# config: /etc/selinux/restorecond.conf
+> > +# pidfile: /run/restorecond.pid
+> > +#
+> > +# Return values according to LSB for all commands but status:
+> > +# 0 - success
+> > +# 1 - generic or unspecified error
+> > +# 2 - invalid or excess argument(s)
+> > +# 3 - unimplemented feature (e.g. "reload")
+> > +# 4 - insufficient privilege
+> > +# 5 - program is not installed
+> > +# 6 - program is not configured
+> > +# 7 - program is not running
+>
+> We don't care about all those comments.
+>
+> > +PATH=3D/sbin:/bin:/usr/bin:/usr/sbin
+> > +DESC=3D"SELinux file context maintaining daemon"
+>
+> These variables are not needed.
+>
+> > +NAME=3Drestorecond
+> > +DAEMON=3D/usr/sbin/$NAME
+> > +DAEMON_ARGS=3D""
+> > +PIDFILE=3D/var/run/$NAME.pid
+> > +LOCKFILE=3D/var/run/$NAME.pid
+> > +SCRIPTNAME=3D/etc/init.d/$NAME
+> > +
+> > +[ -x /usr/sbin/selinuxenabled ] && /usr/sbin/selinuxenabled || exit 7
+>
+> We don't care about this either.
+>
+> > +# Check that we are root ... so non-root users stop here
+> > +test $EUID =3D 0  || exit 4
+>
+> Same.
+>
+> > +test -x /usr/sbin/restorecond  || exit 5
+> > +test -f /etc/selinux/restorecond.conf  || exit 6
+>
+> Same.
+>
+> > +
+> > +RETVAL=3D0
+> > +
+> > +start()
+> > +{
+> > +     # Return
+> > +     #   0 if daemon has been started
+> > +     #   1 if daemon was already running
+> > +     #   2 if daemon could not be started
+> > +     start-stop-daemon --start --quiet --pidfile $PIDFILE --exec
+> $DAEMON --test > /dev/null \
+> > +             || return 1
+>
+> Don't test.
+>
+> > +     start-stop-daemon --start --quiet --pidfile $PIDFILE --exec
+> $DAEMON -- \
+> > +             $DAEMON_ARGS \
+> > +             || return 2
+>
+> Please see S01syslogd on how to do this.
+>
+> > +stop()
+> > +{
+> > +     # Return
+> > +     #   0 if daemon has been stopped
+> > +     #   1 if daemon was already stopped
+> > +     #   2 if daemon could not be stopped
+> > +     #   other if a failure occurred
+> > +     start-stop-daemon --stop --quiet --retry=3DTERM/30/KILL/5 --pidfi=
+le
+> $PIDFILE --name $NAME
+> > +     RETVAL=3D"$?"
+> > +     [ "$RETVAL" =3D 2 ] && return 2
+> > +
+> > +     rm -f $PIDFILE
+> > +     rm -f $LOCKFILE
+> > +     return "$RETVAL"
+>
+> Please do like S01syslogd.
+>
+> Thanks a lot!
+>
+
+Thanks for the comments! A new version is now
+
+ready for consumption for when somebody have some
+time to check it.
+
+Best regards.
+
+Jos=C3=A9.
+
+--0000000000001c100305c9fc8949
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div dir=3D"ltr"><br></div><br><div class=3D"gmail_quote">=
+<div dir=3D"ltr" class=3D"gmail_attr">On Fri, Aug 20, 2021 at 12:21 AM Thom=
+as Petazzoni &lt;<a href=3D"mailto:thomas.petazzoni@bootlin.com">thomas.pet=
+azzoni@bootlin.com</a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote=
+" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);=
+padding-left:1ex">Hello Jos=C3=A9,<br>
+<br>
+On Mon,=C2=A0 9 Aug 2021 08:55:57 +0300<br>
+Jos=C3=A9 Pekkarinen &lt;<a href=3D"mailto:jose.pekkarinen@unikie.com" targ=
+et=3D"_blank">jose.pekkarinen@unikie.com</a>&gt; wrote:<br>
+<br>
+&gt; The current restorecond upstream init script is no<br>
+&gt; good fit for the user space generated by buildroot,<br>
+&gt; this script is an extension of the original, that<br>
+&gt; brings some changes from the debian init script to<br>
+&gt; use start-stop-daemon instead of daemon, while<br>
+&gt; removing dependencies on /etc/rc.d/init.d/functions<br>
+&gt; and /lib/lsb/init-functions.<br>
+&gt; <br>
+&gt; Signed-off-by: Jos=C3=A9 Pekkarinen &lt;<a href=3D"mailto:jose.pekkari=
+nen@unikie.com" target=3D"_blank">jose.pekkarinen@unikie.com</a>&gt;<br>
+<br>
+Thanks a lot, but unfortunately your proposed script still doesn&#39;t<br>
+follow the model/template of package/busybox/S01syslogd. Could you try<br>
+to follow the template as closely as possible ?<br>
+<br>
+&gt; diff --git a/package/restorecond/S02restorecond b/package/restorecond/=
+S02restorecond<br>
+&gt; new file mode 100644<br>
+&gt; index 0000000000..24ee30853f<br>
+&gt; --- /dev/null<br>
+&gt; +++ b/package/restorecond/S02restorecond<br>
+&gt; @@ -0,0 +1,113 @@<br>
+&gt; +#!/bin/sh<br>
+&gt; +#<br>
+&gt; +# restorecond:=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
+Daemon used to maintain path file context<br>
+&gt; +#<br>
+&gt; +# chkconfig: - 12 87<br>
+&gt; +# description:=C2=A0 =C2=A0 =C2=A0 =C2=A0restorecond uses inotify to =
+look for creation of new files \<br>
+&gt; +# listed in the /etc/selinux/restorecond.conf file, and restores the =
+\<br>
+&gt; +# correct security context.<br>
+&gt; +#<br>
+&gt; +# processname: /usr/sbin/restorecond<br>
+&gt; +# config: /etc/selinux/restorecond.conf<br>
+&gt; +# pidfile: /run/restorecond.pid<br>
+&gt; +#<br>
+&gt; +# Return values according to LSB for all commands but status:<br>
+&gt; +# 0 - success<br>
+&gt; +# 1 - generic or unspecified error<br>
+&gt; +# 2 - invalid or excess argument(s)<br>
+&gt; +# 3 - unimplemented feature (e.g. &quot;reload&quot;)<br>
+&gt; +# 4 - insufficient privilege<br>
+&gt; +# 5 - program is not installed<br>
+&gt; +# 6 - program is not configured<br>
+&gt; +# 7 - program is not running<br>
+<br>
+We don&#39;t care about all those comments.<br>
+<br>
+&gt; +PATH=3D/sbin:/bin:/usr/bin:/usr/sbin<br>
+&gt; +DESC=3D&quot;SELinux file context maintaining daemon&quot;<br>
+<br>
+These variables are not needed.<br>
+<br>
+&gt; +NAME=3Drestorecond<br>
+&gt; +DAEMON=3D/usr/sbin/$NAME<br>
+&gt; +DAEMON_ARGS=3D&quot;&quot;<br>
+&gt; +PIDFILE=3D/var/run/$NAME.pid<br>
+&gt; +LOCKFILE=3D/var/run/$NAME.pid<br>
+&gt; +SCRIPTNAME=3D/etc/init.d/$NAME<br>
+&gt; +<br>
+&gt; +[ -x /usr/sbin/selinuxenabled ] &amp;&amp; /usr/sbin/selinuxenabled |=
+| exit 7<br>
+<br>
+We don&#39;t care about this either.<br>
+<br>
+&gt; +# Check that we are root ... so non-root users stop here<br>
+&gt; +test $EUID =3D 0=C2=A0 || exit 4<br>
+<br>
+Same.<br>
+<br>
+&gt; +test -x /usr/sbin/restorecond=C2=A0 || exit 5<br>
+&gt; +test -f /etc/selinux/restorecond.conf=C2=A0 || exit 6<br>
+<br>
+Same.<br>
+<br>
+&gt; +<br>
+&gt; +RETVAL=3D0<br>
+&gt; +<br>
+&gt; +start()<br>
+&gt; +{<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0# Return<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0#=C2=A0 =C2=A00 if daemon has been started<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0#=C2=A0 =C2=A01 if daemon was already running<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0#=C2=A0 =C2=A02 if daemon could not be started<br=
+>
+&gt; +=C2=A0 =C2=A0 =C2=A0start-stop-daemon --start --quiet --pidfile $PIDF=
+ILE --exec $DAEMON --test &gt; /dev/null \<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0|| return 1<br>
+<br>
+Don&#39;t test.<br>
+<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0start-stop-daemon --start --quiet --pidfile $PIDF=
+ILE --exec $DAEMON -- \<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0$DAEMON_ARGS \<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0|| return 2<br>
+<br>
+Please see S01syslogd on how to do this.<br>
+<br>
+&gt; +stop()<br>
+&gt; +{<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0# Return<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0#=C2=A0 =C2=A00 if daemon has been stopped<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0#=C2=A0 =C2=A01 if daemon was already stopped<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0#=C2=A0 =C2=A02 if daemon could not be stopped<br=
+>
+&gt; +=C2=A0 =C2=A0 =C2=A0#=C2=A0 =C2=A0other if a failure occurred<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0start-stop-daemon --stop --quiet --retry=3DTERM/3=
+0/KILL/5 --pidfile $PIDFILE --name $NAME<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0RETVAL=3D&quot;$?&quot;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0[ &quot;$RETVAL&quot; =3D 2 ] &amp;&amp; return 2=
+<br>
+&gt; +<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0rm -f $PIDFILE<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0rm -f $LOCKFILE<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0return &quot;$RETVAL&quot;<br>
+<br>
+Please do like S01syslogd.<br>
+<br>
+Thanks a lot!<br></blockquote><div><br></div></div><blockquote style=3D"mar=
+gin:0 0 0 40px;border:none;padding:0px"><div class=3D"gmail_quote"><div>Tha=
+nks for the comments! A new version is now</div></div></blockquote>ready fo=
+r consumption for when somebody have some<div>time to check it.=C2=A0<br><d=
+iv><br></div><blockquote style=3D"margin:0 0 0 40px;border:none;padding:0px=
+"><div>Best regards.</div><div><br></div></blockquote><div dir=3D"ltr" clas=
+s=3D"gmail_signature"><div dir=3D"ltr"><blockquote style=3D"margin:0px 0px =
+0px 40px;border:none;padding:0px">Jos=C3=A9.</blockquote></div></div></div>=
+</div>
+
+--0000000000001c100305c9fc8949--
+
+--===============3163029285488983484==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@busybox.net
+http://lists.busybox.net/mailman/listinfo/buildroot
+
+--===============3163029285488983484==--
