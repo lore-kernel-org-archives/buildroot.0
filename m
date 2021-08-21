@@ -2,90 +2,90 @@ Return-Path: <SRS0=Fkjy=NM=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.5 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
 	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
 	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 598F4C4338F
-	for <buildroot@archiver.kernel.org>; Sat, 21 Aug 2021 15:41:40 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 03522C4338F
+	for <buildroot@archiver.kernel.org>; Sat, 21 Aug 2021 16:05:45 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id F1AB260F4C
-	for <buildroot@archiver.kernel.org>; Sat, 21 Aug 2021 15:41:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org F1AB260F4C
+	by mail.kernel.org (Postfix) with ESMTPS id 9A4626121F
+	for <buildroot@archiver.kernel.org>; Sat, 21 Aug 2021 16:05:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9A4626121F
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B2217402C6;
-	Sat, 21 Aug 2021 15:41:39 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 62D1C401FA;
+	Sat, 21 Aug 2021 16:05:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id l6HdEwL1C4AI; Sat, 21 Aug 2021 15:41:36 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id zpRgo0MAbHm1; Sat, 21 Aug 2021 16:05:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2CCFF402C8;
-	Sat, 21 Aug 2021 15:41:35 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C9FAF40278;
+	Sat, 21 Aug 2021 16:05:39 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C3C201BF4DA
- for <buildroot@lists.busybox.net>; Sat, 21 Aug 2021 15:41:33 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7B19C1BF418
+ for <buildroot@lists.busybox.net>; Sat, 21 Aug 2021 16:05:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BFA47605C8
- for <buildroot@lists.busybox.net>; Sat, 21 Aug 2021 15:41:33 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 773EA60597
+ for <buildroot@lists.busybox.net>; Sat, 21 Aug 2021 16:05:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp3.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZYZnawa5heRg for <buildroot@lists.busybox.net>;
- Sat, 21 Aug 2021 15:41:29 +0000 (UTC)
+ with ESMTP id mNd-78iqeR8V for <buildroot@lists.busybox.net>;
+ Sat, 21 Aug 2021 16:05:33 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
- [IPv6:2a00:1450:4864:20::42b])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 46C06605C4
- for <buildroot@buildroot.org>; Sat, 21 Aug 2021 15:41:29 +0000 (UTC)
-Received: by mail-wr1-x42b.google.com with SMTP id r7so18808129wrs.0
- for <buildroot@buildroot.org>; Sat, 21 Aug 2021 08:41:29 -0700 (PDT)
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
+ [IPv6:2a00:1450:4864:20::431])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9EEA460596
+ for <buildroot@buildroot.org>; Sat, 21 Aug 2021 16:05:33 +0000 (UTC)
+Received: by mail-wr1-x431.google.com with SMTP id r7so18871138wrs.0
+ for <buildroot@buildroot.org>; Sat, 21 Aug 2021 09:05:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=4NnFc/uc11VFEm8Dx5uMTwENPU/WR0Be+BBsaJO5R8E=;
- b=tsw3Xes3F+PZS+PZ8eyPj1/HQzPo/TOzDwMlFGQmYS2tuhcGQ0p63Ll0ft525H0UzM
- YIrM20p8oraltp8IS2JYw8DNrkSiSV5IR1uzWI+Tt32JeltdtkT87R2TrLEtGbN2vRw7
- ue03oYErjudKmELAPttH0RZ40BbdTnbHVAE8mqxvENIO2HGU2BxPVZoGtAtbrs3TCPZO
- GIqaQeFh/fEotiuqWIiFgSuPfVSCtn49JIVv2waYElgLWvuzx4u82x1iQzgUR0dIYQpx
- jXMFvX/aWz7xffBv22ZKQfox3a963CCfzl5vyh46tHyKyt58Ev3Sym2gLCato5V8jszu
- tSPA==
+ bh=RMNLh6Vzc0+xmZq/dTqAWCPg8LaT+Mny5n1CeugEyYw=;
+ b=mpo54uWCWXdALlQTvVDFTedC7sd7RX4DcaJxQwPeUtaR0EPq80ukv2PHW66mWa/m2r
+ +SPGqR9En49dTFh7aoKDU1gQMugV/CTwjQbftlaDpt9XopgWSNaqE4BGabjlbpC+crGP
+ sPSRpiZdQ3AlyBDeboqI1oKZb4k3MsX1D/7j5URneDA/yOjdrKoeZP8mIQMv8qrBDxR/
+ NBcmQk/JsgLvcxCd8ALynroQgQM1n2LCNVxAjJTu1sF+UGBcUi4eV8NG2u3mjx3iekR0
+ vFaJAk0L58WNGbAVLuKIOQJDfN0Mcb6Jatc+purNuqBPWNH33gXV7S5eCS0qeefHhNNZ
+ s9sQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=4NnFc/uc11VFEm8Dx5uMTwENPU/WR0Be+BBsaJO5R8E=;
- b=bllqn4sI2DCTaK2Kln7/b+02PV1EiT6B+om1R7DWEb+GRDyFde7ZEq70UarLznYONj
- vgUEsFrd0dBGrI7ezzJaqQ5G7KHeEtJvyO5H58H2aVGc8Ikt1tq7bcRJFAi8nAFhFSNl
- tAXBrtpWfuuO6itO6gq/P30j+NJ1N3v/GQEYntirfp4+tLEC3hkxCXmb7SQhNJbFF8VA
- Xyy8YpJzpQPMNyjqkUnIiCp4Fg2NzsQVbPm839ci7TzquApTLSzCzZbvEDbQ7I1wwpXz
- FyrKH1CCzES2mJJgWrerVcZa25Kw0fK9E96LUwOSPWJNin8OfosArsI+9trsPy62+Rjq
- wPuQ==
-X-Gm-Message-State: AOAM530FpV86lvxuBOAF9OORAZiH4JfVIc4VkDxaMTvjoN/FOg0E67PL
- 8C7OZ+BvzOczRPFZbx3lZ+eOAs26/nb3pQ==
-X-Google-Smtp-Source: ABdhPJwZMLVDD7CaA7pCxYoCKI3WAJThwpIsrswyq417ADKppRSzuIjtlBWLmOfpeyUJbrPjfegE7A==
-X-Received: by 2002:a5d:4442:: with SMTP id x2mr4462665wrr.60.1629560487130;
- Sat, 21 Aug 2021 08:41:27 -0700 (PDT)
+ bh=RMNLh6Vzc0+xmZq/dTqAWCPg8LaT+Mny5n1CeugEyYw=;
+ b=mGTVRwoByC4NKharya5nHM5Hdw7I581etd0SBWc6tw5tEiwcgnh/b6RDISSQK2Jc9B
+ Oidju4LvcS65og6uYmR1RnOy+cOYnvDuVtpegPzVxCO707reUNWHiEKb5OrGrLq5ehH4
+ 60QhJN58Z4urGXSsGLvt1o5/iK1rxgIEWux5j+qGPOQGrRIp1ngt5CX0X6289L/HHxKq
+ a+pmPrzZ9Q2/ow01N80ZTDl/TzdPm8LPNBZOsQ88MBOo+Gxr9jl2QoGdxMVrNgQ5xnOB
+ l9OG1PX/jX5VDX3EK7RPYjboaufKUq/k7O8NyuiRbWKrxBSTL1WKXuz9uA3CvmZC9ubt
+ aggg==
+X-Gm-Message-State: AOAM532+JY1Lu7HOmoA+9F6aoOe9WLC7OIv3De1zA6FTQL9+Up14Pbfn
+ f8OKnrLNVDgL4PWLN/XBMKOX88QtDJfbjA==
+X-Google-Smtp-Source: ABdhPJyMCmc/tPtyC7FabFOmgG6bAxRkfcQKIKqG2mK/ZWGgDgvQcuOBGTySEoQ1UfLTMr+NAMVAuw==
+X-Received: by 2002:adf:ee0d:: with SMTP id y13mr4500269wrn.317.1629561931653; 
+ Sat, 21 Aug 2021 09:05:31 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-417-221.w2-10.abo.wanadoo.fr.
  [2.10.242.221])
- by smtp.gmail.com with ESMTPSA id u16sm9391893wmc.41.2021.08.21.08.41.26
+ by smtp.gmail.com with ESMTPSA id x6sm1836708wrp.49.2021.08.21.09.05.30
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 21 Aug 2021 08:41:26 -0700 (PDT)
+ Sat, 21 Aug 2021 09:05:31 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 21 Aug 2021 17:41:23 +0200
-Message-Id: <20210821154123.1433985-1-fontaine.fabrice@gmail.com>
+Date: Sat, 21 Aug 2021 18:05:09 +0200
+Message-Id: <20210821160509.1514047-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/snort3: link with -latomic if needed
+Subject: [Buildroot] [PATCH 1/1] package/mesa3d: fix build on riscv32
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,41 +97,80 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Sergio Prado <sergio.prado@e-labworks.com>,
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
+ Romain Naour <romain.naour@gmail.com>,
  Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-Fix the following build failure raised since bump to version 3.1.6
-in commit e66f2fd310374779d415fa683813cc5f5ccf6be9 and
-https://github.com/snort3/snort3/commit/3e518d86040e74c328bcc0d5bbd49c1da6b7a3ec:
+Fix the following build failure on riscv32:
 
-/home/buildroot/autobuild/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/powerpc-buildroot-linux-uclibc/9.3.0/../../../../powerpc-buildroot-linux-uclibc/bin/ld: service_inspectors/dce_rpc/CMakeFiles/dce_rpc.dir/dce_smb2_file.cc.o: undefined reference to symbol '__atomic_load_8@@LIBATOMIC_1.0'
+../src/util/futex.h: In function 'sys_futex':
+../src/util/futex.h:39:19: error: 'SYS_futex' undeclared (first use in this function); did you mean 'sys_futex'?
+   39 |    return syscall(SYS_futex, addr1, op, val1, timeout, addr2, val3);
+      |                   ^~~~~~~~~
+      |                   sys_futex
 
 Fixes:
- - http://autobuild.buildroot.org/results/df34a69175e61bc7b180d89c738747e19aaf13bf
+ - http://autobuild.buildroot.org/results/692700a5f967760a0b8cd358b1712f1d5a7b681e
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/snort3/snort3.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ ...-fix-build-on-32-bit-architectures-u.patch | 43 +++++++++++++++++++
+ 1 file changed, 43 insertions(+)
+ create mode 100644 package/mesa3d/0005-src-util-futex.h-fix-build-on-32-bit-architectures-u.patch
 
-diff --git a/package/snort3/snort3.mk b/package/snort3/snort3.mk
-index aabc89e165..7495ab9b0f 100644
---- a/package/snort3/snort3.mk
-+++ b/package/snort3/snort3.mk
-@@ -54,4 +54,9 @@ else
- SNORT3_CONF_OPTS += -DHAVE_LZMA=OFF
- endif
- 
-+# Uses __atomic_load_8
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+SNORT3_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
-+endif
+diff --git a/package/mesa3d/0005-src-util-futex.h-fix-build-on-32-bit-architectures-u.patch b/package/mesa3d/0005-src-util-futex.h-fix-build-on-32-bit-architectures-u.patch
+new file mode 100644
+index 0000000000..b01db8a4b4
+--- /dev/null
++++ b/package/mesa3d/0005-src-util-futex.h-fix-build-on-32-bit-architectures-u.patch
+@@ -0,0 +1,43 @@
++From e501b7c17ada9c694d3f8302622b78d733485b38 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 21 Aug 2021 17:55:33 +0200
++Subject: [PATCH] src/util/futex.h: fix build on 32-bit architectures using
++ 64-bit time_t
 +
- $(eval $(cmake-package))
++Fix the following build failure on 32-bit architectures using 64-bit
++time_t (e.g. riscv32):
++
++../src/util/futex.h: In function 'sys_futex':
++../src/util/futex.h:39:19: error: 'SYS_futex' undeclared (first use in this function); did you mean 'sys_futex'?
++   39 |    return syscall(SYS_futex, addr1, op, val1, timeout, addr2, val3);
++      |                   ^~~~~~~~~
++      |                   sys_futex
++
++Fixes:
++ - http://autobuild.buildroot.org/results/692700a5f967760a0b8cd358b1712f1d5a7b681e
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status:
++https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/12496]
++---
++ src/util/futex.h | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/src/util/futex.h b/src/util/futex.h
++index 43097f4cd5b..221eda9db0c 100644
++--- a/src/util/futex.h
+++++ b/src/util/futex.h
++@@ -34,6 +34,10 @@
++ #include <sys/syscall.h>
++ #include <sys/time.h>
++ 
+++#ifndef SYS_futex
+++#define SYS_futex SYS_futex_time64
+++#endif
+++
++ static inline long sys_futex(void *addr1, int op, int val1, const struct timespec *timeout, void *addr2, int val3)
++ {
++    return syscall(SYS_futex, addr1, op, val1, timeout, addr2, val3);
++-- 
++2.32.0
++
 -- 
 2.32.0
 
