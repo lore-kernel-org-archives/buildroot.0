@@ -2,93 +2,72 @@ Return-Path: <SRS0=qqE2=NN=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
-	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,HTML_MESSAGE,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,MIME_QP_LONG_LINE,
+	SPF_HELO_NONE,SPF_PASS,T_KAM_HTML_FONT_INVALID,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A664AC4338F
-	for <buildroot@archiver.kernel.org>; Sun, 22 Aug 2021 09:05:40 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 68BB6C4338F
+	for <buildroot@archiver.kernel.org>; Sun, 22 Aug 2021 09:14:47 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 3E0DD611EF
-	for <buildroot@archiver.kernel.org>; Sun, 22 Aug 2021 09:05:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3E0DD611EF
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id 9C95A61250
+	for <buildroot@archiver.kernel.org>; Sun, 22 Aug 2021 09:14:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9C95A61250
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=benettiengineering.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E8CAB40010;
-	Sun, 22 Aug 2021 09:05:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6732F400FB;
+	Sun, 22 Aug 2021 09:14:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AHMSjsvb7qgH; Sun, 22 Aug 2021 09:05:36 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id JENvwRegmqLD; Sun, 22 Aug 2021 09:14:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 09ADE400DD;
-	Sun, 22 Aug 2021 09:05:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DA9ED401F1;
+	Sun, 22 Aug 2021 09:14:41 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5DA371BF2C1
- for <buildroot@lists.busybox.net>; Sun, 22 Aug 2021 09:05:33 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5BF571BF2C1
+ for <buildroot@lists.busybox.net>; Sun, 22 Aug 2021 09:14:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4D37C4023C
- for <buildroot@lists.busybox.net>; Sun, 22 Aug 2021 09:05:33 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4B60E401F1
+ for <buildroot@lists.busybox.net>; Sun, 22 Aug 2021 09:14:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Lhsx1mY9--iD for <buildroot@lists.busybox.net>;
- Sun, 22 Aug 2021 09:05:30 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
- [IPv6:2a00:1450:4864:20::42d])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5535D401E7
- for <buildroot@buildroot.org>; Sun, 22 Aug 2021 09:05:30 +0000 (UTC)
-Received: by mail-wr1-x42d.google.com with SMTP id x12so21152812wrr.11
- for <buildroot@buildroot.org>; Sun, 22 Aug 2021 02:05:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=6o6rWCnV+cUQLx4vUX0DiL0ukEjU5veOZVb11bsc+fg=;
- b=m/2UjAfcrHNzFVDxQbonHwDpoGrzV7pIKUkd4oh9kBu4WNxJU8pyIR5bh45snbji04
- 7JGF0HY+6741aypc3dPcTzfMCgdWchV7V3N6p+3oZmJnvUupkl2M+PgTYr0Z9OJ/HWlH
- COrBjjiEoDR4xoI3VQ4twgqBOPu32rJM93dEcec60ijrgaIV5/Pk77XZFzTmmJ+qTKdE
- rlnjiH9V+U6NYvvoO4DX5irOAcBdGpkFQ6RfFUdfzANnh3l9/uY4aCB7ddNWRdtdcEr2
- 8SJtWHfwjlHTyKh8mM6Bp6Hev81/1iccWE5HJ6byaIfB+6yoyH49IGUbiX23Fe6QuzyU
- jtJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=6o6rWCnV+cUQLx4vUX0DiL0ukEjU5veOZVb11bsc+fg=;
- b=CrwI4s/SeN+VSPzT6P6eH8IgoF/bUHy5Sfg2QLq+JHgCVEt9EQ4ncPqVlrSnG2jVWB
- pVEfIrNiJkK5zeLKEVrJyHugKyEYH0Mq2Xo9lkJFrkNwe8S9fhvYTVMici4Ny5+fZ2Ba
- bRlowlGdLCpdWSsuj+gfQ7jv9hB6cw/382wYo/wontk+O9jqtJ9U9nbOu7MiOX1f8TgP
- ni6lLKuANiPuqfVol1BIcNfFv7vPuchg74l2JLo/DC1vLFjAShXCIil3tYG0ZztZ0PRN
- EAjZlMeE6EwzMmA+c+B5sjPFlUYE55270n/uRsvSzOUEhAJGYcs3PZIAt4i3r6nHvi4+
- Kj+A==
-X-Gm-Message-State: AOAM530t1r9aFzLkZr6cuKEKQXAnRNlYhrn+MYiPyKbpa9R9ItGhbWu+
- nMPJO6W86ieJj+vYoN7iDfjpzrxXMdc=
-X-Google-Smtp-Source: ABdhPJz4w2NLJ8l4gqMXvdGdCWsQ+g5UUWh89Ar9A3WRSnXuMgPxRiVCVIMUkJkmSzv1dSHupQx+oA==
-X-Received: by 2002:a05:6000:1864:: with SMTP id
- d4mr8107024wri.250.1629623128444; 
- Sun, 22 Aug 2021 02:05:28 -0700 (PDT)
-Received: from localhost.localdomain
- (2a01cb058f8a180098814a9aef637f91.ipv6.abo.wanadoo.fr.
- [2a01:cb05:8f8a:1800:9881:4a9a:ef63:7f91])
- by smtp.gmail.com with ESMTPSA id z7sm14840959wmi.4.2021.08.22.02.05.27
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 22 Aug 2021 02:05:27 -0700 (PDT)
-From: Romain Naour <romain.naour@gmail.com>
-To: buildroot@buildroot.org
-Date: Sun, 22 Aug 2021 11:05:22 +0200
-Message-Id: <20210822090522.2527091-1-romain.naour@gmail.com>
-X-Mailer: git-send-email 2.31.1
-MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] support/testing: remove
- TestPythonPy2{Cryptography, ServiceIdentity, Treq, Twisted, Txtorcon}
+ with ESMTP id y1WQARwIqRgS for <buildroot@lists.busybox.net>;
+ Sun, 22 Aug 2021 09:14:35 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtpweb155.aruba.it (smtpweb155.aruba.it [62.149.158.155])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 28C69400FB
+ for <buildroot@buildroot.org>; Sun, 22 Aug 2021 09:14:34 +0000 (UTC)
+Received: from smtpclient.apple ([89.164.10.203])
+ by Aruba Outgoing Smtp  with ESMTPA
+ id HjYkmfvr9a4UMHjYlmmJuL; Sun, 22 Aug 2021 11:14:33 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+ t=1629623673; bh=wAxll4/Qz9q8I9xDX02NnAIzu0hzPk+/Z1DnronAUx8=;
+ h=Content-Type:From:Mime-Version:Subject:Date:To;
+ b=LRhU7RDjJ/zmRPXhd73/pQMyL7FHga7s2pa2CW0FmjjJVvtcuI7aAkw4JiO2ICN4N
+ MSiOOOWNGSdPJ+Cpkx+9eMYhnltS4Y0TIc3cz2dK9ndxepPRe55JJNgrJZDtaEkEG3
+ ynmNJvWnP65j03gO/DR5LqJeQMiiEYG6qgpKOsUoYCbOvxvKv+V1TqHHsKbk+f5OhR
+ R+I/LNprR9mzRwAtIK+IKgDUZ1YSwmKSzoq4aCfFgE6ma4qdPKkA3SoxKKkW41YQqz
+ /IvyZsJlj4M6NIZQc3KJ5uuz9mbaloEEatz8F20/jaj+XUEmunDaSDPJp0gkuxhpp+
+ N04u9jvdtZRPw==
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Mime-Version: 1.0 (1.0)
+Date: Sun, 22 Aug 2021 11:14:30 +0200
+Message-Id: <FE42D615-6AE8-462B-8B28-33B13B98BDCE@benettiengineering.com>
+References: <CAAV5jBd+Z2o-8unyXtNeWJgcbMGobANYbUss-rOm=+K_OVbNDQ@mail.gmail.com>
+In-Reply-To: <CAAV5jBd+Z2o-8unyXtNeWJgcbMGobANYbUss-rOm=+K_OVbNDQ@mail.gmail.com>
+To: Bensuperpc <bensuperpc@gmail.com>
+X-Mailer: iPhone Mail (18G82)
+X-CMAE-Envelope: MS4wfEP/kwK6lcmdddIY1tvWjVXrP7vkDjExC2UOq9z1NfCyh9zodJvoYAsqSvlSItFrZZGrqomOMVfszLIRSyau8nUgHpxoGGs7aJJzFc6Q7RYckT6ui3uD
+ 9dHaM+wSjsZMWsiZ8chTP4ewN4iw2dJYNfj5RcgQ1bm1AMsYlDRBoPF92trNqBDJ8faU6ZF9DmcJYhzGbEwpYwdj+JjvohbvmqbVFV479YbSh03Qj+U7S7S+
+ hYB3N5aTsUIm2X2SxY0hQjdf1zC5e53MzY8EEoIAzt28J1iQlD4BJys6VAz/mLmMtvwVVOpHX6CsgwgUYQrOFIhI5uIZAEqKV/2LA0Z8ZSiAwXQQLyuTGEvS
+ b0/AYSQM
+Subject: Re: [Buildroot] [PATCH 1/1] Enable quadmath on aarch64
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,139 +79,187 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Romain Naour <romain.naour@gmail.com>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============9022705820774637347=="
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-The python2 support has been removed since the python-idna bump to version 3.2 [1]
 
-[1] 0c7e30b43a5e98abfc8db521a6415b5a5c1c267f
+--===============9022705820774637347==
+Content-Type: multipart/alternative; boundary=Apple-Mail-9AAE0C6E-15D9-46A5-AE3E-A53FB16F0885
+Content-Transfer-Encoding: 7bit
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
----
-Now python-cryptography only support python3, the python infra will
-provide the host variant for python3.
-We can remove package/python3-cryptography.
----
- .../testing/tests/package/test_python_cryptography.py | 11 -----------
- .../tests/package/test_python_service_identity.py     | 11 -----------
- support/testing/tests/package/test_python_treq.py     |  9 ---------
- support/testing/tests/package/test_python_twisted.py  |  9 ---------
- support/testing/tests/package/test_python_txtorcon.py | 11 -----------
- 5 files changed, 51 deletions(-)
 
-diff --git a/support/testing/tests/package/test_python_cryptography.py b/support/testing/tests/package/test_python_cryptography.py
-index 14515fcd2d..62f0ca0def 100644
---- a/support/testing/tests/package/test_python_cryptography.py
-+++ b/support/testing/tests/package/test_python_cryptography.py
-@@ -1,17 +1,6 @@
- from tests.package.test_python import TestPythonPackageBase
- 
- 
--class TestPythonPy2Cryptography(TestPythonPackageBase):
--    __test__ = True
--    config = TestPythonPackageBase.config + \
--        """
--        BR2_PACKAGE_PYTHON=y
--        BR2_PACKAGE_PYTHON_CRYPTOGRAPHY=y
--        """
--    sample_scripts = ["tests/package/sample_python_cryptography.py"]
--    timeout = 40
--
--
- class TestPythonPy3Cryptography(TestPythonPackageBase):
-     __test__ = True
-     config = TestPythonPackageBase.config + \
-diff --git a/support/testing/tests/package/test_python_service_identity.py b/support/testing/tests/package/test_python_service_identity.py
-index 6aeb77de8c..09cfbe0a26 100644
---- a/support/testing/tests/package/test_python_service_identity.py
-+++ b/support/testing/tests/package/test_python_service_identity.py
-@@ -1,17 +1,6 @@
- from tests.package.test_python import TestPythonPackageBase
- 
- 
--class TestPythonPy2ServiceIdentity(TestPythonPackageBase):
--    __test__ = True
--    config = TestPythonPackageBase.config + \
--        """
--        BR2_PACKAGE_PYTHON=y
--        BR2_PACKAGE_PYTHON_SERVICE_IDENTITY=y
--        """
--    sample_scripts = ["tests/package/sample_python_service_identity.py"]
--    timeout = 30
--
--
- class TestPythonPy3ServiceIdentity(TestPythonPackageBase):
-     __test__ = True
-     config = TestPythonPackageBase.config + \
-diff --git a/support/testing/tests/package/test_python_treq.py b/support/testing/tests/package/test_python_treq.py
-index e24ae845be..d7a23829ea 100644
---- a/support/testing/tests/package/test_python_treq.py
-+++ b/support/testing/tests/package/test_python_treq.py
-@@ -12,15 +12,6 @@ class TestPythonTreq(TestPythonPackageBase):
-         self.assertEqual(exit_code, 0)
- 
- 
--class TestPythonPy2Treq(TestPythonTreq):
--    __test__ = True
--    config = TestPythonTreq.config + \
--        """
--        BR2_PACKAGE_PYTHON=y
--        BR2_PACKAGE_PYTHON_TREQ=y
--        """
--
--
- class TestPythonPy3Treq(TestPythonTreq):
-     __test__ = True
-     config = TestPythonTreq.config + \
-diff --git a/support/testing/tests/package/test_python_twisted.py b/support/testing/tests/package/test_python_twisted.py
-index a458ee45dd..e87312db13 100644
---- a/support/testing/tests/package/test_python_twisted.py
-+++ b/support/testing/tests/package/test_python_twisted.py
-@@ -21,15 +21,6 @@ class TestPythonTwisted(TestPythonPackageBase):
-         self.assertEqual(exit_code, 0)
- 
- 
--class TestPythonPy2Twisted(TestPythonTwisted):
--    __test__ = True
--    config = TestPythonTwisted.config + \
--        """
--        BR2_PACKAGE_PYTHON=y
--        BR2_PACKAGE_PYTHON_TWISTED=y
--        """
--
--
- class TestPythonPy3Twisted(TestPythonTwisted):
-     __test__ = True
-     config = TestPythonTwisted.config + \
-diff --git a/support/testing/tests/package/test_python_txtorcon.py b/support/testing/tests/package/test_python_txtorcon.py
-index 1ac2f6919a..8e74190ee1 100644
---- a/support/testing/tests/package/test_python_txtorcon.py
-+++ b/support/testing/tests/package/test_python_txtorcon.py
-@@ -1,17 +1,6 @@
- from tests.package.test_python import TestPythonPackageBase
- 
- 
--class TestPythonPy2Txtorcon(TestPythonPackageBase):
--    __test__ = True
--    config = TestPythonPackageBase.config + \
--        """
--        BR2_PACKAGE_PYTHON=y
--        BR2_PACKAGE_PYTHON_TXTORCON=y
--        """
--    sample_scripts = ["tests/package/sample_python_txtorcon.py"]
--    timeout = 30
--
--
- class TestPythonPy3Txtorcon(TestPythonPackageBase):
-     __test__ = True
-     config = TestPythonPackageBase.config + \
--- 
-2.31.1
+--Apple-Mail-9AAE0C6E-15D9-46A5-AE3E-A53FB16F0885
+Content-Type: text/plain;
+	charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+Hi Bensuperpc,
+
+you have to use your real name. Then you have to use plain text, no html at a=
+ll in Mailing List.
+This commit log seems written directly in email client, instead you should w=
+rite it during git commit.
+
+Also, you need to send v2 patch, so pass -v2 to git format-patch and indicat=
+e V1->V2 changes(basically you=E2=80=99re written the commit log).
+
+Best regards
+Giulio Benetti
+
+Inviato da iPhone
+
+> Il giorno 22 ago 2021, alle ore 06:27, Bensuperpc <bensuperpc@gmail.com> h=
+a scritto:
+>=20
+> =EF=BB=BF
+> Some headers need quadmath to work (Ex: boost::multiprecision::float128),=20=
+
+>=20
+> I am getting following compile error on aarch64 without BR2_TOOLCHAIN_HAS_=
+LIBQUADMATH=3Dy :
+> boost/multiprecision/float128.hpp:40:10: fatal error: 'quadmath.h' file no=
+t found
+> when I use float128 in boost.
+>=20
+> Config file: https://github.com/dockcross/dockcross/blob/master/linux-arm6=
+4-full/buildroot.config
+>=20
+> Bensuperpc,
+>=20
+>=20
+>> Le sam. 21 ao=C3=BBt 2021 =C3=A0 23:27, Thomas Petazzoni <thomas.petazzon=
+i@bootlin.com> a =C3=A9crit :
+>> On Sat, 21 Aug 2021 21:44:01 +0200
+>> Bensuperpc <bensuperpc@gmail.com> wrote:
+>>=20
+>> > Enable quadmath on aarch64
+>> >=20
+>> > Signed-off-by: Bensuperpc <bensuperpc@gmail.com>
+>>=20
+>> We do need a real name to accept contributions.
+>>=20
+>> > ---
+>> >  toolchain/Config.in | 2 +-
+>> >  1 file changed, 1 insertion(+), 1 deletion(-)
+>> >=20
+>> > diff --git a/toolchain/Config.in b/toolchain/Config.in
+>> > index 1d0469a13e..b4cd6d511f 100644
+>> > --- a/toolchain/Config.in
+>> > +++ b/toolchain/Config.in
+>> > @@ -794,6 +794,6 @@ config BR2_TOOLCHAIN_HAS_ATOMIC
+>> >  # - When available, libquadmath requires wchar support.
+>> >  config BR2_TOOLCHAIN_HAS_LIBQUADMATH
+>> >       bool
+>> > -     default y if BR2_i386 || BR2_x86_64
+>> > +     default y if BR2_i386 || BR2_x86_64 || BR2_aarch64
+>>=20
+>> This option is not about "enabling" something, but about saying whether
+>> libquadmath is supported/available on a given CPU architecture. Since
+>> when is libquadmath available/supported by gcc?
+>>=20
+>> What was the motivation behind this change?
+>>=20
+>> Thanks!
+>>=20
+>> Thomas
+>> --=20
+>> Thomas Petazzoni, co-owner and CEO, Bootlin
+>> Embedded Linux and Kernel engineering
+>> https://bootlin.com
+
+--Apple-Mail-9AAE0C6E-15D9-46A5-AE3E-A53FB16F0885
+Content-Type: text/html;
+	charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<html><head><meta http-equiv=3D"content-type" content=3D"text/html; charset=3D=
+utf-8"></head><body dir=3D"auto">Hi Bensuperpc,<div><br></div><div>you have t=
+o use your real name. Then you have to use plain text, no html at all in Mai=
+ling List.</div><div>This commit log seems written directly in email client,=
+ instead you should write it during git commit.</div><div><br></div><div>Als=
+o, you need to send v2 patch, so pass -v2 to git format-patch and indicate V=
+1-&gt;V2 changes(basically you=E2=80=99re written the commit log).</div><div=
+><br></div><div>Best regards</div><div>Giulio Benetti<br><br><div dir=3D"ltr=
+">Inviato da iPhone</div><div dir=3D"ltr"><br><blockquote type=3D"cite">Il g=
+iorno 22 ago 2021, alle ore 06:27, Bensuperpc &lt;bensuperpc@gmail.com&gt; h=
+a scritto:<br><br></blockquote></div><blockquote type=3D"cite"><div dir=3D"l=
+tr">=EF=BB=BF<div dir=3D"ltr">Some headers need quadmath to work (Ex: boost:=
+:multiprecision::float128),&nbsp;<br><div><br></div><div>I am getting follow=
+ing compile error on aarch64 without&nbsp;<span style=3D"color:rgb(80,0,80)"=
+><i><b>BR2_TOOLCHAIN_HAS_LIBQUADMATH=3Dy</b>&nbsp;</i></span>:</div><div><i>=
+boost/multiprecision/float128.hpp:40:10: fatal error: 'quadmath.h' file not f=
+ound</i><br></div><div>when I use&nbsp;<span style=3D"font-family:inherit;fo=
+nt-style:inherit;font-variant-ligatures:inherit;font-variant-caps:inherit;fo=
+nt-weight:inherit;background-color:transparent;white-space:inherit;font-size=
+:13px">float128 in boost.</span></div><div><br></div><div>Config file:&nbsp;=
+<a href=3D"https://github.com/dockcross/dockcross/blob/master/linux-arm64-fu=
+ll/buildroot.config" target=3D"_blank">https://github.com/dockcross/dockcros=
+s/blob/master/linux-arm64-full/buildroot.config</a></div><div><br></div><div=
+>Bensuperpc,</div><div><b><br></b></div></div><br><div class=3D"gmail_quote"=
+><div dir=3D"ltr" class=3D"gmail_attr">Le&nbsp;sam. 21 ao=C3=BBt 2021 =C3=A0=
+&nbsp;23:27, Thomas Petazzoni &lt;<a href=3D"mailto:thomas.petazzoni@bootlin=
+.com" target=3D"_blank">thomas.petazzoni@bootlin.com</a>&gt; a =C3=A9crit&nb=
+sp;:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0=
+.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">On Sat, 21 Aug=
+ 2021 21:44:01 +0200<br>
+Bensuperpc &lt;<a href=3D"mailto:bensuperpc@gmail.com" target=3D"_blank">ben=
+superpc@gmail.com</a>&gt; wrote:<br>
+<br>
+&gt; Enable quadmath on aarch64<br>
+&gt; <br>
+&gt; Signed-off-by: Bensuperpc &lt;<a href=3D"mailto:bensuperpc@gmail.com" t=
+arget=3D"_blank">bensuperpc@gmail.com</a>&gt;<br>
+<br>
+We do need a real name to accept contributions.<br>
+<br>
+&gt; ---<br>
+&gt;&nbsp; toolchain/Config.in | 2 +-<br>
+&gt;&nbsp; 1 file changed, 1 insertion(+), 1 deletion(-)<br>
+&gt; <br>
+&gt; diff --git a/toolchain/Config.in b/toolchain/Config.in<br>
+&gt; index 1d0469a13e..b4cd6d511f 100644<br>
+&gt; --- a/toolchain/Config.in<br>
+&gt; +++ b/toolchain/Config.in<br>
+&gt; @@ -794,6 +794,6 @@ config BR2_TOOLCHAIN_HAS_ATOMIC<br>
+&gt;&nbsp; # - When available, libquadmath requires wchar support.<br>
+&gt;&nbsp; config BR2_TOOLCHAIN_HAS_LIBQUADMATH<br>
+&gt;&nbsp; &nbsp; &nbsp; &nbsp;bool<br>
+&gt; -&nbsp; &nbsp; &nbsp;default y if BR2_i386 || BR2_x86_64<br>
+&gt; +&nbsp; &nbsp; &nbsp;default y if BR2_i386 || BR2_x86_64 || BR2_aarch64=
+<br>
+<br>
+This option is not about "enabling" something, but about saying whether<br>
+libquadmath is supported/available on a given CPU architecture. Since<br>
+when is libquadmath available/supported by gcc?<br>
+<br>
+What was the motivation behind this change?<br>
+<br>
+Thanks!<br>
+<br>
+Thomas<br>
+-- <br>
+Thomas Petazzoni, co-owner and CEO, Bootlin<br>
+Embedded Linux and Kernel engineering<br>
+<a href=3D"https://bootlin.com" rel=3D"noreferrer" target=3D"_blank">https:/=
+/bootlin.com</a><br>
+</blockquote></div>
+</div></blockquote></div></body></html>=
+
+--Apple-Mail-9AAE0C6E-15D9-46A5-AE3E-A53FB16F0885--
+
+--===============9022705820774637347==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
 http://lists.busybox.net/mailman/listinfo/buildroot
+
+--===============9022705820774637347==--
