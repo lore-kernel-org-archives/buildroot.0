@@ -2,91 +2,96 @@ Return-Path: <SRS0=qqE2=NN=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.5 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-18.0 required=3.0 tests=BAYES_00,
 	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
 	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,NICE_REPLY_A,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 510A6C4338F
-	for <buildroot@archiver.kernel.org>; Sun, 22 Aug 2021 19:03:30 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3082AC4338F
+	for <buildroot@archiver.kernel.org>; Sun, 22 Aug 2021 19:17:18 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 082DE61181
-	for <buildroot@archiver.kernel.org>; Sun, 22 Aug 2021 19:03:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 082DE61181
+	by mail.kernel.org (Postfix) with ESMTPS id D046D61266
+	for <buildroot@archiver.kernel.org>; Sun, 22 Aug 2021 19:17:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D046D61266
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7BC77401CC;
-	Sun, 22 Aug 2021 19:03:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9FAFC80D66;
+	Sun, 22 Aug 2021 19:17:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dPiXyKrKqlH5; Sun, 22 Aug 2021 19:03:22 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id TVfl6zxXMd_C; Sun, 22 Aug 2021 19:17:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9A75040252;
-	Sun, 22 Aug 2021 19:03:20 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 276031BF47A
- for <buildroot@lists.busybox.net>; Sun, 22 Aug 2021 19:03:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2722580D69;
+	Sun, 22 Aug 2021 19:17:13 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id AB32C1BF41A
+ for <buildroot@lists.busybox.net>; Sun, 22 Aug 2021 19:17:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 16783401B5
- for <buildroot@lists.busybox.net>; Sun, 22 Aug 2021 19:03:09 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 92AD580D66
+ for <buildroot@lists.busybox.net>; Sun, 22 Aug 2021 19:17:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id w-cm6t3ctUHk for <buildroot@lists.busybox.net>;
- Sun, 22 Aug 2021 19:03:04 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qN2N4nrFMAyQ for <buildroot@lists.busybox.net>;
+ Sun, 22 Aug 2021 19:17:06 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
- [IPv6:2a00:1450:4864:20::432])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C8167401A2
- for <buildroot@buildroot.org>; Sun, 22 Aug 2021 19:03:03 +0000 (UTC)
-Received: by mail-wr1-x432.google.com with SMTP id q10so22835225wro.2
- for <buildroot@buildroot.org>; Sun, 22 Aug 2021 12:03:03 -0700 (PDT)
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
+ [IPv6:2a00:1450:4864:20::435])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3AB8580D7A
+ for <buildroot@buildroot.org>; Sun, 22 Aug 2021 19:17:06 +0000 (UTC)
+Received: by mail-wr1-x435.google.com with SMTP id k29so22822336wrd.7
+ for <buildroot@buildroot.org>; Sun, 22 Aug 2021 12:17:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=YvAPBOb9U921Vn6F6AlBrcpAng0zV7TWF5vZX/hC5rE=;
- b=SriWf2/868XaQFPRyR6O4l0yTM2EIsLZCe0UfTXg+ltZIhj+2pwLZhd7ruJBis7NFV
- UbA+w4HcUvAbZ20y6637KmVApTRj5jgNMPbxIpDlmYN+exXJO61r+fw2h6q8woaUAVnv
- +Jrniyhi3v5ylmJs3FWK1PCQFA05MWiLaQ68YpXRCU7dOTsbP7A43c4al7kp3b5Kk8fG
- aBaax8rsP5xotlMbiZzH8cAPbjJAILL3Wr4zS3wbC4VLhtfYxA2xly/06OxXvKnNPnXY
- 07t1MSR2V2w3szU41XHd14HlkVI2QMGtgxlsCJdU5+ynpsRNzBQAW7hEYKFyOxAGozjz
- +9Xw==
+ h=subject:to:references:from:message-id:date:user-agent:mime-version
+ :in-reply-to:content-language:content-transfer-encoding;
+ bh=ohOJdoGJB4wMGoUsn58XYkP8nibgszHWvDc7gzXYXBc=;
+ b=EBVU4tIOw84zFzHZ/xtdJtKK1og/i0qqGRTRCXJNY6bGWi5Hbc+CvE1W81BBPG3fdJ
+ B4DAGTlSk7VJ2sPe+Nx3VPpKtVY76eawLCXrpLFDXEeWTRcP8C7EiIM1qoQiPAcQIEh+
+ 52z8TAYvHMizQ/A6LUBBYAc5HwBpyEDImqxLLvFMIQdVTqsPRukTk5ucm9UycVlE0l0d
+ 5ulJQWrUIe6s564BFB0lHdibaRWEOWMk65nof6+tX7BbCt1EKmksx1cNClQejq6czKEl
+ tFIs6x+N+rXhYaE59XRFG0dTOqJOjK7lb2IAfMeslKAuf5TzqdUB3InSqsA9Q/ykICgx
+ UOCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=YvAPBOb9U921Vn6F6AlBrcpAng0zV7TWF5vZX/hC5rE=;
- b=oMBlXxLFMY3IfCaep94nApqlVDMAGyHGN8vuaaHsUYMnPr1IYDOyHomSlkK1a2wfIW
- Oc1x33o3I8Qw/jVQK17Zc2Hi/88lREZmvMxPoh4jOAmUcbCRGFVR3OOunagsJWuoTZ6i
- dR0iJuyDIjHmMNuLCPz6xmYFEc2Md33pEC85zZk2VfFNSZ9TEnRcQa1U2jy+1i/IEqXC
- 8B0JL/x/19OFQJ2bpZHvZRyfOIJbsWDYU3QAuAnH+/eiCX+zY1PKyKYu9NilNSGchZtW
- 9RdfXiDgveD3+IigeaDXDRo4CkLhcv9soHPIlObJD14Z1OgC1nOzE9pCbvW5GFs5R1NO
- U6Aw==
-X-Gm-Message-State: AOAM5302fIQmdA1xlFRTcp+WleaZ4yGVQHhhbJ7YKUbQPItfkN46zBGM
- fvzGCazyQF3/gkuqKG3i7M8vxsvYKAf2+u/9
-X-Google-Smtp-Source: ABdhPJxt0o/BbGu/Ukqn55GmgQgonL6FjMFDpCfwT1rjQDJo9p8B6DttcbJ4rBX4SugClv8TrmmFEg==
-X-Received: by 2002:adf:ba0d:: with SMTP id o13mr9614725wrg.134.1629658981694; 
- Sun, 22 Aug 2021 12:03:01 -0700 (PDT)
-Received: from localhost.localdomain (gw1.ms-free.net. [185.243.124.10])
- by smtp.gmail.com with ESMTPSA id p18sm12703760wrt.13.2021.08.22.12.02.59
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 22 Aug 2021 12:03:01 -0700 (PDT)
-From: Petr Vorel <petr.vorel@gmail.com>
-To: buildroot@buildroot.org
-Date: Sun, 22 Aug 2021 21:02:51 +0200
-Message-Id: <20210822190251.280313-2-petr.vorel@gmail.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20210822190251.280313-1-petr.vorel@gmail.com>
+ h=x-gm-message-state:subject:to:references:from:message-id:date
+ :user-agent:mime-version:in-reply-to:content-language
+ :content-transfer-encoding;
+ bh=ohOJdoGJB4wMGoUsn58XYkP8nibgszHWvDc7gzXYXBc=;
+ b=mlJLURRo3GZEJQVXJzUV3wvsk5i0A66zl0r3JKjLIk4Ij2TSueIyvvXNsGRjborVIw
+ zCsMm74TDUK5BTahFA6kY2YsENeI7ir9GXbZy5/73iKRNuErvO/rTDni0rRSFFf8pd9l
+ aR1Zo95bPuBw2pq0g7xAYFSvN3i216bVrYi7bzgZs7t8egBZfIJk/Ylak7du5JjarAXp
+ 6SxT/OO353XWPEoW4thOuLGS3W4qPqtkLJ2Asq6rThiAQGIEnXGzbnVF47hNRCKJJn+f
+ YCs+CIsG9VqHLqKGifCcqNTMRAGpyWprLQQ+sFjhrSiMEigX/shPJtBxd2BWOsXqWHKa
+ dyzA==
+X-Gm-Message-State: AOAM530qsDEOQ+IRzBdfWVaUKik7xoPwSe5Htjt8OnX0QCJSF+mHCkD6
+ lRuXK/uZsHIixdMWK9Rh8zHhPfaCVH4=
+X-Google-Smtp-Source: ABdhPJw+GfzB4y6nxBHcOYP5m/oRjWcxVOF76O/BdBuuoCi0GxeIOCQGe4CwsVXn8GRiEM3IO3y+jA==
+X-Received: by 2002:adf:cf05:: with SMTP id o5mr9640745wrj.270.1629659824289; 
+ Sun, 22 Aug 2021 12:17:04 -0700 (PDT)
+Received: from ?IPv6:2a01:cb05:8f8a:1800:9881:4a9a:ef63:7f91?
+ (2a01cb058f8a180098814a9aef637f91.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:8f8a:1800:9881:4a9a:ef63:7f91])
+ by smtp.gmail.com with ESMTPSA id o8sm13286393wmq.21.2021.08.22.12.17.03
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sun, 22 Aug 2021 12:17:03 -0700 (PDT)
+To: Petr Vorel <petr.vorel@gmail.com>, buildroot@buildroot.org
 References: <20210822190251.280313-1-petr.vorel@gmail.com>
+ <20210822190251.280313-2-petr.vorel@gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Message-ID: <1bf16d0e-12bf-db14-5f1a-9c24534be795@gmail.com>
+Date: Sun, 22 Aug 2021 21:17:02 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2 2/2] package/localedef: bump to version
+In-Reply-To: <20210822190251.280313-2-petr.vorel@gmail.com>
+Content-Language: en-US
+Subject: Re: [Buildroot] [PATCH v2 2/2] package/localedef: bump to version
  2.34-9-g9acab0bba6a5a57323b1f94bf95b21618a9e5aa4
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
@@ -99,455 +104,396 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-resync the version with glibc package.
-
-Dropped 2 patches (fixes backported from previous releases),
-rebased 2 which are kept (only line numbers changed).
-
-Suggested-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
----
-New in v2.
-
- ...y-parameter-warning-for-__sigsetjmp-.patch | 155 ------------------
- ...overflow-warning-in-pthread_cleanup_.patch | 125 --------------
- ...ACK-only-build-and-install-localedef.patch |  12 +-
- ...y-on-GCC-to-4.8-and-binutils-to-2.24.patch |  12 +-
- .../localedef.hash                            |   2 +-
- package/localedef/localedef.mk                |   2 +-
- 6 files changed, 14 insertions(+), 294 deletions(-)
- delete mode 100644 package/localedef/2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2/0003-Fix-GCC-11-Warray-parameter-warning-for-__sigsetjmp-.patch
- delete mode 100644 package/localedef/2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2/0004-Avoid-Wstringop-overflow-warning-in-pthread_cleanup_.patch
- rename package/localedef/{2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2 => 2.34-9-g9acab0bba6a5a57323b1f94bf95b21618a9e5aa4}/0001-HACK-only-build-and-install-localedef.patch (88%)
- rename package/localedef/{2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2 => 2.34-9-g9acab0bba6a5a57323b1f94bf95b21618a9e5aa4}/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch (90%)
- rename package/localedef/{2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2 => 2.34-9-g9acab0bba6a5a57323b1f94bf95b21618a9e5aa4}/localedef.hash (70%)
-
-diff --git a/package/localedef/2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2/0003-Fix-GCC-11-Warray-parameter-warning-for-__sigsetjmp-.patch b/package/localedef/2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2/0003-Fix-GCC-11-Warray-parameter-warning-for-__sigsetjmp-.patch
-deleted file mode 100644
-index 888d27fe4a..0000000000
---- a/package/localedef/2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2/0003-Fix-GCC-11-Warray-parameter-warning-for-__sigsetjmp-.patch
-+++ /dev/null
-@@ -1,155 +0,0 @@
--From 44f1469daff3a0bfe67fb5839243f114ace3bad8 Mon Sep 17 00:00:00 2001
--From: Joseph Myers <joseph@codesourcery.com>
--Date: Mon, 5 Oct 2020 16:46:46 +0000
--Subject: [PATCH 3/4] Fix GCC 11 -Warray-parameter warning for __sigsetjmp (bug
-- 26647)
--
--This patch fixes part of bug 26647 (-Werror=array-parameter error
--building with GCC 11 because of __sigsetjmp being declared using an
--array parameter in one header and a pointer parameter in another).
--
--The fix is to split the struct __jmp_buf_tag definition out to a
--separate bits/types/ header so it can be included in pthread.h, so
--that pthread.h can declare __sigsetjmp with the type contents visible,
--so can use an array (as in setjmp.h) rather than a pointer in the
--declaration.
--
--Note that several other build failures with GCC 11 remain.  This does
--not fix the jmp_buf-related -Wstringop-overflow errors (also discussed
--in bug 26647), or -Warray-parameter errors for other functions (bug
--26686), or -Warray-bounds errors (bug 26687).
--
--Tested, with older compilers, natively for x86_64 and with
--build-many-glibc.py for aarch64-linux-gnu.  Tested with
--build-many-glibcs.py with GCC mainline for aarch64-linux-gnu that this
--gets past the -Warray-parameter issue for __sigsetjmp (with the next
--build failure being the other one discussed in bug 26647).
--
--[Upstream: https://github.com/bminor/glibc/commit/19302b27bdacfe87e861ff46fc0fbad60dd6602d.patch]
--Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-----
-- include/bits/types/struct___jmp_buf_tag.h |  1 +
-- setjmp/Makefile                           |  3 +-
-- setjmp/bits/types/struct___jmp_buf_tag.h  | 37 +++++++++++++++++++++++
-- setjmp/setjmp.h                           | 15 +--------
-- sysdeps/nptl/pthread.h                    |  5 +--
-- 5 files changed, 44 insertions(+), 17 deletions(-)
-- create mode 100644 include/bits/types/struct___jmp_buf_tag.h
-- create mode 100644 setjmp/bits/types/struct___jmp_buf_tag.h
--
--diff --git a/include/bits/types/struct___jmp_buf_tag.h b/include/bits/types/struct___jmp_buf_tag.h
--new file mode 100644
--index 00000000..e3250150
----- /dev/null
--+++ b/include/bits/types/struct___jmp_buf_tag.h
--@@ -0,0 +1 @@
--+#include <setjmp/bits/types/struct___jmp_buf_tag.h>
--diff --git a/setjmp/Makefile b/setjmp/Makefile
--index dcac5693..603f61d7 100644
----- a/setjmp/Makefile
--+++ b/setjmp/Makefile
--@@ -22,7 +22,8 @@ subdir	:= setjmp
-- 
-- include ../Makeconfig
-- 
---headers	:= setjmp.h bits/setjmp.h bits/setjmp2.h
--+headers	:= setjmp.h bits/setjmp.h bits/setjmp2.h \
--+	   bits/types/struct___jmp_buf_tag.h
-- 
-- routines	:= setjmp sigjmp bsd-setjmp bsd-_setjmp \
-- 		   longjmp __longjmp jmp-unwind
--diff --git a/setjmp/bits/types/struct___jmp_buf_tag.h b/setjmp/bits/types/struct___jmp_buf_tag.h
--new file mode 100644
--index 00000000..9d8634f1
----- /dev/null
--+++ b/setjmp/bits/types/struct___jmp_buf_tag.h
--@@ -0,0 +1,37 @@
--+/* Define struct __jmp_buf_tag.
--+   Copyright (C) 1991-2020 Free Software Foundation, Inc.
--+   This file is part of the GNU C Library.
--+
--+   The GNU C Library is free software; you can redistribute it and/or
--+   modify it under the terms of the GNU Lesser General Public
--+   License as published by the Free Software Foundation; either
--+   version 2.1 of the License, or (at your option) any later version.
--+
--+   The GNU C Library is distributed in the hope that it will be useful,
--+   but WITHOUT ANY WARRANTY; without even the implied warranty of
--+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
--+   Lesser General Public License for more details.
--+
--+   You should have received a copy of the GNU Lesser General Public
--+   License along with the GNU C Library; if not, see
--+   <https://www.gnu.org/licenses/>.  */
--+
--+#ifndef	__jmp_buf_tag_defined
--+#define	__jmp_buf_tag_defined 1
--+
--+#include <bits/setjmp.h>		/* Get `__jmp_buf'.  */
--+#include <bits/types/__sigset_t.h>
--+
--+/* Calling environment, plus possibly a saved signal mask.  */
--+struct __jmp_buf_tag
--+  {
--+    /* NOTE: The machine-dependent definitions of `__sigsetjmp'
--+       assume that a `jmp_buf' begins with a `__jmp_buf' and that
--+       `__mask_was_saved' follows it.  Do not move these members
--+       or add others before it.  */
--+    __jmp_buf __jmpbuf;		/* Calling environment.  */
--+    int __mask_was_saved;	/* Saved the signal mask?  */
--+    __sigset_t __saved_mask;	/* Saved signal mask.  */
--+  };
--+
--+#endif
--diff --git a/setjmp/setjmp.h b/setjmp/setjmp.h
--index 4e3443c3..c6c59f40 100644
----- a/setjmp/setjmp.h
--+++ b/setjmp/setjmp.h
--@@ -27,20 +27,7 @@
-- __BEGIN_DECLS
-- 
-- #include <bits/setjmp.h>		/* Get `__jmp_buf'.  */
---#include <bits/types/__sigset_t.h>
---
---/* Calling environment, plus possibly a saved signal mask.  */
---struct __jmp_buf_tag
---  {
---    /* NOTE: The machine-dependent definitions of `__sigsetjmp'
---       assume that a `jmp_buf' begins with a `__jmp_buf' and that
---       `__mask_was_saved' follows it.  Do not move these members
---       or add others before it.  */
---    __jmp_buf __jmpbuf;		/* Calling environment.  */
---    int __mask_was_saved;	/* Saved the signal mask?  */
---    __sigset_t __saved_mask;	/* Saved signal mask.  */
---  };
---
--+#include <bits/types/struct___jmp_buf_tag.h>
-- 
-- typedef struct __jmp_buf_tag jmp_buf[1];
-- 
--diff --git a/sysdeps/nptl/pthread.h b/sysdeps/nptl/pthread.h
--index 8a403cbf..d4194da7 100644
----- a/sysdeps/nptl/pthread.h
--+++ b/sysdeps/nptl/pthread.h
--@@ -28,6 +28,7 @@
-- #include <bits/wordsize.h>
-- #include <bits/types/struct_timespec.h>
-- #include <bits/types/__sigset_t.h>
--+#include <bits/types/struct___jmp_buf_tag.h>
-- 
-- 
-- /* Detach state.  */
--@@ -730,8 +731,8 @@ extern void __pthread_unwind_next (__pthread_unwind_buf_t *__buf)
-- #endif
-- 
-- /* Function used in the macros.  */
---struct __jmp_buf_tag;
---extern int __sigsetjmp (struct __jmp_buf_tag *__env, int __savemask) __THROWNL;
--+extern int __sigsetjmp (struct __jmp_buf_tag __env[1],
--+			int __savemask) __THROWNL;
-- 
-- 
-- /* Mutex handling.  */
---- 
--2.31.1
--
-diff --git a/package/localedef/2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2/0004-Avoid-Wstringop-overflow-warning-in-pthread_cleanup_.patch b/package/localedef/2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2/0004-Avoid-Wstringop-overflow-warning-in-pthread_cleanup_.patch
-deleted file mode 100644
-index 83f3f15eb6..0000000000
---- a/package/localedef/2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2/0004-Avoid-Wstringop-overflow-warning-in-pthread_cleanup_.patch
-+++ /dev/null
-@@ -1,125 +0,0 @@
--From ea50889c35fb73ed9e140d800303aae9148c2888 Mon Sep 17 00:00:00 2001
--From: Joseph Myers <joseph@codesourcery.com>
--Date: Fri, 30 Oct 2020 22:25:42 +0000
--Subject: [PATCH 4/4] Avoid -Wstringop-overflow warning in pthread_cleanup_push
-- macros
--
--GCC 11 introduces a -Wstringop-overflow warning for calls to functions
--with an array argument passed as a pointer to memory not large enough
--for that array.  This includes the __sigsetjmp calls from
--pthread_cleanup_push macros, because those use a structure in
--__pthread_unwind_buf_t, which has a common initial subsequence with
--jmp_buf but does not include the saved signal mask; this is OK in this
--case because the second argument to __sigsetjmp is 0 so the signal
--mask is not accessed.
--
--To avoid this warning, use a function alias __sigsetjmp_cancel with
--first argument an array of exactly the type used in the calls to the
--function, if using GCC 11 or later.  With older compilers, continue to
--use __sigsetjmp with a cast, to avoid any issues with compilers
--predating the returns_twice attribute not applying the same special
--handling to __sigsetjmp_cancel as to __sigsetjmp.
--
--Tested with build-many-glibcs.py for arm-linux-gnueabi that this fixes
--the testsuite build failures.
--
--[Upstream: https://github.com/bminor/glibc/commit/548f467fa14ffe7d955beeb31b30e2aeae4467e0.patch]
--Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-----
-- misc/sys/cdefs.h       |  8 ++++++++
-- sysdeps/nptl/pthread.h | 37 +++++++++++++++++++++++++++----------
-- 2 files changed, 35 insertions(+), 10 deletions(-)
--
--diff --git a/misc/sys/cdefs.h b/misc/sys/cdefs.h
--index 38221d0b..ce877487 100644
----- a/misc/sys/cdefs.h
--+++ b/misc/sys/cdefs.h
--@@ -556,4 +556,12 @@ _Static_assert (0, "IEEE 128-bits long double requires redirection on this platf
-- #  define __attr_access(x)
-- #endif
-- 
--+/* Specify that a function such as setjmp or vfork may return
--+   twice.  */
--+#if __GNUC_PREREQ (4, 1)
--+# define __attribute_returns_twice__ __attribute__ ((__returns_twice__))
--+#else
--+# define __attribute_returns_twice__ /* Ignore.  */
--+#endif
--+
-- #endif	 /* sys/cdefs.h */
--diff --git a/sysdeps/nptl/pthread.h b/sysdeps/nptl/pthread.h
--index d4194da7..3a34d823 100644
----- a/sysdeps/nptl/pthread.h
--+++ b/sysdeps/nptl/pthread.h
--@@ -512,13 +512,15 @@ extern void pthread_testcancel (void);
-- 
-- /* Cancellation handling with integration into exception handling.  */
-- 
--+struct __cancel_jmp_buf_tag
--+{
--+  __jmp_buf __cancel_jmp_buf;
--+  int __mask_was_saved;
--+};
--+
-- typedef struct
-- {
---  struct
---  {
---    __jmp_buf __cancel_jmp_buf;
---    int __mask_was_saved;
---  } __cancel_jmp_buf[1];
--+  struct __cancel_jmp_buf_tag __cancel_jmp_buf[1];
--   void *__pad[4];
-- } __pthread_unwind_buf_t __attribute__ ((__aligned__));
-- 
--@@ -658,8 +660,8 @@ __pthread_cleanup_routine (struct __pthread_cleanup_frame *__frame)
--     __pthread_unwind_buf_t __cancel_buf;				      \
--     void (*__cancel_routine) (void *) = (routine);			      \
--     void *__cancel_arg = (arg);						      \
---    int __not_first_call = __sigsetjmp ((struct __jmp_buf_tag *) (void *)     \
---					__cancel_buf.__cancel_jmp_buf, 0);    \
--+    int __not_first_call = __sigsetjmp_cancel (__cancel_buf.__cancel_jmp_buf, \
--+					       0);			      \
--     if (__glibc_unlikely (__not_first_call))				      \
--       {									      \
-- 	__cancel_routine (__cancel_arg);				      \
--@@ -693,8 +695,8 @@ extern void __pthread_unregister_cancel (__pthread_unwind_buf_t *__buf)
--     __pthread_unwind_buf_t __cancel_buf;				      \
--     void (*__cancel_routine) (void *) = (routine);			      \
--     void *__cancel_arg = (arg);						      \
---    int __not_first_call = __sigsetjmp ((struct __jmp_buf_tag *) (void *)     \
---					__cancel_buf.__cancel_jmp_buf, 0);    \
--+    int __not_first_call = __sigsetjmp_cancel (__cancel_buf.__cancel_jmp_buf, \
--+					       0);			      \
--     if (__glibc_unlikely (__not_first_call))				      \
--       {									      \
-- 	__cancel_routine (__cancel_arg);				      \
--@@ -730,9 +732,24 @@ extern void __pthread_unwind_next (__pthread_unwind_buf_t *__buf)
--      ;
-- #endif
-- 
---/* Function used in the macros.  */
--+/* Function used in the macros.  Calling __sigsetjmp, with its first
--+   argument declared as an array, results in a -Wstringop-overflow
--+   warning from GCC 11 because struct pthread_unwind_buf is smaller
--+   than jmp_buf.  The calls from the macros have __SAVEMASK set to 0,
--+   so nothing beyond the common prefix is used and this warning is a
--+   false positive.  Use an alias with its first argument declared to
--+   use the type in the macros if possible to avoid this warning.  */
--+#if __GNUC_PREREQ (11, 0)
--+extern int __REDIRECT_NTHNL (__sigsetjmp_cancel,
--+			     (struct __cancel_jmp_buf_tag __env[1],
--+			      int __savemask),
--+			     __sigsetjmp) __attribute_returns_twice__;
--+#else
--+# define __sigsetjmp_cancel(env, savemask) \
--+  __sigsetjmp ((struct __jmp_buf_tag *) (void *) (env), (savemask))
-- extern int __sigsetjmp (struct __jmp_buf_tag __env[1],
-- 			int __savemask) __THROWNL;
--+#endif
-- 
-- 
-- /* Mutex handling.  */
---- 
--2.31.1
--
-diff --git a/package/localedef/2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2/0001-HACK-only-build-and-install-localedef.patch b/package/localedef/2.34-9-g9acab0bba6a5a57323b1f94bf95b21618a9e5aa4/0001-HACK-only-build-and-install-localedef.patch
-similarity index 88%
-rename from package/localedef/2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2/0001-HACK-only-build-and-install-localedef.patch
-rename to package/localedef/2.34-9-g9acab0bba6a5a57323b1f94bf95b21618a9e5aa4/0001-HACK-only-build-and-install-localedef.patch
-index d327008c1d..b289000c8a 100644
---- a/package/localedef/2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2/0001-HACK-only-build-and-install-localedef.patch
-+++ b/package/localedef/2.34-9-g9acab0bba6a5a57323b1f94bf95b21618a9e5aa4/0001-HACK-only-build-and-install-localedef.patch
-@@ -1,4 +1,4 @@
--From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-+From 442e9a3f262c49cf61f9e7bdf12882f0a427666b Mon Sep 17 00:00:00 2001
- From: Michael Olbrich <m.olbrich@pengutronix.de>
- Date: Mon, 21 May 2018 16:45:02 +0200
- Subject: [PATCH] HACK: only build and install localedef
-@@ -13,10 +13,10 @@ Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-  2 files changed, 13 insertions(+), 7 deletions(-)
- 
- diff --git a/Rules b/Rules
--index 16afa6acaa..6c208db788 100644
-+index b1137afe71..2aeac31922 100644
- --- a/Rules
- +++ b/Rules
--@@ -190,10 +190,16 @@ binaries-shared-notests = $(filter-out $(binaries-pie) $(binaries-static), \
-+@@ -216,10 +216,16 @@ binaries-shared-notests = $(filter-out $(binaries-pie) $(binaries-static), \
-  				       $(binaries-all-notests))
-  
-  ifneq "$(strip $(binaries-shared-notests))" ""
-@@ -38,10 +38,10 @@ index 16afa6acaa..6c208db788 100644
-  
-  ifneq "$(strip $(binaries-shared-tests))" ""
- diff --git a/locale/Makefile b/locale/Makefile
--index 764e751c36..c28322d71f 100644
-+index b7c60681fa..de4cf4003f 100644
- --- a/locale/Makefile
- +++ b/locale/Makefile
--@@ -32,15 +32,15 @@ categories	= ctype messages monetary numeric time paper name \
-+@@ -33,15 +33,15 @@ categories	= ctype messages monetary numeric time paper name \
-  		  address telephone measurement identification collate
-  aux		= $(categories:%=lc-%) $(categories:%=C-%) SYS_libc C_name \
-  		  xlocale localename global-locale coll-lookup
-@@ -61,5 +61,5 @@ index 764e751c36..c28322d71f 100644
-  
-  libBrokenLocale-routines = broken_cur_max
- -- 
--2.21.0
-+2.33.0
- 
-diff --git a/package/localedef/2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch b/package/localedef/2.34-9-g9acab0bba6a5a57323b1f94bf95b21618a9e5aa4/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch
-similarity index 90%
-rename from package/localedef/2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch
-rename to package/localedef/2.34-9-g9acab0bba6a5a57323b1f94bf95b21618a9e5aa4/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch
-index a6e87cc317..d848af142f 100644
---- a/package/localedef/2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch
-+++ b/package/localedef/2.34-9-g9acab0bba6a5a57323b1f94bf95b21618a9e5aa4/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch
-@@ -1,4 +1,4 @@
--From 313e04bfbd281f9b46fdde097aacb59d501820a3 Mon Sep 17 00:00:00 2001
-+From 85412262460f6ba9f6e2cf8da74fc1904c54c854 Mon Sep 17 00:00:00 2001
- From: Matt Weber <matthew.weber@rockwellcollins.com>
- Date: Thu, 6 Feb 2020 14:36:21 -0600
- Subject: [PATCH] relax dependency on GCC to 4.8 and binutils to 2.24
-@@ -29,10 +29,10 @@ Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-  1 file changed, 3 insertions(+), 3 deletions(-)
- 
- diff --git a/configure b/configure
--index 6d26b824..9ac2e5e9 100755
-+index 9619c10991..0c481d2339 100755
- --- a/configure
- +++ b/configure
--@@ -4601,7 +4601,7 @@ $as_echo_n "checking version of $AS... " >&6; }
-+@@ -4651,7 +4651,7 @@ $as_echo_n "checking version of $AS... " >&6; }
-    ac_prog_version=`$AS --version 2>&1 | sed -n 's/^.*GNU assembler.* \([0-9]*\.[0-9.]*\).*$/\1/p'`
-    case $ac_prog_version in
-      '') ac_prog_version="v. ?.??, bad"; ac_verc_fail=yes;;
-@@ -41,7 +41,7 @@ index 6d26b824..9ac2e5e9 100755
-         ac_prog_version="$ac_prog_version, ok"; ac_verc_fail=no;;
-      *) ac_prog_version="$ac_prog_version, bad"; ac_verc_fail=yes;;
-  
--@@ -4731,7 +4731,7 @@ $as_echo_n "checking version of $LD... " >&6; }
-+@@ -4781,7 +4781,7 @@ $as_echo_n "checking version of $LD... " >&6; }
-    ac_prog_version=`$LD --version 2>&1 | sed -n 's/^.*GNU ld.* \([0-9][0-9]*\.[0-9.]*\).*$/\1/p'`
-    case $ac_prog_version in
-      '') ac_prog_version="v. ?.??, bad"; ac_verc_fail=yes;;
-@@ -50,7 +50,7 @@ index 6d26b824..9ac2e5e9 100755
-         ac_prog_version="$ac_prog_version, ok"; ac_verc_fail=no;;
-      *) ac_prog_version="$ac_prog_version, bad"; ac_verc_fail=yes;;
-  
--@@ -5140,7 +5140,7 @@ int
-+@@ -5189,7 +5189,7 @@ int
-  main ()
-  {
-  
-@@ -60,5 +60,5 @@ index 6d26b824..9ac2e5e9 100755
-  #endif
-    ;
- -- 
--2.18.0
-+2.33.0
- 
-diff --git a/package/localedef/2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2/localedef.hash b/package/localedef/2.34-9-g9acab0bba6a5a57323b1f94bf95b21618a9e5aa4/localedef.hash
-similarity index 70%
-rename from package/localedef/2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2/localedef.hash
-rename to package/localedef/2.34-9-g9acab0bba6a5a57323b1f94bf95b21618a9e5aa4/localedef.hash
-index b1d5243fcc..595de95a58 100644
---- a/package/localedef/2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2/localedef.hash
-+++ b/package/localedef/2.34-9-g9acab0bba6a5a57323b1f94bf95b21618a9e5aa4/localedef.hash
-@@ -1,5 +1,5 @@
- # Locally calculated (fetched from Github)
--sha256  f4710e9a435a7b83e1d23dd75434f0d36b898eba9b4249c946c32b467d852fd4  glibc-2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2.tar.gz
-+sha256  1c7ed0f69ed268bd66f9754d0cb8fb65e0dafc1f9a1048ea50d1e96d60399686  glibc-2.34-9-g9acab0bba6a5a57323b1f94bf95b21618a9e5aa4.tar.gz
- 
- # Hashes for license files
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/localedef/localedef.mk b/package/localedef/localedef.mk
-index 57ab5a3458..87d921cffe 100644
---- a/package/localedef/localedef.mk
-+++ b/package/localedef/localedef.mk
-@@ -7,7 +7,7 @@
- # Use the same VERSION and SITE as target glibc
- # As in glibc.mk, generate version string using:
- #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
--LOCALEDEF_VERSION = 2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2
-+LOCALEDEF_VERSION = 2.34-9-g9acab0bba6a5a57323b1f94bf95b21618a9e5aa4
- LOCALEDEF_SOURCE = glibc-$(LOCALEDEF_VERSION).tar.gz
- LOCALEDEF_SITE = $(call github,bminor,glibc,$(LOCALEDEF_VERSION))
- HOST_LOCALEDEF_DL_SUBDIR = glibc
--- 
-2.33.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@busybox.net
-http://lists.busybox.net/mailman/listinfo/buildroot
+SGVsbG8gUGV0ciwKCkxlIDIyLzA4LzIwMjEgw6AgMjE6MDIsIFBldHIgVm9yZWwgYSDDqWNyaXTC
+oDoKPiByZXN5bmMgdGhlIHZlcnNpb24gd2l0aCBnbGliYyBwYWNrYWdlLgo+IAo+IERyb3BwZWQg
+MiBwYXRjaGVzIChmaXhlcyBiYWNrcG9ydGVkIGZyb20gcHJldmlvdXMgcmVsZWFzZXMpLAo+IHJl
+YmFzZWQgMiB3aGljaCBhcmUga2VwdCAob25seSBsaW5lIG51bWJlcnMgY2hhbmdlZCkuCj4gCj4g
+U3VnZ2VzdGVkLWJ5OiBSb21haW4gTmFvdXIgPHJvbWFpbi5uYW91ckBnbWFpbC5jb20+Cj4gU2ln
+bmVkLW9mZi1ieTogUGV0ciBWb3JlbCA8cGV0ci52b3JlbEBnbWFpbC5jb20+CgpUaGFua3MgZm9y
+IHRoaXMgbmV3IHZlcnNpb24uCgpCdXQgaXQgd2lsbCBjb25mbGljdCB3aXRoIG15IHBhdGNoIHRo
+YXQgcmVzeW5jIHRoZSBnbGliYyB2ZXJzaW9uIGZvciAyLjMzCgpodHRwOi8vcGF0Y2h3b3JrLm96
+bGFicy5vcmcvcHJvamVjdC9idWlsZHJvb3QvcGF0Y2gvMjAyMTA4MjExMzEyNTYuMTEzODAwMi0x
+LXJvbWFpbi5uYW91ckBnbWFpbC5jb20vCgpTaW5jZSBnbGliYyBhbmQgbG9jYWxlZGVmIGFyZSBy
+ZWFsbHkgdGhlIHNhbWUgcHJvamVjdCwgSSB3b3VsZCBzdWdnZXN0IHRvIGJ1bXAKdGhlIHZlcnNp
+b24gd2l0aCBvbmUgY29tbWl0LgoKSSBhZ3JlZSwgSXQncyBub3QgY29udmVuaWVudCB0byB0YWtl
+IGNhcmUgb2YgbG9jYWxlZGVmIHBhY2thZ2UgYXQgdGhlIHNhbWUgdGltZQpvZiBnbGliYy4KCkJl
+c3QgcmVnYXJkcywKUm9tYWluCgoKPiAtLS0KPiBOZXcgaW4gdjIuCj4gCj4gIC4uLnktcGFyYW1l
+dGVyLXdhcm5pbmctZm9yLV9fc2lnc2V0am1wLS5wYXRjaCB8IDE1NSAtLS0tLS0tLS0tLS0tLS0t
+LS0KPiAgLi4ub3ZlcmZsb3ctd2FybmluZy1pbi1wdGhyZWFkX2NsZWFudXBfLnBhdGNoIHwgMTI1
+IC0tLS0tLS0tLS0tLS0tCj4gIC4uLkFDSy1vbmx5LWJ1aWxkLWFuZC1pbnN0YWxsLWxvY2FsZWRl
+Zi5wYXRjaCB8ICAxMiArLQo+ICAuLi55LW9uLUdDQy10by00LjgtYW5kLWJpbnV0aWxzLXRvLTIu
+MjQucGF0Y2ggfCAgMTIgKy0KPiAgLi4uL2xvY2FsZWRlZi5oYXNoICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgIHwgICAyICstCj4gIHBhY2thZ2UvbG9jYWxlZGVmL2xvY2FsZWRlZi5tayAgICAg
+ICAgICAgICAgICB8ICAgMiArLQo+ICA2IGZpbGVzIGNoYW5nZWQsIDE0IGluc2VydGlvbnMoKyks
+IDI5NCBkZWxldGlvbnMoLSkKPiAgZGVsZXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvbG9jYWxlZGVm
+LzIuMzItMzctZzc2MGUxZDI4NzgyNWZhOTFkNGQ1YTBjYzkyMTM0MGM3NDBkODAzZTIvMDAwMy1G
+aXgtR0NDLTExLVdhcnJheS1wYXJhbWV0ZXItd2FybmluZy1mb3ItX19zaWdzZXRqbXAtLnBhdGNo
+Cj4gIGRlbGV0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL2xvY2FsZWRlZi8yLjMyLTM3LWc3NjBlMWQy
+ODc4MjVmYTkxZDRkNWEwY2M5MjEzNDBjNzQwZDgwM2UyLzAwMDQtQXZvaWQtV3N0cmluZ29wLW92
+ZXJmbG93LXdhcm5pbmctaW4tcHRocmVhZF9jbGVhbnVwXy5wYXRjaAo+ICByZW5hbWUgcGFja2Fn
+ZS9sb2NhbGVkZWYvezIuMzItMzctZzc2MGUxZDI4NzgyNWZhOTFkNGQ1YTBjYzkyMTM0MGM3NDBk
+ODAzZTIgPT4gMi4zNC05LWc5YWNhYjBiYmE2YTVhNTczMjNiMWY5NGJmOTViMjE2MThhOWU1YWE0
+fS8wMDAxLUhBQ0stb25seS1idWlsZC1hbmQtaW5zdGFsbC1sb2NhbGVkZWYucGF0Y2ggKDg4JSkK
+PiAgcmVuYW1lIHBhY2thZ2UvbG9jYWxlZGVmL3syLjMyLTM3LWc3NjBlMWQyODc4MjVmYTkxZDRk
+NWEwY2M5MjEzNDBjNzQwZDgwM2UyID0+IDIuMzQtOS1nOWFjYWIwYmJhNmE1YTU3MzIzYjFmOTRi
+Zjk1YjIxNjE4YTllNWFhNH0vMDAwMi1yZWxheC1kZXBlbmRlbmN5LW9uLUdDQy10by00LjgtYW5k
+LWJpbnV0aWxzLXRvLTIuMjQucGF0Y2ggKDkwJSkKPiAgcmVuYW1lIHBhY2thZ2UvbG9jYWxlZGVm
+L3syLjMyLTM3LWc3NjBlMWQyODc4MjVmYTkxZDRkNWEwY2M5MjEzNDBjNzQwZDgwM2UyID0+IDIu
+MzQtOS1nOWFjYWIwYmJhNmE1YTU3MzIzYjFmOTRiZjk1YjIxNjE4YTllNWFhNH0vbG9jYWxlZGVm
+Lmhhc2ggKDcwJSkKPiAKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9sb2NhbGVkZWYvMi4zMi0zNy1n
+NzYwZTFkMjg3ODI1ZmE5MWQ0ZDVhMGNjOTIxMzQwYzc0MGQ4MDNlMi8wMDAzLUZpeC1HQ0MtMTEt
+V2FycmF5LXBhcmFtZXRlci13YXJuaW5nLWZvci1fX3NpZ3NldGptcC0ucGF0Y2ggYi9wYWNrYWdl
+L2xvY2FsZWRlZi8yLjMyLTM3LWc3NjBlMWQyODc4MjVmYTkxZDRkNWEwY2M5MjEzNDBjNzQwZDgw
+M2UyLzAwMDMtRml4LUdDQy0xMS1XYXJyYXktcGFyYW1ldGVyLXdhcm5pbmctZm9yLV9fc2lnc2V0
+am1wLS5wYXRjaAo+IGRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDg4OGQyN2ZlNGEu
+LjAwMDAwMDAwMDAKPiAtLS0gYS9wYWNrYWdlL2xvY2FsZWRlZi8yLjMyLTM3LWc3NjBlMWQyODc4
+MjVmYTkxZDRkNWEwY2M5MjEzNDBjNzQwZDgwM2UyLzAwMDMtRml4LUdDQy0xMS1XYXJyYXktcGFy
+YW1ldGVyLXdhcm5pbmctZm9yLV9fc2lnc2V0am1wLS5wYXRjaAo+ICsrKyAvZGV2L251bGwKPiBA
+QCAtMSwxNTUgKzAsMCBAQAo+IC1Gcm9tIDQ0ZjE0NjlkYWZmM2EwYmZlNjdmYjU4MzkyNDNmMTE0
+YWNlM2JhZDggTW9uIFNlcCAxNyAwMDowMDowMCAyMDAxCj4gLUZyb206IEpvc2VwaCBNeWVycyA8
+am9zZXBoQGNvZGVzb3VyY2VyeS5jb20+Cj4gLURhdGU6IE1vbiwgNSBPY3QgMjAyMCAxNjo0Njo0
+NiArMDAwMAo+IC1TdWJqZWN0OiBbUEFUQ0ggMy80XSBGaXggR0NDIDExIC1XYXJyYXktcGFyYW1l
+dGVyIHdhcm5pbmcgZm9yIF9fc2lnc2V0am1wIChidWcKPiAtIDI2NjQ3KQo+IC0KPiAtVGhpcyBw
+YXRjaCBmaXhlcyBwYXJ0IG9mIGJ1ZyAyNjY0NyAoLVdlcnJvcj1hcnJheS1wYXJhbWV0ZXIgZXJy
+b3IKPiAtYnVpbGRpbmcgd2l0aCBHQ0MgMTEgYmVjYXVzZSBvZiBfX3NpZ3NldGptcCBiZWluZyBk
+ZWNsYXJlZCB1c2luZyBhbgo+IC1hcnJheSBwYXJhbWV0ZXIgaW4gb25lIGhlYWRlciBhbmQgYSBw
+b2ludGVyIHBhcmFtZXRlciBpbiBhbm90aGVyKS4KPiAtCj4gLVRoZSBmaXggaXMgdG8gc3BsaXQg
+dGhlIHN0cnVjdCBfX2ptcF9idWZfdGFnIGRlZmluaXRpb24gb3V0IHRvIGEKPiAtc2VwYXJhdGUg
+Yml0cy90eXBlcy8gaGVhZGVyIHNvIGl0IGNhbiBiZSBpbmNsdWRlZCBpbiBwdGhyZWFkLmgsIHNv
+Cj4gLXRoYXQgcHRocmVhZC5oIGNhbiBkZWNsYXJlIF9fc2lnc2V0am1wIHdpdGggdGhlIHR5cGUg
+Y29udGVudHMgdmlzaWJsZSwKPiAtc28gY2FuIHVzZSBhbiBhcnJheSAoYXMgaW4gc2V0am1wLmgp
+IHJhdGhlciB0aGFuIGEgcG9pbnRlciBpbiB0aGUKPiAtZGVjbGFyYXRpb24uCj4gLQo+IC1Ob3Rl
+IHRoYXQgc2V2ZXJhbCBvdGhlciBidWlsZCBmYWlsdXJlcyB3aXRoIEdDQyAxMSByZW1haW4uICBU
+aGlzIGRvZXMKPiAtbm90IGZpeCB0aGUgam1wX2J1Zi1yZWxhdGVkIC1Xc3RyaW5nb3Atb3ZlcmZs
+b3cgZXJyb3JzIChhbHNvIGRpc2N1c3NlZAo+IC1pbiBidWcgMjY2NDcpLCBvciAtV2FycmF5LXBh
+cmFtZXRlciBlcnJvcnMgZm9yIG90aGVyIGZ1bmN0aW9ucyAoYnVnCj4gLTI2Njg2KSwgb3IgLVdh
+cnJheS1ib3VuZHMgZXJyb3JzIChidWcgMjY2ODcpLgo+IC0KPiAtVGVzdGVkLCB3aXRoIG9sZGVy
+IGNvbXBpbGVycywgbmF0aXZlbHkgZm9yIHg4Nl82NCBhbmQgd2l0aAo+IC1idWlsZC1tYW55LWds
+aWJjLnB5IGZvciBhYXJjaDY0LWxpbnV4LWdudS4gIFRlc3RlZCB3aXRoCj4gLWJ1aWxkLW1hbnkt
+Z2xpYmNzLnB5IHdpdGggR0NDIG1haW5saW5lIGZvciBhYXJjaDY0LWxpbnV4LWdudSB0aGF0IHRo
+aXMKPiAtZ2V0cyBwYXN0IHRoZSAtV2FycmF5LXBhcmFtZXRlciBpc3N1ZSBmb3IgX19zaWdzZXRq
+bXAgKHdpdGggdGhlIG5leHQKPiAtYnVpbGQgZmFpbHVyZSBiZWluZyB0aGUgb3RoZXIgb25lIGRp
+c2N1c3NlZCBpbiBidWcgMjY2NDcpLgo+IC0KPiAtW1Vwc3RyZWFtOiBodHRwczovL2dpdGh1Yi5j
+b20vYm1pbm9yL2dsaWJjL2NvbW1pdC8xOTMwMmIyN2JkYWNmZTg3ZTg2MWZmNDZmYzBmYmFkNjBk
+ZDY2MDJkLnBhdGNoXQo+IC1TaWduZWQtb2ZmLWJ5OiBQZXRlciBTZWlkZXJlciA8cHMucmVwb3J0
+QGdteC5uZXQ+Cj4gLS0tLQo+IC0gaW5jbHVkZS9iaXRzL3R5cGVzL3N0cnVjdF9fX2ptcF9idWZf
+dGFnLmggfCAgMSArCj4gLSBzZXRqbXAvTWFrZWZpbGUgICAgICAgICAgICAgICAgICAgICAgICAg
+ICB8ICAzICstCj4gLSBzZXRqbXAvYml0cy90eXBlcy9zdHJ1Y3RfX19qbXBfYnVmX3RhZy5oICB8
+IDM3ICsrKysrKysrKysrKysrKysrKysrKysrCj4gLSBzZXRqbXAvc2V0am1wLmggICAgICAgICAg
+ICAgICAgICAgICAgICAgICB8IDE1ICstLS0tLS0tLQo+IC0gc3lzZGVwcy9ucHRsL3B0aHJlYWQu
+aCAgICAgICAgICAgICAgICAgICAgfCAgNSArLS0KPiAtIDUgZmlsZXMgY2hhbmdlZCwgNDQgaW5z
+ZXJ0aW9ucygrKSwgMTcgZGVsZXRpb25zKC0pCj4gLSBjcmVhdGUgbW9kZSAxMDA2NDQgaW5jbHVk
+ZS9iaXRzL3R5cGVzL3N0cnVjdF9fX2ptcF9idWZfdGFnLmgKPiAtIGNyZWF0ZSBtb2RlIDEwMDY0
+NCBzZXRqbXAvYml0cy90eXBlcy9zdHJ1Y3RfX19qbXBfYnVmX3RhZy5oCj4gLQo+IC1kaWZmIC0t
+Z2l0IGEvaW5jbHVkZS9iaXRzL3R5cGVzL3N0cnVjdF9fX2ptcF9idWZfdGFnLmggYi9pbmNsdWRl
+L2JpdHMvdHlwZXMvc3RydWN0X19fam1wX2J1Zl90YWcuaAo+IC1uZXcgZmlsZSBtb2RlIDEwMDY0
+NAo+IC1pbmRleCAwMDAwMDAwMC4uZTMyNTAxNTAKPiAtLS0tIC9kZXYvbnVsbAo+IC0rKysgYi9p
+bmNsdWRlL2JpdHMvdHlwZXMvc3RydWN0X19fam1wX2J1Zl90YWcuaAo+IC1AQCAtMCwwICsxIEBA
+Cj4gLSsjaW5jbHVkZSA8c2V0am1wL2JpdHMvdHlwZXMvc3RydWN0X19fam1wX2J1Zl90YWcuaD4K
+PiAtZGlmZiAtLWdpdCBhL3NldGptcC9NYWtlZmlsZSBiL3NldGptcC9NYWtlZmlsZQo+IC1pbmRl
+eCBkY2FjNTY5My4uNjAzZjYxZDcgMTAwNjQ0Cj4gLS0tLSBhL3NldGptcC9NYWtlZmlsZQo+IC0r
+KysgYi9zZXRqbXAvTWFrZWZpbGUKPiAtQEAgLTIyLDcgKzIyLDggQEAgc3ViZGlyCTo9IHNldGpt
+cAo+IC0gCj4gLSBpbmNsdWRlIC4uL01ha2Vjb25maWcKPiAtIAo+IC0taGVhZGVycwk6PSBzZXRq
+bXAuaCBiaXRzL3NldGptcC5oIGJpdHMvc2V0am1wMi5oCj4gLStoZWFkZXJzCTo9IHNldGptcC5o
+IGJpdHMvc2V0am1wLmggYml0cy9zZXRqbXAyLmggXAo+IC0rCSAgIGJpdHMvdHlwZXMvc3RydWN0
+X19fam1wX2J1Zl90YWcuaAo+IC0gCj4gLSByb3V0aW5lcwk6PSBzZXRqbXAgc2lnam1wIGJzZC1z
+ZXRqbXAgYnNkLV9zZXRqbXAgXAo+IC0gCQkgICBsb25nam1wIF9fbG9uZ2ptcCBqbXAtdW53aW5k
+Cj4gLWRpZmYgLS1naXQgYS9zZXRqbXAvYml0cy90eXBlcy9zdHJ1Y3RfX19qbXBfYnVmX3RhZy5o
+IGIvc2V0am1wL2JpdHMvdHlwZXMvc3RydWN0X19fam1wX2J1Zl90YWcuaAo+IC1uZXcgZmlsZSBt
+b2RlIDEwMDY0NAo+IC1pbmRleCAwMDAwMDAwMC4uOWQ4NjM0ZjEKPiAtLS0tIC9kZXYvbnVsbAo+
+IC0rKysgYi9zZXRqbXAvYml0cy90eXBlcy9zdHJ1Y3RfX19qbXBfYnVmX3RhZy5oCj4gLUBAIC0w
+LDAgKzEsMzcgQEAKPiAtKy8qIERlZmluZSBzdHJ1Y3QgX19qbXBfYnVmX3RhZy4KPiAtKyAgIENv
+cHlyaWdodCAoQykgMTk5MS0yMDIwIEZyZWUgU29mdHdhcmUgRm91bmRhdGlvbiwgSW5jLgo+IC0r
+ICAgVGhpcyBmaWxlIGlzIHBhcnQgb2YgdGhlIEdOVSBDIExpYnJhcnkuCj4gLSsKPiAtKyAgIFRo
+ZSBHTlUgQyBMaWJyYXJ5IGlzIGZyZWUgc29mdHdhcmU7IHlvdSBjYW4gcmVkaXN0cmlidXRlIGl0
+IGFuZC9vcgo+IC0rICAgbW9kaWZ5IGl0IHVuZGVyIHRoZSB0ZXJtcyBvZiB0aGUgR05VIExlc3Nl
+ciBHZW5lcmFsIFB1YmxpYwo+IC0rICAgTGljZW5zZSBhcyBwdWJsaXNoZWQgYnkgdGhlIEZyZWUg
+U29mdHdhcmUgRm91bmRhdGlvbjsgZWl0aGVyCj4gLSsgICB2ZXJzaW9uIDIuMSBvZiB0aGUgTGlj
+ZW5zZSwgb3IgKGF0IHlvdXIgb3B0aW9uKSBhbnkgbGF0ZXIgdmVyc2lvbi4KPiAtKwo+IC0rICAg
+VGhlIEdOVSBDIExpYnJhcnkgaXMgZGlzdHJpYnV0ZWQgaW4gdGhlIGhvcGUgdGhhdCBpdCB3aWxs
+IGJlIHVzZWZ1bCwKPiAtKyAgIGJ1dCBXSVRIT1VUIEFOWSBXQVJSQU5UWTsgd2l0aG91dCBldmVu
+IHRoZSBpbXBsaWVkIHdhcnJhbnR5IG9mCj4gLSsgICBNRVJDSEFOVEFCSUxJVFkgb3IgRklUTkVT
+UyBGT1IgQSBQQVJUSUNVTEFSIFBVUlBPU0UuICBTZWUgdGhlIEdOVQo+IC0rICAgTGVzc2VyIEdl
+bmVyYWwgUHVibGljIExpY2Vuc2UgZm9yIG1vcmUgZGV0YWlscy4KPiAtKwo+IC0rICAgWW91IHNo
+b3VsZCBoYXZlIHJlY2VpdmVkIGEgY29weSBvZiB0aGUgR05VIExlc3NlciBHZW5lcmFsIFB1Ymxp
+Ywo+IC0rICAgTGljZW5zZSBhbG9uZyB3aXRoIHRoZSBHTlUgQyBMaWJyYXJ5OyBpZiBub3QsIHNl
+ZQo+IC0rICAgPGh0dHBzOi8vd3d3LmdudS5vcmcvbGljZW5zZXMvPi4gICovCj4gLSsKPiAtKyNp
+Zm5kZWYJX19qbXBfYnVmX3RhZ19kZWZpbmVkCj4gLSsjZGVmaW5lCV9fam1wX2J1Zl90YWdfZGVm
+aW5lZCAxCj4gLSsKPiAtKyNpbmNsdWRlIDxiaXRzL3NldGptcC5oPgkJLyogR2V0IGBfX2ptcF9i
+dWYnLiAgKi8KPiAtKyNpbmNsdWRlIDxiaXRzL3R5cGVzL19fc2lnc2V0X3QuaD4KPiAtKwo+IC0r
+LyogQ2FsbGluZyBlbnZpcm9ubWVudCwgcGx1cyBwb3NzaWJseSBhIHNhdmVkIHNpZ25hbCBtYXNr
+LiAgKi8KPiAtK3N0cnVjdCBfX2ptcF9idWZfdGFnCj4gLSsgIHsKPiAtKyAgICAvKiBOT1RFOiBU
+aGUgbWFjaGluZS1kZXBlbmRlbnQgZGVmaW5pdGlvbnMgb2YgYF9fc2lnc2V0am1wJwo+IC0rICAg
+ICAgIGFzc3VtZSB0aGF0IGEgYGptcF9idWYnIGJlZ2lucyB3aXRoIGEgYF9fam1wX2J1ZicgYW5k
+IHRoYXQKPiAtKyAgICAgICBgX19tYXNrX3dhc19zYXZlZCcgZm9sbG93cyBpdC4gIERvIG5vdCBt
+b3ZlIHRoZXNlIG1lbWJlcnMKPiAtKyAgICAgICBvciBhZGQgb3RoZXJzIGJlZm9yZSBpdC4gICov
+Cj4gLSsgICAgX19qbXBfYnVmIF9fam1wYnVmOwkJLyogQ2FsbGluZyBlbnZpcm9ubWVudC4gICov
+Cj4gLSsgICAgaW50IF9fbWFza193YXNfc2F2ZWQ7CS8qIFNhdmVkIHRoZSBzaWduYWwgbWFzaz8g
+ICovCj4gLSsgICAgX19zaWdzZXRfdCBfX3NhdmVkX21hc2s7CS8qIFNhdmVkIHNpZ25hbCBtYXNr
+LiAgKi8KPiAtKyAgfTsKPiAtKwo+IC0rI2VuZGlmCj4gLWRpZmYgLS1naXQgYS9zZXRqbXAvc2V0
+am1wLmggYi9zZXRqbXAvc2V0am1wLmgKPiAtaW5kZXggNGUzNDQzYzMuLmM2YzU5ZjQwIDEwMDY0
+NAo+IC0tLS0gYS9zZXRqbXAvc2V0am1wLmgKPiAtKysrIGIvc2V0am1wL3NldGptcC5oCj4gLUBA
+IC0yNywyMCArMjcsNyBAQAo+IC0gX19CRUdJTl9ERUNMUwo+IC0gCj4gLSAjaW5jbHVkZSA8Yml0
+cy9zZXRqbXAuaD4JCS8qIEdldCBgX19qbXBfYnVmJy4gICovCj4gLS0jaW5jbHVkZSA8Yml0cy90
+eXBlcy9fX3NpZ3NldF90Lmg+Cj4gLS0KPiAtLS8qIENhbGxpbmcgZW52aXJvbm1lbnQsIHBsdXMg
+cG9zc2libHkgYSBzYXZlZCBzaWduYWwgbWFzay4gICovCj4gLS1zdHJ1Y3QgX19qbXBfYnVmX3Rh
+Zwo+IC0tICB7Cj4gLS0gICAgLyogTk9URTogVGhlIG1hY2hpbmUtZGVwZW5kZW50IGRlZmluaXRp
+b25zIG9mIGBfX3NpZ3NldGptcCcKPiAtLSAgICAgICBhc3N1bWUgdGhhdCBhIGBqbXBfYnVmJyBi
+ZWdpbnMgd2l0aCBhIGBfX2ptcF9idWYnIGFuZCB0aGF0Cj4gLS0gICAgICAgYF9fbWFza193YXNf
+c2F2ZWQnIGZvbGxvd3MgaXQuICBEbyBub3QgbW92ZSB0aGVzZSBtZW1iZXJzCj4gLS0gICAgICAg
+b3IgYWRkIG90aGVycyBiZWZvcmUgaXQuICAqLwo+IC0tICAgIF9fam1wX2J1ZiBfX2ptcGJ1ZjsJ
+CS8qIENhbGxpbmcgZW52aXJvbm1lbnQuICAqLwo+IC0tICAgIGludCBfX21hc2tfd2FzX3NhdmVk
+OwkvKiBTYXZlZCB0aGUgc2lnbmFsIG1hc2s/ICAqLwo+IC0tICAgIF9fc2lnc2V0X3QgX19zYXZl
+ZF9tYXNrOwkvKiBTYXZlZCBzaWduYWwgbWFzay4gICovCj4gLS0gIH07Cj4gLS0KPiAtKyNpbmNs
+dWRlIDxiaXRzL3R5cGVzL3N0cnVjdF9fX2ptcF9idWZfdGFnLmg+Cj4gLSAKPiAtIHR5cGVkZWYg
+c3RydWN0IF9fam1wX2J1Zl90YWcgam1wX2J1ZlsxXTsKPiAtIAo+IC1kaWZmIC0tZ2l0IGEvc3lz
+ZGVwcy9ucHRsL3B0aHJlYWQuaCBiL3N5c2RlcHMvbnB0bC9wdGhyZWFkLmgKPiAtaW5kZXggOGE0
+MDNjYmYuLmQ0MTk0ZGE3IDEwMDY0NAo+IC0tLS0gYS9zeXNkZXBzL25wdGwvcHRocmVhZC5oCj4g
+LSsrKyBiL3N5c2RlcHMvbnB0bC9wdGhyZWFkLmgKPiAtQEAgLTI4LDYgKzI4LDcgQEAKPiAtICNp
+bmNsdWRlIDxiaXRzL3dvcmRzaXplLmg+Cj4gLSAjaW5jbHVkZSA8Yml0cy90eXBlcy9zdHJ1Y3Rf
+dGltZXNwZWMuaD4KPiAtICNpbmNsdWRlIDxiaXRzL3R5cGVzL19fc2lnc2V0X3QuaD4KPiAtKyNp
+bmNsdWRlIDxiaXRzL3R5cGVzL3N0cnVjdF9fX2ptcF9idWZfdGFnLmg+Cj4gLSAKPiAtIAo+IC0g
+LyogRGV0YWNoIHN0YXRlLiAgKi8KPiAtQEAgLTczMCw4ICs3MzEsOCBAQCBleHRlcm4gdm9pZCBf
+X3B0aHJlYWRfdW53aW5kX25leHQgKF9fcHRocmVhZF91bndpbmRfYnVmX3QgKl9fYnVmKQo+IC0g
+I2VuZGlmCj4gLSAKPiAtIC8qIEZ1bmN0aW9uIHVzZWQgaW4gdGhlIG1hY3Jvcy4gICovCj4gLS1z
+dHJ1Y3QgX19qbXBfYnVmX3RhZzsKPiAtLWV4dGVybiBpbnQgX19zaWdzZXRqbXAgKHN0cnVjdCBf
+X2ptcF9idWZfdGFnICpfX2VudiwgaW50IF9fc2F2ZW1hc2spIF9fVEhST1dOTDsKPiAtK2V4dGVy
+biBpbnQgX19zaWdzZXRqbXAgKHN0cnVjdCBfX2ptcF9idWZfdGFnIF9fZW52WzFdLAo+IC0rCQkJ
+aW50IF9fc2F2ZW1hc2spIF9fVEhST1dOTDsKPiAtIAo+IC0gCj4gLSAvKiBNdXRleCBoYW5kbGlu
+Zy4gICovCj4gLS0tIAo+IC0yLjMxLjEKPiAtCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvbG9jYWxl
+ZGVmLzIuMzItMzctZzc2MGUxZDI4NzgyNWZhOTFkNGQ1YTBjYzkyMTM0MGM3NDBkODAzZTIvMDAw
+NC1Bdm9pZC1Xc3RyaW5nb3Atb3ZlcmZsb3ctd2FybmluZy1pbi1wdGhyZWFkX2NsZWFudXBfLnBh
+dGNoIGIvcGFja2FnZS9sb2NhbGVkZWYvMi4zMi0zNy1nNzYwZTFkMjg3ODI1ZmE5MWQ0ZDVhMGNj
+OTIxMzQwYzc0MGQ4MDNlMi8wMDA0LUF2b2lkLVdzdHJpbmdvcC1vdmVyZmxvdy13YXJuaW5nLWlu
+LXB0aHJlYWRfY2xlYW51cF8ucGF0Y2gKPiBkZWxldGVkIGZpbGUgbW9kZSAxMDA2NDQKPiBpbmRl
+eCA4M2YzZjE1ZWI2Li4wMDAwMDAwMDAwCj4gLS0tIGEvcGFja2FnZS9sb2NhbGVkZWYvMi4zMi0z
+Ny1nNzYwZTFkMjg3ODI1ZmE5MWQ0ZDVhMGNjOTIxMzQwYzc0MGQ4MDNlMi8wMDA0LUF2b2lkLVdz
+dHJpbmdvcC1vdmVyZmxvdy13YXJuaW5nLWluLXB0aHJlYWRfY2xlYW51cF8ucGF0Y2gKPiArKysg
+L2Rldi9udWxsCj4gQEAgLTEsMTI1ICswLDAgQEAKPiAtRnJvbSBlYTUwODg5YzM1ZmI3M2VkOWUx
+NDBkODAwMzAzYWFlOTE0OGMyODg4IE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQo+IC1Gcm9tOiBK
+b3NlcGggTXllcnMgPGpvc2VwaEBjb2Rlc291cmNlcnkuY29tPgo+IC1EYXRlOiBGcmksIDMwIE9j
+dCAyMDIwIDIyOjI1OjQyICswMDAwCj4gLVN1YmplY3Q6IFtQQVRDSCA0LzRdIEF2b2lkIC1Xc3Ry
+aW5nb3Atb3ZlcmZsb3cgd2FybmluZyBpbiBwdGhyZWFkX2NsZWFudXBfcHVzaAo+IC0gbWFjcm9z
+Cj4gLQo+IC1HQ0MgMTEgaW50cm9kdWNlcyBhIC1Xc3RyaW5nb3Atb3ZlcmZsb3cgd2FybmluZyBm
+b3IgY2FsbHMgdG8gZnVuY3Rpb25zCj4gLXdpdGggYW4gYXJyYXkgYXJndW1lbnQgcGFzc2VkIGFz
+IGEgcG9pbnRlciB0byBtZW1vcnkgbm90IGxhcmdlIGVub3VnaAo+IC1mb3IgdGhhdCBhcnJheS4g
+IFRoaXMgaW5jbHVkZXMgdGhlIF9fc2lnc2V0am1wIGNhbGxzIGZyb20KPiAtcHRocmVhZF9jbGVh
+bnVwX3B1c2ggbWFjcm9zLCBiZWNhdXNlIHRob3NlIHVzZSBhIHN0cnVjdHVyZSBpbgo+IC1fX3B0
+aHJlYWRfdW53aW5kX2J1Zl90LCB3aGljaCBoYXMgYSBjb21tb24gaW5pdGlhbCBzdWJzZXF1ZW5j
+ZSB3aXRoCj4gLWptcF9idWYgYnV0IGRvZXMgbm90IGluY2x1ZGUgdGhlIHNhdmVkIHNpZ25hbCBt
+YXNrOyB0aGlzIGlzIE9LIGluIHRoaXMKPiAtY2FzZSBiZWNhdXNlIHRoZSBzZWNvbmQgYXJndW1l
+bnQgdG8gX19zaWdzZXRqbXAgaXMgMCBzbyB0aGUgc2lnbmFsCj4gLW1hc2sgaXMgbm90IGFjY2Vz
+c2VkLgo+IC0KPiAtVG8gYXZvaWQgdGhpcyB3YXJuaW5nLCB1c2UgYSBmdW5jdGlvbiBhbGlhcyBf
+X3NpZ3NldGptcF9jYW5jZWwgd2l0aAo+IC1maXJzdCBhcmd1bWVudCBhbiBhcnJheSBvZiBleGFj
+dGx5IHRoZSB0eXBlIHVzZWQgaW4gdGhlIGNhbGxzIHRvIHRoZQo+IC1mdW5jdGlvbiwgaWYgdXNp
+bmcgR0NDIDExIG9yIGxhdGVyLiAgV2l0aCBvbGRlciBjb21waWxlcnMsIGNvbnRpbnVlIHRvCj4g
+LXVzZSBfX3NpZ3NldGptcCB3aXRoIGEgY2FzdCwgdG8gYXZvaWQgYW55IGlzc3VlcyB3aXRoIGNv
+bXBpbGVycwo+IC1wcmVkYXRpbmcgdGhlIHJldHVybnNfdHdpY2UgYXR0cmlidXRlIG5vdCBhcHBs
+eWluZyB0aGUgc2FtZSBzcGVjaWFsCj4gLWhhbmRsaW5nIHRvIF9fc2lnc2V0am1wX2NhbmNlbCBh
+cyB0byBfX3NpZ3NldGptcC4KPiAtCj4gLVRlc3RlZCB3aXRoIGJ1aWxkLW1hbnktZ2xpYmNzLnB5
+IGZvciBhcm0tbGludXgtZ251ZWFiaSB0aGF0IHRoaXMgZml4ZXMKPiAtdGhlIHRlc3RzdWl0ZSBi
+dWlsZCBmYWlsdXJlcy4KPiAtCj4gLVtVcHN0cmVhbTogaHR0cHM6Ly9naXRodWIuY29tL2JtaW5v
+ci9nbGliYy9jb21taXQvNTQ4ZjQ2N2ZhMTRmZmU3ZDk1NWJlZWIzMWIzMGUyYWVhZTQ0NjdlMC5w
+YXRjaF0KPiAtU2lnbmVkLW9mZi1ieTogUGV0ZXIgU2VpZGVyZXIgPHBzLnJlcG9ydEBnbXgubmV0
+Pgo+IC0tLS0KPiAtIG1pc2Mvc3lzL2NkZWZzLmggICAgICAgfCAgOCArKysrKysrKwo+IC0gc3lz
+ZGVwcy9ucHRsL3B0aHJlYWQuaCB8IDM3ICsrKysrKysrKysrKysrKysrKysrKysrKysrKy0tLS0t
+LS0tLS0KPiAtIDIgZmlsZXMgY2hhbmdlZCwgMzUgaW5zZXJ0aW9ucygrKSwgMTAgZGVsZXRpb25z
+KC0pCj4gLQo+IC1kaWZmIC0tZ2l0IGEvbWlzYy9zeXMvY2RlZnMuaCBiL21pc2Mvc3lzL2NkZWZz
+LmgKPiAtaW5kZXggMzgyMjFkMGIuLmNlODc3NDg3IDEwMDY0NAo+IC0tLS0gYS9taXNjL3N5cy9j
+ZGVmcy5oCj4gLSsrKyBiL21pc2Mvc3lzL2NkZWZzLmgKPiAtQEAgLTU1Niw0ICs1NTYsMTIgQEAg
+X1N0YXRpY19hc3NlcnQgKDAsICJJRUVFIDEyOC1iaXRzIGxvbmcgZG91YmxlIHJlcXVpcmVzIHJl
+ZGlyZWN0aW9uIG9uIHRoaXMgcGxhdGYKPiAtICMgIGRlZmluZSBfX2F0dHJfYWNjZXNzKHgpCj4g
+LSAjZW5kaWYKPiAtIAo+IC0rLyogU3BlY2lmeSB0aGF0IGEgZnVuY3Rpb24gc3VjaCBhcyBzZXRq
+bXAgb3IgdmZvcmsgbWF5IHJldHVybgo+IC0rICAgdHdpY2UuICAqLwo+IC0rI2lmIF9fR05VQ19Q
+UkVSRVEgKDQsIDEpCj4gLSsjIGRlZmluZSBfX2F0dHJpYnV0ZV9yZXR1cm5zX3R3aWNlX18gX19h
+dHRyaWJ1dGVfXyAoKF9fcmV0dXJuc190d2ljZV9fKSkKPiAtKyNlbHNlCj4gLSsjIGRlZmluZSBf
+X2F0dHJpYnV0ZV9yZXR1cm5zX3R3aWNlX18gLyogSWdub3JlLiAgKi8KPiAtKyNlbmRpZgo+IC0r
+Cj4gLSAjZW5kaWYJIC8qIHN5cy9jZGVmcy5oICovCj4gLWRpZmYgLS1naXQgYS9zeXNkZXBzL25w
+dGwvcHRocmVhZC5oIGIvc3lzZGVwcy9ucHRsL3B0aHJlYWQuaAo+IC1pbmRleCBkNDE5NGRhNy4u
+M2EzNGQ4MjMgMTAwNjQ0Cj4gLS0tLSBhL3N5c2RlcHMvbnB0bC9wdGhyZWFkLmgKPiAtKysrIGIv
+c3lzZGVwcy9ucHRsL3B0aHJlYWQuaAo+IC1AQCAtNTEyLDEzICs1MTIsMTUgQEAgZXh0ZXJuIHZv
+aWQgcHRocmVhZF90ZXN0Y2FuY2VsICh2b2lkKTsKPiAtIAo+IC0gLyogQ2FuY2VsbGF0aW9uIGhh
+bmRsaW5nIHdpdGggaW50ZWdyYXRpb24gaW50byBleGNlcHRpb24gaGFuZGxpbmcuICAqLwo+IC0g
+Cj4gLStzdHJ1Y3QgX19jYW5jZWxfam1wX2J1Zl90YWcKPiAtK3sKPiAtKyAgX19qbXBfYnVmIF9f
+Y2FuY2VsX2ptcF9idWY7Cj4gLSsgIGludCBfX21hc2tfd2FzX3NhdmVkOwo+IC0rfTsKPiAtKwo+
+IC0gdHlwZWRlZiBzdHJ1Y3QKPiAtIHsKPiAtLSAgc3RydWN0Cj4gLS0gIHsKPiAtLSAgICBfX2pt
+cF9idWYgX19jYW5jZWxfam1wX2J1ZjsKPiAtLSAgICBpbnQgX19tYXNrX3dhc19zYXZlZDsKPiAt
+LSAgfSBfX2NhbmNlbF9qbXBfYnVmWzFdOwo+IC0rICBzdHJ1Y3QgX19jYW5jZWxfam1wX2J1Zl90
+YWcgX19jYW5jZWxfam1wX2J1ZlsxXTsKPiAtICAgdm9pZCAqX19wYWRbNF07Cj4gLSB9IF9fcHRo
+cmVhZF91bndpbmRfYnVmX3QgX19hdHRyaWJ1dGVfXyAoKF9fYWxpZ25lZF9fKSk7Cj4gLSAKPiAt
+QEAgLTY1OCw4ICs2NjAsOCBAQCBfX3B0aHJlYWRfY2xlYW51cF9yb3V0aW5lIChzdHJ1Y3QgX19w
+dGhyZWFkX2NsZWFudXBfZnJhbWUgKl9fZnJhbWUpCj4gLSAgICAgX19wdGhyZWFkX3Vud2luZF9i
+dWZfdCBfX2NhbmNlbF9idWY7CQkJCSAgICAgIFwKPiAtICAgICB2b2lkICgqX19jYW5jZWxfcm91
+dGluZSkgKHZvaWQgKikgPSAocm91dGluZSk7CQkJICAgICAgXAo+IC0gICAgIHZvaWQgKl9fY2Fu
+Y2VsX2FyZyA9IChhcmcpOwkJCQkJCSAgICAgIFwKPiAtLSAgICBpbnQgX19ub3RfZmlyc3RfY2Fs
+bCA9IF9fc2lnc2V0am1wICgoc3RydWN0IF9fam1wX2J1Zl90YWcgKikgKHZvaWQgKikgICAgIFwK
+PiAtLQkJCQkJX19jYW5jZWxfYnVmLl9fY2FuY2VsX2ptcF9idWYsIDApOyAgICBcCj4gLSsgICAg
+aW50IF9fbm90X2ZpcnN0X2NhbGwgPSBfX3NpZ3NldGptcF9jYW5jZWwgKF9fY2FuY2VsX2J1Zi5f
+X2NhbmNlbF9qbXBfYnVmLCBcCj4gLSsJCQkJCSAgICAgICAwKTsJCQkgICAgICBcCj4gLSAgICAg
+aWYgKF9fZ2xpYmNfdW5saWtlbHkgKF9fbm90X2ZpcnN0X2NhbGwpKQkJCQkgICAgICBcCj4gLSAg
+ICAgICB7CQkJCQkJCQkJICAgICAgXAo+IC0gCV9fY2FuY2VsX3JvdXRpbmUgKF9fY2FuY2VsX2Fy
+Zyk7CQkJCSAgICAgIFwKPiAtQEAgLTY5Myw4ICs2OTUsOCBAQCBleHRlcm4gdm9pZCBfX3B0aHJl
+YWRfdW5yZWdpc3Rlcl9jYW5jZWwgKF9fcHRocmVhZF91bndpbmRfYnVmX3QgKl9fYnVmKQo+IC0g
+ICAgIF9fcHRocmVhZF91bndpbmRfYnVmX3QgX19jYW5jZWxfYnVmOwkJCQkgICAgICBcCj4gLSAg
+ICAgdm9pZCAoKl9fY2FuY2VsX3JvdXRpbmUpICh2b2lkICopID0gKHJvdXRpbmUpOwkJCSAgICAg
+IFwKPiAtICAgICB2b2lkICpfX2NhbmNlbF9hcmcgPSAoYXJnKTsJCQkJCQkgICAgICBcCj4gLS0g
+ICAgaW50IF9fbm90X2ZpcnN0X2NhbGwgPSBfX3NpZ3NldGptcCAoKHN0cnVjdCBfX2ptcF9idWZf
+dGFnICopICh2b2lkICopICAgICBcCj4gLS0JCQkJCV9fY2FuY2VsX2J1Zi5fX2NhbmNlbF9qbXBf
+YnVmLCAwKTsgICAgXAo+IC0rICAgIGludCBfX25vdF9maXJzdF9jYWxsID0gX19zaWdzZXRqbXBf
+Y2FuY2VsIChfX2NhbmNlbF9idWYuX19jYW5jZWxfam1wX2J1ZiwgXAo+IC0rCQkJCQkgICAgICAg
+MCk7CQkJICAgICAgXAo+IC0gICAgIGlmIChfX2dsaWJjX3VubGlrZWx5IChfX25vdF9maXJzdF9j
+YWxsKSkJCQkJICAgICAgXAo+IC0gICAgICAgewkJCQkJCQkJCSAgICAgIFwKPiAtIAlfX2NhbmNl
+bF9yb3V0aW5lIChfX2NhbmNlbF9hcmcpOwkJCQkgICAgICBcCj4gLUBAIC03MzAsOSArNzMyLDI0
+IEBAIGV4dGVybiB2b2lkIF9fcHRocmVhZF91bndpbmRfbmV4dCAoX19wdGhyZWFkX3Vud2luZF9i
+dWZfdCAqX19idWYpCj4gLSAgICAgIDsKPiAtICNlbmRpZgo+IC0gCj4gLS0vKiBGdW5jdGlvbiB1
+c2VkIGluIHRoZSBtYWNyb3MuICAqLwo+IC0rLyogRnVuY3Rpb24gdXNlZCBpbiB0aGUgbWFjcm9z
+LiAgQ2FsbGluZyBfX3NpZ3NldGptcCwgd2l0aCBpdHMgZmlyc3QKPiAtKyAgIGFyZ3VtZW50IGRl
+Y2xhcmVkIGFzIGFuIGFycmF5LCByZXN1bHRzIGluIGEgLVdzdHJpbmdvcC1vdmVyZmxvdwo+IC0r
+ICAgd2FybmluZyBmcm9tIEdDQyAxMSBiZWNhdXNlIHN0cnVjdCBwdGhyZWFkX3Vud2luZF9idWYg
+aXMgc21hbGxlcgo+IC0rICAgdGhhbiBqbXBfYnVmLiAgVGhlIGNhbGxzIGZyb20gdGhlIG1hY3Jv
+cyBoYXZlIF9fU0FWRU1BU0sgc2V0IHRvIDAsCj4gLSsgICBzbyBub3RoaW5nIGJleW9uZCB0aGUg
+Y29tbW9uIHByZWZpeCBpcyB1c2VkIGFuZCB0aGlzIHdhcm5pbmcgaXMgYQo+IC0rICAgZmFsc2Ug
+cG9zaXRpdmUuICBVc2UgYW4gYWxpYXMgd2l0aCBpdHMgZmlyc3QgYXJndW1lbnQgZGVjbGFyZWQg
+dG8KPiAtKyAgIHVzZSB0aGUgdHlwZSBpbiB0aGUgbWFjcm9zIGlmIHBvc3NpYmxlIHRvIGF2b2lk
+IHRoaXMgd2FybmluZy4gICovCj4gLSsjaWYgX19HTlVDX1BSRVJFUSAoMTEsIDApCj4gLStleHRl
+cm4gaW50IF9fUkVESVJFQ1RfTlRITkwgKF9fc2lnc2V0am1wX2NhbmNlbCwKPiAtKwkJCSAgICAg
+KHN0cnVjdCBfX2NhbmNlbF9qbXBfYnVmX3RhZyBfX2VudlsxXSwKPiAtKwkJCSAgICAgIGludCBf
+X3NhdmVtYXNrKSwKPiAtKwkJCSAgICAgX19zaWdzZXRqbXApIF9fYXR0cmlidXRlX3JldHVybnNf
+dHdpY2VfXzsKPiAtKyNlbHNlCj4gLSsjIGRlZmluZSBfX3NpZ3NldGptcF9jYW5jZWwoZW52LCBz
+YXZlbWFzaykgXAo+IC0rICBfX3NpZ3NldGptcCAoKHN0cnVjdCBfX2ptcF9idWZfdGFnICopICh2
+b2lkICopIChlbnYpLCAoc2F2ZW1hc2spKQo+IC0gZXh0ZXJuIGludCBfX3NpZ3NldGptcCAoc3Ry
+dWN0IF9fam1wX2J1Zl90YWcgX19lbnZbMV0sCj4gLSAJCQlpbnQgX19zYXZlbWFzaykgX19USFJP
+V05MOwo+IC0rI2VuZGlmCj4gLSAKPiAtIAo+IC0gLyogTXV0ZXggaGFuZGxpbmcuICAqLwo+IC0t
+LSAKPiAtMi4zMS4xCj4gLQo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2xvY2FsZWRlZi8yLjMyLTM3
+LWc3NjBlMWQyODc4MjVmYTkxZDRkNWEwY2M5MjEzNDBjNzQwZDgwM2UyLzAwMDEtSEFDSy1vbmx5
+LWJ1aWxkLWFuZC1pbnN0YWxsLWxvY2FsZWRlZi5wYXRjaCBiL3BhY2thZ2UvbG9jYWxlZGVmLzIu
+MzQtOS1nOWFjYWIwYmJhNmE1YTU3MzIzYjFmOTRiZjk1YjIxNjE4YTllNWFhNC8wMDAxLUhBQ0st
+b25seS1idWlsZC1hbmQtaW5zdGFsbC1sb2NhbGVkZWYucGF0Y2gKPiBzaW1pbGFyaXR5IGluZGV4
+IDg4JQo+IHJlbmFtZSBmcm9tIHBhY2thZ2UvbG9jYWxlZGVmLzIuMzItMzctZzc2MGUxZDI4Nzgy
+NWZhOTFkNGQ1YTBjYzkyMTM0MGM3NDBkODAzZTIvMDAwMS1IQUNLLW9ubHktYnVpbGQtYW5kLWlu
+c3RhbGwtbG9jYWxlZGVmLnBhdGNoCj4gcmVuYW1lIHRvIHBhY2thZ2UvbG9jYWxlZGVmLzIuMzQt
+OS1nOWFjYWIwYmJhNmE1YTU3MzIzYjFmOTRiZjk1YjIxNjE4YTllNWFhNC8wMDAxLUhBQ0stb25s
+eS1idWlsZC1hbmQtaW5zdGFsbC1sb2NhbGVkZWYucGF0Y2gKPiBpbmRleCBkMzI3MDA4YzFkLi5i
+Mjg5MDAwYzhhIDEwMDY0NAo+IC0tLSBhL3BhY2thZ2UvbG9jYWxlZGVmLzIuMzItMzctZzc2MGUx
+ZDI4NzgyNWZhOTFkNGQ1YTBjYzkyMTM0MGM3NDBkODAzZTIvMDAwMS1IQUNLLW9ubHktYnVpbGQt
+YW5kLWluc3RhbGwtbG9jYWxlZGVmLnBhdGNoCj4gKysrIGIvcGFja2FnZS9sb2NhbGVkZWYvMi4z
+NC05LWc5YWNhYjBiYmE2YTVhNTczMjNiMWY5NGJmOTViMjE2MThhOWU1YWE0LzAwMDEtSEFDSy1v
+bmx5LWJ1aWxkLWFuZC1pbnN0YWxsLWxvY2FsZWRlZi5wYXRjaAo+IEBAIC0xLDQgKzEsNCBAQAo+
+IC1Gcm9tIDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAgTW9uIFNlcCAx
+NyAwMDowMDowMCAyMDAxCj4gK0Zyb20gNDQyZTlhM2YyNjJjNDljZjYxZjllN2JkZjEyODgyZjBh
+NDI3NjY2YiBNb24gU2VwIDE3IDAwOjAwOjAwIDIwMDEKPiAgRnJvbTogTWljaGFlbCBPbGJyaWNo
+IDxtLm9sYnJpY2hAcGVuZ3V0cm9uaXguZGU+Cj4gIERhdGU6IE1vbiwgMjEgTWF5IDIwMTggMTY6
+NDU6MDIgKzAyMDAKPiAgU3ViamVjdDogW1BBVENIXSBIQUNLOiBvbmx5IGJ1aWxkIGFuZCBpbnN0
+YWxsIGxvY2FsZWRlZgo+IEBAIC0xMywxMCArMTMsMTAgQEAgU2lnbmVkLW9mZi1ieTogUGV0ZXIg
+U2VpZGVyZXIgPHBzLnJlcG9ydEBnbXgubmV0Pgo+ICAgMiBmaWxlcyBjaGFuZ2VkLCAxMyBpbnNl
+cnRpb25zKCspLCA3IGRlbGV0aW9ucygtKQo+ICAKPiAgZGlmZiAtLWdpdCBhL1J1bGVzIGIvUnVs
+ZXMKPiAtaW5kZXggMTZhZmE2YWNhYS4uNmMyMDhkYjc4OCAxMDA2NDQKPiAraW5kZXggYjExMzdh
+ZmU3MS4uMmFlYWMzMTkyMiAxMDA2NDQKPiAgLS0tIGEvUnVsZXMKPiAgKysrIGIvUnVsZXMKPiAt
+QEAgLTE5MCwxMCArMTkwLDE2IEBAIGJpbmFyaWVzLXNoYXJlZC1ub3Rlc3RzID0gJChmaWx0ZXIt
+b3V0ICQoYmluYXJpZXMtcGllKSAkKGJpbmFyaWVzLXN0YXRpYyksIFwKPiArQEAgLTIxNiwxMCAr
+MjE2LDE2IEBAIGJpbmFyaWVzLXNoYXJlZC1ub3Rlc3RzID0gJChmaWx0ZXItb3V0ICQoYmluYXJp
+ZXMtcGllKSAkKGJpbmFyaWVzLXN0YXRpYyksIFwKPiAgIAkJCQkgICAgICAgJChiaW5hcmllcy1h
+bGwtbm90ZXN0cykpCj4gICAKPiAgIGlmbmVxICIkKHN0cmlwICQoYmluYXJpZXMtc2hhcmVkLW5v
+dGVzdHMpKSIgIiIKPiBAQCAtMzgsMTAgKzM4LDEwIEBAIGluZGV4IDE2YWZhNmFjYWEuLjZjMjA4
+ZGI3ODggMTAwNjQ0Cj4gICAKPiAgIGlmbmVxICIkKHN0cmlwICQoYmluYXJpZXMtc2hhcmVkLXRl
+c3RzKSkiICIiCj4gIGRpZmYgLS1naXQgYS9sb2NhbGUvTWFrZWZpbGUgYi9sb2NhbGUvTWFrZWZp
+bGUKPiAtaW5kZXggNzY0ZTc1MWMzNi4uYzI4MzIyZDcxZiAxMDA2NDQKPiAraW5kZXggYjdjNjA2
+ODFmYS4uZGU0Y2Y0MDAzZiAxMDA2NDQKPiAgLS0tIGEvbG9jYWxlL01ha2VmaWxlCj4gICsrKyBi
+L2xvY2FsZS9NYWtlZmlsZQo+IC1AQCAtMzIsMTUgKzMyLDE1IEBAIGNhdGVnb3JpZXMJPSBjdHlw
+ZSBtZXNzYWdlcyBtb25ldGFyeSBudW1lcmljIHRpbWUgcGFwZXIgbmFtZSBcCj4gK0BAIC0zMywx
+NSArMzMsMTUgQEAgY2F0ZWdvcmllcwk9IGN0eXBlIG1lc3NhZ2VzIG1vbmV0YXJ5IG51bWVyaWMg
+dGltZSBwYXBlciBuYW1lIFwKPiAgIAkJICBhZGRyZXNzIHRlbGVwaG9uZSBtZWFzdXJlbWVudCBp
+ZGVudGlmaWNhdGlvbiBjb2xsYXRlCj4gICBhdXgJCT0gJChjYXRlZ29yaWVzOiU9bGMtJSkgJChj
+YXRlZ29yaWVzOiU9Qy0lKSBTWVNfbGliYyBDX25hbWUgXAo+ICAgCQkgIHhsb2NhbGUgbG9jYWxl
+bmFtZSBnbG9iYWwtbG9jYWxlIGNvbGwtbG9va3VwCj4gQEAgLTYxLDUgKzYxLDUgQEAgaW5kZXgg
+NzY0ZTc1MWMzNi4uYzI4MzIyZDcxZiAxMDA2NDQKPiAgIAo+ICAgbGliQnJva2VuTG9jYWxlLXJv
+dXRpbmVzID0gYnJva2VuX2N1cl9tYXgKPiAgLS0gCj4gLTIuMjEuMAo+ICsyLjMzLjAKPiAgCj4g
+ZGlmZiAtLWdpdCBhL3BhY2thZ2UvbG9jYWxlZGVmLzIuMzItMzctZzc2MGUxZDI4NzgyNWZhOTFk
+NGQ1YTBjYzkyMTM0MGM3NDBkODAzZTIvMDAwMi1yZWxheC1kZXBlbmRlbmN5LW9uLUdDQy10by00
+LjgtYW5kLWJpbnV0aWxzLXRvLTIuMjQucGF0Y2ggYi9wYWNrYWdlL2xvY2FsZWRlZi8yLjM0LTkt
+ZzlhY2FiMGJiYTZhNWE1NzMyM2IxZjk0YmY5NWIyMTYxOGE5ZTVhYTQvMDAwMi1yZWxheC1kZXBl
+bmRlbmN5LW9uLUdDQy10by00LjgtYW5kLWJpbnV0aWxzLXRvLTIuMjQucGF0Y2gKPiBzaW1pbGFy
+aXR5IGluZGV4IDkwJQo+IHJlbmFtZSBmcm9tIHBhY2thZ2UvbG9jYWxlZGVmLzIuMzItMzctZzc2
+MGUxZDI4NzgyNWZhOTFkNGQ1YTBjYzkyMTM0MGM3NDBkODAzZTIvMDAwMi1yZWxheC1kZXBlbmRl
+bmN5LW9uLUdDQy10by00LjgtYW5kLWJpbnV0aWxzLXRvLTIuMjQucGF0Y2gKPiByZW5hbWUgdG8g
+cGFja2FnZS9sb2NhbGVkZWYvMi4zNC05LWc5YWNhYjBiYmE2YTVhNTczMjNiMWY5NGJmOTViMjE2
+MThhOWU1YWE0LzAwMDItcmVsYXgtZGVwZW5kZW5jeS1vbi1HQ0MtdG8tNC44LWFuZC1iaW51dGls
+cy10by0yLjI0LnBhdGNoCj4gaW5kZXggYTZlODdjYzMxNy4uZDg0OGFmMTQyZiAxMDA2NDQKPiAt
+LS0gYS9wYWNrYWdlL2xvY2FsZWRlZi8yLjMyLTM3LWc3NjBlMWQyODc4MjVmYTkxZDRkNWEwY2M5
+MjEzNDBjNzQwZDgwM2UyLzAwMDItcmVsYXgtZGVwZW5kZW5jeS1vbi1HQ0MtdG8tNC44LWFuZC1i
+aW51dGlscy10by0yLjI0LnBhdGNoCj4gKysrIGIvcGFja2FnZS9sb2NhbGVkZWYvMi4zNC05LWc5
+YWNhYjBiYmE2YTVhNTczMjNiMWY5NGJmOTViMjE2MThhOWU1YWE0LzAwMDItcmVsYXgtZGVwZW5k
+ZW5jeS1vbi1HQ0MtdG8tNC44LWFuZC1iaW51dGlscy10by0yLjI0LnBhdGNoCj4gQEAgLTEsNCAr
+MSw0IEBACj4gLUZyb20gMzEzZTA0YmZiZDI4MWY5YjQ2ZmRkZTA5N2FhY2I1OWQ1MDE4MjBhMyBN
+b24gU2VwIDE3IDAwOjAwOjAwIDIwMDEKPiArRnJvbSA4NTQxMjI2MjQ2MGY2YmE5ZjZlMmNmOGRh
+NzRmYzE5MDRjNTRjODU0IE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQo+ICBGcm9tOiBNYXR0IFdl
+YmVyIDxtYXR0aGV3LndlYmVyQHJvY2t3ZWxsY29sbGlucy5jb20+Cj4gIERhdGU6IFRodSwgNiBG
+ZWIgMjAyMCAxNDozNjoyMSAtMDYwMAo+ICBTdWJqZWN0OiBbUEFUQ0hdIHJlbGF4IGRlcGVuZGVu
+Y3kgb24gR0NDIHRvIDQuOCBhbmQgYmludXRpbHMgdG8gMi4yNAo+IEBAIC0yOSwxMCArMjksMTAg
+QEAgU2lnbmVkLW9mZi1ieTogTWF0dGhldyBXZWJlciA8bWF0dGhldy53ZWJlckByb2Nrd2VsbGNv
+bGxpbnMuY29tPgo+ICAgMSBmaWxlIGNoYW5nZWQsIDMgaW5zZXJ0aW9ucygrKSwgMyBkZWxldGlv
+bnMoLSkKPiAgCj4gIGRpZmYgLS1naXQgYS9jb25maWd1cmUgYi9jb25maWd1cmUKPiAtaW5kZXgg
+NmQyNmI4MjQuLjlhYzJlNWU5IDEwMDc1NQo+ICtpbmRleCA5NjE5YzEwOTkxLi4wYzQ4MWQyMzM5
+IDEwMDc1NQo+ICAtLS0gYS9jb25maWd1cmUKPiAgKysrIGIvY29uZmlndXJlCj4gLUBAIC00NjAx
+LDcgKzQ2MDEsNyBAQCAkYXNfZWNob19uICJjaGVja2luZyB2ZXJzaW9uIG9mICRBUy4uLiAiID4m
+NjsgfQo+ICtAQCAtNDY1MSw3ICs0NjUxLDcgQEAgJGFzX2VjaG9fbiAiY2hlY2tpbmcgdmVyc2lv
+biBvZiAkQVMuLi4gIiA+JjY7IH0KPiAgICAgYWNfcHJvZ192ZXJzaW9uPWAkQVMgLS12ZXJzaW9u
+IDI+JjEgfCBzZWQgLW4gJ3MvXi4qR05VIGFzc2VtYmxlci4qIFwoWzAtOV0qXC5bMC05Ll0qXCku
+KiQvXDEvcCdgCj4gICAgIGNhc2UgJGFjX3Byb2dfdmVyc2lvbiBpbgo+ICAgICAgICcnKSBhY19w
+cm9nX3ZlcnNpb249InYuID8uPz8sIGJhZCI7IGFjX3ZlcmNfZmFpbD15ZXM7Owo+IEBAIC00MSw3
+ICs0MSw3IEBAIGluZGV4IDZkMjZiODI0Li45YWMyZTVlOSAxMDA3NTUKPiAgICAgICAgICBhY19w
+cm9nX3ZlcnNpb249IiRhY19wcm9nX3ZlcnNpb24sIG9rIjsgYWNfdmVyY19mYWlsPW5vOzsKPiAg
+ICAgICAqKSBhY19wcm9nX3ZlcnNpb249IiRhY19wcm9nX3ZlcnNpb24sIGJhZCI7IGFjX3ZlcmNf
+ZmFpbD15ZXM7Owo+ICAgCj4gLUBAIC00NzMxLDcgKzQ3MzEsNyBAQCAkYXNfZWNob19uICJjaGVj
+a2luZyB2ZXJzaW9uIG9mICRMRC4uLiAiID4mNjsgfQo+ICtAQCAtNDc4MSw3ICs0NzgxLDcgQEAg
+JGFzX2VjaG9fbiAiY2hlY2tpbmcgdmVyc2lvbiBvZiAkTEQuLi4gIiA+JjY7IH0KPiAgICAgYWNf
+cHJvZ192ZXJzaW9uPWAkTEQgLS12ZXJzaW9uIDI+JjEgfCBzZWQgLW4gJ3MvXi4qR05VIGxkLiog
+XChbMC05XVswLTldKlwuWzAtOS5dKlwpLiokL1wxL3AnYAo+ICAgICBjYXNlICRhY19wcm9nX3Zl
+cnNpb24gaW4KPiAgICAgICAnJykgYWNfcHJvZ192ZXJzaW9uPSJ2LiA/Lj8/LCBiYWQiOyBhY192
+ZXJjX2ZhaWw9eWVzOzsKPiBAQCAtNTAsNyArNTAsNyBAQCBpbmRleCA2ZDI2YjgyNC4uOWFjMmU1
+ZTkgMTAwNzU1Cj4gICAgICAgICAgYWNfcHJvZ192ZXJzaW9uPSIkYWNfcHJvZ192ZXJzaW9uLCBv
+ayI7IGFjX3ZlcmNfZmFpbD1ubzs7Cj4gICAgICAgKikgYWNfcHJvZ192ZXJzaW9uPSIkYWNfcHJv
+Z192ZXJzaW9uLCBiYWQiOyBhY192ZXJjX2ZhaWw9eWVzOzsKPiAgIAo+IC1AQCAtNTE0MCw3ICs1
+MTQwLDcgQEAgaW50Cj4gK0BAIC01MTg5LDcgKzUxODksNyBAQCBpbnQKPiAgIG1haW4gKCkKPiAg
+IHsKPiAgIAo+IEBAIC02MCw1ICs2MCw1IEBAIGluZGV4IDZkMjZiODI0Li45YWMyZTVlOSAxMDA3
+NTUKPiAgICNlbmRpZgo+ICAgICA7Cj4gIC0tIAo+IC0yLjE4LjAKPiArMi4zMy4wCj4gIAo+IGRp
+ZmYgLS1naXQgYS9wYWNrYWdlL2xvY2FsZWRlZi8yLjMyLTM3LWc3NjBlMWQyODc4MjVmYTkxZDRk
+NWEwY2M5MjEzNDBjNzQwZDgwM2UyL2xvY2FsZWRlZi5oYXNoIGIvcGFja2FnZS9sb2NhbGVkZWYv
+Mi4zNC05LWc5YWNhYjBiYmE2YTVhNTczMjNiMWY5NGJmOTViMjE2MThhOWU1YWE0L2xvY2FsZWRl
+Zi5oYXNoCj4gc2ltaWxhcml0eSBpbmRleCA3MCUKPiByZW5hbWUgZnJvbSBwYWNrYWdlL2xvY2Fs
+ZWRlZi8yLjMyLTM3LWc3NjBlMWQyODc4MjVmYTkxZDRkNWEwY2M5MjEzNDBjNzQwZDgwM2UyL2xv
+Y2FsZWRlZi5oYXNoCj4gcmVuYW1lIHRvIHBhY2thZ2UvbG9jYWxlZGVmLzIuMzQtOS1nOWFjYWIw
+YmJhNmE1YTU3MzIzYjFmOTRiZjk1YjIxNjE4YTllNWFhNC9sb2NhbGVkZWYuaGFzaAo+IGluZGV4
+IGIxZDUyNDNmY2MuLjU5NWRlOTVhNTggMTAwNjQ0Cj4gLS0tIGEvcGFja2FnZS9sb2NhbGVkZWYv
+Mi4zMi0zNy1nNzYwZTFkMjg3ODI1ZmE5MWQ0ZDVhMGNjOTIxMzQwYzc0MGQ4MDNlMi9sb2NhbGVk
+ZWYuaGFzaAo+ICsrKyBiL3BhY2thZ2UvbG9jYWxlZGVmLzIuMzQtOS1nOWFjYWIwYmJhNmE1YTU3
+MzIzYjFmOTRiZjk1YjIxNjE4YTllNWFhNC9sb2NhbGVkZWYuaGFzaAo+IEBAIC0xLDUgKzEsNSBA
+QAo+ICAjIExvY2FsbHkgY2FsY3VsYXRlZCAoZmV0Y2hlZCBmcm9tIEdpdGh1YikKPiAtc2hhMjU2
+ICBmNDcxMGU5YTQzNWE3YjgzZTFkMjNkZDc1NDM0ZjBkMzZiODk4ZWJhOWI0MjQ5Yzk0NmMzMmI0
+NjdkODUyZmQ0ICBnbGliYy0yLjMyLTM3LWc3NjBlMWQyODc4MjVmYTkxZDRkNWEwY2M5MjEzNDBj
+NzQwZDgwM2UyLnRhci5nego+ICtzaGEyNTYgIDFjN2VkMGY2OWVkMjY4YmQ2NmY5NzU0ZDBjYjhm
+YjY1ZTBkYWZjMWY5YTEwNDhlYTUwZDFlOTZkNjAzOTk2ODYgIGdsaWJjLTIuMzQtOS1nOWFjYWIw
+YmJhNmE1YTU3MzIzYjFmOTRiZjk1YjIxNjE4YTllNWFhNC50YXIuZ3oKPiAgCj4gICMgSGFzaGVz
+IGZvciBsaWNlbnNlIGZpbGVzCj4gIHNoYTI1NiAgODE3N2Y5NzUxMzIxMzUyNmRmMmNmNjE4NGQ4
+ZmY5ODZjNjc1YWZiNTE0ZDRlNjhhNDA0MDEwNTIxYjg4MDY0MyAgQ09QWUlORwo+IGRpZmYgLS1n
+aXQgYS9wYWNrYWdlL2xvY2FsZWRlZi9sb2NhbGVkZWYubWsgYi9wYWNrYWdlL2xvY2FsZWRlZi9s
+b2NhbGVkZWYubWsKPiBpbmRleCA1N2FiNWEzNDU4Li44N2Q5MjFjZmZlIDEwMDY0NAo+IC0tLSBh
+L3BhY2thZ2UvbG9jYWxlZGVmL2xvY2FsZWRlZi5tawo+ICsrKyBiL3BhY2thZ2UvbG9jYWxlZGVm
+L2xvY2FsZWRlZi5tawo+IEBAIC03LDcgKzcsNyBAQAo+ICAjIFVzZSB0aGUgc2FtZSBWRVJTSU9O
+IGFuZCBTSVRFIGFzIHRhcmdldCBnbGliYwo+ICAjIEFzIGluIGdsaWJjLm1rLCBnZW5lcmF0ZSB2
+ZXJzaW9uIHN0cmluZyB1c2luZzoKPiAgIyAgIGdpdCBkZXNjcmliZSAtLW1hdGNoICdnbGliYy0q
+JyAtLWFiYnJldj00MCBvcmlnaW4vcmVsZWFzZS9NQUpPUi5NSU5PUi9tYXN0ZXIgfCBjdXQgLWQg
+Jy0nIC1mIDItCj4gLUxPQ0FMRURFRl9WRVJTSU9OID0gMi4zMi0zNy1nNzYwZTFkMjg3ODI1ZmE5
+MWQ0ZDVhMGNjOTIxMzQwYzc0MGQ4MDNlMgo+ICtMT0NBTEVERUZfVkVSU0lPTiA9IDIuMzQtOS1n
+OWFjYWIwYmJhNmE1YTU3MzIzYjFmOTRiZjk1YjIxNjE4YTllNWFhNAo+ICBMT0NBTEVERUZfU09V
+UkNFID0gZ2xpYmMtJChMT0NBTEVERUZfVkVSU0lPTikudGFyLmd6Cj4gIExPQ0FMRURFRl9TSVRF
+ID0gJChjYWxsIGdpdGh1YixibWlub3IsZ2xpYmMsJChMT0NBTEVERUZfVkVSU0lPTikpCj4gIEhP
+U1RfTE9DQUxFREVGX0RMX1NVQkRJUiA9IGdsaWJjCj4gCgpfX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9v
+dEBidXN5Ym94Lm5ldApodHRwOi8vbGlzdHMuYnVzeWJveC5uZXQvbWFpbG1hbi9saXN0aW5mby9i
+dWlsZHJvb3QK
