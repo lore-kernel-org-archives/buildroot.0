@@ -2,101 +2,92 @@ Return-Path: <SRS0=qqE2=NN=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.0 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-12.4 required=3.0 tests=BAYES_00,
 	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
-	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,NICE_REPLY_A,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,HTML_MESSAGE,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,MIME_HTML_MOSTLY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AA637C4338F
-	for <buildroot@archiver.kernel.org>; Sun, 22 Aug 2021 21:44:03 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6883FC4338F
+	for <buildroot@archiver.kernel.org>; Sun, 22 Aug 2021 22:55:17 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 589896125F
-	for <buildroot@archiver.kernel.org>; Sun, 22 Aug 2021 21:44:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 589896125F
+	by mail.kernel.org (Postfix) with ESMTPS id EFF7761163
+	for <buildroot@archiver.kernel.org>; Sun, 22 Aug 2021 22:55:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org EFF7761163
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1187780D8C;
-	Sun, 22 Aug 2021 21:44:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B43E840290;
+	Sun, 22 Aug 2021 22:55:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FrlrhQWtUNie; Sun, 22 Aug 2021 21:43:59 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A15DB80D94;
-	Sun, 22 Aug 2021 21:43:58 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 707071BF471
- for <buildroot@lists.busybox.net>; Sun, 22 Aug 2021 21:43:56 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 606F440301
- for <buildroot@lists.busybox.net>; Sun, 22 Aug 2021 21:43:56 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2nwiyWVNPBq6 for <buildroot@lists.busybox.net>;
- Sun, 22 Aug 2021 21:43:51 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id h1OTOMRpy8W0; Sun, 22 Aug 2021 22:55:13 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3ACEC40294;
+	Sun, 22 Aug 2021 22:55:12 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 252BF1BF46D
+ for <buildroot@lists.busybox.net>; Sun, 22 Aug 2021 22:55:11 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 136B0400DE
+ for <buildroot@lists.busybox.net>; Sun, 22 Aug 2021 22:55:11 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id uWSa47tjHdIA for <buildroot@lists.busybox.net>;
+ Sun, 22 Aug 2021 22:55:06 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
- [IPv6:2a00:1450:4864:20::32a])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 569BE40300
- for <buildroot@buildroot.org>; Sun, 22 Aug 2021 21:43:51 +0000 (UTC)
-Received: by mail-wm1-x32a.google.com with SMTP id
- l7-20020a1c2507000000b002e6be5d86b3so9476304wml.3
- for <buildroot@buildroot.org>; Sun, 22 Aug 2021 14:43:51 -0700 (PDT)
+Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com
+ [IPv6:2607:f8b0:4864:20::32b])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C760C401A4
+ for <buildroot@buildroot.org>; Sun, 22 Aug 2021 22:55:05 +0000 (UTC)
+Received: by mail-ot1-x32b.google.com with SMTP id
+ g66-20020a9d12c8000000b0051aeba607f1so22911535otg.11
+ for <buildroot@buildroot.org>; Sun, 22 Aug 2021 15:55:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
- h=subject:to:cc:references:from:message-id:date:user-agent
- :mime-version:in-reply-to:content-language:content-transfer-encoding;
- bh=FqaxCMEx2s8C/rzs5nJ7+DZeqzUjIZuzvnTVL8KGDG4=;
- b=p7He6MlrtX9vi2oGgsRUxzZK9MPJ/eTH2AUXsb1InjU3Od33Hh3EfYf8zT4RhP9Akv
- RdIJ4i4NsoXW+Bwvekwfcj12q4aRKhg+0Ea3oFQV2L7gAy4talyFmn77um6+O3jUGVuZ
- dLp9Di+NssrJlv8XYTLcy1+xSPvkKIOpxCuDe5lUn4TjePuJu5Gpvs96r/tmvfNo/Oj4
- z/cCZtorAb7vsbFO0ooIX/LVeig/ndw1nnL9ekshrXghRDeyvdnk87lHi/jU1T1pPcuu
- pxGO2HutVkz9Liaf9nBl0HoGCCWpdxPgt15qpXijolzvyTZTXjicqzeYoFx6vAWp4D9n
- reMA==
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=rrBdKuxILvzmPxJnz46o0tIC/NJd/fyXPVK2SIU+YzY=;
+ b=efPX5Gt/tzihio1WpRIUFv/xQVCUJ/BrQjXEmty/KLV6i+IYg9B0B/KRzukT2mF1ru
+ iAF+A2tB3rso3jGnI/vmrNSZmrKXJbPb+SZ2139pyC8RFS3PNfdKxbqTQCPQ3anhi/YT
+ 5+ti2qzHd1tDCjZakyI2CIFkguWnpWer5bbM5vKOhWqV5W4rKxYl05rtngfk9Ej1jajl
+ WEVoqjOC8/5caFXAf93jDJQCK+l1USoi2X7A768ZqqZWPMJD6KgIbXsLatXMn4ewGoS+
+ RwWyJIMEPnU8YRBciru4QlL4wszEuNQIpUZgE2cKkVGYMScFAJ18kB72iexkh1glEGFF
+ 60bw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
- h=x-gm-message-state:subject:to:cc:references:from:message-id:date
- :user-agent:mime-version:in-reply-to:content-language
- :content-transfer-encoding;
- bh=FqaxCMEx2s8C/rzs5nJ7+DZeqzUjIZuzvnTVL8KGDG4=;
- b=XVn39ktbsf72MiNAa5DdgNqgNkWd/m20bj4TijSqt3SOwxwLFk5UjBwRyp4WuEJQLR
- W5VYmaDs+vfpHwG2QyAqYqG/TOAmxGhZ2GcL84p5G/9L5sdpE3nRI6hhwNoB2PbDU8UJ
- sgmrCpw0O1yym3fYN2NdP+ossIck+SIM6PA4O3rOKqeaWnhr8f5nBTLlTRHBQAyvgr7H
- mDqdk20p3jcL0KDKhpoHrHO8qjB9zYQIUJglzqpWTJjYEWrdvgia2obFPcx7J8f2c8Q+
- vbL+Q6W1iEbs8rjv8qXWMeyTuaYWRdTm7i/4lICl/M4YxOSQyDBMPTEruI3ObBaqJ+qJ
- XflA==
-X-Gm-Message-State: AOAM530S+tieu28lE7O0JhLGpiwVRuxoa0AomdJfQS0/GV75Bt1VhwWe
- tHPKGdtLMIFxPIthrBqy+SQ=
-X-Google-Smtp-Source: ABdhPJwkU7SjY7X+HseKxJi/EybMALobTjye94t+jQmIw41sw569rkAO7rdo/6pHBjQKMAzitmFhZA==
-X-Received: by 2002:a1c:2504:: with SMTP id l4mr13511656wml.55.1629668629454; 
- Sun, 22 Aug 2021 14:43:49 -0700 (PDT)
-Received: from ?IPv6:2a01:cb05:8f8a:1800:9881:4a9a:ef63:7f91?
- (2a01cb058f8a180098814a9aef637f91.ipv6.abo.wanadoo.fr.
- [2a01:cb05:8f8a:1800:9881:4a9a:ef63:7f91])
- by smtp.gmail.com with ESMTPSA id n10sm12757566wms.3.2021.08.22.14.43.48
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 22 Aug 2021 14:43:48 -0700 (PDT)
-To: =?UTF-8?Q?Jos=c3=a9_Luis_Salvador_Rufo?= <salvador.joseluis@gmail.com>
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=rrBdKuxILvzmPxJnz46o0tIC/NJd/fyXPVK2SIU+YzY=;
+ b=pc1sOOZ8er0i92XUm4cYbK1GIc3HIg82bcxIk2n2tqDt4hWx7b8aS88XP0v2lLPPL5
+ Q1pxgOgjyIF+IRnBb9YW14NsCQRGT0Rt0giSF4lll6Lyzsl/QdQDXJ+BMaSP3CPGrbBU
+ e/9tIhIWfTjaqFwwC7FzkvTrPEieNnEgtxN8AG5XsQwLZAagWaZYYFggPsoI138Nfj3b
+ 9/3r7ZYnpMCP0dGTQ/cFFSu5icZkmABgiAgQFg8vyrCvWnY3Vtw/L26ANL0ZzoQEVw+w
+ ebYy+N9nT/c8X3ZNltJ9K2iszpmh64xXVUdxX2Dl25hVT1haHVGRJIiC5Fd91XhuuZ46
+ j2og==
+X-Gm-Message-State: AOAM532fvxuwWGBP4rA7Xwx+pbjeGmczptGIpgU33bxHHSBLhnvCNl1R
+ 8tPs4mucX9FwTK5FCvsTeCSc9q10s9dkIbSmYwU=
+X-Google-Smtp-Source: ABdhPJzzj5tRHmIoH9z1sRqMAyhcrCvSL/ZkL0rL5HUn8c8zYz/wgT+bunak6oySvOMupFTwZjUX6yfjyE5OVB4Cx4M=
+X-Received: by 2002:a05:6830:3115:: with SMTP id
+ b21mr26514646ots.240.1629672904867; 
+ Sun, 22 Aug 2021 15:55:04 -0700 (PDT)
+MIME-Version: 1.0
 References: <20210822200519.1757151-1-salvador.joseluis@gmail.com>
  <e25ad303-2283-20c4-5ce6-c893bf38376d@gmail.com>
  <CAH+XeQbHj4sHiUmf3rc1PFHb+BbpLEb4KDbKwkef-7UfDB9=Fg@mail.gmail.com>
  <a6320c62-a68d-6433-9f3b-9e1df87a5c39@gmail.com>
  <CAH+XeQawHERfudB2Hxd8VGpRyckSzQOCjbpGpVg=+bpskzJUsw@mail.gmail.com>
-From: Romain Naour <romain.naour@gmail.com>
-Message-ID: <cb4c98eb-2f52-1d8a-942e-550ad425e767@gmail.com>
-Date: Sun, 22 Aug 2021 23:43:47 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
-MIME-Version: 1.0
-In-Reply-To: <CAH+XeQawHERfudB2Hxd8VGpRyckSzQOCjbpGpVg=+bpskzJUsw@mail.gmail.com>
-Content-Language: en-US
+ <cb4c98eb-2f52-1d8a-942e-550ad425e767@gmail.com>
+In-Reply-To: <cb4c98eb-2f52-1d8a-942e-550ad425e767@gmail.com>
+From: =?UTF-8?Q?Jos=C3=A9_Luis_Salvador_Rufo?= <salvador.joseluis@gmail.com>
+Date: Mon, 23 Aug 2021 00:54:53 +0200
+Message-ID: <CAH+XeQYBqrMLY8u8+K0gYiyxHF1PgYSyB7Wgvs-f106P5B5-eQ@mail.gmail.com>
+To: Romain Naour <romain.naour@gmail.com>
 Subject: Re: [Buildroot] [PATCH] package/zfs: Fix cross-platform-compilations
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
@@ -112,117 +103,580 @@ List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
  Philippe Serbruyns <Philippe.Serbruyns@ugent.be>,
  "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============4156729712880956198=="
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-TGUgMjIvMDgvMjAyMSDDoCAyMzoyNywgSm9zw6kgTHVpcyBTYWx2YWRvciBSdWZvIGEgw6ljcml0
-wqA6Cj4gSGVsbG8gUm9tYWluIE5hb3VyLAo+IAo+IEVsIGRvbSwgMjIgYWdvIDIwMjEgYSBsYXMg
-MjI6NTIsIFJvbWFpbiBOYW91ciAoPHJvbWFpbi5uYW91ckBnbWFpbC5jb20KPiA8bWFpbHRvOnJv
-bWFpbi5uYW91ckBnbWFpbC5jb20+PikgZXNjcmliacOzOgo+IAo+ICAgICBIZWxsbyBKb3PDqSBM
-dWlzLAo+IAo+ICAgICBMZSAyMi8wOC8yMDIxIMOgIDIyOjM4LCBKb3PDqSBMdWlzIFNhbHZhZG9y
-IFJ1Zm8gYSDDqWNyaXTCoDoKPiAgICAgPiBIZWxsbyBSb21haW4sCj4gICAgID4KPiAgICAgPiBF
-bCBkb20sIDIyIGFnbyAyMDIxIGEgbGFzIDIyOjI3LCBSb21haW4gTmFvdXIgKDxyb21haW4ubmFv
-dXJAZ21haWwuY29tCj4gICAgIDxtYWlsdG86cm9tYWluLm5hb3VyQGdtYWlsLmNvbT4KPiAgICAg
-PiA8bWFpbHRvOnJvbWFpbi5uYW91ckBnbWFpbC5jb20gPG1haWx0bzpyb21haW4ubmFvdXJAZ21h
-aWwuY29tPj4+KSBlc2NyaWJpw7M6Cj4gICAgID4KPiAgICAgPsKgIMKgIMKgSGVsbG8gSm9zw6kg
-THVpcywKPiAgICAgPgo+ICAgICA+wqAgwqAgwqBMZSAyMi8wOC8yMDIxIMOgIDIyOjA1LCBKb3PD
-qSBMdWlzIFNhbHZhZG9yIFJ1Zm8gYSDDqWNyaXTCoDoKPiAgICAgPsKgIMKgIMKgPiBUaGlzIHBh
-dGNoIGZpeGVzIHRoZSBgbWFrZWAgZXhlY3V0ZWQgZnJvbSB0aGUgYGtlcm5lbC5tNGAgaW4KPiAg
-ICAgPsKgIMKgIMKgPiBjcm9zcy1wbGF0Zm9ybS1jb21waWxhdGlvbnMgZW52aXJvbm1lbnRzOgo+
-ICAgICA+wqAgwqAgwqA+IGh0dHBzOi8vZ2l0aHViLmNvbS9vcGVuemZzL3pmcy9ibG9iL3pmcy0y
-LjAuNS9jb25maWcva2VybmVsLm00I0w1ODgKPiAgICAgPGh0dHBzOi8vZ2l0aHViLmNvbS9vcGVu
-emZzL3pmcy9ibG9iL3pmcy0yLjAuNS9jb25maWcva2VybmVsLm00I0w1ODg+Cj4gICAgID7CoCDC
-oCDCoDxodHRwczovL2dpdGh1Yi5jb20vb3Blbnpmcy96ZnMvYmxvYi96ZnMtMi4wLjUvY29uZmln
-L2tlcm5lbC5tNCNMNTg4Cj4gICAgIDxodHRwczovL2dpdGh1Yi5jb20vb3Blbnpmcy96ZnMvYmxv
-Yi96ZnMtMi4wLjUvY29uZmlnL2tlcm5lbC5tNCNMNTg4Pj4KPiAgICAgPsKgIMKgIMKgPgo+ICAg
-ICA+wqAgwqAgwqA+IFNpZ25lZC1vZmYtYnk6IEpvc8OpIEx1aXMgU2FsdmFkb3IgUnVmbyA8c2Fs
-dmFkb3Iuam9zZWx1aXNAZ21haWwuY29tCj4gICAgIDxtYWlsdG86c2FsdmFkb3Iuam9zZWx1aXNA
-Z21haWwuY29tPgo+ICAgICA+wqAgwqAgwqA8bWFpbHRvOnNhbHZhZG9yLmpvc2VsdWlzQGdtYWls
-LmNvbSA8bWFpbHRvOnNhbHZhZG9yLmpvc2VsdWlzQGdtYWlsLmNvbT4+Pgo+ICAgICA+wqAgwqAg
-wqA+IC0tLQo+ICAgICA+wqAgwqAgwqA+IEhlbGxvIGFsbC4KPiAgICAgPsKgIMKgIMKgPgo+ICAg
-ICA+wqAgwqAgwqA+IEBSb21haW4gTmFvdXIsIHRoaXMgcGF0Y2ggd2lsbCBmaXggdGhlIGJ1aWxk
-cm9vdCBnaXRsYWIgQ0kuCj4gICAgID4KPiAgICAgPsKgIMKgIMKgSW5kZWVkIGl0IGZpeCB0aGUg
-aXNzdWUhCj4gICAgID4KPiAgICAgPsKgIMKgIMKgVGVzdGVkLWJ5OiBSb21haW4gTmFvdXIgPHJv
-bWFpbi5uYW91ckBnbWFpbC5jb20KPiAgICAgPG1haWx0bzpyb21haW4ubmFvdXJAZ21haWwuY29t
-PiA8bWFpbHRvOnJvbWFpbi5uYW91ckBnbWFpbC5jb20KPiAgICAgPG1haWx0bzpyb21haW4ubmFv
-dXJAZ21haWwuY29tPj4+Cj4gICAgID4KPiAgICAgPsKgIMKgIMKgPgo+ICAgICA+wqAgwqAgwqA+
-IEBQaGlsaXBwZSBTZXJicnV5bnMswqB0aGlzIHBhdGNoIHdpbGwgZml4IHlvdXIgaXNzdWUgd2l0
-aCB5b3VyIHJwaTQuCj4gICAgID7CoCDCoCDCoD4KPiAgICAgPsKgIMKgIMKgPsKgIHBhY2thZ2Uv
-emZzL3pmcy5tayA8aHR0cDovL3pmcy5taz4gPGh0dHA6Ly96ZnMubWsgPGh0dHA6Ly96ZnMubWs+
-Pgo+ICAgICB8IDEzICsrKysrKysrKysrKysKPiAgICAgPsKgIMKgIMKgPsKgIDEgZmlsZSBjaGFu
-Z2VkLCAxMyBpbnNlcnRpb25zKCspCj4gICAgID7CoCDCoCDCoD4KPiAgICAgPsKgIMKgIMKgPiBk
-aWZmIC0tZ2l0IGEvcGFja2FnZS96ZnMvemZzLm1rIDxodHRwOi8vemZzLm1rPiA8aHR0cDovL3pm
-cy5tawo+ICAgICA8aHR0cDovL3pmcy5taz4+IGIvcGFja2FnZS96ZnMvemZzLm1rIDxodHRwOi8v
-emZzLm1rPgo+ICAgICA+wqAgwqAgwqA8aHR0cDovL3pmcy5tayA8aHR0cDovL3pmcy5taz4+Cj4g
-ICAgID7CoCDCoCDCoD4gaW5kZXggM2IxYWZiNDE5YS4uMjQwNjRjYmE4MiAxMDA2NDQKPiAgICAg
-PsKgIMKgIMKgPiAtLS0gYS9wYWNrYWdlL3pmcy96ZnMubWsgPGh0dHA6Ly96ZnMubWs+IDxodHRw
-Oi8vemZzLm1rIDxodHRwOi8vemZzLm1rPj4KPiAgICAgPsKgIMKgIMKgPiArKysgYi9wYWNrYWdl
-L3pmcy96ZnMubWsgPGh0dHA6Ly96ZnMubWs+IDxodHRwOi8vemZzLm1rIDxodHRwOi8vemZzLm1r
-Pj4KPiAgICAgPsKgIMKgIMKgPiBAQCAtMTMsNiArMTMsMTkgQEAgWkZTX0NQRV9JRF9QUk9EVUNU
-ID0gb3Blbnpmcwo+ICAgICA+wqAgwqAgwqA+wqAKPiAgICAgPsKgIMKgIMKgPsKgIFpGU19BVVRP
-UkVDT05GID0gWUVTCj4gICAgID7CoCDCoCDCoD7CoAo+ICAgICA+wqAgwqAgwqA+ICsjIGNyb3Nz
-IGNvbXBpbGUgZW52aXJvbm1lbnQgZm9yIGxpbnV4IGtlcm5lbCBtb2R1bGUKPiAgICAgPsKgIMKg
-IMKgPiArWkZTX01BS0VfRU5WID0gXAo+ICAgICA+wqAgwqAgwqA+ICvCoCDCoCDCoEhPU1RDQz0i
-JChIT1NUQ0MpICQoSE9TVF9DRkxBR1MpICQoSE9TVF9MREZMQUdTKSIgXAo+ICAgICA+wqAgwqAg
-wqA+ICvCoCDCoCDCoEFSQ0g9JChLRVJORUxfQVJDSCkgXAo+ICAgICA+wqAgwqAgwqA+ICvCoCDC
-oCDCoENST1NTX0NPTVBJTEU9IiQoVEFSR0VUX0NST1NTKSIgXAo+ICAgICA+wqAgwqAgwqA+ICvC
-oCDCoCDCoERFUE1PRD0kKEhPU1RfRElSKS9zYmluL2RlcG1vZAo+ICAgICA+Cj4gICAgID7CoCDC
-oCDCoFlvdSBjYW4gcmVwbGFjZSBhbGwgNCBsaW5lcyB3aXRoICQoTElOVVhfTUFLRV9GTEFHUykg
-aGVyZSBpbnN0ZWFkLgo+ICAgICA+Cj4gICAgID4gU29ycnksIHlvdSBjYW4gbm90LsKgTElOVVhf
-TUFLRV9GTEFHUyBpbmNsdWRlc8KgSU5TVEFMTF9NT0RfUEFUSCwgYW5kIG11c3QgYmUKPiAgICAg
-PiBlbXB0eSBmb3Iga2VybmVsIG1vZHVsZXMuIElmIHdlIHVzZSBMSU5VWF9NQUtFX0ZMQUdTLCB0
-aGUgbW9kdWxlIG91dHB1dAo+ICAgICB3aWxsIGJlCj4gICAgID4gVEFSR0VUX0RJUi9JTlNUQUxM
-X01PRF9QQVRILCBhcyB5b3UgY2FuIHNlZSBpbiBwa2ctZ2VuZXJpYy5tawo+ICAgICA8aHR0cDov
-L3BrZy1nZW5lcmljLm1rPgo+ICAgICA+IDxodHRwOi8vcGtnLWdlbmVyaWMubWsgPGh0dHA6Ly9w
-a2ctZ2VuZXJpYy5taz4+IGF0IGxpbmUgNzcuIEkgYWxyZWFkeSBsb3N0Cj4gICAgIH4xLTJoIGJl
-Y2F1c2Ugb2YgdGhpcyA6LSguCj4gCj4gICAgIFRoaXMgY2hlY2sgYWxsb3cgdG8gZGV0ZWN0IGlz
-c3VlcyBvbiBhIGJ1aWxkIHN5c3RlbS4KPiAgICAgT3RoZXIgcGFja2FnZXMgYnVpbGRpbmcgYW4g
-b3V0IG9mIHRyZWUga2VybmVsIG1vZHVsZSBpcyBhYmxlIHRvIHVzZQo+ICAgICBMSU5VWF9NQUtF
-X0ZMQUdTIChleGNlcHQgbGludXgtZnVzaW9uKS4KPiAKPiAgICAgPiDCoAo+ICAgICA+IFRoZSBh
-bHRlcm5hdGl2ZSB0byB1c2luZyAkKExJTlVYX01BS0VfRkxBR1MpIGlzIGVtcHR5IHRoZcKgSU5T
-VEFMTF9NT0RfUEFUSCBhcwo+ICAgICA+IGZvbGxvd3M6Cj4gICAgID4gWkZTX01BS0VfRU5WID0g
-XAo+ICAgICA+IMKgIMKgIMKgJChMSU5VWF9NQUtFX0ZMQUdTKSBcCj4gICAgID4gwqAgwqAgwqBJ
-TlNUQUxMX01PRF9QQVRIPQo+ICAgICA+Cj4gICAgID4gV2hhdCBkbyB5b3UgcHJlZmVyPwo+IAo+
-ICAgICBJZiBwb3NzaWJsZSwgYSB6ZnMgcGF0Y2guCj4gCj4gSGVyZSBpcyB0aGUgInByb2JsZW0i
-Ogo+IAo+IGh0dHBzOi8vZ2l0aHViLmNvbS9vcGVuemZzL3pmcy9ibG9iL3pmcy0yLjAuNS9tb2R1
-bGUvTWFrZWZpbGUuaW4jTDc5Cj4gPGh0dHBzOi8vZ2l0aHViLmNvbS9vcGVuemZzL3pmcy9ibG9i
-L3pmcy0yLjAuNS9tb2R1bGUvTWFrZWZpbGUuaW4jTDc5Pgo+PiBJTlNUQUxMX01PRF9QQVRIPSQo
-REVTVERJUikkKElOU1RBTExfTU9EX1BBVEgpCgpUaGlzIGlzIHRoZSBwcm9ibGVtLiBJIGd1ZXNz
-IHlvdSBoYXZlIHRvIHJlbW92ZSBERVNURElSIHdoZW4gdXNlZCB3aXRoCklOU1RBTExfTU9EX1BB
-VEguCgo+IAo+IGFuZAo+IAo+IGh0dHBzOi8vZ2l0LmJ1aWxkcm9vdC5uZXQvYnVpbGRyb290L3Ry
-ZWUvcGFja2FnZS9wa2ctZ2VuZXJpYy5taz9oPTIwMjEuMDgtcmMyI243NyA8aHR0cHM6Ly9naXQu
-YnVpbGRyb290Lm5ldC9idWlsZHJvb3QvdHJlZS9wYWNrYWdlL3BrZy1nZW5lcmljLm1rP2g9MjAy
-MS4wOC1yYzIjbjc3Pgo+PsKgJChpZiAkKGZpbHRlciBlbmQsJCgxKSksJChjYWxsIHN0ZXBfY2hl
-Y2tfYnVpbGRfZGlyX29uZSwkKDMpLCQoVEFSR0VUX0RJUikvJChPKSkpKQo+IAo+IEJ1aWxkcm9v
-dCBhbHJlYWR5IGRvZXMgdGhhdCwgc28gd2hlbiBgbWFrZSBtb2R1bGVzX2luc3RhbGxgIGlzIGV4
-ZWN1dGVkLCB0aGUKPiBvdXRwdXQgbW9kdWxlcyBkaXJlY3Rvcnkgd2lsbCBiZSBUQVJHRVRfRElS
-L1RBUkdFVF9ESVIvSU5TVEFMTF9NT0RfUEFUSC4KPiAKPiBJIGhhdmUgbm8gaWRlYSB3aG8gaXPC
-oHRoZSBvbmUgdGhhdCBtdXN0IGNoYW5nZSBpdHMgYmVoYXZpb3IuIDotKAo+IEFueSBzdWdnZXN0
-aW9ucyBvbiBob3cgdG8gcHJvY2VlZD8KPiAKPiBNYXliZSBJIGNhbiB1bmV4cG9ydCBERVNURElS
-IGJlZm9yZSBgbWFrZSBtb2R1bGVzX2luc3RhbGxgLi4uCgpZZXMsIERFU1RESVIgaXMgc29tZXRp
-bWUgbWlzcyB1c2VkIChzZWUgYnVpbGRyb290IGdpdGxvZyBmb3IgZXhhbXBsZSkuCgpJdCdzIGEg
-YnVnIGlmIERFU1RESVIgYW5kIElOU1RBTExfTU9EX1BBVEggYXJlIHVzZWQgdG9nZXRoZXI6Cgpo
-dHRwczovL3d3dy5nbnUub3JnL3ByZXAvc3RhbmRhcmRzL2h0bWxfbm9kZS9ERVNURElSLmh0bWwK
-Cmh0dHBzOi8vd3d3Lmtlcm5lbC5vcmcvZG9jL0RvY3VtZW50YXRpb24va2J1aWxkL21vZHVsZXMu
-dHh0IChJTlNUQUxMX01PRF9QQVRIKQoKQmVzdCByZWdhcmRzLApSb21haW4KCgo+IAo+IEF0dGFj
-aGVkIGFsdGVybmF0aXZlIHBhdGNoIHdpdGggTElOVVhfTUFLRV9GTEFHUyBhbmQgZW1wdHkgSU5T
-VEFMTF9NT0RfUEFUSC4KPiAKPiAKPiAgICAgT3RoZXJ3aXNlIEkgd291bGQgc3VnZ2VzdCB0byBh
-ZGQgYSBjb21tZW50IGFib3V0IHRoZSByZWFzb24gd2h5IExJTlVYX01BS0VfRkxBR1MKPiAgICAg
-Y2FuJ3QgYmUgdXNlZC4KPiAKPiAgICAgQmVzdCByZWdhcmRzLAo+ICAgICBSb21haW4KPiAKPiAK
-PiAgICAgPgo+ICAgICA+Cj4gICAgID7CoCDCoCDCoD4gKyMgYC4vY29uZmlndXJlYCB3aWxsIGV4
-ZWN1dGUgYSBgbWFrZSBtb2R1bGVzYCB0ZXN0IGNhc2UKPiAgICAgPsKgIMKgIMKgPiArWkZTX0NP
-TkZfRU5WID0gXAo+ICAgICA+wqAgwqAgwqA+ICvCoCDCoCDCoEhPU1RDQz0iJChIT1NUQ0MpICQo
-SE9TVF9DRkxBR1MpICQoSE9TVF9MREZMQUdTKSIgXAo+ICAgICA+wqAgwqAgwqA+ICvCoCDCoCDC
-oEFSQ0g9JChLRVJORUxfQVJDSCkgXAo+ICAgICA+wqAgwqAgwqA+ICvCoCDCoCDCoENST1NTX0NP
-TVBJTEU9IiQoVEFSR0VUX0NST1NTKSIgXAo+ICAgICA+wqAgwqAgwqA+ICvCoCDCoCDCoERFUE1P
-RD0kKEhPU1RfRElSKS9zYmluL2RlcG1vZAo+ICAgICA+Cj4gICAgID7CoCDCoCDCoFNhbWUgaGVy
-ZS4KPiAgICAgPgo+ICAgICA+Cj4gICAgID4KPiAgICAgPsKgIMKgIMKgPiArCj4gICAgID7CoCDC
-oCDCoD7CoCBaRlNfREVQRU5ERU5DSUVTID0gbGliYWlvIG9wZW5zc2wgdWRldiB1dGlsLWxpbnV4
-IHpsaWIKPiAgICAgPsKgIMKgIMKgPsKgCj4gICAgID7CoCDCoCDCoD7CoCAjIHN5c3Zpbml0IGlu
-c3RhbGxzIG9ubHkgYSBjb21tZW50ZWQtb3V0IG1vZHVsZXMtbG9hZC5kLyBjb25maWcgZmlsZQo+
-ICAgICA+wqAgwqAgwqA+Cj4gICAgID4KPiAKPiAKPiBHcmVldGluZ3MhwqAKCl9fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxp
-c3QKYnVpbGRyb290QGJ1c3lib3gubmV0Cmh0dHA6Ly9saXN0cy5idXN5Ym94Lm5ldC9tYWlsbWFu
-L2xpc3RpbmZvL2J1aWxkcm9vdAo=
+--===============4156729712880956198==
+Content-Type: multipart/alternative; boundary="00000000000098421805ca2dca5e"
+
+--00000000000098421805ca2dca5e
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hello Romain Naour,
+
+El dom, 22 ago 2021 a las 23:43, Romain Naour (<romain.naour@gmail.com>)
+escribi=C3=B3:
+
+> Le 22/08/2021 =C3=A0 23:27, Jos=C3=A9 Luis Salvador Rufo a =C3=A9crit :
+> > Hello Romain Naour,
+> >
+> > El dom, 22 ago 2021 a las 22:52, Romain Naour (<romain.naour@gmail.com
+> > <mailto:romain.naour@gmail.com>>) escribi=C3=B3:
+> >
+> >     Hello Jos=C3=A9 Luis,
+> >
+> >     Le 22/08/2021 =C3=A0 22:38, Jos=C3=A9 Luis Salvador Rufo a =C3=A9cr=
+it :
+> >     > Hello Romain,
+> >     >
+> >     > El dom, 22 ago 2021 a las 22:27, Romain Naour (<
+> romain.naour@gmail.com
+> >     <mailto:romain.naour@gmail.com>
+> >     > <mailto:romain.naour@gmail.com <mailto:romain.naour@gmail.com>>>)
+> escribi=C3=B3:
+> >     >
+> >     >     Hello Jos=C3=A9 Luis,
+> >     >
+> >     >     Le 22/08/2021 =C3=A0 22:05, Jos=C3=A9 Luis Salvador Rufo a =
+=C3=A9crit :
+> >     >     > This patch fixes the `make` executed from the `kernel.m4` i=
+n
+> >     >     > cross-platform-compilations environments:
+> >     >     >
+> https://github.com/openzfs/zfs/blob/zfs-2.0.5/config/kernel.m4#L588
+> >     <https://github.com/openzfs/zfs/blob/zfs-2.0.5/config/kernel.m4#L58=
+8
+> >
+> >     >     <
+> https://github.com/openzfs/zfs/blob/zfs-2.0.5/config/kernel.m4#L588
+> >     <https://github.com/openzfs/zfs/blob/zfs-2.0.5/config/kernel.m4#L58=
+8
+> >>
+> >     >     >
+> >     >     > Signed-off-by: Jos=C3=A9 Luis Salvador Rufo <
+> salvador.joseluis@gmail.com
+> >     <mailto:salvador.joseluis@gmail.com>
+> >     >     <mailto:salvador.joseluis@gmail.com <mailto:
+> salvador.joseluis@gmail.com>>>
+> >     >     > ---
+> >     >     > Hello all.
+> >     >     >
+> >     >     > @Romain Naour, this patch will fix the buildroot gitlab CI.
+> >     >
+> >     >     Indeed it fix the issue!
+> >     >
+> >     >     Tested-by: Romain Naour <romain.naour@gmail.com
+> >     <mailto:romain.naour@gmail.com> <mailto:romain.naour@gmail.com
+> >     <mailto:romain.naour@gmail.com>>>
+> >     >
+> >     >     >
+> >     >     > @Philippe Serbruyns, this patch will fix your issue with
+> your rpi4.
+> >     >     >
+> >     >     >  package/zfs/zfs.mk <http://zfs.mk> <http://zfs.mk <
+> http://zfs.mk>>
+> >     | 13 +++++++++++++
+> >     >     >  1 file changed, 13 insertions(+)
+> >     >     >
+> >     >     > diff --git a/package/zfs/zfs.mk <http://zfs.mk> <
+> http://zfs.mk
+> >     <http://zfs.mk>> b/package/zfs/zfs.mk <http://zfs.mk>
+> >     >     <http://zfs.mk <http://zfs.mk>>
+> >     >     > index 3b1afb419a..24064cba82 100644
+> >     >     > --- a/package/zfs/zfs.mk <http://zfs.mk> <http://zfs.mk <
+> http://zfs.mk>>
+> >     >     > +++ b/package/zfs/zfs.mk <http://zfs.mk> <http://zfs.mk <
+> http://zfs.mk>>
+> >     >     > @@ -13,6 +13,19 @@ ZFS_CPE_ID_PRODUCT =3D openzfs
+> >     >     >
+> >     >     >  ZFS_AUTORECONF =3D YES
+> >     >     >
+> >     >     > +# cross compile environment for linux kernel module
+> >     >     > +ZFS_MAKE_ENV =3D \
+> >     >     > +     HOSTCC=3D"$(HOSTCC) $(HOST_CFLAGS) $(HOST_LDFLAGS)" \
+> >     >     > +     ARCH=3D$(KERNEL_ARCH) \
+> >     >     > +     CROSS_COMPILE=3D"$(TARGET_CROSS)" \
+> >     >     > +     DEPMOD=3D$(HOST_DIR)/sbin/depmod
+> >     >
+> >     >     You can replace all 4 lines with $(LINUX_MAKE_FLAGS) here
+> instead.
+> >     >
+> >     > Sorry, you can not. LINUX_MAKE_FLAGS includes INSTALL_MOD_PATH,
+> and must be
+> >     > empty for kernel modules. If we use LINUX_MAKE_FLAGS, the module
+> output
+> >     will be
+> >     > TARGET_DIR/INSTALL_MOD_PATH, as you can see in pkg-generic.mk
+> >     <http://pkg-generic.mk>
+> >     > <http://pkg-generic.mk <http://pkg-generic.mk>> at line 77. I
+> already lost
+> >     ~1-2h because of this :-(.
+> >
+> >     This check allow to detect issues on a build system.
+> >     Other packages building an out of tree kernel module is able to use
+> >     LINUX_MAKE_FLAGS (except linux-fusion).
+> >
+> >     >
+> >     > The alternative to using $(LINUX_MAKE_FLAGS) is empty
+> the INSTALL_MOD_PATH as
+> >     > follows:
+> >     > ZFS_MAKE_ENV =3D \
+> >     >      $(LINUX_MAKE_FLAGS) \
+> >     >      INSTALL_MOD_PATH=3D
+> >     >
+> >     > What do you prefer?
+> >
+> >     If possible, a zfs patch.
+> >
+> > Here is the "problem":
+> >
+> > https://github.com/openzfs/zfs/blob/zfs-2.0.5/module/Makefile.in#L79
+> > <https://github.com/openzfs/zfs/blob/zfs-2.0.5/module/Makefile.in#L79>
+> >> INSTALL_MOD_PATH=3D$(DESTDIR)$(INSTALL_MOD_PATH)
+>
+> This is the problem. I guess you have to remove DESTDIR when used with
+> INSTALL_MOD_PATH.
+>
+> I found that DESTDIR is already empty. Sorry, my bad.
+
+>
+> > and
+> >
+> >
+> https://git.buildroot.net/buildroot/tree/package/pkg-generic.mk?h=3D2021.=
+08-rc2#n77
+> <
+> https://git.buildroot.net/buildroot/tree/package/pkg-generic.mk?h=3D2021.=
+08-rc2#n77
+> >
+> >> $(if $(filter end,$(1)),$(call
+> step_check_build_dir_one,$(3),$(TARGET_DIR)/$(O))))
+>
+
+So I made:
+```
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 97ee204b80..c406b32acf 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -71,6 +71,7 @@ define step_check_build_dir_one
+ endef
+
+ define step_check_build_dir
++       echo -e "TARGET_DIR $(TARGET_DIR)\nO $(O)\n" > /tmp/output
+        $(if $(filter install-staging,$(2)),\
+                $(if $(filter end,$(1)),$(call
+step_check_build_dir_one,$(3),$(STAGING_DIR)/$(O))))
+        $(if $(filter install-target,$(2)),\
+```
+
+And here is the output:
+```
+TARGET_DIR /home/jlsalvador/src/buildroot-rpi4-tmp/per-package/zfs/target
+O /home/jlsalvador/src/buildroot-rpi4-tmp
+```
+
+So the installation path will be
+`/home/jlsalvador/src/buildroot-rpi4-tmp/per-package/zfs/target//home/jlsal=
+vador/src/buildroot-rpi4-tmp`
+
+`/home/jlsalvador/src/buildroot-rpi4-tmp` is an out-of-tree buildroot
+directory that was created with the following command:
+
+```
+mkdir ~/src/buildroot-rpi4-tmp
+cd ~/src/buildroot-rpi4-tmp
+make O=3D$(pwd) -C ../buildroot menuconfig
+```
+
+Maybe this is the problem? Is `$(TARGET_DIR)/$(O)` right?
+
+
+> >
+> > Buildroot already does that, so when `make modules_install` is executed=
+,
+> the
+> > output modules directory will be TARGET_DIR/TARGET_DIR/INSTALL_MOD_PATH=
+.
+> >
+> > I have no idea who is the one that must change its behavior. :-(
+> > Any suggestions on how to proceed?
+> >
+> > Maybe I can unexport DESTDIR before `make modules_install`...
+>
+> Yes, DESTDIR is sometime miss used (see buildroot gitlog for example).
+>
+> It's a bug if DESTDIR and INSTALL_MOD_PATH are used together:
+>
+> https://www.gnu.org/prep/standards/html_node/DESTDIR.html
+>
+> https://www.kernel.org/doc/Documentation/kbuild/modules.txt
+> (INSTALL_MOD_PATH)
+>
+> Best regards,
+> Romain
+>
+>
+> >
+> > Attached alternative patch with LINUX_MAKE_FLAGS and empty
+> INSTALL_MOD_PATH.
+> >
+> >
+> >     Otherwise I would suggest to add a comment about the reason why
+> LINUX_MAKE_FLAGS
+> >     can't be used.
+> >
+> >     Best regards,
+> >     Romain
+> >
+> >
+> >     >
+> >     >
+> >     >     > +# `./configure` will execute a `make modules` test case
+> >     >     > +ZFS_CONF_ENV =3D \
+> >     >     > +     HOSTCC=3D"$(HOSTCC) $(HOST_CFLAGS) $(HOST_LDFLAGS)" \
+> >     >     > +     ARCH=3D$(KERNEL_ARCH) \
+> >     >     > +     CROSS_COMPILE=3D"$(TARGET_CROSS)" \
+> >     >     > +     DEPMOD=3D$(HOST_DIR)/sbin/depmod
+> >     >
+> >     >     Same here.
+> >     >
+> >     >
+> >     >
+> >     >     > +
+> >     >     >  ZFS_DEPENDENCIES =3D libaio openssl udev util-linux zlib
+> >     >     >
+> >     >     >  # sysvinit installs only a commented-out modules-load.d/
+> config file
+> >     >     >
+> >     >
+> >
+> >
+> > Greetings!
+>
+>
+
+--00000000000098421805ca2dca5e
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div dir=3D"ltr">Hello Romain Naour,</div><br><div class=
+=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">El dom, 22 ago 2021 =
+a las 23:43, Romain Naour (&lt;<a href=3D"mailto:romain.naour@gmail.com">ro=
+main.naour@gmail.com</a>&gt;) escribi=C3=B3:<br></div><blockquote class=3D"=
+gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(20=
+4,204,204);padding-left:1ex">Le 22/08/2021 =C3=A0 23:27, Jos=C3=A9 Luis Sal=
+vador Rufo a =C3=A9crit=C2=A0:<br>
+&gt; Hello Romain Naour,<br>
+&gt; <br>
+&gt; El dom, 22 ago 2021 a las 22:52, Romain Naour (&lt;<a href=3D"mailto:r=
+omain.naour@gmail.com" target=3D"_blank">romain.naour@gmail.com</a><br>
+&gt; &lt;mailto:<a href=3D"mailto:romain.naour@gmail.com" target=3D"_blank"=
+>romain.naour@gmail.com</a>&gt;&gt;) escribi=C3=B3:<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0Hello Jos=C3=A9 Luis,<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0Le 22/08/2021 =C3=A0 22:38, Jos=C3=A9 Luis Salvador=
+ Rufo a =C3=A9crit=C2=A0:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt; Hello Romain,<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt; El dom, 22 ago 2021 a las 22:27, Romain Naour =
+(&lt;<a href=3D"mailto:romain.naour@gmail.com" target=3D"_blank">romain.nao=
+ur@gmail.com</a><br>
+&gt;=C2=A0 =C2=A0 =C2=A0&lt;mailto:<a href=3D"mailto:romain.naour@gmail.com=
+" target=3D"_blank">romain.naour@gmail.com</a>&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt; &lt;mailto:<a href=3D"mailto:romain.naour@gmai=
+l.com" target=3D"_blank">romain.naour@gmail.com</a> &lt;mailto:<a href=3D"m=
+ailto:romain.naour@gmail.com" target=3D"_blank">romain.naour@gmail.com</a>&=
+gt;&gt;&gt;) escribi=C3=B3:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0Hello Jos=C3=A9 Luis,<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0Le 22/08/2021 =C3=A0 22:05,=
+ Jos=C3=A9 Luis Salvador Rufo a =C3=A9crit=C2=A0:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt; This patch fixes the `=
+make` executed from the `kernel.m4` in<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt; cross-platform-compila=
+tions environments:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt; <a href=3D"https://git=
+hub.com/openzfs/zfs/blob/zfs-2.0.5/config/kernel.m4#L588" rel=3D"noreferrer=
+" target=3D"_blank">https://github.com/openzfs/zfs/blob/zfs-2.0.5/config/ke=
+rnel.m4#L588</a><br>
+&gt;=C2=A0 =C2=A0 =C2=A0&lt;<a href=3D"https://github.com/openzfs/zfs/blob/=
+zfs-2.0.5/config/kernel.m4#L588" rel=3D"noreferrer" target=3D"_blank">https=
+://github.com/openzfs/zfs/blob/zfs-2.0.5/config/kernel.m4#L588</a>&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&lt;<a href=3D"https://gith=
+ub.com/openzfs/zfs/blob/zfs-2.0.5/config/kernel.m4#L588" rel=3D"noreferrer"=
+ target=3D"_blank">https://github.com/openzfs/zfs/blob/zfs-2.0.5/config/ker=
+nel.m4#L588</a><br>
+&gt;=C2=A0 =C2=A0 =C2=A0&lt;<a href=3D"https://github.com/openzfs/zfs/blob/=
+zfs-2.0.5/config/kernel.m4#L588" rel=3D"noreferrer" target=3D"_blank">https=
+://github.com/openzfs/zfs/blob/zfs-2.0.5/config/kernel.m4#L588</a>&gt;&gt;<=
+br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt; Signed-off-by: Jos=C3=
+=A9 Luis Salvador Rufo &lt;<a href=3D"mailto:salvador.joseluis@gmail.com" t=
+arget=3D"_blank">salvador.joseluis@gmail.com</a><br>
+&gt;=C2=A0 =C2=A0 =C2=A0&lt;mailto:<a href=3D"mailto:salvador.joseluis@gmai=
+l.com" target=3D"_blank">salvador.joseluis@gmail.com</a>&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&lt;mailto:<a href=3D"mailt=
+o:salvador.joseluis@gmail.com" target=3D"_blank">salvador.joseluis@gmail.co=
+m</a> &lt;mailto:<a href=3D"mailto:salvador.joseluis@gmail.com" target=3D"_=
+blank">salvador.joseluis@gmail.com</a>&gt;&gt;&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt; ---<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt; Hello all.<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt; @Romain Naour, this pa=
+tch will fix the buildroot gitlab CI.<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0Indeed it fix the issue!<br=
+>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0Tested-by: Romain Naour &lt=
+;<a href=3D"mailto:romain.naour@gmail.com" target=3D"_blank">romain.naour@g=
+mail.com</a><br>
+&gt;=C2=A0 =C2=A0 =C2=A0&lt;mailto:<a href=3D"mailto:romain.naour@gmail.com=
+" target=3D"_blank">romain.naour@gmail.com</a>&gt; &lt;mailto:<a href=3D"ma=
+ilto:romain.naour@gmail.com" target=3D"_blank">romain.naour@gmail.com</a><b=
+r>
+&gt;=C2=A0 =C2=A0 =C2=A0&lt;mailto:<a href=3D"mailto:romain.naour@gmail.com=
+" target=3D"_blank">romain.naour@gmail.com</a>&gt;&gt;&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt; @Philippe Serbruyns,=
+=C2=A0this patch will fix your issue with your rpi4.<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 package/zfs/<a h=
+ref=3D"http://zfs.mk" rel=3D"noreferrer" target=3D"_blank">zfs.mk</a> &lt;<=
+a href=3D"http://zfs.mk" rel=3D"noreferrer" target=3D"_blank">http://zfs.mk=
+</a>&gt; &lt;<a href=3D"http://zfs.mk" rel=3D"noreferrer" target=3D"_blank"=
+>http://zfs.mk</a> &lt;<a href=3D"http://zfs.mk" rel=3D"noreferrer" target=
+=3D"_blank">http://zfs.mk</a>&gt;&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0| 13 +++++++++++++<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 1 file changed, =
+13 insertions(+)<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt; diff --git a/package/z=
+fs/<a href=3D"http://zfs.mk" rel=3D"noreferrer" target=3D"_blank">zfs.mk</a=
+> &lt;<a href=3D"http://zfs.mk" rel=3D"noreferrer" target=3D"_blank">http:/=
+/zfs.mk</a>&gt; &lt;<a href=3D"http://zfs.mk" rel=3D"noreferrer" target=3D"=
+_blank">http://zfs.mk</a><br>
+&gt;=C2=A0 =C2=A0 =C2=A0&lt;<a href=3D"http://zfs.mk" rel=3D"noreferrer" ta=
+rget=3D"_blank">http://zfs.mk</a>&gt;&gt; b/package/zfs/<a href=3D"http://z=
+fs.mk" rel=3D"noreferrer" target=3D"_blank">zfs.mk</a> &lt;<a href=3D"http:=
+//zfs.mk" rel=3D"noreferrer" target=3D"_blank">http://zfs.mk</a>&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&lt;<a href=3D"http://zfs.m=
+k" rel=3D"noreferrer" target=3D"_blank">http://zfs.mk</a> &lt;<a href=3D"ht=
+tp://zfs.mk" rel=3D"noreferrer" target=3D"_blank">http://zfs.mk</a>&gt;&gt;=
+<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt; index 3b1afb419a..2406=
+4cba82 100644<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt; --- a/package/zfs/<a h=
+ref=3D"http://zfs.mk" rel=3D"noreferrer" target=3D"_blank">zfs.mk</a> &lt;<=
+a href=3D"http://zfs.mk" rel=3D"noreferrer" target=3D"_blank">http://zfs.mk=
+</a>&gt; &lt;<a href=3D"http://zfs.mk" rel=3D"noreferrer" target=3D"_blank"=
+>http://zfs.mk</a> &lt;<a href=3D"http://zfs.mk" rel=3D"noreferrer" target=
+=3D"_blank">http://zfs.mk</a>&gt;&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt; +++ b/package/zfs/<a h=
+ref=3D"http://zfs.mk" rel=3D"noreferrer" target=3D"_blank">zfs.mk</a> &lt;<=
+a href=3D"http://zfs.mk" rel=3D"noreferrer" target=3D"_blank">http://zfs.mk=
+</a>&gt; &lt;<a href=3D"http://zfs.mk" rel=3D"noreferrer" target=3D"_blank"=
+>http://zfs.mk</a> &lt;<a href=3D"http://zfs.mk" rel=3D"noreferrer" target=
+=3D"_blank">http://zfs.mk</a>&gt;&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt; @@ -13,6 +13,19 @@ ZFS=
+_CPE_ID_PRODUCT =3D openzfs<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 ZFS_AUTORECONF =
+=3D YES<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt; +# cross compile envir=
+onment for linux kernel module<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt; +ZFS_MAKE_ENV =3D \<br=
+>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt; +=C2=A0 =C2=A0 =C2=A0H=
+OSTCC=3D&quot;$(HOSTCC) $(HOST_CFLAGS) $(HOST_LDFLAGS)&quot; \<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt; +=C2=A0 =C2=A0 =C2=A0A=
+RCH=3D$(KERNEL_ARCH) \<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt; +=C2=A0 =C2=A0 =C2=A0C=
+ROSS_COMPILE=3D&quot;$(TARGET_CROSS)&quot; \<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt; +=C2=A0 =C2=A0 =C2=A0D=
+EPMOD=3D$(HOST_DIR)/sbin/depmod<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0You can replace all 4 lines=
+ with $(LINUX_MAKE_FLAGS) here instead.<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt; Sorry, you can not.=C2=A0LINUX_MAKE_FLAGS incl=
+udes=C2=A0INSTALL_MOD_PATH, and must be<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt; empty for kernel modules. If we use LINUX_MAKE=
+_FLAGS, the module output<br>
+&gt;=C2=A0 =C2=A0 =C2=A0will be<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt; TARGET_DIR/INSTALL_MOD_PATH, as you can see in=
+ <a href=3D"http://pkg-generic.mk" rel=3D"noreferrer" target=3D"_blank">pkg=
+-generic.mk</a><br>
+&gt;=C2=A0 =C2=A0 =C2=A0&lt;<a href=3D"http://pkg-generic.mk" rel=3D"norefe=
+rrer" target=3D"_blank">http://pkg-generic.mk</a>&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt; &lt;<a href=3D"http://pkg-generic.mk" rel=3D"n=
+oreferrer" target=3D"_blank">http://pkg-generic.mk</a> &lt;<a href=3D"http:=
+//pkg-generic.mk" rel=3D"noreferrer" target=3D"_blank">http://pkg-generic.m=
+k</a>&gt;&gt; at line 77. I already lost<br>
+&gt;=C2=A0 =C2=A0 =C2=A0~1-2h because of this :-(.<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0This check allow to detect issues on a build system=
+.<br>
+&gt;=C2=A0 =C2=A0 =C2=A0Other packages building an out of tree kernel modul=
+e is able to use<br>
+&gt;=C2=A0 =C2=A0 =C2=A0LINUX_MAKE_FLAGS (except linux-fusion).<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt; =C2=A0<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt; The alternative to using $(LINUX_MAKE_FLAGS) i=
+s empty the=C2=A0INSTALL_MOD_PATH as<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt; follows:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt; ZFS_MAKE_ENV =3D \<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt; =C2=A0 =C2=A0 =C2=A0$(LINUX_MAKE_FLAGS) \<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt; =C2=A0 =C2=A0 =C2=A0INSTALL_MOD_PATH=3D<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt; What do you prefer?<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0If possible, a zfs patch.<br>
+&gt; <br>
+&gt; Here is the &quot;problem&quot;:<br>
+&gt; <br>
+&gt; <a href=3D"https://github.com/openzfs/zfs/blob/zfs-2.0.5/module/Makefi=
+le.in#L79" rel=3D"noreferrer" target=3D"_blank">https://github.com/openzfs/=
+zfs/blob/zfs-2.0.5/module/Makefile.in#L79</a><br>
+&gt; &lt;<a href=3D"https://github.com/openzfs/zfs/blob/zfs-2.0.5/module/Ma=
+kefile.in#L79" rel=3D"noreferrer" target=3D"_blank">https://github.com/open=
+zfs/zfs/blob/zfs-2.0.5/module/Makefile.in#L79</a>&gt;<br>
+&gt;&gt; INSTALL_MOD_PATH=3D$(DESTDIR)$(INSTALL_MOD_PATH)<br>
+<br>
+This is the problem. I guess you have to remove DESTDIR when used with<br>
+INSTALL_MOD_PATH.<br>
+<br></blockquote><div>I found that DESTDIR is already empty. Sorry, my bad.=
+</div><div><br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px =
+0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">
+&gt; <br>
+&gt; and<br>
+&gt; <br>
+&gt; <a href=3D"https://git.buildroot.net/buildroot/tree/package/pkg-generi=
+c.mk?h=3D2021.08-rc2#n77" rel=3D"noreferrer" target=3D"_blank">https://git.=
+buildroot.net/buildroot/tree/package/pkg-generic.mk?h=3D2021.08-rc2#n77</a>=
+ &lt;<a href=3D"https://git.buildroot.net/buildroot/tree/package/pkg-generi=
+c.mk?h=3D2021.08-rc2#n77" rel=3D"noreferrer" target=3D"_blank">https://git.=
+buildroot.net/buildroot/tree/package/pkg-generic.mk?h=3D2021.08-rc2#n77</a>=
+&gt;<br>
+&gt;&gt;=C2=A0$(if $(filter end,$(1)),$(call step_check_build_dir_one,$(3),=
+$(TARGET_DIR)/$(O))))<br></blockquote><div><br></div><div>So I made:</div><=
+div>```</div><div>diff --git a/package/<a href=3D"http://pkg-generic.mk">pk=
+g-generic.mk</a> b/package/<a href=3D"http://pkg-generic.mk">pkg-generic.mk=
+</a><br>index 97ee204b80..c406b32acf 100644<br>--- a/package/<a href=3D"htt=
+p://pkg-generic.mk">pkg-generic.mk</a><br>+++ b/package/<a href=3D"http://p=
+kg-generic.mk">pkg-generic.mk</a><br>@@ -71,6 +71,7 @@ define step_check_bu=
+ild_dir_one<br>=C2=A0endef<br>=C2=A0<br>=C2=A0define step_check_build_dir<b=
+r>+ =C2=A0 =C2=A0 =C2=A0 echo -e &quot;TARGET_DIR $(TARGET_DIR)\nO $(O)\n&q=
+uot; &gt; /tmp/output<br>=C2=A0 =C2=A0 =C2=A0 =C2=A0 $(if $(filter install-=
+staging,$(2)),\<br>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+$(if $(filter end,$(1)),$(call step_check_build_dir_one,$(3),$(STAGING_DIR)=
+/$(O))))<br>=C2=A0 =C2=A0 =C2=A0 =C2=A0 $(if $(filter install-target,$(2)),=
+\<br></div><div>```<br></div><div><br></div><div>And here is the output:</d=
+iv><div>```</div>TARGET_DIR /home/jlsalvador/src/buildroot-rpi4-tmp/per-pac=
+kage/zfs/target<br>O /home/jlsalvador/src/buildroot-rpi4-tmp<br><div>```<br=
+></div><div><br></div><div>So the installation path will be `/home/jlsalvad=
+or/src/buildroot-rpi4-tmp/per-package/zfs/target//home/jlsalvador/src/build=
+root-rpi4-tmp`<br></div><div><br></div><div>`/home/jlsalvador/src/buildroot=
+-rpi4-tmp` is an out-of-tree buildroot directory that was created with the =
+following command:</div><div><br></div><div>```</div><div>mkdir ~/src/build=
+root-rpi4-tmp</div><div>cd ~/src/buildroot-rpi4-tmp</div><div>make O=3D$(pw=
+d) -C ../buildroot menuconfig<br></div><div>```</div><div><br></div><div>Ma=
+ybe this is the problem? Is `$(TARGET_DIR)/$(O)` right?</div><div>=C2=A0<br=
+></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;=
+border-left:1px solid rgb(204,204,204);padding-left:1ex">
+&gt; <br>
+&gt; Buildroot already does that, so when `make modules_install` is execute=
+d, the<br>
+&gt; output modules directory will be TARGET_DIR/TARGET_DIR/INSTALL_MOD_PAT=
+H.<br>
+&gt; <br>
+&gt; I have no idea who is=C2=A0the one that must change its behavior. :-(<=
+br>
+&gt; Any suggestions on how to proceed?<br>
+&gt; <br>
+&gt; Maybe I can unexport DESTDIR before `make modules_install`...<br>
+<br>
+Yes, DESTDIR is sometime miss used (see buildroot gitlog for example).<br>
+<br>
+It&#39;s a bug if DESTDIR and INSTALL_MOD_PATH are used together:<br>
+<br>
+<a href=3D"https://www.gnu.org/prep/standards/html_node/DESTDIR.html" rel=
+=3D"noreferrer" target=3D"_blank">https://www.gnu.org/prep/standards/html_n=
+ode/DESTDIR.html</a><br>
+<br>
+<a href=3D"https://www.kernel.org/doc/Documentation/kbuild/modules.txt" rel=
+=3D"noreferrer" target=3D"_blank">https://www.kernel.org/doc/Documentation/=
+kbuild/modules.txt</a> (INSTALL_MOD_PATH)<br>
+<br>
+Best regards,<br>
+Romain<br>
+<br>
+<br>
+&gt; <br>
+&gt; Attached alternative patch with LINUX_MAKE_FLAGS and empty INSTALL_MOD=
+_PATH.<br>
+&gt; <br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0Otherwise I would suggest to add a comment about th=
+e reason why LINUX_MAKE_FLAGS<br>
+&gt;=C2=A0 =C2=A0 =C2=A0can&#39;t be used.<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0Best regards,<br>
+&gt;=C2=A0 =C2=A0 =C2=A0Romain<br>
+&gt; <br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt; +# `./configure` will =
+execute a `make modules` test case<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt; +ZFS_CONF_ENV =3D \<br=
+>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt; +=C2=A0 =C2=A0 =C2=A0H=
+OSTCC=3D&quot;$(HOSTCC) $(HOST_CFLAGS) $(HOST_LDFLAGS)&quot; \<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt; +=C2=A0 =C2=A0 =C2=A0A=
+RCH=3D$(KERNEL_ARCH) \<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt; +=C2=A0 =C2=A0 =C2=A0C=
+ROSS_COMPILE=3D&quot;$(TARGET_CROSS)&quot; \<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt; +=C2=A0 =C2=A0 =C2=A0D=
+EPMOD=3D$(HOST_DIR)/sbin/depmod<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0Same here.<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt; +<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 ZFS_DEPENDENCIES=
+ =3D libaio openssl udev util-linux zlib<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 # sysvinit insta=
+lls only a commented-out modules-load.d/ config file<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;<br>
+&gt; <br>
+&gt; <br>
+&gt; Greetings!=C2=A0<br>
+<br>
+</blockquote></div></div>
+
+--00000000000098421805ca2dca5e--
+
+--===============4156729712880956198==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@busybox.net
+http://lists.busybox.net/mailman/listinfo/buildroot
+
+--===============4156729712880956198==--
