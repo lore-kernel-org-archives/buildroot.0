@@ -1,94 +1,90 @@
-Return-Path: <SRS0=qqE2=NN=busybox.net=buildroot-bounces@kernel.org>
+Return-Path: <SRS0=awcP=NO=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.4 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
-	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,HTML_MESSAGE,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,MIME_HTML_MOSTLY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-0.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,HTML_MESSAGE,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6883FC4338F
-	for <buildroot@archiver.kernel.org>; Sun, 22 Aug 2021 22:55:17 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 19A26C4338F
+	for <buildroot@archiver.kernel.org>; Mon, 23 Aug 2021 05:44:19 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id EFF7761163
-	for <buildroot@archiver.kernel.org>; Sun, 22 Aug 2021 22:55:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org EFF7761163
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id 926856126A
+	for <buildroot@archiver.kernel.org>; Mon, 23 Aug 2021 05:44:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 926856126A
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=unikie.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B43E840290;
-	Sun, 22 Aug 2021 22:55:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 53F1A6065C;
+	Mon, 23 Aug 2021 05:44:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id h1OTOMRpy8W0; Sun, 22 Aug 2021 22:55:13 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id sRY7gQw6fne0; Mon, 23 Aug 2021 05:44:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3ACEC40294;
-	Sun, 22 Aug 2021 22:55:12 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 252BF1BF46D
- for <buildroot@lists.busybox.net>; Sun, 22 Aug 2021 22:55:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A585F6066E;
+	Mon, 23 Aug 2021 05:44:13 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 90C1D1BF429
+ for <buildroot@lists.busybox.net>; Mon, 23 Aug 2021 05:44:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 136B0400DE
- for <buildroot@lists.busybox.net>; Sun, 22 Aug 2021 22:55:11 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 80B7480CFA
+ for <buildroot@lists.busybox.net>; Mon, 23 Aug 2021 05:44:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uWSa47tjHdIA for <buildroot@lists.busybox.net>;
- Sun, 22 Aug 2021 22:55:06 +0000 (UTC)
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=unikie-com.20150623.gappssmtp.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id E1m6KHAeouKv for <buildroot@lists.busybox.net>;
+ Mon, 23 Aug 2021 05:44:07 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com
- [IPv6:2607:f8b0:4864:20::32b])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C760C401A4
- for <buildroot@buildroot.org>; Sun, 22 Aug 2021 22:55:05 +0000 (UTC)
-Received: by mail-ot1-x32b.google.com with SMTP id
- g66-20020a9d12c8000000b0051aeba607f1so22911535otg.11
- for <buildroot@buildroot.org>; Sun, 22 Aug 2021 15:55:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com
+ [IPv6:2a00:1450:4864:20::534])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2D39F80CC9
+ for <buildroot@buildroot.org>; Mon, 23 Aug 2021 05:44:07 +0000 (UTC)
+Received: by mail-ed1-x534.google.com with SMTP id g21so24400353edw.4
+ for <buildroot@buildroot.org>; Sun, 22 Aug 2021 22:44:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=unikie-com.20150623.gappssmtp.com; s=20150623;
  h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=rrBdKuxILvzmPxJnz46o0tIC/NJd/fyXPVK2SIU+YzY=;
- b=efPX5Gt/tzihio1WpRIUFv/xQVCUJ/BrQjXEmty/KLV6i+IYg9B0B/KRzukT2mF1ru
- iAF+A2tB3rso3jGnI/vmrNSZmrKXJbPb+SZ2139pyC8RFS3PNfdKxbqTQCPQ3anhi/YT
- 5+ti2qzHd1tDCjZakyI2CIFkguWnpWer5bbM5vKOhWqV5W4rKxYl05rtngfk9Ej1jajl
- WEVoqjOC8/5caFXAf93jDJQCK+l1USoi2X7A768ZqqZWPMJD6KgIbXsLatXMn4ewGoS+
- RwWyJIMEPnU8YRBciru4QlL4wszEuNQIpUZgE2cKkVGYMScFAJ18kB72iexkh1glEGFF
- 60bw==
+ :cc; bh=j1WCXwUFDRtwNpLYtFdbUZ0C1gajkNDDzZcC6QXN4OU=;
+ b=eguKF8aJOSX7f9iOY87NSJFqRJKN+7+lW0yKYciq7fqgf6gSTAKaVmRi2bZAAQ2FaS
+ ZVlNvTKqWOpEQHwznn7LyDNm1TuctcP81lFk+8NDYq8KPR1T5iyQCkYsZSUV3VSya/UZ
+ tf+sDpDJn0xSi1AiRqYrg5WLtxE9C7RNpkL+2PUhOszjPKiB9A1jfEmbXqy0yNVSBKZo
+ zjQH8XgdmlGMwQzGmY+gzziTS2hxCtLAtYhBpov0ukdHm7GNZM3tUilboB+hGJtVJYSI
+ w2dUbcZla4FNapFPxfHw3uOZq2nx71OHFd3/kZj2wP/uKyon4XCz4BWAljxGzxoMtf7P
+ uyuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:mime-version:references:in-reply-to:from:date
  :message-id:subject:to:cc;
- bh=rrBdKuxILvzmPxJnz46o0tIC/NJd/fyXPVK2SIU+YzY=;
- b=pc1sOOZ8er0i92XUm4cYbK1GIc3HIg82bcxIk2n2tqDt4hWx7b8aS88XP0v2lLPPL5
- Q1pxgOgjyIF+IRnBb9YW14NsCQRGT0Rt0giSF4lll6Lyzsl/QdQDXJ+BMaSP3CPGrbBU
- e/9tIhIWfTjaqFwwC7FzkvTrPEieNnEgtxN8AG5XsQwLZAagWaZYYFggPsoI138Nfj3b
- 9/3r7ZYnpMCP0dGTQ/cFFSu5icZkmABgiAgQFg8vyrCvWnY3Vtw/L26ANL0ZzoQEVw+w
- ebYy+N9nT/c8X3ZNltJ9K2iszpmh64xXVUdxX2Dl25hVT1haHVGRJIiC5Fd91XhuuZ46
- j2og==
-X-Gm-Message-State: AOAM532fvxuwWGBP4rA7Xwx+pbjeGmczptGIpgU33bxHHSBLhnvCNl1R
- 8tPs4mucX9FwTK5FCvsTeCSc9q10s9dkIbSmYwU=
-X-Google-Smtp-Source: ABdhPJzzj5tRHmIoH9z1sRqMAyhcrCvSL/ZkL0rL5HUn8c8zYz/wgT+bunak6oySvOMupFTwZjUX6yfjyE5OVB4Cx4M=
-X-Received: by 2002:a05:6830:3115:: with SMTP id
- b21mr26514646ots.240.1629672904867; 
- Sun, 22 Aug 2021 15:55:04 -0700 (PDT)
+ bh=j1WCXwUFDRtwNpLYtFdbUZ0C1gajkNDDzZcC6QXN4OU=;
+ b=Ftvj/VvgB+ZtA+SAGNthVH+jHAE/FTq/ZT2x/v0bFOnqL+UmWBZoi0Rw2Cdr1HbO56
+ IdVS/ybcIqKSLmtEYpU5lgUaGJqv3+dZ75H1HHs8LAnSpe/7L/4GHc+Y8m2HkF9b/ZMg
+ hKTDk6GY1gdTf76p5uznrm6MmkUElpF8rfdcaecmQIAAPYkflGvhmFhKUEHEXGhFDT50
+ Gp6FInRq/kmR+0mLpI3YLg4KONl1fczENw958ejzus6HkiA11CtulOpP19otBeUpL6m5
+ B75ISLDUkHL/9e3SVUMMEtgIBzNtVkzUz9vOTLCmmlir4D1I+TqDeAYRy/CopvbwUmV7
+ ZIcw==
+X-Gm-Message-State: AOAM5310a1mPuuzuThzyvfh9b1qXrLDgz2dtdJOVwQSuDeSvt6enFg6B
+ Up58aMbrZ5flMxMJt/5ouz5bpdkscItFV3tuMhw9Vg==
+X-Google-Smtp-Source: ABdhPJxcK9VV7yW1M5552u/YzMJuw0yWvpiJXferaSGIGE9FTzGhDfrvtJy5DbQFtsY3CI7N+1wh2mKE8OvVxbKX3II=
+X-Received: by 2002:a05:6402:375:: with SMTP id
+ s21mr36518901edw.318.1629697445369; 
+ Sun, 22 Aug 2021 22:44:05 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210822200519.1757151-1-salvador.joseluis@gmail.com>
- <e25ad303-2283-20c4-5ce6-c893bf38376d@gmail.com>
- <CAH+XeQbHj4sHiUmf3rc1PFHb+BbpLEb4KDbKwkef-7UfDB9=Fg@mail.gmail.com>
- <a6320c62-a68d-6433-9f3b-9e1df87a5c39@gmail.com>
- <CAH+XeQawHERfudB2Hxd8VGpRyckSzQOCjbpGpVg=+bpskzJUsw@mail.gmail.com>
- <cb4c98eb-2f52-1d8a-942e-550ad425e767@gmail.com>
-In-Reply-To: <cb4c98eb-2f52-1d8a-942e-550ad425e767@gmail.com>
-From: =?UTF-8?Q?Jos=C3=A9_Luis_Salvador_Rufo?= <salvador.joseluis@gmail.com>
-Date: Mon, 23 Aug 2021 00:54:53 +0200
-Message-ID: <CAH+XeQYBqrMLY8u8+K0gYiyxHF1PgYSyB7Wgvs-f106P5B5-eQ@mail.gmail.com>
-To: Romain Naour <romain.naour@gmail.com>
-Subject: Re: [Buildroot] [PATCH] package/zfs: Fix cross-platform-compilations
+References: <20210819092904.2942827-1-jose.pekkarinen@unikie.com>
+ <20210819210517.GF27036@scaer>
+ <CAJPV9Mqd-c_0JD82KQU5hMH32UVMy71ded1Ht7vtEr6iJhw+xg@mail.gmail.com>
+ <20210820191656.GS27036@scaer>
+In-Reply-To: <20210820191656.GS27036@scaer>
+From: =?UTF-8?Q?Jos=C3=A9_Pekkarinen?= <jose.pekkarinen@unikie.com>
+Date: Mon, 23 Aug 2021 08:43:54 +0300
+Message-ID: <CAJPV9Mo-6jFQb=hOGANwr6aD7NSzobYPk_kr+HCb=HuYBODzoA@mail.gmail.com>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Subject: Re: [Buildroot] [PATCH v2] package/libselinux: Add autorelabel for
+ first boot
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,575 +96,233 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Philippe Serbruyns <Philippe.Serbruyns@ugent.be>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============4156729712880956198=="
+Cc: "Weber, Matthew L Collins" <Matthew.Weber@collins.com>,
+ Adam Duskett <aduskett@gmail.com>, buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============2185960528019496777=="
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
---===============4156729712880956198==
-Content-Type: multipart/alternative; boundary="00000000000098421805ca2dca5e"
+--===============2185960528019496777==
+Content-Type: multipart/alternative; boundary="00000000000052a94f05ca338146"
 
---00000000000098421805ca2dca5e
+--00000000000052a94f05ca338146
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hello Romain Naour,
+On Fri, Aug 20, 2021 at 10:17 PM Yann E. MORIN <yann.morin.1998@free.fr>
+wrote:
 
-El dom, 22 ago 2021 a las 23:43, Romain Naour (<romain.naour@gmail.com>)
-escribi=C3=B3:
-
-> Le 22/08/2021 =C3=A0 23:27, Jos=C3=A9 Luis Salvador Rufo a =C3=A9crit :
-> > Hello Romain Naour,
-> >
-> > El dom, 22 ago 2021 a las 22:52, Romain Naour (<romain.naour@gmail.com
-> > <mailto:romain.naour@gmail.com>>) escribi=C3=B3:
-> >
-> >     Hello Jos=C3=A9 Luis,
-> >
-> >     Le 22/08/2021 =C3=A0 22:38, Jos=C3=A9 Luis Salvador Rufo a =C3=A9cr=
-it :
-> >     > Hello Romain,
-> >     >
-> >     > El dom, 22 ago 2021 a las 22:27, Romain Naour (<
-> romain.naour@gmail.com
-> >     <mailto:romain.naour@gmail.com>
-> >     > <mailto:romain.naour@gmail.com <mailto:romain.naour@gmail.com>>>)
-> escribi=C3=B3:
-> >     >
-> >     >     Hello Jos=C3=A9 Luis,
-> >     >
-> >     >     Le 22/08/2021 =C3=A0 22:05, Jos=C3=A9 Luis Salvador Rufo a =
-=C3=A9crit :
-> >     >     > This patch fixes the `make` executed from the `kernel.m4` i=
+> Jos=C3=A9, All,
+>
+> +Matthew +Adam, our resident SELinux experts: questions for you toward
+> the end...
+>
+> (resend as I acutally forgot to add them)
+>
+> On 2021-08-20 15:19 +0300, Jos=C3=A9 Pekkarinen spake thusly:
+> > On Fri, Aug 20, 2021 at 12:05 AM Yann E. MORIN < [1]
+> yann.morin.1998@free.fr> wrote:
+> > > On 2021-08-19 12:29 +0300, Jos=C3=A9 Pekkarinen spake thusly:
+> > > > Currently buildroot ship libselinux without triggering
+> > > > this option, which often shows inconsistencies between
+> > > > what the refpolicy defines as a label for a file and
+> > > > what the actual file has. Triggering an initial relabel
+> > > > would help activating enforcing state right away without
+> > > > requiring to enter it once in permissive and tweak the
+> > > > labels.
+> [--SNIP--]
+> > > Isn't this going to fail on read-only filesystems? Relabelling
+> suposedly
+> > > requires that extended attributes be added/updated/removed, and that
+> > > requires a read-write filesystem...
+> > > Can't we do the re-labelling at the time we create the filesystem, i.=
+e.
+> > > in fs/common.mk?
+> > > And it seems we already have that:
+> [--SNIP--]
+> > > So why is the labelling wrong? Can't we fix it right there rather tha=
 n
-> >     >     > cross-platform-compilations environments:
-> >     >     >
-> https://github.com/openzfs/zfs/blob/zfs-2.0.5/config/kernel.m4#L588
-> >     <https://github.com/openzfs/zfs/blob/zfs-2.0.5/config/kernel.m4#L58=
-8
-> >
-> >     >     <
-> https://github.com/openzfs/zfs/blob/zfs-2.0.5/config/kernel.m4#L588
-> >     <https://github.com/openzfs/zfs/blob/zfs-2.0.5/config/kernel.m4#L58=
-8
-> >>
-> >     >     >
-> >     >     > Signed-off-by: Jos=C3=A9 Luis Salvador Rufo <
-> salvador.joseluis@gmail.com
-> >     <mailto:salvador.joseluis@gmail.com>
-> >     >     <mailto:salvador.joseluis@gmail.com <mailto:
-> salvador.joseluis@gmail.com>>>
-> >     >     > ---
-> >     >     > Hello all.
-> >     >     >
-> >     >     > @Romain Naour, this patch will fix the buildroot gitlab CI.
-> >     >
-> >     >     Indeed it fix the issue!
-> >     >
-> >     >     Tested-by: Romain Naour <romain.naour@gmail.com
-> >     <mailto:romain.naour@gmail.com> <mailto:romain.naour@gmail.com
-> >     <mailto:romain.naour@gmail.com>>>
-> >     >
-> >     >     >
-> >     >     > @Philippe Serbruyns, this patch will fix your issue with
-> your rpi4.
-> >     >     >
-> >     >     >  package/zfs/zfs.mk <http://zfs.mk> <http://zfs.mk <
-> http://zfs.mk>>
-> >     | 13 +++++++++++++
-> >     >     >  1 file changed, 13 insertions(+)
-> >     >     >
-> >     >     > diff --git a/package/zfs/zfs.mk <http://zfs.mk> <
-> http://zfs.mk
-> >     <http://zfs.mk>> b/package/zfs/zfs.mk <http://zfs.mk>
-> >     >     <http://zfs.mk <http://zfs.mk>>
-> >     >     > index 3b1afb419a..24064cba82 100644
-> >     >     > --- a/package/zfs/zfs.mk <http://zfs.mk> <http://zfs.mk <
-> http://zfs.mk>>
-> >     >     > +++ b/package/zfs/zfs.mk <http://zfs.mk> <http://zfs.mk <
-> http://zfs.mk>>
-> >     >     > @@ -13,6 +13,19 @@ ZFS_CPE_ID_PRODUCT =3D openzfs
-> >     >     >
-> >     >     >  ZFS_AUTORECONF =3D YES
-> >     >     >
-> >     >     > +# cross compile environment for linux kernel module
-> >     >     > +ZFS_MAKE_ENV =3D \
-> >     >     > +     HOSTCC=3D"$(HOSTCC) $(HOST_CFLAGS) $(HOST_LDFLAGS)" \
-> >     >     > +     ARCH=3D$(KERNEL_ARCH) \
-> >     >     > +     CROSS_COMPILE=3D"$(TARGET_CROSS)" \
-> >     >     > +     DEPMOD=3D$(HOST_DIR)/sbin/depmod
-> >     >
-> >     >     You can replace all 4 lines with $(LINUX_MAKE_FLAGS) here
-> instead.
-> >     >
-> >     > Sorry, you can not. LINUX_MAKE_FLAGS includes INSTALL_MOD_PATH,
-> and must be
-> >     > empty for kernel modules. If we use LINUX_MAKE_FLAGS, the module
-> output
-> >     will be
-> >     > TARGET_DIR/INSTALL_MOD_PATH, as you can see in pkg-generic.mk
-> >     <http://pkg-generic.mk>
-> >     > <http://pkg-generic.mk <http://pkg-generic.mk>> at line 77. I
-> already lost
-> >     ~1-2h because of this :-(.
-> >
-> >     This check allow to detect issues on a build system.
-> >     Other packages building an out of tree kernel module is able to use
-> >     LINUX_MAKE_FLAGS (except linux-fusion).
-> >
-> >     >
-> >     > The alternative to using $(LINUX_MAKE_FLAGS) is empty
-> the INSTALL_MOD_PATH as
-> >     > follows:
-> >     > ZFS_MAKE_ENV =3D \
-> >     >      $(LINUX_MAKE_FLAGS) \
-> >     >      INSTALL_MOD_PATH=3D
-> >     >
-> >     > What do you prefer?
-> >
-> >     If possible, a zfs patch.
-> >
-> > Here is the "problem":
-> >
-> > https://github.com/openzfs/zfs/blob/zfs-2.0.5/module/Makefile.in#L79
-> > <https://github.com/openzfs/zfs/blob/zfs-2.0.5/module/Makefile.in#L79>
-> >> INSTALL_MOD_PATH=3D$(DESTDIR)$(INSTALL_MOD_PATH)
+> > > at runtime?
+> > It's is not wrong, it was just unnoticed by my eyeballs,
 >
-> This is the problem. I guess you have to remove DESTDIR when used with
-> INSTALL_MOD_PATH.
+> :-)
 >
-> I found that DESTDIR is already empty. Sorry, my bad.
-
+> > however, there is a case this is not covering properly and preventing
+> > the userspace to run right away in enforcing mode, because at
+> > this time not all files in /dev are populated, and running it in
+> > permissive mode multiple complains from selinux to the serial
+> > devices turn up. If you have some suggestions how we can
+> > improve this case, I'm happy to bring more changes.
 >
-> > and
-> >
-> >
-> https://git.buildroot.net/buildroot/tree/package/pkg-generic.mk?h=3D2021.=
-08-rc2#n77
-> <
-> https://git.buildroot.net/buildroot/tree/package/pkg-generic.mk?h=3D2021.=
-08-rc2#n77
-> >
-> >> $(if $(filter end,$(1)),$(call
-> step_check_build_dir_one,$(3),$(TARGET_DIR)/$(O))))
+> What I understand from your explanations, above, is that we have to have
+> some labels (i.e. extended attributes) set on files in /dev, or the
+> policy may reference objects that are not properly labeled.
 >
 
-So I made:
-```
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 97ee204b80..c406b32acf 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -71,6 +71,7 @@ define step_check_build_dir_one
- endef
+You are right, since, for example, if you just activate
 
- define step_check_build_dir
-+       echo -e "TARGET_DIR $(TARGET_DIR)\nO $(O)\n" > /tmp/output
-        $(if $(filter install-staging,$(2)),\
-                $(if $(filter end,$(1)),$(call
-step_check_build_dir_one,$(3),$(STAGING_DIR)/$(O))))
-        $(if $(filter install-target,$(2)),\
-```
+selinux  in permissive mode, you can see the following avcs
+in the console coming up:
 
-And here is the output:
-```
-TARGET_DIR /home/jlsalvador/src/buildroot-rpi4-tmp/per-package/zfs/target
-O /home/jlsalvador/src/buildroot-rpi4-tmp
-```
+[    0.936152] audit: type=3D1400 audit(1629697223.045:3): avc:  denied  {
+read write } for  pid=3D81 comm=3D"sh" path=3D"/dev/console" dev=3D"devtmpf=
+s"
+ino=3D13 scontext=3Dsystem_u:system_r:sysadm_t
+tcontext=3Dsystem_u:object_r:device_t tclass=3Dchr_file permissive=3D1
+[    0.940632] audit: type=3D1400 audit(1629697223.050:4): avc:  denied  {
+open } for  pid=3D81 comm=3D"sh" path=3D"/dev/tty" dev=3D"devtmpfs" ino=3D1=
+2
+scontext=3Dsystem_u:system_r:sysadm_t tcontext=3Dsystem_u:object_r:device_t
+tclass=3Dchr_file permissive=3D1
+[    0.942731] audit: type=3D1400 audit(1629697223.052:5): avc:  denied  {
+ioctl } for  pid=3D81 comm=3D"sh" path=3D"/dev/console" dev=3D"devtmpfs" in=
+o=3D13
+ioctlcmd=3D0x540f scontext=3Dsystem_u:system_r:sysadm_t
+tcontext=3Dsystem_u:object_r:device_t tclass=3Dchr_file permissive=3D1
+[    0.944298] ln (81) used greatest stack depth: 13272 bytes left
+INIT: Entering runlevel: 3
+Starting syslogd: OK
+[    0.952061] audit: type=3D1400 audit(1629697223.061:6): avc:  denied  {
+read write } for  pid=3D99 comm=3D"syslogd" path=3D"/dev/null" dev=3D"devtm=
+pfs"
+ino=3D5 scontext=3Dsystem_u:system_r:syslogd_t
+tcontext=3Dsystem_u:object_r:device_t tclass=3Dchr_file permissive=3D1
+[    0.953337] audit: type=3D1400 audit(1629697223.063:7): avc:  denied  {
+read } for  pid=3D99 comm=3D"syslogd" name=3D"log" dev=3D"vda" ino=3D1891
+scontext=3Dsystem_u:system_r:syslogd_t tcontext=3Dsystem_u:object_r:var_t
+tclass=3Dlnk_file permissive=3D1
+[    0.954209] audit: type=3D1400 audit(1629697223.063:8): avc:  denied  {
+search } for  pid=3D99 comm=3D"syslogd" name=3D"/" dev=3D"tmpfs" ino=3D1
+scontext=3Dsystem_u:system_r:syslogd_t tcontext=3Dsystem_u:object_r:tmpfs_t
+tclass=3Ddir permissive=3D1
+[    0.955091] audit: type=3D1400 audit(1629697223.064:9): avc:  denied  {
+write } for  pid=3D99 comm=3D"syslogd" name=3D"/" dev=3D"tmpfs" ino=3D1
+scontext=3Dsystem_u:system_r:syslogd_t tcontext=3Dsystem_u:object_r:tmpfs_t
+tclass=3Ddir permissive=3D1
+[    0.956182] audit: type=3D1400 audit(1629697223.064:10): avc:  denied  {
+add_name } for  pid=3D99 comm=3D"syslogd" name=3D"messages"
+scontext=3Dsystem_u:system_r:syslogd_t tcontext=3Dsystem_u:object_r:tmpfs_t
+tclass=3Ddir permissive=3D1
 
-So the installation path will be
-`/home/jlsalvador/src/buildroot-rpi4-tmp/per-package/zfs/target//home/jlsal=
-vador/src/buildroot-rpi4-tmp`
+I'm using the reference policy version 32. If this
 
-`/home/jlsalvador/src/buildroot-rpi4-tmp` is an out-of-tree buildroot
-directory that was created with the following command:
+is executed in enforcing mode, at this time there would be
+no process remaining in the system.
 
-```
-mkdir ~/src/buildroot-rpi4-tmp
-cd ~/src/buildroot-rpi4-tmp
-make O=3D$(pwd) -C ../buildroot menuconfig
-```
+Thanks!
 
-Maybe this is the problem? Is `$(TARGET_DIR)/$(O)` right?
+Jos=C3=A9.
 
-
-> >
-> > Buildroot already does that, so when `make modules_install` is executed=
-,
-> the
-> > output modules directory will be TARGET_DIR/TARGET_DIR/INSTALL_MOD_PATH=
-.
-> >
-> > I have no idea who is the one that must change its behavior. :-(
-> > Any suggestions on how to proceed?
-> >
-> > Maybe I can unexport DESTDIR before `make modules_install`...
->
-> Yes, DESTDIR is sometime miss used (see buildroot gitlog for example).
->
-> It's a bug if DESTDIR and INSTALL_MOD_PATH are used together:
->
-> https://www.gnu.org/prep/standards/html_node/DESTDIR.html
->
-> https://www.kernel.org/doc/Documentation/kbuild/modules.txt
-> (INSTALL_MOD_PATH)
->
-> Best regards,
-> Romain
->
->
-> >
-> > Attached alternative patch with LINUX_MAKE_FLAGS and empty
-> INSTALL_MOD_PATH.
-> >
-> >
-> >     Otherwise I would suggest to add a comment about the reason why
-> LINUX_MAKE_FLAGS
-> >     can't be used.
-> >
-> >     Best regards,
-> >     Romain
-> >
-> >
-> >     >
-> >     >
-> >     >     > +# `./configure` will execute a `make modules` test case
-> >     >     > +ZFS_CONF_ENV =3D \
-> >     >     > +     HOSTCC=3D"$(HOSTCC) $(HOST_CFLAGS) $(HOST_LDFLAGS)" \
-> >     >     > +     ARCH=3D$(KERNEL_ARCH) \
-> >     >     > +     CROSS_COMPILE=3D"$(TARGET_CROSS)" \
-> >     >     > +     DEPMOD=3D$(HOST_DIR)/sbin/depmod
-> >     >
-> >     >     Same here.
-> >     >
-> >     >
-> >     >
-> >     >     > +
-> >     >     >  ZFS_DEPENDENCIES =3D libaio openssl udev util-linux zlib
-> >     >     >
-> >     >     >  # sysvinit installs only a commented-out modules-load.d/
-> config file
-> >     >     >
-> >     >
-> >
-> >
-> > Greetings!
->
->
-
---00000000000098421805ca2dca5e
+--00000000000052a94f05ca338146
 Content-Type: text/html; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-<div dir=3D"ltr"><div dir=3D"ltr">Hello Romain Naour,</div><br><div class=
-=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">El dom, 22 ago 2021 =
-a las 23:43, Romain Naour (&lt;<a href=3D"mailto:romain.naour@gmail.com">ro=
-main.naour@gmail.com</a>&gt;) escribi=C3=B3:<br></div><blockquote class=3D"=
-gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(20=
-4,204,204);padding-left:1ex">Le 22/08/2021 =C3=A0 23:27, Jos=C3=A9 Luis Sal=
-vador Rufo a =C3=A9crit=C2=A0:<br>
-&gt; Hello Romain Naour,<br>
-&gt; <br>
-&gt; El dom, 22 ago 2021 a las 22:52, Romain Naour (&lt;<a href=3D"mailto:r=
-omain.naour@gmail.com" target=3D"_blank">romain.naour@gmail.com</a><br>
-&gt; &lt;mailto:<a href=3D"mailto:romain.naour@gmail.com" target=3D"_blank"=
->romain.naour@gmail.com</a>&gt;&gt;) escribi=C3=B3:<br>
-&gt; <br>
-&gt;=C2=A0 =C2=A0 =C2=A0Hello Jos=C3=A9 Luis,<br>
-&gt; <br>
-&gt;=C2=A0 =C2=A0 =C2=A0Le 22/08/2021 =C3=A0 22:38, Jos=C3=A9 Luis Salvador=
- Rufo a =C3=A9crit=C2=A0:<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt; Hello Romain,<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt; El dom, 22 ago 2021 a las 22:27, Romain Naour =
-(&lt;<a href=3D"mailto:romain.naour@gmail.com" target=3D"_blank">romain.nao=
-ur@gmail.com</a><br>
-&gt;=C2=A0 =C2=A0 =C2=A0&lt;mailto:<a href=3D"mailto:romain.naour@gmail.com=
-" target=3D"_blank">romain.naour@gmail.com</a>&gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt; &lt;mailto:<a href=3D"mailto:romain.naour@gmai=
-l.com" target=3D"_blank">romain.naour@gmail.com</a> &lt;mailto:<a href=3D"m=
-ailto:romain.naour@gmail.com" target=3D"_blank">romain.naour@gmail.com</a>&=
-gt;&gt;&gt;) escribi=C3=B3:<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0Hello Jos=C3=A9 Luis,<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0Le 22/08/2021 =C3=A0 22:05,=
- Jos=C3=A9 Luis Salvador Rufo a =C3=A9crit=C2=A0:<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt; This patch fixes the `=
-make` executed from the `kernel.m4` in<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt; cross-platform-compila=
-tions environments:<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt; <a href=3D"https://git=
-hub.com/openzfs/zfs/blob/zfs-2.0.5/config/kernel.m4#L588" rel=3D"noreferrer=
-" target=3D"_blank">https://github.com/openzfs/zfs/blob/zfs-2.0.5/config/ke=
-rnel.m4#L588</a><br>
-&gt;=C2=A0 =C2=A0 =C2=A0&lt;<a href=3D"https://github.com/openzfs/zfs/blob/=
-zfs-2.0.5/config/kernel.m4#L588" rel=3D"noreferrer" target=3D"_blank">https=
-://github.com/openzfs/zfs/blob/zfs-2.0.5/config/kernel.m4#L588</a>&gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&lt;<a href=3D"https://gith=
-ub.com/openzfs/zfs/blob/zfs-2.0.5/config/kernel.m4#L588" rel=3D"noreferrer"=
- target=3D"_blank">https://github.com/openzfs/zfs/blob/zfs-2.0.5/config/ker=
-nel.m4#L588</a><br>
-&gt;=C2=A0 =C2=A0 =C2=A0&lt;<a href=3D"https://github.com/openzfs/zfs/blob/=
-zfs-2.0.5/config/kernel.m4#L588" rel=3D"noreferrer" target=3D"_blank">https=
-://github.com/openzfs/zfs/blob/zfs-2.0.5/config/kernel.m4#L588</a>&gt;&gt;<=
+<div dir=3D"ltr"><div dir=3D"ltr"><br></div><br><div class=3D"gmail_quote">=
+<div dir=3D"ltr" class=3D"gmail_attr">On Fri, Aug 20, 2021 at 10:17 PM Yann=
+ E. MORIN &lt;<a href=3D"mailto:yann.morin.1998@free.fr">yann.morin.1998@fr=
+ee.fr</a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote" style=3D"ma=
+rgin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:=
+1ex">Jos=C3=A9, All,<br>
+<br>
++Matthew +Adam, our resident SELinux experts: questions for you toward<br>
+the end...<br>
+<br>
+(resend as I acutally forgot to add them)<br>
+<br>
+On 2021-08-20 15:19 +0300, Jos=C3=A9 Pekkarinen spake thusly:<br>
+&gt; On Fri, Aug 20, 2021 at 12:05 AM Yann E. MORIN &lt; [1]<a href=3D"mail=
+to:yann.morin.1998@free.fr" target=3D"_blank">yann.morin.1998@free.fr</a>&g=
+t; wrote:<br>
+&gt; &gt; On 2021-08-19 12:29 +0300, Jos=C3=A9 Pekkarinen spake thusly:<br>
+&gt; &gt; &gt; Currently buildroot ship libselinux without triggering<br>
+&gt; &gt; &gt; this option, which often shows inconsistencies between<br>
+&gt; &gt; &gt; what the refpolicy defines as a label for a file and<br>
+&gt; &gt; &gt; what the actual file has. Triggering an initial relabel<br>
+&gt; &gt; &gt; would help activating enforcing state right away without<br>
+&gt; &gt; &gt; requiring to enter it once in permissive and tweak the<br>
+&gt; &gt; &gt; labels.<br>
+[--SNIP--]<br>
+&gt; &gt; Isn&#39;t this going to fail on read-only filesystems? Relabellin=
+g suposedly<br>
+&gt; &gt; requires that extended attributes be added/updated/removed, and t=
+hat<br>
+&gt; &gt; requires a read-write filesystem...<br>
+&gt; &gt; Can&#39;t we do the re-labelling at the time we create the filesy=
+stem, i.e.<br>
+&gt; &gt; in fs/<a href=3D"http://common.mk" rel=3D"noreferrer" target=3D"_=
+blank">common.mk</a>?<br>
+&gt; &gt; And it seems we already have that:<br>
+[--SNIP--]<br>
+&gt; &gt; So why is the labelling wrong? Can&#39;t we fix it right there ra=
+ther than<br>
+&gt; &gt; at runtime?<br>
+&gt; It&#39;s is not wrong, it was just unnoticed by my eyeballs,<br>
+<br>
+:-)<br>
+<br>
+&gt; however, there is a case this is not covering properly and preventing<=
 br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt; Signed-off-by: Jos=C3=
-=A9 Luis Salvador Rufo &lt;<a href=3D"mailto:salvador.joseluis@gmail.com" t=
-arget=3D"_blank">salvador.joseluis@gmail.com</a><br>
-&gt;=C2=A0 =C2=A0 =C2=A0&lt;mailto:<a href=3D"mailto:salvador.joseluis@gmai=
-l.com" target=3D"_blank">salvador.joseluis@gmail.com</a>&gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&lt;mailto:<a href=3D"mailt=
-o:salvador.joseluis@gmail.com" target=3D"_blank">salvador.joseluis@gmail.co=
-m</a> &lt;mailto:<a href=3D"mailto:salvador.joseluis@gmail.com" target=3D"_=
-blank">salvador.joseluis@gmail.com</a>&gt;&gt;&gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt; ---<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt; Hello all.<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt; @Romain Naour, this pa=
-tch will fix the buildroot gitlab CI.<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0Indeed it fix the issue!<br=
+&gt; the userspace to run right away in enforcing mode, because at<br>
+&gt; this time not all files in /dev are populated, and running it in<br>
+&gt; permissive mode multiple complains from selinux to the serial<br>
+&gt; devices turn up. If you have some suggestions how we can<br>
+&gt; improve this case, I&#39;m happy to bring more changes.<br>
+<br>
+What I understand from your explanations, above, is that we have to have<br=
 >
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0Tested-by: Romain Naour &lt=
-;<a href=3D"mailto:romain.naour@gmail.com" target=3D"_blank">romain.naour@g=
-mail.com</a><br>
-&gt;=C2=A0 =C2=A0 =C2=A0&lt;mailto:<a href=3D"mailto:romain.naour@gmail.com=
-" target=3D"_blank">romain.naour@gmail.com</a>&gt; &lt;mailto:<a href=3D"ma=
-ilto:romain.naour@gmail.com" target=3D"_blank">romain.naour@gmail.com</a><b=
-r>
-&gt;=C2=A0 =C2=A0 =C2=A0&lt;mailto:<a href=3D"mailto:romain.naour@gmail.com=
-" target=3D"_blank">romain.naour@gmail.com</a>&gt;&gt;&gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt; @Philippe Serbruyns,=
-=C2=A0this patch will fix your issue with your rpi4.<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 package/zfs/<a h=
-ref=3D"http://zfs.mk" rel=3D"noreferrer" target=3D"_blank">zfs.mk</a> &lt;<=
-a href=3D"http://zfs.mk" rel=3D"noreferrer" target=3D"_blank">http://zfs.mk=
-</a>&gt; &lt;<a href=3D"http://zfs.mk" rel=3D"noreferrer" target=3D"_blank"=
->http://zfs.mk</a> &lt;<a href=3D"http://zfs.mk" rel=3D"noreferrer" target=
-=3D"_blank">http://zfs.mk</a>&gt;&gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0| 13 +++++++++++++<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 1 file changed, =
-13 insertions(+)<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt; diff --git a/package/z=
-fs/<a href=3D"http://zfs.mk" rel=3D"noreferrer" target=3D"_blank">zfs.mk</a=
-> &lt;<a href=3D"http://zfs.mk" rel=3D"noreferrer" target=3D"_blank">http:/=
-/zfs.mk</a>&gt; &lt;<a href=3D"http://zfs.mk" rel=3D"noreferrer" target=3D"=
-_blank">http://zfs.mk</a><br>
-&gt;=C2=A0 =C2=A0 =C2=A0&lt;<a href=3D"http://zfs.mk" rel=3D"noreferrer" ta=
-rget=3D"_blank">http://zfs.mk</a>&gt;&gt; b/package/zfs/<a href=3D"http://z=
-fs.mk" rel=3D"noreferrer" target=3D"_blank">zfs.mk</a> &lt;<a href=3D"http:=
-//zfs.mk" rel=3D"noreferrer" target=3D"_blank">http://zfs.mk</a>&gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&lt;<a href=3D"http://zfs.m=
-k" rel=3D"noreferrer" target=3D"_blank">http://zfs.mk</a> &lt;<a href=3D"ht=
-tp://zfs.mk" rel=3D"noreferrer" target=3D"_blank">http://zfs.mk</a>&gt;&gt;=
-<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt; index 3b1afb419a..2406=
-4cba82 100644<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt; --- a/package/zfs/<a h=
-ref=3D"http://zfs.mk" rel=3D"noreferrer" target=3D"_blank">zfs.mk</a> &lt;<=
-a href=3D"http://zfs.mk" rel=3D"noreferrer" target=3D"_blank">http://zfs.mk=
-</a>&gt; &lt;<a href=3D"http://zfs.mk" rel=3D"noreferrer" target=3D"_blank"=
->http://zfs.mk</a> &lt;<a href=3D"http://zfs.mk" rel=3D"noreferrer" target=
-=3D"_blank">http://zfs.mk</a>&gt;&gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt; +++ b/package/zfs/<a h=
-ref=3D"http://zfs.mk" rel=3D"noreferrer" target=3D"_blank">zfs.mk</a> &lt;<=
-a href=3D"http://zfs.mk" rel=3D"noreferrer" target=3D"_blank">http://zfs.mk=
-</a>&gt; &lt;<a href=3D"http://zfs.mk" rel=3D"noreferrer" target=3D"_blank"=
->http://zfs.mk</a> &lt;<a href=3D"http://zfs.mk" rel=3D"noreferrer" target=
-=3D"_blank">http://zfs.mk</a>&gt;&gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt; @@ -13,6 +13,19 @@ ZFS=
-_CPE_ID_PRODUCT =3D openzfs<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 ZFS_AUTORECONF =
-=3D YES<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt; +# cross compile envir=
-onment for linux kernel module<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt; +ZFS_MAKE_ENV =3D \<br=
->
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt; +=C2=A0 =C2=A0 =C2=A0H=
-OSTCC=3D&quot;$(HOSTCC) $(HOST_CFLAGS) $(HOST_LDFLAGS)&quot; \<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt; +=C2=A0 =C2=A0 =C2=A0A=
-RCH=3D$(KERNEL_ARCH) \<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt; +=C2=A0 =C2=A0 =C2=A0C=
-ROSS_COMPILE=3D&quot;$(TARGET_CROSS)&quot; \<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt; +=C2=A0 =C2=A0 =C2=A0D=
-EPMOD=3D$(HOST_DIR)/sbin/depmod<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0You can replace all 4 lines=
- with $(LINUX_MAKE_FLAGS) here instead.<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt; Sorry, you can not.=C2=A0LINUX_MAKE_FLAGS incl=
-udes=C2=A0INSTALL_MOD_PATH, and must be<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt; empty for kernel modules. If we use LINUX_MAKE=
-_FLAGS, the module output<br>
-&gt;=C2=A0 =C2=A0 =C2=A0will be<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt; TARGET_DIR/INSTALL_MOD_PATH, as you can see in=
- <a href=3D"http://pkg-generic.mk" rel=3D"noreferrer" target=3D"_blank">pkg=
--generic.mk</a><br>
-&gt;=C2=A0 =C2=A0 =C2=A0&lt;<a href=3D"http://pkg-generic.mk" rel=3D"norefe=
-rrer" target=3D"_blank">http://pkg-generic.mk</a>&gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt; &lt;<a href=3D"http://pkg-generic.mk" rel=3D"n=
-oreferrer" target=3D"_blank">http://pkg-generic.mk</a> &lt;<a href=3D"http:=
-//pkg-generic.mk" rel=3D"noreferrer" target=3D"_blank">http://pkg-generic.m=
-k</a>&gt;&gt; at line 77. I already lost<br>
-&gt;=C2=A0 =C2=A0 =C2=A0~1-2h because of this :-(.<br>
-&gt; <br>
-&gt;=C2=A0 =C2=A0 =C2=A0This check allow to detect issues on a build system=
-.<br>
-&gt;=C2=A0 =C2=A0 =C2=A0Other packages building an out of tree kernel modul=
-e is able to use<br>
-&gt;=C2=A0 =C2=A0 =C2=A0LINUX_MAKE_FLAGS (except linux-fusion).<br>
-&gt; <br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt; =C2=A0<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt; The alternative to using $(LINUX_MAKE_FLAGS) i=
-s empty the=C2=A0INSTALL_MOD_PATH as<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt; follows:<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt; ZFS_MAKE_ENV =3D \<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt; =C2=A0 =C2=A0 =C2=A0$(LINUX_MAKE_FLAGS) \<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt; =C2=A0 =C2=A0 =C2=A0INSTALL_MOD_PATH=3D<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt; What do you prefer?<br>
-&gt; <br>
-&gt;=C2=A0 =C2=A0 =C2=A0If possible, a zfs patch.<br>
-&gt; <br>
-&gt; Here is the &quot;problem&quot;:<br>
-&gt; <br>
-&gt; <a href=3D"https://github.com/openzfs/zfs/blob/zfs-2.0.5/module/Makefi=
-le.in#L79" rel=3D"noreferrer" target=3D"_blank">https://github.com/openzfs/=
-zfs/blob/zfs-2.0.5/module/Makefile.in#L79</a><br>
-&gt; &lt;<a href=3D"https://github.com/openzfs/zfs/blob/zfs-2.0.5/module/Ma=
-kefile.in#L79" rel=3D"noreferrer" target=3D"_blank">https://github.com/open=
-zfs/zfs/blob/zfs-2.0.5/module/Makefile.in#L79</a>&gt;<br>
-&gt;&gt; INSTALL_MOD_PATH=3D$(DESTDIR)$(INSTALL_MOD_PATH)<br>
-<br>
-This is the problem. I guess you have to remove DESTDIR when used with<br>
-INSTALL_MOD_PATH.<br>
-<br></blockquote><div>I found that DESTDIR is already empty. Sorry, my bad.=
-</div><div><br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px =
-0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">
-&gt; <br>
-&gt; and<br>
-&gt; <br>
-&gt; <a href=3D"https://git.buildroot.net/buildroot/tree/package/pkg-generi=
-c.mk?h=3D2021.08-rc2#n77" rel=3D"noreferrer" target=3D"_blank">https://git.=
-buildroot.net/buildroot/tree/package/pkg-generic.mk?h=3D2021.08-rc2#n77</a>=
- &lt;<a href=3D"https://git.buildroot.net/buildroot/tree/package/pkg-generi=
-c.mk?h=3D2021.08-rc2#n77" rel=3D"noreferrer" target=3D"_blank">https://git.=
-buildroot.net/buildroot/tree/package/pkg-generic.mk?h=3D2021.08-rc2#n77</a>=
-&gt;<br>
-&gt;&gt;=C2=A0$(if $(filter end,$(1)),$(call step_check_build_dir_one,$(3),=
-$(TARGET_DIR)/$(O))))<br></blockquote><div><br></div><div>So I made:</div><=
-div>```</div><div>diff --git a/package/<a href=3D"http://pkg-generic.mk">pk=
-g-generic.mk</a> b/package/<a href=3D"http://pkg-generic.mk">pkg-generic.mk=
-</a><br>index 97ee204b80..c406b32acf 100644<br>--- a/package/<a href=3D"htt=
-p://pkg-generic.mk">pkg-generic.mk</a><br>+++ b/package/<a href=3D"http://p=
-kg-generic.mk">pkg-generic.mk</a><br>@@ -71,6 +71,7 @@ define step_check_bu=
-ild_dir_one<br>=C2=A0endef<br>=C2=A0<br>=C2=A0define step_check_build_dir<b=
-r>+ =C2=A0 =C2=A0 =C2=A0 echo -e &quot;TARGET_DIR $(TARGET_DIR)\nO $(O)\n&q=
-uot; &gt; /tmp/output<br>=C2=A0 =C2=A0 =C2=A0 =C2=A0 $(if $(filter install-=
-staging,$(2)),\<br>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-$(if $(filter end,$(1)),$(call step_check_build_dir_one,$(3),$(STAGING_DIR)=
-/$(O))))<br>=C2=A0 =C2=A0 =C2=A0 =C2=A0 $(if $(filter install-target,$(2)),=
-\<br></div><div>```<br></div><div><br></div><div>And here is the output:</d=
-iv><div>```</div>TARGET_DIR /home/jlsalvador/src/buildroot-rpi4-tmp/per-pac=
-kage/zfs/target<br>O /home/jlsalvador/src/buildroot-rpi4-tmp<br><div>```<br=
-></div><div><br></div><div>So the installation path will be `/home/jlsalvad=
-or/src/buildroot-rpi4-tmp/per-package/zfs/target//home/jlsalvador/src/build=
-root-rpi4-tmp`<br></div><div><br></div><div>`/home/jlsalvador/src/buildroot=
--rpi4-tmp` is an out-of-tree buildroot directory that was created with the =
-following command:</div><div><br></div><div>```</div><div>mkdir ~/src/build=
-root-rpi4-tmp</div><div>cd ~/src/buildroot-rpi4-tmp</div><div>make O=3D$(pw=
-d) -C ../buildroot menuconfig<br></div><div>```</div><div><br></div><div>Ma=
-ybe this is the problem? Is `$(TARGET_DIR)/$(O)` right?</div><div>=C2=A0<br=
-></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;=
-border-left:1px solid rgb(204,204,204);padding-left:1ex">
-&gt; <br>
-&gt; Buildroot already does that, so when `make modules_install` is execute=
-d, the<br>
-&gt; output modules directory will be TARGET_DIR/TARGET_DIR/INSTALL_MOD_PAT=
-H.<br>
-&gt; <br>
-&gt; I have no idea who is=C2=A0the one that must change its behavior. :-(<=
-br>
-&gt; Any suggestions on how to proceed?<br>
-&gt; <br>
-&gt; Maybe I can unexport DESTDIR before `make modules_install`...<br>
-<br>
-Yes, DESTDIR is sometime miss used (see buildroot gitlog for example).<br>
-<br>
-It&#39;s a bug if DESTDIR and INSTALL_MOD_PATH are used together:<br>
-<br>
-<a href=3D"https://www.gnu.org/prep/standards/html_node/DESTDIR.html" rel=
-=3D"noreferrer" target=3D"_blank">https://www.gnu.org/prep/standards/html_n=
-ode/DESTDIR.html</a><br>
-<br>
-<a href=3D"https://www.kernel.org/doc/Documentation/kbuild/modules.txt" rel=
-=3D"noreferrer" target=3D"_blank">https://www.kernel.org/doc/Documentation/=
-kbuild/modules.txt</a> (INSTALL_MOD_PATH)<br>
-<br>
-Best regards,<br>
-Romain<br>
-<br>
-<br>
-&gt; <br>
-&gt; Attached alternative patch with LINUX_MAKE_FLAGS and empty INSTALL_MOD=
-_PATH.<br>
-&gt; <br>
-&gt; <br>
-&gt;=C2=A0 =C2=A0 =C2=A0Otherwise I would suggest to add a comment about th=
-e reason why LINUX_MAKE_FLAGS<br>
-&gt;=C2=A0 =C2=A0 =C2=A0can&#39;t be used.<br>
-&gt; <br>
-&gt;=C2=A0 =C2=A0 =C2=A0Best regards,<br>
-&gt;=C2=A0 =C2=A0 =C2=A0Romain<br>
-&gt; <br>
-&gt; <br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt; +# `./configure` will =
-execute a `make modules` test case<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt; +ZFS_CONF_ENV =3D \<br=
->
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt; +=C2=A0 =C2=A0 =C2=A0H=
-OSTCC=3D&quot;$(HOSTCC) $(HOST_CFLAGS) $(HOST_LDFLAGS)&quot; \<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt; +=C2=A0 =C2=A0 =C2=A0A=
-RCH=3D$(KERNEL_ARCH) \<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt; +=C2=A0 =C2=A0 =C2=A0C=
-ROSS_COMPILE=3D&quot;$(TARGET_CROSS)&quot; \<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt; +=C2=A0 =C2=A0 =C2=A0D=
-EPMOD=3D$(HOST_DIR)/sbin/depmod<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0Same here.<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt; +<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 ZFS_DEPENDENCIES=
- =3D libaio openssl udev util-linux zlib<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 # sysvinit insta=
-lls only a commented-out modules-load.d/ config file<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0&gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;<br>
-&gt; <br>
-&gt; <br>
-&gt; Greetings!=C2=A0<br>
-<br>
-</blockquote></div></div>
+some labels (i.e. extended attributes) set on files in /dev, or the<br>
+policy may reference objects that are not properly labeled.<br></blockquote=
+><div><br></div></div><blockquote style=3D"margin:0 0 0 40px;border:none;pa=
+dding:0px"><div class=3D"gmail_quote"><div>You are right, since, for exampl=
+e, if you just activate</div></div></blockquote>selinux=C2=A0 in permissive=
+ mode, you can see the following avcs<div>in the console coming up:</div><d=
+iv><br></div><div>[ =C2=A0 =C2=A00.936152] audit: type=3D1400 audit(1629697=
+223.045:3): avc: =C2=A0denied =C2=A0{ read write } for =C2=A0pid=3D81 comm=
+=3D&quot;sh&quot; path=3D&quot;/dev/console&quot; dev=3D&quot;devtmpfs&quot=
+; ino=3D13 scontext=3Dsystem_u:system_r:sysadm_t tcontext=3Dsystem_u:object=
+_r:device_t tclass=3Dchr_file permissive=3D1<br>[ =C2=A0 =C2=A00.940632] au=
+dit: type=3D1400 audit(1629697223.050:4): avc: =C2=A0denied =C2=A0{ open } =
+for =C2=A0pid=3D81 comm=3D&quot;sh&quot; path=3D&quot;/dev/tty&quot; dev=3D=
+&quot;devtmpfs&quot; ino=3D12 scontext=3Dsystem_u:system_r:sysadm_t tcontex=
+t=3Dsystem_u:object_r:device_t tclass=3Dchr_file permissive=3D1<br>[ =C2=A0=
+ =C2=A00.942731] audit: type=3D1400 audit(1629697223.052:5): avc: =C2=A0den=
+ied =C2=A0{ ioctl } for =C2=A0pid=3D81 comm=3D&quot;sh&quot; path=3D&quot;/=
+dev/console&quot; dev=3D&quot;devtmpfs&quot; ino=3D13 ioctlcmd=3D0x540f sco=
+ntext=3Dsystem_u:system_r:sysadm_t tcontext=3Dsystem_u:object_r:device_t tc=
+lass=3Dchr_file permissive=3D1<br>[ =C2=A0 =C2=A00.944298] ln (81) used gre=
+atest stack depth: 13272 bytes left<br>INIT: Entering runlevel: 3<br>Starti=
+ng syslogd: OK<br>[ =C2=A0 =C2=A00.952061] audit: type=3D1400 audit(1629697=
+223.061:6): avc: =C2=A0denied =C2=A0{ read write } for =C2=A0pid=3D99 comm=
+=3D&quot;syslogd&quot; path=3D&quot;/dev/null&quot; dev=3D&quot;devtmpfs&qu=
+ot; ino=3D5 scontext=3Dsystem_u:system_r:syslogd_t tcontext=3Dsystem_u:obje=
+ct_r:device_t tclass=3Dchr_file permissive=3D1<br>[ =C2=A0 =C2=A00.953337] =
+audit: type=3D1400 audit(1629697223.063:7): avc: =C2=A0denied =C2=A0{ read =
+} for =C2=A0pid=3D99 comm=3D&quot;syslogd&quot; name=3D&quot;log&quot; dev=
+=3D&quot;vda&quot; ino=3D1891 scontext=3Dsystem_u:system_r:syslogd_t tconte=
+xt=3Dsystem_u:object_r:var_t tclass=3Dlnk_file permissive=3D1<br>[ =C2=A0 =
+=C2=A00.954209] audit: type=3D1400 audit(1629697223.063:8): avc: =C2=A0deni=
+ed =C2=A0{ search } for =C2=A0pid=3D99 comm=3D&quot;syslogd&quot; name=3D&q=
+uot;/&quot; dev=3D&quot;tmpfs&quot; ino=3D1 scontext=3Dsystem_u:system_r:sy=
+slogd_t tcontext=3Dsystem_u:object_r:tmpfs_t tclass=3Ddir permissive=3D1<br=
+>[ =C2=A0 =C2=A00.955091] audit: type=3D1400 audit(1629697223.064:9): avc: =
+=C2=A0denied =C2=A0{ write } for =C2=A0pid=3D99 comm=3D&quot;syslogd&quot; =
+name=3D&quot;/&quot; dev=3D&quot;tmpfs&quot; ino=3D1 scontext=3Dsystem_u:sy=
+stem_r:syslogd_t tcontext=3Dsystem_u:object_r:tmpfs_t tclass=3Ddir permissi=
+ve=3D1<br>[ =C2=A0 =C2=A00.956182] audit: type=3D1400 audit(1629697223.064:=
+10): avc: =C2=A0denied =C2=A0{ add_name } for =C2=A0pid=3D99 comm=3D&quot;s=
+yslogd&quot; name=3D&quot;messages&quot; scontext=3Dsystem_u:system_r:syslo=
+gd_t tcontext=3Dsystem_u:object_r:tmpfs_t tclass=3Ddir permissive=3D1</div>=
+<div><br></div><div><blockquote style=3D"margin:0 0 0 40px;border:none;padd=
+ing:0px"><div>I&#39;m using the reference policy version 32. If this</div><=
+/blockquote>is executed in enforcing mode, at this time there would be</div=
+><div>no process remaining in the system.</div><div><br></div><div><blockqu=
+ote style=3D"margin:0 0 0 40px;border:none;padding:0px">Thanks!<br><br>Jos=
+=C3=A9.</blockquote><div class=3D"gmail_quote"><div>=C2=A0</div></div></div=
+></div>
 
---00000000000098421805ca2dca5e--
+--00000000000052a94f05ca338146--
 
---===============4156729712880956198==
+--===============2185960528019496777==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -679,4 +333,4 @@ buildroot mailing list
 buildroot@busybox.net
 http://lists.busybox.net/mailman/listinfo/buildroot
 
---===============4156729712880956198==--
+--===============2185960528019496777==--
