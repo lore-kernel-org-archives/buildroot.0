@@ -2,57 +2,57 @@ Return-Path: <SRS0=2pYX=NR=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
-	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AEC7AC432BE
-	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:12:13 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A9E50C432BE
+	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:12:25 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 73C4A60231
-	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:12:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 73C4A60231
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
+	by mail.kernel.org (Postfix) with ESMTPS id 6A6EB60FDC
+	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:12:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6A6EB60FDC
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 47715426C4;
-	Thu, 26 Aug 2021 22:12:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 421E1614B7;
+	Thu, 26 Aug 2021 22:12:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id N23H-l2Hnkia; Thu, 26 Aug 2021 22:12:08 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id O1X5FdAMwWvq; Thu, 26 Aug 2021 22:12:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6CF31426DE;
-	Thu, 26 Aug 2021 22:12:07 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3C2911BF33E
+	by smtp3.osuosl.org (Postfix) with ESMTP id D859F614BA;
+	Thu, 26 Aug 2021 22:12:19 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 7B66D1BF33E
  for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 22:02:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6DE8440767
- for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 22:02:37 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 79356426B4
+ for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 22:02:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YW40wNR85ofn for <buildroot@lists.busybox.net>;
- Thu, 26 Aug 2021 22:02:32 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Q8yD_hjvKL4b for <buildroot@lists.busybox.net>;
+ Thu, 26 Aug 2021 22:02:34 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id ED55C4077C
- for <buildroot@buildroot.org>; Thu, 26 Aug 2021 22:02:28 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D80D7426AF
+ for <buildroot@buildroot.org>; Thu, 26 Aug 2021 22:02:34 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 4ED698DC50; Thu, 26 Aug 2021 22:01:27 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id 37D3D8DC50; Thu, 26 Aug 2021 22:01:33 +0000 (UTC)
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sat, 7 Aug 2021 23:19:51 +0200
+Date: Tue, 24 Aug 2021 00:05:20 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 5108554dfe0d4815c9c84f75b118298c147ccd33
-X-Git-Newrev: f4961dea504bcc999988b174466423eb72052a6e
+X-Git-Oldrev: 912f9511de54f5a647e7aca52594c3020fe15ee8
+X-Git-Newrev: 3298e67ac64ce1f52f58f1ef668c4c8c63309d04
 X-Patchwork-Hint: ignore
-Message-Id: <20210826220127.4ED698DC50@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libvirt: disable
- stack-protector
+Message-Id: <20210826220133.37D3D8DC50@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/mesa3d: fix build on
+ riscv32
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,47 +70,75 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f4961dea504bcc999988b174466423eb72052a6e
+commit: https://git.buildroot.net/buildroot/commit/?id=3298e67ac64ce1f52f58f1ef668c4c8c63309d04
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Set warning_level to 1 instead of the default value of 2 to disable
-stack-protector and avoid the following build failure since the addition
-of the package in commit ccfc90e1010e42e6529afae3a5ea8bf7226dabc1:
+Fix the following build failure on riscv32:
 
-/tmp/instance-5/output-1/host/opt/ext-toolchain/bin/../lib/gcc/i686-buildroot-linux-uclibc/9.3.0/../../../../i686-buildroot-linux-uclibc/bin/ld: tests/commandhelper.p/commandhelper.c.o: in function `printInput':
-commandhelper.c:(.text+0xad): undefined reference to `__stack_chk_guard'
+../src/util/futex.h: In function 'sys_futex':
+../src/util/futex.h:39:19: error: 'SYS_futex' undeclared (first use in this function); did you mean 'sys_futex'?
+   39 |    return syscall(SYS_futex, addr1, op, val1, timeout, addr2, val3);
+      |                   ^~~~~~~~~
+      |                   sys_futex
 
 Fixes:
- - http://autobuild.buildroot.org/results/a2657eb18b579752c8217ab356adcb52931f6785
+ - http://autobuild.buildroot.org/results/692700a5f967760a0b8cd358b1712f1d5a7b681e
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-[yann.morin.1998@free.fr:
-  - move to a separate assignment
-  - add a big fat comment to explain it
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/libvirt/libvirt.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ ...tex.h-fix-build-on-32-bit-architectures-u.patch | 43 ++++++++++++++++++++++
+ 1 file changed, 43 insertions(+)
 
-diff --git a/package/libvirt/libvirt.mk b/package/libvirt/libvirt.mk
-index a0fd5af951..cd037a6b02 100644
---- a/package/libvirt/libvirt.mk
-+++ b/package/libvirt/libvirt.mk
-@@ -53,6 +53,13 @@ LIBVIRT_CONF_OPTS = \
- 	-Dudev=enabled \
- 	-Dwireshark_dissector=disabled
- 
-+# warning_level should only drive the level of warnings during the
-+# compilation of C code. However, libvirt misuses that to also
-+# enable SSP when warning_level == 2
-+# Force warning_level=1 to disable SSP, and let our toolchain wrapper
-+# handle it.
-+LIBVIRT_CONF_OPTS += -Dwarning_level=1
+diff --git a/package/mesa3d/0005-src-util-futex.h-fix-build-on-32-bit-architectures-u.patch b/package/mesa3d/0005-src-util-futex.h-fix-build-on-32-bit-architectures-u.patch
+new file mode 100644
+index 0000000000..b01db8a4b4
+--- /dev/null
++++ b/package/mesa3d/0005-src-util-futex.h-fix-build-on-32-bit-architectures-u.patch
+@@ -0,0 +1,43 @@
++From e501b7c17ada9c694d3f8302622b78d733485b38 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 21 Aug 2021 17:55:33 +0200
++Subject: [PATCH] src/util/futex.h: fix build on 32-bit architectures using
++ 64-bit time_t
 +
- ifeq ($(BR2_PACKAGE_ATTR),y)
- LIBVIRT_CONF_OPTS += -Dattr=enabled
- LIBVIRT_DEPENDENCIES += attr
++Fix the following build failure on 32-bit architectures using 64-bit
++time_t (e.g. riscv32):
++
++../src/util/futex.h: In function 'sys_futex':
++../src/util/futex.h:39:19: error: 'SYS_futex' undeclared (first use in this function); did you mean 'sys_futex'?
++   39 |    return syscall(SYS_futex, addr1, op, val1, timeout, addr2, val3);
++      |                   ^~~~~~~~~
++      |                   sys_futex
++
++Fixes:
++ - http://autobuild.buildroot.org/results/692700a5f967760a0b8cd358b1712f1d5a7b681e
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status:
++https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/12496]
++---
++ src/util/futex.h | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/src/util/futex.h b/src/util/futex.h
++index 43097f4cd5b..221eda9db0c 100644
++--- a/src/util/futex.h
+++++ b/src/util/futex.h
++@@ -34,6 +34,10 @@
++ #include <sys/syscall.h>
++ #include <sys/time.h>
++ 
+++#ifndef SYS_futex
+++#define SYS_futex SYS_futex_time64
+++#endif
+++
++ static inline long sys_futex(void *addr1, int op, int val1, const struct timespec *timeout, void *addr2, int val3)
++ {
++    return syscall(SYS_futex, addr1, op, val1, timeout, addr2, val3);
++-- 
++2.32.0
++
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
