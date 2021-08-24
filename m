@@ -2,89 +2,58 @@ Return-Path: <SRS0=7Mk9=NP=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
-	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E2709C4338F
-	for <buildroot@archiver.kernel.org>; Tue, 24 Aug 2021 07:01:57 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E4A22C4338F
+	for <buildroot@archiver.kernel.org>; Tue, 24 Aug 2021 07:08:09 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 958A361181
-	for <buildroot@archiver.kernel.org>; Tue, 24 Aug 2021 07:01:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 958A361181
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id 84E8A61165
+	for <buildroot@archiver.kernel.org>; Tue, 24 Aug 2021 07:08:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 84E8A61165
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6153E4022F;
-	Tue, 24 Aug 2021 07:01:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 46CDD80DC6;
+	Tue, 24 Aug 2021 07:08:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mghoIXHLDk0R; Tue, 24 Aug 2021 07:01:53 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id zLT6NaEE8GiS; Tue, 24 Aug 2021 07:08:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A721D40494;
-	Tue, 24 Aug 2021 07:01:52 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 779FD1BF340
- for <buildroot@lists.busybox.net>; Tue, 24 Aug 2021 07:01:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8083980DE1;
+	Tue, 24 Aug 2021 07:08:04 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 189E11BF31B
+ for <buildroot@lists.busybox.net>; Tue, 24 Aug 2021 07:08:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6063740494
- for <buildroot@lists.busybox.net>; Tue, 24 Aug 2021 07:01:51 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 07CE180DE1
+ for <buildroot@lists.busybox.net>; Tue, 24 Aug 2021 07:08:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3HLUvh7YEn0i for <buildroot@lists.busybox.net>;
- Tue, 24 Aug 2021 07:01:46 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
- [IPv6:2a00:1450:4864:20::42e])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 26A744022F
- for <buildroot@buildroot.org>; Tue, 24 Aug 2021 07:01:46 +0000 (UTC)
-Received: by mail-wr1-x42e.google.com with SMTP id b8so413677wrn.7
- for <buildroot@buildroot.org>; Tue, 24 Aug 2021 00:01:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=GS/LR3/mF8DV0Ca5EhB2d4xFqQn3gV7F6knEx0Ghzjo=;
- b=UBemvLFP8vuSzoKP7BJ0dnaNeB79wHPE6shy0bswqd9MAbelcAeE3+1+M0v+oLOgvo
- j21CaxzKM+xjBeyZQNF3j6QEnhH2S5MbQaYA7SnXrtTwtiBSZ9oMBJasxpG4ShbcgeMd
- p6qC+IWCVU94FaBCY7YZNmNrLCIUo2kljiChoqS3SrQ4/mlMZf/BgRWeidiZSRhsxktW
- cZCiVSYNGIt/akd8ew2bkzm3JGaPLJ9xrlUH+FOsE0HjxL0zekgSSxsabhHcC57MJVKR
- M9zlgA3Mx6EB2Jo1kr5GufrJVX6z81UNqVifTXDVaV3XzDqM7hMP9eSQN1gpKAi5EJyZ
- 8OVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=GS/LR3/mF8DV0Ca5EhB2d4xFqQn3gV7F6knEx0Ghzjo=;
- b=J3JTyhRrVzJQOWMtpUujCNXWYaS+RSvbdX8cvoYfUAZuyIBaXSxde9+xErtN1M0HOx
- fLVtk+KgWWdKADX290ZSrKcQC8mvifNiBp29bWXi5bcoxMFUEMePhZgtsF6EOVu0YybE
- rUt2A1raahESkBemsc0Y/YKSurBhyuxgam68MtdgIumAXykuRssHVwkJ4CehYYhDTG/8
- yCgIOcMmXuWYoYVGeSZWIAYO61KKa1PKN/h3orARMawURKUd2N7FhOpqDAnhOKF3U+ow
- dgFsa3/N/qu4dp2OvXVzvd+/pLpzO9o7X219QWcz3A59JmJsFD/B3uMw3NSTqSNkNVhY
- 3M0Q==
-X-Gm-Message-State: AOAM531/8M47g7vgxYvvzNpqOL5XY6JgB4UWTFjVw4nkktPrgrgOXNag
- Iy4lzRHVkHiJThs6gnHWKzzubPi+N9UqgA==
-X-Google-Smtp-Source: ABdhPJy1ZlyD9GRT9M8mNelbVNsO6NSg2HgieF53d/JqcsioIC2PJaIbhzMNtp6TC2V+XSi1tJtr0w==
-X-Received: by 2002:adf:d4c2:: with SMTP id w2mr18107931wrk.235.1629788504233; 
- Tue, 24 Aug 2021 00:01:44 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-417-221.w2-10.abo.wanadoo.fr.
- [2.10.242.221])
- by smtp.gmail.com with ESMTPSA id l12sm1364449wms.24.2021.08.24.00.01.43
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 24 Aug 2021 00:01:43 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id K8jg5HABp-hQ for <buildroot@lists.busybox.net>;
+ Tue, 24 Aug 2021 07:07:59 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 297F680DC6
+ for <buildroot@buildroot.org>; Tue, 24 Aug 2021 07:07:59 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id 910168DCD5; Tue, 24 Aug 2021 07:07:03 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 24 Aug 2021 09:01:41 +0200
-Message-Id: <20210824070141.94164-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.32.0
-MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/mesa3d-demos: use
- BR2_PACKAGE_MESA3D_GBM
+Date: Tue, 24 Aug 2021 08:57:20 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 26f6110740e936e83ddc4ce76cb58f8c5ba2eefe
+X-Git-Newrev: 6fb0dbe4038ccde96e4600ca566d6269911077bc
+X-Patchwork-Hint: ignore
+Message-Id: <20210824070703.910168DCD5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libcap: don't overwrite 'empty'
+ when generating loader.txt
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,39 +65,100 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
- Spenser Gilliland <spenser@gillilanding.com>,
- Romain Naour <romain.naour@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-Use BR2_PACKAGE_MESA3D_GBM introduced by commit
-b6c051acf787c804e732bc58ba8d7e440701a168
+commit: https://git.buildroot.net/buildroot/commit/?id=6fb0dbe4038ccde96e4600ca566d6269911077bc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Upstream commit [1] introduced an invocation of objcopy to generat
+loader.txt. However, objcopy, if not provided with an output file, will
+overwrite the input file. This is usually harmless because it will be
+identical, but the timestamp is updated. This may cause 'empty' to be
+newer than 'loader.txt', which causes 'loader.txt' and its dependencies
+to be rebuilt during 'make install'
+
+We provide a different set of parameters during 'make install'. In
+particular, we no longer pass in HOST_CONFIGURE_OPTS, so we no longer
+set LDFLAGS. Thus, there is no -Wl,rpath option that is passed in, which
+causes the resulting binaries to have an incorrect RPATH.
+
+Fix this by adding /dev/null as the output file in the objcopy
+invocation.
+
+Patch was sent upstream, but there's no mailing list, just a single
+person.
+
+Fixes: http://autobuild.buildroot.net/results/600/600aff5b839b48db80751cace5fa9670b7a3d698
+(hopefully)
+
+[1] https://git.kernel.org/pub/scm/libs/libcap/libcap.git/commit/?id=efd293947f940180eedd8d0915b124f4aedccc08
+
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/mesa3d-demos/mesa3d-demos.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ ...file-don-t-overwrite-empty-when-generatin.patch | 50 ++++++++++++++++++++++
+ 1 file changed, 50 insertions(+)
 
-diff --git a/package/mesa3d-demos/mesa3d-demos.mk b/package/mesa3d-demos/mesa3d-demos.mk
-index 4289acfffb..6b5262a2e9 100644
---- a/package/mesa3d-demos/mesa3d-demos.mk
-+++ b/package/mesa3d-demos/mesa3d-demos.mk
-@@ -43,7 +43,7 @@ else
- MESA3D_DEMOS_CONF_OPTS += --disable-vg
- endif
- 
--ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_EGL),y)
-+ifeq ($(BR2_PACKAGE_MESA3D_GBM),y)
- MESA3D_DEMOS_DEPENDENCIES += mesa3d
- MESA3D_DEMOS_CONF_OPTS += --enable-gbm
- else
--- 
-2.32.0
-
+diff --git a/package/libcap/0001-libcap-Makefile-don-t-overwrite-empty-when-generatin.patch b/package/libcap/0001-libcap-Makefile-don-t-overwrite-empty-when-generatin.patch
+new file mode 100644
+index 0000000000..a47a2c788e
+--- /dev/null
++++ b/package/libcap/0001-libcap-Makefile-don-t-overwrite-empty-when-generatin.patch
+@@ -0,0 +1,50 @@
++From dc507a812d931c24f1ac98c811fdd29bffa21da9 Mon Sep 17 00:00:00 2001
++From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
++Date: Tue, 24 Aug 2021 00:36:40 +0200
++Subject: [PATCH] libcap/Makefile: don't overwrite 'empty' when generating
++ loader.txt
++
++objcopy takes an input file and an output file as arguments. If the
++output file is left out, the input file will be overwritten.
++
++Since the objcopy command used to generate loader.txt only does a
++dump-section and no filtering, in practice there is no change to empty.
++However, as a side-effect, its timestamp is updated. The timestamp of
++empty and of loader.txt will be more or less the same; however,
++loader.txt is closed just before the output file is closed, so it's
++possible that the timestamp of loader.txt is just a little bit earlier.
++If this happens, it causes loader.txt to be rebuilt later, which in turn
++causes a number of other object files to be rebuilt.
++
++Usually that's harmless, but it sometimes causes the rebuild to happen
++during 'make install'. This is particularly annoying if 'make install'
++is done as root, since loader.txt becomes owned by root in that case.
++
++Fix this by specifying a harmless output file: /dev/null.
++
++While we're at it, take in an upstream change that removes the redundant
++redirect.
++
++Fixes: ee3b25c0a877fa74d1aec88f325ac45b09963c82
++
++Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
++---
++ libcap/Makefile | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/libcap/Makefile b/libcap/Makefile
++index 47cf8f4..18e4f4f 100644
++--- a/libcap/Makefile
+++++ b/libcap/Makefile
++@@ -105,7 +105,7 @@ empty: empty.c
++ 	$(CC) -o $@ $<
++ 
++ loader.txt: empty
++-	$(OBJCOPY) --dump-section .interp=/dev/stdout $< > $@
+++	$(OBJCOPY) --dump-section .interp=$@ $< /dev/null
++ 
++ cap_magic.o: execable.h execable.c loader.txt
++ 	$(CC) $(CFLAGS) $(IPATH) -DLIBRARY_VERSION=\"$(LIBTITLE)-$(VERSION).$(MINOR)\" -DSHARED_LOADER=\"$(shell cat loader.txt)\" -c execable.c -o $@
++-- 
++2.31.1
++
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
