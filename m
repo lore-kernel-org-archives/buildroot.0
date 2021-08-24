@@ -8,82 +8,84 @@ X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F33F7C4338F
-	for <buildroot@archiver.kernel.org>; Tue, 24 Aug 2021 06:44:41 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AAF63C4338F
+	for <buildroot@archiver.kernel.org>; Tue, 24 Aug 2021 06:49:33 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id A93D561101
-	for <buildroot@archiver.kernel.org>; Tue, 24 Aug 2021 06:44:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A93D561101
+	by mail.kernel.org (Postfix) with ESMTPS id 5730A61212
+	for <buildroot@archiver.kernel.org>; Tue, 24 Aug 2021 06:49:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5730A61212
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5A9BB400E7;
-	Tue, 24 Aug 2021 06:44:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2181B605F6;
+	Tue, 24 Aug 2021 06:49:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LOYt350BiHc9; Tue, 24 Aug 2021 06:44:37 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ruh83de_iT6n; Tue, 24 Aug 2021 06:49:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C263B40177;
-	Tue, 24 Aug 2021 06:44:36 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 55CA21BF339
- for <buildroot@lists.busybox.net>; Tue, 24 Aug 2021 06:44:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7DA2060723;
+	Tue, 24 Aug 2021 06:49:28 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 0A8521BF339
+ for <buildroot@lists.busybox.net>; Tue, 24 Aug 2021 06:49:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4AA9540177
- for <buildroot@lists.busybox.net>; Tue, 24 Aug 2021 06:44:35 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0739C60723
+ for <buildroot@lists.busybox.net>; Tue, 24 Aug 2021 06:49:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EPMm4ru-asK2 for <buildroot@lists.busybox.net>;
- Tue, 24 Aug 2021 06:44:30 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8QgdV9In9I-7 for <buildroot@lists.busybox.net>;
+ Tue, 24 Aug 2021 06:49:22 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
- [IPv6:2a00:1450:4864:20::435])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6287B400E7
- for <buildroot@buildroot.org>; Tue, 24 Aug 2021 06:44:30 +0000 (UTC)
-Received: by mail-wr1-x435.google.com with SMTP id n5so17270082wro.12
- for <buildroot@buildroot.org>; Mon, 23 Aug 2021 23:44:30 -0700 (PDT)
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
+ [IPv6:2a00:1450:4864:20::329])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1BC24605F6
+ for <buildroot@buildroot.org>; Tue, 24 Aug 2021 06:49:22 +0000 (UTC)
+Received: by mail-wm1-x329.google.com with SMTP id
+ w21-20020a7bc1150000b02902e69ba66ce6so1544402wmi.1
+ for <buildroot@buildroot.org>; Mon, 23 Aug 2021 23:49:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=vcqFv8DjmWeNeNmAwQ7ZKDBtdCLRvGUqANA1NC1ut4Y=;
- b=n+6OmvDp2In685B+cEmABxGVSAlXQMGR9DGpxxEHZMuvC2L1ySUi7PrVuMLj9yOqkL
- kW55y4WbYD7OCj3PAQ0QJzjWuz5otR5j0z0cpyc+EnayxaTy3t8Pj4QMIIPMjSj1xv5G
- ubqU/aBKECbB6kLf2W0e0FzyiGSc7qWzj6AWfy26GInk4KfTUeR9/9EcomHAlO2Ku84/
- PlLXv8duIR9ZRyoOKsmTpYxnKej2KhL9o0PcInZp1sCpUzP9VIvWnQELtb4hvmKQPloi
- DlslyO8QEkN54i6C69zof6bty/P/qC8SPe2uXZDITWkQIXUQflxPF51Aa/bnx+eL58Zx
- rBbA==
+ bh=iXle1BsAIxATICcNxPLbzEacmc9KmtDWKPUmjCCdV0Q=;
+ b=b5e/96ZHK8us89UMDWYck4lcDjIdPlJydeUaQmZwBGINDBKGnuq/rsHelu3Hw8Z9I8
+ drFapjShUlXeeWWWjI5daEq65Cznfwy77+5b2Uwlz4l8PI0kLMcQnrJ6yTLSui5Jscut
+ hUuifC5fnukN1H0bMU2WK2d0XLx1ZVkcXLmPzUWkFgcWiNbaRTk8fcIDx5Lf6BRo2T9s
+ r3sntc8zXYWVcyjDFybZ8h0GZRXxyLMlHd5eBcu/TCFEaOjlr1AlaZ1mECuuXwMpQZOi
+ E1RHHER0jpisyr1txlXtLCE6v7jh/y9q5LhbxNuFz6aO51d07Cyzfo5cj/OxUuCRwKFr
+ nGHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=vcqFv8DjmWeNeNmAwQ7ZKDBtdCLRvGUqANA1NC1ut4Y=;
- b=di1HRZHk2SmHsjH7V64uEqC83NxbTTRU8YdTTMcvtkCrKMS8DQYp3hLdnJbEwp3fEc
- NeWXIFld7m04P42ABVgNwUZm5BoIpIyCMn5BlK0xIpuftdYCbV0npbFO2krl28r4EVZT
- q+P20UEnljcY5QeUzbXj8VrucmCJ6wjotM8l84bqfTTDpuiXVqMzCKm9BOFlcKc8ZcaP
- YBKL95vy8RoGeOkbREbgax9tRHLoPdPvax/FVKoXGohwGDVCYnAKrhH/oq8ITm+1Toih
- OxgF96IjOldR/d1TiyNebRYkm4+VVOSrKDe2hzUur44wlpf1o2hyX31lj5o/TaFP9bS7
- X37g==
-X-Gm-Message-State: AOAM533VBRh+A2mMyJqQ0CceB0TwQj6y1FbZbRjbJI7Pc27Y5O0xoZlR
- vX/TdZ7WUOXAsvsiFwDRZ3/nCfGiLy3uUg==
-X-Google-Smtp-Source: ABdhPJzIqBya4lq/3PH6XSLVsGPemmSA64hv+Lev8IngBnLpI5Jzsmftjb9tCdy/aGQBSab9Tj1MuQ==
-X-Received: by 2002:adf:f645:: with SMTP id x5mr12342768wrp.353.1629787468249; 
- Mon, 23 Aug 2021 23:44:28 -0700 (PDT)
+ bh=iXle1BsAIxATICcNxPLbzEacmc9KmtDWKPUmjCCdV0Q=;
+ b=WP38bYi8oAhVNRyuH88qQ+WiMMPoWZDCUjgPVw/5Trh071PqMj8MGGPN1G0fqzKj/t
+ 7GmRUVW5TLo84KBlKD0/Tv3sV6+pHnS2/nzuUXnOpg10gKv3GBlTSWKUALI97ZrUyqAB
+ 6CVzEPvrehv5L3BewuIdVI2rpgv+iy+Nfxeo1kl03cz5HEpELARpbg5qkTpSX77Mme0N
+ QIzGSjNBrjittiOKOnT7A/UkFX4bC+r9MNMJhJcyV1qOUbBnbWIa0oygWCqz4l7blCp4
+ kj0BVad8JQzsYXS4Pg5vHFk7FGA5/9s9aBCi6QPvP/9pFZtpNHqE0ryvBiugO3LAgbIv
+ NEig==
+X-Gm-Message-State: AOAM530SbNWCfaaNquIqyB0I79oUD3uugQbZGvsuyyZ8wP/UsWk2NHe3
+ +iBMm195vs+SHqNSu5beSkRQirJovlwvpA==
+X-Google-Smtp-Source: ABdhPJzOpVTBQIjJGTIbGsMoEEa7dqyvI10zk2Z5sBzCVBzUFeC2Zuni96KoUen73KViu7nEFhaw+g==
+X-Received: by 2002:a05:600c:3641:: with SMTP id
+ y1mr2395688wmq.43.1629787759968; 
+ Mon, 23 Aug 2021 23:49:19 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-417-221.w2-10.abo.wanadoo.fr.
  [2.10.242.221])
- by smtp.gmail.com with ESMTPSA id 18sm1521237wmv.27.2021.08.23.23.44.27
+ by smtp.gmail.com with ESMTPSA id z7sm1327805wmi.4.2021.08.23.23.49.19
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 23 Aug 2021 23:44:27 -0700 (PDT)
+ Mon, 23 Aug 2021 23:49:19 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 24 Aug 2021 08:43:57 +0200
-Message-Id: <20210824064357.92124-1-fontaine.fabrice@gmail.com>
+Date: Tue, 24 Aug 2021 08:49:16 +0200
+Message-Id: <20210824064916.92551-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/sdl2: use BR2_PACKAGE_MESA3D_GBM
+Subject: [Buildroot] [PATCH 1/1] package/mpv: use BR2_PACKAGE_MESA3D_GBM
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,44 +97,57 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Michael Fischer <mf@go-sys.de>,
+Cc: Mahyar Koshkouei <mahyar.koshkouei@gmail.com>,
  Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-BR2_PACKAGE_MESA3D_GBM should be used instead of
-BR2_PACKAGE_MESA3D_OPENGL_EGL as spotted by Arnout in review of
-https://patchwork.ozlabs.org/project/buildroot/patch/20210821093908.677218-1-fontaine.fabrice@gmail.com/
+Use BR2_PACKAGE_MESA3D_GBM instead of BR2_PACKAGE_MESA3D_OPENGL_EGL as
+GBM can also be provided by a DRI driver
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/sdl2/Config.in | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ package/mpv/Config.in | 2 +-
+ package/mpv/mpv.mk    | 5 ++---
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/package/sdl2/Config.in b/package/sdl2/Config.in
-index a487b8de60..bf3ba9d5c4 100644
---- a/package/sdl2/Config.in
-+++ b/package/sdl2/Config.in
-@@ -31,14 +31,13 @@ comment "X11 video driver needs X.org"
- config BR2_PACKAGE_SDL2_KMSDRM
- 	bool "KMS/DRM video driver"
- 	depends on BR2_PACKAGE_LIBDRM
--	# requires libgbm from mesa3d
--	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL
-+	depends on BR2_PACKAGE_MESA3D_GBM
+diff --git a/package/mpv/Config.in b/package/mpv/Config.in
+index 81b1e24b5f..51c9799de8 100644
+--- a/package/mpv/Config.in
++++ b/package/mpv/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_MPV_SUPPORTS_VAAPI
+ 	bool
+-	default y if BR2_PACKAGE_LIBDRM && BR2_PACKAGE_MESA3D_OPENGL_EGL
++	default y if BR2_PACKAGE_LIBDRM && BR2_PACKAGE_MESA3D_GBM
+ 	default y if BR2_PACKAGE_WAYLAND
+ 	default y if BR2_PACKAGE_XORG7
  
- comment "KMS/DRM video driver needs libdrm"
- 	depends on !BR2_PACKAGE_LIBDRM
+diff --git a/package/mpv/mpv.mk b/package/mpv/mpv.mk
+index f8ecaeb78a..e2910d9d97 100644
+--- a/package/mpv/mpv.mk
++++ b/package/mpv/mpv.mk
+@@ -46,8 +46,7 @@ else
+ MPV_CONF_OPTS += --disable-alsa
+ endif
  
--comment "KMS/DRM video driver needs an OpenGL EGL backend provided by mesa3d"
--	depends on !BR2_PACKAGE_MESA3D_OPENGL_EGL
-+comment "KMS/DRM video driver needs mesa3d w/ GBM"
-+	depends on !BR2_PACKAGE_MESA3D_GBM
- 
- config BR2_PACKAGE_SDL2_OPENGL
- 	bool "OpenGL (GLX)"
+-# GBM support is provided by mesa3d when EGL=y
+-ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_EGL),y)
++ifeq ($(BR2_PACKAGE_MESA3D_GBM),y)
+ MPV_CONF_OPTS += --enable-gbm
+ MPV_DEPENDENCIES += mesa3d
+ ifeq ($(BR2_PACKAGE_LIBDRM),y)
+@@ -184,7 +183,7 @@ endif
+ ifeq ($(BR2_PACKAGE_LIBVA)$(BR2_PACKAGE_MPV_SUPPORTS_VAAPI),yy)
+ MPV_CONF_OPTS += --enable-vaapi
+ MPV_DEPENDENCIES += libva
+-ifeq ($(BR2_PACKAGE_LIBDRM)$(BR2_PACKAGE_MESA3D_OPENGL_EGL),yy)
++ifeq ($(BR2_PACKAGE_LIBDRM)$(BR2_PACKAGE_MESA3D_GBM),yy)
+ MPV_CONF_OPTS += --enable-vaapi-drm
+ else
+ MPV_CONF_OPTS += --disable-vaapi-drm
 -- 
 2.32.0
 
