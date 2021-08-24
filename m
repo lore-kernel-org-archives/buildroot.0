@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 78F04C432BE
-	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:34:25 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 96D7DC4320E
+	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:34:37 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 3905360FE6
-	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:34:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3905360FE6
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
+	by mail.kernel.org (Postfix) with ESMTPS id 5353260FE6
+	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:34:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5353260FE6
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0AA3342637;
-	Thu, 26 Aug 2021 22:34:25 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 23701407A6;
+	Thu, 26 Aug 2021 22:34:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 95-ZPFdODPK6; Thu, 26 Aug 2021 22:34:20 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id RX3Y_Jbr6toJ; Thu, 26 Aug 2021 22:34:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7028E426BD;
-	Thu, 26 Aug 2021 22:34:19 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7827E407B3;
+	Thu, 26 Aug 2021 22:34:31 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 040B71BF33E
- for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 22:03:57 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1349A1BF33E
+ for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 22:03:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 99850407BD
+ by smtp2.osuosl.org (Postfix) with ESMTP id D5A17407BB
  for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 22:02:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id p6FhuYRM-Yud for <buildroot@lists.busybox.net>;
- Thu, 26 Aug 2021 22:02:53 +0000 (UTC)
+ with ESMTP id AeAvBkBkQaPi for <buildroot@lists.busybox.net>;
+ Thu, 26 Aug 2021 22:02:54 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9025D407CC
- for <buildroot@buildroot.org>; Thu, 26 Aug 2021 22:02:34 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 12DEA407D3
+ for <buildroot@buildroot.org>; Thu, 26 Aug 2021 22:02:35 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id F1A798DC50; Thu, 26 Aug 2021 22:01:32 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ id 755898DC50; Thu, 26 Aug 2021 22:01:33 +0000 (UTC)
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Mon, 23 Aug 2021 23:08:05 +0200
+Date: Tue, 24 Aug 2021 23:54:53 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 181a5e229b347c1996eeca7d7727ee66bc566f01
-X-Git-Newrev: 2e94aeed1a97f5b66b9a8dc4f0133451b7b7b34f
+X-Git-Oldrev: fe4e06d3176b01834fda92d25ae7ece65f3550e0
+X-Git-Newrev: f4ff135e7811417cf4b4accbf3342f35968d34c0
 X-Patchwork-Hint: ignore
-Message-Id: <20210826220132.F1A798DC50@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] Config.in: disable Fortify
- Source for microblaze
+Message-Id: <20210826220133.755898DC50@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] support/testing: revert the
+ last change of check_network()
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,59 +70,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2e94aeed1a97f5b66b9a8dc4f0133451b7b7b34f
+commit: https://git.buildroot.net/buildroot/commit/?id=f4ff135e7811417cf4b4accbf3342f35968d34c0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-As reported by Toolchain-builder project [1], the microblaze glibc
-toolchain creates a system that doesn't boot when FORTIFY_SOURCE is
-enabled: the init process hangs.
+check_network() must check the error code of the command
+used to check the network configuration with the value
+passed as argument "exitCode".
 
-Also, hardening features may not be wanted or possible for such
-slow soft-core cpus [2].
+But this argument is ignored since this commit [1].
 
-Note: for completeness, BR2_RELRO_PARTIAL was manually tested and it
-does boot.
+Revert the last change of check_network().
 
-[1] https://gitlab.com/bootlin/toolchains-builder/-/jobs/1467624500
-[2] http://lists.busybox.net/pipermail/buildroot/2021-June/312416.html
+Fixes:
+https://gitlab.com/kubu93/buildroot/-/jobs/1522848308
+https://gitlab.com/kubu93/buildroot/-/jobs/1522848306
+
+[1] afc1ed4d5152e0f6e724e6986a1d12c8001b94fe
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- Config.in | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ support/testing/tests/init/base.py | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/Config.in b/Config.in
-index 2ef5d407e4..3db2c8dcab 100644
---- a/Config.in
-+++ b/Config.in
-@@ -853,9 +853,16 @@ endchoice
- comment "RELocation Read Only (RELRO) needs shared libraries"
- 	depends on !BR2_SHARED_LIBS
+diff --git a/support/testing/tests/init/base.py b/support/testing/tests/init/base.py
+index 6a85b87783..7f12186b73 100644
+--- a/support/testing/tests/init/base.py
++++ b/support/testing/tests/init/base.py
+@@ -42,4 +42,5 @@ class InitSystemBase(infra.basetest.BRTest):
  
-+config BR2_FORTIFY_SOURCE_ARCH_SUPPORTS
-+	bool
-+	default y
-+	# Microblaze glibc toolchains don't work with Fortify Source enabled
-+	depends on !BR2_microblaze
-+
- choice
- 	bool "Buffer-overflow Detection (FORTIFY_SOURCE)"
- 	default BR2_FORTIFY_SOURCE_1
-+	depends on BR2_FORTIFY_SOURCE_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
- 	depends on !BR2_OPTIMIZE_0
- 	help
-@@ -896,6 +903,7 @@ config BR2_FORTIFY_SOURCE_2
- endchoice
- 
- comment "Fortify Source needs a glibc toolchain and optimization"
-+	depends on BR2_FORTIFY_SOURCE_ARCH_SUPPORTS
- 	depends on (!BR2_TOOLCHAIN_USES_GLIBC || BR2_OPTIMIZE_0)
- endmenu
- 
+     def check_network(self, interface, exitCode=0):
+         cmd = "ip addr show {} |grep inet".format(interface)
+-        self.assertRunOk(cmd)
++        _, exit_code = self.emulator.run(cmd)
++        self.assertEqual(exit_code, exitCode)
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
