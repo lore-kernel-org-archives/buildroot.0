@@ -2,57 +2,57 @@ Return-Path: <SRS0=2pYX=NR=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-12.4 required=3.0 tests=BAYES_00,DATE_IN_PAST_24_48,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2DA87C432BE
-	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:37:08 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D4714C432BE
+	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:37:20 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id E7D1D60EBA
-	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:37:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E7D1D60EBA
+	by mail.kernel.org (Postfix) with ESMTPS id 9A7D360EBA
+	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 22:37:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9A7D360EBA
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BD6244077F;
-	Thu, 26 Aug 2021 22:37:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7306942637;
+	Thu, 26 Aug 2021 22:37:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nWRkSK-JgMyu; Thu, 26 Aug 2021 22:37:03 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id xzcYhTq-NdZq; Thu, 26 Aug 2021 22:37:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2CD6F40786;
-	Thu, 26 Aug 2021 22:37:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DBC5D42687;
+	Thu, 26 Aug 2021 22:37:14 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0FFB21BF33E
- for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 22:04:12 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 209121BF33E
+ for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 22:04:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C2A1C407C6
- for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 22:03:02 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7552340767
+ for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 22:03:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pyYPgFBiR92V for <buildroot@lists.busybox.net>;
- Thu, 26 Aug 2021 22:02:58 +0000 (UTC)
+ with ESMTP id PFPkh1xhMDDI for <buildroot@lists.busybox.net>;
+ Thu, 26 Aug 2021 22:02:57 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id C610A407DD
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8693B407DA
  for <buildroot@buildroot.org>; Thu, 26 Aug 2021 22:02:35 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 344D38DC50; Thu, 26 Aug 2021 22:01:34 +0000 (UTC)
+ id E908D8DC52; Thu, 26 Aug 2021 22:01:33 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Thu, 26 Aug 2021 23:07:52 +0200
+Date: Wed, 25 Aug 2021 22:12:26 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: c4e1a075101914f8e0d47f8bb9c06bea13ba0fd2
-X-Git-Newrev: 42a3fee35e67d8d946f52a82bfa88ee6fd9f04b6
+X-Git-Oldrev: 5eace9d35c4a671c1ac175ab1240d2403e3d7290
+X-Git-Newrev: 3454bc99242a1a0069ccdb61d9598dc2fe6a9aa5
 X-Patchwork-Hint: ignore
-Message-Id: <20210826220134.344D38DC50@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/mtd: ubihealthd needs
- kernel 3.17+
+Message-Id: <20210826220133.E908D8DC52@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/alsa-utils: Fix
+ alsa-plugins compatibility
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,42 +70,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=42a3fee35e67d8d946f52a82bfa88ee6fd9f04b6
+commit: https://git.buildroot.net/buildroot/commit/?id=3454bc99242a1a0069ccdb61d9598dc2fe6a9aa5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-ubihealthd requires getrandom(2) that was introduced in kernel version
-3.17. ubihealthd does not build when getrandom(2) is not detected, so
-the following installation step fails.
+Previously, alsa-plugins would not work if alsa-utils was installed
+after it. This happened because:
 
-Technically the dependency should also be on glibc version 2.25+. But we
-have no way to depend on glibc versions of external toolchains.
-Toolchain built with kernel headers older than 3.17 can build
-ubihealthd, but it will fail at run-time. So this is a pretty close
-approximation of the actual dependency.
+1. alsa-plugins copies some files $(TARGET_DIR)/usr/share/alsa/alsa.conf.d
+2. alsa-utils removes these files during installation ( rm -rf $(TARGET_DIR)/usr/share/alsa/;)
 
-Fixes:
-http://autobuild.buildroot.net/results/2d42b0a626367e4051d0e2aadcce39e974fe09d4/
-http://autobuild.buildroot.net/results/a2b6dbf707275e3f8262479c0650cfc7cb9abc8d/
+The `rm -rf` command was originally added as part of the fix for
+https://bugs.buildroot.org/show_bug.cgi?id=1573 11 years ago.
 
-Cc: Matt Weber <matthew.weber@collins.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+The intention might have been to allow for unconfiguring some options
+and then rebuilding alsa-utils. However, this is a scenario that does
+not work anyway.
+
+The simplest fix for the `alsa-plugins` compatibility issue appears to
+be to remove the `rm -rf` command.
+
+Signed-off-by: Gleb Mazovetskiy <glex.spb@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/mtd/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/alsa-utils/alsa-utils.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/mtd/Config.in b/package/mtd/Config.in
-index abfe806661..57ad01971d 100644
---- a/package/mtd/Config.in
-+++ b/package/mtd/Config.in
-@@ -147,6 +147,7 @@ config BR2_PACKAGE_MTD_UBIHEALTHD
- 	bool "ubihealthd"
- 	default y
- 	depends on BR2_PACKAGE_MTD_UBIFS_UTILS
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 # getrandom()
- 
- config BR2_PACKAGE_MTD_UBIMKVOL
- 	bool "ubimkvol"
+diff --git a/package/alsa-utils/alsa-utils.mk b/package/alsa-utils/alsa-utils.mk
+index 2658c827a0..427280c1e6 100644
+--- a/package/alsa-utils/alsa-utils.mk
++++ b/package/alsa-utils/alsa-utils.mk
+@@ -77,7 +77,6 @@ define ALSA_UTILS_INSTALL_TARGET_CMDS
+ 	fi
+ 	if [ -x "$(TARGET_DIR)/usr/sbin/alsactl" ]; then \
+ 		mkdir -p $(TARGET_DIR)/usr/share/; \
+-		rm -rf $(TARGET_DIR)/usr/share/alsa/; \
+ 		cp -rdpf $(STAGING_DIR)/usr/share/alsa/ $(TARGET_DIR)/usr/share/alsa/; \
+ 	fi
+ endef
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
