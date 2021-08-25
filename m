@@ -2,93 +2,91 @@ Return-Path: <SRS0=vKZi=NQ=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-18.5 required=3.0 tests=BAYES_00,
 	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
 	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C578C432BE
-	for <buildroot@archiver.kernel.org>; Wed, 25 Aug 2021 18:19:46 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0DE85C432BE
+	for <buildroot@archiver.kernel.org>; Wed, 25 Aug 2021 19:20:34 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 0DE1F61075
-	for <buildroot@archiver.kernel.org>; Wed, 25 Aug 2021 18:19:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0DE1F61075
+	by mail.kernel.org (Postfix) with ESMTPS id 9FE2160EAF
+	for <buildroot@archiver.kernel.org>; Wed, 25 Aug 2021 19:20:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9FE2160EAF
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CA32740105;
-	Wed, 25 Aug 2021 18:19:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 689A86061B;
+	Wed, 25 Aug 2021 19:20:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id I4WMAjz1dqLq; Wed, 25 Aug 2021 18:19:41 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id FYJVnl4F-Bx5; Wed, 25 Aug 2021 19:20:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 821584013C;
-	Wed, 25 Aug 2021 18:19:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EC4976069C;
+	Wed, 25 Aug 2021 19:20:28 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 13C131BF39F
- for <buildroot@lists.busybox.net>; Wed, 25 Aug 2021 18:19:17 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id F21CC1BF588
+ for <buildroot@lists.busybox.net>; Wed, 25 Aug 2021 19:20:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 00F92613BF
- for <buildroot@lists.busybox.net>; Wed, 25 Aug 2021 18:19:16 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E1769613AB
+ for <buildroot@lists.busybox.net>; Wed, 25 Aug 2021 19:20:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bUyeibMdYbix for <buildroot@lists.busybox.net>;
- Wed, 25 Aug 2021 18:19:13 +0000 (UTC)
+ with ESMTP id BstaGz3h5Swe for <buildroot@lists.busybox.net>;
+ Wed, 25 Aug 2021 19:20:22 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com
- [IPv6:2a00:1450:4864:20::22f])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C25D5605EE
- for <buildroot@buildroot.org>; Wed, 25 Aug 2021 18:19:12 +0000 (UTC)
-Received: by mail-lj1-x22f.google.com with SMTP id w4so187097ljh.13
- for <buildroot@buildroot.org>; Wed, 25 Aug 2021 11:19:12 -0700 (PDT)
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
+ [IPv6:2a00:1450:4864:20::331])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 091FE6061B
+ for <buildroot@buildroot.org>; Wed, 25 Aug 2021 19:20:21 +0000 (UTC)
+Received: by mail-wm1-x331.google.com with SMTP id
+ c129-20020a1c35870000b02902e6b6135279so509992wma.0
+ for <buildroot@buildroot.org>; Wed, 25 Aug 2021 12:20:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=jUt5/0P0h3YULbjIlEzu7+/qEpJaYOH5bmkZWIkyje0=;
- b=qc8Z2ZUuxDD4lOQAarL5LJsHjyJLkqrYU/GcI+RYvP6kxoEtON3yHCdFRYfSXJIT5O
- mwGa3toLJnGi1gTQgJtuHZtEATyrAJ0LVDs/pppSc5Y4Cs28UYJMN1vNeqCgB5z7nD1g
- vxS9kIHQnji0NmCrHoF1xMrIJhNfs1pLf+ZqAypi84k5kEabqJHZT9pPXBYGDVKzvDZ9
- 0ouYELgV3rwcJSCicbLk8Bm3Z+8Us12patCi2WhxQ5QZ3fElKzxkkgpEmRk+tIcZa4M/
- o61K2G4loHTluFV461T3deQXvc1EFnVebfwVWgTO4hsRo+OOgnOyvQnthBolK+5GLzfB
- 3qfw==
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=k8hDioVYKtQ0VvDKfOTvxZg21hi6USfRshpH0U+Y594=;
+ b=RR7MpXfino92/FNjybMwJXuefT6YghEaxKhi5HpKTh1XWNAOmM0UXnT/0FTZFhOBN0
+ Z9+oT4OyG1jZhSQ+Qc1b7oL5Ig2Ujz8KxelfquPJPihnPHcnuml8WDeHlT1h7tIiaJ6q
+ COJb/PQisUCbSA1HZLJSpW8lam0u2/pZ90Pi6TSoVX9ihp2ypje+Levzlxa9beTVlkIv
+ ewuD+XOStskSjxq1Jbj/6vvNUDSyoMo2Qc3oZ4tJgeJo7SN4uEhzJh58BFB00h/bCUsy
+ MamrkQenxmcyFr3Yy4IDD8mqKReaeCY6mx4rMjQeo4nZ4RpaXBiGLxpr+vu79qWq3f73
+ /adQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=jUt5/0P0h3YULbjIlEzu7+/qEpJaYOH5bmkZWIkyje0=;
- b=VFZgq5iNtNtWBD5NevcJNC8AXi/OGyKeAnRwP4JteN4mJAlYDKmSYgZdLXZ+8kEUfe
- NqZTZNxXdsjGqPuT7vRGXfBisn31X0c8r8dT94MDDAAX49U6acC9yFNpU9CM6hI+n2bS
- +mU6mRd60lVVLMC0bxl+0/KJcufYL14b7+1+xgnpMHT1UA+zzevMvIqEAuYy4P0+Uch1
- SAuAhZ15M9oNDUjYp/iacLhEva6yELm74CUi6OT2vTjofw0vmcbG9nFYw562jL00NhPG
- 0rOWTOE79zpGwxdmQisZDcEFxkLQbFkbh86TjMoZGXlvVzADRakscx7mIkOopmsex079
- jgsQ==
-X-Gm-Message-State: AOAM533OY4wgYGQwnfX8A9GtwYp6RNQyzflk5dcRq2G+By7W+CLbHqid
- lldadCqStHEIsnX1jnwXnjRiAiVRRUjkXK2IuO0=
-X-Google-Smtp-Source: ABdhPJxrie7FfTT4pLLnqi/qEajRd9djr07yDl6/EdVhPy7/zm2jqxi2mppmWUS9tKJ/+ndshHPPBg==
-X-Received: by 2002:a2e:2406:: with SMTP id k6mr35767778ljk.258.1629915550589; 
- Wed, 25 Aug 2021 11:19:10 -0700 (PDT)
-Received: from localhost.localdomain (m90-131-47-37.cust.tele2.lt.
- [90.131.47.37])
- by smtp.gmail.com with ESMTPSA id j20sm80125lji.41.2021.08.25.11.19.09
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=k8hDioVYKtQ0VvDKfOTvxZg21hi6USfRshpH0U+Y594=;
+ b=RGu5t4BmkUfx3ptNJVjagojMsq2ZZaXgy4D/L7Hoe99XfSPoFv5dCNC/Ycv23T3fM2
+ hTQhdQIQbSzkTo31sgJT0oVK6Cw4NxyniJhRCl2a6/QMile33BZbOsHlLhTRarprLTz8
+ OaOGB61pe+Y2UaiJON0gGiqfXYawjnCBQdIWhZjh7oOTHxfi3EHM8tWIRLX6e4mjAPKV
+ 8LIBWpPKII1lFQOYhZjs0UHPRbsz6JNySRi6SdKSOazCq0uxd6mzT7f3Eo0M0hWzJCMU
+ +ymKqhTIEbpl3QuEEWB5pl1bmnPE3zCLjE8c5UhhbUvTUCRsuxakIBLghQvVuQRGC5cp
+ laBA==
+X-Gm-Message-State: AOAM533wkmzqlEdrluSaJRglGUeBm5saF1ZCktSPQEca0JHa2Rhoutk3
+ 2Q5aBcNfbPgjmTY+ef7AB0ZagAT3poA=
+X-Google-Smtp-Source: ABdhPJziLidkK8jciXyIOm6h2+SCV6kqjaEQNjB4um2bTtnvlrJLtD+JAOY9hYXjkNsKXgVEV+yBfg==
+X-Received: by 2002:a1c:7515:: with SMTP id o21mr98337wmc.150.1629919220302;
+ Wed, 25 Aug 2021 12:20:20 -0700 (PDT)
+Received: from localhost.localdomain
+ (2a01cb058f8a180098814a9aef637f91.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:8f8a:1800:9881:4a9a:ef63:7f91])
+ by smtp.gmail.com with ESMTPSA id c2sm759465wrs.60.2021.08.25.12.20.19
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 25 Aug 2021 11:19:10 -0700 (PDT)
-From: Yauheni Saldatsenka <eugentoo@gmail.com>
+ Wed, 25 Aug 2021 12:20:19 -0700 (PDT)
+From: Romain Naour <romain.naour@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 25 Aug 2021 21:18:58 +0300
-Message-Id: <20210825181858.801574-3-eugentoo@gmail.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20210825181858.801574-1-eugentoo@gmail.com>
-References: <20210825181858.801574-1-eugentoo@gmail.com>
+Date: Wed, 25 Aug 2021 21:20:13 +0200
+Message-Id: <20210825192014.1203727-1-romain.naour@gmail.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 3/3] [PATCH v3 1/1]
- configs/stm32f469_disco_xip_defconfig: alternative defconfig for XIP
+Subject: [Buildroot] [PATCH] configs/beaglev_defconfig: update linux-headers
+ to 5.13.
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,202 +98,38 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Christophe Priouzeau <christophe.priouzeau@foss.st.com>
+Cc: Romain Naour <romain.naour@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-Result of make tinyconfig was taken as a starting point to fit kernel
-into flash memory.
-Current setup kernel + rootfs fits in 1.6MB on-chip flash memory.
+The beaglev kernel is based on the 5.13 branch, update
+the expected linux-headers version to 5.13.
 
 Fixes:
-    - Move kernel to new flash bank due to growth of dtb size
-    - Fix kernel start address in bootloader
+https://gitlab.com/kubu93/buildroot/-/jobs/1525740895
 
-For better binary size optimization gcc LTO is turned on.
-
-Signed-off-by: Yauheni Saldatsenka <eugentoo@gmail.com>
-
-----
-v2 -> v3:
-- Create separate readme.txt for xip configuration
-- Create separate flash.sh script for xip configuration
-
-Signed-off-by: Yauheni Saldatsenka <eugentoo@gmail.com>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- .../stm32f469-disco/flash.sh                  | 45 ++++---------------
- .../stm32f469-disco/flash_xip.sh              | 20 +++++++++
- .../stm32f469-disco/readme.txt                | 26 +++--------
- .../stm32f469-disco/readme_xip.txt            | 22 +++++++++
- 4 files changed, 57 insertions(+), 56 deletions(-)
- create mode 100644 board/stmicroelectronics/stm32f469-disco/flash_xip.sh
- create mode 100644 board/stmicroelectronics/stm32f469-disco/readme_xip.txt
+ configs/beaglev_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/board/stmicroelectronics/stm32f469-disco/flash.sh b/board/stmicroelectronics/stm32f469-disco/flash.sh
-index 0e130908aa..984d2b2599 100755
---- a/board/stmicroelectronics/stm32f469-disco/flash.sh
-+++ b/board/stmicroelectronics/stm32f469-disco/flash.sh
-@@ -1,45 +1,18 @@
- #!/bin/bash
- 
- OUTPUT_DIR=$1
--BUILD_TYPE=$2
- 
--if ! test -d "${OUTPUT_DIR}"; then
-+if ! test -d "${OUTPUT_DIR}" ; then
-     echo "ERROR: no output directory specified."
-     echo "Usage: $0 OUTPUT_DIR"
-     exit 1
- fi
- 
--if  [[ -z "${BUILD_TYPE}" ]]; then
--    echo "ERROR: no build type specified, please select 'xip' or 'uboot'."
--    echo "Usage: $0 OUTPUT_DIR $1 BUILD_TYPE"
--    exit 1
--fi
--
--case "${BUILD_TYPE}" in
--	"xip")
--		${OUTPUT_DIR}/host/bin/openocd -f board/stm32f469discovery.cfg \
--					 -c "init" \
--					 -c "reset init" \
--					 -c "flash probe 0" \
--					 -c "flash info 0" \
--					 -c "flash write_image erase ${OUTPUT_DIR}/images/stm32f469i-disco.bin 0x08000000" \
--					 -c "flash write_image erase ${OUTPUT_DIR}/images/stm32f469-disco.dtb 0x08004000" \
--					 -c "flash write_image erase ${OUTPUT_DIR}/images/xipImage 0x08010000" \
--					 -c "reset run" \
--					 -c "shutdown"
--		;;
--	"uboot")
--		FLASH_COMMAND=
--		${OUTPUT_DIR}/host/bin/openocd -f board/stm32f469discovery.cfg \
--					 -c "init" \
--					 -c "reset init" \
--					 -c "flash probe 0" \
--					 -c "flash info 0" \
--					 -c "flash write_image erase ${OUTPUT_DIR}/images/u-boot.bin 0x08000000" \
--					 -c "reset run" \
--					 -c "shutdown"
--	    ;;
--	*)
--		echo "Wrong build type. Please select from: xip, uboot"
--		;;
--esac
-+${OUTPUT_DIR}/host/bin/openocd -f board/stm32f469discovery.cfg \
-+  -c "init" \
-+  -c "reset init" \
-+  -c "flash probe 0" \
-+  -c "flash info 0" \
-+  -c "flash write_image erase ${OUTPUT_DIR}/images/u-boot.bin 0x08000000" \
-+  -c "reset run" \
-+  -c "shutdown"
-diff --git a/board/stmicroelectronics/stm32f469-disco/flash_xip.sh b/board/stmicroelectronics/stm32f469-disco/flash_xip.sh
-new file mode 100644
-index 0000000000..b5a067cee5
---- /dev/null
-+++ b/board/stmicroelectronics/stm32f469-disco/flash_xip.sh
-@@ -0,0 +1,20 @@
-+#!/bin/bash
-+
-+OUTPUT_DIR=$1
-+
-+if ! test -d "${OUTPUT_DIR}"; then
-+    echo "ERROR: no output directory specified."
-+    echo "Usage: $0 OUTPUT_DIR"
-+    exit 1
-+fi
-+
-+${OUTPUT_DIR}/host/bin/openocd -f board/stm32f469discovery.cfg \
-+  -c "init" \
-+  -c "reset init" \
-+  -c "flash probe 0" \
-+  -c "flash info 0" \
-+  -c "flash write_image erase ${OUTPUT_DIR}/images/stm32f469i-disco.bin 0x08000000" \
-+  -c "flash write_image erase ${OUTPUT_DIR}/images/stm32f469-disco.dtb 0x08004000" \
-+  -c "flash write_image erase ${OUTPUT_DIR}/images/xipImage 0x08010000" \
-+  -c "reset run" \
-+  -c "shutdown"
-diff --git a/board/stmicroelectronics/stm32f469-disco/readme.txt b/board/stmicroelectronics/stm32f469-disco/readme.txt
-index 646f340382..c1e1d30e69 100644
---- a/board/stmicroelectronics/stm32f469-disco/readme.txt
-+++ b/board/stmicroelectronics/stm32f469-disco/readme.txt
-@@ -4,37 +4,23 @@ STM32F469 Discovery
- This tutorial describes how to use the predefined Buildroot
- configuration for the STM32F469 Discovery evaluation platform.
- 
--There are two setups supported:
--1. Internal flash memory is fully occupied with u-boot bootloader which boots kernel with
--   root filesystem from MMC.
--2. Internal flash memory stores simple afboot-stm32 bootloader, device tree and
--   in place (XIP) kernel with built-in initramfs.
--   Kernel is based on tinyconfig.
--
- Building
- --------
--  Type
--  "make stm32f469_disco_defconfig"
--  to build u-boot setup
--  or
--  "make stm32f469_disco_xip_defconfig"
--  to build xip setup
--
--  Then
- 
--  "make"
-+  make stm32f469_disco_defconfig
-+  make
- 
- Flashing
- --------
- 
--  ./board/stmicroelectronics/stm32f469-disco/flash.sh output/ <BUILD_TYPE>
-+  ./board/stmicroelectronics/stm32f469-disco/flash.sh output/
- 
--  <BUILD_TYPE> can be "xip" or "uboot"
-+It will flash the U-boot bootloader.
- 
--Creating SD card for u-boot setup
-+Creating SD card
- ----------------
- 
--Buildroot prepares an "sdcard.img" image in the output/images/ directory,
-+Buildroot prepares an"sdcard.img" image in the output/images/ directory,
- ready to be dumped on a SD card. Launch the following command as root:
- 
-   dd if=output/images/sdcard.img of=/dev/<your-sd-device>
-diff --git a/board/stmicroelectronics/stm32f469-disco/readme_xip.txt b/board/stmicroelectronics/stm32f469-disco/readme_xip.txt
-new file mode 100644
-index 0000000000..c4c93cef6c
---- /dev/null
-+++ b/board/stmicroelectronics/stm32f469-disco/readme_xip.txt
-@@ -0,0 +1,22 @@
-+STM32F469 Discovery
-+===================
-+
-+This tutorial describes how to use the predefined Buildroot
-+configuration for the STM32F469 Discovery evaluation platform.
-+
-+Internal flash memory stores simple afboot-stm32 bootloader, device tree and
-+in place (XIP) kernel with built-in initramfs.
-+Kernel is based on tinyconfig.
-+
-+Building
-+--------
-+
-+  make stm32f469_disco_xip_defconfig
-+  make
-+
-+Flashing
-+--------
-+
-+  ./board/stmicroelectronics/stm32f469-disco/flash.sh output/
-+
-+It will flash binary to internal flash memory.
+diff --git a/configs/beaglev_defconfig b/configs/beaglev_defconfig
+index 82a6e9abc4..70459bf3e8 100644
+--- a/configs/beaglev_defconfig
++++ b/configs/beaglev_defconfig
+@@ -4,7 +4,7 @@ BR2_RISCV_ISA_CUSTOM_RVM=y
+ BR2_RISCV_ISA_CUSTOM_RVF=y
+ BR2_RISCV_ISA_CUSTOM_RVD=y
+ BR2_RISCV_ISA_CUSTOM_RVC=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_12=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_13=y
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/beaglev/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/beaglev/genimage.cfg"
 -- 
-2.32.0
+2.31.1
 
 _______________________________________________
 buildroot mailing list
