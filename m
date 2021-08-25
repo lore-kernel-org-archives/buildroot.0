@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F538C432BE
-	for <buildroot@archiver.kernel.org>; Wed, 25 Aug 2021 20:23:16 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 10617C432BE
+	for <buildroot@archiver.kernel.org>; Wed, 25 Aug 2021 20:23:27 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id F31C5610A3
-	for <buildroot@archiver.kernel.org>; Wed, 25 Aug 2021 20:23:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org F31C5610A3
+	by mail.kernel.org (Postfix) with ESMTPS id B6EC0610A3
+	for <buildroot@archiver.kernel.org>; Wed, 25 Aug 2021 20:23:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B6EC0610A3
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6F03E40710;
-	Wed, 25 Aug 2021 20:23:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 80DEB605CC;
+	Wed, 25 Aug 2021 20:23:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id X23xIPpTtLFn; Wed, 25 Aug 2021 20:23:10 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id KVMR4Rl6cL3n; Wed, 25 Aug 2021 20:23:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C8EB342556;
-	Wed, 25 Aug 2021 20:23:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EAE5F60670;
+	Wed, 25 Aug 2021 20:23:20 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id F2C8D1BF335
- for <buildroot@lists.busybox.net>; Wed, 25 Aug 2021 20:22:55 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 086081BF9BD
+ for <buildroot@lists.busybox.net>; Wed, 25 Aug 2021 20:22:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E16DA823E8
+ by smtp1.osuosl.org (Postfix) with ESMTP id F051981BB2
  for <buildroot@lists.busybox.net>; Wed, 25 Aug 2021 20:22:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dP18lcUYnGBI for <buildroot@lists.busybox.net>;
+ with ESMTP id em7lq5Kf_DcR for <buildroot@lists.busybox.net>;
  Wed, 25 Aug 2021 20:22:51 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 69BC981BB2
+ by smtp1.osuosl.org (Postfix) with ESMTP id 567C181ABB
  for <buildroot@buildroot.org>; Wed, 25 Aug 2021 20:22:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 3F77489066; Wed, 25 Aug 2021 20:21:52 +0000 (UTC)
+ id 2B32389079; Wed, 25 Aug 2021 20:21:52 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Wed, 25 Aug 2021 21:50:17 +0200
+Date: Wed, 25 Aug 2021 21:47:18 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a223dd4aef256bf1c63881353399e4a18f7c43bc
-X-Git-Newrev: 6f911a17257d945eb3cb5c9c9a966f0e5fca0842
+X-Git-Oldrev: 2463bebe471f071a0453dccab1851e11d61d4ab7
+X-Git-Newrev: a4a4330b73d494201ec72ea40fc34e96fb41faf3
 X-Patchwork-Hint: ignore
-Message-Id: <20210825202152.3F77489066@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] toolchain: handle toolchains with multiple
- ld*.so.* files
+Message-Id: <20210825202152.2B32389079@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/belle-sip: add
+ BELLE_SIP_CPE_ID_VENDOR
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,36 +70,31 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6f911a17257d945eb3cb5c9c9a966f0e5fca0842
+commit: https://git.buildroot.net/buildroot/commit/?id=a4a4330b73d494201ec72ea40fc34e96fb41faf3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Some 3rd party vendor toolchains have multiple files which match
-these glob patterns.  In this case, the shell script failed.
-Switching to use find and xargs solves the issue.
+cpe:2.3:a:linphone:belle-sip is a valid CPE identifier for this package:
 
-Signed-off-by: Jonah Petri <jonah@petri.us>
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alinphone%3Abelle-sip
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- toolchain/helpers.mk | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ package/belle-sip/belle-sip.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index dfb2581ed5..5ed149d57d 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -135,10 +135,8 @@ copy_toolchain_sysroot = \
- 			$(call simplify_symlink,$$i,$(STAGING_DIR)) ; \
- 		done ; \
- 	fi ; \
--	if [ ! -e $(STAGING_DIR)/lib/ld*.so.* ]; then \
--		if [ -e $${ARCH_SYSROOT_DIR}/lib/ld*.so.* ]; then \
--			cp -a $${ARCH_SYSROOT_DIR}/lib/ld*.so.* $(STAGING_DIR)/lib/ ; \
--		fi ; \
-+       if ! find -wholename $(STAGING_DIR)'/lib/ld*.so.*' > /dev/null; then \
-+               find -wholename $${ARCH_SYSROOT_DIR}'/lib/ld*.so.*' -print0 | xargs -0 -I % cp % $(STAGING_DIR)/lib/; \
- 	fi ; \
- 	if [ `readlink -f $${SYSROOT_DIR}` != `readlink -f $${ARCH_SYSROOT_DIR}` ] ; then \
- 		if [ ! -d $${ARCH_SYSROOT_DIR}/usr/include ] ; then \
+diff --git a/package/belle-sip/belle-sip.mk b/package/belle-sip/belle-sip.mk
+index 23b60e51f5..11b96f3fd9 100644
+--- a/package/belle-sip/belle-sip.mk
++++ b/package/belle-sip/belle-sip.mk
+@@ -9,6 +9,7 @@ BELLE_SIP_SITE = \
+ 	https://gitlab.linphone.org/BC/public/belle-sip/-/archive/$(BELLE_SIP_VERSION)
+ BELLE_SIP_LICENSE = GPL-3.0+
+ BELLE_SIP_LICENSE_FILES = LICENSE.txt
++BELLE_SIP_CPE_ID_VENDOR = linphone
+ BELLE_SIP_INSTALL_STAGING = YES
+ BELLE_SIP_DEPENDENCIES = \
+ 	bctoolbox \
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
