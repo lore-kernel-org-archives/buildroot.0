@@ -7,93 +7,91 @@ X-Spam-Status: No, score=-17.3 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A81F9C432BE
-	for <buildroot@archiver.kernel.org>; Wed, 25 Aug 2021 20:04:27 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 41279C432BE
+	for <buildroot@archiver.kernel.org>; Wed, 25 Aug 2021 20:04:48 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2801B610C9
-	for <buildroot@archiver.kernel.org>; Wed, 25 Aug 2021 20:04:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2801B610C9
+	by mail.kernel.org (Postfix) with ESMTPS id 05098610C8
+	for <buildroot@archiver.kernel.org>; Wed, 25 Aug 2021 20:04:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 05098610C8
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D06B3401B4;
-	Wed, 25 Aug 2021 20:04:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CC8A640231;
+	Wed, 25 Aug 2021 20:04:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DeDG0jwTCA3P; Wed, 25 Aug 2021 20:04:23 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 25FA640510;
-	Wed, 25 Aug 2021 20:04:22 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1A3F51BF335
- for <buildroot@lists.busybox.net>; Wed, 25 Aug 2021 20:04:21 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0946D407E9
- for <buildroot@lists.busybox.net>; Wed, 25 Aug 2021 20:04:21 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HNoX1KhRFReV for <buildroot@lists.busybox.net>;
- Wed, 25 Aug 2021 20:04:16 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id iuHc29dolX_D; Wed, 25 Aug 2021 20:04:44 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3449040233;
+	Wed, 25 Aug 2021 20:04:43 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 094A51BF335
+ for <buildroot@lists.busybox.net>; Wed, 25 Aug 2021 20:04:42 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id ED0F960614
+ for <buildroot@lists.busybox.net>; Wed, 25 Aug 2021 20:04:41 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JjCZ4X-7Ax5R for <buildroot@lists.busybox.net>;
+ Wed, 25 Aug 2021 20:04:41 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com
- [IPv6:2a00:1450:4864:20::535])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 484BF407DC
- for <buildroot@buildroot.org>; Wed, 25 Aug 2021 20:04:16 +0000 (UTC)
-Received: by mail-ed1-x535.google.com with SMTP id d6so872134edt.7
- for <buildroot@buildroot.org>; Wed, 25 Aug 2021 13:04:15 -0700 (PDT)
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com
+ [IPv6:2a00:1450:4864:20::534])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2417F605FD
+ for <buildroot@buildroot.org>; Wed, 25 Aug 2021 20:04:41 +0000 (UTC)
+Received: by mail-ed1-x534.google.com with SMTP id q3so896669edt.5
+ for <buildroot@buildroot.org>; Wed, 25 Aug 2021 13:04:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=subject:to:cc:references:from:organization:message-id:date
- :user-agent:mime-version:in-reply-to:content-language
- :content-transfer-encoding;
- bh=p/KbKgOJEUnz53pW8nAtZaU5Utkg2KEx92Df1qZFHQA=;
- b=TXBdaPc572lHRbT9d54mEKCCGJVpagj/g2pB0p2KSvmtvHfU1l08qcTy7Xs8S2Ik1a
- KAKqOBVRNcTC2Y7owunyce+sTdSzxoeKVzJP0rw++2jOsHIU1epwdLmovkorQ2sqC+Yx
- YzhE+Z1LtKryDbrhbmDD3sxTzt8m5rwrdcSm9rmZZVAKdktse5Us5aQjCC0FN7PfWNmL
- T7/8Q0kCZo1ymnPOpNykolew8MaCOuNYrWEIXkiPs9G5j/+2my5TUKdmTHj6QLX3ffsd
- Ym9IEuLS0av32RbigBvKjXz+ordaye8RBsCkL3u5EoafLMS4RkQRAh1Sg1sHq6hY31ze
- l7pA==
+ h=subject:to:references:from:organization:message-id:date:user-agent
+ :mime-version:in-reply-to:content-language:content-transfer-encoding;
+ bh=tNoluFaa5BxlJ1/E0JtrWTT3s1B65qqV+7VD0Qyk1AI=;
+ b=VOoCVPkvnDNrRcUh3ueEQAxkbQkf7TBAhsmr/HK64NPL+HzK0eJKNvZ9J8nFmohmpL
+ xZnn6YtgVVK9fjaCa995iySpEAHiFQgnbP5lHToKBPhx4S0Yvm5fpTk+/3R0UOO4Yvwb
+ wxONrGdkndvwUvpYRz2oo2En65+KbnGzd8sCaKFciEhVtLMKZP2vrAO2gk9dAU46P1pZ
+ KjmnXLbkOndV/CKPrxjvSBQ3at4Upf/qx3sfwGl/6zYiZaTSSfQKoktM76Djj0f7JBZu
+ dYLB2BST2sb5pUx4eQKVyvMl0/YKlyYN68YN/MFVyKep9kxJlYFDAAPF1Gl0x3TOlkAn
+ jLuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
- h=x-gm-message-state:subject:to:cc:references:from:organization
+ h=x-gm-message-state:subject:to:references:from:organization
  :message-id:date:user-agent:mime-version:in-reply-to
  :content-language:content-transfer-encoding;
- bh=p/KbKgOJEUnz53pW8nAtZaU5Utkg2KEx92Df1qZFHQA=;
- b=kSe6sul/KtBNTIWYEp+Aj0wlDR4CSH+MV2+PGSJqaippg2BZCIT79Ych9QHCt3HtCK
- mDVnZ0p8/Yv/VyNSfKtCeTNxUIa/kQvxBfeqcyS5iRwl142OWuX5FmQm4E8otJR7Y2gv
- Vtc54/QOAKsSVh79fuSsRqIGujTl4zw1Y18G6ckK5zLqEx8bJMNo1TYz5NyhW7Fr6uLx
- MWf7YjrLblhZ19OmcIb76rVgpEqiNVb3KxftTKMTr0LUUlAZdbs0YEUaQDxjFuczFPiK
- zNxfAgIs10wCsXnz9evPxYGtIXAgYZaBDuZ8g4DJeX3f0Z91IMvkMuMA/poViF0XoSI2
- D/sQ==
-X-Gm-Message-State: AOAM5304W2kGVW1620xFDGTF70y2geWPwTObuuvBbywEBGZyO524w7Cf
- A8uYIpbptCqzcXlZZ9pimz+Gtg==
-X-Google-Smtp-Source: ABdhPJz5JO1i73dEUo4CfVGAws5VGKFXzw6z7Q5+OSXpMCAU0arxymz7QqebkWz4209z7qTqD55O0A==
-X-Received: by 2002:aa7:c4c3:: with SMTP id p3mr310161edr.122.1629921854279;
- Wed, 25 Aug 2021 13:04:14 -0700 (PDT)
+ bh=tNoluFaa5BxlJ1/E0JtrWTT3s1B65qqV+7VD0Qyk1AI=;
+ b=T6Yma+UuhV2LA/CMqKk33bYFDh4BUVtOS8pV4S+AakROu0gibCzt10nfAQ3cpNP9na
+ 0QomsZMu2T8alTdIxmKmbrvWARy7Z3bkURGpVXXY2aoBGfq5WlJfFmhntP9ftNG8AvPo
+ N7pzZImHn09GKqmrYCPvBInHfAwBrx3dlqlUrgMZVsQb/wJpYMz3Oue7iVNJeN+E5EGh
+ 4aGuolG3USRt2Rcuzjsk/hgz5FyDYIeemCX+HxNT6o5tgUl03XvEkDh/PRDUDba0Dktp
+ E2/ATpMk7WbOExTFHZPjev9002myP4qZdM4G4UeaFOdj/7Zec9LghWCOCDk94D+ntZL5
+ tZ9A==
+X-Gm-Message-State: AOAM530cUgVP/rQm8jQT/wTPl8w0GG+jtKjBL59/gGKo3QxOGfKxb8yi
+ dsL/wQu2HH93OTNUgbzfmkj0LWyhqSEiHw==
+X-Google-Smtp-Source: ABdhPJxLLEvM9gF4sXKkBhr3oYFiGSByY2lavpn4jkEA95NE5UHPL85MT+E9LxrJ1yBD6UcLdlUJFg==
+X-Received: by 2002:a50:e606:: with SMTP id y6mr303613edm.216.1629921879291;
+ Wed, 25 Aug 2021 13:04:39 -0700 (PDT)
 Received: from ?IPv6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id t3sm543045edt.61.2021.08.25.13.04.13
+ by smtp.gmail.com with ESMTPSA id b5sm290656ejq.56.2021.08.25.13.04.38
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 25 Aug 2021 13:04:13 -0700 (PDT)
-To: Jonah Petri <jonah@petri.us>, buildroot@buildroot.org
-References: <20210824203841.1554763-1-jonah@petri.us>
+ Wed, 25 Aug 2021 13:04:38 -0700 (PDT)
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+References: <20210824215813.1122744-1-thomas.petazzoni@bootlin.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-Message-ID: <e8372342-ccd7-9be9-5e78-da1a31ad9162@mind.be>
-Date: Wed, 25 Aug 2021 22:04:13 +0200
+Message-ID: <e1df59fa-b22a-6d65-4aaa-e5213f90e350@mind.be>
+Date: Wed, 25 Aug 2021 22:04:38 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.11.0
 MIME-Version: 1.0
-In-Reply-To: <20210824203841.1554763-1-jonah@petri.us>
+In-Reply-To: <20210824215813.1122744-1-thomas.petazzoni@bootlin.com>
 Content-Language: en-GB
-Subject: Re: [Buildroot] [PATCH v2 1/1] toolchain: handle toolchains with
- multiple ld*.so.* files
+Subject: Re: [Buildroot] [PATCH] DEVELOPERS: drop Maxime Hadjinlian
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -105,10 +103,6 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Romain Naour <romain.naour@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
@@ -116,12 +110,13 @@ Sender: "buildroot" <buildroot-bounces@busybox.net>
 
 
 
-On 24/08/2021 22:38, Jonah Petri wrote:
-> Some 3rd party vendor toolchains have multiple files which match
-> these glob patterns.  In this case, the shell script failed.
-> Switching to use find and xargs solves the issue.
+On 24/08/2021 23:58, Thomas Petazzoni wrote:
+> Maxime has not been contributing to Buildroot for several years, so it
+> doesn't make sense to keep him in the DEVELOPERS file and make us
+> think that those packages are being maintained and to Cc: him on
+> patches affecting those packages.
 > 
-> Signed-off-by: Jonah Petri <jonah@petri.us>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
  Applied to master, thanks.
 
@@ -129,29 +124,50 @@ On 24/08/2021 22:38, Jonah Petri wrote:
  Arnout
 
 > ---
-> Changes v1->v2:
-> 	Add SOB
+>  DEVELOPERS | 30 ------------------------------
+>  1 file changed, 30 deletions(-)
 > 
->  toolchain/helpers.mk | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
-> 
-> diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-> index dfb2581ed5..5ed149d57d 100644
-> --- a/toolchain/helpers.mk
-> +++ b/toolchain/helpers.mk
-> @@ -135,10 +135,8 @@ copy_toolchain_sysroot = \
->  			$(call simplify_symlink,$$i,$(STAGING_DIR)) ; \
->  		done ; \
->  	fi ; \
-> -	if [ ! -e $(STAGING_DIR)/lib/ld*.so.* ]; then \
-> -		if [ -e $${ARCH_SYSROOT_DIR}/lib/ld*.so.* ]; then \
-> -			cp -a $${ARCH_SYSROOT_DIR}/lib/ld*.so.* $(STAGING_DIR)/lib/ ; \
-> -		fi ; \
-> +       if ! find -wholename $(STAGING_DIR)'/lib/ld*.so.*' > /dev/null; then \
-> +               find -wholename $${ARCH_SYSROOT_DIR}'/lib/ld*.so.*' -print0 | xargs -0 -I % cp % $(STAGING_DIR)/lib/; \
->  	fi ; \
->  	if [ `readlink -f $${SYSROOT_DIR}` != `readlink -f $${ARCH_SYSROOT_DIR}` ] ; then \
->  		if [ ! -d $${ARCH_SYSROOT_DIR}/usr/include ] ; then \
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 7d2fbf4cf3..53448dd100 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -1876,36 +1876,6 @@ F:	package/postgis/
+>  F:	package/protozero/
+>  F:	package/timescaledb/
+>  
+> -N:	Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> -F:	package/babeld/
+> -F:	package/dante/
+> -F:	package/faifa/
+> -F:	package/initscripts/
+> -F:	package/intel-microcode/
+> -F:	package/iucode-tool/
+> -F:	package/jasper/
+> -F:	package/kodi/
+> -F:	package/libass/
+> -F:	package/libbluray/
+> -F:	package/libcdio/
+> -F:	package/libcofi/
+> -F:	package/libenca/
+> -F:	package/libmodplug/
+> -F:	package/libnfs/
+> -F:	package/libplist/
+> -F:	package/libshairplay/
+> -F:	package/linux-zigbee/
+> -F:	package/netcat-openbsd/
+> -F:	package/open-plc-utils/
+> -F:	package/rpi-firmware/
+> -F:	package/rpi-userland/
+> -F:	package/rtmpdump/
+> -F:	package/skeleton/
+> -F:	package/systemd/
+> -F:	package/systemd-bootchart/
+> -F:	package/tinyalsa/
+> -F:	package/tinyxml/
+> -
+>  N:	Michael Durrant <mdurrant@arcturusnetworks.com>
+>  F:	board/arcturus/
+>  F:	configs/arcturus_ucp1020_defconfig
 > 
 _______________________________________________
 buildroot mailing list
