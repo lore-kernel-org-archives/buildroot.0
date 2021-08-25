@@ -2,82 +2,85 @@ Return-Path: <SRS0=vKZi=NQ=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C901C4320A
-	for <buildroot@archiver.kernel.org>; Wed, 25 Aug 2021 07:31:01 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B0ABEC4338F
+	for <buildroot@archiver.kernel.org>; Wed, 25 Aug 2021 09:03:14 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id BC9CE60EFE
-	for <buildroot@archiver.kernel.org>; Wed, 25 Aug 2021 07:30:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org BC9CE60EFE
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=tudorholton.com
+	by mail.kernel.org (Postfix) with ESMTPS id 4144D61139
+	for <buildroot@archiver.kernel.org>; Wed, 25 Aug 2021 09:03:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4144D61139
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=busybox.net
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7ED01406DC;
-	Wed, 25 Aug 2021 07:30:59 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 01FE9403A4;
+	Wed, 25 Aug 2021 09:03:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZZ3L4g152QPG; Wed, 25 Aug 2021 07:30:55 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id u9hp-_BX7wKR; Wed, 25 Aug 2021 09:03:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C905A406DE;
-	Wed, 25 Aug 2021 07:30:54 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 530E31BF5D7
- for <buildroot@lists.busybox.net>; Wed, 25 Aug 2021 07:30:53 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2D631403AB;
+	Wed, 25 Aug 2021 09:03:07 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 2C1B01BF20F
+ for <buildroot@lists.busybox.net>; Wed, 25 Aug 2021 09:03:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 41EAA406DE
- for <buildroot@lists.busybox.net>; Wed, 25 Aug 2021 07:30:53 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 244004038F
+ for <buildroot@lists.busybox.net>; Wed, 25 Aug 2021 09:03:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MUtmSXy7Yta0 for <buildroot@lists.busybox.net>;
- Wed, 25 Aug 2021 07:30:48 +0000 (UTC)
-X-Greylist: delayed 00:22:24 by SQLgrey-1.8.0
-Received: from webhost.tudorholton.net (webhost.tudorholton.net [27.50.73.94])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 88700406DC
- for <buildroot@buildroot.org>; Wed, 25 Aug 2021 07:30:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
- d=tudorholton.com; s=default; h=Content-Transfer-Encoding:Content-Type:
- Message-ID:Subject:To:From:Date:MIME-Version:Sender:Reply-To:Cc:Content-ID:
- Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
- :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
- List-Subscribe:List-Post:List-Owner:List-Archive;
- bh=2U7TreGJH3UTvV9IeC0ZAaEX6+MthgW9I4rzO06/Smg=; b=rmWP8R6mdV3agLQZvO6kn1MFLp
- 6f28jRRCYJKQioTNv0QVwe7xFc/bdWQCTHyqOpLTjZgGBhCjpabJesNgdtI4PCyEHcbAeLnN8pMOR
- Mef82KtCmKYBEVwIL7wLf0dWiuZwcn8ZULsYzpaVPb3bahsxkmqTuujXnDOipg83ohqjreAuqL9Gh
- cyNXB9XKkz/jYyiCmuPCYRKKmYNcJZ4P6i48sEUypyW/keyptn1SICOGSjx3n9Z9k33HCTMQKhOUD
- GpKWGZqX9Vz4tOHeQwBHOwWtnEbZT2OHHvi/PEX46CqDV1GEnJD88/4gIrbp9yRiB0NbRSk7EDE3f
- k+oFYtcQ==;
-Received: from [::1] (port=33708 helo=webhost.tudorholton.net)
- by webhost.tudorholton.net with esmtpa (Exim 4.94.2)
- (envelope-from <tudor@tudorholton.com>) id 1mIn1I-0008VN-Om
- for buildroot@buildroot.org; Wed, 25 Aug 2021 17:08:21 +1000
-MIME-Version: 1.0
-Date: Wed, 25 Aug 2021 17:08:16 +1000
-From: Tudor Holton <tudor@tudorholton.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 91lCoXGquEL4 for <buildroot@lists.busybox.net>;
+ Wed, 25 Aug 2021 09:03:01 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com
+ [IPv6:2a00:1450:4864:20::52f])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 84283400E5
+ for <buildroot@buildroot.org>; Wed, 25 Aug 2021 09:03:00 +0000 (UTC)
+Received: by mail-ed1-x52f.google.com with SMTP id s25so23163069edw.0
+ for <buildroot@buildroot.org>; Wed, 25 Aug 2021 02:03:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=googlemail.com; s=20161025;
+ h=from:to:cc:subject:date:message-id;
+ bh=m8R4H07qVnSdlTUbOHz/u3kYRTi0Z29edOFStWSoEVk=;
+ b=UYNrb6p1BQD06av4bicB2mplE9GbhEfbdmc4T27ZmR9RNjGXP3XJILaTy6NXtQndTR
+ lYn2FEeZhxHrH2to7vsJDFwhhtqxC2xZqZ/lC8rUwQUjz+xJPdq1sp8zb37Jeeoyydfu
+ ec67+onbLv648T2f5Sw5KmlEKKnE/ATH42D0V3+MxDYejtjNg3GVirp5rrSmbUM8dU9/
+ rv/Z0eBjmty4uXLpF4X2D5ZMwXZzScJ851ejFCIdeenMYG4ePnw/0KHrZ+knNIO67W5z
+ XC5Ca2DmyoyDW+EJBvk67QKLoRxte+ysxMVaoFBZOH/YsX4AbyAxcElGAS4Rh/fuesx4
+ QqPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id;
+ bh=m8R4H07qVnSdlTUbOHz/u3kYRTi0Z29edOFStWSoEVk=;
+ b=fd2rjYV2c7ZpIKsSgdzZSlhOFhMb1a5B1JFdpz9/7gRiHx0EoBhEkkozt+SZqCzKZJ
+ K2ohrpRMvYHPxFQd0fHRnxAE7SYhkY6bH/1chdPv6m0K7tS+i8pLERBw/sf7sSOHjZIy
+ gbFaVaOrwtaJ7EKvB+N+Tg3JXw7M8GI+mUPBIk/Orj6USCjgRTPtUELYZhmmYDJcv7p4
+ AHHvGJx33uCh6BNQFodhc6atom84BlY1vW/JLWZF0XiAYtvTGTv0LrLe6SZkDKm9lzt6
+ YJW03ygmKefMkvBG0AS+Sxmn2ibf0L8c0AZOaJ5kW7Szx9FA0TTzu+JsbFMHKMTmJWdf
+ x0BQ==
+X-Gm-Message-State: AOAM531aCXmflYjYlLwOCAYzDogSOfmsW6ub7dQf0QWUshNVZZkAgpRt
+ TGHIkI636GhGq3YtpDPfjN6uT4OVKsA=
+X-Google-Smtp-Source: ABdhPJwbPBZYJXQUGopHaCqS4lb4OhuPV1RFjSf/4pnwAu+MMsbP31DLJqehDBG50X0UrXGv3gdyPA==
+X-Received: by 2002:a05:6402:1b10:: with SMTP id
+ by16mr10415165edb.297.1629882178358; 
+ Wed, 25 Aug 2021 02:02:58 -0700 (PDT)
+Received: from development1.visionsystems.de (mail.visionsystems.de.
+ [213.209.99.202])
+ by smtp.gmail.com with ESMTPSA id ly7sm7283318ejb.109.2021.08.25.02.02.57
+ (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+ Wed, 25 Aug 2021 02:02:57 -0700 (PDT)
 To: buildroot@buildroot.org
-User-Agent: Roundcube Webmail/1.4.11
-Message-ID: <f2ac08f597a5b80bb2b2aa9ea554b952@tudorholton.com>
-X-Sender: tudor@tudorholton.com
-X-AntiAbuse: This header was added to track abuse,
- please include it with any abuse report
-X-AntiAbuse: Primary Hostname - webhost.tudorholton.net
-X-AntiAbuse: Original Domain - buildroot.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - tudorholton.com
-X-Get-Message-Sender-Via: webhost.tudorholton.net: authenticated_id:
- tudor@tudorholton.com
-X-Authenticated-Sender: webhost.tudorholton.net: tudor@tudorholton.com
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-Subject: [Buildroot] Package to manage multiple buildroot filesystem
- "versions"?
+Date: Wed, 25 Aug 2021 11:02:43 +0200
+Message-Id: <20210825090243.30444-1-yegorslists@googlemail.com>
+X-Mailer: git-send-email 2.17.0
+Subject: [Buildroot] [PATCH v3] package/libqmi: bump to version 1.30.0
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,46 +92,177 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
+From: yegorslists--- via buildroot <buildroot@busybox.net>
+Reply-To: yegorslists@googlemail.com
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ Matt Weber <matthew.weber@collins.com>,
+ Aleksander Morgado <aleksander@aleksander.es>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-Hi all,
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-I understand that buildroot is for building root filesystems and not 
-really outside that, but...
+This release introduces meson build system support that fixes
+gobject-intorspection issue with autotools.
 
-Is there a package that can manage the partition layout, and buildroot 
-filesystem "versions", for upgrade and fallback?
+As meson files are only available in git, switch the location to
+https://gitlab.freedesktop.org.
 
-For example, something like:
+Add support for bash-completion.
 
-1) During build, allocate space for 2 or more partitions, the first 
-partition is the running buildroot filesystem
-2) When the buildroot filesystem is running, download a newer version of 
-the filesystem, verify it, and dd it to the second partition
-3) Tell grub/EFI to boot the newer partition and reboot
-BUT
-4a) It doesn't complete the startup for some reason (like there's a 
-kernel panic, or something doesn't start properly triggering the 
-watchdog)
-SO
-5a) It reboots again, calling the previous version (e.g. using grub 
-fallback or fallback.efi)
-OR
-4b) It does complete the startup, but some important service doesn't 
-work (like it can't connect to the internet) so we presume we need to 
-roll back
-5B) It rolls back to the previous version with some kind of failure flag 
-to tell the server that it failed the upgrade
+Add an upstream patch fixing the compilation without gobject-intorspection.
 
-I can see that this could be fairly easily written, but I was wondering 
-if there was a buildroot package or environment that does this kind of 
-behaviour already?
+Fixes:
+http://autobuild.buildroot.net/results/c13877a5700445253900e312bc87904152be429a
 
-Cheers,
-Tudor.
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Acked-by: Aleksander Morgado <aleksander@aleksander.es>
+---
+Changes v1 -> v2:
+  - add a patch fixing the compilation without gobject-intorspection (Aleksander Morgado)
+Changes v2 -> v3:
+  - rebase against next branch (Thomas Petazzoni)
+
+ ...build-meson-fix-introspection-option.patch | 33 +++++++++++++++++
+ package/libqmi/libqmi.hash                    |  2 +-
+ package/libqmi/libqmi.mk                      | 37 ++++++++++++-------
+ 3 files changed, 58 insertions(+), 14 deletions(-)
+ create mode 100644 package/libqmi/0001-build-meson-fix-introspection-option.patch
+
+diff --git a/package/libqmi/0001-build-meson-fix-introspection-option.patch b/package/libqmi/0001-build-meson-fix-introspection-option.patch
+new file mode 100644
+index 0000000000..0528868025
+--- /dev/null
++++ b/package/libqmi/0001-build-meson-fix-introspection-option.patch
+@@ -0,0 +1,33 @@
++From bfb066419f288764edbade1e27e93a5dda59a5f4 Mon Sep 17 00:00:00 2001
++From: Aleksander Morgado <aleksander@aleksander.es>
++Date: Fri, 6 Aug 2021 10:32:22 +0200
++Subject: [PATCH] build,meson: fix introspection option
++
++Using -Dintrospection=false would actually not disable it. There is no
++longer an "auto" option for the introspection support, it will be
++either enabled or disabled depending on what the user asks
++for (default enabled).
++
++Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
++---
++ meson.build | 5 ++++-
++ 1 file changed, 4 insertions(+), 1 deletion(-)
++
++diff --git a/meson.build b/meson.build
++index b25bca57..d28e5601 100644
++--- a/meson.build
+++++ b/meson.build
++@@ -218,7 +218,10 @@ version_conf.set10('QMI_QRTR_SUPPORTED', enable_qrtr)
++ version_conf.set10('QMI_RMNET_SUPPORTED', enable_rmnet)
++
++ # introspection support
++-enable_gir = dependency('gobject-introspection-1.0', version: '>= 0.9.6', required: get_option('introspection')).found()
+++enable_gir = get_option('introspection')
+++if enable_gir
+++  dependency('gobject-introspection-1.0', version: '>= 0.9.6')
+++endif
++
++ random_number = qmi_minor_version + meson.version().split('.').get(1).to_int()
++
++--
++2.17.0
+diff --git a/package/libqmi/libqmi.hash b/package/libqmi/libqmi.hash
+index 0bfc63f4a4..0373bb4e75 100644
+--- a/package/libqmi/libqmi.hash
++++ b/package/libqmi/libqmi.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+-sha256  cbb890893de1dee06ea5ebdac2d22f0469314a6f93f15f61f2f1206a1c9ae5fd  libqmi-1.28.6.tar.xz
++sha256  c0421684c12697c448077dd5c0a66c6f745deab3558af578e3f10307c8a0c564  libqmi-1.30.0.tar.gz
+diff --git a/package/libqmi/libqmi.mk b/package/libqmi/libqmi.mk
+index 35a41e5bd0..05fd3ae9af 100644
+--- a/package/libqmi/libqmi.mk
++++ b/package/libqmi/libqmi.mk
+@@ -4,9 +4,8 @@
+ #
+ ################################################################################
+ 
+-LIBQMI_VERSION = 1.28.6
+-LIBQMI_SITE = http://www.freedesktop.org/software/libqmi
+-LIBQMI_SOURCE = libqmi-$(LIBQMI_VERSION).tar.xz
++LIBQMI_VERSION = 1.30.0
++LIBQMI_SITE = https://gitlab.freedesktop.org/mobile-broadband/libqmi/-/archive/$(LIBQMI_VERSION)
+ LIBQMI_LICENSE = LGPL-2.0+ (library), GPL-2.0+ (programs)
+ LIBQMI_LICENSE_FILES = COPYING COPYING.LIB
+ LIBQMI_CPE_ID_VENDOR = libqmi_project
+@@ -14,40 +13,52 @@ LIBQMI_INSTALL_STAGING = YES
+ 
+ LIBQMI_DEPENDENCIES = libglib2
+ 
+-LIBQMI_CONF_OPTS = --disable-Werror
++ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
++LIBQMI_DEPENDENCIES += gobject-introspection
++LIBQMI_CONF_OPTS += -Dintrospection=true
++else
++LIBQMI_CONF_OPTS += -Dintrospection=false
++endif
+ 
+ # if libgudev available, request udev support for a better
+ # qmi-firmware-update experience
+ ifeq ($(BR2_PACKAGE_LIBGUDEV),y)
+ LIBQMI_DEPENDENCIES += libgudev
+-LIBQMI_CONF_OPTS += --with-udev
++LIBQMI_CONF_OPTS += -Dudev=true
+ else
+-LIBQMI_CONF_OPTS += --without-udev
++LIBQMI_CONF_OPTS += -Dudev=false
+ endif
+ 
+ # if libmbim available, request QMI-over-MBIM support
+ ifeq ($(BR2_PACKAGE_LIBMBIM),y)
+ LIBQMI_DEPENDENCIES += libmbim
+-LIBQMI_CONF_OPTS += --enable-mbim-qmux
++LIBQMI_CONF_OPTS += -Dmbim_qmux=true
+ else
+-LIBQMI_CONF_OPTS += --disable-mbim-qmux
++LIBQMI_CONF_OPTS += -Dmbim_qmux=false
+ endif
+ 
+ # if libqrtr-glib available, enable support for QMI over QRTR
+ ifeq ($(BR2_PACKAGE_LIBQRTR_GLIB),y)
+ LIBQMI_DEPENDENCIES += libqrtr-glib
+-LIBQMI_CONF_OPTS += --enable-qrtr
++LIBQMI_CONF_OPTS += -Dqrtr=true
+ else
+-LIBQMI_CONF_OPTS += --disable-qrtr
++LIBQMI_CONF_OPTS += -Dqrtr=false
+ endif
+ 
+ # if ModemManager available, enable MM runtime check in
+ # qmi-firmware-update (note that we don't need to build-depend on
+ # anything else)
+ ifeq ($(BR2_PACKAGE_MODEM_MANAGER),y)
+-LIBQMI_CONF_OPTS += --enable-mm-runtime-check
++LIBQMI_CONF_OPTS += -Dmm_runtime_check=true
++else
++LIBQMI_CONF_OPTS += -Dmm_runtime_check=false
++endif
++
++ifeq ($(BR2_PACKAGE_BASH_COMPLETION),y)
++LIBQMI_DEPENDENCIES += bash-completion
++LIBQMI_CONF_OPTS += -Dbash_completion=true
+ else
+-LIBQMI_CONF_OPTS += --disable-mm-runtime-check
++LIBQMI_CONF_OPTS += -Dbash_completion=false
+ endif
+ 
+-$(eval $(autotools-package))
++$(eval $(meson-package))
+-- 
+2.17.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
