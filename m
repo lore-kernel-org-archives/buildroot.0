@@ -2,85 +2,98 @@ Return-Path: <SRS0=vKZi=NQ=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.3 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
+	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B0ABEC4338F
-	for <buildroot@archiver.kernel.org>; Wed, 25 Aug 2021 09:03:14 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C9462C4338F
+	for <buildroot@archiver.kernel.org>; Wed, 25 Aug 2021 11:12:39 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 4144D61139
-	for <buildroot@archiver.kernel.org>; Wed, 25 Aug 2021 09:03:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4144D61139
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=busybox.net
+	by mail.kernel.org (Postfix) with ESMTPS id 6D20D610E5
+	for <buildroot@archiver.kernel.org>; Wed, 25 Aug 2021 11:12:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6D20D610E5
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 01FE9403A4;
-	Wed, 25 Aug 2021 09:03:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 25BF0819D1;
+	Wed, 25 Aug 2021 11:12:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id u9hp-_BX7wKR; Wed, 25 Aug 2021 09:03:10 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id hZ-onz1FVxHP; Wed, 25 Aug 2021 11:12:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2D631403AB;
-	Wed, 25 Aug 2021 09:03:07 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2C1B01BF20F
- for <buildroot@lists.busybox.net>; Wed, 25 Aug 2021 09:03:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1168981A16;
+	Wed, 25 Aug 2021 11:12:34 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D7F461BF873
+ for <buildroot@lists.busybox.net>; Wed, 25 Aug 2021 11:12:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 244004038F
- for <buildroot@lists.busybox.net>; Wed, 25 Aug 2021 09:03:06 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id D5026605DB
+ for <buildroot@lists.busybox.net>; Wed, 25 Aug 2021 11:12:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 91lCoXGquEL4 for <buildroot@lists.busybox.net>;
- Wed, 25 Aug 2021 09:03:01 +0000 (UTC)
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fYPRosFK2ZBk for <buildroot@lists.busybox.net>;
+ Wed, 25 Aug 2021 11:12:29 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com
- [IPv6:2a00:1450:4864:20::52f])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 84283400E5
- for <buildroot@buildroot.org>; Wed, 25 Aug 2021 09:03:00 +0000 (UTC)
-Received: by mail-ed1-x52f.google.com with SMTP id s25so23163069edw.0
- for <buildroot@buildroot.org>; Wed, 25 Aug 2021 02:03:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=googlemail.com; s=20161025;
- h=from:to:cc:subject:date:message-id;
- bh=m8R4H07qVnSdlTUbOHz/u3kYRTi0Z29edOFStWSoEVk=;
- b=UYNrb6p1BQD06av4bicB2mplE9GbhEfbdmc4T27ZmR9RNjGXP3XJILaTy6NXtQndTR
- lYn2FEeZhxHrH2to7vsJDFwhhtqxC2xZqZ/lC8rUwQUjz+xJPdq1sp8zb37Jeeoyydfu
- ec67+onbLv648T2f5Sw5KmlEKKnE/ATH42D0V3+MxDYejtjNg3GVirp5rrSmbUM8dU9/
- rv/Z0eBjmty4uXLpF4X2D5ZMwXZzScJ851ejFCIdeenMYG4ePnw/0KHrZ+knNIO67W5z
- XC5Ca2DmyoyDW+EJBvk67QKLoRxte+ysxMVaoFBZOH/YsX4AbyAxcElGAS4Rh/fuesx4
- QqPQ==
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
+ [IPv6:2a00:1450:4864:20::42f])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C38666064D
+ for <buildroot@buildroot.org>; Wed, 25 Aug 2021 11:12:28 +0000 (UTC)
+Received: by mail-wr1-x42f.google.com with SMTP id h13so35876913wrp.1
+ for <buildroot@buildroot.org>; Wed, 25 Aug 2021 04:12:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
+ h=subject:to:cc:references:from:message-id:date:user-agent
+ :mime-version:in-reply-to:content-language:content-transfer-encoding;
+ bh=CunyTBI4DXQwZgTxTYVY7KKBSuypWC9JmaSmUse3Zw0=;
+ b=byVGtryp9P4qkIyzfuiA76gFDEyUr3zfHZaKxzfGsh+bAKhxt8jpDaJF6eTYbl9pnD
+ 950GN4iCAj2D6UUf5d/2TQ/RYDtsCaQGbeVsFm/i9uvPRn/j3rHbk4wIe0DL/7QPzPTs
+ GXHz/phlVPjlfdJls062//68LkqNz+ZCEgn557dwdgxlO/b8VEMlc48ZaFWmTFIA23sj
+ XieAgL4qLY6H63M7EbjZHY6GT2sDZZ+ibgzQhpB/9UJPbMh9cgM8kl0Ko0aKx0bRNFZv
+ x0wlzTJ9yLHuwb0XTs4MogZ72XJBp2cvfMRWFyvkn1q86btY0wlpzStmbp36AhFN725m
+ VB5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
- h=x-gm-message-state:from:to:cc:subject:date:message-id;
- bh=m8R4H07qVnSdlTUbOHz/u3kYRTi0Z29edOFStWSoEVk=;
- b=fd2rjYV2c7ZpIKsSgdzZSlhOFhMb1a5B1JFdpz9/7gRiHx0EoBhEkkozt+SZqCzKZJ
- K2ohrpRMvYHPxFQd0fHRnxAE7SYhkY6bH/1chdPv6m0K7tS+i8pLERBw/sf7sSOHjZIy
- gbFaVaOrwtaJ7EKvB+N+Tg3JXw7M8GI+mUPBIk/Orj6USCjgRTPtUELYZhmmYDJcv7p4
- AHHvGJx33uCh6BNQFodhc6atom84BlY1vW/JLWZF0XiAYtvTGTv0LrLe6SZkDKm9lzt6
- YJW03ygmKefMkvBG0AS+Sxmn2ibf0L8c0AZOaJ5kW7Szx9FA0TTzu+JsbFMHKMTmJWdf
- x0BQ==
-X-Gm-Message-State: AOAM531aCXmflYjYlLwOCAYzDogSOfmsW6ub7dQf0QWUshNVZZkAgpRt
- TGHIkI636GhGq3YtpDPfjN6uT4OVKsA=
-X-Google-Smtp-Source: ABdhPJwbPBZYJXQUGopHaCqS4lb4OhuPV1RFjSf/4pnwAu+MMsbP31DLJqehDBG50X0UrXGv3gdyPA==
-X-Received: by 2002:a05:6402:1b10:: with SMTP id
- by16mr10415165edb.297.1629882178358; 
- Wed, 25 Aug 2021 02:02:58 -0700 (PDT)
-Received: from development1.visionsystems.de (mail.visionsystems.de.
- [213.209.99.202])
- by smtp.gmail.com with ESMTPSA id ly7sm7283318ejb.109.2021.08.25.02.02.57
- (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
- Wed, 25 Aug 2021 02:02:57 -0700 (PDT)
-To: buildroot@buildroot.org
-Date: Wed, 25 Aug 2021 11:02:43 +0200
-Message-Id: <20210825090243.30444-1-yegorslists@googlemail.com>
-X-Mailer: git-send-email 2.17.0
-Subject: [Buildroot] [PATCH v3] package/libqmi: bump to version 1.30.0
+ h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+ :user-agent:mime-version:in-reply-to:content-language
+ :content-transfer-encoding;
+ bh=CunyTBI4DXQwZgTxTYVY7KKBSuypWC9JmaSmUse3Zw0=;
+ b=IeCTw6Mrm9tTj/0NDCegACyLZDgPiDL0DgyQt+03sTRgZnbSS/+ZMK7VjObEccfxop
+ 1BfbbZ3/bqGYrfXv2dfrjGtnPhizDn3u98BJrzYIXSw2LR2GbSNlEiZDOnuTFSCsogpY
+ RX9Mil4nBnqJP+Dl2sFrtPnBnDJqn1cFPtuQvwSERe/dSs7azU7elWw+lvhigPnNU4Sq
+ 5r0VgDVxTOjibtmLa/S7uPkj9cm72b8hZdMmYYLR2O4TzzRFNQly+lDRw+MEdzz+fHb9
+ 9Q2CmIKQ3IXhrw0F7jRB2KiSwcUNFfHbO+QNINxQ/zdtGqK/EayqqrqHkUaM2gR706Tq
+ qEyQ==
+X-Gm-Message-State: AOAM530a2u376ixLVA1KJgaJUCQYe9Fi7Ru1WdKy/ZskclzIu1Xuy9QS
+ wdgjiGEcuiqLbo+g7gl5X+92bxv/d+8=
+X-Google-Smtp-Source: ABdhPJwejbMT3i9Cfzi0rnAmN87cfQcQBSz9LX6y7dahJ+/TWX5D3ii8pzoCN4hlQpaEnQ200JJwCw==
+X-Received: by 2002:adf:fb91:: with SMTP id a17mr6001066wrr.376.1629889946967; 
+ Wed, 25 Aug 2021 04:12:26 -0700 (PDT)
+Received: from ?IPv6:2a01:cb05:8f8a:1800:9881:4a9a:ef63:7f91?
+ (2a01cb058f8a180098814a9aef637f91.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:8f8a:1800:9881:4a9a:ef63:7f91])
+ by smtp.gmail.com with ESMTPSA id c13sm16976116wru.73.2021.08.25.04.12.26
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 25 Aug 2021 04:12:26 -0700 (PDT)
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20210822194644.3260223-1-romain.naour@gmail.com>
+ <20210825000242.0bbf2fa9@windsurf>
+From: Romain Naour <romain.naour@gmail.com>
+Message-ID: <994b4a7a-3f70-0e0f-2e53-8cf8de58b007@gmail.com>
+Date: Wed, 25 Aug 2021 13:12:25 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
+MIME-Version: 1.0
+In-Reply-To: <20210825000242.0bbf2fa9@windsurf>
+Content-Language: en-US
+Subject: Re: [Buildroot] [PATCH] support/testing: test_atf: bump the custom
+ version to v2.5
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,178 +105,31 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-From: yegorslists--- via buildroot <buildroot@busybox.net>
-Reply-To: yegorslists@googlemail.com
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
- Matt Weber <matthew.weber@collins.com>,
- Aleksander Morgado <aleksander@aleksander.es>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
-
-This release introduces meson build system support that fixes
-gobject-intorspection issue with autotools.
-
-As meson files are only available in git, switch the location to
-https://gitlab.freedesktop.org.
-
-Add support for bash-completion.
-
-Add an upstream patch fixing the compilation without gobject-intorspection.
-
-Fixes:
-http://autobuild.buildroot.net/results/c13877a5700445253900e312bc87904152be429a
-
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Acked-by: Aleksander Morgado <aleksander@aleksander.es>
----
-Changes v1 -> v2:
-  - add a patch fixing the compilation without gobject-intorspection (Aleksander Morgado)
-Changes v2 -> v3:
-  - rebase against next branch (Thomas Petazzoni)
-
- ...build-meson-fix-introspection-option.patch | 33 +++++++++++++++++
- package/libqmi/libqmi.hash                    |  2 +-
- package/libqmi/libqmi.mk                      | 37 ++++++++++++-------
- 3 files changed, 58 insertions(+), 14 deletions(-)
- create mode 100644 package/libqmi/0001-build-meson-fix-introspection-option.patch
-
-diff --git a/package/libqmi/0001-build-meson-fix-introspection-option.patch b/package/libqmi/0001-build-meson-fix-introspection-option.patch
-new file mode 100644
-index 0000000000..0528868025
---- /dev/null
-+++ b/package/libqmi/0001-build-meson-fix-introspection-option.patch
-@@ -0,0 +1,33 @@
-+From bfb066419f288764edbade1e27e93a5dda59a5f4 Mon Sep 17 00:00:00 2001
-+From: Aleksander Morgado <aleksander@aleksander.es>
-+Date: Fri, 6 Aug 2021 10:32:22 +0200
-+Subject: [PATCH] build,meson: fix introspection option
-+
-+Using -Dintrospection=false would actually not disable it. There is no
-+longer an "auto" option for the introspection support, it will be
-+either enabled or disabled depending on what the user asks
-+for (default enabled).
-+
-+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-+---
-+ meson.build | 5 ++++-
-+ 1 file changed, 4 insertions(+), 1 deletion(-)
-+
-+diff --git a/meson.build b/meson.build
-+index b25bca57..d28e5601 100644
-+--- a/meson.build
-++++ b/meson.build
-+@@ -218,7 +218,10 @@ version_conf.set10('QMI_QRTR_SUPPORTED', enable_qrtr)
-+ version_conf.set10('QMI_RMNET_SUPPORTED', enable_rmnet)
-+
-+ # introspection support
-+-enable_gir = dependency('gobject-introspection-1.0', version: '>= 0.9.6', required: get_option('introspection')).found()
-++enable_gir = get_option('introspection')
-++if enable_gir
-++  dependency('gobject-introspection-1.0', version: '>= 0.9.6')
-++endif
-+
-+ random_number = qmi_minor_version + meson.version().split('.').get(1).to_int()
-+
-+--
-+2.17.0
-diff --git a/package/libqmi/libqmi.hash b/package/libqmi/libqmi.hash
-index 0bfc63f4a4..0373bb4e75 100644
---- a/package/libqmi/libqmi.hash
-+++ b/package/libqmi/libqmi.hash
-@@ -1,4 +1,4 @@
- # Locally computed:
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
--sha256  cbb890893de1dee06ea5ebdac2d22f0469314a6f93f15f61f2f1206a1c9ae5fd  libqmi-1.28.6.tar.xz
-+sha256  c0421684c12697c448077dd5c0a66c6f745deab3558af578e3f10307c8a0c564  libqmi-1.30.0.tar.gz
-diff --git a/package/libqmi/libqmi.mk b/package/libqmi/libqmi.mk
-index 35a41e5bd0..05fd3ae9af 100644
---- a/package/libqmi/libqmi.mk
-+++ b/package/libqmi/libqmi.mk
-@@ -4,9 +4,8 @@
- #
- ################################################################################
- 
--LIBQMI_VERSION = 1.28.6
--LIBQMI_SITE = http://www.freedesktop.org/software/libqmi
--LIBQMI_SOURCE = libqmi-$(LIBQMI_VERSION).tar.xz
-+LIBQMI_VERSION = 1.30.0
-+LIBQMI_SITE = https://gitlab.freedesktop.org/mobile-broadband/libqmi/-/archive/$(LIBQMI_VERSION)
- LIBQMI_LICENSE = LGPL-2.0+ (library), GPL-2.0+ (programs)
- LIBQMI_LICENSE_FILES = COPYING COPYING.LIB
- LIBQMI_CPE_ID_VENDOR = libqmi_project
-@@ -14,40 +13,52 @@ LIBQMI_INSTALL_STAGING = YES
- 
- LIBQMI_DEPENDENCIES = libglib2
- 
--LIBQMI_CONF_OPTS = --disable-Werror
-+ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
-+LIBQMI_DEPENDENCIES += gobject-introspection
-+LIBQMI_CONF_OPTS += -Dintrospection=true
-+else
-+LIBQMI_CONF_OPTS += -Dintrospection=false
-+endif
- 
- # if libgudev available, request udev support for a better
- # qmi-firmware-update experience
- ifeq ($(BR2_PACKAGE_LIBGUDEV),y)
- LIBQMI_DEPENDENCIES += libgudev
--LIBQMI_CONF_OPTS += --with-udev
-+LIBQMI_CONF_OPTS += -Dudev=true
- else
--LIBQMI_CONF_OPTS += --without-udev
-+LIBQMI_CONF_OPTS += -Dudev=false
- endif
- 
- # if libmbim available, request QMI-over-MBIM support
- ifeq ($(BR2_PACKAGE_LIBMBIM),y)
- LIBQMI_DEPENDENCIES += libmbim
--LIBQMI_CONF_OPTS += --enable-mbim-qmux
-+LIBQMI_CONF_OPTS += -Dmbim_qmux=true
- else
--LIBQMI_CONF_OPTS += --disable-mbim-qmux
-+LIBQMI_CONF_OPTS += -Dmbim_qmux=false
- endif
- 
- # if libqrtr-glib available, enable support for QMI over QRTR
- ifeq ($(BR2_PACKAGE_LIBQRTR_GLIB),y)
- LIBQMI_DEPENDENCIES += libqrtr-glib
--LIBQMI_CONF_OPTS += --enable-qrtr
-+LIBQMI_CONF_OPTS += -Dqrtr=true
- else
--LIBQMI_CONF_OPTS += --disable-qrtr
-+LIBQMI_CONF_OPTS += -Dqrtr=false
- endif
- 
- # if ModemManager available, enable MM runtime check in
- # qmi-firmware-update (note that we don't need to build-depend on
- # anything else)
- ifeq ($(BR2_PACKAGE_MODEM_MANAGER),y)
--LIBQMI_CONF_OPTS += --enable-mm-runtime-check
-+LIBQMI_CONF_OPTS += -Dmm_runtime_check=true
-+else
-+LIBQMI_CONF_OPTS += -Dmm_runtime_check=false
-+endif
-+
-+ifeq ($(BR2_PACKAGE_BASH_COMPLETION),y)
-+LIBQMI_DEPENDENCIES += bash-completion
-+LIBQMI_CONF_OPTS += -Dbash_completion=true
- else
--LIBQMI_CONF_OPTS += --disable-mm-runtime-check
-+LIBQMI_CONF_OPTS += -Dbash_completion=false
- endif
- 
--$(eval $(autotools-package))
-+$(eval $(meson-package))
--- 
-2.17.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@busybox.net
-http://lists.busybox.net/mailman/listinfo/buildroot
+SGVsbG8gVGhvbWFzLAoKTGUgMjUvMDgvMjAyMSDDoCAwMDowMiwgVGhvbWFzIFBldGF6em9uaSBh
+IMOpY3JpdMKgOgo+IE9uIFN1biwgMjIgQXVnIDIwMjEgMjE6NDY6NDQgKzAyMDAKPiBSb21haW4g
+TmFvdXIgPHJvbWFpbi5uYW91ckBnbWFpbC5jb20+IHdyb3RlOgo+IAo+PiBUaGlzIHZlcnNpb24g
+YnVtcCBpcyBuZWVkZWQgdG8gcGFzcyB0aGUgQVRGIHRlc3Qgd2l0aAo+PiBoYXJkZW5pbmcgb3B0
+aW9uIGVuYWJsZWQgKC1mc3RhY2stcHJvdGVjdG9yLXN0cm9uZykKPj4KPj4gV2l0aCB0aGUgdmVy
+c2lvbiB2Mi4yLCBBVEYgZmFpbCBkdWUgdG8gdW5kZWZpbmVkIHJlZmVyZW5jZXM6Cj4+Cj4+IC4v
+YnVpbGQvanVuby9yZWxlYXNlL2JsMnUvYXJtX3R6YzQwMC5vOiBJbiBmdW5jdGlvbiBgYXJtX3R6
+YzQwMF9zZXR1cCc6Cj4+IGFybV90emM0MDAuYzooLnRleHQuYXJtX3R6YzQwMF9zZXR1cCsweDEw
+KTogdW5kZWZpbmVkIHJlZmVyZW5jZSB0byBgX19zdGFja19jaGtfZ3VhcmQnCj4+IGFybV90emM0
+MDAuYzooLnRleHQuYXJtX3R6YzQwMF9zZXR1cCsweDE4KTogdW5kZWZpbmVkIHJlZmVyZW5jZSB0
+byBgX19zdGFja19jaGtfZ3VhcmQnCj4+IGFybV90emM0MDAuYzooLnRleHQuYXJtX3R6YzQwMF9z
+ZXR1cCsweGI4KTogdW5kZWZpbmVkIHJlZmVyZW5jZSB0byBgX19zdGFja19jaGtfZ3VhcmQnCj4+
+IGFybV90emM0MDAuYzooLnRleHQuYXJtX3R6YzQwMF9zZXR1cCsweGNjKTogdW5kZWZpbmVkIHJl
+ZmVyZW5jZSB0byBgX19zdGFja19jaGtfZmFpbCcKPj4KPj4gU2lnbmVkLW9mZi1ieTogUm9tYWlu
+IE5hb3VyIDxyb21haW4ubmFvdXJAZ21haWwuY29tPgo+IAo+IElzbid0IHRoaXMgZml4ZWQgc2lu
+Y2UgY2NhYzlhNWJiYmQ3Mzc0MTg3YTBmMDAxNzEwMWVjZTBjMjAyODUxZCBwZXJoYXBzID8KCk5v
+LCBpdCB3YXMgcmVwcm9kdWNlZCB3aXRoIHRoaXMgcGlwZWxpbmUgYWZ0ZXIgdGhpcyBjb21taXQ6
+Cmh0dHBzOi8vZ2l0bGFiLmNvbS9rdWJ1OTMvYnVpbGRyb290Ly0vcGlwZWxpbmVzLzM1NzA3OTk2
+MC8KCkJlc3QgcmVnYXJkcywKUm9tYWluCgoKPiAKPiBUaG9tYXMKPiAKCl9fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QK
+YnVpbGRyb290QGJ1c3lib3gubmV0Cmh0dHA6Ly9saXN0cy5idXN5Ym94Lm5ldC9tYWlsbWFuL2xp
+c3RpbmZvL2J1aWxkcm9vdAo=
