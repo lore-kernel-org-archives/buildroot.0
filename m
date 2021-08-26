@@ -1,61 +1,84 @@
-Return-Path: <SRS0=vKZi=NQ=busybox.net=buildroot-bounces@kernel.org>
+Return-Path: <SRS0=2pYX=NR=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 38B72C432BE
-	for <buildroot@archiver.kernel.org>; Wed, 25 Aug 2021 22:31:35 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 53BEDC432BE
+	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 04:01:33 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id E4DA56103C
-	for <buildroot@archiver.kernel.org>; Wed, 25 Aug 2021 22:31:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E4DA56103C
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
+	by mail.kernel.org (Postfix) with ESMTPS id A9DF160F25
+	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 04:01:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A9DF160F25
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=busybox.net
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B0FE98246D;
-	Wed, 25 Aug 2021 22:31:34 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3FED040139;
+	Thu, 26 Aug 2021 04:01:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ARo-kGQj_pEC; Wed, 25 Aug 2021 22:31:31 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id z25vBW_UY9HI; Thu, 26 Aug 2021 04:01:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3EDA88246F;
-	Wed, 25 Aug 2021 22:31:30 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id DE25C1BF283
- for <buildroot@lists.busybox.net>; Wed, 25 Aug 2021 22:31:28 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id AFA0A4052E;
+	Thu, 26 Aug 2021 04:01:27 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 74D281BF97E
+ for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 04:01:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DA873613DA
- for <buildroot@lists.busybox.net>; Wed, 25 Aug 2021 22:31:28 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 618174052E
+ for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 04:01:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Z0hYVIIM6t5T for <buildroot@lists.busybox.net>;
- Wed, 25 Aug 2021 22:31:24 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 46DA3613E4
- for <buildroot@buildroot.org>; Wed, 25 Aug 2021 22:31:24 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 6FF0C20002;
- Wed, 25 Aug 2021 22:31:21 +0000 (UTC)
-Date: Thu, 26 Aug 2021 00:31:20 +0200
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Tudor Holton <tudor@tudorholton.com>
-Message-ID: <20210826003120.7eb15bbd@windsurf>
-In-Reply-To: <f2ac08f597a5b80bb2b2aa9ea554b952@tudorholton.com>
-References: <f2ac08f597a5b80bb2b2aa9ea554b952@tudorholton.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hjImBur6yLaH for <buildroot@lists.busybox.net>;
+ Thu, 26 Aug 2021 04:01:21 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com
+ [IPv6:2a00:1450:4864:20::633])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B65C540139
+ for <buildroot@buildroot.org>; Thu, 26 Aug 2021 04:01:21 +0000 (UTC)
+Received: by mail-ej1-x633.google.com with SMTP id bt14so3157834ejb.3
+ for <buildroot@buildroot.org>; Wed, 25 Aug 2021 21:01:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=googlemail.com; s=20161025;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=Zjl74C+6YSrfKGGNrShn/4wB59pJISWIVe47tpUSbyg=;
+ b=pOaxviJZGjJ62MPqMew7cQNVvU5QCX/N58dglIxGU8AicAC+7VNZPQ+GMRxS1/Ciz+
+ s5KNNGbcnnd7jPmoMokUByNKhLz/wreLD0fUANF59IvhkIherjA9ndFVhlihKr/ln3fQ
+ tGX4TKFDpv32hkvEjm/X+21TmHBD9Ol2s8GzTGKBRR6Siws0NeV7yN7joXYyCXeDd9ZV
+ UHpNm3/xU20ivUZiNkOnENMs+C7PQ5uhNq4m507NsXrMMZgecHfg+XXJorad6kDif/mF
+ U5osg9m22jb3smL5uBaXKOVPq3W9cfP55QYfyD36gvrim1WZCK0FeATx6GxJFRoBe4C+
+ kTbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=Zjl74C+6YSrfKGGNrShn/4wB59pJISWIVe47tpUSbyg=;
+ b=cJB6c6Yo/z2ENd5rMc2DBaTR+WPzPXlpmqsui/IMiNzTjoB36n4vmHILEYUGuc9rlb
+ N0YE4QdwskUCUpyVGKpQi85V7FuIKBwKLTSE+VI/5Dd3AF3VhC4AxDQWS4N4lxw6rKKA
+ 5PZHF39W4UnpGpYmFWOy/awlXtSejMbyEI+6GVixF1PuiXgI1OH9wmfPDlF6qyowHa2a
+ UkTGPEmt2jTA4UoeBzNMEx99758pLimhItDuOECvW0tm4HLshzdNsVBA/LR2fQSa7Gic
+ O67riVCC+LwB71MN6MSLlWF/P74t8viIJZiyp9hJ8JQ1Aey6uuAAyVQDTd6vGfa4rjPM
+ sIow==
+X-Gm-Message-State: AOAM532FHwEYXNMRgZGf3GMxEKq/8ZAVoaWUHBulWFo43fd+Tp0fPAC5
+ tKDxbBumcc0M13+RZVeS54MVpswPdHlnswMdZso=
+X-Google-Smtp-Source: ABdhPJyRXNRD+v7OWeNgsGm4RszX4acIcwdcWi1iZSFF8NoNgscAvFlp2aIkUr/qSIsf3v+CZIDpmXIrf6qAzpzlb/U=
+X-Received: by 2002:a17:906:a0c:: with SMTP id
+ w12mr2024132ejf.376.1629950479875; 
+ Wed, 25 Aug 2021 21:01:19 -0700 (PDT)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] Package to manage multiple buildroot filesystem
- "versions"?
+References: <20210825090243.30444-1-yegorslists@googlemail.com>
+ <20210826002909.777698f8@windsurf>
+In-Reply-To: <20210826002909.777698f8@windsurf>
+Date: Thu, 26 Aug 2021 06:01:07 +0200
+Message-ID: <CAGm1_kuW=EYjpXAL3g2mZhBxh4tAyB8633D+49Wiwij8-JbspA@mail.gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [Buildroot] [PATCH v3] package/libqmi: bump to version 1.30.0
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -67,65 +90,51 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: buildroot@buildroot.org
+From: Yegor Yefremov via buildroot <buildroot@busybox.net>
+Reply-To: Yegor Yefremov <yegorslists@googlemail.com>
+Cc: yegorslists--- via buildroot <buildroot@busybox.net>,
+ Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ Matt Weber <matthew.weber@collins.com>,
+ Aleksander Morgado <aleksander@aleksander.es>,
+ buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-Hello Tudor,
+Hi Thomas,
 
-On Wed, 25 Aug 2021 17:08:16 +1000
-Tudor Holton <tudor@tudorholton.com> wrote:
+On Thu, Aug 26, 2021 at 12:29 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> On Wed, 25 Aug 2021 11:02:43 +0200
+> yegorslists--- via buildroot <buildroot@busybox.net> wrote:
+>
+> > From: Yegor Yefremov <yegorslists@googlemail.com>
+> >
+> > This release introduces meson build system support that fixes
+> > gobject-intorspection issue with autotools.
+> >
+> > As meson files are only available in git, switch the location to
+> > https://gitlab.freedesktop.org.
+> >
+> > Add support for bash-completion.
+> >
+> > Add an upstream patch fixing the compilation without gobject-intorspection.
+> >
+> > Fixes:
+> > http://autobuild.buildroot.net/results/c13877a5700445253900e312bc87904152be429a
+>
+> Are you sure it is still fixing this issue ? I already made the same
+> comment on v2, pointing other commits that fixed gobject-introspection
+> issues.
 
-> I understand that buildroot is for building root filesystems and not 
-> really outside that, but...
-> 
-> Is there a package that can manage the partition layout, and buildroot 
-> filesystem "versions", for upgrade and fallback?
-> 
-> For example, something like:
-> 
-> 1) During build, allocate space for 2 or more partitions, the first 
-> partition is the running buildroot filesystem
-> 2) When the buildroot filesystem is running, download a newer version of 
-> the filesystem, verify it, and dd it to the second partition
-> 3) Tell grub/EFI to boot the newer partition and reboot
-> BUT
-> 4a) It doesn't complete the startup for some reason (like there's a 
-> kernel panic, or something doesn't start properly triggering the 
-> watchdog)
-> SO
-> 5a) It reboots again, calling the previous version (e.g. using grub 
-> fallback or fallback.efi)
-> OR
-> 4b) It does complete the startup, but some important service doesn't 
-> work (like it can't connect to the internet) so we presume we need to 
-> roll back
-> 5B) It rolls back to the previous version with some kind of failure flag 
-> to tell the server that it failed the upgrade
-> 
-> I can see that this could be fairly easily written, but I was wondering 
-> if there was a buildroot package or environment that does this kind of 
-> behaviour already?
-
-You are re-inventing the concept of OTA update systems. Check out:
-
- * swupdate, https://sbabic.github.io/swupdate/
-
- * RAUC, https://rauc.readthedocs.io/en/latest/
-
- * Mender, https://mender.io/
-
-All three are packaged in Buildroot.
+OK. I'll remove this comment. Though in the context of the next
+branch, it really fixes the compilation issue. The general fix is only
+in the master branch. libqrtr-glib still fails in the next branch.
 
 Best regards,
-
-Thomas Petazzoni
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Yegor
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
