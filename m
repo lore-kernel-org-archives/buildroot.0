@@ -2,61 +2,57 @@ Return-Path: <SRS0=2pYX=NR=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C664EC432BE
-	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 12:43:45 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 26E68C432BE
+	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 12:53:09 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 23F2A6109E
-	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 12:43:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 23F2A6109E
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
+	by mail.kernel.org (Postfix) with ESMTPS id 8ED7460F39
+	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 12:53:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8ED7460F39
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C1D7940218;
-	Thu, 26 Aug 2021 12:43:44 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 42BED401D4;
+	Thu, 26 Aug 2021 12:53:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YtaP0r6SX6oU; Thu, 26 Aug 2021 12:43:40 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 4roaHYxzrWyv; Thu, 26 Aug 2021 12:53:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9508A40356;
-	Thu, 26 Aug 2021 12:43:39 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9C41540212;
+	Thu, 26 Aug 2021 12:53:03 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C9EA21BF873
- for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 12:43:38 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 315081BF873
+ for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 12:53:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B5D3581C20
- for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 12:43:38 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 204CA8269C
+ for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 12:53:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id o4ex-V4rPncN for <buildroot@lists.busybox.net>;
- Thu, 26 Aug 2021 12:43:34 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 67C6D81B71
- for <buildroot@buildroot.org>; Thu, 26 Aug 2021 12:43:34 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 3DC022000C;
- Thu, 26 Aug 2021 12:43:31 +0000 (UTC)
-Date: Thu, 26 Aug 2021 14:43:29 +0200
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Yegor Yefremov <yegorslists@googlemail.com>
-Message-ID: <20210826144329.768936d7@windsurf>
-In-Reply-To: <CAGm1_kuW=EYjpXAL3g2mZhBxh4tAyB8633D+49Wiwij8-JbspA@mail.gmail.com>
-References: <20210825090243.30444-1-yegorslists@googlemail.com>
- <20210826002909.777698f8@windsurf>
- <CAGm1_kuW=EYjpXAL3g2mZhBxh4tAyB8633D+49Wiwij8-JbspA@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v3] package/libqmi: bump to version 1.30.0
+ with ESMTP id 9Iqz-upOrGMb for <buildroot@lists.busybox.net>;
+ Thu, 26 Aug 2021 12:52:57 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id AC5918268F
+ for <buildroot@buildroot.org>; Thu, 26 Aug 2021 12:52:57 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4052)
+ id BAC088CD3F; Thu, 26 Aug 2021 12:51:56 +0000 (UTC)
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+To: buildroot@buildroot.org
+Date: Thu, 26 Aug 2021 14:20:23 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 206c098f78da33cade7c2b8b6f8b71368c937c74
+X-Git-Newrev: 73f34988bb81f3e9ea188ac49816dcf21d0276af
+X-Patchwork-Hint: ignore
+Message-Id: <20210826125156.BAC088CD3F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] Revert "toolchain: handle toolchains with
+ multiple ld*.so.* files"
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,39 +64,44 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
- Matt Weber <matthew.weber@collins.com>,
- Aleksander Morgado <aleksander@aleksander.es>,
- buildroot <buildroot@buildroot.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-Hello Yegor,
+commit: https://git.buildroot.net/buildroot/commit/?id=73f34988bb81f3e9ea188ac49816dcf21d0276af
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 26 Aug 2021 06:01:07 +0200
-Yegor Yefremov <yegorslists@googlemail.com> wrote:
+This breaks some existing external toolchains. Since we're very close to
+a release, don't try to fix it, but instead simply revert.
 
-> > Are you sure it is still fixing this issue ? I already made the same
-> > comment on v2, pointing other commits that fixed gobject-introspection
-> > issues.  
-> 
-> OK. I'll remove this comment. Though in the context of the next
-> branch, it really fixes the compilation issue. The general fix is only
-> in the master branch. libqrtr-glib still fails in the next branch.
+This reverts commit 6f911a17257d945eb3cb5c9c9a966f0e5fca0842.
 
-Everything that is in the master branch will appear in the next branch,
-either when if we merge master into next, or when 2021.08 is released
-and we merge next back into master, and kill the next branch.
+Fixes: http://autobuild.buildroot.net/results/afe/afe44f4b6a3c53e5864cfb10b04529011e72cf5c/
 
-Best regards,
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ toolchain/helpers.mk | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 5ed149d57d..dfb2581ed5 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -135,8 +135,10 @@ copy_toolchain_sysroot = \
+ 			$(call simplify_symlink,$$i,$(STAGING_DIR)) ; \
+ 		done ; \
+ 	fi ; \
+-       if ! find -wholename $(STAGING_DIR)'/lib/ld*.so.*' > /dev/null; then \
+-               find -wholename $${ARCH_SYSROOT_DIR}'/lib/ld*.so.*' -print0 | xargs -0 -I % cp % $(STAGING_DIR)/lib/; \
++	if [ ! -e $(STAGING_DIR)/lib/ld*.so.* ]; then \
++		if [ -e $${ARCH_SYSROOT_DIR}/lib/ld*.so.* ]; then \
++			cp -a $${ARCH_SYSROOT_DIR}/lib/ld*.so.* $(STAGING_DIR)/lib/ ; \
++		fi ; \
+ 	fi ; \
+ 	if [ `readlink -f $${SYSROOT_DIR}` != `readlink -f $${ARCH_SYSROOT_DIR}` ] ; then \
+ 		if [ ! -d $${ARCH_SYSROOT_DIR}/usr/include ] ; then \
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
