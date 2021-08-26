@@ -2,48 +2,49 @@ Return-Path: <SRS0=2pYX=NR=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.5 required=3.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+	DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 53BEDC432BE
-	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 04:01:33 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 64CDDC432BE
+	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 04:01:46 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id A9DF160F25
-	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 04:01:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A9DF160F25
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=busybox.net
+	by mail.kernel.org (Postfix) with ESMTPS id 2809B610CF
+	for <buildroot@archiver.kernel.org>; Thu, 26 Aug 2021 04:01:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2809B610CF
+Authentication-Results: mail.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=googlemail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3FED040139;
-	Thu, 26 Aug 2021 04:01:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D2D318248F;
+	Thu, 26 Aug 2021 04:01:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id z25vBW_UY9HI; Thu, 26 Aug 2021 04:01:28 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id jApwxopYkHp1; Thu, 26 Aug 2021 04:01:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AFA0A4052E;
-	Thu, 26 Aug 2021 04:01:27 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 74D281BF97E
+	by smtp1.osuosl.org (Postfix) with ESMTP id 79DDF82457;
+	Thu, 26 Aug 2021 04:01:40 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 806F31C1135
  for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 04:01:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 618174052E
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6F23C82457
  for <buildroot@lists.busybox.net>; Thu, 26 Aug 2021 04:01:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hjImBur6yLaH for <buildroot@lists.busybox.net>;
- Thu, 26 Aug 2021 04:01:21 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kJIAjPkikv-2 for <buildroot@lists.busybox.net>;
+ Thu, 26 Aug 2021 04:01:22 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com
- [IPv6:2a00:1450:4864:20::633])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B65C540139
- for <buildroot@buildroot.org>; Thu, 26 Aug 2021 04:01:21 +0000 (UTC)
-Received: by mail-ej1-x633.google.com with SMTP id bt14so3157834ejb.3
- for <buildroot@buildroot.org>; Wed, 25 Aug 2021 21:01:21 -0700 (PDT)
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com
+ [IPv6:2a00:1450:4864:20::62c])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D4D5181911
+ for <buildroot@busybox.net>; Thu, 26 Aug 2021 04:01:21 +0000 (UTC)
+Received: by mail-ej1-x62c.google.com with SMTP id h9so3150989ejs.4
+ for <buildroot@busybox.net>; Wed, 25 Aug 2021 21:01:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=googlemail.com; s=20161025;
  h=mime-version:references:in-reply-to:from:date:message-id:subject:to
@@ -59,14 +60,14 @@ X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  h=x-gm-message-state:mime-version:references:in-reply-to:from:date
  :message-id:subject:to:cc;
  bh=Zjl74C+6YSrfKGGNrShn/4wB59pJISWIVe47tpUSbyg=;
- b=cJB6c6Yo/z2ENd5rMc2DBaTR+WPzPXlpmqsui/IMiNzTjoB36n4vmHILEYUGuc9rlb
- N0YE4QdwskUCUpyVGKpQi85V7FuIKBwKLTSE+VI/5Dd3AF3VhC4AxDQWS4N4lxw6rKKA
- 5PZHF39W4UnpGpYmFWOy/awlXtSejMbyEI+6GVixF1PuiXgI1OH9wmfPDlF6qyowHa2a
- UkTGPEmt2jTA4UoeBzNMEx99758pLimhItDuOECvW0tm4HLshzdNsVBA/LR2fQSa7Gic
- O67riVCC+LwB71MN6MSLlWF/P74t8viIJZiyp9hJ8JQ1Aey6uuAAyVQDTd6vGfa4rjPM
- sIow==
-X-Gm-Message-State: AOAM532FHwEYXNMRgZGf3GMxEKq/8ZAVoaWUHBulWFo43fd+Tp0fPAC5
- tKDxbBumcc0M13+RZVeS54MVpswPdHlnswMdZso=
+ b=s1l96pkYTyQj/b/zew2lTdNmnkhVlQVcRChMKOtXCKSX8+15zFK4PUcxNGOkrm/Pvw
+ ER+9R+soFvolmkqSwwjf8SLWza84e9oUxEvn2EbhdapZ0TqH2PASLbwuxRaVixeqQPE6
+ rQufM2Y1ygckEIlQHrjoS49jaz19+zkRQ/9Mkv0tpJoJy56Sn1C6v5D4Li1FFEynEg88
+ dCj4htiz6yN8rNSoCXaSTaoszPnjy/02g27qzethdQnhru/DwLdRMRK/1RxbKD0KJis+
+ NzDw92Ov9aWiu1somF2LJA+95JcHoig6RiXY1cGQvhXMTEQTslAbQaD65NJLdW3tMnsB
+ ML5g==
+X-Gm-Message-State: AOAM533SdV7IBpgpQSn7cPrq2qCHwB39F/gWPoLHhot/f4FIdDp1+CnB
+ fisYOIc7Yl4VlN8DoYecF4ejGBbXpvuLoJCjJ00=
 X-Google-Smtp-Source: ABdhPJyRXNRD+v7OWeNgsGm4RszX4acIcwdcWi1iZSFF8NoNgscAvFlp2aIkUr/qSIsf3v+CZIDpmXIrf6qAzpzlb/U=
 X-Received: by 2002:a17:906:a0c:: with SMTP id
  w12mr2024132ejf.376.1629950479875; 
@@ -75,6 +76,7 @@ MIME-Version: 1.0
 References: <20210825090243.30444-1-yegorslists@googlemail.com>
  <20210826002909.777698f8@windsurf>
 In-Reply-To: <20210826002909.777698f8@windsurf>
+From: Yegor Yefremov <yegorslists@googlemail.com>
 Date: Thu, 26 Aug 2021 06:01:07 +0200
 Message-ID: <CAGm1_kuW=EYjpXAL3g2mZhBxh4tAyB8633D+49Wiwij8-JbspA@mail.gmail.com>
 To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
@@ -90,8 +92,6 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-From: Yegor Yefremov via buildroot <buildroot@busybox.net>
-Reply-To: Yegor Yefremov <yegorslists@googlemail.com>
 Cc: yegorslists--- via buildroot <buildroot@busybox.net>,
  Eric Le Bihan <eric.le.bihan.dev@free.fr>,
  Matt Weber <matthew.weber@collins.com>,
@@ -101,6 +101,7 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
+Message-ID: <20210826040107.PE2W4-5a8YaEppeGodV_9Ubs0InqS959I3uf0HV182w@z>
 
 Hi Thomas,
 
