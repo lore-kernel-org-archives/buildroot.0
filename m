@@ -2,91 +2,101 @@ Return-Path: <SRS0=sHoS=NS=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
-	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+X-Spam-Status: No, score=-15.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BD1AFC432BE
-	for <buildroot@archiver.kernel.org>; Fri, 27 Aug 2021 16:23:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 15F89C432BE
+	for <buildroot@archiver.kernel.org>; Fri, 27 Aug 2021 16:31:03 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 72C2360EE4
-	for <buildroot@archiver.kernel.org>; Fri, 27 Aug 2021 16:23:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 72C2360EE4
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id 844C660E99
+	for <buildroot@archiver.kernel.org>; Fri, 27 Aug 2021 16:31:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 844C660E99
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4387982BE7;
-	Fri, 27 Aug 2021 16:23:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4D0C18352B;
+	Fri, 27 Aug 2021 16:31:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id l4jre0aCy0Nx; Fri, 27 Aug 2021 16:23:32 +0000 (UTC)
+	with ESMTP id m5M-hYF8OySX; Fri, 27 Aug 2021 16:30:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CBCC882DD9;
-	Fri, 27 Aug 2021 16:23:31 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 341491BF40D
- for <buildroot@lists.busybox.net>; Fri, 27 Aug 2021 16:23:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CC2FE83560;
+	Fri, 27 Aug 2021 16:30:57 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id C458F1BF40D
+ for <buildroot@lists.busybox.net>; Fri, 27 Aug 2021 16:30:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 216BB407E8
- for <buildroot@lists.busybox.net>; Fri, 27 Aug 2021 16:23:30 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C15016070F
+ for <buildroot@lists.busybox.net>; Fri, 27 Aug 2021 16:30:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UYmIwEQk-_kk for <buildroot@lists.busybox.net>;
- Fri, 27 Aug 2021 16:23:25 +0000 (UTC)
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id CtXqmKyE1O9w for <buildroot@lists.busybox.net>;
+ Fri, 27 Aug 2021 16:30:50 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
- [IPv6:2a00:1450:4864:20::32b])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 236164028E
- for <buildroot@buildroot.org>; Fri, 27 Aug 2021 16:23:25 +0000 (UTC)
-Received: by mail-wm1-x32b.google.com with SMTP id
- x2-20020a1c7c02000000b002e6f1f69a1eso9644095wmc.5
- for <buildroot@buildroot.org>; Fri, 27 Aug 2021 09:23:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=5T6/xnTjbOWKuG//L446x/uSPrDKZM3No7mu8qIHN+Y=;
- b=IcWd/WRI5g280H9EaBiG6d6VbBXIZJ9/RGNt93C9JjmjQbs6Yg/JzRyMeqDrS5Ngz0
- QNrNBQO9mvX8zCMBVDOIddAzwKugdTpzfizKz/7FIObCK5ZWMaH9+fA2qXIEMadmX3RC
- 1G17iAg75Jn0OZz+Quy7ojIzYM5RuKe5GiUpxx3MQiFlSZkqZc999Frv5CYguz61HeZC
- 4eIfXnXhNoptIfSQE9gYQRlAG06QWaDaml6aZVZrKUxi/mkpt1eVflDei610nU/PaGHB
- ZOoc2UgxflvKm+MCqiaIogqYT5FP+xC6mMt2LUFihy4QoOF8pjt0p22dz+fhqE531GWJ
- /gXg==
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com
+ [IPv6:2a00:1450:4864:20::529])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 52A4C606A7
+ for <buildroot@buildroot.org>; Fri, 27 Aug 2021 16:30:50 +0000 (UTC)
+Received: by mail-ed1-x529.google.com with SMTP id z19so10664301edi.9
+ for <buildroot@buildroot.org>; Fri, 27 Aug 2021 09:30:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=subject:to:references:from:organization:message-id:date:user-agent
+ :mime-version:in-reply-to:content-language:content-transfer-encoding;
+ bh=rZXVHTEfiAGX/dos/lD8ghN3S5aX1lgvn89FIbY2UtM=;
+ b=M6uiXNn5W3INuBwuKaiNSiES/VmBAdO32FkZOHqWooaVoA00ZbMIYaFZxC2BVbv8BB
+ A69oqP2iGsBSNvJF37sthbS/S6ufQbNcH+A6lH9wObJcOmI9wMeGxYhaiD7XL+st2sTc
+ OVjo/f3ULulXZuT+u+4kySx0ScRsv4JqM/NESrTN7sQLf038jwS+JR5bkfPXayEPQSOR
+ Ta64Y7FOtAZLI7AuIfqlOKrh10MO0w+CMItU+3USDtp9eIC1h3xfV4mgavAkH77JXgNN
+ CXvFhSbVAsnArHVBOhWurL5y37ixwVKODA0Quq2D11Z6FHhMLWRo5AnoPqSmkuOBUsw4
+ XJOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=5T6/xnTjbOWKuG//L446x/uSPrDKZM3No7mu8qIHN+Y=;
- b=s4p680DQLJ4AuX+kpolJXqOSPMxZO9JtcWUMBADhThLULaQlivtMj26yaFCJFgf1ev
- 5Cis3ILz+6LTLQLVHVLaNvhzo+kqzQNAX220wg3p4hUE3aZOqZV42FUZCqnyU5DGOWxL
- gQm2BD/7C51yoPPaLGBQgjiyHthN99d9QZg7mdTV/ACDST1RPtObwgPm5hqTAavl0hT1
- z4Ql2ewrOhS6e5JamdDhqW9r8SRMfAovcI39bnQ310biGEj83+CGtdyTkYTIQIqgE/cr
- 4zytWA1ZTn9wnO8p/YneMhQieJ5P+S/FkglqC/SF36j40+hYK3SGz2BlECygoKJNt4UQ
- qDdQ==
-X-Gm-Message-State: AOAM53039gkPo6Ipj1b2KfHCck0xlUgLfFFVQPcxej2acMyBh/rU6vt3
- zv7wY7Xqtan+VuSTz7JC5h+2qLfr5BQL3w==
-X-Google-Smtp-Source: ABdhPJyT2l6uGX5bcTaNohh5GGsaMG8yscTfOVj8DzErcU7MH8VHS7EO+S4o4rrXqmxILLInsZ8Rzg==
-X-Received: by 2002:a1c:443:: with SMTP id 64mr9770280wme.180.1630081402324;
- Fri, 27 Aug 2021 09:23:22 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-417-221.w2-10.abo.wanadoo.fr.
- [2.10.242.221])
- by smtp.gmail.com with ESMTPSA id q11sm11684119wmc.41.2021.08.27.09.23.20
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 27 Aug 2021 09:23:21 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Fri, 27 Aug 2021 18:23:11 +0200
-Message-Id: <20210827162311.2006524-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.32.0
+ h=x-gm-message-state:subject:to:references:from:organization
+ :message-id:date:user-agent:mime-version:in-reply-to
+ :content-language:content-transfer-encoding;
+ bh=rZXVHTEfiAGX/dos/lD8ghN3S5aX1lgvn89FIbY2UtM=;
+ b=hzXapkDS2aq69HgxduUZULGOyelkDPQ3Jp6UZ1Luy9MJHoILdeT+Rla0uEsLhqNsMn
+ DV34dZgMvegmRBrIbLdEqkCLe98kjpftvIGo9ZYcIA2iRDdQ4Rd+7qcF/0LsJmIgg15y
+ ui57YOWJcvmNVDDi2QpRJd65dIC8E+MbRPwyEadkZNw1pGGKiSNAKxlTCOTeBO6AFTbh
+ m370AJhP5p2TGlj6uAnCBDVJiTU1C5HP9UOmOakpGzbAi7Hnd3SzE8PiTYLLaQz06d3n
+ gEy79yvriGCp+XC+meKZ+C5QmKDdEvMgKfcWfuaxbrZLOuV6QW2hU+p18OyMOgWIdzdb
+ Bq4w==
+X-Gm-Message-State: AOAM530Z8KS4epeRWutNDPBDbSyYirMfDzN5rgsM3xuEpu9VPzpJyrS7
+ IENnySy75Fe6v7G3PS8TaRn3jDuBO0kIMg==
+X-Google-Smtp-Source: ABdhPJyG0kykTYt0XEDqihnajLtdjsJ1CwRGnqH9ZpfUVJO3scKNF6d23OkxU4sCSdhymg2ZV1U+Ow==
+X-Received: by 2002:a05:6402:28b3:: with SMTP id
+ eg51mr10697134edb.31.1630081848482; 
+ Fri, 27 Aug 2021 09:30:48 -0700 (PDT)
+Received: from ?IPv6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id k15sm3080386ejb.92.2021.08.27.09.30.47
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Fri, 27 Aug 2021 09:30:48 -0700 (PDT)
+To: "Voss, Samuel M Collins" <sam.voss@collins.com>,
+ "buildroot@buildroot.org" <buildroot@buildroot.org>
+References: <20210826210241.56201-1-sam.voss@collins.com>
+ <942093f8-fbc2-8278-7913-e1644ecde8f0@mind.be>
+ <DM2P110MB01074BC60B97C1F94BA7DF6085C89@DM2P110MB0107.NAMP110.PROD.OUTLOOK.COM>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+Message-ID: <33f060f1-78de-bf24-df90-5763650d3195@mind.be>
+Date: Fri, 27 Aug 2021 18:30:47 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2,1/1] package/ipmiutil: touch config.h.in
+In-Reply-To: <DM2P110MB01074BC60B97C1F94BA7DF6085C89@DM2P110MB0107.NAMP110.PROD.OUTLOOK.COM>
+Content-Language: en-GB
+Subject: Re: [Buildroot] [External] Re: [PATCH 1/1] package/busybox: add
+ systemd service for telnetd
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,52 +108,101 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: David Bachelart <david.bachelart@bbright.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-Build fails since bump to version 3.1.7 in commit
-011f31ee244b7fe4621b3f69ca3d7e7b1cfdb5bb because config.h.in is older
-than aclocal.m4:
 
-make[1]: Entering directory '/tmp/instance-4/output-1/build/ipmiutil-3.1.7'
-(CDPATH="${ZSH_VERSION+.}:" && cd . && autoheader)
-/bin/bash: autoheader: command not found
 
-Fixes:
- - http://autobuild.buildroot.org/results/2005af881726473f2cda176e90c1e41e4baea67c
+On 27/08/2021 17:50, Voss, Samuel M Collins wrote:
+> Arnout,
+> 
+>> -----Original Message-----
+>> From: Arnout Vandecappelle <arnout@mind.be>
+>> Sent: Thursday, August 26, 2021 5:01 PM
+>> To: Voss, Samuel M Collins <sam.voss@collins.com>;
+>> buildroot@buildroot.org
+>> Subject: [External] Re: [Buildroot] [PATCH 1/1] package/busybox: add
+>> systemd service for telnetd
+>>
+>>
+>>
+>> On 26/08/2021 23:02, Sam Voss via buildroot wrote:
+>>> Signed-off-by: Sam Voss <sam.voss@collins.com>
+>>> ---
+>>>  package/busybox/busybox.mk      |  7 +++++++
+>>>  package/busybox/telnetd.service | 11 +++++++++++
+>>>  2 files changed, 18 insertions(+)
+>>>  create mode 100644 package/busybox/telnetd.service
+>>>
+>>> diff --git a/package/busybox/busybox.mk
+>> b/package/busybox/busybox.mk
+>>> index cfc06b0d78..fb427faf1c 100644
+>>> --- a/package/busybox/busybox.mk
+>>> +++ b/package/busybox/busybox.mk
+>>> @@ -378,6 +378,13 @@ define BUSYBOX_INSTALL_TARGET_CMDS
+>>>  	$(BUSYBOX_INSTALL_MDEV_CONF)
+>>>  endef
+>>>
+>>> +define BUSYBOX_INSTALL_INIT_SYSTEMD
+>>> +	if grep -q CONFIG_FEATURE_TELNETD_STANDALONE=y
+>> $(@D)/.config; then \
+>>> +		$(INSTALL) -D -m 0644 package/busybox/telnetd.service \
+>>> +
+>> 	$(TARGET_DIR)/usr/lib/systemd/system/telnetd.service ; \
+>>> +	fi
+>>> +endef
+>>> +
+>>>  # Install the sysvinit scripts, for the moment, but not those that
+>>> already  # have a corresponding one in openrc.
+>>>  define BUSYBOX_INSTALL_INIT_OPENRC
+>>> diff --git a/package/busybox/telnetd.service
+>>> b/package/busybox/telnetd.service new file mode 100644 index
+>>> 0000000000..3c1fa457b1
+>>> --- /dev/null
+>>> +++ b/package/busybox/telnetd.service
+>>> @@ -0,0 +1,11 @@
+>>> +[Unit]
+>>> +Description=Telnetd Service
+>>> +After=network.target
+>>> +
+>>> +[Service]
+>>> +# busybox telnet doesn't support pidfile, so run in foreground
+>>
+>>  AFAIU Type=simple is anyway the preferred type for services without
+>> specific systemd support, so I don't think this comment is very useful...
+> 
+> Fair enough, I didn't know that was the specific guidance, so I'm okay with dropping that comment when applying.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
-Changes v1 -> v2 (after review of Arnout Vandecappelle):
- - touch config.h.in instead of autoreconf
+ From the systemd.service(5) man page:
 
- package/ipmiutil/ipmiutil.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+It is generally recommended to use Type=simple for long-running services
+whenever possible, as it is the simplest and fastest option.
 
-diff --git a/package/ipmiutil/ipmiutil.mk b/package/ipmiutil/ipmiutil.mk
-index d85b9643f0..a8d9bb8763 100644
---- a/package/ipmiutil/ipmiutil.mk
-+++ b/package/ipmiutil/ipmiutil.mk
-@@ -11,6 +11,12 @@ IPMIUTIL_LICENSE_FILES = COPYING
- 
- IPMIUTIL_MAKE = $(MAKE1)
- 
-+# aclocal.m4 is newer than config.h.in. touch it to avoid autoreconf
-+define IPMIUTIL_TOUCH_CONFIG_H_IN
-+	touch $(@D)/config.h.in
-+endef
-+IPMIUTIL_PRE_CONFIGURE_HOOKS += IPMIUTIL_TOUCH_CONFIG_H_IN
-+
- # forgets to link against libcrypto dependencies breaking static link
- ifeq ($(BR2_PACKAGE_OPENSSL)x$(BR2_STATIC_LIBS),yx)
- # tests against distro libcrypto so it might get a false positive when
--- 
-2.32.0
 
+ Regards,
+ Arnout
+
+> 
+> Thanks for letting me know,
+> 
+> Sam
+> 
+>>
+>>  Regardless:
+>>
+>> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+>>
+>>  Regards,
+>>  Arnout
+>>
+>>> +Type=simple
+>>> +ExecStart=/usr/sbin/telnetd -F
+>>> +
+>>> +[Install]
+>>> +WantedBy=multi-user.target
+>>>
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
