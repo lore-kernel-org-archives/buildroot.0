@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-10.7 required=3.0 tests=BAYES_00,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 039DAC432BE
-	for <buildroot@archiver.kernel.org>; Sat, 28 Aug 2021 14:46:37 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 61BF0C432BE
+	for <buildroot@archiver.kernel.org>; Sat, 28 Aug 2021 14:46:49 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9D91C608FB
-	for <buildroot@archiver.kernel.org>; Sat, 28 Aug 2021 14:46:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9D91C608FB
+	by mail.kernel.org (Postfix) with ESMTPS id 1F35F60725
+	for <buildroot@archiver.kernel.org>; Sat, 28 Aug 2021 14:46:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1F35F60725
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 691E660657;
-	Sat, 28 Aug 2021 14:46:36 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DF8CD40019;
+	Sat, 28 Aug 2021 14:46:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OR4s3JIFaNEh; Sat, 28 Aug 2021 14:46:31 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id nCVm22F8XIK1; Sat, 28 Aug 2021 14:46:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DE72B6065A;
-	Sat, 28 Aug 2021 14:46:30 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 434F340106;
+	Sat, 28 Aug 2021 14:46:43 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5830F1BF37B
- for <buildroot@lists.busybox.net>; Sat, 28 Aug 2021 14:46:05 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6C26B1BF37B
+ for <buildroot@lists.busybox.net>; Sat, 28 Aug 2021 14:46:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2AF7540019
+ by smtp2.osuosl.org (Postfix) with ESMTP id 438F640106
  for <buildroot@lists.busybox.net>; Sat, 28 Aug 2021 14:46:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nPPaYrFeNLmz for <buildroot@lists.busybox.net>;
+ with ESMTP id MWNukoV5YtiU for <buildroot@lists.busybox.net>;
  Sat, 28 Aug 2021 14:45:59 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 917EA40106
+ by smtp2.osuosl.org (Postfix) with ESMTP id A7A274012B
  for <buildroot@buildroot.org>; Sat, 28 Aug 2021 14:45:59 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id F07CA840BF; Sat, 28 Aug 2021 14:44:53 +0000 (UTC)
+ id 15F6E840AF; Sat, 28 Aug 2021 14:44:54 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 28 Aug 2021 16:44:14 +0200
+Date: Sat, 28 Aug 2021 16:44:48 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: a4f83d39cf4bb4dd155b8f79d13b4349dd103c49
-X-Git-Newrev: afde8fb8f36267e7b025c26e700f76e9bb75706f
+X-Git-Oldrev: 6c1d9995b5c418080db2b18208a9823b9826aa0f
+X-Git-Newrev: 2f910229ef0c6a94b97db73f3fd22e878a64dcdd
 X-Patchwork-Hint: ignore
-Message-Id: <20210828144453.F07CA840BF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/pkg-python: invalidate
- precompiled _sysconfigdata*.pyc
+Message-Id: <20210828144454.15F6E840AF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/owfs: remove Python
+ sysconfigdata fixup
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,46 +70,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=afde8fb8f36267e7b025c26e700f76e9bb75706f
+commit: https://git.buildroot.net/buildroot/commit/?id=2f910229ef0c6a94b97db73f3fd22e878a64dcdd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-For per-package directories, we fixup the _sysconfigdata*.py files, so
-that they get proper path pointing to the current package's direcotry
-structure.
-
-However, the corresponding, pre-compiled blobs _sysconfigdata*.pyc were
-left around, and thus are inconsistent with their source. They might
-also be regenerated when a package would install a python module; this
-regeneration would trigger the soon-to-be-introduced overwrite
-detection.
-
-This commit simply removes _sysconfigdata*.pyc files; they will anyway
-be regenerated by the PYTHON{,3}_CREATE_PYC_FILES target finalize hooks.
-This is an efficient way to guarantee the consistency between the source
-and precompiled versions, and to not trigger the overwrite detection.
+This fixup is done at pkg-generic level for all packages.
+So, it is no more needed in owfs package.
 
 Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-[yann.morin.1998@free.frs: reword the commit log]
+Reviewed-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/pkg-python.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/owfs/owfs.mk | 9 ---------
+ 1 file changed, 9 deletions(-)
 
-diff --git a/package/pkg-python.mk b/package/pkg-python.mk
-index 8b24aeb3b1..ddf9e733fd 100644
---- a/package/pkg-python.mk
-+++ b/package/pkg-python.mk
-@@ -108,7 +108,9 @@ define PKG_PYTHON_FIXUP_SYSCONFIGDATA
- 		\(    -path '$(HOST_DIR)/lib/python*' \
- 		   -o -path '$(STAGING_DIR)/usr/lib/python*' \
- 		\) \
--		-name "_sysconfigdata*.py" -print0 \
-+		\(    \( -name "_sysconfigdata*.pyc" -delete \) \
-+		   -o \( -name "_sysconfigdata*.py" -print0 \) \
-+		\) \
- 	| xargs -0 --no-run-if-empty \
- 		$(SED) 's:$(PER_PACKAGE_DIR)/[^/]\+/:$(PER_PACKAGE_DIR)/$($(PKG)_NAME)/:g'
- endef
+diff --git a/package/owfs/owfs.mk b/package/owfs/owfs.mk
+index ffc0b3098d..10543d3698 100644
+--- a/package/owfs/owfs.mk
++++ b/package/owfs/owfs.mk
+@@ -88,15 +88,6 @@ OWFS_DEPENDENCIES += python host-swig
+ # override the PYSITEDIR variable in make.
+ OWFS_EXTRA_MAKE_OPTS += PYSITEDIR=/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
+ 
+-ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),y)
+-define OWFS_FIXUP_PYTHON_SYSCONFIGDATA
+-	find $(HOST_DIR)/lib/python* $(STAGING_DIR)/usr/lib/python* \
+-		-name "_sysconfigdata*.py" | xargs --no-run-if-empty \
+-		$(SED) "s:$(PER_PACKAGE_DIR)/[^/]\+/:$(PER_PACKAGE_DIR)/owfs/:g"
+-endef
+-OWFS_PRE_CONFIGURE_HOOKS += OWFS_FIXUP_PYTHON_SYSCONFIGDATA
+-endif
+-
+ else
+ OWFS_CONF_OPTS += --disable-owpython --without-python
+ endif
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
