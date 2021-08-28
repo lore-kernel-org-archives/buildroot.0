@@ -2,56 +2,57 @@ Return-Path: <SRS0=jfQC=N2=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
-	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 98981C433EF
-	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 18:44:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3087AC433F5
+	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 18:44:35 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 590E560E76
-	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 18:44:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 590E560E76
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
+	by mail.kernel.org (Postfix) with ESMTPS id 9E30860E76
+	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 18:44:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9E30860E76
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 27B5A402BB;
-	Sat,  4 Sep 2021 18:44:21 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6A4B940276;
+	Sat,  4 Sep 2021 18:44:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dVWnI4CaTDUw; Sat,  4 Sep 2021 18:44:20 +0000 (UTC)
+	with ESMTP id aOyFcywow6Al; Sat,  4 Sep 2021 18:44:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3DF5A40230;
-	Sat,  4 Sep 2021 18:44:19 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2695D402C8;
+	Sat,  4 Sep 2021 18:44:32 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6F20A1BF5DD
- for <buildroot@lists.busybox.net>; Sat,  4 Sep 2021 18:26:05 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4C78E1BF5DD
+ for <buildroot@lists.busybox.net>; Sat,  4 Sep 2021 18:26:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A896D40171
+ by smtp2.osuosl.org (Postfix) with ESMTP id BE8FA4020D
  for <buildroot@lists.busybox.net>; Sat,  4 Sep 2021 18:25:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EELhH0XL6U1p for <buildroot@lists.busybox.net>;
+ with ESMTP id MvhFjdBzi5lY for <buildroot@lists.busybox.net>;
  Sat,  4 Sep 2021 18:25:19 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 068CC402A9
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7177540230
  for <buildroot@buildroot.org>; Sat,  4 Sep 2021 18:25:18 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id D16F48834A; Sat,  4 Sep 2021 18:23:55 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id 373958834D; Sat,  4 Sep 2021 18:23:56 +0000 (UTC)
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sat, 28 Aug 2021 15:21:01 +0200
+Date: Sat, 28 Aug 2021 17:01:11 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e1ddac352de6c86511a1a27efd8e79495519bcd8
-X-Git-Newrev: ba56bce06552ddb4fc10cf67e9daf13b17f0ad2c
+X-Git-Oldrev: 2ff70353948f60047d2e7c747378cc1402d59dce
+X-Git-Newrev: a30204b005f484937a8b0a6a8b58a514394bfcfb
 X-Patchwork-Hint: ignore
-Message-Id: <20210904182355.D16F48834A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/boost: fix sparc build
+Message-Id: <20210904182356.373958834D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] utils/test-pkg: add mode to only prepare
+ .config files
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,60 +71,109 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ba56bce06552ddb4fc10cf67e9daf13b17f0ad2c
+commit: https://git.buildroot.net/buildroot/commit/?id=a30204b005f484937a8b0a6a8b58a514394bfcfb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix the following build failure on sparc raised since bump to version
-1.77.0 in commit d39d8f7cee9b4634e6f490020204f63fae419e8e:
+Currently, running test-pkg is only done locally on the developers
+machine.
 
-./boost/predef/architecture/sparc.h:37:38: error: missing ')' in expression
-   37 | #   if !defined(BOOST_ARCH_SPARC) && (defined(__sparcv9) || defined(__sparc_v9__)
-      |                                      ^
+In a follow up commit, we'll add the possibility to run test-pkg in a
+gitlab-ci pipeline and, to speed things up, with one job per buildable
+configuration.
 
-Fixes:
- - http://autobuild.buildroot.org/results/c1f15e3a0cefb7e65e5288fb4564d59a3b06a0bd
+As such, we will need to make sure that test-pkg only prepares the
+configurations, and that it does not build them.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Add such a mode, with a new option, --prepare-only
+
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Romain Naour <romain.naour@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/boost/0001-added-missing-brackets.patch | 29 +++++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
+ utils/test-pkg | 20 +++++++++++++++++---
+ 1 file changed, 17 insertions(+), 3 deletions(-)
 
-diff --git a/package/boost/0001-added-missing-brackets.patch b/package/boost/0001-added-missing-brackets.patch
-new file mode 100644
-index 0000000000..1a2d5e67ec
---- /dev/null
-+++ b/package/boost/0001-added-missing-brackets.patch
-@@ -0,0 +1,29 @@
-+From 1be0e4a2d8db15a405f64a6f65507b87c1be7e1a Mon Sep 17 00:00:00 2001
-+From: tkoecker <tkoecker@gmx.net>
-+Date: Fri, 21 May 2021 16:31:11 +0200
-+Subject: [PATCH] added missing brackets (#118)
+diff --git a/utils/test-pkg b/utils/test-pkg
+index 54c6c5e8fe..526b95b1fb 100755
+--- a/utils/test-pkg
++++ b/utils/test-pkg
+@@ -12,13 +12,13 @@ do_clean() {
+ 
+ main() {
+     local o O opts
+-    local cfg dir pkg random toolchains_csv toolchain all number mode
++    local cfg dir pkg random toolchains_csv toolchain all number mode prepare_only
+     local ret nb nb_skip nb_fail nb_legal nb_tc build_dir keep
+     local -a toolchains
+     local pkg_br_name
+ 
+     o='hakc:d:n:p:r:t:'
+-    O='help,all,keep,config-snippet:,build-dir:,number:,package:,random:,toolchains-csv:'
++    O='help,all,keep,prepare-only,config-snippet:,build-dir:,number:,package:,random:,toolchains-csv:'
+     opts="$(getopt -n "${my_name}" -o "${o}" -l "${O}" -- "${@}")"
+     eval set -- "${opts}"
+ 
+@@ -27,6 +27,7 @@ main() {
+     keep=0
+     number=0
+     mode=0
++    prepare_only=0
+     toolchains_csv="${TOOLCHAINS_CSV}"
+     while [ ${#} -gt 0 ]; do
+         case "${1}" in
+@@ -39,6 +40,9 @@ main() {
+         (-k|--keep)
+             keep=1; shift 1
+             ;;
++        (--prepare-only)
++            prepare_only=1; shift 1
++            ;;
+         (-c|--config-snippet)
+             cfg="${2}"; shift 2
+             ;;
+@@ -127,7 +131,7 @@ main() {
+         toolchain="$(basename "${toolchainconfig}" .config)"
+         build_dir="${dir}/${toolchain}"
+         printf "%40s [%*d/%d]: " "${toolchain}" ${#nb_tc} ${nb} ${nb_tc}
+-        build_one "${build_dir}" "${toolchainconfig}" "${cfg}" "${pkg}" && ret=0 || ret=${?}
++        build_one "${build_dir}" "${toolchainconfig}" "${cfg}" "${pkg}" "${prepare_only}" && ret=0 || ret=${?}
+         case ${ret} in
+         (0) printf "OK\n";;
+         (1) : $((nb_skip++)); printf "SKIPPED\n";;
+@@ -147,6 +151,7 @@ build_one() {
+     local toolchainconfig="${2}"
+     local cfg="${3}"
+     local pkg="${4}"
++    local prepare_only="${5}"
+ 
+     mkdir -p "${dir}"
+ 
+@@ -170,6 +175,11 @@ build_one() {
+     # Remove file, it's empty anyway.
+     rm -f "${dir}/missing.config"
+ 
++    # Defer building the job to the caller (e.g. a gitlab pipeline)
++    if [ ${prepare_only} -eq 1 ]; then
++        return 0
++    fi
 +
-+[Retrieved from:
-+https://github.com/boostorg/predef/commit/1be0e4a2d8db15a405f64a6f65507b87c1be7e1a]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ include/boost/predef/architecture/sparc.h | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
+     if [ -n "${pkg}" ]; then
+         if ! make O="${dir}" "${pkg}-dirclean" >> "${dir}/logfile" 2>&1; then
+             return 2
+@@ -257,6 +267,10 @@ Options:
+         Note: the logfile and configuration is always retained, even without
+         this option.
+ 
++    --prepare-only
++        Only prepare the .config files, but do not build them. Output the
++        list of build directories to stdout, and the status on stderr.
 +
-+diff --git a/boost/predef/architecture/sparc.h b/boost/predef/architecture/sparc.h
-+index d7b94f0..d01605e 100644
-+--- a/boost/predef/architecture/sparc.h
-++++ b//boost/predef/architecture/sparc.h
-+@@ -34,10 +34,10 @@ Distributed under the Boost Software License, Version 1.0.
-+ 
-+ #if defined(__sparc__) || defined(__sparc)
-+ #   undef BOOST_ARCH_SPARC
-+-#   if !defined(BOOST_ARCH_SPARC) && (defined(__sparcv9) || defined(__sparc_v9__)
-++#   if !defined(BOOST_ARCH_SPARC) && (defined(__sparcv9) || defined(__sparc_v9__))
-+ #       define BOOST_ARCH_SPARC BOOST_VERSION_NUMBER(9,0,0)
-+ #   endif
-+-#   if !defined(BOOST_ARCH_SPARC) && (defined(__sparcv8) || defined(__sparc_v8__)
-++#   if !defined(BOOST_ARCH_SPARC) && (defined(__sparcv8) || defined(__sparc_v8__))
-+ #       define BOOST_ARCH_SPARC BOOST_VERSION_NUMBER(8,0,0)
-+ #   endif
-+ #   if !defined(BOOST_ARCH_SPARC)
+ Example:
+ 
+     Testing libcec would require a config snippet that contains:
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
