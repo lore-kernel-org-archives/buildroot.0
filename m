@@ -2,91 +2,99 @@ Return-Path: <SRS0=/RLo=NT=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.5 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
-	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E501C432BE
-	for <buildroot@archiver.kernel.org>; Sat, 28 Aug 2021 11:06:02 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 253DCC432BE
+	for <buildroot@archiver.kernel.org>; Sat, 28 Aug 2021 11:28:04 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B1BF560E77
-	for <buildroot@archiver.kernel.org>; Sat, 28 Aug 2021 11:06:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B1BF560E77
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id 953B460EE7
+	for <buildroot@archiver.kernel.org>; Sat, 28 Aug 2021 11:28:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 953B460EE7
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 75DDB83EA1;
-	Sat, 28 Aug 2021 11:06:01 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 48D36400CB;
+	Sat, 28 Aug 2021 11:28:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KB1jVKRcqJ46; Sat, 28 Aug 2021 11:05:57 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 102D583EA4;
-	Sat, 28 Aug 2021 11:05:57 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 683351BF417
- for <buildroot@lists.busybox.net>; Sat, 28 Aug 2021 11:05:55 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 55D4740250
- for <buildroot@lists.busybox.net>; Sat, 28 Aug 2021 11:05:55 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bh3s3zKJlS1C for <buildroot@lists.busybox.net>;
- Sat, 28 Aug 2021 11:05:50 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id a58dtXqJXM9M; Sat, 28 Aug 2021 11:27:59 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1522B40122;
+	Sat, 28 Aug 2021 11:27:58 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 67A751BF417
+ for <buildroot@lists.busybox.net>; Sat, 28 Aug 2021 11:27:56 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 55D2560720
+ for <buildroot@lists.busybox.net>; Sat, 28 Aug 2021 11:27:56 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id AwSethYEaqFv for <buildroot@lists.busybox.net>;
+ Sat, 28 Aug 2021 11:27:51 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
- [IPv6:2a00:1450:4864:20::42b])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 16A80400CB
- for <buildroot@buildroot.org>; Sat, 28 Aug 2021 11:05:49 +0000 (UTC)
-Received: by mail-wr1-x42b.google.com with SMTP id i6so14512776wrv.2
- for <buildroot@buildroot.org>; Sat, 28 Aug 2021 04:05:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
- h=from:to:cc:subject:date:message-id:mime-version
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
+ [IPv6:2a00:1450:4864:20::42f])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7D3766071F
+ for <buildroot@buildroot.org>; Sat, 28 Aug 2021 11:27:51 +0000 (UTC)
+Received: by mail-wr1-x42f.google.com with SMTP id q11so14505442wrr.9
+ for <buildroot@buildroot.org>; Sat, 28 Aug 2021 04:27:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=subject:to:cc:references:from:organization:message-id:date
+ :user-agent:mime-version:in-reply-to:content-language
  :content-transfer-encoding;
- bh=kOqlmIamP8T44kOvrW+8n+41M2SXScMKbSEGYjl0kvA=;
- b=Ry4ZDMHkCebA+AtclnB6tOLcRYy1QITfK9DlsH34KZog2ESHX835mwtBS4G3vYiFvY
- f/L+0zKHlGV03iogmkC2e1ZTyxmO8Ouu5P3TsvGMfIkQKZKL0PQNCLuyDF1MvNbZe5Ks
- 7/D3FhZZZ9T0WxPjrB89nGvZ2tZr24ZS6dqVDLuSjK1B/OlAz9LxCMFLHbda/0kQSxKA
- 8FROAgTDCf8zGAwpEvPh+IQiQ0P/pGBEV8xYLnCVXpqE5c6ARaeK3/mXWc403l/5uZs8
- W1pPiZGXkdOw39Iay3RqY/+Cvq/Hh6sQx5QYX7bM/ihhF+yEVTD7Nx7ev6LFXxMBoAVM
- xuHw==
+ bh=dSiMGiFhWPtghq7Whc9OetrsKp8o0FphCl7V6Yyk6kc=;
+ b=TvZAq+2fAnpQnrjpHcyhG1nzmV5JbfnUQLAJP/DDVtH29295X40J7HG3lcZ6q8Ik5r
+ dRPWnoxDhLJAICKk5Y8EVUxIyvwhjoEsA73Fh5QJ0ZN7FUQRm2l4eBS4r5c79VR1m4wI
+ HmLqKueXEbPX9uqGjwgesdKYemarawY/1A7Lh54LUsAI2edft1gD8fOIevx4r1a5nkNF
+ Na4jp6rt/AIluQVWBtxlxIJ2HrV7BIhV3hF+FmV3wV1osq0AuQrXCL6P5nozeUUKzP8v
+ tLeztbyFKIgFAua+CznFnD29vtvGWANiam9LlG2yJqa9RLwS66ryZjWaYaNURLUvOVpj
+ f1iQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=kOqlmIamP8T44kOvrW+8n+41M2SXScMKbSEGYjl0kvA=;
- b=oelP5UCitacrmp1R2b/ncZssscSiXlFU9RXAHsyg0EJuVhHi/j0e1xv56GTZvkyU5o
- OnEu/YX17yK2eSvV6BGZbVB8ejhR+Ga6YoEAUi/8o3phP9N2P/y0XRlK0BDkaGzBOyZv
- YtNMUmrQNV1lth5rbssxKavYK6lFGerncb4JT1O7haICb/QA8ckR05Bul2RDJdCixga1
- 5UNaywirLcG+og5RgnvEnXBb7/YpTFM1PTtrTvKtYYSYXoaJNmiP9sB0qI7mmz8GzJwm
- RTsBjJAsHDgi89g9damI8uZX8oB/59d+UfSuSDGDdmtJUSDRVvtUYf3Zo//0F7uur0j2
- 22sg==
-X-Gm-Message-State: AOAM532rmPcSzswvsGoC36wymEBKrxi3zYa+gpXd1rnOhSFIOa6I1/fa
- hmAFmzy+x8/PMLloPxvD7VBHUSUbA45OwQ==
-X-Google-Smtp-Source: ABdhPJyoMBT6OI4Zqoh9M1PY8rKB9AhpaBpf/asyhXd7EHCN43sjYNS186heHY5S847SxukgZwBefA==
-X-Received: by 2002:a05:6000:124f:: with SMTP id
- j15mr15599000wrx.101.1630148747786; 
- Sat, 28 Aug 2021 04:05:47 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-417-221.w2-10.abo.wanadoo.fr.
- [2.10.242.221])
- by smtp.gmail.com with ESMTPSA id m186sm1295081wme.48.2021.08.28.04.05.43
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 28 Aug 2021 04:05:45 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Sat, 28 Aug 2021 13:05:13 +0200
-Message-Id: <20210828110513.782701-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.32.0
+ h=x-gm-message-state:subject:to:cc:references:from:organization
+ :message-id:date:user-agent:mime-version:in-reply-to
+ :content-language:content-transfer-encoding;
+ bh=dSiMGiFhWPtghq7Whc9OetrsKp8o0FphCl7V6Yyk6kc=;
+ b=qYy90h5LiCbp1yjfKkVayjyj/wV7jrdQvCuVoe8dXNLSCmpJsAjWA4gFRbRarNI39H
+ SSMJcO0XHJcJ6Ounivf9v7yFBr+ulzaLUzzrr1FtHm+rF+Y2PPSNBY4kuKAw/FUIHYZA
+ szSrzLmTgr/LbHIc9WsKcLZOtNok99FJUoLg1NTTys4eD6AFFw0cLrEz487k9cv0QAIV
+ w2keC62ZSMbEzIpkjBQLzK0B6Ro/+KWecK+Swh7H1E2n0yUm2wk5PHUi5jaRdtA+HpgW
+ 7Hx5oUqjqpqpoImtmouEUGRfT9OvQMkw7vpjD3uE6ho2q5kiCSGWaoxsxq4+gkaI11rc
+ OEsg==
+X-Gm-Message-State: AOAM531isDCwAuBuXGSqiIYAE2GuY3u4jbim58gGRl+hr+Mtunbytv7t
+ rscLa4DmdqxEjewt7+PV17HxemfY3bfpgQ==
+X-Google-Smtp-Source: ABdhPJxdmymDhC2RHmLmBLwCxrnOYDEmcMaLesJkDiYjEly0cvBj3U0IpD48mYoqPvjueasHjdjUWw==
+X-Received: by 2002:a5d:4c4c:: with SMTP id n12mr15769669wrt.19.1630150069500; 
+ Sat, 28 Aug 2021 04:27:49 -0700 (PDT)
+Received: from [10.73.0.168] ([213.219.130.152])
+ by smtp.gmail.com with ESMTPSA id r16sm4877341wrg.71.2021.08.28.04.27.48
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sat, 28 Aug 2021 04:27:48 -0700 (PDT)
+To: Romain Naour <romain.naour@gmail.com>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>
+References: <20210827091743.2516027-1-romain.naour@gmail.com>
+ <20210827204819.GE2661@scaer>
+ <75eb3db4-01a4-a335-f997-6ef81456682d@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+Message-ID: <1433accf-3050-0f2e-9701-3da87c8c7c12@mind.be>
+Date: Sat, 28 Aug 2021 13:27:48 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH/next 1/1] package/sdl2: drop patch
+In-Reply-To: <75eb3db4-01a4-a335-f997-6ef81456682d@gmail.com>
+Content-Language: en-GB
+Subject: Re: [Buildroot] [PATCHv2] package/zfs: Fix
+ cross-platform-compilations
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,489 +106,52 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Michael Fischer <mf@go-sys.de>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: =?UTF-8?Q?Jos=c3=a9_Luis_Salvador_Rufo?= <salvador.joseluis@gmail.com>,
+ buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-Drop patch (and so SDL2_RUN_AUTOGEN) as patch is already in version
-2.0.16 which was applied to next by commit
-c80fbf269c020c53a6140ffbf328d64674a8ada0
-
-Fixes:
- - http://autobuild.buildroot.org/results/4f9026e94373fb31ef7e45f8b4fd55adc178013a
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...-building-with-KMSDRM-support-if-EGL.patch | 433 ------------------
- package/sdl2/sdl2.mk                          |   8 -
- 2 files changed, 441 deletions(-)
- delete mode 100644 package/sdl2/0001-Buildsystem-Add-guards-for-not-building-with-KMSDRM-support-if-EGL.patch
-
-diff --git a/package/sdl2/0001-Buildsystem-Add-guards-for-not-building-with-KMSDRM-support-if-EGL.patch b/package/sdl2/0001-Buildsystem-Add-guards-for-not-building-with-KMSDRM-support-if-EGL.patch
-deleted file mode 100644
-index b58c989f13..0000000000
---- a/package/sdl2/0001-Buildsystem-Add-guards-for-not-building-with-KMSDRM-support-if-EGL.patch
-+++ /dev/null
-@@ -1,433 +0,0 @@
--From 2fc987c28f14668a9ce360331f591e32e20c3906 Mon Sep 17 00:00:00 2001
--From: Manuel Alfayate Corchete <redwindwanderer@gmail.com>
--Date: Tue, 22 Dec 2020 14:15:33 +0100
--Subject: [PATCH] [Buildsystem] Add guards for not building with KMSDRM support
-- if EGL is not available.
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Retrieved from:
--https://github.com/libsdl-org/SDL/commit/2fc987c28f14668a9ce360331f591e32e20c3906]
-----
-- configure.ac                                  | 29 ++++++++++++++++++-
-- src/video/kmsdrm/SDL_kmsdrmopengles.c         |  4 +--
-- src/video/kmsdrm/SDL_kmsdrmopengles.h         |  4 +--
-- src/video/kmsdrm/SDL_kmsdrmvideo.c            | 22 +++++---------
-- src/video/kmsdrm/SDL_kmsdrmvideo.h            |  8 -----
-- .../SDL_kmsdrm_legacy_opengles.c              |  4 +--
-- .../SDL_kmsdrm_legacy_opengles.h              |  4 +--
-- .../kmsdrm_legacy/SDL_kmsdrm_legacy_video.c   | 20 ++-----------
-- .../kmsdrm_legacy/SDL_kmsdrm_legacy_video.h   |  6 ++--
-- 9 files changed, 47 insertions(+), 54 deletions(-)
--
--diff --git a/configure.ac b/configure.ac
--index b7e519b8f..acff858ba 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -2236,7 +2236,10 @@ CheckKMSDRM()
-- AS_HELP_STRING([--enable-video-kmsdrm], [use KMSDRM video driver [[default=no]]]),
--                   , enable_video_kmsdrm=no)
-- 
---    if test x$enable_video = xyes -a x$enable_video_kmsdrm = xyes; then
--+    if  test x$enable_video = xyes && \
--+        test x$enable_video_kmsdrm = xyes && \
--+        test x$video_opengl_egl = xyes; then
--+
--         video_kmsdrm=no
-- 
--         PKG_CHECK_MODULES([LIBDRM], [libdrm >= 1.4.82], libdrm_avail=yes, libdrm_avail=no)
--@@ -2418,6 +2421,28 @@ CheckOpenGLESX11()
--     fi
-- }
-- 
--+dnl Find EGL
--+CheckEGLKMSDRM()
--+{
--+    AC_MSG_CHECKING(for EGL support)
--+    video_opengl_egl=no
--+    AC_TRY_COMPILE([
--+      #define LINUX
--+      #define EGL_API_FB
--+      #define MESA_EGL_NO_X11_HEADERS
--+      #define EGL_NO_X11
--+      #include <EGL/egl.h>
--+      #include <EGL/eglext.h>
--+    ],[
--+    ],[
--+    video_opengl_egl=yes
--+    ])
--+    AC_MSG_RESULT($video_opengl_egl)
--+    if test x$video_opengl_egl = xyes; then
--+	AC_DEFINE(SDL_VIDEO_OPENGL_EGL, 1, [ ])
--+    fi
--+}
--+
-- dnl Check for Windows OpenGL
-- CheckWINDOWSGL()
-- {
--@@ -3555,6 +3580,8 @@ case "$host" in
--         CheckRPI
--         CheckX11
--         CheckDirectFB
--+        # Need to check for EGL first because KMSDRM depends on it.
--+        CheckEGLKMSDRM
--         CheckKMSDRM
--         CheckOpenGLX11
--         CheckOpenGLESX11
--diff --git a/src/video/kmsdrm/SDL_kmsdrmopengles.c b/src/video/kmsdrm/SDL_kmsdrmopengles.c
--index c9ec554b4..664621d2b 100644
----- a/src/video/kmsdrm/SDL_kmsdrmopengles.c
--+++ b/src/video/kmsdrm/SDL_kmsdrmopengles.c
--@@ -22,7 +22,7 @@
-- 
-- #include "../../SDL_internal.h"
-- 
---#if SDL_VIDEO_DRIVER_KMSDRM && SDL_VIDEO_OPENGL_EGL
--+#if SDL_VIDEO_DRIVER_KMSDRM
-- 
-- #include "SDL_kmsdrmvideo.h"
-- #include "SDL_kmsdrmopengles.h"
--@@ -376,6 +376,6 @@ KMSDRM_GLES_SwapWindow(_THIS, SDL_Window * window)
-- 
-- SDL_EGL_MakeCurrent_impl(KMSDRM)
-- 
---#endif /* SDL_VIDEO_DRIVER_KMSDRM && SDL_VIDEO_OPENGL_EGL */
--+#endif /* SDL_VIDEO_DRIVER_KMSDRM */
-- 
-- /* vi: set ts=4 sw=4 expandtab: */
--diff --git a/src/video/kmsdrm/SDL_kmsdrmopengles.h b/src/video/kmsdrm/SDL_kmsdrmopengles.h
--index f81b0c3dc..c8db7da86 100644
----- a/src/video/kmsdrm/SDL_kmsdrmopengles.h
--+++ b/src/video/kmsdrm/SDL_kmsdrmopengles.h
--@@ -24,7 +24,7 @@
-- #ifndef SDL_kmsdrmopengles_h_
-- #define SDL_kmsdrmopengles_h_
-- 
---#if SDL_VIDEO_DRIVER_KMSDRM && SDL_VIDEO_OPENGL_EGL
--+#if SDL_VIDEO_DRIVER_KMSDRM
-- 
-- #include "../SDL_sysvideo.h"
-- #include "../SDL_egl_c.h"
--@@ -42,7 +42,7 @@ extern SDL_GLContext KMSDRM_GLES_CreateContext(_THIS, SDL_Window * window);
-- extern int KMSDRM_GLES_SwapWindow(_THIS, SDL_Window * window);
-- extern int KMSDRM_GLES_MakeCurrent(_THIS, SDL_Window * window, SDL_GLContext context);
-- 
---#endif /* SDL_VIDEO_DRIVER_KMSDRM && SDL_VIDEO_OPENGL_EGL */
--+#endif /* SDL_VIDEO_DRIVER_KMSDRM */
-- 
-- #endif /* SDL_kmsdrmopengles_h_ */
-- 
--diff --git a/src/video/kmsdrm/SDL_kmsdrmvideo.c b/src/video/kmsdrm/SDL_kmsdrmvideo.c
--index e84bd5ebc..663bc2170 100644
----- a/src/video/kmsdrm/SDL_kmsdrmvideo.c
--+++ b/src/video/kmsdrm/SDL_kmsdrmvideo.c
--@@ -846,7 +846,6 @@ KMSDRM_CreateDevice(int devindex)
--     device->SetWindowGrab = KMSDRM_SetWindowGrab;
--     device->DestroyWindow = KMSDRM_DestroyWindow;
--     device->GetWindowWMInfo = KMSDRM_GetWindowWMInfo;
---#if SDL_VIDEO_OPENGL_EGL
--     device->GL_DefaultProfileConfig = KMSDRM_GLES_DefaultProfileConfig;
--     device->GL_LoadLibrary = KMSDRM_GLES_LoadLibrary;
--     device->GL_GetProcAddress = KMSDRM_GLES_GetProcAddress;
--@@ -857,9 +856,7 @@ KMSDRM_CreateDevice(int devindex)
--     device->GL_GetSwapInterval = KMSDRM_GLES_GetSwapInterval;
--     device->GL_SwapWindow = KMSDRM_GLES_SwapWindow;
--     device->GL_DeleteContext = KMSDRM_GLES_DeleteContext;
---#endif
---    device->PumpEvents = KMSDRM_PumpEvents;
---    device->free = KMSDRM_DeleteDevice;
--+
-- #if SDL_VIDEO_VULKAN
--     device->Vulkan_LoadLibrary = KMSDRM_Vulkan_LoadLibrary;
--     device->Vulkan_UnloadLibrary = KMSDRM_Vulkan_UnloadLibrary;
--@@ -867,6 +864,10 @@ KMSDRM_CreateDevice(int devindex)
--     device->Vulkan_CreateSurface = KMSDRM_Vulkan_CreateSurface;
--     device->Vulkan_GetDrawableSize = KMSDRM_Vulkan_GetDrawableSize;
-- #endif
--+
--+    device->PumpEvents = KMSDRM_PumpEvents;
--+    device->free = KMSDRM_DeleteDevice;
--+
--     return device;
-- 
-- cleanup:
--@@ -1327,9 +1328,7 @@ KMSDRM_DestroySurfaces(_THIS, SDL_Window *window)
--     SDL_DisplayData *dispdata = (SDL_DisplayData *)SDL_GetDisplayDriverData(0);
--     KMSDRM_PlaneInfo plane_info = {0};
-- 
---#if SDL_VIDEO_OPENGL_EGL
--     EGLContext egl_context;
---#endif
-- 
--     /********************************************************************/
--     /* BLOCK 1: protect the PRIMARY PLANE before destroying the buffers */
--@@ -1380,7 +1379,6 @@ KMSDRM_DestroySurfaces(_THIS, SDL_Window *window)
--     /* will get wrong info and we will be in trouble.                          */
--     /***************************************************************************/
-- 
---#if SDL_VIDEO_OPENGL_EGL
--     egl_context = (EGLContext)SDL_GL_GetCurrentContext();
--     SDL_EGL_MakeCurrent(_this, EGL_NO_SURFACE, egl_context);
-- 
--@@ -1388,7 +1386,6 @@ KMSDRM_DestroySurfaces(_THIS, SDL_Window *window)
--         SDL_EGL_DestroySurface(_this, windata->egl_surface);
--         windata->egl_surface = EGL_NO_SURFACE;
--     }
---#endif
-- 
--     if (windata->gs) {
--         KMSDRM_gbm_surface_destroy(windata->gs);
--@@ -1431,7 +1428,6 @@ KMSDRM_CreateSurfaces(_THIS, SDL_Window * window)
--         return SDL_SetError("Could not create GBM surface");
--     }
-- 
---#if SDL_VIDEO_OPENGL_EGL
--     /* We can't get the EGL context yet because SDL_CreateRenderer has not been called,
--        but we need an EGL surface NOW, or GL won't be able to render into any surface
--        and we won't see the first frame. */
--@@ -1448,8 +1444,6 @@ KMSDRM_CreateSurfaces(_THIS, SDL_Window * window)
--     egl_context = (EGLContext)SDL_GL_GetCurrentContext();
--     ret = SDL_EGL_MakeCurrent(_this, windata->egl_surface, egl_context);
-- 
---#endif
---
-- cleanup:
-- 
--     if (ret) {
--@@ -1478,11 +1472,11 @@ KMSDRM_DestroyWindow(_THIS, SDL_Window *window)
-- 
--     if (!is_vulkan) {
--         KMSDRM_DestroySurfaces(_this, window);
---#if SDL_VIDEO_OPENGL_EGL
--+
--         if (_this->egl_data) {
--             SDL_EGL_UnloadLibrary(_this);
--         }
---#endif
--+
--         if (dispdata->gbm_init) {
--             KMSDRM_DeinitMouse(_this);
--             KMSDRM_GBMDeinit(_this, dispdata);
--@@ -1754,7 +1748,6 @@ KMSDRM_CreateWindow(_THIS, SDL_Window * window)
--                  goto cleanup;
--          }
-- 
---#if SDL_VIDEO_OPENGL_EGL
--          /* Manually load the EGL library. KMSDRM_EGL_LoadLibrary() has already
--             been called by SDL_CreateWindow() but we don't do anything there,
--             precisely to be able to load it here.
--@@ -1766,7 +1759,6 @@ KMSDRM_CreateWindow(_THIS, SDL_Window * window)
--                  goto cleanup;
--              }
--          }
---#endif
-- 
--          /* Can't init mouse stuff sooner because cursor plane is not ready. */
--          KMSDRM_InitMouse(_this);
--diff --git a/src/video/kmsdrm/SDL_kmsdrmvideo.h b/src/video/kmsdrm/SDL_kmsdrmvideo.h
--index 2cf34522b..e58c922a8 100644
----- a/src/video/kmsdrm/SDL_kmsdrmvideo.h
--+++ b/src/video/kmsdrm/SDL_kmsdrmvideo.h
--@@ -34,10 +34,8 @@
-- 
-- #include <gbm.h>
-- #include <assert.h>
---#if SDL_VIDEO_OPENGL_EGL
-- #include <EGL/egl.h>
-- #include <EGL/eglext.h>
---#endif
-- 
-- /****************************************************************************************/
-- /* Driverdata pointers are void struct* used to store backend-specific variables        */
--@@ -101,10 +99,6 @@ typedef struct SDL_DisplayData
--     EGLSyncKHR kms_fence;
--     EGLSyncKHR gpu_fence;
-- 
---#if SDL_VIDEO_OPENGL_EGL
---    EGLSurface old_egl_surface;
---#endif
---
--     SDL_bool modeset_pending;
--     SDL_bool gbm_init;
-- 
--@@ -129,9 +123,7 @@ typedef struct SDL_WindowData
--     struct gbm_bo *bo;
--     struct gbm_bo *next_bo;
-- 
---#if SDL_VIDEO_OPENGL_EGL
--     EGLSurface egl_surface;
---#endif
-- 
--     /* For scaling and AR correction. */
--     int32_t src_w;
--diff --git a/src/video/kmsdrm_legacy/SDL_kmsdrm_legacy_opengles.c b/src/video/kmsdrm_legacy/SDL_kmsdrm_legacy_opengles.c
--index 890801891..a886eb326 100644
----- a/src/video/kmsdrm_legacy/SDL_kmsdrm_legacy_opengles.c
--+++ b/src/video/kmsdrm_legacy/SDL_kmsdrm_legacy_opengles.c
--@@ -21,7 +21,7 @@
-- 
-- #include "../../SDL_internal.h"
-- 
---#if SDL_VIDEO_DRIVER_KMSDRM && SDL_VIDEO_OPENGL_EGL
--+#if SDL_VIDEO_DRIVER_KMSDRM
-- 
-- #include "SDL_log.h"
-- 
--@@ -147,6 +147,6 @@ KMSDRM_LEGACY_GLES_SwapWindow(_THIS, SDL_Window * window) {
-- 
-- SDL_EGL_MakeCurrent_impl(KMSDRM_LEGACY)
-- 
---#endif /* SDL_VIDEO_DRIVER_KMSDRM && SDL_VIDEO_OPENGL_EGL */
--+#endif /* SDL_VIDEO_DRIVER_KMSDRM */
-- 
-- /* vi: set ts=4 sw=4 expandtab: */
--diff --git a/src/video/kmsdrm_legacy/SDL_kmsdrm_legacy_opengles.h b/src/video/kmsdrm_legacy/SDL_kmsdrm_legacy_opengles.h
--index 5e5ba96dc..2926cbe58 100644
----- a/src/video/kmsdrm_legacy/SDL_kmsdrm_legacy_opengles.h
--+++ b/src/video/kmsdrm_legacy/SDL_kmsdrm_legacy_opengles.h
--@@ -23,7 +23,7 @@
-- #ifndef SDL_kmsdrmopengles_h_
-- #define SDL_kmsdrmopengles_h_
-- 
---#if SDL_VIDEO_DRIVER_KMSDRM && SDL_VIDEO_OPENGL_EGL
--+#if SDL_VIDEO_DRIVER_KMSDRM
-- 
-- #include "../SDL_sysvideo.h"
-- #include "../SDL_egl_c.h"
--@@ -41,7 +41,7 @@ extern SDL_GLContext KMSDRM_LEGACY_GLES_CreateContext(_THIS, SDL_Window * window
-- extern int KMSDRM_LEGACY_GLES_SwapWindow(_THIS, SDL_Window * window);
-- extern int KMSDRM_LEGACY_GLES_MakeCurrent(_THIS, SDL_Window * window, SDL_GLContext context);
-- 
---#endif /* SDL_VIDEO_DRIVER_KMSDRM && SDL_VIDEO_OPENGL_EGL */
--+#endif /* SDL_VIDEO_DRIVER_KMSDRM */
-- 
-- #endif /* SDL_kmsdrmopengles_h_ */
-- 
--diff --git a/src/video/kmsdrm_legacy/SDL_kmsdrm_legacy_video.c b/src/video/kmsdrm_legacy/SDL_kmsdrm_legacy_video.c
--index 36b1899bd..acddfc29a 100644
----- a/src/video/kmsdrm_legacy/SDL_kmsdrm_legacy_video.c
--+++ b/src/video/kmsdrm_legacy/SDL_kmsdrm_legacy_video.c
--@@ -213,7 +213,7 @@ KMSDRM_LEGACY_CreateDevice(int devindex)
--     device->SetWindowGrab = KMSDRM_LEGACY_SetWindowGrab;
--     device->DestroyWindow = KMSDRM_LEGACY_DestroyWindow;
--     device->GetWindowWMInfo = KMSDRM_LEGACY_GetWindowWMInfo;
---#if SDL_VIDEO_OPENGL_EGL
--+
--     device->GL_LoadLibrary = KMSDRM_LEGACY_GLES_LoadLibrary;
--     device->GL_GetProcAddress = KMSDRM_LEGACY_GLES_GetProcAddress;
--     device->GL_UnloadLibrary = KMSDRM_LEGACY_GLES_UnloadLibrary;
--@@ -223,7 +223,7 @@ KMSDRM_LEGACY_CreateDevice(int devindex)
--     device->GL_GetSwapInterval = KMSDRM_LEGACY_GLES_GetSwapInterval;
--     device->GL_SwapWindow = KMSDRM_LEGACY_GLES_SwapWindow;
--     device->GL_DeleteContext = KMSDRM_LEGACY_GLES_DeleteContext;
---#endif
--+
--     device->PumpEvents = KMSDRM_LEGACY_PumpEvents;
--     device->free = KMSDRM_LEGACY_DeleteDevice;
-- 
--@@ -369,14 +369,12 @@ KMSDRM_LEGACY_DestroySurfaces(_THIS, SDL_Window * window)
--         windata->next_bo = NULL;
--     }
-- 
---#if SDL_VIDEO_OPENGL_EGL
--     SDL_EGL_MakeCurrent(_this, EGL_NO_SURFACE, EGL_NO_CONTEXT);
-- 
--     if (windata->egl_surface != EGL_NO_SURFACE) {
--         SDL_EGL_DestroySurface(_this, windata->egl_surface);
--         windata->egl_surface = EGL_NO_SURFACE;
--     }
---#endif
-- 
--     if (windata->gs) {
--         KMSDRM_LEGACY_gbm_surface_destroy(windata->gs);
--@@ -394,18 +392,14 @@ KMSDRM_LEGACY_CreateSurfaces(_THIS, SDL_Window * window)
--     Uint32 height = dispdata->mode.vdisplay;
--     Uint32 surface_fmt = GBM_FORMAT_XRGB8888;
--     Uint32 surface_flags = GBM_BO_USE_SCANOUT | GBM_BO_USE_RENDERING;
---#if SDL_VIDEO_OPENGL_EGL
--     EGLContext egl_context;
---#endif
-- 
--     if (!KMSDRM_LEGACY_gbm_device_is_format_supported(viddata->gbm, surface_fmt, surface_flags)) {
--         SDL_LogWarn(SDL_LOG_CATEGORY_VIDEO, "GBM surface format not supported. Trying anyway.");
--     }
-- 
---#if SDL_VIDEO_OPENGL_EGL
--     SDL_EGL_SetRequiredVisualId(_this, surface_fmt);
--     egl_context = (EGLContext)SDL_GL_GetCurrentContext();
---#endif
-- 
--     KMSDRM_LEGACY_DestroySurfaces(_this, window);
-- 
--@@ -415,7 +409,6 @@ KMSDRM_LEGACY_CreateSurfaces(_THIS, SDL_Window * window)
--         return SDL_SetError("Could not create GBM surface");
--     }
-- 
---#if SDL_VIDEO_OPENGL_EGL
--     windata->egl_surface = SDL_EGL_CreateSurface(_this, (NativeWindowType)windata->gs);
-- 
--     if (windata->egl_surface == EGL_NO_SURFACE) {
--@@ -425,7 +418,6 @@ KMSDRM_LEGACY_CreateSurfaces(_THIS, SDL_Window * window)
--     SDL_EGL_MakeCurrent(_this, windata->egl_surface, egl_context);
-- 
--     windata->egl_surface_dirty = 0;
---#endif
-- 
--     return 0;
-- }
--@@ -734,15 +726,9 @@ KMSDRM_LEGACY_SetDisplayMode(_THIS, SDL_VideoDisplay * display, SDL_DisplayMode
--         SDL_Window *window = viddata->windows[i];
--         SDL_WindowData *windata = (SDL_WindowData *)window->driverdata;
-- 
---#if SDL_VIDEO_OPENGL_EGL
--         /* Can't recreate EGL surfaces right now, need to wait until SwapWindow
--            so the correct thread-local surface and context state are available */
--         windata->egl_surface_dirty = 1;
---#else
---        if (KMSDRM_LEGACY_CreateSurfaces(_this, window)) {
---            return -1;
---        }
---#endif
-- 
--         /* Tell app about the resize */
--         SDL_SendWindowEvent(window, SDL_WINDOWEVENT_RESIZED, mode->w, mode->h);
--@@ -758,13 +744,11 @@ KMSDRM_LEGACY_CreateWindow(_THIS, SDL_Window * window)
--     SDL_WindowData *windata;
--     SDL_VideoDisplay *display;
-- 
---#if SDL_VIDEO_OPENGL_EGL
--     if (!_this->egl_data) {
--         if (SDL_GL_LoadLibrary(NULL) < 0) {
--             goto error;
--         }
--     }
---#endif
-- 
--     /* Allocate window internal data */
--     windata = (SDL_WindowData *)SDL_calloc(1, sizeof(SDL_WindowData));
--diff --git a/src/video/kmsdrm_legacy/SDL_kmsdrm_legacy_video.h b/src/video/kmsdrm_legacy/SDL_kmsdrm_legacy_video.h
--index 28e1bc4fe..9df2bcfa3 100644
----- a/src/video/kmsdrm_legacy/SDL_kmsdrm_legacy_video.h
--+++ b/src/video/kmsdrm_legacy/SDL_kmsdrm_legacy_video.h
--@@ -31,9 +31,7 @@
-- #include <xf86drm.h>
-- #include <xf86drmMode.h>
-- #include <gbm.h>
---#if SDL_VIDEO_OPENGL_EGL
-- #include <EGL/egl.h>
---#endif
-- 
-- typedef struct SDL_VideoData
-- {
--@@ -71,10 +69,10 @@ typedef struct SDL_WindowData
--     struct gbm_bo *crtc_bo;
--     SDL_bool waiting_for_flip;
--     SDL_bool double_buffer;
---#if SDL_VIDEO_OPENGL_EGL
--+
--     int egl_surface_dirty;
--     EGLSurface egl_surface;
---#endif
--+
-- } SDL_WindowData;
-- 
-- typedef struct KMSDRM_LEGACY_FBInfo
-diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
-index f93c3fa879..1708180626 100644
---- a/package/sdl2/sdl2.mk
-+++ b/package/sdl2/sdl2.mk
-@@ -22,14 +22,6 @@ SDL2_CONF_OPTS += \
- 	--disable-pulseaudio \
- 	--disable-video-wayland
- 
--# We're patching configure.ac but autoreconf breaks the build
--# The script only uses autoconf, not automake or libtool
--SDL2_DEPENDENCIES += host-autoconf
--define SDL2_RUN_AUTOGEN
--	cd $(@D) && PATH=$(BR_PATH) ./autogen.sh
--endef
--SDL2_PRE_CONFIGURE_HOOKS += SDL2_RUN_AUTOGEN
--
- # We are using autotools build system for sdl2, so the sdl2-config.cmake
- # include path are not resolved like for sdl2-config script.
- # Change the absolute /usr path to resolve relatively to the sdl2-config.cmake location.
--- 
-2.32.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@busybox.net
-http://lists.busybox.net/mailman/listinfo/buildroot
+CgpPbiAyNy8wOC8yMDIxIDIzOjI3LCBSb21haW4gTmFvdXIgd3JvdGU6Cj4gSGVsbG8gWWFubiwK
+PiAKPiBMZSAyNy8wOC8yMDIxIMOgIDIyOjQ4LCBZYW5uIEUuIE1PUklOIGEgw6ljcml0wqA6Cj4+
+IFJvbWFpbiwgSm9zw6ksIEFsbCwKPj4KPj4gT24gMjAyMS0wOC0yNyAxMToxNyArMDIwMCwgUm9t
+YWluIE5hb3VyIHNwYWtlIHRodXNseToKPj4+IEZyb206IEpvc8OpIEx1aXMgU2FsdmFkb3IgUnVm
+byA8c2FsdmFkb3Iuam9zZWx1aXNAZ21haWwuY29tPgo+Pj4KPj4+IFRoaXMgcGF0Y2ggZml4ZXMg
+dGhlIGBtYWtlYCBleGVjdXRlZCBmcm9tIHRoZSBga2VybmVsLm00YCBpbgo+Pj4gY3Jvc3MtcGxh
+dGZvcm0tY29tcGlsYXRpb25zIGVudmlyb25tZW50czoKPj4+IGh0dHBzOi8vZ2l0aHViLmNvbS9v
+cGVuemZzL3pmcy9ibG9iL3pmcy0yLjAuNS9jb25maWcva2VybmVsLm00I0w1ODgKPj4+Cj4+PiBG
+aXhlczoKPj4+IGh0dHBzOi8vZ2l0bGFiLmNvbS9rdWJ1OTMvYnVpbGRyb290Ly0vam9icy8xNTIy
+ODQ4NDgzCj4+Pgo+Pj4gU2lnbmVkLW9mZi1ieTogSm9zw6kgTHVpcyBTYWx2YWRvciBSdWZvIDxz
+YWx2YWRvci5qb3NlbHVpc0BnbWFpbC5jb20+Cj4+PiBTaWduZWQtb2ZmLWJ5OiBSb21haW4gTmFv
+dXIgPHJvbWFpbi5uYW91ckBnbWFpbC5jb20+Cj4+PiAtLS0KPj4+IHYyOiBhZGQgYSBwYXRjaCB0
+byByZW1vdmUgREVTVERJUiB1c2VkIHdpdGggSU5TVEFMTF9NT0RfUEFUSAo+Pj4gICAgIFVzZSBM
+SU5VWF9NQUtFX0ZMQUdTIGZvciBaRlNfTUFLRV9FTlYgYW5kIFpGU19DT05GX0VOVgo+Pj4gICAg
+IGh0dHA6Ly9saXN0cy5idXN5Ym94Lm5ldC9waXBlcm1haWwvYnVpbGRyb290LzIwMjEtQXVndXN0
+LzYyMTM1MC5odG1sCj4+IEkndmUgb25seSBoYWQgYSBjdXJzb3J5IGxvb2sgYXQgdGhlIHByZXZp
+b3VzIGRpc2N1c3Npb24sIHNvcnJ5Li4uCj4+Cj4+IEhvd2V2ZXIsIEkgYmVsaWV2ZSB0aGlzIGlz
+IGluY29ycmVjdCB0byBwYXNzICQoTElOVVhfTUFLRV9GTEFHUykgaW4gdGhlCj4+IGVudmlyb25t
+ZW50IGZvciBjb25maWd1cmUgYW5kIG1ha2UuCj4+Cj4+IEluZGVlZCwgJChMSU5VWF9NQUtFX0ZM
+QUdTKSBzaG91bGQgcmVhbGx5IG9ubHkgYmUgdXNlZCB3aGVuIGFjdHVhbGx5Cj4+IGJ1aWxkaW5n
+IGtlcm5lbCBtb2R1bGVzLCBub3QgdXNlcmxhbmQgc3R1ZmYsIGJlY2F1c2UgaXQgY29udGFpbnMK
+Pj4gdmFyaWFibGVzIHRoYXQgYXJlIG5vdCB2YWxpZCBvdGhlcndpc2UuCj4+Cj4+IEZvciBleGFt
+cGxlLCBpdCBvdmVycmlkZXMgSE9TVENDIHdpdGggYSB2YWx1ZSB0aGF0IGlzIG5vdCBjb3JyZWN0
+Cj4+IG91dHNpZGUgb2YgYnVsZGluZyB0aGUga2VybmVsLiBJdCBhbHNvIGNvbmRpdGlvbmFsbHkg
+Y29udGFpbnMgdGhlCj4+IHVuc2NvcGVkIHZhcmlhYmxlIExPQURBRERSLCB3aGljaCBuYW1lIGlz
+IHRvbyBnZW5lcmljLgo+Pgo+PiBBbHNvLCBJIGRvbid0IHVuZGVyc3RhbmQgd2h5IHdlIG5lZWQg
+dGhlc2UgYXQgY29uZmlndXJlIHRpbWUsIGJlY2F1c2Ugd2UKPj4gYXJlIHVzaW5nIHRoZSBrZXJu
+ZWwtbW9kdWxlIGluZnJhIHRvIGJ1aWxkIHRoZSBrZXJuZWwgbW9kdWxlLi4uIEFuZAo+PiBiYXNp
+Y2FsbHksIHRoZSB0d28gYXJlIG1vc3RseSBtdXR1YWxseSBleGNsdXNpdmUuLi4KPiBUaGUgY29u
+ZmlndXJlIHNjcmlwdCBpcyB0cnlpbmcgdG8gYnVpbGQgYSBrZXJuZWwgbW9kdWxlIHRvIGNoZWNr
+IGlmIGl0cyBhYmxlIHRvCj4gYnVpbGQgemZzIG1vZHVsZXMuIFdpdGhvdXQgTElOVVhfTUFLRV9G
+TEFHUywgaXQgdHJ5IHRvIGJ1aWxkIHRoZSBtb2R1bGUgZm9yIHRoZQo+IGhvc3QgbWFjaGluZSB0
+aGF0IGZhaWwgdG8gYnVpbGQgd2l0aCBvbGQgY29tcGlsZXIvZGlzdHJpYnV0aW9uLgo+IAo+IEkg
+aGF2ZW4ndCBsb29rZWQgZGVlcGx5IHRvIHRoZSBidWlsZHN5c3RlbS4uLgoKIEkgdG9vayBhIHF1
+aWNrIGxvb2suIEkgdGhpbmsgeW91IGNhbiBzZXQgS0VSTkVMX01BS0UgaW4gdGhlIGVudmlyb25t
+ZW50CihaRlNfQ09ORl9FTlYpIGFuZCB1c2UgdGhlIGxpbnV4IGZsYWdzIHRoZXJlOgoKWkZTX0NP
+TkZfRU5WICs9IEtFUk5FTF9NQUtFPSIkKExJTlVYX01BS0VfRkxBR1MpIgoKIFdoZW4gZG9pbmcg
+dGhhdCwgdGhlIGxpbnV4IGZsYWdzIHNob3VsZG4ndCBiZSBwYXNzZWQgdG8gbWFrZSBhdCBhbGwg
+YW55IG1vcmUKZWl0aGVyLgoKIFVudGVzdGVkLCBvYnZpb3VzbHkgOi0pCgogUmVnYXJkcywKIEFy
+bm91dAoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVp
+bGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVzeWJveC5uZXQKaHR0cDovL2xpc3RzLmJ1
+c3lib3gubmV0L21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
