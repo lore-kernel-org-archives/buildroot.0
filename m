@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 42612C433EF
-	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 18:43:57 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4FB9AC433F5
+	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 18:44:09 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 0A80960555
-	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 18:43:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0A80960555
+	by mail.kernel.org (Postfix) with ESMTPS id 0199B60E76
+	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 18:44:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0199B60E76
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D53AC42586;
-	Sat,  4 Sep 2021 18:43:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CE34E60782;
+	Sat,  4 Sep 2021 18:44:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pbjZPDk6fpMA; Sat,  4 Sep 2021 18:43:56 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 1jlVNYM5Qvpf; Sat,  4 Sep 2021 18:44:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 34BDB40250;
-	Sat,  4 Sep 2021 18:43:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2F174605BC;
+	Sat,  4 Sep 2021 18:44:07 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7DF101BF5DD
- for <buildroot@lists.busybox.net>; Sat,  4 Sep 2021 18:26:03 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 68F9E1BF5DD
+ for <buildroot@lists.busybox.net>; Sat,  4 Sep 2021 18:26:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 853C540167
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9033C40272
  for <buildroot@lists.busybox.net>; Sat,  4 Sep 2021 18:25:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Wy_fdtuAbWqD for <buildroot@lists.busybox.net>;
+ with ESMTP id IlSr5O_ShGnL for <buildroot@lists.busybox.net>;
  Sat,  4 Sep 2021 18:25:19 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id F338340171
- for <buildroot@buildroot.org>; Sat,  4 Sep 2021 18:25:17 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 32B434020D
+ for <buildroot@buildroot.org>; Sat,  4 Sep 2021 18:25:18 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id C7B538834A; Sat,  4 Sep 2021 18:23:55 +0000 (UTC)
+ id 04FB08834A; Sat,  4 Sep 2021 18:23:56 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 27 Aug 2021 23:26:35 +0200
+Date: Sat, 28 Aug 2021 16:44:14 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 61730de4c0a83e7309bfd766df58c14410a543b3
-X-Git-Newrev: e1ddac352de6c86511a1a27efd8e79495519bcd8
+X-Git-Oldrev: a4f83d39cf4bb4dd155b8f79d13b4349dd103c49
+X-Git-Newrev: afde8fb8f36267e7b025c26e700f76e9bb75706f
 X-Patchwork-Hint: ignore
-Message-Id: <20210904182355.C7B538834A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/busybox: add systemd service for
- telnetd
+Message-Id: <20210904182356.04FB08834A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/pkg-python: invalidate precompiled
+ _sysconfigdata*.pyc
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,66 +71,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e1ddac352de6c86511a1a27efd8e79495519bcd8
+commit: https://git.buildroot.net/buildroot/commit/?id=afde8fb8f36267e7b025c26e700f76e9bb75706f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Sam Voss <sam.voss@collins.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-[yann.morin.1998@free.fr:
-  - introduce BUSYBOX_INSTALL_TELNET_SERVICE
-  - move _INSTALL_INIT_SYSTEMD alphabetically between openrc and sysv
-  - drop the comment about Type=simple  (Arnout)
-]
+For per-package directories, we fixup the _sysconfigdata*.py files, so
+that they get proper path pointing to the current package's direcotry
+structure.
+
+However, the corresponding, pre-compiled blobs _sysconfigdata*.pyc were
+left around, and thus are inconsistent with their source. They might
+also be regenerated when a package would install a python module; this
+regeneration would trigger the soon-to-be-introduced overwrite
+detection.
+
+This commit simply removes _sysconfigdata*.pyc files; they will anyway
+be regenerated by the PYTHON{,3}_CREATE_PYC_FILES target finalize hooks.
+This is an efficient way to guarantee the consistency between the source
+and precompiled versions, and to not trigger the overwrite detection.
+
+Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+[yann.morin.1998@free.frs: reword the commit log]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/busybox/busybox.mk      | 10 ++++++++++
- package/busybox/telnetd.service | 10 ++++++++++
- 2 files changed, 20 insertions(+)
+ package/pkg-python.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 4b1fbade1d..560c4fe7b6 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -332,6 +332,12 @@ define BUSYBOX_INSTALL_TELNET_SCRIPT
- 			$(TARGET_DIR)/etc/init.d/S50telnet ; \
- 	fi
+diff --git a/package/pkg-python.mk b/package/pkg-python.mk
+index 8b24aeb3b1..ddf9e733fd 100644
+--- a/package/pkg-python.mk
++++ b/package/pkg-python.mk
+@@ -108,7 +108,9 @@ define PKG_PYTHON_FIXUP_SYSCONFIGDATA
+ 		\(    -path '$(HOST_DIR)/lib/python*' \
+ 		   -o -path '$(STAGING_DIR)/usr/lib/python*' \
+ 		\) \
+-		-name "_sysconfigdata*.py" -print0 \
++		\(    \( -name "_sysconfigdata*.pyc" -delete \) \
++		   -o \( -name "_sysconfigdata*.py" -print0 \) \
++		\) \
+ 	| xargs -0 --no-run-if-empty \
+ 		$(SED) 's:$(PER_PACKAGE_DIR)/[^/]\+/:$(PER_PACKAGE_DIR)/$($(PKG)_NAME)/:g'
  endef
-+define BUSYBOX_INSTALL_TELNET_SERVICE
-+	if grep -q CONFIG_FEATURE_TELNETD_STANDALONE=y $(@D)/.config; then \
-+		$(INSTALL) -D -m 0644 package/busybox/telnetd.service \
-+			$(TARGET_DIR)/usr/lib/systemd/system/telnetd.service ; \
-+	fi
-+endef
- 
- # Add /bin/{a,hu}sh to /etc/shells otherwise some login tools like dropbear
- # can reject the user connection. See man shells.
-@@ -384,6 +390,10 @@ define BUSYBOX_INSTALL_INIT_OPENRC
- 	$(BUSYBOX_INSTALL_TELNET_SCRIPT)
- endef
- 
-+define BUSYBOX_INSTALL_INIT_SYSTEMD
-+	$(BUSYBOX_INSTALL_TELNET_SERVICE)
-+endef
-+
- define BUSYBOX_INSTALL_INIT_SYSV
- 	$(BUSYBOX_INSTALL_MDEV_SCRIPT)
- 	$(BUSYBOX_INSTALL_LOGGING_SCRIPT)
-diff --git a/package/busybox/telnetd.service b/package/busybox/telnetd.service
-new file mode 100644
-index 0000000000..8a640b761f
---- /dev/null
-+++ b/package/busybox/telnetd.service
-@@ -0,0 +1,10 @@
-+[Unit]
-+Description=Telnetd Service
-+After=network.target
-+
-+[Service]
-+Type=simple
-+ExecStart=/usr/sbin/telnetd -F
-+
-+[Install]
-+WantedBy=multi-user.target
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
