@@ -2,57 +2,78 @@ Return-Path: <SRS0=/RLo=NT=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+X-Spam-Status: No, score=-7.0 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B153C432BE
-	for <buildroot@archiver.kernel.org>; Sat, 28 Aug 2021 14:00:17 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 35679C432BE
+	for <buildroot@archiver.kernel.org>; Sat, 28 Aug 2021 14:04:38 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 07CD6608FB
-	for <buildroot@archiver.kernel.org>; Sat, 28 Aug 2021 14:00:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 07CD6608FB
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
+	by mail.kernel.org (Postfix) with ESMTPS id DF67560ED3
+	for <buildroot@archiver.kernel.org>; Sat, 28 Aug 2021 14:04:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org DF67560ED3
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C80CE4012B;
-	Sat, 28 Aug 2021 14:00:16 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id h4FyeJ8mhU2n; Sat, 28 Aug 2021 14:00:12 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EF1034012E;
-	Sat, 28 Aug 2021 14:00:11 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B4DEC1BF30D
- for <buildroot@lists.busybox.net>; Sat, 28 Aug 2021 14:00:10 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A34554276C
- for <buildroot@lists.busybox.net>; Sat, 28 Aug 2021 14:00:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B17AB4256F;
+	Sat, 28 Aug 2021 14:04:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8j6Ka0gh8JuH for <buildroot@lists.busybox.net>;
- Sat, 28 Aug 2021 14:00:06 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A44EE426D6
- for <buildroot@buildroot.org>; Sat, 28 Aug 2021 14:00:06 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 2268382DB5; Sat, 28 Aug 2021 13:59:01 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-To: buildroot@buildroot.org
-Date: Sat, 28 Aug 2021 15:56:52 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: cc5e056508fba8b7561dcbe2a76cdacef8619a2a
-X-Git-Newrev: 0fe536b797cc0ae11bd54ed7046cd39b73780c18
-X-Patchwork-Hint: ignore
-Message-Id: <20210828135901.2268382DB5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/fakedate: avoid
- recursion if not first in the PATH
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id EVFxTm5hgtyR; Sat, 28 Aug 2021 14:04:34 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 16C8842583;
+	Sat, 28 Aug 2021 14:04:33 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1818A1BF2E5
+ for <buildroot@lists.busybox.net>; Sat, 28 Aug 2021 14:04:31 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 14FC460673
+ for <buildroot@lists.busybox.net>; Sat, 28 Aug 2021 14:04:31 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=free.fr
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LJmG8VkvZ8Ls for <buildroot@lists.busybox.net>;
+ Sat, 28 Aug 2021 14:04:27 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1401D60681
+ for <buildroot@buildroot.org>; Sat, 28 Aug 2021 14:04:26 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:c0ce:7c4d:7a73:f3f6])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id 88EEE78034E;
+ Sat, 28 Aug 2021 16:04:18 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+ s=smtp-20201208; t=1630159465;
+ bh=vzh38eCMT/z3bPxjZo+DnH0AcahhDBiAsOjDZ8J2RrY=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=OOXr7LtvJtsqJcWjrW/7axwnBJjIirTOVdiGr7QfEaBDq9TzEdI5Jb2VclkcjJtK9
+ kmjgMOK0z7GVadYQO5DlkuqxjgZoBESADf45NOjQ+s4ZH3gsulSiLr39u4SLzfON46
+ Ko7d6WKkLLTzkYKQKb01Ksqzza0PHwImHEDox9wo5b8a5kUtkFqKH6F/572WYh2gVJ
+ VgVOzVTzRUjq7vM7iQWm60L17nIzDdsOFY5XC7q61cARUXIQMkUPdIBksOlI5qcIAR
+ P5t+fni0adUQdAfI7uOtT9a56hAzMUgd48SyGN64RIZeByh71bc1iNwNB0xLSDUabk
+ szu1i5a1r3C+w==
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sat, 28 Aug 2021 16:04:18 +0200
+Date: Sat, 28 Aug 2021 16:04:18 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Arnout Vandecappelle <arnout@mind.be>
+Message-ID: <20210828140418.GM2661@scaer>
+References: <20210828130847.461996-1-yann.morin.1998@free.fr>
+ <fc83d0b8-928f-6cab-de86-7a58a4114445@mind.be>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <fc83d0b8-928f-6cab-de86-7a58a4114445@mind.be>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+Subject: Re: [Buildroot] [PATCH] package/fakedate: avoid recursion if not
+ first in the PATH
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,80 +85,38 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0fe536b797cc0ae11bd54ed7046cd39b73780c18
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Arnout, All,
 
-With BR2_REPRODUCIBLE, our 'fakedate' wrapper script will end up in
-host/bin/date. Currently, it iterates over all the 'date' found in PATH,
-until it finds one that is not the script itself, in an attempt to avoid
-infinite recursion by calling itself again and again.
+On 2021-08-28 15:57 +0200, Arnout Vandecappelle spake thusly:
+> On 28/08/2021 15:08, Yann E. MORIN wrote:
+[--SNIP--]
+> > We fix that by iterating, in reverse order, over all the 'date' we can
+> > find in PATH, and when we find ourselves, then we know the one we found
+> > in the iteration just before is the one that we should call.
+[--SNIP--]
+> > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+>  Applied to master, thanks.
 
-This heuristic works OK in Buildroot, because host/bin/ is first in the
-PATH, and so that means the first entry in the PATH is skipped.
+As discussed on IRC: s/master/next/
 
-However, this is going to fail as soon as our wrapper is not the first
-in the PATH. Indeed, in that situation, the current heuristic will stop
-on the first 'date' in the PATH, as it is not the script itself, and
-since our script was executed, that probably means the first 'date' was
-itself a wrapper that ended up calling us. So, calling it again will
-eventually trickle to calling us again, and thus creating the loop our
-heuristic was made to avoid.
+(Baruch will not have to worry we again messed up when pushing! ;-) )
 
-This situation currently does not occur in Buildroot, because host/bin/
-is first, *and* we have no package that provide their own 'date' wrapper
-during their build steps.
+Regards,
+Yann E. MORIN.
 
-But when we generate an SDK with BR2_REPRODUCIBLE, then our wrapper
-script will be in sdk/bin/, and there is no longer any guarantee this
-comes first in the PATH, thus opening the possibility that another
-buildsystem based on our SDK, but which has its own 'date' wrapper, will
-trigger this infinite recursion.
-
-We fix that by iterating, in reverse order, over all the 'date' we can
-find in PATH, and when we find ourselves, then we know the one we found
-in the iteration just before is the one that we should call.
-
-'which -a' is old enough that we can expect it to be always available;
-it has been present at least since Debian Squeeze, released 2011.
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/fakedate/fakedate | 14 ++++++--------
- 1 file changed, 6 insertions(+), 8 deletions(-)
-
-diff --git a/package/fakedate/fakedate b/package/fakedate/fakedate
-index a64d9b9cdf..9bef113357 100755
---- a/package/fakedate/fakedate
-+++ b/package/fakedate/fakedate
-@@ -19,15 +19,13 @@
- #
- 
- DATE_BIN=false
--# Do not call `date' directly since it will produce an infinite recursion.
--# Instead, find path of true `date' binary.
--for P in `echo $PATH | tr ':' ' '`; do
--    if [ -x "$P/date" ]; then
--        if ! [ "$P/date" -ef "$0" ]; then
--            DATE_BIN="$P/date"
--            break;
--        fi
-+# Do not call any 'date' before us in the PATH, or that would create
-+# an infinite recursion.
-+for date in $(which -a date |tac); do
-+    if [ "${date}" -ef "$0" ]; then
-+        break
-     fi
-+    DATE_BIN="${date}"
- done
- 
- if [ -n "$SOURCE_DATE_EPOCH" ]; then
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
