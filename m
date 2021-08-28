@@ -2,56 +2,57 @@ Return-Path: <SRS0=jfQC=N2=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7BC76C433F5
-	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 18:33:12 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0ECB0C433F5
+	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 18:33:25 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 4492B60F4C
-	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 18:33:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4492B60F4C
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
+	by mail.kernel.org (Postfix) with ESMTPS id C99D760F4C
+	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 18:33:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C99D760F4C
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 084F240167;
-	Sat,  4 Sep 2021 18:33:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9B00A8332A;
+	Sat,  4 Sep 2021 18:33:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lQAzgh3uXRUA; Sat,  4 Sep 2021 18:33:11 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id sY3kbpQbb0bO; Sat,  4 Sep 2021 18:33:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0FDF44017C;
-	Sat,  4 Sep 2021 18:33:10 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1283F1BF5DD
+	by smtp1.osuosl.org (Postfix) with ESMTP id CA2AE83122;
+	Sat,  4 Sep 2021 18:33:22 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 951A01BF5DD
  for <buildroot@lists.busybox.net>; Sat,  4 Sep 2021 18:25:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 639C0605B7
- for <buildroot@lists.busybox.net>; Sat,  4 Sep 2021 18:25:17 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6499282D7C
+ for <buildroot@lists.busybox.net>; Sat,  4 Sep 2021 18:25:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cz68nxqikBJq for <buildroot@lists.busybox.net>;
- Sat,  4 Sep 2021 18:25:16 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qmmT1FNmilsx for <buildroot@lists.busybox.net>;
+ Sat,  4 Sep 2021 18:25:18 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id BCD7F60751
- for <buildroot@buildroot.org>; Sat,  4 Sep 2021 18:25:16 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id CB9BA81D46
+ for <buildroot@buildroot.org>; Sat,  4 Sep 2021 18:25:18 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 861F18834C; Sat,  4 Sep 2021 18:23:54 +0000 (UTC)
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ id 94FD58834A; Sat,  4 Sep 2021 18:23:56 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Thu, 19 Aug 2021 22:34:30 +0200
+Date: Sat, 28 Aug 2021 22:17:31 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b3b610b72ea2bf865631dc92992fb87748814d4c
-X-Git-Newrev: c80fbf269c020c53a6140ffbf328d64674a8ada0
+X-Git-Oldrev: 8132216e0ecb1cd115ec9d1a211b967e5bda3054
+X-Git-Newrev: 040f75aa06829595ef8f3d9dea9382ba152ee34e
 X-Patchwork-Hint: ignore
-Message-Id: <20210904182354.861F18834C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/sdl2: bump version to 2.0.16
+Message-Id: <20210904182356.94FD58834A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/pkg-qmake.mk: Move
+ QT5_QT_CONF_FIXUP to post-prepare hook
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,41 +71,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c80fbf269c020c53a6140ffbf328d64674a8ada0
+commit: https://git.buildroot.net/buildroot/commit/?id=040f75aa06829595ef8f3d9dea9382ba152ee34e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Michael Fischer <mf@go-sys.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/sdl2/sdl2.hash | 6 +++---
- package/sdl2/sdl2.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+QT5_QT_CONF_FIXUP tweaks files for per-package directory build.
+This is typically the kind of operation expected to be in
+post-prepare hook.
 
-diff --git a/package/sdl2/sdl2.hash b/package/sdl2/sdl2.hash
-index 6b818fb002..6dee461258 100644
---- a/package/sdl2/sdl2.hash
-+++ b/package/sdl2/sdl2.hash
-@@ -1,4 +1,4 @@
--# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.0.14.tar.gz.sig
--sha256  d8215b571a581be1332d2106f8036fcb03d12a70bae01e20f424976d275432bc  SDL2-2.0.14.tar.gz
-+# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.0.16.tar.gz.sig
-+sha256  65be9ff6004034b5b2ce9927b5a4db1814930f169c4b2dae0a1e4697075f287b  SDL2-2.0.16.tar.gz
- # Locally calculated
--sha256  ae4df3759a726538607b84c00ab8f8a5567d9f38ad5397486eb9b5c5f626caef  COPYING.txt
-+sha256  52d41d0c82507721ca1fd92c20dc2bf9ca531b3a288ef845a8275c550f118804  LICENSE.txt
-diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
-index 5aad92eda8..0620c56062 100644
---- a/package/sdl2/sdl2.mk
-+++ b/package/sdl2/sdl2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/pkg-qmake.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/package/pkg-qmake.mk b/package/pkg-qmake.mk
+index a77286fe3a..deb033c1d6 100644
+--- a/package/pkg-qmake.mk
++++ b/package/pkg-qmake.mk
+@@ -56,13 +56,14 @@ $(2)_DEPENDENCIES 		+= host-perl
+ $(2)_PRE_CONFIGURE_HOOKS        += QT_HEADERS_SYNC_HOOK
+ endif
  
--SDL2_VERSION = 2.0.14
-+SDL2_VERSION = 2.0.16
- SDL2_SOURCE = SDL2-$(SDL2_VERSION).tar.gz
- SDL2_SITE = http://www.libsdl.org/release
- SDL2_LICENSE = Zlib
++$(2)_POST_PREPARE_HOOKS += QT5_QT_CONF_FIXUP
++
+ #
+ # Configure step. Only define it if not already defined by the package
+ # .mk file.
+ #
+ ifndef $(2)_CONFIGURE_CMDS
+ define $(2)_CONFIGURE_CMDS
+-	$$(QT5_QT_CONF_FIXUP)
+ 	cd $$($(2)_BUILDDIR) && \
+ 	$$(TARGET_MAKE_ENV) $$($(2)_CONF_ENV) $$(QT5_QMAKE) $$($(2)_CONF_OPTS)
+ endef
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
