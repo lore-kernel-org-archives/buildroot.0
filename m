@@ -2,69 +2,90 @@ Return-Path: <SRS0=/RLo=NT=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.5 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
+	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CB634C432BE
-	for <buildroot@archiver.kernel.org>; Sat, 28 Aug 2021 10:40:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A3BD1C432BE
+	for <buildroot@archiver.kernel.org>; Sat, 28 Aug 2021 10:58:29 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 5BC3460E73
-	for <buildroot@archiver.kernel.org>; Sat, 28 Aug 2021 10:40:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5BC3460E73
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=busybox.net
+	by mail.kernel.org (Postfix) with ESMTPS id 58A1D60E77
+	for <buildroot@archiver.kernel.org>; Sat, 28 Aug 2021 10:58:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 58A1D60E77
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 21275605AE;
-	Sat, 28 Aug 2021 10:40:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 14FA660720;
+	Sat, 28 Aug 2021 10:58:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qbqHPTXcv6-L; Sat, 28 Aug 2021 10:40:18 +0000 (UTC)
+	with ESMTP id uL-Tsdf6fDXr; Sat, 28 Aug 2021 10:58:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8800F606D3;
-	Sat, 28 Aug 2021 10:40:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 19EBE60724;
+	Sat, 28 Aug 2021 10:58:24 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B890F1BF4E7
- for <buildroot@lists.busybox.net>; Sat, 28 Aug 2021 10:40:15 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0973B1BF4E7
+ for <buildroot@lists.busybox.net>; Sat, 28 Aug 2021 10:58:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A8D4382D12
- for <buildroot@lists.busybox.net>; Sat, 28 Aug 2021 10:40:15 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 03D0783F2E
+ for <buildroot@lists.busybox.net>; Sat, 28 Aug 2021 10:58:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=heine.tech
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Db6-nsD_263o for <buildroot@lists.busybox.net>;
- Sat, 28 Aug 2021 10:40:10 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from mail.heine.tech (mail.heine.tech [IPv6:2a01:4f8:1c0c:5073::1])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4EB8982F8B
- for <buildroot@buildroot.org>; Sat, 28 Aug 2021 10:40:10 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 37A881814BD; Sat, 28 Aug 2021 12:40:04 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=heine.tech; s=dkim;
- t=1630147207; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding:content-language:in-reply-to:references;
- bh=Oyaqk55xuWP9AO/f4XUXoeuVbgiGr+81pcsDVHg4cS4=;
- b=dmu2sphaL9mEMfm8bE9hrvNMxqUUQmUHA/CYNMNYPmke+7BNzykJj5l7dgQxy19EOf2oBT
- mWJdP1swmPOwpgkU5+Ayo3XUKBADBen5cABMw96bbS6OTybxdg3MmaSi0WhFc/N0S1j71a
- IsEV8XWT+oOqdl/6HL2dJIepkJVUBf4=
-To: Arnout Vandecappelle <arnout@mind.be>, buildroot@buildroot.org
-References: <20210819131246.38791-1-buildroot@heine.tech>
- <4a826a55-5c43-23e4-9f5c-5851bee80f21@mind.be>
-Message-ID: <a3d324da-95e4-bad3-d125-9ce7818bdc2e@heine.tech>
-Date: Sat, 28 Aug 2021 12:40:02 +0200
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.13.0
+ with ESMTP id qLSUEHQ_VofB for <buildroot@lists.busybox.net>;
+ Sat, 28 Aug 2021 10:58:19 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
+ [IPv6:2a00:1450:4864:20::42c])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0959883F2B
+ for <buildroot@buildroot.org>; Sat, 28 Aug 2021 10:58:18 +0000 (UTC)
+Received: by mail-wr1-x42c.google.com with SMTP id i6so14488104wrv.2
+ for <buildroot@buildroot.org>; Sat, 28 Aug 2021 03:58:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=wICzGWnVKk/V4BStBo7fCcE5UWl1x+cBMXoo5H4+vn0=;
+ b=ml/hJ7T5m7IWGtss2LddvxPT1i39YoPExT48oqaaWRIOG7752avWd34RX0tsaW/7OI
+ mETAOrqiB/I5odNrUnOzABA/Wjq8hbh7sYu38WOsTvuM4RGedbWX2S/OHhMb0QK7kUKe
+ XA6miipEpvY8MFDZmf/QgXojDvpjNOaYWtrzSjSNtZpb9yT00cX4l/hxcjN4vae8UarW
+ aQSC3srGL2ZmdI6depYy/NIOl5knFnzjkURgFCw8wXoCUjh+6rroYItacPzya/vfZit/
+ xuYbODXIeJXPeB21Cucc0XFxlhLzB+w6vWUaLSt+anqm9ihtZRpr/N7v/h8Wudeca+Gf
+ iE/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=wICzGWnVKk/V4BStBo7fCcE5UWl1x+cBMXoo5H4+vn0=;
+ b=Fjfeb2FSpi2PA/1upJRHvZFJih+IIv29Z59aVtcFW6K1FmsBR2p/nTVjX9zSP5kwlO
+ KeogWvpogwW+PssTz/ps/rkQpCMFrBdDF1AkqxPbVZEM3IgGZeWl7qHWX0FtSSVLDgWZ
+ 7AItPqoQCO0/6PzPvTxI49pVCnrryUefHvAhDAaW2zR9xfcuaSs4GnojJ0e7GHWKcXUW
+ VdnPQusb/2xTgy4yKqkokkPJxAUeoHqdEbpFfv+QutZYpqn3XWd1ceAf6rBMixZnvVc9
+ A2uX5HPkjigbf4NHm6bQ23SpbOL5mAxMmr6jDNJpz1SaotiP2fKWND+rPco3Kpv9RkOI
+ NTWg==
+X-Gm-Message-State: AOAM533XK3ZWnJWZYDcCRZ3zKW+WnX/SKjArveoG5I2yp1BOTWCh3fJW
+ c34BsqltNLuG6YDcaMDZZhu5HPRNuV6h6w==
+X-Google-Smtp-Source: ABdhPJwgTXUiNXfnPxnfe3+nmK+9RisK+HT3xVTjK7Y0rD1Jm8yWGdGewVyN2S8QSf4VBfdqyszxVQ==
+X-Received: by 2002:adf:f889:: with SMTP id u9mr15326637wrp.67.1630148296959; 
+ Sat, 28 Aug 2021 03:58:16 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-417-221.w2-10.abo.wanadoo.fr.
+ [2.10.242.221])
+ by smtp.gmail.com with ESMTPSA id q11sm13790463wmc.41.2021.08.28.03.58.16
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 28 Aug 2021 03:58:16 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sat, 28 Aug 2021 12:58:07 +0200
+Message-Id: <20210828105807.781836-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-In-Reply-To: <4a826a55-5c43-23e4-9f5c-5851bee80f21@mind.be>
-Content-Language: en-US
-X-Last-TLS-Session-Version: TLSv1.3
-Subject: Re: [Buildroot] [PATCH v2] package/boost: bump version to 1.77.0
+Subject: [Buildroot] [PATCH/next 1/1] package/boost: fix sparc build
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,63 +97,65 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-From: Michael Nosthoff via buildroot <buildroot@busybox.net>
-Reply-To: Michael Nosthoff <buildroot@heine.tech>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>, Marcin Bis <marcin@bis.org.pl>,
- Bartosz Golaszewski <brgl@bgdev.pl>, Maxim Kochetkov <fido_max@inbox.ru>,
- Fabio Urquiza <fabiorush@gmail.com>, Romain Naour <romain.naour@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-Hi,
+Fix the following build failure on sparc raised since bump to version
+1.77.0 in commit d39d8f7cee9b4634e6f490020204f63fae419e8e:
 
-On 26.08.21 23:36, Arnout Vandecappelle wrote:
->   Applied to master, thanks. With a few more changes though:
->
->      [Arnout: improve propagation of reverse dependencies:
->       - also update comment of cc-tool;
->       - add boost-filesystem to reason of gnuradio, libcpprestsdk, uhd;
->       - move dependency to arch-deps of mongodb]
->
-> [snip]
-Thanks!
->> diff --git a/package/botan/Config.in b/package/botan/Config.in
->> index 341fa7c622..635fe1836d 100644
->> --- a/package/botan/Config.in
->> +++ b/package/botan/Config.in
->> @@ -18,8 +18,8 @@ config BR2_PACKAGE_BOTAN
->>   	depends on BR2_TOOLCHAIN_HAS_THREADS
->>   	depends on BR2_PACKAGE_BOTAN_ARCH_SUPPORTS
->>   	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::future
->> -	select BR2_PACKAGE_BOOST_FILESYSTEM if BR2_PACKAGE_BOOST
->> -	select BR2_PACKAGE_BOOST_SYSTEM if BR2_PACKAGE_BOOST
->> +	select BR2_PACKAGE_BOOST_FILESYSTEM if BR2_PACKAGE_BOOST && BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
->> +	select BR2_PACKAGE_BOOST_SYSTEM if BR2_PACKAGE_BOOST && BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
->   I suspect there might be a problem here. botan will build with boost as soon as
-> boost is enabled, even if lockfree atomic ints are not supported. So it's very
-> well possible that the build will fail on an architecture without them if you
-> select botan and boost (and not filesystem).
->
->   It may be sufficient to add BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
-> to the condition in botan.mk - but perhaps botan will automatically enable boost
-> if it is detected (even if no --with-boost is given). If so, the configure
-> script will have to be patched to add a --without-boost option so we can disable it.
->
->   Can you take a look? Or you could wait for autobuild failures for botan, but
-> since you're not a developer for botan you won't get mails for it.
->
->   I've applied without attempting a fix, but I'm pretty sure something will have
-> to be done.
+./boost/predef/architecture/sparc.h:37:38: error: missing ')' in expression
+   37 | #   if !defined(BOOST_ARCH_SPARC) && (defined(__sparcv9) || defined(__sparc_v9__)
+      |                                      ^
 
-I'll keep an eye on the autobuilder results and/or check the botan 
-package in more detail when I find the time.
+Fixes:
+ - http://autobuild.buildroot.org/results/c1f15e3a0cefb7e65e5288fb4564d59a3b06a0bd
 
-Regards,
-Michael
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ .../boost/0001-added-missing-brackets.patch   | 29 +++++++++++++++++++
+ 1 file changed, 29 insertions(+)
+ create mode 100644 package/boost/0001-added-missing-brackets.patch
 
+diff --git a/package/boost/0001-added-missing-brackets.patch b/package/boost/0001-added-missing-brackets.patch
+new file mode 100644
+index 0000000000..1a2d5e67ec
+--- /dev/null
++++ b/package/boost/0001-added-missing-brackets.patch
+@@ -0,0 +1,29 @@
++From 1be0e4a2d8db15a405f64a6f65507b87c1be7e1a Mon Sep 17 00:00:00 2001
++From: tkoecker <tkoecker@gmx.net>
++Date: Fri, 21 May 2021 16:31:11 +0200
++Subject: [PATCH] added missing brackets (#118)
++
++[Retrieved from:
++https://github.com/boostorg/predef/commit/1be0e4a2d8db15a405f64a6f65507b87c1be7e1a]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ include/boost/predef/architecture/sparc.h | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/boost/predef/architecture/sparc.h b/boost/predef/architecture/sparc.h
++index d7b94f0..d01605e 100644
++--- a/boost/predef/architecture/sparc.h
+++++ b//boost/predef/architecture/sparc.h
++@@ -34,10 +34,10 @@ Distributed under the Boost Software License, Version 1.0.
++ 
++ #if defined(__sparc__) || defined(__sparc)
++ #   undef BOOST_ARCH_SPARC
++-#   if !defined(BOOST_ARCH_SPARC) && (defined(__sparcv9) || defined(__sparc_v9__)
+++#   if !defined(BOOST_ARCH_SPARC) && (defined(__sparcv9) || defined(__sparc_v9__))
++ #       define BOOST_ARCH_SPARC BOOST_VERSION_NUMBER(9,0,0)
++ #   endif
++-#   if !defined(BOOST_ARCH_SPARC) && (defined(__sparcv8) || defined(__sparc_v8__)
+++#   if !defined(BOOST_ARCH_SPARC) && (defined(__sparcv8) || defined(__sparc_v8__))
++ #       define BOOST_ARCH_SPARC BOOST_VERSION_NUMBER(8,0,0)
++ #   endif
++ #   if !defined(BOOST_ARCH_SPARC)
+-- 
+2.32.0
 
 _______________________________________________
 buildroot mailing list
