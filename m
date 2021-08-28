@@ -2,78 +2,77 @@ Return-Path: <SRS0=/RLo=NT=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.0 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C2C3C432BE
-	for <buildroot@archiver.kernel.org>; Sat, 28 Aug 2021 20:19:58 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 817D3C432BE
+	for <buildroot@archiver.kernel.org>; Sat, 28 Aug 2021 20:47:44 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id E4B3460EB3
-	for <buildroot@archiver.kernel.org>; Sat, 28 Aug 2021 20:19:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E4B3460EB3
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
+	by mail.kernel.org (Postfix) with ESMTPS id D78FA60E90
+	for <buildroot@archiver.kernel.org>; Sat, 28 Aug 2021 20:47:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D78FA60E90
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=grenoble.cnrs.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BFD3840228;
-	Sat, 28 Aug 2021 20:19:57 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9491940025;
+	Sat, 28 Aug 2021 20:47:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3Qyn8wggeimr; Sat, 28 Aug 2021 20:19:53 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7319940264;
-	Sat, 28 Aug 2021 20:19:52 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B2DF21BF3E5
- for <buildroot@lists.busybox.net>; Sat, 28 Aug 2021 20:19:45 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9E815402A8
- for <buildroot@lists.busybox.net>; Sat, 28 Aug 2021 20:19:45 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jkob6s12qXdX for <buildroot@lists.busybox.net>;
- Sat, 28 Aug 2021 20:19:40 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1536540295
- for <buildroot@buildroot.org>; Sat, 28 Aug 2021 20:19:38 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:c0ce:7c4d:7a73:f3f6])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id D936F780316;
- Sat, 28 Aug 2021 22:19:21 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1630181976;
- bh=Gtk/dIPBGV645IwWvuJS6d882RrWRSGc3XXYr/8ZWFI=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=sW9L9KNZCorzYILqzi3kclFJUIrsJpwEmsGnK8dnSvqNCLlF1cf9B3qTjlubzBGx2
- tWWPPWc8QF1aYXLY5OXd+GvNjnFvrBVRHb/1Ty5R5DuIKNwdWVB6zyB40ypwrG9Bm1
- tYQXuSvWXS8wGuiOAtJEKhArkKKgqBMPy5Pe6WU8Z7suQPURDPxEGsBDwLIZ7sjnx7
- 5DH/9orhJU1MBlD9PF7L366IINI+wGeJkMzWbdszSYq9uo0nfWpEfZRNJKVvMnh+bT
- sOt3OzIjh2TZNTOU+iIDCL6nJ3FE6POPbIOKLpt4ztRH0z+OkfxFlD0MJh3u6hrUKz
- lXceM03Nlnzbw==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 28 Aug 2021 22:19:21 +0200
-Date: Sat, 28 Aug 2021 22:19:21 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Herve Codina <herve.codina@bootlin.com>
-Message-ID: <20210828201921.GR2661@scaer>
-References: <20210817083930.3718711-1-herve.codina@bootlin.com>
- <20210817083930.3718711-7-herve.codina@bootlin.com>
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ZCxbPKxbbHSb; Sat, 28 Aug 2021 20:47:40 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id F03DA400EB;
+	Sat, 28 Aug 2021 20:47:38 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id E91371BF3E5
+ for <buildroot@lists.busybox.net>; Sat, 28 Aug 2021 20:47:36 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id C9C3082BF5
+ for <buildroot@lists.busybox.net>; Sat, 28 Aug 2021 20:47:36 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=grenoble.cnrs.fr
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HqjSwnTF7bua for <buildroot@lists.busybox.net>;
+ Sat, 28 Aug 2021 20:47:32 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from mailgw-out1.grenoble.cnrs.fr (mailgw-out1.grenoble.cnrs.fr
+ [147.173.1.68])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E70F082BE7
+ for <buildroot@busybox.net>; Sat, 28 Aug 2021 20:47:31 +0000 (UTC)
+Received: from [IPv6:2a01:e0a:947:6e20:5479:30c4:413d:7107] (unknown
+ [IPv6:2a01:e0a:947:6e20:5479:30c4:413d:7107])
+ (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+ (No client certificate requested)
+ by mailgw-out1.grenoble.cnrs.fr (Postfix) with ESMTPSA id BED08BFD72
+ for <buildroot@busybox.net>; Sat, 28 Aug 2021 22:47:28 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=grenoble.cnrs.fr;
+ s=202106-grenoble.cnrs.fr; t=1630183648;
+ bh=62nVkYyGBc5rJeWQrIif21DUx5kGp6O8aynZOlNXsxA=;
+ h=Subject:To:References:From:Date:In-Reply-To:From;
+ b=kThXT0BFA8RuASXv0/pfvb1gID8f5tgpY1UrFAP85zxaez8LCUx18M5Hp6R5DTdq9
+ YT09GR/99l1dL9cM8ZZ+lFOu17F3i5dKEq7SCPWwHzZ6qu3RKJaFJXdKmF0qqk/1AL
+ 93wizR2bhmvdHTZF+nBNbT5xGAu5qU4htGnGWw7aJUS01dU1CE+t+O82vMnrhF79+u
+ c76YlTTT6bfA3TVe/R2BOtfjiBEtyEr1f90QcrB3mwFtk92XCvWOOEFV30ksqGbSrJ
+ d2D6Gx2WNLzPHbeu8FyLBE7Dp1oLu/BRL5fWMXerM9YLGfDgoOZK06w79FqYXWOZkQ
+ SHWpz+b21OJHw==
+To: buildroot@busybox.net
+References: <20210828070547.B424F615B6@smtp3.osuosl.org>
+From: Edgar Bonet <bonet@grenoble.cnrs.fr>
+Message-ID: <2fbac2fa-041c-8c84-6c05-96a670cc8a8a@grenoble.cnrs.fr>
+Date: Sat, 28 Aug 2021 22:47:26 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20210817083930.3718711-7-herve.codina@bootlin.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH v3 06/16] package/pkg-qmake.mk: Move
- QT5_QT_CONF_FIXUP to post-prepare hook
+In-Reply-To: <20210828070547.B424F615B6@smtp3.osuosl.org>
+Content-Language: en-US
+Subject: Re: [Buildroot] [autobuild.buildroot.net] Daily results for
+ 2021-08-27
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,50 +84,64 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Naumann Andreas <ANaumann@ultratronik.de>,
- Peter Seiderer <ps.report@gmx.net>, Julien Corjon <corjon.j@ecagroup.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org,
- Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-SGVydsOpLCBBbGwsCgpPbiAyMDIxLTA4LTE3IDEwOjM5ICswMjAwLCBIZXJ2ZSBDb2RpbmEgc3Bh
-a2UgdGh1c2x5Ogo+IFFUNV9RVF9DT05GX0ZJWFVQIHR3ZWFrcyBmaWxlcyBmb3IgcGVyLXBhY2th
-Z2UgZGlyZWN0b3J5IGJ1aWxkLgo+IFRoaXMgaXMgdHlwaWNhbGx5IHRoZSBraW5kIG9mIG9wZXJh
-dGlvbiBleHBlY3RlZCB0byBiZSBpbgo+IHBvc3QtcHJlcGFyZSBob29rLgo+IAo+IFNpZ25lZC1v
-ZmYtYnk6IEhlcnZlIENvZGluYSA8aGVydmUuY29kaW5hQGJvb3RsaW4uY29tPgoKQXBwbGllZCB0
-byBuZXh0LCB0aGFua3MuCgpSZWdhcmRzLApZYW5uIEUuIE1PUklOLgoKPiAtLS0KPiBOZXcgcGF0
-Y2ggaW4gdGhpcyB2MyBzZXJpZXMuCj4gQXMgc2FpZCBwcmV2aW91c2x5IGluCj4gaHR0cHM6Ly9s
-b3JlLmtlcm5lbC5vcmcvYnVpbGRyb290L2IxZDBjNWE1LWY3NmYtZTM4ZS0wMjU3LTEzMDBmNmEz
-MGVhYkBhbmRpbi5kZS8KPiBUaGlzIHBhdGNoIG1vdmVzIFF0NSBmaXh1cCB0byA8UEtHPl9QT1NU
-X1BSRVBBUkVfSE9PS1MgKG9sZCA8UEtHPl9QRVJfUEFDS0FHRV9UV0VBS19IT09LUwo+IG1lbnRp
-b25lZCBpbiBkaXNjdXNzaW9uKS4KPiAKPiAgcGFja2FnZS9wa2ctcW1ha2UubWsgfCAzICsrLQo+
-ICAxIGZpbGUgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0pCj4gCj4gZGlm
-ZiAtLWdpdCBhL3BhY2thZ2UvcGtnLXFtYWtlLm1rIGIvcGFja2FnZS9wa2ctcW1ha2UubWsKPiBp
-bmRleCBhNzcyODZmZTNhLi5kZWIwMzNjMWQ2IDEwMDY0NAo+IC0tLSBhL3BhY2thZ2UvcGtnLXFt
-YWtlLm1rCj4gKysrIGIvcGFja2FnZS9wa2ctcW1ha2UubWsKPiBAQCAtNTYsMTMgKzU2LDE0IEBA
-ICQoMilfREVQRU5ERU5DSUVTIAkJKz0gaG9zdC1wZXJsCj4gICQoMilfUFJFX0NPTkZJR1VSRV9I
-T09LUyAgICAgICAgKz0gUVRfSEVBREVSU19TWU5DX0hPT0sKPiAgZW5kaWYKPiAgCj4gKyQoMilf
-UE9TVF9QUkVQQVJFX0hPT0tTICs9IFFUNV9RVF9DT05GX0ZJWFVQCj4gKwo+ICAjCj4gICMgQ29u
-ZmlndXJlIHN0ZXAuIE9ubHkgZGVmaW5lIGl0IGlmIG5vdCBhbHJlYWR5IGRlZmluZWQgYnkgdGhl
-IHBhY2thZ2UKPiAgIyAubWsgZmlsZS4KPiAgIwo+ICBpZm5kZWYgJCgyKV9DT05GSUdVUkVfQ01E
-Uwo+ICBkZWZpbmUgJCgyKV9DT05GSUdVUkVfQ01EUwo+IC0JJCQoUVQ1X1FUX0NPTkZfRklYVVAp
-Cj4gIAljZCAkJCgkKDIpX0JVSUxERElSKSAmJiBcCj4gIAkkJChUQVJHRVRfTUFLRV9FTlYpICQk
-KCQoMilfQ09ORl9FTlYpICQkKFFUNV9RTUFLRSkgJCQoJCgyKV9DT05GX09QVFMpCj4gIGVuZGVm
-Cj4gLS0gCj4gMi4zMS4xCj4gCj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX18KPiBidWlsZHJvb3QgbWFpbGluZyBsaXN0Cj4gYnVpbGRyb290QGJ1c3lib3gu
-bmV0Cj4gaHR0cDovL2xpc3RzLmJ1c3lib3gubmV0L21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290
-CgotLSAKLi0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0t
-LS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0tLS4KfCAgWWFubiBFLiBNT1JJTiAgfCBSZWFsLVRp
-bWUgRW1iZWRkZWQgfCAvIlwgQVNDSUkgUklCQk9OIHwgRXJpY3MnIGNvbnNwaXJhY3k6IHwKfCAr
-MzMgNjYyIDM3NiAwNTYgfCBTb2Z0d2FyZSAgRGVzaWduZXIgfCBcIC8gQ0FNUEFJR04gICAgIHwg
-IF9fXyAgICAgICAgICAgICAgIHwKfCArMzMgNTYxIDA5OSA0MjcgYC0tLS0tLS0tLS0tLS4tLS0t
-LS0tOiAgWCAgQUdBSU5TVCAgICAgIHwgIFxlLyAgVGhlcmUgaXMgbm8gIHwKfCBodHRwOi8veW1v
-cmluLmlzLWEtZ2Vlay5vcmcvIHwgXy8qXF8gfCAvIFwgSFRNTCBNQUlMICAgIHwgICB2ICAgY29u
-c3BpcmFjeS4gIHwKJy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0tXi0tLS0t
-LS0tLS0tLS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0tLS0tLScKX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJv
-b3RAYnVzeWJveC5uZXQKaHR0cDovL2xpc3RzLmJ1c3lib3gubmV0L21haWxtYW4vbGlzdGluZm8v
-YnVpbGRyb290Cg==
+Hello!
+
+This morning, the autobuilder wrote:
+> Detail of defconfig failures for master [...]
+
+I took a look at these failures: some of them are known issues.
+
+>    acmesystems_aria_g25_128mb | https://gitlab.com/buildroot.org/buildroot/-/jobs/1536008767
+>    acmesystems_aria_g25_256mb | https://gitlab.com/buildroot.org/buildroot/-/jobs/1536008768
+> acmesystems_arietta_g25_128mb | https://gitlab.com/buildroot.org/buildroot/-/jobs/1536008770
+> acmesystems_arietta_g25_256mb | https://gitlab.com/buildroot.org/buildroot/-/jobs/1536008771
+
+These have been fixed yesterday in commit
+eaece8645b6fb6cbaef6ae8ac6aeacaaa7ced20c, but the tests above ran before
+the fix was committed.
+
+>     microchip_sama5d2_icp_mmc | https://gitlab.com/buildroot.org/buildroot/-/jobs/1536008997
+> microchip_sama5d2_icp_mmc_dev | https://gitlab.com/buildroot.org/buildroot/-/jobs/1536008999
+
+This is a bug in AT91Bootstrap[1] that was fixed, for the defconfigs
+using AT91Bootstrap 3, by upgrading to v3.10.3. C.f. commits
+0744eef34d836bc8ef086ed657377bc15ed753a9,
+0614f435a09e99c33f418a646eaa7647944c2f4c and
+8ac2e5e46fd38b2da8cc292587e91d7b3d4710bf.
+
+The two defconfigs above use AT91Bootstrap v4.0.0-rc2, which has the
+same bug (in the 4.x branch, it was fixed between v4.0.0-rc3 and
+v4.0.0-rc4). These failures can be fixed by upgrading to the final
+release of AT91Bootstrap, namely v4.0.0.
+
+>   microchip_sam9x60ek_mmc_dev | https://gitlab.com/buildroot.org/buildroot/-/jobs/1536008989
+
+This fails with the message:
+
+    mkfs.ext4: Could not allocate block in ext2 filesystem while
+    populating file system
+    Maybe you need to increase the filesystem size
+    (BR2_TARGET_ROOTFS_EXT2_SIZE)
+
+And indeed, adding
+
+    BR2_TARGET_ROOTFS_EXT2_SIZE="100M"
+
+fixes the failure.
+
+I could submit patches, but I cannot test the generated images.
+
+Regards,
+
+Edgar Bonet.
+
+[1] https://github.com/linux4sam/at91bootstrap/issues/127
+_______________________________________________
+buildroot mailing list
+buildroot@busybox.net
+http://lists.busybox.net/mailman/listinfo/buildroot
