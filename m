@@ -2,67 +2,69 @@ Return-Path: <SRS0=/RLo=NT=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,
 	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,TVD_SPACE_RATIO,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 75814C432BE
-	for <buildroot@archiver.kernel.org>; Sat, 28 Aug 2021 08:32:45 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 39059C432BE
+	for <buildroot@archiver.kernel.org>; Sat, 28 Aug 2021 08:40:16 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1FD1761101
-	for <buildroot@archiver.kernel.org>; Sat, 28 Aug 2021 08:32:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1FD1761101
+	by mail.kernel.org (Postfix) with ESMTPS id BC53261107
+	for <buildroot@archiver.kernel.org>; Sat, 28 Aug 2021 08:40:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org BC53261107
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=t-online.de
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DCABC400FE;
-	Sat, 28 Aug 2021 08:32:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 886416074B;
+	Sat, 28 Aug 2021 08:40:15 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id bv-1YqfQ-CJY; Sat, 28 Aug 2021 08:40:11 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id E774E6166B;
+	Sat, 28 Aug 2021 08:40:10 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id DE7B41BF30A
+ for <buildroot@lists.busybox.net>; Sat, 28 Aug 2021 08:40:09 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id CB4A940247
+ for <buildroot@lists.busybox.net>; Sat, 28 Aug 2021 08:40:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ymcjjvM7x7ot; Sat, 28 Aug 2021 08:32:41 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 32BAB40165;
-	Sat, 28 Aug 2021 08:32:40 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 08FB51BF30A
- for <buildroot@lists.busybox.net>; Sat, 28 Aug 2021 08:32:39 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 05AA583F0C
- for <buildroot@lists.busybox.net>; Sat, 28 Aug 2021 08:32:39 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nQEHy5fmacRS for <buildroot@lists.busybox.net>;
- Sat, 28 Aug 2021 08:32:34 +0000 (UTC)
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 081XT8xd1WrM for <buildroot@lists.busybox.net>;
+ Sat, 28 Aug 2021 08:40:05 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mailout11.t-online.de (mailout11.t-online.de [194.25.134.85])
- by smtp1.osuosl.org (Postfix) with ESMTPS id DEA9C83EE9
- for <buildroot@buildroot.org>; Sat, 28 Aug 2021 08:32:33 +0000 (UTC)
-Received: from fwd34.aul.t-online.de (fwd34.aul.t-online.de [172.20.26.145])
- by mailout11.t-online.de (Postfix) with SMTP id D5298338E
- for <buildroot@buildroot.org>; Sat, 28 Aug 2021 10:32:07 +0200 (CEST)
+Received: from mailout05.t-online.de (mailout05.t-online.de [194.25.134.82])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0EEC3400FE
+ for <buildroot@buildroot.org>; Sat, 28 Aug 2021 08:40:04 +0000 (UTC)
+Received: from fwd15.aul.t-online.de (fwd15.aul.t-online.de [172.20.27.63])
+ by mailout05.t-online.de (Postfix) with SMTP id BB648161D5
+ for <buildroot@buildroot.org>; Sat, 28 Aug 2021 10:40:02 +0200 (CEST)
 Received: from fli4l.lan.fli4l
- (TtMjJiZdrh-OypiBSnZ3u+SMQBHPKsZglOpwp-ZOJ71pxORq2Y4V5OvVjRT17OuZU5@[79.214.206.166])
- by fwd34.t-online.de with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1mJtl1-0jqUYS0; Sat, 28 Aug 2021 10:32:07 +0200
-Received: from mahler.lan.fli4l ([192.168.1.1]:37694)
+ (SmYMAOZZrhVSDtJk3nfm1O9lGLIMreJ0AuRemFxUQGtV3Oynay24v1X0g6ZCoJuZSD@[79.214.206.166])
+ by fwd15.t-online.de with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
+ esmtp id 1mJtsg-0JM1Qm0; Sat, 28 Aug 2021 10:40:02 +0200
+Received: from mahler.lan.fli4l ([192.168.1.1]:37696)
  by fli4l.lan.fli4l with esmtp (Exim 4.94.2)
- (envelope-from <bernd.kuhls@t-online.de>) id 1mJtl1-0001Up-3P
- for buildroot@buildroot.org; Sat, 28 Aug 2021 10:32:07 +0200
+ (envelope-from <bernd.kuhls@t-online.de>) id 1mJtsf-0002pD-RA
+ for buildroot@buildroot.org; Sat, 28 Aug 2021 10:40:02 +0200
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Sat, 28 Aug 2021 10:32:06 +0200
-Message-Id: <20210828083207.670611-1-bernd.kuhls@t-online.de>
+Date: Sat, 28 Aug 2021 10:39:59 +0200
+Message-Id: <20210828084001.673394-1-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-ID: TtMjJiZdrh-OypiBSnZ3u+SMQBHPKsZglOpwp-ZOJ71pxORq2Y4V5OvVjRT17OuZU5
-X-TOI-EXPURGATEID: 150726::1630139527-000126A7-8E015231/0/0 CLEAN NORMAL
-X-TOI-MSGID: 3bbd5969-9565-4257-8f35-c06a013622e9
-Subject: [Buildroot] [PATCH/next 1/2] package/dovecot: bump version to 2.3.16
+X-ID: SmYMAOZZrhVSDtJk3nfm1O9lGLIMreJ0AuRemFxUQGtV3Oynay24v1X0g6ZCoJuZSD
+X-TOI-EXPURGATEID: 150726::1630140002-0001577D-A0EF5262/0/0 CLEAN NORMAL
+X-TOI-MSGID: f9fba94f-4e10-4e5b-8aa5-eb02927a2e15
+Subject: [Buildroot] [PATCH/next 1/3] package/kodi-audiodecoder-nosefart:
+ bump version to 19.0.0-Matrix
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,38 +82,36 @@ Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
 Release notes:
-https://dovecot.org/pipermail/dovecot-news/2021-August/000463.html
+https://github.com/xbmc/audiodecoder.nosefart/releases/tag/19.0.0-Matrix
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/dovecot/dovecot.hash | 2 +-
- package/dovecot/dovecot.mk   | 2 +-
+ .../kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.hash  | 2 +-
+ .../kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.mk    | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/dovecot/dovecot.hash b/package/dovecot/dovecot.hash
-index cd314cf0dd..c7cbf46e47 100644
---- a/package/dovecot/dovecot.hash
-+++ b/package/dovecot/dovecot.hash
-@@ -1,5 +1,5 @@
- # Locally computed after checking signature
--sha256  21bbdd5d45957a99133de8b7e71813ecb73d9476c89dfc63479e9102b3553590  dovecot-2.3.15.tar.gz
-+sha256  03a71d53055bd9ec528d55e07afaf15c09dec9856cba734904bfd05acbc6cf12  dovecot-2.3.16.tar.gz
- sha256  319a9830aab406109cd67cb45496587566a8123203d66d037b209ca3e13de02a  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
- sha256  52b8c95fabb19575281874b661ef7968ea47e8f5d74ba0dd40ce512e52b3fc97  COPYING.MIT
-diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
-index 62499061f2..cd637f19a1 100644
---- a/package/dovecot/dovecot.mk
-+++ b/package/dovecot/dovecot.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.hash b/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.hash
+index 9f929d9f82..61507e8229 100644
+--- a/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.hash
++++ b/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  a4be5f6efc46841c9b1689c91b06f69cd695220b583e62ed2948768fa93d09a2  kodi-audiodecoder-nosefart-3.0.0-Matrix.tar.gz
++sha256  4975c65b5acd002cf772707170e54bcbcc48d7898dd2e6b4239bab56636b44e7  kodi-audiodecoder-nosefart-19.0.0-Matrix.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.mk b/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.mk
+index 377f6b7ef1..91be43c580 100644
+--- a/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.mk
++++ b/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- DOVECOT_VERSION_MAJOR = 2.3
--DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).15
-+DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).16
- DOVECOT_SITE = https://dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
- DOVECOT_INSTALL_STAGING = YES
- DOVECOT_LICENSE = LGPL-2.1, MIT, Public Domain, BSD-3-Clause, Unicode-DFS-2015
+-KODI_AUDIODECODER_NOSEFART_VERSION = 3.0.0-Matrix
++KODI_AUDIODECODER_NOSEFART_VERSION = 19.0.0-Matrix
+ KODI_AUDIODECODER_NOSEFART_SITE = $(call github,xbmc,audiodecoder.nosefart,$(KODI_AUDIODECODER_NOSEFART_VERSION))
+ KODI_AUDIODECODER_NOSEFART_LICENSE = GPL-2.0+
+ KODI_AUDIODECODER_NOSEFART_LICENSE_FILES = LICENSE.md
 -- 
 2.30.2
 
