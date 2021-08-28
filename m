@@ -2,77 +2,95 @@ Return-Path: <SRS0=/RLo=NT=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-15.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 81EAAC432BE
-	for <buildroot@archiver.kernel.org>; Sat, 28 Aug 2021 14:47:44 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A630C432BE
+	for <buildroot@archiver.kernel.org>; Sat, 28 Aug 2021 14:58:09 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1D46F60EBC
-	for <buildroot@archiver.kernel.org>; Sat, 28 Aug 2021 14:47:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1D46F60EBC
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
+	by mail.kernel.org (Postfix) with ESMTPS id 5156B60E77
+	for <buildroot@archiver.kernel.org>; Sat, 28 Aug 2021 14:58:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5156B60E77
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DDE9260689;
-	Sat, 28 Aug 2021 14:47:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0EE6A835C9;
+	Sat, 28 Aug 2021 14:58:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5ziQZagh3JWU; Sat, 28 Aug 2021 14:47:40 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id esx8YtA6j_uE; Sat, 28 Aug 2021 14:58:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 727D260699;
-	Sat, 28 Aug 2021 14:47:39 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6AB681BF37B
- for <buildroot@lists.busybox.net>; Sat, 28 Aug 2021 14:47:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 76D4D835D9;
+	Sat, 28 Aug 2021 14:58:03 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 4B7AB1BF37B
+ for <buildroot@lists.busybox.net>; Sat, 28 Aug 2021 14:58:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 66F0A407E9
- for <buildroot@lists.busybox.net>; Sat, 28 Aug 2021 14:47:36 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 44783835D9
+ for <buildroot@lists.busybox.net>; Sat, 28 Aug 2021 14:58:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aTcW8iiEwTFp for <buildroot@lists.busybox.net>;
- Sat, 28 Aug 2021 14:47:30 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3D09A402B5
- for <buildroot@buildroot.org>; Sat, 28 Aug 2021 14:47:29 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:c0ce:7c4d:7a73:f3f6])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id 8A47F780304;
- Sat, 28 Aug 2021 16:47:08 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1630162046;
- bh=Aa++OwInTJdZmuxzKCj2pZMW5Mac9zLKvplHfo+xjHI=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=P6S3mhaRkiWQ20sgYCRUcUgRwseWs2Yni9Fq0twQF0rzITNHNp1u6wRk0f5+H/N/D
- aC2S3RGPtl4tj+fTKRDuv+boadYy4/Uq6lKsUBU8ui63F0Bjcwo/mOkmfviTuiCAJh
- 5NV7BocOB6yVto2MTJtcd6Q1JGaIoKKqBxYO8MDz9dM5M/YDIHb2r7kH2b+hqWWUCi
- dhPadfPV1h2rRF6Y4Pd86ug+lJtszjXK9qQdIEm+y+oWNjfik7BXOysFFlDfkol+KF
- nIyZc5megd5NCGDsAfD7n+SWsjZU8/tlfChI//wic/Hr7cb53Q60qrrxK78ROCvrWz
- olvjp9EsPqz9Q==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 28 Aug 2021 16:47:08 +0200
-Date: Sat, 28 Aug 2021 16:47:08 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Herve Codina <herve.codina@bootlin.com>
-Message-ID: <20210828144708.GN2661@scaer>
-References: <20210817083930.3718711-1-herve.codina@bootlin.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OvYhiTc2hMQi for <buildroot@lists.busybox.net>;
+ Sat, 28 Aug 2021 14:57:57 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
+ [IPv6:2a00:1450:4864:20::432])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3FE9A835C9
+ for <buildroot@buildroot.org>; Sat, 28 Aug 2021 14:57:56 +0000 (UTC)
+Received: by mail-wr1-x432.google.com with SMTP id u16so15183356wrn.5
+ for <buildroot@buildroot.org>; Sat, 28 Aug 2021 07:57:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=subject:to:cc:references:from:organization:message-id:date
+ :user-agent:mime-version:in-reply-to:content-language
+ :content-transfer-encoding;
+ bh=NV7AIxnk1nSGYJHm4k5I7l1DV+Xn7BGMLb1F64tXKJo=;
+ b=WDcJOab4WCSSgc9l4b0bchLHvL5eK0aio4pE/FhZcn5BeELbFSMjvM3yK2dzRcXpjw
+ BdImnug01oS47pk5OuziaXsqwGe0s/pYVReRLYakreMhl9vZXNp5WbmqbUiAB0qoibiz
+ ipW3KOW3QMt0EoIVJP0u31GNhUpHEmVQlgwPRwCq8xfcPsMtH6LZnjodwWAjM8e3dSnI
+ H7Qkabb/ryXbcw1LRK2C1yCg+ImHhOEVwtb4K0wJ8pm5RLdp1FmR0L9Fv865ATYJUwsa
+ OIe+/GBG2IMmhL+UrQsL6YsIVYc7aqQ/nylMgxqoPsW1qJTnB2BVhYWvictjMXricN+h
+ jGpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:subject:to:cc:references:from:organization
+ :message-id:date:user-agent:mime-version:in-reply-to
+ :content-language:content-transfer-encoding;
+ bh=NV7AIxnk1nSGYJHm4k5I7l1DV+Xn7BGMLb1F64tXKJo=;
+ b=lpP+DtQtH/QIeDFHUbGoSbcRBkpWc/LGWZFytCAOjMvpSaRPU7QqWEHy1JXuOd3YZd
+ rkv6Ir8x9NrQfbcpAqh4UuuwI8GH3eRLoxdmqc2Vi/9i1B7ns5J+Tu2zDVxrUm1PSr+V
+ c0rn8ECSUro8PN1v5LhIH93tNumpakTUTjT5cb9w2M1l4veTSKxm2VFEVW5Ch9Z5nz8H
+ ZDHQ+fXVaSsVsLTybP3HdwhkSixO3lwTt2QtNaeHL5i1bG1VJfCZgdruFwMSMq0tinMy
+ pMaEva6C0o5W6gLkHgtRoL6lKBK2vZoZj+TpY/W8hMlv6CZK/2fKpBOxRIBFpF9722bV
+ 0lbw==
+X-Gm-Message-State: AOAM533+wY4wHMyvplPMAdVH/46+sugXqxMpt3nZXl6EGoarOUN0sWDR
+ UVScUg/mm5Z6Ct+aUZPDfu6DlQ==
+X-Google-Smtp-Source: ABdhPJzqScDRNtg0OVDLG1d2XuOuPggHkjb3Buv80KLjfebooSmcuD3IYAYTGuLLbagPret+05yhgw==
+X-Received: by 2002:adf:e4c5:: with SMTP id v5mr16704549wrm.1.1630162675027;
+ Sat, 28 Aug 2021 07:57:55 -0700 (PDT)
+Received: from [10.73.0.168] ([213.219.130.152])
+ by smtp.gmail.com with ESMTPSA id z14sm1780846wmi.24.2021.08.28.07.57.54
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sat, 28 Aug 2021 07:57:54 -0700 (PDT)
+To: Yauheni Saldatsenka <eugentoo@gmail.com>, buildroot@buildroot.org
+References: <20210825181858.801574-1-eugentoo@gmail.com>
+ <20210825181858.801574-2-eugentoo@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+Message-ID: <a0e8c46c-16ad-5b31-832b-377dda07ef0c@mind.be>
+Date: Sat, 28 Aug 2021 16:57:54 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20210817083930.3718711-1-herve.codina@bootlin.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH v3 00/16] Overwritten file detection and
- fixes, one more step to TLP build
+In-Reply-To: <20210825181858.801574-2-eugentoo@gmail.com>
+Content-Language: en-GB
+Subject: Re: [Buildroot] [PATCH 2/3] [PATCH v2 1/1]
+ configs/stm32f469_disco_xip_defconfig: alternative defconfig for XIP
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,108 +102,262 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Naumann Andreas <ANaumann@ultratronik.de>,
- Peter Seiderer <ps.report@gmx.net>, Julien Corjon <corjon.j@ecagroup.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org,
- Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Christophe Priouzeau <christophe.priouzeau@foss.st.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-SGVydsOpLCBBbGwsCgpPbiAyMDIxLTA4LTE3IDEwOjM5ICswMjAwLCBIZXJ2ZSBDb2RpbmEgc3Bh
-a2UgdGh1c2x5Ogo+IFRoaXMgdjMgc2VyaWVzIGFkZHMgYSBuZXcgcGF0Y2ggKHBhdGNoIDEpIHRv
-IGZpeCBhIGZpbmQgZmFpbHVyZSBhbHJlYWR5IHByZXNlbnQKPiBpbiBQS0dfUFlUSE9OX0ZJWFVQ
-X1NZU0NPTkZJRyB0aGF0IHdhcyBoaWdobGlnaHRlZCBpbiB0aGUgcHJldmlvdXMgdmVyc2lvbgo+
-IG9mIHRoaXMgc2VyaWVzLgo+IEl0IGFsc28gcmV3b3JrcyB0aGUgcHl0aG9uIGZpeHVwIGFjY29y
-ZGluZyB0byBwcmV2aW91cyByZXZpZXcgKHBhdGNoZXMgMiBhbmQgMykKPiBhbmQgZml4ZXMgdGhl
-IHRlc3QgZ2l2ZW4gaW4gcGF0Y2ggMTIuCj4gCj4gVHdvIHBhdGNoZXMgYXJlIGFkZGVkIHJlbGF0
-ZWQgdG8gUXQ1LiBUaGUgZmlyc3Qgb25lIChwYXRjaCA1KSB3YXMgcHJldmlvdXNseQo+IHNlbnQg
-YnkgQW5kcmVhcyBOYXVtYW5uIGFuZCBmaXhlcyBhIFF0NSBvdmVyd3JpdGUuIAo+IGh0dHBzOi8v
-bG9yZS5rZXJuZWwub3JnL2J1aWxkcm9vdC8yMDIxMDYyMzA4MzkyNy44Mjc4LTEtYW5hdW1hbm5A
-dWx0cmF0cm9uaWsuZGUvCj4gaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvYnVpbGRyb290L2IxZDBj
-NWE1LWY3NmYtZTM4ZS0wMjU3LTEzMDBmNmEzMGVhYkBhbmRpbi5kZS8KPiBUaGUgc2Vjb25kIG9u
-ZSAocGF0Y2ggNikgbW92ZXMgdGhlIGZpeHVwIGZ1bmN0aW9uIHRvIHRoZSBwb3N0LXByZXBhcmUg
-aG9va3MuCj4gCj4gT25lIG1vcmUgcGF0Y2ggd2FzIGFkZGVkIGluIHRoaXMgc2VyaWUgKHBhdGNo
-IDE0KSB0byBtb3ZlIGZpeHVwLWxpYnRvb2wtZmlsZSB0bwo+IHRoZSBwb3N0LXByZXBhcmUgaG9v
-a3MuIFRoaXMgd2FzIG1lbnRpb25uZWQgZHVyaW5nIHRoZSByZXZpZXcgb2YgdGhlIGZpcnN0Cj4g
-dmVyc2lvbiBvZiB0aGlzIHNlcmllcyAoaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvYnVpbGRyb290
-LzIwMjEwNjI1MDkyNzA0LkdKMjg1MkBzY2Flci8pLgo+IAo+IE1vcmUgY2hhbmdlcyBkZXRhaWxz
-IGFyZSBnaXZlbiBpbiBlYWNoIGluZGl2aWR1YWwgcGF0Y2hlcy4KPiAKPiBCZXN0IHJlZ2FyZHMs
-Cj4gSGVydsOpIENvZGluYQo+IAo+IEFuZHJlYXMgTmF1bWFubiAoMSk6Cj4gICBxdDU6IEZpeCBz
-cG9yYWRpYyBidWlsZCBmYWlsdXJlIGR1cmluZyB0b3AtbGV2ZWwgcGFyYWxsZWwgYnVpbGQKPiAK
-PiBIZXJ2ZSBDb2RpbmEgKDExKToKPiAgIHBhY2thZ2UvcGtnLXB5dGhvbjogZml4IFBLR19QWVRI
-T05fRklYVVBfU1lTQ09ORklHREFUQQo+ICAgcGFja2FnZS9wa2ctcHl0aG9uOiBpbnZhbGlkYXRl
-IHByZWNvbXBpbGVkIF9zeXNjb25maWdkYXRhKi5weWMKPiAgIHBhY2thZ2UvcGtnLWdlbmVyaWMu
-bWs6IG1vdmUgcHl0aG9uIGZpeHVwIHRvIGdlbmVyaWMgcGFja2FnZQo+ICAgICBpbmZyYXN0cnVj
-dHVyZQo+ICAgcGFja2FnZS9vd2ZzOiByZW1vdmUgUHl0aG9uIHN5c2NvbmZpZ2RhdGEgZml4dXAK
-CkkndmUgYXBwbGllZCB0aG9zZSBmb3VyIHB5dGhvbi1yZWxhdGVkIGZpeGVzIHRvIG5leHQsIHRo
-YW5rcyEKCkknbGwgcmVzdW1lIHRoZSByZXN0IG9mIHRoZSBzZXJpZXMgbGF0ZXIgaW4gdGhlIFdF
-OyBubyBuZWVkIHRvIHJlc3BpbiEKClJlZ2FyZHMsCllhbm4gRS4gTU9SSU4uCgo+ICAgcGFja2Fn
-ZS9wa2ctcW1ha2UubWs6IE1vdmUgUVQ1X1FUX0NPTkZfRklYVVAgdG8gcG9zdC1wcmVwYXJlIGhv
-b2sKPiAgIHBhY2thZ2UvcGtnLWdlbmVyaWMubWs6IGdlbmVyYXRlIGZpbmFsIHJzeW5jIGV4Y2x1
-ZGUgZmlsZSBsaXN0Cj4gICBNYWtlZmlsZTogcnN5bmMgZ2xvYmFsIHtUQVJHRVQsSE9TVH1fRElS
-IHVzaW5nIGV4Y2x1c2lvbiBmaWxlIGxpc3QKPiAgIE1ha2VmaWxlOiBicmVha3MgaGFyZGxpbmtz
-IGluIGdsb2JhbCB7VEFSR0VULEhPU1R9X0RJUiBvbiBwZXItcGFja2FnZQo+ICAgICBidWlsZAo+
-ICAgcGFja2FnZS9wa2ctZ2VuZXJpYy5tazogZml4IHBlci1wYWNrYWdlCj4gICAgIDxwa2c+LXty
-ZWNvbmZpZ3VyZSxyZWJ1aWxkLHJlaW5zdGFsbH0KPiAgIHBhY2thZ2UvcGtnLWdlbmVyaWMubWs6
-IHJlbW92ZSAuZmlsZXMtZmluYWwtcnN5bmMuYmVmb3JlIHRlbXBvcmFyeQo+ICAgICBmaWxlCj4g
-ICBwYWNrYWdlL3BrZy1nZW5lcmljLm1rOiBtb3ZlIGZpeHVwLWxpYnRvb2wtZmlsZXMgdG8gcG9z
-dC1wcmVwYXJlIGhvb2sKPiAKPiBUaG9tYXMgUGV0YXp6b25pICg0KToKPiAgIHBhY2thZ2UvcGtn
-LWdlbmVyaWMubWs6IGRldGVjdCBmaWxlcyBvdmVyd3JpdHRlbiBpbiBUQVJHRVRfRElSIGFuZAo+
-ICAgICBIT1NUX0RJUgo+ICAgc3VwcG9ydC90ZXN0aW5nL2luZnJhOiBhZGQgbG9nX2ZpbGVfcGF0
-aCgpIGZ1bmN0aW9uCj4gICBzdXBwb3J0L3Rlc3RpbmcvdGVzdHM6IGFkZCB0ZXN0IGZvciBjaGVj
-a19iaW5fYXJjaAo+ICAgc3VwcG9ydC90ZXN0aW5nL3Rlc3RzOiBhZGQgdGVzdCBmb3IgZmlsZSBv
-dmVyd3JpdGUgZGV0ZWN0aW9uCj4gCj4gIE1ha2VmaWxlICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICB8ICAzNCArKysrLQo+ICBwYWNrYWdlL293ZnMvb3dmcy5tayAgICAgICAg
-ICAgICAgICAgICAgICAgICAgfCAgIDkgLS0KPiAgcGFja2FnZS9wa2ctZ2VuZXJpYy5tayAgICAg
-ICAgICAgICAgICAgICAgICAgIHwgMTI1ICsrKysrKysrKysrKysrKystLQo+ICBwYWNrYWdlL3Br
-Zy1weXRob24ubWsgICAgICAgICAgICAgICAgICAgICAgICAgfCAgMTAgLS0KPiAgcGFja2FnZS9w
-a2ctcW1ha2UubWsgICAgICAgICAgICAgICAgICAgICAgICAgIHwgICAzICstCj4gIHBhY2thZ2Uv
-cXQ1L3F0NS5tayAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAgMSArCj4gIHN1cHBvcnQv
-dGVzdGluZy9pbmZyYS9fX2luaXRfXy5weSAgICAgICAgICAgICB8ICAxMSArLQo+ICAuLi4vYnIy
-LWV4dGVybmFsL2RldGVjdC1iYWQtYXJjaC9Db25maWcuaW4gICAgfCAgIDEgKwo+ICAuLi4vZGV0
-ZWN0LWJhZC1hcmNoL2V4dGVybmFsLmRlc2MgICAgICAgICAgICAgfCAgIDEgKwo+ICAuLi4vYnIy
-LWV4dGVybmFsL2RldGVjdC1iYWQtYXJjaC9leHRlcm5hbC5tayAgfCAgIDEgKwo+ICAuLi4vcGFj
-a2FnZS9kZXRlY3QtYmFkLWFyY2gvQ29uZmlnLmluICAgICAgICAgfCAgIDQgKwo+ICAuLi4vZGV0
-ZWN0LWJhZC1hcmNoL2RldGVjdC1iYWQtYXJjaC5tayAgICAgICAgfCAgMTUgKysrCj4gIC4uLi9i
-cjItZXh0ZXJuYWwvZGV0ZWN0LW92ZXJ3cml0ZS9Db25maWcuaW4gICB8ICAgMSArCj4gIC4uLi9k
-ZXRlY3Qtb3ZlcndyaXRlL2V4dGVybmFsLmRlc2MgICAgICAgICAgICB8ICAgMSArCj4gIC4uLi9i
-cjItZXh0ZXJuYWwvZGV0ZWN0LW92ZXJ3cml0ZS9leHRlcm5hbC5tayB8ICAgMSArCj4gIC4uLi9w
-YWNrYWdlL2RldGVjdC1vdmVyd3JpdGUvQ29uZmlnLmluICAgICAgICB8ICAgNSArCj4gIC4uLi9k
-ZXRlY3Qtb3ZlcndyaXRlL2RldGVjdC1vdmVyd3JpdGUubWsgICAgICB8ICAxOSArKysKPiAgc3Vw
-cG9ydC90ZXN0aW5nL3Rlc3RzL2NvcmUvdGVzdF9iYWRfYXJjaC5weSAgIHwgIDE5ICsrKwo+ICAu
-Li4vdGVzdGluZy90ZXN0cy9jb3JlL3Rlc3RfZmlsZV9vdmVyd3JpdGUucHkgfCAgNDggKysrKysr
-Kwo+ICAxOSBmaWxlcyBjaGFuZ2VkLCAyNjkgaW5zZXJ0aW9ucygrKSwgNDAgZGVsZXRpb25zKC0p
-Cj4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBzdXBwb3J0L3Rlc3RpbmcvdGVzdHMvY29yZS9icjItZXh0
-ZXJuYWwvZGV0ZWN0LWJhZC1hcmNoL0NvbmZpZy5pbgo+ICBjcmVhdGUgbW9kZSAxMDA2NDQgc3Vw
-cG9ydC90ZXN0aW5nL3Rlc3RzL2NvcmUvYnIyLWV4dGVybmFsL2RldGVjdC1iYWQtYXJjaC9leHRl
-cm5hbC5kZXNjCj4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBzdXBwb3J0L3Rlc3RpbmcvdGVzdHMvY29y
-ZS9icjItZXh0ZXJuYWwvZGV0ZWN0LWJhZC1hcmNoL2V4dGVybmFsLm1rCj4gIGNyZWF0ZSBtb2Rl
-IDEwMDY0NCBzdXBwb3J0L3Rlc3RpbmcvdGVzdHMvY29yZS9icjItZXh0ZXJuYWwvZGV0ZWN0LWJh
-ZC1hcmNoL3BhY2thZ2UvZGV0ZWN0LWJhZC1hcmNoL0NvbmZpZy5pbgo+ICBjcmVhdGUgbW9kZSAx
-MDA2NDQgc3VwcG9ydC90ZXN0aW5nL3Rlc3RzL2NvcmUvYnIyLWV4dGVybmFsL2RldGVjdC1iYWQt
-YXJjaC9wYWNrYWdlL2RldGVjdC1iYWQtYXJjaC9kZXRlY3QtYmFkLWFyY2gubWsKPiAgY3JlYXRl
-IG1vZGUgMTAwNjQ0IHN1cHBvcnQvdGVzdGluZy90ZXN0cy9jb3JlL2JyMi1leHRlcm5hbC9kZXRl
-Y3Qtb3ZlcndyaXRlL0NvbmZpZy5pbgo+ICBjcmVhdGUgbW9kZSAxMDA2NDQgc3VwcG9ydC90ZXN0
-aW5nL3Rlc3RzL2NvcmUvYnIyLWV4dGVybmFsL2RldGVjdC1vdmVyd3JpdGUvZXh0ZXJuYWwuZGVz
-Ywo+ICBjcmVhdGUgbW9kZSAxMDA2NDQgc3VwcG9ydC90ZXN0aW5nL3Rlc3RzL2NvcmUvYnIyLWV4
-dGVybmFsL2RldGVjdC1vdmVyd3JpdGUvZXh0ZXJuYWwubWsKPiAgY3JlYXRlIG1vZGUgMTAwNjQ0
-IHN1cHBvcnQvdGVzdGluZy90ZXN0cy9jb3JlL2JyMi1leHRlcm5hbC9kZXRlY3Qtb3ZlcndyaXRl
-L3BhY2thZ2UvZGV0ZWN0LW92ZXJ3cml0ZS9Db25maWcuaW4KPiAgY3JlYXRlIG1vZGUgMTAwNjQ0
-IHN1cHBvcnQvdGVzdGluZy90ZXN0cy9jb3JlL2JyMi1leHRlcm5hbC9kZXRlY3Qtb3ZlcndyaXRl
-L3BhY2thZ2UvZGV0ZWN0LW92ZXJ3cml0ZS9kZXRlY3Qtb3ZlcndyaXRlLm1rCj4gIGNyZWF0ZSBt
-b2RlIDEwMDY0NCBzdXBwb3J0L3Rlc3RpbmcvdGVzdHMvY29yZS90ZXN0X2JhZF9hcmNoLnB5Cj4g
-IGNyZWF0ZSBtb2RlIDEwMDY0NCBzdXBwb3J0L3Rlc3RpbmcvdGVzdHMvY29yZS90ZXN0X2ZpbGVf
-b3ZlcndyaXRlLnB5Cj4gCj4gLS0gCj4gMi4zMS4xCj4gCgotLSAKLi0tLS0tLS0tLS0tLS0tLS0t
-Li0tLS0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0t
-LS0tLS4KfCAgWWFubiBFLiBNT1JJTiAgfCBSZWFsLVRpbWUgRW1iZWRkZWQgfCAvIlwgQVNDSUkg
-UklCQk9OIHwgRXJpY3MnIGNvbnNwaXJhY3k6IHwKfCArMzMgNjYyIDM3NiAwNTYgfCBTb2Z0d2Fy
-ZSAgRGVzaWduZXIgfCBcIC8gQ0FNUEFJR04gICAgIHwgIF9fXyAgICAgICAgICAgICAgIHwKfCAr
-MzMgNTYxIDA5OSA0MjcgYC0tLS0tLS0tLS0tLS4tLS0tLS0tOiAgWCAgQUdBSU5TVCAgICAgIHwg
-IFxlLyAgVGhlcmUgaXMgbm8gIHwKfCBodHRwOi8veW1vcmluLmlzLWEtZ2Vlay5vcmcvIHwgXy8q
-XF8gfCAvIFwgSFRNTCBNQUlMICAgIHwgICB2ICAgY29uc3BpcmFjeS4gIHwKJy0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0tXi0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0tLS0t
-LS0tLS0tLS0tLScKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVzeWJveC5uZXQKaHR0cDovL2xp
-c3RzLmJ1c3lib3gubmV0L21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+ Hi Yauheni,
+
+ There were still a number of things not OK with this patch, but I've fixed them
+up and applied to next, thanks.
+
+ First of all, it should have been only a single commit, not split over 3 for
+the different versions. Separate commits should only be made when you do
+separate, more or less independent things. In this case, however, it's really a
+single change you're making (adding the new defconfig). So I've squashed
+everything into a single commit.
+
+
+On 25/08/2021 20:18, Yauheni Saldatsenka wrote:
+> Result of make tinyconfig was taken as a starting point to fit kernel
+> into flash memory.
+> Current setup kernel + rootfs fits in 1.6MB on-chip flash memory.
+> 
+> Fixes:
+>     - Move kernel to new flash bank due to growth of dtb size
+>     - Fix kernel start address in bootloader
+> 
+> For better binary size optimization gcc LTO is turned on.
+> 
+> Signed-off-by: Yauheni Saldatsenka <eugentoo@gmail.com>
+
+[snip]
+> diff --git a/board/stmicroelectronics/stm32f469-disco/linux/defconfig b/board/stmicroelectronics/stm32f469-disco/linux/linux.config
+> similarity index 100%
+> rename from board/stmicroelectronics/stm32f469-disco/linux/defconfig
+> rename to board/stmicroelectronics/stm32f469-disco/linux/linux.config
+
+ linux/linux.config is not a very useful name, so I've moved it up one
+directory. I also called it linux-xip.config, to distinguish it more clearly
+from the existing linux.fragment.
+
+
+> diff --git a/board/stmicroelectronics/stm32f469-disco/patches/afboot-stm32/0001-stm32f469-i-Update-kernel-start-address.patch b/board/stmicroelectronics/stm32f469-disco/patches/afboot-stm32/0001-stm32f469-i-Update-kernel-start-address.patch
+> new file mode 100644
+> index 0000000000..d5d1e5a8ad
+> --- /dev/null
+> +++ b/board/stmicroelectronics/stm32f469-disco/patches/afboot-stm32/0001-stm32f469-i-Update-kernel-start-address.patch
+> @@ -0,0 +1,56 @@
+> +From fe5f3a86d07e378baeeddc1dfecd0686d83aa42f Mon Sep 17 00:00:00 2001
+> +From: Yauheni Saldatsenka <eugentoo@gmail.com>
+> +Date: Sat, 14 Aug 2021 18:54:51 +0300
+> +Subject: [PATCH] stm32f469-i: Update kernel start address
+> +
+> +As of GNU/Linux v5.12 kernel device tree binary grows above 0x08008000
+> +and overwrites kernel binary
+> +Therefore this commit moves kernel to the next flash bank
+> +
+> +Signed-off-by: Yauheni Saldatsenka <eugentoo@gmail.com>
+
+ Has this patch been sent upstream to afboot-stm32?
+
+
+> +---
+> + stm32f469i-disco.c | 7 +++----
+> + 1 file changed, 3 insertions(+), 4 deletions(-)
+> +
+> +diff --git a/stm32f469i-disco.c b/stm32f469i-disco.c
+> +index 2da1f4b..46fc06a 100644
+> +--- a/stm32f469i-disco.c
+> ++++ b/stm32f469i-disco.c
+> +@@ -6,6 +6,7 @@
+> + #include "gpio.h"
+> + #include "mpu.h"
+> + 
+> ++#define KERNEL_ADDR     0x08010000
+> + #define CONFIG_HSE_HZ	8000000
+> + #define CONFIG_PLL_M	8
+> + #define CONFIG_PLL_N	360
+> +@@ -85,7 +86,7 @@ static void fmc_wait_busy(void)
+> + 
+> + void start_kernel(void)
+> + {
+> +-	void (*kernel)(uint32_t reserved, uint32_t mach, uint32_t dt) = (void (*)(uint32_t, uint32_t, uint32_t))(0x08008000 | 1);
+> ++	void (*kernel)(uint32_t reserved, uint32_t mach, uint32_t dt) = (void (*)(uint32_t, uint32_t, uint32_t))(KERNEL_ADDR | 1);
+> + 
+> + 	kernel(0, ~0UL, 0x08004000);
+> + }
+> +@@ -102,7 +103,7 @@ int main(void)
+> + 	volatile uint32_t *SYSCFG_MEMRMP = (void *)(SYSCFG_BASE + 0x00);
+> + 	int i;
+> + 
+> +-	mpu_config(0x0);
+> ++	mpu_config(0xc0000000);
+
+ It's not clear how this is related to moving the kernel address...
+
+> + 
+> + 	if (*FLASH_CR & FLASH_CR_LOCK) {
+> + 		*FLASH_KEYR = 0x45670123;
+> +@@ -195,8 +196,6 @@ int main(void)
+> + 	usart_setup(usart_base, 45000000);
+> + 	usart_putch(usart_base, '.');
+> + 
+> +-	*SYSCFG_MEMRMP = 0x4;
+
+ This also is not clear why it's removed.
+
+ I still applied the patch as is.
+
+> +-
+> + 	start_kernel();
+> + 
+> + 	return 0;
+> +-- 
+> +2.32.0
+[snip]
+> diff --git a/board/stmicroelectronics/stm32f469-disco/patches/linux/0001-Use-default-dram-address-without-remapping.patch b/board/stmicroelectronics/stm32f469-disco/patches/linux/0001-Use-default-dram-address-without-remapping.patch
+> new file mode 100644
+> index 0000000000..68fe8380a2
+> --- /dev/null
+> +++ b/board/stmicroelectronics/stm32f469-disco/patches/linux/0001-Use-default-dram-address-without-remapping.patch
+> @@ -0,0 +1,38 @@
+> +From 8ccf9f625d00138d86fb7d70f3efd58a8fb4d7ff Mon Sep 17 00:00:00 2001
+> +From: Yauheni Saldatsenka <eugentoo@gmail.com>
+> +Date: Mon, 23 Aug 2021 02:54:22 +0300
+> +Subject: [PATCH] Use default dram address without remapping
+> +
+> +Signed-off-by: Yauheni Saldatsenka <eugentoo@gmail.com>
+> +---
+> + arch/arm/boot/dts/stm32f469-disco.dts | 6 +++---
+> + 1 file changed, 3 insertions(+), 3 deletions(-)
+> +
+> +diff --git a/arch/arm/boot/dts/stm32f469-disco.dts b/arch/arm/boot/dts/stm32f469-disco.dts
+> +index 2e1b3bbbe4b5..06845614a19a 100644
+> +--- a/arch/arm/boot/dts/stm32f469-disco.dts
+> ++++ b/arch/arm/boot/dts/stm32f469-disco.dts
+> +@@ -60,9 +60,9 @@ chosen {
+> + 		stdout-path = "serial0:115200n8";
+> + 	};
+> + 
+> +-	memory@00000000 {
+> ++	memory@c0000000 {
+
+ It's good that you update the device tree with a patch now instead of copying
+it. However, the full dts was still there in the board directory, but unused. So
+I removed it.
+
+ Also, there were a few changes that you didn't keep - but I guess those weren't
+actually needed.
+
+> + 		device_type = "memory";
+> +-		reg = <0x00000000 0x1000000>;
+> ++		reg = <0xc0000000 0x1000000>;
+> + 	};
+> + 
+> + 	aliases {
+> +@@ -84,7 +84,7 @@ vdd_dsi: vdd-dsi {
+> + 	};
+> + 
+> + 	soc {
+> +-		dma-ranges = <0xc0000000 0x0 0x10000000>;
+> ++		dma-ranges = <0xc0000000 0xc0000000 0x10000000>;
+> + 	};
+> + 
+> + 	leds {
+> +-- 
+> +2.32.0
+> +
+> diff --git a/board/stmicroelectronics/stm32f469-disco/readme.txt b/board/stmicroelectronics/stm32f469-disco/readme.txt
+> index c1e1d30e69..646f340382 100644
+> --- a/board/stmicroelectronics/stm32f469-disco/readme.txt
+> +++ b/board/stmicroelectronics/stm32f469-disco/readme.txt
+> @@ -4,23 +4,37 @@ STM32F469 Discovery
+>  This tutorial describes how to use the predefined Buildroot
+>  configuration for the STM32F469 Discovery evaluation platform.
+>  
+> +There are two setups supported:
+> +1. Internal flash memory is fully occupied with u-boot bootloader which boots kernel with
+> +   root filesystem from MMC.
+> +2. Internal flash memory stores simple afboot-stm32 bootloader, device tree and
+> +   in place (XIP) kernel with built-in initramfs.
+
+ Very good readme! I've just added here a sentence to say that no SD card is
+needed, to make that explicit.
+
+
+ Regards,
+ Arnout
+
+> +   Kernel is based on tinyconfig.
+> +
+>  Building
+>  --------
+> +  Type
+> +  "make stm32f469_disco_defconfig"
+> +  to build u-boot setup
+> +  or
+> +  "make stm32f469_disco_xip_defconfig"
+> +  to build xip setup
+> +
+> +  Then
+>  
+> -  make stm32f469_disco_defconfig
+> -  make
+> +  "make"
+>  
+>  Flashing
+>  --------
+>  
+> -  ./board/stmicroelectronics/stm32f469-disco/flash.sh output/
+> +  ./board/stmicroelectronics/stm32f469-disco/flash.sh output/ <BUILD_TYPE>
+>  
+> -It will flash the U-boot bootloader.
+> +  <BUILD_TYPE> can be "xip" or "uboot"
+>  
+> -Creating SD card
+> +Creating SD card for u-boot setup
+>  ----------------
+>  
+> -Buildroot prepares an"sdcard.img" image in the output/images/ directory,
+> +Buildroot prepares an "sdcard.img" image in the output/images/ directory,
+>  ready to be dumped on a SD card. Launch the following command as root:
+>  
+>    dd if=output/images/sdcard.img of=/dev/<your-sd-device>
+> diff --git a/configs/stm32f469_disco_xip_defconfig b/configs/stm32f469_disco_xip_defconfig
+> index 81bdb0d6d6..fd2946ab8b 100644
+> --- a/configs/stm32f469_disco_xip_defconfig
+> +++ b/configs/stm32f469_disco_xip_defconfig
+> @@ -1,24 +1,18 @@
+>  BR2_arm=y
+>  BR2_cortex_m4=y
+>  BR2_GLOBAL_PATCH_DIR="board/stmicroelectronics/stm32f469-disco/patches"
+> -BR2_KERNEL_HEADERS_5_13=y
+>  # BR2_UCLIBC_INSTALL_UTILS is not set
+> -BR2_GCC_VERSION_11_X=y
+>  BR2_GCC_ENABLE_LTO=y
+> -BR2_ROOTFS_POST_BUILD_SCRIPT="board/stmicroelectronics/common/stm32f4xx/stm32-post-build.sh"
+>  BR2_LINUX_KERNEL=y
+>  BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+> -BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/stmicroelectronics/stm32f469-disco/linux/defconfig"
+> +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/stmicroelectronics/stm32f469-disco/linux/linux.config"
+>  BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
+>  BR2_LINUX_KERNEL_XZ=y
+>  BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="xipImage"
+>  BR2_LINUX_KERNEL_DTS_SUPPORT=y
+>  BR2_LINUX_KERNEL_INTREE_DTS_NAME="stm32f469-disco"
+> -BR2_LINUX_KERNEL_CUSTOM_DTS_PATH="board/stmicroelectronics/stm32f469-disco/linux/stm32f469-disco.dts"
+>  BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-minimal.config"
+> -BR2_PACKAGE_ZLIB=y
+>  BR2_TARGET_ROOTFS_INITRAMFS=y
+>  # BR2_TARGET_ROOTFS_TAR is not set
+>  BR2_TARGET_AFBOOT_STM32=y
+>  BR2_PACKAGE_HOST_OPENOCD=y
+> -BR2_PACKAGE_HOST_UTIL_LINUX=y
+> 
+_______________________________________________
+buildroot mailing list
+buildroot@busybox.net
+http://lists.busybox.net/mailman/listinfo/buildroot
