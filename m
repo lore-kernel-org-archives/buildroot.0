@@ -2,89 +2,56 @@ Return-Path: <SRS0=/RLo=NT=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.5 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
-	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5EDC1C432BE
-	for <buildroot@archiver.kernel.org>; Sat, 28 Aug 2021 04:47:00 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F046C432BE
+	for <buildroot@archiver.kernel.org>; Sat, 28 Aug 2021 07:05:54 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id CF1DB60ED5
-	for <buildroot@archiver.kernel.org>; Sat, 28 Aug 2021 04:46:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org CF1DB60ED5
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id 1A75161076
+	for <buildroot@archiver.kernel.org>; Sat, 28 Aug 2021 07:05:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1A75161076
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6E45183B76;
-	Sat, 28 Aug 2021 04:46:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BF3CC4282B;
+	Sat, 28 Aug 2021 07:05:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cYwJxfNVSNcb; Sat, 28 Aug 2021 04:46:56 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id cyNurvn24heD; Sat, 28 Aug 2021 07:05:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0A4FF83EEC;
-	Sat, 28 Aug 2021 04:46:55 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B98871BF27C
- for <buildroot@lists.busybox.net>; Sat, 28 Aug 2021 04:46:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 354414282C;
+	Sat, 28 Aug 2021 07:05:49 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id C4BD11BF398
+ for <buildroot@lists.busybox.net>; Sat, 28 Aug 2021 07:05:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id ADEFD83EEC
- for <buildroot@lists.busybox.net>; Sat, 28 Aug 2021 04:46:53 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B424F615B6
+ for <buildroot@lists.busybox.net>; Sat, 28 Aug 2021 07:05:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xjXOiZXlrrXQ for <buildroot@lists.busybox.net>;
- Sat, 28 Aug 2021 04:46:48 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com
- [IPv6:2607:f8b0:4864:20::d34])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 98D4583B76
- for <buildroot@buildroot.org>; Sat, 28 Aug 2021 04:46:48 +0000 (UTC)
-Received: by mail-io1-xd34.google.com with SMTP id a15so11671204iot.2
- for <buildroot@buildroot.org>; Fri, 27 Aug 2021 21:46:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=ZsulwZJhCwTbMTfgYzc7TkOGqsrEo4RRM03B0N7OG0s=;
- b=ZYe8Ts1EVOb0VywRa/8Rpu+8B6AUy8CTAxqEnInj4PTa6ArtHCeFttPcUmf0cjZjz2
- +D2B64FhSkvSKtUknsy1QR3itWQnVz60yPihXQpREvL7qz+/b0hFC4+X3uS1+K/86iDH
- P8M6357DLHJ0yIXmDDi7A9EatYv5ns4M75gBx619w+gC8KiLBdTyF72slfsr3USJw3U+
- TxUhSKN9tjl0YgqVG2BlBih83Zrh578FhLDRG60uo4AC8nViV1K8aufGJjefM12Bjm7b
- 5ZEgSdGNiUwRaCrvtcIEMxaRDMbvISGGSuupgW5uA7rsfwXMsRTKebu1lQsoQmr/g6+p
- jblw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=ZsulwZJhCwTbMTfgYzc7TkOGqsrEo4RRM03B0N7OG0s=;
- b=Yo85rC9pJTRS0017M7QDQV9S8v7LxFVBAsgXEMx6i8Th/COFGTFL80ii/3iCIJPjIJ
- AFGTnRqvMVDoquvj7KvN25pR0oFacNf/GRiDHTSN+HI60rt2rPfL0pJ1ZE1nCQoyB53R
- hFw5Lh3NCnQXMdQXjr6heVfzR5Z0HRN8kTgUu8o0ow/VA6B9+5306C6TMICsWH8+Qr8b
- wEsqy1SWp7xOaoJHQVDf1AUfhuyLyTo4T6CqlV7enkCI/5/WuHFX28W6r58mO7IEef/t
- 0RPATHm9H/H1B80hvWPPEdsvlY7vG/zuq0iZJsbEl6RmUWdepBtWzPH3lffiLIXce34g
- 1M7g==
-X-Gm-Message-State: AOAM532UIDFzoslBYH2bPZIygFXvOToOa275+rXLHJqcw2ZafE+wrDWl
- LnrxWMJHH0U0i7TTUIgS0TzUF2C3al4=
-X-Google-Smtp-Source: ABdhPJztBbgWaf4Ts/YAxlycjmvp2RuxO1MBYDNIgc5gOJK9OEPi8QY+SSGHYRXe5xcWz0ICnllZ8Q==
-X-Received: by 2002:a6b:fb0b:: with SMTP id h11mr9903603iog.59.1630126007518; 
- Fri, 27 Aug 2021 21:46:47 -0700 (PDT)
-Received: from james-x399.localdomain (97-118-237-25.hlrn.qwest.net.
- [97.118.237.25])
- by smtp.gmail.com with ESMTPSA id h11sm348989ilc.7.2021.08.27.21.46.47
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 27 Aug 2021 21:46:47 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: buildroot@buildroot.org
-Date: Fri, 27 Aug 2021 22:46:26 -0600
-Message-Id: <20210828044626.3170348-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.25.1
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fKi1f7Mn7BmL for <buildroot@lists.busybox.net>;
+ Sat, 28 Aug 2021 07:05:43 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 11B7A61560
+ for <buildroot@buildroot.org>; Sat, 28 Aug 2021 07:05:42 +0000 (UTC)
+Received: (Authenticated sender: bot@bootlin.com)
+ by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id 1059DC0009
+ for <buildroot@buildroot.org>; Sat, 28 Aug 2021 07:05:39 +0000 (UTC)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/swupdate: update service/init
- configs
+To: buildroot@buildroot.org
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 28 Aug 2021 07:05:39 -0000
+Message-Id: <20210828070547.B424F615B6@smtp3.osuosl.org>
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2021-08-27
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,250 +63,236 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-Set SKIP_STRIP=y so that the swupdate binary isn't stripped.
+Hello,
 
-Introduce BR2_PACKAGE_SWUPDATE_WEBSERVER so that we can control
-the required webserver config installation when enabled.
+Autobuild statistics for 2021-08-27
+===================================
 
-Ensure swupdate systemd support is always set based on buildroot
-using systemd as this is required for the systemd services.
+      branch |  OK | NOK | TIM | TOT |
+  2021.02.x  | 39  | 12  |  1  | 52  |
+  2021.05.x  | 41  |  9  |  1  | 51  |
+    master   | 204 | 24  |  1  | 229 |
+     next    | 36  | 39  |  1  | 76  |
 
-Use swupdate's make install so that we install swupdate tools needed
-for services.
+Classification of failures by reason for master
+-----------------------------------------------
 
-Adapted from:
-https://github.com/sbabic/meta-swupdate/tree/abc520d97482232302046459715845a025aca7d6/recipes-support/swupdate/swupdate
-https://github.com/sbabic/meta-swupdate/blob/abc520d97482232302046459715845a025aca7d6/recipes-support/swupdate/swupdate.inc
+               capnproto-0.8.0 | 2 
+                    ffmpeg-4.4 | 2 
+                 openal-1.21.1 | 2 
+                    qemu-6.0.0 | 2 
+                 dc3dd-7.2.641 | 1 
+                   delve-1.6.1 | 1 
+            erlang-jiffy-1.0.6 | 1 
+                       gdb-9.2 | 1 
+ glslsandbox-player-2019.08.23 | 1 
+                harfbuzz-2.8.2 | 1 
+                librsvg-2.50.5 | 1 
+               linux-pam-1.5.1 | 1 
+                       mongodb | 1 
+                 opencv4-4.5.3 | 1 
+           python-pybind-2.6.1 | 1 
+                qt5base-5.15.2 | 1 
+            qt5location-5.15.2 | 1 
+                    ruby-3.0.2 | 1 
+                       unknown | 1 
+                    xen-4.14.2 | 1 
+                  zeromq-4.3.4 | 1 
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/swupdate/10-mongoose-args          |  1 +
- package/swupdate/90-start-progress         |  1 +
- package/swupdate/Config.in                 |  7 ++++
- package/swupdate/swupdate-progress.service |  9 +++++
- package/swupdate/swupdate-usb.rules        |  2 +
- package/swupdate/swupdate-usb@.service     |  8 ++++
- package/swupdate/swupdate.mk               | 43 +++++++++++++++++++---
- package/swupdate/swupdate.socket           | 11 ++++++
- package/swupdate/tmpfiles-swupdate.conf    |  2 +
- 9 files changed, 79 insertions(+), 5 deletions(-)
- create mode 100644 package/swupdate/10-mongoose-args
- create mode 100644 package/swupdate/90-start-progress
- create mode 100644 package/swupdate/swupdate-progress.service
- create mode 100644 package/swupdate/swupdate-usb.rules
- create mode 100644 package/swupdate/swupdate-usb@.service
- create mode 100644 package/swupdate/swupdate.socket
- create mode 100644 package/swupdate/tmpfiles-swupdate.conf
 
-diff --git a/package/swupdate/10-mongoose-args b/package/swupdate/10-mongoose-args
-new file mode 100644
-index 0000000000..896e66ba86
---- /dev/null
-+++ b/package/swupdate/10-mongoose-args
-@@ -0,0 +1 @@
-+SWUPDATE_WEBSERVER_ARGS="-r /www ${SWUPDATE_MONGOOSE_EXTRA_ARGS:--p 8080}"
-diff --git a/package/swupdate/90-start-progress b/package/swupdate/90-start-progress
-new file mode 100644
-index 0000000000..3b0eb5e7d7
---- /dev/null
-+++ b/package/swupdate/90-start-progress
-@@ -0,0 +1 @@
-+exec /usr/bin/swupdate-progress -w -r &
-diff --git a/package/swupdate/Config.in b/package/swupdate/Config.in
-index f601e45fcd..6b832cfcbf 100644
---- a/package/swupdate/Config.in
-+++ b/package/swupdate/Config.in
-@@ -60,9 +60,16 @@ config BR2_PACKAGE_SWUPDATE_CONFIG
- 	  I you wish to use your own modified swupdate configuration
- 	  file specify the config file location with this option.
- 
-+config BR2_PACKAGE_SWUPDATE_WEBSERVER
-+	bool "swupdate webserver"
-+	default y
-+	help
-+	  Enable update from remote using a web server on the target.
-+
- config BR2_PACKAGE_SWUPDATE_INSTALL_WEBSITE
- 	bool "install default website"
- 	default y
-+	depends on BR2_PACKAGE_SWUPDATE_WEBSERVER
- 	help
- 	  Install the provided website to /var/www/swupdate.
- 
-diff --git a/package/swupdate/swupdate-progress.service b/package/swupdate/swupdate-progress.service
-new file mode 100644
-index 0000000000..0d464bb420
---- /dev/null
-+++ b/package/swupdate/swupdate-progress.service
-@@ -0,0 +1,9 @@
-+[Unit]
-+Description=swupdate progress service
-+After=swupdate.service
-+
-+[Service]
-+ExecStart=/usr/bin/swupdate-progress -r -w
-+
-+[Install]
-+WantedBy=swupdate.service
-diff --git a/package/swupdate/swupdate-usb.rules b/package/swupdate/swupdate-usb.rules
-new file mode 100644
-index 0000000000..b4efd0b733
---- /dev/null
-+++ b/package/swupdate/swupdate-usb.rules
-@@ -0,0 +1,2 @@
-+ACTION=="add", KERNEL=="sd*", SUBSYSTEM=="block", ENV{ID_BUS}=="usb", ENV{ID_FS_USAGE}=="filesystem", TAG+="systemd", ENV{SYSTEMD_WANTS}+="swupdate-usb@%k.service"
-+
-diff --git a/package/swupdate/swupdate-usb@.service b/package/swupdate/swupdate-usb@.service
-new file mode 100644
-index 0000000000..eda9d1539c
---- /dev/null
-+++ b/package/swupdate/swupdate-usb@.service
-@@ -0,0 +1,8 @@
-+[Unit]
-+Description=usb media swupdate service
-+Requires=swupdate-progress.service
-+
-+[Service]
-+ExecStartPre=/bin/mount /dev/%I /mnt
-+ExecStart=/bin/sh -c "swupdate-client -v /mnt/*.swu"
-+ExecStopPost=/bin/umount /mnt
-diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
-index 402aa0a91f..3368b6ef6a 100644
---- a/package/swupdate/swupdate.mk
-+++ b/package/swupdate/swupdate.mk
-@@ -22,7 +22,7 @@ SWUPDATE_LICENSE_FILES = LICENSES/BSD-1-Clause.txt \
- # swupdate uses $CROSS-cc instead of $CROSS-gcc, which is not
- # available in all external toolchains, and use CC for linking. Ensure
- # TARGET_CC is used for both.
--SWUPDATE_MAKE_ENV = CC="$(TARGET_CC)" LD="$(TARGET_CC)"
-+SWUPDATE_MAKE_ENV = CC="$(TARGET_CC)" LD="$(TARGET_CC)" SKIP_STRIP=y
- 
- # swupdate bundles its own version of mongoose (version 6.16)
- 
-@@ -139,6 +139,13 @@ endif
- 
- ifeq ($(BR2_PACKAGE_SYSTEMD),y)
- SWUPDATE_DEPENDENCIES += systemd
-+define SWUPDATE_SET_SYSTEMD
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_SYSTEMD)
-+endef
-+else
-+define SWUPDATE_SET_SYSTEMD
-+	$(call KCONFIG_DISABLE_OPT,CONFIG_SYSTEMD)
-+endef
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBUBOOTENV),y)
-@@ -180,6 +187,16 @@ ifeq ($(BR2_PACKAGE_LIBRSYNC),y)
- SWUPDATE_DEPENDENCIES += librsync
- endif
- 
-+ifeq ($(BR2_PACKAGE_SWUPDATE_WEBSERVER),y)
-+define SWUPDATE_SET_WEBSERVER
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_WEBSERVER)
-+endef
-+else
-+define SWUPDATE_SET_WEBSERVER
-+	$(call KCONFIG_DISABLE_OPT,CONFIG_WEBSERVER)
-+endef
-+endif
-+
- SWUPDATE_BUILD_CONFIG = $(@D)/.config
- 
- SWUPDATE_KCONFIG_FILE = $(call qstrip,$(BR2_PACKAGE_SWUPDATE_CONFIG))
-@@ -192,14 +209,17 @@ SWUPDATE_MAKE_OPTS = \
- 
- define SWUPDATE_KCONFIG_FIXUP_CMDS
- 	$(SWUPDATE_SET_LUA_VERSION)
-+	$(SWUPDATE_SET_SYSTEMD)
-+	$(SWUPDATE_SET_WEBSERVER)
- endef
- 
- define SWUPDATE_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(SWUPDATE_MAKE_ENV) $(MAKE) $(SWUPDATE_MAKE_OPTS) -C $(@D)
-+	$(TARGET_MAKE_ENV) $(SWUPDATE_MAKE_ENV) $(MAKE) -C $(@D) $(SWUPDATE_MAKE_OPTS)
- endef
- 
- define SWUPDATE_INSTALL_TARGET_CMDS
--	$(INSTALL) -D -m 0755 $(@D)/swupdate $(TARGET_DIR)/usr/bin/swupdate
-+	$(TARGET_MAKE_ENV) $(SWUPDATE_MAKE_ENV) $(MAKE) -C $(@D) \
-+		$(SWUPDATE_MAKE_OPTS) DESTDIR=$(TARGET_DIR) install
- 	$(if $(BR2_PACKAGE_SWUPDATE_INSTALL_WEBSITE), \
- 		mkdir -p $(TARGET_DIR)/var/www/swupdate; \
- 		cp -dpfr $(@D)/examples/www/v2/* $(TARGET_DIR)/var/www/swupdate)
-@@ -213,23 +233,36 @@ $(error No Swupdate configuration file specified, check your BR2_PACKAGE_SWUPDAT
- endif
- endif
- 
--ifeq ($(BR2_PACKAGE_SWUPDATE_INSTALL_WEBSITE),y)
- define SWUPDATE_INSTALL_COMMON
- 	mkdir -p $(TARGET_DIR)/etc/swupdate/conf.d \
- 		$(TARGET_DIR)/usr/lib/swupdate/conf.d
- 	$(INSTALL) -D -m 755 package/swupdate/swupdate.sh \
- 		$(TARGET_DIR)/usr/lib/swupdate/swupdate.sh
-+	$(if $(BR2_PACKAGE_SWUPDATE_WEBSERVER), \
-+		$(INSTALL) -D -m 644 package/swupdate/10-mongoose-args \
-+			$(TARGET_DIR)/usr/lib/swupdate/conf.d/10-mongoose-args)
- endef
- define SWUPDATE_INSTALL_INIT_SYSTEMD
- 	$(SWUPDATE_INSTALL_COMMON)
- 	$(INSTALL) -D -m 644 package/swupdate/swupdate.service \
- 		$(TARGET_DIR)/usr/lib/systemd/system/swupdate.service
-+	$(INSTALL) -D -m 644 package/swupdate/swupdate.socket \
-+		$(TARGET_DIR)/usr/lib/systemd/system/swupdate.socket
-+	$(INSTALL) -D -m 644 package/swupdate/swupdate-usb@.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/swupdate-usb@.service
-+	$(INSTALL) -D -m 644 package/swupdate/swupdate-progress.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/swupdate-progress.service
-+	$(INSTALL) -D -m 644 package/swupdate/tmpfiles-swupdate.conf \
-+		$(TARGET_DIR)/usr/lib/tmpfiles.d/tmpfiles-swupdate.conf
-+	$(INSTALL) -D -m 644 package/swupdate/swupdate-usb.rules \
-+		$(TARGET_DIR)/lib/udev/rules.d/swupdate-usb.rules
- endef
- define SWUPDATE_INSTALL_INIT_SYSV
- 	$(SWUPDATE_INSTALL_COMMON)
- 	$(INSTALL) -D -m 755 package/swupdate/S80swupdate \
- 		$(TARGET_DIR)/etc/init.d/S80swupdate
-+	$(INSTALL) -D -m 644 package/swupdate/90-start-progress \
-+		$(TARGET_DIR)/usr/lib/swupdate/conf.d/90-start-progress
- endef
--endif
- 
- $(eval $(kconfig-package))
-diff --git a/package/swupdate/swupdate.socket b/package/swupdate/swupdate.socket
-new file mode 100644
-index 0000000000..2b756714c5
---- /dev/null
-+++ b/package/swupdate/swupdate.socket
-@@ -0,0 +1,11 @@
-+[Unit]
-+Description=SWUpdate socket listener
-+Documentation=https://github.com/sbabic/swupdate
-+Documentation=https://sbabic.github.io/swupdate
-+
-+[Socket]
-+ListenStream=/tmp/sockinstctrl
-+ListenStream=/tmp/swupdateprog
-+
-+[Install]
-+WantedBy=sockets.target
-diff --git a/package/swupdate/tmpfiles-swupdate.conf b/package/swupdate/tmpfiles-swupdate.conf
-new file mode 100644
-index 0000000000..4743672fcc
---- /dev/null
-+++ b/package/swupdate/tmpfiles-swupdate.conf
-@@ -0,0 +1,2 @@
-+X /tmp/datadst
-+X /tmp/scripts
+Detail of failures for master
+-----------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+  riscv64    |        capnproto-0.8.0         | NOK | http://autobuild.buildroot.net/results/596d06c6e46dba355e486995c63acc6490dae333 |     
+  riscv64    |        capnproto-0.8.0         | NOK | http://autobuild.buildroot.net/results/d589423f98974b89476129388180dcb9bb516afc |     
+    arc      |         dc3dd-7.2.641          | NOK | http://autobuild.buildroot.net/results/e0ffdf2093c44c145d4d87b4d1ec24946c6e90b5 | ORPH
+   x86_64    |          delve-1.6.1           | NOK | http://autobuild.buildroot.net/results/c860115832de2eedd84d3367d6853b8056788cf2 |     
+  aarch64    |       erlang-jiffy-1.0.6       | NOK | http://autobuild.buildroot.net/results/e6f45c9def3c6962a868c3bf6f16cf9af943bd7a |     
+   mipsel    |           ffmpeg-4.4           | NOK | http://autobuild.buildroot.net/results/78f6c3717602993029ce0885eb47ec7cd24adea1 |     
+   mipsel    |           ffmpeg-4.4           | NOK | http://autobuild.buildroot.net/results/85cda50a944c29cb55001f021919a4899e75c95e |     
+powerpc64le  |            gdb-9.2             | NOK | http://autobuild.buildroot.net/results/766a42128e7635b8acffdb33d75e85b4c3df5896 | ORPH
+    arm      | glslsandbox-player-2019.08.23  | NOK | http://autobuild.buildroot.net/results/752bac67d67a3f8dfac4ed3ce3137b43172d31b1 |     
+    arc      |         harfbuzz-2.8.2         | NOK | http://autobuild.buildroot.net/results/a89a5e5588e187f3356770d1ec918bccd724d710 | ORPH
+   x86_64    |         librsvg-2.50.5         | NOK | http://autobuild.buildroot.net/results/96f1f58cf858f0f0dc929e7e6489aaa126aa915e |     
+   x86_64    |        linux-pam-1.5.1         | NOK | http://autobuild.buildroot.net/results/268e19b352aee9cf0b5840424303b97f204e3ac1 | ORPH
+  aarch64    |            mongodb             | TIM | http://autobuild.buildroot.net/results/f3923837d88bdb282bd758bc627be53a8a313c78 |     
+    or1k     |         openal-1.21.1          | NOK | http://autobuild.buildroot.net/results/58c1c8826ab4353a960857c3c60034da7339d577 |     
+    or1k     |         openal-1.21.1          | NOK | http://autobuild.buildroot.net/results/66c1da49bf9db55f8661c9ca1b4585dd92b9e593 |     
+    arm      |         opencv4-4.5.3          | NOK | http://autobuild.buildroot.net/results/50dbbd95d5d5a6b39fe5a6d26c1960b719701bb5 |     
+  mips64el   |      python-pybind-2.6.1       | NOK | http://autobuild.buildroot.net/results/88bcb61610122edc30e76a153f1167b5de601cb9 |     
+    i686     |           qemu-6.0.0           | NOK | http://autobuild.buildroot.net/results/33c90ebf04997f4d3557cfa66abc9cf9a3076137 |     
+    i686     |           qemu-6.0.0           | NOK | http://autobuild.buildroot.net/results/0865be32fd7c0c643e530f6f1f0fb161ed03d19b |     
+  riscv32    |         qt5base-5.15.2         | NOK | http://autobuild.buildroot.net/results/ffedfc000029072d5d724e98ab4551fe973658ce |     
+  aarch64    |       qt5location-5.15.2       | NOK | http://autobuild.buildroot.net/results/6f65a1ab91d2f1edeca236b4b7b589bea5c42c5e |     
+    sh4      |           ruby-3.0.2           | NOK | http://autobuild.buildroot.net/results/f5742e7fb6e8142bcdb53b7f4f5e9c1bea3558cd |     
+    m68k     |            unknown             | NOK | http://autobuild.buildroot.net/results/5a47a50433857234b061e2dd872d46d6b8d859c7 |     
+    arm      |           xen-4.14.2           | NOK | http://autobuild.buildroot.net/results/136ce42f44bf48d3db4eda7b1548bf7ac1b97d51 |     
+    or1k     |          zeromq-4.3.4          | NOK | http://autobuild.buildroot.net/results/0448e3ac00ec61e49fa48c2d226d00fab794e6e8 |     
+
+
+Classification of failures by reason for 2021.02.x
+--------------------------------------------------
+
+        host-sentry-cli-1.57.0 | 3 
+azure-iot-sdk-c-LTS_07_2020... | 1 
+               capnproto-0.8.0 | 1 
+docker-proxy-55685ba49593e6... | 1 
+ glslsandbox-player-2019.08.23 | 1 
+kvm-unit-tests-kvm-unit-tes... | 1 
+                       mongodb | 1 
+monkey-f54856ce250c4e257354... | 1 
+            qt5location-5.15.2 | 1 
+                rocksdb-6.13.3 | 1 
+                  zeromq-4.3.4 | 1 
+
+
+Detail of failures for 2021.02.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+  riscv32    | azure-iot-sdk-c-LTS_07_2020... | NOK | http://autobuild.buildroot.net/results/d8b404559d823dd0dbcc1ed0228072e2f2354eaa |     
+  riscv64    |        capnproto-0.8.0         | NOK | http://autobuild.buildroot.net/results/9058d6a6a5c13f91cd4e72058d7d89ddd8867250 |     
+   x86_64    | docker-proxy-55685ba49593e6... | NOK | http://autobuild.buildroot.net/results/dc1be1b7eae691de25e335876a881ab124501a56 |     
+    arm      | glslsandbox-player-2019.08.23  | NOK | http://autobuild.buildroot.net/results/31b3fff9748300e293b4efb5615176ccce48dd15 |     
+  riscv64    |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/463b06e7a0bde8ab4562feea04a658290e1cf513 |     
+  riscv64    |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/af1e65f0fbae32437e1b451661cc86e60290987e |     
+    arm      |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/cf5e0603488b90847686ae0ca9ea6f3a13ee74b8 |     
+ powerpc64   | kvm-unit-tests-kvm-unit-tes... | NOK | http://autobuild.buildroot.net/results/54bb0ae11863526518a02e8f4731eae4d4e96f11 |     
+  aarch64    |            mongodb             | TIM | http://autobuild.buildroot.net/results/80df387393333ce37bf706b7676619e37d6b0027 |     
+  riscv64    | monkey-f54856ce250c4e257354... | NOK | http://autobuild.buildroot.net/results/e3eacb1aeef7bedeffbfad2a46d81f48e017f7b8 |     
+  aarch64    |       qt5location-5.15.2       | NOK | http://autobuild.buildroot.net/results/09259b85f860454bb6dfe8a653d9e6331a0299d5 |     
+  powerpc    |         rocksdb-6.13.3         | NOK | http://autobuild.buildroot.net/results/393639dcdca91a2adfe1a3d75b3d1dfe1ec4fb6b |     
+    or1k     |          zeromq-4.3.4          | NOK | http://autobuild.buildroot.net/results/e32e42955f12274cdd7e4f3fd16e8ec70a831532 |     
+
+
+Classification of failures by reason for 2021.05.x
+--------------------------------------------------
+
+        host-sentry-cli-1.57.0 | 3 
+                  zeromq-4.3.4 | 2 
+                 dc3dd-7.2.641 | 1 
+                    ffmpeg-4.4 | 1 
+                       mongodb | 1 
+                  ndisc6-1.0.4 | 1 
+               pipewire-0.3.26 | 1 
+
+
+Detail of failures for 2021.05.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+    arc      |         dc3dd-7.2.641          | NOK | http://autobuild.buildroot.net/results/e445eb5f7706fba71b3f03851b2eb1bafbf8882d | ORPH
+   mipsel    |           ffmpeg-4.4           | NOK | http://autobuild.buildroot.net/results/e6a280e7b1806eb5edcd0896e9bc752358f13f0c |     
+    m68k     |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/ab1d3216e549a2ee1cf8c7e874c20ced6f261cc9 |     
+  aarch64    |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/629c2305bc3b6829fe870184c5e776f0817b0ffa |     
+    arc      |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/fdf5fea5feb967be8032adf1a7bcc55025971ab5 |     
+  aarch64    |            mongodb             | TIM | http://autobuild.buildroot.net/results/923d2ebf6a2039e1441188834b77ac9e75ca70f0 |     
+    arm      |          ndisc6-1.0.4          | NOK | http://autobuild.buildroot.net/results/b6ef802506a7ebc7a9330505c4e88d821dd6ef0e | ORPH
+    i686     |        pipewire-0.3.26         | NOK | http://autobuild.buildroot.net/results/d4477cfa56b187f919adc0dc981c5b5c69cfa6ab |     
+    or1k     |          zeromq-4.3.4          | NOK | http://autobuild.buildroot.net/results/7e34375bffbf34585c3b4fad37e54958d1740d2d |     
+    or1k     |          zeromq-4.3.4          | NOK | http://autobuild.buildroot.net/results/fe1cd9d00b561f6d2ae085aa12ee4cb0f4fd3ae9 |     
+
+
+Classification of failures by reason for next
+---------------------------------------------
+
+                   sdl2-2.0.16 | 23
+              host-libcap-2.52 | 5 
+                  boost-1.77.0 | 1 
+                         clang | 1 
+                flannel-0.14.0 | 1 
+                      gdb-10.2 | 1 
+              gnuradio-3.8.2.0 | 1 
+                 libebml-1.4.2 | 1 
+                 libfuse-2.9.9 | 1 
+               libglib2-2.68.2 | 1 
+                librsvg-2.50.5 | 1 
+                  nginx-1.20.1 | 1 
+          refpolicy-2.20210203 | 1 
+                       unknown | 1 
+
+
+Detail of failures for next
+---------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+   sparc     |          boost-1.77.0          | NOK | http://autobuild.buildroot.net/results/e2706eb65b646ea26feed23a04e53ac08489923e |     
+  aarch64    |             clang              | TIM | http://autobuild.buildroot.net/results/bd72f639b8246b2c9c73339d4ccc5fb0994b4aab |     
+    i686     |         flannel-0.14.0         | NOK | http://autobuild.buildroot.net/results/e505981a3f62f3584880880d329653a80c1c1ee4 |     
+  riscv64    |            gdb-10.2            | NOK | http://autobuild.buildroot.net/results/9fe9c6f2a38508199a210514ff1451c042a52a2d | ORPH
+powerpc64le  |        gnuradio-3.8.2.0        | NOK | http://autobuild.buildroot.net/results/492e474b4a58c60b23b061b92de829a8270d6df3 |     
+   x86_64    |        host-libcap-2.52        | NOK | http://autobuild.buildroot.net/results/14549cd482f906ef6891ea47f2b57714ecb250e4 |     
+  sparc64    |        host-libcap-2.52        | NOK | http://autobuild.buildroot.net/results/5d1ed2089430f3a611047491d0f9d57d7bc2dd04 |     
+  riscv64    |        host-libcap-2.52        | NOK | http://autobuild.buildroot.net/results/8b120aaf0b18a017cb1529ba7a9546c357edb620 |     
+  sparc64    |        host-libcap-2.52        | NOK | http://autobuild.buildroot.net/results/9a0af0c3d74eee9477f486ef6e727f1638813560 |     
+  aarch64    |        host-libcap-2.52        | NOK | http://autobuild.buildroot.net/results/69adac4934c7508c3d1fbcc6fffa366d882fa60e |     
+   xtensa    |         libebml-1.4.2          | NOK | http://autobuild.buildroot.net/results/0bc8af8085d06ac0ddab7f4bdbb4bcfe397a7618 |     
+   s390x     |         libfuse-2.9.9          | NOK | http://autobuild.buildroot.net/results/c50f0e36e6fabdc6b1b281bbfd19bf0fe657f4fc | ORPH
+   s390x     |        libglib2-2.68.2         | NOK | http://autobuild.buildroot.net/results/fce640544e6d10fa107361301265a905565bb2c9 |     
+  mips64el   |         librsvg-2.50.5         | NOK | http://autobuild.buildroot.net/results/dfb5fab21560d11071b5870098b3dc2f4e639303 |     
+  aarch64    |          nginx-1.20.1          | NOK | http://autobuild.buildroot.net/results/669d0a50d0e71f5565c39f65c3ec45b05c1c5c7a |     
+   xtensa    |      refpolicy-2.20210203      | NOK | http://autobuild.buildroot.net/results/a8d70cad72d0997509efd08dd925efcfd8b31d56 |     
+   xtensa    |          sdl2-2.0.16           | NOK | http://autobuild.buildroot.net/results/cb89eb6e0784b0c20f33f49b8e3177a78031b0da |     
+  mips64el   |          sdl2-2.0.16           | NOK | http://autobuild.buildroot.net/results/751a28f346575ad349f532e63f74d0edb64dd497 |     
+    arm      |          sdl2-2.0.16           | NOK | http://autobuild.buildroot.net/results/971b7585386d90c0568d79ccde299c22a1c6f4ec |     
+  mips64el   |          sdl2-2.0.16           | NOK | http://autobuild.buildroot.net/results/3340110aa82bad6b32babfe3eb567c37f294802e |     
+    arm      |          sdl2-2.0.16           | NOK | http://autobuild.buildroot.net/results/df2cff78e9c20d6328887823795aac459d9e5256 |     
+    arc      |          sdl2-2.0.16           | NOK | http://autobuild.buildroot.net/results/486feb17b34bf7e59f8d3457de43d3698924343d |     
+   mipsel    |          sdl2-2.0.16           | NOK | http://autobuild.buildroot.net/results/6cb4f38f99c395804cc33e8ff560c38694e3f041 |     
+  powerpc    |          sdl2-2.0.16           | NOK | http://autobuild.buildroot.net/results/26784de46c9b1e118926a0403e521de210cf1db3 |     
+   x86_64    |          sdl2-2.0.16           | NOK | http://autobuild.buildroot.net/results/c26f49648c459913d2fe7b94a5b8ec40c036b7b8 |     
+   xtensa    |          sdl2-2.0.16           | NOK | http://autobuild.buildroot.net/results/653bef6bb0c515e8f8b43d6a81b3b9c5fa351b20 |     
+   x86_64    |          sdl2-2.0.16           | NOK | http://autobuild.buildroot.net/results/ad73575f88cda70c0a1cfe894beb49ed90cb5581 |     
+  riscv64    |          sdl2-2.0.16           | NOK | http://autobuild.buildroot.net/results/e94f38ab8a49c9ee6e4db18177c7b9f581dd9200 |     
+ powerpc64   |          sdl2-2.0.16           | NOK | http://autobuild.buildroot.net/results/3fa85d2a4a9063ab7f392b022875b0f6bd72a8dc |     
+powerpc64le  |          sdl2-2.0.16           | NOK | http://autobuild.buildroot.net/results/39e004d95a2f55ce000b7960add0703cdcb09ab9 |     
+powerpc64le  |          sdl2-2.0.16           | NOK | http://autobuild.buildroot.net/results/025fa0890a8f7adfc0352eefed358188d9489cef |     
+    arm      |          sdl2-2.0.16           | NOK | http://autobuild.buildroot.net/results/c2e0ca8e82fc257cf2bead7c7e182f5579ccf671 |     
+  aarch64    |          sdl2-2.0.16           | NOK | http://autobuild.buildroot.net/results/5dfd86b764e1a9194efe4e35827f0cdef699b770 |     
+ powerpc64   |          sdl2-2.0.16           | NOK | http://autobuild.buildroot.net/results/f1e2ed63836eead2352bec62f629e2fac1c22c71 |     
+  aarch64    |          sdl2-2.0.16           | NOK | http://autobuild.buildroot.net/results/cc489cda56a81d6cb92d5db0eb48752d1138c1bf |     
+    arm      |          sdl2-2.0.16           | NOK | http://autobuild.buildroot.net/results/a1f2abcfaa79c1c7692f485f65da79ab9636f9a3 |     
+  mips64el   |          sdl2-2.0.16           | NOK | http://autobuild.buildroot.net/results/02d703ef7ddb365b0cfc79242c0add06d2f68116 |     
+  mips64el   |          sdl2-2.0.16           | NOK | http://autobuild.buildroot.net/results/70c60e6257ef8f6576ae602ae07682624629e651 |     
+    sh4      |          sdl2-2.0.16           | NOK | http://autobuild.buildroot.net/results/15ea337e85e31ebf412e90e16da25d7da0bcca0c |     
+   x86_64    |            unknown             | NOK | http://autobuild.buildroot.net/results/93d8e9792907dd5d5f82d135e9770d06194a0a48 |     
+
+
+Gitlab CI results for 2021-08-27
+================================
+
+Detail of defconfig failures for master
+---------------------------------------
+
+                        defconfig |                        link to the job                        | orph?
+----------------------------------+---------------------------------------------------------------+------
+       acmesystems_aria_g25_128mb | https://gitlab.com/buildroot.org/buildroot/-/jobs/1536008767  |      
+       acmesystems_aria_g25_256mb | https://gitlab.com/buildroot.org/buildroot/-/jobs/1536008768  |      
+    acmesystems_arietta_g25_128mb | https://gitlab.com/buildroot.org/buildroot/-/jobs/1536008770  |      
+    acmesystems_arietta_g25_256mb | https://gitlab.com/buildroot.org/buildroot/-/jobs/1536008771  |      
+             amarula_vyasa_rk3288 | https://gitlab.com/buildroot.org/buildroot/-/jobs/1536008773  |      
+                          beaglev | https://gitlab.com/buildroot.org/buildroot/-/jobs/1536008836  |      
+      microchip_sam9x60ek_mmc_dev | https://gitlab.com/buildroot.org/buildroot/-/jobs/1536008989  |      
+        microchip_sama5d2_icp_mmc | https://gitlab.com/buildroot.org/buildroot/-/jobs/1536008997  |      
+    microchip_sama5d2_icp_mmc_dev | https://gitlab.com/buildroot.org/buildroot/-/jobs/1536008999  |      
+                   pcengines_apu2 | https://gitlab.com/buildroot.org/buildroot/-/jobs/1536009127  |      
+               raspberrypi3_qt5we | https://gitlab.com/buildroot.org/buildroot/-/jobs/1536009257  |      
+                    zynqmp_zcu106 | https://gitlab.com/buildroot.org/buildroot/-/jobs/1536009377  |      
+
+
+
 -- 
-2.25.1
-
+http://autobuild.buildroot.net
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
