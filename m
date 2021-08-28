@@ -2,56 +2,96 @@ Return-Path: <SRS0=/RLo=NT=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-20.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A55FC432BE
-	for <buildroot@archiver.kernel.org>; Sat, 28 Aug 2021 14:59:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C081C432BE
+	for <buildroot@archiver.kernel.org>; Sat, 28 Aug 2021 15:01:04 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 170F360EBD
-	for <buildroot@archiver.kernel.org>; Sat, 28 Aug 2021 14:59:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 170F360EBD
+	by mail.kernel.org (Postfix) with ESMTPS id 3F036606A5
+	for <buildroot@archiver.kernel.org>; Sat, 28 Aug 2021 15:01:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3F036606A5
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DBF9C426FC;
-	Sat, 28 Aug 2021 14:59:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 14652426E1;
+	Sat, 28 Aug 2021 15:01:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AykT96su-Xoe; Sat, 28 Aug 2021 14:59:46 +0000 (UTC)
+	with ESMTP id hVC31PW-P3A8; Sat, 28 Aug 2021 15:01:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B4D4042623;
-	Sat, 28 Aug 2021 14:59:45 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 747771BF27C
- for <buildroot@lists.busybox.net>; Sat, 28 Aug 2021 14:59:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7BEFD426FC;
+	Sat, 28 Aug 2021 15:00:59 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 947541BF37B
+ for <buildroot@lists.busybox.net>; Sat, 28 Aug 2021 15:00:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6296D40101
- for <buildroot@lists.busybox.net>; Sat, 28 Aug 2021 14:59:44 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 908DD835C9
+ for <buildroot@lists.busybox.net>; Sat, 28 Aug 2021 15:00:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dYmJHMB-jKzg for <buildroot@lists.busybox.net>;
- Sat, 28 Aug 2021 14:59:40 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B4E3940019
- for <buildroot@buildroot.org>; Sat, 28 Aug 2021 14:59:40 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 1E14E844CD; Sat, 28 Aug 2021 14:58:35 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-To: buildroot@buildroot.org
-Date: Sat, 28 Aug 2021 15:50:46 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e63c8ceeea0aeb2c499b994dc0c819e3234c5e3a
-X-Git-Newrev: 7ba9967287d2ae0063a0ce5ab1980221f04d3ed8
-X-Patchwork-Hint: ignore
-Message-Id: <20210828145835.1E14E844CD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/xen: fix build with 64 bits time_t
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id nU33JJhh4quk for <buildroot@lists.busybox.net>;
+ Sat, 28 Aug 2021 15:00:53 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
+ [IPv6:2a00:1450:4864:20::432])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E7BE5834C6
+ for <buildroot@buildroot.org>; Sat, 28 Aug 2021 15:00:52 +0000 (UTC)
+Received: by mail-wr1-x432.google.com with SMTP id x6so6943083wrv.13
+ for <buildroot@buildroot.org>; Sat, 28 Aug 2021 08:00:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=subject:to:cc:references:from:organization:message-id:date
+ :user-agent:mime-version:in-reply-to:content-language
+ :content-transfer-encoding;
+ bh=VzQs0BiJCQwLWf9iJZa/NlPEt3M0pTQVXDZxd2LVb24=;
+ b=Ve8K/56o1zgtLNck6mXpDzUMB/FgPa+mxypw00suI3l3xHx/f04NQpQnfXaDk0oXkq
+ 8SH7KtZVjbsoKBnug26/k2/T7QVh3gx6IHx/To8Y1jqliGaH3xwrCTIRdYGpPztWGjGt
+ 4jKIlaH+SjCiGUsnVYrrlSLUFqbU5NQSXDdIGWXVXteoccacmYwYR4NpWGx/yXg4Jisq
+ 1A9jyrdeNuxllUs5QYvTRaeAMPuvJhmE2Yguo61FGOerlV6pWcGwakjc+7HmpCrl5xz5
+ CEl7NKI/N47w+saiax3xIHhKHH30lLcQmeQrH92BXWVtY5SOWUcB52eWsO8ihvLlskSo
+ 9CDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:subject:to:cc:references:from:organization
+ :message-id:date:user-agent:mime-version:in-reply-to
+ :content-language:content-transfer-encoding;
+ bh=VzQs0BiJCQwLWf9iJZa/NlPEt3M0pTQVXDZxd2LVb24=;
+ b=p8Dv+EDApirHjKkLaCTi9Yd61cqt8Qvxy58uUYn9SLMjmHYL+shdkF3yZcXn7N8TYx
+ OjCjDXWc2R1kuNfGamTU0sBFHR859SoKe+ZWS2hPT8/eQl4+bXNV1cQ4+oaS3V7zcmF2
+ XmOFhRqlBiVrdik03RoCgEDnFJ23vop3WTJwhjIzBpwUJgKHUIn9SfkoPBYVX7IMIQ7j
+ h7jdWYIU+m5Q3iriHJKJr5lut12H6mV6ejB3jh8Pw5WcI77P0sBP0HJrvHEhqTBClYXB
+ FybuhecUmWSvwp2KVRuvdo6h8s0jaYF61ewYrRGEp8ivk1PRn19d3dtDcBUZO8DYrncZ
+ w73Q==
+X-Gm-Message-State: AOAM532OdrD0HqP4AO/NC5ihzstQ5DSPIoeiF6neQeGyDORWPmrGf2ia
+ MRrcJEKsSpI4scjY0HdK9+IUhA==
+X-Google-Smtp-Source: ABdhPJwV/rzsGHylnT+EqPgmAY3kz0Ypj0EE+dkxuIeHxns6xjmyR2970R1A6CTskM5NWy/uK7qCtg==
+X-Received: by 2002:a5d:6e0c:: with SMTP id h12mr16673009wrz.334.1630162851308; 
+ Sat, 28 Aug 2021 08:00:51 -0700 (PDT)
+Received: from [10.73.0.168] ([213.219.130.152])
+ by smtp.gmail.com with ESMTPSA id x11sm9831922wro.83.2021.08.28.08.00.50
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sat, 28 Aug 2021 08:00:50 -0700 (PDT)
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+References: <20210821104403.1184407-1-fontaine.fabrice@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+Message-ID: <6f8d2382-0f16-e9e1-f396-47fea320bea7@mind.be>
+Date: Sat, 28 Aug 2021 17:00:50 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
+MIME-Version: 1.0
+In-Reply-To: <20210821104403.1184407-1-fontaine.fabrice@gmail.com>
+Content-Language: en-GB
+Subject: Re: [Buildroot] [PATCH/next 1/1] package/log4cxx: add libesmtp
+ optional dependency
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,251 +103,48 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8462717995410142060=="
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
---===============8462717995410142060==
-Content-Type: text/plain
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7ba9967287d2ae0063a0ce5ab1980221f04d3ed8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix build of xen with 64 bites time_t:
+On 21/08/2021 12:44, Fabrice Fontaine wrote:
+> libesmtp is an optional dependency (disabled by default) since version
+> 0.10.0 and
+> https://github.com/apache/logging-log4cxx/commit/8a35b429c6b1bc73635d9b6db482523619199a90
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-/tmp/instance-0/output-1/build/xen-4.14.2/tools/qemu-xen/hw/input/virtio-input-host.c: In function 'virtio_input_host_handle_status':
-/tmp/instance-0/output-1/build/xen-4.14.2/tools/qemu-xen/hw/input/virtio-input-host.c:198:28: error: 'struct input_event' has no member named 'time'
-  198 |     if (gettimeofday(&evdev.time, NULL)) {
-      |                            ^
+ Applied to next, thanks.
 
-Fixes:
- - http://autobuild.buildroot.org/results/136ce42f44bf48d3db4eda7b1548bf7ac1b97d51
+ Regards,
+ Arnout
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- .../xen/0003-Fix-build-with-64-bits-time_t.patch   | 95 ++++++++++++++++++++++
- .../0004-libs-light-fix-tv_sec-printf-format.patch | 63 ++++++++++++++
- ...0005-libs-light-fix-tv_sec-fprintf-format.patch | 30 +++++++
- 3 files changed, 188 insertions(+)
-
-diff --git a/package/xen/0003-Fix-build-with-64-bits-time_t.patch b/package/xen/0003-Fix-build-with-64-bits-time_t.patch
-new file mode 100644
-index 0000000000..8559aece2d
---- /dev/null
-+++ b/package/xen/0003-Fix-build-with-64-bits-time_t.patch
-@@ -0,0 +1,95 @@
-+From f7a6df5f5bf3acc219352a1b25573ae2082d7e42 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Thu, 3 Dec 2020 20:58:19 +0100
-+Subject: [PATCH] Fix build with 64 bits time_t
-+
-+time element is deprecated on new input_event structure in kernel's
-+input.h [1]
-+
-+This will avoid the following build failure:
-+
-+hw/input/virtio-input-host.c: In function 'virtio_input_host_handle_status':
-+hw/input/virtio-input-host.c:198:28: error: 'struct input_event' has no member named 'time'
-+  198 |     if (gettimeofday(&evdev.time, NULL)) {
-+      |                            ^
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/a538167e288c14208d557cd45446df86d3d599d5
-+ - http://autobuild.buildroot.org/results/efd4474fb4b6c0ce0ab3838ce130429c51e43bbb
-+
-+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit?id=152194fe9c3f
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Message-Id: <20201203195819.583626-1-fontaine.fabrice@gmail.com>
-+Fixes: https://gitlab.com/qemu-project/qemu/-/issues/246
-+Reviewed-by: Michael S. Tsirkin <mst@redhat.com>
-+Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
-+
-+[Retrieved (and updated for qemu-xen) from:
-+https://github.com/qemu/qemu/commit/f7a6df5f5bf3acc219352a1b25573ae2082d7e42]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ contrib/vhost-user-input/main.c | 8 ++++++--
-+ hw/input/virtio-input-host.c    | 5 ++++-
-+ 2 files changed, 10 insertions(+), 3 deletions(-)
-+
-+diff --git a/tools/qemu-xen/contrib/vhost-user-input/main.c b/tools/qemu-xen/contrib/vhost-user-input/main.c
-+index c15d18c33f0c..081230da548a 100644
-+--- a/tools/qemu-xen/contrib/vhost-user-input/main.c
-++++ b/tools/qemu-xen/contrib/vhost-user-input/main.c
-+@@ -6,13 +6,14 @@
-+ #include "qemu/osdep.h"
-+ 
-+ #include <glib.h>
-+-#include <linux/input.h>
-++#include <sys/ioctl.h>
-+ 
-+ #include "qemu/iov.h"
-+ #include "qemu/bswap.h"
-+ #include "qemu/sockets.h"
-+ #include "contrib/libvhost-user/libvhost-user.h"
-+ #include "contrib/libvhost-user/libvhost-user-glib.h"
-++#include "standard-headers/linux/input.h"
-+ #include "standard-headers/linux/virtio_input.h"
-+ #include "qapi/error.h"
-+ 
-+@@ -113,13 +114,16 @@ vi_evdev_watch(VuDev *dev, int condition, void *data)
-+ static void vi_handle_status(VuInput *vi, virtio_input_event *event)
-+ {
-+     struct input_event evdev;
-++    struct timeval tval;
-+     int rc;
-+ 
-+-    if (gettimeofday(&evdev.time, NULL)) {
-++    if (gettimeofday(&tval, NULL)) {
-+         perror("vi_handle_status: gettimeofday");
-+         return;
-+     }
-+ 
-++    evdev.input_event_sec = tval.tv_sec;
-++    evdev.input_event_usec = tval.tv_usec;
-+     evdev.type = le16toh(event->type);
-+     evdev.code = le16toh(event->code);
-+     evdev.value = le32toh(event->value);
-+diff --git a/tools/qemu-xen/hw/input/virtio-input-host.c b/tools/qemu-xen/hw/input/virtio-input-host.c
-+index 85daf73f1a80..137efba57b0f 100644
-+--- a/tools/qemu-xen/hw/input/virtio-input-host.c
-++++ b/tools/qemu-xen/hw/input/virtio-input-host.c
-+@@ -193,13 +193,16 @@ static void virtio_input_host_handle_status(VirtIOInput *vinput,
-+ {
-+     VirtIOInputHost *vih = VIRTIO_INPUT_HOST(vinput);
-+     struct input_event evdev;
-++    struct timeval tval;
-+     int rc;
-+ 
-+-    if (gettimeofday(&evdev.time, NULL)) {
-++    if (gettimeofday(&tval, NULL)) {
-+         perror("virtio_input_host_handle_status: gettimeofday");
-+         return;
-+     }
-+ 
-++    evdev.input_event_sec = tval.tv_sec;
-++    evdev.input_event_usec = tval.tv_usec;
-+     evdev.type = le16_to_cpu(event->type);
-+     evdev.code = le16_to_cpu(event->code);
-+     evdev.value = le32_to_cpu(event->value);
-diff --git a/package/xen/0004-libs-light-fix-tv_sec-printf-format.patch b/package/xen/0004-libs-light-fix-tv_sec-printf-format.patch
-new file mode 100644
-index 0000000000..fffc8d7307
---- /dev/null
-+++ b/package/xen/0004-libs-light-fix-tv_sec-printf-format.patch
-@@ -0,0 +1,63 @@
-+From a8ac01aa3e3ea5e6a9a1620aa8fa7e9da3458120 Mon Sep 17 00:00:00 2001
-+From: Manuel Bouyer <bouyer@netbsd.org>
-+Date: Tue, 26 Jan 2021 23:47:55 +0100
-+Subject: [PATCH] libs/light: fix tv_sec printf format
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Don't assume tv_sec is a unsigned long, it is 64 bits on NetBSD 32 bits.
-+Use %jd and cast to (intmax_t) instead
-+
-+Signed-off-by: Manuel Bouyer <bouyer@netbsd.org>
-+Reviewed-by: Roger Pau Monné <roger.pau@citrix.com>
-+[Retrieved (and backported) from:
-+https://gitlab.com/xen-project/xen/-/commit/a8ac01aa3e3ea5e6a9a1620aa8fa7e9da3458120]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ tools/libs/light/libxl_create.c | 8 ++++----
-+ 1 file changed, 4 insertions(+), 4 deletions(-)
-+
-+diff --git a/tools/libxl/libxl_create.c b/tools/libxl/libxl_create.c
-+index 8616113e72..9848d65f36 100644
-+--- a/tools/libxl/libxl_create.c
-++++ b/tools/libxl/libxl_create.c
-+@@ -496,7 +496,7 @@ int libxl__domain_build(libxl__gc *gc,
-+         vments[2] = "image/ostype";
-+         vments[3] = "hvm";
-+         vments[4] = "start_time";
-+-        vments[5] = GCSPRINTF("%lu.%02d", start_time.tv_sec,(int)start_time.tv_usec/10000);
-++        vments[5] = GCSPRINTF("%jd.%02d", (intmax_t)start_time.tv_sec,(int)start_time.tv_usec/10000);
-+ 
-+         localents = libxl__calloc(gc, 13, sizeof(char *));
-+         i = 0;
-+@@ -535,7 +535,7 @@ int libxl__domain_build(libxl__gc *gc,
-+         vments[i++] = "image/kernel";
-+         vments[i++] = (char *) state->pv_kernel.path;
-+         vments[i++] = "start_time";
-+-        vments[i++] = GCSPRINTF("%lu.%02d", start_time.tv_sec,(int)start_time.tv_usec/10000);
-++        vments[i++] = GCSPRINTF("%jd.%02d", (intmax_t)start_time.tv_sec,(int)start_time.tv_usec/10000);
-+         if (state->pv_ramdisk.path) {
-+             vments[i++] = "image/ramdisk";
-+             vments[i++] = (char *) state->pv_ramdisk.path;
-+@@ -1502,7 +1502,7 @@ static void domcreate_stream_done(libxl__egc *egc,
-+         vments[2] = "image/ostype";
-+         vments[3] = "hvm";
-+         vments[4] = "start_time";
-+-        vments[5] = GCSPRINTF("%lu.%02d", start_time.tv_sec,(int)start_time.tv_usec/10000);
-++        vments[5] = GCSPRINTF("%jd.%02d", (intmax_t)start_time.tv_sec,(int)start_time.tv_usec/10000);
-+         break;
-+     case LIBXL_DOMAIN_TYPE_PV:
-+         vments = libxl__calloc(gc, 11, sizeof(char *));
-+@@ -1512,7 +1512,7 @@ static void domcreate_stream_done(libxl__egc *egc,
-+         vments[i++] = "image/kernel";
-+         vments[i++] = (char *) state->pv_kernel.path;
-+         vments[i++] = "start_time";
-+-        vments[i++] = GCSPRINTF("%lu.%02d", start_time.tv_sec,(int)start_time.tv_usec/10000);
-++        vments[i++] = GCSPRINTF("%jd.%02d", (intmax_t)start_time.tv_sec,(int)start_time.tv_usec/10000);
-+         if (state->pv_ramdisk.path) {
-+             vments[i++] = "image/ramdisk";
-+             vments[i++] = (char *) state->pv_ramdisk.path;
-+-- 
-+GitLab
-+
-diff --git a/package/xen/0005-libs-light-fix-tv_sec-fprintf-format.patch b/package/xen/0005-libs-light-fix-tv_sec-fprintf-format.patch
-new file mode 100644
-index 0000000000..d677dce4fc
---- /dev/null
-+++ b/package/xen/0005-libs-light-fix-tv_sec-fprintf-format.patch
-@@ -0,0 +1,30 @@
-+From 4881285bcfd8f2e2c913c6e9f011b1e90652f414 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 28 Aug 2021 11:00:07 +0200
-+Subject: [PATCH] libs/light: fix tv_sec fprintf format
-+
-+Don't assume tv_sec is a unsigned long, it is 64 bits on NetBSD 32 bits.
-+Use %jd and cast to (intmax_t) instead
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: sent to xen-devel@lists.xenproject.org]
-+---
-+ tools/libs/light/libxl_domain.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/tools/libxl/libxl_domain.c b/tools/libxl/libxl_domain.c
-+index c00c36c928..51a6127552 100644
-+--- a/tools/libxl/libxl_domain.c
-++++ b/tools/libxl/libxl_domain.c
-+@@ -1444,7 +1444,7 @@ static int libxl__mark_domid_recent(libxl__gc *gc, uint32_t domid)
-+         }
-+     }
-+ 
-+-    r = fprintf(nf, "%lu %u\n", ctxt.ts.tv_sec, domid);
-++    r = fprintf(nf, "%jd %u\n", (intmax_t)ctxt.ts.tv_sec, domid);
-+     if (r < 0) {
-+         LOGED(ERROR, domid, "failed to write to '%s'", new);
-+         goto out;
-+-- 
-+2.32.0
-+
-
---===============8462717995410142060==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+> ---
+>  package/log4cxx/log4cxx.mk | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/package/log4cxx/log4cxx.mk b/package/log4cxx/log4cxx.mk
+> index 0ddea9466a..075f8cb371 100644
+> --- a/package/log4cxx/log4cxx.mk
+> +++ b/package/log4cxx/log4cxx.mk
+> @@ -22,4 +22,11 @@ LOG4CXX_CONF_OPTS = \
+>  
+>  LOG4CXX_DEPENDENCIES = apr apr-util
+>  
+> +ifeq ($(BR2_PACKAGE_LIBESMTP),y)
+> +LOG4CXX_DEPENDENCIES += libesmtp
+> +LOG4CXX_CONF_OPTS += --with-SMTP=libesmtp
+> +else
+> +LOG4CXX_CONF_OPTS += --without-SMTP
+> +endif
+> +
+>  $(eval $(autotools-package))
+> 
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
 http://lists.busybox.net/mailman/listinfo/buildroot
-
---===============8462717995410142060==--
