@@ -2,56 +2,57 @@ Return-Path: <SRS0=jfQC=N2=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C78D9C433EF
-	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 18:47:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CAA10C433F5
+	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 18:47:28 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 8C6CB60E9B
-	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 18:47:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8C6CB60E9B
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
+	by mail.kernel.org (Postfix) with ESMTPS id 95C5F60E74
+	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 18:47:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 95C5F60E74
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6B9E983440;
-	Sat,  4 Sep 2021 18:47:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 70E2D83E3E;
+	Sat,  4 Sep 2021 18:47:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CCITO0A5T9gq; Sat,  4 Sep 2021 18:47:15 +0000 (UTC)
+	with ESMTP id BqNWgT8nSl5l; Sat,  4 Sep 2021 18:47:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9D7D78341E;
-	Sat,  4 Sep 2021 18:47:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A622983AC8;
+	Sat,  4 Sep 2021 18:47:26 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3C43F1BF5DD
- for <buildroot@lists.busybox.net>; Sat,  4 Sep 2021 18:26:20 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 10E9D1BF5DD
+ for <buildroot@lists.busybox.net>; Sat,  4 Sep 2021 18:26:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D0AD7402B7
+ by smtp2.osuosl.org (Postfix) with ESMTP id CEE9E40173
  for <buildroot@lists.busybox.net>; Sat,  4 Sep 2021 18:25:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id h4WK8VW93mHV for <buildroot@lists.busybox.net>;
+ with ESMTP id xEKBiXj_Jn8K for <buildroot@lists.busybox.net>;
  Sat,  4 Sep 2021 18:25:20 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id EA266402BE
+ by smtp2.osuosl.org (Postfix) with ESMTP id D735940238
  for <buildroot@buildroot.org>; Sat,  4 Sep 2021 18:25:18 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id BE4F98834A; Sat,  4 Sep 2021 18:23:56 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ id A759F8834A; Sat,  4 Sep 2021 18:23:56 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 29 Aug 2021 18:29:23 +0200
+Date: Sun, 29 Aug 2021 11:37:32 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 62b135af5e1e2ad9ea38e33125b40b3ed074cf57
-X-Git-Newrev: dd1621b067cf2569198227a25080a127a05f7dc4
+X-Git-Oldrev: 1259d40b0ab2d436fad088f4b9288b9899ef19a4
+X-Git-Newrev: c938698b4a9e537d3e43c692a5c2a3a15c5d8d37
 X-Patchwork-Hint: ignore
-Message-Id: <20210904182356.BE4F98834A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/qt5/qt5opcua: new package
+Message-Id: <20210904182356.A759F8834A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/testing/tests: add test for
+ check_bin_arch
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,106 +71,102 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dd1621b067cf2569198227a25080a127a05f7dc4
+commit: https://git.buildroot.net/buildroot/commit/?id=c938698b4a9e537d3e43c692a5c2a3a15c5d8d37
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The Qt OPC UA module implements a Qt API to interact with OPC UA on
-top of a 3rd party OPC UA stack.
-The default is open62541, which is bundled by qt5opcua in version 1.0,
-so we dont need to provide/depend on br's own open62541 package.
+This tests build a bogus package that installs a binary built for the
+host architecture into $(TARGET_DIR), which should cause a build
+failure, at least as long as the host architecture isn't ARM.
 
-Another dependency is mbedtls, but it's optional.
-
-Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+[yann.morin.1998@free.fr: drop uneeded subprocess import to fix flake8]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- DEVELOPERS                         |  1 +
- package/qt5/Config.in              |  1 +
- package/qt5/qt5opcua/Config.in     |  9 +++++++++
- package/qt5/qt5opcua/qt5opcua.hash | 10 ++++++++++
- package/qt5/qt5opcua/qt5opcua.mk   | 19 +++++++++++++++++++
- 5 files changed, 40 insertions(+)
+ .../tests/core/br2-external/detect-bad-arch/Config.in  |  1 +
+ .../core/br2-external/detect-bad-arch/external.desc    |  1 +
+ .../core/br2-external/detect-bad-arch/external.mk      |  1 +
+ .../detect-bad-arch/package/detect-bad-arch/Config.in  |  4 ++++
+ .../package/detect-bad-arch/detect-bad-arch.mk         | 15 +++++++++++++++
+ support/testing/tests/core/test_bad_arch.py            | 18 ++++++++++++++++++
+ 6 files changed, 40 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 66c5a6703c..1bc4a1370c 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1962,6 +1962,7 @@ N:	Naumann Andreas <ANaumann@ultratronik.de>
- F:	package/evemu/
- F:	package/libevdev/
- F:	package/pkg-qmake.mk
-+F:	package/qt5/qt5opcua/
- 
- N:	Nicola Di Lieto <nicola.dilieto@gmail.com>
- F:	package/uacme/
-diff --git a/package/qt5/Config.in b/package/qt5/Config.in
-index 6714c6271d..6f2428d800 100644
---- a/package/qt5/Config.in
-+++ b/package/qt5/Config.in
-@@ -51,6 +51,7 @@ source "package/qt5/qt5location/Config.in"
- source "package/qt5/qt5lottie/Config.in"
- source "package/qt5/qt5mqtt/Config.in"
- source "package/qt5/qt5multimedia/Config.in"
-+source "package/qt5/qt5opcua/Config.in"
- source "package/qt5/qt5quickcontrols/Config.in"
- source "package/qt5/qt5quickcontrols2/Config.in"
- source "package/qt5/qt5quicktimeline/Config.in"
-diff --git a/package/qt5/qt5opcua/Config.in b/package/qt5/qt5opcua/Config.in
+diff --git a/support/testing/tests/core/br2-external/detect-bad-arch/Config.in b/support/testing/tests/core/br2-external/detect-bad-arch/Config.in
 new file mode 100644
-index 0000000000..2b0ba37af3
+index 0000000000..530c077bbe
 --- /dev/null
-+++ b/package/qt5/qt5opcua/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_QT5OPCUA
-+	bool "qt5opcua"
-+	depends on BR2_PACKAGE_QT5
-+	help
-+	  Qt is a cross-platform application and UI framework for
-+	  developers using C++.
++++ b/support/testing/tests/core/br2-external/detect-bad-arch/Config.in
+@@ -0,0 +1 @@
++source "$BR2_EXTERNAL_DETECT_BAD_ARCH_PATH/package/detect-bad-arch/Config.in"
+diff --git a/support/testing/tests/core/br2-external/detect-bad-arch/external.desc b/support/testing/tests/core/br2-external/detect-bad-arch/external.desc
+new file mode 100644
+index 0000000000..3c4232c90d
+--- /dev/null
++++ b/support/testing/tests/core/br2-external/detect-bad-arch/external.desc
+@@ -0,0 +1 @@
++name: DETECT_BAD_ARCH
+diff --git a/support/testing/tests/core/br2-external/detect-bad-arch/external.mk b/support/testing/tests/core/br2-external/detect-bad-arch/external.mk
+new file mode 100644
+index 0000000000..71b9821ddc
+--- /dev/null
++++ b/support/testing/tests/core/br2-external/detect-bad-arch/external.mk
+@@ -0,0 +1 @@
++include $(sort $(wildcard $(BR2_EXTERNAL_DETECT_BAD_ARCH_PATH)/package/*/*.mk))
+diff --git a/support/testing/tests/core/br2-external/detect-bad-arch/package/detect-bad-arch/Config.in b/support/testing/tests/core/br2-external/detect-bad-arch/package/detect-bad-arch/Config.in
+new file mode 100644
+index 0000000000..9893e9afc1
+--- /dev/null
++++ b/support/testing/tests/core/br2-external/detect-bad-arch/package/detect-bad-arch/Config.in
+@@ -0,0 +1,4 @@
++config BR2_PACKAGE_DETECT_BAD_ARCH
++	bool
++	default y
 +
-+	  The Qt OPC UA module implements a Qt API to interact with
-+	  OPC UA on top of a 3rd party OPC UA stack.
-diff --git a/package/qt5/qt5opcua/qt5opcua.hash b/package/qt5/qt5opcua/qt5opcua.hash
+diff --git a/support/testing/tests/core/br2-external/detect-bad-arch/package/detect-bad-arch/detect-bad-arch.mk b/support/testing/tests/core/br2-external/detect-bad-arch/package/detect-bad-arch/detect-bad-arch.mk
 new file mode 100644
-index 0000000000..e55fb17743
+index 0000000000..5e78c55f1f
 --- /dev/null
-+++ b/package/qt5/qt5opcua/qt5opcua.hash
-@@ -0,0 +1,10 @@
-+# Hash locally calculated
-+sha256  562171c6dfd6f4f072316ddb6d7c5bcc8907a68ba31005cb8c20ed75beff34fb  qt5opcua-5.15.2-br1.tar.gz
-+
-+# Hashes for license files:
-+sha256  d93cc415382f0013088fa276d9cf82373badf244c78220a926f15ee46f0fe3c4  LICENSE-CC0
-+sha256  f827ad079686ba92cc94811e35492d0e8966f704008b6da9eeda0b659fb58a8d  LICENSE.FDL
-+sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE.GPL3
-+sha256  0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652  LICENSE.GPL3-EXCEPT
-+sha256  6c3f3c31b93985f1b93bfbb35fb609d37281697d0efc220c9f91cf4b59eaabde  LICENSE.GPLv2
-+sha256  75d800e60c8d58c2e7f0338e8552ea6123a9ce7e5dd8e1cdf2095e013b737488  LICENSE.LGPLv3
-diff --git a/package/qt5/qt5opcua/qt5opcua.mk b/package/qt5/qt5opcua/qt5opcua.mk
-new file mode 100644
-index 0000000000..a58c4c5e14
---- /dev/null
-+++ b/package/qt5/qt5opcua/qt5opcua.mk
-@@ -0,0 +1,19 @@
++++ b/support/testing/tests/core/br2-external/detect-bad-arch/package/detect-bad-arch/detect-bad-arch.mk
+@@ -0,0 +1,15 @@
 +################################################################################
 +#
-+# qt5opcua
++# detect-bad-arch
 +#
 +################################################################################
 +
-+QT5OPCUA_VERSION = $(QT5_VERSION)
-+QT5OPCUA_SITE = https://code.qt.io/qt/qtopcua.git
-+QT5OPCUA_SITE_METHOD = git
-+QT5OPCUA_INSTALL_STAGING = YES
-+QT5OPCUA_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDL-1.3 (docs) CC0-1.0
-+QT5OPCUA_LICENSE_FILES = LICENSE.GPLv2 LICENSE.GPL3 LICENSE.GPL3-EXCEPT LICENSE.LGPLv3 LICENSE.FDL LICENSE-CC0
-+QT5OPCUA_SYNC_QT_HEADERS = YES
++define DETECT_BAD_ARCH_BUILD_CMDS
++	echo "int main(void) { return 0; }" | $(HOSTCC) -x c -o $(@D)/foo -
++endef
 +
-+ifeq ($(BR2_PACKAGE_MBEDTLS),y)
-+QT5OPCUA_DEPENDENCIES += mbedtls
-+endif
++define DETECT_BAD_ARCH_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/foo $(TARGET_DIR)/usr/bin/foo
++endef
 +
-+$(eval $(qmake-package))
++$(eval $(generic-package))
+diff --git a/support/testing/tests/core/test_bad_arch.py b/support/testing/tests/core/test_bad_arch.py
+new file mode 100644
+index 0000000000..316231e28e
+--- /dev/null
++++ b/support/testing/tests/core/test_bad_arch.py
+@@ -0,0 +1,18 @@
++import infra
++import infra.basetest
++
++
++class DetectBadArchTest(infra.basetest.BRConfigTest):
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + infra.basetest.MINIMAL_CONFIG
++    br2_external = [infra.filepath("tests/core/br2-external/detect-bad-arch")]
++
++    def test_run(self):
++        with self.assertRaises(SystemError):
++            self.b.build()
++        logf_path = infra.log_file_path(self.b.builddir, "build",
++                                        infra.basetest.BRConfigTest.logtofile)
++        if logf_path:
++            s = 'ERROR: architecture for "/usr/bin/foo" is'
++            with open(logf_path, "r") as f:
++                lines = [l for l in f.readlines() if l.startswith(s)]
++            self.assertEqual(len(lines), 1)
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
