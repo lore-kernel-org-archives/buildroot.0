@@ -7,94 +7,93 @@ X-Spam-Status: No, score=-15.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E1B43C432BE
-	for <buildroot@archiver.kernel.org>; Sun, 29 Aug 2021 17:22:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C4CC1C432BE
+	for <buildroot@archiver.kernel.org>; Sun, 29 Aug 2021 17:25:41 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 681D160F4B
-	for <buildroot@archiver.kernel.org>; Sun, 29 Aug 2021 17:22:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 681D160F4B
+	by mail.kernel.org (Postfix) with ESMTPS id 3B77A60F38
+	for <buildroot@archiver.kernel.org>; Sun, 29 Aug 2021 17:25:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3B77A60F38
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 31EE180E5C;
-	Sun, 29 Aug 2021 17:22:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 02FD680D84;
+	Sun, 29 Aug 2021 17:25:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AOWTgoJPNwn8; Sun, 29 Aug 2021 17:22:07 +0000 (UTC)
+	with ESMTP id VPQ9Bxm7h2JC; Sun, 29 Aug 2021 17:25:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3B3A380E9F;
-	Sun, 29 Aug 2021 17:22:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 72A4A80D8B;
+	Sun, 29 Aug 2021 17:25:36 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8A1E31BF599
- for <buildroot@lists.busybox.net>; Sun, 29 Aug 2021 17:22:05 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9361A1BF599
+ for <buildroot@lists.busybox.net>; Sun, 29 Aug 2021 17:25:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7516E6070B
- for <buildroot@lists.busybox.net>; Sun, 29 Aug 2021 17:22:05 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8349E6070B
+ for <buildroot@lists.busybox.net>; Sun, 29 Aug 2021 17:25:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp3.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id swYfjx9fM44C for <buildroot@lists.busybox.net>;
- Sun, 29 Aug 2021 17:22:01 +0000 (UTC)
+ with ESMTP id Spe9T7FDns81 for <buildroot@lists.busybox.net>;
+ Sun, 29 Aug 2021 17:25:29 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com
- [IPv6:2a00:1450:4864:20::62d])
- by smtp3.osuosl.org (Postfix) with ESMTPS id CAFFA606F2
- for <buildroot@buildroot.org>; Sun, 29 Aug 2021 17:22:00 +0000 (UTC)
-Received: by mail-ej1-x62d.google.com with SMTP id i21so25958371ejd.2
- for <buildroot@buildroot.org>; Sun, 29 Aug 2021 10:22:00 -0700 (PDT)
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com
+ [IPv6:2a00:1450:4864:20::62b])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 58758606F2
+ for <buildroot@buildroot.org>; Sun, 29 Aug 2021 17:25:29 +0000 (UTC)
+Received: by mail-ej1-x62b.google.com with SMTP id a25so25906027ejv.6
+ for <buildroot@buildroot.org>; Sun, 29 Aug 2021 10:25:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=subject:to:cc:references:from:organization:message-id:date
- :user-agent:mime-version:in-reply-to:content-language
- :content-transfer-encoding;
- bh=Ovj1oQ27GA5HXZKxNOabFD0CrZMlmmO+EUMtsFBpxAg=;
- b=KPYBva5I9611RRYDu/vhT3Z15/Do1GLxmx80Zw7AtPpTrjQnvybM5VJUqem1aYz4AX
- gdJgJ3/2q/jJxS6qr/mfWOJn8xFGxkvG0G6uF0ogQ4+15sYKy4li550L07XLtK8C8Bpb
- 5EcVN8BZTNv/6k21IjM1s/1SMrpFhsyssBzcegAdIG1hr72fRq3Om3Bw8QGhHLNQMsew
- BWY5j+YRD+Iv9RW7fOOwykqi1sg0FDBI4ZuTebINHRnu4NXaJ0j45EwaLnOJYEpMo277
- EmmsLHxVLJTINMcuXw7lXMjcUIY6IWS/UO+xcYWxzKvp0pSrNsHOwq2ZMosxp+1+ejVp
- Gc1A==
+ h=subject:to:references:from:organization:message-id:date:user-agent
+ :mime-version:in-reply-to:content-language:content-transfer-encoding;
+ bh=Y2qgqB+xAUQGvTA6JvSx/hZlIwav3ca32Do+TnzQ4tY=;
+ b=IEDg/cqkIoZfE8MPBZrI6sDkjVcNCa1dXr7EEcKjMw1rkstvBlKCGcdw95AsVO52Nn
+ sXUKkrW7lhowHeXzfTsugCB+GdrmPee7PNDtgy3kRaeXU5o3L3P0CJofmuSgHFuLO6Sx
+ xi/GXkYG7JDfINXv9h0OH+4vLYBVy78b9QzxR8wON33/U2CxZpbgmqCG7zIbBpHktWGI
+ Faoq2l/8e4tCKQ8lOa9IJvp5GEKb9Bt3CwUCfRyYQ5MUGEOmhuKi5MY20TuNHbGa8QPq
+ tvXpUSyi6rkMBu8/Ii3Ls14U0G2+mVpxrynlpTIPxRN2/sTK1d0h7f2F+No0ArQmUdm/
+ dNrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
- h=x-gm-message-state:subject:to:cc:references:from:organization
+ h=x-gm-message-state:subject:to:references:from:organization
  :message-id:date:user-agent:mime-version:in-reply-to
  :content-language:content-transfer-encoding;
- bh=Ovj1oQ27GA5HXZKxNOabFD0CrZMlmmO+EUMtsFBpxAg=;
- b=ZCOjfS0lxpcnpZ8EUM5ZnlZ21aJjou7cMZ1J7gxhVGq6Q3IGnuBB7zY/3UcV4SpYnT
- 8RbvjqoUFFiwAfplYvDCLNd6xezGoKr7bEgEJNVaJksExHO5otsuZQ98MHTEYoYAYWis
- JBNW2NSDn6EkeeVimrImXl9NItWug+Vig2yaG3K7OqEhzPO8ahfvfppDeweyaYCtfcAc
- FjZc/Vb/aaALAHJ2ZRo7AIgm96ERlHHXXTQ3dfj05jE0vNO8mUWtvctIdNmqeTQsRbRW
- 4MCymZ5WOzNcTD8qeHHVX1T7aAZ3Sj52sdkhaf67xWWW8COQ8OeQ9CMAhfKzaHw8nSp9
- tkiA==
-X-Gm-Message-State: AOAM530rhEmctu7iMq0F/ELfNmNhHzww8lKTuMsz3DCkr4Quy2wWycC6
- 16/3PJAgCT0aH7paO7pCj+dM1g==
-X-Google-Smtp-Source: ABdhPJySech43I/S3O9OP6ykXSxMqxOD262n4hi6/PixM/AAU8l2jEFaET7jDlBkFIJF3PBww3S8hA==
-X-Received: by 2002:a17:906:c443:: with SMTP id
- ck3mr20498107ejb.195.1630257719071; 
- Sun, 29 Aug 2021 10:21:59 -0700 (PDT)
+ bh=Y2qgqB+xAUQGvTA6JvSx/hZlIwav3ca32Do+TnzQ4tY=;
+ b=W6Gacli+pxXD9Om4HwbQY52XXADVOwqs4ovJMTE0gQOr4I5urJcP74rUefc4AJcVe9
+ Ita7BkK7b5eG2sjWKZbN6Q+WRyZ8EQNxg/cUNsNrHmKXGKgfmBxD3XP8P928JUDJqJNW
+ pGnTLKGWMs0YyUovrkD4Qc5vg6cPenOXD/yw714sygIcLQP6VDNWpCr36hmrEyY3fwUL
+ 9sDXoD9Z49wlSYlTHQnJbh5w8yUndmTC3k1yRCPc4Cxj2r7taxVslMtkNrWsDssk6txK
+ FXHFtppdNb6p7IC+uHVlplOkGFa+16awDf7RrBCwoDkiBprB8MDDy+A9g+DGXXVtSj7V
+ L6+w==
+X-Gm-Message-State: AOAM530/nyqpuYOe6rtik/VrmkGTF/Ne7sk3GTxYq76KvpJAyRSyELl3
+ NAEZvn7Rh1VXAYWBiPOuon6kRR9YdUtZgw==
+X-Google-Smtp-Source: ABdhPJy6TLErHHVrR4QLBrSo15CvuVfv4BDmx8RQhC05kmNfq0uELpV3E0SFrix8BQUbR7AJDbtEHg==
+X-Received: by 2002:a17:906:8468:: with SMTP id
+ hx8mr20627802ejc.492.1630257927426; 
+ Sun, 29 Aug 2021 10:25:27 -0700 (PDT)
 Received: from ?IPv6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id f30sm5574513ejl.78.2021.08.29.10.21.58
+ by smtp.gmail.com with ESMTPSA id lb12sm5704733ejc.28.2021.08.29.10.25.26
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 29 Aug 2021 10:21:58 -0700 (PDT)
-To: Jonah Petri <jonah@petri.us>, buildroot@buildroot.org
-References: <20210826193424.1650108-1-jonah@petri.us>
+ Sun, 29 Aug 2021 10:25:27 -0700 (PDT)
+To: Michael Nosthoff <buildroot@heine.tech>, buildroot@buildroot.org
+References: <20210826195548.34967-1-buildroot@heine.tech>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-Message-ID: <4bdc9d7d-b4ce-4834-c7ef-eff9865f82fb@mind.be>
-Date: Sun, 29 Aug 2021 19:21:57 +0200
+Message-ID: <0fc30697-caf1-ffd6-9e93-07b88efa1707@mind.be>
+Date: Sun, 29 Aug 2021 19:25:25 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.11.0
 MIME-Version: 1.0
-In-Reply-To: <20210826193424.1650108-1-jonah@petri.us>
+In-Reply-To: <20210826195548.34967-1-buildroot@heine.tech>
 Content-Language: en-GB
-Subject: Re: [Buildroot] [PATCH v3 1/1] toolchain: handle toolchains with
- multiple ld*.so.* files
+Subject: Re: [Buildroot] [PATCH] package/json-for-modern-cpp: bump version
+ to 3.10.2
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -106,10 +105,6 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Romain Naour <romain.naour@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
@@ -117,50 +112,42 @@ Sender: "buildroot" <buildroot-bounces@busybox.net>
 
 
 
-On 26/08/2021 21:34, Jonah Petri wrote:
-> Some 3rd party vendor toolchains have multiple files which match
-> these glob patterns.  In this case, the shell script failed.
-> Switching to use find and xargs solves the issue.
-> 
-> Signed-off-by: Jonah Petri <jonah@petri.us>
+On 26/08/2021 21:55, Michael Nosthoff via buildroot wrote:
+> Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 > ---
-> Changes:
->   v2: add SOB
->   v3: fix usage of `find`
->     I moved away from -wholename, which seemed needlessly complex, and
-> instead I'm using just the base directory and -name.  Tested with
-> previously-failing ARM aarch64 external toolchain build.
+>  package/json-for-modern-cpp/json-for-modern-cpp.hash | 2 +-
+>  package/json-for-modern-cpp/json-for-modern-cpp.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
->  toolchain/helpers.mk | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
-> 
-> diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-> index dfb2581ed5..cb9ff6479b 100644
-> --- a/toolchain/helpers.mk
-> +++ b/toolchain/helpers.mk
-> @@ -135,10 +135,8 @@ copy_toolchain_sysroot = \
->  			$(call simplify_symlink,$$i,$(STAGING_DIR)) ; \
->  		done ; \
->  	fi ; \
-> -	if [ ! -e $(STAGING_DIR)/lib/ld*.so.* ]; then \
-> -		if [ -e $${ARCH_SYSROOT_DIR}/lib/ld*.so.* ]; then \
-> -			cp -a $${ARCH_SYSROOT_DIR}/lib/ld*.so.* $(STAGING_DIR)/lib/ ; \
-> -		fi ; \
-> +	if [[ ! $$(find $(STAGING_DIR)/lib -name 'ld*.so.*' -print -quit) ]]; then \
+> diff --git a/package/json-for-modern-cpp/json-for-modern-cpp.hash b/package/json-for-modern-cpp/json-for-modern-cpp.hash
+> index eb9270b311..5296be3924 100644
+> --- a/package/json-for-modern-cpp/json-for-modern-cpp.hash
+> +++ b/package/json-for-modern-cpp/json-for-modern-cpp.hash
+> @@ -1,3 +1,3 @@
+>  # Locally computed
+> -sha256  9943db11eeaa5b23e58a88fbc26c453faccef7b546e55063ad00e7caaaf76d0b  json-3.9.0.tar.gz
+> +sha256  081ed0f9f89805c2d96335c3acfa993b39a0a5b4b4cef7edb68dd2210a13458c  json-3.10.2.tar.gz
+>  sha256  50be9457e5c9faaba5e60d9c73f8eabe9e0737a2d9c3e58357d856661862c18e  LICENSE.MIT
 
- I was going to say: don't use [[, it's a bashism. However, we already use it in
-helpers.mk, so I guess it's OK. It's up to whoever has a problem with it to get
-rid of it :-)
-
- Therefore, applied to next, thanks.
+ License hash changed due to copyright year update to 2021. Committed to next
+with that fixed, thanks.
 
  Regards,
  Arnout
 
-> +		find $${ARCH_SYSROOT_DIR}/lib -name 'ld*.so.*' -print0 | xargs -0 -I % cp % $(STAGING_DIR)/lib/; \
->  	fi ; \
->  	if [ `readlink -f $${SYSROOT_DIR}` != `readlink -f $${ARCH_SYSROOT_DIR}` ] ; then \
->  		if [ ! -d $${ARCH_SYSROOT_DIR}/usr/include ] ; then \
+> diff --git a/package/json-for-modern-cpp/json-for-modern-cpp.mk b/package/json-for-modern-cpp/json-for-modern-cpp.mk
+> index b644f3354c..14843380ee 100644
+> --- a/package/json-for-modern-cpp/json-for-modern-cpp.mk
+> +++ b/package/json-for-modern-cpp/json-for-modern-cpp.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -JSON_FOR_MODERN_CPP_VERSION = 3.9.0
+> +JSON_FOR_MODERN_CPP_VERSION = 3.10.2
+>  JSON_FOR_MODERN_CPP_SOURCE = json-$(JSON_FOR_MODERN_CPP_VERSION).tar.gz
+>  JSON_FOR_MODERN_CPP_SITE = $(call github,nlohmann,json,v$(JSON_FOR_MODERN_CPP_VERSION))
+>  JSON_FOR_MODERN_CPP_LICENSE = MIT
 > 
 _______________________________________________
 buildroot mailing list
