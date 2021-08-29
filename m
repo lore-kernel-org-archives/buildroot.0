@@ -2,57 +2,97 @@ Return-Path: <SRS0=tQX8=NU=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-20.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6748CC432BE
-	for <buildroot@archiver.kernel.org>; Sun, 29 Aug 2021 16:54:28 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F6A5C432BE
+	for <buildroot@archiver.kernel.org>; Sun, 29 Aug 2021 16:57:38 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 289A960F23
-	for <buildroot@archiver.kernel.org>; Sun, 29 Aug 2021 16:54:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 289A960F23
+	by mail.kernel.org (Postfix) with ESMTPS id 2974860F39
+	for <buildroot@archiver.kernel.org>; Sun, 29 Aug 2021 16:57:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2974860F39
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DB98340104;
-	Sun, 29 Aug 2021 16:54:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EDB7480DDD;
+	Sun, 29 Aug 2021 16:57:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id T7iSSNyv0ues; Sun, 29 Aug 2021 16:54:22 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Zpjd9Mu_TI18; Sun, 29 Aug 2021 16:57:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BF3CC40108;
-	Sun, 29 Aug 2021 16:54:21 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2D3C01BF298
- for <buildroot@lists.busybox.net>; Sun, 29 Aug 2021 16:53:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6D7BF80E61;
+	Sun, 29 Aug 2021 16:57:33 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 442811BF298
+ for <buildroot@lists.busybox.net>; Sun, 29 Aug 2021 16:57:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 18F1E40108
- for <buildroot@lists.busybox.net>; Sun, 29 Aug 2021 16:53:12 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 340F5606BE
+ for <buildroot@lists.busybox.net>; Sun, 29 Aug 2021 16:57:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZZT52rc6pAox for <buildroot@lists.busybox.net>;
- Sun, 29 Aug 2021 16:53:06 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id CB49E40104
- for <buildroot@buildroot.org>; Sun, 29 Aug 2021 16:53:06 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id AAB1187598; Sun, 29 Aug 2021 16:51:58 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-To: buildroot@buildroot.org
-Date: Sun, 29 Aug 2021 18:29:23 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 62b135af5e1e2ad9ea38e33125b40b3ed074cf57
-X-Git-Newrev: dd1621b067cf2569198227a25080a127a05f7dc4
-X-Patchwork-Hint: ignore
-Message-Id: <20210829165158.AAB1187598@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/qt5/qt5opcua: new
- package
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fRU43_LakrFX for <buildroot@lists.busybox.net>;
+ Sun, 29 Aug 2021 16:57:27 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com
+ [IPv6:2a00:1450:4864:20::529])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 56AC66070A
+ for <buildroot@buildroot.org>; Sun, 29 Aug 2021 16:57:25 +0000 (UTC)
+Received: by mail-ed1-x529.google.com with SMTP id u19so1240358edb.3
+ for <buildroot@buildroot.org>; Sun, 29 Aug 2021 09:57:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=subject:to:references:from:organization:message-id:date:user-agent
+ :mime-version:in-reply-to:content-language:content-transfer-encoding;
+ bh=yCS1NCiXl9Z+h7kezBpk6546FNYdjN0EtytlnbwRieY=;
+ b=Bu9pE7DGiiBUkcTOKKpkAlT/gR4TvaH30cLngj2sQHwqrv5sGtU6AUMxnzAlVRuuGu
+ RLqUlA2IehKb/01uPEi7lX+vtN1ANxqW34+8CBkdCSrcDUqi5iWR61mWozxU4FW+GFWi
+ WHkaS9ELSnsOnbKSbjh9cTLRc0c4g8D582vRuzNnazIjlxIggr3aHoZwO7zBzq/tDF0Y
+ jtLjBdh71uPy6jAmuH1tWCMn5+JfWw68YyrOpXUSA2Kb4MsPualalSzGc2ehxLHg0pM4
+ 9k12mne3h1RYe0iUKwTzekkFpYG2WbKjRFh0YxhdaI67vhRlJsZwUoB7gnXPiy7PMRpm
+ P4Zg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:subject:to:references:from:organization
+ :message-id:date:user-agent:mime-version:in-reply-to
+ :content-language:content-transfer-encoding;
+ bh=yCS1NCiXl9Z+h7kezBpk6546FNYdjN0EtytlnbwRieY=;
+ b=dgUEX7lZ5/HEBHAd8N4aYXgUiYsZMCDV6/yYauepmqvlpYJHIKY9i/YfnVNPWkFbQj
+ YzlgUdWk0XL5+NAj3aR3MXYVKjQUtavOfIgm3eD756hICDOR+VB0uCKL5gFxCOAixgNW
+ 3ut/fD9+syzGC9nGaSTq1kE+vkPSiOoYegJ2SI7qJbCjBg9eWFgwLDDHb74yO/+/Db13
+ uIgBuqLWDPeo4NMC+40cHCwhoezIDTBptX4Ui85awbiN+HhAobXyeSeKFCMh4+9fU4Om
+ PNOi0wzQoDZTYnb/vhLMEMEXp9EqTUkPAdgZZ4UBGnHR+TmD1Gv92OBHB5rbH2Y9yAwD
+ 6JxA==
+X-Gm-Message-State: AOAM532FEiuAwJWSl579Joq8o4D3iWu9wnCjTC3tg1YpwJxvCDKbmdmC
+ rGzd533exwKiOj7GRxZ046xLdVo0L/Vpvg==
+X-Google-Smtp-Source: ABdhPJwV5fDQENsi5zZ9CjWVEcykotUqCLqTm7c4aj1cDgq8JXKUAJAhAFjiGhu7n0F1vbvyq4HWSg==
+X-Received: by 2002:a05:6402:c05:: with SMTP id
+ co5mr20679955edb.41.1630256243521; 
+ Sun, 29 Aug 2021 09:57:23 -0700 (PDT)
+Received: from ?IPv6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id p5sm5616393ejl.73.2021.08.29.09.57.23
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sun, 29 Aug 2021 09:57:23 -0700 (PDT)
+To: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, buildroot@buildroot.org
+References: <20210806124854.1832099-1-tomi.valkeinen@ideasonboard.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+Message-ID: <955e7707-8577-ceb6-722a-67d4fb06fe52@mind.be>
+Date: Sun, 29 Aug 2021 18:57:22 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
+MIME-Version: 1.0
+In-Reply-To: <20210806124854.1832099-1-tomi.valkeinen@ideasonboard.com>
+Content-Language: en-GB
+Subject: Re: [Buildroot] [PATCH] package/rwmem: new package
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,112 +104,101 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dd1621b067cf2569198227a25080a127a05f7dc4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The Qt OPC UA module implements a Qt API to interact with OPC UA on
-top of a 3rd party OPC UA stack.
-The default is open62541, which is bundled by qt5opcua in version 1.0,
-so we dont need to provide/depend on br's own open62541 package.
 
-Another dependency is mbedtls, but it's optional.
+On 06/08/2021 14:48, Tomi Valkeinen wrote:
+> rwmem is small tool to read & write device registers. Some of the
+> features include:
+> 
+> - support mmaped and i2c devices
+> - addressing with 8/16/32/64 bit addresses
+> - accessing 8/16/32/64 bit memory locations
+> - little and big endian addressess and accesses
+> - bitfields
+> - address ranges
+> - register description database
 
-Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- DEVELOPERS                         |  1 +
- package/qt5/Config.in              |  1 +
- package/qt5/qt5opcua/Config.in     |  9 +++++++++
- package/qt5/qt5opcua/qt5opcua.hash | 10 ++++++++++
- package/qt5/qt5opcua/qt5opcua.mk   | 19 +++++++++++++++++++
- 5 files changed, 40 insertions(+)
+ I added a sentence here to say that python bindings are disabled for now.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 66c5a6703c..1bc4a1370c 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1962,6 +1962,7 @@ N:	Naumann Andreas <ANaumann@ultratronik.de>
- F:	package/evemu/
- F:	package/libevdev/
- F:	package/pkg-qmake.mk
-+F:	package/qt5/qt5opcua/
- 
- N:	Nicola Di Lieto <nicola.dilieto@gmail.com>
- F:	package/uacme/
-diff --git a/package/qt5/Config.in b/package/qt5/Config.in
-index 6714c6271d..6f2428d800 100644
---- a/package/qt5/Config.in
-+++ b/package/qt5/Config.in
-@@ -51,6 +51,7 @@ source "package/qt5/qt5location/Config.in"
- source "package/qt5/qt5lottie/Config.in"
- source "package/qt5/qt5mqtt/Config.in"
- source "package/qt5/qt5multimedia/Config.in"
-+source "package/qt5/qt5opcua/Config.in"
- source "package/qt5/qt5quickcontrols/Config.in"
- source "package/qt5/qt5quickcontrols2/Config.in"
- source "package/qt5/qt5quicktimeline/Config.in"
-diff --git a/package/qt5/qt5opcua/Config.in b/package/qt5/qt5opcua/Config.in
-new file mode 100644
-index 0000000000..2b0ba37af3
---- /dev/null
-+++ b/package/qt5/qt5opcua/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_QT5OPCUA
-+	bool "qt5opcua"
-+	depends on BR2_PACKAGE_QT5
-+	help
-+	  Qt is a cross-platform application and UI framework for
-+	  developers using C++.
-+
-+	  The Qt OPC UA module implements a Qt API to interact with
-+	  OPC UA on top of a 3rd party OPC UA stack.
-diff --git a/package/qt5/qt5opcua/qt5opcua.hash b/package/qt5/qt5opcua/qt5opcua.hash
-new file mode 100644
-index 0000000000..e55fb17743
---- /dev/null
-+++ b/package/qt5/qt5opcua/qt5opcua.hash
-@@ -0,0 +1,10 @@
-+# Hash locally calculated
-+sha256  562171c6dfd6f4f072316ddb6d7c5bcc8907a68ba31005cb8c20ed75beff34fb  qt5opcua-5.15.2-br1.tar.gz
-+
-+# Hashes for license files:
-+sha256  d93cc415382f0013088fa276d9cf82373badf244c78220a926f15ee46f0fe3c4  LICENSE-CC0
-+sha256  f827ad079686ba92cc94811e35492d0e8966f704008b6da9eeda0b659fb58a8d  LICENSE.FDL
-+sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE.GPL3
-+sha256  0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652  LICENSE.GPL3-EXCEPT
-+sha256  6c3f3c31b93985f1b93bfbb35fb609d37281697d0efc220c9f91cf4b59eaabde  LICENSE.GPLv2
-+sha256  75d800e60c8d58c2e7f0338e8552ea6123a9ce7e5dd8e1cdf2095e013b737488  LICENSE.LGPLv3
-diff --git a/package/qt5/qt5opcua/qt5opcua.mk b/package/qt5/qt5opcua/qt5opcua.mk
-new file mode 100644
-index 0000000000..a58c4c5e14
---- /dev/null
-+++ b/package/qt5/qt5opcua/qt5opcua.mk
-@@ -0,0 +1,19 @@
-+################################################################################
-+#
-+# qt5opcua
-+#
-+################################################################################
-+
-+QT5OPCUA_VERSION = $(QT5_VERSION)
-+QT5OPCUA_SITE = https://code.qt.io/qt/qtopcua.git
-+QT5OPCUA_SITE_METHOD = git
-+QT5OPCUA_INSTALL_STAGING = YES
-+QT5OPCUA_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDL-1.3 (docs) CC0-1.0
-+QT5OPCUA_LICENSE_FILES = LICENSE.GPLv2 LICENSE.GPL3 LICENSE.GPL3-EXCEPT LICENSE.LGPLv3 LICENSE.FDL LICENSE-CC0
-+QT5OPCUA_SYNC_QT_HEADERS = YES
-+
-+ifeq ($(BR2_PACKAGE_MBEDTLS),y)
-+QT5OPCUA_DEPENDENCIES += mbedtls
-+endif
-+
-+$(eval $(qmake-package))
+ With that, applied to next, thanks.
+
+ Regards,
+ Arnout
+
+> 
+> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+> ---
+>  package/Config.in        |  1 +
+>  package/rwmem/Config.in  | 10 ++++++++++
+>  package/rwmem/rwmem.hash |  2 ++
+>  package/rwmem/rwmem.mk   | 14 ++++++++++++++
+>  4 files changed, 27 insertions(+)
+>  create mode 100644 package/rwmem/Config.in
+>  create mode 100644 package/rwmem/rwmem.hash
+>  create mode 100644 package/rwmem/rwmem.mk
+> 
+> diff --git a/package/Config.in b/package/Config.in
+> index 046c04e994..6e97346eb1 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -134,6 +134,7 @@ menu "Debugging, profiling and benchmark"
+>  	source "package/ramsmp/Config.in"
+>  	source "package/ramspeed/Config.in"
+>  	source "package/rt-tests/Config.in"
+> +	source "package/rwmem/Config.in"
+>  	source "package/sentry-native/Config.in"
+>  	source "package/spidev_test/Config.in"
+>  	source "package/strace/Config.in"
+> diff --git a/package/rwmem/Config.in b/package/rwmem/Config.in
+> new file mode 100644
+> index 0000000000..0fd9142e92
+> --- /dev/null
+> +++ b/package/rwmem/Config.in
+> @@ -0,0 +1,10 @@
+> +config BR2_PACKAGE_RWMEM
+> +	bool "rwmem"
+> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5
+> +	depends on BR2_INSTALL_LIBSTDCPP
+> +	select BR2_PACKAGE_FMT
+> +	select BR2_PACKAGE_INIH
+> +	help
+> +	  Simple program to read/write from/to any location in memory.
+> +
+> +	  https://github.com/tomba/rwmem
+> diff --git a/package/rwmem/rwmem.hash b/package/rwmem/rwmem.hash
+> new file mode 100644
+> index 0000000000..9becbc5b21
+> --- /dev/null
+> +++ b/package/rwmem/rwmem.hash
+> @@ -0,0 +1,2 @@
+> +sha256  55d28f029c0cd5c21d3e1c89371e2905d5217f571ef5389ed0fce163804d1c4a  rwmem-c8291705c82bb0686be9adf6a427a2b72114719a.tar.gz
+> +sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
+> diff --git a/package/rwmem/rwmem.mk b/package/rwmem/rwmem.mk
+> new file mode 100644
+> index 0000000000..24c4e92efc
+> --- /dev/null
+> +++ b/package/rwmem/rwmem.mk
+> @@ -0,0 +1,14 @@
+> +################################################################################
+> +#
+> +# rwmem
+> +#
+> +################################################################################
+> +
+> +RWMEM_VERSION = c8291705c82bb0686be9adf6a427a2b72114719a
+> +RWMEM_SITE = $(call github,tomba,rwmem,$(RWMEM_VERSION))
+> +RWMEM_LICENSE = GPL-2.0
+> +RWMEM_LICENSE_FILES = LICENSE
+> +RWMEM_CONF_OPTS = -Dpyrwmem=disabled
+> +RWMEM_DEPENDENCIES = host-pkgconf fmt inih
+> +
+> +$(eval $(meson-package))
+> 
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
