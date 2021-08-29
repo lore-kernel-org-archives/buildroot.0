@@ -2,90 +2,100 @@ Return-Path: <SRS0=tQX8=NU=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.5 required=3.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-	DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E70AEC432BE
-	for <buildroot@archiver.kernel.org>; Sun, 29 Aug 2021 15:09:15 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 16712C432BE
+	for <buildroot@archiver.kernel.org>; Sun, 29 Aug 2021 15:24:15 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 90AA660F42
-	for <buildroot@archiver.kernel.org>; Sun, 29 Aug 2021 15:09:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 90AA660F42
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id 6EB59606A5
+	for <buildroot@archiver.kernel.org>; Sun, 29 Aug 2021 15:24:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6EB59606A5
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 59F564041F;
-	Sun, 29 Aug 2021 15:09:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 27AE860585;
+	Sun, 29 Aug 2021 15:24:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Eb72nE4U23XJ; Sun, 29 Aug 2021 15:09:11 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C6B7140426;
-	Sun, 29 Aug 2021 15:09:10 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 492871BF3DB
- for <buildroot@lists.busybox.net>; Sun, 29 Aug 2021 15:09:09 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3F5586059A
- for <buildroot@lists.busybox.net>; Sun, 29 Aug 2021 15:09:09 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CYIumsvPmAUc for <buildroot@lists.busybox.net>;
- Sun, 29 Aug 2021 15:09:04 +0000 (UTC)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id pVbDK5_3GzPF; Sun, 29 Aug 2021 15:24:10 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id DA111605DE;
+	Sun, 29 Aug 2021 15:24:09 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 8C3261BF3DB
+ for <buildroot@lists.busybox.net>; Sun, 29 Aug 2021 15:24:07 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 75FDE80D7B
+ for <buildroot@lists.busybox.net>; Sun, 29 Aug 2021 15:24:07 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RgwkcDxpkQ8Y for <buildroot@lists.busybox.net>;
+ Sun, 29 Aug 2021 15:24:02 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com
- [IPv6:2607:f8b0:4864:20::334])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5C20B60599
- for <buildroot@buildroot.org>; Sun, 29 Aug 2021 15:09:04 +0000 (UTC)
-Received: by mail-ot1-x334.google.com with SMTP id
- i8-20020a056830402800b0051afc3e373aso15028207ots.5
- for <buildroot@buildroot.org>; Sun, 29 Aug 2021 08:09:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=M3jTCA3uZMY3EFY61laG/Wpz5dX/MbXI0XP4wFUC2og=;
- b=UmVflNJ/3zvk2vbywKPEX5DAf5NlanHcIsCTQ+YqV2yBxQss1hNFK586DPQPeixeuL
- /2HHen9AYIzgghslizk8x9edU2st3Yba3nQMTjlcchfKRkCpCpAfl2c0imYQcxqN6GfL
- OUQZ2wRW6kGNK/5qvZRPpVDDmygxA4F66u1Ugn/t8OecAyXlJWOar0eJGOYuvTe4UE+d
- iyXr5ySWsTlT6T4dA8a1s16KmxnCyYMjF3D3KiwjQ/yZxTkae4Yrjd+4GIrBOR0qlVNV
- 1fObVsGfuWkzERpYMnR4zjG1ACZnsdvUibt8Zf9QGSC9AblbMfbOgbOwqVSwWjfs9D+E
- TQOg==
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com
+ [IPv6:2a00:1450:4864:20::629])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 72B2180C51
+ for <buildroot@buildroot.org>; Sun, 29 Aug 2021 15:24:02 +0000 (UTC)
+Received: by mail-ej1-x629.google.com with SMTP id ia27so25411046ejc.10
+ for <buildroot@buildroot.org>; Sun, 29 Aug 2021 08:24:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=subject:to:cc:references:from:organization:message-id:date
+ :user-agent:mime-version:in-reply-to:content-language
+ :content-transfer-encoding;
+ bh=jgrc/TjVrMiXrC/kxW5efMaXcdKp0ZUzHJQreLY82Pg=;
+ b=cKnM3k3rfgmm0laTj8iI7z14HjUAOODKJdWPJ4a8xYR9Iy9mSyZdnY4XTqUXcxJvFZ
+ snFsrgZ955oWLn0F+h3o8nMp1Qz+LFsfI6iiNJmJIgGImoOVhV3nMZQq1SNTCucGEf4i
+ vV9kX4impUCsTHCf2MzWWiby0CusOuz8BM/1UZI1WqX2GK240OfSp/kfEssBUtpnimoW
+ 2+ztGTt/k14kqpuJeRoFOwzRwXCDB1SXdDeyZWFzvsK1+x+mvDxZ6w53rXVuhirpGU10
+ 09hM40FkAT1oudNUEX2BbHMA4b6VnzSp4cZj6DPlQz18a2dBPr87aeg20qwNoE+c1QNu
+ mKFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=M3jTCA3uZMY3EFY61laG/Wpz5dX/MbXI0XP4wFUC2og=;
- b=rFB4UnOCtBN7m9IJXxWKbETOLuc4SYCF+4r/NJOl8aY/1ny6+zSvVAY8Je9JyqJmDt
- xZLY+nHGyWl0PA0qHdTw6/EilRyFkbtq8/m0D99YIktzyK3ZarpxyIwEgOzK3Bbu3d0M
- 8RK5lRkgbbcEFOs7QTZ5TLX/GS1IRh1dbbOR2M+ooxnEtkZVLQPsJx+Y8jItsV8trTNb
- 6Sg2iqMXXb6tzLtRZGqx29cNBHwr61SxhIsKkHTEe5UcgedsIv5A68es6ypFT/bikoKs
- rhc/rxyfXqVCnYyBkj39oNvZr5wWLHaTd5Y7kdnqv/boZeuaMSh8xmT3ADDG3NbmidTe
- /3EA==
-X-Gm-Message-State: AOAM530pKr2OyGLo1HOpSBEbQcnw+6PTbMQ5iqUgs0UiviWDr0KHBacH
- cVZTYQu6Z8mAEZndj4CeJKBPDw6jqr/HKtIhgKY=
-X-Google-Smtp-Source: ABdhPJxnmDe1ReFPS08wYsqiEjMWd1hIr52K22hngfpEo8/CIangpHfpED2CViyst/J4PQGkedH0o6+0De3UMugQGj0=
-X-Received: by 2002:a05:6830:70d:: with SMTP id
- y13mr922119ots.278.1630249743136; 
- Sun, 29 Aug 2021 08:09:03 -0700 (PDT)
+ h=x-gm-message-state:subject:to:cc:references:from:organization
+ :message-id:date:user-agent:mime-version:in-reply-to
+ :content-language:content-transfer-encoding;
+ bh=jgrc/TjVrMiXrC/kxW5efMaXcdKp0ZUzHJQreLY82Pg=;
+ b=L+u4oS69bv1Bo36QSz5btBV4oAkYcN20amLIcy8u/XJcIQkRv4raORBP/C5AHeV+Vm
+ lDD7c9s2zGJaDhgtrK0/zHgQcFN33q95O5aQZu6ke0eFbYfqLhyP9iDTE7ejSo0TiWsh
+ jPGUbxX5epLbJ3S6ESmZUVeq4ja5coJZNlBNzhnlVr/eESqg4fFDmYEujBbQOREFI4zZ
+ JtKaB3Nj5eZlVd8r8dSCmpSC+3z39erROx+m43ze9eqIgEWoBAP6R84EGLka0aJDpYBB
+ H5zauMplm9v49i1CV+r5qAULkVbcCuORhucYH9CUWaZ7prO1x+5ClD2TenI3k2N3pgJ5
+ KDUg==
+X-Gm-Message-State: AOAM533k1AMkD+bqFQlsDpoTyKi5GuAm8XI4i8Q+xIzjjZ8+fJoiVwbC
+ pE5HsuKUxy4/2xk93D7bcOS3vA==
+X-Google-Smtp-Source: ABdhPJypY4IajEtJoZ853WDj6r4PYiCql7mvPPmg5xkmVHle4oYAK9tC4YbXxbUC5exg9QoC5RU+xQ==
+X-Received: by 2002:a17:907:764f:: with SMTP id
+ kj15mr6465157ejc.473.1630250640481; 
+ Sun, 29 Aug 2021 08:24:00 -0700 (PDT)
+Received: from ?IPv6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id x15sm5439954ejc.59.2021.08.29.08.23.59
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sun, 29 Aug 2021 08:23:59 -0700 (PDT)
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+References: <86602fc9-9d62-0b7b-4ce3-25bf3de27254@mind.be>
+ <7FE9A46C-9CD8-4143-99DE-CE8D786A459C@benettiengineering.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+Message-ID: <761985a1-2152-7a7b-e430-54b7b4ed31f3@mind.be>
+Date: Sun, 29 Aug 2021 17:23:59 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-References: <20210828044626.3170348-1-james.hilliard1@gmail.com>
- <48045f87-380b-6f11-95a4-7fc6e7520936@mind.be>
- <CADvTj4pGvfaCRUoOSGms=ZuNv39Fo_MDVzKSDv31tC0FoFg_ew@mail.gmail.com>
- <bc35caa4-6aad-b0d4-183d-2e0ad2ae8d08@mind.be>
-In-Reply-To: <bc35caa4-6aad-b0d4-183d-2e0ad2ae8d08@mind.be>
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sun, 29 Aug 2021 09:08:52 -0600
-Message-ID: <CADvTj4p_OgJfCJLNCDB+O-s64gR9akjW=hr7FD-akxJhswmmig@mail.gmail.com>
-To: Arnout Vandecappelle <arnout@mind.be>
-Subject: Re: [Buildroot] [PATCH 1/1] package/swupdate: update service/init
- configs
+In-Reply-To: <7FE9A46C-9CD8-4143-99DE-CE8D786A459C@benettiengineering.com>
+Content-Language: en-GB
+Subject: Re: [Buildroot] [PATCH 1/2] toolchain: introduce
+ BR2_TOOLCHAIN_HAS_GCC_BUG_83143
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,217 +107,61 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: buildroot <buildroot@buildroot.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Romain Naour <romain.naour@gmail.com>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-On Sun, Aug 29, 2021 at 8:58 AM Arnout Vandecappelle <arnout@mind.be> wrote:
->
->
->
-> On 29/08/2021 03:54, James Hilliard wrote:
-> > On Sat, Aug 28, 2021 at 6:44 AM Arnout Vandecappelle <arnout@mind.be> wrote:
-> >>
-> >>  Hi James,
-> >>
-> >>  "update" in the subject is not really helpful.
-> >
-> > I had assumed these configs were mostly just re-syncing with meta-swupdate.
-> >
-> > I'll split this patch up.
-> >
-> >>
-> >> On 28/08/2021 06:46, James Hilliard wrote:
-> >>> Set SKIP_STRIP=y so that the swupdate binary isn't stripped.
-> >>
-> >>  We can see that from the patch - instead you should explain why we want to skip
-> >> strip.
-> >>
-> >>  Also, this has nothing to do with systemd configs, so should be a separate patch.
-> >>
-> >>  In this case for sure, because I think it might be something for master.
-> >
-> > Ok, will send separately.
->
->  Splitting off just this bit is probably sufficient - I don't want to push
-> useless work on you.
-
-Well I split it up a bit more:
-https://patchwork.ozlabs.org/project/buildroot/list/?series=260043
-
->
-> [snip]
-> >>> diff --git a/package/swupdate/10-mongoose-args b/package/swupdate/10-mongoose-args
-> >>> new file mode 100644
-> >>> index 0000000000..896e66ba86
-> >>> --- /dev/null
-> >>> +++ b/package/swupdate/10-mongoose-args
-> >>> @@ -0,0 +1 @@
-> >>> +SWUPDATE_WEBSERVER_ARGS="-r /www ${SWUPDATE_MONGOOSE_EXTRA_ARGS:--p 8080}"
-> >>
-> >>  Is this correct? The webserver is installed in /var/www, not /www...
->
->  You didn't reply to this...
-
-Oh, it's fixed in my v2.
-
->
-> >>
-> >>> diff --git a/package/swupdate/90-start-progress b/package/swupdate/90-start-progress
-> >>> new file mode 100644
-> >>> index 0000000000..3b0eb5e7d7
-> >>> --- /dev/null
-> >>> +++ b/package/swupdate/90-start-progress
-> >>> @@ -0,0 +1 @@
-> >>> +exec /usr/bin/swupdate-progress -w -r &
-> >>> diff --git a/package/swupdate/Config.in b/package/swupdate/Config.in
-> >>> index f601e45fcd..6b832cfcbf 100644
-> >>> --- a/package/swupdate/Config.in
-> >>> +++ b/package/swupdate/Config.in
-> >>> @@ -60,9 +60,16 @@ config BR2_PACKAGE_SWUPDATE_CONFIG
-> >>>         I you wish to use your own modified swupdate configuration
-> >>>         file specify the config file location with this option.
-> >>>
-> >>> +config BR2_PACKAGE_SWUPDATE_WEBSERVER
-> >>> +     bool "swupdate webserver"
-> >>> +     default y
-> >>> +     help
-> >>> +       Enable update from remote using a web server on the target.
-> >>> +
-> >>>  config BR2_PACKAGE_SWUPDATE_INSTALL_WEBSITE
-> >>>       bool "install default website"
-> >>>       default y
-> >>> +     depends on BR2_PACKAGE_SWUPDATE_WEBSERVER
-> >>
-> >>  I could be mistaken, but isn't the website perfectly usable with an external
-> >> webserver as well? You just have to provide the upload endpoint IIRC.
-> >
-> > The webserver is also the upload endpoint and is thus required, sure you can
-> > proxy to it via nginx even but it's not optional for the update
-> > website to function.
->
->  So I was indeed mistaken :-)
->
->  I thought I made a comment somewhere that maybe the
-> BR2_PACKAGE_SWUPDATE_WEBSERVER isn't needed (but now I can't find that comment
-> so maybe in the end I removed it). In case I did make that comment: ignore it
-> :-) The explanation above makes it clear that it really *is* needed as a config
-> option.
-
-Yeah, I didn't see another way to make the website install depend on it.
-
->
-> >
-> >>
-> >>>       help
-> >>>         Install the provided website to /var/www/swupdate.
-> >>>
-> >>> diff --git a/package/swupdate/swupdate-progress.service b/package/swupdate/swupdate-progress.service
-> >>> new file mode 100644
-> >>> index 0000000000..0d464bb420
-> >>> --- /dev/null
-> >>> +++ b/package/swupdate/swupdate-progress.service
-> >>> @@ -0,0 +1,9 @@
-> >>> +[Unit]
-> >>> +Description=swupdate progress service
-> >>> +After=swupdate.service
-> >>> +
-> >>> +[Service]
-> >>> +ExecStart=/usr/bin/swupdate-progress -r -w
-> >>> +
-> >>> +[Install]
-> >>> +WantedBy=swupdate.service
-> >>
-> >>  I suspect this is copied verbatim from meta-swupdate... It's good form to then
-> >> add a comment in the beginning of the file that specifies the upstream copyright
-> >> and license (in SPDX) and an upstream link.
-> >>
-> >>  Same for all other files you copied, of course.
-> >
-> > Hmm, I'm thinking the best option would just be to add a comment to the makefile
-> > indicating the source of them, they are MIT licensed which is already a license
-> > listed for the swupdate package.
->
->  An SPDX-License-Identifier comment costs nothing and can be very helpful for
-> people who have to analyse licenses. We haven't this discussed it at all so it's
-> purely my own opinion, but I believe we should require that on all files.
-
-I think a number of these config files don't even have a good spot for
-that, but I did add a note in the makefile regarding the license for them.
-
->
->
-> >>> diff --git a/package/swupdate/swupdate-usb.rules b/package/swupdate/swupdate-usb.rules
-> >>> new file mode 100644
-> >>> index 0000000000..b4efd0b733
-> >>> --- /dev/null
-> >>> +++ b/package/swupdate/swupdate-usb.rules
-> >>> @@ -0,0 +1,2 @@
-> >>> +ACTION=="add", KERNEL=="sd*", SUBSYSTEM=="block", ENV{ID_BUS}=="usb", ENV{ID_FS_USAGE}=="filesystem", TAG+="systemd", ENV{SYSTEMD_WANTS}+="swupdate-usb@%k.service"
-> >>
-> >>  Hm, I wonder if it's a good idea to install this unconditionally... It feels to
-> >> me that this is a possible attack vector that the user should be aware of - and
-> >> the best way to do that is to make the whole thing optional.
-> >
-> > Maybe, although swu files should typically be signed.
->
->  With the default installation, there is no signature check - you need to change
-> the swupdate.conf and install a public key for it to work. So, if you're going
-> to that trouble, it's no effort at all to also install the udev rules for
-> automounting USB. That is, of course, assuming that it's documented - which
-> currently it is not. Which is why I made the suggestion to instead contribute it
-> as upstream documentation.
-
-Yeah, I left the udev rule out of my v2 for now.
-
->
->
-> >>  But really, I kind of wonder if this is something that Buildroot should
-> >> provide. Ideally, this should be part of the swupdate documentation, and if you
-> >> actually want automatic updates when a USB storage device is plugged in, you can
-> >> put that stuff in an overlay.
-> >
-> > Well it's included by default in the meta-swupdate layer, but yeah I
-> > should probably
-> > add a config option for it.
-> [snip]
-> >>> diff --git a/package/swupdate/tmpfiles-swupdate.conf b/package/swupdate/tmpfiles-swupdate.conf
-> >>> new file mode 100644
-> >>> index 0000000000..4743672fcc
-> >>> --- /dev/null
-> >>> +++ b/package/swupdate/tmpfiles-swupdate.conf
-> >>> @@ -0,0 +1,2 @@
-> >>> +X /tmp/datadst
-> >>> +X /tmp/scripts
-> >>
-> >>  Why are these needed? Are they only needed for systemd? If not, the S80swupdate
-> >> init script should also be updated to create those directories.
-> >
-> > These directives prevent systemd from deleting those folders, they are
-> > not needed
-> > for non-systemd setups.
-> >
-> > See:
-> > https://www.freedesktop.org/software/systemd/man/tmpfiles.d.html
-> >
-> > Specifically:
-> > X
-> > Ignore a path during cleaning. Use this type to exclude paths from clean-up as
-> > controlled with the Age parameter. Unlike x, this parameter will not exclude the
-> > content if path is a directory, but only directory itself. Note that
-> > lines of this type do
-> > not influence the effect of r or R lines. Lines of this type accept
-> > shell-style globs in
-> > place of normal path names.
->
->  Thanks - TIL.
->
->  Regards,
->  Arnout
->
-_______________________________________________
-buildroot mailing list
-buildroot@busybox.net
-http://lists.busybox.net/mailman/listinfo/buildroot
+CgpPbiAyOC8wOC8yMDIxIDE0OjM5LCBHaXVsaW8gQmVuZXR0aSB3cm90ZToKPiBIaSBBcm5vdXQs
+Cj4gCj4+IElsIGdpb3JubyAyOCBhZ28gMjAyMSwgYWxsZSBvcmUgMTQ6MDYsIEFybm91dCBWYW5k
+ZWNhcHBlbGxlIDxhcm5vdXRAbWluZC5iZT4gaGEgc2NyaXR0bzoKPj4KPj4g77u/Cj4+Cj4+PiBP
+biAyOC8wOC8yMDIxIDAwOjM0LCBHaXVsaW8gQmVuZXR0aSB3cm90ZToKPj4+IHJ1YnkgcGFja2Fn
+ZSBmYWlscyB0byBidWlsZCBmb3IgdGhlIFNINCBhcmNoaXRlY3R1cmUgd2l0aCBvcHRpbWl6YXRp
+b24KPj4+IGVuYWJsZWQgd2l0aCBnY2MgPSA5LjMuMDoKPj4+IGh0dHA6Ly9hdXRvYnVpbGQuYnVp
+bGRyb290Lm5ldC9yZXN1bHRzL2Y1Ny9mNTc0MmU3ZmI2ZTgxNDJiY2RiNTNiN2Y0ZjVlOWMxYmVh
+MzU1OGNkLwo+Pj4KPj4+IEl0J3MgYWxyZWFkeSBiZWVuIHJlcG9ydGVkIHVwc3RyZWFtOgo+Pj4g
+aHR0cHM6Ly9nY2MuZ251Lm9yZy9idWd6aWxsYS9zaG93X2J1Zy5jZ2k/aWQ9ODMxNDMKPj4+Cj4+
+PiBTaWduZWQtb2ZmLWJ5OiBHaXVsaW8gQmVuZXR0aSA8Z2l1bGlvLmJlbmV0dGlAYmVuZXR0aWVu
+Z2luZWVyaW5nLmNvbT4KPj4+IC0tLQo+Pj4gdG9vbGNoYWluL0NvbmZpZy5pbiB8IDkgKysrKysr
+KysrCj4+PiAxIGZpbGUgY2hhbmdlZCwgOSBpbnNlcnRpb25zKCspCj4+Pgo+Pj4gZGlmZiAtLWdp
+dCBhL3Rvb2xjaGFpbi9Db25maWcuaW4gYi90b29sY2hhaW4vQ29uZmlnLmluCj4+PiBpbmRleCBi
+ZjJiYjNlZmU0Li40NDE5NDQzOTMwIDEwMDY0NAo+Pj4gLS0tIGEvdG9vbGNoYWluL0NvbmZpZy5p
+bgo+Pj4gKysrIGIvdG9vbGNoYWluL0NvbmZpZy5pbgo+Pj4gQEAgLTEzMyw2ICsxMzMsMTUgQEAg
+Y29uZmlnIEJSMl9UT09MQ0hBSU5fSEFTX0dDQ19CVUdfNjg0ODUKPj4+ICAgIGJvb2wKPj4+ICAg
+IGRlZmF1bHQgeSBpZiBCUjJfbWljcm9ibGF6ZQo+Pj4KPj4+ICsjIGh0dHBzOi8vZ2NjLmdudS5v
+cmcvYnVnemlsbGEvc2hvd19idWcuY2dpP2lkPTgzMTQzCj4+PiArIyBFcnJvcjogaW52YWxpZCBv
+cGVyYW5kcyAoKlVORCogYW5kIC50ZXh0IHNlY3Rpb25zKSBmb3IgYC0nIG9uIHNoNC4KPj4+ICsj
+IFRoaXMgYnVnIG5vIGxvbmdlciBleGlzdHMgaW4gZ2NjIDEwLnggYnV0IHJlYXBwZWFyZWQgb24g
+Z2NjIDExLnggYW5kCj4+PiArIyBpdCBzdGlsbCBub3QgYmVlbiBmaXhlZCB5ZXQuCj4+PiArY29u
+ZmlnIEJSMl9UT09MQ0hBSU5fSEFTX0dDQ19CVUdfODMxNDMKPj4+ICsgICAgYm9vbAo+Pj4gKyAg
+ICBkZWZhdWx0IHkgaWYgIUJSMl9UT09MQ0hBSU5fR0NDX0FUX0xFQVNUXzEwCj4+Cj4+IFRoZSBj
+b25kaXRpb24gZG9lc24ndCBjb3JyZXNwb25kIHRvIHRoZSBjb21tZW50IGFib3ZlLi4uCj4gCj4g
+SeKAmXZlIHRyaWVkIGl0IGFuZCBjaGVja2VkIC5jb25maWcKPiBJIGZpbmQgaXQgZW1pdHRlZCBv
+biBnY2MgOSBhbmQgMTEgd2hpbGUgb24gZ2NjIDEwIG5vdCBhcyBkZXNjcmliZWQuCgogSSBkb24n
+dCBrbm93IHdoYXQgeW91IGRpZCBkaWZmZXJlbnRseSwgYnV0IHRoYXQncyBub3Qgd2hhdCBJIGhh
+dmUuLi4KCldpdGggdGhpcyBkZWZjb25maWc6CgpCUjJfc2g9eQpCUjJfR0NDX1ZFUlNJT05fMTFf
+WD15CgpncmVwIEdDQ19CVUdfODMxNDMgLmNvbmZpZwoKcHJvZHVjZXMgbm8gb3V0cHV0LCB3aGls
+ZSB3aXRoIHRoaXMgZGVmY29uZmlnOgoKQlIyX3NoPXkKQlIyX0dDQ19WRVJTSU9OXzlfWD15Cgpp
+dCBkb2VzIHNob3cgaXQuCgoKIEJUVywgSSBkaWRuJ3Qgbm90aWNlIGJlZm9yZSwgYnV0OiB3aHkg
+aXMgdGhpcyBvbmx5IGZvciBzaDQsIGFuZCBub3QgYW55IG90aGVyClN1cGVySD8gSSBtZWFuLCBh
+cmUgeW91IHN1cmUgaXQncyBvbmx5IG9uIHNoND8gc2g0IGlzIHRoZSBvbmx5IG9uZSB0ZXN0ZWQg
+aW4gdGhlCmF1dG9idWlsZGVycywgb2YgY291cnNlLCBidXQgaXQncyBraW5kIG9mIGxpa2VseSB0
+aGF0IG90aGVyIFN1cGVySCBzdWZmZXIgZnJvbQp0aGUgc2FtZSBidWcuLi4KCgo+IEl04oCZcyBh
+bHdheXMgZGlmZmljdWx0IHRvIG1lIHRvIHVuZGVyc3RhbmQgaG93IHRoYXQgdmFyaWFibGUgd29y
+a3MuCgogSXQncyB2ZXJ5IHNpbXBsZTogQVRfTEVBU1RfMTBfWCBpcyB0cnVlIGZvciBhbGwgR0ND
+ID49IDEwLjAsIHNvIGFsc28gZm9yIEdDQwoxMS4gSWYgeW91IHdhbnQgZXhhY3RseSBvbmUgdmVy
+c2lvbiwgaXQncyBBVF9MRUFTVF8xMCAmJiAhQVRfTEVBU1RfMTEuIEluIHRoaXMKY2FzZSwgeW91
+IHdhbnQgdGhlIG5lZ2F0aXZlIG9mIHRoYXQsIHNvICFBVF9MRUFTVF8xMCB8fCBBVF9MRUFTVF8x
+MS4KCiBSZWdhcmRzLAogQXJub3V0Cgo+IAo+IEdpdWxpbwo+IAo+Pgo+Pgo+PiBSZWdhcmRzLAo+
+PiBBcm5vdXQKPj4KPj4+ICsgICAgZGVwZW5kcyBvbiBCUjJfc2g0Cj4+PiArCj4+PiAjIGh0dHBz
+Oi8vZ2NjLmdudS5vcmcvYnVnemlsbGEvc2hvd19idWcuY2dpP2lkPTg1MTgwLiBUaGlzIGJ1ZyBu
+bwo+Pj4gIyBsb25nZXIgZXhpc3RzIGluIGdjYyA4LnguCj4+PiBjb25maWcgQlIyX1RPT0xDSEFJ
+Tl9IQVNfR0NDX0JVR184NTE4MAo+Pj4KPj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX18KPj4gYnVpbGRyb290IG1haWxpbmcgbGlzdAo+PiBidWlsZHJvb3RA
+YnVzeWJveC5uZXQKPj4gaHR0cDovL2xpc3RzLmJ1c3lib3gubmV0L21haWxtYW4vbGlzdGluZm8v
+YnVpbGRyb290Cj4gCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1c3lib3gubmV0Cmh0dHA6Ly9s
+aXN0cy5idXN5Ym94Lm5ldC9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
