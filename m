@@ -2,78 +2,71 @@ Return-Path: <SRS0=tQX8=NU=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.0 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
+X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,TVD_SPACE_RATIO,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8CFDBC432BE
-	for <buildroot@archiver.kernel.org>; Sun, 29 Aug 2021 10:46:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9EB58C432BE
+	for <buildroot@archiver.kernel.org>; Sun, 29 Aug 2021 11:39:51 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 087C960F3A
-	for <buildroot@archiver.kernel.org>; Sun, 29 Aug 2021 10:46:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 087C960F3A
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
+	by mail.kernel.org (Postfix) with ESMTPS id 29AC960F25
+	for <buildroot@archiver.kernel.org>; Sun, 29 Aug 2021 11:39:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 29AC960F25
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=t-online.de
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B3BC240496;
-	Sun, 29 Aug 2021 10:46:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E290340455;
+	Sun, 29 Aug 2021 11:39:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id th1V4gOKvjWT; Sun, 29 Aug 2021 10:46:51 +0000 (UTC)
+	with ESMTP id gZYP9nTh5eV8; Sun, 29 Aug 2021 11:39:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1E8AB4049B;
-	Sun, 29 Aug 2021 10:46:50 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 679971BF336
- for <buildroot@lists.busybox.net>; Sun, 29 Aug 2021 10:46:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4BFE440465;
+	Sun, 29 Aug 2021 11:39:46 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B2EA31BF2EA
+ for <buildroot@lists.busybox.net>; Sun, 29 Aug 2021 11:39:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5E8A64013F
- for <buildroot@lists.busybox.net>; Sun, 29 Aug 2021 10:46:48 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9F1B080DCE
+ for <buildroot@lists.busybox.net>; Sun, 29 Aug 2021 11:39:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VgIPtJhdY-qL for <buildroot@lists.busybox.net>;
- Sun, 29 Aug 2021 10:46:44 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4DE42400DA
- for <buildroot@buildroot.org>; Sun, 29 Aug 2021 10:46:44 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:c87f:483a:a09f:382b])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id C7FFA5FF27;
- Sun, 29 Aug 2021 12:46:27 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1630234002;
- bh=dPucVfzsA0ZE3pB81PoEnROdLc+PxsWasURmYXAvMNg=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=qM8wsVDMVAUyOEZ2f2wjlz9t5HbzaP1COlONeLiaqsggrQYNd+uvoPuFxTfNTrsFy
- sxBMteJHSJWUxSNMbLiZbUuJuRLjL6vBq9oT+s7Id8DeayX/wHxu/mQ6wB+/E6HvuG
- f3ognqfsvfW8ifmxEtzGNB+lcWiUmUTLsGHObOMvH87QXreyVxFAavM8oNstZkxJBs
- J34Y2oICxS9245uyhkv3gkQL5G0p5LoPPWUYyB3mbVk73xV7gQ0a6vKVI8ymrkoe7P
- 400yTYJWwl6HcAppcb9SW96kCHRCuOCHmq32+h8cHZTKtUO5r6QHsSAjHj8zh7qLZ9
- ugy+Oxkb6Q2ww==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 29 Aug 2021 12:46:27 +0200
-Date: Sun, 29 Aug 2021 12:46:27 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Herve Codina <herve.codina@bootlin.com>
-Message-ID: <20210829104627.GU2661@scaer>
-References: <20210817083930.3718711-1-herve.codina@bootlin.com>
- <20210817083930.3718711-15-herve.codina@bootlin.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id s6Qo8MdIYGOc for <buildroot@lists.busybox.net>;
+ Sun, 29 Aug 2021 11:39:40 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from mailout06.t-online.de (mailout06.t-online.de [194.25.134.19])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E3BF680EA3
+ for <buildroot@buildroot.org>; Sun, 29 Aug 2021 11:39:39 +0000 (UTC)
+Received: from fwd39.aul.t-online.de (fwd39.aul.t-online.de [172.20.27.138])
+ by mailout06.t-online.de (Postfix) with SMTP id 5C4381AC15
+ for <buildroot@buildroot.org>; Sun, 29 Aug 2021 13:39:30 +0200 (CEST)
+Received: from fli4l.lan.fli4l
+ (bpIK7kZEohvXBkZvsKoAJlVDB-fRoS-4Y6BkeIDPcGPGYOXLLuAbjON1BN4SFHtZ56@[84.161.184.41])
+ by fwd39.t-online.de with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
+ esmtp id 1mKJ9g-2cwZo80; Sun, 29 Aug 2021 13:39:16 +0200
+Received: from mahler.lan.fli4l ([192.168.1.1]:43748)
+ by fli4l.lan.fli4l with esmtp (Exim 4.94.2)
+ (envelope-from <bernd.kuhls@t-online.de>) id 1mKJ9g-0003p8-3X
+ for buildroot@buildroot.org; Sun, 29 Aug 2021 13:39:16 +0200
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+To: buildroot@buildroot.org
+Date: Sun, 29 Aug 2021 13:39:14 +0200
+Message-Id: <20210829113915.19781-2-bernd.kuhls@t-online.de>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210829113915.19781-1-bernd.kuhls@t-online.de>
+References: <20210829113915.19781-1-bernd.kuhls@t-online.de>
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20210817083930.3718711-15-herve.codina@bootlin.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH v3 14/16] support/testing/tests: add test
- for check_bin_arch
+X-ID: bpIK7kZEohvXBkZvsKoAJlVDB-fRoS-4Y6BkeIDPcGPGYOXLLuAbjON1BN4SFHtZ56
+X-TOI-EXPURGATEID: 150726::1630237156-00003E8E-B9A23054/0/0 CLEAN NORMAL
+X-TOI-MSGID: 88e46cf1-464c-4504-9104-b68efb2f5c68
+Subject: [Buildroot] [PATCH/next 2/3] package/kodi-pvr-iptvsimple: bump
+ version to 7.6.10-Matrix
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,58 +78,45 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Naumann Andreas <ANaumann@ultratronik.de>,
- Peter Seiderer <ps.report@gmx.net>, Julien Corjon <corjon.j@ecagroup.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org,
- Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-On 2021-08-17 10:39 +0200, Herve Codina spake thusly:
-> From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> 
-> This tests build a bogus package that installs a binary built for the
-> host architecture into $(TARGET_DIR), which should cause a build
-> failure, at least as long as the host architecture isn't ARM.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+Changelog:
+https://github.com/kodi-pvr/pvr.iptvsimple/blob/Matrix/pvr.iptvsimple/changelog.txt
 
-This was not really part of the PPD/TLPB stuff, and did not seem to
-depend on it in any way, so: applied to next, thanks.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash | 2 +-
+ package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Seem a small nit below, though...
-
-> ---
-[--SNIP--]
-> diff --git a/support/testing/tests/core/test_bad_arch.py b/support/testing/tests/core/test_bad_arch.py
-> new file mode 100644
-> index 0000000000..76acba3711
-> --- /dev/null
-> +++ b/support/testing/tests/core/test_bad_arch.py
-> @@ -0,0 +1,19 @@
-> +import infra
-> +import infra.basetest
-> +import subprocess
-
-    $ make check-flake8
-    support/testing/tests/core/test_bad_arch.py:3:1: F401 'subprocess' imported but unused
-    1     F401 'subprocess' imported but unused
-
-I fixed that when applying.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
+index 911837c0c6..d32719eb3a 100644
+--- a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
++++ b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  b968b38d09299a9784b82d3fb82f461db1544901b450e374d270dd5c2be0c6d1  kodi-pvr-iptvsimple-7.6.9-Matrix.tar.gz
++sha256  7c6a08f77f8e8ba64d4a7608a8ef7baace10eefc8d0dace1e4c7ae58776e5f94  kodi-pvr-iptvsimple-7.6.10-Matrix.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
+index 6785410562..4c3234cdde 100644
+--- a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
++++ b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_PVR_IPTVSIMPLE_VERSION = 7.6.9-Matrix
++KODI_PVR_IPTVSIMPLE_VERSION = 7.6.10-Matrix
+ KODI_PVR_IPTVSIMPLE_SITE = $(call github,kodi-pvr,pvr.iptvsimple,$(KODI_PVR_IPTVSIMPLE_VERSION))
+ KODI_PVR_IPTVSIMPLE_LICENSE = GPL-2.0+
+ KODI_PVR_IPTVSIMPLE_LICENSE_FILES = LICENSE.md
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.30.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
