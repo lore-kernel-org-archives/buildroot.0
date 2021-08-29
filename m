@@ -7,52 +7,51 @@ X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CCBB9C433EF
-	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 18:47:04 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C78D9C433EF
+	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 18:47:16 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 966AC60E77
-	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 18:47:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 966AC60E77
+	by mail.kernel.org (Postfix) with ESMTPS id 8C6CB60E9B
+	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 18:47:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8C6CB60E9B
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 727BB42743;
-	Sat,  4 Sep 2021 18:47:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6B9E983440;
+	Sat,  4 Sep 2021 18:47:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5fK_2t8-jQ0h; Sat,  4 Sep 2021 18:47:03 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id CCITO0A5T9gq; Sat,  4 Sep 2021 18:47:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ABDF9426AF;
-	Sat,  4 Sep 2021 18:47:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9D7D78341E;
+	Sat,  4 Sep 2021 18:47:14 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 11B9B1BF5DD
- for <buildroot@lists.busybox.net>; Sat,  4 Sep 2021 18:26:19 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3C43F1BF5DD
+ for <buildroot@lists.busybox.net>; Sat,  4 Sep 2021 18:26:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C33F2402AE
+ by smtp2.osuosl.org (Postfix) with ESMTP id D0AD7402B7
  for <buildroot@lists.busybox.net>; Sat,  4 Sep 2021 18:25:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5-RORDfFPule for <buildroot@lists.busybox.net>;
- Sat,  4 Sep 2021 18:25:21 +0000 (UTC)
+ with ESMTP id h4WK8VW93mHV for <buildroot@lists.busybox.net>;
+ Sat,  4 Sep 2021 18:25:20 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1451340173
- for <buildroot@buildroot.org>; Sat,  4 Sep 2021 18:25:19 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id EA266402BE
+ for <buildroot@buildroot.org>; Sat,  4 Sep 2021 18:25:18 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id DCE138834A; Sat,  4 Sep 2021 18:23:56 +0000 (UTC)
+ id BE4F98834A; Sat,  4 Sep 2021 18:23:56 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sun, 29 Aug 2021 19:20:23 +0200
+Date: Sun, 29 Aug 2021 18:29:23 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8dcd6ae36170282156e0522f9a1e9533d8c4c43d
-X-Git-Newrev: 92207bc03f2358b28e0fd2cc3a41e40504b5d3d4
+X-Git-Oldrev: 62b135af5e1e2ad9ea38e33125b40b3ed074cf57
+X-Git-Newrev: dd1621b067cf2569198227a25080a127a05f7dc4
 X-Patchwork-Hint: ignore
-Message-Id: <20210904182356.DCE138834A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] toolchain: handle toolchains with multiple
- ld*.so.* files
+Message-Id: <20210904182356.BE4F98834A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/qt5/qt5opcua: new package
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,36 +70,106 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=92207bc03f2358b28e0fd2cc3a41e40504b5d3d4
+commit: https://git.buildroot.net/buildroot/commit/?id=dd1621b067cf2569198227a25080a127a05f7dc4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Some 3rd party vendor toolchains have multiple files which match
-these glob patterns.  In this case, the shell script failed.
-Switching to use find and xargs solves the issue.
+The Qt OPC UA module implements a Qt API to interact with OPC UA on
+top of a 3rd party OPC UA stack.
+The default is open62541, which is bundled by qt5opcua in version 1.0,
+so we dont need to provide/depend on br's own open62541 package.
 
-Signed-off-by: Jonah Petri <jonah@petri.us>
+Another dependency is mbedtls, but it's optional.
+
+Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- toolchain/helpers.mk | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ DEVELOPERS                         |  1 +
+ package/qt5/Config.in              |  1 +
+ package/qt5/qt5opcua/Config.in     |  9 +++++++++
+ package/qt5/qt5opcua/qt5opcua.hash | 10 ++++++++++
+ package/qt5/qt5opcua/qt5opcua.mk   | 19 +++++++++++++++++++
+ 5 files changed, 40 insertions(+)
 
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index dfb2581ed5..1dfb52ac38 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -135,10 +135,8 @@ copy_toolchain_sysroot = \
- 			$(call simplify_symlink,$$i,$(STAGING_DIR)) ; \
- 		done ; \
- 	fi ; \
--	if [ ! -e $(STAGING_DIR)/lib/ld*.so.* ]; then \
--		if [ -e $${ARCH_SYSROOT_DIR}/lib/ld*.so.* ]; then \
--			cp -a $${ARCH_SYSROOT_DIR}/lib/ld*.so.* $(STAGING_DIR)/lib/ ; \
--		fi ; \
-+	if [[ ! $$(find $(STAGING_DIR)/lib -name 'ld*.so.*' -print -quit) ]]; then \
-+		find $${ARCH_SYSROOT_DIR}/lib -name 'ld*.so.*' -print0 | xargs -0 -I % cp % $(STAGING_DIR)/lib/; \
- 	fi ; \
- 	if [ `readlink -f $${SYSROOT_DIR}` != `readlink -f $${ARCH_SYSROOT_DIR}` ] ; then \
- 		if [ ! -d $${ARCH_SYSROOT_DIR}/usr/include ] ; then \
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 66c5a6703c..1bc4a1370c 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1962,6 +1962,7 @@ N:	Naumann Andreas <ANaumann@ultratronik.de>
+ F:	package/evemu/
+ F:	package/libevdev/
+ F:	package/pkg-qmake.mk
++F:	package/qt5/qt5opcua/
+ 
+ N:	Nicola Di Lieto <nicola.dilieto@gmail.com>
+ F:	package/uacme/
+diff --git a/package/qt5/Config.in b/package/qt5/Config.in
+index 6714c6271d..6f2428d800 100644
+--- a/package/qt5/Config.in
++++ b/package/qt5/Config.in
+@@ -51,6 +51,7 @@ source "package/qt5/qt5location/Config.in"
+ source "package/qt5/qt5lottie/Config.in"
+ source "package/qt5/qt5mqtt/Config.in"
+ source "package/qt5/qt5multimedia/Config.in"
++source "package/qt5/qt5opcua/Config.in"
+ source "package/qt5/qt5quickcontrols/Config.in"
+ source "package/qt5/qt5quickcontrols2/Config.in"
+ source "package/qt5/qt5quicktimeline/Config.in"
+diff --git a/package/qt5/qt5opcua/Config.in b/package/qt5/qt5opcua/Config.in
+new file mode 100644
+index 0000000000..2b0ba37af3
+--- /dev/null
++++ b/package/qt5/qt5opcua/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_QT5OPCUA
++	bool "qt5opcua"
++	depends on BR2_PACKAGE_QT5
++	help
++	  Qt is a cross-platform application and UI framework for
++	  developers using C++.
++
++	  The Qt OPC UA module implements a Qt API to interact with
++	  OPC UA on top of a 3rd party OPC UA stack.
+diff --git a/package/qt5/qt5opcua/qt5opcua.hash b/package/qt5/qt5opcua/qt5opcua.hash
+new file mode 100644
+index 0000000000..e55fb17743
+--- /dev/null
++++ b/package/qt5/qt5opcua/qt5opcua.hash
+@@ -0,0 +1,10 @@
++# Hash locally calculated
++sha256  562171c6dfd6f4f072316ddb6d7c5bcc8907a68ba31005cb8c20ed75beff34fb  qt5opcua-5.15.2-br1.tar.gz
++
++# Hashes for license files:
++sha256  d93cc415382f0013088fa276d9cf82373badf244c78220a926f15ee46f0fe3c4  LICENSE-CC0
++sha256  f827ad079686ba92cc94811e35492d0e8966f704008b6da9eeda0b659fb58a8d  LICENSE.FDL
++sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE.GPL3
++sha256  0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652  LICENSE.GPL3-EXCEPT
++sha256  6c3f3c31b93985f1b93bfbb35fb609d37281697d0efc220c9f91cf4b59eaabde  LICENSE.GPLv2
++sha256  75d800e60c8d58c2e7f0338e8552ea6123a9ce7e5dd8e1cdf2095e013b737488  LICENSE.LGPLv3
+diff --git a/package/qt5/qt5opcua/qt5opcua.mk b/package/qt5/qt5opcua/qt5opcua.mk
+new file mode 100644
+index 0000000000..a58c4c5e14
+--- /dev/null
++++ b/package/qt5/qt5opcua/qt5opcua.mk
+@@ -0,0 +1,19 @@
++################################################################################
++#
++# qt5opcua
++#
++################################################################################
++
++QT5OPCUA_VERSION = $(QT5_VERSION)
++QT5OPCUA_SITE = https://code.qt.io/qt/qtopcua.git
++QT5OPCUA_SITE_METHOD = git
++QT5OPCUA_INSTALL_STAGING = YES
++QT5OPCUA_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDL-1.3 (docs) CC0-1.0
++QT5OPCUA_LICENSE_FILES = LICENSE.GPLv2 LICENSE.GPL3 LICENSE.GPL3-EXCEPT LICENSE.LGPLv3 LICENSE.FDL LICENSE-CC0
++QT5OPCUA_SYNC_QT_HEADERS = YES
++
++ifeq ($(BR2_PACKAGE_MBEDTLS),y)
++QT5OPCUA_DEPENDENCIES += mbedtls
++endif
++
++$(eval $(qmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
