@@ -1,77 +1,87 @@
-Return-Path: <SRS0=/RLo=NT=busybox.net=buildroot-bounces@kernel.org>
+Return-Path: <SRS0=tQX8=NU=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.0 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+X-Spam-Status: No, score=-15.5 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
+	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C3C96C432BE
-	for <buildroot@archiver.kernel.org>; Sat, 28 Aug 2021 22:48:15 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9427FC432BE
+	for <buildroot@archiver.kernel.org>; Sun, 29 Aug 2021 01:54:46 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 4380E608FE
-	for <buildroot@archiver.kernel.org>; Sat, 28 Aug 2021 22:48:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4380E608FE
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
+	by mail.kernel.org (Postfix) with ESMTPS id 2203060C51
+	for <buildroot@archiver.kernel.org>; Sun, 29 Aug 2021 01:54:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2203060C51
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DD7FC605B2;
-	Sat, 28 Aug 2021 22:48:14 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BA8EE400D8;
+	Sun, 29 Aug 2021 01:54:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TIO8pVM0O5XZ; Sat, 28 Aug 2021 22:48:11 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id oezyZriPgbl4; Sun, 29 Aug 2021 01:54:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A420360633;
-	Sat, 28 Aug 2021 22:48:10 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A08651BF406
- for <buildroot@lists.busybox.net>; Sat, 28 Aug 2021 22:48:08 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 33BA4400FF;
+	Sun, 29 Aug 2021 01:54:41 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 9E7501BF2F1
+ for <buildroot@lists.busybox.net>; Sun, 29 Aug 2021 01:54:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9913A60633
- for <buildroot@lists.busybox.net>; Sat, 28 Aug 2021 22:48:08 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 898B7400D8
+ for <buildroot@lists.busybox.net>; Sun, 29 Aug 2021 01:54:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DRT2o57J6Pyu for <buildroot@lists.busybox.net>;
- Sat, 28 Aug 2021 22:48:03 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id NPHzjQDlfEjD for <buildroot@lists.busybox.net>;
+ Sun, 29 Aug 2021 01:54:34 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp3.osuosl.org (Postfix) with ESMTPS id BB4D7605B2
- for <buildroot@buildroot.org>; Sat, 28 Aug 2021 22:48:03 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:c0ce:7c4d:7a73:f3f6])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id 2F03B7802CE;
- Sun, 29 Aug 2021 00:47:41 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1630190880;
- bh=M6CeSt+n8j1XKLc6nA2ktr6XJctWoaPpmWW7Hjm9s8M=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=AwQ6Kq8dPXA81cYgLMnUFBSpdOKIVG9X229D+cducbvdYeTZ6VY+vut7JNMMVXJ3U
- 6x8zX93bak4nbuipB4x2dkZ78UHAuGK0Z8eHMPLMEtF5fxhW1KUEA+hco5Ad0qtkmh
- JrGMQgF2rt6g4OVnhzq/sIwgIUp78shcsEntMzcF9DcOZ4GhV1uE0yuxAqUYU/h9Dr
- m6o9F0TcAX+MkYU7CIqXn3KNiguwJGiOC+YWtvXi5mTeKNFzrkQn4ZZ5x+p0fFLbLH
- XQDbnfU+Ae/XDIc1rLDACE1AJ6rYrZMogfRl4O0HvnondQf01y/bJ4/OHtp4d9qZld
- +ao+FBrPt2BXg==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 29 Aug 2021 00:47:40 +0200
-Date: Sun, 29 Aug 2021 00:47:40 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Herve Codina <herve.codina@bootlin.com>
-Message-ID: <20210828224740.GS2661@scaer>
-References: <20210817083930.3718711-1-herve.codina@bootlin.com>
- <20210817083930.3718711-8-herve.codina@bootlin.com>
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com
+ [IPv6:2607:f8b0:4864:20::232])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 246FB400FF
+ for <buildroot@buildroot.org>; Sun, 29 Aug 2021 01:54:34 +0000 (UTC)
+Received: by mail-oi1-x232.google.com with SMTP id 6so15140720oiy.8
+ for <buildroot@buildroot.org>; Sat, 28 Aug 2021 18:54:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=cKO4Y75Hsp8kBkHTlZAIsxhLTRXIKjN/rbG6InF21Mg=;
+ b=Dn30mXcIbYhg5MWFFnNSj7frAviOg4lOGlwFXEpUFwMzGpNpwF6/weB39LylkT47TO
+ CRM2CjGKDq2JbaZeypIj9pEA4HsiGlav+XpTtyIEgFry1ap2z6wpG3ShfumakhhS2K1d
+ WWA0pw9TBq25qLg8vrkTqi0X0kuMAdHhW4IsGIzIAQkNPcP/FZwtU9W0mkvg+FY8WogC
+ z6pfOCnnjvckndr85kVDT4pJpcxzAIiwGk4h+q3FQKR4hZvIk1g+FrKehA95xURnavKt
+ fRxacQjBFatVM79v6CMRcCX8bCqQsi5hCWQCCwRk/fwKe0OBCyzhz/JiHnzrnqT9cbot
+ H4WA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=cKO4Y75Hsp8kBkHTlZAIsxhLTRXIKjN/rbG6InF21Mg=;
+ b=HFPDzGoEAoYMYTdLWmzHrz+KF3cpDgPPgDSuRNt+nErM0JckiQ6pDg7kiHUZBhy5q0
+ ++vtuu4ID198OHUZYDDZJP4zLJqoDb4CgFcPGIpLlcjrcK2h45DBx6jfOeem+6fpCNM4
+ T98ton5OgG4gBr7x4kkcqji1y3P63UcHiEpoLRNiVFchvIe4rhtYowb3+FYD5lcuemfd
+ 5Vl48duuGqeYqFD0sG1jZzG2344j8docxbz3vamOWPtaADLSDY/8gNc/qAVbiObhJaZ8
+ k/ZDmcLmxU3ogaS9ngqOaExN5PH1NIs5okofYuooyG2znhC/mAztRQuK7xkHgK150+FO
+ bkZA==
+X-Gm-Message-State: AOAM530h1cyvaSQWeRoM9zss1+dUCpFqqQ4bDmNKor4ISRwmqaravaRz
+ PpMbxYYov44TH+SdohdMSPkEF09VuznUW70mCk09k7IBjTE=
+X-Google-Smtp-Source: ABdhPJwIr/SMHQoZ9YjGbTaeqY7Ue4A+y2LInJUjUhdIFfxe9Kt79xRKlPeA9aN8f1hc0RH+s36ldZDypbTVjgu7WNM=
+X-Received: by 2002:a05:6808:1787:: with SMTP id
+ bg7mr19707048oib.39.1630202072861; 
+ Sat, 28 Aug 2021 18:54:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20210817083930.3718711-8-herve.codina@bootlin.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH v3 07/16] package/pkg-generic.mk: detect
- files overwritten in TARGET_DIR and HOST_DIR
+References: <20210828044626.3170348-1-james.hilliard1@gmail.com>
+ <48045f87-380b-6f11-95a4-7fc6e7520936@mind.be>
+In-Reply-To: <48045f87-380b-6f11-95a4-7fc6e7520936@mind.be>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Sat, 28 Aug 2021 19:54:21 -0600
+Message-ID: <CADvTj4pGvfaCRUoOSGms=ZuNv39Fo_MDVzKSDv31tC0FoFg_ew@mail.gmail.com>
+To: Arnout Vandecappelle <arnout@mind.be>
+Subject: Re: [Buildroot] [PATCH 1/1] package/swupdate: update service/init
+ configs
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,165 +93,346 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Naumann Andreas <ANaumann@ultratronik.de>,
- Peter Seiderer <ps.report@gmx.net>, Julien Corjon <corjon.j@ecagroup.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org,
- Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: buildroot <buildroot@buildroot.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-SGVydsOpLCBBbGwsCgpPbiAyMDIxLTA4LTE3IDEwOjM5ICswMjAwLCBIZXJ2ZSBDb2RpbmEgc3Bh
-a2UgdGh1c2x5Ogo+IEZyb206IFRob21hcyBQZXRhenpvbmkgPHRob21hcy5wZXRhenpvbmlAYm9v
-dGxpbi5jb20+Cj4gCj4gV2l0aG91dCBwZXItcGFja2FnZSBkaXJlY3Rvcnkgc3VwcG9ydCwgYSBw
-YWNrYWdlIGNhbiBoYXBwaWx5IG92ZXJ3cml0ZQo+IGZpbGVzIGluc3RhbGxlZCBieSBvdGhlciBw
-YWNrYWdlcy4gSW5kZWVkLCBiZWNhdXNlIHRoZSBidWlsZCBvcmRlcgo+IGJldHdlZW4gcGFja2Fn
-ZXMgaXMgYWx3YXlzIGd1YXJhbnRlZWQsIEJ1aWxkcm9vdCB3aWxsIGFsd2F5cyBwcm9kdWNlCj4g
-dGhlIHNhbWUgb3V0cHV0Lgo+IAo+IEhvd2V2ZXIsIHdpdGggcGVyLXBhY2thZ2UgZGlyZWN0b3J5
-IHN1cHBvcnQsIGl0IGlzIGFic29sdXRlbHkgY3JpdGljYWwKPiB0aGF0IGEgZ2l2ZW4gcGFja2Fn
-ZSBkb2VzIG5vdCBvdmVyd3JpdGUgZmlsZXMgYWxyZWFkeSBpbnN0YWxsZWQgYnkKPiBhbm90aGVy
-IHBhY2thZ2UsIGR1ZSB0byBob3cgdGhlIGZpbmFsIGFnZ3JlZ2F0aW9uIGlzIGRvbmUgdG8gY3Jl
-YXRlCj4gdGhlIGNvbXBsZXRlIHRhcmdldC8sIHN0YWdpbmcvIGFuZCBob3N0LyBmb2xkZXJzLiBV
-bmZvcnR1bmF0ZWx5LCB3ZQo+IGN1cnJlbnRseSBkb24ndCBoYXZlIGFueXRoaW5nIGluIEJ1aWxk
-cm9vdCB0aGF0IGRldGVjdHMgdGhpcwo+IHNpdHVhdGlvbi4KPiAKPiBXZSB1c2VkIHRvIGhhdmUg
-Y2hlY2stdW5pcS1maWxlcywgYnV0IGl0IHdhcyBkcm9wcGVkIGluIGNvbW1pdAo+IDI0OTYxODlh
-NDIwNzE3M2U0Y2Q1YmJhYjkwMjU2ZjkxMTE3NWVlNTcuCj4gCj4gVGhpcyBjb21taXQgaXMgYSBu
-ZXcgaW1wbGVtZW50YXRpb24gb2Ygc3VjaCBhIGRldGVjdGlvbiwgd2hpY2ggaXMKPiBiYXNlZCBv
-biBjYWxjdWxhdGluZyBhbmQgdmVyaWZ5aW5nIE1ENSBoYXNoZXMgb2YgaW5zdGFsbGVkIGZpbGVz
-OiB0aGUKPiBjYWxjdWxhdGlvbiBpcyBkb25lIGF0IHRoZSBiZWdpbm5pbmcgb2YgdGhlIGNvbmZp
-Z3VyZSBzdGVwLCB0aGUKPiB2ZXJpZmljYXRpb24gZHVyaW5nIHRoZSBuZXdseSBpbnRyb2R1Y2Vk
-ICJpbnN0YWxsIiBzdGVwIHRoYXQgdGFrZXMKPiBwbGFjZSBhZnRlciBhbGwgaW5zdGFsbGF0aW9u
-IHN0ZXBzLgo+IAo+IFNpbmNlIHByZXZlbnRpbmcgZmlsZSBvdmVyd3JpdGVzIGlzIHJlYWxseSBv
-bmx5IG5lZWRlZCB3aGVuCj4gcGVyLXBhY2thZ2UgZGlyZWN0b3J5IHN1cHBvcnQgaXMgdXNlZCwg
-YW5kIGR1ZSB0byB0aGlzIHZlcmlmaWNhdGlvbgo+IGhhdmluZyBzb21lIG92ZXJoZWFkLCBpdCBp
-cyBvbmx5IGVuYWJsZWQgd2hlbgo+IEJSMl9QRVJfUEFDS0FHRV9ESVJFQ1RPUklFUz15LiBUaGlz
-IGFkZGl0aW9uYWwgdmVyaWZpY2F0aW9uIGNvc3QgaXMKPiBob3dldmVyIG5vdCB0b28gYmFkIGFz
-IG9uIGF2ZXJhZ2UsIHdpdGggcGVyLXBhY2thZ2UgZGlyZWN0b3J5IHN1cHBvcnQsCj4gdGhlIHBl
-ci1wYWNrYWdlIHRhcmdldC8gYW5kIGhvc3QvIGRpcmVjdG9yaWVzIHdpbGwgY29udGFpbiBsZXNz
-IGZpbGVzCj4gdGhhbiB3aXRoIGEgYnVpbGQgdGhhdCBkb2Vzbid0IHVzZSBwZXItcGFja2FnZSBk
-aXJlY3Rvcnkgc3VwcG9ydC4gVGhpcwo+IGhlbHBzIGEgYml0IGluIG1pdGlnYXRpbmcgdGhlIGFk
-ZGl0aW9uYWwgY29zdCBvZiB0aGlzIHZlcmlmaWNhdGlvbi4KPiAKPiBOb3RlIHRoYXQgd2UgYXJl
-IG5vdCBoYW5kbGluZyBzZXBhcmF0ZWx5IEhPU1RfRElSIGFuZCBTVEFHSU5HX0RJUiwKPiBsaWtl
-IHdlJ3JlIGRvaW5nIHdpdGggdGhlIHBrZ19zaXplX3tiZWZvcmUsYWZ0ZXJ9IGZ1bmN0aW9ucy4g
-SW5zdGVhZCwKPiB0aGUgdmVyaWZpY2F0aW9uIG9uIEhPU1RfRElSIHdhbGtzIGRvd24gaW50byB0
-aGUgU1RBR0lOR19ESVIuCj4gCj4gRHVyaW5nIHBlci1wYWNrYWdlIGJ1aWxkLCBvcmlnaW5hbCBm
-aWxlcyBhcmUgbW9kaWZpZWQgYnkKPiBmaXh1cC1saWJ0b29sLWZpbGVzIGFuZCBmaXh1cC1weXRo
-b24tZmlsZXMgY2FsbHMuCj4gQnV0IHNpbmNlIHRoZXNlIGZpeHVwcyBtb2RpZnkgZmlsZXMgdXNp
-bmcgc2VkIC0taW4tcGxhY2UsIHRoZXNlCj4gbW9kaWZpY2F0aW9ucyBhcmUgZG9uZSB1c2luZyBh
-IHRlbXBvcmFyeSBmaWxlIGFuZCBhIGNhbGwgdG8gcmVuYW1lLgo+IFJlbmFtZSBicmVha3MgdGhl
-IGhhcmRsaW5rIHRvIHRoZSBvcmlnaW5hbCBmaWxlIGFuZCBsZWF2ZSB0aGUgdGVtcG9yYXJ5Cj4g
-ZmlsZSBpbiBwZXItcGFja2FnZSBUQVJHRVQgZGlyLgo+IEFzIHRoZSBvcmlnaW5hbCBmaWxlIGlz
-IG5vdCBtb2RpZmllZCwgdGhpcyBpcyBubyBsb25nZXIgY29uc2lkZXJlZCBhcwo+IGFuIG92ZXJ3
-cml0ZS4gVGhpcyBwYXRjaCBzaW1wbHkgY29uc2lkZXJzIHRoYXQgd2hhdCBpcyBkb25lIGJ5Cj4g
-Zml4dXAtbGlidG9vbC1maWxlcyBhbmQgZml4dXAtcHl0aG9uLWZpbGVzIGlzIHBhcnQgb2YgdGhl
-IG9yaWdpbmFsCj4gc25hcHNob3QgdXNlZCB0byBkZXRlY3Qgb3ZlcndyaXRlcy4gQW5kIHNvLCB0
-aGUgb3JpZ2luYWwgc25hcHNob3QgaXMKPiB0YWtlbiBhZnRlciBmaXh1cC1saWJ0b29sLWZpbGVz
-IGFuZCBmaXh1cC1weXRob24tZmlsZXMgY2FsbHMuCgpUaGlzIHBhcmFncmFwaCBzaG91bGQgdGFr
-ZSBpbnRvIGNvbnNpZGVyYXRpb24gdGhlIGZhY3QgdGhhdCB3ZSBhbHNvIG5vdwpoYXZlIHRob3Nl
-IF9QT1NUX1BSRVBBUkVfSE9PS1MgKGFuZCBmaXJzdCBtb3ZpbmcgdGhlIGxpYnRvb2wgZml4dXBz
-IHRvCmJlIGhvb2tzIHdvdWxkIGhhdmUgc2ltcGxpZmllZCB0aGlzIHBhcmFncmFwaCkuCgpIb3dl
-dmVyLCB3aGF0IHByb21wdGVkIG1lIGZyb20gYXBwbHlpbmcgZm9yIG5vdywgaXMgdGhhdCB0aGlz
-IG5ldwpkZXRlY3Rpb24gaXMgYSBoYXJkIGVycm9yLgoKUHJldmlvdXNseSwgY2hlY2stdW5pcS1m
-aWxlcyB3YXMganVzdCBlbWl0dGluZyB3YXJuaW5ncywgYnV0IHdvdWxkIG5vdApwcmV2ZW50IHRo
-ZSBidWlsZCBmcm9tIGZhaWxpbmcuIE5vdywgd2l0aCB0aGlzIHBhdGNoLCBldmVuIGFuIGlubm9j
-dW91cwpvdmVyd3JpdGUgKGUuZy4gYmVjYXVzZSBhIHBvc3QtYnVpbGQgc2NyaXB0IGRlbGV0ZXMg
-dGhlIGZpbGUsIG9yIHRoZQpjb250ZW50IG9mIHRoZSBmaWxlIHJlYWxseSBkb2VzIG5vdCBtYXR0
-ZXIgYXQgcnVudGltZSksIHRoZSBidWlsZCB3aWxsCmZhaWwuCgpJLmUuIGNvbmZpZ3VyYXRpb25z
-IHRoYXQgYXJlIGN1cnJlbnRseSB3b3JraW5nIHdpdGggUFBELCBkZXNwaXRlIHRoZQpvdmVyd3Jp
-dGUsIHdpbGwgc3VkZGVubHkgbm8gbG9uZ2VyIGJ1aWxkLgoKT1RPSCwgaWYgd2UgZG8gbm90IG1h
-a2UgdGhhdCBhIGhhcmQtZXJyb3IsIHdlIHdpbGwgbmV2ZXIgZGV0ZWN0IG1vc3QKaXNzdWVzLCBi
-ZWNhdXNlIHVzZXJzIHdpbGwgbmV2ZXIgc3BvdCB0aG9zZSB3YXJuaW5ncyBhbmQgd2lsIGVudmVy
-CnJlcG9ydCBpc3N1ZXMsIGFuZCB0aGUgYXV0b2J1aWxkZXJzIHdpbGwgbm90IGZhaWwgYW5kIHdl
-IHdpbGwgbm90Cm5vdGljZSBlaXRoZXIuLi4KCk9uZSBzb2x1dGlvbiBpcyB0byBhZGQgYSBjb25m
-aWd1cmF0aW9uIGtub2IgdG8gbWFrZSB0aGF0IGEgaGFyZC1lcnJvciwKbGlrZSB3ZSBoYXZlIHRo
-ZSBwYXJhbm9pZCBsaWJzL2hlYWRlcnMgY2hlY2s6CgogICAgY29uZmlnIEJSMl9QUERfT1ZFUldS
-SVRFX1NUUklDVAogICAgICAgIGJvb2wgIlN0cmljdCBmaWxlIG92ZXJ3cml0ZSBkZXRlY3Rpb24i
-CiAgICAgICAgZGVwZW5kcyBvbiBCUjJfUEVSX1BBQ0tBR0VfRElSRUNUT1JJRVMKICAgICAgICBo
-ZWxwCiAgICAgICAgICBTYXkgJ3knIGhlcmUgdG8gdHVybiB0aGUgZmlsZSBvdmVyd3JpdGUgZGV0
-ZWN0aW9uCiAgICAgICAgICB0byBhIGhhcmQgZXJyb3IuIEJ5IGRlZmF1bHQsIG9ubHkgd2Fybmlu
-Z3Mgd2lsbCBiZQogICAgICAgICAgcHJpbnRlZC4KCkFuZCB1c2UgdGhhdCB0byBleGl0IGluIGVy
-cm9yIG9ubHkgaWYgc2V0OgoKICAgIFsuLi5dCiAgICB7IFwKICAgICAgICBlY2hvICJFUlJPUjog
-Wy4uLl0iOyBcCiAgICAgICAgJChpZiAkKEJSMl9QUERfT1ZFUldSSVRFX1NUUklDVCksZXhpdCAx
-OykgXAogICAgfSA7IFwKICAgIFsuLi5dCgpBbmQgdGhlbiwgZW5zdXJlIGl0IGlzIGFsd2F5cyBl
-bmFibGVkIGluIG91ciBhdXRvYnVpbGRlcnMsIHNvIGluCnV0aWxzL2dlbnJhbmRjb25maWc6Cgog
-ICAgZGlmZiAtLWdpdCBhL3V0aWxzL2dlbnJhbmRjb25maWcgYi91dGlscy9nZW5yYW5kY29uZmln
-IGluZGV4IDYyMmNmZDQ4OTEuLmE4OTFmOTNiNmQgMTAwNzU1CiAgICAtLS0gYS91dGlscy9nZW5y
-YW5kY29uZmlnCiAgICArKysgYi91dGlscy9nZW5yYW5kY29uZmlnCiAgICBAQCAtMzUzLDYgKzM1
-Myw3IEBAIGRlZiBnZW5fY29uZmlnKGFyZ3MpOgogICAgICAgICAjIFBlci1wYWNrYWdlIGZvbGRl
-cgogICAgICAgICBpZiByYW5kaW50KDAsIDE1KSA9PSAwOgogICAgICAgICAgICAgY29uZmlnbGlu
-ZXMuYXBwZW5kKCJCUjJfUEVSX1BBQ0tBR0VfRElSRUNUT1JJRVM9eVxuIikKICAgICsgICAgICAg
-IGNvbmZpZ2xpbmVzLmFwcGVuZCgiQlIyX1BQRF9PVkVSV1JJVEVfU1RSSUNUPXlcbiIpCiAgICAg
-CiAgICAgICAgICMgQW1lbmQgdGhlIGNvbmZpZ3VyYXRpb24gd2l0aCBhIGZldyB0aGluZ3MuCiAg
-ICAgICAgIGlmIHJhbmRpbnQoMCwgMjApID09IDA6CgpJIGFtIG5vdCB0b3RhbGx5IHNvbGQgdG8g
-dGhlIG5ldyBjb25maWcga25vYiBlaXRoZXIsIGJ1dCBJJ2Qgc3RpbGwKcmF0aGVyIGhhdmUgaXQg
-dGhhbiB1bmNvbmRpdGlvbmFsbHkgYnJlYWsgdGhlIGJ1aWxkLi4uCgpBZnRlciBhbGwsIHdlIGtu
-b3cgdGhhdCB0aGVyZSBhcmUgc29tZSBwZW9wbGUgdXNpbmcgUFBEIChhbmQgVExQQikgYW5kCmFy
-ZSBoYXBweSB3aXRoIGhvdyBpdCB3b3JrcyBmb3IgdGhlbSwgc28gYnJlYWtpbmcgdGhlIGJ1aWxk
-IG9uIHB1cnBvc2UKd291bGQgcHJvYmFibHkgbm90IGJlIHNlZW4gYXMgYW4gaW1wcm92ZW1lbnQu
-Li4KClJlZ2FyZHMsCllhbm4gRS4gTU9SSU4uCgo+IFNpZ25lZC1vZmYtYnk6IFRob21hcyBQZXRh
-enpvbmkgPHRob21hcy5wZXRhenpvbmlAYm9vdGxpbi5jb20+Cj4gU2lnbmVkLW9mZi1ieTogSGVy
-dmUgQ29kaW5hIDxoZXJ2ZS5jb2RpbmFAYm9vdGxpbi5jb20+Cj4gLS0tCj4gVGhpcyBjb21taXQg
-aXMgcmV0cmVpdmVkIGZyb20gVGhvbWFzJ3Mgd29yay4KPiBUaGUgZmlyc3QgdmVyc2lvbiB3YXMg
-ZGlzY3Vzc2VkCj4gaHR0cHM6Ly9wYXRjaHdvcmsub3psYWJzLm9yZy9wcm9qZWN0L2J1aWxkcm9v
-dC9wYXRjaC8yMDIwMDQzMDA5NTI0OS43ODI1OTctOS10aG9tYXMucGV0YXp6b25pQGJvb3RsaW4u
-Y29tLwo+IFRoaXMgbmV3IHZlcnNpb24gd2FzIG5vdCBhbHJlYWR5IHN1Ym1pdHRlZCBieSBUaG9t
-YXMgb3IgSSBtaXNzZWQgaXQuCj4gQ29tcGFyZWQgdG8gdGhlIGZpcnN0IHZlcnNpb24sIHRoaXMg
-cGF0Y2ggaGFzIGFuIGltcHJvdmVkIGNvbW1pdCBtZXNzYWdlIGFuZAo+IGdlbmVyYXRlcyB0aGUg
-bWQ1c3VtIHNuYXBzaG90IHVzaW5nCj4gICdMQ19BTEw9QyBmaW5kICQoMSkgLXR5cGUgZiAtcHJp
-bnQwIHwgeGFyZ3MgLTAgLXIgbWQ1c3VtID4gJCgkKFBLRylfRElSKS8uZmlsZXMkKDIpLm1kNTsn
-Cj4gaW5zdGVhZCBvZgo+ICAnY2QgJCgxKTsgTENfQUxMPUMgZmluZCAuIC10eXBlIGYgLWV4ZWMg
-bWQ1c3VtIHt9IFw7ID4gJCgkKFBLRylfRElSKS8uZmlsZXMkKDIpLm1kNScKPiAKPiBDaGFuZ2Vz
-IHYxIHRvIHYyOgo+ICAtIEFkZGVkIG5vdGUgYWJvdXQgd2h5IGZpeHVwLXtsaWJ0b29sLHB5dGhv
-bn0tZmlsZXMgYXJlIG5vdCBjb25zaWRlcmVkIG92ZXJ3cml0ZXMKPiAgICBhbmQgc28gdGFrZSB0
-aGUgb3ZlcndyaXRlIHNuYXBzaG90IGFmdGVyIGZpeHVwLXtsaWJ0b29sLHB5dGhvbn0tZmlsZXMg
-Y2FsbC4KPiAgLSBSZW1vdmVkICdMQ19BTEw9QycKPiAKPiBDaGFuZ2VzIHYyIHRvIHYzOgo+IE5v
-bmUKPiAKPiAgcGFja2FnZS9wa2ctZ2VuZXJpYy5tayB8IDIzICsrKysrKysrKysrKysrKysrKysr
-KysrCj4gIDEgZmlsZSBjaGFuZ2VkLCAyMyBpbnNlcnRpb25zKCspCj4gCj4gZGlmZiAtLWdpdCBh
-L3BhY2thZ2UvcGtnLWdlbmVyaWMubWsgYi9wYWNrYWdlL3BrZy1nZW5lcmljLm1rCj4gaW5kZXgg
-MzgzODFkOTNiNS4uNDE0ODYyZTI2NyAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL3BrZy1nZW5lcmlj
-Lm1rCj4gKysrIGIvcGFja2FnZS9wa2ctZ2VuZXJpYy5tawo+IEBAIC0xMjQsNiArMTI0LDI1IEBA
-IGRlZmluZSBGSVhVUF9QWVRIT05fU1lTQ09ORklHREFUQQo+ICBlbmRlZgo+ICBlbmRpZgo+ICAK
-PiArIyBGdW5jdGlvbnMgdG8gZGV0ZWN0IG92ZXJ3cml0dGVuIGZpbGVzCj4gKwo+ICtpZmVxICgk
-KEJSMl9QRVJfUEFDS0FHRV9ESVJFQ1RPUklFUykseSkKPiArIyAkKDEpOiBiYXNlIGRpcmVjdG9y
-eSB0byBzZWFyY2ggaW4KPiArIyAkKDIpOiBzdWZmaXggb2YgZmlsZSAob3B0aW9uYWwpCj4gK2Rl
-ZmluZSBwa2dfZGV0ZWN0X292ZXJ3cml0ZV9iZWZvcmUKPiArCWZpbmQgJCgxKSAtdHlwZSBmIC1w
-cmludDAgfCB4YXJncyAtMCAtciBtZDVzdW0gPiAkKCQoUEtHKV9ESVIpLy5maWxlcyQoMikubWQ1
-Owo+ICtlbmRlZgo+ICsKPiArIyAkKDEpOiBiYXNlIGRpcmVjdG9yeSB0byBzZWFyY2ggaW4KPiAr
-IyAkKDIpOiBzdWZmaXggb2YgZmlsZSAob3B0aW9uYWwpCj4gK2RlZmluZSBwa2dfZGV0ZWN0X292
-ZXJ3cml0ZV9hZnRlcgo+ICsJaWYgdGVzdCAtcyAkKCQoUEtHKV9ESVIpLy5maWxlcyQoMikubWQ1
-IDsgdGhlbiBcCj4gKwkJbWQ1c3VtIC0tcXVpZXQgLWMgJCgkKFBLRylfRElSKS8uZmlsZXMkKDIp
-Lm1kNSB8fCBcCj4gKwkJeyBlY2hvICJFUlJPUjogcGFja2FnZSAkKCQoUEtHKV9OQU1FKSBoYXMg
-b3ZlcndyaXR0ZW4gZmlsZXMgaW5zdGFsbGVkIGJ5IGEgcHJldmlvdXMgcGFja2FnZSwgYWJvcnRp
-bmcuIjsgZXhpdCAxOyB9IDsgXAo+ICsJZmkKPiArZW5kZWYKPiArZW5kaWYKPiArCj4gICMgRnVu
-Y3Rpb25zIHRvIGNvbGxlY3Qgc3RhdGlzdGljcyBhYm91dCBpbnN0YWxsZWQgZmlsZXMKPiAgCj4g
-ICMgJCgxKTogYmFzZSBkaXJlY3RvcnkgdG8gc2VhcmNoIGluCj4gQEAgLTI3Nyw2ICsyOTYsOCBA
-QCAkKEJVSUxEX0RJUikvJS8uc3RhbXBfY29uZmlndXJlZDoKPiAgCSQoY2FsbCBmaXh1cC1saWJ0
-b29sLWZpbGVzLCQoTkFNRSksJChIT1NUX0RJUikpCj4gIAkkKGNhbGwgZml4dXAtbGlidG9vbC1m
-aWxlcywkKE5BTUUpLCQoU1RBR0lOR19ESVIpKQo+ICAJJChmb3JlYWNoIGhvb2ssJCgkKFBLRylf
-UE9TVF9QUkVQQVJFX0hPT0tTKSwkKGNhbGwgJChob29rKSkkKHNlcCkpCj4gKwlAJChjYWxsIHBr
-Z19kZXRlY3Rfb3ZlcndyaXRlX2JlZm9yZSwkKFRBUkdFVF9ESVIpKQo+ICsJQCQoY2FsbCBwa2df
-ZGV0ZWN0X292ZXJ3cml0ZV9iZWZvcmUsJChIT1NUX0RJUiksLWhvc3QpCj4gIAkkKGZvcmVhY2gg
-aG9vaywkKCQoUEtHKV9QUkVfQ09ORklHVVJFX0hPT0tTKSwkKGNhbGwgJChob29rKSkkKHNlcCkp
-Cj4gIAkkKCQoUEtHKV9DT05GSUdVUkVfQ01EUykKPiAgCSQoZm9yZWFjaCBob29rLCQoJChQS0cp
-X1BPU1RfQ09ORklHVVJFX0hPT0tTKSwkKGNhbGwgJChob29rKSkkKHNlcCkpCj4gQEAgLTQwMSw2
-ICs0MjIsOCBAQCAkKEJVSUxEX0RJUikvJS8uc3RhbXBfaW5zdGFsbGVkOgo+ICAJQCQoY2FsbCBw
-a2dfc2l6ZV9hZnRlciwkKFNUQUdJTkdfRElSKSwtc3RhZ2luZykKPiAgCUAkKGNhbGwgcGtnX3Np
-emVfYWZ0ZXIsJChIT1NUX0RJUiksLWhvc3QpCj4gIAlAJChjYWxsIGNoZWNrX2Jpbl9hcmNoKQo+
-ICsJQCQoY2FsbCBwa2dfZGV0ZWN0X292ZXJ3cml0ZV9hZnRlciwkKFRBUkdFVF9ESVIpKQo+ICsJ
-QCQoY2FsbCBwa2dfZGV0ZWN0X292ZXJ3cml0ZV9hZnRlciwkKEhPU1RfRElSKSwtaG9zdCkKPiAg
-CSQoUSl0b3VjaCAkQAo+ICAKPiAgIyBSZW1vdmUgcGFja2FnZSBzb3VyY2VzCj4gLS0gCj4gMi4z
-MS4xCj4gCj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18K
-PiBidWlsZHJvb3QgbWFpbGluZyBsaXN0Cj4gYnVpbGRyb290QGJ1c3lib3gubmV0Cj4gaHR0cDov
-L2xpc3RzLmJ1c3lib3gubmV0L21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290CgotLSAKLi0tLS0t
-LS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS4tLS0t
-LS0tLS0tLS0tLS0tLS0tLS4KfCAgWWFubiBFLiBNT1JJTiAgfCBSZWFsLVRpbWUgRW1iZWRkZWQg
-fCAvIlwgQVNDSUkgUklCQk9OIHwgRXJpY3MnIGNvbnNwaXJhY3k6IHwKfCArMzMgNjYyIDM3NiAw
-NTYgfCBTb2Z0d2FyZSAgRGVzaWduZXIgfCBcIC8gQ0FNUEFJR04gICAgIHwgIF9fXyAgICAgICAg
-ICAgICAgIHwKfCArMzMgNTYxIDA5OSA0MjcgYC0tLS0tLS0tLS0tLS4tLS0tLS0tOiAgWCAgQUdB
-SU5TVCAgICAgIHwgIFxlLyAgVGhlcmUgaXMgbm8gIHwKfCBodHRwOi8veW1vcmluLmlzLWEtZ2Vl
-ay5vcmcvIHwgXy8qXF8gfCAvIFwgSFRNTCBNQUlMICAgIHwgICB2ICAgY29uc3BpcmFjeS4gIHwK
-Jy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0tXi0tLS0tLS0tLS0tLS0tLS0t
-LV4tLS0tLS0tLS0tLS0tLS0tLS0tLScKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVzeWJveC5u
-ZXQKaHR0cDovL2xpc3RzLmJ1c3lib3gubmV0L21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+On Sat, Aug 28, 2021 at 6:44 AM Arnout Vandecappelle <arnout@mind.be> wrote:
+>
+>  Hi James,
+>
+>  "update" in the subject is not really helpful.
+
+I had assumed these configs were mostly just re-syncing with meta-swupdate.
+
+I'll split this patch up.
+
+>
+> On 28/08/2021 06:46, James Hilliard wrote:
+> > Set SKIP_STRIP=y so that the swupdate binary isn't stripped.
+>
+>  We can see that from the patch - instead you should explain why we want to skip
+> strip.
+>
+>  Also, this has nothing to do with systemd configs, so should be a separate patch.
+>
+>  In this case for sure, because I think it might be something for master.
+
+Ok, will send separately.
+
+>
+>
+> > Introduce BR2_PACKAGE_SWUPDATE_WEBSERVER so that we can control
+> > the required webserver config installation when enabled.
+>
+>  This also should be a separate patch (though less important in this case).
+>
+>
+> > Ensure swupdate systemd support is always set based on buildroot
+> > using systemd as this is required for the systemd services.
+> >
+> > Use swupdate's make install so that we install swupdate tools needed
+> > for services.
+> >
+> > Adapted from:
+> > https://github.com/sbabic/meta-swupdate/tree/abc520d97482232302046459715845a025aca7d6/recipes-support/swupdate/swupdate
+> > https://github.com/sbabic/meta-swupdate/blob/abc520d97482232302046459715845a025aca7d6/recipes-support/swupdate/swupdate.inc
+> >
+> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> > ---
+> >  package/swupdate/10-mongoose-args          |  1 +
+> >  package/swupdate/90-start-progress         |  1 +
+> >  package/swupdate/Config.in                 |  7 ++++
+> >  package/swupdate/swupdate-progress.service |  9 +++++
+> >  package/swupdate/swupdate-usb.rules        |  2 +
+> >  package/swupdate/swupdate-usb@.service     |  8 ++++
+> >  package/swupdate/swupdate.mk               | 43 +++++++++++++++++++---
+> >  package/swupdate/swupdate.socket           | 11 ++++++
+> >  package/swupdate/tmpfiles-swupdate.conf    |  2 +
+> >  9 files changed, 79 insertions(+), 5 deletions(-)
+> >  create mode 100644 package/swupdate/10-mongoose-args
+> >  create mode 100644 package/swupdate/90-start-progress
+> >  create mode 100644 package/swupdate/swupdate-progress.service
+> >  create mode 100644 package/swupdate/swupdate-usb.rules
+> >  create mode 100644 package/swupdate/swupdate-usb@.service
+> >  create mode 100644 package/swupdate/swupdate.socket
+> >  create mode 100644 package/swupdate/tmpfiles-swupdate.conf
+> >
+> > diff --git a/package/swupdate/10-mongoose-args b/package/swupdate/10-mongoose-args
+> > new file mode 100644
+> > index 0000000000..896e66ba86
+> > --- /dev/null
+> > +++ b/package/swupdate/10-mongoose-args
+> > @@ -0,0 +1 @@
+> > +SWUPDATE_WEBSERVER_ARGS="-r /www ${SWUPDATE_MONGOOSE_EXTRA_ARGS:--p 8080}"
+>
+>  Is this correct? The webserver is installed in /var/www, not /www...
+>
+> > diff --git a/package/swupdate/90-start-progress b/package/swupdate/90-start-progress
+> > new file mode 100644
+> > index 0000000000..3b0eb5e7d7
+> > --- /dev/null
+> > +++ b/package/swupdate/90-start-progress
+> > @@ -0,0 +1 @@
+> > +exec /usr/bin/swupdate-progress -w -r &
+> > diff --git a/package/swupdate/Config.in b/package/swupdate/Config.in
+> > index f601e45fcd..6b832cfcbf 100644
+> > --- a/package/swupdate/Config.in
+> > +++ b/package/swupdate/Config.in
+> > @@ -60,9 +60,16 @@ config BR2_PACKAGE_SWUPDATE_CONFIG
+> >         I you wish to use your own modified swupdate configuration
+> >         file specify the config file location with this option.
+> >
+> > +config BR2_PACKAGE_SWUPDATE_WEBSERVER
+> > +     bool "swupdate webserver"
+> > +     default y
+> > +     help
+> > +       Enable update from remote using a web server on the target.
+> > +
+> >  config BR2_PACKAGE_SWUPDATE_INSTALL_WEBSITE
+> >       bool "install default website"
+> >       default y
+> > +     depends on BR2_PACKAGE_SWUPDATE_WEBSERVER
+>
+>  I could be mistaken, but isn't the website perfectly usable with an external
+> webserver as well? You just have to provide the upload endpoint IIRC.
+
+The webserver is also the upload endpoint and is thus required, sure you can
+proxy to it via nginx even but it's not optional for the update
+website to function.
+
+>
+> >       help
+> >         Install the provided website to /var/www/swupdate.
+> >
+> > diff --git a/package/swupdate/swupdate-progress.service b/package/swupdate/swupdate-progress.service
+> > new file mode 100644
+> > index 0000000000..0d464bb420
+> > --- /dev/null
+> > +++ b/package/swupdate/swupdate-progress.service
+> > @@ -0,0 +1,9 @@
+> > +[Unit]
+> > +Description=swupdate progress service
+> > +After=swupdate.service
+> > +
+> > +[Service]
+> > +ExecStart=/usr/bin/swupdate-progress -r -w
+> > +
+> > +[Install]
+> > +WantedBy=swupdate.service
+>
+>  I suspect this is copied verbatim from meta-swupdate... It's good form to then
+> add a comment in the beginning of the file that specifies the upstream copyright
+> and license (in SPDX) and an upstream link.
+>
+>  Same for all other files you copied, of course.
+
+Hmm, I'm thinking the best option would just be to add a comment to the makefile
+indicating the source of them, they are MIT licensed which is already a license
+listed for the swupdate package.
+
+>
+> > diff --git a/package/swupdate/swupdate-usb.rules b/package/swupdate/swupdate-usb.rules
+> > new file mode 100644
+> > index 0000000000..b4efd0b733
+> > --- /dev/null
+> > +++ b/package/swupdate/swupdate-usb.rules
+> > @@ -0,0 +1,2 @@
+> > +ACTION=="add", KERNEL=="sd*", SUBSYSTEM=="block", ENV{ID_BUS}=="usb", ENV{ID_FS_USAGE}=="filesystem", TAG+="systemd", ENV{SYSTEMD_WANTS}+="swupdate-usb@%k.service"
+>
+>  Hm, I wonder if it's a good idea to install this unconditionally... It feels to
+> me that this is a possible attack vector that the user should be aware of - and
+> the best way to do that is to make the whole thing optional.
+
+Maybe, although swu files should typically be signed.
+
+>
+>  But really, I kind of wonder if this is something that Buildroot should
+> provide. Ideally, this should be part of the swupdate documentation, and if you
+> actually want automatic updates when a USB storage device is plugged in, you can
+> put that stuff in an overlay.
+
+Well it's included by default in the meta-swupdate layer, but yeah I
+should probably
+add a config option for it.
+
+>
+>
+> > diff --git a/package/swupdate/swupdate-usb@.service b/package/swupdate/swupdate-usb@.service
+> > new file mode 100644
+> > index 0000000000..eda9d1539c
+> > --- /dev/null
+> > +++ b/package/swupdate/swupdate-usb@.service
+> > @@ -0,0 +1,8 @@
+> > +[Unit]
+> > +Description=usb media swupdate service
+> > +Requires=swupdate-progress.service
+> > +
+> > +[Service]
+> > +ExecStartPre=/bin/mount /dev/%I /mnt
+> > +ExecStart=/bin/sh -c "swupdate-client -v /mnt/*.swu"
+> > +ExecStopPost=/bin/umount /mnt
+> > diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
+> > index 402aa0a91f..3368b6ef6a 100644
+> > --- a/package/swupdate/swupdate.mk
+> > +++ b/package/swupdate/swupdate.mk
+> > @@ -22,7 +22,7 @@ SWUPDATE_LICENSE_FILES = LICENSES/BSD-1-Clause.txt \
+> >  # swupdate uses $CROSS-cc instead of $CROSS-gcc, which is not
+> >  # available in all external toolchains, and use CC for linking. Ensure
+> >  # TARGET_CC is used for both.
+> > -SWUPDATE_MAKE_ENV = CC="$(TARGET_CC)" LD="$(TARGET_CC)"
+> > +SWUPDATE_MAKE_ENV = CC="$(TARGET_CC)" LD="$(TARGET_CC)" SKIP_STRIP=y
+> >
+> >  # swupdate bundles its own version of mongoose (version 6.16)
+> >
+> > @@ -139,6 +139,13 @@ endif
+> >
+> >  ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+> >  SWUPDATE_DEPENDENCIES += systemd
+> > +define SWUPDATE_SET_SYSTEMD
+> > +     $(call KCONFIG_ENABLE_OPT,CONFIG_SYSTEMD)
+> > +endef
+> > +else
+> > +define SWUPDATE_SET_SYSTEMD
+> > +     $(call KCONFIG_DISABLE_OPT,CONFIG_SYSTEMD)
+> > +endef
+> >  endif
+> >
+> >  ifeq ($(BR2_PACKAGE_LIBUBOOTENV),y)
+> > @@ -180,6 +187,16 @@ ifeq ($(BR2_PACKAGE_LIBRSYNC),y)
+> >  SWUPDATE_DEPENDENCIES += librsync
+> >  endif
+> >
+> > +ifeq ($(BR2_PACKAGE_SWUPDATE_WEBSERVER),y)
+> > +define SWUPDATE_SET_WEBSERVER
+> > +     $(call KCONFIG_ENABLE_OPT,CONFIG_WEBSERVER)
+> > +endef
+> > +else
+> > +define SWUPDATE_SET_WEBSERVER
+> > +     $(call KCONFIG_DISABLE_OPT,CONFIG_WEBSERVER)
+> > +endef
+> > +endif
+> > +
+> >  SWUPDATE_BUILD_CONFIG = $(@D)/.config
+> >
+> >  SWUPDATE_KCONFIG_FILE = $(call qstrip,$(BR2_PACKAGE_SWUPDATE_CONFIG))
+> > @@ -192,14 +209,17 @@ SWUPDATE_MAKE_OPTS = \
+> >
+> >  define SWUPDATE_KCONFIG_FIXUP_CMDS
+> >       $(SWUPDATE_SET_LUA_VERSION)
+> > +     $(SWUPDATE_SET_SYSTEMD)
+> > +     $(SWUPDATE_SET_WEBSERVER)
+> >  endef
+> >
+> >  define SWUPDATE_BUILD_CMDS
+> > -     $(TARGET_MAKE_ENV) $(SWUPDATE_MAKE_ENV) $(MAKE) $(SWUPDATE_MAKE_OPTS) -C $(@D)
+> > +     $(TARGET_MAKE_ENV) $(SWUPDATE_MAKE_ENV) $(MAKE) -C $(@D) $(SWUPDATE_MAKE_OPTS)
+> >  endef
+> >
+> >  define SWUPDATE_INSTALL_TARGET_CMDS
+> > -     $(INSTALL) -D -m 0755 $(@D)/swupdate $(TARGET_DIR)/usr/bin/swupdate
+> > +     $(TARGET_MAKE_ENV) $(SWUPDATE_MAKE_ENV) $(MAKE) -C $(@D) \
+> > +             $(SWUPDATE_MAKE_OPTS) DESTDIR=$(TARGET_DIR) install
+> >       $(if $(BR2_PACKAGE_SWUPDATE_INSTALL_WEBSITE), \
+> >               mkdir -p $(TARGET_DIR)/var/www/swupdate; \
+> >               cp -dpfr $(@D)/examples/www/v2/* $(TARGET_DIR)/var/www/swupdate)
+> > @@ -213,23 +233,36 @@ $(error No Swupdate configuration file specified, check your BR2_PACKAGE_SWUPDAT
+> >  endif
+> >  endif
+> >
+> > -ifeq ($(BR2_PACKAGE_SWUPDATE_INSTALL_WEBSITE),y)
+> >  define SWUPDATE_INSTALL_COMMON
+> >       mkdir -p $(TARGET_DIR)/etc/swupdate/conf.d \
+> >               $(TARGET_DIR)/usr/lib/swupdate/conf.d
+> >       $(INSTALL) -D -m 755 package/swupdate/swupdate.sh \
+> >               $(TARGET_DIR)/usr/lib/swupdate/swupdate.sh
+> > +     $(if $(BR2_PACKAGE_SWUPDATE_WEBSERVER), \
+>
+>  Not saying that adding the Buildroot config option is bad, but another option
+> would be to simply check the setting of the webserver option in the swupdate config:
+>
+>         if grep -q '^CONFIG_WEBSERVER=y' $(SWUPDATE_BUILD_CONFIG); then \
+> > +             $(INSTALL) -D -m 644 package/swupdate/10-mongoose-args \
+> > +                     $(TARGET_DIR)/usr/lib/swupdate/conf.d/10-mongoose-args)
+> >  endef
+> >  define SWUPDATE_INSTALL_INIT_SYSTEMD
+> >       $(SWUPDATE_INSTALL_COMMON)
+> >       $(INSTALL) -D -m 644 package/swupdate/swupdate.service \
+> >               $(TARGET_DIR)/usr/lib/systemd/system/swupdate.service
+> > +     $(INSTALL) -D -m 644 package/swupdate/swupdate.socket \
+> > +             $(TARGET_DIR)/usr/lib/systemd/system/swupdate.socket
+> > +     $(INSTALL) -D -m 644 package/swupdate/swupdate-usb@.service \
+> > +             $(TARGET_DIR)/usr/lib/systemd/system/swupdate-usb@.service
+> > +     $(INSTALL) -D -m 644 package/swupdate/swupdate-progress.service \
+> > +             $(TARGET_DIR)/usr/lib/systemd/system/swupdate-progress.service
+> > +     $(INSTALL) -D -m 644 package/swupdate/tmpfiles-swupdate.conf \
+> > +             $(TARGET_DIR)/usr/lib/tmpfiles.d/tmpfiles-swupdate.conf
+> > +     $(INSTALL) -D -m 644 package/swupdate/swupdate-usb.rules \
+> > +             $(TARGET_DIR)/lib/udev/rules.d/swupdate-usb.rules
+> >  endef
+> >  define SWUPDATE_INSTALL_INIT_SYSV
+> >       $(SWUPDATE_INSTALL_COMMON)
+> >       $(INSTALL) -D -m 755 package/swupdate/S80swupdate \
+> >               $(TARGET_DIR)/etc/init.d/S80swupdate
+> > +     $(INSTALL) -D -m 644 package/swupdate/90-start-progress \
+> > +             $(TARGET_DIR)/usr/lib/swupdate/conf.d/90-start-progress
+> >  endef
+> > -endif
+> >
+> >  $(eval $(kconfig-package))
+> > diff --git a/package/swupdate/swupdate.socket b/package/swupdate/swupdate.socket
+> > new file mode 100644
+> > index 0000000000..2b756714c5
+> > --- /dev/null
+> > +++ b/package/swupdate/swupdate.socket
+> > @@ -0,0 +1,11 @@
+> > +[Unit]
+> > +Description=SWUpdate socket listener
+> > +Documentation=https://github.com/sbabic/swupdate
+> > +Documentation=https://sbabic.github.io/swupdate
+> > +
+> > +[Socket]
+> > +ListenStream=/tmp/sockinstctrl
+> > +ListenStream=/tmp/swupdateprog
+> > +
+> > +[Install]
+> > +WantedBy=sockets.target
+> > diff --git a/package/swupdate/tmpfiles-swupdate.conf b/package/swupdate/tmpfiles-swupdate.conf
+> > new file mode 100644
+> > index 0000000000..4743672fcc
+> > --- /dev/null
+> > +++ b/package/swupdate/tmpfiles-swupdate.conf
+> > @@ -0,0 +1,2 @@
+> > +X /tmp/datadst
+> > +X /tmp/scripts
+>
+>  Why are these needed? Are they only needed for systemd? If not, the S80swupdate
+> init script should also be updated to create those directories.
+
+These directives prevent systemd from deleting those folders, they are
+not needed
+for non-systemd setups.
+
+See:
+https://www.freedesktop.org/software/systemd/man/tmpfiles.d.html
+
+Specifically:
+X
+Ignore a path during cleaning. Use this type to exclude paths from clean-up as
+controlled with the Age parameter. Unlike x, this parameter will not exclude the
+content if path is a directory, but only directory itself. Note that
+lines of this type do
+not influence the effect of r or R lines. Lines of this type accept
+shell-style globs in
+place of normal path names.
+
+
+>
+>  Regards,
+>  Arnout
+_______________________________________________
+buildroot mailing list
+buildroot@busybox.net
+http://lists.busybox.net/mailman/listinfo/buildroot
