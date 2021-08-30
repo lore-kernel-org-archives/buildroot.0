@@ -7,83 +7,85 @@ X-Spam-Status: No, score=-16.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F239C4320A
-	for <buildroot@archiver.kernel.org>; Mon, 30 Aug 2021 04:42:38 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 63767C432BE
+	for <buildroot@archiver.kernel.org>; Mon, 30 Aug 2021 04:42:50 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 48D6E60F5C
-	for <buildroot@archiver.kernel.org>; Mon, 30 Aug 2021 04:42:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 48D6E60F5C
+	by mail.kernel.org (Postfix) with ESMTPS id 2C50060F5C
+	for <buildroot@archiver.kernel.org>; Mon, 30 Aug 2021 04:42:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2C50060F5C
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=wdc.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1C36B6067E;
-	Mon, 30 Aug 2021 04:42:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0AB5A4040B;
+	Mon, 30 Aug 2021 04:42:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dtdYraAgMZ9X; Mon, 30 Aug 2021 04:42:34 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id dwnTxYbdlATu; Mon, 30 Aug 2021 04:42:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1266C606EF;
-	Mon, 30 Aug 2021 04:42:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F01A34041F;
+	Mon, 30 Aug 2021 04:42:44 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 404DF1BF2F4
- for <buildroot@lists.busybox.net>; Mon, 30 Aug 2021 04:41:13 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 43CAC1BF2F4
+ for <buildroot@lists.busybox.net>; Mon, 30 Aug 2021 04:41:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3DCEE6067E
- for <buildroot@lists.busybox.net>; Mon, 30 Aug 2021 04:41:13 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 33E2560759
+ for <buildroot@lists.busybox.net>; Mon, 30 Aug 2021 04:41:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=wdc.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BPqITpjQ_AfX for <buildroot@lists.busybox.net>;
- Mon, 30 Aug 2021 04:41:11 +0000 (UTC)
+ with ESMTP id T6fDdMCaoOkD for <buildroot@lists.busybox.net>;
+ Mon, 30 Aug 2021 04:41:10 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
 Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
- by smtp3.osuosl.org (Postfix) with ESMTPS id CE61460759
- for <buildroot@buildroot.org>; Mon, 30 Aug 2021 04:41:11 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B46E860755
+ for <buildroot@buildroot.org>; Mon, 30 Aug 2021 04:41:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
- t=1630298471; x=1661834471;
+ t=1630298470; x=1661834470;
  h=from:to:cc:subject:date:message-id:in-reply-to:
  references:mime-version:content-transfer-encoding;
- bh=cF+Wu5R2Haz+8r1wawZUTcvf67T/32+97UgtJEsZxjM=;
- b=EyalwbiKEaVJET+UfjxzyzOl7vrnf3HhATVX7c3SgyKb45RJaQ3L5EM3
- r61qVhRR7KTDYB15dHm0wJtx1c8DLfP2X2pl3HtYcCoJzHbjaaAxZm3oj
- bL9cXantcQdP8nzIXHb3K/xMqlONlgvy1HrqhJ9aWGNUdU2TPGyQNubb9
- jy17yMKaikb/uusw24tNqXYy6oNWwN4q2yrdxOl7tPHmLuWzSLx3hOKMx
- JmyOa+clxrdHbgq66Ht5VZTx2oRi5Ey1Lurwkh7+LwLsEn75+W7DkRay2
- qIypl0eJpaB6dge3QlkTanFyb8Yuy0o65XPORzt/M+eXo2pIOoRTqLh5y Q==;
-X-IronPort-AV: E=Sophos;i="5.84,362,1620662400"; d="scan'208";a="177842512"
+ bh=dxxPStFpFcDPqjslRQ2TN3IJIlYfX5i0LJmtynPLQuI=;
+ b=IouD+UfDFkOZ2lJBxBnzAWOm1VPqFEQHvx/qpoQwlEJ2NQ4hiQHpeKPD
+ 759/4r194znOOClWei5db7IKLtFXB2nASJAwK82FKA8aMkegvISwg/qAV
+ ebDkwkT1OvoxFW/GKa0/jB/F4dkSgef4R0gJHuUxYrpDIR4WHnyDQ6XIm
+ GUy0WYBcUntV4ekXadlBA0Sw7StiC3YaA5SmjjEqbPzPgtd9MwoOo4sPg
+ xtOYD/iJiatDdGheSH6OqnwadguY+4bLr/uwbMoPzjdIxcioePBSZSGU9
+ jDYA+x48JdNBBnz7WEkGWKv1zzo8lX0yPsGczBGSTybBPRTTKNgIkHPzE Q==;
+X-IronPort-AV: E=Sophos;i="5.84,362,1620662400"; d="scan'208";a="177842508"
 Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com)
  ([199.255.45.14])
- by ob1.hgst.iphmx.com with ESMTP; 30 Aug 2021 12:41:11 +0800
-IronPort-SDR: dxqxbt9CjUnTWk1F1O9X4aatZtRrfiSmFJcqOKuWLUgk2krvmRORQXe8/VbDXDz08sCjy8/Icf
- d0n41EanRwXpzm0my3tY0zFm4JYuC/AKS8BnSLeCSwSOxA2kaWzGwql2CnLMZi2T6ijdXmmNSh
- 8WiS0dbXB9mxGgozxDVB/RBFzzQD+naxDBZaC+T5mPLOXN16eKq7/kXpxgy3Ov9Lttu07tiDCD
- /SRDTiQ5G5y/caeiUA6JnlEhCmo1bKqo6No2bQgjKylhn2VBMtCDEH+Yk2Z2MgT15W9UIttfFV
- AJX69L+NMIrqWRMFvnDyrh8e
+ by ob1.hgst.iphmx.com with ESMTP; 30 Aug 2021 12:41:10 +0800
+IronPort-SDR: IU/bkq2RybQFMqYJLhh/c8l8ppmbZbNJf+Tm7lm569udqJQ5FNBwEZ9ZGukB3AhJKBPoVw+/9m
+ hmchNuUjZAnF/rKmsUYIosrGqlUrgoOlJzjL4kzoQ/Ngb3MpQOBxP7Hc3DNyph2HkfEpAIPEu6
+ zzWrPZczjPxbzIxEq5KiiWDe6m0jdLVmX0fuKQX2AR2UJaztYh4QjwkRi5DJ5ubRdXGEqXKnu+
+ C+0iMVylL1CFAquAQlOVbDkQ5i3qv3mFiASMVKO7AmLI4e8QsZ3RaZEytEvPSBC3vRE2hCi0Uj
+ NNfMzy/Irm1HB3DezCe80Q5q
 Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
- 29 Aug 2021 21:18:02 -0700
-IronPort-SDR: no3E+ZohNMDNGhe27UZjBxf3jzY9lJOk4IAiWNaTNAkS3l2Ke1m+6EO6jpR8XiTBPG+UimwkP+
- uzdYoFceEAqoQbiJrkoKMo4NbdmO+XDAQFIBJD0CXCkvNYheAMeXRx1AwoHENHFpeIWJkIv5R2
- 1hd/VsKDFhQNPw8xb3FpTVAhc56EU7jKhQcd4P8mp/LE3tlN8Ugaip/XEz6RAp9jyCjtS6R6xb
- /L8abzcKytbhV/Dkkdw3eFWpZzYNH3XUt5nVWQy3loBEMnYHu7Qotg4PovPY9VaaHhHORJ3QDU
- cSE=
+ 29 Aug 2021 21:18:01 -0700
+IronPort-SDR: Fhf08WSW6QdFdHKGtDfmD9uXLL7TXNHRmb5aj2v/KwCFxrv1KcUdczaSDGlLim6WI+/7VJJGLk
+ pTO4O4gPz+nJn6smLoYAgnhDcwEWGvkYGv6u8OK1BqDloe0EIGuFqAE/McngdbSvSG1cibKlLs
+ FFLpiJpEM/ZcM3miAG9DMnZuJ5b64gNXUWLu1KbSkXoD7su0GjuWxqE3V5OriCOIBhOtYRXznn
+ k8uanEdH+2P+HHocX3aiHNEY15iyffumFex2ZMXS9SVKHffytRIChOXjo1BtE9WXBzEJn9ZV44
+ Wc4=
 WDCIronportException: Internal
 Received: from unknown (HELO twashi.fujisawa.hgst.com) ([10.225.163.119])
- by uls-op-cesaip02.wdc.com with ESMTP; 29 Aug 2021 21:41:10 -0700
+ by uls-op-cesaip02.wdc.com with ESMTP; 29 Aug 2021 21:41:09 -0700
 From: Damien Le Moal <damien.lemoal@wdc.com>
 To: buildroot <buildroot@buildroot.org>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 30 Aug 2021 13:40:59 +0900
-Message-Id: <20210830044100.260173-9-damien.lemoal@wdc.com>
+Date: Mon, 30 Aug 2021 13:40:58 +0900
+Message-Id: <20210830044100.260173-8-damien.lemoal@wdc.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210830044100.260173-1-damien.lemoal@wdc.com>
 References: <20210830044100.260173-1-damien.lemoal@wdc.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v4 8/9] board: Add Canaan KD233 support
+Subject: [Buildroot] [PATCH v4 7/9] board: Add Sipeed MAIX-Dock support
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,33 +105,33 @@ Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
 Add two configuration files to support the dual-core RV64 Canaan K210
-SoC based KD233 development board. These configurations are similar to
-the configurations defined for the Sipeed boards, differing only by the
+SoC based Sipeed MAIX-Dock board. These configurations are similar to
+the Sipeed MAIX-bit board configurations, differing only by the
 built-in kernel device tree used.
 
 Signed-off-by: Damien Le Moal <damien.lemoal@wdc.com>
 ---
- board/canaan/kd233/linux-dtb.config   |  2 ++
- configs/canaan_kd233_defconfig        | 15 +++++++++++++++
- configs/canaan_kd233_sdcard_defconfig | 14 ++++++++++++++
+ board/sipeed/maix-dock/linux-dtb.config   |  2 ++
+ configs/sipeed_maix_dock_defconfig        | 15 +++++++++++++++
+ configs/sipeed_maix_dock_sdcard_defconfig | 14 ++++++++++++++
  3 files changed, 31 insertions(+)
- create mode 100644 board/canaan/kd233/linux-dtb.config
- create mode 100644 configs/canaan_kd233_defconfig
- create mode 100644 configs/canaan_kd233_sdcard_defconfig
+ create mode 100644 board/sipeed/maix-dock/linux-dtb.config
+ create mode 100644 configs/sipeed_maix_dock_defconfig
+ create mode 100644 configs/sipeed_maix_dock_sdcard_defconfig
 
-diff --git a/board/canaan/kd233/linux-dtb.config b/board/canaan/kd233/linux-dtb.config
+diff --git a/board/sipeed/maix-dock/linux-dtb.config b/board/sipeed/maix-dock/linux-dtb.config
 new file mode 100644
-index 0000000000..d5b107124a
+index 0000000000..b1ca3166f8
 --- /dev/null
-+++ b/board/canaan/kd233/linux-dtb.config
++++ b/board/sipeed/maix-dock/linux-dtb.config
 @@ -0,0 +1,2 @@
 +CONFIG_SOC_CANAAN_K210_DTB_BUILTIN=y
-+CONFIG_SOC_CANAAN_K210_DTB_SOURCE="canaan_kd233"
-diff --git a/configs/canaan_kd233_defconfig b/configs/canaan_kd233_defconfig
++CONFIG_SOC_CANAAN_K210_DTB_SOURCE="sipeed_maix_dock"
+diff --git a/configs/sipeed_maix_dock_defconfig b/configs/sipeed_maix_dock_defconfig
 new file mode 100644
-index 0000000000..cabb6aa4f8
+index 0000000000..253ba2690d
 --- /dev/null
-+++ b/configs/canaan_kd233_defconfig
++++ b/configs/sipeed_maix_dock_defconfig
 @@ -0,0 +1,15 @@
 +BR2_riscv=y
 +BR2_KERNEL_HEADERS_5_13=y
@@ -139,18 +141,18 @@ index 0000000000..cabb6aa4f8
 +BR2_ROOTFS_OVERLAY="board/canaan/k210-common/rootfs_overlay"
 +BR2_LINUX_KERNEL=y
 +BR2_LINUX_KERNEL_DEFCONFIG="nommu_k210"
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/canaan/kd233/linux-dtb.config"
++BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/sipeed/maix-dock/linux-dtb.config"
 +BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
 +BR2_LINUX_KERNEL_IMAGE_NAME="loader.bin"
 +BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-minimal.config"
 +BR2_PACKAGE_BUSYBOX_CONFIG_FRAGMENT_FILES="board/canaan/k210-common/busybox-tiny.config"
 +# BR2_PACKAGE_IFUPDOWN_SCRIPTS is not set
 +BR2_TARGET_ROOTFS_INITRAMFS=y
-diff --git a/configs/canaan_kd233_sdcard_defconfig b/configs/canaan_kd233_sdcard_defconfig
+diff --git a/configs/sipeed_maix_dock_sdcard_defconfig b/configs/sipeed_maix_dock_sdcard_defconfig
 new file mode 100644
-index 0000000000..c57418674f
+index 0000000000..3e6b9b1026
 --- /dev/null
-+++ b/configs/canaan_kd233_sdcard_defconfig
++++ b/configs/sipeed_maix_dock_sdcard_defconfig
 @@ -0,0 +1,14 @@
 +BR2_riscv=y
 +BR2_KERNEL_HEADERS_5_13=y
@@ -160,7 +162,7 @@ index 0000000000..c57418674f
 +BR2_ROOTFS_OVERLAY="board/canaan/k210-common/rootfs_overlay"
 +BR2_LINUX_KERNEL=y
 +BR2_LINUX_KERNEL_DEFCONFIG="nommu_k210_sdcard"
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/canaan/kd233/linux-dtb.config"
++BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/sipeed/maix-dock/linux-dtb.config"
 +BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
 +BR2_LINUX_KERNEL_IMAGE_NAME="loader.bin"
 +BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-minimal.config"
