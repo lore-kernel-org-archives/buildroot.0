@@ -2,101 +2,103 @@ Return-Path: <SRS0=17BZ=NV=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.0 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.0 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 14CD2C432BE
-	for <buildroot@archiver.kernel.org>; Mon, 30 Aug 2021 09:21:10 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 060A3C432BE
+	for <buildroot@archiver.kernel.org>; Mon, 30 Aug 2021 09:46:37 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id ABDEC60F44
-	for <buildroot@archiver.kernel.org>; Mon, 30 Aug 2021 09:21:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org ABDEC60F44
+	by mail.kernel.org (Postfix) with ESMTPS id 4353B6103C
+	for <buildroot@archiver.kernel.org>; Mon, 30 Aug 2021 09:46:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4353B6103C
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6872C400D4;
-	Mon, 30 Aug 2021 09:21:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 08145605EB;
+	Mon, 30 Aug 2021 09:46:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5HeTBZHl2U3T; Mon, 30 Aug 2021 09:21:05 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Gm-OJqGrHNL0; Mon, 30 Aug 2021 09:46:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 97888401FE;
-	Mon, 30 Aug 2021 09:21:04 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C63E41BF5A3
- for <buildroot@lists.busybox.net>; Mon, 30 Aug 2021 09:21:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 48C856063C;
+	Mon, 30 Aug 2021 09:46:31 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id D7F2F1BF5A3
+ for <buildroot@lists.busybox.net>; Mon, 30 Aug 2021 09:46:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B0918403D5
- for <buildroot@lists.busybox.net>; Mon, 30 Aug 2021 09:21:02 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C606280DFC
+ for <buildroot@lists.busybox.net>; Mon, 30 Aug 2021 09:46:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hXICD4PTbDej for <buildroot@lists.busybox.net>;
- Mon, 30 Aug 2021 09:20:58 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pPRCSY18f9pC for <buildroot@lists.busybox.net>;
+ Mon, 30 Aug 2021 09:46:25 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com
- [IPv6:2a00:1450:4864:20::533])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E6984403C4
- for <buildroot@buildroot.org>; Mon, 30 Aug 2021 09:20:57 +0000 (UTC)
-Received: by mail-ed1-x533.google.com with SMTP id r7so4585415edd.6
- for <buildroot@buildroot.org>; Mon, 30 Aug 2021 02:20:57 -0700 (PDT)
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com
+ [IPv6:2a00:1450:4864:20::629])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 89DB080D61
+ for <buildroot@buildroot.org>; Mon, 30 Aug 2021 09:46:25 +0000 (UTC)
+Received: by mail-ej1-x629.google.com with SMTP id mf2so29807041ejb.9
+ for <buildroot@buildroot.org>; Mon, 30 Aug 2021 02:46:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=subject:to:cc:references:from:organization:message-id:date
  :user-agent:mime-version:in-reply-to:content-language
  :content-transfer-encoding;
- bh=aS40oOBup3ORnEaP8xORZKY1KygBuz7qPccv6NLYWps=;
- b=Ahv3lRHoLZu+uL9c+kuRX3j162eCOWm4d62heHrBJeP4BFXXYeKN8gEgIzt+1HhJP2
- LcDsun/UXhRTYH+dMXTUFqkryB//UClnh+aF302zNY5TWmUO47uTNMHawU4XaAiJ6fno
- QjcmPlvuBcAyX3RpK+ZyUijBmi9ok2ZMCj37EJq1EIWbc/Iv2/t9O/BDFjwXWv7Ly00L
- CK9W73p1StWf01tZQB5vA2ukHPo5ncfg78w9qmePp1n0/s+xUGkslaj8d3OGXuoNMlO4
- 3EEDQO8JSRvYgQtAa6ilZsHcSQe6YdxJtu3L3mtkGo7ITr8RrrbFLnRgEDzaNnE+u2fd
- SYLA==
+ bh=SE0dMTIfqGG6m/D6N4ZMeRWYWKK2W0pcFhukfPuqLVA=;
+ b=MofH0+LirJDx4NaCKkHOsonL0Vgu8//qgKILtuWHogezfjFSdfupLxBwAq9aLvFMkQ
+ dyrpWjnZPU/K3S9tcH0s90oxK0acbhNfZPP3csLVOWEQCM7TyByguyPSZdXR07MgDn6k
+ QBw6Zb/IDGD+vJlIT5Vf8hMg+CdzKc/cvOEnSv1HiJnyr/vgGfpumI4j23EPvv/8GTPH
+ m/Tr8maDTN3DjP/q0OLMWfJEQdl5lykOK+TnuXyQ5oJPKL3gcgq5l8RK0Z4aWE0NYXXL
+ 3y4y+9Zp1WeP5HjRdgIvd4RkJ4xXYmO4Pylra3lgcG7QmlXOFK6IHwX6euh9NFrBHJ4b
+ 74KA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:subject:to:cc:references:from:organization
  :message-id:date:user-agent:mime-version:in-reply-to
  :content-language:content-transfer-encoding;
- bh=aS40oOBup3ORnEaP8xORZKY1KygBuz7qPccv6NLYWps=;
- b=f32EbObxRJofqc8FbLFq3F//+NtwZQXPANAU8iEkv/GFFO7FQ/96tIpyd/Ud1cnpEp
- elCHHvLxxVSQXHO+NsqauSOKSqJe0LOpf9WPHKGBbJ2mFlb3V6yFqCQwPRiroFqjikOj
- Sc1ClPtETnZhEfTKxZ53uFS05cIzNYJwz9NBRpv3HuNnfhJ4m/QMGDTAihSVI6otjY98
- IdZiFXMVedRINmGk60zOa7FiJLpjgbtSLqfWx56PVGOhahvOXKOK5I5RQycy1arPuq6Q
- m2JvkCgkc0vcskXTMLb0QAGBoi/WZg8ISNk+2QuOlyBW1MsurYb6TI7geqEwzioPK4zD
- GtyQ==
-X-Gm-Message-State: AOAM530WUuEFQBytTKCwzmJM7y4/eWMnOEpigY/evyFuzPzBMuWKR0PQ
- RmB3NdhH7cc4RLsVVulWWOfuDA==
-X-Google-Smtp-Source: ABdhPJwgiMj1R5c2HW+GfQt/zgwYMeNIMiFY7cE3T9myVB++kle0WiwROmx6Syv5TBzxCyxXRjMvMQ==
-X-Received: by 2002:a05:6402:344f:: with SMTP id
- l15mr22883602edc.56.1630315255967; 
- Mon, 30 Aug 2021 02:20:55 -0700 (PDT)
+ bh=SE0dMTIfqGG6m/D6N4ZMeRWYWKK2W0pcFhukfPuqLVA=;
+ b=sV5CGMdMs+9862Y7466V3egxqEd94I+WUWg+UxwnJQ3OVd5cqGhNaTjyusMoJRjItZ
+ QgohT5bsHFWGAO1R/2iTpkRhBKxnQrikDN1Oo6qMpy/Yh5ydgQD2H6kCHofWDMi+ZABR
+ +l5+zaEyt5oOmDbaUMhfRnNX8R04cq4vqNf04Y1xbKNHIUuRVhG4KVlaIik0c3iQ+Ewd
+ y/+ln1umNk+aeoatn85yBZZ/3/Kj60BJ117UjSpkHmPWdCtu0w+XTY8aSquzj7o/ugtP
+ 4TgK796pvf1WP6YlpxoU/JIiNV27GFkyHhTCv4123M5nwWDWzEtJ4D5hYaiHp2ReCgvr
+ zMGA==
+X-Gm-Message-State: AOAM531V7PNp4uhQizigVlhdKNgWyeDzsQ62a0U2o93gS8GfVeQZIwBI
+ 3LBJFKYGw7nO/pvHA00LMrSaeg==
+X-Google-Smtp-Source: ABdhPJzvFx40fC6odmtLMw8Wj+tPdbvNgM9Mkbai0AQhiqom9LystJgIqtTQp/RntsA4UUE01rL77Q==
+X-Received: by 2002:a17:906:4541:: with SMTP id
+ s1mr24589377ejq.378.1630316783353; 
+ Mon, 30 Aug 2021 02:46:23 -0700 (PDT)
 Received: from ?IPv6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id b5sm6400895ejq.56.2021.08.30.02.20.55
+ by smtp.gmail.com with ESMTPSA id qt23sm6539917ejb.26.2021.08.30.02.46.22
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 30 Aug 2021 02:20:55 -0700 (PDT)
+ Mon, 30 Aug 2021 02:46:23 -0700 (PDT)
 To: "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20210829183932.1737738-1-fontaine.fabrice@gmail.com>
- <20210829193748.GD1053080@scaer>
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20210817083930.3718711-1-herve.codina@bootlin.com>
+ <20210817083930.3718711-8-herve.codina@bootlin.com>
+ <20210828224740.GS2661@scaer> <20210829133955.74d921e9@windsurf>
+ <20210829125121.GA1053080@scaer> <20210829164031.GB1053080@scaer>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-Message-ID: <a0cae486-dd1d-135f-bec5-d3a29b6fae78@mind.be>
-Date: Mon, 30 Aug 2021 11:20:54 +0200
+Message-ID: <ec6db63a-b841-6fb3-e537-234fe43fbb44@mind.be>
+Date: Mon, 30 Aug 2021 11:46:22 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.11.0
 MIME-Version: 1.0
-In-Reply-To: <20210829193748.GD1053080@scaer>
+In-Reply-To: <20210829164031.GB1053080@scaer>
 Content-Language: en-GB
-Subject: Re: [Buildroot] [PATCH 1/1] package/pkg-utils.mk: fix per-package
- build with ncurses
+Subject: Re: [Buildroot] [PATCH v3 07/16] package/pkg-generic.mk: detect
+ files overwritten in TARGET_DIR and HOST_DIR
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -108,113 +110,132 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>,
- Herve Codina <herve.codina@bootlin.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Herve Codina <herve.codina@bootlin.com>,
+ Naumann Andreas <ANaumann@ultratronik.de>, Peter Seiderer <ps.report@gmx.net>,
+ Julien Corjon <corjon.j@ecagroup.com>, buildroot@buildroot.org,
+ Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-CgpPbiAyOS8wOC8yMDIxIDIxOjM3LCBZYW5uIEUuIE1PUklOIHdyb3RlOgo+IEZhYnJpY2UsIEFs
-bCwKPiAKPiArSGVydsOpLCArVGhvbWFzLCArQXJub3V0LCArUm9tYWluCj4gCj4gVGhhbmtzIGZv
-ciB0aGlzIHBhdGNoLCB0aGF0IGlzIGEgdmVyeSBnb29kIGV4YW1wbGUgb2YgYSB2ZXJ5IHRyaWNr
-eQo+IHByb2JsZW0gd2UndmUgYmVlbiBzdHVtYmxpbmcgdXBvbiBzaW5jZSB3ZSBzdGFydGVkIGRv
-aW5nIHRvcC1sZXZlbAo+IHBhcmFsbGVsIGJ1aWxkcy4uLgo+IAo+IE9uIDIwMjEtMDgtMjkgMjA6
-MzkgKzAyMDAsIEZhYnJpY2UgRm9udGFpbmUgc3Bha2UgdGh1c2x5Ogo+PiBGaXggcGVyLXBhY2th
-Z2UgYnVpbGQgd2l0aCBuY3Vyc2VzIGFuZCB0b29sY2hhaW5zIHByb3ZpZGluZyBuY3Vyc2VzLmgg
-YnkKPj4gYWRkaW5nIC0tdXBkYXRlIHBhcmFtZXRlciB0byByc3luYyBjYWxsLiBJbmRlZWQsIHdp
-dGhvdXQgdGhpcyBwYXJhbWV0ZXIsCj4+IHRoZSBjdXJzZXMuaCBmaWxlIGluc3RhbGxlZCBieSBu
-Y3Vyc2VzICh3aXRoIHdjaGFyIHN1cHBvcnQpIGNvdWxkIGJlCj4+IG92ZXJyaWRlbiBieSBhIGN1
-cnNlcy5oIGZpbGUgcHJvdmlkZWQgYnkgdGhlIHRvb2xjaGFpbiAod2l0aG91dCB3Y2hhcgo+PiBz
-dXBwb3J0KSByZXN1bHRpbmcgaW4gdGhlIGZvbGxvd2luZyBidWlsZCBmYWlsdXJlIG9uIGJtb24g
-b3IgcnRvcnJlbnQ6Cj4+Cj4+IHJzeW5jIC1hIC0tbGluay1kZXN0PS90bXAvaW5zdGFuY2UtMC9v
-dXRwdXQtMS9wZXItcGFja2FnZS9ob3N0LXBrZ2NvbmYvaG9zdC8gL3RtcC9pbnN0YW5jZS0wL291
-dHB1dC0xL3Blci1wYWNrYWdlL2hvc3QtcGtnY29uZi9ob3N0LyAvdG1wL2luc3RhbmNlLTAvb3V0
-cHV0LTEvcGVyLXBhY2thZ2UvcnRvcnJlbnQvaG9zdAo+PiByc3luYyAtYSAtLWxpbmstZGVzdD0v
-dG1wL2luc3RhbmNlLTAvb3V0cHV0LTEvcGVyLXBhY2thZ2UvaG9zdC1za2VsZXRvbi9ob3N0LyAv
-dG1wL2luc3RhbmNlLTAvb3V0cHV0LTEvcGVyLXBhY2thZ2UvaG9zdC1za2VsZXRvbi9ob3N0LyAv
-dG1wL2luc3RhbmNlLTAvb3V0cHV0LTEvcGVyLXBhY2thZ2UvcnRvcnJlbnQvaG9zdAo+PiByc3lu
-YyAtYSAtLWxpbmstZGVzdD0vdG1wL2luc3RhbmNlLTAvb3V0cHV0LTEvcGVyLXBhY2thZ2UvbGli
-Y3VybC9ob3N0LyAvdG1wL2luc3RhbmNlLTAvb3V0cHV0LTEvcGVyLXBhY2thZ2UvbGliY3VybC9o
-b3N0LyAvdG1wL2luc3RhbmNlLTAvb3V0cHV0LTEvcGVyLXBhY2thZ2UvcnRvcnJlbnQvaG9zdAo+
-PiByc3luYyAtYSAtLWxpbmstZGVzdD0vdG1wL2luc3RhbmNlLTAvb3V0cHV0LTEvcGVyLXBhY2th
-Z2UvbGlidG9ycmVudC9ob3N0LyAvdG1wL2luc3RhbmNlLTAvb3V0cHV0LTEvcGVyLXBhY2thZ2Uv
-bGlidG9ycmVudC9ob3N0LyAvdG1wL2luc3RhbmNlLTAvb3V0cHV0LTEvcGVyLXBhY2thZ2UvcnRv
-cnJlbnQvaG9zdAo+PiByc3luYyAtYSAtLWxpbmstZGVzdD0vdG1wL2luc3RhbmNlLTAvb3V0cHV0
-LTEvcGVyLXBhY2thZ2UvbmN1cnNlcy9ob3N0LyAvdG1wL2luc3RhbmNlLTAvb3V0cHV0LTEvcGVy
-LXBhY2thZ2UvbmN1cnNlcy9ob3N0LyAvdG1wL2luc3RhbmNlLTAvb3V0cHV0LTEvcGVyLXBhY2th
-Z2UvcnRvcnJlbnQvaG9zdAo+PiByc3luYyAtYSAtLWxpbmstZGVzdD0vdG1wL2luc3RhbmNlLTAv
-b3V0cHV0LTEvcGVyLXBhY2thZ2Uvc2tlbGV0b24vaG9zdC8gL3RtcC9pbnN0YW5jZS0wL291dHB1
-dC0xL3Blci1wYWNrYWdlL3NrZWxldG9uL2hvc3QvIC90bXAvaW5zdGFuY2UtMC9vdXRwdXQtMS9w
-ZXItcGFja2FnZS9ydG9ycmVudC9ob3N0Cj4+IHJzeW5jIC1hIC0tbGluay1kZXN0PS90bXAvaW5z
-dGFuY2UtMC9vdXRwdXQtMS9wZXItcGFja2FnZS90b29sY2hhaW4vaG9zdC8gL3RtcC9pbnN0YW5j
-ZS0wL291dHB1dC0xL3Blci1wYWNrYWdlL3Rvb2xjaGFpbi9ob3N0LyAvdG1wL2luc3RhbmNlLTAv
-b3V0cHV0LTEvcGVyLXBhY2thZ2UvcnRvcnJlbnQvaG9zdAo+IAo+IFNvLCBpZiB3ZSBoYWQgaGFk
-IGZpbGUgb3ZlcndyaXRlIGRldGVjdGlvbiBpbiBwbGFjZSAod2hpY2ggSSBoYXZlIGJlZW4KPiBy
-ZXZpZXdpbmcgYW5kIHRlc3RpbmcgdGhpcyBXRSksIHRoZSBidWlsZCB3b3VsZCBoYXZlIGZhaWxl
-ZCBlYXJsaWVyLCBhdAo+IHRoZSBlbmQgb2YgdGhlIGluc3RhbGwgc3RlcCBvZiBuY3Vyc2VzLCB3
-aXRoOgo+IAo+ICAgICAvaG9tZS95bW9yaW4vZGV2L2J1aWxkcm9vdC9PL3Blci1wYWNrYWdlL25j
-dXJzZXMvaG9zdC9yaXNjdjY0LWJ1aWxkcm9vdC1saW51eC1nbnUvc3lzcm9vdC91c3IvbGliL3Br
-Z2NvbmZpZy9uY3Vyc2VzLnBjOiBGQUlMRUQKPiAgICAgL2hvbWUveW1vcmluL2Rldi9idWlsZHJv
-b3QvTy9wZXItcGFja2FnZS9uY3Vyc2VzL2hvc3QvcmlzY3Y2NC1idWlsZHJvb3QtbGludXgtZ251
-L3N5c3Jvb3QvdXNyL2xpYi9wa2djb25maWcvbWVudS5wYzogRkFJTEVECj4gICAgIC9ob21lL3lt
-b3Jpbi9kZXYvYnVpbGRyb290L08vcGVyLXBhY2thZ2UvbmN1cnNlcy9ob3N0L3Jpc2N2NjQtYnVp
-bGRyb290LWxpbnV4LWdudS9zeXNyb290L3Vzci9saWIvcGtnY29uZmlnL2Zvcm0ucGM6IEZBSUxF
-RAo+ICAgICAvaG9tZS95bW9yaW4vZGV2L2J1aWxkcm9vdC9PL3Blci1wYWNrYWdlL25jdXJzZXMv
-aG9zdC9yaXNjdjY0LWJ1aWxkcm9vdC1saW51eC1nbnUvc3lzcm9vdC91c3IvbGliL3BrZ2NvbmZp
-Zy9wYW5lbC5wYzogRkFJTEVECj4gICAgIC9ob21lL3ltb3Jpbi9kZXYvYnVpbGRyb290L08vcGVy
-LXBhY2thZ2UvbmN1cnNlcy9ob3N0L3Jpc2N2NjQtYnVpbGRyb290LWxpbnV4LWdudS9zeXNyb290
-L3Vzci9pbmNsdWRlL2N1cnNlcy5oOiBGQUlMRUQKPiAgICAgL2hvbWUveW1vcmluL2Rldi9idWls
-ZHJvb3QvTy9wZXItcGFja2FnZS9uY3Vyc2VzL2hvc3QvcmlzY3Y2NC1idWlsZHJvb3QtbGludXgt
-Z251L3N5c3Jvb3QvdXNyL2luY2x1ZGUvdGVybS5oOiBGQUlMRUQKPiAgICAgbWQ1c3VtOiBXQVJO
-SU5HOiA2IGNvbXB1dGVkIGNoZWNrc3VtcyBkaWQgTk9UIG1hdGNoCj4gICAgIEVSUk9SOiBwYWNr
-YWdlIG5jdXJzZXMgaGFzIG92ZXJ3cml0dGVuIGZpbGVzIGluc3RhbGxlZCBieSBhIHByZXZpb3Vz
-IHBhY2thZ2UsIGFib3J0aW5nLgo+ICAgICBtYWtlWzFdOiAqKiogW3BhY2thZ2UvcGtnLWdlbmVy
-aWMubWs6NDY3OiAvaG9tZS95bW9yaW4vZGV2L2J1aWxkcm9vdC9PL2J1aWxkL25jdXJzZXMtNi4x
-Ly5zdGFtcF9pbnN0YWxsZWRdIEVycm9yIDEKPiAgICAgbWFrZTogKioqIFtNYWtlZmlsZToyMzog
-X2FsbF0gRXJyb3IgMgo+IAo+PiBbLi4uXQo+Pgo+PiBjaGVja2luZyBmb3IgTmN1cnNlc1cgd2lk
-ZS1jaGFyYWN0ZXIgbGlicmFyeS4uLiB5ZXMKPj4gY2hlY2tpbmcgZm9yIHdvcmtpbmcgbmN1cnNl
-c3cvY3Vyc2VzLmguLi4gbm8KPj4gY2hlY2tpbmcgZm9yIHdvcmtpbmcgbmN1cnNlc3cuaC4uLiBu
-bwo+PiBjaGVja2luZyBmb3Igd29ya2luZyBuY3Vyc2VzLmguLi4gbm8KPj4gY29uZmlndXJlOiBX
-QVJOSU5HOiBjb3VsZCBub3QgZmluZCBhIHdvcmtpbmcgbmN1cnNlc3cvY3Vyc2VzLmgsIG5jdXJz
-ZXN3Lmggb3IgbmN1cnNlcy5oCj4+Cj4+IEZpeGVzOgo+PiAgLSBodHRwOi8vYXV0b2J1aWxkLmJ1
-aWxkcm9vdC5vcmcvcmVzdWx0cy84YzBkMTNlM2NjM2RkZDJhMjFmOTk0NzdjYWQ0ZTM5NTIyZTlk
-ZWVjCj4+ICAtIGh0dHA6Ly9hdXRvYnVpbGQuYnVpbGRyb290Lm9yZy9yZXN1bHRzL2QyZjE4Y2Nh
-ZDZhMDMzMGQ3OGU5N2Q3MGM4MTBhYzg5Yjg0ZDIyNjEKPj4KPj4gU2lnbmVkLW9mZi1ieTogRmFi
-cmljZSBGb250YWluZSA8Zm9udGFpbmUuZmFicmljZUBnbWFpbC5jb20+Cj4+IC0tLQo+PiAgcGFj
-a2FnZS9wa2ctdXRpbHMubWsgfCAyICstCj4+ICAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24o
-KyksIDEgZGVsZXRpb24oLSkKPj4KPj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvcGtnLXV0aWxzLm1r
-IGIvcGFja2FnZS9wa2ctdXRpbHMubWsKPj4gaW5kZXggYWUzYzdmOWRhOS4uNWFmMzRkNGVlMCAx
-MDA2NDQKPj4gLS0tIGEvcGFja2FnZS9wa2ctdXRpbHMubWsKPj4gKysrIGIvcGFja2FnZS9wa2ct
-dXRpbHMubWsKPj4gQEAgLTE4NCw3ICsxODQsNyBAQCBpZmVxICgkKEJSMl9QRVJfUEFDS0FHRV9E
-SVJFQ1RPUklFUykseSkKPj4gIGRlZmluZSBwZXItcGFja2FnZS1yc3luYwo+PiAgCW1rZGlyIC1w
-ICQoMykKPj4gIAkkKGZvcmVhY2ggcGtnLCQoMSksXAo+PiAtCQlyc3luYyAtYSAtLWxpbmstZGVz
-dD0kKFBFUl9QQUNLQUdFX0RJUikvJChwa2cpLyQoMikvIFwKPj4gKwkJcnN5bmMgLWF1IC0tbGlu
-ay1kZXN0PSQoUEVSX1BBQ0tBR0VfRElSKS8kKHBrZykvJCgyKS8gXAo+IAo+IFNvcnJ5LCB0aGlz
-IGlzIG5vdCB0aGUgY29ycmVjdCBzb2x1dGlvbi4gSW5kZWVkLCB3ZSBjYW4gbm90IGFjY2VwdCB0
-aGF0Cj4gYSBwYWNrYWdlIG92ZXJ3cml0ZXMgYSBmaWxlIHByb3ZpZGVkIGJ5IGFub3RoZXIgcGFj
-a2FnZS4gU2VlIHRoZQo+IGV4cGxhbmF0aW9ucyBUaG9tYXMgYW5kIEkgZGlzY3Vzc2VkIGVhcmxp
-ZXIgdG9kYXk6Cj4gCj4gICAgIGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2J1aWxkcm9vdC8yMDIx
-MDgyOTEzMzk1NS43NGQ5MjFlOUB3aW5kc3VyZi8KPiAgICAgaHR0cHM6Ly9sb3JlLmtlcm5lbC5v
-cmcvYnVpbGRyb290LzIwMjEwODI5MTY0MDMxLkdCMTA1MzA4MEBzY2Flci8KPiAKPiBUaGlzIGNh
-c2UgaXMgaG93ZXZlciB2ZXJ5IHNwZWNpYWwsIGFuZCBJIGhhdmUgbm8gaWRlYSAoeWV0KSBvbiB3
-aGF0IHRoZQo+IGJlc3Qgc29sdXRpb24gaXMuIEkgZ3Vlc3MgdGhlIGN1cnNlcyBoZWFkZXJzIGlu
-IHRoZSB0b29sY2hhaW4gYXJlIGR1ZSB0bwo+IHRoZSBwcmVzZW5jZSBvZiBnZGIgd2l0aCBUVUkg
-c3VwcG9ydC4uLgo+IAo+IEkgd291bGQgYmUgdGVtcHRlZCB0byBzYXkgInRoaXMgdG9vbGNoYWlu
-IGlzIG5vdCBwdXJlLCB3ZSBjYW4ndCB1c2UgaXQiLAo+IGFuZCBkZWZlciB0byB0aGUgQm9vdGxp
-biB0b29sY2hhaW4gYnVpbGRlciBwcm9qZWN0IHRvIGZpeCB0aGVpcgo+IHRvb2xjaGFpbnMsIGJ1
-dCB0aGlzIGlzIHByb2JhYmx5IGEgYml0IG9mIHNodWZmbGluZyB0aGUgZHVzdCB1bmRlciB0aGUK
-PiByYWcuLi4KPiAKPiBTbywgYW55IGlucHV0IGFuZCBpbnNpZ2h0IHdvdWxkIGJlIGFwcHJlY2lh
-dGVkLi4uCgogSSB0aGluayB3ZSBuZWVkIHRvIHN0YXJ0IGEgd2lraSBwYWdlIGZvciB0aGlzIGRp
-c2N1c3Npb24sIG9uIHRoZSBtYWlsaW5nIGxpc3QKdGhlIGNvbmNsdXNpb25zIHdpbGwgZ2V0IGxv
-c3QgdG9vIGVhc2lseS4uLiBJIGRvbid0IGhhdmUgdGltZSBmb3IgdGhhdCBub3cKdGhvdWdoLCBt
-YXliZSB0b25pZ2h0LgoKIFJlZ2FyZHMsCiBBcm5vdXQKCj4gCj4gUmVnYXJkcywKPiBZYW5uIEUu
-IE1PUklOLgo+IAo+PiAgCQkkKFBFUl9QQUNLQUdFX0RJUikvJChwa2cpLyQoMikvIFwKPj4gIAkJ
-JCgzKSQoc2VwKSkKPj4gIGVuZGVmCj4+IC0tIAo+PiAyLjMyLjAKPj4KPj4gX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPj4gYnVpbGRyb290IG1haWxpbmcg
-bGlzdAo+PiBidWlsZHJvb3RAYnVzeWJveC5uZXQKPj4gaHR0cDovL2xpc3RzLmJ1c3lib3gubmV0
-L21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cj4gCl9fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1
-c3lib3gubmV0Cmh0dHA6Ly9saXN0cy5idXN5Ym94Lm5ldC9tYWlsbWFuL2xpc3RpbmZvL2J1aWxk
-cm9vdAo=
+
+
+On 29/08/2021 18:40, Yann E. MORIN wrote:
+> Thomas, All,
+> 
+> On 2021-08-29 14:51 +0200, Yann E. MORIN spake thusly:
+> [--SNIP--]
+>> Finally, as a side note: there is still a case of file overwrite that we
+>> do not detect, even with this series: if two packages that are not part
+>> of the same dependency chain (i.e. they do not depend one on the other),
+>> and they both install the same file, then the file-overwrite will only
+>> happen when we eventually assemble the global target/ and host/ from the
+>> individual PPD target/ and host/ and we still have to add a detection
+>> for that case (which is not a pre-requisite before we apply the current
+>> series, of course).
+> 
+> And of course, this will also cause an overwrite when two such packages
+> are also dependencies of a third patckage, and so when the PPD of that
+> third package is prepared, we would have to detect file overwrite.
+> 
+> Note: let's assume the following hypotetical dependency graph (where the
+> notation A --<-- B means that B depends on A):
+> 
+>       .-<-- A --<-.                 S: skeleton
+>      /             \                F: target-finalize
+>     S --<-- B --<-- C
+>      \               \
+>       `-<-- D --<-----<-- F
+> 
+> If A and B both install the same file, then we do not have a sane PPD
+> to build C.
+> 
+> If D and any package in the dependency chain of C (i.e. S, A, B, or C
+> itself) install the same file, then we can only detect it in
+> target-finalize.
+> 
+> So, let's take a step back, and have a wider look. I wonder if the end
+> of a package installation step is the best location to detected file
+> overwrite...
+> 
+> Indeed, let's assume that we do file overwrite detection:
+> 
+>  1. in PPD preparation (when we rsync the dependencies, in the macro
+>     per-package-rsync): we can also detect that a package overwrites one
+>     or more files of another package, report those files, *and* prevent
+>     building a package with unsound dependencies;
+> 
+>  2. in {target,host}-finalize: we can detect that a package overwrites
+>     one or more files provided by another package, and report those
+>     files.
+> 
+> So, the above (still theoretical implementation) is all we would need,
+> in the end, and we would not need to do the detection at the end of a
+> package installation step of each package, because it would not provide
+> any information that we couldn't have with the above.
+
+ Fabrice's patches have shown that the overwritten file detection is too
+aggressive in the sense to that it *will* cause (many?) failures in the current
+situation.
+
+ So, taking a step further back, what really is the problem we're trying to
+solve here? Why can't we overwrite files from other packages?
+
+ I think there are three distinct problems. Let's take Yann's example from above.
+
+1. A file written in A and overwritten in C is only a problem because the
+finalize step doesn't take into account dependencies when combining the trees.
+We could solve that by taking into the account the dependencies.
+
+2. A file written by both A and B is a problem for package C, because it is not
+predictable which version it will see. This problem can be solved by adding a
+dependency between A and B.
+
+3. A file written by S and overwritten by A - this, I think, is the big problem.
+At first sight it's like case 1 - by taking into account the dependencies, the
+finalize stage will see the version from A. However, the problem is for stuff
+installed into staging, where B sees the version from S while C sees the version
+from A or from S, depending on order of A/B installation. This has two problems:
+3a. C's version depends on the order of A/B installation;
+3b. B sees a different version of the file than A - this could be a problem for
+e.g. header files that affect compilation.
+
+ The original scheme we discussed three or four years ago already took into
+account situations 1 and 2, I think, but not yet situation 3. Note that back
+then, the overwritten file detection was assumed to happen only in finalize and
+accept overwrites in case there's a dependency.
+
+ The curses and crypt issues that Fabrice detected fall in category 3. And
+they're extra nasty, because one of the packages involved is the toolchain that
+everybody depends on, so you can't just add a dependency to break it.
+
+ I haven't given sufficient thought to it yet, but one idea is to allow packages
+to add a post-install hook to another package. That way, ncurses could remove
+curses.h from the toolchain, and libxcrypt could remove crypt.h. Still tricky
+though because it would mean that any package that uses crypt.h would need to
+optionally depend on libxcrypt - so that particular case would probably have to
+be solved by making libxcrypt be part of the toolchain... Or maybe making sure
+it doesn't overwrite crypt.h and teach its dependencies to include the
+libxcrypt-specific crypt.h.
+
+ One thing is certain: it's complicated :-)
+
+ Regards,
+ Arnout
+
+
+> 
+> However, a benefit of also doing it at the end of the installation step,
+> of a package, is that we can cut short on the build time. However, I am
+> not sure that benefit is that important or major...
+> 
+> So, I'd like we think a bit harder before we apply this patch...
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+_______________________________________________
+buildroot mailing list
+buildroot@busybox.net
+http://lists.busybox.net/mailman/listinfo/buildroot
