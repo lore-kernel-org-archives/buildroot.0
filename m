@@ -2,83 +2,61 @@ Return-Path: <SRS0=17BZ=NV=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_2
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5790FC432BE
-	for <buildroot@archiver.kernel.org>; Mon, 30 Aug 2021 20:54:44 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BFE57C432BE
+	for <buildroot@archiver.kernel.org>; Mon, 30 Aug 2021 21:14:26 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D4E0D60F9E
-	for <buildroot@archiver.kernel.org>; Mon, 30 Aug 2021 20:54:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D4E0D60F9E
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=starry.com
+	by mail.kernel.org (Postfix) with ESMTPS id 595E560F12
+	for <buildroot@archiver.kernel.org>; Mon, 30 Aug 2021 21:14:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 595E560F12
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A50A680D6C;
-	Mon, 30 Aug 2021 20:54:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1510B60746;
+	Mon, 30 Aug 2021 21:14:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EoaxSyibXTB5; Mon, 30 Aug 2021 20:54:40 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id pdYt_WHoKHYb; Mon, 30 Aug 2021 21:14:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 26D1F80D88;
-	Mon, 30 Aug 2021 20:54:39 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 939201BF2A4
- for <buildroot@lists.busybox.net>; Mon, 30 Aug 2021 20:54:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 75E1E607AD;
+	Mon, 30 Aug 2021 21:14:21 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 2EA8B1BF86C
+ for <buildroot@lists.busybox.net>; Mon, 30 Aug 2021 21:14:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 809BC80D44
- for <buildroot@lists.busybox.net>; Mon, 30 Aug 2021 20:54:37 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1C9CA40298
+ for <buildroot@lists.busybox.net>; Mon, 30 Aug 2021 21:14:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id P5QQ4nmGN_mq for <buildroot@lists.busybox.net>;
- Mon, 30 Aug 2021 20:54:33 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com
- [IPv6:2607:f8b0:4864:20::82b])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0639280D88
- for <buildroot@buildroot.org>; Mon, 30 Aug 2021 20:54:32 +0000 (UTC)
-Received: by mail-qt1-x82b.google.com with SMTP id d2so12886579qto.6
- for <buildroot@buildroot.org>; Mon, 30 Aug 2021 13:54:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=starry.com; s=google;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=bxU/Z/MSTJQARwUsBzRVlPh6iISDsfzIGJx1lLBeLuo=;
- b=ons8wTG8jadpV4tHwqsPCuT88UsUYJT3au1hKr5G7ERhmgycX8uG4s3xQ3R+v6eaNK
- A8K8djhtDpwD8UeuRz+Vc/uHe/CX7GJh1HVOeSGKu8KYx7DIAOviKUHZZEFhiV/6Z7sK
- QzuxXadi4kzUPKEVmp4fcxe+Lzk4T0dLALmXE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=bxU/Z/MSTJQARwUsBzRVlPh6iISDsfzIGJx1lLBeLuo=;
- b=V3Prt62Xf/qwfW8QLR5FxppuoEe5xy99KDZ6qhKdEFCecW+Am3PzaDncXq8rtI904T
- KuIks2tS42VZ0m0+DVwNv6/ioBl7xRWfKOWYo9DvACaeoCKS6TQwDMBuKe0P5gEU2Isz
- xWXaiNvf79UMWllyB8zC4uIrngdBWhC5AuSIlu6Ffzk2PB/Wfblvtebrk5TNClPnUEd/
- OfmuwSJ9tV6NIcPD2j1cw4AQgeRK+nIFhDOYtdtW62Id0KiQUxXUzVCJ6e6s19oMHbIM
- 6r4jz1VOmYkAwjjZsl9eiq5SZixS40iI7rD86F/yYe6ff2s0qPbWsNtsWrmtw40ue7C1
- UGTA==
-X-Gm-Message-State: AOAM532niAXLp1dzFqq/0W9NK7+JnZEmcbNDZf0GJ7wlWHEJeZLzjKOr
- mTES4AV1TYwX218UQ+8F290VIOyuPwI6UOgb
-X-Google-Smtp-Source: ABdhPJzHu1iLhikJhjQbGxSdVGxMeQdKZ5q7N537YzRXPEFKFD2ju6BBPk3dyfai2F2iqmKVz4SymA==
-X-Received: by 2002:ac8:ccb:: with SMTP id o11mr22793482qti.240.1630356871762; 
- Mon, 30 Aug 2021 13:54:31 -0700 (PDT)
-Received: from starry.com (205-201-16-55.starry-inc.net. [205.201.16.55])
- by smtp.gmail.com with ESMTPSA id d20sm11971889qkl.13.2021.08.30.13.54.30
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 30 Aug 2021 13:54:31 -0700 (PDT)
-From: Nevo Hed <nhed+buildroot@starry.com>
-To: buildroot@buildroot.org
-Date: Mon, 30 Aug 2021 16:53:57 -0400
-Message-Id: <20210830205357.4104461-1-nhed+buildroot@starry.com>
-X-Mailer: git-send-email 2.31.1
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fNKnLzJa3I56 for <buildroot@lists.busybox.net>;
+ Mon, 30 Aug 2021 21:14:15 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 194D4400DD
+ for <buildroot@buildroot.org>; Mon, 30 Aug 2021 21:14:14 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 4F2BE1C0003;
+ Mon, 30 Aug 2021 21:14:11 +0000 (UTC)
+Date: Mon, 30 Aug 2021 23:14:10 +0200
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+To: =?UTF-8?B?Sm9zw6k=?= Pekkarinen <jose.pekkarinen@unikie.com>
+Message-ID: <20210830231410.7071d092@windsurf>
+In-Reply-To: <20210830114531.2285178-1-jose.pekkarinen@unikie.com>
+References: <20210830114531.2285178-1-jose.pekkarinen@unikie.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/nginx: override endianness
+Subject: Re: [Buildroot] [PATCH] package/refpolicy: Treat all modules as
+ custom
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,170 +68,40 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: Nevo Hed <nhed+buildroot@starry.com>, Samuel Martin <s.martin49@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Matthew Weber <matthew.weber@rockwellcollins.com>, atenart@kernel.org,
+ Maxime Chevallier <maxime.chevallier@bootlin.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-Though several patches exist in buildroot's nginx package dir they do
-not seem to address endianness.
-
-The test program generated my the script compiles but fails to run (as
-it is built for another architecture) but the script does not
-distinguish between the failure to run the program and an indication
-of certain endianness.  As such the fallback of big-endian is used.
-This setting then causes http2 headers (anything not in the satic
-dictionary) to come out as undecipherble trash.
-
-This commit includes a patch to the configure script to allow a
-`--force-endianness=big|little` flag as as setting that flag in
-buildroot's package makefile.
-
-Signed-off-by: Nevo Hed <nhed+buildroot@starry.com>
----
- ...-of-endianness-for-cross-compilation.patch | 115 ++++++++++++++++++
- package/nginx/nginx.mk                        |   1 +
- 2 files changed, 116 insertions(+)
- create mode 100644 package/nginx/0010-Allow-forcing-of-endianness-for-cross-compilation.patch
-
-diff --git a/package/nginx/0010-Allow-forcing-of-endianness-for-cross-compilation.patch b/package/nginx/0010-Allow-forcing-of-endianness-for-cross-compilation.patch
-new file mode 100644
-index 0000000000..137ff6ea5d
---- /dev/null
-+++ b/package/nginx/0010-Allow-forcing-of-endianness-for-cross-compilation.patch
-@@ -0,0 +1,115 @@
-+From b1a6b13d8ac2cade71bae508c7d20fbee6807e4e Mon Sep 17 00:00:00 2001
-+From: Nevo Hed <nhed+buildroot@starry.com>
-+Date: Mon, 30 Aug 2021 13:28:13 -0400
-+Subject: [PATCH] Allow forcing of endianness for cross-compilation
-+
-+Signed-off-by: Nevo Hed <nhed+buildroot@starry.com>
-+---
-+ auto/endianness | 61 ++++++++++++++++++++++++++++++++-----------------
-+ auto/options    |  6 +++++
-+ 2 files changed, 46 insertions(+), 21 deletions(-)
-+
-+diff --git a/auto/endianness b/auto/endianness
-+index 1b552b6b..4b2a3cd7 100644
-+--- a/auto/endianness
-++++ b/auto/endianness
-+@@ -26,25 +26,44 @@ int main(void) {
-+ 
-+ END
-+ 
-+-ngx_test="$CC $CC_TEST_FLAGS $CC_AUX_FLAGS \
-+-          -o $NGX_AUTOTEST $NGX_AUTOTEST.c $NGX_LD_OPT $ngx_feature_libs"
-+-
-+-eval "$ngx_test >> $NGX_AUTOCONF_ERR 2>&1"
-+-
-+-if [ -x $NGX_AUTOTEST ]; then
-+-    if $NGX_AUTOTEST >/dev/null 2>&1; then
-+-        echo " little endian"
-++case "${NGX_FORCE_ENDIANNESS}" in
-++    little)
-++        echo " little endian (forced)"
-+         have=NGX_HAVE_LITTLE_ENDIAN . auto/have
-+-    else
-+-        echo " big endian"
-+-    fi
-+-
-+-    rm -rf $NGX_AUTOTEST*
-+-
-+-else
-+-    rm -rf $NGX_AUTOTEST*
-+-
-+-    echo
-+-    echo "$0: error: cannot detect system byte ordering"
-+-    exit 1
-+-fi
-++    ;;
-++
-++    big)
-++        echo " big endian (forced)"
-++    ;;
-++
-++    "")
-++        ngx_test="$CC $CC_TEST_FLAGS $CC_AUX_FLAGS \
-++                  -o $NGX_AUTOTEST $NGX_AUTOTEST.c $NGX_LD_OPT $ngx_feature_libs"
-++
-++        eval "$ngx_test >> $NGX_AUTOCONF_ERR 2>&1"
-++
-++        if [ -x $NGX_AUTOTEST ]; then
-++            if $NGX_AUTOTEST >/dev/null 2>&1; then
-++                echo " little endian"
-++                have=NGX_HAVE_LITTLE_ENDIAN . auto/have
-++            else
-++                echo " big endian"
-++            fi
-++
-++            rm -rf $NGX_AUTOTEST*
-++
-++        else
-++            rm -rf $NGX_AUTOTEST*
-++
-++            echo
-++            echo "$0: error: cannot detect system byte ordering"
-++            exit 1
-++        fi
-++    ;;
-++
-++    *)
-++        echo
-++        echo "$0: error: invalid \"--force-endianness=${NGX_FORCE_ENDIANNESS}\""
-++        exit 1
-++    ;;
-++esac
-+diff --git a/auto/options b/auto/options
-+index 80be906e..85a06456 100644
-+--- a/auto/options
-++++ b/auto/options
-+@@ -17,6 +17,8 @@ NGX_USER=
-+ NGX_GROUP=
-+ NGX_BUILD=
-+ 
-++NGX_FORCE_ENDIANNESS=
-++
-+ CC=${CC:-cc}
-+ CPP=
-+ NGX_OBJS=objs
-+@@ -196,6 +198,8 @@ do
-+         --user=*)                        NGX_USER="$value"          ;;
-+         --group=*)                       NGX_GROUP="$value"         ;;
-+ 
-++        --force-endianness=*)            NGX_FORCE_ENDIANNESS="$value" ;;
-++
-+         --crossbuild=*)                  NGX_PLATFORM="$value"      ;;
-+ 
-+         --build=*)                       NGX_BUILD="$value"         ;;
-+@@ -432,6 +436,8 @@ cat << END
-+   --build=NAME                       set build name
-+   --builddir=DIR                     set build directory
-+ 
-++  --force-endianness=<big>|<little>  force endianness
-++
-+   --with-select_module               enable select module
-+   --without-select_module            disable select module
-+   --with-poll_module                 enable poll module
-+-- 
-+2.31.1
-+
-diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
-index 1f996cc613..31b6e276b7 100644
---- a/package/nginx/nginx.mk
-+++ b/package/nginx/nginx.mk
-@@ -49,6 +49,7 @@ NGINX_CONF_ENV += \
- 
- # prefix: nginx root configuration location
- NGINX_CONF_OPTS += \
-+	--force-endianness=$(call qstrip,$(call LOWERCASE,$(BR2_ENDIAN))) \
- 	--prefix=/usr \
- 	--conf-path=/etc/nginx/nginx.conf \
- 	--sbin-path=/usr/sbin/nginx \
--- 
-2.31.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@busybox.net
-http://lists.busybox.net/mailman/listinfo/buildroot
+SGVsbG8sCgpPbiBNb24sIDMwIEF1ZyAyMDIxIDE0OjQ1OjMxICswMzAwCkpvc8OpIFBla2thcmlu
+ZW4gPGpvc2UucGVra2FyaW5lbkB1bmlraWUuY29tPiB3cm90ZToKCj4gVGhlIGN1cnJlbnQgcHJv
+Y2Vzc2luZyBvZiB0aGUgbW9kdWxlcyBkb2Vzbid0IHdvcmsgZm9yCj4gY3VzdG9tIG1hZGUgcG9s
+aWNpZXMgYXBwZW5kZWQgdGhyb3VnaCB0aGUgZXh0cmEgZGlyIG1lY2hhbmlzbSwKPiBzaW5jZSBz
+ZWQgd29uJ3QgZmluZCBhIG1hdGNoIGZvciBjdXN0b20gbW9kdWxlcywgaXQgd2lsbAo+IGNvbnRp
+bnVlIHdpdGhvdXQgdHJpZ2dlcmluZyBhbmQgZXJyb3IuIFRoaXMgcGF0Y2ggcmVtb3Zlcwo+IGFs
+bCB0aGUgbW9kdWxlcyBmcm9tIG1vZHVsZXMuY29uZiBhbmQgYWRkIHRoZW0gb25lIGJ5Cj4gb25l
+IHVzaW5nIFJFRlBPTElDWV9NT0RVTEVTIHZhbHVlcy4KPiAKPiBTaWduZWQtb2ZmLWJ5OiBKb3PD
+qSBQZWtrYXJpbmVuIDxqb3NlLnBla2thcmluZW5AdW5pa2llLmNvbT4KPiAtLS0KPiAgcGFja2Fn
+ZS9yZWZwb2xpY3kvcmVmcG9saWN5Lm1rIHwgNCArKy0tCj4gIDEgZmlsZSBjaGFuZ2VkLCAyIGlu
+c2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0pCgpJJ3ZlIGFkZGVkIEFudG9pbmUgVMOpbmFydCwg
+TWF4aW1lIENoZXZhbGxpZXIgYW5kIE1hdHQgV2ViZXIgaW4gQ2MgZm9yIGEKcmV2aWV3IG9mIHRo
+aXMgcGF0Y2guCgpCZXN0IHJlZ2FyZHMsCgpUaG9tYXMgUGV0YXp6b25pCgo+IGRpZmYgLS1naXQg
+YS9wYWNrYWdlL3JlZnBvbGljeS9yZWZwb2xpY3kubWsgYi9wYWNrYWdlL3JlZnBvbGljeS9yZWZw
+b2xpY3kubWsKPiBpbmRleCAwMTk0NzA4YjM3Li4xYzBhMmMzMzg1IDEwMDY0NAo+IC0tLSBhL3Bh
+Y2thZ2UvcmVmcG9saWN5L3JlZnBvbGljeS5tawo+ICsrKyBiL3BhY2thZ2UvcmVmcG9saWN5L3Jl
+ZnBvbGljeS5tawo+IEBAIC04NSw5ICs4NSw5IEBAIGVuZGVmCj4gICMgSW4gdGhlIGNvbnRleHQg
+b2YgYSBtb25vbGl0aGljIHBvbGljeSBlbmFibGluZyBhIHBpZWNlIG9mIHRoZSBwb2xpY3kgYXMK
+PiAgIyAnYmFzZScgb3IgJ21vZHVsZScgaXMgZXF1aXZhbGVudCwgc28gd2UgZW5hYmxlIHRoZW0g
+YXMgJ2Jhc2UnLgo+ICBkZWZpbmUgUkVGUE9MSUNZX0NPTkZJR1VSRV9NT0RVTEVTCj4gLQkkKFNF
+RCkgInMvID0gbW9kdWxlLyA9IG5vL2ciICQoQEQpL3BvbGljeS9tb2R1bGVzLmNvbmYKPiArCSQo
+U0VEKSAiLyA9IG1vZHVsZS9kIiAkKEBEKS9wb2xpY3kvbW9kdWxlcy5jb25mCj4gIAkkKGZvcmVh
+Y2ggbSwkKHNvcnQgJChSRUZQT0xJQ1lfTU9EVUxFUykpLAo+IC0JCSQoU0VEKSAiL14kKG0pID0v
+Y1wkKG0pID0gYmFzZSIgJChARCkvcG9saWN5L21vZHVsZXMuY29uZgo+ICsJCSQoU0VEKSAiL14j
+IE1vZHVsZTogJChtKS9hXCQobSkgPSBiYXNlIiAkKEBEKS9wb2xpY3kvbW9kdWxlcy5jb25mCj4g
+IAkpCj4gIGVuZGVmCj4gIAoKCgotLSAKVGhvbWFzIFBldGF6em9uaSwgY28tb3duZXIgYW5kIENF
+TywgQm9vdGxpbgpFbWJlZGRlZCBMaW51eCBhbmQgS2VybmVsIGVuZ2luZWVyaW5nCmh0dHBzOi8v
+Ym9vdGxpbi5jb20KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVzeWJveC5uZXQKaHR0cDovL2xp
+c3RzLmJ1c3lib3gubmV0L21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
