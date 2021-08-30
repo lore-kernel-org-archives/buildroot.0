@@ -2,61 +2,60 @@ Return-Path: <SRS0=17BZ=NV=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.2 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A8A9C432BE
-	for <buildroot@archiver.kernel.org>; Mon, 30 Aug 2021 21:16:49 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 15C97C432BE
+	for <buildroot@archiver.kernel.org>; Mon, 30 Aug 2021 21:32:19 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id EA1DF60F12
-	for <buildroot@archiver.kernel.org>; Mon, 30 Aug 2021 21:16:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org EA1DF60F12
+	by mail.kernel.org (Postfix) with ESMTPS id B17C260E77
+	for <buildroot@archiver.kernel.org>; Mon, 30 Aug 2021 21:32:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B17C260E77
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BF657607CE;
-	Mon, 30 Aug 2021 21:16:48 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BjcrJhAdxc4D; Mon, 30 Aug 2021 21:16:45 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1E0F160A3C;
-	Mon, 30 Aug 2021 21:16:44 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9A6911BF86C
- for <buildroot@lists.busybox.net>; Mon, 30 Aug 2021 21:16:42 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8A34B80F47
- for <buildroot@lists.busybox.net>; Mon, 30 Aug 2021 21:16:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 79E5D80F66;
+	Mon, 30 Aug 2021 21:32:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id caEAzKMi437p for <buildroot@lists.busybox.net>;
- Mon, 30 Aug 2021 21:16:38 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 4nDjVQUhbGS1; Mon, 30 Aug 2021 21:32:14 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id B3D6380F50;
+	Mon, 30 Aug 2021 21:32:13 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 67F981BF86C
+ for <buildroot@lists.busybox.net>; Mon, 30 Aug 2021 21:32:12 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 637BC40117
+ for <buildroot@lists.busybox.net>; Mon, 30 Aug 2021 21:32:12 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id naT7XklozrZp for <buildroot@lists.busybox.net>;
+ Mon, 30 Aug 2021 21:32:08 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 39C8A80F31
- for <buildroot@buildroot.org>; Mon, 30 Aug 2021 21:16:38 +0000 (UTC)
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id F144D40198
+ for <buildroot@buildroot.org>; Mon, 30 Aug 2021 21:32:07 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id D7D91240003;
- Mon, 30 Aug 2021 21:16:34 +0000 (UTC)
-Date: Mon, 30 Aug 2021 23:16:33 +0200
+ by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 19C3D1C0003;
+ Mon, 30 Aug 2021 21:32:05 +0000 (UTC)
+Date: Mon, 30 Aug 2021 23:32:04 +0200
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Woody Douglass <wdouglass@carnegierobotics.com>
-Message-ID: <20210830231633.6bbdcda9@windsurf>
-In-Reply-To: <291e9206b766be40d6d9c49cc8d2ef388ca8f5d2.camel@carnegierobotics.com>
-References: <291e9206b766be40d6d9c49cc8d2ef388ca8f5d2.camel@carnegierobotics.com>
+To: Damien Le Moal <damien.lemoal@wdc.com>
+Message-ID: <20210830233204.2d8dcfad@windsurf>
+In-Reply-To: <20210830044100.260173-1-damien.lemoal@wdc.com>
+References: <20210830044100.260173-1-damien.lemoal@wdc.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/pkg-cmake.mk: allow cmake
- packages to have a configurable install prefix
+Subject: Re: [Buildroot] [PATCH v4 0/9] Add RV64 NOMMU and Canaan K210 SoC
+ support
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,48 +67,43 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: "s.martin49@gmail.com" <s.martin49@gmail.com>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>
+Cc: Alistair Francis <alistair@alistair23.me>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-Hello Woody,
+Hello Damien,
 
-On Mon, 30 Aug 2021 19:47:56 +0000
-Woody Douglass <wdouglass@carnegierobotics.com> wrote:
+On Mon, 30 Aug 2021 13:40:51 +0900
+Damien Le Moal <damien.lemoal@wdc.com> wrote:
 
-> I like to organize binaries on my system so that proprietary stuff
-> is put under the /opt tree. this patch allows for that.
+> Christoph Hellwig (2):
+>   package/elf2flt: add RISC-V 64-bits support
+>   package/Makefile.in: Fix NOMMU RISC-V 64-bits toolchain base name
 > 
-> Signed-off-by: Woodrow Douglass <wdouglass@carnegierobotics.com>
+> Damien Le Moal (7):
+>   arch/config: Make RISC-V 64-bits MMU optional
 
-Can't you just pass:
+Just tested with the first 3 patches applied the following defconfig:
 
-<pkg>_CONF_OPTS = -DCMAKE_INSTALL_PREFIX=/opt
+BR2_riscv=y
+# BR2_USE_MMU is not set
 
-in your own package ?
+It fails to build with:
 
-<pkg>_CONF_OPTS is used as follows:
+/home/thomas/buildroot/buildroot/output/host/riscv64-buildroot-linux-uclibc/bin/elf2flt: Loading to RAM ('-r' option) 
+is required
 
-        $$($$(PKG)_CONF_ENV) $$(BR2_CMAKE) $$($$(PKG)_SRCDIR) \
-                -DCMAKE_TOOLCHAIN_FILE="$$(HOST_DIR)/share/buildroot/toolchainfile.cmake" \
-                -DCMAKE_INSTALL_PREFIX="/usr" \
-                -DCMAKE_COLOR_MAKEFILE=OFF \
-                -DBUILD_DOC=OFF \
-                -DBUILD_DOCS=OFF \
-                -DBUILD_EXAMPLE=OFF \
-                -DBUILD_EXAMPLES=OFF \
-                -DBUILD_TEST=OFF \
-                -DBUILD_TESTS=OFF \
-                -DBUILD_TESTING=OFF \
-                -DBUILD_SHARED_LIBS=$$(if $$(BR2_STATIC_LIBS),OFF,ON) \
-                $$(CMAKE_QUIET) \
-                $$($$(PKG)_CONF_OPTS) \
+This is using the default Busybox configuration, i.e
+package/busybox/busybox.config. I haven't tested if other noMMU
+architectures exhibit the same issue.
 
-Since it appears *after* -DCMAKE_INSTALL_PREFIX="/usr" I assume your
-own -DCMAKE_INSTALL_PREFIX=/opt would take precedence.
+The package/busybox/busybox-minimal.config causes the same issue.
+
+I'm gonna try on ARM noMMU and see.
 
 Best regards,
 
