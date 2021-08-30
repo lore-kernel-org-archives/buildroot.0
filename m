@@ -7,68 +7,70 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EE3D4C4320E
-	for <buildroot@archiver.kernel.org>; Mon, 30 Aug 2021 11:25:04 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E695C432BE
+	for <buildroot@archiver.kernel.org>; Mon, 30 Aug 2021 11:25:26 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 830196112F
-	for <buildroot@archiver.kernel.org>; Mon, 30 Aug 2021 11:25:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 830196112F
+	by mail.kernel.org (Postfix) with ESMTPS id A03F76112F
+	for <buildroot@archiver.kernel.org>; Mon, 30 Aug 2021 11:25:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A03F76112F
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=green-communications.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3331E400DF;
-	Mon, 30 Aug 2021 11:25:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6211C401AF;
+	Mon, 30 Aug 2021 11:25:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4D9R__XVCQW3; Mon, 30 Aug 2021 11:25:00 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id au-0mhGYM4Mm; Mon, 30 Aug 2021 11:25:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9F2A64017E;
-	Mon, 30 Aug 2021 11:24:59 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B50041BF39C
- for <buildroot@lists.busybox.net>; Mon, 30 Aug 2021 11:24:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8936B401C0;
+	Mon, 30 Aug 2021 11:25:20 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 7F0501BF39C
+ for <buildroot@lists.busybox.net>; Mon, 30 Aug 2021 11:25:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A41374017E
- for <buildroot@lists.busybox.net>; Mon, 30 Aug 2021 11:24:57 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6F2D7607AB
+ for <buildroot@lists.busybox.net>; Mon, 30 Aug 2021 11:25:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9htpoXlu6NJ4 for <buildroot@lists.busybox.net>;
- Mon, 30 Aug 2021 11:24:53 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fAgrRaPr4bJS for <buildroot@lists.busybox.net>;
+ Mon, 30 Aug 2021 11:25:15 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
 Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
- by smtp2.osuosl.org (Postfix) with ESMTPS id EA0D9400DF
- for <buildroot@buildroot.org>; Mon, 30 Aug 2021 11:24:52 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id DC25F607B4
+ for <buildroot@buildroot.org>; Mon, 30 Aug 2021 11:25:14 +0000 (UTC)
 Received: from houde.tangerine ([185.65.135.179]) by mrelayeu.kundenserver.de
  (mreue107 [212.227.15.184]) with ESMTPSA (Nemesis) id
- 1M8xwu-1mOXYs3Jn4-00688Q; Mon, 30 Aug 2021 13:24:49 +0200
+ 1MI4cT-1mG3FX0B0B-00FEnz; Mon, 30 Aug 2021 13:25:12 +0200
 From: Thomas Claveirole <thomas.claveirole@green-communications.fr>
 To: buildroot@buildroot.org
-Date: Mon, 30 Aug 2021 13:24:30 +0200
-Message-Id: <20210830112431.144659-1-thomas.claveirole@green-communications.fr>
+Date: Mon, 30 Aug 2021 13:24:31 +0200
+Message-Id: <20210830112431.144659-2-thomas.claveirole@green-communications.fr>
 X-Mailer: git-send-email 2.33.0
+In-Reply-To: <20210830112431.144659-1-thomas.claveirole@green-communications.fr>
+References: <20210830112431.144659-1-thomas.claveirole@green-communications.fr>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:mgeQZUAA3jhABUqjKGLgYPOfHC8th/c+U2xKvbtGb3D08A2GL4G
- TBCpPuu5GCPpgvLtdr8EU5QWrbMhEYpaysX/W/gCz56ggpKY5Oug/LgXMTZDDMeLoAy8TXQ
- KhQZumxfcNkbX3boBt3gzLdDaQ9tDqfLDoXIJvV2KvWsr8T/3537gTq9dZZ8tdBWxWpl07O
- BRF8SviF+XpDSQ+sh46mw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:hI2bAmnAFHY=:yzScOhdSdN73nkggcugsGz
- IEeCoLhQ8KN6hjEl/FM66c/XyyH5kZQptIrFJhC+BM0/sPdDVgsZo7mwe7dREFEtawKx8kBdm
- oaX8ema+QWKFHixS0NTxuc3fL4k/7A6y7gsFH6E0emqyJO1cKOBgnVXQZF4jaHQ90Ml3dbZtl
- 4IbGWIobuZbx2mWb0pyNlRxoEIVquIVEwAKDrTXg0WeWBRW4CTBGh3eLYTh1IkWbWAA7naG9V
- OVKsCrNQaViT8ZuZUYwfYMBGIK8zdaxhoX8oMrEGmrfUW683Cxq8AnENZ9baoz+nYYJcKsMIy
- 6FdnZVHtWCPoHg/1mo0icyePu8KGj1M/xogT5coJevCJ5B8Mlqoigitj4HRQUeGkKj+Nzy+ia
- gR/BVzWoRwYc7SA8mi+9DXd/UQ1ujzwNJD55miiRI4oNA3BkFErPKeRea9z6nwdwZEDJEqZho
- 2QYs6hjTqCfccEWmH3TjxXmXXGio6e56WB4YMzf9q/m6CK+qteQ5NjxrDLR8GEaDxv4iIvKs0
- zZbF2NoE262LJYlN4kGqUYtWOyQzQ05MCwb+JyqK4iSJh8Es/mAqjKcGfK+Y84Q5GGQq9fCum
- yO7heZL4fJqxG6rqN/q2NuKBB/tobpZsX+2tIWQtxd/8IiwvvHCmppQHudb8rEE9EXt+danoL
- TN8VpnczxGNCoRI55g+6iWQN2STZTJXRnt/ztyZX/8ASaK8jPR4HO9DwQgxy9L3SBtsD3v+Bc
- kk0dYzBveQKda3K2tFXEstD3EzTGGiCLhOwjZPhoWgjNiFtpeKeNSDJAKYlZBwxgWO1iSwpdp
- mcHz11j
-Subject: [Buildroot] [PATCH] package/vuejs: bump version to 3.2.6
+X-Provags-ID: V03:K1:wsqm7pBBtuwxZmdVf7PFJKM41nIZqvadDY2Hpl/XS1VeWDF60Od
+ yPNl25RUG138Ncjl0iCZv5VGhb35eEpPf+d47B0F9EKBkQ2JJS5VQc6Aoa9rNz8Fvgb0Mgp
+ QKxxfJTvqV3oXtAEuGFdooubEDaOAU2G/djkR8dL8F5eFTXr7R0gNQMTZWzd2y3kFb1Rrod
+ 3CX1/hlur2zVZafa5E8Vg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:0NYDIzYCOq0=:jZjQNAbezAG7g+KWOf5KNx
+ Fv/O0In5ijJ+TJp14/Msk0BI6IfvB3zyXou4YMRZUnuHjbvRVX+uDz7Nkw1tJ3EKjxvwKgpvQ
+ c4KyrDg7BL9U/ve7PQVT17Jc8Z/Swg9OJuGo0e1evA7kgXTAd6jjqu+vBr02qv/AMLiA2NOg9
+ oi3EbYZSg2yHxkFYEqaB/3pygf4NtZA0Q7Oi8S3ai10/WMdOWwUN7y0uUHLI1jzwbY7Fd7Emh
+ MWcBS9wah2Q4Ne1DXwoMt3aUEkvoY0Z21+qaDTza4gF6++37DERYwKE597kmHa3DvETDUf74/
+ sWd0CpZ6VwA16FKRptFe/TuW9rjTAYcq3LFtb64Z3Gl8yAvte3G4M2bi4s40mysXhCgbrdsNk
+ uYbukQHie31oWZbxl8hDy9SKgMaNmLvKZU3V1j8CIX/VuI774vVaCzL0ByyVTaLME9dKwvvlG
+ TNTbGj4y5GUhxZUNdDo0nGVK54JExEhjf6n51QpBmqWwSHcV4rAx+Qpw5CtpzzYk6fEk0DCzI
+ JVnsNRQUUpVjTFhnoayC4F0FBwFfevRqg/Qyos1OSYu71n5MKdKI/mn0sEYglhw1Bv/vDFXZv
+ c8SIvlY6uG//ZbS+xZFygvRUfV7bqmM3b+yvX/s0Rqhnds1AtvJ4I2udGykzhLq/A1I4xBwCL
+ 8Pk8LCVam+FHv6G9XWd+oo8GkeD13TvJIYvNdvZmlKoaU8VjPa7jCiNzJE3A18DGGRKbVCGFP
+ gtPcRCynUb0nTB+UPtL6nPqaFDgvOzPqlhBgWmtCIzyNo6xtYKnLI3PJWun/kKLbBCrxp7+nD
+ x6r5krh
+Subject: [Buildroot] [PATCH] package/vuejs-router: bump version to 4.0.11
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,39 +91,32 @@ Sender: "buildroot" <buildroot-bounces@busybox.net>
 
 Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
 ---
- package/vuejs/vuejs.hash | 2 +-
- package/vuejs/vuejs.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/vuejs-router/vuejs-router.hash | 2 +-
+ package/vuejs-router/vuejs-router.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/vuejs/vuejs.hash b/package/vuejs/vuejs.hash
-index c2804961d2..1801a0c6e9 100644
---- a/package/vuejs/vuejs.hash
-+++ b/package/vuejs/vuejs.hash
+diff --git a/package/vuejs-router/vuejs-router.hash b/package/vuejs-router/vuejs-router.hash
+index 62b16505ea..1e5f850ca6 100644
+--- a/package/vuejs-router/vuejs-router.hash
++++ b/package/vuejs-router/vuejs-router.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  ddd5e07483d18d2abd645c01200f57d5ffd1c3bf262cdb9f9e1a66a7b855d84a  vue-3.1.5.tgz
-+sha256  464ea5fdbcb51eee0b5f4762f169024b36a3bcd2c039ea8608b17fdd8a8595e9  vue-3.2.6.tgz
- sha256  1bb85cc9b13b81ef41c81c51866172fc345e0503c86726a6755b796590b70175  LICENSE
-diff --git a/package/vuejs/vuejs.mk b/package/vuejs/vuejs.mk
-index 18e12f69d4..e2fc2c2dfb 100644
---- a/package/vuejs/vuejs.mk
-+++ b/package/vuejs/vuejs.mk
-@@ -4,13 +4,13 @@
+-sha256  d85cb70686cad36a087ad9586f1839c9997f707eb0065445fb1ea3d9218494f6  vue-router-4.0.10.tgz
++sha256  317ae9b916b9a8c5ec521697c345bef15759887d63342ddf19c18ff05ca279b9  vue-router-4.0.11.tgz
+ sha256  9c0015250f592a09d7787efc07152afcf661fff6bda2554359f6d00987828c02  LICENSE
+diff --git a/package/vuejs-router/vuejs-router.mk b/package/vuejs-router/vuejs-router.mk
+index 60e751e1d1..3f6bcc5067 100644
+--- a/package/vuejs-router/vuejs-router.mk
++++ b/package/vuejs-router/vuejs-router.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--VUEJS_VERSION = 3.1.5
-+VUEJS_VERSION = 3.2.6
- VUEJS_SOURCE = vue-$(VUEJS_VERSION).tgz
- VUEJS_SITE = https://registry.npmjs.org/vue/-
- VUEJS_LICENSE = MIT
- VUEJS_LICENSE_FILES = LICENSE
- 
--# Install .min.js as .js
-+# Install .prod.js as .js
- define VUEJS_INSTALL_TARGET_CMDS
- 	$(INSTALL) -m 644 -D $(@D)/dist/vue.global.prod.js \
- 		$(TARGET_DIR)/var/www/vue.js
+-VUEJS_ROUTER_VERSION = 4.0.10
++VUEJS_ROUTER_VERSION = 4.0.11
+ VUEJS_ROUTER_SOURCE = vue-router-$(VUEJS_ROUTER_VERSION).tgz
+ VUEJS_ROUTER_SITE = https://registry.npmjs.org/vue-router/-
+ VUEJS_ROUTER_LICENSE = MIT
 -- 
 2.33.0
 
