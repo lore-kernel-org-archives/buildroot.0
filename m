@@ -2,81 +2,99 @@ Return-Path: <SRS0=R6N7=NW=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,HTML_MESSAGE,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.0 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 66BD9C432BE
-	for <buildroot@archiver.kernel.org>; Tue, 31 Aug 2021 16:19:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EF35FC432BE
+	for <buildroot@archiver.kernel.org>; Tue, 31 Aug 2021 16:39:51 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1348B610C9
-	for <buildroot@archiver.kernel.org>; Tue, 31 Aug 2021 16:19:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1348B610C9
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=starry.com
+	by mail.kernel.org (Postfix) with ESMTPS id 6FD1E6109E
+	for <buildroot@archiver.kernel.org>; Tue, 31 Aug 2021 16:39:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6FD1E6109E
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D2F0D824DC;
-	Tue, 31 Aug 2021 16:19:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 384DF80F4B;
+	Tue, 31 Aug 2021 16:39:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tG9bxBa4NwgF; Tue, 31 Aug 2021 16:19:49 +0000 (UTC)
+	with ESMTP id 16JkU-usAQTi; Tue, 31 Aug 2021 16:39:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 54D4382404;
-	Tue, 31 Aug 2021 16:19:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B995080F94;
+	Tue, 31 Aug 2021 16:39:46 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id CD8721BF421
- for <buildroot@lists.busybox.net>; Tue, 31 Aug 2021 16:19:46 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9BE3D1BF4D7
+ for <buildroot@lists.busybox.net>; Tue, 31 Aug 2021 16:39:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BCA6C60664
- for <buildroot@lists.busybox.net>; Tue, 31 Aug 2021 16:19:46 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8A9F3606D5
+ for <buildroot@lists.busybox.net>; Tue, 31 Aug 2021 16:39:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=starry.com
+ dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jli_LZKsVT7j for <buildroot@lists.busybox.net>;
- Tue, 31 Aug 2021 16:19:42 +0000 (UTC)
+ with ESMTP id 9JHYZabjoy9G for <buildroot@lists.busybox.net>;
+ Tue, 31 Aug 2021 16:39:39 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com
- [IPv6:2607:f8b0:4864:20::f2b])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D91A56138A
- for <buildroot@buildroot.org>; Tue, 31 Aug 2021 16:19:41 +0000 (UTC)
-Received: by mail-qv1-xf2b.google.com with SMTP id l4so10658673qvl.12
- for <buildroot@buildroot.org>; Tue, 31 Aug 2021 09:19:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=starry.com; s=google;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=tmkpBcpYrr8m7cjkpiRpmKjHwaB1fTYdnDLNI24F75Q=;
- b=jyVA07wrEutpTItbMHOrUX22+IWtWrUMWvYP9TvjYqkWXM0pTLaOQFX6qLFKhAMUcX
- J5UIMTuZnaxcJ/89Pv1s3QOt6gD0Q500j6Zj+sY+JVRaYlBEh729a25x70IiQV6QQBIz
- N10pmCeqvfNTA6IIizr55av3YUDUCsS+bZA7M=
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com
+ [IPv6:2a00:1450:4864:20::536])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 96B18606A5
+ for <buildroot@buildroot.org>; Tue, 31 Aug 2021 16:39:39 +0000 (UTC)
+Received: by mail-ed1-x536.google.com with SMTP id dm15so27744970edb.10
+ for <buildroot@buildroot.org>; Tue, 31 Aug 2021 09:39:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=subject:to:cc:references:from:organization:message-id:date
+ :user-agent:mime-version:in-reply-to:content-language
+ :content-transfer-encoding;
+ bh=r8zfq0/JsPmt+QfoAaLeHhVcLf4ePGBFDN+KDTUo24I=;
+ b=FO6XsufOWMnvZwPOJtYpqfaoODfE3XliOzBfSOEZmEqwLJkMzeiUPvDNz2ZI6KXTxu
+ HaUlWfu/TCayOndcEsITuMsWaSzC6MvjoMirtB705QwOPPz117QpXuILRRdgFg/08OMM
+ nrLf1XcVw5yz0BZTLp90sLCLp+6zaMPGmWxvOPYcCx1LapIESOCkI9HtFkWvbE+i1yJv
+ IaR1BM0ub3PKBq7OUpn4pJM19VT0cdfGB8gx22Gp+5x1ru4vY2WSy3XI5sKvg76olovq
+ GQb2p2fL4SEa8WF9jBpTG41asmi5le+C9GfQZ+w3j/vwdQpcSXr3LvNF+ixKG9PoDkOE
+ 0J1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=tmkpBcpYrr8m7cjkpiRpmKjHwaB1fTYdnDLNI24F75Q=;
- b=ZGgC/3gx7RGjopDxv7Ip1WoKSXzP3jZmOh/SAm3yX8i9j5LfnWtz6MlBJQSY9DrLOU
- z3uu2U5Y110Rmn3qDAqO1lac9azVptMxXY5ziGQu7xGVsnyboeZAeX7RBYe+CLG8G9Vo
- CQqy/S9V7jsbbhjMu1zDK7lLqriU2ed/zyRYTIDqwWJYkth6h2ySfVopXNMZDej60ECP
- Rs9Xrs4hdiSxqzLwzCyb9+hdWoX1jc386UebGZIalQBnUQdA59Mz2AXY4xU0JtiWpX1k
- R1mtXBVC3BLdbCWVDWpH5a2euD1dluRMyuOLulSuDP3v09sT/tUCiq4xKKYRvFXqXINr
- 20iA==
-X-Gm-Message-State: AOAM5328Y9gO4swEGQKAi6qEZAq/XAJWh73ZR/FiZMsfbxagKnB53wxq
- YpXWRfh1eM7P/9+PH/y9TsQorp8ieaav/JMOF9g6pA==
-X-Google-Smtp-Source: ABdhPJw7eI89+roR5UNYHoZ/l7uOq9xbNU7RV6ZtNcpLldhAbdcRLSZtCa0bNn8eZkSk37EbKXs+V8lzPgQDPAiNV9c=
-X-Received: by 2002:a0c:a995:: with SMTP id a21mr23289433qvb.35.1630426780549; 
- Tue, 31 Aug 2021 09:19:40 -0700 (PDT)
-MIME-Version: 1.0
+ h=x-gm-message-state:subject:to:cc:references:from:organization
+ :message-id:date:user-agent:mime-version:in-reply-to
+ :content-language:content-transfer-encoding;
+ bh=r8zfq0/JsPmt+QfoAaLeHhVcLf4ePGBFDN+KDTUo24I=;
+ b=lIoEnPiUbIIJh+kKJRSocvB4laS6qZooQOu1/FK+6x3l4a037g7PdSp/hp9M7e5hof
+ BPHlw8DgUkuWN8Dwtg8khT2QGnsc1KpwX/+xbFDt5Cm111tZye/ErgIYyRzkWNY4fSKW
+ Y/SwUXywx6sOl+bD7ST1Fa7gmVIkoDcEJdxYBfAz8BqA20hPzlnZ4NGJ6T0FFCQ8DPfX
+ o22nevRBvg8k1v6gNMCGKvgUMm6Jqt2SWv67BiJcQGquH9s25lNbdL8P0IAqp/acNQHj
+ M+ss/+GBdQTdXSu1E2VC1j8iReHrkqyKokWLKwru0A1txDkGZCEixSNK3WfMN2235bGQ
+ J6iw==
+X-Gm-Message-State: AOAM530l69bC2bv0aFiCLLdkTF/CJH/wKIabfzLje7Q4c6QCNJMW/zzq
+ bYdajk7mmFehk0QPe6OI4D8nuw==
+X-Google-Smtp-Source: ABdhPJze36ki23hRWfKUTVdcTDXJ5T/IgCZ2ML51agUb0HB+zRscIGxuPHbPN/BxqRRFO/yVxr2e6Q==
+X-Received: by 2002:a05:6402:358e:: with SMTP id
+ y14mr23443612edc.296.1630427977566; 
+ Tue, 31 Aug 2021 09:39:37 -0700 (PDT)
+Received: from ?IPv6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id lu4sm8042174ejb.103.2021.08.31.09.39.36
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Tue, 31 Aug 2021 09:39:37 -0700 (PDT)
+To: Nevo Hed <nhed+buildroot@starry.com>
 References: <20210830205357.4104461-1-nhed+buildroot@starry.com>
  <1eda8eb9-90dd-ac8f-9aee-620079c9f17d@mind.be>
-In-Reply-To: <1eda8eb9-90dd-ac8f-9aee-620079c9f17d@mind.be>
-From: Nevo Hed <nhed+buildroot@starry.com>
-Date: Tue, 31 Aug 2021 12:19:29 -0400
-Message-ID: <CABGDZCkTAKJgsg=AuEqMdhVyirVbwuzatigVfg7Kpfnj9LhJAA@mail.gmail.com>
-To: Arnout Vandecappelle <arnout@mind.be>
+ <CABGDZCkTAKJgsg=AuEqMdhVyirVbwuzatigVfg7Kpfnj9LhJAA@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+Message-ID: <5260d0e1-bb49-c98a-498e-d3d67230f350@mind.be>
+Date: Tue, 31 Aug 2021 18:39:36 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
+MIME-Version: 1.0
+In-Reply-To: <CABGDZCkTAKJgsg=AuEqMdhVyirVbwuzatigVfg7Kpfnj9LhJAA@mail.gmail.com>
+Content-Language: en-GB
 Subject: Re: [Buildroot] [PATCH 1/1] package/nginx: override endianness
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
@@ -90,456 +108,152 @@ List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
 Cc: Samuel Martin <s.martin49@gmail.com>, buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============7312409366588928067=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
---===============7312409366588928067==
-Content-Type: multipart/alternative; boundary="000000000000168c4905cadd51a6"
-
---000000000000168c4905cadd51a6
-Content-Type: text/plain; charset="UTF-8"
-
-Yes Arnout, That link is my report to nginx.
-
-I will add that comment to my patch, but quick question -
-will that go on my inner or outer patch?
-I don't see the word 'upstream' in any of the current nginx patches and
-most of them deal with unsupported cross-compilation
-
-
-On Tue, Aug 31, 2021 at 9:45 AM Arnout Vandecappelle <arnout@mind.be> wrote:
-
->
->
-> On 30/08/2021 22:53, Nevo Hed wrote:
-> > Though several patches exist in buildroot's nginx package dir they do
-> > not seem to address endianness.
-> >
-> > The test program generated my the script compiles but fails to run (as
-> > it is built for another architecture) but the script does not
-> > distinguish between the failure to run the program and an indication
-> > of certain endianness.  As such the fallback of big-endian is used.
-> > This setting then causes http2 headers (anything not in the satic
-> > dictionary) to come out as undecipherble trash.
-> >
-> > This commit includes a patch to the configure script to allow a
-> > `--force-endianness=big|little` flag as as setting that flag in
-> > buildroot's package makefile.
-> >
-> > Signed-off-by: Nevo Hed <nhed+buildroot@starry.com>
-> > ---
-> >  ...-of-endianness-for-cross-compilation.patch | 115 ++++++++++++++++++
-> >  package/nginx/nginx.mk                        |   1 +
-> >  2 files changed, 116 insertions(+)
-> >  create mode 100644
-> package/nginx/0010-Allow-forcing-of-endianness-for-cross-compilation.patch
-> >
-> > diff --git
-> a/package/nginx/0010-Allow-forcing-of-endianness-for-cross-compilation.patch
-> b/package/nginx/0010-Allow-forcing-of-endianness-for-cross-compilation.patch
-> > new file mode 100644
-> > index 0000000000..137ff6ea5d
-> > --- /dev/null
-> > +++
-> b/package/nginx/0010-Allow-forcing-of-endianness-for-cross-compilation.patch
-> > @@ -0,0 +1,115 @@
-> > +From b1a6b13d8ac2cade71bae508c7d20fbee6807e4e Mon Sep 17 00:00:00 2001
-> > +From: Nevo Hed <nhed+buildroot@starry.com>
-> > +Date: Mon, 30 Aug 2021 13:28:13 -0400
-> > +Subject: [PATCH] Allow forcing of endianness for cross-compilation
-> > +
-> > +Signed-off-by: Nevo Hed <nhed+buildroot@starry.com>
->
->  Ideally, you should have sent the patch upstream and you should add a
-> reference
-> to the upstream contribution. In this case, it can be as simple as:
->
-> Upstream-status: Invalid (upstream doesn't support cross-compilation)
-> See https://trac.nginx.org/nginx/ticket/2240
->
->
->  Regards,
->  Arnout
->
-> > +---
-> > + auto/endianness | 61 ++++++++++++++++++++++++++++++++-----------------
-> > + auto/options    |  6 +++++
-> > + 2 files changed, 46 insertions(+), 21 deletions(-)
-> > +
-> > +diff --git a/auto/endianness b/auto/endianness
-> > +index 1b552b6b..4b2a3cd7 100644
-> > +--- a/auto/endianness
-> > ++++ b/auto/endianness
-> > +@@ -26,25 +26,44 @@ int main(void) {
-> > +
-> > + END
-> > +
-> > +-ngx_test="$CC $CC_TEST_FLAGS $CC_AUX_FLAGS \
-> > +-          -o $NGX_AUTOTEST $NGX_AUTOTEST.c $NGX_LD_OPT
-> $ngx_feature_libs"
-> > +-
-> > +-eval "$ngx_test >> $NGX_AUTOCONF_ERR 2>&1"
-> > +-
-> > +-if [ -x $NGX_AUTOTEST ]; then
-> > +-    if $NGX_AUTOTEST >/dev/null 2>&1; then
-> > +-        echo " little endian"
-> > ++case "${NGX_FORCE_ENDIANNESS}" in
-> > ++    little)
-> > ++        echo " little endian (forced)"
-> > +         have=NGX_HAVE_LITTLE_ENDIAN . auto/have
-> > +-    else
-> > +-        echo " big endian"
-> > +-    fi
-> > +-
-> > +-    rm -rf $NGX_AUTOTEST*
-> > +-
-> > +-else
-> > +-    rm -rf $NGX_AUTOTEST*
-> > +-
-> > +-    echo
-> > +-    echo "$0: error: cannot detect system byte ordering"
-> > +-    exit 1
-> > +-fi
-> > ++    ;;
-> > ++
-> > ++    big)
-> > ++        echo " big endian (forced)"
-> > ++    ;;
-> > ++
-> > ++    "")
-> > ++        ngx_test="$CC $CC_TEST_FLAGS $CC_AUX_FLAGS \
-> > ++                  -o $NGX_AUTOTEST $NGX_AUTOTEST.c $NGX_LD_OPT
-> $ngx_feature_libs"
-> > ++
-> > ++        eval "$ngx_test >> $NGX_AUTOCONF_ERR 2>&1"
-> > ++
-> > ++        if [ -x $NGX_AUTOTEST ]; then
-> > ++            if $NGX_AUTOTEST >/dev/null 2>&1; then
-> > ++                echo " little endian"
-> > ++                have=NGX_HAVE_LITTLE_ENDIAN . auto/have
-> > ++            else
-> > ++                echo " big endian"
-> > ++            fi
-> > ++
-> > ++            rm -rf $NGX_AUTOTEST*
-> > ++
-> > ++        else
-> > ++            rm -rf $NGX_AUTOTEST*
-> > ++
-> > ++            echo
-> > ++            echo "$0: error: cannot detect system byte ordering"
-> > ++            exit 1
-> > ++        fi
-> > ++    ;;
-> > ++
-> > ++    *)
-> > ++        echo
-> > ++        echo "$0: error: invalid
-> \"--force-endianness=${NGX_FORCE_ENDIANNESS}\""
-> > ++        exit 1
-> > ++    ;;
-> > ++esac
-> > +diff --git a/auto/options b/auto/options
-> > +index 80be906e..85a06456 100644
-> > +--- a/auto/options
-> > ++++ b/auto/options
-> > +@@ -17,6 +17,8 @@ NGX_USER=
-> > + NGX_GROUP=
-> > + NGX_BUILD=
-> > +
-> > ++NGX_FORCE_ENDIANNESS=
-> > ++
-> > + CC=${CC:-cc}
-> > + CPP=
-> > + NGX_OBJS=objs
-> > +@@ -196,6 +198,8 @@ do
-> > +         --user=*)                        NGX_USER="$value"          ;;
-> > +         --group=*)                       NGX_GROUP="$value"         ;;
-> > +
-> > ++        --force-endianness=*)            NGX_FORCE_ENDIANNESS="$value"
-> ;;
-> > ++
-> > +         --crossbuild=*)                  NGX_PLATFORM="$value"      ;;
-> > +
-> > +         --build=*)                       NGX_BUILD="$value"         ;;
-> > +@@ -432,6 +436,8 @@ cat << END
-> > +   --build=NAME                       set build name
-> > +   --builddir=DIR                     set build directory
-> > +
-> > ++  --force-endianness=<big>|<little>  force endianness
-> > ++
-> > +   --with-select_module               enable select module
-> > +   --without-select_module            disable select module
-> > +   --with-poll_module                 enable poll module
-> > +--
-> > +2.31.1
-> > +
-> > diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
-> > index 1f996cc613..31b6e276b7 100644
-> > --- a/package/nginx/nginx.mk
-> > +++ b/package/nginx/nginx.mk
-> > @@ -49,6 +49,7 @@ NGINX_CONF_ENV += \
-> >
-> >  # prefix: nginx root configuration location
-> >  NGINX_CONF_OPTS += \
-> > +     --force-endianness=$(call qstrip,$(call LOWERCASE,$(BR2_ENDIAN))) \
-> >       --prefix=/usr \
-> >       --conf-path=/etc/nginx/nginx.conf \
-> >       --sbin-path=/usr/sbin/nginx \
-> >
->
-
---000000000000168c4905cadd51a6
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">Yes Arnout, That link is my report to=C2=A0nginx.<div><br>=
-<div>I will add that comment to my patch, but quick=C2=A0question -</div><d=
-iv>will that go on my inner or outer patch?</div><div>I don&#39;t see the w=
-ord &#39;upstream&#39; in any of the current nginx patches and most of them=
- deal with unsupported=C2=A0cross-compilation</div><div><div><br></div></di=
-v></div></div><br><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmai=
-l_attr">On Tue, Aug 31, 2021 at 9:45 AM Arnout Vandecappelle &lt;<a href=3D=
-"mailto:arnout@mind.be">arnout@mind.be</a>&gt; wrote:<br></div><blockquote =
-class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px sol=
-id rgb(204,204,204);padding-left:1ex"><br>
-<br>
-On 30/08/2021 22:53, Nevo Hed wrote:<br>
-&gt; Though several patches exist in buildroot&#39;s nginx package dir they=
- do<br>
-&gt; not seem to address endianness.<br>
-&gt; <br>
-&gt; The test program generated my the script compiles but fails to run (as=
-<br>
-&gt; it is built for another architecture) but the script does not<br>
-&gt; distinguish between the failure to run the program and an indication<b=
-r>
-&gt; of certain endianness.=C2=A0 As such the fallback of big-endian is use=
-d.<br>
-&gt; This setting then causes http2 headers (anything not in the satic<br>
-&gt; dictionary) to come out as undecipherble trash.<br>
-&gt; <br>
-&gt; This commit includes a patch to the configure script to allow a<br>
-&gt; `--force-endianness=3Dbig|little` flag as as setting that flag in<br>
-&gt; buildroot&#39;s package makefile.<br>
-&gt; <br>
-&gt; Signed-off-by: Nevo Hed &lt;<a href=3D"mailto:nhed%2Bbuildroot@starry.=
-com" target=3D"_blank">nhed+buildroot@starry.com</a>&gt;<br>
-&gt; ---<br>
-&gt;=C2=A0 ...-of-endianness-for-cross-compilation.patch | 115 ++++++++++++=
-++++++<br>
-&gt;=C2=A0 package/nginx/<a href=3D"http://nginx.mk" rel=3D"noreferrer" tar=
-get=3D"_blank">nginx.mk</a>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
- =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 |=C2=A0 =C2=A01 +<br>
-&gt;=C2=A0 2 files changed, 116 insertions(+)<br>
-&gt;=C2=A0 create mode 100644 package/nginx/0010-Allow-forcing-of-endiannes=
-s-for-cross-compilation.patch<br>
-&gt; <br>
-&gt; diff --git a/package/nginx/0010-Allow-forcing-of-endianness-for-cross-=
-compilation.patch b/package/nginx/0010-Allow-forcing-of-endianness-for-cros=
-s-compilation.patch<br>
-&gt; new file mode 100644<br>
-&gt; index 0000000000..137ff6ea5d<br>
-&gt; --- /dev/null<br>
-&gt; +++ b/package/nginx/0010-Allow-forcing-of-endianness-for-cross-compila=
-tion.patch<br>
-&gt; @@ -0,0 +1,115 @@<br>
-&gt; +From b1a6b13d8ac2cade71bae508c7d20fbee6807e4e Mon Sep 17 00:00:00 200=
-1<br>
-&gt; +From: Nevo Hed &lt;<a href=3D"mailto:nhed%2Bbuildroot@starry.com" tar=
-get=3D"_blank">nhed+buildroot@starry.com</a>&gt;<br>
-&gt; +Date: Mon, 30 Aug 2021 13:28:13 -0400<br>
-&gt; +Subject: [PATCH] Allow forcing of endianness for cross-compilation<br=
->
-&gt; +<br>
-&gt; +Signed-off-by: Nevo Hed &lt;<a href=3D"mailto:nhed%2Bbuildroot@starry=
-.com" target=3D"_blank">nhed+buildroot@starry.com</a>&gt;<br>
-<br>
-=C2=A0Ideally, you should have sent the patch upstream and you should add a=
- reference<br>
-to the upstream contribution. In this case, it can be as simple as:<br>
-<br>
-Upstream-status: Invalid (upstream doesn&#39;t support cross-compilation)<b=
-r>
-See <a href=3D"https://trac.nginx.org/nginx/ticket/2240" rel=3D"noreferrer"=
- target=3D"_blank">https://trac.nginx.org/nginx/ticket/2240</a><br>
-<br>
-<br>
-=C2=A0Regards,<br>
-=C2=A0Arnout<br>
-<br>
-&gt; +---<br>
-&gt; + auto/endianness | 61 ++++++++++++++++++++++++++++++++---------------=
---<br>
-&gt; + auto/options=C2=A0 =C2=A0 |=C2=A0 6 +++++<br>
-&gt; + 2 files changed, 46 insertions(+), 21 deletions(-)<br>
-&gt; +<br>
-&gt; +diff --git a/auto/endianness b/auto/endianness<br>
-&gt; +index 1b552b6b..4b2a3cd7 100644<br>
-&gt; +--- a/auto/endianness<br>
-&gt; ++++ b/auto/endianness<br>
-&gt; +@@ -26,25 +26,44 @@ int main(void) {<br>
-&gt; + <br>
-&gt; + END<br>
-&gt; + <br>
-&gt; +-ngx_test=3D&quot;$CC $CC_TEST_FLAGS $CC_AUX_FLAGS \<br>
-&gt; +-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 -o $NGX_AUTOTEST $NGX_AUTOTEST.c =
-$NGX_LD_OPT $ngx_feature_libs&quot;<br>
-&gt; +-<br>
-&gt; +-eval &quot;$ngx_test &gt;&gt; $NGX_AUTOCONF_ERR 2&gt;&amp;1&quot;<br=
->
-&gt; +-<br>
-&gt; +-if [ -x $NGX_AUTOTEST ]; then<br>
-&gt; +-=C2=A0 =C2=A0 if $NGX_AUTOTEST &gt;/dev/null 2&gt;&amp;1; then<br>
-&gt; +-=C2=A0 =C2=A0 =C2=A0 =C2=A0 echo &quot; little endian&quot;<br>
-&gt; ++case &quot;${NGX_FORCE_ENDIANNESS}&quot; in<br>
-&gt; ++=C2=A0 =C2=A0 little)<br>
-&gt; ++=C2=A0 =C2=A0 =C2=A0 =C2=A0 echo &quot; little endian (forced)&quot;=
-<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0have=3DNGX_HAVE_LITTLE_ENDIAN . aut=
-o/have<br>
-&gt; +-=C2=A0 =C2=A0 else<br>
-&gt; +-=C2=A0 =C2=A0 =C2=A0 =C2=A0 echo &quot; big endian&quot;<br>
-&gt; +-=C2=A0 =C2=A0 fi<br>
-&gt; +-<br>
-&gt; +-=C2=A0 =C2=A0 rm -rf $NGX_AUTOTEST*<br>
-&gt; +-<br>
-&gt; +-else<br>
-&gt; +-=C2=A0 =C2=A0 rm -rf $NGX_AUTOTEST*<br>
-&gt; +-<br>
-&gt; +-=C2=A0 =C2=A0 echo<br>
-&gt; +-=C2=A0 =C2=A0 echo &quot;$0: error: cannot detect system byte orderi=
-ng&quot;<br>
-&gt; +-=C2=A0 =C2=A0 exit 1<br>
-&gt; +-fi<br>
-&gt; ++=C2=A0 =C2=A0 ;;<br>
-&gt; ++<br>
-&gt; ++=C2=A0 =C2=A0 big)<br>
-&gt; ++=C2=A0 =C2=A0 =C2=A0 =C2=A0 echo &quot; big endian (forced)&quot;<br=
->
-&gt; ++=C2=A0 =C2=A0 ;;<br>
-&gt; ++<br>
-&gt; ++=C2=A0 =C2=A0 &quot;&quot;)<br>
-&gt; ++=C2=A0 =C2=A0 =C2=A0 =C2=A0 ngx_test=3D&quot;$CC $CC_TEST_FLAGS $CC_=
-AUX_FLAGS \<br>
-&gt; ++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 -o $N=
-GX_AUTOTEST $NGX_AUTOTEST.c $NGX_LD_OPT $ngx_feature_libs&quot;<br>
-&gt; ++<br>
-&gt; ++=C2=A0 =C2=A0 =C2=A0 =C2=A0 eval &quot;$ngx_test &gt;&gt; $NGX_AUTOC=
-ONF_ERR 2&gt;&amp;1&quot;<br>
-&gt; ++<br>
-&gt; ++=C2=A0 =C2=A0 =C2=A0 =C2=A0 if [ -x $NGX_AUTOTEST ]; then<br>
-&gt; ++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 if $NGX_AUTOTEST &gt;/dev/=
-null 2&gt;&amp;1; then<br>
-&gt; ++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 echo &quot; =
-little endian&quot;<br>
-&gt; ++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 have=3DNGX_H=
-AVE_LITTLE_ENDIAN . auto/have<br>
-&gt; ++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 else<br>
-&gt; ++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 echo &quot; =
-big endian&quot;<br>
-&gt; ++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 fi<br>
-&gt; ++<br>
-&gt; ++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 rm -rf $NGX_AUTOTEST*<br>
-&gt; ++<br>
-&gt; ++=C2=A0 =C2=A0 =C2=A0 =C2=A0 else<br>
-&gt; ++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 rm -rf $NGX_AUTOTEST*<br>
-&gt; ++<br>
-&gt; ++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 echo<br>
-&gt; ++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 echo &quot;$0: error: cann=
-ot detect system byte ordering&quot;<br>
-&gt; ++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 exit 1<br>
-&gt; ++=C2=A0 =C2=A0 =C2=A0 =C2=A0 fi<br>
-&gt; ++=C2=A0 =C2=A0 ;;<br>
-&gt; ++<br>
-&gt; ++=C2=A0 =C2=A0 *)<br>
-&gt; ++=C2=A0 =C2=A0 =C2=A0 =C2=A0 echo<br>
-&gt; ++=C2=A0 =C2=A0 =C2=A0 =C2=A0 echo &quot;$0: error: invalid \&quot;--f=
-orce-endianness=3D${NGX_FORCE_ENDIANNESS}\&quot;&quot;<br>
-&gt; ++=C2=A0 =C2=A0 =C2=A0 =C2=A0 exit 1<br>
-&gt; ++=C2=A0 =C2=A0 ;;<br>
-&gt; ++esac<br>
-&gt; +diff --git a/auto/options b/auto/options<br>
-&gt; +index 80be906e..85a06456 100644<br>
-&gt; +--- a/auto/options<br>
-&gt; ++++ b/auto/options<br>
-&gt; +@@ -17,6 +17,8 @@ NGX_USER=3D<br>
-&gt; + NGX_GROUP=3D<br>
-&gt; + NGX_BUILD=3D<br>
-&gt; + <br>
-&gt; ++NGX_FORCE_ENDIANNESS=3D<br>
-&gt; ++<br>
-&gt; + CC=3D${CC:-cc}<br>
-&gt; + CPP=3D<br>
-&gt; + NGX_OBJS=3Dobjs<br>
-&gt; +@@ -196,6 +198,8 @@ do<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0--user=3D*)=C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 NGX_USER=3D&quo=
-t;$value&quot;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 ;;<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0--group=3D*)=C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0NGX_GROUP=3D&=
-quot;$value&quot;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0;;<br>
-&gt; + <br>
-&gt; ++=C2=A0 =C2=A0 =C2=A0 =C2=A0 --force-endianness=3D*)=C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 NGX_FORCE_ENDIANNESS=3D&quot;$value&quot; ;;<br>
-&gt; ++<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0--crossbuild=3D*)=C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 NGX_PLATFORM=3D&quot;$value&q=
-uot;=C2=A0 =C2=A0 =C2=A0 ;;<br>
-&gt; + <br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0--build=3D*)=C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0NGX_BUILD=3D&=
-quot;$value&quot;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0;;<br>
-&gt; +@@ -432,6 +436,8 @@ cat &lt;&lt; END<br>
-&gt; +=C2=A0 =C2=A0--build=3DNAME=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0set build name<br>
-&gt; +=C2=A0 =C2=A0--builddir=3DDIR=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0set build directory<br>
-&gt; + <br>
-&gt; ++=C2=A0 --force-endianness=3D&lt;big&gt;|&lt;little&gt;=C2=A0 force e=
-ndianness<br>
-&gt; ++<br>
-&gt; +=C2=A0 =C2=A0--with-select_module=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0enable select module<br>
-&gt; +=C2=A0 =C2=A0--without-select_module=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 disable select module<br>
-&gt; +=C2=A0 =C2=A0--with-poll_module=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0enable poll module<br>
-&gt; +-- <br>
-&gt; +2.31.1<br>
-&gt; +<br>
-&gt; diff --git a/package/nginx/<a href=3D"http://nginx.mk" rel=3D"noreferr=
-er" target=3D"_blank">nginx.mk</a> b/package/nginx/<a href=3D"http://nginx.=
-mk" rel=3D"noreferrer" target=3D"_blank">nginx.mk</a><br>
-&gt; index 1f996cc613..31b6e276b7 100644<br>
-&gt; --- a/package/nginx/<a href=3D"http://nginx.mk" rel=3D"noreferrer" tar=
-get=3D"_blank">nginx.mk</a><br>
-&gt; +++ b/package/nginx/<a href=3D"http://nginx.mk" rel=3D"noreferrer" tar=
-get=3D"_blank">nginx.mk</a><br>
-&gt; @@ -49,6 +49,7 @@ NGINX_CONF_ENV +=3D \<br>
-&gt;=C2=A0 <br>
-&gt;=C2=A0 # prefix: nginx root configuration location<br>
-&gt;=C2=A0 NGINX_CONF_OPTS +=3D \<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0--force-endianness=3D$(call qstrip,$(call LOWERCA=
-SE,$(BR2_ENDIAN))) \<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0--prefix=3D/usr \<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0--conf-path=3D/etc/nginx/nginx.conf \<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0--sbin-path=3D/usr/sbin/nginx \<br>
-&gt; <br>
-</blockquote></div>
-
---000000000000168c4905cadd51a6--
-
---===============7312409366588928067==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@busybox.net
-http://lists.busybox.net/mailman/listinfo/buildroot
-
---===============7312409366588928067==--
+CgpPbiAzMS8wOC8yMDIxIDE4OjE5LCBOZXZvIEhlZCB3cm90ZToKPiBZZXMgQXJub3V0LCBUaGF0
+IGxpbmsgaXMgbXkgcmVwb3J0IHRvwqBuZ2lueC4KPiAKPiBJIHdpbGwgYWRkIHRoYXQgY29tbWVu
+dCB0byBteSBwYXRjaCwgYnV0IHF1aWNrwqBxdWVzdGlvbiAtCj4gd2lsbCB0aGF0IGdvIG9uIG15
+IGlubmVyIG9yIG91dGVyIHBhdGNoPwoKIFRoZSBpbm5lciBwYXRjaC4KCj4gSSBkb24ndCBzZWUg
+dGhlIHdvcmQgJ3Vwc3RyZWFtJyBpbiBhbnkgb2YgdGhlIGN1cnJlbnQgbmdpbnggcGF0Y2hlcyBh
+bmQgbW9zdCBvZgo+IHRoZW0gZGVhbCB3aXRoIHVuc3VwcG9ydGVkwqBjcm9zcy1jb21waWxhdGlv
+bgoKIE1vc3Qgb2YgdGhlIHBhdGNoZXMgYXJlIHZlcnkgb2xkIGFuZCB3ZSBkaWRuJ3QgaGF2ZSB0
+aGF0ICJydWxlIiBiYWNrIHRoZW4uIFRoZQpydWxlIGlzIGFsc28gbm90IHZlcnkgc3RyaWN0IC0g
+d2Ugb2Z0ZW4gb3Zlcmxvb2sgaXQgd2hpbGUgYXBwbHlpbmcuCgoKIE5vdGU6IHNtYWxsIGNoYW5n
+ZXMgbGlrZSB0aGlzIChhbmQgdGhlIHNwZWxsaW5nIGZpeGVzIGluIHRoZSBjb21taXQgbWVzc2Fn
+ZSkgd2UKY2FuIG1ha2Ugd2hpbGUgYXBwbHlpbmcsIGJ1dCBvZiBjb3Vyc2UgaXQncyBtdWNoIGFw
+cHJlY2lhdGVkIGlmIHlvdSBzZW5kIGEgdjIKd2l0aCBhbGwgdGhlIGZpeGVzLgoKIFJlZ2FyZHMs
+CiBBcm5vdXQKCj4gCj4gCj4gT24gVHVlLCBBdWcgMzEsIDIwMjEgYXQgOTo0NSBBTSBBcm5vdXQg
+VmFuZGVjYXBwZWxsZSA8YXJub3V0QG1pbmQuYmUKPiA8bWFpbHRvOmFybm91dEBtaW5kLmJlPj4g
+d3JvdGU6Cj4gCj4gCj4gCj4gICAgIE9uIDMwLzA4LzIwMjEgMjI6NTMsIE5ldm8gSGVkIHdyb3Rl
+Ogo+ICAgICA+IFRob3VnaCBzZXZlcmFsIHBhdGNoZXMgZXhpc3QgaW4gYnVpbGRyb290J3Mgbmdp
+bnggcGFja2FnZSBkaXIgdGhleSBkbwo+ICAgICA+IG5vdCBzZWVtIHRvIGFkZHJlc3MgZW5kaWFu
+bmVzcy4KPiAgICAgPgo+ICAgICA+IFRoZSB0ZXN0IHByb2dyYW0gZ2VuZXJhdGVkIG15IHRoZSBz
+Y3JpcHQgY29tcGlsZXMgYnV0IGZhaWxzIHRvIHJ1biAoYXMKPiAgICAgPiBpdCBpcyBidWlsdCBm
+b3IgYW5vdGhlciBhcmNoaXRlY3R1cmUpIGJ1dCB0aGUgc2NyaXB0IGRvZXMgbm90Cj4gICAgID4g
+ZGlzdGluZ3Vpc2ggYmV0d2VlbiB0aGUgZmFpbHVyZSB0byBydW4gdGhlIHByb2dyYW0gYW5kIGFu
+IGluZGljYXRpb24KPiAgICAgPiBvZiBjZXJ0YWluIGVuZGlhbm5lc3MuwqAgQXMgc3VjaCB0aGUg
+ZmFsbGJhY2sgb2YgYmlnLWVuZGlhbiBpcyB1c2VkLgo+ICAgICA+IFRoaXMgc2V0dGluZyB0aGVu
+IGNhdXNlcyBodHRwMiBoZWFkZXJzIChhbnl0aGluZyBub3QgaW4gdGhlIHNhdGljCj4gICAgID4g
+ZGljdGlvbmFyeSkgdG8gY29tZSBvdXQgYXMgdW5kZWNpcGhlcmJsZSB0cmFzaC4KPiAgICAgPgo+
+ICAgICA+IFRoaXMgY29tbWl0IGluY2x1ZGVzIGEgcGF0Y2ggdG8gdGhlIGNvbmZpZ3VyZSBzY3Jp
+cHQgdG8gYWxsb3cgYQo+ICAgICA+IGAtLWZvcmNlLWVuZGlhbm5lc3M9YmlnfGxpdHRsZWAgZmxh
+ZyBhcyBhcyBzZXR0aW5nIHRoYXQgZmxhZyBpbgo+ICAgICA+IGJ1aWxkcm9vdCdzIHBhY2thZ2Ug
+bWFrZWZpbGUuCj4gICAgID4KPiAgICAgPiBTaWduZWQtb2ZmLWJ5OiBOZXZvIEhlZCA8bmhlZCti
+dWlsZHJvb3RAc3RhcnJ5LmNvbQo+ICAgICA8bWFpbHRvOm5oZWQlMkJidWlsZHJvb3RAc3RhcnJ5
+LmNvbT4+Cj4gICAgID4gLS0tCj4gICAgID7CoCAuLi4tb2YtZW5kaWFubmVzcy1mb3ItY3Jvc3Mt
+Y29tcGlsYXRpb24ucGF0Y2ggfCAxMTUgKysrKysrKysrKysrKysrKysrCj4gICAgID7CoCBwYWNr
+YWdlL25naW54L25naW54Lm1rIDxodHRwOi8vbmdpbngubWs+wqAgwqAgwqAgwqAgwqAgwqAgwqAg
+wqAgwqAgwqAgwqAgwqAgfMKgIMKgMSArCj4gICAgID7CoCAyIGZpbGVzIGNoYW5nZWQsIDExNiBp
+bnNlcnRpb25zKCspCj4gICAgID7CoCBjcmVhdGUgbW9kZSAxMDA2NDQKPiAgICAgcGFja2FnZS9u
+Z2lueC8wMDEwLUFsbG93LWZvcmNpbmctb2YtZW5kaWFubmVzcy1mb3ItY3Jvc3MtY29tcGlsYXRp
+b24ucGF0Y2gKPiAgICAgPgo+ICAgICA+IGRpZmYgLS1naXQKPiAgICAgYS9wYWNrYWdlL25naW54
+LzAwMTAtQWxsb3ctZm9yY2luZy1vZi1lbmRpYW5uZXNzLWZvci1jcm9zcy1jb21waWxhdGlvbi5w
+YXRjaAo+ICAgICBiL3BhY2thZ2UvbmdpbngvMDAxMC1BbGxvdy1mb3JjaW5nLW9mLWVuZGlhbm5l
+c3MtZm9yLWNyb3NzLWNvbXBpbGF0aW9uLnBhdGNoCj4gICAgID4gbmV3IGZpbGUgbW9kZSAxMDA2
+NDQKPiAgICAgPiBpbmRleCAwMDAwMDAwMDAwLi4xMzdmZjZlYTVkCj4gICAgID4gLS0tIC9kZXYv
+bnVsbAo+ICAgICA+ICsrKwo+ICAgICBiL3BhY2thZ2UvbmdpbngvMDAxMC1BbGxvdy1mb3JjaW5n
+LW9mLWVuZGlhbm5lc3MtZm9yLWNyb3NzLWNvbXBpbGF0aW9uLnBhdGNoCj4gICAgID4gQEAgLTAs
+MCArMSwxMTUgQEAKPiAgICAgPiArRnJvbSBiMWE2YjEzZDhhYzJjYWRlNzFiYWU1MDhjN2QyMGZi
+ZWU2ODA3ZTRlIE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQo+ICAgICA+ICtGcm9tOiBOZXZvIEhl
+ZCA8bmhlZCtidWlsZHJvb3RAc3RhcnJ5LmNvbQo+ICAgICA8bWFpbHRvOm5oZWQlMkJidWlsZHJv
+b3RAc3RhcnJ5LmNvbT4+Cj4gICAgID4gK0RhdGU6IE1vbiwgMzAgQXVnIDIwMjEgMTM6Mjg6MTMg
+LTA0MDAKPiAgICAgPiArU3ViamVjdDogW1BBVENIXSBBbGxvdyBmb3JjaW5nIG9mIGVuZGlhbm5l
+c3MgZm9yIGNyb3NzLWNvbXBpbGF0aW9uCj4gICAgID4gKwo+ICAgICA+ICtTaWduZWQtb2ZmLWJ5
+OiBOZXZvIEhlZCA8bmhlZCtidWlsZHJvb3RAc3RhcnJ5LmNvbQo+ICAgICA8bWFpbHRvOm5oZWQl
+MkJidWlsZHJvb3RAc3RhcnJ5LmNvbT4+Cj4gCj4gICAgIMKgSWRlYWxseSwgeW91IHNob3VsZCBo
+YXZlIHNlbnQgdGhlIHBhdGNoIHVwc3RyZWFtIGFuZCB5b3Ugc2hvdWxkIGFkZCBhIHJlZmVyZW5j
+ZQo+ICAgICB0byB0aGUgdXBzdHJlYW0gY29udHJpYnV0aW9uLiBJbiB0aGlzIGNhc2UsIGl0IGNh
+biBiZSBhcyBzaW1wbGUgYXM6Cj4gCj4gICAgIFVwc3RyZWFtLXN0YXR1czogSW52YWxpZCAodXBz
+dHJlYW0gZG9lc24ndCBzdXBwb3J0IGNyb3NzLWNvbXBpbGF0aW9uKQo+ICAgICBTZWUgaHR0cHM6
+Ly90cmFjLm5naW54Lm9yZy9uZ2lueC90aWNrZXQvMjI0MAo+ICAgICA8aHR0cHM6Ly90cmFjLm5n
+aW54Lm9yZy9uZ2lueC90aWNrZXQvMjI0MD4KPiAKPiAKPiAgICAgwqBSZWdhcmRzLAo+ICAgICDC
+oEFybm91dAo+IAo+ICAgICA+ICstLS0KPiAgICAgPiArIGF1dG8vZW5kaWFubmVzcyB8IDYxICsr
+KysrKysrKysrKysrKysrKysrKysrKysrKysrKysrLS0tLS0tLS0tLS0tLS0tLS0KPiAgICAgPiAr
+IGF1dG8vb3B0aW9uc8KgIMKgIHzCoCA2ICsrKysrCj4gICAgID4gKyAyIGZpbGVzIGNoYW5nZWQs
+IDQ2IGluc2VydGlvbnMoKyksIDIxIGRlbGV0aW9ucygtKQo+ICAgICA+ICsKPiAgICAgPiArZGlm
+ZiAtLWdpdCBhL2F1dG8vZW5kaWFubmVzcyBiL2F1dG8vZW5kaWFubmVzcwo+ICAgICA+ICtpbmRl
+eCAxYjU1MmI2Yi4uNGIyYTNjZDcgMTAwNjQ0Cj4gICAgID4gKy0tLSBhL2F1dG8vZW5kaWFubmVz
+cwo+ICAgICA+ICsrKysgYi9hdXRvL2VuZGlhbm5lc3MKPiAgICAgPiArQEAgLTI2LDI1ICsyNiw0
+NCBAQCBpbnQgbWFpbih2b2lkKSB7Cj4gICAgID4gKwo+ICAgICA+ICsgRU5ECj4gICAgID4gKwo+
+ICAgICA+ICstbmd4X3Rlc3Q9IiRDQyAkQ0NfVEVTVF9GTEFHUyAkQ0NfQVVYX0ZMQUdTIFwKPiAg
+ICAgPiArLcKgIMKgIMKgIMKgIMKgIC1vICROR1hfQVVUT1RFU1QgJE5HWF9BVVRPVEVTVC5jICRO
+R1hfTERfT1BUICRuZ3hfZmVhdHVyZV9saWJzIgo+ICAgICA+ICstCj4gICAgID4gKy1ldmFsICIk
+bmd4X3Rlc3QgPj4gJE5HWF9BVVRPQ09ORl9FUlIgMj4mMSIKPiAgICAgPiArLQo+ICAgICA+ICst
+aWYgWyAteCAkTkdYX0FVVE9URVNUIF07IHRoZW4KPiAgICAgPiArLcKgIMKgIGlmICROR1hfQVVU
+T1RFU1QgPi9kZXYvbnVsbCAyPiYxOyB0aGVuCj4gICAgID4gKy3CoCDCoCDCoCDCoCBlY2hvICIg
+bGl0dGxlIGVuZGlhbiIKPiAgICAgPiArK2Nhc2UgIiR7TkdYX0ZPUkNFX0VORElBTk5FU1N9IiBp
+bgo+ICAgICA+ICsrwqAgwqAgbGl0dGxlKQo+ICAgICA+ICsrwqAgwqAgwqAgwqAgZWNobyAiIGxp
+dHRsZSBlbmRpYW4gKGZvcmNlZCkiCj4gICAgID4gK8KgIMKgIMKgIMKgIMKgaGF2ZT1OR1hfSEFW
+RV9MSVRUTEVfRU5ESUFOIC4gYXV0by9oYXZlCj4gICAgID4gKy3CoCDCoCBlbHNlCj4gICAgID4g
+Ky3CoCDCoCDCoCDCoCBlY2hvICIgYmlnIGVuZGlhbiIKPiAgICAgPiArLcKgIMKgIGZpCj4gICAg
+ID4gKy0KPiAgICAgPiArLcKgIMKgIHJtIC1yZiAkTkdYX0FVVE9URVNUKgo+ICAgICA+ICstCj4g
+ICAgID4gKy1lbHNlCj4gICAgID4gKy3CoCDCoCBybSAtcmYgJE5HWF9BVVRPVEVTVCoKPiAgICAg
+PiArLQo+ICAgICA+ICstwqAgwqAgZWNobwo+ICAgICA+ICstwqAgwqAgZWNobyAiJDA6IGVycm9y
+OiBjYW5ub3QgZGV0ZWN0IHN5c3RlbSBieXRlIG9yZGVyaW5nIgo+ICAgICA+ICstwqAgwqAgZXhp
+dCAxCj4gICAgID4gKy1maQo+ICAgICA+ICsrwqAgwqAgOzsKPiAgICAgPiArKwo+ICAgICA+ICsr
+wqAgwqAgYmlnKQo+ICAgICA+ICsrwqAgwqAgwqAgwqAgZWNobyAiIGJpZyBlbmRpYW4gKGZvcmNl
+ZCkiCj4gICAgID4gKyvCoCDCoCA7Owo+ICAgICA+ICsrCj4gICAgID4gKyvCoCDCoCAiIikKPiAg
+ICAgPiArK8KgIMKgIMKgIMKgIG5neF90ZXN0PSIkQ0MgJENDX1RFU1RfRkxBR1MgJENDX0FVWF9G
+TEFHUyBcCj4gICAgID4gKyvCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCAtbyAkTkdYX0FVVE9U
+RVNUICROR1hfQVVUT1RFU1QuYyAkTkdYX0xEX09QVAo+ICAgICAkbmd4X2ZlYXR1cmVfbGlicyIK
+PiAgICAgPiArKwo+ICAgICA+ICsrwqAgwqAgwqAgwqAgZXZhbCAiJG5neF90ZXN0ID4+ICROR1hf
+QVVUT0NPTkZfRVJSIDI+JjEiCj4gICAgID4gKysKPiAgICAgPiArK8KgIMKgIMKgIMKgIGlmIFsg
+LXggJE5HWF9BVVRPVEVTVCBdOyB0aGVuCj4gICAgID4gKyvCoCDCoCDCoCDCoCDCoCDCoCBpZiAk
+TkdYX0FVVE9URVNUID4vZGV2L251bGwgMj4mMTsgdGhlbgo+ICAgICA+ICsrwqAgwqAgwqAgwqAg
+wqAgwqAgwqAgwqAgZWNobyAiIGxpdHRsZSBlbmRpYW4iCj4gICAgID4gKyvCoCDCoCDCoCDCoCDC
+oCDCoCDCoCDCoCBoYXZlPU5HWF9IQVZFX0xJVFRMRV9FTkRJQU4gLiBhdXRvL2hhdmUKPiAgICAg
+PiArK8KgIMKgIMKgIMKgIMKgIMKgIGVsc2UKPiAgICAgPiArK8KgIMKgIMKgIMKgIMKgIMKgIMKg
+IMKgIGVjaG8gIiBiaWcgZW5kaWFuIgo+ICAgICA+ICsrwqAgwqAgwqAgwqAgwqAgwqAgZmkKPiAg
+ICAgPiArKwo+ICAgICA+ICsrwqAgwqAgwqAgwqAgwqAgwqAgcm0gLXJmICROR1hfQVVUT1RFU1Qq
+Cj4gICAgID4gKysKPiAgICAgPiArK8KgIMKgIMKgIMKgIGVsc2UKPiAgICAgPiArK8KgIMKgIMKg
+IMKgIMKgIMKgIHJtIC1yZiAkTkdYX0FVVE9URVNUKgo+ICAgICA+ICsrCj4gICAgID4gKyvCoCDC
+oCDCoCDCoCDCoCDCoCBlY2hvCj4gICAgID4gKyvCoCDCoCDCoCDCoCDCoCDCoCBlY2hvICIkMDog
+ZXJyb3I6IGNhbm5vdCBkZXRlY3Qgc3lzdGVtIGJ5dGUgb3JkZXJpbmciCj4gICAgID4gKyvCoCDC
+oCDCoCDCoCDCoCDCoCBleGl0IDEKPiAgICAgPiArK8KgIMKgIMKgIMKgIGZpCj4gICAgID4gKyvC
+oCDCoCA7Owo+ICAgICA+ICsrCj4gICAgID4gKyvCoCDCoCAqKQo+ICAgICA+ICsrwqAgwqAgwqAg
+wqAgZWNobwo+ICAgICA+ICsrwqAgwqAgwqAgwqAgZWNobyAiJDA6IGVycm9yOiBpbnZhbGlkCj4g
+ICAgIFwiLS1mb3JjZS1lbmRpYW5uZXNzPSR7TkdYX0ZPUkNFX0VORElBTk5FU1N9XCIiCj4gICAg
+ID4gKyvCoCDCoCDCoCDCoCBleGl0IDEKPiAgICAgPiArK8KgIMKgIDs7Cj4gICAgID4gKytlc2Fj
+Cj4gICAgID4gK2RpZmYgLS1naXQgYS9hdXRvL29wdGlvbnMgYi9hdXRvL29wdGlvbnMKPiAgICAg
+PiAraW5kZXggODBiZTkwNmUuLjg1YTA2NDU2IDEwMDY0NAo+ICAgICA+ICstLS0gYS9hdXRvL29w
+dGlvbnMKPiAgICAgPiArKysrIGIvYXV0by9vcHRpb25zCj4gICAgID4gK0BAIC0xNyw2ICsxNyw4
+IEBAIE5HWF9VU0VSPQo+ICAgICA+ICsgTkdYX0dST1VQPQo+ICAgICA+ICsgTkdYX0JVSUxEPQo+
+ICAgICA+ICsKPiAgICAgPiArK05HWF9GT1JDRV9FTkRJQU5ORVNTPQo+ICAgICA+ICsrCj4gICAg
+ID4gKyBDQz0ke0NDOi1jY30KPiAgICAgPiArIENQUD0KPiAgICAgPiArIE5HWF9PQkpTPW9ianMK
+PiAgICAgPiArQEAgLTE5Niw2ICsxOTgsOCBAQCBkbwo+ICAgICA+ICvCoCDCoCDCoCDCoCDCoC0t
+dXNlcj0qKcKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIE5HWF9VU0VSPSIkdmFs
+dWUiwqAgwqAgwqAgwqAgwqAgOzsKPiAgICAgPiArwqAgwqAgwqAgwqAgwqAtLWdyb3VwPSopwqAg
+wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqBOR1hfR1JPVVA9IiR2YWx1ZSLCoCDCoCDC
+oCDCoCDCoDs7Cj4gICAgID4gKwo+ICAgICA+ICsrwqAgwqAgwqAgwqAgLS1mb3JjZS1lbmRpYW5u
+ZXNzPSopwqAgwqAgwqAgwqAgwqAgwqAgTkdYX0ZPUkNFX0VORElBTk5FU1M9IiR2YWx1ZSIgOzsK
+PiAgICAgPiArKwo+ICAgICA+ICvCoCDCoCDCoCDCoCDCoC0tY3Jvc3NidWlsZD0qKcKgIMKgIMKg
+IMKgIMKgIMKgIMKgIMKgIMKgIE5HWF9QTEFURk9STT0iJHZhbHVlIsKgIMKgIMKgIDs7Cj4gICAg
+ID4gKwo+ICAgICA+ICvCoCDCoCDCoCDCoCDCoC0tYnVpbGQ9KinCoCDCoCDCoCDCoCDCoCDCoCDC
+oCDCoCDCoCDCoCDCoCDCoE5HWF9CVUlMRD0iJHZhbHVlIsKgIMKgIMKgIMKgIMKgOzsKPiAgICAg
+PiArQEAgLTQzMiw2ICs0MzYsOCBAQCBjYXQgPDwgRU5ECj4gICAgID4gK8KgIMKgLS1idWlsZD1O
+QU1FwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqBzZXQgYnVpbGQgbmFtZQo+ICAg
+ICA+ICvCoCDCoC0tYnVpbGRkaXI9RElSwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqBz
+ZXQgYnVpbGQgZGlyZWN0b3J5Cj4gICAgID4gKwo+ICAgICA+ICsrwqAgLS1mb3JjZS1lbmRpYW5u
+ZXNzPTxiaWc+fDxsaXR0bGU+wqAgZm9yY2UgZW5kaWFubmVzcwo+ICAgICA+ICsrCj4gICAgID4g
+K8KgIMKgLS13aXRoLXNlbGVjdF9tb2R1bGXCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoGVuYWJsZSBz
+ZWxlY3QgbW9kdWxlCj4gICAgID4gK8KgIMKgLS13aXRob3V0LXNlbGVjdF9tb2R1bGXCoCDCoCDC
+oCDCoCDCoCDCoCBkaXNhYmxlIHNlbGVjdCBtb2R1bGUKPiAgICAgPiArwqAgwqAtLXdpdGgtcG9s
+bF9tb2R1bGXCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoGVuYWJsZSBwb2xsIG1vZHVsZQo+ICAg
+ICA+ICstLQo+ICAgICA+ICsyLjMxLjEKPiAgICAgPiArCj4gICAgID4gZGlmZiAtLWdpdCBhL3Bh
+Y2thZ2UvbmdpbngvbmdpbngubWsgPGh0dHA6Ly9uZ2lueC5taz4KPiAgICAgYi9wYWNrYWdlL25n
+aW54L25naW54Lm1rIDxodHRwOi8vbmdpbngubWs+Cj4gICAgID4gaW5kZXggMWY5OTZjYzYxMy4u
+MzFiNmUyNzZiNyAxMDA2NDQKPiAgICAgPiAtLS0gYS9wYWNrYWdlL25naW54L25naW54Lm1rIDxo
+dHRwOi8vbmdpbngubWs+Cj4gICAgID4gKysrIGIvcGFja2FnZS9uZ2lueC9uZ2lueC5tayA8aHR0
+cDovL25naW54Lm1rPgo+ICAgICA+IEBAIC00OSw2ICs0OSw3IEBAIE5HSU5YX0NPTkZfRU5WICs9
+IFwKPiAgICAgPsKgCj4gICAgID7CoCAjIHByZWZpeDogbmdpbnggcm9vdCBjb25maWd1cmF0aW9u
+IGxvY2F0aW9uCj4gICAgID7CoCBOR0lOWF9DT05GX09QVFMgKz0gXAo+ICAgICA+ICvCoCDCoCDC
+oC0tZm9yY2UtZW5kaWFubmVzcz0kKGNhbGwgcXN0cmlwLCQoY2FsbCBMT1dFUkNBU0UsJChCUjJf
+RU5ESUFOKSkpIFwKPiAgICAgPsKgIMKgIMKgIMKgLS1wcmVmaXg9L3VzciBcCj4gICAgID7CoCDC
+oCDCoCDCoC0tY29uZi1wYXRoPS9ldGMvbmdpbngvbmdpbnguY29uZiBcCj4gICAgID7CoCDCoCDC
+oCDCoC0tc2Jpbi1wYXRoPS91c3Ivc2Jpbi9uZ2lueCBcCj4gICAgID4KPiAKX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlz
+dApidWlsZHJvb3RAYnVzeWJveC5uZXQKaHR0cDovL2xpc3RzLmJ1c3lib3gubmV0L21haWxtYW4v
+bGlzdGluZm8vYnVpbGRyb290Cg==
