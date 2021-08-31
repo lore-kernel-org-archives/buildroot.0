@@ -2,97 +2,57 @@ Return-Path: <SRS0=R6N7=NW=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 10EB8C432BE
-	for <buildroot@archiver.kernel.org>; Tue, 31 Aug 2021 06:30:34 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D158C432BE
+	for <buildroot@archiver.kernel.org>; Tue, 31 Aug 2021 06:30:58 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 85CFA60FC3
-	for <buildroot@archiver.kernel.org>; Tue, 31 Aug 2021 06:30:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 85CFA60FC3
+	by mail.kernel.org (Postfix) with ESMTPS id E575560232
+	for <buildroot@archiver.kernel.org>; Tue, 31 Aug 2021 06:30:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E575560232
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4DC40400E4;
-	Tue, 31 Aug 2021 06:30:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B706C81AC4;
+	Tue, 31 Aug 2021 06:30:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2gzmsuvUk-qP; Tue, 31 Aug 2021 06:30:29 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id O1KzbNImW2jX; Tue, 31 Aug 2021 06:30:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5D3284012D;
-	Tue, 31 Aug 2021 06:30:28 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5B3E11BF990
- for <buildroot@lists.busybox.net>; Tue, 31 Aug 2021 06:30:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4E78481AD7;
+	Tue, 31 Aug 2021 06:30:53 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1FAB61BF377
+ for <buildroot@lists.busybox.net>; Tue, 31 Aug 2021 06:30:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5861060A57
- for <buildroot@lists.busybox.net>; Tue, 31 Aug 2021 06:30:27 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0F18A80E48
+ for <buildroot@lists.busybox.net>; Tue, 31 Aug 2021 06:30:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9V7SW2E4ux6P for <buildroot@lists.busybox.net>;
- Tue, 31 Aug 2021 06:30:26 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com
- [IPv6:2a00:1450:4864:20::634])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6DBF3608D1
- for <buildroot@buildroot.org>; Tue, 31 Aug 2021 06:30:26 +0000 (UTC)
-Received: by mail-ej1-x634.google.com with SMTP id ia27so36229547ejc.10
- for <buildroot@buildroot.org>; Mon, 30 Aug 2021 23:30:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
- h=sender:from:to:cc:subject:references:date:in-reply-to:message-id
- :user-agent:mime-version;
- bh=Oa7lA8pZ1Ut2iebrzhF5p1VjFk3+VczobbGyYwI0d+w=;
- b=Fhh67+Uu0CV4cqkf3M2CyH84+TmXkn0ciw+zzXN4EqB6w8NcA/NY4zv214bUDryxGT
- Xh0uEm5U6kOd8Xwn7FojWmkmmBK2dCuXtnbv3ZtedzjwYiNLlzIheYjJ10QLLPmIpD/V
- /P+IB2JdT9qEVtQb9VuzugcicqBWSo/zeIi7q2zSxI7N0JuHtMdQYd09vM09W5ITHMmp
- xMU0iIfHF3Lt1q9pRJoWyAt9+HAIGlpJdt4xyzLfWwh/3J19kxR+CJLsszYwz/H3XPdM
- TO2Or/OVxZFXWF7Cr+AhEC/9V4QECtgClnS4YwTeEzPNwSZp0rW7GoA6Jc3CfF7cyClK
- bNGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:sender:from:to:cc:subject:references:date
- :in-reply-to:message-id:user-agent:mime-version;
- bh=Oa7lA8pZ1Ut2iebrzhF5p1VjFk3+VczobbGyYwI0d+w=;
- b=XzbVoOQTJCQhExlBFVqitOkQ5P1agQpjmza7VxccDV8G1Ui0OwxJAEDHs0tUEhKO96
- Q2stOxKWGJvH8p99+MPzlzGtt4O8TfYlSaeUpdMmXXqml7MQc5HSx03Ca+a3Z6KYxYD/
- HwAtX3i8MQRByM0iz+D99bV5PN4KuuObAM/4YWnEoAY/jy5pNrAl1EzkT1I7F741ldjF
- iTTHigRVqGssW452xmeH3Q7PCoijUwVz1YuTJsFLiNNMl+p6f8LyvWwBVMN3hlup4ruq
- mngmD2J2QtM+J403wNbO/HmNyHHxgoYoNaEbCWrNFYXSZMwtsVm7fFxopaa8YtzMq39U
- uxqg==
-X-Gm-Message-State: AOAM530CQYFneq1Q4zrXCI/z0BFORDHlOkXVxMA0MZWAQGIn1SrOoDNB
- WDET3phP6NMGdyPF4Ow66TRk/zonQgc=
-X-Google-Smtp-Source: ABdhPJxXE3BXNDc9e7iIG+hE6VdxeLfgNfeBkeZ9eV7E9stYyki0hRVNG7F5iNg7X7tOPCgx0tUqzQ==
-X-Received: by 2002:a17:907:61b0:: with SMTP id
- mt48mr29081928ejc.64.1630391423503; 
- Mon, 30 Aug 2021 23:30:23 -0700 (PDT)
-Received: from dell.be.48ers.dk (d51A5BC31.access.telenet.be. [81.165.188.49])
- by smtp.gmail.com with ESMTPSA id
- t24sm7671306ejf.48.2021.08.30.23.30.22
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 30 Aug 2021 23:30:23 -0700 (PDT)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
- (envelope-from <peter@korsgaard.com>)
- id 1mKxHq-0006qo-9n; Tue, 31 Aug 2021 08:30:22 +0200
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vgpCsqT-NkM2 for <buildroot@lists.busybox.net>;
+ Tue, 31 Aug 2021 06:30:46 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id B133580E11
+ for <buildroot@buildroot.org>; Tue, 31 Aug 2021 06:30:46 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id E79BD87D39; Tue, 31 Aug 2021 06:29:34 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Bernd Kuhls <bernd.kuhls@t-online.de>
-References: <20210828082531.585788-1-bernd.kuhls@t-online.de>
-Date: Tue, 31 Aug 2021 08:30:22 +0200
-In-Reply-To: <20210828082531.585788-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sat, 28 Aug 2021 10:25:31 +0200")
-Message-ID: <87zgsyunwh.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/fetchmail: bump version to
- 6.4.21
+To: buildroot@buildroot.org
+Date: Tue, 31 Aug 2021 08:28:53 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 630e85f8f5ed64933b45599fc4332d9609177c5c
+X-Git-Newrev: bd20e704ec8cae08ec02188c3e967abba4902f03
+X-Patchwork-Hint: ignore
+Message-Id: <20210831062934.E79BD87D39@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/php: security bump version to
+ 8.0.10
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -104,30 +64,53 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=bd20e704ec8cae08ec02188c3e967abba4902f03
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Release notes:
- > https://sourceforge.net/p/fetchmail/mailman/message/37333073/
+Quoting https://www.php.net/
+"This is a security fix release."
 
- > "It contains the security fix for CVE-2021-36386 of 6.4.20, and fixes
- > a regression/a bug that causes log message truncation/run-together
- > prominently visible with --logfile that was introduced into 6.4.20."
+Changelog: https://www.php.net/ChangeLog-8.php#8.0.10
 
- > Updated note for CVE-2021-36386:
- > https://sourceforge.net/p/fetchmail/mailman/message/37333078/
+CVE-ID were not mentioned in any of the fixed bugs.
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/php/php.hash b/package/php/php.hash
+index 1a1698eb9b..70e9e1fc44 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From https://www.php.net/downloads.php
+-sha256  71a01b2b56544e20e28696ad5b366e431a0984eaa39aa5e35426a4843e172010  php-8.0.9.tar.xz
++sha256  66dc4d1bc86d9c1bc255b51b79d337ed1a7a035cf71230daabbf9a4ca35795eb  php-8.0.10.tar.xz
+ 
+ # License file
+ sha256  a188db807d711536f71e27b7d36879d63480f7994dc18adc08e624b3c5430fff  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index a1ad6e3296..ce20b09a46 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PHP_VERSION = 8.0.9
++PHP_VERSION = 8.0.10
+ PHP_SITE = https://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
