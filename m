@@ -2,64 +2,70 @@ Return-Path: <SRS0=R6N7=NW=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F259C432BE
-	for <buildroot@archiver.kernel.org>; Tue, 31 Aug 2021 07:21:37 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B0B12C432BE
+	for <buildroot@archiver.kernel.org>; Tue, 31 Aug 2021 07:36:14 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 5E5136023E
-	for <buildroot@archiver.kernel.org>; Tue, 31 Aug 2021 07:21:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5E5136023E
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=dopsi.ch
+	by mail.kernel.org (Postfix) with ESMTPS id 5465960240
+	for <buildroot@archiver.kernel.org>; Tue, 31 Aug 2021 07:36:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5465960240
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=go-sys.de
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 11DFA4041A;
-	Tue, 31 Aug 2021 07:21:36 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 06CCC401BB;
+	Tue, 31 Aug 2021 07:36:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id osdAPJ3wGmtG; Tue, 31 Aug 2021 07:21:32 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8F6224041E;
-	Tue, 31 Aug 2021 07:21:31 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5F6861BF348
- for <buildroot@lists.busybox.net>; Tue, 31 Aug 2021 07:21:30 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4DA2240209
- for <buildroot@lists.busybox.net>; Tue, 31 Aug 2021 07:21:30 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=dopsi.ch
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id O8ImGwxlZQZ0 for <buildroot@lists.busybox.net>;
- Tue, 31 Aug 2021 07:21:24 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id jbZN37dG3CWA; Tue, 31 Aug 2021 07:36:10 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 660D040209;
+	Tue, 31 Aug 2021 07:36:09 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 4D9101BF348
+ for <buildroot@lists.busybox.net>; Tue, 31 Aug 2021 07:36:08 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4988981D73
+ for <buildroot@lists.busybox.net>; Tue, 31 Aug 2021 07:36:08 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xWfR53cqqcXg for <buildroot@lists.busybox.net>;
+ Tue, 31 Aug 2021 07:36:03 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from mail-4316.protonmail.ch (mail-4316.protonmail.ch [185.70.43.16])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E7C33401BB
- for <buildroot@buildroot.org>; Tue, 31 Aug 2021 07:21:23 +0000 (UTC)
-Date: Tue, 31 Aug 2021 07:21:12 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dopsi.ch;
- s=protonmail2; t=1630394479;
- bh=9/mGHmyf9go1k2FJUTrAvcGkJ62c0PYQyOVtyc4BY2M=;
- h=Date:To:From:Cc:Reply-To:Subject:From;
- b=RsRJ9B9U5Q/2i7fx9pLQf91HON9AlDEmpqP7U6CmGdy7k6wu3qEgbTVQ3kgeRnclD
- 35LGoyQeZu0VyZVJHUx0G0fSuLDv6qYKkiPLa/1RjO8uoq1LTXKQS/9GBR6SwCyVEo
- UClgETHqA7GRx+Kv6zhcnp4HQiEZwvVJOpdwSewzHMU3iLk10bvlpLXWWPXRAaVAuy
- hR1Vf5bFDd3CSW1h5JgkwJpTxBwE2Wl3rsko938sEGNAJJ0p8HZzuT8KMTl2R7dQ8l
- QW2prdJKCKETm3ymgMr7SkOTnHNN8SNQICDwMqL+qjRZxgNmwCDribJd0lGpnGgjyp
- cIr62L7jC5Mxw==
-To: buildroot@buildroot.org
-From: Simon Doppler <dopsi@dopsi.ch>
-Message-ID: <20210831072031.18391-1-dopsi@dopsi.ch>
+Received: from smtprelay05.ispgateway.de (smtprelay05.ispgateway.de
+ [80.67.18.28])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 90B2081D72
+ for <buildroot@busybox.net>; Tue, 31 Aug 2021 07:36:03 +0000 (UTC)
+Received: from [84.191.225.2] (helo=exchange.go-sys.de)
+ by smtprelay05.ispgateway.de with esmtpsa (TLS1.2) tls
+ TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384 (Exim 4.94.2)
+ (envelope-from <mf@go-sys.de>)
+ id 1mKyHe-00021Z-Ff; Tue, 31 Aug 2021 09:34:14 +0200
+Received: from exchange.go-sys.local (192.168.1.17) by exchange.go-sys.local
+ (192.168.1.17) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id 15.1.2106.2; Tue, 31
+ Aug 2021 09:35:59 +0200
+Received: from go-sys.de (192.168.1.112) by exchange.go-sys.de (192.168.1.17)
+ with Microsoft SMTP Server id 15.1.2106.2 via Frontend Transport;
+ Tue, 31 Aug 2021 09:35:58 +0200
+From: Michael Fischer <mf@go-sys.de>
+To: <buildroot@busybox.net>
+Date: Tue, 31 Aug 2021 09:35:55 +0200
+Message-ID: <20210831073555.8157-1-mf@go-sys.de>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v4] configs/stm32mp157c_odyssey: new defconfig
+X-C2ProcessedOrg: 77b28032-c882-4527-ad15-de6c89cb71cd
+X-CrossPremisesHeadersFilteredBySendConnector: exchange.go-sys.local
+X-OrganizationHeadersPreserved: exchange.go-sys.local
+X-Df-Sender: c21hcnRob3N0QGdvLXN5cy5kZQ==
+Subject: [Buildroot] [PATCH 1/1] package/gcc: bump version 11.x to 11.2.0
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,221 +77,197 @@ List-Post: <mailto:buildroot@busybox.net>
 List-Help: <mailto:buildroot-request@busybox.net?subject=help>
 List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@busybox.net?subject=subscribe>
-Reply-To: Simon Doppler <dopsi@dopsi.ch>
-Cc: yann.morin.1998@free.fr, thomas.petazzoni@bootlin.com,
- Simon Doppler <dopsi@dopsi.ch>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Michael Fischer <mf@go-sys.de>, Maxim Kochetkov <fido_max@inbox.ru>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-U1RNMzJNUDE1N0MtT2R5c3NleSByZWZlcmVuY2U6Cmh0dHBzOi8vd2lraS5zZWVlZHN0dWRpby5j
-b20vT0RZU1NFWS1TVE0zMk1QMTU3Qy8KClNpZ25lZC1vZmYtYnk6IFNpbW9uIERvcHBsZXIgPGRv
-cHNpQGRvcHNpLmNoPgotLS0KIERFVkVMT1BFUlMgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICB8ICAgNCArCiBib2FyZC9zZWVlZC9zdG0zMm1wMTU3Yy1vZHlzc2V5L2dlbmltYWdl
-LmNmZyAgfCAgMjIgKysrCiBib2FyZC9zZWVlZC9zdG0zMm1wMTU3Yy1vZHlzc2V5L2xpbnV4LmNv
-bmZpZyAgfCAxODIgKysrKysrKysrKysrKysrKysrCiAuLi4vb3ZlcmxheS9ib290L2V4dGxpbnV4
-L2V4dGxpbnV4LmNvbmYgICAgICAgfCAgIDQgKwogLi4uLWZpeC1zdG0zMm1wMTU3Yy1vZHlzc2V5
-LWNhcmQtZGV0ZWN0LnBhdGNoIHwgIDM2ICsrKysKIGJvYXJkL3NlZWVkL3N0bTMybXAxNTdjLW9k
-eXNzZXkvcmVhZG1lLnR4dCAgICB8ICAzOCArKysrCiBjb25maWdzL3N0bTMybXAxNTdjX29keXNz
-ZXlfZGVmY29uZmlnICAgICAgICAgfCAgMzEgKysrCiA3IGZpbGVzIGNoYW5nZWQsIDMxNyBpbnNl
-cnRpb25zKCspCiBjcmVhdGUgbW9kZSAxMDA2NDQgYm9hcmQvc2VlZWQvc3RtMzJtcDE1N2Mtb2R5
-c3NleS9nZW5pbWFnZS5jZmcKIGNyZWF0ZSBtb2RlIDEwMDY0NCBib2FyZC9zZWVlZC9zdG0zMm1w
-MTU3Yy1vZHlzc2V5L2xpbnV4LmNvbmZpZwogY3JlYXRlIG1vZGUgMTAwNjQ0IGJvYXJkL3NlZWVk
-L3N0bTMybXAxNTdjLW9keXNzZXkvb3ZlcmxheS9ib290L2V4dGxpbnV4L2V4dGxpbnV4LmNvbmYK
-IGNyZWF0ZSBtb2RlIDEwMDY0NCBib2FyZC9zZWVlZC9zdG0zMm1wMTU3Yy1vZHlzc2V5L3BhdGNo
-ZXMvbGludXgvNS4xMC4xLzAwMDEtQVJNLWR0cy1zdG0zMi1maXgtc3RtMzJtcDE1N2Mtb2R5c3Nl
-eS1jYXJkLWRldGVjdC5wYXRjaAogY3JlYXRlIG1vZGUgMTAwNjQ0IGJvYXJkL3NlZWVkL3N0bTMy
-bXAxNTdjLW9keXNzZXkvcmVhZG1lLnR4dAogY3JlYXRlIG1vZGUgMTAwNjQ0IGNvbmZpZ3Mvc3Rt
-MzJtcDE1N2Nfb2R5c3NleV9kZWZjb25maWcKCmRpZmYgLS1naXQgYS9ERVZFTE9QRVJTIGIvREVW
-RUxPUEVSUwppbmRleCA1MzQ0OGRkMTAwLi41MGUzNmRlMzkwIDEwMDY0NAotLS0gYS9ERVZFTE9Q
-RVJTCisrKyBiL0RFVkVMT1BFUlMKQEAgLTI0NzEsNiArMjQ3MSwxMCBAQCBGOglwYWNrYWdlL3hz
-Y3JlZW5zYXZlci8KIEY6CXBhY2thZ2Uvem1xcHAvCiBGOglwYWNrYWdlL3p5cmUvCgorTjoJU2lt
-b24gRG9wcGxlciA8ZG9wc2lAZG9wc2kuY2g+CitGOglib2FyZC9zZWVlZC8KK0Y6CWNvbmZpZ3Mv
-c3RtMzJtcDE1N2Nfb2R5c3NleV9kZWZjb25maWcKKwogTjoJU3BlbnNlciBHaWxsaWxhbmQgPHNw
-ZW5zZXJAZ2lsbGlsYW5kaW5nLmNvbT4KIEY6CWFyY2gvQ29uZmlnLmluLm1pY3JvYmxhemUKIEY6
-CXBhY2thZ2UvYTEwZGlzcC8KZGlmZiAtLWdpdCBhL2JvYXJkL3NlZWVkL3N0bTMybXAxNTdjLW9k
-eXNzZXkvZ2VuaW1hZ2UuY2ZnIGIvYm9hcmQvc2VlZWQvc3RtMzJtcDE1N2Mtb2R5c3NleS9nZW5p
-bWFnZS5jZmcKbmV3IGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggMDAwMDAwMDAwMC4uMTcwZGVkYzI1
-NAotLS0gL2Rldi9udWxsCisrKyBiL2JvYXJkL3NlZWVkL3N0bTMybXAxNTdjLW9keXNzZXkvZ2Vu
-aW1hZ2UuY2ZnCkBAIC0wLDAgKzEsMjIgQEAKK2ltYWdlIHNkY2FyZC5pbWcgeworCWhkaW1hZ2Ug
-eworCQlncHQgPSAidHJ1ZSIKKwl9CisKKwlwYXJ0aXRpb24gZnNibDEgeworCQlpbWFnZSA9ICJ0
-Zi1hLXN0bTMybXAxNTdjLW9keXNzZXkuc3RtMzIiCisJfQorCisJcGFydGl0aW9uIGZzYmwyIHsK
-KwkJaW1hZ2UgPSAidGYtYS1zdG0zMm1wMTU3Yy1vZHlzc2V5LnN0bTMyIgorCX0KKworCXBhcnRp
-dGlvbiBzc2JsIHsKKwkJaW1hZ2UgPSAidS1ib290LnN0bTMyIgorCX0KKworCXBhcnRpdGlvbiBy
-b290ZnMgeworCQlpbWFnZSA9ICJyb290ZnMuZXh0NCIKKwkJYm9vdGFibGUgPSAieWVzIgorCX0K
-K30KZGlmZiAtLWdpdCBhL2JvYXJkL3NlZWVkL3N0bTMybXAxNTdjLW9keXNzZXkvbGludXguY29u
-ZmlnIGIvYm9hcmQvc2VlZWQvc3RtMzJtcDE1N2Mtb2R5c3NleS9saW51eC5jb25maWcKbmV3IGZp
-bGUgbW9kZSAxMDA2NDQKaW5kZXggMDAwMDAwMDAwMC4uODc4YTBjMzlmMQotLS0gL2Rldi9udWxs
-CisrKyBiL2JvYXJkL3NlZWVkL3N0bTMybXAxNTdjLW9keXNzZXkvbGludXguY29uZmlnCkBAIC0w
-LDAgKzEsMTgyIEBACitDT05GSUdfU1lTVklQQz15CitDT05GSUdfUE9TSVhfTVFVRVVFPXkKK0NP
-TkZJR19VU0VMSUI9eQorQ09ORklHX05PX0haPXkKK0NPTkZJR19ISUdIX1JFU19USU1FUlM9eQor
-Q09ORklHX1BSRUVNUFQ9eQorQ09ORklHX0lLQ09ORklHPXkKK0NPTkZJR19JS0NPTkZJR19QUk9D
-PXkKK0NPTkZJR19MT0dfQlVGX1NISUZUPTE2CitDT05GSUdfQkxLX0RFVl9JTklUUkQ9eQorQ09O
-RklHX0FSQ0hfU1RNMzI9eQorQ09ORklHX0FSTV9USFVNQkVFPXkKKyMgQ09ORklHX0NBQ0hFX0wy
-WDAgaXMgbm90IHNldAorQ09ORklHX0FSTV9FUlJBVEFfNDMwOTczPXkKK0NPTkZJR19BUk1fRVJS
-QVRBXzcyMDc4OT15CitDT05GSUdfQVJNX0VSUkFUQV83NTQzMjI9eQorQ09ORklHX0FSTV9FUlJB
-VEFfNzU0MzI3PXkKK0NPTkZJR19BUk1fRVJSQVRBXzc2NDM2OT15CitDT05GSUdfQVJNX0VSUkFU
-QV83NzU0MjA9eQorQ09ORklHX0FSTV9FUlJBVEFfNzk4MTgxPXkKK0NPTkZJR19TTVA9eQorQ09O
-RklHX01DUE09eQorQ09ORklHX0hJR0hNRU09eQorQ09ORklHX0ZPUkNFX01BWF9aT05FT1JERVI9
-MTIKK0NPTkZJR19TRUNDT01QPXkKKyMgQ09ORklHX0FUQUdTIGlzIG5vdCBzZXQKK0NPTkZJR19a
-Qk9PVF9ST01fVEVYVD0weDAKK0NPTkZJR19aQk9PVF9ST01fQlNTPTB4MAorQ09ORklHX0FSTV9B
-UFBFTkRFRF9EVEI9eQorQ09ORklHX0FSTV9BVEFHX0RUQl9DT01QQVQ9eQorQ09ORklHX1ZGUD15
-CitDT05GSUdfTkVPTj15CitDT05GSUdfS0VSTkVMX01PREVfTkVPTj15CitDT05GSUdfQVJNX0NS
-WVBUTz15CitDT05GSUdfTU9EVUxFUz15CitDT05GSUdfTU9EVUxFX0ZPUkNFX0xPQUQ9eQorQ09O
-RklHX01PRFVMRV9VTkxPQUQ9eQorQ09ORklHX01PRFZFUlNJT05TPXkKK0NPTkZJR19QQVJUSVRJ
-T05fQURWQU5DRUQ9eQorQ09ORklHX0NNRExJTkVfUEFSVElUSU9OPXkKK0NPTkZJR19DTUE9eQor
-Q09ORklHX05FVD15CitDT05GSUdfUEFDS0VUPXkKK0NPTkZJR19VTklYPXkKK0NPTkZJR19JTkVU
-PXkKK0NPTkZJR19DQU49eQorQ09ORklHX0NBTl9NX0NBTj15CitDT05GSUdfREVWVE1QRlM9eQor
-Q09ORklHX0RFVlRNUEZTX01PVU5UPXkKK0NPTkZJR19ETUFfQ01BPXkKK0NPTkZJR19DTUFfU0la
-RV9NQllURVM9MTI4CitDT05GSUdfU0lNUExFX1BNX0JVUz15CitDT05GSUdfTVREPXkKK0NPTkZJ
-R19NVERfQ01ETElORV9QQVJUUz15CitDT05GSUdfTVREX0JMT0NLPXkKK0NPTkZJR19NVERfTTI1
-UDgwPXkKK0NPTkZJR19NVERfTkFORD15CitDT05GSUdfTVREX05BTkRfU1RNMzJfRk1DMj15CitD
-T05GSUdfTVREX1NQSV9OT1I9eQorIyBDT05GSUdfTVREX1NQSV9OT1JfVVNFXzRLX1NFQ1RPUlMg
-aXMgbm90IHNldAorQ09ORklHX01URF9VQkk9eQorQ09ORklHX0JMS19ERVZfTE9PUD15CitDT05G
-SUdfQkxLX0RFVl9SQU09eQorQ09ORklHX0JMS19ERVZfUkFNX1NJWkU9NjU1MzYKK0NPTkZJR19T
-UkFNPXkKK0NPTkZJR19FRVBST01fQVQyND15CitDT05GSUdfTkVUREVWSUNFUz15CitDT05GSUdf
-VklSVElPX05FVD15CitDT05GSUdfS1M4ODUxPXkKK0NPTkZJR19TTVNDOTExWD15CitDT05GSUdf
-U1RNTUFDX0VUSD15CitDT05GSUdfRFdNQUNfRFdDX1FPU19FVEg9eQorQ09ORklHX01ESU9fQklU
-QkFORz15CitDT05GSUdfSU5QVVRfSk9ZREVWPXkKK0NPTkZJR19JTlBVVF9FVkRFVj15CitDT05G
-SUdfSU5QVVRfVE9VQ0hTQ1JFRU49eQorQ09ORklHX1RPVUNIU0NSRUVOX0VEVF9GVDVYMDY9eQor
-Q09ORklHX0lOUFVUX01JU0M9eQorQ09ORklHX0lOUFVUX1NUUE1JQzFfT05LRVk9eQorQ09ORklH
-X1NFUklBTF9TVE0zMj15CitDT05GSUdfU0VSSUFMX1NUTTMyX0NPTlNPTEU9eQorQ09ORklHX1NF
-UklBTF9ERVZfQlVTPXkKK0NPTkZJR19IV19SQU5ET009eQorQ09ORklHX0kyQ19DSEFSREVWPXkK
-K0NPTkZJR19JMkNfTVVYPXkKK0NPTkZJR19JMkNfU1RNMzJGNz15CitDT05GSUdfU1BJPXkKK0NP
-TkZJR19TUElfU1RNMzI9eQorQ09ORklHX1NQSV9TVE0zMl9RU1BJPXkKK0NPTkZJR19QSU5DVFJM
-X1NJTkdMRT15CitDT05GSUdfUElOQ1RSTF9TVE1GWD15CitDT05GSUdfUE9XRVJfUkVTRVQ9eQor
-Q09ORklHX1BPV0VSX1JFU0VUX0dQSU89eQorQ09ORklHX1BPV0VSX1JFU0VUX0dQSU9fUkVTVEFS
-VD15CitDT05GSUdfUE9XRVJfUkVTRVRfU1lTQ09OPXkKK0NPTkZJR19QT1dFUl9SRVNFVF9TWVND
-T05fUE9XRVJPRkY9eQorQ09ORklHX1NZU0NPTl9SRUJPT1RfTU9ERT15CitDT05GSUdfV0FUQ0hE
-T0c9eQorQ09ORklHX1NUUE1JQzFfV0FUQ0hET0c9eQorQ09ORklHX01GRF9TVE0zMl9MUFRJTUVS
-PXkKK0NPTkZJR19NRkRfU1RQTUlDMT15CitDT05GSUdfUkVHVUxBVE9SPXkKK0NPTkZJR19SRUdV
-TEFUT1JfRklYRURfVk9MVEFHRT15CitDT05GSUdfUkVHVUxBVE9SX1NUTTMyX1ZSRUZCVUY9eQor
-Q09ORklHX1JFR1VMQVRPUl9TVE0zMl9QV1I9eQorQ09ORklHX1JFR1VMQVRPUl9TVFBNSUMxPXkK
-K0NPTkZJR19EUk09eQorQ09ORklHX0RSTV9TVE09eQorQ09ORklHX0RSTV9TVE1fRFNJPXkKK0NP
-TkZJR19EUk1fUEFORUxfT1JJU0VURUNIX09UTTgwMDlBPXkKK0NPTkZJR19EUk1fU0lJOTAyWD15
-CitDT05GSUdfQkFDS0xJR0hUX0xDRF9TVVBQT1JUPXkKKyMgQ09ORklHX0xDRF9DTEFTU19ERVZJ
-Q0UgaXMgbm90IHNldAorQ09ORklHX0JBQ0tMSUdIVF9DTEFTU19ERVZJQ0U9eQorIyBDT05GSUdf
-QkFDS0xJR0hUX0dFTkVSSUMgaXMgbm90IHNldAorQ09ORklHX0ZSQU1FQlVGRkVSX0NPTlNPTEVf
-Uk9UQVRJT049eQorQ09ORklHX1NPVU5EPXkKK0NPTkZJR19TTkQ9eQorQ09ORklHX1NORF9EWU5B
-TUlDX01JTk9SUz15CitDT05GSUdfVVNCPXkKK0NPTkZJR19VU0JfT1RHPXkKK0NPTkZJR19VU0Jf
-WEhDSV9IQ0Q9eQorQ09ORklHX1VTQl9YSENJX1BMQVRGT1JNPXkKK0NPTkZJR19VU0JfRUhDSV9I
-Q0Q9eQorQ09ORklHX1VTQl9FSENJX0hDRF9QTEFURk9STT15CitDT05GSUdfVVNCX09IQ0lfSENE
-PXkKK0NPTkZJR19VU0JfT0hDSV9IQ0RfUExBVEZPUk09eQorQ09ORklHX1VTQl9EV0MyPXkKK0NP
-TkZJR19VU0JfQ0hJUElERUE9eQorQ09ORklHX1VTQl9DSElQSURFQV9IT1NUPXkKK0NPTkZJR19V
-U0JfSVNQMTc2MD15CitDT05GSUdfVVNCX0hTSUNfVVNCMzUwMz15CitDT05GSUdfVVNCX0dQSU9f
-VkJVUz15CitDT05GSUdfVVNCX0lTUDEzMDE9eQorQ09ORklHX1VTQl9VTFBJPXkKK0NPTkZJR19U
-WVBFQz15CitDT05GSUdfVFlQRUNfU1RVU0I9eQorQ09ORklHX01NQz15CitDT05GSUdfTU1DX0JM
-T0NLX01JTk9SUz0xNgorQ09ORklHX01NQ19BUk1NTUNJPXkKK0NPTkZJR19NTUNfU0RIQ0k9eQor
-Q09ORklHX01NQ19TREhDSV9QTFRGTT15CitDT05GSUdfTU1DX0RXPXkKK0NPTkZJR19ORVdfTEVE
-Uz15CitDT05GSUdfTEVEU19DTEFTUz15CitDT05GSUdfTEVEU19HUElPPXkKK0NPTkZJR19MRURT
-X1BXTT15CitDT05GSUdfUlRDX0NMQVNTPXkKK0NPTkZJR19SVENfRFJWX1NUTTMyPXkKK0NPTkZJ
-R19ETUFERVZJQ0VTPXkKK0NPTkZJR19TVE0zMl9ETUE9eQorQ09ORklHX1NUTTMyX0RNQU1VWD15
-CitDT05GSUdfU1RNMzJfTURNQT15CitDT05GSUdfSFdTUElOTE9DSz15CitDT05GSUdfSFdTUElO
-TE9DS19TVE0zMj15CitDT05GSUdfU1RNMzJfSVBDQz15CitDT05GSUdfUkVNT1RFUFJPQz15CitD
-T05GSUdfU1RNMzJfUlBST0M9eQorQ09ORklHX1JQTVNHX1ZJUlRJTz15CitDT05GSUdfUlBNU0df
-VFRZPXkKK0NPTkZJR19JSU89eQorQ09ORklHX0lJT19TV19UUklHR0VSPXkKK0NPTkZJR19TRF9B
-RENfTU9EVUxBVE9SPXkKK0NPTkZJR19TVE0zMl9BRENfQ09SRT15CitDT05GSUdfU1RNMzJfQURD
-PXkKK0NPTkZJR19TVE0zMl9BRENfVEVNUD15CitDT05GSUdfU1RNMzJfREZTRE1fQURDPXkKK0NP
-TkZJR19TVE0zMl9MUFRJTUVSX0NOVD15CitDT05GSUdfU1RNMzJfREFDPXkKK0NPTkZJR19JSU9f
-SFJUSU1FUl9UUklHR0VSPXkKK0NPTkZJR19JSU9fU1RNMzJfTFBUSU1FUl9UUklHR0VSPXkKK0NP
-TkZJR19QV009eQorQ09ORklHX1BXTV9TVE0zMj15CitDT05GSUdfUFdNX1NUTTMyX0xQPXkKK0NP
-TkZJR19QSFlfU1RNMzJfVVNCUEhZQz15CitDT05GSUdfTlZNRU1fU1RNMzJfUk9NRU09eQorQ09O
-RklHX0VYVDRfRlM9eQorQ09ORklHX01TRE9TX0ZTPXkKK0NPTkZJR19WRkFUX0ZTPXkKK0NPTkZJ
-R19UTVBGUz15CitDT05GSUdfVE1QRlNfUE9TSVhfQUNMPXkKK0NPTkZJR19QUklOVEtfVElNRT15
-CmRpZmYgLS1naXQgYS9ib2FyZC9zZWVlZC9zdG0zMm1wMTU3Yy1vZHlzc2V5L292ZXJsYXkvYm9v
-dC9leHRsaW51eC9leHRsaW51eC5jb25mIGIvYm9hcmQvc2VlZWQvc3RtMzJtcDE1N2Mtb2R5c3Nl
-eS9vdmVybGF5L2Jvb3QvZXh0bGludXgvZXh0bGludXguY29uZgpuZXcgZmlsZSBtb2RlIDEwMDY0
-NAppbmRleCAwMDAwMDAwMDAwLi5iNTc5NTQxNWViCi0tLSAvZGV2L251bGwKKysrIGIvYm9hcmQv
-c2VlZWQvc3RtMzJtcDE1N2Mtb2R5c3NleS9vdmVybGF5L2Jvb3QvZXh0bGludXgvZXh0bGludXgu
-Y29uZgpAQCAtMCwwICsxLDQgQEAKK2xhYmVsIHN0bTMybXAxNTdjLW9keXNzZXktYnVpbGRyb290
-CisgIGtlcm5lbCAvYm9vdC96SW1hZ2UKKyAgZGV2aWNldHJlZSAvYm9vdC9zdG0zMm1wMTU3Yy1v
-ZHlzc2V5LmR0YgorICBhcHBlbmQgcm9vdD0vZGV2L21tY2JsazBwNCByb290d2FpdApkaWZmIC0t
-Z2l0IGEvYm9hcmQvc2VlZWQvc3RtMzJtcDE1N2Mtb2R5c3NleS9wYXRjaGVzL2xpbnV4LzUuMTAu
-MS8wMDAxLUFSTS1kdHMtc3RtMzItZml4LXN0bTMybXAxNTdjLW9keXNzZXktY2FyZC1kZXRlY3Qu
-cGF0Y2ggYi9ib2FyZC9zZWVlZC9zdG0zMm1wMTU3Yy1vZHlzc2V5L3BhdGNoZXMvbGludXgvNS4x
-MC4xLzAwMDEtQVJNLWR0cy1zdG0zMi1maXgtc3RtMzJtcDE1N2Mtb2R5c3NleS1jYXJkLWRldGVj
-dC5wYXRjaApuZXcgZmlsZSBtb2RlIDEwMDY0NAppbmRleCAwMDAwMDAwMDAwLi5hYjJkYzVkZWE4
-Ci0tLSAvZGV2L251bGwKKysrIGIvYm9hcmQvc2VlZWQvc3RtMzJtcDE1N2Mtb2R5c3NleS9wYXRj
-aGVzL2xpbnV4LzUuMTAuMS8wMDAxLUFSTS1kdHMtc3RtMzItZml4LXN0bTMybXAxNTdjLW9keXNz
-ZXktY2FyZC1kZXRlY3QucGF0Y2gKQEAgLTAsMCArMSwzNiBAQAorRnJvbSAwMTcxYjA3MzczY2M4
-YzI4MTVjYTVmYTc5YTczMDhmZGVmYTU0Y2E0IE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQorRnJv
-bTogR3J6ZWdvcnogU3p5bWFzemVrIDxnc3p5bWFzemVrQHNob3J0LnBsPgorRGF0ZTogU2F0LCAx
-MCBBcHIgMjAyMSAyMTozNToyMSArMDIwMAorU3ViamVjdDogW1BBVENIXSBBUk06IGR0czogc3Rt
-MzI6IGZpeCBzdG0zMm1wMTU3Yy1vZHlzc2V5IGNhcmQgZGV0ZWN0IHBpbgorTUlNRS1WZXJzaW9u
-OiAxLjAKK0NvbnRlbnQtVHlwZTogdGV4dC9wbGFpbjsgY2hhcnNldD1VVEYtOAorQ29udGVudC1U
-cmFuc2Zlci1FbmNvZGluZzogOGJpdAorCitUaGUgbWljcm9TRCBjYXJkIGRldGVjdCBwaW4gaXMg
-cGh5c2ljYWxseSBjb25uZWN0ZWQgdG8gdGhlIE1QVSBwaW4gUEkzLgorVGhlIERldmljZSBUcmVl
-IGNvbmZpZ3VyYXRpb24gb2YgdGhlIGNhcmQgZGV0ZWN0IHBpbiB3YXMgd3JvbmfigJRpdCB3YXMK
-K3NldCB0byBwaW4gUEI3IGluc3RlYWQuIElmIHN1Y2ggY29uZmlndXJhdGlvbiB3YXMgdXNlZCwg
-dGhlIGtlcm5lbCB3b3VsZAoraGFuZyBvbiDigJxXYWl0aW5nIGZvciByb290IGRldmljZeKAnSB3
-aGVuIGJvb3RpbmcgZnJvbSBhIG1pY3JvU0QgY2FyZC4KKworU2lnbmVkLW9mZi1ieTogR3J6ZWdv
-cnogU3p5bWFzemVrIDxnc3p5bWFzemVrQHNob3J0LnBsPgorU2lnbmVkLW9mZi1ieTogQWxleGFu
-ZHJlIFRvcmd1ZSA8YWxleGFuZHJlLnRvcmd1ZUBmb3NzLnN0LmNvbT4KK0JhY2twb3J0ZWQgZnJv
-bTogaHR0cHM6Ly9naXQua2VybmVsLm9yZy9wdWIvc2NtL2xpbnV4L2tlcm5lbC9naXQvdG9ydmFs
-ZHMvbGludXguZ2l0L2NvbW1pdC9hcmNoL2FybS9ib290L2R0cy9zdG0zMm1wMTU3Yy1vZHlzc2V5
-LmR0cz9pZD0wMTcxYjA3MzczY2M4YzI4MTVjYTVmYTc5YTczMDhmZGVmYTU0Y2E0CistLS0KKyBh
-cmNoL2FybS9ib290L2R0cy9zdG0zMm1wMTU3Yy1vZHlzc2V5LmR0cyB8IDIgKy0KKyAxIGZpbGUg
-Y2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRpb24oLSkKKworZGlmZiAtLWdpdCBhL2Fy
-Y2gvYXJtL2Jvb3QvZHRzL3N0bTMybXAxNTdjLW9keXNzZXkuZHRzIGIvYXJjaC9hcm0vYm9vdC9k
-dHMvc3RtMzJtcDE1N2Mtb2R5c3NleS5kdHMKK2luZGV4IGE3ZmZlYzhmMTUxNi4uYmUxZGQ1ZTll
-NzQ0IDEwMDY0NAorLS0tIGEvYXJjaC9hcm0vYm9vdC9kdHMvc3RtMzJtcDE1N2Mtb2R5c3NleS5k
-dHMKKysrKyBiL2FyY2gvYXJtL2Jvb3QvZHRzL3N0bTMybXAxNTdjLW9keXNzZXkuZHRzCitAQCAt
-NjQsNyArNjQsNyBAQCAmc2RtbWMxIHsKKyAJcGluY3RybC0wID0gPCZzZG1tYzFfYjRfcGluc19h
-PjsKKyAJcGluY3RybC0xID0gPCZzZG1tYzFfYjRfb2RfcGluc19hPjsKKyAJcGluY3RybC0yID0g
-PCZzZG1tYzFfYjRfc2xlZXBfcGluc19hPjsKKy0JY2QtZ3Bpb3MgPSA8JmdwaW9iIDcgKEdQSU9f
-QUNUSVZFX0xPVyB8IEdQSU9fUFVMTF9VUCk+OworKwljZC1ncGlvcyA9IDwmZ3Bpb2kgMyAoR1BJ
-T19BQ1RJVkVfTE9XIHwgR1BJT19QVUxMX1VQKT47CisgCWRpc2FibGUtd3A7CisgCXN0LG5lZy1l
-ZGdlOworIAlidXMtd2lkdGggPSA8ND47CistLQorMi4zMC4yCisKZGlmZiAtLWdpdCBhL2JvYXJk
-L3NlZWVkL3N0bTMybXAxNTdjLW9keXNzZXkvcmVhZG1lLnR4dCBiL2JvYXJkL3NlZWVkL3N0bTMy
-bXAxNTdjLW9keXNzZXkvcmVhZG1lLnR4dApuZXcgZmlsZSBtb2RlIDEwMDY0NAppbmRleCAwMDAw
-MDAwMDAwLi4wOTMyODY3MzkzCi0tLSAvZGV2L251bGwKKysrIGIvYm9hcmQvc2VlZWQvc3RtMzJt
-cDE1N2Mtb2R5c3NleS9yZWFkbWUudHh0CkBAIC0wLDAgKzEsMzggQEAKK1NUTTMyTVAxNTdDLU9k
-eXNzZXkKKworSW50cm8KKz09PT09CisKK1RoaXMgY29uZmlndXJhdGlvbiBzdXBwb3J0cyB0aGUg
-U1RNMzJNUDE1N0MtT2R5c3NleSBwbGF0Zm9ybToKKworICBodHRwczovL3dpa2kuc2VlZWRzdHVk
-aW8uY29tL09EWVNTRVktU1RNMzJNUDE1N0MvCisKK0hvdyB0byBidWlsZAorPT09PT09PT09PT09
-CisKKyAkIG1ha2Ugc3RtMzJtcDE1N2Nfb2R5c3NleV9kZWZjb25maWcKKyAkIG1ha2UKKworSG93
-IHRvIHdyaXRlIHRoZSBtaWNyb1NEIGNhcmQKKz09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-CisKK09uY2UgdGhlIGJ1aWxkIHByb2Nlc3MgaXMgZmluaXNoZWQgeW91IHdpbGwgaGF2ZSBhbiBp
-bWFnZSBjYWxsZWQKKyJzZGNhcmQuaW1nIiBpbiB0aGUgb3V0cHV0L2ltYWdlcy8gZGlyZWN0b3J5
-LgorCitDb3B5IHRoZSBib290YWJsZSAic2RjYXJkLmltZyIgb250byBhbiBtaWNyb1NEIGNhcmQg
-d2l0aCAiZGQiOgorCisgICQgc3VkbyBkZCBpZj1vdXRwdXQvaW1hZ2VzL3NkY2FyZC5pbWcgb2Y9
-L2Rldi9zZFgKKworQm9vdCB0aGUgYm9hcmQKKz09PT09PT09PT09PT09CisKKyAoMSkgSW5zZXJ0
-IHRoZSBtaWNyb1NEIGNhcmQgaW4gY29ubmVjdG9yIEoyMS4KKworICgyKSBDb25uZWN0IHRvIHRo
-ZSBVQVJUIGNvbm5lY3RvciBKMjQgKGxvY2F0ZWQgbmV4dCB0aGUgdGhlIERDIGphY2sKKyAgICAg
-SjI0IGFuZCB0aGUgYmF0dGVyeSBjb25uZWN0b3IgSjIwKSBhbmQgcnVuIHlvdXIgc2VyaWFsIGNv
-bW11bmljYXRpb24KKyAgICAgcHJvZ3JhbSBvbiAvZGV2L3R0eUFDTTAuCisKKyAoMykgUGx1ZyBh
-IFVTQi1DIGNhYmxlIGluIEo2IG9yIGEgY2VudGVyLXBvc2l0aXZlIDEyViBqYWNrIGludG8gSjE3
-CisgICAgIHRvIHBvd2VyLXVwIHRoZSBib2FyZC4KKworICg0KSBUaGUgc3lzdGVtIHdpbGwgc3Rh
-cnQsIHdpdGggdGhlIGNvbnNvbGUgb24gVUFSVC4KZGlmZiAtLWdpdCBhL2NvbmZpZ3Mvc3RtMzJt
-cDE1N2Nfb2R5c3NleV9kZWZjb25maWcgYi9jb25maWdzL3N0bTMybXAxNTdjX29keXNzZXlfZGVm
-Y29uZmlnCm5ldyBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4IDAwMDAwMDAwMDAuLjA3OGZmNzQ5MjMK
-LS0tIC9kZXYvbnVsbAorKysgYi9jb25maWdzL3N0bTMybXAxNTdjX29keXNzZXlfZGVmY29uZmln
-CkBAIC0wLDAgKzEsMzEgQEAKK0JSMl9hcm09eQorQlIyX2NvcnRleF9hNz15CitCUjJfR0xPQkFM
-X1BBVENIX0RJUj0iYm9hcmQvc2VlZWQvc3RtMzJtcDE1N2Mtb2R5c3NleS9wYXRjaGVzIgorQlIy
-X1BBQ0tBR0VfSE9TVF9MSU5VWF9IRUFERVJTX0NVU1RPTV81XzEwPXkKK0JSMl9ST09URlNfT1ZF
-UkxBWT0iYm9hcmQvc2VlZWQvc3RtMzJtcDE1N2Mtb2R5c3NleS9vdmVybGF5LyIKK0JSMl9ST09U
-RlNfUE9TVF9JTUFHRV9TQ1JJUFQ9InN1cHBvcnQvc2NyaXB0cy9nZW5pbWFnZS5zaCIKK0JSMl9S
-T09URlNfUE9TVF9TQ1JJUFRfQVJHUz0iLWMgYm9hcmQvc2VlZWQvc3RtMzJtcDE1N2Mtb2R5c3Nl
-eS9nZW5pbWFnZS5jZmciCitCUjJfTElOVVhfS0VSTkVMPXkKK0JSMl9MSU5VWF9LRVJORUxfQ1VT
-VE9NX1ZFUlNJT049eQorQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fVkVSU0lPTl9WQUxVRT0iNS4x
-MC4xIgorQlIyX0xJTlVYX0tFUk5FTF9VU0VfQ1VTVE9NX0NPTkZJRz15CitCUjJfTElOVVhfS0VS
-TkVMX0NVU1RPTV9DT05GSUdfRklMRT0iYm9hcmQvc2VlZWQvc3RtMzJtcDE1N2Mtb2R5c3NleS9s
-aW51eC5jb25maWciCitCUjJfTElOVVhfS0VSTkVMX0RUU19TVVBQT1JUPXkKK0JSMl9MSU5VWF9L
-RVJORUxfSU5UUkVFX0RUU19OQU1FPSJzdG0zMm1wMTU3Yy1vZHlzc2V5IgorQlIyX0xJTlVYX0tF
-Uk5FTF9JTlNUQUxMX1RBUkdFVD15CitCUjJfVEFSR0VUX1JPT1RGU19FWFQyPXkKK0JSMl9UQVJH
-RVRfUk9PVEZTX0VYVDJfND15CitCUjJfVEFSR0VUX1JPT1RGU19FWFQyX1NJWkU9IjEyME0iCisj
-IEJSMl9UQVJHRVRfUk9PVEZTX1RBUiBpcyBub3Qgc2V0CitCUjJfVEFSR0VUX0FSTV9UUlVTVEVE
-X0ZJUk1XQVJFPXkKK0JSMl9UQVJHRVRfQVJNX1RSVVNURURfRklSTVdBUkVfUExBVEZPUk09InN0
-bTMybXAxIgorQlIyX1RBUkdFVF9BUk1fVFJVU1RFRF9GSVJNV0FSRV9BRERJVElPTkFMX1ZBUklB
-QkxFUz0iU1RNMzJNUF9TRE1NQz0xIEFBUkNIMzJfU1A9c3BfbWluIERUQl9GSUxFX05BTUU9c3Rt
-MzJtcDE1N2Mtb2R5c3NleS5kdGIiCitCUjJfVEFSR0VUX0FSTV9UUlVTVEVEX0ZJUk1XQVJFX0lN
-QUdFUz0iKi5zdG0zMiIKK0JSMl9UQVJHRVRfQVJNX1RSVVNURURfRklSTVdBUkVfTkVFRFNfRFRD
-PXkKK0JSMl9UQVJHRVRfVUJPT1Q9eQorQlIyX1RBUkdFVF9VQk9PVF9CT0FSRF9ERUZDT05GSUc9
-InN0bTMybXAxNV90cnVzdGVkIgorQlIyX1RBUkdFVF9VQk9PVF9ORUVEU19EVEM9eQorIyBCUjJf
-VEFSR0VUX1VCT09UX0ZPUk1BVF9CSU4gaXMgbm90IHNldAorQlIyX1RBUkdFVF9VQk9PVF9GT1JN
-QVRfU1RNMzI9eQorQlIyX1RBUkdFVF9VQk9PVF9DVVNUT01fTUFLRU9QVFM9IkRFVklDRV9UUkVF
-PXN0bTMybXAxNTdjLW9keXNzZXkiCitCUjJfUEFDS0FHRV9IT1NUX0dFTklNQUdFPXkKLS0KMi4z
-MC4yCgoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVp
-bGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVzeWJveC5uZXQKaHR0cDovL2xpc3RzLmJ1
-c3lib3gubmV0L21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+patch 0001: already applied upstream
+
+Signed-off-by: Michael Fischer <mf@go-sys.de>
+---
+ ...01-Remove-cyclades-from-libsanitizer.patch | 125 ------------------
+ ...mcmodel-option-to-handle-large-GOTs.patch} |   0
+ ...cmodel-large-when-building-crtstuff.patch} |   0
+ package/gcc/Config.in.host                    |   2 +-
+ package/gcc/gcc.hash                          |   4 +-
+ 5 files changed, 3 insertions(+), 128 deletions(-)
+ delete mode 100644 package/gcc/11.1.0/0001-Remove-cyclades-from-libsanitizer.patch
+ rename package/gcc/{11.1.0/0002-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch => 11.2.0/0001-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch} (100%)
+ rename package/gcc/{11.1.0/0003-or1k-Use-cmodel-large-when-building-crtstuff.patch => 11.2.0/0002-or1k-Use-cmodel-large-when-building-crtstuff.patch} (100%)
+
+diff --git a/package/gcc/11.1.0/0001-Remove-cyclades-from-libsanitizer.patch b/package/gcc/11.1.0/0001-Remove-cyclades-from-libsanitizer.patch
+deleted file mode 100644
+index ee6e349a6c..0000000000
+--- a/package/gcc/11.1.0/0001-Remove-cyclades-from-libsanitizer.patch
++++ /dev/null
+@@ -1,125 +0,0 @@
+-From 745dae5923aba02982563481d75a21595df22ff8 Mon Sep 17 00:00:00 2001
+-From: Tamar Christina <tamar.christina@arm.com>
+-Date: Fri, 21 May 2021 10:30:59 +0100
+-Subject: [PATCH] libsanitizer: Remove cyclades from libsanitizer
+-
+-The Linux kernel has removed the interface to cyclades from
+-the latest kernel headers[1] due to them being orphaned for the
+-past 13 years.
+-
+-libsanitizer uses this header when compiling against glibc, but
+-glibcs itself doesn't seem to have any references to cyclades.
+-
+-Further more it seems that the driver is broken in the kernel and
+-the firmware doesn't seem to be available anymore.
+-
+-As such since this is breaking the build of libsanitizer (and so the
+-GCC bootstrap[2]) I propose to remove this.
+-
+-[1] https://lkml.org/lkml/2021/3/2/153
+-[2] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=100379
+-
+-(cherry picked from commit f7c5351552387bd43f6ca3631016d7f0dfe0f135)
+-
+-libsanitizer/ChangeLog:
+-
+-	PR sanitizer/100379
+-	* sanitizer_common/sanitizer_common_interceptors_ioctl.inc: Cherry-pick
+-	llvm-project revision f7c5351552387bd43f6ca3631016d7f0dfe0f135.
+-	* sanitizer_common/sanitizer_platform_limits_posix.cpp: Likewise.
+-	* sanitizer_common/sanitizer_platform_limits_posix.h: Likewise.
+-
+-Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+----
+- .../sanitizer_common_interceptors_ioctl.inc           |  9 ---------
+- .../sanitizer_platform_limits_posix.cpp               | 11 -----------
+- .../sanitizer_platform_limits_posix.h                 | 10 ----------
+- 3 files changed, 30 deletions(-)
+-
+-diff --git a/libsanitizer/sanitizer_common/sanitizer_common_interceptors_ioctl.inc b/libsanitizer/sanitizer_common/sanitizer_common_interceptors_ioctl.inc
+-index 7f181258eab..b7da6598755 100644
+---- a/libsanitizer/sanitizer_common/sanitizer_common_interceptors_ioctl.inc
+-+++ b/libsanitizer/sanitizer_common/sanitizer_common_interceptors_ioctl.inc
+-@@ -370,15 +370,6 @@ static void ioctl_table_fill() {
+- 
+- #if SANITIZER_GLIBC
+-   // _(SIOCDEVPLIP, WRITE, struct_ifreq_sz); // the same as EQL_ENSLAVE
+--  _(CYGETDEFTHRESH, WRITE, sizeof(int));
+--  _(CYGETDEFTIMEOUT, WRITE, sizeof(int));
+--  _(CYGETMON, WRITE, struct_cyclades_monitor_sz);
+--  _(CYGETTHRESH, WRITE, sizeof(int));
+--  _(CYGETTIMEOUT, WRITE, sizeof(int));
+--  _(CYSETDEFTHRESH, NONE, 0);
+--  _(CYSETDEFTIMEOUT, NONE, 0);
+--  _(CYSETTHRESH, NONE, 0);
+--  _(CYSETTIMEOUT, NONE, 0);
+-   _(EQL_EMANCIPATE, WRITE, struct_ifreq_sz);
+-   _(EQL_ENSLAVE, WRITE, struct_ifreq_sz);
+-   _(EQL_GETMASTRCFG, WRITE, struct_ifreq_sz);
+-diff --git a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp
+-index 35a690cba5c..6e5c330b98e 100644
+---- a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp
+-+++ b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp
+-@@ -143,7 +143,6 @@ typedef struct user_fpregs elf_fpregset_t;
+- # include <sys/procfs.h>
+- #endif
+- #include <sys/user.h>
+--#include <linux/cyclades.h>
+- #include <linux/if_eql.h>
+- #include <linux/if_plip.h>
+- #include <linux/lp.h>
+-@@ -460,7 +459,6 @@ unsigned struct_ElfW_Phdr_sz = sizeof(Elf_Phdr);
+- 
+- #if SANITIZER_GLIBC
+-   unsigned struct_ax25_parms_struct_sz = sizeof(struct ax25_parms_struct);
+--  unsigned struct_cyclades_monitor_sz = sizeof(struct cyclades_monitor);
+- #if EV_VERSION > (0x010000)
+-   unsigned struct_input_keymap_entry_sz = sizeof(struct input_keymap_entry);
+- #else
+-@@ -824,15 +822,6 @@ unsigned struct_ElfW_Phdr_sz = sizeof(Elf_Phdr);
+- #endif // SANITIZER_LINUX
+- 
+- #if SANITIZER_LINUX && !SANITIZER_ANDROID
+--  unsigned IOCTL_CYGETDEFTHRESH = CYGETDEFTHRESH;
+--  unsigned IOCTL_CYGETDEFTIMEOUT = CYGETDEFTIMEOUT;
+--  unsigned IOCTL_CYGETMON = CYGETMON;
+--  unsigned IOCTL_CYGETTHRESH = CYGETTHRESH;
+--  unsigned IOCTL_CYGETTIMEOUT = CYGETTIMEOUT;
+--  unsigned IOCTL_CYSETDEFTHRESH = CYSETDEFTHRESH;
+--  unsigned IOCTL_CYSETDEFTIMEOUT = CYSETDEFTIMEOUT;
+--  unsigned IOCTL_CYSETTHRESH = CYSETTHRESH;
+--  unsigned IOCTL_CYSETTIMEOUT = CYSETTIMEOUT;
+-   unsigned IOCTL_EQL_EMANCIPATE = EQL_EMANCIPATE;
+-   unsigned IOCTL_EQL_ENSLAVE = EQL_ENSLAVE;
+-   unsigned IOCTL_EQL_GETMASTRCFG = EQL_GETMASTRCFG;
+-diff --git a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.h b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.h
+-index ad358eef8b7..cba41ba5494 100644
+---- a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.h
+-+++ b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.h
+-@@ -983,7 +983,6 @@ extern unsigned struct_vt_mode_sz;
+- 
+- #if SANITIZER_LINUX && !SANITIZER_ANDROID
+- extern unsigned struct_ax25_parms_struct_sz;
+--extern unsigned struct_cyclades_monitor_sz;
+- extern unsigned struct_input_keymap_entry_sz;
+- extern unsigned struct_ipx_config_data_sz;
+- extern unsigned struct_kbdiacrs_sz;
+-@@ -1328,15 +1327,6 @@ extern unsigned IOCTL_VT_WAITACTIVE;
+- #endif  // SANITIZER_LINUX
+- 
+- #if SANITIZER_LINUX && !SANITIZER_ANDROID
+--extern unsigned IOCTL_CYGETDEFTHRESH;
+--extern unsigned IOCTL_CYGETDEFTIMEOUT;
+--extern unsigned IOCTL_CYGETMON;
+--extern unsigned IOCTL_CYGETTHRESH;
+--extern unsigned IOCTL_CYGETTIMEOUT;
+--extern unsigned IOCTL_CYSETDEFTHRESH;
+--extern unsigned IOCTL_CYSETDEFTIMEOUT;
+--extern unsigned IOCTL_CYSETTHRESH;
+--extern unsigned IOCTL_CYSETTIMEOUT;
+- extern unsigned IOCTL_EQL_EMANCIPATE;
+- extern unsigned IOCTL_EQL_ENSLAVE;
+- extern unsigned IOCTL_EQL_GETMASTRCFG;
+--- 
+-2.27.0
+-
+diff --git a/package/gcc/11.1.0/0002-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch b/package/gcc/11.2.0/0001-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch
+similarity index 100%
+rename from package/gcc/11.1.0/0002-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch
+rename to package/gcc/11.2.0/0001-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch
+diff --git a/package/gcc/11.1.0/0003-or1k-Use-cmodel-large-when-building-crtstuff.patch b/package/gcc/11.2.0/0002-or1k-Use-cmodel-large-when-building-crtstuff.patch
+similarity index 100%
+rename from package/gcc/11.1.0/0003-or1k-Use-cmodel-large-when-building-crtstuff.patch
+rename to package/gcc/11.2.0/0002-or1k-Use-cmodel-large-when-building-crtstuff.patch
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index ae2051d2aa..2b7f88154e 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -92,7 +92,7 @@ config BR2_GCC_VERSION
+ 	default "8.4.0"     if BR2_GCC_VERSION_POWERPC_SPE
+ 	default "9.4.0"     if BR2_GCC_VERSION_9_X
+ 	default "10.3.0"    if BR2_GCC_VERSION_10_X
+-	default "11.1.0"    if BR2_GCC_VERSION_11_X
++	default "11.2.0"    if BR2_GCC_VERSION_11_X
+ 	default "arc-2020.09-release" if BR2_GCC_VERSION_ARC
+ 	default "48152afb96c59733d5bc79e3399bb7b3d4b44266" if BR2_GCC_VERSION_CSKY
+ 
+diff --git a/package/gcc/gcc.hash b/package/gcc/gcc.hash
+index 0f7ff9dbf7..b37307ebe3 100644
+--- a/package/gcc/gcc.hash
++++ b/package/gcc/gcc.hash
+@@ -4,8 +4,8 @@ sha512  6de904f552a02de33b11ef52312bb664396efd7e1ce3bbe37bfad5ef617f133095b3767b
+ sha512  dfd3500bf21784b8351a522d53463cf362ede66b0bc302edf350bb44e94418497a8b4b797b6af8ca9b2eeb746b3b115d9c3698381b989546e9151b4496415624  gcc-9.4.0.tar.xz
+ # From ftp://gcc.gnu.org/pub/gcc/releases/gcc-10.3.0/sha512.sum
+ sha512  2b2dd7453d48a398c29eaebd1422b70341001b8c90a62aee51e83344e7fdd8a8e45f82a4a9165bd7edc76dada912c932f4b6632c5636760fec4c5d7e402b3f86  gcc-10.3.0.tar.xz
+-# From ftp://gcc.gnu.org/pub/gcc/releases/gcc-11.1.0/sha512.sum
+-sha512  fd6bba0f67ff48069d03073d1a9b5e896383b1cfc9dde008e868e60a9ec5014a837d56af0ecbf467b3fb9b37ec74a676e819a18b44393a0a3c4280175b5d7ad8  gcc-11.1.0.tar.xz
++# From ftp://gcc.gnu.org/pub/gcc/releases/gcc-11.2.0/sha512.sum
++sha512  d53a0a966230895c54f01aea38696f818817b505f1e2bfa65e508753fcd01b2aedb4a61434f41f3a2ddbbd9f41384b96153c684ded3f0fa97c82758d9de5c7cf  gcc-11.2.0.tar.xz
+ 
+ # Locally calculated (fetched from Github)
+ sha512  b0853e2b1c5998044392023fa653e399e74118c46e616504ac59e1a2cf27620f94434767ce06b6cf4ca3dfb57f81d6eda92752befaf095ea5e564a9181b4659c  gcc-arc-2020.09-release.tar.gz
+-- 
+2.20.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@busybox.net
+http://lists.busybox.net/mailman/listinfo/buildroot
