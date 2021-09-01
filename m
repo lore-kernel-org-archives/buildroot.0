@@ -2,89 +2,91 @@ Return-Path: <SRS0=5uHv=NX=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
+	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A918EC432BE
-	for <buildroot@archiver.kernel.org>; Wed,  1 Sep 2021 10:17:41 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 65894C432BE
+	for <buildroot@archiver.kernel.org>; Wed,  1 Sep 2021 12:48:53 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D95E66101A
-	for <buildroot@archiver.kernel.org>; Wed,  1 Sep 2021 10:17:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D95E66101A
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
+	by mail.kernel.org (Postfix) with ESMTPS id E8D4C60041
+	for <buildroot@archiver.kernel.org>; Wed,  1 Sep 2021 12:48:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E8D4C60041
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AD02482779;
-	Wed,  1 Sep 2021 10:17:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B076F401C5;
+	Wed,  1 Sep 2021 12:48:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2PyoE8QFO_ZM; Wed,  1 Sep 2021 10:17:37 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id BWKGamJhhmmc; Wed,  1 Sep 2021 12:48:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2060982784;
-	Wed,  1 Sep 2021 10:17:36 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 46CC81BF681
- for <buildroot@lists.busybox.net>; Wed,  1 Sep 2021 10:17:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 144AF4018A;
+	Wed,  1 Sep 2021 12:48:48 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id ABB221BF329
+ for <buildroot@lists.busybox.net>; Wed,  1 Sep 2021 12:48:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 36D0782784
- for <buildroot@lists.busybox.net>; Wed,  1 Sep 2021 10:17:34 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9B558400F6
+ for <buildroot@lists.busybox.net>; Wed,  1 Sep 2021 12:48:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id a0d1I4WgS43V for <buildroot@lists.busybox.net>;
- Wed,  1 Sep 2021 10:17:30 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wPiJ2uYHXz8u for <buildroot@lists.busybox.net>;
+ Wed,  1 Sep 2021 12:48:42 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com
- [IPv6:2a00:1450:4864:20::52e])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 39E5982779
- for <buildroot@buildroot.org>; Wed,  1 Sep 2021 10:17:30 +0000 (UTC)
-Received: by mail-ed1-x52e.google.com with SMTP id q3so3038824edt.5
- for <buildroot@buildroot.org>; Wed, 01 Sep 2021 03:17:30 -0700 (PDT)
+Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com
+ [IPv6:2607:f8b0:4864:20::f30])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 67AB04018A
+ for <buildroot@buildroot.org>; Wed,  1 Sep 2021 12:48:42 +0000 (UTC)
+Received: by mail-qv1-xf30.google.com with SMTP id p17so1331518qvo.8
+ for <buildroot@buildroot.org>; Wed, 01 Sep 2021 05:48:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
- h=sender:from:to:subject:date:message-id:user-agent:mime-version;
- bh=ICEL9Pakwh50tiuwfLndI0dDB5wbnitZJ1vqSgdTFaA=;
- b=W0NZ4WjHxPgQwC18PuRWrCK+wI3ARfwcVeJdIcQSE0WWj13dJu/39tk2SW1tdlWZ/8
- fC1Zl2LSzsjqwD0NclKsBgXsFhLTGy+uY/+WMdCWsgQKnnfEd0GJIxc7kjpp3Lma1uj2
- 7YhdguBl4VSYuzRznxaPtCaGJpV0ULTtO8UdRhxG9HDuH6caE2RdkP85LKU2LBL6gS+Y
- DdVsdZIE3+A+Tr5m/ZouXx4kZJ8l/CPWy9pOE+TaYns9OISH4sfCPDOTLqj0lJ7HjbvJ
- pMFv9CTH1gcZ8Jk0PyejR4s/s5vXbW9g+RF3lfF6gGGu78boIHwSoZJ4aApoMWVIEp9V
- vbBw==
+ h=from:to:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=YJMgTPReRbwg+6KSS9UCwyK4hOXK7l3Yz0+eJPF/NQQ=;
+ b=IGPrHd3SjAvgieFXGgEZMxotnbqPB9rNxj3paWadgDWfjNCEe386mlT6EpyIl1pl/j
+ SlP5qo1/2MSn4WDDApEs48P+ir5RfCW9QWq+R5jPeuNZiYoKOSkAiGAfnU7GmRDvpRBc
+ bxfz1ORYhZ4LtSFSUzYW/zIBhgjzyTJD3S+K3qk22wjAbN6ED5k1+ePRGSAWuWOSQT7I
+ CvFPmDE04/Y1BELzaj6nZKZLk0CW0SltG04TQWLqY55F2rdRLqSNu8l4rhbcUUyLTPjo
+ ex/DINj8oEgFs+r/lSLELAgYMyvGyNTz58oZGct31emMUjxU9+z9vXJpGSP3WNpc/H0I
+ 1xpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
- h=x-gm-message-state:sender:from:to:subject:date:message-id
- :user-agent:mime-version;
- bh=ICEL9Pakwh50tiuwfLndI0dDB5wbnitZJ1vqSgdTFaA=;
- b=YxsloRgy4Q2bXRThQF68nTjtxf1krz9KWleURNRJDZJuccZvN1uw0RRq6bUjvkrE02
- pTofqAcfNpHqKiNahFvN2ZsRXzPcFu4zp4yA7Q7raXatveBpb3NHy2uiA3RU8ft2pM49
- gfaCeXozs49rrVpaDHbzNwR4TMxFKT5o9fMH5dwq15gpJdpm6dOu7jdJ87vVzKxnqJGn
- Vse+9004JvUNUlmS+U1QDe5Eh7xSDlUc+Hca0N6quOquGoFsetUkaDqWz2iy4iQbeuce
- rJyF2iMm0+YHpS3HthwgcVJE/HNjWQYvvsoUIfTcXp4r+wYq7U6PFas5qM/7WlzHy4ME
- AODg==
-X-Gm-Message-State: AOAM530zDgyUwB8RWocR7gXnlv29pB02zceSXOA4w5EtbfPO2nlWu+uD
- Ai/n0O6j9WhpOm2KpQ59+VPGCrH3QKc=
-X-Google-Smtp-Source: ABdhPJyKgOvG8PV8WlK1Qznsa1pu7nOT9bTMD2i4ZeAtcVsz/lCqotNxkGNY9DWOrZoFl5GkfKGAnA==
-X-Received: by 2002:aa7:cf82:: with SMTP id z2mr35008675edx.254.1630491448405; 
- Wed, 01 Sep 2021 03:17:28 -0700 (PDT)
-Received: from dell.be.48ers.dk (d51a5bc31.access.telenet.be. [81.165.188.49])
- by smtp.gmail.com with ESMTPSA id
- g9sm9687964ejo.60.2021.09.01.03.17.26 for <buildroot@buildroot.org>
+ h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=YJMgTPReRbwg+6KSS9UCwyK4hOXK7l3Yz0+eJPF/NQQ=;
+ b=ubBJJhpc30iNxUuxpxPJJu8qSqvLAW9p1oscfsSLGqXlzYeNkR2vfFX1ZzI1bCoRxc
+ w0IYZ8zXwJE17t4SiQKwa4bNZUEEJkdzFaR13bf4EkswdQoSNUXej12hsON9+d6MT/0N
+ 6Hj2w8863n4olRf10Ss/FM81SdPO2GExVrYL7Amc83XIMpif/y1p7aM2lUKtbtnnF2MF
+ YMJJkb5Vg6vXmUNGpmckeU+tKMvl9VOqxVzjQ+Ew+hdRscFnLYNuO2LRyLA3CE6F+8JE
+ iJ2GI9fw4qX3viUsq/EYq8PQSOSqMahKlIkTRnV22ogtrrOGMTFM2JPp0QFIhxB3xW5p
+ GFWw==
+X-Gm-Message-State: AOAM530paDcrF97kMfT5Zrad7X66Q9mcrmhYKdq9Ku3+7nGYlG3TIbsv
+ uTYBMv/N6K2YgOmc7gNSBHbRj4w98K0=
+X-Google-Smtp-Source: ABdhPJxFASrcMcXUPKQUoDWEEeiQjReoarcglwujUiixjhUOtVp38u39NNajY4UcSEk4LmT01AIUYg==
+X-Received: by 2002:a05:6214:20eb:: with SMTP id
+ 11mr34504103qvk.52.1630500519650; 
+ Wed, 01 Sep 2021 05:48:39 -0700 (PDT)
+Received: from blazer.lan
+ (bras-base-mtrlpq4718w-grc-09-142-113-8-172.dsl.bell.ca. [142.113.8.172])
+ by smtp.gmail.com with ESMTPSA id s28sm15950721qkm.43.2021.09.01.05.48.38
+ for <buildroot@buildroot.org>
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 01 Sep 2021 03:17:27 -0700 (PDT)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
- (envelope-from <peter@korsgaard.com>) id 1mLNJ7-0003T3-E0
- for buildroot@buildroot.org; Wed, 01 Sep 2021 12:17:25 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
+ Wed, 01 Sep 2021 05:48:38 -0700 (PDT)
+From: Ash Charles <ashcharles@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 01 Sep 2021 12:17:25 +0200
-Message-ID: <87mtowtxai.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+Date: Wed,  1 Sep 2021 08:48:37 -0400
+Message-Id: <20210901124837.201278-1-ashcharles@gmail.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Subject: [Buildroot] Buildroot 2021.08-rc3 released
+Subject: [Buildroot] [PATCH] pru-software-support: bump to latest version
+ 5.8.0
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,55 +103,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-Hi,
+Update to the latest version of the PRU software support [1]. The
+license file remains the same.
 
-Buildroot 2021.08-rc3 is released - Go download it at:
+[1] https://git.ti.com/cgit/pru-software-support-package/pru-software-support-package
 
-http://buildroot.net/downloads/buildroot-2021.08-rc3.tar.gz
+Signed-off-by: Ash Charles <ashcharles@gmail.com>
+---
+ package/pru-software-support/pru-software-support.hash | 2 +-
+ package/pru-software-support/pru-software-support.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-or
-
-http://buildroot.net/downloads/buildroot-2021.08-rc3.tar.bz2
-
-Or get it from Git:
-
-git://git.buildroot.net/buildroot
-
-This should be the last release candidate. Expect the final 2021.08
-release in a few days.
-
-Please give it a spin and report any problems to the mailing list or
-bug tracker. Many thanks to the people contributing to this release:
-
-git shortlog -sn 2021.08-rc2..
-
-    30  Fabrice Fontaine
-    10  Giulio Benetti
-    10  Romain Naour
-     3  Bernd Kuhls
-     3  Thomas Petazzoni
-     3  Yann E. MORIN
-     2  Angelo Compagnucci
-     2  Arnout Vandecappelle (Essensium/Mind)
-     2  Baruch Siach
-     2  Francois Perrad
-     2  Matthew Weber
-     2  Michael Fischer
-     2  Peter Korsgaard
-     1  Conrad Ratschan
-     1  Edgar Bonet
-     1  Eugen Hristev
-     1  Gleb Mazovetskiy
-     1  Jonah Petri
-     1  Michael Nosthoff
-     1  Titouan Christophe
-
-For more details, see the CHANGES file:
-
-http://git.buildroot.net/buildroot/plain/CHANGES?id=2021.08-rc3
-
+diff --git a/package/pru-software-support/pru-software-support.hash b/package/pru-software-support/pru-software-support.hash
+index cd81488e1b..8345c2724e 100644
+--- a/package/pru-software-support/pru-software-support.hash
++++ b/package/pru-software-support/pru-software-support.hash
+@@ -1,3 +1,3 @@
+ # Locally-calculated hash
+-sha256  57e47128dc5437c5a64d4ef94f419d9ea38e894c0c31ab10cad99c0da614b296  pru-software-support-package-v5.7.0.tar.gz
++sha256  e9256533a6901d31cd12b4ca1c1638b795d316a966967783a8d573e75a6f9d77 pru-software-support-package-v5.8.0.tar.gz
+ sha256  62a2f56498cd1bac2d4ea6ea1c941affba1e4bb65bfdf2dcffd8e5079fa34399  PRU-Package-v6.1-Manifest.html
+diff --git a/package/pru-software-support/pru-software-support.mk b/package/pru-software-support/pru-software-support.mk
+index 91f41bcb91..7c1b520290 100644
+--- a/package/pru-software-support/pru-software-support.mk
++++ b/package/pru-software-support/pru-software-support.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PRU_SOFTWARE_SUPPORT_VERSION = 5.7.0
++PRU_SOFTWARE_SUPPORT_VERSION = 5.8.0
+ PRU_SOFTWARE_SUPPORT_SITE = https://git.ti.com/cgit/pru-software-support-package/pru-software-support-package/snapshot
+ PRU_SOFTWARE_SUPPORT_SOURCE = $(PRU_SOFTWARE_SUPPORT_NAME)-package-v$(PRU_SOFTWARE_SUPPORT_VERSION).tar.gz
+ PRU_SOFTWARE_SUPPORT_LICENSE =  BSD-3-Clause, Public Domain
 -- 
-Bye, Peter Korsgaard
+2.26.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
