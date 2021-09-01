@@ -2,91 +2,98 @@ Return-Path: <SRS0=5uHv=NX=busybox.net=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
-	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 65894C432BE
-	for <buildroot@archiver.kernel.org>; Wed,  1 Sep 2021 12:48:53 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A6EB3C432BE
+	for <buildroot@archiver.kernel.org>; Wed,  1 Sep 2021 13:26:39 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id E8D4C60041
-	for <buildroot@archiver.kernel.org>; Wed,  1 Sep 2021 12:48:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E8D4C60041
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id E6C3961026
+	for <buildroot@archiver.kernel.org>; Wed,  1 Sep 2021 13:26:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E6C3961026
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=busybox.net
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B076F401C5;
-	Wed,  1 Sep 2021 12:48:52 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9FAA740286;
+	Wed,  1 Sep 2021 13:26:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BWKGamJhhmmc; Wed,  1 Sep 2021 12:48:49 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id pT5uhUSpRBcs; Wed,  1 Sep 2021 13:26:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 144AF4018A;
-	Wed,  1 Sep 2021 12:48:48 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id ABB221BF329
- for <buildroot@lists.busybox.net>; Wed,  1 Sep 2021 12:48:46 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9CBCE4028B;
+	Wed,  1 Sep 2021 13:26:33 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 6EB021BF3DC
+ for <buildroot@lists.busybox.net>; Wed,  1 Sep 2021 13:26:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9B558400F6
- for <buildroot@lists.busybox.net>; Wed,  1 Sep 2021 12:48:46 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5D8458291D
+ for <buildroot@lists.busybox.net>; Wed,  1 Sep 2021 13:26:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wPiJ2uYHXz8u for <buildroot@lists.busybox.net>;
- Wed,  1 Sep 2021 12:48:42 +0000 (UTC)
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id eHeqhGRh96VV for <buildroot@lists.busybox.net>;
+ Wed,  1 Sep 2021 13:26:28 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com
- [IPv6:2607:f8b0:4864:20::f30])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 67AB04018A
- for <buildroot@buildroot.org>; Wed,  1 Sep 2021 12:48:42 +0000 (UTC)
-Received: by mail-qv1-xf30.google.com with SMTP id p17so1331518qvo.8
- for <buildroot@buildroot.org>; Wed, 01 Sep 2021 05:48:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20161025;
- h=from:to:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=YJMgTPReRbwg+6KSS9UCwyK4hOXK7l3Yz0+eJPF/NQQ=;
- b=IGPrHd3SjAvgieFXGgEZMxotnbqPB9rNxj3paWadgDWfjNCEe386mlT6EpyIl1pl/j
- SlP5qo1/2MSn4WDDApEs48P+ir5RfCW9QWq+R5jPeuNZiYoKOSkAiGAfnU7GmRDvpRBc
- bxfz1ORYhZ4LtSFSUzYW/zIBhgjzyTJD3S+K3qk22wjAbN6ED5k1+ePRGSAWuWOSQT7I
- CvFPmDE04/Y1BELzaj6nZKZLk0CW0SltG04TQWLqY55F2rdRLqSNu8l4rhbcUUyLTPjo
- ex/DINj8oEgFs+r/lSLELAgYMyvGyNTz58oZGct31emMUjxU9+z9vXJpGSP3WNpc/H0I
- 1xpw==
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com
+ [IPv6:2a00:1450:4864:20::630])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0590E81CAF
+ for <buildroot@buildroot.org>; Wed,  1 Sep 2021 13:26:27 +0000 (UTC)
+Received: by mail-ej1-x630.google.com with SMTP id a25so6635428ejv.6
+ for <buildroot@buildroot.org>; Wed, 01 Sep 2021 06:26:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=subject:to:references:from:organization:message-id:date:user-agent
+ :mime-version:in-reply-to:content-language:content-transfer-encoding;
+ bh=Pyr4lG+tQ2piXJOPlQe/5XriyneBKSqJyhukkPhbnlA=;
+ b=DnXr3lhOEpBegHVVOyDsCJ5grk7dV+PuV//hv1LdqSyan85RwamvjCpaHQ3oflxS1F
+ ZWYtwW5QJJja87AJha94JfowiBrjxlxlMlmoDRg6Lcw6281Dwrn5ZprfrOnWYIkgXh91
+ mNZ5VIuGZ91CfAbtln7lep+KgRmLSdL3KIi7srvt9ByxXyzG9A8RMmr5JLd9NnBDMQxw
+ 4D085pGcv9vRut76sg90MnWwSzFpStAEBYWd6VZ4dlNC9fjtac62u0DfNIhSx7qct97g
+ fLiJtbgzGMh9oPNeqyF5vcPGHHWf/7mmAWIz9WdJT9WWgr9TDF0waLttsppOJQIvxTad
+ 3Kxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
- h=x-gm-message-state:from:to:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=YJMgTPReRbwg+6KSS9UCwyK4hOXK7l3Yz0+eJPF/NQQ=;
- b=ubBJJhpc30iNxUuxpxPJJu8qSqvLAW9p1oscfsSLGqXlzYeNkR2vfFX1ZzI1bCoRxc
- w0IYZ8zXwJE17t4SiQKwa4bNZUEEJkdzFaR13bf4EkswdQoSNUXej12hsON9+d6MT/0N
- 6Hj2w8863n4olRf10Ss/FM81SdPO2GExVrYL7Amc83XIMpif/y1p7aM2lUKtbtnnF2MF
- YMJJkb5Vg6vXmUNGpmckeU+tKMvl9VOqxVzjQ+Ew+hdRscFnLYNuO2LRyLA3CE6F+8JE
- iJ2GI9fw4qX3viUsq/EYq8PQSOSqMahKlIkTRnV22ogtrrOGMTFM2JPp0QFIhxB3xW5p
- GFWw==
-X-Gm-Message-State: AOAM530paDcrF97kMfT5Zrad7X66Q9mcrmhYKdq9Ku3+7nGYlG3TIbsv
- uTYBMv/N6K2YgOmc7gNSBHbRj4w98K0=
-X-Google-Smtp-Source: ABdhPJxFASrcMcXUPKQUoDWEEeiQjReoarcglwujUiixjhUOtVp38u39NNajY4UcSEk4LmT01AIUYg==
-X-Received: by 2002:a05:6214:20eb:: with SMTP id
- 11mr34504103qvk.52.1630500519650; 
- Wed, 01 Sep 2021 05:48:39 -0700 (PDT)
-Received: from blazer.lan
- (bras-base-mtrlpq4718w-grc-09-142-113-8-172.dsl.bell.ca. [142.113.8.172])
- by smtp.gmail.com with ESMTPSA id s28sm15950721qkm.43.2021.09.01.05.48.38
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 01 Sep 2021 05:48:38 -0700 (PDT)
-From: Ash Charles <ashcharles@gmail.com>
-To: buildroot@buildroot.org
-Date: Wed,  1 Sep 2021 08:48:37 -0400
-Message-Id: <20210901124837.201278-1-ashcharles@gmail.com>
-X-Mailer: git-send-email 2.26.2
+ h=x-gm-message-state:subject:to:references:from:organization
+ :message-id:date:user-agent:mime-version:in-reply-to
+ :content-language:content-transfer-encoding;
+ bh=Pyr4lG+tQ2piXJOPlQe/5XriyneBKSqJyhukkPhbnlA=;
+ b=gBlGW6el3joSTqob7eT63lyzAf7Bn8fG1tDvaTE21TLROhcrQ31dVCy2oBwlKKihpV
+ VNv+lBMPp4EVksKqWI69hGGHw2G/thl91/HkRmatliIFmXORxAbv0iLscbSaQ/H5iqri
+ yMvfrYsPMGVnCU6S1umFHbEaj7fBUzq8JQUD9sJhP66V9X0o+bATnNUjF/POqDurYbY8
+ NEJsukd5qxEFtXvNsN4UxF2tHv6PjRz8QLkBO9UGfJpTzH5TDaJyfwy33GtkUg/Nv3Cd
+ OMRGtBLRl7e+DRCdqVxEL2hLL1iFQCj+810fiHVjneCqCqPI9JshNcufgoYmc36FGkaU
+ 5HZQ==
+X-Gm-Message-State: AOAM5334couGwFyzpbhXckpBnYL3beNRoiA0/aVovbMSNyI2a1+XSd7M
+ gvPP64I3g6TtLZIlKnQamHDwtKucVCGjUQ==
+X-Google-Smtp-Source: ABdhPJz5P/yCF/Txkffd27koWjqnF6aiNt745dv/UZ7PUTPhTEl35tkhboPOUsDMx5ODg+puSgGBug==
+X-Received: by 2002:a17:907:3f91:: with SMTP id
+ hr17mr36140258ejc.496.1630502786116; 
+ Wed, 01 Sep 2021 06:26:26 -0700 (PDT)
+Received: from ?IPv6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id qq16sm2888138ejb.120.2021.09.01.06.26.25
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 01 Sep 2021 06:26:25 -0700 (PDT)
+To: Krzysztof Kanas <kkanas@fastmail.com>, buildroot@buildroot.org
+References: <20210830201308.143849-1-kkanas@fastmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+Message-ID: <57f575c2-ba73-a1b1-6074-88b772d1207e@mind.be>
+Date: Wed, 1 Sep 2021 15:26:24 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] pru-software-support: bump to latest version
- 5.8.0
+In-Reply-To: <20210830201308.143849-1-kkanas@fastmail.com>
+Content-Language: en-GB
+Subject: Re: [Buildroot] [PATCH 1/1]
+ package/environment-setup/environment-setup: add zsh
 X-BeenThere: buildroot@busybox.net
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,42 +110,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@busybox.net
 Sender: "buildroot" <buildroot-bounces@busybox.net>
 
-Update to the latest version of the PRU software support [1]. The
-license file remains the same.
 
-[1] https://git.ti.com/cgit/pru-software-support-package/pru-software-support-package
 
-Signed-off-by: Ash Charles <ashcharles@gmail.com>
----
- package/pru-software-support/pru-software-support.hash | 2 +-
- package/pru-software-support/pru-software-support.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On 30/08/2021 22:13, Krzysztof Kanas wrote:
+> environment-setup used BASH_SOURCE which is bash specific and empty
+> variable for zsh (and other shell's).
+> Use $0 which should be work across multiple shells(tcsh, dash, zsh)
+> It won't work if other script is sourcing environment-setup.
 
-diff --git a/package/pru-software-support/pru-software-support.hash b/package/pru-software-support/pru-software-support.hash
-index cd81488e1b..8345c2724e 100644
---- a/package/pru-software-support/pru-software-support.hash
-+++ b/package/pru-software-support/pru-software-support.hash
-@@ -1,3 +1,3 @@
- # Locally-calculated hash
--sha256  57e47128dc5437c5a64d4ef94f419d9ea38e894c0c31ab10cad99c0da614b296  pru-software-support-package-v5.7.0.tar.gz
-+sha256  e9256533a6901d31cd12b4ca1c1638b795d316a966967783a8d573e75a6f9d77 pru-software-support-package-v5.8.0.tar.gz
- sha256  62a2f56498cd1bac2d4ea6ea1c941affba1e4bb65bfdf2dcffd8e5079fa34399  PRU-Package-v6.1-Manifest.html
-diff --git a/package/pru-software-support/pru-software-support.mk b/package/pru-software-support/pru-software-support.mk
-index 91f41bcb91..7c1b520290 100644
---- a/package/pru-software-support/pru-software-support.mk
-+++ b/package/pru-software-support/pru-software-support.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PRU_SOFTWARE_SUPPORT_VERSION = 5.7.0
-+PRU_SOFTWARE_SUPPORT_VERSION = 5.8.0
- PRU_SOFTWARE_SUPPORT_SITE = https://git.ti.com/cgit/pru-software-support-package/pru-software-support-package/snapshot
- PRU_SOFTWARE_SUPPORT_SOURCE = $(PRU_SOFTWARE_SUPPORT_NAME)-package-v$(PRU_SOFTWARE_SUPPORT_VERSION).tar.gz
- PRU_SOFTWARE_SUPPORT_LICENSE =  BSD-3-Clause, Public Domain
--- 
-2.26.2
+ The environment-setup is supposed to be source'd, so how is this ever going to
+work?
 
+ I think the only viable solution is to require an argument if shell is not bash.
+
+ Regards,
+ Arnout
+
+> 
+> Signed-off-by: Krzysztof Kanas <kkanas@fastmail.com>
+> ---
+>  package/environment-setup/environment-setup | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/environment-setup/environment-setup b/package/environment-setup/environment-setup
+> index e9bc36fdd093..2b54e88d6689 100644
+> --- a/package/environment-setup/environment-setup
+> +++ b/package/environment-setup/environment-setup
+> @@ -16,4 +16,8 @@ Some tips:
+>  * To build CMake-based projects, use the "cmake" alias
+>  
+>  EOF
+> -SDK_PATH=$(dirname $(realpath "${BASH_SOURCE[0]}"))
+> +if [ x"${BASH_SOURCE}" != x"" ]; then
+> +        SDK_PATH=$(dirname $(realpath "${BASH_SOURCE[0]}"))
+> +else
+> +	SDK_PATH=$(dirname $(realpath $0))
+> +fi
+> 
 _______________________________________________
 buildroot mailing list
 buildroot@busybox.net
