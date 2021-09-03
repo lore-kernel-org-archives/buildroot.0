@@ -1,99 +1,75 @@
-Return-Path: <SRS0=xf8z=NY=lists.buildroot.org=buildroot-bounces@kernel.org>
+Return-Path: <SRS0=/NXK=NZ=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.9 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
-	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,NICE_REPLY_A,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F86DC433EF
-	for <buildroot@archiver.kernel.org>; Thu,  2 Sep 2021 21:47:06 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 429E9C433F5
+	for <buildroot@archiver.kernel.org>; Fri,  3 Sep 2021 00:41:13 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2517B610A0
-	for <buildroot@archiver.kernel.org>; Thu,  2 Sep 2021 21:47:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2517B610A0
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id 9F5CB60FC0
+	for <buildroot@archiver.kernel.org>; Fri,  3 Sep 2021 00:41:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9F5CB60FC0
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=ozlabs.org
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DAC3061548;
-	Thu,  2 Sep 2021 21:47:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 69E0642605;
+	Fri,  3 Sep 2021 00:41:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ntj1X1EzoIoC; Thu,  2 Sep 2021 21:47:04 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id CVPvIeBwpCbD; Fri,  3 Sep 2021 00:41:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 59B5B6153B;
-	Thu,  2 Sep 2021 21:47:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B9BD6425F7;
+	Fri,  3 Sep 2021 00:41:10 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C4A0F1BF5DC
- for <buildroot@lists.busybox.net>; Thu,  2 Sep 2021 21:47:01 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6E1A41C113E
+ for <buildroot@lists.busybox.net>; Fri,  3 Sep 2021 00:41:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B454980F22
- for <buildroot@lists.busybox.net>; Thu,  2 Sep 2021 21:47:01 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5DBF4835C9
+ for <buildroot@lists.busybox.net>; Fri,  3 Sep 2021 00:41:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
+ dkim=pass (2048-bit key) header.d=ozlabs.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mPjeLhcKbztO for <buildroot@lists.busybox.net>;
- Thu,  2 Sep 2021 21:47:00 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
- [IPv6:2a00:1450:4864:20::42a])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6B53680E8F
- for <buildroot@buildroot.org>; Thu,  2 Sep 2021 21:46:59 +0000 (UTC)
-Received: by mail-wr1-x42a.google.com with SMTP id b10so5234165wru.0
- for <buildroot@buildroot.org>; Thu, 02 Sep 2021 14:46:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=subject:to:references:from:message-id:date:user-agent:mime-version
- :in-reply-to:content-language:content-transfer-encoding;
- bh=qtbynEQ4zmsVbF+V67xgLxQ50aiSLqibgwAvuxUP5Oc=;
- b=K/99oOWTkloLDRvYMmWQga6nWNYGePO+jii2lUQ1Z8O9WF8+eb6BXP9YJuzICNREeu
- 2JsFYNmr9h9Z/GqaMv0ptBXCRe8ifAJQFdJLgcC726k/nSFvlyEGuRXrk62VhhFlqfve
- +hMIVLKcIO2Ql4sexHsCC+yqdgyhTIrVE1amli07Oi5rCyn3OmtO5wdWVHe0o0fuYJ3K
- j+sHLtmOYiaRYQgCoJ1yC1lJpkEtPnYJaY0EP8bES1aY1miCvqC4x88CJdUNoIKILy0D
- RgTWoKOsRre2UzFBt91J7+W7eOrYPqPMsYC10Gd6ryxbzwj78zWxrCMD7GS7yT8UeBUW
- qzxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:subject:to:references:from:message-id:date
- :user-agent:mime-version:in-reply-to:content-language
- :content-transfer-encoding;
- bh=qtbynEQ4zmsVbF+V67xgLxQ50aiSLqibgwAvuxUP5Oc=;
- b=rY13mYMNdvJyICY2sCDcRM8L/cLd5WLqRL4NiQG+31ZKcY313R65dBPrQHr7Tq/cQs
- mHwvsxJxcNokVIT6PUvDTO4+0645ae2MBijQ8HUFGQBkFXChxPpQCAPRv0DS5Gpfj5tK
- bxDPVZP6lB5+/TS3VJZlQFNIkjDb7WKKzI0lkaw0PpovlCz+IiuLMgEXInlA6to95DF9
- jp2sgd88qDAw1NiCjoYOub3GAX+PPxyfLx0paXszM1ZnHE4cIGSElc9P0tf4+NxeEI2R
- MiAXbexluRaCgF8aTYIINdp6p2ImGmvA7YnF46s3vJo1tBqCr3tbPIA8RzJdi1zL+2LM
- iPgA==
-X-Gm-Message-State: AOAM53398wqM69Kd1qQDfveFAZjytxdK2NsGCfa0d0N3wFApeEbVRJBe
- msvrV/+79ASLIKDdma3wwD1fs5GcNjc=
-X-Google-Smtp-Source: ABdhPJzNCJwMHRk+dVPgvCXljYp0GLC+yzgNjl9ENMC7FiNBvzFGL153FoGq2GGyg7iGuOrqxr2+Dg==
-X-Received: by 2002:adf:e78d:: with SMTP id n13mr349454wrm.55.1630619218154;
- Thu, 02 Sep 2021 14:46:58 -0700 (PDT)
-Received: from ?IPv6:2a01:cb05:8f8a:1800:9881:4a9a:ef63:7f91?
- (2a01cb058f8a180098814a9aef637f91.ipv6.abo.wanadoo.fr.
- [2a01:cb05:8f8a:1800:9881:4a9a:ef63:7f91])
- by smtp.gmail.com with ESMTPSA id u25sm2657783wmj.10.2021.09.02.14.46.57
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Thu, 02 Sep 2021 14:46:57 -0700 (PDT)
-To: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>,
- buildroot@buildroot.org
-References: <20170507200503.01FB7827D5@busybox.osuosl.org>
-From: Romain Naour <romain.naour@gmail.com>
-Message-ID: <6d167577-7440-96ed-0de0-2fd68995c450@gmail.com>
-Date: Thu, 2 Sep 2021 23:46:56 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+ with ESMTP id Oi1FG2yl9ihp for <buildroot@lists.busybox.net>;
+ Fri,  3 Sep 2021 00:41:07 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from ozlabs.org (bilbo.ozlabs.org [203.11.71.1])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 41D52835C8
+ for <buildroot@busybox.net>; Fri,  3 Sep 2021 00:41:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ozlabs.org;
+ s=201707; t=1630629663;
+ bh=mchNLYs+tD4witejbzPNOa4FnKuWUjN6HODMhKZDtOk=;
+ h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+ b=a0+idTS+kCnMfW7xpA+gL/ZS1T9PQrGmuzoUebtefieKcTzpEI7N3xXHRWfol00M8
+ 3+MOWR8R253YyDLvJivcKlJgqDODB5H7V/EVT17IUJjlqENveUjn4YB/duI+dl8/nY
+ 5rP0ee3Yxwyeu4nxhJoWFSco1couEttv207oQvTvYf6VMkWxmLVMMuhoO0D7ZrJgD/
+ 6nJwZ2deP6fKSEsaV8UUOy5X+fd36g7psw5PEfTEeQ5STyQjv4RsDEkKqUxxguvUQk
+ MmxmwTAWDxa+Tg9+1IFwoErkNqvUVXRv7Ku1PGFSd+i1RFxHqZLdMhYJkwxx82crTv
+ cO3562fFkfINQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest
+ SHA256) (No client certificate requested)
+ by mail.ozlabs.org (Postfix) with ESMTPSA id 4H0zVk55WTz9sSn;
+ Fri,  3 Sep 2021 10:41:01 +1000 (AEST)
+Message-ID: <e65b04b32ae2d249310cdd85647e2a69321f8275.camel@ozlabs.org>
+From: Jeremy Kerr <jk@ozlabs.org>
+To: Stephen Rothwell <sfr@canb.auug.org.au>, buildroot@busybox.net
+Date: Fri, 03 Sep 2021 08:40:58 +0800
+In-Reply-To: <20210903092217.7f02055a@canb.auug.org.au>
+References: <YS/GToWU8Wx8XOR6@pevik>
+ <CACPK8XcMS1nW446xL--CLShQTZA0opSNE4Yr_cnY1Ayh3vYe=A@mail.gmail.com>
+ <20210903092217.7f02055a@canb.auug.org.au>
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
-In-Reply-To: <20170507200503.01FB7827D5@busybox.osuosl.org>
-Content-Language: en-US
-Subject: Re: [Buildroot] [git commit] support/testing: add fs tests
+Subject: Re: [Buildroot] What's wrong with patchwork
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -106,113 +82,53 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Joel Stanley <joel@jms.id.au>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-SGVsbG8gVGhvbWFzLCBBbGwsCgpMZSAwNy8wNS8yMDE3IMOgIDIyOjA0LCBUaG9tYXMgUGV0YXp6
-b25pIGEgw6ljcml0wqA6Cj4gY29tbWl0OiBodHRwczovL2dpdC5idWlsZHJvb3QubmV0L2J1aWxk
-cm9vdC9jb21taXQvP2lkPWJmNGE2NDkwZTRlZTcwZjBhNDZlNTg4NjAyOTk1YmEzNGU2Yzg3MmEK
-PiBicmFuY2g6IGh0dHBzOi8vZ2l0LmJ1aWxkcm9vdC5uZXQvYnVpbGRyb290L2NvbW1pdC8/aWQ9
-cmVmcy9oZWFkcy9tYXN0ZXIKPiAKPiBUaGlzIGNvbW1pdCBhZGRzIGEgbnVtYmVyIG9mIHRlc3Qg
-Y2FzZXMgZm9yIHZhcmlvdXMgZmlsZXN5c3RlbSBmb3JtYXRzOgo+IGV4dDIvMy80LCBpc285NjYw
-LCBqZmZzMiwgc3F1YXNoZnMsIHViaS91YmlmcyBhbmQgeWFmZnMyLiBBbGwgb2YgdGhlbQo+IGV4
-Y2VwdCB5YWZmczIgYXJlIHJ1bnRpbWUgdGVzdGVkLiBUaGUgaXNvOTY2MCBzZXQgb2YgdGVzdCBj
-YXNlcyBpcwo+IHBhcnRpY3VsYXJseSByaWNoLCB0ZXN0aW5nIHRoZSBwcm9wZXIgb3BlcmF0aW9u
-IG9mIHRoZSBpc285NjYwIHN1cHBvcnQKPiB3aXRoIGFsbCBvZiBncnViLCBncnViMiBhbmQgaXNv
-bGludXguCj4gCj4gU2lnbmVkLW9mZi1ieTogVGhvbWFzIFBldGF6em9uaSA8dGhvbWFzLnBldGF6
-em9uaUBmcmVlLWVsZWN0cm9ucy5jb20+Cj4gLS0tCj4gIHN1cHBvcnQvdGVzdGluZy9jb25mL2dy
-dWItbWVudS5sc3QgICAgICAgICAgICAgICAgIHwgIDIwICsrKwo+ICBzdXBwb3J0L3Rlc3Rpbmcv
-Y29uZi9ncnViMi5jZmcgICAgICAgICAgICAgICAgICAgICB8ICAgNyArCj4gIHN1cHBvcnQvdGVz
-dGluZy9jb25mL2lzb2xpbnV4LmNmZyAgICAgICAgICAgICAgICAgIHwgICA1ICsKPiAgLi4uL3Rl
-c3RpbmcvY29uZi9taW5pbWFsLXg4Ni1xZW11LWtlcm5lbC5jb25maWcgICAgfCAgMjMgKysrCj4g
-IHN1cHBvcnQvdGVzdGluZy90ZXN0cy9mcy9fX2luaXRfXy5weSAgICAgICAgICAgICAgIHwgICAw
-Cj4gIHN1cHBvcnQvdGVzdGluZy90ZXN0cy9mcy90ZXN0X2V4dC5weSAgICAgICAgICAgICAgIHwg
-MTE5ICsrKysrKysrKysrKysrKwo+ICBzdXBwb3J0L3Rlc3RpbmcvdGVzdHMvZnMvdGVzdF9pc285
-NjYwLnB5ICAgICAgICAgICB8IDE2MiArKysrKysrKysrKysrKysrKysrKysKPiAgc3VwcG9ydC90
-ZXN0aW5nL3Rlc3RzL2ZzL3Rlc3RfamZmczIucHkgICAgICAgICAgICAgfCAgNDUgKysrKysrCj4g
-IHN1cHBvcnQvdGVzdGluZy90ZXN0cy9mcy90ZXN0X3NxdWFzaGZzLnB5ICAgICAgICAgIHwgIDM3
-ICsrKysrCj4gIHN1cHBvcnQvdGVzdGluZy90ZXN0cy9mcy90ZXN0X3ViaS5weSAgICAgICAgICAg
-ICAgIHwgIDM5ICsrKysrCj4gIHN1cHBvcnQvdGVzdGluZy90ZXN0cy9mcy90ZXN0X3lhZmZzMi5w
-eSAgICAgICAgICAgIHwgIDEyICsrCj4gIDExIGZpbGVzIGNoYW5nZWQsIDQ2OSBpbnNlcnRpb25z
-KCspCj4gCgpbLi4uXQoKPiBkaWZmIC0tZ2l0IGEvc3VwcG9ydC90ZXN0aW5nL3Rlc3RzL2ZzL3Rl
-c3RfdWJpLnB5IGIvc3VwcG9ydC90ZXN0aW5nL3Rlc3RzL2ZzL3Rlc3RfdWJpLnB5Cj4gbmV3IGZp
-bGUgbW9kZSAxMDA2NDQKPiBpbmRleCAwMDAwMDAwLi5lZGU0OTk5Cj4gLS0tIC9kZXYvbnVsbAo+
-ICsrKyBiL3N1cHBvcnQvdGVzdGluZy90ZXN0cy9mcy90ZXN0X3ViaS5weQo+IEBAIC0wLDAgKzEs
-MzkgQEAKPiAraW1wb3J0IHN1YnByb2Nlc3MKPiAraW1wb3J0IG9zCj4gKwo+ICtpbXBvcnQgaW5m
-cmEuYmFzZXRlc3QKPiArCj4gK2NsYXNzIFRlc3RVYmkoaW5mcmEuYmFzZXRlc3QuQlJUZXN0KToK
-PiArICAgIGNvbmZpZyA9IGluZnJhLmJhc2V0ZXN0LkJBU0lDX1RPT0xDSEFJTl9DT05GSUcgKyBc
-Cj4gKyIiIgo+ICtCUjJfVEFSR0VUX1JPT1RGU19VQklGUz15Cj4gK0JSMl9UQVJHRVRfUk9PVEZT
-X1VCSUZTX0xFQlNJWkU9MHg3ZmY4MAo+ICtCUjJfVEFSR0VUX1JPT1RGU19VQklGU19NSU5JT1NJ
-WkU9MHgxCj4gK0JSMl9UQVJHRVRfUk9PVEZTX1VCST15Cj4gK0JSMl9UQVJHRVRfUk9PVEZTX1VC
-SV9QRUJTSVpFPTB4ODAwMDAKPiArQlIyX1RBUkdFVF9ST09URlNfVUJJX1NVQlNJWkU9MQoKV2h5
-IHRoZSBkZWZhdWx0IHZhbHVlIHByb3ZpZGVkIGJ5IEJ1aWxkcm9vdCAoS2NvbmZpZykgYXJlIG5v
-dCB1c2VkIGhlcmUgPwoKPiArIiIiCj4gKwo+ICsgICAgIyBUT0RPOiBpZiB5b3UgYm9vdCBRZW11
-IHR3aWNlIG9uIHRoZSBzYW1lIFVCSSBpbWFnZSwgaXQgZmFpbHMgdG8KPiArICAgICMgYXR0YWNo
-IHRoZSBpbWFnZSB0aGUgc2Vjb25kIHRpbWUsIHdpdGggInViaTAgZXJyb3I6Cj4gKyAgICAjIHVi
-aV9yZWFkX3ZvbHVtZV90YWJsZTogdGhlIGxheW91dCB2b2x1bWUgd2FzIG5vdCBmb3VuZCIuCj4g
-KyAgICAjIFRvIGJlIGludmVzdGlnYXRlZC4KPiArICAgIGRlZiB0ZXN0X3J1bihzZWxmKToKPiAr
-ICAgICAgICBpbWcgPSBvcy5wYXRoLmpvaW4oc2VsZi5idWlsZGRpciwgImltYWdlcyIsICJyb290
-ZnMudWJpIikKPiArICAgICAgICBvdXQgPSBzdWJwcm9jZXNzLmNoZWNrX291dHB1dChbImZpbGUi
-LCBpbWddLAo+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGN3ZD1zZWxm
-LmJ1aWxkZGlyLAo+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGVudj17
-IkxBTkciOiAiQyJ9KQo+ICsgICAgICAgIG91dCA9IG91dC5zcGxpdGxpbmVzKCkKPiArCj4gKyAg
-ICAgICAgc3VicHJvY2Vzcy5jYWxsKFsidHJ1bmNhdGUiLCAiLXMgMTI4TSIsIGltZ10pCgpTaW5j
-ZSBRZW11IDQuMCwgdGhpcyB0ZXN0IGRvZXNuJ3Qgd29yayBhbnltb3JlIGR1ZSB0byBhIG5ldyBj
-aGVjayBiZXR3ZWVuIHRoZQpiYWNrZW5kIGFuZCBkZXZpY2Ugc2l6ZToKCmh0dHBzOi8vZ2l0LnFl
-bXUub3JnLz9wPXFlbXUuZ2l0O2E9Y29tbWl0O2g9MDZmMTUyMTc5NTIwNzM1OWEzOTU5OTZjMjUz
-YzMwNmY0YWI3NTg2ZQoKU2VlOiBodHRwczovL2dpdGxhYi5jb20va3VidTkzL2J1aWxkcm9vdC8t
-L2pvYnMvMTU0MzEwMDkzMgoKVGhlIHBmbGFzaCBkZXZpY2UgcHJvdmlkZWQgYnkgUWVtdSBmb3Ig
-QVJNIHZleHByZXNzLWE5IHRhcmdldCBpcyA2NE0gWzFdIGJ1dCB0aGUKQVJNIHZleHByZXNzIGRl
-dmljZXRyZWUgZGVzY3JpYmUgYSAxMjhNIGZsYXNoIGRldmljZSBbMl0KClRoZSBzaXplIG9mIHJv
-b3Rmcy51YmkgaW1hZ2UgaXMgcmVkdWNlZCB0byA2NE0gdG8gYWxsb3cgYm9vdGluZyBRZW11LgoK
-ZG1lc2c6CnBoeXNtYXAtZmxhc2ggNDAwMDAwMDAuZmxhc2g6IHBoeXNtYXAgcGxhdGZvcm0gZmxh
-c2ggZGV2aWNlOiBbbWVtCjB4NDAwMDAwMDAtMHg0M2ZmZmZmZl0KNDAwMDAwMDAuZmxhc2g6IEZv
-dW5kIDIgeDE2IGRldmljZXMgYXQgMHgwIGluIDMyLWJpdCBiYW5rLiBNYW51ZmFjdHVyZXIgSUQK
-MHgwMDAwMDAgQ2hpcCBJRCAweDAwMDAwMApJbnRlbC9TaGFycCBFeHRlbmRlZCBRdWVyeSBUYWJs
-ZSBhdCAweDAwMzEKVXNpbmcgYnVmZmVyIHdyaXRlIG1ldGhvZApwaHlzbWFwLWZsYXNoIDQwMDAw
-MDAwLmZsYXNoOiBwaHlzbWFwIHBsYXRmb3JtIGZsYXNoIGRldmljZTogW21lbQoweDQ0MDAwMDAw
-LTB4NDdmZmZmZmZdCjQwMDAwMDAwLmZsYXNoOiBGb3VuZCAyIHgxNiBkZXZpY2VzIGF0IDB4MCBp
-biAzMi1iaXQgYmFuay4gTWFudWZhY3R1cmVyIElECjB4MDAwMDAwIENoaXAgSUQgMHgwMDAwMDAK
-SW50ZWwvU2hhcnAgRXh0ZW5kZWQgUXVlcnkgVGFibGUgYXQgMHgwMDMxClVzaW5nIGJ1ZmZlciB3
-cml0ZSBtZXRob2QKQ29uY2F0ZW5hdGluZyBNVEQgZGV2aWNlczoKKDApOiAiNDAwMDAwMDAuZmxh
-c2giCigxKTogIjQwMDAwMDAwLmZsYXNoIgppbnRvIGRldmljZSAiNDAwMDAwMDAuZmxhc2giCnBo
-eXNtYXAtZmxhc2ggNDgwMDAwMDAucHNyYW06IHBoeXNtYXAgcGxhdGZvcm0gZmxhc2ggZGV2aWNl
-OiBbbWVtCjB4NDgwMDAwMDAtMHg0OWZmZmZmZl0KClsuLi5dCgp1YmkwOiBhdHRhY2hpbmcgbXRk
-MAp1YmkwOiBzY2FubmluZyBpcyBmaW5pc2hlZAp1YmkwOiBhdHRhY2hlZCBtdGQwIChuYW1lICI0
-MDAwMDAwMC5mbGFzaCIsIHNpemUgMTI4IE1pQikKdWJpMDogUEVCIHNpemU6IDI2MjE0NCBieXRl
-cyAoMjU2IEtpQiksIExFQiBzaXplOiAyNjIwMTYgYnl0ZXMKdWJpMDogbWluLi9tYXguIEkvTyB1
-bml0IHNpemVzOiAxLzQwOTYsIHN1Yi1wYWdlIHNpemUgMQp1YmkwOiBWSUQgaGVhZGVyIG9mZnNl
-dDogNjQgKGFsaWduZWQgNjQpLCBkYXRhIG9mZnNldDogMTI4CnViaTA6IGdvb2QgUEVCczogNTEy
-LCBiYWQgUEVCczogMCwgY29ycnVwdGVkIFBFQnM6IDAKdWJpMDogdXNlciB2b2x1bWU6IDEsIGlu
-dGVybmFsIHZvbHVtZXM6IDEsIG1heC4gdm9sdW1lcyBjb3VudDogMTI4CnViaTA6IG1heC9tZWFu
-IGVyYXNlIGNvdW50ZXI6IDEvMCwgV0wgdGhyZXNob2xkOiA0MDk2LCBpbWFnZSBzZXF1ZW5jZSBu
-dW1iZXI6CjI1MTEzNTI2Mgp1YmkwOiBhdmFpbGFibGUgUEVCczogNDkyLCB0b3RhbCByZXNlcnZl
-ZCBQRUJzOiAyMCwgUEVCcyByZXNlcnZlZCBmb3IgYmFkIFBFQgpoYW5kbGluZzogMAoKWy4uLl0K
-CkJ1dCBmb3Igc29tZSByZWFzb24sIHRoZSBmaWxlc3lzdGVtIGNhbid0IGJlIG1vdW50ZWQuLi4K
-Ckxpc3Qgb2YgYWxsIHBhcnRpdGlvbnM6CjFmMDAgICAgICAgICAgMTMxMDcyIG10ZGJsb2NrMAog
-KGRyaXZlcj8pCjFmMDEgICAgICAgICAgIDMyNzY4IG10ZGJsb2NrMQogKGRyaXZlcj8pCk5vIGZp
-bGVzeXN0ZW0gY291bGQgbW91bnQgcm9vdCwgdHJpZWQ6CiB1YmlmcwoKS2VybmVsIHBhbmljIC0g
-bm90IHN5bmNpbmc6IFZGUzogVW5hYmxlIHRvIG1vdW50IHJvb3QgZnMgb24gdW5rbm93bi1ibG9j
-aygwLDApCgpbMV0KaHR0cHM6Ly9naXQucWVtdS5vcmcvP3A9cWVtdS5naXQ7YT1ibG9iO2Y9aHcv
-YXJtL3ZleHByZXNzLmM7aD01ODQ4MWMwNzYyOWFlZGIwOTg2NGRjYzcyNzU3ZmY3OTQ3ZTczM2Ji
-O2hiPUhFQUQjbDUwCgpbMl0KaHR0cHM6Ly9naXQua2VybmVsLm9yZy9wdWIvc2NtL2xpbnV4L2tl
-cm5lbC9naXQvc3RhYmxlL2xpbnV4LmdpdC90cmVlL2FyY2gvYXJtL2Jvb3QvZHRzL3ZleHByZXNz
-LXYybS5kdHNpP2g9djUuMTQjbjMzCgpUaGUgaXNzdWUgd2FzIG5vdCBkZXRlY3RlZCB1bnRpbCBu
-b3cgc2luY2Ugd2UgYXJlIHNpbGwgdXNpbmcgYW4gb2xkIHFlbXUgKDIuOCkKZm9yIHRlc3Rpbmcg
-aW4gZ2l0bGFiICh1c2luZyB0aGUgQnVpbGRyb290IERvY2tlciBpbWFnZSB1c2VkIGJ5IGdpdGxh
-Yi1jaS55bWwpLgoKQW55IGlkZWEgPwoKQmVzdCByZWdhcmRzLApSb21haW4KCgo+ICsKPiArICAg
-ICAgICBzZWxmLmVtdWxhdG9yLmJvb3QoYXJjaD0iYXJtdjciLAo+ICsgICAgICAgICAgICAgICAg
-ICAgICAgICAgICBrZXJuZWw9ImJ1aWx0aW4iLAo+ICsgICAgICAgICAgICAgICAgICAgICAgICAg
-ICBrZXJuZWxfY21kbGluZT1bInJvb3Q9dWJpMDpyb290ZnMiLAo+ICsgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgInViaS5tdGQ9MCIsCj4gKyAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAicm9vdGZzdHlwZT11YmlmcyJdLAo+ICsgICAg
-ICAgICAgICAgICAgICAgICAgICAgICBvcHRpb25zPVsiLWRyaXZlIiwgImZpbGU9e30saWY9cGZs
-YXNoIi5mb3JtYXQoaW1nKV0pCj4gKyAgICAgICAgc2VsZi5lbXVsYXRvci5sb2dpbigpCj4gKyAg
-ICAgICAgY21kID0gIm1vdW50IHwgZ3JlcCAndWJpMDpyb290ZnMgb24gLyB0eXBlIHViaWZzJyIK
-PiArICAgICAgICBfLCBleGl0X2NvZGUgPSBzZWxmLmVtdWxhdG9yLnJ1bihjbWQpCj4gKyAgICAg
-ICAgc2VsZi5hc3NlcnRFcXVhbChleGl0X2NvZGUsIDApCl9fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290
-QGxpc3RzLmJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4v
-bGlzdGluZm8vYnVpbGRyb290Cg==
+Hi all,
+
+> > ---------- Forwarded message ---------
+> > From: Petr Vorel <petr.vorel@gmail.com>
+> > Date: Fri, 3 Sep 2021, 07:26
+> > Subject: [Buildroot] What's wrong with patchwork
+> > To: <buildroot@buildroot.org>
+> > 
+> > 
+> > Hi all,
+> > 
+> > what's wrong with patchwork? It does not show new patches, nor
+> > replies to
+> > patches. I checked my reply and patches are on mailing list.
+> > 
+> > I also checked to reply to another project (LTP) in
+> > patchwork.ozlabs.org,
+> > thus it looks to be buildroot specific.
+
+Looking through the mail logs, I see there seems to be a period of time
+where no messages were received by the patchwork feed (for buildroot),
+at the SMTP level. Message counts by day:
+
+  2021-08-31: 37
+  2021-09-01: 44
+  2021-09-02: 14
+  2021-09-03: 0
+  04 - now  : 51
+
+Stephen, I assume all has been OK with the SMTP server? Buildroot folks,
+has anything happened with delivery through the list?
+
+It might be something on the actual patchwork side, but I'd like to
+check that the email feed is OK first.
+
+Cheers,
+
+
+Jeremy
+
+_______________________________________________
+buildroot mailing list
+buildroot@lists.buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
