@@ -8,86 +8,86 @@ X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 885DCC433EF
-	for <buildroot@archiver.kernel.org>; Fri,  3 Sep 2021 16:21:24 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 69603C4332F
+	for <buildroot@archiver.kernel.org>; Fri,  3 Sep 2021 16:21:36 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 25C6260E77
-	for <buildroot@archiver.kernel.org>; Fri,  3 Sep 2021 16:21:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 25C6260E77
+	by mail.kernel.org (Postfix) with ESMTPS id 30ED460F12
+	for <buildroot@archiver.kernel.org>; Fri,  3 Sep 2021 16:21:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 30ED460F12
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 044D361542;
-	Fri,  3 Sep 2021 16:21:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 076AD426C7;
+	Fri,  3 Sep 2021 16:21:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UIROrgQuu31t; Fri,  3 Sep 2021 16:21:23 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id cxBezaEMnAcY; Fri,  3 Sep 2021 16:21:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5ABE06070C;
-	Fri,  3 Sep 2021 16:21:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 609CC426C1;
+	Fri,  3 Sep 2021 16:21:34 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5DA8B1BF327
- for <buildroot@lists.busybox.net>; Fri,  3 Sep 2021 16:20:40 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4651D1BF327
+ for <buildroot@lists.busybox.net>; Fri,  3 Sep 2021 16:20:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A512080DAA
- for <buildroot@lists.busybox.net>; Fri,  3 Sep 2021 16:20:39 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 362A480D96
+ for <buildroot@lists.busybox.net>; Fri,  3 Sep 2021 16:20:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RYGHzV9xYUUn for <buildroot@lists.busybox.net>;
- Fri,  3 Sep 2021 16:20:39 +0000 (UTC)
+ with ESMTP id OhyKwQHdUzbO for <buildroot@lists.busybox.net>;
+ Fri,  3 Sep 2021 16:20:40 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com
- [IPv6:2607:f8b0:4864:20::52b])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 33FD380D88
- for <buildroot@buildroot.org>; Fri,  3 Sep 2021 16:20:39 +0000 (UTC)
-Received: by mail-pg1-x52b.google.com with SMTP id w7so5983491pgk.13
- for <buildroot@buildroot.org>; Fri, 03 Sep 2021 09:20:39 -0700 (PDT)
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com
+ [IPv6:2607:f8b0:4864:20::42e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id BAA8E80D88
+ for <buildroot@buildroot.org>; Fri,  3 Sep 2021 16:20:40 +0000 (UTC)
+Received: by mail-pf1-x42e.google.com with SMTP id u6so4690033pfi.0
+ for <buildroot@buildroot.org>; Fri, 03 Sep 2021 09:20:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=op4V2cIud4vxDZYwjxkdI3wWu0mwsvsjQhpYuAKxXAE=;
- b=o07GSj11159R4y41GHo4cjxAsAD5XWpCKg7B/Y0R1jkOTiYt9Hadl4YEx5SSi/ifdG
- /+mEVUQ7f+JkeO5Zpea0ye8J+627GdRkw7INRog8gARASL9dMoPzCm4vAdRQ08q9FxJ2
- ghC0uKym9iVtPE01CSxv71KNxo9v0aZ5oNI0pqWHfQbYWme9CKcpku4s+cW17TkHhd1I
- wx8nyjDyNkbBFXJOOpL54IcP2bYz7LoHWcrYsYFhKl9nMr9R0PlicyijN8S3TElRC1Zl
- U7f9lauqQe7elvrHxmOmc5h3YRnN1rVBJFrwe3xnHFSpZ13+edXl38dTFeTj0X771Ziv
- wFPA==
+ bh=Vkvo0uHKR3O8C8Y6KX+ZyU7wcwPniSvzSFj8twsBlnQ=;
+ b=OWXEkgwMFIj5MBcPi8j2ahf/BIx1mLdWwZQupfjpRVbPH4QqE8yFUOPSfmQhpiw9MB
+ acnmgJRww0BlkdGHmKfaDNNTZqQyKE8uypSx6lhwtyz+f7jmbhvEQ+Epgjhj+CTITqHY
+ JJB8dXZFNTsclSBStM1P2RIRHN0W2GUJhOvtgK8adM6duDvdpnHPDndCzYmT8G6iESYb
+ g9Ec4ZIkeiRwO2Fp9jNyR7Bkps63/9LCCtZEdkAL+6vMQQKHEaZGgDy/0oF10o0sQhbx
+ 25wd2ucG6fbhFPx+QzK7nM5KdaaG6wkuigrAfWalqQwlVurhJfC/rpds3V/2QUu0j6SV
+ cpUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
  :references:mime-version:content-transfer-encoding;
- bh=op4V2cIud4vxDZYwjxkdI3wWu0mwsvsjQhpYuAKxXAE=;
- b=BRG9tc2lDL9JjB5ZjnGMJxseHkm+v/1irok5nNyjNS/bqHhcEZR69/lAXgUUEZ99cg
- i37hmBCKdYB7av6hbquboyXAwlrvqvZ8DzcG9xZnEhODldXZwAWFZ2ANnLrZsAA87D4N
- T1U/Iuxk9TDpkCACEjGyXzLYt5kU+ihP+uN64BEEoeCCfFy51ClDXpMgNPbIcLNrQih7
- iKW/0JKmDHmKbtH/VReZv3yJSA68Gi4JpxqQUr4JzL7gS7qL19wKz2p6Gk2IsSqIv0rb
- X1u7hv8pxApCAHkseVG2429LC+7NNSU1pH2GTVugy8SJYSO8AX+kovrKjDJnz7FbdhCI
- kOZw==
-X-Gm-Message-State: AOAM533YrcfMAba2H9JTeDGB2gffB/ZGQa8LOW5fQuLUPuxiHCLrukpZ
- ShHh/sYZCSQTcVWQvMxEVX7iGj8yDSe73g==
-X-Google-Smtp-Source: ABdhPJzQUXLIOnFlwUnmkPayrJDmpIQkRjlD/K/NURGdaaG/3+P/e8qK1Kc6z9EF/IdpkcPopUcOKQ==
-X-Received: by 2002:a63:cc01:: with SMTP id x1mr4311100pgf.304.1630686038528; 
- Fri, 03 Sep 2021 09:20:38 -0700 (PDT)
+ bh=Vkvo0uHKR3O8C8Y6KX+ZyU7wcwPniSvzSFj8twsBlnQ=;
+ b=mojlFcK3VpvhG8LtHDJI4Mu4Mf6xX5XEF8S8LtEKGHYUbApHYkFKnePPRg63m+qu0Y
+ EVGg/k72kXHBSLGNoWci/n3ImO91g6A/TNzeE89kVdf6L2mbux+ZpLZCqBL70f3p9Op5
+ Z7WG1noDY4XfCFH1s9OaKbcTpaA0nwQmfINGSoPSnwADt2ByWkCzHItbqaoM6faUedaQ
+ 38ySQz8eVztwveji+PLIvy6VRufBazUOIr3oggjsG9+l5MZj4OcuI7s7x9tZJTjWzzJm
+ C+NrjNs0poHCUSiiinv9B768zFMCMS2W5NLibYyRlPOKbepptO5qv2j5sVS6rI8nM38Q
+ XArg==
+X-Gm-Message-State: AOAM531dbqcAf/lGzuBDBDS4hOgPHy+t3dPZ6Ho/da7+Gu+KSAdWwnRL
+ m43UjrL2IzqIa6deX2YZnpHOQgVGe8NAsg==
+X-Google-Smtp-Source: ABdhPJy+qNPSQr/T23criTQDYsKC/WpblFzuTcLZ0jV+o9gjHh7yaIJU5oMTS0lJsxgJ5bLBhwqIUw==
+X-Received: by 2002:a63:fe41:: with SMTP id x1mr4219758pgj.272.1630686039286; 
+ Fri, 03 Sep 2021 09:20:39 -0700 (PDT)
 Received: from adam.rai.com ([47.149.13.137])
- by smtp.gmail.com with ESMTPSA id q7sm5586184pja.11.2021.09.03.09.20.37
+ by smtp.gmail.com with ESMTPSA id q7sm5586184pja.11.2021.09.03.09.20.38
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 03 Sep 2021 09:20:38 -0700 (PDT)
+ Fri, 03 Sep 2021 09:20:39 -0700 (PDT)
 From: Adam Duskett <aduskett@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri,  3 Sep 2021 09:20:24 -0700
-Message-Id: <20210903162027.1935040-5-aduskett@gmail.com>
+Date: Fri,  3 Sep 2021 09:20:25 -0700
+Message-Id: <20210903162027.1935040-6-aduskett@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210903162027.1935040-1-aduskett@gmail.com>
 References: <20210903162027.1935040-1-aduskett@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH/master 4/7] g-ir-scanner-lddwrapper.in: Fix
- shellcheck warnings, switch to sh
+Subject: [Buildroot] [PATCH/master 5/7] g-ir-compiler.in: Fix shellcheck
+ warnings, switch to sh
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -109,19 +109,19 @@ Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
 ---
- package/gobject-introspection/g-ir-scanner-lddwrapper.in | 4 ++--
+ package/gobject-introspection/g-ir-compiler.in | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gobject-introspection/g-ir-scanner-lddwrapper.in b/package/gobject-introspection/g-ir-scanner-lddwrapper.in
-index c19314566a..2f09bca77a 100644
---- a/package/gobject-introspection/g-ir-scanner-lddwrapper.in
-+++ b/package/gobject-introspection/g-ir-scanner-lddwrapper.in
+diff --git a/package/gobject-introspection/g-ir-compiler.in b/package/gobject-introspection/g-ir-compiler.in
+index 3313cc501f..712753023a 100644
+--- a/package/gobject-introspection/g-ir-compiler.in
++++ b/package/gobject-introspection/g-ir-compiler.in
 @@ -1,3 +1,3 @@
 -#!/usr/bin/env bash
 +#!/usr/bin/env sh
  
--${HOST_DIR}/sbin/prelink-rtld --root=$(dirname $0)/../../ "$@"
-+"${HOST_DIR}"/sbin/prelink-rtld --root="$(dirname "$0")/../../" "$@"
+-$(dirname $0)/g-ir-scanner-qemuwrapper $(dirname $0)/g-ir-compiler.real "$@"
++"$(dirname "$0")"/g-ir-scanner-qemuwrapper "$(dirname "$0")"/g-ir-compiler.real "$@"
 -- 
 2.30.2
 
