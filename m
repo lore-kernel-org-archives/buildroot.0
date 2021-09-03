@@ -2,70 +2,90 @@ Return-Path: <SRS0=/NXK=NZ=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,HTML_MESSAGE,MAILING_LIST_MULTI,
-	MIME_QP_LONG_LINE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
+	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 02CAFC433EF
-	for <buildroot@archiver.kernel.org>; Fri,  3 Sep 2021 10:22:06 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B8542C433F5
+	for <buildroot@archiver.kernel.org>; Fri,  3 Sep 2021 10:39:32 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1F51560F42
-	for <buildroot@archiver.kernel.org>; Fri,  3 Sep 2021 10:22:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1F51560F42
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=benettiengineering.com
+	by mail.kernel.org (Postfix) with ESMTPS id 598B7610CE
+	for <buildroot@archiver.kernel.org>; Fri,  3 Sep 2021 10:39:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 598B7610CE
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id ADE1183716;
-	Fri,  3 Sep 2021 10:22:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F13104263E;
+	Fri,  3 Sep 2021 10:39:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AnyIYNqCJ_T3; Fri,  3 Sep 2021 10:22:03 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ODjDJExOMQvx; Fri,  3 Sep 2021 10:39:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CA0F18348C;
-	Fri,  3 Sep 2021 10:22:02 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4E1611BF40E
- for <buildroot@lists.busybox.net>; Fri,  3 Sep 2021 10:22:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4D6DE42638;
+	Fri,  3 Sep 2021 10:39:30 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 39F0D1BF40E
+ for <buildroot@lists.busybox.net>; Fri,  3 Sep 2021 10:39:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 475D8834E3
- for <buildroot@lists.busybox.net>; Fri,  3 Sep 2021 10:22:00 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 28B71606C6
+ for <buildroot@lists.busybox.net>; Fri,  3 Sep 2021 10:39:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HxndrGFuzqK5 for <buildroot@lists.busybox.net>;
- Fri,  3 Sep 2021 10:21:58 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtpweb147.aruba.it (smtpweb147.aruba.it [62.149.158.147])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6DECC8348C
- for <buildroot@busybox.net>; Fri,  3 Sep 2021 10:21:57 +0000 (UTC)
-Received: from smtpclient.apple ([151.34.157.101])
- by Aruba Outgoing Smtp  with ESMTPA
- id M6KRmqyuia4UMM6KTmuxoA; Fri, 03 Sep 2021 12:21:55 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1630664515; bh=PHsPxCSlxb7OAWoyQD0SI3yeOvdpoO3hqQ0Z7ze/zD8=;
- h=Content-Type:From:Mime-Version:Subject:Date:To;
- b=AsFijuZgeMO6P1b8PULgbL0NzCjQG25b4dH7tuPfWCUwhQTqEozL/sKW+RqnpWmRo
- uSUKXv5zH5hQYUY2nP9s7NZkYne/4SvQ2yquIBKvoGjTRRxt7/j6LDQERZcDSSNHWK
- gIPnEznxXl+eIwyf0uYsFEsHc4ZZL8R5O2CtS6YCQgGAlsTj5GyOMiWxveu+5H2fbS
- /dgb74MUYEVZYy0sEUGAEFoeULEuKV3Cxl3iIEWnVt4TNkWUCU+d90x0H3OwqY3V+l
- 4Bf5M/Icq+dpQ5pVAOlLKsrJbEewqAKiL+jyTiA2LozAfxZkGS5A/ksTcJJk+jKyWm
- HypoksFFjpAeg==
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Mime-Version: 1.0 (1.0)
-Date: Fri, 3 Sep 2021 12:21:47 +0200
-Message-Id: <30117DCC-D442-43F5-8388-384C8EE48769@benettiengineering.com>
-References: <877dfyrwao.fsf@dell.be.48ers.dk>
-In-Reply-To: <877dfyrwao.fsf@dell.be.48ers.dk>
-To: Peter Korsgaard <peter@korsgaard.com>
-X-Mailer: iPhone Mail (18G82)
-X-CMAE-Envelope: MS4wfBU2cKRdBUcisyW7gzEC5CSgYqXkRAZxWT35cUPpWmSwkqMD4PbuhB+lKBxqV1TNTuSIvzZTYQvsch3tsTa71gQkJjOMH+IZSe9QGmnIY6j0E07deHal
- 3E+DMdFBBAArHfu1BEHKR0t6FSL1yj7V2hiuKbTdCcFzR/CAWIngGTf2Jdeiwz1kYOPugKT6ur18Zz8VHBE4e44HVz/hExYRSEnvyFDB2E3uvktHx/CztVGF
- zP5KRdz04N4FLRebd2vZopOYC1YLCSIhol+2Zmjo+vgg2dJasQJKWXvM5jI9VnQ5yEpE3bgIR21ghvgAKGUueA==
-Subject: Re: [Buildroot] What's wrong with patchwork
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id f39FmPn2kxFL for <buildroot@lists.busybox.net>;
+ Fri,  3 Sep 2021 10:39:27 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com
+ [IPv6:2607:f8b0:4864:20::d2c])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 8B2F560676
+ for <buildroot@buildroot.org>; Fri,  3 Sep 2021 10:39:27 +0000 (UTC)
+Received: by mail-io1-xd2c.google.com with SMTP id b7so6176194iob.4
+ for <buildroot@buildroot.org>; Fri, 03 Sep 2021 03:39:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=TM0MlF9uU+hzX2ZK8PI0MtEBur2tIzfjBAH1Wg8qOdg=;
+ b=mZsciMyilavW393ZFYeDuJWTcpTDpSfVpeJr5mz2dYWLPQ8DYHKK7GGOnXBu4ig3kC
+ E25ThLegu4VRv3UeRYkuE9z+9JbHyoPX07If3+R9/5wGEz6uiqvReqI5jNE13SmCeiBC
+ pOjR1o36QlJ36iN3B5HW3pGtGvX13AZDXdWEivbfryzeKsZq9XfGURUcjDKT2vJT/u9C
+ knaV61SyDnUISonnMEsqdrKeSSSqvDRB7s6HHLK5zB+AJtj58slgdTyIEgJbnxvrAS10
+ oA+rkLAJRdQwILpQd+zehOQB2reykbAgIt0ci6OxIxhDwcCyol9Ux7aJdfpKQbOCtuLV
+ Ubkg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=TM0MlF9uU+hzX2ZK8PI0MtEBur2tIzfjBAH1Wg8qOdg=;
+ b=Q67chssDnvgQ03u7W8f6O86g4dLyYz5yIewixsqBG+cr4CMSKCn4iT7G/pFTeNNirb
+ 6/f05N6CIEuv7u/ToL4OhTo4IxAVWhbfRfX11OZ06TjJHGDdcEN7p7nNNLMyjYXaUniN
+ BnLlkCaVFc9R8REweooKLX+s7gGXsxz+FTtf2S4FeCJmHs6qBmbyRR84mxFsu4VUrU5d
+ lrjLqbV8wWNJuOHOCNPeY1O62CutHvRUnCqwhUTVoufzEiRKiB2qfsnXdvn174Vcg4wW
+ xI79SnT4n7gFJsue292ALgwGqRdBk3RmtoJ3x0wHQfvpf4eqAxm8kAAIuNeO8we51kxV
+ sfIw==
+X-Gm-Message-State: AOAM530VvaiQSQEsL0kUWjFLhocH6QXmkdjhFgAeOFDc3UvdmBcG0nni
+ pwW+dG6IZ6IV63dJ4pDLqExo/IiKX3s=
+X-Google-Smtp-Source: ABdhPJz++aTbJkaroygUsdXT9PSjGwXjohzCjIyfwkLLVG5EdW3gB7eK2pwmEo+zXWwIKXlHPmpbfQ==
+X-Received: by 2002:a02:3b22:: with SMTP id c34mr2071473jaa.140.1630665566312; 
+ Fri, 03 Sep 2021 03:39:26 -0700 (PDT)
+Received: from james-x399.localdomain (97-118-237-25.hlrn.qwest.net.
+ [97.118.237.25])
+ by smtp.gmail.com with ESMTPSA id b16sm2209282ila.1.2021.09.03.03.39.25
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 03 Sep 2021 03:39:25 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
+To: buildroot@buildroot.org
+Date: Fri,  3 Sep 2021 04:39:24 -0600
+Message-Id: <20210903103924.2907009-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH 1/1] package/systemd: bump to version 249.4
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,167 +98,48 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: buildroot@busybox.net, Stephen Rothwell <sfr@canb.auug.org.au>,
- Jeremy Kerr <jk@ozlabs.org>, Joel Stanley <joel@jms.id.au>
-Content-Type: multipart/mixed; boundary="===============3339119315894334498=="
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Norbert Lange <nolange79@gmail.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/systemd/systemd.hash | 2 +-
+ package/systemd/systemd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
---===============3339119315894334498==
-Content-Type: multipart/alternative; boundary=Apple-Mail-031CCFE3-6A48-468C-A7F0-A596E0E0BF6C
-Content-Transfer-Encoding: 7bit
-
-
---Apple-Mail-031CCFE3-6A48-468C-A7F0-A596E0E0BF6C
-Content-Type: text/plain;
-	charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-
-Hi Peter,
-
-> Il giorno 3 set 2021, alle ore 08:46, Peter Korsgaard <peter@korsgaard.com=
-> ha scritto:
->=20
-> =EF=BB=BF
->>=20
->>>>>> "Jeremy" =3D=3D Jeremy Kerr <jk@ozlabs.org> writes:
->=20
-> Hi,
->=20
->>> I just noticed that my buildroot list filter is no longer working.
->>> The listid used to be:
->>>=20
->>> List-Id: Discussion and development of buildroot
->>> <buildroot.busybox.net>
->>>=20
->>> but now it is set to:
->>>=20
->>> List-Id: Discussion and development of buildroot
->>> <buildroot.lists.buildroot.org>
->>>=20
->>> It looks like buildroot list changed domains recently. Perhaps the
->>> subscription for incoming-buildroot@ didn't get moved over to the new
->>> setup?
->=20
->> Ah, that'd explain missing patches then (assuming delivery is
->> working...). Patchwork relies on the list ID to correlate mail to
->> projects. Since it doesn't know about the new list-id, it'll be
->> dropping those.
->=20
->> I'll update the list-id for the buildroot patchwork project.
->=20
-> Sorry about this. The mailing list setup had a number of annoying issues
-> (the busybox.net vs buildroot.org, how uclibc/busybox lists were also
-> shown, TLS certificate not matching the hostname, ..) so we recently
-> worked with the OSUOSL guys to fix it.
->=20
-> We've had some teething issues, but I believe it is working now, if not
-> let me know.
->=20
-> With the changes, the list page
-> (https://lists.buildroot.org/mailman/listinfo) now has correct TLS
-> config and only shows the buildroot list and the List-id is
-> buildroot.lists.buildroot.org.
-
-This patch[1] still doesn=E2=80=99t show up.
-Do I resend it?
-Maybe other patches have been lost on patchwork. I don=E2=80=99t know if pat=
-chwork works in polling or triggering.
-
-[1]: https://lists.buildroot.org/pipermail/buildroot/2021-September/621975.h=
-tml
-
-Thank you
-Best regards
-Giulio Benetti
-
->=20
-> --=20
-> Bye, Peter Korsgaard
-> _______________________________________________
-> buildroot mailing list
-> buildroot@lists.buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
---Apple-Mail-031CCFE3-6A48-468C-A7F0-A596E0E0BF6C
-Content-Type: text/html;
-	charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-
-<html><head><meta http-equiv=3D"content-type" content=3D"text/html; charset=3D=
-utf-8"></head><body dir=3D"auto">Hi Peter,<br><div dir=3D"ltr"><br><blockquo=
-te type=3D"cite">Il giorno 3 set 2021, alle ore 08:46, Peter Korsgaard &lt;p=
-eter@korsgaard.com&gt; ha scritto:<br><br></blockquote></div><blockquote typ=
-e=3D"cite"><div dir=3D"ltr">=EF=BB=BF<blockquote type=3D"cite"><blockquote t=
-ype=3D"cite"><blockquote type=3D"cite"><blockquote type=3D"cite"><blockquote=
- type=3D"cite"><span>"Jeremy" =3D=3D Jeremy Kerr &lt;jk@ozlabs.org&gt; write=
-s:</span><br></blockquote></blockquote></blockquote></blockquote></blockquot=
-e><span></span><br><span>Hi,</span><br><span></span><br><blockquote type=3D"=
-cite"><blockquote type=3D"cite"><span>I just noticed that my buildroot list f=
-ilter is no longer working.</span><br></blockquote></blockquote><blockquote t=
-ype=3D"cite"><blockquote type=3D"cite"><span>The listid used to be:</span><b=
-r></blockquote></blockquote><blockquote type=3D"cite"><blockquote type=3D"ci=
-te"><span></span><br></blockquote></blockquote><blockquote type=3D"cite"><bl=
-ockquote type=3D"cite"><span>List-Id: Discussion and development of buildroo=
-t</span><br></blockquote></blockquote><blockquote type=3D"cite"><blockquote t=
-ype=3D"cite"><span>&lt;buildroot.busybox.net&gt;</span><br></blockquote></bl=
-ockquote><blockquote type=3D"cite"><blockquote type=3D"cite"><span></span><b=
-r></blockquote></blockquote><blockquote type=3D"cite"><blockquote type=3D"ci=
-te"><span>but now it is set to:</span><br></blockquote></blockquote><blockqu=
-ote type=3D"cite"><blockquote type=3D"cite"><span></span><br></blockquote></=
-blockquote><blockquote type=3D"cite"><blockquote type=3D"cite"><span>List-Id=
-: Discussion and development of buildroot</span><br></blockquote></blockquot=
-e><blockquote type=3D"cite"><blockquote type=3D"cite"><span>&lt;buildroot.li=
-sts.buildroot.org&gt;</span><br></blockquote></blockquote><blockquote type=3D=
-"cite"><blockquote type=3D"cite"><span></span><br></blockquote></blockquote>=
-<blockquote type=3D"cite"><blockquote type=3D"cite"><span>It looks like buil=
-droot list changed domains recently. Perhaps the</span><br></blockquote></bl=
-ockquote><blockquote type=3D"cite"><blockquote type=3D"cite"><span>subscript=
-ion for incoming-buildroot@ didn't get moved over to the new</span><br></blo=
-ckquote></blockquote><blockquote type=3D"cite"><blockquote type=3D"cite"><sp=
-an>setup?</span><br></blockquote></blockquote><span></span><br><blockquote t=
-ype=3D"cite"><span>Ah, that'd explain missing patches then (assuming deliver=
-y is</span><br></blockquote><blockquote type=3D"cite"><span>working...). Pat=
-chwork relies on the list ID to correlate mail to</span><br></blockquote><bl=
-ockquote type=3D"cite"><span>projects. Since it doesn't know about the new l=
-ist-id, it'll be</span><br></blockquote><blockquote type=3D"cite"><span>drop=
-ping those.</span><br></blockquote><span></span><br><blockquote type=3D"cite=
-"><span>I'll update the list-id for the buildroot patchwork project.</span><=
-br></blockquote><span></span><br><span>Sorry about this. The mailing list se=
-tup had a number of annoying issues</span><br><span>(the busybox.net vs buil=
-droot.org, how uclibc/busybox lists were also</span><br><span>shown, TLS cer=
-tificate not matching the hostname, ..) so we recently</span><br><span>worke=
-d with the OSUOSL guys to fix it.</span><br><span></span><br><span>We've had=
- some teething issues, but I believe it is working now, if not</span><br><sp=
-an>let me know.</span><br><span></span><br><span>With the changes, the list p=
-age</span><br><span>(https://lists.buildroot.org/mailman/listinfo) now has c=
-orrect TLS</span><br><span>config and only shows the buildroot list and the L=
-ist-id is</span><br><span>buildroot.lists.buildroot.org.</span><br></div></b=
-lockquote><div><br></div><div>This patch[1] still doesn=E2=80=99t show up.</=
-div><div>Do I resend it?</div><div>Maybe other patches have been lost on pat=
-chwork. I don=E2=80=99t know if patchwork works in polling or triggering.</d=
-iv><div><br></div><div>[1]:&nbsp;<a href=3D"https://lists.buildroot.org/pipe=
-rmail/buildroot/2021-September/621975.html">https://lists.buildroot.org/pipe=
-rmail/buildroot/2021-September/621975.html</a></div><div><br></div><div>Than=
-k you</div><div>Best regards</div><div>Giulio Benetti</div><br><blockquote t=
-ype=3D"cite"><div dir=3D"ltr"><span></span><br><span>-- </span><br><span>Bye=
-, Peter Korsgaard</span><br><span>__________________________________________=
-_____</span><br><span>buildroot mailing list</span><br><span>buildroot@lists=
-.buildroot.org</span><br><span>https://lists.buildroot.org/mailman/listinfo/=
-buildroot</span><br></div></blockquote></body></html>=
-
---Apple-Mail-031CCFE3-6A48-468C-A7F0-A596E0E0BF6C--
-
---===============3339119315894334498==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
+index b419dce445..baab5304e6 100644
+--- a/package/systemd/systemd.hash
++++ b/package/systemd/systemd.hash
+@@ -1,5 +1,5 @@
+ # sha256 locally computed
+-sha256  69ca802ff87e316a216f4bf5e5fd787dd9810c8c8c5076917ee817e52bd6c3a9  systemd-249.1.tar.gz
++sha256  f3df809bbe777fcb5ffe2b29aaf6f871de764ef22706940960f88b8a850e9278  systemd-249.4.tar.gz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE.GPL2
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.LGPL2.1
+ sha256  f5645b4b846479859d6618fa7a5a1722681aa7fc43c1e45f8bf8e1fe5738d618  README
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 8bfd407f81..5a76f2f246 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SYSTEMD_VERSION = 249.1
++SYSTEMD_VERSION = 249.4
+ SYSTEMD_SITE = $(call github,systemd,systemd-stable,v$(SYSTEMD_VERSION))
+ SYSTEMD_LICENSE = LGPL-2.1+, GPL-2.0+ (udev), Public Domain (few source files, see README), BSD-3-Clause (tools/chromiumos)
+ SYSTEMD_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1 README tools/chromiumos/LICENSE
+-- 
+2.25.1
 
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============3339119315894334498==--
