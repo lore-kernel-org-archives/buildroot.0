@@ -7,52 +7,53 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 31C2BC433F5
-	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 21:04:31 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A4F6C433EF
+	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 21:04:43 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id E9A94604AC
-	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 21:04:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E9A94604AC
+	by mail.kernel.org (Postfix) with ESMTPS id 1701060EE6
+	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 21:04:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1701060EE6
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B564C605E0;
-	Sat,  4 Sep 2021 21:04:30 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id CF3C240205;
+	Sat,  4 Sep 2021 21:04:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gl9QA69xoc0a; Sat,  4 Sep 2021 21:04:30 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id v4f2K2icP9qE; Sat,  4 Sep 2021 21:04:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F4009600B6;
-	Sat,  4 Sep 2021 21:04:28 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 28E8B1BF28F
+	by smtp2.osuosl.org (Postfix) with ESMTP id C9FA3401D4;
+	Sat,  4 Sep 2021 21:04:40 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 2B7941BF95A
  for <buildroot@lists.busybox.net>; Sat,  4 Sep 2021 21:03:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 23DD180EFA
+ by smtp2.osuosl.org (Postfix) with ESMTP id 26B704015B
  for <buildroot@lists.busybox.net>; Sat,  4 Sep 2021 21:03:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ugZa6eVgJieO for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bACNkB6HBDVe for <buildroot@lists.busybox.net>;
  Sat,  4 Sep 2021 21:03:37 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 26DA780EDE
+ by smtp2.osuosl.org (Postfix) with ESMTP id 45BE540105
  for <buildroot@buildroot.org>; Sat,  4 Sep 2021 21:03:37 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id A37D4884F5; Sat,  4 Sep 2021 21:02:14 +0000 (UTC)
+ id BF675884F7; Sat,  4 Sep 2021 21:02:14 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 4 Sep 2021 22:55:25 +0200
+Date: Sat, 4 Sep 2021 23:02:26 +0200
 X-Git-Refname: refs/heads/2021.05.x
-X-Git-Oldrev: c78dc217b5bb895cec62a66e092859a221c89f71
-X-Git-Newrev: a2f6f62ca068e5ec1878f694d8588c9fa64c5415
+X-Git-Oldrev: d65ec878191fe6f21e9266b2e811f1a775c4f6a4
+X-Git-Newrev: 06e0f6cc678d85a681328b4b0d5862db756fb6a3
 X-Patchwork-Hint: ignore
-Message-Id: <20210904210214.A37D4884F5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.05.x] package/sqlite: add
- SQLITE_TAR_VERSION
+Message-Id: <20210904210214.BF675884F7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.05.x]
+ package/busybox/udhcpc.script: ensure action argument is correctly passed
+ to hook scripts
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,44 +67,72 @@ List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============7146239950189732165=="
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a2f6f62ca068e5ec1878f694d8588c9fa64c5415
+--===============7146239950189732165==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=06e0f6cc678d85a681328b4b0d5862db756fb6a3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
 
-3.34.1 is the version used by https://release-monitoring.org as well as
-NVD NIST database so add SQLITE_TAR_VERSION and drop
-SQLITE_CPE_ID_VERSION
+commit f79a420825479c47d (package/busybox/udhcpc.script: support RFC3442
+static routes) used 'set --' clobbering the positional arguments, causing
+the action argument to not be correctly forwarded to hook scripts for the
+renew / bound cases if static routes are provided by the server.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+As a workaround, save the action argument at the beginning of the script and
+use that when calling hook scripts.
+
+Reported-by: 王琦 <wangwangqi2011@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 3943b6f003647c8d9a993da31f0d22061906e9d7)
+(cherry picked from commit 94c41eef615bb33ad26fff71d341f66e35286f5d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/sqlite/sqlite.mk | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/busybox/udhcpc.script | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index 2c2928f274..f04b866631 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/package/busybox/udhcpc.script b/package/busybox/udhcpc.script
+index c73ad6c2ef..74dc5532b9 100755
+--- a/package/busybox/udhcpc.script
++++ b/package/busybox/udhcpc.script
+@@ -4,6 +4,7 @@
  
--SQLITE_VERSION = 3340100
--SQLITE_CPE_ID_VERSION = 3.34.1
--SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
-+SQLITE_VERSION = 3.34.1
-+SQLITE_TAR_VERSION = 3340100
-+SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_TAR_VERSION).tar.gz
- SQLITE_SITE = https://www.sqlite.org/2021
- SQLITE_LICENSE = Public domain
- SQLITE_LICENSE_FILES = tea/license.terms
+ [ -z "$1" ] && echo "Error: should be called from udhcpc" && exit 1
+ 
++ACTION="$1"
+ RESOLV_CONF="/etc/resolv.conf"
+ [ -e $RESOLV_CONF ] || touch $RESOLV_CONF
+ [ -n "$broadcast" ] && BROADCAST="broadcast $broadcast"
+@@ -29,7 +30,7 @@ wait_for_ipv6_default_route() {
+ 	printf " timeout!\n"
+ }
+ 
+-case "$1" in
++case "$ACTION" in
+ 	deconfig)
+ 		/sbin/ifconfig $interface up
+ 		/sbin/ifconfig $interface 0.0.0.0
+@@ -115,7 +116,7 @@ esac
+ HOOK_DIR="$0.d"
+ for hook in "${HOOK_DIR}/"*; do
+     [ -f "${hook}" -a -x "${hook}" ] || continue
+-    "${hook}" "${@}"
++    "${hook}" "$ACTION"
+ done
+ 
+ exit 0
+
+--===============7146239950189732165==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============7146239950189732165==--
