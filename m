@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A7B5C433EF
-	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 20:46:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 72809C433EF
+	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 20:47:02 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 5B07460F3A
-	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 20:46:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5B07460F3A
+	by mail.kernel.org (Postfix) with ESMTPS id 1F92060ED6
+	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 20:47:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1F92060ED6
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0198C40205;
-	Sat,  4 Sep 2021 20:46:49 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E28FB4022E;
+	Sat,  4 Sep 2021 20:47:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jqmwwDS3E_xz; Sat,  4 Sep 2021 20:46:47 +0000 (UTC)
+	with ESMTP id 1SkXq5B8OjWv; Sat,  4 Sep 2021 20:47:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AD42040169;
-	Sat,  4 Sep 2021 20:46:46 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5B9FE1BF95A
- for <buildroot@lists.busybox.net>; Sat,  4 Sep 2021 20:46:09 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9D78C4021D;
+	Sat,  4 Sep 2021 20:46:59 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 02FE41BF20F
+ for <buildroot@lists.busybox.net>; Sat,  4 Sep 2021 20:46:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4B201605D9
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7603A4014E
  for <buildroot@lists.busybox.net>; Sat,  4 Sep 2021 20:46:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id y9PjpmRMOgAk for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yZMz5DL3xdjU for <buildroot@lists.busybox.net>;
  Sat,  4 Sep 2021 20:46:08 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2D4E86066E
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3BB1C401D5
  for <buildroot@buildroot.org>; Sat,  4 Sep 2021 20:46:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id B1B658841C; Sat,  4 Sep 2021 20:44:45 +0000 (UTC)
+ id CE61388488; Sat,  4 Sep 2021 20:44:45 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 4 Sep 2021 22:32:50 +0200
+Date: Sat, 4 Sep 2021 22:40:44 +0200
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 99952c08a836bc155b078ccffd274bad0f7b32d5
-X-Git-Newrev: cb07d93847c4ae7f4f8f714b8b3d3e5293353763
+X-Git-Oldrev: 53af97d57779f60175f0033c7a3a32232dca2f10
+X-Git-Newrev: f42dd76bc327c55dd74ba0fdcb0d599e67354285
 X-Patchwork-Hint: ignore
-Message-Id: <20210904204445.B1B658841C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/sylpheed: fix
- CVE-2021-37746
+Message-Id: <20210904204445.CE61388488@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/gd: fix
+ CVE-2021-38115
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,79 +71,71 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cb07d93847c4ae7f4f8f714b8b3d3e5293353763
+commit: https://git.buildroot.net/buildroot/commit/?id=f42dd76bc327c55dd74ba0fdcb0d599e67354285
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-textview_uri_security_check in textview.c in Claws Mail before 3.18.0,
-and Sylpheed through 3.7.0, does not have sufficient link checks before
-accepting a click.
+read_header_tga in gd_tga.c in the GD Graphics Library (aka LibGD)
+through 2.3.2 allows remote attackers to cause a denial of service
+(out-of-bounds read) via a crafted TGA file.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 634dcbd50dd5cf4b25153689e61bcba45163c841)
+(cherry picked from commit 0eebfba38888209313837bc81a22a4b3bf11ada4)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...arden-link-checker-before-accepting-click.patch | 37 ++++++++++++++++++++++
- package/sylpheed/sylpheed.mk                       |  3 ++
- 2 files changed, 40 insertions(+)
+ ...d-out-of-bands-in-reading-tga-header-file.patch | 29 ++++++++++++++++++++++
+ package/gd/gd.mk                                   |  3 +++
+ 2 files changed, 32 insertions(+)
 
-diff --git a/package/sylpheed/0001-harden-link-checker-before-accepting-click.patch b/package/sylpheed/0001-harden-link-checker-before-accepting-click.patch
+diff --git a/package/gd/0001-fix-read-out-of-bands-in-reading-tga-header-file.patch b/package/gd/0001-fix-read-out-of-bands-in-reading-tga-header-file.patch
 new file mode 100644
-index 0000000000..fe3375bc91
+index 0000000000..a42bfb402e
 --- /dev/null
-+++ b/package/sylpheed/0001-harden-link-checker-before-accepting-click.patch
-@@ -0,0 +1,37 @@
-+From ac286a71ed78429e16c612161251b9ea90ccd431 Mon Sep 17 00:00:00 2001
-+From: Paul <paul@claws-mail.org>
-+Date: Sun, 23 May 2021 12:16:40 +0100
-+Subject: [PATCH] harden link checker before accepting click
++++ b/package/gd/0001-fix-read-out-of-bands-in-reading-tga-header-file.patch
+@@ -0,0 +1,29 @@
++From 8b111b2b4a4842179be66db68d84dda91a246032 Mon Sep 17 00:00:00 2001
++From: maryam ebrahimzadeh <maryam.ebr@student.sharif.edu>
++Date: Mon, 19 Jul 2021 10:07:13 +0430
++Subject: [PATCH] fix read out-of-bands in reading tga header file
 +
 +[Retrieved from:
-+https://git.claws-mail.org/?p=claws.git;a=commit;h=ac286a71ed78429e16c612161251b9ea90ccd431]
++https://github.com/libgd/libgd/commit/8b111b2b4a4842179be66db68d84dda91a246032]
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 +---
-+ src/textview.c | 4 +++-
-+ 1 file changed, 3 insertions(+), 1 deletion(-)
++ src/gd_tga.c | 6 +++++-
++ 1 file changed, 5 insertions(+), 1 deletion(-)
 +
-+diff --git a/src/textview.c b/src/textview.c
-+index 62ad46eaf..3cdf5d911 100644
-+--- a/src/textview.c
-++++ b/src/textview.c
-+@@ -2885,7 +2885,7 @@ gboolean textview_uri_security_check(TextView *textview, ClickableText *uri)
-+ 	gboolean retval = TRUE;
++diff --git a/src/gd_tga.c b/src/gd_tga.c
++index cae9428da..286febb28 100644
++--- a/src/gd_tga.c
+++++ b/src/gd_tga.c
++@@ -191,7 +191,11 @@ int read_header_tga(gdIOCtx *ctx, oTga *tga)
++ 			return -1;
++ 		}
 + 
-+ 	if (is_uri_string(uri->uri) == FALSE)
-+-		return TRUE;
-++		return FALSE;
-+ 
-+ 	visible_str = textview_get_visible_uri(textview, uri);
-+ 	if (visible_str == NULL)
-+@@ -2922,6 +2922,8 @@ gboolean textview_uri_security_check(TextView *textview, ClickableText *uri)
-+ 		if (aval == G_ALERTALTERNATE)
-+ 			retval = TRUE;
++-		gdGetBuf(tga->ident, tga->identsize, ctx);
+++		
+++		if (gdGetBuf(tga->ident, tga->identsize, ctx) != tga->identsize) {
+++			gd_error("fail to read header ident");
+++			return -1;
+++		}
 + 	}
-++	if (strlen(uri->uri) > get_uri_len(uri->uri))
-++		retval = FALSE;
 + 
-+ 	g_free(visible_str);
-+ 
-+-- 
-+2.25.1
-+
-diff --git a/package/sylpheed/sylpheed.mk b/package/sylpheed/sylpheed.mk
-index 2f8a7aeff9..a7c7adade3 100644
---- a/package/sylpheed/sylpheed.mk
-+++ b/package/sylpheed/sylpheed.mk
-@@ -14,6 +14,9 @@ SYLPHEED_CPE_ID_VENDOR = sylpheed_project
- SYLPHEED_CONF_OPTS = --disable-gtkspell --disable-gpgme
- SYLPHEED_DEPENDENCIES = host-pkgconf libgtk2
++ 	return 1;
+diff --git a/package/gd/gd.mk b/package/gd/gd.mk
+index c7037f8dbc..6de7b73836 100644
+--- a/package/gd/gd.mk
++++ b/package/gd/gd.mk
+@@ -15,6 +15,9 @@ GD_CPE_ID_PRODUCT = libgd
+ GD_CONF_OPTS = --without-x --disable-rpath --disable-werror
+ GD_DEPENDENCIES = host-pkgconf
  
-+# 0001-harden-link-checker-before-accepting-click.patch
-+SYLPHEED_IGNORE_CVES += CVE-2021-37746
++# 0001-fix-read-out-of-bands-in-reading-tga-header-file.patch
++GD_IGNORE_CVES += CVE-2021-38115
 +
- # Remove the -I$(includedir) from the Makefiles
- # because it refers to the host /usr/include.
- define SYLPHEED_PRECONFIGURE
+ # gd forgets to link utilities with -pthread even though it uses
+ # pthreads, causing linking errors with static linking
+ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
