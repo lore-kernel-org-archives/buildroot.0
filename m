@@ -8,88 +8,84 @@ X-Spam-Status: No, score=-18.5 required=3.0 tests=BAYES_00,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1950CC433F5
-	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 10:09:04 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AFE8EC433EF
+	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 11:36:51 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 87A7F60F91
-	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 10:09:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 87A7F60F91
+	by mail.kernel.org (Postfix) with ESMTPS id 38C3860FDC
+	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 11:36:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 38C3860FDC
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3063E4011B;
-	Sat,  4 Sep 2021 10:09:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D5D4A42530;
+	Sat,  4 Sep 2021 11:36:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id f_qbZwdhL-k6; Sat,  4 Sep 2021 10:09:02 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id SZXRfeGx29_h; Sat,  4 Sep 2021 11:36:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 38337400D4;
-	Sat,  4 Sep 2021 10:09:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2BAA14252D;
+	Sat,  4 Sep 2021 11:36:48 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5C42F1BF5AD
- for <buildroot@lists.busybox.net>; Sat,  4 Sep 2021 10:08:47 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7D0331BF616
+ for <buildroot@lists.busybox.net>; Sat,  4 Sep 2021 11:36:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4BEC860613
- for <buildroot@lists.busybox.net>; Sat,  4 Sep 2021 10:08:47 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 68C37606E2
+ for <buildroot@lists.busybox.net>; Sat,  4 Sep 2021 11:36:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp3.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4hBrF5eFXP-v for <buildroot@lists.busybox.net>;
- Sat,  4 Sep 2021 10:08:46 +0000 (UTC)
+ with ESMTP id AGjAK8vMOLlW for <buildroot@lists.busybox.net>;
+ Sat,  4 Sep 2021 11:36:45 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
- [IPv6:2a00:1450:4864:20::42a])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 53AB860071
- for <buildroot@buildroot.org>; Sat,  4 Sep 2021 10:08:46 +0000 (UTC)
-Received: by mail-wr1-x42a.google.com with SMTP id b6so2143824wrh.10
- for <buildroot@buildroot.org>; Sat, 04 Sep 2021 03:08:46 -0700 (PDT)
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
+ [IPv6:2a00:1450:4864:20::429])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 39F3F60679
+ for <buildroot@buildroot.org>; Sat,  4 Sep 2021 11:36:45 +0000 (UTC)
+Received: by mail-wr1-x429.google.com with SMTP id i6so2419387wrv.2
+ for <buildroot@buildroot.org>; Sat, 04 Sep 2021 04:36:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=WTjqCbGoklA4D+izhfoGPm6x6h2zD5OXsYWzc8cC5+I=;
- b=S/61fTUVL6EnLh0I9FGqlzL5oqe2ZIvykBAZDCnyR3grqfZUpdEblG3FGqlXGQG5j9
- u6HQGqtqEyTPg5zHuV8gPmXYmIRxj/y3RrhWEwVG3MLxezZU7/qGvHQETHzrud/KXyGS
- V0nAmdtPIX0v8gix/zXkjPr1mF44kigtbd7WXAcwukNh/A8BDlCj+xLcE0c5v/RWtBOh
- qBO8x7slMvII/BtKHVHma2ooel8dJhXzWgc7M2PgjB3bgp+X/r+Yne9EGHgSo0uoD3zC
- zM6aGaSSBZf2i1Ob+JjA6anHexTQi/dWSiy3F87aVf5QZ4CxxZu901tJqxPeThr070BR
- YZCQ==
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=4uAKREJ+fFBFNrEVtoxc2BISkzMbQ7X07Z5oSbqdtD0=;
+ b=bd3Btb2zJoZsckSfgJXqBzEdITnET+ytXthMsL/Ot44XAmQkUwLhKNWGkQifcWgmDq
+ MAV6Jm/NuCDOhHB2a1B17IHiAi5noIX6v0Z3/nNytvK7LbCtg6rPi85eWZSiqYN/CKQK
+ 8ow1Y3LczBt1Ea+ybljjf+JQCxGNnycSp4eTXfsxWu2bI6mnjtuLPfntmQpJqC3U45Rj
+ 6GJi49SKFIOUGFMG195ANB5GQOP3WRNpujjidKHqMB98aChC5LLKVHVNd01g/QLq5zSC
+ /BMxsC2lI9W843+hoS04odJLmTM1WqA3NyjJ01I93iTE2dhLthiFa+7OiXaxis+KlFTJ
+ iA9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=WTjqCbGoklA4D+izhfoGPm6x6h2zD5OXsYWzc8cC5+I=;
- b=hZCuuklctd55GW6K5Jj71DJxXpxhKjrE5jhKKmI8YBlHfSajRPUPq9cunoQD/4mjaH
- ntI4VhdCuez/UYz0Chc2EjJ1qICd0qPACD+/gNBpX1i79yIguQiFmAbsLnVjHn+itZU8
- TXZ/IieJhg3dv+prlRmvaALr+nxgKQVli9i4puKjttOoElDT6RHiRwg4SiRJmVunqUFA
- RbRitrf0SbkLb4sEHwwknPLTZBsNSXe6c2kNYn2awBtrsCu4qHr/oW+em83LCv0TKJ4e
- 1g+M+0HbTSv8Yyb5yNpZNliFJodqa5yikMQ+AE9ako83uvyxrED8mqca040PNB5ETfUY
- Z5mQ==
-X-Gm-Message-State: AOAM533NhRKVJWgLUiDXKqJOISO4N06GhAiS1XhaPLnOkN4BvsFM7Ia1
- h6zjDSfZ9zD8ZmYhMzkerpT9OJYX4WI=
-X-Google-Smtp-Source: ABdhPJwUFjJu3MZ10PHJfvbvXT7tH2lN+hPY7vjZ6DQd0DI3KoS4QtuGNvjYU6f8z7t28SgEXvnHtA==
-X-Received: by 2002:adf:db83:: with SMTP id u3mr3388728wri.363.1630750124493; 
- Sat, 04 Sep 2021 03:08:44 -0700 (PDT)
-Received: from localhost.localdomain
- (2a01cb058f8a180098814a9aef637f91.ipv6.abo.wanadoo.fr.
- [2a01:cb05:8f8a:1800:9881:4a9a:ef63:7f91])
- by smtp.gmail.com with ESMTPSA id o2sm1794172wrh.13.2021.09.04.03.08.43
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=4uAKREJ+fFBFNrEVtoxc2BISkzMbQ7X07Z5oSbqdtD0=;
+ b=i8j9MUlThCp4sC/XAFWfGVmeSR99rkae5TpwpgBJrTym1izw/fXP69TMYY5AVEsHGp
+ 4k8RGcS+tQC3zhUOoLJMjrNiQmYSxF47DuNb9+YuWls1Gy9k0UHeETtPaR3Y7DZTdUFl
+ u3N6cuDoW6MzVfZsqLFhGubr+2d78T7IG0MJ/JkF1MvviUTrzfDNu2TU34nc8P2K0BhG
+ 7zEWZ6KTYZ6nRpLY5MxH6SWkDIoYupZTd2GEi95+083qF10Ow2vIQvwuGZDhl8Y26BwS
+ 1mBKKX8Ya2yOBvqdR/6C0k/PR7gGzlTaOBSNaPKNmuFuY3RxPDBP5juvhIJjNgRmzEt/
+ 5WpA==
+X-Gm-Message-State: AOAM5302Gubd+I0oK4GsRXTicYctkEPWY2XUa1NEv7EtW+FkF33Y8Efq
+ eGVus7ayd3sB5OplNuF6ahDJ35bGKRcnlQ==
+X-Google-Smtp-Source: ABdhPJyDu8eDUL5khXiSH+UAMd5/4MtgfG4YgB11n9eB8kmBPeNsdmoaZTmKzj907T4YR9UTtNEP7w==
+X-Received: by 2002:adf:b78d:: with SMTP id s13mr3679767wre.344.1630755403174; 
+ Sat, 04 Sep 2021 04:36:43 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-2139-166.w92-167.abo.wanadoo.fr.
+ [92.167.218.166])
+ by smtp.gmail.com with ESMTPSA id j17sm1926375wrh.67.2021.09.04.04.36.42
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 04 Sep 2021 03:08:44 -0700 (PDT)
-From: Romain Naour <romain.naour@gmail.com>
+ Sat, 04 Sep 2021 04:36:42 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat,  4 Sep 2021 12:08:37 +0200
-Message-Id: <20210904100837.1785198-2-romain.naour@gmail.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210904100837.1785198-1-romain.naour@gmail.com>
-References: <20210904100837.1785198-1-romain.naour@gmail.com>
+Date: Sat,  4 Sep 2021 13:36:32 +0200
+Message-Id: <20210904113632.1623223-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Subject: [Buildroot] [RFC 2/2] support/testing: test_ubi: reduce the
- rootfs.ubi size to 64M to match the Qemu emulated flash device
+Subject: [Buildroot] [PATCH 1/1] package/nginx-dav-ext: needs libxslt
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,42 +98,75 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>
+Cc: Samuel Martin <s.martin49@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Johan Oudinet <johan.oudinet@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-The size of the cfi flash device emulated by Qemu is 64M not 128M [1].
-Since Qemu >= 4.0, the size of the device must match the size of the block backend [2].
+Build is broken since bump to version 3.0.0 in commit
+45524f10cd84855868c9be3901c2bd6ea1c9f079 because libxslt is needed
+instead of expat since
+https://github.com/arut/nginx-dav-ext-module/commit/37772c545314aa4a250066f4e7cbc8806d406fa8:
+
+adding module in /tmp/instance-0/output-1/build/nginx-dav-ext-3.0.0
+ + ngx_http_dav_ext_module was configured
+checking for PCRE library ... found
+checking for PCRE JIT support ... found
+Package libxslt was not found in the pkg-config search path.
+Perhaps you should add the directory containing `libxslt.pc'
+to the PKG_CONFIG_PATH environment variable
+Package 'libxslt', required by 'virtual:world', not found
+Package libxslt was not found in the pkg-config search path.
+Perhaps you should add the directory containing `libxslt.pc'
+to the PKG_CONFIG_PATH environment variable
+Package 'libxslt', required by 'virtual:world', not found
+checking for libxslt ... not found
+checking for libxslt in /usr/local/ ... not found
+checking for libxslt in /usr/pkg/ ... not found
+checking for libxslt in /opt/local/ ... not found
+
+./configure: error: the HTTP XSLT module requires the libxml2/libxslt
+libraries. You can either do not enable the module or install the libraries.
 
 Fixes:
+ - http://autobuild.buildroot.org/results/8735d20ca7ccf4eda2f79f9400bed70474855b40
 
-  qemu-system-arm: device requires 67108864 bytes, block backend provides 134217728 bytes
-
-[1] https://git.qemu.org/?p=qemu.git;a=blob;f=hw/arm/vexpress.c;h=58481c07629aedb09864dcc72757ff7947e733bb;hb=f9baca549e44791be0dd98de15add3d8452a8af0#l50
-[2] https://git.qemu.org/?p=qemu.git;a=commitdiff;h=06f1521795207359a395996c253c306f4ab7586e
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- support/testing/tests/fs/test_ubi.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/nginx-dav-ext/Config.in        | 2 +-
+ package/nginx-dav-ext/nginx-dav-ext.mk | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/support/testing/tests/fs/test_ubi.py b/support/testing/tests/fs/test_ubi.py
-index 9cacf3b4b7..92cd5cfd3b 100644
---- a/support/testing/tests/fs/test_ubi.py
-+++ b/support/testing/tests/fs/test_ubi.py
-@@ -25,7 +25,7 @@ class TestUbi(infra.basetest.BRTest):
-         out = out.splitlines()
-         self.assertIn("UBI image, version 1", out[0])
+diff --git a/package/nginx-dav-ext/Config.in b/package/nginx-dav-ext/Config.in
+index 1e60321fe3..9e3a0faf28 100644
+--- a/package/nginx-dav-ext/Config.in
++++ b/package/nginx-dav-ext/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_NGINX_DAV_EXT
+ 	bool "nginx-dav-ext"
+ 	depends on BR2_PACKAGE_NGINX_HTTP_DAV_MODULE
+-	select BR2_PACKAGE_EXPAT
++	select BR2_PACKAGE_LIBXSLT
+ 	help
+ 	  NGINX WebDAV missing commands support (PROPFIND & OPTIONS).
  
--        subprocess.call(["truncate", "-s 128M", img])
-+        subprocess.call(["truncate", "-s 64M", img])
+diff --git a/package/nginx-dav-ext/nginx-dav-ext.mk b/package/nginx-dav-ext/nginx-dav-ext.mk
+index 1b3071851a..cce527e179 100644
+--- a/package/nginx-dav-ext/nginx-dav-ext.mk
++++ b/package/nginx-dav-ext/nginx-dav-ext.mk
+@@ -8,6 +8,6 @@ NGINX_DAV_EXT_VERSION = 3.0.0
+ NGINX_DAV_EXT_SITE = $(call github,arut,nginx-dav-ext-module,v$(NGINX_DAV_EXT_VERSION))
+ NGINX_DAV_EXT_LICENSE = BSD-2-Clause
+ NGINX_DAV_EXT_LICENSE_FILES = LICENSE
+-NGINX_DAV_EXT_DEPENDENCIES = expat
++NGINX_DAV_EXT_DEPENDENCIES = libxslt
  
-         self.emulator.boot(arch="armv7",
-                            kernel="builtin",
+ $(eval $(generic-package))
 -- 
-2.31.1
+2.32.0
 
 _______________________________________________
 buildroot mailing list
