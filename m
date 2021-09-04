@@ -2,91 +2,90 @@ Return-Path: <SRS0=jfQC=N2=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.7 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-18.5 required=3.0 tests=BAYES_00,
 	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
 	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	UNWANTED_LANGUAGE_BODY,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 442D0C433EF
-	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 09:54:17 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B9948C433F5
+	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 10:08:51 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 0B71B61051
-	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 09:54:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0B71B61051
+	by mail.kernel.org (Postfix) with ESMTPS id 2045B60F91
+	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 10:08:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2045B60F91
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D09D1605CC;
-	Sat,  4 Sep 2021 09:54:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D470F40292;
+	Sat,  4 Sep 2021 10:08:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vFw-ApXIYJJP; Sat,  4 Sep 2021 09:54:16 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id IAJ8GJncoFIR; Sat,  4 Sep 2021 10:08:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 38663605AF;
-	Sat,  4 Sep 2021 09:54:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2E98240262;
+	Sat,  4 Sep 2021 10:08:49 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 3B68A1BF836
- for <buildroot@lists.busybox.net>; Sat,  4 Sep 2021 09:54:11 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id DDB1A1BF5AD
+ for <buildroot@lists.busybox.net>; Sat,  4 Sep 2021 10:08:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 37A8A425D7
- for <buildroot@lists.busybox.net>; Sat,  4 Sep 2021 09:54:11 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id CA87F40262
+ for <buildroot@lists.busybox.net>; Sat,  4 Sep 2021 10:08:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id S7IjguXJ1MTy for <buildroot@lists.busybox.net>;
- Sat,  4 Sep 2021 09:54:10 +0000 (UTC)
+ with ESMTP id JKdB--MxPq_5 for <buildroot@lists.busybox.net>;
+ Sat,  4 Sep 2021 10:08:45 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
- [IPv6:2a00:1450:4864:20::42f])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 634A9425C5
- for <buildroot@buildroot.org>; Sat,  4 Sep 2021 09:54:10 +0000 (UTC)
-Received: by mail-wr1-x42f.google.com with SMTP id d6so1481589wrc.11
- for <buildroot@buildroot.org>; Sat, 04 Sep 2021 02:54:10 -0700 (PDT)
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
+ [IPv6:2a00:1450:4864:20::42b])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7299E40259
+ for <buildroot@buildroot.org>; Sat,  4 Sep 2021 10:08:45 +0000 (UTC)
+Received: by mail-wr1-x42b.google.com with SMTP id b10so2214473wru.0
+ for <buildroot@buildroot.org>; Sat, 04 Sep 2021 03:08:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=jx+lRHbDWEjZ4zR/sMHoHWSq89sAd+YK4tIsaJq2UF0=;
- b=MdhYtgaKXtO2EhFi4LSwEP1gMDD8adWZSYl59PnwPi3zZ9S0EGfwW+6wxFJtIkns/v
- 31aZ8N5LqNCOwXG6l6Izk4aUtCePIamL4Wzr3ScNQFePoQrZMW+lLOoj51kP3J38dYi7
- 3fVWrkdin/+1jGQAFFRUwg2IdRsLOV4k3OtzEE14G8knxCVQyxn31Em0/NlBlQOrwj9M
- QSQAhGcHjnwBxYb4QJ2h9nl9e5ZvsDiD8q7Tl1/z80er23UZ2PlG3XwJZw+lfTR5GOCc
- e5QEf4sRkanyUHxVskfLVmNbewnlKillwP2LSdAwAha/GL9mF6XsVuDqKuENaNfJqN1W
- +4ZA==
+ bh=D3RvkZTyCTcyB6X78+SFj/AWG43Y2yvM9lT2zZ43ebs=;
+ b=M0Hz5WuYLM9TbuifhYsgTdsxXuueTBo/ogfYbibVzOKoyqH21n/i3KH/z5Y+OU1o9C
+ ImSos+jYS+JgjqDNhrwClTjw0l3Cpnh6sDP08U3i2ToloLMTYyzoYMDnonNwRzz5v9CV
+ U1JUKwGAKA9/YeJ0pjmtdtkg+vAiIWxIfGqLq3vIc30VDnBez5Er70BqaNe1e5t7/hzi
+ zZU6G5LtJQ8e1JWY5lUFYMGGk5VHnHsHRI5NCBfpfEr3qyINZiftlXvIu6OuRlGEByhS
+ EfrcddCR/TXrKj0nJ0whVJ8uWXgEotd6oYmokYf/RQGc98JJA8sonHL2zZUHtEasaDWy
+ 1lYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=jx+lRHbDWEjZ4zR/sMHoHWSq89sAd+YK4tIsaJq2UF0=;
- b=VAD/bgSNbH8BCutjFsXtelB81nUhWKZCMsJhapMm1HAeO13v5xNZsMGI7gHE/fCtUr
- aSjcR0Mj8hT+9y5RAJY5vF2HNtasHqX5UAGwi3RNk+n1sTJ7cXswa/BBubimtGirUIHv
- noLMEIc+hc9fnHfg3RyfTpvA2iVDuJLc+jHZPnJNzOM2OIJw245EPNofBql5WeSNRzCT
- uBPiQdDzDBFNrDmvh9Zj0ne6Pk4HpxIQwblJKEe9KjofKH254CAoD+WQje9JihLcq68R
- prJ01v7W+5sQ6ALUuew16OSbCi35Oy4yFFJofmpvA06xycLLe5/giZwiit1dLfjQBZ1Y
- qcsQ==
-X-Gm-Message-State: AOAM530lv8/MtMEq+A4EIIS3okSozdPfJiBYbZuk8txdJc1G6ZBJIK3Z
- Qaog/DUA3d1J85QqwnvN/OBmhi4sHCywUA==
-X-Google-Smtp-Source: ABdhPJzhhQ/bxZnVmLbf78RcSXq1JsxrsYqz3DNnZkMG5c0YniLOe5AkqkxS1RMeKI7nYQybikQvjw==
-X-Received: by 2002:adf:ea4d:: with SMTP id j13mr3271006wrn.86.1630749248218; 
- Sat, 04 Sep 2021 02:54:08 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-2139-166.w92-167.abo.wanadoo.fr.
- [92.167.218.166])
- by smtp.gmail.com with ESMTPSA id n66sm1640676wmn.2.2021.09.04.02.54.07
+ bh=D3RvkZTyCTcyB6X78+SFj/AWG43Y2yvM9lT2zZ43ebs=;
+ b=ClIs3wnNAgdQ8qCAD55FLj1SjFKM2Dv8wjKE2N0LTLdibeA+Oukc3M8G3PrxQW1IiA
+ b5y/sFF5U+sfgDCuIgCpOYcV5iy4YTukoMc63rRwAh9YAGBuRbqbg+7TwUG4na3P+D+7
+ NaJae8NvsaB00Smp9Ug6fhp6+mQ4/rKIglu5te0K/aPV6Zqs3/pCsPofYt6XlGJjdX1L
+ np+aVvBgcLJENu89/21i1Q9uNUoJvp86k7aOqA0UmFUkSDZ8IV60GYGJH6YRzl/AGE+w
+ cDpAqKbpy+FOn1j8z5bDdBCrXFzjjUSGY1afzv63yT6kj0prJZ+uMmnv4LuTTxSeaGOh
+ yhJw==
+X-Gm-Message-State: AOAM5308pEmXbC3kmahUvgFYCqJLGYu+6O8zKHr5dkAgH1iLX0lCUsEo
+ WFjp0FKWmpmzr4ONhfsgGRYb8OP129Q=
+X-Google-Smtp-Source: ABdhPJzsBHWN4SrAjV9RQjgWow+VSlkdV5GKn3ZAK7DIMLg7WVsPuWU6pw8xKb/5XV2rY5xVsPVaYA==
+X-Received: by 2002:adf:d231:: with SMTP id k17mr3293405wrh.389.1630750123725; 
+ Sat, 04 Sep 2021 03:08:43 -0700 (PDT)
+Received: from localhost.localdomain
+ (2a01cb058f8a180098814a9aef637f91.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:8f8a:1800:9881:4a9a:ef63:7f91])
+ by smtp.gmail.com with ESMTPSA id o2sm1794172wrh.13.2021.09.04.03.08.42
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 04 Sep 2021 02:54:07 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Sat, 04 Sep 2021 03:08:43 -0700 (PDT)
+From: Romain Naour <romain.naour@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat,  4 Sep 2021 11:54:03 +0200
-Message-Id: <20210904095403.1519090-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.32.0
+Date: Sat,  4 Sep 2021 12:08:36 +0200
+Message-Id: <20210904100837.1785198-1-romain.naour@gmail.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/libvirt: fix build with lvm2
+Subject: [Buildroot] [RFC 1/2] support/testing: test_ubi.py enable qemu's
+ cfi flash01 old multiple chip handling
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,42 +98,55 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Jared Bents <jared.bents@rockwellcollins.com>
+Cc: Romain Naour <romain.naour@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-libvirt needs a lvm2 standard install since its addition in commit
-ccfc90e1010e42e6529afae3a5ea8bf7226dabc1 to avoid the following build
-failure:
+The ubi/ubifs test (test_ubi.py) rely on a Qemu bug present in 2.8.0 that was fixed in Qemu 2.9.0 [1].
+The ubi/ubifs settings must be updated to run with Qemu >= 2.9.0 using the new multiple chip handling.
 
-../output-1/build/libvirt-7.4.0/meson.build:1831:6: ERROR: Program 'pvcreate' not found
+The issue was not detected until now since we are sill using an old qemu (2.8 from Debian stretch)
+for testing in gitlab (using the Buildroot Docker image used by gitlab-ci.yml).
+The test will fail with qemu >= 2.9.
+
+In order to be able to the the test with any Qemu version >= 2.9, enable the
+hw-compat property to retain the old behaviour on 2.8 and earlier versions.
+(This property is not supported by qemu 2.8.0).
+
+Tested with qemu 2.9.0.
 
 Fixes:
- - http://autobuild.buildroot.org/results/dc9af7a677af7e53c1240ebbee5b0edc84c8cf52
+https://gitlab.com/kubu93/buildroot/-/jobs/1543100932
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[1] https://git.qemu.org/?p=qemu.git;a=commit;h=feb0b1aa11f14ee71660aba46b46387d1f923c9e
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- package/libvirt/libvirt.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This will not work with Qemu 2.8.0 since this property doesn't exist.
 
-diff --git a/package/libvirt/libvirt.mk b/package/libvirt/libvirt.mk
-index 1b420771f5..847c35e06e 100644
---- a/package/libvirt/libvirt.mk
-+++ b/package/libvirt/libvirt.mk
-@@ -166,7 +166,7 @@ else
- LIBVIRT_CONF_OPTS += -Dselinux=disabled -Dsecdriver_selinux=disabled
- endif
- 
--ifeq ($(BR2_PACKAGE_LVM2),y)
-+ifeq ($(BR2_PACKAGE_LVM2_STANDARD_INSTALL),y)
- LIBVIRT_CONF_OPTS += -Dstorage_lvm=enabled
- LIBVIRT_DEPENDENCIES += lvm2
- else
+I tried to update the ubi/ubifs settings without success.
+---
+ support/testing/tests/fs/test_ubi.py | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/support/testing/tests/fs/test_ubi.py b/support/testing/tests/fs/test_ubi.py
+index 7321f83da9..9cacf3b4b7 100644
+--- a/support/testing/tests/fs/test_ubi.py
++++ b/support/testing/tests/fs/test_ubi.py
+@@ -32,7 +32,8 @@ class TestUbi(infra.basetest.BRTest):
+                            kernel_cmdline=["root=ubi0:rootfs",
+                                            "ubi.mtd=0",
+                                            "rootfstype=ubifs"],
+-                           options=["-drive", "file={},if=pflash".format(img)])
++                           options=["-global", "driver=cfi.pflash01,property=old-multiple-chip-handling,value=on",
++                                    "-drive", "file={},if=pflash".format(img)])
+         self.emulator.login()
+         cmd = "mount | grep 'ubi0:rootfs on / type ubifs'"
+         _, exit_code = self.emulator.run(cmd)
 -- 
-2.32.0
+2.31.1
 
 _______________________________________________
 buildroot mailing list
