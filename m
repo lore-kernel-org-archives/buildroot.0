@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 53CE5C433F5
-	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 20:47:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 46D41C433EF
+	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 20:47:34 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1CA8D60F42
-	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 20:47:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1CA8D60F42
+	by mail.kernel.org (Postfix) with ESMTPS id 10C5460F3A
+	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 20:47:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 10C5460F3A
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E5BF46079E;
-	Sat,  4 Sep 2021 20:47:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D9C1560793;
+	Sat,  4 Sep 2021 20:47:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uuv6-fHcyGar; Sat,  4 Sep 2021 20:47:21 +0000 (UTC)
+	with ESMTP id 69m4IfOHLrOc; Sat,  4 Sep 2021 20:47:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 42F7260793;
-	Sat,  4 Sep 2021 20:47:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 287EA607AB;
+	Sat,  4 Sep 2021 20:47:32 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 39E921BF20F
- for <buildroot@lists.busybox.net>; Sat,  4 Sep 2021 20:46:11 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3D8A21BF20F
+ for <buildroot@lists.busybox.net>; Sat,  4 Sep 2021 20:46:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id F2F4D40167
- for <buildroot@lists.busybox.net>; Sat,  4 Sep 2021 20:46:09 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 25FDF4014E
+ for <buildroot@lists.busybox.net>; Sat,  4 Sep 2021 20:46:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vXE2ndmIKjfW for <buildroot@lists.busybox.net>;
+ with ESMTP id bbL1ec3GJALo for <buildroot@lists.busybox.net>;
  Sat,  4 Sep 2021 20:46:08 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3FBDE4015B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 26B6A40105
  for <buildroot@buildroot.org>; Sat,  4 Sep 2021 20:46:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id C575B8841C; Sat,  4 Sep 2021 20:44:45 +0000 (UTC)
+ id A5FBE88489; Sat,  4 Sep 2021 20:44:45 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 4 Sep 2021 22:35:15 +0200
+Date: Sat, 4 Sep 2021 22:32:48 +0200
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 3560d99544a02e8aaa3093043f44ccdf1ec770f4
-X-Git-Newrev: 53af97d57779f60175f0033c7a3a32232dca2f10
+X-Git-Oldrev: 68776d578dde0a14cdfde7b780d9dd260094f6ef
+X-Git-Newrev: 99952c08a836bc155b078ccffd274bad0f7b32d5
 X-Patchwork-Hint: ignore
-Message-Id: <20210904204445.C575B8841C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x]
- package/python-matplotlib: merge dependency comments
+Message-Id: <20210904204445.A5FBE88489@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/sylpheed: add
+ SYLPHEED_CPE_ID_VENDOR
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,33 +71,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=53af97d57779f60175f0033c7a3a32232dca2f10
+commit: https://git.buildroot.net/buildroot/commit/?id=99952c08a836bc155b078ccffd274bad0f7b32d5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+
+cpe:2.3:a:sylpheed_project:sylpheed is a valid CPE identifier for this
+package:
+
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Asylpheed_project%3Asylpheed
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit d77aba25a55560d4c15bf319d6dc24619232a8ee)
+(cherry picked from commit 7b30697b316ea4e336abebeea34d5c6447688630)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-matplotlib/Config.in | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ package/sylpheed/sylpheed.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/python-matplotlib/Config.in b/package/python-matplotlib/Config.in
-index e7e2804b4f..afc090856f 100644
---- a/package/python-matplotlib/Config.in
-+++ b/package/python-matplotlib/Config.in
-@@ -34,8 +34,6 @@ config BR2_PACKAGE_PYTHON_MATPLOTLIB_QT
+diff --git a/package/sylpheed/sylpheed.mk b/package/sylpheed/sylpheed.mk
+index 0453fba521..2f8a7aeff9 100644
+--- a/package/sylpheed/sylpheed.mk
++++ b/package/sylpheed/sylpheed.mk
+@@ -10,6 +10,7 @@ SYLPHEED_SOURCE = sylpheed-$(SYLPHEED_VERSION).tar.xz
+ SYLPHEED_SITE = http://sylpheed.sraoss.jp/sylpheed/v$(SYLPHEED_VERSION_MAJOR)
+ SYLPHEED_LICENSE = GPL-2.0+ (executables), LGPL-2.1+ (library, attachment plugin)
+ SYLPHEED_LICENSE_FILES = COPYING COPYING.LIB
++SYLPHEED_CPE_ID_VENDOR = sylpheed_project
+ SYLPHEED_CONF_OPTS = --disable-gtkspell --disable-gpgme
+ SYLPHEED_DEPENDENCIES = host-pkgconf libgtk2
  
- endif
- 
--comment "python-matplotlib needs a toolchain w/ C++"
--	depends on !BR2_INSTALL_LIBSTDCPP
--
--comment "python-matplotlib needs glibc or musl"
--	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)
-+comment "python-matplotlib needs a glibc or musl toolchain w/ C++"
-+	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL) || \
-+		!BR2_INSTALL_LIBSTDCPP
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
