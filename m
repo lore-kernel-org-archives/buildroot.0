@@ -2,57 +2,94 @@ Return-Path: <SRS0=jfQC=N2=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+X-Spam-Status: No, score=-8.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 60433C433F5
-	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 20:19:28 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B6D4C433EF
+	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 20:26:29 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 228CC60F55
-	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 20:19:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 228CC60F55
+	by mail.kernel.org (Postfix) with ESMTPS id 16DC36069E
+	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 20:26:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 16DC36069E
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EB5AF425CE;
-	Sat,  4 Sep 2021 20:19:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D34526065C;
+	Sat,  4 Sep 2021 20:26:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id l-8NGUSccXfi; Sat,  4 Sep 2021 20:19:27 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id n2MCjFrqiwU9; Sat,  4 Sep 2021 20:26:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 014F2425A8;
-	Sat,  4 Sep 2021 20:19:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 37E776066E;
+	Sat,  4 Sep 2021 20:26:27 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 22B6C1BF962
- for <buildroot@lists.busybox.net>; Sat,  4 Sep 2021 20:17:30 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 220AF1BF20F
+ for <buildroot@lists.busybox.net>; Sat,  4 Sep 2021 20:26:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1F44060658
- for <buildroot@lists.busybox.net>; Sat,  4 Sep 2021 20:17:30 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1193F6066E
+ for <buildroot@lists.busybox.net>; Sat,  4 Sep 2021 20:26:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id T8m3COMmYUfw for <buildroot@lists.busybox.net>;
- Sat,  4 Sep 2021 20:17:29 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 37D0F606C7
- for <buildroot@buildroot.org>; Sat,  4 Sep 2021 20:17:29 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id C84CA8842F; Sat,  4 Sep 2021 20:16:06 +0000 (UTC)
+ with ESMTP id J0WGDotThA5Y for <buildroot@lists.busybox.net>;
+ Sat,  4 Sep 2021 20:26:25 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com
+ [IPv6:2a00:1450:4864:20::633])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5B87B6065C
+ for <buildroot@buildroot.org>; Sat,  4 Sep 2021 20:26:25 +0000 (UTC)
+Received: by mail-ej1-x633.google.com with SMTP id t19so5069942ejr.8
+ for <buildroot@buildroot.org>; Sat, 04 Sep 2021 13:26:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=sender:from:to:cc:subject:references:date:in-reply-to:message-id
+ :user-agent:mime-version;
+ bh=ZrbyxZX4QaPdekRvKen1e1WQZtEoa1VACVhi7QxFl50=;
+ b=pbx6bRy3W5Vmr+tc7i0/CKlFBEawRdmySH3suYKbi9RrdB3oUpZvxYWO1PZl5cVHCr
+ g6ZS3JQaVw5xcdy+GSbgXJRGi4yWFhpQZI/GuLUfsYj9MbTSyUX5YNge6esarXhKktSn
+ hMYtaFrD7i80Ku8gIiQB4oaeb85cG+LN6lJZM3F4dsxd7qrlfzM4oVVIVk3d0V53kZHb
+ cqbQP3uuo2DRM5f+4OPqDCZELprcYONK/KT06+ePCeuLSSUrVeHIzW8OhamP3tpwQ12i
+ g7fEhDbCZTjmV6uHSWaJRqrc0oXeROJ0Yt9rDuMPYd2XkK4un2xJwvTEcfAtkLo/63jd
+ 4y6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:sender:from:to:cc:subject:references:date
+ :in-reply-to:message-id:user-agent:mime-version;
+ bh=ZrbyxZX4QaPdekRvKen1e1WQZtEoa1VACVhi7QxFl50=;
+ b=nd27L39CNAHNxxO5uuDGfTW+FTXs4S7qhWbjMxVt61lbOEERaHI7E+OQwz1YS9Pvvq
+ /JyajX2z/q68OC/nUHmhUL/ixhfS/nQiOvbN7FZHi5V/yjIfGr9DtlJoosrtilLdiR1L
+ ynBJiAZHXWiN2U/mYXhigeWs8r0dzMRui7yE1sv2Jx0Jj6w4x1dTKdvswrm0b8T3av8v
+ xTapfOr3swAhbSBtpkBxKNuZMgl4ygtDKgGnJwEFeCUS8jDj4A5IkywHuJySpyx9ItPY
+ I9Hro6kzbkCBkrm6r9AMkVDJU2nzlSnR8usJTIZvpo11x9Rq3yGAZ+9nBSz5S55N1fuR
+ vFgQ==
+X-Gm-Message-State: AOAM530bXEtqIhh8DOQgJ8sC3cALzkUFnwiB0+XyWh3MMeZjNA+3tZ/7
+ szf+X8wMQBIWf8RK2Qw4zUU=
+X-Google-Smtp-Source: ABdhPJzaPsE4pQ+tP0U0BAokrm23kYPZBU5IfDTU1ZNWxiCVbkrRlwWvo3K3YipJQfeINSKU3sM4eQ==
+X-Received: by 2002:a17:907:10cc:: with SMTP id
+ rv12mr5772800ejb.423.1630787183442; 
+ Sat, 04 Sep 2021 13:26:23 -0700 (PDT)
+Received: from dell.be.48ers.dk (d51a5bc31.access.telenet.be. [81.165.188.49])
+ by smtp.gmail.com with ESMTPSA id
+ r6sm1470650ejb.119.2021.09.04.13.26.22
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 04 Sep 2021 13:26:22 -0700 (PDT)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
+ (envelope-from <peter@korsgaard.com>)
+ id 1mMcF3-0004hq-Il; Sat, 04 Sep 2021 22:26:21 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sat, 4 Sep 2021 22:08:52 +0200
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 527018a3f10e7364ac1b66b87caa24b263931d8f
-X-Git-Newrev: 58c73ff9e2aac31cddb2558339af046bfbed6bf2
-X-Patchwork-Hint: ignore
-Message-Id: <20210904201606.C84CA8842F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/xenomai: fix
- build on arc and riscv32
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20210809100037.1102402-1-fontaine.fabrice@gmail.com>
+Date: Sat, 04 Sep 2021 22:26:21 +0200
+In-Reply-To: <20210809100037.1102402-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 9 Aug 2021 12:00:37 +0200")
+Message-ID: <87tuj0nl3m.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/jszip: fix CVE-2021-23413
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,190 +102,26 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============5742872554721409636=="
+Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
+ buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
---===============5742872554721409636==
-Content-Type: text/plain
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-commit: https://git.buildroot.net/buildroot/commit/?id=58c73ff9e2aac31cddb2558339af046bfbed6bf2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+ > This affects the package jszip before 3.7.0. Crafting a new zip file
+ > with filenames set to Object prototype values (e.g __proto__, toString,
+ > etc) results in a returned object with a modified prototype instance.
 
-Fix the following build failures on arc and riscv32:
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-latency.c: In function 'display':
-latency.c:326:21: error: format '%ld' expects argument of type 'long int', but argument 2 has type 'time_t' {aka 'long long int'} [-Werror=format=]
-  326 |         ("RTT|  %.2ld:%.2ld:%.2ld  (%s, %Ld us period, "
-      |                 ~~~~^
-      |                     |
-      |                     long int
-      |                 %.2lld
-  327 |          "priority %d)\n", dt / 3600,
-      |                            ~~~~~~~~~
-      |                               |
-      |                               time_t {aka long long int}
+Committed to 2021.02.x and 2021.05.x, thanks.
 
-altency.c: In function ‘display’:
-altency.c:262:21: error: format ‘%ld’ expects argument of type ‘long int’, but argument 2 has type ‘time_t’ {aka ‘long long int’} [-Werror=format=]
-  262 |         ("RTT|  %.2ld:%.2ld:%.2ld  (%s, %Ld us period, "
-      |                 ~~~~^
-      |                     |
-      |                     long int
-      |                 %.2lld
-  263 |          "priority %d)\n", dt / 3600,
-      |                            ~~~~~~~~~
-      |                               |
-      |                               time_t {aka long long int}
-
-Fixes:
- - http://autobuild.buildroot.org/results/448efe22e8fe058a1b354a3c124874e30b9ce138
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 74196b7d059684e555a87e5409c21c56c727066b)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../0002-Add-disable-demo-testsuite-options.patch  | 94 ++++++++++++++++++++++
- package/xenomai/xenomai.mk                         |  7 +-
- 2 files changed, 100 insertions(+), 1 deletion(-)
-
-diff --git a/package/xenomai/3.0.10/0002-Add-disable-demo-testsuite-options.patch b/package/xenomai/3.0.10/0002-Add-disable-demo-testsuite-options.patch
-new file mode 100644
-index 0000000000..0a817503b6
---- /dev/null
-+++ b/package/xenomai/3.0.10/0002-Add-disable-demo-testsuite-options.patch
-@@ -0,0 +1,94 @@
-+From 702697cafcec735e55f075594a2990204c8ea17d Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Tue, 10 Aug 2021 18:01:48 +0200
-+Subject: [PATCH] Add --disable-{demo,testsuite} options
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Allow the user to disable demo and testsuite to avoid the following
-+build failures on arc and riscv32:
-+
-+latency.c: In function 'display':
-+latency.c:326:21: error: format '%ld' expects argument of type 'long int', but argument 2 has type 'time_t' {aka 'long long int'} [-Werror=format=]
-+  326 |         ("RTT|  %.2ld:%.2ld:%.2ld  (%s, %Ld us period, "
-+      |                 ~~~~^
-+      |                     |
-+      |                     long int
-+      |                 %.2lld
-+  327 |          "priority %d)\n", dt / 3600,
-+      |                            ~~~~~~~~~
-+      |                               |
-+      |                               time_t {aka long long int}
-+
-+altency.c: In function ‘display’:
-+altency.c:262:21: error: format ‘%ld’ expects argument of type ‘long int’, but argument 2 has type ‘time_t’ {aka ‘long long int’} [-Werror=format=]
-+  262 |         ("RTT|  %.2ld:%.2ld:%.2ld  (%s, %Ld us period, "
-+      |                 ~~~~^
-+      |                     |
-+      |                     long int
-+      |                 %.2lld
-+  263 |          "priority %d)\n", dt / 3600,
-+      |                            ~~~~~~~~~
-+      |                               |
-+      |                               time_t {aka long long int}
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/448efe22e8fe058a1b354a3c124874e30b9ce138
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ Makefile.am  | 12 ++++++++++--
-+ configure.ac | 12 ++++++++++++
-+ 2 files changed, 22 insertions(+), 2 deletions(-)
-+
-+diff --git a/Makefile.am b/Makefile.am
-+index 891e53f66..604644277 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -6,9 +6,17 @@ SUBDIRS = 		\
-+ 	config		\
-+ 	include		\
-+ 	scripts		\
-+-	testsuite	\
-+-	utils		\
-++	utils
-++
-++if XENO_ENABLE_DEMO
-++SUBDIRS += 		\
-+ 	demo
-++endif
-++
-++if XENO_ENABLE_TESTSUITE
-++SUBDIRS += 		\
-++	testsuite
-++endif
-+ 
-+ EXTRA_DIST = kernel debian
-+ 
-+diff --git a/configure.ac b/configure.ac
-+index bd5fd5ba9..29dfd16e5 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -200,6 +200,18 @@ test \! x$debug_mode = x && AC_DEFINE(CONFIG_XENO_DEBUG,1,[config])
-+ AM_CONDITIONAL(XENO_DEBUG_FULL,[test x$debug_mode = xfull])
-+ test x$debug_mode = xfull && AC_DEFINE(CONFIG_XENO_DEBUG_FULL,1,[config])
-+ 
-++dnl Demo (default: on)
-++
-++AC_ARG_ENABLE(demo,
-++	AS_HELP_STRING([--disable-demo], [Disable demo]))
-++AM_CONDITIONAL(XENO_ENABLE_DEMO,[test x$enable_demo != xno])
-++
-++dnl Testsuite (default: on)
-++
-++AC_ARG_ENABLE(testsuite,
-++	AS_HELP_STRING([--disable-testsuite], [Disable testsuite]))
-++AM_CONDITIONAL(XENO_ENABLE_TESTSUITE,[test x$enable_testsuite != xno])
-++
-+ dnl Low resolution clock (default: off)
-+ 
-+ unset lores_clock
-+-- 
-+2.30.2
-+
-diff --git a/package/xenomai/xenomai.mk b/package/xenomai/xenomai.mk
-index 7e3b130085..c1ad0c5df6 100644
---- a/package/xenomai/xenomai.mk
-+++ b/package/xenomai/xenomai.mk
-@@ -16,6 +16,8 @@ else
- XENOMAI_SOURCE = xenomai-$(XENOMAI_VERSION).tar.bz2
- XENOMAI_SITE = http://xenomai.org/downloads/xenomai/stable
- endif
-+# We're patching configure.ac
-+XENOMAI_AUTORECONF = YES
- 
- # Exclude all from the hash check, but the latest version.
- ifeq ($(BR2_PACKAGE_XENOMAI)$(BR2_PACKAGE_XENOMAI_LATEST_VERSION),y)
-@@ -37,7 +39,10 @@ XENOMAI_INSTALL_STAGING = YES
- XENOMAI_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install-user
- XENOMAI_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) install-user
- 
--XENOMAI_CONF_OPTS += --includedir=/usr/include/xenomai/
-+XENOMAI_CONF_OPTS += \
-+	--disable-demo \
-+	--disable-testsuite \
-+	--includedir=/usr/include/xenomai/
- 
- ifeq ($(BR2_PACKAGE_XENOMAI_MERCURY),y)
- XENOMAI_CONF_OPTS += --with-core=mercury
-
---===============5742872554721409636==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5742872554721409636==--
