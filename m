@@ -2,96 +2,57 @@ Return-Path: <SRS0=jfQC=N2=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AEB1BC433F5
-	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 20:43:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6CC72C433F5
+	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 20:46:12 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 7143760C3E
-	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 20:43:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7143760C3E
+	by mail.kernel.org (Postfix) with ESMTPS id 29C3B60F3A
+	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 20:46:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 29C3B60F3A
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3656560789;
-	Sat,  4 Sep 2021 20:43:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CCDF660789;
+	Sat,  4 Sep 2021 20:46:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oA5h3d-9VcLB; Sat,  4 Sep 2021 20:43:18 +0000 (UTC)
+	with ESMTP id bhn5mKyKcMCb; Sat,  4 Sep 2021 20:46:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 885256077F;
-	Sat,  4 Sep 2021 20:43:17 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 42D411BF20F
- for <buildroot@lists.busybox.net>; Sat,  4 Sep 2021 20:43:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2A4F36066E;
+	Sat,  4 Sep 2021 20:46:10 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id CFB241BF20F
+ for <buildroot@lists.busybox.net>; Sat,  4 Sep 2021 20:46:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2AB1A4015B
- for <buildroot@lists.busybox.net>; Sat,  4 Sep 2021 20:43:16 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id CB90040460
+ for <buildroot@lists.busybox.net>; Sat,  4 Sep 2021 20:46:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1BK-Wik6nzfi for <buildroot@lists.busybox.net>;
- Sat,  4 Sep 2021 20:43:15 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com
- [IPv6:2a00:1450:4864:20::632])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 58DE540105
- for <buildroot@buildroot.org>; Sat,  4 Sep 2021 20:43:15 +0000 (UTC)
-Received: by mail-ej1-x632.google.com with SMTP id mf2so5104836ejb.9
- for <buildroot@buildroot.org>; Sat, 04 Sep 2021 13:43:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=sender:from:to:cc:subject:references:date:in-reply-to:message-id
- :user-agent:mime-version;
- bh=/Abo2iBOr0L05W7UlJ5WB3WzANit2HmgpMhT30+rwLg=;
- b=n6l0cPSszOIvJgaJfz2wl1PWF/h+oFnFDozK3ZuVJiMFA71B35IYnQJpcRn1fv2ex6
- uhGu0O8R9Bl2erwC5NB6E9OleiAdtlCGh+AvWaD+balglQh4dvzcFtSC0dcqwv3p4CuB
- jP564VpUsO6L0vQYjlaefbAUHL/rL8hwWJnFyYvACWUH0Go49LBcHOAi+k7T5M0883B7
- j1GD+rbzryotPLMLfcvj5cOZCrRh3scJevysI4i3rVctl9MUvNf2Mq1NiB4IJR7oNvyE
- +EpACSSwQaGZxgiWsGfLZ+HUh5U3fTsBb2hU0up9EoAbCB5cM5oz+q2bsIJ/MUa3knNG
- FVmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:sender:from:to:cc:subject:references:date
- :in-reply-to:message-id:user-agent:mime-version;
- bh=/Abo2iBOr0L05W7UlJ5WB3WzANit2HmgpMhT30+rwLg=;
- b=tJ/ALzB56FLVQvJNu5HLx9F/d45j9SkYJODKi8y0TvPrm27aGZRnTfoLNL6CmAEq+O
- T3TlNSWkd/IofjYjgqKBGVprNSfxLVtH77y8qf/QinFB8SiAveFHY9cpOVluc8vw+7fD
- 1jWO8SgEoNmpwVmZwctxIHkklKVX4XF9HaSLsCgwv71r5+bjQJqVuhLB8mErqvmzUTJR
- MBMmvwWXLjfbIUHBRF/ABwccOUwqoHksRQjMfavJRqLdYvZiEUE8wwfJ6hdXC3Jk58Vy
- DiAQl7rimFuSm7dWdgma8Tk/ac1GwgK4H2a6DMR2YrF4ZQ+0K2EtXNRpSj/vzgN9FOim
- 2uTA==
-X-Gm-Message-State: AOAM530J/HmgRlcc0SH/BFOjedKzhARJhrF0pzwtXh0/WlElIyKoVwn5
- vUjtSApGGgb26MGvM9r+oVoXeexE3M0=
-X-Google-Smtp-Source: ABdhPJzFnst29LJvEu/4YlwLU2r8biuboTdT1K7SHDO1MUjhzS1o+aWz6Lx9zs5SPwy4if8j76x2ng==
-X-Received: by 2002:a17:906:9708:: with SMTP id
- k8mr5699722ejx.399.1630788193627; 
- Sat, 04 Sep 2021 13:43:13 -0700 (PDT)
-Received: from dell.be.48ers.dk (d51a5bc31.access.telenet.be. [81.165.188.49])
- by smtp.gmail.com with ESMTPSA id
- z12sm1889144edi.44.2021.09.04.13.43.12
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 04 Sep 2021 13:43:13 -0700 (PDT)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
- (envelope-from <peter@korsgaard.com>)
- id 1mMcVM-00089d-CI; Sat, 04 Sep 2021 22:43:12 +0200
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id EbAI2LE5FfnW for <buildroot@lists.busybox.net>;
+ Sat,  4 Sep 2021 20:46:08 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 19F894045B
+ for <buildroot@buildroot.org>; Sat,  4 Sep 2021 20:46:08 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 9C0B98841C; Sat,  4 Sep 2021 20:44:45 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20210814204354.352402-1-fontaine.fabrice@gmail.com>
-Date: Sat, 04 Sep 2021 22:43:12 +0200
-In-Reply-To: <20210814204354.352402-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 14 Aug 2021 22:43:54 +0200")
-Message-ID: <87zgssm5r3.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/gd: fix CVE-2021-38115
+To: buildroot@buildroot.org
+Date: Sat, 4 Sep 2021 22:27:02 +0200
+X-Git-Refname: refs/heads/2021.02.x
+X-Git-Oldrev: eddbbbabc7f41a3e3ff6dd71ccb86a517079a558
+X-Git-Newrev: 68776d578dde0a14cdfde7b780d9dd260094f6ef
+X-Patchwork-Hint: ignore
+Message-Id: <20210904204445.9C0B98841C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/prosody: security
+ bump version to 0.11.10
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -104,24 +65,85 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=68776d578dde0a14cdfde7b780d9dd260094f6ef
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
- > read_header_tga in gd_tga.c in the GD Graphics Library (aka LibGD)
- > through 2.3.2 allows remote attackers to cause a denial of service
- > (out-of-bounds read) via a crafted TGA file.
+fixes CVE-2021-37601
+see https://blog.prosody.im/prosody-0.11.10-released/
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 047b85e7d5c1b936d886bcda49fea9e7f435cbfa)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/prosody/0001-enable-syslog.patch | 2 +-
+ package/prosody/0002-add-pidfile.patch   | 2 +-
+ package/prosody/prosody.hash             | 8 ++++----
+ package/prosody/prosody.mk               | 2 +-
+ 4 files changed, 7 insertions(+), 7 deletions(-)
 
-Committed to 2021.02.x and 2021.05.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/prosody/0001-enable-syslog.patch b/package/prosody/0001-enable-syslog.patch
+index 16acc89c5a..5f09fa903e 100644
+--- a/package/prosody/0001-enable-syslog.patch
++++ b/package/prosody/0001-enable-syslog.patch
+@@ -11,7 +11,7 @@ diff --git a/prosody.cfg.lua.dist b/prosody.cfg.lua.dist
+ index a0fc6c9e..af3cc0e4 100644
+ --- a/prosody.cfg.lua.dist
+ +++ b/prosody.cfg.lua.dist
+-@@ -155,7 +155,7 @@ archive_expires_after = "1w" -- Remove archived messages after 1 week
++@@ -166,7 +166,7 @@ archive_expires_after = "1w" -- Remove archived messages after 1 week
+  log = {
+  	info = "prosody.log"; -- Change 'info' to 'debug' for verbose logging
+  	error = "prosody.err";
+diff --git a/package/prosody/0002-add-pidfile.patch b/package/prosody/0002-add-pidfile.patch
+index 6221fd0856..0653ed7239 100644
+--- a/package/prosody/0002-add-pidfile.patch
++++ b/package/prosody/0002-add-pidfile.patch
+@@ -11,7 +11,7 @@ diff --git a/prosody.cfg.lua.dist b/prosody.cfg.lua.dist
+ index af3cc0e4..675db12f 100644
+ --- a/prosody.cfg.lua.dist
+ +++ b/prosody.cfg.lua.dist
+-@@ -176,6 +176,9 @@ log = {
++@@ -187,6 +187,9 @@ log = {
+  -- HTTPS currently only supports a single certificate, specify it here:
+  --https_certificate = "certs/localhost.crt"
+  
+diff --git a/package/prosody/prosody.hash b/package/prosody/prosody.hash
+index 50d5964712..4579545e39 100644
+--- a/package/prosody/prosody.hash
++++ b/package/prosody/prosody.hash
+@@ -1,8 +1,8 @@
+ # Locally computed:
+-md5  be7e1c66c06b0eb4bdce37b67bcc6b51  prosody-0.11.9.tar.gz
+-sha1  632c2dd7794d344d4edbcea18fc1b5f623da5ca4  prosody-0.11.9.tar.gz
+-sha256  ccc032aea49d858635fb93644db276de6812be83073a8d80e9b4508095deff09  prosody-0.11.9.tar.gz
+-sha512  fabbbbb1acb3de4ff01e3e8c6e9e4dc37cb161259f1649683a1f9d925ed9f1709e052bfc831cba3f1861a9cca599f2b725ee739bfcb57164d6f50ac07011b52a  prosody-0.11.9.tar.gz
++md5  6130b79fb64141909330caf83a79a131  prosody-0.11.10.tar.gz
++sha1  4dc8b2f783b43e7a5e781b1fc8aee48b0e106def  prosody-0.11.10.tar.gz
++sha256  c6d714e6d4a6ddd1db1266b205d9d8a3ed91818f42755c9268ffb18359d204e1  prosody-0.11.10.tar.gz
++sha512  419d8f8465f1807015f0a52d8f35ee89892b0869084dae38b60fc833d63c3d70892d8e59ae00039cd15e0e25f46d042954896f51f8c0520650a877f5296707cb  prosody-0.11.10.tar.gz
+ 
+ # Hash for license file:
+ sha256 bbbdc1c5426e5944cf869fc0faeaf19d88a220cd2b39ea98b7b8e86b0e88a2ef  COPYING
+diff --git a/package/prosody/prosody.mk b/package/prosody/prosody.mk
+index 92c812ebfa..0eeb32cd3f 100644
+--- a/package/prosody/prosody.mk
++++ b/package/prosody/prosody.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PROSODY_VERSION = 0.11.9
++PROSODY_VERSION = 0.11.10
+ PROSODY_SITE = https://prosody.im/downloads/source
+ PROSODY_LICENSE = MIT
+ PROSODY_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
