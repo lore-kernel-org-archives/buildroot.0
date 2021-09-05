@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
 	TVD_SPACE_RATIO,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 069EDC433EF
-	for <buildroot@archiver.kernel.org>; Sun,  5 Sep 2021 14:01:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 11775C433F5
+	for <buildroot@archiver.kernel.org>; Sun,  5 Sep 2021 14:01:27 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id BED6860F12
-	for <buildroot@archiver.kernel.org>; Sun,  5 Sep 2021 14:01:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org BED6860F12
+	by mail.kernel.org (Postfix) with ESMTPS id CA0B560F12
+	for <buildroot@archiver.kernel.org>; Sun,  5 Sep 2021 14:01:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org CA0B560F12
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8D513402B6;
-	Sun,  5 Sep 2021 14:01:13 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9917540273;
+	Sun,  5 Sep 2021 14:01:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KKog3pvFo49c; Sun,  5 Sep 2021 14:01:12 +0000 (UTC)
+	with ESMTP id XOIfHaMZzGXI; Sun,  5 Sep 2021 14:01:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A1301402B1;
-	Sun,  5 Sep 2021 14:01:11 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8E9D3402CF;
+	Sun,  5 Sep 2021 14:01:24 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id ADEED1BF57B
- for <buildroot@lists.busybox.net>; Sun,  5 Sep 2021 14:00:26 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7F0671BF57B
+ for <buildroot@lists.busybox.net>; Sun,  5 Sep 2021 14:00:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AA0C5402AB
+ by smtp2.osuosl.org (Postfix) with ESMTP id C287140223
  for <buildroot@lists.busybox.net>; Sun,  5 Sep 2021 14:00:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QtNKn-sp7m4t for <buildroot@lists.busybox.net>;
+ with ESMTP id AvHczXomQ-Bo for <buildroot@lists.busybox.net>;
  Sun,  5 Sep 2021 14:00:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id C87A940223
+ by smtp2.osuosl.org (Postfix) with ESMTP id E878140273
  for <buildroot@buildroot.org>; Sun,  5 Sep 2021 14:00:25 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id A7A83885E0; Sun,  5 Sep 2021 13:59:01 +0000 (UTC)
+ id D6311885E0; Sun,  5 Sep 2021 13:59:01 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sun, 5 Sep 2021 15:59:58 +0200
+Date: Sun, 5 Sep 2021 16:00:02 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a8e66715aa3192b747fbdadc78052d448d4d9790
-X-Git-Newrev: a24fd00634c94948e349e8cc0fcbce98ccc0829c
+X-Git-Oldrev: 0123cff637e3ea90ec045d5c255a5b9484ddc4fb
+X-Git-Newrev: 8b8a61283383d832a660a4448b68f3f996904164
 X-Patchwork-Hint: ignore
-Message-Id: <20210905135901.A7A83885E0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/kodi-audioencoder-vorbis: bump
- version to 19.0.0-Matrix
+Message-Id: <20210905135901.D6311885E0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kodi-visualisation-waveform: bump
+ version to 19.0.1-Matrix
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,41 +71,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a24fd00634c94948e349e8cc0fcbce98ccc0829c
+commit: https://git.buildroot.net/buildroot/commit/?id=8b8a61283383d832a660a4448b68f3f996904164
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Release notes:
-https://github.com/xbmc/audioencoder.vorbis/releases/tag/19.0.0-Matrix
+https://github.com/xbmc/visualization.waveform/releases/tag/19.0.1-Matrix
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.hash | 2 +-
- package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk   | 2 +-
+ package/kodi-visualisation-waveform/kodi-visualisation-waveform.hash | 2 +-
+ package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.hash b/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.hash
-index f415624db0..5a10a66794 100644
---- a/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.hash
-+++ b/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.hash
+diff --git a/package/kodi-visualisation-waveform/kodi-visualisation-waveform.hash b/package/kodi-visualisation-waveform/kodi-visualisation-waveform.hash
+index 465ce9005e..d5538651bb 100644
+--- a/package/kodi-visualisation-waveform/kodi-visualisation-waveform.hash
++++ b/package/kodi-visualisation-waveform/kodi-visualisation-waveform.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  ba4e6bf402e31096c1fd791db8db26d0eea575998ae414a74c797e868fd08000  kodi-audioencoder-vorbis-3.0.1-Matrix.tar.gz
-+sha256  e7c1f05a921cb2da21a49a1c8d4392b4e9337548481beee9f1f70c07806b1bd6  kodi-audioencoder-vorbis-19.0.0-Matrix.tar.gz
+-sha256  c0b20e5d5877c34be107df0db142d46def785acb7269e6525f39a511c5a8e030  kodi-visualisation-waveform-19.0.0-Matrix.tar.gz
++sha256  5b025f3c1b15108b958a56ebbacf315865c7e527258778fe9580469876e4858c  kodi-visualisation-waveform-19.0.1-Matrix.tar.gz
  sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk b/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk
-index e79dd433db..f1a7a67811 100644
---- a/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk
-+++ b/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk
+diff --git a/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk b/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk
+index c66b47d60c..b7694cf574 100644
+--- a/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk
++++ b/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_AUDIOENCODER_VORBIS_VERSION = 3.0.1-Matrix
-+KODI_AUDIOENCODER_VORBIS_VERSION = 19.0.0-Matrix
- KODI_AUDIOENCODER_VORBIS_SITE = $(call github,xbmc,audioencoder.vorbis,$(KODI_AUDIOENCODER_VORBIS_VERSION))
- KODI_AUDIOENCODER_VORBIS_LICENSE = GPL-2.0+
- KODI_AUDIOENCODER_VORBIS_LICENSE_FILES = LICENSE.md
+-KODI_VISUALISATION_WAVEFORM_VERSION = 19.0.0-Matrix
++KODI_VISUALISATION_WAVEFORM_VERSION = 19.0.1-Matrix
+ KODI_VISUALISATION_WAVEFORM_SITE = $(call github,xbmc,visualization.waveform,$(KODI_VISUALISATION_WAVEFORM_VERSION))
+ KODI_VISUALISATION_WAVEFORM_LICENSE = GPL-2.0+
+ KODI_VISUALISATION_WAVEFORM_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
