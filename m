@@ -2,49 +2,49 @@ Return-Path: <SRS0=j1wI=N3=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.2 required=3.0 tests=BAYES_05,
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 743DCC433F5
-	for <buildroot@archiver.kernel.org>; Sun,  5 Sep 2021 14:39:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CF2ADC433EF
+	for <buildroot@archiver.kernel.org>; Sun,  5 Sep 2021 16:46:16 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id ECBBF60F14
-	for <buildroot@archiver.kernel.org>; Sun,  5 Sep 2021 14:39:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org ECBBF60F14
+	by mail.kernel.org (Postfix) with ESMTPS id 2F3CF600AA
+	for <buildroot@archiver.kernel.org>; Sun,  5 Sep 2021 16:46:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2F3CF600AA
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=busybox.net
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 82130401B6;
-	Sun,  5 Sep 2021 14:39:16 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C5DEF402BF;
+	Sun,  5 Sep 2021 16:46:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id eWfMbcpl_CAR; Sun,  5 Sep 2021 14:39:15 +0000 (UTC)
+	with ESMTP id WuIrPgX00h4W; Sun,  5 Sep 2021 16:46:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AE715400F5;
-	Sun,  5 Sep 2021 14:39:14 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 239F71BF392
- for <buildroot@lists.busybox.net>; Sun,  5 Sep 2021 14:39:14 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D4570402BB;
+	Sun,  5 Sep 2021 16:46:13 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 4DE991BF5A0
+ for <buildroot@lists.busybox.net>; Sun,  5 Sep 2021 16:46:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 132484042F
- for <buildroot@lists.busybox.net>; Sun,  5 Sep 2021 14:39:14 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3BC59402BB
+ for <buildroot@lists.busybox.net>; Sun,  5 Sep 2021 16:46:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ycrPU7mTrTZ2 for <buildroot@lists.busybox.net>;
- Sun,  5 Sep 2021 14:39:13 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id z-tH67lLm8E9 for <buildroot@lists.busybox.net>;
+ Sun,  5 Sep 2021 16:46:11 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7254140425
- for <buildroot@uclibc.org>; Sun,  5 Sep 2021 14:39:13 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 253FC401D0
+ for <buildroot@uclibc.org>; Sun,  5 Sep 2021 16:46:11 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 3D95D881F7; Sun,  5 Sep 2021 14:37:49 +0000 (UTC)
+ id B622D88366; Sun,  5 Sep 2021 16:44:46 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Sun, 05 Sep 2021 14:39:13 +0000
+Date: Sun, 05 Sep 2021 16:46:10 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -60,8 +60,8 @@ X-Bugzilla-Priority: P5
 X-Bugzilla-Assigned-To: yann.morin.1998@free.fr
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: assigned_to cc bug_status
-Message-ID: <bug-14196-163-X0jLxlBe3x@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-14196-163-oY7xtsnzCJ@https.bugs.busybox.net/>
 In-Reply-To: <bug-14196-163@https.bugs.busybox.net/>
 References: <bug-14196-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
@@ -89,14 +89,29 @@ Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
 https://bugs.busybox.net/show_bug.cgi?id=14196
 
-Yann E. MORIN <yann.morin.1998@free.fr> changed:
+--- Comment #1 from Yann E. MORIN <yann.morin.1998@free.fr> ---
+Leon, All,
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-           Assignee|unassigned@buildroot.uclibc |yann.morin.1998@free.fr
-                   |.org                        |
-                 CC|                            |yann.morin.1998@free.fr
-             Status|NEW                         |ASSIGNED
+Thanks the report. I can confirm indeed that e2fsprogs 1.46.3 now requirtes
+that
+the file where to generate the filesystem must pre-exist. This is a regression
+in
+2fsprogs itself.; indeed, I've tested 1.46.2 and 1.46.4, and both work without
+the touch.
+
+And indeed, the e2fsprogs commit53464654bd33 (mke2fs: fix creating a file
+system
+image w/o a pre-existing file) states:
+
+    By deferring the call to check_plausible() in commit
+    942b00cb9d2f ("mke2fs: do not warn about a pre-existing partition
+    table when using a non-zero offset") this behaviour was broken.
+
+I'll try to see if we can cook up a backport of that commit for the 2021.08.x
+branch. For master, a bump to 1.46.4 will fix the issue.
+
+Regards,
+Yann E. MORIN.
 
 -- 
 You are receiving this mail because:
