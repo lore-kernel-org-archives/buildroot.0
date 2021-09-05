@@ -2,88 +2,91 @@ Return-Path: <SRS0=j1wI=N3=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-18.5 required=3.0 tests=BAYES_00,
 	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
 	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D987C433EF
-	for <buildroot@archiver.kernel.org>; Sun,  5 Sep 2021 06:58:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A96E3C433F5
+	for <buildroot@archiver.kernel.org>; Sun,  5 Sep 2021 08:41:02 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1B79660F8F
-	for <buildroot@archiver.kernel.org>; Sun,  5 Sep 2021 06:58:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1B79660F8F
+	by mail.kernel.org (Postfix) with ESMTPS id 2B83060F90
+	for <buildroot@archiver.kernel.org>; Sun,  5 Sep 2021 08:41:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2B83060F90
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E5AEB819BC;
-	Sun,  5 Sep 2021 06:58:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CE91480F4B;
+	Sun,  5 Sep 2021 08:41:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PGPa-YcLUxBc; Sun,  5 Sep 2021 06:58:38 +0000 (UTC)
+	with ESMTP id JvKjx8mJkMW4; Sun,  5 Sep 2021 08:41:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3FB938196E;
-	Sun,  5 Sep 2021 06:58:37 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 43B431BF5D7
- for <buildroot@lists.busybox.net>; Sun,  5 Sep 2021 06:58:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1F19680F48;
+	Sun,  5 Sep 2021 08:41:00 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 38F801BF59B
+ for <buildroot@lists.busybox.net>; Sun,  5 Sep 2021 08:40:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 33FA08196E
- for <buildroot@lists.busybox.net>; Sun,  5 Sep 2021 06:58:32 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 27FA560712
+ for <buildroot@lists.busybox.net>; Sun,  5 Sep 2021 08:40:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Vhi6tRF7iToW for <buildroot@lists.busybox.net>;
- Sun,  5 Sep 2021 06:58:31 +0000 (UTC)
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id GPpH2dCRqToA for <buildroot@lists.busybox.net>;
+ Sun,  5 Sep 2021 08:40:58 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
- [IPv6:2a00:1450:4864:20::42b])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 435548196A
- for <buildroot@busybox.net>; Sun,  5 Sep 2021 06:58:31 +0000 (UTC)
-Received: by mail-wr1-x42b.google.com with SMTP id q11so4787991wrr.9
- for <buildroot@busybox.net>; Sat, 04 Sep 2021 23:58:31 -0700 (PDT)
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
+ [IPv6:2a00:1450:4864:20::336])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 330BD605B5
+ for <buildroot@buildroot.org>; Sun,  5 Sep 2021 08:40:58 +0000 (UTC)
+Received: by mail-wm1-x336.google.com with SMTP id
+ k20-20020a05600c0b5400b002e87ad6956eso2545251wmr.1
+ for <buildroot@buildroot.org>; Sun, 05 Sep 2021 01:40:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=I3mtod3wKphQm6WgyO3Y/vYKvClCdJ8rZpcHzJea2Vg=;
- b=D9SIq0SFN/EZN6bHcATTJs7BYGyA98e+rOIHuKHcBkVUq2zcpWg5uk51hji2iHHk1y
- ns4nmZscJ86HOpUPZ1gPAdMRODXoSONVz/Gd6Z87kT+h80oQ6eONd8pVqL0lxHhYC3Nj
- HZOLOXVinNcYsYm7D3B6Fo3xE+s2cU6shwltoq1Id16d1tvYsK0SLQH7PAj3CXi9BQ+b
- ibgPv5tlxArP++I0O+UGRDOLaZPWL1MZQ0D5NrgNaI8AbDMR+0XaerKqqXlFYdqmEvcp
- mjihbYwaQGnYGpHngYTRqzg3YleO5R87SeHxNK2k64KB8nDzQaha9ILcXW9QSexgxQhO
- VBCA==
+ bh=IC3yBffKfOs3kNBAYsK+jSqIUwZuGHMloA5xDZPJnzs=;
+ b=BS0lIcAxc6EQ1reyPafCLLLVy+IPsjbnHTHWfToHtqGUItSIPLFemoQ0Ho8JA976iV
+ QIcx3ZrH5M8+p0n8F2+Zy82OXDMBdhgIOo6EZuCC4W1MUedAmxhv6JKHk92SXoLVrQtH
+ bc2dFvX6Qnnrpm0UEgNIdiUad9IGbvukVyiiSNYbYPdVUzkYRDdb/MhcW+oEwNYB/0U6
+ 4+jvKjieQ5idLRtyIWXeNWvxgrIK/vBqcTCYlMb9dX5DJaxkEgzFsvKHOTI5kb++rfVn
+ N4Mr80hYGdOwtkCWbZ1nbEKnPumgYnS6z4tJAGDEPZWPApE3/KrfetyNhpKPcJbZDk0i
+ 5ixg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=I3mtod3wKphQm6WgyO3Y/vYKvClCdJ8rZpcHzJea2Vg=;
- b=fdNXHuzOtGGrUFf/kLr8tDxjl2JoUFYSdkClIbinInhgo4YIYL4Au6iJDdMmpKhslS
- VsMIR5yW7/aIxI6YmDVFFN79HiY76zskmHI45XdLqxz4naamqM10wEEFkOxnfHanHZUg
- xrCmGZDzn1O7MtfSInmgbJYrpi4JUoEfbSJ6V1BpVgYyEfZClp6dc+wRSgg9/4WvK/WQ
- qfUyrfZDJjW5r2KBQ5v+CltQHzAsNr3aq4JI6L7H6SIjRLSRaEWooP0Wwlp+DJR0P1f5
- ZFjCfNK4XRsJLIlwFZnSUOT5v7eN8PcuhuKc0msc3UzVlOBGwZac+78vaba/BTyUp0fF
- T8VA==
-X-Gm-Message-State: AOAM532tIGjUFMu1wdy16nVuqPl9+1R8VIvAxPIaSFMpQZvINX+O8P11
- P6dKXNSibXBT7qOnA5LhrqPRuah4FuE=
-X-Google-Smtp-Source: ABdhPJzbrPoP8xIJ/mNfbXPaNr9ZoTTomkFywxnaPpk3u3FlDelY6U95UAilczIZrgBsL0jto+ZS7g==
-X-Received: by 2002:a5d:438a:: with SMTP id i10mr7164598wrq.285.1630825109664; 
- Sat, 04 Sep 2021 23:58:29 -0700 (PDT)
-Received: from vm-user.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
- by smtp.gmail.com with ESMTPSA id b12sm4700921wrx.72.2021.09.04.23.58.29
+ bh=IC3yBffKfOs3kNBAYsK+jSqIUwZuGHMloA5xDZPJnzs=;
+ b=p85/H/bGYSAj2a/KOGSIavt8j401/Bb5C/PbvoyUGhEFTXvHxLl7vD67I8+U7lwznQ
+ lQ7NIp1RK5mVkfqD/3R6SKfLx36zjROPuqOy8SGG16ApyHAN8ZG+vgZ6Y0H/pPUQLuJE
+ zQkBKdIfGtUQ6MgLNdO+cx9spAPSnX0bxJmHXfsZy8d2YN5caSnFaMRr1DfzwDlMyVZY
+ XIpthmWP4/F0f/A7TjpmuHI3X3S2MwjIenmElg0OuXBR7b4PwFpo0ty9zpA8gWVUO5UT
+ e5VTG7BjIFfa4MPcRa45eCGFBwjLJrgqErGBrbt/tBLd0XkpbGgwJlFSRBYSTAF+F1am
+ J/4g==
+X-Gm-Message-State: AOAM531T7o75BvyThfYFVIlJmnmXLwGjt//LdriyqETHqIIqhsOqq7vZ
+ gNqlLfNL9gae/PJJqmluuRdXMWrIkL+ZXQ==
+X-Google-Smtp-Source: ABdhPJw0+hoyWeWmzd+L1BoCBNyxbK9x1+lfRLM18UeIA5/JTNod7KcslztnxPc1LnyJ7OLipbl3Vw==
+X-Received: by 2002:a1c:2289:: with SMTP id i131mr6180053wmi.113.1630831256214; 
+ Sun, 05 Sep 2021 01:40:56 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-2139-166.w92-167.abo.wanadoo.fr.
+ [92.167.218.166])
+ by smtp.gmail.com with ESMTPSA id q13sm4356357wrv.79.2021.09.05.01.40.55
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 04 Sep 2021 23:58:29 -0700 (PDT)
-From: Francois Perrad <fperrad@gmail.com>
-X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
-To: buildroot@busybox.net
-Date: Sun,  5 Sep 2021 08:58:23 +0200
-Message-Id: <20210905065823.1828910-1-francois.perrad@gadz.org>
-X-Mailer: git-send-email 2.30.2
+ Sun, 05 Sep 2021 01:40:55 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sun,  5 Sep 2021 10:40:45 +0200
+Message-Id: <20210905084045.557846-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/libsoup: bump to version 2.74.0
+Subject: [Buildroot] [PATCH 1/1] package/osm2pgsql: needs gcc >= 4.9
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,59 +99,59 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
+Cc: Maxim Kochetkov <fido_max@inbox.ru>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/libsoup/0001-meson.build-set-c_std-to-gnu99.patch | 4 ++--
- package/libsoup/libsoup.hash                              | 4 ++--
- package/libsoup/libsoup.mk                                | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+osm2pgsql needs C++14 since bump to version 1.5.1 in commit
+a71661ffb216c7423dcd02ec9e8d703252dbcbad and
+https://github.com/openstreetmap/osm2pgsql/commit/d35dd358d6e4a88a792be60c85bf55d2360c1a71
+to avoid the following build failure:
 
-diff --git a/package/libsoup/0001-meson.build-set-c_std-to-gnu99.patch b/package/libsoup/0001-meson.build-set-c_std-to-gnu99.patch
-index 5a85e05de..f2e8f7701 100644
---- a/package/libsoup/0001-meson.build-set-c_std-to-gnu99.patch
-+++ b/package/libsoup/0001-meson.build-set-c_std-to-gnu99.patch
-@@ -26,8 +26,8 @@ diff --git a/meson.build b/meson.build
- index 4dfd8c15..a5ebc63a 100644
- --- a/meson.build
- +++ b/meson.build
--@@ -3,7 +3,7 @@ project('libsoup', 'c',
--         version: '2.72.0',
-+@@ -2,6 +2,6 @@ project('libsoup', 'c',
-+         version: '2.74.0',
-          meson_version : '>= 0.50',
-          license : 'LGPL2',
- -        default_options : 'c_std=c99')
-diff --git a/package/libsoup/libsoup.hash b/package/libsoup/libsoup.hash
-index 01bf41956..95c1c26eb 100644
---- a/package/libsoup/libsoup.hash
-+++ b/package/libsoup/libsoup.hash
-@@ -1,4 +1,4 @@
--# From https://ftp.gnome.org/pub/GNOME/sources/libsoup/2.72/libsoup-2.72.0.sha256sum
--sha256  170c3f8446b0f65f8e4b93603349172b1085fb8917c181d10962f02bb85f5387  libsoup-2.72.0.tar.xz
-+# From https://ftp.gnome.org/pub/GNOME/sources/libsoup/2.74/libsoup-2.74.0.sha256sum
-+sha256  33b1d4e0d639456c675c227877e94a8078d731233e2d57689c11abcef7d3c48e  libsoup-2.74.0.tar.xz
- # Locally calculated
- sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
-diff --git a/package/libsoup/libsoup.mk b/package/libsoup/libsoup.mk
-index 964488f43..a8b4cf12b 100644
---- a/package/libsoup/libsoup.mk
-+++ b/package/libsoup/libsoup.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+/home/buildroot/autobuild/instance-1/output-1/build/osm2pgsql-1.5.1/src/db-copy.cpp: In member function 'void db_copy_thread_t::sync_and_wait()':
+/home/buildroot/autobuild/instance-1/output-1/build/osm2pgsql-1.5.1/src/db-copy.cpp:108:16: error: 'make_unique' is not a member of 'std'
+     add_buffer(std::make_unique<db_cmd_sync_t>(std::move(barrier)));
+                ^
+
+Fixes:
+ - http://autobuild.buildroot.org/results/30ae4b9405454919437098d29abbd743638c9423
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/osm2pgsql/Config.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/osm2pgsql/Config.in b/package/osm2pgsql/Config.in
+index d31191b3a7..315f496d8e 100644
+--- a/package/osm2pgsql/Config.in
++++ b/package/osm2pgsql/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_OSM2PGSQL
+ 	bool "osm2pgsql"
+ 	depends on BR2_INSTALL_LIBSTDCPP # boost, fmt, libosmium, protozero
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11, libosmium, protozero
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # boost, libosmium
+ 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-filesystem
+ 	depends on BR2_USE_WCHAR # boost, fmt, libosmium
+@@ -23,10 +23,10 @@ config BR2_PACKAGE_OSM2PGSQL
  
--LIBSOUP_VERSION_MAJOR = 2.72
-+LIBSOUP_VERSION_MAJOR = 2.74
- LIBSOUP_VERSION = $(LIBSOUP_VERSION_MAJOR).0
- LIBSOUP_SOURCE = libsoup-$(LIBSOUP_VERSION).tar.xz
- LIBSOUP_SITE = http://ftp.gnome.org/pub/gnome/sources/libsoup/$(LIBSOUP_VERSION_MAJOR)
+ 	  https://osm2pgsql.org
+ 
+-comment "osm2pgsql needs a toolchain w/ C++,  wchar, threads, gcc >= 4.7"
++comment "osm2pgsql needs a toolchain w/ C++,  wchar, threads, gcc >= 4.9"
+ 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 || !BR2_TOOLCHAIN_HAS_THREADS
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || !BR2_TOOLCHAIN_HAS_THREADS
+ 
+ comment "osm2pgsql needs a toolchain not affected by GCC bug 64735"
+ 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
 -- 
-2.30.2
+2.33.0
 
 _______________________________________________
 buildroot mailing list
