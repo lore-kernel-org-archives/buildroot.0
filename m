@@ -1,90 +1,109 @@
-Return-Path: <SRS0=jfQC=N2=lists.buildroot.org=buildroot-bounces@kernel.org>
+Return-Path: <SRS0=j1wI=N3=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
-	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 64042C433F5
-	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 22:31:25 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A40ECC433EF
+	for <buildroot@archiver.kernel.org>; Sun,  5 Sep 2021 01:36:18 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D9C1860249
-	for <buildroot@archiver.kernel.org>; Sat,  4 Sep 2021 22:31:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D9C1860249
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id 075A160698
+	for <buildroot@archiver.kernel.org>; Sun,  5 Sep 2021 01:36:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 075A160698
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=live.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9EDC8425AB;
-	Sat,  4 Sep 2021 22:31:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8B38C80F6B;
+	Sun,  5 Sep 2021 01:36:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id b4RMQSJDUPJQ; Sat,  4 Sep 2021 22:31:23 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id UM9kLTqswsYb; Sun,  5 Sep 2021 01:36:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F39514258D;
-	Sat,  4 Sep 2021 22:31:22 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 837EB1BF391
- for <buildroot@lists.busybox.net>; Sat,  4 Sep 2021 22:31:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D085E80F64;
+	Sun,  5 Sep 2021 01:36:15 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E61691BF5B3
+ for <buildroot@lists.busybox.net>; Sun,  5 Sep 2021 01:36:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 72B2E4258D
- for <buildroot@lists.busybox.net>; Sat,  4 Sep 2021 22:31:21 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id D5A1360708
+ for <buildroot@lists.busybox.net>; Sun,  5 Sep 2021 01:36:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nitysGuKyLhW for <buildroot@lists.busybox.net>;
- Sat,  4 Sep 2021 22:31:20 +0000 (UTC)
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=live.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wj20lBh1dymb for <buildroot@lists.busybox.net>;
+ Sun,  5 Sep 2021 01:36:12 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
- [IPv6:2a00:1450:4864:20::432])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 75F1042586
- for <buildroot@buildroot.org>; Sat,  4 Sep 2021 22:31:20 +0000 (UTC)
-Received: by mail-wr1-x432.google.com with SMTP id x6so3867125wrv.13
- for <buildroot@buildroot.org>; Sat, 04 Sep 2021 15:31:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=QKuXnzWXRHSMbxK0FLkNO2o4oCF2/ofaTvoXz5QHa/0=;
- b=gv7eVsgr0GfETtOVogUkWQ6rtKE8GtrnA7mvtFbJpPMb8FFyMqnJA+nn3nsMGoTgP3
- L+iSrgpesXZpF0HPBCib1N19EwsTLudp8qlDjJDYGwYHC669svQXTWDqdUj4rbLUpmU8
- 63AMENt6QsPErHhR8fdMSyPG71PEjIVLae17pX9qIWodkj9Qzr1CavC0jAgB49tLeycw
- lEFt0sd9xYhfM4K9DxWNaH6CpVbQ+VY414V20myrhIOnwUb5jyPLajmK4pp4WWcNKWZj
- VQyYZDBLZ67/+2aLEz15S09df96JBVoDSAKgcJzL6QMn3hipwTT2Y0MYonQ6/Oi780lh
- yQ8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=QKuXnzWXRHSMbxK0FLkNO2o4oCF2/ofaTvoXz5QHa/0=;
- b=YvWSa3g7qU9mijr9l1ovx9XFsjnSS/ws1DDEtEj2+gkSmAN9ltq5EHOLXeO8mvSmHe
- Rwf+4unBVtVFMPn/5qrqcmqA8urahjTjgwvHus6sQR/yklKBjmfAf3oGep46alIpuqsa
- bi2GkMQ3Jot/Jr/i/BnwvLVfmtYyxHMY34juLgKHNCt7XHih5lXjSHOD3Uuguu8ASAdp
- FkMQnV71uh0OfBrRsajUstauHOIV0LXJHsRZcC4W1yRBk2+jkNi9gESPvcVdpH5HDLfT
- +MmYaIJ1BMIn1SaZojfKihv7RvqZNKwPxyi0zPkllYUx2DjYX5h+RJhICPfGFMy4aPNl
- FtKA==
-X-Gm-Message-State: AOAM530fBzeoSehfk1F54558D8UDh6RYVxuqFv9qLXau19FQhPq+0Ioh
- R71bphezmwlf717LNaXiu780ZaeW6avN3w==
-X-Google-Smtp-Source: ABdhPJyZJBhKRSajNXo/7QpwoaSDcG4AvKO6Fye8nI4JfprC/M6F1N7qzPnmow2/VjkUlq947aNVrw==
-X-Received: by 2002:adf:9e4d:: with SMTP id v13mr5680986wre.419.1630794678481; 
- Sat, 04 Sep 2021 15:31:18 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-2139-166.w92-167.abo.wanadoo.fr.
- [92.167.218.166])
- by smtp.gmail.com with ESMTPSA id l11sm3429229wrb.15.2021.09.04.15.31.17
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 04 Sep 2021 15:31:18 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com
+ (mail-dm6nam08olkn2064.outbound.protection.outlook.com [40.92.45.64])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A8D06606EE
+ for <buildroot@buildroot.org>; Sun,  5 Sep 2021 01:36:12 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=J+kWO+YxRNzgCHnbp+yOzrzAPnRElSN62dLcMtXeJ08lAdIMoz3o7Yd4Cg1PURYbRKF6LaOlTKokeJ5rutor2MX25OJ6KCPqOmXALxyeMYS/wpV6dhKSpXbKLyaGraDosVBCP6y7w2pRyw34fdTGIQ7LCtLJ04J0CPwhZdHjSiiPWHnqX34Tcsx4UleEjUgZ7aV9/d/azTml9mO0TM/OuZO8BdEk8mSp4VkMdyVTx3AKhI/cQHc0sMBUS1HM9+JZGv77FQvO//2W3nPINldVtuN1jL+wFjM4L01m0oRB1KAVUQY3atn6+jQ9RVAKeBvYInjNIMc4m1tsiryZfu57sg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version; 
+ bh=doNQYEmT2aWVxXfZSTCVmZ1YZ3fufCHHspVhgoW/mGw=;
+ b=Bd9/6MMxWYngIVQQu1Jurz1Kidx/0sCdJltfXOlH0D9uRWG7EnXFY5aC947gdIlx+u3ksXLf+RwYT7wfwXwVbBPEcfB2UXyRkAaYhYBN7F5uLzuEbzjItTQbjoh2gGo4XcjZyynTNyspWnZl7XX+w/1Dx60HGdYE2TZ8VqLH8blz8kzMDaZdfABraqYwuclRHbBHx9gRKkail5Nx8yGWhpsQa7ym6UCydo9HFeDVI63rkneb6eyRWYSEgMjFYSxkVivPSE1kVIwWY0bnajd/i/TyMqrW9dws/MEiTmQ6NVrPiRMynksWnDyQ31CL0GkoYhUGlED8ZRQjmX/eSQZxFw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=live.com; s=selector1; 
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=doNQYEmT2aWVxXfZSTCVmZ1YZ3fufCHHspVhgoW/mGw=;
+ b=Kx+UMHzr0zor8ex13P0+pfP+6eg+gn90ws+yHhUBR7Bm+ZcTSiZVk5JjCzeWkm9QrcOJxFZ5IlQP+NcUyM5DpH5LSsBI35MaKZ/DnlNzF/EkEnL+k9Icd+/LRa7d8iiyKa886FunAMDsO0jGpY2JQ/VP/jnfP7DMT9EtdlU2qD4cxYDFQfvDDvIGDH325lw66JsI54VMIlkeVOwT6p25LFP2bDCww8oXX8MtVHYUD+HlTqsld963JJJWH04ZPbzjfKsFbbt4/IJtuy/bCPiUidH+plom+hzuXFkpuMfhRruFWwJnLSeXv74GRwCSYzqUVCADZNnjZufEeXV3zrBTlA==
+Received: from DM6PR08MB3993.namprd08.prod.outlook.com (2603:10b6:5:85::28) by
+ DM6PR08MB5417.namprd08.prod.outlook.com (2603:10b6:5:fc::21) with
+ Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4478.17; Sun, 5 Sep 2021 01:36:09 +0000
+Received: from DM6PR08MB3993.namprd08.prod.outlook.com
+ ([fe80::54e7:e665:1ca:5013]) by DM6PR08MB3993.namprd08.prod.outlook.com
+ ([fe80::54e7:e665:1ca:5013%5]) with mapi id 15.20.4478.019; Sun, 5 Sep 2021
+ 01:36:08 +0000
+From: James Knight <james.d.knight@live.com>
 To: buildroot@buildroot.org
-Date: Sun,  5 Sep 2021 00:31:15 +0200
-Message-Id: <20210904223115.545819-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.33.0
+Date: Sat,  4 Sep 2021 21:35:19 -0400
+Message-ID: <DM6PR08MB39931F9CC3A0472896C5CD87A0D19@DM6PR08MB3993.namprd08.prod.outlook.com>
+X-Mailer: git-send-email 2.28.0.windows.1
+X-TMN: [HaBwpskRtYhkCmlK5OaFsw8paljdfzhvWdD1FiUz8WNEQlryqv/quvUj8VescQt+Riwj41H51a0=]
+X-ClientProxiedBy: MN2PR04CA0030.namprd04.prod.outlook.com
+ (2603:10b6:208:d4::43) To DM6PR08MB3993.namprd08.prod.outlook.com
+ (2603:10b6:5:85::28)
+X-Microsoft-Original-Message-ID: <20210905013520.15960-1-james.d.knight@live.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/libglib2: fix build with glibc >=
- 2.34
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from localhost.localdomain (2607:fea8:e341:f0f0:5cf8:7779:fa4b:9c0d)
+ by MN2PR04CA0030.namprd04.prod.outlook.com (2603:10b6:208:d4::43) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4478.25 via Frontend
+ Transport; Sun, 5 Sep 2021 01:36:08 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 29c13c94-f8d6-41d2-3413-08d9700d88f9
+X-MS-Exchange-SLBlob-MailProps: gjx25WM8ZNVetrSOn5BNfyVtQLPp+4uOtq1X6X3IYxCf2EZqWbouB5emKSe8WxxJza4QiI9Z+Au85V9FexWHh73Y2mthw8+zGPjyG/FsIXxCY3Ma2borVIRggZuMZ7bhGdMWbZMXBx+0qqtZcgptBnoov33oj2F4eC5lZjdfpCgStoPlRQNgsNYgiXFgkM8MmattnnZT+fXvL0HrhVO7oHTeOQxugvmKRhibI5QLFjBcMMvtdLcO+4DhmTqgqviK5ez15X1/B5UjJPM631UzivOzZ2tDuE5uhh3nRQk5fe1FI8CwpxUy2xqJ7s6C3J4WLivvKL0tN2cv23n7dwkCvuKoqde+S/odelKGV+j7ekT5AvHAw/LNmOKgQSQ3sGt7FeHzz3bxOhdkJ6NNQJHL+uEpdg4rgDUXjAclExJI3wFmoP1xANAuAL02rl/jL8eL+oCAfdRT7oiP4QHSp7bMvkpiYg7xcTWpauYvssf8VpLb++6Emxc71sZClnudh9+SJ9GoiORUOzSgQYaLGMS2CyNU8csf+WVlUUfLzFP+D2kCE3X5XwOX+EbF5pnCIN3BO3BXT94NyoB3CoPjCyhO/5m3CdnnLaKhgi6cORievlm+sqToP+36MpubpBrYhy5Y7BBIwNntux8SqiiIN5KdBe5QedlVig7ICNViVo5pbXzODCSByczFZHZkYMU8n60R7wsR7Tn/Us/F+y8oCSpl0ww2vawjsU73t2K7ILGUjKM=
+X-MS-TrafficTypeDiagnostic: DM6PR08MB5417:
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 133SV3u4r0tCIpBizWLu72bKhPOIdqfRtPSy8RW72jA/mXWbL1W8omFRsdZt4qotduNBx2od6LoPMTEdDEa8RyaZGDmWgEtsvKp5V8N3wYNwmer6O/4h6S0FLIDshaHHCPDvXbAMrApTgU3QuoY/sJ5WB7e5ClckaJpX+sutq4WdqhlbxbT1EazzUIjNBq4sqpHRSwzZdSJJwUbNOsl4Njn2ryiNhHTW+fcY6lcw2hCqT8LXm7c2utUW9S2zQdGQavVdAv54u5lW13FRV9TaYRttGy8A/tSHxCY5PgigHUjkMGMvo98+v7qeFI8Pk4ENHTmvGbc/XvOBVBDKCBFzglNrJiaNBOUabvz/yBodmS1Ncij101Je91vAeqjescmUb0fGDunY0aMCwK1BtqNj3hlCMWnj7It6L2jXQTNk1z+hQdTzJcpqOhuaTcXMVXob
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: IjwUGf7SOwakJLjKr+r/7yBw6ajyjMonx9zmCPh4pWjiSyN2JJAMargzP1vntpEcPt3g96tv92hvDU1en2bav2HPF8xsvjtywR4FEEthn8uaU9dzR5qMO0yd7Sb3rtIoUKMPPOAczG9vufs5bS68toIttwsEdjRLAoTszKEe+jhhDNVbCopNg47vPIVxILCPIhSxJtWqPFIx//o8rXhPaw==
+X-OriginatorOrg: sct-15-20-3174-20-msonline-outlook-124b4.templateTenant
+X-MS-Exchange-CrossTenant-Network-Message-Id: 29c13c94-f8d6-41d2-3413-08d9700d88f9
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR08MB3993.namprd08.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Sep 2021 01:36:08.9561 (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR08MB5417
+Subject: [Buildroot] [PATCH v2 1/1] utils/getdeveloperlib.py: explicitly set
+ devs document encoding
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,50 +116,60 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: James Knight <james.d.knight@live.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-Rml4IHRoZSBmb2xsb3dpbmcgYnVpbGQgZmFpbHVyZSB3aXRoIGdsaWJjID49IDIuMzQ6CgouLi9n
-bGliL2dzcGF3bi5jOiBJbiBmdW5jdGlvbiAnc2FmZV9jbG9zZWZyb20nOgouLi9nbGliL2dzcGF3
-bi5jOjE0OTc6NzogZXJyb3I6IHRvbyBmZXcgYXJndW1lbnRzIHRvIGZ1bmN0aW9uICdjbG9zZV9y
-YW5nZScKIDE0OTcgfCAgIGlmIChjbG9zZV9yYW5nZSAobG93ZmQsIEdfTUFYVUlOVCkgIT0gMCAm
-JiBlcnJubyA9PSBFTk9TWVMpCiAgICAgIHwgICAgICAgXn5+fn5+fn5+fn4KCkZpeGVzOgogLSBo
-dHRwOi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5vcmcvcmVzdWx0cy9jYmMwOTEzZmEyY2M0ODZkZWI2
-NGIwN2I1YjEzMzQxYTVhOTcwMjVlCgpTaWduZWQtb2ZmLWJ5OiBGYWJyaWNlIEZvbnRhaW5lIDxm
-b250YWluZS5mYWJyaWNlQGdtYWlsLmNvbT4KLS0tCiAuLi50bHktdXNlLTMtcGFyYW1ldGVycy1m
-b3ItY2xvc2VfcmFuZ2UucGF0Y2ggfCAzMyArKysrKysrKysrKysrKysrKysrCiAxIGZpbGUgY2hh
-bmdlZCwgMzMgaW5zZXJ0aW9ucygrKQogY3JlYXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvbGliZ2xp
-YjIvMDAwNC1jb3JyZWN0bHktdXNlLTMtcGFyYW1ldGVycy1mb3ItY2xvc2VfcmFuZ2UucGF0Y2gK
-CmRpZmYgLS1naXQgYS9wYWNrYWdlL2xpYmdsaWIyLzAwMDQtY29ycmVjdGx5LXVzZS0zLXBhcmFt
-ZXRlcnMtZm9yLWNsb3NlX3JhbmdlLnBhdGNoIGIvcGFja2FnZS9saWJnbGliMi8wMDA0LWNvcnJl
-Y3RseS11c2UtMy1wYXJhbWV0ZXJzLWZvci1jbG9zZV9yYW5nZS5wYXRjaApuZXcgZmlsZSBtb2Rl
-IDEwMDY0NAppbmRleCAwMDAwMDAwMDAwLi5iZmNhNGIxNGVmCi0tLSAvZGV2L251bGwKKysrIGIv
-cGFja2FnZS9saWJnbGliMi8wMDA0LWNvcnJlY3RseS11c2UtMy1wYXJhbWV0ZXJzLWZvci1jbG9z
-ZV9yYW5nZS5wYXRjaApAQCAtMCwwICsxLDMzIEBACitGcm9tIGI3MTExN2Q4OTQzNGRiODNkMzRi
-YzFiOTgxY2EwM2Q0YmUyOTk1NzYgTW9uIFNlcCAxNyAwMDowMDowMCAyMDAxCitGcm9tOiBLaGVt
-IFJhaiA8cmFqLmtoZW1AZ21haWwuY29tPgorRGF0ZTogVGh1LCA4IEp1bCAyMDIxIDE3OjI2OjQz
-IC0wNzAwCitTdWJqZWN0OiBbUEFUQ0hdIGNvcnJlY3RseSB1c2UgMyBwYXJhbWV0ZXJzIGZvciBj
-bG9zZV9yYW5nZQorCitsaWJjIGltcGxlbWVudGF0aW9uIGhhcyAzIHBhcmFtZXRlciBlLmcuCito
-dHRwczovL3d3dy5mcmVlYnNkLm9yZy9jZ2kvbWFuLmNnaT9xdWVyeT1jbG9zZV9yYW5nZSZzZWt0
-aW9uPTImZm9ybWF0PWh0bWwKKworU2lnbmVkLW9mZi1ieTogS2hlbSBSYWogPHJhai5raGVtQGdt
-YWlsLmNvbT4KKworW1JldHJpZXZlZCBmcm9tOgoraHR0cHM6Ly9naXRsYWIuZ25vbWUub3JnL0dO
-T01FL2dsaWIvLS9jb21taXQvYjcxMTE3ZDg5NDM0ZGI4M2QzNGJjMWI5ODFjYTAzZDRiZTI5OTU3
-Nl0KK1NpZ25lZC1vZmYtYnk6IEZhYnJpY2UgRm9udGFpbmUgPGZvbnRhaW5lLmZhYnJpY2VAZ21h
-aWwuY29tPgorLS0tCisgZ2xpYi9nc3Bhd24uYyB8IDIgKy0KKyAxIGZpbGUgY2hhbmdlZCwgMSBp
-bnNlcnRpb24oKyksIDEgZGVsZXRpb24oLSkKKworZGlmZiAtLWdpdCBhL2dsaWIvZ3NwYXduLmMg
-Yi9nbGliL2dzcGF3bi5jCitpbmRleCA4OTk2NDdjMmYuLjMwNzNhMTBhNCAxMDA2NDQKKy0tLSBh
-L2dsaWIvZ3NwYXduLmMKKysrKyBiL2dsaWIvZ3NwYXduLmMKK0BAIC0xNTIwLDcgKzE1MjAsNyBA
-QCBzYWZlX2Nsb3NlZnJvbSAoaW50IGxvd2ZkKQorICAgICoKKyAgICAqIEhhbmRsZSBFTk9TWVMg
-aW4gY2FzZSBpdOKAmXMgc3VwcG9ydGVkIGluIGxpYmMgYnV0IG5vdCB0aGUga2VybmVsOyBpZiBz
-bywKKyAgICAqIGZhbGwgYmFjayB0byBzYWZlX2Zkd2FsaygpLiAqLworLSAgaWYgKGNsb3NlX3Jh
-bmdlIChsb3dmZCwgR19NQVhVSU5UKSAhPSAwICYmIGVycm5vID09IEVOT1NZUykKKysgIGlmIChj
-bG9zZV9yYW5nZSAobG93ZmQsIEdfTUFYVUlOVCwgMCkgIT0gMCAmJiBlcnJubyA9PSBFTk9TWVMp
-CisgI2VuZGlmICAvKiBIQVZFX0NMT1NFX1JBTkdFICovCisgICAodm9pZCkgc2FmZV9mZHdhbGsg
-KGNsb3NlX2Z1bmMsIEdJTlRfVE9fUE9JTlRFUiAobG93ZmQpKTsKKyAjZW5kaWYKKy0tIAorR2l0
-TGFiCisKLS0gCjIuMzMuMAoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAbGlzdHMuYnVpbGRyb290
-Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJv
-b3QK
+Explicitly indicate the file encoding to UTF-8 for the DEVELOPERS
+document. This prevents Unicode decoding errors when printing E-Mail
+entries with Unicode characters on systems using an alternative default
+encoding (e.g. 'CP1252').
+
+This corrects the following observed error:
+
+    $ ./utils/get-developers outgoing/*
+    Traceback (most recent call last):
+      File "utils\get-developers", line 105, in <module>
+        __main__()
+      File "utils\get-developers", line 47, in __main__
+        devs = getdeveloperlib.parse_developers()
+      File "...\buildroot\utils\getdeveloperlib.py", line 239, in parse_developers
+        for line in f:
+      File "...\Python<ver>\lib\encodings\cp1252.py", line 23, in decode
+        return codecs.charmap_decode(input,self.errors,decoding_table)[0]
+    UnicodeDecodeError: 'charmap' codec can't decode byte 0x81 in position 6659: character maps to <undefined>
+
+Signed-off-by: James Knight <james.d.knight@live.com>
+---
+ utils/getdeveloperlib.py | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/utils/getdeveloperlib.py b/utils/getdeveloperlib.py
+index b205817033d1d488c13e88f3b1bdbf82aa6b1224..08abcfed545034cb68ce708bd9aef772484238cb 100644
+--- a/utils/getdeveloperlib.py
++++ b/utils/getdeveloperlib.py
+@@ -1,4 +1,5 @@
+ from __future__ import print_function
++from io import open
+ import os
+ import re
+ import glob
+@@ -231,7 +232,8 @@ def parse_developers():
+     linen = 0
+     global unittests
+     unittests = list_unittests()
+-    with open(os.path.join(brpath, "DEVELOPERS"), "r") as f:
++    developers_fname = os.path.join(brpath, 'DEVELOPERS')
++    with open(developers_fname, mode='r', encoding='utf_8') as f:
+         files = []
+         name = None
+         for line in f:
+-- 
+2.28.0.windows.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@lists.buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
