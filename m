@@ -7,91 +7,90 @@ X-Spam-Status: No, score=-8.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B360DC433F5
-	for <buildroot@archiver.kernel.org>; Mon,  6 Sep 2021 17:08:53 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D4082C433EF
+	for <buildroot@archiver.kernel.org>; Mon,  6 Sep 2021 18:10:02 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2C98261004
-	for <buildroot@archiver.kernel.org>; Mon,  6 Sep 2021 17:08:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2C98261004
+	by mail.kernel.org (Postfix) with ESMTPS id 0D3AC6103B
+	for <buildroot@archiver.kernel.org>; Mon,  6 Sep 2021 18:10:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0D3AC6103B
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E57FA40493;
-	Mon,  6 Sep 2021 17:08:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A92DC80EE0;
+	Mon,  6 Sep 2021 18:10:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rBZpvqjDqh8u; Mon,  6 Sep 2021 17:08:52 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id iVcO7G8iVfdI; Mon,  6 Sep 2021 18:10:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 130E6401CE;
-	Mon,  6 Sep 2021 17:08:51 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2DF7E1BF574
- for <buildroot@lists.busybox.net>; Mon,  6 Sep 2021 17:08:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1D85A80E1F;
+	Mon,  6 Sep 2021 18:10:00 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 6AE981BF470
+ for <buildroot@lists.busybox.net>; Mon,  6 Sep 2021 18:09:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1D368401F2
- for <buildroot@lists.busybox.net>; Mon,  6 Sep 2021 17:08:50 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5A6D780E1F
+ for <buildroot@lists.busybox.net>; Mon,  6 Sep 2021 18:09:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id orHzk51Jt0ES for <buildroot@lists.busybox.net>;
- Mon,  6 Sep 2021 17:08:48 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HU09x65YtYUN for <buildroot@lists.busybox.net>;
+ Mon,  6 Sep 2021 18:09:57 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com
- [IPv6:2a00:1450:4864:20::632])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0569A401D1
- for <buildroot@buildroot.org>; Mon,  6 Sep 2021 17:08:47 +0000 (UTC)
-Received: by mail-ej1-x632.google.com with SMTP id x11so14722366ejv.0
- for <buildroot@buildroot.org>; Mon, 06 Sep 2021 10:08:47 -0700 (PDT)
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com
+ [IPv6:2a00:1450:4864:20::52c])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5CE0680E0D
+ for <buildroot@buildroot.org>; Mon,  6 Sep 2021 18:09:57 +0000 (UTC)
+Received: by mail-ed1-x52c.google.com with SMTP id n11so10456481edv.11
+ for <buildroot@buildroot.org>; Mon, 06 Sep 2021 11:09:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=sender:from:to:cc:subject:references:date:in-reply-to:message-id
  :user-agent:mime-version;
- bh=vprasNPD4ZDlpHfVYNYYaQfC4HGDCXq2aSaQ2I+3l+w=;
- b=fv0mVyWuv3XTLKLgQ9u9FxMVMW2LseOq8Vk3rElaAIsoetavX32B0KR1fNE5dkAPTM
- htix+qUaoQVvQUxb5t+nLlwqQkYjxk8DDDcYOAP+/Uein+F5zH7iJnS7vv7L6y5RGpOa
- 8KnTQDnjIuJ1sciFn13LIBSpR9jGphm2aS6p9AtUjT38Lw7LMyy8WOsXd711Db4A2DqU
- 0w0jHh8/37cxBJrf1wihqf2hzlC/sfjTz0NC6M2OT06aaYEJtcI9aMklIcx/jHC5ijMJ
- qYCy7mwSxsinbmsLLaIW1gAcXX9AE3hcoABkD5nubgEzKG8Vw6c6apTVTf2ZAmkAgHyq
- 5rZw==
+ bh=WKXtVzhEt2EWOQq9cpRVWzvih/9JtqW3reWbizqz8RM=;
+ b=iX66Bwh6FpeO+1ZffoZqg5/cUoMs4o5+vmaY9asGcFg//ZKqkA/fpM6MzQfwZnE0Xd
+ 8WgE4pukzWE5fMFhC1h7A1HaNQw2EWlxTMPdRt1bGW5K+jHjUek7a6LWB/B0jcdtHR2r
+ uPjVKm+vOoObg721l8rkS+rOp2ayVhwFQr4Iie+OElZoO/MFN5gFEoiILgzqjueLCaaP
+ VHY0MCA7ME94QWkiDzW0nrXRehIyNjmIFM4kDfejBol4ohNFUcF+druHWiqhouNhu6TR
+ qUGq244OEXiTO6TFYVkKt8Ujc8AU2URdKm4nqIh4BM3YU029dK+Fhhgei3GIb4S72zA4
+ vzBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:sender:from:to:cc:subject:references:date
  :in-reply-to:message-id:user-agent:mime-version;
- bh=vprasNPD4ZDlpHfVYNYYaQfC4HGDCXq2aSaQ2I+3l+w=;
- b=YZYzQOc3pBKw2gYWIv2I+4Lv42KQ1wr9lBT8HjFnve2VC0mzwveZiI2wftlspbGY35
- vmkF2GMH0HSThnkmOQ+qdCRx/MuupJChvwdAsjdZgd7bf6N8a1/G9bz0w5ft7PpqdK9r
- KqgRq+gAbgN5Qq3js0bX3rk9Ikf6fdmAdpq3eeMtcXHswDt2FzBhNE9ELDziUEjXrLOo
- SFVHnZieRLeQ/ojQCS9UlCw7OFlFmbVVculKs/PkeR1PPsh/7FwWv9IvR205zHD5RZyy
- aRHncHzavSty8alf7/U2WIbpUw24Tk0vXn1lSqrthL1EOht9KB2KB7A0KF8QluqNiGMe
- 24Pw==
-X-Gm-Message-State: AOAM533YqT0yc71bGV/9iIRtPKg2Uf0ip6notaaORc9UKQu0bSygwrQf
- SXGsTOilAXZioMxvxaUQAbn3UCyShAQ=
-X-Google-Smtp-Source: ABdhPJz8+TSTUGXSlbw8lgj8orBxgDs0d2Ka8tbbyDmQmtN1lpATwuyAICNaPxQm4ZNtveQVUPH1DQ==
-X-Received: by 2002:a17:906:544f:: with SMTP id
- d15mr14688400ejp.520.1630948126131; 
- Mon, 06 Sep 2021 10:08:46 -0700 (PDT)
+ bh=WKXtVzhEt2EWOQq9cpRVWzvih/9JtqW3reWbizqz8RM=;
+ b=K6tAttZTC9YtPPWQbBghW9pcPMcU1EOa36nQcv/tmdGK4pftK14Jm5IMKavrYDitnY
+ 6Vb1vkwvLsqIhGN8FxdWPx2tnlWysmSIrS2rBjDo+0KN5ojHXGncYZZ+SBBFgI0MQ/Ze
+ Ok/Yu6TtVFmm3UO9HSofDJxxepr9XVmnkXs7JfZLTnEwTok8HmhZSFqykozYZ38mWj/s
+ IU41i7W2yIo85jh+KuiS7E5J9On+tjKqYOnaQNEmaIh42yuRZpOyK74flXtx11njpvu2
+ pkk+q6PcoI/dVIIOPlX5hEfkhjnZGwgrGPQ0tZIz6DnSuBI7Rg4wwdSmv8aUzBrsP5Bz
+ FtUw==
+X-Gm-Message-State: AOAM5325AhM5p1keIKqowcDdsCGo6edzHLh0zosa90JKFwFj0nFbWdch
+ o0D4+uut7R3oQXC/eAe+wdvp+iAD+1I=
+X-Google-Smtp-Source: ABdhPJzMp+OUbsyqlxQhXdnFtT/mW+P6pQgWOKC6J+Gpf+VYpxHWoP0OdWlpRyhlyB4xbwf7mINhUA==
+X-Received: by 2002:a05:6402:268f:: with SMTP id
+ w15mr7909371edd.186.1630951795616; 
+ Mon, 06 Sep 2021 11:09:55 -0700 (PDT)
 Received: from dell.be.48ers.dk (d51A5BC31.access.telenet.be. [81.165.188.49])
  by smtp.gmail.com with ESMTPSA id
- s3sm4303971ejm.49.2021.09.06.10.08.44
+ h21sm4325389ejb.101.2021.09.06.11.09.54
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 06 Sep 2021 10:08:45 -0700 (PDT)
+ Mon, 06 Sep 2021 11:09:54 -0700 (PDT)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
  (envelope-from <peter@korsgaard.com>)
- id 1mNI6u-00020P-BH; Mon, 06 Sep 2021 19:08:44 +0200
+ id 1mNJ45-0003Ad-Nm; Mon, 06 Sep 2021 20:09:53 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20210821160509.1514047-1-fontaine.fabrice@gmail.com>
-Date: Mon, 06 Sep 2021 19:08:44 +0200
-In-Reply-To: <20210821160509.1514047-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 21 Aug 2021 18:05:09 +0200")
-Message-ID: <87a6kpiqcj.fsf@dell.be.48ers.dk>
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+References: <20210821230613.470903-1-giulio.benetti@benettiengineering.com>
+Date: Mon, 06 Sep 2021 20:09:53 +0200
+In-Reply-To: <20210821230613.470903-1-giulio.benetti@benettiengineering.com>
+ (Giulio Benetti's message of "Sun, 22 Aug 2021 01:06:13 +0200")
+Message-ID: <8735qhinim.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/mesa3d: fix build on riscv32
+Subject: Re: [Buildroot] [PATCH] package/libmodsecurity: fix build failure
+ on m68k_cf
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -104,26 +103,22 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
- Romain Naour <romain.naour@gmail.com>, buildroot@buildroot.org
+Cc: Frank Vanbever <frank.vanbever@essensium.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Giulio" == Giulio Benetti <giulio.benetti@benettiengineering.com> writes:
 
- > Fix the following build failure on riscv32:
- > ../src/util/futex.h: In function 'sys_futex':
- > ../src/util/futex.h:39:19: error: 'SYS_futex' undeclared (first use in this function); did you mean 'sys_futex'?
- >    39 |    return syscall(SYS_futex, addr1, op, val1, timeout, addr2, val3);
- >       |                   ^~~~~~~~~
- >       |                   sys_futex
+ > This package has -fPIC gcc option set by default but we can't use it on
+ > m68k_cf since it doesn't support it throwing a gcc build failure. So let's
+ > disable it by passing -fno-PIC.
 
  > Fixes:
- >  - http://autobuild.buildroot.org/results/692700a5f967760a0b8cd358b1712f1d5a7b681e
+ > http://autobuild.buildroot.net/results/b92980a563fe7ee331e70f288ce041be0bf29d40/
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
 Committed to 2021.02.x and 2021.05.x, thanks.
 
