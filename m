@@ -2,87 +2,68 @@ Return-Path: <SRS0=O81Z=N4=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.5 required=3.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-	DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.4 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B0180C433F5
-	for <buildroot@archiver.kernel.org>; Mon,  6 Sep 2021 12:48:45 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C3A3C433EF
+	for <buildroot@archiver.kernel.org>; Mon,  6 Sep 2021 12:53:50 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 31C3C6101C
-	for <buildroot@archiver.kernel.org>; Mon,  6 Sep 2021 12:48:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 31C3C6101C
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id BB12761050
+	for <buildroot@archiver.kernel.org>; Mon,  6 Sep 2021 12:53:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org BB12761050
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=lists.buildroot.org
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E726640288;
-	Mon,  6 Sep 2021 12:48:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 61B9C605E5;
+	Mon,  6 Sep 2021 12:53:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 66BF9gL3E4_A; Mon,  6 Sep 2021 12:48:44 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1FBF540141;
-	Mon,  6 Sep 2021 12:48:43 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 85BDF1BF2A0
- for <buildroot@lists.busybox.net>; Mon,  6 Sep 2021 12:48:41 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 81F1C606CF
- for <buildroot@lists.busybox.net>; Mon,  6 Sep 2021 12:48:41 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WA4O6wDq8_Fo for <buildroot@lists.busybox.net>;
- Mon,  6 Sep 2021 12:48:38 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com
- [IPv6:2a00:1450:4864:20::136])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8D9F160666
- for <buildroot@buildroot.org>; Mon,  6 Sep 2021 12:48:38 +0000 (UTC)
-Received: by mail-lf1-x136.google.com with SMTP id h16so13290554lfk.10
- for <buildroot@buildroot.org>; Mon, 06 Sep 2021 05:48:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=l5sxOYoKQXnV6H7QI2Bb5mNrrv7ISaudkPiit8wMebA=;
- b=DnUnJxkURtTC+6tlNFoCB8b1daV8aglGLbUc4xGyQY+tlOu6+3APrLRnPUhxijKcWi
- zqJ8A0Tngtf329cXOMnDGtkF7I6M3zl5lWRasq5nY9iBRjR0EPqY22PiJNcqFWIZaTBu
- +u88rH7qAYZ0mFKy9UI5hDLaaegsbReEdYT8RCLkxn9X34025YqlUY00bXHPfCmgi9eD
- Dp1+FqwxUBz4q28vpvIBDoM5lLtsz0RsV6fHJ30oRFFqM/1bwIgmYbLKMLeioGNybaLS
- 5ZvGZJOweeoTG1CBm/oXtLsKVoFu71DhcIZmQZoCeaqBdHPlP8OVVGxVfXz3Ne2KpYTX
- uNCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=l5sxOYoKQXnV6H7QI2Bb5mNrrv7ISaudkPiit8wMebA=;
- b=r7x4e49zFe3PHMmqMgNoV0CytZIWX/GuiwKXGUUa371ZwkwWFfPSbFbpLGDnQdCDwx
- GJX8Ob1orBa6PrSMetss6Tb9QwltXOIWnZOe5iJp8d+1XiQad6BPpkp40tGUXobCdB8U
- 7iY6JYZFmo/w81Y1q5mQWLbKyHRxU0b/f8dRDX4Wm4qqMuib47WtrPn77+ZzeSTrXBra
- d4aMspexy3FlMZDTFW+h2hLyOWo+nKPQDagE47CZkSV5oTFLuHEBuQQBxcOgkiaFEdYp
- MF66PebSfNr9x2m8sYGGinDYeswgo7vJeXilOiF/Wxq5KpArYEshsGQEeFIinU36AOKH
- pAYg==
-X-Gm-Message-State: AOAM5335cM3v4qIVeHhDnVgOFWMyoZhToR4OtgkrBYpl6iFz+ldOLMEh
- WDHgZ7y5QXbjmxeSo3IMmCefl3B8yCMgrgqffTY=
-X-Google-Smtp-Source: ABdhPJwjruj8nxWuOLhUcONe4AHwPhAvLlIIG/Nx6Y7lQtqVB7/DpCLgEq8noia7LVRYgRQ1Yd0ENgmqZSj8gVMCbsw=
-X-Received: by 2002:ac2:5f1b:: with SMTP id 27mr9693316lfq.79.1630932516401;
- Mon, 06 Sep 2021 05:48:36 -0700 (PDT)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id KOlQlSmSm8ce; Mon,  6 Sep 2021 12:53:48 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id A441E60596;
+	Mon,  6 Sep 2021 12:53:47 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 23E901BF2A0
+ for <buildroot@lists.busybox.net>; Mon,  6 Sep 2021 12:53:46 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1300381BF4
+ for <buildroot@lists.busybox.net>; Mon,  6 Sep 2021 12:53:46 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (1024-bit key) header.d=heine.tech
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id nr8I7DSXryXv for <buildroot@lists.busybox.net>;
+ Mon,  6 Sep 2021 12:53:44 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from mail.heine.tech (mail.heine.tech [195.201.24.99])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8F0DC81BD9
+ for <buildroot@buildroot.org>; Mon,  6 Sep 2021 12:53:44 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 989111814BB; Mon,  6 Sep 2021 14:53:41 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=heine.tech; s=dkim;
+ t=1630932822; h=from:subject:date:message-id:to:mime-version:content-type:
+ content-transfer-encoding:content-language:in-reply-to:references;
+ bh=Fskqc/+ASI7oRS5M4yZXYBjw+XRClfQRn7qThKN3DyE=;
+ b=tTfcdd10P7PA7xvRG6CtQRFFjYpXDvC3gEo5aPCT1WByp+loZtRMlXnz16gq64lf5rif3I
+ otpffGcaXnBSagBOythkRi7XU556mCMZQyl5HPIHTikcK632t3Kw6R5Is+xYlE2pHi9F+a
+ fauzN3/Z4sakZzOYjLRJsHtXf6rxpZ0=
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+References: <20210905182508.1151818-1-fontaine.fabrice@gmail.com>
+Message-ID: <2952975a-e15b-3dae-ea6b-7e55a2da0427@heine.tech>
+Date: Mon, 6 Sep 2021 14:53:40 +0200
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.13.0
 MIME-Version: 1.0
-References: <20210906094214.6142-1-heiko.thiery@gmail.com>
- <20210906094214.6142-4-heiko.thiery@gmail.com>
- <PAXPR04MB8863813E1952003264B49565A7D29@PAXPR04MB8863.eurprd04.prod.outlook.com>
-In-Reply-To: <PAXPR04MB8863813E1952003264B49565A7D29@PAXPR04MB8863.eurprd04.prod.outlook.com>
-From: Fabio Estevam <festevam@gmail.com>
-Date: Mon, 6 Sep 2021 09:48:25 -0300
-Message-ID: <CAOMZO5DOMp_JG3TFqv81C_zz1AKXm_6=dwRmwFGQuHC9rgpivw@mail.gmail.com>
-To: "Stephane Viau (OSS)" <stephane.viau@oss.nxp.com>
-Subject: Re: [Buildroot] [PATCH 3/3] boot/uboot: copy IMX firmware files to
- uboot package dir
+In-Reply-To: <20210905182508.1151818-1-fontaine.fabrice@gmail.com>
+Content-Language: en-US
+X-Last-TLS-Session-Version: TLSv1.3
+Subject: Re: [Buildroot] [PATCH 1/1] package/boost: fix fiber dependencies
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,32 +76,65 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: Gary Bisson <bisson.gary@gmail.com>, Xavier Roumegue <xroumegue@gmail.com>,
- Refik Tuzakli <tuzakli.refik@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>,
- Heiko Thiery <heiko.thiery@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
+From: Michael Nosthoff via buildroot <buildroot@lists.buildroot.org>
+Reply-To: Michael Nosthoff <buildroot@heine.tech>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-Hi Stephane,
+Hi,
 
-On Mon, Sep 6, 2021 at 9:45 AM Stephane Viau (OSS)
-<stephane.viau@oss.nxp.com> wrote:
-
-> >+         encapsulate NXP specific firmware (DDR, HDMI) inside U-Boot.
+On 05.09.21 20:25, Fabrice Fontaine wrote:
+> Commit d39d8f7cee9b4634e6f490020204f63fae419e8e forgot to update fiber
+> dependencies resulting in the following build failure:
 >
-> Are other firmware binaries also concerned (I did not check the U-Boot code) ;
-> such as VPU, SDMA, ... ?
+> WARNING: unmet direct dependencies detected for BR2_PACKAGE_BOOST_FILESYSTEM
+>    Depends on [n]: BR2_PACKAGE_BOOST [=y] && BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS [=n]
+>    Selected by [y]:
+>    - BR2_PACKAGE_BOOST_FIBER [=y] && BR2_PACKAGE_BOOST [=y] && BR2_PACKAGE_BOOST_CONTEXT_ARCH_SUPPORTS [=y] && BR2_TOOLCHAIN_HAS_THREADS_NPTL [=y] && !BR2_MIPS_CPU_MIPS32 [=n] && !BR2_MIPS_CPU_MIPS64 [=n] && (BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS [=n] || BR2_TOOLCHAIN_GCC_AT_LEAST_6 [=y]) && !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 [=n]
+>
+> Fixes:
+>   - http://autobuild.buildroot.org/results/40b8af6ce273ebd5fca56d6734f64dacd562efb1
+>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>   package/boost/Config.in | 6 ++----
+>   1 file changed, 2 insertions(+), 4 deletions(-)
+>
+> diff --git a/package/boost/Config.in b/package/boost/Config.in
+> index f6409769c6..536e5b8486 100644
+> --- a/package/boost/Config.in
+> +++ b/package/boost/Config.in
+> @@ -149,8 +149,7 @@ config BR2_PACKAGE_BOOST_FIBER
+>   	# mips support uses the "pause" instruction, only available
+>   	# since mips32r2/mips64r2.
+>   	depends on !BR2_MIPS_CPU_MIPS32 && !BR2_MIPS_CPU_MIPS64
+> -	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS \
+> -		|| BR2_TOOLCHAIN_GCC_AT_LEAST_6 # boost-context -> boost-thread
+> +	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-filesystem
+>   	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # boost-context
+>   	select BR2_PACKAGE_BOOST_CONTEXT
+>   	select BR2_PACKAGE_BOOST_FILESYSTEM
+> @@ -160,8 +159,7 @@ config BR2_PACKAGE_BOOST_FIBER
+>   
+>   comment "boost-fiber needs a toolchain w/ NPTL"
+>   	depends on BR2_PACKAGE_BOOST_CONTEXT_ARCH_SUPPORTS
+> -	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS \
+> -		|| BR2_TOOLCHAIN_GCC_AT_LEAST_6
+> +	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
+>   	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
+>   
+>   comment "boost-fiber needs a toolchain not affected by GCC bug 64735"
 
-U-Boot does not need the VPU and SDMA firmwares, as they are only used
-by the kernel.
+whoopsie, I somehow missed that this was an OR dependency. Nice catch!
+
+Reviewed-by: Michael Nosthoff <buildroot@heine.tech>
 
 Regards,
+Michael
 
-Fabio Estevam
+
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
