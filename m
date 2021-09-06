@@ -2,57 +2,70 @@ Return-Path: <SRS0=O81Z=N4=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-15.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 039B9C433EF
-	for <buildroot@archiver.kernel.org>; Mon,  6 Sep 2021 15:12:25 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D76B1C433F5
+	for <buildroot@archiver.kernel.org>; Mon,  6 Sep 2021 15:21:50 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id C3B1360200
-	for <buildroot@archiver.kernel.org>; Mon,  6 Sep 2021 15:12:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C3B1360200
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
+	by mail.kernel.org (Postfix) with ESMTPS id 1790D60F13
+	for <buildroot@archiver.kernel.org>; Mon,  6 Sep 2021 15:21:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1790D60F13
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=email.cz
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 67F4680D27;
-	Mon,  6 Sep 2021 15:12:24 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jDVKg2F2Y5Pa; Mon,  6 Sep 2021 15:12:23 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 278FE80ECB;
-	Mon,  6 Sep 2021 15:12:22 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 58EF21BF3E0
- for <buildroot@lists.busybox.net>; Mon,  6 Sep 2021 15:12:10 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4F07F40495
- for <buildroot@lists.busybox.net>; Mon,  6 Sep 2021 15:12:10 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D61F8400CF;
+	Mon,  6 Sep 2021 15:21:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qBgyB0_fJVl1 for <buildroot@lists.busybox.net>;
- Mon,  6 Sep 2021 15:12:08 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6D92440109
- for <buildroot@buildroot.org>; Mon,  6 Sep 2021 15:12:08 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id CF416886C0; Mon,  6 Sep 2021 15:10:41 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id t6q9nbH6pvoV; Mon,  6 Sep 2021 15:21:48 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id BA1274015C;
+	Mon,  6 Sep 2021 15:21:47 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B88FB1BF3E0
+ for <buildroot@lists.busybox.net>; Mon,  6 Sep 2021 15:21:46 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id B5296404BB
+ for <buildroot@lists.busybox.net>; Mon,  6 Sep 2021 15:21:46 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (1024-bit key) header.d=email.cz
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JsnTZgASwTxw for <buildroot@lists.busybox.net>;
+ Mon,  6 Sep 2021 15:21:45 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from mxd1.seznam.cz (mxd1.seznam.cz [IPv6:2a02:598:a::78:210])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C11FF4049B
+ for <buildroot@buildroot.org>; Mon,  6 Sep 2021 15:21:44 +0000 (UTC)
+Received: from email.seznam.cz
+ by email-smtpc20a.ko.seznam.cz (email-smtpc20a.ko.seznam.cz [10.53.18.24])
+ id 193003f799d7696a1b443d99; Mon, 06 Sep 2021 17:21:42 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=email.cz; s=beta;
+ t=1630941702; bh=V4f3mJPft4XV8wQHsGFtYre+3PqRXD+xXz3O2Rl8bsM=;
+ h=Received:Date:From:To:Cc:Subject:Message-ID:MIME-Version:
+ Content-Type:Content-Disposition:Content-Transfer-Encoding;
+ b=SK+EaIrRHzoYN3xbngKqKl8NJ5uxH6AISGfcFeuiYuUwH49HDllCXwFZMpu8KoLgT
+ vMIL22wWE+B44EEdJDnDWoCSRlu0RyAnp/IQ/JWqQN07HNR9NTr4BTtVbqT3d3FmoJ
+ hTC6ytYIrgmn+wS6+xnmG5Hiyj8m41DQpoPXvI34=
+Received: from arch-zen.localdomain (havhav.seb.rev-fortech.cz [213.250.223.2])
+ by email-relay7.ko.seznam.cz (Seznam SMTPD 1.3.125) with ESMTP;
+ Mon, 06 Sep 2021 17:21:40 +0200 (CEST)  
+Date: Mon, 6 Sep 2021 17:21:34 +0200
+From: Jan Havran <havran.jan@email.cz>
 To: buildroot@buildroot.org
-Date: Mon, 6 Sep 2021 17:06:38 +0200
-X-Git-Refname: refs/heads/2021.05.x
-X-Git-Oldrev: 9d341ef2ec2bb89d6b368a53ec6a97df4b8448d2
-X-Git-Newrev: 94bd3fa36cb57131461e5e457fbb345c00c9c4ea
-X-Patchwork-Hint: ignore
-Message-Id: <20210906151041.CF416886C0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.05.x] package/cpio: fix
- CVE-2021-38185
+Message-ID: <YTYx/iGrNt8WsbwS@arch-zen.localdomain>
+MIME-Version: 1.0
+Content-Disposition: inline
+Subject: [Buildroot] [PATCH 1/1] package/bluez-tools: bump to version
+ f65321736475429316f07ee94ec0deac8e46ec4a
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,559 +78,106 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=94bd3fa36cb57131461e5e457fbb345c00c9c4ea
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
+Minor fixes:
+- build with gcc 10 (drop patch)
+- correct the signal handler registration bt-agent
 
-GNU cpio through 2.13 allows attackers to execute arbitrary code via a
-crafted pattern file, because of a dstring.c ds_fgetstr integer overflow
-that triggers an out-of-bounds heap write. NOTE: it is unclear whether
-there are common cases where the pattern file, associated with the -E
-option, is untrusted data.
+Other changes:
+- remove incorrectly handled error argument from device_* calls
+- add UUID for SIMAccess
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 89857df2d1233f60ca7702b387d8e2a17e125d23)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Jan Havran <havran.jan@email.cz>
 ---
- .../cpio/0002-Rewrite-dynamic-string-support.patch | 461 +++++++++++++++++++++
- package/cpio/0003-Fix-previous-commit.patch        |  40 ++
- package/cpio/cpio.mk                               |   4 +
- 3 files changed, 505 insertions(+)
+ .../bluez-tools/0001-fix-gcc-10-compile.patch | 46 -------------------
+ package/bluez-tools/bluez-tools.hash          |  2 +-
+ package/bluez-tools/bluez-tools.mk            |  2 +-
+ 3 files changed, 2 insertions(+), 48 deletions(-)
+ delete mode 100644 package/bluez-tools/0001-fix-gcc-10-compile.patch
 
-diff --git a/package/cpio/0002-Rewrite-dynamic-string-support.patch b/package/cpio/0002-Rewrite-dynamic-string-support.patch
-new file mode 100644
-index 0000000000..44282ae3f1
---- /dev/null
-+++ b/package/cpio/0002-Rewrite-dynamic-string-support.patch
-@@ -0,0 +1,461 @@
-+From dd96882877721703e19272fe25034560b794061b Mon Sep 17 00:00:00 2001
-+From: Sergey Poznyakoff <gray@gnu.org>
-+Date: Sat, 7 Aug 2021 12:52:21 +0300
-+Subject: Rewrite dynamic string support.
-+
-+* src/dstring.c (ds_init): Take a single argument.
-+(ds_free): New function.
-+(ds_resize): Take a single argument.  Use x2nrealloc to expand
-+the storage.
-+(ds_reset,ds_append,ds_concat,ds_endswith): New function.
-+(ds_fgetstr): Rewrite.  In particular, this fixes integer overflow.
-+* src/dstring.h (dynamic_string): Keep both the allocated length
-+(ds_size) and index of the next free byte in the string (ds_idx).
-+(ds_init,ds_resize): Change signature.
-+(ds_len): New macro.
-+(ds_free,ds_reset,ds_append,ds_concat,ds_endswith): New protos.
-+* src/copyin.c: Use new ds_ functions.
-+* src/copyout.c: Likewise.
-+* src/copypass.c: Likewise.
-+* src/util.c: Likewise.
-+
-+[Retrieved from:
-+https://git.savannah.gnu.org/cgit/cpio.git/commit/?id=dd96882877721703e19272fe25034560b794061b]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ src/copyin.c   | 40 +++++++++++++-------------
-+ src/copyout.c  | 16 ++++-------
-+ src/copypass.c | 34 +++++++++++------------
-+ src/dstring.c  | 88 ++++++++++++++++++++++++++++++++++++++++++----------------
-+ src/dstring.h  | 31 ++++++++++-----------
-+ src/util.c     |  6 ++--
-+ 6 files changed, 123 insertions(+), 92 deletions(-)
-+
-+diff --git a/src/copyin.c b/src/copyin.c
-+index a096048..4fb14af 100644
-+--- a/src/copyin.c
-++++ b/src/copyin.c
-+@@ -55,11 +55,12 @@ query_rename(struct cpio_file_stat* file_hdr, FILE *tty_in, FILE *tty_out,
-+   char *str_res;		/* Result for string function.  */
-+   static dynamic_string new_name;	/* New file name for rename option.  */
-+   static int initialized_new_name = false;
-++
-+   if (!initialized_new_name)
-+-  {
-+-    ds_init (&new_name, 128);
-+-    initialized_new_name = true;
-+-  }
-++    {
-++      ds_init (&new_name);
-++      initialized_new_name = true;
-++    }
-+ 
-+   if (rename_flag)
-+     {
-+@@ -780,37 +781,36 @@ long_format (struct cpio_file_stat *file_hdr, char const *link_name)
-+    already in `save_patterns' (from the command line) are preserved.  */
-+ 
-+ static void
-+-read_pattern_file ()
-++read_pattern_file (void)
-+ {
-+-  int max_new_patterns;
-+-  char **new_save_patterns;
-+-  int new_num_patterns;
-++  char **new_save_patterns = NULL;
-++  size_t max_new_patterns;
-++  size_t new_num_patterns;
-+   int i;
-+-  dynamic_string pattern_name;
-++  dynamic_string pattern_name = DYNAMIC_STRING_INITIALIZER;
-+   FILE *pattern_fp;
-+ 
-+   if (num_patterns < 0)
-+     num_patterns = 0;
-+-  max_new_patterns = 1 + num_patterns;
-+-  new_save_patterns = (char **) xmalloc (max_new_patterns * sizeof (char *));
-+   new_num_patterns = num_patterns;
-+-  ds_init (&pattern_name, 128);
-++  max_new_patterns = num_patterns;
-++  new_save_patterns = xcalloc (max_new_patterns, sizeof (new_save_patterns[0]));
-+ 
-+   pattern_fp = fopen (pattern_file_name, "r");
-+   if (pattern_fp == NULL)
-+     open_fatal (pattern_file_name);
-+   while (ds_fgetstr (pattern_fp, &pattern_name, '\n') != NULL)
-+     {
-+-      if (new_num_patterns >= max_new_patterns)
-+-	{
-+-	  max_new_patterns += 1;
-+-	  new_save_patterns = (char **)
-+-	    xrealloc ((char *) new_save_patterns,
-+-		      max_new_patterns * sizeof (char *));
-+-	}
-++      if (new_num_patterns == max_new_patterns)
-++	new_save_patterns = x2nrealloc (new_save_patterns,
-++					&max_new_patterns,
-++					sizeof (new_save_patterns[0]));
-+       new_save_patterns[new_num_patterns] = xstrdup (pattern_name.ds_string);
-+       ++new_num_patterns;
-+     }
-++
-++  ds_free (&pattern_name);
-++  
-+   if (ferror (pattern_fp) || fclose (pattern_fp) == EOF)
-+     close_error (pattern_file_name);
-+ 
-+@@ -1210,7 +1210,7 @@ swab_array (char *ptr, int count)
-+    in the file system.  */
-+ 
-+ void
-+-process_copy_in ()
-++process_copy_in (void)
-+ {
-+   FILE *tty_in = NULL;		/* Interactive file for rename option.  */
-+   FILE *tty_out = NULL;		/* Interactive file for rename option.  */
-+diff --git a/src/copyout.c b/src/copyout.c
-+index 5ca587f..ca6798c 100644
-+--- a/src/copyout.c
-++++ b/src/copyout.c
-+@@ -594,9 +594,10 @@ assign_string (char **pvar, char *value)
-+    The format of the header depends on the compatibility (-c) flag.  */
-+ 
-+ void
-+-process_copy_out ()
-++process_copy_out (void)
-+ {
-+-  dynamic_string input_name;	/* Name of file read from stdin.  */
-++  dynamic_string input_name = DYNAMIC_STRING_INITIALIZER;
-++                                /* Name of file read from stdin.  */
-+   struct stat file_stat;	/* Stat record for file.  */
-+   struct cpio_file_stat file_hdr = CPIO_FILE_STAT_INITIALIZER;
-+                                 /* Output header information.  */
-+@@ -605,7 +606,6 @@ process_copy_out ()
-+   char *orig_file_name = NULL;
-+ 
-+   /* Initialize the copy out.  */
-+-  ds_init (&input_name, 128);
-+   file_hdr.c_magic = 070707;
-+ 
-+   /* Check whether the output file might be a tape.  */
-+@@ -657,14 +657,9 @@ process_copy_out ()
-+ 	    {
-+ 	      if (file_hdr.c_mode & CP_IFDIR)
-+ 		{
-+-		  int len = strlen (input_name.ds_string);
-+ 		  /* Make sure the name ends with a slash */
-+-		  if (input_name.ds_string[len-1] != '/')
-+-		    {
-+-		      ds_resize (&input_name, len + 2);
-+-		      input_name.ds_string[len] = '/';
-+-		      input_name.ds_string[len+1] = 0;
-+-		    }
-++		  if (!ds_endswith (&input_name, '/'))
-++		    ds_append (&input_name, '/');
-+ 		}
-+ 	    }
-+ 	  
-+@@ -875,6 +870,7 @@ process_copy_out ()
-+ 			 (unsigned long) blocks), (unsigned long) blocks);
-+     }
-+   cpio_file_stat_free (&file_hdr);
-++  ds_free (&input_name);
-+ }
-+ 
-+ 
-+diff --git a/src/copypass.c b/src/copypass.c
-+index 5d5e939..23ee687 100644
-+--- a/src/copypass.c
-++++ b/src/copypass.c
-+@@ -48,10 +48,12 @@ set_copypass_perms (int fd, const char *name, struct stat *st)
-+    If `link_flag', link instead of copying.  */
-+ 
-+ void
-+-process_copy_pass ()
-++process_copy_pass (void)
-+ {
-+-  dynamic_string input_name;	/* Name of file from stdin.  */
-+-  dynamic_string output_name;	/* Name of new file.  */
-++  dynamic_string input_name = DYNAMIC_STRING_INITIALIZER;
-++                                /* Name of file from stdin.  */
-++  dynamic_string output_name = DYNAMIC_STRING_INITIALIZER;
-++                                /* Name of new file.  */
-+   size_t dirname_len;		/* Length of `directory_name'.  */
-+   int res;			/* Result of functions.  */
-+   char *slash;			/* For moving past slashes in input name.  */
-+@@ -65,25 +67,18 @@ process_copy_pass ()
-+ 				   created files  */
-+ 
-+   /* Initialize the copy pass.  */
-+-  ds_init (&input_name, 128);
-+   
-+   dirname_len = strlen (directory_name);
-+   if (change_directory_option && !ISSLASH (directory_name[0]))
-+     {
-+       char *pwd = xgetcwd ();
-+-
-+-      dirname_len += strlen (pwd) + 1;
-+-      ds_init (&output_name, dirname_len + 2);
-+-      strcpy (output_name.ds_string, pwd);
-+-      strcat (output_name.ds_string, "/");
-+-      strcat (output_name.ds_string, directory_name);
-++      
-++      ds_concat (&output_name, pwd);
-++      ds_append (&output_name, '/');
-+     }
-+-  else
-+-    {
-+-      ds_init (&output_name, dirname_len + 2);
-+-      strcpy (output_name.ds_string, directory_name);
-+-    }
-+-  output_name.ds_string[dirname_len] = '/';
-++  ds_concat (&output_name, directory_name);
-++  ds_append (&output_name, '/');
-++  dirname_len = ds_len (&output_name);
-+   output_is_seekable = true;
-+ 
-+   change_dir ();
-+@@ -116,8 +111,8 @@ process_copy_pass ()
-+       /* Make the name of the new file.  */
-+       for (slash = input_name.ds_string; *slash == '/'; ++slash)
-+ 	;
-+-      ds_resize (&output_name, dirname_len + strlen (slash) + 2);
-+-      strcpy (output_name.ds_string + dirname_len + 1, slash);
-++      ds_reset (&output_name, dirname_len);
-++      ds_concat (&output_name, slash);
-+ 
-+       existing_dir = false;
-+       if (lstat (output_name.ds_string, &out_file_stat) == 0)
-+@@ -333,6 +328,9 @@ process_copy_pass ()
-+ 			 (unsigned long) blocks),
-+ 	       (unsigned long) blocks);
-+     }
-++
-++  ds_free (&input_name);
-++  ds_free (&output_name);
-+ }
-+ 
-+ /* Try and create a hard link from FILE_NAME to another file 
-+diff --git a/src/dstring.c b/src/dstring.c
-+index b261d5a..692d3e7 100644
-+--- a/src/dstring.c
-++++ b/src/dstring.c
-+@@ -20,8 +20,8 @@
-+ #if defined(HAVE_CONFIG_H)
-+ # include <config.h>
-+ #endif
-+-
-+ #include <stdio.h>
-++#include <stdlib.h>
-+ #if defined(HAVE_STRING_H) || defined(STDC_HEADERS)
-+ #include <string.h>
-+ #else
-+@@ -33,24 +33,41 @@
-+ /* Initialiaze dynamic string STRING with space for SIZE characters.  */
-+ 
-+ void
-+-ds_init (dynamic_string *string, int size)
-++ds_init (dynamic_string *string)
-++{
-++  memset (string, 0, sizeof *string);
-++}
-++
-++/* Free the dynamic string storage. */
-++
-++void
-++ds_free (dynamic_string *string)
-+ {
-+-  string->ds_length = size;
-+-  string->ds_string = (char *) xmalloc (size);
-++  free (string->ds_string);
-+ }
-+ 
-+-/* Expand dynamic string STRING, if necessary, to hold SIZE characters.  */
-++/* Expand dynamic string STRING, if necessary.  */
-+ 
-+ void
-+-ds_resize (dynamic_string *string, int size)
-++ds_resize (dynamic_string *string)
-+ {
-+-  if (size > string->ds_length)
-++  if (string->ds_idx == string->ds_size)
-+     {
-+-      string->ds_length = size;
-+-      string->ds_string = (char *) xrealloc ((char *) string->ds_string, size);
-++      string->ds_string = x2nrealloc (string->ds_string, &string->ds_size,
-++				      1);
-+     }
-+ }
-+ 
-++/* Reset the index of the dynamic string S to LEN. */
-++
-++void
-++ds_reset (dynamic_string *s, size_t len)
-++{
-++  while (len > s->ds_size)
-++    ds_resize (s);
-++  s->ds_idx = len;
-++}
-++
-+ /* Dynamic string S gets a string terminated by the EOS character
-+    (which is removed) from file F.  S will increase
-+    in size during the function if the string from F is longer than
-+@@ -61,34 +78,50 @@ ds_resize (dynamic_string *string, int size)
-+ char *
-+ ds_fgetstr (FILE *f, dynamic_string *s, char eos)
-+ {
-+-  int insize;			/* Amount needed for line.  */
-+-  int strsize;			/* Amount allocated for S.  */
-+   int next_ch;
-+ 
-+   /* Initialize.  */
-+-  insize = 0;
-+-  strsize = s->ds_length;
-++  s->ds_idx = 0;
-+ 
-+   /* Read the input string.  */
-+-  next_ch = getc (f);
-+-  while (next_ch != eos && next_ch != EOF)
-++  while ((next_ch = getc (f)) != eos && next_ch != EOF)
-+     {
-+-      if (insize >= strsize - 1)
-+-	{
-+-	  ds_resize (s, strsize * 2 + 2);
-+-	  strsize = s->ds_length;
-+-	}
-+-      s->ds_string[insize++] = next_ch;
-+-      next_ch = getc (f);
-++      ds_resize (s);
-++      s->ds_string[s->ds_idx++] = next_ch;
-+     }
-+-  s->ds_string[insize++] = '\0';
-++  ds_resize (s);
-++  s->ds_string[s->ds_idx] = '\0';
-+ 
-+-  if (insize == 1 && next_ch == EOF)
-++  if (s->ds_idx == 0 && next_ch == EOF)
-+     return NULL;
-+   else
-+     return s->ds_string;
-+ }
-+ 
-++void
-++ds_append (dynamic_string *s, int c)
-++{
-++  ds_resize (s);
-++  s->ds_string[s->ds_idx] = c;
-++  if (c)
-++    {
-++      s->ds_idx++;
-++      ds_resize (s);
-++      s->ds_string[s->ds_idx] = 0;
-++    }      
-++}
-++
-++void
-++ds_concat (dynamic_string *s, char const *str)
-++{
-++  size_t len = strlen (str);
-++  while (len + 1 > s->ds_size)
-++    ds_resize (s);
-++  memcpy (s->ds_string + s->ds_idx, str, len);
-++  s->ds_idx += len;
-++  s->ds_string[s->ds_idx] = 0;
-++}
-++
-+ char *
-+ ds_fgets (FILE *f, dynamic_string *s)
-+ {
-+@@ -100,3 +133,10 @@ ds_fgetname (FILE *f, dynamic_string *s)
-+ {
-+   return ds_fgetstr (f, s, '\0');
-+ }
-++
-++/* Return true if the dynamic string S ends with character C. */
-++int
-++ds_endswith (dynamic_string *s, int c)
-++{
-++  return (s->ds_idx > 0 && s->ds_string[s->ds_idx - 1] == c);
-++}
-+diff --git a/src/dstring.h b/src/dstring.h
-+index 5d24181..ca7a5f1 100644
-+--- a/src/dstring.h
-++++ b/src/dstring.h
-+@@ -17,10 +17,6 @@
-+    Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-+    Boston, MA 02110-1301 USA.  */
-+ 
-+-#ifndef NULL
-+-#define NULL 0
-+-#endif
-+-
-+ /* A dynamic string consists of record that records the size of an
-+    allocated string and the pointer to that string.  The actual string
-+    is a normal zero byte terminated string that can be used with the
-+@@ -30,22 +26,25 @@
-+ 
-+ typedef struct
-+ {
-+-  int ds_length;		/* Actual amount of storage allocated.  */
-+-  char *ds_string;		/* String.  */
-++  size_t ds_size;   /* Actual amount of storage allocated.  */
-++  size_t ds_idx;    /* Index of the next free byte in the string. */
-++  char *ds_string;  /* String storage. */
-+ } dynamic_string;
-+ 
-++#define DYNAMIC_STRING_INITIALIZER { 0, 0, NULL }
-+ 
-+-/* Macros that look similar to the original string functions.
-+-   WARNING:  These macros work only on pointers to dynamic string records.
-+-   If used with a real record, an "&" must be used to get the pointer.  */
-+-#define ds_strlen(s)		strlen ((s)->ds_string)
-+-#define ds_strcmp(s1, s2)	strcmp ((s1)->ds_string, (s2)->ds_string)
-+-#define ds_strncmp(s1, s2, n)	strncmp ((s1)->ds_string, (s2)->ds_string, n)
-+-#define ds_index(s, c)		index ((s)->ds_string, c)
-+-#define ds_rindex(s, c)		rindex ((s)->ds_string, c)
-++void ds_init (dynamic_string *string);
-++void ds_free (dynamic_string *string);
-++void ds_reset (dynamic_string *s, size_t len);
-+ 
-+-void ds_init (dynamic_string *string, int size);
-+-void ds_resize (dynamic_string *string, int size);
-++/* All functions below guarantee that s->ds_string[s->ds_idx] == '\0' */
-+ char *ds_fgetname (FILE *f, dynamic_string *s);
-+ char *ds_fgets (FILE *f, dynamic_string *s);
-+ char *ds_fgetstr (FILE *f, dynamic_string *s, char eos);
-++void ds_append (dynamic_string *s, int c);
-++void ds_concat (dynamic_string *s, char const *str);
-++
-++#define ds_len(s) ((s)->ds_idx)
-++
-++int ds_endswith (dynamic_string *s, int c);
-++
-+diff --git a/src/util.c b/src/util.c
-+index 996d4fa..ff2746d 100644
-+--- a/src/util.c
-++++ b/src/util.c
-+@@ -846,11 +846,9 @@ get_next_reel (int tape_des)
-+   FILE *tty_out;		/* File for interacting with user.  */
-+   int old_tape_des;
-+   char *next_archive_name;
-+-  dynamic_string new_name;
-++  dynamic_string new_name = DYNAMIC_STRING_INITIALIZER;
-+   char *str_res;
-+ 
-+-  ds_init (&new_name, 128);
-+-
-+   /* Open files for interactive communication.  */
-+   tty_in = fopen (TTY_NAME, "r");
-+   if (tty_in == NULL)
-+@@ -925,7 +923,7 @@ get_next_reel (int tape_des)
-+     error (PAXEXIT_FAILURE, 0, _("internal error: tape descriptor changed from %d to %d"),
-+ 	   old_tape_des, tape_des);
-+ 
-+-  free (new_name.ds_string);
-++  ds_free (&new_name);
-+   fclose (tty_in);
-+   fclose (tty_out);
-+ }
-+-- 
-+cgit v1.2.1
-+
-diff --git a/package/cpio/0003-Fix-previous-commit.patch b/package/cpio/0003-Fix-previous-commit.patch
-new file mode 100644
-index 0000000000..e33a8523d8
---- /dev/null
-+++ b/package/cpio/0003-Fix-previous-commit.patch
-@@ -0,0 +1,40 @@
-+From dfc801c44a93bed7b3951905b188823d6a0432c8 Mon Sep 17 00:00:00 2001
-+From: Sergey Poznyakoff <gray@gnu.org>
-+Date: Wed, 11 Aug 2021 18:10:38 +0300
-+Subject: Fix previous commit
-+
-+* src/dstring.c (ds_reset,ds_concat): Don't call ds_resize in a
-+loop.
-+
-+[Retrieved from:
-+https://git.savannah.gnu.org/cgit/cpio.git/commit/?id=dfc801c44a93bed7b3951905b188823d6a0432c8]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ src/dstring.c | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/src/dstring.c b/src/dstring.c
-+index 692d3e7..b7e0bb5 100644
-+--- a/src/dstring.c
-++++ b/src/dstring.c
-+@@ -64,7 +64,7 @@ void
-+ ds_reset (dynamic_string *s, size_t len)
-+ {
-+   while (len > s->ds_size)
-+-    ds_resize (s);
-++    s->ds_string = x2nrealloc (s->ds_string, &s->ds_size, 1);
-+   s->ds_idx = len;
-+ }
-+ 
-+@@ -116,7 +116,7 @@ ds_concat (dynamic_string *s, char const *str)
-+ {
-+   size_t len = strlen (str);
-+   while (len + 1 > s->ds_size)
-+-    ds_resize (s);
-++    s->ds_string = x2nrealloc (s->ds_string, &s->ds_size, 1);
-+   memcpy (s->ds_string + s->ds_idx, str, len);
-+   s->ds_idx += len;
-+   s->ds_string[s->ds_idx] = 0;
-+-- 
-+cgit v1.2.1
-+
-diff --git a/package/cpio/cpio.mk b/package/cpio/cpio.mk
-index 9ce281dd1c..e95ea742b3 100644
---- a/package/cpio/cpio.mk
-+++ b/package/cpio/cpio.mk
-@@ -12,6 +12,10 @@ CPIO_LICENSE = GPL-3.0+
- CPIO_LICENSE_FILES = COPYING
- CPIO_CPE_ID_VENDOR = gnu
+diff --git a/package/bluez-tools/0001-fix-gcc-10-compile.patch b/package/bluez-tools/0001-fix-gcc-10-compile.patch
+deleted file mode 100644
+index 028c2db69d..0000000000
+--- a/package/bluez-tools/0001-fix-gcc-10-compile.patch
++++ /dev/null
+@@ -1,46 +0,0 @@
+-From 687105d611b38961f390f0a328f9cfa3b93aeb18 Mon Sep 17 00:00:00 2001
+-From: Leigh Scott <leigh123linux@gmail.com>
+-Date: Tue, 28 Jan 2020 22:46:37 +0000
+-Subject: [PATCH] fix gcc-10 compile
+-
+-[Retrieved from:
+-https://github.com/khvzak/bluez-tools/pull/34/commits/687105d611b38961f390f0a328f9cfa3b93aeb18]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- src/lib/agent-helper.c | 2 ++
+- src/lib/agent-helper.h | 4 ++--
+- 2 files changed, 4 insertions(+), 2 deletions(-)
+-
+-diff --git a/src/lib/agent-helper.c b/src/lib/agent-helper.c
+-index bf50bcc..2b94100 100644
+---- a/src/lib/agent-helper.c
+-+++ b/src/lib/agent-helper.c
+-@@ -33,6 +33,8 @@
+- 
+- #include "agent-helper.h"
+- 
+-+gboolean agent_need_unregister;
+-+
+- static const gchar *_bt_agent_introspect_xml = "<node name=\"/org/blueztools\">\n\t<interface name=\"org.bluez.Agent1\">\n\t\t<method name=\"Release\">\n\t\t</method>\n\t\t<method name=\"RequestPinCode\">\n\t\t\t<arg name=\"device\" direction=\"in\" type=\"o\"/>\n\t\t\t<arg name=\"pincode\" direction=\"out\" type=\"s\"/>\n\t\t</method>\n\t\t<method name=\"DisplayPinCode\">\n\t\t\t<arg name=\"device\" direction=\"in\" type=\"o\"/>\n\t\t\t<arg name=\"pincode\" direction=\"in\" type=\"s\"/>\n\t\t</method>\n\t\t<method name=\"RequestPasskey\">\n\t\t\t<arg name=\"device\" direction=\"in\" type=\"o\"/>\n\t\t\t<arg name=\"passkey\" direction=\"out\" type=\"u\"/>\n\t\t</method>\n\t\t<method name=\"DisplayPasskey\">\n\t\t\t<arg name=\"device\" direction=\"in\" type=\"o\"/>\n\t\t\t<arg name=\"passkey\" direction=\"in\" type=\"u\"/>\n\t\t\t<arg name=\"entered\" direction=\"in\" type=\"q\"/>\n\t\t</method>\n\t\t<method name=\"RequestConfirmation\">\n\t\t\t<arg name=\"device\" direction=\"in\" 
+ type=\"o\"/>\n\t\t\t<arg name=\"passkey\" direction=\"in\" type=\"u\"/>\n\t\t</method>\n\t\t<method name=\"RequestAuthorization\">\n\t\t\t<arg name=\"device\" direction=\"in\" type=\"o\"/>\n\t\t</method>\n\t\t<method name=\"AuthorizeService\">\n\t\t\t<arg name=\"device\" direction=\"in\" type=\"o\"/>\n\t\t\t<arg name=\"uuid\" direction=\"in\" type=\"s\"/>\n\t\t</method>\n\t\t<method name=\"Cancel\">\n\t\t</method>\n\t</interface>\n</node>\n";
+- static guint _bt_agent_registration_id = 0;
+- static GHashTable *_pin_hash_table = NULL;
+-diff --git a/src/lib/agent-helper.h b/src/lib/agent-helper.h
+-index 8e1cc85..9a952c4 100644
+---- a/src/lib/agent-helper.h
+-+++ b/src/lib/agent-helper.h
+-@@ -35,7 +35,7 @@ extern "C" {
+- #define AGENT_DBUS_INTERFACE "org.bluez.Agent1"
+- #define AGENT_PATH "/org/blueztools"
+- 
+--gboolean agent_need_unregister;
+-+extern gboolean agent_need_unregister;
+- 
+- void register_agent_callbacks(gboolean interactive_console, GHashTable *pin_dictonary, gpointer main_loop_object, GError **error);
+- void unregister_agent_callbacks(GError **error);
+-@@ -44,4 +44,4 @@ void unregister_agent_callbacks(GError **error);
+- }
+- #endif
+- 
+--#endif /* __AGENT_HELPER_H */
+-\ No newline at end of file
+-+#endif /* __AGENT_HELPER_H */
+diff --git a/package/bluez-tools/bluez-tools.hash b/package/bluez-tools/bluez-tools.hash
+index 808e5c6061..f013f195cb 100644
+--- a/package/bluez-tools/bluez-tools.hash
++++ b/package/bluez-tools/bluez-tools.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  62ca98af63d2ae142dbc77995c6bd4c259eaba4a5832daa33ae9e3d585b9205f  bluez-tools-97efd293491ad7ec96a655665339908f2478b3d1.tar.gz
++sha256  dd5acf9e501514f4ad1136af966d2723f3270e0e2fffd6d29da93fa76c9fafa3  bluez-tools-f65321736475429316f07ee94ec0deac8e46ec4a.tar.gz
+ sha256  b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
+diff --git a/package/bluez-tools/bluez-tools.mk b/package/bluez-tools/bluez-tools.mk
+index c58701981a..007235958b 100644
+--- a/package/bluez-tools/bluez-tools.mk
++++ b/package/bluez-tools/bluez-tools.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# 0002-Rewrite-dynamic-string-support.patch
-+# 0003-Fix-previous-commit.patch
-+CPIO_IGNORE_CVES += CVE-2021-38185
-+
- # cpio uses argp.h which is not provided by uclibc or musl by default.
- # Use the argp-standalone package to provide this.
- ifeq ($(BR2_PACKAGE_ARGP_STANDALONE),y)
+-BLUEZ_TOOLS_VERSION = 97efd293491ad7ec96a655665339908f2478b3d1
++BLUEZ_TOOLS_VERSION = f65321736475429316f07ee94ec0deac8e46ec4a
+ BLUEZ_TOOLS_SITE = $(call github,khvzak,bluez-tools,$(BLUEZ_TOOLS_VERSION))
+ 
+ # sources fetched from github, no configure script)
+-- 
+2.33.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
