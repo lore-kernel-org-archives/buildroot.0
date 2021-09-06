@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B412C433EF
-	for <buildroot@archiver.kernel.org>; Mon,  6 Sep 2021 18:50:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 81A33C433EF
+	for <buildroot@archiver.kernel.org>; Mon,  6 Sep 2021 18:50:14 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 59BD86103E
-	for <buildroot@archiver.kernel.org>; Mon,  6 Sep 2021 18:50:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 59BD86103E
+	by mail.kernel.org (Postfix) with ESMTPS id 209256103E
+	for <buildroot@archiver.kernel.org>; Mon,  6 Sep 2021 18:50:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 209256103E
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 14DBD404A0;
-	Mon,  6 Sep 2021 18:50:01 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id AF2D3404AF;
+	Mon,  6 Sep 2021 18:50:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DB6PcKDn_GUw; Mon,  6 Sep 2021 18:50:00 +0000 (UTC)
+	with ESMTP id ZNiBM-iUt_iO; Mon,  6 Sep 2021 18:50:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1C9B44049C;
-	Mon,  6 Sep 2021 18:49:59 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2782A1BF470
+	by smtp2.osuosl.org (Postfix) with ESMTP id A311240473;
+	Mon,  6 Sep 2021 18:50:11 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 402E41BF97E
  for <buildroot@lists.busybox.net>; Mon,  6 Sep 2021 18:49:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 17842608CB
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2F0484049C
  for <buildroot@lists.busybox.net>; Mon,  6 Sep 2021 18:49:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cGzjgiHJ0HQT for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jzrPQfwjvzLM for <buildroot@lists.busybox.net>;
  Mon,  6 Sep 2021 18:49:56 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id F3D49605DF
- for <buildroot@buildroot.org>; Mon,  6 Sep 2021 18:49:55 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0AA3140473
+ for <buildroot@buildroot.org>; Mon,  6 Sep 2021 18:49:56 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 0E61688701; Mon,  6 Sep 2021 18:48:29 +0000 (UTC)
+ id 1A62388702; Mon,  6 Sep 2021 18:48:29 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 6 Sep 2021 18:22:02 +0200
+Date: Mon, 6 Sep 2021 20:07:57 +0200
 X-Git-Refname: refs/heads/2021.05.x
-X-Git-Oldrev: 7fb5d97625b219da58acb29668860cbb11120574
-X-Git-Newrev: 85f3019f1d1f9829add571e7f69c380597d8226a
+X-Git-Oldrev: 85f3019f1d1f9829add571e7f69c380597d8226a
+X-Git-Newrev: 62f6b53c19ebd0b9764f01a9bea76d18d3e27f57
 X-Patchwork-Hint: ignore
-Message-Id: <20210906184829.0E61688701@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.05.x] package/mesa3d: fix build
- on riscv32
+Message-Id: <20210906184829.1A62388702@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.05.x] package/libmodsecurity:
+ disable -fPIC on m68k_cf
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,77 +71,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=85f3019f1d1f9829add571e7f69c380597d8226a
+commit: https://git.buildroot.net/buildroot/commit/?id=62f6b53c19ebd0b9764f01a9bea76d18d3e27f57
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
 
-Fix the following build failure on riscv32:
-
-../src/util/futex.h: In function 'sys_futex':
-../src/util/futex.h:39:19: error: 'SYS_futex' undeclared (first use in this function); did you mean 'sys_futex'?
-   39 |    return syscall(SYS_futex, addr1, op, val1, timeout, addr2, val3);
-      |                   ^~~~~~~~~
-      |                   sys_futex
+This package has -fPIC gcc option set by default but we can't use it on
+m68k_cf since it doesn't support it throwing a gcc build failure. So let's
+disable it by passing -fno-PIC.
 
 Fixes:
- - http://autobuild.buildroot.org/results/692700a5f967760a0b8cd358b1712f1d5a7b681e
+http://autobuild.buildroot.net/results/b92980a563fe7ee331e70f288ce041be0bf29d40/
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 3298e67ac64ce1f52f58f1ef668c4c8c63309d04)
+(cherry picked from commit 2a48a6ee9d6b81c804182ff0ad6e0f7c850f6839)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...tex.h-fix-build-on-32-bit-architectures-u.patch | 43 ++++++++++++++++++++++
- 1 file changed, 43 insertions(+)
+ package/libmodsecurity/libmodsecurity.mk | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/package/mesa3d/0005-src-util-futex.h-fix-build-on-32-bit-architectures-u.patch b/package/mesa3d/0005-src-util-futex.h-fix-build-on-32-bit-architectures-u.patch
-new file mode 100644
-index 0000000000..b01db8a4b4
---- /dev/null
-+++ b/package/mesa3d/0005-src-util-futex.h-fix-build-on-32-bit-architectures-u.patch
-@@ -0,0 +1,43 @@
-+From e501b7c17ada9c694d3f8302622b78d733485b38 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 21 Aug 2021 17:55:33 +0200
-+Subject: [PATCH] src/util/futex.h: fix build on 32-bit architectures using
-+ 64-bit time_t
+diff --git a/package/libmodsecurity/libmodsecurity.mk b/package/libmodsecurity/libmodsecurity.mk
+index 66e7e522a1..be46eb6e02 100644
+--- a/package/libmodsecurity/libmodsecurity.mk
++++ b/package/libmodsecurity/libmodsecurity.mk
+@@ -52,4 +52,14 @@ else
+ LIBMODSECURITY_CONF_OPTS += --without-maxmind
+ endif
+ 
++LIBMODSECURITY_CXXFLAGS = $(TARGET_CXXFLAGS)
 +
-+Fix the following build failure on 32-bit architectures using 64-bit
-+time_t (e.g. riscv32):
++# m68k_cf can't use -fPIC that libmodsecurity forces to use, so we need
++# to disable it to avoid a build failure.
++ifeq ($(BR2_m68k_cf),y)
++LIBMODSECURITY_CXXFLAGS += -fno-PIC
++endif
 +
-+../src/util/futex.h: In function 'sys_futex':
-+../src/util/futex.h:39:19: error: 'SYS_futex' undeclared (first use in this function); did you mean 'sys_futex'?
-+   39 |    return syscall(SYS_futex, addr1, op, val1, timeout, addr2, val3);
-+      |                   ^~~~~~~~~
-+      |                   sys_futex
++LIBMODSECURITY_CONF_OPTS += CXXFLAGS="$(LIBMODSECURITY_CXXFLAGS)"
 +
-+Fixes:
-+ - http://autobuild.buildroot.org/results/692700a5f967760a0b8cd358b1712f1d5a7b681e
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status:
-+https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/12496]
-+---
-+ src/util/futex.h | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/src/util/futex.h b/src/util/futex.h
-+index 43097f4cd5b..221eda9db0c 100644
-+--- a/src/util/futex.h
-++++ b/src/util/futex.h
-+@@ -34,6 +34,10 @@
-+ #include <sys/syscall.h>
-+ #include <sys/time.h>
-+ 
-++#ifndef SYS_futex
-++#define SYS_futex SYS_futex_time64
-++#endif
-++
-+ static inline long sys_futex(void *addr1, int op, int val1, const struct timespec *timeout, void *addr2, int val3)
-+ {
-+    return syscall(SYS_futex, addr1, op, val1, timeout, addr2, val3);
-+-- 
-+2.32.0
-+
+ $(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
