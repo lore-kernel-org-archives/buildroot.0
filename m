@@ -2,57 +2,90 @@ Return-Path: <SRS0=O81Z=N4=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.5 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
+	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 13BDEC433F5
-	for <buildroot@archiver.kernel.org>; Mon,  6 Sep 2021 15:26:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EC5B0C433EF
+	for <buildroot@archiver.kernel.org>; Mon,  6 Sep 2021 15:27:02 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B154860295
-	for <buildroot@archiver.kernel.org>; Mon,  6 Sep 2021 15:26:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B154860295
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
+	by mail.kernel.org (Postfix) with ESMTPS id B2D9B60FBF
+	for <buildroot@archiver.kernel.org>; Mon,  6 Sep 2021 15:27:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B2D9B60FBF
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7C30D6084A;
-	Mon,  6 Sep 2021 15:26:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8741F60800;
+	Mon,  6 Sep 2021 15:27:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zeGE3gAcqGEC; Mon,  6 Sep 2021 15:26:48 +0000 (UTC)
+	with ESMTP id 1S_LEmlcBAHH; Mon,  6 Sep 2021 15:27:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 36A3760877;
-	Mon,  6 Sep 2021 15:26:47 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B10881BF3E0
- for <buildroot@lists.busybox.net>; Mon,  6 Sep 2021 15:25:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B17D9608A5;
+	Mon,  6 Sep 2021 15:26:59 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 75C881BF3E0
+ for <buildroot@lists.busybox.net>; Mon,  6 Sep 2021 15:26:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9FD714047F
- for <buildroot@lists.busybox.net>; Mon,  6 Sep 2021 15:25:55 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 65F9182479
+ for <buildroot@lists.busybox.net>; Mon,  6 Sep 2021 15:26:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id roPFqOa1hlgP for <buildroot@lists.busybox.net>;
- Mon,  6 Sep 2021 15:25:53 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E9E704047D
- for <buildroot@buildroot.org>; Mon,  6 Sep 2021 15:25:53 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 53BDF886C6; Mon,  6 Sep 2021 15:24:27 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Mon, 6 Sep 2021 17:06:46 +0200
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 09164c0b4a5c3c2e9b81ed0b73ab25c2fa186464
-X-Git-Newrev: a56e34c64a9f6fd66069d7c3006899e3d39afd55
-X-Patchwork-Hint: ignore
-Message-Id: <20210906152427.53BDF886C6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/cpio: fix
- CVE-2021-38185
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4H0pvjfbPKjL for <buildroot@lists.busybox.net>;
+ Mon,  6 Sep 2021 15:26:24 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
+ [IPv6:2a00:1450:4864:20::42c])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3775B8242D
+ for <buildroot@busybox.net>; Mon,  6 Sep 2021 15:26:24 +0000 (UTC)
+Received: by mail-wr1-x42c.google.com with SMTP id u9so10356697wrg.8
+ for <buildroot@busybox.net>; Mon, 06 Sep 2021 08:26:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=p4ZDVLEnvbMsMdamwiXy8OiCmKgEacDneNGN10FlBKo=;
+ b=noBTII3OqZmhPNaq1UFznw4+L6eVilro24JfWyNYOLbvCZoxgquKwiVAoG7wzlJQBL
+ EHlwYWyE+oZ/K7hWje4xp9045cCkyVX7UK3RvoaC/hlFmbttx13Dvhk8VfFJjHvmVQEc
+ 0zwIG59ipYWa13qsHO4uGWWywvJbbcMFCNTngIC4NGL7yi/vh6jit+p+O7M0CSCH60oR
+ sDx5VszTBxStoxMId4Btz8QRO7cxbgZbs7L5Mx2lcPgJISguyFkALrBczSyEQT+ePRRg
+ 6t9XZx3gJ0ro7ZPtfei2Qb3WkGrn7YAwKESGa8SkE+RQAOLjmwJanX4r/dS00dnka6c7
+ KjyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=p4ZDVLEnvbMsMdamwiXy8OiCmKgEacDneNGN10FlBKo=;
+ b=YG7j3aPL9yDi5/VW1Hk7ROx4M5Kf7QWBbjtrHZbDHkOItMABRheSASKYUmX7vrt5fn
+ Ic9sfXkEuHrJOKDTekwE1ifLHv9RIIBeqcljjl0h7imaS7lTeLTLKNGrexhGaE4TCRar
+ gYQxqwP6GDPOAw4A0gq0vFQokfMcyuzRolUeqWjk1I7RxPWfA660Erm8kJuXlfGTqTip
+ kNsS+Yt4CZZyo6+ELTWEKOL1Esjj93bN66po71EaWNqCcEW15PO4bAT2LPAndSGfSII4
+ 8AKVPNlwrTJDTM7bkJSuxFrd/SmoHTP67/c8cxaTsKYWEmdWQFtmAMxuyc3R1/Npk+mp
+ KSLQ==
+X-Gm-Message-State: AOAM530bUjG7JhHuM11gaFEh1bnET2TIEy8zLEybvToF5aMkrkxg6PQk
+ IZG/7GdqwBmVhu4cVXkxkb5w3W1OmfY=
+X-Google-Smtp-Source: ABdhPJxxuAeTzCzG537ga2l+NUN91bI7Id3P9DVlNnuvngbLNc9luJUetbFUETflgtENR2ipq0MHqA==
+X-Received: by 2002:adf:c411:: with SMTP id v17mr14328047wrf.160.1630941982335; 
+ Mon, 06 Sep 2021 08:26:22 -0700 (PDT)
+Received: from vm-user.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
+ by smtp.gmail.com with ESMTPSA id d7sm7100136wrf.3.2021.09.06.08.26.21
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 06 Sep 2021 08:26:22 -0700 (PDT)
+From: Francois Perrad <fperrad@gmail.com>
+X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
+To: buildroot@busybox.net
+Date: Mon,  6 Sep 2021 17:26:14 +0200
+Message-Id: <20210906152614.1831576-1-francois.perrad@gadz.org>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH] package/m4: bump to version 1.4.19
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,560 +98,367 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a56e34c64a9f6fd66069d7c3006899e3d39afd55
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
-
-GNU cpio through 2.13 allows attackers to execute arbitrary code via a
-crafted pattern file, because of a dstring.c ds_fgetstr integer overflow
-that triggers an out-of-bounds heap write. NOTE: it is unclear whether
-there are common cases where the pattern file, associated with the -E
-option, is untrusted data.
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 89857df2d1233f60ca7702b387d8e2a17e125d23)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../cpio/0002-Rewrite-dynamic-string-support.patch | 461 +++++++++++++++++++++
- package/cpio/0003-Fix-previous-commit.patch        |  40 ++
- package/cpio/cpio.mk                               |   4 +
- 3 files changed, 505 insertions(+)
-
-diff --git a/package/cpio/0002-Rewrite-dynamic-string-support.patch b/package/cpio/0002-Rewrite-dynamic-string-support.patch
-new file mode 100644
-index 0000000000..44282ae3f1
---- /dev/null
-+++ b/package/cpio/0002-Rewrite-dynamic-string-support.patch
-@@ -0,0 +1,461 @@
-+From dd96882877721703e19272fe25034560b794061b Mon Sep 17 00:00:00 2001
-+From: Sergey Poznyakoff <gray@gnu.org>
-+Date: Sat, 7 Aug 2021 12:52:21 +0300
-+Subject: Rewrite dynamic string support.
-+
-+* src/dstring.c (ds_init): Take a single argument.
-+(ds_free): New function.
-+(ds_resize): Take a single argument.  Use x2nrealloc to expand
-+the storage.
-+(ds_reset,ds_append,ds_concat,ds_endswith): New function.
-+(ds_fgetstr): Rewrite.  In particular, this fixes integer overflow.
-+* src/dstring.h (dynamic_string): Keep both the allocated length
-+(ds_size) and index of the next free byte in the string (ds_idx).
-+(ds_init,ds_resize): Change signature.
-+(ds_len): New macro.
-+(ds_free,ds_reset,ds_append,ds_concat,ds_endswith): New protos.
-+* src/copyin.c: Use new ds_ functions.
-+* src/copyout.c: Likewise.
-+* src/copypass.c: Likewise.
-+* src/util.c: Likewise.
-+
-+[Retrieved from:
-+https://git.savannah.gnu.org/cgit/cpio.git/commit/?id=dd96882877721703e19272fe25034560b794061b]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ src/copyin.c   | 40 +++++++++++++-------------
-+ src/copyout.c  | 16 ++++-------
-+ src/copypass.c | 34 +++++++++++------------
-+ src/dstring.c  | 88 ++++++++++++++++++++++++++++++++++++++++++----------------
-+ src/dstring.h  | 31 ++++++++++-----------
-+ src/util.c     |  6 ++--
-+ 6 files changed, 123 insertions(+), 92 deletions(-)
-+
-+diff --git a/src/copyin.c b/src/copyin.c
-+index a096048..4fb14af 100644
-+--- a/src/copyin.c
-++++ b/src/copyin.c
-+@@ -55,11 +55,12 @@ query_rename(struct cpio_file_stat* file_hdr, FILE *tty_in, FILE *tty_out,
-+   char *str_res;		/* Result for string function.  */
-+   static dynamic_string new_name;	/* New file name for rename option.  */
-+   static int initialized_new_name = false;
-++
-+   if (!initialized_new_name)
-+-  {
-+-    ds_init (&new_name, 128);
-+-    initialized_new_name = true;
-+-  }
-++    {
-++      ds_init (&new_name);
-++      initialized_new_name = true;
-++    }
-+ 
-+   if (rename_flag)
-+     {
-+@@ -780,37 +781,36 @@ long_format (struct cpio_file_stat *file_hdr, char const *link_name)
-+    already in `save_patterns' (from the command line) are preserved.  */
-+ 
-+ static void
-+-read_pattern_file ()
-++read_pattern_file (void)
-+ {
-+-  int max_new_patterns;
-+-  char **new_save_patterns;
-+-  int new_num_patterns;
-++  char **new_save_patterns = NULL;
-++  size_t max_new_patterns;
-++  size_t new_num_patterns;
-+   int i;
-+-  dynamic_string pattern_name;
-++  dynamic_string pattern_name = DYNAMIC_STRING_INITIALIZER;
-+   FILE *pattern_fp;
-+ 
-+   if (num_patterns < 0)
-+     num_patterns = 0;
-+-  max_new_patterns = 1 + num_patterns;
-+-  new_save_patterns = (char **) xmalloc (max_new_patterns * sizeof (char *));
-+   new_num_patterns = num_patterns;
-+-  ds_init (&pattern_name, 128);
-++  max_new_patterns = num_patterns;
-++  new_save_patterns = xcalloc (max_new_patterns, sizeof (new_save_patterns[0]));
-+ 
-+   pattern_fp = fopen (pattern_file_name, "r");
-+   if (pattern_fp == NULL)
-+     open_fatal (pattern_file_name);
-+   while (ds_fgetstr (pattern_fp, &pattern_name, '\n') != NULL)
-+     {
-+-      if (new_num_patterns >= max_new_patterns)
-+-	{
-+-	  max_new_patterns += 1;
-+-	  new_save_patterns = (char **)
-+-	    xrealloc ((char *) new_save_patterns,
-+-		      max_new_patterns * sizeof (char *));
-+-	}
-++      if (new_num_patterns == max_new_patterns)
-++	new_save_patterns = x2nrealloc (new_save_patterns,
-++					&max_new_patterns,
-++					sizeof (new_save_patterns[0]));
-+       new_save_patterns[new_num_patterns] = xstrdup (pattern_name.ds_string);
-+       ++new_num_patterns;
-+     }
-++
-++  ds_free (&pattern_name);
-++  
-+   if (ferror (pattern_fp) || fclose (pattern_fp) == EOF)
-+     close_error (pattern_file_name);
-+ 
-+@@ -1210,7 +1210,7 @@ swab_array (char *ptr, int count)
-+    in the file system.  */
-+ 
-+ void
-+-process_copy_in ()
-++process_copy_in (void)
-+ {
-+   FILE *tty_in = NULL;		/* Interactive file for rename option.  */
-+   FILE *tty_out = NULL;		/* Interactive file for rename option.  */
-+diff --git a/src/copyout.c b/src/copyout.c
-+index 5ca587f..ca6798c 100644
-+--- a/src/copyout.c
-++++ b/src/copyout.c
-+@@ -594,9 +594,10 @@ assign_string (char **pvar, char *value)
-+    The format of the header depends on the compatibility (-c) flag.  */
-+ 
-+ void
-+-process_copy_out ()
-++process_copy_out (void)
-+ {
-+-  dynamic_string input_name;	/* Name of file read from stdin.  */
-++  dynamic_string input_name = DYNAMIC_STRING_INITIALIZER;
-++                                /* Name of file read from stdin.  */
-+   struct stat file_stat;	/* Stat record for file.  */
-+   struct cpio_file_stat file_hdr = CPIO_FILE_STAT_INITIALIZER;
-+                                 /* Output header information.  */
-+@@ -605,7 +606,6 @@ process_copy_out ()
-+   char *orig_file_name = NULL;
-+ 
-+   /* Initialize the copy out.  */
-+-  ds_init (&input_name, 128);
-+   file_hdr.c_magic = 070707;
-+ 
-+   /* Check whether the output file might be a tape.  */
-+@@ -657,14 +657,9 @@ process_copy_out ()
-+ 	    {
-+ 	      if (file_hdr.c_mode & CP_IFDIR)
-+ 		{
-+-		  int len = strlen (input_name.ds_string);
-+ 		  /* Make sure the name ends with a slash */
-+-		  if (input_name.ds_string[len-1] != '/')
-+-		    {
-+-		      ds_resize (&input_name, len + 2);
-+-		      input_name.ds_string[len] = '/';
-+-		      input_name.ds_string[len+1] = 0;
-+-		    }
-++		  if (!ds_endswith (&input_name, '/'))
-++		    ds_append (&input_name, '/');
-+ 		}
-+ 	    }
-+ 	  
-+@@ -875,6 +870,7 @@ process_copy_out ()
-+ 			 (unsigned long) blocks), (unsigned long) blocks);
-+     }
-+   cpio_file_stat_free (&file_hdr);
-++  ds_free (&input_name);
-+ }
-+ 
-+ 
-+diff --git a/src/copypass.c b/src/copypass.c
-+index 5d5e939..23ee687 100644
-+--- a/src/copypass.c
-++++ b/src/copypass.c
-+@@ -48,10 +48,12 @@ set_copypass_perms (int fd, const char *name, struct stat *st)
-+    If `link_flag', link instead of copying.  */
-+ 
-+ void
-+-process_copy_pass ()
-++process_copy_pass (void)
-+ {
-+-  dynamic_string input_name;	/* Name of file from stdin.  */
-+-  dynamic_string output_name;	/* Name of new file.  */
-++  dynamic_string input_name = DYNAMIC_STRING_INITIALIZER;
-++                                /* Name of file from stdin.  */
-++  dynamic_string output_name = DYNAMIC_STRING_INITIALIZER;
-++                                /* Name of new file.  */
-+   size_t dirname_len;		/* Length of `directory_name'.  */
-+   int res;			/* Result of functions.  */
-+   char *slash;			/* For moving past slashes in input name.  */
-+@@ -65,25 +67,18 @@ process_copy_pass ()
-+ 				   created files  */
-+ 
-+   /* Initialize the copy pass.  */
-+-  ds_init (&input_name, 128);
-+   
-+   dirname_len = strlen (directory_name);
-+   if (change_directory_option && !ISSLASH (directory_name[0]))
-+     {
-+       char *pwd = xgetcwd ();
-+-
-+-      dirname_len += strlen (pwd) + 1;
-+-      ds_init (&output_name, dirname_len + 2);
-+-      strcpy (output_name.ds_string, pwd);
-+-      strcat (output_name.ds_string, "/");
-+-      strcat (output_name.ds_string, directory_name);
-++      
-++      ds_concat (&output_name, pwd);
-++      ds_append (&output_name, '/');
-+     }
-+-  else
-+-    {
-+-      ds_init (&output_name, dirname_len + 2);
-+-      strcpy (output_name.ds_string, directory_name);
-+-    }
-+-  output_name.ds_string[dirname_len] = '/';
-++  ds_concat (&output_name, directory_name);
-++  ds_append (&output_name, '/');
-++  dirname_len = ds_len (&output_name);
-+   output_is_seekable = true;
-+ 
-+   change_dir ();
-+@@ -116,8 +111,8 @@ process_copy_pass ()
-+       /* Make the name of the new file.  */
-+       for (slash = input_name.ds_string; *slash == '/'; ++slash)
-+ 	;
-+-      ds_resize (&output_name, dirname_len + strlen (slash) + 2);
-+-      strcpy (output_name.ds_string + dirname_len + 1, slash);
-++      ds_reset (&output_name, dirname_len);
-++      ds_concat (&output_name, slash);
-+ 
-+       existing_dir = false;
-+       if (lstat (output_name.ds_string, &out_file_stat) == 0)
-+@@ -333,6 +328,9 @@ process_copy_pass ()
-+ 			 (unsigned long) blocks),
-+ 	       (unsigned long) blocks);
-+     }
-++
-++  ds_free (&input_name);
-++  ds_free (&output_name);
-+ }
-+ 
-+ /* Try and create a hard link from FILE_NAME to another file 
-+diff --git a/src/dstring.c b/src/dstring.c
-+index b261d5a..692d3e7 100644
-+--- a/src/dstring.c
-++++ b/src/dstring.c
-+@@ -20,8 +20,8 @@
-+ #if defined(HAVE_CONFIG_H)
-+ # include <config.h>
-+ #endif
-+-
-+ #include <stdio.h>
-++#include <stdlib.h>
-+ #if defined(HAVE_STRING_H) || defined(STDC_HEADERS)
-+ #include <string.h>
-+ #else
-+@@ -33,24 +33,41 @@
-+ /* Initialiaze dynamic string STRING with space for SIZE characters.  */
-+ 
-+ void
-+-ds_init (dynamic_string *string, int size)
-++ds_init (dynamic_string *string)
-++{
-++  memset (string, 0, sizeof *string);
-++}
-++
-++/* Free the dynamic string storage. */
-++
-++void
-++ds_free (dynamic_string *string)
-+ {
-+-  string->ds_length = size;
-+-  string->ds_string = (char *) xmalloc (size);
-++  free (string->ds_string);
-+ }
-+ 
-+-/* Expand dynamic string STRING, if necessary, to hold SIZE characters.  */
-++/* Expand dynamic string STRING, if necessary.  */
-+ 
-+ void
-+-ds_resize (dynamic_string *string, int size)
-++ds_resize (dynamic_string *string)
-+ {
-+-  if (size > string->ds_length)
-++  if (string->ds_idx == string->ds_size)
-+     {
-+-      string->ds_length = size;
-+-      string->ds_string = (char *) xrealloc ((char *) string->ds_string, size);
-++      string->ds_string = x2nrealloc (string->ds_string, &string->ds_size,
-++				      1);
-+     }
-+ }
-+ 
-++/* Reset the index of the dynamic string S to LEN. */
-++
-++void
-++ds_reset (dynamic_string *s, size_t len)
-++{
-++  while (len > s->ds_size)
-++    ds_resize (s);
-++  s->ds_idx = len;
-++}
-++
-+ /* Dynamic string S gets a string terminated by the EOS character
-+    (which is removed) from file F.  S will increase
-+    in size during the function if the string from F is longer than
-+@@ -61,34 +78,50 @@ ds_resize (dynamic_string *string, int size)
-+ char *
-+ ds_fgetstr (FILE *f, dynamic_string *s, char eos)
-+ {
-+-  int insize;			/* Amount needed for line.  */
-+-  int strsize;			/* Amount allocated for S.  */
-+   int next_ch;
-+ 
-+   /* Initialize.  */
-+-  insize = 0;
-+-  strsize = s->ds_length;
-++  s->ds_idx = 0;
-+ 
-+   /* Read the input string.  */
-+-  next_ch = getc (f);
-+-  while (next_ch != eos && next_ch != EOF)
-++  while ((next_ch = getc (f)) != eos && next_ch != EOF)
-+     {
-+-      if (insize >= strsize - 1)
-+-	{
-+-	  ds_resize (s, strsize * 2 + 2);
-+-	  strsize = s->ds_length;
-+-	}
-+-      s->ds_string[insize++] = next_ch;
-+-      next_ch = getc (f);
-++      ds_resize (s);
-++      s->ds_string[s->ds_idx++] = next_ch;
-+     }
-+-  s->ds_string[insize++] = '\0';
-++  ds_resize (s);
-++  s->ds_string[s->ds_idx] = '\0';
-+ 
-+-  if (insize == 1 && next_ch == EOF)
-++  if (s->ds_idx == 0 && next_ch == EOF)
-+     return NULL;
-+   else
-+     return s->ds_string;
-+ }
-+ 
-++void
-++ds_append (dynamic_string *s, int c)
-++{
-++  ds_resize (s);
-++  s->ds_string[s->ds_idx] = c;
-++  if (c)
-++    {
-++      s->ds_idx++;
-++      ds_resize (s);
-++      s->ds_string[s->ds_idx] = 0;
-++    }      
-++}
-++
-++void
-++ds_concat (dynamic_string *s, char const *str)
-++{
-++  size_t len = strlen (str);
-++  while (len + 1 > s->ds_size)
-++    ds_resize (s);
-++  memcpy (s->ds_string + s->ds_idx, str, len);
-++  s->ds_idx += len;
-++  s->ds_string[s->ds_idx] = 0;
-++}
-++
-+ char *
-+ ds_fgets (FILE *f, dynamic_string *s)
-+ {
-+@@ -100,3 +133,10 @@ ds_fgetname (FILE *f, dynamic_string *s)
-+ {
-+   return ds_fgetstr (f, s, '\0');
-+ }
-++
-++/* Return true if the dynamic string S ends with character C. */
-++int
-++ds_endswith (dynamic_string *s, int c)
-++{
-++  return (s->ds_idx > 0 && s->ds_string[s->ds_idx - 1] == c);
-++}
-+diff --git a/src/dstring.h b/src/dstring.h
-+index 5d24181..ca7a5f1 100644
-+--- a/src/dstring.h
-++++ b/src/dstring.h
-+@@ -17,10 +17,6 @@
-+    Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-+    Boston, MA 02110-1301 USA.  */
-+ 
-+-#ifndef NULL
-+-#define NULL 0
-+-#endif
-+-
-+ /* A dynamic string consists of record that records the size of an
-+    allocated string and the pointer to that string.  The actual string
-+    is a normal zero byte terminated string that can be used with the
-+@@ -30,22 +26,25 @@
-+ 
-+ typedef struct
-+ {
-+-  int ds_length;		/* Actual amount of storage allocated.  */
-+-  char *ds_string;		/* String.  */
-++  size_t ds_size;   /* Actual amount of storage allocated.  */
-++  size_t ds_idx;    /* Index of the next free byte in the string. */
-++  char *ds_string;  /* String storage. */
-+ } dynamic_string;
-+ 
-++#define DYNAMIC_STRING_INITIALIZER { 0, 0, NULL }
-+ 
-+-/* Macros that look similar to the original string functions.
-+-   WARNING:  These macros work only on pointers to dynamic string records.
-+-   If used with a real record, an "&" must be used to get the pointer.  */
-+-#define ds_strlen(s)		strlen ((s)->ds_string)
-+-#define ds_strcmp(s1, s2)	strcmp ((s1)->ds_string, (s2)->ds_string)
-+-#define ds_strncmp(s1, s2, n)	strncmp ((s1)->ds_string, (s2)->ds_string, n)
-+-#define ds_index(s, c)		index ((s)->ds_string, c)
-+-#define ds_rindex(s, c)		rindex ((s)->ds_string, c)
-++void ds_init (dynamic_string *string);
-++void ds_free (dynamic_string *string);
-++void ds_reset (dynamic_string *s, size_t len);
-+ 
-+-void ds_init (dynamic_string *string, int size);
-+-void ds_resize (dynamic_string *string, int size);
-++/* All functions below guarantee that s->ds_string[s->ds_idx] == '\0' */
-+ char *ds_fgetname (FILE *f, dynamic_string *s);
-+ char *ds_fgets (FILE *f, dynamic_string *s);
-+ char *ds_fgetstr (FILE *f, dynamic_string *s, char eos);
-++void ds_append (dynamic_string *s, int c);
-++void ds_concat (dynamic_string *s, char const *str);
-++
-++#define ds_len(s) ((s)->ds_idx)
-++
-++int ds_endswith (dynamic_string *s, int c);
-++
-+diff --git a/src/util.c b/src/util.c
-+index 996d4fa..ff2746d 100644
-+--- a/src/util.c
-++++ b/src/util.c
-+@@ -846,11 +846,9 @@ get_next_reel (int tape_des)
-+   FILE *tty_out;		/* File for interacting with user.  */
-+   int old_tape_des;
-+   char *next_archive_name;
-+-  dynamic_string new_name;
-++  dynamic_string new_name = DYNAMIC_STRING_INITIALIZER;
-+   char *str_res;
-+ 
-+-  ds_init (&new_name, 128);
-+-
-+   /* Open files for interactive communication.  */
-+   tty_in = fopen (TTY_NAME, "r");
-+   if (tty_in == NULL)
-+@@ -925,7 +923,7 @@ get_next_reel (int tape_des)
-+     error (PAXEXIT_FAILURE, 0, _("internal error: tape descriptor changed from %d to %d"),
-+ 	   old_tape_des, tape_des);
-+ 
-+-  free (new_name.ds_string);
-++  ds_free (&new_name);
-+   fclose (tty_in);
-+   fclose (tty_out);
-+ }
-+-- 
-+cgit v1.2.1
-+
-diff --git a/package/cpio/0003-Fix-previous-commit.patch b/package/cpio/0003-Fix-previous-commit.patch
-new file mode 100644
-index 0000000000..e33a8523d8
---- /dev/null
-+++ b/package/cpio/0003-Fix-previous-commit.patch
-@@ -0,0 +1,40 @@
-+From dfc801c44a93bed7b3951905b188823d6a0432c8 Mon Sep 17 00:00:00 2001
-+From: Sergey Poznyakoff <gray@gnu.org>
-+Date: Wed, 11 Aug 2021 18:10:38 +0300
-+Subject: Fix previous commit
-+
-+* src/dstring.c (ds_reset,ds_concat): Don't call ds_resize in a
-+loop.
-+
-+[Retrieved from:
-+https://git.savannah.gnu.org/cgit/cpio.git/commit/?id=dfc801c44a93bed7b3951905b188823d6a0432c8]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ src/dstring.c | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/src/dstring.c b/src/dstring.c
-+index 692d3e7..b7e0bb5 100644
-+--- a/src/dstring.c
-++++ b/src/dstring.c
-+@@ -64,7 +64,7 @@ void
-+ ds_reset (dynamic_string *s, size_t len)
-+ {
-+   while (len > s->ds_size)
-+-    ds_resize (s);
-++    s->ds_string = x2nrealloc (s->ds_string, &s->ds_size, 1);
-+   s->ds_idx = len;
-+ }
-+ 
-+@@ -116,7 +116,7 @@ ds_concat (dynamic_string *s, char const *str)
-+ {
-+   size_t len = strlen (str);
-+   while (len + 1 > s->ds_size)
-+-    ds_resize (s);
-++    s->ds_string = x2nrealloc (s->ds_string, &s->ds_size, 1);
-+   memcpy (s->ds_string + s->ds_idx, str, len);
-+   s->ds_idx += len;
-+   s->ds_string[s->ds_idx] = 0;
-+-- 
-+cgit v1.2.1
-+
-diff --git a/package/cpio/cpio.mk b/package/cpio/cpio.mk
-index 9ce281dd1c..e95ea742b3 100644
---- a/package/cpio/cpio.mk
-+++ b/package/cpio/cpio.mk
-@@ -12,6 +12,10 @@ CPIO_LICENSE = GPL-3.0+
- CPIO_LICENSE_FILES = COPYING
- CPIO_CPE_ID_VENDOR = gnu
- 
-+# 0002-Rewrite-dynamic-string-support.patch
-+# 0003-Fix-previous-commit.patch
-+CPIO_IGNORE_CVES += CVE-2021-38185
-+
- # cpio uses argp.h which is not provided by uclibc or musl by default.
- # Use the argp-standalone package to provide this.
- ifeq ($(BR2_PACKAGE_ARGP_STANDALONE),y)
-_______________________________________________
-buildroot mailing list
-buildroot@lists.buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+Q09QWUlORyB3aXRoIGh0dHBzIGxpbmtzCgpTaWduZWQtb2ZmLWJ5OiBGcmFuY29pcyBQZXJyYWQg
+PGZyYW5jb2lzLnBlcnJhZEBnYWR6Lm9yZz4KLS0tCiAuLi5hZGp1c3QtdG8tZ2xpYmMtMi4yOC1s
+aWJpby5oLXJlbW92YWwucGF0Y2ggfCAxNjYgLS0tLS0tLS0tLS0tLS0tLS0tCiAuLi5lLW1vcmUt
+cGFyYW5vaWQtYWJvdXQtbGliaW8uaC1jaGFuZ2UucGF0Y2ggfCAxNTEgLS0tLS0tLS0tLS0tLS0t
+LQogLi4uL200LzAwMDMtYy1zdGFjay1zdG9wLXVzaW5nLVNJR1NUS1NaLnBhdGNoIHwgMTA2IC0t
+LS0tLS0tLS0tCiBwYWNrYWdlL200L200Lmhhc2ggICAgICAgICAgICAgICAgICAgICAgICAgICAg
+fCAgIDQgKy0KIHBhY2thZ2UvbTQvbTQubWsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8
+ICAgMiArLQogNSBmaWxlcyBjaGFuZ2VkLCAzIGluc2VydGlvbnMoKyksIDQyNiBkZWxldGlvbnMo
+LSkKIGRlbGV0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL200LzAwMDEtZmZsdXNoLWFkanVzdC10by1n
+bGliYy0yLjI4LWxpYmlvLmgtcmVtb3ZhbC5wYXRjaAogZGVsZXRlIG1vZGUgMTAwNjQ0IHBhY2th
+Z2UvbTQvMDAwMi1mZmx1c2gtYmUtbW9yZS1wYXJhbm9pZC1hYm91dC1saWJpby5oLWNoYW5nZS5w
+YXRjaAogZGVsZXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvbTQvMDAwMy1jLXN0YWNrLXN0b3AtdXNp
+bmctU0lHU1RLU1oucGF0Y2gKCmRpZmYgLS1naXQgYS9wYWNrYWdlL200LzAwMDEtZmZsdXNoLWFk
+anVzdC10by1nbGliYy0yLjI4LWxpYmlvLmgtcmVtb3ZhbC5wYXRjaCBiL3BhY2thZ2UvbTQvMDAw
+MS1mZmx1c2gtYWRqdXN0LXRvLWdsaWJjLTIuMjgtbGliaW8uaC1yZW1vdmFsLnBhdGNoCmRlbGV0
+ZWQgZmlsZSBtb2RlIDEwMDY0NAppbmRleCA1YzVjMTFiOTkuLjAwMDAwMDAwMAotLS0gYS9wYWNr
+YWdlL200LzAwMDEtZmZsdXNoLWFkanVzdC10by1nbGliYy0yLjI4LWxpYmlvLmgtcmVtb3ZhbC5w
+YXRjaAorKysgL2Rldi9udWxsCkBAIC0xLDE2NiArMCwwIEBACi1Gcm9tIDRhZjRhNGE3MTgyN2Mw
+YmM1ZTBlYzY3YWYyM2VkZWY0ZjE1Y2VlOGUgTW9uIFNlcCAxNyAwMDowMDowMCAyMDAxCi1Gcm9t
+OiBQYXVsIEVnZ2VydCA8ZWdnZXJ0QGNzLnVjbGEuZWR1PgotRGF0ZTogTW9uLCA1IE1hciAyMDE4
+IDEwOjU2OjI5IC0wODAwCi1TdWJqZWN0OiBbUEFUQ0hdIGZmbHVzaDogYWRqdXN0IHRvIGdsaWJj
+IDIuMjggbGliaW8uaCByZW1vdmFsCi1NSU1FLVZlcnNpb246IDEuMAotQ29udGVudC1UeXBlOiB0
+ZXh0L3BsYWluOyBjaGFyc2V0PVVURi04Ci1Db250ZW50LVRyYW5zZmVyLUVuY29kaW5nOiA4Yml0
+Ci0KLVByb2JsZW0gcmVwb3J0ZWQgYnkgRGFuaWVsIFAuIEJlcnJhbmfDqSBpbjoKLWh0dHBzOi8v
+bGlzdHMuZ251Lm9yZy9yL2J1Zy1nbnVsaWIvMjAxOC0wMy9tc2cwMDAwMC5odG1sCi0qIGxpYi9m
+YnVmbW9kZS5jIChmYnVmbW9kZSk6Ci0qIGxpYi9mZmx1c2guYyAoY2xlYXJfdW5nZXRjX2J1ZmZl
+cl9wcmVzZXJ2aW5nX3Bvc2l0aW9uKQotKGRpc2FibGVfc2Vla19vcHRpbWl6YXRpb24sIHJwbF9m
+Zmx1c2gpOgotKiBsaWIvZnBlbmRpbmcuYyAoX19mcGVuZGluZyk6Ci0qIGxpYi9mcHVyZ2UuYyAo
+ZnB1cmdlKToKLSogbGliL2ZyZWFkYWJsZS5jIChmcmVhZGFibGUpOgotKiBsaWIvZnJlYWRhaGVh
+ZC5jIChmcmVhZGFoZWFkKToKLSogbGliL2ZyZWFkaW5nLmMgKGZyZWFkaW5nKToKLSogbGliL2Zy
+ZWFkcHRyLmMgKGZyZWFkcHRyKToKLSogbGliL2ZyZWFkc2Vlay5jIChmcmVhZHB0cmluYyk6Ci0q
+IGxpYi9mc2Vla28uYyAoZnNlZWtvKToKLSogbGliL2ZzZXRlcnIuYyAoZnNldGVycik6Ci0qIGxp
+Yi9md3JpdGFibGUuYyAoZndyaXRhYmxlKToKLSogbGliL2Z3cml0aW5nLmMgKGZ3cml0aW5nKToK
+LUNoZWNrIF9JT19FT0ZfU0VFTiBpbnN0ZWFkIG9mIF9JT19mdHJ5bG9ja2ZpbGUuCi0qIGxpYi9z
+dGRpby1pbXBsLmggKF9JT19JTl9CQUNLVVApIFtfSU9fRU9GX1NFRU5dOgotRGVmaW5lIGlmIG5v
+dCBhbHJlYWR5IGRlZmluZWQuCi0KLVt5YW5uLm1vcmluLjE5OThAZnJlZS5mcjogcGFydGlhbGx5
+IGJhY2twb3J0IGZyb20gdXBzdHJlYW0gZ251bGliXQotU2lnbmVkLW9mZi1ieTogIllhbm4gRS4g
+TU9SSU4iIDx5YW5uLm1vcmluLjE5OThAZnJlZS5mcj4KLQotLS0tCi0gbGliL2ZmbHVzaC5jICAg
+ICB8ICA2ICsrKy0tLQotIGxpYi9mcGVuZGluZy5jICAgfCAgMiArLQotIGxpYi9mcHVyZ2UuYyAg
+ICAgfCAgMiArLQotIGxpYi9mcmVhZGFoZWFkLmMgfCAgMiArLQotIGxpYi9mcmVhZGluZy5jICAg
+fCAgMiArLQotIGxpYi9mc2Vla28uYyAgICAgfCAgNCArKy0tCi0gbGliL3N0ZGlvLWltcGwuaCB8
+ICA2ICsrKysrKwotIDcgZmlsZXMgY2hhbmdlZCwgMTUgaW5zZXJ0aW9ucygrKSwgOSBkZWxldGlv
+bnMoLSkKLQotZGlmZiAtLWdpdCBhL2xpYi9mZmx1c2guYyBiL2J1aWxkLWF1eC9nbnVsaWIvbGli
+L2ZmbHVzaC5jCi1pbmRleCA5ODNhZGUwZmYuLmE2ZWRmYTEwNSAxMDA2NDQKLS0tLSBhL2xpYi9m
+Zmx1c2guYwotKysrIGIvbGliL2ZmbHVzaC5jCi1AQCAtMzMsNyArMzMsNyBAQAotICN1bmRlZiBm
+Zmx1c2gKLSAKLSAKLS0jaWYgZGVmaW5lZCBfSU9fZnRyeWxvY2tmaWxlIHx8IF9fR05VX0xJQlJB
+UllfXyA9PSAxIC8qIEdOVSBsaWJjLCBCZU9TLCBIYWlrdSwgTGludXggbGliYzUgKi8KLSsjaWYg
+ZGVmaW5lZCBfSU9fRU9GX1NFRU4gfHwgX19HTlVfTElCUkFSWV9fID09IDEgLyogR05VIGxpYmMs
+IEJlT1MsIEhhaWt1LCBMaW51eCBsaWJjNSAqLwotIAotIC8qIENsZWFyIHRoZSBzdHJlYW0ncyB1
+bmdldGMgYnVmZmVyLCBwcmVzZXJ2aW5nIHRoZSB2YWx1ZSBvZiBmdGVsbG8gKGZwKS4gICovCi0g
+c3RhdGljIHZvaWQKLUBAIC03Miw3ICs3Miw3IEBAIGNsZWFyX3VuZ2V0Y19idWZmZXIgKEZJTEUg
+KmZwKQotIAotICNlbmRpZgotIAotLSNpZiAhIChkZWZpbmVkIF9JT19mdHJ5bG9ja2ZpbGUgfHwg
+X19HTlVfTElCUkFSWV9fID09IDEgLyogR05VIGxpYmMsIEJlT1MsIEhhaWt1LCBMaW51eCBsaWJj
+NSAqLykKLSsjaWYgISAoZGVmaW5lZCBfSU9fRU9GX1NFRU4gfHwgX19HTlVfTElCUkFSWV9fID09
+IDEgLyogR05VIGxpYmMsIEJlT1MsIEhhaWt1LCBMaW51eCBsaWJjNSAqLykKLSAKLSAjIGlmIChk
+ZWZpbmVkIF9fc2ZlcnJvciB8fCBkZWZpbmVkIF9fRHJhZ29uRmx5X18gfHwgZGVmaW5lZCBfX0FO
+RFJPSURfXykgJiYgZGVmaW5lZCBfX1NOUFQKLSAvKiBGcmVlQlNELCBOZXRCU0QsIE9wZW5CU0Qs
+IERyYWdvbkZseSwgTWFjIE9TIFgsIEN5Z3dpbiwgTWluaXggMywgQW5kcm9pZCAqLwotQEAgLTE0
+OCw3ICsxNDgsNyBAQCBycGxfZmZsdXNoIChGSUxFICpzdHJlYW0pCi0gICBpZiAoc3RyZWFtID09
+IE5VTEwgfHwgISBmcmVhZGluZyAoc3RyZWFtKSkKLSAgICAgcmV0dXJuIGZmbHVzaCAoc3RyZWFt
+KTsKLSAKLS0jaWYgZGVmaW5lZCBfSU9fZnRyeWxvY2tmaWxlIHx8IF9fR05VX0xJQlJBUllfXyA9
+PSAxIC8qIEdOVSBsaWJjLCBCZU9TLCBIYWlrdSwgTGludXggbGliYzUgKi8KLSsjaWYgZGVmaW5l
+ZCBfSU9fRU9GX1NFRU4gfHwgX19HTlVfTElCUkFSWV9fID09IDEgLyogR05VIGxpYmMsIEJlT1Ms
+IEhhaWt1LCBMaW51eCBsaWJjNSAqLwotIAotICAgY2xlYXJfdW5nZXRjX2J1ZmZlcl9wcmVzZXJ2
+aW5nX3Bvc2l0aW9uIChzdHJlYW0pOwotIAotZGlmZiAtLWdpdCBhL2xpYi9mcGVuZGluZy5jIGIv
+YnVpbGQtYXV4L2dudWxpYi9saWIvZnBlbmRpbmcuYwotaW5kZXggYzg0ZTNhNWI0Li43ODlmNTBl
+NGUgMTAwNjQ0Ci0tLS0gYS9saWIvZnBlbmRpbmcuYwotKysrIGIvbGliL2ZwZW5kaW5nLmMKLUBA
+IC0zMiw3ICszMiw3IEBAIF9fZnBlbmRpbmcgKEZJTEUgKmZwKQotICAgLyogTW9zdCBzeXN0ZW1z
+IHByb3ZpZGUgRklMRSBhcyBhIHN0cnVjdCBhbmQgdGhlIG5lY2Vzc2FyeSBiaXRtYXNrIGluCi0g
+ICAgICA8c3RkaW8uaD4sIGJlY2F1c2UgdGhleSBuZWVkIGl0IGZvciBpbXBsZW1lbnRpbmcgZ2V0
+YygpIGFuZCBwdXRjKCkgYXMKLSAgICAgIGZhc3QgbWFjcm9zLiAgKi8KLS0jaWYgZGVmaW5lZCBf
+SU9fZnRyeWxvY2tmaWxlIHx8IF9fR05VX0xJQlJBUllfXyA9PSAxIC8qIEdOVSBsaWJjLCBCZU9T
+LCBIYWlrdSwgTGludXggbGliYzUgKi8KLSsjaWYgZGVmaW5lZCBfSU9fRU9GX1NFRU4gfHwgX19H
+TlVfTElCUkFSWV9fID09IDEgLyogR05VIGxpYmMsIEJlT1MsIEhhaWt1LCBMaW51eCBsaWJjNSAq
+LwotICAgcmV0dXJuIGZwLT5fSU9fd3JpdGVfcHRyIC0gZnAtPl9JT193cml0ZV9iYXNlOwotICNl
+bGlmIGRlZmluZWQgX19zZmVycm9yIHx8IGRlZmluZWQgX19EcmFnb25GbHlfXyB8fCBkZWZpbmVk
+IF9fQU5EUk9JRF9fCi0gICAvKiBGcmVlQlNELCBOZXRCU0QsIE9wZW5CU0QsIERyYWdvbkZseSwg
+TWFjIE9TIFgsIEN5Z3dpbiwgTWluaXggMywgQW5kcm9pZCAqLwotZGlmZiAtLWdpdCBhL2xpYi9m
+cHVyZ2UuYyBiL2J1aWxkLWF1eC9nbnVsaWIvbGliL2ZwdXJnZS5jCi1pbmRleCBiMWQ0MTdjN2Eu
+LjNhZWRjYzM3MyAxMDA2NDQKLS0tLSBhL2xpYi9mcHVyZ2UuYwotKysrIGIvbGliL2ZwdXJnZS5j
+Ci1AQCAtNjIsNyArNjIsNyBAQCBmcHVyZ2UgKEZJTEUgKmZwKQotICAgLyogTW9zdCBzeXN0ZW1z
+IHByb3ZpZGUgRklMRSBhcyBhIHN0cnVjdCBhbmQgdGhlIG5lY2Vzc2FyeSBiaXRtYXNrIGluCi0g
+ICAgICA8c3RkaW8uaD4sIGJlY2F1c2UgdGhleSBuZWVkIGl0IGZvciBpbXBsZW1lbnRpbmcgZ2V0
+YygpIGFuZCBwdXRjKCkgYXMKLSAgICAgIGZhc3QgbWFjcm9zLiAgKi8KLS0jIGlmIGRlZmluZWQg
+X0lPX2Z0cnlsb2NrZmlsZSB8fCBfX0dOVV9MSUJSQVJZX18gPT0gMSAvKiBHTlUgbGliYywgQmVP
+UywgSGFpa3UsIExpbnV4IGxpYmM1ICovCi0rIyBpZiBkZWZpbmVkIF9JT19FT0ZfU0VFTiB8fCBf
+X0dOVV9MSUJSQVJZX18gPT0gMSAvKiBHTlUgbGliYywgQmVPUywgSGFpa3UsIExpbnV4IGxpYmM1
+ICovCi0gICBmcC0+X0lPX3JlYWRfZW5kID0gZnAtPl9JT19yZWFkX3B0cjsKLSAgIGZwLT5fSU9f
+d3JpdGVfcHRyID0gZnAtPl9JT193cml0ZV9iYXNlOwotICAgLyogQXZvaWQgbWVtb3J5IGxlYWsg
+d2hlbiB0aGVyZSBpcyBhbiBhY3RpdmUgdW5nZXRjIGJ1ZmZlci4gICovCi1kaWZmIC0tZ2l0IGEv
+bGliL2ZyZWFkYWhlYWQuYyBiL2J1aWxkLWF1eC9nbnVsaWIvbGliL2ZyZWFkYWhlYWQuYwotaW5k
+ZXggYzJlY2I1YjI4Li4yM2VjNzZlZTUgMTAwNjQ0Ci0tLS0gYS9saWIvZnJlYWRhaGVhZC5jCi0r
+KysgYi9saWIvZnJlYWRhaGVhZC5jCi1AQCAtMzAsNyArMzAsNyBAQCBleHRlcm4gc2l6ZV90IF9f
+c3JlYWRhaGVhZCAoRklMRSAqKTsKLSBzaXplX3QKLSBmcmVhZGFoZWFkIChGSUxFICpmcCkKLSB7
+Ci0tI2lmIGRlZmluZWQgX0lPX2Z0cnlsb2NrZmlsZSB8fCBfX0dOVV9MSUJSQVJZX18gPT0gMSAv
+KiBHTlUgbGliYywgQmVPUywgSGFpa3UsIExpbnV4IGxpYmM1ICovCi0rI2lmIGRlZmluZWQgX0lP
+X0VPRl9TRUVOIHx8IF9fR05VX0xJQlJBUllfXyA9PSAxIC8qIEdOVSBsaWJjLCBCZU9TLCBIYWlr
+dSwgTGludXggbGliYzUgKi8KLSAgIGlmIChmcC0+X0lPX3dyaXRlX3B0ciA+IGZwLT5fSU9fd3Jp
+dGVfYmFzZSkKLSAgICAgcmV0dXJuIDA7Ci0gICByZXR1cm4gKGZwLT5fSU9fcmVhZF9lbmQgLSBm
+cC0+X0lPX3JlYWRfcHRyKQotZGlmZiAtLWdpdCBhL2xpYi9mcmVhZGluZy5jIGIvYnVpbGQtYXV4
+L2dudWxpYi9saWIvZnJlYWRpbmcuYwotaW5kZXggNzNjMjhhY2RkLi5jMjRkMGM4OGEgMTAwNjQ0
+Ci0tLS0gYS9saWIvZnJlYWRpbmcuYwotKysrIGIvbGliL2ZyZWFkaW5nLmMKLUBAIC0zMSw3ICsz
+MSw3IEBAIGZyZWFkaW5nIChGSUxFICpmcCkKLSAgIC8qIE1vc3Qgc3lzdGVtcyBwcm92aWRlIEZJ
+TEUgYXMgYSBzdHJ1Y3QgYW5kIHRoZSBuZWNlc3NhcnkgYml0bWFzayBpbgotICAgICAgPHN0ZGlv
+Lmg+LCBiZWNhdXNlIHRoZXkgbmVlZCBpdCBmb3IgaW1wbGVtZW50aW5nIGdldGMoKSBhbmQgcHV0
+YygpIGFzCi0gICAgICBmYXN0IG1hY3Jvcy4gICovCi0tIyBpZiBkZWZpbmVkIF9JT19mdHJ5bG9j
+a2ZpbGUgfHwgX19HTlVfTElCUkFSWV9fID09IDEgLyogR05VIGxpYmMsIEJlT1MsIEhhaWt1LCBM
+aW51eCBsaWJjNSAqLwotKyMgaWYgZGVmaW5lZCBfSU9fRU9GX1NFRU4gfHwgX19HTlVfTElCUkFS
+WV9fID09IDEgLyogR05VIGxpYmMsIEJlT1MsIEhhaWt1LCBMaW51eCBsaWJjNSAqLwotICAgcmV0
+dXJuICgoZnAtPl9mbGFncyAmIF9JT19OT19XUklURVMpICE9IDAKLSAgICAgICAgICAgfHwgKChm
+cC0+X2ZsYWdzICYgKF9JT19OT19SRUFEUyB8IF9JT19DVVJSRU5UTFlfUFVUVElORykpID09IDAK
+LSAgICAgICAgICAgICAgICYmIGZwLT5fSU9fcmVhZF9iYXNlICE9IE5VTEwpKTsKLWRpZmYgLS1n
+aXQgYS9saWIvZnNlZWtvLmMgYi9idWlsZC1hdXgvZ251bGliL2xpYi9mc2Vla28uYwotaW5kZXgg
+MDEwMWFiNTVmLi4xOTNmNGU4Y2UgMTAwNjQ0Ci0tLS0gYS9saWIvZnNlZWtvLmMKLSsrKyBiL2xp
+Yi9mc2Vla28uYwotQEAgLTQ3LDcgKzQ3LDcgQEAgZnNlZWtvIChGSUxFICpmcCwgb2ZmX3Qgb2Zm
+c2V0LCBpbnQgd2hlbmNlKQotICNlbmRpZgotIAotICAgLyogVGhlc2UgdGVzdHMgYXJlIGJhc2Vk
+IG9uIGZwdXJnZS5jLiAgKi8KLS0jaWYgZGVmaW5lZCBfSU9fZnRyeWxvY2tmaWxlIHx8IF9fR05V
+X0xJQlJBUllfXyA9PSAxIC8qIEdOVSBsaWJjLCBCZU9TLCBIYWlrdSwgTGludXggbGliYzUgKi8K
+LSsjaWYgZGVmaW5lZCBfSU9fRU9GX1NFRU4gfHwgX19HTlVfTElCUkFSWV9fID09IDEgLyogR05V
+IGxpYmMsIEJlT1MsIEhhaWt1LCBMaW51eCBsaWJjNSAqLwotICAgaWYgKGZwLT5fSU9fcmVhZF9l
+bmQgPT0gZnAtPl9JT19yZWFkX3B0cgotICAgICAgICYmIGZwLT5fSU9fd3JpdGVfcHRyID09IGZw
+LT5fSU9fd3JpdGVfYmFzZQotICAgICAgICYmIGZwLT5fSU9fc2F2ZV9iYXNlID09IE5VTEwpCi1A
+QCAtMTIzLDcgKzEyMyw3IEBAIGZzZWVrbyAoRklMRSAqZnAsIG9mZl90IG9mZnNldCwgaW50IHdo
+ZW5jZSkKLSAgICAgICAgICAgcmV0dXJuIC0xOwotICAgICAgICAgfQotIAotLSNpZiBkZWZpbmVk
+IF9JT19mdHJ5bG9ja2ZpbGUgfHwgX19HTlVfTElCUkFSWV9fID09IDEgLyogR05VIGxpYmMsIEJl
+T1MsIEhhaWt1LCBMaW51eCBsaWJjNSAqLwotKyNpZiBkZWZpbmVkIF9JT19FT0ZfU0VFTiB8fCBf
+X0dOVV9MSUJSQVJZX18gPT0gMSAvKiBHTlUgbGliYywgQmVPUywgSGFpa3UsIExpbnV4IGxpYmM1
+ICovCi0gICAgICAgZnAtPl9mbGFncyAmPSB+X0lPX0VPRl9TRUVOOwotICAgICAgIGZwLT5fb2Zm
+c2V0ID0gcG9zOwotICNlbGlmIGRlZmluZWQgX19zZmVycm9yIHx8IGRlZmluZWQgX19EcmFnb25G
+bHlfXyB8fCBkZWZpbmVkIF9fQU5EUk9JRF9fCi1kaWZmIC0tZ2l0IGEvbGliL3N0ZGlvLWltcGwu
+aCBiL2J1aWxkLWF1eC9nbnVsaWIvbGliL3N0ZGlvLWltcGwuaAotaW5kZXggNzhkODk2ZTlmLi4w
+NWM1NzUyYTIgMTAwNjQ0Ci0tLS0gYS9saWIvc3RkaW8taW1wbC5oCi0rKysgYi9saWIvc3RkaW8t
+aW1wbC5oCi1AQCAtMTgsNiArMTgsMTIgQEAKLSAgICB0aGUgc2FtZSBpbXBsZW1lbnRhdGlvbiBv
+ZiBzdGRpbyBleHRlbnNpb24gQVBJLCBleGNlcHQgdGhhdCBzb21lIGZpZWxkcwotICAgIGhhdmUg
+ZGlmZmVyZW50IG5hbWluZyBjb252ZW50aW9ucywgb3IgdGhlaXIgYWNjZXNzIHJlcXVpcmVzIHNv
+bWUgY2FzdHMuICAqLwotIAotKy8qIEdsaWJjIDIuMjggbWFkZSBfSU9fSU5fQkFDS1VQIHByaXZh
+dGUuICBGb3Igbm93LCB3b3JrIGFyb3VuZCB0aGlzCi0rICAgcHJvYmxlbSBieSBkZWZpbmluZyBp
+dCBvdXJzZWx2ZXMuICBGSVhNRTogRG8gbm90IHJlbHkgb24gZ2xpYmMKLSsgICBpbnRlcm5hbHMu
+ICAqLwotKyNpZiAhZGVmaW5lZCBfSU9fSU5fQkFDS1VQICYmIGRlZmluZWQgX0lPX0VPRl9TRUVO
+Ci0rIyBkZWZpbmUgX0lPX0lOX0JBQ0tVUCAweDEwMAotKyNlbmRpZgotIAotIC8qIEJTRCBzdGRp
+byBkZXJpdmVkIGltcGxlbWVudGF0aW9ucy4gICovCi0gCi0tLSAKLTIuMTQuMQotCmRpZmYgLS1n
+aXQgYS9wYWNrYWdlL200LzAwMDItZmZsdXNoLWJlLW1vcmUtcGFyYW5vaWQtYWJvdXQtbGliaW8u
+aC1jaGFuZ2UucGF0Y2ggYi9wYWNrYWdlL200LzAwMDItZmZsdXNoLWJlLW1vcmUtcGFyYW5vaWQt
+YWJvdXQtbGliaW8uaC1jaGFuZ2UucGF0Y2gKZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4
+IGE4MjBjYThjYS4uMDAwMDAwMDAwCi0tLSBhL3BhY2thZ2UvbTQvMDAwMi1mZmx1c2gtYmUtbW9y
+ZS1wYXJhbm9pZC1hYm91dC1saWJpby5oLWNoYW5nZS5wYXRjaAorKysgL2Rldi9udWxsCkBAIC0x
+LDE1MSArMCwwIEBACi1Gcm9tIDc0ZDlkNmEyOTNkNzQ2MmRlYThmODNlN2ZjNWFjNzkyZTk1NmEw
+YWQgTW9uIFNlcCAxNyAwMDowMDowMCAyMDAxCi1Gcm9tOiBQYXVsIEVnZ2VydCA8ZWdnZXJ0QGNz
+LnVjbGEuZWR1PgotRGF0ZTogVGh1LCA4IE1hciAyMDE4IDE2OjQyOjQ1IC0wODAwCi1TdWJqZWN0
+OiBbUEFUQ0ggMi8yXSBmZmx1c2g6IGJlIG1vcmUgcGFyYW5vaWQgYWJvdXQgbGliaW8uaCBjaGFu
+Z2UKLQotU3VnZ2VzdGVkIGJ5IEVsaSBaYXJldHNraWkgaW46Ci1odHRwczovL2xpc3RzLmdudS5v
+cmcvci9lbWFjcy1kZXZlbC8yMDE4LTAzL21zZzAwMjcwLmh0bWwKLSogbGliL2ZidWZtb2RlLmMg
+KGZidWZtb2RlKToKLSogbGliL2ZmbHVzaC5jIChjbGVhcl91bmdldGNfYnVmZmVyX3ByZXNlcnZp
+bmdfcG9zaXRpb24pCi0oZGlzYWJsZV9zZWVrX29wdGltaXphdGlvbiwgcnBsX2ZmbHVzaCk6Ci0q
+IGxpYi9mcGVuZGluZy5jIChfX2ZwZW5kaW5nKToKLSogbGliL2ZwdXJnZS5jIChmcHVyZ2UpOgot
+KiBsaWIvZnJlYWRhYmxlLmMgKGZyZWFkYWJsZSk6Ci0qIGxpYi9mcmVhZGFoZWFkLmMgKGZyZWFk
+YWhlYWQpOgotKiBsaWIvZnJlYWRpbmcuYyAoZnJlYWRpbmcpOgotKiBsaWIvZnJlYWRwdHIuYyAo
+ZnJlYWRwdHIpOgotKiBsaWIvZnJlYWRzZWVrLmMgKGZyZWFkcHRyaW5jKToKLSogbGliL2ZzZWVr
+by5jIChmc2Vla28pOgotKiBsaWIvZnNldGVyci5jIChmc2V0ZXJyKToKLSogbGliL2Z3cml0YWJs
+ZS5jIChmd3JpdGFibGUpOgotKiBsaWIvZndyaXRpbmcuYyAoZndyaXRpbmcpOgotTG9vayBhdCBf
+SU9fZnRyeWxvY2tmaWxlIGFzIHdlbGwgYXMgYXQgX0lPX0VPRl9TRUVOLgotLS0tCi0gbGliL2Zm
+bHVzaC5jICAgICB8ICA5ICsrKysrKy0tLQotIGxpYi9mcGVuZGluZy5jICAgfCAgMyArKy0KLSBs
+aWIvZnB1cmdlLmMgICAgIHwgIDMgKystCi0gbGliL2ZyZWFkYWhlYWQuYyB8ICAzICsrLQotIGxp
+Yi9mcmVhZGluZy5jICAgfCAgMyArKy0KLSBsaWIvZnNlZWtvLmMgICAgIHwgIDYgKysrKy0tCi0g
+NiBmaWxlcyBjaGFuZ2VkLCAxOCBpbnNlcnRpb25zKCspLCA5IGRlbGV0aW9ucygtKQotCi1beWFu
+bi5tb3Jpbi4xOTk4QGZyZWUuZnI6IHBhcnRpYWxseSBiYWNrcG9ydCBmcm9tIHVwc3RyZWFtIGdu
+dWxpYl0KLVNpZ25lZC1vZmYtYnk6ICJZYW5uIEUuIE1PUklOIiA8eWFubi5tb3Jpbi4xOTk4QGZy
+ZWUuZnI+Ci0KLWRpZmYgLS1naXQgYS9saWIvZmZsdXNoLmMgYi9idWlsZC1hdXgvZ251bGliL2xp
+Yi9mZmx1c2guYwotaW5kZXggYTZlZGZhMTA1Li5hMTQwYjdhZDkgMTAwNjQ0Ci0tLS0gYS9saWIv
+ZmZsdXNoLmMKLSsrKyBiL2xpYi9mZmx1c2guYwotQEAgLTMzLDcgKzMzLDggQEAKLSAjdW5kZWYg
+ZmZsdXNoCi0gCi0gCi0tI2lmIGRlZmluZWQgX0lPX0VPRl9TRUVOIHx8IF9fR05VX0xJQlJBUllf
+XyA9PSAxIC8qIEdOVSBsaWJjLCBCZU9TLCBIYWlrdSwgTGludXggbGliYzUgKi8KLSsjaWYgZGVm
+aW5lZCBfSU9fRU9GX1NFRU4gfHwgZGVmaW5lZCBfSU9fZnRyeWxvY2tmaWxlIHx8IF9fR05VX0xJ
+QlJBUllfXyA9PSAxCi0rLyogR05VIGxpYmMsIEJlT1MsIEhhaWt1LCBMaW51eCBsaWJjNSAqLwot
+IAotIC8qIENsZWFyIHRoZSBzdHJlYW0ncyB1bmdldGMgYnVmZmVyLCBwcmVzZXJ2aW5nIHRoZSB2
+YWx1ZSBvZiBmdGVsbG8gKGZwKS4gICovCi0gc3RhdGljIHZvaWQKLUBAIC03Miw3ICs3Myw4IEBA
+IGNsZWFyX3VuZ2V0Y19idWZmZXIgKEZJTEUgKmZwKQotIAotICNlbmRpZgotIAotLSNpZiAhIChk
+ZWZpbmVkIF9JT19FT0ZfU0VFTiB8fCBfX0dOVV9MSUJSQVJZX18gPT0gMSAvKiBHTlUgbGliYywg
+QmVPUywgSGFpa3UsIExpbnV4IGxpYmM1ICovKQotKyNpZiAhIChkZWZpbmVkIF9JT19FT0ZfU0VF
+TiB8fCBkZWZpbmVkIF9JT19mdHJ5bG9ja2ZpbGUgfHwgX19HTlVfTElCUkFSWV9fID09IDEpCi0r
+LyogR05VIGxpYmMsIEJlT1MsIEhhaWt1LCBMaW51eCBsaWJjNSAqLwotIAotICMgaWYgKGRlZmlu
+ZWQgX19zZmVycm9yIHx8IGRlZmluZWQgX19EcmFnb25GbHlfXyB8fCBkZWZpbmVkIF9fQU5EUk9J
+RF9fKSAmJiBkZWZpbmVkIF9fU05QVAotIC8qIEZyZWVCU0QsIE5ldEJTRCwgT3BlbkJTRCwgRHJh
+Z29uRmx5LCBNYWMgT1MgWCwgQ3lnd2luLCBNaW5peCAzLCBBbmRyb2lkICovCi1AQCAtMTQ4LDcg
+KzE1MCw4IEBAIHJwbF9mZmx1c2ggKEZJTEUgKnN0cmVhbSkKLSAgIGlmIChzdHJlYW0gPT0gTlVM
+TCB8fCAhIGZyZWFkaW5nIChzdHJlYW0pKQotICAgICByZXR1cm4gZmZsdXNoIChzdHJlYW0pOwot
+IAotLSNpZiBkZWZpbmVkIF9JT19FT0ZfU0VFTiB8fCBfX0dOVV9MSUJSQVJZX18gPT0gMSAvKiBH
+TlUgbGliYywgQmVPUywgSGFpa3UsIExpbnV4IGxpYmM1ICovCi0rI2lmIGRlZmluZWQgX0lPX0VP
+Rl9TRUVOIHx8IGRlZmluZWQgX0lPX2Z0cnlsb2NrZmlsZSB8fCBfX0dOVV9MSUJSQVJZX18gPT0g
+MQotKyAgLyogR05VIGxpYmMsIEJlT1MsIEhhaWt1LCBMaW51eCBsaWJjNSAqLwotIAotICAgY2xl
+YXJfdW5nZXRjX2J1ZmZlcl9wcmVzZXJ2aW5nX3Bvc2l0aW9uIChzdHJlYW0pOwotIAotZGlmZiAt
+LWdpdCBhL2xpYi9mcGVuZGluZy5jIGIvYnVpbGQtYXV4L2dudWxpYi9saWIvZnBlbmRpbmcuYwot
+aW5kZXggNzg5ZjUwZTRlLi43YmMyMzVkZWQgMTAwNjQ0Ci0tLS0gYS9saWIvZnBlbmRpbmcuYwot
+KysrIGIvbGliL2ZwZW5kaW5nLmMKLUBAIC0zMiw3ICszMiw4IEBAIF9fZnBlbmRpbmcgKEZJTEUg
+KmZwKQotICAgLyogTW9zdCBzeXN0ZW1zIHByb3ZpZGUgRklMRSBhcyBhIHN0cnVjdCBhbmQgdGhl
+IG5lY2Vzc2FyeSBiaXRtYXNrIGluCi0gICAgICA8c3RkaW8uaD4sIGJlY2F1c2UgdGhleSBuZWVk
+IGl0IGZvciBpbXBsZW1lbnRpbmcgZ2V0YygpIGFuZCBwdXRjKCkgYXMKLSAgICAgIGZhc3QgbWFj
+cm9zLiAgKi8KLS0jaWYgZGVmaW5lZCBfSU9fRU9GX1NFRU4gfHwgX19HTlVfTElCUkFSWV9fID09
+IDEgLyogR05VIGxpYmMsIEJlT1MsIEhhaWt1LCBMaW51eCBsaWJjNSAqLwotKyNpZiBkZWZpbmVk
+IF9JT19FT0ZfU0VFTiB8fCBkZWZpbmVkIF9JT19mdHJ5bG9ja2ZpbGUgfHwgX19HTlVfTElCUkFS
+WV9fID09IDEKLSsgIC8qIEdOVSBsaWJjLCBCZU9TLCBIYWlrdSwgTGludXggbGliYzUgKi8KLSAg
+IHJldHVybiBmcC0+X0lPX3dyaXRlX3B0ciAtIGZwLT5fSU9fd3JpdGVfYmFzZTsKLSAjZWxpZiBk
+ZWZpbmVkIF9fc2ZlcnJvciB8fCBkZWZpbmVkIF9fRHJhZ29uRmx5X18gfHwgZGVmaW5lZCBfX0FO
+RFJPSURfXwotICAgLyogRnJlZUJTRCwgTmV0QlNELCBPcGVuQlNELCBEcmFnb25GbHksIE1hYyBP
+UyBYLCBDeWd3aW4sIE1pbml4IDMsIEFuZHJvaWQgKi8KLWRpZmYgLS1naXQgYS9saWIvZnB1cmdl
+LmMgYi9idWlsZC1hdXgvZ251bGliL2xpYi9mcHVyZ2UuYwotaW5kZXggM2FlZGNjMzczLi41NTQ3
+OTBiNTYgMTAwNjQ0Ci0tLS0gYS9saWIvZnB1cmdlLmMKLSsrKyBiL2xpYi9mcHVyZ2UuYwotQEAg
+LTYyLDcgKzYyLDggQEAgZnB1cmdlIChGSUxFICpmcCkKLSAgIC8qIE1vc3Qgc3lzdGVtcyBwcm92
+aWRlIEZJTEUgYXMgYSBzdHJ1Y3QgYW5kIHRoZSBuZWNlc3NhcnkgYml0bWFzayBpbgotICAgICAg
+PHN0ZGlvLmg+LCBiZWNhdXNlIHRoZXkgbmVlZCBpdCBmb3IgaW1wbGVtZW50aW5nIGdldGMoKSBh
+bmQgcHV0YygpIGFzCi0gICAgICBmYXN0IG1hY3Jvcy4gICovCi0tIyBpZiBkZWZpbmVkIF9JT19F
+T0ZfU0VFTiB8fCBfX0dOVV9MSUJSQVJZX18gPT0gMSAvKiBHTlUgbGliYywgQmVPUywgSGFpa3Us
+IExpbnV4IGxpYmM1ICovCi0rIyBpZiBkZWZpbmVkIF9JT19FT0ZfU0VFTiB8fCBkZWZpbmVkIF9J
+T19mdHJ5bG9ja2ZpbGUgfHwgX19HTlVfTElCUkFSWV9fID09IDEKLSsgIC8qIEdOVSBsaWJjLCBC
+ZU9TLCBIYWlrdSwgTGludXggbGliYzUgKi8KLSAgIGZwLT5fSU9fcmVhZF9lbmQgPSBmcC0+X0lP
+X3JlYWRfcHRyOwotICAgZnAtPl9JT193cml0ZV9wdHIgPSBmcC0+X0lPX3dyaXRlX2Jhc2U7Ci0g
+ICAvKiBBdm9pZCBtZW1vcnkgbGVhayB3aGVuIHRoZXJlIGlzIGFuIGFjdGl2ZSB1bmdldGMgYnVm
+ZmVyLiAgKi8KLWRpZmYgLS1naXQgYS9saWIvZnJlYWRhaGVhZC5jIGIvYnVpbGQtYXV4L2dudWxp
+Yi9saWIvZnJlYWRhaGVhZC5jCi1pbmRleCAyM2VjNzZlZTUuLmVkM2RkMGViZCAxMDA2NDQKLS0t
+LSBhL2xpYi9mcmVhZGFoZWFkLmMKLSsrKyBiL2xpYi9mcmVhZGFoZWFkLmMKLUBAIC0zMCw3ICsz
+MCw4IEBAIGV4dGVybiBzaXplX3QgX19zcmVhZGFoZWFkIChGSUxFICopOwotIHNpemVfdAotIGZy
+ZWFkYWhlYWQgKEZJTEUgKmZwKQotIHsKLS0jaWYgZGVmaW5lZCBfSU9fRU9GX1NFRU4gfHwgX19H
+TlVfTElCUkFSWV9fID09IDEgLyogR05VIGxpYmMsIEJlT1MsIEhhaWt1LCBMaW51eCBsaWJjNSAq
+LwotKyNpZiBkZWZpbmVkIF9JT19FT0ZfU0VFTiB8fCBkZWZpbmVkIF9JT19mdHJ5bG9ja2ZpbGUg
+fHwgX19HTlVfTElCUkFSWV9fID09IDEKLSsgIC8qIEdOVSBsaWJjLCBCZU9TLCBIYWlrdSwgTGlu
+dXggbGliYzUgKi8KLSAgIGlmIChmcC0+X0lPX3dyaXRlX3B0ciA+IGZwLT5fSU9fd3JpdGVfYmFz
+ZSkKLSAgICAgcmV0dXJuIDA7Ci0gICByZXR1cm4gKGZwLT5fSU9fcmVhZF9lbmQgLSBmcC0+X0lP
+X3JlYWRfcHRyKQotZGlmZiAtLWdpdCBhL2xpYi9mcmVhZGluZy5jIGIvYnVpbGQtYXV4L2dudWxp
+Yi9saWIvZnJlYWRpbmcuYwotaW5kZXggYzI0ZDBjODhhLi43OTBmOTJjYTMgMTAwNjQ0Ci0tLS0g
+YS9saWIvZnJlYWRpbmcuYwotKysrIGIvbGliL2ZyZWFkaW5nLmMKLUBAIC0zMSw3ICszMSw4IEBA
+IGZyZWFkaW5nIChGSUxFICpmcCkKLSAgIC8qIE1vc3Qgc3lzdGVtcyBwcm92aWRlIEZJTEUgYXMg
+YSBzdHJ1Y3QgYW5kIHRoZSBuZWNlc3NhcnkgYml0bWFzayBpbgotICAgICAgPHN0ZGlvLmg+LCBi
+ZWNhdXNlIHRoZXkgbmVlZCBpdCBmb3IgaW1wbGVtZW50aW5nIGdldGMoKSBhbmQgcHV0YygpIGFz
+Ci0gICAgICBmYXN0IG1hY3Jvcy4gICovCi0tIyBpZiBkZWZpbmVkIF9JT19FT0ZfU0VFTiB8fCBf
+X0dOVV9MSUJSQVJZX18gPT0gMSAvKiBHTlUgbGliYywgQmVPUywgSGFpa3UsIExpbnV4IGxpYmM1
+ICovCi0rIyBpZiBkZWZpbmVkIF9JT19FT0ZfU0VFTiB8fCBkZWZpbmVkIF9JT19mdHJ5bG9ja2Zp
+bGUgfHwgX19HTlVfTElCUkFSWV9fID09IDEKLSsgIC8qIEdOVSBsaWJjLCBCZU9TLCBIYWlrdSwg
+TGludXggbGliYzUgKi8KLSAgIHJldHVybiAoKGZwLT5fZmxhZ3MgJiBfSU9fTk9fV1JJVEVTKSAh
+PSAwCi0gICAgICAgICAgIHx8ICgoZnAtPl9mbGFncyAmIChfSU9fTk9fUkVBRFMgfCBfSU9fQ1VS
+UkVOVExZX1BVVFRJTkcpKSA9PSAwCi0gICAgICAgICAgICAgICAmJiBmcC0+X0lPX3JlYWRfYmFz
+ZSAhPSBOVUxMKSk7Ci1kaWZmIC0tZ2l0IGEvbGliL2ZzZWVrby5jIGIvYnVpbGQtYXV4L2dudWxp
+Yi9saWIvZnNlZWtvLmMKLWluZGV4IDE5M2Y0ZThjZS4uZTVjNTE3MmU3IDEwMDY0NAotLS0tIGEv
+bGliL2ZzZWVrby5jCi0rKysgYi9saWIvZnNlZWtvLmMKLUBAIC00Nyw3ICs0Nyw4IEBAIGZzZWVr
+byAoRklMRSAqZnAsIG9mZl90IG9mZnNldCwgaW50IHdoZW5jZSkKLSAjZW5kaWYKLSAKLSAgIC8q
+IFRoZXNlIHRlc3RzIGFyZSBiYXNlZCBvbiBmcHVyZ2UuYy4gICovCi0tI2lmIGRlZmluZWQgX0lP
+X0VPRl9TRUVOIHx8IF9fR05VX0xJQlJBUllfXyA9PSAxIC8qIEdOVSBsaWJjLCBCZU9TLCBIYWlr
+dSwgTGludXggbGliYzUgKi8KLSsjaWYgZGVmaW5lZCBfSU9fRU9GX1NFRU4gfHwgZGVmaW5lZCBf
+SU9fZnRyeWxvY2tmaWxlIHx8IF9fR05VX0xJQlJBUllfXyA9PSAxCi0rICAvKiBHTlUgbGliYywg
+QmVPUywgSGFpa3UsIExpbnV4IGxpYmM1ICovCi0gICBpZiAoZnAtPl9JT19yZWFkX2VuZCA9PSBm
+cC0+X0lPX3JlYWRfcHRyCi0gICAgICAgJiYgZnAtPl9JT193cml0ZV9wdHIgPT0gZnAtPl9JT193
+cml0ZV9iYXNlCi0gICAgICAgJiYgZnAtPl9JT19zYXZlX2Jhc2UgPT0gTlVMTCkKLUBAIC0xMjMs
+NyArMTI0LDggQEAgZnNlZWtvIChGSUxFICpmcCwgb2ZmX3Qgb2Zmc2V0LCBpbnQgd2hlbmNlKQot
+ICAgICAgICAgICByZXR1cm4gLTE7Ci0gICAgICAgICB9Ci0gCi0tI2lmIGRlZmluZWQgX0lPX0VP
+Rl9TRUVOIHx8IF9fR05VX0xJQlJBUllfXyA9PSAxIC8qIEdOVSBsaWJjLCBCZU9TLCBIYWlrdSwg
+TGludXggbGliYzUgKi8KLSsjaWYgZGVmaW5lZCBfSU9fRU9GX1NFRU4gfHwgZGVmaW5lZCBfSU9f
+ZnRyeWxvY2tmaWxlIHx8IF9fR05VX0xJQlJBUllfXyA9PSAxCi0rICAgICAgLyogR05VIGxpYmMs
+IEJlT1MsIEhhaWt1LCBMaW51eCBsaWJjNSAqLwotICAgICAgIGZwLT5fZmxhZ3MgJj0gfl9JT19F
+T0ZfU0VFTjsKLSAgICAgICBmcC0+X29mZnNldCA9IHBvczsKLSAjZWxpZiBkZWZpbmVkIF9fc2Zl
+cnJvciB8fCBkZWZpbmVkIF9fRHJhZ29uRmx5X18gfHwgZGVmaW5lZCBfX0FORFJPSURfXwotLS0g
+Ci0yLjE0LjEKLQpkaWZmIC0tZ2l0IGEvcGFja2FnZS9tNC8wMDAzLWMtc3RhY2stc3RvcC11c2lu
+Zy1TSUdTVEtTWi5wYXRjaCBiL3BhY2thZ2UvbTQvMDAwMy1jLXN0YWNrLXN0b3AtdXNpbmctU0lH
+U1RLU1oucGF0Y2gKZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4IGYyNjJmYzgxOC4uMDAw
+MDAwMDAwCi0tLSBhL3BhY2thZ2UvbTQvMDAwMy1jLXN0YWNrLXN0b3AtdXNpbmctU0lHU1RLU1ou
+cGF0Y2gKKysrIC9kZXYvbnVsbApAQCAtMSwxMDYgKzAsMCBAQAotYy1zdGFjazogc3RvcCB1c2lu
+ZyBTSUdTVEtTWgotCi1JdOKAmXMgYmVlbiBwcm9wb3NlZCB0byBzdG9wIG1ha2luZyBTSUdTVEtT
+WiBhbiBpbnRlZ2VyIGNvbnN0YW50OgotaHR0cHM6Ly9zb3VyY2V3YXJlLm9yZy9waXBlcm1haWwv
+bGliYy1hbHBoYS8yMDIwLVNlcHRlbWJlci8xMTgwMjguaHRtbAotQWxzbywgdXNpbmcgU0lHU1RL
+U1ogaW4gI2lmIGRpZCBub3QgY29uZm9ybSB0byBjdXJyZW50IFBPU0lYLgotQWxzbywgYXZvaWRp
+bmcgU0lHU1RLU1ogbWFrZXMgdGhlIGNvZGUgc2ltcGxlciBhbmQgZWFzaWVyIHRvIGdyb2suCi0q
+IGxpYi9jLXN0YWNrLmMgKFNJR1NUS1NaKTogUmVtb3ZlLgotKGFsdGVybmF0ZV9zaWduYWxfc3Rh
+Y2spOiBOb3cgYSA2NCBLaUIgYXJyYXksIGZvciBzaW1wbGljaXR5LgotQWxsIHVzZXMgY2hhbmdl
+ZC4KLQotW1JldHJpZXZlZCAoYW5kIGJhY2twb3J0ZWQpIGZyb206Ci1odHRwczovL2dpdC5zYXZh
+bm5haC5nbnUub3JnL2NnaXQvZ251bGliLmdpdC9wYXRjaC8/aWQ9ZjllMmIyMGExMmEyMzBlZmEz
+MGYxZDQ3OTU2M2FlMDdkMjc2YTk0Yl0KLVNpZ25lZC1vZmYtYnk6IEZhYnJpY2UgRm9udGFpbmUg
+PGZvbnRhaW5lLmZhYnJpY2VAZ21haWwuY29tPgotCi1kaWZmIC1OdXJhIG00LTEuNC4xOC5vcmln
+L2xpYi9jLXN0YWNrLmMgbTQtMS40LjE4L2xpYi9jLXN0YWNrLmMKLS0tLSBtNC0xLjQuMTgub3Jp
+Zy9saWIvYy1zdGFjay5jCTIwMjEtMDQtMTEgMTk6MTI6MTQuMDg2NDk0MDI5ICswMjAwCi0rKysg
+bTQtMS40LjE4L2xpYi9jLXN0YWNrLmMJMjAyMS0wNC0xMSAxOTo0ODo0Ni4zMTY4NjI3NjAgKzAy
+MDAKLUBAIC01MCwxNSArNTAsMTYgQEAKLSAjaWYgISBIQVZFX1NUQUNLX1QgJiYgISBkZWZpbmVk
+IHN0YWNrX3QKLSB0eXBlZGVmIHN0cnVjdCBzaWdhbHRzdGFjayBzdGFja190OwotICNlbmRpZgot
+LSNpZm5kZWYgU0lHU1RLU1oKLS0jIGRlZmluZSBTSUdTVEtTWiAxNjM4NAotLSNlbGlmIEhBVkVf
+TElCU0lHU0VHViAmJiBTSUdTVEtTWiA8IDE2Mzg0Ci0tLyogbGlic2lnc2VndiAyLjYgdGhyb3Vn
+aCAyLjggaGF2ZSBhIGJ1ZyB3aGVyZSBzb21lIGFyY2hpdGVjdHVyZXMgdXNlCi0tICAgbW9yZSB0
+aGFuIHRoZSBMaW51eCBkZWZhdWx0IG9mIGFuIDhrIGFsdGVybmF0ZSBzdGFjayB3aGVuIGRlY2lk
+aW5nCi0tICAgaWYgYSBmYXVsdCB3YXMgY2F1c2VkIGJ5IHN0YWNrIG92ZXJmbG93LiAgKi8KLS0j
+IHVuZGVmIFNJR1NUS1NaCi0tIyBkZWZpbmUgU0lHU1RLU1ogMTYzODQKLS0jZW5kaWYKLSsKLSsv
+KiBTdG9yYWdlIGZvciB0aGUgYWx0ZXJuYXRlIHNpZ25hbCBzdGFjay4KLSsgICA2NCBLaUIgaXMg
+bm90IHRvbyBsYXJnZSBmb3IgR251bGliLXVzaW5nIGFwcHMsIGFuZCBpcyBsYXJnZSBlbm91Z2gK
+LSsgICBmb3IgYWxsIGtub3duIHBsYXRmb3Jtcy4gIFNtYWxsZXIgc2l6ZXMgbWF5IHJ1biBpbnRv
+IHRyb3VibGUuCi0rICAgRm9yIGV4YW1wbGUsIGxpYnNpZ3NlZ3YgMi42IHRocm91Z2ggMi44IGhh
+dmUgYSBidWcgd2hlcmUgc29tZQotKyAgIGFyY2hpdGVjdHVyZXMgdXNlIG1vcmUgdGhhbiB0aGUg
+TGludXggZGVmYXVsdCBvZiBhbiA4IEtpQiBhbHRlcm5hdGUKLSsgICBzdGFjayB3aGVuIGRlY2lk
+aW5nIGlmIGEgZmF1bHQgd2FzIGNhdXNlZCBieSBzdGFjayBvdmVyZmxvdy4gICovCi0rc3RhdGlj
+IG1heF9hbGlnbl90IGFsdGVybmF0ZV9zaWduYWxfc3RhY2tbKDY0ICogMTAyNAotKyAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICArIHNpemVvZiAobWF4X2FsaWduX3Qp
+IC0gMSkKLSsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAvIHNpemVv
+ZiAobWF4X2FsaWduX3QpXTsKLSAKLSAjaW5jbHVkZSA8c3RkbGliLmg+Ci0gI2luY2x1ZGUgPHN0
+cmluZy5oPgotQEAgLTEyOCwxOSArMTI5LDYgQEAKLSAjaWYgKEhBVkVfU0lHQUxUU1RBQ0sgJiYg
+SEFWRV9ERUNMX1NJR0FMVFNUQUNLIFwKLSAgICAgICYmIEhBVkVfU1RBQ0tfT1ZFUkZMT1dfSEFO
+RExJTkcpIHx8IEhBVkVfTElCU0lHU0VHVgotIAotLS8qIFN0b3JhZ2UgZm9yIHRoZSBhbHRlcm5h
+dGUgc2lnbmFsIHN0YWNrLiAgKi8KLS1zdGF0aWMgdW5pb24KLS17Ci0tICBjaGFyIGJ1ZmZlcltT
+SUdTVEtTWl07Ci0tCi0tICAvKiBUaGVzZSBvdGhlciBtZW1iZXJzIGFyZSBmb3IgcHJvcGVyIGFs
+aWdubWVudC4gIFRoZXJlJ3Mgbm8KLS0gICAgIHN0YW5kYXJkIHdheSB0byBndWFyYW50ZWUgc3Rh
+Y2sgYWxpZ25tZW50LCBidXQgdGhpcyBzZWVtcyBlbm91Z2gKLS0gICAgIGluIHByYWN0aWNlLiAg
+Ki8KLS0gIGxvbmcgZG91YmxlIGxkOwotLSAgbG9uZyBsOwotLSAgdm9pZCAqcDsKLS19IGFsdGVy
+bmF0ZV9zaWduYWxfc3RhY2s7Ci0tCi0gc3RhdGljIHZvaWQKLSBudWxsX2FjdGlvbiAoaW50IHNp
+Z25vIF9fYXR0cmlidXRlX18gKCh1bnVzZWQpKSkKLSB7Ci1AQCAtMjA1LDggKzE5Myw4IEBACi0g
+Ci0gICAvKiBBbHdheXMgaW5zdGFsbCB0aGUgb3ZlcmZsb3cgaGFuZGxlci4gICovCi0gICBpZiAo
+c3RhY2tvdmVyZmxvd19pbnN0YWxsX2hhbmRsZXIgKG92ZXJmbG93X2hhbmRsZXIsCi0tICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGFsdGVybmF0ZV9zaWduYWxfc3RhY2suYnVm
+ZmVyLAotLSAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBzaXplb2YgYWx0ZXJu
+YXRlX3NpZ25hbF9zdGFjay5idWZmZXIpKQotKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICBhbHRlcm5hdGVfc2lnbmFsX3N0YWNrLAotKyAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICBzaXplb2YgYWx0ZXJuYXRlX3NpZ25hbF9zdGFjaykpCi0gICAgIHsKLSAg
+ICAgICBlcnJubyA9IEVOT1RTVVA7Ci0gICAgICAgcmV0dXJuIC0xOwotQEAgLTI3OSwxNCArMjY3
+LDE0IEBACi0gICBzdGFja190IHN0OwotICAgc3RydWN0IHNpZ2FjdGlvbiBhY3Q7Ci0gICBzdC5z
+c19mbGFncyA9IDA7Ci0rICBzdC5zc19zcCA9IGFsdGVybmF0ZV9zaWduYWxfc3RhY2s7Ci0rICBz
+dC5zc19zaXplID0gc2l6ZW9mIGFsdGVybmF0ZV9zaWduYWxfc3RhY2s7Ci0gIyBpZiBTSUdBTFRT
+VEFDS19TU19SRVZFUlNFRAotICAgLyogSXJpeCBtaXN0YWtlbmx5IHRyZWF0cyBzc19zcCBhcyB0
+aGUgdXBwZXIgYm91bmQsIHJhdGhlciB0aGFuCi0gICAgICBsb3dlciBib3VuZCwgb2YgdGhlIGFs
+dGVybmF0ZSBzdGFjay4gICovCi0tICBzdC5zc19zcCA9IGFsdGVybmF0ZV9zaWduYWxfc3RhY2su
+YnVmZmVyICsgU0lHU1RLU1ogLSBzaXplb2YgKHZvaWQgKik7Ci0tICBzdC5zc19zaXplID0gc2l6
+ZW9mIGFsdGVybmF0ZV9zaWduYWxfc3RhY2suYnVmZmVyIC0gc2l6ZW9mICh2b2lkICopOwotLSMg
+ZWxzZQotLSAgc3Quc3Nfc3AgPSBhbHRlcm5hdGVfc2lnbmFsX3N0YWNrLmJ1ZmZlcjsKLS0gIHN0
+LnNzX3NpemUgPSBzaXplb2YgYWx0ZXJuYXRlX3NpZ25hbF9zdGFjay5idWZmZXI7Ci0rICBzdC5z
+c19zaXplIC09IHNpemVvZiAodm9pZCAqKTsKLSsgIGNoYXIgKnNzX3NwID0gc3Quc3Nfc3A7Ci0r
+ICBzdC5zc19zcCA9IHNzX3NwICsgc3Quc3Nfc2l6ZTsKLSAjIGVuZGlmCi0gICByID0gc2lnYWx0
+c3RhY2sgKCZzdCwgTlVMTCk7Ci0gICBpZiAociAhPSAwKQotZGlmZiAtTnVyYSBtNC0xLjQuMTgu
+b3JpZy9saWIvYy1zdGFjay5oIG00LTEuNC4xOC9saWIvYy1zdGFjay5oCi0tLS0gbTQtMS40LjE4
+Lm9yaWcvbGliL2Mtc3RhY2suaAkyMDIxLTA0LTExIDE5OjEyOjE0LjA5ODQ5NDA0MiArMDIwMAot
+KysrIG00LTEuNC4xOC9saWIvYy1zdGFjay5oCTIwMjEtMDQtMTEgMTk6MTc6NDIuMTM4ODQ4Mzc4
+ICswMjAwCi1AQCAtMzQsNyArMzQsNyBAQAotICAgIEEgbnVsbCBBQ1RJT04gYWN0cyBsaWtlIGFu
+IGFjdGlvbiB0aGF0IGRvZXMgbm90aGluZy4KLSAKLSAgICBBQ1RJT04gbXVzdCBiZSBhc3luYy1z
+aWduYWwtc2FmZS4gIEFDVElPTiB0b2dldGhlciB3aXRoIGl0cyBjYWxsZWVzCi0tICAgbXVzdCBu
+b3QgcmVxdWlyZSBtb3JlIHRoYW4gU0lHU1RLU1ogYnl0ZXMgb2Ygc3RhY2sgc3BhY2UuICBBbHNv
+LAotKyAgIG11c3Qgbm90IHJlcXVpcmUgbW9yZSB0aGFuIDY0IEtpQiBieXRlcyBvZiBzdGFjayBz
+cGFjZS4gIEFsc28sCi0gICAgQUNUSU9OIHNob3VsZCBub3QgY2FsbCBsb25nam1wLCBiZWNhdXNl
+IHRoaXMgaW1wbGVtZW50YXRpb24gZG9lcwotICAgIG5vdCBndWFyYW50ZWUgdGhhdCBpdCBpcyBz
+YWZlIHRvIHJldHVybiB0byB0aGUgb3JpZ2luYWwgc3RhY2suCi0gCmRpZmYgLS1naXQgYS9wYWNr
+YWdlL200L200Lmhhc2ggYi9wYWNrYWdlL200L200Lmhhc2gKaW5kZXggZTY2NWZjMTQ5Li5hODFm
+NGZhYjkgMTAwNjQ0Ci0tLSBhL3BhY2thZ2UvbTQvbTQuaGFzaAorKysgYi9wYWNrYWdlL200L200
+Lmhhc2gKQEAgLTEsNCArMSw0IEBACiAjIExvY2FsbHkgY2FsY3VsYXRlZCBhZnRlciBjaGVja2lu
+ZyBwZ3Agc2lnbmF0dXJlCi1zaGEyNTYJZjJjMWU4NmNhMGE0MDRmZjI4MTYzMWJkYzgzNzc2Mzg5
+OTI3NDRiMTc1YWZiODA2ZTI1ODcxYTI0YTkzNGUwNwltNC0xLjQuMTgudGFyLnh6CitzaGEyNTYg
+IDYzYWVkZTVjNmQzM2I2ZDliMTM1MTFjZDBiZTJjYWMwNDZmMmU3MGZkMGEwN2FhOTU3M2EwNGE4
+Mjc4M2FmOTYgIG00LTEuNC4xOS50YXIueHoKICMgTGljZW5zZSBmaWxlcywgbG9jYWxseSBjYWxj
+dWxhdGVkCi1zaGEyNTYJOGNlYjRiOWVlNWFkZWRkZTQ3YjMxZTk3NWMxZDkwYzczYWQyN2I2YjE2
+NWExZGNkODBjN2M1NDVlYjY1YjkwMwlDT1BZSU5HCitzaGEyNTYgIDM5NzJkYzk3NDRmNjQ5OWYw
+ZjliMmRiZjc2Njk2ZjJhZTdhZDhhZjliMjNkZGU2NmQ2YWY4NmM5ZGZiMzY5ODYgIENPUFlJTkcK
+ZGlmZiAtLWdpdCBhL3BhY2thZ2UvbTQvbTQubWsgYi9wYWNrYWdlL200L200Lm1rCmluZGV4IDg0
+OWU3ZjRhNS4uM2ExMjA5Mjk3IDEwMDY0NAotLS0gYS9wYWNrYWdlL200L200Lm1rCisrKyBiL3Bh
+Y2thZ2UvbTQvbTQubWsKQEAgLTQsNyArNCw3IEBACiAjCiAjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IwogCi1NNF9WRVJTSU9OID0gMS40LjE4CitNNF9WRVJTSU9OID0gMS40LjE5CiBNNF9TT1VSQ0Ug
+PSBtNC0kKE00X1ZFUlNJT04pLnRhci54egogTTRfU0lURSA9ICQoQlIyX0dOVV9NSVJST1IpL200
+CiBNNF9MSUNFTlNFID0gR1BMLTMuMCsKLS0gCjIuMzAuMgoKX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJv
+b3RAbGlzdHMuYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1h
+bi9saXN0aW5mby9idWlsZHJvb3QK
