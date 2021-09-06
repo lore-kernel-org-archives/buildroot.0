@@ -2,70 +2,87 @@ Return-Path: <SRS0=O81Z=N4=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.5 required=3.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+	DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D76B1C433F5
-	for <buildroot@archiver.kernel.org>; Mon,  6 Sep 2021 15:21:50 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 895F0C433EF
+	for <buildroot@archiver.kernel.org>; Mon,  6 Sep 2021 15:23:31 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1790D60F13
-	for <buildroot@archiver.kernel.org>; Mon,  6 Sep 2021 15:21:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1790D60F13
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=email.cz
+	by mail.kernel.org (Postfix) with ESMTPS id 2CA8460F13
+	for <buildroot@archiver.kernel.org>; Mon,  6 Sep 2021 15:23:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2CA8460F13
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D61F8400CF;
-	Mon,  6 Sep 2021 15:21:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CCE706084D;
+	Mon,  6 Sep 2021 15:23:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id t6q9nbH6pvoV; Mon,  6 Sep 2021 15:21:48 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id cgV3ika5t918; Mon,  6 Sep 2021 15:23:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BA1274015C;
-	Mon,  6 Sep 2021 15:21:47 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B88FB1BF3E0
- for <buildroot@lists.busybox.net>; Mon,  6 Sep 2021 15:21:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2FD826081A;
+	Mon,  6 Sep 2021 15:23:29 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 38DD41BF3E0
+ for <buildroot@lists.busybox.net>; Mon,  6 Sep 2021 15:23:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B5296404BB
- for <buildroot@lists.busybox.net>; Mon,  6 Sep 2021 15:21:46 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2DFE74047D
+ for <buildroot@lists.busybox.net>; Mon,  6 Sep 2021 15:23:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=email.cz
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JsnTZgASwTxw for <buildroot@lists.busybox.net>;
- Mon,  6 Sep 2021 15:21:45 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from mxd1.seznam.cz (mxd1.seznam.cz [IPv6:2a02:598:a::78:210])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C11FF4049B
- for <buildroot@buildroot.org>; Mon,  6 Sep 2021 15:21:44 +0000 (UTC)
-Received: from email.seznam.cz
- by email-smtpc20a.ko.seznam.cz (email-smtpc20a.ko.seznam.cz [10.53.18.24])
- id 193003f799d7696a1b443d99; Mon, 06 Sep 2021 17:21:42 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=email.cz; s=beta;
- t=1630941702; bh=V4f3mJPft4XV8wQHsGFtYre+3PqRXD+xXz3O2Rl8bsM=;
- h=Received:Date:From:To:Cc:Subject:Message-ID:MIME-Version:
- Content-Type:Content-Disposition:Content-Transfer-Encoding;
- b=SK+EaIrRHzoYN3xbngKqKl8NJ5uxH6AISGfcFeuiYuUwH49HDllCXwFZMpu8KoLgT
- vMIL22wWE+B44EEdJDnDWoCSRlu0RyAnp/IQ/JWqQN07HNR9NTr4BTtVbqT3d3FmoJ
- hTC6ytYIrgmn+wS6+xnmG5Hiyj8m41DQpoPXvI34=
-Received: from arch-zen.localdomain (havhav.seb.rev-fortech.cz [213.250.223.2])
- by email-relay7.ko.seznam.cz (Seznam SMTPD 1.3.125) with ESMTP;
- Mon, 06 Sep 2021 17:21:40 +0200 (CEST)  
-Date: Mon, 6 Sep 2021 17:21:34 +0200
-From: Jan Havran <havran.jan@email.cz>
-To: buildroot@buildroot.org
-Message-ID: <YTYx/iGrNt8WsbwS@arch-zen.localdomain>
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yofq7nSsSOQB for <buildroot@lists.busybox.net>;
+ Mon,  6 Sep 2021 15:23:27 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com
+ [IPv6:2a00:1450:4864:20::134])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 091A14015C
+ for <buildroot@buildroot.org>; Mon,  6 Sep 2021 15:23:26 +0000 (UTC)
+Received: by mail-lf1-x134.google.com with SMTP id t12so14063559lfg.9
+ for <buildroot@buildroot.org>; Mon, 06 Sep 2021 08:23:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=8wmDpgojZbr/5EPUwnLGFs8g7vEbXVYjhaFTssO7iZQ=;
+ b=kjHLdodSdnlFM21YK8W/xC1coxkLyDhuPDibR3t583ufSWW5Z6mXy27FdHGgCJGJoO
+ fzTFevaTxcd/fzxgT5uGuQsGz1Re5LqiYhDy7Z8x4gJ0RG6DO1xHKkrWRaDqIx9LMYIM
+ Fa7t3okzxE1adUYGXX1sf/bgCNZM3hpLmCMUaEnha1kEjLyS/KRaPLc5nxVfGuRuE2q3
+ MG6XX+wubVaiqiHW6ktHhl3HqL3lTHjx7fobumksBzxt/i+2A2iwlQhZE5t+eFZScaMg
+ 9wx6/C27u7gVI6/jcCTk0HLQ8Cyg92YrjS01+pwHJoLLNLzcZGDAMGNLsRbulmvjOfri
+ eEWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=8wmDpgojZbr/5EPUwnLGFs8g7vEbXVYjhaFTssO7iZQ=;
+ b=a8wytkNKW335Bw1cwZebvK4mEG5JPUNdZaXvyNhjuCKNcD+TvEn3goWkYU63TjOxPf
+ BBnWYKIFpMSkVrbferSgVdO3f2s+yvs61M9W0zWAmc4y/AJESfpdJQup0nehc5GHUJjJ
+ PssMZSQ0bXwRQEV7Z6DApFQlJ57w1bj+E7wi/pRVsbFCUkwWqytnBGxWPd2HQo+uhllc
+ 7IrdDEwunyTvIWFyY2txoLnxIPkPPfhlx8h0V9ygYpka+TOWY7FCc7FaIl2dl8zxiPp/
+ 3mmzod0YqNbxQiy0lfHDZ0dJ3lNzecZYPRUGOrcPFnLdDD6wYirjpIbaa3a+pY2kFTUF
+ HHHg==
+X-Gm-Message-State: AOAM5329Io9H4yF9HFCGLdri2Xkqo1iGm1ZWXHpqdGXiWuSSmw6rWETP
+ YT/2NO491ZLqdaR+k9OdmwI02j5aVtlqzpmdgJw=
+X-Google-Smtp-Source: ABdhPJwHk5V6I2L79JQLOtirXgayQGJNkQ5TQjDDAj9l8c4AZDui6sDWf6jEZbTadPuUBytEAK//xuf2Yl3qBT3VGgs=
+X-Received: by 2002:a19:4817:: with SMTP id v23mr9933640lfa.154.1630941805005; 
+ Mon, 06 Sep 2021 08:23:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Disposition: inline
-Subject: [Buildroot] [PATCH 1/1] package/bluez-tools: bump to version
- f65321736475429316f07ee94ec0deac8e46ec4a
+References: <20210906094214.6142-1-heiko.thiery@gmail.com>
+ <CAOMZO5A4FXz+3M1m+aQT4hfWtBCgLo7-3c+pOV8XXrrGGY4-=Q@mail.gmail.com>
+ <CAEyMn7ZpntE-ZFPrU09oiB5LStkbf-7BBTV1PqJZ3X48pjmCEQ@mail.gmail.com>
+In-Reply-To: <CAEyMn7ZpntE-ZFPrU09oiB5LStkbf-7BBTV1PqJZ3X48pjmCEQ@mail.gmail.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Mon, 6 Sep 2021 12:23:13 -0300
+Message-ID: <CAOMZO5ACyWzrmLjnB5M0We_grP7DMXYUkiTTeghz_EH_6Z0Y_A@mail.gmail.com>
+To: Heiko Thiery <heiko.thiery@gmail.com>
+Subject: Re: [Buildroot] [PATCH 0/3] Add support to build imx8 images using
+ mainline uboot
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,106 +95,36 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Cc: Gary Bisson <bisson.gary@gmail.com>,
+ Stephane Viau <stephane.viau@oss.nxp.com>,
+ Refik Tuzakli <tuzakli.refik@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ buildroot <buildroot@buildroot.org>, Xavier Roumegue <xroumegue@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-Minor fixes:
-- build with gcc 10 (drop patch)
-- correct the signal handler registration bt-agent
+Hi Heiko,
 
-Other changes:
-- remove incorrectly handled error argument from device_* calls
-- add UUID for SIMAccess
+On Mon, Sep 6, 2021 at 10:32 AM Heiko Thiery <heiko.thiery@gmail.com> wrote:
 
-Signed-off-by: Jan Havran <havran.jan@email.cz>
----
- .../bluez-tools/0001-fix-gcc-10-compile.patch | 46 -------------------
- package/bluez-tools/bluez-tools.hash          |  2 +-
- package/bluez-tools/bluez-tools.mk            |  2 +-
- 3 files changed, 2 insertions(+), 48 deletions(-)
- delete mode 100644 package/bluez-tools/0001-fix-gcc-10-compile.patch
+> What board are you exactly asking for? the nxp imx8mm evk? I have a
+> tree for the kontron pitx-imx8m [1] that has an i.MX8MQ.
+>
+> Maybe this also answers your question ;-/
+>
+> [1] https://github.com/hthiery/buildroot/tree/uboot-imx
 
-diff --git a/package/bluez-tools/0001-fix-gcc-10-compile.patch b/package/bluez-tools/0001-fix-gcc-10-compile.patch
-deleted file mode 100644
-index 028c2db69d..0000000000
---- a/package/bluez-tools/0001-fix-gcc-10-compile.patch
-+++ /dev/null
-@@ -1,46 +0,0 @@
--From 687105d611b38961f390f0a328f9cfa3b93aeb18 Mon Sep 17 00:00:00 2001
--From: Leigh Scott <leigh123linux@gmail.com>
--Date: Tue, 28 Jan 2020 22:46:37 +0000
--Subject: [PATCH] fix gcc-10 compile
--
--[Retrieved from:
--https://github.com/khvzak/bluez-tools/pull/34/commits/687105d611b38961f390f0a328f9cfa3b93aeb18]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- src/lib/agent-helper.c | 2 ++
-- src/lib/agent-helper.h | 4 ++--
-- 2 files changed, 4 insertions(+), 2 deletions(-)
--
--diff --git a/src/lib/agent-helper.c b/src/lib/agent-helper.c
--index bf50bcc..2b94100 100644
----- a/src/lib/agent-helper.c
--+++ b/src/lib/agent-helper.c
--@@ -33,6 +33,8 @@
-- 
-- #include "agent-helper.h"
-- 
--+gboolean agent_need_unregister;
--+
-- static const gchar *_bt_agent_introspect_xml = "<node name=\"/org/blueztools\">\n\t<interface name=\"org.bluez.Agent1\">\n\t\t<method name=\"Release\">\n\t\t</method>\n\t\t<method name=\"RequestPinCode\">\n\t\t\t<arg name=\"device\" direction=\"in\" type=\"o\"/>\n\t\t\t<arg name=\"pincode\" direction=\"out\" type=\"s\"/>\n\t\t</method>\n\t\t<method name=\"DisplayPinCode\">\n\t\t\t<arg name=\"device\" direction=\"in\" type=\"o\"/>\n\t\t\t<arg name=\"pincode\" direction=\"in\" type=\"s\"/>\n\t\t</method>\n\t\t<method name=\"RequestPasskey\">\n\t\t\t<arg name=\"device\" direction=\"in\" type=\"o\"/>\n\t\t\t<arg name=\"passkey\" direction=\"out\" type=\"u\"/>\n\t\t</method>\n\t\t<method name=\"DisplayPasskey\">\n\t\t\t<arg name=\"device\" direction=\"in\" type=\"o\"/>\n\t\t\t<arg name=\"passkey\" direction=\"in\" type=\"u\"/>\n\t\t\t<arg name=\"entered\" direction=\"in\" type=\"q\"/>\n\t\t</method>\n\t\t<method name=\"RequestConfirmation\">\n\t\t\t<arg name=\"device\" direction=\"in\" 
- type=\"o\"/>\n\t\t\t<arg name=\"passkey\" direction=\"in\" type=\"u\"/>\n\t\t</method>\n\t\t<method name=\"RequestAuthorization\">\n\t\t\t<arg name=\"device\" direction=\"in\" type=\"o\"/>\n\t\t</method>\n\t\t<method name=\"AuthorizeService\">\n\t\t\t<arg name=\"device\" direction=\"in\" type=\"o\"/>\n\t\t\t<arg name=\"uuid\" direction=\"in\" type=\"s\"/>\n\t\t</method>\n\t\t<method name=\"Cancel\">\n\t\t</method>\n\t</interface>\n</node>\n";
-- static guint _bt_agent_registration_id = 0;
-- static GHashTable *_pin_hash_table = NULL;
--diff --git a/src/lib/agent-helper.h b/src/lib/agent-helper.h
--index 8e1cc85..9a952c4 100644
----- a/src/lib/agent-helper.h
--+++ b/src/lib/agent-helper.h
--@@ -35,7 +35,7 @@ extern "C" {
-- #define AGENT_DBUS_INTERFACE "org.bluez.Agent1"
-- #define AGENT_PATH "/org/blueztools"
-- 
---gboolean agent_need_unregister;
--+extern gboolean agent_need_unregister;
-- 
-- void register_agent_callbacks(gboolean interactive_console, GHashTable *pin_dictonary, gpointer main_loop_object, GError **error);
-- void unregister_agent_callbacks(GError **error);
--@@ -44,4 +44,4 @@ void unregister_agent_callbacks(GError **error);
-- }
-- #endif
-- 
---#endif /* __AGENT_HELPER_H */
--\ No newline at end of file
--+#endif /* __AGENT_HELPER_H */
-diff --git a/package/bluez-tools/bluez-tools.hash b/package/bluez-tools/bluez-tools.hash
-index 808e5c6061..f013f195cb 100644
---- a/package/bluez-tools/bluez-tools.hash
-+++ b/package/bluez-tools/bluez-tools.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  62ca98af63d2ae142dbc77995c6bd4c259eaba4a5832daa33ae9e3d585b9205f  bluez-tools-97efd293491ad7ec96a655665339908f2478b3d1.tar.gz
-+sha256  dd5acf9e501514f4ad1136af966d2723f3270e0e2fffd6d29da93fa76c9fafa3  bluez-tools-f65321736475429316f07ee94ec0deac8e46ec4a.tar.gz
- sha256  b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
-diff --git a/package/bluez-tools/bluez-tools.mk b/package/bluez-tools/bluez-tools.mk
-index c58701981a..007235958b 100644
---- a/package/bluez-tools/bluez-tools.mk
-+++ b/package/bluez-tools/bluez-tools.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BLUEZ_TOOLS_VERSION = 97efd293491ad7ec96a655665339908f2478b3d1
-+BLUEZ_TOOLS_VERSION = f65321736475429316f07ee94ec0deac8e46ec4a
- BLUEZ_TOOLS_SITE = $(call github,khvzak,bluez-tools,$(BLUEZ_TOOLS_VERSION))
- 
- # sources fetched from github, no configure script)
--- 
-2.33.0
+This helps, thanks.
 
+I am wondering if we could make the files below generic?
+
+board/kontron/pitx-imx8m/post-build.sh
+board/kontron/pitx-imx8m/post-image.sh
+board/kontron/pitx-imx8m/genimage.cfg
+
+Thanks
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
