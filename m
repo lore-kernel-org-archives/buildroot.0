@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7FD82C433F5
-	for <buildroot@archiver.kernel.org>; Mon,  6 Sep 2021 19:10:45 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D3D6AC433F5
+	for <buildroot@archiver.kernel.org>; Mon,  6 Sep 2021 19:10:57 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 47BDD61050
-	for <buildroot@archiver.kernel.org>; Mon,  6 Sep 2021 19:10:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 47BDD61050
+	by mail.kernel.org (Postfix) with ESMTPS id 7F6D961050
+	for <buildroot@archiver.kernel.org>; Mon,  6 Sep 2021 19:10:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7F6D961050
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 11A4D404A4;
-	Mon,  6 Sep 2021 19:10:45 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id d4lvj0Pi2G_N; Mon,  6 Sep 2021 19:10:44 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2BA7E4049F;
-	Mon,  6 Sep 2021 19:10:43 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2F29A1BF97E
- for <buildroot@lists.busybox.net>; Mon,  6 Sep 2021 19:10:41 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1E9F4608D5
- for <buildroot@lists.busybox.net>; Mon,  6 Sep 2021 19:10:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 53F58608EF;
+	Mon,  6 Sep 2021 19:10:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id D71Wu61nCvbh for <buildroot@lists.busybox.net>;
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 2MMeOQw_epAn; Mon,  6 Sep 2021 19:10:56 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id AE1E9608D5;
+	Mon,  6 Sep 2021 19:10:55 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1C9C31BF34C
+ for <buildroot@lists.busybox.net>; Mon,  6 Sep 2021 19:10:41 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0CD7740527
+ for <buildroot@lists.busybox.net>; Mon,  6 Sep 2021 19:10:41 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Zj2pODo5_Qsr for <buildroot@lists.busybox.net>;
  Mon,  6 Sep 2021 19:10:40 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 44BFB608D1
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3E73E404F4
  for <buildroot@buildroot.org>; Mon,  6 Sep 2021 19:10:40 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 4D9D88871A; Mon,  6 Sep 2021 19:09:13 +0000 (UTC)
+ id 44BC588719; Mon,  6 Sep 2021 19:09:13 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 6 Sep 2021 21:09:21 +0200
+Date: Mon, 6 Sep 2021 21:06:37 +0200
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: ff4ff190a7cd965dfb0119d2daadbbb264287084
-X-Git-Newrev: 2abb3befe7da8f95d1799017c5dc91f32b612328
+X-Git-Oldrev: 0eac66e0e9de27e0a118ed4c4cc5c88ba1db39b7
+X-Git-Newrev: ff4ff190a7cd965dfb0119d2daadbbb264287084
 X-Patchwork-Hint: ignore
-Message-Id: <20210906190913.4D9D88871A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] support/testing:
- test_docker_compose: bump the kernel to 4.19.204
+Message-Id: <20210906190913.44BC588719@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] toolchain: improve
+ conditions for gcc bug 99140
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,36 +71,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2abb3befe7da8f95d1799017c5dc91f32b612328
+commit: https://git.buildroot.net/buildroot/commit/?id=ff4ff190a7cd965dfb0119d2daadbbb264287084
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-gcc 10.x is now used by default but the kernel 4.19 used by
-test_docker_compose doesn't build with it.
+Gcc bug 99140 has been fixed on gcc 8.x but reappeared on gcc 9.x while
+it's been fixed on gcc 10.x+. So let's update
+BR2_TOOLCHAIN_HAS_GCC_BUG_99140 accordingly.
 
-Bump the kernel to 4.19.204 release that contains a lot of
-fixes for newer gcc.
+Fixes:
+http://autobuild.buildroot.net/results/c55/c55f50a8d657695f0d5492c32efa666254cd7f99/
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 5d60e07e27a44e245eeb64cbd8acb2c1b5d7c415)
+(cherry picked from commit fe4e06d3176b01834fda92d25ae7ece65f3550e0)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/testing/tests/package/test_docker_compose.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ toolchain/Config.in | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/support/testing/tests/package/test_docker_compose.py b/support/testing/tests/package/test_docker_compose.py
-index 737dbf393c..7ca81c311b 100644
---- a/support/testing/tests/package/test_docker_compose.py
-+++ b/support/testing/tests/package/test_docker_compose.py
-@@ -16,7 +16,7 @@ class TestDockerCompose(infra.basetest.BRTest):
-         BR2_ROOTFS_POST_SCRIPT_ARGS="{}"
-         BR2_LINUX_KERNEL=y
-         BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19"
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.204"
-         BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-         BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="{}"
-         BR2_PACKAGE_CA_CERTIFICATES=y
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index 9dafa173ad..1b3aff30f7 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -171,10 +171,13 @@ config BR2_TOOLCHAIN_HAS_GCC_BUG_93847
+ 
+ # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=99410
+ # Error: branch offset out of range on Nios II. This bug
+-# no longer exists in gcc >= 8.x.
++# no longer exists in gcc 8.x but reappeared on gcc 9.x and has been
++# fixed on gcc 10.x.
+ config BR2_TOOLCHAIN_HAS_GCC_BUG_99140
+ 	bool
+-	default y if BR2_nios2 && !BR2_TOOLCHAIN_GCC_AT_LEAST_8
++	default y if !BR2_TOOLCHAIN_GCC_AT_LEAST_8
++	default y if BR2_TOOLCHAIN_GCC_AT_LEAST_9 && !BR2_TOOLCHAIN_GCC_AT_LEAST_10
++	depends on BR2_nios2
+ 
+ # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101737
+ # ICE: SH4 -Os causes internal compiler error. This bug
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
