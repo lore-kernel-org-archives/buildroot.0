@@ -1,93 +1,85 @@
-Return-Path: <SRS0=O81Z=N4=lists.buildroot.org=buildroot-bounces@kernel.org>
+Return-Path: <SRS0=M9Dx=N5=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-15.5 required=3.0 tests=BAYES_00,
 	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
 	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 439CEC433EF
-	for <buildroot@archiver.kernel.org>; Mon,  6 Sep 2021 22:37:57 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 881C4C433F5
+	for <buildroot@archiver.kernel.org>; Tue,  7 Sep 2021 00:21:21 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id A7AD260EB7
-	for <buildroot@archiver.kernel.org>; Mon,  6 Sep 2021 22:37:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A7AD260EB7
+	by mail.kernel.org (Postfix) with ESMTPS id 036A26109D
+	for <buildroot@archiver.kernel.org>; Tue,  7 Sep 2021 00:21:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 036A26109D
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6D34B4049B;
-	Mon,  6 Sep 2021 22:37:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9F5B682716;
+	Tue,  7 Sep 2021 00:21:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id X-8o1jFg3A1T; Mon,  6 Sep 2021 22:37:55 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 9iKpmzhGKOrU; Tue,  7 Sep 2021 00:21:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 594DB40480;
-	Mon,  6 Sep 2021 22:37:54 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id CF8A41BF301
- for <buildroot@lists.busybox.net>; Mon,  6 Sep 2021 22:37:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AC4D3826F5;
+	Tue,  7 Sep 2021 00:21:18 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 5606F1BF32B
+ for <buildroot@lists.busybox.net>; Tue,  7 Sep 2021 00:21:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BF1E060AC7
- for <buildroot@lists.busybox.net>; Mon,  6 Sep 2021 22:37:52 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 52795826F5
+ for <buildroot@lists.busybox.net>; Tue,  7 Sep 2021 00:21:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 19GThE_4bo8V for <buildroot@lists.busybox.net>;
- Mon,  6 Sep 2021 22:37:51 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 42Q--JqU14Dx for <buildroot@lists.busybox.net>;
+ Tue,  7 Sep 2021 00:21:16 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
- [IPv6:2a00:1450:4864:20::42e])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 75D7660A3B
- for <buildroot@buildroot.org>; Mon,  6 Sep 2021 22:37:51 +0000 (UTC)
-Received: by mail-wr1-x42e.google.com with SMTP id m9so11669245wrb.1
- for <buildroot@buildroot.org>; Mon, 06 Sep 2021 15:37:51 -0700 (PDT)
+Received: from mail-oo1-xc35.google.com (mail-oo1-xc35.google.com
+ [IPv6:2607:f8b0:4864:20::c35])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 39F40826DF
+ for <buildroot@buildroot.org>; Tue,  7 Sep 2021 00:21:16 +0000 (UTC)
+Received: by mail-oo1-xc35.google.com with SMTP id
+ m11-20020a056820034b00b0028bb60b551fso2422203ooe.5
+ for <buildroot@buildroot.org>; Mon, 06 Sep 2021 17:21:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=yom0kPihC5IHRANhIPorSF6jAiwrxaBGJkItIQSlBjA=;
- b=QQPxvtbswkXj6e+nBdXEeFqFDq+cc0GezgMJt8P5CBXhayXPLFYnPHGvByurfuFVfa
- lbNv1WbINVzpfk/TMdfsfM1+z1NAVLHOTL2UqTGUXoascyuYXKT7hb4thmjuQvHyNtjI
- 2k2r0qcY0gFwGnp/09HMKlacjcmeMA3sPfCQYVYmg8tX+1CvHlS32shgSzQ2hGVcRDeo
- +pWYAl4HmtquNuKyD3waKP+XkB8cxuQAZOgKF00cPBXhUUjiu2QfTU1LFhKbliJrIuhH
- FeVSOa3Jql8O6wFKmsIQKAAd2fxgPe6aaoBr6K6I7eGLu0/9BMZsaE8qUOl/6z1emWFE
- QQrQ==
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=kLuOrt7TbKBBOBSrLtRAqKnipyzib6U227HJB5bEzg8=;
+ b=g3HpYTuwIm0Q+54R96J8RQdZBO5xq3DtfBBMzQh7o7L6HHivz+NpMBpHoXgdm1fosv
+ Jb2whgOd7UqlkTo9AnN4JqWJ0ShBB39an57keqRg09bTwc9ALvgkKVNHdj0NtTPE2WO+
+ co58cAbGJqxOvjJnxRUtPwTxA6mLc1I7EUFVPjzKdwKl9Rz/0Ef7Nncqv5jsxNABUOqW
+ cxjNRADrcCpwLcXyLLI8fFCUKVUfg67/R9RLPeflBmUDAFAxaDv20FgLSQNqqB2OD57z
+ 0GIxVSpPRvLRW873iUqC9nUrteTKrKHPRhf+HO1lu02JTpnb1D+yST++lpS+fUZCLOiM
+ dxIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=yom0kPihC5IHRANhIPorSF6jAiwrxaBGJkItIQSlBjA=;
- b=ATJKn8itAkFeNhIW5FlbW43DS46qGpdZTUau8obB+xx0PZQvTvKdGiB+MajwpKDAFH
- 1LxD+algAU/WCGvxhivmixQbL4OYNYnCOFKXOGgetBbYZGp+QV4GPvgUWFJhGJCMl1rI
- ptcdKHEfyEtH6qC386D3TdB4UWx4DR9Naq6kVw5edH7vvEO6Ro1Afn5yxkBPXBPf7fB9
- bC2cmfoi+x7hT89+NDn0K6gT197fQUGkwW48ZEBUJgA73oUndLrrE0iRzxVNzucL6oYx
- xBFMDPRuw+GDKqcDREXg3c/SW/uVS2QNlRMjsT1hhL+oOHbPeZpJ4qcX8FVQDfzzbLFJ
- JfDA==
-X-Gm-Message-State: AOAM532+/DZuMy89iyZOsuLexqVx8elu9IDD2Cv82J0zzr/FS/JDNLxj
- LkzaTWmkrZmQ+E29Wan3eYyaEB0dtb4=
-X-Google-Smtp-Source: ABdhPJxZAgcoixMpmOA18ijPcUYh7uN8iRkR89uUxPu6OBoaNH1sfCBumtOwDJ6QgUFGHzRfBj+DPg==
-X-Received: by 2002:adf:dc8a:: with SMTP id r10mr15719016wrj.371.1630967869716; 
- Mon, 06 Sep 2021 15:37:49 -0700 (PDT)
-Received: from localhost.localdomain
- (2a01cb058f8a180098814a9aef637f91.ipv6.abo.wanadoo.fr.
- [2a01:cb05:8f8a:1800:9881:4a9a:ef63:7f91])
- by smtp.gmail.com with ESMTPSA id x9sm672931wmi.30.2021.09.06.15.37.48
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 06 Sep 2021 15:37:49 -0700 (PDT)
-From: Romain Naour <romain.naour@gmail.com>
-To: buildroot@buildroot.org
-Date: Tue,  7 Sep 2021 00:37:45 +0200
-Message-Id: <20210906223745.3231596-1-romain.naour@gmail.com>
-X-Mailer: git-send-email 2.31.1
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=kLuOrt7TbKBBOBSrLtRAqKnipyzib6U227HJB5bEzg8=;
+ b=MdgZ7cmGeRcGXEd9L9INFMFXIPLSfe6frLELCqg0aeW8KBtJQ7ApY/Vubrdg43WWAI
+ S+bdjVHTX3yyY3GPJPC1ptdRLqJsfFbnwNVsCa4D6bkR8t/ckWCIWWoR/ZAfVclM8w68
+ rcvSOx7HG8xy9MynfNdSnSSVw6AXofjIFGb5ob8fYGa1b/RYXLrwF74vfUQk0elDZ/c/
+ nUQxslcrItFSn0Mmtlx3nPCHh1BDl6OYdHWe7HSkLyx+sDwaM46IvNVB3KGHijfbTlVn
+ 9oW/+VFYrmh55TFeG8mrS03b56NSey29ukRI7/GGBCg8rv1u6IwE82NbGxyqw1zLwGXy
+ YSMg==
+X-Gm-Message-State: AOAM532I6RwlmbO7v5n8R4U0TAKBdFviIexkPC0d6BoeyHB2H03rcK0E
+ IxvP+u3VR4VgiVImEhLv3PwEFsDy8OCnfw4L/yE=
+X-Google-Smtp-Source: ABdhPJz93I+wh9aCAQjf09o2cMZq7kjfmvLSwG6TMYfPazhWS0oYA2RMGmllfeOdagWsSpXQ9VoMgwQXvdPdshT7mCQ=
+X-Received: by 2002:a4a:e1a4:: with SMTP id 4mr15681073ooy.14.1630974075019;
+ Mon, 06 Sep 2021 17:21:15 -0700 (PDT)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] support/testing: test_openssh: use a prebuilt
- toolchain
+References: <20210814195143.92753-1-sam.voss@gmail.com>
+In-Reply-To: <20210814195143.92753-1-sam.voss@gmail.com>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Mon, 6 Sep 2021 18:21:04 -0600
+Message-ID: <CADvTj4r0Af4s=oMMYR-6kh=pXFA_u=YfWgiXWn6DSNTE9g5hvw@mail.gmail.com>
+To: Sam Voss <sam.voss@gmail.com>
+Subject: Re: [Buildroot] [PATCH] package/ripgrep: bump to version 13.0.0
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,43 +92,201 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>
+Cc: buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-Switch from the Buildroot internal toolchain for armv5 to
-the prebuilt Bootlin external toolchain.
+On Sat, Aug 14, 2021 at 1:52 PM <sam.voss@gmail.com> wrote:
+>
+> From: Sam Voss <sam.voss@gmail.com>
+>
+> Also adds patch to make the jemalloc feature optional on musl, due to
+> toolchains not being supported by upstream project.
 
-The test doesn't require to build a toolchain, there was
-no prebuilt glibc toolchain recent enough at the time this
-test has been introduced.
+Which toolchains are not supported here specifically?
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
----
- support/testing/tests/package/test_openssh.py | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+>
+> Signed-off-by: Sam Voss <sam.voss@gmail.com>
+> ---
+>  ...llocator-behind-a-cargo-feature-flag.patch | 131 ++++++++++++++++++
+>  package/ripgrep/ripgrep.hash                  |   4 +-
+>  package/ripgrep/ripgrep.mk                    |   2 +-
+>  3 files changed, 134 insertions(+), 3 deletions(-)
+>  create mode 100644 package/ripgrep/0001-puts-jemalloc-allocator-behind-a-cargo-feature-flag.patch
+>
+> diff --git a/package/ripgrep/0001-puts-jemalloc-allocator-behind-a-cargo-feature-flag.patch b/package/ripgrep/0001-puts-jemalloc-allocator-behind-a-cargo-feature-flag.patch
+> new file mode 100644
+> index 0000000000..e2ba68f389
+> --- /dev/null
+> +++ b/package/ripgrep/0001-puts-jemalloc-allocator-behind-a-cargo-feature-flag.patch
+> @@ -0,0 +1,131 @@
+> +From 68c2a4d7a5d9b46f65121958fdb12d5270bfd1b6 Mon Sep 17 00:00:00 2001
+> +From: Jonathan Stites <mail@jonstites.com>
+> +Date: Wed, 6 May 2020 12:55:35 +0000
+> +Subject: [PATCH] puts jemalloc allocator behind a cargo feature flag
+> +
+> +Retrieved from: https://github.com/BurntSushi/ripgrep/pull/1569
+> +
+> +Moves jemalloc behind a feature for musl builds, where it is not
+> +supported by the upstream project, so ripgrep will fail to build.
+> +
+> +Signed-off-by: Sam Voss <sam.voss@gmail.com>
+> +---
+> + .github/workflows/ci.yml      | 6 ++++++
+> + .github/workflows/release.yml | 8 +++++++-
+> + Cargo.toml                    | 8 +++++++-
+> + README.md                     | 9 +++++++++
+> + crates/core/main.rs           | 8 ++++++--
+> + 5 files changed, 35 insertions(+), 4 deletions(-)
+> +
+> +diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml
+> +index ab154ec..aa567d9 100644
+> +--- a/.github/workflows/ci.yml
+> ++++ b/.github/workflows/ci.yml
+> +@@ -149,6 +149,12 @@ jobs:
+> +       if: matrix.target != ''
+> +       run: ${{ env.CARGO }} test --verbose --workspace ${{ env.TARGET_FLAGS }}
+> +
+> ++    - name: Run tests with jemalloc (Musl)
+> ++      # We only use the jemalloc allocator when building with musl.
+> ++      # The system allocator is good enough for other platforms.
+> ++      if: matrix.os == 'nightly-musl'
+> ++      run: ${{ env.CARGO }} test --verbose --all --features jemalloc ${{ env.TARGET_FLAGS }}
+> ++
+> +     - name: Test for existence of build artifacts (Windows)
+> +       if: matrix.os == 'windows-2019'
+> +       shell: bash
+> +diff --git a/.github/workflows/release.yml b/.github/workflows/release.yml
+> +index 7cfb6a4..ad6b82d 100644
+> +--- a/.github/workflows/release.yml
+> ++++ b/.github/workflows/release.yml
+> +@@ -133,7 +133,13 @@ jobs:
+> +         echo "target flag is: ${{ env.TARGET_FLAGS }}"
+> +         echo "target dir is: ${{ env.TARGET_DIR }}"
+> +
+> +-    - name: Build release binary
+> ++    - name: Build release binary (linux)
+> ++      if: matrix.build == 'linux'
+> ++      # Use jemalloc allocator for much better performance over the musl default allocator
+> ++      run: ${{ env.CARGO }} build --verbose --release --features "pcre2 jemalloc" ${{ env.TARGET_FLAGS }}
+> ++
+> ++    - name: Build release binary (non-linux)
+> ++      if: matrix.build != 'linux'
+> +       run: ${{ env.CARGO }} build --verbose --release --features pcre2 ${{ env.TARGET_FLAGS }}
+> +
+> +     - name: Strip release binary (linux and macos)
+> +diff --git a/Cargo.toml b/Cargo.toml
+> +index fb78fcb..0d34b1e 100644
+> +--- a/Cargo.toml
+> ++++ b/Cargo.toml
+> +@@ -56,8 +56,9 @@ version = "2.33.0"
+> + default-features = false
+> + features = ["suggestions"]
+> +
+> +-[target.'cfg(all(target_env = "musl", target_pointer_width = "64"))'.dependencies.jemallocator]
+> ++[dependencies.jemallocator]
+> + version = "0.3.0"
+> ++optional = true
+> +
+> + [build-dependencies]
+> + lazy_static = "1.1.0"
+> +@@ -75,6 +76,11 @@ walkdir = "2"
+> + [features]
+> + simd-accel = ["grep/simd-accel"]
+> + pcre2 = ["grep/pcre2"]
+> ++# The jemalloc allocator is used for improved
+> ++# performance on x86 musl builds.
+> ++# Cargo does not yet support platform-specific features
+> ++# https://github.com/rust-lang/cargo/issues/1197
+> ++jemalloc = ["jemallocator"]
+> +
+> + [profile.release]
+> + debug = 1
+> +diff --git a/README.md b/README.md
+> +index 46938bc..9917b29 100644
+> +--- a/README.md
+> ++++ b/README.md
+> +@@ -406,6 +406,15 @@ build a static executable with MUSL and with PCRE2, then you will need to have
+> + `musl-gcc` installed, which might be in a separate package from the actual
+> + MUSL library, depending on your Linux distribution.
+> +
+> ++When building with the MUSL target on Linux, it is recommended to use the
+> ++jemalloc allocator for performance:
+> ++
+> ++```
+> ++$ rustup target add x86_64-unknown-linux-musl
+> ++$ cargo build --release --target x86_64-unknown-linux-musl --features jemalloc
+> ++```
+> ++
+> ++
+> +
+> + ### Running tests
+> +
+> +diff --git a/crates/core/main.rs b/crates/core/main.rs
+> +index 47385de..c9dae5a 100644
+> +--- a/crates/core/main.rs
+> ++++ b/crates/core/main.rs
+> +@@ -31,7 +31,7 @@ mod subject;
+> + // have the fastest version of everything. Its goal is to be small and amenable
+> + // to static compilation.) Even though ripgrep isn't particularly allocation
+> + // heavy, musl's allocator appears to slow down ripgrep quite a bit. Therefore,
+> +-// when building with musl, we use jemalloc.
+> ++// we expose a feature for using jemalloc when building with musl.
+> + //
+> + // We don't unconditionally use jemalloc because it can be nice to use the
+> + // system's default allocator by default. Moreover, jemalloc seems to increase
+> +@@ -39,7 +39,11 @@ mod subject;
+> + //
+> + // Moreover, we only do this on 64-bit systems since jemalloc doesn't support
+> + // i686.
+> +-#[cfg(all(target_env = "musl", target_pointer_width = "64"))]
+> ++#[cfg(all(
+> ++    target_env = "musl",
+> ++    target_pointer_width = "64",
+> ++    feature = "jemalloc"
+> ++))]
 
-diff --git a/support/testing/tests/package/test_openssh.py b/support/testing/tests/package/test_openssh.py
-index 490147f86f..4b48059573 100644
---- a/support/testing/tests/package/test_openssh.py
-+++ b/support/testing/tests/package/test_openssh.py
-@@ -47,9 +47,8 @@ class TestOpenSshGlibc(TestOpensshBase):
-         TestOpensshBase.opensshconfig + \
-         """
-         BR2_arm=y
--        BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
--        BR2_KERNEL_HEADERS_4_19=y
--        BR2_TOOLCHAIN_BUILDROOT_CXX=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-         BR2_PACKAGE_RNG_TOOLS=y
-         BR2_TARGET_ROOTFS_CPIO=y
-         """
--- 
-2.31.1
+Might make more sense to explicitly specify known working architectures using:
+https://doc.rust-lang.org/reference/conditional-compilation.html#target_arch
 
+> + #[global_allocator]
+> + static ALLOC: jemallocator::Jemalloc = jemallocator::Jemalloc;
+> +
+> +--
+> +2.32.0
+> +
+> diff --git a/package/ripgrep/ripgrep.hash b/package/ripgrep/ripgrep.hash
+> index 0841c0185c..b2f03a95e6 100644
+> --- a/package/ripgrep/ripgrep.hash
+> +++ b/package/ripgrep/ripgrep.hash
+> @@ -1,3 +1,3 @@
+>  # Locally calculated
+> -sha256 7035379fce0c1e32552e8ee528b92c3d01b8d3935ea31d26c51a73287be74bb3 ripgrep-0.8.1.tar.gz
+> -sha256 0f96a83840e146e43c0ec96a22ec1f392e0680e6c1226e6f3ba87e0740af850f LICENSE-MIT
+> +sha256 0fb17aaf285b3eee8ddab17b833af1e190d73de317ff9648751ab0660d763ed2  ripgrep-13.0.0.tar.gz
+> +sha256 0f96a83840e146e43c0ec96a22ec1f392e0680e6c1226e6f3ba87e0740af850f  LICENSE-MIT
+> diff --git a/package/ripgrep/ripgrep.mk b/package/ripgrep/ripgrep.mk
+> index 450bb020e3..2d9dd3ee2f 100644
+> --- a/package/ripgrep/ripgrep.mk
+> +++ b/package/ripgrep/ripgrep.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>
+> -RIPGREP_VERSION = 0.8.1
+> +RIPGREP_VERSION = 13.0.0
+>  RIPGREP_SITE = $(call github,burntsushi,ripgrep,$(RIPGREP_VERSION))
+>  RIPGREP_LICENSE = MIT
+>  RIPGREP_LICENSE_FILES = LICENSE-MIT
+> --
+> 2.32.0
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot@busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
