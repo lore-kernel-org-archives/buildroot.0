@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 530C4C433F5
-	for <buildroot@archiver.kernel.org>; Tue,  7 Sep 2021 13:56:55 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D3619C433F5
+	for <buildroot@archiver.kernel.org>; Tue,  7 Sep 2021 13:59:39 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 17A0961051
-	for <buildroot@archiver.kernel.org>; Tue,  7 Sep 2021 13:56:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 17A0961051
+	by mail.kernel.org (Postfix) with ESMTPS id 97D2460F43
+	for <buildroot@archiver.kernel.org>; Tue,  7 Sep 2021 13:59:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 97D2460F43
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DC04D40252;
-	Tue,  7 Sep 2021 13:56:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6CCC54028A;
+	Tue,  7 Sep 2021 13:59:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Kb2drynMT0KC; Tue,  7 Sep 2021 13:56:53 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id lAaD2VFgYWSM; Tue,  7 Sep 2021 13:59:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6828F40238;
-	Tue,  7 Sep 2021 13:56:52 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4F7141BF2CC
- for <buildroot@lists.busybox.net>; Tue,  7 Sep 2021 13:56:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9755E402FC;
+	Tue,  7 Sep 2021 13:59:37 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 272AC1BF25F
+ for <buildroot@lists.busybox.net>; Tue,  7 Sep 2021 13:59:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 464F56079F
- for <buildroot@lists.busybox.net>; Tue,  7 Sep 2021 13:56:06 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 23F04402FC
+ for <buildroot@lists.busybox.net>; Tue,  7 Sep 2021 13:59:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IW_G62Ao-X0N for <buildroot@lists.busybox.net>;
- Tue,  7 Sep 2021 13:56:01 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9yHkHa21NzEZ for <buildroot@lists.busybox.net>;
+ Tue,  7 Sep 2021 13:59:34 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id AF355605C4
- for <buildroot@buildroot.org>; Tue,  7 Sep 2021 13:56:01 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id ECCAD4028A
+ for <buildroot@buildroot.org>; Tue,  7 Sep 2021 13:59:34 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id E5B858881C; Tue,  7 Sep 2021 13:54:32 +0000 (UTC)
+ id 2556C8882B; Tue,  7 Sep 2021 13:58:06 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 7 Sep 2021 15:53:41 +0200
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 1d18c730bb6084b2158f6cc8d185f4b3cd9b527f
-X-Git-Newrev: 98fb8a6786463761521c757ff44a6f7a82856f29
+Date: Tue, 7 Sep 2021 15:51:32 +0200
+X-Git-Refname: refs/heads/2021.05.x
+X-Git-Oldrev: aab37f5a6f2a46769f5147f7c36ee5c35a05bf0e
+X-Git-Newrev: 1a9a41d3718b36c676c0534dc40e8a9e74a4b5bd
 X-Patchwork-Hint: ignore
-Message-Id: <20210907135432.E5B858881C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/c-ares: fix build
- with latest nodejs
+Message-Id: <20210907135806.2556C8882B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.05.x] package/xen: fix build
+ with 64 bits time_t
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,223 +66,252 @@ List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============1872709554055789909=="
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=98fb8a6786463761521c757ff44a6f7a82856f29
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+--===============1872709554055789909==
+Content-Type: text/plain
 
-Fix the following build failure with nodejs raised since bump to version
-12.22.5 in commit 7038b029d8c8774eca6d7888d6642d7e84ff5165:
+commit: https://git.buildroot.net/buildroot/commit/?id=1a9a41d3718b36c676c0534dc40e8a9e74a4b5bd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
 
-../src/cares_wrap.cc:42:11: fatal error: ares_nameser.h: No such file or directory
-   42 | # include <ares_nameser.h>
-      |           ^~~~~~~~~~~~~~~~
+Fix build of xen with 64 bites time_t:
+
+/tmp/instance-0/output-1/build/xen-4.14.2/tools/qemu-xen/hw/input/virtio-input-host.c: In function 'virtio_input_host_handle_status':
+/tmp/instance-0/output-1/build/xen-4.14.2/tools/qemu-xen/hw/input/virtio-input-host.c:198:28: error: 'struct input_event' has no member named 'time'
+  198 |     if (gettimeofday(&evdev.time, NULL)) {
+      |                            ^
 
 Fixes:
- - http://autobuild.buildroot.org/results/a0f867d5e765fc1aa052de5e53ed350b3b20743f
+ - http://autobuild.buildroot.org/results/136ce42f44bf48d3db4eda7b1548bf7ac1b97d51
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit a9ca15cf9263becea9fd2ba79ba2a8f9884765ba)
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit 7ba9967287d2ae0063a0ce5ab1980221f04d3ed8)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...vide-ares_nameser-h-as-a-public-interface.patch | 170 +++++++++++++++++++++
- package/c-ares/c-ares.mk                           |   2 +
- 2 files changed, 172 insertions(+)
+ .../xen/0003-Fix-build-with-64-bits-time_t.patch   | 95 ++++++++++++++++++++++
+ .../0004-libs-light-fix-tv_sec-printf-format.patch | 63 ++++++++++++++
+ ...0005-libs-light-fix-tv_sec-fprintf-format.patch | 30 +++++++
+ 3 files changed, 188 insertions(+)
 
-diff --git a/package/c-ares/0001-Provide-ares_nameser-h-as-a-public-interface.patch b/package/c-ares/0001-Provide-ares_nameser-h-as-a-public-interface.patch
+diff --git a/package/xen/0003-Fix-build-with-64-bits-time_t.patch b/package/xen/0003-Fix-build-with-64-bits-time_t.patch
 new file mode 100644
-index 0000000000..c3ae3daa8d
+index 0000000000..8559aece2d
 --- /dev/null
-+++ b/package/c-ares/0001-Provide-ares_nameser-h-as-a-public-interface.patch
-@@ -0,0 +1,170 @@
-+From 7712fcd17847998cf1ee3071284ec50c5b3c1978 Mon Sep 17 00:00:00 2001
-+From: Felix Yan <felixonmars@archlinux.org>
-+Date: Wed, 18 Aug 2021 01:32:44 +0800
-+Subject: [PATCH] Provide ares_nameser.h as a public interface (#417)
++++ b/package/xen/0003-Fix-build-with-64-bits-time_t.patch
+@@ -0,0 +1,95 @@
++From f7a6df5f5bf3acc219352a1b25573ae2082d7e42 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Thu, 3 Dec 2020 20:58:19 +0100
++Subject: [PATCH] Fix build with 64 bits time_t
 +
-+NodeJS needs ares_nameser.h as a pubic header.
++time element is deprecated on new input_event structure in kernel's
++input.h [1]
 +
-+Fixes: #415
-+Fix By: Felix Yan (@felixonmars)
++This will avoid the following build failure:
 +
-+[Retrieved from:
-+https://github.com/c-ares/c-ares/commit/7712fcd17847998cf1ee3071284ec50c5b3c1978]
++hw/input/virtio-input-host.c: In function 'virtio_input_host_handle_status':
++hw/input/virtio-input-host.c:198:28: error: 'struct input_event' has no member named 'time'
++  198 |     if (gettimeofday(&evdev.time, NULL)) {
++      |                            ^
++
++Fixes:
++ - http://autobuild.buildroot.org/results/a538167e288c14208d557cd45446df86d3d599d5
++ - http://autobuild.buildroot.org/results/efd4474fb4b6c0ce0ab3838ce130429c51e43bbb
++
++[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit?id=152194fe9c3f
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Message-Id: <20201203195819.583626-1-fontaine.fabrice@gmail.com>
++Fixes: https://gitlab.com/qemu-project/qemu/-/issues/246
++Reviewed-by: Michael S. Tsirkin <mst@redhat.com>
++Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
++
++[Retrieved (and updated for qemu-xen) from:
++https://github.com/qemu/qemu/commit/f7a6df5f5bf3acc219352a1b25573ae2082d7e42]
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 +---
-+ CMakeLists.txt                      |  6 ++++++
-+ configure.ac                        | 14 ++++++++++++++
-+ include/CMakeLists.txt              |  2 +-
-+ include/Makefile.am                 |  2 +-
-+ include/ares_build.h.cmake          |  2 ++
-+ include/ares_build.h.in             |  3 +++
-+ {src/lib => include}/ares_nameser.h | 10 ++++++----
-+ src/lib/Makefile.inc                |  1 -
-+ 8 files changed, 33 insertions(+), 7 deletions(-)
-+ rename {src/lib => include}/ares_nameser.h (98%)
++ contrib/vhost-user-input/main.c | 8 ++++++--
++ hw/input/virtio-input-host.c    | 5 ++++-
++ 2 files changed, 10 insertions(+), 3 deletions(-)
 +
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 3f42d145..28f8e01a 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -557,6 +557,12 @@ ENDIF()
-+ IF (HAVE_WINDOWS_H)
-+ 	SET (CARES_HAVE_WINDOWS_H 1)
-+ ENDIF()
-++IF (HAVE_ARPA_NAMESER_H)
-++	SET (CARES_HAVE_ARPA_NAMESER_H 1)
-++ENDIF()
-++IF (HAVE_ARPA_NAMESER_COMPAT_H)
-++	SET (CARES_HAVE_ARPA_NAMESER_COMPAT_H 1)
-++ENDIF()
++diff --git a/tools/qemu-xen/contrib/vhost-user-input/main.c b/tools/qemu-xen/contrib/vhost-user-input/main.c
++index c15d18c33f0c..081230da548a 100644
++--- a/tools/qemu-xen/contrib/vhost-user-input/main.c
+++++ b/tools/qemu-xen/contrib/vhost-user-input/main.c
++@@ -6,13 +6,14 @@
++ #include "qemu/osdep.h"
 + 
-+ # Record toplevel CMakeLists.txt path
-+ set(CARES_TOPLEVEL_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
-+diff --git a/configure.ac b/configure.ac
-+index c21b8ff3..1ba8a8ec 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -547,6 +547,20 @@ dnl *Sigh* these are needed in order for net/if.h to get properly detected.
-+ ]
-+ )
++ #include <glib.h>
++-#include <linux/input.h>
+++#include <sys/ioctl.h>
 + 
-++dnl Test and set CARES_HAVE_ARPA_NAMESER_H / CARES_HAVE_ARPA_NAMESER_COMPAT_H
-++AC_CHECK_DECL([HAVE_ARPA_NAMESER_H],
-++[
-++CARES_DEFINE_UNQUOTED([CARES_HAVE_ARPA_NAMESER_H])
-++],
-++[]
-++)
-++AC_CHECK_DECL([HAVE_ARPA_NAMESER_COMPAT_H],
-++[
-++CARES_DEFINE_UNQUOTED([CARES_HAVE_ARPA_NAMESER_COMPAT_H])
-++],
-++[]
-++)
-++
-+ dnl Checks for typedefs, structures, and compiler characteristics.
-+ AC_C_CONST
-+ AC_TYPE_SIZE_T
-+diff --git a/include/CMakeLists.txt b/include/CMakeLists.txt
-+index 439e7bb2..3321956d 100644
-+--- a/include/CMakeLists.txt
-++++ b/include/CMakeLists.txt
-+@@ -3,6 +3,6 @@ CONFIGURE_FILE (ares_build.h.cmake ${PROJECT_BINARY_DIR}/ares_build.h)
++ #include "qemu/iov.h"
++ #include "qemu/bswap.h"
++ #include "qemu/sockets.h"
++ #include "contrib/libvhost-user/libvhost-user.h"
++ #include "contrib/libvhost-user/libvhost-user-glib.h"
+++#include "standard-headers/linux/input.h"
++ #include "standard-headers/linux/virtio_input.h"
++ #include "qapi/error.h"
 + 
-+ # Headers installation target
-+ IF (CARES_INSTALL)
-+-	SET (CARES_HEADERS ares.h ares_version.h "${PROJECT_BINARY_DIR}/ares_build.h" ares_rules.h ares_dns.h)
-++	SET (CARES_HEADERS ares.h ares_version.h "${PROJECT_BINARY_DIR}/ares_build.h" ares_rules.h ares_dns.h ares_nameser.h)
-+ 	INSTALL (FILES ${CARES_HEADERS} COMPONENT Devel DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
-+ ENDIF ()
-+diff --git a/include/Makefile.am b/include/Makefile.am
-+index 125a686a..d208bece 100644
-+--- a/include/Makefile.am
-++++ b/include/Makefile.am
-+@@ -2,6 +2,6 @@ AUTOMAKE_OPTIONS = foreign nostdinc 1.9.6
-+ ACLOCAL_AMFLAGS = -I m4 --install
++@@ -113,13 +114,16 @@ vi_evdev_watch(VuDev *dev, int condition, void *data)
++ static void vi_handle_status(VuInput *vi, virtio_input_event *event)
++ {
++     struct input_event evdev;
+++    struct timeval tval;
++     int rc;
 + 
-+ # what headers to install on 'make install':
-+-include_HEADERS = ares.h ares_version.h ares_build.h ares_rules.h ares_dns.h
-++include_HEADERS = ares.h ares_version.h ares_build.h ares_rules.h ares_dns.h ares_nameser.h
++-    if (gettimeofday(&evdev.time, NULL)) {
+++    if (gettimeofday(&tval, NULL)) {
++         perror("vi_handle_status: gettimeofday");
++         return;
++     }
 + 
-+ EXTRA_DIST = ares_build.h.cmake ares_build.h.in ares_build.h.dist CMakeLists.txt
-+diff --git a/include/ares_build.h.cmake b/include/ares_build.h.cmake
-+index ac32d47f..e847f17e 100644
-+--- a/include/ares_build.h.cmake
-++++ b/include/ares_build.h.cmake
-+@@ -13,6 +13,8 @@
-+ #cmakedefine CARES_HAVE_WS2TCPIP_H
-+ #cmakedefine CARES_HAVE_WINSOCK2_H
-+ #cmakedefine CARES_HAVE_WINDOWS_H
-++#cmakedefine CARES_HAVE_ARPA_NAMESER_H
-++#cmakedefine CARES_HAVE_ARPA_NAMESER_COMPAT_H
+++    evdev.input_event_sec = tval.tv_sec;
+++    evdev.input_event_usec = tval.tv_usec;
++     evdev.type = le16toh(event->type);
++     evdev.code = le16toh(event->code);
++     evdev.value = le32toh(event->value);
++diff --git a/tools/qemu-xen/hw/input/virtio-input-host.c b/tools/qemu-xen/hw/input/virtio-input-host.c
++index 85daf73f1a80..137efba57b0f 100644
++--- a/tools/qemu-xen/hw/input/virtio-input-host.c
+++++ b/tools/qemu-xen/hw/input/virtio-input-host.c
++@@ -193,13 +193,16 @@ static void virtio_input_host_handle_status(VirtIOInput *vinput,
++ {
++     VirtIOInputHost *vih = VIRTIO_INPUT_HOST(vinput);
++     struct input_event evdev;
+++    struct timeval tval;
++     int rc;
 + 
-+ #ifdef CARES_HAVE_SYS_TYPES_H
-+ #  include <sys/types.h>
-+diff --git a/include/ares_build.h.in b/include/ares_build.h.in
-+index 24e3a989..20fd28a0 100644
-+--- a/include/ares_build.h.in
-++++ b/include/ares_build.h.in
-+@@ -55,6 +55,9 @@
-+    Error Compilation_aborted_CARES_TYPEOF_ARES_SOCKLEN_T_already_defined
-+ #endif
++-    if (gettimeofday(&evdev.time, NULL)) {
+++    if (gettimeofday(&tval, NULL)) {
++         perror("virtio_input_host_handle_status: gettimeofday");
++         return;
++     }
 + 
-++#undef CARES_HAVE_ARPA_NAMESER_H
-++#undef CARES_HAVE_ARPA_NAMESER_COMPAT_H
-++
-+ /* ================================================================ */
-+ /*  EXTERNAL INTERFACE SETTINGS FOR CONFIGURE CAPABLE SYSTEMS ONLY  */
-+ /* ================================================================ */
-+diff --git a/src/lib/ares_nameser.h b/include/ares_nameser.h
-+similarity index 98%
-+rename from src/lib/ares_nameser.h
-+rename to include/ares_nameser.h
-+index 65aebcc1..18a9e5ac 100644
-+--- a/src/lib/ares_nameser.h
-++++ b/include/ares_nameser.h
-+@@ -2,10 +2,12 @@
-+ #ifndef ARES_NAMESER_H
-+ #define ARES_NAMESER_H
+++    evdev.input_event_sec = tval.tv_sec;
+++    evdev.input_event_usec = tval.tv_usec;
++     evdev.type = le16_to_cpu(event->type);
++     evdev.code = le16_to_cpu(event->code);
++     evdev.value = le32_to_cpu(event->value);
+diff --git a/package/xen/0004-libs-light-fix-tv_sec-printf-format.patch b/package/xen/0004-libs-light-fix-tv_sec-printf-format.patch
+new file mode 100644
+index 0000000000..fffc8d7307
+--- /dev/null
++++ b/package/xen/0004-libs-light-fix-tv_sec-printf-format.patch
+@@ -0,0 +1,63 @@
++From a8ac01aa3e3ea5e6a9a1620aa8fa7e9da3458120 Mon Sep 17 00:00:00 2001
++From: Manuel Bouyer <bouyer@netbsd.org>
++Date: Tue, 26 Jan 2021 23:47:55 +0100
++Subject: [PATCH] libs/light: fix tv_sec printf format
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Don't assume tv_sec is a unsigned long, it is 64 bits on NetBSD 32 bits.
++Use %jd and cast to (intmax_t) instead
++
++Signed-off-by: Manuel Bouyer <bouyer@netbsd.org>
++Reviewed-by: Roger Pau Monné <roger.pau@citrix.com>
++[Retrieved (and backported) from:
++https://gitlab.com/xen-project/xen/-/commit/a8ac01aa3e3ea5e6a9a1620aa8fa7e9da3458120]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ tools/libs/light/libxl_create.c | 8 ++++----
++ 1 file changed, 4 insertions(+), 4 deletions(-)
++
++diff --git a/tools/libxl/libxl_create.c b/tools/libxl/libxl_create.c
++index 8616113e72..9848d65f36 100644
++--- a/tools/libxl/libxl_create.c
+++++ b/tools/libxl/libxl_create.c
++@@ -496,7 +496,7 @@ int libxl__domain_build(libxl__gc *gc,
++         vments[2] = "image/ostype";
++         vments[3] = "hvm";
++         vments[4] = "start_time";
++-        vments[5] = GCSPRINTF("%lu.%02d", start_time.tv_sec,(int)start_time.tv_usec/10000);
+++        vments[5] = GCSPRINTF("%jd.%02d", (intmax_t)start_time.tv_sec,(int)start_time.tv_usec/10000);
 + 
-+-#ifdef HAVE_ARPA_NAMESER_H
-++#include "ares_build.h"
-++
-++#ifdef CARES_HAVE_ARPA_NAMESER_H
-+ #  include <arpa/nameser.h>
-+ #endif
-+-#ifdef HAVE_ARPA_NAMESER_COMPAT_H
-++#ifdef CARES_HAVE_ARPA_NAMESER_COMPAT_H
-+ #  include <arpa/nameser_compat.h>
-+ #endif
++         localents = libxl__calloc(gc, 13, sizeof(char *));
++         i = 0;
++@@ -535,7 +535,7 @@ int libxl__domain_build(libxl__gc *gc,
++         vments[i++] = "image/kernel";
++         vments[i++] = (char *) state->pv_kernel.path;
++         vments[i++] = "start_time";
++-        vments[i++] = GCSPRINTF("%lu.%02d", start_time.tv_sec,(int)start_time.tv_usec/10000);
+++        vments[i++] = GCSPRINTF("%jd.%02d", (intmax_t)start_time.tv_sec,(int)start_time.tv_usec/10000);
++         if (state->pv_ramdisk.path) {
++             vments[i++] = "image/ramdisk";
++             vments[i++] = (char *) state->pv_ramdisk.path;
++@@ -1502,7 +1502,7 @@ static void domcreate_stream_done(libxl__egc *egc,
++         vments[2] = "image/ostype";
++         vments[3] = "hvm";
++         vments[4] = "start_time";
++-        vments[5] = GCSPRINTF("%lu.%02d", start_time.tv_sec,(int)start_time.tv_usec/10000);
+++        vments[5] = GCSPRINTF("%jd.%02d", (intmax_t)start_time.tv_sec,(int)start_time.tv_usec/10000);
++         break;
++     case LIBXL_DOMAIN_TYPE_PV:
++         vments = libxl__calloc(gc, 11, sizeof(char *));
++@@ -1512,7 +1512,7 @@ static void domcreate_stream_done(libxl__egc *egc,
++         vments[i++] = "image/kernel";
++         vments[i++] = (char *) state->pv_kernel.path;
++         vments[i++] = "start_time";
++-        vments[i++] = GCSPRINTF("%lu.%02d", start_time.tv_sec,(int)start_time.tv_usec/10000);
+++        vments[i++] = GCSPRINTF("%jd.%02d", (intmax_t)start_time.tv_sec,(int)start_time.tv_usec/10000);
++         if (state->pv_ramdisk.path) {
++             vments[i++] = "image/ramdisk";
++             vments[i++] = (char *) state->pv_ramdisk.path;
++-- 
++GitLab
++
+diff --git a/package/xen/0005-libs-light-fix-tv_sec-fprintf-format.patch b/package/xen/0005-libs-light-fix-tv_sec-fprintf-format.patch
+new file mode 100644
+index 0000000000..d677dce4fc
+--- /dev/null
++++ b/package/xen/0005-libs-light-fix-tv_sec-fprintf-format.patch
+@@ -0,0 +1,30 @@
++From 4881285bcfd8f2e2c913c6e9f011b1e90652f414 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 28 Aug 2021 11:00:07 +0200
++Subject: [PATCH] libs/light: fix tv_sec fprintf format
++
++Don't assume tv_sec is a unsigned long, it is 64 bits on NetBSD 32 bits.
++Use %jd and cast to (intmax_t) instead
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: sent to xen-devel@lists.xenproject.org]
++---
++ tools/libs/light/libxl_domain.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/tools/libxl/libxl_domain.c b/tools/libxl/libxl_domain.c
++index c00c36c928..51a6127552 100644
++--- a/tools/libxl/libxl_domain.c
+++++ b/tools/libxl/libxl_domain.c
++@@ -1444,7 +1444,7 @@ static int libxl__mark_domid_recent(libxl__gc *gc, uint32_t domid)
++         }
++     }
 + 
-+@@ -68,7 +70,7 @@
-+  * provide them
-+  * ============================================================================
-+  */
-+-#ifndef HAVE_ARPA_NAMESER_H
-++#ifndef CARES_HAVE_ARPA_NAMESER_H
-+ 
-+ typedef enum __ns_class {
-+     ns_c_invalid = 0,       /* Cookie. */
-+@@ -173,7 +175,7 @@ typedef enum __ns_rcode {
-+     ns_r_badtime = 18
-+ } ns_rcode;
-+ 
-+-#endif /* HAVE_ARPA_NAMESER_H */
-++#endif /* CARES_HAVE_ARPA_NAMESER_H */
-+ 
-+ 
-+ /* ============================================================================
-+diff --git a/src/lib/Makefile.inc b/src/lib/Makefile.inc
-+index 7426c3de..47bc8cdd 100644
-+--- a/src/lib/Makefile.inc
-++++ b/src/lib/Makefile.inc
-+@@ -73,7 +73,6 @@ HHEADERS = ares_android.h                        \
-+   ares_strsplit.h			\
-+   ares_writev.h				\
-+   bitncmp.h				\
-+-  ares_nameser.h			\
-+   ares_setup.h				\
-+   setup_once.h
-+ 
-diff --git a/package/c-ares/c-ares.mk b/package/c-ares/c-ares.mk
-index 3a7c6e0298..761aa73280 100644
---- a/package/c-ares/c-ares.mk
-+++ b/package/c-ares/c-ares.mk
-@@ -10,6 +10,8 @@ C_ARES_INSTALL_STAGING = YES
- C_ARES_CONF_OPTS = --with-random=/dev/urandom
- C_ARES_LICENSE = MIT
- C_ARES_LICENSE_FILES = LICENSE.md
-+# We're patching configure.ac
-+C_ARES_AUTORECONF = YES
- 
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
++-    r = fprintf(nf, "%lu %u\n", ctxt.ts.tv_sec, domid);
+++    r = fprintf(nf, "%jd %u\n", (intmax_t)ctxt.ts.tv_sec, domid);
++     if (r < 0) {
++         LOGED(ERROR, domid, "failed to write to '%s'", new);
++         goto out;
++-- 
++2.32.0
++
+
+--===============1872709554055789909==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1872709554055789909==--
