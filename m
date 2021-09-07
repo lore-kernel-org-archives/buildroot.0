@@ -2,94 +2,87 @@ Return-Path: <SRS0=M9Dx=N5=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.5 required=3.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+X-Spam-Status: No, score=-0.5 required=3.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
 	DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 10A01C433EF
-	for <buildroot@archiver.kernel.org>; Tue,  7 Sep 2021 09:03:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C41C9C433F5
+	for <buildroot@archiver.kernel.org>; Tue,  7 Sep 2021 09:16:20 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id AB08B610E9
-	for <buildroot@archiver.kernel.org>; Tue,  7 Sep 2021 09:03:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org AB08B610E9
+	by mail.kernel.org (Postfix) with ESMTPS id 6F02260F14
+	for <buildroot@archiver.kernel.org>; Tue,  7 Sep 2021 09:16:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6F02260F14
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 65D5582A4E;
-	Tue,  7 Sep 2021 09:03:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 21F2382AEF;
+	Tue,  7 Sep 2021 09:16:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BiazYrxBL8PL; Tue,  7 Sep 2021 09:03:35 +0000 (UTC)
+	with ESMTP id xmcLSUDzu_Ml; Tue,  7 Sep 2021 09:16:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A22A4828F8;
-	Tue,  7 Sep 2021 09:03:34 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 843C11BF315
- for <buildroot@lists.busybox.net>; Tue,  7 Sep 2021 09:03:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 813A582AB9;
+	Tue,  7 Sep 2021 09:16:18 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id EF0791BF2F2
+ for <buildroot@lists.busybox.net>; Tue,  7 Sep 2021 09:16:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 70D3860BE9
- for <buildroot@lists.busybox.net>; Tue,  7 Sep 2021 09:03:33 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id DDD02405C0
+ for <buildroot@lists.busybox.net>; Tue,  7 Sep 2021 09:16:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id brLMPxXJGK9U for <buildroot@lists.busybox.net>;
- Tue,  7 Sep 2021 09:03:31 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qHspgH6n9EiZ for <buildroot@lists.busybox.net>;
+ Tue,  7 Sep 2021 09:16:16 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com
- [IPv6:2a00:1450:4864:20::22f])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 47D3260BDC
- for <buildroot@buildroot.org>; Tue,  7 Sep 2021 09:03:31 +0000 (UTC)
-Received: by mail-lj1-x22f.google.com with SMTP id s12so15451691ljg.0
- for <buildroot@buildroot.org>; Tue, 07 Sep 2021 02:03:31 -0700 (PDT)
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com
+ [IPv6:2a00:1450:4864:20::129])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 31DF340410
+ for <buildroot@buildroot.org>; Tue,  7 Sep 2021 09:16:16 +0000 (UTC)
+Received: by mail-lf1-x129.google.com with SMTP id z2so18272306lft.1
+ for <buildroot@buildroot.org>; Tue, 07 Sep 2021 02:16:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=xPwr/lTYKJWxNO/sJ9VVBTRkSWz0Rv17X3xmerzPfs8=;
- b=nX7ErmWOzgr6FNyHC7z1NGfayHZekMkd1GO5D9Wsp6Z1q87uEJafiK5jwuXRh+x8yV
- jG1tfacZeKWrsaHjsdy4AqbIIgLAv6woo1KKA1xfU9pOsLRlVnyh3CCRIDQJ/x16sWWb
- nFpU+BX53Fx237kbG6AtnShpFERyvWOiXwK1bJ6si8QsYsEwfpgVLjs07V9O6YJmkqnM
- xV6KRxNsPtmjkAKtGfmI0KMW+/UjLTv2OLGl9DHVkXunZD3DBwrvt4ZAis4r8t90354b
- Gzs5yXhwKDmQfBGhDymGAxxrWVfZAXbM1KtwUsh5rx0FB1vTUIa78antiz2bIdNIuHnQ
- lxSQ==
+ :cc; bh=9nUJwGyp1ieCUECIX8iDaS0jj0NKUpfl2bshbutb4Gk=;
+ b=pRPxGMt0ECaiLrvN5AYhxut8UaOiiokBDFSAdrvWP2lo2x6sTSJLT6x9IRAp8Znsej
+ bK0u/EkxPG23nh6QqnAgtuUW0Z7n6ijGwagEpmBDGihuaJzuvI++F3MLFQTRyH/Nwkeu
+ kUEwhlf9hcUG2yQdEb0PY65qpBCqezlYoC/CNdQA5yHPHUshn9oZrB4n5zGCJ1haIILi
+ r3si1jVOswqKUxMoDn/sFokkUvU7UIeYFCWTHiThOlDpS3meg7PQ9onpOrmHLxJAAfMa
+ eE0sZySjs3jQLux9vk6nEF7Wa/60zx7LKXJIuTg3V9S+D8pp8JpBq81bOhuOwz3vqXwM
+ 6DIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:mime-version:references:in-reply-to:from:date
  :message-id:subject:to:cc;
- bh=xPwr/lTYKJWxNO/sJ9VVBTRkSWz0Rv17X3xmerzPfs8=;
- b=fcNSETXwLrdTKukG6KWu78YlZhKx+Xupvnu2RoV4LhZ6eOZPvJ2EkUr/rZU1w+MASA
- nnYd8jzn401gaZXPtl7LC5lpaF+xD4jopBq4j5UO1VhvPqNFstSSdUBXHBuY+XLpREUw
- vs6oS+eAHVkWoQ/+Z5hjtytjb4cZkqGJheVjtwszHou0F5KB+p+g1alwJHWzDP6Fe5AJ
- HTH7Ok+khhSyj60Gsf16ox5M0ujuXi5uQDgVKw1kCVegYg3aavNaB+HDWBW9cDjplD+E
- HGojFxlsrlBFYQIPaq+FP6OFWlDRchMxmDkK7/Ax1TvOIk4xt9fYLsJkQNz0wXan822X
- LAcw==
-X-Gm-Message-State: AOAM530Dfiack6nMFcvGEwrdre5ppdq5lR2O0yjkziTQkifDqyb6NwXz
- d8gXHP6rYsK16KF9vbILhfvtWNGneSMofTSsZGM=
-X-Google-Smtp-Source: ABdhPJxWwMszXv7ILZCbYDyBQEZ4i89wEof5fZcVPwLvvg0UkuoB6hcPUkT1s9wbLNEoj0Vi4F8ENiMyflhBBUwy6Og=
-X-Received: by 2002:a05:651c:160f:: with SMTP id
- f15mr13989617ljq.276.1631005409195; 
- Tue, 07 Sep 2021 02:03:29 -0700 (PDT)
+ bh=9nUJwGyp1ieCUECIX8iDaS0jj0NKUpfl2bshbutb4Gk=;
+ b=qjg1Dl3X+wbOWqHnKpVD6vGd1vPAOh9ZIe+jDP0lgodHCma0LGF4A1kKOEnc94e0WO
+ HSsXIgeJ4kjA71kozSJSGIelM9ON9TcTYts0s85onTeA+z39SKH6hfYe3zdRACm5Df87
+ U8Vq27b+C0R2gSWRYpfLPAYfRgvKRKLlH413oYBoQkXkjITge86euCxSmwtNg7ny79mA
+ maYhNP1N27LI2ZX4GY+zBjjo1Apn+UQgMkh9CmP6gJ0ePan2OSl1zr8Khs1Kb6v0k1cI
+ mMMye7sXfccTg6uVueSJNgbsaQBfHaVJScSsbqnTnOj0Xh49dlOsJ/gE0ZIvQMeAVI6k
+ MfAg==
+X-Gm-Message-State: AOAM533UToT/j8WZBtQEdWM0OYFDd4uatRL/dScRIepYHalBz8j5rZC2
+ 7e8N4x8canw3WwMsCFlXTWCCtBoEU+Hvx6jMT9zR0ph4Ff4=
+X-Google-Smtp-Source: ABdhPJysMgEOYQCnXPOSI62llDsYFXavq7uvSFWqt+vF4zjncDvM+l5xRMikbg3npo1t3K2HIc69DxEe2oNrKLk2euQ=
+X-Received: by 2002:ac2:5f0a:: with SMTP id 10mr11930808lfq.14.1631006173993; 
+ Tue, 07 Sep 2021 02:16:13 -0700 (PDT)
 MIME-Version: 1.0
 References: <20210906094214.6142-1-heiko.thiery@gmail.com>
- <CAOMZO5A4FXz+3M1m+aQT4hfWtBCgLo7-3c+pOV8XXrrGGY4-=Q@mail.gmail.com>
- <CAEyMn7ZpntE-ZFPrU09oiB5LStkbf-7BBTV1PqJZ3X48pjmCEQ@mail.gmail.com>
- <CAOMZO5ACyWzrmLjnB5M0We_grP7DMXYUkiTTeghz_EH_6Z0Y_A@mail.gmail.com>
- <CAEyMn7ZKBHc8eCn=Uf_RsmRFrnMAOLVf7m_90fRZi8bCVcZscQ@mail.gmail.com>
- <YTckin7wSQXI4a/c@p1g2>
- <CAEyMn7bqZwYArZ0MV=G95dpuH0U_+YzLO+aV_ZHTDrt=wBiZwg@mail.gmail.com>
- <YTcplRmz8UP33lr1@p1g2>
-In-Reply-To: <YTcplRmz8UP33lr1@p1g2>
+ <20210906094214.6142-3-heiko.thiery@gmail.com>
+ <5a4dbac30a8e7546394c6f6969c602d3@walle.cc>
+In-Reply-To: <5a4dbac30a8e7546394c6f6969c602d3@walle.cc>
 From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Tue, 7 Sep 2021 11:03:18 +0200
-Message-ID: <CAEyMn7ayUhZKzK=_ZushYuQz=wUPP58BgYHnSxf-S=g7WKHJrQ@mail.gmail.com>
-To: Gary Bisson <gary.bisson@boundarydevices.com>
-Subject: Re: [Buildroot] [PATCH 0/3] Add support to build imx8 images using
- mainline uboot
+Date: Tue, 7 Sep 2021 11:16:02 +0200
+Message-ID: <CAEyMn7aJqGiyh9y-u-v5Bp6yAA+ZLQnJqM98JduiME6-8hmbeA@mail.gmail.com>
+To: Michael Walle <michael@walle.cc>
+Subject: Re: [Buildroot] [PATCH 2/3] boot/uboot: copy ATF bl31 binary to
+ uboot package dir
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -105,75 +98,23 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 Cc: Gary Bisson <bisson.gary@gmail.com>,
  Stephane Viau <stephane.viau@oss.nxp.com>,
  Refik Tuzakli <tuzakli.refik@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- buildroot <buildroot@buildroot.org>, Fabio Estevam <festevam@gmail.com>,
- Xavier Roumegue <xroumegue@gmail.com>
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org,
+ Fabio Estevam <festevam@gmail.com>, Xavier Roumegue <xroumegue@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-Hi Gary,
+Hi Michael,
 
-Am Di., 7. Sept. 2021 um 10:58 Uhr schrieb Gary Bisson
-<gary.bisson@boundarydevices.com>:
+Am Mo., 6. Sept. 2021 um 12:23 Uhr schrieb Michael Walle <michael@walle.cc>:
 >
-> Hi Thiery,
+> Am 2021-09-06 11:42, schrieb Heiko Thiery:
+> > If the U-Boot image is to be built with binman and the ATF binary is
 >
-> On Tue, Sep 07, 2021 at 10:43:43AM +0200, Heiko Thiery wrote:
-> > Hi Gary,
-> >
-> > Am Di., 7. Sept. 2021 um 10:36 Uhr schrieb Gary Bisson
-> > <gary.bisson@boundarydevices.com>:
-> > >
-> > > Hi Thiery,
-> > >
-> > > On Tue, Sep 07, 2021 at 08:36:30AM +0200, Heiko Thiery wrote:
-> > > > Hi Fabio,
-> > > >
-> > > > Am Mo., 6. Sept. 2021 um 17:23 Uhr schrieb Fabio Estevam <festevam@gmail.com>:
-> > > > >
-> > > > > Hi Heiko,
-> > > > >
-> > > > > On Mon, Sep 6, 2021 at 10:32 AM Heiko Thiery <heiko.thiery@gmail.com> wrote:
-> > > > >
-> > > > > > What board are you exactly asking for? the nxp imx8mm evk? I have a
-> > > > > > tree for the kontron pitx-imx8m [1] that has an i.MX8MQ.
-> > > > > >
-> > > > > > Maybe this also answers your question ;-/
-> > > > > >
-> > > > > > [1] https://github.com/hthiery/buildroot/tree/uboot-imx
-> > > > >
-> > > > > This helps, thanks.
-> > >
-> > > I've tried this series with our U-Boot (2020.07 based) and it doesn't
-> > > work for me as using UBOOT_FORMAT_CUSTOM isn't sufficient as it only
-> > > copies the binaries selected but doesn't use it as target [1].
-> > >
-> > > So I wonder, which U-Boot version are you using? Is the flash.bin
-> > > created automatically when issuing 'make all'?
-> > > In my version of U-Boot it requires to use 'make flash.bin' otherwise it
-> > > simply doesn't generate flash.bin.
-> > >
-> > > I believe we would still need a new U-Boot target name [2] but I'd like
-> > > to understand how it worked for you
-> >
-> > Yes, when switching to binman the "make all" target will create the
-> > flash.bin (all output that is defined/described in binman). So in your
-> > case when you use the "old" u-boot way of creating this output we have
-> > to add a new u-boot target in buildroot.
->
-> Thanks for the quick reply. Indeed I just saw in your U-Boot tree how
-> the binman description was done, it's pretty neat.
-> So do you know if the flash.bin target is here to stay in U-Boot or is
-> binman to new way to go and flash.bin becomes an outdated target? I know
-> it's more of a U-Boot question than Buildroot but just to understand if
-> it even makes sense to add the target if it's going to disappear in
-> upcoming releases.
+> btw TF-A is the new name for ATF ;)
 
-As far as I understand the goal is to switch to binman for all boards.
-That would mean the flash.bin target will disappear. But what about
-having a custom build target in buildroot?
+Good to know. But for consistency I have used the ATF naming.
 
 -- 
 Heiko
