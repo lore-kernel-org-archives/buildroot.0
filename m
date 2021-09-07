@@ -2,95 +2,57 @@ Return-Path: <SRS0=M9Dx=N5=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E43DEC433F5
-	for <buildroot@archiver.kernel.org>; Tue,  7 Sep 2021 06:37:58 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 48C08C433FE
+	for <buildroot@archiver.kernel.org>; Tue,  7 Sep 2021 06:38:11 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 7F82260232
-	for <buildroot@archiver.kernel.org>; Tue,  7 Sep 2021 06:37:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7F82260232
+	by mail.kernel.org (Postfix) with ESMTPS id C831260232
+	for <buildroot@archiver.kernel.org>; Tue,  7 Sep 2021 06:38:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C831260232
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5D48F60BC5;
-	Tue,  7 Sep 2021 06:37:58 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8FDBE404C0;
+	Tue,  7 Sep 2021 06:38:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oKMrcg-nw7Af; Tue,  7 Sep 2021 06:37:57 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id nI6EhL4TGkvN; Tue,  7 Sep 2021 06:38:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C8BAA60BC2;
-	Tue,  7 Sep 2021 06:37:56 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C54AA1BF2A5
- for <buildroot@lists.busybox.net>; Tue,  7 Sep 2021 06:37:54 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8EE1C404BF;
+	Tue,  7 Sep 2021 06:38:08 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 95D9B1BF2A5
+ for <buildroot@lists.busybox.net>; Tue,  7 Sep 2021 06:38:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C22CF60BC2
- for <buildroot@lists.busybox.net>; Tue,  7 Sep 2021 06:37:54 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 92B9380C80
+ for <buildroot@lists.busybox.net>; Tue,  7 Sep 2021 06:38:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fG9A2IBHF8A0 for <buildroot@lists.busybox.net>;
- Tue,  7 Sep 2021 06:37:54 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com
- [IPv6:2a00:1450:4864:20::62d])
- by smtp3.osuosl.org (Postfix) with ESMTPS id F2D8960BBD
- for <buildroot@buildroot.org>; Tue,  7 Sep 2021 06:37:53 +0000 (UTC)
-Received: by mail-ej1-x62d.google.com with SMTP id mf2so17568076ejb.9
- for <buildroot@buildroot.org>; Mon, 06 Sep 2021 23:37:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=sender:from:to:cc:subject:references:date:in-reply-to:message-id
- :user-agent:mime-version;
- bh=172MvYneP1gGOEU5QgQMkX9Lg4ORxqMzmKvQFdZhxQg=;
- b=ovOHO0qWlQiMMwsgVOZWR9uRapYyBW+UkO0cVF/H/I2dHxVUNvXoZ+9viXohNKRyHD
- 17n+bz1p47BCKAANy2+OG/3gdHxKj3UZqhVt+CA9eigvr3MDcUpZWaCo6rGKyo3odZE+
- dp93oknzz07yhhlWHUUCEAPdHNtBd2X3ER0r/8DgnT4fSJ1iNuOng9fnXxCkS300jP/s
- tWJqROubvv9s6JlUyWXkwNueEoYS8t2ZE4lYfEgb28vV0Rb46sQ7wOEYjel3med2/WV2
- 8dOCrjxQr75yMSxRQgnEsEg0G/yfb9HLqh02U5UGQY6dqqxQN0PCzTGiqXtyJVCAKWTC
- 5AKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:sender:from:to:cc:subject:references:date
- :in-reply-to:message-id:user-agent:mime-version;
- bh=172MvYneP1gGOEU5QgQMkX9Lg4ORxqMzmKvQFdZhxQg=;
- b=duuazXENyzY+1jCR+DJguykTFb/JWPy1xPlXKLia1ZTOHqDT0UsManJhwcrk9xdv0i
- kVyTP4k6KfASc0pBd7vGbSHptQpACodft16L/T/+0XEBFCO70kr5xMoDGGOTC9GsuMMn
- tr8J1qcI3eTXvWi+AZ7R2h2gErzwdDuy1KDTXnYSwk0vX4FVVI46aHXC8TM5ohSN24PD
- SVlVRLNiP+rnmSbEYeSUIAxbVE8JXq4lUpl+IIuqDIr6blcIkhH4sku5w743c7kb/Hkp
- p5ZVsnYy3CPZvQDZtS5R/7CX6EuEJKUm3GYVmy7Pgt4H6yos6fKRbjPG7JXMYGe98fV5
- hxjw==
-X-Gm-Message-State: AOAM532z3wQCOw4YINdWwm6Xp8m5XGsvFZ1O+CuUImjygMcaCHxfYZMH
- 0hTvTTiEmeiuCPOl9jagWawbMhO5XdY=
-X-Google-Smtp-Source: ABdhPJyBalWSK/XUuS/30hG92LShiePOiPIAvhFyTAZmSOuTfF4LAs3Qr7Xti/ftvCJ7FRTtEXhfOQ==
-X-Received: by 2002:a17:906:32cf:: with SMTP id
- k15mr17216383ejk.68.1630996672271; 
- Mon, 06 Sep 2021 23:37:52 -0700 (PDT)
-Received: from dell.be.48ers.dk (d51A5BC31.access.telenet.be. [81.165.188.49])
- by smtp.gmail.com with ESMTPSA id
- d22sm4960501ejk.5.2021.09.06.23.37.51
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 06 Sep 2021 23:37:51 -0700 (PDT)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
- (envelope-from <peter@korsgaard.com>)
- id 1mNUjv-0001Wi-6h; Tue, 07 Sep 2021 08:37:51 +0200
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ytFKwpih_EFF for <buildroot@lists.busybox.net>;
+ Tue,  7 Sep 2021 06:38:06 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 79F3D80C68
+ for <buildroot@buildroot.org>; Tue,  7 Sep 2021 06:38:06 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 606C288776; Tue,  7 Sep 2021 06:36:38 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20210824195006.185258-1-fontaine.fabrice@gmail.com>
-Date: Tue, 07 Sep 2021 08:37:51 +0200
-In-Reply-To: <20210824195006.185258-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Tue, 24 Aug 2021 21:50:06 +0200")
-Message-ID: <875yvchow0.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/libarchive: security bump to
- version 3.5.2
+To: buildroot@buildroot.org
+Date: Tue, 7 Sep 2021 08:07:14 +0200
+X-Git-Refname: refs/heads/2021.05.x
+X-Git-Oldrev: 2340037e7365008e78d773ea8480316e9eada637
+X-Git-Newrev: 1fedc1e379241b2251fc82a00ca4c96bc8d4961c
+X-Patchwork-Hint: ignore
+Message-Id: <20210907063638.606C288776@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.05.x] package/localedef: bump
+ to version 2.32-50-g737efa27 to match glibc
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,25 +65,68 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: Pierre-Jean Texier <texier.pj2@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=1fedc1e379241b2251fc82a00ca4c96bc8d4961c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
 
- > Fix CVE-2021-36976: libarchive 3.4.1 through 3.5.1 has a use-after-free
- > in copy_string (called from do_uncompress_block and process_block).
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ .../0001-HACK-only-build-and-install-localedef.patch                    | 0
+ .../0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch      | 0
+ .../0003-Fix-GCC-11-Warray-parameter-warning-for-__sigsetjmp-.patch     | 0
+ .../0004-Avoid-Wstringop-overflow-warning-in-pthread_cleanup_.patch     | 0
+ .../localedef.hash                                                      | 2 +-
+ package/localedef/localedef.mk                                          | 2 +-
+ 6 files changed, 2 insertions(+), 2 deletions(-)
 
- > https://github.com/libarchive/libarchive/releases/tag/v3.5.2
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Committed to 2021.02.x and 2021.05.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/localedef/2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2/0001-HACK-only-build-and-install-localedef.patch b/package/localedef/2.32-50-g737efa27fca5c97f566a2005687fda7d6659cd2e/0001-HACK-only-build-and-install-localedef.patch
+similarity index 100%
+rename from package/localedef/2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2/0001-HACK-only-build-and-install-localedef.patch
+rename to package/localedef/2.32-50-g737efa27fca5c97f566a2005687fda7d6659cd2e/0001-HACK-only-build-and-install-localedef.patch
+diff --git a/package/localedef/2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch b/package/localedef/2.32-50-g737efa27fca5c97f566a2005687fda7d6659cd2e/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch
+similarity index 100%
+rename from package/localedef/2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch
+rename to package/localedef/2.32-50-g737efa27fca5c97f566a2005687fda7d6659cd2e/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch
+diff --git a/package/localedef/2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2/0003-Fix-GCC-11-Warray-parameter-warning-for-__sigsetjmp-.patch b/package/localedef/2.32-50-g737efa27fca5c97f566a2005687fda7d6659cd2e/0003-Fix-GCC-11-Warray-parameter-warning-for-__sigsetjmp-.patch
+similarity index 100%
+rename from package/localedef/2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2/0003-Fix-GCC-11-Warray-parameter-warning-for-__sigsetjmp-.patch
+rename to package/localedef/2.32-50-g737efa27fca5c97f566a2005687fda7d6659cd2e/0003-Fix-GCC-11-Warray-parameter-warning-for-__sigsetjmp-.patch
+diff --git a/package/localedef/2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2/0004-Avoid-Wstringop-overflow-warning-in-pthread_cleanup_.patch b/package/localedef/2.32-50-g737efa27fca5c97f566a2005687fda7d6659cd2e/0004-Avoid-Wstringop-overflow-warning-in-pthread_cleanup_.patch
+similarity index 100%
+rename from package/localedef/2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2/0004-Avoid-Wstringop-overflow-warning-in-pthread_cleanup_.patch
+rename to package/localedef/2.32-50-g737efa27fca5c97f566a2005687fda7d6659cd2e/0004-Avoid-Wstringop-overflow-warning-in-pthread_cleanup_.patch
+diff --git a/package/localedef/2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2/localedef.hash b/package/localedef/2.32-50-g737efa27fca5c97f566a2005687fda7d6659cd2e/localedef.hash
+similarity index 70%
+rename from package/localedef/2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2/localedef.hash
+rename to package/localedef/2.32-50-g737efa27fca5c97f566a2005687fda7d6659cd2e/localedef.hash
+index b1d5243fcc..5e00ef7c04 100644
+--- a/package/localedef/2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2/localedef.hash
++++ b/package/localedef/2.32-50-g737efa27fca5c97f566a2005687fda7d6659cd2e/localedef.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated (fetched from Github)
+-sha256  f4710e9a435a7b83e1d23dd75434f0d36b898eba9b4249c946c32b467d852fd4  glibc-2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2.tar.gz
++sha256  b634d38ace90752eeecb93246d71c0673bab0db8dfbd69333479ae7b10d63410  glibc-2.32-50-g737efa27fca5c97f566a2005687fda7d6659cd2e.tar.gz
+ 
+ # Hashes for license files
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/localedef/localedef.mk b/package/localedef/localedef.mk
+index 57ab5a3458..4768066f6a 100644
+--- a/package/localedef/localedef.mk
++++ b/package/localedef/localedef.mk
+@@ -7,7 +7,7 @@
+ # Use the same VERSION and SITE as target glibc
+ # As in glibc.mk, generate version string using:
+ #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
+-LOCALEDEF_VERSION = 2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2
++LOCALEDEF_VERSION = 2.32-50-g737efa27fca5c97f566a2005687fda7d6659cd2e
+ LOCALEDEF_SOURCE = glibc-$(LOCALEDEF_VERSION).tar.gz
+ LOCALEDEF_SITE = $(call github,bminor,glibc,$(LOCALEDEF_VERSION))
+ HOST_LOCALEDEF_DL_SUBDIR = glibc
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
