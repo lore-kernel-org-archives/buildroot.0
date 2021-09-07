@@ -2,57 +2,57 @@ Return-Path: <SRS0=M9Dx=N5=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B2F3C433F5
-	for <buildroot@archiver.kernel.org>; Tue,  7 Sep 2021 13:01:35 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0BE91C433F5
+	for <buildroot@archiver.kernel.org>; Tue,  7 Sep 2021 13:01:47 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id CA2AE61057
-	for <buildroot@archiver.kernel.org>; Tue,  7 Sep 2021 13:01:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org CA2AE61057
+	by mail.kernel.org (Postfix) with ESMTPS id D44FC61052
+	for <buildroot@archiver.kernel.org>; Tue,  7 Sep 2021 13:01:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D44FC61052
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9392F404CA;
-	Tue,  7 Sep 2021 13:01:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AB471828F2;
+	Tue,  7 Sep 2021 13:01:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id K3bTRdVHY4pn; Tue,  7 Sep 2021 13:01:33 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id frUcD0a1cCW7; Tue,  7 Sep 2021 13:01:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7BF1740252;
-	Tue,  7 Sep 2021 13:01:32 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8BC0C1BF334
+	by smtp1.osuosl.org (Postfix) with ESMTP id EA44981DBF;
+	Tue,  7 Sep 2021 13:01:44 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 9F3191BF995
  for <buildroot@lists.busybox.net>; Tue,  7 Sep 2021 13:01:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7C2CE60663
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9CF0280CB7
  for <buildroot@lists.busybox.net>; Tue,  7 Sep 2021 13:01:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QvOeFYL3pdIU for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4p8AiLwkhmMv for <buildroot@lists.busybox.net>;
  Tue,  7 Sep 2021 13:01:02 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id BBFF060635
+ by smtp1.osuosl.org (Postfix) with ESMTP id C62DE828F2
  for <buildroot@buildroot.org>; Tue,  7 Sep 2021 13:01:02 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 1385C8880E; Tue,  7 Sep 2021 12:59:34 +0000 (UTC)
+ id 1E3B58880F; Tue,  7 Sep 2021 12:59:34 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 7 Sep 2021 14:39:39 +0200
+Date: Tue, 7 Sep 2021 14:59:09 +0200
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 4c787fb093a6014bf68da7f08ea914c10b52c7f1
-X-Git-Newrev: 4a6066128057d702c35602aceb84b2bec988055b
+X-Git-Oldrev: 4a6066128057d702c35602aceb84b2bec988055b
+X-Git-Newrev: 83b14eb433896a588885d449d546a8437cf6b4cc
 X-Patchwork-Hint: ignore
-Message-Id: <20210907125934.1385C8880E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/coreutils:
- Prevent overwriting of fakedate
+Message-Id: <20210907125934.1E3B58880F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] support/testing:
+ test_atf: bump the custom version to v2.5
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,69 +71,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4a6066128057d702c35602aceb84b2bec988055b
+commit: https://git.buildroot.net/buildroot/commit/?id=83b14eb433896a588885d449d546a8437cf6b4cc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-When BR2_REPRODUCIBLE is set and host-coreutils needs to be built, the
-fakedate script installed to 'host/bin/date' will be overwritten by
-host-coreutils.
+This version bump is needed to pass the ATF test with
+hardening option enabled (-fstack-protector-strong)
 
-Besides, we do not need our host-coreutils for 'date' at all; we really
-rely on the host system to provide it.
+With the version v2.2, ATF fail due to undefined references:
 
-Unconditionally disable installing the 'date' binary in host-coreutils.
+./build/juno/release/bl2u/arm_tzc400.o: In function `arm_tzc400_setup':
+arm_tzc400.c:(.text.arm_tzc400_setup+0x10): undefined reference to `__stack_chk_guard'
+arm_tzc400.c:(.text.arm_tzc400_setup+0x18): undefined reference to `__stack_chk_guard'
+arm_tzc400.c:(.text.arm_tzc400_setup+0xb8): undefined reference to `__stack_chk_guard'
+arm_tzc400.c:(.text.arm_tzc400_setup+0xcc): undefined reference to `__stack_chk_fail'
 
-Note that we explicitly request only ln and realpath to be installed,
-but the coreutils buildsystem does not strictly obey to that, as was
-already noticed in 885e6fdb8a40 (package/coreutils: introduce a host
-variant), which added that comment above HOST_COREUTILS_CONF_OPTS:
+Since commit ccac9a5bbbd7374187a0f0017101ece0c202851d, Buildroot no
+longer forces ENABLE_STACK_PROTECTOR. However, we rely on the ATF build
+system to handle it correctly, and this wasn't the case in v2.2.
 
-    # Explicitly install ln and realpath, which we *are* insterested in.
-    # A lot of other programs still get installed, however, but disabling
-    # them does not gain much at build time, and is a loooong list that is
-    # difficult to maintain...
+Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/1524842591
 
-So, we also update that comment to explain why we still anyway disable
-installation of 'date'.
-
-Signed-off-by: Conrad Ratschan <conrad.ratschan@collins.com>
-[yann.morin.1998@free.fr:
-  - unconditionally disable installing date
-  - extend comment and commit log to explain why we need
-    --enable-no-install-program=date despite the existing
-    --enable-install-program=ln,realpath
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit bdf792910945f287beda6d9262492f1910646a61)
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit e5494f1fac12744217784c331b1ba3c28f319567)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/coreutils/coreutils.mk | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ support/testing/tests/boot/test_atf.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
-index 65234a113e..3ec3c847c2 100644
---- a/package/coreutils/coreutils.mk
-+++ b/package/coreutils/coreutils.mk
-@@ -154,7 +154,8 @@ COREUTILS_POST_INSTALL_TARGET_HOOKS += COREUTILS_FIX_CHROOT_LOCATION
- # Explicitly install ln and realpath, which we *are* insterested in.
- # A lot of other programs still get installed, however, but disabling
- # them does not gain much at build time, and is a loooong list that is
--# difficult to maintain...
-+# difficult to maintain... Just avoid overwriting fakedate when creating
-+# a reproducible build
- HOST_COREUTILS_CONF_OPTS = \
- 	--disable-acl \
- 	--disable-libcap \
-@@ -162,7 +163,8 @@ HOST_COREUTILS_CONF_OPTS = \
- 	--disable-single-binary \
- 	--disable-xattr \
- 	--without-gmp \
--	--enable-install-program=ln,realpath
-+	--enable-install-program=ln,realpath \
-+	--enable-no-install-program=date
- 
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+diff --git a/support/testing/tests/boot/test_atf.py b/support/testing/tests/boot/test_atf.py
+index e6c11aa742..a6ef676182 100644
+--- a/support/testing/tests/boot/test_atf.py
++++ b/support/testing/tests/boot/test_atf.py
+@@ -10,7 +10,7 @@ class TestATFVexpress(infra.basetest.BRTest):
+         BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+         BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
+         BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/ARM-software/arm-trusted-firmware.git"
+-        BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="v2.2"
++        BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="v2.5"
+         BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="juno"
+         BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
+         BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33=y
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
