@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 99164C433EF
-	for <buildroot@archiver.kernel.org>; Tue,  7 Sep 2021 06:38:36 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9717CC433EF
+	for <buildroot@archiver.kernel.org>; Tue,  7 Sep 2021 06:38:48 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 5940F61102
-	for <buildroot@archiver.kernel.org>; Tue,  7 Sep 2021 06:38:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5940F61102
+	by mail.kernel.org (Postfix) with ESMTPS id 40B8460232
+	for <buildroot@archiver.kernel.org>; Tue,  7 Sep 2021 06:38:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 40B8460232
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2A51C40239;
-	Tue,  7 Sep 2021 06:38:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 19B5F606F3;
+	Tue,  7 Sep 2021 06:38:48 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 5F2AD5x3K6Sx; Tue,  7 Sep 2021 06:38:47 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5E698600C5;
+	Tue,  7 Sep 2021 06:38:46 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id AA4571BF2A5
+ for <buildroot@lists.busybox.net>; Tue,  7 Sep 2021 06:38:09 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9A29B40624
+ for <buildroot@lists.busybox.net>; Tue,  7 Sep 2021 06:38:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id L2ZoMEVsdoeI; Tue,  7 Sep 2021 06:38:35 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 778A7401E8;
-	Tue,  7 Sep 2021 06:38:34 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id EBA6F1BF2A5
- for <buildroot@lists.busybox.net>; Tue,  7 Sep 2021 06:38:08 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E42EC404C0
- for <buildroot@lists.busybox.net>; Tue,  7 Sep 2021 06:38:08 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OM7SDKF-dBNQ for <buildroot@lists.busybox.net>;
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3Px-WgKtUb5X for <buildroot@lists.busybox.net>;
  Tue,  7 Sep 2021 06:38:06 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9CE1C404BD
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8896F40604
  for <buildroot@buildroot.org>; Tue,  7 Sep 2021 06:38:06 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 8BE7C88789; Tue,  7 Sep 2021 06:36:38 +0000 (UTC)
+ id 764498878A; Tue,  7 Sep 2021 06:36:38 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 7 Sep 2021 08:37:40 +0200
+Date: Tue, 7 Sep 2021 08:34:56 +0200
 X-Git-Refname: refs/heads/2021.05.x
-X-Git-Oldrev: b4389c3282243286d85fbb9ea8f416bb030d278a
-X-Git-Newrev: cab433a1424c84191537b66e5e026f7106d64c44
+X-Git-Oldrev: 7743eab6bdf723845fb197ccae2133a5ac7474e0
+X-Git-Newrev: ab962d86a7af602e470e81a194eb18e60bae7dc8
 X-Patchwork-Hint: ignore
-Message-Id: <20210907063638.8BE7C88789@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.05.x] package/libarchive:
- security bump to version 3.5.2
+Message-Id: <20210907063638.764498878A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.05.x] package/linux-pam: find
+ libxcrypt through pkg-config
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,47 +71,86 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cab433a1424c84191537b66e5e026f7106d64c44
+commit: https://git.buildroot.net/buildroot/commit/?id=ab962d86a7af602e470e81a194eb18e60bae7dc8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
 
-Fix CVE-2021-36976: libarchive 3.4.1 through 3.5.1 has a use-after-free
-in copy_string (called from do_uncompress_block and process_block).
+Find libxcryt through pkg-config to avoid the following build failure:
 
-https://github.com/libarchive/libarchive/releases/tag/v3.5.2
+/home/buildroot/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/riscv64-buildroot-linux-musl/10.2.0/../../../../riscv64-buildroot-linux-musl/bin/ld: .libs/passverify.o: in function `.L30':
+passverify.c:(.text+0x368): undefined reference to `crypt_checksalt'
+
+Fixes:
+ - http://autobuild.buildroot.org/results/20b14e222b35c2d1269960075832b784ba81aa1a
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit a223dd4aef256bf1c63881353399e4a18f7c43bc)
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 2962697039c72583d1e57e2b61b6281896f5b761)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libarchive/libarchive.hash | 2 +-
- package/libarchive/libarchive.mk   | 3 ++-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ ...c-also-search-libcrypt-through-pkg-config.patch | 55 ++++++++++++++++++++++
+ 1 file changed, 55 insertions(+)
 
-diff --git a/package/libarchive/libarchive.hash b/package/libarchive/libarchive.hash
-index bf0d6e4fdd..d31e9f55f4 100644
---- a/package/libarchive/libarchive.hash
-+++ b/package/libarchive/libarchive.hash
-@@ -1,4 +1,4 @@
- # From https://www.libarchive.de/downloads/sha256sums
--sha256  9015d109ec00bb9ae1a384b172bf2fc1dff41e2c66e5a9eeddf933af9db37f5a  libarchive-3.5.1.tar.gz
-+sha256  f0b19ff39c3c9a5898a219497ababbadab99d8178acc980155c7e1271089b5a0  libarchive-3.5.2.tar.xz
- # Locally computed:
- sha256  b2cdf763345de2de34cebf54394df3c61a105c3b71288603c251f2fa638200ba  COPYING
-diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
-index 9cc69fd45a..eec256ba75 100644
---- a/package/libarchive/libarchive.mk
-+++ b/package/libarchive/libarchive.mk
-@@ -4,7 +4,8 @@
- #
- ################################################################################
- 
--LIBARCHIVE_VERSION = 3.5.1
-+LIBARCHIVE_VERSION = 3.5.2
-+LIBARCHIVE_SOURCE = libarchive-$(LIBARCHIVE_VERSION).tar.xz
- LIBARCHIVE_SITE = https://www.libarchive.de/downloads
- LIBARCHIVE_INSTALL_STAGING = YES
- LIBARCHIVE_LICENSE = BSD-2-Clause, BSD-3-Clause, CC0-1.0, OpenSSL, Apache-2.0
+diff --git a/package/linux-pam/0004-configure.ac-also-search-libcrypt-through-pkg-config.patch b/package/linux-pam/0004-configure.ac-also-search-libcrypt-through-pkg-config.patch
+new file mode 100644
+index 0000000000..09b86902bb
+--- /dev/null
++++ b/package/linux-pam/0004-configure.ac-also-search-libcrypt-through-pkg-config.patch
+@@ -0,0 +1,55 @@
++From 49e3ffcbe267691dfbf24c91417aa296e7412146 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 29 Aug 2021 21:15:57 +0200
++Subject: [PATCH] configure.ac: also search libcrypt through pkg-config
++
++libxcrypt provides a libcrypt.pc file so use it if available as this
++will allow to retrieve the library path (e.g.
++-L/home/buildroot/output/host//riscv64-buildroot-linux-musl/sysroot/usr/lib)
++which is useful when cross-compiling and will avoid the following build
++failure on buildroot:
++
++/home/buildroot/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/riscv64-buildroot-linux-musl/10.2.0/../../../../riscv64-buildroot-linux-musl/bin/ld: .libs/passverify.o: in function `.L30':
++passverify.c:(.text+0x368): undefined reference to `crypt_checksalt'
++
++Fixes:
++ - http://autobuild.buildroot.org/results/20b14e222b35c2d1269960075832b784ba81aa1a
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/linux-pam/linux-pam/commit/49e3ffcbe267691dfbf24c91417aa296e7412146]
++---
++ configure.ac | 13 ++++++++++---
++ 1 file changed, 10 insertions(+), 3 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index d464884c..c06bc7dd 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -363,8 +363,14 @@ AC_CHECK_HEADERS(crypt.h)
++ 
++ BACKUP_LIBS=$LIBS
++ LIBCRYPT=""
++-AC_SEARCH_LIBS([crypt_gensalt_rn],[crypt])
++-case "$ac_cv_search_crypt_gensalt_rn" in
+++PKG_CHECK_MODULES([CRYPT], [libcrypt], [
+++  CFLAGS="$CFLAGS $CRYPT_CFLAGS"
+++  CPPFLAGS="$CPPFLAGS $CRYPT_CFLAGS"
+++  LIBS="$LIBS $CRYPT_LIBS"
+++  LIBCRYPT="$CRYPT_LIBS"
+++], [
+++  AC_SEARCH_LIBS([crypt_gensalt_rn],[crypt])
+++  case "$ac_cv_search_crypt_gensalt_rn" in
++ 	-l*) LIBCRYPT="$ac_cv_search_crypt_gensalt_rn" ;;
++ 	no) AC_SEARCH_LIBS([crypt_r],[crypt])
++ 		case "$ac_cv_search_crypt_r" in
++@@ -374,7 +380,8 @@ case "$ac_cv_search_crypt_gensalt_rn" in
++ 			-l*) LIBCRYPT="$ac_cv_search_crypt" ;;
++ 		esac ;;
++ 	esac ;;
++-esac
+++  esac
+++])
++ AC_CHECK_FUNCS([crypt_r])
++ LIBS=$BACKUP_LIBS
++ AC_SUBST(LIBCRYPT)
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
