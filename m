@@ -7,90 +7,92 @@ X-Spam-Status: No, score=-8.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C448EC433F5
-	for <buildroot@archiver.kernel.org>; Tue,  7 Sep 2021 13:54:22 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 595BAC433EF
+	for <buildroot@archiver.kernel.org>; Tue,  7 Sep 2021 13:54:34 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 24A4F61104
-	for <buildroot@archiver.kernel.org>; Tue,  7 Sep 2021 13:54:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 24A4F61104
+	by mail.kernel.org (Postfix) with ESMTPS id C5FE361101
+	for <buildroot@archiver.kernel.org>; Tue,  7 Sep 2021 13:54:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C5FE361101
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 02691605DB;
-	Tue,  7 Sep 2021 13:54:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9440080ED9;
+	Tue,  7 Sep 2021 13:54:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0xbvurWwMeDx; Tue,  7 Sep 2021 13:54:21 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Df3F8aySLo2S; Tue,  7 Sep 2021 13:54:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 52E4060767;
-	Tue,  7 Sep 2021 13:54:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F211C80ED7;
+	Tue,  7 Sep 2021 13:54:31 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6EA711BF2CC
- for <buildroot@lists.busybox.net>; Tue,  7 Sep 2021 13:54:13 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id EB0F81BF2CC
+ for <buildroot@lists.busybox.net>; Tue,  7 Sep 2021 13:54:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5E527605C4
- for <buildroot@lists.busybox.net>; Tue,  7 Sep 2021 13:54:13 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id DB41460767
+ for <buildroot@lists.busybox.net>; Tue,  7 Sep 2021 13:54:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vRsCoP6ar_V7 for <buildroot@lists.busybox.net>;
- Tue,  7 Sep 2021 13:54:12 +0000 (UTC)
+ with ESMTP id zQKoh9diTp2z for <buildroot@lists.busybox.net>;
+ Tue,  7 Sep 2021 13:54:19 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
 Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com
  [IPv6:2a00:1450:4864:20::529])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7E8D0605BD
- for <buildroot@buildroot.org>; Tue,  7 Sep 2021 13:54:12 +0000 (UTC)
-Received: by mail-ed1-x529.google.com with SMTP id q3so14059300edt.5
- for <buildroot@buildroot.org>; Tue, 07 Sep 2021 06:54:12 -0700 (PDT)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1A2D0600C9
+ for <buildroot@buildroot.org>; Tue,  7 Sep 2021 13:54:18 +0000 (UTC)
+Received: by mail-ed1-x529.google.com with SMTP id g22so14024053edy.12
+ for <buildroot@buildroot.org>; Tue, 07 Sep 2021 06:54:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=sender:from:to:cc:subject:references:date:in-reply-to:message-id
  :user-agent:mime-version;
- bh=dpZATinoYeNIMCaYAlhel6ebCmC2DveFR+5CRaenK3o=;
- b=hEptoEHFbqiOwIbGaXTnhdBHmjaVS1OIUrw5uWImwRE/nYjcB7Dmty7O5ovUbFPwpi
- KfRYQCtf/V8Dczv+eLa/YX9NTqPu65QW5jWpvApd3P1kpizZAGKKTv1gKVxcn3ulI5L3
- YHsLFE659gBQ3kPYo9OPz9ExCgY1Nsm4iQCwWt9Dgo323KuMCL8jJLi7XtDUzpG/E7B4
- 2i6FcmZB+DqP4GRVVtKTA7ueWp6fSlBahzs5WCFS7EC93SL3SkDM9E078wfi1ZYO6Wqu
- OGUtfH9c8DMEVt76PQVSl2v6xhq7Apm9yiD+1Avvb7L9vmmzjBABf6nPQZKewxtCJHS1
- pB3w==
+ bh=BjLRT1b2ON+LayR5jv11JMbp01+mmnTFM8bIpOx8Orw=;
+ b=mZJRvyB63VuJ3AvxelDbgbUN3aSAC0NJXl3kP+PRTBMj/iLCfjnVA2gJRiW8nZerHR
+ wC/5QIEU4zCJwrnXT284Mlh+Bj+ZlY5+QADOsgBkSG0WvOqWOxngZTDKh2296gj5ZlKS
+ 8D0kDmoK9IMpjiDwCKSLOoB7fo6UTrBdQ1VW2+l245DVUtspli9KPQzu8QrlGOnCRcxp
+ yK7LZq7nhm5Kq5K+ikaW3ZJzhm2nnsl3ealyTspdJMYhP0wAyGlhY8gHPlFfCU9lji8u
+ wNbSanPTe/VVxB+F16j8eZqMpDsfXLnRvvTHlz1gJrMQ2pJXGXi+1TMaQFiNUn3b3VHE
+ j0BQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:sender:from:to:cc:subject:references:date
  :in-reply-to:message-id:user-agent:mime-version;
- bh=dpZATinoYeNIMCaYAlhel6ebCmC2DveFR+5CRaenK3o=;
- b=giolgMAjK9Dp0gswhYxeFGiNEmfAJenKVk99rDH491axLSL3CKt6aHowpoIruPSMVs
- ckV4IuBdyE7ofosNLjSfa4mF/uEdatJxFxZlyJ8hQMu1ZkWvutQm4GGHSa1qi1jLfbdv
- CcbA+iWrD17DCuSl0PnONaHzksmFboGrZ/sDPUhRRB7wCiML9zyeLqCnzLYa3H1mbYS+
- 8Fy3toNh7AJw8qRvrZmBwce0WXXdI7YzIxSeFu5Jr6ttNg4y7ah/x9+T7NxIifFoJ9m3
- MDw+X8haQkuMRxSOARJ9xxLmxP3USudiVearHh8X12UwbChVWqP0yxc6zpuAjN49k3V/
- g6Ew==
-X-Gm-Message-State: AOAM530zgFjrojfhoLZvEipOdPkusThp1pAZYjp5WgQYTbylXpK4ayE1
- BF4zRHCagv/JotyE+hUq0UI=
-X-Google-Smtp-Source: ABdhPJwBXYm5BFX2BOMxFWjfJQ+GdjD7NaF+yrmbsH/PtKwF33GnFFLLcXtJPpoKsjOo2uVThB9TAw==
-X-Received: by 2002:aa7:d818:: with SMTP id v24mr18804635edq.197.1631022850629; 
- Tue, 07 Sep 2021 06:54:10 -0700 (PDT)
+ bh=BjLRT1b2ON+LayR5jv11JMbp01+mmnTFM8bIpOx8Orw=;
+ b=R0Bx7aNTcdrQ/GFIfCL9FCX4G4jxbIlE6Y8HERpEQWwA7FLpXIfhHYsiSzVkGd53C5
+ oIG99Q8n/ZhEphXtD+QdTf8lx3UkY8zjuswVEJ5IejSX9zgwsMZJ3w6muhPVvQT2tG5l
+ 0oaPji+nbltLN2qWYr6PgpzRON1A4y8g+qLhGZaEWAC0c9cnS8RAMFO/L83wBIPhLYTq
+ 9OYeuydp/SOgon2fJQDAkHLPZyvp/+HpbpxqAOtBZWq8+Mt7Uv/A3XKsWX3vzJcolYmv
+ 94FEAD0n2BGoRg7yCKKYiJGjM83vNKSsyzG658RSQVIExN+9IdMXWFEr6o4ZZyBkv9iT
+ 0/pA==
+X-Gm-Message-State: AOAM5325znACi3+HpDsNo6Ok/bP+hJfFd3vPMKbM2t4h6CMB1WIsIopK
+ 7fHTNbCsCIqrj75OlUstfOQ=
+X-Google-Smtp-Source: ABdhPJzEy942LkCJ32xMesiAFFdCQn104qvGxO1k3koA8eUJbK01xKckjRVxNgebn8o5d6hl9Ucoqg==
+X-Received: by 2002:a05:6402:1642:: with SMTP id
+ s2mr18495623edx.135.1631022857396; 
+ Tue, 07 Sep 2021 06:54:17 -0700 (PDT)
 Received: from dell.be.48ers.dk (d51A5BC31.access.telenet.be. [81.165.188.49])
  by smtp.gmail.com with ESMTPSA id
- v12sm6602914ede.16.2021.09.07.06.54.09
+ h22sm5509753eji.112.2021.09.07.06.54.16
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 07 Sep 2021 06:54:10 -0700 (PDT)
+ Tue, 07 Sep 2021 06:54:16 -0700 (PDT)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
  (envelope-from <peter@korsgaard.com>)
- id 1mNbY9-0003cn-GB; Tue, 07 Sep 2021 15:54:09 +0200
+ id 1mNbYG-0003cy-6C; Tue, 07 Sep 2021 15:54:16 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 References: <20210828150604.946236-1-fontaine.fabrice@gmail.com>
- <20210828150604.946236-2-fontaine.fabrice@gmail.com>
-Date: Tue, 07 Sep 2021 15:54:09 +0200
-In-Reply-To: <20210828150604.946236-2-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 28 Aug 2021 17:06:03 +0200")
-Message-ID: <87czpkebjy.fsf@dell.be.48ers.dk>
+ <20210828150604.946236-3-fontaine.fabrice@gmail.com>
+Date: Tue, 07 Sep 2021 15:54:16 +0200
+In-Reply-To: <20210828150604.946236-3-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 28 Aug 2021 17:06:04 +0200")
+Message-ID: <878s08ebjr.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 2/3] package/c-ares: fix build with latest
- nodejs
+Subject: Re: [Buildroot] [PATCH 3/3] package/c-ares: add C_ARES_CPE_ID_VENDOR
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -111,15 +113,10 @@ Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Fix the following build failure with nodejs raised since bump to version
- > 12.22.5 in commit 7038b029d8c8774eca6d7888d6642d7e84ff5165:
+ > cpe:2.3:a:c-ares_project:c-ares is a valid CPE identifier for this
+ > package:
 
- > ../src/cares_wrap.cc:42:11: fatal error: ares_nameser.h: No such file or directory
- >    42 | # include <ares_nameser.h>
- >       |           ^~~~~~~~~~~~~~~~
-
- > Fixes:
- >  - http://autobuild.buildroot.org/results/a0f867d5e765fc1aa052de5e53ed350b3b20743f
+ >   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Ac-ares_project%3Ac-ares
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
