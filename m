@@ -2,95 +2,57 @@ Return-Path: <SRS0=M9Dx=N5=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 66775C433F5
-	for <buildroot@archiver.kernel.org>; Tue,  7 Sep 2021 20:49:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AC458C433F5
+	for <buildroot@archiver.kernel.org>; Tue,  7 Sep 2021 20:50:05 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 8113D61051
-	for <buildroot@archiver.kernel.org>; Tue,  7 Sep 2021 20:49:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8113D61051
+	by mail.kernel.org (Postfix) with ESMTPS id 0A14B60F23
+	for <buildroot@archiver.kernel.org>; Tue,  7 Sep 2021 20:50:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0A14B60F23
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 29C3680E26;
-	Tue,  7 Sep 2021 20:49:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D60C282C3C;
+	Tue,  7 Sep 2021 20:50:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id I7xu2X_TexUQ; Tue,  7 Sep 2021 20:49:52 +0000 (UTC)
+	with ESMTP id Vg6g20_i1Cjh; Tue,  7 Sep 2021 20:50:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7742380E48;
-	Tue,  7 Sep 2021 20:49:51 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 342301BF332
- for <buildroot@lists.busybox.net>; Tue,  7 Sep 2021 20:49:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3020082C3B;
+	Tue,  7 Sep 2021 20:50:03 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id EA2551BF995
+ for <buildroot@lists.busybox.net>; Tue,  7 Sep 2021 20:49:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 308F480F3A
- for <buildroot@lists.busybox.net>; Tue,  7 Sep 2021 20:49:50 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E618C60797
+ for <buildroot@lists.busybox.net>; Tue,  7 Sep 2021 20:49:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xbwHZUvx8mPX for <buildroot@lists.busybox.net>;
- Tue,  7 Sep 2021 20:49:49 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com
- [IPv6:2a00:1450:4864:20::62d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id F237680E48
- for <buildroot@buildroot.org>; Tue,  7 Sep 2021 20:49:48 +0000 (UTC)
-Received: by mail-ej1-x62d.google.com with SMTP id mf2so737056ejb.9
- for <buildroot@buildroot.org>; Tue, 07 Sep 2021 13:49:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=sender:from:to:cc:subject:references:date:in-reply-to:message-id
- :user-agent:mime-version;
- bh=J58H9qPuBUJZgJAymmcF6xoHTWeKdpFYtW+H39dHsG4=;
- b=SjiE/k6QJxv/JVtsHO7WMygotnqjGgPFe12msBhkqCiAJtfHNridsNe6/wxgZN2Hx2
- MKMOn7TxhkdO7QPO7OwOee35rP1jmb/uY9Q1d0gri703D8S7vnDVCDW4+eqdLxus6DDZ
- z0DmQwJglcsTdVvY3VAOynYqZNwVZNqFriR3VHpNkbHi1OedoA4YSs96KUksJZAiMZeG
- y5lJn4X1m8m5PO8w1le5DAEzFvL/t69VKxdUlzn3mQ02U7KCP0ZPpigA+NPMY8PSAv75
- 3f6r+tSmNUVBtxJZ47AsRp9fKmVcspwO2eTEjGfzHvauXu2NJSVRD1bYGw/SC8bZSL3C
- FPmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:sender:from:to:cc:subject:references:date
- :in-reply-to:message-id:user-agent:mime-version;
- bh=J58H9qPuBUJZgJAymmcF6xoHTWeKdpFYtW+H39dHsG4=;
- b=q4/J+siLJ7AvQoICNhF3e4go2Yh4eWtuiFUIpI4kHLdNJ7cCMys8z6m2nRT2PkyJ5+
- tdp+KiNlNZpVpheAv9TrmNAioTJ4OZtzFossB1Or8boqR+Miru/Yb/F1O4TGuRernlJ/
- HoFe1OvHQE7zPGUB6aTid6q3fUfugEWhPvzB0g9jkXMsspwycl13vEAnfq0f3EkcmQwI
- Ofo0a6dpVsW++idt34VGc+X3aKxGlqGsvEjs1XJe3fo/zkQdDZhYUV15+H7YLrLr7rxI
- 3TL4V0aUzXcTSISMwhDSmIm1ovoJPfSEqmtmkgsqtO7n3Fhg8Aujn2vaKRFtLggOAebP
- hCKw==
-X-Gm-Message-State: AOAM5336eBFMCRuE7c2fzMrmvz22LIICeqcbiIRAXM30FL56ADnxOpMS
- lSnuCWD0SzmyDJN16ZpRl7efBDwQjCM=
-X-Google-Smtp-Source: ABdhPJypUDYnoN7pGSfjFPOZZSF/hNmBFkl0l3lvB4M+uP6cLCvKWUJ/3kPwlCB2Ybs9AuGl4a2PYQ==
-X-Received: by 2002:a17:906:fa04:: with SMTP id
- lo4mr230895ejb.558.1631047787289; 
- Tue, 07 Sep 2021 13:49:47 -0700 (PDT)
-Received: from dell.be.48ers.dk (d51A5BC31.access.telenet.be. [81.165.188.49])
- by smtp.gmail.com with ESMTPSA id
- a18sm83822edj.52.2021.09.07.13.49.46
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 07 Sep 2021 13:49:46 -0700 (PDT)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
- (envelope-from <peter@korsgaard.com>)
- id 1mNi2L-0002VW-Nr; Tue, 07 Sep 2021 22:49:45 +0200
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id v7DQJe2YBoLY for <buildroot@lists.busybox.net>;
+ Tue,  7 Sep 2021 20:49:57 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2C7EC6078F
+ for <buildroot@buildroot.org>; Tue,  7 Sep 2021 20:49:57 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id B314E888EF; Tue,  7 Sep 2021 20:48:27 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Bernd Kuhls <bernd.kuhls@t-online.de>
-References: <20210828082531.585788-1-bernd.kuhls@t-online.de>
-Date: Tue, 07 Sep 2021 22:49:45 +0200
-In-Reply-To: <20210828082531.585788-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sat, 28 Aug 2021 10:25:31 +0200")
-Message-ID: <87tuiwcdqu.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/fetchmail: bump version to
- 6.4.21
+To: buildroot@buildroot.org
+Date: Tue, 7 Sep 2021 22:39:39 +0200
+X-Git-Refname: refs/heads/2021.05.x
+X-Git-Oldrev: 264a6526cbe0f0b55da30999463dc4720f997987
+X-Git-Newrev: 54e93da958d55f2054464037ad45c87acfd71509
+X-Patchwork-Hint: ignore
+Message-Id: <20210907204827.B314E888EF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.05.x] package/php: security
+ bump version to 7.4.23
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,30 +65,52 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=54e93da958d55f2054464037ad45c87acfd71509
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
 
- > Release notes:
- > https://sourceforge.net/p/fetchmail/mailman/message/37333073/
+Quoting https://www.php.net/
+"This is a security fix release."
 
- > "It contains the security fix for CVE-2021-36386 of 6.4.20, and fixes
- > a regression/a bug that causes log message truncation/run-together
- > prominently visible with --logfile that was introduced into 6.4.20."
+Changelog: https://www.php.net/ChangeLog-7.php#7.4.23
 
- > Updated note for CVE-2021-36386:
- > https://sourceforge.net/p/fetchmail/mailman/message/37333078/
+CVE-ID were not mentioned in any of the fixed bugs.
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Committed to 2021.02.x and 2021.05.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/php/php.hash b/package/php/php.hash
+index 2280b3f9b2..28ac6c5d68 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From https://www.php.net/downloads.php
+-sha256  8e078cd7d2f49ac3fcff902490a5bb1addc885e7e3b0d8dd068f42c68297bde8  php-7.4.22.tar.xz
++sha256  cea52313fcffe56343bcd3c66dbb23cd5507dc559cc2e3547cf8f5452e88a05d  php-7.4.23.tar.xz
+ 
+ # License file
+ sha256  a188db807d711536f71e27b7d36879d63480f7994dc18adc08e624b3c5430fff  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 41075b2f73..805030d88a 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PHP_VERSION = 7.4.22
++PHP_VERSION = 7.4.23
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
