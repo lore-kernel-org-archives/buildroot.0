@@ -8,85 +8,86 @@ X-Spam-Status: No, score=-18.5 required=3.0 tests=BAYES_00,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 873ABC433F5
-	for <buildroot@archiver.kernel.org>; Wed,  8 Sep 2021 16:43:09 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 76792C433F5
+	for <buildroot@archiver.kernel.org>; Wed,  8 Sep 2021 16:45:46 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 0391E61139
-	for <buildroot@archiver.kernel.org>; Wed,  8 Sep 2021 16:43:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0391E61139
+	by mail.kernel.org (Postfix) with ESMTPS id 1397961139
+	for <buildroot@archiver.kernel.org>; Wed,  8 Sep 2021 16:45:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1397961139
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 98CA383408;
-	Wed,  8 Sep 2021 16:43:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A246A40796;
+	Wed,  8 Sep 2021 16:45:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qgLET56Rg-Np; Wed,  8 Sep 2021 16:43:07 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id R33HTdTTOKIG; Wed,  8 Sep 2021 16:45:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EFFF4833A0;
-	Wed,  8 Sep 2021 16:43:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0834440781;
+	Wed,  8 Sep 2021 16:45:43 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E6A641BF3CA
- for <buildroot@lists.busybox.net>; Wed,  8 Sep 2021 16:43:04 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B7C111BF3CA
+ for <buildroot@lists.busybox.net>; Wed,  8 Sep 2021 16:45:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E3556833A0
- for <buildroot@lists.busybox.net>; Wed,  8 Sep 2021 16:43:04 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A586083415
+ for <buildroot@lists.busybox.net>; Wed,  8 Sep 2021 16:45:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ijyzfDRCgA5B for <buildroot@lists.busybox.net>;
- Wed,  8 Sep 2021 16:43:04 +0000 (UTC)
+ with ESMTP id Bs43nJrlfFB5 for <buildroot@lists.busybox.net>;
+ Wed,  8 Sep 2021 16:45:41 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
- [IPv6:2a00:1450:4864:20::32c])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 01CA18339C
- for <buildroot@buildroot.org>; Wed,  8 Sep 2021 16:43:03 +0000 (UTC)
-Received: by mail-wm1-x32c.google.com with SMTP id
- v20-20020a1cf714000000b002e71f4d2026so1578044wmh.1
- for <buildroot@buildroot.org>; Wed, 08 Sep 2021 09:43:03 -0700 (PDT)
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
+ [IPv6:2a00:1450:4864:20::331])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id AEB6083408
+ for <buildroot@buildroot.org>; Wed,  8 Sep 2021 16:45:41 +0000 (UTC)
+Received: by mail-wm1-x331.google.com with SMTP id
+ u15-20020a05600c19cf00b002f6445b8f55so2069897wmq.0
+ for <buildroot@buildroot.org>; Wed, 08 Sep 2021 09:45:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=GK4167ZMDnTtCoJ4dxzHRh/dl6DGsSBvVO7Xo6FEQyM=;
- b=mcTBqCgvSp1EGXFcOemIt11YZfgqlt1ZTnPRLPIpssxxNup0hcYejRWAkFNOY+UJxO
- v3Ru30EkXymfWTLUhWMglbaW8LYbc8mA3CmDEOpwYLIFeVdV8FaHSPKYsVDRAvMi5hy6
- kiZJP5pFkJQOhco/xLl7mhwvdsl29yKMpHgAtoxVT2Hswql8pbg0qytSn36bmPSWnAe2
- fnh6Hihl1B0Un1Py8o7dPJhPb6B5thYkY/y11nuf3CDfcxS5PKQR5dTny90LMLNHujuo
- dmIQliBA4NjPsrn6uNPIwUoNgKU+8LJy2T+lc0iguKuVdM20+5KEKo3Av+dt9J0cpALm
- juxA==
+ bh=mMwYmI/iQ4B3mLtwP1StD7vnVMw6BCZ7FlfIWYQWjKU=;
+ b=LDo82cGSJ0oQ3wYF7WtrLSak1cU94pbpN7BVM/gd6CZupsICSnc2RkraCeZ48Aa0x/
+ ObA14wfNAvG7bHya0kHMjLilIAAUUAqjKHFBdwdJIEL4EvSQPvufb5wA8WLxhdlrZ3qX
+ CamDhICEH/xOahYBQOt0WayyWV0RqvUr+K6hEC+oIS5RVf67rIKa6sre+ujwVgAQXRzk
+ CcACN/mPeiSNyiRVpRd9vNW1Z/HvJaNkBv1Bo5iUVZMToem/pC8jQD6xL6GsMnBNyrlK
+ bzckUS0JLUDg1ROoW9q27V3SS7IQrwJTtniIsaAUsCFrD8juV08hj6q5hBODQWrCl3g6
+ HNKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=GK4167ZMDnTtCoJ4dxzHRh/dl6DGsSBvVO7Xo6FEQyM=;
- b=OwT0MXQKKNcq93w+YFFMO2QrrZktXYsZlKZwrZR4ZZu5MiY6T08q+ujam7yLSDs1FQ
- rm12hkGuix9Us/EJZGqL2pbDcHawIXSAeAfVYAuM4DJmwPoouiH2ox/uJ5GN6frTwvFi
- QsI8Y3FmgGdlausP8+v3v8dCF7ew85DaXrPQBKtVA9FjIax6zrdbejTJpVHgAVUhPY8N
- tVG3aBlGd5Y70MAAhbpM8HkljKSst0D5vL43zSkj+31OSgflZwya4TWh5h7J7l9F2vcF
- dzRG4j8BnMFFL4Cy4QmvdMjC4x0k8YpoYqkfRq80zx3U0VEifKlNatrv6W1qhnxsrcub
- 7m8A==
-X-Gm-Message-State: AOAM533xM+XDE9PSfFu19IO9qkefYh4l3RMzaZzJUkFO91ojd7yJhXji
- xrmUtNQF309J0DbZThV7i8Rlm790efw=
-X-Google-Smtp-Source: ABdhPJxGU5E7V8//PIZyABbR8QdDSF1f6Kfe22kx2tL+4qltIGqO9fr+S17lGeEc1Ud6bjuEULJwfg==
-X-Received: by 2002:a05:600c:a05:: with SMTP id
- z5mr4460919wmp.73.1631119381986; 
- Wed, 08 Sep 2021 09:43:01 -0700 (PDT)
+ bh=mMwYmI/iQ4B3mLtwP1StD7vnVMw6BCZ7FlfIWYQWjKU=;
+ b=TDA9f41cJcOIIUJd38qeSp0aaWQWBkr2DVkLVS3ve9df/aUT6VGb+pIzbS9/sOcdWQ
+ 27SclVybWd080u4I96zIcwREo2jsXzxBMaUbY6Yk/ji/s9rXDW1ZGWnoOFYUgcggGP+8
+ SAv06+VAdaXOQNhwHTnU+AJEFUpN8EzFXTHX2chD6n68RQ0rO8H+Kt7oX9Nzohpual4b
+ Bd0zCTc+zECggxxdvaZ8Lec3OUhCPnjeuCwqHniWa3FS3KwO/lnwtDpnHN8MVQWA+84M
+ cegZW6e9mCxCiL5WjHOvdMH7hRpHkyOnAc5wqvl6qU9zRykREH98/GNSLyqE7OQIC8ev
+ FBKg==
+X-Gm-Message-State: AOAM530/Xj+PGvEBOBBdizEArEzRnszCAjDxp94JNcGSy4thKWB8uGzp
+ tx4hYg4r+X9/Y3NWToKfurKoyNey7lc=
+X-Google-Smtp-Source: ABdhPJywWX35VI1DsoatRrRrugSWWId7s5w+ykltiumyeT9iqdHLgmvEM4qbMQXVR/wVyd9PHn3EXA==
+X-Received: by 2002:a7b:c74d:: with SMTP id w13mr4389364wmk.149.1631119539647; 
+ Wed, 08 Sep 2021 09:45:39 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-2139-166.w92-167.abo.wanadoo.fr.
  [92.167.218.166])
- by smtp.gmail.com with ESMTPSA id s12sm2689359wru.41.2021.09.08.09.43.00
+ by smtp.gmail.com with ESMTPSA id f17sm2651319wmf.4.2021.09.08.09.45.39
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 08 Sep 2021 09:43:01 -0700 (PDT)
+ Wed, 08 Sep 2021 09:45:39 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed,  8 Sep 2021 18:42:24 +0200
-Message-Id: <20210908164224.474851-1-fontaine.fabrice@gmail.com>
+Date: Wed,  8 Sep 2021 18:45:36 +0200
+Message-Id: <20210908164536.474998-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/uboot-tools: fix MKIMAGE_ARCH
- handling
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/uboot-tools: fix MKIMAGE_ARCH handling
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -137,8 +138,8 @@ Invalid architecture, supported are:
 	x86_64           AMD x86_64
 	xtensa           Xtensa
 
-Strangely enough, we only have one build autobuilder failure even if
-or1k must be used since the addition of openriscv support in 2012:
+Strangely enough, we only have autobuilder failures since July 2021 even
+if or1k must be used since the addition of openriscv support in 2012:
 https://github.com/u-boot/u-boot/commit/3ddcaccda3824e1c7f7266d543e4c0eb3ea9851c
 
 Fixes:
@@ -146,6 +147,10 @@ Fixes:
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
+Changes v1 -> v2:
+ - Fix commit message to specify that autobuilder failures are raised
+   since July 2021
+
  package/uboot-tools/uboot-tools.mk | 14 +++++++-------
  1 file changed, 7 insertions(+), 7 deletions(-)
 
