@@ -8,84 +8,84 @@ X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F70BC433F5
-	for <buildroot@archiver.kernel.org>; Wed,  8 Sep 2021 08:21:23 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 58F51C433F5
+	for <buildroot@archiver.kernel.org>; Wed,  8 Sep 2021 08:21:35 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1C4A561131
-	for <buildroot@archiver.kernel.org>; Wed,  8 Sep 2021 08:21:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1C4A561131
+	by mail.kernel.org (Postfix) with ESMTPS id F106A61131
+	for <buildroot@archiver.kernel.org>; Wed,  8 Sep 2021 08:21:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org F106A61131
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E29EB406C0;
-	Wed,  8 Sep 2021 08:21:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9BCB282FE4;
+	Wed,  8 Sep 2021 08:21:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id w8Csff4FwKM2; Wed,  8 Sep 2021 08:21:22 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 7wUGqvh3VX9s; Wed,  8 Sep 2021 08:21:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4C3734052A;
-	Wed,  8 Sep 2021 08:21:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0DADC82FCE;
+	Wed,  8 Sep 2021 08:21:33 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id DAAC71BF5B4
- for <buildroot@lists.busybox.net>; Wed,  8 Sep 2021 08:21:19 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 35F6D1BF5B4
+ for <buildroot@lists.busybox.net>; Wed,  8 Sep 2021 08:21:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CA66A82FCE
- for <buildroot@lists.busybox.net>; Wed,  8 Sep 2021 08:21:19 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 25B4182FCE
+ for <buildroot@lists.busybox.net>; Wed,  8 Sep 2021 08:21:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rX8ciJ_nRwrl for <buildroot@lists.busybox.net>;
- Wed,  8 Sep 2021 08:21:19 +0000 (UTC)
+ with ESMTP id 1GxqJUJv_3wj for <buildroot@lists.busybox.net>;
+ Wed,  8 Sep 2021 08:21:20 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
- [IPv6:2a00:1450:4864:20::429])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 127C482F87
- for <buildroot@buildroot.org>; Wed,  8 Sep 2021 08:21:18 +0000 (UTC)
-Received: by mail-wr1-x429.google.com with SMTP id b6so1923219wrh.10
- for <buildroot@buildroot.org>; Wed, 08 Sep 2021 01:21:18 -0700 (PDT)
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
+ [IPv6:2a00:1450:4864:20::32a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6A63782F87
+ for <buildroot@buildroot.org>; Wed,  8 Sep 2021 08:21:20 +0000 (UTC)
+Received: by mail-wm1-x32a.google.com with SMTP id
+ u19-20020a7bc053000000b002f8d045b2caso854702wmc.1
+ for <buildroot@buildroot.org>; Wed, 08 Sep 2021 01:21:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=mW4jcglhO4rm4QdaOK4pOShPTi9CgG+c5/KJ/8Z32k4=;
- b=kLgwHSenmex0S6Zzz3CQ1ftvUsbuHhvoCQgICEa6YIXb4dRjU3XsV/tl0pXnqJC4ub
- 8laVG9bB4NEMup8e3chmn9aqE2hRLyLaKCAR5puzEPrHm570pylq0cYooTzedLiG4Dp4
- n1TvMIj5uum4H+EVrYLmSnvyLjkSoQdygu6zqCB2FldDM6FTknSj7noARr5p3ftgFb85
- aR3m19pHklr+eGhV8m56/HabZVAAtYsJFjR3juUmiAhM2UJLmunh7DyLHy0P3UMYWNyf
- tvFwrxyM+gPeBoRZC69juVejO9ha9rUg7PJvuSRyUXe65fjI2tn16e1YRlgmN69lHRBa
- XmDg==
+ h=from:to:cc:subject:date:message-id:in-reply-to:references
+ :mime-version:content-transfer-encoding;
+ bh=EiICXERN+ZWK6dOmArYNGKYbvLL9+3sx0NmEOkTHLDs=;
+ b=hhAzWk+V/vHjXnvFDx13A9IB1/O5nmUoT2gLTW5a6c1s+gxoEpK5BODYVKipeICP0r
+ Jqrrv9CS389QdbdSsFzz7OQdfZD2CUJxT3Y8m6rST1ch850tbdj+EGdy7XQjLqFCEDig
+ 6jBrZUhBRNlujSI8+UZU+ZJGPtvJ7VNmJGnH9pTrdlRCjK0Fk/hn+ZcydLMt1qrCR60+
+ bWMEkc/Vu3r6TQSUkZpTUSgEZ7RbTCWZ6nqWPxRAtqNRgwCguvf/i4Pw0Duj6MQre3m0
+ /DdmaXYZkJV0cOeCww5hqXbOdJw9Bi6hZwl1wUeWm4OlmxkfULL4yEQdzG9JFHNiS41c
+ 3mCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=mW4jcglhO4rm4QdaOK4pOShPTi9CgG+c5/KJ/8Z32k4=;
- b=S7r3s81mzJF9sFIy0lGhW0PKVMWd5/4XNGSKIPfCqdzmKrxd3LeH818jtkCQt+Ql22
- qi6Lh6vopTxL5XcpbrGEBFDvS6DTxj2+K/8au4j2hy5RKpliMTS/D17lUl9GYjfM1C7L
- YqMRFgrE02cXNVWc+UEZ/hR1ZICiZrWEBLRfFfjhqdbQQKzQhNPk7UeDJO4y4FMWUG4S
- uoul/c6MriURHnpedN73T42hzVafAJxsnL3qUVn/JYcgvoDS9qx5DUg8pfnTuDg6wgXf
- DzIYEThHguDwOpfIfXBBuyvx1+cRzJcpkU87pdKHU9AmRboSP9ZJJVfcB6gG5kKQvGGh
- gXAg==
-X-Gm-Message-State: AOAM533ppOk6xgsIbutVfWOV6oJGT3ViN9nW6mZkVhvg35r0acNXvmKv
- K8ra1I0K4cIWlsdMhIVgeEvmK5jIGO1ubA==
-X-Google-Smtp-Source: ABdhPJzf2RCzW6xJG4/qty5Dh8okut0fZ1GQ29EQHSd3mQvHFMj5BHuzC7KoyeVLiW7D+coynvSWkw==
-X-Received: by 2002:adf:9d4b:: with SMTP id o11mr2525629wre.29.1631089277208; 
- Wed, 08 Sep 2021 01:21:17 -0700 (PDT)
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+ :references:mime-version:content-transfer-encoding;
+ bh=EiICXERN+ZWK6dOmArYNGKYbvLL9+3sx0NmEOkTHLDs=;
+ b=X2n1mx7Ygkm4ypzy4dZAi4KaFKbET46hCD5kHBQf15iCunzjloXl1pHW+YD2G7LAdo
+ SRyCN9rU/zsye952lIIpYq3MVDs/6qG+UEj/xv8pcIOrIE5OXuLsd1sbDvQS5m4qCKb0
+ 12PtFPvkm+asVriZQN3eBv2vifo5HeOY+75nhSPlM3X+v99g/NVb+ve8bvShmSuefIL1
+ tu6sqPwXtE+q98Y9jWLGPOcO7TPJQKMt0o2HzeUw4RcT+gQlB/odEln1QREOwFdVF7sH
+ TvU8tnoDcJpVlvzvGzyf2BnA7y2j3Q+q8qUvSsloKzRSdZd0EKUhAy+RZ5W/3VZPpQvu
+ yJaw==
+X-Gm-Message-State: AOAM531RJJRxcDAARkDZmg0SAfEUgIooWQqBtvaEF7cQMfqqp4MYaYIH
+ FF5Wo7T7+tyLf4cjNbDt0ICBaxF4hObrHQ==
+X-Google-Smtp-Source: ABdhPJzdlz4N5lBtSjDMXG9zEMH//abjUwc6f3hBynbEqSgw/njYyIc+FjigbRdI0ZT9/lW67PcAnQ==
+X-Received: by 2002:a7b:c751:: with SMTP id w17mr2312748wmk.162.1631089278521; 
+ Wed, 08 Sep 2021 01:21:18 -0700 (PDT)
 Received: from asaf.. ([2a10:8002:6b25:0:8ac0:67ea:778a:fea7])
- by smtp.gmail.com with ESMTPSA id d129sm531776wmd.23.2021.09.08.01.21.16
+ by smtp.gmail.com with ESMTPSA id d129sm531776wmd.23.2021.09.08.01.21.17
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 08 Sep 2021 01:21:16 -0700 (PDT)
+ Wed, 08 Sep 2021 01:21:18 -0700 (PDT)
 From: Asaf Kahlon <asafka7@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed,  8 Sep 2021 11:21:09 +0300
-Message-Id: <20210908082110.694376-1-asafka7@gmail.com>
+Date: Wed,  8 Sep 2021 11:21:10 +0300
+Message-Id: <20210908082110.694376-2-asafka7@gmail.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210908082110.694376-1-asafka7@gmail.com>
+References: <20210908082110.694376-1-asafka7@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/{libuv,
- uvw}: bump to versions 1.42.0, 2.10.0_libuv_v1.42
+Subject: [Buildroot] [PATCH 1/1] package/uftrace: bump to version 0.10
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -107,56 +107,32 @@ Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/libuv/libuv.hash | 2 +-
- package/libuv/libuv.mk   | 2 +-
- package/uvw/uvw.hash     | 2 +-
- package/uvw/uvw.mk       | 2 +-
- 4 files changed, 4 insertions(+), 4 deletions(-)
+ package/uftrace/uftrace.hash | 2 +-
+ package/uftrace/uftrace.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libuv/libuv.hash b/package/libuv/libuv.hash
-index 042dd9dc34..172ef1f168 100644
---- a/package/libuv/libuv.hash
-+++ b/package/libuv/libuv.hash
+diff --git a/package/uftrace/uftrace.hash b/package/uftrace/uftrace.hash
+index fb1e116be6..43831d72a7 100644
+--- a/package/uftrace/uftrace.hash
++++ b/package/uftrace/uftrace.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256  6cfeb5f4bab271462b4a2cc77d4ecec847fdbdc26b72019c27ae21509e6f94fa  libuv-1.41.0.tar.gz
-+sha256  371e5419708f6aaeb8656671f89400b92a9bba6443369af1bb70bcd6e4b3c764  libuv-1.42.0.tar.gz
- sha256  6d20216ae022fbeed23916f48508fd807ece3d8464992330643b0e64e5c0c24b  LICENSE
-diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
-index d3c58d4dd4..9fe775951d 100644
---- a/package/libuv/libuv.mk
-+++ b/package/libuv/libuv.mk
-@@ -6,7 +6,7 @@
- 
- # When bumping libuv, check if a new version of uvw is available
- # and bump it too.
--LIBUV_VERSION = 1.41.0
-+LIBUV_VERSION = 1.42.0
- LIBUV_SITE = $(call github,libuv,libuv,v$(LIBUV_VERSION))
- LIBUV_DEPENDENCIES = host-pkgconf
- LIBUV_INSTALL_STAGING = YES
-diff --git a/package/uvw/uvw.hash b/package/uvw/uvw.hash
-index 2aeb4732cd..5f7521c8b3 100644
---- a/package/uvw/uvw.hash
-+++ b/package/uvw/uvw.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  dd610cb1626b8a7779ed251584bcc0362fb98fcee13e699680f61828a1ba55de  uvw-2.9.0_libuv_v1.41.tar.gz
-+sha256  30b0ba97a94d5e652490c6b1b32c95e608263f21cf3bc606308d09b3e3a114bf  uvw-2.10.0_libuv_v1.42.tar.gz
- sha256  5de32af2469480cf3261c9781962e0887366666ba8ee1f4a32c386c77fc50c88  LICENSE
-diff --git a/package/uvw/uvw.mk b/package/uvw/uvw.mk
-index 96375926d9..9c15d536cb 100644
---- a/package/uvw/uvw.mk
-+++ b/package/uvw/uvw.mk
+ # Locally computed
+-sha256	418d30c959d3b6d0dcafd55e588a5d414a9984b30f2522a5af004a268824a5a2  uftrace-0.9.4.tar.gz
++sha256	b8b56d540ea95c3eafe56440d6a998e0a140d53ca2584916b6ca82702795bbd9  uftrace-0.10.tar.gz
+ sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/uftrace/uftrace.mk b/package/uftrace/uftrace.mk
+index 7c9b9b1992..b487b30695 100644
+--- a/package/uftrace/uftrace.mk
++++ b/package/uftrace/uftrace.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--UVW_VERSION = 2.9.0_libuv_v1.41
-+UVW_VERSION = 2.10.0_libuv_v1.42
- UVW_SITE = $(call github,skypjack,uvw,v$(UVW_VERSION))
- UVW_INSTALL_STAGING = YES
- UVW_INSTALL_TARGET = NO
+-UFTRACE_VERSION = 0.9.4
++UFTRACE_VERSION = 0.10
+ UFTRACE_SITE = $(call github,namhyung,uftrace,v$(UFTRACE_VERSION))
+ UFTRACE_LICENSE = GPL-2.0
+ UFTRACE_LICENSE_FILES = COPYING
 -- 
 2.30.2
 
