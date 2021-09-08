@@ -8,86 +8,84 @@ X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A11DC433EF
-	for <buildroot@archiver.kernel.org>; Wed,  8 Sep 2021 08:20:54 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F70BC433F5
+	for <buildroot@archiver.kernel.org>; Wed,  8 Sep 2021 08:21:23 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id C88676113C
-	for <buildroot@archiver.kernel.org>; Wed,  8 Sep 2021 08:20:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C88676113C
+	by mail.kernel.org (Postfix) with ESMTPS id 1C4A561131
+	for <buildroot@archiver.kernel.org>; Wed,  8 Sep 2021 08:21:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1C4A561131
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A404C60818;
-	Wed,  8 Sep 2021 08:20:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E29EB406C0;
+	Wed,  8 Sep 2021 08:21:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Vq27orbMjM7b; Wed,  8 Sep 2021 08:20:52 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id w8Csff4FwKM2; Wed,  8 Sep 2021 08:21:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D046D6074D;
-	Wed,  8 Sep 2021 08:20:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4C3734052A;
+	Wed,  8 Sep 2021 08:21:21 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 71AD81BF5B4
- for <buildroot@lists.busybox.net>; Wed,  8 Sep 2021 08:19:52 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id DAAC71BF5B4
+ for <buildroot@lists.busybox.net>; Wed,  8 Sep 2021 08:21:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5E01F80D32
- for <buildroot@lists.busybox.net>; Wed,  8 Sep 2021 08:19:52 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id CA66A82FCE
+ for <buildroot@lists.busybox.net>; Wed,  8 Sep 2021 08:21:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LIZZXN_syrOX for <buildroot@lists.busybox.net>;
- Wed,  8 Sep 2021 08:19:51 +0000 (UTC)
+ with ESMTP id rX8ciJ_nRwrl for <buildroot@lists.busybox.net>;
+ Wed,  8 Sep 2021 08:21:19 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
- [IPv6:2a00:1450:4864:20::336])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 692E682FE7
- for <buildroot@buildroot.org>; Wed,  8 Sep 2021 08:19:51 +0000 (UTC)
-Received: by mail-wm1-x336.google.com with SMTP id
- 192-20020a1c04c9000000b002f7a4ab0a49so724564wme.0
- for <buildroot@buildroot.org>; Wed, 08 Sep 2021 01:19:51 -0700 (PDT)
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
+ [IPv6:2a00:1450:4864:20::429])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 127C482F87
+ for <buildroot@buildroot.org>; Wed,  8 Sep 2021 08:21:18 +0000 (UTC)
+Received: by mail-wr1-x429.google.com with SMTP id b6so1923219wrh.10
+ for <buildroot@buildroot.org>; Wed, 08 Sep 2021 01:21:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=YJL8BpOtvWZnZOS/ixhGdjia44aZxdbPvFk4ScB6XY4=;
- b=f8OwBZjgo+ZhmaVCAYB8KA9Oq1sQ2bzAwlR14ZksTBGjBQ6neI7VCKkVY1OWuupBh1
- +aG4EfFhV+eeiw4yX2PXO4XlVtOouNBlZhUEg06eAvxEhvGoC0bG8XOmWUfOBDvsEiVF
- ww4+riJmE1dpSEp6xIi95e2MMf5YVcxdAQbXVFzefWdUMLvbVnO6FUm7zR4+XATFQmS+
- Af9mOlUjTwxw81px/tMron3CpOSfbQbmsgcBjbS/YD+TGgEKvMSBmyGEtcxP3wFCryDE
- JstzuL/OpRVVjbVdiY72ZZb8Ti7mKAQjyeqc82/eyi/bQji/CmUX4T9813Mfcd5FBRLh
- UtTQ==
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=mW4jcglhO4rm4QdaOK4pOShPTi9CgG+c5/KJ/8Z32k4=;
+ b=kLgwHSenmex0S6Zzz3CQ1ftvUsbuHhvoCQgICEa6YIXb4dRjU3XsV/tl0pXnqJC4ub
+ 8laVG9bB4NEMup8e3chmn9aqE2hRLyLaKCAR5puzEPrHm570pylq0cYooTzedLiG4Dp4
+ n1TvMIj5uum4H+EVrYLmSnvyLjkSoQdygu6zqCB2FldDM6FTknSj7noARr5p3ftgFb85
+ aR3m19pHklr+eGhV8m56/HabZVAAtYsJFjR3juUmiAhM2UJLmunh7DyLHy0P3UMYWNyf
+ tvFwrxyM+gPeBoRZC69juVejO9ha9rUg7PJvuSRyUXe65fjI2tn16e1YRlgmN69lHRBa
+ XmDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=YJL8BpOtvWZnZOS/ixhGdjia44aZxdbPvFk4ScB6XY4=;
- b=LRTomm+lHPpaWBDUeDgi2+D6h6Vc0Sf6aUrKFxe43m/CHlBjmjffOL9Km771cnL58Y
- 9KSX82vw5s/NU7efczdOoLKtgms2wZgw2mcQwnwJJYhypcUDL78CXTV1rAEuMIVRrtIe
- Ejh/WaNc6kCTuwCIV56ALr/YPyoYUvijbZbPrUev8O8XsHmwvI02z/t4pdfjjwXGwrNu
- 4FOrqujqkjbJzizqLEFRhJYde1+Qtf/kio61BZSa3/5Onk1Cpa1VSP9spSXZK/hWqgRn
- su4jAd4HpR1MowDX2zgl/KX9NG/5uZFZD3p/1p5uxw+aLxkcQdukOHeUepFWsNvmDTfI
- O6IA==
-X-Gm-Message-State: AOAM530k7Ykww7lKW/B0JGTFJ4PmTGWdaEyzqvyoM3Y2pFl9d3z+Eoie
- EE2VvuCOzC6FeZAwGDkIuP6RSFaqds587w==
-X-Google-Smtp-Source: ABdhPJx1dfMRVNnEAWdsO/AJWyasxXimn6LNkz+FcrCB59JuCDqFQCrtz8GKqnbnb6TTuDBSZ5vv2A==
-X-Received: by 2002:a1c:a713:: with SMTP id q19mr166412wme.42.1631089189544;
- Wed, 08 Sep 2021 01:19:49 -0700 (PDT)
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=mW4jcglhO4rm4QdaOK4pOShPTi9CgG+c5/KJ/8Z32k4=;
+ b=S7r3s81mzJF9sFIy0lGhW0PKVMWd5/4XNGSKIPfCqdzmKrxd3LeH818jtkCQt+Ql22
+ qi6Lh6vopTxL5XcpbrGEBFDvS6DTxj2+K/8au4j2hy5RKpliMTS/D17lUl9GYjfM1C7L
+ YqMRFgrE02cXNVWc+UEZ/hR1ZICiZrWEBLRfFfjhqdbQQKzQhNPk7UeDJO4y4FMWUG4S
+ uoul/c6MriURHnpedN73T42hzVafAJxsnL3qUVn/JYcgvoDS9qx5DUg8pfnTuDg6wgXf
+ DzIYEThHguDwOpfIfXBBuyvx1+cRzJcpkU87pdKHU9AmRboSP9ZJJVfcB6gG5kKQvGGh
+ gXAg==
+X-Gm-Message-State: AOAM533ppOk6xgsIbutVfWOV6oJGT3ViN9nW6mZkVhvg35r0acNXvmKv
+ K8ra1I0K4cIWlsdMhIVgeEvmK5jIGO1ubA==
+X-Google-Smtp-Source: ABdhPJzf2RCzW6xJG4/qty5Dh8okut0fZ1GQ29EQHSd3mQvHFMj5BHuzC7KoyeVLiW7D+coynvSWkw==
+X-Received: by 2002:adf:9d4b:: with SMTP id o11mr2525629wre.29.1631089277208; 
+ Wed, 08 Sep 2021 01:21:17 -0700 (PDT)
 Received: from asaf.. ([2a10:8002:6b25:0:8ac0:67ea:778a:fea7])
- by smtp.gmail.com with ESMTPSA id c15sm1304347wmr.8.2021.09.08.01.19.46
+ by smtp.gmail.com with ESMTPSA id d129sm531776wmd.23.2021.09.08.01.21.16
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 08 Sep 2021 01:19:48 -0700 (PDT)
+ Wed, 08 Sep 2021 01:21:16 -0700 (PDT)
 From: Asaf Kahlon <asafka7@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed,  8 Sep 2021 11:19:27 +0300
-Message-Id: <20210908081927.694201-7-asafka7@gmail.com>
+Date: Wed,  8 Sep 2021 11:21:09 +0300
+Message-Id: <20210908082110.694376-1-asafka7@gmail.com>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210908081927.694201-1-asafka7@gmail.com>
-References: <20210908081927.694201-1-asafka7@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/python-scapy: bump to version 2.4.5
+Subject: [Buildroot] [PATCH 1/1] package/{libuv,
+ uvw}: bump to versions 1.42.0, 2.10.0_libuv_v1.42
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -109,40 +107,58 @@ Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-scapy/python-scapy.hash | 4 ++--
- package/python-scapy/python-scapy.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/libuv/libuv.hash | 2 +-
+ package/libuv/libuv.mk   | 2 +-
+ package/uvw/uvw.hash     | 2 +-
+ package/uvw/uvw.mk       | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-scapy/python-scapy.hash b/package/python-scapy/python-scapy.hash
-index 8618e54f4b..4dccffd39a 100644
---- a/package/python-scapy/python-scapy.hash
-+++ b/package/python-scapy/python-scapy.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/scapy/json
--md5  01e52ff5d1f04364e17fc2d42872282e  scapy-2.4.4.tar.gz
--sha256  ecfd7a14cd9c3ef0eb08d28d5bb71d97219edff1454ccbdff229f676b27900ee  scapy-2.4.4.tar.gz
-+md5  54072af118e9291b6c7898b4ea87cdaf  scapy-2.4.5.tar.gz
-+sha256  bc707e3604784496b6665a9e5b2a69c36cc9fb032af4864b29051531b24c8593  scapy-2.4.5.tar.gz
- # Locally computed sha256 checksums
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-diff --git a/package/python-scapy/python-scapy.mk b/package/python-scapy/python-scapy.mk
-index 3083a84412..9cf17db671 100644
---- a/package/python-scapy/python-scapy.mk
-+++ b/package/python-scapy/python-scapy.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/libuv/libuv.hash b/package/libuv/libuv.hash
+index 042dd9dc34..172ef1f168 100644
+--- a/package/libuv/libuv.hash
++++ b/package/libuv/libuv.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  6cfeb5f4bab271462b4a2cc77d4ecec847fdbdc26b72019c27ae21509e6f94fa  libuv-1.41.0.tar.gz
++sha256  371e5419708f6aaeb8656671f89400b92a9bba6443369af1bb70bcd6e4b3c764  libuv-1.42.0.tar.gz
+ sha256  6d20216ae022fbeed23916f48508fd807ece3d8464992330643b0e64e5c0c24b  LICENSE
+diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
+index d3c58d4dd4..9fe775951d 100644
+--- a/package/libuv/libuv.mk
++++ b/package/libuv/libuv.mk
+@@ -6,7 +6,7 @@
+ 
+ # When bumping libuv, check if a new version of uvw is available
+ # and bump it too.
+-LIBUV_VERSION = 1.41.0
++LIBUV_VERSION = 1.42.0
+ LIBUV_SITE = $(call github,libuv,libuv,v$(LIBUV_VERSION))
+ LIBUV_DEPENDENCIES = host-pkgconf
+ LIBUV_INSTALL_STAGING = YES
+diff --git a/package/uvw/uvw.hash b/package/uvw/uvw.hash
+index 2aeb4732cd..5f7521c8b3 100644
+--- a/package/uvw/uvw.hash
++++ b/package/uvw/uvw.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  dd610cb1626b8a7779ed251584bcc0362fb98fcee13e699680f61828a1ba55de  uvw-2.9.0_libuv_v1.41.tar.gz
++sha256  30b0ba97a94d5e652490c6b1b32c95e608263f21cf3bc606308d09b3e3a114bf  uvw-2.10.0_libuv_v1.42.tar.gz
+ sha256  5de32af2469480cf3261c9781962e0887366666ba8ee1f4a32c386c77fc50c88  LICENSE
+diff --git a/package/uvw/uvw.mk b/package/uvw/uvw.mk
+index 96375926d9..9c15d536cb 100644
+--- a/package/uvw/uvw.mk
++++ b/package/uvw/uvw.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_SCAPY_VERSION = 2.4.4
-+PYTHON_SCAPY_VERSION = 2.4.5
- PYTHON_SCAPY_SOURCE = scapy-$(PYTHON_SCAPY_VERSION).tar.gz
--PYTHON_SCAPY_SITE = https://files.pythonhosted.org/packages/c6/8f/438d4d0bab4c8e22906a7401dd082b4c0f914daf2bbdc7e7e8390d81a5c3
-+PYTHON_SCAPY_SITE = https://files.pythonhosted.org/packages/85/47/c919432ca258f354bb2c1e645623f891603f185bfc7563d4a21f6432e7ed
- PYTHON_SCAPY_SETUP_TYPE = setuptools
- PYTHON_SCAPY_LICENSE = GPL-2.0
- PYTHON_SCAPY_LICENSE_FILES = LICENSE
+-UVW_VERSION = 2.9.0_libuv_v1.41
++UVW_VERSION = 2.10.0_libuv_v1.42
+ UVW_SITE = $(call github,skypjack,uvw,v$(UVW_VERSION))
+ UVW_INSTALL_STAGING = YES
+ UVW_INSTALL_TARGET = NO
 -- 
-2.33.0
+2.30.2
 
 _______________________________________________
 buildroot mailing list
