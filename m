@@ -9,87 +9,87 @@ X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4254CC433F5
-	for <buildroot@archiver.kernel.org>; Wed,  8 Sep 2021 20:22:43 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7BB54C433F5
+	for <buildroot@archiver.kernel.org>; Wed,  8 Sep 2021 20:23:00 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 076716115B
-	for <buildroot@archiver.kernel.org>; Wed,  8 Sep 2021 20:22:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 076716115B
+	by mail.kernel.org (Postfix) with ESMTPS id 1F8B761139
+	for <buildroot@archiver.kernel.org>; Wed,  8 Sep 2021 20:23:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1F8B761139
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A89AB613E4;
-	Wed,  8 Sep 2021 20:22:42 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D9C9240251;
+	Wed,  8 Sep 2021 20:22:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JAu3LdzaDJdo; Wed,  8 Sep 2021 20:22:41 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id QdbwhLOKXSC9; Wed,  8 Sep 2021 20:22:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F24E7613B8;
-	Wed,  8 Sep 2021 20:22:40 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E177F1BF870
- for <buildroot@lists.busybox.net>; Wed,  8 Sep 2021 20:22:39 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B67D140265;
+	Wed,  8 Sep 2021 20:22:57 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0A8A31BF870
+ for <buildroot@lists.busybox.net>; Wed,  8 Sep 2021 20:22:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CA337406EC
- for <buildroot@lists.busybox.net>; Wed,  8 Sep 2021 20:22:39 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id EE4DF83434
+ for <buildroot@lists.busybox.net>; Wed,  8 Sep 2021 20:22:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KJOv95aOFuM3 for <buildroot@lists.busybox.net>;
- Wed,  8 Sep 2021 20:22:38 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id UfxtQ0EYBoqF for <buildroot@lists.busybox.net>;
+ Wed,  8 Sep 2021 20:22:54 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
- [IPv6:2a00:1450:4864:20::32d])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 283FF40306
- for <buildroot@buildroot.org>; Wed,  8 Sep 2021 20:22:38 +0000 (UTC)
-Received: by mail-wm1-x32d.google.com with SMTP id
- l18-20020a05600c4f1200b002f8cf606262so2544065wmq.1
- for <buildroot@buildroot.org>; Wed, 08 Sep 2021 13:22:37 -0700 (PDT)
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
+ [IPv6:2a00:1450:4864:20::32c])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B7A8A833B7
+ for <buildroot@buildroot.org>; Wed,  8 Sep 2021 20:22:54 +0000 (UTC)
+Received: by mail-wm1-x32c.google.com with SMTP id
+ m25-20020a7bcb99000000b002e751bcb5dbso2445208wmi.5
+ for <buildroot@buildroot.org>; Wed, 08 Sep 2021 13:22:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=subject:from:to:cc:references:message-id:date:user-agent
  :mime-version:in-reply-to:content-language:content-transfer-encoding;
  bh=iQ3WUvAPFky1JhNWeKcIUooJPNc+wkvrIXjM7Dc+RDk=;
- b=PI4uQFJVAFs1+aXthUGlZISnAPe6Lw3kC+djQUqdfGbziIaDuZLFr1EDK0g+GYfAcb
- RlNnzCAp0lxdg2ddOtXwJO9gGEAfbPL1mGAWCaSzpa317sz6xhBkOYSL8XJFfuo4I8kb
- jwHyTZrH58BfwdkiM9ofkUbQ/0mHRlCKO8wDoOGnsbBhnUQYD1mKKJ+l6MM3SwbZ0Qjq
- gktqb5iqwpvHRUuYBdYRk+DSPE2PxOU/Kju0FtG39wmmGJam3UM1c+Kllc7WHq2wMjBJ
- p7kNSEdNfpKjV8pdspXDL0XEnou4e+4FBKNf2N/Ny8mC79/lhJbkx9dlGYnnvkfhHG4y
- v5Tg==
+ b=eKK9DM6lS8QrC1+twzcXlbCmBIg++y5Jfk1J/TNq9+kUYbg9lyCHYA9wWQ0i6Z9Hg7
+ AdbINp9NyE0QpVAt55Rsd0++Pl4DcIluMbA4F88HhUcnKEasqzfvHhwLpmXxwJl/v6BE
+ FhpPQfMCaZC+/LEOAexosK6wZc+JNNvrBTTzADq9wTiyBdd/kaeTVAkQp6v9wDNXBC5Y
+ KGvTDk29zBWQhD1EtXsMshlJU45N1fNhvgrDDINrye67n3nrreOUUVtXRRYB621OIXCh
+ c7rvnnh4y5uw3FMYjj9jGMxZ+94eIJkWNWSLlP3wQxNrKxW1EXfEJp2fetJQ1LbB75xC
+ FWMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:subject:from:to:cc:references:message-id:date
  :user-agent:mime-version:in-reply-to:content-language
  :content-transfer-encoding;
  bh=iQ3WUvAPFky1JhNWeKcIUooJPNc+wkvrIXjM7Dc+RDk=;
- b=cVR96QlR6wg4UtY3YcNCwvIn37g1f1a9KOuOB//Q404NQZl9IFc+mF0P8RrTuIZSJe
- /OOeqEiilYpm3xsVQS+RwU2rTdVDNR9NSUPfaeDaztnlgUpZPvE3e1u2JY6GPDoxA6cI
- kenpAA3CYhLd0O0D78WwW+Ic3Ixglp1AbMGz0BvKDsG3p6DLjIC6qtRfStCBRd9jjfUk
- R0to4k8rhl0k22+YGCYWc1qgCBvjHFcTlgNkAgHeEI3V6LTxwhLEwienw3Ko+a5s2m5c
- HGNkUX8mZNLe9Vm45oABRxOzL2JzfjGfmB2Gu+OMqCEH96GB4Q33DfvA8ORhax0JCC4S
- Z8GQ==
-X-Gm-Message-State: AOAM531xIs2tqsAnRxFk40sOkPtC3k+06SlYPhyi3U9H1oRLt1o89ZPK
- /74ASPY1dq4V1hHxo4Ps9eQ=
-X-Google-Smtp-Source: ABdhPJxnFviSX+whiDfE77aBE7+4edaMj1IKx0Fj7+atUoW1nTejSbBRU6cfAUNAZYT52VHXqwe2Iw==
-X-Received: by 2002:a1c:7515:: with SMTP id o21mr71833wmc.150.1631132556373;
- Wed, 08 Sep 2021 13:22:36 -0700 (PDT)
+ b=WFocEx/gpyRfqlKYE3HvNPU+nJLZs/JJfccbI7cfTJ3wV8ByfXtKeJBwpVoNVs2uFO
+ PSH1gL52cp1/doAQwflyMKyWOdth2NEvn922XHaDjTPPiv5KqN9EvELWssuMC3Go02Oi
+ IAS26bIyhHdLDWxDmtW5VkZU58JlkPZBQU5l6sEFCOy0WPMQWKFwBkMhAo/Z3t8IcVCj
+ n6at0KokzP2tUWqfw1aFmvtNrdDz39KeQ6ZsCfgkozca0JvOcUZEgG2PgBT/5ufsPLVl
+ ZTHRclbIGVJs7nlFy0+tT12dG2N1g++Ji7hVizSx2umEmWz3e2sZydvGub0rhV7DJKjF
+ 9e7A==
+X-Gm-Message-State: AOAM533G0x+H5gAOSLxuIRpVh0BbhpfCV6I3VGUecBQDTZgrDEXvKjDI
+ dsA7naRzzQj7y+2DgFEJroo=
+X-Google-Smtp-Source: ABdhPJzN3VScyYSPQ4vastj+ylKZwkBfhbHlbAE6pZx3vBRHZcBApGhMQQe1icnFVKZEzc2eb7JI8g==
+X-Received: by 2002:a7b:c745:: with SMTP id w5mr5386916wmk.17.1631132573098;
+ Wed, 08 Sep 2021 13:22:53 -0700 (PDT)
 Received: from ?IPv6:2a01:cb05:8f8a:1800:2216:4e4e:b697:b4ce?
  (2a01cb058f8a180022164e4eb697b4ce.ipv6.abo.wanadoo.fr.
  [2a01:cb05:8f8a:1800:2216:4e4e:b697:b4ce])
- by smtp.gmail.com with ESMTPSA id w1sm3034358wmc.19.2021.09.08.13.22.34
+ by smtp.gmail.com with ESMTPSA id u13sm144874wrg.68.2021.09.08.13.22.48
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 08 Sep 2021 13:22:36 -0700 (PDT)
+ Wed, 08 Sep 2021 13:22:52 -0700 (PDT)
 From: Romain Naour <romain.naour@gmail.com>
 To: "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
 References: <20210905173446.44137-1-yann.morin.1998@free.fr>
  <20210905174402.GV1053080@scaer>
  <b8b5e5f2-5549-777d-1d94-c93fd21e9d4b@gmail.com>
-Message-ID: <90729893-818e-a54e-b3e3-51cee5342873@gmail.com>
-Date: Wed, 8 Sep 2021 22:22:17 +0200
+Message-ID: <cc862f92-fa95-27ff-4643-6fa47e18b80d@gmail.com>
+Date: Wed, 8 Sep 2021 22:22:41 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.11.0
 MIME-Version: 1.0
