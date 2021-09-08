@@ -2,57 +2,91 @@ Return-Path: <SRS0=AA6u=N6=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
+	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 35846C433EF
-	for <buildroot@archiver.kernel.org>; Wed,  8 Sep 2021 08:16:41 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 30796C433F5
+	for <buildroot@archiver.kernel.org>; Wed,  8 Sep 2021 08:19:43 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2C26061131
-	for <buildroot@archiver.kernel.org>; Wed,  8 Sep 2021 08:16:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2C26061131
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
+	by mail.kernel.org (Postfix) with ESMTPS id A74CC6113C
+	for <buildroot@archiver.kernel.org>; Wed,  8 Sep 2021 08:19:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A74CC6113C
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C41D140222;
-	Wed,  8 Sep 2021 08:16:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4DBF480E19;
+	Wed,  8 Sep 2021 08:19:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XzDxFPQD6qaI; Wed,  8 Sep 2021 08:16:38 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id G5aGT5nljgFr; Wed,  8 Sep 2021 08:19:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D3F2F400DE;
-	Wed,  8 Sep 2021 08:16:37 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id CC74D1BF5B4
- for <buildroot@lists.busybox.net>; Wed,  8 Sep 2021 08:16:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A008680DDE;
+	Wed,  8 Sep 2021 08:19:40 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 7DA611BF5B4
+ for <buildroot@lists.busybox.net>; Wed,  8 Sep 2021 08:19:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C9227606AE
- for <buildroot@lists.busybox.net>; Wed,  8 Sep 2021 08:16:36 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6D3EB403CB
+ for <buildroot@lists.busybox.net>; Wed,  8 Sep 2021 08:19:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OUXOcBWamefk for <buildroot@lists.busybox.net>;
- Wed,  8 Sep 2021 08:16:35 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 9393D60688
- for <buildroot@buildroot.org>; Wed,  8 Sep 2021 08:16:35 +0000 (UTC)
-Received: (Authenticated sender: kory.maincent@bootlin.com)
- by relay11.mail.gandi.net (Postfix) with ESMTPSA id 0FDC310000B;
- Wed,  8 Sep 2021 08:16:31 +0000 (UTC)
-From: Kory Maincent <kory.maincent@bootlin.com>
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0Q3r4T0ZGjoj for <buildroot@lists.busybox.net>;
+ Wed,  8 Sep 2021 08:19:37 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
+ [IPv6:2a00:1450:4864:20::336])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7A1DC40332
+ for <buildroot@buildroot.org>; Wed,  8 Sep 2021 08:19:37 +0000 (UTC)
+Received: by mail-wm1-x336.google.com with SMTP id
+ j17-20020a05600c1c1100b002e754875260so835066wms.4
+ for <buildroot@buildroot.org>; Wed, 08 Sep 2021 01:19:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=vU7Ap9Tb4A6eMhXG+c21mJA5ABFnwZ2WnnAC7MAbNYo=;
+ b=A+a6fBIhyqOQMUL78RqlyLyp67WylN5o6hZri8U578M7W4VVIhX9wX5ueB4APLM/VX
+ Zy4iyLm4QW/myC9x6r5f9mMlpofwEkWutX8fjXBqr69MQOvL7ynKktQlBwxdbaPdJKJ7
+ lgGNTqIs2cED9LE91vqItXXpXMvv1RdACCMr7DaQuIHP0tNKLhSLqSpCDKRk00xIFn/o
+ DyHFPmmiD69ECw6hf4UikBjiHRaKbj54xfXCnQ2MujzWOKj8/u5vzr2DuUE91bmWZ5Ic
+ 8pFiAto/8+MsUIj6UmyBzorRw7BQcup+s5+Nc5PnFW+hQWRSmv9Il9F98QIdFnH0haJJ
+ OPqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=vU7Ap9Tb4A6eMhXG+c21mJA5ABFnwZ2WnnAC7MAbNYo=;
+ b=lbM0s2l7Dr4bpH9h3bvDIuvSbw0Fs9EmbrM9e0eo3/sayyQsPkW5JOYi+8cqRjR3UM
+ TgiazU7cfVTm2WgUEud3RCjSrOSVo0Z5/1HaquzSCletOuJGN3H/K9vKXbrpMfqf3GnD
+ Rw/B9tsi7AMLRlu6FemYi/vW8mhaYKOlePcChlZ00r37aWcpYuA/O5Gcxo6eY09rCX1I
+ T359m8Q/ig+DqzrVsqK0sMonjA5Yhp7Y+ak02PMMOJvg5dG60ic7VvEK0FyOeuXJIaTL
+ 4daWcIr8ORChmmozxjX+alSvQe8xfjH2u1N/zzdC1JddkBHjLm6BhzIDGpH6pmN9Qpyx
+ jYxQ==
+X-Gm-Message-State: AOAM533Sf/R/qRt8IZ2xvXIyh9xiTrUcIEZ2l9vwWPXUcPucha93XHJe
+ oTfi7tA4Q0VTrvcVfW9a/0C30H/aTzGX5w==
+X-Google-Smtp-Source: ABdhPJytUfVwqastlD+NMLAGCwcm7yLJXOz1w5bLG2GPVbQ6JypB8tWpW+8ewxAq85kegKSUPEYjUw==
+X-Received: by 2002:a7b:c192:: with SMTP id y18mr2241729wmi.163.1631089175383; 
+ Wed, 08 Sep 2021 01:19:35 -0700 (PDT)
+Received: from asaf.. ([2a10:8002:6b25:0:8ac0:67ea:778a:fea7])
+ by smtp.gmail.com with ESMTPSA id c15sm1304347wmr.8.2021.09.08.01.19.34
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 08 Sep 2021 01:19:35 -0700 (PDT)
+From: Asaf Kahlon <asafka7@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed,  8 Sep 2021 10:16:30 +0200
-Message-Id: <20210908081630.3404221-1-kory.maincent@bootlin.com>
-X-Mailer: git-send-email 2.25.1
+Date: Wed,  8 Sep 2021 11:19:21 +0300
+Message-Id: <20210908081927.694201-1-asafka7@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/arm-gnu-a-toolchain: bump to version
- 10.3-2021.07
+Subject: [Buildroot] [PATCH 1/1] package/python{3}-psutil: bump to version
+ 5.8.0
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,50 +99,66 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: thomas.petazzoni@bootlin.com
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-Update to version 10.3-2021.07.
-The old version contained a nasty nano.spec. The nano.spec file was adding
--lc_nano option but the c_nano.a library was not delivered in the
-toolchain archive.
-
-Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/arm-gnu-a-toolchain/arm-gnu-a-toolchain.hash | 2 +-
- package/arm-gnu-a-toolchain/arm-gnu-a-toolchain.mk   | 6 +++---
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-psutil/python-psutil.hash | 4 ++--
+ package/python-psutil/python-psutil.mk   | 4 ++--
+ package/python3-psutil/python3-psutil.mk | 4 ++--
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/arm-gnu-a-toolchain/arm-gnu-a-toolchain.hash b/package/arm-gnu-a-toolchain/arm-gnu-a-toolchain.hash
-index b18e56c151..26b9f1be1e 100644
---- a/package/arm-gnu-a-toolchain/arm-gnu-a-toolchain.hash
-+++ b/package/arm-gnu-a-toolchain/arm-gnu-a-toolchain.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 ac952d89ae0fc3543e81099e7d34917efc621f5def112eee843fd1ce755eca8c  gcc-arm-9.2-2019.12-x86_64-arm-none-eabi.tar.xz
-+sha256 8c5b8de344e23cd035ca2b53bbf2075c58131ad61223cae48510641d3e556cea  gcc-arm-none-eabi-10.3-2021.07-x86_64-linux.tar.bz2
-diff --git a/package/arm-gnu-a-toolchain/arm-gnu-a-toolchain.mk b/package/arm-gnu-a-toolchain/arm-gnu-a-toolchain.mk
-index d7088892ca..1bbfa45d78 100644
---- a/package/arm-gnu-a-toolchain/arm-gnu-a-toolchain.mk
-+++ b/package/arm-gnu-a-toolchain/arm-gnu-a-toolchain.mk
-@@ -4,9 +4,9 @@
- #
+diff --git a/package/python-psutil/python-psutil.hash b/package/python-psutil/python-psutil.hash
+index 1a053cc368..552ced55ec 100644
+--- a/package/python-psutil/python-psutil.hash
++++ b/package/python-psutil/python-psutil.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/psutil/json
+-md5  50bf39b4faa268ba1da8a9730bb38bb6  psutil-5.7.2.tar.gz
+-sha256  90990af1c3c67195c44c9a889184f84f5b2320dce3ee3acbd054e3ba0b4a7beb  psutil-5.7.2.tar.gz
++md5  91060da163ef478002a4456dd99cbb4c  psutil-5.8.0.tar.gz
++sha256  0c9ccb99ab76025f2f0bbecf341d4656e9c1351db8cc8a03ccd62e318ab4b5c6  psutil-5.8.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  24c12984500caa07ffdce19eebc06396c5e6d244b573bc6c438f4a6ef8e56c1b  LICENSE
+diff --git a/package/python-psutil/python-psutil.mk b/package/python-psutil/python-psutil.mk
+index 9dbc472213..3bba7ca343 100644
+--- a/package/python-psutil/python-psutil.mk
++++ b/package/python-psutil/python-psutil.mk
+@@ -5,9 +5,9 @@
  ################################################################################
  
--ARM_GNU_A_TOOLCHAIN_VERSION = 9.2-2019.12
--ARM_GNU_A_TOOLCHAIN_SITE = https://developer.arm.com/-/media/Files/downloads/gnu-a/$(ARM_GNU_A_TOOLCHAIN_VERSION)/binrel
--ARM_GNU_A_TOOLCHAIN_SOURCE = gcc-arm-$(ARM_GNU_A_TOOLCHAIN_VERSION)-x86_64-arm-none-eabi.tar.xz
-+ARM_GNU_A_TOOLCHAIN_VERSION = 10.3-2021.07
-+ARM_GNU_A_TOOLCHAIN_SITE = https://developer.arm.com/-/media/Files/downloads/gnu-rm/$(ARM_GNU_A_TOOLCHAIN_VERSION)
-+ARM_GNU_A_TOOLCHAIN_SOURCE = gcc-arm-none-eabi-$(ARM_GNU_A_TOOLCHAIN_VERSION)-x86_64-linux.tar.bz2
- ARM_GNU_A_TOOLCHAIN_LICENSE = GPL-3.0+
+ # Please keep in sync with package/python3-psutil/python3-psutil.mk
+-PYTHON_PSUTIL_VERSION = 5.7.2
++PYTHON_PSUTIL_VERSION = 5.8.0
+ PYTHON_PSUTIL_SOURCE = psutil-$(PYTHON_PSUTIL_VERSION).tar.gz
+-PYTHON_PSUTIL_SITE = https://files.pythonhosted.org/packages/aa/3e/d18f2c04cf2b528e18515999b0c8e698c136db78f62df34eee89cee205f1
++PYTHON_PSUTIL_SITE = https://files.pythonhosted.org/packages/e1/b0/7276de53321c12981717490516b7e612364f2cb372ee8901bd4a66a000d7
+ PYTHON_PSUTIL_SETUP_TYPE = setuptools
+ PYTHON_PSUTIL_LICENSE = BSD-3-Clause
+ PYTHON_PSUTIL_LICENSE_FILES = LICENSE
+diff --git a/package/python3-psutil/python3-psutil.mk b/package/python3-psutil/python3-psutil.mk
+index 029e1b1c12..1304124f57 100644
+--- a/package/python3-psutil/python3-psutil.mk
++++ b/package/python3-psutil/python3-psutil.mk
+@@ -5,9 +5,9 @@
+ ################################################################################
  
- HOST_ARM_GNU_A_TOOLCHAIN_INSTALL_DIR = $(HOST_DIR)/opt/gcc-arm-none-eabi
+ # Please keep in sync with package/python-psutil/python-psutil.mk
+-PYTHON3_PSUTIL_VERSION = 5.7.2
++PYTHON3_PSUTIL_VERSION = 5.8.0
+ PYTHON3_PSUTIL_SOURCE = psutil-$(PYTHON3_PSUTIL_VERSION).tar.gz
+-PYTHON3_PSUTIL_SITE = https://files.pythonhosted.org/packages/aa/3e/d18f2c04cf2b528e18515999b0c8e698c136db78f62df34eee89cee205f1
++PYTHON3_PSUTIL_SITE = https://files.pythonhosted.org/packages/e1/b0/7276de53321c12981717490516b7e612364f2cb372ee8901bd4a66a000d7
+ PYTHON3_PSUTIL_SETUP_TYPE = setuptools
+ PYTHON3_PSUTIL_LICENSE = BSD-3-Clause
+ PYTHON3_PSUTIL_LICENSE_FILES = LICENSE
 -- 
-2.25.1
+2.33.0
 
 _______________________________________________
 buildroot mailing list
