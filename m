@@ -8,84 +8,82 @@ X-Spam-Status: No, score=-18.5 required=3.0 tests=BAYES_00,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 94F4EC433F5
-	for <buildroot@archiver.kernel.org>; Wed,  8 Sep 2021 20:01:27 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EF4D5C433EF
+	for <buildroot@archiver.kernel.org>; Wed,  8 Sep 2021 20:11:19 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1057061078
-	for <buildroot@archiver.kernel.org>; Wed,  8 Sep 2021 20:01:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1057061078
+	by mail.kernel.org (Postfix) with ESMTPS id 94BC06115C
+	for <buildroot@archiver.kernel.org>; Wed,  8 Sep 2021 20:11:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 94BC06115C
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CF84D83313;
-	Wed,  8 Sep 2021 20:01:26 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 39490404E8;
+	Wed,  8 Sep 2021 20:11:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Q1IstFazhx3n; Wed,  8 Sep 2021 20:01:25 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id hhspZDuyA6lm; Wed,  8 Sep 2021 20:11:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 083B0830FB;
-	Wed,  8 Sep 2021 20:01:25 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1104D1BF397
- for <buildroot@lists.busybox.net>; Wed,  8 Sep 2021 20:01:23 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5C9EA40284;
+	Wed,  8 Sep 2021 20:11:17 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 352D61BF870
+ for <buildroot@lists.busybox.net>; Wed,  8 Sep 2021 20:11:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 00B0883312
- for <buildroot@lists.busybox.net>; Wed,  8 Sep 2021 20:01:23 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 23E3940284
+ for <buildroot@lists.busybox.net>; Wed,  8 Sep 2021 20:11:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id amJedJHZzf17 for <buildroot@lists.busybox.net>;
- Wed,  8 Sep 2021 20:01:22 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OO2yzxLazl_9 for <buildroot@lists.busybox.net>;
+ Wed,  8 Sep 2021 20:11:13 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
- [IPv6:2a00:1450:4864:20::332])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C4871830FB
- for <buildroot@buildroot.org>; Wed,  8 Sep 2021 20:01:21 +0000 (UTC)
-Received: by mail-wm1-x332.google.com with SMTP id
- c8-20020a7bc008000000b002e6e462e95fso2509321wmb.2
- for <buildroot@buildroot.org>; Wed, 08 Sep 2021 13:01:21 -0700 (PDT)
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
+ [IPv6:2a00:1450:4864:20::434])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id BD84740265
+ for <buildroot@buildroot.org>; Wed,  8 Sep 2021 20:11:13 +0000 (UTC)
+Received: by mail-wr1-x434.google.com with SMTP id d6so4989092wrc.11
+ for <buildroot@buildroot.org>; Wed, 08 Sep 2021 13:11:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=bjbVAbnHXACWpd/NubB5mQ94P3jXc/RGwKBpxPe8Bhk=;
- b=HMB0Hz9xd+bT/7Lqa+IEIij19Gi0U8aM6dFsmJA4FV27gygAmp1xCz1s8tY9WSA3Jk
- gGgfiIPVMH/9MO6YUWLImKulKAhgudXi3CQyIYlJD1ayT30VMm3QBCJddwKwuhdzGI1Y
- S2b+Tt3lNryAV/9iI1T43Uy1GA0tUOSURM8XsQjAOH5gCe51nGAmrgdsRWYsmnt8jgaH
- vP0QWg6dy+paXXrznaigdGgqSM7Ob13aLrr8IvNICXr2gxrMP9FgBhZuV1hxtK16BvR9
- 4kiJBB9TQBNQnI45bvyuh6vtTIG6jpOM04JgzpnJY5VKkcwPaW7TTl6kZuGM4/0sK+Lg
- bo2g==
+ bh=0agNTl4SasIZWRslp2FHDIotsPxVRgcZM9SkmXEJxfs=;
+ b=Cs3rQCA/ycFtMrA829Ep7/KgVQvbOkAdcU3OJoqCNnZ8uhXrKu+7mgIO1TZurszaWN
+ 0wCGvLznSMO4bm2gibJvg/C3ZCy2ALbYB9l6N00W0JrDcxTKOCPQIJ32kyip58/jrKDH
+ rx5K+yaYHsS0hWxzvpjqg83uC8YJpdPx7m2IUysKThfF7jh1cPncSBVYgzpjTvUm/IYS
+ 4DhReMHoiKdGLzsh1wFY0SR2NdILv+uvGkJX/csT0Sm6jme3/vN/X5NjJuMvlcBTGYrE
+ f97iXQ8qInSSIJrh8hXoSuSZHz/EXXnRhV16+0wlEMdpvV1R/1BZpOafg2kA/9wnFrBl
+ 4rDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=bjbVAbnHXACWpd/NubB5mQ94P3jXc/RGwKBpxPe8Bhk=;
- b=0kQuvFfSji1hVk0WqNRtQvREciKnv9V9vCGJt/rScDU0WDV05QwuWnAO0KZ7FZQsGK
- wly37IGchn+ZtHbqZEBXGu7AEidu7FFVt/Vt1d+X7G4BaHF3GVIiuuZZFuwbUMKU5bhV
- 99jFeK6u2MXQtwKosT52Aen81ISfHJCA0fWmpMgKW05pj/BobxNLOH2jghRmTwbfuUTB
- SL/UeH8IWNv7hiYBQ8E5vMZ1Byk/8vHW1HBh263zzqp25RpeznMHEY6lvljlHCaYKh0v
- aODKfttpXhBSkSyfjgEnbMnH6qQYva0zvdTPZ/aau0W+5bxw+85ohnIpygffsDmvRein
- F3VQ==
-X-Gm-Message-State: AOAM5313F0IFeZrDaKXZTnYY/lfuNpjVK6uzKdZrJTpnTRPh3aJlh2oN
- 4jeQp0qbusQNX61LKIeYZAYnq4Penkc=
-X-Google-Smtp-Source: ABdhPJwOCcv2tkElPYa62OLk7JoWx6MblRpx05yNMCfvKB7o8R7192/KhdRp5tmeMm6Ga53YpG/xmA==
-X-Received: by 2002:a05:600c:3b26:: with SMTP id
- m38mr36671wms.155.1631131279790; 
- Wed, 08 Sep 2021 13:01:19 -0700 (PDT)
+ bh=0agNTl4SasIZWRslp2FHDIotsPxVRgcZM9SkmXEJxfs=;
+ b=Rpdes92zZ3Oynw/y0LDVYjRmtUtCKLDSd+K8hkzzUlglg4TnGbJZGoKCqqhwX0E31L
+ 5LIRYR4t2UFHBpVngVn+r84S83HrDwSOE39exo0y8Gsa3lgHHIOqrrbXELwrLOYzVydj
+ J4kZWGIQx4ddwoHzBS0bSDIccb+Ig92c679ALb8lIcSUqjxWatm90UPQs25RK/k6nM45
+ lYPTz0BQsaXsoNmc2xd9CWCnqkFDQ2VNiLvAko2/NZedQzRfgurXO2OUfgs3JNEZBEaQ
+ kIicdsoZcC3PFukbpckDJL0pUPRjvD0Ilj7LMgHvYn+tUe0ltWz8a1Ccuk7ogpzEJ0iO
+ L6SA==
+X-Gm-Message-State: AOAM532bYixW7XjB5vNp5GhCsKn41wufMkSRd1FrwxX7gtJ1+nVzDqDS
+ A6oFyD8menpZRcU51w/5PNyYL95Addg=
+X-Google-Smtp-Source: ABdhPJy1kZ5kG/lDoKqkWByLtMytkQs3G+aJuqAj87rMJtktbVLYUuEGUh+d5GDwxlT1YAUn5S/DNA==
+X-Received: by 2002:adf:c550:: with SMTP id s16mr91099wrf.25.1631131871823;
+ Wed, 08 Sep 2021 13:11:11 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-2139-166.w92-167.abo.wanadoo.fr.
  [92.167.218.166])
- by smtp.gmail.com with ESMTPSA id a12sm3059923wmm.42.2021.09.08.13.01.19
+ by smtp.gmail.com with ESMTPSA id o12sm2999404wmr.2.2021.09.08.13.10.42
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 08 Sep 2021 13:01:19 -0700 (PDT)
+ Wed, 08 Sep 2021 13:10:55 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed,  8 Sep 2021 22:00:58 +0200
-Message-Id: <20210908200058.593544-1-fontaine.fabrice@gmail.com>
+Date: Wed,  8 Sep 2021 22:10:37 +0200
+Message-Id: <20210908201037.729001-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/tinycbor: bump to version 0.5.4
+Subject: [Buildroot] [PATCH 1/1] package/libupnp: bump to version 1.14.10
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -104,87 +102,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-- Drop patch (already in version)
-- Update indentation in hash file (two spaces)
-
-https://github.com/intel/tinycbor/releases/tag/v0.5.4
+https://github.com/pupnp/pupnp/blob/release-1.14.10/ChangeLog
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...able-build-for-different-c-libraries.patch | 39 -------------------
- package/tinycbor/tinycbor.hash                |  4 +-
- package/tinycbor/tinycbor.mk                  |  2 +-
- 3 files changed, 3 insertions(+), 42 deletions(-)
- delete mode 100644 package/tinycbor/0001-Enable-build-for-different-c-libraries.patch
+ package/libupnp/libupnp.hash | 2 +-
+ package/libupnp/libupnp.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/tinycbor/0001-Enable-build-for-different-c-libraries.patch b/package/tinycbor/0001-Enable-build-for-different-c-libraries.patch
-deleted file mode 100644
-index 40f9288604..0000000000
---- a/package/tinycbor/0001-Enable-build-for-different-c-libraries.patch
-+++ /dev/null
-@@ -1,39 +0,0 @@
--From 085ca40781f7c39febe6d14fb7e5cba342e1804b Mon Sep 17 00:00:00 2001
--From: Ricardo Crudo <ricardo.crudo@gmail.com>
--Date: Sat, 30 May 2020 22:03:01 +0200
--Subject: [PATCH] Enable build for different c libraries
--
--The open_memstream.c was using GLIBC macro definition to test if the
--library is building on a Linux box. This makes impossible to build
--tinycbor against other C libraries, as musl for example.
--
--Signed-off-by: Ricardo Crudo <ricardo.crudo@gmail.com>
--[Retrieved from:
--https://github.com/intel/tinycbor/commit/085ca40781f7c39febe6d14fb7e5cba342e1804b]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- src/open_memstream.c | 4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/src/open_memstream.c b/src/open_memstream.c
--index 18f3de8..3365378 100644
----- a/src/open_memstream.c
--+++ b/src/open_memstream.c
--@@ -38,7 +38,7 @@
-- #ifdef __APPLE__
-- typedef int RetType;
-- typedef int LenType;
---#elif __GLIBC__
--+#elif __linux__
-- typedef ssize_t RetType;
-- typedef size_t LenType;
-- #else
--@@ -101,7 +101,7 @@ FILE *open_memstream(char **bufptr, size_t *lenptr)
-- 
-- #ifdef __APPLE__
--     return funopen(b, NULL, write_to_buffer, NULL, close_buffer);
---#elif __GLIBC__
--+#elif __linux__
--     static const cookie_io_functions_t vtable = {
--         NULL,
--         write_to_buffer,
-diff --git a/package/tinycbor/tinycbor.hash b/package/tinycbor/tinycbor.hash
-index 8ff706bb67..29f0cfabf0 100644
---- a/package/tinycbor/tinycbor.hash
-+++ b/package/tinycbor/tinycbor.hash
+diff --git a/package/libupnp/libupnp.hash b/package/libupnp/libupnp.hash
+index f7fdb6d521..1c8a302682 100644
+--- a/package/libupnp/libupnp.hash
++++ b/package/libupnp/libupnp.hash
 @@ -1,3 +1,3 @@
  # Locally computed:
--sha256	956eb4b670ea4969eaee67395b5bb6437b153960385b77357d6692e979d1b12d	tinycbor-0.5.3.tar.gz
--sha256	3c6ba0b5bfa7830505301ffb336a17b0748e0d61c4d34216e9dc98f10e40395e	LICENSE
-+sha256  e63668a71fd6d7abf1727dc31682ec7f107599a3c024a445c3e5da6af9328983  tinycbor-0.5.4.tar.gz
-+sha256  3c6ba0b5bfa7830505301ffb336a17b0748e0d61c4d34216e9dc98f10e40395e  LICENSE
-diff --git a/package/tinycbor/tinycbor.mk b/package/tinycbor/tinycbor.mk
-index ef095ea67d..476da67363 100644
---- a/package/tinycbor/tinycbor.mk
-+++ b/package/tinycbor/tinycbor.mk
+-sha256  7b66ac4a86bc0e218e2771ac274b2945bc4154bf9054e57b14afb67c26ac7c24  libupnp-1.14.7.tar.bz2
++sha256  dc417f5ef0a9182d76b6cf38bdf863e2fb1ee3c353c56fa82e354edef7ba50f2  libupnp-1.14.10.tar.bz2
+ sha256  c8b99423cad48bb44e2cf52a496361404290865eac259a82da6d1e4331ececb3  COPYING
+diff --git a/package/libupnp/libupnp.mk b/package/libupnp/libupnp.mk
+index 7457d2644a..ef2b724efa 100644
+--- a/package/libupnp/libupnp.mk
++++ b/package/libupnp/libupnp.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TINYCBOR_VERSION = 0.5.3
-+TINYCBOR_VERSION = 0.5.4
- TINYCBOR_SITE = $(call github,intel,tinycbor,v$(TINYCBOR_VERSION))
- TINYCBOR_LICENSE = MIT
- TINYCBOR_LICENSE_FILES = LICENSE
+-LIBUPNP_VERSION = 1.14.7
++LIBUPNP_VERSION = 1.14.10
+ LIBUPNP_SOURCE = libupnp-$(LIBUPNP_VERSION).tar.bz2
+ LIBUPNP_SITE = \
+ 	http://downloads.sourceforge.net/project/pupnp/release-$(LIBUPNP_VERSION)
 -- 
 2.33.0
 
