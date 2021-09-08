@@ -2,92 +2,88 @@ Return-Path: <SRS0=AA6u=N6=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.5 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
-	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-21.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 76792C433F5
-	for <buildroot@archiver.kernel.org>; Wed,  8 Sep 2021 16:45:46 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E150AC433F5
+	for <buildroot@archiver.kernel.org>; Wed,  8 Sep 2021 18:08:56 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1397961139
-	for <buildroot@archiver.kernel.org>; Wed,  8 Sep 2021 16:45:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1397961139
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id 1B8E661131
+	for <buildroot@archiver.kernel.org>; Wed,  8 Sep 2021 18:08:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1B8E661131
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A246A40796;
-	Wed,  8 Sep 2021 16:45:45 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9F86A40108;
+	Wed,  8 Sep 2021 18:08:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id R33HTdTTOKIG; Wed,  8 Sep 2021 16:45:44 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id qB6XVPqoi-lp; Wed,  8 Sep 2021 18:08:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0834440781;
-	Wed,  8 Sep 2021 16:45:43 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B7C111BF3CA
- for <buildroot@lists.busybox.net>; Wed,  8 Sep 2021 16:45:42 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9289740135;
+	Wed,  8 Sep 2021 18:08:53 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A19B21BF484
+ for <buildroot@lists.busybox.net>; Wed,  8 Sep 2021 18:08:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A586083415
- for <buildroot@lists.busybox.net>; Wed,  8 Sep 2021 16:45:42 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8F3D840135
+ for <buildroot@lists.busybox.net>; Wed,  8 Sep 2021 18:08:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Bs43nJrlfFB5 for <buildroot@lists.busybox.net>;
- Wed,  8 Sep 2021 16:45:41 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JjSMfUzz_OKu for <buildroot@lists.busybox.net>;
+ Wed,  8 Sep 2021 18:08:48 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
- [IPv6:2a00:1450:4864:20::331])
- by smtp1.osuosl.org (Postfix) with ESMTPS id AEB6083408
- for <buildroot@buildroot.org>; Wed,  8 Sep 2021 16:45:41 +0000 (UTC)
-Received: by mail-wm1-x331.google.com with SMTP id
- u15-20020a05600c19cf00b002f6445b8f55so2069897wmq.0
- for <buildroot@buildroot.org>; Wed, 08 Sep 2021 09:45:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
+ [IPv6:2a00:1450:4864:20::42b])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 64C2640108
+ for <buildroot@buildroot.org>; Wed,  8 Sep 2021 18:08:48 +0000 (UTC)
+Received: by mail-wr1-x42b.google.com with SMTP id i28so4615186wrb.2
+ for <buildroot@buildroot.org>; Wed, 08 Sep 2021 11:08:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=mMwYmI/iQ4B3mLtwP1StD7vnVMw6BCZ7FlfIWYQWjKU=;
- b=LDo82cGSJ0oQ3wYF7WtrLSak1cU94pbpN7BVM/gd6CZupsICSnc2RkraCeZ48Aa0x/
- ObA14wfNAvG7bHya0kHMjLilIAAUUAqjKHFBdwdJIEL4EvSQPvufb5wA8WLxhdlrZ3qX
- CamDhICEH/xOahYBQOt0WayyWV0RqvUr+K6hEC+oIS5RVf67rIKa6sre+ujwVgAQXRzk
- CcACN/mPeiSNyiRVpRd9vNW1Z/HvJaNkBv1Bo5iUVZMToem/pC8jQD6xL6GsMnBNyrlK
- bzckUS0JLUDg1ROoW9q27V3SS7IQrwJTtniIsaAUsCFrD8juV08hj6q5hBODQWrCl3g6
- HNKA==
+ bh=eS74N0LIkL7ggY6CIIm2y1N4nxziw6rv+x9FbAPlXBY=;
+ b=hrqozG33Rzhmcy+LT0ncXXQYUxEHJBe7rMHp4XDidn+J2oIQeMhU77fjnh0T6iy2xm
+ ZmNnrXOVRkq7yzscUpMHVEQ9zf20PeIRqshyiYXqUt++mneB2F29JL9YFSHlKWya7Ru0
+ zzX5xrr2yOXlb3LWjIRMMl1T83WfCglgpHsWhpg6GgcaR9rW8qCeMnyZ7W6ncI/I+gN7
+ 2+upzNhjMOYME0QYPWZaO6nvl6sN2uehwtJtneW29CduHIOOEGbOxH6thqt3ltZKH+jj
+ lq5uvB7HUoEgmObQ2ME3pFGfFr0wjoMcEfR63YFvEE0s8c8uImjhdyLL8kT5Sk41t2Vl
+ iOfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=mMwYmI/iQ4B3mLtwP1StD7vnVMw6BCZ7FlfIWYQWjKU=;
- b=TDA9f41cJcOIIUJd38qeSp0aaWQWBkr2DVkLVS3ve9df/aUT6VGb+pIzbS9/sOcdWQ
- 27SclVybWd080u4I96zIcwREo2jsXzxBMaUbY6Yk/ji/s9rXDW1ZGWnoOFYUgcggGP+8
- SAv06+VAdaXOQNhwHTnU+AJEFUpN8EzFXTHX2chD6n68RQ0rO8H+Kt7oX9Nzohpual4b
- Bd0zCTc+zECggxxdvaZ8Lec3OUhCPnjeuCwqHniWa3FS3KwO/lnwtDpnHN8MVQWA+84M
- cegZW6e9mCxCiL5WjHOvdMH7hRpHkyOnAc5wqvl6qU9zRykREH98/GNSLyqE7OQIC8ev
- FBKg==
-X-Gm-Message-State: AOAM530/Xj+PGvEBOBBdizEArEzRnszCAjDxp94JNcGSy4thKWB8uGzp
- tx4hYg4r+X9/Y3NWToKfurKoyNey7lc=
-X-Google-Smtp-Source: ABdhPJywWX35VI1DsoatRrRrugSWWId7s5w+ykltiumyeT9iqdHLgmvEM4qbMQXVR/wVyd9PHn3EXA==
-X-Received: by 2002:a7b:c74d:: with SMTP id w13mr4389364wmk.149.1631119539647; 
- Wed, 08 Sep 2021 09:45:39 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-2139-166.w92-167.abo.wanadoo.fr.
- [92.167.218.166])
- by smtp.gmail.com with ESMTPSA id f17sm2651319wmf.4.2021.09.08.09.45.39
+ bh=eS74N0LIkL7ggY6CIIm2y1N4nxziw6rv+x9FbAPlXBY=;
+ b=brmUZukhH3eC/pgHVm1mCG9XFLDFr5W3mjR22kgj8WrgC+tl5cCNU0Yj5JhhYo2L58
+ HxY5P4AG76yC96kOQtXtqkPvkhBMom+KvBwxtP0WYRYG1kg+rtiJcPWqsn309E4bfJG3
+ LsHQcBGEGTWu4WwJfOo42EMT3tc1PtuRxipdo9RkXYeT0NOSYTl20+9lxcUHCNHJij5W
+ zoHTsJoSfxemLT1JVQbbjAxeishBXQ1PTPqcpnJncszN25Qdr+2RDNKjhALju4Z9XVq1
+ fwfExcwygyvWRGBZhfiZIdC2BTfaPQ/EI6cmhRmtS3I8rxYM9zwerbfpXvwmSiMELq0a
+ /BBQ==
+X-Gm-Message-State: AOAM530OqRVAY6emCkMjJgiMg9TH08EXF9f89MF7Nea7o2PshdtERhYK
+ 7yJF0iGXLZk35iaovMoF2xGpoRMsOZ4Vg/BP
+X-Google-Smtp-Source: ABdhPJz1RbmzbpyxsKpIvT/dB5y6KXYRtoYKvIAV9Y2czLY/9U/xYw42HHwgld/oflBlwOm6bNo/uA==
+X-Received: by 2002:a5d:4142:: with SMTP id c2mr5362050wrq.340.1631124526162; 
+ Wed, 08 Sep 2021 11:08:46 -0700 (PDT)
+Received: from illias-PC.local.ess-mail.com
+ (ip-188-118-3-185.reverse.destiny.be. [188.118.3.185])
+ by smtp.gmail.com with ESMTPSA id m6sm3456595wrw.0.2021.09.08.11.08.45
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 08 Sep 2021 09:45:39 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Wed, 08 Sep 2021 11:08:45 -0700 (PDT)
+From: Illia Bitkov <illia.bitkov@mind.be>
 To: buildroot@buildroot.org
-Date: Wed,  8 Sep 2021 18:45:36 +0200
-Message-Id: <20210908164536.474998-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.33.0
+Date: Wed,  8 Sep 2021 20:08:25 +0200
+Message-Id: <20210908180825.690731-1-illia.bitkov@mind.be>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/uboot-tools: fix MKIMAGE_ARCH handling
+Subject: [Buildroot] [PATCH v3 1/1] package/mono: fix external libatomic_ops
+ linkage
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,89 +96,94 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: Matt Weber <matthew.weber@collins.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Illia Bitkov <illia.bitkov@mind.be>,
+ Angelo Compagnucci <angelo.compagnucci@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-Fix MKIMAGE_ARCH handling to avoid the following build failure:
+Added patch fixes linkage of libgc with external libtomic-ops.
+Mono uses bundeled bdwgc which doesn't link external libatomic-ops.
+Patch is a fix cherry-picked from bdwgc upstream.
 
-/home/buildroot/autobuild/instance-0/output-1/build/host-uboot-tools-2021.07/tools/mkimage -C none -A openrisc -T script -d /home/buildroot/autobuild/instance-0/output-1/boot_script.txt /home/buildroot/autobuild/instance-0/output-1/build/host-uboot-tools-2021.07/tools/boot.scr
+Problem found on ARMv5 processors, on newer ARM processors
+it uses header based functions and doesn't need built library.
 
-Invalid architecture, supported are:
-	alpha            Alpha
-	arc              ARC
-	arm              ARM
-	arm64            AArch64
-	avr32            AVR32
-	blackfin         Blackfin
-	ia64             IA64
-	invalid          Invalid ARCH
-	m68k             M68K
-	microblaze       MicroBlaze
-	mips             MIPS
-	mips64           MIPS 64 Bit
-	nds32            NDS32
-	nios2            NIOS II
-	or1k             OpenRISC 1000
-	powerpc          PowerPC
-	riscv            RISC-V
-	s390             IBM S390
-	sandbox          Sandbox
-	sh               SuperH
-	sparc            SPARC
-	sparc64          SPARC 64 Bit
-	x86              Intel x86
-	x86_64           AMD x86_64
-	xtensa           Xtensa
-
-Strangely enough, we only have autobuilder failures since July 2021 even
-if or1k must be used since the addition of openriscv support in 2012:
-https://github.com/u-boot/u-boot/commit/3ddcaccda3824e1c7f7266d543e4c0eb3ea9851c
+Error:
+/home/buildroot/autobuild/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/9.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: ../../external/bdwgc/.libs/libgc.a(gc.o): in function `GC_steal_mark_stack':
+gc.c:(.text+0x2020): undefined reference to `AO_store_full_emulation'
 
 Fixes:
- - http://autobuild.buildroot.org/results/c3f0f2a3fb87d74bfdaccf9b94c66f0b5bae7520
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+http://autobuild.buildroot.net/results/ebc54e5dea63aca21a4072d294fdede41de559c7
+http://autobuild.buildroot.net/results/6d10a4bd43fbc9c1d3fa26d5eef394c8023cb85f
+Signed-off-by: Illia Bitkov <illia.bitkov@mind.be>
 ---
-Changes v1 -> v2:
- - Fix commit message to specify that autobuilder failures are raised
-   since July 2021
+ ...-system-libatomic_ops-shared-library.patch | 52 +++++++++++++++++++
+ 1 file changed, 52 insertions(+)
+ create mode 100644 package/mono/0001-Fix-linkage-with-a-system-libatomic_ops-shared-library.patch
 
- package/uboot-tools/uboot-tools.mk | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
-
-diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
-index a87956d028..81f60963ec 100644
---- a/package/uboot-tools/uboot-tools.mk
-+++ b/package/uboot-tools/uboot-tools.mk
-@@ -206,15 +206,15 @@ $(eval $(host-generic-package))
- 
- MKIMAGE = $(HOST_DIR)/bin/mkimage
- 
--# mkimage supports arm blackfin m68k microblaze mips mips64 nios2 powerpc ppc sh sparc sparc64 x86
-+# mkimage supports alpha arc arm arm64 blackfin ia64 invalid m68k microblaze mips mips64 nds32 nios2 or1k powerpc riscv s390 sandbox sh sparc sparc64 x86 x86_64 xtensa
- # KERNEL_ARCH can be arm64 arc arm blackfin m68k microblaze mips nios2 powerpc sh sparc i386 x86_64 xtensa
--# For arm64, arc, xtensa we'll just keep KERNEL_ARCH
--# For mips64, we'll just keep mips
--# For i386 and x86_64, we need to convert
--ifeq ($(KERNEL_ARCH),x86_64)
--MKIMAGE_ARCH = x86
--else ifeq ($(KERNEL_ARCH),i386)
-+# For i386, we need to convert
-+# For openrisc, we need to convert
-+# For others, we'll just keep KERNEL_ARCH
-+ifeq ($(KERNEL_ARCH),i386)
- MKIMAGE_ARCH = x86
-+else ifeq ($(KERNEL_ARCH),openrisc)
-+MKIMAGE_ARCH = or1k
- else
- MKIMAGE_ARCH = $(KERNEL_ARCH)
- endif
+diff --git a/package/mono/0001-Fix-linkage-with-a-system-libatomic_ops-shared-library.patch b/package/mono/0001-Fix-linkage-with-a-system-libatomic_ops-shared-library.patch
+new file mode 100644
+index 0000000000..66d4d8e100
+--- /dev/null
++++ b/package/mono/0001-Fix-linkage-with-a-system-libatomic_ops-shared-library.patch
+@@ -0,0 +1,52 @@
++From 02a44ee1df8176c72e75fd706d1a8f063d3196d5 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Mon, 5 Nov 2018 22:50:40 +0100
++Subject: Fix linkage with a system libatomic_ops shared library
++
++Issue #247 (bdwgc).
++
++When bdwgc is linked with the external libatomic_ops, bdw-gc.pc must
++contain the needed dynamic libraries (such as -latomic_ops) otherwise
++build of applications could fail on the link stage on some hosts:
++* libgc.so: undefined reference to 'AO_fetch_compare_and_swap_emulation'
++* libgc.so: undefined reference to 'AO_store_full_emulation'
++
++So, this commit sets ATOMIC_OPS_LIBS to "-latomic_ops" when a system
++atomic_ops library is used and uses ATOMIC_OPS_LIBS in bdw-gc.pc.in.
++
++* bdw-gc.pc.in (Libs): Add @ATOMIC_OPS_LIBS@.
++* configure.ac [$with_libatomic_ops!=no && $with_libatomic_ops!=none
++&& $THREADS!=none] (ATOMIC_OPS_LIBS): Set to -latomic_ops; do AC_SUBST.
++
++Fix is cherry-picked from bdwgc upstream
++
++Link to original commit https://github.com/ivmai/bdwgc/commit/02a44ee1df8176c72e75fd706d1a8f063d3196d5?branch=02a44ee1df8176c72e75fd706d1a8f063d3196d5&diff=unified  
++
++Signed-off-by: Illia Bitkov <illia.bitkov@mind.be>
++
++diff --git a/external/bdwgc/bdw-gc.pc.in b/external/bdwgc/bdw-gc.pc.in
++index ef4c2341..a32e7598 100644
++--- a/external/bdwgc/bdw-gc.pc.in
+++++ b/external/bdwgc/bdw-gc.pc.in
++@@ -6,5 +6,5 @@ includedir=@includedir@
++ Name: Boehm-Demers-Weiser Conservative Garbage Collector
++ Description: A garbage collector for C and C++
++ Version: @PACKAGE_VERSION@
++-Libs: -L${libdir} -lgc
+++Libs: -L${libdir} @ATOMIC_OPS_LIBS@ -lgc
++ Cflags: -I${includedir}
++diff --git a/external/bdwgc/configure.ac b/external/bdwgc/configure.ac
++index 21abe8fa..9ffe81de 100644
++--- a/external/bdwgc/configure.ac
+++++ b/external/bdwgc/configure.ac
++@@ -1081,7 +1081,9 @@ AS_IF([test x"$with_libatomic_ops" = xno \
++ AC_MSG_CHECKING([which libatomic_ops to use])
++ AS_IF([test x"$with_libatomic_ops" != xno],
++   [ AS_IF([test x"$with_libatomic_ops" != xnone -a x"$THREADS" != xnone],
++-          [ AC_MSG_RESULT([external]) ],
+++          [ AC_MSG_RESULT([external])
+++            ATOMIC_OPS_LIBS="-latomic_ops"
+++            AC_SUBST([ATOMIC_OPS_LIBS]) ],
++           [ AC_MSG_RESULT([none])
++             AS_IF([test x"$THREADS" != xnone],
++                   [ AC_DEFINE([GC_BUILTIN_ATOMIC], [1],
 -- 
-2.33.0
+2.25.1
 
 _______________________________________________
 buildroot mailing list
