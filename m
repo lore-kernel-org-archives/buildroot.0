@@ -1,71 +1,62 @@
-Return-Path: <SRS0=AA6u=N6=lists.buildroot.org=buildroot-bounces@kernel.org>
+Return-Path: <SRS0=nSxO=N7=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-21.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A1C3C433F5
-	for <buildroot@archiver.kernel.org>; Wed,  8 Sep 2021 22:15:38 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DCAA9C433FE
+	for <buildroot@archiver.kernel.org>; Thu,  9 Sep 2021 04:17:52 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id AE4C661157
-	for <buildroot@archiver.kernel.org>; Wed,  8 Sep 2021 22:15:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org AE4C661157
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=benettiengineering.com
+	by mail.kernel.org (Postfix) with ESMTPS id F1E8361101
+	for <buildroot@archiver.kernel.org>; Thu,  9 Sep 2021 04:17:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org F1E8361101
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=tkos.co.il
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 84307406CD;
-	Wed,  8 Sep 2021 22:15:37 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8AA57404B0;
+	Thu,  9 Sep 2021 04:17:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mK5smyc17zuE; Wed,  8 Sep 2021 22:15:36 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Og5ZWA9OYjvD; Thu,  9 Sep 2021 04:17:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EB49E404B1;
-	Wed,  8 Sep 2021 22:15:35 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id BC7941BF9B2
- for <buildroot@lists.busybox.net>; Wed,  8 Sep 2021 22:15:22 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id ADB4740183;
+	Thu,  9 Sep 2021 04:17:49 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 6975B1BF40A
+ for <buildroot@lists.busybox.net>; Thu,  9 Sep 2021 04:17:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B933C613E1
- for <buildroot@lists.busybox.net>; Wed,  8 Sep 2021 22:15:22 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 56D5283E4A
+ for <buildroot@lists.busybox.net>; Thu,  9 Sep 2021 04:17:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=aruba.it
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id h3R0lk1e6_Xq for <buildroot@lists.busybox.net>;
- Wed,  8 Sep 2021 22:15:21 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hw8_-mKTHmQi for <buildroot@lists.busybox.net>;
+ Thu,  9 Sep 2021 04:17:47 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtpcmd10101.aruba.it (smtpcmd10101.aruba.it [62.149.156.101])
- by smtp3.osuosl.org (Postfix) with ESMTP id C8CC96068F
- for <buildroot@buildroot.org>; Wed,  8 Sep 2021 22:15:20 +0000 (UTC)
-Received: from ubuntu.localdomain ([146.241.179.121])
- by Aruba Outgoing Smtp  with ESMTPSA
- id O5qfmiloJnyXHO5qfmZIvp; Thu, 09 Sep 2021 00:15:19 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1631139319; bh=8ajt2cy7CGsD9zVvRzg0FMyzMoOGDlimnpnDpUH0d/o=;
- h=From:To:Subject:Date:MIME-Version;
- b=ZIxabNOgJ+FA4yilV68GZxYjKsRRQOzn3ONuta0wttmw3qfooPOW64NosiofLA2+9
- 2de19zVDlpXj5enPTMNuQgrfbMTaeLC1DFx0QcWHswLlxUBH019K8X6uElPLZPm415
- uoZP6Uu7e+yBhj3qdF9+8q6V32OH3xBf/4f8QKJAG4+I87yzQjkqgB1zhxo/B9NXkl
- RXngb4VvjRL9OLrHuYhV5MbsELFvmTHACQ7M2FuEFLJLT9tl3uD8fiXiVMOVwsYZ0/
- OC9ZbxVjOGuKTUEerCiFoHAHz4miiWtzkzMwo6S1lK1WRzSTZAJCRlELU/VAPEdiZx
- 8Qh5j28OvLK3g==
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-To: buildroot@buildroot.org
-Date: Thu,  9 Sep 2021 00:15:15 +0200
-Message-Id: <20210908221516.1719932-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.25.1
+Received: from mx.tkos.co.il (guitar.tcltek.co.il [192.115.133.116])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1AB0583E48
+ for <buildroot@busybox.net>; Thu,  9 Sep 2021 04:17:46 +0000 (UTC)
+Received: from tarshish (unknown [10.0.8.2])
+ (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+ (No client certificate requested)
+ by mx.tkos.co.il (Postfix) with ESMTPS id 08D7A440E2F;
+ Thu,  9 Sep 2021 07:17:23 +0300 (IDT)
+References: <20210817142420.32435-1-mf@go-sys.de>
+ <878s09kbnn.fsf@dell.be.48ers.dk>
+User-agent: mu4e 1.6.5; emacs 27.1
+From: Baruch Siach <baruch@tkos.co.il>
+To: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 09 Sep 2021 07:16:14 +0300
+In-reply-to: <878s09kbnn.fsf@dell.be.48ers.dk>
+Message-ID: <87bl52l6vu.fsf@tarshish>
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4wfKxDoQSHSQ7GCewAk5DtNnPd4KgZZnTSFboFGf5RrtSY/UgdC8nZZ3jZfUzjtY23cbUBjLdtlM0bqQbZ0aZY9oHobOSn0J0crcbhhW00lqGdefWDXY5I
- 3nm5FIAn9jOcjiKEGpr++4Hr2lwBbqLg7CVNsNNkgt7HNPXS2OFNaG6+c0vZUOoQKUap1a8PCkIxoQymJ9Dvvx3vEKKAAoCd8MZeYwV13mSSMc0z6Q/Q161q
- OETDd4ee8z9eKmG8zPyAjFd0AB+Urizw+3s5iGhkcS4=
-Subject: [Buildroot] [PATCH 1/2] package/harfbuzz: bump to version 2.9.1
+Subject: Re: [Buildroot] [PATCH 1/1] package/gdb: bump version 10.x to 10.2
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,45 +69,30 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc: Michael Fischer <mf@go-sys.de>, buildroot@busybox.net
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-Bump to version 2.9.1
+Hi Peter,
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- package/harfbuzz/harfbuzz.hash | 2 +-
- package/harfbuzz/harfbuzz.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Mon, Sep 06 2021, Peter Korsgaard wrote:
+>>>>>> "Michael" == Michael Fischer <mf@go-sys.de> writes:
+>
+>  > Signed-off-by: Michael Fischer <mf@go-sys.de>
+>
+> Committed to 2021.02.x and 2021.05.x, thanks.
 
-diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
-index a101f3e7de..c00195cba6 100644
---- a/package/harfbuzz/harfbuzz.hash
-+++ b/package/harfbuzz/harfbuzz.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  3e1c2e1d2c65d56364fd16d1c41a06b2a35795496f78dfff635c2b7414b54c5a  harfbuzz-2.9.0.tar.xz
-+sha256  0edcc980f526a338452180e701d6aba6323aef457b6686976a7d17ccbddc51cf  harfbuzz-2.9.1.tar.xz
- sha256  4345e1735f8bc6d812fed5180cabb5a5e88a4109d332652f2a45c13cfa5ee692  COPYING
-diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
-index bcf5bfb5af..70c1e1f7e6 100644
---- a/package/harfbuzz/harfbuzz.mk
-+++ b/package/harfbuzz/harfbuzz.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--HARFBUZZ_VERSION = 2.9.0
-+HARFBUZZ_VERSION = 2.9.1
- HARFBUZZ_SITE = https://github.com/harfbuzz/harfbuzz/releases/download/$(HARFBUZZ_VERSION)
- HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.xz
- HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
+Not in 2021.05.x as of commit cb797087e95eb9 ("package/fetchmail: bump
+version to 6.4.21").
+
+baruch
+
 -- 
-2.25.1
-
+                                                     ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch@tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
