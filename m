@@ -5,89 +5,89 @@ X-Spam-Level:
 X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
 	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
 	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 84D1AC433EF
-	for <buildroot@archiver.kernel.org>; Thu,  9 Sep 2021 21:28:36 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EAEC9C433EF
+	for <buildroot@archiver.kernel.org>; Thu,  9 Sep 2021 22:41:30 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id EA3256103E
-	for <buildroot@archiver.kernel.org>; Thu,  9 Sep 2021 21:28:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org EA3256103E
+	by mail.kernel.org (Postfix) with ESMTPS id 58DE1611C1
+	for <buildroot@archiver.kernel.org>; Thu,  9 Sep 2021 22:41:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 58DE1611C1
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 75EC360B38;
-	Thu,  9 Sep 2021 21:28:35 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E95A6401F6;
+	Thu,  9 Sep 2021 22:41:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9smaPbTK5HGT; Thu,  9 Sep 2021 21:28:34 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id atMtiLCB5SHA; Thu,  9 Sep 2021 22:41:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D1811607B8;
-	Thu,  9 Sep 2021 21:28:33 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0FA11401E7;
+	Thu,  9 Sep 2021 22:41:28 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 865F51BF2AB
- for <buildroot@lists.busybox.net>; Thu,  9 Sep 2021 21:28:32 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A461E1BF27A
+ for <buildroot@lists.busybox.net>; Thu,  9 Sep 2021 22:41:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 751D584AB5
- for <buildroot@lists.busybox.net>; Thu,  9 Sep 2021 21:28:32 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8521E837C0
+ for <buildroot@lists.busybox.net>; Thu,  9 Sep 2021 22:41:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3A1QbH_yFqsV for <buildroot@lists.busybox.net>;
- Thu,  9 Sep 2021 21:28:32 +0000 (UTC)
+ with ESMTP id yFquJaAq3tV2 for <buildroot@lists.busybox.net>;
+ Thu,  9 Sep 2021 22:41:25 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com
- [IPv6:2607:f8b0:4864:20::130])
- by smtp1.osuosl.org (Postfix) with ESMTPS id DDDD784AB2
- for <buildroot@buildroot.org>; Thu,  9 Sep 2021 21:28:31 +0000 (UTC)
-Received: by mail-il1-x130.google.com with SMTP id h29so3465418ila.2
- for <buildroot@buildroot.org>; Thu, 09 Sep 2021 14:28:31 -0700 (PDT)
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com
+ [IPv6:2607:f8b0:4864:20::d32])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id F299F83563
+ for <buildroot@buildroot.org>; Thu,  9 Sep 2021 22:41:24 +0000 (UTC)
+Received: by mail-io1-xd32.google.com with SMTP id a13so4439486iol.5
+ for <buildroot@buildroot.org>; Thu, 09 Sep 2021 15:41:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=DHHaY5g7N3nqmhfQ1CSiVk92CBGPtPScN6mqLFobasU=;
- b=f0kS06gdssRPkXRfVht7xiIxWADkA5TSMQ7SxugKvCn2HN7o3OyFxUplMcIRhtGu9Q
- Owhf/8lAseoFn85Su8RdOwJJLZwIN49YO1Fyh2nt7SUYbBQqBifEgu0sNbhRJUoeKZ2Z
- RHekqAh267QIfN9gY1YtvfrhUlgVxPTuATY/2QuD5r+D/vf5ZrTuU78yPV99FJQB4Vam
- /SY0RnJuy3VGQ2rAm3FxyEnkOhJf5r/vsOvIXMIE9YVLHHfQdnMZKMM632HmcQartFQX
- rFFh87NkzsieTzeOsiO0VYcnuMf/3OkAaifskanFor/W4azDnaPCFoPnhpPmW1F1HXhD
- 4lQg==
+ bh=q+ia4rwiwTXjhSlHiGZQfVkkrwOlDW7fUhHAxa2+VGI=;
+ b=EBwLKcqVFqPsmK2jGCzNDEU8+JkZ2Qr135bJ32PkXa02tEy9L72AyiZ84FtEsNttq9
+ BNOu4yyvWUTxC61mRKGqX4uwXCFFxZRfwSNX90cSsHl6WepXmtMIpV0AOgzLOem7tNdA
+ W45/ackNEKBDxqa57vzXpti3POncR3Fypn/5oUalsP7n6TNSqe5kVz6ARnOQ7SsGs8Pv
+ sJly79YuSOizt8aMrBx2m+kqkWicmOrOj9LOgIivulZu6Hrz0OpXtvfZ1cSu+H8scr/2
+ zNhHJbEKBLXzN/pOy+94rUUitghM2A2e5xyZd0McGhxMzlx0R4nKYzwLDcVzs3JICdvg
+ feQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=DHHaY5g7N3nqmhfQ1CSiVk92CBGPtPScN6mqLFobasU=;
- b=icCG1i1IDtjYDoR2UsoGQCRMkddCU77ZXj/G49OiwaWdlg/bSRQ2ti5b9vq8W9/U/z
- f8ZiHDc1uR6cEr8mC4FKoltklYzS8EPGOba2lu/UcpqENKgKnHZMv+T3fgMjZ6nbCe1o
- LagZIJyvduUMUDWZ6uUk01X3M1atL72t00qco6DoLdFyBzBeQEF7Z+fhWrFSWzpwHy8d
- LdD8GZmGVxAjY4pYx2TluX2lSDTFTXjf+GfmSJYq5c95HOLn7pYUyTkNdmyuzRvCg6S6
- 6cEF4hd37DmBkEnTLGANnL4skUjavL4+q/l5bMCf+ccrybd0JiVLvx+NH3NPQS6TbVkJ
- goQQ==
-X-Gm-Message-State: AOAM532fmxkWy4BvYwSUZ5L7MKmSFssNvr+/FPOx/ehLEO5H9iKBMFEQ
- +f/KLaUbiNqg7bAdzeOtjJfyirBm200=
-X-Google-Smtp-Source: ABdhPJz76P9SlrsTyfk10LwP7LPuXMAvLXRLOhhHjpiXVoaZ6LMekBY7HisSRxgifXGxfEsflICADw==
-X-Received: by 2002:a05:6e02:b41:: with SMTP id
- f1mr3037181ilu.269.1631222910668; 
- Thu, 09 Sep 2021 14:28:30 -0700 (PDT)
+ bh=q+ia4rwiwTXjhSlHiGZQfVkkrwOlDW7fUhHAxa2+VGI=;
+ b=DHb5bWIgy5bOj/+JyFkVka25FpFeYOMxaEe8gN/yN4v2redgbU4R1iOR0Ehz5QnNAC
+ 8epxsXX5rQhSKT0Ih70jvs8WuEnNFbQNM7i+6PKsFvcc1J3dyAUifQ0rOzog8vGUJeNs
+ nruhKBUhd4VJDq+2F9l3IRJRya+Gz0MhTbzk/bmQfVNdFBz9TyxpI1vspVAj6Ah/dx8W
+ ugC2okrWD9ACsiifKKGorG2n1QG2XtMKac28G2OHRGmyDgzzzhxGD9y0JnNniHAj5Z5O
+ cu4NdShy86oP6Rk8hWCg0nKlpi5oAOe2y7idN4F+JNORvs1kzo/NomB9SMdohrBzaSKm
+ Pf1A==
+X-Gm-Message-State: AOAM531RbK+CI4SeIY4m5uZVEd0Jugyp5sa2vFbFLpRJviMWkbCFde+W
+ WhUtzvSWkepIOmHXoNqkW0a5B6JEs0g=
+X-Google-Smtp-Source: ABdhPJy7HXenvjDZmwFv58zHHZfTRqEklxP1tt3ZN3oBJ8+X7x6AfEUaRxUUhRzJX2aqCqkYr+iCFQ==
+X-Received: by 2002:a05:6638:399:: with SMTP id
+ y25mr1851290jap.23.1631227283848; 
+ Thu, 09 Sep 2021 15:41:23 -0700 (PDT)
 Received: from james-x399.localdomain (97-118-233-80.hlrn.qwest.net.
  [97.118.233.80])
- by smtp.gmail.com with ESMTPSA id b3sm1098436ilm.20.2021.09.09.14.28.30
+ by smtp.gmail.com with ESMTPSA id a21sm1492631iot.43.2021.09.09.15.41.23
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 09 Sep 2021 14:28:30 -0700 (PDT)
+ Thu, 09 Sep 2021 15:41:23 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu,  9 Sep 2021 15:28:26 -0600
-Message-Id: <20210909212826.2260357-1-james.hilliard1@gmail.com>
+Date: Thu,  9 Sep 2021 16:41:21 -0600
+Message-Id: <20210909224121.2327470-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/pipewire: install systemd services
- when using systemd
+Subject: [Buildroot] [PATCH v2 1/1] package/pipewire: install systemd
+ services when using systemd
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -108,11 +108,14 @@ Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/pipewire/pipewire.mk | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+Changes v1 -> v2:
+  - Install user for service
+---
+ package/pipewire/pipewire.mk | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
 
 diff --git a/package/pipewire/pipewire.mk b/package/pipewire/pipewire.mk
-index 2317398088..7908712a33 100644
+index 2317398088..7ae9673cae 100644
 --- a/package/pipewire/pipewire.mk
 +++ b/package/pipewire/pipewire.mk
 @@ -43,10 +43,16 @@ PIPEWIRE_CONF_OPTS += -Dgstreamer=disabled
@@ -134,6 +137,15 @@ index 2317398088..7908712a33 100644
  endif
  
  ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
+@@ -144,4 +150,8 @@ else
+ PIPEWIRE_CONF_OPTS += -Decho-cancel-webrtc=disabled
+ endif
+ 
++define PIPEWIRE_USERS
++	pipewire -1 pipewire -1 * - - - PipeWire System Daemon
++endef
++
+ $(eval $(meson-package))
 -- 
 2.25.1
 
