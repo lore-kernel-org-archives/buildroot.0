@@ -8,84 +8,81 @@ X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AF854C433F5
-	for <buildroot@archiver.kernel.org>; Thu,  9 Sep 2021 06:01:39 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 11B8DC433F5
+	for <buildroot@archiver.kernel.org>; Thu,  9 Sep 2021 06:57:19 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 45F1F61176
-	for <buildroot@archiver.kernel.org>; Thu,  9 Sep 2021 06:01:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 45F1F61176
+	by mail.kernel.org (Postfix) with ESMTPS id 826AF61184
+	for <buildroot@archiver.kernel.org>; Thu,  9 Sep 2021 06:57:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 826AF61184
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E2EC7407BA;
-	Thu,  9 Sep 2021 06:01:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2BFAE60ACF;
+	Thu,  9 Sep 2021 06:57:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DaNCfUVX32jA; Thu,  9 Sep 2021 06:01:38 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id UCJ_k4x1W_dY; Thu,  9 Sep 2021 06:57:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 51C40407AD;
-	Thu,  9 Sep 2021 06:01:37 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id AC37C1BF232
- for <buildroot@lists.busybox.net>; Thu,  9 Sep 2021 06:01:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7217160ACC;
+	Thu,  9 Sep 2021 06:57:16 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 69FE91BF86C
+ for <buildroot@lists.busybox.net>; Thu,  9 Sep 2021 06:57:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A74DD407AD
- for <buildroot@lists.busybox.net>; Thu,  9 Sep 2021 06:01:35 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 58AB160ACC
+ for <buildroot@lists.busybox.net>; Thu,  9 Sep 2021 06:57:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id L3RVTBDgHK-Q for <buildroot@lists.busybox.net>;
- Thu,  9 Sep 2021 06:01:34 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gxwhh6xc5D6e for <buildroot@lists.busybox.net>;
+ Thu,  9 Sep 2021 06:57:13 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
- [IPv6:2a00:1450:4864:20::330])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5675040724
- for <buildroot@buildroot.org>; Thu,  9 Sep 2021 06:01:34 +0000 (UTC)
-Received: by mail-wm1-x330.google.com with SMTP id
- 196-20020a1c04cd000000b002fa489ffe1fso521351wme.4
- for <buildroot@buildroot.org>; Wed, 08 Sep 2021 23:01:34 -0700 (PDT)
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
+ [IPv6:2a00:1450:4864:20::32d])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3827560ACB
+ for <buildroot@buildroot.org>; Thu,  9 Sep 2021 06:57:13 +0000 (UTC)
+Received: by mail-wm1-x32d.google.com with SMTP id
+ j17-20020a05600c1c1100b002e754875260so570426wms.4
+ for <buildroot@buildroot.org>; Wed, 08 Sep 2021 23:57:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=nxIOupUzAM9mn7b1upOw1V9GvhKyuh6WY9+tPHRZjGQ=;
- b=qK2Du0/JQBLX7fDVIrNb9s3A1z1b034ParuJh1fE1jxveHF3k5KJCW7ktDSwpWhRvw
- sKvCyJ3lbToqUiIF7wMkhMZvZsW/FpkjK3hx/ru/X/URQ3Wt+G2kHu9xIgkkQFdQTlVr
- 5qM9aWfSbNUVmI9Y/ZGsRzHBikjxEZPz7x5mldRCxl3In8P5Kzo5QVBnlknTH8Gk+GlY
- gOBJ/QVaHO9Eg0nyjVwc9eVNFYL+hb4XxtNCJ0+4dZ7OgWtUKbJj4pFJNJEYC7fHTop2
- b2i5Wuhk8FDcvYAuEwm/+f4Dm0pOa37x1yqGqr+k7kPOxMYINi9zo57TUOZqULJAaZ3w
- Wq6Q==
+ h=from:to:cc:subject:date:message-id;
+ bh=pkxRt/jMyYBBinaculD5ku0J0oaAKYtl16hYAYql/94=;
+ b=FghYDz/c1AQWsspvK2wpa85MuZQSkuPCyKmDzEqN9vS2axqEDd0oe6HEGJqnWfpObj
+ nCnPmZegMAXbp4KGhFKeKa31CahFp4JE+1UIDqmK7oZcGgFt2XbYoWJ2jV9ksjh6vshi
+ sJ7ibe1JUC10mthRqzog5DteJidhFFZO1uohWK7W8lDRDgry3FP8Jh4YAjS5AU/oquBw
+ Qbxu6r0JZGYouDltYjsexfdr4+4JftCkMK9toJ8TUxKJAxq6LY2jVMLGuTqhBfq9QTGB
+ vR2oJwTd6ffDfdpNQiuuFVyPbLbXz2m9jAznAHAfQuhcPtkoUgowbITHwg5jsoSXXLc6
+ C/AQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=nxIOupUzAM9mn7b1upOw1V9GvhKyuh6WY9+tPHRZjGQ=;
- b=P3J2sFEElK5Pt8JeHuinwocDng6zlZi4k9wi5OpM6H53ieTAfjARjvs1ATa6k4DGUt
- rK+TyZ65SAYyXDfxgD4Bqo7o7LSC6M/z7XuENRaL/ej/qqtq5Nbq1ZOU28JEiICVSYls
- 7HW85uF9iYdj81ylacjbFF3dtehLZwksRxD4mLLqiPbUs2sM2Xo05CPcDWNI3bJYxq1P
- e5Ws6iLZvjebi0Whw9Ai0KMEcn+MV/PJcUHd01ylssbgeUZ0CL2D3Jzx1Utd2M+M8YOA
- pgvC9/Ruwj4JRxkE5pTpUUDxqfnmtOIyMPBYuuKd0BHDt7I7C4g3WUBOyAz/yY9+Ca7W
- F23A==
-X-Gm-Message-State: AOAM533iVFfAXGfOPb4/vLW6TQTwOBfJaKCDcRuZoBOX88j5gvMnni+t
- NSgs/EaQhyuG26F6lpMFmIpI1wqC0kg=
-X-Google-Smtp-Source: ABdhPJwfH3r0TBZSJyHVJi4v3VmZJ3/b7gsG1zqFnjPhw3gHCb6QZQMERUfVOqL775vBftHISDT6wQ==
-X-Received: by 2002:a1c:2b04:: with SMTP id r4mr1016169wmr.168.1631167292177; 
- Wed, 08 Sep 2021 23:01:32 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-2139-166.w92-167.abo.wanadoo.fr.
- [92.167.218.166])
- by smtp.gmail.com with ESMTPSA id y24sm639500wma.9.2021.09.08.23.01.30
+ h=x-gm-message-state:from:to:cc:subject:date:message-id;
+ bh=pkxRt/jMyYBBinaculD5ku0J0oaAKYtl16hYAYql/94=;
+ b=Xm9Y+IZLagsWG6sfUMSD9sYAQcvqUUum8mEd+7eWc6Y003qLKzddUNvlBNIQijkZlQ
+ 5zb0cVeoQndUqL7bFds2UgQt+RAnGcoaJhZgU1ukOvwwAZzEB8v/OMZFiGT2gPYLX6N7
+ KaxQkh2pYDElzPdeQ+E1iNXJjyeJw1aDge9LSsCtLgjRyozONN0dLjqEw/n6BUSXF+mS
+ C/GGs8dQm1hj5L+SwEyvEMLC3CEmSOGdMlxisQ9M/DlHH0g0HACysYRoC/CYpKiJsDRH
+ V/8LH65nHSqNecKJICutRdS1n+t3H+MDROAtu7k2bbUjN5ywu+/fuZKYBV+Bhfq2bV5n
+ AqVw==
+X-Gm-Message-State: AOAM533UqNQDItUv+rtu5FVx9YONBQ7FykgcuxVfFD0/ayuW3rKqPmCL
+ fvlIv5f5uXcbnbToVxizz/W8weipOZ9ljQ==
+X-Google-Smtp-Source: ABdhPJwECJfB5gHggM1OGQk3lwxiBO12/zsLcOoRXDbloO9UgZf0Tz0fHbgepxUo9eVrpmJsiM9kJg==
+X-Received: by 2002:a1c:984c:: with SMTP id a73mr1178441wme.171.1631170631157; 
+ Wed, 08 Sep 2021 23:57:11 -0700 (PDT)
+Received: from localhost.localdomain
+ (pv372-h01-176-145-91-242.dsl.sta.abo.bbox.fr. [176.145.91.242])
+ by smtp.gmail.com with ESMTPSA id c9sm833194wrf.77.2021.09.08.23.57.09
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 08 Sep 2021 23:01:31 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Wed, 08 Sep 2021 23:57:10 -0700 (PDT)
+From: David GOUARIN <dgouarin@gmail.com>
+X-Google-Original-From: David GOUARIN <david.gouarin@thalesgroup.com>
 To: buildroot@buildroot.org
-Date: Thu,  9 Sep 2021 08:01:29 +0200
-Message-Id: <20210909060129.1120525-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.33.0
-MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/xscreensaver: needs xserver SELinux
- module
+Date: Thu,  9 Sep 2021 10:02:21 +0200
+Message-Id: <20210909080221.6143-1-david.gouarin@thalesgroup.com>
+X-Mailer: git-send-email 2.17.1
+Subject: [Buildroot] [PATCH v2] package/libtalloc: bump to version 2.3.3
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,47 +95,55 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: Simon Dawson <spdawson@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: David GOUARIN <david.gouarin@thalesgroup.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-xserver is needed to fix the following build failure raised since commit
-613827c5b0a2bf71320047954639dc9003524db0:
+license is now LGPL-3.0+ for both talloc and pytalloc
 
-Compiling targeted policy.33
-env LD_LIBRARY_PATH="/data/buildroot-autobuilder/instance-0/output-1/host/lib:/data/buildroot-autobuilder/instance-0/output-1/host/usr/lib" /data/buildroot-autobuilder/instance-0/output-1/host/usr/bin/checkpolicy -c 33 -U deny -S -O -E policy.conf -o policy.33
-policy.conf:3071:ERROR 'attribute input_xevent_type is not declared' at token ';' on line 3071:
-type xscreensaver_helper_t;
-type xscreensaver_input_xevent_t, input_xevent_type, xevent_type;
-checkpolicy:  error(s) encountered while parsing configuration
-make[1]: *** [Rules.monolithic:79: policy.33] Error 1
-
-Fixes:
- - http://autobuild.buildroot.org/results/2b5/2b546153ff8b9a11a5bb8475b918f220dd5b1787/build-end.log
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: David GOUARIN <david.gouarin@thalesgroup.com>
 ---
- package/xscreensaver/xscreensaver.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+v1 -> v2
+   update license informations
+---
+ package/libtalloc/libtalloc.hash | 6 +++---
+ package/libtalloc/libtalloc.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/xscreensaver/xscreensaver.mk b/package/xscreensaver/xscreensaver.mk
-index 4461413a5e..6c52bc1c02 100644
---- a/package/xscreensaver/xscreensaver.mk
-+++ b/package/xscreensaver/xscreensaver.mk
-@@ -11,7 +11,7 @@ XSCREENSAVER_SITE = https://www.jwz.org/xscreensaver
- XSCREENSAVER_LICENSE = MIT-like, GPL-2.0+
- XSCREENSAVER_LICENSE_FILES = hacks/screenhack.h hacks/glx/chessmodels.h
- XSCREENSAVER_CPE_ID_VENDOR = xscreensaver_project
--XSCREENSAVER_SELINUX_MODULES = xscreensaver
-+XSCREENSAVER_SELINUX_MODULES = xscreensaver xserver
+diff --git a/package/libtalloc/libtalloc.hash b/package/libtalloc/libtalloc.hash
+index 9d48a965d0..84b0320df8 100644
+--- a/package/libtalloc/libtalloc.hash
++++ b/package/libtalloc/libtalloc.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  ef4822d2fdafd2be8e0cabc3ec3c806ae29b8268e932c5e9a4cd5585f37f9f77  talloc-2.3.1.tar.gz
+-sha256  15c2767545d1e43dc35832736253bde5be956f8ffec0474a6d0f70349b646ed3  talloc.h
+-sha256  8742f2dad3aaf885c7b4b699c20bfa0e9edeab380689f91a88aa90af03e6947b  pytalloc.h
++sha256  6be95b2368bd0af1c4cd7a88146eb6ceea18e46c3ffc9330bf6262b40d1d8aaa  talloc-2.3.3.tar.gz
++sha256  f8340c449dd64a55c6605b02fcad2aec6f473612ac6026739a22995380a8043c  talloc.h
++sha256  cca17b31b2f00d7a737764b70e2be3a32f3b047ac8535c3b53759eb2946e5053  pytalloc.h
+diff --git a/package/libtalloc/libtalloc.mk b/package/libtalloc/libtalloc.mk
+index fb382cff76..03414a9f53 100644
+--- a/package/libtalloc/libtalloc.mk
++++ b/package/libtalloc/libtalloc.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
  
- XSCREENSAVER_DEPENDENCIES = \
- 	gdk-pixbuf \
+-LIBTALLOC_VERSION = 2.3.1
++LIBTALLOC_VERSION = 2.3.3
+ LIBTALLOC_SOURCE = talloc-$(LIBTALLOC_VERSION).tar.gz
+ LIBTALLOC_SITE = https://www.samba.org/ftp/talloc
+-LIBTALLOC_LICENSE = LGPL-3.0+, GPL-3.0+
++LIBTALLOC_LICENSE = LGPL-3.0+
+ LIBTALLOC_LICENSE_FILES = talloc.h pytalloc.h
+ LIBTALLOC_INSTALL_STAGING = YES
+ 
 -- 
-2.33.0
+2.17.1
 
 _______________________________________________
 buildroot mailing list
