@@ -2,66 +2,90 @@ Return-Path: <SRS0=85Xw=OA=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,
-	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+X-Spam-Status: No, score=-18.5 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
+	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1EE75C433F5
-	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 06:49:26 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B4D3C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 06:53:14 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 8E12B61186
-	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 06:49:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8E12B61186
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=t-online.de
+	by mail.kernel.org (Postfix) with ESMTPS id CAA9460F9C
+	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 06:53:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org CAA9460F9C
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 53FAA81B23;
-	Fri, 10 Sep 2021 06:49:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 94150403CA;
+	Fri, 10 Sep 2021 06:53:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VlJ-DI9O4hk4; Fri, 10 Sep 2021 06:49:24 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id PbZsEfnNW-mF; Fri, 10 Sep 2021 06:53:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 94C9880E86;
-	Fri, 10 Sep 2021 06:49:23 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id EDC9C1BF352
- for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 06:49:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E79DB403CF;
+	Fri, 10 Sep 2021 06:53:11 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id F17971BF352
+ for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 06:53:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EA42680E86
- for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 06:49:21 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id D9B3760B17
+ for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 06:53:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vHi9i1lDA9c7 for <buildroot@lists.busybox.net>;
- Fri, 10 Sep 2021 06:49:20 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mailout01.t-online.de (mailout01.t-online.de [194.25.134.80])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B0AD880E79
- for <buildroot@buildroot.org>; Fri, 10 Sep 2021 06:49:20 +0000 (UTC)
-Received: from fwd85.dcpf.telekom.de (fwd85.aul.t-online.de [10.223.144.111])
- by mailout01.t-online.de (Postfix) with SMTP id 7831045C;
- Fri, 10 Sep 2021 08:49:15 +0200 (CEST)
-Received: from fli4l.lan.fli4l ([84.161.183.251]) by fwd85.t-online.de
- with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1mOaLY-1sJge10; Fri, 10 Sep 2021 08:49:12 +0200
-Received: from [192.168.1.109] (port=36364 helo=bruckner.lan.fli4l)
- by fli4l.lan.fli4l with esmtp (Exim 4.94.2)
- (envelope-from <bernd.kuhls@t-online.de>)
- id 1mOaLX-0004zU-Hx; Fri, 10 Sep 2021 08:49:11 +0200
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dcVB8neQVH6O for <buildroot@lists.busybox.net>;
+ Fri, 10 Sep 2021 06:53:10 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
+ [IPv6:2a00:1450:4864:20::42f])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E92D66068F
+ for <buildroot@buildroot.org>; Fri, 10 Sep 2021 06:53:09 +0000 (UTC)
+Received: by mail-wr1-x42f.google.com with SMTP id n5so1092252wro.12
+ for <buildroot@buildroot.org>; Thu, 09 Sep 2021 23:53:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=PlbKx2pePHxuK5fgw+xwk70FXocKleqGWVRTyFUnSto=;
+ b=LloPqxIr8SarBc3IGAi8A75F21R1aocwW7aUBEVOOL6uYJsdV81TLyNhC73tQ2kNBz
+ aPVJD2w7bRsaNjfWPTnc7z0LTTuECSQw33mqIAR4C2sFd7DrxyiXqXfo3l//yPFjbfWV
+ CNONXubr23mQPQYdTA7o8ROa5bRar73SlSFRpezIRO6Lz0XZcP7t5IQISCGcaKZHWo+N
+ mcxvxnbWk01JLPYzO0gT0OruAFkTJ9QyEZJQOgt7eJIvWVy1TPA5cMdwejxaI5V/YYTa
+ lmyZ+x1bJ0C/KfTzIg+I6yEDB90dDvBdQBT979zWMMqOf9YP790AXduW9xoayrzrbYG5
+ ECbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=PlbKx2pePHxuK5fgw+xwk70FXocKleqGWVRTyFUnSto=;
+ b=p0g5tJFErgiBG80FYCrJe/VRvZ96EbxHdYzDLFmBzkC7JDJiJ20eyBOAEhMkS1Ra4f
+ EG1RF89uXQOq5+TATfRGlBMDoZ1f60MwWErpwL9rH2S4IIXtoeciqS/MunC9XKFQCyzd
+ /CQUUCAPHczUQcISX7lS/hSXTREth+Y5MmqpqP80TJTvgv6ibWMAwMfmos0GT3YfSlzT
+ j8RhBoOdoHSJp3L2JLaaDZsvc/KaXjyejOHVa7u/WngsCdtgx9Pl9oThvAW2wTAix4EX
+ QLhWp0TaMGu4sargXcZdu0sQb3xoVY17MwEjdgVyJxiRXYWyh4Ugbt5SxUrAvSt4kuOK
+ v8Jw==
+X-Gm-Message-State: AOAM5339Fq2l4WuppSpLdH3kJjFTlMSmVkfx5KEsVs62E/qa5sgTQz1Q
+ iPRgo1W0RvB1cBFfbbSvPUrRQT+lUCQ=
+X-Google-Smtp-Source: ABdhPJzwN9uQKqocw+ztH8SpHuI7YP8bWljNW2MMNAC7FkiVafgY81mhzxGR2/hBShya9kuBbSZ/KA==
+X-Received: by 2002:a5d:69c8:: with SMTP id s8mr588249wrw.330.1631256787909;
+ Thu, 09 Sep 2021 23:53:07 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-2139-166.w92-167.abo.wanadoo.fr.
+ [92.167.218.166])
+ by smtp.gmail.com with ESMTPSA id m8sm3514757wms.32.2021.09.09.23.53.07
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 09 Sep 2021 23:53:07 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 10 Sep 2021 08:49:11 +0200
-Message-Id: <20210910064911.29593-1-bernd.kuhls@t-online.de>
-X-Mailer: git-send-email 2.30.2
+Date: Fri, 10 Sep 2021 08:53:05 +0200
+Message-Id: <20210910065305.100451-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1631256552-00013AC1-B1A1C8D6/0/0 CLEAN NORMAL
-X-TOI-MSGID: 7dc86181-2eba-4d84-aa51-c67ff8cfd051
-Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
- mesa3d-headers}: bump version to 21.1.8
+Subject: [Buildroot] [PATCH 1/1] package/gnuradio: drop gr-flex option
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,65 +98,79 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>
+Cc: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-Release notes:
-https://lists.freedesktop.org/archives/mesa-announce/2021-September/000644.html
+gr-pager is not available since bump to version 3.8.0.0 in commit
+0d6a7b2981d4ba83a95ff1c10a15970e41fabec2 and
+https://github.com/gnuradio/gnuradio/commit/2d2caa205f3c3059deab7c82660908656167fd90
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/mesa3d-headers/mesa3d-headers.mk | 2 +-
- package/mesa3d/mesa3d.hash               | 6 +++---
- package/mesa3d/mesa3d.mk                 | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ Config.in.legacy             | 8 ++++++++
+ package/gnuradio/Config.in   | 6 ------
+ package/gnuradio/gnuradio.mk | 6 ------
+ 3 files changed, 8 insertions(+), 12 deletions(-)
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index f569b53285..233292ab0a 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 6f71575f8a..c550abf419 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -144,6 +144,14 @@ endif
  
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 21.1.7
-+MESA3D_HEADERS_VERSION = 21.1.8
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://archive.mesa3d.org
- MESA3D_HEADERS_DL_SUBDIR = mesa3d
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index 3ff58f028e..26176b85b7 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,6 +1,6 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2021-August/000642.html
--sha256  e9e67c10654f2e4bf15b944bb048007a614292aa4792b1b7512eb700b7b3a7bb  mesa-21.1.7.tar.xz
--sha512  1fd677437f292c30fbf08bfef8c1088557841f426090ccba20ab2a222b08fb5c3ec48a7a0301466e03a23019d09414c700a4f5e299479cacd6972a9f3ba030c8  mesa-21.1.7.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2021-September/000644.html
-+sha256  5cd32f5d089dca75300578a3d771a656eaed652090573a2655fe4e7022d56bfc  mesa-21.1.8.tar.xz
-+sha512  80fcf2b1d59b49e384e9aa1ae63a3ce709833059af1ffd8eb821054c1976709134098cfc79fac1578a2f08a003223f1c96b38e2e650c5be49821c6f2fe1047af  mesa-21.1.8.tar.xz
+ ###############################################################################
  
- # License
- sha256  998437f3f75f0c542046f83c1cb349408122268168fb13eb4ae6967aa18b7d98  docs/license.rst
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 54b50f684f..1a9e355641 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
- ################################################################################
++comment "Legacy options removed in 2021.11"
++
++config BR2_PACKAGE_GNURADIO_PAGER
++	bool "gnuradio gr-flex support removed"
++	select BR2_LEGACY
++	help
++	  gr-flex has been removed from gnuradio since version 3.8.0.0.
++
+ comment "Legacy options removed in 2021.08"
  
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 21.1.7
-+MESA3D_VERSION = 21.1.8
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://archive.mesa3d.org
- MESA3D_LICENSE = MIT, SGI, Khronos
+ config BR2_PACKAGE_LIBMCRYPT
+diff --git a/package/gnuradio/Config.in b/package/gnuradio/Config.in
+index 183b49fe9b..77163c611d 100644
+--- a/package/gnuradio/Config.in
++++ b/package/gnuradio/Config.in
+@@ -130,12 +130,6 @@ config BR2_PACKAGE_GNURADIO_FILTER
+ 	help
+ 	  Filter signal processing blocks
+ 
+-config BR2_PACKAGE_GNURADIO_PAGER
+-	bool "gr-flex support"
+-	select BR2_PACKAGE_GNURADIO_ANALOG
+-	help
+-	  FLEX pager decoder implementation blocks
+-
+ config BR2_PACKAGE_GNURADIO_QTGUI
+ 	bool "gr-qtgui"
+ 	depends on BR2_PACKAGE_GNURADIO_PYTHON
+diff --git a/package/gnuradio/gnuradio.mk b/package/gnuradio/gnuradio.mk
+index d8292dac08..36d7ee65cf 100644
+--- a/package/gnuradio/gnuradio.mk
++++ b/package/gnuradio/gnuradio.mk
+@@ -130,12 +130,6 @@ else
+ GNURADIO_CONF_OPTS += -DENABLE_PYTHON=OFF
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_GNURADIO_PAGER),y)
+-GNURADIO_CONF_OPTS += -DENABLE_GR_PAGER=ON
+-else
+-GNURADIO_CONF_OPTS += -DENABLE_GR_PAGER=OFF
+-endif
+-
+ ifeq ($(BR2_PACKAGE_GNURADIO_QTGUI),y)
+ GNURADIO_DEPENDENCIES += qt5base python-pyqt5 qwt
+ GNURADIO_CONF_OPTS += -DENABLE_GR_QTGUI=ON
 -- 
-2.30.2
+2.33.0
 
 _______________________________________________
 buildroot mailing list
