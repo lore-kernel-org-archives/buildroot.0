@@ -4,55 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.7 required=3.0 tests=BAYES_00,
 	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	TVD_SPACE_RATIO autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 91AF0C433F5
-	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 21:34:12 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8AEA7C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 21:34:25 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 0EF466120A
-	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 21:34:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0EF466120A
+	by mail.kernel.org (Postfix) with ESMTPS id E86EF6120E
+	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 21:34:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E86EF6120E
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CE5BB80F65;
-	Fri, 10 Sep 2021 21:34:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B7D69605CC;
+	Fri, 10 Sep 2021 21:34:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sDsMb75q50ku; Fri, 10 Sep 2021 21:34:11 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id x2X09k9yw-8R; Fri, 10 Sep 2021 21:34:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 44BCB80F21;
-	Fri, 10 Sep 2021 21:34:10 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 741BA1BF38D
- for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 21:34:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 052956067D;
+	Fri, 10 Sep 2021 21:34:22 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1A04B1BF38D
+ for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 21:34:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6E5F480F64
- for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 21:34:08 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 06200605CC
+ for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 21:34:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 31zlV_sod0Mw for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ycMgVDkBMUQp for <buildroot@lists.busybox.net>;
  Fri, 10 Sep 2021 21:34:07 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9680780F21
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6F3F16001B
  for <buildroot@buildroot.org>; Fri, 10 Sep 2021 21:34:07 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 1D51188EAB; Fri, 10 Sep 2021 21:32:31 +0000 (UTC)
+ id E66C288EAA; Fri, 10 Sep 2021 21:32:30 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 10 Sep 2021 23:00:06 +0200
+Date: Fri, 10 Sep 2021 22:59:57 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: bcfc5df394cfdfb20bfc3f14e887e5462b8909f4
-X-Git-Newrev: 6c5d4a3ba2dd240e5049a8991f0b0bb47249f81e
+X-Git-Oldrev: b1e8594f0926c7867b0efbff5fafa411e54c2782
+X-Git-Newrev: fde22d8c7750324ab97c2bea6d1e8adad9c04251
 X-Patchwork-Hint: ignore
-Message-Id: <20210910213231.1D51188EAB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gst1-plugins-bayer2rgb-neon:
- enable for BR2_aarch64
+Message-Id: <20210910213230.E66C288EAA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/bayer2rgb-neon: update URL in
+ Config.in file
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,36 +66,40 @@ List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8934489991176209002=="
+Content-Type: multipart/mixed; boundary="===============0841711969047344962=="
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
---===============8934489991176209002==
+--===============0841711969047344962==
 Content-Type: text/plain
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6c5d4a3ba2dd240e5049a8991f0b0bb47249f81e
+commit: https://git.buildroot.net/buildroot/commit/?id=fde22d8c7750324ab97c2bea6d1e8adad9c04251
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+The URL pointing to phytec.de is obsolete and not even used by
+Buildroot.
 
 Signed-off-by: Sébastien Szymanski <sebastien.szymanski@armadeus.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/gstreamer1/gst1-plugins-bayer2rgb-neon/Config.in | 2 +-
+ package/bayer2rgb-neon/Config.in | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/gstreamer1/gst1-plugins-bayer2rgb-neon/Config.in b/package/gstreamer1/gst1-plugins-bayer2rgb-neon/Config.in
-index d3eec30c7a..570300a304 100644
---- a/package/gstreamer1/gst1-plugins-bayer2rgb-neon/Config.in
-+++ b/package/gstreamer1/gst1-plugins-bayer2rgb-neon/Config.in
-@@ -1,6 +1,6 @@
- menuconfig BR2_PACKAGE_GST1_PLUGINS_BAYER2RGB_NEON
- 	bool "gst1-plugins-bayer2rgb-neon"
--	depends on BR2_arm && BR2_ARM_CPU_HAS_NEON # bayer2rgb-neon
-+	depends on (BR2_arm && BR2_ARM_CPU_HAS_NEON) || BR2_aarch64 # bayer2rgb-neon
- 	depends on !BR2_STATIC_LIBS # bayer2rgb-neon
- 	depends on BR2_INSTALL_LIBSTDCPP # bayer2rgb-neon
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # bayer2rgb-neon
+diff --git a/package/bayer2rgb-neon/Config.in b/package/bayer2rgb-neon/Config.in
+index ed065c1ed7..8fd18b4fa9 100644
+--- a/package/bayer2rgb-neon/Config.in
++++ b/package/bayer2rgb-neon/Config.in
+@@ -9,7 +9,7 @@ config BR2_PACKAGE_BAYER2RGB_NEON
+ 	  to decode raw camera bayer to RGB using
+ 	  NEON hardware acceleration.
+ 
+-	  https://git.phytec.de/bayer2rgb-neon/
++	  https://gitlab-ext.sigma-chemnitz.de/ensc/bayer2rgb
+ 
+ comment "bayer2rgb-neon needs a toolchain w/ C++, dynamic library, gcc >= 4.9"
+ 	depends on BR2_arm && BR2_ARM_CPU_HAS_NEON
 
---===============8934489991176209002==
+--===============0841711969047344962==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -106,4 +110,4 @@ buildroot mailing list
 buildroot@lists.buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============8934489991176209002==--
+--===============0841711969047344962==--
