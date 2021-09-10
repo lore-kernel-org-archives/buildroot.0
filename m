@@ -8,86 +8,84 @@ X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 53FB2C433F5
-	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 00:37:33 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 49EB9C433F5
+	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 06:23:09 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D10A1600AA
-	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 00:37:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D10A1600AA
+	by mail.kernel.org (Postfix) with ESMTPS id B4B3B61026
+	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 06:23:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B4B3B61026
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 903FD4066E;
-	Fri, 10 Sep 2021 00:37:32 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5729F40179;
+	Fri, 10 Sep 2021 06:23:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qoa3g_QPeAbF; Fri, 10 Sep 2021 00:37:31 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id US5ujqgP4Uru; Fri, 10 Sep 2021 06:23:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0AAA14066C;
-	Fri, 10 Sep 2021 00:37:30 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7F59D40165;
+	Fri, 10 Sep 2021 06:23:06 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 914441BF9C8
- for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 00:37:29 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 694971BF352
+ for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 06:23:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 809E5849D9
- for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 00:37:29 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 52720849DE
+ for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 06:23:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cUfKCpnrjt8X for <buildroot@lists.busybox.net>;
- Fri, 10 Sep 2021 00:37:29 +0000 (UTC)
+ with ESMTP id Ln8WqHZ4lxlX for <buildroot@lists.busybox.net>;
+ Fri, 10 Sep 2021 06:23:04 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com
- [IPv6:2607:f8b0:4864:20::132])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E18C9849BE
- for <buildroot@buildroot.org>; Fri, 10 Sep 2021 00:37:28 +0000 (UTC)
-Received: by mail-il1-x132.google.com with SMTP id a1so274526ilj.6
- for <buildroot@buildroot.org>; Thu, 09 Sep 2021 17:37:28 -0700 (PDT)
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
+ [IPv6:2a00:1450:4864:20::434])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 77192849E0
+ for <buildroot@busybox.net>; Fri, 10 Sep 2021 06:23:04 +0000 (UTC)
+Received: by mail-wr1-x434.google.com with SMTP id w29so264747wra.8
+ for <buildroot@busybox.net>; Thu, 09 Sep 2021 23:23:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=v+LR/Wckv5Ka+Pp5JIs4cmxDTB+jADGF3IPBeBPNwmg=;
- b=gIV5xy6f/3HJu+QQhOO1PP7FvXUlFKa2NPL20qM8uNW3bm140kEPSui+jU4vL6XFLJ
- cYHiWo2FLCWLRykKdCh4KqhLSQ0cMhhUv0awIaH8TerI9hD5S7H+KSp0DX5H5PAiFwbt
- jwmyM+v91Z2AHxk95n013CfRB7ymfDNw3NVIbGGITmnUO3h8wPVLxl0XXUvEc0UsDf8S
- f5MGvTydDVHzp2hJrANSsgxfB69mM7fRoRMncGewBpI1z3N4j+Yue1sr4ZxHKokXCSOG
- QRkgSUR8hXIyWcreIZ/c4BodSvjT/ecO5ce216IoSLtsCSyScEQPCM1Pj4Ng8j0AHO84
- uQrQ==
+ bh=dV2nm3twhksuJC/JqDMMDW2XiDGACHgRIfbzUbOp8Dc=;
+ b=b8uuIoKrUqr3W8x3Lgb7bmNvCmWEUX5vtwVEyKH9H/SpCX2pLe6I6sdlDMJBHwottG
+ paSg6iGEXtUyjSMuiwj9k+oJWHWgqmkuvxW43qQw7fE/66QC2pQR+fmkQZkJ4aT0tUdm
+ ScXiVo8zS7rG5wY9nnH9N5qdZEgRdPp7cdeTmzoApiW0S1x5CyW2/A43k6wkj8BpTPk2
+ DzHv9Zr8dkIprrJqxM/D0+7xjqCUJzid+SDRRlVbeBtVev7dKjmN5ZeBQ6dvao3vx5Yl
+ 3J+qTZ6diGSkBnGK/vTClFqz83Pse+rrfgHJqmPgQJHN7Z3fJAhYrm3vWKX5LHsJ7F8u
+ 6NNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=v+LR/Wckv5Ka+Pp5JIs4cmxDTB+jADGF3IPBeBPNwmg=;
- b=BJ9twmeWUtW38WBAvL2L2NPAwhs4RUlFwuF1fSs/0YIDGLZ0YaUSVOP9FPhHLRtunQ
- jF7AMdJH2b6x8KLfP6fh9ZiRh78icmCL7MWxpkUb4K7aL2O3gZ3fEqCH55ez4FLyjXON
- RWLkPl0n4odUAXPT5MyYf11dOpTkHXtKvxaE/78qTNgr27OofXSm4LIVTvVuMcU11qZ6
- 8htjmPg0ebCaHsES1Lfl6CD6+U5c/xkNy2KftHACm20zLz98so+zH9HtHBB1BwSIdcwZ
- bhKipARUu+odsJwx/7WPLjYUSJ6RlDMZXKmadoaBtjxVtTsGKFodJEB/WDjN90lPnvrF
- XCUQ==
-X-Gm-Message-State: AOAM530rT7PRLU1XQTyNVVQwIwDr751QwJrr1vV6RV4h2PRmra/S1eOi
- KWM7xMCrKIGLy/aqllA5yi86Dj65ikQ=
-X-Google-Smtp-Source: ABdhPJy10EFSc0BdtlwZVZIhpYD9M4Kc+/4WxYtXEvbgzWejqbQv/1qHQOxRha8JBbObs+V2k0z6ow==
-X-Received: by 2002:a05:6e02:1a0e:: with SMTP id
- s14mr4292939ild.49.1631234247737; 
- Thu, 09 Sep 2021 17:37:27 -0700 (PDT)
-Received: from james-x399.localdomain (97-118-233-80.hlrn.qwest.net.
- [97.118.233.80])
- by smtp.gmail.com with ESMTPSA id x12sm1577982ill.6.2021.09.09.17.37.27
+ bh=dV2nm3twhksuJC/JqDMMDW2XiDGACHgRIfbzUbOp8Dc=;
+ b=4H9p3Tk7xPyQqVaG+dwh7brC+tJCbxyrSkdb/gIa0Udqfc7Ck8pWWuKMkaAyKOHQUs
+ El4SrEnOuUEsNTOrhbKmNuqmygFAAp+oKOFxi7gSezpbg0p5t30Kt4f/tOPZ1h3WgN2a
+ zcqowoYrPdskMXgB/eCL1sMNqAXphPUGlXqe6DJb3zCBlYWqtAGCLsmm1NtEUoyCny9K
+ PMMQZ/gLClIas3QxUufSGK5d6tUFE5xkrxYqDJrSDAUCIOMFDKJW8UthtC3QMdZLsta+
+ PNcozuVF/lLr6krTdFm1zgBhFNXLzMEZMj7vg5UXOxT/ySUpQD/lMLv8jciEZEIJQw2/
+ QE8w==
+X-Gm-Message-State: AOAM531n7rmNdP6fe5QH6X/Qb00SnQ5LBZWbiip/g2sJmn/M97VkjxMs
+ yiF+4DmSpGuhHfk0fokgWwQPhpQvXSY=
+X-Google-Smtp-Source: ABdhPJx1VVw8FQkVcoTxblr5lRYiiSLEuQBBnu27WcZ61IWSVZ6ewGpNA5pKSnZSojdP8ff5FLsxwA==
+X-Received: by 2002:adf:f4ca:: with SMTP id h10mr7621665wrp.351.1631254982484; 
+ Thu, 09 Sep 2021 23:23:02 -0700 (PDT)
+Received: from vm-user.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
+ by smtp.gmail.com with ESMTPSA id p5sm4023001wrd.25.2021.09.09.23.23.01
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 09 Sep 2021 17:37:27 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: buildroot@buildroot.org
-Date: Thu,  9 Sep 2021 18:37:25 -0600
-Message-Id: <20210910003725.3926456-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.25.1
+ Thu, 09 Sep 2021 23:23:02 -0700 (PDT)
+From: Francois Perrad <fperrad@gmail.com>
+X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
+To: buildroot@busybox.net
+Date: Fri, 10 Sep 2021 08:22:54 +0200
+Message-Id: <20210910062255.2162777-1-francois.perrad@gadz.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/pipewire: add option to build
- examples
+Subject: [Buildroot] [PATCH] package/luaposix: bump to version 35.1
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,61 +98,46 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/pipewire/Config.in   | 5 +++++
- package/pipewire/pipewire.mk | 7 ++++++-
- 2 files changed, 11 insertions(+), 1 deletion(-)
+diff LICENSE:
+-Copyright (C) 2006-2020 luaposix authors
++Copyright (C) 2006-2021 luaposix authors
 
-diff --git a/package/pipewire/Config.in b/package/pipewire/Config.in
-index 6c61dd2021..b15bbfa8d3 100644
---- a/package/pipewire/Config.in
-+++ b/package/pipewire/Config.in
-@@ -14,6 +14,11 @@ config BR2_PACKAGE_PIPEWIRE
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/luaposix/luaposix.hash | 4 ++--
+ package/luaposix/luaposix.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/luaposix/luaposix.hash b/package/luaposix/luaposix.hash
+index 54617853a..ee76ea103 100644
+--- a/package/luaposix/luaposix.hash
++++ b/package/luaposix/luaposix.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  a4edf2f715feff65acb009e8d1689e57ec665eb79bc36a6649fae55eafd56809  luaposix-35.0.tar.gz
+-sha256  e5d496c903dc3989bb2f6f175cda52d26e3494ad1fdd67ae1c3b3e5f76ffb86f  LICENSE
++sha256  1b5c48d2abd59de0738d1fc1e6204e44979ad2a1a26e8e22a2d6215dd502c797  luaposix-35.1.tar.gz
++sha256  f50bc0f3197523b1709f31707425f2de95f8a45534b081a6b564179ab059e850  LICENSE
+diff --git a/package/luaposix/luaposix.mk b/package/luaposix/luaposix.mk
+index d04881dfd..fa2670915 100644
+--- a/package/luaposix/luaposix.mk
++++ b/package/luaposix/luaposix.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- if BR2_PACKAGE_PIPEWIRE
- 
-+config BR2_PACKAGE_PIPEWIRE_EXAMPLES
-+	bool "pipewire examples"
-+	help
-+	  Build pipewire examples
-+
- config BR2_PACKAGE_PIPEWIRE_GSTREAMER
- 	bool "pipewire gstreamer plugins"
- 	depends on BR2_USE_WCHAR # libglib2
-diff --git a/package/pipewire/pipewire.mk b/package/pipewire/pipewire.mk
-index 2317398088..472bb06dd7 100644
---- a/package/pipewire/pipewire.mk
-+++ b/package/pipewire/pipewire.mk
-@@ -13,7 +13,6 @@ PIPEWIRE_DEPENDENCIES = host-pkgconf dbus $(TARGET_NLS_DEPENDENCIES)
- 
- PIPEWIRE_CONF_OPTS += \
- 	-Ddocs=disabled \
--	-Dexamples=disabled \
- 	-Dman=disabled \
- 	-Dtests=disabled \
- 	-Dspa-plugins=enabled \
-@@ -35,6 +34,12 @@ else
- PIPEWIRE_CONF_OPTS += -Dudev=disabled
- endif
- 
-+ifeq ($(BR2_PACKAGE_PIPEWIRE_EXAMPLES),y)
-+PIPEWIRE_CONF_OPTS += -Dexamples=enabled
-+else
-+PIPEWIRE_CONF_OPTS += -Dexamples=disabled
-+endif
-+
- ifeq ($(BR2_PACKAGE_PIPEWIRE_GSTREAMER),y)
- PIPEWIRE_CONF_OPTS += -Dgstreamer=enabled
- PIPEWIRE_DEPENDENCIES += libglib2 gstreamer1 gst1-plugins-base
+-LUAPOSIX_VERSION = 35.0
++LUAPOSIX_VERSION = 35.1
+ LUAPOSIX_SITE = $(call github,luaposix,luaposix,v$(LUAPOSIX_VERSION))
+ LUAPOSIX_LICENSE = MIT
+ LUAPOSIX_LICENSE_FILES = LICENSE
 -- 
-2.25.1
+2.30.2
 
 _______________________________________________
 buildroot mailing list
