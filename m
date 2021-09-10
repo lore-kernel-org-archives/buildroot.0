@@ -2,56 +2,95 @@ Return-Path: <SRS0=85Xw=OA=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+X-Spam-Status: No, score=-8.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F2488C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 18:10:59 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E921C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 18:11:11 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id BB5776109F
-	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 18:10:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org BB5776109F
+	by mail.kernel.org (Postfix) with ESMTPS id 1897A6109F
+	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 18:11:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1897A6109F
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 90ABC40463;
-	Fri, 10 Sep 2021 18:10:59 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BF6C0402BB;
+	Fri, 10 Sep 2021 18:11:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rvPqgLfi_hyw; Fri, 10 Sep 2021 18:10:58 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Gp8aqVOmUm7k; Fri, 10 Sep 2021 18:11:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4AD80407B9;
-	Fri, 10 Sep 2021 18:10:57 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 77B101BF424
- for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 18:10:44 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0A285401F3;
+	Fri, 10 Sep 2021 18:11:08 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 88EC51BF424
+ for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 18:10:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 67EF9407B9
- for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 18:10:44 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 762ED849B9
+ for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 18:10:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QLbLGLpO217s for <buildroot@lists.busybox.net>;
- Fri, 10 Sep 2021 18:10:41 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id EAAC540463
- for <buildroot@buildroot.org>; Fri, 10 Sep 2021 18:10:41 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id C014A88E53; Fri, 10 Sep 2021 18:09:05 +0000 (UTC)
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id eZ6K40SiCEdm for <buildroot@lists.busybox.net>;
+ Fri, 10 Sep 2021 18:10:57 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com
+ [IPv6:2a00:1450:4864:20::535])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 47849849AC
+ for <buildroot@busybox.net>; Fri, 10 Sep 2021 18:10:57 +0000 (UTC)
+Received: by mail-ed1-x535.google.com with SMTP id n10so3678707eda.10
+ for <buildroot@busybox.net>; Fri, 10 Sep 2021 11:10:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=sender:from:to:cc:subject:references:date:in-reply-to:message-id
+ :user-agent:mime-version;
+ bh=TaZqcsvr+UZ7ixcs6hotC94zfi0RC1rkjeS+RstVcc4=;
+ b=TDCJoHaBmNwX3d75EV+YNhbYq/n0OPuN1S6EFkrqxen9mc1f5K++fwovsK0kmgUBQs
+ mZoVn9DZGEflmfMuFsWp5jde7N7r/AHnRXXh8qKlRA3MPFQaKnezAo0Kiv8DmHjwXNGL
+ 9uT745lCEEkqmNHb/DLM55ezTTUxabuvMZi1U60InPzgp3Zfi0552xHdiegYlf7GH2gs
+ Askhw0yYe7FDZaAVNm/vkoDkjMtYb9dWyyUju5MfkGMSbS37CA8V8JVNGVVMj1i957GB
+ wSJhk2b1h1G6sZDYxK5ThTxXfE32WJoQECcBwIr6IN26+pLoysXavERo11jBa5ZMoXiP
+ /aOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:sender:from:to:cc:subject:references:date
+ :in-reply-to:message-id:user-agent:mime-version;
+ bh=TaZqcsvr+UZ7ixcs6hotC94zfi0RC1rkjeS+RstVcc4=;
+ b=ZxdL1tCz4OCYPEi4OgOUmugHa7YZc76Pm5PRxwtx2ZzeqF35aJMCak0x+QB/5rhjps
+ sOI5gUMs7c2E4LOmtVKYt+c8DtHRmRjsdtECg1Fxi4KVlUHkK4KqXsodm/JoTjcFKtQf
+ 48lxMmKa4VRrJKijkPUtNt8hSsY1gCp5OIuvjj7CIcWEIgxtNnnIECy/21F5u1DENvVa
+ eCScIAu03qK0Z5siqf1ZrhA59B6F0n+DN3q9UU5Jv0IqP9QjGYfxtirBkV22JybmN1t0
+ GsRzxWXBJ+tu3A6N1jjmK7JHaEBGCIezO7KxGADLHRuunR7YdFSKk3/ViZxJU68zHRZl
+ R4TQ==
+X-Gm-Message-State: AOAM532Ws6ItoRgEjtWKNb6neVLUg8X2lc4GAbFBksH8iiOmlzxRkWzL
+ oAkydS99HcAyFkxdnlvU9yI=
+X-Google-Smtp-Source: ABdhPJxdhWs2aOMCm6ygXffJq+wKAVXk4jj+LrHLC8rLc1CS70ZziGIV+R2B+l+s9IYId9m7LtI8zQ==
+X-Received: by 2002:aa7:d3d1:: with SMTP id o17mr10355381edr.272.1631297455491; 
+ Fri, 10 Sep 2021 11:10:55 -0700 (PDT)
+Received: from dell.be.48ers.dk (d51A5BC31.access.telenet.be. [81.165.188.49])
+ by smtp.gmail.com with ESMTPSA id
+ a18sm3172293edj.52.2021.09.10.11.10.54
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 10 Sep 2021 11:10:54 -0700 (PDT)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
+ (envelope-from <peter@korsgaard.com>)
+ id 1mOkzF-0001Sv-OL; Fri, 10 Sep 2021 20:10:53 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Fri, 10 Sep 2021 20:10:27 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4bdb9111894dd083d531177b3ffdd41451dde7f5
-X-Git-Newrev: 05125113fcb93d990ecb9395224d3fda5d911dc4
-X-Patchwork-Hint: ignore
-Message-Id: <20210910180905.C014A88E53@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libgcrypt: bump to version 1.9.4
+To: Francois Perrad <fperrad@gmail.com>
+References: <20210909083514.2066928-1-francois.perrad@gadz.org>
+Date: Fri, 10 Sep 2021 20:10:53 +0200
+In-Reply-To: <20210909083514.2066928-1-francois.perrad@gadz.org> (Francois
+ Perrad's message of "Thu, 9 Sep 2021 10:35:14 +0200")
+Message-ID: <87k0jo713m.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH] package/gnutls: bump to version 3.7.2
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,74 +103,20 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@busybox.net
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=05125113fcb93d990ecb9395224d3fda5d911dc4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../0001-configure.ac-add-an-option-to-disable-tests.patch        | 4 ++--
- package/libgcrypt/libgcrypt.hash                                  | 8 ++++----
- package/libgcrypt/libgcrypt.mk                                    | 2 +-
- 3 files changed, 7 insertions(+), 7 deletions(-)
+ > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
-diff --git a/package/libgcrypt/0001-configure.ac-add-an-option-to-disable-tests.patch b/package/libgcrypt/0001-configure.ac-add-an-option-to-disable-tests.patch
-index 21ff20a473..4ef02fba65 100644
---- a/package/libgcrypt/0001-configure.ac-add-an-option-to-disable-tests.patch
-+++ b/package/libgcrypt/0001-configure.ac-add-an-option-to-disable-tests.patch
-@@ -24,7 +24,7 @@ diff --git a/Makefile.am b/Makefile.am
- index 7fa4fa4d..f0bd90e4 100644
- --- a/Makefile.am
- +++ b/Makefile.am
--@@ -39,9 +39,14 @@ else
-+@@ -40,9 +40,14 @@ else
-  doc =
-  endif
-  
-@@ -44,7 +44,7 @@ diff --git a/configure.ac b/configure.ac
- index e8c8cd39..1a6b61e5 100644
- --- a/configure.ac
- +++ b/configure.ac
--@@ -2710,6 +2710,16 @@ AC_ARG_ENABLE([doc], AC_HELP_STRING([--disable-doc],
-+@@ -3198,6 +3198,16 @@ AC_ARG_ENABLE([doc], AC_HELP_STRING([--disable-doc],
-  AM_CONDITIONAL([BUILD_DOC], [test "x$build_doc" != xno])
-  
-  
-diff --git a/package/libgcrypt/libgcrypt.hash b/package/libgcrypt/libgcrypt.hash
-index 26ec492e10..23562d0ed3 100644
---- a/package/libgcrypt/libgcrypt.hash
-+++ b/package/libgcrypt/libgcrypt.hash
-@@ -1,7 +1,7 @@
- # From https://www.gnupg.org/download/integrity_check.html
--sha1  6b18f453fee677078586279d96fb88e5df7b3f35  libgcrypt-1.9.3.tar.bz2
-+sha1  1bccc8393482fa1953323ff429c6b5ba5676eb1a  libgcrypt-1.9.4.tar.bz2
- # Locally calculated after checking signature
--# https://gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-1.9.3.tar.bz2.sig
--# using key D8692123C4065DEA5E0F3AB5249B39D24F25E3B6
--sha256  97ebe4f94e2f7e35b752194ce15a0f3c66324e0ff6af26659bbfb5ff2ec328fd  libgcrypt-1.9.3.tar.bz2
-+# https://gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-1.9.4.tar.bz2.sig
-+# using key 6DAA6E64A76D2840571B4902528897B826403ADA
-+sha256  ea849c83a72454e3ed4267697e8ca03390aee972ab421e7df69dfe42b65caaf7  libgcrypt-1.9.4.tar.bz2
- sha256  ca0061fc1381a3ab242310e4b3f56389f28e3d460eb2fd822ed7a21c6f030532  COPYING.LIB
-diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
-index 26be5d2f49..e5fdfcfc8e 100644
---- a/package/libgcrypt/libgcrypt.mk
-+++ b/package/libgcrypt/libgcrypt.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBGCRYPT_VERSION = 1.9.3
-+LIBGCRYPT_VERSION = 1.9.4
- LIBGCRYPT_SOURCE = libgcrypt-$(LIBGCRYPT_VERSION).tar.bz2
- LIBGCRYPT_LICENSE = LGPL-2.1+
- LIBGCRYPT_LICENSE_FILES = COPYING.LIB
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
