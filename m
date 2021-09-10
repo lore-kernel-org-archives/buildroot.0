@@ -2,71 +2,77 @@ Return-Path: <SRS0=85Xw=OA=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.0 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A9F5C433F5
-	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 19:43:21 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 39E93C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 20:03:22 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9A43E61167
-	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 19:43:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9A43E61167
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=benettiengineering.com
+	by mail.kernel.org (Postfix) with ESMTPS id 81C08611F0
+	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 20:03:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 81C08611F0
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3544E4063E;
-	Fri, 10 Sep 2021 19:43:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4D16083F73;
+	Fri, 10 Sep 2021 20:03:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DbLJ5xstH1NT; Fri, 10 Sep 2021 19:43:19 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id aq2RTZ-tdk1Y; Fri, 10 Sep 2021 20:03:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 61EE4402D9;
-	Fri, 10 Sep 2021 19:43:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9796083E99;
+	Fri, 10 Sep 2021 20:03:19 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 223991BF352
- for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 19:43:17 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 080D81BF352
+ for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 20:03:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 121CC6067B
- for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 19:43:17 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0476761B93
+ for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 20:03:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=aruba.it
+ dkim=pass (2048-bit key) header.d=free.fr
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pb73QVgUS11p for <buildroot@lists.busybox.net>;
- Fri, 10 Sep 2021 19:43:16 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtpcmd13147.aruba.it (smtpcmd13147.aruba.it [62.149.156.147])
- by smtp3.osuosl.org (Postfix) with ESMTP id EC57B606A8
- for <buildroot@buildroot.org>; Fri, 10 Sep 2021 19:43:15 +0000 (UTC)
-Received: from smtpclient.apple ([146.241.179.121])
- by Aruba Outgoing Smtp  with ESMTPA
- id OmQbmFmHUiqGsOmQbmbMlR; Fri, 10 Sep 2021 21:43:14 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1631302994; bh=3/DeZ3rLYzpFdWkAm7BwS4S0Rt8ffP6Wgv5LFIiwDGg=;
- h=Content-Type:From:Mime-Version:Subject:Date:To;
- b=CHPeoW6exBnO6p0XWRZ0kEAquOvt/X15SUbCORlEVkBGIQBlj3IrfYQ/yJAzSroPn
- 9XkyOT0bkOT1tc5epEZMh/PEG4wb7mEmbKZ6jipMpZZ+7Ck5SXNuqlqgDXlS6Xe/dR
- 5GLZQzONGzPqCW0VZfAI+u+Lli4EpTrZ0pyxyYL/+vJqjMO6+3MaTT1qBp1P1zPF82
- LEtIt5Vznppfdxpa1Iu3EtcDc6fuDs6lNr6XYsz5jZY/ypeS2ftNOy7gzNyq0N4F1/
- ugU9el6M5npbWwOwEuBsqZrMGdcbxytSrLyEqm53j2bocTdiPd/puEd2Pk3UGVnrXU
- 1qivjFGi6LBlw==
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Mime-Version: 1.0 (1.0)
-Date: Fri, 10 Sep 2021 21:43:13 +0200
-Message-Id: <6AE92217-9CCD-4F8D-A98F-314ABC3C1233@benettiengineering.com>
-References: <20210910171815.6d6d00ea@windsurf>
-In-Reply-To: <20210910171815.6d6d00ea@windsurf>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-X-Mailer: iPhone Mail (18G82)
-X-CMAE-Envelope: MS4wfI0W9ZTH44jtDW9l+FxqKpZhVLW9Q59VuiKlVTLfuCpcv6VOAmpW0G/LS5FJ4ez84Zd5aIu4clXvrTXH8LjTGrG/1CvMF98egpvjk0U4zJu0fnxYRkoT
- pr90JiZZVR4BOvx3HgFt/yk6n0M/my/GbmD8JtXXFIc5WO5bMztxTf/J67ApXwMpRmumxfPwMd6ogh7PvYfS2axGfo9z2Zlxf47MzJd9oIkHi4ObxN0rn/7S
- udRyG2u+PcR+kymJUIkEa53ozJSkaK+TpA9G7gTNGpe+jM2+JnQGBv9uqoqyH2pq
-Subject: Re: [Buildroot] Arc and C-Sky toolchains
+ with ESMTP id t1SH7T0b_D1v for <buildroot@lists.busybox.net>;
+ Fri, 10 Sep 2021 20:03:16 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A875B61B91
+ for <buildroot@buildroot.org>; Fri, 10 Sep 2021 20:03:16 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:d014:579:30ce:61f5])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPSA id 1897B2003A4;
+ Fri, 10 Sep 2021 22:03:06 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+ s=smtp-20201208; t=1631304193;
+ bh=x8Zf4PCVv0dJEnTF15ICBewRYp9wlnuABSe993Vh1yE=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=L5NDC1xe7yMnwbZcO8moV2uoWtIv19chEQFfBksXgdwX7LQXeRyIs+ElGmakIc56K
+ G2JukYel/knvtqQwCzkTcYWnasA3C5XnThEKEz7rjg4FBOEh/iWv7ATUj8Voen0m2T
+ IkYHZMP3Ymo0bgmKQO7u8o7Gh4W5ZaWtpvEdMS05jMTVG92Q+eCPdwxr0eKcGlaBd4
+ jtKRDN4b8ENQ50wH004x0Fm1PaJjjVUxKCHSm87/+JEkrQnAlpwM6elunYTp3ZOg1U
+ Onm5GGuuye/HzL0xocz+WB3kmqPhzcERPVJpz3JGCUeWTGYb8B2DehIqccIJdbp+0S
+ fZ0HJYYU9Jgqg==
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Fri, 10 Sep 2021 22:03:06 +0200
+Date: Fri, 10 Sep 2021 22:03:06 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Peter Korsgaard <peter@korsgaard.com>
+Message-ID: <20210910200306.GA1053080@scaer>
+References: <20210910140241.26771-1-peter@korsgaard.com>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20210910140241.26771-1-peter@korsgaard.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+Subject: Re: [Buildroot] [PATCH] package/haproxy: security bump to version
+ 2.4.4
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,35 +85,78 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>,
- Buildroot Mailing List <buildroot@buildroot.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-SGVsbG8gVGhvbWFzLAoKPiBJbCBnaW9ybm8gMTAgc2V0IDIwMjEsIGFsbGUgb3JlIDE3OjE4LCBU
-aG9tYXMgUGV0YXp6b25pIDx0aG9tYXMucGV0YXp6b25pQGJvb3RsaW4uY29tPiBoYSBzY3JpdHRv
-Ogo+IAo+IO+7v09uIFdlZCwgOCBTZXAgMjAyMSAyMzoyOTowNyArMDIwMAo+IEdpdWxpbyBCZW5l
-dHRpIDxnaXVsaW8uYmVuZXR0aUBiZW5ldHRpZW5naW5lZXJpbmcuY29tPiB3cm90ZToKPiAKPj4g
-SSBjYW4ndCB1bmRlcnN0YW5kIHRoZSByZWFzb24gd2h5IEFyYyBhbmQgQy1Ta3kgcHJvdmlkZSBh
-IHNwZWNpYWwgCj4+IHRvb2xjaGFpbihpLmUuIHN5bm9wc2lzIGdjYzEwKSBpbnN0ZWFkIG9mIHRy
-ZWF0aW5nIHRoZW0gbGlrZSBleHRlcm5hbCAKPj4gdG9vbGNoYWlucy4gQ2FuIHlvdSBoZWxwIG1l
-IGluIHVuZGVyc3RhbmRpbmcgdGhpcz8KPiAKPiBZb3UncmUgY29uZnVzaW5nIHRoaW5ncyBoZXJl
-Lgo+IAo+IEFSQyBhbmQgQy1TS1kgc3VwcG9ydCBpcyAod2FzIGZvciBBUkMpIG5vdCBpbiB1cHN0
-cmVhbQo+IGdjYy9iaW51dGlscy9nZGIsIHNvIHdlIGhhdmUgKGhhZCkgdG8gdXNlIHNwZWNpZmlj
-IGZvcmtzIG9mIHRoZXNlCj4gcHJvamVjdHMsIHRoYXQgaGF2ZSBzdXBwb3J0IGZvciB0aG9zZSBD
-UFUgYXJjaGl0ZWN0dXJlcy4KCkFoIGhlcmUgaXMgdGhlIHJlYXNvbiwgdGhleSB3ZXJlIG5vdCB1
-cHN0cmVhbWVkCgo+IAo+IFRoaXMgaXMgY29tcGxldGVseSBpbmRlcGVuZGVudCBmcm9tIHRoZSBh
-YmlsaXR5IHRvIHVzZSBleHRlcm5hbAo+IHRvb2xjaGFpbnMgZm9yIHRob3NlIENQVSBhcmNoaXRl
-Y3R1cmVzLgo+IAo+IEFuIGV4dGVybmFsIHRvb2xjaGFpbiBpcyBhIHByZS1jb21waWxlZCB0b29s
-Y2hhaW4uIEhlcmUgd2hhdCB3ZSB3YW50IGlzCj4gc3VwcG9ydCBmb3IgQVJDIGFuZCBDLVNLWSBp
-biBvdXIgaW50ZXJuYWwgdG9vbGNoYWluIGJhY2tlbmQsIHdoZXJlCj4gQnVpbGRyb290IGJ1aWxk
-cyBnY2MvYmludXRpbHMvZ2RiL2xpYmMuCgpBbGwgY2xlYXIgbm93LiBUaGFuayB5b3UgdmVyeSBt
-dWNoLgpTbyBuZXh0IHBhdGNoZXMgcmVnYXJkaW5nIEFSQyBnY2MxMCBtYWtlIHNlbnNlLgoKQmVz
-dCByZWdhcmRzCkdpdWxpbyBCZW5ldHRpCgo+IAo+IEJlc3QgcmVnYXJkcywKPiAKPiBUaG9tYXMK
-PiAtLSAKPiBUaG9tYXMgUGV0YXp6b25pLCBjby1vd25lciBhbmQgQ0VPLCBCb290bGluCj4gRW1i
-ZWRkZWQgTGludXggYW5kIEtlcm5lbCBlbmdpbmVlcmluZyBhbmQgdHJhaW5pbmcKPiBodHRwczov
-L2Jvb3RsaW4uY29tCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBsaXN0cy5idWlsZHJvb3Qub3Jn
-Cmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+Peter, All,
+
+On 2021-09-10 16:02 +0200, Peter Korsgaard spake thusly:
+> Fixes the following security issues:
+> 
+> - CVE-2021-40346: An integer overflow exists in HAProxy 2.0 through 2.5 in
+>   the htx_add_header() can be exploited to perform an HTTP request smuggling
+>   attack, allowing an attacker to bypass all configured http-request HAProxy
+>   ACLs and possibly other ACLs.
+> 
+> For more details, see the advisory:
+> https://www.mail-archive.com/haproxy@formilux.org/msg41114.html
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Applied to master, thanks.
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/haproxy/haproxy.hash | 4 ++--
+>  package/haproxy/haproxy.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/haproxy/haproxy.hash b/package/haproxy/haproxy.hash
+> index 9edf5def08..3ad5e4ebe8 100644
+> --- a/package/haproxy/haproxy.hash
+> +++ b/package/haproxy/haproxy.hash
+> @@ -1,5 +1,5 @@
+> -# From: http://www.haproxy.org/download/2.4/src/haproxy-2.4.3.tar.gz.sha256
+> -sha256  ce479380be5464faa881dcd829618931b60130ffeb01c88bc2bf95e230046405  haproxy-2.4.3.tar.gz
+> +# From: http://www.haproxy.org/download/2.4/src/haproxy-2.4.4.tar.gz.sha256
+> +sha256  116b7329cebee5dab8ba47ad70feeabd0c91680d9ef68c28e41c34869920d1fe  haproxy-2.4.4.tar.gz
+>  # Locally computed:
+>  sha256  0717ca51fceaa25ac9e5ccc62e0c727dcf27796057201fb5fded56a25ff6ca28  LICENSE
+>  sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  doc/lgpl.txt
+> diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
+> index 85d4fa7e8d..91cb71eb7c 100644
+> --- a/package/haproxy/haproxy.mk
+> +++ b/package/haproxy/haproxy.mk
+> @@ -5,7 +5,7 @@
+>  ################################################################################
+>  
+>  HAPROXY_VERSION_MAJOR = 2.4
+> -HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).3
+> +HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).4
+>  HAPROXY_SITE = http://www.haproxy.org/download/$(HAPROXY_VERSION_MAJOR)/src
+>  HAPROXY_LICENSE = GPL-2.0+ and LGPL-2.1+ with exceptions
+>  HAPROXY_LICENSE_FILES = LICENSE doc/lgpl.txt doc/gpl.txt
+> -- 
+> 2.20.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@lists.buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
+_______________________________________________
+buildroot mailing list
+buildroot@lists.buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
