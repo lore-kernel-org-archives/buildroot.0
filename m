@@ -7,92 +7,90 @@ X-Spam-Status: No, score=-8.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 80EC6C433F5
-	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 11:09:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D2449C433F5
+	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 11:12:15 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id A95B0611B0
-	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 11:09:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A95B0611B0
+	by mail.kernel.org (Postfix) with ESMTPS id 4B36E611B0
+	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 11:12:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4B36E611B0
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 745186076A;
-	Fri, 10 Sep 2021 11:09:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EB91B60B60;
+	Fri, 10 Sep 2021 11:12:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id q6F29EOjdUgs; Fri, 10 Sep 2021 11:09:34 +0000 (UTC)
+	with ESMTP id PBe0Pty29p9K; Fri, 10 Sep 2021 11:12:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E452D60B45;
-	Fri, 10 Sep 2021 11:09:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5D21D60B59;
+	Fri, 10 Sep 2021 11:12:13 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 03A621BF23C
- for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 11:09:32 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9F2931BF23C
+ for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 11:12:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E4B0383B51
- for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 11:09:31 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8F4DF84A4D
+ for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 11:12:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id END9ZqrrxHPh for <buildroot@lists.busybox.net>;
- Fri, 10 Sep 2021 11:09:30 +0000 (UTC)
+ with ESMTP id Z43yrx6aNCMg for <buildroot@lists.busybox.net>;
+ Fri, 10 Sep 2021 11:12:10 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com
- [IPv6:2a00:1450:4864:20::62b])
- by smtp1.osuosl.org (Postfix) with ESMTPS id BFC5383B42
- for <buildroot@buildroot.org>; Fri, 10 Sep 2021 11:09:29 +0000 (UTC)
-Received: by mail-ej1-x62b.google.com with SMTP id a25so3467185ejv.6
- for <buildroot@buildroot.org>; Fri, 10 Sep 2021 04:09:29 -0700 (PDT)
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com
+ [IPv6:2a00:1450:4864:20::52b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B310B84A4F
+ for <buildroot@buildroot.org>; Fri, 10 Sep 2021 11:12:10 +0000 (UTC)
+Received: by mail-ed1-x52b.google.com with SMTP id c22so558132edn.12
+ for <buildroot@buildroot.org>; Fri, 10 Sep 2021 04:12:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=sender:from:to:cc:subject:references:date:in-reply-to:message-id
  :user-agent:mime-version;
- bh=NJwqjtsK+rn2gTgkVCQ192GcUyiTbUFfM626XM7PQk0=;
- b=CBDcuEiSlfDF/EelE23SM/0NGDfn0OsihB/idSP7bO7cv9HKhiDkkkDphaQFOugtze
- RHE547byTccnAjPgnEORlVcpWq97BjiC626lZDmPybpA5qKUeDhfArQzm1ElhchN2Vh5
- qwQ9EJHp8zvy4Hhs7+xioMCKKFukLHp/xIxGUoFg0hq2TV3NDhLMB2+p9mXPK3DbFJsw
- 111ZihdoibOQxgNBMEtHsJl52SNBbhQvrtNGZ2Dmy3blFrvCXaI2JCI/adXikfHWMqvr
- 2ycXV0A7n90x+eZG9+fB8nd8Iv7vIvU3acMbRZFW9cAXpVQDXur6dUARDPYXmXpCqdho
- x+hQ==
+ bh=axg76dTq4WNaCCIqgUM8xwduM74G5BaHlUKToDgguQ8=;
+ b=SYzXoh63e77cIDRI7WqCuBBPMjPoFkVYJX/fUabE+Bwf4f9QJ97uijocXFVAZ+aPJQ
+ DCKJPROTKcPGxvrl385JnhWSo1I48pZDFPK5w8LnA4tx8ypzKGwEcKet7NAUu3wZuIi1
+ Mj2oWh+D776efUiJTNIr5gfhtc3SzQNGTBnBeftFZdrtLfJsl63+77fDJfnymAWqD+h7
+ HN2JgRJxm2l/YREBnwfQvTwYcmDPjBMmp53kNcvwDIDF+QBDaFG9WkgSk/9RSwBr5xkN
+ EH2xvgX0L96mRpPUXpuGgKIZ3ctbbwfZciVRMI9NQ4m+ufuu198n9NydkmNQ8reULxbu
+ cFCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:sender:from:to:cc:subject:references:date
  :in-reply-to:message-id:user-agent:mime-version;
- bh=NJwqjtsK+rn2gTgkVCQ192GcUyiTbUFfM626XM7PQk0=;
- b=qOBQRbW9lEdaa51NsQDos3hReIOBXnllQXSKJ7f9EgXvBH/djR8W2B0+nRmlb4HYts
- T9Iy4Mmdy85BQs99e/mMsXovgwfCSZhu8axSR5hhP8eMcCpfmcSpSZ053AMkxzkRbQKh
- l+3xx6pa7tspr01RkkPFJGRCutYWpmyCwBfYMLVsw+ndO2MM5V0ewkPPF1umYQ/knkSY
- M95SCLb5NGy/8qcSb9HdaGIO9vNQk1i3B6W0FCKSK/jRobxRSdJ+Av9jcXZd+6iLfcXQ
- WX0TXr09/5F3pVNKM+EplNASiR393PHeBRNc45MhR4F67WkQ5ZW91xWnKyB1dKPfXlFb
- Xwhw==
-X-Gm-Message-State: AOAM5334Rt/lIhZt3P002UiPleUQA1fE0CyYvjVIcLwMJF/toJLdWw7N
- CdDTVaVvSyLYMQe4cBI4pbs=
-X-Google-Smtp-Source: ABdhPJx0b84Vo44oGQTF8TwxjMNUE77kVvykyNX5DAsQYbVA/VLeDqyY2JVg6XdAb1KunusLSm1q+w==
-X-Received: by 2002:a17:906:d789:: with SMTP id
- pj9mr8515435ejb.134.1631272168115; 
- Fri, 10 Sep 2021 04:09:28 -0700 (PDT)
+ bh=axg76dTq4WNaCCIqgUM8xwduM74G5BaHlUKToDgguQ8=;
+ b=73HRxkO+B6IX7RbOhTjMYL6LuO+n+W92D7/o9mPwpotqZ3L8ybo8EN+R/ByIwfflD3
+ Cq1Vhf+GmjCr/2cSwiVQqCDEx6m3H92m19O1BYQf4hApPYEBDVSn4igzEXpOjlBSeI0l
+ //F7GEDgjwiNfsOx99nMdA0/7/u+XYeFFnaa7UujOPJyx7/ePrZjzooVwWrDwm3yCcI8
+ ThU7UgwjMXcMxoxevxBRrZ5tA9zGAJPRvsZ+VyO0KO7qbVv+iY1FD7GhBGYFWExLGEcf
+ FoY/trxKMlEByZwlFOK/WQNhDuc3mCEFQx1JU1IT5faeLSE1SeX1n9O0jWe9QKPmPB79
+ IQAw==
+X-Gm-Message-State: AOAM533o5LgNc6uuck53B4XikTKwIeXRmvxRUgw8vUJdsCnOQjtd3WEx
+ q/7HmWKMeky0Tlwf9u1rwCg=
+X-Google-Smtp-Source: ABdhPJzObgCa6dya/C7NgpN8hzF+Apn39lkK5GEfNXooAFzs4R0LA/CWnIfJsPZ+55nV6vR0wnLyVw==
+X-Received: by 2002:aa7:ccd6:: with SMTP id y22mr8361632edt.363.1631272329007; 
+ Fri, 10 Sep 2021 04:12:09 -0700 (PDT)
 Received: from dell.be.48ers.dk (d51A5BC31.access.telenet.be. [81.165.188.49])
  by smtp.gmail.com with ESMTPSA id
- m12sm2293917ejd.21.2021.09.10.04.09.26
+ bs13sm2287711ejb.98.2021.09.10.04.12.08
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 10 Sep 2021 04:09:27 -0700 (PDT)
+ Fri, 10 Sep 2021 04:12:08 -0700 (PDT)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
  (envelope-from <peter@korsgaard.com>)
- id 1mOePO-0007aB-5H; Fri, 10 Sep 2021 13:09:26 +0200
+ id 1mOeRz-0007tE-PJ; Fri, 10 Sep 2021 13:12:07 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20210902162222.2232480-1-fontaine.fabrice@gmail.com>
-Date: Fri, 10 Sep 2021 13:09:26 +0200
-In-Reply-To: <20210902162222.2232480-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Thu, 2 Sep 2021 18:22:22 +0200")
-Message-ID: <87zgskadqx.fsf@dell.be.48ers.dk>
+References: <20210901202912.193241-1-fontaine.fabrice@gmail.com>
+Date: Fri, 10 Sep 2021 13:12:07 +0200
+In-Reply-To: <20210901202912.193241-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Wed, 1 Sep 2021 22:29:12 +0200")
+Message-ID: <87v938admg.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/qt5/qt5base: fix build on
- riscv32
+Subject: Re: [Buildroot] [PATCH 1/1] package/wlroots: fix uclibc build
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -105,8 +103,7 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: Peter Seiderer <ps.report@gmx.net>, Julien Corjon <corjon.j@ecagroup.com>,
- buildroot@buildroot.org
+Cc: Adrian Perez de Castro <aperez@igalia.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
@@ -114,17 +111,17 @@ Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Fix the following build failure on riscv32:
- > In file included from thread/qmutex_linux.cpp:45,
- >                  from thread/qmutex.cpp:804:
- > thread/qfutex_p.h: In function 'int QtLinuxFutex::_q_futex(int*, int, int, quintptr, int*, int)':
- > thread/qfutex_p.h:116:30: error: '__NR_futex' was not declared in this scope; did you mean '_q_futex'?
- >   116 |         int result = syscall(__NR_futex, addr, op | FUTEX_PRIVATE_FLAG, val, val2, addr2, val3);
- >       |                              ^~~~~~~~~~
- >       |                              _q_futex
+ > Fix the following uclibc build failure raised since at least bump to
+ > version 0.11.0 in commit 0bc9c89612cc1f41f9a64f6e889f8bcd8a871e30:
+
+ > In file included from ../include/wlr/types/wlr_data_device.h:13,
+ >                  from ../types/data_device/wlr_drag.c:7:
+ > ../include/wlr/types/wlr_seat.h:221:18: error: field 'last_event' has incomplete type
+ >   221 |  struct timespec last_event;
+ >       |                  ^~~~~~~~~~
 
  > Fixes:
- >  - http://autobuild.buildroot.org/results/ffedfc000029072d5d724e98ab4551fe973658ce
+ >  - http://autobuild.buildroot.org/results/3501ceb4290638b2f6d70aaa4d8ce74feec3a525
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
