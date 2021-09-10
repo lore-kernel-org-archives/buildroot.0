@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CF721C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 11:34:31 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 87560C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 11:34:43 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 7B156611BF
-	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 11:34:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7B156611BF
+	by mail.kernel.org (Postfix) with ESMTPS id 54EA7611BD
+	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 11:34:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 54EA7611BD
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 502B54067D;
-	Fri, 10 Sep 2021 11:34:31 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 15BA740625;
+	Fri, 10 Sep 2021 11:34:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JF-PMoLcUphY; Fri, 10 Sep 2021 11:34:30 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Y3-w4YRkAgSF; Fri, 10 Sep 2021 11:34:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9C203404E6;
-	Fri, 10 Sep 2021 11:34:29 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 40BCE40617;
+	Fri, 10 Sep 2021 11:34:41 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 158E41BF23C
- for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 11:34:06 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 28EAB1BF23C
+ for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 11:34:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0EFCB6064F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 36843605F7
  for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 11:34:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6nXNqPxIIWvo for <buildroot@lists.busybox.net>;
+ with ESMTP id AfUmoBa8UXbh for <buildroot@lists.busybox.net>;
  Fri, 10 Sep 2021 11:34:04 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 51820605F7
+ by smtp3.osuosl.org (Postfix) with ESMTP id 62F3B6065A
  for <buildroot@buildroot.org>; Fri, 10 Sep 2021 11:34:04 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id C050888CB7; Fri, 10 Sep 2021 11:32:28 +0000 (UTC)
+ id D41F288CB9; Fri, 10 Sep 2021 11:32:28 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 10 Sep 2021 13:19:10 +0200
+Date: Fri, 10 Sep 2021 13:28:04 +0200
 X-Git-Refname: refs/heads/2021.08.x
-X-Git-Oldrev: aa433d1c5cfbd72b64ff3f92f2ffa2e02ea7089b
-X-Git-Newrev: 1ef68986a4ba08805762c8ac2d1237ad7235e210
+X-Git-Oldrev: e761474284a2ec3fcbacc9addd388a437d57ab52
+X-Git-Newrev: 340d03bdb293587b51676d09357f04b7b310326a
 X-Patchwork-Hint: ignore
-Message-Id: <20210910113228.C050888CB7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.08.x] package/vsftpd: bump to
- 3.0.5
+Message-Id: <20210910113228.D41F288CB9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.08.x] package/mosquitto:
+ security bump to v2.0.12
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,87 +71,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1ef68986a4ba08805762c8ac2d1237ad7235e210
+commit: https://git.buildroot.net/buildroot/commit/?id=340d03bdb293587b51676d09357f04b7b310326a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.08.x
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Mosquitto 2.0.12 is a security and bugfix release, notably:
+
+* Fix possible DoS in the broker with MQTTv5
+* Fix CVE-2020-13849
+* Fix CVE-2021-34434
+
+Read the full announcement on
+https://mosquitto.org/blog/2021/08/version-2-0-12-released/
+
+Signed-off-by: Titouan Christophe <titouanchristophe@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 6a89a3b830e75d1e8d686f02cd33a3914d4dd33a)
+(cherry picked from commit d333eab3f0743a54808466b933a8591ac1eb5ed3)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/vsftpd/0002-fix-CVE-2015-1419.patch               | 4 ++--
- package/vsftpd/0003-Prevent-hang-in-SIGCHLD-handler.patch | 4 ++--
- package/vsftpd/vsftpd.hash                                | 2 +-
- package/vsftpd/vsftpd.mk                                  | 2 +-
- 4 files changed, 6 insertions(+), 6 deletions(-)
+ package/mosquitto/mosquitto.hash | 4 ++--
+ package/mosquitto/mosquitto.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/vsftpd/0002-fix-CVE-2015-1419.patch b/package/vsftpd/0002-fix-CVE-2015-1419.patch
-index 95ad017a1c..657af289cb 100644
---- a/package/vsftpd/0002-fix-CVE-2015-1419.patch
-+++ b/package/vsftpd/0002-fix-CVE-2015-1419.patch
-@@ -73,7 +73,7 @@ Index: vsftpd-3.0.2/str.c
- ===================================================================
- --- vsftpd-3.0.2.orig/str.c
- +++ vsftpd-3.0.2/str.c
--@@ -770,3 +770,14 @@ str_replace_unprintable(struct mystr* p_
-+@@ -711,3 +711,14 @@ str_replace_unprintable(struct mystr* p_
-    }
-  }
-  
-@@ -92,7 +92,7 @@ Index: vsftpd-3.0.2/str.h
- ===================================================================
- --- vsftpd-3.0.2.orig/str.h
- +++ vsftpd-3.0.2/str.h
--@@ -101,6 +101,7 @@ void str_replace_unprintable(struct myst
-+@@ -100,6 +100,7 @@ void str_replace_unprintable(struct myst
-  int str_atoi(const struct mystr* p_str);
-  filesize_t str_a_to_filesize_t(const struct mystr* p_str);
-  unsigned int str_octal_to_uint(const struct mystr* p_str);
-diff --git a/package/vsftpd/0003-Prevent-hang-in-SIGCHLD-handler.patch b/package/vsftpd/0003-Prevent-hang-in-SIGCHLD-handler.patch
-index 0732c5f632..6056193779 100644
---- a/package/vsftpd/0003-Prevent-hang-in-SIGCHLD-handler.patch
-+++ b/package/vsftpd/0003-Prevent-hang-in-SIGCHLD-handler.patch
-@@ -21,7 +21,7 @@ diff --git a/sysutil.c b/sysutil.c
- index 6d7cb3f..099748f 100644
- --- a/sysutil.c
- +++ b/sysutil.c
--@@ -608,13 +608,13 @@ vsf_sysutil_exit(int exit_code)
-+@@ -592,13 +592,13 @@ vsf_sysutil_exit(int exit_code)
-  }
-  
-  struct vsf_sysutil_wait_retval
-@@ -41,7 +41,7 @@ diff --git a/sysutil.h b/sysutil.h
- index c145bdf..13153cd 100644
- --- a/sysutil.h
- +++ b/sysutil.h
--@@ -177,7 +177,7 @@ struct vsf_sysutil_wait_retval
-+@@ -175,7 +175,7 @@ struct vsf_sysutil_wait_retval
-    int PRIVATE_HANDS_OFF_syscall_retval;
-    int PRIVATE_HANDS_OFF_exit_status;
-  };
-diff --git a/package/vsftpd/vsftpd.hash b/package/vsftpd/vsftpd.hash
-index 751faf61ca..485e5ba2f0 100644
---- a/package/vsftpd/vsftpd.hash
-+++ b/package/vsftpd/vsftpd.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256  6b9421bd27e8a6cdeed5b31154f294a20b003a11a26c09500715a0a6b1b86a26  vsftpd-3.0.4.tar.gz
-+sha256  26b602ae454b0ba6d99ef44a09b6b9e0dfa7f67228106736df1f278c70bc91d3  vsftpd-3.0.5.tar.gz
- # Locally computed
- sha256  c9cf119e2f9dbcf187fb805ba5aded105db26a693803636fb7228c98460ffbf2  COPYING
-diff --git a/package/vsftpd/vsftpd.mk b/package/vsftpd/vsftpd.mk
-index 8daf07c62a..3e7b233e48 100644
---- a/package/vsftpd/vsftpd.mk
-+++ b/package/vsftpd/vsftpd.mk
+diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
+index baa2a90c5a..2692aa1a9b 100644
+--- a/package/mosquitto/mosquitto.hash
++++ b/package/mosquitto/mosquitto.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking gpg signature
+-# from https://mosquitto.org/files/source/mosquitto-2.0.11.tar.gz.asc
+-sha256  7b36a7198bce85cf31b132f5c6ee36dcf5dadf86fb768501eb1e11ce95d4f78a  mosquitto-2.0.11.tar.gz
++# from https://mosquitto.org/files/source/mosquitto-2.0.12.tar.gz.asc
++sha256  31cf0065cb431d6f4e57a5f4d56663e839c9d177362eff89582d7cfde191c933  mosquitto-2.0.12.tar.gz
+ 
+ # License files
+ sha256  d3c4ccace4e5d3cc89d34cf2a0bc85b8596bfc0a32b815d0d77f9b7c41b5350c  LICENSE.txt
+diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
+index 52f9c98733..06b963a994 100644
+--- a/package/mosquitto/mosquitto.mk
++++ b/package/mosquitto/mosquitto.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--VSFTPD_VERSION = 3.0.4
-+VSFTPD_VERSION = 3.0.5
- VSFTPD_SITE = https://security.appspot.com/downloads
- VSFTPD_LIBS = -lcrypt
- VSFTPD_LICENSE = GPL-2.0
+-MOSQUITTO_VERSION = 2.0.11
++MOSQUITTO_VERSION = 2.0.12
+ MOSQUITTO_SITE = https://mosquitto.org/files/source
+ MOSQUITTO_LICENSE = EPL-2.0 or EDLv1.0
+ MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v20 edl-v10
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
