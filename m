@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 96BEDC433F5
-	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 17:53:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B420BC433F5
+	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 17:54:02 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1C79460F6D
-	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 17:53:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1C79460F6D
+	by mail.kernel.org (Postfix) with ESMTPS id 0DDE76103D
+	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 17:54:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0DDE76103D
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AFCCB40210;
-	Fri, 10 Sep 2021 17:53:48 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 55C9D401F3;
+	Fri, 10 Sep 2021 17:54:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XQTXq-QFmweV; Fri, 10 Sep 2021 17:53:47 +0000 (UTC)
+	with ESMTP id 1r5aFDTV-oea; Fri, 10 Sep 2021 17:54:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B3934401F3;
-	Fri, 10 Sep 2021 17:53:46 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B6E261BF9C8
- for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 17:53:33 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 32CCB401E3;
+	Fri, 10 Sep 2021 17:53:59 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id DD5741BF83C
+ for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 17:53:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A75AD83E78
- for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 17:53:33 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id CC97540221
+ for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 17:53:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id glsZBiU4qutm for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4IdVKAC_Fk_F for <buildroot@lists.busybox.net>;
  Fri, 10 Sep 2021 17:53:32 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id EF93283E74
+ by smtp4.osuosl.org (Postfix) with ESMTP id CD5D6401F6
  for <buildroot@buildroot.org>; Fri, 10 Sep 2021 17:53:32 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id CDB6E88E42; Fri, 10 Sep 2021 17:51:56 +0000 (UTC)
+ id A6D7888E41; Fri, 10 Sep 2021 17:51:56 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 10 Sep 2021 19:53:16 +0200
+Date: Fri, 10 Sep 2021 19:52:19 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d0f683d35cc6e50ded3ebaa7b5a717a3a5c528e4
-X-Git-Newrev: c47ebe7aeb70015614ff1d477dc1a71e8c161425
+X-Git-Oldrev: 7bfe798e8fbc7efad8c9d2cd0eb907deb404c1cf
+X-Git-Newrev: 0476b4f2fad9077008cc5cb8a45296b0da3ebb30
 X-Patchwork-Hint: ignore
-Message-Id: <20210910175156.CDB6E88E42@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/x11r7/xapp_xeyes: bump version to
- 1.2.0
+Message-Id: <20210910175156.A6D7888E41@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xapp_xrdb: bump version to
+ 1.2.1
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,53 +71,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c47ebe7aeb70015614ff1d477dc1a71e8c161425
+commit: https://git.buildroot.net/buildroot/commit/?id=0476b4f2fad9077008cc5cb8a45296b0da3ebb30
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Release notes:
-https://lists.x.org/archives/xorg-announce/2021-August/003101.html
+https://lists.x.org/archives/xorg-announce/2021-August/003107.html
 
 Removed md5 and sha1 hashes, reformatted hashes, updated _SITE.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xapp_xeyes/xapp_xeyes.hash | 10 ++++------
- package/x11r7/xapp_xeyes/xapp_xeyes.mk   |  4 ++--
+ package/x11r7/xapp_xrdb/xapp_xrdb.hash | 10 ++++------
+ package/x11r7/xapp_xrdb/xapp_xrdb.mk   |  4 ++--
  2 files changed, 6 insertions(+), 8 deletions(-)
 
-diff --git a/package/x11r7/xapp_xeyes/xapp_xeyes.hash b/package/x11r7/xapp_xeyes/xapp_xeyes.hash
-index bbb6a9b08b..734492b6cd 100644
---- a/package/x11r7/xapp_xeyes/xapp_xeyes.hash
-+++ b/package/x11r7/xapp_xeyes/xapp_xeyes.hash
+diff --git a/package/x11r7/xapp_xrdb/xapp_xrdb.hash b/package/x11r7/xapp_xrdb/xapp_xrdb.hash
+index b8a6896ca7..606fd26060 100644
+--- a/package/x11r7/xapp_xrdb/xapp_xrdb.hash
++++ b/package/x11r7/xapp_xrdb/xapp_xrdb.hash
 @@ -1,7 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2018-March/002860.html
--md5 6f0543ec84283df5743eeafc173bea4a  xeyes-1.1.2.tar.bz2
--sha1 458987f8accdbd8abf993ee51030391cf584d2e8  xeyes-1.1.2.tar.bz2
--sha256 57bcec0d2d167af9e5d44d0dbd74c6d7c0f0591cd0608952b23c749fdd910553  xeyes-1.1.2.tar.bz2
--sha512 008d76f03ddabd3d86ad9e52a540504553b94cb7a6743b20cf08897549eb27505667365ab9af21956a1b5ec7297acca8903a326536e6195a30e643cd93297ee0  xeyes-1.1.2.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2021-August/003101.html
-+sha256  f8a17e23146bef1ab345a1e303c6749e42aaa7bcf4f25428afad41770721b6db  xeyes-1.2.0.tar.bz2
-+sha512  2d1614614b3ba3d1ebaa0e9801a2e159389b94aaacafb962d326b7e6dc712c1eb2c12a50ceb10b3135cf0eee6ae86bbf84e73098deb08e73792f14a60616b4d8  xeyes-1.2.0.tar.bz2
+-# From https://lists.x.org/archives/xorg-announce/2019-February/002953.html
+-md5 34ae801ef994d192c70fcce2bdb2a1b2  xrdb-1.2.0.tar.bz2
+-sha1 79596928246288a217abdec0e4a2315ec9b07963  xrdb-1.2.0.tar.bz2
+-sha256 f23a65cfa1f7126040d68b6cf1e4567523edac10f8dc06f23d840d330c7c6946  xrdb-1.2.0.tar.bz2
+-sha512 14e1cdfb2152fb28f1f4641b177ab236648d7e967a95b952bf4cfce8d3e1ef085e85385354e3381aaf644462e8888a1847f755ab4016ecb4cb4a715b001dd2ef  xrdb-1.2.0.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2021-August/003107.html
++sha256  4f5d031c214ffb88a42ae7528492abde1178f5146351ceb3c05f3b8d5abee8b4  xrdb-1.2.1.tar.bz2
++sha512  d88135cdfea8536523dfb986249ee42761d5363c936352f12f55b4d0c849f21236f7d74d39869c5ec5b549019d6ed89d9096cde4b3c2b4816c2778a8e370b5c9  xrdb-1.2.1.tar.bz2
  # Locally computed
--sha256 d8de1de40e16227d1eb4b19e95117ce3f990f71f71df096a2259b0bc9931e042 COPYING
-+sha256  d8de1de40e16227d1eb4b19e95117ce3f990f71f71df096a2259b0bc9931e042  COPYING
-diff --git a/package/x11r7/xapp_xeyes/xapp_xeyes.mk b/package/x11r7/xapp_xeyes/xapp_xeyes.mk
-index 6c7f859d35..11eea802d5 100644
---- a/package/x11r7/xapp_xeyes/xapp_xeyes.mk
-+++ b/package/x11r7/xapp_xeyes/xapp_xeyes.mk
+-sha256 ca1b3e2f9f37c35876b69a9c1c5a7860fae59b7ba87a1d2dc541b722e29b1ecc COPYING
++sha256  ca1b3e2f9f37c35876b69a9c1c5a7860fae59b7ba87a1d2dc541b722e29b1ecc  COPYING
+diff --git a/package/x11r7/xapp_xrdb/xapp_xrdb.mk b/package/x11r7/xapp_xrdb/xapp_xrdb.mk
+index b445805d17..4f9860d25a 100644
+--- a/package/x11r7/xapp_xrdb/xapp_xrdb.mk
++++ b/package/x11r7/xapp_xrdb/xapp_xrdb.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--XAPP_XEYES_VERSION = 1.1.2
-+XAPP_XEYES_VERSION = 1.2.0
- XAPP_XEYES_SOURCE = xeyes-$(XAPP_XEYES_VERSION).tar.bz2
--XAPP_XEYES_SITE = http://xorg.freedesktop.org/releases/individual/app
-+XAPP_XEYES_SITE = https://xorg.freedesktop.org/archive/individual/app
- XAPP_XEYES_LICENSE = MIT
- XAPP_XEYES_LICENSE_FILES = COPYING
- XAPP_XEYES_DEPENDENCIES = xlib_libX11 xlib_libXext xlib_libXmu xlib_libXrender xlib_libXt
+-XAPP_XRDB_VERSION = 1.2.0
++XAPP_XRDB_VERSION = 1.2.1
+ XAPP_XRDB_SOURCE = xrdb-$(XAPP_XRDB_VERSION).tar.bz2
+-XAPP_XRDB_SITE = http://xorg.freedesktop.org/releases/individual/app
++XAPP_XRDB_SITE = https://xorg.freedesktop.org/archive/individual/app
+ XAPP_XRDB_LICENSE = MIT
+ XAPP_XRDB_LICENSE_FILES = COPYING
+ XAPP_XRDB_DEPENDENCIES = xlib_libX11 xlib_libXmu
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
