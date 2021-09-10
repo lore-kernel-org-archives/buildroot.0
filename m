@@ -1,90 +1,93 @@
-Return-Path: <SRS0=nSxO=N7=lists.buildroot.org=buildroot-bounces@kernel.org>
+Return-Path: <SRS0=85Xw=OA=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.5 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
 	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
 	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 788CFC433F5
-	for <buildroot@archiver.kernel.org>; Thu,  9 Sep 2021 23:56:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 53FB2C433F5
+	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 00:37:33 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D296460F02
-	for <buildroot@archiver.kernel.org>; Thu,  9 Sep 2021 23:56:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D296460F02
+	by mail.kernel.org (Postfix) with ESMTPS id D10A1600AA
+	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 00:37:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D10A1600AA
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 633E440513;
-	Thu,  9 Sep 2021 23:56:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 903FD4066E;
+	Fri, 10 Sep 2021 00:37:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hvKm3-97A_bg; Thu,  9 Sep 2021 23:56:41 +0000 (UTC)
+	with ESMTP id qoa3g_QPeAbF; Fri, 10 Sep 2021 00:37:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9718C40535;
-	Thu,  9 Sep 2021 23:56:40 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B13E21BF27E
- for <buildroot@lists.busybox.net>; Thu,  9 Sep 2021 23:56:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0AAA14066C;
+	Fri, 10 Sep 2021 00:37:30 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 914441BF9C8
+ for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 00:37:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A059340535
- for <buildroot@lists.busybox.net>; Thu,  9 Sep 2021 23:56:39 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 809E5849D9
+ for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 00:37:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CLVnxp7NmsS1 for <buildroot@lists.busybox.net>;
- Thu,  9 Sep 2021 23:56:38 +0000 (UTC)
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id cUfKCpnrjt8X for <buildroot@lists.busybox.net>;
+ Fri, 10 Sep 2021 00:37:29 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com
- [IPv6:2607:f8b0:4864:20::12d])
- by smtp4.osuosl.org (Postfix) with ESMTPS id EC86240513
- for <buildroot@buildroot.org>; Thu,  9 Sep 2021 23:56:37 +0000 (UTC)
-Received: by mail-il1-x12d.google.com with SMTP id v16so161422ilo.10
- for <buildroot@buildroot.org>; Thu, 09 Sep 2021 16:56:37 -0700 (PDT)
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com
+ [IPv6:2607:f8b0:4864:20::132])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E18C9849BE
+ for <buildroot@buildroot.org>; Fri, 10 Sep 2021 00:37:28 +0000 (UTC)
+Received: by mail-il1-x132.google.com with SMTP id a1so274526ilj.6
+ for <buildroot@buildroot.org>; Thu, 09 Sep 2021 17:37:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=IxMPVzLiUAi5esnihve0fjQdx0S086rLleCkAKYtxic=;
- b=kF14FUoupu4T4PjxFs7zb6QAuS3QeAbiTHYrqUkvJch4O16j4xkhwYKLcFGRXKPbSs
- iDeTGe9A7tVxmlCX2baxvFht27ApTfn8k1RuX4vJD7wECbTJK3R41MCVILe7mf5lFu86
- FlPEnarcrTtw6auXL9ti6izZzSxigKj4vdO6eYJssAfPSzMoUAfp+RwpVVd6blg9b0dd
- W+fLSTr4UP1xEOOo2khN84pE+Sn5fYJKy+G1Gynz4hEDACudeAaMy47cVsHuZj7iWTUE
- BZ+syHORp22fet3q7mUqaDFkwSBjvbq7Hv0eTk/p/ioD3bllN8AsKgCXgvEs/kEmhe64
- VI8g==
+ bh=v+LR/Wckv5Ka+Pp5JIs4cmxDTB+jADGF3IPBeBPNwmg=;
+ b=gIV5xy6f/3HJu+QQhOO1PP7FvXUlFKa2NPL20qM8uNW3bm140kEPSui+jU4vL6XFLJ
+ cYHiWo2FLCWLRykKdCh4KqhLSQ0cMhhUv0awIaH8TerI9hD5S7H+KSp0DX5H5PAiFwbt
+ jwmyM+v91Z2AHxk95n013CfRB7ymfDNw3NVIbGGITmnUO3h8wPVLxl0XXUvEc0UsDf8S
+ f5MGvTydDVHzp2hJrANSsgxfB69mM7fRoRMncGewBpI1z3N4j+Yue1sr4ZxHKokXCSOG
+ QRkgSUR8hXIyWcreIZ/c4BodSvjT/ecO5ce216IoSLtsCSyScEQPCM1Pj4Ng8j0AHO84
+ uQrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=IxMPVzLiUAi5esnihve0fjQdx0S086rLleCkAKYtxic=;
- b=eBK7J7Hn/jHSdXrC/LtP2yIl+WB1ed1IK1k97L6pkQKcdhlB+YsigIhbOiqX/cyBJR
- A5zi1e4K380lc7PJvdgg94y7OLtgR1sRoz5OLRLnhx3MKKMHC59sUDRgMBXTI9lCU/Ls
- R4HUKIsh6txf7dqueg6W11eEznSHHWwLsi+ub0/WOeKY2N+qTSA8IyfCGCRgZxZlpJt1
- MCaBxC6mEDUOdHNUjY+nEx2GR6jtb4q2gGce1VEJuYwlWVOtGwLIp6elh8xc87+NiCy6
- QxVolcDEE59ooDJvW0sZap+UpkIUTk4chuQfZRzbnmvw+jv0ADVtcPBm5bwI5KZTDChn
- ifPw==
-X-Gm-Message-State: AOAM531F46cQlJ0WkH7dp/kT2SEWH7mcYhkN7HdxTWaVj9xTfjggLOoa
- Z7w2h2KmD+W9iifsrC17TQVNth3feec=
-X-Google-Smtp-Source: ABdhPJxfHm1w1OOJ4wzLSTShZq3M976aberkO6+GiQaZsG5eldr93YavTqs1bs3K/AdkqoeWPpXAkA==
-X-Received: by 2002:a92:d848:: with SMTP id h8mr4111288ilq.230.1631231796829; 
- Thu, 09 Sep 2021 16:56:36 -0700 (PDT)
+ bh=v+LR/Wckv5Ka+Pp5JIs4cmxDTB+jADGF3IPBeBPNwmg=;
+ b=BJ9twmeWUtW38WBAvL2L2NPAwhs4RUlFwuF1fSs/0YIDGLZ0YaUSVOP9FPhHLRtunQ
+ jF7AMdJH2b6x8KLfP6fh9ZiRh78icmCL7MWxpkUb4K7aL2O3gZ3fEqCH55ez4FLyjXON
+ RWLkPl0n4odUAXPT5MyYf11dOpTkHXtKvxaE/78qTNgr27OofXSm4LIVTvVuMcU11qZ6
+ 8htjmPg0ebCaHsES1Lfl6CD6+U5c/xkNy2KftHACm20zLz98so+zH9HtHBB1BwSIdcwZ
+ bhKipARUu+odsJwx/7WPLjYUSJ6RlDMZXKmadoaBtjxVtTsGKFodJEB/WDjN90lPnvrF
+ XCUQ==
+X-Gm-Message-State: AOAM530rT7PRLU1XQTyNVVQwIwDr751QwJrr1vV6RV4h2PRmra/S1eOi
+ KWM7xMCrKIGLy/aqllA5yi86Dj65ikQ=
+X-Google-Smtp-Source: ABdhPJy10EFSc0BdtlwZVZIhpYD9M4Kc+/4WxYtXEvbgzWejqbQv/1qHQOxRha8JBbObs+V2k0z6ow==
+X-Received: by 2002:a05:6e02:1a0e:: with SMTP id
+ s14mr4292939ild.49.1631234247737; 
+ Thu, 09 Sep 2021 17:37:27 -0700 (PDT)
 Received: from james-x399.localdomain (97-118-233-80.hlrn.qwest.net.
  [97.118.233.80])
- by smtp.gmail.com with ESMTPSA id y27sm1614930iot.10.2021.09.09.16.56.36
+ by smtp.gmail.com with ESMTPSA id x12sm1577982ill.6.2021.09.09.17.37.27
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 09 Sep 2021 16:56:36 -0700 (PDT)
+ Thu, 09 Sep 2021 17:37:27 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu,  9 Sep 2021 17:56:35 -0600
-Message-Id: <20210909235635.2987074-1-james.hilliard1@gmail.com>
+Date: Thu,  9 Sep 2021 18:37:25 -0600
+Message-Id: <20210910003725.3926456-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/libcamera: bump to version
- e355ca0087cd93ef80f74c61018e9e9228a93313
+Subject: [Buildroot] [PATCH 1/1] package/pipewire: add option to build
+ examples
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,90 +100,59 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Kieran Bingham <kieran.bingham@ideasonboard.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-Drop patch that is now upstream.
-
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- ...ra-add-dependencies-to-libcamera_dep.patch | 37 -------------------
- package/libcamera/libcamera.hash              |  2 +-
- package/libcamera/libcamera.mk                |  2 +-
- 3 files changed, 2 insertions(+), 39 deletions(-)
- delete mode 100644 package/libcamera/0001-libcamera-add-dependencies-to-libcamera_dep.patch
+ package/pipewire/Config.in   | 5 +++++
+ package/pipewire/pipewire.mk | 7 ++++++-
+ 2 files changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/package/libcamera/0001-libcamera-add-dependencies-to-libcamera_dep.patch b/package/libcamera/0001-libcamera-add-dependencies-to-libcamera_dep.patch
-deleted file mode 100644
-index aa8d659cf3..0000000000
---- a/package/libcamera/0001-libcamera-add-dependencies-to-libcamera_dep.patch
-+++ /dev/null
-@@ -1,37 +0,0 @@
--From 1a2fd4526e0858827f47a7e9359df34f0d0e3108 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Thu, 27 May 2021 21:00:21 +0200
--Subject: [PATCH] libcamera: add dependencies to libcamera_dep
--
--Add dependencies to libcamera_dep to avoid the following build failure
--with qcam on sparc v8 which is raised since commit
--a8310248fc26cc1e1b791af5e9394c1d20bee269:
--
--FAILED: src/qcam/qcam
--/srv/storage/autobuild/run/instance-0/output-1/host/bin/sparc-linux-g++  -o src/qcam/qcam src/qcam/qcam.p/meson-generated_.._qt5-feathericons_qrc.cpp.o src/qcam/qcam.p/meson-generated_moc_main_window.cpp.o src/qcam/qcam.p/meson-generated_moc_viewfinder_qt.cpp.o src/qcam/qcam.p/.._cam_options.cpp.o src/qcam/qcam.p/.._cam_stream_options.cpp.o src/qcam/qcam.p/format_converter.cpp.o src/qcam/qcam.p/main.cpp.o src/qcam/qcam.p/main_window.cpp.o src/qcam/qcam.p/message_handler.cpp.o src/qcam/qcam.p/viewfinder_qt.cpp.o src/qcam/qcam.p/dng_writer.cpp.o -Wl,--as-needed -Wl,--no-undefined -Wl,-O1 -Wshadow -include config.h '-Wl,-rpath,$ORIGIN/../libcamera' -Wl,-rpath-link,/srv/storage/autobuild/run/instance-0/output-1/build/libcamera-3a1f67a8031ac5ad96a11d5dc8b2e8976290497b/build/src/libcamera -Wl,--start-group src/libcamera/libcamera.so /srv/storage/autobuild/run/instance-0/output-1/host/sparc-buildroot-linux-uclibc/sysroot/usr/lib/libQt5Core.so /srv/storage/autobuild/run/instance-0/output-1/
- host/sparc-buildroot-linux-uclibc/sysroot/usr/lib/libQt5Gui.so /srv/storage/autobuild/run/instance-0/output-1/host/sparc-buildroot-linux-uclibc/sysroot/usr/lib/libQt5Widgets.so /srv/storage/autobuild/run/instance-0/output-1/host/sparc-buildroot-linux-uclibc/sysroot/usr/lib/libtiff.so -Wl,--end-group
--/srv/storage/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/9.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: src/qcam/qcam.p/main_window.cpp.o: undefined reference to symbol '__atomic_fetch_add_4@@LIBATOMIC_1.0'
--/srv/storage/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/9.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: /srv/storage/autobuild/run/instance-0/output-1/host/sparc-buildroot-linux-uclibc/sysroot/lib/libatomic.so.1: error adding symbols: DSO missing from command line
--
--Fixes:
-- - http://autobuild.buildroot.org/results/d0726b2253f1f3d006e057f3b32c646c4b9b5f7a
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://bugs.libcamera.org/show_bug.cgi?id=39]
-----
-- src/libcamera/meson.build | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/src/libcamera/meson.build b/src/libcamera/meson.build
--index cc2b8669..af3533ad 100644
----- a/src/libcamera/meson.build
--+++ b/src/libcamera/meson.build
--@@ -160,6 +160,7 @@ libcamera_dep = declare_dependency(sources : [
--                                        libcamera_public_headers,
--                                    ],
--                                    include_directories : libcamera_includes,
--+                                   dependencies : libcamera_deps,
--                                    link_with : libcamera)
-- 
-- subdir('proxy/worker')
---- 
--2.30.2
-diff --git a/package/libcamera/libcamera.hash b/package/libcamera/libcamera.hash
-index 78197b9aeb..52c584bc16 100644
---- a/package/libcamera/libcamera.hash
-+++ b/package/libcamera/libcamera.hash
-@@ -1,4 +1,4 @@
--sha256  fa9efe38397392a338c0ed9d0bf3ac1480d4d1c96b0597e422f8b9fb36f43398  libcamera-3a1f67a8031ac5ad96a11d5dc8b2e8976290497b-br1.tar.gz
-+sha256  a5ed581416719b914140eda76ca8a4e0e9c944b859f8fb018fc17497278c5ae1  libcamera-e355ca0087cd93ef80f74c61018e9e9228a93313-br1.tar.gz
+diff --git a/package/pipewire/Config.in b/package/pipewire/Config.in
+index 6c61dd2021..b15bbfa8d3 100644
+--- a/package/pipewire/Config.in
++++ b/package/pipewire/Config.in
+@@ -14,6 +14,11 @@ config BR2_PACKAGE_PIPEWIRE
  
- # license files
- sha256  fd38b2c053c0cce46d9c5ef3545a6e34d157a240ba99c9b8dca5d37a8147da6c  LICENSES/BSD-2-Clause.txt
-diff --git a/package/libcamera/libcamera.mk b/package/libcamera/libcamera.mk
-index 11a6961da5..677da8ac4c 100644
---- a/package/libcamera/libcamera.mk
-+++ b/package/libcamera/libcamera.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+ if BR2_PACKAGE_PIPEWIRE
  
- LIBCAMERA_SITE = https://git.linuxtv.org/libcamera.git
--LIBCAMERA_VERSION = 3a1f67a8031ac5ad96a11d5dc8b2e8976290497b
-+LIBCAMERA_VERSION = e355ca0087cd93ef80f74c61018e9e9228a93313
- LIBCAMERA_SITE_METHOD = git
- LIBCAMERA_DEPENDENCIES = \
- 	host-openssl \
++config BR2_PACKAGE_PIPEWIRE_EXAMPLES
++	bool "pipewire examples"
++	help
++	  Build pipewire examples
++
+ config BR2_PACKAGE_PIPEWIRE_GSTREAMER
+ 	bool "pipewire gstreamer plugins"
+ 	depends on BR2_USE_WCHAR # libglib2
+diff --git a/package/pipewire/pipewire.mk b/package/pipewire/pipewire.mk
+index 2317398088..472bb06dd7 100644
+--- a/package/pipewire/pipewire.mk
++++ b/package/pipewire/pipewire.mk
+@@ -13,7 +13,6 @@ PIPEWIRE_DEPENDENCIES = host-pkgconf dbus $(TARGET_NLS_DEPENDENCIES)
+ 
+ PIPEWIRE_CONF_OPTS += \
+ 	-Ddocs=disabled \
+-	-Dexamples=disabled \
+ 	-Dman=disabled \
+ 	-Dtests=disabled \
+ 	-Dspa-plugins=enabled \
+@@ -35,6 +34,12 @@ else
+ PIPEWIRE_CONF_OPTS += -Dudev=disabled
+ endif
+ 
++ifeq ($(BR2_PACKAGE_PIPEWIRE_EXAMPLES),y)
++PIPEWIRE_CONF_OPTS += -Dexamples=enabled
++else
++PIPEWIRE_CONF_OPTS += -Dexamples=disabled
++endif
++
+ ifeq ($(BR2_PACKAGE_PIPEWIRE_GSTREAMER),y)
+ PIPEWIRE_CONF_OPTS += -Dgstreamer=enabled
+ PIPEWIRE_DEPENDENCIES += libglib2 gstreamer1 gst1-plugins-base
 -- 
 2.25.1
 
