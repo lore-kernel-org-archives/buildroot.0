@@ -7,51 +7,51 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C4C6C433F5
-	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 13:27:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 914CAC433EF
+	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 13:27:30 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 5445361167
-	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 13:27:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5445361167
+	by mail.kernel.org (Postfix) with ESMTPS id 3BCC861167
+	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 13:27:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3BCC861167
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 119C46065A;
-	Fri, 10 Sep 2021 13:27:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E7646605F9;
+	Fri, 10 Sep 2021 13:27:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5lTXo9ZzHNAg; Fri, 10 Sep 2021 13:27:17 +0000 (UTC)
+	with ESMTP id BB3mTgUQ2avm; Fri, 10 Sep 2021 13:27:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 645A3605F9;
-	Fri, 10 Sep 2021 13:27:16 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id BB8921BF317
- for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 13:27:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 38C06616A3;
+	Fri, 10 Sep 2021 13:27:28 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A0D771BF317
+ for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 13:27:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AB8C3849A6
- for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 13:27:11 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9D1A54062F
+ for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 13:27:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eHkNrEGeV2KT for <buildroot@lists.busybox.net>;
- Fri, 10 Sep 2021 13:27:11 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id n6ueJZf2AAJP for <buildroot@lists.busybox.net>;
+ Fri, 10 Sep 2021 13:27:17 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 08B54849A3
- for <buildroot@buildroot.org>; Fri, 10 Sep 2021 13:27:11 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id AC88840285
+ for <buildroot@buildroot.org>; Fri, 10 Sep 2021 13:27:17 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 4C70D88D42; Fri, 10 Sep 2021 13:25:35 +0000 (UTC)
+ id F186788D48; Fri, 10 Sep 2021 13:25:41 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 10 Sep 2021 15:20:32 +0200
-X-Git-Refname: refs/heads/2021.05.x
-X-Git-Oldrev: e78fce6e34227ecc11c5501d42b56f37b4762d52
-X-Git-Newrev: c615dc5e7febea1fa1f7febd16c7a24e064382fa
+Date: Fri, 10 Sep 2021 15:20:14 +0200
+X-Git-Refname: refs/heads/2021.08.x
+X-Git-Oldrev: cd258e78a0d8172ba37f60d65163fce4a81f9267
+X-Git-Newrev: 1279d2b132844dc71ae51852f7287a205d5e48a4
 X-Patchwork-Hint: ignore
-Message-Id: <20210910132535.4C70D88D42@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.05.x] package/go: security bump
+Message-Id: <20210910132541.F186788D48@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.08.x] package/go: security bump
  version to 1.16.8
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
@@ -71,8 +71,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c615dc5e7febea1fa1f7febd16c7a24e064382fa
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=1279d2b132844dc71ae51852f7287a205d5e48a4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.08.x
 
 go1.16.8 (released 2021-09-09) includes a security fix to the archive/zip
 package, as well as bug fixes to the archive/zip, go/internal/gccgoimporter,
@@ -81,8 +81,6 @@ html/template, net/http, and runtime/pprof packages.
 https://golang.org/doc/devel/release#go1.16.minor
 
 Signed-off-by: Christian Stewart <christian@paral.in>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 1279d2b132844dc71ae51852f7287a205d5e48a4)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
  package/go/go.hash | 2 +-
