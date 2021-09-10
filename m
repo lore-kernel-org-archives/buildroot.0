@@ -7,51 +7,51 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C34ABC433EF
-	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 11:13:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 14836C433F5
+	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 11:13:58 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 715DF60FE3
-	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 11:13:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 715DF60FE3
+	by mail.kernel.org (Postfix) with ESMTPS id D447A603E9
+	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 11:13:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D447A603E9
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3F0D240615;
-	Fri, 10 Sep 2021 11:13:44 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 68CED405F4;
+	Fri, 10 Sep 2021 11:13:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BSA9d3OBpz4S; Fri, 10 Sep 2021 11:13:43 +0000 (UTC)
+	with ESMTP id ly4WIsWyZg3l; Fri, 10 Sep 2021 11:13:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 50059405F4;
-	Fri, 10 Sep 2021 11:13:42 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6439C1BF23C
- for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 11:13:18 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 307DC400E4;
+	Fri, 10 Sep 2021 11:13:55 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id E3FA01BF23C
+ for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 11:13:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5D498405F4
- for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 11:13:17 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D402584A4F
+ for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 11:13:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qbd2hNgmufVW for <buildroot@lists.busybox.net>;
- Fri, 10 Sep 2021 11:13:16 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id iuoTE233bEum for <buildroot@lists.busybox.net>;
+ Fri, 10 Sep 2021 11:13:23 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5872C400E4
- for <buildroot@buildroot.org>; Fri, 10 Sep 2021 11:13:16 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 14F7984A4D
+ for <buildroot@buildroot.org>; Fri, 10 Sep 2021 11:13:23 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id CEDDC88C83; Fri, 10 Sep 2021 11:11:40 +0000 (UTC)
+ id 90C2F88CA0; Fri, 10 Sep 2021 11:11:47 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 10 Sep 2021 13:09:06 +0200
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: ad98d9b7712f97ecb656ad2020f4a34dc233c9e0
-X-Git-Newrev: fc2d99b294612bd85f0b5080e7098cd57da16a94
+Date: Fri, 10 Sep 2021 13:09:11 +0200
+X-Git-Refname: refs/heads/2021.05.x
+X-Git-Oldrev: 26997e12c7b8519c75f36bc72a91984149a381dc
+X-Git-Newrev: e2d1e8c5e6e34a9e93ea949c2867818a0467a893
 X-Patchwork-Hint: ignore
-Message-Id: <20210910111140.CEDDC88C83@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/qt5/qt5base: fix
+Message-Id: <20210910111147.90C2F88CA0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.05.x] package/qt5/qt5base: fix
  build on riscv32
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
@@ -71,8 +71,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fc2d99b294612bd85f0b5080e7098cd57da16a94
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=e2d1e8c5e6e34a9e93ea949c2867818a0467a893
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
 
 Fix the following build failure on riscv32:
 
