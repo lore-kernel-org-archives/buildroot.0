@@ -2,57 +2,73 @@ Return-Path: <SRS0=85Xw=OA=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 38496C433F5
-	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 11:36:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A9FDCC433FE
+	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 11:55:45 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id EC76E611BD
-	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 11:36:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org EC76E611BD
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
+	by mail.kernel.org (Postfix) with ESMTPS id 2EBBA611B0
+	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 11:55:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2EBBA611B0
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=busybox.net
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C6555406C0;
-	Fri, 10 Sep 2021 11:36:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EE2D54069B;
+	Fri, 10 Sep 2021 11:55:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TmWrCF-U3TJt; Fri, 10 Sep 2021 11:36:07 +0000 (UTC)
+	with ESMTP id rvE2TZ05Vi9u; Fri, 10 Sep 2021 11:55:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EA30C40719;
-	Fri, 10 Sep 2021 11:36:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5E84F40699;
+	Fri, 10 Sep 2021 11:55:43 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5C2A41BF23C
- for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 11:34:46 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5256C1BF859
+ for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 11:55:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A50AA8274D
- for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 11:34:45 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4081D83126
+ for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 11:55:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hwXGOe3ja1e3 for <buildroot@lists.busybox.net>;
- Fri, 10 Sep 2021 11:34:44 +0000 (UTC)
+ with ESMTP id yWUNv4Bst43L for <buildroot@lists.busybox.net>;
+ Fri, 10 Sep 2021 11:55:41 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id F09CA829FE
- for <buildroot@buildroot.org>; Fri, 10 Sep 2021 11:34:44 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 6F70888CFD; Fri, 10 Sep 2021 11:33:09 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Fri, 10 Sep 2021 13:28:13 +0200
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 3dcb5341971ea7332c887855dd8d3c295326521e
-X-Git-Newrev: af88a2ab740c674f3bb85d3df5053051d84ed4c9
-X-Patchwork-Hint: ignore
-Message-Id: <20210910113309.6F70888CFD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/mosquitto:
- security bump to v2.0.12
+ by smtp1.osuosl.org (Postfix) with ESMTP id A4E6482EB4
+ for <buildroot@uclibc.org>; Fri, 10 Sep 2021 11:55:41 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 81)
+ id 1873F864D5; Fri, 10 Sep 2021 11:54:06 +0000 (UTC)
+From: bugzilla@busybox.net
+To: buildroot@uclibc.org
+Date: Fri, 10 Sep 2021 11:55:41 +0000
+X-Bugzilla-Reason: CC
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: buildroot
+X-Bugzilla-Component: Other
+X-Bugzilla-Version: 2021.05
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: t.ruschival@gmail.com
+X-Bugzilla-Status: RESOLVED
+X-Bugzilla-Resolution: INVALID
+X-Bugzilla-Priority: P5
+X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
+X-Bugzilla-Target-Milestone: ---
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_status resolution
+Message-ID: <bug-14206-163-AWiXTFb9HI@https.bugs.busybox.net/>
+In-Reply-To: <bug-14206-163@https.bugs.busybox.net/>
+References: <bug-14206-163@https.bugs.busybox.net/>
+X-Bugzilla-URL: https://bugs.busybox.net/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
+Subject: [Buildroot] [Bug 14206] QT5 touch screen rotation does not work
+ since 2021.05
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,59 +81,38 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=af88a2ab740c674f3bb85d3df5053051d84ed4c9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+https://bugs.busybox.net/show_bug.cgi?id=14206
 
-Mosquitto 2.0.12 is a security and bugfix release, notably:
+Thomas Ruschival <t.ruschival@gmail.com> changed:
 
-* Fix possible DoS in the broker with MQTTv5
-* Fix CVE-2020-13849
-* Fix CVE-2021-34434
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|---                         |INVALID
 
-Read the full announcement on
-https://mosquitto.org/blog/2021/08/version-2-0-12-released/
+--- Comment #2 from Thomas Ruschival <t.ruschival@gmail.com> ---
+It is not a bug but a behavior of Qt5 v5.15.
+(https://doc.qt.io/qt-5/inputs-linux-device.html) 
 
-Signed-off-by: Titouan Christophe <titouanchristophe@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit d333eab3f0743a54808466b933a8591ac1eb5ed3)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/mosquitto/mosquitto.hash | 4 ++--
- package/mosquitto/mosquitto.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+The issue can be solved/worked around in two different ways:
 
-diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
-index baa2a90c5a..2692aa1a9b 100644
---- a/package/mosquitto/mosquitto.hash
-+++ b/package/mosquitto/mosquitto.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking gpg signature
--# from https://mosquitto.org/files/source/mosquitto-2.0.11.tar.gz.asc
--sha256  7b36a7198bce85cf31b132f5c6ee36dcf5dadf86fb768501eb1e11ce95d4f78a  mosquitto-2.0.11.tar.gz
-+# from https://mosquitto.org/files/source/mosquitto-2.0.12.tar.gz.asc
-+sha256  31cf0065cb431d6f4e57a5f4d56663e839c9d177362eff89582d7cfde191c933  mosquitto-2.0.12.tar.gz
- 
- # License files
- sha256  d3c4ccace4e5d3cc89d34cf2a0bc85b8596bfc0a32b815d0d77f9b7c41b5350c  LICENSE.txt
-diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
-index 52f9c98733..06b963a994 100644
---- a/package/mosquitto/mosquitto.mk
-+++ b/package/mosquitto/mosquitto.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MOSQUITTO_VERSION = 2.0.11
-+MOSQUITTO_VERSION = 2.0.12
- MOSQUITTO_SITE = https://mosquitto.org/files/source
- MOSQUITTO_LICENSE = EPL-2.0 or EDLv1.0
- MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v20 edl-v10
+Either: 
+Disable the use of libinput (QT_QPA_EGLFS_NO_LIBINPUT=1) and continue using the
+environment variable
+QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS=/dev/input/touch:rotate=90
+
+OR: 
+use the generic platform plugin configuration variable
+QT_QPA_GENERIC_PLUGINS=evdevtouch:/dev/input/touch:rotate=90
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
