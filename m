@@ -1,61 +1,73 @@
-Return-Path: <SRS0=n+Pr=OD=lists.buildroot.org=buildroot-bounces@kernel.org>
+Return-Path: <SRS0=85Xw=OA=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CC2D3C433FE
-	for <buildroot@archiver.kernel.org>; Mon, 13 Sep 2021 14:45:07 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 88219C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 14:21:56 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 67AF260FE6
-	for <buildroot@archiver.kernel.org>; Mon, 13 Sep 2021 14:45:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 67AF260FE6
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=theobroma-systems.com
+	by mail.kernel.org (Postfix) with ESMTPS id 420DF60EFE
+	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 14:21:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 420DF60EFE
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=busybox.net
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 139DC403AB;
-	Mon, 13 Sep 2021 14:45:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 115738257D;
+	Fri, 10 Sep 2021 14:21:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id W4DoDV1sP48v; Mon, 13 Sep 2021 14:45:06 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id jHq3-yeyKL0t; Fri, 10 Sep 2021 14:21:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 713B040364;
-	Mon, 13 Sep 2021 14:45:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6A69081BCB;
+	Fri, 10 Sep 2021 14:21:54 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 56EF61BF3A7
- for <buildroot@lists.busybox.net>; Mon, 13 Sep 2021 14:44:44 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 88A781BF842
+ for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 14:21:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 46EE940364
- for <buildroot@lists.busybox.net>; Mon, 13 Sep 2021 14:44:44 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 83D384068E
+ for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 14:21:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id G7TesSYAPmdt for <buildroot@lists.busybox.net>;
- Mon, 13 Sep 2021 14:44:43 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from mail.theobroma-systems.com (vegas.theobroma-systems.com
- [144.76.126.164])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 80D314035A
- for <buildroot@buildroot.org>; Mon, 13 Sep 2021 14:44:43 +0000 (UTC)
-Received: from ip092042140082.rev.nessus.at ([92.42.140.82]:37314
- helo=meitner.lan) by mail.theobroma-systems.com with esmtpsa
- (TLS1.2:DHE_RSA_AES_256_CBC_SHA1:256) (Exim 4.80)
- (envelope-from <martin.elshuber@theobroma-systems.com>)
- id 1mPmvx-0002q5-5i; Mon, 13 Sep 2021 16:27:45 +0200
-From: Martin Elshuber <martin.elshuber@theobroma-systems.com>
-To: buildroot@buildroot.org
-Date: Mon, 13 Sep 2021 16:26:50 +0200
-Message-Id: <20210913142652.942533-1-martin.elshuber@theobroma-systems.com>
-X-Mailer: git-send-email 2.30.2
+ with ESMTP id 98K0vh8eSLIi for <buildroot@lists.busybox.net>;
+ Fri, 10 Sep 2021 14:21:51 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id CE36140466
+ for <buildroot@uclibc.org>; Fri, 10 Sep 2021 14:21:51 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 81)
+ id 03A6D88097; Fri, 10 Sep 2021 14:20:15 +0000 (UTC)
+From: bugzilla@busybox.net
+To: buildroot@uclibc.org
+Date: Fri, 10 Sep 2021 14:21:51 +0000
+X-Bugzilla-Reason: CC
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: buildroot
+X-Bugzilla-Component: Other
+X-Bugzilla-Version: 2021.02.1
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: stsp2@yandex.ru
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P5
+X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
+X-Bugzilla-Target-Milestone: ---
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
+ op_sys bug_status bug_severity priority component assigned_to reporter cc
+ target_milestone
+Message-ID: <bug-14211-163@https.bugs.busybox.net/>
+X-Bugzilla-URL: https://bugs.busybox.net/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/3] package/strongswan: fix broken dependency
- relation
+Subject: [Buildroot] [Bug 14211] New: libffi-3.3.tar.gz repacked
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,47 +80,39 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>,
- Martin Elshuber <martin.elshuber@theobroma-systems.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-The AKA backend for 3GPP2 requires libgmp (see
-https://wiki.strongswan.org/projects/strongswan/wiki/Autoconf). Since
-the AKA backend for 3GPP2 is included by BR2_PACKAGE_STRONGSWAN_EAP,
-when selecting a crypto backend different from
-BR2_PACKAGE_STRONGSWAN_GMP, there is no guarantee the gmp package is
-selected as well. When doing so, make fails since the package is in the
-dependency chain but not selected:
+https://bugs.busybox.net/show_bug.cgi?id=14211
 
-  $ make
-  Makefile:585: *** gmp is in the dependency chain of strongswan that has added it to its _DEPENDENCIES variable without selecting it or depending on it from Config.in.  Stop.
-  make: *** [Makefile:23: _all] Error 2
+            Bug ID: 14211
+           Summary: libffi-3.3.tar.gz repacked
+           Product: buildroot
+           Version: 2021.02.1
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned@buildroot.uclibc.org
+          Reporter: stsp2@yandex.ru
+                CC: buildroot@uclibc.org
+  Target Milestone: ---
 
-To fix this, select BR2_PACKAGE_GMP when selecting BR2_PACKAGE_STRONGSWAN_EAP.
+The below libffi sources have
+different hash sums:
+http://sources.buildroot.net/libffi/libffi-3.3.tar.gz
+https://gcc.gnu.org/pub/libffi/libffi-3.3.tar.gz
 
-Signed-off-by: Martin Elshuber <martin.elshuber@theobroma-systems.com>
----
- package/strongswan/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+I am not sure its a usual practice
+for buildroot to repack source packages.
 
-diff --git a/package/strongswan/Config.in b/package/strongswan/Config.in
-index 47c7107f59..368cd1ecc0 100644
---- a/package/strongswan/Config.in
-+++ b/package/strongswan/Config.in
-@@ -75,6 +75,7 @@ config BR2_PACKAGE_STRONGSWAN_TNCCS_DYNAMIC
- 
- config BR2_PACKAGE_STRONGSWAN_EAP
- 	bool "Enable EAP protocols"
-+	select BR2_PACKAGE_GMP
- 	help
- 	  Enable various EAP protocols:
- 	    - mschapv2
 -- 
-2.30.2
-
+You are receiving this mail because:
+You are on the CC list for the bug.
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
