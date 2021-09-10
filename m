@@ -7,63 +7,63 @@ X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C701C433F5
-	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 06:55:42 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 570C2C433F5
+	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 06:55:53 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 72B8A611AF
-	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 06:55:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 72B8A611AF
+	by mail.kernel.org (Postfix) with ESMTPS id 1D69C611B0
+	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 06:55:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1D69C611B0
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=t-online.de
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 36B026066B;
-	Fri, 10 Sep 2021 06:55:41 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id s75COYhNeC7Z; Fri, 10 Sep 2021 06:55:40 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7DAE26063D;
-	Fri, 10 Sep 2021 06:55:39 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A4CA81BF352
- for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 06:55:37 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9432B8274D
- for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 06:55:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E70098275C;
+	Fri, 10 Sep 2021 06:55:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id czem7PDz-fcb for <buildroot@lists.busybox.net>;
- Fri, 10 Sep 2021 06:55:36 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id H_JqonO95ez7; Fri, 10 Sep 2021 06:55:52 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4C1EF8274D;
+	Fri, 10 Sep 2021 06:55:51 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1D2421BF352
+ for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 06:55:38 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0C30940179
+ for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 06:55:38 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id htz2_FI8P4gU for <buildroot@lists.busybox.net>;
+ Fri, 10 Sep 2021 06:55:37 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
 Received: from mailout01.t-online.de (mailout01.t-online.de [194.25.134.80])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A329F81BB2
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E3DA3400DD
  for <buildroot@buildroot.org>; Fri, 10 Sep 2021 06:55:36 +0000 (UTC)
 Received: from fwd78.dcpf.telekom.de (fwd78.aul.t-online.de [10.223.144.104])
- by mailout01.t-online.de (Postfix) with SMTP id 94D064388
+ by mailout01.t-online.de (Postfix) with SMTP id 78A1D4380
  for <buildroot@buildroot.org>; Fri, 10 Sep 2021 08:55:34 +0200 (CEST)
 Received: from fli4l.lan.fli4l ([84.161.183.251]) by fwd78.t-online.de
  with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1mOaRh-25ArQX0; Fri, 10 Sep 2021 08:55:33 +0200
+ esmtp id 1mOaRg-1xldkf0; Fri, 10 Sep 2021 08:55:33 +0200
 Received: from [192.168.1.109] (port=36366 helo=bruckner.lan.fli4l)
  by fli4l.lan.fli4l with esmtp (Exim 4.94.2)
- (envelope-from <bernd.kuhls@t-online.de>) id 1mOaRh-00067z-9b
- for buildroot@buildroot.org; Fri, 10 Sep 2021 08:55:33 +0200
+ (envelope-from <bernd.kuhls@t-online.de>) id 1mOaRg-00067z-Dp
+ for buildroot@buildroot.org; Fri, 10 Sep 2021 08:55:32 +0200
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Fri, 10 Sep 2021 08:55:32 +0200
-Message-Id: <20210910065532.31730-5-bernd.kuhls@t-online.de>
+Date: Fri, 10 Sep 2021 08:55:29 +0200
+Message-Id: <20210910065532.31730-2-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210910065532.31730-1-bernd.kuhls@t-online.de>
 References: <20210910065532.31730-1-bernd.kuhls@t-online.de>
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1631256933-00016B91-186125A9/0/0 CLEAN NORMAL
-X-TOI-MSGID: 292180e2-c71d-4019-a5e2-bcdec35e15ec
-Subject: [Buildroot] [PATCH 5/5] package/x11r7/xapp_xeyes: bump version to
- 1.2.0
+X-TOI-EXPURGATEID: 150726::1631256933-00016B91-2BC687B1/0/0 CLEAN NORMAL
+X-TOI-MSGID: 9d6c7729-3ef0-42f1-85f5-5f2756beec8b
+Subject: [Buildroot] [PATCH 2/5] package/x11r7/xlib_libXft: bump version to
+ 2.3.4
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,48 +82,48 @@ Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
 Release notes:
-https://lists.x.org/archives/xorg-announce/2021-August/003101.html
+https://lists.x.org/archives/xorg-announce/2021-August/003104.html
 
 Removed md5 and sha1 hashes, reformatted hashes, updated _SITE.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xapp_xeyes/xapp_xeyes.hash | 10 ++++------
- package/x11r7/xapp_xeyes/xapp_xeyes.mk   |  4 ++--
+ package/x11r7/xlib_libXft/xlib_libXft.hash | 10 ++++------
+ package/x11r7/xlib_libXft/xlib_libXft.mk   |  4 ++--
  2 files changed, 6 insertions(+), 8 deletions(-)
 
-diff --git a/package/x11r7/xapp_xeyes/xapp_xeyes.hash b/package/x11r7/xapp_xeyes/xapp_xeyes.hash
-index bbb6a9b08b..734492b6cd 100644
---- a/package/x11r7/xapp_xeyes/xapp_xeyes.hash
-+++ b/package/x11r7/xapp_xeyes/xapp_xeyes.hash
+diff --git a/package/x11r7/xlib_libXft/xlib_libXft.hash b/package/x11r7/xlib_libXft/xlib_libXft.hash
+index bd0838b4dd..8743a9b7d1 100644
+--- a/package/x11r7/xlib_libXft/xlib_libXft.hash
++++ b/package/x11r7/xlib_libXft/xlib_libXft.hash
 @@ -1,7 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2018-March/002860.html
--md5 6f0543ec84283df5743eeafc173bea4a  xeyes-1.1.2.tar.bz2
--sha1 458987f8accdbd8abf993ee51030391cf584d2e8  xeyes-1.1.2.tar.bz2
--sha256 57bcec0d2d167af9e5d44d0dbd74c6d7c0f0591cd0608952b23c749fdd910553  xeyes-1.1.2.tar.bz2
--sha512 008d76f03ddabd3d86ad9e52a540504553b94cb7a6743b20cf08897549eb27505667365ab9af21956a1b5ec7297acca8903a326536e6195a30e643cd93297ee0  xeyes-1.1.2.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2021-August/003101.html
-+sha256  f8a17e23146bef1ab345a1e303c6749e42aaa7bcf4f25428afad41770721b6db  xeyes-1.2.0.tar.bz2
-+sha512  2d1614614b3ba3d1ebaa0e9801a2e159389b94aaacafb962d326b7e6dc712c1eb2c12a50ceb10b3135cf0eee6ae86bbf84e73098deb08e73792f14a60616b4d8  xeyes-1.2.0.tar.bz2
+-# From https://lists.x.org/archives/xorg-announce/2019-March/002976.html
+-md5 4a433c24627b4ff60a4dd403a0990796  libXft-2.3.3.tar.bz2
+-sha1 48f543fe495f545df1794fa36a0a708558ae298c  libXft-2.3.3.tar.bz2
+-sha256 225c68e616dd29dbb27809e45e9eadf18e4d74c50be43020ef20015274529216  libXft-2.3.3.tar.bz2
+-sha512 28fdaf3baa3b156a4a7fdd6e39c4d8026d7d21eaa9be27c9797c8d329dab691a1bc82ea6042f9d4729a9343d93787536fb7e4b606f722f33cbe608b2e79910e8  libXft-2.3.3.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2021-August/003104.html
++sha256  57dedaab20914002146bdae0cb0c769ba3f75214c4c91bd2613d6ef79fc9abdd  libXft-2.3.4.tar.bz2
++sha512  5bb019750982ed4643880efd7368bc226ad49cfa8c0c8c6d4614dfeed74f588c65e1ba69adcc12284ec07d841e5b58fc1c27f3fddf83fe1a2837b29dd9ecec51  libXft-2.3.4.tar.bz2
  # Locally computed
--sha256 d8de1de40e16227d1eb4b19e95117ce3f990f71f71df096a2259b0bc9931e042 COPYING
-+sha256  d8de1de40e16227d1eb4b19e95117ce3f990f71f71df096a2259b0bc9931e042  COPYING
-diff --git a/package/x11r7/xapp_xeyes/xapp_xeyes.mk b/package/x11r7/xapp_xeyes/xapp_xeyes.mk
-index 6c7f859d35..11eea802d5 100644
---- a/package/x11r7/xapp_xeyes/xapp_xeyes.mk
-+++ b/package/x11r7/xapp_xeyes/xapp_xeyes.mk
+-sha256 7cda22286b1379b9b73df695f72cbad36595e65b039a5fbc5c89b69ecc44438c  COPYING
++sha256  7cda22286b1379b9b73df695f72cbad36595e65b039a5fbc5c89b69ecc44438c  COPYING
+diff --git a/package/x11r7/xlib_libXft/xlib_libXft.mk b/package/x11r7/xlib_libXft/xlib_libXft.mk
+index 489cfe4c56..b1640a6613 100644
+--- a/package/x11r7/xlib_libXft/xlib_libXft.mk
++++ b/package/x11r7/xlib_libXft/xlib_libXft.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--XAPP_XEYES_VERSION = 1.1.2
-+XAPP_XEYES_VERSION = 1.2.0
- XAPP_XEYES_SOURCE = xeyes-$(XAPP_XEYES_VERSION).tar.bz2
--XAPP_XEYES_SITE = http://xorg.freedesktop.org/releases/individual/app
-+XAPP_XEYES_SITE = https://xorg.freedesktop.org/archive/individual/app
- XAPP_XEYES_LICENSE = MIT
- XAPP_XEYES_LICENSE_FILES = COPYING
- XAPP_XEYES_DEPENDENCIES = xlib_libX11 xlib_libXext xlib_libXmu xlib_libXrender xlib_libXt
+-XLIB_LIBXFT_VERSION = 2.3.3
++XLIB_LIBXFT_VERSION = 2.3.4
+ XLIB_LIBXFT_SOURCE = libXft-$(XLIB_LIBXFT_VERSION).tar.bz2
+-XLIB_LIBXFT_SITE = http://xorg.freedesktop.org/releases/individual/lib
++XLIB_LIBXFT_SITE = https://xorg.freedesktop.org/archive/individual/lib
+ XLIB_LIBXFT_LICENSE = MIT
+ XLIB_LIBXFT_LICENSE_FILES = COPYING
+ XLIB_LIBXFT_INSTALL_STAGING = YES
 -- 
 2.30.2
 
