@@ -2,90 +2,93 @@ Return-Path: <SRS0=85Xw=OA=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-18.5 required=3.0 tests=BAYES_00,
 	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
 	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 49EB9C433F5
-	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 06:23:09 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DC654C433F5
+	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 06:38:31 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B4B3B61026
-	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 06:23:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B4B3B61026
+	by mail.kernel.org (Postfix) with ESMTPS id 520B760FC0
+	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 06:38:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 520B760FC0
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5729F40179;
-	Fri, 10 Sep 2021 06:23:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F0BF783E8E;
+	Fri, 10 Sep 2021 06:38:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id US5ujqgP4Uru; Fri, 10 Sep 2021 06:23:07 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7F59D40165;
-	Fri, 10 Sep 2021 06:23:06 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 694971BF352
- for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 06:23:05 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 52720849DE
- for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 06:23:05 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Ln8WqHZ4lxlX for <buildroot@lists.busybox.net>;
- Fri, 10 Sep 2021 06:23:04 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id iPT-KykbQD7h; Fri, 10 Sep 2021 06:38:30 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 28A5483E95;
+	Fri, 10 Sep 2021 06:38:29 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A3F1C1BF352
+ for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 06:38:27 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 967ED6063D
+ for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 06:38:27 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HxRkzwIsGnoL for <buildroot@lists.busybox.net>;
+ Fri, 10 Sep 2021 06:38:25 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
- [IPv6:2a00:1450:4864:20::434])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 77192849E0
- for <buildroot@busybox.net>; Fri, 10 Sep 2021 06:23:04 +0000 (UTC)
-Received: by mail-wr1-x434.google.com with SMTP id w29so264747wra.8
- for <buildroot@busybox.net>; Thu, 09 Sep 2021 23:23:04 -0700 (PDT)
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
+ [IPv6:2a00:1450:4864:20::332])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 63CBA60636
+ for <buildroot@buildroot.org>; Fri, 10 Sep 2021 06:38:25 +0000 (UTC)
+Received: by mail-wm1-x332.google.com with SMTP id
+ 196-20020a1c04cd000000b002fa489ffe1fso623041wme.4
+ for <buildroot@buildroot.org>; Thu, 09 Sep 2021 23:38:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=dV2nm3twhksuJC/JqDMMDW2XiDGACHgRIfbzUbOp8Dc=;
- b=b8uuIoKrUqr3W8x3Lgb7bmNvCmWEUX5vtwVEyKH9H/SpCX2pLe6I6sdlDMJBHwottG
- paSg6iGEXtUyjSMuiwj9k+oJWHWgqmkuvxW43qQw7fE/66QC2pQR+fmkQZkJ4aT0tUdm
- ScXiVo8zS7rG5wY9nnH9N5qdZEgRdPp7cdeTmzoApiW0S1x5CyW2/A43k6wkj8BpTPk2
- DzHv9Zr8dkIprrJqxM/D0+7xjqCUJzid+SDRRlVbeBtVev7dKjmN5ZeBQ6dvao3vx5Yl
- 3J+qTZ6diGSkBnGK/vTClFqz83Pse+rrfgHJqmPgQJHN7Z3fJAhYrm3vWKX5LHsJ7F8u
- 6NNA==
+ bh=oYGjdI9SDiibCHGZPAqXBrcANyOmsBSuV11yp8wPu6E=;
+ b=GuT9iyNqDmcvlWBd/qI0BtgZrHoMzmwb+0V26oX8dzjnL0BnTssFOl7DIBxSJ8gwT3
+ ZfVBcTjgXM9FIb4MqYd71H2Z/o3UFMSp35WMSvh/BXowG8pi6mgSx+mJpd3D3Ble1uiY
+ f6A9ex+oaBBxguCdqcLW/hGM+OTXP/oo4ttTW2E2Ir+XkUz98zC9INma49/G1ApXqJcL
+ yTZu6boMwbX0M0V//99Ce3ut+D9prsEpW8s6MfiBMZfAeotIxS8ife8zJe+UbECRsMlI
+ lvZlpiaQ0nkOxLDQEqwzJa6laE/+A9KCN2L/p3eGtiKTvOVZcJUC81QWvKZmhyg0ieg1
+ UVnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=dV2nm3twhksuJC/JqDMMDW2XiDGACHgRIfbzUbOp8Dc=;
- b=4H9p3Tk7xPyQqVaG+dwh7brC+tJCbxyrSkdb/gIa0Udqfc7Ck8pWWuKMkaAyKOHQUs
- El4SrEnOuUEsNTOrhbKmNuqmygFAAp+oKOFxi7gSezpbg0p5t30Kt4f/tOPZ1h3WgN2a
- zcqowoYrPdskMXgB/eCL1sMNqAXphPUGlXqe6DJb3zCBlYWqtAGCLsmm1NtEUoyCny9K
- PMMQZ/gLClIas3QxUufSGK5d6tUFE5xkrxYqDJrSDAUCIOMFDKJW8UthtC3QMdZLsta+
- PNcozuVF/lLr6krTdFm1zgBhFNXLzMEZMj7vg5UXOxT/ySUpQD/lMLv8jciEZEIJQw2/
- QE8w==
-X-Gm-Message-State: AOAM531n7rmNdP6fe5QH6X/Qb00SnQ5LBZWbiip/g2sJmn/M97VkjxMs
- yiF+4DmSpGuhHfk0fokgWwQPhpQvXSY=
-X-Google-Smtp-Source: ABdhPJx1VVw8FQkVcoTxblr5lRYiiSLEuQBBnu27WcZ61IWSVZ6ewGpNA5pKSnZSojdP8ff5FLsxwA==
-X-Received: by 2002:adf:f4ca:: with SMTP id h10mr7621665wrp.351.1631254982484; 
- Thu, 09 Sep 2021 23:23:02 -0700 (PDT)
-Received: from vm-user.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
- by smtp.gmail.com with ESMTPSA id p5sm4023001wrd.25.2021.09.09.23.23.01
+ bh=oYGjdI9SDiibCHGZPAqXBrcANyOmsBSuV11yp8wPu6E=;
+ b=CHIlCAXsxZX4SEoKNNSFt5xe1t63dvGrY5NZZJBFGwXKoGaxwZGEx7Znqh51XqBiaM
+ n32HJ24wO50mGzM7d955sm6tZ+1ybGCWq6Mlafu/GJNXPp7yu+p0FHf3sMWPH/W0J2A4
+ 4N+1ZOdoxMRgbadWdaY62ydt4vTDX23i7lrFtgGdgy6akPkF5ehIF765MuHjVTl8pNJp
+ 8xOO7YYXTRtc6rQuvbsLU3SmAi0oDxc5NbNrQiuGf52js7kPSQP7NE8vsxETTErgMVEd
+ tWHO7KT1aKJIsl/yRe+WSlAbKViTgjNVOGKU5I9fHxA8vAAwOm1EpBGLn4B92uaafHbx
+ R3LA==
+X-Gm-Message-State: AOAM532BLMQVHlcMl6rJBYDEyVktohos/H2/DHtNx7Tj60+Zzx0H7was
+ UMutSZr9AdY1e9zMKsDgpELyQbJdvR0=
+X-Google-Smtp-Source: ABdhPJxZoCpsdMM22yba6ADLdhOlpDPLYO6FDnzfik+y4FyWUncqzJdfTmliE2BJsGU+o254nfWCTQ==
+X-Received: by 2002:a05:600c:2947:: with SMTP id
+ n7mr489319wmd.192.1631255903108; 
+ Thu, 09 Sep 2021 23:38:23 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-2139-166.w92-167.abo.wanadoo.fr.
+ [92.167.218.166])
+ by smtp.gmail.com with ESMTPSA id m18sm1077241wrn.85.2021.09.09.23.38.22
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 09 Sep 2021 23:23:02 -0700 (PDT)
-From: Francois Perrad <fperrad@gmail.com>
-X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
-To: buildroot@busybox.net
-Date: Fri, 10 Sep 2021 08:22:54 +0200
-Message-Id: <20210910062255.2162777-1-francois.perrad@gadz.org>
-X-Mailer: git-send-email 2.30.2
+ Thu, 09 Sep 2021 23:38:22 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Fri, 10 Sep 2021 08:37:42 +0200
+Message-Id: <20210910063742.97364-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/luaposix: bump to version 35.1
+Subject: [Buildroot] [PATCH 1/1] package/gnuradio: fix build with boost
+ 1.77.0
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,46 +101,204 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
+Cc: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-diff LICENSE:
--Copyright (C) 2006-2020 luaposix authors
-+Copyright (C) 2006-2021 luaposix authors
+Fix the following build failure raised since commit
+d39d8f7cee9b4634e6f490020204f63fae419e8e:
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+In file included from /home/buildroot/autobuild/instance-3/output-1/host/x86_64-buildroot-linux-musl/sysroot/usr/include/boost/math/common_factor.hpp:14,
+                 from /home/buildroot/autobuild/instance-3/output-1/build/gnuradio-3.8.2.0/gr-digital/lib/symbol_sync_cc_impl.cc:30:
+/home/buildroot/autobuild/instance-3/output-1/host/x86_64-buildroot-linux-musl/sysroot/usr/include/boost/math/common_factor_ct.hpp:17:68: error: _Pragma takes a parenthesized string literal
+   17 | BOOST_MATH_HEADER_DEPRECATED("<boost/integer/common_factor_ct.hpp>");
+      |
+
+Fixes:
+ - http://autobuild.buildroot.org/results/7b4/7b46f51588144bca1d323230c378ce7f6ee999a8/build-end.log
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/luaposix/luaposix.hash | 4 ++--
- package/luaposix/luaposix.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...ve-deprecated-math-common_factor.hpp.patch | 165 ++++++++++++++++++
+ 1 file changed, 165 insertions(+)
+ create mode 100644 package/gnuradio/0005-boost-remove-deprecated-math-common_factor.hpp.patch
 
-diff --git a/package/luaposix/luaposix.hash b/package/luaposix/luaposix.hash
-index 54617853a..ee76ea103 100644
---- a/package/luaposix/luaposix.hash
-+++ b/package/luaposix/luaposix.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  a4edf2f715feff65acb009e8d1689e57ec665eb79bc36a6649fae55eafd56809  luaposix-35.0.tar.gz
--sha256  e5d496c903dc3989bb2f6f175cda52d26e3494ad1fdd67ae1c3b3e5f76ffb86f  LICENSE
-+sha256  1b5c48d2abd59de0738d1fc1e6204e44979ad2a1a26e8e22a2d6215dd502c797  luaposix-35.1.tar.gz
-+sha256  f50bc0f3197523b1709f31707425f2de95f8a45534b081a6b564179ab059e850  LICENSE
-diff --git a/package/luaposix/luaposix.mk b/package/luaposix/luaposix.mk
-index d04881dfd..fa2670915 100644
---- a/package/luaposix/luaposix.mk
-+++ b/package/luaposix/luaposix.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LUAPOSIX_VERSION = 35.0
-+LUAPOSIX_VERSION = 35.1
- LUAPOSIX_SITE = $(call github,luaposix,luaposix,v$(LUAPOSIX_VERSION))
- LUAPOSIX_LICENSE = MIT
- LUAPOSIX_LICENSE_FILES = LICENSE
+diff --git a/package/gnuradio/0005-boost-remove-deprecated-math-common_factor.hpp.patch b/package/gnuradio/0005-boost-remove-deprecated-math-common_factor.hpp.patch
+new file mode 100644
+index 0000000000..0c282b7322
+--- /dev/null
++++ b/package/gnuradio/0005-boost-remove-deprecated-math-common_factor.hpp.patch
+@@ -0,0 +1,165 @@
++From 2c767bb260a25b415e8c9c4b3ea37280b2127cec Mon Sep 17 00:00:00 2001
++From: japm48 <japm48@users.noreply.github.com>
++Date: Fri, 10 Apr 2020 23:35:30 +0200
++Subject: [PATCH] boost: remove deprecated math/common_factor.hpp
++
++Remove deprecation warning and prefer using std::{lcm,gcd} to Boost.
++Fixes #2712.
++
++[Retrieved from:
++https://github.com/gnuradio/gnuradio/commit/2c767bb260a25b415e8c9c4b3ea37280b2127cec]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ .../include/gnuradio/CMakeLists.txt           |  1 +
++ .../include/gnuradio/integer_math.h           | 35 +++++++++++++++++++
++ gnuradio-runtime/lib/buffer.cc                | 19 ++--------
++ gr-digital/lib/symbol_sync_cc_impl.cc         |  4 +--
++ gr-digital/lib/symbol_sync_ff_impl.cc         |  4 +--
++ 5 files changed, 43 insertions(+), 20 deletions(-)
++ create mode 100644 gnuradio-runtime/include/gnuradio/integer_math.h
++
++diff --git a/gnuradio-runtime/include/gnuradio/CMakeLists.txt b/gnuradio-runtime/include/gnuradio/CMakeLists.txt
++index 8d718e87b5b..056af5d6f48 100644
++--- a/gnuradio-runtime/include/gnuradio/CMakeLists.txt
+++++ b/gnuradio-runtime/include/gnuradio/CMakeLists.txt
++@@ -31,6 +31,7 @@ install(FILES
++   gr_complex.h
++   hier_block2.h
++   high_res_timer.h
+++  integer_math.h
++   io_signature.h
++   logger.h
++   math.h
++diff --git a/gnuradio-runtime/include/gnuradio/integer_math.h b/gnuradio-runtime/include/gnuradio/integer_math.h
++new file mode 100644
++index 00000000000..15141049fa4
++--- /dev/null
+++++ b/gnuradio-runtime/include/gnuradio/integer_math.h
++@@ -0,0 +1,35 @@
+++/* -*- c++ -*- */
+++/*
+++ * Copyright 2020 Free Software Foundation, Inc.
+++ *
+++ * This file is part of GNU Radio
+++ *
+++ * SPDX-License-Identifier: GPL-3.0-or-later
+++ *
+++ */
+++#ifndef INCLUDED_GR_INTEGER_MATH_H
+++#define INCLUDED_GR_INTEGER_MATH_H
+++
+++#if (__cplusplus >= 201703L)
+++
+++// Prefer C++17 goodness.
+++#include <numeric>
+++#define GR_GCD std::gcd
+++#define GR_LCM std::lcm
+++
+++#elif (BOOST_VERSION >= 105800)
+++
+++// Fallback: newer boost API (introduced in Boost 1.58.0).
+++#include <boost/integer/common_factor_rt.hpp>
+++#define GR_GCD boost::integer::gcd
+++#define GR_LCM boost::integer::lcm
+++
+++#else
+++
+++// Last resort: old deprecated boost API.
+++#include <boost/math/common_factor_rt.hpp>
+++#define GR_GCD boost::math::gcd
+++#define GR_LCM boost::math::lcm
+++
+++#endif /* __cplusplus >= 201703L */
+++#endif /* INCLUDED_GR_INTEGER_MATH_H */
++diff --git a/gnuradio-runtime/lib/buffer.cc b/gnuradio-runtime/lib/buffer.cc
++index 720c72c4ee8..46d704542b1 100644
++--- a/gnuradio-runtime/lib/buffer.cc
+++++ b/gnuradio-runtime/lib/buffer.cc
++@@ -13,22 +13,13 @@
++ #endif
++ #include "vmcircbuf.h"
++ #include <gnuradio/buffer.h>
+++#include <gnuradio/integer_math.h>
++ #include <gnuradio/math.h>
++ #include <assert.h>
++ #include <algorithm>
++ #include <iostream>
++ #include <stdexcept>
++ 
++-// the following header is deprecated as of Boost 1.66.0, and the
++-// other API was introduced in Boost 1.58.0. Since we still support
++-// Boost back to 1.54.0, use the older API if pre-1.5.80 and otherwise
++-// use the newer API.
++-#if (BOOST_VERSION < 105800)
++-#include <boost/math/common_factor_rt.hpp>
++-#else
++-#include <boost/integer/common_factor_rt.hpp>
++-#endif
++-
++ namespace gr {
++ 
++ static long s_buffer_count = 0; // counts for debugging storage mgmt
++@@ -68,13 +59,9 @@ static long s_buffer_reader_count = 0;
++  *
++  *     type_size * nitems == k * page_size
++  */
++-static long minimum_buffer_items(long type_size, long page_size)
+++static inline long minimum_buffer_items(long type_size, long page_size)
++ {
++-#if (BOOST_VERSION < 105800)
++-    return page_size / boost::math::gcd(type_size, page_size);
++-#else
++-    return page_size / boost::integer::gcd(type_size, page_size);
++-#endif
+++    return page_size / GR_GCD(type_size, page_size);
++ }
++ 
++ 
++diff --git a/gr-digital/lib/symbol_sync_cc_impl.cc b/gr-digital/lib/symbol_sync_cc_impl.cc
++index 55f85e7c6a7..55f162dc727 100644
++--- a/gr-digital/lib/symbol_sync_cc_impl.cc
+++++ b/gr-digital/lib/symbol_sync_cc_impl.cc
++@@ -13,9 +13,9 @@
++ #endif
++ 
++ #include "symbol_sync_cc_impl.h"
+++#include <gnuradio/integer_math.h>
++ #include <gnuradio/io_signature.h>
++ #include <gnuradio/math.h>
++-#include <boost/math/common_factor.hpp>
++ #include <stdexcept>
++ 
++ namespace gr {
++@@ -95,7 +95,7 @@ symbol_sync_cc_impl::symbol_sync_cc_impl(enum ted_type detector_type,
++         throw std::runtime_error("unable to create interpolating_resampler_ccf");
++ 
++     // Block Internal Clocks
++-    d_interps_per_symbol_n = boost::math::lcm(d_ted->inputs_per_symbol(), d_osps_n);
+++    d_interps_per_symbol_n = GR_LCM(d_ted->inputs_per_symbol(), d_osps_n);
++     d_interps_per_ted_input_n = d_interps_per_symbol_n / d_ted->inputs_per_symbol();
++     d_interps_per_output_sample_n = d_interps_per_symbol_n / d_osps_n;
++ 
++diff --git a/gr-digital/lib/symbol_sync_ff_impl.cc b/gr-digital/lib/symbol_sync_ff_impl.cc
++index d0ec32ab192..1172c1b4f8a 100644
++--- a/gr-digital/lib/symbol_sync_ff_impl.cc
+++++ b/gr-digital/lib/symbol_sync_ff_impl.cc
++@@ -13,9 +13,9 @@
++ #endif
++ 
++ #include "symbol_sync_ff_impl.h"
+++#include <gnuradio/integer_math.h>
++ #include <gnuradio/io_signature.h>
++ #include <gnuradio/math.h>
++-#include <boost/math/common_factor.hpp>
++ #include <stdexcept>
++ 
++ namespace gr {
++@@ -97,7 +97,7 @@ symbol_sync_ff_impl::symbol_sync_ff_impl(enum ted_type detector_type,
++         throw std::runtime_error("unable to create interpolating_resampler_fff");
++ 
++     // Block Internal Clocks
++-    d_interps_per_symbol_n = boost::math::lcm(d_ted->inputs_per_symbol(), d_osps_n);
+++    d_interps_per_symbol_n = GR_LCM(d_ted->inputs_per_symbol(), d_osps_n);
++     d_interps_per_ted_input_n = d_interps_per_symbol_n / d_ted->inputs_per_symbol();
++     d_interps_per_output_sample_n = d_interps_per_symbol_n / d_osps_n;
++ 
 -- 
-2.30.2
+2.33.0
 
 _______________________________________________
 buildroot mailing list
