@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-10.7 required=3.0 tests=BAYES_00,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3946EC433EF
-	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 21:34:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 95DF8C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 21:34:47 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id CA68E6120E
-	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 21:34:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org CA68E6120E
+	by mail.kernel.org (Postfix) with ESMTPS id 5E81D611F0
+	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 21:34:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5E81D611F0
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7B4168247F;
-	Fri, 10 Sep 2021 21:34:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3B32284AAD;
+	Fri, 10 Sep 2021 21:34:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Fs4EKYydWZsY; Fri, 10 Sep 2021 21:34:34 +0000 (UTC)
+	with ESMTP id TugZhbHXwFAo; Fri, 10 Sep 2021 21:34:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8A1CA818A7;
-	Fri, 10 Sep 2021 21:34:33 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1B7C11BF9C8
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3B98384AA4;
+	Fri, 10 Sep 2021 21:34:45 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1FD901C1127
  for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 21:34:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 06D874028B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0C2B64067B
  for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 21:34:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 48u_8U3kXWfo for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1N_0oEGHAWQN for <buildroot@lists.busybox.net>;
  Fri, 10 Sep 2021 21:34:07 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 77F2540288
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8D0FE40678
  for <buildroot@buildroot.org>; Fri, 10 Sep 2021 21:34:07 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id F02AD88EAB; Fri, 10 Sep 2021 21:32:30 +0000 (UTC)
+ id 122C988EAA; Fri, 10 Sep 2021 21:32:31 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 10 Sep 2021 22:59:59 +0200
+Date: Fri, 10 Sep 2021 23:00:04 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: fde22d8c7750324ab97c2bea6d1e8adad9c04251
-X-Git-Newrev: 088cf29f135d05cb07ed3c4870e1c38d2c7a5f53
+X-Git-Oldrev: 0512910e4901edcb78bb1daa4eb3be9bdc4dc8a9
+X-Git-Newrev: bcfc5df394cfdfb20bfc3f14e887e5462b8909f4
 X-Patchwork-Hint: ignore
-Message-Id: <20210910213230.F02AD88EAB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/bayer2rgb-neon: bump version to
- 0.6.1
+Message-Id: <20210910213231.122C988EAA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gst1-plugins-bayer2rgb-neon: bump
+ to 0.6.1
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,47 +66,69 @@ List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============5162485538248302453=="
+Content-Type: multipart/mixed; boundary="===============2285062859412047592=="
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
---===============5162485538248302453==
+--===============2285062859412047592==
 Content-Type: text/plain
 
-commit: https://git.buildroot.net/buildroot/commit/?id=088cf29f135d05cb07ed3c4870e1c38d2c7a5f53
+commit: https://git.buildroot.net/buildroot/commit/?id=bcfc5df394cfdfb20bfc3f14e887e5462b8909f4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Update SITE to be synced with bayer2rgb-neon.
+Use git as METHOD because no tarball is available for this version.
 
 Signed-off-by: Sébastien Szymanski <sebastien.szymanski@armadeus.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/bayer2rgb-neon/bayer2rgb-neon.hash | 2 +-
- package/bayer2rgb-neon/bayer2rgb-neon.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/gstreamer1/gst1-plugins-bayer2rgb-neon/Config.in            | 2 +-
+ .../gst1-plugins-bayer2rgb-neon/gst1-plugins-bayer2rgb-neon.hash    | 4 ++--
+ .../gst1-plugins-bayer2rgb-neon/gst1-plugins-bayer2rgb-neon.mk      | 6 +++---
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/bayer2rgb-neon/bayer2rgb-neon.hash b/package/bayer2rgb-neon/bayer2rgb-neon.hash
-index b1e87d7a36..26a14fcb51 100644
---- a/package/bayer2rgb-neon/bayer2rgb-neon.hash
-+++ b/package/bayer2rgb-neon/bayer2rgb-neon.hash
+diff --git a/package/gstreamer1/gst1-plugins-bayer2rgb-neon/Config.in b/package/gstreamer1/gst1-plugins-bayer2rgb-neon/Config.in
+index b7cac08d7d..d3eec30c7a 100644
+--- a/package/gstreamer1/gst1-plugins-bayer2rgb-neon/Config.in
++++ b/package/gstreamer1/gst1-plugins-bayer2rgb-neon/Config.in
+@@ -12,7 +12,7 @@ menuconfig BR2_PACKAGE_GST1_PLUGINS_BAYER2RGB_NEON
+ 	  decode raw camera bayer to RGB using
+ 	  NEON hardware acceleration.
+ 
+-	  https://git.phytec.de/gst-bayer2rgb-neon
++	  https://gitlab-ext.sigma-chemnitz.de/ensc/gst-bayer2rgb-neon
+ 
+ comment "gst1-plugins-bayer2rgb-neon needs a toolchain w/ C++, dynamic library, gcc >= 4.9"
+ 	depends on BR2_arm && BR2_ARM_CPU_HAS_NEON
+diff --git a/package/gstreamer1/gst1-plugins-bayer2rgb-neon/gst1-plugins-bayer2rgb-neon.hash b/package/gstreamer1/gst1-plugins-bayer2rgb-neon/gst1-plugins-bayer2rgb-neon.hash
+index cfb62b062a..e626d0ba8d 100644
+--- a/package/gstreamer1/gst1-plugins-bayer2rgb-neon/gst1-plugins-bayer2rgb-neon.hash
++++ b/package/gstreamer1/gst1-plugins-bayer2rgb-neon/gst1-plugins-bayer2rgb-neon.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256  d2e3e97bb9da218f223c03b2f080c5da727224e6e4cb99979398971110dfae04  bayer2rgb-neon-bef3ecafe290d61a50fd27da3e5d0df6f4b88045-br1.tar.gz
-+sha256  edf451dbb52ad67eb35f9043390bd75ea7228d493c99184aae80b3bd27beab62  bayer2rgb-neon-15feb1115b4828488cc36d09f625e23e8b6a0ec5-br1.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/bayer2rgb-neon/bayer2rgb-neon.mk b/package/bayer2rgb-neon/bayer2rgb-neon.mk
-index 34510e7616..a483890c81 100644
---- a/package/bayer2rgb-neon/bayer2rgb-neon.mk
-+++ b/package/bayer2rgb-neon/bayer2rgb-neon.mk
-@@ -4,7 +4,7 @@
+-sha256 307725640203083df7dfb7f9c2b8bb9583accf7b8c06238dd92d6150a9fd8b04 gst-bayer2rgb-neon-0.4.tar.bz2
+-sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 COPYING
++sha256  76b2135a23f465f789ccb86bd3a8190a1e30f86cdb28abfac4d9a2cdece63fa2  gst1-plugins-bayer2rgb-neon-b630798efcd611879e7cb1c246052e5ba1acc41d-br1.tar.gz
++sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/gstreamer1/gst1-plugins-bayer2rgb-neon/gst1-plugins-bayer2rgb-neon.mk b/package/gstreamer1/gst1-plugins-bayer2rgb-neon/gst1-plugins-bayer2rgb-neon.mk
+index 5139463ca1..815099e315 100644
+--- a/package/gstreamer1/gst1-plugins-bayer2rgb-neon/gst1-plugins-bayer2rgb-neon.mk
++++ b/package/gstreamer1/gst1-plugins-bayer2rgb-neon/gst1-plugins-bayer2rgb-neon.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--BAYER2RGB_NEON_VERSION = bef3ecafe290d61a50fd27da3e5d0df6f4b88045
-+BAYER2RGB_NEON_VERSION = 15feb1115b4828488cc36d09f625e23e8b6a0ec5
- BAYER2RGB_NEON_SITE = https://gitlab-ext.sigma-chemnitz.de/ensc/bayer2rgb.git
- BAYER2RGB_NEON_SITE_METHOD = git
- BAYER2RGB_NEON_LICENSE = GPL-3.0
+-GST1_PLUGINS_BAYER2RGB_NEON_VERSION = 0.4
+-GST1_PLUGINS_BAYER2RGB_NEON_SOURCE = gst-bayer2rgb-neon-$(GST1_PLUGINS_BAYER2RGB_NEON_VERSION).tar.bz2
+-GST1_PLUGINS_BAYER2RGB_NEON_SITE = https://git.phytec.de/gst-bayer2rgb-neon/snapshot
++GST1_PLUGINS_BAYER2RGB_NEON_VERSION = b630798efcd611879e7cb1c246052e5ba1acc41d
++GST1_PLUGINS_BAYER2RGB_NEON_SITE = https://gitlab-ext.sigma-chemnitz.de/ensc/gst-bayer2rgb-neon.git
++GST1_PLUGINS_BAYER2RGB_NEON_SITE_METHOD = git
+ GST1_PLUGINS_BAYER2RGB_NEON_LICENSE = GPL-3.0
+ GST1_PLUGINS_BAYER2RGB_NEON_LICENSE_FILES = COPYING
+ 
 
---===============5162485538248302453==
+--===============2285062859412047592==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -117,4 +139,4 @@ buildroot mailing list
 buildroot@lists.buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============5162485538248302453==--
+--===============2285062859412047592==--
