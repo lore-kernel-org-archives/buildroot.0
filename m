@@ -2,57 +2,78 @@ Return-Path: <SRS0=85Xw=OA=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 14A97C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 10:02:32 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1C0B2C433F5
+	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 10:45:54 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id BDAA0610C8
-	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 10:02:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org BDAA0610C8
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
+	by mail.kernel.org (Postfix) with ESMTPS id 3FD0E6054F
+	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 10:45:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3FD0E6054F
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=lists.buildroot.org
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 77BF340690;
-	Fri, 10 Sep 2021 10:02:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 105E060B42;
+	Fri, 10 Sep 2021 10:45:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zlWvioIf-wEg; Fri, 10 Sep 2021 10:02:30 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 8ZgaDJvLqmx2; Fri, 10 Sep 2021 10:45:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BB51C40672;
-	Fri, 10 Sep 2021 10:02:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5DD2960B30;
+	Fri, 10 Sep 2021 10:45:51 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 33C9B1C1127
- for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 10:01:50 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id F28121BF591
+ for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 10:45:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1FD4F60786
- for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 10:01:50 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E065260B30
+ for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 10:45:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nqo0ZaBiSSYm for <buildroot@lists.busybox.net>;
- Fri, 10 Sep 2021 10:01:49 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6429D605D7
- for <buildroot@buildroot.org>; Fri, 10 Sep 2021 10:01:49 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 0834988C6A; Fri, 10 Sep 2021 10:00:14 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ with ESMTP id uEIFCgvnw_0M for <buildroot@lists.busybox.net>;
+ Fri, 10 Sep 2021 10:45:49 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com
+ [209.85.216.46])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3DC2960786
+ for <buildroot@buildroot.org>; Fri, 10 Sep 2021 10:45:49 +0000 (UTC)
+Received: by mail-pj1-f46.google.com with SMTP id
+ c13-20020a17090a558d00b00198e6497a4fso1175570pji.4
+ for <buildroot@buildroot.org>; Fri, 10 Sep 2021 03:45:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=b37+l2Qa0yDz0ntvUHz8S45mdwzhz15SFvPzuZY2FcU=;
+ b=jpw4UPO0DsVaUDZokeq68YbxBxS9Qli3Dpwn7xYrC9v6msrnWpfNzzCyBiANE8Bj7p
+ tlWpyi3aOIRUr9aS/cPlrrQI7Ao7nUH4M1QSSizRYxFrbP9XGplJSnZKKZxXgekrg3O4
+ NjhWOOY/gHNX3634lWwyPfALe6wSH5jdQtQqjYDdDissPpS7zzb/g8m1AKabJHgEk5+F
+ PnXSKTdcAosUrudNvRnS+wFmVnIqw9rDUXCQ5gL65/c4Q9f7NFH1FPz4Ku8l+U32Yxvl
+ W8AvGWbyG70CNXL3cm5an3xcvDr9uq2iAKj/TWeiGbGpAltSIdBQ/fmMHtJqAVV7iFMO
+ qlNw==
+X-Gm-Message-State: AOAM531+f8eAykvedJcmJcnzC5h4URJ5gxJEs31ultnLGTg6uQVAQ8EW
+ cePQ9VaDtS5aKRfwvedBLNmHrbOK1Awv5Q==
+X-Google-Smtp-Source: ABdhPJwi1BqK2BvxBdASTOWfiVNk3N0hhkngeLddgR2rEfMaRCC/IrF0hgd9qqcGah3P2yFpO0UHZg==
+X-Received: by 2002:a17:90a:dc15:: with SMTP id
+ i21mr8685277pjv.64.1631270748477; 
+ Fri, 10 Sep 2021 03:45:48 -0700 (PDT)
+Received: from localhost.localdomain (ip68-6-75-194.sb.sd.cox.net.
+ [68.6.75.194])
+ by smtp.gmail.com with ESMTPSA id cl16sm4499637pjb.23.2021.09.10.03.45.47
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 10 Sep 2021 03:45:48 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Fri, 10 Sep 2021 12:00:32 +0200
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 79bfe255e915d621deb1294d64bb1cbc32c5bdff
-X-Git-Newrev: ad98d9b7712f97ecb656ad2020f4a34dc233c9e0
-X-Patchwork-Hint: ignore
-Message-Id: <20210910100014.0834988C6A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/netsniff-ng: fix
- static build of mausezahn
+Date: Fri, 10 Sep 2021 03:45:45 -0700
+Message-Id: <20210910104545.518321-1-christian@paral.in>
+X-Mailer: git-send-email 2.33.0
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH 1/1] package/go: security bump version to 1.16.8
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,101 +86,53 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+From: Christian Stewart via buildroot <buildroot@lists.buildroot.org>
+Reply-To: Christian Stewart <christian@paral.in>
+Cc: Christian Stewart <christian@paral.in>, Anisse Astier <anisse@astier.eu>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ad98d9b7712f97ecb656ad2020f4a34dc233c9e0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+go1.16.8 (released 2021-09-09) includes a security fix to the archive/zip
+package, as well as bug fixes to the archive/zip, go/internal/gccgoimporter,
+html/template, net/http, and runtime/pprof packages.
 
-The configure script fails to detect libpcap in static build because it
-does not take into account the libnl dependency on link. As a result the
-configure script silently disables mausezahn build even when
-BR2_PACKAGE_NETSNIFF_NG_MAUSEZAHN is enabled. Add upstream patch to use
-pkg-config for libpcap link flags.
+https://golang.org/doc/devel/release#go1.16.minor
 
-Cc: Joris Lijssens <joris.lijssens@gmail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit de39a17f7173c82db358054752d3d65a41f0ca09)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- ...ect-libpcap-dependencies-using-pkg-config.patch | 51 ++++++++++++++++++++++
- package/netsniff-ng/netsniff-ng.mk                 |  2 +-
- 2 files changed, 52 insertions(+), 1 deletion(-)
+ package/go/go.hash | 2 +-
+ package/go/go.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/netsniff-ng/0001-Detect-libpcap-dependencies-using-pkg-config.patch b/package/netsniff-ng/0001-Detect-libpcap-dependencies-using-pkg-config.patch
-new file mode 100644
-index 0000000000..bbcbd2bfc3
---- /dev/null
-+++ b/package/netsniff-ng/0001-Detect-libpcap-dependencies-using-pkg-config.patch
-@@ -0,0 +1,51 @@
-+From 194ec61843b9598ce90873c812b817c4b96e2e0d Mon Sep 17 00:00:00 2001
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Thu, 2 Sep 2021 12:56:00 +0300
-+Subject: [PATCH] Detect libpcap dependencies using pkg-config
-+
-+When building statically the link command line must include all
-+dependencies of all libraries. libpcap can optionally depend on libnl.
-+mausezahn can't build statically in this case.
-+
-+Use pkg-config in configure and in the link command to construct the
-+library flags we need to link with libpcap.
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+Signed-off-by: Tobias Klauser <tklauser@distanz.ch>
-+---
-+Upstream status: commit 194ec61843b9598ce90873c812b817c4b96e2e0d
-+
-+ configure          | 4 +++-
-+ mausezahn/Makefile | 2 +-
-+ 2 files changed, 4 insertions(+), 2 deletions(-)
-+
-+diff --git a/configure b/configure
-+index 510826a798f5..598ae2433a7a 100755
-+--- a/configure
-++++ b/configure
-+@@ -588,7 +588,9 @@ int main(void)
-+ }
-+ EOF
-+ 
-+-	$CC -o $TMPDIR/pcaptest $TMPDIR/pcaptest.c -lpcap >> config.log 2>&1
-++	$CC -o $TMPDIR/pcaptest $TMPDIR/pcaptest.c \
-++		$($PKG_CONFIG --libs libpcap 2>> config.log) \
-++		>> config.log 2>&1
-+ 	if [ ! -x $TMPDIR/pcaptest ] ; then
-+ 		echo "[NO]"
-+ 		echo "CONFIG_LIBPCAP=0" >> Config
-+diff --git a/mausezahn/Makefile b/mausezahn/Makefile
-+index ca16b6579583..9544565355cc 100644
-+--- a/mausezahn/Makefile
-++++ b/mausezahn/Makefile
-+@@ -1,6 +1,6 @@
-+ mausezahn-libs =	-lcli \
-+ 			-lnet \
-+-			-lpcap \
-++			$(shell PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) $(PKG_CONFIG) --libs libpcap 2> /dev/null ) \
-+ 			-lrt \
-+ 			-lpthread \
-+ 			-lm
-+-- 
-+2.33.0
-+
-diff --git a/package/netsniff-ng/netsniff-ng.mk b/package/netsniff-ng/netsniff-ng.mk
-index f45246da63..27bd707c84 100644
---- a/package/netsniff-ng/netsniff-ng.mk
-+++ b/package/netsniff-ng/netsniff-ng.mk
-@@ -13,7 +13,7 @@ NETSNIFF_NG_LICENSE_FILES = README COPYING
- NETSNIFF_NG_CONF_ENV = \
- 	NACL_INC_DIR=/dev/null \
- 	NACL_LIB_DIR=/dev/null
--NETSNIFF_NG_DEPENDENCIES = libnl libpcap libnetfilter_conntrack liburcu
-+NETSNIFF_NG_DEPENDENCIES = host-pkgconf libnl libpcap libnetfilter_conntrack liburcu
+diff --git a/package/go/go.hash b/package/go/go.hash
+index 0db83167ee..bc828f41c8 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,3 +1,3 @@
+ # From https://golang.org/dl/
+-sha256  1a9f2894d3d878729f7045072f30becebe243524cf2fce4e0a7b248b1e0654ac  go1.16.7.src.tar.gz
++sha256  8f2a8c24b793375b3243df82fdb0c8387486dcc8a892ca1c991aa99ace086b98  go1.16.8.src.tar.gz
+ sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index 69e9fdb3c7..8b99916f90 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_NETSNIFF_NG_MAUSEZAHN),y)
- NETSNIFF_NG_DEPENDENCIES += libcli libnet
+-GO_VERSION = 1.16.7
++GO_VERSION = 1.16.8
+ GO_SITE = https://storage.googleapis.com/golang
+ GO_SOURCE = go$(GO_VERSION).src.tar.gz
+ 
+-- 
+2.33.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
