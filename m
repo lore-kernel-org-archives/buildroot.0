@@ -2,99 +2,70 @@ Return-Path: <SRS0=85Xw=OA=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.4 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+X-Spam-Status: No, score=-10.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,HTML_MESSAGE,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MIME_QP_LONG_LINE,SPF_HELO_NONE,SPF_PASS
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A518C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 19:16:26 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 56289C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 19:41:03 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B3AB961167
-	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 19:16:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B3AB961167
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
+	by mail.kernel.org (Postfix) with ESMTPS id 6223F611BF
+	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 19:41:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6223F611BF
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=benettiengineering.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 80259414BB;
-	Fri, 10 Sep 2021 19:16:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0BCFA837C0;
+	Fri, 10 Sep 2021 19:41:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Pkj1TvjfRbqt; Fri, 10 Sep 2021 19:16:24 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id t556eBDKu_0f; Fri, 10 Sep 2021 19:41:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3967E4071F;
-	Fri, 10 Sep 2021 19:16:23 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 311431BF82D
- for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 19:16:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3B7D883A53;
+	Fri, 10 Sep 2021 19:41:00 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B2F301BF352
+ for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 19:40:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 203DB60678
- for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 19:16:21 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A23EB83A53
+ for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 19:40:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9dxaDh-JOSsI for <buildroot@lists.busybox.net>;
- Fri, 10 Sep 2021 19:16:20 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com
- [IPv6:2a00:1450:4864:20::62d])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2EC196066F
- for <buildroot@buildroot.org>; Fri, 10 Sep 2021 19:16:20 +0000 (UTC)
-Received: by mail-ej1-x62d.google.com with SMTP id e21so6269362ejz.12
- for <buildroot@buildroot.org>; Fri, 10 Sep 2021 12:16:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=subject:to:references:from:organization:message-id:date:user-agent
- :mime-version:in-reply-to:content-language:content-transfer-encoding;
- bh=IytNr0MtyAdi8pdmtiThysYJ0JDJBXrE+odLCksPdHM=;
- b=h0TcLZN1qANtbd4kq+AyCo15aHlqI13qXugIqFCV4mUeFWQDiQeHe/G3dqZnohnTPi
- yLnhtzfCVDk9DOAsma8grs44zTtJ+2YgHG5G0/+bvfOLj2RG2uGmwzgDpcywpooapZqC
- UagrBLBhBVCwym4wSeHzVpJT7D1oAKqeOmiVJBGbV7XwyMm2zlY/+xfzbyH0PmQ6fHe1
- y2O9ve8qE1iDU4cR+5hHTYy21UIbQE2QJhpoSBF7SNUpnM3qTuxb/VHBgGt04uLsZuKQ
- LDVRero2aI0LlNJDc65WtJGdJo6TiaPuiBt9Ga0a1Cj3D8fEM5Av0ZV6l8Ib3Sipgnht
- xinQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:subject:to:references:from:organization
- :message-id:date:user-agent:mime-version:in-reply-to
- :content-language:content-transfer-encoding;
- bh=IytNr0MtyAdi8pdmtiThysYJ0JDJBXrE+odLCksPdHM=;
- b=MxwGOIwae3NvNtZpvp/l8tZBKmirdeuwDhrtMiTurwpi7h1NCFtDI0XcZxa6CMXlWb
- UgpaWBSwUl/hn7cord3tLf3M3BDzCYZdeQOqC1dY0Ih2eFfKVJYrtqEZL2QDDX06nLvE
- UD5XwCgV5j/+RzWud5lvA+p1s4M3+eXFXePxU1cXt2uB+SCtVy/7A9HelbHPBo55FD6M
- CwikQdrf/0AkAVVnnqWwXNNLIraxrjaVUpwocb7++wsBB9Ixr/w5kpeMHR7aa4zuZIXJ
- 860+bOfzQ7tdDJbtgl2IRarpoToYuW8PEUNxV14vxtuTszI+1mSQBjZ+9oq25ylKlXbN
- ikRQ==
-X-Gm-Message-State: AOAM532BpDkVjKIz0+lzesN2g5AnB2j+Ln6/Y3fu8ocK7Ja+SNB/vzdX
- OoW1cZlXXXF+6X7yxDtklqi6WCdY99as9g==
-X-Google-Smtp-Source: ABdhPJylcatxdBJH2WtroNm19pSk7tNizKphG+lQbTsd/JGYetxVqQs92OIWnFdRd4y6YuMEQCZqxw==
-X-Received: by 2002:a17:906:7714:: with SMTP id
- q20mr11294232ejm.551.1631301378209; 
- Fri, 10 Sep 2021 12:16:18 -0700 (PDT)
-Received: from ?IPv6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
- (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id j5sm2849329ejb.96.2021.09.10.12.16.17
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Fri, 10 Sep 2021 12:16:17 -0700 (PDT)
-To: Matthew Weber <matthew.weber@collins.com>, buildroot@buildroot.org
-References: <20210827205430.39745-1-matthew.weber@collins.com>
- <20210827205430.39745-4-matthew.weber@collins.com>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-Message-ID: <e3ac8256-915e-afbe-0a45-e24adf99a7e1@mind.be>
-Date: Fri, 10 Sep 2021 21:16:17 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
-MIME-Version: 1.0
-In-Reply-To: <20210827205430.39745-4-matthew.weber@collins.com>
-Content-Language: en-GB
-Subject: Re: [Buildroot] [PATCH v3 3/3] support/testing/tests/fs: test OCI
- format
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xhoy7RwRaDWW for <buildroot@lists.busybox.net>;
+ Fri, 10 Sep 2021 19:40:56 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtpcmd13147.aruba.it (smtpcmd13147.aruba.it [62.149.156.147])
+ by smtp1.osuosl.org (Postfix) with ESMTP id D5B85837C0
+ for <buildroot@busybox.net>; Fri, 10 Sep 2021 19:40:55 +0000 (UTC)
+Received: from smtpclient.apple ([146.241.179.121])
+ by Aruba Outgoing Smtp  with ESMTPA
+ id OmOJmFkN0iqGsOmOKmbLAD; Fri, 10 Sep 2021 21:40:53 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+ t=1631302853; bh=9TDQmFfB53wel9Di+sEy71DZG4uC3j8ZZZeZyIbvawc=;
+ h=Content-Type:From:Mime-Version:Subject:Date:To;
+ b=RJL79MEBU6S4pexx4Kb2Q7ulAZXC85pHwljjkWY3sSFd2YAVTlToxcrscYN7NYzmd
+ dH5vIszVCDjzQOhMvHF83ngGwywkYztrBQoijyJvJH9Afdjv5X5s736P0/YIGNXi2R
+ rTbx7TZ4RnECy8ILwJPr4z9j7MKkh0KHdE+tCXvip3jaJQEUh5UAZvE/clHnvofLed
+ W2Wm4QYNBjtlHcxVmgEa1ut4+HxLWPhBQTMgeIi2bUw2RQJ+JK6Ain6VHPp47Tf3sU
+ LafWuZ/7AP056rHjsX4cDhKzqqDnrb0b6tXXjRBG8Cr4OYXmxjkhhaMJ7VXfp6yVh3
+ tpCmbeK2+6gOA==
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Mime-Version: 1.0 (1.0)
+Date: Fri, 10 Sep 2021 21:40:51 +0200
+Message-Id: <DA971654-1893-453C-A37D-BC4C6E772195@benettiengineering.com>
+References: <87ilz8ad2f.fsf@dell.be.48ers.dk>
+In-Reply-To: <87ilz8ad2f.fsf@dell.be.48ers.dk>
+To: Peter Korsgaard <peter@korsgaard.com>
+X-Mailer: iPhone Mail (18G82)
+X-CMAE-Envelope: MS4wfEuCwPqv6jQ4qtkh/mb7nK5poLYvSsJR4aYULumsxVSuDfmHd8qEeDvFrTqGTfDoJ4Ukcj8L6o1xx/22MHLwdiJ/aPmOpVzyMNIt5NR/i2HyHNbctaaM
+ w4C4En5jRf9USewjophYEaI+qiUHxIf0hqdlmyEtOg/QxrkmoQj2AyPriqFdwjBGG+Y5u3HQZ5j3Y6yfyrNaEm7hSFLDnTQMLZs4F+KA6bVYu4uuzp5IS82G
+ auX3oahCWT0pnHCGAl/2I99yeNuvVyJY3B7aEnaGF1U=
+Subject: Re: [Buildroot] [PATCH] package/harfbuzz: bump to version 2.9.0
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -107,128 +78,162 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@busybox.net, Francois Perrad <fperrad@gmail.com>
+Content-Type: multipart/mixed; boundary="===============7318183975859286423=="
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
 
+--===============7318183975859286423==
+Content-Type: multipart/alternative; boundary=Apple-Mail-66F962E3-2A5D-4E4C-8AEC-58336DD7E185
+Content-Transfer-Encoding: 7bit
 
-On 27/08/2021 22:54, Matthew Weber via buildroot wrote:
-> This patch adds runtime testing of the OCI archive created by the
-> sloci scripting. It launches a containerd instance, imports, and
-> runs the OCI container.
-> 
-> The existing QEMU AARCH64 kernel config was extended to enable common
-> options used by a container runtime (cgroup and overlayfs).
-> 
-> Signed-off-by: Matthew Weber <matthew.weber@collins.com>
-> 
-> ---
-> The updating of the QEMU AARCH64 kernel config seemed like a better
-> option then 1) adding to the docker compose test kernel fragment or
-> 2) creating a new fragment for this test.
 
- I think a new fragment would have been better, but potato potato.
+--Apple-Mail-66F962E3-2A5D-4E4C-8AEC-58336DD7E185
+Content-Type: text/plain;
+	charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
- Applied to master, thanks.
+Hi Peter, Francois,
 
- Regards,
- Arnout
+> Il giorno 10 set 2021, alle ore 13:24, Peter Korsgaard <peter@korsgaard.co=
+m> ha scritto:
+>=20
+> =EF=BB=BF
+>>=20
+>>>>>> "Francois" =3D=3D Francois Perrad <fperrad@gmail.com> writes:
+>=20
+>> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+>> ---
+>> package/harfbuzz/harfbuzz.hash | 2 +-
+>> package/harfbuzz/harfbuzz.mk   | 2 +-
+>> 2 files changed, 2 insertions(+), 2 deletions(-)
+>=20
+>> diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.h=
+ash
+>> index 774b3104a..a101f3e7d 100644
+>> --- a/package/harfbuzz/harfbuzz.hash
+>> +++ b/package/harfbuzz/harfbuzz.hash
+>> @@ -1,3 +1,3 @@
+>> # Locally computed
+>> -sha256  d58461395ce28b9dc03903254374dd70c38c8c28c5046db123c08f7ab9417be7=
+  harfbuzz-2.8.2.tar.xz
+>> +sha256  3e1c2e1d2c65d56364fd16d1c41a06b2a35795496f78dfff635c2b7414b54c5a=
+  harfbuzz-2.9.0.tar.xz
+>> sha256  4345e1735f8bc6d812fed5180cabb5a5e88a4109d332652f2a45c13cfa5ee692 =
+ COPYING
+>> diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
+>> index c7f5dfe9d..ccb0d940d 100644
+>> --- a/package/harfbuzz/harfbuzz.mk
+>> +++ b/package/harfbuzz/harfbuzz.mk
+>> @@ -4,7 +4,7 @@
+>> #
+>> #########################################################################=
+#######
+>=20
+>> -HARFBUZZ_VERSION =3D 2.8.2
+>> +HARFBUZZ_VERSION =3D 2.9.0
+>=20
+> Doesn't harbuzz follow the gnome-style odd versions are development
+> versions? If so, do we want to have 2.9.x in Buildroot?
 
-> ---
->  board/qemu/aarch64-virt/linux.config |  6 +++
->  support/testing/tests/fs/test_oci.py | 56 ++++++++++++++++++++++++++++
->  2 files changed, 62 insertions(+)
->  create mode 100644 support/testing/tests/fs/test_oci.py
-> 
-> diff --git a/board/qemu/aarch64-virt/linux.config b/board/qemu/aarch64-virt/linux.config
-> index 02e0812ffd..e3a4a92913 100644
-> --- a/board/qemu/aarch64-virt/linux.config
-> +++ b/board/qemu/aarch64-virt/linux.config
-> @@ -3,6 +3,11 @@ CONFIG_POSIX_MQUEUE=y
->  CONFIG_NO_HZ_IDLE=y
->  CONFIG_HIGH_RES_TIMERS=y
->  CONFIG_TASKSTATS=y
-> +CONFIG_MEMCG=y
-> +CONFIG_BLK_CGROUP=y
-> +CONFIG_CPUSETS=y
-> +CONFIG_CGROUP_DEVICE=y
-> +CONFIG_CGROUP_CPUACCT=y
->  CONFIG_SCHED_AUTOGROUP=y
->  CONFIG_PROFILING=y
->  CONFIG_ARCH_VEXPRESS=y
-> @@ -62,5 +67,6 @@ CONFIG_ARM_SMMU_V3=y
->  CONFIG_EXT4_FS=y
->  CONFIG_FUSE_FS=y
->  CONFIG_VIRTIO_FS=y
-> +CONFIG_OVERLAY_FS=y
->  CONFIG_TMPFS=y
->  CONFIG_TMPFS_POSIX_ACL=y
-> diff --git a/support/testing/tests/fs/test_oci.py b/support/testing/tests/fs/test_oci.py
-> new file mode 100644
-> index 0000000000..eb5548c510
-> --- /dev/null
-> +++ b/support/testing/tests/fs/test_oci.py
-> @@ -0,0 +1,56 @@
-> +import os
-> +import shutil
-> +import infra.basetest
-> +
-> +
-> +class TestOci(infra.basetest.BRTest):
-> +    config = \
-> +        """
-> +        BR2_aarch64=y
-> +        BR2_TOOLCHAIN_EXTERNAL=y
-> +        BR2_LINUX_KERNEL=y
-> +        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> +        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.61"
-> +        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-> +        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
-> +        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-> +        BR2_PACKAGE_CGROUPFS_MOUNT=y
-> +        BR2_PACKAGE_CONTAINERD=y
-> +        BR2_TARGET_ROOTFS_EXT2=y
-> +        BR2_TARGET_ROOTFS_EXT2_SIZE="600M"
-> +        BR2_TARGET_ROOTFS_OCI=y
-> +        BR2_TARGET_ROOTFS_OCI_ENTRYPOINT="df"
-> +        BR2_TARGET_ROOTFS_OCI_ENTRYPOINT_ARGS="-h"
-> +        BR2_TARGET_ROOTFS_OCI_ARCHIVE=y
-> +        # BR2_TARGET_ROOTFS_TAR is not set
-> +        """
-> +
-> +    def login(self):
-> +        rootfs = os.path.join(self.builddir, "images", "rootfs.ext2")
-> +        kern = os.path.join(self.builddir, "images", "Image")
-> +        self.emulator.boot(arch="aarch64",
-> +                           kernel=kern,
-> +                           kernel_cmdline=["root=/dev/vda", "console=ttyAMA0"],
-> +                           options=["-M", "virt",
-> +                                    "-cpu", "cortex-a57",
-> +                                    "-m", "512M",
-> +                                    "-drive", "file={},format=raw,if=virtio".format(rootfs)])
-> +        self.emulator.login()
-> +
-> +    def place_test_oci(self):
-> +        shutil.copy(os.path.join(self.builddir, 'images', 'rootfs-oci-latest-aarch64-linux.oci-image.tar'),
-> +                    os.path.join(self.builddir, 'target', 'oci.tar'))
-> +        self.b.build()
-> +
-> +    def test_run(self):
-> +        self.place_test_oci()
-> +        self.login()
-> +
-> +        cmd = "containerd &"
-> +        self.assertRunOk(cmd)
-> +
-> +        cmd = "ctr image import --base-name buildroot-test /oci.tar"
-> +        self.assertRunOk(cmd, timeout=120)
-> +
-> +        cmd = "ctr run --rm --tty buildroot-test:latest v1"
-> +        self.assertRunOk(cmd, timeout=120)
-> 
+It doesn=E2=80=99t seem to follow that scheme anymore since some time.
+If we check what Ubuntu uses in last versions:
+https://pkgs.org/search/?q=3DHarfbuzz
+they=E2=80=99re either odd and even.
+Ubuntu          Harfbuzz
+18.04(LTS)     1.7.2
+20.04(LTS)    2.6.4
+21.04              2.7.4
+
+So I think we=E2=80=99re fine following every release.
+After this patch there is mine with version 2.9.1
+
+Best regards
+Giulio Benetti
+
+>=20
+> --=20
+> Bye, Peter Korsgaard
+> _______________________________________________
+> buildroot mailing list
+> buildroot@lists.buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--Apple-Mail-66F962E3-2A5D-4E4C-8AEC-58336DD7E185
+Content-Type: text/html;
+	charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<html><head><meta http-equiv=3D"content-type" content=3D"text/html; charset=3D=
+utf-8"></head><body dir=3D"auto">Hi Peter, Francois,<br><div dir=3D"ltr"><br=
+><blockquote type=3D"cite">Il giorno 10 set 2021, alle ore 13:24, Peter Kors=
+gaard &lt;peter@korsgaard.com&gt; ha scritto:<br><br></blockquote></div><blo=
+ckquote type=3D"cite"><div dir=3D"ltr">=EF=BB=BF<blockquote type=3D"cite"><b=
+lockquote type=3D"cite"><blockquote type=3D"cite"><blockquote type=3D"cite">=
+<blockquote type=3D"cite"><span>"Francois" =3D=3D Francois Perrad &lt;fperra=
+d@gmail.com&gt; writes:</span><br></blockquote></blockquote></blockquote></b=
+lockquote></blockquote><span></span><br><blockquote type=3D"cite"><span>Sign=
+ed-off-by: Francois Perrad &lt;francois.perrad@gadz.org&gt;</span><br></bloc=
+kquote><blockquote type=3D"cite"><span>---</span><br></blockquote><blockquot=
+e type=3D"cite"><span> package/harfbuzz/harfbuzz.hash | 2 +-</span><br></blo=
+ckquote><blockquote type=3D"cite"><span> package/harfbuzz/harfbuzz.mk &nbsp;=
+&nbsp;| 2 +-</span><br></blockquote><blockquote type=3D"cite"><span> 2 files=
+ changed, 2 insertions(+), 2 deletions(-)</span><br></blockquote><span></spa=
+n><br><blockquote type=3D"cite"><span>diff --git a/package/harfbuzz/harfbuzz=
+.hash b/package/harfbuzz/harfbuzz.hash</span><br></blockquote><blockquote ty=
+pe=3D"cite"><span>index 774b3104a..a101f3e7d 100644</span><br></blockquote><=
+blockquote type=3D"cite"><span>--- a/package/harfbuzz/harfbuzz.hash</span><b=
+r></blockquote><blockquote type=3D"cite"><span>+++ b/package/harfbuzz/harfbu=
+zz.hash</span><br></blockquote><blockquote type=3D"cite"><span>@@ -1,3 +1,3 @=
+@</span><br></blockquote><blockquote type=3D"cite"><span> # Locally computed=
+</span><br></blockquote><blockquote type=3D"cite"><span>-sha256 &nbsp;d58461=
+395ce28b9dc03903254374dd70c38c8c28c5046db123c08f7ab9417be7 &nbsp;harfbuzz-2.=
+8.2.tar.xz</span><br></blockquote><blockquote type=3D"cite"><span>+sha256 &n=
+bsp;3e1c2e1d2c65d56364fd16d1c41a06b2a35795496f78dfff635c2b7414b54c5a &nbsp;h=
+arfbuzz-2.9.0.tar.xz</span><br></blockquote><blockquote type=3D"cite"><span>=
+ sha256 &nbsp;4345e1735f8bc6d812fed5180cabb5a5e88a4109d332652f2a45c13cfa5ee6=
+92 &nbsp;COPYING</span><br></blockquote><blockquote type=3D"cite"><span>diff=
+ --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk</span><=
+br></blockquote><blockquote type=3D"cite"><span>index c7f5dfe9d..ccb0d940d 1=
+00644</span><br></blockquote><blockquote type=3D"cite"><span>--- a/package/h=
+arfbuzz/harfbuzz.mk</span><br></blockquote><blockquote type=3D"cite"><span>+=
+++ b/package/harfbuzz/harfbuzz.mk</span><br></blockquote><blockquote type=3D=
+"cite"><span>@@ -4,7 +4,7 @@</span><br></blockquote><blockquote type=3D"cite=
+"><span> #</span><br></blockquote><blockquote type=3D"cite"><span> #########=
+#######################################################################</spa=
+n><br></blockquote><span></span><br><blockquote type=3D"cite"><span>-HARFBUZ=
+Z_VERSION =3D 2.8.2</span><br></blockquote><blockquote type=3D"cite"><span>+=
+HARFBUZZ_VERSION =3D 2.9.0</span><br></blockquote><span></span><br><span>Doe=
+sn't harbuzz follow the gnome-style odd versions are development</span><br><=
+span>versions? If so, do we want to have 2.9.x in Buildroot?</span><br></div=
+></blockquote><div><br></div><div>It doesn=E2=80=99t seem to follow that sch=
+eme anymore since some time.</div><div>If we check what Ubuntu uses in last v=
+ersions:</div><div><a href=3D"https://pkgs.org/search/?q=3DHarfbuzz">https:/=
+/pkgs.org/search/?q=3DHarfbuzz</a></div><div>they=E2=80=99re either odd and e=
+ven.</div><div>Ubuntu &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Harfbuzz</div><div>1=
+8.04(LTS) &nbsp; &nbsp; 1.7.2</div><div>20.04(LTS) &nbsp; &nbsp;2.6.4</div><=
+div>21.04 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;2.7.4</div><div><b=
+r></div><div>So I think we=E2=80=99re fine following every release.</div><di=
+v>After this patch there is mine with version 2.9.1</div><div><br></div><div=
+>Best regards</div><div>Giulio Benetti</div><br><blockquote type=3D"cite"><d=
+iv dir=3D"ltr"><span></span><br><span>-- </span><br><span>Bye, Peter Korsgaa=
+rd</span><br><span>_______________________________________________</span><br=
+><span>buildroot mailing list</span><br><span>buildroot@lists.buildroot.org<=
+/span><br><span>https://lists.buildroot.org/mailman/listinfo/buildroot</span=
+><br></div></blockquote></body></html>=
+
+--Apple-Mail-66F962E3-2A5D-4E4C-8AEC-58336DD7E185--
+
+--===============7318183975859286423==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============7318183975859286423==--
