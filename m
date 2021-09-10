@@ -2,57 +2,57 @@ Return-Path: <SRS0=85Xw=OA=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D1F60C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 11:13:32 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C34ABC433EF
+	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 11:13:44 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 7732060FE3
-	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 11:13:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7732060FE3
+	by mail.kernel.org (Postfix) with ESMTPS id 715DF60FE3
+	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 11:13:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 715DF60FE3
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5538960BBC;
-	Fri, 10 Sep 2021 11:13:32 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3F0D240615;
+	Fri, 10 Sep 2021 11:13:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SoGe5MibgMi0; Fri, 10 Sep 2021 11:13:31 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id BSA9d3OBpz4S; Fri, 10 Sep 2021 11:13:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7E1C060B65;
-	Fri, 10 Sep 2021 11:13:30 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5CCB61BF9CB
- for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 11:13:17 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 50059405F4;
+	Fri, 10 Sep 2021 11:13:42 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6439C1BF23C
+ for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 11:13:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 59CCD84A56
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5D498405F4
  for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 11:13:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dDgqVIZyNsFy for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qbd2hNgmufVW for <buildroot@lists.busybox.net>;
  Fri, 10 Sep 2021 11:13:16 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 61E6484A4D
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5872C400E4
  for <buildroot@buildroot.org>; Fri, 10 Sep 2021 11:13:16 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id DAB6F88C91; Fri, 10 Sep 2021 11:11:40 +0000 (UTC)
+ id CEDDC88C83; Fri, 10 Sep 2021 11:11:40 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 10 Sep 2021 13:10:38 +0200
+Date: Fri, 10 Sep 2021 13:09:06 +0200
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: fc2d99b294612bd85f0b5080e7098cd57da16a94
-X-Git-Newrev: 2ae0409d46da45880dd69c7d09c0ccfd87918e4e
+X-Git-Oldrev: ad98d9b7712f97ecb656ad2020f4a34dc233c9e0
+X-Git-Newrev: fc2d99b294612bd85f0b5080e7098cd57da16a94
 X-Patchwork-Hint: ignore
-Message-Id: <20210910111140.DAB6F88C91@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/wlroots: fix
- uclibc build
+Message-Id: <20210910111140.CEDDC88C83@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/qt5/qt5base: fix
+ build on riscv32
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,208 +71,80 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2ae0409d46da45880dd69c7d09c0ccfd87918e4e
+commit: https://git.buildroot.net/buildroot/commit/?id=fc2d99b294612bd85f0b5080e7098cd57da16a94
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Fix the following uclibc build failure raised since at least bump to
-version 0.11.0 in commit 0bc9c89612cc1f41f9a64f6e889f8bcd8a871e30:
+Fix the following build failure on riscv32:
 
-In file included from ../include/wlr/types/wlr_data_device.h:13,
-                 from ../types/data_device/wlr_drag.c:7:
-../include/wlr/types/wlr_seat.h:221:18: error: field 'last_event' has incomplete type
-  221 |  struct timespec last_event;
-      |                  ^~~~~~~~~~
+In file included from thread/qmutex_linux.cpp:45,
+                 from thread/qmutex.cpp:804:
+thread/qfutex_p.h: In function 'int QtLinuxFutex::_q_futex(int*, int, int, quintptr, int*, int)':
+thread/qfutex_p.h:116:30: error: '__NR_futex' was not declared in this scope; did you mean '_q_futex'?
+  116 |         int result = syscall(__NR_futex, addr, op | FUTEX_PRIVATE_FLAG, val, val2, addr2, val3);
+      |                              ^~~~~~~~~~
+      |                              _q_futex
 
 Fixes:
- - http://autobuild.buildroot.org/results/3501ceb4290638b2f6d70aaa4d8ce74feec3a525
+ - http://autobuild.buildroot.org/results/ffedfc000029072d5d724e98ab4551fe973658ce
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-(cherry picked from commit 301502b7f7e3d1c7b99bab8addbbcdc794bf8d50)
+(cherry picked from commit 050be3ad358b7824b3fe9f832bc1ee494edd37d8)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-Add-feature-macros-to-more-C-files-.patch | 174 +++++++++++++++++++++
- 1 file changed, 174 insertions(+)
+ .../qt5/qt5base/0009-Fix-build-on-riscv32.patch    | 45 ++++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
 
-diff --git a/package/wlroots/0001-Add-feature-macros-to-more-C-files-.patch b/package/wlroots/0001-Add-feature-macros-to-more-C-files-.patch
+diff --git a/package/qt5/qt5base/0009-Fix-build-on-riscv32.patch b/package/qt5/qt5base/0009-Fix-build-on-riscv32.patch
 new file mode 100644
-index 0000000000..0ba078708a
+index 0000000000..98c7210551
 --- /dev/null
-+++ b/package/wlroots/0001-Add-feature-macros-to-more-C-files-.patch
-@@ -0,0 +1,174 @@
-+From cf37ba4c0bf31316b698ba23015f91903766871d Mon Sep 17 00:00:00 2001
-+From: Paul Cercueil <paul@crapouillou.net>
-+Date: Thu, 18 Feb 2021 22:31:39 +0000
-+Subject: [PATCH] Add feature macros to more C files
++++ b/package/qt5/qt5base/0009-Fix-build-on-riscv32.patch
+@@ -0,0 +1,45 @@
++From 035dc537bee26e3b63a211b2835d8560439e161f Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 27 Aug 2021 16:28:32 +0200
++Subject: Fix build on riscv32
 +
-+These source files use "struct timespec", which is POSIX 1993.09.
++riscv32 fails to build because __NR_futex is not defined on this
++architecture:
 +
-+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
++In file included from thread/qmutex_linux.cpp:45,
++                 from thread/qmutex.cpp:804:
++thread/qfutex_p.h: In function 'int QtLinuxFutex::_q_futex(int*, int, int, quintptr, int*, int)':
++thread/qfutex_p.h:116:30: error: '__NR_futex' was not declared in this scope; did you mean '_q_futex'?
++  116 |         int result = syscall(__NR_futex, addr, op | FUTEX_PRIVATE_FLAG, val, val2, addr2, val3);
++      |                              ^~~~~~~~~~
++      |                              _q_futex
 +
-+[Retrieved from: https://github.com/swaywm/wlroots/pull/2493]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Pick-to: 6.1 6.2
++Fixes: QTBUG-96067
++Change-Id: Ib6a9bcc496f37e69ac39362cb0a021fccaf311f5
++Reviewed-by: Thiago Macieira <thiago.macieira@intel.com>
++[Retrieved from:
++https://code.qt.io/cgit/qt/qtbase.git/commit/?id=035dc537bee26e3b63a211b2835d8560439e161f]
 +---
-+ backend/wayland/output.c                  | 1 +
-+ types/data_device/wlr_data_device.c       | 1 +
-+ types/data_device/wlr_drag.c              | 1 +
-+ types/wlr_export_dmabuf_v1.c              | 1 +
-+ types/wlr_idle.c                          | 1 +
-+ types/wlr_keyboard_shortcuts_inhibit_v1.c | 1 +
-+ types/wlr_pointer_constraints_v1.c        | 1 +
-+ types/wlr_primary_selection.c             | 1 +
-+ types/wlr_relative_pointer_v1.c           | 1 +
-+ types/wlr_screencopy_v1.c                 | 1 +
-+ types/wlr_virtual_pointer_v1.c            | 1 +
-+ types/wlr_xdg_decoration_v1.c             | 1 +
-+ types/xdg_shell/wlr_xdg_popup.c           | 1 +
-+ types/xdg_shell/wlr_xdg_positioner.c      | 1 +
-+ types/xdg_shell/wlr_xdg_shell.c           | 1 +
-+ types/xdg_shell/wlr_xdg_surface.c         | 1 +
-+ 16 files changed, 16 insertions(+)
++ src/corelib/thread/qfutex_p.h | 5 +++++
++ 1 file changed, 5 insertions(+)
 +
-+diff --git a/backend/wayland/output.c b/backend/wayland/output.c
-+index d5410e0d32..8ff8fa2a00 100644
-+--- a/backend/wayland/output.c
-++++ b/backend/wayland/output.c
-+@@ -1,3 +1,4 @@
-++#define _POSIX_C_SOURCE 199309L
-+ #include <assert.h>
-+ #include <stdint.h>
-+ #include <stdio.h>
-+diff --git a/types/data_device/wlr_data_device.c b/types/data_device/wlr_data_device.c
-+index 6cd84ec0ab..beac496124 100644
-+--- a/types/data_device/wlr_data_device.c
-++++ b/types/data_device/wlr_data_device.c
-+@@ -1,3 +1,4 @@
-++#define _POSIX_C_SOURCE 199309L
-+ #include <assert.h>
-+ #include <stdlib.h>
-+ #include <string.h>
-+diff --git a/types/data_device/wlr_drag.c b/types/data_device/wlr_drag.c
-+index 53bf4066a1..e3c1e249b4 100644
-+--- a/types/data_device/wlr_drag.c
-++++ b/types/data_device/wlr_drag.c
-+@@ -1,3 +1,4 @@
-++#define _POSIX_C_SOURCE 199309L
-+ #include <assert.h>
-+ #include <stdlib.h>
-+ #include <string.h>
-+diff --git a/types/wlr_export_dmabuf_v1.c b/types/wlr_export_dmabuf_v1.c
-+index a8e2a4bde3..98ceae68f1 100644
-+--- a/types/wlr_export_dmabuf_v1.c
-++++ b/types/wlr_export_dmabuf_v1.c
-+@@ -1,3 +1,4 @@
-++#define _POSIX_C_SOURCE 199309L
-+ #include <assert.h>
-+ #include <stdlib.h>
-+ #include <unistd.h>
-+diff --git a/types/wlr_idle.c b/types/wlr_idle.c
-+index 4c338931cc..80fd871fab 100644
-+--- a/types/wlr_idle.c
-++++ b/types/wlr_idle.c
-+@@ -1,3 +1,4 @@
-++#define _POSIX_C_SOURCE 199309L
-+ #include <assert.h>
-+ #include <stdlib.h>
-+ #include <string.h>
-+diff --git a/types/wlr_keyboard_shortcuts_inhibit_v1.c b/types/wlr_keyboard_shortcuts_inhibit_v1.c
-+index fe4e64b04e..8360a9c21c 100644
-+--- a/types/wlr_keyboard_shortcuts_inhibit_v1.c
-++++ b/types/wlr_keyboard_shortcuts_inhibit_v1.c
-+@@ -1,3 +1,4 @@
-++#define _POSIX_C_SOURCE 199309L
-+ #include <assert.h>
-+ #include <stdlib.h>
-+ #include <util/signal.h>
-+diff --git a/types/wlr_pointer_constraints_v1.c b/types/wlr_pointer_constraints_v1.c
-+index eca45984c4..f1db8e3415 100644
-+--- a/types/wlr_pointer_constraints_v1.c
-++++ b/types/wlr_pointer_constraints_v1.c
-+@@ -1,3 +1,4 @@
-++#define _POSIX_C_SOURCE 199309L
-+ #include <assert.h>
-+ #include <limits.h>
-+ #include <pixman.h>
-+diff --git a/types/wlr_primary_selection.c b/types/wlr_primary_selection.c
-+index 0875462c8c..7e0e11ddaa 100644
-+--- a/types/wlr_primary_selection.c
-++++ b/types/wlr_primary_selection.c
-+@@ -1,3 +1,4 @@
-++#define _POSIX_C_SOURCE 199309L
-+ #include <assert.h>
-+ #include <stdlib.h>
-+ #include <wlr/types/wlr_primary_selection.h>
-+diff --git a/types/wlr_relative_pointer_v1.c b/types/wlr_relative_pointer_v1.c
-+index 8613f2b91c..3f8dd8b72a 100644
-+--- a/types/wlr_relative_pointer_v1.c
-++++ b/types/wlr_relative_pointer_v1.c
-+@@ -1,3 +1,4 @@
-++#define _POSIX_C_SOURCE 199309L
-+ #include <assert.h>
-+ #include <inttypes.h>
-+ #include <stdlib.h>
-+diff --git a/types/wlr_screencopy_v1.c b/types/wlr_screencopy_v1.c
-+index 6feb074274..29864c2364 100644
-+--- a/types/wlr_screencopy_v1.c
-++++ b/types/wlr_screencopy_v1.c
-+@@ -1,3 +1,4 @@
-++#define _POSIX_C_SOURCE 199309L
-+ #include <assert.h>
-+ #include <stdlib.h>
-+ #include <drm_fourcc.h>
-+diff --git a/types/wlr_virtual_pointer_v1.c b/types/wlr_virtual_pointer_v1.c
-+index a9d1fd7bc4..5566e9e013 100644
-+--- a/types/wlr_virtual_pointer_v1.c
-++++ b/types/wlr_virtual_pointer_v1.c
-+@@ -1,3 +1,4 @@
-++#define _POSIX_C_SOURCE 199309L
-+ #include <assert.h>
-+ #include <stdlib.h>
-+ #include <wlr/types/wlr_seat.h>
-+diff --git a/types/wlr_xdg_decoration_v1.c b/types/wlr_xdg_decoration_v1.c
-+index 544035b7b8..904474c088 100644
-+--- a/types/wlr_xdg_decoration_v1.c
-++++ b/types/wlr_xdg_decoration_v1.c
-+@@ -1,3 +1,4 @@
-++#define _POSIX_C_SOURCE 199309L
-+ #include <assert.h>
-+ #include <stdbool.h>
-+ #include <stdlib.h>
-+diff --git a/types/xdg_shell/wlr_xdg_popup.c b/types/xdg_shell/wlr_xdg_popup.c
-+index 69b4cfe19f..05d6551fc8 100644
-+--- a/types/xdg_shell/wlr_xdg_popup.c
-++++ b/types/xdg_shell/wlr_xdg_popup.c
-+@@ -1,3 +1,4 @@
-++#define _POSIX_C_SOURCE 199309L
-+ #include <assert.h>
-+ #include <stdlib.h>
-+ #include <string.h>
-+diff --git a/types/xdg_shell/wlr_xdg_positioner.c b/types/xdg_shell/wlr_xdg_positioner.c
-+index f88bf323b8..8881c49916 100644
-+--- a/types/xdg_shell/wlr_xdg_positioner.c
-++++ b/types/xdg_shell/wlr_xdg_positioner.c
-+@@ -1,3 +1,4 @@
-++#define _POSIX_C_SOURCE 199309L
-+ #include <assert.h>
-+ #include <stdlib.h>
-+ #include "types/wlr_xdg_shell.h"
-+diff --git a/types/xdg_shell/wlr_xdg_shell.c b/types/xdg_shell/wlr_xdg_shell.c
-+index 0480d5f354..c93fe7c3fb 100644
-+--- a/types/xdg_shell/wlr_xdg_shell.c
-++++ b/types/xdg_shell/wlr_xdg_shell.c
-+@@ -1,3 +1,4 @@
-++#define _POSIX_C_SOURCE 199309L
-+ #include <assert.h>
-+ #include <stdlib.h>
-+ #include "types/wlr_xdg_shell.h"
-+diff --git a/types/xdg_shell/wlr_xdg_surface.c b/types/xdg_shell/wlr_xdg_surface.c
-+index edf562abcd..c1dfbfba7e 100644
-+--- a/types/xdg_shell/wlr_xdg_surface.c
-++++ b/types/xdg_shell/wlr_xdg_surface.c
-+@@ -1,3 +1,4 @@
-++#define _POSIX_C_SOURCE 199309L
-+ #include <assert.h>
-+ #include <stdlib.h>
-+ #include <string.h>
++diff --git a/src/corelib/thread/qfutex_p.h b/src/corelib/thread/qfutex_p.h
++index 40482b6fc1..037207a5c0 100644
++--- a/src/corelib/thread/qfutex_p.h
+++++ b/src/corelib/thread/qfutex_p.h
++@@ -103,6 +103,11 @@ QT_END_NAMESPACE
++ // if not defined in linux/futex.h
++ #  define FUTEX_PRIVATE_FLAG        128         // added in v2.6.22
++ 
+++// RISC-V does not supply __NR_futex
+++#  ifndef __NR_futex
+++#    define __NR_futex __NR_futex_time64
+++#  endif
+++
++ QT_BEGIN_NAMESPACE
++ namespace QtLinuxFutex {
++     constexpr inline bool futexAvailable() { return true; }
++-- 
++cgit v1.2.1
++
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
