@@ -2,96 +2,90 @@ Return-Path: <SRS0=85Xw=OA=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-18.5 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
+	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A37AEC433EF
-	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 21:00:02 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A32F6C433F5
+	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 21:00:31 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id A5D0661208
-	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 21:00:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A5D0661208
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
+	by mail.kernel.org (Postfix) with ESMTPS id 2282D611B0
+	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 21:00:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2282D611B0
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4D02084A0F;
-	Fri, 10 Sep 2021 21:00:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AD12C60614;
+	Fri, 10 Sep 2021 21:00:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lUQR50aO75Je; Fri, 10 Sep 2021 21:00:00 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id pYe21uIpKFCN; Fri, 10 Sep 2021 21:00:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AB6888499C;
-	Fri, 10 Sep 2021 20:59:59 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8D7901BF2A7
- for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 20:59:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5E52A60620;
+	Fri, 10 Sep 2021 21:00:28 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 223CD1BF580
+ for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 21:00:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7D28E8499C
- for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 20:59:57 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 11E5F41576
+ for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 21:00:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Z794OA0ZS04N for <buildroot@lists.busybox.net>;
- Fri, 10 Sep 2021 20:59:56 +0000 (UTC)
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Ne-l9WRFBQyC for <buildroot@lists.busybox.net>;
+ Fri, 10 Sep 2021 21:00:25 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com
- [IPv6:2a00:1450:4864:20::631])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 67B5B83B3E
- for <buildroot@busybox.net>; Fri, 10 Sep 2021 20:59:56 +0000 (UTC)
-Received: by mail-ej1-x631.google.com with SMTP id e21so6777896ejz.12
- for <buildroot@busybox.net>; Fri, 10 Sep 2021 13:59:56 -0700 (PDT)
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
+ [IPv6:2a00:1450:4864:20::436])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4EAAB40672
+ for <buildroot@buildroot.org>; Fri, 10 Sep 2021 21:00:25 +0000 (UTC)
+Received: by mail-wr1-x436.google.com with SMTP id n5so4387016wro.12
+ for <buildroot@buildroot.org>; Fri, 10 Sep 2021 14:00:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=sender:from:to:cc:subject:references:date:in-reply-to:message-id
- :user-agent:mime-version:content-transfer-encoding;
- bh=aB3JmmsI/gajt6p2Vg2cudlz9FyoQh/g+fyCi3VlNXk=;
- b=LJNdcV2IDGnhgQdmrilGQsEBTWHtg2lxTWL74zjI0sKX1Aiv/am84sVhn/gEUxrf1h
- IA8OZpzBM8GfwpC4useJRMe6i4O+t9byRzRcl1PgldlAI3raZIQH5UBveDaZUzMX1lKE
- zR1RjSeO/Qsz+jmgbVJ3+jPF4bAhEgrFaGVEsLwSNdN4K2eb/F7hVkt9n80Z8x9hlVrz
- arZYDNURcNUGGGPpR/IYsJ6gB2Ydc3hOj6aEKlXEuPckW6/yfp788+8nQtfZdcgPjk7i
- aCN/mpcuu/GNXQ3ExeWPy/g5DH+azzZgDKDmlThXJAa6R3qLVYTAAFKY7ytl/y56PAQK
- XZqw==
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=MVt5AeevzJd3mJQ6g4MqYZs54a16p26DrZF0stYcYIQ=;
+ b=d4ZLpnZQeSSj9kKdjdAslXl0Sn4Gv1gX3Vztw1/zuXFuhRGuUetqLThdPl9xvKCSxT
+ ockYEGDx35j29d/G0tRRU2L741ricrAXIeXLJNYir327tmt2yznPYmjfSGNFWUudiDIr
+ hQa8ldiz7WKFBCXAjfvc4jxxDTfSXet++6UAx6z2uIuEnh1l1YdIXg9ZfE203boXpBOK
+ zJCupStYhVzmh4V9As+AdxUhtTZ/KkCWpMHR1m82IPU+Wy89REg828du5WcXFTWgTdId
+ m7DEWwgUoeg6HeAn0xyk+14q5I9raOv97YJCDg2YgI4gwlOwANPMHX+YGeDsixwRd2gt
+ EG3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:sender:from:to:cc:subject:references:date
- :in-reply-to:message-id:user-agent:mime-version
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=aB3JmmsI/gajt6p2Vg2cudlz9FyoQh/g+fyCi3VlNXk=;
- b=r8K5GfBO/CIS+ZQq8ij85JxMeF4Lch3xAEBl+bnMQYGZjB6OMN5WTtXTsnk45dw2MV
- frcN6ZkQApdP9OjuiJaUIjKSk70pFoHgnwbncvfXZyBFCtM45JRJFZsPoP7kWKPXomRX
- ETUwgL0UeIegb/+YnwI6P3Zctg5s8Noi3hBCYeTkJ3UNRmNT80YwJcYp60dQ1iMFqJEx
- a9ZkjqGhtq3wXaITWkUalH4Ky875WwlYn66AFIvJzaw56Lz1hl92vV5s/Ofk0Jlkb7ZZ
- xXUUD/JKSqbi/lsS5oTPZxKh9EnZ+HmOtu1mKyfPRQyN3Ntm9pqkDVlpGDYI0KRz3g8b
- gutg==
-X-Gm-Message-State: AOAM530ZQWWwRxPpzx6F3r4LUryzqPEeeV6AUqK0bxAykATw3m4aaaY1
- +MnuYhrrZZeakKZTFsiY21s=
-X-Google-Smtp-Source: ABdhPJy3+n7Jpg+sVb369znlS3he+XQP3RLmlOcn/jkgPG4IiCq1gwr0w4lwipSN+Yxko9BKcAWk8g==
-X-Received: by 2002:a17:907:2a85:: with SMTP id
- fl5mr11240855ejc.91.1631307594675; 
- Fri, 10 Sep 2021 13:59:54 -0700 (PDT)
-Received: from dell.be.48ers.dk (d51A5BC31.access.telenet.be. [81.165.188.49])
- by smtp.gmail.com with ESMTPSA id
- b8sm3342564edv.96.2021.09.10.13.59.52
+ bh=MVt5AeevzJd3mJQ6g4MqYZs54a16p26DrZF0stYcYIQ=;
+ b=QR3IT1mQrZxjaj2EeN8+MFQbRnrth2slkPpXhmMRBJ+AHo5GYs6QL1rOKtFGmV6U5B
+ 3W6BVsikkwXH+ujgDNLTRSP0kOLHVYO7SEywnOZVqOMOoon7yoW8DHMEwDDAOOvCzTM1
+ 75Tju74rMCjdpojSo2Q7XNLVsLpV3qxPT8EDmkE9HGOV+z18lkRSmZpynsfsJ+n7jR/o
+ Mg3vpYRD4CmWrcKR0UjbPal+yIZkmMdR0Wiq6UUhbvauIiuOgBFM2iVWTtLu0+hbLflR
+ bTDYb5EgLkfPAw5XPs5WGHCiio30OjOShMwXwUJTFvre1ovZMYP33Pgs5ucWkqbKy+0U
+ eDLg==
+X-Gm-Message-State: AOAM533QrcpohV93hHgGL/jco4cMa2wCNYCaOwUBD0n0Q42F80c0HRtD
+ JXStpaZmsYV9KHQVxj2hbccxfVD1QL8=
+X-Google-Smtp-Source: ABdhPJxQxx6Zhr6AV/Tk0lL78MiribifKzW/392FEFYj/EalfUsJVrLqdnQcu3g/ZEcHxoLPVkU88w==
+X-Received: by 2002:adf:f9cb:: with SMTP id w11mr11614355wrr.382.1631307623300; 
+ Fri, 10 Sep 2021 14:00:23 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-2139-166.w92-167.abo.wanadoo.fr.
+ [92.167.218.166])
+ by smtp.gmail.com with ESMTPSA id l7sm5727879wmj.9.2021.09.10.14.00.22
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 10 Sep 2021 13:59:53 -0700 (PDT)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
- (envelope-from <peter@korsgaard.com>)
- id 1mOncm-0002QB-2L; Fri, 10 Sep 2021 22:59:52 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-References: <87ilz8ad2f.fsf@dell.be.48ers.dk>
- <DA971654-1893-453C-A37D-BC4C6E772195@benettiengineering.com>
-Date: Fri, 10 Sep 2021 22:59:52 +0200
-In-Reply-To: <DA971654-1893-453C-A37D-BC4C6E772195@benettiengineering.com>
- (Giulio Benetti's message of "Fri, 10 Sep 2021 21:40:51 +0200")
-Message-ID: <87a6kk6t9z.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+ Fri, 10 Sep 2021 14:00:22 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Fri, 10 Sep 2021 22:59:23 +0200
+Message-Id: <20210910205923.632114-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/harfbuzz: bump to version 2.9.0
+Subject: [Buildroot] [PATCH 1/1] package/autofs: fix build with glibc >= 2.34
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -104,48 +98,165 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: buildroot@busybox.net, Francois Perrad <fperrad@gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-Pj4+Pj4gIkdpdWxpbyIgPT0gR2l1bGlvIEJlbmV0dGkgPGdpdWxpby5iZW5ldHRpQGJlbmV0dGll
-bmdpbmVlcmluZy5jb20+IHdyaXRlczoKCiA+IEhpIFBldGVyLCBGcmFuY29pcywKID4+IElsIGdp
-b3JubyAxMCBzZXQgMjAyMSwgYWxsZSBvcmUgMTM6MjQsIFBldGVyIEtvcnNnYWFyZCA8cGV0ZXJA
-a29yc2dhYXJkLmNvbT4gaGEgc2NyaXR0bzoKID4+IAogPj4g77u/CiA+Pj4gCiA+Pj4+Pj4+ICJG
-cmFuY29pcyIgPT0gRnJhbmNvaXMgUGVycmFkIDxmcGVycmFkQGdtYWlsLmNvbT4gd3JpdGVzOgog
-Pj4gCiA+Pj4gU2lnbmVkLW9mZi1ieTogRnJhbmNvaXMgUGVycmFkIDxmcmFuY29pcy5wZXJyYWRA
-Z2Fkei5vcmc+CiA+Pj4gLS0tCiA+Pj4gcGFja2FnZS9oYXJmYnV6ei9oYXJmYnV6ei5oYXNoIHwg
-MiArLQogPj4+IHBhY2thZ2UvaGFyZmJ1enovaGFyZmJ1enoubWsgICB8IDIgKy0KID4+PiAyIGZp
-bGVzIGNoYW5nZWQsIDIgaW5zZXJ0aW9ucygrKSwgMiBkZWxldGlvbnMoLSkKID4+IAogPj4+IGRp
-ZmYgLS1naXQgYS9wYWNrYWdlL2hhcmZidXp6L2hhcmZidXp6Lmhhc2ggYi9wYWNrYWdlL2hhcmZi
-dXp6L2hhcmZidXp6Lmhhc2gKID4+PiBpbmRleCA3NzRiMzEwNGEuLmExMDFmM2U3ZCAxMDA2NDQK
-ID4+PiAtLS0gYS9wYWNrYWdlL2hhcmZidXp6L2hhcmZidXp6Lmhhc2gKID4+PiArKysgYi9wYWNr
-YWdlL2hhcmZidXp6L2hhcmZidXp6Lmhhc2gKID4+PiBAQCAtMSwzICsxLDMgQEAKID4+PiAjIExv
-Y2FsbHkgY29tcHV0ZWQKID4+PiAtc2hhMjU2ICBkNTg0NjEzOTVjZTI4YjlkYzAzOTAzMjU0Mzc0
-ZGQ3MGMzOGM4YzI4YzUwNDZkYjEyM2MwOGY3YWI5NDE3YmU3ICBoYXJmYnV6ei0yLjguMi50YXIu
-eHoKID4+PiArc2hhMjU2ICAzZTFjMmUxZDJjNjVkNTYzNjRmZDE2ZDFjNDFhMDZiMmEzNTc5NTQ5
-NmY3OGRmZmY2MzVjMmI3NDE0YjU0YzVhICBoYXJmYnV6ei0yLjkuMC50YXIueHoKID4+PiBzaGEy
-NTYgIDQzNDVlMTczNWY4YmM2ZDgxMmZlZDUxODBjYWJiNWE1ZTg4YTQxMDlkMzMyNjUyZjJhNDVj
-MTNjZmE1ZWU2OTIgIENPUFlJTkcKID4+PiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9oYXJmYnV6ei9o
-YXJmYnV6ei5tayBiL3BhY2thZ2UvaGFyZmJ1enovaGFyZmJ1enoubWsKID4+PiBpbmRleCBjN2Y1
-ZGZlOWQuLmNjYjBkOTQwZCAxMDA2NDQKID4+PiAtLS0gYS9wYWNrYWdlL2hhcmZidXp6L2hhcmZi
-dXp6Lm1rCiA+Pj4gKysrIGIvcGFja2FnZS9oYXJmYnV6ei9oYXJmYnV6ei5tawogPj4+IEBAIC00
-LDcgKzQsNyBAQAogPj4+ICMKID4+PiAjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIwogPj4gCiA+Pj4g
-LUhBUkZCVVpaX1ZFUlNJT04gPSAyLjguMgogPj4+ICtIQVJGQlVaWl9WRVJTSU9OID0gMi45LjAK
-ID4+IAogPj4gRG9lc24ndCBoYXJidXp6IGZvbGxvdyB0aGUgZ25vbWUtc3R5bGUgb2RkIHZlcnNp
-b25zIGFyZSBkZXZlbG9wbWVudAogPj4gdmVyc2lvbnM/IElmIHNvLCBkbyB3ZSB3YW50IHRvIGhh
-dmUgMi45LnggaW4gQnVpbGRyb290PwoKID4gSXQgZG9lc27igJl0IHNlZW0gdG8gZm9sbG93IHRo
-YXQgc2NoZW1lIGFueW1vcmUgc2luY2Ugc29tZSB0aW1lLgogPiBJZiB3ZSBjaGVjayB3aGF0IFVi
-dW50dSB1c2VzIGluIGxhc3QgdmVyc2lvbnM6CiA+IGh0dHBzOi8vcGtncy5vcmcvc2VhcmNoLz9x
-PUhhcmZidXp6CiA+IHRoZXnigJlyZSBlaXRoZXIgb2RkIGFuZCBldmVuLgogPiBVYnVudHUgICAg
-ICAgICAgSGFyZmJ1enoKID4gMTguMDQoTFRTKSAgICAgMS43LjIKID4gMjAuMDQoTFRTKSAgICAy
-LjYuNAogPiAyMS4wNCAgICAgICAgICAgICAgMi43LjQKCiA+IFNvIEkgdGhpbmsgd2XigJlyZSBm
-aW5lIGZvbGxvd2luZyBldmVyeSByZWxlYXNlLgogPiBBZnRlciB0aGlzIHBhdGNoIHRoZXJlIGlz
-IG1pbmUgd2l0aCB2ZXJzaW9uIDIuOS4xCgpBaGgsIG9rIC0gU29ycnkgdGhlbi4gSSdsbCBnZXQg
-dG8geW91ciAyLjkuMSBwYXRjaCB0aGlzIHdlZWtlbmQuCgotLSAKQnllLCBQZXRlciBLb3JzZ2Fh
-cmQKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRy
-b290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAbGlzdHMuYnVpbGRyb290Lm9yZwpodHRwczovL2xp
-c3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+Fix the following build failure with glibc >= 2.34:
+
+In file included from /tmp/instance-0/output-1/host/arc-buildroot-linux-gnu/sysroot/usr/include/bits/local_lim.h:81,
+                 from /tmp/instance-0/output-1/host/arc-buildroot-linux-gnu/sysroot/usr/include/bits/posix1_lim.h:161,
+                 from /tmp/instance-0/output-1/host/arc-buildroot-linux-gnu/sysroot/usr/include/dirent.h:233,
+                 from automount.c:22:
+automount.c:87:37: error: initializer element is not constant
+   87 | size_t detached_thread_stack_size = PTHREAD_STACK_MIN * 144;
+      |                                     ^~~~~~~~~~~~~~~~~
+
+Fixes:
+ - http://autobuild.buildroot.org/results/0c8ab8968b2adf6a5f8eeab00ce388968fa1c1d5
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...7-use-default-stack-size-for-threads.patch | 124 ++++++++++++++++++
+ 1 file changed, 124 insertions(+)
+ create mode 100644 package/autofs/0001-autofs-5-1-7-use-default-stack-size-for-threads.patch
+
+diff --git a/package/autofs/0001-autofs-5-1-7-use-default-stack-size-for-threads.patch b/package/autofs/0001-autofs-5-1-7-use-default-stack-size-for-threads.patch
+new file mode 100644
+index 0000000000..f63c399fdc
+--- /dev/null
++++ b/package/autofs/0001-autofs-5-1-7-use-default-stack-size-for-threads.patch
+@@ -0,0 +1,124 @@
++From 91edcc55c681dac41d2213b498ec6450aee22d9f Mon Sep 17 00:00:00 2001
++From: Ian Kent <raven@themaw.net>
++Date: Mon, 26 Jul 2021 13:18:38 +0800
++Subject: autofs-5.1.7 - use default stack size for threads
++
++autofs uses PTHREAD_STACK_MIN to set the stack size for threads it
++creates.
++
++In two cases it is used to reduce the stack size for long running
++service threads while it's used to allocate a larger stack for worker
++threads that can have larger memory requirements.
++
++In recent glibc releases PTHREAD_STACK_MIN is no longer a constant
++which can lead to unexpectedly different stack sizes on different
++architectures and the autofs assumption it's a constant causes a
++compile failure.
++
++The need to alter the stack size was due to observed stack overflow
++which was thought to be due the thread stack being too small for autofs
++and glibc alloca(3) usage.
++
++Quite a bit of that alloca(3) usage has been eliminated from autofs now,
++particularly those that might be allocating largish amounts of storage,
++and there has been a lot of change in glibc too so using the thread
++default stack should be ok.
++
++Signed-off-by: Ian Kent <raven@themaw.net>
++
++[Retrieved (and updated to drop CHANGELOG update) from:
++https://git.kernel.org/pub/scm/linux/storage/autofs/autofs.git/commit/?id=91edcc55c681dac41d2213b498ec6450aee22d9f]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ CHANGELOG          |  1 +
++ daemon/automount.c | 29 -----------------------------
++ daemon/state.c     |  6 +-----
++ lib/alarm.c        |  6 +-----
++ 4 files changed, 3 insertions(+), 39 deletions(-)
++
++diff --git a/daemon/automount.c b/daemon/automount.c
++index 23235a7..d743235 100644
++--- a/daemon/automount.c
+++++ b/daemon/automount.c
++@@ -84,7 +84,6 @@ static size_t kpkt_len;
++ /* Attributes for creating detached and joinable threads */
++ pthread_attr_t th_attr;
++ pthread_attr_t th_attr_detached;
++-size_t detached_thread_stack_size = PTHREAD_STACK_MIN * 144;
++ 
++ struct master_readmap_cond mrc = {
++ 	PTHREAD_MUTEX_INITIALIZER, PTHREAD_COND_INITIALIZER, 0, NULL, 0, 0, 0, 0};
++@@ -2620,34 +2619,6 @@ int main(int argc, char *argv[])
++ 		exit(1);
++ 	}
++ 
++-#ifdef _POSIX_THREAD_ATTR_STACKSIZE
++-	if (pthread_attr_setstacksize(
++-			&th_attr_detached, detached_thread_stack_size)) {
++-		logerr("%s: failed to set stack size thread attribute!",
++-		       program);
++-		if (start_pipefd[1] != -1) {
++-			res = write(start_pipefd[1], pst_stat, sizeof(*pst_stat));
++-			close(start_pipefd[1]);
++-		}
++-		release_flag_file();
++-		macro_free_global_table();
++-		exit(1);
++-	}
++-#endif
++-
++-	if (pthread_attr_getstacksize(
++-			&th_attr_detached, &detached_thread_stack_size)) {
++-		logerr("%s: failed to get detached thread stack size!",
++-		       program);
++-		if (start_pipefd[1] != -1) {
++-			res = write(start_pipefd[1], pst_stat, sizeof(*pst_stat));
++-			close(start_pipefd[1]);
++-		}
++-		release_flag_file();
++-		macro_free_global_table();
++-		exit(1);
++-	}
++-
++ 	info(logging, "Starting automounter version %s, master map %s",
++ 		version, master_list->name);
++ 	info(logging, "using kernel protocol version %d.%02d",
++diff --git a/daemon/state.c b/daemon/state.c
++index 5156bb2..5df0561 100644
++--- a/daemon/state.c
+++++ b/daemon/state.c
++@@ -1177,12 +1177,8 @@ int st_start_handler(void)
++ 	status = pthread_attr_init(pattrs);
++ 	if (status)
++ 		pattrs = NULL;
++-	else {
+++	else
++ 		pthread_attr_setdetachstate(pattrs, PTHREAD_CREATE_DETACHED);
++-#ifdef _POSIX_THREAD_ATTR_STACKSIZE
++-		pthread_attr_setstacksize(pattrs, PTHREAD_STACK_MIN*4);
++-#endif
++-	}
++ 
++ 	status = pthread_create(&thid, pattrs, st_queue_handler, NULL);
++ 
++diff --git a/lib/alarm.c b/lib/alarm.c
++index f27e13c..1631a9b 100755
++--- a/lib/alarm.c
+++++ b/lib/alarm.c
++@@ -270,12 +270,8 @@ int alarm_start_handler(void)
++ 	status = pthread_attr_init(pattrs);
++ 	if (status)
++ 		pattrs = NULL;
++-	else {
+++	else
++ 		pthread_attr_setdetachstate(pattrs, PTHREAD_CREATE_DETACHED);
++-#ifdef _POSIX_THREAD_ATTR_STACKSIZE
++-		pthread_attr_setstacksize(pattrs, PTHREAD_STACK_MIN*4);
++-#endif
++-	}
++ 
++ 	status = pthread_condattr_init(&condattrs);
++ 	if (status)
++-- 
++cgit 1.2.3-1.el7
++
+-- 
+2.33.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@lists.buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
