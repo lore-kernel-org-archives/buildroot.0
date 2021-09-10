@@ -2,91 +2,66 @@ Return-Path: <SRS0=85Xw=OA=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
-	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B4AEC433F5
-	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 06:47:33 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1EE75C433F5
+	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 06:49:26 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1B2A160F9C
-	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 06:47:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1B2A160F9C
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id 8E12B61186
+	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 06:49:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8E12B61186
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=t-online.de
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B7F3740181;
-	Fri, 10 Sep 2021 06:47:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 53FAA81B23;
+	Fri, 10 Sep 2021 06:49:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KxHST0I5j_lQ; Fri, 10 Sep 2021 06:47:31 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id VlJ-DI9O4hk4; Fri, 10 Sep 2021 06:49:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E3C6F40179;
-	Fri, 10 Sep 2021 06:47:30 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 930E21BF352
- for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 06:47:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 94C9880E86;
+	Fri, 10 Sep 2021 06:49:23 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id EDC9C1BF352
+ for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 06:49:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 804046063D
- for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 06:47:29 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id EA42680E86
+ for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 06:49:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UlQ1wkNV8o_7 for <buildroot@lists.busybox.net>;
- Fri, 10 Sep 2021 06:47:28 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
- [IPv6:2a00:1450:4864:20::42e])
- by smtp3.osuosl.org (Postfix) with ESMTPS id AFDE160636
- for <buildroot@buildroot.org>; Fri, 10 Sep 2021 06:47:28 +0000 (UTC)
-Received: by mail-wr1-x42e.google.com with SMTP id b6so1073925wrh.10
- for <buildroot@buildroot.org>; Thu, 09 Sep 2021 23:47:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=Mg6tFhmxUyE/tAiWVv2fbskdkrAwYpFpGdeCUQYg+mQ=;
- b=lrvOAP+tvjQoSBo/2tzumUjWK758K3MObveK1nEOG/v6RWkCIdjBFA09Y1GdaSOO9Q
- vi4XSG4UntZSsZaOAyxNHOiiLDgEeAnC8AbVnSU4jYig9n1R6JKjo92UHB0YY6ci/ZwB
- +2vfWUZnxks4LY5Z5LeT1srWtX636+VuWVfdBQdtttQLqSm/UCktdQRjYthaNjilqtuf
- KmqvfGIUzWrXkhxC9/je2dGYNK5kBLHixoe5aN8uWVzAL/nEj0jWRe9aBzP2jwYpb/OV
- ltjCO6nFuEVnQJ1sdMNkb0ws5XnePpXa6y7u9PaBAkS89TJsgX0gtov8zD6cVS5Hmvtf
- SK7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=Mg6tFhmxUyE/tAiWVv2fbskdkrAwYpFpGdeCUQYg+mQ=;
- b=ic7kSVBIL5GHAINuIfW2BtETiOHDTJ7SwSrh3zxWm1ZiDrMYKQU9VxLlP2HGPVT/Z3
- 7Ds0qcJ6RSMBdExhsvJPHW/RAoa63DgRmh+pANgt9M0hdsxbkWmCln1HPBuPnA0o9lSU
- Srt5yXtQ91pBIKkJQ4e8+V3RNj7aqzo+FsjiIFsuY2s6oC95JMfCMqWTzlDfXvBlbB41
- s2KuayRF2E6Q+ONCqsWXy+GaRFUIAQqB00Buv4y6OY6ifUJnwMqE+uaXE45xTJI8YEwA
- rpstDSyCv8mlFzSjqHsdCxpF+urv8gFlmRxsRM+50dTh6b8XuW5myuLMCGr2F505c9Zu
- etTg==
-X-Gm-Message-State: AOAM530uYfm89ojtwqnv2vJuur1sL5igNvOrb1v1qe6JIWaTjoSQ7Bz1
- aLreOdfndlb9mbWudn1nbGZ60sWBwaI=
-X-Google-Smtp-Source: ABdhPJwtFH7jST2J6xqoRAgtgD79J0J+8H9GUVgVVLt22S8dutpKlqePXoA0RNoAg2RbpYAokCGmvw==
-X-Received: by 2002:a5d:6212:: with SMTP id y18mr7856081wru.241.1631256446585; 
- Thu, 09 Sep 2021 23:47:26 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-2139-166.w92-167.abo.wanadoo.fr.
- [92.167.218.166])
- by smtp.gmail.com with ESMTPSA id n66sm3482893wmn.2.2021.09.09.23.47.25
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 09 Sep 2021 23:47:25 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vHi9i1lDA9c7 for <buildroot@lists.busybox.net>;
+ Fri, 10 Sep 2021 06:49:20 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from mailout01.t-online.de (mailout01.t-online.de [194.25.134.80])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B0AD880E79
+ for <buildroot@buildroot.org>; Fri, 10 Sep 2021 06:49:20 +0000 (UTC)
+Received: from fwd85.dcpf.telekom.de (fwd85.aul.t-online.de [10.223.144.111])
+ by mailout01.t-online.de (Postfix) with SMTP id 7831045C;
+ Fri, 10 Sep 2021 08:49:15 +0200 (CEST)
+Received: from fli4l.lan.fli4l ([84.161.183.251]) by fwd85.t-online.de
+ with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
+ esmtp id 1mOaLY-1sJge10; Fri, 10 Sep 2021 08:49:12 +0200
+Received: from [192.168.1.109] (port=36364 helo=bruckner.lan.fli4l)
+ by fli4l.lan.fli4l with esmtp (Exim 4.94.2)
+ (envelope-from <bernd.kuhls@t-online.de>)
+ id 1mOaLX-0004zU-Hx; Fri, 10 Sep 2021 08:49:11 +0200
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Fri, 10 Sep 2021 08:47:22 +0200
-Message-Id: <20210910064722.99806-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.33.0
+Date: Fri, 10 Sep 2021 08:49:11 +0200
+Message-Id: <20210910064911.29593-1-bernd.kuhls@t-online.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] Config.in.legacy: drop 2021.08 entry
- duplicate
+X-TOI-EXPURGATEID: 150726::1631256552-00013AC1-B1A1C8D6/0/0 CLEAN NORMAL
+X-TOI-MSGID: 7dc86181-2eba-4d84-aa51-c67ff8cfd051
+Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
+ mesa3d-headers}: bump version to 21.1.8
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,35 +74,65 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Romain Naour <romain.naour@gmail.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-Drop 2021.08 entry duplicate added with commit
-531b2a10cda6bae78ecc141c9fe48f2024f71dbc
+Release notes:
+https://lists.freedesktop.org/archives/mesa-announce/2021-September/000644.html
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- Config.in.legacy | 2 --
- 1 file changed, 2 deletions(-)
+ package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+ package/mesa3d/mesa3d.hash               | 6 +++---
+ package/mesa3d/mesa3d.mk                 | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 68c9f3ca49..6f71575f8a 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -224,8 +224,6 @@ config BR2_PACKAGE_PHP_EXT_XMLRPC
- 	  The XMLRPC php extension was removed.
- 	  See: https://wiki.php.net/rfc/unbundle_xmlprc
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index f569b53285..233292ab0a 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
  
--comment "Legacy options removed in 2021.08"
--
- config BR2_GCC_VERSION_8_X
- 	bool "gcc 8.x support removed"
- 	select BR2_LEGACY
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 21.1.7
++MESA3D_HEADERS_VERSION = 21.1.8
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://archive.mesa3d.org
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index 3ff58f028e..26176b85b7 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2021-August/000642.html
+-sha256  e9e67c10654f2e4bf15b944bb048007a614292aa4792b1b7512eb700b7b3a7bb  mesa-21.1.7.tar.xz
+-sha512  1fd677437f292c30fbf08bfef8c1088557841f426090ccba20ab2a222b08fb5c3ec48a7a0301466e03a23019d09414c700a4f5e299479cacd6972a9f3ba030c8  mesa-21.1.7.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2021-September/000644.html
++sha256  5cd32f5d089dca75300578a3d771a656eaed652090573a2655fe4e7022d56bfc  mesa-21.1.8.tar.xz
++sha512  80fcf2b1d59b49e384e9aa1ae63a3ce709833059af1ffd8eb821054c1976709134098cfc79fac1578a2f08a003223f1c96b38e2e650c5be49821c6f2fe1047af  mesa-21.1.8.tar.xz
+ 
+ # License
+ sha256  998437f3f75f0c542046f83c1cb349408122268168fb13eb4ae6967aa18b7d98  docs/license.rst
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 54b50f684f..1a9e355641 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 21.1.7
++MESA3D_VERSION = 21.1.8
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://archive.mesa3d.org
+ MESA3D_LICENSE = MIT, SGI, Khronos
 -- 
-2.33.0
+2.30.2
 
 _______________________________________________
 buildroot mailing list
