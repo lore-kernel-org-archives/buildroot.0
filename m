@@ -7,51 +7,51 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E3B9C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 18:10:47 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2488C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 18:10:59 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id DC8C7611EE
-	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 18:10:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org DC8C7611EE
+	by mail.kernel.org (Postfix) with ESMTPS id BB5776109F
+	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 18:10:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org BB5776109F
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BAD23401E3;
-	Fri, 10 Sep 2021 18:10:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 90ABC40463;
+	Fri, 10 Sep 2021 18:10:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oFOc1o-bjsDx; Fri, 10 Sep 2021 18:10:45 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rvPqgLfi_hyw; Fri, 10 Sep 2021 18:10:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B8BF2401F3;
-	Fri, 10 Sep 2021 18:10:44 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4EE001BF424
- for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 18:10:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4AD80407B9;
+	Fri, 10 Sep 2021 18:10:57 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 77B101BF424
+ for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 18:10:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3DFE16066A
- for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 18:10:43 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 67EF9407B9
+ for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 18:10:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id O4kzuhzksgkc for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id QLbLGLpO217s for <buildroot@lists.busybox.net>;
  Fri, 10 Sep 2021 18:10:41 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id E479F605FF
+ by smtp4.osuosl.org (Postfix) with ESMTP id EAAC540463
  for <buildroot@buildroot.org>; Fri, 10 Sep 2021 18:10:41 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id B6FDF88E52; Fri, 10 Sep 2021 18:09:05 +0000 (UTC)
+ id C014A88E53; Fri, 10 Sep 2021 18:09:05 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 10 Sep 2021 20:09:59 +0200
+Date: Fri, 10 Sep 2021 20:10:27 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c47ebe7aeb70015614ff1d477dc1a71e8c161425
-X-Git-Newrev: 4bdb9111894dd083d531177b3ffdd41451dde7f5
+X-Git-Oldrev: 4bdb9111894dd083d531177b3ffdd41451dde7f5
+X-Git-Newrev: 05125113fcb93d990ecb9395224d3fda5d911dc4
 X-Patchwork-Hint: ignore
-Message-Id: <20210910180905.B6FDF88E52@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gnutls: bump to version 3.7.2
+Message-Id: <20210910180905.C014A88E53@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libgcrypt: bump to version 1.9.4
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,56 +70,68 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4bdb9111894dd083d531177b3ffdd41451dde7f5
+commit: https://git.buildroot.net/buildroot/commit/?id=05125113fcb93d990ecb9395224d3fda5d911dc4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gnutls/Config.in   | 2 +-
- package/gnutls/gnutls.hash | 4 ++--
- package/gnutls/gnutls.mk   | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+ .../0001-configure.ac-add-an-option-to-disable-tests.patch        | 4 ++--
+ package/libgcrypt/libgcrypt.hash                                  | 8 ++++----
+ package/libgcrypt/libgcrypt.mk                                    | 2 +-
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/gnutls/Config.in b/package/gnutls/Config.in
-index cd853d1e74..cd83b375aa 100644
---- a/package/gnutls/Config.in
-+++ b/package/gnutls/Config.in
-@@ -12,7 +12,7 @@ config BR2_PACKAGE_GNUTLS
- 	  GnuTLS is a secure communications library implementing the SSL
- 	  and TLS protocols and technologies around them.
- 
--	  http://www.gnutls.org
-+	  https://www.gnutls.org/
- 
- if BR2_PACKAGE_GNUTLS
- 
-diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
-index 0788a7a6f0..5d4fd1a0dc 100644
---- a/package/gnutls/gnutls.hash
-+++ b/package/gnutls/gnutls.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking pgp signature
--# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.7/gnutls-3.7.1.tar.xz.sig
--sha256  3777d7963eca5e06eb315686163b7b3f5045e2baac5e54e038ace9835e5cac6f  gnutls-3.7.1.tar.xz
-+# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.7/gnutls-3.7.2.tar.xz.sig
-+sha256  646e6c5a9a185faa4cea796d378a1ba8e1148dbb197ca6605f95986a25af2752  gnutls-3.7.2.tar.xz
- # Locally calculated
- sha256  e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b  doc/COPYING
- sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  doc/COPYING.LESSER
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index 6fc9ffad0b..11c2d81e7d 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/libgcrypt/0001-configure.ac-add-an-option-to-disable-tests.patch b/package/libgcrypt/0001-configure.ac-add-an-option-to-disable-tests.patch
+index 21ff20a473..4ef02fba65 100644
+--- a/package/libgcrypt/0001-configure.ac-add-an-option-to-disable-tests.patch
++++ b/package/libgcrypt/0001-configure.ac-add-an-option-to-disable-tests.patch
+@@ -24,7 +24,7 @@ diff --git a/Makefile.am b/Makefile.am
+ index 7fa4fa4d..f0bd90e4 100644
+ --- a/Makefile.am
+ +++ b/Makefile.am
+-@@ -39,9 +39,14 @@ else
++@@ -40,9 +40,14 @@ else
+  doc =
+  endif
+  
+@@ -44,7 +44,7 @@ diff --git a/configure.ac b/configure.ac
+ index e8c8cd39..1a6b61e5 100644
+ --- a/configure.ac
+ +++ b/configure.ac
+-@@ -2710,6 +2710,16 @@ AC_ARG_ENABLE([doc], AC_HELP_STRING([--disable-doc],
++@@ -3198,6 +3198,16 @@ AC_ARG_ENABLE([doc], AC_HELP_STRING([--disable-doc],
+  AM_CONDITIONAL([BUILD_DOC], [test "x$build_doc" != xno])
+  
+  
+diff --git a/package/libgcrypt/libgcrypt.hash b/package/libgcrypt/libgcrypt.hash
+index 26ec492e10..23562d0ed3 100644
+--- a/package/libgcrypt/libgcrypt.hash
++++ b/package/libgcrypt/libgcrypt.hash
+@@ -1,7 +1,7 @@
+ # From https://www.gnupg.org/download/integrity_check.html
+-sha1  6b18f453fee677078586279d96fb88e5df7b3f35  libgcrypt-1.9.3.tar.bz2
++sha1  1bccc8393482fa1953323ff429c6b5ba5676eb1a  libgcrypt-1.9.4.tar.bz2
+ # Locally calculated after checking signature
+-# https://gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-1.9.3.tar.bz2.sig
+-# using key D8692123C4065DEA5E0F3AB5249B39D24F25E3B6
+-sha256  97ebe4f94e2f7e35b752194ce15a0f3c66324e0ff6af26659bbfb5ff2ec328fd  libgcrypt-1.9.3.tar.bz2
++# https://gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-1.9.4.tar.bz2.sig
++# using key 6DAA6E64A76D2840571B4902528897B826403ADA
++sha256  ea849c83a72454e3ed4267697e8ca03390aee972ab421e7df69dfe42b65caaf7  libgcrypt-1.9.4.tar.bz2
+ sha256  ca0061fc1381a3ab242310e4b3f56389f28e3d460eb2fd822ed7a21c6f030532  COPYING.LIB
+diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
+index 26be5d2f49..e5fdfcfc8e 100644
+--- a/package/libgcrypt/libgcrypt.mk
++++ b/package/libgcrypt/libgcrypt.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- GNUTLS_VERSION_MAJOR = 3.7
--GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).1
-+GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).2
- GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
- GNUTLS_SITE = https://www.gnupg.org/ftp/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
- GNUTLS_LICENSE = LGPL-2.1+ (core library)
+-LIBGCRYPT_VERSION = 1.9.3
++LIBGCRYPT_VERSION = 1.9.4
+ LIBGCRYPT_SOURCE = libgcrypt-$(LIBGCRYPT_VERSION).tar.bz2
+ LIBGCRYPT_LICENSE = LGPL-2.1+
+ LIBGCRYPT_LICENSE_FILES = COPYING.LIB
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
