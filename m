@@ -2,77 +2,89 @@ Return-Path: <SRS0=85Xw=OA=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.0 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.5 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
+	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E495CC433F5
-	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 21:35:10 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C9FE6C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 21:40:44 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 885576120A
-	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 21:35:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 885576120A
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
+	by mail.kernel.org (Postfix) with ESMTPS id 95921611F0
+	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 21:40:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 95921611F0
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5303840678;
-	Fri, 10 Sep 2021 21:35:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3C3EA4157C;
+	Fri, 10 Sep 2021 21:40:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UAps9CnefOpK; Fri, 10 Sep 2021 21:35:09 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id OP196MKvQguE; Fri, 10 Sep 2021 21:40:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 76A52404E1;
-	Fri, 10 Sep 2021 21:35:08 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 67EE31BF38D
- for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 21:34:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8A3EA4157A;
+	Fri, 10 Sep 2021 21:40:42 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id D45C41BF38D
+ for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 21:40:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 565F284ABD
- for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 21:34:59 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C38094157A
+ for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 21:40:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jlujggCO2V6L for <buildroot@lists.busybox.net>;
- Fri, 10 Sep 2021 21:34:58 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A753182EB5
- for <buildroot@buildroot.org>; Fri, 10 Sep 2021 21:34:56 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:d014:579:30ce:61f5])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPSA id F1AEC20039F;
- Fri, 10 Sep 2021 23:34:46 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1631309693;
- bh=iZdue2yjUu76ZQ8gFvPr+iq/QJgRokVnJP3agLZ3fDU=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=Lgolva8W7X+d7SJzqDr9kLnJs9rWLh93Cq/WYhQqO1QoCaOufH90AzH/dNJYAypNI
- zZbS/9kIqyYgFuJ+C94KcroYB4OJ6tVYI4gUnBA8x1Co+EWX/eITh34YA+rSCBo7K9
- 0RBDpNt4WM7JfKGnpf3riGHNbU4bYuXTvdLTV3SQUaFaGFvGA58f+MqzxdrTLIUbXR
- 6GuiIoTG342gbSDpGz+IREhVDzpe4wjnWF3GNPR7cBh5k0p0qAe1A+Fa1OOlUkmuZE
- OMCK7GU2hy5pgWBZgk432WARHuRpcbGBU0/ZedyzrcZrmjpKVzjQebD4NXo61hbdyv
- 9KshNStXbVY7w==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Fri, 10 Sep 2021 23:34:46 +0200
-Date: Fri, 10 Sep 2021 23:34:46 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: =?utf-8?Q?S=C3=A9bastien?= Szymanski <sebastien.szymanski@armadeus.com>
-Message-ID: <20210910213446.GG1053080@scaer>
-References: <20210908145526.3543-1-sebastien.szymanski@armadeus.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id BhDBEWFEEEx0 for <buildroot@lists.busybox.net>;
+ Fri, 10 Sep 2021 21:40:39 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
+ [IPv6:2a00:1450:4864:20::331])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6CA5B41579
+ for <buildroot@buildroot.org>; Fri, 10 Sep 2021 21:40:39 +0000 (UTC)
+Received: by mail-wm1-x331.google.com with SMTP id
+ 196-20020a1c04cd000000b002fa489ffe1fso2395729wme.4
+ for <buildroot@buildroot.org>; Fri, 10 Sep 2021 14:40:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=nLfUb3yJkjb4YE+GdQ1C+2A9qXItrI3aCZAqDh+gDos=;
+ b=llOUlni7/teUIH1EpwH82EfmVfT3TNBiYOpdDsej37NDd12B4HQ0kc05CXcruotzqK
+ Zk0+S6okgzT0PJD/3m1lzHsgNpiIr8/5KXDD8iNOn0tjJV2bo/E+gPi0867G0Sqvy1ea
+ oiORhFndpm4q5PVdNCck9M9009ghrZHjZZc4fcfwwXX9sajstWL1sgJ9D0ChduQwyG/Y
+ neIpasWMtvYuwkz3cjTffgpZR9UxtRXh1BcBiA4fAZbmtIl3w1D9i5pRMclhYq1ZK8AW
+ i3YBUb+ezqOYv27anv36awSzBB2hSZrugWsbAruaHWO1g4VKrpL5+x/BNbMHggW92nIS
+ p8Xg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=nLfUb3yJkjb4YE+GdQ1C+2A9qXItrI3aCZAqDh+gDos=;
+ b=y1KV0fw/IOy+3zL9lZhlKvwyWNWPtbPh90wJUdYVQn6N23+TsXNjOzmSnuZ0p3SPw4
+ b1ngy33m8utgQI4R4rGi5EYPwXmeSQxWU7+J1lr1dSQFgV7s2A91i3HBVthqNQjq2LkC
+ bglKpkMafevou2UPnag678qa3sKSYvbucvcSLkVbeiEMj+K8xExSjtUqZl6452b4THPP
+ YJ9XPAbeOojWP46kPgloYkH2UKRSglcODl+1dieOFIXkcTxS9YcuNS8mUdAcJFF4xVIp
+ QOq8133dNS3lSMC9ZmRlHkMayYRXu6mIdZD656ZIxyAtqnVSCmFbT1iwyiltsvhEckYK
+ s+Ww==
+X-Gm-Message-State: AOAM533TO8L6YtsXeP83LEorMkRglHXK7VTu85uZO95bxSOH9t24wzA+
+ QWan4KHYlLAz6UWGqWur2ChQ283eOII=
+X-Google-Smtp-Source: ABdhPJwEZIRpS9ib1Bl5Z2QsEt6rKt1E2vDjeD67tZNpkKYj/m7RlH+fLt/m7n2/YzH8QhYy7HnlHA==
+X-Received: by 2002:a1c:23cb:: with SMTP id j194mr10301012wmj.1.1631310037419; 
+ Fri, 10 Sep 2021 14:40:37 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-2139-166.w92-167.abo.wanadoo.fr.
+ [92.167.218.166])
+ by smtp.gmail.com with ESMTPSA id b24sm5090266wmj.43.2021.09.10.14.40.36
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 10 Sep 2021 14:40:36 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Fri, 10 Sep 2021 23:40:22 +0200
+Message-Id: <20210910214022.640034-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20210908145526.3543-1-sebastien.szymanski@armadeus.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 1/5] package/bayer2rgb-neon: update URL in
- Config.in file
+Subject: [Buildroot] [PATCH 1/1] package/liblinear: bump to version 2.43
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,41 +97,83 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: Eloi Bail <eloi.bail@savoirfairelinux.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Romain Naour <romain.naour@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-U8OpYmFzdGllbiwgQWxsLAoKT24gMjAyMS0wOS0wOCAxNjo1NSArMDIwMCwgU8OpYmFzdGllbiBT
-enltYW5za2kgc3Bha2UgdGh1c2x5Ogo+IFRoZSBVUkwgcG9pbnRpbmcgdG8gcGh5dGVjLmRlIGlz
-IG9ic29sZXRlIGFuZCBub3QgZXZlbiB1c2VkIGJ5Cj4gQnVpbGRyb290Lgo+IAo+IFNpZ25lZC1v
-ZmYtYnk6IFPDqWJhc3RpZW4gU3p5bWFuc2tpIDxzZWJhc3RpZW4uc3p5bWFuc2tpQGFybWFkZXVz
-LmNvbT4KClNlcmllcyBvZiA1IHBhdGNoZXMgYXBwbGllZCB0byBtYXN0ZXIsIHRoYW5rcy4KClJl
-Z2FyZHMsCllhbm4gRS4gTU9SSU4uCgo+IC0tLQo+ICBwYWNrYWdlL2JheWVyMnJnYi1uZW9uL0Nv
-bmZpZy5pbiB8IDIgKy0KPiAgMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspLCAxIGRlbGV0
-aW9uKC0pCj4gCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvYmF5ZXIycmdiLW5lb24vQ29uZmlnLmlu
-IGIvcGFja2FnZS9iYXllcjJyZ2ItbmVvbi9Db25maWcuaW4KPiBpbmRleCBlZDA2NWMxZWQ3Li44
-ZmQxOGI0ZmE5IDEwMDY0NAo+IC0tLSBhL3BhY2thZ2UvYmF5ZXIycmdiLW5lb24vQ29uZmlnLmlu
-Cj4gKysrIGIvcGFja2FnZS9iYXllcjJyZ2ItbmVvbi9Db25maWcuaW4KPiBAQCAtOSw3ICs5LDcg
-QEAgY29uZmlnIEJSMl9QQUNLQUdFX0JBWUVSMlJHQl9ORU9OCj4gIAkgIHRvIGRlY29kZSByYXcg
-Y2FtZXJhIGJheWVyIHRvIFJHQiB1c2luZwo+ICAJICBORU9OIGhhcmR3YXJlIGFjY2VsZXJhdGlv
-bi4KPiAgCj4gLQkgIGh0dHBzOi8vZ2l0LnBoeXRlYy5kZS9iYXllcjJyZ2ItbmVvbi8KPiArCSAg
-aHR0cHM6Ly9naXRsYWItZXh0LnNpZ21hLWNoZW1uaXR6LmRlL2Vuc2MvYmF5ZXIycmdiCj4gIAo+
-ICBjb21tZW50ICJiYXllcjJyZ2ItbmVvbiBuZWVkcyBhIHRvb2xjaGFpbiB3LyBDKyssIGR5bmFt
-aWMgbGlicmFyeSwgZ2NjID49IDQuOSIKPiAgCWRlcGVuZHMgb24gQlIyX2FybSAmJiBCUjJfQVJN
-X0NQVV9IQVNfTkVPTgo+IC0tIAo+IDIuMzIuMAo+IAo+IF9fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fCj4gYnVpbGRyb290IG1haWxpbmcgbGlzdAo+IGJ1aWxk
-cm9vdEBsaXN0cy5idWlsZHJvb3Qub3JnCj4gaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21h
-aWxtYW4vbGlzdGluZm8vYnVpbGRyb290CgotLSAKLi0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0t
-LS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0tLS4KfCAg
-WWFubiBFLiBNT1JJTiAgfCBSZWFsLVRpbWUgRW1iZWRkZWQgfCAvIlwgQVNDSUkgUklCQk9OIHwg
-RXJpY3MnIGNvbnNwaXJhY3k6IHwKfCArMzMgNjYyIDM3NiAwNTYgfCBTb2Z0d2FyZSAgRGVzaWdu
-ZXIgfCBcIC8gQ0FNUEFJR04gICAgIHwgIF9fXyAgICAgICAgICAgICAgIHwKfCArMzMgNTYxIDA5
-OSA0MjcgYC0tLS0tLS0tLS0tLS4tLS0tLS0tOiAgWCAgQUdBSU5TVCAgICAgIHwgIFxlLyAgVGhl
-cmUgaXMgbm8gIHwKfCBodHRwOi8veW1vcmluLmlzLWEtZ2Vlay5vcmcvIHwgXy8qXF8gfCAvIFwg
-SFRNTCBNQUlMICAgIHwgICB2ICAgY29uc3BpcmFjeS4gIHwKJy0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLV4tLS0tLS0tXi0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0tLS0t
-LScKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRy
-b290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAbGlzdHMuYnVpbGRyb290Lm9yZwpodHRwczovL2xp
-c3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+- Update hash of COPYRIGHT (update in year:
+  https://github.com/cjlin1/liblinear/commit/65115f742683b21ed10582c1664829e0146fcaec
+  https://github.com/cjlin1/liblinear/commit/acf2f9caf166574a23912fe0e57e16187f74f5a6)
+- Refresh second patch
+- Update indentation in hash file (two spaces)
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/liblinear/0002-build-static-lib.patch | 12 +++++++-----
+ package/liblinear/liblinear.hash              |  4 ++--
+ package/liblinear/liblinear.mk                |  2 +-
+ 3 files changed, 10 insertions(+), 8 deletions(-)
+
+diff --git a/package/liblinear/0002-build-static-lib.patch b/package/liblinear/0002-build-static-lib.patch
+index 98657d3c82..f3497b767e 100644
+--- a/package/liblinear/0002-build-static-lib.patch
++++ b/package/liblinear/0002-build-static-lib.patch
+@@ -1,18 +1,20 @@
+ Makefile: add a rule to build a static library
+ 
+ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++[Fabrice: update for 2.43]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ diff -durN liblinear-1.96.orig/Makefile liblinear-1.96/Makefile
+ --- liblinear-1.96.orig/Makefile	2014-11-15 07:50:23.000000000 +0100
+ +++ liblinear-1.96/Makefile	2014-12-14 00:23:00.135893956 +0100
+ @@ -16,6 +16,11 @@
+  	fi; \
+- 	$(CXX) $${SHARED_LIB_FLAG} linear.o tron.o blas/blas.a -o liblinear.so.$(SHVER)
++ 	$(CXX) $${SHARED_LIB_FLAG} linear.o newton.o blas/blas.a -o liblinear.so.$(SHVER)
+  
+ +# Keeping blas/blas.a as a pre-requisite, to ensure all .o files are built
+-+static-lib: linear.o tron.o blas/blas.a
+-+	$(AR) rcv liblinear.a linear.o tron.o blas/*.o
+++static-lib: linear.o newton.o blas/blas.a
+++	$(AR) rcv liblinear.a linear.o newton.o blas/*.o
+ +	$(RANLIB) liblinear.a
+ +
+- train: tron.o linear.o train.c blas/blas.a
+- 	$(CXX) $(CFLAGS) -o train train.c tron.o linear.o $(LIBS)
++ train: newton.o linear.o train.c blas/blas.a
++ 	$(CXX) $(CFLAGS) -o train train.c newton.o linear.o $(LIBS)
+  
+diff --git a/package/liblinear/liblinear.hash b/package/liblinear/liblinear.hash
+index 4430d29989..a714b8bc4e 100644
+--- a/package/liblinear/liblinear.hash
++++ b/package/liblinear/liblinear.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 881c7039c6cf93119c781fb56263de91617b3eca8c3951f2c19a3797de95c6ac liblinear-2.30.tar.gz
+-sha256 c366abf1cb3a003d8c6e6d9c111a23c432db1d001294f88d479b70b60d7c0af2 COPYRIGHT
++sha256  02bad43d745e2796f39a08ac9d117770e71939ef06b1ee7afc6ab7909e304807  liblinear-2.43.tar.gz
++sha256  c5c91211a0edaa4c77e352f6b27a8f9c6768afe27d48176d6094905c534eacb3  COPYRIGHT
+diff --git a/package/liblinear/liblinear.mk b/package/liblinear/liblinear.mk
+index 2d0fd0013c..3b137ed518 100644
+--- a/package/liblinear/liblinear.mk
++++ b/package/liblinear/liblinear.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBLINEAR_VERSION = 2.30
++LIBLINEAR_VERSION = 2.43
+ LIBLINEAR_SITE = http://www.csie.ntu.edu.tw/~cjlin/liblinear
+ LIBLINEAR_LICENSE = BSD-3-Clause
+ LIBLINEAR_LICENSE_FILES = COPYRIGHT
+-- 
+2.33.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@lists.buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
