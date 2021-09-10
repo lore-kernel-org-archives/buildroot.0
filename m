@@ -2,90 +2,56 @@ Return-Path: <SRS0=85Xw=OA=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.5 required=3.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-	DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AE28DC433EF
-	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 18:10:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E3B9C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 18:10:47 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 653D76109F
-	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 18:10:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 653D76109F
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id DC8C7611EE
+	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 18:10:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org DC8C7611EE
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 347BE401D0;
-	Fri, 10 Sep 2021 18:10:07 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BAD23401E3;
+	Fri, 10 Sep 2021 18:10:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4gzuROFLTvyT; Fri, 10 Sep 2021 18:10:06 +0000 (UTC)
+	with ESMTP id oFOc1o-bjsDx; Fri, 10 Sep 2021 18:10:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 64469401E3;
-	Fri, 10 Sep 2021 18:10:05 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A06661BF424
- for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 18:10:04 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B8BF2401F3;
+	Fri, 10 Sep 2021 18:10:44 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 4EE001BF424
+ for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 18:10:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9049540450
- for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 18:10:04 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3DFE16066A
+ for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 18:10:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 78McI13JL1uJ for <buildroot@lists.busybox.net>;
- Fri, 10 Sep 2021 18:10:03 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com
- [IPv6:2a00:1450:4864:20::133])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4DA5F40463
- for <buildroot@buildroot.org>; Fri, 10 Sep 2021 18:10:03 +0000 (UTC)
-Received: by mail-lf1-x133.google.com with SMTP id bq5so5733538lfb.9
- for <buildroot@buildroot.org>; Fri, 10 Sep 2021 11:10:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=U4G000zb9mggFMPS1zaypxcNdTd51j8LJ2vzuUSZBEo=;
- b=cVE5bwo4zsB4wK3OH9r8KfmLqxTGHMiwNrdY3TMqoAqxtphViZIZsyef165cDQNHrn
- GZawbJNfsvK4i/RSsBp52Z7vjVsfk2qIENi6MYvYHGjgu0ph1n1HDpdh8XiQNVQKYfto
- i0BZkDyg5ly+y6UYflCz7SEtN1WRZQvUZ3JVNYY2fs1K2D5MDTNGzK8i6MVe+DDBG/d2
- xMBql82K6Lx3h82UT7mnfsWdRWlJtHfBfCD89OLjdR5SG/usdFxh+dGK87W/+wJYu8DF
- HvKscPwK6frpk/OK7k8RXpiCn3UAda7InC56GhN6JuuCJ/HhR6joVS5mV1Dx8t3tHhBx
- 0mgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=U4G000zb9mggFMPS1zaypxcNdTd51j8LJ2vzuUSZBEo=;
- b=oP022q+yVU6fs1tR74y+ivzcK6p2ZswhGL24Ib3QcGYNYPf72+ClVHnQnC8R5JoUfi
- P+m/X6owaVIjyCbZGKK/RE/gcFDt2qaB8n7HML7AOHizbTjQqgEZlBvc9fZHKfDrNkkt
- +iLUbYp/FGrW0W8DbU/ZTsMpVb+vZsM797xDL+Fn2Cti74gENDO3GUR6gxtJTbWWnV5o
- XqQsPU9ICNtIKPyeWIbsEFbL1HmB22UiXNOSTw901HZV8VPzLDNFdP5fhYkY+Rt4INvo
- m0SIbSkyJNCqbMcggiiF3wZwF/75vsjEPo+ZeIVUxH2d321Hms2voN2MMoXfLj+gdSXi
- 5GZA==
-X-Gm-Message-State: AOAM530En4WpZ4ghndUKNUtcuIo6rb6TUPstGZrRDMWwMEijvJSURhRS
- jidYYlgnpqWeioXd0JuwzKz7wk/xzYPWLGqrcFc=
-X-Google-Smtp-Source: ABdhPJw+HNVY8+i9R33283AiGlF/VmtIiUNXCj6N/kXzmfj02D4ZYhOEqKE+i2aQgwzY9E64mUqGYmeLk8IVCnkc0bk=
-X-Received: by 2002:a05:6512:2206:: with SMTP id
- h6mr4845332lfu.621.1631297401289; 
- Fri, 10 Sep 2021 11:10:01 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210910140925.28138-1-heiko.thiery@gmail.com>
- <20210910140925.28138-3-heiko.thiery@gmail.com>
- <CAOMZO5DZ8881bwgwKw5GwSWzgNPzVMh-oz6KLCLNw-Sb_TMELQ@mail.gmail.com>
- <CAEyMn7bx8OL5wmvHnoUiWzH2oQO1A1PLDO0q1aDko1HetFe-PA@mail.gmail.com>
- <CAOMZO5BReqW9Q4ydYVytNOkMXWnLzwfr6Q=bLTQv2FM0eAd2pQ@mail.gmail.com>
-In-Reply-To: <CAOMZO5BReqW9Q4ydYVytNOkMXWnLzwfr6Q=bLTQv2FM0eAd2pQ@mail.gmail.com>
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Fri, 10 Sep 2021 20:09:50 +0200
-Message-ID: <CAEyMn7brc2iK7gmUUmy39xJbJh78UU==DQs5PN0HtGpp-eVn3g@mail.gmail.com>
-To: Fabio Estevam <festevam@gmail.com>
-Subject: Re: [Buildroot] [PATCH v2 2/3] boot/uboot: copy ATF bl31 binary to
- uboot package dir
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id O4kzuhzksgkc for <buildroot@lists.busybox.net>;
+ Fri, 10 Sep 2021 18:10:41 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id E479F605FF
+ for <buildroot@buildroot.org>; Fri, 10 Sep 2021 18:10:41 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id B6FDF88E52; Fri, 10 Sep 2021 18:09:05 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Fri, 10 Sep 2021 20:09:59 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: c47ebe7aeb70015614ff1d477dc1a71e8c161425
+X-Git-Newrev: 4bdb9111894dd083d531177b3ffdd41451dde7f5
+X-Patchwork-Hint: ignore
+Message-Id: <20210910180905.B6FDF88E52@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gnutls: bump to version 3.7.2
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,43 +64,62 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: Gary Bisson <bisson.gary@gmail.com>,
- Stephane Viau <stephane.viau@oss.nxp.com>,
- Refik Tuzakli <tuzakli.refik@gmail.com>, Michael Walle <michael@walle.cc>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- buildroot <buildroot@buildroot.org>, Xavier Roumegue <xroumegue@gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-Hi Fabio,
+commit: https://git.buildroot.net/buildroot/commit/?id=4bdb9111894dd083d531177b3ffdd41451dde7f5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Am Fr., 10. Sept. 2021 um 18:08 Uhr schrieb Fabio Estevam <festevam@gmail.com>:
->
-> Hi Heiko,
->
-> On Fri, Sep 10, 2021 at 1:03 PM Heiko Thiery <heiko.thiery@gmail.com> wrote:
->
-> > I don't think that's quite right. With the old mainline uboot you
-> > could also build the flash.bin, but that was optional. The make rule
-> > 'flash.bin' was not part of 'make all'. But with the change to binman
-> > the files are now necessary, because 'make all' now also builds the
-> > flash.bin.
->
-> The need for bl31.bin present in the build directory was required even
-> prior to the binman conversion.
->
-> For example, let's take the U-Boot 2021.01 readme for imx8mm evk:
-> https://source.denx.de/u-boot/u-boot/-/blob/v2021.01/doc/board/freescale/imx8mm_evk.rst
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/gnutls/Config.in   | 2 +-
+ package/gnutls/gnutls.hash | 4 ++--
+ package/gnutls/gnutls.mk   | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-ah ok .. I was not aware of that. I just thought this requirement
-comes from building via binman.
-
-Thank you
-
--- 
-Heiko
+diff --git a/package/gnutls/Config.in b/package/gnutls/Config.in
+index cd853d1e74..cd83b375aa 100644
+--- a/package/gnutls/Config.in
++++ b/package/gnutls/Config.in
+@@ -12,7 +12,7 @@ config BR2_PACKAGE_GNUTLS
+ 	  GnuTLS is a secure communications library implementing the SSL
+ 	  and TLS protocols and technologies around them.
+ 
+-	  http://www.gnutls.org
++	  https://www.gnutls.org/
+ 
+ if BR2_PACKAGE_GNUTLS
+ 
+diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
+index 0788a7a6f0..5d4fd1a0dc 100644
+--- a/package/gnutls/gnutls.hash
++++ b/package/gnutls/gnutls.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature
+-# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.7/gnutls-3.7.1.tar.xz.sig
+-sha256  3777d7963eca5e06eb315686163b7b3f5045e2baac5e54e038ace9835e5cac6f  gnutls-3.7.1.tar.xz
++# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.7/gnutls-3.7.2.tar.xz.sig
++sha256  646e6c5a9a185faa4cea796d378a1ba8e1148dbb197ca6605f95986a25af2752  gnutls-3.7.2.tar.xz
+ # Locally calculated
+ sha256  e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b  doc/COPYING
+ sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  doc/COPYING.LESSER
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index 6fc9ffad0b..11c2d81e7d 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ GNUTLS_VERSION_MAJOR = 3.7
+-GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).1
++GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).2
+ GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
+ GNUTLS_SITE = https://www.gnupg.org/ftp/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
+ GNUTLS_LICENSE = LGPL-2.1+ (core library)
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
