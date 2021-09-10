@@ -7,90 +7,92 @@ X-Spam-Status: No, score=-8.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D2449C433F5
-	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 11:12:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 17C61C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 11:13:07 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 4B36E611B0
-	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 11:12:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4B36E611B0
+	by mail.kernel.org (Postfix) with ESMTPS id D140561100
+	for <buildroot@archiver.kernel.org>; Fri, 10 Sep 2021 11:13:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D140561100
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EB91B60B60;
-	Fri, 10 Sep 2021 11:12:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A027060B69;
+	Fri, 10 Sep 2021 11:13:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PBe0Pty29p9K; Fri, 10 Sep 2021 11:12:14 +0000 (UTC)
+	with ESMTP id C4aVGbZXReeC; Fri, 10 Sep 2021 11:13:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5D21D60B59;
-	Fri, 10 Sep 2021 11:12:13 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9F2931BF23C
- for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 11:12:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1887460B45;
+	Fri, 10 Sep 2021 11:13:05 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1744E1BF23C
+ for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 11:13:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8F4DF84A4D
- for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 11:12:11 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 04F95405F4
+ for <buildroot@lists.busybox.net>; Fri, 10 Sep 2021 11:13:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Z43yrx6aNCMg for <buildroot@lists.busybox.net>;
- Fri, 10 Sep 2021 11:12:10 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id U-TwlFKYBPAZ for <buildroot@lists.busybox.net>;
+ Fri, 10 Sep 2021 11:13:03 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com
- [IPv6:2a00:1450:4864:20::52b])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B310B84A4F
- for <buildroot@buildroot.org>; Fri, 10 Sep 2021 11:12:10 +0000 (UTC)
-Received: by mail-ed1-x52b.google.com with SMTP id c22so558132edn.12
- for <buildroot@buildroot.org>; Fri, 10 Sep 2021 04:12:10 -0700 (PDT)
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com
+ [IPv6:2a00:1450:4864:20::635])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 019D2400E4
+ for <buildroot@buildroot.org>; Fri, 10 Sep 2021 11:13:02 +0000 (UTC)
+Received: by mail-ej1-x635.google.com with SMTP id am9so191586ejc.7
+ for <buildroot@buildroot.org>; Fri, 10 Sep 2021 04:13:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=sender:from:to:cc:subject:references:date:in-reply-to:message-id
  :user-agent:mime-version;
- bh=axg76dTq4WNaCCIqgUM8xwduM74G5BaHlUKToDgguQ8=;
- b=SYzXoh63e77cIDRI7WqCuBBPMjPoFkVYJX/fUabE+Bwf4f9QJ97uijocXFVAZ+aPJQ
- DCKJPROTKcPGxvrl385JnhWSo1I48pZDFPK5w8LnA4tx8ypzKGwEcKet7NAUu3wZuIi1
- Mj2oWh+D776efUiJTNIr5gfhtc3SzQNGTBnBeftFZdrtLfJsl63+77fDJfnymAWqD+h7
- HN2JgRJxm2l/YREBnwfQvTwYcmDPjBMmp53kNcvwDIDF+QBDaFG9WkgSk/9RSwBr5xkN
- EH2xvgX0L96mRpPUXpuGgKIZ3ctbbwfZciVRMI9NQ4m+ufuu198n9NydkmNQ8reULxbu
- cFCg==
+ bh=m1h2lSMMctVcO8CJXRNyXqvdrR5hQ4RNWNUprL/oJx4=;
+ b=plRyoelrR7ct5zazSEMHHoj/TVJ1wACJoEEr/TG7ZF7oX3am50rXWFsVmb/G8aP1P+
+ 7n9OLoXlp9iqnry+Usn0oVqfLOvStqfmROCE6Kkk6J2rHWnqwbKa8Li/62Mth9R6zlyl
+ xD2NAzoOMTE8QG4Pgywms561+3lKX8C/dN2r8gB4x3vpx20oEHSO53TpUBRKJyDuMV+/
+ ECqXVh5DqKXOYSa7pKMkJ6pCUZGHzm5UrFQLXiYa+N0u7MjY3oaRp41Yq3mBHagLj2Ae
+ 7GRlrxpfWnwh76hV5xyqwlCh0K8ywPOAvXRdM9ZI+idX+e6KDM7Q0W9bIrEtZjUZrne9
+ 4atg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:sender:from:to:cc:subject:references:date
  :in-reply-to:message-id:user-agent:mime-version;
- bh=axg76dTq4WNaCCIqgUM8xwduM74G5BaHlUKToDgguQ8=;
- b=73HRxkO+B6IX7RbOhTjMYL6LuO+n+W92D7/o9mPwpotqZ3L8ybo8EN+R/ByIwfflD3
- Cq1Vhf+GmjCr/2cSwiVQqCDEx6m3H92m19O1BYQf4hApPYEBDVSn4igzEXpOjlBSeI0l
- //F7GEDgjwiNfsOx99nMdA0/7/u+XYeFFnaa7UujOPJyx7/ePrZjzooVwWrDwm3yCcI8
- ThU7UgwjMXcMxoxevxBRrZ5tA9zGAJPRvsZ+VyO0KO7qbVv+iY1FD7GhBGYFWExLGEcf
- FoY/trxKMlEByZwlFOK/WQNhDuc3mCEFQx1JU1IT5faeLSE1SeX1n9O0jWe9QKPmPB79
- IQAw==
-X-Gm-Message-State: AOAM533o5LgNc6uuck53B4XikTKwIeXRmvxRUgw8vUJdsCnOQjtd3WEx
- q/7HmWKMeky0Tlwf9u1rwCg=
-X-Google-Smtp-Source: ABdhPJzObgCa6dya/C7NgpN8hzF+Apn39lkK5GEfNXooAFzs4R0LA/CWnIfJsPZ+55nV6vR0wnLyVw==
-X-Received: by 2002:aa7:ccd6:: with SMTP id y22mr8361632edt.363.1631272329007; 
- Fri, 10 Sep 2021 04:12:09 -0700 (PDT)
+ bh=m1h2lSMMctVcO8CJXRNyXqvdrR5hQ4RNWNUprL/oJx4=;
+ b=cnAOv8uGJmQ/BlNjtZ4ydA/V9F2oBQ6dp4qmUNPY8H+YnflxQzx30XtUhNEv3iiazw
+ dSAtVy+ExBeh8thiOPR/3LavkXbhIklI3Fp7x6osqFKrxOKQm5EnS7w9cSflVAhjHoNf
+ jBiVLT5vkLcTVKTI2rGcBB3cueA9WQA3az661BLQgncx7eYBOAjtZIs0UwT4NpbQCGgP
+ s+72jRM8sNxltCLiFk97pnd/uyoHqc051sRALNQvjfdlBumqjldJIQ5i9p9eGh/0rULI
+ TbaNp3+L9cgnIZpgPA2ygSmopD3oLVONWxYAnms/WNLcl1GCFBi+x0UoF2Im4x8ipbv0
+ ijJw==
+X-Gm-Message-State: AOAM5328fM0AbVGRl7PcSMeBLlt+SyMWTU5SuHAC3Qd27mAt2vSuLzY0
+ 256euNDdDzcSV4vrMDqNnJG+bGI9Y2Q=
+X-Google-Smtp-Source: ABdhPJw3Ih7s41sw771JmNSJ9F5hYRNEb052GoGnZ3/6Lrg/HTudB4jtVqS7k3tI2bh70dQ2llCcqQ==
+X-Received: by 2002:a17:906:4413:: with SMTP id
+ x19mr8892139ejo.234.1631272381317; 
+ Fri, 10 Sep 2021 04:13:01 -0700 (PDT)
 Received: from dell.be.48ers.dk (d51A5BC31.access.telenet.be. [81.165.188.49])
  by smtp.gmail.com with ESMTPSA id
- bs13sm2287711ejb.98.2021.09.10.04.12.08
+ ks20sm2236152ejb.125.2021.09.10.04.13.00
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 10 Sep 2021 04:12:08 -0700 (PDT)
+ Fri, 10 Sep 2021 04:13:00 -0700 (PDT)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
  (envelope-from <peter@korsgaard.com>)
- id 1mOeRz-0007tE-PJ; Fri, 10 Sep 2021 13:12:07 +0200
+ id 1mOeSq-0007x6-0X; Fri, 10 Sep 2021 13:13:00 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20210901202912.193241-1-fontaine.fabrice@gmail.com>
-Date: Fri, 10 Sep 2021 13:12:07 +0200
-In-Reply-To: <20210901202912.193241-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Wed, 1 Sep 2021 22:29:12 +0200")
-Message-ID: <87v938admg.fsf@dell.be.48ers.dk>
+References: <20210903214525.615577-1-fontaine.fabrice@gmail.com>
+Date: Fri, 10 Sep 2021 13:12:59 +0200
+In-Reply-To: <20210903214525.615577-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Fri, 3 Sep 2021 23:45:25 +0200")
+Message-ID: <87r1dwadl0.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/wlroots: fix uclibc build
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-pyudev: fix build with
+ python 2
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,7 +105,8 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: Adrian Perez de Castro <aperez@igalia.com>, buildroot@buildroot.org
+Cc: Asaf Kahlon <asafka7@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
@@ -111,17 +114,16 @@ Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Fix the following uclibc build failure raised since at least bump to
- > version 0.11.0 in commit 0bc9c89612cc1f41f9a64f6e889f8bcd8a871e30:
+ > Build with python 2 is broken since bump to version 0.22.0 in commit
+ > 0adb141d342707ca9a478f57f187e38d5bb716f2:
 
- > In file included from ../include/wlr/types/wlr_data_device.h:13,
- >                  from ../types/data_device/wlr_drag.c:7:
- > ../include/wlr/types/wlr_seat.h:221:18: error: field 'last_event' has incomplete type
- >   221 |  struct timespec last_event;
- >       |                  ^~~~~~~~~~
+ > error:   File "/usr/lib/python2.7/site-packages/pyudev/_ctypeslib/utils.py", line 54
+ >     lib = cdll.LoadLibrary(f'lib{name}.so')
+ >                                          ^
+ > SyntaxError: invalid syntax
 
  > Fixes:
- >  - http://autobuild.buildroot.org/results/3501ceb4290638b2f6d70aaa4d8ce74feec3a525
+ >  - http://autobuild.buildroot.org/results/8b35ca6910dfd881953968f8d88ac842d57c9262
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
