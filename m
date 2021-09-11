@@ -2,56 +2,56 @@ Return-Path: <SRS0=HL2s=OB=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 646F6C433F5
-	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 12:53:16 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 298A0C433F5
+	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 12:53:28 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id C3F12610C9
-	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 12:53:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C3F12610C9
+	by mail.kernel.org (Postfix) with ESMTPS id 9460C611B0
+	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 12:53:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9460C611B0
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 76BC060757;
-	Sat, 11 Sep 2021 12:53:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5BE5983B10;
+	Sat, 11 Sep 2021 12:53:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BiU-IUW5Zohi; Sat, 11 Sep 2021 12:53:14 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3AYyVVwTmuAG; Sat, 11 Sep 2021 12:53:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BAAB5607BA;
-	Sat, 11 Sep 2021 12:53:13 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9AB1B1BF957
+	by smtp1.osuosl.org (Postfix) with ESMTP id 912BA837C0;
+	Sat, 11 Sep 2021 12:53:25 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 951B31BF31A
  for <buildroot@lists.busybox.net>; Sat, 11 Sep 2021 12:53:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 84EAA607BA
+ by smtp4.osuosl.org (Postfix) with ESMTP id 83AAF40684
  for <buildroot@lists.busybox.net>; Sat, 11 Sep 2021 12:53:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id z-ZwM-HxpePn for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id SN1AmnHABltH for <buildroot@lists.busybox.net>;
  Sat, 11 Sep 2021 12:53:10 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8E15060757
+ by smtp4.osuosl.org (Postfix) with ESMTP id 82D764044C
  for <buildroot@buildroot.org>; Sat, 11 Sep 2021 12:53:10 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 91A7888F3B; Sat, 11 Sep 2021 12:51:32 +0000 (UTC)
+ id 8688688F3A; Sat, 11 Sep 2021 12:51:32 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
 Date: Sat, 11 Sep 2021 14:52:41 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ccda2f4bdc97d2f5a4a1efdb357ece8e5b57e10d
-X-Git-Newrev: 5ec9542415c92584fe0b986feea6326375bd63b6
+X-Git-Oldrev: e83974e2f9f5b7380e78f417b1ef5e0d919d724c
+X-Git-Newrev: ccda2f4bdc97d2f5a4a1efdb357ece8e5b57e10d
 X-Patchwork-Hint: ignore
-Message-Id: <20210911125132.91A7888F3B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/testing/tests/fs: test OCI format
+Message-Id: <20210911125132.8688688F3A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] fs: new OCI filesystem type
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,123 +70,248 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5ec9542415c92584fe0b986feea6326375bd63b6
+commit: https://git.buildroot.net/buildroot/commit/?id=ccda2f4bdc97d2f5a4a1efdb357ece8e5b57e10d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch adds runtime testing of the OCI archive created by the
-sloci scripting. It launches a containerd instance, imports, and
-runs the OCI container.
+Add support to generate OCI (Open Container Initiative) images.
 
-The existing QEMU AARCH64 kernel config was extended to enable common
-options used by a container runtime (cgroup and overlayfs).
+An OCI image consists of a manifest, an image index (optional), a set of
+filesystem layers, and a configuration. The complete specification is
+available in the link below:
 
+https://github.com/opencontainers/image-spec/blob/master/spec.md
+
+The image is generated with the host tool sloci-image, and config
+options can be used to configure image parameters.
+
+By default, the image is generated in a directory called rootfs-oci:
+
+$ cd output/images
+$ ls rootfs-oci/
+blobs  index.json  oci-layout
+
+Optionally, the image can be packed into a tar archive.
+
+The image can be pushed to a registry using containers tools like
+skopeo:
+
+$ skopeo copy --dest-creds <user>:<pass> oci:rootfs-oci:<tag> \
+	docker://<user>/<image>[:tag]
+
+And then we can pull/run the container image with tools like docker:
+
+$ docker run -it <user>/<image>[:tag]
+
+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
 Signed-off-by: Matthew Weber <matthew.weber@collins.com>
-[Arnout: adapt file name which is arm64 now; add to DEVELOPERS]
+[Arnout:
+ - mention in help text that options are space separated;
+ - use GO_GOARCH and GO_GOARM for architecture;
+ - quote all arguments;
+ - don't cd to BINARIES_DIR;
+ - remove ROOTFS_OCI_IMAGE_NAME variable;
+ - remove wildcard from rm.
+]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- DEVELOPERS                           |  1 +
- board/qemu/aarch64-virt/linux.config |  6 ++++
- support/testing/tests/fs/test_oci.py | 57 ++++++++++++++++++++++++++++++++++++
- 3 files changed, 64 insertions(+)
+ fs/Config.in     |  1 +
+ fs/oci/Config.in | 89 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ fs/oci/oci.mk    | 80 ++++++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 170 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 8473f51726..abb54aa41c 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1846,6 +1846,7 @@ F:	package/wpa_supplicant/
- F:	package/wireless_tools/
- F:	package/xen/
- F:	package/xml-security-c/
-+F:	support/testing/tests/fs/test_oci.py
- F:	support/testing/tests/package/br2-external/openjdk/
- F:	support/testing/tests/package/test_openjdk.py
- F:	support/testing/tests/package/test_opkg/
-diff --git a/board/qemu/aarch64-virt/linux.config b/board/qemu/aarch64-virt/linux.config
-index 02e0812ffd..e3a4a92913 100644
---- a/board/qemu/aarch64-virt/linux.config
-+++ b/board/qemu/aarch64-virt/linux.config
-@@ -3,6 +3,11 @@ CONFIG_POSIX_MQUEUE=y
- CONFIG_NO_HZ_IDLE=y
- CONFIG_HIGH_RES_TIMERS=y
- CONFIG_TASKSTATS=y
-+CONFIG_MEMCG=y
-+CONFIG_BLK_CGROUP=y
-+CONFIG_CPUSETS=y
-+CONFIG_CGROUP_DEVICE=y
-+CONFIG_CGROUP_CPUACCT=y
- CONFIG_SCHED_AUTOGROUP=y
- CONFIG_PROFILING=y
- CONFIG_ARCH_VEXPRESS=y
-@@ -62,5 +67,6 @@ CONFIG_ARM_SMMU_V3=y
- CONFIG_EXT4_FS=y
- CONFIG_FUSE_FS=y
- CONFIG_VIRTIO_FS=y
-+CONFIG_OVERLAY_FS=y
- CONFIG_TMPFS=y
- CONFIG_TMPFS_POSIX_ACL=y
-diff --git a/support/testing/tests/fs/test_oci.py b/support/testing/tests/fs/test_oci.py
+diff --git a/fs/Config.in b/fs/Config.in
+index 37a2aa21f8..eee5e26bb2 100644
+--- a/fs/Config.in
++++ b/fs/Config.in
+@@ -11,6 +11,7 @@ source "fs/f2fs/Config.in"
+ source "fs/initramfs/Config.in"
+ source "fs/iso9660/Config.in"
+ source "fs/jffs2/Config.in"
++source "fs/oci/Config.in"
+ source "fs/romfs/Config.in"
+ source "fs/squashfs/Config.in"
+ source "fs/tar/Config.in"
+diff --git a/fs/oci/Config.in b/fs/oci/Config.in
 new file mode 100644
-index 0000000000..347332f30d
+index 0000000000..176785810a
 --- /dev/null
-+++ b/support/testing/tests/fs/test_oci.py
-@@ -0,0 +1,57 @@
-+import os
-+import shutil
-+import infra.basetest
++++ b/fs/oci/Config.in
+@@ -0,0 +1,89 @@
++config BR2_TARGET_ROOTFS_OCI
++	bool "oci image"
++	help
++	  Build an OCI (Open Container Initiative) image.
 +
++	  By default, the image is generated in a directory called
++	  rootfs-oci:
 +
-+class TestOci(infra.basetest.BRTest):
-+    config = \
-+        """
-+        BR2_aarch64=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_LINUX_KERNEL=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.61"
-+        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
-+        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+        BR2_PACKAGE_CGROUPFS_MOUNT=y
-+        BR2_PACKAGE_CONTAINERD=y
-+        BR2_TARGET_ROOTFS_EXT2=y
-+        BR2_TARGET_ROOTFS_EXT2_SIZE="600M"
-+        BR2_TARGET_ROOTFS_OCI=y
-+        BR2_TARGET_ROOTFS_OCI_ENTRYPOINT="df"
-+        BR2_TARGET_ROOTFS_OCI_ENTRYPOINT_ARGS="-h"
-+        BR2_TARGET_ROOTFS_OCI_ARCHIVE=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
++	  $ cd output/images
++	  $ ls rootfs-oci/
++	  blobs  index.json  oci-layout
 +
-+    def login(self):
-+        rootfs = os.path.join(self.builddir, "images", "rootfs.ext2")
-+        kern = os.path.join(self.builddir, "images", "Image")
-+        self.emulator.boot(arch="aarch64",
-+                           kernel=kern,
-+                           kernel_cmdline=["root=/dev/vda", "console=ttyAMA0"],
-+                           options=["-M", "virt",
-+                                    "-cpu", "cortex-a57",
-+                                    "-m", "512M",
-+                                    "-drive", "file={},format=raw,if=virtio".format(rootfs)])
-+        self.emulator.login()
++	  You can push the image to a registry. Example using skopeo:
 +
-+    def place_test_oci(self):
-+        shutil.copy(os.path.join(self.builddir, 'images', 'rootfs-oci-latest-arm64-linux.oci-image.tar'),
-+                    os.path.join(self.builddir, 'target', 'oci.tar'))
-+        # rebuild to make sure oci.tar ends up in rootfs.ext2
-+        self.b.build()
++	  $ skopeo copy --dest-creds <user>:<pass> \
++	           oci:rootfs-oci:<tag> docker://<user>/<image>[:tag]
 +
-+    def test_run(self):
-+        self.place_test_oci()
-+        self.login()
++	  And pull/run it with docker:
 +
-+        cmd = "containerd &"
-+        self.assertRunOk(cmd)
++	  $ docker run -it <user>/<image>[:tag]
 +
-+        cmd = "ctr image import --base-name buildroot-test /oci.tar"
-+        self.assertRunOk(cmd, timeout=120)
++if BR2_TARGET_ROOTFS_OCI
 +
-+        cmd = "ctr run --rm --tty buildroot-test:latest v1"
-+        self.assertRunOk(cmd, timeout=120)
++config BR2_TARGET_ROOTFS_OCI_AUTHOR
++	string "author name and/or email address"
++	default "Buildroot"
++	help
++	  Name and/or email address of the person which created the
++	  image.
++
++config BR2_TARGET_ROOTFS_OCI_TAG
++	string "image tag"
++	default "latest"
++	help
++	  Tag to be used in the container image. If empty, 'latest' will
++	  be used by default.
++
++config BR2_TARGET_ROOTFS_OCI_ENTRYPOINT
++	string "entrypoint"
++	default "sh"
++	help
++	  Command to execute when the container starts.
++
++config BR2_TARGET_ROOTFS_OCI_ENTRYPOINT_ARGS
++	string "entrypoint arguments"
++	help
++	  Default arguments to the entrypoint of the container.
++
++config BR2_TARGET_ROOTFS_OCI_WORKDIR
++	string "working directory"
++	help
++	  Working directory of the entrypoint process in the
++	  container.
++
++config BR2_TARGET_ROOTFS_OCI_UID
++	string "username or UID"
++	default "0"
++	help
++	  The username or UID of user the process run as.
++
++config BR2_TARGET_ROOTFS_OCI_ENV_VARS
++	string "environment variables"
++	help
++	  Default environment variables for the container.
++	  Space-separated list of variable=value assignments.
++
++config BR2_TARGET_ROOTFS_OCI_PORTS
++	string "ports"
++	help
++	  Default set of ports to expose from a container running
++	  this image as a space-separted list of ports in the following
++	  format:
++
++	  <port>/tcp, <port>/udp, <port> (same as <port>/tcp).
++
++config BR2_TARGET_ROOTFS_OCI_LABELS
++	string "labels"
++	help
++	  Metadata in the format KEY=VALUE for the container compliant
++	  with OCI annotation rules. If KEY starts with a dot, it will
++	  be prefixed with "org.opencontainers.image"
++	  (e.g. .url -> org.opencontainers.image.url).
++
++config BR2_TARGET_ROOTFS_OCI_ARCHIVE
++	bool "pack oci image into a tar archive"
++	help
++	  Select whether the image should be packed into a TAR archive.
++
++endif
+diff --git a/fs/oci/oci.mk b/fs/oci/oci.mk
+new file mode 100644
+index 0000000000..aa81920d36
+--- /dev/null
++++ b/fs/oci/oci.mk
+@@ -0,0 +1,80 @@
++################################################################################
++#
++# Build the oci image
++#
++################################################################################
++
++ROOTFS_OCI_DEPENDENCIES = host-sloci-image
++
++# architecture - take it from Go
++OCI_SLOCI_IMAGE_OPTS = --arch $(GO_GOARCH)
++
++# architecture variant (typically used only for arm)
++OCI_SLOCI_IMAGE_OPTS += $(and $(GO_GOARM),--arch-variant v$(GO_GOARM))
++
++# entrypoint
++OCI_ENTRYPOINT = $(call qstrip,$(BR2_TARGET_ROOTFS_OCI_ENTRYPOINT))
++ifneq ($(OCI_ENTRYPOINT),)
++OCI_SLOCI_IMAGE_OPTS += --entrypoint "$(OCI_ENTRYPOINT)"
++endif
++
++# entrypoint arguments
++OCI_ENTRYPOINT_ARGS = $(call qstrip,$(BR2_TARGET_ROOTFS_OCI_ENTRYPOINT_ARGS))
++ifneq ($(OCI_ENTRYPOINT_ARGS),)
++OCI_SLOCI_IMAGE_OPTS += --cmd "$(OCI_ENTRYPOINT_ARGS)"
++endif
++
++# author
++OCI_AUTHOR = $(call qstrip,$(BR2_TARGET_ROOTFS_OCI_AUTHOR))
++ifneq ($(OCI_AUTHOR),)
++OCI_SLOCI_IMAGE_OPTS += --author "$(OCI_AUTHOR)"
++endif
++
++# username or UID
++OCI_UID = $(call qstrip,$(BR2_TARGET_ROOTFS_OCI_UID))
++ifneq ($(OCI_UID),)
++OCI_SLOCI_IMAGE_OPTS += --user "$(OCI_UID)"
++endif
++
++# labels
++OCI_LABELS = $(call qstrip,$(BR2_TARGET_ROOTFS_OCI_LABELS))
++ifneq ($(OCI_LABELS),)
++OCI_SLOCI_IMAGE_OPTS += \
++	$(foreach label,$(OCI_LABELS),--label "$(label)")
++endif
++
++# environment variables
++OCI_ENV_VARS = $(call qstrip,$(BR2_TARGET_ROOTFS_OCI_ENV_VARS))
++ifneq ($(OCI_ENV_VARS),)
++OCI_SLOCI_IMAGE_OPTS += \
++	$(foreach var,$(OCI_ENV_VARS),--env "$(var)")
++endif
++
++# working directory
++OCI_WORKDIR = $(call qstrip,$(BR2_TARGET_ROOTFS_OCI_WORKDIR))
++ifneq ($(OCI_WORKDIR),)
++OCI_SLOCI_IMAGE_OPTS += --working-dir "$(OCI_WORKDIR)"
++endif
++
++# ports
++OCI_PORTS = $(call qstrip,$(BR2_TARGET_ROOTFS_OCI_PORTS))
++ifneq ($(OCI_PORTS),)
++OCI_SLOCI_IMAGE_OPTS += \
++	$(foreach port,$(OCI_PORTS),--port "$(port)")
++endif
++
++# tag
++OCI_TAG = $(or $(call qstrip,$(BR2_TARGET_ROOTFS_OCI_TAG)),latest)
++
++# enable tar archive
++ifeq ($(BR2_TARGET_ROOTFS_OCI_ARCHIVE),y)
++OCI_SLOCI_IMAGE_OPTS += --tar
++endif
++
++define ROOTFS_OCI_CMD
++	rm -rf $(BINARIES_DIR)/rootfs-oci
++	$(HOST_DIR)/bin/sloci-image $(OCI_SLOCI_IMAGE_OPTS) $(TARGET_DIR) \
++		$(BINARIES_DIR)/rootfs-oci:$(OCI_TAG)
++endef
++
++$(eval $(rootfs))
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
