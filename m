@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B6978C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 20:59:00 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EB4DBC433F5
+	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 20:59:10 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 768A961100
-	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 20:59:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 768A961100
+	by mail.kernel.org (Postfix) with ESMTPS id 9741F61100
+	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 20:59:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9741F61100
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3D54C404AD;
-	Sat, 11 Sep 2021 20:59:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6EA2280C28;
+	Sat, 11 Sep 2021 20:59:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id eMIwaB1TyLHj; Sat, 11 Sep 2021 20:58:58 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id DgUwmmQGBE8v; Sat, 11 Sep 2021 20:59:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 74FB14049E;
-	Sat, 11 Sep 2021 20:58:57 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C94C01BF2CB
+	by smtp1.osuosl.org (Postfix) with ESMTP id C53F080BDB;
+	Sat, 11 Sep 2021 20:59:08 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id CC7E91BF958
  for <buildroot@lists.busybox.net>; Sat, 11 Sep 2021 20:58:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B68FF402A4
+ by smtp3.osuosl.org (Postfix) with ESMTP id C8B06607F3
  for <buildroot@lists.busybox.net>; Sat, 11 Sep 2021 20:58:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NYfvSCB8jQ2q for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id E7OGF5LHogKc for <buildroot@lists.busybox.net>;
  Sat, 11 Sep 2021 20:58:47 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D44534029A
+ by smtp3.osuosl.org (Postfix) with ESMTP id CAEE3605D4
  for <buildroot@buildroot.org>; Sat, 11 Sep 2021 20:58:47 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 1B6F38A258; Sat, 11 Sep 2021 20:57:09 +0000 (UTC)
+ id 10A328A257; Sat, 11 Sep 2021 20:57:09 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sat, 11 Sep 2021 22:53:53 +0200
+Date: Sat, 11 Sep 2021 22:52:14 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: eec9cfb310a824c56f87c390235933bd5eb50de7
-X-Git-Newrev: 291eb252ac3d64365bf08992bb7eb38b3cfb8f8f
+X-Git-Oldrev: c09f126f570355b8ec134724b453300a4811339c
+X-Git-Newrev: eec9cfb310a824c56f87c390235933bd5eb50de7
 X-Patchwork-Hint: ignore
-Message-Id: <20210911205709.1B6F38A258@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] boot/uboot: copy ATF bl31 binary to uboot
- package dir
+Message-Id: <20210911205709.10A328A257@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/freescale-imx/firmware-imx: copy
+ all (lp)ddr files unconditionaly
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,38 +71,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=291eb252ac3d64365bf08992bb7eb38b3cfb8f8f
+commit: https://git.buildroot.net/buildroot/commit/?id=eec9cfb310a824c56f87c390235933bd5eb50de7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-If the ATF binary is used by U-Boot, the file is expected to be in the
-toplevel directory.
+In mainline u-boot more and more imx8 boards are switched to binman
+to create the imx specific image (flash.bin). To support this the
+(lp)ddr firmware training files are needed. For this to work all files
+should be made available to the U-Boot build.
 
 Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+Reviewed-by: Gary Bisson <gary.bisson@boundarydevices.com>
 Reviewed-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- boot/uboot/uboot.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ package/freescale-imx/firmware-imx/firmware-imx.mk | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index 4f3c9b7c3a..1a840d9cc1 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -162,8 +162,16 @@ ifeq ($(BR2_TARGET_UBOOT_NEEDS_ATF_BL31),y)
- UBOOT_DEPENDENCIES += arm-trusted-firmware
- ifeq ($(BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF),y)
- UBOOT_MAKE_OPTS += BL31=$(BINARIES_DIR)/bl31.elf
-+define UBOOT_COPY_ATF_FIRMWARE
-+	cp $(BINARIES_DIR)/bl31.elf $(@D)/
-+endef
-+UBOOT_PRE_BUILD_HOOKS += UBOOT_COPY_ATF_FIRMWARE
- else
- UBOOT_MAKE_OPTS += BL31=$(BINARIES_DIR)/bl31.bin
-+define UBOOT_COPY_ATF_FIRMWARE
-+	cp $(BINARIES_DIR)/bl31.bin $(@D)/
-+endef
-+UBOOT_PRE_BUILD_HOOKS += UBOOT_COPY_ATF_FIRMWARE
+diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
+index 1076cf85f1..29241342be 100644
+--- a/package/freescale-imx/firmware-imx/firmware-imx.mk
++++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
+@@ -51,6 +51,11 @@ define FIRMWARE_IMX_INSTALL_IMAGE_DDR_FW
+ 		$(FIRMWARE_IMX_DDRFW_DIR)/lpddr4_pmu_train_2d_fw.bin > \
+ 		$(BINARIES_DIR)/lpddr4_pmu_train_fw.bin
+ 	ln -sf $(BINARIES_DIR)/lpddr4_pmu_train_fw.bin $(BINARIES_DIR)/ddr_fw.bin
++
++	# U-Boot supports creation of the combined flash.bin image. To make
++	# sure that U-Boot can access all available files copy them to
++	# the binary dir.
++	cp $(FIRMWARE_IMX_DDRFW_DIR)/lpddr4*.bin $(BINARIES_DIR)/
+ endef
  endif
+ 
+@@ -69,6 +74,11 @@ define FIRMWARE_IMX_INSTALL_IMAGE_DDR_FW
+ 		$(FIRMWARE_IMX_DDRFW_DIR)/ddr4_2d_201810_fw.bin > \
+ 		$(BINARIES_DIR)/ddr4_201810_fw.bin
+ 	ln -sf $(BINARIES_DIR)/ddr4_201810_fw.bin $(BINARIES_DIR)/ddr_fw.bin
++
++	# U-Boot supports creation of the combined flash.bin image. To make
++	# sure that U-Boot can access all available files copy them to
++	# the binary dir.
++	cp $(FIRMWARE_IMX_DDRFW_DIR)/ddr4*.bin $(BINARIES_DIR)/
+ endef
  endif
  
 _______________________________________________
