@@ -2,56 +2,95 @@ Return-Path: <SRS0=HL2s=OB=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 22164C433F5
-	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 16:21:14 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E0581C4332F
+	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 16:25:17 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D3E6F6023B
-	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 16:21:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D3E6F6023B
+	by mail.kernel.org (Postfix) with ESMTPS id B321961214
+	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 16:25:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B321961214
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9CE8E61BDC;
-	Sat, 11 Sep 2021 16:21:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7FB4B82B84;
+	Sat, 11 Sep 2021 16:25:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SIzqPxwD7N7p; Sat, 11 Sep 2021 16:21:12 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id YsOIrvjBRSlv; Sat, 11 Sep 2021 16:25:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B8B3361BD3;
-	Sat, 11 Sep 2021 16:21:11 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id DFAD31BF304
- for <buildroot@lists.busybox.net>; Sat, 11 Sep 2021 16:20:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F0C2182786;
+	Sat, 11 Sep 2021 16:25:15 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 7BCF41BF304
+ for <buildroot@lists.busybox.net>; Sat, 11 Sep 2021 16:25:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CD52061B9A
- for <buildroot@lists.busybox.net>; Sat, 11 Sep 2021 16:20:40 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7908D82786
+ for <buildroot@lists.busybox.net>; Sat, 11 Sep 2021 16:25:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id X7tmZk9L_tNa for <buildroot@lists.busybox.net>;
- Sat, 11 Sep 2021 16:20:39 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id C379160B49
- for <buildroot@buildroot.org>; Sat, 11 Sep 2021 16:20:39 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 723AD890B6; Sat, 11 Sep 2021 16:19:01 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-To: buildroot@buildroot.org
-Date: Sat, 11 Sep 2021 18:16:16 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f20589cbc7ad83e4e8017025a9ca4fa9efe8161e
-X-Git-Newrev: 35af76784f0720b0981bb0982f9a7e20b0ef2be1
-X-Patchwork-Hint: ignore
-Message-Id: <20210911161901.723AD890B6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gcc: bump version 11.x to 11.2.0
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id feZLfrCiEjIA for <buildroot@lists.busybox.net>;
+ Sat, 11 Sep 2021 16:25:13 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com
+ [IPv6:2a00:1450:4864:20::52d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 85A2F82778
+ for <buildroot@buildroot.org>; Sat, 11 Sep 2021 16:25:13 +0000 (UTC)
+Received: by mail-ed1-x52d.google.com with SMTP id j13so7215225edv.13
+ for <buildroot@buildroot.org>; Sat, 11 Sep 2021 09:25:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=subject:to:references:from:organization:message-id:date:user-agent
+ :mime-version:in-reply-to:content-language:content-transfer-encoding;
+ bh=6U1GFR08mdu3bdEO/iutDnRCQddWJVJL+nsXU+DzMlc=;
+ b=LjhNhjbBISw9OaLm6kG+gK6sjMq6lVMSTzdKL2u6JsKCGwFJV6Rl/5UPjjuPGHlvqb
+ yfxPkYvoSSNjVUML+bFZvX0CGtZPCcHK2AaLk+ETsscPf6OJW6SX5s8OskxOKEpVjzWA
+ bjzwuny3k2YoJ3YnK0msD9QXuxD98MvDqvPMon2Dh3itzr7bKGUNW72Se9UjiIYlK+tE
+ noQF1o58JFI6sHAgoF4cM8FvmHy6Ipj4Xh0KV3FnVec66pbbZvo5vrAKJlXjTjiegQ5u
+ 1FQpKoIvj70K2nOke6U7fJN4A/HEVy03UhtDIIqNHgFYTQDSIUIJETiYAOPPbcKiYT5a
+ hsVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:subject:to:references:from:organization
+ :message-id:date:user-agent:mime-version:in-reply-to
+ :content-language:content-transfer-encoding;
+ bh=6U1GFR08mdu3bdEO/iutDnRCQddWJVJL+nsXU+DzMlc=;
+ b=RSjMcB3UXhtIpVbtIlA3UmKmXdXjOO9U9pFx280agOIbUQ0/HkTnZBp0kuRo5FYaxv
+ jw2Y6wk4y0CiXHT4qiDqzXaAUdpOQPAWdEdadaqSnmAxqB6fY4u+3byTWkWv8ik5mmmX
+ LOaYZpxeJeguYfpmLyYIfMVDNcYiyZIMPzlW0qSKsA0HBQn4ut3ue4+33KxWDmkBKDb+
+ BlAvF0RRMlHSjfQqdONIoVhVhz7ML+3hHBIZfypK0SK9V8BFfbpQsNZ7oreO0YFGI6rW
+ KBbGx7mtJdlSqrGgUM4SkjM81wwgdJBTgWJo6Epbr3i5KLAs9zHWViwuCpEXNMcZFpKQ
+ 4C6Q==
+X-Gm-Message-State: AOAM532zwWHVMWGLO8fZg9fcEeWK/ZsAVT7gIONqmvoJj4fzafWUJVZp
+ qHH6wU7XvzIoOFg4IdvSkIZpbxA5hqP5Wg==
+X-Google-Smtp-Source: ABdhPJzc38k9VbnsZJUF6/mk0FaH37Al/rUkqvnIXFOm7zfooP9/Rk7vIMO7b8HmQxweGgEuKzeVmw==
+X-Received: by 2002:aa7:c80a:: with SMTP id a10mr4022280edt.174.1631377511858; 
+ Sat, 11 Sep 2021 09:25:11 -0700 (PDT)
+Received: from ?IPv6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id bi3sm1130498edb.91.2021.09.11.09.25.10
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sat, 11 Sep 2021 09:25:11 -0700 (PDT)
+To: Romain Naour <romain.naour@gmail.com>, buildroot@buildroot.org
+References: <20210831192729.407412-1-romain.naour@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+Message-ID: <0cb31cf4-8d61-d3cf-9f11-3319e5f51acd@mind.be>
+Date: Sat, 11 Sep 2021 18:25:10 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
+MIME-Version: 1.0
+In-Reply-To: <20210831192729.407412-1-romain.naour@gmail.com>
+Content-Language: en-GB
+Subject: Re: [Buildroot] [for-next 1/3] toolchain/toolchain-external: update
+ Arm ARM toolchain 10.3-2021.07
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,194 +103,46 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=35af76784f0720b0981bb0982f9a7e20b0ef2be1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-patch 0001: already applied upstream
 
-Signed-off-by: Michael Fischer <mf@go-sys.de>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- .../0001-Remove-cyclades-from-libsanitizer.patch   | 125 ---------------------
- ...-Add-mcmodel-option-to-handle-large-GOTs.patch} |   0
- ...-Use-cmodel-large-when-building-crtstuff.patch} |   0
- package/gcc/Config.in.host                         |   2 +-
- package/gcc/gcc.hash                               |   4 +-
- 5 files changed, 3 insertions(+), 128 deletions(-)
+On 31/08/2021 21:27, Romain Naour wrote:
+> Update to gcc 10.3, gdb 10.2, binutils 2.36.1, glibc 2.33.
+> 
+> Remove BR2_TOOLCHAIN_HAS_NATIVE_RPC since the support for obsolete
+> RPC was finally dropped in glibc in 2.32 (2020-08-04).
+> 
+> See "Release Note":
+> https://developer.arm.com/open-source/gnu-toolchain/gnu-a/downloads#
+> 
+> Tested with qemu_arm_vexpress_defconfig.
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
 
-diff --git a/package/gcc/11.1.0/0001-Remove-cyclades-from-libsanitizer.patch b/package/gcc/11.1.0/0001-Remove-cyclades-from-libsanitizer.patch
-deleted file mode 100644
-index ee6e349a6c..0000000000
---- a/package/gcc/11.1.0/0001-Remove-cyclades-from-libsanitizer.patch
-+++ /dev/null
-@@ -1,125 +0,0 @@
--From 745dae5923aba02982563481d75a21595df22ff8 Mon Sep 17 00:00:00 2001
--From: Tamar Christina <tamar.christina@arm.com>
--Date: Fri, 21 May 2021 10:30:59 +0100
--Subject: [PATCH] libsanitizer: Remove cyclades from libsanitizer
--
--The Linux kernel has removed the interface to cyclades from
--the latest kernel headers[1] due to them being orphaned for the
--past 13 years.
--
--libsanitizer uses this header when compiling against glibc, but
--glibcs itself doesn't seem to have any references to cyclades.
--
--Further more it seems that the driver is broken in the kernel and
--the firmware doesn't seem to be available anymore.
--
--As such since this is breaking the build of libsanitizer (and so the
--GCC bootstrap[2]) I propose to remove this.
--
--[1] https://lkml.org/lkml/2021/3/2/153
--[2] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=100379
--
--(cherry picked from commit f7c5351552387bd43f6ca3631016d7f0dfe0f135)
--
--libsanitizer/ChangeLog:
--
--	PR sanitizer/100379
--	* sanitizer_common/sanitizer_common_interceptors_ioctl.inc: Cherry-pick
--	llvm-project revision f7c5351552387bd43f6ca3631016d7f0dfe0f135.
--	* sanitizer_common/sanitizer_platform_limits_posix.cpp: Likewise.
--	* sanitizer_common/sanitizer_platform_limits_posix.h: Likewise.
--
--Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
-----
-- .../sanitizer_common_interceptors_ioctl.inc           |  9 ---------
-- .../sanitizer_platform_limits_posix.cpp               | 11 -----------
-- .../sanitizer_platform_limits_posix.h                 | 10 ----------
-- 3 files changed, 30 deletions(-)
--
--diff --git a/libsanitizer/sanitizer_common/sanitizer_common_interceptors_ioctl.inc b/libsanitizer/sanitizer_common/sanitizer_common_interceptors_ioctl.inc
--index 7f181258eab..b7da6598755 100644
----- a/libsanitizer/sanitizer_common/sanitizer_common_interceptors_ioctl.inc
--+++ b/libsanitizer/sanitizer_common/sanitizer_common_interceptors_ioctl.inc
--@@ -370,15 +370,6 @@ static void ioctl_table_fill() {
-- 
-- #if SANITIZER_GLIBC
--   // _(SIOCDEVPLIP, WRITE, struct_ifreq_sz); // the same as EQL_ENSLAVE
---  _(CYGETDEFTHRESH, WRITE, sizeof(int));
---  _(CYGETDEFTIMEOUT, WRITE, sizeof(int));
---  _(CYGETMON, WRITE, struct_cyclades_monitor_sz);
---  _(CYGETTHRESH, WRITE, sizeof(int));
---  _(CYGETTIMEOUT, WRITE, sizeof(int));
---  _(CYSETDEFTHRESH, NONE, 0);
---  _(CYSETDEFTIMEOUT, NONE, 0);
---  _(CYSETTHRESH, NONE, 0);
---  _(CYSETTIMEOUT, NONE, 0);
--   _(EQL_EMANCIPATE, WRITE, struct_ifreq_sz);
--   _(EQL_ENSLAVE, WRITE, struct_ifreq_sz);
--   _(EQL_GETMASTRCFG, WRITE, struct_ifreq_sz);
--diff --git a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp
--index 35a690cba5c..6e5c330b98e 100644
----- a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp
--+++ b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp
--@@ -143,7 +143,6 @@ typedef struct user_fpregs elf_fpregset_t;
-- # include <sys/procfs.h>
-- #endif
-- #include <sys/user.h>
---#include <linux/cyclades.h>
-- #include <linux/if_eql.h>
-- #include <linux/if_plip.h>
-- #include <linux/lp.h>
--@@ -460,7 +459,6 @@ unsigned struct_ElfW_Phdr_sz = sizeof(Elf_Phdr);
-- 
-- #if SANITIZER_GLIBC
--   unsigned struct_ax25_parms_struct_sz = sizeof(struct ax25_parms_struct);
---  unsigned struct_cyclades_monitor_sz = sizeof(struct cyclades_monitor);
-- #if EV_VERSION > (0x010000)
--   unsigned struct_input_keymap_entry_sz = sizeof(struct input_keymap_entry);
-- #else
--@@ -824,15 +822,6 @@ unsigned struct_ElfW_Phdr_sz = sizeof(Elf_Phdr);
-- #endif // SANITIZER_LINUX
-- 
-- #if SANITIZER_LINUX && !SANITIZER_ANDROID
---  unsigned IOCTL_CYGETDEFTHRESH = CYGETDEFTHRESH;
---  unsigned IOCTL_CYGETDEFTIMEOUT = CYGETDEFTIMEOUT;
---  unsigned IOCTL_CYGETMON = CYGETMON;
---  unsigned IOCTL_CYGETTHRESH = CYGETTHRESH;
---  unsigned IOCTL_CYGETTIMEOUT = CYGETTIMEOUT;
---  unsigned IOCTL_CYSETDEFTHRESH = CYSETDEFTHRESH;
---  unsigned IOCTL_CYSETDEFTIMEOUT = CYSETDEFTIMEOUT;
---  unsigned IOCTL_CYSETTHRESH = CYSETTHRESH;
---  unsigned IOCTL_CYSETTIMEOUT = CYSETTIMEOUT;
--   unsigned IOCTL_EQL_EMANCIPATE = EQL_EMANCIPATE;
--   unsigned IOCTL_EQL_ENSLAVE = EQL_ENSLAVE;
--   unsigned IOCTL_EQL_GETMASTRCFG = EQL_GETMASTRCFG;
--diff --git a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.h b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.h
--index ad358eef8b7..cba41ba5494 100644
----- a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.h
--+++ b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.h
--@@ -983,7 +983,6 @@ extern unsigned struct_vt_mode_sz;
-- 
-- #if SANITIZER_LINUX && !SANITIZER_ANDROID
-- extern unsigned struct_ax25_parms_struct_sz;
---extern unsigned struct_cyclades_monitor_sz;
-- extern unsigned struct_input_keymap_entry_sz;
-- extern unsigned struct_ipx_config_data_sz;
-- extern unsigned struct_kbdiacrs_sz;
--@@ -1328,15 +1327,6 @@ extern unsigned IOCTL_VT_WAITACTIVE;
-- #endif  // SANITIZER_LINUX
-- 
-- #if SANITIZER_LINUX && !SANITIZER_ANDROID
---extern unsigned IOCTL_CYGETDEFTHRESH;
---extern unsigned IOCTL_CYGETDEFTIMEOUT;
---extern unsigned IOCTL_CYGETMON;
---extern unsigned IOCTL_CYGETTHRESH;
---extern unsigned IOCTL_CYGETTIMEOUT;
---extern unsigned IOCTL_CYSETDEFTHRESH;
---extern unsigned IOCTL_CYSETDEFTIMEOUT;
---extern unsigned IOCTL_CYSETTHRESH;
---extern unsigned IOCTL_CYSETTIMEOUT;
-- extern unsigned IOCTL_EQL_EMANCIPATE;
-- extern unsigned IOCTL_EQL_ENSLAVE;
-- extern unsigned IOCTL_EQL_GETMASTRCFG;
---- 
--2.27.0
--
-diff --git a/package/gcc/11.1.0/0002-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch b/package/gcc/11.2.0/0001-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch
-similarity index 100%
-rename from package/gcc/11.1.0/0002-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch
-rename to package/gcc/11.2.0/0001-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch
-diff --git a/package/gcc/11.1.0/0003-or1k-Use-cmodel-large-when-building-crtstuff.patch b/package/gcc/11.2.0/0002-or1k-Use-cmodel-large-when-building-crtstuff.patch
-similarity index 100%
-rename from package/gcc/11.1.0/0003-or1k-Use-cmodel-large-when-building-crtstuff.patch
-rename to package/gcc/11.2.0/0002-or1k-Use-cmodel-large-when-building-crtstuff.patch
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index ae2051d2aa..2b7f88154e 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -92,7 +92,7 @@ config BR2_GCC_VERSION
- 	default "8.4.0"     if BR2_GCC_VERSION_POWERPC_SPE
- 	default "9.4.0"     if BR2_GCC_VERSION_9_X
- 	default "10.3.0"    if BR2_GCC_VERSION_10_X
--	default "11.1.0"    if BR2_GCC_VERSION_11_X
-+	default "11.2.0"    if BR2_GCC_VERSION_11_X
- 	default "arc-2020.09-release" if BR2_GCC_VERSION_ARC
- 	default "48152afb96c59733d5bc79e3399bb7b3d4b44266" if BR2_GCC_VERSION_CSKY
- 
-diff --git a/package/gcc/gcc.hash b/package/gcc/gcc.hash
-index 0f7ff9dbf7..b37307ebe3 100644
---- a/package/gcc/gcc.hash
-+++ b/package/gcc/gcc.hash
-@@ -4,8 +4,8 @@ sha512  6de904f552a02de33b11ef52312bb664396efd7e1ce3bbe37bfad5ef617f133095b3767b
- sha512  dfd3500bf21784b8351a522d53463cf362ede66b0bc302edf350bb44e94418497a8b4b797b6af8ca9b2eeb746b3b115d9c3698381b989546e9151b4496415624  gcc-9.4.0.tar.xz
- # From ftp://gcc.gnu.org/pub/gcc/releases/gcc-10.3.0/sha512.sum
- sha512  2b2dd7453d48a398c29eaebd1422b70341001b8c90a62aee51e83344e7fdd8a8e45f82a4a9165bd7edc76dada912c932f4b6632c5636760fec4c5d7e402b3f86  gcc-10.3.0.tar.xz
--# From ftp://gcc.gnu.org/pub/gcc/releases/gcc-11.1.0/sha512.sum
--sha512  fd6bba0f67ff48069d03073d1a9b5e896383b1cfc9dde008e868e60a9ec5014a837d56af0ecbf467b3fb9b37ec74a676e819a18b44393a0a3c4280175b5d7ad8  gcc-11.1.0.tar.xz
-+# From ftp://gcc.gnu.org/pub/gcc/releases/gcc-11.2.0/sha512.sum
-+sha512  d53a0a966230895c54f01aea38696f818817b505f1e2bfa65e508753fcd01b2aedb4a61434f41f3a2ddbbd9f41384b96153c684ded3f0fa97c82758d9de5c7cf  gcc-11.2.0.tar.xz
- 
- # Locally calculated (fetched from Github)
- sha512  b0853e2b1c5998044392023fa653e399e74118c46e616504ac59e1a2cf27620f94434767ce06b6cf4ca3dfb57f81d6eda92752befaf095ea5e564a9181b4659c  gcc-arc-2020.09-release.tar.gz
+ All three applied to master, thanks.
+
+[snip]
+> -TOOLCHAIN_EXTERNAL_ARM_ARM_VERSION = 2020.11
+> -TOOLCHAIN_EXTERNAL_ARM_ARM_SITE = https://developer.arm.com/-/media/Files/downloads/gnu-a/10.2-$(TOOLCHAIN_EXTERNAL_ARM_ARM_VERSION)/binrel
+> +TOOLCHAIN_EXTERNAL_ARM_ARM_VERSION = 2021.07
+> +TOOLCHAIN_EXTERNAL_ARM_ARM_SITE = https://developer.arm.com/-/media/Files/downloads/gnu-a/10.3-$(TOOLCHAIN_EXTERNAL_ARM_ARM_VERSION)/binrel
+
+ I wonder, why don't we set version to 10.3-2021.07? Is release-monitoring or
+CPE tracking this package?
+
+ Regards,
+ Arnout
+
+>  
+> -TOOLCHAIN_EXTERNAL_ARM_ARM_SOURCE = gcc-arm-10.2-$(TOOLCHAIN_EXTERNAL_ARM_ARM_VERSION)-x86_64-arm-none-linux-gnueabihf.tar.xz
+> +TOOLCHAIN_EXTERNAL_ARM_ARM_SOURCE = gcc-arm-10.3-$(TOOLCHAIN_EXTERNAL_ARM_ARM_VERSION)-x86_64-arm-none-linux-gnueabihf.tar.xz
+>  
+>  $(eval $(toolchain-external-package))
+> 
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
