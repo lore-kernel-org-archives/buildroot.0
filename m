@@ -2,57 +2,57 @@ Return-Path: <SRS0=HL2s=OB=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A4F1C433F5
-	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 14:13:50 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C886BC433F5
+	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 14:14:01 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 934F36101A
-	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 14:13:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 934F36101A
+	by mail.kernel.org (Postfix) with ESMTPS id 7D92C61206
+	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 14:14:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7D92C61206
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 62A9E402AD;
-	Sat, 11 Sep 2021 14:13:49 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 54F6740459;
+	Sat, 11 Sep 2021 14:14:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id icX0SVtns3cR; Sat, 11 Sep 2021 14:13:48 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id A9D9VEbv4Afl; Sat, 11 Sep 2021 14:14:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CFF8D40284;
-	Sat, 11 Sep 2021 14:13:47 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5F6DF1BF957
+	by smtp2.osuosl.org (Postfix) with ESMTP id 819F640550;
+	Sat, 11 Sep 2021 14:13:59 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 929471BF834
  for <buildroot@lists.busybox.net>; Sat, 11 Sep 2021 14:12:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5A7CB607D0
+ by smtp2.osuosl.org (Postfix) with ESMTP id 94BFE40457
  for <buildroot@lists.busybox.net>; Sat, 11 Sep 2021 14:12:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fjwSKI1ePaxB for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Ijqwems-9K5A for <buildroot@lists.busybox.net>;
  Sat, 11 Sep 2021 14:12:23 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id B1D53607D7
+ by smtp2.osuosl.org (Postfix) with ESMTP id B630B40459
  for <buildroot@buildroot.org>; Sat, 11 Sep 2021 14:12:23 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 974F488F9B; Sat, 11 Sep 2021 14:10:45 +0000 (UTC)
+ id AA59288FE7; Sat, 11 Sep 2021 14:10:45 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
 Date: Sat, 11 Sep 2021 16:11:47 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 85062dcefc352f96b309cb232bc931374e8ca077
-X-Git-Newrev: 7b1bdc3cee0506c477ed92e02d2ac14137bfc076
+X-Git-Oldrev: 25b0645aa4f6a6457942b50161e7e0c05b4222d3
+X-Git-Newrev: daa46718e0642a92c59edb166ced1ff1911b0043
 X-Patchwork-Hint: ignore
-Message-Id: <20210911141045.974F488F9B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/swupdate: add comment on origin of
- services/configs
+Message-Id: <20210911141045.AA59288FE7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/swupdate: prevent systemd from
+ removing swupdate tmp folders
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,28 +71,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7b1bdc3cee0506c477ed92e02d2ac14137bfc076
+commit: https://git.buildroot.net/buildroot/commit/?id=daa46718e0642a92c59edb166ced1ff1911b0043
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Ensure these folders are excluded from being cleaned up by systemd.
+
+Fixes:
+[ERROR] : SWUPDATE failed [0] ERROR : I cannot open /tmp/scripts/format.lua 2
+[ERROR] : SWUPDATE failed [0] ERROR : extracting script to /tmp/scripts/ failed
+[ERROR] : SWUPDATE failed [1] Installation failed !
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/swupdate/swupdate.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/swupdate/swupdate.mk            | 2 ++
+ package/swupdate/tmpfiles-swupdate.conf | 2 ++
+ 2 files changed, 4 insertions(+)
 
 diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
-index c9bd486127..256f0930ce 100644
+index cf3607a661..4bcdb96602 100644
 --- a/package/swupdate/swupdate.mk
 +++ b/package/swupdate/swupdate.mk
-@@ -222,6 +222,8 @@ $(error No Swupdate configuration file specified, check your BR2_PACKAGE_SWUPDAT
- endif
- endif
- 
-+# Services and configs derived from meta-swupdate(MIT license)
-+# https://github.com/sbabic/meta-swupdate/tree/master/recipes-support/swupdate/swupdate
- define SWUPDATE_INSTALL_COMMON
- 	mkdir -p $(TARGET_DIR)/etc/swupdate/conf.d \
- 		$(TARGET_DIR)/usr/lib/swupdate/conf.d
+@@ -248,6 +248,8 @@ define SWUPDATE_INSTALL_INIT_SYSTEMD
+ 	$(SWUPDATE_INSTALL_COMMON)
+ 	$(INSTALL) -D -m 644 package/swupdate/swupdate.service \
+ 		$(TARGET_DIR)/usr/lib/systemd/system/swupdate.service
++	$(INSTALL) -D -m 644 package/swupdate/tmpfiles-swupdate.conf \
++		$(TARGET_DIR)/usr/lib/tmpfiles.d/tmpfiles-swupdate.conf
+ endef
+ define SWUPDATE_INSTALL_INIT_SYSV
+ 	$(SWUPDATE_INSTALL_COMMON)
+diff --git a/package/swupdate/tmpfiles-swupdate.conf b/package/swupdate/tmpfiles-swupdate.conf
+new file mode 100644
+index 0000000000..4743672fcc
+--- /dev/null
++++ b/package/swupdate/tmpfiles-swupdate.conf
+@@ -0,0 +1,2 @@
++X /tmp/datadst
++X /tmp/scripts
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
