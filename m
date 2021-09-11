@@ -2,56 +2,56 @@ Return-Path: <SRS0=HL2s=OB=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 44412C433F5
-	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 19:55:53 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A27F3C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 19:56:04 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D39F261039
-	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 19:55:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D39F261039
+	by mail.kernel.org (Postfix) with ESMTPS id 6C2B761039
+	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 19:56:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6C2B761039
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A2D5C82423;
-	Sat, 11 Sep 2021 19:55:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3255A61BFE;
+	Sat, 11 Sep 2021 19:56:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NhXRveTIbKkI; Sat, 11 Sep 2021 19:55:51 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 8Fh-AZOYgRGa; Sat, 11 Sep 2021 19:56:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 07DE8823FB;
-	Sat, 11 Sep 2021 19:55:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8C0AB608CC;
+	Sat, 11 Sep 2021 19:56:02 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id CF8611BF285
- for <buildroot@lists.busybox.net>; Sat, 11 Sep 2021 19:55:20 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 13ED61BF957
+ for <buildroot@lists.busybox.net>; Sat, 11 Sep 2021 19:55:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CBD3B40289
- for <buildroot@lists.busybox.net>; Sat, 11 Sep 2021 19:55:20 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0377F40017
+ for <buildroot@lists.busybox.net>; Sat, 11 Sep 2021 19:55:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iO9jG9hlPxDZ for <buildroot@lists.busybox.net>;
+ with ESMTP id YPwna6j9zykB for <buildroot@lists.busybox.net>;
  Sat, 11 Sep 2021 19:55:20 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 01CEB40017
+ by smtp2.osuosl.org (Postfix) with ESMTP id 09F2C401B8
  for <buildroot@buildroot.org>; Sat, 11 Sep 2021 19:55:20 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 507828914C; Sat, 11 Sep 2021 19:53:41 +0000 (UTC)
+ id 5BCCB8914D; Sat, 11 Sep 2021 19:53:41 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sat, 11 Sep 2021 21:52:30 +0200
+Date: Sat, 11 Sep 2021 21:53:11 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 22d65321ece2bc8a0f9928d0ec1a5911d62ada30
-X-Git-Newrev: d0bd34ab2099494132a37c3f4a7e1e75cdc996da
+X-Git-Oldrev: d0bd34ab2099494132a37c3f4a7e1e75cdc996da
+X-Git-Newrev: c4cae0b7c032e792b208360848659662aee4692f
 X-Patchwork-Hint: ignore
-Message-Id: <20210911195341.507828914C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libvirt: fix build with lvm2
+Message-Id: <20210911195341.5BCCB8914D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/nginx-dav-ext: needs libxslt
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,37 +70,69 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d0bd34ab2099494132a37c3f4a7e1e75cdc996da
+commit: https://git.buildroot.net/buildroot/commit/?id=c4cae0b7c032e792b208360848659662aee4692f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-libvirt needs a lvm2 standard install since its addition in commit
-ccfc90e1010e42e6529afae3a5ea8bf7226dabc1 to avoid the following build
-failure:
+Build is broken since bump to version 3.0.0 in commit
+45524f10cd84855868c9be3901c2bd6ea1c9f079 because libxslt is needed
+instead of expat since
+https://github.com/arut/nginx-dav-ext-module/commit/37772c545314aa4a250066f4e7cbc8806d406fa8:
 
-../output-1/build/libvirt-7.4.0/meson.build:1831:6: ERROR: Program 'pvcreate' not found
+adding module in /tmp/instance-0/output-1/build/nginx-dav-ext-3.0.0
+ + ngx_http_dav_ext_module was configured
+checking for PCRE library ... found
+checking for PCRE JIT support ... found
+Package libxslt was not found in the pkg-config search path.
+Perhaps you should add the directory containing `libxslt.pc'
+to the PKG_CONFIG_PATH environment variable
+Package 'libxslt', required by 'virtual:world', not found
+Package libxslt was not found in the pkg-config search path.
+Perhaps you should add the directory containing `libxslt.pc'
+to the PKG_CONFIG_PATH environment variable
+Package 'libxslt', required by 'virtual:world', not found
+checking for libxslt ... not found
+checking for libxslt in /usr/local/ ... not found
+checking for libxslt in /usr/pkg/ ... not found
+checking for libxslt in /opt/local/ ... not found
+
+./configure: error: the HTTP XSLT module requires the libxml2/libxslt
+libraries. You can either do not enable the module or install the libraries.
 
 Fixes:
- - http://autobuild.buildroot.org/results/dc9af7a677af7e53c1240ebbee5b0edc84c8cf52
+ - http://autobuild.buildroot.org/results/8735d20ca7ccf4eda2f79f9400bed70474855b40
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/libvirt/libvirt.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/nginx-dav-ext/Config.in        | 2 +-
+ package/nginx-dav-ext/nginx-dav-ext.mk | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libvirt/libvirt.mk b/package/libvirt/libvirt.mk
-index 1b420771f5..847c35e06e 100644
---- a/package/libvirt/libvirt.mk
-+++ b/package/libvirt/libvirt.mk
-@@ -166,7 +166,7 @@ else
- LIBVIRT_CONF_OPTS += -Dselinux=disabled -Dsecdriver_selinux=disabled
- endif
+diff --git a/package/nginx-dav-ext/Config.in b/package/nginx-dav-ext/Config.in
+index 1e60321fe3..9e3a0faf28 100644
+--- a/package/nginx-dav-ext/Config.in
++++ b/package/nginx-dav-ext/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_NGINX_DAV_EXT
+ 	bool "nginx-dav-ext"
+ 	depends on BR2_PACKAGE_NGINX_HTTP_DAV_MODULE
+-	select BR2_PACKAGE_EXPAT
++	select BR2_PACKAGE_LIBXSLT
+ 	help
+ 	  NGINX WebDAV missing commands support (PROPFIND & OPTIONS).
  
--ifeq ($(BR2_PACKAGE_LVM2),y)
-+ifeq ($(BR2_PACKAGE_LVM2_STANDARD_INSTALL),y)
- LIBVIRT_CONF_OPTS += -Dstorage_lvm=enabled
- LIBVIRT_DEPENDENCIES += lvm2
- else
+diff --git a/package/nginx-dav-ext/nginx-dav-ext.mk b/package/nginx-dav-ext/nginx-dav-ext.mk
+index 1b3071851a..cce527e179 100644
+--- a/package/nginx-dav-ext/nginx-dav-ext.mk
++++ b/package/nginx-dav-ext/nginx-dav-ext.mk
+@@ -8,6 +8,6 @@ NGINX_DAV_EXT_VERSION = 3.0.0
+ NGINX_DAV_EXT_SITE = $(call github,arut,nginx-dav-ext-module,v$(NGINX_DAV_EXT_VERSION))
+ NGINX_DAV_EXT_LICENSE = BSD-2-Clause
+ NGINX_DAV_EXT_LICENSE_FILES = LICENSE
+-NGINX_DAV_EXT_DEPENDENCIES = expat
++NGINX_DAV_EXT_DEPENDENCIES = libxslt
+ 
+ $(eval $(generic-package))
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
