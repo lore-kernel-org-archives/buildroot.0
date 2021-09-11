@@ -2,98 +2,98 @@ Return-Path: <SRS0=HL2s=OB=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BA0D1C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 15:47:00 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B94DC433F5
+	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 15:54:41 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id EE97061153
-	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 15:46:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org EE97061153
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
+	by mail.kernel.org (Postfix) with ESMTPS id BF38B61205
+	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 15:54:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org BF38B61205
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8DE4A80FF4;
-	Sat, 11 Sep 2021 15:46:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8672A60611;
+	Sat, 11 Sep 2021 15:54:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sBPKmvSegCjl; Sat, 11 Sep 2021 15:46:58 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DF2B480F8E;
-	Sat, 11 Sep 2021 15:46:57 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 75F271BF35A
- for <buildroot@lists.busybox.net>; Sat, 11 Sep 2021 15:46:56 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5F101607AE
- for <buildroot@lists.busybox.net>; Sat, 11 Sep 2021 15:46:56 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6qU15olR_9py for <buildroot@lists.busybox.net>;
- Sat, 11 Sep 2021 15:46:55 +0000 (UTC)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id jEuYMgIAu8xa; Sat, 11 Sep 2021 15:54:39 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9AABA607AE;
+	Sat, 11 Sep 2021 15:54:38 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 79CBE1BF35A
+ for <buildroot@lists.busybox.net>; Sat, 11 Sep 2021 15:54:37 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 637D381D5F
+ for <buildroot@lists.busybox.net>; Sat, 11 Sep 2021 15:54:37 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZwYshnkqgocm for <buildroot@lists.busybox.net>;
+ Sat, 11 Sep 2021 15:54:36 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com
- [IPv6:2a00:1450:4864:20::62b])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8B83260758
- for <buildroot@buildroot.org>; Sat, 11 Sep 2021 15:46:55 +0000 (UTC)
-Received: by mail-ej1-x62b.google.com with SMTP id i21so10786700ejd.2
- for <buildroot@buildroot.org>; Sat, 11 Sep 2021 08:46:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=sender:from:to:cc:subject:references:date:in-reply-to:message-id
- :user-agent:mime-version;
- bh=IGLNPLUSDH0CyNrtCtm4keE256XCYXh2Qp97SQ8fQnw=;
- b=eRZ6INZMoxonUS8sauYPoncCMaZcQZmdBwE3AQSKhlIj+B3aesOZQ7pcwSuqBrETYi
- CIxtLKHkPbsxuRA17QvVaYPzaNs3IyyYrW6lEorzzVHJzuRZRl8jSPxh/0MVEehGZhDl
- HNJby75S4KVi0aV6aY4NtvkGeLcqt7wth0OBNbrU1dJJWdlrfQNnmtZOPr1rxa4PahrG
- m5ALaRwmwJY9if//wBEycS4aYNnFlIJl7JzvS3Og/XOP1kdA1QfVEoegQVaVUUCSosE8
- BiKEtVhpiPmi5N1CXtB6C1DMhglqY9sdJf8ubRLMaHELtM8T7+zMxQWk/lQJ1SEu3qWw
- pR0w==
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com
+ [IPv6:2a00:1450:4864:20::632])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id CD97681D5A
+ for <buildroot@buildroot.org>; Sat, 11 Sep 2021 15:54:35 +0000 (UTC)
+Received: by mail-ej1-x632.google.com with SMTP id x11so10850772ejv.0
+ for <buildroot@buildroot.org>; Sat, 11 Sep 2021 08:54:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=subject:to:cc:references:from:organization:message-id:date
+ :user-agent:mime-version:in-reply-to:content-language
+ :content-transfer-encoding;
+ bh=w5z6Y2QjTk/GkgrNdB8MBd/o9lSybpSaPXC0kqIKTmo=;
+ b=gIWqJjVKCRwZ25NPsV+naWfGHD4H595J9bG7otKLNVNspLIVeyCuPbyedjs0LaHODl
+ Fj6brrVsNIu8+od5WyXOqf/GVG4lI3+ja1OoF3W5n1OVeZsj1qALpqflqfktFKEWeECB
+ e2lP535sKVpAx0E5Pez299Zq78T/kYJx9BgCzkP2CTWTyunAGehgGpaFK1gKFkLtXO6Z
+ CL59d2UhQn0/vzW6oDT3f4PloNzwEfCiXhCUd6llilvbWwo8z6koJycYG+/yRf9iBKyS
+ fIaGTvD5x6Iil9/OPqmYvC/CsMn+fhGzjw1AJUKx+Mcybm8ScPgI6tEUNq+q7o3zlTMw
+ VaEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:sender:from:to:cc:subject:references:date
- :in-reply-to:message-id:user-agent:mime-version;
- bh=IGLNPLUSDH0CyNrtCtm4keE256XCYXh2Qp97SQ8fQnw=;
- b=EJsyikYhU7z0rHdxaW0zuYGJxkQmNuA/Ujp5oHNNcSsm6FSyTU5sRij5D6AUy2dX9k
- 8BvN0QZdHeM1QoI+35LwpP/Mxsgh59enFExilaFNyqD8ElpD1GqOPMrjzJLWhxagDH3K
- Ft3kbbd/QCezzKWbPvsTgMQIJVzFcCr5UuDLRZhKTkJlhNt+l+sVw2oPkYGmIavP/ixo
- OkklbCHxkYYNBbEHfv2/I0sH6pUYUsY02gimiPkZAnY3sgP5aiVyl4vSSXbnp0zlb8GW
- riHYO+yHhRs3FCDrJb1Hd8zAxVVU/icBQabuaJmuiBo+LCZx99ke98JnrGqpea12n1J/
- SFww==
-X-Gm-Message-State: AOAM533KO+SDbpJXgFuuyQ2+soXgKqP1Y248pWWdQf4/TBmHn8tNmp7+
- GKn2QWHnChcOqBar9JdnoQMfUuDLO44=
-X-Google-Smtp-Source: ABdhPJw2aNIBxEev7/Pxw1/TZSwCbZV/tvhr92LVaySiZEE674M8LBC3YJCcnrAofNvYnRTfZefcnw==
-X-Received: by 2002:a17:906:72d0:: with SMTP id
- m16mr3404622ejl.282.1631375213890; 
- Sat, 11 Sep 2021 08:46:53 -0700 (PDT)
-Received: from dell.be.48ers.dk (d51A5BC31.access.telenet.be. [81.165.188.49])
- by smtp.gmail.com with ESMTPSA id
- jx21sm925700ejc.27.2021.09.11.08.46.53
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 11 Sep 2021 08:46:53 -0700 (PDT)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
- (envelope-from <peter@korsgaard.com>)
- id 1mP5DQ-0000iR-JV; Sat, 11 Sep 2021 17:46:52 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Arnout Vandecappelle <arnout@mind.be>
-References: <20210827205430.39745-1-matthew.weber@collins.com>
- <20210827205430.39745-3-matthew.weber@collins.com>
- <87o88z5jgl.fsf@dell.be.48ers.dk>
- <85dd14fc-98ae-fc48-2121-d6614da8ca0f@mind.be>
-Date: Sat, 11 Sep 2021 17:46:52 +0200
-In-Reply-To: <85dd14fc-98ae-fc48-2121-d6614da8ca0f@mind.be> (Arnout
- Vandecappelle's message of "Sat, 11 Sep 2021 17:03:21 +0200")
-Message-ID: <87bl4z5d3n.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+ h=x-gm-message-state:subject:to:cc:references:from:organization
+ :message-id:date:user-agent:mime-version:in-reply-to
+ :content-language:content-transfer-encoding;
+ bh=w5z6Y2QjTk/GkgrNdB8MBd/o9lSybpSaPXC0kqIKTmo=;
+ b=cE0dpt9/5bgtXKbJ+sR8yZ55OHwFG8GF9W1QbGP0glHt95xgQVyHMH00oEwPxEX/4b
+ 90tq4A6PntkbnpdWqvoueQX5stH4m7xbbHN0RunZ9O+UKgO4MfADw1obMuoC5OntId9h
+ 2gtStqf6awAOYH6Tge5v9kTIiqs/mHdQAh6UWjAn5+WHMAOjCAIsVKShPRheZav7DHjz
+ x74H2P6O+5WdGPllZDbOYWtqiyRSMK7p/OILxpN9wWNI/JC6noIE+KVFs/DbNwJ0ssir
+ ECJFtd06qV9Kf3G3eiJ+YzONralvgRMpE30IqHgDqpWI848bSV7wRciOTQ7S8dR3Tzoq
+ G9jg==
+X-Gm-Message-State: AOAM531jof9LCs7g+FQ5IpyavPrHb0b/py9eWpBPwEiZXCHMqaH2VeVB
+ F+rSXb7UiEq9y2lRfwGkMsaxnDflz72nxQ==
+X-Google-Smtp-Source: ABdhPJyTxaU9fEHbcKq0mgXlAsYos2HBXnrEbwL7l/FO4OW/vQc+NB7RlW4Re2+cbyvsoEFx4ehAMA==
+X-Received: by 2002:a17:906:cd19:: with SMTP id
+ oz25mr3418988ejb.404.1631375673819; 
+ Sat, 11 Sep 2021 08:54:33 -0700 (PDT)
+Received: from ?IPv6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id d22sm935937ejj.47.2021.09.11.08.54.32
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sat, 11 Sep 2021 08:54:33 -0700 (PDT)
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+References: <20210830215032.4153761-1-fontaine.fabrice@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+Message-ID: <d627dd5b-7064-b809-a7da-130d0d7c04b8@mind.be>
+Date: Sat, 11 Sep 2021 17:54:32 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v3 2/3] fs: new OCI filesystem type
+In-Reply-To: <20210830215032.4153761-1-fontaine.fabrice@gmail.com>
+Content-Language: en-GB
+Subject: Re: [Buildroot] [PATCH 1/1] package/polkit: switch to meson-package
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -106,39 +106,243 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: Matthew Weber via buildroot <buildroot@busybox.net>,
- Sergio Prado <sergio.prado@e-labworks.com>,
- Matthew Weber <matthew.weber@collins.com>, buildroot@buildroot.org
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ Marek Belisko <marek.belisko@open-nandra.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
- > On 11/09/2021 15:29, Peter Korsgaard wrote:
- >>>>>>> "Matthew" == Matthew Weber via buildroot <buildroot@busybox.net> writes:
- >> 
- >> > From: Sergio Prado <sergio.prado@e-labworks.com>
- >> > Add support to generate OCI (Open Container Initiative) images.
- >> 
- >> > An OCI image consists of a manifest, an image index (optional), a set of
- >> > filesystem layers, and a configuration. The complete specification is
- >> > available in the link below:
- >> 
- >> Out of interest, what is the functional difference between this and just
- >> doing docker import output/build/rootfs.tar <my-tag>?
 
- >  "import" just creates a filesystem. An OCI image also has an entrypoint, an
- > environment, exposed ports, and a bunch of metadata.
+On 30/08/2021 23:50, Fabrice Fontaine wrote:
+> Switch to meson-package to fix the following build failure raised since
+> bump of gobject-introspection to version 1.68.0 in commit
+> abc110e3624aa4e8a9bd8595b3fdc0aec60845e0:
+> 
+> Could not find GIR file 'Gio-2.0.gir'; check XDG_DATA_DIRS or use --includedir
+> error parsing file Polkit-1.0.gir: Failed to parse included gir Gio-2.0
+> If the above error message is about missing .so libraries, then setting up GIR_EXTRA_LIBS_PATH in the .mk file should help.
+> Typically like this: PKG_MAKE_ENV += GIR_EXTRA_LIBS_PATH="$(@D)/.libs"
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/26bcb21900b403db690d6005dbef0a76ff494d6c
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Ok. I guess you can do most if not all of those with the --change option
-to docker import though:
+ Applied to master, thanks.
 
-https://docs.docker.com/engine/reference/commandline/import/
+ Regards,
+ Arnout
 
--- 
-Bye, Peter Korsgaard
+> ---
+>  ...02-Improve-meson_post_install-script.patch | 124 ++++++++++++++++++
+>  package/polkit/Config.in                      |   2 +-
+>  package/polkit/polkit.mk                      |  27 ++--
+>  3 files changed, 136 insertions(+), 17 deletions(-)
+>  create mode 100644 package/polkit/0002-Improve-meson_post_install-script.patch
+> 
+> diff --git a/package/polkit/0002-Improve-meson_post_install-script.patch b/package/polkit/0002-Improve-meson_post_install-script.patch
+> new file mode 100644
+> index 0000000000..932bf88f59
+> --- /dev/null
+> +++ b/package/polkit/0002-Improve-meson_post_install-script.patch
+> @@ -0,0 +1,124 @@
+> +From 6c8022392713955c5ae0061e22b50a16a1c2252a Mon Sep 17 00:00:00 2001
+> +From: Simon McVittie <smcv@collabora.com>
+> +Date: Thu, 15 Jul 2021 12:36:05 +0000
+> +Subject: [PATCH] Improve meson_post_install script
+> +
+> +[Retrieved from:
+> +https://gitlab.freedesktop.org/polkit/polkit/-/commit/6c8022392713955c5ae0061e22b50a16a1c2252a]
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +---
+> + .gitlab-ci.yml        |  3 +--
+> + meson_post_install.py | 58 +++++++++++++++++++++++++++++++++++--------
+> + 2 files changed, 49 insertions(+), 12 deletions(-)
+> +
+> +diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+> +index 8ac3e9f..6d0abb4 100644
+> +--- a/.gitlab-ci.yml
+> ++++ b/.gitlab-ci.yml
+> +@@ -26,8 +26,6 @@ build_stable:
+> +   before_script:
+> +     - dnf upgrade -y --nogpgcheck fedora-release fedora-repos*
+> +     - dnf update -y && dnf install -y $DEPENDENCIES
+> +-    - getent group polkitd >/dev/null || groupadd -r polkitd
+> +-    - getent passwd polkitd >/dev/null || useradd -r -g polkitd -d / -s /sbin/nologin -c "User for polkitd" polkitd
+> + 
+> +   script:
+> +     - meson setup 
+> +@@ -43,6 +41,7 @@ build_stable:
+> +     - meson compile -C builddir
+> +     - meson test    -C builddir
+> +     - meson install -C builddir
+> ++    - DESTDIR=$(pwd)/DESTDIR meson install -C builddir
+> +   artifacts:
+> +     name: 'test logs'
+> +     when: 'always'
+> +diff --git a/meson_post_install.py b/meson_post_install.py
+> +index 0a0fccf..0ab7469 100644
+> +--- a/meson_post_install.py
+> ++++ b/meson_post_install.py
+> +@@ -1,20 +1,44 @@
+> + #!/usr/bin/env python3
+> + 
+> +-import getpass
+> + import os
+> + import pwd
+> + import sys
+> + 
+> ++destdir = os.environ.get('DESTDIR')
+> + prefix = os.environ['MESON_INSTALL_DESTDIR_PREFIX']
+> + 
+> +-bindir = os.path.join(prefix, sys.argv[1])
+> +-pkgdatadir = os.path.join(prefix, sys.argv[2])
+> +-pkglibdir = os.path.join(prefix, sys.argv[3])
+> +-pkgsysconfdir = os.path.join(prefix, sys.argv[4])
+> ++def destdir_path(p):
+> ++    if os.path.isabs(p):
+> ++        if destdir is None:
+> ++            return p
+> ++        else:
+> ++            return os.path.join(destdir, os.path.relpath(p, '/'))
+> ++    else:
+> ++        return os.path.join(prefix, p)
+> + 
+> +-polkitd_uid = pwd.getpwnam(sys.argv[5]).pw_uid
+> ++bindir = destdir_path(sys.argv[1])
+> ++pkgdatadir = destdir_path(sys.argv[2])
+> ++pkglibdir = destdir_path(sys.argv[3])
+> ++pkgsysconfdir = destdir_path(sys.argv[4])
+> ++polkitd_user = sys.argv[5]
+> + 
+> +-os.chmod(os.path.join(bindir, 'pkexec'), 0o4775)
+> ++try:
+> ++    polkitd_uid = pwd.getpwnam(polkitd_user).pw_uid
+> ++except KeyError:
+> ++    polkitd_uid = None
+> ++
+> ++dst = os.path.join(bindir, 'pkexec')
+> ++
+> ++if os.geteuid() == 0:
+> ++    os.chmod(dst, 0o4755)
+> ++    os.chown(dst, 0, -1)
+> ++else:
+> ++    print(
+> ++        'Owner and mode of {} need to be setuid root (04755) after '
+> ++        'installation'.format(
+> ++            dst,
+> ++        )
+> ++    )
+> + 
+> + dst_dirs = [
+> +     os.path.join(pkgsysconfdir, 'rules.d'),
+> +@@ -24,13 +48,27 @@ dst_dirs = [
+> + for dst in dst_dirs:
+> +     if not os.path.exists(dst):
+> +         os.makedirs(dst, mode=0o700)
+> +-        if getpass.getuser() == "root":
+> ++        if os.geteuid() == 0 and polkitd_uid is not None:
+> +             os.chown(dst, polkitd_uid, -1)
+> ++        else:
+> ++            print(
+> ++                'Owner of {} needs to be set to {} after installation'.format(
+> ++                    dst, polkitd_user,
+> ++                )
+> ++            )
+> + 
+> + # polkit-agent-helper-1 need to be setuid root because it's used to
+> + # authenticate not only the invoking user, but possibly also root
+> + # and/or other users.
+> + dst = os.path.join(pkglibdir, 'polkit-agent-helper-1')
+> +-os.chmod(dst, 0o4755)
+> +-if getpass.getuser() == "root":
+> ++
+> ++if os.geteuid() == 0:
+> ++    os.chmod(dst, 0o4755)
+> +     os.chown(dst, 0, -1)
+> ++else:
+> ++    print(
+> ++        'Owner and mode of {} need to be setuid root (04755) after '
+> ++        'installation'.format(
+> ++            dst,
+> ++        )
+> ++    )
+> +-- 
+> +GitLab
+> +
+> diff --git a/package/polkit/Config.in b/package/polkit/Config.in
+> index 622cbbb90b..a968ee52d7 100644
+> --- a/package/polkit/Config.in
+> +++ b/package/polkit/Config.in
+> @@ -5,7 +5,7 @@ config BR2_PACKAGE_POLKIT
+>  	depends on BR2_USE_MMU # libglib2, dbus
+>  	depends on BR2_USE_WCHAR # libglib2
+>  	depends on !BR2_STATIC_LIBS # duktape
+> -	select BR2_PACKAGE_DBUS # runtime
+> +	select BR2_PACKAGE_DBUS
+>  	select BR2_PACKAGE_DUKTAPE
+>  	select BR2_PACKAGE_EXPAT
+>  	select BR2_PACKAGE_LIBGLIB2
+> diff --git a/package/polkit/polkit.mk b/package/polkit/polkit.mk
+> index 3a8c442dbb..7d75d66ffb 100644
+> --- a/package/polkit/polkit.mk
+> +++ b/package/polkit/polkit.mk
+> @@ -9,36 +9,31 @@ POLKIT_SITE = $(call github,aduskett,polkit-duktape,v$(POLKIT_VERSION))
+>  POLKIT_LICENSE = GPL-2.0
+>  POLKIT_LICENSE_FILES = COPYING
+>  POLKIT_CPE_ID_VENDOR = polkit_project
+> -POLKIT_AUTORECONF = YES
+>  POLKIT_INSTALL_STAGING = YES
+>  
+>  POLKIT_DEPENDENCIES = \
+> -	duktape libglib2 host-intltool expat $(TARGET_NLS_DEPENDENCIES)
+> +	dbus duktape libglib2 host-intltool expat $(TARGET_NLS_DEPENDENCIES)
+>  
+> -POLKIT_CONF_ENV = \
+> -	CXXFLAGS="$(TARGET_CXXFLAGS)" \
+> -	LIBS=$(TARGET_NLS_LIBS)
+> +POLKIT_LDFLAGS = $(TARGET_NLS_LIBS)
+>  
+>  POLKIT_CONF_OPTS = \
+> -	--with-os-type=unknown \
+> -	--disable-man-pages \
+> -	--disable-examples \
+> -	--disable-libelogind \
+> -	--disable-libsystemd-login \
+> -	--with-duktape
+> +	-Dman=false \
+> +	-Dexamples=false \
+> +	-Dsession_tracking=ConsoleKit \
+> +	-Djs_engine=duktape
+>  
+>  ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
+> -POLKIT_CONF_OPTS += --enable-introspection
+> +POLKIT_CONF_OPTS += -Dintrospection=true
+>  POLKIT_DEPENDENCIES += gobject-introspection
+>  else
+> -POLKIT_CONF_OPTS += --disable-introspection
+> +POLKIT_CONF_OPTS += -Dintrospection=false
+>  endif
+>  
+>  ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
+>  POLKIT_DEPENDENCIES += linux-pam
+> -POLKIT_CONF_OPTS += --with-authfw=pam
+> +POLKIT_CONF_OPTS += -Dauthfw=pam
+>  else
+> -POLKIT_CONF_OPTS += --with-authfw=shadow
+> +POLKIT_CONF_OPTS += -Dauthfw=shadow
+>  endif
+>  
+>  # polkit.{its,loc} are needed for gvfs and must be installed in $(HOST_DIR)
+> @@ -72,4 +67,4 @@ define POLKIT_INSTALL_INIT_SYSV
+>  		$(TARGET_DIR)/etc/init.d/S50polkit
+>  endef
+>  
+> -$(eval $(autotools-package))
+> +$(eval $(meson-package))
+> 
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
