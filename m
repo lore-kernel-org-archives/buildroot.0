@@ -2,77 +2,58 @@ Return-Path: <SRS0=HL2s=OB=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 48603C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 12:43:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DCE9EC433EF
+	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 12:48:27 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id CB96E60F8F
-	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 12:43:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org CB96E60F8F
+	by mail.kernel.org (Postfix) with ESMTPS id 6EDF8611AD
+	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 12:48:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6EDF8611AD
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 68D4F40269;
-	Sat, 11 Sep 2021 12:43:34 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1172940117;
+	Sat, 11 Sep 2021 12:48:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wWX-LFDCguSQ; Sat, 11 Sep 2021 12:43:33 +0000 (UTC)
+	with ESMTP id 3Cf3YuIMJqgO; Sat, 11 Sep 2021 12:48:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3BA4040120;
-	Sat, 11 Sep 2021 12:43:32 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A972C1BF31A
- for <buildroot@lists.busybox.net>; Sat, 11 Sep 2021 12:43:30 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id CE9DA4011A;
+	Sat, 11 Sep 2021 12:48:24 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 3459D1BF31A
+ for <buildroot@lists.busybox.net>; Sat, 11 Sep 2021 12:48:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 98F7860757
- for <buildroot@lists.busybox.net>; Sat, 11 Sep 2021 12:43:30 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 23D3081B14
+ for <buildroot@lists.busybox.net>; Sat, 11 Sep 2021 12:48:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ETXcsQoCiHfT for <buildroot@lists.busybox.net>;
- Sat, 11 Sep 2021 12:43:29 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2DE7B60629
- for <buildroot@buildroot.org>; Sat, 11 Sep 2021 12:43:29 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:6c4a:f4f1:e14a:6e93])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id EAB0AB0056A;
- Sat, 11 Sep 2021 14:43:21 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1631364206;
- bh=IeBRkRGwsMEua3fjKsvfOB+ZrBvNfclKy6ImZnk6BNs=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=Y9E5l7SajR4skg9X8s1FySJB1zEeGpzrI5McgS11AnSm4wDGSWsc8kCS2vaYoR6TF
- ABKNMqMBMLEFZbyhFn25z47t6bd2GGpU/Hwkh7V5pG2T+IZVoMXhK0r84wiisC92CS
- vLEPJp1gsIMeOaVoGW4nxLA7F4/3Ncd3kWNbx4EHzzJeVljUPWM8Otr9JeLYg3E2Bv
- LeyQuZjTPdhPTzJZMurib14VqIMN2lG708viaJpPSbUme5jkHMLRb0HjVPC7zjqTi3
- v/OgdrY00awl8p2JexB2p+pX8WOUWWl01hnlPaGTjPOyaBiMsQHmI5eI5lLqi+82m6
- Y0t2ZbdGcxMCA==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 11 Sep 2021 14:43:21 +0200
-Date: Sat, 11 Sep 2021 14:43:21 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20210911124321.GL1053080@scaer>
-References: <20210910205923.632114-1-fontaine.fabrice@gmail.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20210910205923.632114-1-fontaine.fabrice@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 1/1] package/autofs: fix build with glibc >=
- 2.34
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wHVELe8Ubw2M for <buildroot@lists.busybox.net>;
+ Sat, 11 Sep 2021 12:48:21 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5BB8381ADE
+ for <buildroot@buildroot.org>; Sat, 11 Sep 2021 12:48:21 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id 60D2788F0A; Sat, 11 Sep 2021 12:46:43 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sat, 11 Sep 2021 14:46:37 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 230e54e4a8f30fd207c8f37af8677cbefdf3c2b8
+X-Git-Newrev: a600671166fc59c9da5a5fdca0ba204d0f7836f5
+X-Patchwork-Hint: ignore
+Message-Id: <20210911124643.60D2788F0A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gnuradio: fix build with boost
+ 1.77.0
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,185 +66,204 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=a600671166fc59c9da5a5fdca0ba204d0f7836f5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-09-10 22:59 +0200, Fabrice Fontaine spake thusly:
-> Fix the following build failure with glibc >= 2.34:
-> 
-> In file included from /tmp/instance-0/output-1/host/arc-buildroot-linux-gnu/sysroot/usr/include/bits/local_lim.h:81,
->                  from /tmp/instance-0/output-1/host/arc-buildroot-linux-gnu/sysroot/usr/include/bits/posix1_lim.h:161,
->                  from /tmp/instance-0/output-1/host/arc-buildroot-linux-gnu/sysroot/usr/include/dirent.h:233,
->                  from automount.c:22:
-> automount.c:87:37: error: initializer element is not constant
->    87 | size_t detached_thread_stack_size = PTHREAD_STACK_MIN * 144;
->       |                                     ^~~~~~~~~~~~~~~~~
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/0c8ab8968b2adf6a5f8eeab00ce388968fa1c1d5
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fix the following build failure raised since commit
+d39d8f7cee9b4634e6f490020204f63fae419e8e:
 
-Applied to master, thanks.
+In file included from /home/buildroot/autobuild/instance-3/output-1/host/x86_64-buildroot-linux-musl/sysroot/usr/include/boost/math/common_factor.hpp:14,
+                 from /home/buildroot/autobuild/instance-3/output-1/build/gnuradio-3.8.2.0/gr-digital/lib/symbol_sync_cc_impl.cc:30:
+/home/buildroot/autobuild/instance-3/output-1/host/x86_64-buildroot-linux-musl/sysroot/usr/include/boost/math/common_factor_ct.hpp:17:68: error: _Pragma takes a parenthesized string literal
+   17 | BOOST_MATH_HEADER_DEPRECATED("<boost/integer/common_factor_ct.hpp>");
+      |
 
-Regards,
-Yann E. MORIN.
+Fixes:
+ - http://autobuild.buildroot.org/results/7b4/7b46f51588144bca1d323230c378ce7f6ee999a8/build-end.log
 
-> ---
->  ...7-use-default-stack-size-for-threads.patch | 124 ++++++++++++++++++
->  1 file changed, 124 insertions(+)
->  create mode 100644 package/autofs/0001-autofs-5-1-7-use-default-stack-size-for-threads.patch
-> 
-> diff --git a/package/autofs/0001-autofs-5-1-7-use-default-stack-size-for-threads.patch b/package/autofs/0001-autofs-5-1-7-use-default-stack-size-for-threads.patch
-> new file mode 100644
-> index 0000000000..f63c399fdc
-> --- /dev/null
-> +++ b/package/autofs/0001-autofs-5-1-7-use-default-stack-size-for-threads.patch
-> @@ -0,0 +1,124 @@
-> +From 91edcc55c681dac41d2213b498ec6450aee22d9f Mon Sep 17 00:00:00 2001
-> +From: Ian Kent <raven@themaw.net>
-> +Date: Mon, 26 Jul 2021 13:18:38 +0800
-> +Subject: autofs-5.1.7 - use default stack size for threads
-> +
-> +autofs uses PTHREAD_STACK_MIN to set the stack size for threads it
-> +creates.
-> +
-> +In two cases it is used to reduce the stack size for long running
-> +service threads while it's used to allocate a larger stack for worker
-> +threads that can have larger memory requirements.
-> +
-> +In recent glibc releases PTHREAD_STACK_MIN is no longer a constant
-> +which can lead to unexpectedly different stack sizes on different
-> +architectures and the autofs assumption it's a constant causes a
-> +compile failure.
-> +
-> +The need to alter the stack size was due to observed stack overflow
-> +which was thought to be due the thread stack being too small for autofs
-> +and glibc alloca(3) usage.
-> +
-> +Quite a bit of that alloca(3) usage has been eliminated from autofs now,
-> +particularly those that might be allocating largish amounts of storage,
-> +and there has been a lot of change in glibc too so using the thread
-> +default stack should be ok.
-> +
-> +Signed-off-by: Ian Kent <raven@themaw.net>
-> +
-> +[Retrieved (and updated to drop CHANGELOG update) from:
-> +https://git.kernel.org/pub/scm/linux/storage/autofs/autofs.git/commit/?id=91edcc55c681dac41d2213b498ec6450aee22d9f]
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +---
-> + CHANGELOG          |  1 +
-> + daemon/automount.c | 29 -----------------------------
-> + daemon/state.c     |  6 +-----
-> + lib/alarm.c        |  6 +-----
-> + 4 files changed, 3 insertions(+), 39 deletions(-)
-> +
-> +diff --git a/daemon/automount.c b/daemon/automount.c
-> +index 23235a7..d743235 100644
-> +--- a/daemon/automount.c
-> ++++ b/daemon/automount.c
-> +@@ -84,7 +84,6 @@ static size_t kpkt_len;
-> + /* Attributes for creating detached and joinable threads */
-> + pthread_attr_t th_attr;
-> + pthread_attr_t th_attr_detached;
-> +-size_t detached_thread_stack_size = PTHREAD_STACK_MIN * 144;
-> + 
-> + struct master_readmap_cond mrc = {
-> + 	PTHREAD_MUTEX_INITIALIZER, PTHREAD_COND_INITIALIZER, 0, NULL, 0, 0, 0, 0};
-> +@@ -2620,34 +2619,6 @@ int main(int argc, char *argv[])
-> + 		exit(1);
-> + 	}
-> + 
-> +-#ifdef _POSIX_THREAD_ATTR_STACKSIZE
-> +-	if (pthread_attr_setstacksize(
-> +-			&th_attr_detached, detached_thread_stack_size)) {
-> +-		logerr("%s: failed to set stack size thread attribute!",
-> +-		       program);
-> +-		if (start_pipefd[1] != -1) {
-> +-			res = write(start_pipefd[1], pst_stat, sizeof(*pst_stat));
-> +-			close(start_pipefd[1]);
-> +-		}
-> +-		release_flag_file();
-> +-		macro_free_global_table();
-> +-		exit(1);
-> +-	}
-> +-#endif
-> +-
-> +-	if (pthread_attr_getstacksize(
-> +-			&th_attr_detached, &detached_thread_stack_size)) {
-> +-		logerr("%s: failed to get detached thread stack size!",
-> +-		       program);
-> +-		if (start_pipefd[1] != -1) {
-> +-			res = write(start_pipefd[1], pst_stat, sizeof(*pst_stat));
-> +-			close(start_pipefd[1]);
-> +-		}
-> +-		release_flag_file();
-> +-		macro_free_global_table();
-> +-		exit(1);
-> +-	}
-> +-
-> + 	info(logging, "Starting automounter version %s, master map %s",
-> + 		version, master_list->name);
-> + 	info(logging, "using kernel protocol version %d.%02d",
-> +diff --git a/daemon/state.c b/daemon/state.c
-> +index 5156bb2..5df0561 100644
-> +--- a/daemon/state.c
-> ++++ b/daemon/state.c
-> +@@ -1177,12 +1177,8 @@ int st_start_handler(void)
-> + 	status = pthread_attr_init(pattrs);
-> + 	if (status)
-> + 		pattrs = NULL;
-> +-	else {
-> ++	else
-> + 		pthread_attr_setdetachstate(pattrs, PTHREAD_CREATE_DETACHED);
-> +-#ifdef _POSIX_THREAD_ATTR_STACKSIZE
-> +-		pthread_attr_setstacksize(pattrs, PTHREAD_STACK_MIN*4);
-> +-#endif
-> +-	}
-> + 
-> + 	status = pthread_create(&thid, pattrs, st_queue_handler, NULL);
-> + 
-> +diff --git a/lib/alarm.c b/lib/alarm.c
-> +index f27e13c..1631a9b 100755
-> +--- a/lib/alarm.c
-> ++++ b/lib/alarm.c
-> +@@ -270,12 +270,8 @@ int alarm_start_handler(void)
-> + 	status = pthread_attr_init(pattrs);
-> + 	if (status)
-> + 		pattrs = NULL;
-> +-	else {
-> ++	else
-> + 		pthread_attr_setdetachstate(pattrs, PTHREAD_CREATE_DETACHED);
-> +-#ifdef _POSIX_THREAD_ATTR_STACKSIZE
-> +-		pthread_attr_setstacksize(pattrs, PTHREAD_STACK_MIN*4);
-> +-#endif
-> +-	}
-> + 
-> + 	status = pthread_condattr_init(&condattrs);
-> + 	if (status)
-> +-- 
-> +cgit 1.2.3-1.el7
-> +
-> -- 
-> 2.33.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@lists.buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ ...-remove-deprecated-math-common_factor.hpp.patch | 165 +++++++++++++++++++++
+ 1 file changed, 165 insertions(+)
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/gnuradio/0005-boost-remove-deprecated-math-common_factor.hpp.patch b/package/gnuradio/0005-boost-remove-deprecated-math-common_factor.hpp.patch
+new file mode 100644
+index 0000000000..0c282b7322
+--- /dev/null
++++ b/package/gnuradio/0005-boost-remove-deprecated-math-common_factor.hpp.patch
+@@ -0,0 +1,165 @@
++From 2c767bb260a25b415e8c9c4b3ea37280b2127cec Mon Sep 17 00:00:00 2001
++From: japm48 <japm48@users.noreply.github.com>
++Date: Fri, 10 Apr 2020 23:35:30 +0200
++Subject: [PATCH] boost: remove deprecated math/common_factor.hpp
++
++Remove deprecation warning and prefer using std::{lcm,gcd} to Boost.
++Fixes #2712.
++
++[Retrieved from:
++https://github.com/gnuradio/gnuradio/commit/2c767bb260a25b415e8c9c4b3ea37280b2127cec]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ .../include/gnuradio/CMakeLists.txt           |  1 +
++ .../include/gnuradio/integer_math.h           | 35 +++++++++++++++++++
++ gnuradio-runtime/lib/buffer.cc                | 19 ++--------
++ gr-digital/lib/symbol_sync_cc_impl.cc         |  4 +--
++ gr-digital/lib/symbol_sync_ff_impl.cc         |  4 +--
++ 5 files changed, 43 insertions(+), 20 deletions(-)
++ create mode 100644 gnuradio-runtime/include/gnuradio/integer_math.h
++
++diff --git a/gnuradio-runtime/include/gnuradio/CMakeLists.txt b/gnuradio-runtime/include/gnuradio/CMakeLists.txt
++index 8d718e87b5b..056af5d6f48 100644
++--- a/gnuradio-runtime/include/gnuradio/CMakeLists.txt
+++++ b/gnuradio-runtime/include/gnuradio/CMakeLists.txt
++@@ -31,6 +31,7 @@ install(FILES
++   gr_complex.h
++   hier_block2.h
++   high_res_timer.h
+++  integer_math.h
++   io_signature.h
++   logger.h
++   math.h
++diff --git a/gnuradio-runtime/include/gnuradio/integer_math.h b/gnuradio-runtime/include/gnuradio/integer_math.h
++new file mode 100644
++index 00000000000..15141049fa4
++--- /dev/null
+++++ b/gnuradio-runtime/include/gnuradio/integer_math.h
++@@ -0,0 +1,35 @@
+++/* -*- c++ -*- */
+++/*
+++ * Copyright 2020 Free Software Foundation, Inc.
+++ *
+++ * This file is part of GNU Radio
+++ *
+++ * SPDX-License-Identifier: GPL-3.0-or-later
+++ *
+++ */
+++#ifndef INCLUDED_GR_INTEGER_MATH_H
+++#define INCLUDED_GR_INTEGER_MATH_H
+++
+++#if (__cplusplus >= 201703L)
+++
+++// Prefer C++17 goodness.
+++#include <numeric>
+++#define GR_GCD std::gcd
+++#define GR_LCM std::lcm
+++
+++#elif (BOOST_VERSION >= 105800)
+++
+++// Fallback: newer boost API (introduced in Boost 1.58.0).
+++#include <boost/integer/common_factor_rt.hpp>
+++#define GR_GCD boost::integer::gcd
+++#define GR_LCM boost::integer::lcm
+++
+++#else
+++
+++// Last resort: old deprecated boost API.
+++#include <boost/math/common_factor_rt.hpp>
+++#define GR_GCD boost::math::gcd
+++#define GR_LCM boost::math::lcm
+++
+++#endif /* __cplusplus >= 201703L */
+++#endif /* INCLUDED_GR_INTEGER_MATH_H */
++diff --git a/gnuradio-runtime/lib/buffer.cc b/gnuradio-runtime/lib/buffer.cc
++index 720c72c4ee8..46d704542b1 100644
++--- a/gnuradio-runtime/lib/buffer.cc
+++++ b/gnuradio-runtime/lib/buffer.cc
++@@ -13,22 +13,13 @@
++ #endif
++ #include "vmcircbuf.h"
++ #include <gnuradio/buffer.h>
+++#include <gnuradio/integer_math.h>
++ #include <gnuradio/math.h>
++ #include <assert.h>
++ #include <algorithm>
++ #include <iostream>
++ #include <stdexcept>
++ 
++-// the following header is deprecated as of Boost 1.66.0, and the
++-// other API was introduced in Boost 1.58.0. Since we still support
++-// Boost back to 1.54.0, use the older API if pre-1.5.80 and otherwise
++-// use the newer API.
++-#if (BOOST_VERSION < 105800)
++-#include <boost/math/common_factor_rt.hpp>
++-#else
++-#include <boost/integer/common_factor_rt.hpp>
++-#endif
++-
++ namespace gr {
++ 
++ static long s_buffer_count = 0; // counts for debugging storage mgmt
++@@ -68,13 +59,9 @@ static long s_buffer_reader_count = 0;
++  *
++  *     type_size * nitems == k * page_size
++  */
++-static long minimum_buffer_items(long type_size, long page_size)
+++static inline long minimum_buffer_items(long type_size, long page_size)
++ {
++-#if (BOOST_VERSION < 105800)
++-    return page_size / boost::math::gcd(type_size, page_size);
++-#else
++-    return page_size / boost::integer::gcd(type_size, page_size);
++-#endif
+++    return page_size / GR_GCD(type_size, page_size);
++ }
++ 
++ 
++diff --git a/gr-digital/lib/symbol_sync_cc_impl.cc b/gr-digital/lib/symbol_sync_cc_impl.cc
++index 55f85e7c6a7..55f162dc727 100644
++--- a/gr-digital/lib/symbol_sync_cc_impl.cc
+++++ b/gr-digital/lib/symbol_sync_cc_impl.cc
++@@ -13,9 +13,9 @@
++ #endif
++ 
++ #include "symbol_sync_cc_impl.h"
+++#include <gnuradio/integer_math.h>
++ #include <gnuradio/io_signature.h>
++ #include <gnuradio/math.h>
++-#include <boost/math/common_factor.hpp>
++ #include <stdexcept>
++ 
++ namespace gr {
++@@ -95,7 +95,7 @@ symbol_sync_cc_impl::symbol_sync_cc_impl(enum ted_type detector_type,
++         throw std::runtime_error("unable to create interpolating_resampler_ccf");
++ 
++     // Block Internal Clocks
++-    d_interps_per_symbol_n = boost::math::lcm(d_ted->inputs_per_symbol(), d_osps_n);
+++    d_interps_per_symbol_n = GR_LCM(d_ted->inputs_per_symbol(), d_osps_n);
++     d_interps_per_ted_input_n = d_interps_per_symbol_n / d_ted->inputs_per_symbol();
++     d_interps_per_output_sample_n = d_interps_per_symbol_n / d_osps_n;
++ 
++diff --git a/gr-digital/lib/symbol_sync_ff_impl.cc b/gr-digital/lib/symbol_sync_ff_impl.cc
++index d0ec32ab192..1172c1b4f8a 100644
++--- a/gr-digital/lib/symbol_sync_ff_impl.cc
+++++ b/gr-digital/lib/symbol_sync_ff_impl.cc
++@@ -13,9 +13,9 @@
++ #endif
++ 
++ #include "symbol_sync_ff_impl.h"
+++#include <gnuradio/integer_math.h>
++ #include <gnuradio/io_signature.h>
++ #include <gnuradio/math.h>
++-#include <boost/math/common_factor.hpp>
++ #include <stdexcept>
++ 
++ namespace gr {
++@@ -97,7 +97,7 @@ symbol_sync_ff_impl::symbol_sync_ff_impl(enum ted_type detector_type,
++         throw std::runtime_error("unable to create interpolating_resampler_fff");
++ 
++     // Block Internal Clocks
++-    d_interps_per_symbol_n = boost::math::lcm(d_ted->inputs_per_symbol(), d_osps_n);
+++    d_interps_per_symbol_n = GR_LCM(d_ted->inputs_per_symbol(), d_osps_n);
++     d_interps_per_ted_input_n = d_interps_per_symbol_n / d_ted->inputs_per_symbol();
++     d_interps_per_output_sample_n = d_interps_per_symbol_n / d_osps_n;
++ 
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
