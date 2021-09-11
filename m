@@ -2,57 +2,57 @@ Return-Path: <SRS0=HL2s=OB=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	TVD_SPACE_RATIO,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E10EC433EF
-	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 14:12:50 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0BB6FC433F5
+	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 14:13:02 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D7B106101A
-	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 14:12:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D7B106101A
+	by mail.kernel.org (Postfix) with ESMTPS id 9A3BB611CC
+	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 14:13:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9A3BB611CC
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A6D6F4068A;
-	Sat, 11 Sep 2021 14:12:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6095083459;
+	Sat, 11 Sep 2021 14:13:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JQQXatXo0DbA; Sat, 11 Sep 2021 14:12:49 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id J0UxP8JNxVFZ; Sat, 11 Sep 2021 14:13:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 16FBF403DA;
-	Sat, 11 Sep 2021 14:12:48 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7352A1BF834
- for <buildroot@lists.busybox.net>; Sat, 11 Sep 2021 14:12:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B7CBB833B7;
+	Sat, 11 Sep 2021 14:12:59 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 5CB0B1BF834
+ for <buildroot@lists.busybox.net>; Sat, 11 Sep 2021 14:12:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6321140477
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2D57460629
  for <buildroot@lists.busybox.net>; Sat, 11 Sep 2021 14:12:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id W0i6Va9fkBCU for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ko3eYKgv7-T4 for <buildroot@lists.busybox.net>;
  Sat, 11 Sep 2021 14:12:23 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7EAE1400E8
+ by smtp3.osuosl.org (Postfix) with ESMTP id 84AC7607D0
  for <buildroot@buildroot.org>; Sat, 11 Sep 2021 14:12:23 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 60F3D88FE8; Sat, 11 Sep 2021 14:10:45 +0000 (UTC)
+ id 6B82588FE5; Sat, 11 Sep 2021 14:10:45 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
 Date: Sat, 11 Sep 2021 16:11:46 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 13ff77b36a29f91399bfbc3cc56776f11888c222
-X-Git-Newrev: bfb764c6dbfa721d3fe35a7bfe951f84b2a904c4
+X-Git-Oldrev: bfb764c6dbfa721d3fe35a7bfe951f84b2a904c4
+X-Git-Newrev: 1833c710ce73a1ca67143abd3fbcee6fd5d6fcdb
 X-Patchwork-Hint: ignore
-Message-Id: <20210911141045.60F3D88FE8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/kodi-pvr-zattoo: bump version to
- 19.7.10-Matrix
+Message-Id: <20210911141045.6B82588FE5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/swupdate: let buildroot handle
+ stripping
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,41 +71,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bfb764c6dbfa721d3fe35a7bfe951f84b2a904c4
+commit: https://git.buildroot.net/buildroot/commit/?id=1833c710ce73a1ca67143abd3fbcee6fd5d6fcdb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes:
-https://github.com/rbuehlma/pvr.zattoo/releases/tag/19.7.10-Matrix
+In buildroot, stripping for the target is configured and implemented
+with the global `BR2_STRIP_strip` option that drive the stripping in
+the target-finalize step.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+So, we explicitly disable stripping at build time for swupdate.
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash | 2 +-
- package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/swupdate/swupdate.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
-index 138ad19b88..ac4960df92 100644
---- a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
-+++ b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  d0dee5802592aa1fd53c3835e373b2c49bdc3121575273bf2a0c8ebf1a40bd2c  kodi-pvr-zattoo-19.7.9-Matrix.tar.gz
-+sha256  8cc02c4627b5108e39bb7b6a6f56f7ba5debbb1adf982c4f23395944aa7d2c8e  kodi-pvr-zattoo-19.7.10-Matrix.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
-index 554fd3946f..7a3b230e8b 100644
---- a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
-+++ b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
+index 402aa0a91f..42008cddd7 100644
+--- a/package/swupdate/swupdate.mk
++++ b/package/swupdate/swupdate.mk
+@@ -22,7 +22,7 @@ SWUPDATE_LICENSE_FILES = LICENSES/BSD-1-Clause.txt \
+ # swupdate uses $CROSS-cc instead of $CROSS-gcc, which is not
+ # available in all external toolchains, and use CC for linking. Ensure
+ # TARGET_CC is used for both.
+-SWUPDATE_MAKE_ENV = CC="$(TARGET_CC)" LD="$(TARGET_CC)"
++SWUPDATE_MAKE_ENV = CC="$(TARGET_CC)" LD="$(TARGET_CC)" SKIP_STRIP=y
  
--KODI_PVR_ZATTOO_VERSION = 19.7.9-Matrix
-+KODI_PVR_ZATTOO_VERSION = 19.7.10-Matrix
- KODI_PVR_ZATTOO_SITE = $(call github,rbuehlma,pvr.zattoo,$(KODI_PVR_ZATTOO_VERSION))
- KODI_PVR_ZATTOO_LICENSE = GPL-2.0+
- KODI_PVR_ZATTOO_LICENSE_FILES = LICENSE.md
+ # swupdate bundles its own version of mongoose (version 6.16)
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
