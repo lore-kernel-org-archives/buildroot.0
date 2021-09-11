@@ -7,51 +7,51 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 298A0C433F5
-	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 12:53:28 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DA2A1C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 12:53:39 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9460C611B0
-	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 12:53:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9460C611B0
+	by mail.kernel.org (Postfix) with ESMTPS id 3EAF1611B0
+	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 12:53:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3EAF1611B0
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5BE5983B10;
-	Sat, 11 Sep 2021 12:53:27 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3AYyVVwTmuAG; Sat, 11 Sep 2021 12:53:26 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 912BA837C0;
-	Sat, 11 Sep 2021 12:53:25 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 951B31BF31A
- for <buildroot@lists.busybox.net>; Sat, 11 Sep 2021 12:53:11 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 83AAF40684
- for <buildroot@lists.busybox.net>; Sat, 11 Sep 2021 12:53:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0ED6F40199;
+	Sat, 11 Sep 2021 12:53:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SN1AmnHABltH for <buildroot@lists.busybox.net>;
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 6MQ8hDn0dok8; Sat, 11 Sep 2021 12:53:38 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3CBDA40166;
+	Sat, 11 Sep 2021 12:53:37 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C5C661BF958
+ for <buildroot@lists.busybox.net>; Sat, 11 Sep 2021 12:53:11 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id C1451401BB
+ for <buildroot@lists.busybox.net>; Sat, 11 Sep 2021 12:53:11 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id tuz2AwNniyzI for <buildroot@lists.busybox.net>;
  Sat, 11 Sep 2021 12:53:10 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 82D764044C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7BFD14011A
  for <buildroot@buildroot.org>; Sat, 11 Sep 2021 12:53:10 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 8688688F3A; Sat, 11 Sep 2021 12:51:32 +0000 (UTC)
+ id 7C50B88F39; Sat, 11 Sep 2021 12:51:32 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sat, 11 Sep 2021 14:52:41 +0200
+Date: Sat, 11 Sep 2021 14:52:33 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e83974e2f9f5b7380e78f417b1ef5e0d919d724c
-X-Git-Newrev: ccda2f4bdc97d2f5a4a1efdb357ece8e5b57e10d
+X-Git-Oldrev: a600671166fc59c9da5a5fdca0ba204d0f7836f5
+X-Git-Newrev: e83974e2f9f5b7380e78f417b1ef5e0d919d724c
 X-Patchwork-Hint: ignore
-Message-Id: <20210911125132.8688688F3A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] fs: new OCI filesystem type
+Message-Id: <20210911125132.7C50B88F39@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/sloci-image: new host package
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,248 +70,196 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ccda2f4bdc97d2f5a4a1efdb357ece8e5b57e10d
+commit: https://git.buildroot.net/buildroot/commit/?id=e83974e2f9f5b7380e78f417b1ef5e0d919d724c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add support to generate OCI (Open Container Initiative) images.
-
-An OCI image consists of a manifest, an image index (optional), a set of
-filesystem layers, and a configuration. The complete specification is
-available in the link below:
-
-https://github.com/opencontainers/image-spec/blob/master/spec.md
-
-The image is generated with the host tool sloci-image, and config
-options can be used to configure image parameters.
-
-By default, the image is generated in a directory called rootfs-oci:
-
-$ cd output/images
-$ ls rootfs-oci/
-blobs  index.json  oci-layout
-
-Optionally, the image can be packed into a tar archive.
-
-The image can be pushed to a registry using containers tools like
-skopeo:
-
-$ skopeo copy --dest-creds <user>:<pass> oci:rootfs-oci:<tag> \
-	docker://<user>/<image>[:tag]
-
-And then we can pull/run the container image with tools like docker:
-
-$ docker run -it <user>/<image>[:tag]
+sloci-image is a simple CLI tool for packing rootfs into a single-layer
+OCI image.
 
 Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
 Signed-off-by: Matthew Weber <matthew.weber@collins.com>
-[Arnout:
- - mention in help text that options are space separated;
- - use GO_GOARCH and GO_GOARM for architecture;
- - quote all arguments;
- - don't cd to BINARIES_DIR;
- - remove ROOTFS_OCI_IMAGE_NAME variable;
- - remove wildcard from rm.
-]
+[Arnout: correctly set PREFIX, add Matt to DEVELOPERS, add additional
+         patch]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- fs/Config.in     |  1 +
- fs/oci/Config.in | 89 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- fs/oci/oci.mk    | 80 ++++++++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 170 insertions(+)
+ DEVELOPERS                                         |  2 ++
+ package/Config.in.host                             |  1 +
+ ...I-tar-from-the-contents-of-working-folder.patch | 37 ++++++++++++++++++++
+ .../0002-oci_arch-fix-arch-arm64-argument.patch    | 39 ++++++++++++++++++++++
+ package/sloci-image/Config.in.host                 |  7 ++++
+ package/sloci-image/sloci-image.hash               |  5 +++
+ package/sloci-image/sloci-image.mk                 | 19 +++++++++++
+ 7 files changed, 110 insertions(+)
 
-diff --git a/fs/Config.in b/fs/Config.in
-index 37a2aa21f8..eee5e26bb2 100644
---- a/fs/Config.in
-+++ b/fs/Config.in
-@@ -11,6 +11,7 @@ source "fs/f2fs/Config.in"
- source "fs/initramfs/Config.in"
- source "fs/iso9660/Config.in"
- source "fs/jffs2/Config.in"
-+source "fs/oci/Config.in"
- source "fs/romfs/Config.in"
- source "fs/squashfs/Config.in"
- source "fs/tar/Config.in"
-diff --git a/fs/oci/Config.in b/fs/oci/Config.in
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 9498d9ce36..8473f51726 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1835,6 +1835,7 @@ F:	package/raptor/
+ F:	package/rng-tools/
+ F:	package/rsyslog/
+ F:	package/setools/
++F:	package/sloci-image/
+ F:	package/smcroute/
+ F:	package/tclap/
+ F:	package/tini/
+@@ -2435,6 +2436,7 @@ F:	package/curlpp/
+ F:	package/daq/
+ F:	package/libgdiplus/
+ F:	package/pimd/
++F:	package/sloci-image/
+ F:	package/snort/
+ F:	package/stella/
+ F:	package/tio/
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 551352482e..a0ec9bc1ab 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -79,6 +79,7 @@ menu "Host utilities"
+ 	source "package/s6-rc/Config.in.host"
+ 	source "package/sam-ba/Config.in.host"
+ 	source "package/sdbusplus/Config.in.host"
++	source "package/sloci-image/Config.in.host"
+ 	source "package/squashfs/Config.in.host"
+ 	source "package/sunxi-tools/Config.in.host"
+ 	source "package/swig/Config.in.host"
+diff --git a/package/sloci-image/0001-create-OCI-tar-from-the-contents-of-working-folder.patch b/package/sloci-image/0001-create-OCI-tar-from-the-contents-of-working-folder.patch
 new file mode 100644
-index 0000000000..176785810a
+index 0000000000..3d048e3843
 --- /dev/null
-+++ b/fs/oci/Config.in
-@@ -0,0 +1,89 @@
-+config BR2_TARGET_ROOTFS_OCI
-+	bool "oci image"
++++ b/package/sloci-image/0001-create-OCI-tar-from-the-contents-of-working-folder.patch
+@@ -0,0 +1,37 @@
++From 66c73c2ba3057634f19f37d3cfbbe752638c9f9f Mon Sep 17 00:00:00 2001
++From: Matthew Weber <matthew.weber@collins.com>
++Date: Fri, 27 Aug 2021 12:24:19 -0500
++Subject: [PATCH] create OCI tar from the contents of working folder
++
++When testing with containerd, it was found that the tarfile
++created with sloci can't import because the contents are inside
++a folder.  Looking around online, it seems that the an oci tar
++should container the blob/index.json/oci-layout in the . of the
++tarfile.
++
++Upstream: https://github.com/jirutka/sloci-image/pull/3
++
++Refs:
++https://snyk.io/blog/container-image-formats/
++https://github.com/opencontainers/image-spec/blob/main/image-layout.md
++
++Signed-off-by: Matthew Weber <matthew.weber@collins.com>
++---
++ sloci-image | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/sloci-image b/sloci-image
++index 90dba26..7f3c775 100755
++--- a/sloci-image
+++++ b/sloci-image
++@@ -425,6 +425,6 @@ if [ "$OUT_TYPE" = tar ]; then
++ 	file_name="$IMAGE_NAME-$CFG_REF_NAME-$CFG_ARCH"
++ 	file_name="$file_name${CFG_ARCH_VARIANT:+"-$CFG_ARCH_VARIANT"}-$CFG_OS.oci-image"
++ 
++-	tar ${DEBUG:+-v} -cf "$file_name.tar" "$IMAGE_NAME"
+++	tar ${DEBUG:+-v} -cf "$file_name.tar" -C "$IMAGE_NAME" .
++ 	rm -Rf "$IMAGE_NAME"
++ fi
++-- 
++2.17.1
++
+diff --git a/package/sloci-image/0002-oci_arch-fix-arch-arm64-argument.patch b/package/sloci-image/0002-oci_arch-fix-arch-arm64-argument.patch
+new file mode 100644
+index 0000000000..27c4ab8c16
+--- /dev/null
++++ b/package/sloci-image/0002-oci_arch-fix-arch-arm64-argument.patch
+@@ -0,0 +1,39 @@
++From 67b16c65cdf0f654275802d6d12451a81a4d2796 Mon Sep 17 00:00:00 2001
++From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
++Date: Sat, 11 Sep 2021 14:37:20 +0200
++Subject: [PATCH] oci_arch: fix "--arch arm64" argument
++
++The --arch argument presumably should take the appropriate GOARCH-type
++string. The oci_arch() function does some conversion on it, which is
++needed because without --arch the architecture is taken from "uname -m",
++which yields something different than a GOARCH-type string.
++
++However, oci_arch() converts arm* into arm, which is wrong for arm64.
++Since arm64 is a proper GOARCH-type string, it shouldn't be converted at
++all.
++
++Upate the case statement to convert arm64 to arm64 (i.e., do nothing).
++Since the arm64 match comes before arm*, it takes precedence.
++
++Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
++Upstream: https://github.com/jirutka/sloci-image/pull/4
++---
++ sloci-image | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/sloci-image b/sloci-image
++index 7f3c775..6844023 100755
++--- a/sloci-image
+++++ b/sloci-image
++@@ -214,7 +214,7 @@ oci_arch() {
++ 	case "$1" in
++ 		x86_64) echo amd64;;
++ 		x86) echo 386;;
++-		aarch64) echo arm64;;
+++		aarch64|arm64) echo arm64;;
++ 		arm*) echo arm;;
++ 		*) echo "$1";;
++ 	esac
++-- 
++2.31.1
++
+diff --git a/package/sloci-image/Config.in.host b/package/sloci-image/Config.in.host
+new file mode 100644
+index 0000000000..d809f1f3c7
+--- /dev/null
++++ b/package/sloci-image/Config.in.host
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_HOST_SLOCI_IMAGE
++	bool "host sloci-image"
 +	help
-+	  Build an OCI (Open Container Initiative) image.
-+
-+	  By default, the image is generated in a directory called
-+	  rootfs-oci:
-+
-+	  $ cd output/images
-+	  $ ls rootfs-oci/
-+	  blobs  index.json  oci-layout
-+
-+	  You can push the image to a registry. Example using skopeo:
-+
-+	  $ skopeo copy --dest-creds <user>:<pass> \
-+	           oci:rootfs-oci:<tag> docker://<user>/<image>[:tag]
-+
-+	  And pull/run it with docker:
-+
-+	  $ docker run -it <user>/<image>[:tag]
-+
-+if BR2_TARGET_ROOTFS_OCI
-+
-+config BR2_TARGET_ROOTFS_OCI_AUTHOR
-+	string "author name and/or email address"
-+	default "Buildroot"
-+	help
-+	  Name and/or email address of the person which created the
++	  A simple CLI tool for packing rootfs into a single-layer OCI
 +	  image.
 +
-+config BR2_TARGET_ROOTFS_OCI_TAG
-+	string "image tag"
-+	default "latest"
-+	help
-+	  Tag to be used in the container image. If empty, 'latest' will
-+	  be used by default.
-+
-+config BR2_TARGET_ROOTFS_OCI_ENTRYPOINT
-+	string "entrypoint"
-+	default "sh"
-+	help
-+	  Command to execute when the container starts.
-+
-+config BR2_TARGET_ROOTFS_OCI_ENTRYPOINT_ARGS
-+	string "entrypoint arguments"
-+	help
-+	  Default arguments to the entrypoint of the container.
-+
-+config BR2_TARGET_ROOTFS_OCI_WORKDIR
-+	string "working directory"
-+	help
-+	  Working directory of the entrypoint process in the
-+	  container.
-+
-+config BR2_TARGET_ROOTFS_OCI_UID
-+	string "username or UID"
-+	default "0"
-+	help
-+	  The username or UID of user the process run as.
-+
-+config BR2_TARGET_ROOTFS_OCI_ENV_VARS
-+	string "environment variables"
-+	help
-+	  Default environment variables for the container.
-+	  Space-separated list of variable=value assignments.
-+
-+config BR2_TARGET_ROOTFS_OCI_PORTS
-+	string "ports"
-+	help
-+	  Default set of ports to expose from a container running
-+	  this image as a space-separted list of ports in the following
-+	  format:
-+
-+	  <port>/tcp, <port>/udp, <port> (same as <port>/tcp).
-+
-+config BR2_TARGET_ROOTFS_OCI_LABELS
-+	string "labels"
-+	help
-+	  Metadata in the format KEY=VALUE for the container compliant
-+	  with OCI annotation rules. If KEY starts with a dot, it will
-+	  be prefixed with "org.opencontainers.image"
-+	  (e.g. .url -> org.opencontainers.image.url).
-+
-+config BR2_TARGET_ROOTFS_OCI_ARCHIVE
-+	bool "pack oci image into a tar archive"
-+	help
-+	  Select whether the image should be packed into a TAR archive.
-+
-+endif
-diff --git a/fs/oci/oci.mk b/fs/oci/oci.mk
++	  https://github.com/jirutka/sloci-image
+diff --git a/package/sloci-image/sloci-image.hash b/package/sloci-image/sloci-image.hash
 new file mode 100644
-index 0000000000..aa81920d36
+index 0000000000..117f0ba6e0
 --- /dev/null
-+++ b/fs/oci/oci.mk
-@@ -0,0 +1,80 @@
++++ b/package/sloci-image/sloci-image.hash
+@@ -0,0 +1,5 @@
++# Locally computed
++sha256  56fbc335c193eccc3992f0a723c6dabe762f6d4854fc52059be074bdf5060d9e  sloci-image-0.1.1.tar.gz
++
++# Hash for license files:
++sha256  8ea53673b084576813fc40cd63817c5a1619438942b5e6c30dac1d10707c27e4  LICENSE
+diff --git a/package/sloci-image/sloci-image.mk b/package/sloci-image/sloci-image.mk
+new file mode 100644
+index 0000000000..232127bfa2
+--- /dev/null
++++ b/package/sloci-image/sloci-image.mk
+@@ -0,0 +1,19 @@
 +################################################################################
 +#
-+# Build the oci image
++# sloci-image
 +#
 +################################################################################
 +
-+ROOTFS_OCI_DEPENDENCIES = host-sloci-image
++SLOCI_IMAGE_VERSION = 0.1.1
++SLOCI_IMAGE_SITE = $(call github,jirutka,sloci-image,v$(SLOCI_IMAGE_VERSION))
 +
-+# architecture - take it from Go
-+OCI_SLOCI_IMAGE_OPTS = --arch $(GO_GOARCH)
++SLOCI_IMAGE_LICENSE = MIT
++SLOCI_IMAGE_LICENSE_FILES = LICENSE
 +
-+# architecture variant (typically used only for arm)
-+OCI_SLOCI_IMAGE_OPTS += $(and $(GO_GOARM),--arch-variant v$(GO_GOARM))
++HOST_SLOCI_IMAGE_DEPENDENCIES = host-gawk
 +
-+# entrypoint
-+OCI_ENTRYPOINT = $(call qstrip,$(BR2_TARGET_ROOTFS_OCI_ENTRYPOINT))
-+ifneq ($(OCI_ENTRYPOINT),)
-+OCI_SLOCI_IMAGE_OPTS += --entrypoint "$(OCI_ENTRYPOINT)"
-+endif
-+
-+# entrypoint arguments
-+OCI_ENTRYPOINT_ARGS = $(call qstrip,$(BR2_TARGET_ROOTFS_OCI_ENTRYPOINT_ARGS))
-+ifneq ($(OCI_ENTRYPOINT_ARGS),)
-+OCI_SLOCI_IMAGE_OPTS += --cmd "$(OCI_ENTRYPOINT_ARGS)"
-+endif
-+
-+# author
-+OCI_AUTHOR = $(call qstrip,$(BR2_TARGET_ROOTFS_OCI_AUTHOR))
-+ifneq ($(OCI_AUTHOR),)
-+OCI_SLOCI_IMAGE_OPTS += --author "$(OCI_AUTHOR)"
-+endif
-+
-+# username or UID
-+OCI_UID = $(call qstrip,$(BR2_TARGET_ROOTFS_OCI_UID))
-+ifneq ($(OCI_UID),)
-+OCI_SLOCI_IMAGE_OPTS += --user "$(OCI_UID)"
-+endif
-+
-+# labels
-+OCI_LABELS = $(call qstrip,$(BR2_TARGET_ROOTFS_OCI_LABELS))
-+ifneq ($(OCI_LABELS),)
-+OCI_SLOCI_IMAGE_OPTS += \
-+	$(foreach label,$(OCI_LABELS),--label "$(label)")
-+endif
-+
-+# environment variables
-+OCI_ENV_VARS = $(call qstrip,$(BR2_TARGET_ROOTFS_OCI_ENV_VARS))
-+ifneq ($(OCI_ENV_VARS),)
-+OCI_SLOCI_IMAGE_OPTS += \
-+	$(foreach var,$(OCI_ENV_VARS),--env "$(var)")
-+endif
-+
-+# working directory
-+OCI_WORKDIR = $(call qstrip,$(BR2_TARGET_ROOTFS_OCI_WORKDIR))
-+ifneq ($(OCI_WORKDIR),)
-+OCI_SLOCI_IMAGE_OPTS += --working-dir "$(OCI_WORKDIR)"
-+endif
-+
-+# ports
-+OCI_PORTS = $(call qstrip,$(BR2_TARGET_ROOTFS_OCI_PORTS))
-+ifneq ($(OCI_PORTS),)
-+OCI_SLOCI_IMAGE_OPTS += \
-+	$(foreach port,$(OCI_PORTS),--port "$(port)")
-+endif
-+
-+# tag
-+OCI_TAG = $(or $(call qstrip,$(BR2_TARGET_ROOTFS_OCI_TAG)),latest)
-+
-+# enable tar archive
-+ifeq ($(BR2_TARGET_ROOTFS_OCI_ARCHIVE),y)
-+OCI_SLOCI_IMAGE_OPTS += --tar
-+endif
-+
-+define ROOTFS_OCI_CMD
-+	rm -rf $(BINARIES_DIR)/rootfs-oci
-+	$(HOST_DIR)/bin/sloci-image $(OCI_SLOCI_IMAGE_OPTS) $(TARGET_DIR) \
-+		$(BINARIES_DIR)/rootfs-oci:$(OCI_TAG)
++define HOST_SLOCI_IMAGE_INSTALL_CMDS
++	$(HOST_MAKE_ENV) $(MAKE) PREFIX=$(HOST_DIR) -C $(@D) install
 +endef
 +
-+$(eval $(rootfs))
++$(eval $(host-generic-package))
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
