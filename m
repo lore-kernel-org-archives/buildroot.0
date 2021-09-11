@@ -2,90 +2,98 @@ Return-Path: <SRS0=HL2s=OB=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.5 required=3.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-	DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-15.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 31551C433F5
-	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 16:26:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5AEDCC433F5
+	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 16:29:56 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id E295F61213
-	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 16:26:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E295F61213
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id F2BFC60F58
+	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 16:29:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org F2BFC60F58
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B454D406B3;
-	Sat, 11 Sep 2021 16:26:27 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8E119400FC;
+	Sat, 11 Sep 2021 16:29:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FHgzVRYkbA6W; Sat, 11 Sep 2021 16:26:26 +0000 (UTC)
+	with ESMTP id AHoN5RKvnreQ; Sat, 11 Sep 2021 16:29:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CEEA740489;
-	Sat, 11 Sep 2021 16:26:25 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id EEB7A1BF304
- for <buildroot@lists.busybox.net>; Sat, 11 Sep 2021 16:25:24 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8D09E40489;
+	Sat, 11 Sep 2021 16:29:53 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 2FFE31BF304
+ for <buildroot@lists.busybox.net>; Sat, 11 Sep 2021 16:29:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DD55A82C4D
- for <buildroot@lists.busybox.net>; Sat, 11 Sep 2021 16:25:24 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2C264415BD
+ for <buildroot@lists.busybox.net>; Sat, 11 Sep 2021 16:29:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dli3dPELXYHQ for <buildroot@lists.busybox.net>;
- Sat, 11 Sep 2021 16:25:23 +0000 (UTC)
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wn2aIBQ6E18A for <buildroot@lists.busybox.net>;
+ Sat, 11 Sep 2021 16:29:51 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com
- [IPv6:2a00:1450:4864:20::134])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 96D0B82786
- for <buildroot@buildroot.org>; Sat, 11 Sep 2021 16:25:22 +0000 (UTC)
-Received: by mail-lf1-x134.google.com with SMTP id k4so10937886lfj.7
- for <buildroot@buildroot.org>; Sat, 11 Sep 2021 09:25:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc:content-transfer-encoding;
- bh=QPRQcSN+c/0Zp8CgXEFTNENa1E0tDKhwHZ/5l7ObNx8=;
- b=ddnElQPyd/G2BEzR1LWtToxI920dWkinLytVQNw1JwwuxTTKuJjqBz1YnbWSHuc4j/
- F7Zg8MrCxPXcNF4+GPFLZ4dP7B+U4GkEjfVlMpm3cmA4qm4DlZda3oW2ZY4LRfKdH8Fp
- GRp8ENBqdO/YNTtmR6URxqVHVhIah9cJaU1sUsq4Kv7nxOATbD3jxlMt4dmfkz/p0v4C
- SbSEFy0Xxwu11nLxR1ZCB5XTx6J//ER+YrfxWy++RJiA9ktMDHRZPBBY0wiT5AN0h5MH
- MdTZQq3Df8k4B1zzKZ6ab+XXxoxcAi5HI5r1Sn5cq1FjmNS13c3LUfGSfkUX3Y98neiN
- GBEQ==
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com
+ [IPv6:2a00:1450:4864:20::52d])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1749F415BC
+ for <buildroot@buildroot.org>; Sat, 11 Sep 2021 16:29:50 +0000 (UTC)
+Received: by mail-ed1-x52d.google.com with SMTP id g21so7257889edw.4
+ for <buildroot@buildroot.org>; Sat, 11 Sep 2021 09:29:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=subject:to:cc:references:from:organization:message-id:date
+ :user-agent:mime-version:in-reply-to:content-language
+ :content-transfer-encoding;
+ bh=PnfXfNsFGCIHppOXuM+LYxOS5uwlXeBBlOzfMOhnPzc=;
+ b=SdaVxUIvOJ+uvJbUz7+cOXEiHvkYu/Y+kmDhpwASz+HvybVUwc2dN14UPCcFpeAyDd
+ HvjKXSf5ypN2niJlxPwhr4cOEiRojw960RyjKwGhP3EigjmarQRhZ9blPtRhUNqCTeaJ
+ xEkSXx18n/jzDupcwEeWCw3Ft7Ga5q1rH3PstNLgHxtHfocNqqoVeYT5jcJKxaz/y205
+ GnJLhFLusUo2mHSUjNNztc3czymcgAp7LYxHFqYi51LSw7arrupo5T9z/lq6vF7pzpM/
+ 2tVJCA1nH9t4V9UqoBSiyf0WbZQVzGe85gVDVGhy82MKcPJE/4ghWr1nUiHDAUElZxTY
+ MuYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc:content-transfer-encoding;
- bh=QPRQcSN+c/0Zp8CgXEFTNENa1E0tDKhwHZ/5l7ObNx8=;
- b=zfJj7q/4hEmhgWrs/UZawuBtnvpM/5RRfFdQokYLTU3L8lthAPmCWQuLI0eOeNhvsK
- Oueg7NH0IIulVtr15hGSegdReD+MaPa+MF0bPTESLLSxyP1RF0lwpdr8XP0CodQkAZed
- o4eVp+fVmTtUGXB5L1lltaI2DqREXNWv5VvAMpy3S7uD3YhYrkYjf65YUNY7nPj/ltEc
- enWxpVAlVjVYgX3VWrCndx+n3qd7Cda7yzY/a7cqYtKc6YlYrYJVMFD2UAPZJhYJs/Ja
- 1jML67hnrVkOyuSAt0KQ0hFsRX9wkp1Z6GBYfMidnLnjMHez9uekjm2mC3Hp+npGUfAf
- stkw==
-X-Gm-Message-State: AOAM531T1Cr1dkiTsf1KyG/55qblJY99T0tpreyLFB5OMZntSqlcWJfL
- OF4orA21eiJGzmBc9f3gPzyCGOt29yT2mF1X7DvSSYRNfTg=
-X-Google-Smtp-Source: ABdhPJzdWya6onlqIKkG0MNjfjgFJTlRvqQfnTmfMhc/w5fkH5ot7j4kH5mnjSUgv6YOSRBX39wLIVG9Vuozmph0NEE=
-X-Received: by 2002:ac2:483a:: with SMTP id 26mr2531112lft.684.1631377520710; 
- Sat, 11 Sep 2021 09:25:20 -0700 (PDT)
+ h=x-gm-message-state:subject:to:cc:references:from:organization
+ :message-id:date:user-agent:mime-version:in-reply-to
+ :content-language:content-transfer-encoding;
+ bh=PnfXfNsFGCIHppOXuM+LYxOS5uwlXeBBlOzfMOhnPzc=;
+ b=ILXfY0OAy1QwoLX4w9ZIrwaEa2OdsB3/6SaPBmbGT314QLKbut2pgPUR5MgUGbVSDR
+ 5o7necP+hFH9lV1LtopiezQWYbiAPldqOM3+InM/Ngfj5e40PV3pY6pqonZxsahbxPkL
+ c7ptX47lcOiGqRx/64tUBk8XrnKezoMoqeuS9SkvSkV6FAsAYRzifABkWWtjbfZe77SW
+ 9OVbcgAA724IT5kWKx3iLmHXBTrxh3h00FfkdX9x8aTpN5iTJ3f9GyF0B+ulfHq+Gfbd
+ pHR/yUBck+NkCkYOeQK7fYP7Z/SHHtvRZwXDSrcYKB4zGTpSIbKyGgAD81pVb++OhAKC
+ F3pg==
+X-Gm-Message-State: AOAM5334SQTvebs2dXU6moUtxiszM4/gw/j6EvT/u0KwsMZ5VyvNeaxi
+ WaJNxP+m4yr+0j5ayHjLAvAeYu9LthQ=
+X-Google-Smtp-Source: ABdhPJwdftImCbZAIWAkBgLXKYtstTOF9RHBO/sE4UveEzPKTZJ0WyTPbAF8YFziWbqd7AWx7w7z8g==
+X-Received: by 2002:a05:6402:5163:: with SMTP id
+ d3mr4061544ede.220.1631377789343; 
+ Sat, 11 Sep 2021 09:29:49 -0700 (PDT)
+Received: from ?IPv6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id z18sm325925edq.29.2021.09.11.09.29.48
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sat, 11 Sep 2021 09:29:48 -0700 (PDT)
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+References: <20210831195812.1095065-1-fontaine.fabrice@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+Message-ID: <8f2f0ec2-9907-3c14-85dc-5888542efcdc@mind.be>
+Date: Sat, 11 Sep 2021 18:29:48 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-References: <20210908164536.474998-1-fontaine.fabrice@gmail.com>
- <20210911125500.GN1053080@scaer>
- <CAPi7W82x1VFV2Lb+=m=7fhzV7MDc0743TjkDN9n0nXNYefPUsg@mail.gmail.com>
- <20210911161614.GR1053080@scaer>
-In-Reply-To: <20210911161614.GR1053080@scaer>
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 11 Sep 2021 18:25:09 +0200
-Message-ID: <CAPi7W81wz0Tr1wtV0BLTEg3FfT+6bs0A2p=7MYKJ+WSp4CUtKg@mail.gmail.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Subject: Re: [Buildroot] [PATCH v2,
- 1/1] package/uboot-tools: fix MKIMAGE_ARCH handling
+In-Reply-To: <20210831195812.1095065-1-fontaine.fabrice@gmail.com>
+Content-Language: en-GB
+Subject: Re: [Buildroot] [PATCH 1/1] package/zip: fix musl static build
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,55 +106,67 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: Matt Weber <matthew.weber@collins.com>,
- Buildroot Mailing List <buildroot@buildroot.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Jan Pedersen <jp@jp-embedded.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-TGUgc2FtLiAxMSBzZXB0LiAyMDIxIMOgIDE4OjE2LCBZYW5uIEUuIE1PUklOIDx5YW5uLm1vcmlu
-LjE5OThAZnJlZS5mcj4gYSDDqWNyaXQgOgo+Cj4gRmFicmljZSwgQWxsLAo+Cj4gT24gMjAyMS0w
-OS0xMSAxODowNyArMDIwMCwgRmFicmljZSBGb250YWluZSBzcGFrZSB0aHVzbHk6Cj4gPiBMZSBz
-YW0uIDExIHNlcHQuIDIwMjEgw6AgMTQ6NTUsIFlhbm4gRS4gTU9SSU4gPHlhbm4ubW9yaW4uMTk5
-OEBmcmVlLmZyPiBhIMOpY3JpdCA6Cj4gPiA+IE9uIDIwMjEtMDktMDggMTg6NDUgKzAyMDAsIEZh
-YnJpY2UgRm9udGFpbmUgc3Bha2UgdGh1c2x5Ogo+ID4gPiA+IEZpeCBNS0lNQUdFX0FSQ0ggaGFu
-ZGxpbmcgdG8gYXZvaWQgdGhlIGZvbGxvd2luZyBidWlsZCBmYWlsdXJlOgo+IFstLVNOSVAtLV0K
-PiA+ID4gPiAtaWZlcSAoJChLRVJORUxfQVJDSCkseDg2XzY0KQo+ID4gPiA+IC1NS0lNQUdFX0FS
-Q0ggPSB4ODYKPiA+ID4gPiAtZWxzZSBpZmVxICgkKEtFUk5FTF9BUkNIKSxpMzg2KQo+ID4gPiA+
-ICsjIEZvciBpMzg2LCB3ZSBuZWVkIHRvIGNvbnZlcnQKPiA+ID4gPiArIyBGb3Igb3BlbnJpc2Ms
-IHdlIG5lZWQgdG8gY29udmVydAo+ID4gPiA+ICsjIEZvciBvdGhlcnMsIHdlJ2xsIGp1c3Qga2Vl
-cCBLRVJORUxfQVJDSAo+ID4gPiA+ICtpZmVxICgkKEtFUk5FTF9BUkNIKSxpMzg2KQo+ID4gPiA+
-ICBNS0lNQUdFX0FSQ0ggPSB4ODYKPiA+ID4KPiA+ID4gQnV0IHRoZW4sIHg4Nl82NCBzaG91bGQg
-c3RpbGwgYmUgY2hhbmdlZCB0byB4ODYsIG5vPwo+ID4gTm9wZSwgeDg2XzY0IGlzIHJlY29nbml6
-ZWQgYXMgYSB2YWxpZCBhcmNoaXRlY3R1cmUsIGhlcmUgaXMgYW4gZXh0cmFjdAo+ID4gb2YgdGhl
-IGNvbW1pdCBtZXNzYWdlOgo+ID4KPiA+ICAgICAgICAgeDg2ICAgICAgICAgICAgICBJbnRlbCB4
-ODYKPiA+ICAgICAgICAgeDg2XzY0ICAgICAgICAgICBBTUQgeDg2XzY0Cj4gPiAgICAgICAgIHh0
-ZW5zYSAgICAgICAgICAgWHRlbnNhCj4KPiBBaCwgcmlnaHQsIEkgb3Zlcmxvb2tlZCB0aGF0IGlu
-IHRoZSBsaXN0Lgo+Cj4gV2hhdCBnb3QgbWUgY29uZnVzZWQgd2FzIHRoYXQgeW91IHNwZWNpYWxs
-eSBtZW50aW9uIG9yMWssIGJ1dCBub3QKPiB4ODZfNjQsIHdoaWNoIHdhcyBhbHNvIHdyb25nLCBi
-dXQgd2UgZG8gbm90IHNlZW0gdG8gaGF2ZSBhbnkgYnVpbGQKPiBmYWlsdXJlIGFzc29jaWF0ZWQg
-d2l0aCB0aGF0LCBkbyB3ZT8KVHJ1ZSwgdGhlcmUgYXJlIG5vIGJ1aWxkIGZhaWx1cmVzIG9uIHg4
-Nl82NC4KCkknbSB3b25kZXJpbmcgaWYgdGhvc2UgYnVpbGQgZmFpbHVyZXMgYXJlIHJhaXNlZCBi
-ZWNhdXNlIG9mIHRvb2xjaGFpbiBhbGlhc2VzLgpJbmRlZWQsIGl0IHNlZW1zIHRoYXQgb3BlbnJp
-c2MgY2FuIGJlIGRlZmluZWQgYXMgYSBhbGlhcyB0byBvcjFrOgpodHRwczovL2dpdGh1Yi5jb20v
-dS1ib290L3UtYm9vdC9ibG9iL2JiY2FjZGY0Y2QyM2YyZTVkZWI5ZWY5MTYwOTZjOTU2Yzk1NTI0
-M2QvdG9vbHMvYnVpbGRtYW4vUkVBRE1FI0wxOTYKaHR0cHM6Ly9naXRodWIuY29tL3UtYm9vdC91
-LWJvb3QvYmxvYi9hOTRhYjU2MWUyZjQ5YTgwZDg1Nzk5MzBlODQwYjgxMGFiMWExMzMwL3Rvb2xz
-L2J1aWxkbWFuL2JzZXR0aW5ncy5weSNMODgKCkJ1dCBJIGRpZG4ndCBmaW5kIHRoZSByb290IGNh
-dXNlIG9mIHRoZXNlIGJ1aWxkIGZhaWx1cmVzLCBwZXJoYXBzIHRoZQp0b29sY2hhaW4tYWxpYXMg
-aXMgb3ZlcndyaXR0ZW4/ClNvIEkgZ2F2ZSB1cCBhbmQgdGhvdWdodCB0aGF0IHRoaXMgcGF0Y2gg
-d2FzIGFuIGFjY2VwdGFibGUgbG9uZy10ZXJtIHNvbHV0aW9uLgo+Cj4gUmVnYXJkcywKPiBZYW5u
-IEUuIE1PUklOLgo+Cj4gLS0KPiAuLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0t
-LS0uLS0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS0tLgo+IHwgIFlhbm4gRS4g
-TU9SSU4gIHwgUmVhbC1UaW1lIEVtYmVkZGVkIHwgLyJcIEFTQ0lJIFJJQkJPTiB8IEVyaWNzJyBj
-b25zcGlyYWN5OiB8Cj4gfCArMzMgNjYyIDM3NiAwNTYgfCBTb2Z0d2FyZSAgRGVzaWduZXIgfCBc
-IC8gQ0FNUEFJR04gICAgIHwgIF9fXyAgICAgICAgICAgICAgIHwKPiB8ICszMyA1NjEgMDk5IDQy
-NyBgLS0tLS0tLS0tLS0tLi0tLS0tLS06ICBYICBBR0FJTlNUICAgICAgfCAgXGUvICBUaGVyZSBp
-cyBubyAgfAo+IHwgaHR0cDovL3ltb3Jpbi5pcy1hLWdlZWsub3JnLyB8IF8vKlxfIHwgLyBcIEhU
-TUwgTUFJTCAgICB8ICAgdiAgIGNvbnNwaXJhY3kuICB8Cj4gJy0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLV4tLS0tLS0tXi0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0tLS0t
-LScKQmVzdCBSZWdhcmRzLAoKRmFicmljZQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBsaXN0cy5i
-dWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZv
-L2J1aWxkcm9vdAo=
+
+
+On 31/08/2021 21:58, Fabrice Fontaine wrote:
+> Fix the following static build failure on musl which is raised because
+> the "Check for directory libraries" in configure wrongly adds -DNO_DIR
+> when no directory library is needed:
+> 
+> /tmp/instance-0/output-1/host/bin/arm-buildroot-linux-musleabihf-gcc -c -D_FILE_OFFSET_BITS=64 -O2 -g0 -static -I. -DUNIX -DUIDGID_NOT_16BIT -DBZIP2_SUPPORT -DLARGE_FILE_SUPPORT -DUNICODE_SUPPORT -DNO_MKTIME -DNO_DIR -DHAVE_DIRENT_H -DHAVE_TERMIOS_H unix/unix.c
+> unix/unix.c:70:14: error: conflicting types for 'DIR'
+>    70 | typedef FILE DIR;
+>       |              ^~~
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/83a6e0c8c4ad026cb0261246e3b1a80d754454bd
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+ Applied to master, thanks. I added a comment that upstream is dead.
+
+ Regards,
+ Arnout
+
+> ---
+>  package/zip/0008-fix-musl-static-build.patch | 20 ++++++++++++++++++++
+>  1 file changed, 20 insertions(+)
+>  create mode 100644 package/zip/0008-fix-musl-static-build.patch
+> 
+> diff --git a/package/zip/0008-fix-musl-static-build.patch b/package/zip/0008-fix-musl-static-build.patch
+> new file mode 100644
+> index 0000000000..a7a31eba9e
+> --- /dev/null
+> +++ b/package/zip/0008-fix-musl-static-build.patch
+> @@ -0,0 +1,20 @@
+> +fix musl static build
+> +
+> +Don't define NO_DIR if no directory library is needed
+> +
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +
+> +diff -Nura zip30.orig/unix/configure zip30/unix/configure
+> +--- zip30.orig/unix/configure	2021-08-31 21:29:55.219967136 +0200
+> ++++ zip30/unix/configure	2021-08-31 21:50:48.239280513 +0200
+> +@@ -569,8 +569,8 @@
+> +   done
+> +   if [ ${OPT} ]; then
+> +     LFLAGS2="${LFLAGS2} ${OPT}"
+> +-  else
+> +-    CFLAGS="${CFLAGS} -DNO_DIR"
+> ++  #else
+> ++  #  CFLAGS="${CFLAGS} -DNO_DIR"
+> +   fi
+> + fi
+> + 
+> 
+_______________________________________________
+buildroot mailing list
+buildroot@lists.buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
