@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A6EFCC433EF
-	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 16:20:49 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2207EC433EF
+	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 16:21:02 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 71B2B61209
-	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 16:20:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 71B2B61209
+	by mail.kernel.org (Postfix) with ESMTPS id E7FE661209
+	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 16:21:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E7FE661209
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 45EBF406B4;
-	Sat, 11 Sep 2021 16:20:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 92509415C0;
+	Sat, 11 Sep 2021 16:21:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id U9YtAh8ta88G; Sat, 11 Sep 2021 16:20:48 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id x2riPYUg6GE9; Sat, 11 Sep 2021 16:21:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2D39040D03;
-	Sat, 11 Sep 2021 16:20:47 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7F2AF1BF304
+	by smtp4.osuosl.org (Postfix) with ESMTP id F097A415BF;
+	Sat, 11 Sep 2021 16:20:59 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C68541BF304
  for <buildroot@lists.busybox.net>; Sat, 11 Sep 2021 16:20:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7AB0661BD3
+ by smtp2.osuosl.org (Postfix) with ESMTP id B5D2740CF6
  for <buildroot@lists.busybox.net>; Sat, 11 Sep 2021 16:20:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Ch_WQo3TXAnf for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yWx05UGKzmWn for <buildroot@lists.busybox.net>;
  Sat, 11 Sep 2021 16:20:39 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D1F0F61B9A
+ by smtp2.osuosl.org (Postfix) with ESMTP id C99B740CF7
  for <buildroot@buildroot.org>; Sat, 11 Sep 2021 16:20:39 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 85498890B8; Sat, 11 Sep 2021 16:19:01 +0000 (UTC)
+ id 7B930890B7; Sat, 11 Sep 2021 16:19:01 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sat, 11 Sep 2021 18:19:09 +0200
+Date: Sat, 11 Sep 2021 18:18:04 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 949a66e660b29917e5890e3ea07dd7c10095f00c
-X-Git-Newrev: 4e070082495c1686b2b207db7fe7720271dc7d86
+X-Git-Oldrev: 35af76784f0720b0981bb0982f9a7e20b0ef2be1
+X-Git-Newrev: 949a66e660b29917e5890e3ea07dd7c10095f00c
 X-Patchwork-Hint: ignore
-Message-Id: <20210911161901.85498890B8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/ruby: fix build failure due to gcc
- bug 83143
+Message-Id: <20210911161901.7B930890B7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] toolchain: introduce
+ BR2_TOOLCHAIN_HAS_GCC_BUG_83143
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,46 +71,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4e070082495c1686b2b207db7fe7720271dc7d86
+commit: https://git.buildroot.net/buildroot/commit/?id=949a66e660b29917e5890e3ea07dd7c10095f00c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The ruby package exhibits gcc bug 83143 when built for the SH4 architecture
-with optimization enabled, which causes a build failure.
-
-Differentely from other packages in Buildroot where we work around this
-gcc bug by setting optimization to -O0 we can use -freorder-blocks-algorithm=simple
-as suggested here [1] if BR2_TOOLCHAIN_HAS_GCC_BUG_83143=y.
-
-Fixes:
+ruby package fails to build for the SH4 architecture with optimization
+enabled with gcc = 9.3.0:
 http://autobuild.buildroot.net/results/f57/f5742e7fb6e8142bcdb53b7f4f5e9c1bea3558cd/
 
-[1]: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=83143#c15
+It's already been reported upstream:
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=83143
+
+Anyway let's assume all SuperH(BR2_sh) have this bug according to:
+http://lists.busybox.net/pipermail/buildroot/2021-August/621906.html
 
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/ruby/ruby.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ toolchain/Config.in | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
-index 2434ce946b..b02744f0e5 100644
---- a/package/ruby/ruby.mk
-+++ b/package/ruby/ruby.mk
-@@ -77,6 +77,14 @@ else
- RUBY_CONF_OPTS += --without-gmp
- endif
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index a78b884579..1223e95c9b 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -139,6 +139,15 @@ config BR2_TOOLCHAIN_HAS_GCC_BUG_68485
+ 	bool
+ 	default y if BR2_microblaze
  
-+RUBY_CFLAGS = $(TARGET_CFLAGS)
++# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=83143
++# Error: invalid operands (*UND* and .text sections) for `-' on sh4.
++# This bug no longer exists in gcc 10.x but reappeared on gcc 11.x and
++# it still not been fixed yet.
++config BR2_TOOLCHAIN_HAS_GCC_BUG_83143
++	bool
++	default y if BR2_sh
++	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_10 || BR2_TOOLCHAIN_GCC_AT_LEAST_11
 +
-+ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_83143),y)
-+RUBY_CFLAGS += -freorder-blocks-algorithm=simple
-+endif
-+
-+RUBY_CONF_OPTS += CFLAGS="$(RUBY_CFLAGS)"
-+
- # Remove rubygems and friends, as they need extensions that aren't
- # built and a target compiler.
- RUBY_EXTENSIONS_REMOVE = rake* rdoc* rubygems*
+ # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180. This bug no
+ # longer exists in gcc 8.x.
+ config BR2_TOOLCHAIN_HAS_GCC_BUG_85180
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
