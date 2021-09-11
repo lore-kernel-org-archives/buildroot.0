@@ -6,45 +6,45 @@ X-Spam-Status: No, score=-3.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 99903C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 07:59:13 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C2E20C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 08:00:28 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 0334160F8F
-	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 07:59:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0334160F8F
+	by mail.kernel.org (Postfix) with ESMTPS id 3B15A611C0
+	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 08:00:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3B15A611C0
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=busybox.net
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A474D81975;
-	Sat, 11 Sep 2021 07:59:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CB400607ED;
+	Sat, 11 Sep 2021 08:00:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id z2hT1CQsLp_X; Sat, 11 Sep 2021 07:59:11 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id qrZoiolAT44i; Sat, 11 Sep 2021 08:00:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EC03681774;
-	Sat, 11 Sep 2021 07:59:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3F04B607B6;
+	Sat, 11 Sep 2021 08:00:26 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 64C471BF281
- for <buildroot@lists.busybox.net>; Sat, 11 Sep 2021 07:59:09 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 29FDD1BF954
+ for <buildroot@lists.busybox.net>; Sat, 11 Sep 2021 08:00:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4DE8241576
- for <buildroot@lists.busybox.net>; Sat, 11 Sep 2021 07:59:09 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0EB6F415C4
+ for <buildroot@lists.busybox.net>; Sat, 11 Sep 2021 08:00:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KKItCD9oUoeA for <buildroot@lists.busybox.net>;
- Sat, 11 Sep 2021 07:59:08 +0000 (UTC)
+ with ESMTP id Jq3jaghN_G-w for <buildroot@lists.busybox.net>;
+ Sat, 11 Sep 2021 08:00:17 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id AB99D41485
- for <buildroot@uclibc.org>; Sat, 11 Sep 2021 07:59:08 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 572A1415C6
+ for <buildroot@uclibc.org>; Sat, 11 Sep 2021 08:00:17 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 2F58A88EEF; Sat, 11 Sep 2021 07:57:31 +0000 (UTC)
+ id CED5888387; Sat, 11 Sep 2021 07:58:39 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Sat, 11 Sep 2021 07:59:08 +0000
+Date: Sat, 11 Sep 2021 08:00:17 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -60,15 +60,16 @@ X-Bugzilla-Priority: P5
 X-Bugzilla-Assigned-To: yann.morin.1998@free.fr
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_status resolution cc assigned_to
-Message-ID: <bug-14206-163-fcJquasMhX@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: short_desc
+Message-ID: <bug-14206-163-V905sSNTQh@https.bugs.busybox.net/>
 In-Reply-To: <bug-14206-163@https.bugs.busybox.net/>
 References: <bug-14206-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
 Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Subject: [Buildroot] [Bug 14206] QT5 touch screen rotation does not work
- since 2021.05
+Subject: [Buildroot] [Bug 14206] Kodi: even when not enabled,
+ forcefully selects libevdev and libinput [was: QT5 touch screen
+ rotation does not work since 2021.05]
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,27 +93,12 @@ Yann E. MORIN <yann.morin.1998@free.fr> changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
-             Status|RESOLVED                    |REOPENED
-         Resolution|INVALID                     |---
-                 CC|                            |yann.morin.1998@free.fr
-           Assignee|unassigned@buildroot.uclibc |yann.morin.1998@free.fr
-                   |.org                        |
-
---- Comment #3 from Yann E. MORIN <yann.morin.1998@free.fr> ---
-Thomas, All,
-
-(In reply to Thomas Ruschival from comment #0)
-> Looking for the cause I found that since 2021.05 libxkbcommon (BR2_PACKAGE_LIBXKBCOMMON)
-> and libinput (BR2_PACKAGE_LIBINPUT) are selected. In turn libevdev (BR2_PACKAGE_LIBEVDEV)
-> is selected.
-> Libinput and libxkbcommon are selected by BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_GBM.
-
-Indeed, this code is incorrect; good catch! :-)
-
-I'll send a patch soonish to fix that.
-
-Regards,
-Yann E. MORIN.
+            Summary|QT5 touch screen rotation   |Kodi: even when not
+                   |does not work since 2021.05 |enabled, forcefully selects
+                   |                            |libevdev and libinput [was:
+                   |                            |QT5 touch screen rotation
+                   |                            |does not work since
+                   |                            |2021.05]
 
 -- 
 You are receiving this mail because:
