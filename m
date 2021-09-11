@@ -7,94 +7,93 @@ X-Spam-Status: No, score=-15.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ACEE1C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 14:53:19 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1DFB6C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 14:53:31 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 3366960E97
-	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 14:53:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3366960E97
+	by mail.kernel.org (Postfix) with ESMTPS id BA83260E97
+	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 14:53:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org BA83260E97
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C4D9041578;
-	Sat, 11 Sep 2021 14:53:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7BD6460604;
+	Sat, 11 Sep 2021 14:53:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LxUdLYpTgTyg; Sat, 11 Sep 2021 14:53:18 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id hFe7tDACESnq; Sat, 11 Sep 2021 14:53:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 289714156F;
-	Sat, 11 Sep 2021 14:53:17 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 344171BF834
- for <buildroot@lists.busybox.net>; Sat, 11 Sep 2021 14:53:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D6B3F605A7;
+	Sat, 11 Sep 2021 14:53:28 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 71A8D1BF834
+ for <buildroot@lists.busybox.net>; Sat, 11 Sep 2021 14:53:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2FE50406AE
- for <buildroot@lists.busybox.net>; Sat, 11 Sep 2021 14:53:15 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6B653403C8
+ for <buildroot@lists.busybox.net>; Sat, 11 Sep 2021 14:53:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id z7zNyM2xSbyO for <buildroot@lists.busybox.net>;
- Sat, 11 Sep 2021 14:53:14 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HVP3ZAv9Cfkm for <buildroot@lists.busybox.net>;
+ Sat, 11 Sep 2021 14:53:26 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com
- [IPv6:2a00:1450:4864:20::535])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 62513402E1
- for <buildroot@buildroot.org>; Sat, 11 Sep 2021 14:53:14 +0000 (UTC)
-Received: by mail-ed1-x535.google.com with SMTP id g8so7019869edt.7
- for <buildroot@buildroot.org>; Sat, 11 Sep 2021 07:53:14 -0700 (PDT)
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com
+ [IPv6:2a00:1450:4864:20::62a])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A42EF400BA
+ for <buildroot@buildroot.org>; Sat, 11 Sep 2021 14:53:25 +0000 (UTC)
+Received: by mail-ej1-x62a.google.com with SMTP id i21so10586316ejd.2
+ for <buildroot@buildroot.org>; Sat, 11 Sep 2021 07:53:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=subject:to:references:from:organization:message-id:date:user-agent
  :mime-version:in-reply-to:content-language:content-transfer-encoding;
- bh=M7fGgAT5ZFAFC/H72ld+cgSFQ+7Z+zB88k5iYGkGCqA=;
- b=Zb1OpLDv9NaVWG7pcnqJuJ4OJqg+c4jlgOZQJZx4+C51uJ2SSL4E4kftwkUSKWRMn6
- 2n+IhGbvBU4AoUbaFWMDWJXwxgSweKV3ahturxBXYjY+FdeVjbVgr1/cFIphT3Oubmmi
- L1qYoeGW5ia/rwLHFWSy+qpprE6o5UyWyXlHY84aDSxbQDDEUZgkG4q8oiY85XHJW9xf
- KzxQrC4A3kKWx+9UcCxIFRKuIHDvbqt1vjXen1Bn5WKm+USq03JQJLY2ViY7FaiWBwYP
- hfdpMGoHF1WJzIuNSJhy/fIA8t3t+vxgyOBMd/zgfrMbLIJIRUhPk0FWfmiI1bdYBl0i
- tnGA==
+ bh=3cwflq0V48/BXWKocuBjhpm7FmKDzarVa2gRddCOhlM=;
+ b=OQXOCoTW6DKeWgnGcHN+I4nsgwV8EVNx8i4YGloNIFZPFjLPPY8ruCAIdbXKxXnzyd
+ p8BX5ouNlXiXKGloaV3zpT4MjWVZOHcQeBw5hFXuAsmXpVeDRW+7A8bs97urXiSpzGe7
+ qYzBKRlv754AAeydgUmLaDOunCLaEMDeZIL4XFx7qAd+GT/HpcxdzqgCA+GjRUhCz2S8
+ yxZV68gChxB2J/ca3KLAbhQ9ACJFFbtoSPfI5cGKHX2RhYwHWkj7+AA8t5o4tGYXA6Sx
+ XktnVgnlsAV3uQVLKqsVYfCS7vX+QyaBEp2i1/dMLAjCPkg3Y6xhLOPKaRiFm//Ln+EO
+ eieA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:subject:to:references:from:organization
  :message-id:date:user-agent:mime-version:in-reply-to
  :content-language:content-transfer-encoding;
- bh=M7fGgAT5ZFAFC/H72ld+cgSFQ+7Z+zB88k5iYGkGCqA=;
- b=VA//pgfDs/c/RZIXNadpb3WaXgUyTMNm5gqKwKQ83WXuzf9OR0ZNJmOFF4a4bmyWw2
- LpyvvvI1by7Dz4NvOQRoXldhWbEhCWn8ZNaS0CclAPyBs305kapx/Us6Uu5v001Y57kj
- p5+U1kbXKjZOG74ThPRtml9+14Tn01ZWKW9m2G8zRTB/JP81XpU1qYw2NzQB7Vqgl7U0
- ohcHWgRDBm+bEIUIrYAZvKz0a2CBAQd0VLLPLceqmM/6SbkMOQMI0HejKTY2p0enmRN1
- t+T1ydQwu9YWY8NKRxPnXs6RXaOioNB5vvN7XL/C33nNmx3Yz6poah3tp86nrIqRwrEy
- dONQ==
-X-Gm-Message-State: AOAM533CAwezk+TLzDPGen554wstS4TtkZJYQ5h6lz7p6YUBQoQpPyDj
- PC5+UwB2iksm8PEMfIoaFm5uMggCDIyJKw==
-X-Google-Smtp-Source: ABdhPJxcx/IcqnB/l0AHQ4kjLLH8kYb1VrrNdd7dbl6mh1fRgYR9ux/HfV41TfeEZL+hzpLb5gegrw==
-X-Received: by 2002:a05:6402:524e:: with SMTP id
- t14mr3586329edd.39.1631371992653; 
- Sat, 11 Sep 2021 07:53:12 -0700 (PDT)
+ bh=3cwflq0V48/BXWKocuBjhpm7FmKDzarVa2gRddCOhlM=;
+ b=RAWCVsNiaQVVuijD3FDaiZFTcT0uPy+QjvgEV6GYi2ihRc4j8m5768WL1uxRcWEfRY
+ GYJXrMuSuPmEK4DD43CXBmriCuoB36cl8x5Cr3ChweVCQxuVCW1+Vdq2wZNJhy+5etFi
+ 98U6p0xNrFAoMYs1cbjMp9gghxugMhuruWwngbelQsCHBEfPPXw8yxhbQgLqwSoflZ6I
+ qfjrgA5cvMw62MsOVUvSvIkNxWvuC6oRqVEPOPO9ZUbNulSmL09+qo9wQe12Nc/BecHZ
+ 2ZvBVrBVMjrQslollduafyiCCvxuCezWaywaxGClsFqAeLUQr9g8vmEyg8QheUK/rJFU
+ O5Eg==
+X-Gm-Message-State: AOAM5324oKgAFbAvjM0qkZeekCbQrcn9LujvrwRC5uvcCHJbqnKquLJ9
+ ubxcJhZBlgwuBtnSAQnJ6gXuWmnOfoDOeQ==
+X-Google-Smtp-Source: ABdhPJw2urpNTLtMzbTe2fwH6c4/OfiC97u3iXfhv3mkaiXPS7sbl8n48YybfBIgydjcKHZup7+GcQ==
+X-Received: by 2002:a17:906:138a:: with SMTP id
+ f10mr3134035ejc.89.1631372003891; 
+ Sat, 11 Sep 2021 07:53:23 -0700 (PDT)
 Received: from ?IPv6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id x9sm1038835edj.95.2021.09.11.07.53.12
+ by smtp.gmail.com with ESMTPSA id jl12sm857352ejc.120.2021.09.11.07.53.23
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 11 Sep 2021 07:53:12 -0700 (PDT)
-To: Krzysztof Kanas <kkanas@fastmail.com>, buildroot@buildroot.org
-References: <fe5d4301-e57d-5cf9-7860-841639c59f86@fastmail.com>
- <20210902112848.41512-1-kkanas@fastmail.com>
+ Sat, 11 Sep 2021 07:53:23 -0700 (PDT)
+To: Petr Vorel <petr.vorel@gmail.com>, buildroot@buildroot.org
+References: <20210901234917.13980-1-petr.vorel@gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-Message-ID: <abdf55d4-63da-1791-b47b-39197c4ce0f3@mind.be>
-Date: Sat, 11 Sep 2021 16:53:11 +0200
+Message-ID: <fc33670a-98d5-7abc-7f65-7a76f0bd412c@mind.be>
+Date: Sat, 11 Sep 2021 16:53:22 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.11.0
 MIME-Version: 1.0
-In-Reply-To: <20210902112848.41512-1-kkanas@fastmail.com>
+In-Reply-To: <20210901234917.13980-1-petr.vorel@gmail.com>
 Content-Language: en-GB
-Subject: Re: [Buildroot] [PATCH v2 1/1]
- package/environment-setup/environment-setup: add zsh
+Subject: Re: [Buildroot] [PATCH v2 1/1] package/debianutils: bump version to
+ 5.4
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -114,46 +113,50 @@ Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
 
 
-On 02/09/2021 13:28, Krzysztof Kanas wrote:
-> environment-setup used BASH_SOURCE which is bash specific and empty
-> variable for zsh (and other shell's).
-> Zsh Uses $0. Unfortunately POSIX is not specifying how exactly $0
-> should behave when in sourced (or using special dot utility). So other
-> shell support have to be implemented in different manner.
-> 
-> Signed-off-by: Krzysztof Kanas <kkanas@fastmail.com>
-> 
-> ---
-> Changes in v2:
-> 	- fix shell detection logic
-> 	- change commit comment
-> ---
->  package/environment-setup/environment-setup | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/environment-setup/environment-setup b/package/environment-setup/environment-setup
-> index e9bc36fdd093..6716c19a577a 100644
-> --- a/package/environment-setup/environment-setup
-> +++ b/package/environment-setup/environment-setup
-> @@ -16,4 +16,10 @@ Some tips:
->  * To build CMake-based projects, use the "cmake" alias
->  
->  EOF
-> -SDK_PATH=$(dirname $(realpath "${BASH_SOURCE[0]}"))
-> +if [ x"$BASH_VERSION" != x"" ] ; then
-> +	SDK_PATH=$(dirname $(realpath "${BASH_SOURCE[0]}"))
-> +elif [ x"$ZSH_VERSION" != x"" ] ; then
-> +	SDK_PATH=$(dirname $(realpath $0))
-> +else
-> +	echo unsuported shell
+On 02/09/2021 01:49, Petr Vorel wrote:
+> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 
- I fixed the spelling mistake, added quotes around it, and applied to master,
-thanks.
+ Applied to master, thanks.
 
  Regards,
  Arnout
 
-> +fi
+> ---
+> Changes v1->v2:
+> * Fix DEBIANUTILS_SITE & DEBIANUTILS_SOURCE
+> 
+>  package/debianutils/debianutils.hash | 4 ++--
+>  package/debianutils/debianutils.mk   | 6 +++---
+>  2 files changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/package/debianutils/debianutils.hash b/package/debianutils/debianutils.hash
+> index 16a45d4ea1..d6889c9ba4 100644
+> --- a/package/debianutils/debianutils.hash
+> +++ b/package/debianutils/debianutils.hash
+> @@ -1,4 +1,4 @@
+> -# From http://snapshot.debian.org/archive/debian/20200525T145753Z/pool/main/d/debianutils/debianutils_4.11.dsc
+> -sha256 bb5ce6290696b0d623377521ed217f484aa98f7346c5f7c48f9ae3e1acfb7151 debianutils_4.11.tar.xz
+> +# From https://snapshot.debian.org/archive/debian/20210825T030241Z/pool/main/d/debianutils/debianutils_5.4-3.dsc
+> +sha256 611b1268bee9d183886c94e5f34920e4b5b67ff45202aef3f6f2ba8f4a205163  debianutils_5.4.orig.tar.xz
+>  # Locally calculated
+>  sha256 3c8b5112cb8f74ba959233291908d73f527afa6f1d96f93649aeb912b5884567 debian/copyright
+> diff --git a/package/debianutils/debianutils.mk b/package/debianutils/debianutils.mk
+> index d2c41130fb..0e436daa3f 100644
+> --- a/package/debianutils/debianutils.mk
+> +++ b/package/debianutils/debianutils.mk
+> @@ -4,9 +4,9 @@
+>  #
+>  ################################################################################
+>  
+> -DEBIANUTILS_VERSION = 4.11
+> -DEBIANUTILS_SOURCE = debianutils_$(DEBIANUTILS_VERSION).tar.xz
+> -DEBIANUTILS_SITE = http://snapshot.debian.org/archive/debian/20200525T145753Z/pool/main/d/debianutils
+> +DEBIANUTILS_VERSION = 5.4
+> +DEBIANUTILS_SOURCE = debianutils_$(DEBIANUTILS_VERSION).orig.tar.xz
+> +DEBIANUTILS_SITE = https://snapshot.debian.org/archive/debian/20210822T204137Z/pool/main/d/debianutils
+>  DEBIANUTILS_CONF_OPTS = --exec-prefix=/
+>  DEBIANUTILS_LICENSE = GPL-2.0+, SMAIL (savelog)
+>  DEBIANUTILS_LICENSE_FILES = debian/copyright
 > 
 _______________________________________________
 buildroot mailing list
