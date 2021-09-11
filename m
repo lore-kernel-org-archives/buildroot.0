@@ -9,81 +9,81 @@ X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BBBF9C433F5
-	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 08:42:52 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EF2FEC433EF
+	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 08:47:13 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 4C90B60FE6
-	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 08:42:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4C90B60FE6
+	by mail.kernel.org (Postfix) with ESMTPS id 6EF5C611BF
+	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 08:47:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6EF5C611BF
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmx.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DD0E760675;
-	Sat, 11 Sep 2021 08:42:51 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3215E40163;
+	Sat, 11 Sep 2021 08:47:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OdWl8qxgQFbs; Sat, 11 Sep 2021 08:42:51 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id N4Z5DVDlMm0w; Sat, 11 Sep 2021 08:47:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4FA9C60654;
-	Sat, 11 Sep 2021 08:42:50 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 654FB1BF3C2
- for <buildroot@lists.busybox.net>; Sat, 11 Sep 2021 08:42:48 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6AEC0400A8;
+	Sat, 11 Sep 2021 08:47:11 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id F29591BF3C2
+ for <buildroot@lists.busybox.net>; Sat, 11 Sep 2021 08:47:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 54C8284AE3
- for <buildroot@lists.busybox.net>; Sat, 11 Sep 2021 08:42:48 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E169860654
+ for <buildroot@lists.busybox.net>; Sat, 11 Sep 2021 08:47:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
  dkim=pass (1024-bit key) header.d=gmx.net
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ANI5m8n9kBoa for <buildroot@lists.busybox.net>;
- Sat, 11 Sep 2021 08:42:47 +0000 (UTC)
-X-Greylist: delayed 00:05:04 by SQLgrey-1.8.0
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D6E9A84AE2
- for <buildroot@buildroot.org>; Sat, 11 Sep 2021 08:42:46 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vrC-OxtWBo3h for <buildroot@lists.busybox.net>;
+ Sat, 11 Sep 2021 08:47:09 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C22BE605BD
+ for <buildroot@buildroot.org>; Sat, 11 Sep 2021 08:47:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
- s=badeba3b8450; t=1631349764;
+ s=badeba3b8450; t=1631350026;
  bh=BytOZUO4y2KEq2x9s4f5WdD1O3wy+ylPiqjZUbjepsU=;
  h=X-UI-Sender-Class:From:To:Subject:Date;
- b=PiL2FcGcxA2gsxWVi2fSlYJEQj6S2bSAt5TPwOPggunLda1z7YG8qYtsnu3BrWfu3
- H+PMjb/rmekwE2x4WZ42gV2NC9Deu6NDiQWJ0hKdvQPK8eUBZpGMi8YNWLSGCy/tLH
- z78uNDMMOc7/cipdgqNkWX7iffR2Zb5+Phps+2Mc=
+ b=IkDaASX6WEXMU0fOuljFPsQzDNufIr0Rju5ikTBQwSDlRPv0CVp+xtuszOXipWJXc
+ vy7zMMbJIw4N321QhYYIyVdsytj8X8L6iekHoqMOTSINii/7zyBobOgYTDzpBLEjcp
+ Pna0Ald/axLqAx2P9EZiDD1f+HfdqUj7gsZIdNTk=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from NCC-5001D.lan ([83.130.82.162]) by mail.gmx.net (mrgmx105
- [212.227.17.174]) with ESMTPSA (Nemesis) id 1MWigq-1mR52I2l3I-00X175 for
- <buildroot@buildroot.org>; Sat, 11 Sep 2021 10:37:38 +0200
+Received: from NCC-5001D.lan ([83.130.82.162]) by mail.gmx.net (mrgmx104
+ [212.227.17.174]) with ESMTPSA (Nemesis) id 1MnJhU-1moNib3EIe-00jLPK for
+ <buildroot@buildroot.org>; Sat, 11 Sep 2021 10:42:05 +0200
 From: Dagg Stompler <daggs@gmx.com>
 To: buildroot@buildroot.org
-Date: Sat, 11 Sep 2021 11:37:37 +0300
-Message-Id: <20210911083737.9073-1-daggs@gmx.com>
+Date: Sat, 11 Sep 2021 11:42:04 +0300
+Message-Id: <20210911084204.22150-1-daggs@gmx.com>
 X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:wpM4d50MQZKasJZFekRsLCS9OuzX/ZtcF7FDQ3KCqJmNoH2waHR
- vlm3xebZR/IaEErBnBqZbbRe4yEPhMEOKnC3FPomjT8vTExz/frw1CTxEKXnUdyQs8hkbj9
- MY4SFqUi1vWgOWzqOCiv2fBCK7JI3iXecZkwtiFEWfeB8nZOkzfYOvq82GcHiH48tZ7D138
- 6Z/6bi4bJdDwmSTwri18Q==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:u75EPY7iSh8=:TBvetsGP8KJ9o/UqCtauVJ
- ItYpghylZ8RYOQX3AG6r+8JpGa03Lk13yw+Fzdq33F/mRRxHubigbVKNidZgBv0Vh8jkiMKcZ
- Cw8yyVC8KkJ+5Sd+QiQVR2wXNQ/SSsiLCXD5bpVbhA5N9TPkMZRKrfTPDx8lBTJC0YOfntCDt
- M+MieapUCFmruVka5xgHlI9O+1jZ7V4/jXSbzu3XH4FA7fegeU2iLMd5pqHDUDw1/Xv8ckGB+
- yA9HeaEzSABGCJDnXk0mJPKerjuVLSz2XpdKsBpwhU11aWRG4TxXzZmRsd/qFiCCrXuMebkPk
- opHj2ndB2u0xIAKZJ1EVsYDkZr/nHCVFI3FueIcHDXCb9eOyf+qiqaEne48jhLDFVyVMOkNLR
- Fa+aqyKO8Jq/dfgP6sXs+hYLIzTTaQTwtkPlNWoTH2UYcpxwVG8s5e1bA64dT9pmrVY2SHqlk
- VAuDibauhHFTrntJeKSwh6I3WccSe5VgknO2t+SWXOnRvWDCvg2PJUxJA+onQ3k4up+TXsMYn
- cCCu0c3hC3VzkXk5wEWAwxczD0dJ295+DLGdBAFWhSLx7shC/5jHqdhbzUx3w/uIS3Nh5sqgQ
- 2DTso78avpJM+YL1gAtJ8htHLSDi2CnNPtT+T7WHf7+Aya+lV5KhX5nCJDaLz/Rh0EhYLlTV+
- qXpmBjIGQRx87PWZbWK7dc3LCRFoxaFssQpraw9qkAsaZOPTJ8tZwPp93iUqeUgUM+iXCQS4N
- IqeP9dw2D0X9qaG6QaT5TbfUQ+Egr7nBYOsrtQ8IlPRn17N2d321ttaw8lNBBVGZJSJN7/bg5
- AI0zmR/ZDI004cluKu/i/rFJcnlx1utpKyBuXs1Ejou3uXXEQuuIsqf7GxSjEnfdiZCVYoTFT
- pJoL+sy/OOSLurTu4mm8jXdI7+v7vgaaDNnZUy1X36MkFEKujiwOzKgJef+kxt4Op8BMmN3et
- yCOxJiXT/mG/2aWf/DSFLjjlceBsJnkjGq58zRPQYDyVnGmCdD4DZjMTAvKEx5s7DG8jsbRPc
- G/tFmO2czyFSFPb4og9nrE3E6KcSrcF8BiTI6fn5bnqC8mQXkY3JuPCyTPN5NoeAJT5ggykuj
- 76GbqBzzQv8g3U=
+X-Provags-ID: V03:K1:O6MZlLOSYFgT/9Vo+oLPzmK/HZiOomTEirp7m4XlqK1tC6GrqUt
+ 17ZwW7hhgE4zN0pNIW1KBYkaWZdZs6sKxDD712KwcaR4MP18x+mCUoPpo4vZ9ooQzX89f7T
+ 4oSZPwKExyDfibAyNCVwXF9bcCO0/CWqlKKgCtgmtNDxUR+XXW4Ahp7gUFs65aZSRJXkUsB
+ tSh4hn2/WdFPy1HEJUWUQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:aWxi8P87c7w=:aZCEoqzLysuu8IwPaG5y88
+ d/xBkC4emRo8FZ62+sRUbIM9WYSmMWYrQ3GrXzT9XzPWnz/+w9MhIuCezLMPAdbaozNgz5Vla
+ B3ZkbxC4dEaZM6eWgvDEVQbbEYBoHfDOsfWAVLpoevQ0ex3bntJxb/yJ0eoS6RAS5QjoGw4ih
+ 9tMsQz6MFtXCXve2WmxlKClFTg6n/GvL7t9ndezLlcgPE4MkCY3hr8g/RTp/AsUfO43Bu27Vb
+ D3OzYTogMGc/hKY3uQnyaDx16QN+y+WfYDMdeI/2UjcMq14rl+IUrTjcDTjMFv0t9WqDfRr0+
+ LuLbF7QUDjyl89Lzw7VD2DpmM9oYg5OR71OJSt0TQU+283N2GCTuhlY3XE41QCJCrWbeaF+N3
+ HdxUXbPH31fAfHJvww5hsXEsRiMXWUtygFmOVx/XBem9h2eAnqeVqfHKgwyPQcCQEJHDxd8iH
+ 4DDAB0ksjgr1iN+h0a1hKyBYLlBDPUzxeOEOq3GLkLzM+r34ZbynU+PoxO9GlPMom4LRiLqYw
+ xjhS2vG4YxKbmSNeAyor8X6TH+WlmLEtJbVIv3emEkeStp2EBM03M+tqnwZM/D9QHGnaSXNsH
+ Zo7hgiTB50ZDZ+ahXA+PRiaCTeUNV21RwH9pZpu+54xJH2PI0MW8q80Z5n6wZMV1HNIyC4sIH
+ haHc33A9U37RbQTVEMhqE8Hfr9FeRlUSDhQnYqdwL4nCfxLGTwJZdicsr5CBwKahFlXdV6oIu
+ ENDRjVuqvIQFRlmqEULobA2WuoIbORMCoWUeESTPY+BujqpBNOp/xTJCj9aWqBFMpsqwQ6WUD
+ HIFIaGblxm5ejUx5sPXD0OWS3kNcFs2wLLPebCrIYTNrX7dlju09GhfgnNHE6DvReq+TBm0cI
+ Gl1b8L4uQDHrGdMAkLVN1VWaGf9luEvCjY/PBW+ygofVYcZk+AjNljFpq3DWCbDx0UzztG4Of
+ nme6Kam9Yfbrf6gOuxFrhTnx6b1yEO6uns2CXOSgWNzBOXR1FNR+hWESkh/xRPYQW7BA79Zfy
+ OIe/FnVb2yhmyD/UER8gMyAST2gYotGZA9AStAlGB6ZzmTMZUy7Dhn+FhXFOkhIll1xeNF7cg
+ OT5km2rD7J845w=
 Subject: [Buildroot] [PATCH] configs/ordeidc2: increase image size to 256M
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
