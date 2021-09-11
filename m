@@ -7,53 +7,52 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E956C433F5
-	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 19:49:36 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 313CCC433EF
+	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 19:49:44 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 52F0161152
-	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 19:49:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 52F0161152
+	by mail.kernel.org (Postfix) with ESMTPS id F0C1B60FDC
+	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 19:49:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org F0C1B60FDC
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 01E29404EF;
-	Sat, 11 Sep 2021 19:49:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C7BA880EF3;
+	Sat, 11 Sep 2021 19:49:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YuG-e-fgbi_S; Sat, 11 Sep 2021 19:49:31 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Ktfc5AlujNyo; Sat, 11 Sep 2021 19:49:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 98A29407E3;
-	Sat, 11 Sep 2021 19:49:30 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id BBC461BF285
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2D0AE80ECD;
+	Sat, 11 Sep 2021 19:49:42 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id BEA281BF957
  for <buildroot@lists.busybox.net>; Sat, 11 Sep 2021 19:49:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B2542407E3
+ by smtp1.osuosl.org (Postfix) with ESMTP id AB94E80ECD
  for <buildroot@lists.busybox.net>; Sat, 11 Sep 2021 19:49:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6YRXZRql3HuH for <buildroot@lists.busybox.net>;
- Sat, 11 Sep 2021 19:49:25 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id MNlf4fOpEcsP for <buildroot@lists.busybox.net>;
+ Sat, 11 Sep 2021 19:49:26 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id E6158404E9
- for <buildroot@buildroot.org>; Sat, 11 Sep 2021 19:49:25 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1A65A80E9F
+ for <buildroot@buildroot.org>; Sat, 11 Sep 2021 19:49:26 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 4397089132; Sat, 11 Sep 2021 19:47:47 +0000 (UTC)
+ id 70857890FD; Sat, 11 Sep 2021 19:47:47 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sat, 11 Sep 2021 20:59:05 +0200
+Date: Sat, 11 Sep 2021 21:31:36 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e1c4eeab73de03bb4cbc1786c7be99613bc33e50
-X-Git-Newrev: 79c6f25c0264ea68faf3f395f04deb69a0d6e7c9
+X-Git-Oldrev: 70bad61b53c50801fc916f78194c0c4ded1bb6b6
+X-Git-Newrev: 22d65321ece2bc8a0f9928d0ec1a5911d62ada30
 X-Patchwork-Hint: ignore
-Message-Id: <20210911194747.4397089132@busybox.osuosl.org>
-Subject: [Buildroot] [git commit]
- package/gobject-introspection/g-ir-scanner.in: Fix shellcheck warnings,
- switch to sh
+Message-Id: <20210911194747.70857890FD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gobject-introspection: Add
+ QEMU_USERMODE_ARGS support
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,39 +71,52 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=79c6f25c0264ea68faf3f395f04deb69a0d6e7c9
+commit: https://git.buildroot.net/buildroot/commit/?id=22d65321ece2bc8a0f9928d0ec1a5911d62ada30
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Now that the qemu package has the BR2_PACKAGE_HOST_QEMU_USER_MODE_ARGS string,
+the gobject-introspection g-ir-scanner-qemuwrapper script can pass that string
+to qemu.
+
+Add the QEMU_USERMODE_ARGS to g-ir-scanner-qemuwrapper.in and unconditionally
+sed @QEMU_USERMODE_ARGS@ with BR2_PACKAGE_HOST_QEMU_USER_MODE_ARGS.
+
+Fixes:
+http://autobuild.buildroot.org/results/2e9dbc0d36600c09fa9e59ab1b1903c9f40661e8
+
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
+[Arnout: don't add QEMU_USERMODE_ARGS variable to shell script]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/gobject-introspection/g-ir-scanner.in | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ package/gobject-introspection/g-ir-scanner-qemuwrapper.in | 1 +
+ package/gobject-introspection/gobject-introspection.mk    | 2 ++
+ 2 files changed, 3 insertions(+)
 
-diff --git a/package/gobject-introspection/g-ir-scanner.in b/package/gobject-introspection/g-ir-scanner.in
-index 22df7be309..013eb15700 100644
---- a/package/gobject-introspection/g-ir-scanner.in
-+++ b/package/gobject-introspection/g-ir-scanner.in
-@@ -1,4 +1,4 @@
--#!/usr/bin/env bash
-+#!/usr/bin/env sh
+diff --git a/package/gobject-introspection/g-ir-scanner-qemuwrapper.in b/package/gobject-introspection/g-ir-scanner-qemuwrapper.in
+index 85f0750b4d..9786feea40 100644
+--- a/package/gobject-introspection/g-ir-scanner-qemuwrapper.in
++++ b/package/gobject-introspection/g-ir-scanner-qemuwrapper.in
+@@ -8,6 +8,7 @@ GOI_LIBRARY_PATH="${GIR_EXTRA_LIBS_PATH:+${GIR_EXTRA_LIBS_PATH}:}.libs:$(dirname
+ # which may then get deleted (or their dependencies) and potentially segfault
+ GIO_MODULE_DIR="$(dirname "$0")/../lib/gio/modules-dummy" \
+ @QEMU_USER@ -r @TOOLCHAIN_HEADERS_VERSION@ \
++    @QEMU_USERMODE_ARGS@ \
+     -L "$(dirname "$0")/../../" \
+     -E LD_LIBRARY_PATH="${GOI_LIBRARY_PATH}" \
+     "$@"
+diff --git a/package/gobject-introspection/gobject-introspection.mk b/package/gobject-introspection/gobject-introspection.mk
+index f34dca7278..6a3d321cc7 100644
+--- a/package/gobject-introspection/gobject-introspection.mk
++++ b/package/gobject-introspection/gobject-introspection.mk
+@@ -84,6 +84,8 @@ define GOBJECT_INTROSPECTION_INSTALL_PRE_WRAPPERS
+ 		$(STAGING_DIR)/usr/bin/g-ir-scanner-qemuwrapper
+ 	$(SED) "s%@QEMU_USER@%$(QEMU_USER)%g" \
+ 		$(STAGING_DIR)/usr/bin/g-ir-scanner-qemuwrapper
++	$(SED) "s%@QEMU_USERMODE_ARGS@%$(call qstrip,$(BR2_PACKAGE_HOST_QEMU_USER_MODE_ARGS))%g" \
++		$(STAGING_DIR)/usr/bin/g-ir-scanner-qemuwrapper
+ 	$(SED) "s%@TOOLCHAIN_HEADERS_VERSION@%$(BR2_TOOLCHAIN_HEADERS_AT_LEAST)%g" \
+ 		$(STAGING_DIR)/usr/bin/g-ir-scanner-qemuwrapper
  
- # These environment variables are empty by default, and as such ccompiler.py
- # defaults to either using the system tools (CC, CXX, and CPP) or leaving
-@@ -15,8 +15,8 @@ export LDFLAGS="${LDFLAGS:-@TARGET_LDFLAGS@}"
- 
- export GI_SCANNER_DISABLE_CACHE=1
- 
--${HOST_DIR}/bin/g-ir-scanner \
----lib-dirs-envvar=GIR_EXTRA_LIBS_PATH \
----use-binary-wrapper=$(dirname $0)/g-ir-scanner-qemuwrapper \
----use-ldd-wrapper=$(dirname $0)/g-ir-scanner-lddwrapper \
----add-include-path=$(dirname $0)/../share/gir-1.0 "$@"
-+"${HOST_DIR}"/bin/g-ir-scanner \
-+    --lib-dirs-envvar=GIR_EXTRA_LIBS_PATH \
-+    --use-binary-wrapper="$(dirname "$0")"/g-ir-scanner-qemuwrapper \
-+    --use-ldd-wrapper="$(dirname "$0")"/g-ir-scanner-lddwrapper \
-+    --add-include-path="$(dirname "$0")"/../share/gir-1.0 "$@"
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
