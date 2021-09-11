@@ -2,56 +2,57 @@ Return-Path: <SRS0=HL2s=OB=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 715F5C433F5
-	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 20:59:22 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E9D25C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 20:59:33 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 3995461050
-	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 20:59:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3995461050
+	by mail.kernel.org (Postfix) with ESMTPS id B9FDE60F24
+	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 20:59:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B9FDE60F24
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 134AE80D0B;
-	Sat, 11 Sep 2021 20:59:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 990BB415B0;
+	Sat, 11 Sep 2021 20:59:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ygg5kTu603Rt; Sat, 11 Sep 2021 20:59:21 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id urmvYPZjKp0E; Sat, 11 Sep 2021 20:59:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 42A1680C28;
-	Sat, 11 Sep 2021 20:59:20 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id CC5AE1BF957
- for <buildroot@lists.busybox.net>; Sat, 11 Sep 2021 20:58:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CF0DD40505;
+	Sat, 11 Sep 2021 20:59:31 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id D61DB1BF2CB
+ for <buildroot@lists.busybox.net>; Sat, 11 Sep 2021 20:58:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C957683005
+ by smtp4.osuosl.org (Postfix) with ESMTP id CFA214029A
  for <buildroot@lists.busybox.net>; Sat, 11 Sep 2021 20:58:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1UDw1pE3zjD0 for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id UWNMe1i76rNM for <buildroot@lists.busybox.net>;
  Sat, 11 Sep 2021 20:58:47 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id B959882C7D
+ by smtp4.osuosl.org (Postfix) with ESMTP id C0F5E4027C
  for <buildroot@buildroot.org>; Sat, 11 Sep 2021 20:58:47 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id EF87F8A257; Sat, 11 Sep 2021 20:57:08 +0000 (UTC)
+ id 060058A258; Sat, 11 Sep 2021 20:57:09 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sat, 11 Sep 2021 22:46:46 +0200
+Date: Sat, 11 Sep 2021 22:51:58 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 30a22bfe11dc71565a0c8afbf075ce65af7f7bfb
-X-Git-Newrev: fb6a9acfe19b35a53c666c4ae9eac6a71049b735
+X-Git-Oldrev: fb6a9acfe19b35a53c666c4ae9eac6a71049b735
+X-Git-Newrev: c09f126f570355b8ec134724b453300a4811339c
 X-Patchwork-Hint: ignore
-Message-Id: <20210911205708.EF87F8A257@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/boost: fix fiber dependencies
+Message-Id: <20210911205709.060058A258@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libcamera: bump to version
+ e355ca0087cd93ef80f74c61018e9e9228a93313
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,51 +71,87 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fb6a9acfe19b35a53c666c4ae9eac6a71049b735
+commit: https://git.buildroot.net/buildroot/commit/?id=c09f126f570355b8ec134724b453300a4811339c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit d39d8f7cee9b4634e6f490020204f63fae419e8e forgot to update fiber
-dependencies resulting in the following build failure:
+Drop patch that is now upstream.
 
-WARNING: unmet direct dependencies detected for BR2_PACKAGE_BOOST_FILESYSTEM
-  Depends on [n]: BR2_PACKAGE_BOOST [=y] && BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS [=n]
-  Selected by [y]:
-  - BR2_PACKAGE_BOOST_FIBER [=y] && BR2_PACKAGE_BOOST [=y] && BR2_PACKAGE_BOOST_CONTEXT_ARCH_SUPPORTS [=y] && BR2_TOOLCHAIN_HAS_THREADS_NPTL [=y] && !BR2_MIPS_CPU_MIPS32 [=n] && !BR2_MIPS_CPU_MIPS64 [=n] && (BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS [=n] || BR2_TOOLCHAIN_GCC_AT_LEAST_6 [=y]) && !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 [=n]
-
-Fixes:
- - http://autobuild.buildroot.org/results/40b8af6ce273ebd5fca56d6734f64dacd562efb1
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Reviewed-by: Michael Nosthoff <buildroot@heine.tech>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Reviewed-by: Kieran Bingham <kieran.bingham@ideasonboard.com.
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/boost/Config.in | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ ...bcamera-add-dependencies-to-libcamera_dep.patch | 37 ----------------------
+ package/libcamera/libcamera.hash                   |  2 +-
+ package/libcamera/libcamera.mk                     |  2 +-
+ 3 files changed, 2 insertions(+), 39 deletions(-)
 
-diff --git a/package/boost/Config.in b/package/boost/Config.in
-index d9ce841a92..6813ad80ae 100644
---- a/package/boost/Config.in
-+++ b/package/boost/Config.in
-@@ -140,8 +140,7 @@ config BR2_PACKAGE_BOOST_FIBER
- 	# mips support uses the "pause" instruction, only available
- 	# since mips32r2/mips64r2.
- 	depends on !BR2_MIPS_CPU_MIPS32 && !BR2_MIPS_CPU_MIPS64
--	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS \
--		|| BR2_TOOLCHAIN_GCC_AT_LEAST_6 # boost-context -> boost-thread
-+	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-filesystem
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # boost-context
- 	select BR2_PACKAGE_BOOST_CONTEXT
- 	select BR2_PACKAGE_BOOST_FILESYSTEM
-@@ -151,8 +150,7 @@ config BR2_PACKAGE_BOOST_FIBER
+diff --git a/package/libcamera/0001-libcamera-add-dependencies-to-libcamera_dep.patch b/package/libcamera/0001-libcamera-add-dependencies-to-libcamera_dep.patch
+deleted file mode 100644
+index aa8d659cf3..0000000000
+--- a/package/libcamera/0001-libcamera-add-dependencies-to-libcamera_dep.patch
++++ /dev/null
+@@ -1,37 +0,0 @@
+-From 1a2fd4526e0858827f47a7e9359df34f0d0e3108 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Thu, 27 May 2021 21:00:21 +0200
+-Subject: [PATCH] libcamera: add dependencies to libcamera_dep
+-
+-Add dependencies to libcamera_dep to avoid the following build failure
+-with qcam on sparc v8 which is raised since commit
+-a8310248fc26cc1e1b791af5e9394c1d20bee269:
+-
+-FAILED: src/qcam/qcam
+-/srv/storage/autobuild/run/instance-0/output-1/host/bin/sparc-linux-g++  -o src/qcam/qcam src/qcam/qcam.p/meson-generated_.._qt5-feathericons_qrc.cpp.o src/qcam/qcam.p/meson-generated_moc_main_window.cpp.o src/qcam/qcam.p/meson-generated_moc_viewfinder_qt.cpp.o src/qcam/qcam.p/.._cam_options.cpp.o src/qcam/qcam.p/.._cam_stream_options.cpp.o src/qcam/qcam.p/format_converter.cpp.o src/qcam/qcam.p/main.cpp.o src/qcam/qcam.p/main_window.cpp.o src/qcam/qcam.p/message_handler.cpp.o src/qcam/qcam.p/viewfinder_qt.cpp.o src/qcam/qcam.p/dng_writer.cpp.o -Wl,--as-needed -Wl,--no-undefined -Wl,-O1 -Wshadow -include config.h '-Wl,-rpath,$ORIGIN/../libcamera' -Wl,-rpath-link,/srv/storage/autobuild/run/instance-0/output-1/build/libcamera-3a1f67a8031ac5ad96a11d5dc8b2e8976290497b/build/src/libcamera -Wl,--start-group src/libcamera/libcamera.so /srv/storage/autobuild/run/instance-0/output-1/host/sparc-buildroot-linux-uclibc/sysroot/usr/lib/libQt5Core.so /srv/storage/autobuild/run/instance-0/output-1/
+ host/sparc-buildroot-linux-uclibc/sysroot/usr/lib/libQt5Gui.so /srv/storage/autobuild/run/instance-0/output-1/host/sparc-buildroot-linux-uclibc/sysroot/usr/lib/libQt5Widgets.so /srv/storage/autobuild/run/instance-0/output-1/host/sparc-buildroot-linux-uclibc/sysroot/usr/lib/libtiff.so -Wl,--end-group
+-/srv/storage/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/9.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: src/qcam/qcam.p/main_window.cpp.o: undefined reference to symbol '__atomic_fetch_add_4@@LIBATOMIC_1.0'
+-/srv/storage/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/9.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: /srv/storage/autobuild/run/instance-0/output-1/host/sparc-buildroot-linux-uclibc/sysroot/lib/libatomic.so.1: error adding symbols: DSO missing from command line
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/d0726b2253f1f3d006e057f3b32c646c4b9b5f7a
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://bugs.libcamera.org/show_bug.cgi?id=39]
+----
+- src/libcamera/meson.build | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/src/libcamera/meson.build b/src/libcamera/meson.build
+-index cc2b8669..af3533ad 100644
+---- a/src/libcamera/meson.build
+-+++ b/src/libcamera/meson.build
+-@@ -160,6 +160,7 @@ libcamera_dep = declare_dependency(sources : [
+-                                        libcamera_public_headers,
+-                                    ],
+-                                    include_directories : libcamera_includes,
+-+                                   dependencies : libcamera_deps,
+-                                    link_with : libcamera)
+- 
+- subdir('proxy/worker')
+--- 
+-2.30.2
+diff --git a/package/libcamera/libcamera.hash b/package/libcamera/libcamera.hash
+index 78197b9aeb..52c584bc16 100644
+--- a/package/libcamera/libcamera.hash
++++ b/package/libcamera/libcamera.hash
+@@ -1,4 +1,4 @@
+-sha256  fa9efe38397392a338c0ed9d0bf3ac1480d4d1c96b0597e422f8b9fb36f43398  libcamera-3a1f67a8031ac5ad96a11d5dc8b2e8976290497b-br1.tar.gz
++sha256  a5ed581416719b914140eda76ca8a4e0e9c944b859f8fb018fc17497278c5ae1  libcamera-e355ca0087cd93ef80f74c61018e9e9228a93313-br1.tar.gz
  
- comment "boost-fiber needs a toolchain w/ NPTL"
- 	depends on BR2_PACKAGE_BOOST_CONTEXT_ARCH_SUPPORTS
--	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS \
--		|| BR2_TOOLCHAIN_GCC_AT_LEAST_6
-+	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ # license files
+ sha256  fd38b2c053c0cce46d9c5ef3545a6e34d157a240ba99c9b8dca5d37a8147da6c  LICENSES/BSD-2-Clause.txt
+diff --git a/package/libcamera/libcamera.mk b/package/libcamera/libcamera.mk
+index 11a6961da5..677da8ac4c 100644
+--- a/package/libcamera/libcamera.mk
++++ b/package/libcamera/libcamera.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- comment "boost-fiber needs a toolchain not affected by GCC bug 64735"
+ LIBCAMERA_SITE = https://git.linuxtv.org/libcamera.git
+-LIBCAMERA_VERSION = 3a1f67a8031ac5ad96a11d5dc8b2e8976290497b
++LIBCAMERA_VERSION = e355ca0087cd93ef80f74c61018e9e9228a93313
+ LIBCAMERA_SITE_METHOD = git
+ LIBCAMERA_DEPENDENCIES = \
+ 	host-openssl \
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
