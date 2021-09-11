@@ -2,56 +2,56 @@ Return-Path: <SRS0=HL2s=OB=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5CE56C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 20:44:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A38CC433F5
+	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 20:44:58 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id AFF9060F6F
-	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 20:44:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org AFF9060F6F
+	by mail.kernel.org (Postfix) with ESMTPS id 2358261050
+	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 20:44:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2358261050
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7FAA54048D;
-	Sat, 11 Sep 2021 20:44:45 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D75A840476;
+	Sat, 11 Sep 2021 20:44:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OHJqkGVakDnK; Sat, 11 Sep 2021 20:44:44 +0000 (UTC)
+	with ESMTP id ooKizePghWrq; Sat, 11 Sep 2021 20:44:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8F00540470;
-	Sat, 11 Sep 2021 20:44:43 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id EDFC01BF2CB
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0F319405D5;
+	Sat, 11 Sep 2021 20:44:56 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id F0AEC1BF957
  for <buildroot@lists.busybox.net>; Sat, 11 Sep 2021 20:43:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E640C605E5
+ by smtp2.osuosl.org (Postfix) with ESMTP id E758F4042A
  for <buildroot@lists.busybox.net>; Sat, 11 Sep 2021 20:43:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JvRdYJzCutRr for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PCh0oY67PoBW for <buildroot@lists.busybox.net>;
  Sat, 11 Sep 2021 20:43:55 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 46209607E9
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3A67340490
  for <buildroot@buildroot.org>; Sat, 11 Sep 2021 20:43:55 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 8650D89156; Sat, 11 Sep 2021 20:42:16 +0000 (UTC)
+ id 7BDE78918B; Sat, 11 Sep 2021 20:42:16 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sat, 11 Sep 2021 22:34:57 +0200
+Date: Sat, 11 Sep 2021 22:34:18 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 29932ece351992ec9c9ee2bc42d1ce0619c314b0
-X-Git-Newrev: 30a22bfe11dc71565a0c8afbf075ce65af7f7bfb
+X-Git-Oldrev: eb75d71b8026ff98d632964ac1c6fedeb0433ef7
+X-Git-Newrev: 29932ece351992ec9c9ee2bc42d1ce0619c314b0
 X-Patchwork-Hint: ignore
-Message-Id: <20210911204216.8650D89156@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/osm2pgsql: needs gcc >= 4.9
+Message-Id: <20210911204216.7BDE78918B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/tvheadend: fix python3 detection
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,55 +70,31 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=30a22bfe11dc71565a0c8afbf075ce65af7f7bfb
+commit: https://git.buildroot.net/buildroot/commit/?id=29932ece351992ec9c9ee2bc42d1ce0619c314b0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-osm2pgsql needs C++14 since bump to version 1.5.1 in commit
-a71661ffb216c7423dcd02ec9e8d703252dbcbad and
-https://github.com/openstreetmap/osm2pgsql/commit/d35dd358d6e4a88a792be60c85bf55d2360c1a71
-to avoid the following build failure:
-
-/home/buildroot/autobuild/instance-1/output-1/build/osm2pgsql-1.5.1/src/db-copy.cpp: In member function 'void db_copy_thread_t::sync_and_wait()':
-/home/buildroot/autobuild/instance-1/output-1/build/osm2pgsql-1.5.1/src/db-copy.cpp:108:16: error: 'make_unique' is not a member of 'std'
-     add_buffer(std::make_unique<db_cmd_sync_t>(std::move(barrier)));
-                ^
-
 Fixes:
- - http://autobuild.buildroot.org/results/30ae4b9405454919437098d29abbd743638c9423
+http://autobuild.buildroot.net/results/101/101d1caa355c2d7ee1762b394c1bf4e29350bd06//
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Reviewed-by: Maxim Kochetkov <fido_max@inbox.ru>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/osm2pgsql/Config.in | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/tvheadend/tvheadend.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/osm2pgsql/Config.in b/package/osm2pgsql/Config.in
-index d31191b3a7..315f496d8e 100644
---- a/package/osm2pgsql/Config.in
-+++ b/package/osm2pgsql/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_OSM2PGSQL
- 	bool "osm2pgsql"
- 	depends on BR2_INSTALL_LIBSTDCPP # boost, fmt, libosmium, protozero
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11, libosmium, protozero
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # boost, libosmium
- 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-filesystem
- 	depends on BR2_USE_WCHAR # boost, fmt, libosmium
-@@ -23,10 +23,10 @@ config BR2_PACKAGE_OSM2PGSQL
- 
- 	  https://osm2pgsql.org
- 
--comment "osm2pgsql needs a toolchain w/ C++,  wchar, threads, gcc >= 4.7"
-+comment "osm2pgsql needs a toolchain w/ C++,  wchar, threads, gcc >= 4.9"
- 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 || !BR2_TOOLCHAIN_HAS_THREADS
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || !BR2_TOOLCHAIN_HAS_THREADS
- 
- comment "osm2pgsql needs a toolchain not affected by GCC bug 64735"
- 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+index cd8fedf1f0..6000e82a6f 100644
+--- a/package/tvheadend/tvheadend.mk
++++ b/package/tvheadend/tvheadend.mk
+@@ -154,7 +154,7 @@ define TVHEADEND_CONFIGURE_CMDS
+ 			--arch="$(ARCH)" \
+ 			--cpu="$(GCC_TARGET_CPU)" \
+ 			--nowerror \
+-			--python="$(HOST_DIR)/bin/python" \
++			--python="$(HOST_DIR)/bin/python3" \
+ 			--enable-dvbscan \
+ 			--enable-bundle \
+ 			--enable-pngquant \
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
