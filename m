@@ -7,53 +7,52 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 708A1C433F5
-	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 18:56:07 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BBC60C433F5
+	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 18:56:18 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id E4205610A3
-	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 18:56:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E4205610A3
+	by mail.kernel.org (Postfix) with ESMTPS id 86A4961059
+	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 18:56:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 86A4961059
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 97F9860B6F;
-	Sat, 11 Sep 2021 18:56:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2821082695;
+	Sat, 11 Sep 2021 18:56:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hIZDwHLm2LOQ; Sat, 11 Sep 2021 18:56:06 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id wuQ2U-B6hjZJ; Sat, 11 Sep 2021 18:56:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 15623608CA;
-	Sat, 11 Sep 2021 18:56:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7BC2A824DC;
+	Sat, 11 Sep 2021 18:56:16 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 60C541BF958
- for <buildroot@lists.busybox.net>; Sat, 11 Sep 2021 18:55:40 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7B95C1BF2C2
+ for <buildroot@lists.busybox.net>; Sat, 11 Sep 2021 18:55:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4FD74401B8
- for <buildroot@lists.busybox.net>; Sat, 11 Sep 2021 18:55:40 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 77FC7400FC
+ for <buildroot@lists.busybox.net>; Sat, 11 Sep 2021 18:55:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZdUMdeva4tqD for <buildroot@lists.busybox.net>;
+ with ESMTP id ZDL0ApV3m2Gh for <buildroot@lists.busybox.net>;
  Sat, 11 Sep 2021 18:55:38 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id DC13D400FC
+ by smtp2.osuosl.org (Postfix) with ESMTP id E38B4401B0
  for <buildroot@buildroot.org>; Sat, 11 Sep 2021 18:55:38 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 4EF4C890FF; Sat, 11 Sep 2021 18:54:00 +0000 (UTC)
+ id 59CD5890FE; Sat, 11 Sep 2021 18:54:00 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sat, 11 Sep 2021 20:47:35 +0200
+Date: Sat, 11 Sep 2021 20:50:27 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ecd20b16332661f77be030605e38d6d2fa9cd049
-X-Git-Newrev: 97ab9ffa735c8e82a6ce05c68dade5bd13713a0e
+X-Git-Oldrev: 97ab9ffa735c8e82a6ce05c68dade5bd13713a0e
+X-Git-Newrev: e1c4eeab73de03bb4cbc1786c7be99613bc33e50
 X-Patchwork-Hint: ignore
-Message-Id: <20210911185400.4EF4C890FF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit]
- package/gobject-introspection/g-ir-scanner-qemuwrapper.in: Fix latent bug
- if GIR_EXTRA_LIBS_PATH is empty
+Message-Id: <20210911185400.59CD5890FE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] g-ir-scanner-qemuwrapper.in: Fix
+ shellcheck warnings, switch to sh
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,43 +71,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=97ab9ffa735c8e82a6ce05c68dade5bd13713a0e
+commit: https://git.buildroot.net/buildroot/commit/?id=e1c4eeab73de03bb4cbc1786c7be99613bc33e50
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-If GIR_EXTRA_LIBS_PATH is empty, the LD_LIBRARY_PATH variable is
-":.libs:$(dirname $0)/../lib:$(dirname $0)/../../lib".
-
-As discussed with Yann Morin, add a new variable, "GOI_LIBRARY_PATH" and
-prepend ${GIR_EXTRA_LIBS_PATH:+${GIR_EXTRA_LIBS_PATH}:} to the path to fix the
-above bug.
+- Add double quotes to prevent globbing and word splitting.
+  - Add indentations of continuation lines.
+  - Disable SC2181 and SC2016 as we explicitly do not want the variables
+    expanded in the echo.
 
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/gobject-introspection/g-ir-scanner-qemuwrapper.in | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ .../gobject-introspection/g-ir-scanner-qemuwrapper.in    | 16 +++++++++-------
+ 1 file changed, 9 insertions(+), 7 deletions(-)
 
 diff --git a/package/gobject-introspection/g-ir-scanner-qemuwrapper.in b/package/gobject-introspection/g-ir-scanner-qemuwrapper.in
-index cad7ef875e..c76553515e 100644
+index c76553515e..85f0750b4d 100644
 --- a/package/gobject-introspection/g-ir-scanner-qemuwrapper.in
 +++ b/package/gobject-introspection/g-ir-scanner-qemuwrapper.in
-@@ -1,5 +1,7 @@
- #!/usr/bin/env bash
+@@ -1,19 +1,21 @@
+-#!/usr/bin/env bash
++#!/usr/bin/env sh
  
-+GOI_LIBRARY_PATH="${GIR_EXTRA_LIBS_PATH:+${GIR_EXTRA_LIBS_PATH}:}.libs:$(dirname "$0")/../lib:$(dirname "$0")/../../lib"
-+
- # Pass -r to qemu-user as to trick glibc into not errorings out if the host kernel
+ GOI_LIBRARY_PATH="${GIR_EXTRA_LIBS_PATH:+${GIR_EXTRA_LIBS_PATH}:}.libs:$(dirname "$0")/../lib:$(dirname "$0")/../../lib"
+ 
+-# Pass -r to qemu-user as to trick glibc into not errorings out if the host kernel
++# Pass -r to qemu-user as to trick glibc into not erroring out if the host kernel
  # is older than the target kernel.
  # Use a modules directory which does not exist so we don't load random things
-@@ -7,7 +9,7 @@
- GIO_MODULE_DIR=$(dirname $0)/../lib/gio/modules-dummy \
+ # which may then get deleted (or their dependencies) and potentially segfault
+-GIO_MODULE_DIR=$(dirname $0)/../lib/gio/modules-dummy \
++GIO_MODULE_DIR="$(dirname "$0")/../lib/gio/modules-dummy" \
  @QEMU_USER@ -r @TOOLCHAIN_HEADERS_VERSION@ \
- -L $(dirname $0)/../../ \
---E LD_LIBRARY_PATH=${GIR_EXTRA_LIBS_PATH}:.libs:$(dirname $0)/../lib:$(dirname $0)/../../lib \
-+-E LD_LIBRARY_PATH="${GOI_LIBRARY_PATH}" \
- "$@"
+--L $(dirname $0)/../../ \
+--E LD_LIBRARY_PATH="${GOI_LIBRARY_PATH}" \
+-"$@"
++    -L "$(dirname "$0")/../../" \
++    -E LD_LIBRARY_PATH="${GOI_LIBRARY_PATH}" \
++    "$@"
  
- if [[ $? -ne 0 ]]; then
+-if [[ $? -ne 0 ]]; then
++# shellcheck disable=SC2181
++if [ $? -ne 0 ]; then
+     echo "If the above error message is about missing .so libraries, then setting up GIR_EXTRA_LIBS_PATH in the .mk file should help."
++    # shellcheck disable=SC2016
+     echo 'Typically like this: PKG_MAKE_ENV += GIR_EXTRA_LIBS_PATH="$(@D)/.libs"'
+     exit 1
+ fi
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
