@@ -2,56 +2,95 @@ Return-Path: <SRS0=HL2s=OB=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-20.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E3D3C433F5
-	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 14:37:59 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F09F6C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 14:52:19 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 3DA906109F
-	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 14:37:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3DA906109F
+	by mail.kernel.org (Postfix) with ESMTPS id 209276109F
+	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 14:52:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 209276109F
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1603283E69;
-	Sat, 11 Sep 2021 14:37:59 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DE5FD400E8;
+	Sat, 11 Sep 2021 14:52:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7t18TnESVYdc; Sat, 11 Sep 2021 14:37:58 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 10gUyKwovMUo; Sat, 11 Sep 2021 14:52:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8389180C91;
-	Sat, 11 Sep 2021 14:37:57 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 99FA81BF834
- for <buildroot@lists.busybox.net>; Sat, 11 Sep 2021 14:37:31 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E915D40142;
+	Sat, 11 Sep 2021 14:52:16 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id BE8C91BF834
+ for <buildroot@lists.busybox.net>; Sat, 11 Sep 2021 14:52:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 87121607D0
- for <buildroot@lists.busybox.net>; Sat, 11 Sep 2021 14:37:30 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id AC700400E8
+ for <buildroot@lists.busybox.net>; Sat, 11 Sep 2021 14:52:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OTxXDHjxD5JR for <buildroot@lists.busybox.net>;
- Sat, 11 Sep 2021 14:37:29 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D1A63607EC
- for <buildroot@buildroot.org>; Sat, 11 Sep 2021 14:37:29 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id AC3FB8902E; Sat, 11 Sep 2021 14:35:51 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-To: buildroot@buildroot.org
-Date: Sat, 11 Sep 2021 16:27:19 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3f81aa885de833805999b168465042071ba831ad
-X-Git-Newrev: 7b7be053b8b6f763b54a662020e84edc3b202d2b
-X-Patchwork-Hint: ignore
-Message-Id: <20210911143551.AC3FB8902E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/smcroute: add sysv init script
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ax0KONqp0g0w for <buildroot@lists.busybox.net>;
+ Sat, 11 Sep 2021 14:52:13 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com
+ [IPv6:2a00:1450:4864:20::531])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0C12A40142
+ for <buildroot@buildroot.org>; Sat, 11 Sep 2021 14:52:12 +0000 (UTC)
+Received: by mail-ed1-x531.google.com with SMTP id s25so7059542edw.0
+ for <buildroot@buildroot.org>; Sat, 11 Sep 2021 07:52:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=subject:to:references:from:organization:message-id:date:user-agent
+ :mime-version:in-reply-to:content-language:content-transfer-encoding;
+ bh=U3GBCGeAd7EJaQJiovH0Ll8WJBrTHXq5hYKHMCBvvHE=;
+ b=e1ua3F8w7Ls0XoetqotTS5bkO3BCsFVI3zgXmFEWVhsKDypyrRqst1b8dTAxqn6owy
+ ReyJQLOrohmeOuQeFItTDYPHn9ejgj4AZ6OPOH9SdAtoKS9nJ7bAE4hAhOya68wAac4Y
+ kzu0VncyAWG+JMgxiE7wm4qCc0fCoe8c2vH8Iwhq4q9tpAnKExqixZxGeSB9I0uIREat
+ uma6/dpRH40s4V1XQlSTHUaGiQ57ZTtbT15Dg7vokjot10MkSZXTCedXPuISvqmG12ur
+ 5zV+fRNB4/2rEbuCKGTV39SiZ1bMqsT3cifoO9LC0Va1+1uJ9tjbiKIP+Zqzfj8lI3+9
+ WZIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:subject:to:references:from:organization
+ :message-id:date:user-agent:mime-version:in-reply-to
+ :content-language:content-transfer-encoding;
+ bh=U3GBCGeAd7EJaQJiovH0Ll8WJBrTHXq5hYKHMCBvvHE=;
+ b=h/VSgCV59jml7dUbPCWzb1Ew/vWF3Yf88JoMgAldfvFRnRE+XwCi+3rFPtsF18b03F
+ ViyzSUJi8XGbDmIJ4lKmi+JgVcP8Z+q82mDouc0SLk+XMVrsKP1NRfLuczbFnle/7tT2
+ dsUGNCOAr40tr+e/bzSCaAcK3jxgloALkMzAyCbGJg7h8I1igKNe+lUtkc+qkIQI9Ylt
+ 3ZhBMLzvosE8x71l3F0oXlMhBpiCqraXX+KvFdtnOhECU+3xUArx1TypmMB/vwLNgvfL
+ 0z5ogapWleDbJgqs2zobS7hs2F/RJe/oOeN53swChhqhbU4Rnd+u4R3xVgylulSq4Jz1
+ J53g==
+X-Gm-Message-State: AOAM5308PL3k8BZPLcpVjKJePiijUYV4l7xqKvbM4MRFQvsIlFiBX1Te
+ 5G74agu8nD716/LhJyUbEr0y4qeKiBz90Q==
+X-Google-Smtp-Source: ABdhPJw7hcBpWwMJXV28VtPp6xT+plpnVjWlX7c4wYOtSZUNXn//eVju/yQ5gH8ha8EGXLsXhnOWvQ==
+X-Received: by 2002:a50:ae21:: with SMTP id c30mr3703524edd.120.1631371931232; 
+ Sat, 11 Sep 2021 07:52:11 -0700 (PDT)
+Received: from ?IPv6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id m22sm924776edq.71.2021.09.11.07.52.10
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sat, 11 Sep 2021 07:52:10 -0700 (PDT)
+To: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
+References: <20210902044451.64673-1-bernd.kuhls@t-online.de>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+Message-ID: <fabc97ab-dd72-507c-65ee-ff08234344c2@mind.be>
+Date: Sat, 11 Sep 2021 16:52:10 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
+MIME-Version: 1.0
+In-Reply-To: <20210902044451.64673-1-bernd.kuhls@t-online.de>
+Content-Language: en-GB
+Subject: Re: [Buildroot] [PATCH/next 1/1] package/xmrig: bump version to
+ 6.15.0
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,96 +103,52 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7b7be053b8b6f763b54a662020e84edc3b202d2b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Same start order as mrouted, start after networking is up.
 
-Custom command line options, like startup delay, or disable multicast
-routing by default, can be added to the optional /etc/default/smcroute
-env. file.
+On 02/09/2021 06:44, Bernd Kuhls wrote:
+> Changelog:
+> https://github.com/xmrig/xmrig/blob/master/CHANGELOG.md
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/smcroute/S41smcroute | 48 ++++++++++++++++++++++++++++++++++++++++++++
- package/smcroute/smcroute.mk |  5 +++++
- 2 files changed, 53 insertions(+)
+ Applied to master, thanks.
 
-diff --git a/package/smcroute/S41smcroute b/package/smcroute/S41smcroute
-new file mode 100755
-index 0000000000..bdc0f87645
---- /dev/null
-+++ b/package/smcroute/S41smcroute
-@@ -0,0 +1,48 @@
-+#!/bin/sh
-+
-+NAME="smcroute"
-+DAEMON="smcrouted"
-+PIDFILE="/var/run/$NAME.pid"
-+
-+# shellcheck source=/dev/null
-+[ -r "/etc/default/$NAME" ] && . "/etc/default/$NAME"
-+
-+cmd()
-+{
-+    start-stop-daemon -q -p "$PIDFILE" "$@"
-+    status=$?
-+    if [ $status -eq 0 ]; then
-+	echo "OK"
-+    else
-+	echo "FAIL"
-+    fi
-+    return $status
-+}
-+
-+case "$1" in
-+    start)
-+	printf 'Starting %s: ' "$DAEMON"
-+	# shellcheck disable=SC2086 # we need the word splitting
-+	cmd -S -x "/usr/sbin/$DAEMON" -- $SMCROUTED_ARGS
-+	;;
-+
-+    stop)
-+	printf 'Stopping %s: ' "$DAEMON"
-+	cmd -K
-+	;;
-+
-+    restart)
-+	$0 stop
-+	sleep 1
-+	$0 start
-+	;;
-+
-+    reload)
-+	printf 'Reloading %s: ' "$DAEMON"
-+	cmd -K -s HUP
-+	;;
-+
-+    *)
-+	echo "Usage: $0 {start|stop|restart|reload}"
-+	exit 1
-+esac
-diff --git a/package/smcroute/smcroute.mk b/package/smcroute/smcroute.mk
-index e4ee81db6f..9cce0acbbc 100644
---- a/package/smcroute/smcroute.mk
-+++ b/package/smcroute/smcroute.mk
-@@ -19,4 +19,9 @@ else
- SMCROUTE_CONF_OPTS += --without-libcap
- endif
- 
-+define SMCROUTE_INSTALL_INIT_SYSV
-+	$(INSTALL) -m 755 -D package/smcroute/S41smcroute \
-+		$(TARGET_DIR)/etc/init.d/S41smcroute
-+endef
-+
- $(eval $(autotools-package))
+ Regards,
+ Arnout
+
+> ---
+>  package/xmrig/xmrig.hash | 2 +-
+>  package/xmrig/xmrig.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/xmrig/xmrig.hash b/package/xmrig/xmrig.hash
+> index 0af163de8a..ebe6fe5726 100644
+> --- a/package/xmrig/xmrig.hash
+> +++ b/package/xmrig/xmrig.hash
+> @@ -1,3 +1,3 @@
+>  # Locally calculated
+> -sha256  5342632664a01efc7d512ce404f580d9ee380899afb144b4afc05c43e76cf446  xmrig-6.14.1.tar.gz
+> +sha256  155ce4b921839525f03ff7fe3ce9d6ecddf4f2a32cae1b0b83b3808c9db39880  xmrig-6.15.0.tar.gz
+>  sha256  589ed823e9a84c56feb95ac58e7cf384626b9cbf4fda2a907bc36e103de1bad2  LICENSE
+> diff --git a/package/xmrig/xmrig.mk b/package/xmrig/xmrig.mk
+> index d04a783254..16471682ca 100644
+> --- a/package/xmrig/xmrig.mk
+> +++ b/package/xmrig/xmrig.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -XMRIG_VERSION = 6.14.1
+> +XMRIG_VERSION = 6.15.0
+>  XMRIG_SITE = $(call github,xmrig,xmrig,v$(XMRIG_VERSION))
+>  XMRIG_LICENSE = GPL-3.0+
+>  XMRIG_LICENSE_FILES = LICENSE
+> 
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
