@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D8BDAC433EF
-	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 16:25:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8884FC433EF
+	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 16:26:04 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id A2DE061212
-	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 16:25:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A2DE061212
+	by mail.kernel.org (Postfix) with ESMTPS id 566CE60F58
+	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 16:26:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 566CE60F58
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7F3EF61BDC;
-	Sat, 11 Sep 2021 16:25:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 327EF61BFD;
+	Sat, 11 Sep 2021 16:26:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QJNb7Mldd1Ep; Sat, 11 Sep 2021 16:25:51 +0000 (UTC)
+	with ESMTP id HkJMZx-BXlGR; Sat, 11 Sep 2021 16:26:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9067261BF4;
-	Sat, 11 Sep 2021 16:25:50 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D78231BF304
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5BCB561BFB;
+	Sat, 11 Sep 2021 16:26:02 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id EC3EC1BF957
  for <buildroot@lists.busybox.net>; Sat, 11 Sep 2021 16:25:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C633161BD8
+ by smtp2.osuosl.org (Postfix) with ESMTP id E82A3406B3
  for <buildroot@lists.busybox.net>; Sat, 11 Sep 2021 16:25:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JoDxXqUid5F1 for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id X5HwjiReBab3 for <buildroot@lists.busybox.net>;
  Sat, 11 Sep 2021 16:25:21 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id E6CBF607E3
+ by smtp2.osuosl.org (Postfix) with ESMTP id DE15F40490
  for <buildroot@buildroot.org>; Sat, 11 Sep 2021 16:25:21 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 98503890D7; Sat, 11 Sep 2021 16:23:43 +0000 (UTC)
+ id 8E50B890D6; Sat, 11 Sep 2021 16:23:43 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sat, 11 Sep 2021 18:23:06 +0200
+Date: Sat, 11 Sep 2021 18:22:02 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 45b1719d50f5a235bb30ef96de8b764326d84719
-X-Git-Newrev: 1cc2a31a0ce6edfe5582bfd7d29fc088368e5066
+X-Git-Oldrev: f94381f29eaaf31023f74db9d2e915c35176e5a4
+X-Git-Newrev: 45b1719d50f5a235bb30ef96de8b764326d84719
 X-Patchwork-Hint: ignore
-Message-Id: <20210911162343.98503890D7@busybox.osuosl.org>
+Message-Id: <20210911162343.8E50B890D6@busybox.osuosl.org>
 Subject: [Buildroot] [git commit] toolchain/toolchain-external: update Arm
- AArch64 BE toolchain 10.3-2021.07
+ AArch64 toolchain 10.3-2021.07
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,7 +71,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1cc2a31a0ce6edfe5582bfd7d29fc088368e5066
+commit: https://git.buildroot.net/buildroot/commit/?id=45b1719d50f5a235bb30ef96de8b764326d84719
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Update to gcc 10.3, gdb 10.2, binutils 2.36.1, glibc 2.33.
@@ -82,23 +82,25 @@ RPC was finally dropped in glibc in 2.32 (2020-08-04).
 See "Release Note":
 https://developer.arm.com/open-source/gnu-toolchain/gnu-a/downloads#
 
+Tested with qemu_aarch64_virt_defconfig.
+
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- .../toolchain-external/toolchain-external-arm-aarch64-be/Config.in  | 3 +--
- .../toolchain-external-arm-aarch64-be.hash                          | 6 +++---
- .../toolchain-external-arm-aarch64-be.mk                            | 6 +++---
+ .../toolchain-external/toolchain-external-arm-aarch64/Config.in     | 3 +--
+ .../toolchain-external-arm-aarch64.hash                             | 6 +++---
+ .../toolchain-external-arm-aarch64.mk                               | 6 +++---
  3 files changed, 7 insertions(+), 8 deletions(-)
 
-diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/Config.in b/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/Config.in
-index bbd6a0703d..783ed35314 100644
---- a/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/Config.in
-+++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/Config.in
+diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64/Config.in b/toolchain/toolchain-external/toolchain-external-arm-aarch64/Config.in
+index b6062846a4..4557debe5d 100644
+--- a/toolchain/toolchain-external/toolchain-external-arm-aarch64/Config.in
++++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64/Config.in
 @@ -1,12 +1,11 @@
- config BR2_TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE
--	bool "Arm AArch64 BE 2020.11"
-+	bool "Arm AArch64 BE 2021.07"
- 	depends on BR2_aarch64_be
+ config BR2_TOOLCHAIN_EXTERNAL_ARM_AARCH64
+-	bool "Arm AArch64 2020.11"
++	bool "Arm AArch64 2021.07"
+ 	depends on BR2_aarch64
  	depends on BR2_HOSTARCH = "x86_64"
  	depends on !BR2_STATIC_LIBS
  	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
@@ -108,33 +110,33 @@ index bbd6a0703d..783ed35314 100644
  	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_20
  	select BR2_TOOLCHAIN_GCC_AT_LEAST_10
  	select BR2_TOOLCHAIN_HAS_FORTRAN
-diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.hash b/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.hash
-index 8e67a96599..1079917c98 100644
---- a/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.hash
-+++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.hash
+diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.hash b/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.hash
+index 90abe56d64..ca1ea48bcb 100644
+--- a/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.hash
++++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.hash
 @@ -1,4 +1,4 @@
--# From https://developer.arm.com/-/media/Files/downloads/gnu-a/10.2-2020.11/binrel/gcc-arm-10.2-2020.11-x86_64-aarch64_be-none-linux-gnu.tar.xz.asc
--md5  5da75bca337de5adade5b339709f8b16  gcc-arm-10.2-2020.11-x86_64-aarch64_be-none-linux-gnu.tar.xz
-+# From https://developer.arm.com/-/media/Files/downloads/gnu-a/10.3-2021.07/binrel/gcc-arm-10.3-2021.07-x86_64-aarch64_be-none-linux-gnu.tar.xz.asc
-+md5  54cbaef7db7eb3de27732500f9da9c6f  gcc-arm-10.3-2021.07-x86_64-aarch64_be-none-linux-gnu.tar.xz
+-# From https://developer.arm.com/-/media/Files/downloads/gnu-a/10.2-2020.11/binrel/gcc-arm-10.2-2020.11-x86_64-aarch64-none-linux-gnu.tar.xz.asc
+-md5  d6e6676d31c51405ae0fc7687ef0a224  gcc-arm-10.2-2020.11-x86_64-aarch64-none-linux-gnu.tar.xz
++# From https://developer.arm.com/-/media/Files/downloads/gnu-a/10.3-2021.07/binrel/gcc-arm-10.3-2021.07-x86_64-aarch64-none-linux-gnu.tar.xz.asc
++md5  07bbe2b5277b75ba36a924e9136366a4  gcc-arm-10.3-2021.07-x86_64-aarch64-none-linux-gnu.tar.xz
  # locally calculated
--sha256  78a472aeb80f6ff56bfdef57ce165b233bac4af7aa2e12f454900518a30ddf20  gcc-arm-10.2-2020.11-x86_64-aarch64_be-none-linux-gnu.tar.xz
-+sha256  63c34cac07ceadd74620ea87f27af1aa6a6f55c20a5bc116af21a59ddb6b6a6a  gcc-arm-10.3-2021.07-x86_64-aarch64_be-none-linux-gnu.tar.xz
-diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.mk b/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.mk
-index 384fc2efc5..5a6dbc60d5 100644
---- a/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.mk
-+++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.mk
+-sha256  fe7f72330216612de44891ebe5e228eed7c0c051ac090c395b2b33115c6f5408  gcc-arm-10.2-2020.11-x86_64-aarch64-none-linux-gnu.tar.xz
++sha256  1e33d53dea59c8de823bbdfe0798280bdcd138636c7060da9d77a97ded095a84  gcc-arm-10.3-2021.07-x86_64-aarch64-none-linux-gnu.tar.xz
+diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.mk b/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.mk
+index 583e4a763d..356e0810b3 100644
+--- a/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.mk
++++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE_VERSION = 2020.11
--TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE_SITE = https://developer.arm.com/-/media/Files/downloads/gnu-a/10.2-$(TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE_VERSION)/binrel
-+TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE_VERSION = 2021.07
-+TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE_SITE = https://developer.arm.com/-/media/Files/downloads/gnu-a/10.3-$(TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE_VERSION)/binrel
+-TOOLCHAIN_EXTERNAL_ARM_AARCH64_VERSION = 2020.11
+-TOOLCHAIN_EXTERNAL_ARM_AARCH64_SITE = https://developer.arm.com/-/media/Files/downloads/gnu-a/10.2-$(TOOLCHAIN_EXTERNAL_ARM_AARCH64_VERSION)/binrel
++TOOLCHAIN_EXTERNAL_ARM_AARCH64_VERSION = 2021.07
++TOOLCHAIN_EXTERNAL_ARM_AARCH64_SITE = https://developer.arm.com/-/media/Files/downloads/gnu-a/10.3-$(TOOLCHAIN_EXTERNAL_ARM_AARCH64_VERSION)/binrel
  
--TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE_SOURCE = gcc-arm-10.2-$(TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE_VERSION)-x86_64-aarch64_be-none-linux-gnu.tar.xz
-+TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE_SOURCE = gcc-arm-10.3-$(TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE_VERSION)-x86_64-aarch64_be-none-linux-gnu.tar.xz
+-TOOLCHAIN_EXTERNAL_ARM_AARCH64_SOURCE = gcc-arm-10.2-$(TOOLCHAIN_EXTERNAL_ARM_AARCH64_VERSION)-x86_64-aarch64-none-linux-gnu.tar.xz
++TOOLCHAIN_EXTERNAL_ARM_AARCH64_SOURCE = gcc-arm-10.3-$(TOOLCHAIN_EXTERNAL_ARM_AARCH64_VERSION)-x86_64-aarch64-none-linux-gnu.tar.xz
  
  $(eval $(toolchain-external-package))
 _______________________________________________
