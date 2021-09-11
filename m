@@ -2,75 +2,56 @@ Return-Path: <SRS0=HL2s=OB=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E4842C433F5
-	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 12:48:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 646F6C433F5
+	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 12:53:16 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id AC23A61026
-	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 12:48:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org AC23A61026
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
+	by mail.kernel.org (Postfix) with ESMTPS id C3F12610C9
+	for <buildroot@archiver.kernel.org>; Sat, 11 Sep 2021 12:53:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C3F12610C9
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6FD2360726;
-	Sat, 11 Sep 2021 12:48:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 76BC060757;
+	Sat, 11 Sep 2021 12:53:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YFqIshkrCcep; Sat, 11 Sep 2021 12:48:38 +0000 (UTC)
+	with ESMTP id BiU-IUW5Zohi; Sat, 11 Sep 2021 12:53:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7116C60737;
-	Sat, 11 Sep 2021 12:48:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BAAB5607BA;
+	Sat, 11 Sep 2021 12:53:13 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id AD3931BF31A
- for <buildroot@lists.busybox.net>; Sat, 11 Sep 2021 12:48:25 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9AB1B1BF957
+ for <buildroot@lists.busybox.net>; Sat, 11 Sep 2021 12:53:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AA19060737
- for <buildroot@lists.busybox.net>; Sat, 11 Sep 2021 12:48:25 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 84EAA607BA
+ for <buildroot@lists.busybox.net>; Sat, 11 Sep 2021 12:53:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 01m4f33mhQEz for <buildroot@lists.busybox.net>;
- Sat, 11 Sep 2021 12:48:24 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7796960726
- for <buildroot@buildroot.org>; Sat, 11 Sep 2021 12:48:24 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:6c4a:f4f1:e14a:6e93])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id CCEEAB0053B;
- Sat, 11 Sep 2021 14:48:16 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1631364503;
- bh=RaTplMs0Ud1Ah5O75OW/fGsuGixeSqEFU3F3ZWn7xhQ=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=VtdxNFGYDPJyKGs/0e/2sn4PiRBrHvDA6GgKn++j+ULP5xvdLfYGLrZeBC0xcLyqR
- fU8B565pSnSQX6VXA7C1enX9xc3WP72Q5b9RqVs2odJlhrfa9b+HGr/O+WrW/P2MaV
- cq2o/BcUjqwaoTaG9oFz8MEvzyciS2x4HTi5rkaQ1d+hDT9cp3nKzndgAfRSRJ67T/
- rk6R5CNLMtMYRKC/qi0dWUyK76tjCLbMril39SnAhIMCr3ADEAA53goo2R3O0xn9KT
- QPbUKeOjnuYjly/uEwUWRApPvfyDS8ohpXq5u92glk4QNJycRfUfTNg90wrfL0OY3+
- BNx0CSRfCmVVw==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 11 Sep 2021 14:48:16 +0200
-Date: Sat, 11 Sep 2021 14:48:16 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20210911124816.GM1053080@scaer>
-References: <20210910063742.97364-1-fontaine.fabrice@gmail.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20210910063742.97364-1-fontaine.fabrice@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 1/1] package/gnuradio: fix build with boost
- 1.77.0
+ with ESMTP id z-ZwM-HxpePn for <buildroot@lists.busybox.net>;
+ Sat, 11 Sep 2021 12:53:10 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8E15060757
+ for <buildroot@buildroot.org>; Sat, 11 Sep 2021 12:53:10 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4052)
+ id 91A7888F3B; Sat, 11 Sep 2021 12:51:32 +0000 (UTC)
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+To: buildroot@buildroot.org
+Date: Sat, 11 Sep 2021 14:52:41 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: ccda2f4bdc97d2f5a4a1efdb357ece8e5b57e10d
+X-Git-Newrev: 5ec9542415c92584fe0b986feea6326375bd63b6
+X-Patchwork-Hint: ignore
+Message-Id: <20210911125132.91A7888F3B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/testing/tests/fs: test OCI format
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,226 +64,129 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>,
- buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=5ec9542415c92584fe0b986feea6326375bd63b6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-09-10 08:37 +0200, Fabrice Fontaine spake thusly:
-> Fix the following build failure raised since commit
-> d39d8f7cee9b4634e6f490020204f63fae419e8e:
-> 
-> In file included from /home/buildroot/autobuild/instance-3/output-1/host/x86_64-buildroot-linux-musl/sysroot/usr/include/boost/math/common_factor.hpp:14,
->                  from /home/buildroot/autobuild/instance-3/output-1/build/gnuradio-3.8.2.0/gr-digital/lib/symbol_sync_cc_impl.cc:30:
-> /home/buildroot/autobuild/instance-3/output-1/host/x86_64-buildroot-linux-musl/sysroot/usr/include/boost/math/common_factor_ct.hpp:17:68: error: _Pragma takes a parenthesized string literal
->    17 | BOOST_MATH_HEADER_DEPRECATED("<boost/integer/common_factor_ct.hpp>");
->       |
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/7b4/7b46f51588144bca1d323230c378ce7f6ee999a8/build-end.log
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+This patch adds runtime testing of the OCI archive created by the
+sloci scripting. It launches a containerd instance, imports, and
+runs the OCI container.
 
-Applied to master, thanks.
+The existing QEMU AARCH64 kernel config was extended to enable common
+options used by a container runtime (cgroup and overlayfs).
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Matthew Weber <matthew.weber@collins.com>
+[Arnout: adapt file name which is arm64 now; add to DEVELOPERS]
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ DEVELOPERS                           |  1 +
+ board/qemu/aarch64-virt/linux.config |  6 ++++
+ support/testing/tests/fs/test_oci.py | 57 ++++++++++++++++++++++++++++++++++++
+ 3 files changed, 64 insertions(+)
 
-> ---
->  ...ve-deprecated-math-common_factor.hpp.patch | 165 ++++++++++++++++++
->  1 file changed, 165 insertions(+)
->  create mode 100644 package/gnuradio/0005-boost-remove-deprecated-math-common_factor.hpp.patch
-> 
-> diff --git a/package/gnuradio/0005-boost-remove-deprecated-math-common_factor.hpp.patch b/package/gnuradio/0005-boost-remove-deprecated-math-common_factor.hpp.patch
-> new file mode 100644
-> index 0000000000..0c282b7322
-> --- /dev/null
-> +++ b/package/gnuradio/0005-boost-remove-deprecated-math-common_factor.hpp.patch
-> @@ -0,0 +1,165 @@
-> +From 2c767bb260a25b415e8c9c4b3ea37280b2127cec Mon Sep 17 00:00:00 2001
-> +From: japm48 <japm48@users.noreply.github.com>
-> +Date: Fri, 10 Apr 2020 23:35:30 +0200
-> +Subject: [PATCH] boost: remove deprecated math/common_factor.hpp
-> +
-> +Remove deprecation warning and prefer using std::{lcm,gcd} to Boost.
-> +Fixes #2712.
-> +
-> +[Retrieved from:
-> +https://github.com/gnuradio/gnuradio/commit/2c767bb260a25b415e8c9c4b3ea37280b2127cec]
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +---
-> + .../include/gnuradio/CMakeLists.txt           |  1 +
-> + .../include/gnuradio/integer_math.h           | 35 +++++++++++++++++++
-> + gnuradio-runtime/lib/buffer.cc                | 19 ++--------
-> + gr-digital/lib/symbol_sync_cc_impl.cc         |  4 +--
-> + gr-digital/lib/symbol_sync_ff_impl.cc         |  4 +--
-> + 5 files changed, 43 insertions(+), 20 deletions(-)
-> + create mode 100644 gnuradio-runtime/include/gnuradio/integer_math.h
-> +
-> +diff --git a/gnuradio-runtime/include/gnuradio/CMakeLists.txt b/gnuradio-runtime/include/gnuradio/CMakeLists.txt
-> +index 8d718e87b5b..056af5d6f48 100644
-> +--- a/gnuradio-runtime/include/gnuradio/CMakeLists.txt
-> ++++ b/gnuradio-runtime/include/gnuradio/CMakeLists.txt
-> +@@ -31,6 +31,7 @@ install(FILES
-> +   gr_complex.h
-> +   hier_block2.h
-> +   high_res_timer.h
-> ++  integer_math.h
-> +   io_signature.h
-> +   logger.h
-> +   math.h
-> +diff --git a/gnuradio-runtime/include/gnuradio/integer_math.h b/gnuradio-runtime/include/gnuradio/integer_math.h
-> +new file mode 100644
-> +index 00000000000..15141049fa4
-> +--- /dev/null
-> ++++ b/gnuradio-runtime/include/gnuradio/integer_math.h
-> +@@ -0,0 +1,35 @@
-> ++/* -*- c++ -*- */
-> ++/*
-> ++ * Copyright 2020 Free Software Foundation, Inc.
-> ++ *
-> ++ * This file is part of GNU Radio
-> ++ *
-> ++ * SPDX-License-Identifier: GPL-3.0-or-later
-> ++ *
-> ++ */
-> ++#ifndef INCLUDED_GR_INTEGER_MATH_H
-> ++#define INCLUDED_GR_INTEGER_MATH_H
-> ++
-> ++#if (__cplusplus >= 201703L)
-> ++
-> ++// Prefer C++17 goodness.
-> ++#include <numeric>
-> ++#define GR_GCD std::gcd
-> ++#define GR_LCM std::lcm
-> ++
-> ++#elif (BOOST_VERSION >= 105800)
-> ++
-> ++// Fallback: newer boost API (introduced in Boost 1.58.0).
-> ++#include <boost/integer/common_factor_rt.hpp>
-> ++#define GR_GCD boost::integer::gcd
-> ++#define GR_LCM boost::integer::lcm
-> ++
-> ++#else
-> ++
-> ++// Last resort: old deprecated boost API.
-> ++#include <boost/math/common_factor_rt.hpp>
-> ++#define GR_GCD boost::math::gcd
-> ++#define GR_LCM boost::math::lcm
-> ++
-> ++#endif /* __cplusplus >= 201703L */
-> ++#endif /* INCLUDED_GR_INTEGER_MATH_H */
-> +diff --git a/gnuradio-runtime/lib/buffer.cc b/gnuradio-runtime/lib/buffer.cc
-> +index 720c72c4ee8..46d704542b1 100644
-> +--- a/gnuradio-runtime/lib/buffer.cc
-> ++++ b/gnuradio-runtime/lib/buffer.cc
-> +@@ -13,22 +13,13 @@
-> + #endif
-> + #include "vmcircbuf.h"
-> + #include <gnuradio/buffer.h>
-> ++#include <gnuradio/integer_math.h>
-> + #include <gnuradio/math.h>
-> + #include <assert.h>
-> + #include <algorithm>
-> + #include <iostream>
-> + #include <stdexcept>
-> + 
-> +-// the following header is deprecated as of Boost 1.66.0, and the
-> +-// other API was introduced in Boost 1.58.0. Since we still support
-> +-// Boost back to 1.54.0, use the older API if pre-1.5.80 and otherwise
-> +-// use the newer API.
-> +-#if (BOOST_VERSION < 105800)
-> +-#include <boost/math/common_factor_rt.hpp>
-> +-#else
-> +-#include <boost/integer/common_factor_rt.hpp>
-> +-#endif
-> +-
-> + namespace gr {
-> + 
-> + static long s_buffer_count = 0; // counts for debugging storage mgmt
-> +@@ -68,13 +59,9 @@ static long s_buffer_reader_count = 0;
-> +  *
-> +  *     type_size * nitems == k * page_size
-> +  */
-> +-static long minimum_buffer_items(long type_size, long page_size)
-> ++static inline long minimum_buffer_items(long type_size, long page_size)
-> + {
-> +-#if (BOOST_VERSION < 105800)
-> +-    return page_size / boost::math::gcd(type_size, page_size);
-> +-#else
-> +-    return page_size / boost::integer::gcd(type_size, page_size);
-> +-#endif
-> ++    return page_size / GR_GCD(type_size, page_size);
-> + }
-> + 
-> + 
-> +diff --git a/gr-digital/lib/symbol_sync_cc_impl.cc b/gr-digital/lib/symbol_sync_cc_impl.cc
-> +index 55f85e7c6a7..55f162dc727 100644
-> +--- a/gr-digital/lib/symbol_sync_cc_impl.cc
-> ++++ b/gr-digital/lib/symbol_sync_cc_impl.cc
-> +@@ -13,9 +13,9 @@
-> + #endif
-> + 
-> + #include "symbol_sync_cc_impl.h"
-> ++#include <gnuradio/integer_math.h>
-> + #include <gnuradio/io_signature.h>
-> + #include <gnuradio/math.h>
-> +-#include <boost/math/common_factor.hpp>
-> + #include <stdexcept>
-> + 
-> + namespace gr {
-> +@@ -95,7 +95,7 @@ symbol_sync_cc_impl::symbol_sync_cc_impl(enum ted_type detector_type,
-> +         throw std::runtime_error("unable to create interpolating_resampler_ccf");
-> + 
-> +     // Block Internal Clocks
-> +-    d_interps_per_symbol_n = boost::math::lcm(d_ted->inputs_per_symbol(), d_osps_n);
-> ++    d_interps_per_symbol_n = GR_LCM(d_ted->inputs_per_symbol(), d_osps_n);
-> +     d_interps_per_ted_input_n = d_interps_per_symbol_n / d_ted->inputs_per_symbol();
-> +     d_interps_per_output_sample_n = d_interps_per_symbol_n / d_osps_n;
-> + 
-> +diff --git a/gr-digital/lib/symbol_sync_ff_impl.cc b/gr-digital/lib/symbol_sync_ff_impl.cc
-> +index d0ec32ab192..1172c1b4f8a 100644
-> +--- a/gr-digital/lib/symbol_sync_ff_impl.cc
-> ++++ b/gr-digital/lib/symbol_sync_ff_impl.cc
-> +@@ -13,9 +13,9 @@
-> + #endif
-> + 
-> + #include "symbol_sync_ff_impl.h"
-> ++#include <gnuradio/integer_math.h>
-> + #include <gnuradio/io_signature.h>
-> + #include <gnuradio/math.h>
-> +-#include <boost/math/common_factor.hpp>
-> + #include <stdexcept>
-> + 
-> + namespace gr {
-> +@@ -97,7 +97,7 @@ symbol_sync_ff_impl::symbol_sync_ff_impl(enum ted_type detector_type,
-> +         throw std::runtime_error("unable to create interpolating_resampler_fff");
-> + 
-> +     // Block Internal Clocks
-> +-    d_interps_per_symbol_n = boost::math::lcm(d_ted->inputs_per_symbol(), d_osps_n);
-> ++    d_interps_per_symbol_n = GR_LCM(d_ted->inputs_per_symbol(), d_osps_n);
-> +     d_interps_per_ted_input_n = d_interps_per_symbol_n / d_ted->inputs_per_symbol();
-> +     d_interps_per_output_sample_n = d_interps_per_symbol_n / d_osps_n;
-> + 
-> -- 
-> 2.33.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@lists.buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 8473f51726..abb54aa41c 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1846,6 +1846,7 @@ F:	package/wpa_supplicant/
+ F:	package/wireless_tools/
+ F:	package/xen/
+ F:	package/xml-security-c/
++F:	support/testing/tests/fs/test_oci.py
+ F:	support/testing/tests/package/br2-external/openjdk/
+ F:	support/testing/tests/package/test_openjdk.py
+ F:	support/testing/tests/package/test_opkg/
+diff --git a/board/qemu/aarch64-virt/linux.config b/board/qemu/aarch64-virt/linux.config
+index 02e0812ffd..e3a4a92913 100644
+--- a/board/qemu/aarch64-virt/linux.config
++++ b/board/qemu/aarch64-virt/linux.config
+@@ -3,6 +3,11 @@ CONFIG_POSIX_MQUEUE=y
+ CONFIG_NO_HZ_IDLE=y
+ CONFIG_HIGH_RES_TIMERS=y
+ CONFIG_TASKSTATS=y
++CONFIG_MEMCG=y
++CONFIG_BLK_CGROUP=y
++CONFIG_CPUSETS=y
++CONFIG_CGROUP_DEVICE=y
++CONFIG_CGROUP_CPUACCT=y
+ CONFIG_SCHED_AUTOGROUP=y
+ CONFIG_PROFILING=y
+ CONFIG_ARCH_VEXPRESS=y
+@@ -62,5 +67,6 @@ CONFIG_ARM_SMMU_V3=y
+ CONFIG_EXT4_FS=y
+ CONFIG_FUSE_FS=y
+ CONFIG_VIRTIO_FS=y
++CONFIG_OVERLAY_FS=y
+ CONFIG_TMPFS=y
+ CONFIG_TMPFS_POSIX_ACL=y
+diff --git a/support/testing/tests/fs/test_oci.py b/support/testing/tests/fs/test_oci.py
+new file mode 100644
+index 0000000000..347332f30d
+--- /dev/null
++++ b/support/testing/tests/fs/test_oci.py
+@@ -0,0 +1,57 @@
++import os
++import shutil
++import infra.basetest
++
++
++class TestOci(infra.basetest.BRTest):
++    config = \
++        """
++        BR2_aarch64=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_LINUX_KERNEL=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.61"
++        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
++        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++        BR2_PACKAGE_CGROUPFS_MOUNT=y
++        BR2_PACKAGE_CONTAINERD=y
++        BR2_TARGET_ROOTFS_EXT2=y
++        BR2_TARGET_ROOTFS_EXT2_SIZE="600M"
++        BR2_TARGET_ROOTFS_OCI=y
++        BR2_TARGET_ROOTFS_OCI_ENTRYPOINT="df"
++        BR2_TARGET_ROOTFS_OCI_ENTRYPOINT_ARGS="-h"
++        BR2_TARGET_ROOTFS_OCI_ARCHIVE=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++
++    def login(self):
++        rootfs = os.path.join(self.builddir, "images", "rootfs.ext2")
++        kern = os.path.join(self.builddir, "images", "Image")
++        self.emulator.boot(arch="aarch64",
++                           kernel=kern,
++                           kernel_cmdline=["root=/dev/vda", "console=ttyAMA0"],
++                           options=["-M", "virt",
++                                    "-cpu", "cortex-a57",
++                                    "-m", "512M",
++                                    "-drive", "file={},format=raw,if=virtio".format(rootfs)])
++        self.emulator.login()
++
++    def place_test_oci(self):
++        shutil.copy(os.path.join(self.builddir, 'images', 'rootfs-oci-latest-arm64-linux.oci-image.tar'),
++                    os.path.join(self.builddir, 'target', 'oci.tar'))
++        # rebuild to make sure oci.tar ends up in rootfs.ext2
++        self.b.build()
++
++    def test_run(self):
++        self.place_test_oci()
++        self.login()
++
++        cmd = "containerd &"
++        self.assertRunOk(cmd)
++
++        cmd = "ctr image import --base-name buildroot-test /oci.tar"
++        self.assertRunOk(cmd, timeout=120)
++
++        cmd = "ctr run --rm --tty buildroot-test:latest v1"
++        self.assertRunOk(cmd, timeout=120)
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
