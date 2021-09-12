@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 980B6C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 12 Sep 2021 20:17:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 21681C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 12 Sep 2021 20:17:53 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 66AF260F6D
-	for <buildroot@archiver.kernel.org>; Sun, 12 Sep 2021 20:17:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 66AF260F6D
+	by mail.kernel.org (Postfix) with ESMTPS id DBE3961051
+	for <buildroot@archiver.kernel.org>; Sun, 12 Sep 2021 20:17:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org DBE3961051
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 36A354046A;
-	Sun, 12 Sep 2021 20:17:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BBCDE4045C;
+	Sun, 12 Sep 2021 20:17:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zvwoBPWI5tBz; Sun, 12 Sep 2021 20:17:40 +0000 (UTC)
+	with ESMTP id SwmKX1AJY7vO; Sun, 12 Sep 2021 20:17:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6E4F14045C;
-	Sun, 12 Sep 2021 20:17:39 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 698A71BF404
+	by smtp4.osuosl.org (Postfix) with ESMTP id 226094050F;
+	Sun, 12 Sep 2021 20:17:51 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 6C2C21BF95A
  for <buildroot@lists.busybox.net>; Sun, 12 Sep 2021 20:15:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5A0BB81854
- for <buildroot@lists.busybox.net>; Sun, 12 Sep 2021 20:15:43 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3F6016075B
+ for <buildroot@lists.busybox.net>; Sun, 12 Sep 2021 20:15:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MvC0STPj5FQg for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8oTsjXKlpNoR for <buildroot@lists.busybox.net>;
  Sun, 12 Sep 2021 20:15:40 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 64DCF8186B
+ by smtp3.osuosl.org (Postfix) with ESMTP id A081860762
  for <buildroot@buildroot.org>; Sun, 12 Sep 2021 20:15:40 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 633C48A47B; Sun, 12 Sep 2021 20:13:59 +0000 (UTC)
+ id 9FB078A47C; Sun, 12 Sep 2021 20:13:59 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 12 Sep 2021 20:55:56 +0200
+Date: Sun, 12 Sep 2021 21:37:09 +0200
 X-Git-Refname: refs/heads/2021.05.x
-X-Git-Oldrev: 3a07fabc35171c1c56544e7714d04c7c2cbed22f
-X-Git-Newrev: 1a100f6ec8ae0667559b5f05349b532eeaf1cdc5
+X-Git-Oldrev: 8e469e30f7caec596d9e4a6cdda6fd14ac56b623
+X-Git-Newrev: ff75e9e07d8bb70e4c9e5676567bf2a0133d7c28
 X-Patchwork-Hint: ignore
-Message-Id: <20210912201359.633C48A47B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.05.x] package/libgcrypt: bump
- to version 1.9.4
+Message-Id: <20210912201359.9FB078A47C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.05.x] package/openssl: fix
+ spurious spaces
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,70 +71,32 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1a100f6ec8ae0667559b5f05349b532eeaf1cdc5
+commit: https://git.buildroot.net/buildroot/commit/?id=ff75e9e07d8bb70e4c9e5676567bf2a0133d7c28
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 05125113fcb93d990ecb9395224d3fda5d911dc4)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 8b2befcd7475c62f312d6d3b9a9d76f8de6fb062)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-configure.ac-add-an-option-to-disable-tests.patch        | 4 ++--
- package/libgcrypt/libgcrypt.hash                                  | 8 ++++----
- package/libgcrypt/libgcrypt.mk                                    | 2 +-
- 3 files changed, 7 insertions(+), 7 deletions(-)
+ package/openssl/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libgcrypt/0001-configure.ac-add-an-option-to-disable-tests.patch b/package/libgcrypt/0001-configure.ac-add-an-option-to-disable-tests.patch
-index 21ff20a473..4ef02fba65 100644
---- a/package/libgcrypt/0001-configure.ac-add-an-option-to-disable-tests.patch
-+++ b/package/libgcrypt/0001-configure.ac-add-an-option-to-disable-tests.patch
-@@ -24,7 +24,7 @@ diff --git a/Makefile.am b/Makefile.am
- index 7fa4fa4d..f0bd90e4 100644
- --- a/Makefile.am
- +++ b/Makefile.am
--@@ -39,9 +39,14 @@ else
-+@@ -40,9 +40,14 @@ else
-  doc =
-  endif
-  
-@@ -44,7 +44,7 @@ diff --git a/configure.ac b/configure.ac
- index e8c8cd39..1a6b61e5 100644
- --- a/configure.ac
- +++ b/configure.ac
--@@ -2710,6 +2710,16 @@ AC_ARG_ENABLE([doc], AC_HELP_STRING([--disable-doc],
-+@@ -3198,6 +3198,16 @@ AC_ARG_ENABLE([doc], AC_HELP_STRING([--disable-doc],
-  AM_CONDITIONAL([BUILD_DOC], [test "x$build_doc" != xno])
-  
-  
-diff --git a/package/libgcrypt/libgcrypt.hash b/package/libgcrypt/libgcrypt.hash
-index 26ec492e10..23562d0ed3 100644
---- a/package/libgcrypt/libgcrypt.hash
-+++ b/package/libgcrypt/libgcrypt.hash
-@@ -1,7 +1,7 @@
- # From https://www.gnupg.org/download/integrity_check.html
--sha1  6b18f453fee677078586279d96fb88e5df7b3f35  libgcrypt-1.9.3.tar.bz2
-+sha1  1bccc8393482fa1953323ff429c6b5ba5676eb1a  libgcrypt-1.9.4.tar.bz2
- # Locally calculated after checking signature
--# https://gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-1.9.3.tar.bz2.sig
--# using key D8692123C4065DEA5E0F3AB5249B39D24F25E3B6
--sha256  97ebe4f94e2f7e35b752194ce15a0f3c66324e0ff6af26659bbfb5ff2ec328fd  libgcrypt-1.9.3.tar.bz2
-+# https://gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-1.9.4.tar.bz2.sig
-+# using key 6DAA6E64A76D2840571B4902528897B826403ADA
-+sha256  ea849c83a72454e3ed4267697e8ca03390aee972ab421e7df69dfe42b65caaf7  libgcrypt-1.9.4.tar.bz2
- sha256  ca0061fc1381a3ab242310e4b3f56389f28e3d460eb2fd822ed7a21c6f030532  COPYING.LIB
-diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
-index 26be5d2f49..e5fdfcfc8e 100644
---- a/package/libgcrypt/libgcrypt.mk
-+++ b/package/libgcrypt/libgcrypt.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/openssl/Config.in b/package/openssl/Config.in
+index f69e85978f..f79bac28fa 100644
+--- a/package/openssl/Config.in
++++ b/package/openssl/Config.in
+@@ -55,8 +55,8 @@ config BR2_PACKAGE_HAS_OPENSSL
  
--LIBGCRYPT_VERSION = 1.9.3
-+LIBGCRYPT_VERSION = 1.9.4
- LIBGCRYPT_SOURCE = libgcrypt-$(LIBGCRYPT_VERSION).tar.bz2
- LIBGCRYPT_LICENSE = LGPL-2.1+
- LIBGCRYPT_LICENSE_FILES = COPYING.LIB
+ config BR2_PACKAGE_PROVIDES_OPENSSL
+ 	string
+-	default "libopenssl"  if BR2_PACKAGE_LIBOPENSSL
+-	default "libressl"  if BR2_PACKAGE_LIBRESSL
++	default "libopenssl" if BR2_PACKAGE_LIBOPENSSL
++	default "libressl" if BR2_PACKAGE_LIBRESSL
+ 
+ endif
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
