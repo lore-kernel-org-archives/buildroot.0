@@ -2,76 +2,89 @@ Return-Path: <SRS0=7Pu+=OC=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
+	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 95C04C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 12 Sep 2021 20:34:56 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A597C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 12 Sep 2021 20:47:51 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 3CC8E61050
-	for <buildroot@archiver.kernel.org>; Sun, 12 Sep 2021 20:34:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3CC8E61050
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
+	by mail.kernel.org (Postfix) with ESMTPS id 063F360F43
+	for <buildroot@archiver.kernel.org>; Sun, 12 Sep 2021 20:47:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 063F360F43
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 199DD40565;
-	Sun, 12 Sep 2021 20:34:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C48EC818E8;
+	Sun, 12 Sep 2021 20:47:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JhW31pZyyS1e; Sun, 12 Sep 2021 20:34:55 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 2Wbu0oouFUNm; Sun, 12 Sep 2021 20:47:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 244794056D;
-	Sun, 12 Sep 2021 20:34:54 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C7EA41BF404
- for <buildroot@lists.busybox.net>; Sun, 12 Sep 2021 20:34:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3583D8188B;
+	Sun, 12 Sep 2021 20:47:49 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 5A2541BF2B4
+ for <buildroot@lists.busybox.net>; Sun, 12 Sep 2021 20:47:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B6F6B40287
- for <buildroot@lists.busybox.net>; Sun, 12 Sep 2021 20:34:51 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 44CB78188B
+ for <buildroot@lists.busybox.net>; Sun, 12 Sep 2021 20:47:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OhTHa20_6Iti for <buildroot@lists.busybox.net>;
- Sun, 12 Sep 2021 20:34:49 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Un_6lJFD5xlC for <buildroot@lists.busybox.net>;
+ Sun, 12 Sep 2021 20:47:46 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 9190340272
- for <buildroot@buildroot.org>; Sun, 12 Sep 2021 20:34:49 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:bc3c:8ee4:eb9c:c13b])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPSA id E84032003CA;
- Sun, 12 Sep 2021 22:34:39 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1631478886;
- bh=Wb5+vXzNPhYC2Vt4Az0W8StWglbO6g56UpPwQzhXkHw=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=AzirRgBm1KDf8TT+1rWxg2psyOWPL3gs40uZx4g66nnCOPVcOsVx3u3fQ1SXwt9/N
- OHZ2MPEaXfqjS7ZUAtSKMf/P/nMktyyiS6QPd7o2S+QOtJ8g/UuKsYhJhcmsMMtnd9
- kl5vg84PFyigWAAy+Ws9VmwqXWj99rrOBIa4+prjBbfMHblKA/FkBp4P+ujfx4S/QS
- DPsIVYunL9ma15MOzOp0H/mfU3pInNN9ThvQfBcrnDaxjd3gOfMe9fWfL0MluMXRB+
- Er4TzjUx+XXQdCJ7iHRw1LvcoX3MNX0TbyxuVX4zTbBheCUYV6z+DwP5vPr7w8OBrV
- GmOevXimdho+A==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 12 Sep 2021 22:34:39 +0200
-Date: Sun, 12 Sep 2021 22:34:39 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20210912203439.GL1053080@scaer>
-References: <20210912122252.1811311-1-fontaine.fabrice@gmail.com>
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com
+ [IPv6:2607:f8b0:4864:20::d2d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id ADD8481886
+ for <buildroot@buildroot.org>; Sun, 12 Sep 2021 20:47:46 +0000 (UTC)
+Received: by mail-io1-xd2d.google.com with SMTP id j18so9447812ioj.8
+ for <buildroot@buildroot.org>; Sun, 12 Sep 2021 13:47:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=Dx2HFG0W5N97yf/LMTBLPENiJZVyJ1Qw3vi9FAXgySg=;
+ b=YXNpol3dug7naTbQIHtSBJZHOpojhdIkeXv/pADnuICtIN6dp/avgfpmq1C8U2gPC4
+ V8StIPXYPArbecBJAVw+FGdAai/Mi6pulO9m4/zrqiOcSl4sUEWQpVy7V4uVaTP4JRwX
+ SKOfq+HeXkf2t/TS0UxMGdwAW37Ng7XiZ/dXxqOWGjeTwbeHbkyYu5Zu0C+oeCbGEdoA
+ QpLD3k/iXtoOYb2A4A6XXthI6onNxgldJBilBoQMUC7xewzWg9x3yyJxNoU1Jj8fHpBl
+ 4p8mYDCHHwdKOmYihWSPNpQUiuOYe5oINqzt7C7LV1wFsGBKz6jGO2eHWB12l1QIyWFj
+ c9oA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=Dx2HFG0W5N97yf/LMTBLPENiJZVyJ1Qw3vi9FAXgySg=;
+ b=QrkdqCVyhiUjgdltxDvkR2tyW8Qhgb/6ssNhEfKRpOUXXINUyJAtf96RdOxWTw+aPO
+ i18P5WqGOEEiPL6V36CLd0Od3vSh2JAd2YYEVx4QTkHpCwIzhQCVxIMdRGH96Vog1b6t
+ 4+UBUsaYFXqwGQjrRaRJBD/Fg48/VWBSLIuKo2rEpnQVu8IiummcQlGneblLc3cmzTVu
+ CnoX8eWtCBbc1CUCuIIiITG7zgeW90dnCopTaBexuEy6+44RlF7qor8Yn0+4NrrY7XnL
+ xxo6EPcDLbCjTU0aSrGAWpm2HkG9rw9XAgjx0wTkQZ9MupE4nzkbriLQe+WuwCTPi5/5
+ D8AA==
+X-Gm-Message-State: AOAM533X1vBI0d1UA0ahO7vLZ/NxavJhxEhG1hfQEuD3XebsUTVuzhCJ
+ jPbBEa/dk/CISoWkOgQX7Is7V6TjwBw=
+X-Google-Smtp-Source: ABdhPJyPDqhK5vzVZ6H3KfvJXYvyQyZ+MZm6os4xhJmUIVx1V08WQtPo2/Mdb8yRq6s3qR4J6G71Bw==
+X-Received: by 2002:a5d:9e0f:: with SMTP id h15mr6039078ioh.133.1631479665469; 
+ Sun, 12 Sep 2021 13:47:45 -0700 (PDT)
+Received: from james-x399.localdomain (97-118-233-80.hlrn.qwest.net.
+ [97.118.233.80])
+ by smtp.gmail.com with ESMTPSA id s18sm3452585iov.53.2021.09.12.13.47.45
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 12 Sep 2021 13:47:45 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
+To: buildroot@buildroot.org
+Date: Sun, 12 Sep 2021 14:47:41 -0600
+Message-Id: <20210912204741.995864-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20210912122252.1811311-1-fontaine.fabrice@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 1/1] package/bluez5_utils: fix build
+Subject: [Buildroot] [PATCH 1/1] package/pipewire: add option to enable
+ media-session support
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,165 +97,63 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: Marcin Bis <marcin@bis.org.pl>, buildroot@buildroot.org
+Cc: James Hilliard <james.hilliard1@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-Fabrice, All,
+The example media-session pipewire session manager requires
+pipewire to be built with examples enabled, add support for
+enabling this while depending on examples being enabled.
 
-On 2021-09-12 14:22 +0200, Fabrice Fontaine spake thusly:
-> Fix the following build failure which is only raised once on
-> autobuilders even if pause is defined in glibc since at least 1995 and
-> https://sourceware.org/git/?p=glibc.git;a=commit;h=28f540f45bbacd939bfd07f213bcad2bf730b1bf
-> and in bluez5_utils since version 5.5 and
-> https://github.com/bluez/bluez/commit/caab74c97542a56b591f0b16b44ab6ba4b40f0f5:
+To simplify adding support for additional session managers in
+the future such as wireplumber we pass a comma separated list
+to the -Dsession-managers meson config option. This also will
+ensure that systemd services that depend on media-session are
+only installed if media-session support is enabled.
 
-I was very confused about that, so I investigated a bit.
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/pipewire/Config.in   | 6 ++++++
+ package/pipewire/pipewire.mk | 6 ++++++
+ 2 files changed, 12 insertions(+)
 
-So, to speed up the build, I tried a build on ARM with a prebuilt
-Bootlin toolchain: no failure.
-
-Ah, but the s390x [0][1] and arc [2] failures all use an internal
-toolchain. And indeed, I could reproduce the arc failure.
-
-And guess what happened recently with the internal toolchain? We bumped
-the glibc version to 2.34.
-
-And indeed, reverting to glibc 2.33 makes the issue disappear.
-
-So, here are the results for an arm build:
-
-         \   bluez5_utils
-    glibc \  5.60  |  5.61
-    -------\-------+--------
-    2.33   |  OK   |   OK
-    -------+-------+--------
-    2.34   |  KO   |   KO
-
-So, even bluez5_utils 5.60 would have failed with glibc 2.33 if we
-hadn't bump glibc "so fast" after we bumped bluez5_utils.
-
-And it did not fail with pre-built toolchains becasue none is using
-glibc 2.34 yet.
-
-So, what changed in glibc between 2.33 and 2.34 that makes 'pause()'
-conflict? That's a bit hard to see... Indeed, the source file for pause
-hasn't changed in a meaningful way in ages.
-
-All that I could notice about it, was that the pause() from NPTL was
-dropped, to use the generic pause()... Not sure however if that's the
-real cause...
-
-Anyway, the issue is triggerred by glibc 2.34.
-
-And your patch does make sense anyway, so do not forget to send it
-upstream with the explanations about glibc 2.34. ;-)
-
-I've tweaked the commit message too, and applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-[0] http://autobuild.buildroot.org/results/c4f/c4fbface34be8815838fd7201621d7a8fddd32c5/
-[1] http://autobuild.buildroot.org/results/853/85376fcfea208850542e9102f014c17ffda01e67/
-[2] http://autobuild.buildroot.org/results/62b/62b88740f19fbe4a1ad7959dc141d539eb88c1f8/
-
-> profiles/audio/media.c:1284:13: error: conflicting types for 'pause'
->  1284 | static bool pause(void *user_data)
->       |             ^~~~~
-> In file included from /tmp/instance-0/output-1/per-package/bluez5_utils/host/s390x-buildroot-linux-gnu/sysroot/usr/include/bits/sigstksz.h:24,
->                  from /tmp/instance-0/output-1/per-package/bluez5_utils/host/s390x-buildroot-linux-gnu/sysroot/usr/include/signal.h:328,
->                  from /tmp/instance-0/output-1/per-package/bluez5_utils/host/bin/../s390x-buildroot-linux-gnu/sysroot/usr/include/glib-2.0/glib/gbacktrace.h:36,
->                  from /tmp/instance-0/output-1/per-package/bluez5_utils/host/bin/../s390x-buildroot-linux-gnu/sysroot/usr/include/glib-2.0/glib.h:34,
->                  from profiles/audio/media.c:21:
-> /tmp/instance-0/output-1/per-package/bluez5_utils/host/s390x-buildroot-linux-gnu/sysroot/usr/include/unistd.h:489:12: note: previous declaration of 'pause' was here
->   489 | extern int pause (void);
->       |            ^~~~~
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/c4f/c4fbface34be8815838fd7201621d7a8fddd32c5/build-end.log
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...-profiles-audio-media.c-rename-pause.patch | 52 +++++++++++++++++++
->  1 file changed, 52 insertions(+)
->  create mode 100644 package/bluez5_utils/0002-profiles-audio-media.c-rename-pause.patch
-> 
-> diff --git a/package/bluez5_utils/0002-profiles-audio-media.c-rename-pause.patch b/package/bluez5_utils/0002-profiles-audio-media.c-rename-pause.patch
-> new file mode 100644
-> index 0000000000..a7fabc9edd
-> --- /dev/null
-> +++ b/package/bluez5_utils/0002-profiles-audio-media.c-rename-pause.patch
-> @@ -0,0 +1,52 @@
-> +From 0bb5785a68a2799db003364770be3764af9b9034 Mon Sep 17 00:00:00 2001
-> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +Date: Sun, 12 Sep 2021 13:55:49 +0200
-> +Subject: [PATCH] profiles/audio/media.c: rename pause
-> +
-> +Rename pause to media_player_pause to avoid the following build failure:
-> +
-> +profiles/audio/media.c:1284:13: error: conflicting types for 'pause'
-> + 1284 | static bool pause(void *user_data)
-> +      |             ^~~~~
-> +In file included from /tmp/instance-0/output-1/per-package/bluez5_utils/host/s390x-buildroot-linux-gnu/sysroot/usr/include/bits/sigstksz.h:24,
-> +                 from /tmp/instance-0/output-1/per-package/bluez5_utils/host/s390x-buildroot-linux-gnu/sysroot/usr/include/signal.h:328,
-> +                 from /tmp/instance-0/output-1/per-package/bluez5_utils/host/bin/../s390x-buildroot-linux-gnu/sysroot/usr/include/glib-2.0/glib/gbacktrace.h:36,
-> +                 from /tmp/instance-0/output-1/per-package/bluez5_utils/host/bin/../s390x-buildroot-linux-gnu/sysroot/usr/include/glib-2.0/glib.h:34,
-> +                 from profiles/audio/media.c:21:
-> +/tmp/instance-0/output-1/per-package/bluez5_utils/host/s390x-buildroot-linux-gnu/sysroot/usr/include/unistd.h:489:12: note: previous declaration of 'pause' was here
-> +  489 | extern int pause (void);
-> +      |            ^~~~~
-> +
-> +Fixes:
-> + - http://autobuild.buildroot.org/results/c4fbface34be8815838fd7201621d7a8fddd32c5
-> +
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +---
-> + profiles/audio/media.c | 4 ++--
-> + 1 file changed, 2 insertions(+), 2 deletions(-)
-> +
-> +diff --git a/profiles/audio/media.c b/profiles/audio/media.c
-> +index 267722542..f93b74e67 100644
-> +--- a/profiles/audio/media.c
-> ++++ b/profiles/audio/media.c
-> +@@ -1281,7 +1281,7 @@ static bool stop(void *user_data)
-> + 	return media_player_send(mp, "Stop");
-> + }
-> + 
-> +-static bool pause(void *user_data)
-> ++static bool media_player_pause(void *user_data)
-> + {
-> + 	struct media_player *mp = user_data;
-> + 
-> +@@ -1331,7 +1331,7 @@ static struct avrcp_player_cb player_cb = {
-> + 	.set_volume = set_volume,
-> + 	.play = play,
-> + 	.stop = stop,
-> +-	.pause = pause,
-> ++	.pause = media_player_pause,
-> + 	.next = next,
-> + 	.previous = previous,
-> + };
-> +-- 
-> +2.33.0
-> +
-> -- 
-> 2.33.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@lists.buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/package/pipewire/Config.in b/package/pipewire/Config.in
+index b15bbfa8d3..506b85e856 100644
+--- a/package/pipewire/Config.in
++++ b/package/pipewire/Config.in
+@@ -19,6 +19,12 @@ config BR2_PACKAGE_PIPEWIRE_EXAMPLES
+ 	help
+ 	  Build pipewire examples
+ 
++config BR2_PACKAGE_PIPEWIRE_MEDIA_SESSION
++	bool "pipewire media-session"
++	depends on BR2_PACKAGE_PIPEWIRE_EXAMPLES
++	help
++	  Build pipewire media-session support
++
+ config BR2_PACKAGE_PIPEWIRE_GSTREAMER
+ 	bool "pipewire gstreamer plugins"
+ 	depends on BR2_USE_WCHAR # libglib2
+diff --git a/package/pipewire/pipewire.mk b/package/pipewire/pipewire.mk
+index e4ea60c39c..f4f7f487cb 100644
+--- a/package/pipewire/pipewire.mk
++++ b/package/pipewire/pipewire.mk
+@@ -150,4 +150,10 @@ else
+ PIPEWIRE_CONF_OPTS += -Decho-cancel-webrtc=disabled
+ endif
+ 
++ifeq ($(BR2_PACKAGE_PIPEWIRE_MEDIA_SESSION),y)
++PIPEWIRE_SESSION_MANAGERS_LIST = media-session
++endif
++
++PIPEWIRE_CONF_OPTS += -Dsession-managers='$(subst $(space),$(comma),$(PIPEWIRE_SESSION_MANAGERS_LIST))'
++
+ $(eval $(meson-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.25.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
