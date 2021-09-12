@@ -7,51 +7,51 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E777C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 12 Sep 2021 20:21:49 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 36222C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 12 Sep 2021 20:22:01 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2E13760EE0
-	for <buildroot@archiver.kernel.org>; Sun, 12 Sep 2021 20:21:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2E13760EE0
+	by mail.kernel.org (Postfix) with ESMTPS id 0025160EE0
+	for <buildroot@archiver.kernel.org>; Sun, 12 Sep 2021 20:22:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0025160EE0
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0A468406BF;
-	Sun, 12 Sep 2021 20:21:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C333781D02;
+	Sun, 12 Sep 2021 20:22:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 56H-GOMMkBPK; Sun, 12 Sep 2021 20:21:48 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id x6aC_M_IRhYY; Sun, 12 Sep 2021 20:21:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7765640438;
-	Sun, 12 Sep 2021 20:21:47 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 977971BF404
- for <buildroot@lists.busybox.net>; Sun, 12 Sep 2021 20:17:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F3C2681CDB;
+	Sun, 12 Sep 2021 20:21:58 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id E06B81BF404
+ for <buildroot@lists.busybox.net>; Sun, 12 Sep 2021 20:17:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 83E3440480
- for <buildroot@lists.busybox.net>; Sun, 12 Sep 2021 20:17:48 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D09D7818A7
+ for <buildroot@lists.busybox.net>; Sun, 12 Sep 2021 20:17:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id y8THF76ICifa for <buildroot@lists.busybox.net>;
- Sun, 12 Sep 2021 20:17:47 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gUYswGZjT77y for <buildroot@lists.busybox.net>;
+ Sun, 12 Sep 2021 20:17:55 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D4F5840458
- for <buildroot@buildroot.org>; Sun, 12 Sep 2021 20:17:47 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2159E81871
+ for <buildroot@buildroot.org>; Sun, 12 Sep 2021 20:17:55 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id D2A998A4D1; Sun, 12 Sep 2021 20:16:06 +0000 (UTC)
+ id 1EFFD8A4D4; Sun, 12 Sep 2021 20:16:14 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 12 Sep 2021 22:17:14 +0200
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 480ca190882d592416c6fdbb66f0b06fde2a728f
-X-Git-Newrev: 6d9e38c427b6a09d975a4ce96af466db6d72eb78
+Date: Sun, 12 Sep 2021 22:17:04 +0200
+X-Git-Refname: refs/heads/2021.05.x
+X-Git-Oldrev: 0a98c3f46f911c2d675adf9ee5012006f24ab660
+X-Git-Newrev: b27129f5dbdfc4c8c46a305d34063b3ce8525c6b
 X-Patchwork-Hint: ignore
-Message-Id: <20210912201606.D2A998A4D1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/swupdate: don't
+Message-Id: <20210912201614.1EFFD8A4D4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.05.x] package/swupdate: don't
  require website for services
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
@@ -71,8 +71,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6d9e38c427b6a09d975a4ce96af466db6d72eb78
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=b27129f5dbdfc4c8c46a305d34063b3ce8525c6b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
 
 The swupdate services do not depend on
 BR2_PACKAGE_SWUPDATE_INSTALL_WEBSITE, so install them unconditionally.
