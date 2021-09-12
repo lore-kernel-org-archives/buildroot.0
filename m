@@ -2,67 +2,56 @@ Return-Path: <SRS0=7Pu+=OC=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CE58CC433F5
-	for <buildroot@archiver.kernel.org>; Sun, 12 Sep 2021 09:29:12 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 00BBBC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 12 Sep 2021 09:47:47 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 353F561039
-	for <buildroot@archiver.kernel.org>; Sun, 12 Sep 2021 09:29:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 353F561039
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=igalia.com
+	by mail.kernel.org (Postfix) with ESMTPS id 9A88760F38
+	for <buildroot@archiver.kernel.org>; Sun, 12 Sep 2021 09:47:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9A88760F38
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 03CFA60BBE;
-	Sun, 12 Sep 2021 09:29:12 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2B499400B5;
+	Sun, 12 Sep 2021 09:47:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IloOmyIW9zn9; Sun, 12 Sep 2021 09:29:11 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id OVbB2o5CtTWE; Sun, 12 Sep 2021 09:47:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6474F60A35;
-	Sun, 12 Sep 2021 09:29:10 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B70621BF47E
- for <buildroot@lists.busybox.net>; Sun, 12 Sep 2021 09:29:08 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C9E7A4010E;
+	Sun, 12 Sep 2021 09:47:43 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 10D721BF47E
+ for <buildroot@lists.busybox.net>; Sun, 12 Sep 2021 09:47:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A5EC840477
- for <buildroot@lists.busybox.net>; Sun, 12 Sep 2021 09:29:08 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E758981CE9
+ for <buildroot@lists.busybox.net>; Sun, 12 Sep 2021 09:47:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=igalia.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IRLs2_qx60XF for <buildroot@lists.busybox.net>;
- Sun, 12 Sep 2021 09:29:08 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from fanzine.igalia.com (fanzine.igalia.com [178.60.130.6])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C3C7840443
- for <buildroot@buildroot.org>; Sun, 12 Sep 2021 09:29:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
- s=20170329; 
- h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:Cc:To:From;
- bh=9gjeeylGopmbi8NOZiYB9OyYBoCFIdXkK6j5WXbYDj0=; 
- b=m2AMYkxkshfsq3S5+GrR1XVBZoFEBuM/zo3MXVBolnaHYoHTBcLRWJUplRZ6xP0I2tnbHhJFGmh1eruu7sZ7gDENi5IsdZrkicUXVX99kAG+SHkXgASJUD34m3J1i2trjg1uZuJ6iKGuuMxPUdOXk01rGo/D/6QnjRcjEUYC4fFtq/h+5rBV3TovdIUkDX9f8k1+bwlfDF8dmFz4LmTIqFJ6pvBSOUXG4DkXStFv9EwcsgT9JyAM8wxgvJUClVv1Lzs10CIfSHQ8GvPyC4GZ0s1a4NxJNspesgHFVktmUPJpNG4sPD0091YCLZgwS9e5CtyvvJYQF9C97sS9z9vlKQ==;
-Received: from 91-153-34-142.elisa-laajakaista.fi ([91.153.34.142] helo=kodama)
- by fanzine.igalia.com with esmtpsa 
- (Cipher TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256) (Exim)
- id 1mPLnN-00016S-FH; Sun, 12 Sep 2021 11:29:05 +0200
-Received: from localhost (kodama [local])
- by kodama (OpenSMTPD) with ESMTPA id 6768ffb7;
- Sun, 12 Sep 2021 09:28:55 +0000 (UTC)
-From: Adrian Perez de Castro <aperez@igalia.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5qpb0YbUpXML for <buildroot@lists.busybox.net>;
+ Sun, 12 Sep 2021 09:47:40 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id EC87681CE3
+ for <buildroot@buildroot.org>; Sun, 12 Sep 2021 09:47:40 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id E2F048A3D0; Sun, 12 Sep 2021 09:46:00 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 12 Sep 2021 12:28:55 +0300
-Message-Id: <20210912092855.2427158-1-aperez@igalia.com>
-X-Mailer: git-send-email 2.33.0
-MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/cog: bump to version 0.10.1
+Date: Sun, 12 Sep 2021 11:27:28 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 63f34c54090a70987a707346a6e77d1a6fbead99
+X-Git-Newrev: 1b1b24ce84ae4c20273a1c5ac2bd98889c0b8d73
+X-Patchwork-Hint: ignore
+Message-Id: <20210912094600.E2F048A3D0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/boost: fix math with no atomics
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,69 +64,248 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: Adrian Perez de Castro <aperez@igalia.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-Update to version 0.10.1, which fixes the build when the DRM platform
-module is enabled, fixes handling of absolute pointer events, and makes
-the headless platform optional. Note that while optional, Buildroot
-keeps it enabled (as previously) because the wpebackend-fdo dependency
-is always needed anyway because Buildroot does not include any other
-WPE backend.
+commit: https://git.buildroot.net/buildroot/commit/?id=1b1b24ce84ae4c20273a1c5ac2bd98889c0b8d73
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes:
+Boost 1.77.0 broke the build of the math component on architectures
+without lockfree atomics. This was reported in [0].
 
-  https://wpewebkit.org/release/cog-0.10.1.html
+This patch adds the relevant patches from the upstream patchset[1] which fix the build
+and removes the dependency on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+[0] https://github.com/boostorg/math/issues/673
+[1] https://github.com/boostorg/math/pull/684
+
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/cog/cog.hash | 8 ++++----
- package/cog/cog.mk   | 3 ++-
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ ...rnoulli-code-on-platforms-with-no-atomics.patch |  47 +++++++
+ ...s-a-soft-failure-in-bernoulli_details_hpp.patch | 145 +++++++++++++++++++++
+ package/boost/Config.in                            |   1 -
+ 3 files changed, 192 insertions(+), 1 deletion(-)
 
-diff --git a/package/cog/cog.hash b/package/cog/cog.hash
-index 566d30fa2a..3abc5f2c83 100644
---- a/package/cog/cog.hash
-+++ b/package/cog/cog.hash
-@@ -1,7 +1,7 @@
--# From https://wpewebkit.org/releases/cog-0.10.0.tar.xz.sums
--md5  1b0407b6163a3a01afdfc0fb454a7570  cog-0.10.0.tar.xz
--sha1  911816c00a2b08f4cfd388b1d2e176835c9b4e9e  cog-0.10.0.tar.xz
--sha256  2c72369c636ca4684370adad1344071b23c9ee2c851eb7d738fa2e1d7092031f  cog-0.10.0.tar.xz
-+# From https://wpewebkit.org/releases/cog-0.10.1.tar.xz.sums
-+md5  b997da3c143bc34ec5e953eb7e7ccefc  cog-0.10.1.tar.xz
-+sha1  f25312141de918f41add3e3c9984faa985cda0a9  cog-0.10.1.tar.xz
-+sha256  aecf546d7b0645119d79559c5574cb5eb68364fc8409dfbd47a4920bd1f221bc  cog-0.10.1.tar.xz
+diff --git a/package/boost/0002-math-provide-graceful-failure-for-bernoulli-code-on-platforms-with-no-atomics.patch b/package/boost/0002-math-provide-graceful-failure-for-bernoulli-code-on-platforms-with-no-atomics.patch
+new file mode 100644
+index 0000000000..121355d71e
+--- /dev/null
++++ b/package/boost/0002-math-provide-graceful-failure-for-bernoulli-code-on-platforms-with-no-atomics.patch
+@@ -0,0 +1,47 @@
++From 32bd6197353f6ea8e5bef01f09e25c944141acfc Mon Sep 17 00:00:00 2001
++From: jzmaddock <john@johnmaddock.co.uk>
++Date: Wed, 1 Sep 2021 18:54:54 +0100
++Subject: [PATCH] Allow definition of BOOST_MATH_NO_ATOMIC_INT on the command
++ line. Allows us to test/emulate platforms with no atomic integers.
++
++---
++ boost/math/tools/atomic.hpp | 10 +++++-----
++ 1 file changed, 5 insertions(+), 5 deletions(-)
++
++diff --git a/boost/math/tools/atomic.hpp b/boost/math/tools/atomic.hpp
++index cc76ed269f..e3cbf5db89 100644
++--- a/boost/math/tools/atomic.hpp
+++++ b/boost/math/tools/atomic.hpp
++@@ -16,27 +16,27 @@
++ namespace boost {
++    namespace math {
++       namespace detail {
++-#if ATOMIC_INT_LOCK_FREE == 2
+++#if (ATOMIC_INT_LOCK_FREE == 2) && !defined(BOOST_MATH_NO_ATOMIC_INT)
++          typedef std::atomic<int> atomic_counter_type;
++          typedef std::atomic<unsigned> atomic_unsigned_type;
++          typedef int atomic_integer_type;
++          typedef unsigned atomic_unsigned_integer_type;
++-#elif ATOMIC_SHORT_LOCK_FREE == 2
+++#elif (ATOMIC_SHORT_LOCK_FREE == 2) && !defined(BOOST_MATH_NO_ATOMIC_INT)
++          typedef std::atomic<short> atomic_counter_type;
++          typedef std::atomic<unsigned short> atomic_unsigned_type;
++          typedef short atomic_integer_type;
++          typedef unsigned short atomic_unsigned_type;
++-#elif ATOMIC_LONG_LOCK_FREE == 2
+++#elif (ATOMIC_LONG_LOCK_FREE == 2) && !defined(BOOST_MATH_NO_ATOMIC_INT)
++          typedef std::atomic<long> atomic_unsigned_integer_type;
++          typedef std::atomic<unsigned long> atomic_unsigned_type;
++          typedef unsigned long atomic_unsigned_type;
++          typedef long atomic_integer_type;
++-#elif ATOMIC_LLONG_LOCK_FREE == 2
+++#elif (ATOMIC_LLONG_LOCK_FREE == 2) && !defined(BOOST_MATH_NO_ATOMIC_INT)
++          typedef std::atomic<long long> atomic_unsigned_integer_type;
++          typedef std::atomic<unsigned long long> atomic_unsigned_type;
++          typedef long long atomic_integer_type;
++          typedef unsigned long long atomic_unsigned_integer_type;
++-#else
+++#elif !defined(BOOST_MATH_NO_ATOMIC_INT)
++ #  define BOOST_MATH_NO_ATOMIC_INT
++ #endif
++       } // Namespace detail
+diff --git a/package/boost/0003-math-make-no-atomics-a-soft-failure-in-bernoulli_details_hpp.patch b/package/boost/0003-math-make-no-atomics-a-soft-failure-in-bernoulli_details_hpp.patch
+new file mode 100644
+index 0000000000..77f1217a3a
+--- /dev/null
++++ b/package/boost/0003-math-make-no-atomics-a-soft-failure-in-bernoulli_details_hpp.patch
+@@ -0,0 +1,145 @@
++From 7d482f6ebc356e6ec455ccb5f51a23971bf6ce5b Mon Sep 17 00:00:00 2001
++From: jzmaddock <john@johnmaddock.co.uk>
++Date: Wed, 1 Sep 2021 20:31:53 +0100
++Subject: [PATCH] Make no atomics a soft failure in bernoulli_details.hpp.
++ Include an "escape macro" so thread safety can be disabled if certain
++ bernoulli features are to be used in a no-atomics environment. Fixes
++ https://github.com/boostorg/math/issues/673.
++
++---
++ .../detail/bernoulli_details.hpp                 | 10 +++++++---
++ libs/math/test/Jamfile.v2                        |  3 +++
++ test/compile_test/bernoulli_no_atomic_d.cpp      | 14 ++++++++++++++
++ test/compile_test/bernoulli_no_atomic_fail.cpp   | 15 +++++++++++++++
++ test/compile_test/bernoulli_no_atomic_mp.cpp     | 16 ++++++++++++++++
++ 5 files changed, 55 insertions(+), 3 deletions(-)
++ create mode 100644 test/compile_test/bernoulli_no_atomic_d.cpp
++ create mode 100644 test/compile_test/bernoulli_no_atomic_fail.cpp
++ create mode 100644 test/compile_test/bernoulli_no_atomic_mp.cpp
++
++diff --git a/boost/math/special_functions/detail/bernoulli_details.hpp b/boost/math/special_functions/detail/bernoulli_details.hpp
++index cf35545264..8519b7c89c 100644
++--- a/boost/math/special_functions/detail/bernoulli_details.hpp
+++++ b/boost/math/special_functions/detail/bernoulli_details.hpp
++@@ -360,7 +360,7 @@ class bernoulli_numbers_cache
++          return out;
++       }
++ 
++-      #ifndef BOOST_HAS_THREADS
+++      #if !defined(BOOST_HAS_THREADS) || defined(BOOST_MATH_BERNOULLI_UNTHREADED)
++       //
++       // Single threaded code, very simple:
++       //
++@@ -382,6 +382,8 @@ class bernoulli_numbers_cache
++          *out = (i >= m_overflow_limit) ? policies::raise_overflow_error<T>("boost::math::bernoulli_b2n<%1%>(std::size_t)", 0, T(i), pol) : bn[i];
++          ++out;
++       }
+++      #elif defined(BOOST_MATH_NO_ATOMIC_INT)
+++      static_assert(sizeof(T) == 1, "Unsupported configuration: your platform appears to have no atomic integers.  If you are happy with thread-unsafe code, then you may define BOOST_MATH_BERNOULLI_UNTHREADED to suppress this error.");
++       #else
++       //
++       // Double-checked locking pattern, lets us access cached already cached values
++@@ -464,7 +466,7 @@ class bernoulli_numbers_cache
++          return out;
++       }
++ 
++-      #ifndef BOOST_HAS_THREADS
+++      #if !defined(BOOST_HAS_THREADS) || defined(BOOST_MATH_BERNOULLI_UNTHREADED)
++       //
++       // Single threaded code, very simple:
++       //
++@@ -494,6 +496,8 @@ class bernoulli_numbers_cache
++          }
++          ++out;
++       }
+++      #elif defined(BOOST_MATH_NO_ATOMIC_INT)
+++      static_assert(sizeof(T) == 1, "Unsupported configuration: your platform appears to have no atomic integers.  If you are happy with thread-unsafe code, then you may define BOOST_MATH_BERNOULLI_UNTHREADED to suppress this error.");
++       #else
++       //
++       // Double-checked locking pattern, lets us access cached already cached values
++@@ -555,7 +559,7 @@ class bernoulli_numbers_cache
++    // The value at which we know overflow has already occurred for the Bn:
++    std::size_t m_overflow_limit;
++ 
++-   #ifdef BOOST_HAS_THREADS
+++   #if defined(BOOST_HAS_THREADS) && !defined(BOOST_MATH_NO_ATOMIC_INT)
++    std::mutex m_mutex;
++    atomic_counter_type m_counter, m_current_precision;
++    #else
++diff --git a/libs/math/test/Jamfile.v2 b/libs/math/test/Jamfile.v2
++index 52fb87f5e5..3ac63f9279 100644
++--- a/libs/math/test/Jamfile.v2
+++++ b/libs/math/test/Jamfile.v2
++@@ -1137,6 +1137,9 @@ test-suite misc :
++ 
++ #   [ run __temporary_test.cpp test_instances//test_instances : : : <test-info>always_show_run_output <pch>off ]
++    [ compile test_no_long_double_policy.cpp ]
+++   [ compile compile_test/bernoulli_no_atomic_d.cpp ]
+++   [ compile compile_test/bernoulli_no_atomic_mp.cpp ]
+++   [ compile-fail compile_test/bernoulli_no_atomic_fail.cpp ]
++ ;
++ 
++ test-suite interpolators :
++diff --git a/test/compile_test/bernoulli_no_atomic_d.cpp b/test/compile_test/bernoulli_no_atomic_d.cpp
++new file mode 100644
++index 0000000000..61926f7e1f
++--- /dev/null
+++++ b/test/compile_test/bernoulli_no_atomic_d.cpp
++@@ -0,0 +1,14 @@
+++//  (C) Copyright John Maddock 2021.
+++//  Use, modification and distribution are subject to the
+++//  Boost Software License, Version 1.0. (See accompanying file
+++//  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+++
+++#define BOOST_MATH_NO_ATOMIC_INT
+++
+++#include <boost/math/special_functions/bernoulli.hpp>
+++#include "test_compile_result.hpp"
+++
+++void compile_and_link_test()
+++{
+++   check_result<double>(boost::math::bernoulli_b2n<double>(4));
+++}
++diff --git a/test/compile_test/bernoulli_no_atomic_fail.cpp b/test/compile_test/bernoulli_no_atomic_fail.cpp
++new file mode 100644
++index 0000000000..bbd7152412
++--- /dev/null
+++++ b/test/compile_test/bernoulli_no_atomic_fail.cpp
++@@ -0,0 +1,15 @@
+++//  (C) Copyright John Maddock 2021.
+++//  Use, modification and distribution are subject to the
+++//  Boost Software License, Version 1.0. (See accompanying file
+++//  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+++
+++#define BOOST_MATH_NO_ATOMIC_INT
+++
+++#include <boost/math/special_functions/bernoulli.hpp>
+++#include <boost/multiprecision/cpp_bin_float.hpp>
+++#include "test_compile_result.hpp"
+++
+++void compile_and_link_test()
+++{
+++   check_result<boost::multiprecision::cpp_bin_float_50>(boost::math::bernoulli_b2n<boost::multiprecision::cpp_bin_float_50>(4));
+++}
++diff --git a/test/compile_test/bernoulli_no_atomic_mp.cpp b/test/compile_test/bernoulli_no_atomic_mp.cpp
++new file mode 100644
++index 0000000000..8d5a6e78e6
++--- /dev/null
+++++ b/test/compile_test/bernoulli_no_atomic_mp.cpp
++@@ -0,0 +1,16 @@
+++//  (C) Copyright John Maddock 2021.
+++//  Use, modification and distribution are subject to the
+++//  Boost Software License, Version 1.0. (See accompanying file
+++//  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+++
+++#define BOOST_MATH_NO_ATOMIC_INT
+++#define BOOST_MATH_BERNOULLI_UNTHREADED
+++
+++#include <boost/math/special_functions/bernoulli.hpp>
+++#include <boost/multiprecision/cpp_bin_float.hpp>
+++#include "test_compile_result.hpp"
+++
+++void compile_and_link_test()
+++{
+++   check_result<boost::multiprecision::cpp_bin_float_50>(boost::math::bernoulli_b2n<boost::multiprecision::cpp_bin_float_50>(4));
+++}
+diff --git a/package/boost/Config.in b/package/boost/Config.in
+index 6813ad80ae..1c405a36c3 100644
+--- a/package/boost/Config.in
++++ b/package/boost/Config.in
+@@ -252,7 +252,6 @@ comment "boost-log needs a toolchain not affected by GCC bug 64735"
  
- # Hashes for license files:
- sha256  e6c42d93c68b292bcccf6d2ec3e13da85df90b718ba27c2c2a01053a9d009252  COPYING
-diff --git a/package/cog/cog.mk b/package/cog/cog.mk
-index d373e6e1b6..07b8e245ef 100644
---- a/package/cog/cog.mk
-+++ b/package/cog/cog.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--COG_VERSION = 0.10.0
-+COG_VERSION = 0.10.1
- COG_SITE = https://wpewebkit.org/releases
- COG_SOURCE = cog-$(COG_VERSION).tar.xz
- COG_INSTALL_STAGING = YES
-@@ -13,6 +13,7 @@ COG_LICENSE = MIT
- COG_LICENSE_FILES = COPYING
- COG_CONF_OPTS = \
- 	-DCOG_BUILD_PROGRAMS=ON \
-+	-DCOG_PLATFORM_HEADLESS=ON \
- 	-DCOG_WESTON_DIRECT_DISPLAY=OFF \
- 	-DINSTALL_MAN_PAGES=OFF \
- 	-DCOG_HOME_URI='$(call qstrip,$(BR2_PACKAGE_COG_PROGRAMS_HOME_URI))'
--- 
-2.33.0
-
+ config BR2_PACKAGE_BOOST_MATH
+ 	bool "boost-math"
+-	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
+ 	help
+ 	  Boost.Math includes several contributions in the domain of
+ 	  mathematics:
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
