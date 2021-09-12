@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0FE98C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 12 Sep 2021 20:18:52 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C2197C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 12 Sep 2021 20:19:03 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id CE6F061051
-	for <buildroot@archiver.kernel.org>; Sun, 12 Sep 2021 20:18:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org CE6F061051
+	by mail.kernel.org (Postfix) with ESMTPS id 8E6BD61051
+	for <buildroot@archiver.kernel.org>; Sun, 12 Sep 2021 20:19:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8E6BD61051
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A0EF68188D;
-	Sun, 12 Sep 2021 20:18:51 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6A102404E4;
+	Sun, 12 Sep 2021 20:19:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kAh2g-TU5jJY; Sun, 12 Sep 2021 20:18:50 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 5DSpuRysLea8; Sun, 12 Sep 2021 20:19:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0111F818A7;
-	Sun, 12 Sep 2021 20:18:50 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 0E0611BF404
+	by smtp2.osuosl.org (Postfix) with ESMTP id 68F914016B;
+	Sun, 12 Sep 2021 20:19:01 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1C0311BF95A
  for <buildroot@lists.busybox.net>; Sun, 12 Sep 2021 20:16:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F0AE86073C
- for <buildroot@lists.busybox.net>; Sun, 12 Sep 2021 20:16:39 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 188714016B
+ for <buildroot@lists.busybox.net>; Sun, 12 Sep 2021 20:16:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GFsVmwsWMiAX for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id J4tGs93-h1hB for <buildroot@lists.busybox.net>;
  Sun, 12 Sep 2021 20:16:39 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2751160773
+ by smtp2.osuosl.org (Postfix) with ESMTP id 15FAC401FC
  for <buildroot@buildroot.org>; Sun, 12 Sep 2021 20:16:39 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 338DB8A4CD; Sun, 12 Sep 2021 20:14:58 +0000 (UTC)
+ id 142638A4CB; Sun, 12 Sep 2021 20:14:58 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 12 Sep 2021 20:56:03 +0200
+Date: Sun, 12 Sep 2021 20:42:44 +0200
 X-Git-Refname: refs/heads/2021.08.x
-X-Git-Oldrev: 2075ca40df56bbaadc08944fcf5cac9b76cb7a0e
-X-Git-Newrev: 65d059c315231a44328b25e71496bdd6cd7b83f4
+X-Git-Oldrev: 163d0ccd87547b0175d297bb3f6361de06dd6cbb
+X-Git-Newrev: cbcb9a6ec145771a4f765d3b72664a09c86cea57
 X-Patchwork-Hint: ignore
-Message-Id: <20210912201458.338DB8A4CD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.08.x] package/gnutls: bump to
- version 3.7.2
+Message-Id: <20210912201458.142638A4CB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.08.x]
+ package/x11r7/xlib_libXft: bump version to 2.3.4
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,58 +71,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=65d059c315231a44328b25e71496bdd6cd7b83f4
+commit: https://git.buildroot.net/buildroot/commit/?id=cbcb9a6ec145771a4f765d3b72664a09c86cea57
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.08.x
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Release notes:
+https://lists.x.org/archives/xorg-announce/2021-August/003104.html
+
+Removed md5 and sha1 hashes, reformatted hashes, updated _SITE.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 4bdb9111894dd083d531177b3ffdd41451dde7f5)
+(cherry picked from commit d3355d8625b61438a6d981e51ec40dc231012590)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gnutls/Config.in   | 2 +-
- package/gnutls/gnutls.hash | 4 ++--
- package/gnutls/gnutls.mk   | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+ package/x11r7/xlib_libXft/xlib_libXft.hash | 10 ++++------
+ package/x11r7/xlib_libXft/xlib_libXft.mk   |  4 ++--
+ 2 files changed, 6 insertions(+), 8 deletions(-)
 
-diff --git a/package/gnutls/Config.in b/package/gnutls/Config.in
-index cd853d1e74..cd83b375aa 100644
---- a/package/gnutls/Config.in
-+++ b/package/gnutls/Config.in
-@@ -12,7 +12,7 @@ config BR2_PACKAGE_GNUTLS
- 	  GnuTLS is a secure communications library implementing the SSL
- 	  and TLS protocols and technologies around them.
- 
--	  http://www.gnutls.org
-+	  https://www.gnutls.org/
- 
- if BR2_PACKAGE_GNUTLS
- 
-diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
-index 0788a7a6f0..5d4fd1a0dc 100644
---- a/package/gnutls/gnutls.hash
-+++ b/package/gnutls/gnutls.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking pgp signature
--# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.7/gnutls-3.7.1.tar.xz.sig
--sha256  3777d7963eca5e06eb315686163b7b3f5045e2baac5e54e038ace9835e5cac6f  gnutls-3.7.1.tar.xz
-+# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.7/gnutls-3.7.2.tar.xz.sig
-+sha256  646e6c5a9a185faa4cea796d378a1ba8e1148dbb197ca6605f95986a25af2752  gnutls-3.7.2.tar.xz
- # Locally calculated
- sha256  e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b  doc/COPYING
- sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  doc/COPYING.LESSER
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index 6fc9ffad0b..11c2d81e7d 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/x11r7/xlib_libXft/xlib_libXft.hash b/package/x11r7/xlib_libXft/xlib_libXft.hash
+index bd0838b4dd..8743a9b7d1 100644
+--- a/package/x11r7/xlib_libXft/xlib_libXft.hash
++++ b/package/x11r7/xlib_libXft/xlib_libXft.hash
+@@ -1,7 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2019-March/002976.html
+-md5 4a433c24627b4ff60a4dd403a0990796  libXft-2.3.3.tar.bz2
+-sha1 48f543fe495f545df1794fa36a0a708558ae298c  libXft-2.3.3.tar.bz2
+-sha256 225c68e616dd29dbb27809e45e9eadf18e4d74c50be43020ef20015274529216  libXft-2.3.3.tar.bz2
+-sha512 28fdaf3baa3b156a4a7fdd6e39c4d8026d7d21eaa9be27c9797c8d329dab691a1bc82ea6042f9d4729a9343d93787536fb7e4b606f722f33cbe608b2e79910e8  libXft-2.3.3.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2021-August/003104.html
++sha256  57dedaab20914002146bdae0cb0c769ba3f75214c4c91bd2613d6ef79fc9abdd  libXft-2.3.4.tar.bz2
++sha512  5bb019750982ed4643880efd7368bc226ad49cfa8c0c8c6d4614dfeed74f588c65e1ba69adcc12284ec07d841e5b58fc1c27f3fddf83fe1a2837b29dd9ecec51  libXft-2.3.4.tar.bz2
+ # Locally computed
+-sha256 7cda22286b1379b9b73df695f72cbad36595e65b039a5fbc5c89b69ecc44438c  COPYING
++sha256  7cda22286b1379b9b73df695f72cbad36595e65b039a5fbc5c89b69ecc44438c  COPYING
+diff --git a/package/x11r7/xlib_libXft/xlib_libXft.mk b/package/x11r7/xlib_libXft/xlib_libXft.mk
+index 489cfe4c56..b1640a6613 100644
+--- a/package/x11r7/xlib_libXft/xlib_libXft.mk
++++ b/package/x11r7/xlib_libXft/xlib_libXft.mk
+@@ -4,9 +4,9 @@
+ #
  ################################################################################
  
- GNUTLS_VERSION_MAJOR = 3.7
--GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).1
-+GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).2
- GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
- GNUTLS_SITE = https://www.gnupg.org/ftp/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
- GNUTLS_LICENSE = LGPL-2.1+ (core library)
+-XLIB_LIBXFT_VERSION = 2.3.3
++XLIB_LIBXFT_VERSION = 2.3.4
+ XLIB_LIBXFT_SOURCE = libXft-$(XLIB_LIBXFT_VERSION).tar.bz2
+-XLIB_LIBXFT_SITE = http://xorg.freedesktop.org/releases/individual/lib
++XLIB_LIBXFT_SITE = https://xorg.freedesktop.org/archive/individual/lib
+ XLIB_LIBXFT_LICENSE = MIT
+ XLIB_LIBXFT_LICENSE_FILES = COPYING
+ XLIB_LIBXFT_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
