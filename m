@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F341C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 12 Sep 2021 20:16:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 137E8C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 12 Sep 2021 20:16:56 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id F25BD61051
-	for <buildroot@archiver.kernel.org>; Sun, 12 Sep 2021 20:16:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org F25BD61051
+	by mail.kernel.org (Postfix) with ESMTPS id AE71A60F6D
+	for <buildroot@archiver.kernel.org>; Sun, 12 Sep 2021 20:16:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org AE71A60F6D
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B462A4026F;
-	Sun, 12 Sep 2021 20:16:42 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 666614025D;
+	Sun, 12 Sep 2021 20:16:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id shgoK-yzkT6N; Sun, 12 Sep 2021 20:16:41 +0000 (UTC)
+	with ESMTP id 63VAWCuvr1Y1; Sun, 12 Sep 2021 20:16:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DEDA440270;
-	Sun, 12 Sep 2021 20:16:40 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 47E511BF95A
+	by smtp2.osuosl.org (Postfix) with ESMTP id 62220402AE;
+	Sun, 12 Sep 2021 20:16:53 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 57C1C1BF404
  for <buildroot@lists.busybox.net>; Sun, 12 Sep 2021 20:15:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 433D281854
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2ACCC6073C
  for <buildroot@lists.busybox.net>; Sun, 12 Sep 2021 20:15:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VGCI8Lyreq7V for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id iamCqYjB_otA for <buildroot@lists.busybox.net>;
  Sun, 12 Sep 2021 20:15:40 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8E05981871
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6D5996075B
  for <buildroot@buildroot.org>; Sun, 12 Sep 2021 20:15:40 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 8D39B8A47D; Sun, 12 Sep 2021 20:13:59 +0000 (UTC)
+ id 6BDFE8A47C; Sun, 12 Sep 2021 20:13:59 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 12 Sep 2021 21:28:41 +0200
+Date: Sun, 12 Sep 2021 21:04:25 +0200
 X-Git-Refname: refs/heads/2021.05.x
-X-Git-Oldrev: f4fa700882f264a603c86f6775a9db9027a948c6
-X-Git-Newrev: 9613e896303e656da0aaadb47986b93dae3cd2dc
+X-Git-Oldrev: 1a100f6ec8ae0667559b5f05349b532eeaf1cdc5
+X-Git-Newrev: 2f688432496dae98203005a712b8bf812471909f
 X-Patchwork-Hint: ignore
-Message-Id: <20210912201359.8D39B8A47D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.05.x] DEVELOPERS: add myself to
- harfbuzz package
+Message-Id: <20210912201359.6BDFE8A47C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.05.x] package/haproxy: security
+ bump to version 2.2.17
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,31 +71,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9613e896303e656da0aaadb47986b93dae3cd2dc
+commit: https://git.buildroot.net/buildroot/commit/?id=2f688432496dae98203005a712b8bf812471909f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
 
-Add myself to harfbuzz package.
+Fixes the following security issues:
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 8bea006e6b113de507392dc377df01c881728f73)
+- CVE-2021-40346: An integer overflow exists in HAProxy 2.0 through 2.5 in
+  the htx_add_header() can be exploited to perform an HTTP request smuggling
+  attack, allowing an attacker to bypass all configured http-request HAProxy
+  ACLs and possibly other ACLs.
+
+For more details, see the advisory:
+https://www.mail-archive.com/haproxy@formilux.org/msg41114.html
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS | 1 +
- 1 file changed, 1 insertion(+)
+ package/haproxy/haproxy.hash | 4 ++--
+ package/haproxy/haproxy.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 241940ab03..a380195009 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1035,6 +1035,7 @@ N:	Giulio Benetti <giulio.benetti@benettiengineering.com>
- F:	package/at/
- F:	package/binutils/
- F:	package/gcc/
-+F:	package/harfbuzz/
- F:	package/libfuse3/
- F:	package/libnspr/
- F:	package/libnss/
+diff --git a/package/haproxy/haproxy.hash b/package/haproxy/haproxy.hash
+index 20be7deae4..92f155581f 100644
+--- a/package/haproxy/haproxy.hash
++++ b/package/haproxy/haproxy.hash
+@@ -1,5 +1,5 @@
+-# From: http://www.haproxy.org/download/2.2/src/haproxy-2.2.16.tar.gz.sha256
+-sha256  b81e03a181070d1f7bcdaeec9f09af701fb1ab015c3c9c997a881f4773e29375  haproxy-2.2.16.tar.gz
++# From: http://www.haproxy.org/download/2.2/src/haproxy-2.2.17.tar.gz.sha256
++sha256  68af4aa3807d9c9f29b976d0ed57fb2e06acf7a185979059584862cc20d85be0  haproxy-2.2.17.tar.gz
+ # Locally computed:
+ sha256  0717ca51fceaa25ac9e5ccc62e0c727dcf27796057201fb5fded56a25ff6ca28  LICENSE
+ sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  doc/lgpl.txt
+diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
+index 641ab03668..0b38995810 100644
+--- a/package/haproxy/haproxy.mk
++++ b/package/haproxy/haproxy.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ HAPROXY_VERSION_MAJOR = 2.2
+-HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).16
++HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).17
+ HAPROXY_SITE = http://www.haproxy.org/download/$(HAPROXY_VERSION_MAJOR)/src
+ HAPROXY_LICENSE = GPL-2.0+ and LGPL-2.1+ with exceptions
+ HAPROXY_LICENSE_FILES = LICENSE doc/lgpl.txt doc/gpl.txt
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
