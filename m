@@ -2,57 +2,56 @@ Return-Path: <SRS0=7Pu+=OC=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C7B46C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 12 Sep 2021 12:43:41 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 77DE3C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 12 Sep 2021 12:43:53 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 7281B61212
-	for <buildroot@archiver.kernel.org>; Sun, 12 Sep 2021 12:43:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7281B61212
+	by mail.kernel.org (Postfix) with ESMTPS id 1B3BD61209
+	for <buildroot@archiver.kernel.org>; Sun, 12 Sep 2021 12:43:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1B3BD61209
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4B3F6825C7;
-	Sun, 12 Sep 2021 12:43:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DD03B4026C;
+	Sun, 12 Sep 2021 12:43:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xJeFo5PYItMQ; Sun, 12 Sep 2021 12:43:40 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rFIxZyOlc56E; Sun, 12 Sep 2021 12:43:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A01098276B;
-	Sun, 12 Sep 2021 12:43:39 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D8AC71BF47A
- for <buildroot@lists.busybox.net>; Sun, 12 Sep 2021 12:43:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4885B40218;
+	Sun, 12 Sep 2021 12:43:51 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 06E2A1BF95A
+ for <buildroot@lists.busybox.net>; Sun, 12 Sep 2021 12:43:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C5DF6825B9
+ by smtp2.osuosl.org (Postfix) with ESMTP id EA7B3402A2
  for <buildroot@lists.busybox.net>; Sun, 12 Sep 2021 12:43:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pCXYMP1EEceH for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xXDra-9almyv for <buildroot@lists.busybox.net>;
  Sun, 12 Sep 2021 12:43:26 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 06D23825BF
- for <buildroot@buildroot.org>; Sun, 12 Sep 2021 12:43:26 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0CE3040119
+ for <buildroot@buildroot.org>; Sun, 12 Sep 2021 12:43:25 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id B08318A3E9; Sun, 12 Sep 2021 12:41:45 +0000 (UTC)
+ id B99F08A405; Sun, 12 Sep 2021 12:41:45 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sun, 12 Sep 2021 14:31:27 +0200
+Date: Sun, 12 Sep 2021 14:32:22 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2143c74484e12afd81fd4bc27849a4a1f4bfc2d8
-X-Git-Newrev: cae9e692b1e2f9a299af148a8358674930d3429b
+X-Git-Oldrev: cae9e692b1e2f9a299af148a8358674930d3429b
+X-Git-Newrev: d5eb075d55c038ac26acaaed9781cf4589180539
 X-Patchwork-Hint: ignore
-Message-Id: <20210912124145.B08318A3E9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/pulseaudio: needs xdg SELinux
- module
+Message-Id: <20210912124145.B99F08A405@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/uhd: needs boost math
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,43 +70,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cae9e692b1e2f9a299af148a8358674930d3429b
+commit: https://git.buildroot.net/buildroot/commit/?id=d5eb075d55c038ac26acaaed9781cf4589180539
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-xdg is needed (and can't be make optional as it is unconditionally used
-in pulseaudio.fc) to fix the following build failure raised since commit
-bf44a11cf67fde4ba96928a2a4196103b7ec4ef3:
-
- Compiling targeted policy.33
- env LD_LIBRARY_PATH="/tmp/instance-0/output-1/host/lib:/tmp/instance-0/output-1/host/usr/lib" /tmp/instance-0/output-1/host/usr/bin/checkpolicy -c 33 -U deny -S -O -E policy.conf -o policy.33
- policy/modules/apps/pulseaudio.te:44:ERROR 'attribute xdg_config_type is not declared' at token ';' on line 317285:
- #line 44
-	typeattribute pulseaudio_xdg_config_t xdg_config_type;
- checkpolicy:  error(s) encountered while parsing configuration
- make[1]: *** [Rules.monolithic:79: policy.33] Error 1
+Lots of uhd components (e.g. examples, USRP1, USRP2) needs boost math
+(i.e. https://github.com/EttusResearch/uhd/search?q=boost%3A%3Amath)
+resulting in build failures since commit
+c577eac16eaae515973faf3013da197516bfd391
 
 Fixes:
- - http://autobuild.buildroot.org/results/818219c0f722080d9f6ef778fdc50e34dd4187ab
+ - http://autobuild.buildroot.org/results/70f6db101c9d35cdd88da602a863ddf35706fd7d
+ - http://autobuild.buildroot.org/results/5b28591b4c4a7ae4cc6d428c42d96db138ef3ee7
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/pulseaudio/pulseaudio.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/uhd/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/pulseaudio/pulseaudio.mk b/package/pulseaudio/pulseaudio.mk
-index 372cd98da8..a238315778 100644
---- a/package/pulseaudio/pulseaudio.mk
-+++ b/package/pulseaudio/pulseaudio.mk
-@@ -11,7 +11,7 @@ PULSEAUDIO_INSTALL_STAGING = YES
- PULSEAUDIO_LICENSE = LGPL-2.1+ (specific license for modules, see LICENSE file)
- PULSEAUDIO_LICENSE_FILES = LICENSE GPL LGPL
- PULSEAUDIO_CPE_ID_VENDOR = pulseaudio
--PULSEAUDIO_SELINUX_MODULES = pulseaudio
-+PULSEAUDIO_SELINUX_MODULES = pulseaudio xdg
- PULSEAUDIO_CONF_OPTS = \
- 	--disable-default-build-tests \
- 	--disable-legacy-database-entry-format \
+diff --git a/package/uhd/Config.in b/package/uhd/Config.in
+index 0d68fda171..248e309dd5 100644
+--- a/package/uhd/Config.in
++++ b/package/uhd/Config.in
+@@ -21,6 +21,7 @@ config BR2_PACKAGE_UHD
+ 	select BR2_PACKAGE_BOOST_CHRONO
+ 	select BR2_PACKAGE_BOOST_DATE_TIME
+ 	select BR2_PACKAGE_BOOST_FILESYSTEM
++	select BR2_PACKAGE_BOOST_MATH
+ 	select BR2_PACKAGE_BOOST_PROGRAM_OPTIONS
+ 	select BR2_PACKAGE_BOOST_REGEX
+ 	select BR2_PACKAGE_BOOST_SERIALIZATION
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
