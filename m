@@ -2,76 +2,91 @@ Return-Path: <SRS0=7Pu+=OC=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.5 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
+	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E49B6C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 12 Sep 2021 15:53:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E23BC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 12 Sep 2021 16:48:29 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 651766101B
-	for <buildroot@archiver.kernel.org>; Sun, 12 Sep 2021 15:53:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 651766101B
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
+	by mail.kernel.org (Postfix) with ESMTPS id 8DDC1604E9
+	for <buildroot@archiver.kernel.org>; Sun, 12 Sep 2021 16:48:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8DDC1604E9
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 27D64400C5;
-	Sun, 12 Sep 2021 15:53:29 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4B8EF401C9;
+	Sun, 12 Sep 2021 16:48:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uzJkBK3f3sIX; Sun, 12 Sep 2021 15:53:28 +0000 (UTC)
+	with ESMTP id WwkhxyGkUMxm; Sun, 12 Sep 2021 16:48:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3010740173;
-	Sun, 12 Sep 2021 15:53:27 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 6427B1BF41A
- for <buildroot@lists.busybox.net>; Sun, 12 Sep 2021 15:53:26 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7939B40132;
+	Sun, 12 Sep 2021 16:48:26 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id AB6BE1BF423
+ for <buildroot@lists.busybox.net>; Sun, 12 Sep 2021 16:48:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 51EDE826A4
- for <buildroot@lists.busybox.net>; Sun, 12 Sep 2021 15:53:26 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 955C8404A3
+ for <buildroot@lists.busybox.net>; Sun, 12 Sep 2021 16:48:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WDMeKlj036vA for <buildroot@lists.busybox.net>;
- Sun, 12 Sep 2021 15:53:25 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6047082684
- for <buildroot@buildroot.org>; Sun, 12 Sep 2021 15:53:25 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:bc3c:8ee4:eb9c:c13b])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPSA id 8A2A02003DC;
- Sun, 12 Sep 2021 17:53:18 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1631462002;
- bh=C6mK0JZWod4XnJk/4fjQ5KSMBumsOfFiw9/qmSIDBZI=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=UvwqwUK73zRWXxGtvHe3LCk3y5PnSr2ri49kJ/soelOyQsFJW9i12C5vcHY5xez3y
- P18AtxRg0W2wBQgGArGcAlZ7hnVlxF7KLstoTvLKKVVHtTqnJ3eSQkMNeM3wtGV6H8
- VJZRiOrSm/OTju4AF8zdrcKDHEeqxAZiunk7A9L9p65b+EJ3w2vxyJS6Z/NrnvUFZT
- wTzu2nsXjohxUe49Xl5DEvI8KiIfsEqngmyg2dN6J3+N1T8EMeYaog+9jqSJAoNCeG
- hDrStMGy0TC3eAZ/fJZ0DcHAKsYbttzVdRkapIG1s9FRSa0HpggVV1ZnqxtONNNZby
- t1dmcNIja8eMA==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 12 Sep 2021 17:53:18 +0200
-Date: Sun, 12 Sep 2021 17:53:18 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Michael Nosthoff <buildroot@heine.tech>
-Message-ID: <20210912155318.GK1053080@scaer>
-References: <20210912153632.84285-1-buildroot@heine.tech>
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Ra4BUXgttCAY for <buildroot@lists.busybox.net>;
+ Sun, 12 Sep 2021 16:48:24 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
+ [IPv6:2a00:1450:4864:20::330])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id BD3344049C
+ for <buildroot@buildroot.org>; Sun, 12 Sep 2021 16:48:24 +0000 (UTC)
+Received: by mail-wm1-x330.google.com with SMTP id
+ j17-20020a05600c1c1100b002e754875260so4922399wms.4
+ for <buildroot@buildroot.org>; Sun, 12 Sep 2021 09:48:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=zl1GPNxF9P3cWOY4np6i+iaF2u2TtSqCNE6lduL8Vm8=;
+ b=H+6A+aqoNa/WO9I3gfTwYFjOhMUreonL9UZzgOks2FPuBZpwwm2oKzdYOq62t/sYSX
+ Q6aVDymsQ0P5yhSCCdjvwtvvLAHO/FkGI0Dne+se41MDY7FjTuHu+mn/7F1gIyIYOI55
+ DcvlMKvQUt5eFzCG1PEsmw+W7bRzWUELPJRDI1bYp7tu+sT3rwMyP/+qpm1IFwuVEflk
+ Tnk/4t0dhd0ZQa+PsMZqDc+bfPNh3CXu7yJI3Ox5h2vjirfwU+WkLD4q093UEV5GCRFw
+ iUt4GSk/vQjDaUyeTzR4A3ZDQ//dF2uFttl0Z42iV4UIa3N4izjDe911/dbH/pvh4QBs
+ wtEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=zl1GPNxF9P3cWOY4np6i+iaF2u2TtSqCNE6lduL8Vm8=;
+ b=mnNzF/IfllXRG1oQG9KUp0ajgtJDD0+dNepWb7QY2K1eDqYs7F3scoSucG90IatpiQ
+ dT6y832IEUEeiZwGBa38igg2A1V0sO9gH5a14Zmd/PY9GCYEV4fye81KPpi8J18ceU+6
+ SFyHNDBmqK0S6FZ9bJLutiU5d3Ae1nCLV4/FDk7tO7h5BnlhUA3uJND26MWkE3WCxmiq
+ lzQZ5YhPKnagbEx4wFHkHdMEJuIgBU/n+UXGZD8ZzpiuMR0S1Qe6uwgnq/CktYKGcO2I
+ cngkfVbZU6P8pErOCGTtWTbYQHrPL+73eGR+Bm1bqMYazmuTB2MvsaUO8iKL5tV2dLez
+ ry9Q==
+X-Gm-Message-State: AOAM5322Npq0G4MAXF0FA8CNCxlmi+1jXyeiPylRkxiD3FDyF6+pNyEO
+ TLjjr/L9209UaZuG/8XcBTY+EVr7nDg=
+X-Google-Smtp-Source: ABdhPJwKG3NvXo32H1dez/BEslrXYYS/qHX20RchWMz2n+e3IN83+vjzVGWzmU9GE3nVGBwjzVsoUw==
+X-Received: by 2002:a1c:a757:: with SMTP id q84mr7489009wme.26.1631465302784; 
+ Sun, 12 Sep 2021 09:48:22 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-2139-166.w92-167.abo.wanadoo.fr.
+ [92.167.218.166])
+ by smtp.gmail.com with ESMTPSA id z17sm5181071wrh.66.2021.09.12.09.48.21
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 12 Sep 2021 09:48:21 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sun, 12 Sep 2021 18:48:19 +0200
+Message-Id: <20210912164819.2164395-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20210912153632.84285-1-buildroot@heine.tech>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH] package/boost: anotate patches
+Subject: [Buildroot] [PATCH v2,1/1] package/fio: bump to version 3.28
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,86 +99,59 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-Michael, Al,
+This will fix the following build failure with kernel >= 5.14 thanks to
+https://github.com/axboe/fio/commit/382975557e632efb506836bc1709789e615c9094:
 
-On 2021-09-12 17:36 +0200, Michael Nosthoff via buildroot spake thusly:
-> * add changelog and Signed-off-by to patches
-> * use correct name for patch 0002
-> 
-> Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
-> ---
->  ...n-of-boost_math_no_atomic_int-on-the-command-line.patch} | 6 ++++++
->  ...no-atomics-a-soft-failure-in-bernoulli_details_hpp.patch | 5 +++++
->  2 files changed, 11 insertions(+)
->  rename package/boost/{0002-math-provide-graceful-failure-for-bernoulli-code-on-platforms-with-no-atomics.patch => 0002-math-allow-definition-of-boost_math_no_atomic_int-on-the-command-line.patch} (91%)
-> 
-> diff --git a/package/boost/0002-math-provide-graceful-failure-for-bernoulli-code-on-platforms-with-no-atomics.patch b/package/boost/0002-math-allow-definition-of-boost_math_no_atomic_int-on-the-command-line.patch
-> similarity index 91%
-> rename from package/boost/0002-math-provide-graceful-failure-for-bernoulli-code-on-platforms-with-no-atomics.patch
-> rename to package/boost/0002-math-allow-definition-of-boost_math_no_atomic_int-on-the-command-line.patch
-> index 121355d71e..d7cbf7b95f 100644
-> --- a/package/boost/0002-math-provide-graceful-failure-for-bernoulli-code-on-platforms-with-no-atomics.patch
-> +++ b/package/boost/0002-math-allow-definition-of-boost_math_no_atomic_int-on-the-command-line.patch
-> @@ -4,6 +4,12 @@ Date: Wed, 1 Sep 2021 18:54:54 +0100
->  Subject: [PATCH] Allow definition of BOOST_MATH_NO_ATOMIC_INT on the command
->   line. Allows us to test/emulate platforms with no atomic integers.
->  
-> +[buildroot@heine.tech:
-> +  - backport from boostorg/math 32bd6197353f6ea8e5bef01f09e25c944141acfc
-> +  - alter path to match boost release
-> +]
-> +Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
-> +
+In file included from crc/../os/os.h:39,
+                 from crc/crc32c-arm64.c:2:
+crc/../os/os-linux.h:17:10: fatal error: linux/raw.h: No such file or directory
+   17 | #include <linux/raw.h>
+      |          ^~~~~~~~~~~~~
 
-Spurious empty line, fixed.
+Fixes:
+ - http://autobuild.buildroot.org/results/d85c044263c76ff7ef0fe47921d893a472954da9
 
-Otherwise: exactly how I like them to be formatted, thanks! :-)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+Changes v1 -> v2:
+ - Fix tarball hash
 
-Applied to master, thanks.
+ package/fio/fio.hash | 2 +-
+ package/fio/fio.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
->  ---
->   boost/math/tools/atomic.hpp | 10 +++++-----
->   1 file changed, 5 insertions(+), 5 deletions(-)
-> diff --git a/package/boost/0003-math-make-no-atomics-a-soft-failure-in-bernoulli_details_hpp.patch b/package/boost/0003-math-make-no-atomics-a-soft-failure-in-bernoulli_details_hpp.patch
-> index 77f1217a3a..7e324e310c 100644
-> --- a/package/boost/0003-math-make-no-atomics-a-soft-failure-in-bernoulli_details_hpp.patch
-> +++ b/package/boost/0003-math-make-no-atomics-a-soft-failure-in-bernoulli_details_hpp.patch
-> @@ -6,6 +6,11 @@ Subject: [PATCH] Make no atomics a soft failure in bernoulli_details.hpp.
->   bernoulli features are to be used in a no-atomics environment. Fixes
->   https://github.com/boostorg/math/issues/673.
->  
-> +[buildroot@heine.tech:
-> +  - backport from boostorg/math 7d482f6ebc356e6ec455ccb5f51a23971bf6ce5b
-> +  - alter path to match boost release
-> +]
-> +Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
->  ---
->   .../detail/bernoulli_details.hpp                 | 10 +++++++---
->   libs/math/test/Jamfile.v2                        |  3 +++
-> -- 
-> 2.33.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@lists.buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/package/fio/fio.hash b/package/fio/fio.hash
+index 88319e4cc0..891ca4e40e 100644
+--- a/package/fio/fio.hash
++++ b/package/fio/fio.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  da9826f07a003656ea070d359c90f752db8c3216ced9ff865242eed1a1db93bc  fio-3.27.tar.gz
++sha256  859dca5241e5494d86c4aa1531a984cc556789c78e56b30d6070acfbdd193a8c  fio-3.28.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  8a240c1ad13d1fe3e58588643d81d0695899be4a669fe6d8fafa76ca6a89db2c  MORAL-LICENSE
+diff --git a/package/fio/fio.mk b/package/fio/fio.mk
+index 12e2b2ab7c..13818b60fd 100644
+--- a/package/fio/fio.mk
++++ b/package/fio/fio.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FIO_VERSION = 3.27
++FIO_VERSION = 3.28
+ FIO_SITE = http://brick.kernel.dk/snaps
+ FIO_LICENSE = GPL-2.0
+ FIO_LICENSE_FILES = COPYING MORAL-LICENSE
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.33.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
