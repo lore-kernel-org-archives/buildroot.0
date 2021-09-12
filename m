@@ -2,57 +2,57 @@ Return-Path: <SRS0=7Pu+=OC=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-11.0 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 60866C4332F
-	for <buildroot@archiver.kernel.org>; Sun, 12 Sep 2021 20:00:47 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F0702C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 12 Sep 2021 20:00:58 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 30D1761029
-	for <buildroot@archiver.kernel.org>; Sun, 12 Sep 2021 20:00:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 30D1761029
+	by mail.kernel.org (Postfix) with ESMTPS id BD25A61050
+	for <buildroot@archiver.kernel.org>; Sun, 12 Sep 2021 20:00:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org BD25A61050
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 02E364049C;
-	Sun, 12 Sep 2021 20:00:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8AAE181C20;
+	Sun, 12 Sep 2021 20:00:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XA9DRdY9UPLM; Sun, 12 Sep 2021 20:00:46 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id PtF-_4XBfsYA; Sun, 12 Sep 2021 20:00:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5B00240426;
-	Sun, 12 Sep 2021 20:00:45 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1C82E1BF409
+	by smtp1.osuosl.org (Postfix) with ESMTP id DC15681C18;
+	Sun, 12 Sep 2021 20:00:56 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 2D03C1BF95A
  for <buildroot@lists.busybox.net>; Sun, 12 Sep 2021 19:58:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 15B064032E
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1BEE340186
  for <buildroot@lists.busybox.net>; Sun, 12 Sep 2021 19:58:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LYIHmJT-r_kq for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1a3VrsDKbg4j for <buildroot@lists.busybox.net>;
  Sun, 12 Sep 2021 19:58:47 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1B80640337
+ by smtp2.osuosl.org (Postfix) with ESMTP id 468AA401FC
  for <buildroot@buildroot.org>; Sun, 12 Sep 2021 19:58:47 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 2E7458A425; Sun, 12 Sep 2021 19:57:06 +0000 (UTC)
+ id 4A9118A43C; Sun, 12 Sep 2021 19:57:06 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 12 Sep 2021 20:55:47 +0200
+Date: Sun, 12 Sep 2021 21:19:34 +0200
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 1bfe3f48af349a75a883836f8ca7141394a604d0
-X-Git-Newrev: 9e367f7ebcfa9a080cc366697b6f7c0841b4d1b2
+X-Git-Oldrev: 532c6c963106afe5c598e988e88fd856f9cb0987
+X-Git-Newrev: 1c5f59abf1cb29384748426b68a516ed3850add1
 X-Patchwork-Hint: ignore
-Message-Id: <20210912195706.2E7458A425@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/libgcrypt: bump
- to version 1.9.4
+Message-Id: <20210912195706.4A9118A43C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/sox: install to
+ staging
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,70 +71,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9e367f7ebcfa9a080cc366697b6f7c0841b4d1b2
+commit: https://git.buildroot.net/buildroot/commit/?id=1c5f59abf1cb29384748426b68a516ed3850add1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 05125113fcb93d990ecb9395224d3fda5d911dc4)
+sox also provides one or more libraries with headers, so also install
+sox to staging.
+
+Signed-off-by: Adrian Amaglio <nainformatique@gresille.org>
+[Giulio: reword commit log]
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+[yann.morin.1998@free.fr:
+  - further refine commit log
+  - move assignment in a more sensible location
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit b6ff11fd9db0732bf3ba4ccb8cc0f14811f992ae)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-configure.ac-add-an-option-to-disable-tests.patch        | 4 ++--
- package/libgcrypt/libgcrypt.hash                                  | 8 ++++----
- package/libgcrypt/libgcrypt.mk                                    | 2 +-
- 3 files changed, 7 insertions(+), 7 deletions(-)
+ package/sox/sox.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/libgcrypt/0001-configure.ac-add-an-option-to-disable-tests.patch b/package/libgcrypt/0001-configure.ac-add-an-option-to-disable-tests.patch
-index 21ff20a473..4ef02fba65 100644
---- a/package/libgcrypt/0001-configure.ac-add-an-option-to-disable-tests.patch
-+++ b/package/libgcrypt/0001-configure.ac-add-an-option-to-disable-tests.patch
-@@ -24,7 +24,7 @@ diff --git a/Makefile.am b/Makefile.am
- index 7fa4fa4d..f0bd90e4 100644
- --- a/Makefile.am
- +++ b/Makefile.am
--@@ -39,9 +39,14 @@ else
-+@@ -40,9 +40,14 @@ else
-  doc =
-  endif
-  
-@@ -44,7 +44,7 @@ diff --git a/configure.ac b/configure.ac
- index e8c8cd39..1a6b61e5 100644
- --- a/configure.ac
- +++ b/configure.ac
--@@ -2710,6 +2710,16 @@ AC_ARG_ENABLE([doc], AC_HELP_STRING([--disable-doc],
-+@@ -3198,6 +3198,16 @@ AC_ARG_ENABLE([doc], AC_HELP_STRING([--disable-doc],
-  AM_CONDITIONAL([BUILD_DOC], [test "x$build_doc" != xno])
-  
-  
-diff --git a/package/libgcrypt/libgcrypt.hash b/package/libgcrypt/libgcrypt.hash
-index 26ec492e10..23562d0ed3 100644
---- a/package/libgcrypt/libgcrypt.hash
-+++ b/package/libgcrypt/libgcrypt.hash
-@@ -1,7 +1,7 @@
- # From https://www.gnupg.org/download/integrity_check.html
--sha1  6b18f453fee677078586279d96fb88e5df7b3f35  libgcrypt-1.9.3.tar.bz2
-+sha1  1bccc8393482fa1953323ff429c6b5ba5676eb1a  libgcrypt-1.9.4.tar.bz2
- # Locally calculated after checking signature
--# https://gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-1.9.3.tar.bz2.sig
--# using key D8692123C4065DEA5E0F3AB5249B39D24F25E3B6
--sha256  97ebe4f94e2f7e35b752194ce15a0f3c66324e0ff6af26659bbfb5ff2ec328fd  libgcrypt-1.9.3.tar.bz2
-+# https://gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-1.9.4.tar.bz2.sig
-+# using key 6DAA6E64A76D2840571B4902528897B826403ADA
-+sha256  ea849c83a72454e3ed4267697e8ca03390aee972ab421e7df69dfe42b65caaf7  libgcrypt-1.9.4.tar.bz2
- sha256  ca0061fc1381a3ab242310e4b3f56389f28e3d460eb2fd822ed7a21c6f030532  COPYING.LIB
-diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
-index 26be5d2f49..e5fdfcfc8e 100644
---- a/package/libgcrypt/libgcrypt.mk
-+++ b/package/libgcrypt/libgcrypt.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/sox/sox.mk b/package/sox/sox.mk
+index dcc1a670b4..4b09b94bc3 100644
+--- a/package/sox/sox.mk
++++ b/package/sox/sox.mk
+@@ -15,6 +15,7 @@ SOX_CPE_ID_PRODUCT = sound_exchange
+ # From git and we're patching configure.ac
+ SOX_AUTORECONF = YES
+ SOX_AUTORECONF_OPTS = --include=$(HOST_DIR)/share/autoconf-archive
++SOX_INSTALL_STAGING = YES
  
--LIBGCRYPT_VERSION = 1.9.3
-+LIBGCRYPT_VERSION = 1.9.4
- LIBGCRYPT_SOURCE = libgcrypt-$(LIBGCRYPT_VERSION).tar.bz2
- LIBGCRYPT_LICENSE = LGPL-2.1+
- LIBGCRYPT_LICENSE_FILES = COPYING.LIB
+ SOX_IGNORE_CVES += CVE-2017-11332 CVE-2017-11358 CVE-2017-11359 \
+ 	CVE-2017-15370 CVE-2017-15371 CVE-2017-15372 CVE-2017-15642 \
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
