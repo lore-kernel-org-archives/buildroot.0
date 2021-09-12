@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 02C4CC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 12 Sep 2021 20:20:16 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5096DC433F5
+	for <buildroot@archiver.kernel.org>; Sun, 12 Sep 2021 20:20:36 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id C7E5061056
-	for <buildroot@archiver.kernel.org>; Sun, 12 Sep 2021 20:20:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C7E5061056
+	by mail.kernel.org (Postfix) with ESMTPS id 18C1961051
+	for <buildroot@archiver.kernel.org>; Sun, 12 Sep 2021 20:20:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 18C1961051
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A80E960B93;
-	Sun, 12 Sep 2021 20:20:15 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kRng_erur9Vo; Sun, 12 Sep 2021 20:20:14 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E8F8560767;
-	Sun, 12 Sep 2021 20:20:13 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id BC7BB1BF404
- for <buildroot@lists.busybox.net>; Sun, 12 Sep 2021 20:16:41 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F00E140490
- for <buildroot@lists.busybox.net>; Sun, 12 Sep 2021 20:16:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D8BF8406BE;
+	Sun, 12 Sep 2021 20:20:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eYodLe86rU-7 for <buildroot@lists.busybox.net>;
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id kk3yixvF5QQu; Sun, 12 Sep 2021 20:20:26 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8F5F140381;
+	Sun, 12 Sep 2021 20:20:25 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 05D2B1BF404
+ for <buildroot@lists.busybox.net>; Sun, 12 Sep 2021 20:16:42 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4A1FB60773
+ for <buildroot@lists.busybox.net>; Sun, 12 Sep 2021 20:16:40 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id SnKZ4e6LPKAP for <buildroot@lists.busybox.net>;
  Sun, 12 Sep 2021 20:16:39 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5ED624049C
+ by smtp3.osuosl.org (Postfix) with ESMTP id 97F7E60783
  for <buildroot@buildroot.org>; Sun, 12 Sep 2021 20:16:39 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 6A0408A4CB; Sun, 12 Sep 2021 20:14:58 +0000 (UTC)
+ id A1D908A4C4; Sun, 12 Sep 2021 20:14:58 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 12 Sep 2021 21:28:27 +0200
+Date: Sun, 12 Sep 2021 21:56:28 +0200
 X-Git-Refname: refs/heads/2021.08.x
-X-Git-Oldrev: 88f215964e90f32756c9c7729ac74e2fc4fd5c81
-X-Git-Newrev: 5cb48c2a2c2ca81f866ed5f3372dc95d19bc7de5
+X-Git-Oldrev: 03593c71508bbfc05d4afffeee50fdae4be9778e
+X-Git-Newrev: b3df700d88684a08961d7081fe8fd80cfb55d2f9
 X-Patchwork-Hint: ignore
-Message-Id: <20210912201458.6A0408A4CB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.08.x] DEVELOPERS: add myself to
- harfbuzz package
+Message-Id: <20210912201458.A1D908A4C4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.08.x] package/swupdate: let
+ buildroot handle stripping
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,31 +71,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5cb48c2a2c2ca81f866ed5f3372dc95d19bc7de5
+commit: https://git.buildroot.net/buildroot/commit/?id=b3df700d88684a08961d7081fe8fd80cfb55d2f9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.08.x
 
-Add myself to harfbuzz package.
+In buildroot, stripping for the target is configured and implemented
+with the global `BR2_STRIP_strip` option that drive the stripping in
+the target-finalize step.
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 8bea006e6b113de507392dc377df01c881728f73)
+So, we explicitly disable stripping at build time for swupdate.
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit 1833c710ce73a1ca67143abd3fbcee6fd5d6fcdb)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS | 1 +
- 1 file changed, 1 insertion(+)
+ package/swupdate/swupdate.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 53448dd100..9598b64a4a 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1054,6 +1054,7 @@ N:	Giulio Benetti <giulio.benetti@benettiengineering.com>
- F:	package/at/
- F:	package/binutils/
- F:	package/gcc/
-+F:	package/harfbuzz/
- F:	package/libfuse3/
- F:	package/libnspr/
- F:	package/libnss/
+diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
+index 402aa0a91f..42008cddd7 100644
+--- a/package/swupdate/swupdate.mk
++++ b/package/swupdate/swupdate.mk
+@@ -22,7 +22,7 @@ SWUPDATE_LICENSE_FILES = LICENSES/BSD-1-Clause.txt \
+ # swupdate uses $CROSS-cc instead of $CROSS-gcc, which is not
+ # available in all external toolchains, and use CC for linking. Ensure
+ # TARGET_CC is used for both.
+-SWUPDATE_MAKE_ENV = CC="$(TARGET_CC)" LD="$(TARGET_CC)"
++SWUPDATE_MAKE_ENV = CC="$(TARGET_CC)" LD="$(TARGET_CC)" SKIP_STRIP=y
+ 
+ # swupdate bundles its own version of mongoose (version 6.16)
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
