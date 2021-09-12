@@ -2,95 +2,57 @@ Return-Path: <SRS0=7Pu+=OC=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-13.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,PDS_BTC_ID,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 677DFC433F5
-	for <buildroot@archiver.kernel.org>; Sun, 12 Sep 2021 19:57:44 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A1CD8C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 12 Sep 2021 19:58:51 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 005F76101E
-	for <buildroot@archiver.kernel.org>; Sun, 12 Sep 2021 19:57:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 005F76101E
+	by mail.kernel.org (Postfix) with ESMTPS id 240A96101E
+	for <buildroot@archiver.kernel.org>; Sun, 12 Sep 2021 19:58:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 240A96101E
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B28FF4021B;
-	Sun, 12 Sep 2021 19:57:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C831160030;
+	Sun, 12 Sep 2021 19:58:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9nCtxyD5YSos; Sun, 12 Sep 2021 19:57:42 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id AzHqufnpIJOy; Sun, 12 Sep 2021 19:58:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D92B840186;
-	Sun, 12 Sep 2021 19:57:41 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id BC41C1BF409
- for <buildroot@lists.busybox.net>; Sun, 12 Sep 2021 19:57:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 258D56072A;
+	Sun, 12 Sep 2021 19:58:49 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C6C071BF409
+ for <buildroot@lists.busybox.net>; Sun, 12 Sep 2021 19:58:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A7E7140155
- for <buildroot@lists.busybox.net>; Sun, 12 Sep 2021 19:57:39 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C330A4037C
+ for <buildroot@lists.busybox.net>; Sun, 12 Sep 2021 19:58:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8ZDgm8z19zn8 for <buildroot@lists.busybox.net>;
- Sun, 12 Sep 2021 19:57:39 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com
- [IPv6:2a00:1450:4864:20::62a])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C56BF4012A
- for <buildroot@buildroot.org>; Sun, 12 Sep 2021 19:57:38 +0000 (UTC)
-Received: by mail-ej1-x62a.google.com with SMTP id ho42so16233034ejc.9
- for <buildroot@buildroot.org>; Sun, 12 Sep 2021 12:57:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=sender:from:to:cc:subject:references:date:in-reply-to:message-id
- :user-agent:mime-version;
- bh=E8gWVRLLsrJO5bf4aZP5iuQQR9vjwzRAnvJ9JxXp5Cw=;
- b=Gj1VwCmR9bo7cLGHB5sjCUHY6ECEoCI8ZsmRBAit8lzPwd6TYjr92rufu9misQNQOD
- 2VNvIq61biEhEOQggDzJFiix2w7+CKHs7HbfSBfn16YYaJakN9NvcOnm6PhjA3XlEA+X
- cpa/qPLMOKmqfWqRxi+StI4Gbo/HVJ052R6bzcMr+6AaqhtepJAYdySzn3Tq2OVtvrnR
- aH8uypAhJQznozw85V17DJOjtf+ZzER+S/jUZhhflSeFwUvr9xVfAjams6u9YAhSGXL5
- 7KB7TTjMrZPFGAeGzLprGKKQzN5JUEMnNQ+F/Et3h+oqpEMCfNf0IA0f4NrY6CLGPlnO
- T39w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:sender:from:to:cc:subject:references:date
- :in-reply-to:message-id:user-agent:mime-version;
- bh=E8gWVRLLsrJO5bf4aZP5iuQQR9vjwzRAnvJ9JxXp5Cw=;
- b=JIa066rMfAaVEQxO+scC6wkEY1HZRqkmQj/TJkJzCCFzwUfcC2sNPd6tFh2xqpbU6p
- gxsAoJhPKCGjdz6/hy/lWIW2Pc4U7n0OlIwuetQ5Ux2cgwIw5Gr/Pg+WAPDYlhwH39jQ
- pfqMcqtCts44tiVTD6jDybPw8JoxfyF+HTliwm4LaK6JgLBgrjsvxm5nGWOZkbPwLNES
- dsL9xA+U9Wny7zRUcFy3cQuEVAD1CK4D5jd4TrwuVzmsgoMK0PTz2fEEIX/J/yXY3odr
- L2tNQYmtYeUpggJdvfsoreGBTcY0RxYLdCi7e5bH3V20fcM3/ZQBKH90TYbfq9ocQTVv
- Lngw==
-X-Gm-Message-State: AOAM532Lp6yZng7E5PjNSUp5g3wJ7U1gSRdlugLgVb45p6JlLdSy+FfD
- G2BTxe6txfMSqmTHM6bhb4I=
-X-Google-Smtp-Source: ABdhPJwBRavbrmfB41tphNpVRKIO4LvhGF/FrQcsBfer335oyPCtJwKCq2PeNdFBrRoHczaCC+snWQ==
-X-Received: by 2002:a17:907:10c8:: with SMTP id
- rv8mr8733487ejb.280.1631476657074; 
- Sun, 12 Sep 2021 12:57:37 -0700 (PDT)
-Received: from dell.be.48ers.dk (d51A5BC31.access.telenet.be. [81.165.188.49])
- by smtp.gmail.com with ESMTPSA id
- a24sm2784050edu.49.2021.09.12.12.57.36
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 12 Sep 2021 12:57:36 -0700 (PDT)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
- (envelope-from <peter@korsgaard.com>)
- id 1mPVbb-00063i-QX; Sun, 12 Sep 2021 21:57:35 +0200
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mUmSZeUIaW-Z for <buildroot@lists.busybox.net>;
+ Sun, 12 Sep 2021 19:58:47 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 15F944032E
+ for <buildroot@buildroot.org>; Sun, 12 Sep 2021 19:58:47 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 1A1FC8A425; Sun, 12 Sep 2021 19:57:06 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: James Hilliard <james.hilliard1@gmail.com>
-References: <20210829024632.682029-1-james.hilliard1@gmail.com>
-Date: Sun, 12 Sep 2021 21:57:35 +0200
-In-Reply-To: <20210829024632.682029-1-james.hilliard1@gmail.com> (James
- Hilliard's message of "Sat, 28 Aug 2021 20:46:25 -0600")
-Message-ID: <874kap36ts.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v2 1/8] package/swupdate: let buildroot
- handle stripping
+To: buildroot@buildroot.org
+Date: Sun, 12 Sep 2021 20:48:49 +0200
+X-Git-Refname: refs/heads/2021.02.x
+X-Git-Oldrev: bb55ce96f72075af111510d6642900c142350cd9
+X-Git-Newrev: 7743b25600d845a1773c0e91d46ef61a907c9cee
+X-Patchwork-Hint: ignore
+Message-Id: <20210912195706.1A1FC8A425@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/x11r7/xapp_xwd:
+ bump version to 1.0.8
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,26 +65,61 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
->>>>> "James" == James Hilliard <james.hilliard1@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=7743b25600d845a1773c0e91d46ef61a907c9cee
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
- > In buildroot, stripping for the target is configured and implemented
- > with the global `BR2_STRIP_strip` option that drive the stripping in
- > the target-finalize step.
+Release notes:
+https://lists.x.org/archives/xorg-announce/2021-August/003102.html
 
- > So, we explicitly disable stripping at build time for swupdate.
+Removed md5 and sha1 hashes, reformatted hashes, updated _SITE.
 
- > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit d0f683d35cc6e50ded3ebaa7b5a717a3a5c528e4)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/x11r7/xapp_xwd/xapp_xwd.hash | 10 ++++------
+ package/x11r7/xapp_xwd/xapp_xwd.mk   |  4 ++--
+ 2 files changed, 6 insertions(+), 8 deletions(-)
 
-Committed to 2021.02.x, 2021.05.x and 2021.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/x11r7/xapp_xwd/xapp_xwd.hash b/package/x11r7/xapp_xwd/xapp_xwd.hash
+index 606618bcc6..7595286499 100644
+--- a/package/x11r7/xapp_xwd/xapp_xwd.hash
++++ b/package/x11r7/xapp_xwd/xapp_xwd.hash
+@@ -1,7 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2018-March/002876.html
+-md5 11794a8eba6d295a192a8975287fd947  xwd-1.0.7.tar.bz2
+-sha1 65ce0617be29687cf6082c3a0e85d15a0dcccda9  xwd-1.0.7.tar.bz2
+-sha256 cd6815b8b9e0b98e284d3d732fb12162159cb9dcee4f45a7d4c0bd8b308a6794  xwd-1.0.7.tar.bz2
+-sha512 6fdb0a115ae505169bbc7fcc45580daf26bced2e26e0bf9a877636016038931a8386e8edcbe015f4024be508d0461906adef4834cf22a445e3c282f0b8fad17e  xwd-1.0.7.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2021-August/003102.html
++sha256  fbaa2b34163714fe7be22b60920ea4683f63b355babb1781aec2e452a033031b  xwd-1.0.8.tar.bz2
++sha512  d2aaf42c60d20c4b09f4947d3702058dbfad4633b2c5c8ea62e8897fc9ced1ab3417ce99255a223286d21a731f543019470737e3074f1bc68033b4eb47bc773e  xwd-1.0.8.tar.bz2
+ # Locally computed
+-sha256 7cfda56afd92a1ecd2f23bd0064e01b5141053390d854785504adfe2c0fbd946 COPYING
++sha256  7cfda56afd92a1ecd2f23bd0064e01b5141053390d854785504adfe2c0fbd946  COPYING
+diff --git a/package/x11r7/xapp_xwd/xapp_xwd.mk b/package/x11r7/xapp_xwd/xapp_xwd.mk
+index 4d7ed0f877..1c5bd50166 100644
+--- a/package/x11r7/xapp_xwd/xapp_xwd.mk
++++ b/package/x11r7/xapp_xwd/xapp_xwd.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-XAPP_XWD_VERSION = 1.0.7
++XAPP_XWD_VERSION = 1.0.8
+ XAPP_XWD_SOURCE = xwd-$(XAPP_XWD_VERSION).tar.bz2
+-XAPP_XWD_SITE = http://xorg.freedesktop.org/releases/individual/app
++XAPP_XWD_SITE = https://xorg.freedesktop.org/archive/individual/app
+ XAPP_XWD_LICENSE = MIT
+ XAPP_XWD_LICENSE_FILES = COPYING
+ XAPP_XWD_DEPENDENCIES = xlib_libX11 xlib_libXmu xlib_libxkbfile
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
