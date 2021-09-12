@@ -2,57 +2,92 @@ Return-Path: <SRS0=7Pu+=OC=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.5 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
+	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 42D1CC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 12 Sep 2021 12:44:05 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A5DC6C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 12 Sep 2021 13:16:11 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 0A2CA61108
-	for <buildroot@archiver.kernel.org>; Sun, 12 Sep 2021 12:44:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0A2CA61108
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
+	by mail.kernel.org (Postfix) with ESMTPS id 1448361076
+	for <buildroot@archiver.kernel.org>; Sun, 12 Sep 2021 13:16:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1448361076
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D197A608B8;
-	Sun, 12 Sep 2021 12:44:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D196B404DB;
+	Sun, 12 Sep 2021 13:16:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HWjs-TTiN359; Sun, 12 Sep 2021 12:44:04 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Sly7v-a4W_FU; Sun, 12 Sep 2021 13:16:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 173F6608FA;
-	Sun, 12 Sep 2021 12:44:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 23C9240526;
+	Sun, 12 Sep 2021 13:16:09 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1FF7C1BF47A
- for <buildroot@lists.busybox.net>; Sun, 12 Sep 2021 12:43:28 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 702F11BF473
+ for <buildroot@lists.busybox.net>; Sun, 12 Sep 2021 13:16:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1975540119
- for <buildroot@lists.busybox.net>; Sun, 12 Sep 2021 12:43:27 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5E6C240235
+ for <buildroot@lists.busybox.net>; Sun, 12 Sep 2021 13:16:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1bp6h1Db5T8N for <buildroot@lists.busybox.net>;
- Sun, 12 Sep 2021 12:43:26 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 15CBB40267
- for <buildroot@buildroot.org>; Sun, 12 Sep 2021 12:43:26 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id C45288A406; Sun, 12 Sep 2021 12:41:45 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ with ESMTP id smJtVsmkpwzL for <buildroot@lists.busybox.net>;
+ Sun, 12 Sep 2021 13:16:04 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
+ [IPv6:2a00:1450:4864:20::32c])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6667540119
+ for <buildroot@buildroot.org>; Sun, 12 Sep 2021 13:16:04 +0000 (UTC)
+Received: by mail-wm1-x32c.google.com with SMTP id
+ 196-20020a1c04cd000000b002fa489ffe1fso4926182wme.4
+ for <buildroot@buildroot.org>; Sun, 12 Sep 2021 06:16:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=ttXGSGTOGoBI6y1NBF5kSQG/xCvUmfCJL6+MmERs4Mk=;
+ b=gSZOlaL7O2kph6haQG1dq2MrJ4StycS7VkjCvRBkZkfmNpX8JQKQQjNUZ0IZ14iF/q
+ cK+ObDCuV5xayvDWuMsvu39Y36PSLQlSNU3FYDFxvQQ67KIQn9XW4A+oaVrG/Hgs8aMj
+ 31QVWof91/u2FahXNRn8hSwyFveb5+3KQyBIVCNsGJj1mML5TbufmjMthxcXUdsRgpuU
+ oV32JeA1p3BrSOEyBIUeX37ybK/FNHH3RJ3CChAVzhFIV8dHeBXZGKYVPpWhqNila9AF
+ BEJYXOZ07q55Qls1PME3fqlZVEhCKo1NMF+DQ5eE881I+Nj7vVIUNz0TQCgx4uRv66qe
+ pbxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=ttXGSGTOGoBI6y1NBF5kSQG/xCvUmfCJL6+MmERs4Mk=;
+ b=GMh9Ib0JKbU/98Z4iKxpqNynkwSCBnGcZtLwJlFQR8ffIRBNvr+x6FEiAgis7G5z1x
+ Wb5Z8ghjNDjskuXgGnHHc+k9rpRgrY6QudcYAjECT16hxT7Z+AwuFUTBvwPJlY0DH7IE
+ Cw9QMsf6MU5Ya6IaG9fSQeaTr0PQCwn+wusmYRQmiZEoHqAv1iH2fRVZ5kEqos4rKUDq
+ cxCbMHm41tv9zW14B8RHsvE2ARfWAMiQb99WR3PpIveACfpnrlwzJf9N8OFUa9JAozXv
+ Cs2EisQvEpoDFGRyOLH91bq0biJ/Uztw8Zfzz5tMCUiUuuG1xYJTIVouwHbhHnT/84sY
+ udZA==
+X-Gm-Message-State: AOAM533F80+UZSxwyk9zo/CYazrgAAwPchaFdyigqGUhdu3lVIrSXqct
+ HLxXV6uUa27HRSDaXCgtnZTLE3bvdAg=
+X-Google-Smtp-Source: ABdhPJyPPLOjwwCmQg+yOZ5XfvJh4b7Ul4Knbwz1619+UXvZtlxqUqGdAEqvEKo1HlFNtn0uMAGShQ==
+X-Received: by 2002:a05:600c:4f53:: with SMTP id
+ m19mr6700997wmq.2.1631452562435; 
+ Sun, 12 Sep 2021 06:16:02 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-2139-166.w92-167.abo.wanadoo.fr.
+ [92.167.218.166])
+ by smtp.gmail.com with ESMTPSA id o12sm3807928wms.15.2021.09.12.06.16.01
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 12 Sep 2021 06:16:01 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 12 Sep 2021 14:35:13 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d5eb075d55c038ac26acaaed9781cf4589180539
-X-Git-Newrev: c90776302c79e33ac2da7f666291c6d7960a96c3
-X-Patchwork-Hint: ignore
-Message-Id: <20210912124145.C45288A406@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/bluez-tools: bump to version
- f65321736475429316f07ee94ec0deac8e46ec4a
+Date: Sun, 12 Sep 2021 15:15:59 +0200
+Message-Id: <20210912131559.2155322-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.33.0
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH 1/1] package/fio: bump to version 3.28
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,106 +100,56 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c90776302c79e33ac2da7f666291c6d7960a96c3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+This will fix the following build failure with kernel >= 5.14 thanks to
+https://github.com/axboe/fio/commit/382975557e632efb506836bc1709789e615c9094:
 
-Minor fixes:
-- build with gcc 10 (drop patch)
-- correct the signal handler registration bt-agent
+In file included from crc/../os/os.h:39,
+                 from crc/crc32c-arm64.c:2:
+crc/../os/os-linux.h:17:10: fatal error: linux/raw.h: No such file or directory
+   17 | #include <linux/raw.h>
+      |          ^~~~~~~~~~~~~
 
-Other changes:
-- remove incorrectly handled error argument from device_* calls
-- add UUID for SIMAccess
+Fixes:
+ - http://autobuild.buildroot.org/results/d85c044263c76ff7ef0fe47921d893a472954da9
 
-Signed-off-by: Jan Havran <havran.jan@email.cz>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/bluez-tools/0001-fix-gcc-10-compile.patch | 46 -----------------------
- package/bluez-tools/bluez-tools.hash              |  2 +-
- package/bluez-tools/bluez-tools.mk                |  2 +-
- 3 files changed, 2 insertions(+), 48 deletions(-)
+ package/fio/fio.hash | 2 +-
+ package/fio/fio.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/bluez-tools/0001-fix-gcc-10-compile.patch b/package/bluez-tools/0001-fix-gcc-10-compile.patch
-deleted file mode 100644
-index 028c2db69d..0000000000
---- a/package/bluez-tools/0001-fix-gcc-10-compile.patch
-+++ /dev/null
-@@ -1,46 +0,0 @@
--From 687105d611b38961f390f0a328f9cfa3b93aeb18 Mon Sep 17 00:00:00 2001
--From: Leigh Scott <leigh123linux@gmail.com>
--Date: Tue, 28 Jan 2020 22:46:37 +0000
--Subject: [PATCH] fix gcc-10 compile
--
--[Retrieved from:
--https://github.com/khvzak/bluez-tools/pull/34/commits/687105d611b38961f390f0a328f9cfa3b93aeb18]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- src/lib/agent-helper.c | 2 ++
-- src/lib/agent-helper.h | 4 ++--
-- 2 files changed, 4 insertions(+), 2 deletions(-)
--
--diff --git a/src/lib/agent-helper.c b/src/lib/agent-helper.c
--index bf50bcc..2b94100 100644
----- a/src/lib/agent-helper.c
--+++ b/src/lib/agent-helper.c
--@@ -33,6 +33,8 @@
-- 
-- #include "agent-helper.h"
-- 
--+gboolean agent_need_unregister;
--+
-- static const gchar *_bt_agent_introspect_xml = "<node name=\"/org/blueztools\">\n\t<interface name=\"org.bluez.Agent1\">\n\t\t<method name=\"Release\">\n\t\t</method>\n\t\t<method name=\"RequestPinCode\">\n\t\t\t<arg name=\"device\" direction=\"in\" type=\"o\"/>\n\t\t\t<arg name=\"pincode\" direction=\"out\" type=\"s\"/>\n\t\t</method>\n\t\t<method name=\"DisplayPinCode\">\n\t\t\t<arg name=\"device\" direction=\"in\" type=\"o\"/>\n\t\t\t<arg name=\"pincode\" direction=\"in\" type=\"s\"/>\n\t\t</method>\n\t\t<method name=\"RequestPasskey\">\n\t\t\t<arg name=\"device\" direction=\"in\" type=\"o\"/>\n\t\t\t<arg name=\"passkey\" direction=\"out\" type=\"u\"/>\n\t\t</method>\n\t\t<method name=\"DisplayPasskey\">\n\t\t\t<arg name=\"device\" direction=\"in\" type=\"o\"/>\n\t\t\t<arg name=\"passkey\" direction=\"in\" type=\"u\"/>\n\t\t\t<arg name=\"entered\" direction=\"in\" type=\"q\"/>\n\t\t</method>\n\t\t<method name=\"RequestConfirmation\">\n\t\t\t<arg name=\"device\" direction=\"in\" 
- type=\"o\"/>\n\t\t\t<arg name=\"passkey\" direction=\"in\" type=\"u\"/>\n\t\t</method>\n\t\t<method name=\"RequestAuthorization\">\n\t\t\t<arg name=\"device\" direction=\"in\" type=\"o\"/>\n\t\t</method>\n\t\t<method name=\"AuthorizeService\">\n\t\t\t<arg name=\"device\" direction=\"in\" type=\"o\"/>\n\t\t\t<arg name=\"uuid\" direction=\"in\" type=\"s\"/>\n\t\t</method>\n\t\t<method name=\"Cancel\">\n\t\t</method>\n\t</interface>\n</node>\n";
-- static guint _bt_agent_registration_id = 0;
-- static GHashTable *_pin_hash_table = NULL;
--diff --git a/src/lib/agent-helper.h b/src/lib/agent-helper.h
--index 8e1cc85..9a952c4 100644
----- a/src/lib/agent-helper.h
--+++ b/src/lib/agent-helper.h
--@@ -35,7 +35,7 @@ extern "C" {
-- #define AGENT_DBUS_INTERFACE "org.bluez.Agent1"
-- #define AGENT_PATH "/org/blueztools"
-- 
---gboolean agent_need_unregister;
--+extern gboolean agent_need_unregister;
-- 
-- void register_agent_callbacks(gboolean interactive_console, GHashTable *pin_dictonary, gpointer main_loop_object, GError **error);
-- void unregister_agent_callbacks(GError **error);
--@@ -44,4 +44,4 @@ void unregister_agent_callbacks(GError **error);
-- }
-- #endif
-- 
---#endif /* __AGENT_HELPER_H */
--\ No newline at end of file
--+#endif /* __AGENT_HELPER_H */
-diff --git a/package/bluez-tools/bluez-tools.hash b/package/bluez-tools/bluez-tools.hash
-index 808e5c6061..f013f195cb 100644
---- a/package/bluez-tools/bluez-tools.hash
-+++ b/package/bluez-tools/bluez-tools.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/fio/fio.hash b/package/fio/fio.hash
+index 88319e4cc0..87045af119 100644
+--- a/package/fio/fio.hash
++++ b/package/fio/fio.hash
+@@ -1,4 +1,4 @@
  # Locally computed
--sha256  62ca98af63d2ae142dbc77995c6bd4c259eaba4a5832daa33ae9e3d585b9205f  bluez-tools-97efd293491ad7ec96a655665339908f2478b3d1.tar.gz
-+sha256  dd5acf9e501514f4ad1136af966d2723f3270e0e2fffd6d29da93fa76c9fafa3  bluez-tools-f65321736475429316f07ee94ec0deac8e46ec4a.tar.gz
- sha256  b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
-diff --git a/package/bluez-tools/bluez-tools.mk b/package/bluez-tools/bluez-tools.mk
-index c58701981a..007235958b 100644
---- a/package/bluez-tools/bluez-tools.mk
-+++ b/package/bluez-tools/bluez-tools.mk
+-sha256  da9826f07a003656ea070d359c90f752db8c3216ced9ff865242eed1a1db93bc  fio-3.27.tar.gz
++sha256  da9826f07a003656ea070d359c90f752db8c3216ced9ff865242eed1a1db93bc  fio-3.28.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  8a240c1ad13d1fe3e58588643d81d0695899be4a669fe6d8fafa76ca6a89db2c  MORAL-LICENSE
+diff --git a/package/fio/fio.mk b/package/fio/fio.mk
+index 12e2b2ab7c..13818b60fd 100644
+--- a/package/fio/fio.mk
++++ b/package/fio/fio.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--BLUEZ_TOOLS_VERSION = 97efd293491ad7ec96a655665339908f2478b3d1
-+BLUEZ_TOOLS_VERSION = f65321736475429316f07ee94ec0deac8e46ec4a
- BLUEZ_TOOLS_SITE = $(call github,khvzak,bluez-tools,$(BLUEZ_TOOLS_VERSION))
- 
- # sources fetched from github, no configure script)
+-FIO_VERSION = 3.27
++FIO_VERSION = 3.28
+ FIO_SITE = http://brick.kernel.dk/snaps
+ FIO_LICENSE = GPL-2.0
+ FIO_LICENSE_FILES = COPYING MORAL-LICENSE
+-- 
+2.33.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
