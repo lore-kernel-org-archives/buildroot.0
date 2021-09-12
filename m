@@ -8,87 +8,88 @@ X-Spam-Status: No, score=-18.5 required=3.0 tests=BAYES_00,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1EB6DC433F5
-	for <buildroot@archiver.kernel.org>; Sun, 12 Sep 2021 14:13:39 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 99674C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 12 Sep 2021 14:13:51 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id CFF666108C
-	for <buildroot@archiver.kernel.org>; Sun, 12 Sep 2021 14:13:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org CFF666108C
+	by mail.kernel.org (Postfix) with ESMTPS id 58C1661050
+	for <buildroot@archiver.kernel.org>; Sun, 12 Sep 2021 14:13:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 58C1661050
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A471D404D8;
-	Sun, 12 Sep 2021 14:13:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1C7826075B;
+	Sun, 12 Sep 2021 14:13:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PQPgfWoqxD3r; Sun, 12 Sep 2021 14:13:37 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Jv50nhHGJz61; Sun, 12 Sep 2021 14:13:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0F879404CF;
-	Sun, 12 Sep 2021 14:13:36 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5AAF71BF471
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7E86C605FF;
+	Sun, 12 Sep 2021 14:13:49 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id EE9DD1BF471
  for <buildroot@lists.busybox.net>; Sun, 12 Sep 2021 14:11:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4A8F8825C6
+ by smtp2.osuosl.org (Postfix) with ESMTP id DE12D4014E
  for <buildroot@lists.busybox.net>; Sun, 12 Sep 2021 14:11:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RwsHXmgQF3iW for <buildroot@lists.busybox.net>;
- Sun, 12 Sep 2021 14:11:55 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id oXnsAvS91k3c for <buildroot@lists.busybox.net>;
+ Sun, 12 Sep 2021 14:11:57 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
- [IPv6:2a00:1450:4864:20::330])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5A088825BF
- for <buildroot@buildroot.org>; Sun, 12 Sep 2021 14:11:55 +0000 (UTC)
-Received: by mail-wm1-x330.google.com with SMTP id e26so4724013wmk.2
- for <buildroot@buildroot.org>; Sun, 12 Sep 2021 07:11:55 -0700 (PDT)
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
+ [IPv6:2a00:1450:4864:20::434])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id CE8624013A
+ for <buildroot@buildroot.org>; Sun, 12 Sep 2021 14:11:56 +0000 (UTC)
+Received: by mail-wr1-x434.google.com with SMTP id g16so10437195wrb.3
+ for <buildroot@buildroot.org>; Sun, 12 Sep 2021 07:11:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=709aJS16xQMro/eHu2OFGTUsozw/HhNklhHxQfj2hTs=;
- b=ZByH/p3/kVuhH7wuU7G5EGBRqKAC2cjh/iZx2MWDDlS3WGMgdSoH6+bG0a2hG+/U6q
- 1h4Kl6zmvMBqQIDpu1CfbtTa6pGqxM0xJHGlML/PMiUteYavxkYegE+2vEOTNCnf/JOo
- y3LD9kA05Uf/j6HsRwYF06jLZ3a7Y5oGnG9uxh5H8npqX3qwtSdJ87FoKYQL83iM3ki1
- B5M6pqcINVRoFh4vuAzIvwL0C4t1pH1mUrz+zD5YAL/sbYp3MDFA3w1DjfBw36sXrEzG
- mSz00JZYcf1Fa5eexPA0AVQlZXWB83U8wZ99vk5O0aq5adRyUlUT2XzvqXJ3kBftmo/t
- dDUg==
+ bh=lbrMuwyooZ5bh7+x/0ZA0hsDVq+84YD9v62/JspZElA=;
+ b=kxgrHQH0rArxnDPCt5JYH0T4wElyO1wmgk0bS878t4AXSUunDyL7gLni/8kYlPwDoD
+ 4vwgDzqMixWR3RZYQwq+Yut/7KatBIhZrGjwTpk7rjBszqGrf2VYnfRFOljX9Yrr9nF4
+ JHolwZoeAq1ecCx20TcuAb3h2Y8igHDPsH7xltGv2YXpEKpRPnJQUzYD0PvqIUmKzWXc
+ lTKS80Ct9sJ6zojdhEv+nvrrYZiFFCFUe4DB696r0w3uTo72WW6XI7Yt2u5HXXPkBDgE
+ jj++QDTN1A3vqmfTrAygu7JqBpM9eKfgeHeSIv7XePJadqNlOLh8bQupP0eA8ZfSUowB
+ PK1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
  :references:mime-version:content-transfer-encoding;
- bh=709aJS16xQMro/eHu2OFGTUsozw/HhNklhHxQfj2hTs=;
- b=if+ZnzsMWSQ2iZQWzErXTD5BAfHtcPo+BPCi9VtHdDE9kAlxyBVqf9wY8v3Eq3UuYF
- PqT2Gxj2nxT8ruVaGjXkdnUgUEk95R1JFMxn0DZ/tsjxhtuDcYNAwpo/joYGDjDas0fL
- djBq9jDuTU1eBJT1Tdkfo+GYswRLwejhXA/mZtnDESNUCgLWurb86EZk8bokqzUjdE54
- TZua77eoU9myanpMT+rP1lLQRbnnCAmvkCMXnT8JkcnV5Sy6WvNNBQQWccxHWjGsN4xo
- Qd3sQV9cjZv/6phDRmBVxr9CY/qyrSlIeWPag2mICA+2eKUa5QktUHbXiNmYvJCM7XjQ
- WrAA==
-X-Gm-Message-State: AOAM532U2GFhsNlq6arg9jpVKLMNogbnGP9TUj8Lm2P1AbUXkRUSIbC+
- xvg6oqiNUkjRpFh9nUz7P5cpn6E4BRQ=
-X-Google-Smtp-Source: ABdhPJyU7ml0rARspBUmAG5dc4XYP2CVU8lIU3hnPvKzZvmUrRKcP076t/LiVKFBvFcoeREHb+1utw==
-X-Received: by 2002:a1c:3184:: with SMTP id x126mr6689692wmx.123.1631455913556; 
- Sun, 12 Sep 2021 07:11:53 -0700 (PDT)
+ bh=lbrMuwyooZ5bh7+x/0ZA0hsDVq+84YD9v62/JspZElA=;
+ b=q5GVHmOD4K+hjj9XngAIlDi9uPEMApOEu8jz29UgxMAbEaxzQRSv/z2/7tqqiDnqku
+ 6OL/uinOKnPW+yurOroIQbzWurWpMNS+fspJ4W+b/EYI1XKbXSviEY6tCetnWjS/UfQZ
+ wgMgSEAhZnmvUJ2Yt2XuTDcMrGK16oaqoemEAmq7lLsCC7Oyy+Z2sl3uEK7//5zimpN2
+ Rt2+dwE3c0FJ6BSmNbu3NJuhlcY/2yV3DqBtzyfqG+MOPoCG+eK414sMQjNZOn9lbyKo
+ CZxMGJnLeCs+vpFClhwyUTfW5GEJnzRJhxXsfOTX3m53BH3+mO67+IjQqOYYpL0Kmhnt
+ eVWg==
+X-Gm-Message-State: AOAM532MlRTPbnhuiJohD+rHkitiCqKhH9THVWlgY0obzfK6SE2TDjc/
+ mRIkezUACqyEtHKm5CTKmiZnXzJKWS0=
+X-Google-Smtp-Source: ABdhPJwm/WZbsPAFxxXO+TSf+j3OAN1jAWHMlOyISbrgquxK8WOK1LR4d7hzZw++A0GFudJ5wssxdQ==
+X-Received: by 2002:adf:90cc:: with SMTP id i70mr7699451wri.408.1631455915142; 
+ Sun, 12 Sep 2021 07:11:55 -0700 (PDT)
 Received: from localhost.localdomain
  (2a01cb058f8a180022164e4eb697b4ce.ipv6.abo.wanadoo.fr.
  [2a01:cb05:8f8a:1800:2216:4e4e:b697:b4ce])
- by smtp.gmail.com with ESMTPSA id i5sm4570062wrc.86.2021.09.12.07.11.52
+ by smtp.gmail.com with ESMTPSA id i5sm4570062wrc.86.2021.09.12.07.11.53
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 12 Sep 2021 07:11:53 -0700 (PDT)
+ Sun, 12 Sep 2021 07:11:54 -0700 (PDT)
 From: Romain Naour <romain.naour@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 12 Sep 2021 16:11:36 +0200
-Message-Id: <20210912141140.253778-10-romain.naour@gmail.com>
+Date: Sun, 12 Sep 2021 16:11:37 +0200
+Message-Id: <20210912141140.253778-11-romain.naour@gmail.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210912141140.253778-1-romain.naour@gmail.com>
 References: <20210912141140.253778-1-romain.naour@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 12/16] package/qemu: bump to version 6.1.0
+Subject: [Buildroot] [PATCH 13/16] support/testing: test_ubi: reduce the
+ rootfs.ubi size to 64M to match the Qemu emulated flash device
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -107,484 +108,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-Remove upstream patches.
-Drop 0003-meson-add-tests-option.patch and disable the fp-bench build by default [1]
+The size of the cfi flash device emulated by Qemu is 64M not 128M [1].
+Since Qemu >= 4.0, the size of the device must match the size of the block backend [2].
 
-Qemu now requires at least gcc 7.x to build.
+Fixes:
 
-Disable optional dependency for eBPF RSS loader.
+  qemu-system-arm: device requires 67108864 bytes, block backend provides 134217728 bytes
 
-See:
-https://wiki.qemu.org/ChangeLog/6.1#Build_Information
-
-[1] https://lists.nongnu.org/archive/html/qemu-devel/2021-03/msg00947.html
+[1] https://git.qemu.org/?p=qemu.git;a=blob;f=hw/arm/vexpress.c;h=58481c07629aedb09864dcc72757ff7947e733bb;hb=f9baca549e44791be0dd98de15add3d8452a8af0#l50
+[2] https://git.qemu.org/?p=qemu.git;a=commitdiff;h=06f1521795207359a395996c253c306f4ab7586e
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
-This version bump will break test_ubi since it requires qemu 2.8.0 to pass (due to a qemu bug).
-The test will be updated/fixed in the follow-up commits.
----
- .../0002-Fix-build-with-64-bits-time_t.patch  | 98 -------------------
- ...fp-disable-fp-bench-build-by-default.patch | 28 ++++++
- ....c-fix-fuse-lseek-on-uclibc-or-musl.patch} |  0
- .../qemu/0003-meson-add-tests-option.patch    | 94 ------------------
- .../0004-Makefile-ignore-long-options.patch   | 41 --------
- ...5-block-export-fuse.c-fix-musl-build.patch | 46 ---------
- package/qemu/Config.in                        |  6 +-
- package/qemu/Config.in.host                   |  5 +-
- package/qemu/qemu.hash                        |  2 +-
- package/qemu/qemu.mk                          |  6 +-
- 10 files changed, 37 insertions(+), 289 deletions(-)
- delete mode 100644 package/qemu/0002-Fix-build-with-64-bits-time_t.patch
- create mode 100644 package/qemu/0002-tests-fp-disable-fp-bench-build-by-default.patch
- rename package/qemu/{0006-block-export-fuse.c-fix-fuse-lseek-on-uclibc-or-musl.patch => 0003-block-export-fuse.c-fix-fuse-lseek-on-uclibc-or-musl.patch} (100%)
- delete mode 100644 package/qemu/0003-meson-add-tests-option.patch
- delete mode 100644 package/qemu/0004-Makefile-ignore-long-options.patch
- delete mode 100644 package/qemu/0005-block-export-fuse.c-fix-musl-build.patch
+ support/testing/tests/fs/test_ubi.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/qemu/0002-Fix-build-with-64-bits-time_t.patch b/package/qemu/0002-Fix-build-with-64-bits-time_t.patch
-deleted file mode 100644
-index 934c0e28fd..0000000000
---- a/package/qemu/0002-Fix-build-with-64-bits-time_t.patch
-+++ /dev/null
-@@ -1,98 +0,0 @@
--From 839e51aa452345b440f8d2d0df84ab58bdedfcd1 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sat, 14 Nov 2020 21:54:17 +0100
--Subject: [PATCH] Fix build with 64 bits time_t
--
--time element is deprecated on new input_event structure in kernel's
--input.h [1]
--
--This will avoid the following build failure:
--
--hw/input/virtio-input-host.c: In function 'virtio_input_host_handle_status':
--hw/input/virtio-input-host.c:198:28: error: 'struct input_event' has no member named 'time'
--  198 |     if (gettimeofday(&evdev.time, NULL)) {
--      |                            ^
--
--Fixes:
-- - http://autobuild.buildroot.org/results/a538167e288c14208d557cd45446df86d3d599d5
-- - http://autobuild.buildroot.org/results/efd4474fb4b6c0ce0ab3838ce130429c51e43bbb
--
--[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit?id=152194fe9c3f
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- contrib/vhost-user-input/main.c | 10 +++++++++-
-- hw/input/virtio-input-host.c    | 10 +++++++++-
-- 2 files changed, 18 insertions(+), 2 deletions(-)
--
--diff --git a/contrib/vhost-user-input/main.c b/contrib/vhost-user-input/main.c
--index 6020c6f33a..e688c3e0a9 100644
----- a/contrib/vhost-user-input/main.c
--+++ b/contrib/vhost-user-input/main.c
--@@ -15,6 +15,11 @@
-- #include "standard-headers/linux/virtio_input.h"
-- #include "qapi/error.h"
-- 
--+#ifndef input_event_sec
--+#define input_event_sec time.tv_sec
--+#define input_event_usec time.tv_usec
--+#endif
--+
-- enum {
--     VHOST_USER_INPUT_MAX_QUEUES = 2,
-- };
--@@ -113,13 +118,16 @@ vi_evdev_watch(VuDev *dev, int condition, void *data)
-- static void vi_handle_status(VuInput *vi, virtio_input_event *event)
-- {
--     struct input_event evdev;
--+    struct timeval tval;
--     int rc;
-- 
---    if (gettimeofday(&evdev.time, NULL)) {
--+    if (gettimeofday(&tval, NULL)) {
--         perror("vi_handle_status: gettimeofday");
--         return;
--     }
-- 
--+    evdev.input_event_sec = tval.tv_sec;
--+    evdev.input_event_usec = tval.tv_usec;
--     evdev.type = le16toh(event->type);
--     evdev.code = le16toh(event->code);
--     evdev.value = le32toh(event->value);
--diff --git a/hw/input/virtio-input-host.c b/hw/input/virtio-input-host.c
--index 85daf73f1a..2e261737e1 100644
----- a/hw/input/virtio-input-host.c
--+++ b/hw/input/virtio-input-host.c
--@@ -16,6 +16,11 @@
-- #include <sys/ioctl.h>
-- #include "standard-headers/linux/input.h"
-- 
--+#ifndef input_event_sec
--+#define input_event_sec time.tv_sec
--+#define input_event_usec time.tv_usec
--+#endif
--+
-- /* ----------------------------------------------------------------- */
-- 
-- static struct virtio_input_config virtio_input_host_config[] = {
--@@ -193,13 +198,16 @@ static void virtio_input_host_handle_status(VirtIOInput *vinput,
-- {
--     VirtIOInputHost *vih = VIRTIO_INPUT_HOST(vinput);
--     struct input_event evdev;
--+    struct timeval tval;
--     int rc;
-- 
---    if (gettimeofday(&evdev.time, NULL)) {
--+    if (gettimeofday(&tval, NULL)) {
--         perror("virtio_input_host_handle_status: gettimeofday");
--         return;
--     }
-- 
--+    evdev.input_event_sec = tval.tv_sec;
--+    evdev.input_event_usec = tval.tv_usec;
--     evdev.type = le16_to_cpu(event->type);
--     evdev.code = le16_to_cpu(event->code);
--     evdev.value = le32_to_cpu(event->value);
---- 
--2.29.2
--
-diff --git a/package/qemu/0002-tests-fp-disable-fp-bench-build-by-default.patch b/package/qemu/0002-tests-fp-disable-fp-bench-build-by-default.patch
-new file mode 100644
-index 0000000000..9bc8d43d59
---- /dev/null
-+++ b/package/qemu/0002-tests-fp-disable-fp-bench-build-by-default.patch
-@@ -0,0 +1,28 @@
-+From f82238299d3c4cd23ca60cfc0cf4271f5c860873 Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@gmail.com>
-+Date: Wed, 25 Aug 2021 21:55:53 +0200
-+Subject: [PATCH] tests/fp: disable fp-bench build by default
-+
-+Fixes:
-+https://lists.nongnu.org/archive/html/qemu-devel/2021-03/msg00947.html
-+
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ tests/fp/meson.build | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/tests/fp/meson.build b/tests/fp/meson.build
-+index 07e2cdc8d2..c96460b7f1 100644
-+--- a/tests/fp/meson.build
-++++ b/tests/fp/meson.build
-+@@ -631,6 +631,7 @@ fpbench = executable(
-+   dependencies: [qemuutil],
-+   include_directories: [sfinc, include_directories(tfdir)],
-+   c_args: fpcflags,
-++  build_by_default: false,
-+ )
-+ 
-+ fptestlog2 = executable(
-+-- 
-+2.31.1
-+
-diff --git a/package/qemu/0006-block-export-fuse.c-fix-fuse-lseek-on-uclibc-or-musl.patch b/package/qemu/0003-block-export-fuse.c-fix-fuse-lseek-on-uclibc-or-musl.patch
-similarity index 100%
-rename from package/qemu/0006-block-export-fuse.c-fix-fuse-lseek-on-uclibc-or-musl.patch
-rename to package/qemu/0003-block-export-fuse.c-fix-fuse-lseek-on-uclibc-or-musl.patch
-diff --git a/package/qemu/0003-meson-add-tests-option.patch b/package/qemu/0003-meson-add-tests-option.patch
-deleted file mode 100644
-index b52a7aaf2f..0000000000
---- a/package/qemu/0003-meson-add-tests-option.patch
-+++ /dev/null
-@@ -1,94 +0,0 @@
--From c24f6cc8f847a4f90cd8fe0f94604862c5ac4a5e Mon Sep 17 00:00:00 2001
--From: Romain Naour <romain.naour@gmail.com>
--Date: Mon, 21 Dec 2020 22:12:14 +0100
--Subject: [PATCH] meson: add tests option
--
--tests/fp/fp-bench.c use fenv.h that is not always provided
--by the libc (uClibc).
--
--To workaround this issue, add an new meson option to
--disable tests while building Qemu.
--
--Fixes:
--http://autobuild.buildroot.net/results/53f5d8baa994d599b9da013ee643b82353366ec3/build-end.log
--
--Signed-off-by: Romain Naour <romain.naour@gmail.com>
--Signed-off-by: Adam Duskett <aduskett@gmail.com>
--Refresh for 6.0.0
-----
-- configure         | 7 +++++++
-- meson.build       | 5 ++++-
-- meson_options.txt | 2 ++
-- 3 files changed, 13 insertions(+), 1 deletion(-)
--
--diff --git a/configure b/configure
--index 18c26e0389..7cceae4418 100755
----- a/configure
--+++ b/configure
--@@ -460,6 +460,7 @@ meson=""
-- ninja=""
-- skip_meson=no
-- gettext="auto"
--+tests="auto"
-- fuse="auto"
-- fuse_lseek="auto"
-- multiprocess="auto"
--@@ -1549,6 +1550,10 @@ for opt do
--   ;;
--   --disable-libdaxctl) libdaxctl=no
--   ;;
--+  --disable-tests) tests="disabled"
--+  ;;
--+  --enable-tests) tests="enabled"
--+  ;;
--   --enable-fuse) fuse="enabled"
--   ;;
--   --disable-fuse) fuse="disabled"
--@@ -1915,6 +1920,7 @@ disabled with --disable-FEATURE, default is enabled if available
--   xkbcommon       xkbcommon support
--   rng-none        dummy RNG, avoid using /dev/(u)random and getrandom()
--   libdaxctl       libdaxctl support
--+  tests           build tests
--   fuse            FUSE block device export
--   fuse-lseek      SEEK_HOLE/SEEK_DATA support for FUSE exports
--   multiprocess    Out of process device emulation support
--@@ -6422,6 +6428,7 @@ NINJA=$ninja $meson setup \
--         -Dzstd=$zstd -Dseccomp=$seccomp -Dvirtfs=$virtfs -Dcap_ng=$cap_ng \
--         -Dattr=$attr -Ddefault_devices=$default_devices \
--         -Ddocs=$docs -Dsphinx_build=$sphinx_build -Dinstall_blobs=$blobs \
--+        -Dtests=$tests \
--         -Dvhost_user_blk_server=$vhost_user_blk_server -Dmultiprocess=$multiprocess \
--         -Dfuse=$fuse -Dfuse_lseek=$fuse_lseek -Dguest_agent_msi=$guest_agent_msi \
--         $(if test "$default_features" = no; then echo "-Dauto_features=disabled"; fi) \
--diff --git a/meson.build b/meson.build
--index e3386196ba..7f4efdc347 100644
----- a/meson.build
--+++ b/meson.build
--@@ -2381,7 +2381,10 @@ subdir('scripts')
-- subdir('tools')
-- subdir('pc-bios')
-- subdir('docs')
---subdir('tests')
--+if get_option('tests').enabled()
--+  subdir('tests')
--+endif
--+
-- if gtk.found()
--   subdir('po')
-- endif
--diff --git a/meson_options.txt b/meson_options.txt
--index f6f64785fe..81bffbfe87 100644
----- a/meson_options.txt
--+++ b/meson_options.txt
--@@ -111,6 +111,8 @@ option('fuse_lseek', type : 'feature', value : 'auto',
-- 
-- option('vhost_user_blk_server', type: 'feature', value: 'auto',
--        description: 'build vhost-user-blk server')
--+option('tests', type : 'feature', value : 'auto',
--+       description: 'Tests build support')
-- option('virtfs', type: 'feature', value: 'auto',
--        description: 'virtio-9p support')
-- option('virtiofsd', type: 'feature', value: 'auto',
---- 
--2.29.2
--
-diff --git a/package/qemu/0004-Makefile-ignore-long-options.patch b/package/qemu/0004-Makefile-ignore-long-options.patch
-deleted file mode 100644
-index 2d14b70c03..0000000000
---- a/package/qemu/0004-Makefile-ignore-long-options.patch
-+++ /dev/null
-@@ -1,41 +0,0 @@
--From 14833e24dea49303ebc2464813601054b6cdfcac Mon Sep 17 00:00:00 2001
--From: Alexey Neyman <stilor@att.net>
--Date: Wed, 21 Jul 2021 19:08:46 -0700
--Subject: [PATCH] Makefile: ignore long options
--
--When searching for options like -n in MAKEFLAGS, current code may result
--in a false positive match when make is invoked with long options like
----no-print-directory. This has been observed with certain versions of
--host make (e.g. 3.82) while building the Qemu package in buildroot.
--
--Filter out such long options before searching for one-character options.
--
--Signed-off-by: Alexey Neyman <stilor@att.net>
--Message-Id: <20210722020846.3678817-1-stilor@att.net>
--Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-----
-- Makefile | 8 +++++---
-- 1 file changed, 5 insertions(+), 3 deletions(-)
--
--diff --git a/Makefile b/Makefile
--index 6c36330eef..401c623a65 100644
----- a/Makefile
--+++ b/Makefile
--@@ -129,9 +129,11 @@ endif
-- # 4. Rules to bridge to other makefiles
-- 
-- ifneq ($(NINJA),)
---MAKE.n = $(findstring n,$(firstword $(MAKEFLAGS)))
---MAKE.k = $(findstring k,$(firstword $(MAKEFLAGS)))
---MAKE.q = $(findstring q,$(firstword $(MAKEFLAGS)))
--+# Filter out long options to avoid flags like --no-print-directory which
--+# may result in false positive match for MAKE.n
--+MAKE.n = $(findstring n,$(firstword $(filter-out --%,$(MAKEFLAGS))))
--+MAKE.k = $(findstring k,$(firstword $(filter-out --%,$(MAKEFLAGS))))
--+MAKE.q = $(findstring q,$(firstword $(filter-out --%,$(MAKEFLAGS))))
-- MAKE.nq = $(if $(word 2, $(MAKE.n) $(MAKE.q)),nq)
-- NINJAFLAGS = $(if $V,-v) $(if $(MAKE.n), -n) $(if $(MAKE.k), -k0) \
--         $(filter-out -j, $(lastword -j1 $(filter -l% -j%, $(MAKEFLAGS)))) \
---- 
--2.27.0
--
-diff --git a/package/qemu/0005-block-export-fuse.c-fix-musl-build.patch b/package/qemu/0005-block-export-fuse.c-fix-musl-build.patch
-deleted file mode 100644
-index 0da6b3ff73..0000000000
---- a/package/qemu/0005-block-export-fuse.c-fix-musl-build.patch
-+++ /dev/null
-@@ -1,46 +0,0 @@
--From 4d5280c066eb46a31556044fb52c2618928b0019 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Mon, 9 Aug 2021 10:04:07 +0200
--Subject: [PATCH] block/export/fuse.c: fix musl build
--
--Fix the following build failure on musl raised since version 6.0.0 and
--https://gitlab.com/qemu-project/qemu/-/commit/4ca37a96a75aafe7a37ba51ab1912b09b7190a6b
--because musl does not define FALLOC_FL_ZERO_RANGE:
--
--../block/export/fuse.c: In function 'fuse_fallocate':
--../block/export/fuse.c:563:23: error: 'FALLOC_FL_ZERO_RANGE' undeclared (first use in this function)
--  563 |     } else if (mode & FALLOC_FL_ZERO_RANGE) {
--      |                       ^~~~~~~~~~~~~~~~~~~~
--
--Fixes:
-- - http://autobuild.buildroot.org/results/b96e3d364fd1f8bbfb18904a742e73327d308f64
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: sent to qemu-devel@nongnu.org]
-----
-- block/export/fuse.c | 2 ++
-- 1 file changed, 2 insertions(+)
--
--diff --git a/block/export/fuse.c b/block/export/fuse.c
--index ada9e263eb..07e31129a6 100644
----- a/block/export/fuse.c
--+++ b/block/export/fuse.c
--@@ -635,6 +635,7 @@ static void fuse_fallocate(fuse_req_t req, fuse_ino_t inode, int mode,
--             offset += size;
--             length -= size;
--         } while (ret == 0 && length > 0);
--+#ifdef FALLOC_FL_ZERO_RANGE
--     } else if (mode & FALLOC_FL_ZERO_RANGE) {
--         if (!(mode & FALLOC_FL_KEEP_SIZE) && offset + length > blk_len) {
--             /* No need for zeroes, we are going to write them ourselves */
--@@ -654,6 +655,7 @@ static void fuse_fallocate(fuse_req_t req, fuse_ino_t inode, int mode,
--             offset += size;
--             length -= size;
--         } while (ret == 0 && length > 0);
--+#endif
--     } else if (!mode) {
--         /* We can only fallocate at the EOF with a truncate */
--         if (offset < blk_len) {
---- 
--2.30.2
--
-diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-index 391fd5faaf..763550dbd6 100644
---- a/package/qemu/Config.in
-+++ b/package/qemu/Config.in
-@@ -5,14 +5,16 @@ config BR2_PACKAGE_QEMU_ARCH_SUPPORTS_TARGET
- 		|| BR2_x86_64 || BR2_arm \
- 		|| BR2_powerpc64 || BR2_powerpc64le
+diff --git a/support/testing/tests/fs/test_ubi.py b/support/testing/tests/fs/test_ubi.py
+index 7321f83da9..8148e5f336 100644
+--- a/support/testing/tests/fs/test_ubi.py
++++ b/support/testing/tests/fs/test_ubi.py
+@@ -25,7 +25,7 @@ class TestUbi(infra.basetest.BRTest):
+         out = out.splitlines()
+         self.assertIn("UBI image, version 1", out[0])
  
--comment "QEMU requires a toolchain with wchar, threads"
-+comment "QEMU requires a toolchain with wchar, threads, gcc >= 7"
- 	depends on BR2_PACKAGE_QEMU_ARCH_SUPPORTS_TARGET
- 	depends on BR2_USE_MMU
--	depends on !(BR2_TOOLCHAIN_HAS_THREADS && BR2_USE_WCHAR)
-+	depends on !(BR2_TOOLCHAIN_HAS_THREADS && BR2_USE_WCHAR) || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_7
+-        subprocess.call(["truncate", "-s 128M", img])
++        subprocess.call(["truncate", "-s 64M", img])
  
- config BR2_PACKAGE_QEMU
- 	bool "QEMU"
- 	depends on BR2_PACKAGE_QEMU_ARCH_SUPPORTS_TARGET
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_WCHAR # gettext
- 	depends on BR2_USE_MMU # fork()
-diff --git a/package/qemu/Config.in.host b/package/qemu/Config.in.host
-index fedf90d8b7..a5b38c081b 100644
---- a/package/qemu/Config.in.host
-+++ b/package/qemu/Config.in.host
-@@ -37,6 +37,7 @@ config BR2_PACKAGE_HOST_QEMU_USER_ARCH_SUPPORTS
- config BR2_PACKAGE_HOST_QEMU
- 	bool "host qemu"
- 	depends on BR2_PACKAGE_HOST_QEMU_SYSTEM_ARCH_SUPPORTS || BR2_PACKAGE_HOST_QEMU_USER_ARCH_SUPPORTS
-+	depends on BR2_HOST_GCC_AT_LEAST_7
- 	select BR2_PACKAGE_HOST_QEMU_LINUX_USER_MODE \
- 		if !BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE && BR2_PACKAGE_HOST_QEMU_USER_ARCH_SUPPORTS
- 	select BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE \
-@@ -93,11 +94,7 @@ config BR2_PACKAGE_HOST_QEMU_VIRTFS
- 
- config BR2_PACKAGE_HOST_QEMU_USB
- 	bool "USB passthrough support"
--	depends on BR2_HOST_GCC_AT_LEAST_4_9 # host-libusb
- 	help
- 	  Enables USB passthrough support from guest to host.
- 
--comment "USB passthrough support needs a toolchain w/ host gcc >= 4.9"
--	depends on !BR2_HOST_GCC_AT_LEAST_4_9
--
- endif
-diff --git a/package/qemu/qemu.hash b/package/qemu/qemu.hash
-index 5e873791b8..0613fce493 100644
---- a/package/qemu/qemu.hash
-+++ b/package/qemu/qemu.hash
-@@ -1,4 +1,4 @@
- # Locally computed, tarball verified with GPG signature
--sha256  87bc1a471ca24b97e7005711066007d443423d19aacda3d442558ae032fa30b9  qemu-6.0.0.tar.xz
-+sha256  eebc089db3414bbeedf1e464beda0a7515aad30f73261abc246c9b27503a3c96  qemu-6.1.0.tar.xz
- sha256  6f04ae8364d0079a192b14635f4b1da294ce18724c034c39a6a41d1b09df6100  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 520618cd55..95f3dfe54f 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--QEMU_VERSION = 6.0.0
-+QEMU_VERSION = 6.1.0
- QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.xz
- QEMU_SITE = http://download.qemu.org
- QEMU_LICENSE = GPL-2.0, LGPL-2.1, MIT, BSD-3-Clause, BSD-2-Clause, Others/BSD-1c
-@@ -186,6 +186,7 @@ define QEMU_CONFIGURE_CMDS
- 			--enable-kvm \
- 			--enable-attr \
- 			--enable-vhost-net \
-+			--disable-bpf \
- 			--disable-bsd-user \
- 			--disable-containers \
- 			--disable-xen \
-@@ -215,7 +216,6 @@ define QEMU_CONFIGURE_CMDS
- 			--disable-opengl \
- 			--disable-vhost-user-blk-server \
- 			--disable-virtiofsd \
--			--disable-tests \
- 			$(QEMU_OPTS)
- endef
- 
-@@ -351,6 +351,7 @@ define HOST_QEMU_CONFIGURE_CMDS
- 		--extra-ldflags="$(HOST_LDFLAGS)" \
- 		--meson=$(HOST_DIR)/bin/meson \
- 		--ninja=$(HOST_DIR)/bin/ninja \
-+		--disable-bpf \
- 		--disable-bzip2 \
- 		--disable-containers \
- 		--disable-curl \
-@@ -362,7 +363,6 @@ define HOST_QEMU_CONFIGURE_CMDS
- 		--disable-vnc-jpeg \
- 		--disable-vnc-png \
- 		--disable-vnc-sasl \
--		--disable-tests \
- 		$(HOST_QEMU_OPTS)
- endef
- 
+         self.emulator.boot(arch="armv7",
+                            kernel="builtin",
 -- 
 2.31.1
 
