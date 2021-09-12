@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E554C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 12 Sep 2021 20:17:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A6A46C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 12 Sep 2021 20:17:29 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 4384060F6D
-	for <buildroot@archiver.kernel.org>; Sun, 12 Sep 2021 20:17:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4384060F6D
+	by mail.kernel.org (Postfix) with ESMTPS id 46F1760F6D
+	for <buildroot@archiver.kernel.org>; Sun, 12 Sep 2021 20:17:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 46F1760F6D
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1722440155;
-	Sun, 12 Sep 2021 20:17:08 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 14575404C7;
+	Sun, 12 Sep 2021 20:17:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YofnHytOpt73; Sun, 12 Sep 2021 20:17:07 +0000 (UTC)
+	with ESMTP id Lpb1cgaKd0DN; Sun, 12 Sep 2021 20:17:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 128EA404C2;
-	Sun, 12 Sep 2021 20:17:06 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 7421A1BF962
- for <buildroot@lists.busybox.net>; Sun, 12 Sep 2021 20:15:42 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0F55340281;
+	Sun, 12 Sep 2021 20:17:27 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 2B4FC1BF404
+ for <buildroot@lists.busybox.net>; Sun, 12 Sep 2021 20:15:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5A4E940433
+ by smtp2.osuosl.org (Postfix) with ESMTP id 956174025D
  for <buildroot@lists.busybox.net>; Sun, 12 Sep 2021 20:15:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Ln8VSXyy-QeO for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id m0sutAknGr-L for <buildroot@lists.busybox.net>;
  Sun, 12 Sep 2021 20:15:40 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B325E40449
+ by smtp2.osuosl.org (Postfix) with ESMTP id 97F584026F
  for <buildroot@buildroot.org>; Sun, 12 Sep 2021 20:15:40 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id B25E38A47B; Sun, 12 Sep 2021 20:13:59 +0000 (UTC)
+ id 96A6C8A47B; Sun, 12 Sep 2021 20:13:59 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 12 Sep 2021 21:56:37 +0200
+Date: Sun, 12 Sep 2021 21:34:34 +0200
 X-Git-Refname: refs/heads/2021.05.x
-X-Git-Oldrev: 28b7cc2227791e60110fe820b65aaa9817cc63b5
-X-Git-Newrev: 0a98c3f46f911c2d675adf9ee5012006f24ab660
+X-Git-Oldrev: 9613e896303e656da0aaadb47986b93dae3cd2dc
+X-Git-Newrev: 8e469e30f7caec596d9e4a6cdda6fd14ac56b623
 X-Patchwork-Hint: ignore
-Message-Id: <20210912201359.B25E38A47B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.05.x] package/swupdate: let
- buildroot handle stripping
+Message-Id: <20210912201359.96A6C8A47B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.05.x] package/bayer2rgb-neon:
+ update URL in Config.in file
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,42 +66,50 @@ List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============0580193698608439704=="
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0a98c3f46f911c2d675adf9ee5012006f24ab660
+--===============0580193698608439704==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=8e469e30f7caec596d9e4a6cdda6fd14ac56b623
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
 
-In buildroot, stripping for the target is configured and implemented
-with the global `BR2_STRIP_strip` option that drive the stripping in
-the target-finalize step.
+The URL pointing to phytec.de is obsolete and not even used by
+Buildroot.
 
-So, we explicitly disable stripping at build time for swupdate.
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 1833c710ce73a1ca67143abd3fbcee6fd5d6fcdb)
+Signed-off-by: Sébastien Szymanski <sebastien.szymanski@armadeus.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit fde22d8c7750324ab97c2bea6d1e8adad9c04251)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/swupdate/swupdate.mk | 2 +-
+ package/bayer2rgb-neon/Config.in | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
-index d96a0c2e07..b5fd97568f 100644
---- a/package/swupdate/swupdate.mk
-+++ b/package/swupdate/swupdate.mk
-@@ -13,7 +13,7 @@ SWUPDATE_LICENSE_FILES = Licenses/Exceptions Licenses/gpl-2.0.txt \
- # swupdate uses $CROSS-cc instead of $CROSS-gcc, which is not
- # available in all external toolchains, and use CC for linking. Ensure
- # TARGET_CC is used for both.
--SWUPDATE_MAKE_ENV = CC="$(TARGET_CC)" LD="$(TARGET_CC)"
-+SWUPDATE_MAKE_ENV = CC="$(TARGET_CC)" LD="$(TARGET_CC)" SKIP_STRIP=y
+diff --git a/package/bayer2rgb-neon/Config.in b/package/bayer2rgb-neon/Config.in
+index ed065c1ed7..8fd18b4fa9 100644
+--- a/package/bayer2rgb-neon/Config.in
++++ b/package/bayer2rgb-neon/Config.in
+@@ -9,7 +9,7 @@ config BR2_PACKAGE_BAYER2RGB_NEON
+ 	  to decode raw camera bayer to RGB using
+ 	  NEON hardware acceleration.
  
- # swupdate bundles its own version of mongoose (version 6.16)
+-	  https://git.phytec.de/bayer2rgb-neon/
++	  https://gitlab-ext.sigma-chemnitz.de/ensc/bayer2rgb
  
+ comment "bayer2rgb-neon needs a toolchain w/ C++, dynamic library, gcc >= 4.9"
+ 	depends on BR2_arm && BR2_ARM_CPU_HAS_NEON
+
+--===============0580193698608439704==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============0580193698608439704==--
