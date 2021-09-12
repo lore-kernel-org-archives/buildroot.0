@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 16ED5C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 12 Sep 2021 20:00:12 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BABC0C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 12 Sep 2021 20:00:23 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B491C61029
-	for <buildroot@archiver.kernel.org>; Sun, 12 Sep 2021 20:00:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B491C61029
+	by mail.kernel.org (Postfix) with ESMTPS id 8B2E361029
+	for <buildroot@archiver.kernel.org>; Sun, 12 Sep 2021 20:00:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8B2E361029
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 89EA44049C;
-	Sun, 12 Sep 2021 20:00:11 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xOq31Y9hm4vj; Sun, 12 Sep 2021 20:00:10 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D77E64047E;
-	Sun, 12 Sep 2021 20:00:09 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3F7121BF962
- for <buildroot@lists.busybox.net>; Sun, 12 Sep 2021 19:58:49 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1EEE540186
- for <buildroot@lists.busybox.net>; Sun, 12 Sep 2021 19:58:48 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 511B2401FC;
+	Sun, 12 Sep 2021 20:00:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TTgQ0GpzNkOX for <buildroot@lists.busybox.net>;
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id XENrxFlKRg39; Sun, 12 Sep 2021 20:00:22 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 71A3640186;
+	Sun, 12 Sep 2021 20:00:21 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 28FD71BF409
+ for <buildroot@lists.busybox.net>; Sun, 12 Sep 2021 19:58:50 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0693740358
+ for <buildroot@lists.busybox.net>; Sun, 12 Sep 2021 19:58:49 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TTAKmudo5O2h for <buildroot@lists.busybox.net>;
  Sun, 12 Sep 2021 19:58:47 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4E63F4025D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5A9FA4036F
  for <buildroot@buildroot.org>; Sun, 12 Sep 2021 19:58:47 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 539858A466; Sun, 12 Sep 2021 19:57:06 +0000 (UTC)
+ id 5CBBF8A43C; Sun, 12 Sep 2021 19:57:06 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 12 Sep 2021 21:28:59 +0200
+Date: Sun, 12 Sep 2021 21:33:57 +0200
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 1c5f59abf1cb29384748426b68a516ed3850add1
-X-Git-Newrev: 56b5dbe8b63ee10991413fcaca8e1f56097f99a9
+X-Git-Oldrev: 56b5dbe8b63ee10991413fcaca8e1f56097f99a9
+X-Git-Newrev: 70732789edb353bc99e6a96550b94fd7ea6e9c64
 X-Patchwork-Hint: ignore
-Message-Id: <20210912195706.539858A466@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] DEVELOPERS: add myself to
- harfbuzz package
+Message-Id: <20210912195706.5CBBF8A43C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/bayer2rgb-neon:
+ update URL in Config.in file
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,37 +66,50 @@ List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============7135010730038782453=="
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=56b5dbe8b63ee10991413fcaca8e1f56097f99a9
+--===============7135010730038782453==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=70732789edb353bc99e6a96550b94fd7ea6e9c64
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Add myself to harfbuzz package.
+The URL pointing to phytec.de is obsolete and not even used by
+Buildroot.
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Sébastien Szymanski <sebastien.szymanski@armadeus.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 8bea006e6b113de507392dc377df01c881728f73)
+(cherry picked from commit fde22d8c7750324ab97c2bea6d1e8adad9c04251)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS | 1 +
- 1 file changed, 1 insertion(+)
+ package/bayer2rgb-neon/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 5c252845a4..7018aa31b4 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1026,6 +1026,7 @@ N:	Giulio Benetti <giulio.benetti@benettiengineering.com>
- F:	package/at/
- F:	package/binutils/
- F:	package/gcc/
-+F:	package/harfbuzz/
- F:	package/libfuse3/
- F:	package/libnspr/
- F:	package/libnss/
+diff --git a/package/bayer2rgb-neon/Config.in b/package/bayer2rgb-neon/Config.in
+index ed065c1ed7..8fd18b4fa9 100644
+--- a/package/bayer2rgb-neon/Config.in
++++ b/package/bayer2rgb-neon/Config.in
+@@ -9,7 +9,7 @@ config BR2_PACKAGE_BAYER2RGB_NEON
+ 	  to decode raw camera bayer to RGB using
+ 	  NEON hardware acceleration.
+ 
+-	  https://git.phytec.de/bayer2rgb-neon/
++	  https://gitlab-ext.sigma-chemnitz.de/ensc/bayer2rgb
+ 
+ comment "bayer2rgb-neon needs a toolchain w/ C++, dynamic library, gcc >= 4.9"
+ 	depends on BR2_arm && BR2_ARM_CPU_HAS_NEON
+
+--===============7135010730038782453==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============7135010730038782453==--
