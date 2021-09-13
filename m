@@ -2,57 +2,57 @@ Return-Path: <SRS0=n+Pr=OD=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.2 required=3.0 tests=BAYES_00,DATE_IN_PAST_03_06,
+X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 22682C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 13 Sep 2021 13:45:33 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 86C2CC433FE
+	for <buildroot@archiver.kernel.org>; Mon, 13 Sep 2021 13:45:44 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id C19B861B04
-	for <buildroot@archiver.kernel.org>; Mon, 13 Sep 2021 13:45:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C19B861B04
+	by mail.kernel.org (Postfix) with ESMTPS id 5560561501
+	for <buildroot@archiver.kernel.org>; Mon, 13 Sep 2021 13:45:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5560561501
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9976D80E80;
-	Mon, 13 Sep 2021 13:45:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 30813606CF;
+	Mon, 13 Sep 2021 13:45:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vrhdbTMtwVip; Mon, 13 Sep 2021 13:45:31 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rbfg9yjhWxEo; Mon, 13 Sep 2021 13:45:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E8B2A80ED2;
-	Mon, 13 Sep 2021 13:45:30 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B430D1BF97E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7198E60704;
+	Mon, 13 Sep 2021 13:45:42 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id C0B251BF983
  for <buildroot@lists.busybox.net>; Mon, 13 Sep 2021 13:43:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B07BD400F0
+ by smtp3.osuosl.org (Postfix) with ESMTP id AD621606CF
  for <buildroot@lists.busybox.net>; Mon, 13 Sep 2021 13:43:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dZ-P-b4mXcZV for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id H_n4QvXdp3zR for <buildroot@lists.busybox.net>;
  Mon, 13 Sep 2021 13:43:22 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id CB273400C3
+ by smtp3.osuosl.org (Postfix) with ESMTP id E84C3606C6
  for <buildroot@buildroot.org>; Mon, 13 Sep 2021 13:43:22 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 2235F8A535; Mon, 13 Sep 2021 13:41:40 +0000 (UTC)
+ id 40E318A536; Mon, 13 Sep 2021 13:41:40 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 13 Sep 2021 11:34:04 +0200
+Date: Mon, 13 Sep 2021 15:25:45 +0200
 X-Git-Refname: refs/heads/2021.05.x
-X-Git-Oldrev: b27129f5dbdfc4c8c46a305d34063b3ce8525c6b
-X-Git-Newrev: afdeb5845c070e34a2b10f0add6fd0ecb490fe7e
+X-Git-Oldrev: 429048875b34ded4d8787bbf65bca57d8c535bd7
+X-Git-Newrev: 38da101b11cf086ae3ed84b397b5baf46e0967ff
 X-Patchwork-Hint: ignore
-Message-Id: <20210913134140.2235F8A535@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.05.x] package/swupdate: use
- package make install for target install
+Message-Id: <20210913134140.40E318A536@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.05.x] package/swupdate: add
+ webserver config option
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,40 +71,91 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=afdeb5845c070e34a2b10f0add6fd0ecb490fe7e
+commit: https://git.buildroot.net/buildroot/commit/?id=38da101b11cf086ae3ed84b397b5baf46e0967ff
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
 
-This ensures all tools/libraries will be properly installed.
+Since the website depends on the webserver being enabled we should
+add a config option for it and make the website depend on that.
 
-Update SWUPDATE_BUILD_CMDS param ordering for consistency.
+We should also ensure that the mongoose(webserver) config is present.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 08de8f500e6223a67df96eaf869766a97b4d039f)
+(cherry picked from commit 25b0645aa4f6a6457942b50161e7e0c05b4222d3)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/swupdate/swupdate.mk | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ package/swupdate/10-mongoose-args |  1 +
+ package/swupdate/Config.in        |  7 +++++++
+ package/swupdate/swupdate.mk      | 14 ++++++++++++++
+ 3 files changed, 22 insertions(+)
 
+diff --git a/package/swupdate/10-mongoose-args b/package/swupdate/10-mongoose-args
+new file mode 100644
+index 0000000000..d0b0f8be94
+--- /dev/null
++++ b/package/swupdate/10-mongoose-args
+@@ -0,0 +1 @@
++SWUPDATE_WEBSERVER_ARGS="-r /var/www/swupdate ${SWUPDATE_MONGOOSE_EXTRA_ARGS:--p 8080}"
+diff --git a/package/swupdate/Config.in b/package/swupdate/Config.in
+index e87f695861..188d12433a 100644
+--- a/package/swupdate/Config.in
++++ b/package/swupdate/Config.in
+@@ -59,9 +59,16 @@ config BR2_PACKAGE_SWUPDATE_CONFIG
+ 	  I you wish to use your own modified swupdate configuration
+ 	  file specify the config file location with this option.
+ 
++config BR2_PACKAGE_SWUPDATE_WEBSERVER
++	bool "swupdate webserver"
++	default y
++	help
++	  Enable update from remote using a web server on the target.
++
+ config BR2_PACKAGE_SWUPDATE_INSTALL_WEBSITE
+ 	bool "install default website"
+ 	default y
++	depends on BR2_PACKAGE_SWUPDATE_WEBSERVER
+ 	help
+ 	  Install the provided website to /var/www/swupdate.
+ 
 diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
-index 10c5f2d1f9..12dafcc1a2 100644
+index 3327596d19..6c9e110bc4 100644
 --- a/package/swupdate/swupdate.mk
 +++ b/package/swupdate/swupdate.mk
-@@ -168,11 +168,12 @@ define SWUPDATE_KCONFIG_FIXUP_CMDS
+@@ -153,6 +153,16 @@ ifeq ($(BR2_PACKAGE_LIBRSYNC),y)
+ SWUPDATE_DEPENDENCIES += librsync
+ endif
+ 
++ifeq ($(BR2_PACKAGE_SWUPDATE_WEBSERVER),y)
++define SWUPDATE_SET_WEBSERVER
++	$(call KCONFIG_ENABLE_OPT,CONFIG_WEBSERVER)
++endef
++else
++define SWUPDATE_SET_WEBSERVER
++	$(call KCONFIG_DISABLE_OPT,CONFIG_WEBSERVER)
++endef
++endif
++
+ SWUPDATE_BUILD_CONFIG = $(@D)/.config
+ 
+ SWUPDATE_KCONFIG_FILE = $(call qstrip,$(BR2_PACKAGE_SWUPDATE_CONFIG))
+@@ -173,6 +183,7 @@ define SWUPDATE_KCONFIG_FIXUP_CMDS
+ 	$(SWUPDATE_PREFER_STATIC)
+ 	$(SWUPDATE_SET_LUA_VERSION)
+ 	$(SWUPDATE_SET_SYSTEMD)
++	$(SWUPDATE_SET_WEBSERVER)
  endef
  
  define SWUPDATE_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(SWUPDATE_MAKE_ENV) $(MAKE) $(SWUPDATE_MAKE_OPTS) -C $(@D)
-+	$(TARGET_MAKE_ENV) $(SWUPDATE_MAKE_ENV) $(MAKE) -C $(@D) $(SWUPDATE_MAKE_OPTS)
+@@ -202,6 +213,9 @@ define SWUPDATE_INSTALL_COMMON
+ 		$(TARGET_DIR)/usr/lib/swupdate/conf.d
+ 	$(INSTALL) -D -m 755 package/swupdate/swupdate.sh \
+ 		$(TARGET_DIR)/usr/lib/swupdate/swupdate.sh
++	$(if $(BR2_PACKAGE_SWUPDATE_WEBSERVER), \
++		$(INSTALL) -D -m 644 package/swupdate/10-mongoose-args \
++			$(TARGET_DIR)/usr/lib/swupdate/conf.d/10-mongoose-args)
  endef
- 
- define SWUPDATE_INSTALL_TARGET_CMDS
--	$(INSTALL) -D -m 0755 $(@D)/swupdate $(TARGET_DIR)/usr/bin/swupdate
-+	$(TARGET_MAKE_ENV) $(SWUPDATE_MAKE_ENV) $(MAKE) -C $(@D) \
-+		$(SWUPDATE_MAKE_OPTS) DESTDIR=$(TARGET_DIR) install
- 	$(if $(BR2_PACKAGE_SWUPDATE_INSTALL_WEBSITE), \
- 		mkdir -p $(TARGET_DIR)/var/www/swupdate; \
- 		cp -dpfr $(@D)/examples/www/v2/* $(TARGET_DIR)/var/www/swupdate)
+ define SWUPDATE_INSTALL_INIT_SYSTEMD
+ 	$(SWUPDATE_INSTALL_COMMON)
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
