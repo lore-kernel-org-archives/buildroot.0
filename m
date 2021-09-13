@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DC238C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 13 Sep 2021 13:44:32 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 070FFC43217
+	for <buildroot@archiver.kernel.org>; Mon, 13 Sep 2021 13:44:45 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id A66A261AFE
-	for <buildroot@archiver.kernel.org>; Mon, 13 Sep 2021 13:44:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A66A261AFE
+	by mail.kernel.org (Postfix) with ESMTPS id 871B361B2F
+	for <buildroot@archiver.kernel.org>; Mon, 13 Sep 2021 13:44:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 871B361B2F
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 80AAA80EA0;
-	Mon, 13 Sep 2021 13:44:32 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 54AB240223;
+	Mon, 13 Sep 2021 13:44:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1v1oU4RvpIkp; Mon, 13 Sep 2021 13:44:31 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id tncIacY93YIR; Mon, 13 Sep 2021 13:44:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B7E9880E80;
-	Mon, 13 Sep 2021 13:44:30 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 3654E1BF378
+	by smtp2.osuosl.org (Postfix) with ESMTP id 66D6E4021E;
+	Mon, 13 Sep 2021 13:44:42 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id CC9F51BF378
  for <buildroot@lists.busybox.net>; Mon, 13 Sep 2021 13:43:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 169DA4036D
- for <buildroot@lists.busybox.net>; Mon, 13 Sep 2021 13:43:19 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id AA919400C3
+ for <buildroot@lists.busybox.net>; Mon, 13 Sep 2021 13:43:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HUQCZPyJj9M5 for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9o-d8v3neW4Z for <buildroot@lists.busybox.net>;
  Mon, 13 Sep 2021 13:43:17 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A2E0A4036C
+ by smtp2.osuosl.org (Postfix) with ESMTP id AFAFB402C4
  for <buildroot@buildroot.org>; Mon, 13 Sep 2021 13:43:17 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id E7F828A4D8; Mon, 13 Sep 2021 13:41:34 +0000 (UTC)
+ id 076048A52E; Mon, 13 Sep 2021 13:41:35 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 13 Sep 2021 15:25:49 +0200
+Date: Mon, 13 Sep 2021 15:33:15 +0200
 X-Git-Refname: refs/heads/2021.08.x
-X-Git-Oldrev: 5e1e7e0cfe203c3668e357019d11a698bf18ab79
-X-Git-Newrev: 2fb201cbec258683518fbfb3bd2cf649ae6e8f14
+X-Git-Oldrev: 73550db1d60ea62bac5e437af6bf374a6ad3a7fd
+X-Git-Newrev: 64d6e2a640ac221ec9edc1318d24d245a4344107
 X-Patchwork-Hint: ignore
-Message-Id: <20210913134134.E7F828A4D8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.08.x] package/swupdate: add
- webserver config option
+Message-Id: <20210913134135.076048A52E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.08.x]
+ package/gobject-introspection: fix --includedir
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,91 +71,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2fb201cbec258683518fbfb3bd2cf649ae6e8f14
+commit: https://git.buildroot.net/buildroot/commit/?id=64d6e2a640ac221ec9edc1318d24d245a4344107
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.08.x
 
-Since the website depends on the webserver being enabled we should
-add a config option for it and make the website depend on that.
+Set includedir to $(STAGING_DIR)/usr/share/gir-1.0 instead of . in
+Makefile.introspection or g-ir-compiler won't find .gir files resulting
+in a build failure for autotools-based based programs such as gconf
+since bump of gobject-introspection to version 1.68.0 in commit
+abc110e3624aa4e8a9bd8595b3fdc0aec60845e0:
 
-We should also ensure that the mongoose(webserver) config is present.
+Could not find GIR file 'GObject-2.0.gir'; check XDG_DATA_DIRS or use --includedir
+error parsing file GConf-2.0.gir: Failed to parse included gir GObject-2.0
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/8180d893cbd27512915a7f8a3adb232b93a98ceb
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 25b0645aa4f6a6457942b50161e7e0c05b4222d3)
+(cherry picked from commit 8dda79970661090f202e1f20e5982ba53fdaeb95)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/swupdate/10-mongoose-args |  1 +
- package/swupdate/Config.in        |  7 +++++++
- package/swupdate/swupdate.mk      | 14 ++++++++++++++
- 3 files changed, 22 insertions(+)
+ package/gobject-introspection/gobject-introspection.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/swupdate/10-mongoose-args b/package/swupdate/10-mongoose-args
-new file mode 100644
-index 0000000000..d0b0f8be94
---- /dev/null
-+++ b/package/swupdate/10-mongoose-args
-@@ -0,0 +1 @@
-+SWUPDATE_WEBSERVER_ARGS="-r /var/www/swupdate ${SWUPDATE_MONGOOSE_EXTRA_ARGS:--p 8080}"
-diff --git a/package/swupdate/Config.in b/package/swupdate/Config.in
-index f601e45fcd..6b832cfcbf 100644
---- a/package/swupdate/Config.in
-+++ b/package/swupdate/Config.in
-@@ -60,9 +60,16 @@ config BR2_PACKAGE_SWUPDATE_CONFIG
- 	  I you wish to use your own modified swupdate configuration
- 	  file specify the config file location with this option.
+diff --git a/package/gobject-introspection/gobject-introspection.mk b/package/gobject-introspection/gobject-introspection.mk
+index 81938b14df..f34dca7278 100644
+--- a/package/gobject-introspection/gobject-introspection.mk
++++ b/package/gobject-introspection/gobject-introspection.mk
+@@ -133,6 +133,12 @@ define GOBJECT_INTROSPECTION_INSTALL_WRAPPERS
  
-+config BR2_PACKAGE_SWUPDATE_WEBSERVER
-+	bool "swupdate webserver"
-+	default y
-+	help
-+	  Enable update from remote using a web server on the target.
+ 	$(SED) "s%typelibdir=.*%typelibdir=\$${prefix}/lib/girepository-1.0%g" \
+ 		$(STAGING_DIR)/usr/lib/pkgconfig/gobject-introspection-1.0.pc
 +
- config BR2_PACKAGE_SWUPDATE_INSTALL_WEBSITE
- 	bool "install default website"
- 	default y
-+	depends on BR2_PACKAGE_SWUPDATE_WEBSERVER
- 	help
- 	  Install the provided website to /var/www/swupdate.
- 
-diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
-index 256f0930ce..cf3607a661 100644
---- a/package/swupdate/swupdate.mk
-+++ b/package/swupdate/swupdate.mk
-@@ -187,6 +187,16 @@ ifeq ($(BR2_PACKAGE_LIBRSYNC),y)
- SWUPDATE_DEPENDENCIES += librsync
- endif
- 
-+ifeq ($(BR2_PACKAGE_SWUPDATE_WEBSERVER),y)
-+define SWUPDATE_SET_WEBSERVER
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_WEBSERVER)
-+endef
-+else
-+define SWUPDATE_SET_WEBSERVER
-+	$(call KCONFIG_DISABLE_OPT,CONFIG_WEBSERVER)
-+endef
-+endif
-+
- SWUPDATE_BUILD_CONFIG = $(@D)/.config
- 
- SWUPDATE_KCONFIG_FILE = $(call qstrip,$(BR2_PACKAGE_SWUPDATE_CONFIG))
-@@ -200,6 +210,7 @@ SWUPDATE_MAKE_OPTS = \
- define SWUPDATE_KCONFIG_FIXUP_CMDS
- 	$(SWUPDATE_SET_LUA_VERSION)
- 	$(SWUPDATE_SET_SYSTEMD)
-+	$(SWUPDATE_SET_WEBSERVER)
++	# Set includedir to $(STAGING_DIR)/usr/share/gir-1.0 instead of . or
++	# g-ir-compiler won't find .gir files resulting in a build failure for
++	# autotools-based based programs
++	$(SED) "s%includedir=.%includedir=$(STAGING_DIR)/usr/share/gir-1.0%g" \
++		$(STAGING_DIR)/usr/share/gobject-introspection-1.0/Makefile.introspection
  endef
+ GOBJECT_INTROSPECTION_POST_INSTALL_STAGING_HOOKS += GOBJECT_INTROSPECTION_INSTALL_WRAPPERS
  
- define SWUPDATE_BUILD_CMDS
-@@ -229,6 +240,9 @@ define SWUPDATE_INSTALL_COMMON
- 		$(TARGET_DIR)/usr/lib/swupdate/conf.d
- 	$(INSTALL) -D -m 755 package/swupdate/swupdate.sh \
- 		$(TARGET_DIR)/usr/lib/swupdate/swupdate.sh
-+	$(if $(BR2_PACKAGE_SWUPDATE_WEBSERVER), \
-+		$(INSTALL) -D -m 644 package/swupdate/10-mongoose-args \
-+			$(TARGET_DIR)/usr/lib/swupdate/conf.d/10-mongoose-args)
- endef
- define SWUPDATE_INSTALL_INIT_SYSTEMD
- 	$(SWUPDATE_INSTALL_COMMON)
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
