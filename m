@@ -2,57 +2,57 @@ Return-Path: <SRS0=n+Pr=OD=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 51B51C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 13 Sep 2021 17:48:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 20841C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 13 Sep 2021 17:48:27 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1E2DF610CC
-	for <buildroot@archiver.kernel.org>; Mon, 13 Sep 2021 17:48:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1E2DF610CC
+	by mail.kernel.org (Postfix) with ESMTPS id AF8AC60EB4
+	for <buildroot@archiver.kernel.org>; Mon, 13 Sep 2021 17:48:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org AF8AC60EB4
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D5D724014B;
-	Mon, 13 Sep 2021 17:48:13 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5E5B040275;
+	Mon, 13 Sep 2021 17:48:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KsQ-ZOvPMKGM; Mon, 13 Sep 2021 17:48:12 +0000 (UTC)
+	with ESMTP id KMLhrBTCxGw1; Mon, 13 Sep 2021 17:48:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id ED4CD400F2;
-	Mon, 13 Sep 2021 17:48:11 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D6C791BF342
- for <buildroot@lists.busybox.net>; Mon, 13 Sep 2021 17:47:13 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 637B54023C;
+	Mon, 13 Sep 2021 17:48:24 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 09F471BF97E
+ for <buildroot@lists.busybox.net>; Mon, 13 Sep 2021 17:47:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D94516074E
+ by smtp2.osuosl.org (Postfix) with ESMTP id 09B6D4013F
  for <buildroot@lists.busybox.net>; Mon, 13 Sep 2021 17:47:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mSY9FmcQqRzN for <buildroot@lists.busybox.net>;
- Mon, 13 Sep 2021 17:47:11 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pNwdob1QOQ73 for <buildroot@lists.busybox.net>;
+ Mon, 13 Sep 2021 17:47:10 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2569E60767
- for <buildroot@buildroot.org>; Mon, 13 Sep 2021 17:47:11 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id DAAED40004
+ for <buildroot@buildroot.org>; Mon, 13 Sep 2021 17:47:10 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 1268D8A58E; Mon, 13 Sep 2021 17:45:28 +0000 (UTC)
+ id BF6FE8A58D; Mon, 13 Sep 2021 17:45:27 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 13 Sep 2021 19:38:25 +0200
+Date: Mon, 13 Sep 2021 19:24:54 +0200
 X-Git-Refname: refs/heads/2021.08.x
-X-Git-Oldrev: 26243e63233afd6b619b42e0e8f9360f9ea7e18e
-X-Git-Newrev: cba48ce2ec3925afd1dfdc8c68b5a24115a03af7
+X-Git-Oldrev: aca0577bdeebc9d635b4fbe2ce461af2c154e191
+X-Git-Newrev: 20df88372e8f127b9e93df05fd98383b5c166734
 X-Patchwork-Hint: ignore
-Message-Id: <20210913174528.1268D8A58E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.08.x] package/uboot-tools: fix
- MKIMAGE_ARCH handling
+Message-Id: <20210913174527.BF6FE8A58D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.08.x] toolchain: reorder gcc
+ bugs by number
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,88 +71,51 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cba48ce2ec3925afd1dfdc8c68b5a24115a03af7
+commit: https://git.buildroot.net/buildroot/commit/?id=20df88372e8f127b9e93df05fd98383b5c166734
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.08.x
 
-Fix MKIMAGE_ARCH handling to avoid the following build failure:
+Reorder gcc bugs by number
 
-/home/buildroot/autobuild/instance-0/output-1/build/host-uboot-tools-2021.07/tools/mkimage -C none -A openrisc -T script -d /home/buildroot/autobuild/instance-0/output-1/boot_script.txt /home/buildroot/autobuild/instance-0/output-1/build/host-uboot-tools-2021.07/tools/boot.scr
-
-Invalid architecture, supported are:
-	alpha            Alpha
-	arc              ARC
-	arm              ARM
-	arm64            AArch64
-	avr32            AVR32
-	blackfin         Blackfin
-	ia64             IA64
-	invalid          Invalid ARCH
-	m68k             M68K
-	microblaze       MicroBlaze
-	mips             MIPS
-	mips64           MIPS 64 Bit
-	nds32            NDS32
-	nios2            NIOS II
-	or1k             OpenRISC 1000
-	powerpc          PowerPC
-	riscv            RISC-V
-	s390             IBM S390
-	sandbox          Sandbox
-	sh               SuperH
-	sparc            SPARC
-	sparc64          SPARC 64 Bit
-	x86              Intel x86
-	x86_64           AMD x86_64
-	xtensa           Xtensa
-
-Strangely enough, we only have autobuilder failures since July 2021 even
-as or1k has been used since the addition of openriscv support in 2012:
-https://github.com/u-boot/u-boot/commit/3ddcaccda3824e1c7f7266d543e4c0eb3ea9851c
-
-For x86_64, we incorrectly mangle it to x86.
-
-Finally, the comment about mips64 is wrong: mips64 *is* a valid
-archtecture, and we anyway had no code to tweak that case.
-
-Fixes:
- - http://autobuild.buildroot.org/results/c3f0f2a3fb87d74bfdaccf9b94c66f0b5bae7520
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-[yann.morin.1998@free.fr: extend commit log for mips64 and x86_64]
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 5e8804d4e433cad0c0509483e865afdba003b6fc)
+(cherry picked from commit b1e8594f0926c7867b0efbff5fafa411e54c2782)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/uboot-tools/uboot-tools.mk | 14 +++++++-------
+ toolchain/Config.in | 14 +++++++-------
  1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
-index a87956d028..81f60963ec 100644
---- a/package/uboot-tools/uboot-tools.mk
-+++ b/package/uboot-tools/uboot-tools.mk
-@@ -206,15 +206,15 @@ $(eval $(host-generic-package))
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index c0cfd1a548..af21959eff 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -186,13 +186,6 @@ config BR2_TOOLCHAIN_HAS_GCC_BUG_101737
+ 	bool
+ 	default y if BR2_sh4
  
- MKIMAGE = $(HOST_DIR)/bin/mkimage
+-# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101952
+-# ICE: on SH4: unaligned opcodes detected in executable segment.
+-# This bug still exists in gcc = 11.1.0
+-config BR2_TOOLCHAIN_HAS_GCC_BUG_101952
+-	bool
+-	default y if BR2_sh4
+-
+ # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101915
+ # ICE: in extract_insn, at recog.c:2294 on microblaze.
+ # This bug still exists in gcc = 11.1.0
+@@ -207,6 +200,13 @@ config BR2_TOOLCHAIN_HAS_GCC_BUG_101916
+ 	bool
+ 	default y if BR2_sh4
  
--# mkimage supports arm blackfin m68k microblaze mips mips64 nios2 powerpc ppc sh sparc sparc64 x86
-+# mkimage supports alpha arc arm arm64 blackfin ia64 invalid m68k microblaze mips mips64 nds32 nios2 or1k powerpc riscv s390 sandbox sh sparc sparc64 x86 x86_64 xtensa
- # KERNEL_ARCH can be arm64 arc arm blackfin m68k microblaze mips nios2 powerpc sh sparc i386 x86_64 xtensa
--# For arm64, arc, xtensa we'll just keep KERNEL_ARCH
--# For mips64, we'll just keep mips
--# For i386 and x86_64, we need to convert
--ifeq ($(KERNEL_ARCH),x86_64)
--MKIMAGE_ARCH = x86
--else ifeq ($(KERNEL_ARCH),i386)
-+# For i386, we need to convert
-+# For openrisc, we need to convert
-+# For others, we'll just keep KERNEL_ARCH
-+ifeq ($(KERNEL_ARCH),i386)
- MKIMAGE_ARCH = x86
-+else ifeq ($(KERNEL_ARCH),openrisc)
-+MKIMAGE_ARCH = or1k
- else
- MKIMAGE_ARCH = $(KERNEL_ARCH)
- endif
++# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101952
++# ICE: on SH4: unaligned opcodes detected in executable segment.
++# This bug still exists in gcc = 11.1.0
++config BR2_TOOLCHAIN_HAS_GCC_BUG_101952
++	bool
++	default y if BR2_sh4
++
+ config BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	bool
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
