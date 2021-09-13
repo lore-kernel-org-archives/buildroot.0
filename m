@@ -6,64 +6,67 @@ X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
 	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6EC7AC433EF
-	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 17:44:20 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 15301C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 17:50:28 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id C658B6058D
-	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 17:44:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C658B6058D
+	by mail.kernel.org (Postfix) with ESMTPS id 8B78960EE7
+	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 17:50:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8B78960EE7
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7BBE460715;
-	Tue, 14 Sep 2021 17:44:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 31CAE80E9E;
+	Tue, 14 Sep 2021 17:50:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id G64wCbtC2sMW; Tue, 14 Sep 2021 17:44:18 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 6t5CAf2Jndrh; Tue, 14 Sep 2021 17:50:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F0BEA606E2;
-	Tue, 14 Sep 2021 17:44:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9A1C180E84;
+	Tue, 14 Sep 2021 17:50:25 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 723191BF59F
- for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 17:44:16 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 82D761BF990
+ for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 17:50:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6EC7860687
- for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 17:44:16 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6F7A560687
+ for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 17:50:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hPGPCxH8tsv0 for <buildroot@lists.busybox.net>;
- Tue, 14 Sep 2021 17:44:15 +0000 (UTC)
+ with ESMTP id ti0kLppf8bj6 for <buildroot@lists.busybox.net>;
+ Tue, 14 Sep 2021 17:50:12 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8350B6009C
- for <buildroot@buildroot.org>; Tue, 14 Sep 2021 17:44:15 +0000 (UTC)
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C278760676
+ for <buildroot@buildroot.org>; Tue, 14 Sep 2021 17:50:11 +0000 (UTC)
+Received: from relay3-d.mail.gandi.net (unknown [217.70.183.195])
+ by mslow1.mail.gandi.net (Postfix) with ESMTP id 9E073CF352
+ for <buildroot@buildroot.org>; Tue, 14 Sep 2021 17:44:18 +0000 (UTC)
 Received: (Authenticated sender: peter@casa-korsgaard.com)
- by relay12.mail.gandi.net (Postfix) with ESMTPSA id 794A4200007
+ by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id 5C43760002
  for <buildroot@buildroot.org>; Tue, 14 Sep 2021 17:44:12 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
- (envelope-from <peter@korsgaard.com>) id 1mQCTb-00072N-Uy
+ (envelope-from <peter@korsgaard.com>) id 1mQCTb-00072B-Nu
  for buildroot@buildroot.org; Tue, 14 Sep 2021 19:44:11 +0200
 Resent-To: buildroot@buildroot.org
 Resent-From: Peter Korsgaard <peter@korsgaard.com>
 Resent-Date: Tue, 14 Sep 2021 19:44:11 +0200
-Resent-Message-ID: <87sfy7128k.fsf@dell.be.48ers.dk>
-X-From-Line: nobody Mon Sep 13 15:26:35 2021
+Resent-Message-ID: <87a6kf2gt0.fsf@dell.be.48ers.dk>
+X-From-Line: nobody Mon Sep 13 11:37:09 2021
 From: Peter Korsgaard <peter@korsgaard.com>
 To: James Hilliard <james.hilliard1@gmail.com>
 References: <20210829024632.682029-1-james.hilliard1@gmail.com>
- <20210829024632.682029-7-james.hilliard1@gmail.com>
-Date: Mon, 13 Sep 2021 15:26:35 +0200
-In-Reply-To: <20210829024632.682029-7-james.hilliard1@gmail.com> (James
- Hilliard's message of "Sat, 28 Aug 2021 20:46:31 -0600")
-Message-ID: <87zgsgzjw4.fsf@dell.be.48ers.dk>
+ <20210829024632.682029-3-james.hilliard1@gmail.com>
+Date: Mon, 13 Sep 2021 11:37:09 +0200
+In-Reply-To: <20210829024632.682029-3-james.hilliard1@gmail.com> (James
+ Hilliard's message of "Sat, 28 Aug 2021 20:46:27 -0600")
+Message-ID: <87h7eo24vu.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v2 7/8] package/swupdate: prevent systemd
- from removing swupdate tmp folders
+Subject: Re: [Buildroot] [PATCH v2 3/8] package/swupdate: use package make
+ install for target install
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,11 +87,8 @@ Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
 >>>>> "James" == James Hilliard <james.hilliard1@gmail.com> writes:
 
- > Ensure these folders are excluded from being cleaned up by systemd.
- > Fixes:
- > [ERROR] : SWUPDATE failed [0] ERROR : I cannot open /tmp/scripts/format.lua 2
- > [ERROR] : SWUPDATE failed [0] ERROR : extracting script to /tmp/scripts/ failed
- > [ERROR] : SWUPDATE failed [1] Installation failed !
+ > This ensures all tools/libraries will be properly installed.
+ > Update SWUPDATE_BUILD_CMDS param ordering for consistency.
 
  > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
