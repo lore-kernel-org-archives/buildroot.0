@@ -2,57 +2,57 @@ Return-Path: <SRS0=n+Pr=OD=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.2 required=3.0 tests=BAYES_00,DATE_IN_PAST_03_06,
+X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B04DAC433F5
-	for <buildroot@archiver.kernel.org>; Mon, 13 Sep 2021 13:43:45 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4DF1CC433EF
+	for <buildroot@archiver.kernel.org>; Mon, 13 Sep 2021 13:43:58 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2FBF961414
-	for <buildroot@archiver.kernel.org>; Mon, 13 Sep 2021 13:43:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2FBF961414
+	by mail.kernel.org (Postfix) with ESMTPS id C8B1861AEE
+	for <buildroot@archiver.kernel.org>; Mon, 13 Sep 2021 13:43:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C8B1861AEE
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BB82F4028B;
-	Mon, 13 Sep 2021 13:43:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8FDF440239;
+	Mon, 13 Sep 2021 13:43:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2W2W-fgScWMY; Mon, 13 Sep 2021 13:43:44 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id wTo_40TTM-xo; Mon, 13 Sep 2021 13:43:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F1FFF401CD;
-	Mon, 13 Sep 2021 13:43:42 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D37F81BF378
- for <buildroot@lists.busybox.net>; Mon, 13 Sep 2021 13:43:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9218A4019A;
+	Mon, 13 Sep 2021 13:43:55 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 039171BF97E
+ for <buildroot@lists.busybox.net>; Mon, 13 Sep 2021 13:43:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D063E606CF
- for <buildroot@lists.busybox.net>; Mon, 13 Sep 2021 13:43:18 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 00C6080F66
+ for <buildroot@lists.busybox.net>; Mon, 13 Sep 2021 13:43:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Oq9LIspe6m1r for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qp17OHwPjuWv for <buildroot@lists.busybox.net>;
  Mon, 13 Sep 2021 13:43:17 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 895A2606C6
+ by smtp1.osuosl.org (Postfix) with ESMTP id D5A8F80F0A
  for <buildroot@buildroot.org>; Mon, 13 Sep 2021 13:43:17 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id CDE4E8A4D8; Mon, 13 Sep 2021 13:41:34 +0000 (UTC)
+ id 281DC8A52D; Mon, 13 Sep 2021 13:41:35 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 13 Sep 2021 11:46:19 +0200
+Date: Mon, 13 Sep 2021 15:42:29 +0200
 X-Git-Refname: refs/heads/2021.08.x
-X-Git-Oldrev: 493ecbffff5239d5b07fa35c6a5ce7733335341f
-X-Git-Newrev: 14c97c3a40d10db2d33b5c74582e9e0c8fc85bee
+X-Git-Oldrev: 739dd503be92e830cdd84a19d00799a5ac7e3304
+X-Git-Newrev: aca0577bdeebc9d635b4fbe2ce461af2c154e191
 X-Patchwork-Hint: ignore
-Message-Id: <20210913134134.CDE4E8A4D8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.08.x] package/swupdate:
- enable/disable systemd support automatically
+Message-Id: <20210913134135.281DC8A52D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.08.x] package/gcc: bump version
+ 11.x to 11.2.0
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,47 +71,190 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=14c97c3a40d10db2d33b5c74582e9e0c8fc85bee
+commit: https://git.buildroot.net/buildroot/commit/?id=aca0577bdeebc9d635b4fbe2ce461af2c154e191
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.08.x
 
-This needs to be set properly so that services work correctly.
+patch 0001: already applied upstream
 
-Enable disable automatically based on BR2_PACKAGE_SYSTEMD state.
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Michael Fischer <mf@go-sys.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 85062dcefc352f96b309cb232bc931374e8ca077)
+(cherry picked from commit 35af76784f0720b0981bb0982f9a7e20b0ef2be1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/swupdate/swupdate.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ .../0001-Remove-cyclades-from-libsanitizer.patch   | 125 ---------------------
+ ...-Add-mcmodel-option-to-handle-large-GOTs.patch} |   0
+ ...-Use-cmodel-large-when-building-crtstuff.patch} |   0
+ package/gcc/Config.in.host                         |   2 +-
+ package/gcc/gcc.hash                               |   4 +-
+ 5 files changed, 3 insertions(+), 128 deletions(-)
 
-diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
-index fd0fb763c9..c9bd486127 100644
---- a/package/swupdate/swupdate.mk
-+++ b/package/swupdate/swupdate.mk
-@@ -139,6 +139,13 @@ endif
+diff --git a/package/gcc/11.1.0/0001-Remove-cyclades-from-libsanitizer.patch b/package/gcc/11.1.0/0001-Remove-cyclades-from-libsanitizer.patch
+deleted file mode 100644
+index ee6e349a6c..0000000000
+--- a/package/gcc/11.1.0/0001-Remove-cyclades-from-libsanitizer.patch
++++ /dev/null
+@@ -1,125 +0,0 @@
+-From 745dae5923aba02982563481d75a21595df22ff8 Mon Sep 17 00:00:00 2001
+-From: Tamar Christina <tamar.christina@arm.com>
+-Date: Fri, 21 May 2021 10:30:59 +0100
+-Subject: [PATCH] libsanitizer: Remove cyclades from libsanitizer
+-
+-The Linux kernel has removed the interface to cyclades from
+-the latest kernel headers[1] due to them being orphaned for the
+-past 13 years.
+-
+-libsanitizer uses this header when compiling against glibc, but
+-glibcs itself doesn't seem to have any references to cyclades.
+-
+-Further more it seems that the driver is broken in the kernel and
+-the firmware doesn't seem to be available anymore.
+-
+-As such since this is breaking the build of libsanitizer (and so the
+-GCC bootstrap[2]) I propose to remove this.
+-
+-[1] https://lkml.org/lkml/2021/3/2/153
+-[2] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=100379
+-
+-(cherry picked from commit f7c5351552387bd43f6ca3631016d7f0dfe0f135)
+-
+-libsanitizer/ChangeLog:
+-
+-	PR sanitizer/100379
+-	* sanitizer_common/sanitizer_common_interceptors_ioctl.inc: Cherry-pick
+-	llvm-project revision f7c5351552387bd43f6ca3631016d7f0dfe0f135.
+-	* sanitizer_common/sanitizer_platform_limits_posix.cpp: Likewise.
+-	* sanitizer_common/sanitizer_platform_limits_posix.h: Likewise.
+-
+-Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+----
+- .../sanitizer_common_interceptors_ioctl.inc           |  9 ---------
+- .../sanitizer_platform_limits_posix.cpp               | 11 -----------
+- .../sanitizer_platform_limits_posix.h                 | 10 ----------
+- 3 files changed, 30 deletions(-)
+-
+-diff --git a/libsanitizer/sanitizer_common/sanitizer_common_interceptors_ioctl.inc b/libsanitizer/sanitizer_common/sanitizer_common_interceptors_ioctl.inc
+-index 7f181258eab..b7da6598755 100644
+---- a/libsanitizer/sanitizer_common/sanitizer_common_interceptors_ioctl.inc
+-+++ b/libsanitizer/sanitizer_common/sanitizer_common_interceptors_ioctl.inc
+-@@ -370,15 +370,6 @@ static void ioctl_table_fill() {
+- 
+- #if SANITIZER_GLIBC
+-   // _(SIOCDEVPLIP, WRITE, struct_ifreq_sz); // the same as EQL_ENSLAVE
+--  _(CYGETDEFTHRESH, WRITE, sizeof(int));
+--  _(CYGETDEFTIMEOUT, WRITE, sizeof(int));
+--  _(CYGETMON, WRITE, struct_cyclades_monitor_sz);
+--  _(CYGETTHRESH, WRITE, sizeof(int));
+--  _(CYGETTIMEOUT, WRITE, sizeof(int));
+--  _(CYSETDEFTHRESH, NONE, 0);
+--  _(CYSETDEFTIMEOUT, NONE, 0);
+--  _(CYSETTHRESH, NONE, 0);
+--  _(CYSETTIMEOUT, NONE, 0);
+-   _(EQL_EMANCIPATE, WRITE, struct_ifreq_sz);
+-   _(EQL_ENSLAVE, WRITE, struct_ifreq_sz);
+-   _(EQL_GETMASTRCFG, WRITE, struct_ifreq_sz);
+-diff --git a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp
+-index 35a690cba5c..6e5c330b98e 100644
+---- a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp
+-+++ b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp
+-@@ -143,7 +143,6 @@ typedef struct user_fpregs elf_fpregset_t;
+- # include <sys/procfs.h>
+- #endif
+- #include <sys/user.h>
+--#include <linux/cyclades.h>
+- #include <linux/if_eql.h>
+- #include <linux/if_plip.h>
+- #include <linux/lp.h>
+-@@ -460,7 +459,6 @@ unsigned struct_ElfW_Phdr_sz = sizeof(Elf_Phdr);
+- 
+- #if SANITIZER_GLIBC
+-   unsigned struct_ax25_parms_struct_sz = sizeof(struct ax25_parms_struct);
+--  unsigned struct_cyclades_monitor_sz = sizeof(struct cyclades_monitor);
+- #if EV_VERSION > (0x010000)
+-   unsigned struct_input_keymap_entry_sz = sizeof(struct input_keymap_entry);
+- #else
+-@@ -824,15 +822,6 @@ unsigned struct_ElfW_Phdr_sz = sizeof(Elf_Phdr);
+- #endif // SANITIZER_LINUX
+- 
+- #if SANITIZER_LINUX && !SANITIZER_ANDROID
+--  unsigned IOCTL_CYGETDEFTHRESH = CYGETDEFTHRESH;
+--  unsigned IOCTL_CYGETDEFTIMEOUT = CYGETDEFTIMEOUT;
+--  unsigned IOCTL_CYGETMON = CYGETMON;
+--  unsigned IOCTL_CYGETTHRESH = CYGETTHRESH;
+--  unsigned IOCTL_CYGETTIMEOUT = CYGETTIMEOUT;
+--  unsigned IOCTL_CYSETDEFTHRESH = CYSETDEFTHRESH;
+--  unsigned IOCTL_CYSETDEFTIMEOUT = CYSETDEFTIMEOUT;
+--  unsigned IOCTL_CYSETTHRESH = CYSETTHRESH;
+--  unsigned IOCTL_CYSETTIMEOUT = CYSETTIMEOUT;
+-   unsigned IOCTL_EQL_EMANCIPATE = EQL_EMANCIPATE;
+-   unsigned IOCTL_EQL_ENSLAVE = EQL_ENSLAVE;
+-   unsigned IOCTL_EQL_GETMASTRCFG = EQL_GETMASTRCFG;
+-diff --git a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.h b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.h
+-index ad358eef8b7..cba41ba5494 100644
+---- a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.h
+-+++ b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.h
+-@@ -983,7 +983,6 @@ extern unsigned struct_vt_mode_sz;
+- 
+- #if SANITIZER_LINUX && !SANITIZER_ANDROID
+- extern unsigned struct_ax25_parms_struct_sz;
+--extern unsigned struct_cyclades_monitor_sz;
+- extern unsigned struct_input_keymap_entry_sz;
+- extern unsigned struct_ipx_config_data_sz;
+- extern unsigned struct_kbdiacrs_sz;
+-@@ -1328,15 +1327,6 @@ extern unsigned IOCTL_VT_WAITACTIVE;
+- #endif  // SANITIZER_LINUX
+- 
+- #if SANITIZER_LINUX && !SANITIZER_ANDROID
+--extern unsigned IOCTL_CYGETDEFTHRESH;
+--extern unsigned IOCTL_CYGETDEFTIMEOUT;
+--extern unsigned IOCTL_CYGETMON;
+--extern unsigned IOCTL_CYGETTHRESH;
+--extern unsigned IOCTL_CYGETTIMEOUT;
+--extern unsigned IOCTL_CYSETDEFTHRESH;
+--extern unsigned IOCTL_CYSETDEFTIMEOUT;
+--extern unsigned IOCTL_CYSETTHRESH;
+--extern unsigned IOCTL_CYSETTIMEOUT;
+- extern unsigned IOCTL_EQL_EMANCIPATE;
+- extern unsigned IOCTL_EQL_ENSLAVE;
+- extern unsigned IOCTL_EQL_GETMASTRCFG;
+--- 
+-2.27.0
+-
+diff --git a/package/gcc/11.1.0/0002-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch b/package/gcc/11.2.0/0001-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch
+similarity index 100%
+rename from package/gcc/11.1.0/0002-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch
+rename to package/gcc/11.2.0/0001-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch
+diff --git a/package/gcc/11.1.0/0003-or1k-Use-cmodel-large-when-building-crtstuff.patch b/package/gcc/11.2.0/0002-or1k-Use-cmodel-large-when-building-crtstuff.patch
+similarity index 100%
+rename from package/gcc/11.1.0/0003-or1k-Use-cmodel-large-when-building-crtstuff.patch
+rename to package/gcc/11.2.0/0002-or1k-Use-cmodel-large-when-building-crtstuff.patch
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index ae2051d2aa..2b7f88154e 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -92,7 +92,7 @@ config BR2_GCC_VERSION
+ 	default "8.4.0"     if BR2_GCC_VERSION_POWERPC_SPE
+ 	default "9.4.0"     if BR2_GCC_VERSION_9_X
+ 	default "10.3.0"    if BR2_GCC_VERSION_10_X
+-	default "11.1.0"    if BR2_GCC_VERSION_11_X
++	default "11.2.0"    if BR2_GCC_VERSION_11_X
+ 	default "arc-2020.09-release" if BR2_GCC_VERSION_ARC
+ 	default "48152afb96c59733d5bc79e3399bb7b3d4b44266" if BR2_GCC_VERSION_CSKY
  
- ifeq ($(BR2_PACKAGE_SYSTEMD),y)
- SWUPDATE_DEPENDENCIES += systemd
-+define SWUPDATE_SET_SYSTEMD
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_SYSTEMD)
-+endef
-+else
-+define SWUPDATE_SET_SYSTEMD
-+	$(call KCONFIG_DISABLE_OPT,CONFIG_SYSTEMD)
-+endef
- endif
+diff --git a/package/gcc/gcc.hash b/package/gcc/gcc.hash
+index 0f7ff9dbf7..b37307ebe3 100644
+--- a/package/gcc/gcc.hash
++++ b/package/gcc/gcc.hash
+@@ -4,8 +4,8 @@ sha512  6de904f552a02de33b11ef52312bb664396efd7e1ce3bbe37bfad5ef617f133095b3767b
+ sha512  dfd3500bf21784b8351a522d53463cf362ede66b0bc302edf350bb44e94418497a8b4b797b6af8ca9b2eeb746b3b115d9c3698381b989546e9151b4496415624  gcc-9.4.0.tar.xz
+ # From ftp://gcc.gnu.org/pub/gcc/releases/gcc-10.3.0/sha512.sum
+ sha512  2b2dd7453d48a398c29eaebd1422b70341001b8c90a62aee51e83344e7fdd8a8e45f82a4a9165bd7edc76dada912c932f4b6632c5636760fec4c5d7e402b3f86  gcc-10.3.0.tar.xz
+-# From ftp://gcc.gnu.org/pub/gcc/releases/gcc-11.1.0/sha512.sum
+-sha512  fd6bba0f67ff48069d03073d1a9b5e896383b1cfc9dde008e868e60a9ec5014a837d56af0ecbf467b3fb9b37ec74a676e819a18b44393a0a3c4280175b5d7ad8  gcc-11.1.0.tar.xz
++# From ftp://gcc.gnu.org/pub/gcc/releases/gcc-11.2.0/sha512.sum
++sha512  d53a0a966230895c54f01aea38696f818817b505f1e2bfa65e508753fcd01b2aedb4a61434f41f3a2ddbbd9f41384b96153c684ded3f0fa97c82758d9de5c7cf  gcc-11.2.0.tar.xz
  
- ifeq ($(BR2_PACKAGE_LIBUBOOTENV),y)
-@@ -192,6 +199,7 @@ SWUPDATE_MAKE_OPTS = \
- 
- define SWUPDATE_KCONFIG_FIXUP_CMDS
- 	$(SWUPDATE_SET_LUA_VERSION)
-+	$(SWUPDATE_SET_SYSTEMD)
- endef
- 
- define SWUPDATE_BUILD_CMDS
+ # Locally calculated (fetched from Github)
+ sha512  b0853e2b1c5998044392023fa653e399e74118c46e616504ac59e1a2cf27620f94434767ce06b6cf4ca3dfb57f81d6eda92752befaf095ea5e564a9181b4659c  gcc-arc-2020.09-release.tar.gz
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
