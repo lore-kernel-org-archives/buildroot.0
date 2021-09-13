@@ -1,75 +1,93 @@
-Return-Path: <SRS0=7Pu+=OC=lists.buildroot.org=buildroot-bounces@kernel.org>
+Return-Path: <SRS0=n+Pr=OD=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
+	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D7AEC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 12 Sep 2021 23:55:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 50FE1C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 13 Sep 2021 07:29:57 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 3993C61056
-	for <buildroot@archiver.kernel.org>; Sun, 12 Sep 2021 23:55:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3993C61056
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=benettiengineering.com
+	by mail.kernel.org (Postfix) with ESMTPS id AF7F860FF2
+	for <buildroot@archiver.kernel.org>; Mon, 13 Sep 2021 07:29:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org AF7F860FF2
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F0AAF4040D;
-	Sun, 12 Sep 2021 23:55:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4E99B40324;
+	Mon, 13 Sep 2021 07:29:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Y5uTbaYIPwkA; Sun, 12 Sep 2021 23:55:41 +0000 (UTC)
+	with ESMTP id iP9lbSWkdSJx; Mon, 13 Sep 2021 07:29:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 62D364040A;
-	Sun, 12 Sep 2021 23:55:40 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B4A9C1BF3D1
- for <buildroot@lists.busybox.net>; Sun, 12 Sep 2021 23:55:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 99CAC40339;
+	Mon, 13 Sep 2021 07:29:54 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 17A9F1BF3A7
+ for <buildroot@lists.busybox.net>; Mon, 13 Sep 2021 07:29:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B0C62817AF
- for <buildroot@lists.busybox.net>; Sun, 12 Sep 2021 23:55:38 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 05AA5400E8
+ for <buildroot@lists.busybox.net>; Mon, 13 Sep 2021 07:29:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=aruba.it
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id oG_ES6ihq-9U for <buildroot@lists.busybox.net>;
- Sun, 12 Sep 2021 23:55:37 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtpcmd10101.aruba.it (smtpcmd10101.aruba.it [62.149.156.101])
- by smtp1.osuosl.org (Postfix) with ESMTP id 49A8C8177C
- for <buildroot@buildroot.org>; Sun, 12 Sep 2021 23:55:36 +0000 (UTC)
-Received: from [192.168.126.129] ([146.241.179.121])
- by Aruba Outgoing Smtp  with ESMTPSA
- id PZJumFFpknyXHPZJvmAjmz; Mon, 13 Sep 2021 01:55:35 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1631490935; bh=hWCmGAXwUCZOo9jVpHpl1/umC8LaCxiW+2ET0NFd44I=;
- h=Subject:To:From:Date:MIME-Version:Content-Type;
- b=JN2M+3mSP+jAhAvXS78c4i25IxJnUo8WX3IksikL5PYhFq2gr/vHyCsOMJrO2N/KV
- GapVYFWnWP6z4s1BECgNlHmpHQJ2ulbXfzg7H3SPn3UwUY47/wCHL6BWwtSuVAW9v2
- 2R2+BXNZeBfqjcxQTPMU0GFXZ66l6WwW7Tut7A0Kp3NgpC5dCHlr1QNOsMRJOSgJj9
- ZFNArDhrcCn/9qVwYKEBH2lPTxiGrCB2GsY+4/uQ9emzuDN/HKsrqlK5yw81DCfWKh
- mGXe2RsKxxDzUAIVWR72mPoKHNDn3R98tSlcus880+Q7hm5WtbbMJpUY5J9REQaGCB
- KI+NenHH37SfA==
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rDCbzgiTnqeD for <buildroot@lists.busybox.net>;
+ Mon, 13 Sep 2021 07:29:52 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com
+ [IPv6:2a00:1450:4864:20::532])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D092340025
+ for <buildroot@buildroot.org>; Mon, 13 Sep 2021 07:29:51 +0000 (UTC)
+Received: by mail-ed1-x532.google.com with SMTP id g8so12876681edt.7
+ for <buildroot@buildroot.org>; Mon, 13 Sep 2021 00:29:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=RNDwDLC9ToYp4yvXmJ6A++OQXfg0w+qQlnyFUggmOMk=;
+ b=kmhpUu33Htn53q47eVJBAo6fwX+rj/k0iJiK5aUsOkOCSljP++28E6MzWwI8xwnrUr
+ HNEnIaK2iEMHaSgsg3RfGhxesSSaXHz+WRh3Ivjv6QmRTUOenZjlXq6g+rTFbPECI85T
+ 3XhOyLcZ12rvK6lm7LeKPPx98k+PSiAk3k2NtnwA2+5mrVSWIUCBKfrE9PBz378vyYHj
+ QJQCLS2QKyL5V6wz5MTqpvx+yk7VJ92XdLsmHPngzXbGoIfhScIYW5RwWIM41U+chbNS
+ 1IUczgoPFusTUWi++J9oVL0HnbvdOOdqLH0vO/NvQ1h/W+WIul1qbB4hSAtzU+UpEjnb
+ DK5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=RNDwDLC9ToYp4yvXmJ6A++OQXfg0w+qQlnyFUggmOMk=;
+ b=w6AW9FDLK1jyBWwvBrHijxD03p+p4IJV+FlBRgsUjDUOeqtmjoqwi7UyLwShPQmrWd
+ 5DQNGPQIyoa7PKuDgEpkQZrS22T2XTdbciGBAWQDDQ7n21pQxND35uF3m5aBS+mihMIi
+ q1LMBYlKeaD+8IFilXaYwliSzMMzeeJb9MfGURr2uPSPmnaSLB8btX3VUvUUJgKWq4kR
+ JvqJmTVl65e0sa/WCaV1vPPt20tQ209FqkKlo7zU2ycTsiKx+Vu6pJnp4JpHs+HlVOiT
+ pft54dSVATM9H8KjCw1pfJ+fbcYkUuN5WueT8SmOkmCpxqspCe1bJs1ELOxk6Th5cDtj
+ G6bw==
+X-Gm-Message-State: AOAM533bNUjMtngEcclUvKnEC/6h4QxW6HdWx8ASkq+OGOe+ajkpJEAw
+ I+DtvnwMrCgV7rzj4o4Im0LqphZiB+8qPm9O
+X-Google-Smtp-Source: ABdhPJwoBbwcMjXgxIkiyOfExZuPivlcghxY0WDyknrF86CJQmwGZZKXakaVLnetD1i+UfZtVdXgIA==
+X-Received: by 2002:a05:6402:17d5:: with SMTP id
+ s21mr11777781edy.377.1631518190055; 
+ Mon, 13 Sep 2021 00:29:50 -0700 (PDT)
+Received: from localhost (ptr-5gw9txf6g5tndjqqqz.18120a2.ip6.access.telenet.be.
+ [2a02:1810:510:3800:1b15:18e4:57d1:eb])
+ by smtp.gmail.com with ESMTPSA id o7sm3400834edt.68.2021.09.13.00.29.49
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 13 Sep 2021 00:29:49 -0700 (PDT)
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 To: buildroot@buildroot.org
-References: <20210912230856.1125573-1-giulio.benetti@benettiengineering.com>
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <9d2597c2-27c8-b4dc-44be-aac94bfb9d5f@benettiengineering.com>
-Date: Mon, 13 Sep 2021 01:55:34 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+Date: Mon, 13 Sep 2021 09:29:41 +0200
+Message-Id: <20210913072942.30109-1-patrickdepinguin@gmail.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-In-Reply-To: <20210912230856.1125573-1-giulio.benetti@benettiengineering.com>
-Content-Language: en-US
-X-CMAE-Envelope: MS4wfP/P1VbrWDB0LPDEIXl6igYwUc4hZYkoEGz+LGeJ0hSa2pXuanxYYc/mGlqecgLkBGLRrjM+eHgy5xZd7B4F+LytNa3Q4cJoaoLGE5fNPuENWRgKiOqm
- KTwiWeOirEnsZ9nVXEu+bjY0EyBX3e7db5jxBuQnM/rkH4uJk43br0LkuCGfpbhq0gHaFCjpsnCx17p5k2YT7QWX+g04Er3bD1uiarBOH6uxBozOaISVMpbA
- XB7Nc6AUQMUGCqSN58DErQ==
-Subject: Re: [Buildroot] [PATCH] package/trace-cmd: fix build for Sparc64
+Subject: [Buildroot] [PATCH 1/2] docs/manual/using-buildroot-debugger:
+ suggest '-ix' iso '-x' when loading gdbinit
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,51 +100,61 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: Pierre Floury <pierre.floury@gmail.com>
+Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-On 9/13/21 1:08 AM, Giulio Benetti wrote:
-> Trace-cmd needs -fPIC for Sparc64 platform otherwise it fails on linking,
-> so add -fPIC to CFLAGS when building for such platform.
-> 
+From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-Fixes:
-http://autobuild.buildroot.net/results/c59/c596f6308b7f4d44d9ba009ed0c395396fc72f47/
+A gdbinit file passed via '-x' will be read _after_ parsing any
+object/core file passed on the command-line. In cross-compilation context,
+this is particularly a problem when loading a core file, because without the
+'sysroot' specified in the gdbinit file, it will give a lot of warnings,
+like:
 
-I've forgotten this ^^^, can you please add/reword it while applying 
-patch? Otherwise let me know and I'll send a v2.
+    warning: .dynamic section for "/lib/libstdc++.so.6" is not at the expected address (wrong library or version mismatch?)
+    warning: .dynamic section for "/lib/librt.so.1" is not at the expected address (wrong library or version mismatch?)
+    warning: .dynamic section for "/lib/libm.so.6" is not at the expected address (wrong library or version mismatch?)
+    warning: .dynamic section for "/lib/libgcc_s.so.1" is not at the expected address (wrong library or version mismatch?)
+    warning: .dynamic section for "/lib/libc.so.6" is not at the expected address (wrong library or version mismatch?)
+    warning: .dynamic section for "/lib/ld-linux.so.2" is not at the expected address (wrong library or version mismatch?)
+    warning: .dynamic section for "/lib/libanl.so.1" is not at the expected address (wrong library or version mismatch?)
+    warning: .dynamic section for "/lib/libdl.so.2" is not at the expected address (wrong library or version mismatch?)
+    warning: .dynamic section for "/lib/libpthread.so.0" is not at the expected address (wrong library or version mismatch?)
+    warning: .dynamic section for "/usr/lib/libz.so.1" is not at the expected address (wrong library or version mismatch?)
+    warning: .dynamic section for "/lib/libnss_files.so.2" is not at the expected address (wrong library or version mismatch?)
 
-Thank you
-Best regards
+    warning: Could not load shared library symbols for 17 libraries, e.g. [...]
+    Use the "info sharedlibrary" command to see the complete listing.
+    Do you need "set solib-search-path" or "set sysroot"?
+
+In contrast, the '-ix' option will load the specified gdbinit file _before_
+parsing object/core files. This will remove said warnings.
+
+See also: https://sourceware.org/bugzilla/show_bug.cgi?id=28330
+
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+---
+ docs/manual/using-buildroot-debugger.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/docs/manual/using-buildroot-debugger.txt b/docs/manual/using-buildroot-debugger.txt
+index d5293beb53..9a8a7dfbaf 100644
+--- a/docs/manual/using-buildroot-debugger.txt
++++ b/docs/manual/using-buildroot-debugger.txt
+@@ -35,7 +35,7 @@ Then, on the host, you should start the cross gdb using the following
+ command line:
+ 
+ ----------------------------
+-<buildroot>/output/host/bin/<tuple>-gdb -x <buildroot>/output/staging/usr/share/buildroot/gdbinit foo
++<buildroot>/output/host/bin/<tuple>-gdb -ix <buildroot>/output/staging/usr/share/buildroot/gdbinit foo
+ ----------------------------
+ 
+ Of course, +foo+ must be available in the current directory, built
 -- 
-Giulio Benetti
-Benetti Engineering sas
-
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> ---
->   package/trace-cmd/trace-cmd.mk | 5 +++++
->   1 file changed, 5 insertions(+)
-> 
-> diff --git a/package/trace-cmd/trace-cmd.mk b/package/trace-cmd/trace-cmd.mk
-> index cd3fcb9755..bc431e5dd2 100644
-> --- a/package/trace-cmd/trace-cmd.mk
-> +++ b/package/trace-cmd/trace-cmd.mk
-> @@ -31,6 +31,11 @@ endif
->   # redefining it on the command line causes build problems.
->   TRACE_CMD_CFLAGS = $(filter-out -D_LARGEFILE64_SOURCE,$(TARGET_CFLAGS))
->   
-> +# Sparc64 needs -fPIC
-> +ifeq ($(BR2_sparc64),y)
-> +TRACE_CMD_CFLAGS += -fPIC
-> +endif
-> +
->   # trace-cmd use CPPFLAGS to add some extra flags.
->   # But like for CFLAGS, $(TARGET_CPPFLAGS) contains _LARGEFILE64_SOURCE
->   # that causes build problems.
-> 
+2.32.0
 
 _______________________________________________
 buildroot mailing list
