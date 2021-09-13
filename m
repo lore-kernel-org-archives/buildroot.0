@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9237CC433F5
-	for <buildroot@archiver.kernel.org>; Mon, 13 Sep 2021 17:49:26 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E9F70C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 13 Sep 2021 17:49:38 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 5B24960EB4
-	for <buildroot@archiver.kernel.org>; Mon, 13 Sep 2021 17:49:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5B24960EB4
+	by mail.kernel.org (Postfix) with ESMTPS id B14FD610CE
+	for <buildroot@archiver.kernel.org>; Mon, 13 Sep 2021 17:49:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B14FD610CE
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 350A940209;
-	Mon, 13 Sep 2021 17:49:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7B0C860775;
+	Mon, 13 Sep 2021 17:49:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TgEatM9Q9V5s; Mon, 13 Sep 2021 17:49:25 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 0HfcuQVl7FIT; Mon, 13 Sep 2021 17:49:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5D3944013F;
-	Mon, 13 Sep 2021 17:49:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C8A7B60773;
+	Mon, 13 Sep 2021 17:49:36 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7283B1BF342
- for <buildroot@lists.busybox.net>; Mon, 13 Sep 2021 17:47:17 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A733E1BF97E
+ for <buildroot@lists.busybox.net>; Mon, 13 Sep 2021 17:47:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5DB6E400F2
- for <buildroot@lists.busybox.net>; Mon, 13 Sep 2021 17:47:16 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id A37B3400F2
+ for <buildroot@lists.busybox.net>; Mon, 13 Sep 2021 17:47:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fro1FTGFX9Hc for <buildroot@lists.busybox.net>;
- Mon, 13 Sep 2021 17:47:15 +0000 (UTC)
+ with ESMTP id HcwEnprqfV45 for <buildroot@lists.busybox.net>;
+ Mon, 13 Sep 2021 17:47:19 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7EB5540004
- for <buildroot@buildroot.org>; Mon, 13 Sep 2021 17:47:15 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id DA7E340004
+ for <buildroot@buildroot.org>; Mon, 13 Sep 2021 17:47:19 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 69B178A599; Mon, 13 Sep 2021 17:45:32 +0000 (UTC)
+ id C5BC08A5D3; Mon, 13 Sep 2021 17:45:36 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 13 Sep 2021 19:28:23 +0200
-X-Git-Refname: refs/heads/2021.05.x
-X-Git-Oldrev: 79b4de9f271d43ed57125033cf8e43b4d2d22bbd
-X-Git-Newrev: 153343b97ca97e7fa4f1b04fdb115d440c0fd35e
+Date: Mon, 13 Sep 2021 19:41:19 +0200
+X-Git-Refname: refs/heads/2021.02.x
+X-Git-Oldrev: c776e800b5da23fd986f8de3741b5c2fbc88a5c7
+X-Git-Newrev: 737001e68b179b19d914daecab3d75aebfc8fcb7
 X-Patchwork-Hint: ignore
-Message-Id: <20210913174532.69B178A599@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.05.x] package/zip: fix musl
- static build
+Message-Id: <20210913174536.C5BC08A5D3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] utils/getdeveloperlib.py:
+ force forward-slash for pattern matching
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,57 +71,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=153343b97ca97e7fa4f1b04fdb115d440c0fd35e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=737001e68b179b19d914daecab3d75aebfc8fcb7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Fix the following static build failure on musl which is raised because
-the "Check for directory libraries" in configure wrongly adds -DNO_DIR
-when no directory library is needed:
+Force relative file path resolution of DEVELOPERS file entries to use
+forward-slash separators since pattern matching assumes forward slashes.
+This is to help permit uses invoking `get-developers` on Platforms where
+`os.sep` may not be a forward slash.
 
-/tmp/instance-0/output-1/host/bin/arm-buildroot-linux-musleabihf-gcc -c -D_FILE_OFFSET_BITS=64 -O2 -g0 -static -I. -DUNIX -DUIDGID_NOT_16BIT -DBZIP2_SUPPORT -DLARGE_FILE_SUPPORT -DUNICODE_SUPPORT -DNO_MKTIME -DNO_DIR -DHAVE_DIRENT_H -DHAVE_TERMIOS_H unix/unix.c
-unix/unix.c:70:14: error: conflicting types for 'DIR'
-   70 | typedef FILE DIR;
-      |              ^~~
-
-Fixes:
- - http://autobuild.buildroot.org/results/83a6e0c8c4ad026cb0261246e3b1a80d754454bd
-
-Patch not sent upstream since upstream is dead.
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: James Knight <james.d.knight@live.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit ea0a4c610d8fa6dac3b4a6eadbc0ce5c18223845)
+(cherry picked from commit eb75d71b8026ff98d632964ac1c6fedeb0433ef7)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/zip/0008-fix-musl-static-build.patch | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+ utils/getdeveloperlib.py | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/package/zip/0008-fix-musl-static-build.patch b/package/zip/0008-fix-musl-static-build.patch
-new file mode 100644
-index 0000000000..a7a31eba9e
---- /dev/null
-+++ b/package/zip/0008-fix-musl-static-build.patch
-@@ -0,0 +1,20 @@
-+fix musl static build
-+
-+Don't define NO_DIR if no directory library is needed
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+
-+diff -Nura zip30.orig/unix/configure zip30/unix/configure
-+--- zip30.orig/unix/configure	2021-08-31 21:29:55.219967136 +0200
-++++ zip30/unix/configure	2021-08-31 21:50:48.239280513 +0200
-+@@ -569,8 +569,8 @@
-+   done
-+   if [ ${OPT} ]; then
-+     LFLAGS2="${LFLAGS2} ${OPT}"
-+-  else
-+-    CFLAGS="${CFLAGS} -DNO_DIR"
-++  #else
-++  #  CFLAGS="${CFLAGS} -DNO_DIR"
-+   fi
-+ fi
-+ 
+diff --git a/utils/getdeveloperlib.py b/utils/getdeveloperlib.py
+index 08abcfed54..ce822320f8 100644
+--- a/utils/getdeveloperlib.py
++++ b/utils/getdeveloperlib.py
+@@ -251,7 +251,10 @@ def parse_developers():
+                 if len(dev_files) == 0:
+                     print("WARNING: '%s' doesn't match any file" % fname,
+                           file=sys.stderr)
+-                files += [os.path.relpath(f, brpath) for f in dev_files]
++                for f in dev_files:
++                    dev_file = os.path.relpath(f, brpath)
++                    dev_file = dev_file.replace(os.sep, '/')  # force unix sep
++                    files.append(dev_file)
+             elif line == "":
+                 if not name:
+                     continue
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
