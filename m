@@ -6,67 +6,67 @@ X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
 	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 47AFDC433F5
-	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 17:50:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 162C7C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 17:50:51 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id E25EA60FED
-	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 17:50:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E25EA60FED
+	by mail.kernel.org (Postfix) with ESMTPS id B4FC760E8B
+	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 17:50:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B4FC760E8B
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B5DEA60607;
-	Tue, 14 Sep 2021 17:50:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8EE19606C4;
+	Tue, 14 Sep 2021 17:50:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BZEajAJ2H9Di; Tue, 14 Sep 2021 17:50:38 +0000 (UTC)
+	with ESMTP id hUw9Oy8erWRy; Tue, 14 Sep 2021 17:50:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 217BA60676;
-	Tue, 14 Sep 2021 17:50:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8AECA6075E;
+	Tue, 14 Sep 2021 17:50:48 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A83141BF995
- for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 17:50:12 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 62B761BF59F
+ for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 17:50:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9791D403B2
+ by smtp2.osuosl.org (Postfix) with ESMTP id BFF85400DA
  for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 17:50:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZPNYDFVlBN9w for <buildroot@lists.busybox.net>;
+ with ESMTP id RhpMlX7CstDK for <buildroot@lists.busybox.net>;
  Tue, 14 Sep 2021 17:50:12 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
 Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C492C400DA
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D7662403A4
  for <buildroot@buildroot.org>; Tue, 14 Sep 2021 17:50:11 +0000 (UTC)
-Received: from relay1-d.mail.gandi.net (unknown [217.70.183.193])
- by mslow1.mail.gandi.net (Postfix) with ESMTP id E71A6CF159
- for <buildroot@buildroot.org>; Tue, 14 Sep 2021 17:44:17 +0000 (UTC)
+Received: from relay2-d.mail.gandi.net (unknown [217.70.183.194])
+ by mslow1.mail.gandi.net (Postfix) with ESMTP id 2C993CF43A
+ for <buildroot@buildroot.org>; Tue, 14 Sep 2021 17:44:19 +0000 (UTC)
 Received: (Authenticated sender: peter@casa-korsgaard.com)
- by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 85F95240004
+ by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id 5794F40007
  for <buildroot@buildroot.org>; Tue, 14 Sep 2021 17:44:12 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
- (envelope-from <peter@korsgaard.com>) id 1mQCTb-00072K-T9
+ (envelope-from <peter@korsgaard.com>) id 1mQCTb-00072E-Pa
  for buildroot@buildroot.org; Tue, 14 Sep 2021 19:44:11 +0200
 Resent-To: buildroot@buildroot.org
 Resent-From: Peter Korsgaard <peter@korsgaard.com>
 Resent-Date: Tue, 14 Sep 2021 19:44:11 +0200
-Resent-Message-ID: <87wnnj128k.fsf@dell.be.48ers.dk>
-X-From-Line: nobody Mon Sep 13 15:26:29 2021
+Resent-Message-ID: <875yv32gt0.fsf@dell.be.48ers.dk>
+X-From-Line: nobody Mon Sep 13 11:46:31 2021
 From: Peter Korsgaard <peter@korsgaard.com>
 To: James Hilliard <james.hilliard1@gmail.com>
 References: <20210829024632.682029-1-james.hilliard1@gmail.com>
- <20210829024632.682029-6-james.hilliard1@gmail.com>
-Date: Mon, 13 Sep 2021 15:26:29 +0200
-In-Reply-To: <20210829024632.682029-6-james.hilliard1@gmail.com> (James
- Hilliard's message of "Sat, 28 Aug 2021 20:46:30 -0600")
-Message-ID: <874kao1u9m.fsf@dell.be.48ers.dk>
+ <20210829024632.682029-4-james.hilliard1@gmail.com>
+Date: Mon, 13 Sep 2021 11:46:31 +0200
+In-Reply-To: <20210829024632.682029-4-james.hilliard1@gmail.com> (James
+ Hilliard's message of "Sat, 28 Aug 2021 20:46:28 -0600")
+Message-ID: <87czpc24g8.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v2 6/8] package/swupdate: add webserver
- config option
+Subject: Re: [Buildroot] [PATCH v2 4/8] package/swupdate: enable/disable
+ systemd support automatically
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,10 +87,8 @@ Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
 >>>>> "James" == James Hilliard <james.hilliard1@gmail.com> writes:
 
- > Since the website depends on the webserver being enabled we should
- > add a config option for it and make the website depend on that.
-
- > We should also ensure that the mongoose(webserver) config is present.
+ > This needs to be set properly so that services work correctly.
+ > Enable disable automatically based on BR2_PACKAGE_SYSTEMD state.
 
  > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
