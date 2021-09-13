@@ -2,70 +2,91 @@ Return-Path: <SRS0=n+Pr=OD=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.5 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
+	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 93B43C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 13 Sep 2021 20:45:59 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 17B26C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 13 Sep 2021 20:51:52 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 04509610F9
-	for <buildroot@archiver.kernel.org>; Mon, 13 Sep 2021 20:45:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 04509610F9
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=benettiengineering.com
+	by mail.kernel.org (Postfix) with ESMTPS id DE2D76108B
+	for <buildroot@archiver.kernel.org>; Mon, 13 Sep 2021 20:51:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org DE2D76108B
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C2322401F4;
-	Mon, 13 Sep 2021 20:45:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A07DB60699;
+	Mon, 13 Sep 2021 20:51:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id a_KYQ-Uo9s-l; Mon, 13 Sep 2021 20:45:57 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id xCSpPS7waEwA; Mon, 13 Sep 2021 20:51:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E0C1040135;
-	Mon, 13 Sep 2021 20:45:56 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A44541BF322
- for <buildroot@lists.busybox.net>; Mon, 13 Sep 2021 20:45:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0C69060684;
+	Mon, 13 Sep 2021 20:51:50 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 831DA1BF322
+ for <buildroot@lists.busybox.net>; Mon, 13 Sep 2021 20:51:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A067B40302
- for <buildroot@lists.busybox.net>; Mon, 13 Sep 2021 20:45:55 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8031980DB2
+ for <buildroot@lists.busybox.net>; Mon, 13 Sep 2021 20:51:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=aruba.it
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id owqP1uSBdfBi for <buildroot@lists.busybox.net>;
- Mon, 13 Sep 2021 20:45:54 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtpcmd10102.aruba.it (smtpcmd10102.aruba.it [62.149.156.102])
- by smtp4.osuosl.org (Postfix) with ESMTP id E1A8E402F5
- for <buildroot@buildroot.org>; Mon, 13 Sep 2021 20:45:53 +0000 (UTC)
-Received: from ubuntu.localdomain ([146.241.179.121])
- by Aruba Outgoing Smtp  with ESMTPSA
- id PsprmaZ0unyXHPsprmPCxU; Mon, 13 Sep 2021 22:45:52 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1631565952; bh=dFtLqJ1rFur3/a6m54LKyLn2YCWVF4P+mSAA3nk/+DU=;
- h=From:To:Subject:Date:MIME-Version;
- b=N7+xoiGgdgKtlQsiw9Wj+g7V6PjwM+2/ZUpuWVJQq/+YrGEsig6tN+dUCqwXZgHde
- gu8EOicQ4JjFjGKS/IkZYZsagjCVP5/1nYL3v05EiQTaTdlv/2t6gYmixv3yznCT5P
- VyA/HuwfsHL4XcNAQ3bxcpBosrlNKol14KAsGJaAxwCd4zKhgcwzKC4u9WHVqtIn/n
- dXXjOLYsMSji7DW36VMRyCAkLm29wDat/2FqZteiwn8Gssk0kXsJg2ZiVYK1gXZa6x
- x5o4pryuKdS0gPrBJ6N+tO1gpOjpJW2yxuWNujXjPsywMmfX7PL/uslrE2FaAedTGg
- Del3PYYxqrkyg==
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZlvoVC3Xr0V1 for <buildroot@lists.busybox.net>;
+ Mon, 13 Sep 2021 20:51:48 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
+ [IPv6:2a00:1450:4864:20::430])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 83D9480DAD
+ for <buildroot@buildroot.org>; Mon, 13 Sep 2021 20:51:48 +0000 (UTC)
+Received: by mail-wr1-x430.google.com with SMTP id q26so16661854wrc.7
+ for <buildroot@buildroot.org>; Mon, 13 Sep 2021 13:51:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=N39EF/CzbClursZJohPSBUTAGyt4nsLXqIUz2jHWq+M=;
+ b=fkEaan/KsssVc/swPrfiY/YbkYXzvIQiRbiSrHQEAdNB7sONaZZIb8/p0xZBk+chjY
+ oSIpXRA93xjOKxuv/klLp75rNjvZBX/G58jo5XcRjwo03V+e1o9Ti91BB4XM50hJ7b4i
+ 6IMkjRxS0ixSLr/KudLAec00XquulSYG+Wq8fZPez1pYjBVYlsPtJiH3477oG2Bz2cXx
+ asW+cQTT6smvKVntYkNsVewpCXbNybdWxxZ3r5gBtkCUpm0GLfsVxVOQVIhXh8ElCE/L
+ NYKiKuP8xtqPcMxELsJb9iavqM5xCErNfZZZJBdheUVmMan0sWLcI9UKLAxMtRm8Sulz
+ JNnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=N39EF/CzbClursZJohPSBUTAGyt4nsLXqIUz2jHWq+M=;
+ b=IeCH4+WrNXJxpvJJeosNjlbTjn9L95Xg+d4UC8+dUO8Rfp4EjSclNFJIIfItFNIa0T
+ /s8oj4y+J088pmfLn9PhYhHkBEh5pPXTSfe9iCZNz3UBTbDOapAXqeTUeJtWw85Od0R3
+ QeDSY7Xv1Dq9v9fbHaOJ53E8BXOGNxg7uoT9oRUWM8DLPN+pJoU16DVxdjt3RNadEHuu
+ SrQBDNg4z9MuGvsNczB9zlWW+LlCqnywoCmrxCh1kGCOOr64KmjjABvqIRwER/w5juXf
+ 7Dt3EesSbtDGprjAxARMRAhStfnpBevr5267gvEOE/enNKMKnOh2uIp6rHxUzn4jhGr7
+ 4akg==
+X-Gm-Message-State: AOAM530d2cvEbPfmHxxnhTfZ2CX+fm1MafDhWR4wbHC4Sx0Y6C2HTS1N
+ wF1wXK4YPzzDIWZPVPxSiqmrV3WgPzI=
+X-Google-Smtp-Source: ABdhPJw6Yyjam9+7WLVLseM0Gc7MOpmEXNZamHGqCjC8Mx/N4KnNEgX6fnnYf6zQK3eWBmrO/LqCmQ==
+X-Received: by 2002:adf:aacb:: with SMTP id i11mr14935567wrc.296.1631566306599; 
+ Mon, 13 Sep 2021 13:51:46 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-2139-166.w92-167.abo.wanadoo.fr.
+ [92.167.218.166])
+ by smtp.gmail.com with ESMTPSA id q7sm8372171wrc.55.2021.09.13.13.51.45
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 13 Sep 2021 13:51:46 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 13 Sep 2021 22:45:51 +0200
-Message-Id: <20210913204551.2328033-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.25.1
+Date: Mon, 13 Sep 2021 22:51:31 +0200
+Message-Id: <20210913205131.3897236-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4wfL4Ud7VF/Yr4uQy7U1m5f+3SwTdDbTPPknf+IzFVC5lZIbk3eb2sxRfxsizamyp/vIW/AqU7VCgwyrCwmXcpwyS0H87SLgpvfD/8XruhmydQpjlLu9Hl
- eAR4iZZ83qrKhayMDT5xKqmx7zymS8go2Oe+jhE0xfvsO3oi/HNY/k6HIR45s/3QEeqqCljpFqGOBH8lZcOtirL7DMD8N55oLmSzlL1NyhdgRl7LZyamV5+v
- tuTkfyW3VM6ttbrpp9bGEiWBJOeTRXoh5AxzXmqXgjCBal+6fOjumdz86a5jdSy3384f5s/6v9i3mccuCWLbiWPNZrfMMHX3fbRbRVgqV60=
-Subject: [Buildroot] [PATCH] package/ffmpeg: fix build on mips_32
+Subject: [Buildroot] [PATCH 1/1] package/python-pillow: security bump to
+ version 8.3.2
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,45 +99,58 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
+Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-mips_32 is not supported by ffmpeg and it tries to build with loongson3
-SIMD support that leads to build failure due to:
-/tmp/ccFO2LRa.s: Assembler messages:
-/tmp/ccFO2LRa.s:15314: Error: opcode not supported on this processor: mips32 (mips32) `dmult $2,$6'
-/tmp/ccFO2LRa.s:15316: Error: opcode not supported on this processor: mips32 (mips32) `dsrl $2,$2,32'
+- Fix CVE-2021-23437 Raise ValueError if color specifier is too long
+- Fix 6-byte OOB read in FliDecode
+- Update indentation in hash file (two spaces)
 
-So let's --disable-asm to prevent using those unsupported opcodes.
+https://github.com/python-pillow/Pillow/releases/tag/8.3.2
 
-Fixes:
-http://autobuild.buildroot.net/results/f01/f01d9cedec8e1b371308d0f7af561a75883fa27c/
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/ffmpeg/ffmpeg.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/python-pillow/python-pillow.hash | 7 ++++---
+ package/python-pillow/python-pillow.mk   | 4 ++--
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index 8ff8ea8c6c..5e405d0f60 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -508,7 +508,7 @@ FFMPEG_CONF_OPTS += --enable-mipsfpu
- endif
+diff --git a/package/python-pillow/python-pillow.hash b/package/python-pillow/python-pillow.hash
+index fb1ec53a00..3b5bdf2535 100644
+--- a/package/python-pillow/python-pillow.hash
++++ b/package/python-pillow/python-pillow.hash
+@@ -1,5 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/pillow/json
+-md5  e42fc66e41b5309436a573af49cec47c  Pillow-8.3.1.tar.gz
+-sha256	2cac53839bfc5cece8fdbe7f084d5e3ee61e1303cccc86511d351adcb9e2c792  Pillow-8.3.1.tar.gz
++md5  a7fc550b80819eab11e01cc097913700  Pillow-8.3.2.tar.gz
++sha256  dde3f3ed8d00c72631bc19cbfff8ad3b6215062a5eed402381ad365f82f0c18c  Pillow-8.3.2.tar.gz
++
+ # Locally computed sha256 checksums
+-sha256	5bb11d96b393a698df70018069a986248021f286344c437a13f299c3daf1dfd4  LICENSE
++sha256  5bb11d96b393a698df70018069a986248021f286344c437a13f299c3daf1dfd4  LICENSE
+diff --git a/package/python-pillow/python-pillow.mk b/package/python-pillow/python-pillow.mk
+index a55a937c11..168c9d632c 100644
+--- a/package/python-pillow/python-pillow.mk
++++ b/package/python-pillow/python-pillow.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
- # Fix build failure on "addi opcode not supported"
--ifeq ($(BR2_mips_32r6)$(BR2_mips_64r6),y)
-+ifeq ($(BR2_mips_32)$(BR2_mips_32r6)$(BR2_mips_64r6),y)
- FFMPEG_CONF_OPTS += --disable-asm
- endif
- endif # MIPS
+-PYTHON_PILLOW_VERSION = 8.3.1
+-PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/8f/7d/1e9c2d8989c209edfd10f878da1af956059a1caab498e5bc34fa11b83f71
++PYTHON_PILLOW_VERSION = 8.3.2
++PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/90/d4/a7c9b6c5d176654aa3dbccbfd0be4fd3a263355dc24122a5f1937bdc2689
+ PYTHON_PILLOW_SOURCE = Pillow-$(PYTHON_PILLOW_VERSION).tar.gz
+ PYTHON_PILLOW_LICENSE = HPND
+ PYTHON_PILLOW_LICENSE_FILES = LICENSE
 -- 
-2.25.1
+2.33.0
 
 _______________________________________________
 buildroot mailing list
