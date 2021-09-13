@@ -2,57 +2,57 @@ Return-Path: <SRS0=n+Pr=OD=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.2 required=3.0 tests=BAYES_00,DATE_IN_PAST_03_06,
+X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8170CC4332F
-	for <buildroot@archiver.kernel.org>; Mon, 13 Sep 2021 13:45:09 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A18ABC433F5
+	for <buildroot@archiver.kernel.org>; Mon, 13 Sep 2021 13:45:21 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 29D8961B26
-	for <buildroot@archiver.kernel.org>; Mon, 13 Sep 2021 13:45:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 29D8961B26
+	by mail.kernel.org (Postfix) with ESMTPS id 43B3761B39
+	for <buildroot@archiver.kernel.org>; Mon, 13 Sep 2021 13:45:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 43B3761B39
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E820C402C6;
-	Mon, 13 Sep 2021 13:45:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 19448606CF;
+	Mon, 13 Sep 2021 13:45:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pCExdb1rkaD5; Mon, 13 Sep 2021 13:45:08 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id N6uVjeVwxRfZ; Mon, 13 Sep 2021 13:45:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B6DBF404AF;
-	Mon, 13 Sep 2021 13:45:06 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 87FF01BF378
+	by smtp3.osuosl.org (Postfix) with ESMTP id 665DC60688;
+	Mon, 13 Sep 2021 13:45:19 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id BB42A1BF97F
  for <buildroot@lists.busybox.net>; Mon, 13 Sep 2021 13:43:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7843B40371
+ by smtp1.osuosl.org (Postfix) with ESMTP id A7A5B80F71
  for <buildroot@lists.busybox.net>; Mon, 13 Sep 2021 13:43:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EcgZDylvciu0 for <buildroot@lists.busybox.net>;
- Mon, 13 Sep 2021 13:43:22 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Xgn0WwMk18Gp for <buildroot@lists.busybox.net>;
+ Mon, 13 Sep 2021 13:43:23 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D35F44036C
- for <buildroot@buildroot.org>; Mon, 13 Sep 2021 13:43:22 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 110D480F66
+ for <buildroot@buildroot.org>; Mon, 13 Sep 2021 13:43:23 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 2BF828A536; Mon, 13 Sep 2021 13:41:40 +0000 (UTC)
+ id 5D7348A536; Mon, 13 Sep 2021 13:41:40 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 13 Sep 2021 11:46:04 +0200
+Date: Mon, 13 Sep 2021 15:37:26 +0200
 X-Git-Refname: refs/heads/2021.05.x
-X-Git-Oldrev: afdeb5845c070e34a2b10f0add6fd0ecb490fe7e
-X-Git-Newrev: c72dd290b86b1a84bf76a7c938dcf6a979379332
+X-Git-Oldrev: 421226cbe0ab217eeb1354c96a25509992b090d7
+X-Git-Newrev: 79b4de9f271d43ed57125033cf8e43b4d2d22bbd
 X-Patchwork-Hint: ignore
-Message-Id: <20210913134140.2BF828A536@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.05.x] package/swupdate:
- enable/disable systemd support automatically
+Message-Id: <20210913134140.5D7348A536@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.05.x]
+ package/environment-setup/environment-setup: add zsh
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,47 +71,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c72dd290b86b1a84bf76a7c938dcf6a979379332
+commit: https://git.buildroot.net/buildroot/commit/?id=79b4de9f271d43ed57125033cf8e43b4d2d22bbd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
 
-This needs to be set properly so that services work correctly.
+environment-setup uses BASH_SOURCE which is bash specific. For other
+shells, this variable is empty, leading to an error message and empty
+SDK_PATH.
+Zsh Uses $0. Unfortunately POSIX is not specifying how exactly $0
+should behave when in sourced (or using special dot utility). So other
+shell support have to be implemented in different manner.
 
-Enable disable automatically based on BR2_PACKAGE_SYSTEMD state.
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Krzysztof Kanas <kkanas@fastmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 85062dcefc352f96b309cb232bc931374e8ca077)
+(cherry picked from commit 65cee90cc3cec4da11987370ea2de35d32f046b5)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/swupdate/swupdate.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ package/environment-setup/environment-setup | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
-index 12dafcc1a2..144587d11c 100644
---- a/package/swupdate/swupdate.mk
-+++ b/package/swupdate/swupdate.mk
-@@ -112,6 +112,13 @@ endif
+diff --git a/package/environment-setup/environment-setup b/package/environment-setup/environment-setup
+index e9bc36fdd0..84a9843c24 100644
+--- a/package/environment-setup/environment-setup
++++ b/package/environment-setup/environment-setup
+@@ -16,4 +16,10 @@ Some tips:
+ * To build CMake-based projects, use the "cmake" alias
  
- ifeq ($(BR2_PACKAGE_SYSTEMD),y)
- SWUPDATE_DEPENDENCIES += systemd
-+define SWUPDATE_SET_SYSTEMD
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_SYSTEMD)
-+endef
+ EOF
+-SDK_PATH=$(dirname $(realpath "${BASH_SOURCE[0]}"))
++if [ x"$BASH_VERSION" != x"" ] ; then
++	SDK_PATH=$(dirname $(realpath "${BASH_SOURCE[0]}"))
++elif [ x"$ZSH_VERSION" != x"" ] ; then
++	SDK_PATH=$(dirname $(realpath $0))
 +else
-+define SWUPDATE_SET_SYSTEMD
-+	$(call KCONFIG_DISABLE_OPT,CONFIG_SYSTEMD)
-+endef
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBUBOOTENV),y)
-@@ -165,6 +172,7 @@ SWUPDATE_MAKE_OPTS = \
- define SWUPDATE_KCONFIG_FIXUP_CMDS
- 	$(SWUPDATE_PREFER_STATIC)
- 	$(SWUPDATE_SET_LUA_VERSION)
-+	$(SWUPDATE_SET_SYSTEMD)
- endef
- 
- define SWUPDATE_BUILD_CMDS
++	echo "unsupported shell"
++fi
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
