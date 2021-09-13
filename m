@@ -2,90 +2,57 @@ Return-Path: <SRS0=SwR/=OE=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
-	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.2 required=3.0 tests=BAYES_00,DATE_IN_PAST_06_12,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 02A2FC433EF
-	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 05:40:49 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D91B4C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 06:10:03 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 7363261157
-	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 05:40:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7363261157
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id 018D1610FB
+	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 06:10:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 018D1610FB
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0BAF3402F7;
-	Tue, 14 Sep 2021 05:40:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9AEC1607A6;
+	Tue, 14 Sep 2021 06:10:02 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 8fo8LpOgOHXQ; Tue, 14 Sep 2021 06:10:01 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id E1C8B607C9;
+	Tue, 14 Sep 2021 06:10:00 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 3CB1C1BF989
+ for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 06:10:00 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 383AE40215
+ for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 06:10:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id f4nKv4E5omPn; Tue, 14 Sep 2021 05:40:47 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 35FAC402E3;
-	Tue, 14 Sep 2021 05:40:46 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C96601BF5DE
- for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 05:40:44 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C6076400E7
- for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 05:40:44 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ObkefvN3L2PI for <buildroot@lists.busybox.net>;
- Tue, 14 Sep 2021 05:40:44 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
- [IPv6:2a00:1450:4864:20::333])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D283B4011B
- for <buildroot@buildroot.org>; Tue, 14 Sep 2021 05:40:43 +0000 (UTC)
-Received: by mail-wm1-x333.google.com with SMTP id g128so3791762wma.5
- for <buildroot@buildroot.org>; Mon, 13 Sep 2021 22:40:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=a0KskGjlAToU8Clfo5Jcs83YSlkxMqhcKqmlv5IXXIY=;
- b=Jx+UUmfdUwpLgs4kjNWyxso0725TpWAxwI0ZWlbODd+jDOvHLUKsTBiCdYaOkgRCXT
- YfDoofdCamyDf7jHwGY/wtoB+DiIwMNiOk6mFpPaLTTc/wfAbEYKFdPa9Ia8Zje4amvZ
- M2smuygQYROhAjvk/ct6Ob1r2mI+8XtvcOsg3iJa2ohiAal01cvDCKjL85KHpnaUx2nJ
- 3sJr7xgFa7npqXHpaWfR6sro/iuyDkJpjkDcBaHP+edgMvihTT8TZ1+ZV8wRqYZJowoC
- ErMrcsCoqeXWgGrS2UZWRTKyLGo/MJBVmpOpdcKUCdXoQufRp9dvHzi+X8M5qC4b/G0a
- cYIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=a0KskGjlAToU8Clfo5Jcs83YSlkxMqhcKqmlv5IXXIY=;
- b=DgtCNAX1Xfhc0TOgvVTXZ3Cl0kSaHc8WZ9G1IUijlVyn/fD7zwxVekLZudO/EPKwLS
- 8e1/vkIhGgJV2TGGTgZvAbcxKmRtgAJqzD0sGhqopXKGTlgeH8vuAs+JgrjiUPWLvEBa
- tHmihLlxRPmWjcNyR2CPnpWeuMA0t8BoGkbdAdtLe6xztXyLqyIlXBqikZIvWNn/hg6y
- 2V5nDXLYIdyXmYxnwH196htgq8XXFVoeNnCCt21kppXmfFydFYHD/082vicsdL8azCh8
- UbtN/R8biQjHmT6TAC6yJZVwLiQHjU8LtIt6gZoddSh1Pmd6Z3G85gEN8OJERPoLM7sb
- WkBQ==
-X-Gm-Message-State: AOAM533S5OLuhQMtzysh+0svMliYlGxlmJAII7g9aZa8oslK7oNymtms
- GLA8o1NZORfr6JAIB00StVSWetYibbo=
-X-Google-Smtp-Source: ABdhPJzJ5Lbfv89GMjS9RlvqevcMQN1AvmT341GG4hXAMxEaGxIaBJQavx4nqi5zJBK2KCRkrdAWbA==
-X-Received: by 2002:a1c:730a:: with SMTP id d10mr82293wmb.59.1631598041798;
- Mon, 13 Sep 2021 22:40:41 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-2139-166.w92-167.abo.wanadoo.fr.
- [92.167.218.166])
- by smtp.gmail.com with ESMTPSA id d9sm11640857wrb.36.2021.09.13.22.40.40
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 13 Sep 2021 22:40:41 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2XYOmInjzQvr for <buildroot@lists.busybox.net>;
+ Tue, 14 Sep 2021 06:09:57 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id C2D9240183
+ for <buildroot@buildroot.org>; Tue, 14 Sep 2021 06:09:57 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 8D5F08AC05; Tue, 14 Sep 2021 06:08:13 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 14 Sep 2021 07:40:37 +0200
-Message-Id: <20210914054037.4025010-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.33.0
-MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/pcre: fix license hash
+Date: Mon, 13 Sep 2021 22:54:48 +0200
+X-Git-Refname: refs/heads/2021.02.x
+X-Git-Oldrev: 128adb7a54cdadab503386f684444c96863e67f6
+X-Git-Newrev: 035fda19d322bd552f00c9f1754d991229920a4c
+X-Patchwork-Hint: ignore
+Message-Id: <20210914060813.8D5F08AC05@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/go: security bump
+ version to 1.16.6
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,37 +65,73 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============7668182007062293909=="
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-Commit 0e5a901d3141a3d7e477f0fb79e8f6a748f06449 forgot to update license
-hash (updates in year and email)
+--===============7668182007062293909==
+Content-Type: text/plain
 
-Fixes:
- - http://autobuild.buildroot.org/results/045cd98a4067f1314deb66f52240d2db2000ec4d
+commit: https://git.buildroot.net/buildroot/commit/?id=035fda19d322bd552f00c9f1754d991229920a4c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+These minor releases include a security fix according to the new security policy (#44918).
+
+crypto/tls clients can panic when provided a certificate of the wrong type for the negotiated parameters.
+net/http clients performing HTTPS requests are also affected. The panic can be triggered by an attacker
+in a privileged network position without access to the server certificate's private key, as long as a trusted
+ECDSA or Ed25519 certificate for the server exists (or can be issued), or the client is configured with
+Config.InsecureSkipVerify. Clients that disable all TLS_RSA cipher suites (that is, TLS 1.0–1.2 cipher
+suites without ECDHE), as well as TLS 1.3-only clients, are unaffected.
+
+This is CVE-2021-34558.
+
+View the release notes for more information:
+
+https://golang.org/doc/devel/release.html#go1.16.minor
+
+Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 806b26950d51de22ffbbed0c975e7317982eeb30)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pcre/pcre.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/go/go.hash | 2 +-
+ package/go/go.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/pcre/pcre.hash b/package/pcre/pcre.hash
-index a84d63e1bc..6150303e24 100644
---- a/package/pcre/pcre.hash
-+++ b/package/pcre/pcre.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
- sha256  4dae6fdcd2bb0bb6c37b5f97c33c2be954da743985369cddac3546e3218bffb8  pcre-8.45.tar.bz2
- # License files, locally calculated
--sha256  0dd9c13864dbb9ee4d77a1557e96be29b2d719fb6584192ee36611aae264c4a3  LICENCE
-+sha256  51b3dea44f63338b84b9c97b3d793826a8397309068cf9379a423216ab8ea5b2  LICENCE
--- 
-2.33.0
+diff --git a/package/go/go.hash b/package/go/go.hash
+index bc6147bb52..cd7f2b3813 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,3 +1,3 @@
+ # From https://golang.org/dl/
+-sha256  7bfa7e5908c7cc9e75da5ddf3066d7cbcf3fd9fa51945851325eebc17f50ba80  go1.16.5.src.tar.gz
++sha256  a3a5d4bc401b51db065e4f93b523347a4d343ae0c0b08a65c3423b05a138037d  go1.16.6.src.tar.gz
+ sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index 4252691343..7d6355df92 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GO_VERSION = 1.16.5
++GO_VERSION = 1.16.6
+ GO_SITE = https://storage.googleapis.com/golang
+ GO_SOURCE = go$(GO_VERSION).src.tar.gz
+ 
+
+--===============7668182007062293909==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============7668182007062293909==--
