@@ -2,57 +2,57 @@ Return-Path: <SRS0=n+Pr=OD=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4DF1CC433EF
-	for <buildroot@archiver.kernel.org>; Mon, 13 Sep 2021 13:43:58 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D637C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 13 Sep 2021 13:44:10 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id C8B1861AEE
-	for <buildroot@archiver.kernel.org>; Mon, 13 Sep 2021 13:43:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C8B1861AEE
+	by mail.kernel.org (Postfix) with ESMTPS id AB0BA61AFB
+	for <buildroot@archiver.kernel.org>; Mon, 13 Sep 2021 13:44:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org AB0BA61AFB
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8FDF440239;
-	Mon, 13 Sep 2021 13:43:57 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wTo_40TTM-xo; Mon, 13 Sep 2021 13:43:56 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9218A4019A;
-	Mon, 13 Sep 2021 13:43:55 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 039171BF97E
- for <buildroot@lists.busybox.net>; Mon, 13 Sep 2021 13:43:19 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 00C6080F66
- for <buildroot@lists.busybox.net>; Mon, 13 Sep 2021 13:43:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 583F180D71;
+	Mon, 13 Sep 2021 13:44:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qp17OHwPjuWv for <buildroot@lists.busybox.net>;
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id uwzihHSUwYfm; Mon, 13 Sep 2021 13:44:08 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9654B80D62;
+	Mon, 13 Sep 2021 13:44:07 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 26C6A1BF378
+ for <buildroot@lists.busybox.net>; Mon, 13 Sep 2021 13:43:19 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id A7ADF4036E
+ for <buildroot@lists.busybox.net>; Mon, 13 Sep 2021 13:43:18 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Wj2MGplUWZg5 for <buildroot@lists.busybox.net>;
  Mon, 13 Sep 2021 13:43:17 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id D5A8F80F0A
+ by smtp4.osuosl.org (Postfix) with ESMTP id ABE0D4036D
  for <buildroot@buildroot.org>; Mon, 13 Sep 2021 13:43:17 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 281DC8A52D; Mon, 13 Sep 2021 13:41:35 +0000 (UTC)
+ id 118CB8A4D8; Mon, 13 Sep 2021 13:41:35 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 13 Sep 2021 15:42:29 +0200
+Date: Mon, 13 Sep 2021 15:34:18 +0200
 X-Git-Refname: refs/heads/2021.08.x
-X-Git-Oldrev: 739dd503be92e830cdd84a19d00799a5ac7e3304
-X-Git-Newrev: aca0577bdeebc9d635b4fbe2ce461af2c154e191
+X-Git-Oldrev: 64d6e2a640ac221ec9edc1318d24d245a4344107
+X-Git-Newrev: 9fdeeef212871c32583c0f28e2c3d116fe0fa466
 X-Patchwork-Hint: ignore
-Message-Id: <20210913134135.281DC8A52D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.08.x] package/gcc: bump version
- 11.x to 11.2.0
+Message-Id: <20210913134135.118CB8A4D8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.08.x] package/mc: security bump
+ version to 4.8.27
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,190 +71,89 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aca0577bdeebc9d635b4fbe2ce461af2c154e191
+commit: https://git.buildroot.net/buildroot/commit/?id=9fdeeef212871c32583c0f28e2c3d116fe0fa466
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.08.x
 
-patch 0001: already applied upstream
+Removed patch which was backported from upstream and is now included in
+this release.
 
-Signed-off-by: Michael Fischer <mf@go-sys.de>
+Changelog: https://midnight-commander.org/wiki/NEWS-4.8.27
+
+Fixes CVE-2021-36370:
+https://mail.gnome.org/archives/mc/2021-August/msg00010.html
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 35af76784f0720b0981bb0982f9a7e20b0ef2be1)
+(cherry picked from commit f37cc65fa6f0317b13e73dcf01ab0685f0df3d75)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-Remove-cyclades-from-libsanitizer.patch   | 125 ---------------------
- ...-Add-mcmodel-option-to-handle-large-GOTs.patch} |   0
- ...-Use-cmodel-large-when-building-crtstuff.patch} |   0
- package/gcc/Config.in.host                         |   2 +-
- package/gcc/gcc.hash                               |   4 +-
- 5 files changed, 3 insertions(+), 128 deletions(-)
+ ...4181-FTBFS-against-NCurses-on-OS-X-10-9-5.patch | 32 ----------------------
+ package/mc/mc.hash                                 |  4 +--
+ package/mc/mc.mk                                   |  2 +-
+ 3 files changed, 3 insertions(+), 35 deletions(-)
 
-diff --git a/package/gcc/11.1.0/0001-Remove-cyclades-from-libsanitizer.patch b/package/gcc/11.1.0/0001-Remove-cyclades-from-libsanitizer.patch
+diff --git a/package/mc/0001-Ticket-4181-FTBFS-against-NCurses-on-OS-X-10-9-5.patch b/package/mc/0001-Ticket-4181-FTBFS-against-NCurses-on-OS-X-10-9-5.patch
 deleted file mode 100644
-index ee6e349a6c..0000000000
---- a/package/gcc/11.1.0/0001-Remove-cyclades-from-libsanitizer.patch
+index 6dfae52af5..0000000000
+--- a/package/mc/0001-Ticket-4181-FTBFS-against-NCurses-on-OS-X-10-9-5.patch
 +++ /dev/null
-@@ -1,125 +0,0 @@
--From 745dae5923aba02982563481d75a21595df22ff8 Mon Sep 17 00:00:00 2001
--From: Tamar Christina <tamar.christina@arm.com>
--Date: Fri, 21 May 2021 10:30:59 +0100
--Subject: [PATCH] libsanitizer: Remove cyclades from libsanitizer
+@@ -1,32 +0,0 @@
+-From ba62dd32add2767d6d13f9abb82f43304418740f Mon Sep 17 00:00:00 2001
+-From: Andrew Borodin <aborodin@vmail.ru>
+-Date: Sun, 24 Jan 2021 14:19:22 +0300
+-Subject: [PATCH] Ticket #4181: FTBFS against NCurses on OS X 10.9.5.
 -
--The Linux kernel has removed the interface to cyclades from
--the latest kernel headers[1] due to them being orphaned for the
--past 13 years.
+-lib/tty/tty-ncurses.h: define _XOPEN_SOURCE_EXTENDED to use cchar_t,
+-getcchar(), setcchar().
 -
--libsanitizer uses this header when compiling against glibc, but
--glibcs itself doesn't seem to have any references to cyclades.
--
--Further more it seems that the driver is broken in the kernel and
--the firmware doesn't seem to be available anymore.
--
--As such since this is breaking the build of libsanitizer (and so the
--GCC bootstrap[2]) I propose to remove this.
--
--[1] https://lkml.org/lkml/2021/3/2/153
--[2] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=100379
--
--(cherry picked from commit f7c5351552387bd43f6ca3631016d7f0dfe0f135)
--
--libsanitizer/ChangeLog:
--
--	PR sanitizer/100379
--	* sanitizer_common/sanitizer_common_interceptors_ioctl.inc: Cherry-pick
--	llvm-project revision f7c5351552387bd43f6ca3631016d7f0dfe0f135.
--	* sanitizer_common/sanitizer_platform_limits_posix.cpp: Likewise.
--	* sanitizer_common/sanitizer_platform_limits_posix.h: Likewise.
--
--Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+-Signed-off-by: Andrew Borodin <aborodin@vmail.ru>
+-[Retrieved from:
+-https://github.com/MidnightCommander/mc/commit/ba62dd32add2767d6d13f9abb82f43304418740f]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ----
-- .../sanitizer_common_interceptors_ioctl.inc           |  9 ---------
-- .../sanitizer_platform_limits_posix.cpp               | 11 -----------
-- .../sanitizer_platform_limits_posix.h                 | 10 ----------
-- 3 files changed, 30 deletions(-)
+- lib/tty/tty-ncurses.h | 5 +++++
+- 1 file changed, 5 insertions(+)
 -
--diff --git a/libsanitizer/sanitizer_common/sanitizer_common_interceptors_ioctl.inc b/libsanitizer/sanitizer_common/sanitizer_common_interceptors_ioctl.inc
--index 7f181258eab..b7da6598755 100644
----- a/libsanitizer/sanitizer_common/sanitizer_common_interceptors_ioctl.inc
--+++ b/libsanitizer/sanitizer_common/sanitizer_common_interceptors_ioctl.inc
--@@ -370,15 +370,6 @@ static void ioctl_table_fill() {
+-diff --git a/lib/tty/tty-ncurses.h b/lib/tty/tty-ncurses.h
+-index 9962c7c413..d75df9533a 100644
+---- a/lib/tty/tty-ncurses.h
+-+++ b/lib/tty/tty-ncurses.h
+-@@ -2,6 +2,11 @@
+- #ifndef MC__TTY_NCURSES_H
+- #define MC__TTY_NCURSES_H
 - 
-- #if SANITIZER_GLIBC
--   // _(SIOCDEVPLIP, WRITE, struct_ifreq_sz); // the same as EQL_ENSLAVE
---  _(CYGETDEFTHRESH, WRITE, sizeof(int));
---  _(CYGETDEFTIMEOUT, WRITE, sizeof(int));
---  _(CYGETMON, WRITE, struct_cyclades_monitor_sz);
---  _(CYGETTHRESH, WRITE, sizeof(int));
---  _(CYGETTIMEOUT, WRITE, sizeof(int));
---  _(CYSETDEFTHRESH, NONE, 0);
---  _(CYSETDEFTIMEOUT, NONE, 0);
---  _(CYSETTHRESH, NONE, 0);
---  _(CYSETTIMEOUT, NONE, 0);
--   _(EQL_EMANCIPATE, WRITE, struct_ifreq_sz);
--   _(EQL_ENSLAVE, WRITE, struct_ifreq_sz);
--   _(EQL_GETMASTRCFG, WRITE, struct_ifreq_sz);
--diff --git a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp
--index 35a690cba5c..6e5c330b98e 100644
----- a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp
--+++ b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp
--@@ -143,7 +143,6 @@ typedef struct user_fpregs elf_fpregset_t;
-- # include <sys/procfs.h>
-- #endif
-- #include <sys/user.h>
---#include <linux/cyclades.h>
-- #include <linux/if_eql.h>
-- #include <linux/if_plip.h>
-- #include <linux/lp.h>
--@@ -460,7 +459,6 @@ unsigned struct_ElfW_Phdr_sz = sizeof(Elf_Phdr);
-- 
-- #if SANITIZER_GLIBC
--   unsigned struct_ax25_parms_struct_sz = sizeof(struct ax25_parms_struct);
---  unsigned struct_cyclades_monitor_sz = sizeof(struct cyclades_monitor);
-- #if EV_VERSION > (0x010000)
--   unsigned struct_input_keymap_entry_sz = sizeof(struct input_keymap_entry);
-- #else
--@@ -824,15 +822,6 @@ unsigned struct_ElfW_Phdr_sz = sizeof(Elf_Phdr);
-- #endif // SANITIZER_LINUX
-- 
-- #if SANITIZER_LINUX && !SANITIZER_ANDROID
---  unsigned IOCTL_CYGETDEFTHRESH = CYGETDEFTHRESH;
---  unsigned IOCTL_CYGETDEFTIMEOUT = CYGETDEFTIMEOUT;
---  unsigned IOCTL_CYGETMON = CYGETMON;
---  unsigned IOCTL_CYGETTHRESH = CYGETTHRESH;
---  unsigned IOCTL_CYGETTIMEOUT = CYGETTIMEOUT;
---  unsigned IOCTL_CYSETDEFTHRESH = CYSETDEFTHRESH;
---  unsigned IOCTL_CYSETDEFTIMEOUT = CYSETDEFTIMEOUT;
---  unsigned IOCTL_CYSETTHRESH = CYSETTHRESH;
---  unsigned IOCTL_CYSETTIMEOUT = CYSETTIMEOUT;
--   unsigned IOCTL_EQL_EMANCIPATE = EQL_EMANCIPATE;
--   unsigned IOCTL_EQL_ENSLAVE = EQL_ENSLAVE;
--   unsigned IOCTL_EQL_GETMASTRCFG = EQL_GETMASTRCFG;
--diff --git a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.h b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.h
--index ad358eef8b7..cba41ba5494 100644
----- a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.h
--+++ b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.h
--@@ -983,7 +983,6 @@ extern unsigned struct_vt_mode_sz;
-- 
-- #if SANITIZER_LINUX && !SANITIZER_ANDROID
-- extern unsigned struct_ax25_parms_struct_sz;
---extern unsigned struct_cyclades_monitor_sz;
-- extern unsigned struct_input_keymap_entry_sz;
-- extern unsigned struct_ipx_config_data_sz;
-- extern unsigned struct_kbdiacrs_sz;
--@@ -1328,15 +1327,6 @@ extern unsigned IOCTL_VT_WAITACTIVE;
-- #endif  // SANITIZER_LINUX
-- 
-- #if SANITIZER_LINUX && !SANITIZER_ANDROID
---extern unsigned IOCTL_CYGETDEFTHRESH;
---extern unsigned IOCTL_CYGETDEFTIMEOUT;
---extern unsigned IOCTL_CYGETMON;
---extern unsigned IOCTL_CYGETTHRESH;
---extern unsigned IOCTL_CYGETTIMEOUT;
---extern unsigned IOCTL_CYSETDEFTHRESH;
---extern unsigned IOCTL_CYSETDEFTIMEOUT;
---extern unsigned IOCTL_CYSETTHRESH;
---extern unsigned IOCTL_CYSETTIMEOUT;
-- extern unsigned IOCTL_EQL_EMANCIPATE;
-- extern unsigned IOCTL_EQL_ENSLAVE;
-- extern unsigned IOCTL_EQL_GETMASTRCFG;
---- 
--2.27.0
--
-diff --git a/package/gcc/11.1.0/0002-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch b/package/gcc/11.2.0/0001-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch
-similarity index 100%
-rename from package/gcc/11.1.0/0002-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch
-rename to package/gcc/11.2.0/0001-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch
-diff --git a/package/gcc/11.1.0/0003-or1k-Use-cmodel-large-when-building-crtstuff.patch b/package/gcc/11.2.0/0002-or1k-Use-cmodel-large-when-building-crtstuff.patch
-similarity index 100%
-rename from package/gcc/11.1.0/0003-or1k-Use-cmodel-large-when-building-crtstuff.patch
-rename to package/gcc/11.2.0/0002-or1k-Use-cmodel-large-when-building-crtstuff.patch
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index ae2051d2aa..2b7f88154e 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -92,7 +92,7 @@ config BR2_GCC_VERSION
- 	default "8.4.0"     if BR2_GCC_VERSION_POWERPC_SPE
- 	default "9.4.0"     if BR2_GCC_VERSION_9_X
- 	default "10.3.0"    if BR2_GCC_VERSION_10_X
--	default "11.1.0"    if BR2_GCC_VERSION_11_X
-+	default "11.2.0"    if BR2_GCC_VERSION_11_X
- 	default "arc-2020.09-release" if BR2_GCC_VERSION_ARC
- 	default "48152afb96c59733d5bc79e3399bb7b3d4b44266" if BR2_GCC_VERSION_CSKY
+-+/* for cchar_t, getcchar(), setcchar() */
+-+#ifndef _XOPEN_SOURCE_EXTENDED
+-+#define _XOPEN_SOURCE_EXTENDED
+-+#endif
+-+
+- #ifdef USE_NCURSES
+- #ifdef HAVE_NCURSES_CURSES_H
+- #include <ncurses/curses.h>
+diff --git a/package/mc/mc.hash b/package/mc/mc.hash
+index 63fbfa3213..6400f64b99 100644
+--- a/package/mc/mc.hash
++++ b/package/mc/mc.hash
+@@ -1,4 +1,4 @@
+-# Hash from http://ftp.midnight-commander.org/mc-4.8.26.sha256
+-sha256  c6deadc50595f2d9a22dc6c299a9f28b393e358346ebf6ca444a8469dc166c27  mc-4.8.26.tar.xz
++# Hash from http://ftp.midnight-commander.org/mc-4.8.27.sha256
++sha256  31be59225ffa9920816e9a8b3be0ab225a16d19e4faf46890f25bdffa02a4ff4  mc-4.8.27.tar.xz
+ # sha256 locally computed:
+ sha256  5576bbec76296e1c8e081f7037ebd01bdada388635f58d844a2f20d37bbe4284  COPYING
+diff --git a/package/mc/mc.mk b/package/mc/mc.mk
+index 50dc50f65e..678d687bcf 100644
+--- a/package/mc/mc.mk
++++ b/package/mc/mc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-diff --git a/package/gcc/gcc.hash b/package/gcc/gcc.hash
-index 0f7ff9dbf7..b37307ebe3 100644
---- a/package/gcc/gcc.hash
-+++ b/package/gcc/gcc.hash
-@@ -4,8 +4,8 @@ sha512  6de904f552a02de33b11ef52312bb664396efd7e1ce3bbe37bfad5ef617f133095b3767b
- sha512  dfd3500bf21784b8351a522d53463cf362ede66b0bc302edf350bb44e94418497a8b4b797b6af8ca9b2eeb746b3b115d9c3698381b989546e9151b4496415624  gcc-9.4.0.tar.xz
- # From ftp://gcc.gnu.org/pub/gcc/releases/gcc-10.3.0/sha512.sum
- sha512  2b2dd7453d48a398c29eaebd1422b70341001b8c90a62aee51e83344e7fdd8a8e45f82a4a9165bd7edc76dada912c932f4b6632c5636760fec4c5d7e402b3f86  gcc-10.3.0.tar.xz
--# From ftp://gcc.gnu.org/pub/gcc/releases/gcc-11.1.0/sha512.sum
--sha512  fd6bba0f67ff48069d03073d1a9b5e896383b1cfc9dde008e868e60a9ec5014a837d56af0ecbf467b3fb9b37ec74a676e819a18b44393a0a3c4280175b5d7ad8  gcc-11.1.0.tar.xz
-+# From ftp://gcc.gnu.org/pub/gcc/releases/gcc-11.2.0/sha512.sum
-+sha512  d53a0a966230895c54f01aea38696f818817b505f1e2bfa65e508753fcd01b2aedb4a61434f41f3a2ddbbd9f41384b96153c684ded3f0fa97c82758d9de5c7cf  gcc-11.2.0.tar.xz
- 
- # Locally calculated (fetched from Github)
- sha512  b0853e2b1c5998044392023fa653e399e74118c46e616504ac59e1a2cf27620f94434767ce06b6cf4ca3dfb57f81d6eda92752befaf095ea5e564a9181b4659c  gcc-arc-2020.09-release.tar.gz
+-MC_VERSION = 4.8.26
++MC_VERSION = 4.8.27
+ MC_SOURCE = mc-$(MC_VERSION).tar.xz
+ MC_SITE = http://ftp.midnight-commander.org
+ MC_LICENSE = GPL-3.0+
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
