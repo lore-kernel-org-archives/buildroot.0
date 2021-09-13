@@ -2,57 +2,57 @@ Return-Path: <SRS0=n+Pr=OD=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 83483C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 13 Sep 2021 17:49:50 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 60549C433FE
+	for <buildroot@archiver.kernel.org>; Mon, 13 Sep 2021 17:50:02 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2A64760EB4
-	for <buildroot@archiver.kernel.org>; Mon, 13 Sep 2021 17:49:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2A64760EB4
+	by mail.kernel.org (Postfix) with ESMTPS id EABF6610CC
+	for <buildroot@archiver.kernel.org>; Mon, 13 Sep 2021 17:50:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org EABF6610CC
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 02711402A6;
-	Mon, 13 Sep 2021 17:49:50 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C654C4021B;
+	Mon, 13 Sep 2021 17:50:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id p9j1eXQI4csz; Mon, 13 Sep 2021 17:49:49 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id kw7ju4g8QEGX; Mon, 13 Sep 2021 17:50:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 506704010A;
-	Mon, 13 Sep 2021 17:49:48 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DA91C401E2;
+	Mon, 13 Sep 2021 17:49:59 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9561A1BF342
- for <buildroot@lists.busybox.net>; Mon, 13 Sep 2021 17:47:20 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 021C61BF342
+ for <buildroot@lists.busybox.net>; Mon, 13 Sep 2021 17:47:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8572560773
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9E27E6074E
  for <buildroot@lists.busybox.net>; Mon, 13 Sep 2021 17:47:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fi0etwHYFp-d for <buildroot@lists.busybox.net>;
+ with ESMTP id tashV7OV4Rk0 for <buildroot@lists.busybox.net>;
  Mon, 13 Sep 2021 17:47:19 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id C53F06074E
+ by smtp3.osuosl.org (Postfix) with ESMTP id D47ED6076B
  for <buildroot@buildroot.org>; Mon, 13 Sep 2021 17:47:19 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id B1D658A5D3; Mon, 13 Sep 2021 17:45:36 +0000 (UTC)
+ id BB5FE8A5D9; Mon, 13 Sep 2021 17:45:36 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 13 Sep 2021 19:28:32 +0200
+Date: Mon, 13 Sep 2021 19:38:58 +0200
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: d464f8b313904d36d43157a16e2dbce5b61ac884
-X-Git-Newrev: f5041927886351328f2fd46bfabb6d660c1ebcf4
+X-Git-Oldrev: f5041927886351328f2fd46bfabb6d660c1ebcf4
+X-Git-Newrev: c776e800b5da23fd986f8de3741b5c2fbc88a5c7
 X-Patchwork-Hint: ignore
-Message-Id: <20210913174536.B1D658A5D3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/zip: fix musl
- static build
+Message-Id: <20210913174536.BB5FE8A5D9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/uboot-tools: fix
+ MKIMAGE_ARCH handling
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,57 +71,88 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f5041927886351328f2fd46bfabb6d660c1ebcf4
+commit: https://git.buildroot.net/buildroot/commit/?id=c776e800b5da23fd986f8de3741b5c2fbc88a5c7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Fix the following static build failure on musl which is raised because
-the "Check for directory libraries" in configure wrongly adds -DNO_DIR
-when no directory library is needed:
+Fix MKIMAGE_ARCH handling to avoid the following build failure:
 
-/tmp/instance-0/output-1/host/bin/arm-buildroot-linux-musleabihf-gcc -c -D_FILE_OFFSET_BITS=64 -O2 -g0 -static -I. -DUNIX -DUIDGID_NOT_16BIT -DBZIP2_SUPPORT -DLARGE_FILE_SUPPORT -DUNICODE_SUPPORT -DNO_MKTIME -DNO_DIR -DHAVE_DIRENT_H -DHAVE_TERMIOS_H unix/unix.c
-unix/unix.c:70:14: error: conflicting types for 'DIR'
-   70 | typedef FILE DIR;
-      |              ^~~
+/home/buildroot/autobuild/instance-0/output-1/build/host-uboot-tools-2021.07/tools/mkimage -C none -A openrisc -T script -d /home/buildroot/autobuild/instance-0/output-1/boot_script.txt /home/buildroot/autobuild/instance-0/output-1/build/host-uboot-tools-2021.07/tools/boot.scr
+
+Invalid architecture, supported are:
+	alpha            Alpha
+	arc              ARC
+	arm              ARM
+	arm64            AArch64
+	avr32            AVR32
+	blackfin         Blackfin
+	ia64             IA64
+	invalid          Invalid ARCH
+	m68k             M68K
+	microblaze       MicroBlaze
+	mips             MIPS
+	mips64           MIPS 64 Bit
+	nds32            NDS32
+	nios2            NIOS II
+	or1k             OpenRISC 1000
+	powerpc          PowerPC
+	riscv            RISC-V
+	s390             IBM S390
+	sandbox          Sandbox
+	sh               SuperH
+	sparc            SPARC
+	sparc64          SPARC 64 Bit
+	x86              Intel x86
+	x86_64           AMD x86_64
+	xtensa           Xtensa
+
+Strangely enough, we only have autobuilder failures since July 2021 even
+as or1k has been used since the addition of openriscv support in 2012:
+https://github.com/u-boot/u-boot/commit/3ddcaccda3824e1c7f7266d543e4c0eb3ea9851c
+
+For x86_64, we incorrectly mangle it to x86.
+
+Finally, the comment about mips64 is wrong: mips64 *is* a valid
+archtecture, and we anyway had no code to tweak that case.
 
 Fixes:
- - http://autobuild.buildroot.org/results/83a6e0c8c4ad026cb0261246e3b1a80d754454bd
-
-Patch not sent upstream since upstream is dead.
+ - http://autobuild.buildroot.org/results/c3f0f2a3fb87d74bfdaccf9b94c66f0b5bae7520
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit ea0a4c610d8fa6dac3b4a6eadbc0ce5c18223845)
+[yann.morin.1998@free.fr: extend commit log for mips64 and x86_64]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 5e8804d4e433cad0c0509483e865afdba003b6fc)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/zip/0008-fix-musl-static-build.patch | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+ package/uboot-tools/uboot-tools.mk | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/zip/0008-fix-musl-static-build.patch b/package/zip/0008-fix-musl-static-build.patch
-new file mode 100644
-index 0000000000..a7a31eba9e
---- /dev/null
-+++ b/package/zip/0008-fix-musl-static-build.patch
-@@ -0,0 +1,20 @@
-+fix musl static build
-+
-+Don't define NO_DIR if no directory library is needed
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+
-+diff -Nura zip30.orig/unix/configure zip30/unix/configure
-+--- zip30.orig/unix/configure	2021-08-31 21:29:55.219967136 +0200
-++++ zip30/unix/configure	2021-08-31 21:50:48.239280513 +0200
-+@@ -569,8 +569,8 @@
-+   done
-+   if [ ${OPT} ]; then
-+     LFLAGS2="${LFLAGS2} ${OPT}"
-+-  else
-+-    CFLAGS="${CFLAGS} -DNO_DIR"
-++  #else
-++  #  CFLAGS="${CFLAGS} -DNO_DIR"
-+   fi
-+ fi
-+ 
+diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
+index b0fc9276b2..84c5ab99a0 100644
+--- a/package/uboot-tools/uboot-tools.mk
++++ b/package/uboot-tools/uboot-tools.mk
+@@ -202,15 +202,15 @@ $(eval $(host-generic-package))
+ 
+ MKIMAGE = $(HOST_DIR)/bin/mkimage
+ 
+-# mkimage supports arm blackfin m68k microblaze mips mips64 nios2 powerpc ppc sh sparc sparc64 x86
++# mkimage supports alpha arc arm arm64 blackfin ia64 invalid m68k microblaze mips mips64 nds32 nios2 or1k powerpc riscv s390 sandbox sh sparc sparc64 x86 x86_64 xtensa
+ # KERNEL_ARCH can be arm64 arc arm blackfin m68k microblaze mips nios2 powerpc sh sparc i386 x86_64 xtensa
+-# For arm64, arc, xtensa we'll just keep KERNEL_ARCH
+-# For mips64, we'll just keep mips
+-# For i386 and x86_64, we need to convert
+-ifeq ($(KERNEL_ARCH),x86_64)
+-MKIMAGE_ARCH = x86
+-else ifeq ($(KERNEL_ARCH),i386)
++# For i386, we need to convert
++# For openrisc, we need to convert
++# For others, we'll just keep KERNEL_ARCH
++ifeq ($(KERNEL_ARCH),i386)
+ MKIMAGE_ARCH = x86
++else ifeq ($(KERNEL_ARCH),openrisc)
++MKIMAGE_ARCH = or1k
+ else
+ MKIMAGE_ARCH = $(KERNEL_ARCH)
+ endif
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
