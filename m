@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7CED6C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 13 Sep 2021 17:48:02 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 51B51C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 13 Sep 2021 17:48:14 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1B8B460EB4
-	for <buildroot@archiver.kernel.org>; Mon, 13 Sep 2021 17:48:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1B8B460EB4
+	by mail.kernel.org (Postfix) with ESMTPS id 1E2DF610CC
+	for <buildroot@archiver.kernel.org>; Mon, 13 Sep 2021 17:48:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1E2DF610CC
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D5CCC402B5;
-	Mon, 13 Sep 2021 17:48:01 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D5D724014B;
+	Mon, 13 Sep 2021 17:48:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dJ49QUBNuRMk; Mon, 13 Sep 2021 17:48:01 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id KsQ-ZOvPMKGM; Mon, 13 Sep 2021 17:48:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3CCDE402A6;
-	Mon, 13 Sep 2021 17:48:00 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id ED4CD400F2;
+	Mon, 13 Sep 2021 17:48:11 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 201B41BF989
- for <buildroot@lists.busybox.net>; Mon, 13 Sep 2021 17:47:12 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D6C791BF342
+ for <buildroot@lists.busybox.net>; Mon, 13 Sep 2021 17:47:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1022B6076B
+ by smtp3.osuosl.org (Postfix) with ESMTP id D94516074E
  for <buildroot@lists.busybox.net>; Mon, 13 Sep 2021 17:47:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qjN2F0HtFuzh for <buildroot@lists.busybox.net>;
+ with ESMTP id mSY9FmcQqRzN for <buildroot@lists.busybox.net>;
  Mon, 13 Sep 2021 17:47:11 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1C8EF6074E
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2569E60767
  for <buildroot@buildroot.org>; Mon, 13 Sep 2021 17:47:11 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 0931A8A58D; Mon, 13 Sep 2021 17:45:28 +0000 (UTC)
+ id 1268D8A58E; Mon, 13 Sep 2021 17:45:28 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 13 Sep 2021 19:36:21 +0200
+Date: Mon, 13 Sep 2021 19:38:25 +0200
 X-Git-Refname: refs/heads/2021.08.x
-X-Git-Oldrev: 0d6c66fa7e7fc06bc1527a970d11af2fb5bc9c42
-X-Git-Newrev: 26243e63233afd6b619b42e0e8f9360f9ea7e18e
+X-Git-Oldrev: 26243e63233afd6b619b42e0e8f9360f9ea7e18e
+X-Git-Newrev: cba48ce2ec3925afd1dfdc8c68b5a24115a03af7
 X-Patchwork-Hint: ignore
-Message-Id: <20210913174528.0931A8A58D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.08.x] package/nginx-dav-ext:
- needs libxslt
+Message-Id: <20210913174528.1268D8A58E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.08.x] package/uboot-tools: fix
+ MKIMAGE_ARCH handling
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,71 +71,88 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=26243e63233afd6b619b42e0e8f9360f9ea7e18e
+commit: https://git.buildroot.net/buildroot/commit/?id=cba48ce2ec3925afd1dfdc8c68b5a24115a03af7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.08.x
 
-Build is broken since bump to version 3.0.0 in commit
-45524f10cd84855868c9be3901c2bd6ea1c9f079 because libxslt is needed
-instead of expat since
-https://github.com/arut/nginx-dav-ext-module/commit/37772c545314aa4a250066f4e7cbc8806d406fa8:
+Fix MKIMAGE_ARCH handling to avoid the following build failure:
 
-adding module in /tmp/instance-0/output-1/build/nginx-dav-ext-3.0.0
- + ngx_http_dav_ext_module was configured
-checking for PCRE library ... found
-checking for PCRE JIT support ... found
-Package libxslt was not found in the pkg-config search path.
-Perhaps you should add the directory containing `libxslt.pc'
-to the PKG_CONFIG_PATH environment variable
-Package 'libxslt', required by 'virtual:world', not found
-Package libxslt was not found in the pkg-config search path.
-Perhaps you should add the directory containing `libxslt.pc'
-to the PKG_CONFIG_PATH environment variable
-Package 'libxslt', required by 'virtual:world', not found
-checking for libxslt ... not found
-checking for libxslt in /usr/local/ ... not found
-checking for libxslt in /usr/pkg/ ... not found
-checking for libxslt in /opt/local/ ... not found
+/home/buildroot/autobuild/instance-0/output-1/build/host-uboot-tools-2021.07/tools/mkimage -C none -A openrisc -T script -d /home/buildroot/autobuild/instance-0/output-1/boot_script.txt /home/buildroot/autobuild/instance-0/output-1/build/host-uboot-tools-2021.07/tools/boot.scr
 
-./configure: error: the HTTP XSLT module requires the libxml2/libxslt
-libraries. You can either do not enable the module or install the libraries.
+Invalid architecture, supported are:
+	alpha            Alpha
+	arc              ARC
+	arm              ARM
+	arm64            AArch64
+	avr32            AVR32
+	blackfin         Blackfin
+	ia64             IA64
+	invalid          Invalid ARCH
+	m68k             M68K
+	microblaze       MicroBlaze
+	mips             MIPS
+	mips64           MIPS 64 Bit
+	nds32            NDS32
+	nios2            NIOS II
+	or1k             OpenRISC 1000
+	powerpc          PowerPC
+	riscv            RISC-V
+	s390             IBM S390
+	sandbox          Sandbox
+	sh               SuperH
+	sparc            SPARC
+	sparc64          SPARC 64 Bit
+	x86              Intel x86
+	x86_64           AMD x86_64
+	xtensa           Xtensa
+
+Strangely enough, we only have autobuilder failures since July 2021 even
+as or1k has been used since the addition of openriscv support in 2012:
+https://github.com/u-boot/u-boot/commit/3ddcaccda3824e1c7f7266d543e4c0eb3ea9851c
+
+For x86_64, we incorrectly mangle it to x86.
+
+Finally, the comment about mips64 is wrong: mips64 *is* a valid
+archtecture, and we anyway had no code to tweak that case.
 
 Fixes:
- - http://autobuild.buildroot.org/results/8735d20ca7ccf4eda2f79f9400bed70474855b40
+ - http://autobuild.buildroot.org/results/c3f0f2a3fb87d74bfdaccf9b94c66f0b5bae7520
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit c4cae0b7c032e792b208360848659662aee4692f)
+[yann.morin.1998@free.fr: extend commit log for mips64 and x86_64]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 5e8804d4e433cad0c0509483e865afdba003b6fc)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/nginx-dav-ext/Config.in        | 2 +-
- package/nginx-dav-ext/nginx-dav-ext.mk | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/uboot-tools/uboot-tools.mk | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/nginx-dav-ext/Config.in b/package/nginx-dav-ext/Config.in
-index 1e60321fe3..9e3a0faf28 100644
---- a/package/nginx-dav-ext/Config.in
-+++ b/package/nginx-dav-ext/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_NGINX_DAV_EXT
- 	bool "nginx-dav-ext"
- 	depends on BR2_PACKAGE_NGINX_HTTP_DAV_MODULE
--	select BR2_PACKAGE_EXPAT
-+	select BR2_PACKAGE_LIBXSLT
- 	help
- 	  NGINX WebDAV missing commands support (PROPFIND & OPTIONS).
+diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
+index a87956d028..81f60963ec 100644
+--- a/package/uboot-tools/uboot-tools.mk
++++ b/package/uboot-tools/uboot-tools.mk
+@@ -206,15 +206,15 @@ $(eval $(host-generic-package))
  
-diff --git a/package/nginx-dav-ext/nginx-dav-ext.mk b/package/nginx-dav-ext/nginx-dav-ext.mk
-index 1b3071851a..cce527e179 100644
---- a/package/nginx-dav-ext/nginx-dav-ext.mk
-+++ b/package/nginx-dav-ext/nginx-dav-ext.mk
-@@ -8,6 +8,6 @@ NGINX_DAV_EXT_VERSION = 3.0.0
- NGINX_DAV_EXT_SITE = $(call github,arut,nginx-dav-ext-module,v$(NGINX_DAV_EXT_VERSION))
- NGINX_DAV_EXT_LICENSE = BSD-2-Clause
- NGINX_DAV_EXT_LICENSE_FILES = LICENSE
--NGINX_DAV_EXT_DEPENDENCIES = expat
-+NGINX_DAV_EXT_DEPENDENCIES = libxslt
+ MKIMAGE = $(HOST_DIR)/bin/mkimage
  
- $(eval $(generic-package))
+-# mkimage supports arm blackfin m68k microblaze mips mips64 nios2 powerpc ppc sh sparc sparc64 x86
++# mkimage supports alpha arc arm arm64 blackfin ia64 invalid m68k microblaze mips mips64 nds32 nios2 or1k powerpc riscv s390 sandbox sh sparc sparc64 x86 x86_64 xtensa
+ # KERNEL_ARCH can be arm64 arc arm blackfin m68k microblaze mips nios2 powerpc sh sparc i386 x86_64 xtensa
+-# For arm64, arc, xtensa we'll just keep KERNEL_ARCH
+-# For mips64, we'll just keep mips
+-# For i386 and x86_64, we need to convert
+-ifeq ($(KERNEL_ARCH),x86_64)
+-MKIMAGE_ARCH = x86
+-else ifeq ($(KERNEL_ARCH),i386)
++# For i386, we need to convert
++# For openrisc, we need to convert
++# For others, we'll just keep KERNEL_ARCH
++ifeq ($(KERNEL_ARCH),i386)
+ MKIMAGE_ARCH = x86
++else ifeq ($(KERNEL_ARCH),openrisc)
++MKIMAGE_ARCH = or1k
+ else
+ MKIMAGE_ARCH = $(KERNEL_ARCH)
+ endif
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
