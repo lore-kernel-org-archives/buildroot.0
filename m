@@ -7,51 +7,51 @@ X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E60EC433F5
-	for <buildroot@archiver.kernel.org>; Mon, 13 Sep 2021 18:06:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DF655C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 13 Sep 2021 18:06:42 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 07A26610CE
-	for <buildroot@archiver.kernel.org>; Mon, 13 Sep 2021 18:06:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 07A26610CE
+	by mail.kernel.org (Postfix) with ESMTPS id 8E35B60ED7
+	for <buildroot@archiver.kernel.org>; Mon, 13 Sep 2021 18:06:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8E35B60ED7
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CA9E380EB7;
-	Mon, 13 Sep 2021 18:06:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 68B2680F20;
+	Mon, 13 Sep 2021 18:06:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ckRdQ4UFCIZF; Mon, 13 Sep 2021 18:06:30 +0000 (UTC)
+	with ESMTP id 4Li6v50uK8xO; Mon, 13 Sep 2021 18:06:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2833580EB2;
-	Mon, 13 Sep 2021 18:06:29 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id F1E7B1BF2B9
- for <buildroot@lists.busybox.net>; Mon, 13 Sep 2021 18:06:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B57EC80ED7;
+	Mon, 13 Sep 2021 18:06:40 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id F29D01BF2B9
+ for <buildroot@lists.busybox.net>; Mon, 13 Sep 2021 18:06:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EE98C40266
- for <buildroot@lists.busybox.net>; Mon, 13 Sep 2021 18:06:27 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id EFD7880EB4
+ for <buildroot@lists.busybox.net>; Mon, 13 Sep 2021 18:06:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MpmylXAEE2Wi for <buildroot@lists.busybox.net>;
- Mon, 13 Sep 2021 18:06:26 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dvnGOf_1iwxV for <buildroot@lists.busybox.net>;
+ Mon, 13 Sep 2021 18:06:32 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id DB6044024A
- for <buildroot@buildroot.org>; Mon, 13 Sep 2021 18:06:26 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2A28380EB2
+ for <buildroot@buildroot.org>; Mon, 13 Sep 2021 18:06:32 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id BC6538A5E8; Mon, 13 Sep 2021 18:04:43 +0000 (UTC)
+ id 0EC0F8A5F2; Mon, 13 Sep 2021 18:04:49 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 13 Sep 2021 20:06:21 +0200
-X-Git-Refname: refs/heads/2021.08.x
-X-Git-Oldrev: 3352e94fc93864bba7031392104f5cbfa3510f20
-X-Git-Newrev: f37f82b5d28fbbbbe49f82203ef83bb2e0f01ca7
+Date: Mon, 13 Sep 2021 20:06:10 +0200
+X-Git-Refname: refs/heads/2021.05.x
+X-Git-Oldrev: 963af0c56ec4cd23276933b63711d0c4e517a517
+X-Git-Newrev: 84b4f533ce03187ade81f77857d0e5016a4c4af3
 X-Patchwork-Hint: ignore
-Message-Id: <20210913180443.BC6538A5E8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.08.x] package/openjdk: needs
+Message-Id: <20210913180449.0EC0F8A5F2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.05.x] package/openjdk: needs
  host gcc >= 4.9
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
@@ -71,8 +71,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f37f82b5d28fbbbbe49f82203ef83bb2e0f01ca7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=84b4f533ce03187ade81f77857d0e5016a4c4af3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
 
 openjdk needs host gcc >= 4.9 since bump to version 16.0.1+9 in commit
 057e27029c9811ba8cc4922e30cc3878bed98807 and
