@@ -8,84 +8,86 @@ X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B10A2C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 13 Sep 2021 21:05:07 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E4DD5C4332F
+	for <buildroot@archiver.kernel.org>; Mon, 13 Sep 2021 21:05:19 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 77C2E610CE
-	for <buildroot@archiver.kernel.org>; Mon, 13 Sep 2021 21:05:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 77C2E610CE
+	by mail.kernel.org (Postfix) with ESMTPS id 922076112D
+	for <buildroot@archiver.kernel.org>; Mon, 13 Sep 2021 21:05:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 922076112D
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmx.net
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 49B164030B;
-	Mon, 13 Sep 2021 21:05:07 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 63ABD40209;
+	Mon, 13 Sep 2021 21:05:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tpsaTqAVUd3u; Mon, 13 Sep 2021 21:05:06 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id OPlzFcQS8AGt; Mon, 13 Sep 2021 21:05:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AE38840297;
-	Mon, 13 Sep 2021 21:05:05 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2D3F51BF322
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4C9D040195;
+	Mon, 13 Sep 2021 21:05:17 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 36F3D1BF97E
  for <buildroot@lists.busybox.net>; Mon, 13 Sep 2021 21:04:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7452B40297
- for <buildroot@lists.busybox.net>; Mon, 13 Sep 2021 21:04:17 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 206FE80BE3
+ for <buildroot@lists.busybox.net>; Mon, 13 Sep 2021 21:04:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id X1fkUounQUI2 for <buildroot@lists.busybox.net>;
- Mon, 13 Sep 2021 21:04:16 +0000 (UTC)
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (1024-bit key) header.d=gmx.net
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ut95d9KxDlVJ for <buildroot@lists.busybox.net>;
+ Mon, 13 Sep 2021 21:04:17 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 42F784030B
- for <buildroot@buildroot.org>; Mon, 13 Sep 2021 21:04:15 +0000 (UTC)
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9188B80BE7
+ for <buildroot@buildroot.org>; Mon, 13 Sep 2021 21:04:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
  s=badeba3b8450; t=1631567054;
- bh=s2z+Yrs7gr/fVo547hLlZ771fQ2XelsJ4kxIKF2MZ+c=;
+ bh=g4zZHtvuzUP5JMHgpW+RfXxVAIO7Sa1Oewa9pnhfhAQ=;
  h=X-UI-Sender-Class:From:To:Subject:Date:In-Reply-To:References;
- b=du5z0IOC5BWEIZShUtLOD5ySffpjNjOMwWa1+SWDMbmO+dp3hXJHwkzTaA5fRdto8
- PGrK4e7tzoQ3oHrfeSAFelGvZ5RlYnaK+LgDqKrcjBCKLhBS+wXPLdy3tEvA7mfprJ
- MBNwOGeiJvzRW3E51FEzNWHXk1PtY9OnF7EGhQ0A=
+ b=lLdyxXAOsBkqUPCSNWrSMXjyUuLfqiOpN4L8TF7OicMxp5P1G/kG5dDST5d/ikPu0
+ McC5zVAqwwMF1vKTglsNMkeoADEQHH6Uzc/1Z126ILbyuwLgRpIni+TQmUp3H8cADE
+ kaZWs+5vo7MccyU9IIM2p5rwMWewjDNJVU9SF644=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
 Received: from localhost.fritz.box ([62.216.209.240]) by mail.gmx.net
  (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 1MZktZ-1mSNYX0jBP-00Wq3K for <buildroot@buildroot.org>; Mon, 13 Sep 2021
+ 1Mkpf3-1mlynh28ND-00mJZ0 for <buildroot@buildroot.org>; Mon, 13 Sep 2021
  23:04:14 +0200
 From: Peter Seiderer <ps.report@gmx.net>
 To: buildroot@buildroot.org
-Date: Mon, 13 Sep 2021 23:04:09 +0200
-Message-Id: <20210913210412.24042-11-ps.report@gmx.net>
+Date: Mon, 13 Sep 2021 23:04:11 +0200
+Message-Id: <20210913210412.24042-13-ps.report@gmx.net>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20210913210412.24042-1-ps.report@gmx.net>
 References: <20210913210412.24042-1-ps.report@gmx.net>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:TcfkDJEMCj0KNEmNR9evqnRgP0VS+sXJqa/2aT9P6jUoiGcf4Am
- 567/x6c6O4PlqezaTPo7zP8XyJqQR5GnttpGU92ArE8VxNQSx3GqhJz4Ya3pao8wSdNCsDp
- 5aIP5va/3ndUdCKr4OC6WJZ0PAxMPXY2yu/8V2yyhcawSpu47ES7hak1zWp9LcCGAZ1Lfgy
- X21txokFI1jJ2ikY//JKg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:7LUIBTTmLHE=:MUj69w0u/Nhg5P2dXOp7mS
- aucjFtpAqmBNAshFvI4KclxQ4wu9KrFHgTGHfK9t7aJ0Lzk8ZGnNenfp4hfdPV6DSpgTJHj3K
- Q11VBWv5FZ6GRGTgmhsZxUrWUqPB+aUIxiGHfbG6sSWrLae7kS5oL1JrJS1X4H18k1mXI297X
- RH0Yp42kBEHSdkPW3Uh3Q3ITqLWPT3mfpzZjut0lfiX8qMA0kH0KHidjmWwj8Z41apep7y9Ql
- lXrimNcKVy7j7feMusxppe7CjR4ZrnVvI1gJaAqsBvAr9VvIRh2LPLFtJJUJS3TZqKx5BFUkJ
- EW6Rw+c/robB+mHxzPGdaxwLRlafS3DZc/5MntjR9iaP1OhD9F1h6TZwZAKXc+DkaZ0Q4PTzI
- dktAPuKg5P9qI5wUbf52Mf5/FRkZWrwWsNHlesXIWx4hSG+vgCiNcAmYuulyxUFSt9Sg4h61/
- MbBfNvDUAre+7G3JPJLBogMN3nugRsh75HBJAmO4mcCN5utxOBlDSprffbmfLepMqCJT+y0Z0
- PjIdEn79OUyHwAuHThkmqhFOSzmV03AyVj7nWnOJK5oTiaSR0JVK1hK2TRQp5qMqwIv79dH/s
- N5RjJVr+qEyojakfqDRfXarX4KEvCA8znRX4crPV+PVup+45T6wqKY6LC796dkAgfsxZiRV2P
- XD8bHscbXzk5l2jhoagoZqdc7ywxvwXTKxUUrDEJ5KMXIKvAxmBwW7CMfzPsnx2VxIXKJgPPX
- e51pE8XKd1Y/wtpSj/DSmFVs9Y/5J3tlD82VIw6qnyLCpTlKu05mqjOXW9wNXox2gulRA5oLK
- E/auekTxXyKCzYavXskPk7NEnASasm5ROPG3bpL4p3PBH6S9otRuuQHB0xxympZjSJfQo8TFl
- X2ukUdqUXbzUFABZtfmpOyibYXEQ3XDjWbJ0pgGkxvfCOp+mRDiAdII8Bjx9xDZ3HmgX07w2g
- uOj9/SHVkcQm842lusiv81w3dKjCbUCleLxP8znR5PNSZic3hluAzdVysukylT7DX1RbDzZur
- hijlBK3ETX4ntmMVmx6vUQ/G4l90hOfISHGZZKZi5RLQ8B7VeVA0K8VPH2MhdxtKM4oZXGI0i
- XdkX3VZyF8AMlI=
-Subject: [Buildroot] [PATCH v1 10/13] package/gstreamer1-editing-services:
- bump version to 1.18.5
+X-Provags-ID: V03:K1:pRrnIfRbBQD+crwmFyeRK2bZwfpJJisf4ulkw6yG4mcT41BMGQ5
+ 8WkdW4QRd3eu/mYi9XKWjmtGxXCTNv3rZ879S+TBfA19KnMiGp7/mgTkSQfHPsrFnjbueE8
+ jtpZWQGrLREHBcWFkqWH8qrBMsRVsCPZgHNDFVynRHMXPaLJWucKnjcmpkZ7xIsgVQI/cqL
+ LLXqIuHvURacDS19IDK6A==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:F0gbt8+BJ+U=:gEioCQiehuZRFik5ouJPOx
+ nUAEjxR/TFaMBXKLNz8rCpXXmdsSYUg0czN2yeFzK4TlK+L1NbY0GHsa0P6GxixweEi6bmxvS
+ /AT1wMkNVcc/qPLJhNG3WZWB9cHu2MdT6sMRu2Bl8KSMJqt7m/qq2omxZi+GJlTj1abB2F+Vv
+ TN0ck93ZVSKq/2l6hbTMZIxvQW6/nDEcz9pal+4PzNBLMFWkPyt0Czj1C2RaeN17qlf6xOE+n
+ ykWLkiF9A+uutE25EkfWk54rznYmIuSFPhWF4zIRBrr3Neg6mIa+ka3BzL88WuxVTIrInmtO/
+ o17KJXJwLH509ZP9twDpgyq0RB8W60EDesjYGMwA33LYgzME+7Co0BCPt065xHlXcAEv+LrTF
+ n4zPFdr6WfExSv+3kLb6EotPCJ4z8XH+hd6iKeXMM0FEdLN0JBtiLjK75MNul5aXDTeO93skO
+ N4FixvgUscP/H5Ryv+p3QNHoZNgTWAXS4bWuZ3CHmSQjBuqZG1bWUsLKtdjwuJmn4w7n3AxyP
+ vYvyHm9Etcm36Copb0za1FlTsYdNip2cBdkG5uYXOe5lJiZlVurHN6Qo9RTkcmgs/NTgVVgl0
+ bkj8jfwubntFL7lWkv72qO6yqygYZQ/eZT1yVJeI67DSwhzHmzjb4D/6Zgby/v7f9R0TsruFJ
+ pzFHSZiuFD5vvFA8pb5tVXMpE88kTsesrIgRhvL5Abx4wzgx3lMfV+nPlSvQ0sWHyeclxB1BA
+ OZDP3SByv2rAkddd1Wci+YWkGaca/0Q6BAJ36hjAOs39nsExm10EBkQJ0+ZkbbH7x1FmVTAmW
+ bZrIKbFS63SKw1yn281Ld6RjmVKX9JdaYzie5uVVkgoqPC4Is1rqN7g55dHP2gaGKV4OnF5ln
+ /gXYAW0ATTAGkklQ2QP7CQ5VmbvMoqGDWOnGpqHqG2y1Vb/C00ll1/pJ5wkV7qecrulDyzXA0
+ PB30V9dNPgwW8sd4NdVYtG7Kp1imkt8JXA86CvLqc6SKjLGlWqbZdBRGZEpBQjkAvhMTlFRQm
+ APpX23c6iXePbp+mBiNlQ6DNI59vM22o95fo0pKU4qsc1wB/hl49tzHP/dSd7eLoikWfI3DGM
+ IiFF95VscSZkh8=
+Subject: [Buildroot] [PATCH v1 12/13] package/gst1-python: bump version to
+ 1.18.5
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -105,35 +107,33 @@ Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- .../gstreamer1-editing-services.hash                          | 4 ++--
- .../gstreamer1-editing-services.mk                            | 2 +-
+ package/gstreamer1/gst1-python/gst1-python.hash | 4 ++--
+ package/gstreamer1/gst1-python/gst1-python.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
-index 1795171ee2..daaf729c70 100644
---- a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
-+++ b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
-@@ -1,5 +1,5 @@
--# From https://gstreamer.freedesktop.org/src/gstreamer-editing-services/gst-editing-services-1.18.4.tar.xz.sha256sum
--sha256  4687b870a7de18aebf50f45ff572ad9e0138020e3479e02a6f056a0c4c7a1d04  gst-editing-services-1.18.4.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gstreamer-editing-services/gst-editing-services-1.18.5.tar.xz.sha256sum
-+sha256  8af4a8394d051f3e18280686db49a6efaccc95c0c59a17f0f564e32000590df5  gst-editing-services-1.18.5.tar.xz
- 
- # Hashes for license files:
- sha256  f445dc78b88496f7e20c7a2a461b95baba5865c8919b8289ac24ac0a80c6ce7a  COPYING
-diff --git a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
-index e7f626ef7a..d3de79c5f6 100644
---- a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
-+++ b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
+diff --git a/package/gstreamer1/gst1-python/gst1-python.hash b/package/gstreamer1/gst1-python/gst1-python.hash
+index f7c2d57077..2035c81fea 100644
+--- a/package/gstreamer1/gst1-python/gst1-python.hash
++++ b/package/gstreamer1/gst1-python/gst1-python.hash
+@@ -1,3 +1,3 @@
+-# From https://gstreamer.freedesktop.org/src/gst-python/gst-python-1.18.4.tar.xz.sha256sum
+-sha256  cb68e08a7e825e08b83a12a22dcd6e4f1b328a7b02a7ac84f42f68f4ddc7098e  gst-python-1.18.4.tar.xz
++# From https://gstreamer.freedesktop.org/src/gst-python/gst-python-1.18.5.tar.xz.sha256sum
++sha256  533685871305959d6db89507f3b3aa6c765c2f2b0dacdc32c5a6543e72e5bc52  gst-python-1.18.5.tar.xz
+ sha256  ea3ad127610e5ded2210b3a86a46314f2b3b28e438eccffdae19a4d6fbcdb0c2  COPYING
+diff --git a/package/gstreamer1/gst1-python/gst1-python.mk b/package/gstreamer1/gst1-python/gst1-python.mk
+index ed127cdba8..614cb22396 100644
+--- a/package/gstreamer1/gst1-python/gst1-python.mk
++++ b/package/gstreamer1/gst1-python/gst1-python.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GSTREAMER1_EDITING_SERVICES_VERSION = 1.18.4
-+GSTREAMER1_EDITING_SERVICES_VERSION = 1.18.5
- GSTREAMER1_EDITING_SERVICES_SOURCE = gst-editing-services-$(GSTREAMER1_EDITING_SERVICES_VERSION).tar.xz
- GSTREAMER1_EDITING_SERVICES_SITE = https://gstreamer.freedesktop.org/src/gstreamer-editing-services
- GSTREAMER1_EDITING_SERVICES_LICENSE = LGPL-2.0+
+-GST1_PYTHON_VERSION = 1.18.4
++GST1_PYTHON_VERSION = 1.18.5
+ GST1_PYTHON_SOURCE = gst-python-$(GST1_PYTHON_VERSION).tar.xz
+ GST1_PYTHON_SITE = https://gstreamer.freedesktop.org/src/gst-python
+ GST1_PYTHON_INSTALL_STAGING = YES
 -- 
 2.32.0
 
