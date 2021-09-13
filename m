@@ -2,57 +2,57 @@ Return-Path: <SRS0=SwR/=OE=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.2 required=3.0 tests=BAYES_00,DATE_IN_PAST_06_12,
+X-Spam-Status: No, score=-12.2 required=3.0 tests=BAYES_00,DATE_IN_PAST_06_12,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C9EE2C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 06:10:38 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EA528C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 06:10:50 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 3BB4660EB4
-	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 06:10:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3BB4660EB4
+	by mail.kernel.org (Postfix) with ESMTPS id 70F396112D
+	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 06:10:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 70F396112D
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 03D8B40215;
-	Tue, 14 Sep 2021 06:10:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4B371607DB;
+	Tue, 14 Sep 2021 06:10:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id V2BAegb4ggRQ; Tue, 14 Sep 2021 06:10:37 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id UhCxDfZxb_Xi; Tue, 14 Sep 2021 06:10:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 128A240183;
-	Tue, 14 Sep 2021 06:10:36 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 968641BF31B
+	by smtp3.osuosl.org (Postfix) with ESMTP id A71E4607D9;
+	Tue, 14 Sep 2021 06:10:48 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id AB78A1BF989
  for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 06:10:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4321540183
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3C88D607A6
  for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 06:10:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id naCCwMYeJJES for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 73WuN15km7BH for <buildroot@lists.busybox.net>;
  Tue, 14 Sep 2021 06:09:57 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id BEB6D402F2
+ by smtp3.osuosl.org (Postfix) with ESMTP id A3B886058A
  for <buildroot@buildroot.org>; Tue, 14 Sep 2021 06:09:57 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 76FF28AC05; Tue, 14 Sep 2021 06:08:13 +0000 (UTC)
+ id 5DD3D8AC06; Tue, 14 Sep 2021 06:08:13 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 13 Sep 2021 22:54:30 +0200
+Date: Mon, 13 Sep 2021 22:53:57 +0200
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: c136a012ac41d7d682a7596fed04db4fd35546db
-X-Git-Newrev: f52be858f64814a871cfafbce4750471eb4203f6
+X-Git-Oldrev: bff6255da2d1979ab2594afd828dfe40e6350dde
+X-Git-Newrev: f14662bad7e3d7fb8430bdd7a7e88b3eed4e232c
 X-Patchwork-Hint: ignore
-Message-Id: <20210914060813.76FF28AC05@busybox.osuosl.org>
+Message-Id: <20210914060813.5DD3D8AC06@busybox.osuosl.org>
 Subject: [Buildroot] [git commit branch/2021.02.x] package/go: security bump
- to version 1.16.4
+ to 1.16.2
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,23 +71,20 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f52be858f64814a871cfafbce4750471eb4203f6
+commit: https://git.buildroot.net/buildroot/commit/?id=f14662bad7e3d7fb8430bdd7a7e88b3eed4e232c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Fixes the following security issues:
+go1.16.1 (released 2021/03/10) includes security fixes to the archive/zip and
+encoding/xml packages.
 
-- CVE-2021-31525: ReadRequest and ReadResponse in net/http can hit an
-  unrecoverable panic when reading a very large header (over 7MB on 64-bit
-  architectures, or over 4MB on 32-bit ones).  Transport and Client are
-  vulnerable and the program can be made to crash by a malicious server.
-  Server is not vulnerable by default, but can be if the default max header
-  of 1MB is overridden by setting Server.MaxHeaderBytes to a higher value,
-  in which case the program can be made to crash by a malicious client.
+go1.16.2 (released 2021/03/11) includes fixes to cgo, the compiler, linker, the
+go command, and the syscall and time packages.
 
-  https://github.com/golang/go/issues/45710
+https://golang.org/doc/devel/release.html#go1.16
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 1cfc01a008294247255b7dbb0e3da42e5a1d327b)
+Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 9b36b4aa284466e7294ef8d3ef741b674a96a993)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
  package/go/go.hash | 2 +-
@@ -95,24 +92,24 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/package/go/go.hash b/package/go/go.hash
-index 6d8759f97f..a6676bc160 100644
+index 4181fb52c5..524b6131dc 100644
 --- a/package/go/go.hash
 +++ b/package/go/go.hash
 @@ -1,3 +1,3 @@
  # From https://golang.org/dl/
--sha256  b298d29de9236ca47a023e382313bcc2d2eed31dfa706b60a04103ce83a71a25  go1.16.3.src.tar.gz
-+sha256  ae4f6b6e2a1677d31817984655a762074b5356da50fb58722b99104870d43503  go1.16.4.src.tar.gz
- sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+-sha256  7688063d55656105898f323d90a79a39c378d86fe89ae192eb3b7fc46347c95a  go1.16.src.tar.gz
++sha256  37ca14287a23cb8ba2ac3f5c3dd8adbc1f7a54b9701a57824bf19a0b271f83ea  go1.16.2.src.tar.gz
+ sha256	2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
 diff --git a/package/go/go.mk b/package/go/go.mk
-index 138b1cbd34..5b87915824 100644
+index f6cb2469a8..ff12fb0c62 100644
 --- a/package/go/go.mk
 +++ b/package/go/go.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GO_VERSION = 1.16.3
-+GO_VERSION = 1.16.4
+-GO_VERSION = 1.16
++GO_VERSION = 1.16.2
  GO_SITE = https://storage.googleapis.com/golang
  GO_SOURCE = go$(GO_VERSION).src.tar.gz
  
