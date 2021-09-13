@@ -2,88 +2,68 @@ Return-Path: <SRS0=SwR/=OE=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
-	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F24EC433EF
-	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 17:43:33 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6EC7AC433EF
+	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 17:44:20 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 4C0FF60F4A
-	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 17:43:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4C0FF60F4A
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id C658B6058D
+	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 17:44:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C658B6058D
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1774B80E9E;
-	Tue, 14 Sep 2021 17:43:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7BBE460715;
+	Tue, 14 Sep 2021 17:44:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id umIfYx-4FRBn; Tue, 14 Sep 2021 17:43:32 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id G64wCbtC2sMW; Tue, 14 Sep 2021 17:44:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5D48780E61;
-	Tue, 14 Sep 2021 17:43:31 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 536061BF59F
- for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 17:43:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F0BEA606E2;
+	Tue, 14 Sep 2021 17:44:17 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 723191BF59F
+ for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 17:44:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 42D2080E7B
- for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 17:43:30 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6EC7860687
+ for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 17:44:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kx6GWYwy8HJj for <buildroot@lists.busybox.net>;
- Tue, 14 Sep 2021 17:43:29 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
- [IPv6:2a00:1450:4864:20::329])
- by smtp1.osuosl.org (Postfix) with ESMTPS id EEC0580E61
- for <buildroot@buildroot.org>; Tue, 14 Sep 2021 17:43:28 +0000 (UTC)
-Received: by mail-wm1-x329.google.com with SMTP id
- n7-20020a05600c3b8700b002f8ca941d89so152954wms.2
- for <buildroot@buildroot.org>; Tue, 14 Sep 2021 10:43:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=+ek2uXd51r4s0BY0iGGMgvUnBRoVZbX+cwtIvtDQqMk=;
- b=kCuLDcysFP72EJjPfmfs1j0X2wAFVBA0IR4xzW/1lrcDatT5DgEoKxf6LbDL/YxDTO
- +SZ7PR67NKQnPc4l252iVzsLJB4O+RDiTwsS9adUxEgp6QovqtX/pGJFfpFdZXdKWvy1
- pPInO/08sIWpwLam5AkrQs3LyJAgvKtMWmgfS7U/ACyj/+KJied1eUQwNIReY/17dJ+R
- qPYXsu1JD5uDEvtL3LZwyIjNaTqyw1wwuaXDndMqL3vvj7tCnne1FLbQbRANLYO2MzqZ
- 75DMD43DgZMZEZThgq3nW9qDcHTv4QNAH3rFV7MTQ8pVHRQON/qyPFJwcXxK6tabpNHm
- EpZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=+ek2uXd51r4s0BY0iGGMgvUnBRoVZbX+cwtIvtDQqMk=;
- b=0M027aWZiYb3Izi3+CuBlGtUovwMpZdlTPnfIJmwJPpdQhHzd2JhhCZ4XVfJOQf/pZ
- e4Cg15DJzf3yAKsC+l7uQB26AZ2jEzCkDLd2eiZmT8lWI+rqEt0j8aV1Vwm/f/SujXt4
- wX6N4lno1iLrUq3vaR2vAiQCDFUNSfcThuHv/0R5wkGDBI7K/XbHcZcbyT94c3X4cBAQ
- h8FjvssPHqtgTQAM4cp8BG5ncGBxjHv2pjlL26/np+xQBLe5IY6Bz6tj/rEWalMI4AUD
- u+hhAdi5oirzcdgtJsUb31QfcCFS8XvpPh+UqQl+4wYTcgwwPekk0Vg1PI17S/LN68qa
- AXUg==
-X-Gm-Message-State: AOAM533ItxozvIPZTLy85eUBPnVf4IzYkepe4Uc3o0AJKaRUNfIXFr4k
- CNUoF0umwbOK4T5bnpxoZwJyXHA7o0U=
-X-Google-Smtp-Source: ABdhPJy8Jb7egDqmDE7GUf5iOCNRWs/UQDz2dLGrEuhw/3CJBzJVsyDglqK+XI+QoPHEkydLQLRm4w==
-X-Received: by 2002:a1c:a181:: with SMTP id k123mr383612wme.90.1631641407161; 
- Tue, 14 Sep 2021 10:43:27 -0700 (PDT)
-Received: from dell5510.suse.de (gw1.ms-free.net. [185.243.124.10])
- by smtp.gmail.com with ESMTPSA id q11sm10477200wrn.65.2021.09.14.10.43.26
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 14 Sep 2021 10:43:26 -0700 (PDT)
-From: Petr Vorel <petr.vorel@gmail.com>
-To: buildroot@buildroot.org
-Date: Tue, 14 Sep 2021 19:43:21 +0200
-Message-Id: <20210914174321.13977-1-petr.vorel@gmail.com>
-X-Mailer: git-send-email 2.33.0
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hPGPCxH8tsv0 for <buildroot@lists.busybox.net>;
+ Tue, 14 Sep 2021 17:44:15 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 8350B6009C
+ for <buildroot@buildroot.org>; Tue, 14 Sep 2021 17:44:15 +0000 (UTC)
+Received: (Authenticated sender: peter@casa-korsgaard.com)
+ by relay12.mail.gandi.net (Postfix) with ESMTPSA id 794A4200007
+ for <buildroot@buildroot.org>; Tue, 14 Sep 2021 17:44:12 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
+ (envelope-from <peter@korsgaard.com>) id 1mQCTb-00072N-Uy
+ for buildroot@buildroot.org; Tue, 14 Sep 2021 19:44:11 +0200
+Resent-To: buildroot@buildroot.org
+Resent-From: Peter Korsgaard <peter@korsgaard.com>
+Resent-Date: Tue, 14 Sep 2021 19:44:11 +0200
+Resent-Message-ID: <87sfy7128k.fsf@dell.be.48ers.dk>
+X-From-Line: nobody Mon Sep 13 15:26:35 2021
+From: Peter Korsgaard <peter@korsgaard.com>
+To: James Hilliard <james.hilliard1@gmail.com>
+References: <20210829024632.682029-1-james.hilliard1@gmail.com>
+ <20210829024632.682029-7-james.hilliard1@gmail.com>
+Date: Mon, 13 Sep 2021 15:26:35 +0200
+In-Reply-To: <20210829024632.682029-7-james.hilliard1@gmail.com> (James
+ Hilliard's message of "Sat, 28 Aug 2021 20:46:31 -0600")
+Message-ID: <87zgsgzjw4.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: [Buildroot] [RFC PATCH 1/1] support: utils: Use python3
+Subject: Re: [Buildroot] [PATCH v2 7/8] package/swupdate: prevent systemd
+ from removing swupdate tmp folders
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,146 +76,26 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-Python 2 is EOL sice 2020 [1], it's still available on distros, but may not
-be installed by default (as being replaced by python3).
+>>>>> "James" == James Hilliard <james.hilliard1@gmail.com> writes:
 
-Tested with python3 -m py_compile.
+ > Ensure these folders are excluded from being cleaned up by systemd.
+ > Fixes:
+ > [ERROR] : SWUPDATE failed [0] ERROR : I cannot open /tmp/scripts/format.lua 2
+ > [ERROR] : SWUPDATE failed [0] ERROR : extracting script to /tmp/scripts/ failed
+ > [ERROR] : SWUPDATE failed [1] Installation failed !
 
-[1] https://www.python.org/doc/sunset-python-2/
+ > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
----
- support/scripts/cve.py                                 | 2 +-
- support/scripts/graph-build-time                       | 2 +-
- support/scripts/graph-depends                          | 2 +-
- support/scripts/pycompile.py                           | 2 +-
- support/scripts/size-stats                             | 2 +-
- support/testing/tests/package/sample_gst1_python.py    | 2 +-
- support/testing/tests/package/sample_python_gobject.py | 2 +-
- utils/check-package                                    | 2 +-
- utils/genrandconfig                                    | 2 +-
- utils/get-developers                                   | 2 +-
- utils/size-stats-compare                               | 2 +-
- 11 files changed, 11 insertions(+), 11 deletions(-)
+Committed to 2021.02.x, 2021.05.x and 2021.08.x, thanks.
 
-diff --git a/support/scripts/cve.py b/support/scripts/cve.py
-index 13c29fabe0..7cd6fce4d8 100755
---- a/support/scripts/cve.py
-+++ b/support/scripts/cve.py
-@@ -1,4 +1,4 @@
--#!/usr/bin/env python
-+#!/usr/bin/env python3
- 
- # Copyright (C) 2009 by Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- # Copyright (C) 2020 by Gregory CLEMENT <gregory.clement@bootlin.com>
-diff --git a/support/scripts/graph-build-time b/support/scripts/graph-build-time
-index ba3cdad85b..742c9a7a50 100755
---- a/support/scripts/graph-build-time
-+++ b/support/scripts/graph-build-time
-@@ -1,4 +1,4 @@
--#!/usr/bin/env python
-+#!/usr/bin/env python3
- 
- # Copyright (C) 2011 by Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- # Copyright (C) 2013 by Yann E. MORIN <yann.morin.1998@free.fr>
-diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
-index d42bebce9d..a66fb28f41 100755
---- a/support/scripts/graph-depends
-+++ b/support/scripts/graph-depends
-@@ -1,4 +1,4 @@
--#!/usr/bin/env python
-+#!/usr/bin/env python3
- 
- # Usage (the graphviz package must be installed in your distribution)
- #  ./support/scripts/graph-depends [-p package-name] > test.dot
-diff --git a/support/scripts/pycompile.py b/support/scripts/pycompile.py
-index b8cd3cee6c..549272ab33 100644
---- a/support/scripts/pycompile.py
-+++ b/support/scripts/pycompile.py
-@@ -1,4 +1,4 @@
--#!/usr/bin/env python
-+#!/usr/bin/env python3
- 
- """
- Byte compile all .py files from provided directories. This script is an
-diff --git a/support/scripts/size-stats b/support/scripts/size-stats
-index dea3a6007c..bf3d12a9b7 100755
---- a/support/scripts/size-stats
-+++ b/support/scripts/size-stats
-@@ -1,4 +1,4 @@
--#!/usr/bin/env python
-+#!/usr/bin/env python3
- 
- # Copyright (C) 2014 by Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- 
-diff --git a/support/testing/tests/package/sample_gst1_python.py b/support/testing/tests/package/sample_gst1_python.py
-index fab7e74f40..2d7e0e1ed9 100644
---- a/support/testing/tests/package/sample_gst1_python.py
-+++ b/support/testing/tests/package/sample_gst1_python.py
-@@ -1,4 +1,4 @@
--#!/usr/bin/env python
-+#!/usr/bin/env python3
- """A simple test that uses gst1-python to run a fake videotestsrc for 100
- frames
- """
-diff --git a/support/testing/tests/package/sample_python_gobject.py b/support/testing/tests/package/sample_python_gobject.py
-index 50564aa79f..4490a73613 100644
---- a/support/testing/tests/package/sample_python_gobject.py
-+++ b/support/testing/tests/package/sample_python_gobject.py
-@@ -1,4 +1,4 @@
--#!/usr/bin/env python
-+#!/usr/bin/env python3
- """A simple test that uses python-gobject to find the path of sh."""
- from gi.repository import GLib
- 
-diff --git a/utils/check-package b/utils/check-package
-index dd18d19c25..6540af6b2d 100755
---- a/utils/check-package
-+++ b/utils/check-package
-@@ -1,4 +1,4 @@
--#!/usr/bin/env python
-+#!/usr/bin/env python3
- # See utils/checkpackagelib/readme.txt before editing this file.
- 
- from __future__ import print_function
-diff --git a/utils/genrandconfig b/utils/genrandconfig
-index 622cfd4891..062f9f77d6 100755
---- a/utils/genrandconfig
-+++ b/utils/genrandconfig
-@@ -1,4 +1,4 @@
--#!/usr/bin/env python
-+#!/usr/bin/env python3
- 
- # Copyright (C) 2014 by Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- #
-diff --git a/utils/get-developers b/utils/get-developers
-index 9182b2d85f..22accaf181 100755
---- a/utils/get-developers
-+++ b/utils/get-developers
-@@ -1,4 +1,4 @@
--#!/usr/bin/env python
-+#!/usr/bin/env python3
- 
- import argparse
- import getdeveloperlib
-diff --git a/utils/size-stats-compare b/utils/size-stats-compare
-index a3d7f250c6..422972e488 100755
---- a/utils/size-stats-compare
-+++ b/utils/size-stats-compare
-@@ -1,4 +1,4 @@
--#!/usr/bin/env python
-+#!/usr/bin/env python3
- 
- # Copyright (C) 2016 Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
- 
 -- 
-2.33.0
-
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
