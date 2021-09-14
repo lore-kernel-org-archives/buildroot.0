@@ -7,52 +7,51 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 622C6C433F5
-	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 06:14:49 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 43B3AC433F5
+	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 06:15:07 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 04DCC610FB
-	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 06:14:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 04DCC610FB
+	by mail.kernel.org (Postfix) with ESMTPS id 0D4216112D
+	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 06:15:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0D4216112D
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id ACA74402A8;
-	Tue, 14 Sep 2021 06:14:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D01B580E16;
+	Tue, 14 Sep 2021 06:15:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PlIoifKN_rvy; Tue, 14 Sep 2021 06:14:47 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id N_JXQst1lR78; Tue, 14 Sep 2021 06:15:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BFCEA40215;
-	Tue, 14 Sep 2021 06:14:46 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 154DD1BF31B
+	by smtp1.osuosl.org (Postfix) with ESMTP id 50AD380E17;
+	Tue, 14 Sep 2021 06:15:04 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 16B1E1BF989
  for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 06:14:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EFCAB402E2
+ by smtp3.osuosl.org (Postfix) with ESMTP id F2683607D9
  for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 06:14:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3cjDwn_kdPjE for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Yps-4ICOT42a for <buildroot@lists.busybox.net>;
  Tue, 14 Sep 2021 06:14:44 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 41B304029E
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5F803607C9
  for <buildroot@buildroot.org>; Tue, 14 Sep 2021 06:14:44 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id EF8F18AF42; Tue, 14 Sep 2021 06:12:59 +0000 (UTC)
+ id 197B48AF42; Tue, 14 Sep 2021 06:13:00 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 14 Sep 2021 08:12:12 +0200
+Date: Tue, 14 Sep 2021 08:14:27 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a052ecb5b8bb11a9e882b5a4df6a475877a9b75e
-X-Git-Newrev: a7919e68a60c6055bb2a729b5aeb6d47e7bbe924
+X-Git-Oldrev: 495316758070f7859f974e0594928c5dbe6712de
+X-Git-Newrev: 200e6b014254ccd97affe63e5a8ddb49d4728ffd
 X-Patchwork-Hint: ignore
-Message-Id: <20210914061259.EF8F18AF42@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pillow: security bump to
- version 8.3.2
+Message-Id: <20210914061300.197B48AF42@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libmaxminddb: bump to version 1.6.0
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,51 +70,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a7919e68a60c6055bb2a729b5aeb6d47e7bbe924
+commit: https://git.buildroot.net/buildroot/commit/?id=200e6b014254ccd97affe63e5a8ddb49d4728ffd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Fix CVE-2021-23437 Raise ValueError if color specifier is too long
-- Fix 6-byte OOB read in FliDecode
-- Update indentation in hash file (two spaces)
-
-https://github.com/python-pillow/Pillow/releases/tag/8.3.2
+https://github.com/maxmind/libmaxminddb/releases/tag/1.6.0
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-pillow/python-pillow.hash | 7 ++++---
- package/python-pillow/python-pillow.mk   | 4 ++--
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ package/libmaxminddb/libmaxminddb.hash | 2 +-
+ package/libmaxminddb/libmaxminddb.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-pillow/python-pillow.hash b/package/python-pillow/python-pillow.hash
-index fb1ec53a00..3b5bdf2535 100644
---- a/package/python-pillow/python-pillow.hash
-+++ b/package/python-pillow/python-pillow.hash
-@@ -1,5 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/pillow/json
--md5  e42fc66e41b5309436a573af49cec47c  Pillow-8.3.1.tar.gz
--sha256	2cac53839bfc5cece8fdbe7f084d5e3ee61e1303cccc86511d351adcb9e2c792  Pillow-8.3.1.tar.gz
-+md5  a7fc550b80819eab11e01cc097913700  Pillow-8.3.2.tar.gz
-+sha256  dde3f3ed8d00c72631bc19cbfff8ad3b6215062a5eed402381ad365f82f0c18c  Pillow-8.3.2.tar.gz
-+
- # Locally computed sha256 checksums
--sha256	5bb11d96b393a698df70018069a986248021f286344c437a13f299c3daf1dfd4  LICENSE
-+sha256  5bb11d96b393a698df70018069a986248021f286344c437a13f299c3daf1dfd4  LICENSE
-diff --git a/package/python-pillow/python-pillow.mk b/package/python-pillow/python-pillow.mk
-index a55a937c11..168c9d632c 100644
---- a/package/python-pillow/python-pillow.mk
-+++ b/package/python-pillow/python-pillow.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/libmaxminddb/libmaxminddb.hash b/package/libmaxminddb/libmaxminddb.hash
+index 4bdc05f34e..cfe838f7e5 100644
+--- a/package/libmaxminddb/libmaxminddb.hash
++++ b/package/libmaxminddb/libmaxminddb.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  5237076d250a5f7c297e331c35a433eeaaf0dc205e070e4db353c9ba10f340a2  libmaxminddb-1.5.2.tar.gz
++sha256  7620ac187c591ce21bcd7bf352376a3c56a933e684558a1f6bef4bd4f3f98267  libmaxminddb-1.6.0.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/libmaxminddb/libmaxminddb.mk b/package/libmaxminddb/libmaxminddb.mk
+index c022acf797..4037f89a15 100644
+--- a/package/libmaxminddb/libmaxminddb.mk
++++ b/package/libmaxminddb/libmaxminddb.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_PILLOW_VERSION = 8.3.1
--PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/8f/7d/1e9c2d8989c209edfd10f878da1af956059a1caab498e5bc34fa11b83f71
-+PYTHON_PILLOW_VERSION = 8.3.2
-+PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/90/d4/a7c9b6c5d176654aa3dbccbfd0be4fd3a263355dc24122a5f1937bdc2689
- PYTHON_PILLOW_SOURCE = Pillow-$(PYTHON_PILLOW_VERSION).tar.gz
- PYTHON_PILLOW_LICENSE = HPND
- PYTHON_PILLOW_LICENSE_FILES = LICENSE
+-LIBMAXMINDDB_VERSION = 1.5.2
++LIBMAXMINDDB_VERSION = 1.6.0
+ LIBMAXMINDDB_SITE = \
+ 	https://github.com/maxmind/libmaxminddb/releases/download/$(LIBMAXMINDDB_VERSION)
+ LIBMAXMINDDB_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
