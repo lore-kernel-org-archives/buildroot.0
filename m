@@ -2,90 +2,92 @@ Return-Path: <SRS0=SwR/=OE=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.5 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
 	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
 	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A8C06C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 16:16:06 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DA7E1C433FE
+	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 16:17:43 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2868E60F70
-	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 16:16:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2868E60F70
+	by mail.kernel.org (Postfix) with ESMTPS id 604E060F70
+	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 16:17:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 604E060F70
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C689E80F43;
-	Tue, 14 Sep 2021 16:16:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0FC796067E;
+	Tue, 14 Sep 2021 16:17:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5rXDhK_A0Zm7; Tue, 14 Sep 2021 16:16:05 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 885C180B15;
-	Tue, 14 Sep 2021 16:16:03 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9D4CF1BF42E
- for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 16:16:01 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9A1A36061A
- for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 16:16:01 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Q4_rcD8x8dtu for <buildroot@lists.busybox.net>;
- Tue, 14 Sep 2021 16:16:00 +0000 (UTC)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id nZgg1sJ7917h; Tue, 14 Sep 2021 16:17:42 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 62E6E6061A;
+	Tue, 14 Sep 2021 16:17:41 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id DB18C1BF42E
+ for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 16:17:39 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id CB70B80B15
+ for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 16:17:39 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id GNROPdr6zMJE for <buildroot@lists.busybox.net>;
+ Tue, 14 Sep 2021 16:17:38 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
- [IPv6:2a00:1450:4864:20::42f])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A051A605F6
- for <buildroot@buildroot.org>; Tue, 14 Sep 2021 16:16:00 +0000 (UTC)
-Received: by mail-wr1-x42f.google.com with SMTP id m9so21179394wrb.1
- for <buildroot@buildroot.org>; Tue, 14 Sep 2021 09:16:00 -0700 (PDT)
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
+ [IPv6:2a00:1450:4864:20::42e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7CAE480B10
+ for <buildroot@buildroot.org>; Tue, 14 Sep 2021 16:17:38 +0000 (UTC)
+Received: by mail-wr1-x42e.google.com with SMTP id t8so16113750wrq.4
+ for <buildroot@buildroot.org>; Tue, 14 Sep 2021 09:17:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=DKdD3Leunkjxn9Oxp4s+Q1+Oju2vW/u4Yt95oEo6Ybs=;
- b=JrjdwoO/Ux41ESHjxvmG2HfunnqPkcs0+ueqZM/8+V+qXOZKThtauyPwzv7LxmBcCS
- Cv8mcyUi7gATbiwACSg+OYw9SkyICJ571bSK6wSPN4w4JmbQ0gensPDFSsF+Vm5nbK7o
- +knCKWjwSYhO6lv6f9RRnnHrDA4aZMcIaRUeQ14dxkHkCD/P8Pqy65AGeY2yyW1H4h8J
- y+0hwAAk6jlBT01FLNzNRoFt3jdHK9GzJ/VqV06FJrjB4kNmynwLP+A+WTgh7qKF80VD
- 00T4f7Yk4Y6F78ManG/7KE7OLAcSbnLBPqj5lkxYMnZe4rPRZx5cEMi+pXMe5R5Ue+2S
- JExQ==
+ bh=lA+9G6vD1ykTnvpik/FAOkSjnQx/c1XBExF/8D7SPRg=;
+ b=Ub5UeUqEDPzPD+xBI07nww9GPn+iwThSpij5wuHm8sRI/l5AtPV6B30b5FutJge8st
+ AmHTByuy2MXQbLZcxb7LhxxC2FIbcNpLpzzwmY1IIjqn7j7DMqagv4B2glblCcfKJOJx
+ QSr7Ozuz4dpUJCjfLE7XM1RDZi4C8Aaq5pMWYs6sLinp3N1EFAnjujSGV0GlMaraG/wy
+ uHBQkiU+05AxmoHsTumese/aUdpJMdVDnFf0p3GlYxM/s+H63vW7e2SZkv2X9kc2xxXB
+ HkHbDHr7ZYZw+lndI711eh1MIIbyaecxVb523geVruEwe4SziwMJPvaMsYYUO39omS3i
+ AXOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=DKdD3Leunkjxn9Oxp4s+Q1+Oju2vW/u4Yt95oEo6Ybs=;
- b=PTQ0mqyFzt2gc0SHV15Lxr0YdK71A8LEdFBBb3cTbrFppgPtE0fe3EE7ybP6H/R6Lv
- UhJFciT+XhJWhM8wNPjIQlsiX3iry2wbmzyY9ea052n2eS8VSdzHIO38uEvoihyI4rSu
- V5AG8PtM/vaadpCOXuWiRlxlKBj6PVygk4PJ3Z0ZxOvyJXSAjRmfCymrQ1ynsvMABUSW
- 3qahrcdx0X3EpO6ZngFCN/IwRn/38eKcnhg8M36X3igWFSbgbzYmyKbHgtxIJ4iyy5Wr
- DhiwytW2K3tAl6vry1QXG09H+JIvX4k48siLWn+murZIpZ9wYhNzNXDkkSusKuOqImK3
- NR8g==
-X-Gm-Message-State: AOAM530VrYL6Hyje245Xaon2L2x3i2dNDqTSkQwrJKLI7i9mHqHCsx6z
- 885dXbLWX7qDyq4q/DwEcT00qgCFL9g=
-X-Google-Smtp-Source: ABdhPJwv1kBxNrGEnAZm06lwZLJ7KRaB0+A5tIn97FxK2FYgTj4atZ3zobV8xm1dWhcAbsBWSTJkYw==
-X-Received: by 2002:adf:fb91:: with SMTP id a17mr19303870wrr.376.1631636158638; 
- Tue, 14 Sep 2021 09:15:58 -0700 (PDT)
+ bh=lA+9G6vD1ykTnvpik/FAOkSjnQx/c1XBExF/8D7SPRg=;
+ b=k2+R3CZRjmDlifKM8f+HrqwTDQgkd+A12RV/R6WUZ+AidVmlmxb+lIg3PtBrKFdxOR
+ +Xzv1VVP/bZK/W5qeESM3cz0vpvQ7BVVCGzJJIH1TNQOCt54H/ayXFzfzWsJRJYeOWQ1
+ O/6DNmfRLzcFw1NauRVYy5/Ph2XNIwZTOrPSeN/sWHyZz++ygY7+rvKQDLMbFgsyQFSu
+ dI60Y6Z54gmUhmnE8BYzYpfTOdAX/+fdp/tvhAavEglUON4ANcw9iMvYSeCKzZkxM1h0
+ eXUBUDQAxUP11QdNQ2u3HNSaIyJbF8HsOyMhl8HJhh3uOZLpLHWz3Vw38M/CydcB9fiP
+ i2LQ==
+X-Gm-Message-State: AOAM530DQO8rThV/b5phOiIO7Maw7STJD/lz1bdyFQLRtNAq96zwcimA
+ yBUDkygwZkYgC2Mh++s1/Sp3FXwJQEc=
+X-Google-Smtp-Source: ABdhPJxWCP4PAlXE4XbxJX4nZy/bdJYU+8gEkeq+Lrgcmp4qXcc9VHtBIgOCrV/l8a+xVqrG0Vpu6w==
+X-Received: by 2002:a05:6000:104e:: with SMTP id
+ c14mr19743808wrx.130.1631636256417; 
+ Tue, 14 Sep 2021 09:17:36 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-2139-166.w92-167.abo.wanadoo.fr.
  [92.167.218.166])
- by smtp.gmail.com with ESMTPSA id o2sm11659713wrh.13.2021.09.14.09.15.57
+ by smtp.gmail.com with ESMTPSA id r2sm11556790wrg.31.2021.09.14.09.17.35
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 14 Sep 2021 09:15:57 -0700 (PDT)
+ Tue, 14 Sep 2021 09:17:36 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 14 Sep 2021 18:15:11 +0200
-Message-Id: <20210914161511.44400-1-fontaine.fabrice@gmail.com>
+Date: Tue, 14 Sep 2021 18:17:30 +0200
+Message-Id: <20210914161731.45958-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/mpv: disable vaapi with DRI driver
+Subject: [Buildroot] [PATCH 1/2] package/x11r7/xapp_xeyes: xrender is
+ optional, not mandatory
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,58 +100,53 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: Mahyar Koshkouei <mahyar.koshkouei@gmail.com>,
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
  Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-Build of vaapi with BR2_PACKAGE_MESA3D_DRI_DRIVER is broken since commit
-17a7abbafee9bf4a971e00da7870ae439910e47e because vaapi can only be
-enabled with x11, wayland or egl-drm
-(https://github.com/mpv-player/mpv/blob/ec0006bfa1aaf608a7141929f2871c89ac7a15d6/wscript#L632):
-
-'deps': 'libdl && (x11 || wayland || egl-drm)',
-
-As a result, despite what is being displayed in the autobuilder log
-message, the build failure is not related to X11 but to the fact that
-we try to enable vaapi through a DRI driver but without egl.
-
-Fixes:
- - http://autobuild.buildroot.org/results/5ae706e94eb6e5a3aa69368f81c5d12e608b1a5a
+xrender is optional, not mandatory since its addition in version 1.0.99:
+https://gitlab.freedesktop.org/xorg/app/xeyes/-/commit/5e825a140f4022b88dd7a1a20a9a01b653f1a95c
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/mpv/Config.in | 2 +-
- package/mpv/mpv.mk    | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/x11r7/xapp_xeyes/Config.in     | 1 -
+ package/x11r7/xapp_xeyes/xapp_xeyes.mk | 9 ++++++++-
+ 2 files changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/package/mpv/Config.in b/package/mpv/Config.in
-index 51c9799de8..81b1e24b5f 100644
---- a/package/mpv/Config.in
-+++ b/package/mpv/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_MPV_SUPPORTS_VAAPI
- 	bool
--	default y if BR2_PACKAGE_LIBDRM && BR2_PACKAGE_MESA3D_GBM
-+	default y if BR2_PACKAGE_LIBDRM && BR2_PACKAGE_MESA3D_OPENGL_EGL
- 	default y if BR2_PACKAGE_WAYLAND
- 	default y if BR2_PACKAGE_XORG7
+diff --git a/package/x11r7/xapp_xeyes/Config.in b/package/x11r7/xapp_xeyes/Config.in
+index 5cf7f6c052..a7b77375fd 100644
+--- a/package/x11r7/xapp_xeyes/Config.in
++++ b/package/x11r7/xapp_xeyes/Config.in
+@@ -3,7 +3,6 @@ config BR2_PACKAGE_XAPP_XEYES
+ 	select BR2_PACKAGE_XLIB_LIBX11
+ 	select BR2_PACKAGE_XLIB_LIBXEXT
+ 	select BR2_PACKAGE_XLIB_LIBXMU
+-	select BR2_PACKAGE_XLIB_LIBXRENDER
+ 	select BR2_PACKAGE_XLIB_LIBXT
+ 	help
+ 	  X.Org xeyes application
+diff --git a/package/x11r7/xapp_xeyes/xapp_xeyes.mk b/package/x11r7/xapp_xeyes/xapp_xeyes.mk
+index 11eea802d5..a127e28ea7 100644
+--- a/package/x11r7/xapp_xeyes/xapp_xeyes.mk
++++ b/package/x11r7/xapp_xeyes/xapp_xeyes.mk
+@@ -9,6 +9,13 @@ XAPP_XEYES_SOURCE = xeyes-$(XAPP_XEYES_VERSION).tar.bz2
+ XAPP_XEYES_SITE = https://xorg.freedesktop.org/archive/individual/app
+ XAPP_XEYES_LICENSE = MIT
+ XAPP_XEYES_LICENSE_FILES = COPYING
+-XAPP_XEYES_DEPENDENCIES = xlib_libX11 xlib_libXext xlib_libXmu xlib_libXrender xlib_libXt
++XAPP_XEYES_DEPENDENCIES = xlib_libX11 xlib_libXext xlib_libXmu xlib_libXt
++
++ifeq ($(BR2_PACKAGE_XLIB_LIBXRENDER),y)
++XAPP_XEYES_DEPENDENCIES += xlib_libXrender
++XAPP_XEYES_CONF_OPTS += --with-xrender
++else
++XAPP_XEYES_CONF_OPTS += --without-xrender
++endif
  
-diff --git a/package/mpv/mpv.mk b/package/mpv/mpv.mk
-index a71a4b3114..ff77f248e5 100644
---- a/package/mpv/mpv.mk
-+++ b/package/mpv/mpv.mk
-@@ -184,7 +184,7 @@ endif
- ifeq ($(BR2_PACKAGE_LIBVA)$(BR2_PACKAGE_MPV_SUPPORTS_VAAPI),yy)
- MPV_CONF_OPTS += --enable-vaapi
- MPV_DEPENDENCIES += libva
--ifeq ($(BR2_PACKAGE_LIBDRM)$(BR2_PACKAGE_MESA3D_GBM),yy)
-+ifeq ($(BR2_PACKAGE_LIBDRM)$(BR2_PACKAGE_MESA3D_OPENGL_EGL),yy)
- MPV_CONF_OPTS += --enable-vaapi-drm
- else
- MPV_CONF_OPTS += --disable-vaapi-drm
+ $(eval $(autotools-package))
 -- 
 2.33.0
 
