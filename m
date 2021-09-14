@@ -2,92 +2,89 @@ Return-Path: <SRS0=SwR/=OE=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
 	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
 	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLACK,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F38BC433F5
-	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 21:12:50 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 023F8C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 21:15:14 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id A3BF3610D1
-	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 21:12:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A3BF3610D1
+	by mail.kernel.org (Postfix) with ESMTPS id 9AC0461213
+	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 21:15:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9AC0461213
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6B504402CA;
-	Tue, 14 Sep 2021 21:12:49 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6909E4037C;
+	Tue, 14 Sep 2021 21:15:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bjMhVS-uhN7n; Tue, 14 Sep 2021 21:12:48 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id D8DeBh5O1zTE; Tue, 14 Sep 2021 21:15:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BD345402F5;
-	Tue, 14 Sep 2021 21:12:47 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id DF7A21BF57F
- for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 21:12:45 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6FCD940183;
+	Tue, 14 Sep 2021 21:15:11 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id AEA171BF292
+ for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 21:15:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DBD79607E9
- for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 21:12:45 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9DA0740183
+ for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 21:15:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hbhI_VuDyNMB for <buildroot@lists.busybox.net>;
- Tue, 14 Sep 2021 21:12:45 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8q2dSGR2a_Xe for <buildroot@lists.busybox.net>;
+ Tue, 14 Sep 2021 21:15:08 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
- [IPv6:2a00:1450:4864:20::429])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C60CC6072D
- for <buildroot@buildroot.org>; Tue, 14 Sep 2021 21:12:44 +0000 (UTC)
-Received: by mail-wr1-x429.google.com with SMTP id b6so381737wrh.10
- for <buildroot@buildroot.org>; Tue, 14 Sep 2021 14:12:44 -0700 (PDT)
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
+ [IPv6:2a00:1450:4864:20::42f])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6D9D240154
+ for <buildroot@buildroot.org>; Tue, 14 Sep 2021 21:15:08 +0000 (UTC)
+Received: by mail-wr1-x42f.google.com with SMTP id u15so423002wru.6
+ for <buildroot@buildroot.org>; Tue, 14 Sep 2021 14:15:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=+UM6pgxisIyvk/PfCI8YR+0V43UuSzx1+OOX/Mj4ty0=;
- b=FMK0bnKPiDSbzIjZNsLtT0NU4hmYQEGiJwxGObJb5g/eni222CD/k0MGuIkJwkXOL/
- XvNns1yrVu5WekAXDMDWR2Xjsuk+knrbFqEH2Qv5n1MfpLXn92q9dL4n8dPPHtVqDtqd
- khs/Ao7ojCj2Mokfqm5v0usS0fSy3ItMrehd+11ktafniuAzLr8UJMtTRYwyMpzbmrzf
- 8OsbGl2NF+0MCjxbhAwQCuIC1YXQQebQKoXi43IPllbsIlcjmPZ+eXMo1fegZ9rGgTEU
- FjVjcxDP7Fdh7FjAyAZzfir8UjiPmQUq3hja00+E+UV2irtTtCHPjomLKHhwIcTALWR+
- 0ybg==
+ bh=Y6F/EU9ObNVuLnpJ7i864ol2luUMG67PllSpb/j77NI=;
+ b=BBOQSKCQmhNLGBKi5EfJZSvxddsIjbswEbbrKvyjeLBdblZv9cVVExg2fkmGd0OBxm
+ fDCA9dlj8dB+QnDkKuchIGIdKSiXyitoxeEtRrDz4KnQJHy0Sl7vlYnrh3XllPDACqqj
+ JeFXdhFdZtspATc2pAK+YKXf5fXHg1em5Irvg1kt8FOhVY4Mtmp1vYNKPHlShj/dygM6
+ 9OoSff2an9IAaDzOH0+lTC96/87wh/v7HStCZzGoyu4QtoR7MbgSMsJhKnHH5XO7ysd6
+ hipyQICW8SCufg7AmLJWcEjk4yc3OaitCYvaFvB3V/tAIVRwEDoSFAtc8vHnBzRFml+Z
+ e5Ag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=+UM6pgxisIyvk/PfCI8YR+0V43UuSzx1+OOX/Mj4ty0=;
- b=LgtPDUh3oClW7WN5FZmvhE0nWEHXbn8+wtlqLbN0YCV7LcBCdPE8wbr+oqCTkg6Mad
- tjQko4Z67Q2+Xeu8TP1w35BaI1C8vjptCb6D8aMWTHRdiaaN2KIg0XuxocKeqnIKBW3T
- +2wSEswKCL+Sruf7WDu+sO6HzSpSU1ktJb9zhV6ECswGPjfp8MeN0HmLyOEALE9boxzB
- XIsPX3wWyerTxwUAQb2rRobRuD4WrtzXFT0aG36C+USuvfIVQVZnF5ovUHKwjd2/fyAM
- fCDasAfgDP365J8dN6cd9167rDN7X5NTYB2hWsAno17gna6bbxm2w4hSLKvJlJuwzn9n
- sQ2Q==
-X-Gm-Message-State: AOAM530f+bFf5QvdpNJnCxraX1fPj7xGwDI2NJfnHaQh9ttVpCctzwdh
- uf8PNixdzlB8PbsilEoDq5PMddcTgGE=
-X-Google-Smtp-Source: ABdhPJzAg9j/lnbCanw2Rake4B+GQezZjATUy4E1rzfg0AYRdkCTNyfPG2LZQU7ssp0Vjc9IkM89NA==
-X-Received: by 2002:a05:6000:124b:: with SMTP id
- j11mr1204241wrx.147.1631653962679; 
- Tue, 14 Sep 2021 14:12:42 -0700 (PDT)
+ bh=Y6F/EU9ObNVuLnpJ7i864ol2luUMG67PllSpb/j77NI=;
+ b=MvBIwpLOhrECKDhr9+W1OAbW/N+JJR0HUB70SM9qp+3wv2bafw6u+gGFLUnbhQ0L2e
+ sgIbTH3GwRhTPIIwJ/tSkREysidO+MaLzkV7nZgXlfbj1zLgid7JHZuHcNfprF2Noktb
+ 3XxRmRNKvOItQlgPjHgUwbQIihFbhvDCww13ot3HtyZD8xq4HUUWW7Q2nO4rG93lctjP
+ w9oCBRLQw7tFHukd0eoUOpy8AsSByeg79I5ive208mchb0wrqMuGOv6KJpkSIYbYew6i
+ ILUlc5zgw3hW5YMdhGDvzw1Cm13mCUYEqLdRt+Pq1E8SGAKQYJewss7Uq6KZEwAJhRBZ
+ r4tw==
+X-Gm-Message-State: AOAM532yghSjn67qsesEVlkx3VW2Bo2w9loK7BHVadxVlAwOif2QoCGw
+ mfL19PQMRvs0DUsW0iKelF7FCzkLWN0=
+X-Google-Smtp-Source: ABdhPJw+deW+cpXLa/Lt2tqw6w5G4M0N7aoW/uJ3DnC4vU2pWdGwwi6VDwCadvUoL7Iiz8g3lJJZPA==
+X-Received: by 2002:adf:c542:: with SMTP id s2mr1224139wrf.374.1631654106452; 
+ Tue, 14 Sep 2021 14:15:06 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-2139-166.w92-167.abo.wanadoo.fr.
  [92.167.218.166])
- by smtp.gmail.com with ESMTPSA id v10sm11711177wrg.15.2021.09.14.14.12.41
+ by smtp.gmail.com with ESMTPSA id l13sm11218853wrb.11.2021.09.14.14.15.05
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 14 Sep 2021 14:12:42 -0700 (PDT)
+ Tue, 14 Sep 2021 14:15:05 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 14 Sep 2021 23:11:06 +0200
-Message-Id: <20210914211106.401780-1-fontaine.fabrice@gmail.com>
+Date: Tue, 14 Sep 2021 23:15:01 +0200
+Message-Id: <20210914211501.403653-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/apitrace: fix build with glibc >=
- 2.34
+Subject: [Buildroot] [PATCH 1/1] package/uboot-tools: fix static build with
+ musl
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,68 +97,70 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
+Cc: Matt Weber <matthew.weber@collins.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-Fix the following build failure with glibc >= 2.34:
+Static build with musl fails since bump to version 2020.04 in commit
+fe97212976ea0b2a80fe1e076ad17d6f648cd1de because LDFLAGS, which contains
+-static, is not passed resulting in the following build failure:
 
-/tmp/instance-0/output-1/host/lib/gcc/s390x-buildroot-linux-gnu/10.3.0/../../../../s390x-buildroot-linux-gnu/bin/ld: CMakeFiles/egltrace.dir/dlsym.cpp.o: in function `dlsym':
-dlsym.cpp:(.text+0x34): undefined reference to `__libc_dlopen_mode'
-/tmp/instance-0/output-1/host/lib/gcc/s390x-buildroot-linux-gnu/10.3.0/../../../../s390x-buildroot-linux-gnu/bin/ld: dlsym.cpp:(.text+0x46): undefined reference to `__libc_dlsym'
+/tmp/instance-1/output-1/host/lib/gcc/arm-buildroot-linux-musleabihf/10.3.0/../../../../arm-buildroot-linux-musleabihf/bin/ld: /tmp/instance-1/output-1/host/lib/gcc/arm-buildroot-linux-musleabihf/10.3.0/libgcc.a(_dvmd_lnx.o): in function `__aeabi_ldiv0':
+/tmp/instance-1/output-1/build/host-gcc-final-10.3.0/build/arm-buildroot-linux-musleabihf/libgcc/../../../libgcc/config/arm/lib1funcs.S:1499: undefined reference to `raise'
+collect2: error: ld returned 1 exit status
 
 Fixes:
- - http://autobuild.buildroot.org/results/ac5e5b1e30249ae0fb8b9179338b47c60c026bcc
+ - http://autobuild.buildroot.org/results/d71aba27ff0c7711f2cb67261183506f25217a5f
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...and-__libc_dlopen_mode-on-GLIBC-2-34.patch | 34 +++++++++++++++++++
+ ...ix-C-LD-FLAGS-with-CROSS_BUILD_TOOLS.patch | 34 +++++++++++++++++++
  1 file changed, 34 insertions(+)
- create mode 100644 package/apitrace/0002-gltrace-Avoid-__libc_dlsym-and-__libc_dlopen_mode-on-GLIBC-2-34.patch
+ create mode 100644 package/uboot-tools/0003-tools-Makefile-fix-C-LD-FLAGS-with-CROSS_BUILD_TOOLS.patch
 
-diff --git a/package/apitrace/0002-gltrace-Avoid-__libc_dlsym-and-__libc_dlopen_mode-on-GLIBC-2-34.patch b/package/apitrace/0002-gltrace-Avoid-__libc_dlsym-and-__libc_dlopen_mode-on-GLIBC-2-34.patch
+diff --git a/package/uboot-tools/0003-tools-Makefile-fix-C-LD-FLAGS-with-CROSS_BUILD_TOOLS.patch b/package/uboot-tools/0003-tools-Makefile-fix-C-LD-FLAGS-with-CROSS_BUILD_TOOLS.patch
 new file mode 100644
-index 0000000000..57e3ee248b
+index 0000000000..502458e219
 --- /dev/null
-+++ b/package/apitrace/0002-gltrace-Avoid-__libc_dlsym-and-__libc_dlopen_mode-on-GLIBC-2-34.patch
++++ b/package/uboot-tools/0003-tools-Makefile-fix-C-LD-FLAGS-with-CROSS_BUILD_TOOLS.patch
 @@ -0,0 +1,34 @@
-+From d28a980802ad48568c87da02d630c8babfe163bb Mon Sep 17 00:00:00 2001
-+From: Jose Fonseca <jfonseca@vmware.com>
-+Date: Wed, 1 Sep 2021 16:34:54 +0100
-+Subject: [PATCH] gltrace: Avoid __libc_dlsym and __libc_dlopen_mode on GLIBC
-+ 2.34.
++From 3b89170333ef0fdfffee14751ce3e1d66d7dfa00 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Tue, 14 Sep 2021 19:08:02 +0200
++Subject: [PATCH] tools/Makefile: fix {C,LD}FLAGS with CROSS_BUILD_TOOLS
 +
-+These GLIBC_PRIVATE symbols are gone from GLIBC 2.34 due to the merge of
-+libdl.so onto libc.so.
++When CROSS_BUILD_TOOLS is set, set KBUILD_HOST{CF,LD}FLAGS to
++{C,LD}FLAGS otherwise CC will be used with HOST{C,LD}FLAGS which seems
++wrong.
 +
-+This means apitrace can't defend against infinite recursion when
-+used with Steam Overlay, but at least it should work otherwise.
++It should be noted that, for an unknown reason, overriding
++HOST{C,LD}FLAGS don't work.
 +
-+Fixes https://github.com/apitrace/apitrace/issues/756
-+
-+[Retrieved from:
-+https://github.com/apitrace/apitrace/commit/d28a980802ad48568c87da02d630c8babfe163bb]
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 +---
-+ wrappers/dlsym.cpp | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++ tools/Makefile | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
 +
-+diff --git a/wrappers/dlsym.cpp b/wrappers/dlsym.cpp
-+index 5ab8465b0..5369af35a 100644
-+--- a/wrappers/dlsym.cpp
-++++ b/wrappers/dlsym.cpp
-+@@ -34,7 +34,7 @@
-+ #include "os.hpp"
++diff --git a/tools/Makefile b/tools/Makefile
++index 4a86321f64..98bb92990d 100644
++--- a/tools/Makefile
+++++ b/tools/Makefile
++@@ -316,7 +316,8 @@ subdir- += env
 + 
++ ifneq ($(CROSS_BUILD_TOOLS),)
++ override HOSTCC = $(CC)
++-override HOSTCFLAGS = $(CFLAGS)
+++override KBUILD_HOSTCFLAGS = $(CFLAGS)
+++override KBUILD_HOSTLDFLAGS = $(LDFLAGS)
 + 
-+-#if defined(__GLIBC__) && !defined(__UCLIBC__)
-++#if defined(__GLIBC__) && !defined(__UCLIBC__) && __GLIBC__ == 2 && __GLIBC_MINOR__ < 34
-+ 
-+ 
-+ #include <dlfcn.h>
++ quiet_cmd_crosstools_strip = STRIP   $^
++       cmd_crosstools_strip = $(STRIP) $^; touch $@
++-- 
++2.33.0
++
 -- 
 2.33.0
 
