@@ -8,81 +8,79 @@ X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1408AC433F5
-	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 17:20:12 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2849DC433EF
+	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 17:22:58 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 80C6761130
-	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 17:20:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 80C6761130
+	by mail.kernel.org (Postfix) with ESMTPS id C985C60F4C
+	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 17:22:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C985C60F4C
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 516E0606E2;
-	Tue, 14 Sep 2021 17:20:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9860380D7B;
+	Tue, 14 Sep 2021 17:22:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SHzDc-r9srV3; Tue, 14 Sep 2021 17:20:10 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id mEDp9JaIUbP7; Tue, 14 Sep 2021 17:22:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 83FFF606C4;
-	Tue, 14 Sep 2021 17:20:09 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 989751BF283
- for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 17:20:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B8D3680E8F;
+	Tue, 14 Sep 2021 17:22:55 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 928A31BF283
+ for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 17:22:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 944854017E
- for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 17:20:08 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 82D2980E8F
+ for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 17:22:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id h_n7UiXMlYnG for <buildroot@lists.busybox.net>;
- Tue, 14 Sep 2021 17:20:07 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id P6XPzS2Xg7lg for <buildroot@lists.busybox.net>;
+ Tue, 14 Sep 2021 17:22:52 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
- [IPv6:2a00:1450:4864:20::42b])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2D6CA400D4
- for <buildroot@buildroot.org>; Tue, 14 Sep 2021 17:20:07 +0000 (UTC)
-Received: by mail-wr1-x42b.google.com with SMTP id t8so16426439wrq.4
- for <buildroot@buildroot.org>; Tue, 14 Sep 2021 10:20:07 -0700 (PDT)
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
+ [IPv6:2a00:1450:4864:20::32f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5925B80D7B
+ for <buildroot@buildroot.org>; Tue, 14 Sep 2021 17:22:52 +0000 (UTC)
+Received: by mail-wm1-x32f.google.com with SMTP id
+ g19-20020a1c9d13000000b003075062d4daso136069wme.0
+ for <buildroot@buildroot.org>; Tue, 14 Sep 2021 10:22:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
  bh=B97ksn9+xLfTyqt0JxBHdLjuj0Wu/EXlg/PS1jWSPkQ=;
- b=JcdprNLGs07FoY0PgYO9yafKZiOwNlaOuLKJ6YCAD7m0y17bQwdnhIYtrgoomfEXZV
- U8+ZWgYbhszwtlrQqKA/ORO8WXOWOd1BQ0OhA64Pl9sqTn6NvXZ1AdTjiYtLX9KSwrcK
- ZRMJTLVdSfrg0ieV1hv9KmQPVagNvJix8A1khvnrBH5wMzxdAv+0xIuN21dOsJSrlPp9
- Z37WJT1wtLd6HQzY48xiWsVklLbQ2VvdfXPBr/7APgwVexD1qbXKckvl+93irEgZtl+v
- M4eBMNx1LVRhiwB3ye07gAPmbsKcDJcbouZHYnU1cs3OV9SGyM1znoadfwbeq0oyT0L0
- wGkw==
+ b=pr7k7r7BnEX9KILrzCOqf0TSZDCWzdmpsQ1netTLTRN1DLqQcy56otAUGuRgDdNZwC
+ oO42rKxTbMQROZ9mSeVuuslVA2rHHKkcquhZqaZazAcJOEjFkuRZbbHpAWUt3pZs262f
+ wIMfnwSO1JqhebAWo6rX5ACQRbINP+oESGc31+cLYNAnQVGMnix4vdAKxnpSEJA/lURJ
+ 8UOmKn9Jzp4aB84rp2HzjWHTfpV34JkZi4uo9FvxKQMxhRZv9WIGFowYZ8nKadj2h/Ve
+ 6Q5SGhB27DLyeNW+jI+UwoOEmy0fajfGtfO3Hn4Wsp12fH7yQtUWieZDAsMqwiE8IZmx
+ U2YQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
  bh=B97ksn9+xLfTyqt0JxBHdLjuj0Wu/EXlg/PS1jWSPkQ=;
- b=dDhP4Qph8I7s91W7S9IdywN5nlIAWx66dbGSzz/FoC3LSCyQvInmeh15K8IxI07uOw
- QL+V2PhOhAUwfWqnvT8lg6YgqYIvBpT5Zr8Pb82jIabwfrSZRx7Fo+6xXtmckutJyMyl
- NpbLC0/Iu3AYzLiLSZB0SoveoGD7YULQ39L4xwWi+0Kob3wwpyxpN4ZPE0IbqU63ez24
- xMJTNL3YAwfb82fCYWsXlS5G+XzYqTL5KKDuXeJvacPKG/zVVaQPblnkqwa6PXkC8Mou
- ZM15qvVHnGxQ8areDCoza6l3gAd5GH+AcwTvEDoUM1mR3/1q/QHFh57JAlTUWQXab8qB
- +kwg==
-X-Gm-Message-State: AOAM531u46DlWENmd8fZNhSpAmc3VNSS9ogKysAW1o0DQEwoGuXgIwNV
- M57EONRg+EWy5aJAZKabwX1Qjz3IByM=
-X-Google-Smtp-Source: ABdhPJw3GNvD0NhTPkECh+V5pUDucHkHEVMCNbWR8YIWLMYVAYuB7kAQXfaN4Xu+qel4sMmtehwK/A==
-X-Received: by 2002:a05:6000:1569:: with SMTP id
- 9mr317984wrz.242.1631640005371; 
- Tue, 14 Sep 2021 10:20:05 -0700 (PDT)
+ b=okspTv/5Aforr8C6/v4rc4MDsIFiSM6/p9NaDHLdIQ7ygo+jrd/LOPMdlf1qDMZER7
+ WP2Lw2lVdZ6XzI2HnQrsXuvGit7npxlhv5pxqvEg2M5UmVgzh7BDj+RCoZ9BPhEr+WEE
+ 7SPzUv3dh59w8Ivci1NYFH+7Q6E3hLVwj//26HZ/EcogL8oq0SVBtNPzZDu3ZihMvKlD
+ 4oiVtyaYDZBEZzbBx0wE7Nb+qaA1rNQ1QcGdh+mntPXX31u78UXYKcrcbo6kOjeqtPLS
+ NSoG3dRn6CorOASfupfIxaoIq4NkLCTS+kTkTZttsQyInmbSTHNYm1WBhTxUmsmeFH0C
+ M4aw==
+X-Gm-Message-State: AOAM5316OVy0a66l+Iw7boTnxfKT2XalyqPNwzKaiW5KkyQlLx6D9Yhk
+ JYh8DtfTIs9/BgLrsHWLlqheq0Mn9oA=
+X-Google-Smtp-Source: ABdhPJwmCt9bljmn1pk/TPeRZvEnpeX1wIzY4eLRvRO9tpQjMcd8Wo+dzdRlcDBT7caXO6poWXjVVw==
+X-Received: by 2002:a1c:149:: with SMTP id 70mr233138wmb.187.1631640170655;
+ Tue, 14 Sep 2021 10:22:50 -0700 (PDT)
 Received: from dell5510.suse.de (gw1.ms-free.net. [185.243.124.10])
- by smtp.gmail.com with ESMTPSA id y9sm1939334wmj.36.2021.09.14.10.20.04
+ by smtp.gmail.com with ESMTPSA id r2sm11720108wrg.31.2021.09.14.10.22.49
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 14 Sep 2021 10:20:04 -0700 (PDT)
+ Tue, 14 Sep 2021 10:22:50 -0700 (PDT)
 From: Petr Vorel <petr.vorel@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 14 Sep 2021 19:19:59 +0200
-Message-Id: <20210914171959.7116-1-petr.vorel@gmail.com>
+Date: Tue, 14 Sep 2021 19:22:43 +0200
+Message-Id: <20210914172243.8013-1-petr.vorel@gmail.com>
 X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
 Subject: [Buildroot] [RESENT][PATCH 1/1] package/busybox: bump version to
@@ -99,6 +97,7 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
+Cc: Aleksander Morgado <aleksander@aleksander.es>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
