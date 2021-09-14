@@ -8,86 +8,85 @@ X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DA7E1C433FE
-	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 16:17:43 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A4ACC433F5
+	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 16:17:55 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 604E060F70
-	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 16:17:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 604E060F70
+	by mail.kernel.org (Postfix) with ESMTPS id A004D610FB
+	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 16:17:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A004D610FB
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0FC796067E;
-	Tue, 14 Sep 2021 16:17:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6BB1780B5B;
+	Tue, 14 Sep 2021 16:17:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nZgg1sJ7917h; Tue, 14 Sep 2021 16:17:42 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 2qzAKsPCULRA; Tue, 14 Sep 2021 16:17:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 62E6E6061A;
-	Tue, 14 Sep 2021 16:17:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B43B780B15;
+	Tue, 14 Sep 2021 16:17:52 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id DB18C1BF42E
- for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 16:17:39 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5006D1BF42E
+ for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 16:17:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CB70B80B15
- for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 16:17:39 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3D81480B15
+ for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 16:17:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GNROPdr6zMJE for <buildroot@lists.busybox.net>;
- Tue, 14 Sep 2021 16:17:38 +0000 (UTC)
+ with ESMTP id BzJnovpbylbc for <buildroot@lists.busybox.net>;
+ Tue, 14 Sep 2021 16:17:40 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
- [IPv6:2a00:1450:4864:20::42e])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7CAE480B10
- for <buildroot@buildroot.org>; Tue, 14 Sep 2021 16:17:38 +0000 (UTC)
-Received: by mail-wr1-x42e.google.com with SMTP id t8so16113750wrq.4
- for <buildroot@buildroot.org>; Tue, 14 Sep 2021 09:17:38 -0700 (PDT)
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
+ [IPv6:2a00:1450:4864:20::431])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 15EB580B10
+ for <buildroot@buildroot.org>; Tue, 14 Sep 2021 16:17:40 +0000 (UTC)
+Received: by mail-wr1-x431.google.com with SMTP id g16so21183407wrb.3
+ for <buildroot@buildroot.org>; Tue, 14 Sep 2021 09:17:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=lA+9G6vD1ykTnvpik/FAOkSjnQx/c1XBExF/8D7SPRg=;
- b=Ub5UeUqEDPzPD+xBI07nww9GPn+iwThSpij5wuHm8sRI/l5AtPV6B30b5FutJge8st
- AmHTByuy2MXQbLZcxb7LhxxC2FIbcNpLpzzwmY1IIjqn7j7DMqagv4B2glblCcfKJOJx
- QSr7Ozuz4dpUJCjfLE7XM1RDZi4C8Aaq5pMWYs6sLinp3N1EFAnjujSGV0GlMaraG/wy
- uHBQkiU+05AxmoHsTumese/aUdpJMdVDnFf0p3GlYxM/s+H63vW7e2SZkv2X9kc2xxXB
- HkHbDHr7ZYZw+lndI711eh1MIIbyaecxVb523geVruEwe4SziwMJPvaMsYYUO39omS3i
- AXOQ==
+ h=from:to:cc:subject:date:message-id:in-reply-to:references
+ :mime-version:content-transfer-encoding;
+ bh=n4Pxh8i/QxsfhJdwB3jYleFA4aHmsZZemavFN85L0uA=;
+ b=GZOu13Cyi+gaOGcBUd7EPGNreiPfWTUKYKzVB0ubeP6L5YlhjkItBPWYBWW+XWjfQ1
+ VQHw8aUc050OIPQecSp6woZSEGbliA35Aluq3y4I8/gZdRkiz6s1YelwzLl27SDcM66O
+ 3MNxGuHae/kxM5cxv/RVtIr8nbJoAfpo9JQ3V7NT3KFse4GkRSWjB+7Y9CyU3TBCdTsT
+ ETEwSFy0XhJadrgE9pJ1bCqTWvYhZoyLkc2Vr3cjef3WJWf08AtwVDzXDgksm+dI0eGM
+ X96GiWduLJaSlBpdPN/wQF+S0HGyNTlC4/SpyWgZRDa2JGEeFX6NA9vLJuE2Pu5S3UI/
+ BTlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=lA+9G6vD1ykTnvpik/FAOkSjnQx/c1XBExF/8D7SPRg=;
- b=k2+R3CZRjmDlifKM8f+HrqwTDQgkd+A12RV/R6WUZ+AidVmlmxb+lIg3PtBrKFdxOR
- +Xzv1VVP/bZK/W5qeESM3cz0vpvQ7BVVCGzJJIH1TNQOCt54H/ayXFzfzWsJRJYeOWQ1
- O/6DNmfRLzcFw1NauRVYy5/Ph2XNIwZTOrPSeN/sWHyZz++ygY7+rvKQDLMbFgsyQFSu
- dI60Y6Z54gmUhmnE8BYzYpfTOdAX/+fdp/tvhAavEglUON4ANcw9iMvYSeCKzZkxM1h0
- eXUBUDQAxUP11QdNQ2u3HNSaIyJbF8HsOyMhl8HJhh3uOZLpLHWz3Vw38M/CydcB9fiP
- i2LQ==
-X-Gm-Message-State: AOAM530DQO8rThV/b5phOiIO7Maw7STJD/lz1bdyFQLRtNAq96zwcimA
- yBUDkygwZkYgC2Mh++s1/Sp3FXwJQEc=
-X-Google-Smtp-Source: ABdhPJxWCP4PAlXE4XbxJX4nZy/bdJYU+8gEkeq+Lrgcmp4qXcc9VHtBIgOCrV/l8a+xVqrG0Vpu6w==
-X-Received: by 2002:a05:6000:104e:: with SMTP id
- c14mr19743808wrx.130.1631636256417; 
- Tue, 14 Sep 2021 09:17:36 -0700 (PDT)
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+ :references:mime-version:content-transfer-encoding;
+ bh=n4Pxh8i/QxsfhJdwB3jYleFA4aHmsZZemavFN85L0uA=;
+ b=xAxVOC9eovg1g1TGTBQ4dL5HcLy41O9Rn6Hr7JX8ogI939lfXrOHrSid43dWS830xu
+ mhrcKKhFwys2+U1mkehwlIJLfYqkAFfqkN1b/G8FH83b/RSajpqiOKIMTd/NhpLAn561
+ 622Fi2gJuJz+c0yoLKRkIlcbdcC7FN/2vPrUzKWURXVX4GvMfdO1DX6Sy0aY0AGhdXsj
+ jsw3OoENwUOl/ahHZQpj6zMGLiOL6RAYEtKlB8AfP+8TE9tjbf0BojbtyEwj3KyqWTQK
+ KC3TGu1sZXkbSp/xIRSZvgDwcP+xktVbVhUgan2mtswSuTi6GAGXOE8oe6ymWNTI+yvt
+ zmfQ==
+X-Gm-Message-State: AOAM530IzG6+GUQCo5MSgrACHVAdcWpF3mvWU2Mj8+sUWAfMG9qT5mdO
+ 1dMk52GSuhKOwcCYI67dp2Xrz25IHbI=
+X-Google-Smtp-Source: ABdhPJw9eiotna98gbx16M5cBetdw+paWTGxeg/9qbjbiWwbpGJpkOdfliNPfrDamqOWWchxyEy6cQ==
+X-Received: by 2002:a5d:590a:: with SMTP id v10mr19714690wrd.87.1631636257971; 
+ Tue, 14 Sep 2021 09:17:37 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-2139-166.w92-167.abo.wanadoo.fr.
  [92.167.218.166])
- by smtp.gmail.com with ESMTPSA id r2sm11556790wrg.31.2021.09.14.09.17.35
+ by smtp.gmail.com with ESMTPSA id r2sm11556790wrg.31.2021.09.14.09.17.37
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 14 Sep 2021 09:17:36 -0700 (PDT)
+ Tue, 14 Sep 2021 09:17:37 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 14 Sep 2021 18:17:30 +0200
-Message-Id: <20210914161731.45958-1-fontaine.fabrice@gmail.com>
+Date: Tue, 14 Sep 2021 18:17:31 +0200
+Message-Id: <20210914161731.45958-2-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.33.0
+In-Reply-To: <20210914161731.45958-1-fontaine.fabrice@gmail.com>
+References: <20210914161731.45958-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/2] package/x11r7/xapp_xeyes: xrender is
- optional, not mandatory
+Subject: [Buildroot] [PATCH 2/2] package/x11r7/xapp_xeyes: add xlib_libXi
+ mandatory dependency
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -107,46 +106,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-xrender is optional, not mandatory since its addition in version 1.0.99:
-https://gitlab.freedesktop.org/xorg/app/xeyes/-/commit/5e825a140f4022b88dd7a1a20a9a01b653f1a95c
+Build fails since commit c47ebe7aeb70015614ff1d477dc1a71e8c161425
+because xlib_libXi is a mandatory dependency since version 1.2.0 and
+https://gitlab.freedesktop.org/xorg/app/xeyes/-/commit/420c2d8517246c9e422739cadb7acb29e35a3bed:
+
+configure: error: Package requirements (xi >= 1.7 x11 xt xext xmu xproto >= 7.0.17) were not met:
+
+Package 'xi', required by 'virtual:world', not found
+
+Fixes:
+ - http://autobuild.buildroot.org/results/896f45fb9eadcd235aeab096db479ee0aa5d0860
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/x11r7/xapp_xeyes/Config.in     | 1 -
- package/x11r7/xapp_xeyes/xapp_xeyes.mk | 9 ++++++++-
- 2 files changed, 8 insertions(+), 2 deletions(-)
+ package/x11r7/xapp_xeyes/Config.in     | 1 +
+ package/x11r7/xapp_xeyes/xapp_xeyes.mk | 3 ++-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/package/x11r7/xapp_xeyes/Config.in b/package/x11r7/xapp_xeyes/Config.in
-index 5cf7f6c052..a7b77375fd 100644
+index a7b77375fd..268bc5807e 100644
 --- a/package/x11r7/xapp_xeyes/Config.in
 +++ b/package/x11r7/xapp_xeyes/Config.in
-@@ -3,7 +3,6 @@ config BR2_PACKAGE_XAPP_XEYES
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_XAPP_XEYES
+ 	bool "xeyes"
  	select BR2_PACKAGE_XLIB_LIBX11
  	select BR2_PACKAGE_XLIB_LIBXEXT
++	select BR2_PACKAGE_XLIB_LIBXI
  	select BR2_PACKAGE_XLIB_LIBXMU
--	select BR2_PACKAGE_XLIB_LIBXRENDER
  	select BR2_PACKAGE_XLIB_LIBXT
  	help
- 	  X.Org xeyes application
 diff --git a/package/x11r7/xapp_xeyes/xapp_xeyes.mk b/package/x11r7/xapp_xeyes/xapp_xeyes.mk
-index 11eea802d5..a127e28ea7 100644
+index a127e28ea7..68df8c9ab0 100644
 --- a/package/x11r7/xapp_xeyes/xapp_xeyes.mk
 +++ b/package/x11r7/xapp_xeyes/xapp_xeyes.mk
-@@ -9,6 +9,13 @@ XAPP_XEYES_SOURCE = xeyes-$(XAPP_XEYES_VERSION).tar.bz2
+@@ -9,7 +9,8 @@ XAPP_XEYES_SOURCE = xeyes-$(XAPP_XEYES_VERSION).tar.bz2
  XAPP_XEYES_SITE = https://xorg.freedesktop.org/archive/individual/app
  XAPP_XEYES_LICENSE = MIT
  XAPP_XEYES_LICENSE_FILES = COPYING
--XAPP_XEYES_DEPENDENCIES = xlib_libX11 xlib_libXext xlib_libXmu xlib_libXrender xlib_libXt
-+XAPP_XEYES_DEPENDENCIES = xlib_libX11 xlib_libXext xlib_libXmu xlib_libXt
-+
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXRENDER),y)
-+XAPP_XEYES_DEPENDENCIES += xlib_libXrender
-+XAPP_XEYES_CONF_OPTS += --with-xrender
-+else
-+XAPP_XEYES_CONF_OPTS += --without-xrender
-+endif
+-XAPP_XEYES_DEPENDENCIES = xlib_libX11 xlib_libXext xlib_libXmu xlib_libXt
++XAPP_XEYES_DEPENDENCIES = \
++	xlib_libX11 xlib_libXext xlib_libXi xlib_libXmu xlib_libXt
  
- $(eval $(autotools-package))
+ ifeq ($(BR2_PACKAGE_XLIB_LIBXRENDER),y)
+ XAPP_XEYES_DEPENDENCIES += xlib_libXrender
 -- 
 2.33.0
 
