@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-10.7 required=3.0 tests=BAYES_00,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 67599C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 19:52:34 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E062C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 19:52:45 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id C6CB060F25
-	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 19:52:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C6CB060F25
+	by mail.kernel.org (Postfix) with ESMTPS id D75F061107
+	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 19:52:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D75F061107
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8AA74400A4;
-	Tue, 14 Sep 2021 19:52:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8853C403A5;
+	Tue, 14 Sep 2021 19:52:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bkNb5V75NVsS; Tue, 14 Sep 2021 19:52:31 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id f5x78PSNML_L; Tue, 14 Sep 2021 19:52:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AE4F34010F;
-	Tue, 14 Sep 2021 19:52:30 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 08BDA1BF228
+	by smtp4.osuosl.org (Postfix) with ESMTP id ECECC403B0;
+	Tue, 14 Sep 2021 19:52:42 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 219EA1BF990
  for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 19:52:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id ECA9780E2C
- for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 19:52:28 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 116D3403B0
+ for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 19:52:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SAOS13PbR1hx for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wWfGaJMyfWHm for <buildroot@lists.busybox.net>;
  Tue, 14 Sep 2021 19:52:28 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4394880E2A
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4BD17403A5
  for <buildroot@buildroot.org>; Tue, 14 Sep 2021 19:52:28 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id A28BB8B3AA; Tue, 14 Sep 2021 19:50:42 +0000 (UTC)
+ id ACC748B3AB; Tue, 14 Sep 2021 19:50:42 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 14 Sep 2021 21:47:57 +0200
+Date: Tue, 14 Sep 2021 21:51:17 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3af9c55de08bf0650ed10c1e1ac7b37fd15f6ef6
-X-Git-Newrev: a2b0c9b5f98090d85a2cdf0362f2862f0251805d
+X-Git-Oldrev: a2b0c9b5f98090d85a2cdf0362f2862f0251805d
+X-Git-Newrev: 2c5e13de7c2ca181f60a06799ae5e52d1d4eda20
 X-Patchwork-Hint: ignore
-Message-Id: <20210914195042.A28BB8B3AA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/x11r7/xapp_xeyes: xrender is
- optional, not mandatory
+Message-Id: <20210914195042.ACC748B3AB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xapp_xeyes: add xlib_libXi
+ mandatory dependency
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,50 +71,58 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a2b0c9b5f98090d85a2cdf0362f2862f0251805d
+commit: https://git.buildroot.net/buildroot/commit/?id=2c5e13de7c2ca181f60a06799ae5e52d1d4eda20
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-xrender is optional, not mandatory since its addition in version 1.0.99:
-https://gitlab.freedesktop.org/xorg/app/xeyes/-/commit/5e825a140f4022b88dd7a1a20a9a01b653f1a95c
+Build fails since commit c47ebe7aeb70015614ff1d477dc1a71e8c161425
+because xlib_libXi is a mandatory dependency since version 1.2.0 and
+https://gitlab.freedesktop.org/xorg/app/xeyes/-/commit/420c2d8517246c9e422739cadb7acb29e35a3bed:
+
+configure: error: Package requirements (xi >= 1.7 x11 xt xext xmu xproto >= 7.0.17) were not met:
+
+Package 'xi', required by 'virtual:world', not found
+
+Fixes:
+ - http://autobuild.buildroot.org/results/896f45fb9eadcd235aeab096db479ee0aa5d0860
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[yann.morin.1998@free.fr: split multi-line dependency]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/x11r7/xapp_xeyes/Config.in     | 1 -
- package/x11r7/xapp_xeyes/xapp_xeyes.mk | 9 ++++++++-
- 2 files changed, 8 insertions(+), 2 deletions(-)
+ package/x11r7/xapp_xeyes/Config.in     | 1 +
+ package/x11r7/xapp_xeyes/xapp_xeyes.mk | 7 ++++++-
+ 2 files changed, 7 insertions(+), 1 deletion(-)
 
 diff --git a/package/x11r7/xapp_xeyes/Config.in b/package/x11r7/xapp_xeyes/Config.in
-index 5cf7f6c052..a7b77375fd 100644
+index a7b77375fd..268bc5807e 100644
 --- a/package/x11r7/xapp_xeyes/Config.in
 +++ b/package/x11r7/xapp_xeyes/Config.in
-@@ -3,7 +3,6 @@ config BR2_PACKAGE_XAPP_XEYES
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_XAPP_XEYES
+ 	bool "xeyes"
  	select BR2_PACKAGE_XLIB_LIBX11
  	select BR2_PACKAGE_XLIB_LIBXEXT
++	select BR2_PACKAGE_XLIB_LIBXI
  	select BR2_PACKAGE_XLIB_LIBXMU
--	select BR2_PACKAGE_XLIB_LIBXRENDER
  	select BR2_PACKAGE_XLIB_LIBXT
  	help
- 	  X.Org xeyes application
 diff --git a/package/x11r7/xapp_xeyes/xapp_xeyes.mk b/package/x11r7/xapp_xeyes/xapp_xeyes.mk
-index 11eea802d5..a127e28ea7 100644
+index a127e28ea7..3f37aaee8c 100644
 --- a/package/x11r7/xapp_xeyes/xapp_xeyes.mk
 +++ b/package/x11r7/xapp_xeyes/xapp_xeyes.mk
-@@ -9,6 +9,13 @@ XAPP_XEYES_SOURCE = xeyes-$(XAPP_XEYES_VERSION).tar.bz2
+@@ -9,7 +9,12 @@ XAPP_XEYES_SOURCE = xeyes-$(XAPP_XEYES_VERSION).tar.bz2
  XAPP_XEYES_SITE = https://xorg.freedesktop.org/archive/individual/app
  XAPP_XEYES_LICENSE = MIT
  XAPP_XEYES_LICENSE_FILES = COPYING
--XAPP_XEYES_DEPENDENCIES = xlib_libX11 xlib_libXext xlib_libXmu xlib_libXrender xlib_libXt
-+XAPP_XEYES_DEPENDENCIES = xlib_libX11 xlib_libXext xlib_libXmu xlib_libXt
-+
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXRENDER),y)
-+XAPP_XEYES_DEPENDENCIES += xlib_libXrender
-+XAPP_XEYES_CONF_OPTS += --with-xrender
-+else
-+XAPP_XEYES_CONF_OPTS += --without-xrender
-+endif
+-XAPP_XEYES_DEPENDENCIES = xlib_libX11 xlib_libXext xlib_libXmu xlib_libXt
++XAPP_XEYES_DEPENDENCIES = \
++	xlib_libX11 \
++	xlib_libXext \
++	xlib_libXi \
++	xlib_libXmu \
++	xlib_libXt
  
- $(eval $(autotools-package))
+ ifeq ($(BR2_PACKAGE_XLIB_LIBXRENDER),y)
+ XAPP_XEYES_DEPENDENCIES += xlib_libXrender
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
