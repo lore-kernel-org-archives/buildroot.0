@@ -2,87 +2,57 @@ Return-Path: <SRS0=SwR/=OE=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,HTML_MESSAGE,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D205C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 11:35:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E5F8C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 12:33:49 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1151060FC1
-	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 11:35:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1151060FC1
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=unikie.com
+	by mail.kernel.org (Postfix) with ESMTPS id 309DE60FED
+	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 12:33:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 309DE60FED
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B65F780E29;
-	Tue, 14 Sep 2021 11:35:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BA3F080E97;
+	Tue, 14 Sep 2021 12:33:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TYw7C9lmjlbl; Tue, 14 Sep 2021 11:35:23 +0000 (UTC)
+	with ESMTP id vnyeGx-94VbU; Tue, 14 Sep 2021 12:33:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EC4AE80E27;
-	Tue, 14 Sep 2021 11:35:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EBE2380E84;
+	Tue, 14 Sep 2021 12:33:45 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 27F411BF5AA
- for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 11:35:21 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9B3491BF588
+ for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 12:33:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 16AE840291
- for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 11:35:21 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8500F40181
+ for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 12:33:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=unikie-com.20150623.gappssmtp.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Hg99pwUl3CJZ for <buildroot@lists.busybox.net>;
- Tue, 14 Sep 2021 11:35:19 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com
- [IPv6:2a00:1450:4864:20::633])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 583B34008D
- for <buildroot@buildroot.org>; Tue, 14 Sep 2021 11:35:18 +0000 (UTC)
-Received: by mail-ej1-x633.google.com with SMTP id e21so28095647ejz.12
- for <buildroot@buildroot.org>; Tue, 14 Sep 2021 04:35:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=unikie-com.20150623.gappssmtp.com; s=20150623;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=YykDb+b9YaDR4S+wzwg/wfNY1xr1Wj3OLuI9Ragqi+A=;
- b=F6BzVnlDgHzOW9JKsmm0TUOuUKclrTi9A+Qr15AGcnSK8ECi5iAXLMR2dCgTLJ7bJH
- Y7wgoFnRng9uz7t35nbDmlpEmwBXx8b6uCzv6Nr3zGvFkZU5eAfdXQgUkV22I6C+m3SR
- u4+rMPz+7LFKqOUX9IEZI1jl0P9OsGYSjxJKJuBGA5CTPG0blqzqEe3ioEoXkh4QmcS+
- JuqtX2uVHs0cHgmiP+YzmIjZf94fDg9yrGV4EmziX6alDml5mX58TDOI4uPKydJwLRhx
- GpMkqvZZNjG7IJCqIsuQkVYD6OoDjuj7PGDvzpqV66pneTU6eYowBX0cVXK3EQ+ERvnR
- 2ybQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=YykDb+b9YaDR4S+wzwg/wfNY1xr1Wj3OLuI9Ragqi+A=;
- b=7E/uFmV9nj5GFFo9MlomDnpA3koq4f/OjtWwceqrBJanzU6pP+ACgAyU6OIpuSJEZQ
- b/kCJRO7Pp89xYL9ACOtNU2oX+hSGDYLI2sgBJdgDfYF6gppXyGjSTwwhDih5AXvMkVx
- oe8dc+8cB82IZqHKRasrbUV+ezjlJjcvAoq8xSsyiYpZ+2qD50whAnS9oI7tGsuIENwj
- jJj3g/VY0NXZZic7L2HTQB1FhBXC70ea6WUyMfr085TYvRTAaehixd1rRkduLPD5ujCN
- v4NvDg4nm4fPoK2DMQ/pxcunCz1NqVo3tF5+8aVTSfSYFB8kJ/TIzoKOQpvSmYRN3WIm
- ihPw==
-X-Gm-Message-State: AOAM530lr+LD7k3hfDrRCMNuaVsJM5UTuPG0tPc6gZki/65aoRMMuBYT
- XlKMcq8GFtpRO2H1uNVcQLOfdOWJCQdqZAKah76ZHBaJb7JaBg==
-X-Google-Smtp-Source: ABdhPJwMw6hQOIrFAov+nI/74ustWva2x2FzY402NF4rgOYsOq95TYzZU8YF/vb73RAU9PbbYK0bvehdlyRp2Go/RdE=
-X-Received: by 2002:a17:906:4c8c:: with SMTP id
- q12mr18468125eju.254.1631619317063; 
- Tue, 14 Sep 2021 04:35:17 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210914094611.1782735-1-jose.pekkarinen@unikie.com>
- <d73d972b-aa6b-fdce-ca2b-2c2f2a68b53f@green-communications.fr>
-In-Reply-To: <d73d972b-aa6b-fdce-ca2b-2c2f2a68b53f@green-communications.fr>
-From: =?UTF-8?Q?Jos=C3=A9_Pekkarinen?= <jose.pekkarinen@unikie.com>
-Date: Tue, 14 Sep 2021 14:35:06 +0300
-Message-ID: <CAJPV9Mp9zg=gCRwUd42k92xszS6nqt-y_SSLMZeRi7L_kDt4hQ@mail.gmail.com>
-To: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-Subject: Re: [Buildroot] [PATCH] package/iptables: add init script
+ with ESMTP id 19iiEQwFVxrD for <buildroot@lists.busybox.net>;
+ Tue, 14 Sep 2021 12:33:43 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 58B4A40114
+ for <buildroot@buildroot.org>; Tue, 14 Sep 2021 12:33:43 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 6D5E88B2C1; Tue, 14 Sep 2021 12:31:58 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Tue, 14 Sep 2021 14:12:18 +0200
+X-Git-Refname: refs/heads/2021.02.x
+X-Git-Oldrev: 06d731046b3bef51ffccfdc0ad636bb77aca974f
+X-Git-Newrev: b3d3d1d936ddc76f0533948bd9a4694e6bfe8e3f
+X-Patchwork-Hint: ignore
+Message-Id: <20210914123158.6D5E88B2C1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/libexif: security
+ bump to version 0.6.23
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,135 +65,179 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============5514035379951372499=="
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
---===============5514035379951372499==
-Content-Type: multipart/alternative; boundary="000000000000cd785305cbf2f9ca"
+commit: https://git.buildroot.net/buildroot/commit/?id=b3d3d1d936ddc76f0533948bd9a4694e6bfe8e3f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
---000000000000cd785305cbf2f9ca
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+- Drop patches (already in version)
+- Fix some more denial of service (compute time or stack exhaustion)
+  counter-measures added that avoid minutes of decoding time with
+  malformed files found by OSS-Fuzz
 
-On Tue, Sep 14, 2021 at 2:05 PM Nicolas Cavallari <
-nicolas.cavallari@green-communications.fr> wrote:
+https://github.com/libexif/libexif/releases/tag/v0.6.23
 
-> On 14/09/2021 11:46, Jos=C3=A9 Pekkarinen wrote:
-> > This patch will add an init script that allows
-> > to set a ruleset in /etc/iptables.conf to be loaded
-> > on boot, or flushed on stop, as well as a saving
-> > command to generate a new file.
-> >
-> > Signed-off-by: Jos=C3=A9 Pekkarinen <jose.pekkarinen@unikie.com>
-> > ---
-> >   package/iptables/S41iptables | 58 +++++++++++++++++++++++++++++++++++=
-+
-> >   package/iptables/iptables.mk |  6 ++++
-> >   2 files changed, 64 insertions(+)
-> >   create mode 100644 package/iptables/S41iptables
-> >
-> > diff --git a/package/iptables/S41iptables b/package/iptables/S41iptable=
-s
-> > new file mode 100644
-> > index 0000000000..93998b78de
-> > --- /dev/null
-> > +++ b/package/iptables/S41iptables
->
-> Regardless of whether the maintainers want this in buildroot or not, it
-> does not make sense to start this after S40network;
-> Ideally, the firewall should be enabled before even enabling any network
-> interface.
->
-> It is even debatable if the firewall should be disabled when shutting
-> down, or just left enabled.
->
-> (also, iptables is deprecated in favor of nftables)
->
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit e2f805097611b4828d2cba6168472aac6dedeafe)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...1-fixed-another-unsigned-integer-overflow.patch | 63 ----------------------
+ .../0002-fixed-a-incorrect-overflow-check.patch    | 36 -------------
+ package/libexif/libexif.hash                       |  2 +-
+ package/libexif/libexif.mk                         |  8 +--
+ 4 files changed, 3 insertions(+), 106 deletions(-)
 
-Hi,
-
-Thanks for the very valid points, I don't have any problem
-
-in moving the name to any other number before 40 on demand. Re
-the deprecation, I'm not sure if the tools are going away since I believe
-there is backward compatibility layer in place, but certainly, if it is
-requested, I can bake something similar for nftables and be done.
-
-Best regards.
-
-Jos=C3=A9.
-
---000000000000cd785305cbf2f9ca
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div dir=3D"ltr"><br></div><br><div class=3D"gmail_quote">=
-<div dir=3D"ltr" class=3D"gmail_attr">On Tue, Sep 14, 2021 at 2:05 PM Nicol=
-as Cavallari &lt;<a href=3D"mailto:nicolas.cavallari@green-communications.f=
-r">nicolas.cavallari@green-communications.fr</a>&gt; wrote:<br></div><block=
-quote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1=
-px solid rgb(204,204,204);padding-left:1ex">On 14/09/2021 11:46, Jos=C3=A9 =
-Pekkarinen wrote:<br>
-&gt; This patch will add an init script that allows<br>
-&gt; to set a ruleset in /etc/iptables.conf to be loaded<br>
-&gt; on boot, or flushed on stop, as well as a saving<br>
-&gt; command to generate a new file.<br>
-&gt; <br>
-&gt; Signed-off-by: Jos=C3=A9 Pekkarinen &lt;<a href=3D"mailto:jose.pekkari=
-nen@unikie.com" target=3D"_blank">jose.pekkarinen@unikie.com</a>&gt;<br>
-&gt; ---<br>
-&gt;=C2=A0 =C2=A0package/iptables/S41iptables | 58 ++++++++++++++++++++++++=
-++++++++++++<br>
-&gt;=C2=A0 =C2=A0package/iptables/<a href=3D"http://iptables.mk" rel=3D"nor=
-eferrer" target=3D"_blank">iptables.mk</a> |=C2=A0 6 ++++<br>
-&gt;=C2=A0 =C2=A02 files changed, 64 insertions(+)<br>
-&gt;=C2=A0 =C2=A0create mode 100644 package/iptables/S41iptables<br>
-&gt; <br>
-&gt; diff --git a/package/iptables/S41iptables b/package/iptables/S41iptabl=
-es<br>
-&gt; new file mode 100644<br>
-&gt; index 0000000000..93998b78de<br>
-&gt; --- /dev/null<br>
-&gt; +++ b/package/iptables/S41iptables<br>
-<br>
-Regardless of whether the maintainers want this in buildroot or not, it <br=
->
-does not make sense to start this after S40network;<br>
-Ideally, the firewall should be enabled before even enabling any network <b=
-r>
-interface.<br>
-<br>
-It is even debatable if the firewall should be disabled when shutting <br>
-down, or just left enabled.<br>
-<br>
-(also, iptables is deprecated in favor of nftables)<br>
-</blockquote></div><br clear=3D"all"><div><blockquote style=3D"margin:0 0 0=
- 40px;border:none;padding:0px"><div>Hi,</div><div><br></div></blockquote><b=
-lockquote style=3D"margin:0 0 0 40px;border:none;padding:0px"><div>Thanks f=
-or the very valid points, I don&#39;t have any problem</div></blockquote><d=
-iv>in moving the name to any other number before 40 on demand. Re</div></di=
-v><div>the deprecation, I&#39;m not sure if the tools are going away since =
-I believe</div><div>there is backward compatibility layer in place, but cer=
-tainly, if it is</div><div>requested, I can bake something similar for nfta=
-bles and be done.</div> <div><br></div><blockquote style=3D"margin:0 0 0 40=
-px;border:none;padding:0px">Best regards.<br><br></blockquote><div dir=3D"l=
-tr" class=3D"gmail_signature"><div dir=3D"ltr"><blockquote style=3D"margin:=
-0px 0px 0px 40px;border:none;padding:0px">Jos=C3=A9.</blockquote></div></di=
-v></div>
-
---000000000000cd785305cbf2f9ca--
-
---===============5514035379951372499==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/package/libexif/0001-fixed-another-unsigned-integer-overflow.patch b/package/libexif/0001-fixed-another-unsigned-integer-overflow.patch
+deleted file mode 100644
+index 77bdfe89d2..0000000000
+--- a/package/libexif/0001-fixed-another-unsigned-integer-overflow.patch
++++ /dev/null
+@@ -1,63 +0,0 @@
+-From ce03ad7ef4e8aeefce79192bf5b6f69fae396f0c Mon Sep 17 00:00:00 2001
+-From: Marcus Meissner <marcus@jet.franken.de>
+-Date: Mon, 8 Jun 2020 17:27:06 +0200
+-Subject: [PATCH] fixed another unsigned integer overflow
+-
+-first fixed by google in android fork,
+-https://android.googlesource.com/platform/external/libexif/+/1e187b62682ffab5003c702657d6d725b4278f16%5E%21/#F0
+-
+-(use a more generic overflow check method, also check second overflow instance.)
+-
+-https://security-tracker.debian.org/tracker/CVE-2020-0198
+-
+-Downloaded from upstream commit:
+-https://github.com/libexif/libexif/commit/ce03ad7ef4e8aeefce79192bf5b6f69fae396f0c
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- libexif/exif-data.c | 10 ++++++----
+- 1 file changed, 6 insertions(+), 4 deletions(-)
+-
+-diff --git a/libexif/exif-data.c b/libexif/exif-data.c
+-index 8b280d3..b495726 100644
+---- a/libexif/exif-data.c
+-+++ b/libexif/exif-data.c
+-@@ -47,6 +47,8 @@
+- #undef JPEG_MARKER_APP1
+- #define JPEG_MARKER_APP1 0xe1
+- 
+-+#define CHECKOVERFLOW(offset,datasize,structsize) (( offset >= datasize) || (structsize > datasize) || (offset > datasize - structsize ))
+-+
+- static const unsigned char ExifHeader[] = {0x45, 0x78, 0x69, 0x66, 0x00, 0x00};
+- 
+- struct _ExifDataPrivate
+-@@ -327,7 +329,7 @@ exif_data_load_data_thumbnail (ExifData *data, const unsigned char *d,
+- 		exif_log (data->priv->log, EXIF_LOG_CODE_DEBUG, "ExifData", "Bogus thumbnail offset (%u).", o);
+- 		return;
+- 	}
+--	if (s > ds - o) {
+-+	if (CHECKOVERFLOW(o,ds,s)) {
+- 		exif_log (data->priv->log, EXIF_LOG_CODE_DEBUG, "ExifData", "Bogus thumbnail size (%u), max would be %u.", s, ds-o);
+- 		return;
+- 	}
+-@@ -420,9 +422,9 @@ exif_data_load_data_content (ExifData *data, ExifIfd ifd,
+- 	}
+- 
+- 	/* Read the number of entries */
+--	if ((offset + 2 < offset) || (offset + 2 < 2) || (offset + 2 > ds)) {
+-+	if (CHECKOVERFLOW(offset, ds, 2)) {
+- 		exif_log (data->priv->log, EXIF_LOG_CODE_CORRUPT_DATA, "ExifData",
+--			  "Tag data past end of buffer (%u > %u)", offset+2, ds);
+-+			  "Tag data past end of buffer (%u+2 > %u)", offset, ds);
+- 		return;
+- 	}
+- 	n = exif_get_short (d + offset, data->priv->order);
+-@@ -431,7 +433,7 @@ exif_data_load_data_content (ExifData *data, ExifIfd ifd,
+- 	offset += 2;
+- 
+- 	/* Check if we have enough data. */
+--	if (offset + 12 * n > ds) {
+-+	if (CHECKOVERFLOW(offset, ds, 12*n)) {
+- 		n = (ds - offset) / 12;
+- 		exif_log (data->priv->log, EXIF_LOG_CODE_DEBUG, "ExifData",
+- 				  "Short data; only loading %hu entries...", n);
+diff --git a/package/libexif/0002-fixed-a-incorrect-overflow-check.patch b/package/libexif/0002-fixed-a-incorrect-overflow-check.patch
+deleted file mode 100644
+index 1946f78228..0000000000
+--- a/package/libexif/0002-fixed-a-incorrect-overflow-check.patch
++++ /dev/null
+@@ -1,36 +0,0 @@
+-From 9266d14b5ca4e29b970fa03272318e5f99386e06 Mon Sep 17 00:00:00 2001
+-From: Marcus Meissner <marcus@jet.franken.de>
+-Date: Thu, 5 Nov 2020 09:50:08 +0100
+-Subject: [PATCH] fixed a incorrect overflow check that could be optimized
+- away.
+-
+-inspired by:
+-https://android.googlesource.com/platform/external/libexif/+/8e7345f3bc0bad06ac369d6cbc1124c8ceaf7d4b
+-
+-https://source.android.com/security/bulletin/2020-11-01
+-
+-CVE-2020-0452
+-
+-Downloaded from upstream commit, rebased for 0.6.22:
+-https://github.com/libexif/libexif/commit/9266d14b5ca4e29b970fa03272318e5f99386e06
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- libexif/exif-entry.c | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/libexif/exif-entry.c b/libexif/exif-entry.c
+-index 3fc0ff9..4b866ce 100644
+---- a/libexif/exif-entry.c
+-+++ b/libexif/exif-entry.c
+-@@ -1371,8 +1371,8 @@ exif_entry_get_value (ExifEntry *e, char *val, unsigned int maxlen)
+- 	{
+- 		unsigned char *utf16;
+- 
+--		/* Sanity check the size to prevent overflow */
+--		if (e->size+sizeof(uint16_t)+1 < e->size) break;
+-+		/* Sanity check the size to prevent overflow. Note EXIF files are 64kb at most. */
+-+		if (e->size >= 65536 - sizeof(uint16_t)*2) break;
+- 
+- 		/* The tag may not be U+0000-terminated , so make a local
+- 		   U+0000-terminated copy before converting it */
+diff --git a/package/libexif/libexif.hash b/package/libexif/libexif.hash
+index 1a2157b3f5..e087daf58a 100644
+--- a/package/libexif/libexif.hash
++++ b/package/libexif/libexif.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  5048f1c8fc509cc636c2f97f4b40c293338b6041a5652082d5ee2cf54b530c56  libexif-0.6.22.tar.xz
++sha256  a740a99920eb81ae0aa802bb46e683ce6e0cde061c210f5d5bde5b8572380431  libexif-0.6.23.tar.xz
+ sha256  36b6d3fa47916943fd5fec313c584784946047ec1337a78b440e5992cb595f89  COPYING
+diff --git a/package/libexif/libexif.mk b/package/libexif/libexif.mk
+index 9a25e90d26..49637f1519 100644
+--- a/package/libexif/libexif.mk
++++ b/package/libexif/libexif.mk
+@@ -4,18 +4,14 @@
+ #
+ ################################################################################
+ 
+-LIBEXIF_VERSION = 0.6.22
++LIBEXIF_VERSION = 0.6.23
+ LIBEXIF_SOURCE = libexif-$(LIBEXIF_VERSION).tar.xz
+ LIBEXIF_SITE = \
+-	https://github.com/libexif/libexif/releases/download/libexif-$(subst .,_,$(LIBEXIF_VERSION))-release
++	https://github.com/libexif/libexif/releases/download/v$(LIBEXIF_VERSION)
+ LIBEXIF_INSTALL_STAGING = YES
+ LIBEXIF_DEPENDENCIES = host-pkgconf
+ LIBEXIF_LICENSE = LGPL-2.1+
+ LIBEXIF_LICENSE_FILES = COPYING
+ LIBEXIF_CPE_ID_VENDOR = libexif_project
+-# 0001-fixed-another-unsigned-integer-overflow.patch
+-LIBEXIF_IGNORE_CVES += CVE-2020-0198
+-# 0002-fixed-a-incorrect-overflow-check.patch
+-LIBEXIF_IGNORE_CVES += CVE-2020-0452
+ 
+ $(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5514035379951372499==--
