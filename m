@@ -2,56 +2,56 @@ Return-Path: <SRS0=SwR/=OE=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C655BC433EF
-	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 06:15:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 10BBEC433F5
+	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 06:15:42 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 739466112D
-	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 06:15:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 739466112D
+	by mail.kernel.org (Postfix) with ESMTPS id 9D578610FB
+	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 06:15:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9D578610FB
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 46B30607DA;
-	Tue, 14 Sep 2021 06:15:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7935D607DC;
+	Tue, 14 Sep 2021 06:15:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id I_Gw1B78Xdd6; Tue, 14 Sep 2021 06:15:28 +0000 (UTC)
+	with ESMTP id 1tl_9A9nx5gw; Tue, 14 Sep 2021 06:15:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A953C607D9;
-	Tue, 14 Sep 2021 06:15:27 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6131E1BF31B
- for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 06:14:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C4F30607D9;
+	Tue, 14 Sep 2021 06:15:39 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 0D30A1BF31B
+ for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 06:14:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 38FC54018C
+ by smtp3.osuosl.org (Postfix) with ESMTP id EF14E607C9
  for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 06:14:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id x5L9v_SANOKu for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6Vf6cdP9o1eh for <buildroot@lists.busybox.net>;
  Tue, 14 Sep 2021 06:14:44 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5691A40183
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3A78D605C0
  for <buildroot@buildroot.org>; Tue, 14 Sep 2021 06:14:44 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 0F77F8AF41; Tue, 14 Sep 2021 06:13:00 +0000 (UTC)
+ id E61388AF41; Tue, 14 Sep 2021 06:12:59 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 14 Sep 2021 08:13:50 +0200
+Date: Tue, 14 Sep 2021 08:11:42 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 141c4726c226b0e187c527ce320f897ef71f1311
-X-Git-Newrev: 495316758070f7859f974e0594928c5dbe6712de
+X-Git-Oldrev: 0e5a901d3141a3d7e477f0fb79e8f6a748f06449
+X-Git-Newrev: a052ecb5b8bb11a9e882b5a4df6a475877a9b75e
 X-Patchwork-Hint: ignore
-Message-Id: <20210914061300.0F77F8AF41@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/pcre: fix license hash
+Message-Id: <20210914061259.E61388AF41@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gd: security bump to version 2.3.3
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,31 +70,97 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=495316758070f7859f974e0594928c5dbe6712de
+commit: https://git.buildroot.net/buildroot/commit/?id=a052ecb5b8bb11a9e882b5a4df6a475877a9b75e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit 0e5a901d3141a3d7e477f0fb79e8f6a748f06449 forgot to update license
-hash (updates in year and email)
+- Fix CVE-2021-40145: ** DISPUTED ** gdImageGd2Ptr in gd_gd2.c in the GD
+  Graphics Library (aka LibGD) through 2.3.2 has a double free. NOTE:
+  the vendor's position is "The GD2 image format is a proprietary image
+  format of libgd. It has to be regarded as being obsolete, and should
+  only be used for development and testing purposes."
+- Drop patch (already in version)
+- Update hash of COPYING (duplicate merged and title added with
+  https://github.com/libgd/libgd/commit/82d260950589563a1af9c56f4ce5fde843a695ae
+  https://github.com/libgd/libgd/commit/6013c7bcf6eb795dba584f92d3824ebd3ae60202)
 
-Fixes:
- - http://autobuild.buildroot.org/results/045cd98a4067f1314deb66f52240d2db2000ec4d
+https://github.com/libgd/libgd/releases/tag/gd-2.3.3
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pcre/pcre.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ ...d-out-of-bands-in-reading-tga-header-file.patch | 29 ----------------------
+ package/gd/gd.hash                                 |  4 +--
+ package/gd/gd.mk                                   |  5 +---
+ 3 files changed, 3 insertions(+), 35 deletions(-)
 
-diff --git a/package/pcre/pcre.hash b/package/pcre/pcre.hash
-index a84d63e1bc..6150303e24 100644
---- a/package/pcre/pcre.hash
-+++ b/package/pcre/pcre.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
- sha256  4dae6fdcd2bb0bb6c37b5f97c33c2be954da743985369cddac3546e3218bffb8  pcre-8.45.tar.bz2
- # License files, locally calculated
--sha256  0dd9c13864dbb9ee4d77a1557e96be29b2d719fb6584192ee36611aae264c4a3  LICENCE
-+sha256  51b3dea44f63338b84b9c97b3d793826a8397309068cf9379a423216ab8ea5b2  LICENCE
+diff --git a/package/gd/0001-fix-read-out-of-bands-in-reading-tga-header-file.patch b/package/gd/0001-fix-read-out-of-bands-in-reading-tga-header-file.patch
+deleted file mode 100644
+index a42bfb402e..0000000000
+--- a/package/gd/0001-fix-read-out-of-bands-in-reading-tga-header-file.patch
++++ /dev/null
+@@ -1,29 +0,0 @@
+-From 8b111b2b4a4842179be66db68d84dda91a246032 Mon Sep 17 00:00:00 2001
+-From: maryam ebrahimzadeh <maryam.ebr@student.sharif.edu>
+-Date: Mon, 19 Jul 2021 10:07:13 +0430
+-Subject: [PATCH] fix read out-of-bands in reading tga header file
+-
+-[Retrieved from:
+-https://github.com/libgd/libgd/commit/8b111b2b4a4842179be66db68d84dda91a246032]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- src/gd_tga.c | 6 +++++-
+- 1 file changed, 5 insertions(+), 1 deletion(-)
+-
+-diff --git a/src/gd_tga.c b/src/gd_tga.c
+-index cae9428da..286febb28 100644
+---- a/src/gd_tga.c
+-+++ b/src/gd_tga.c
+-@@ -191,7 +191,11 @@ int read_header_tga(gdIOCtx *ctx, oTga *tga)
+- 			return -1;
+- 		}
+- 
+--		gdGetBuf(tga->ident, tga->identsize, ctx);
+-+		
+-+		if (gdGetBuf(tga->ident, tga->identsize, ctx) != tga->identsize) {
+-+			gd_error("fail to read header ident");
+-+			return -1;
+-+		}
+- 	}
+- 
+- 	return 1;
+diff --git a/package/gd/gd.hash b/package/gd/gd.hash
+index 25e64e801b..d0b1e97675 100644
+--- a/package/gd/gd.hash
++++ b/package/gd/gd.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  478a047084e0d89b83616e4c2cf3c9438175fb0cc55d8c8967f06e0427f7d7fb  libgd-2.3.2.tar.xz
+-sha256  4d80b4af6c38d7a65128c881623dee2a5daee6b3a6ccab74a5cdfa0dfda96da7  COPYING
++sha256  3fe822ece20796060af63b7c60acb151e5844204d289da0ce08f8fdf131e5a61  libgd-2.3.3.tar.xz
++sha256  005f4b6b0141d1bd11d371bbf7d4f67947f85a4906b7f5465f942204cf918ba3  COPYING
+diff --git a/package/gd/gd.mk b/package/gd/gd.mk
+index 90f966c294..55c12e6968 100644
+--- a/package/gd/gd.mk
++++ b/package/gd/gd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GD_VERSION = 2.3.2
++GD_VERSION = 2.3.3
+ GD_SOURCE = libgd-$(GD_VERSION).tar.xz
+ GD_SITE = https://github.com/libgd/libgd/releases/download/gd-$(GD_VERSION)
+ GD_INSTALL_STAGING = YES
+@@ -15,9 +15,6 @@ GD_CPE_ID_PRODUCT = libgd
+ GD_CONF_OPTS = --without-x --disable-rpath --disable-werror
+ GD_DEPENDENCIES = host-pkgconf
+ 
+-# 0001-fix-read-out-of-bands-in-reading-tga-header-file.patch
+-GD_IGNORE_CVES += CVE-2021-38115
+-
+ # gd forgets to link utilities with -pthread even though it uses
+ # pthreads, causing linking errors with static linking
+ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
