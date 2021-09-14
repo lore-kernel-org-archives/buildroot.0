@@ -8,82 +8,82 @@ X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 46037C433F5
-	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 17:24:33 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F24EC433EF
+	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 17:43:33 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 0E7BE603E8
-	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 17:24:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0E7BE603E8
+	by mail.kernel.org (Postfix) with ESMTPS id 4C0FF60F4A
+	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 17:43:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4C0FF60F4A
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D273340303;
-	Tue, 14 Sep 2021 17:24:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1774B80E9E;
+	Tue, 14 Sep 2021 17:43:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lhL1gPmP77s4; Tue, 14 Sep 2021 17:24:32 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id umIfYx-4FRBn; Tue, 14 Sep 2021 17:43:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 22830402F7;
-	Tue, 14 Sep 2021 17:24:31 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id CF01E1BF283
- for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 17:24:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5D48780E61;
+	Tue, 14 Sep 2021 17:43:31 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 536061BF59F
+ for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 17:43:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BCA8C402F7
- for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 17:24:29 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 42D2080E7B
+ for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 17:43:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1DrR-GnaPvUg for <buildroot@lists.busybox.net>;
- Tue, 14 Sep 2021 17:24:27 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kx6GWYwy8HJj for <buildroot@lists.busybox.net>;
+ Tue, 14 Sep 2021 17:43:29 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
- [IPv6:2a00:1450:4864:20::42f])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8E92D402F5
- for <buildroot@buildroot.org>; Tue, 14 Sep 2021 17:24:27 +0000 (UTC)
-Received: by mail-wr1-x42f.google.com with SMTP id q11so21454842wrr.9
- for <buildroot@buildroot.org>; Tue, 14 Sep 2021 10:24:27 -0700 (PDT)
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
+ [IPv6:2a00:1450:4864:20::329])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id EEC0580E61
+ for <buildroot@buildroot.org>; Tue, 14 Sep 2021 17:43:28 +0000 (UTC)
+Received: by mail-wm1-x329.google.com with SMTP id
+ n7-20020a05600c3b8700b002f8ca941d89so152954wms.2
+ for <buildroot@buildroot.org>; Tue, 14 Sep 2021 10:43:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=JAWMeKjsILsGY1XzSAgdShYKBoMW9SlD3o15B7V+T9w=;
- b=KsNU/kU6VMUlY65zkhVmyb47nHaddeAgLx3CQtC72W0RAb6ioiCCIX8E7QSDZGiFXQ
- IJ0m3w0JNiCxf2WjDqgzERo+o7Rhdr00zWSks8lugNHMAbe9WwLTKxWf09gUWwzAxROd
- HPZALYM2UHAr9xV/PZFBLdeVmR44jAgeOILxWnXwOf8njAFkGJZqNRh/5iIa5m8wcvnH
- nBM0OHTrY+Iex2oHyGcDWyZsgit2RkQQJ33/BvMyiQglbDgccpzw45brKwBAgvkHxCNo
- Qev2LTpKEg/0Aee05ZufbRviEizUDTDGERtbDIaVuv9Jz+dPQJj7L6K0IgodBOcpNg7u
- DqiA==
+ bh=+ek2uXd51r4s0BY0iGGMgvUnBRoVZbX+cwtIvtDQqMk=;
+ b=kCuLDcysFP72EJjPfmfs1j0X2wAFVBA0IR4xzW/1lrcDatT5DgEoKxf6LbDL/YxDTO
+ +SZ7PR67NKQnPc4l252iVzsLJB4O+RDiTwsS9adUxEgp6QovqtX/pGJFfpFdZXdKWvy1
+ pPInO/08sIWpwLam5AkrQs3LyJAgvKtMWmgfS7U/ACyj/+KJied1eUQwNIReY/17dJ+R
+ qPYXsu1JD5uDEvtL3LZwyIjNaTqyw1wwuaXDndMqL3vvj7tCnne1FLbQbRANLYO2MzqZ
+ 75DMD43DgZMZEZThgq3nW9qDcHTv4QNAH3rFV7MTQ8pVHRQON/qyPFJwcXxK6tabpNHm
+ EpZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=JAWMeKjsILsGY1XzSAgdShYKBoMW9SlD3o15B7V+T9w=;
- b=l7PYKJ2XeNFgRxcALbF+Vf/smjorhv4MPwfWoTD37tL9jvDpfXJulS8fgZrRo0tWGr
- ODYmJ7rIcbl7LOfGncX0j4k1T6bSjIhNHCAxhRAMfx3x5fUWuepYIX6AG1Y7js2iGn3/
- 2RyxlALimTMHaF+8BMT/HzgC6Bz4qF2nbiTfqv2f/XFS81HzAjOZ0Af2GCeEFX+YeWLc
- pVaB+Qzxdh72WRprn7YQKA+i3xXdkQ33XCHnDpMZ0q6W07acTl7b79Upta44W/9Or0ZH
- EnyzFijONPORXs+LnOXcW2Dnqsvz+SQi0ofPrrPokyacyOCcLVnAqm2FzkdMPuXdhNLt
- Do1w==
-X-Gm-Message-State: AOAM5330fWSjA9ZwvrriZikwAgdtuT+u4s97K9wd6JknQDNlAeeiugt4
- kg/UTcEdMOcR2NzLhRsRWZo7nvDJQag=
-X-Google-Smtp-Source: ABdhPJzeLZNEi2pQBhnQAqIV4DtI8fy+h+0Z3IRYsploSor2SzgpBs/IF1TGXRVyGF3582H7+flJOw==
-X-Received: by 2002:adf:f543:: with SMTP id j3mr276010wrp.287.1631640265721;
- Tue, 14 Sep 2021 10:24:25 -0700 (PDT)
+ bh=+ek2uXd51r4s0BY0iGGMgvUnBRoVZbX+cwtIvtDQqMk=;
+ b=0M027aWZiYb3Izi3+CuBlGtUovwMpZdlTPnfIJmwJPpdQhHzd2JhhCZ4XVfJOQf/pZ
+ e4Cg15DJzf3yAKsC+l7uQB26AZ2jEzCkDLd2eiZmT8lWI+rqEt0j8aV1Vwm/f/SujXt4
+ wX6N4lno1iLrUq3vaR2vAiQCDFUNSfcThuHv/0R5wkGDBI7K/XbHcZcbyT94c3X4cBAQ
+ h8FjvssPHqtgTQAM4cp8BG5ncGBxjHv2pjlL26/np+xQBLe5IY6Bz6tj/rEWalMI4AUD
+ u+hhAdi5oirzcdgtJsUb31QfcCFS8XvpPh+UqQl+4wYTcgwwPekk0Vg1PI17S/LN68qa
+ AXUg==
+X-Gm-Message-State: AOAM533ItxozvIPZTLy85eUBPnVf4IzYkepe4Uc3o0AJKaRUNfIXFr4k
+ CNUoF0umwbOK4T5bnpxoZwJyXHA7o0U=
+X-Google-Smtp-Source: ABdhPJy8Jb7egDqmDE7GUf5iOCNRWs/UQDz2dLGrEuhw/3CJBzJVsyDglqK+XI+QoPHEkydLQLRm4w==
+X-Received: by 2002:a1c:a181:: with SMTP id k123mr383612wme.90.1631641407161; 
+ Tue, 14 Sep 2021 10:43:27 -0700 (PDT)
 Received: from dell5510.suse.de (gw1.ms-free.net. [185.243.124.10])
- by smtp.gmail.com with ESMTPSA id 48sm11413087wrc.14.2021.09.14.10.24.24
+ by smtp.gmail.com with ESMTPSA id q11sm10477200wrn.65.2021.09.14.10.43.26
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 14 Sep 2021 10:24:25 -0700 (PDT)
+ Tue, 14 Sep 2021 10:43:26 -0700 (PDT)
 From: Petr Vorel <petr.vorel@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 14 Sep 2021 19:24:20 +0200
-Message-Id: <20210914172420.8824-1-petr.vorel@gmail.com>
+Date: Tue, 14 Sep 2021 19:43:21 +0200
+Message-Id: <20210914174321.13977-1-petr.vorel@gmail.com>
 X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Subject: [Buildroot] [RESENT][PATCH 1/1] package/debianutils: bump version
- to 5.4
+Subject: [Buildroot] [RFC PATCH 1/1] support: utils: Use python3
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,36 +101,138 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
+Python 2 is EOL sice 2020 [1], it's still available on distros, but may not
+be installed by default (as being replaced by python3).
+
+Tested with python3 -m py_compile.
+
+[1] https://www.python.org/doc/sunset-python-2/
+
 Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 ---
- package/debianutils/debianutils.hash | 4 ++--
- package/debianutils/debianutils.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ support/scripts/cve.py                                 | 2 +-
+ support/scripts/graph-build-time                       | 2 +-
+ support/scripts/graph-depends                          | 2 +-
+ support/scripts/pycompile.py                           | 2 +-
+ support/scripts/size-stats                             | 2 +-
+ support/testing/tests/package/sample_gst1_python.py    | 2 +-
+ support/testing/tests/package/sample_python_gobject.py | 2 +-
+ utils/check-package                                    | 2 +-
+ utils/genrandconfig                                    | 2 +-
+ utils/get-developers                                   | 2 +-
+ utils/size-stats-compare                               | 2 +-
+ 11 files changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/package/debianutils/debianutils.hash b/package/debianutils/debianutils.hash
-index 16a45d4ea1..bbedb6f72f 100644
---- a/package/debianutils/debianutils.hash
-+++ b/package/debianutils/debianutils.hash
+diff --git a/support/scripts/cve.py b/support/scripts/cve.py
+index 13c29fabe0..7cd6fce4d8 100755
+--- a/support/scripts/cve.py
++++ b/support/scripts/cve.py
 @@ -1,4 +1,4 @@
--# From http://snapshot.debian.org/archive/debian/20200525T145753Z/pool/main/d/debianutils/debianutils_4.11.dsc
--sha256 bb5ce6290696b0d623377521ed217f484aa98f7346c5f7c48f9ae3e1acfb7151 debianutils_4.11.tar.xz
-+# From https://snapshot.debian.org/archive/debian/20210825T030241Z/pool/main/d/debianutils/debianutils_5.4-3.dsc
-+sha256 611b1268bee9d183886c94e5f34920e4b5b67ff45202aef3f6f2ba8f4a205163 103640 debianutils_5.4.tar.xz
- # Locally calculated
- sha256 3c8b5112cb8f74ba959233291908d73f527afa6f1d96f93649aeb912b5884567 debian/copyright
-diff --git a/package/debianutils/debianutils.mk b/package/debianutils/debianutils.mk
-index d2c41130fb..3dc9ad6e6b 100644
---- a/package/debianutils/debianutils.mk
-+++ b/package/debianutils/debianutils.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+-#!/usr/bin/env python
++#!/usr/bin/env python3
  
--DEBIANUTILS_VERSION = 4.11
-+DEBIANUTILS_VERSION = 5.4
- DEBIANUTILS_SOURCE = debianutils_$(DEBIANUTILS_VERSION).tar.xz
- DEBIANUTILS_SITE = http://snapshot.debian.org/archive/debian/20200525T145753Z/pool/main/d/debianutils
- DEBIANUTILS_CONF_OPTS = --exec-prefix=/
+ # Copyright (C) 2009 by Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ # Copyright (C) 2020 by Gregory CLEMENT <gregory.clement@bootlin.com>
+diff --git a/support/scripts/graph-build-time b/support/scripts/graph-build-time
+index ba3cdad85b..742c9a7a50 100755
+--- a/support/scripts/graph-build-time
++++ b/support/scripts/graph-build-time
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ 
+ # Copyright (C) 2011 by Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ # Copyright (C) 2013 by Yann E. MORIN <yann.morin.1998@free.fr>
+diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
+index d42bebce9d..a66fb28f41 100755
+--- a/support/scripts/graph-depends
++++ b/support/scripts/graph-depends
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ 
+ # Usage (the graphviz package must be installed in your distribution)
+ #  ./support/scripts/graph-depends [-p package-name] > test.dot
+diff --git a/support/scripts/pycompile.py b/support/scripts/pycompile.py
+index b8cd3cee6c..549272ab33 100644
+--- a/support/scripts/pycompile.py
++++ b/support/scripts/pycompile.py
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ 
+ """
+ Byte compile all .py files from provided directories. This script is an
+diff --git a/support/scripts/size-stats b/support/scripts/size-stats
+index dea3a6007c..bf3d12a9b7 100755
+--- a/support/scripts/size-stats
++++ b/support/scripts/size-stats
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ 
+ # Copyright (C) 2014 by Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ 
+diff --git a/support/testing/tests/package/sample_gst1_python.py b/support/testing/tests/package/sample_gst1_python.py
+index fab7e74f40..2d7e0e1ed9 100644
+--- a/support/testing/tests/package/sample_gst1_python.py
++++ b/support/testing/tests/package/sample_gst1_python.py
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ """A simple test that uses gst1-python to run a fake videotestsrc for 100
+ frames
+ """
+diff --git a/support/testing/tests/package/sample_python_gobject.py b/support/testing/tests/package/sample_python_gobject.py
+index 50564aa79f..4490a73613 100644
+--- a/support/testing/tests/package/sample_python_gobject.py
++++ b/support/testing/tests/package/sample_python_gobject.py
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ """A simple test that uses python-gobject to find the path of sh."""
+ from gi.repository import GLib
+ 
+diff --git a/utils/check-package b/utils/check-package
+index dd18d19c25..6540af6b2d 100755
+--- a/utils/check-package
++++ b/utils/check-package
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ # See utils/checkpackagelib/readme.txt before editing this file.
+ 
+ from __future__ import print_function
+diff --git a/utils/genrandconfig b/utils/genrandconfig
+index 622cfd4891..062f9f77d6 100755
+--- a/utils/genrandconfig
++++ b/utils/genrandconfig
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ 
+ # Copyright (C) 2014 by Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ #
+diff --git a/utils/get-developers b/utils/get-developers
+index 9182b2d85f..22accaf181 100755
+--- a/utils/get-developers
++++ b/utils/get-developers
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ 
+ import argparse
+ import getdeveloperlib
+diff --git a/utils/size-stats-compare b/utils/size-stats-compare
+index a3d7f250c6..422972e488 100755
+--- a/utils/size-stats-compare
++++ b/utils/size-stats-compare
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ 
+ # Copyright (C) 2016 Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+ 
 -- 
 2.33.0
 
