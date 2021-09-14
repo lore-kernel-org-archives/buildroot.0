@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E5F8C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 12:33:49 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BA243C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 12:34:00 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 309DE60FED
-	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 12:33:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 309DE60FED
+	by mail.kernel.org (Postfix) with ESMTPS id 02757610CE
+	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 12:33:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 02757610CE
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BA3F080E97;
-	Tue, 14 Sep 2021 12:33:47 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vnyeGx-94VbU; Tue, 14 Sep 2021 12:33:46 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EBE2380E84;
-	Tue, 14 Sep 2021 12:33:45 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9B3491BF588
- for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 12:33:44 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8500F40181
- for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 12:33:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8F2B8402F7;
+	Tue, 14 Sep 2021 12:33:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 19iiEQwFVxrD for <buildroot@lists.busybox.net>;
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id b1cjYIa4r9gH; Tue, 14 Sep 2021 12:33:58 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id CC0E04013A;
+	Tue, 14 Sep 2021 12:33:57 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 9D0211BF989
+ for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 12:33:44 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 92F78607C7
+ for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 12:33:44 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3qDoDK2sqdhU for <buildroot@lists.busybox.net>;
  Tue, 14 Sep 2021 12:33:43 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 58B4A40114
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6D98F60707
  for <buildroot@buildroot.org>; Tue, 14 Sep 2021 12:33:43 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 6D5E88B2C1; Tue, 14 Sep 2021 12:31:58 +0000 (UTC)
+ id 864518B2C3; Tue, 14 Sep 2021 12:31:58 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 14 Sep 2021 14:12:18 +0200
+Date: Tue, 14 Sep 2021 14:14:13 +0200
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 06d731046b3bef51ffccfdc0ad636bb77aca974f
-X-Git-Newrev: b3d3d1d936ddc76f0533948bd9a4694e6bfe8e3f
+X-Git-Oldrev: a13cff2d06a54a917a393648aff3d494ff1371b3
+X-Git-Newrev: 9481e9f8af11b0922076244bdddb73583e3f9f44
 X-Patchwork-Hint: ignore
-Message-Id: <20210914123158.6D5E88B2C1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/libexif: security
- bump to version 0.6.23
+Message-Id: <20210914123158.864518B2C3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/vim: security
+ bump to version 8.2.3432
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,172 +71,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b3d3d1d936ddc76f0533948bd9a4694e6bfe8e3f
+commit: https://git.buildroot.net/buildroot/commit/?id=9481e9f8af11b0922076244bdddb73583e3f9f44
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-- Drop patches (already in version)
-- Fix some more denial of service (compute time or stack exhaustion)
-  counter-measures added that avoid minutes of decoding time with
-  malformed files found by OSS-Fuzz
-
-https://github.com/libexif/libexif/releases/tag/v0.6.23
+- Fix CVE-2021-3770: vim is vulnerable to Heap-based Buffer Overflow
+- Update hash of README.txt due to changes not related to license:
+  https://github.com/vim/vim/commit/f2a44e5c48b029666ded556e2ab052dfc1266d62
+  https://github.com/vim/vim/commit/89a9c159f23fb7b3e24e6d09068adfc24a73afcb
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit e2f805097611b4828d2cba6168472aac6dedeafe)
+(cherry picked from commit c3198cd4148b5ee8a91f3eff07420e2d2f846d24)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...1-fixed-another-unsigned-integer-overflow.patch | 63 ----------------------
- .../0002-fixed-a-incorrect-overflow-check.patch    | 36 -------------
- package/libexif/libexif.hash                       |  2 +-
- package/libexif/libexif.mk                         |  8 +--
- 4 files changed, 3 insertions(+), 106 deletions(-)
+ package/vim/vim.hash | 4 ++--
+ package/vim/vim.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libexif/0001-fixed-another-unsigned-integer-overflow.patch b/package/libexif/0001-fixed-another-unsigned-integer-overflow.patch
-deleted file mode 100644
-index 77bdfe89d2..0000000000
---- a/package/libexif/0001-fixed-another-unsigned-integer-overflow.patch
-+++ /dev/null
-@@ -1,63 +0,0 @@
--From ce03ad7ef4e8aeefce79192bf5b6f69fae396f0c Mon Sep 17 00:00:00 2001
--From: Marcus Meissner <marcus@jet.franken.de>
--Date: Mon, 8 Jun 2020 17:27:06 +0200
--Subject: [PATCH] fixed another unsigned integer overflow
--
--first fixed by google in android fork,
--https://android.googlesource.com/platform/external/libexif/+/1e187b62682ffab5003c702657d6d725b4278f16%5E%21/#F0
--
--(use a more generic overflow check method, also check second overflow instance.)
--
--https://security-tracker.debian.org/tracker/CVE-2020-0198
--
--Downloaded from upstream commit:
--https://github.com/libexif/libexif/commit/ce03ad7ef4e8aeefce79192bf5b6f69fae396f0c
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- libexif/exif-data.c | 10 ++++++----
-- 1 file changed, 6 insertions(+), 4 deletions(-)
--
--diff --git a/libexif/exif-data.c b/libexif/exif-data.c
--index 8b280d3..b495726 100644
----- a/libexif/exif-data.c
--+++ b/libexif/exif-data.c
--@@ -47,6 +47,8 @@
-- #undef JPEG_MARKER_APP1
-- #define JPEG_MARKER_APP1 0xe1
-- 
--+#define CHECKOVERFLOW(offset,datasize,structsize) (( offset >= datasize) || (structsize > datasize) || (offset > datasize - structsize ))
--+
-- static const unsigned char ExifHeader[] = {0x45, 0x78, 0x69, 0x66, 0x00, 0x00};
-- 
-- struct _ExifDataPrivate
--@@ -327,7 +329,7 @@ exif_data_load_data_thumbnail (ExifData *data, const unsigned char *d,
-- 		exif_log (data->priv->log, EXIF_LOG_CODE_DEBUG, "ExifData", "Bogus thumbnail offset (%u).", o);
-- 		return;
-- 	}
---	if (s > ds - o) {
--+	if (CHECKOVERFLOW(o,ds,s)) {
-- 		exif_log (data->priv->log, EXIF_LOG_CODE_DEBUG, "ExifData", "Bogus thumbnail size (%u), max would be %u.", s, ds-o);
-- 		return;
-- 	}
--@@ -420,9 +422,9 @@ exif_data_load_data_content (ExifData *data, ExifIfd ifd,
-- 	}
-- 
-- 	/* Read the number of entries */
---	if ((offset + 2 < offset) || (offset + 2 < 2) || (offset + 2 > ds)) {
--+	if (CHECKOVERFLOW(offset, ds, 2)) {
-- 		exif_log (data->priv->log, EXIF_LOG_CODE_CORRUPT_DATA, "ExifData",
---			  "Tag data past end of buffer (%u > %u)", offset+2, ds);
--+			  "Tag data past end of buffer (%u+2 > %u)", offset, ds);
-- 		return;
-- 	}
-- 	n = exif_get_short (d + offset, data->priv->order);
--@@ -431,7 +433,7 @@ exif_data_load_data_content (ExifData *data, ExifIfd ifd,
-- 	offset += 2;
-- 
-- 	/* Check if we have enough data. */
---	if (offset + 12 * n > ds) {
--+	if (CHECKOVERFLOW(offset, ds, 12*n)) {
-- 		n = (ds - offset) / 12;
-- 		exif_log (data->priv->log, EXIF_LOG_CODE_DEBUG, "ExifData",
-- 				  "Short data; only loading %hu entries...", n);
-diff --git a/package/libexif/0002-fixed-a-incorrect-overflow-check.patch b/package/libexif/0002-fixed-a-incorrect-overflow-check.patch
-deleted file mode 100644
-index 1946f78228..0000000000
---- a/package/libexif/0002-fixed-a-incorrect-overflow-check.patch
-+++ /dev/null
-@@ -1,36 +0,0 @@
--From 9266d14b5ca4e29b970fa03272318e5f99386e06 Mon Sep 17 00:00:00 2001
--From: Marcus Meissner <marcus@jet.franken.de>
--Date: Thu, 5 Nov 2020 09:50:08 +0100
--Subject: [PATCH] fixed a incorrect overflow check that could be optimized
-- away.
--
--inspired by:
--https://android.googlesource.com/platform/external/libexif/+/8e7345f3bc0bad06ac369d6cbc1124c8ceaf7d4b
--
--https://source.android.com/security/bulletin/2020-11-01
--
--CVE-2020-0452
--
--Downloaded from upstream commit, rebased for 0.6.22:
--https://github.com/libexif/libexif/commit/9266d14b5ca4e29b970fa03272318e5f99386e06
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- libexif/exif-entry.c | 4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/libexif/exif-entry.c b/libexif/exif-entry.c
--index 3fc0ff9..4b866ce 100644
----- a/libexif/exif-entry.c
--+++ b/libexif/exif-entry.c
--@@ -1371,8 +1371,8 @@ exif_entry_get_value (ExifEntry *e, char *val, unsigned int maxlen)
-- 	{
-- 		unsigned char *utf16;
-- 
---		/* Sanity check the size to prevent overflow */
---		if (e->size+sizeof(uint16_t)+1 < e->size) break;
--+		/* Sanity check the size to prevent overflow. Note EXIF files are 64kb at most. */
--+		if (e->size >= 65536 - sizeof(uint16_t)*2) break;
-- 
-- 		/* The tag may not be U+0000-terminated , so make a local
-- 		   U+0000-terminated copy before converting it */
-diff --git a/package/libexif/libexif.hash b/package/libexif/libexif.hash
-index 1a2157b3f5..e087daf58a 100644
---- a/package/libexif/libexif.hash
-+++ b/package/libexif/libexif.hash
+diff --git a/package/vim/vim.hash b/package/vim/vim.hash
+index eb5928e91c..ce04e5cf5d 100644
+--- a/package/vim/vim.hash
++++ b/package/vim/vim.hash
 @@ -1,3 +1,3 @@
- # Locally computed:
--sha256  5048f1c8fc509cc636c2f97f4b40c293338b6041a5652082d5ee2cf54b530c56  libexif-0.6.22.tar.xz
-+sha256  a740a99920eb81ae0aa802bb46e683ce6e0cde061c210f5d5bde5b8572380431  libexif-0.6.23.tar.xz
- sha256  36b6d3fa47916943fd5fec313c584784946047ec1337a78b440e5992cb595f89  COPYING
-diff --git a/package/libexif/libexif.mk b/package/libexif/libexif.mk
-index 9a25e90d26..49637f1519 100644
---- a/package/libexif/libexif.mk
-+++ b/package/libexif/libexif.mk
-@@ -4,18 +4,14 @@
+ # Locally computed
+-sha256  8a72323817210daf40abe545bdf7637591b9b541a0fb3560baed76e436132dba  vim-8.2.0000.tar.gz
+-sha256  accdbd6761e7dd7e580545fe30f3a5a7707d50073aec4b8afef85c30fc9c031b  README.txt
++sha256  12cce47b81e12779b7d58faf879633be1b668f54a5417a5a24adac50413b3b3c  vim-8.2.3432.tar.gz
++sha256  96970b67f9cb38b0e759946cff22562a3c4b11ce78f62f2117d5e7ecded9ab4d  README.txt
+diff --git a/package/vim/vim.mk b/package/vim/vim.mk
+index 36cb59331a..f1ed3c342d 100644
+--- a/package/vim/vim.mk
++++ b/package/vim/vim.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBEXIF_VERSION = 0.6.22
-+LIBEXIF_VERSION = 0.6.23
- LIBEXIF_SOURCE = libexif-$(LIBEXIF_VERSION).tar.xz
- LIBEXIF_SITE = \
--	https://github.com/libexif/libexif/releases/download/libexif-$(subst .,_,$(LIBEXIF_VERSION))-release
-+	https://github.com/libexif/libexif/releases/download/v$(LIBEXIF_VERSION)
- LIBEXIF_INSTALL_STAGING = YES
- LIBEXIF_DEPENDENCIES = host-pkgconf
- LIBEXIF_LICENSE = LGPL-2.1+
- LIBEXIF_LICENSE_FILES = COPYING
- LIBEXIF_CPE_ID_VENDOR = libexif_project
--# 0001-fixed-another-unsigned-integer-overflow.patch
--LIBEXIF_IGNORE_CVES += CVE-2020-0198
--# 0002-fixed-a-incorrect-overflow-check.patch
--LIBEXIF_IGNORE_CVES += CVE-2020-0452
- 
- $(eval $(autotools-package))
+-VIM_VERSION = 8.2.0000
++VIM_VERSION = 8.2.3432
+ VIM_SITE = $(call github,vim,vim,v$(VIM_VERSION))
+ VIM_DEPENDENCIES = ncurses $(TARGET_NLS_DEPENDENCIES)
+ VIM_SUBDIR = src
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
