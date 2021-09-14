@@ -2,71 +2,67 @@ Return-Path: <SRS0=SwR/=OE=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-21.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
+X-Spam-Status: No, score=-18.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A3A0C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 22:26:54 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 80EC9C433FE
+	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 22:31:49 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9193A6103B
-	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 22:26:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9193A6103B
+	by mail.kernel.org (Postfix) with ESMTPS id 05D2C60F58
+	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 22:31:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 05D2C60F58
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=igalia.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 308C4400B9;
-	Tue, 14 Sep 2021 22:26:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9C938403DC;
+	Tue, 14 Sep 2021 22:31:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qDGSjxmRaHxE; Tue, 14 Sep 2021 22:26:51 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 7KnKxge2mbYT; Tue, 14 Sep 2021 22:31:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3F5E7404AC;
-	Tue, 14 Sep 2021 22:26:50 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9AD501BF36F
- for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 22:26:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 68A12403DD;
+	Tue, 14 Sep 2021 22:31:46 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 4BF3F1BF36F
+ for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 22:31:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 890B36077D
- for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 22:26:48 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3BFFE403DD
+ for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 22:31:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=igalia.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Y14qEqUF6tqX for <buildroot@lists.busybox.net>;
- Tue, 14 Sep 2021 22:26:45 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id P-Ox4o0ORGzU for <buildroot@lists.busybox.net>;
+ Tue, 14 Sep 2021 22:31:44 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
 Received: from fanzine.igalia.com (fanzine.igalia.com [178.60.130.6])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E17236076D
- for <buildroot@buildroot.org>; Tue, 14 Sep 2021 22:26:44 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9BB2E403DC
+ for <buildroot@buildroot.org>; Tue, 14 Sep 2021 22:31:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
  s=20170329; 
- h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:To:From;
- bh=xXbwzwBgg76Q/gsN7lL1M93tL/msz/mO+szxjswkyNQ=; 
- b=MtktiVH5HXixLzNdUq9jsnsOLhNrIJINBsrEbygQP4ov2l+u0z42dO3wfqalLAzK7i1sahLWSIGm7/CgjGe+T9NtxPp8s4j1YOq6sdaqfOY9TMI9PO/QXY2im/JFcE2U5MHYXJkGQTK5/rGXHotAEoXpKrzDvc4+MkHEa185iIPRm3z9TVGVWJyp6RxzqfjDAe7t+Vi0ggoMQR+u/HLjnk+Fe52Q3fbaf8CTK69L/irFJFHYDCzaB7sxgVfi/jXM1G3EPjGY4hogNoEl20HczL/pOvCAFeZ5wmcWp7QrY9RnuX9Lk61RrEnk4MLEBRfVnShqBrhadOwezp+xfd130w==;
-Received: from 91-153-34-142.elisa-laajakaista.fi ([91.153.34.142] helo=kodama)
+ h=Content-Type:MIME-Version:References:In-Reply-To:Subject:Cc:To:From:Message-ID:Date;
+ bh=WqrRjGoed3WWtgbWxTBkbIMv6dI53M5gwXwnho1jINU=; 
+ b=NhyJjCN9Lsw5Ochc/8my4UdGNymf6yO/3zBh2iCKkGWQQjtPU9hwgeE3aqZXCj3/m9qZV/f7QgYn28mISKw5KY3Xn+XPDe0hCgbteJtfqv0GhbFWWL25o1H6S2Ug2DtqtGrResyQMYYzgYq7fCgpE6FH7JBFd7LxmJ96JyYYBFSg5NPFHJ04V6eJLGBTvJVWvUmvXu7F3LdH//gUVrPf7A0m90FUTs8D/PpP1anLS5IEkkXOKlD4mSqknfWh7auFQgpHmwrRIWlWRRQmbpu/DOG40XPaSy2vqNcdmz4TjxQtuClZ/A6Dalslm/3oOTneRvTW0WruiK1iENa2mR9sJw==;
+Received: from 91-158-76-100.elisa-laajakaista.fi ([91.158.76.100] helo=momiji)
  by fanzine.igalia.com with esmtpsa 
  (Cipher TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256) (Exim)
- id 1mQGsz-0002zF-Fo
- for <buildroot@buildroot.org>; Wed, 15 Sep 2021 00:26:41 +0200
-Received: from localhost (kodama [local])
- by kodama (OpenSMTPD) with ESMTPA id 9c03ac43
- for <buildroot@buildroot.org>; Tue, 14 Sep 2021 22:26:29 +0000 (UTC)
+ id 1mQGxk-0003Sl-2W; Wed, 15 Sep 2021 00:31:41 +0200
+Received: from localhost (momiji [local])
+ by momiji (OpenSMTPD) with ESMTPA id 9966c0a9;
+ Tue, 14 Sep 2021 22:31:21 +0000 (UTC)
+Date: Wed, 15 Sep 2021 01:31:16 +0300
+Message-ID: <20210915013116.GB62285@momiji>
 From: Adrian Perez de Castro <aperez@igalia.com>
-To: buildroot@buildroot.org
-Date: Wed, 15 Sep 2021 01:26:29 +0300
-Message-Id: <20210914222629.2670193-1-aperez@igalia.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20210914130133.2405250-1-aperez@igalia.com>
-References: <20210914130133.2405250-1-aperez@igalia.com>
+To: Peter Seiderer <ps.report@gmx.net>
+In-Reply-To: <20210914221344.438734be@gmx.net>
+References: <20210912092128.2286771-1-aperez@igalia.com>
+ <20210914130133.2405250-1-aperez@igalia.com> <20210914221344.438734be@gmx.net>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v3 1/1] package/seatd: bump to version 0.6.1
+Subject: Re: [Buildroot] [PATCH v2 1/1] package/seatd: bump to version 0.6.1
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,429 +75,302 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============7441405189900047819=="
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-Update seatd to version 0.6.1, which makes the patches unnecessary (they
-have all been integrated in 0.6.0) and fixes a number of bugs. Some
-Meson build options have been renamed, so the build recipe is updated
-accordingly, too.
 
-Release notes:
+--===============7441405189900047819==
+Content-Type: multipart/signed; boundary="1DrOAB1LsYiLtZy9"; micalg="pgp-sha1"; protocol="application/pgp-signature"
 
-  https://git.sr.ht/~kennylevinsen/seatd/refs/0.6.0
-  https://git.sr.ht/~kennylevinsen/seatd/refs/0.6.1
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
----
-Changes v2 -> v3:
-  - Also link release notes for 0.6.0 (suggested by Peter Seiderer)
----
-Changes v1 -> v2:
-  - Changed version 0.6.0 to 0.6.1
+--1DrOAB1LsYiLtZy9
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: base64
 
----
- ...pport-building-builtin-without-seatd.patch |  37 ---
- package/seatd/0002-Add-no-op-session.patch    | 223 ------------------
- ...003-meson.build-fix-build-with-gcc-7.patch |  48 ----
- package/seatd/seatd.hash                      |   2 +-
- package/seatd/seatd.mk                        |  14 +-
- 5 files changed, 8 insertions(+), 316 deletions(-)
- delete mode 100644 package/seatd/0001-meson-Support-building-builtin-without-seatd.patch
- delete mode 100644 package/seatd/0002-Add-no-op-session.patch
- delete mode 100644 package/seatd/0003-meson.build-fix-build-with-gcc-7.patch
+SGkgUGV0ZXIsCgpPbiBUdWUsIDE0IFNlcCAyMDIxIDIyOjEzOjQ0ICswMjAwIFBldGVyIFNlaWRl
+cmVyIDxwcy5yZXBvcnRAZ214Lm5ldD4gd3JvdGU6Cj4gSGVsbG8gQWRyaWFuLAo+IAo+IE9uIFR1
+ZSwgMTQgU2VwIDIwMjEgMTY6MDE6MzMgKzAzMDAsIEFkcmlhbiBQZXJleiBkZSBDYXN0cm8gPGFw
+ZXJlekBpZ2FsaWEuY29tPiB3cm90ZToKPiAKPiA+IFVwZGF0ZSBzZWF0ZCB0byB2ZXJzaW9uIDAu
+Ni4xLCB3aGljaCBtYWtlcyB0aGUgcGF0Y2hlcyB1bm5lY2Vzc2FyeSBhbmQKPiA+IGZpeGVzIGEg
+bnVtYmVyIG9mIGJ1Z3MuIFNvbWUgTWVzb24gYnVpbGQgb3B0aW9ucyBoYXZlIGJlZW4gcmVuYW1l
+ZCwgc28KPiA+IHRoZSBidWlsZCByZWNpcGUgaXMgdXBkYXRlZCBhY2NvcmRpbmdseSwgdG9vLgo+
+ID4KPiA+IFJlbGVhc2Ugbm90ZXM6IGh0dHBzOi8vZ2l0LnNyLmh0L35rZW5ueWxldmluc2VuL3Nl
+YXRkL3JlZnMvMC42LjEKPiAKPiBBcyB5b3UgYnVtcCBmcm9tIDAuNS4wIHRoZSBhZGRpdGlvbmFs
+IHJlbGVhc2Ugbm90ZXMgbGluayBmb3IgMC42LjAgd291bGQKPiBiZSBuaWNlIChtZW50aW9uaW5n
+IHRoZSB1cHN0cmVhbSBhcHBsaWVkIHBhdGNoZXMpOgo+IAo+IAlodHRwczovL2dpdC5zci5odC9+
+a2VubnlsZXZpbnNlbi9zZWF0ZC9yZWZzLzAuNi4wCgpUaGFua3MgZm9yIHRoZSBzdWdnZXN0aW9u
+LCBJIGhhdmUgcG9zdGVkIHZlcnNpb24gMyBvZiB0aGUgcGF0Y2ggd2l0aCB0aGUKY29tbWl0IG1l
+c3NhZ2UgdXBkYXRlZC4gVGhhbmtzIQoKPiA+IFNpZ25lZC1vZmYtYnk6IEFkcmlhbiBQZXJleiBk
+ZSBDYXN0cm8gPGFwZXJlekBpZ2FsaWEuY29tPgo+ID4gLS0tCj4gPiBDaGFuZ2VzIHYxIC0+IHYy
+Ogo+ID4gICAtIENoYW5nZWQgdmVyc2lvbiAwLjYuMCB0byAwLjYuMQo+ID4gLS0tCj4gPiAgLi4u
+cHBvcnQtYnVpbGRpbmctYnVpbHRpbi13aXRob3V0LXNlYXRkLnBhdGNoIHwgIDM3IC0tLQo+ID4g
+IHBhY2thZ2Uvc2VhdGQvMDAwMi1BZGQtbm8tb3Atc2Vzc2lvbi5wYXRjaCAgICB8IDIyMyAtLS0t
+LS0tLS0tLS0tLS0tLS0KPiA+ICAuLi4wMDMtbWVzb24uYnVpbGQtZml4LWJ1aWxkLXdpdGgtZ2Nj
+LTcucGF0Y2ggfCAgNDggLS0tLQo+ID4gIHBhY2thZ2Uvc2VhdGQvc2VhdGQuaGFzaCAgICAgICAg
+ICAgICAgICAgICAgICB8ICAgMiArLQo+ID4gIHBhY2thZ2Uvc2VhdGQvc2VhdGQubWsgICAgICAg
+ICAgICAgICAgICAgICAgICB8ICAxNCArLQo+ID4gIDUgZmlsZXMgY2hhbmdlZCwgOCBpbnNlcnRp
+b25zKCspLCAzMTYgZGVsZXRpb25zKC0pCj4gPiAgZGVsZXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2Uv
+c2VhdGQvMDAwMS1tZXNvbi1TdXBwb3J0LWJ1aWxkaW5nLWJ1aWx0aW4td2l0aG91dC1zZWF0ZC5w
+YXRjaAo+ID4gIGRlbGV0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL3NlYXRkLzAwMDItQWRkLW5vLW9w
+LXNlc3Npb24ucGF0Y2gKPiA+ICBkZWxldGUgbW9kZSAxMDA2NDQgcGFja2FnZS9zZWF0ZC8wMDAz
+LW1lc29uLmJ1aWxkLWZpeC1idWlsZC13aXRoLWdjYy03LnBhdGNoCj4gPgo+ID4gZGlmZiAtLWdp
+dCBhL3BhY2thZ2Uvc2VhdGQvMDAwMS1tZXNvbi1TdXBwb3J0LWJ1aWxkaW5nLWJ1aWx0aW4td2l0
+aG91dC1zZWF0ZC5wYXRjaCBiL3BhY2thZ2Uvc2VhdGQvMDAwMS1tZXNvbi1TdXBwb3J0LWJ1aWxk
+aW5nLWJ1aWx0aW4td2l0aG91dC1zZWF0ZC5wYXRjaAo+ID4gZGVsZXRlZCBmaWxlIG1vZGUgMTAw
+NjQ0Cj4gPiBpbmRleCBmY2FhMzU1ZGM0Li4wMDAwMDAwMDAwCj4gPiAtLS0gYS9wYWNrYWdlL3Nl
+YXRkLzAwMDEtbWVzb24tU3VwcG9ydC1idWlsZGluZy1idWlsdGluLXdpdGhvdXQtc2VhdGQucGF0
+Y2gKPiA+ICsrKyAvZGV2L251bGwKPiA+IEBAIC0xLDM3ICswLDAgQEAKPiA+IC1Gcm9tIDExYmY3
+ZDVkMTE0MjQ3NDlkNTQ5MjM5NTQwZTVkYjA2Yjg3NTRiYjUgTW9uIFNlcCAxNyAwMDowMDowMCAy
+MDAxCj4gPiAtRnJvbTogS2VubnkgTGV2aW5zZW4gPGtsQGtsLnd0Zj4KPiA+IC1EYXRlOiBTdW4s
+IDI1IEFwciAyMDIxIDIwOjE2OjE5ICswMjAwCj4gPiAtU3ViamVjdDogW1BBVENIXSBtZXNvbjog
+U3VwcG9ydCBidWlsZGluZyBidWlsdGluIHdpdGhvdXQgc2VhdGQKPiA+IC0KPiA+IC1UaGUgYnVp
+bHRpbiBiYWNrZW5kIHJlbGllcyBvbiB0aGUgc2VhdGQgYmFja2VuZCBpbXBsZW1lbnRhdGlvbi4g
+V2hlbgo+ID4gLWJ1aWx0aW4gd2FzIGVuYWJsZWQgd2l0aG91dCBzZWF0ZCwgY29tcGlsYXRpb24g
+d291bGQgZmFpbCBkdWUgdG8gdGhlCj4gPiAtaW1wbGVtZW50YXRpb24gbm90IGJlaW5nIGluY2x1
+ZGVkLgo+ID4gLQo+ID4gLUluY2x1ZGUgdGhlIGltcGxlbWVudGF0aW9uIGlmIGVpdGhlciBzZWF0
+ZCBvciBidWlsdGluIGlzIGVuYWJsZWQuCj4gPiAtCj4gPiAtU2lnbmVkLW9mZi1ieTogQWRyaWFu
+IFBlcmV6IGRlIENhc3RybyA8YXBlcmV6QGlnYWxpYS5jb20+Cj4gPiAtVXBzdHJlYW0tU3RhdHVz
+OiBiYWNrcG9ydCBbd2l0aCBhZGFwdGF0aW9uc10KPiA+IC0tLS0KPiA+IC0gbWVzb24uYnVpbGQg
+fCA1ICsrKystCj4gPiAtIDEgZmlsZSBjaGFuZ2VkLCA0IGluc2VydGlvbnMoKyksIDEgZGVsZXRp
+b24oLSkKPiA+IC0KPiA+IC1kaWZmIC0tZ2l0IGEvbWVzb24uYnVpbGQgYi9tZXNvbi5idWlsZAo+
+ID4gLWluZGV4IGZmNTY4NDUuLjhjYjRmYzYgMTAwNjQ0Cj4gPiAtLS0tIGEvbWVzb24uYnVpbGQK
+PiA+IC0rKysgYi9tZXNvbi5idWlsZAo+ID4gLUBAIC0xMDUsOCArMTA1LDExIEBAIHNlcnZlcl9m
+aWxlcyA9IFsKPiA+IC0gCSdzZWF0ZC9zZXJ2ZXIuYycsCj4gPiAtIF0KPiA+IC0KPiA+IC0taWYg
+Z2V0X29wdGlvbignc2VhdGQnKS5lbmFibGVkKCkKPiA+IC0raWYgZ2V0X29wdGlvbignc2VhdGQn
+KS5lbmFibGVkKCkgb3IgZ2V0X29wdGlvbignYnVpbHRpbicpLmVuYWJsZWQoKQo+ID4gLSAJcHJp
+dmF0ZV9maWxlcyArPSAnbGlic2VhdC9iYWNrZW5kL3NlYXRkLmMnCj4gPiAtK2VuZGlmCj4gPiAt
+Kwo+ID4gLStpZiBnZXRfb3B0aW9uKCdzZWF0ZCcpLmVuYWJsZWQoKQo+ID4gLSAJYWRkX3Byb2pl
+Y3RfYXJndW1lbnRzKCctRFNFQVREX0VOQUJMRUQ9MScsIGxhbmd1YWdlOiAnYycpCj4gPiAtIGVu
+ZGlmCj4gPiAtCj4gPiAtLS0KPiA+IC0yLjMxLjEKPiA+IC0KPiA+IGRpZmYgLS1naXQgYS9wYWNr
+YWdlL3NlYXRkLzAwMDItQWRkLW5vLW9wLXNlc3Npb24ucGF0Y2ggYi9wYWNrYWdlL3NlYXRkLzAw
+MDItQWRkLW5vLW9wLXNlc3Npb24ucGF0Y2gKPiA+IGRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0NAo+
+ID4gaW5kZXggNDQ3OTgxMjZkOS4uMDAwMDAwMDAwMAo+ID4gLS0tIGEvcGFja2FnZS9zZWF0ZC8w
+MDAyLUFkZC1uby1vcC1zZXNzaW9uLnBhdGNoCj4gPiArKysgL2Rldi9udWxsCj4gPiBAQCAtMSwy
+MjMgKzAsMCBAQAo+ID4gLUZyb20gOWE3ODI0YjdjM2ZmNWM5NTc2MzI2NzFlOTE0NTRmYzg0ZmJj
+ZGRhOCBNb24gU2VwIDE3IDAwOjAwOjAwIDIwMDEKPiA+IC1Gcm9tOiBTaW1vbiBTZXIgPGNvbnRh
+Y3RAZW1lcnNpb24uZnI+Cj4gPiAtRGF0ZTogRnJpLCAyNiBNYXIgMjAyMSAxMDowNToxMiArMDEw
+MAo+ID4gLVN1YmplY3Q6IFtQQVRDSF0gQWRkIG5vLW9wIHNlc3Npb24KPiA+IC0KPiA+IC1UaGlz
+IGlzIHVzZWZ1bCBmb3IgaGVhZGxlc3MgdGVzdGluZywgZm9yIGluc3RhbmNlIHdpdGggVktNUzoK
+PiA+IC0KPiA+IC0gICAgbW9kcHJvYmUgdmttcwo+ID4gLSAgICBleHBvcnQgV0xSX0RSTV9ERVZJ
+Q0VTPS9kZXYvZHJpL2NhcmQxCj4gPiAtICAgIGV4cG9ydCBXTFJfQkFDS0VORFM9ZHJtCj4gPiAt
+ICAgIGV4cG9ydCBMSUJTRUFUX0JBQ0tFTkQ9bm9vcAo+ID4gLSAgICBzd2F5Cj4gPiAtCj4gPiAt
+V2UgZG9uJ3QgbmVlZCBhbnkgb2YgdGhlIFZUIGhhbmRsaW5nIGluIHRoaXMgY2FzZS4KPiA+IC0K
+PiA+IC1bUmV0cmlldmVkIGZyb206Cj4gPiAtaHR0cHM6Ly9naXRodWIuY29tL2tlbm55bGV2aW5z
+ZW4vc2VhdGQvY29tbWl0LzlhNzgyNGI3YzNmZjVjOTU3NjMyNjcxZTkxNDU0ZmM4NGZiY2RkYThd
+Cj4gPiAtU2lnbmVkLW9mZi1ieTogRmFicmljZSBGb250YWluZSA8Zm9udGFpbmUuZmFicmljZUBn
+bWFpbC5jb20+Cj4gPiAtLS0tCj4gPiAtIGluY2x1ZGUvbGlic2VhdC5oICAgICAgfCAgIDIgKwo+
+ID4gLSBsaWJzZWF0L2JhY2tlbmQvbm9vcC5jIHwgMTM1ICsrKysrKysrKysrKysrKysrKysrKysr
+KysrKysrKysrKysrKysrKysrCj4gPiAtIGxpYnNlYXQvbGlic2VhdC5jICAgICAgfCAgIDUgKysK
+PiA+IC0gbWVzb24uYnVpbGQgICAgICAgICAgICB8ICAgMiArLQo+ID4gLSA0IGZpbGVzIGNoYW5n
+ZWQsIDE0MyBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0pCj4gPiAtIGNyZWF0ZSBtb2RlIDEw
+MDY0NCBsaWJzZWF0L2JhY2tlbmQvbm9vcC5jCj4gPiAtCj4gPiAtZGlmZiAtLWdpdCBhL2luY2x1
+ZGUvbGlic2VhdC5oIGIvaW5jbHVkZS9saWJzZWF0LmgKPiA+IC1pbmRleCA1Mzc1Y2Q2Li44MjA5
+OGVhIDEwMDY0NAo+ID4gLS0tLSBhL2luY2x1ZGUvbGlic2VhdC5oCj4gPiAtKysrIGIvaW5jbHVk
+ZS9saWJzZWF0LmgKPiA+IC1AQCAtMSw2ICsxLDggQEAKPiA+IC0gI2lmbmRlZiBfTElCU0VBVF9I
+Cj4gPiAtICNkZWZpbmUgX0xJQlNFQVRfSAo+ID4gLQo+ID4gLSsjaW5jbHVkZSA8c3RkYXJnLmg+
+Cj4gPiAtKwo+ID4gLSAvKgo+ID4gLSAgKiBBbiBvcGFxdWUgc3RydWN0IGNvbnRhaW5pbmcgYW4g
+b3BlbmVkIHNlYXQsIGNyZWF0ZWQgYnkgbGlic2VhdF9vcGVuX3NlYXQgYW5kCj4gPiAtICAqIGRl
+c3Ryb3llZCBieSBsaWJzZWF0X2Nsb3NlX3NlYXQuCj4gPiAtZGlmZiAtLWdpdCBhL2xpYnNlYXQv
+YmFja2VuZC9ub29wLmMgYi9saWJzZWF0L2JhY2tlbmQvbm9vcC5jCj4gPiAtbmV3IGZpbGUgbW9k
+ZSAxMDA2NDQKPiA+IC1pbmRleCAwMDAwMDAwLi43MWQwMjI0Cj4gPiAtLS0tIC9kZXYvbnVsbAo+
+ID4gLSsrKyBiL2xpYnNlYXQvYmFja2VuZC9ub29wLmMKPiA+IC1AQCAtMCwwICsxLDEzNSBAQAo+
+ID4gLSsjaW5jbHVkZSA8YXNzZXJ0Lmg+Cj4gPiAtKyNpbmNsdWRlIDxlcnJuby5oPgo+ID4gLSsj
+aW5jbHVkZSA8ZmNudGwuaD4KPiA+IC0rI2luY2x1ZGUgPHBvbGwuaD4KPiA+IC0rI2luY2x1ZGUg
+PHN0ZGJvb2wuaD4KPiA+IC0rI2luY2x1ZGUgPHN0ZGxpYi5oPgo+ID4gLSsjaW5jbHVkZSA8c3Ry
+aW5nLmg+Cj4gPiAtKyNpbmNsdWRlIDxzeXMvc29ja2V0Lmg+Cj4gPiAtKyNpbmNsdWRlIDx1bmlz
+dGQuaD4KPiA+IC0rCj4gPiAtKyNpbmNsdWRlICJiYWNrZW5kLmgiCj4gPiAtKyNpbmNsdWRlICJs
+b2cuaCIKPiA+IC0rCj4gPiAtK3N0cnVjdCBiYWNrZW5kX25vb3Agewo+ID4gLSsJc3RydWN0IGxp
+YnNlYXQgYmFzZTsKPiA+IC0rCXN0cnVjdCBsaWJzZWF0X3NlYXRfbGlzdGVuZXIgKnNlYXRfbGlz
+dGVuZXI7Cj4gPiAtKwl2b2lkICpzZWF0X2xpc3RlbmVyX2RhdGE7Cj4gPiAtKwo+ID4gLSsJYm9v
+bCBpbml0aWFsX3NldHVwOwo+ID4gLSsJaW50IHNvY2tldHNbMl07Cj4gPiAtK307Cj4gPiAtKwo+
+ID4gLStleHRlcm4gY29uc3Qgc3RydWN0IHNlYXRfaW1wbCBub29wX2ltcGw7Cj4gPiAtKwo+ID4g
+LStzdGF0aWMgc3RydWN0IGJhY2tlbmRfbm9vcCAqYmFja2VuZF9ub29wX2Zyb21fbGlic2VhdF9i
+YWNrZW5kKHN0cnVjdCBsaWJzZWF0ICpiYXNlKSB7Cj4gPiAtKwlhc3NlcnQoYmFzZS0+aW1wbCA9
+PSAmbm9vcF9pbXBsKTsKPiA+IC0rCXJldHVybiAoc3RydWN0IGJhY2tlbmRfbm9vcCAqKWJhc2U7
+Cj4gPiAtK30KPiA+IC0rCj4gPiAtK3N0YXRpYyB2b2lkIGRlc3Ryb3koc3RydWN0IGJhY2tlbmRf
+bm9vcCAqYmFja2VuZCkgewo+ID4gLSsJY2xvc2UoYmFja2VuZC0+c29ja2V0c1swXSk7Cj4gPiAt
+KwljbG9zZShiYWNrZW5kLT5zb2NrZXRzWzFdKTsKPiA+IC0rCWZyZWUoYmFja2VuZCk7Cj4gPiAt
+K30KPiA+IC0rCj4gPiAtK3N0YXRpYyBpbnQgY2xvc2Vfc2VhdChzdHJ1Y3QgbGlic2VhdCAqYmFz
+ZSkgewo+ID4gLSsJc3RydWN0IGJhY2tlbmRfbm9vcCAqYmFja2VuZCA9IGJhY2tlbmRfbm9vcF9m
+cm9tX2xpYnNlYXRfYmFja2VuZChiYXNlKTsKPiA+IC0rCWRlc3Ryb3koYmFja2VuZCk7Cj4gPiAt
+KwlyZXR1cm4gMDsKPiA+IC0rfQo+ID4gLSsKPiA+IC0rc3RhdGljIGludCBkaXNhYmxlX3NlYXQo
+c3RydWN0IGxpYnNlYXQgKmJhc2UpIHsKPiA+IC0rCSh2b2lkKWJhc2U7Cj4gPiAtKwlyZXR1cm4g
+MDsKPiA+IC0rfQo+ID4gLSsKPiA+IC0rc3RhdGljIGNvbnN0IGNoYXIgKnNlYXRfbmFtZShzdHJ1
+Y3QgbGlic2VhdCAqYmFzZSkgewo+ID4gLSsJKHZvaWQpYmFzZTsKPiA+IC0rCXJldHVybiAibm9v
+cCI7Cj4gPiAtK30KPiA+IC0rCj4gPiAtK3N0YXRpYyBpbnQgb3Blbl9kZXZpY2Uoc3RydWN0IGxp
+YnNlYXQgKmJhc2UsIGNvbnN0IGNoYXIgKnBhdGgsIGludCAqZmQpIHsKPiA+IC0rCSh2b2lkKWJh
+c2U7Cj4gPiAtKwo+ID4gLSsJaW50IHRtcGZkID0gb3BlbihwYXRoLCBPX1JEV1IgfCBPX0NMT0VY
+RUMpOwo+ID4gLSsJaWYgKHRtcGZkIDwgMCkgewo+ID4gLSsJCWxvZ19lcnJvcmYoIkZhaWxlZCB0
+byBvcGVuIGRldmljZTogJXMiLCBzdHJlcnJvcihlcnJubykpOwo+ID4gLSsJCXJldHVybiAtMTsK
+PiA+IC0rCX0KPiA+IC0rCj4gPiAtKwkqZmQgPSB0bXBmZDsKPiA+IC0rCXJldHVybiB0bXBmZDsK
+PiA+IC0rfQo+ID4gLSsKPiA+IC0rc3RhdGljIGludCBjbG9zZV9kZXZpY2Uoc3RydWN0IGxpYnNl
+YXQgKmJhc2UsIGludCBkZXZpY2VfaWQpIHsKPiA+IC0rCSh2b2lkKWJhc2U7Cj4gPiAtKwkodm9p
+ZClkZXZpY2VfaWQ7Cj4gPiAtKwlyZXR1cm4gMDsKPiA+IC0rfQo+ID4gLSsKPiA+IC0rc3RhdGlj
+IGludCBzd2l0Y2hfc2Vzc2lvbihzdHJ1Y3QgbGlic2VhdCAqYmFzZSwgaW50IHMpIHsKPiA+IC0r
+CSh2b2lkKWJhc2U7Cj4gPiAtKwkodm9pZClzOwo+ID4gLSsJbG9nX2Vycm9yZigiTm8tb3AgYmFj
+a2VuZCBjYW5ub3Qgc3dpdGNoIHRvIHNlc3Npb24gJWQiLCBzKTsKPiA+IC0rCXJldHVybiAtMTsK
+PiA+IC0rfQo+ID4gLSsKPiA+IC0rc3RhdGljIGludCBnZXRfZmQoc3RydWN0IGxpYnNlYXQgKmJh
+c2UpIHsKPiA+IC0rCXN0cnVjdCBiYWNrZW5kX25vb3AgKmJhY2tlbmQgPSBiYWNrZW5kX25vb3Bf
+ZnJvbV9saWJzZWF0X2JhY2tlbmQoYmFzZSk7Cj4gPiAtKwlyZXR1cm4gYmFja2VuZC0+c29ja2V0
+c1swXTsKPiA+IC0rfQo+ID4gLSsKPiA+IC0rc3RhdGljIGludCBkaXNwYXRjaF9iYWNrZ3JvdW5k
+KHN0cnVjdCBsaWJzZWF0ICpiYXNlLCBpbnQgdGltZW91dCkgewo+ID4gLSsJc3RydWN0IGJhY2tl
+bmRfbm9vcCAqYmFja2VuZCA9IGJhY2tlbmRfbm9vcF9mcm9tX2xpYnNlYXRfYmFja2VuZChiYXNl
+KTsKPiA+IC0rCj4gPiAtKwlpZiAoYmFja2VuZC0+aW5pdGlhbF9zZXR1cCkgewo+ID4gLSsJCWJh
+Y2tlbmQtPmluaXRpYWxfc2V0dXAgPSBmYWxzZTsKPiA+IC0rCQliYWNrZW5kLT5zZWF0X2xpc3Rl
+bmVyLT5lbmFibGVfc2VhdCgmYmFja2VuZC0+YmFzZSwgYmFja2VuZC0+c2VhdF9saXN0ZW5lcl9k
+YXRhKTsKPiA+IC0rCX0KPiA+IC0rCj4gPiAtKwlzdHJ1Y3QgcG9sbGZkIGZkID0gewo+ID4gLSsJ
+CS5mZCA9IGJhY2tlbmQtPnNvY2tldHNbMF0sCj4gPiAtKwkJLmV2ZW50cyA9IFBPTExJTiwKPiA+
+IC0rCX07Cj4gPiAtKwlpZiAocG9sbCgmZmQsIDEsIHRpbWVvdXQpIDwgMCkgewo+ID4gLSsJCWlm
+IChlcnJubyA9PSBFQUdBSU4gfHwgZXJybm8gPT0gRUlOVFIpIHsKPiA+IC0rCQkJcmV0dXJuIDA7
+Cj4gPiAtKwkJfSBlbHNlIHsKPiA+IC0rCQkJcmV0dXJuIC0xOwo+ID4gLSsJCX0KPiA+IC0rCX0K
+PiA+IC0rCj4gPiAtKwlyZXR1cm4gMDsKPiA+IC0rfQo+ID4gLSsKPiA+IC0rc3RhdGljIHN0cnVj
+dCBsaWJzZWF0ICpub29wX29wZW5fc2VhdChzdHJ1Y3QgbGlic2VhdF9zZWF0X2xpc3RlbmVyICps
+aXN0ZW5lciwgdm9pZCAqZGF0YSkgewo+ID4gLSsJc3RydWN0IGJhY2tlbmRfbm9vcCAqYmFja2Vu
+ZCA9IGNhbGxvYygxLCBzaXplb2Yoc3RydWN0IGJhY2tlbmRfbm9vcCkpOwo+ID4gLSsJaWYgKGJh
+Y2tlbmQgPT0gTlVMTCkgewo+ID4gLSsJCXJldHVybiBOVUxMOwo+ID4gLSsJfQo+ID4gLSsKPiA+
+IC0rCWlmIChzb2NrZXRwYWlyKEFGX1VOSVgsIFNPQ0tfU1RSRUFNLCAwLCBiYWNrZW5kLT5zb2Nr
+ZXRzKSAhPSAwKSB7Cj4gPiAtKwkJbG9nX2Vycm9yZigic29ja2V0cGFpcigpIGZhaWxlZDogJXMi
+LCBzdHJlcnJvcihlcnJubykpOwo+ID4gLSsJCWZyZWUoYmFja2VuZCk7Cj4gPiAtKwkJcmV0dXJu
+IE5VTEw7Cj4gPiAtKwl9Cj4gPiAtKwo+ID4gLSsJYmFja2VuZC0+c2VhdF9saXN0ZW5lciA9IGxp
+c3RlbmVyOwo+ID4gLSsJYmFja2VuZC0+c2VhdF9saXN0ZW5lcl9kYXRhID0gZGF0YTsKPiA+IC0r
+CWJhY2tlbmQtPmJhc2UuaW1wbCA9ICZub29wX2ltcGw7Cj4gPiAtKwo+ID4gLSsJcmV0dXJuICZi
+YWNrZW5kLT5iYXNlOwo+ID4gLSt9Cj4gPiAtKwo+ID4gLStjb25zdCBzdHJ1Y3Qgc2VhdF9pbXBs
+IG5vb3BfaW1wbCA9IHsKPiA+IC0rCS5vcGVuX3NlYXQgPSBub29wX29wZW5fc2VhdCwKPiA+IC0r
+CS5kaXNhYmxlX3NlYXQgPSBkaXNhYmxlX3NlYXQsCj4gPiAtKwkuY2xvc2Vfc2VhdCA9IGNsb3Nl
+X3NlYXQsCj4gPiAtKwkuc2VhdF9uYW1lID0gc2VhdF9uYW1lLAo+ID4gLSsJLm9wZW5fZGV2aWNl
+ID0gb3Blbl9kZXZpY2UsCj4gPiAtKwkuY2xvc2VfZGV2aWNlID0gY2xvc2VfZGV2aWNlLAo+ID4g
+LSsJLnN3aXRjaF9zZXNzaW9uID0gc3dpdGNoX3Nlc3Npb24sCj4gPiAtKwkuZ2V0X2ZkID0gZ2V0
+X2ZkLAo+ID4gLSsJLmRpc3BhdGNoID0gZGlzcGF0Y2hfYmFja2dyb3VuZCwKPiA+IC0rfTsKPiA+
+IC1kaWZmIC0tZ2l0IGEvbGlic2VhdC9saWJzZWF0LmMgYi9saWJzZWF0L2xpYnNlYXQuYwo+ID4g
+LWluZGV4IGIxZThiYjIuLmE3ZTA3OWMgMTAwNjQ0Cj4gPiAtLS0tIGEvbGlic2VhdC9saWJzZWF0
+LmMKPiA+IC0rKysgYi9saWJzZWF0L2xpYnNlYXQuYwo+ID4gLUBAIC0xMyw2ICsxMyw3IEBACj4g
+PiAtIGV4dGVybiBjb25zdCBzdHJ1Y3Qgc2VhdF9pbXBsIHNlYXRkX2ltcGw7Cj4gPiAtIGV4dGVy
+biBjb25zdCBzdHJ1Y3Qgc2VhdF9pbXBsIGxvZ2luZF9pbXBsOwo+ID4gLSBleHRlcm4gY29uc3Qg
+c3RydWN0IHNlYXRfaW1wbCBidWlsdGluX2ltcGw7Cj4gPiAtK2V4dGVybiBjb25zdCBzdHJ1Y3Qg
+c2VhdF9pbXBsIG5vb3BfaW1wbDsKPiA+IC0KPiA+IC0gc3RhdGljIGNvbnN0IHN0cnVjdCBuYW1l
+ZF9iYWNrZW5kIGltcGxzW10gPSB7Cj4gPiAtICNpZmRlZiBTRUFURF9FTkFCTEVECj4gPiAtQEAg
+LTI0LDYgKzI1LDcgQEAgc3RhdGljIGNvbnN0IHN0cnVjdCBuYW1lZF9iYWNrZW5kIGltcGxzW10g
+PSB7Cj4gPiAtICNpZmRlZiBCVUlMVElOX0VOQUJMRUQKPiA+IC0gCXsiYnVpbHRpbiIsICZidWls
+dGluX2ltcGx9LAo+ID4gLSAjZW5kaWYKPiA+IC0rCXsibm9vcCIsICZub29wX2ltcGx9LAo+ID4g
+LSAJe05VTEwsIE5VTEx9LAo+ID4gLSB9Owo+ID4gLQo+ID4gLUBAIC02Miw2ICs2NCw5IEBAIHN0
+cnVjdCBsaWJzZWF0ICpsaWJzZWF0X29wZW5fc2VhdChzdHJ1Y3QgbGlic2VhdF9zZWF0X2xpc3Rl
+bmVyICpsaXN0ZW5lciwgdm9pZCAqCj4gPiAtCj4gPiAtIAlzdHJ1Y3QgbGlic2VhdCAqYmFja2Vu
+ZCA9IE5VTEw7Cj4gPiAtIAlmb3IgKGNvbnN0IHN0cnVjdCBuYW1lZF9iYWNrZW5kICppdGVyID0g
+aW1wbHM7IGl0ZXItPmJhY2tlbmQgIT0gTlVMTDsgaXRlcisrKSB7Cj4gPiAtKwkJaWYgKGl0ZXIt
+PmJhY2tlbmQgPT0gJm5vb3BfaW1wbCkgewo+ID4gLSsJCQljb250aW51ZTsKPiA+IC0rCQl9Cj4g
+PiAtIAkJYmFja2VuZCA9IGl0ZXItPmJhY2tlbmQtPm9wZW5fc2VhdChsaXN0ZW5lciwgZGF0YSk7
+Cj4gPiAtIAkJaWYgKGJhY2tlbmQgIT0gTlVMTCkgewo+ID4gLSAJCQlsb2dfaW5mb2YoIlNlYXQg
+b3BlbmVkIHdpdGggYmFja2VuZCAnJXMnIiwgaXRlci0+bmFtZSk7Cj4gPiAtZGlmZiAtLWdpdCBh
+L21lc29uLmJ1aWxkIGIvbWVzb24uYnVpbGQKPiA+IC1pbmRleCBmNDFiNjIxLi5jMzgwMGFlIDEw
+MDY0NAo+ID4gLS0tLSBhL21lc29uLmJ1aWxkCj4gPiAtKysrIGIvbWVzb24uYnVpbGQKPiA+IC1A
+QCAtMTQ1LDcgKzE0NSw3IEBAIHN5bWJvbHNfZmlsZSA9ICdsaWJzZWF0L2xpYnNlYXQuc3ltcycK
+PiA+IC0gc3ltYm9sc19mbGFnID0gJy1XbCwtLXZlcnNpb24tc2NyaXB0LEAwQC9AMUAnLmZvcm1h
+dChtZXNvbi5jdXJyZW50X3NvdXJjZV9kaXIoKSwgc3ltYm9sc19maWxlKQo+ID4gLSBsaWIgPSBs
+aWJyYXJ5KAo+ID4gLSAJJ3NlYXQnLCAjIFRoaXMgcmVzdWx0cyBpbiB0aGUgbGlicmFyeSBiZWlu
+ZyBjYWxsZWQgJ2xpYnNlYXQnCj4gPiAtLQlbICdsaWJzZWF0L2xpYnNlYXQuYycgXSwKPiA+IC0r
+CVsgJ2xpYnNlYXQvbGlic2VhdC5jJywgJ2xpYnNlYXQvYmFja2VuZC9ub29wLmMnIF0sCj4gPiAt
+IAlzb3ZlcnNpb246IGxpYnNlYXRfc292ZXJzaW9uLAo+ID4gLSAJbGlua193aXRoOiBwcml2YXRl
+X2xpYiwKPiA+IC0gCWluY2x1ZGVfZGlyZWN0b3JpZXM6IFtpbmNsdWRlX2RpcmVjdG9yaWVzKCcu
+JywgJ2luY2x1ZGUnKV0sCj4gPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9zZWF0ZC8wMDAzLW1lc29u
+LmJ1aWxkLWZpeC1idWlsZC13aXRoLWdjYy03LnBhdGNoIGIvcGFja2FnZS9zZWF0ZC8wMDAzLW1l
+c29uLmJ1aWxkLWZpeC1idWlsZC13aXRoLWdjYy03LnBhdGNoCj4gPiBkZWxldGVkIGZpbGUgbW9k
+ZSAxMDA2NDQKPiA+IGluZGV4IDBlOWY0MzdjYzMuLjAwMDAwMDAwMDAKPiA+IC0tLSBhL3BhY2th
+Z2Uvc2VhdGQvMDAwMy1tZXNvbi5idWlsZC1maXgtYnVpbGQtd2l0aC1nY2MtNy5wYXRjaAo+ID4g
+KysrIC9kZXYvbnVsbAo+ID4gQEAgLTEsNDggKzAsMCBAQAo+ID4gLUZyb20gMGIzMmMzMzk3OGZi
+ZTg3NzJkZjZkMTg1YzliOWQ2NDZjNDQyZGM1ZCBNb24gU2VwIDE3IDAwOjAwOjAwIDIwMDEKPiA+
+IC1Gcm9tOiBGYWJyaWNlIEZvbnRhaW5lIDxmb250YWluZS5mYWJyaWNlQGdtYWlsLmNvbT4KPiA+
+IC1EYXRlOiBTdW4sIDggQXVnIDIwMjEgMTk6MDA6MzUgKzAyMDAKPiA+IC1TdWJqZWN0OiBbUEFU
+Q0hdIG1lc29uLmJ1aWxkOiBmaXggYnVpbGQgd2l0aCBnY2MgPCA3Cj4gPiAtCj4gPiAtVGVzdCBp
+ZiAtV2ltcGxpY2l0LWZhbGx0aHJvdWdoIGlzIGF2YWlsYWJsZSBiZWZvcmUgdXNpbmcgaXQgYXMg
+aXQgaGFzCj4gPiAtYmVlbiBhZGRlZCBvbmx5IHNpbmNlIGdjYyA3LjEgYW5kCj4gPiAtaHR0cHM6
+Ly9naXRodWIuY29tL2djYy1taXJyb3IvZ2NjL2NvbW1pdC84MWZlYTQyNmRhOGM0Njg3YmIzMmU2
+ODk0ZGMyNmYwMGFlMjExODIyCj4gPiAtYW5kIHNvIGl0IHdpbGwgcmFpc2UgdGhlIGZvbGxvd2lu
+ZyBidWlsZCBmYWlsdXJlIHdpdGggZ2NjIDwgNzoKPiA+IC0KPiA+IC1hcm0tbm9uZS1saW51eC1n
+bnVlYWJpLWdjYzogZXJyb3I6IHVucmVjb2duaXplZCBjb21tYW5kIGxpbmUgb3B0aW9uICctV2lt
+cGxpY2l0LWZhbGx0aHJvdWdoJwo+ID4gLQo+ID4gLUZpeGVzOgo+ID4gLSAtIGh0dHA6Ly9hdXRv
+YnVpbGQuYnVpbGRyb290Lm9yZy9yZXN1bHRzLzBlZTY4MTZhN2NjZWViZGFmZDA3NjEyNjc3YTU5
+NGJkZjY4ZTA3OTAKPiA+IC0KPiA+IC1TaWduZWQtb2ZmLWJ5OiBGYWJyaWNlIEZvbnRhaW5lIDxm
+b250YWluZS5mYWJyaWNlQGdtYWlsLmNvbT4KPiA+IC1bVXBzdHJlYW0gc3RhdHVzOiBodHRwczov
+L2dpdGh1Yi5jb20va2VubnlsZXZpbnNlbi9zZWF0ZC9wdWxsLzFdCj4gPiAtLS0tCj4gPiAtIG1l
+c29uLmJ1aWxkIHwgNiArKysrKy0KPiA+IC0gMSBmaWxlIGNoYW5nZWQsIDUgaW5zZXJ0aW9ucygr
+KSwgMSBkZWxldGlvbigtKQo+ID4gLQo+ID4gLWRpZmYgLS1naXQgYS9tZXNvbi5idWlsZCBiL21l
+c29uLmJ1aWxkCj4gPiAtaW5kZXggMTEzMWI0Yi4uYzM2NmE1OSAxMDA2NDQKPiA+IC0tLS0gYS9t
+ZXNvbi5idWlsZAo+ID4gLSsrKyBiL21lc29uLmJ1aWxkCj4gPiAtQEAgLTMxLDcgKzMxLDYgQEAg
+YWRkX3Byb2plY3RfYXJndW1lbnRzKAo+ID4gLSAJCSctV29sZC1zdHlsZS1kZWZpbml0aW9uJywg
+IyBub3AKPiA+IC0gCQknLVdwb2ludGVyLWFyaXRoJywKPiA+IC0gCQknLVdzdHJpY3QtcHJvdG90
+eXBlcycsCj4gPiAtLQkJJy1XaW1wbGljaXQtZmFsbHRocm91Z2gnLAo+ID4gLSAJCSctV21pc3Np
+bmctcHJvdG90eXBlcycsCj4gPiAtIAkJJy1Xbm8tdW5rbm93bi13YXJuaW5nLW9wdGlvbicsCj4g
+PiAtIAkJJy1Xbm8tdW51c2VkLWNvbW1hbmQtbGluZS1hcmd1bWVudCcsCj4gPiAtQEAgLTQ1LDYg
+KzQ0LDExIEBAIGFkZF9wcm9qZWN0X2FyZ3VtZW50cygKPiA+IC0gCWxhbmd1YWdlOiAnYycsCj4g
+PiAtICkKPiA+IC0KPiA+IC0rY2MgPSBtZXNvbi5nZXRfY29tcGlsZXIoJ2MnKQo+ID4gLStpZiBj
+Yy5oYXNfYXJndW1lbnQoJy1XaW1wbGljaXQtZmFsbHRocm91Z2gnKQo+ID4gLSsJYWRkX3Byb2pl
+Y3RfYXJndW1lbnRzKCctV2ltcGxpY2l0LWZhbGx0aHJvdWdoJyAsIGxhbmd1YWdlIDogJ2MnKQo+
+ID4gLStlbmRpZgo+ID4gLSsKPiA+IC0gaWYgWydkZWJ1Z29wdGltaXplZCcsICdyZWxlYXNlJywg
+J21pbnNpemUnXS5jb250YWlucyhnZXRfb3B0aW9uKCdidWlsZHR5cGUnKSkKPiA+IC0gCWFkZF9w
+cm9qZWN0X2FyZ3VtZW50cygnLURfRk9SVElGWV9TT1VSQ0U9MicsIGxhbmd1YWdlOiAnYycpCj4g
+PiAtIGVuZGlmCj4gPiAtLS0KPiA+IC0yLjMwLjIKPiA+IC0KPiA+IGRpZmYgLS1naXQgYS9wYWNr
+YWdlL3NlYXRkL3NlYXRkLmhhc2ggYi9wYWNrYWdlL3NlYXRkL3NlYXRkLmhhc2gKPiA+IGluZGV4
+IDM0MjA3OWU5NTguLjJhZTAzNDQzODIgMTAwNjQ0Cj4gPiAtLS0gYS9wYWNrYWdlL3NlYXRkL3Nl
+YXRkLmhhc2gKPiA+ICsrKyBiL3BhY2thZ2Uvc2VhdGQvc2VhdGQuaGFzaAo+ID4gQEAgLTEsNSAr
+MSw1IEBACj4gPiAgIyBDYWxjdWxhdGVkIGxvY2FsbHkKPiA+IC1zaGEyNTYgIDI3NGI1NjMyNGZj
+ODFjYTYwMDJiYzFjZGQzODc2NjhkZWUzNGE2ZTEwNjNlNWYzODk2ODA1YzM3NzA5NDg5ODggIDAu
+NS4wLnRhci5nego+ID4gK3NoYTI1NiAgZjhmOGQyZDJhNmM1ZjA4NzE0YjJhNzg0NTk1ZTc4MWEy
+NTdkZjE1ZDYwODZlYzRlNzM3MDEyMTdlZTVlYzllOCAgMC42LjEudGFyLmd6Cj4gPgo+ID4gICMg
+TGljZW5zZSBmaWxlcwo+ID4gIHNoYTI1NiAgMjgyYTQ5NDgwM2Q2NjY2MTZiZDcyNmUwMjc5NjM2
+YjVmNmEzMTM4N2FlMTlhNzA3NDU5MDc0MDUwZjI2MDBkMyAgTElDRU5TRQo+ID4gZGlmZiAtLWdp
+dCBhL3BhY2thZ2Uvc2VhdGQvc2VhdGQubWsgYi9wYWNrYWdlL3NlYXRkL3NlYXRkLm1rCj4gPiBp
+bmRleCBiZjU4MmYwZDFkLi4xMDBlMTM0MTI0IDEwMDY0NAo+ID4gLS0tIGEvcGFja2FnZS9zZWF0
+ZC9zZWF0ZC5tawo+ID4gKysrIGIvcGFja2FnZS9zZWF0ZC9zZWF0ZC5tawo+ID4gQEAgLTQsNyAr
+NCw3IEBACj4gPiAgIwo+ID4gICMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCj4gPgo+ID4gLVNFQVRE
+X1ZFUlNJT04gPSAwLjUuMAo+ID4gK1NFQVREX1ZFUlNJT04gPSAwLjYuMQo+ID4gIFNFQVREX1NP
+VVJDRSA9ICQoU0VBVERfVkVSU0lPTikudGFyLmd6Cj4gPiAgU0VBVERfU0lURSA9IGh0dHBzOi8v
+Z2l0LnNyLmh0L35rZW5ueWxldmluc2VuL3NlYXRkL2FyY2hpdmUKPiA+ICBTRUFURF9MSUNFTlNF
+ID0gTUlUCj4gPiBAQCAtMTcsMjAgKzE3LDIwIEBAIFNFQVREX0NPTkZfT1BUUyArPSBcCj4gPiAg
+CS1Ed2Vycm9yPWZhbHNlCj4gPgo+ID4gIGlmZXEgKCQoQlIyX1BBQ0tBR0VfU1lTVEVNRF9MT0dJ
+TkQpLHkpCj4gPiAtU0VBVERfQ09ORl9PUFRTICs9IC1EbG9naW5kPWVuYWJsZWQKPiA+ICtTRUFU
+RF9DT05GX09QVFMgKz0gLURsaWJzZWF0LWxvZ2luZD1lbmFibGVkCj4gPiAgU0VBVERfREVQRU5E
+RU5DSUVTICs9IHN5c3RlbWQKPiA+ICBlbHNlCj4gPiAtU0VBVERfQ09ORl9PUFRTICs9IC1EbG9n
+aW5kPWRpc2FibGVkCj4gPiArU0VBVERfQ09ORl9PUFRTICs9IC1EbGlic2VhdC1sb2dpbmQ9ZGlz
+YWJsZWQKPiA+ICBlbmRpZgo+ID4KPiA+ICBpZmVxICgkKEJSMl9QQUNLQUdFX1NFQVREX0JVSUxU
+SU4pLHkpCj4gPiAtU0VBVERfQ09ORl9PUFRTICs9IC1EYnVpbHRpbj1lbmFibGVkCj4gPiArU0VB
+VERfQ09ORl9PUFRTICs9IC1EbGlic2VhdC1idWlsdGluPWVuYWJsZWQKPiA+ICBlbHNlCj4gPiAt
+U0VBVERfQ09ORl9PUFRTICs9IC1EYnVpbHRpbj1kaXNhYmxlZAo+ID4gK1NFQVREX0NPTkZfT1BU
+UyArPSAtRGxpYnNlYXQtYnVpbHRpbj1kaXNhYmxlZAo+ID4gIGVuZGlmCj4gPgo+ID4gIGlmZXEg
+KCQoQlIyX1BBQ0tBR0VfU0VBVERfREFFTU9OKSx5KQo+ID4gLVNFQVREX0NPTkZfT1BUUyArPSAt
+RHNlYXRkPWVuYWJsZWQgLURzZXJ2ZXI9ZW5hYmxlZAo+ID4gK1NFQVREX0NPTkZfT1BUUyArPSAt
+RGxpYnNlYXQtc2VhdGQ9ZW5hYmxlZCAtRHNlcnZlcj1lbmFibGVkCj4gPgo+ID4gIGRlZmluZSBT
+RUFURF9VU0VSUwo+ID4gIAktIC0gdmlkZW8gLTEgLSAtIC0gLSAtCj4gPiBAQCAtNDcsNyArNDcs
+NyBAQCBkZWZpbmUgU0VBVERfSU5TVEFMTF9JTklUX1NZU1RFTUQKPiA+ICBlbmRlZgo+ID4KPiA+
+ICBlbHNlCj4gPiAtU0VBVERfQ09ORl9PUFRTICs9IC1Ec2VhdGQ9ZGlzYWJsZWQgLURzZXJ2ZXI9
+ZGlzYWJsZWQKPiA+ICtTRUFURF9DT05GX09QVFMgKz0gLURsaWJzZWF0LXNlYXRkPWRpc2FibGVk
+IC1Ec2VydmVyPWRpc2FibGVkCj4gPiAgZW5kaWYKPiA+Cj4gPiAgJChldmFsICQobWVzb24tcGFj
+a2FnZSkpCj4gCgpDaGVlcnMsCuKAlEFkcmnDoW4K
 
-diff --git a/package/seatd/0001-meson-Support-building-builtin-without-seatd.patch b/package/seatd/0001-meson-Support-building-builtin-without-seatd.patch
-deleted file mode 100644
-index fcaa355dc4..0000000000
---- a/package/seatd/0001-meson-Support-building-builtin-without-seatd.patch
-+++ /dev/null
-@@ -1,37 +0,0 @@
--From 11bf7d5d11424749d549239540e5db06b8754bb5 Mon Sep 17 00:00:00 2001
--From: Kenny Levinsen <kl@kl.wtf>
--Date: Sun, 25 Apr 2021 20:16:19 +0200
--Subject: [PATCH] meson: Support building builtin without seatd
--
--The builtin backend relies on the seatd backend implementation. When
--builtin was enabled without seatd, compilation would fail due to the
--implementation not being included.
--
--Include the implementation if either seatd or builtin is enabled.
--
--Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
--Upstream-Status: backport [with adaptations]
-----
-- meson.build | 5 ++++-
-- 1 file changed, 4 insertions(+), 1 deletion(-)
--
--diff --git a/meson.build b/meson.build
--index ff56845..8cb4fc6 100644
----- a/meson.build
--+++ b/meson.build
--@@ -105,8 +105,11 @@ server_files = [
-- 	'seatd/server.c',
-- ]
-- 
---if get_option('seatd').enabled()
--+if get_option('seatd').enabled() or get_option('builtin').enabled()
-- 	private_files += 'libseat/backend/seatd.c'
--+endif
--+
--+if get_option('seatd').enabled()
-- 	add_project_arguments('-DSEATD_ENABLED=1', language: 'c')
-- endif
-- 
---- 
--2.31.1
--
-diff --git a/package/seatd/0002-Add-no-op-session.patch b/package/seatd/0002-Add-no-op-session.patch
-deleted file mode 100644
-index 44798126d9..0000000000
---- a/package/seatd/0002-Add-no-op-session.patch
-+++ /dev/null
-@@ -1,223 +0,0 @@
--From 9a7824b7c3ff5c957632671e91454fc84fbcdda8 Mon Sep 17 00:00:00 2001
--From: Simon Ser <contact@emersion.fr>
--Date: Fri, 26 Mar 2021 10:05:12 +0100
--Subject: [PATCH] Add no-op session
--
--This is useful for headless testing, for instance with VKMS:
--
--    modprobe vkms
--    export WLR_DRM_DEVICES=/dev/dri/card1
--    export WLR_BACKENDS=drm
--    export LIBSEAT_BACKEND=noop
--    sway
--
--We don't need any of the VT handling in this case.
--
--[Retrieved from:
--https://github.com/kennylevinsen/seatd/commit/9a7824b7c3ff5c957632671e91454fc84fbcdda8]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- include/libseat.h      |   2 +
-- libseat/backend/noop.c | 135 +++++++++++++++++++++++++++++++++++++++++
-- libseat/libseat.c      |   5 ++
-- meson.build            |   2 +-
-- 4 files changed, 143 insertions(+), 1 deletion(-)
-- create mode 100644 libseat/backend/noop.c
--
--diff --git a/include/libseat.h b/include/libseat.h
--index 5375cd6..82098ea 100644
----- a/include/libseat.h
--+++ b/include/libseat.h
--@@ -1,6 +1,8 @@
-- #ifndef _LIBSEAT_H
-- #define _LIBSEAT_H
-- 
--+#include <stdarg.h>
--+
-- /*
--  * An opaque struct containing an opened seat, created by libseat_open_seat and
--  * destroyed by libseat_close_seat.
--diff --git a/libseat/backend/noop.c b/libseat/backend/noop.c
--new file mode 100644
--index 0000000..71d0224
----- /dev/null
--+++ b/libseat/backend/noop.c
--@@ -0,0 +1,135 @@
--+#include <assert.h>
--+#include <errno.h>
--+#include <fcntl.h>
--+#include <poll.h>
--+#include <stdbool.h>
--+#include <stdlib.h>
--+#include <string.h>
--+#include <sys/socket.h>
--+#include <unistd.h>
--+
--+#include "backend.h"
--+#include "log.h"
--+
--+struct backend_noop {
--+	struct libseat base;
--+	struct libseat_seat_listener *seat_listener;
--+	void *seat_listener_data;
--+
--+	bool initial_setup;
--+	int sockets[2];
--+};
--+
--+extern const struct seat_impl noop_impl;
--+
--+static struct backend_noop *backend_noop_from_libseat_backend(struct libseat *base) {
--+	assert(base->impl == &noop_impl);
--+	return (struct backend_noop *)base;
--+}
--+
--+static void destroy(struct backend_noop *backend) {
--+	close(backend->sockets[0]);
--+	close(backend->sockets[1]);
--+	free(backend);
--+}
--+
--+static int close_seat(struct libseat *base) {
--+	struct backend_noop *backend = backend_noop_from_libseat_backend(base);
--+	destroy(backend);
--+	return 0;
--+}
--+
--+static int disable_seat(struct libseat *base) {
--+	(void)base;
--+	return 0;
--+}
--+
--+static const char *seat_name(struct libseat *base) {
--+	(void)base;
--+	return "noop";
--+}
--+
--+static int open_device(struct libseat *base, const char *path, int *fd) {
--+	(void)base;
--+
--+	int tmpfd = open(path, O_RDWR | O_CLOEXEC);
--+	if (tmpfd < 0) {
--+		log_errorf("Failed to open device: %s", strerror(errno));
--+		return -1;
--+	}
--+
--+	*fd = tmpfd;
--+	return tmpfd;
--+}
--+
--+static int close_device(struct libseat *base, int device_id) {
--+	(void)base;
--+	(void)device_id;
--+	return 0;
--+}
--+
--+static int switch_session(struct libseat *base, int s) {
--+	(void)base;
--+	(void)s;
--+	log_errorf("No-op backend cannot switch to session %d", s);
--+	return -1;
--+}
--+
--+static int get_fd(struct libseat *base) {
--+	struct backend_noop *backend = backend_noop_from_libseat_backend(base);
--+	return backend->sockets[0];
--+}
--+
--+static int dispatch_background(struct libseat *base, int timeout) {
--+	struct backend_noop *backend = backend_noop_from_libseat_backend(base);
--+
--+	if (backend->initial_setup) {
--+		backend->initial_setup = false;
--+		backend->seat_listener->enable_seat(&backend->base, backend->seat_listener_data);
--+	}
--+
--+	struct pollfd fd = {
--+		.fd = backend->sockets[0],
--+		.events = POLLIN,
--+	};
--+	if (poll(&fd, 1, timeout) < 0) {
--+		if (errno == EAGAIN || errno == EINTR) {
--+			return 0;
--+		} else {
--+			return -1;
--+		}
--+	}
--+
--+	return 0;
--+}
--+
--+static struct libseat *noop_open_seat(struct libseat_seat_listener *listener, void *data) {
--+	struct backend_noop *backend = calloc(1, sizeof(struct backend_noop));
--+	if (backend == NULL) {
--+		return NULL;
--+	}
--+
--+	if (socketpair(AF_UNIX, SOCK_STREAM, 0, backend->sockets) != 0) {
--+		log_errorf("socketpair() failed: %s", strerror(errno));
--+		free(backend);
--+		return NULL;
--+	}
--+
--+	backend->seat_listener = listener;
--+	backend->seat_listener_data = data;
--+	backend->base.impl = &noop_impl;
--+
--+	return &backend->base;
--+}
--+
--+const struct seat_impl noop_impl = {
--+	.open_seat = noop_open_seat,
--+	.disable_seat = disable_seat,
--+	.close_seat = close_seat,
--+	.seat_name = seat_name,
--+	.open_device = open_device,
--+	.close_device = close_device,
--+	.switch_session = switch_session,
--+	.get_fd = get_fd,
--+	.dispatch = dispatch_background,
--+};
--diff --git a/libseat/libseat.c b/libseat/libseat.c
--index b1e8bb2..a7e079c 100644
----- a/libseat/libseat.c
--+++ b/libseat/libseat.c
--@@ -13,6 +13,7 @@
-- extern const struct seat_impl seatd_impl;
-- extern const struct seat_impl logind_impl;
-- extern const struct seat_impl builtin_impl;
--+extern const struct seat_impl noop_impl;
-- 
-- static const struct named_backend impls[] = {
-- #ifdef SEATD_ENABLED
--@@ -24,6 +25,7 @@ static const struct named_backend impls[] = {
-- #ifdef BUILTIN_ENABLED
-- 	{"builtin", &builtin_impl},
-- #endif
--+	{"noop", &noop_impl},
-- 	{NULL, NULL},
-- };
-- 
--@@ -62,6 +64,9 @@ struct libseat *libseat_open_seat(struct libseat_seat_listener *listener, void *
-- 
-- 	struct libseat *backend = NULL;
-- 	for (const struct named_backend *iter = impls; iter->backend != NULL; iter++) {
--+		if (iter->backend == &noop_impl) {
--+			continue;
--+		}
-- 		backend = iter->backend->open_seat(listener, data);
-- 		if (backend != NULL) {
-- 			log_infof("Seat opened with backend '%s'", iter->name);
--diff --git a/meson.build b/meson.build
--index f41b621..c3800ae 100644
----- a/meson.build
--+++ b/meson.build
--@@ -145,7 +145,7 @@ symbols_file = 'libseat/libseat.syms'
-- symbols_flag = '-Wl,--version-script,@0@/@1@'.format(meson.current_source_dir(), symbols_file)
-- lib = library(
-- 	'seat', # This results in the library being called 'libseat'
---	[ 'libseat/libseat.c' ],
--+	[ 'libseat/libseat.c', 'libseat/backend/noop.c' ],
-- 	soversion: libseat_soversion,
-- 	link_with: private_lib,
-- 	include_directories: [include_directories('.', 'include')],
-diff --git a/package/seatd/0003-meson.build-fix-build-with-gcc-7.patch b/package/seatd/0003-meson.build-fix-build-with-gcc-7.patch
-deleted file mode 100644
-index 0e9f437cc3..0000000000
---- a/package/seatd/0003-meson.build-fix-build-with-gcc-7.patch
-+++ /dev/null
-@@ -1,48 +0,0 @@
--From 0b32c33978fbe8772df6d185c9b9d646c442dc5d Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sun, 8 Aug 2021 19:00:35 +0200
--Subject: [PATCH] meson.build: fix build with gcc < 7
--
--Test if -Wimplicit-fallthrough is available before using it as it has
--been added only since gcc 7.1 and
--https://github.com/gcc-mirror/gcc/commit/81fea426da8c4687bb32e6894dc26f00ae211822
--and so it will raise the following build failure with gcc < 7:
--
--arm-none-linux-gnueabi-gcc: error: unrecognized command line option '-Wimplicit-fallthrough'
--
--Fixes:
-- - http://autobuild.buildroot.org/results/0ee6816a7cceebdafd07612677a594bdf68e0790
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/kennylevinsen/seatd/pull/1]
-----
-- meson.build | 6 +++++-
-- 1 file changed, 5 insertions(+), 1 deletion(-)
--
--diff --git a/meson.build b/meson.build
--index 1131b4b..c366a59 100644
----- a/meson.build
--+++ b/meson.build
--@@ -31,7 +31,6 @@ add_project_arguments(
-- 		'-Wold-style-definition', # nop
-- 		'-Wpointer-arith',
-- 		'-Wstrict-prototypes',
---		'-Wimplicit-fallthrough',
-- 		'-Wmissing-prototypes',
-- 		'-Wno-unknown-warning-option',
-- 		'-Wno-unused-command-line-argument',
--@@ -45,6 +44,11 @@ add_project_arguments(
-- 	language: 'c',
-- )
-- 
--+cc = meson.get_compiler('c')
--+if cc.has_argument('-Wimplicit-fallthrough')
--+	add_project_arguments('-Wimplicit-fallthrough' , language : 'c')
--+endif
--+
-- if ['debugoptimized', 'release', 'minsize'].contains(get_option('buildtype'))
-- 	add_project_arguments('-D_FORTIFY_SOURCE=2', language: 'c')
-- endif
---- 
--2.30.2
--
-diff --git a/package/seatd/seatd.hash b/package/seatd/seatd.hash
-index 342079e958..2ae0344382 100644
---- a/package/seatd/seatd.hash
-+++ b/package/seatd/seatd.hash
-@@ -1,5 +1,5 @@
- # Calculated locally
--sha256  274b56324fc81ca6002bc1cdd387668dee34a6e1063e5f3896805c3770948988  0.5.0.tar.gz
-+sha256  f8f8d2d2a6c5f08714b2a784595e781a257df15d6086ec4e73701217ee5ec9e8  0.6.1.tar.gz
- 
- # License files
- sha256  282a494803d666616bd726e0279636b5f6a31387ae19a707459074050f2600d3  LICENSE
-diff --git a/package/seatd/seatd.mk b/package/seatd/seatd.mk
-index bf582f0d1d..100e134124 100644
---- a/package/seatd/seatd.mk
-+++ b/package/seatd/seatd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SEATD_VERSION = 0.5.0
-+SEATD_VERSION = 0.6.1
- SEATD_SOURCE = $(SEATD_VERSION).tar.gz
- SEATD_SITE = https://git.sr.ht/~kennylevinsen/seatd/archive
- SEATD_LICENSE = MIT
-@@ -17,20 +17,20 @@ SEATD_CONF_OPTS += \
- 	-Dwerror=false
- 
- ifeq ($(BR2_PACKAGE_SYSTEMD_LOGIND),y)
--SEATD_CONF_OPTS += -Dlogind=enabled
-+SEATD_CONF_OPTS += -Dlibseat-logind=enabled
- SEATD_DEPENDENCIES += systemd
- else
--SEATD_CONF_OPTS += -Dlogind=disabled
-+SEATD_CONF_OPTS += -Dlibseat-logind=disabled
- endif
- 
- ifeq ($(BR2_PACKAGE_SEATD_BUILTIN),y)
--SEATD_CONF_OPTS += -Dbuiltin=enabled
-+SEATD_CONF_OPTS += -Dlibseat-builtin=enabled
- else
--SEATD_CONF_OPTS += -Dbuiltin=disabled
-+SEATD_CONF_OPTS += -Dlibseat-builtin=disabled
- endif
- 
- ifeq ($(BR2_PACKAGE_SEATD_DAEMON),y)
--SEATD_CONF_OPTS += -Dseatd=enabled -Dserver=enabled
-+SEATD_CONF_OPTS += -Dlibseat-seatd=enabled -Dserver=enabled
- 
- define SEATD_USERS
- 	- - video -1 - - - - -
-@@ -47,7 +47,7 @@ define SEATD_INSTALL_INIT_SYSTEMD
- endef
- 
- else
--SEATD_CONF_OPTS += -Dseatd=disabled -Dserver=disabled
-+SEATD_CONF_OPTS += -Dlibseat-seatd=disabled -Dserver=disabled
- endif
- 
- $(eval $(meson-package))
--- 
-2.33.0
+--1DrOAB1LsYiLtZy9
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRao7wzT9fjNp58d7KRxVnb5MkSOwUCYUEitAAKCRCRxVnb5MkS
+OyGBAJ9psoSRjsJ8Zk4fPsL43sPj6aAtGQCfWVSigTGegHC67LDSss+Exn7INdU=
+=zoBy
+-----END PGP SIGNATURE-----
+
+--1DrOAB1LsYiLtZy9--
+
+--===============7441405189900047819==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============7441405189900047819==--
