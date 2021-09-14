@@ -2,57 +2,57 @@ Return-Path: <SRS0=SwR/=OE=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3909AC433F5
-	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 13:01:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4163EC433F5
+	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 13:01:27 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D25ED610A6
-	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 13:01:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D25ED610A6
+	by mail.kernel.org (Postfix) with ESMTPS id D9F44610E6
+	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 13:01:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D9F44610E6
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AFE2A40328;
-	Tue, 14 Sep 2021 13:01:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9943B4031D;
+	Tue, 14 Sep 2021 13:01:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uF916E_Omdk7; Tue, 14 Sep 2021 13:01:14 +0000 (UTC)
+	with ESMTP id m6Q8hZBP1i-H; Tue, 14 Sep 2021 13:01:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F27D2403A2;
-	Tue, 14 Sep 2021 13:01:12 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5E2CF1BF989
- for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 13:00:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B8F8B403DC;
+	Tue, 14 Sep 2021 13:01:24 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 53B681BF2F6
+ for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 13:01:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4D98340159
+ by smtp3.osuosl.org (Postfix) with ESMTP id 41EF5607DA
  for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 13:00:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id t97_dwORloQW for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0YsHb3_S8-xr for <buildroot@lists.busybox.net>;
  Tue, 14 Sep 2021 13:00:58 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6DD85400DE
+ by smtp3.osuosl.org (Postfix) with ESMTP id 66E3A607D3
  for <buildroot@buildroot.org>; Tue, 14 Sep 2021 13:00:58 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 7AEE58B354; Tue, 14 Sep 2021 12:59:13 +0000 (UTC)
+ id 723918B360; Tue, 14 Sep 2021 12:59:13 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 14 Sep 2021 15:00:21 +0200
+Date: Tue, 14 Sep 2021 14:55:58 +0200
 X-Git-Refname: refs/heads/2021.08.x
-X-Git-Oldrev: b2b54883b5248b589c2e021f4f7bc0b3e86e1d4e
-X-Git-Newrev: e0cd302d80b682a7ede579edaa84c8d52c467429
+X-Git-Oldrev: 4cee4550f6e56952e39552a92306bd549f72c56d
+X-Git-Newrev: b2b54883b5248b589c2e021f4f7bc0b3e86e1d4e
 X-Patchwork-Hint: ignore
-Message-Id: <20210914125913.7AEE58B354@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.08.x] package/python-pillow:
- bump to version 8.3.1
+Message-Id: <20210914125913.723918B360@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.08.x] package/gd: security bump
+ to version 2.3.3
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,45 +71,99 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e0cd302d80b682a7ede579edaa84c8d52c467429
+commit: https://git.buildroot.net/buildroot/commit/?id=b2b54883b5248b589c2e021f4f7bc0b3e86e1d4e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.08.x
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit d6ac118637b032f41c990cb1201664ce4b1bfd1e)
+- Fix CVE-2021-40145: ** DISPUTED ** gdImageGd2Ptr in gd_gd2.c in the GD
+  Graphics Library (aka LibGD) through 2.3.2 has a double free. NOTE:
+  the vendor's position is "The GD2 image format is a proprietary image
+  format of libgd. It has to be regarded as being obsolete, and should
+  only be used for development and testing purposes."
+- Drop patch (already in version)
+- Update hash of COPYING (duplicate merged and title added with
+  https://github.com/libgd/libgd/commit/82d260950589563a1af9c56f4ce5fde843a695ae
+  https://github.com/libgd/libgd/commit/6013c7bcf6eb795dba584f92d3824ebd3ae60202)
+
+https://github.com/libgd/libgd/releases/tag/gd-2.3.3
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit a052ecb5b8bb11a9e882b5a4df6a475877a9b75e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-pillow/python-pillow.hash | 4 ++--
- package/python-pillow/python-pillow.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ ...d-out-of-bands-in-reading-tga-header-file.patch | 29 ----------------------
+ package/gd/gd.hash                                 |  4 +--
+ package/gd/gd.mk                                   |  5 +---
+ 3 files changed, 3 insertions(+), 35 deletions(-)
 
-diff --git a/package/python-pillow/python-pillow.hash b/package/python-pillow/python-pillow.hash
-index 562cb2c1a2..fb1ec53a00 100644
---- a/package/python-pillow/python-pillow.hash
-+++ b/package/python-pillow/python-pillow.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pillow/json
--md5  21c03274a9f59b9c00419852a8faebe7  Pillow-8.2.0.tar.gz
--sha256	a787ab10d7bb5494e5f76536ac460741788f1fbce851068d73a87ca7c35fc3e1  Pillow-8.2.0.tar.gz
-+md5  e42fc66e41b5309436a573af49cec47c  Pillow-8.3.1.tar.gz
-+sha256	2cac53839bfc5cece8fdbe7f084d5e3ee61e1303cccc86511d351adcb9e2c792  Pillow-8.3.1.tar.gz
- # Locally computed sha256 checksums
- sha256	5bb11d96b393a698df70018069a986248021f286344c437a13f299c3daf1dfd4  LICENSE
-diff --git a/package/python-pillow/python-pillow.mk b/package/python-pillow/python-pillow.mk
-index 42607e0bbd..a55a937c11 100644
---- a/package/python-pillow/python-pillow.mk
-+++ b/package/python-pillow/python-pillow.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/gd/0001-fix-read-out-of-bands-in-reading-tga-header-file.patch b/package/gd/0001-fix-read-out-of-bands-in-reading-tga-header-file.patch
+deleted file mode 100644
+index a42bfb402e..0000000000
+--- a/package/gd/0001-fix-read-out-of-bands-in-reading-tga-header-file.patch
++++ /dev/null
+@@ -1,29 +0,0 @@
+-From 8b111b2b4a4842179be66db68d84dda91a246032 Mon Sep 17 00:00:00 2001
+-From: maryam ebrahimzadeh <maryam.ebr@student.sharif.edu>
+-Date: Mon, 19 Jul 2021 10:07:13 +0430
+-Subject: [PATCH] fix read out-of-bands in reading tga header file
+-
+-[Retrieved from:
+-https://github.com/libgd/libgd/commit/8b111b2b4a4842179be66db68d84dda91a246032]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- src/gd_tga.c | 6 +++++-
+- 1 file changed, 5 insertions(+), 1 deletion(-)
+-
+-diff --git a/src/gd_tga.c b/src/gd_tga.c
+-index cae9428da..286febb28 100644
+---- a/src/gd_tga.c
+-+++ b/src/gd_tga.c
+-@@ -191,7 +191,11 @@ int read_header_tga(gdIOCtx *ctx, oTga *tga)
+- 			return -1;
+- 		}
+- 
+--		gdGetBuf(tga->ident, tga->identsize, ctx);
+-+		
+-+		if (gdGetBuf(tga->ident, tga->identsize, ctx) != tga->identsize) {
+-+			gd_error("fail to read header ident");
+-+			return -1;
+-+		}
+- 	}
+- 
+- 	return 1;
+diff --git a/package/gd/gd.hash b/package/gd/gd.hash
+index 25e64e801b..d0b1e97675 100644
+--- a/package/gd/gd.hash
++++ b/package/gd/gd.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  478a047084e0d89b83616e4c2cf3c9438175fb0cc55d8c8967f06e0427f7d7fb  libgd-2.3.2.tar.xz
+-sha256  4d80b4af6c38d7a65128c881623dee2a5daee6b3a6ccab74a5cdfa0dfda96da7  COPYING
++sha256  3fe822ece20796060af63b7c60acb151e5844204d289da0ce08f8fdf131e5a61  libgd-2.3.3.tar.xz
++sha256  005f4b6b0141d1bd11d371bbf7d4f67947f85a4906b7f5465f942204cf918ba3  COPYING
+diff --git a/package/gd/gd.mk b/package/gd/gd.mk
+index 90f966c294..55c12e6968 100644
+--- a/package/gd/gd.mk
++++ b/package/gd/gd.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_PILLOW_VERSION = 8.2.0
--PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/21/23/af6bac2a601be6670064a817273d4190b79df6f74d8012926a39bc7aa77f
-+PYTHON_PILLOW_VERSION = 8.3.1
-+PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/8f/7d/1e9c2d8989c209edfd10f878da1af956059a1caab498e5bc34fa11b83f71
- PYTHON_PILLOW_SOURCE = Pillow-$(PYTHON_PILLOW_VERSION).tar.gz
- PYTHON_PILLOW_LICENSE = HPND
- PYTHON_PILLOW_LICENSE_FILES = LICENSE
+-GD_VERSION = 2.3.2
++GD_VERSION = 2.3.3
+ GD_SOURCE = libgd-$(GD_VERSION).tar.xz
+ GD_SITE = https://github.com/libgd/libgd/releases/download/gd-$(GD_VERSION)
+ GD_INSTALL_STAGING = YES
+@@ -15,9 +15,6 @@ GD_CPE_ID_PRODUCT = libgd
+ GD_CONF_OPTS = --without-x --disable-rpath --disable-werror
+ GD_DEPENDENCIES = host-pkgconf
+ 
+-# 0001-fix-read-out-of-bands-in-reading-tga-header-file.patch
+-GD_IGNORE_CVES += CVE-2021-38115
+-
+ # gd forgets to link utilities with -pthread even though it uses
+ # pthreads, causing linking errors with static linking
+ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
