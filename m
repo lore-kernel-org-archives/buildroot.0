@@ -2,60 +2,90 @@ Return-Path: <SRS0=SwR/=OE=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
+	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 42595C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 16:22:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C4517C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 17:18:44 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id BE825610F9
-	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 16:22:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org BE825610F9
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=tkos.co.il
+	by mail.kernel.org (Postfix) with ESMTPS id 4C9D561130
+	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 17:18:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4C9D561130
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 87436403B3;
-	Tue, 14 Sep 2021 16:22:47 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E0159400D4;
+	Tue, 14 Sep 2021 17:18:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TL0x5EDZUMuj; Tue, 14 Sep 2021 16:22:46 +0000 (UTC)
+	with ESMTP id ersRXZ6APNcw; Tue, 14 Sep 2021 17:18:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A243D4017E;
-	Tue, 14 Sep 2021 16:22:45 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id AA98B4017E;
+	Tue, 14 Sep 2021 17:18:41 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2C1201BF42E
- for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 16:22:44 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 003D91BF283
+ for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 17:18:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1901A6067E
- for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 16:22:44 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id F059E606D6
+ for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 17:18:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dzOMSy02Ci5j for <buildroot@lists.busybox.net>;
- Tue, 14 Sep 2021 16:22:42 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from mx.tkos.co.il (guitar.tcltek.co.il [192.115.133.116])
- by smtp3.osuosl.org (Postfix) with ESMTPS id AC7906061A
- for <buildroot@buildroot.org>; Tue, 14 Sep 2021 16:22:42 +0000 (UTC)
-Received: from tarshish (unknown [10.0.8.2])
- (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
- (No client certificate requested)
- by mx.tkos.co.il (Postfix) with ESMTPS id CA09244073B;
- Tue, 14 Sep 2021 19:22:14 +0300 (IDT)
-References: <20210914132139.3597322-1-jose.pekkarinen@unikie.com>
-User-agent: mu4e 1.6.6; emacs 27.1
-From: Baruch Siach <baruch@tkos.co.il>
-To: =?utf-8?Q?Jos=C3=A9?= Pekkarinen <jose.pekkarinen@unikie.com>
-Date: Tue, 14 Sep 2021 19:20:19 +0300
-In-reply-to: <20210914132139.3597322-1-jose.pekkarinen@unikie.com>
-Message-ID: <87ee9rgm9e.fsf@tarshish>
+ with ESMTP id tOD67jdbS4Mt for <buildroot@lists.busybox.net>;
+ Tue, 14 Sep 2021 17:18:38 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
+ [IPv6:2a00:1450:4864:20::32c])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id F1959606C4
+ for <buildroot@buildroot.org>; Tue, 14 Sep 2021 17:18:37 +0000 (UTC)
+Received: by mail-wm1-x32c.google.com with SMTP id e26so110983wmk.2
+ for <buildroot@buildroot.org>; Tue, 14 Sep 2021 10:18:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=B97ksn9+xLfTyqt0JxBHdLjuj0Wu/EXlg/PS1jWSPkQ=;
+ b=g2GKj5GPidT27ELwiEc8x6HJvfkcEUNKaRRBKUWxqc+byvvdohuP2o/c9wvO63mnQq
+ HPFyMS/j9hdzi8lsAZ2KGyB0Ez5H3S5uMUcIjrP+FSsMogK36witqdVNeyOxrPByk4S3
+ 1a/m/hTFK3WtABJc7H/VpAUGShgrb1X0TApt9uU40uIe+//Fe0Al70wsjC/dCRpHIjV+
+ WkXloIgQ08OCaLy6suk6d0c34uxvi82eUWjtiX4Vy0lqSiEoZIutNWVG/XS0Vbp9FCoB
+ GYO7usPpLxo0e1IWhuYFQ9axEA87Yw5xooJpLwe4qhDuj2OFmQmuPwipBMb5S4hLyBoe
+ MxwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=B97ksn9+xLfTyqt0JxBHdLjuj0Wu/EXlg/PS1jWSPkQ=;
+ b=fFY47vj6qUfjFpCAleHc5Zs/D8lXjPNd8XcFRX4K4kYMR2LAvOPypK8637PnVVCfku
+ krINSf0O5ORmsTtgqD7+8o00xJUSxdYAx8oqZSGuY9nuDoWzb2EXpsx8f6siFaF9nLdL
+ y4I/Y98E+bvTQKIMKfWLSeJhJLHgOac0rpR5MuVZO1OzMboPlbhuvFflfXHRtr31WPXD
+ 04tlJENmpuqQHfVO7WpI8vSaWtDgZvbn1b8fV3bfDwyWXzlSj6fl2w8uJRiCp9dMQK/H
+ yXOzItr1l3yzSgwqYqAnpui3gmUXxWV6E+3bHwAGFP6DFiQz2R/63IvVhlpI3tU4F9Sa
+ NKeQ==
+X-Gm-Message-State: AOAM531zDbrCyhcFLcmqptPdH0vbld5I95JSAC9VNYXd33jv33dSOjVo
+ 3bW5Rv4lJyBIyA9TVSXkEH5sn7RkZsE=
+X-Google-Smtp-Source: ABdhPJzu3+hR1NPUKPi6k1rpO9VssVE9f1TxqYzBNLvTGS2q0ReO6eZdIoF/1u6q7u3YpBJDolvB9A==
+X-Received: by 2002:a1c:a747:: with SMTP id q68mr166801wme.180.1631639916013; 
+ Tue, 14 Sep 2021 10:18:36 -0700 (PDT)
+Received: from dell5510.suse.de (gw1.ms-free.net. [185.243.124.10])
+ by smtp.gmail.com with ESMTPSA id s10sm11068154wrg.42.2021.09.14.10.18.34
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 14 Sep 2021 10:18:35 -0700 (PDT)
+From: Petr Vorel <petr.vorel@gmail.com>
+To: buildroot@buildroot.org
+Date: Tue, 14 Sep 2021 19:18:26 +0200
+Message-Id: <20210914171826.6638-1-petr.vorel@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v2] package/iptables: add init script
+Subject: [Buildroot] [RESENT][PATCH 1/1] package/busybox: bump version to
+ 1.34.0
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,57 +98,177 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-SGkgSm9zw6ksCgpPbiBUdWUsIFNlcCAxNCAyMDIxLCBKb3PDqSBQZWtrYXJpbmVuIHdyb3RlOgo+
-IFRoaXMgcGF0Y2ggd2lsbCBhZGQgYW4gaW5pdCBzY3JpcHQgdGhhdCBhbGxvd3MKPiB0byBzZXQg
-YSBydWxlc2V0IGluIC9ldGMvaXB0YWJsZXMuY29uZiB0byBiZSBsb2FkZWQKPiBvbiBib290LCBv
-ciBmbHVzaGVkIG9uIHN0b3AsIGFzIHdlbGwgYXMgYSBzYXZpbmcKPiBjb21tYW5kIHRvIGdlbmVy
-YXRlIGEgbmV3IGZpbGUuCj4KPiBTaWduZWQtb2ZmLWJ5OiBKb3PDqSBQZWtrYXJpbmVuIDxqb3Nl
-LnBla2thcmluZW5AdW5pa2llLmNvbT4KPiAtLS0KPiBbdjEgLT4gdjJdIHMvdG91Y2ggJChERVNU
-RElSKS90b3VjaCAkKFRBUkdFVF9ESVIpLwo+Cj4gIHBhY2thZ2UvaXB0YWJsZXMvUzQxaXB0YWJs
-ZXMgfCA1OCArKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysKPiAgcGFja2FnZS9p
-cHRhYmxlcy9pcHRhYmxlcy5tayB8ICA2ICsrKysKPiAgMiBmaWxlcyBjaGFuZ2VkLCA2NCBpbnNl
-cnRpb25zKCspCj4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL2lwdGFibGVzL1M0MWlwdGFi
-bGVzCj4KPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9pcHRhYmxlcy9TNDFpcHRhYmxlcyBiL3BhY2th
-Z2UvaXB0YWJsZXMvUzQxaXB0YWJsZXMKPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDAw
-MDAwMDAwMDAuLjkzOTk4Yjc4ZGUKPiAtLS0gL2Rldi9udWxsCj4gKysrIGIvcGFja2FnZS9pcHRh
-Ymxlcy9TNDFpcHRhYmxlcwo+IEBAIC0wLDAgKzEsNTggQEAKPiArIyEvYmluL3NoCj4gKwo+ICtE
-QUVNT049ImlwdGFibGVzIgo+ICsKPiArSVBUQUJMRVNfQVJHUz0iIgo+ICsKPiArc3RhcnQoKSB7
-Cj4gKwlwcmludGYgJ1N0YXJ0aW5nICVzOiAnICIkREFFTU9OIgo+ICsJaXB0YWJsZXMtcmVzdG9y
-ZSA8IC9ldGMvaXB0YWJsZXMuY29uZgo+ICsJc3RhdHVzPSQ/Cj4gKwlpZiBbICIkc3RhdHVzIiAt
-ZXEgMCBdOyB0aGVuCj4gKwkJZWNobyAiT0siCj4gKwllbHNlCj4gKwkJZWNobyAiRkFJTCIKPiAr
-CWZpCj4gKwlyZXR1cm4gIiRzdGF0dXMiCj4gK30KPiArCj4gK3N0b3AoKSB7Cj4gKwlwcmludGYg
-J1N0b3BwaW5nICVzOiAnICIkREFFTU9OIgo+ICsJaXB0YWJsZXMgLUYKPiArCXN0YXR1cz0kPwo+
-ICsJaWYgWyAiJHN0YXR1cyIgLWVxIDAgXTsgdGhlbgo+ICsJCWVjaG8gIk9LIgo+ICsJZWxzZQo+
-ICsJCWVjaG8gIkZBSUwiCj4gKwlmaQo+ICsJcmV0dXJuICIkc3RhdHVzIgo+ICt9Cj4gKwo+ICty
-ZXN0YXJ0KCkgewo+ICsJc3RvcAo+ICsJc2xlZXAgMQo+ICsJc3RhcnQKPiArfQo+ICsKPiArc2F2
-ZSgpIHsKPiArCXByaW50ZiAnU2F2aW5nICVzOiAnICIkREFFTU9OIgo+ICsJaXB0YWJsZXMtc2F2
-ZSA+IC9ldGMvaXB0YWJsZXMuY29uZgoKV2hhdCBhYm91dCByZWFkLW9ubHkgcm9vdGZzPwoKYmFy
-dWNoCgo+ICsJc3RhdHVzPSQ/Cj4gKwlpZiBbICIkc3RhdHVzIiAtZXEgMCBdOyB0aGVuCj4gKwkJ
-ZWNobyAiT0siCj4gKwllbHNlCj4gKwkJZWNobyAiRkFJTCIKPiArCWZpCj4gKwlyZXR1cm4gIiRz
-dGF0dXMiCj4gK30KPiArCj4gK2Nhc2UgIiQxIiBpbgo+ICsJc3RhcnR8c3RvcHxyZXN0YXJ0fHNh
-dmUpCj4gKwkJIiQxIjs7Cj4gKwlyZWxvYWQpCj4gKwkJIyBSZXN0YXJ0LCBzaW5jZSB0aGVyZSBp
-cyBubyB0cnVlICJyZWxvYWQiIGZlYXR1cmUuCj4gKwkJcmVzdGFydDs7Cj4gKwkqKQo+ICsJCWVj
-aG8gIlVzYWdlOiAkMCB7c3RhcnR8c3RvcHxyZXN0YXJ0fHJlbG9hZH0iCj4gKwkJZXhpdCAxCj4g
-K2VzYWMKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9pcHRhYmxlcy9pcHRhYmxlcy5tayBiL3BhY2th
-Z2UvaXB0YWJsZXMvaXB0YWJsZXMubWsKPiBpbmRleCBkYzAxNDY2NjA3Li4xZDM2MTJkYmY2IDEw
-MDY0NAo+IC0tLSBhL3BhY2thZ2UvaXB0YWJsZXMvaXB0YWJsZXMubWsKPiArKysgYi9wYWNrYWdl
-L2lwdGFibGVzL2lwdGFibGVzLm1rCj4gQEAgLTU3LDQgKzU3LDEwIEBAIGRlZmluZSBJUFRBQkxF
-U19MSU5VWF9DT05GSUdfRklYVVBTCj4gIAkkKGNhbGwgS0NPTkZJR19FTkFCTEVfT1BULENPTkZJ
-R19ORVRGSUxURVJfWFRBQkxFUykKPiAgZW5kZWYKPiAgCj4gK2RlZmluZSBJUFRBQkxFU19JTlNU
-QUxMX0lOSVRfU1lTVgo+ICsJJChJTlNUQUxMKSAtbSAwNzU1IC1EIHBhY2thZ2UvaXB0YWJsZXMv
-UzQxaXB0YWJsZXMgXAo+ICsJCSQoVEFSR0VUX0RJUikvZXRjL2luaXQuZC9TNDFpcHRhYmxlcwo+
-ICsJdG91Y2ggJChUQVJHRVRfRElSKS9ldGMvaXB0YWJsZXMuY29uZgo+ICtlbmRlZgo+ICsKPiAg
-JChldmFsICQoYXV0b3Rvb2xzLXBhY2thZ2UpKQoKCi0tIAogICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIH4uIC5+ICAgVGsgT3BlbiBTeXN0ZW1zCj19
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tb29PLS1VLS1P
-b28tLS0tLS0tLS0tLS17PQogICAtIGJhcnVjaEB0a29zLmNvLmlsIC0gdGVsOiArOTcyLjUyLjM2
-OC40NjU2LCBodHRwOi8vd3d3LnRrb3MuY28uaWwgLQpfX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBs
-aXN0cy5idWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xp
-c3RpbmZvL2J1aWxkcm9vdAo=
+* backport fix from 1_34_stable branch
+* refresh patches
+
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+---
+ ...route-use-linux-if_packet.h-instead-.patch | 18 ++++++---
+ ...trip-non-l-arguments-returned-by-pkg.patch | 15 +++----
+ ...003-udhcp-fix-build-breakage-on-MIPS.patch | 39 +++++++++++++++++++
+ package/busybox/busybox.hash                  |  4 +-
+ package/busybox/busybox.mk                    |  2 +-
+ 5 files changed, 63 insertions(+), 15 deletions(-)
+ create mode 100644 package/busybox/0003-udhcp-fix-build-breakage-on-MIPS.patch
+
+diff --git a/package/busybox/0001-networking-libiproute-use-linux-if_packet.h-instead-.patch b/package/busybox/0001-networking-libiproute-use-linux-if_packet.h-instead-.patch
+index 3aabc96053..9b5eaf89bd 100644
+--- a/package/busybox/0001-networking-libiproute-use-linux-if_packet.h-instead-.patch
++++ b/package/busybox/0001-networking-libiproute-use-linux-if_packet.h-instead-.patch
+@@ -1,4 +1,4 @@
+-From d4fec31889ad660a58dab633c511221feb66e817 Mon Sep 17 00:00:00 2001
++From 60da1d0763224698008d847eb8ad8d4d8c6f54ff Mon Sep 17 00:00:00 2001
+ From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ Date: Sat, 5 Oct 2013 15:55:06 +0200
+ Subject: [PATCH] networking/libiproute: use <linux/if_packet.h> instead of
+@@ -14,10 +14,15 @@ This commit fixes the build of iplink with the musl C library.
+ 
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ [Gustavo: update for busybox 1.22.0]
++Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
++---
++ networking/libiproute/iplink.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
+ 
+-diff -Nura busybox-1.22.0.orig/networking/libiproute/iplink.c busybox-1.22.0/networking/libiproute/iplink.c
+---- busybox-1.22.0.orig/networking/libiproute/iplink.c	2014-01-01 09:42:40.301137882 -0300
+-+++ busybox-1.22.0/networking/libiproute/iplink.c	2014-01-01 09:43:01.282827700 -0300
++diff --git a/networking/libiproute/iplink.c b/networking/libiproute/iplink.c
++index 1a1064bdc..a4c3ad307 100644
++--- a/networking/libiproute/iplink.c
+++++ b/networking/libiproute/iplink.c
+ @@ -7,7 +7,7 @@
+   */
+  #include <net/if.h>
+@@ -25,5 +30,8 @@ diff -Nura busybox-1.22.0.orig/networking/libiproute/iplink.c busybox-1.22.0/net
+ -#include <netpacket/packet.h>
+ +#include <linux/if_packet.h>
+  #include <netinet/if_ether.h>
+- 
++
+  #include <linux/if_vlan.h>
++--
++2.33.0
++
+diff --git a/package/busybox/0002-Makefile.flags-strip-non-l-arguments-returned-by-pkg.patch b/package/busybox/0002-Makefile.flags-strip-non-l-arguments-returned-by-pkg.patch
+index 84435442c9..3a94241043 100644
+--- a/package/busybox/0002-Makefile.flags-strip-non-l-arguments-returned-by-pkg.patch
++++ b/package/busybox/0002-Makefile.flags-strip-non-l-arguments-returned-by-pkg.patch
+@@ -1,7 +1,8 @@
+-From 67eb23d2be8aba3c474dac81a15b0fa11e5847b7 Mon Sep 17 00:00:00 2001
++From 59daea82e7b5abcdb42a4f97a0109f14d5a774ea Mon Sep 17 00:00:00 2001
+ From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ Date: Mon, 25 Nov 2013 22:51:53 +0100
+-Subject: [PATCH] Makefile.flags: strip non -l arguments returned by pkg-config
++Subject: [PATCH] Makefile.flags: strip non -l arguments returned by
++ pkg-config
+ 
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ [yann.morin.1998@free.fr: refresh for 1.29.0]
+@@ -13,10 +14,10 @@ Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+  1 file changed, 3 insertions(+), 1 deletion(-)
+ 
+ diff --git a/Makefile.flags b/Makefile.flags
+-index 307afa7..885e323 100644
++index 667481983..88d76efec 100644
+ --- a/Makefile.flags
+ +++ b/Makefile.flags
+-@@ -176,7 +176,9 @@ ifeq ($(CONFIG_SELINUX),y)
++@@ -180,7 +180,9 @@ ifeq ($(CONFIG_SELINUX),y)
+  SELINUX_PC_MODULES = libselinux libsepol
+  $(eval $(call pkg_check_modules,SELINUX,$(SELINUX_PC_MODULES)))
+  CPPFLAGS += $(SELINUX_CFLAGS)
+@@ -25,8 +26,8 @@ index 307afa7..885e323 100644
+ +       $(patsubst -l%,%,$(filter -l%,$(SELINUX_LIBS))),\
+ +       $(SELINUX_PC_MODULES:lib%=%))
+  endif
+- 
++
+  ifeq ($(CONFIG_FEATURE_NSLOOKUP_BIG),y)
+--- 
+-1.8.1.2
++--
++2.33.0
+ 
+diff --git a/package/busybox/0003-udhcp-fix-build-breakage-on-MIPS.patch b/package/busybox/0003-udhcp-fix-build-breakage-on-MIPS.patch
+new file mode 100644
+index 0000000000..d54d45da43
+--- /dev/null
++++ b/package/busybox/0003-udhcp-fix-build-breakage-on-MIPS.patch
+@@ -0,0 +1,39 @@
++From 56824284b749e5b9d568b75d5c5bc471b1814d46 Mon Sep 17 00:00:00 2001
++From: Denys Vlasenko <vda.linux@googlemail.com>
++Date: Fri, 20 Aug 2021 13:33:50 +0200
++Subject: [PATCH] udhcp: fix build breakage on MIPS
++
++Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
++Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
++---
++upstream status: 00adcdb64 ("udhcp: fix build breakage on MIPS")
++
++ networking/udhcp/common.h | 12 ------------
++ 1 file changed, 12 deletions(-)
++
++diff --git a/networking/udhcp/common.h b/networking/udhcp/common.h
++index 8c678dd32..ca778dab8 100644
++--- a/networking/udhcp/common.h
+++++ b/networking/udhcp/common.h
++@@ -304,18 +304,6 @@ void udhcp_dump_packet(struct dhcp_packet *packet) FAST_FUNC;
++ # define log3s(msg) ((void)0)
++ #endif
++
++-#if defined(__mips__)
++-/*
++- * The 'simple' message functions have a negative impact on the size of the
++- * DHCP code when compiled for MIPS, so don't use them in this case.
++- */
++-#define bb_simple_info_msg bb_info_msg
++-#define bb_simple_error_msg bb_error_msg
++-#define bb_simple_perror_msg_and_die bb_perror_msg_and_die
++-#undef log1s
++-#define log1s log1
++-#endif
++-
++ /*** Other shared functions ***/
++
++ /* 2nd param is "uint32_t*" */
++--
++2.33.0
++
+diff --git a/package/busybox/busybox.hash b/package/busybox/busybox.hash
+index 3e9c30cad0..4782f68819 100644
+--- a/package/busybox/busybox.hash
++++ b/package/busybox/busybox.hash
+@@ -1,5 +1,5 @@
+-# From https://busybox.net/downloads/busybox-1.33.1.tar.bz2.sha256
+-sha256  12cec6bd2b16d8a9446dd16130f2b92982f1819f6e1c5f5887b6db03f5660d28  busybox-1.33.1.tar.bz2
++# From https://busybox.net/downloads/busybox-1.34.0.tar.bz2.sha256
++sha256  ec8d1615edb045b83b81966604759c4d4ac921434ab4011da604f629c06074ce  busybox-1.34.0.tar.bz2
+ # Locally computed
+ sha256  bbfc9843646d483c334664f651c208b9839626891d8f17604db2146962f43548  LICENSE
+ sha256  b5a136ed67798e51fe2e0ca0b2a21cb01b904ff0c9f7d563a6292e276607e58f  archival/libarchive/bz/LICENSE
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 560c4fe7b6..08b5c55c50 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BUSYBOX_VERSION = 1.33.1
++BUSYBOX_VERSION = 1.34.0
+ BUSYBOX_SITE = https://www.busybox.net/downloads
+ BUSYBOX_SOURCE = busybox-$(BUSYBOX_VERSION).tar.bz2
+ BUSYBOX_LICENSE = GPL-2.0, bzip2-1.0.4
+-- 
+2.33.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@lists.buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
