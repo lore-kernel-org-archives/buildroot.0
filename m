@@ -2,91 +2,87 @@ Return-Path: <SRS0=SwR/=OE=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
-	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A4ACC433F5
-	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 16:17:55 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E250C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 16:22:18 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id A004D610FB
-	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 16:17:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A004D610FB
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id AB26960F25
+	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 16:22:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org AB26960F25
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=lists.buildroot.org
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6BB1780B5B;
-	Tue, 14 Sep 2021 16:17:54 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 64DD940144;
+	Tue, 14 Sep 2021 16:22:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2qzAKsPCULRA; Tue, 14 Sep 2021 16:17:53 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ywG-08v1RLV7; Tue, 14 Sep 2021 16:22:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B43B780B15;
-	Tue, 14 Sep 2021 16:17:52 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5006D1BF42E
- for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 16:17:42 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4F98C4017E;
+	Tue, 14 Sep 2021 16:22:15 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 45CE31BF42E
+ for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 16:22:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3D81480B15
- for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 16:17:42 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 42AE5402C8
+ for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 16:22:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BzJnovpbylbc for <buildroot@lists.busybox.net>;
- Tue, 14 Sep 2021 16:17:40 +0000 (UTC)
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=googlemail.com
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mayshV7EU-8d for <buildroot@lists.busybox.net>;
+ Tue, 14 Sep 2021 16:22:12 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
- [IPv6:2a00:1450:4864:20::431])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 15EB580B10
- for <buildroot@buildroot.org>; Tue, 14 Sep 2021 16:17:40 +0000 (UTC)
-Received: by mail-wr1-x431.google.com with SMTP id g16so21183407wrb.3
- for <buildroot@buildroot.org>; Tue, 14 Sep 2021 09:17:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=n4Pxh8i/QxsfhJdwB3jYleFA4aHmsZZemavFN85L0uA=;
- b=GZOu13Cyi+gaOGcBUd7EPGNreiPfWTUKYKzVB0ubeP6L5YlhjkItBPWYBWW+XWjfQ1
- VQHw8aUc050OIPQecSp6woZSEGbliA35Aluq3y4I8/gZdRkiz6s1YelwzLl27SDcM66O
- 3MNxGuHae/kxM5cxv/RVtIr8nbJoAfpo9JQ3V7NT3KFse4GkRSWjB+7Y9CyU3TBCdTsT
- ETEwSFy0XhJadrgE9pJ1bCqTWvYhZoyLkc2Vr3cjef3WJWf08AtwVDzXDgksm+dI0eGM
- X96GiWduLJaSlBpdPN/wQF+S0HGyNTlC4/SpyWgZRDa2JGEeFX6NA9vLJuE2Pu5S3UI/
- BTlw==
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com
+ [IPv6:2a00:1450:4864:20::62d])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 32071402C2
+ for <buildroot@buildroot.org>; Tue, 14 Sep 2021 16:22:12 +0000 (UTC)
+Received: by mail-ej1-x62d.google.com with SMTP id b10so23508973ejg.11
+ for <buildroot@buildroot.org>; Tue, 14 Sep 2021 09:22:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=googlemail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id;
+ bh=VVlrrP6L5rm1tEgnWSDmbPtwqk5lwm7m4b9jjIkT2wo=;
+ b=TVKZ8IYYcWHdgEVa27GxZ5urQSvgwxbE17w2FCj+JVgr89ymZJI3seQtQyRnESxOjF
+ V2BqZFSI9SEHqp/VDLH9mVRCgJoQ2gyAQhhEZ3OSqxCdpM+vufIdUETv6o+i9nPEVyP8
+ PFXXl/lNi2oT/FQIt1E5wpezE+6a++96UpceKJYrexusWqdd81iqbF6V0KRqwbHbegEu
+ qz2UppCTVb2MahwM6qKsCgBEIpY8Wttqm+0I/RoXAsh+syLR2FadDqqUdLMu5kJ2YomE
+ o35U+f6fgLtTWZgnOZOo1KYr8Ckrov0h4h3RIVHyRqNvKlWNwTG4rub/0CK9UIiGGuNH
+ X9hw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=n4Pxh8i/QxsfhJdwB3jYleFA4aHmsZZemavFN85L0uA=;
- b=xAxVOC9eovg1g1TGTBQ4dL5HcLy41O9Rn6Hr7JX8ogI939lfXrOHrSid43dWS830xu
- mhrcKKhFwys2+U1mkehwlIJLfYqkAFfqkN1b/G8FH83b/RSajpqiOKIMTd/NhpLAn561
- 622Fi2gJuJz+c0yoLKRkIlcbdcC7FN/2vPrUzKWURXVX4GvMfdO1DX6Sy0aY0AGhdXsj
- jsw3OoENwUOl/ahHZQpj6zMGLiOL6RAYEtKlB8AfP+8TE9tjbf0BojbtyEwj3KyqWTQK
- KC3TGu1sZXkbSp/xIRSZvgDwcP+xktVbVhUgan2mtswSuTi6GAGXOE8oe6ymWNTI+yvt
- zmfQ==
-X-Gm-Message-State: AOAM530IzG6+GUQCo5MSgrACHVAdcWpF3mvWU2Mj8+sUWAfMG9qT5mdO
- 1dMk52GSuhKOwcCYI67dp2Xrz25IHbI=
-X-Google-Smtp-Source: ABdhPJw9eiotna98gbx16M5cBetdw+paWTGxeg/9qbjbiWwbpGJpkOdfliNPfrDamqOWWchxyEy6cQ==
-X-Received: by 2002:a5d:590a:: with SMTP id v10mr19714690wrd.87.1631636257971; 
- Tue, 14 Sep 2021 09:17:37 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-2139-166.w92-167.abo.wanadoo.fr.
- [92.167.218.166])
- by smtp.gmail.com with ESMTPSA id r2sm11556790wrg.31.2021.09.14.09.17.37
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 14 Sep 2021 09:17:37 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ h=x-gm-message-state:from:to:cc:subject:date:message-id;
+ bh=VVlrrP6L5rm1tEgnWSDmbPtwqk5lwm7m4b9jjIkT2wo=;
+ b=WIUf8mnoTyXUDA1fwlgeyNxE6OCZEph/2yjSgl1Kpb8GqRkXvfBQuTnTed4JNU9Uju
+ rA+OOCu3nuvN8hUOY3Be6F6o4YzwVcc6R6SBGDnWDk3kzI/Gc3jx2tH8yD88TPQL6rLn
+ h2pjuYOGQORd+BWoIgComA27aCJSdMjMmbqAHr1ktF+y7Mw93wl1sLlqFm2EgcHKcISO
+ HmMnQ/koUeuce0W1JN1lmDtdKXHROAjpUDlRpjlqo9nDFYL9AHvjl0oxnoAeahpkkJhY
+ uwJHcmXwjvTMTDMlrLmDmS6g0+6oQV4UUlSHK8ci+Wm0F/UguPc1OBPiz9ptxSvfn2xT
+ kzmg==
+X-Gm-Message-State: AOAM531blwKY2Iu7XqUMBSrxHL1XFbAafZfvEGnDHReYt5ryr0MdoLdh
+ FoPQr7gYui4/qi6dI7YpNymyEg8XmdY=
+X-Google-Smtp-Source: ABdhPJyzuB2rpyHIv2mU1okx/iauwWy14uJEHmoR4tPZJQUZUAjqaqlC9KIlg3mHxGIgl9x5VphdcQ==
+X-Received: by 2002:a17:906:1454:: with SMTP id
+ q20mr20362599ejc.446.1631636530212; 
+ Tue, 14 Sep 2021 09:22:10 -0700 (PDT)
+Received: from development1.visionsystems.de (mail.visionsystems.de.
+ [213.209.99.202])
+ by smtp.gmail.com with ESMTPSA id i6sm5095424ejr.68.2021.09.14.09.22.09
+ (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+ Tue, 14 Sep 2021 09:22:09 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Tue, 14 Sep 2021 18:17:31 +0200
-Message-Id: <20210914161731.45958-2-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20210914161731.45958-1-fontaine.fabrice@gmail.com>
-References: <20210914161731.45958-1-fontaine.fabrice@gmail.com>
-MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 2/2] package/x11r7/xapp_xeyes: add xlib_libXi
- mandatory dependency
+Date: Tue, 14 Sep 2021 18:21:58 +0200
+Message-Id: <20210914162158.15045-1-yegorslists@googlemail.com>
+X-Mailer: git-send-email 2.17.0
+Subject: [Buildroot] [PATCH] package/libqmi: bump to version 1.30.2
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,58 +95,92 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+From: yegorslists--- via buildroot <buildroot@lists.buildroot.org>
+Reply-To: yegorslists@googlemail.com
+Cc: Matt Weber <matthew.weber@collins.com>,
+ Aleksander Morgado <aleksander@aleksander.es>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-Build fails since commit c47ebe7aeb70015614ff1d477dc1a71e8c161425
-because xlib_libXi is a mandatory dependency since version 1.2.0 and
-https://gitlab.freedesktop.org/xorg/app/xeyes/-/commit/420c2d8517246c9e422739cadb7acb29e35a3bed:
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-configure: error: Package requirements (xi >= 1.7 x11 xt xext xmu xproto >= 7.0.17) were not met:
+Remove the upstreamed patch.
 
-Package 'xi', required by 'virtual:world', not found
-
-Fixes:
- - http://autobuild.buildroot.org/results/896f45fb9eadcd235aeab096db479ee0aa5d0860
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/x11r7/xapp_xeyes/Config.in     | 1 +
- package/x11r7/xapp_xeyes/xapp_xeyes.mk | 3 ++-
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ ...build-meson-fix-introspection-option.patch | 33 -------------------
+ package/libqmi/libqmi.hash                    |  2 +-
+ package/libqmi/libqmi.mk                      |  2 +-
+ 3 files changed, 2 insertions(+), 35 deletions(-)
+ delete mode 100644 package/libqmi/0001-build-meson-fix-introspection-option.patch
 
-diff --git a/package/x11r7/xapp_xeyes/Config.in b/package/x11r7/xapp_xeyes/Config.in
-index a7b77375fd..268bc5807e 100644
---- a/package/x11r7/xapp_xeyes/Config.in
-+++ b/package/x11r7/xapp_xeyes/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_XAPP_XEYES
- 	bool "xeyes"
- 	select BR2_PACKAGE_XLIB_LIBX11
- 	select BR2_PACKAGE_XLIB_LIBXEXT
-+	select BR2_PACKAGE_XLIB_LIBXI
- 	select BR2_PACKAGE_XLIB_LIBXMU
- 	select BR2_PACKAGE_XLIB_LIBXT
- 	help
-diff --git a/package/x11r7/xapp_xeyes/xapp_xeyes.mk b/package/x11r7/xapp_xeyes/xapp_xeyes.mk
-index a127e28ea7..68df8c9ab0 100644
---- a/package/x11r7/xapp_xeyes/xapp_xeyes.mk
-+++ b/package/x11r7/xapp_xeyes/xapp_xeyes.mk
-@@ -9,7 +9,8 @@ XAPP_XEYES_SOURCE = xeyes-$(XAPP_XEYES_VERSION).tar.bz2
- XAPP_XEYES_SITE = https://xorg.freedesktop.org/archive/individual/app
- XAPP_XEYES_LICENSE = MIT
- XAPP_XEYES_LICENSE_FILES = COPYING
--XAPP_XEYES_DEPENDENCIES = xlib_libX11 xlib_libXext xlib_libXmu xlib_libXt
-+XAPP_XEYES_DEPENDENCIES = \
-+	xlib_libX11 xlib_libXext xlib_libXi xlib_libXmu xlib_libXt
+diff --git a/package/libqmi/0001-build-meson-fix-introspection-option.patch b/package/libqmi/0001-build-meson-fix-introspection-option.patch
+deleted file mode 100644
+index 0528868025..0000000000
+--- a/package/libqmi/0001-build-meson-fix-introspection-option.patch
++++ /dev/null
+@@ -1,33 +0,0 @@
+-From bfb066419f288764edbade1e27e93a5dda59a5f4 Mon Sep 17 00:00:00 2001
+-From: Aleksander Morgado <aleksander@aleksander.es>
+-Date: Fri, 6 Aug 2021 10:32:22 +0200
+-Subject: [PATCH] build,meson: fix introspection option
+-
+-Using -Dintrospection=false would actually not disable it. There is no
+-longer an "auto" option for the introspection support, it will be
+-either enabled or disabled depending on what the user asks
+-for (default enabled).
+-
+-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+----
+- meson.build | 5 ++++-
+- 1 file changed, 4 insertions(+), 1 deletion(-)
+-
+-diff --git a/meson.build b/meson.build
+-index b25bca57..d28e5601 100644
+---- a/meson.build
+-+++ b/meson.build
+-@@ -218,7 +218,10 @@ version_conf.set10('QMI_QRTR_SUPPORTED', enable_qrtr)
+- version_conf.set10('QMI_RMNET_SUPPORTED', enable_rmnet)
+-
+- # introspection support
+--enable_gir = dependency('gobject-introspection-1.0', version: '>= 0.9.6', required: get_option('introspection')).found()
+-+enable_gir = get_option('introspection')
+-+if enable_gir
+-+  dependency('gobject-introspection-1.0', version: '>= 0.9.6')
+-+endif
+-
+- random_number = qmi_minor_version + meson.version().split('.').get(1).to_int()
+-
+---
+-2.17.0
+diff --git a/package/libqmi/libqmi.hash b/package/libqmi/libqmi.hash
+index 0373bb4e75..1f2da45ac0 100644
+--- a/package/libqmi/libqmi.hash
++++ b/package/libqmi/libqmi.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+-sha256  c0421684c12697c448077dd5c0a66c6f745deab3558af578e3f10307c8a0c564  libqmi-1.30.0.tar.gz
++sha256  2eb7c7971b91a64ad830643b0170cff692a69bf0f093ca61d72d3f466a0272d4  libqmi-1.30.2.tar.gz
+diff --git a/package/libqmi/libqmi.mk b/package/libqmi/libqmi.mk
+index 05fd3ae9af..cd2c2719f9 100644
+--- a/package/libqmi/libqmi.mk
++++ b/package/libqmi/libqmi.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_XLIB_LIBXRENDER),y)
- XAPP_XEYES_DEPENDENCIES += xlib_libXrender
+-LIBQMI_VERSION = 1.30.0
++LIBQMI_VERSION = 1.30.2
+ LIBQMI_SITE = https://gitlab.freedesktop.org/mobile-broadband/libqmi/-/archive/$(LIBQMI_VERSION)
+ LIBQMI_LICENSE = LGPL-2.0+ (library), GPL-2.0+ (programs)
+ LIBQMI_LICENSE_FILES = COPYING COPYING.LIB
 -- 
-2.33.0
+2.17.0
 
 _______________________________________________
 buildroot mailing list
