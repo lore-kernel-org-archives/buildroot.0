@@ -1,68 +1,92 @@
-Return-Path: <SRS0=SwR/=OE=lists.buildroot.org=buildroot-bounces@kernel.org>
+Return-Path: <SRS0=vgbW=OF=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.5 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
+	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 80EC9C433FE
-	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 22:31:49 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 38133C433F5
+	for <buildroot@archiver.kernel.org>; Wed, 15 Sep 2021 00:04:35 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 05D2C60F58
-	for <buildroot@archiver.kernel.org>; Tue, 14 Sep 2021 22:31:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 05D2C60F58
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=igalia.com
+	by mail.kernel.org (Postfix) with ESMTPS id A5A1C61211
+	for <buildroot@archiver.kernel.org>; Wed, 15 Sep 2021 00:04:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A5A1C61211
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9C938403DC;
-	Tue, 14 Sep 2021 22:31:48 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 55CAF404E2;
+	Wed, 15 Sep 2021 00:04:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7KnKxge2mbYT; Tue, 14 Sep 2021 22:31:47 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 2ag4VFUbZFym; Wed, 15 Sep 2021 00:04:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 68A12403DD;
-	Tue, 14 Sep 2021 22:31:46 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4BF3F1BF36F
- for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 22:31:45 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3328A404F3;
+	Wed, 15 Sep 2021 00:04:32 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 5D48F1BF392
+ for <buildroot@lists.busybox.net>; Wed, 15 Sep 2021 00:04:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3BFFE403DD
- for <buildroot@lists.busybox.net>; Tue, 14 Sep 2021 22:31:45 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5A27B80DB4
+ for <buildroot@lists.busybox.net>; Wed, 15 Sep 2021 00:04:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id P-Ox4o0ORGzU for <buildroot@lists.busybox.net>;
- Tue, 14 Sep 2021 22:31:44 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from fanzine.igalia.com (fanzine.igalia.com [178.60.130.6])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9BB2E403DC
- for <buildroot@buildroot.org>; Tue, 14 Sep 2021 22:31:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
- s=20170329; 
- h=Content-Type:MIME-Version:References:In-Reply-To:Subject:Cc:To:From:Message-ID:Date;
- bh=WqrRjGoed3WWtgbWxTBkbIMv6dI53M5gwXwnho1jINU=; 
- b=NhyJjCN9Lsw5Ochc/8my4UdGNymf6yO/3zBh2iCKkGWQQjtPU9hwgeE3aqZXCj3/m9qZV/f7QgYn28mISKw5KY3Xn+XPDe0hCgbteJtfqv0GhbFWWL25o1H6S2Ug2DtqtGrResyQMYYzgYq7fCgpE6FH7JBFd7LxmJ96JyYYBFSg5NPFHJ04V6eJLGBTvJVWvUmvXu7F3LdH//gUVrPf7A0m90FUTs8D/PpP1anLS5IEkkXOKlD4mSqknfWh7auFQgpHmwrRIWlWRRQmbpu/DOG40XPaSy2vqNcdmz4TjxQtuClZ/A6Dalslm/3oOTneRvTW0WruiK1iENa2mR9sJw==;
-Received: from 91-158-76-100.elisa-laajakaista.fi ([91.158.76.100] helo=momiji)
- by fanzine.igalia.com with esmtpsa 
- (Cipher TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256) (Exim)
- id 1mQGxk-0003Sl-2W; Wed, 15 Sep 2021 00:31:41 +0200
-Received: from localhost (momiji [local])
- by momiji (OpenSMTPD) with ESMTPA id 9966c0a9;
- Tue, 14 Sep 2021 22:31:21 +0000 (UTC)
-Date: Wed, 15 Sep 2021 01:31:16 +0300
-Message-ID: <20210915013116.GB62285@momiji>
-From: Adrian Perez de Castro <aperez@igalia.com>
-To: Peter Seiderer <ps.report@gmx.net>
-In-Reply-To: <20210914221344.438734be@gmx.net>
-References: <20210912092128.2286771-1-aperez@igalia.com>
- <20210914130133.2405250-1-aperez@igalia.com> <20210914221344.438734be@gmx.net>
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1CgRd2eic5k4 for <buildroot@lists.busybox.net>;
+ Wed, 15 Sep 2021 00:04:29 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com
+ [IPv6:2607:f8b0:4864:20::131])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1781980DB0
+ for <buildroot@buildroot.org>; Wed, 15 Sep 2021 00:04:29 +0000 (UTC)
+Received: by mail-il1-x131.google.com with SMTP id b15so956148ils.10
+ for <buildroot@buildroot.org>; Tue, 14 Sep 2021 17:04:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=E1bjt+j5cpHbOQXBZOlc3ya7TPNutyc7ddevDQBXZwk=;
+ b=RFs3uwi9oGjgmd3ciUcqqr0gY9g1CfZaN2KXlZ9zSfjNAV2k+VYDVwEQUT7LYk+YJR
+ OXMPSFcPWSOFzyAim43oy1XF/lSaN/sr9H8u6q9QI2MLSfmQYa2ZNvu4agSXPV0VG/2e
+ I+CTzH/nm+TWI/+nfjvVzrWkdC+L2WwB10wuxfXOcLhVFnRnNVzeGfJpy9ZlzkxQjcTk
+ yGb+KHJ7W2tAU42UHDJYPVZtDKXIViDthzlChjgFZV9EvyQxUlhghcbgeFm0qdSNGwoO
+ FnbrBfXmg5HgkKZGYCpHuH0WtQ8+cSXzk5TLZHBzqRJg5wZZD8+rArU7qmkeC5vvl/kW
+ a1uQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=E1bjt+j5cpHbOQXBZOlc3ya7TPNutyc7ddevDQBXZwk=;
+ b=Pmgv7ef5jaNwT42f8OSIPxv44z6rvCFt2ZJ8eIFDxbpXKXCQFhhukAVnQJr66VCQRf
+ kW6R7P9FtCSE/hZrJlmYKVb62K0oj7VEU1buXiQlDNRn0FAzohHi+OSUwhQY21DY3eFr
+ Vi4g7iex2Kpz0/vGndsMiUBMDcDlca3VcbxVBVPHuoilgBVML4AR7iUFkZ5LPnrq/dI8
+ /oAWiwsAiXjcOxK8wXlGSg9A3WihZ4/g30Zl+uq5EwWHktvPE4ipDA8P+oDWba7K/JXh
+ rIkLKIM5nHQxtSx/79GGEMIEeRYu0k6of7G2EtSsKu1lPJGThy57JHHvQAHZCdxBr3Xa
+ aMjw==
+X-Gm-Message-State: AOAM531/Qvm1OGLYq9LFiitBMU+azhH9WYMkosvpsZyLt7vAQh8xFADe
+ zpgHMhJKeCEvR07BmTbs4QYO5/9gXIs=
+X-Google-Smtp-Source: ABdhPJy+yx9r6uiIcs0tcksyYf6Cn5rlUwMgc9AobruzIQzOz91+JWXFoJxzN2Z7edNQ0VBXk4DaJw==
+X-Received: by 2002:a05:6e02:b41:: with SMTP id
+ f1mr14360749ilu.269.1631664267955; 
+ Tue, 14 Sep 2021 17:04:27 -0700 (PDT)
+Received: from james-x399.localdomain (97-118-233-80.hlrn.qwest.net.
+ [97.118.233.80])
+ by smtp.gmail.com with ESMTPSA id a15sm7794625ila.34.2021.09.14.17.04.27
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 14 Sep 2021 17:04:27 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
+To: buildroot@buildroot.org
+Date: Tue, 14 Sep 2021 18:04:23 -0600
+Message-Id: <20210915000423.1521236-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v2 1/1] package/seatd: bump to version 0.6.1
+Subject: [Buildroot] [PATCH v2 1/1] package/gstreamer1/gstd: new package
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,302 +99,313 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============7441405189900047819=="
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ James Hilliard <james.hilliard1@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+Changes v1 -> v2:
+  - fix service startup
+  - fix symlink paths
+---
+ package/gstreamer1/Config.in                  |  1 +
+ .../0001-Fix-gstd_chmod.sh-DESTDIR-path.patch | 27 +++++++
+ ...treamer-check-1.0-unless-tests-are-e.patch | 33 +++++++++
+ ...tive-symlink-for-gstd-gst-client-exe.patch | 70 +++++++++++++++++++
+ ...td-check-user-xenv.sh-for-systemd-se.patch | 34 +++++++++
+ package/gstreamer1/gstd/Config.in             | 17 +++++
+ package/gstreamer1/gstd/gstd.hash             |  3 +
+ package/gstreamer1/gstd/gstd.mk               | 36 ++++++++++
+ 8 files changed, 221 insertions(+)
+ create mode 100644 package/gstreamer1/gstd/0001-Fix-gstd_chmod.sh-DESTDIR-path.patch
+ create mode 100644 package/gstreamer1/gstd/0002-Don-t-require-gstreamer-check-1.0-unless-tests-are-e.patch
+ create mode 100644 package/gstreamer1/gstd/0003-Use-relative-symlink-for-gstd-gst-client-exe.patch
+ create mode 100644 package/gstreamer1/gstd/0004-Don-t-require-gstd-check-user-xenv.sh-for-systemd-se.patch
+ create mode 100644 package/gstreamer1/gstd/Config.in
+ create mode 100644 package/gstreamer1/gstd/gstd.hash
+ create mode 100644 package/gstreamer1/gstd/gstd.mk
 
---===============7441405189900047819==
-Content-Type: multipart/signed; boundary="1DrOAB1LsYiLtZy9"; micalg="pgp-sha1"; protocol="application/pgp-signature"
-
-
---1DrOAB1LsYiLtZy9
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: base64
-
-SGkgUGV0ZXIsCgpPbiBUdWUsIDE0IFNlcCAyMDIxIDIyOjEzOjQ0ICswMjAwIFBldGVyIFNlaWRl
-cmVyIDxwcy5yZXBvcnRAZ214Lm5ldD4gd3JvdGU6Cj4gSGVsbG8gQWRyaWFuLAo+IAo+IE9uIFR1
-ZSwgMTQgU2VwIDIwMjEgMTY6MDE6MzMgKzAzMDAsIEFkcmlhbiBQZXJleiBkZSBDYXN0cm8gPGFw
-ZXJlekBpZ2FsaWEuY29tPiB3cm90ZToKPiAKPiA+IFVwZGF0ZSBzZWF0ZCB0byB2ZXJzaW9uIDAu
-Ni4xLCB3aGljaCBtYWtlcyB0aGUgcGF0Y2hlcyB1bm5lY2Vzc2FyeSBhbmQKPiA+IGZpeGVzIGEg
-bnVtYmVyIG9mIGJ1Z3MuIFNvbWUgTWVzb24gYnVpbGQgb3B0aW9ucyBoYXZlIGJlZW4gcmVuYW1l
-ZCwgc28KPiA+IHRoZSBidWlsZCByZWNpcGUgaXMgdXBkYXRlZCBhY2NvcmRpbmdseSwgdG9vLgo+
-ID4KPiA+IFJlbGVhc2Ugbm90ZXM6IGh0dHBzOi8vZ2l0LnNyLmh0L35rZW5ueWxldmluc2VuL3Nl
-YXRkL3JlZnMvMC42LjEKPiAKPiBBcyB5b3UgYnVtcCBmcm9tIDAuNS4wIHRoZSBhZGRpdGlvbmFs
-IHJlbGVhc2Ugbm90ZXMgbGluayBmb3IgMC42LjAgd291bGQKPiBiZSBuaWNlIChtZW50aW9uaW5n
-IHRoZSB1cHN0cmVhbSBhcHBsaWVkIHBhdGNoZXMpOgo+IAo+IAlodHRwczovL2dpdC5zci5odC9+
-a2VubnlsZXZpbnNlbi9zZWF0ZC9yZWZzLzAuNi4wCgpUaGFua3MgZm9yIHRoZSBzdWdnZXN0aW9u
-LCBJIGhhdmUgcG9zdGVkIHZlcnNpb24gMyBvZiB0aGUgcGF0Y2ggd2l0aCB0aGUKY29tbWl0IG1l
-c3NhZ2UgdXBkYXRlZC4gVGhhbmtzIQoKPiA+IFNpZ25lZC1vZmYtYnk6IEFkcmlhbiBQZXJleiBk
-ZSBDYXN0cm8gPGFwZXJlekBpZ2FsaWEuY29tPgo+ID4gLS0tCj4gPiBDaGFuZ2VzIHYxIC0+IHYy
-Ogo+ID4gICAtIENoYW5nZWQgdmVyc2lvbiAwLjYuMCB0byAwLjYuMQo+ID4gLS0tCj4gPiAgLi4u
-cHBvcnQtYnVpbGRpbmctYnVpbHRpbi13aXRob3V0LXNlYXRkLnBhdGNoIHwgIDM3IC0tLQo+ID4g
-IHBhY2thZ2Uvc2VhdGQvMDAwMi1BZGQtbm8tb3Atc2Vzc2lvbi5wYXRjaCAgICB8IDIyMyAtLS0t
-LS0tLS0tLS0tLS0tLS0KPiA+ICAuLi4wMDMtbWVzb24uYnVpbGQtZml4LWJ1aWxkLXdpdGgtZ2Nj
-LTcucGF0Y2ggfCAgNDggLS0tLQo+ID4gIHBhY2thZ2Uvc2VhdGQvc2VhdGQuaGFzaCAgICAgICAg
-ICAgICAgICAgICAgICB8ICAgMiArLQo+ID4gIHBhY2thZ2Uvc2VhdGQvc2VhdGQubWsgICAgICAg
-ICAgICAgICAgICAgICAgICB8ICAxNCArLQo+ID4gIDUgZmlsZXMgY2hhbmdlZCwgOCBpbnNlcnRp
-b25zKCspLCAzMTYgZGVsZXRpb25zKC0pCj4gPiAgZGVsZXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2Uv
-c2VhdGQvMDAwMS1tZXNvbi1TdXBwb3J0LWJ1aWxkaW5nLWJ1aWx0aW4td2l0aG91dC1zZWF0ZC5w
-YXRjaAo+ID4gIGRlbGV0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL3NlYXRkLzAwMDItQWRkLW5vLW9w
-LXNlc3Npb24ucGF0Y2gKPiA+ICBkZWxldGUgbW9kZSAxMDA2NDQgcGFja2FnZS9zZWF0ZC8wMDAz
-LW1lc29uLmJ1aWxkLWZpeC1idWlsZC13aXRoLWdjYy03LnBhdGNoCj4gPgo+ID4gZGlmZiAtLWdp
-dCBhL3BhY2thZ2Uvc2VhdGQvMDAwMS1tZXNvbi1TdXBwb3J0LWJ1aWxkaW5nLWJ1aWx0aW4td2l0
-aG91dC1zZWF0ZC5wYXRjaCBiL3BhY2thZ2Uvc2VhdGQvMDAwMS1tZXNvbi1TdXBwb3J0LWJ1aWxk
-aW5nLWJ1aWx0aW4td2l0aG91dC1zZWF0ZC5wYXRjaAo+ID4gZGVsZXRlZCBmaWxlIG1vZGUgMTAw
-NjQ0Cj4gPiBpbmRleCBmY2FhMzU1ZGM0Li4wMDAwMDAwMDAwCj4gPiAtLS0gYS9wYWNrYWdlL3Nl
-YXRkLzAwMDEtbWVzb24tU3VwcG9ydC1idWlsZGluZy1idWlsdGluLXdpdGhvdXQtc2VhdGQucGF0
-Y2gKPiA+ICsrKyAvZGV2L251bGwKPiA+IEBAIC0xLDM3ICswLDAgQEAKPiA+IC1Gcm9tIDExYmY3
-ZDVkMTE0MjQ3NDlkNTQ5MjM5NTQwZTVkYjA2Yjg3NTRiYjUgTW9uIFNlcCAxNyAwMDowMDowMCAy
-MDAxCj4gPiAtRnJvbTogS2VubnkgTGV2aW5zZW4gPGtsQGtsLnd0Zj4KPiA+IC1EYXRlOiBTdW4s
-IDI1IEFwciAyMDIxIDIwOjE2OjE5ICswMjAwCj4gPiAtU3ViamVjdDogW1BBVENIXSBtZXNvbjog
-U3VwcG9ydCBidWlsZGluZyBidWlsdGluIHdpdGhvdXQgc2VhdGQKPiA+IC0KPiA+IC1UaGUgYnVp
-bHRpbiBiYWNrZW5kIHJlbGllcyBvbiB0aGUgc2VhdGQgYmFja2VuZCBpbXBsZW1lbnRhdGlvbi4g
-V2hlbgo+ID4gLWJ1aWx0aW4gd2FzIGVuYWJsZWQgd2l0aG91dCBzZWF0ZCwgY29tcGlsYXRpb24g
-d291bGQgZmFpbCBkdWUgdG8gdGhlCj4gPiAtaW1wbGVtZW50YXRpb24gbm90IGJlaW5nIGluY2x1
-ZGVkLgo+ID4gLQo+ID4gLUluY2x1ZGUgdGhlIGltcGxlbWVudGF0aW9uIGlmIGVpdGhlciBzZWF0
-ZCBvciBidWlsdGluIGlzIGVuYWJsZWQuCj4gPiAtCj4gPiAtU2lnbmVkLW9mZi1ieTogQWRyaWFu
-IFBlcmV6IGRlIENhc3RybyA8YXBlcmV6QGlnYWxpYS5jb20+Cj4gPiAtVXBzdHJlYW0tU3RhdHVz
-OiBiYWNrcG9ydCBbd2l0aCBhZGFwdGF0aW9uc10KPiA+IC0tLS0KPiA+IC0gbWVzb24uYnVpbGQg
-fCA1ICsrKystCj4gPiAtIDEgZmlsZSBjaGFuZ2VkLCA0IGluc2VydGlvbnMoKyksIDEgZGVsZXRp
-b24oLSkKPiA+IC0KPiA+IC1kaWZmIC0tZ2l0IGEvbWVzb24uYnVpbGQgYi9tZXNvbi5idWlsZAo+
-ID4gLWluZGV4IGZmNTY4NDUuLjhjYjRmYzYgMTAwNjQ0Cj4gPiAtLS0tIGEvbWVzb24uYnVpbGQK
-PiA+IC0rKysgYi9tZXNvbi5idWlsZAo+ID4gLUBAIC0xMDUsOCArMTA1LDExIEBAIHNlcnZlcl9m
-aWxlcyA9IFsKPiA+IC0gCSdzZWF0ZC9zZXJ2ZXIuYycsCj4gPiAtIF0KPiA+IC0KPiA+IC0taWYg
-Z2V0X29wdGlvbignc2VhdGQnKS5lbmFibGVkKCkKPiA+IC0raWYgZ2V0X29wdGlvbignc2VhdGQn
-KS5lbmFibGVkKCkgb3IgZ2V0X29wdGlvbignYnVpbHRpbicpLmVuYWJsZWQoKQo+ID4gLSAJcHJp
-dmF0ZV9maWxlcyArPSAnbGlic2VhdC9iYWNrZW5kL3NlYXRkLmMnCj4gPiAtK2VuZGlmCj4gPiAt
-Kwo+ID4gLStpZiBnZXRfb3B0aW9uKCdzZWF0ZCcpLmVuYWJsZWQoKQo+ID4gLSAJYWRkX3Byb2pl
-Y3RfYXJndW1lbnRzKCctRFNFQVREX0VOQUJMRUQ9MScsIGxhbmd1YWdlOiAnYycpCj4gPiAtIGVu
-ZGlmCj4gPiAtCj4gPiAtLS0KPiA+IC0yLjMxLjEKPiA+IC0KPiA+IGRpZmYgLS1naXQgYS9wYWNr
-YWdlL3NlYXRkLzAwMDItQWRkLW5vLW9wLXNlc3Npb24ucGF0Y2ggYi9wYWNrYWdlL3NlYXRkLzAw
-MDItQWRkLW5vLW9wLXNlc3Npb24ucGF0Y2gKPiA+IGRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0NAo+
-ID4gaW5kZXggNDQ3OTgxMjZkOS4uMDAwMDAwMDAwMAo+ID4gLS0tIGEvcGFja2FnZS9zZWF0ZC8w
-MDAyLUFkZC1uby1vcC1zZXNzaW9uLnBhdGNoCj4gPiArKysgL2Rldi9udWxsCj4gPiBAQCAtMSwy
-MjMgKzAsMCBAQAo+ID4gLUZyb20gOWE3ODI0YjdjM2ZmNWM5NTc2MzI2NzFlOTE0NTRmYzg0ZmJj
-ZGRhOCBNb24gU2VwIDE3IDAwOjAwOjAwIDIwMDEKPiA+IC1Gcm9tOiBTaW1vbiBTZXIgPGNvbnRh
-Y3RAZW1lcnNpb24uZnI+Cj4gPiAtRGF0ZTogRnJpLCAyNiBNYXIgMjAyMSAxMDowNToxMiArMDEw
-MAo+ID4gLVN1YmplY3Q6IFtQQVRDSF0gQWRkIG5vLW9wIHNlc3Npb24KPiA+IC0KPiA+IC1UaGlz
-IGlzIHVzZWZ1bCBmb3IgaGVhZGxlc3MgdGVzdGluZywgZm9yIGluc3RhbmNlIHdpdGggVktNUzoK
-PiA+IC0KPiA+IC0gICAgbW9kcHJvYmUgdmttcwo+ID4gLSAgICBleHBvcnQgV0xSX0RSTV9ERVZJ
-Q0VTPS9kZXYvZHJpL2NhcmQxCj4gPiAtICAgIGV4cG9ydCBXTFJfQkFDS0VORFM9ZHJtCj4gPiAt
-ICAgIGV4cG9ydCBMSUJTRUFUX0JBQ0tFTkQ9bm9vcAo+ID4gLSAgICBzd2F5Cj4gPiAtCj4gPiAt
-V2UgZG9uJ3QgbmVlZCBhbnkgb2YgdGhlIFZUIGhhbmRsaW5nIGluIHRoaXMgY2FzZS4KPiA+IC0K
-PiA+IC1bUmV0cmlldmVkIGZyb206Cj4gPiAtaHR0cHM6Ly9naXRodWIuY29tL2tlbm55bGV2aW5z
-ZW4vc2VhdGQvY29tbWl0LzlhNzgyNGI3YzNmZjVjOTU3NjMyNjcxZTkxNDU0ZmM4NGZiY2RkYThd
-Cj4gPiAtU2lnbmVkLW9mZi1ieTogRmFicmljZSBGb250YWluZSA8Zm9udGFpbmUuZmFicmljZUBn
-bWFpbC5jb20+Cj4gPiAtLS0tCj4gPiAtIGluY2x1ZGUvbGlic2VhdC5oICAgICAgfCAgIDIgKwo+
-ID4gLSBsaWJzZWF0L2JhY2tlbmQvbm9vcC5jIHwgMTM1ICsrKysrKysrKysrKysrKysrKysrKysr
-KysrKysrKysrKysrKysrKysrCj4gPiAtIGxpYnNlYXQvbGlic2VhdC5jICAgICAgfCAgIDUgKysK
-PiA+IC0gbWVzb24uYnVpbGQgICAgICAgICAgICB8ICAgMiArLQo+ID4gLSA0IGZpbGVzIGNoYW5n
-ZWQsIDE0MyBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0pCj4gPiAtIGNyZWF0ZSBtb2RlIDEw
-MDY0NCBsaWJzZWF0L2JhY2tlbmQvbm9vcC5jCj4gPiAtCj4gPiAtZGlmZiAtLWdpdCBhL2luY2x1
-ZGUvbGlic2VhdC5oIGIvaW5jbHVkZS9saWJzZWF0LmgKPiA+IC1pbmRleCA1Mzc1Y2Q2Li44MjA5
-OGVhIDEwMDY0NAo+ID4gLS0tLSBhL2luY2x1ZGUvbGlic2VhdC5oCj4gPiAtKysrIGIvaW5jbHVk
-ZS9saWJzZWF0LmgKPiA+IC1AQCAtMSw2ICsxLDggQEAKPiA+IC0gI2lmbmRlZiBfTElCU0VBVF9I
-Cj4gPiAtICNkZWZpbmUgX0xJQlNFQVRfSAo+ID4gLQo+ID4gLSsjaW5jbHVkZSA8c3RkYXJnLmg+
-Cj4gPiAtKwo+ID4gLSAvKgo+ID4gLSAgKiBBbiBvcGFxdWUgc3RydWN0IGNvbnRhaW5pbmcgYW4g
-b3BlbmVkIHNlYXQsIGNyZWF0ZWQgYnkgbGlic2VhdF9vcGVuX3NlYXQgYW5kCj4gPiAtICAqIGRl
-c3Ryb3llZCBieSBsaWJzZWF0X2Nsb3NlX3NlYXQuCj4gPiAtZGlmZiAtLWdpdCBhL2xpYnNlYXQv
-YmFja2VuZC9ub29wLmMgYi9saWJzZWF0L2JhY2tlbmQvbm9vcC5jCj4gPiAtbmV3IGZpbGUgbW9k
-ZSAxMDA2NDQKPiA+IC1pbmRleCAwMDAwMDAwLi43MWQwMjI0Cj4gPiAtLS0tIC9kZXYvbnVsbAo+
-ID4gLSsrKyBiL2xpYnNlYXQvYmFja2VuZC9ub29wLmMKPiA+IC1AQCAtMCwwICsxLDEzNSBAQAo+
-ID4gLSsjaW5jbHVkZSA8YXNzZXJ0Lmg+Cj4gPiAtKyNpbmNsdWRlIDxlcnJuby5oPgo+ID4gLSsj
-aW5jbHVkZSA8ZmNudGwuaD4KPiA+IC0rI2luY2x1ZGUgPHBvbGwuaD4KPiA+IC0rI2luY2x1ZGUg
-PHN0ZGJvb2wuaD4KPiA+IC0rI2luY2x1ZGUgPHN0ZGxpYi5oPgo+ID4gLSsjaW5jbHVkZSA8c3Ry
-aW5nLmg+Cj4gPiAtKyNpbmNsdWRlIDxzeXMvc29ja2V0Lmg+Cj4gPiAtKyNpbmNsdWRlIDx1bmlz
-dGQuaD4KPiA+IC0rCj4gPiAtKyNpbmNsdWRlICJiYWNrZW5kLmgiCj4gPiAtKyNpbmNsdWRlICJs
-b2cuaCIKPiA+IC0rCj4gPiAtK3N0cnVjdCBiYWNrZW5kX25vb3Agewo+ID4gLSsJc3RydWN0IGxp
-YnNlYXQgYmFzZTsKPiA+IC0rCXN0cnVjdCBsaWJzZWF0X3NlYXRfbGlzdGVuZXIgKnNlYXRfbGlz
-dGVuZXI7Cj4gPiAtKwl2b2lkICpzZWF0X2xpc3RlbmVyX2RhdGE7Cj4gPiAtKwo+ID4gLSsJYm9v
-bCBpbml0aWFsX3NldHVwOwo+ID4gLSsJaW50IHNvY2tldHNbMl07Cj4gPiAtK307Cj4gPiAtKwo+
-ID4gLStleHRlcm4gY29uc3Qgc3RydWN0IHNlYXRfaW1wbCBub29wX2ltcGw7Cj4gPiAtKwo+ID4g
-LStzdGF0aWMgc3RydWN0IGJhY2tlbmRfbm9vcCAqYmFja2VuZF9ub29wX2Zyb21fbGlic2VhdF9i
-YWNrZW5kKHN0cnVjdCBsaWJzZWF0ICpiYXNlKSB7Cj4gPiAtKwlhc3NlcnQoYmFzZS0+aW1wbCA9
-PSAmbm9vcF9pbXBsKTsKPiA+IC0rCXJldHVybiAoc3RydWN0IGJhY2tlbmRfbm9vcCAqKWJhc2U7
-Cj4gPiAtK30KPiA+IC0rCj4gPiAtK3N0YXRpYyB2b2lkIGRlc3Ryb3koc3RydWN0IGJhY2tlbmRf
-bm9vcCAqYmFja2VuZCkgewo+ID4gLSsJY2xvc2UoYmFja2VuZC0+c29ja2V0c1swXSk7Cj4gPiAt
-KwljbG9zZShiYWNrZW5kLT5zb2NrZXRzWzFdKTsKPiA+IC0rCWZyZWUoYmFja2VuZCk7Cj4gPiAt
-K30KPiA+IC0rCj4gPiAtK3N0YXRpYyBpbnQgY2xvc2Vfc2VhdChzdHJ1Y3QgbGlic2VhdCAqYmFz
-ZSkgewo+ID4gLSsJc3RydWN0IGJhY2tlbmRfbm9vcCAqYmFja2VuZCA9IGJhY2tlbmRfbm9vcF9m
-cm9tX2xpYnNlYXRfYmFja2VuZChiYXNlKTsKPiA+IC0rCWRlc3Ryb3koYmFja2VuZCk7Cj4gPiAt
-KwlyZXR1cm4gMDsKPiA+IC0rfQo+ID4gLSsKPiA+IC0rc3RhdGljIGludCBkaXNhYmxlX3NlYXQo
-c3RydWN0IGxpYnNlYXQgKmJhc2UpIHsKPiA+IC0rCSh2b2lkKWJhc2U7Cj4gPiAtKwlyZXR1cm4g
-MDsKPiA+IC0rfQo+ID4gLSsKPiA+IC0rc3RhdGljIGNvbnN0IGNoYXIgKnNlYXRfbmFtZShzdHJ1
-Y3QgbGlic2VhdCAqYmFzZSkgewo+ID4gLSsJKHZvaWQpYmFzZTsKPiA+IC0rCXJldHVybiAibm9v
-cCI7Cj4gPiAtK30KPiA+IC0rCj4gPiAtK3N0YXRpYyBpbnQgb3Blbl9kZXZpY2Uoc3RydWN0IGxp
-YnNlYXQgKmJhc2UsIGNvbnN0IGNoYXIgKnBhdGgsIGludCAqZmQpIHsKPiA+IC0rCSh2b2lkKWJh
-c2U7Cj4gPiAtKwo+ID4gLSsJaW50IHRtcGZkID0gb3BlbihwYXRoLCBPX1JEV1IgfCBPX0NMT0VY
-RUMpOwo+ID4gLSsJaWYgKHRtcGZkIDwgMCkgewo+ID4gLSsJCWxvZ19lcnJvcmYoIkZhaWxlZCB0
-byBvcGVuIGRldmljZTogJXMiLCBzdHJlcnJvcihlcnJubykpOwo+ID4gLSsJCXJldHVybiAtMTsK
-PiA+IC0rCX0KPiA+IC0rCj4gPiAtKwkqZmQgPSB0bXBmZDsKPiA+IC0rCXJldHVybiB0bXBmZDsK
-PiA+IC0rfQo+ID4gLSsKPiA+IC0rc3RhdGljIGludCBjbG9zZV9kZXZpY2Uoc3RydWN0IGxpYnNl
-YXQgKmJhc2UsIGludCBkZXZpY2VfaWQpIHsKPiA+IC0rCSh2b2lkKWJhc2U7Cj4gPiAtKwkodm9p
-ZClkZXZpY2VfaWQ7Cj4gPiAtKwlyZXR1cm4gMDsKPiA+IC0rfQo+ID4gLSsKPiA+IC0rc3RhdGlj
-IGludCBzd2l0Y2hfc2Vzc2lvbihzdHJ1Y3QgbGlic2VhdCAqYmFzZSwgaW50IHMpIHsKPiA+IC0r
-CSh2b2lkKWJhc2U7Cj4gPiAtKwkodm9pZClzOwo+ID4gLSsJbG9nX2Vycm9yZigiTm8tb3AgYmFj
-a2VuZCBjYW5ub3Qgc3dpdGNoIHRvIHNlc3Npb24gJWQiLCBzKTsKPiA+IC0rCXJldHVybiAtMTsK
-PiA+IC0rfQo+ID4gLSsKPiA+IC0rc3RhdGljIGludCBnZXRfZmQoc3RydWN0IGxpYnNlYXQgKmJh
-c2UpIHsKPiA+IC0rCXN0cnVjdCBiYWNrZW5kX25vb3AgKmJhY2tlbmQgPSBiYWNrZW5kX25vb3Bf
-ZnJvbV9saWJzZWF0X2JhY2tlbmQoYmFzZSk7Cj4gPiAtKwlyZXR1cm4gYmFja2VuZC0+c29ja2V0
-c1swXTsKPiA+IC0rfQo+ID4gLSsKPiA+IC0rc3RhdGljIGludCBkaXNwYXRjaF9iYWNrZ3JvdW5k
-KHN0cnVjdCBsaWJzZWF0ICpiYXNlLCBpbnQgdGltZW91dCkgewo+ID4gLSsJc3RydWN0IGJhY2tl
-bmRfbm9vcCAqYmFja2VuZCA9IGJhY2tlbmRfbm9vcF9mcm9tX2xpYnNlYXRfYmFja2VuZChiYXNl
-KTsKPiA+IC0rCj4gPiAtKwlpZiAoYmFja2VuZC0+aW5pdGlhbF9zZXR1cCkgewo+ID4gLSsJCWJh
-Y2tlbmQtPmluaXRpYWxfc2V0dXAgPSBmYWxzZTsKPiA+IC0rCQliYWNrZW5kLT5zZWF0X2xpc3Rl
-bmVyLT5lbmFibGVfc2VhdCgmYmFja2VuZC0+YmFzZSwgYmFja2VuZC0+c2VhdF9saXN0ZW5lcl9k
-YXRhKTsKPiA+IC0rCX0KPiA+IC0rCj4gPiAtKwlzdHJ1Y3QgcG9sbGZkIGZkID0gewo+ID4gLSsJ
-CS5mZCA9IGJhY2tlbmQtPnNvY2tldHNbMF0sCj4gPiAtKwkJLmV2ZW50cyA9IFBPTExJTiwKPiA+
-IC0rCX07Cj4gPiAtKwlpZiAocG9sbCgmZmQsIDEsIHRpbWVvdXQpIDwgMCkgewo+ID4gLSsJCWlm
-IChlcnJubyA9PSBFQUdBSU4gfHwgZXJybm8gPT0gRUlOVFIpIHsKPiA+IC0rCQkJcmV0dXJuIDA7
-Cj4gPiAtKwkJfSBlbHNlIHsKPiA+IC0rCQkJcmV0dXJuIC0xOwo+ID4gLSsJCX0KPiA+IC0rCX0K
-PiA+IC0rCj4gPiAtKwlyZXR1cm4gMDsKPiA+IC0rfQo+ID4gLSsKPiA+IC0rc3RhdGljIHN0cnVj
-dCBsaWJzZWF0ICpub29wX29wZW5fc2VhdChzdHJ1Y3QgbGlic2VhdF9zZWF0X2xpc3RlbmVyICps
-aXN0ZW5lciwgdm9pZCAqZGF0YSkgewo+ID4gLSsJc3RydWN0IGJhY2tlbmRfbm9vcCAqYmFja2Vu
-ZCA9IGNhbGxvYygxLCBzaXplb2Yoc3RydWN0IGJhY2tlbmRfbm9vcCkpOwo+ID4gLSsJaWYgKGJh
-Y2tlbmQgPT0gTlVMTCkgewo+ID4gLSsJCXJldHVybiBOVUxMOwo+ID4gLSsJfQo+ID4gLSsKPiA+
-IC0rCWlmIChzb2NrZXRwYWlyKEFGX1VOSVgsIFNPQ0tfU1RSRUFNLCAwLCBiYWNrZW5kLT5zb2Nr
-ZXRzKSAhPSAwKSB7Cj4gPiAtKwkJbG9nX2Vycm9yZigic29ja2V0cGFpcigpIGZhaWxlZDogJXMi
-LCBzdHJlcnJvcihlcnJubykpOwo+ID4gLSsJCWZyZWUoYmFja2VuZCk7Cj4gPiAtKwkJcmV0dXJu
-IE5VTEw7Cj4gPiAtKwl9Cj4gPiAtKwo+ID4gLSsJYmFja2VuZC0+c2VhdF9saXN0ZW5lciA9IGxp
-c3RlbmVyOwo+ID4gLSsJYmFja2VuZC0+c2VhdF9saXN0ZW5lcl9kYXRhID0gZGF0YTsKPiA+IC0r
-CWJhY2tlbmQtPmJhc2UuaW1wbCA9ICZub29wX2ltcGw7Cj4gPiAtKwo+ID4gLSsJcmV0dXJuICZi
-YWNrZW5kLT5iYXNlOwo+ID4gLSt9Cj4gPiAtKwo+ID4gLStjb25zdCBzdHJ1Y3Qgc2VhdF9pbXBs
-IG5vb3BfaW1wbCA9IHsKPiA+IC0rCS5vcGVuX3NlYXQgPSBub29wX29wZW5fc2VhdCwKPiA+IC0r
-CS5kaXNhYmxlX3NlYXQgPSBkaXNhYmxlX3NlYXQsCj4gPiAtKwkuY2xvc2Vfc2VhdCA9IGNsb3Nl
-X3NlYXQsCj4gPiAtKwkuc2VhdF9uYW1lID0gc2VhdF9uYW1lLAo+ID4gLSsJLm9wZW5fZGV2aWNl
-ID0gb3Blbl9kZXZpY2UsCj4gPiAtKwkuY2xvc2VfZGV2aWNlID0gY2xvc2VfZGV2aWNlLAo+ID4g
-LSsJLnN3aXRjaF9zZXNzaW9uID0gc3dpdGNoX3Nlc3Npb24sCj4gPiAtKwkuZ2V0X2ZkID0gZ2V0
-X2ZkLAo+ID4gLSsJLmRpc3BhdGNoID0gZGlzcGF0Y2hfYmFja2dyb3VuZCwKPiA+IC0rfTsKPiA+
-IC1kaWZmIC0tZ2l0IGEvbGlic2VhdC9saWJzZWF0LmMgYi9saWJzZWF0L2xpYnNlYXQuYwo+ID4g
-LWluZGV4IGIxZThiYjIuLmE3ZTA3OWMgMTAwNjQ0Cj4gPiAtLS0tIGEvbGlic2VhdC9saWJzZWF0
-LmMKPiA+IC0rKysgYi9saWJzZWF0L2xpYnNlYXQuYwo+ID4gLUBAIC0xMyw2ICsxMyw3IEBACj4g
-PiAtIGV4dGVybiBjb25zdCBzdHJ1Y3Qgc2VhdF9pbXBsIHNlYXRkX2ltcGw7Cj4gPiAtIGV4dGVy
-biBjb25zdCBzdHJ1Y3Qgc2VhdF9pbXBsIGxvZ2luZF9pbXBsOwo+ID4gLSBleHRlcm4gY29uc3Qg
-c3RydWN0IHNlYXRfaW1wbCBidWlsdGluX2ltcGw7Cj4gPiAtK2V4dGVybiBjb25zdCBzdHJ1Y3Qg
-c2VhdF9pbXBsIG5vb3BfaW1wbDsKPiA+IC0KPiA+IC0gc3RhdGljIGNvbnN0IHN0cnVjdCBuYW1l
-ZF9iYWNrZW5kIGltcGxzW10gPSB7Cj4gPiAtICNpZmRlZiBTRUFURF9FTkFCTEVECj4gPiAtQEAg
-LTI0LDYgKzI1LDcgQEAgc3RhdGljIGNvbnN0IHN0cnVjdCBuYW1lZF9iYWNrZW5kIGltcGxzW10g
-PSB7Cj4gPiAtICNpZmRlZiBCVUlMVElOX0VOQUJMRUQKPiA+IC0gCXsiYnVpbHRpbiIsICZidWls
-dGluX2ltcGx9LAo+ID4gLSAjZW5kaWYKPiA+IC0rCXsibm9vcCIsICZub29wX2ltcGx9LAo+ID4g
-LSAJe05VTEwsIE5VTEx9LAo+ID4gLSB9Owo+ID4gLQo+ID4gLUBAIC02Miw2ICs2NCw5IEBAIHN0
-cnVjdCBsaWJzZWF0ICpsaWJzZWF0X29wZW5fc2VhdChzdHJ1Y3QgbGlic2VhdF9zZWF0X2xpc3Rl
-bmVyICpsaXN0ZW5lciwgdm9pZCAqCj4gPiAtCj4gPiAtIAlzdHJ1Y3QgbGlic2VhdCAqYmFja2Vu
-ZCA9IE5VTEw7Cj4gPiAtIAlmb3IgKGNvbnN0IHN0cnVjdCBuYW1lZF9iYWNrZW5kICppdGVyID0g
-aW1wbHM7IGl0ZXItPmJhY2tlbmQgIT0gTlVMTDsgaXRlcisrKSB7Cj4gPiAtKwkJaWYgKGl0ZXIt
-PmJhY2tlbmQgPT0gJm5vb3BfaW1wbCkgewo+ID4gLSsJCQljb250aW51ZTsKPiA+IC0rCQl9Cj4g
-PiAtIAkJYmFja2VuZCA9IGl0ZXItPmJhY2tlbmQtPm9wZW5fc2VhdChsaXN0ZW5lciwgZGF0YSk7
-Cj4gPiAtIAkJaWYgKGJhY2tlbmQgIT0gTlVMTCkgewo+ID4gLSAJCQlsb2dfaW5mb2YoIlNlYXQg
-b3BlbmVkIHdpdGggYmFja2VuZCAnJXMnIiwgaXRlci0+bmFtZSk7Cj4gPiAtZGlmZiAtLWdpdCBh
-L21lc29uLmJ1aWxkIGIvbWVzb24uYnVpbGQKPiA+IC1pbmRleCBmNDFiNjIxLi5jMzgwMGFlIDEw
-MDY0NAo+ID4gLS0tLSBhL21lc29uLmJ1aWxkCj4gPiAtKysrIGIvbWVzb24uYnVpbGQKPiA+IC1A
-QCAtMTQ1LDcgKzE0NSw3IEBAIHN5bWJvbHNfZmlsZSA9ICdsaWJzZWF0L2xpYnNlYXQuc3ltcycK
-PiA+IC0gc3ltYm9sc19mbGFnID0gJy1XbCwtLXZlcnNpb24tc2NyaXB0LEAwQC9AMUAnLmZvcm1h
-dChtZXNvbi5jdXJyZW50X3NvdXJjZV9kaXIoKSwgc3ltYm9sc19maWxlKQo+ID4gLSBsaWIgPSBs
-aWJyYXJ5KAo+ID4gLSAJJ3NlYXQnLCAjIFRoaXMgcmVzdWx0cyBpbiB0aGUgbGlicmFyeSBiZWlu
-ZyBjYWxsZWQgJ2xpYnNlYXQnCj4gPiAtLQlbICdsaWJzZWF0L2xpYnNlYXQuYycgXSwKPiA+IC0r
-CVsgJ2xpYnNlYXQvbGlic2VhdC5jJywgJ2xpYnNlYXQvYmFja2VuZC9ub29wLmMnIF0sCj4gPiAt
-IAlzb3ZlcnNpb246IGxpYnNlYXRfc292ZXJzaW9uLAo+ID4gLSAJbGlua193aXRoOiBwcml2YXRl
-X2xpYiwKPiA+IC0gCWluY2x1ZGVfZGlyZWN0b3JpZXM6IFtpbmNsdWRlX2RpcmVjdG9yaWVzKCcu
-JywgJ2luY2x1ZGUnKV0sCj4gPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9zZWF0ZC8wMDAzLW1lc29u
-LmJ1aWxkLWZpeC1idWlsZC13aXRoLWdjYy03LnBhdGNoIGIvcGFja2FnZS9zZWF0ZC8wMDAzLW1l
-c29uLmJ1aWxkLWZpeC1idWlsZC13aXRoLWdjYy03LnBhdGNoCj4gPiBkZWxldGVkIGZpbGUgbW9k
-ZSAxMDA2NDQKPiA+IGluZGV4IDBlOWY0MzdjYzMuLjAwMDAwMDAwMDAKPiA+IC0tLSBhL3BhY2th
-Z2Uvc2VhdGQvMDAwMy1tZXNvbi5idWlsZC1maXgtYnVpbGQtd2l0aC1nY2MtNy5wYXRjaAo+ID4g
-KysrIC9kZXYvbnVsbAo+ID4gQEAgLTEsNDggKzAsMCBAQAo+ID4gLUZyb20gMGIzMmMzMzk3OGZi
-ZTg3NzJkZjZkMTg1YzliOWQ2NDZjNDQyZGM1ZCBNb24gU2VwIDE3IDAwOjAwOjAwIDIwMDEKPiA+
-IC1Gcm9tOiBGYWJyaWNlIEZvbnRhaW5lIDxmb250YWluZS5mYWJyaWNlQGdtYWlsLmNvbT4KPiA+
-IC1EYXRlOiBTdW4sIDggQXVnIDIwMjEgMTk6MDA6MzUgKzAyMDAKPiA+IC1TdWJqZWN0OiBbUEFU
-Q0hdIG1lc29uLmJ1aWxkOiBmaXggYnVpbGQgd2l0aCBnY2MgPCA3Cj4gPiAtCj4gPiAtVGVzdCBp
-ZiAtV2ltcGxpY2l0LWZhbGx0aHJvdWdoIGlzIGF2YWlsYWJsZSBiZWZvcmUgdXNpbmcgaXQgYXMg
-aXQgaGFzCj4gPiAtYmVlbiBhZGRlZCBvbmx5IHNpbmNlIGdjYyA3LjEgYW5kCj4gPiAtaHR0cHM6
-Ly9naXRodWIuY29tL2djYy1taXJyb3IvZ2NjL2NvbW1pdC84MWZlYTQyNmRhOGM0Njg3YmIzMmU2
-ODk0ZGMyNmYwMGFlMjExODIyCj4gPiAtYW5kIHNvIGl0IHdpbGwgcmFpc2UgdGhlIGZvbGxvd2lu
-ZyBidWlsZCBmYWlsdXJlIHdpdGggZ2NjIDwgNzoKPiA+IC0KPiA+IC1hcm0tbm9uZS1saW51eC1n
-bnVlYWJpLWdjYzogZXJyb3I6IHVucmVjb2duaXplZCBjb21tYW5kIGxpbmUgb3B0aW9uICctV2lt
-cGxpY2l0LWZhbGx0aHJvdWdoJwo+ID4gLQo+ID4gLUZpeGVzOgo+ID4gLSAtIGh0dHA6Ly9hdXRv
-YnVpbGQuYnVpbGRyb290Lm9yZy9yZXN1bHRzLzBlZTY4MTZhN2NjZWViZGFmZDA3NjEyNjc3YTU5
-NGJkZjY4ZTA3OTAKPiA+IC0KPiA+IC1TaWduZWQtb2ZmLWJ5OiBGYWJyaWNlIEZvbnRhaW5lIDxm
-b250YWluZS5mYWJyaWNlQGdtYWlsLmNvbT4KPiA+IC1bVXBzdHJlYW0gc3RhdHVzOiBodHRwczov
-L2dpdGh1Yi5jb20va2VubnlsZXZpbnNlbi9zZWF0ZC9wdWxsLzFdCj4gPiAtLS0tCj4gPiAtIG1l
-c29uLmJ1aWxkIHwgNiArKysrKy0KPiA+IC0gMSBmaWxlIGNoYW5nZWQsIDUgaW5zZXJ0aW9ucygr
-KSwgMSBkZWxldGlvbigtKQo+ID4gLQo+ID4gLWRpZmYgLS1naXQgYS9tZXNvbi5idWlsZCBiL21l
-c29uLmJ1aWxkCj4gPiAtaW5kZXggMTEzMWI0Yi4uYzM2NmE1OSAxMDA2NDQKPiA+IC0tLS0gYS9t
-ZXNvbi5idWlsZAo+ID4gLSsrKyBiL21lc29uLmJ1aWxkCj4gPiAtQEAgLTMxLDcgKzMxLDYgQEAg
-YWRkX3Byb2plY3RfYXJndW1lbnRzKAo+ID4gLSAJCSctV29sZC1zdHlsZS1kZWZpbml0aW9uJywg
-IyBub3AKPiA+IC0gCQknLVdwb2ludGVyLWFyaXRoJywKPiA+IC0gCQknLVdzdHJpY3QtcHJvdG90
-eXBlcycsCj4gPiAtLQkJJy1XaW1wbGljaXQtZmFsbHRocm91Z2gnLAo+ID4gLSAJCSctV21pc3Np
-bmctcHJvdG90eXBlcycsCj4gPiAtIAkJJy1Xbm8tdW5rbm93bi13YXJuaW5nLW9wdGlvbicsCj4g
-PiAtIAkJJy1Xbm8tdW51c2VkLWNvbW1hbmQtbGluZS1hcmd1bWVudCcsCj4gPiAtQEAgLTQ1LDYg
-KzQ0LDExIEBAIGFkZF9wcm9qZWN0X2FyZ3VtZW50cygKPiA+IC0gCWxhbmd1YWdlOiAnYycsCj4g
-PiAtICkKPiA+IC0KPiA+IC0rY2MgPSBtZXNvbi5nZXRfY29tcGlsZXIoJ2MnKQo+ID4gLStpZiBj
-Yy5oYXNfYXJndW1lbnQoJy1XaW1wbGljaXQtZmFsbHRocm91Z2gnKQo+ID4gLSsJYWRkX3Byb2pl
-Y3RfYXJndW1lbnRzKCctV2ltcGxpY2l0LWZhbGx0aHJvdWdoJyAsIGxhbmd1YWdlIDogJ2MnKQo+
-ID4gLStlbmRpZgo+ID4gLSsKPiA+IC0gaWYgWydkZWJ1Z29wdGltaXplZCcsICdyZWxlYXNlJywg
-J21pbnNpemUnXS5jb250YWlucyhnZXRfb3B0aW9uKCdidWlsZHR5cGUnKSkKPiA+IC0gCWFkZF9w
-cm9qZWN0X2FyZ3VtZW50cygnLURfRk9SVElGWV9TT1VSQ0U9MicsIGxhbmd1YWdlOiAnYycpCj4g
-PiAtIGVuZGlmCj4gPiAtLS0KPiA+IC0yLjMwLjIKPiA+IC0KPiA+IGRpZmYgLS1naXQgYS9wYWNr
-YWdlL3NlYXRkL3NlYXRkLmhhc2ggYi9wYWNrYWdlL3NlYXRkL3NlYXRkLmhhc2gKPiA+IGluZGV4
-IDM0MjA3OWU5NTguLjJhZTAzNDQzODIgMTAwNjQ0Cj4gPiAtLS0gYS9wYWNrYWdlL3NlYXRkL3Nl
-YXRkLmhhc2gKPiA+ICsrKyBiL3BhY2thZ2Uvc2VhdGQvc2VhdGQuaGFzaAo+ID4gQEAgLTEsNSAr
-MSw1IEBACj4gPiAgIyBDYWxjdWxhdGVkIGxvY2FsbHkKPiA+IC1zaGEyNTYgIDI3NGI1NjMyNGZj
-ODFjYTYwMDJiYzFjZGQzODc2NjhkZWUzNGE2ZTEwNjNlNWYzODk2ODA1YzM3NzA5NDg5ODggIDAu
-NS4wLnRhci5nego+ID4gK3NoYTI1NiAgZjhmOGQyZDJhNmM1ZjA4NzE0YjJhNzg0NTk1ZTc4MWEy
-NTdkZjE1ZDYwODZlYzRlNzM3MDEyMTdlZTVlYzllOCAgMC42LjEudGFyLmd6Cj4gPgo+ID4gICMg
-TGljZW5zZSBmaWxlcwo+ID4gIHNoYTI1NiAgMjgyYTQ5NDgwM2Q2NjY2MTZiZDcyNmUwMjc5NjM2
-YjVmNmEzMTM4N2FlMTlhNzA3NDU5MDc0MDUwZjI2MDBkMyAgTElDRU5TRQo+ID4gZGlmZiAtLWdp
-dCBhL3BhY2thZ2Uvc2VhdGQvc2VhdGQubWsgYi9wYWNrYWdlL3NlYXRkL3NlYXRkLm1rCj4gPiBp
-bmRleCBiZjU4MmYwZDFkLi4xMDBlMTM0MTI0IDEwMDY0NAo+ID4gLS0tIGEvcGFja2FnZS9zZWF0
-ZC9zZWF0ZC5tawo+ID4gKysrIGIvcGFja2FnZS9zZWF0ZC9zZWF0ZC5tawo+ID4gQEAgLTQsNyAr
-NCw3IEBACj4gPiAgIwo+ID4gICMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCj4gPgo+ID4gLVNFQVRE
-X1ZFUlNJT04gPSAwLjUuMAo+ID4gK1NFQVREX1ZFUlNJT04gPSAwLjYuMQo+ID4gIFNFQVREX1NP
-VVJDRSA9ICQoU0VBVERfVkVSU0lPTikudGFyLmd6Cj4gPiAgU0VBVERfU0lURSA9IGh0dHBzOi8v
-Z2l0LnNyLmh0L35rZW5ueWxldmluc2VuL3NlYXRkL2FyY2hpdmUKPiA+ICBTRUFURF9MSUNFTlNF
-ID0gTUlUCj4gPiBAQCAtMTcsMjAgKzE3LDIwIEBAIFNFQVREX0NPTkZfT1BUUyArPSBcCj4gPiAg
-CS1Ed2Vycm9yPWZhbHNlCj4gPgo+ID4gIGlmZXEgKCQoQlIyX1BBQ0tBR0VfU1lTVEVNRF9MT0dJ
-TkQpLHkpCj4gPiAtU0VBVERfQ09ORl9PUFRTICs9IC1EbG9naW5kPWVuYWJsZWQKPiA+ICtTRUFU
-RF9DT05GX09QVFMgKz0gLURsaWJzZWF0LWxvZ2luZD1lbmFibGVkCj4gPiAgU0VBVERfREVQRU5E
-RU5DSUVTICs9IHN5c3RlbWQKPiA+ICBlbHNlCj4gPiAtU0VBVERfQ09ORl9PUFRTICs9IC1EbG9n
-aW5kPWRpc2FibGVkCj4gPiArU0VBVERfQ09ORl9PUFRTICs9IC1EbGlic2VhdC1sb2dpbmQ9ZGlz
-YWJsZWQKPiA+ICBlbmRpZgo+ID4KPiA+ICBpZmVxICgkKEJSMl9QQUNLQUdFX1NFQVREX0JVSUxU
-SU4pLHkpCj4gPiAtU0VBVERfQ09ORl9PUFRTICs9IC1EYnVpbHRpbj1lbmFibGVkCj4gPiArU0VB
-VERfQ09ORl9PUFRTICs9IC1EbGlic2VhdC1idWlsdGluPWVuYWJsZWQKPiA+ICBlbHNlCj4gPiAt
-U0VBVERfQ09ORl9PUFRTICs9IC1EYnVpbHRpbj1kaXNhYmxlZAo+ID4gK1NFQVREX0NPTkZfT1BU
-UyArPSAtRGxpYnNlYXQtYnVpbHRpbj1kaXNhYmxlZAo+ID4gIGVuZGlmCj4gPgo+ID4gIGlmZXEg
-KCQoQlIyX1BBQ0tBR0VfU0VBVERfREFFTU9OKSx5KQo+ID4gLVNFQVREX0NPTkZfT1BUUyArPSAt
-RHNlYXRkPWVuYWJsZWQgLURzZXJ2ZXI9ZW5hYmxlZAo+ID4gK1NFQVREX0NPTkZfT1BUUyArPSAt
-RGxpYnNlYXQtc2VhdGQ9ZW5hYmxlZCAtRHNlcnZlcj1lbmFibGVkCj4gPgo+ID4gIGRlZmluZSBT
-RUFURF9VU0VSUwo+ID4gIAktIC0gdmlkZW8gLTEgLSAtIC0gLSAtCj4gPiBAQCAtNDcsNyArNDcs
-NyBAQCBkZWZpbmUgU0VBVERfSU5TVEFMTF9JTklUX1NZU1RFTUQKPiA+ICBlbmRlZgo+ID4KPiA+
-ICBlbHNlCj4gPiAtU0VBVERfQ09ORl9PUFRTICs9IC1Ec2VhdGQ9ZGlzYWJsZWQgLURzZXJ2ZXI9
-ZGlzYWJsZWQKPiA+ICtTRUFURF9DT05GX09QVFMgKz0gLURsaWJzZWF0LXNlYXRkPWRpc2FibGVk
-IC1Ec2VydmVyPWRpc2FibGVkCj4gPiAgZW5kaWYKPiA+Cj4gPiAgJChldmFsICQobWVzb24tcGFj
-a2FnZSkpCj4gCgpDaGVlcnMsCuKAlEFkcmnDoW4K
-
---1DrOAB1LsYiLtZy9
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRao7wzT9fjNp58d7KRxVnb5MkSOwUCYUEitAAKCRCRxVnb5MkS
-OyGBAJ9psoSRjsJ8Zk4fPsL43sPj6aAtGQCfWVSigTGegHC67LDSss+Exn7INdU=
-=zoBy
------END PGP SIGNATURE-----
-
---1DrOAB1LsYiLtZy9--
-
---===============7441405189900047819==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/package/gstreamer1/Config.in b/package/gstreamer1/Config.in
+index 4a8111333e..a2a15397e9 100644
+--- a/package/gstreamer1/Config.in
++++ b/package/gstreamer1/Config.in
+@@ -17,5 +17,6 @@ source "package/gstreamer1/gst1-rtsp-server/Config.in"
+ source "package/gstreamer1/gst1-shark/Config.in"
+ source "package/gstreamer1/gst1-vaapi/Config.in"
+ source "package/gstreamer1/gst-omx/Config.in"
++source "package/gstreamer1/gstd/Config.in"
+ source "package/gstreamer1/gstreamer1-editing-services/Config.in"
+ endif
+diff --git a/package/gstreamer1/gstd/0001-Fix-gstd_chmod.sh-DESTDIR-path.patch b/package/gstreamer1/gstd/0001-Fix-gstd_chmod.sh-DESTDIR-path.patch
+new file mode 100644
+index 0000000000..79a65ffbdc
+--- /dev/null
++++ b/package/gstreamer1/gstd/0001-Fix-gstd_chmod.sh-DESTDIR-path.patch
+@@ -0,0 +1,27 @@
++From f1c953b9077619a83ab21c24dc343c7e21cd220d Mon Sep 17 00:00:00 2001
++From: James Hilliard <james.hilliard1@gmail.com>
++Date: Tue, 14 Sep 2021 01:46:25 -0600
++Subject: [PATCH] Fix gstd_chmod.sh DESTDIR path.
++
++This should fix the chmod path when cross compiling.
++
++Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
++[Upstream status:
++https://github.com/RidgeRun/gstd-1.x/pull/247]
++---
++ gstd/gstd_chmod.sh | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/gstd/gstd_chmod.sh b/gstd/gstd_chmod.sh
++index 8e58bce..fa7fa80 100755
++--- a/gstd/gstd_chmod.sh
+++++ b/gstd/gstd_chmod.sh
++@@ -3,4 +3,4 @@
++ # $1 mode
++ # $2 file
++ 
++-chmod $1 $2
+++chmod $1 ${DESTDIR}/$2
++-- 
++2.25.1
++
+diff --git a/package/gstreamer1/gstd/0002-Don-t-require-gstreamer-check-1.0-unless-tests-are-e.patch b/package/gstreamer1/gstd/0002-Don-t-require-gstreamer-check-1.0-unless-tests-are-e.patch
+new file mode 100644
+index 0000000000..495fbfc3fa
+--- /dev/null
++++ b/package/gstreamer1/gstd/0002-Don-t-require-gstreamer-check-1.0-unless-tests-are-e.patch
+@@ -0,0 +1,33 @@
++From 586bb97459e72da30bd9991c228b6b8e9251c68b Mon Sep 17 00:00:00 2001
++From: James Hilliard <james.hilliard1@gmail.com>
++Date: Tue, 14 Sep 2021 01:49:49 -0600
++Subject: [PATCH] Don't require gstreamer-check-1.0 unless tests are enabled.
++
++Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
++[Upstream status:
++https://github.com/RidgeRun/gstd-1.x/pull/248]
++---
++ meson.build | 4 +++-
++ 1 file changed, 3 insertions(+), 1 deletion(-)
++
++diff --git a/meson.build b/meson.build
++index 1d9ce9d..76990a0 100644
++--- a/meson.build
+++++ b/meson.build
++@@ -22,10 +22,12 @@ gio_unix_dep  = dependency('gio-unix-2.0',       version : '>=2.44.1')
++ json_glib_dep = dependency('json-glib-1.0',      version : '>=0.16.2')
++ libd_dep      = dependency('libdaemon',          version : '>=0.14')
++ jansson_dep   = dependency('jansson',            version : '>=2.7')
++-gst_check_dep = dependency('gstreamer-check-1.0',version : '>=1.0.5')
++ thread_dep    = dependency('threads')
++ libsoup_dep = dependency('libsoup-2.4',		       version : '>=2.4')
++ 
+++gst_check_required = get_option('enable-tests').enabled()
+++gst_check_dep = dependency('gstreamer-check-1.0', required : gst_check_required, version : '>=1.0.5')
+++
++ systemd_required = get_option('enable-systemd').enabled()
++ systemd_dep = dependency('systemd', required : systemd_required, version : '>=232')
++ 
++-- 
++2.25.1
++
+diff --git a/package/gstreamer1/gstd/0003-Use-relative-symlink-for-gstd-gst-client-exe.patch b/package/gstreamer1/gstd/0003-Use-relative-symlink-for-gstd-gst-client-exe.patch
+new file mode 100644
+index 0000000000..18498a90e9
+--- /dev/null
++++ b/package/gstreamer1/gstd/0003-Use-relative-symlink-for-gstd-gst-client-exe.patch
+@@ -0,0 +1,70 @@
++From 325699be7119312d8a910e624e35c6fb089404c8 Mon Sep 17 00:00:00 2001
++From: James Hilliard <james.hilliard1@gmail.com>
++Date: Tue, 14 Sep 2021 02:49:10 -0600
++Subject: [PATCH] Use relative symlink for gstd/gst-client exe.
++
++This should fix the symlink path when cross compiling.
++
++Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
++[Upstream status:
++https://github.com/RidgeRun/gstd-1.x/pull/249]
++---
++ gst_client/gst_client_symbolic_link.sh | 2 +-
++ gst_client/meson.build                 | 4 ++--
++ gstd/gstd_symbolic_link.sh             | 2 +-
++ gstd/meson.build                       | 2 +-
++ 4 files changed, 5 insertions(+), 5 deletions(-)
++
++diff --git a/gst_client/gst_client_symbolic_link.sh b/gst_client/gst_client_symbolic_link.sh
++index d8d7617..9e85694 100755
++--- a/gst_client/gst_client_symbolic_link.sh
+++++ b/gst_client/gst_client_symbolic_link.sh
++@@ -4,4 +4,4 @@
++ # $1: target
++ # $2: link name
++ rm -f ${DESTDIR}${MESON_INSTALL_PREFIX}/$2
++-ln -s ${DESTDIR}${MESON_INSTALL_PREFIX}/$1 ${DESTDIR}${MESON_INSTALL_PREFIX}/$2
+++ln -s ./$1 ${DESTDIR}${MESON_INSTALL_PREFIX}/$2
++diff --git a/gst_client/meson.build b/gst_client/meson.build
++index badd7e1..271a761 100644
++--- a/gst_client/meson.build
+++++ b/gst_client/meson.build
++@@ -16,11 +16,11 @@ executable(exe_name,
++ 
++ ## Create symbolic link to gst-client
++ meson.add_install_script('gst_client_symbolic_link.sh',
++-  get_option('bindir') +'/'+ exe_name,
+++  exe_name,
++   get_option('bindir') +'/'+ gst_client_name
++ )
++ 
++ meson.add_install_script('gst_client_symbolic_link.sh',
++-  get_option('bindir') +'/'+ exe_name,
+++  exe_name,
++   get_option('bindir') +'/'+ 'gstd-client'
++ )
++diff --git a/gstd/gstd_symbolic_link.sh b/gstd/gstd_symbolic_link.sh
++index d8d7617..9e85694 100755
++--- a/gstd/gstd_symbolic_link.sh
+++++ b/gstd/gstd_symbolic_link.sh
++@@ -4,4 +4,4 @@
++ # $1: target
++ # $2: link name
++ rm -f ${DESTDIR}${MESON_INSTALL_PREFIX}/$2
++-ln -s ${DESTDIR}${MESON_INSTALL_PREFIX}/$1 ${DESTDIR}${MESON_INSTALL_PREFIX}/$2
+++ln -s ./$1 ${DESTDIR}${MESON_INSTALL_PREFIX}/$2
++diff --git a/gstd/meson.build b/gstd/meson.build
++index 68f6313..a0a8a65 100644
++--- a/gstd/meson.build
+++++ b/gstd/meson.build
++@@ -43,6 +43,6 @@ meson.add_install_script('gstd_chmod.sh','777', logstatedir)
++ 
++ ## Create symbolic link to gstd
++ meson.add_install_script('gstd_symbolic_link.sh',
++-  get_option('bindir') +'/'+ exe_name,
+++  exe_name,
++   get_option('bindir') +'/'+ gstd_name
++ )
++-- 
++2.25.1
++
+diff --git a/package/gstreamer1/gstd/0004-Don-t-require-gstd-check-user-xenv.sh-for-systemd-se.patch b/package/gstreamer1/gstd/0004-Don-t-require-gstd-check-user-xenv.sh-for-systemd-se.patch
+new file mode 100644
+index 0000000000..247b5ab32f
+--- /dev/null
++++ b/package/gstreamer1/gstd/0004-Don-t-require-gstd-check-user-xenv.sh-for-systemd-se.patch
+@@ -0,0 +1,34 @@
++From 05ae5237b1bc23399898f9c06463cfe2b5bba499 Mon Sep 17 00:00:00 2001
++From: James Hilliard <james.hilliard1@gmail.com>
++Date: Tue, 14 Sep 2021 17:48:03 -0600
++Subject: [PATCH] Don't require gstd-check-user-xenv.sh for systemd service
++
++The gstd-check-user-xenv.sh script does not appear to be required
++for running the gstd service so we shouldn't require it for the
++service to start.
++
++Note that the non-systemd init script already does not require this.
++
++Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
++[Upstream status:
++https://github.com/RidgeRun/gstd-1.x/pull/251]
++---
++ init/gstd.service.in | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/init/gstd.service.in b/init/gstd.service.in
++index 3d20ecd..9125983 100644
++--- a/init/gstd.service.in
+++++ b/init/gstd.service.in
++@@ -6,7 +6,7 @@ StartLimitIntervalSec=30
++ [Service]
++ Restart=on-failure
++ RestartSec=5s
++-ExecStartPre=@GSTD_SYSTEMD_DIR@/gstd-check-user-xenv.sh
+++ExecStartPre=-@GSTD_SYSTEMD_DIR@/gstd-check-user-xenv.sh
++ ExecStart=@prefix@/bin/gstd
++ 
++ [Install]
++-- 
++2.25.1
++
+diff --git a/package/gstreamer1/gstd/Config.in b/package/gstreamer1/gstd/Config.in
+new file mode 100644
+index 0000000000..3f73dbd1c4
+--- /dev/null
++++ b/package/gstreamer1/gstd/Config.in
+@@ -0,0 +1,17 @@
++config BR2_PACKAGE_GSTD
++	bool "gstd"
++	depends on BR2_USE_WCHAR # libglib2 -> gettext, libsoup
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2, libsoup
++	depends on BR2_USE_MMU # libdaemon, libglib2
++	select BR2_PACKAGE_JANSSON
++	select BR2_PACKAGE_JSON_GLIB
++	select BR2_PACKAGE_LIBDAEMON
++	select BR2_PACKAGE_LIBGLIB2
++	select BR2_PACKAGE_LIBSOUP
++	select BR2_PACKAGE_READLINE
++	help
++	  GStreamer Daemon, also called gstd, is a GStreamer framework for
++	  controlling audio and video streaming using an InterProcess
++	  Communication protocol
++
++	  https://developer.ridgerun.com/wiki/index.php?title=GStreamer_Daemon
+diff --git a/package/gstreamer1/gstd/gstd.hash b/package/gstreamer1/gstd/gstd.hash
+new file mode 100644
+index 0000000000..6ec84bd58d
+--- /dev/null
++++ b/package/gstreamer1/gstd/gstd.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  94c10c798d3618b63cc68cbe053fabd19335a57f982a47b3d66c27c37d325da3  gstd-0.13.0.tar.gz
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/gstreamer1/gstd/gstd.mk b/package/gstreamer1/gstd/gstd.mk
+new file mode 100644
+index 0000000000..2e785853cd
+--- /dev/null
++++ b/package/gstreamer1/gstd/gstd.mk
+@@ -0,0 +1,36 @@
++################################################################################
++#
++# gstd
++#
++################################################################################
++
++GSTD_VERSION = 0.13.0
++GSTD_SITE = $(call github,RidgeRun,gstd-1.x,v$(GSTD_VERSION))
++GSTD_LICENSE_FILES = COPYING
++GSTD_LICENSE = GPL-2.0+
++
++GSTD_DEPENDENCIES = \
++	gstreamer1 \
++	jansson \
++	json-glib \
++	libdaemon \
++	libglib2 \
++	libsoup \
++	readline
++
++GSTD_CONF_OPTS += \
++	-Denable-tests=disabled \
++	-Denable-examples=disabled \
++	-Denable-gtk-doc=false \
++	-Dwith-gstd-runstatedir=/var/run/gstd \
++	-Dwith-gstd-logstatedir=/var/log/gstd \
++	-Dwith-gstd-systemddir=/usr/lib/systemd/system
++
++ifeq ($(BR2_PACKAGE_SYSTEMD),y)
++GSTD_CONF_OPTS += -Denable-systemd=enabled -Denable-initd=disabled
++GSTD_DEPENDENCIES += systemd
++else
++GSTD_CONF_OPTS += -Denable-systemd=disabled -Denable-initd=enabled
++endif
++
++$(eval $(meson-package))
+-- 
+2.25.1
 
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============7441405189900047819==--
