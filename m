@@ -2,75 +2,90 @@ Return-Path: <SRS0=vgbW=OF=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.0 required=3.0 tests=BAYES_00,DKIM_INVALID,
+X-Spam-Status: No, score=-2.0 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B304C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 15 Sep 2021 20:00:25 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7072EC433F5
+	for <buildroot@archiver.kernel.org>; Wed, 15 Sep 2021 20:32:17 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id DB2C26105A
-	for <buildroot@archiver.kernel.org>; Wed, 15 Sep 2021 20:00:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org DB2C26105A
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
+	by mail.kernel.org (Postfix) with ESMTPS id DA8766113E
+	for <buildroot@archiver.kernel.org>; Wed, 15 Sep 2021 20:32:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org DA8766113E
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmx.net
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A4E63401DF;
-	Wed, 15 Sep 2021 20:00:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A63B26074F;
+	Wed, 15 Sep 2021 20:32:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Lhy5mOUJEb5b; Wed, 15 Sep 2021 20:00:23 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id V6lspyXnN02L; Wed, 15 Sep 2021 20:32:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7B44340129;
-	Wed, 15 Sep 2021 20:00:22 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 580641BF30F
- for <buildroot@lists.busybox.net>; Wed, 15 Sep 2021 20:00:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EA58260712;
+	Wed, 15 Sep 2021 20:32:14 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B85C81BF2AA
+ for <buildroot@lists.busybox.net>; Wed, 15 Sep 2021 20:32:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 467B040129
- for <buildroot@lists.busybox.net>; Wed, 15 Sep 2021 20:00:21 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A7E3140665
+ for <buildroot@lists.busybox.net>; Wed, 15 Sep 2021 20:32:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id f0npyNvph7cu for <buildroot@lists.busybox.net>;
- Wed, 15 Sep 2021 20:00:19 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
- by smtp2.osuosl.org (Postfix) with ESMTPS id F02CA40124
- for <buildroot@buildroot.org>; Wed, 15 Sep 2021 20:00:18 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:2c:c310:297c:8ffe])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPSA id F0D442003C3;
- Wed, 15 Sep 2021 22:00:08 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1631736015;
- bh=CJDlSNoWcMVHKL7txUcW/7uOAvUhUhHJ8VmcHKSJhsw=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=pFmJsCa51lRK82gcrAd1ETgiSK6MxaSaHcW/Bg1ksJvnTn2AnDcUzI2447Yh2IHlR
- qR1wXgHF6UmxnCj3ldTetxWVusL25u18rJS/U1YawNXa4Cx520A9m/Tq6b8rHJ5jf+
- LG/9IPqx78phcFFq2VwdaMZPs6SJcyaWcpGB2OtNErknZHAUl6JN8NJMCObJ8J+Ukc
- IdAPpIZ91SLG2LgroBxTV+UNbHAeqf+T4t8TIpCXac3x5xYO5Iv4AqDMiBDFdTOYxo
- MXhLPPplCtlQ94sSMGalGTUM4GIIaELiNy2XIJfSU1s+DFW5DRHH7xFTIEIrkOWTrn
- nx8i6JdRrQv6w==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Wed, 15 Sep 2021 22:00:08 +0200
-Date: Wed, 15 Sep 2021 22:00:08 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20210915200008.GS1053080@scaer>
-References: <20210913203406.3877994-1-fontaine.fabrice@gmail.com>
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (1024-bit key) header.d=gmx.net
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id cAqpkH7fmWgq for <buildroot@lists.busybox.net>;
+ Wed, 15 Sep 2021 20:32:11 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id EEC7040649
+ for <buildroot@buildroot.org>; Wed, 15 Sep 2021 20:32:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+ s=badeba3b8450; t=1631737928;
+ bh=mtiL5dM7RkhZUYOOl4PvomE4ZGrroFd7WJI+bURR4Ag=;
+ h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
+ b=Ir++6Q8Dsx0mkxgopItL4Wyu2vxnjh7nju/mSDBZRAnKAY5dyhfCgatwWF27vXZZx
+ +4NqFbuDZjSx/RC90RbYX7YloTIXsN1bdS4DLh72UwE/ECxfTeqXTZUd1r1CaeDIy4
+ MgUNg7q9J/KGEOvYyJya0TrSNetP1dmItmDmugr8=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from localhost ([62.216.209.112]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MFKKh-1mgHyY3uxd-00Finb; Wed, 15
+ Sep 2021 22:32:08 +0200
+Date: Wed, 15 Sep 2021 22:32:06 +0200
+From: Peter Seiderer <ps.report@gmx.net>
+To: Rafal Gorczynski <rafal.gorczynski@ecosystems-group.co.uk>
+Message-ID: <20210915223206.43a7bda0@gmx.net>
+In-Reply-To: <20210915190617.5d64460f@gmx.net>
+References: <00597E818BDD634EB31FF8A2ECBC4934AB0ADE22@ECO-SRV.ecosystems.local>
+ <20210915190617.5d64460f@gmx.net>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20210913203406.3877994-1-fontaine.fabrice@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 1/1] package/polkit: drop dbus build
- dependency
+X-Provags-ID: V03:K1:P5ohYfTXePs3T/rLUTFSVdq8JMgEoNfzglNyKb3kzIlsbm1lIBw
+ TEFUmPHTLM4zDMQs81iei8JAzVWjHoldZl+RhSSXzMI1k5zT1FFY37BQBuXJzyC7f++TucI
+ BImGPO4OFmV9VsMWP3CVrEtT2KWUnpFZ0HVwvEB1Vr9VoDZ57XMGdhzygZSY94+yIDScQJx
+ r+zg5HsaDdvHXE0k3/53w==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:vjLoc44olCs=:11Rb71mhlFsm+CMs/j3e2G
+ eR8ox/YtUWTKc7pX2q4gyxOU0vnPDNG+/TBb52aIOD/Oa+AD7PKZbGdTG0MZXaURvucjAa0mh
+ TMuadnnHrMy8mhnHI+Xbfw6BoMcWd3KuJu9xzWJEOXsC/oJVd8HQY8MkWLY3d5rXoKG49FzEr
+ e1/2GoMEM4voeNI/SosEy/ijOpLvYgj9mbgBkp9ygaBI7wlUbRJH38x6134pz+YFFqDCQlWQ7
+ aKaR6M5Ox5vMd1nqQkmrXySPs2n4M3gETzOqRq/5vQK3+IIAawuybjf5ct8y4IBmC4O937ob5
+ b8Dib1BrBoDUhv9ywuSDif8sBu3eIhJmaODC9utrQcs8uQYX1aJ48wYBR04MiuUSRUOB3S6PV
+ weSS0jGRQfpW5lpgV0zygCs6pLOC+ybA9L9MOD1hD4K78gZ+TUwLjjFfORf4viHcAAmhaxYgT
+ mMBtZ+3gKcLjb0WllNA571bMfVESuwNOuTUVg8KR2ALgmITaLLhqxT6n5s2bDCLFlAmsY9viZ
+ oFzq+P6HaMDuZupKzMY6xEQLONUIw9jj2jCm1dJDmdnkx+L4jcNwG8FoV1bBK9dyal4bor/tl
+ J1B8mSRAvzpd14ojo9yL8ImUEUuWyldyyDp269WCnaC2WxfohFAjKQNiW3X6n7ozcQNXJj1UN
+ 3K/rpqRryno+w9u2fowwwfcp22E+6x6gtCQFXexKwVSMiFmAYgxcUQQtFYae5W5a4LpcgMRNs
+ 27luqi2B0s0B57p1ipjdeaboWcLrUzbbscYRJTwLGehkGSfMoKocD2xEt52rSGy4SPoIGnTI/
+ RyRyH3b93X7JrSqc2Gx9hHiVcP7ijCp+DQL6CUAaWDVExog+RzBzWiKRNzJre5yDWrqPGZoQj
+ +0MQLWOnL8uCvQmGF6v5TEThEK4YQLaUucIyIUwKlyFdKIP/BDBLsmov3zWYV7z3vBiBxkpL5
+ CPT52Mcp90hSIpxERwYFEgdmMOMNW2B0vRDG1LGKFfnVaKj7sqLnAryBKDw3zFQa52ePjxTuR
+ eTrjbL6Af1TZ/DUH4dArn/DiqkX69PNCap84zxvrGqyO4uEpdiqmq8hz9u0WNE4A1DC96AHJL
+ 7TGtlCV0FXG5gk=
+Subject: Re: [Buildroot] A problem with running Xorg 2021.08.x
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,170 +98,71 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: Marek Belisko <marek.belisko@open-nandra.com>, buildroot@buildroot.org
+Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-Fabrice, All,
+On Wed, 15 Sep 2021 19:06:17 +0200, Peter Seiderer <ps.report@gmx.net> wrote:
 
-On 2021-09-13 22:34 +0200, Fabrice Fontaine spake thusly:
-> Drop dbus build dependency to avoid the following build failure since
-> commit 1db13226394ff7e6f5e7ca643e275f35d6c633bb if systemd-polkit is
-> enabled:
-> 
-> package/dbus/dbus.mk:124: *** Recursive variable 'DBUS_FINAL_RECURSIVE_DEPENDENCIES' references itself (eventually).  Stop.
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/0e038fae0f5fc2db3e85be05db4612e4f2395e35
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Hello Rafal,
+>
+> On Wed, 15 Sep 2021 12:47:56 +0000, Rafal Gorczynski <rafal.gorczynski@ecosystems-group.co.uk> wrote:
+>
+> > Hi,
+> > I'm looking for help with running Xorg in my image, tried multiple branches such as 2021.08, 2021.05, 2021.02 with no luck.
+> >
+> > This is what I've received from Xorg
+> >
+> > [   353.565] (II) LoadModule: "intel"
+> > [   353.565] (II) Loading /usr/lib/xorg/modules/drivers/intel_drv.so
+> > [   353.565] (EE) Failed to load /usr/lib/xorg/modules/drivers/intel_drv.so: /usr/lib/xorg/modules/drivers/intel_drv.so: undefined symbol: vgaHWFreeHWRec
+> > [   353.565] (EE) Failed to load module "intel" (loader failed, 0)
+> > [   353.565] (II) LoadModule: "modesetting"
+> > [   353.565] (II) Loading /usr/lib/xorg/modules/drivers/modesetting_drv.so
+> > [   353.565] (EE) Failed to load /usr/lib/xorg/modules/drivers/modesetting_drv.so: /usr/lib/xorg/modules/drivers/modesetting_drv.so: undefined symbol: shadowRemove
+> > [   353.565] (EE) Failed to load module "modesetting" (loader failed, 0)
+> > [   353.565] (II) LoadModule: "fbdev"
+> > [   353.565] (II) Loading /usr/lib/xorg/modules/drivers/fbdev_drv.so
+> > [   353.565] (EE) Failed to load /usr/lib/xorg/modules/drivers/fbdev_drv.so: /usr/lib/xorg/modules/drivers/fbdev_drv.so: undefined symbol: fbdevHWSave
+> > [   353.565] (EE) Failed to load module "fbdev" (loader failed, 0)
+> > [   353.565] (II) LoadModule: "vesa"
+> > [   353.565] (II) Loading /usr/lib/xorg/modules/drivers/vesa_drv.so
+> > [   353.565] (EE) Failed to load /usr/lib/xorg/modules/drivers/vesa_drv.so: /usr/lib/xorg/modules/drivers/vesa_drv.so: undefined symbol: VBESetModeParameters
+> >
+> > Full Xorg.log https://pastebin.com/nu5wpHex
+> > Full defconfig https://pastebin.com/RLJRwMES
+> >
+> >
+> > I don't have problems with branch 2020.08.x with the same defconfig.
+> >
+> > Any idea?
+>
+> Seems similar to the problem fixed by commit [1] (for the fbdev use case), but take a look
 
-Applied to master, thanks.
+	s/fbdev/fbturbo/
 
 Regards,
-Yann E. MORIN.
+Peter
 
-> ---
->  ...t-computation-of-dbus-data-directory.patch | 35 ++++++++++++++++
->  ...Don-t-require-dbus-development-files.patch | 42 +++++++++++++++++++
->  package/polkit/Config.in                      |  2 +-
->  package/polkit/polkit.mk                      |  2 +-
->  4 files changed, 79 insertions(+), 2 deletions(-)
->  create mode 100644 package/polkit/0003-build-Remove-redundant-computation-of-dbus-data-directory.patch
->  create mode 100644 package/polkit/0004-build-Don-t-require-dbus-development-files.patch
-> 
-> diff --git a/package/polkit/0003-build-Remove-redundant-computation-of-dbus-data-directory.patch b/package/polkit/0003-build-Remove-redundant-computation-of-dbus-data-directory.patch
-> new file mode 100644
-> index 0000000000..7fce2e10a5
-> --- /dev/null
-> +++ b/package/polkit/0003-build-Remove-redundant-computation-of-dbus-data-directory.patch
-> @@ -0,0 +1,35 @@
-> +From 9fa097f4dde92a0c1675400228b4cb965ed3e123 Mon Sep 17 00:00:00 2001
-> +From: Simon McVittie <smcv@debian.org>
-> +Date: Thu, 3 Jun 2021 18:55:29 +0100
-> +Subject: [PATCH] build: Remove redundant computation of dbus data directory
-> +
-> +We were asking pkg-config "if I define ${datadir} to pk_prefix/pk_datadir,
-> +what would ${datadir} be?" but the answer is obviously always going to be
-> +pk_prefix/pk_datadir.
-> +
-> +Signed-off-by: Simon McVittie <smcv@debian.org>
-> +
-> +[Retrieved (and slightly updated for duktape fork) from:
-> +https://gitlab.freedesktop.org/polkit/polkit/-/commit/9fa097f4dde92a0c1675400228b4cb965ed3e123]
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +---
-> + meson.build | 3 +--
-> + 1 file changed, 1 insertion(+), 2 deletions(-)
-> +
-> +diff --git a/meson.build b/meson.build
-> +index 6a6799e..03a7683 100644
-> +--- a/meson.build
-> ++++ b/meson.build
-> +@@ -136,8 +136,7 @@ assert(cc.has_function('XML_ParserCreate', dependencies: expat_dep), 'Can\'t fin
-> + endif
-> + 
-> + dbus_dep = dependency('dbus-1')
-> +-dbus_confdir = dbus_dep.get_pkgconfig_variable('datadir', define_variable: ['datadir', pk_prefix / pk_datadir])   #changed from sysconfdir with respect to commit#8eada3836465838
-> +-dbus_policydir = dbus_confdir / 'dbus-1/system.d'
-> ++dbus_policydir = pk_prefix / pk_datadir / 'dbus-1/system.d'
-> + dbus_system_bus_services_dir = dbus_dep.get_pkgconfig_variable('system_bus_services_dir', define_variable: ['datadir', pk_prefix / pk_datadir])
-> + 
-> + # check OS
-> +-- 
-> +GitLab
-> +
-> diff --git a/package/polkit/0004-build-Don-t-require-dbus-development-files.patch b/package/polkit/0004-build-Don-t-require-dbus-development-files.patch
-> new file mode 100644
-> index 0000000000..1b7adbf67f
-> --- /dev/null
-> +++ b/package/polkit/0004-build-Don-t-require-dbus-development-files.patch
-> @@ -0,0 +1,42 @@
-> +From 4bb2157adae620c8b07caf5a24b177d1f90f2fbb Mon Sep 17 00:00:00 2001
-> +From: Simon McVittie <smcv@debian.org>
-> +Date: Thu, 3 Jun 2021 18:57:00 +0100
-> +Subject: [PATCH] build: Don't require dbus development files
-> +
-> +We don't actually need libdbus, only the dbus-daemon's installation
-> +directory for system services, which in practice is always going to be
-> +/usr/share/dbus-1/system-services.
-> +
-> +Signed-off-by: Simon McVittie <smcv@debian.org>
-> +
-> +[Retrieved (and slightly updated for duktape fork) from:
-> +https://gitlab.freedesktop.org/polkit/polkit/-/commit/4bb2157adae620c8b07caf5a24b177d1f90f2fbb]
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +---
-> + meson.build | 9 +++++++--
-> + 1 file changed, 7 insertions(+), 2 deletions(-)
-> +
-> +diff --git a/meson.build b/meson.build
-> +index 03a7683..539ec7a 100644
-> +--- a/meson.build
-> ++++ b/meson.build
-> +@@ -135,9 +135,14 @@ assert(cc.has_function('XML_ParserCreate', dependencies: expat_dep), 'Can\'t fin
-> +   js_dep = dependency('mozjs-78')
-> + endif
-> + 
-> +-dbus_dep = dependency('dbus-1')
-> ++dbus_dep = dependency('dbus-1', required: false)
-> + dbus_policydir = pk_prefix / pk_datadir / 'dbus-1/system.d'
-> +-dbus_system_bus_services_dir = dbus_dep.get_pkgconfig_variable('system_bus_services_dir', define_variable: ['datadir', pk_prefix / pk_datadir])
-> ++if dbus_dep.found()
-> ++  dbus_system_bus_services_dir = dbus_dep.get_pkgconfig_variable('system_bus_services_dir', define_variable: ['datadir', pk_prefix / pk_datadir])
-> ++else
-> ++  # libdbus development files not installed, assume a standard layout
-> ++  dbus_system_bus_services_dir = pk_prefix / pk_datadir / 'dbus-1' / 'system-services'
-> ++endif
-> + 
-> + # check OS
-> + host_system = host_machine.system()
-> +-- 
-> +GitLab
-> +
-> diff --git a/package/polkit/Config.in b/package/polkit/Config.in
-> index a968ee52d7..622cbbb90b 100644
-> --- a/package/polkit/Config.in
-> +++ b/package/polkit/Config.in
-> @@ -5,7 +5,7 @@ config BR2_PACKAGE_POLKIT
->  	depends on BR2_USE_MMU # libglib2, dbus
->  	depends on BR2_USE_WCHAR # libglib2
->  	depends on !BR2_STATIC_LIBS # duktape
-> -	select BR2_PACKAGE_DBUS
-> +	select BR2_PACKAGE_DBUS # runtime
->  	select BR2_PACKAGE_DUKTAPE
->  	select BR2_PACKAGE_EXPAT
->  	select BR2_PACKAGE_LIBGLIB2
-> diff --git a/package/polkit/polkit.mk b/package/polkit/polkit.mk
-> index 7d75d66ffb..ed6f1a5a8f 100644
-> --- a/package/polkit/polkit.mk
-> +++ b/package/polkit/polkit.mk
-> @@ -12,7 +12,7 @@ POLKIT_CPE_ID_VENDOR = polkit_project
->  POLKIT_INSTALL_STAGING = YES
->  
->  POLKIT_DEPENDENCIES = \
-> -	dbus duktape libglib2 host-intltool expat $(TARGET_NLS_DEPENDENCIES)
-> +	duktape libglib2 host-intltool expat $(TARGET_NLS_DEPENDENCIES)
->  
->  POLKIT_LDFLAGS = $(TARGET_NLS_LIBS)
->  
-> -- 
-> 2.33.0
-> 
+> at the linked bug report/mailing list report for hints about the module loading order in
+> xorg.conf file and/or needed patches...
+>
+> Regards,
+> Peter
+>
+> [1] https://git.buildroot.net/buildroot/commit/?id=9dc2b4a4eee557d3d9e7df31e9d2e96f364a2f03
+>
+> >
+> > Rafal
+> >
+>
 > _______________________________________________
 > buildroot mailing list
 > buildroot@lists.buildroot.org
 > https://lists.buildroot.org/mailman/listinfo/buildroot
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
