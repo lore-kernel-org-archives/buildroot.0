@@ -2,75 +2,74 @@ Return-Path: <SRS0=vgbW=OF=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.7 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B7064C433FE
-	for <buildroot@archiver.kernel.org>; Wed, 15 Sep 2021 08:13:44 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B7CC2C433F5
+	for <buildroot@archiver.kernel.org>; Wed, 15 Sep 2021 08:49:51 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 40372610FF
-	for <buildroot@archiver.kernel.org>; Wed, 15 Sep 2021 08:13:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 40372610FF
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=ACULAB.COM
+	by mail.kernel.org (Postfix) with ESMTPS id E51B061216
+	for <buildroot@archiver.kernel.org>; Wed, 15 Sep 2021 08:49:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E51B061216
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=grenoble.cnrs.fr
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E10936071C;
-	Wed, 15 Sep 2021 08:13:43 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XmtqBFomN-5l; Wed, 15 Sep 2021 08:13:43 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2658960686;
-	Wed, 15 Sep 2021 08:13:42 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A897F1BF343
- for <buildroot@lists.busybox.net>; Wed, 15 Sep 2021 08:13:40 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 97AC140134
- for <buildroot@lists.busybox.net>; Wed, 15 Sep 2021 08:13:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 960C0403BA;
+	Wed, 15 Sep 2021 08:49:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KQ_EGkl-dG-a for <buildroot@lists.busybox.net>;
- Wed, 15 Sep 2021 08:13:39 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id zvabFLFQflqJ; Wed, 15 Sep 2021 08:49:49 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id F35A1403DF;
+	Wed, 15 Sep 2021 08:49:48 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id D37DD1BF343
+ for <buildroot@lists.busybox.net>; Wed, 15 Sep 2021 08:49:47 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id C2EFC80BA9
+ for <buildroot@lists.busybox.net>; Wed, 15 Sep 2021 08:49:47 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=grenoble.cnrs.fr
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dDCMJfNlULrK for <buildroot@lists.busybox.net>;
+ Wed, 15 Sep 2021 08:49:47 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from eu-smtp-delivery-151.mimecast.com
- (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2D30C4012D
- for <buildroot@buildroot.org>; Wed, 15 Sep 2021 08:13:38 +0000 (UTC)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-59-QgEz9b7kOzKCZIRWB7HFaQ-1; Wed, 15 Sep 2021 09:13:35 +0100
-X-MC-Unique: QgEz9b7kOzKCZIRWB7HFaQ-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.23; Wed, 15 Sep 2021 09:13:33 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.023; Wed, 15 Sep 2021 09:13:33 +0100
-From: David Laight <David.Laight@ACULAB.COM>
-To: 'Petr Vorel' <petr.vorel@gmail.com>, "buildroot@buildroot.org"
- <buildroot@buildroot.org>
-Thread-Topic: [Buildroot] [RFC PATCH 1/1] support: utils: Use python3
-Thread-Index: AQHXqZAPyDZC8aH7SUGhUhU2aoDEIqukvtVg
-Date: Wed, 15 Sep 2021 08:13:33 +0000
-Message-ID: <672cac3266544283a755e58c6b021314@AcuMS.aculab.com>
+Received: from mailgw-out1.grenoble.cnrs.fr (mailgw-out1.grenoble.cnrs.fr
+ [IPv6:2001:660:530d:201::44])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3A1D780B84
+ for <buildroot@buildroot.org>; Wed, 15 Sep 2021 08:49:46 +0000 (UTC)
+Received: from [147.173.65.159] (pulsar.grenoble.cnrs.fr [147.173.65.159])
+ (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+ (No client certificate requested)
+ by mailgw-out1.grenoble.cnrs.fr (Postfix) with ESMTPSA id 09F05C32DD
+ for <buildroot@buildroot.org>; Wed, 15 Sep 2021 10:49:44 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=grenoble.cnrs.fr;
+ s=202106-grenoble.cnrs.fr; t=1631695785;
+ bh=tT4SNxN5xB4NxO6I1XUDmbll8eBASy6H3/thBbRuLw0=;
+ h=Subject:To:References:From:Date:In-Reply-To:From;
+ b=UtJJTUU5/n+QlX/JSE4T/LPiUcdYk2E6BjqmnkZg21ayLNKaO/ARurOqYqvG3oAdQ
+ QqiHRU1TxZkwZpKFQaIWeQXtO0I2wboSpV7VrIoMP8PJHrHAqQaXCJEebNWNs06Gad
+ IqOf/Sl12JcLiTgw4EXOmq++kfoJYrdagvdlqAJEW0CFz4hl6IUqMRYTuBHkDR7BZq
+ BiI9/xP5I5d+4a+mo2R5Wec5n6WNxvbP0RquT0RXo6JqDxGVioZy+ctn9XH9yd/ZeN
+ USJkV63lTLBricYUFbDyUuhrDghdizEwFcFJcIhACJ9Qbe2kaTUjJnsrayosN5M/xH
+ DSGDyMPXTopNA==
+To: buildroot@buildroot.org
 References: <20210914174321.13977-1-petr.vorel@gmail.com>
-In-Reply-To: <20210914174321.13977-1-petr.vorel@gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+ <672cac3266544283a755e58c6b021314@AcuMS.aculab.com>
+From: Edgar Bonet <bonet@grenoble.cnrs.fr>
+Message-ID: <bce3caa1-8a90-bd1c-c2e4-9efccf0defbe@grenoble.cnrs.fr>
+Date: Wed, 15 Sep 2021 10:49:44 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
- auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
+In-Reply-To: <672cac3266544283a755e58c6b021314@AcuMS.aculab.com>
 Content-Language: en-US
 Subject: Re: [Buildroot] [RFC PATCH 1/1] support: utils: Use python3
 X-BeenThere: buildroot@lists.buildroot.org
@@ -90,43 +89,28 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-From: Petr Vorel
-> Sent: 14 September 2021 18:43
-> 
-> Python 2 is EOL sice 2020 [1], it's still available on distros, but may not
-> be installed by default (as being replaced by python3).
-> 
-...
-> -#!/usr/bin/env python
-> +#!/usr/bin/env python3
+Hi!
 
-Doesn't python3 just get installed as python?
-So you don't need to change these lines.
+David asked:
+> Doesn't python3 just get installed as python?
 
-...
-> diff --git a/utils/check-package b/utils/check-package
-> index dd18d19c25..6540af6b2d 100755
-> --- a/utils/check-package
-> +++ b/utils/check-package
-> @@ -1,4 +1,4 @@
-> -#!/usr/bin/env python
-> +#!/usr/bin/env python3
->  # See utils/checkpackagelib/readme.txt before editing this file.
-> 
->  from __future__ import print_function
+On Ubuntu and Debian Bullseye, the Python 3 interpreter is installed as
+python3, and Python 2, if requested, is installed as python2. All
+packaged Python scripts explicitly request either python3 or, for some
+legacy packages, python2.
 
-For p3 you can also remove that import.
+There are two optional packages named python-is-python2 and
+python-is-python3 that install a symlink named "python" pointing to
+either python2 or python3. These are intended for compatibility with
+non-Ubuntu or non-Debian scripts that call the unversioned "python".
+They are, obviously, incompatible with one another.
 
-FWIW that didn't help me get some python scripts to run under
-p2 and p3 because one of the p2 installations was too old to
-support it.
+On Ubuntu and Debian, at least, it is then preferred to explicitly
+request either python2 or python3 as the interpreter.
 
-	David
+Regards,
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+Edgar.
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
