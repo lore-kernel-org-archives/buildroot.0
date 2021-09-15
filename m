@@ -2,90 +2,92 @@ Return-Path: <SRS0=vgbW=OF=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.0 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
+	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7072EC433F5
-	for <buildroot@archiver.kernel.org>; Wed, 15 Sep 2021 20:32:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8450CC433EF
+	for <buildroot@archiver.kernel.org>; Wed, 15 Sep 2021 20:57:02 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id DA8766113E
-	for <buildroot@archiver.kernel.org>; Wed, 15 Sep 2021 20:32:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org DA8766113E
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmx.net
+	by mail.kernel.org (Postfix) with ESMTPS id 09BA460E90
+	for <buildroot@archiver.kernel.org>; Wed, 15 Sep 2021 20:57:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 09BA460E90
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A63B26074F;
-	Wed, 15 Sep 2021 20:32:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C7B0A60B47;
+	Wed, 15 Sep 2021 20:57:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id V6lspyXnN02L; Wed, 15 Sep 2021 20:32:15 +0000 (UTC)
+	with ESMTP id NZ4Z7gBqPhZk; Wed, 15 Sep 2021 20:57:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EA58260712;
-	Wed, 15 Sep 2021 20:32:14 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B85C81BF2AA
- for <buildroot@lists.busybox.net>; Wed, 15 Sep 2021 20:32:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2EF456076C;
+	Wed, 15 Sep 2021 20:57:00 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 4C4331BF2AA
+ for <buildroot@lists.busybox.net>; Wed, 15 Sep 2021 20:56:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A7E3140665
- for <buildroot@lists.busybox.net>; Wed, 15 Sep 2021 20:32:12 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3B11840129
+ for <buildroot@lists.busybox.net>; Wed, 15 Sep 2021 20:56:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=gmx.net
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cAqpkH7fmWgq for <buildroot@lists.busybox.net>;
- Wed, 15 Sep 2021 20:32:11 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
- by smtp4.osuosl.org (Postfix) with ESMTPS id EEC7040649
- for <buildroot@buildroot.org>; Wed, 15 Sep 2021 20:32:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
- s=badeba3b8450; t=1631737928;
- bh=mtiL5dM7RkhZUYOOl4PvomE4ZGrroFd7WJI+bURR4Ag=;
- h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
- b=Ir++6Q8Dsx0mkxgopItL4Wyu2vxnjh7nju/mSDBZRAnKAY5dyhfCgatwWF27vXZZx
- +4NqFbuDZjSx/RC90RbYX7YloTIXsN1bdS4DLh72UwE/ECxfTeqXTZUd1r1CaeDIy4
- MgUNg7q9J/KGEOvYyJya0TrSNetP1dmItmDmugr8=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from localhost ([62.216.209.112]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MFKKh-1mgHyY3uxd-00Finb; Wed, 15
- Sep 2021 22:32:08 +0200
-Date: Wed, 15 Sep 2021 22:32:06 +0200
-From: Peter Seiderer <ps.report@gmx.net>
-To: Rafal Gorczynski <rafal.gorczynski@ecosystems-group.co.uk>
-Message-ID: <20210915223206.43a7bda0@gmx.net>
-In-Reply-To: <20210915190617.5d64460f@gmx.net>
-References: <00597E818BDD634EB31FF8A2ECBC4934AB0ADE22@ECO-SRV.ecosystems.local>
- <20210915190617.5d64460f@gmx.net>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-suse-linux-gnu)
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id IivM8CmT9R9S for <buildroot@lists.busybox.net>;
+ Wed, 15 Sep 2021 20:56:58 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
+ [IPv6:2a00:1450:4864:20::32a])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5FDA7401E3
+ for <buildroot@buildroot.org>; Wed, 15 Sep 2021 20:56:58 +0000 (UTC)
+Received: by mail-wm1-x32a.google.com with SMTP id
+ 196-20020a1c04cd000000b002fa489ffe1fso5774655wme.4
+ for <buildroot@buildroot.org>; Wed, 15 Sep 2021 13:56:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=0owFwjlluXobT5DV63WWxxWyRzoCsjgLcK/gCG+W1OI=;
+ b=n4jl+7HLV72yL0gOEHxMoJjbxl43COt0bJ/vt5mkUI6FjZhdRk+Bjhp5Utd6+DRHZd
+ GY2Ub2qZE9tdvg0s6Mn1u42zJrlZLXu4y2ZlVKrhmb9LJwB6q+RB4/VgFGVlyaBkpppG
+ kKOo0hS5K7JmcM+Afi9pXy0vGrpSAaohDkjaBb9CzoFaEqLNmoOpjwQI1uCgQPG4f9nE
+ yH7L4TZwYzfpoR8xzJdWozUGSgB9RbGSKglMToBRoLWC/cUCtTh5oyycE3xdTciRTNTb
+ 1IJYdwksUEboXUx+nBBw+ITqyrekJY/vf3FVSmkItP3z0V2xRsikevAIQZ7F8DNXbLTs
+ +u5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=0owFwjlluXobT5DV63WWxxWyRzoCsjgLcK/gCG+W1OI=;
+ b=IaIEunmnHoYem56jFSCYC6C6J40Rqc+48Pdmxg62JNkzyC/uYdal5P87w0RkM0bFYJ
+ sYFcU6syD7J8UUKerkLMKWjia5sq9GCzO+DmcwN1yKy+GiKMZm44ZGfZ0f3erCQXbKE3
+ oG0MntAMjcsQ0BB/MEyz2cidxKSOnllYnldjzU8EccEbF5KUQvcevg7cmLr6mna+3GY3
+ nDCoA2Q9dxOW2pFw2zOv4oLSxOI0fRihdrUZHBUgN+L2gePOCfb9WMta6nt734jsl7tR
+ 6TEXJgVXXgsolTdyLbhFX/gDIRs+2oa071ZWUpP2+NqQ9f6Pi0uVaEz3YzO5H8m3isA7
+ pnpQ==
+X-Gm-Message-State: AOAM531YIU66pTiPBStngKeK+sgpC9SVXtvgLDB+0XugFMudBou5ajqt
+ Tpow8rjLBHTZ/ukColS1aIhXpx8UwQI=
+X-Google-Smtp-Source: ABdhPJyB5JsOzMe/bJdq9YC1ofdeCdquH6WgvVX4aEizGUCtsOnnDMh+Hz0QlK+gJLOVXiIl1bB2Iw==
+X-Received: by 2002:a05:600c:19cc:: with SMTP id
+ u12mr208294wmq.0.1631739416200; 
+ Wed, 15 Sep 2021 13:56:56 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-2139-166.w92-167.abo.wanadoo.fr.
+ [92.167.218.166])
+ by smtp.gmail.com with ESMTPSA id c135sm5358422wme.6.2021.09.15.13.56.55
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 15 Sep 2021 13:56:55 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Wed, 15 Sep 2021 22:56:38 +0200
+Message-Id: <20210915205640.1411368-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:P5ohYfTXePs3T/rLUTFSVdq8JMgEoNfzglNyKb3kzIlsbm1lIBw
- TEFUmPHTLM4zDMQs81iei8JAzVWjHoldZl+RhSSXzMI1k5zT1FFY37BQBuXJzyC7f++TucI
- BImGPO4OFmV9VsMWP3CVrEtT2KWUnpFZ0HVwvEB1Vr9VoDZ57XMGdhzygZSY94+yIDScQJx
- r+zg5HsaDdvHXE0k3/53w==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:vjLoc44olCs=:11Rb71mhlFsm+CMs/j3e2G
- eR8ox/YtUWTKc7pX2q4gyxOU0vnPDNG+/TBb52aIOD/Oa+AD7PKZbGdTG0MZXaURvucjAa0mh
- TMuadnnHrMy8mhnHI+Xbfw6BoMcWd3KuJu9xzWJEOXsC/oJVd8HQY8MkWLY3d5rXoKG49FzEr
- e1/2GoMEM4voeNI/SosEy/ijOpLvYgj9mbgBkp9ygaBI7wlUbRJH38x6134pz+YFFqDCQlWQ7
- aKaR6M5Ox5vMd1nqQkmrXySPs2n4M3gETzOqRq/5vQK3+IIAawuybjf5ct8y4IBmC4O937ob5
- b8Dib1BrBoDUhv9ywuSDif8sBu3eIhJmaODC9utrQcs8uQYX1aJ48wYBR04MiuUSRUOB3S6PV
- weSS0jGRQfpW5lpgV0zygCs6pLOC+ybA9L9MOD1hD4K78gZ+TUwLjjFfORf4viHcAAmhaxYgT
- mMBtZ+3gKcLjb0WllNA571bMfVESuwNOuTUVg8KR2ALgmITaLLhqxT6n5s2bDCLFlAmsY9viZ
- oFzq+P6HaMDuZupKzMY6xEQLONUIw9jj2jCm1dJDmdnkx+L4jcNwG8FoV1bBK9dyal4bor/tl
- J1B8mSRAvzpd14ojo9yL8ImUEUuWyldyyDp269WCnaC2WxfohFAjKQNiW3X6n7ozcQNXJj1UN
- 3K/rpqRryno+w9u2fowwwfcp22E+6x6gtCQFXexKwVSMiFmAYgxcUQQtFYae5W5a4LpcgMRNs
- 27luqi2B0s0B57p1ipjdeaboWcLrUzbbscYRJTwLGehkGSfMoKocD2xEt52rSGy4SPoIGnTI/
- RyRyH3b93X7JrSqc2Gx9hHiVcP7ijCp+DQL6CUAaWDVExog+RzBzWiKRNzJre5yDWrqPGZoQj
- +0MQLWOnL8uCvQmGF6v5TEThEK4YQLaUucIyIUwKlyFdKIP/BDBLsmov3zWYV7z3vBiBxkpL5
- CPT52Mcp90hSIpxERwYFEgdmMOMNW2B0vRDG1LGKFfnVaKj7sqLnAryBKDw3zFQa52ePjxTuR
- eTrjbL6Af1TZ/DUH4dArn/DiqkX69PNCap84zxvrGqyO4uEpdiqmq8hz9u0WNE4A1DC96AHJL
- 7TGtlCV0FXG5gk=
-Subject: Re: [Buildroot] A problem with running Xorg 2021.08.x
+Subject: [Buildroot] [PATCH 1/3] package/libvirt: disable docs and tests
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,70 +100,56 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Jared Bents <jared.bents@rockwellcollins.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-On Wed, 15 Sep 2021 19:06:17 +0200, Peter Seiderer <ps.report@gmx.net> wrote:
+Disable docs and tests which are enabled since the addition of the
+package in commit ccfc90e1010e42e6529afae3a5ea8bf7226dabc1
 
-> Hello Rafal,
->
-> On Wed, 15 Sep 2021 12:47:56 +0000, Rafal Gorczynski <rafal.gorczynski@ecosystems-group.co.uk> wrote:
->
-> > Hi,
-> > I'm looking for help with running Xorg in my image, tried multiple branches such as 2021.08, 2021.05, 2021.02 with no luck.
-> >
-> > This is what I've received from Xorg
-> >
-> > [   353.565] (II) LoadModule: "intel"
-> > [   353.565] (II) Loading /usr/lib/xorg/modules/drivers/intel_drv.so
-> > [   353.565] (EE) Failed to load /usr/lib/xorg/modules/drivers/intel_drv.so: /usr/lib/xorg/modules/drivers/intel_drv.so: undefined symbol: vgaHWFreeHWRec
-> > [   353.565] (EE) Failed to load module "intel" (loader failed, 0)
-> > [   353.565] (II) LoadModule: "modesetting"
-> > [   353.565] (II) Loading /usr/lib/xorg/modules/drivers/modesetting_drv.so
-> > [   353.565] (EE) Failed to load /usr/lib/xorg/modules/drivers/modesetting_drv.so: /usr/lib/xorg/modules/drivers/modesetting_drv.so: undefined symbol: shadowRemove
-> > [   353.565] (EE) Failed to load module "modesetting" (loader failed, 0)
-> > [   353.565] (II) LoadModule: "fbdev"
-> > [   353.565] (II) Loading /usr/lib/xorg/modules/drivers/fbdev_drv.so
-> > [   353.565] (EE) Failed to load /usr/lib/xorg/modules/drivers/fbdev_drv.so: /usr/lib/xorg/modules/drivers/fbdev_drv.so: undefined symbol: fbdevHWSave
-> > [   353.565] (EE) Failed to load module "fbdev" (loader failed, 0)
-> > [   353.565] (II) LoadModule: "vesa"
-> > [   353.565] (II) Loading /usr/lib/xorg/modules/drivers/vesa_drv.so
-> > [   353.565] (EE) Failed to load /usr/lib/xorg/modules/drivers/vesa_drv.so: /usr/lib/xorg/modules/drivers/vesa_drv.so: undefined symbol: VBESetModeParameters
-> >
-> > Full Xorg.log https://pastebin.com/nu5wpHex
-> > Full defconfig https://pastebin.com/RLJRwMES
-> >
-> >
-> > I don't have problems with branch 2020.08.x with the same defconfig.
-> >
-> > Any idea?
->
-> Seems similar to the problem fixed by commit [1] (for the fbdev use case), but take a look
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libvirt/libvirt.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-	s/fbdev/fbturbo/
-
-Regards,
-Peter
-
-> at the linked bug report/mailing list report for hints about the module loading order in
-> xorg.conf file and/or needed patches...
->
-> Regards,
-> Peter
->
-> [1] https://git.buildroot.net/buildroot/commit/?id=9dc2b4a4eee557d3d9e7df31e9d2e96f364a2f03
->
-> >
-> > Rafal
-> >
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot@lists.buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+diff --git a/package/libvirt/libvirt.mk b/package/libvirt/libvirt.mk
+index 847c35e06e..396dd61577 100644
+--- a/package/libvirt/libvirt.mk
++++ b/package/libvirt/libvirt.mk
+@@ -33,6 +33,7 @@ LIBVIRT_CONF_ENV += \
+ LIBVIRT_CONF_OPTS = \
+ 	-Drpath=disabled \
+ 	-Dapparmor=disabled \
++	-Ddocs=disabled \
+ 	-Ddriver_bhyve=disabled \
+ 	-Ddriver_esx=disabled \
+ 	-Ddriver_hyperv=disabled \
+@@ -41,10 +42,12 @@ LIBVIRT_CONF_OPTS = \
+ 	-Ddriver_openvz=disabled \
+ 	-Ddriver_remote=enabled \
+ 	-Ddriver_secrets=enabled \
++	-Ddriver_test=disabled \
+ 	-Ddriver_vbox=disabled \
+ 	-Ddriver_vmware=disabled \
+ 	-Ddriver_vz=disabled \
+ 	-Ddtrace=disabled \
++	-Dexpensive_tests=disabled \
+ 	-Dfirewalld=disabled \
+ 	-Dfirewalld_zone=disabled \
+ 	-Dglusterfs=disabled \
+@@ -64,6 +67,7 @@ LIBVIRT_CONF_OPTS = \
+ 	-Dstorage_mpath=disabled \
+ 	-Dsysctl_config=enabled \
+ 	-Dtest_coverage=false \
++	-Dtests=disabled \
+ 	-Dudev=enabled \
+ 	-Dwireshark_dissector=disabled
+ 
+-- 
+2.33.0
 
 _______________________________________________
 buildroot mailing list
