@@ -2,87 +2,65 @@ Return-Path: <SRS0=vgbW=OF=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,HTML_MESSAGE,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.9 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,HTML_MESSAGE,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 84FDEC433F5
-	for <buildroot@archiver.kernel.org>; Wed, 15 Sep 2021 11:41:46 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 968D4C433EF
+	for <buildroot@archiver.kernel.org>; Wed, 15 Sep 2021 12:11:58 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D1D7F61185
-	for <buildroot@archiver.kernel.org>; Wed, 15 Sep 2021 11:41:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D1D7F61185
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=unikie.com
+	by mail.kernel.org (Postfix) with ESMTPS id D664C606A5
+	for <buildroot@archiver.kernel.org>; Wed, 15 Sep 2021 12:11:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D664C606A5
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=grinn-global.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 726A64052D;
-	Wed, 15 Sep 2021 11:41:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9C1FD81B99;
+	Wed, 15 Sep 2021 12:11:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WECBT9z-ZZLi; Wed, 15 Sep 2021 11:41:44 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 772C14052E;
-	Wed, 15 Sep 2021 11:41:43 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9D1361BF3D9
- for <buildroot@lists.busybox.net>; Wed, 15 Sep 2021 11:41:41 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 98E9B82865
- for <buildroot@lists.busybox.net>; Wed, 15 Sep 2021 11:41:41 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=unikie-com.20150623.gappssmtp.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6HN9UOP3ihpa for <buildroot@lists.busybox.net>;
- Wed, 15 Sep 2021 11:41:40 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com
- [IPv6:2a00:1450:4864:20::52a])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1250082864
- for <buildroot@buildroot.org>; Wed, 15 Sep 2021 11:41:39 +0000 (UTC)
-Received: by mail-ed1-x52a.google.com with SMTP id g8so3853231edt.7
- for <buildroot@buildroot.org>; Wed, 15 Sep 2021 04:41:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=unikie-com.20150623.gappssmtp.com; s=20150623;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=e/eNOOkt+wt3g7QQuUQnSeqfuONU67ipQ0ytfEhtKFY=;
- b=VaMv/pgS/fzUbQ0c7j8cIY1a/Vb9XNtu3MK3qt0qbO9GAxQOKhL+wp0Aa3ZIu2C7sN
- YJmumxd/Y07Ir4KbqE+8J9NJVsGJhO3nyVPOIijAEqexxkuvoRbfLDZKyUXXwvvWhuoa
- OjWc2XS/aG3t2a4+oDuR6TD7VR8xknkCabr7B3rrj/jiyKhSzG8iCeeQaLrEwwNyhsnb
- UmoKv4d68M/jMm4VNUz6OUfhWAf4odjaAfZgnZzhtHT6US/eL0kwLwNQYiqCjRCCrfmg
- 23i1+XtBfB66VsRfTHV+EhqBDqBb3QJO7PVS4TKXfk/+P9L5n2b0pRmDjUri8koPI/ck
- RA2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=e/eNOOkt+wt3g7QQuUQnSeqfuONU67ipQ0ytfEhtKFY=;
- b=Gf6SzkMeADNpL46mjCrjUaI1KsU3r8RQAhta/evy22Ygs8KSiIH6ex4ML06BjldYHP
- eTpaLNDr9n5ix+J1v3tKlPcQRNMBdws8fAX2CKZj4rSb9P8qcp274OSnElIWEjWeHJEG
- lhwCxqNK58DuAxZB1nMzH6oWPU8wtcECkmX3Mh3NboHaON0vpQtD9Fv4mYj1lHzxvCAC
- QwoD5+wRP/yje9wNOgYe82fH2AtMVVUFUpjrQ7mScNJkaFbxdFF5/kyhjuGAFufZudhA
- rwdcwVTP+hr+t28W7NsLUUQmUJtr3p3r7zLfHax46yUzYWumefro26ZKRLMCdJ2QhoAS
- irjg==
-X-Gm-Message-State: AOAM532u7CHYcXdBBJvHAHdNKMyUSEWdFeAAOwQ/KNwI0GvB7S+NvcAf
- NY3k/YOgWFuRsZXxsAG3p+wGTOvt+R2nlt/wkOQliHHLD3SJlw==
-X-Google-Smtp-Source: ABdhPJw7zKEztZYMiz5fDPDYPFyJUm6HWHcdKu4lHnsJvNSchZI3tkGheIWYTXaVFyqmpzrjXmndu4nfKRbMkNlMlzQ=
-X-Received: by 2002:aa7:c9d6:: with SMTP id i22mr25840789edt.307.1631706098111; 
- Wed, 15 Sep 2021 04:41:38 -0700 (PDT)
-MIME-Version: 1.0
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id tY3uO6uuWlW2; Wed, 15 Sep 2021 12:11:56 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8E615828DF;
+	Wed, 15 Sep 2021 12:11:55 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6802A1BF404
+ for <buildroot@lists.busybox.net>; Wed, 15 Sep 2021 12:11:54 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4ACD8401C8
+ for <buildroot@lists.busybox.net>; Wed, 15 Sep 2021 12:11:54 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id FQmjISMahzYA for <buildroot@lists.busybox.net>;
+ Wed, 15 Sep 2021 12:11:52 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from mail.grinn-global.com (mail.grinn-global.com [77.55.128.204])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 928B5400EE
+ for <buildroot@buildroot.org>; Wed, 15 Sep 2021 12:11:52 +0000 (UTC)
+X-Virus-Scanned: by amavisd-new using ClamAV (1)
+Received: from [192.168.65.122] (95.143.241.142.ultranet.net.pl
+ [95.143.241.142])
+ by server220076.nazwa.pl (Postfix) with ESMTP id 1F8D21C5E31;
+ Wed, 15 Sep 2021 14:11:49 +0200 (CEST)
+To: =?UTF-8?Q?Jos=c3=a9_Pekkarinen?= <jose.pekkarinen@unikie.com>
 References: <20210914132139.3597322-1-jose.pekkarinen@unikie.com>
  <87ee9rgm9e.fsf@tarshish>
  <CAJPV9MoTBjbwuAbtWaeHeSJBOKtYAbpOtJCJTAj3NW8ZF8HRSQ@mail.gmail.com>
  <87k0jif8w4.fsf@tarshish>
-In-Reply-To: <87k0jif8w4.fsf@tarshish>
-From: =?UTF-8?Q?Jos=C3=A9_Pekkarinen?= <jose.pekkarinen@unikie.com>
-Date: Wed, 15 Sep 2021 14:41:27 +0300
-Message-ID: <CAJPV9MpYfzoEN3qbMMmFvQy78-=i4VP39_0KzZ2GraYDnNwd3Q@mail.gmail.com>
-To: Baruch Siach <baruch@tkos.co.il>
+ <CAJPV9MpYfzoEN3qbMMmFvQy78-=i4VP39_0KzZ2GraYDnNwd3Q@mail.gmail.com>
+From: =?UTF-8?Q?Bartosz_Bi=c5=82as?= <b.bilas@grinn-global.com>
+Message-ID: <c4771a62-e0e7-939c-703f-00b89267569c@grinn-global.com>
+Date: Wed, 15 Sep 2021 14:11:48 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
+MIME-Version: 1.0
+In-Reply-To: <CAJPV9MpYfzoEN3qbMMmFvQy78-=i4VP39_0KzZ2GraYDnNwd3Q@mail.gmail.com>
+Content-Language: en-US
 Subject: Re: [Buildroot] [PATCH v2] package/iptables: add init script
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
@@ -97,352 +75,434 @@ List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
 Cc: buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============5265403997954777128=="
+Content-Type: multipart/mixed; boundary="===============1649311475106202370=="
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
---===============5265403997954777128==
-Content-Type: multipart/alternative; boundary="0000000000005b2d4305cc072ec6"
+This is a multi-part message in MIME format.
+--===============1649311475106202370==
+Content-Type: multipart/alternative;
+ boundary="------------4F308195E34B01946387379E"
+Content-Language: en-US
 
---0000000000005b2d4305cc072ec6
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+This is a multi-part message in MIME format.
+--------------4F308195E34B01946387379E
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Wed, Sep 15, 2021 at 1:09 PM Baruch Siach <baruch@tkos.co.il> wrote:
+Hello José,
 
-> Hi Jos=C3=A9,
+On 9/15/21 1:41 PM, José Pekkarinen wrote:
 >
-> On Wed, Sep 15 2021, Jos=C3=A9 Pekkarinen wrote:
-> > On Tue, Sep 14, 2021 at 7:22 PM Baruch Siach <baruch@tkos.co.il> wrote:
-> >  On Tue, Sep 14 2021, Jos=C3=A9 Pekkarinen wrote:
-> >  > This patch will add an init script that allows
-> >  > to set a ruleset in /etc/iptables.conf to be loaded
-> >  > on boot, or flushed on stop, as well as a saving
-> >  > command to generate a new file.
-> >  >
-> >  > Signed-off-by: Jos=C3=A9 Pekkarinen <jose.pekkarinen@unikie.com>
-> >  > ---
-> >  > [v1 -> v2] s/touch $(DESTDIR)/touch $(TARGET_DIR)/
-> >  >
-> >  >  package/iptables/S41iptables | 58
-> ++++++++++++++++++++++++++++++++++++
-> >  >  package/iptables/iptables.mk |  6 ++++
-> >  >  2 files changed, 64 insertions(+)
-> >  >  create mode 100644 package/iptables/S41iptables
-> >  >
-> >  > diff --git a/package/iptables/S41iptables
-> b/package/iptables/S41iptables
-> >  > new file mode 100644
-> >  > index 0000000000..93998b78de
-> >  > --- /dev/null
-> >  > +++ b/package/iptables/S41iptables
-> >  > @@ -0,0 +1,58 @@
-> >  > +#!/bin/sh
-> >  > +
-> >  > +DAEMON=3D"iptables"
-> >  > +
-> >  > +IPTABLES_ARGS=3D""
-> >  > +
-> >  > +start() {
-> >  > +     printf 'Starting %s: ' "$DAEMON"
-> >  > +     iptables-restore < /etc/iptables.conf
-> >  > +     status=3D$?
-> >  > +     if [ "$status" -eq 0 ]; then
-> >  > +             echo "OK"
-> >  > +     else
-> >  > +             echo "FAIL"
-> >  > +     fi
-> >  > +     return "$status"
-> >  > +}
-> >  > +
-> >  > +stop() {
-> >  > +     printf 'Stopping %s: ' "$DAEMON"
-> >  > +     iptables -F
-> >  > +     status=3D$?
-> >  > +     if [ "$status" -eq 0 ]; then
-> >  > +             echo "OK"
-> >  > +     else
-> >  > +             echo "FAIL"
-> >  > +     fi
-> >  > +     return "$status"
-> >  > +}
-> >  > +
-> >  > +restart() {
-> >  > +     stop
-> >  > +     sleep 1
-> >  > +     start
-> >  > +}
-> >  > +
-> >  > +save() {
-> >  > +     printf 'Saving %s: ' "$DAEMON"
-> >  > +     iptables-save > /etc/iptables.conf
-> >
-> >  What about read-only rootfs?
-> >
-> >     Very good point, will it work if we check the rootfs
-> > whether is ro or rw, and execute on that behalf?
 >
-> I'm not sure that this script is a good idea to begin with for the
-> default installation. But if the maintainers think it is, the script
-> should skip the save operation for read-only filesystems. See how
-> package/urandom-scripts/S20urandom handles that.
+> On Wed, Sep 15, 2021 at 1:09 PM Baruch Siach <baruch@tkos.co.il 
+> <mailto:baruch@tkos.co.il>> wrote:
 >
-
-    Thanks again, I'm testing a patch to solve the ro rootfs
-issue. Is there any better approach to have a firewall ruleset
-by default in the final image?
-
-    Best regards.
-
-    Jos=C3=A9.
-
-
+>     Hi José,
 >
-> baruch
+>     On Wed, Sep 15 2021, José Pekkarinen wrote:
+>     > On Tue, Sep 14, 2021 at 7:22 PM Baruch Siach <baruch@tkos.co.il
+>     <mailto:baruch@tkos.co.il>> wrote:
+>     >  On Tue, Sep 14 2021, José Pekkarinen wrote:
+>     >  > This patch will add an init script that allows
+>     >  > to set a ruleset in /etc/iptables.conf to be loaded
+>     >  > on boot, or flushed on stop, as well as a saving
+>     >  > command to generate a new file.
+>     >  >
+>     >  > Signed-off-by: José Pekkarinen <jose.pekkarinen@unikie.com
+>     <mailto:jose.pekkarinen@unikie.com>>
+>     >  > ---
+>     >  > [v1 -> v2] s/touch $(DESTDIR)/touch $(TARGET_DIR)/
+>     >  >
+>     >  >  package/iptables/S41iptables | 58
+>     ++++++++++++++++++++++++++++++++++++
+>     >  >  package/iptables/iptables.mk <http://iptables.mk> |  6 ++++
+>     >  >  2 files changed, 64 insertions(+)
+>     >  >  create mode 100644 package/iptables/S41iptables
+>     >  >
+>     >  > diff --git a/package/iptables/S41iptables
+>     b/package/iptables/S41iptables
+>     >  > new file mode 100644
+>     >  > index 0000000000..93998b78de
+>     >  > --- /dev/null
+>     >  > +++ b/package/iptables/S41iptables
+>     >  > @@ -0,0 +1,58 @@
+>     >  > +#!/bin/sh
+>     >  > +
+>     >  > +DAEMON="iptables"
+>     >  > +
+>     >  > +IPTABLES_ARGS=""
+>     >  > +
+>     >  > +start() {
+>     >  > +     printf 'Starting %s: ' "$DAEMON"
+>     >  > +     iptables-restore < /etc/iptables.conf
+>     >  > +     status=$?
+>     >  > +     if [ "$status" -eq 0 ]; then
+>     >  > +             echo "OK"
+>     >  > +     else
+>     >  > +             echo "FAIL"
+>     >  > +     fi
+>     >  > +     return "$status"
+>     >  > +}
+>     >  > +
+>     >  > +stop() {
+>     >  > +     printf 'Stopping %s: ' "$DAEMON"
+>     >  > +     iptables -F
+>     >  > +     status=$?
+>     >  > +     if [ "$status" -eq 0 ]; then
+>     >  > +             echo "OK"
+>     >  > +     else
+>     >  > +             echo "FAIL"
+>     >  > +     fi
+>     >  > +     return "$status"
+>     >  > +}
+>     >  > +
+>     >  > +restart() {
+>     >  > +     stop
+>     >  > +     sleep 1
+>     >  > +     start
+>     >  > +}
+>     >  > +
+>     >  > +save() {
+>     >  > +     printf 'Saving %s: ' "$DAEMON"
+>     >  > +     iptables-save > /etc/iptables.conf
+>     >
+>     >  What about read-only rootfs?
+>     >
+>     >     Very good point, will it work if we check the rootfs
+>     > whether is ro or rw, and execute on that behalf?
 >
-> >
-> >     Thanks for the comments!
-> >
-> >     Jos=C3=A9.
-> >
-> >  baruch
-> >
-> >  > +     status=3D$?
-> >  > +     if [ "$status" -eq 0 ]; then
-> >  > +             echo "OK"
-> >  > +     else
-> >  > +             echo "FAIL"
-> >  > +     fi
-> >  > +     return "$status"
-> >  > +}
-> >  > +
-> >  > +case "$1" in
-> >  > +     start|stop|restart|save)
-> >  > +             "$1";;
-> >  > +     reload)
-> >  > +             # Restart, since there is no true "reload" feature.
-> >  > +             restart;;
-> >  > +     *)
-> >  > +             echo "Usage: $0 {start|stop|restart|reload}"
-> >  > +             exit 1
-> >  > +esac
-> >  > diff --git a/package/iptables/iptables.mk b/package/iptables/
-> iptables.mk
-> >  > index dc01466607..1d3612dbf6 100644
-> >  > --- a/package/iptables/iptables.mk
-> >  > +++ b/package/iptables/iptables.mk
-> >  > @@ -57,4 +57,10 @@ define IPTABLES_LINUX_CONFIG_FIXUPS
-> >  >       $(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XTABLES)
-> >  >  endef
-> >  >
-> >  > +define IPTABLES_INSTALL_INIT_SYSV
-> >  > +     $(INSTALL) -m 0755 -D package/iptables/S41iptables \
-> >  > +             $(TARGET_DIR)/etc/init.d/S41iptables
-> >  > +     touch $(TARGET_DIR)/etc/iptables.conf
-> >  > +endef
-> >  > +
-> >  >  $(eval $(autotools-package))
+>     I'm not sure that this script is a good idea to begin with for the
+>     default installation. But if the maintainers think it is, the script
+>     should skip the save operation for read-only filesystems. See how
+>     package/urandom-scripts/S20urandom handles that.
 >
-> --
->                                                      ~. .~   Tk Open
-> Systems
-> =3D}------------------------------------------------ooO--U--Ooo----------=
---{=3D
->    - baruch@tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
 >
+>     Thanks again, I'm testing a patch to solve the ro rootfs
+> issue. Is there any better approach to have a firewall ruleset
+> by default in the final image?
+
+Did you try to use post-build script to copy this file into your image?
+
+Best
+Bartek
+>
+>     Best regards.
+>
+>     José.
+>
+>
+>     baruch
+>
+>     >
+>     >     Thanks for the comments!
+>     >
+>     >     José.
+>     >
+>     >  baruch
+>     >
+>     >  > +     status=$?
+>     >  > +     if [ "$status" -eq 0 ]; then
+>     >  > +             echo "OK"
+>     >  > +     else
+>     >  > +             echo "FAIL"
+>     >  > +     fi
+>     >  > +     return "$status"
+>     >  > +}
+>     >  > +
+>     >  > +case "$1" in
+>     >  > +     start|stop|restart|save)
+>     >  > +             "$1";;
+>     >  > +     reload)
+>     >  > +             # Restart, since there is no true "reload" feature.
+>     >  > +             restart;;
+>     >  > +     *)
+>     >  > +             echo "Usage: $0 {start|stop|restart|reload}"
+>     >  > +             exit 1
+>     >  > +esac
+>     >  > diff --git a/package/iptables/iptables.mk
+>     <http://iptables.mk> b/package/iptables/iptables.mk
+>     <http://iptables.mk>
+>     >  > index dc01466607..1d3612dbf6 100644
+>     >  > --- a/package/iptables/iptables.mk <http://iptables.mk>
+>     >  > +++ b/package/iptables/iptables.mk <http://iptables.mk>
+>     >  > @@ -57,4 +57,10 @@ define IPTABLES_LINUX_CONFIG_FIXUPS
+>     >  >       $(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XTABLES)
+>     >  >  endef
+>     >  >
+>     >  > +define IPTABLES_INSTALL_INIT_SYSV
+>     >  > +     $(INSTALL) -m 0755 -D package/iptables/S41iptables \
+>     >  > +  $(TARGET_DIR)/etc/init.d/S41iptables
+>     >  > +     touch $(TARGET_DIR)/etc/iptables.conf
+>     >  > +endef
+>     >  > +
+>     >  >  $(eval $(autotools-package))
+>
+>     -- 
+>                                                          ~. .~  Tk
+>     Open Systems
+>     =}------------------------------------------------ooO--U--Ooo------------{=
+>        - baruch@tkos.co.il <mailto:baruch@tkos.co.il> - tel:
+>     +972.52.368.4656, http://www.tkos.co.il <http://www.tkos.co.il> -
+>
+>
+>
+> -- 
+>
+>     José.
+>
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot@lists.buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+-- 
 
 
---=20
+--------------4F308195E34B01946387379E
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: 8bit
 
-Jos=C3=A9.
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  </head>
+  <body>
+    <p>Hello José,</p>
+    <div class="moz-cite-prefix">On 9/15/21 1:41 PM, José Pekkarinen
+      wrote:<br>
+    </div>
+    <blockquote type="cite"
+cite="mid:CAJPV9MpYfzoEN3qbMMmFvQy78-=i4VP39_0KzZ2GraYDnNwd3Q@mail.gmail.com">
+      <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+      <div dir="ltr">
+        <div dir="ltr"><br>
+        </div>
+        <br>
+        <div class="gmail_quote">
+          <div dir="ltr" class="gmail_attr">On Wed, Sep 15, 2021 at 1:09
+            PM Baruch Siach &lt;<a href="mailto:baruch@tkos.co.il"
+              moz-do-not-send="true">baruch@tkos.co.il</a>&gt; wrote:<br>
+          </div>
+          <blockquote class="gmail_quote" style="margin:0px 0px 0px
+            0.8ex;border-left:1px solid
+            rgb(204,204,204);padding-left:1ex">Hi José,<br>
+            <br>
+            On Wed, Sep 15 2021, José Pekkarinen wrote:<br>
+            &gt; On Tue, Sep 14, 2021 at 7:22 PM Baruch Siach &lt;<a
+              href="mailto:baruch@tkos.co.il" target="_blank"
+              moz-do-not-send="true">baruch@tkos.co.il</a>&gt; wrote:<br>
+            &gt;  On Tue, Sep 14 2021, José Pekkarinen wrote:<br>
+            &gt;  &gt; This patch will add an init script that allows<br>
+            &gt;  &gt; to set a ruleset in /etc/iptables.conf to be
+            loaded<br>
+            &gt;  &gt; on boot, or flushed on stop, as well as a saving<br>
+            &gt;  &gt; command to generate a new file.<br>
+            &gt;  &gt;<br>
+            &gt;  &gt; Signed-off-by: José Pekkarinen &lt;<a
+              href="mailto:jose.pekkarinen@unikie.com" target="_blank"
+              moz-do-not-send="true">jose.pekkarinen@unikie.com</a>&gt;<br>
+            &gt;  &gt; ---<br>
+            &gt;  &gt; [v1 -&gt; v2] s/touch $(DESTDIR)/touch
+            $(TARGET_DIR)/<br>
+            &gt;  &gt;<br>
+            &gt;  &gt;  package/iptables/S41iptables | 58
+            ++++++++++++++++++++++++++++++++++++<br>
+            &gt;  &gt;  package/iptables/<a href="http://iptables.mk"
+              rel="noreferrer" target="_blank" moz-do-not-send="true">iptables.mk</a>
+            |  6 ++++<br>
+            &gt;  &gt;  2 files changed, 64 insertions(+)<br>
+            &gt;  &gt;  create mode 100644 package/iptables/S41iptables<br>
+            &gt;  &gt;<br>
+            &gt;  &gt; diff --git a/package/iptables/S41iptables
+            b/package/iptables/S41iptables<br>
+            &gt;  &gt; new file mode 100644<br>
+            &gt;  &gt; index 0000000000..93998b78de<br>
+            &gt;  &gt; --- /dev/null<br>
+            &gt;  &gt; +++ b/package/iptables/S41iptables<br>
+            &gt;  &gt; @@ -0,0 +1,58 @@<br>
+            &gt;  &gt; +#!/bin/sh<br>
+            &gt;  &gt; +<br>
+            &gt;  &gt; +DAEMON="iptables"<br>
+            &gt;  &gt; +<br>
+            &gt;  &gt; +IPTABLES_ARGS=""<br>
+            &gt;  &gt; +<br>
+            &gt;  &gt; +start() {<br>
+            &gt;  &gt; +     printf 'Starting %s: ' "$DAEMON"<br>
+            &gt;  &gt; +     iptables-restore &lt; /etc/iptables.conf<br>
+            &gt;  &gt; +     status=$?<br>
+            &gt;  &gt; +     if [ "$status" -eq 0 ]; then<br>
+            &gt;  &gt; +             echo "OK"<br>
+            &gt;  &gt; +     else<br>
+            &gt;  &gt; +             echo "FAIL"<br>
+            &gt;  &gt; +     fi<br>
+            &gt;  &gt; +     return "$status"<br>
+            &gt;  &gt; +}<br>
+            &gt;  &gt; +<br>
+            &gt;  &gt; +stop() {<br>
+            &gt;  &gt; +     printf 'Stopping %s: ' "$DAEMON"<br>
+            &gt;  &gt; +     iptables -F<br>
+            &gt;  &gt; +     status=$?<br>
+            &gt;  &gt; +     if [ "$status" -eq 0 ]; then<br>
+            &gt;  &gt; +             echo "OK"<br>
+            &gt;  &gt; +     else<br>
+            &gt;  &gt; +             echo "FAIL"<br>
+            &gt;  &gt; +     fi<br>
+            &gt;  &gt; +     return "$status"<br>
+            &gt;  &gt; +}<br>
+            &gt;  &gt; +<br>
+            &gt;  &gt; +restart() {<br>
+            &gt;  &gt; +     stop<br>
+            &gt;  &gt; +     sleep 1<br>
+            &gt;  &gt; +     start<br>
+            &gt;  &gt; +}<br>
+            &gt;  &gt; +<br>
+            &gt;  &gt; +save() {<br>
+            &gt;  &gt; +     printf 'Saving %s: ' "$DAEMON"<br>
+            &gt;  &gt; +     iptables-save &gt; /etc/iptables.conf<br>
+            &gt;<br>
+            &gt;  What about read-only rootfs?<br>
+            &gt;<br>
+            &gt;     Very good point, will it work if we check the
+            rootfs<br>
+            &gt; whether is ro or rw, and execute on that behalf?<br>
+            <br>
+            I'm not sure that this script is a good idea to begin with
+            for the<br>
+            default installation. But if the maintainers think it is,
+            the script<br>
+            should skip the save operation for read-only filesystems.
+            See how<br>
+            package/urandom-scripts/S20urandom handles that.<br>
+          </blockquote>
+          <div><br>
+          </div>
+          <div>    Thanks again, I'm testing a patch to solve the ro
+            rootfs</div>
+          <div>issue. Is there any better approach to have a firewall
+            ruleset</div>
+          <div>by default in the final image?</div>
+        </div>
+      </div>
+    </blockquote>
+    <p>Did you try to use post-build script to copy this file into your
+      image?</p>
+    Best<br>
+    Bartek<br>
+    <blockquote type="cite"
+cite="mid:CAJPV9MpYfzoEN3qbMMmFvQy78-=i4VP39_0KzZ2GraYDnNwd3Q@mail.gmail.com">
+      <div dir="ltr">
+        <div class="gmail_quote">
+          <div><br>
+          </div>
+          <div>    Best regards.</div>
+          <div><br>
+          </div>
+          <div>    José.</div>
+          <div> </div>
+          <blockquote class="gmail_quote" style="margin:0px 0px 0px
+            0.8ex;border-left:1px solid
+            rgb(204,204,204);padding-left:1ex">
+            <br>
+            baruch<br>
+            <br>
+            &gt;<br>
+            &gt;     Thanks for the comments!<br>
+            &gt;<br>
+            &gt;     José.<br>
+            &gt;  <br>
+            &gt;  baruch<br>
+            &gt;<br>
+            &gt;  &gt; +     status=$?<br>
+            &gt;  &gt; +     if [ "$status" -eq 0 ]; then<br>
+            &gt;  &gt; +             echo "OK"<br>
+            &gt;  &gt; +     else<br>
+            &gt;  &gt; +             echo "FAIL"<br>
+            &gt;  &gt; +     fi<br>
+            &gt;  &gt; +     return "$status"<br>
+            &gt;  &gt; +}<br>
+            &gt;  &gt; +<br>
+            &gt;  &gt; +case "$1" in<br>
+            &gt;  &gt; +     start|stop|restart|save)<br>
+            &gt;  &gt; +             "$1";;<br>
+            &gt;  &gt; +     reload)<br>
+            &gt;  &gt; +             # Restart, since there is no true
+            "reload" feature.<br>
+            &gt;  &gt; +             restart;;<br>
+            &gt;  &gt; +     *)<br>
+            &gt;  &gt; +             echo "Usage: $0
+            {start|stop|restart|reload}"<br>
+            &gt;  &gt; +             exit 1<br>
+            &gt;  &gt; +esac<br>
+            &gt;  &gt; diff --git a/package/iptables/<a
+              href="http://iptables.mk" rel="noreferrer" target="_blank"
+              moz-do-not-send="true">iptables.mk</a> b/package/iptables/<a
+              href="http://iptables.mk" rel="noreferrer" target="_blank"
+              moz-do-not-send="true">iptables.mk</a><br>
+            &gt;  &gt; index dc01466607..1d3612dbf6 100644<br>
+            &gt;  &gt; --- a/package/iptables/<a
+              href="http://iptables.mk" rel="noreferrer" target="_blank"
+              moz-do-not-send="true">iptables.mk</a><br>
+            &gt;  &gt; +++ b/package/iptables/<a
+              href="http://iptables.mk" rel="noreferrer" target="_blank"
+              moz-do-not-send="true">iptables.mk</a><br>
+            &gt;  &gt; @@ -57,4 +57,10 @@ define
+            IPTABLES_LINUX_CONFIG_FIXUPS<br>
+            &gt;  &gt;       $(call
+            KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XTABLES)<br>
+            &gt;  &gt;  endef<br>
+            &gt;  &gt;  <br>
+            &gt;  &gt; +define IPTABLES_INSTALL_INIT_SYSV<br>
+            &gt;  &gt; +     $(INSTALL) -m 0755 -D
+            package/iptables/S41iptables \<br>
+            &gt;  &gt; +           
+             $(TARGET_DIR)/etc/init.d/S41iptables<br>
+            &gt;  &gt; +     touch $(TARGET_DIR)/etc/iptables.conf<br>
+            &gt;  &gt; +endef<br>
+            &gt;  &gt; +<br>
+            &gt;  &gt;  $(eval $(autotools-package))<br>
+            <br>
+            -- <br>
+                                                                 ~. .~ 
+             Tk Open Systems<br>
+=}------------------------------------------------ooO--U--Ooo------------{=<br>
+               - <a href="mailto:baruch@tkos.co.il" target="_blank"
+              moz-do-not-send="true">baruch@tkos.co.il</a> - tel:
+            +972.52.368.4656, <a href="http://www.tkos.co.il"
+              rel="noreferrer" target="_blank" moz-do-not-send="true">http://www.tkos.co.il</a>
+            -<br>
+          </blockquote>
+        </div>
+        <br clear="all">
+        <div><br>
+        </div>
+        -- <br>
+        <div dir="ltr" class="gmail_signature">
+          <div dir="ltr">
+            <blockquote style="margin:0px 0px 0px
+              40px;border:none;padding:0px">José.</blockquote>
+          </div>
+        </div>
+      </div>
+      <br>
+      <fieldset class="mimeAttachmentHeader"></fieldset>
+      <pre class="moz-quote-pre" wrap="">_______________________________________________
+buildroot mailing list
+<a class="moz-txt-link-abbreviated" href="mailto:buildroot@lists.buildroot.org">buildroot@lists.buildroot.org</a>
+<a class="moz-txt-link-freetext" href="https://lists.buildroot.org/mailman/listinfo/buildroot">https://lists.buildroot.org/mailman/listinfo/buildroot</a>
+</pre>
+    </blockquote>
+    <div class="moz-signature">-- <br>
+      <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+      <title></title>
+      <br>
+    </div>
+  </body>
+</html>
 
---0000000000005b2d4305cc072ec6
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+--------------4F308195E34B01946387379E--
 
-<div dir=3D"ltr"><div dir=3D"ltr"><br></div><br><div class=3D"gmail_quote">=
-<div dir=3D"ltr" class=3D"gmail_attr">On Wed, Sep 15, 2021 at 1:09 PM Baruc=
-h Siach &lt;<a href=3D"mailto:baruch@tkos.co.il">baruch@tkos.co.il</a>&gt; =
-wrote:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0=
-px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">Hi Jos=C3=
-=A9,<br>
-<br>
-On Wed, Sep 15 2021, Jos=C3=A9 Pekkarinen wrote:<br>
-&gt; On Tue, Sep 14, 2021 at 7:22 PM Baruch Siach &lt;<a href=3D"mailto:bar=
-uch@tkos.co.il" target=3D"_blank">baruch@tkos.co.il</a>&gt; wrote:<br>
-&gt;=C2=A0 On Tue, Sep 14 2021, Jos=C3=A9 Pekkarinen wrote:<br>
-&gt;=C2=A0 &gt; This patch will add an init script that allows<br>
-&gt;=C2=A0 &gt; to set a ruleset in /etc/iptables.conf to be loaded<br>
-&gt;=C2=A0 &gt; on boot, or flushed on stop, as well as a saving<br>
-&gt;=C2=A0 &gt; command to generate a new file.<br>
-&gt;=C2=A0 &gt;<br>
-&gt;=C2=A0 &gt; Signed-off-by: Jos=C3=A9 Pekkarinen &lt;<a href=3D"mailto:j=
-ose.pekkarinen@unikie.com" target=3D"_blank">jose.pekkarinen@unikie.com</a>=
-&gt;<br>
-&gt;=C2=A0 &gt; ---<br>
-&gt;=C2=A0 &gt; [v1 -&gt; v2] s/touch $(DESTDIR)/touch $(TARGET_DIR)/<br>
-&gt;=C2=A0 &gt;<br>
-&gt;=C2=A0 &gt;=C2=A0 package/iptables/S41iptables | 58 +++++++++++++++++++=
-+++++++++++++++++<br>
-&gt;=C2=A0 &gt;=C2=A0 package/iptables/<a href=3D"http://iptables.mk" rel=
-=3D"noreferrer" target=3D"_blank">iptables.mk</a> |=C2=A0 6 ++++<br>
-&gt;=C2=A0 &gt;=C2=A0 2 files changed, 64 insertions(+)<br>
-&gt;=C2=A0 &gt;=C2=A0 create mode 100644 package/iptables/S41iptables<br>
-&gt;=C2=A0 &gt;<br>
-&gt;=C2=A0 &gt; diff --git a/package/iptables/S41iptables b/package/iptable=
-s/S41iptables<br>
-&gt;=C2=A0 &gt; new file mode 100644<br>
-&gt;=C2=A0 &gt; index 0000000000..93998b78de<br>
-&gt;=C2=A0 &gt; --- /dev/null<br>
-&gt;=C2=A0 &gt; +++ b/package/iptables/S41iptables<br>
-&gt;=C2=A0 &gt; @@ -0,0 +1,58 @@<br>
-&gt;=C2=A0 &gt; +#!/bin/sh<br>
-&gt;=C2=A0 &gt; +<br>
-&gt;=C2=A0 &gt; +DAEMON=3D&quot;iptables&quot;<br>
-&gt;=C2=A0 &gt; +<br>
-&gt;=C2=A0 &gt; +IPTABLES_ARGS=3D&quot;&quot;<br>
-&gt;=C2=A0 &gt; +<br>
-&gt;=C2=A0 &gt; +start() {<br>
-&gt;=C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0printf &#39;Starting %s: &#39; &quot;$=
-DAEMON&quot;<br>
-&gt;=C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0iptables-restore &lt; /etc/iptables.co=
-nf<br>
-&gt;=C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0status=3D$?<br>
-&gt;=C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0if [ &quot;$status&quot; -eq 0 ]; then=
-<br>
-&gt;=C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0echo &quot=
-;OK&quot;<br>
-&gt;=C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0else<br>
-&gt;=C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0echo &quot=
-;FAIL&quot;<br>
-&gt;=C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0fi<br>
-&gt;=C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0return &quot;$status&quot;<br>
-&gt;=C2=A0 &gt; +}<br>
-&gt;=C2=A0 &gt; +<br>
-&gt;=C2=A0 &gt; +stop() {<br>
-&gt;=C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0printf &#39;Stopping %s: &#39; &quot;$=
-DAEMON&quot;<br>
-&gt;=C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0iptables -F<br>
-&gt;=C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0status=3D$?<br>
-&gt;=C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0if [ &quot;$status&quot; -eq 0 ]; then=
-<br>
-&gt;=C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0echo &quot=
-;OK&quot;<br>
-&gt;=C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0else<br>
-&gt;=C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0echo &quot=
-;FAIL&quot;<br>
-&gt;=C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0fi<br>
-&gt;=C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0return &quot;$status&quot;<br>
-&gt;=C2=A0 &gt; +}<br>
-&gt;=C2=A0 &gt; +<br>
-&gt;=C2=A0 &gt; +restart() {<br>
-&gt;=C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0stop<br>
-&gt;=C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0sleep 1<br>
-&gt;=C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0start<br>
-&gt;=C2=A0 &gt; +}<br>
-&gt;=C2=A0 &gt; +<br>
-&gt;=C2=A0 &gt; +save() {<br>
-&gt;=C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0printf &#39;Saving %s: &#39; &quot;$DA=
-EMON&quot;<br>
-&gt;=C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0iptables-save &gt; /etc/iptables.conf<=
-br>
-&gt;<br>
-&gt;=C2=A0 What about read-only rootfs?<br>
-&gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0Very good point, will it work if we check the rootf=
-s<br>
-&gt; whether is ro or rw, and execute on that behalf?<br>
-<br>
-I&#39;m not sure that this script is a good idea to begin with for the<br>
-default installation. But if the maintainers think it is, the script<br>
-should skip the save operation for read-only filesystems. See how<br>
-package/urandom-scripts/S20urandom handles that.<br></blockquote><div><br><=
-/div><div>=C2=A0 =C2=A0 Thanks again, I&#39;m testing a patch to solve the =
-ro rootfs</div><div>issue. Is there any better approach to have a firewall =
-ruleset</div><div>by default in the final image?</div><div><br></div><div>=
-=C2=A0 =C2=A0 Best regards.</div><div><br></div><div>=C2=A0 =C2=A0 Jos=C3=
-=A9.</div><div>=C2=A0</div><blockquote class=3D"gmail_quote" style=3D"margi=
-n:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex=
-">
-<br>
-baruch<br>
-<br>
-&gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0Thanks for the comments!<br>
-&gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0Jos=C3=A9.<br>
-&gt;=C2=A0 <br>
-&gt;=C2=A0 baruch<br>
-&gt;<br>
-&gt;=C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0status=3D$?<br>
-&gt;=C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0if [ &quot;$status&quot; -eq 0 ]; then=
-<br>
-&gt;=C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0echo &quot=
-;OK&quot;<br>
-&gt;=C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0else<br>
-&gt;=C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0echo &quot=
-;FAIL&quot;<br>
-&gt;=C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0fi<br>
-&gt;=C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0return &quot;$status&quot;<br>
-&gt;=C2=A0 &gt; +}<br>
-&gt;=C2=A0 &gt; +<br>
-&gt;=C2=A0 &gt; +case &quot;$1&quot; in<br>
-&gt;=C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0start|stop|restart|save)<br>
-&gt;=C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&quot;$1&q=
-uot;;;<br>
-&gt;=C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0reload)<br>
-&gt;=C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0# Restart,=
- since there is no true &quot;reload&quot; feature.<br>
-&gt;=C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0restart;;<=
-br>
-&gt;=C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0*)<br>
-&gt;=C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0echo &quot=
-;Usage: $0 {start|stop|restart|reload}&quot;<br>
-&gt;=C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0exit 1<br>
-&gt;=C2=A0 &gt; +esac<br>
-&gt;=C2=A0 &gt; diff --git a/package/iptables/<a href=3D"http://iptables.mk=
-" rel=3D"noreferrer" target=3D"_blank">iptables.mk</a> b/package/iptables/<=
-a href=3D"http://iptables.mk" rel=3D"noreferrer" target=3D"_blank">iptables=
-.mk</a><br>
-&gt;=C2=A0 &gt; index dc01466607..1d3612dbf6 100644<br>
-&gt;=C2=A0 &gt; --- a/package/iptables/<a href=3D"http://iptables.mk" rel=
-=3D"noreferrer" target=3D"_blank">iptables.mk</a><br>
-&gt;=C2=A0 &gt; +++ b/package/iptables/<a href=3D"http://iptables.mk" rel=
-=3D"noreferrer" target=3D"_blank">iptables.mk</a><br>
-&gt;=C2=A0 &gt; @@ -57,4 +57,10 @@ define IPTABLES_LINUX_CONFIG_FIXUPS<br>
-&gt;=C2=A0 &gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0$(call KCONFIG_ENABLE_OPT,CONFIG_=
-NETFILTER_XTABLES)<br>
-&gt;=C2=A0 &gt;=C2=A0 endef<br>
-&gt;=C2=A0 &gt;=C2=A0 <br>
-&gt;=C2=A0 &gt; +define IPTABLES_INSTALL_INIT_SYSV<br>
-&gt;=C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0$(INSTALL) -m 0755 -D package/iptables=
-/S41iptables \<br>
-&gt;=C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0$(TARGET_D=
-IR)/etc/init.d/S41iptables<br>
-&gt;=C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0touch $(TARGET_DIR)/etc/iptables.conf<=
-br>
-&gt;=C2=A0 &gt; +endef<br>
-&gt;=C2=A0 &gt; +<br>
-&gt;=C2=A0 &gt;=C2=A0 $(eval $(autotools-package))<br>
-<br>
--- <br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0~. .~=C2=A0 =C2=A0Tk Open Systems<=
-br>
-=3D}------------------------------------------------ooO--U--Ooo------------=
-{=3D<br>
-=C2=A0 =C2=A0- <a href=3D"mailto:baruch@tkos.co.il" target=3D"_blank">baruc=
-h@tkos.co.il</a> - tel: +972.52.368.4656, <a href=3D"http://www.tkos.co.il"=
- rel=3D"noreferrer" target=3D"_blank">http://www.tkos.co.il</a> -<br>
-</blockquote></div><br clear=3D"all"><div><br></div>-- <br><div dir=3D"ltr"=
- class=3D"gmail_signature"><div dir=3D"ltr"><blockquote style=3D"margin:0px=
- 0px 0px 40px;border:none;padding:0px">Jos=C3=A9.</blockquote></div></div><=
-/div>
-
---0000000000005b2d4305cc072ec6--
-
---===============5265403997954777128==
+--===============1649311475106202370==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -453,4 +513,4 @@ buildroot mailing list
 buildroot@lists.buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============5265403997954777128==--
+--===============1649311475106202370==--
