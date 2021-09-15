@@ -2,63 +2,57 @@ Return-Path: <SRS0=vgbW=OF=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C9229C433F5
-	for <buildroot@archiver.kernel.org>; Wed, 15 Sep 2021 09:52:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CD2FFC433F5
+	for <buildroot@archiver.kernel.org>; Wed, 15 Sep 2021 09:52:37 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 0C0BC60C51
-	for <buildroot@archiver.kernel.org>; Wed, 15 Sep 2021 09:52:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0C0BC60C51
+	by mail.kernel.org (Postfix) with ESMTPS id 7A9EC610A4
+	for <buildroot@archiver.kernel.org>; Wed, 15 Sep 2021 09:52:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7A9EC610A4
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A0F7F404D6;
-	Wed, 15 Sep 2021 09:52:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 53224404F1;
+	Wed, 15 Sep 2021 09:52:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0getHTjDdnTs; Wed, 15 Sep 2021 09:52:25 +0000 (UTC)
+	with ESMTP id hpZ9ev48sUxV; Wed, 15 Sep 2021 09:52:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1B093404D1;
-	Wed, 15 Sep 2021 09:52:23 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8E5EF1BF3F6
- for <buildroot@lists.busybox.net>; Wed, 15 Sep 2021 09:52:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B26BA404E9;
+	Wed, 15 Sep 2021 09:52:35 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B5E971BF3F6
+ for <buildroot@lists.busybox.net>; Wed, 15 Sep 2021 09:52:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8AA38404D1
- for <buildroot@lists.busybox.net>; Wed, 15 Sep 2021 09:52:21 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A5C3E826C7
+ for <buildroot@lists.busybox.net>; Wed, 15 Sep 2021 09:52:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8-zIzrgvqFvK for <buildroot@lists.busybox.net>;
- Wed, 15 Sep 2021 09:52:20 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 77EF2404CF
- for <buildroot@buildroot.org>; Wed, 15 Sep 2021 09:52:20 +0000 (UTC)
-Received: (Authenticated sender: peter@casa-korsgaard.com)
- by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 08B022000A;
- Wed, 15 Sep 2021 09:52:16 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
- (envelope-from <peter@korsgaard.com>)
- id 1mQRaS-0007zC-3a; Wed, 15 Sep 2021 11:52:16 +0200
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6EhE0SaQl0Vz for <buildroot@lists.busybox.net>;
+ Wed, 15 Sep 2021 09:52:22 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id DE7B3826AA
+ for <buildroot@buildroot.org>; Wed, 15 Sep 2021 09:52:22 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id E74188B3D1; Wed, 15 Sep 2021 09:50:35 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20210915060318.599840-1-fontaine.fabrice@gmail.com>
-Date: Wed, 15 Sep 2021 11:52:16 +0200
-In-Reply-To: <20210915060318.599840-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Wed, 15 Sep 2021 08:03:18 +0200")
-Message-ID: <87bl4utbcf.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/libexif: fix build with gcc 4.8
+To: buildroot@buildroot.org
+Date: Wed, 15 Sep 2021 11:51:57 +0200
+X-Git-Refname: refs/heads/2021.02.x
+X-Git-Oldrev: 9eb977f0022408ad9d7bf6e2f53b8dbff81a95e6
+X-Git-Newrev: 9235281bcb505a6630052d38c04250aa5f9a89f8
+X-Patchwork-Hint: ignore
+Message-Id: <20210915095035.E74188B3D1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/libexif: fix
+ build with gcc 4.8
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,32 +65,81 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=9235281bcb505a6630052d38c04250aa5f9a89f8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
- > Fix the following build failure with gcc 4.8 raised since bump to
- > version 0.6.23 in commit e2f805097611b4828d2cba6168472aac6dedeafe:
+Fix the following build failure with gcc 4.8 raised since bump to
+version 0.6.23 in commit e2f805097611b4828d2cba6168472aac6dedeafe:
 
- > exif-gps-ifd.c: In function 'exif_get_gps_tag_info':
- > exif-gps-ifd.c:62:3: error: 'for' loop initial declarations are only allowed in C99 mode
- >    for (int i = 0; i < sizeof(exif_gps_ifd_tags) / sizeof(ExifGPSIfdTagInfo); ++i) {
- >    ^
- > exif-gps-ifd.c:62:3: note: use option -std=c99 or -std=gnu99 to compile your code
+exif-gps-ifd.c: In function 'exif_get_gps_tag_info':
+exif-gps-ifd.c:62:3: error: 'for' loop initial declarations are only allowed in C99 mode
+   for (int i = 0; i < sizeof(exif_gps_ifd_tags) / sizeof(ExifGPSIfdTagInfo); ++i) {
+   ^
+exif-gps-ifd.c:62:3: note: use option -std=c99 or -std=gnu99 to compile your code
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/7dd222e06d1e6611449fb8fe7516817c9ad43d65
+Fixes:
+ - http://autobuild.buildroot.org/results/7dd222e06d1e6611449fb8fe7516817c9ad43d65
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 039de9a291a9d77bc6d07ef2a3e1a51899a2d7db)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...xif-exif-gps-ifd.c-fix-build-with-gcc-4.8.patch | 40 ++++++++++++++++++++++
+ 1 file changed, 40 insertions(+)
 
-Committed to 2021.02.x, 2021.05.x and 2021.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libexif/0001-libexif-exif-gps-ifd.c-fix-build-with-gcc-4.8.patch b/package/libexif/0001-libexif-exif-gps-ifd.c-fix-build-with-gcc-4.8.patch
+new file mode 100644
+index 0000000000..7bbf3b3e4d
+--- /dev/null
++++ b/package/libexif/0001-libexif-exif-gps-ifd.c-fix-build-with-gcc-4.8.patch
+@@ -0,0 +1,40 @@
++From 0c925491dea995ca96770159158bb8d57a48d84b Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Wed, 15 Sep 2021 07:56:32 +0200
++Subject: [PATCH] libexif/exif-gps-ifd.c: fix build with gcc 4.8
++
++Fix the following build failure with gcc 4.8 raised since version 0.6.23 and
++https://github.com/libexif/libexif/commit/e12c3529813cd16d50bf0a1c759093e1039dffec:
++
++exif-gps-ifd.c: In function 'exif_get_gps_tag_info':
++exif-gps-ifd.c:62:3: error: 'for' loop initial declarations are only allowed in C99 mode
++   for (int i = 0; i < sizeof(exif_gps_ifd_tags) / sizeof(ExifGPSIfdTagInfo); ++i) {
++   ^
++exif-gps-ifd.c:62:3: note: use option -std=c99 or -std=gnu99 to compile your code
++
++Fixes:
++ - http://autobuild.buildroot.org/results/7dd222e06d1e6611449fb8fe7516817c9ad43d65
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/libexif/libexif/pull/72]
++---
++ libexif/exif-gps-ifd.c | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/libexif/exif-gps-ifd.c b/libexif/exif-gps-ifd.c
++index 9c9ba70..de5f950 100644
++--- a/libexif/exif-gps-ifd.c
+++++ b/libexif/exif-gps-ifd.c
++@@ -59,7 +59,8 @@ const static struct ExifGPSIfdTagInfo exif_gps_ifd_tags[] = {
++ };
++ 
++ const ExifGPSIfdTagInfo *exif_get_gps_tag_info(ExifTag tag) {
++-  for (int i = 0; i < sizeof(exif_gps_ifd_tags) / sizeof(ExifGPSIfdTagInfo); ++i) {
+++  int i;
+++  for (i = 0; i < sizeof(exif_gps_ifd_tags) / sizeof(ExifGPSIfdTagInfo); ++i) {
++     if (tag==exif_gps_ifd_tags[i].tag)
++       return &exif_gps_ifd_tags[i];
++   }
++-- 
++2.33.0
++
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
