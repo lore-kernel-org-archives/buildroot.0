@@ -7,95 +7,93 @@ X-Spam-Status: No, score=-16.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D6A3C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 16 Sep 2021 18:42:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B16FC433EF
+	for <buildroot@archiver.kernel.org>; Thu, 16 Sep 2021 18:50:56 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 6274F61139
-	for <buildroot@archiver.kernel.org>; Thu, 16 Sep 2021 18:42:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6274F61139
+	by mail.kernel.org (Postfix) with ESMTPS id CF1B5611CA
+	for <buildroot@archiver.kernel.org>; Thu, 16 Sep 2021 18:50:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org CF1B5611CA
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 125E3607F7;
-	Thu, 16 Sep 2021 18:42:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 770426082A;
+	Thu, 16 Sep 2021 18:50:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Oni1SEotypCw; Thu, 16 Sep 2021 18:42:09 +0000 (UTC)
+	with ESMTP id cxpl6NVWLV87; Thu, 16 Sep 2021 18:50:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7D68260811;
-	Thu, 16 Sep 2021 18:42:08 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id AA7B21BF8B4
- for <buildroot@lists.busybox.net>; Thu, 16 Sep 2021 18:42:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D9B45607F7;
+	Thu, 16 Sep 2021 18:50:53 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 6BF561BF8B4
+ for <buildroot@lists.busybox.net>; Thu, 16 Sep 2021 18:50:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 994DF41589
- for <buildroot@lists.busybox.net>; Thu, 16 Sep 2021 18:42:06 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 58A8783F1C
+ for <buildroot@lists.busybox.net>; Thu, 16 Sep 2021 18:50:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VgF1U2Smh_f5 for <buildroot@lists.busybox.net>;
- Thu, 16 Sep 2021 18:42:05 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id FfEzddAbQzKu for <buildroot@lists.busybox.net>;
+ Thu, 16 Sep 2021 18:50:51 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com
- [IPv6:2a00:1450:4864:20::536])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7AE72406F6
- for <buildroot@buildroot.org>; Thu, 16 Sep 2021 18:42:05 +0000 (UTC)
-Received: by mail-ed1-x536.google.com with SMTP id c22so20351259edn.12
- for <buildroot@buildroot.org>; Thu, 16 Sep 2021 11:42:05 -0700 (PDT)
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com
+ [IPv6:2a00:1450:4864:20::52a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0042583E9B
+ for <buildroot@busybox.net>; Thu, 16 Sep 2021 18:50:50 +0000 (UTC)
+Received: by mail-ed1-x52a.google.com with SMTP id n10so19867124eda.10
+ for <buildroot@busybox.net>; Thu, 16 Sep 2021 11:50:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=subject:to:cc:references:from:organization:message-id:date
- :user-agent:mime-version:in-reply-to:content-language
- :content-transfer-encoding;
- bh=TP7eqte+W2bxxZGzPX3JZhm3XcJtTUq1qIjoWyAMeSs=;
- b=Vtt0tGzUvQjWHsEH+L0ItnTc6Fo2xrKxc6w9YpR/SbZfdAwAPoLXwddtLU1/trGDXz
- 861GcxIVehFPjgJ3bkUC3oQ15ipsHL/NYBMlDvW4RMi7Qwt55k7xIr7MTvdEQbgzErH+
- qAHG/YxdE5xTeSdgNJMF5By4otPCzzvTkctI3kOlvY7g0RHLxNCBYWgFoTlOECJWMD8H
- KAdMZBEpezmn7V9ac92ZRFgyB08NNsUn6p9FoHTWRlfMj6dpBOY3uwNfykmK77+sF3Lj
- n0rEoiJCaGNOtYv9FtHCFxqWpL5GYdlQOe4/FDjUIBOq8uxEemMcWAfQUQXZ8eOvUAr1
- wBqw==
+ h=subject:to:references:from:organization:message-id:date:user-agent
+ :mime-version:in-reply-to:content-language:content-transfer-encoding;
+ bh=ODyWoCC6Lt5L4nt+e8bnyqQXRwIrQUu9kR0c8UhnTe4=;
+ b=CKiGYw+XD+ieu8OKFslwdxKNpMYU7owVkCg1L9nvE+OQnWtFzphBZzZX0q5pp8Gbkd
+ OB2+M7EZ7EKgQadZMi/qc+1UAf9aYe88/GgoF24itR1aOUd40ajycxM64zhoh8bOzGLC
+ bNwpvJmwDN/pLXcPXaUWc0bnIiAy5gzQ7lTZt9N/52PCUr3UX2pSUQb2YNockpB1vp2+
+ wvpjWo7BiSadT72wDbv0OhQQAPC65bK/522VpFs08b8Pdk/xj3jH2TTZV+BiwfUQTwl7
+ t8sElEz6LlJ4OhFdaMr7JdVtlyCc+REKY2gi5D+LCHmmo8xfG9IcAQPeQbKVmvC81TUu
+ MB3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:subject:to:cc:references:from:organization
+ h=x-gm-message-state:subject:to:references:from:organization
  :message-id:date:user-agent:mime-version:in-reply-to
  :content-language:content-transfer-encoding;
- bh=TP7eqte+W2bxxZGzPX3JZhm3XcJtTUq1qIjoWyAMeSs=;
- b=ZNos1FZ+hXrY8O1kPx4Nv8rp/smQE2YVuEYBRhAjJLnlDAJjKvfITKIH88yfDQ41fJ
- OB2aCeV/GupfEwQHG2DCbcRvPUULzUtRCgLOh7vNbZSd9u9TXEL2tiFRl4cr69zmhEXn
- uIta9rY7xEwEv+45HcL+hx9h5ZDXm6nDkcqT3nOgX38n5tJOmzbmxhTwCXS5zdbdbcIq
- W4vmVMaX52ZrVITyNpGx+uyu1YeQoqbqeiKw2GdIhxxOxGmq+ypJgDaWdDeH1yteIH0M
- q/HunWWNlvvxjEry/9WWCyMpZe+fCxHsPnw6gxA35XqnngAtljE1NhrpmsnA5YPPEkYC
- TF6w==
-X-Gm-Message-State: AOAM530w9oGF2OVHPQo6pDdILftNeLd7T3dU9I1SohfI72KQYcTordYn
- pVWZgNH7RyG7s/tpLeuNRLGdhV4jLEh5Aw==
-X-Google-Smtp-Source: ABdhPJybUJiVtLhbGbpWzQc5qLmKdC3l/WNP8BXNU1BGwzVaTKbxmlHolNtz1JellYWo9L0Fc30ULg==
-X-Received: by 2002:a17:906:6943:: with SMTP id
- c3mr7746274ejs.550.1631817723437; 
- Thu, 16 Sep 2021 11:42:03 -0700 (PDT)
+ bh=ODyWoCC6Lt5L4nt+e8bnyqQXRwIrQUu9kR0c8UhnTe4=;
+ b=tFOXGwhw7ZLoK+UgozLFMQmEqq16fHmaUKMBHo2tBDRUVGwCdWz+lrQ5U7jdR/BqM6
+ E79ojuxZWX41ateiTUFHamrEJRxydTCWI6ZTVZxc9NYIKZx495t1PtjOE4Up1q22A+wJ
+ B+c5vBfLkW+MvYZdHnLidw80QMYW1Cyz5ZgOKKmz60hsU6IR/Uu1ugAK8QkyZ19+WfKd
+ FPea3L3QY5PUBuOb4NiXjPpevAsqzN9BMk6ETCEmST8Sspk7x4hbxMG3Y/NTZRSW1/Pe
+ GMLraO/jeGkevMkfE8umwuJfqaRVXBIexqJScchHpCiu87m0S/gd0s/RaxGoWgKqq3PJ
+ JL1g==
+X-Gm-Message-State: AOAM533esj+Vcw0Iyo5XsQTJl18oUVBSJD00Gq/HW2DVoRwn4VsSxMQ/
+ +vFqcrgjqpX19P6tLjUpcbWDPtfPS8pqJg==
+X-Google-Smtp-Source: ABdhPJyu4kHeO55SQC7+pee/Ldwk5BPcnYuUFjcV9vTOeDKRaNKuuNTvs2yeombtv83xd9Usaaa4QQ==
+X-Received: by 2002:a05:6402:4cf:: with SMTP id
+ n15mr8060828edw.269.1631818248377; 
+ Thu, 16 Sep 2021 11:50:48 -0700 (PDT)
 Received: from ?IPv6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id w11sm1722260edl.12.2021.09.16.11.42.02
+ by smtp.gmail.com with ESMTPSA id j22sm1500293ejt.11.2021.09.16.11.50.47
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Thu, 16 Sep 2021 11:42:02 -0700 (PDT)
-To: Petr Vorel <petr.vorel@gmail.com>, buildroot@buildroot.org
-References: <20210915194839.22122-1-petr.vorel@gmail.com>
- <20210915194839.22122-4-petr.vorel@gmail.com>
+ Thu, 16 Sep 2021 11:50:47 -0700 (PDT)
+To: Francois Perrad <fperrad@gmail.com>, buildroot@busybox.net
+References: <20210906152525.1831463-1-francois.perrad@gadz.org>
+ <20210906152525.1831463-2-francois.perrad@gadz.org>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-Message-ID: <56e9b208-6590-eaa7-35ce-55cec55e499a@mind.be>
-Date: Thu, 16 Sep 2021 20:42:01 +0200
+Message-ID: <4604d2d6-83ea-9aaa-83bf-e1fcbb01eab3@mind.be>
+Date: Thu, 16 Sep 2021 20:50:45 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.11.0
 MIME-Version: 1.0
-In-Reply-To: <20210915194839.22122-4-petr.vorel@gmail.com>
+In-Reply-To: <20210906152525.1831463-2-francois.perrad@gadz.org>
 Content-Language: en-GB
-Subject: Re: [Buildroot] [PATCH v2 3/4] utils/getdeveloperlib.py: use
- python3 explicitly
+Subject: Re: [Buildroot] [PATCH 2/3] perl-libwww-perl: bump to version 6.56
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -108,8 +106,6 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: David Laight <David.Laight@ACULAB.COM>,
- Edgar Bonet <bonet@grenoble.cnrs.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
@@ -117,45 +113,54 @@ Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
 
 
-On 15/09/2021 21:48, Petr Vorel wrote:
-> + remove python2 compatibility imports
-> 
-> library is used by support/scripts/pkg-stats and utils/get-developers
-> which both use python3. Although library does not require shebang,
-> it's better to state python3 use.
+On 06/09/2021 17:25, Francois Perrad wrote:
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
- Do you have some supporting evidence of this claim "it's better to add a shebang"?
+ All three applied to master, thanks.
 
- Looking at a few random projects with python files, I see none that do it.
+ I had to make two fixes though:
 
- And it seems like a lot of noise to add this for no obvious gain. If it's about
-documenting the minimum python version, it's not even correct: some of these
-scripts will require python3.4 or python3.5 and that's not documented...
+- The subject line should be package/perl-libwww-perl
+
+- When the license hash changes, the commit message must explain why it changes.
+
+ Could you pay attention to that in the future? Thanks!
 
  Regards,
  Arnout
 
-> 
-> Tested with python3 -m py_compile.
-> 
-> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 > ---
-> New in v2
+>  package/perl-libwww-perl/perl-libwww-perl.hash | 6 +++---
+>  package/perl-libwww-perl/perl-libwww-perl.mk   | 2 +-
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 > 
->  utils/getdeveloperlib.py | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/utils/getdeveloperlib.py b/utils/getdeveloperlib.py
-> index ce822320f8..74a3a420ee 100644
-> --- a/utils/getdeveloperlib.py
-> +++ b/utils/getdeveloperlib.py
-> @@ -1,4 +1,5 @@
-> -from __future__ import print_function
-> +#!/usr/bin/env python3
-> +
->  from io import open
->  import os
->  import re
+> diff --git a/package/perl-libwww-perl/perl-libwww-perl.hash b/package/perl-libwww-perl/perl-libwww-perl.hash
+> index c419c1d7b..709e94647 100644
+> --- a/package/perl-libwww-perl/perl-libwww-perl.hash
+> +++ b/package/perl-libwww-perl/perl-libwww-perl.hash
+> @@ -1,6 +1,6 @@
+>  # retrieved by scancpan from http://cpan.metacpan.org/
+> -md5  4df22c50511a3f01063d2ba4d91bfbec  libwww-perl-6.55.tar.gz
+> -sha256  c1d0d3a44a039b136ebac7336f576e3f5c232347e8221abd69ceb4108e85c920  libwww-perl-6.55.tar.gz
+> +md5  0ef270c43ee93e22c2086ba9998aa11a  libwww-perl-6.56.tar.gz
+> +sha256  94362e68e5c6782f3987a9dec6adc409d20e28665dbf28ff47d1d701443ce7ce  libwww-perl-6.56.tar.gz
+>  
+>  # computed by scancpan
+> -sha256  e84ac5ab84ace59952d2640e0ca4522eb0aaa8c2aa696352d1252aa109ea20bc  LICENSE
+> +sha256  311f168ba9a7819ffab4fea19858f9e880737baf6d112929d11530205035a4cc  LICENSE
+> diff --git a/package/perl-libwww-perl/perl-libwww-perl.mk b/package/perl-libwww-perl/perl-libwww-perl.mk
+> index 99adb5665..10fda9de6 100644
+> --- a/package/perl-libwww-perl/perl-libwww-perl.mk
+> +++ b/package/perl-libwww-perl/perl-libwww-perl.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -PERL_LIBWWW_PERL_VERSION = 6.55
+> +PERL_LIBWWW_PERL_VERSION = 6.56
+>  PERL_LIBWWW_PERL_SOURCE = libwww-perl-$(PERL_LIBWWW_PERL_VERSION).tar.gz
+>  PERL_LIBWWW_PERL_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
+>  PERL_LIBWWW_PERL_LICENSE = Artistic or GPL-1.0+
 > 
 _______________________________________________
 buildroot mailing list
