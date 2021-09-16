@@ -2,56 +2,88 @@ Return-Path: <SRS0=h7+E=OG=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7489EC433EF
-	for <buildroot@archiver.kernel.org>; Thu, 16 Sep 2021 20:37:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D77EBC433EF
+	for <buildroot@archiver.kernel.org>; Thu, 16 Sep 2021 20:46:16 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 137B361056
-	for <buildroot@archiver.kernel.org>; Thu, 16 Sep 2021 20:37:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 137B361056
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
+	by mail.kernel.org (Postfix) with ESMTPS id 8FF376105A
+	for <buildroot@archiver.kernel.org>; Thu, 16 Sep 2021 20:46:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8FF376105A
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmx.net
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CBACB401B8;
-	Thu, 16 Sep 2021 20:37:17 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 51A2E4070F;
+	Thu, 16 Sep 2021 20:46:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gejTerCwsQ5O; Thu, 16 Sep 2021 20:37:16 +0000 (UTC)
+	with ESMTP id XVuK6ozsQmP9; Thu, 16 Sep 2021 20:46:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A7A484054A;
-	Thu, 16 Sep 2021 20:37:15 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4EBB840711;
+	Thu, 16 Sep 2021 20:46:14 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C89111BF9BA
- for <buildroot@lists.busybox.net>; Thu, 16 Sep 2021 20:37:02 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 05D941BF2F1
+ for <buildroot@lists.busybox.net>; Thu, 16 Sep 2021 20:46:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B57684157D
- for <buildroot@lists.busybox.net>; Thu, 16 Sep 2021 20:37:02 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E88E8407DF
+ for <buildroot@lists.busybox.net>; Thu, 16 Sep 2021 20:46:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (1024-bit key) header.d=gmx.net
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zogM8tSqF26Z for <buildroot@lists.busybox.net>;
- Thu, 16 Sep 2021 20:37:01 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id E50F44157C
- for <buildroot@buildroot.org>; Thu, 16 Sep 2021 20:37:01 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 983958B4C8; Thu, 16 Sep 2021 20:35:11 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ with ESMTP id 8dzQLzgdxwmY for <buildroot@lists.busybox.net>;
+ Thu, 16 Sep 2021 20:46:10 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3D42C4074A
+ for <buildroot@buildroot.org>; Thu, 16 Sep 2021 20:46:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+ s=badeba3b8450; t=1631825167;
+ bh=R+EOwP0KjR2CeYXYcX0oAP2UxiYGVApa8giRCef42+o=;
+ h=X-UI-Sender-Class:From:To:Subject:Date;
+ b=GV7VYoi6AjB4ORDem+p+IVbDVEbK3f2ll+KgOG+Zx3/azm0aLceGuLeKTi27GN3wh
+ OKN4dzy8vA9Pyywbai0BiEwEJVzQNgFOxdJA9j6N3iqD2uNVJka/f4Tm4eYYCvJQUk
+ P5vagJAZJw9bffqDukgx9RH2yu+Fruqv7V3yPYZ0=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from localhost.fritz.box ([62.216.209.40]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MfHEJ-1n5ofM1QgF-00gqhC
+ for <buildroot@buildroot.org>; Thu, 16 Sep 2021 22:46:07 +0200
+From: Peter Seiderer <ps.report@gmx.net>
 To: buildroot@buildroot.org
-Date: Thu, 16 Sep 2021 22:36:38 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1d550990ea68c7674f25217d036631243690b0e7
-X-Git-Newrev: e772166ff22ef232726df05baaeef0c6f7601e12
-X-Patchwork-Hint: ignore
-Message-Id: <20210916203511.983958B4C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] docs/website: update for 2021.02.5
+Date: Thu, 16 Sep 2021 22:46:06 +0200
+Message-Id: <20210916204606.26348-1-ps.report@gmx.net>
+X-Mailer: git-send-email 2.33.0
+MIME-Version: 1.0
+X-Provags-ID: V03:K1:KcLKbFxVZOmOqOxSJwGQjvT/eePKy+d3CcuKA3YT8fyw8/BtdjG
+ muII5EPMOmThojLtMWXVXE2IjTYz5Zef5ka1JSHfjsMPa1rabos7UcxAuTAJc//0VPVz1mY
+ TeZjCBr1yTCxY/8hE8xGaRYrbaMSt3jRxrxsEoSaSsUhqqU/JtdpXcwByaerUIHzDrDEiRG
+ zrdkgcts8HyqbEKjKbjnA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:QkQUfbZiEOY=:B9c7y2XW+41FGPUKV2EdBP
+ Dj1mqEoADcdhmwBwjlVfQPTZYn0z4X/RdB9B94vaqTxE/40zC5NrBMS7YuWMIW7eY+3DX6Lyd
+ Z7pmHbhVYv54nEYZUazY9cwR9BFt7pwJqXo0Ua3begHRWK9K0FG3Kd0BfFQs5yfThxMy7PlO+
+ kUxE/V2ErgCsQRgpW3hR9fc5AOLpOidSfSiFLPWOhOWb4AOEWF3lNFauHzHQNYySJG6YoylmT
+ MMAsAfUzFbno0IpcbrXihTt0SY4ZxV5YedrAoMF5Ym9hfdfnFt0BPmVCGucYt/JEx6MQWPYgA
+ GU7rk/CRmkOxOkEPIRcvERn4Xq5gB2Rb0khZ7+AX2y95QM6MzvuOefFA8N9ZKqVVEiLxHJGHS
+ i+cZVE6PjMSVQPvOS4ZG+I98a7b9LMrqdCswvyrp842W8wKmEzAbKgF58GJyL+GmIDDJyLm/F
+ vcm3Rm0z+6MnfVwBgzTjAUmoccAdzaQoor56K7zyp0yrZ1ySF8enoMdEdxYZF2J2o4Sqpa+4J
+ 3/tWO0Ae/L6/RI2IVvA/oPSCGdEXIE+YIXHXbm5R54vOvZzUVn2p45nLB+k42RiTqxJBcXb/O
+ s5u2xgx496I9SWtHcbKwQ33h4iCtuUdT/CBI8EnNqqmeGT/JDNngxRCkGa38nzoQn/7KF+0pA
+ xHHUJiiXWwUoL/0dBruA+0pPmNg2yyZ8myJ0NviOw5NvgIEov0a9Az61Ywtiy18vLJ8ysFwj9
+ f5WRvupndcp7gppX2ZSm7NRnxDmf/yICUzgZK58q69S3RPELDgyilB3XDOq9dZfi52GYndqwt
+ 4w7ORYdXyjiu/Fh860c19GWOiDxQKK4pswIT/cJeFXgbpcf+teqo8EqUVzSsefC9+vUoqNaI/
+ 2ZJIWos9leZ0W6dPflnwXCgSrO3J9ZD11uIR5bjK08vN5OwRN547PegPF3CKihitFkf65iNt9
+ lDwY8oP20SMOC0zvb4K2sD6+9m1pw2nwslMeQgohwyYcJ6mwXoQYOd0aa/cCIlYVktKd2OYvL
+ TcyVcO2raRLWqbdjwUkBsnbykddPla563tEOXUqLBMq6yDo2avrZIerMMbanjBHS9koUSkmv8
+ CnT5lwmYwjYvG4=
+Subject: [Buildroot] [PATCH v1] package/bison: bump version to 3.8.1
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,102 +96,50 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e772166ff22ef232726df05baaeef0c6f7601e12
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+For details see [1] and [2].
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+[1] https://lists.gnu.org/archive/html/info-gnu/2021-09/msg00006.html
+[2] https://fossies.org/linux/bison/ChangeLog
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- docs/website/download.html | 18 +++++++++---------
- docs/website/news.html     | 19 +++++++++++++++++++
- 2 files changed, 28 insertions(+), 9 deletions(-)
+ package/bison/bison.hash | 4 ++--
+ package/bison/bison.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/docs/website/download.html b/docs/website/download.html
-index 5fea085ef9..57298d56d8 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -8,37 +8,37 @@
-     <div class="panel-heading">Download</div>
-     <div class="panel-body">
+diff --git a/package/bison/bison.hash b/package/bison/bison.hash
+index f4abe4c661..04b6ca03e4 100644
+--- a/package/bison/bison.hash
++++ b/package/bison/bison.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature from
+-# http://mirror.keystealth.org/gnu/bison/bison-3.7.6.tar.xz.sig
+-sha256  67d68ce1e22192050525643fc0a7a22297576682bef6a5c51446903f5aeef3cf  bison-3.7.6.tar.xz
++# http://mirror.keystealth.org/gnu/bison/bison-3.8.1.tar.xz.sig
++sha256  31fc602488aad6bdecf0ccc556e0fc72fc57cdc595cf92398f020e0cf4980f15  bison-3.8.1.tar.xz
+ # License files, locally calculated
+ sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
+diff --git a/package/bison/bison.mk b/package/bison/bison.mk
+index 26db307e20..8413233063 100644
+--- a/package/bison/bison.mk
++++ b/package/bison/bison.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--      <h3 style="text-align: center;">Latest long term support release: <b>2021.02.4</b></h3>
-+      <h3 style="text-align: center;">Latest long term support release: <b>2021.02.5</b></h3>
- 
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2021.02.4.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2021.02.5.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2021.02.4.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2021.02.5.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
--	  <h3><a href="/downloads/buildroot-2021.02.4.tar.gz">buildroot-2021.02.4.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2021.02.4.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2021.02.5.tar.gz">buildroot-2021.02.5.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2021.02.5.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2021.02.4.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2021.02.5.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2021.02.4.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2021.02.5.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2021.02.4.tar.bz2">buildroot-2021.02.4.tar.bz2</a></h3>
--	  <p><a href="/downloads/buildroot-2021.02.4.tar.bz2.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2021.02.5.tar.bz2">buildroot-2021.02.5.tar.bz2</a></h3>
-+	  <p><a href="/downloads/buildroot-2021.02.5.tar.bz2.sign">PGP signature</a></p>
- 	</div>
-       </div>
- 
-diff --git a/docs/website/news.html b/docs/website/news.html
-index 57783460ec..f8c6a382f7 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,25 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li class="timeline-inverted">
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2021.02.5 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>16 September 2021</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2021.02.5 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2021.02.4 release. See the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2021.02.5">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="http://lists.busybox.net/pipermail/buildroot/2021-September/623319.html">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2021.02.5.tar.bz2">2021.02.5 release</a>.</p>
-+      </div>
-+    </div>
-+  </li>
-+
-   <li>
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
+-BISON_VERSION = 3.7.6
++BISON_VERSION = 3.8.1
+ BISON_SOURCE = bison-$(BISON_VERSION).tar.xz
+ BISON_SITE = $(BR2_GNU_MIRROR)/bison
+ BISON_LICENSE = GPL-3.0+
+-- 
+2.33.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
