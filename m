@@ -7,51 +7,51 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 84633C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 16 Sep 2021 20:31:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A25D7C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 16 Sep 2021 20:37:06 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id CCFF860FBF
-	for <buildroot@archiver.kernel.org>; Thu, 16 Sep 2021 20:30:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org CCFF860FBF
+	by mail.kernel.org (Postfix) with ESMTPS id 1BCDD61056
+	for <buildroot@archiver.kernel.org>; Thu, 16 Sep 2021 20:37:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1BCDD61056
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A0A7883F68;
-	Thu, 16 Sep 2021 20:30:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BD8FB83F67;
+	Thu, 16 Sep 2021 20:37:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hRt12Et8cywQ; Thu, 16 Sep 2021 20:30:58 +0000 (UTC)
+	with ESMTP id tGdOFLrcOgGT; Thu, 16 Sep 2021 20:37:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0374683F63;
-	Thu, 16 Sep 2021 20:30:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2FD6683F63;
+	Thu, 16 Sep 2021 20:37:04 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 61F161BF9BA
- for <buildroot@lists.busybox.net>; Thu, 16 Sep 2021 20:30:45 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 997281BF2F1
+ for <buildroot@lists.busybox.net>; Thu, 16 Sep 2021 20:37:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4F03283ECB
- for <buildroot@lists.busybox.net>; Thu, 16 Sep 2021 20:30:45 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9630083F63
+ for <buildroot@lists.busybox.net>; Thu, 16 Sep 2021 20:37:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uP0mzFQAaMxV for <buildroot@lists.busybox.net>;
- Thu, 16 Sep 2021 20:30:43 +0000 (UTC)
+ with ESMTP id NIKBw8xDYrpp for <buildroot@lists.busybox.net>;
+ Thu, 16 Sep 2021 20:37:01 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 67CFA83EC7
- for <buildroot@buildroot.org>; Thu, 16 Sep 2021 20:30:43 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id DAF4683F61
+ for <buildroot@buildroot.org>; Thu, 16 Sep 2021 20:37:01 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 1B7678B4B9; Thu, 16 Sep 2021 20:28:53 +0000 (UTC)
+ id 8C3B08B4C6; Thu, 16 Sep 2021 20:35:11 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 16 Sep 2021 22:25:16 +0200
+Date: Thu, 16 Sep 2021 22:33:46 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b2a1e959ea6da4ddfc6ffbe9877de9826a832684
-X-Git-Newrev: b926d0d30022362a16de0128df8a98779e34839c
+X-Git-Oldrev: 3c040feba86c2986c39a388fac75aefd94e25859
+X-Git-Newrev: 1d550990ea68c7674f25217d036631243690b0e7
 X-Patchwork-Hint: ignore
-Message-Id: <20210916202853.1B7678B4B9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] Update for 2021.05.2
+Message-Id: <20210916203511.8C3B08B4C6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] Update for 2021.02.5
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,26 +70,26 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b926d0d30022362a16de0128df8a98779e34839c
+commit: https://git.buildroot.net/buildroot/commit/?id=1d550990ea68c7674f25217d036631243690b0e7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 3466797cedb15097924bf207774d11a79d03a9ac)
+(cherry picked from commit 767a2da72fc1690fde33b665851f20492ba5cd75)
 [Peter: drop Makefile change]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- CHANGES | 23 +++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
+ CHANGES | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
 diff --git a/CHANGES b/CHANGES
-index 78ca4446e0..85cd179491 100644
+index 85cd179491..aa43729732 100644
 --- a/CHANGES
 +++ b/CHANGES
-@@ -122,6 +122,29 @@
- 	#13846: BR2_PACKAGE_LVM2_STANDARD_INSTALL should be default to
- 	        y as before
+@@ -343,6 +343,28 @@
+ 	#13751: libopenssl (static): huge drop in performance in newer ..
+ 	#13771: package htop has undeclared dependency on host python
  
-+2021.05.2, released September 15th, 2021
++2021.02.5, released September 15th, 2021
 +
 +	Important / security related fixes.
 +
@@ -97,22 +97,21 @@ index 78ca4446e0..85cd179491 100644
 +	currently working.
 +
 +	Updated/fixed packages: alsa-utils, arm-trusted-firmware,
-+	bayer2rgb-neon, belle-sip, bullet, busybox, c-ares, cjson,
-+	coreutils, cpio, eigen, environment-setup, fetchmail, ffmpeg,
++	bayer2rgb-neon, belle-sip, busybox, c-ares, cjson, coreutils,
++	cpio, eigen, environt-setup, fetchmail, fluidsynth,
 +	fontconfig, gd, gdb, gnuradio, gnutls, go, haproxy, ipmiutil,
-+	iputils, jszip, kvm-unit-tests, libarchive, libargtable2,
-+	libexif, libgcrypt, libmodsecurity, libopenssl, librsvg,
-+	libshout, libssh, libxcrypt, linux, linux-pam, localedef, mc,
-+	mesa3d, mosquitto, netsniff-ng, nginx, nodejs, ogre, openjdk,
-+	openmpi, openvmtools, perl-net-ssh2, php, pipewire,
-+	postgresql, prelink-cross, prosody, protobuf, python-keyring,
++	iputils, jszip, kvm-unit-tests, libarchive, libexif,
++	libgcrypt, libmodsecurity, libopenssl, librsvg, libshout,
++	libssh, linux, localedef, mc, mesa3d, mosquitto, netsniff-ng,
++	nginx, nodejs, ogre, openmpi, openvmtools, php, postgresql,
++	prelink-cross, prosody, protobuf, python-keyring,
 +	python-matplotlib, python-pillow, python-pyudev,
 +	python-secretstorage, python3, qt5base, samba4, sdl2, sox,
-+	swupdate, sylpheed, tar, terminology, tor, uboot-tools, uhd,
-+	unbound, ushare, vim, wlroots, xapp_xrdb, xapp_xwd, xen,
-+	xenomai, xlib_libXfont2, xlib_libXft, zip
++	swupdate, sylpheed, tor, uboot-tools, uhd, unbound, vim,
++	wlroots, xapp_xrdb, xapp_xwd, xen, xenomai, xlib_libXfont2,
++	xlib_libXft, zip
 +
- 2021.05.1, released August 10, 2021
+ 2021.02.4, released August 10th, 2021
  
  	Important / security related fixes.
 _______________________________________________
