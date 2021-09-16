@@ -2,89 +2,89 @@ Return-Path: <SRS0=h7+E=OG=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
-	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0BC42C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 16 Sep 2021 17:07:08 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 89E40C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 16 Sep 2021 17:37:12 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id ABD8660F11
-	for <buildroot@archiver.kernel.org>; Thu, 16 Sep 2021 17:07:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org ABD8660F11
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id 05E506023D
+	for <buildroot@archiver.kernel.org>; Thu, 16 Sep 2021 17:37:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 05E506023D
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmx.net
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7F47D41592;
-	Thu, 16 Sep 2021 17:07:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A0E306082A;
+	Thu, 16 Sep 2021 17:37:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id J6EyOAu-X1RR; Thu, 16 Sep 2021 17:07:06 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id lvSkDeBQbiKp; Thu, 16 Sep 2021 17:37:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E7F4241587;
-	Thu, 16 Sep 2021 17:07:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1B2D4606C0;
+	Thu, 16 Sep 2021 17:37:10 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id AEC2B1BF406
- for <buildroot@lists.busybox.net>; Thu, 16 Sep 2021 17:07:04 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3BCE61BF406
+ for <buildroot@lists.busybox.net>; Thu, 16 Sep 2021 17:37:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A921B83F00
- for <buildroot@lists.busybox.net>; Thu, 16 Sep 2021 17:07:04 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2ACC9827C6
+ for <buildroot@lists.busybox.net>; Thu, 16 Sep 2021 17:37:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
+ dkim=pass (1024-bit key) header.d=gmx.net
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AB6RYa0U8rLa for <buildroot@lists.busybox.net>;
- Thu, 16 Sep 2021 17:07:03 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com
- [IPv6:2607:f8b0:4864:20::436])
- by smtp1.osuosl.org (Postfix) with ESMTPS id CF64183EFD
- for <buildroot@buildroot.org>; Thu, 16 Sep 2021 17:07:03 +0000 (UTC)
-Received: by mail-pf1-x436.google.com with SMTP id e16so6518400pfc.6
- for <buildroot@buildroot.org>; Thu, 16 Sep 2021 10:07:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=G73DoNvhpCf9AplqJY/Gr9sPBALSj+phpfBN31uOlEg=;
- b=CCpN2KTOKQcY7WOzaJ6ZshfMXXlZ0RLKsljDGCZpcLauG9OCLs8Spe5MbygFhuXJII
- ky26pzT4BwBHqWHvxY+ZsT6OhUcdWrx400gkZBS9JUST1m07ArzecuAtxZv+Y3KgMVQX
- 7Nzgm5WAesVUDFQsmHz91Be6r6M0bClGyMY6+S7f/iImxxyhKqvB1c1stctK+TuMnb1d
- Jy0INxs6ANduj9yfh4BRSj+OPQBG9Hs5N05hxhNX8Qs+odq/+3hyVGqPswI64q8NdKhN
- BR9qY7autmSQ0nTOv/5RGgYmaOSdDHI/RCnqLhu9YigJQYiy59xP5CNVsIWwAi8KVXCE
- nQAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=G73DoNvhpCf9AplqJY/Gr9sPBALSj+phpfBN31uOlEg=;
- b=Gs2ymnLR6J0udn21n3QhTIGLc5MZKcklEYAfFY9EAB4Vb/STQP+8M+f4iQEh3byL+C
- Mt/YTqg5V/DeXy5vs1OA8XjgL+rBJWn7dtC+PTDMZ0wpjbNMXDCNVBtIWQaF5qUy7AD+
- 22HryJSj6nBeAgtzwGKwyxNJi2rzTJs9x7ZV0FlaG8q8wN0wGLAXRBp4YZSK28VZch8S
- RqOJOv6WBWl6LEJd901uoGysbkZKCvhKIiMrxQLEsP/lLBZ6ft7m3rXbr9qiAWn4NHqU
- 1MV5RLRR1aU5gT+AzHZcFfCY3/e3ISYX+4wsBBltAXCbRDLCu/J7U/+Gst+dGJHSTkSU
- oesg==
-X-Gm-Message-State: AOAM533X03OqJjyKU+RLAbmw0MY8enWTDPiwTRngRdfTP8/jjDq1NxBB
- wzjZNWMTHsNrbzFrAJUTyXNeo0I4qBToIQ==
-X-Google-Smtp-Source: ABdhPJxtzmswrxgTyq3MMn0FQ3y4NA7TQn++eRu3ooZFcog2PBqkRhlZPTosjTueMw8oidzkbh4JOQ==
-X-Received: by 2002:a63:a804:: with SMTP id o4mr5809338pgf.309.1631812023015; 
- Thu, 16 Sep 2021 10:07:03 -0700 (PDT)
-Received: from adam.rai.com ([47.149.13.137])
- by smtp.gmail.com with ESMTPSA id on6sm3469459pjb.19.2021.09.16.10.07.02
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 16 Sep 2021 10:07:02 -0700 (PDT)
-From: Adam Duskett <aduskett@gmail.com>
+ with ESMTP id qmnNOBH1W5yR for <buildroot@lists.busybox.net>;
+ Thu, 16 Sep 2021 17:37:08 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7881982779
+ for <buildroot@buildroot.org>; Thu, 16 Sep 2021 17:37:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+ s=badeba3b8450; t=1631813824;
+ bh=6m2mQTt5Ank5XRqoyE8EJfDZBVHL+aepcMAIN5LXR3U=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+ b=dOmE8mOqCflP2k0I9Yb4JKomG8wr3PdxHecfSrjY8TKQ0S2aVut7XXsxV+KNFcoRD
+ 3wz6KLYRzgy+QCP12bPl3YPpNeh1ULhzLkeZW74nWcri0ssRBtvCtSFH4JY0NjAJTF
+ DtAYx1qf3ujnvX1+1z/cwZuCEniTEKc7t1Lu9UBo=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from localhost.fritz.box ([62.216.209.40]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MaJ7v-1mNTTJ041d-00WHFQ; Thu, 16
+ Sep 2021 19:37:04 +0200
+From: Peter Seiderer <ps.report@gmx.net>
 To: buildroot@buildroot.org
-Date: Thu, 16 Sep 2021 10:07:00 -0700
-Message-Id: <20210916170700.1123980-1-aduskett@gmail.com>
-X-Mailer: git-send-email 2.30.2
+Date: Thu, 16 Sep 2021 19:37:03 +0200
+Message-Id: <20210916173703.26938-1-ps.report@gmx.net>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/libglib2: bump version to 2.68.4
+X-Provags-ID: V03:K1:zLTQ2io7+33Xjm3YkyTMc2OjQ2d+xMGXEKoog80d5VQ1f+TwyB+
+ KfB33sHcgBiNrwyqh1ji+LR+fZ6LtIT7au9VVhMyk6CX2HyUJ8xFEgHFy7FLJIr1N545SXu
+ yjBvcEOjKzwgVHp4uHwKJFu3A0VAiyOa0049Vr9yTRPHQFXGyOlzpauIq9L6PIEML+5gRLz
+ +miUFL7URCDSfSPbH+ztQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:mTG2/XfBKlw=:Vc2ZVrQ9htvodl/YGGxnNz
+ WZB86VPjhGo3PPmYrTxgvlCDF1yLiKaRlgkRyHtXXYip/LMVlKTbq9UHvTKOkc2bi4AX75jbI
+ 6c2pb8c9qIzyt8shAuZgaJ/4l6LeiOAW7D1il8DWAFj2pkJQUYRUN6kRJlefT9Q6LETg8HQpn
+ ZC7LrCJ8xChcOD6ClPswOS4qH1TwjVjDkhFYN/NXLAdIUYlGcJdo1fndVktm9Wx+U4PaDZBt1
+ Scm3K6wdm9pNbyzpm5Lt/HibVQNO/0N1CNcK1Avuq2SMw+2sFUFn6dO1jc21IKgjzehY7J/SH
+ BGOHdqNrH1UeDZw6dn1cBQyIeGILKbZncQvDMj9OEyCq7ypuMDYUALb3EF2Ob48lb7pA3DVvl
+ hm6qBsJSQzrl7gE01X0ELK6qzX8r/Xh0aLZaz11qbT5QzWYKNowD4OuH0VgT+8mu2LCId/YWr
+ aGF8TW/OprypBzhj54AoJBTInNcOJ7jHRFHCTQ+oD77ap45R56tuThYttMz/WL2dIzHjQrn77
+ I3AHqy6vqcSJmpDEPdcDSQ+EDK3Gwu5+6UoUWIwWmK+INrBXvVASD9Pp2WvLXU5fnJ/bEPmoR
+ GGCpV4JmKz64q/FXUN4YX/xwm4yOkpV+/OTF5g6C40KGTvjvOSWW+GhDmGwmTgEJRDizgFxyR
+ TUHRXaraIaTlidpL4N+8R4yyxHv447zWQvrZpV7IW03YpYR85D/SLeNFszAIAJGMjWAHVioMd
+ EOJHaLPojeRLYj5ilfX4T8c0+uh8YsnVYcvxibBkGpo5ToyUzUWeV8G8KaVvAH28URG44WBHt
+ aJ8WIbmrD0cy5SWqmFh9IawS0pvonLSwH8qs2a41zx9OeQ/GRJlw80DOAy8rKqr18BSBhgbZ/
+ UQsHhP7fSjVphm+OJacFM2bSBKaIZd2RtzsmyosdyLJjwT/xavTLZQi6cqG/WccH+afr5bn8O
+ qLs8weJk5ge24S/gj5w78GcQnwMZp5pdskIEDXZ2UcSDsVLa+q6bf8/zHwJMSkuxSlL9muxK/
+ U+2d569Fj5YbbYPK2OO3/KMWhB0qjOC52JZNYY4Yt9ZiXvj5/l+QFF1zgXQRiX7mhgaHKdzYy
+ hXnjX0/tdDlC/E=
+Subject: [Buildroot] [PATCH v1] package/libiio: fix compile without thread
+ support
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,61 +97,48 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: Adam Duskett <aduskett@rivian.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Paul Cercueil <paul@crapouillou.net>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-From: Adam Duskett <aduskett@rivian.com>
+- fix compile without thread support (add configure option
+  '-DNO_THREADS=ON' as requested)
 
-Signed-off-by: Adam Duskett <aduskett@rivian.com>
+Fixes:
+
+  - http://autobuild.buildroot.net/results/2cca5952e7d677cd0d5fa97aa1a7bf3e722df3a2
+
+  CMake Error at CMakeLists.txt:409 (message):
+    Unable to find pthread dependency.
+
+    If you want to disable multi-threading support, set NO_THREADS=ON.
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/libglib2/0002-remove-cpp-requirement.patch | 2 +-
- package/libglib2/libglib2.hash                     | 4 ++--
- package/libglib2/libglib2.mk                       | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+ package/libiio/libiio.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/libglib2/0002-remove-cpp-requirement.patch b/package/libglib2/0002-remove-cpp-requirement.patch
-index 9393bd258a..c402cbafa5 100644
---- a/package/libglib2/0002-remove-cpp-requirement.patch
-+++ b/package/libglib2/0002-remove-cpp-requirement.patch
-@@ -35,7 +35,7 @@ index 4bbf4c2..ac59f4e 100644
- @@ -1,4 +1,4 @@
- -project('glib', 'c', 'cpp',
- +project('glib', 'c',
--   version : '2.68.2',
-+   version : '2.68.4',
-    # NOTE: We keep this pinned at 0.49 because that's what Debian 10 ships
-    meson_version : '>= 0.49.2',
- @@ -10,7 +10,6 @@ project('glib', 'c', 'cpp',
-diff --git a/package/libglib2/libglib2.hash b/package/libglib2/libglib2.hash
-index 15e0085f78..d421e025ff 100644
---- a/package/libglib2/libglib2.hash
-+++ b/package/libglib2/libglib2.hash
-@@ -1,4 +1,4 @@
--# https://download.gnome.org/sources/glib/2.68/glib-2.68.2.sha256sum
--sha256  ecc7798a9cc034eabdfd7f246e6dd461cdbf1175fcc2e9867cc7da7b7309e0fb  glib-2.68.2.tar.xz
-+# https://download.gnome.org/sources/glib/2.68/glib-2.68.4.sha256sum
-+sha256  62fd061d08a75492617e625a73e2c05e259f831acbb8e1f8b9c81f23f7993a3b  glib-2.68.4.tar.xz
- # License files, locally calculated
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-index 4f13622e36..af73aeb3bf 100644
---- a/package/libglib2/libglib2.mk
-+++ b/package/libglib2/libglib2.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/libiio/libiio.mk b/package/libiio/libiio.mk
+index 4ce933a0cd..f706298c22 100644
+--- a/package/libiio/libiio.mk
++++ b/package/libiio/libiio.mk
+@@ -17,6 +17,12 @@ LIBIIO_CONF_OPTS = -DENABLE_IPV6=ON \
+ 	-DWITH_TESTS=$(if $(BR2_PACKAGE_LIBIIO_TESTS),ON,OFF) \
+ 	-DWITH_DOC=OFF
  
- LIBGLIB2_VERSION_MAJOR = 2.68
--LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).2
-+LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).4
- LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.xz
- LIBGLIB2_SITE = http://ftp.gnome.org/pub/gnome/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
- LIBGLIB2_LICENSE = LGPL-2.1+
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
++LIBIIO_CONF_OPTS += -DNO_THREADS=OFF
++else
++LIBIIO_CONF_OPTS += -DNO_THREADS=ON
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBIIO_XML_BACKEND),y)
+ LIBIIO_DEPENDENCIES += libxml2
+ LIBIIO_CONF_OPTS += -DWITH_XML_BACKEND=ON
 -- 
-2.30.2
+2.33.0
 
 _______________________________________________
 buildroot mailing list
