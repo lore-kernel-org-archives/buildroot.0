@@ -2,65 +2,90 @@ Return-Path: <SRS0=h7+E=OG=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
+	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A644C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 16 Sep 2021 11:39:54 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 863EBC433F5
+	for <buildroot@archiver.kernel.org>; Thu, 16 Sep 2021 16:48:54 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 8C0AE61207
-	for <buildroot@archiver.kernel.org>; Thu, 16 Sep 2021 11:39:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8C0AE61207
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=ecosystems-group.co.uk
+	by mail.kernel.org (Postfix) with ESMTPS id EB3DF63230
+	for <buildroot@archiver.kernel.org>; Thu, 16 Sep 2021 16:48:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org EB3DF63230
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2F1A280CB9;
-	Thu, 16 Sep 2021 11:39:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8FDBB605D9;
+	Thu, 16 Sep 2021 16:48:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EnaKeDaMmHJZ; Thu, 16 Sep 2021 11:39:52 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id fMJqCzoV_kFK; Thu, 16 Sep 2021 16:48:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5103880C89;
-	Thu, 16 Sep 2021 11:39:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AA81D605E3;
+	Thu, 16 Sep 2021 16:48:50 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5D5211BF48C
- for <buildroot@lists.busybox.net>; Thu, 16 Sep 2021 11:39:49 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 85F2A1BF3E5
+ for <buildroot@lists.busybox.net>; Thu, 16 Sep 2021 16:48:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4CAEC80C89
- for <buildroot@lists.busybox.net>; Thu, 16 Sep 2021 11:39:49 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 75EF983EB9
+ for <buildroot@lists.busybox.net>; Thu, 16 Sep 2021 16:48:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Wvk65-cS2WF1 for <buildroot@lists.busybox.net>;
- Thu, 16 Sep 2021 11:39:48 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from mail.ecosystems-group.co.uk (mail.ecosystems-group.co.uk
- [194.73.217.18])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 069F880C61
- for <buildroot@buildroot.org>; Thu, 16 Sep 2021 11:39:47 +0000 (UTC)
-Received: from ECO-SRV.ecosystems.local ([fe80::e556:f4a8:df18:453e]) by
- ECO-SRV.ecosystems.local ([fe80::e556:f4a8:df18:453e%11]) with mapi id
- 14.03.0513.000; Thu, 16 Sep 2021 12:39:45 +0100
-From: Rafal Gorczynski <rafal.gorczynski@ecosystems-group.co.uk>
-To: Peter Seiderer <ps.report@gmx.net>
-Thread-Topic: [Buildroot] A problem with running Xorg 2021.08.x
-Thread-Index: AdeqL9o/pAo8duwvSgSta/nZhHw8SAAG8MeAAAcwJQAAIaP1QA==
-Date: Thu, 16 Sep 2021 11:39:43 +0000
-Message-ID: <00597E818BDD634EB31FF8A2ECBC4934AB0ADFF8@ECO-SRV.ecosystems.local>
-References: <00597E818BDD634EB31FF8A2ECBC4934AB0ADE22@ECO-SRV.ecosystems.local>
- <20210915190617.5d64460f@gmx.net> <20210915223206.43a7bda0@gmx.net>
-In-Reply-To: <20210915223206.43a7bda0@gmx.net>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [192.168.10.58]
+ with ESMTP id IePxE8pocaJy for <buildroot@lists.busybox.net>;
+ Thu, 16 Sep 2021 16:48:46 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
+ [IPv6:2a00:1450:4864:20::436])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5E21583E60
+ for <buildroot@buildroot.org>; Thu, 16 Sep 2021 16:48:46 +0000 (UTC)
+Received: by mail-wr1-x436.google.com with SMTP id t8so3544205wri.1
+ for <buildroot@buildroot.org>; Thu, 16 Sep 2021 09:48:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=iylVU85jrTXUWAt4R8PW/afdrg1dRmia5t4fUCKTNNo=;
+ b=fhN+05l9BPbccLmG+3qzC6pVthqtSL5N7ypFs9rz+GiVlXQdGMw6MHXAYiOi+ocWfN
+ VUUE3QPb3/R+kxI+S+7p/WYunv9dJjgZtEXe8mYZIdZGZpPkQ30KB7bJK0m/4XF48ooE
+ ryvTwE6d5d5ULtlcyj2usF8eoaCt+ki/MI44fdNkhz/CoxUHzdLUA/n7gODG/EKpcn+R
+ W+J5onZvD10OQx/4pASDY050r3RBwYGHWcGpq2QV5yWx9vB1qYvRdzE9i5/WrMDPbqqN
+ IjmZBs9ip7E0v83/dtHEnrY1EF869MozDjuGFjrYtqBsXxL0eeSGsHceyXtZU5nw2UzD
+ 5B3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=iylVU85jrTXUWAt4R8PW/afdrg1dRmia5t4fUCKTNNo=;
+ b=LH1c8ZW0s6FGt2Q953Gbyxb48iS6m57komcZ1VJf+j5I1ge6EOCva6DLFaDWvLghES
+ GTgDnlBOlW8hvTwmraKH42+PEscVFCY6Ifo0IWEDMsGbUZXkYc8Yy7frHL59NPy82Yh9
+ x3CSaqBSI6BSyuOONAjnoHNfWeXHsuiYcLDcudJ01ECI1c5udstIq5wEtlIYET3YOJRf
+ SMh/sEuNRAlMSl/BLGNBq0SOF99qdlDEvcjtViHF/9vQeVbtZM61JOZmYubtt2TcI9NC
+ xBZNeF77mZuQ8VRop+KisBcWcVBdyLfb+KcmR99Bt5BqhGMJOTpK6f8f9ZiFN/ODLbMO
+ hPqQ==
+X-Gm-Message-State: AOAM532erHmCRC7Jtl2CUgTJSvd4Ur+Q7Bx+FlebUaqYgqr4kFImWTep
+ 7RD5eJpnBRaPOc2swnU5lkGfxMpSBo0=
+X-Google-Smtp-Source: ABdhPJwziedI9Kq6862nJXBkHWmj/uGh+bPnJg3pUKvfWRq90wOG4mxiwZx4ETGp3jrLV0bPX30eKQ==
+X-Received: by 2002:a5d:46cb:: with SMTP id g11mr7333862wrs.60.1631810924329; 
+ Thu, 16 Sep 2021 09:48:44 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-2139-166.w92-167.abo.wanadoo.fr.
+ [92.167.218.166])
+ by smtp.gmail.com with ESMTPSA id j21sm3995916wrd.48.2021.09.16.09.48.43
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 16 Sep 2021 09:48:43 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Thu, 16 Sep 2021 18:48:21 +0200
+Message-Id: <20210916164821.1940365-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Subject: Re: [Buildroot] A problem with running Xorg 2021.08.x
+Subject: [Buildroot] [PATCH 1/1] package/lxc: bump to version 4.0.10
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,97 +98,47 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-Hi Peter,
-Yes, got it, fbdev driver requires that configuration as well. 
+https://discuss.linuxcontainers.org/t/lxc-4-0-10-has-been-released/11618
+https://discuss.linuxcontainers.org/t/lxc-4-0-9-lts-has-been-released/10999
 
-I have added 
-Section "Module"
-        Load "fb"
-        Load "shadow"
-        Load "fbdevhw"
-EndSection
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/lxc/lxc.hash | 2 +-
+ package/lxc/lxc.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-to my /etc/X11/xorg.conf 
-
-I have no idea how make a patch :/
-
-Thanks mate!
-
-Rafal
-
-
-
------Original Message-----
-From: Peter Seiderer [mailto:ps.report@gmx.net] 
-Sent: 15 September 2021 22:32
-To: Rafal Gorczynski
-Cc: buildroot@buildroot.org
-Subject: Re: [Buildroot] A problem with running Xorg 2021.08.x
-
-On Wed, 15 Sep 2021 19:06:17 +0200, Peter Seiderer <ps.report@gmx.net> wrote:
-
-> Hello Rafal,
->
-> On Wed, 15 Sep 2021 12:47:56 +0000, Rafal Gorczynski <rafal.gorczynski@ecosystems-group.co.uk> wrote:
->
-> > Hi,
-> > I'm looking for help with running Xorg in my image, tried multiple branches such as 2021.08, 2021.05, 2021.02 with no luck.
-> >
-> > This is what I've received from Xorg
-> >
-> > [   353.565] (II) LoadModule: "intel"
-> > [   353.565] (II) Loading /usr/lib/xorg/modules/drivers/intel_drv.so
-> > [   353.565] (EE) Failed to load /usr/lib/xorg/modules/drivers/intel_drv.so: /usr/lib/xorg/modules/drivers/intel_drv.so: undefined symbol: vgaHWFreeHWRec
-> > [   353.565] (EE) Failed to load module "intel" (loader failed, 0)
-> > [   353.565] (II) LoadModule: "modesetting"
-> > [   353.565] (II) Loading /usr/lib/xorg/modules/drivers/modesetting_drv.so
-> > [   353.565] (EE) Failed to load /usr/lib/xorg/modules/drivers/modesetting_drv.so: /usr/lib/xorg/modules/drivers/modesetting_drv.so: undefined symbol: shadowRemove
-> > [   353.565] (EE) Failed to load module "modesetting" (loader failed, 0)
-> > [   353.565] (II) LoadModule: "fbdev"
-> > [   353.565] (II) Loading /usr/lib/xorg/modules/drivers/fbdev_drv.so
-> > [   353.565] (EE) Failed to load /usr/lib/xorg/modules/drivers/fbdev_drv.so: /usr/lib/xorg/modules/drivers/fbdev_drv.so: undefined symbol: fbdevHWSave
-> > [   353.565] (EE) Failed to load module "fbdev" (loader failed, 0)
-> > [   353.565] (II) LoadModule: "vesa"
-> > [   353.565] (II) Loading /usr/lib/xorg/modules/drivers/vesa_drv.so
-> > [   353.565] (EE) Failed to load /usr/lib/xorg/modules/drivers/vesa_drv.so: /usr/lib/xorg/modules/drivers/vesa_drv.so: undefined symbol: VBESetModeParameters
-> >
-> > Full Xorg.log https://pastebin.com/nu5wpHex
-> > Full defconfig https://pastebin.com/RLJRwMES
-> >
-> >
-> > I don't have problems with branch 2020.08.x with the same defconfig.
-> >
-> > Any idea?
->
-> Seems similar to the problem fixed by commit [1] (for the fbdev use case), but take a look
-
-	s/fbdev/fbturbo/
-
-Regards,
-Peter
-
-> at the linked bug report/mailing list report for hints about the module loading order in
-> xorg.conf file and/or needed patches...
->
-> Regards,
-> Peter
->
-> [1] https://git.buildroot.net/buildroot/commit/?id=9dc2b4a4eee557d3d9e7df31e9d2e96f364a2f03	
->
-> >
-> > Rafal
-> >
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot@lists.buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+diff --git a/package/lxc/lxc.hash b/package/lxc/lxc.hash
+index 85cdecceb2..efd7a8e42c 100644
+--- a/package/lxc/lxc.hash
++++ b/package/lxc/lxc.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  9165dabc0bb6ef7f2fda2009aee90b20fbefe77ed8008347e9f06048eba1e463  lxc-4.0.6.tar.gz
++sha256  a10c518056d2e497bd600e4ffac2853bdeab1e835bf455a6d87cc8df128bfae9  lxc-4.0.10.tar.gz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE.GPL2
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.LGPL2.1
+diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
+index 24a1f3c588..93f6d2535f 100644
+--- a/package/lxc/lxc.mk
++++ b/package/lxc/lxc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LXC_VERSION = 4.0.6
++LXC_VERSION = 4.0.10
+ LXC_SITE = https://linuxcontainers.org/downloads/lxc
+ LXC_LICENSE = GPL-2.0 (some tools), LGPL-2.1+
+ LXC_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1
+-- 
+2.33.0
 
 _______________________________________________
 buildroot mailing list
