@@ -7,51 +7,51 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A25D7C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 16 Sep 2021 20:37:06 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7489EC433EF
+	for <buildroot@archiver.kernel.org>; Thu, 16 Sep 2021 20:37:18 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1BCDD61056
-	for <buildroot@archiver.kernel.org>; Thu, 16 Sep 2021 20:37:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1BCDD61056
+	by mail.kernel.org (Postfix) with ESMTPS id 137B361056
+	for <buildroot@archiver.kernel.org>; Thu, 16 Sep 2021 20:37:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 137B361056
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BD8FB83F67;
-	Thu, 16 Sep 2021 20:37:05 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id CBACB401B8;
+	Thu, 16 Sep 2021 20:37:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tGdOFLrcOgGT; Thu, 16 Sep 2021 20:37:05 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id gejTerCwsQ5O; Thu, 16 Sep 2021 20:37:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2FD6683F63;
-	Thu, 16 Sep 2021 20:37:04 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 997281BF2F1
+	by smtp2.osuosl.org (Postfix) with ESMTP id A7A484054A;
+	Thu, 16 Sep 2021 20:37:15 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C89111BF9BA
  for <buildroot@lists.busybox.net>; Thu, 16 Sep 2021 20:37:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9630083F63
+ by smtp4.osuosl.org (Postfix) with ESMTP id B57684157D
  for <buildroot@lists.busybox.net>; Thu, 16 Sep 2021 20:37:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NIKBw8xDYrpp for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zogM8tSqF26Z for <buildroot@lists.busybox.net>;
  Thu, 16 Sep 2021 20:37:01 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id DAF4683F61
+ by smtp4.osuosl.org (Postfix) with ESMTP id E50F44157C
  for <buildroot@buildroot.org>; Thu, 16 Sep 2021 20:37:01 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 8C3B08B4C6; Thu, 16 Sep 2021 20:35:11 +0000 (UTC)
+ id 983958B4C8; Thu, 16 Sep 2021 20:35:11 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 16 Sep 2021 22:33:46 +0200
+Date: Thu, 16 Sep 2021 22:36:38 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3c040feba86c2986c39a388fac75aefd94e25859
-X-Git-Newrev: 1d550990ea68c7674f25217d036631243690b0e7
+X-Git-Oldrev: 1d550990ea68c7674f25217d036631243690b0e7
+X-Git-Newrev: e772166ff22ef232726df05baaeef0c6f7601e12
 X-Patchwork-Hint: ignore
-Message-Id: <20210916203511.8C3B08B4C6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] Update for 2021.02.5
+Message-Id: <20210916203511.983958B4C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] docs/website: update for 2021.02.5
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,50 +70,96 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1d550990ea68c7674f25217d036631243690b0e7
+commit: https://git.buildroot.net/buildroot/commit/?id=e772166ff22ef232726df05baaeef0c6f7601e12
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 767a2da72fc1690fde33b665851f20492ba5cd75)
-[Peter: drop Makefile change]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- CHANGES | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+ docs/website/download.html | 18 +++++++++---------
+ docs/website/news.html     | 19 +++++++++++++++++++
+ 2 files changed, 28 insertions(+), 9 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index 85cd179491..aa43729732 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -343,6 +343,28 @@
- 	#13751: libopenssl (static): huge drop in performance in newer ..
- 	#13771: package htop has undeclared dependency on host python
+diff --git a/docs/website/download.html b/docs/website/download.html
+index 5fea085ef9..57298d56d8 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -8,37 +8,37 @@
+     <div class="panel-heading">Download</div>
+     <div class="panel-body">
  
-+2021.02.5, released September 15th, 2021
-+
-+	Important / security related fixes.
-+
-+	Toolchain: Disable fortify support for Microblaze as it is not
-+	currently working.
-+
-+	Updated/fixed packages: alsa-utils, arm-trusted-firmware,
-+	bayer2rgb-neon, belle-sip, busybox, c-ares, cjson, coreutils,
-+	cpio, eigen, environt-setup, fetchmail, fluidsynth,
-+	fontconfig, gd, gdb, gnuradio, gnutls, go, haproxy, ipmiutil,
-+	iputils, jszip, kvm-unit-tests, libarchive, libexif,
-+	libgcrypt, libmodsecurity, libopenssl, librsvg, libshout,
-+	libssh, linux, localedef, mc, mesa3d, mosquitto, netsniff-ng,
-+	nginx, nodejs, ogre, openmpi, openvmtools, php, postgresql,
-+	prelink-cross, prosody, protobuf, python-keyring,
-+	python-matplotlib, python-pillow, python-pyudev,
-+	python-secretstorage, python3, qt5base, samba4, sdl2, sox,
-+	swupdate, sylpheed, tor, uboot-tools, uhd, unbound, vim,
-+	wlroots, xapp_xrdb, xapp_xwd, xen, xenomai, xlib_libXfont2,
-+	xlib_libXft, zip
-+
- 2021.02.4, released August 10th, 2021
+-      <h3 style="text-align: center;">Latest long term support release: <b>2021.02.4</b></h3>
++      <h3 style="text-align: center;">Latest long term support release: <b>2021.02.5</b></h3>
  
- 	Important / security related fixes.
+       <div class="row mt centered">
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2021.02.4.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2021.02.5.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2021.02.4.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2021.02.5.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+-	  <h3><a href="/downloads/buildroot-2021.02.4.tar.gz">buildroot-2021.02.4.tar.gz</a></h3>
+-	  <p><a href="/downloads/buildroot-2021.02.4.tar.gz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2021.02.5.tar.gz">buildroot-2021.02.5.tar.gz</a></h3>
++	  <p><a href="/downloads/buildroot-2021.02.5.tar.gz.sign">PGP signature</a></p>
+ 	</div>
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2021.02.4.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2021.02.5.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2021.02.4.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2021.02.5.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2021.02.4.tar.bz2">buildroot-2021.02.4.tar.bz2</a></h3>
+-	  <p><a href="/downloads/buildroot-2021.02.4.tar.bz2.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2021.02.5.tar.bz2">buildroot-2021.02.5.tar.bz2</a></h3>
++	  <p><a href="/downloads/buildroot-2021.02.5.tar.bz2.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+ 
+diff --git a/docs/website/news.html b/docs/website/news.html
+index 57783460ec..f8c6a382f7 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,25 @@
+ <h2>News</h2>
+ <ul class="timeline">
+ 
++  <li class="timeline-inverted">
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2021.02.5 released</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>16 September 2021</small></p>
++      </div>
++      <div class="timeline-body">
++	<p>The 2021.02.5 bugfix release is out, fixing a number of important /
++	  security related issues discovered since the 2021.02.4 release. See the
++	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2021.02.5">CHANGES</a>
++	  file for more details, read the
++	  <a href="http://lists.busybox.net/pipermail/buildroot/2021-September/623319.html">announcement</a>
++	  and go to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2021.02.5.tar.bz2">2021.02.5 release</a>.</p>
++      </div>
++    </div>
++  </li>
++
+   <li>
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
