@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-10.7 required=3.0 tests=BAYES_00,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E5C7EC433EF
-	for <buildroot@archiver.kernel.org>; Fri, 17 Sep 2021 20:07:28 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4262AC433F5
+	for <buildroot@archiver.kernel.org>; Fri, 17 Sep 2021 20:13:09 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 8802D61216
-	for <buildroot@archiver.kernel.org>; Fri, 17 Sep 2021 20:07:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8802D61216
+	by mail.kernel.org (Postfix) with ESMTPS id DA1C460EFF
+	for <buildroot@archiver.kernel.org>; Fri, 17 Sep 2021 20:13:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org DA1C460EFF
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2C69A407B7;
-	Fri, 17 Sep 2021 20:07:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B077761BEE;
+	Fri, 17 Sep 2021 20:13:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id j-gvdwOXx6n2; Fri, 17 Sep 2021 20:07:27 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id q6zvjH69Qbth; Fri, 17 Sep 2021 20:13:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 469264047E;
-	Fri, 17 Sep 2021 20:07:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 25F8C61BEA;
+	Fri, 17 Sep 2021 20:13:07 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id AF1801BF48D
- for <buildroot@lists.busybox.net>; Fri, 17 Sep 2021 20:07:24 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 760491BF48D
+ for <buildroot@lists.busybox.net>; Fri, 17 Sep 2021 20:13:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9D65861BEA
- for <buildroot@lists.busybox.net>; Fri, 17 Sep 2021 20:07:24 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 72A7B61BEA
+ for <buildroot@lists.busybox.net>; Fri, 17 Sep 2021 20:13:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5YOCDBlLQJOa for <buildroot@lists.busybox.net>;
- Fri, 17 Sep 2021 20:07:23 +0000 (UTC)
+ with ESMTP id dNdf1kuPCjWG for <buildroot@lists.busybox.net>;
+ Fri, 17 Sep 2021 20:13:04 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id EEB6B60B91
- for <buildroot@buildroot.org>; Fri, 17 Sep 2021 20:07:23 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id CD9AB60B91
+ for <buildroot@buildroot.org>; Fri, 17 Sep 2021 20:13:04 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 5ABA88B522; Fri, 17 Sep 2021 20:05:31 +0000 (UTC)
+ id 3CA988B52A; Fri, 17 Sep 2021 20:11:12 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 17 Sep 2021 21:52:18 +0200
+Date: Fri, 17 Sep 2021 22:10:06 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e772166ff22ef232726df05baaeef0c6f7601e12
-X-Git-Newrev: 3f71ff5257d63cf306ce3177a89bbaa79984ba10
+X-Git-Oldrev: 3f71ff5257d63cf306ce3177a89bbaa79984ba10
+X-Git-Newrev: 7f303516f69a143c2ecc317948ec1934a195235c
 X-Patchwork-Hint: ignore
-Message-Id: <20210917200531.5ABA88B522@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/xorriso: build host variant with
- zlib support
+Message-Id: <20210917201112.3CA988B52A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] fs/iso9660: switch from cdrkit to xorriso
+ to build ISO9660 images
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,40 +71,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3f71ff5257d63cf306ce3177a89bbaa79984ba10
+commit: https://git.buildroot.net/buildroot/commit/?id=7f303516f69a143c2ecc317948ec1934a195235c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-We will soon use xorriso in the ISO9660 image generation support, and
-this requires having zlib support in host-xorriso.
+In order to add support for EFI-compatible ISO9660 images in future
+patches, this commit switch the ISO9660 logic to use xorriso instead of
+cdrkit. Indeed the genimageiso tool from cdrkit doesn't have the
+--efi-boot option needed to generate an image compatible with EFI BIOS.
 
 Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
+[yann.morin.1998@free.fr: drop superfluous tool name from variable]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/xorriso/xorriso.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ fs/iso9660/iso9660.mk | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/xorriso/xorriso.mk b/package/xorriso/xorriso.mk
-index 7b38f268bb..ff3414fd8a 100644
---- a/package/xorriso/xorriso.mk
-+++ b/package/xorriso/xorriso.mk
-@@ -12,14 +12,16 @@ XORRISO_LICENSE_FILES = COPYING COPYRIGHT
- # Disable everything until we actually need those features, and add the correct
- # host libraries
- HOST_XORRISO_CONF_OPTS = \
-+	--enable-zlib \
- 	--disable-xattr-h-pref-attr \
--	--disable-zlib \
- 	--disable-libbz2 \
- 	--disable-libcdio \
- 	--disable-libreadline \
- 	--disable-libedit \
- 	--disable-libacl
+diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
+index a129655ce3..23421a9a5c 100644
+--- a/fs/iso9660/iso9660.mk
++++ b/fs/iso9660/iso9660.mk
+@@ -24,7 +24,7 @@
  
-+HOST_XORRISO_DEPENDENCIES = host-zlib
-+
- # libcdio doesn't make sense for Linux
- # http://lists.gnu.org/archive/html/bug-xorriso/2017-04/msg00004.html
- XORRISO_CONF_OPTS = --disable-libcdio
+ ROOTFS_ISO9660_BOOT_MENU = $(call qstrip,$(BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU))
+ 
+-ROOTFS_ISO9660_DEPENDENCIES = host-cdrkit linux
++ROOTFS_ISO9660_DEPENDENCIES = host-xorriso linux
+ 
+ ifeq ($(BR2_TARGET_ROOTFS_INITRAMFS),y)
+ ROOTFS_ISO9660_USE_INITRD = YES
+@@ -52,7 +52,7 @@ define ROOTFS_ISO9660_MKZFTREE
+ 		$(ROOTFS_ISO9660_TMP_TARGET_DIR)
+ endef
+ ROOTFS_ISO9660_PRE_GEN_HOOKS += ROOTFS_ISO9660_MKZFTREE
+-ROOTFS_ISO9660_GENISOIMAGE_OPTS += -z
++ROOTFS_ISO9660_OPTS += -z
+ else
+ ROOTFS_ISO9660_TMP_TARGET_DIR = $(TARGET_DIR)
+ endif
+@@ -129,9 +129,9 @@ ROOTFS_ISO9660_PRE_GEN_HOOKS += ROOTFS_ISO9660_DISABLE_EXTERNAL_INITRD
+ endif # ROOTFS_ISO9660_USE_INITRD
+ 
+ define ROOTFS_ISO9660_CMD
+-	$(HOST_DIR)/bin/genisoimage -J -R -b $(ROOTFS_ISO9660_BOOT_IMAGE) \
++	$(HOST_DIR)/bin/xorriso -as mkisofs -J -R -b $(ROOTFS_ISO9660_BOOT_IMAGE) \
+ 		-no-emul-boot -boot-load-size 4 -boot-info-table \
+-		$(ROOTFS_ISO9660_GENISOIMAGE_OPTS) \
++		$(ROOTFS_ISO9660_OPTS) \
+ 		-o $@ $(ROOTFS_ISO9660_TMP_TARGET_DIR)
+ endef
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
