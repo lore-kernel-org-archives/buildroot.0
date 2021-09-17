@@ -2,76 +2,91 @@ Return-Path: <SRS0=uTOM=OH=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.0 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.5 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
+	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 99B2DC433F5
-	for <buildroot@archiver.kernel.org>; Fri, 17 Sep 2021 21:33:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 07032C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 17 Sep 2021 22:20:26 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 4ABF2610E9
-	for <buildroot@archiver.kernel.org>; Fri, 17 Sep 2021 21:33:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4ABF2610E9
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
+	by mail.kernel.org (Postfix) with ESMTPS id 715D161076
+	for <buildroot@archiver.kernel.org>; Fri, 17 Sep 2021 22:20:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 715D161076
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0C33F407E3;
-	Fri, 17 Sep 2021 21:33:29 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 28AB1401E6;
+	Fri, 17 Sep 2021 22:20:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6ihCZSfRUzVS; Fri, 17 Sep 2021 21:33:27 +0000 (UTC)
+	with ESMTP id 2e6Eec3uhZSI; Fri, 17 Sep 2021 22:20:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EFC4E407D9;
-	Fri, 17 Sep 2021 21:33:26 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 315B21C1135
- for <buildroot@lists.busybox.net>; Fri, 17 Sep 2021 21:33:25 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4E80B4028C;
+	Fri, 17 Sep 2021 22:20:23 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0694A1BF4E2
+ for <buildroot@lists.busybox.net>; Fri, 17 Sep 2021 22:20:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1E2A86F69A
- for <buildroot@lists.busybox.net>; Fri, 17 Sep 2021 21:33:25 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 020E942528
+ for <buildroot@lists.busybox.net>; Fri, 17 Sep 2021 22:20:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id d2hcaX_2Ovzo for <buildroot@lists.busybox.net>;
- Fri, 17 Sep 2021 21:33:24 +0000 (UTC)
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id h1AJ-X13X-EL for <buildroot@lists.busybox.net>;
+ Fri, 17 Sep 2021 22:20:21 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 18AD96F8AC
- for <buildroot@buildroot.org>; Fri, 17 Sep 2021 21:33:24 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:4db3:5a06:f3b2:1f85])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id 5E9125FF20;
- Fri, 17 Sep 2021 23:33:18 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1631914402;
- bh=Ao+n9mybndL2OuHFFlvTWaQ2qt60+p09/XwZ0MypOJw=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=OgDuY+PqhcvyvtbsnSlRjP2sJc0ixZvXOtoZuhFDUnaVO81HMtXvzvxbddrzQcXi9
- uTWZ6A17qKWz9i/P+7xyGdJpTHtkRoDIhXcYbFTlwIV9ydR5DMdNLAH+VhtItBfTa6
- mV/PCe/09Jzaz5nK3pGEwuYVClG8iWUm8xh/tYe/sP+MWOtk52LB0pBJj/6OHQuxR6
- WNStRKhXmWfpXzO6x6yjjf1a8GJoKagsuPoquphhrUyog1TaZ+Q/I08ULBc2qerxsX
- 5h48inkt72toczSOx246ShdCIuQ6qLxyLokmosuuyeYbwADBWbPEphJpYkuB1UjGNP
- qkHEbXW9Is6fw==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Fri, 17 Sep 2021 23:33:17 +0200
-Date: Fri, 17 Sep 2021 23:33:17 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Bartosz Bilas <b.bilas@grinn-global.com>
-Message-ID: <20210917213317.GA1053080@scaer>
-References: <20210917205254.30134-1-b.bilas@grinn-global.com>
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
+ [IPv6:2a00:1450:4864:20::32d])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0CE92421F2
+ for <buildroot@buildroot.org>; Fri, 17 Sep 2021 22:20:20 +0000 (UTC)
+Received: by mail-wm1-x32d.google.com with SMTP id y132so8424772wmc.1
+ for <buildroot@buildroot.org>; Fri, 17 Sep 2021 15:20:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=uFds1vnZCmOnj8F+d4qEG80QGGnoUYf8uSTM1JGmgcU=;
+ b=JevlEqj/PsW1RZ7anpO1DELIXtQcB7jpLizoKRQy/Hr8CnoJgxf/r2KeCggwn/XrCv
+ 9C68MydtkHz2f7b5qXAZ9SesVIifVA/zrDRGXK8LIsH7kKQoqc0qxpYJ5LXspHw6biXt
+ sOSHVlLJp5Jk/FRi9DuiGpBXik2OhYiqqZm0VQfRCWU/B3uvmhCG2qyClhAWQnlfMYWV
+ vTphPU6coXzNY2XbVwvImED33Wpz72AfKBQEl/f2sP6rUkTTDjCP1hVXACW0CrjqLUgj
+ 22/9TY0nFFo7b+GQ2p+yH1RRvN8/1JClImNtxHF6HY6nI/l0NlXz1XNwlrGC67uglYbK
+ uixQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=uFds1vnZCmOnj8F+d4qEG80QGGnoUYf8uSTM1JGmgcU=;
+ b=YQ48XfubufO1OFRvpBpRKtqhW9g9n+W4nnFeGdmSBLlyIsXFciQUKuhzbXVPf7Fkn8
+ Fh2/Av5snRcuZleVeIq4C9RBYgX8qDaRAjEpUbI5EpzHYRGuxB/f1UfCNUj8bRVOSnMM
+ CKmg2j/+WZHUsMMI8qp1ZQb/op3hmlQMBEB3cd94aeAHw25OobaMvNDLlkNsgDNSs1td
+ cWerBZGg7v8OL0TMORLuirZBwin+P+PoLF0dK8Cke7JzcoZWZ1/cvwaEVmKVELF8Br4Q
+ PnxPQVZIKyDVtdx3PCmgn/nr9yOASz4MTErZYXSGfFi0AHVpBNM0eLoqDHXxMe9RYQ5K
+ 9+wA==
+X-Gm-Message-State: AOAM532GeTX5RXhLJFcKRJAv71+uTmdBkieU/locLe6bcAEZIqYEBqDS
+ M9t/R+vi6S4qc+QJGLP1EJqw+5IdOc0=
+X-Google-Smtp-Source: ABdhPJzWEOX3IIm0rj1KtBvyXBcF3Y7fi2r6NBQyqb2pRXpSqNcXkLI+usJx8jW6M+6iVh6bPnuGVA==
+X-Received: by 2002:a7b:c20f:: with SMTP id x15mr4938501wmi.59.1631917218864; 
+ Fri, 17 Sep 2021 15:20:18 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-2139-166.w92-167.abo.wanadoo.fr.
+ [92.167.218.166])
+ by smtp.gmail.com with ESMTPSA id 129sm7615246wmz.26.2021.09.17.15.20.17
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 17 Sep 2021 15:20:18 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sat, 18 Sep 2021 00:19:34 +0200
+Message-Id: <20210917221934.631955-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20210917205254.30134-1-b.bilas@grinn-global.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH]  boot/barebox: bump version to 2021.08.0
+Subject: [Buildroot] [PATCH 1/1] package/apache: security bump to version
+ 2.4.49
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,80 +99,55 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-Bartosz, All,
+Fix CVE-2021-33193: A crafted method sent through HTTP/2 will bypass
+validation and be forwarded by mod_proxy, which can lead to request
+splitting or cache poisoning. This issue affects Apache HTTP Server
+2.4.17 to 2.4.48.
 
-On 2021-09-17 22:52 +0200, Bartosz Bilas spake thusly:
-> Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+https://github.com/apache/httpd/blob/2.4.49/CHANGES
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/apache/apache.hash | 6 +++---
+ package/apache/apache.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  boot/barebox/Config.in    | 4 ++--
->  boot/barebox/barebox.hash | 6 +++---
->  2 files changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
-> index af4c1f816c..71c855bb60 100644
-> --- a/boot/barebox/Config.in
-> +++ b/boot/barebox/Config.in
-> @@ -12,7 +12,7 @@ choice
->  	  Select the specific Barebox version you want to use
->  
->  config BR2_TARGET_BAREBOX_LATEST_VERSION
-> -	bool "2021.07.0"
-> +	bool "2021.08.0"
->  
->  config BR2_TARGET_BAREBOX_CUSTOM_VERSION
->  	bool "Custom version"
-> @@ -40,7 +40,7 @@ endif
->  
->  config BR2_TARGET_BAREBOX_VERSION
->  	string
-> -	default "2021.07.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
-> +	default "2021.08.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
->  	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
->  	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
->  	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
-> diff --git a/boot/barebox/barebox.hash b/boot/barebox/barebox.hash
-> index a82edef63b..34d34eece2 100644
-> --- a/boot/barebox/barebox.hash
-> +++ b/boot/barebox/barebox.hash
-> @@ -1,8 +1,8 @@
-> -# From https://www.barebox.org/download/barebox-2021.07.0.tar.bz2.md5
-> -md5  df3651a395e1420c2818dd464c63069d  barebox-2021.07.0.tar.bz2
-> +# From https://www.barebox.org/download/barebox-2021.08.0.tar.bz2.md5
-> +md5  eddcd7bc7e9d3836f0d68e3abce210ec  barebox-2021.08.0.tar.bz2
->  
->  # Locally calculated
-> -sha256  ce5d9d8953a2e3c21f1e6a72b1499962170bb41c4750ce8129ef44bf7860992d  barebox-2021.07.0.tar.bz2
-> +sha256  6b29f2f23d1b0c279f2ee680dcf29900c3d85367fbb107038f54b577d8a616dc  barebox-2021.08.0.tar.bz2
->  
->  # License files, locally computed
->  sha256  ab1122aa9f9073ad1ec824edcd970b16a6a7881a34a18fd56c080debb2dca5d4  COPYING
-> -- 
-> 2.33.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@lists.buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/package/apache/apache.hash b/package/apache/apache.hash
+index c03934b40a..49efefebb9 100644
+--- a/package/apache/apache.hash
++++ b/package/apache/apache.hash
+@@ -1,5 +1,5 @@
+-# From http://archive.apache.org/dist/httpd/httpd-2.4.46.tar.bz2.{sha256,sha512}
+-sha256  1bc826e7b2e88108c7e4bf43c026636f77a41d849cfb667aa7b5c0b86dbf966c  httpd-2.4.48.tar.bz2
+-sha512  6c250626f1e7d10428a92d984fd48ff841effcc8705f7816ab71b681bbd51d0012ad158dcd13763fe7d630311f2de258b27574603140d648be42796ab8326724  httpd-2.4.48.tar.bz2
++# From http://archive.apache.org/dist/httpd/httpd-2.4.49.tar.bz2.{sha256,sha512}
++sha256  65b965d6890ea90d9706595e4b7b9365b5060bec8ea723449480b4769974133b  httpd-2.4.49.tar.bz2
++sha512  418e277232cf30a81d02b8554e31aaae6433bbea842bdb81e47a609469395cc4891183fb6ee02bd669edb2392c2007869b19da29f5998b8fd5c7d3142db310dd  httpd-2.4.49.tar.bz2
+ # Locally computed
+ sha256  47b8c2b6c3309282a99d4a3001575c790fead690cc14734628c4667d2bbffc43  LICENSE
+diff --git a/package/apache/apache.mk b/package/apache/apache.mk
+index 365dc9a72e..ae2fb70535 100644
+--- a/package/apache/apache.mk
++++ b/package/apache/apache.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-APACHE_VERSION = 2.4.48
++APACHE_VERSION = 2.4.49
+ APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
+ APACHE_SITE = http://archive.apache.org/dist/httpd
+ APACHE_LICENSE = Apache-2.0
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.33.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
