@@ -2,91 +2,68 @@ Return-Path: <SRS0=uTOM=OH=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.5 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
-	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A144C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 17 Sep 2021 17:01:16 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 68599C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 17 Sep 2021 17:22:46 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 8DEE961216
-	for <buildroot@archiver.kernel.org>; Fri, 17 Sep 2021 17:01:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8DEE961216
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id D99DC60F4A
+	for <buildroot@archiver.kernel.org>; Fri, 17 Sep 2021 17:22:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D99DC60F4A
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3970C415B7;
-	Fri, 17 Sep 2021 17:01:15 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7F70F40780;
+	Fri, 17 Sep 2021 17:22:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WhBmPjDQHhfy; Fri, 17 Sep 2021 17:01:14 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 894FE41593;
-	Fri, 17 Sep 2021 17:01:13 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C7D791BF385
- for <buildroot@lists.busybox.net>; Fri, 17 Sep 2021 17:01:12 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B1DB34075D
- for <buildroot@lists.busybox.net>; Fri, 17 Sep 2021 17:01:12 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HKswEL9ldL9h for <buildroot@lists.busybox.net>;
- Fri, 17 Sep 2021 17:01:10 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
- [IPv6:2a00:1450:4864:20::32c])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4095E40173
- for <buildroot@buildroot.org>; Fri, 17 Sep 2021 17:01:10 +0000 (UTC)
-Received: by mail-wm1-x32c.google.com with SMTP id
- 192-20020a1c04c9000000b002f7a4ab0a49so7936131wme.0
- for <buildroot@buildroot.org>; Fri, 17 Sep 2021 10:01:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=BgMMdr8jHjGCC9oqLZcQyUlRcuO4wnthVnpFOpw4lVk=;
- b=i106JMpz/tPY03moPPqEGKyJI+n2nBIGcaGuIijo4QUJqVQMxuMIkRPq2mM/4SAvac
- 5OSOZhQvR4dHN/SFU2VmxEcT9zto+ERdhd/BbJofn9OGBlz9zwPYxVKuob9xdmw/lHaZ
- Oiu8mSj7kvrN/F1lfMU2E0ueT7rdjxVBGlpxdl0whR9k/xkzSolYxMIFoOHLz9b0M6/S
- huDoQBFkhIrzWOQP4EasnnDCnEbaRuP8f4LIhcOYCRLjcbpAqvI6JdT+wWU87P60VzyI
- US+mZ3JkEYvwF56rOh87R3vARL/lSroY19leZptagiBTDR18bCfgZdKEzuhKJeEfowtR
- CVbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=BgMMdr8jHjGCC9oqLZcQyUlRcuO4wnthVnpFOpw4lVk=;
- b=L6s6S5kCSVjUe7wiCk0vl5cnZpOJOlE+fLDj6yrUBkcLm+Ma9miGECm0DFpzJVE25B
- 9G53UQ6HaynI6DQQ5ZtwIUr7z8WTAOsJwS+AGpEQtZr/ObIAzuwTKSfOzvHt9dte9VWX
- f+C9cVMpLZkxv9ddWCWv3RlnVULZJH8+RH22wcrR+MmZW9DU6wnCUqovCiy6MDoYOMjS
- US1g9eXtfZqZG4SPkYH1VlvizOU4cMcU+37u4YHUqdL7WidFwNWlwaXSZ/4379fAdh8R
- CF1Z5hRvapCAzyDJLDMx4piacSKkkmAhW3yTFPAskgdkr5lZhCnI6izYpoaOdq5f57yq
- dU7A==
-X-Gm-Message-State: AOAM5305hRWuwF9y/tENxPA5rQoZaNyJASwtBsX3EtIQi3QcOuGuPKk2
- L7kyG4uWYS8FZStozShVrDzonxwdYVg=
-X-Google-Smtp-Source: ABdhPJw1B2EasTtgRYjDRBF9iTwkrL7KA6t7f/VBIvEhsdNZxJQCd2MGrRRMmVUy7VFGIWqQWO4ptg==
-X-Received: by 2002:a1c:2705:: with SMTP id n5mr16010097wmn.176.1631898068153; 
- Fri, 17 Sep 2021 10:01:08 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-2139-166.w92-167.abo.wanadoo.fr.
- [92.167.218.166])
- by smtp.gmail.com with ESMTPSA id c185sm6429227wma.8.2021.09.17.10.01.07
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 17 Sep 2021 10:01:07 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Fri, 17 Sep 2021 19:00:31 +0200
-Message-Id: <20210917170031.324231-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.33.0
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id bmTTVpYl-PIu; Fri, 17 Sep 2021 17:22:44 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9A14A40173;
+	Fri, 17 Sep 2021 17:22:43 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 442761BF31D
+ for <buildroot@lists.busybox.net>; Fri, 17 Sep 2021 17:22:41 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4047F840AE
+ for <buildroot@lists.busybox.net>; Fri, 17 Sep 2021 17:22:41 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=kernel.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Gwfmto1RyWRO for <buildroot@lists.busybox.net>;
+ Fri, 17 Sep 2021 17:22:40 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9D995840A8
+ for <buildroot@buildroot.org>; Fri, 17 Sep 2021 17:22:40 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 99865610E9;
+ Fri, 17 Sep 2021 17:22:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+ s=k20201202; t=1631899360;
+ bh=s5uP+dULyp/S0F0gjQfGWCSfiJSdDxIt1CI/UMzs/l8=;
+ h=In-Reply-To:References:From:Cc:Subject:To:Date:From;
+ b=ZrujuQ2X84HeKIfFTGHfcI68YHRfCD98NGM02fB3B4uKL9EH5wVKmVNazFjGWieT5
+ gNQ7Mv6OIR0q2YRkdQOwWscFQy64ri2EahM9tQubH7mnJwEEwL5RAQDm2uRR1eFe/S
+ zWHOa68MBBFqteQIJtf3VGCT3r0wp5YiI7IAm1hGJFZac1PGlMuKAppzbw80CFDXoj
+ IvE8nfi5Jixn4GPWWTHxjpMt89HSpJyZ5bW/wUxK0KPMn1DElVQa/joX2hX8dI+jE3
+ 2XD1TIj8iATLQ6yB7FUImcDnTZlON0xYnohGbYMfkfcT8cWlBt3Zw1aMP4PQc4Eirl
+ +YhNaAx3yDUtA==
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/libxcrypt: bump to version 4.4.26
+In-Reply-To: <20210830114531.2285178-1-jose.pekkarinen@unikie.com>
+References: <20210830114531.2285178-1-jose.pekkarinen@unikie.com>
+From: Antoine Tenart <atenart@kernel.org>
+To: José Pekkarinen <jose.pekkarinen@unikie.com>, buildroot@buildroot.org
+Message-ID: <163189935709.536094.10717640766848618610@kwain>
+Date: Fri, 17 Sep 2021 19:22:37 +0200
+Subject: Re: [Buildroot] [PATCH] package/refpolicy: Treat all modules as
+ custom
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,63 +76,40 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: Guillaume William Brs <guillaume.bressaix@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: José Pekkarinen <jose.pekkarinen@unikie.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-This bump contains a single change to fix the following build failure
-with Microblaze raised since bump to version 4.4.25 in commit
-a071bec0a0cd928443223132d47564c90bc64713:
-
-lib/crypt-gensalt-static.c:33:1: error: symver is only supported on ELF platforms
-   33 | SYMVER_crypt_gensalt;
-      | ^~~~~~~~~~~~~~~~~~~~
-
-Update hash of LICENSING due to new file being added with
-https://github.com/besser82/libxcrypt/commit/4ab5f672eb6fb43c9bd83060ef48f90decd4989c
-
-https://github.com/besser82/libxcrypt/blob/v4.4.26/NEWS
-
-Fixes:
- - http://autobuild.buildroot.org/results/4766bfce9813b7f321369ec45298d16cd6dc251a
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libxcrypt/libxcrypt.hash | 4 ++--
- package/libxcrypt/libxcrypt.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/libxcrypt/libxcrypt.hash b/package/libxcrypt/libxcrypt.hash
-index e0b96406cc..b47f470020 100644
---- a/package/libxcrypt/libxcrypt.hash
-+++ b/package/libxcrypt/libxcrypt.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  caea3d032a46c4855ff818637884c7f5719ad228b79387b62ee023c8fbef17b4  libxcrypt-4.4.25.tar.gz
--sha256  3c1ff7a7c9da111853ada463c54b65b42b7b1d3d6592dd527281db0827331d77  LICENSING
-+sha256  e8a544dd19171c1e6191a6044c96cc31496d781ba08b5a00f53310d001d58114  libxcrypt-4.4.26.tar.gz
-+sha256  cead8b3d94a143f64ccb571ada1cea47a70a0b847c8d95306e8d78ed68951f3d  LICENSING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-diff --git a/package/libxcrypt/libxcrypt.mk b/package/libxcrypt/libxcrypt.mk
-index 4627d21b62..3c98b30dd5 100644
---- a/package/libxcrypt/libxcrypt.mk
-+++ b/package/libxcrypt/libxcrypt.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBXCRYPT_VERSION = 4.4.25
-+LIBXCRYPT_VERSION = 4.4.26
- LIBXCRYPT_SITE = $(call github,besser82,libxcrypt,v$(LIBXCRYPT_VERSION))
- LIBXCRYPT_LICENSE = LGPL-2.1+
- LIBXCRYPT_LICENSE_FILES = LICENSING COPYING.LIB
--- 
-2.33.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@lists.buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gSm9zw6ksCgpRdW90aW5nIEpvc8OpIFBla2thcmluZW4gKDIwMjEtMDgtMzAgMTM6NDU6
+MzEpCj4gVGhlIGN1cnJlbnQgcHJvY2Vzc2luZyBvZiB0aGUgbW9kdWxlcyBkb2Vzbid0IHdvcmsg
+Zm9yCj4gY3VzdG9tIG1hZGUgcG9saWNpZXMgYXBwZW5kZWQgdGhyb3VnaCB0aGUgZXh0cmEgZGly
+IG1lY2hhbmlzbSwKPiBzaW5jZSBzZWQgd29uJ3QgZmluZCBhIG1hdGNoIGZvciBjdXN0b20gbW9k
+dWxlcywgaXQgd2lsbAo+IGNvbnRpbnVlIHdpdGhvdXQgdHJpZ2dlcmluZyBhbmQgZXJyb3IuIFRo
+aXMgcGF0Y2ggcmVtb3Zlcwo+IGFsbCB0aGUgbW9kdWxlcyBmcm9tIG1vZHVsZXMuY29uZiBhbmQg
+YWRkIHRoZW0gb25lIGJ5Cj4gb25lIHVzaW5nIFJFRlBPTElDWV9NT0RVTEVTIHZhbHVlcy4KCkkn
+bSBmYWlsaW5nIHRvIHNlZSB3aGF0IHBhcnRpY3VsYXIgc2V0dXAgdGhlIGNoYW5nZSBiZWxvdyB3
+b3VsZCBmaXguCgpDb3VsZCB5b3UgZWxhYm9yYXRlIG9uIHRoZSBhYm92ZT8gTWF5YmUgaW5jbHVk
+aW5nIGNvbmZpZ3VyYXRpb24Kc25pcHBldHMgYW5kIGV4YW1wbGUgb2Ygc3VjaCBhIG1vZHVsZSAo
+d2l0aCB0aGUgZmlsZSB0cmVlLCBzdGFydGluZyBmcm9tClJFRlBPTElDWV9FWFRSQV9NT0RVTEVT
+X0RJUlMpLgoKVGhhbmtzIQpBbnRvaW5lCgo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL3JlZnBvbGlj
+eS9yZWZwb2xpY3kubWsgYi9wYWNrYWdlL3JlZnBvbGljeS9yZWZwb2xpY3kubWsKPiBpbmRleCAw
+MTk0NzA4YjM3Li4xYzBhMmMzMzg1IDEwMDY0NAo+IC0tLSBhL3BhY2thZ2UvcmVmcG9saWN5L3Jl
+ZnBvbGljeS5tawo+ICsrKyBiL3BhY2thZ2UvcmVmcG9saWN5L3JlZnBvbGljeS5tawo+IEBAIC04
+NSw5ICs4NSw5IEBAIGVuZGVmCj4gICMgSW4gdGhlIGNvbnRleHQgb2YgYSBtb25vbGl0aGljIHBv
+bGljeSBlbmFibGluZyBhIHBpZWNlIG9mIHRoZSBwb2xpY3kgYXMKPiAgIyAnYmFzZScgb3IgJ21v
+ZHVsZScgaXMgZXF1aXZhbGVudCwgc28gd2UgZW5hYmxlIHRoZW0gYXMgJ2Jhc2UnLgo+ICBkZWZp
+bmUgUkVGUE9MSUNZX0NPTkZJR1VSRV9NT0RVTEVTCj4gLSAgICAgICAkKFNFRCkgInMvID0gbW9k
+dWxlLyA9IG5vL2ciICQoQEQpL3BvbGljeS9tb2R1bGVzLmNvbmYKPiArICAgICAgICQoU0VEKSAi
+LyA9IG1vZHVsZS9kIiAkKEBEKS9wb2xpY3kvbW9kdWxlcy5jb25mCj4gICAgICAgICAkKGZvcmVh
+Y2ggbSwkKHNvcnQgJChSRUZQT0xJQ1lfTU9EVUxFUykpLAo+IC0gICAgICAgICAgICAgICAkKFNF
+RCkgIi9eJChtKSA9L2NcJChtKSA9IGJhc2UiICQoQEQpL3BvbGljeS9tb2R1bGVzLmNvbmYKPiAr
+ICAgICAgICAgICAgICAgJChTRUQpICIvXiMgTW9kdWxlOiAkKG0pL2FcJChtKSA9IGJhc2UiICQo
+QEQpL3BvbGljeS9tb2R1bGVzLmNvbmYKPiAgICAgICAgICkKPiAgZW5kZWYKPiAgCj4gLS0gCj4g
+Mi4yNS4xCj4gCj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X18KPiBidWlsZHJvb3QgbWFpbGluZyBsaXN0Cj4gYnVpbGRyb290QGJ1c3lib3gubmV0Cj4gaHR0
+cDovL2xpc3RzLmJ1c3lib3gubmV0L21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cl9fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5n
+IGxpc3QKYnVpbGRyb290QGxpc3RzLmJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJv
+b3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
