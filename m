@@ -8,70 +8,71 @@ X-Spam-Status: No, score=-12.0 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 07E4BC433EF
-	for <buildroot@archiver.kernel.org>; Sat, 18 Sep 2021 19:54:50 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D7D78C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 18 Sep 2021 20:00:08 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 99AFF61051
-	for <buildroot@archiver.kernel.org>; Sat, 18 Sep 2021 19:54:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 99AFF61051
+	by mail.kernel.org (Postfix) with ESMTPS id 74D37610CB
+	for <buildroot@archiver.kernel.org>; Sat, 18 Sep 2021 20:00:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 74D37610CB
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6D8D240494;
-	Sat, 18 Sep 2021 19:54:49 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1691B4016F;
+	Sat, 18 Sep 2021 20:00:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id g8iYgYopk6kd; Sat, 18 Sep 2021 19:54:48 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 88mg96huFrYP; Sat, 18 Sep 2021 20:00:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A339340470;
-	Sat, 18 Sep 2021 19:54:47 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 810C51BF40A
- for <buildroot@lists.busybox.net>; Sat, 18 Sep 2021 19:54:46 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 12525400F2;
+	Sat, 18 Sep 2021 20:00:05 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 861D11BF40A
+ for <buildroot@lists.busybox.net>; Sat, 18 Sep 2021 20:00:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 70A76605D8
- for <buildroot@lists.busybox.net>; Sat, 18 Sep 2021 19:54:46 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 06E01404F3
+ for <buildroot@lists.busybox.net>; Sat, 18 Sep 2021 20:00:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=free.fr
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id U8iC7omueZOY for <buildroot@lists.busybox.net>;
- Sat, 18 Sep 2021 19:54:45 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7319A605CF
- for <buildroot@buildroot.org>; Sat, 18 Sep 2021 19:54:45 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id cZ6rXvSM2hqI for <buildroot@lists.busybox.net>;
+ Sat, 18 Sep 2021 20:00:02 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1A9D2404D5
+ for <buildroot@buildroot.org>; Sat, 18 Sep 2021 20:00:02 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b51:cb00:ed4a:2560:2180:38b6])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 9DAE5B0054C;
- Sat, 18 Sep 2021 21:54:35 +0200 (CEST)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 5E014B004EE;
+ Sat, 18 Sep 2021 21:59:56 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1631994884;
- bh=+B5fvQEve9r0wJU7cTXFPdLFBz8TpCkgGu9+UiOe2x4=;
+ s=smtp-20201208; t=1631995200;
+ bh=yuoGF9xfPjcyMThVbO1QvWMFlbqWebqlfAQUDV9YVXM=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=nQoACgIitltg8OBtI4H8deH3Xu/gKb4U1JpKpaC+6XBajGOMwgLqxtID3H3tKYYg6
- Q6MHkUemi6knXe1jhSKRR7xDwxDuC8Uua1sRbVYHatuIHnVkQDXDYPdtjIYkaTvWyB
- LoLizTjgPPly1mUnuRge4NMf1b5/AXGWfkBNsniFrrDVz59TtN+FUH4H5NeIaFy1+E
- fLNYLvuIlzYxvzgjBH74NxzQ6RF7l3yx/xGBI4P8armird6jTLgKhM7jCoVZfmeLsi
- nzexH6nl11XCOTC4lAesN9Ar228Q/5LGzhdLLpD8LLdf97xSEu/DCPu0kn4nEdl0UC
- ju/8/VijyL0kw==
+ b=NoqsB+ZRj0DSFSUBTLqd/M5Y1lslBXlpV1gTev/Z70wFP/BHI4KeJAenrG/wnoUGU
+ LSFA/7k5BHOnhZSxUrVs/P7rUPrP+yTa8Ia72IpdkDdtVGYv9ehCKop8AYQuBT+WTt
+ Cu1t+183fvCGH0Lk5R+iamGf90GSD/Gfy+u9NuoWWX4UkTwoxLrocmrcWAtMV4pzL4
+ C3bitw/iu399G1IAVcPKu1zgBxsvoWHZqel0UgfhQ+trAb0ng4XOj6ZOP2wCT99IRB
+ WBAfGvgY0vT57z+cXmJu5c7pxx3x8eN4q0xwSwWNMR0svCYFDVJ5IfYAsrNEaB7S06
+ FSYqHI+feKzkw==
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 18 Sep 2021 21:54:35 +0200
-Date: Sat, 18 Sep 2021 21:54:35 +0200
+ Sat, 18 Sep 2021 21:59:56 +0200
+Date: Sat, 18 Sep 2021 21:59:56 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: yegorslists@googlemail.com
-Message-ID: <20210918195435.GJ1053080@scaer>
-References: <20210914162158.15045-1-yegorslists@googlemail.com>
+To: Petr Vorel <petr.vorel@gmail.com>
+Message-ID: <20210918195956.GK1053080@scaer>
+References: <20210914172420.8824-1-petr.vorel@gmail.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20210914162158.15045-1-yegorslists@googlemail.com>
+In-Reply-To: <20210914172420.8824-1-petr.vorel@gmail.com>
 User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH] package/libqmi: bump to version 1.30.2
+Subject: Re: [Buildroot] [RESENT][PATCH 1/1] package/debianutils: bump
+ version to 5.4
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,99 +85,71 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: Matt Weber <matthew.weber@collins.com>,
- Aleksander Morgado <aleksander@aleksander.es>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-Yegor, All,
+Petr, All,
 
-On 2021-09-14 18:21 +0200, yegorslists--- via buildroot spake thusly:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
-> 
-> Remove the upstreamed patch.
-> 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-
-Sorry, I did not notice you had sent this bump before I applied Petr's
-patch.
-
-Regards,
-Yann E. MORIN.
-
+On 2021-09-14 19:24 +0200, Petr Vorel spake thusly:
+> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 > ---
->  ...build-meson-fix-introspection-option.patch | 33 -------------------
->  package/libqmi/libqmi.hash                    |  2 +-
->  package/libqmi/libqmi.mk                      |  2 +-
->  3 files changed, 2 insertions(+), 35 deletions(-)
->  delete mode 100644 package/libqmi/0001-build-meson-fix-introspection-option.patch
+>  package/debianutils/debianutils.hash | 4 ++--
+>  package/debianutils/debianutils.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/libqmi/0001-build-meson-fix-introspection-option.patch b/package/libqmi/0001-build-meson-fix-introspection-option.patch
-> deleted file mode 100644
-> index 0528868025..0000000000
-> --- a/package/libqmi/0001-build-meson-fix-introspection-option.patch
-> +++ /dev/null
-> @@ -1,33 +0,0 @@
-> -From bfb066419f288764edbade1e27e93a5dda59a5f4 Mon Sep 17 00:00:00 2001
-> -From: Aleksander Morgado <aleksander@aleksander.es>
-> -Date: Fri, 6 Aug 2021 10:32:22 +0200
-> -Subject: [PATCH] build,meson: fix introspection option
-> -
-> -Using -Dintrospection=false would actually not disable it. There is no
-> -longer an "auto" option for the introspection support, it will be
-> -either enabled or disabled depending on what the user asks
-> -for (default enabled).
-> -
-> -Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ----
-> - meson.build | 5 ++++-
-> - 1 file changed, 4 insertions(+), 1 deletion(-)
-> -
-> -diff --git a/meson.build b/meson.build
-> -index b25bca57..d28e5601 100644
-> ---- a/meson.build
-> -+++ b/meson.build
-> -@@ -218,7 +218,10 @@ version_conf.set10('QMI_QRTR_SUPPORTED', enable_qrtr)
-> - version_conf.set10('QMI_RMNET_SUPPORTED', enable_rmnet)
-> -
-> - # introspection support
-> --enable_gir = dependency('gobject-introspection-1.0', version: '>= 0.9.6', required: get_option('introspection')).found()
-> -+enable_gir = get_option('introspection')
-> -+if enable_gir
-> -+  dependency('gobject-introspection-1.0', version: '>= 0.9.6')
-> -+endif
-> -
-> - random_number = qmi_minor_version + meson.version().split('.').get(1).to_int()
-> -
-> ---
-> -2.17.0
-> diff --git a/package/libqmi/libqmi.hash b/package/libqmi/libqmi.hash
-> index 0373bb4e75..1f2da45ac0 100644
-> --- a/package/libqmi/libqmi.hash
-> +++ b/package/libqmi/libqmi.hash
+> diff --git a/package/debianutils/debianutils.hash b/package/debianutils/debianutils.hash
+> index 16a45d4ea1..bbedb6f72f 100644
+> --- a/package/debianutils/debianutils.hash
+> +++ b/package/debianutils/debianutils.hash
 > @@ -1,4 +1,4 @@
->  # Locally computed:
->  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
->  sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-> -sha256  c0421684c12697c448077dd5c0a66c6f745deab3558af578e3f10307c8a0c564  libqmi-1.30.0.tar.gz
-> +sha256  2eb7c7971b91a64ad830643b0170cff692a69bf0f093ca61d72d3f466a0272d4  libqmi-1.30.2.tar.gz
-> diff --git a/package/libqmi/libqmi.mk b/package/libqmi/libqmi.mk
-> index 05fd3ae9af..cd2c2719f9 100644
-> --- a/package/libqmi/libqmi.mk
-> +++ b/package/libqmi/libqmi.mk
+> -# From http://snapshot.debian.org/archive/debian/20200525T145753Z/pool/main/d/debianutils/debianutils_4.11.dsc
+> -sha256 bb5ce6290696b0d623377521ed217f484aa98f7346c5f7c48f9ae3e1acfb7151 debianutils_4.11.tar.xz
+> +# From https://snapshot.debian.org/archive/debian/20210825T030241Z/pool/main/d/debianutils/debianutils_5.4-3.dsc
+> +sha256 611b1268bee9d183886c94e5f34920e4b5b67ff45202aef3f6f2ba8f4a205163 103640 debianutils_5.4.tar.xz
+
+I guess you forgot to fix this before sending:
+
+    package/debianutils/debianutils.hash:2: expected three fields (http://nightly.buildroot.org/#adding-packages-hash)
+
+>  # Locally calculated
+>  sha256 3c8b5112cb8f74ba959233291908d73f527afa6f1d96f93649aeb912b5884567 debian/copyright
+> diff --git a/package/debianutils/debianutils.mk b/package/debianutils/debianutils.mk
+> index d2c41130fb..3dc9ad6e6b 100644
+> --- a/package/debianutils/debianutils.mk
+> +++ b/package/debianutils/debianutils.mk
 > @@ -4,7 +4,7 @@
 >  #
 >  ################################################################################
 >  
-> -LIBQMI_VERSION = 1.30.0
-> +LIBQMI_VERSION = 1.30.2
->  LIBQMI_SITE = https://gitlab.freedesktop.org/mobile-broadband/libqmi/-/archive/$(LIBQMI_VERSION)
->  LIBQMI_LICENSE = LGPL-2.0+ (library), GPL-2.0+ (programs)
->  LIBQMI_LICENSE_FILES = COPYING COPYING.LIB
+> -DEBIANUTILS_VERSION = 4.11
+> +DEBIANUTILS_VERSION = 5.4
+
+    $ make debianutils-source
+    [...]
+    >>> debianutils 5.4 Downloading
+    wget --passive-ftp -nd -t 3 -O '/home/ymorin/dev/buildroot/O/build/.debianutils_5.4.tar.xz.fY4XQF/output' 'http://snapshot.debian.org/archive/debian/20200525T145753Z/pool/main/d/debianutils/debianutils_5.4.tar.xz'
+    URL transformed to HTTPS due to an HSTS policy
+    --2021-09-18 21:57:31--
+    https://snapshot.debian.org/archive/debian/20200525T145753Z/pool/main/d/debianutils/debianutils_5.4.tar.xz
+    Resolving snapshot.debian.org (snapshot.debian.org)...  2001:1af8:4020:b030:deb::185, 2001:630:206:4000:1a1a:0:c13e:ca1b, 185.17.185.185, ...
+    Connecting to snapshot.debian.org
+    (snapshot.debian.org)|2001:1af8:4020:b030:deb::185|:443... connected.
+    HTTP request sent, awaiting response... 404 Not Found
+    2021-09-18 21:57:31 ERROR 404: Not Found.
+
+Can you look into those and resend, please?
+
+Regards,
+Yann E. MORIN.
+
+>  DEBIANUTILS_SOURCE = debianutils_$(DEBIANUTILS_VERSION).tar.xz
+>  DEBIANUTILS_SITE = http://snapshot.debian.org/archive/debian/20200525T145753Z/pool/main/d/debianutils
+>  DEBIANUTILS_CONF_OPTS = --exec-prefix=/
 > -- 
-> 2.17.0
+> 2.33.0
 > 
 > _______________________________________________
 > buildroot mailing list
