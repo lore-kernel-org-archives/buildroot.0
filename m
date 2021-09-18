@@ -8,70 +8,71 @@ X-Spam-Status: No, score=-12.0 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6AE0FC433EF
-	for <buildroot@archiver.kernel.org>; Sat, 18 Sep 2021 20:14:38 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 48014C433F5
+	for <buildroot@archiver.kernel.org>; Sat, 18 Sep 2021 20:14:50 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2E9F761074
-	for <buildroot@archiver.kernel.org>; Sat, 18 Sep 2021 20:14:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2E9F761074
+	by mail.kernel.org (Postfix) with ESMTPS id 100AE610A3
+	for <buildroot@archiver.kernel.org>; Sat, 18 Sep 2021 20:14:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 100AE610A3
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0BCB240433;
-	Sat, 18 Sep 2021 20:14:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DBD8260643;
+	Sat, 18 Sep 2021 20:14:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OQ6HZ2Alq4fE; Sat, 18 Sep 2021 20:14:37 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id GtiOBdyXkhjv; Sat, 18 Sep 2021 20:14:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 64C2C415CB;
-	Sat, 18 Sep 2021 20:14:36 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7ED0B1BF27C
- for <buildroot@lists.busybox.net>; Sat, 18 Sep 2021 20:14:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 37ED160662;
+	Sat, 18 Sep 2021 20:14:48 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id CD1F41BF27C
+ for <buildroot@lists.busybox.net>; Sat, 18 Sep 2021 20:14:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6EF0381B17
- for <buildroot@lists.busybox.net>; Sat, 18 Sep 2021 20:14:04 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id BBADF40162
+ for <buildroot@lists.busybox.net>; Sat, 18 Sep 2021 20:14:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=free.fr
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KVLs_OuxNG9O for <buildroot@lists.busybox.net>;
- Sat, 18 Sep 2021 20:14:03 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id c5-Akdh7ocQb for <buildroot@lists.busybox.net>;
+ Sat, 18 Sep 2021 20:14:19 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
 Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7D8D681B26
- for <buildroot@buildroot.org>; Sat, 18 Sep 2021 20:14:03 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 80C2640018
+ for <buildroot@buildroot.org>; Sat, 18 Sep 2021 20:14:19 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b51:cb00:ed4a:2560:2180:38b6])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id C6494B004FF;
- Sat, 18 Sep 2021 22:13:57 +0200 (CEST)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id AF710B004E8;
+ Sat, 18 Sep 2021 22:14:11 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1631996041;
- bh=3ppgciJ66nGeAjUqyUn/odaN7DYfMucfgfurkqgxSzU=;
+ s=smtp-20201208; t=1631996057;
+ bh=pyVLYDifMiIecZleNBibSEnz2PvZmqQzD6+AH8JHknE=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=FWVvX8/xUfmw/4zkNQcr9IEVNGjwitEwFzS39DKzQzw9L82OrYxO56ziSGdmgaqzT
- kKn+B7J1ZbrI/sgXjJimnPQqP+MHrIsO2Mf2feIp1OR5hm06aRvDO0YdBi9/iaKmmd
- Oqkj7kEhIivDI9Sc5GrMRrTpmmOM0vsSm/uLEzY7NxGa4lexL9pdjXXOQdc1uP8w6D
- qE9WOx3lqvGta8JeIHJ8lM3R7dxhN3t3klsrdVaMG1eKY0LPBHh7NViEdvKaYywQFQ
- F21EpanjaSL9SqTMeMlja4fWa9tw01oTXwryNKvhUqKiZeBSR/d8TWsKFdekVKPwDU
- 6n8B5umMRB6JA==
+ b=imO/JkRNcowhL0iD6Pw/inhxuYNDlScQOJ2JTTYvzl0DdmvOx7nwnQk2f01Tklyh+
+ jAmr4SbsnmT3CMFFvKy0AogZ0j7F2JTX2ZCCh9TYIYTI+FvxbMvJtDStSeQvPa6Zb7
+ ppE8orVpdxBXxi5dUc/IwhCbiaNS2n8mRbvWNKzpj6m0PplNq3fzN+YZruk5r462b+
+ wT4RU3v+x6vejRReCPFPoknozvWni2VZoic0MuJweW7VSSCMVF4692M2+ajOqnadJ/
+ jXkEW79y11C5yc2jSWQN3eNrtKeHnqNmSN70fu9cyOTBBDH5SWcq+qnil6zt6N+2u4
+ hkEzZdLUjNzSg==
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 18 Sep 2021 22:13:57 +0200
-Date: Sat, 18 Sep 2021 22:13:57 +0200
+ Sat, 18 Sep 2021 22:14:11 +0200
+Date: Sat, 18 Sep 2021 22:14:11 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: Peter Seiderer <ps.report@gmx.net>
-Message-ID: <20210918201357.GM1053080@scaer>
-References: <20210914210423.29792-1-ps.report@gmx.net>
+Message-ID: <20210918201411.GN1053080@scaer>
+References: <20210914210154.29441-1-ps.report@gmx.net>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20210914210423.29792-1-ps.report@gmx.net>
+In-Reply-To: <20210914210154.29441-1-ps.report@gmx.net>
 User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH v1] package/libinput: bump version to 1.19.0
+Subject: Re: [Buildroot] [PATCH v1] package/libxkbcommon: bump version to
+ 1.3.1
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,7 +85,7 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
@@ -92,14 +93,12 @@ Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
 Peter, All,
 
-On 2021-09-14 23:04 +0200, Peter Seiderer spake thusly:
-> - add new optional wayland, wayland-protocoll and libx11 dependencies
->   in case the debug gui is enabled (libgtk3 available)
+On 2021-09-14 23:01 +0200, Peter Seiderer spake thusly:
+> For details (since 1.1.0) see [1]
 > 
-> For details see [1], [2].
-> 
-> [1] https://lists.freedesktop.org/archives/wayland-devel/2021-September/041971.html
-> [2] https://lists.freedesktop.org/archives/wayland-devel/2021-September/041977.html
+> [1] https://lists.freedesktop.org/archives/wayland-devel/2021-April/041762.html
+> [2] https://lists.freedesktop.org/archives/wayland-devel/2021-May/041816.html
+> [3] https://lists.freedesktop.org/archives/wayland-devel/2021-September/041976.html
 > 
 > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
@@ -109,53 +108,35 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/libinput/libinput.hash |  6 +++---
->  package/libinput/libinput.mk   | 11 ++++++++++-
->  2 files changed, 13 insertions(+), 4 deletions(-)
+>  package/libxkbcommon/libxkbcommon.hash | 4 ++--
+>  package/libxkbcommon/libxkbcommon.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
-> index 8b6a5466ed..7d57ae9b2d 100644
-> --- a/package/libinput/libinput.hash
-> +++ b/package/libinput/libinput.hash
-> @@ -1,6 +1,6 @@
-> -# From https://lists.freedesktop.org/archives/wayland-devel/2021-August/041934.html
-> -sha256  9ca14021fbc2523bc0610582c51f368321592040b6ca63becc2fa1ea11f1a7cb  libinput-1.18.1.tar.xz
-> -sha512  450e38c0f8245aa0165a8047d25aebee646332f0f2ed442bb2d1bd3e723c2082b6d00d6e3bda308981ece8e29b5cddbd56eab900d2b7497705a45fc27b281828  libinput-1.18.1.tar.xz
-> +# From https://lists.freedesktop.org/archives/wayland-devel/2021-September/041977.html
-> +sha256  3d3a2f12b4a65cd82684121ae4b33cdc3ad541c761a55e8eb73a8e5e443cccbb  libinput-1.19.0.tar.xz
-> +sha512  daf42ce797f2b5aef8d6f7a5c0d967590581e6ac12c26fa6bde5fbc619d75319e39ca55d65d5347e554dd6a48b91f5fed4d3167eabef8ad1ebc43bc0c3e8e220  libinput-1.19.0.tar.xz
+> diff --git a/package/libxkbcommon/libxkbcommon.hash b/package/libxkbcommon/libxkbcommon.hash
+> index 40cad4d0b7..c00fffe706 100644
+> --- a/package/libxkbcommon/libxkbcommon.hash
+> +++ b/package/libxkbcommon/libxkbcommon.hash
+> @@ -1,5 +1,5 @@
+> -# From https://lists.freedesktop.org/archives/wayland-devel/2021-March/041747.html
+> -sha256  412cfcca596f92914ea1a66ad244804d73a5ff20b6d86459951e7ad20576c246  libxkbcommon-1.1.0.tar.xz
+> +# From https://lists.freedesktop.org/archives/wayland-devel/2021-September/041976.html
+> +sha256  b3c710d27a2630054e1e1399c85b7f330ef03359b460f0c1b3b587fd01fe9234  libxkbcommon-1.3.1.tar.xz
 >  
->  # License files
->  sha256  80de50b2022a840db044c56db804ca3565600a692c0714babface587acc6d1b0  COPYING
-> diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
-> index 844a4ae8ba..3ab1a2c38f 100644
-> --- a/package/libinput/libinput.mk
-> +++ b/package/libinput/libinput.mk
+>  # License file:
+>  sha256  086caee279449369d41c1157911ec7696e707b93feba7280de757d3c470b2dfb  LICENSE
+> diff --git a/package/libxkbcommon/libxkbcommon.mk b/package/libxkbcommon/libxkbcommon.mk
+> index 8780706c7e..790083614f 100644
+> --- a/package/libxkbcommon/libxkbcommon.mk
+> +++ b/package/libxkbcommon/libxkbcommon.mk
 > @@ -4,7 +4,7 @@
 >  #
 >  ################################################################################
 >  
-> -LIBINPUT_VERSION = 1.18.1
-> +LIBINPUT_VERSION = 1.19.0
->  LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
->  LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
->  LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
-> @@ -17,6 +17,15 @@ LIBINPUT_CONF_OPTS = -Dtests=false -Dlibwacom=false -Ddocumentation=false
->  ifeq ($(BR2_PACKAGE_LIBGTK3),y)
->  LIBINPUT_CONF_OPTS += -Ddebug-gui=true
->  LIBINPUT_DEPENDENCIES += libgtk3
-> +ifeq ($(BR2_PACKAGE_WAYLAND),y)
-> +LIBINPUT_DEPENDENCIES += wayland
-> +endif
-> +ifeq ($(BR2_PACKAGE_WAYLAND_PROTOCOLS),y)
-> +LIBINPUT_DEPENDENCIES += wayland-protocols
-> +endif
-> +ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
-> +LIBINPUT_DEPENDENCIES += libx11
-> +endif
->  else
->  LIBINPUT_CONF_OPTS += -Ddebug-gui=false
->  endif
+> -LIBXKBCOMMON_VERSION = 1.1.0
+> +LIBXKBCOMMON_VERSION = 1.3.1
+>  LIBXKBCOMMON_SITE = http://xkbcommon.org/download
+>  LIBXKBCOMMON_SOURCE = libxkbcommon-$(LIBXKBCOMMON_VERSION).tar.xz
+>  LIBXKBCOMMON_LICENSE = MIT/X11
 > -- 
 > 2.32.0
 > 
