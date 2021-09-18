@@ -2,76 +2,101 @@ Return-Path: <SRS0=9D0o=OI=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.0 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
+X-Spam-Status: No, score=-9.6 required=3.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+	DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A7A3CC433F5
-	for <buildroot@archiver.kernel.org>; Sat, 18 Sep 2021 20:15:19 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C4620C433F5
+	for <buildroot@archiver.kernel.org>; Sat, 18 Sep 2021 20:25:30 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 5809661076
-	for <buildroot@archiver.kernel.org>; Sat, 18 Sep 2021 20:15:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5809661076
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
+	by mail.kernel.org (Postfix) with ESMTPS id 6829E61076
+	for <buildroot@archiver.kernel.org>; Sat, 18 Sep 2021 20:25:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6829E61076
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1FCD960687;
-	Sat, 18 Sep 2021 20:15:19 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2D1A5401EC;
+	Sat, 18 Sep 2021 20:25:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1HwHZ2WZZEiH; Sat, 18 Sep 2021 20:15:18 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ha9YrdgH74Fc; Sat, 18 Sep 2021 20:25:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6CE8C6067F;
-	Sat, 18 Sep 2021 20:15:17 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4751C1BF27C
- for <buildroot@lists.busybox.net>; Sat, 18 Sep 2021 20:15:16 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 478D040162;
+	Sat, 18 Sep 2021 20:25:28 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 0A69E1BF27C
+ for <buildroot@lists.busybox.net>; Sat, 18 Sep 2021 20:25:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 36F6F83F8B
- for <buildroot@lists.busybox.net>; Sat, 18 Sep 2021 20:15:16 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 06AF860622
+ for <buildroot@lists.busybox.net>; Sat, 18 Sep 2021 20:25:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 424BeEnxo0s1 for <buildroot@lists.busybox.net>;
- Sat, 18 Sep 2021 20:15:15 +0000 (UTC)
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZnfLYD_TV6jQ for <buildroot@lists.busybox.net>;
+ Sat, 18 Sep 2021 20:25:26 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5418783F6C
- for <buildroot@buildroot.org>; Sat, 18 Sep 2021 20:15:15 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:ed4a:2560:2180:38b6])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 9E7CCB0053F;
- Sat, 18 Sep 2021 22:15:09 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1631996113;
- bh=Eh7Bnp+ZQfuIGH2mlmsFxZIxfwKIL0OkdKT/V48bETY=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=ADmtoOfB1RP75bOxvdJMtGs9orb/TSrsz+75OIIpk4F473Ye5BfsdfoeqPsTsICeY
- MzHIuwEm5GHwl8gw2CKC3/jHNSuyjmL7TzV/VN9TSuKeWdX8Mj5aMPv1bPMUHWrHiH
- I/Fw4RTxcFolK8W5zDB8q1m35/NNLpH/OfUPsBx1eI71xLpDgVYRUdzrpTziPAuyWQ
- kbA0viI66139X7G/g6tSKTVu6KvVBBvTBTL7J634WtQyyxQrfHNTozTvgtCmvoEAFu
- pL6xHjeiEab0gwG9KsOevi+Hx4s+V+WQDYNBLOtOv8OSw/bQMZO7lueTjs4uR03SL8
- TYZHlxhgjUnow==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 18 Sep 2021 22:15:09 +0200
-Date: Sat, 18 Sep 2021 22:15:09 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Petr Vorel <petr.vorel@gmail.com>
-Message-ID: <20210918201509.GP1053080@scaer>
-References: <20210914175351.21107-1-petr.vorel@gmail.com>
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
+ [IPv6:2a00:1450:4864:20::429])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0B8C9605DC
+ for <buildroot@buildroot.org>; Sat, 18 Sep 2021 20:25:25 +0000 (UTC)
+Received: by mail-wr1-x429.google.com with SMTP id q11so21096154wrr.9
+ for <buildroot@buildroot.org>; Sat, 18 Sep 2021 13:25:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=subject:to:cc:references:from:message-id:date:user-agent
+ :mime-version:in-reply-to:content-language:content-transfer-encoding;
+ bh=5kezMd3UrGYUvkVKr8sr6tLYMFKMwVx30fHFozzKuCI=;
+ b=UKatg8DF5A5S1pkEYPFX12dWfBPFFGtdDD0iV/rouSxSv21xU0D6ffMSICUUDt6nAG
+ J9c5HO9SxCwJYw5WKFs3e4rRt9x2hoaxFuOivFSJq+1rP2Q/HCDIcX0aNrg8z0DdGDPn
+ z2lh8YCdOLDoRL2xmoNpdBXyeFfmKpGj+zaoBhe6DKUmcY9wYRiFS3HYBBedj5ECgf9h
+ 3TxljJ+VUDAHJwyzi0Yxnbsav14jdphJ9l2V+YCku+s8OmokEwJ5p2xIqCInptzT9BmC
+ a/yUKZSlspEiKu89r7H1Bdr0gtzVJd7W6C3vrQV9qBaz4IyGBVSWq9IsDG949G66RtSG
+ w//w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+ :user-agent:mime-version:in-reply-to:content-language
+ :content-transfer-encoding;
+ bh=5kezMd3UrGYUvkVKr8sr6tLYMFKMwVx30fHFozzKuCI=;
+ b=3CQ7fFr8J0pG23IaGMCbqcdJeU1L5Eh3QygvczAk8ylIa9p386DRrUsCYK1GOXBCNc
+ fRKz541K/hLwm+vQCW08Ye5Xqo8DoWsyZIPSoDMQq68bzxi+P0GC3k1YsNKs3MrEoipi
+ LRiUIPLqnk7nxbTxwi6ZGbTg7UA9WkIqxFLI/iFMbKr/JMNLx+mA65LAtjs18oGLR4ID
+ MSrJ5NkWVndFmTbSBqzZ4wLbNIWeepv05BLNKU0GJpZPVXqLOD/OjPc8QQb7AHsGkbCD
+ Piba+3dJnZvkmkmF3P/79+yUVSIangTJEa4HX4V2wdE1ACcgGU2gVceW7FaLHtkoCltk
+ 4vcA==
+X-Gm-Message-State: AOAM532WrBdoZf/0Z5xng1ZmIQVnAscxMtS+uaBM+qDXEVMbxlgVrvx8
+ 4/VaSxL04e637baC+OQWQY6DFO20bXg=
+X-Google-Smtp-Source: ABdhPJx1JmjvGTwouj+xgJNBw4p4x9yrBKJiKgxqIp06ziBOGgZwNZiduxaPu1Ed5z0ApCpqb7ZSzA==
+X-Received: by 2002:a05:6000:18a4:: with SMTP id
+ b4mr10922041wri.288.1631996724081; 
+ Sat, 18 Sep 2021 13:25:24 -0700 (PDT)
+Received: from ?IPv6:2a01:cb05:8f8a:1800:2216:4e4e:b697:b4ce?
+ (2a01cb058f8a180022164e4eb697b4ce.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:8f8a:1800:2216:4e4e:b697:b4ce])
+ by smtp.gmail.com with ESMTPSA id s14sm10528442wrp.84.2021.09.18.13.25.23
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sat, 18 Sep 2021 13:25:23 -0700 (PDT)
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Edgar Bonet <bonet@grenoble.cnrs.fr>
+References: <20210918070214.2527F8436A@smtp1.osuosl.org>
+ <9dfa4af2-1f2c-4ead-1bdb-04282dd59e43@grenoble.cnrs.fr>
+ <20210918102819.GJ1053080@scaer>
+From: Romain Naour <romain.naour@gmail.com>
+Message-ID: <243665c1-0af1-12df-aa4f-4e6c509d13ca@gmail.com>
+Date: Sat, 18 Sep 2021 22:25:22 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20210914175351.21107-1-petr.vorel@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 1/1] package/feh: bump version to 3.7.1
+In-Reply-To: <20210918102819.GJ1053080@scaer>
+Content-Language: en-US
+Subject: Re: [Buildroot] [autobuild.buildroot.net] Daily results for
+ 2021-09-17
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,64 +110,40 @@ List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
 Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-Petr, All,
-
-On 2021-09-14 19:53 +0200, Petr Vorel spake thusly:
-> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/feh/feh.hash | 2 +-
->  package/feh/feh.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/feh/feh.hash b/package/feh/feh.hash
-> index 3a2296ac23..07c0dd9403 100644
-> --- a/package/feh/feh.hash
-> +++ b/package/feh/feh.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated after checking pgp signature
-> -sha256 437420f37f11614e008d066e2a3bdefcfc78144c8212998b2bacdd5d21ea23b4  feh-3.6.3.tar.bz2
-> +sha256 57ab1ca61f57c96595878069f550d36f518530f88fa31b74cc39cd739f9258b6  feh-3.7.1.tar.bz2
->  sha256 2c3a31327dc3cc3331aa6e759d378e4f66d0ece7174a0d5aa137f3cba4bf0509  COPYING
-> diff --git a/package/feh/feh.mk b/package/feh/feh.mk
-> index f27509330d..3aa509abfe 100644
-> --- a/package/feh/feh.mk
-> +++ b/package/feh/feh.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -FEH_VERSION = 3.6.3
-> +FEH_VERSION = 3.7.1
->  FEH_SOURCE = feh-$(FEH_VERSION).tar.bz2
->  FEH_SITE = http://feh.finalrewind.org
->  FEH_DEPENDENCIES = imlib2 libpng xlib_libXt
-> -- 
-> 2.33.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@lists.buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
-_______________________________________________
-buildroot mailing list
-buildroot@lists.buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gRWRnYXIsIFlhbm4sIEFsbCwKCkxlIDE4LzA5LzIwMjEgw6AgMTI6MjgsIFlhbm4gRS4g
+TU9SSU4gYSDDqWNyaXTCoDoKPiBFZGdhciwgQWxsLAo+IAo+ICtSb21haW4KPiAKPiBPbiAyMDIx
+LTA5LTE4IDEwOjE5ICswMjAwLCBFZGdhciBCb25ldCBzcGFrZSB0aHVzbHk6Cj4+IFRoZSBhdXRv
+YnVpbGRlciB3cm90ZToKPj4+IERldGFpbCBvZiBkZWZjb25maWcgZmFpbHVyZXMgZm9yIG1hc3Rl
+cgo+Pj4gLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCj4+Pgo+Pj4gICAg
+ICAgICAgICAgICAgICAgICAgICAgZGVmY29uZmlnIHwgICAgICAgICAgICAgICAgICAgICAgICBs
+aW5rIHRvIHRoZSBqb2IgICAgICAgICAgICAgICAgICAgICAgICB8IG9ycGg/Cj4+PiAtLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tKy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLSstLS0tLS0KPj4+ICAgICAgICAgICAg
+ICAgICAgICAgICBhYXJjaDY0X2VmaSB8IGh0dHBzOi8vZ2l0bGFiLmNvbS9idWlsZHJvb3Qub3Jn
+L2J1aWxkcm9vdC8tL2pvYnMvMTU5NzI0ODc5OCAgfCAgICAgIAo+Pj4gICAgICAgIGFjbWVzeXN0
+ZW1zX2FjcXVhX2E1XzUxMm1iIHwgaHR0cHM6Ly9naXRsYWIuY29tL2J1aWxkcm9vdC5vcmcvYnVp
+bGRyb290Ly0vam9icy8xNTk3MjQ4ODAwICB8ICAgICAgCj4+PiBbLi4uXQo+Pgo+PiBUaGVyZSBt
+YXkgYmUgYSBwcm9ibGVtIG9uIHRoZSBhdXRvYnVpbGRlci4gTW9zdCBvZiB0aG9zZSBsaW5rcyBw
+b2ludCB0bwo+PiBidWlsZCBsb2dzIHRoYXQgYXJlIHRydW5jYXRlZCwgYW5kIGRvIG5vdCBzaG93
+IGFueSBlcnJvciBtZXNzYWdlLgo+Pgo+PiBJIGp1c3QgdHJpZWQgb25lIG9mIHRoZSBmYWlsZWQg
+ZGVmY29uZmlncyAoYWNtZXN5c3RlbXNfYWNxdWFfYTVfNTEybWIpCj4+IHVzaW5nIHRoZSBleGFj
+dCBzYW1lIEJ1aWxkcm9vdCBjb21taXQgYXMgdGhlIGF1dG9idWlsZGVyIGRpZAo+PiAoYzQ4MzMx
+OGQwOSkuIEl0IGFsbCB3ZW50IG91dCBzbW9vdGhseS4KPiAKPiBJZiB5b3UgbG9vayBhdCB0aGUg
+dG9wIG9mIHRoZSBidWlsZCBsb2csIHlvdSdsbCBub3RpY2UgdGhhdCBob3NlCj4gZmFpbHVyZXMg
+YWxsIG9jY3VyIG9uIHRoZSBnY2MxNjAgcnVubmVyLgo+IAo+IEknbSBhZGRpbmcgUm9tYWluIGlu
+IENjIDsgSUlSQywgaGUgYWxyZWFkeSBub3RpY2VkIHNvbWV0aGluZyBmaXNoeSBnb2luZwo+IG9u
+IHdpdGggZ2NjMTYwLiBSb21haW4/CgpJbmRlZWQgYnV0IHRoZXJlIGlzIG5vdGhpbmcgSSBjYW4g
+ZG8uIEkgZG9uJ3QgaGF2ZSBhY2Nlc3MgdG8gdGhpcyBtYWNoaW5lLgpnY2MxNjAgaXMgbm90IGFu
+IGF1dG9idWlsZGVyIGJ1dCBhIGdpdGxhYiBydW5uZXIuCgpJIGJlbGlldmUgd2UgY2FuIHVzZSBn
+aXRsYWIgc2hhcmVkIHJ1bm5lciBmb3Igam9icyB0aGF0IGNhbiBiZSBmaW5pc2hlZCBpbiBsZXNz
+CnRoYW4gM2ggYW5kIHVzZSBvdXIgZ2l0bGFiIHJ1bm5lciBmb3IgbG9uZ2VyIGpvYnMuCkN1cnJl
+bnRseSBpdCB0YWtlIG1vcmUgdGhhbiAyNGggdG8gY29tcGxldGUgYWxsIGRlZmNvbmZpZ3Mgam9i
+cy4uLgoKQmVzdCByZWdhcmRzLApSb21haW4KCj4gCj4gUmVnYXJkcywKPiBZYW5uIEUuIE1PUklO
+Lgo+IAoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVp
+bGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAbGlzdHMuYnVpbGRyb290Lm9yZwpodHRwczov
+L2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
