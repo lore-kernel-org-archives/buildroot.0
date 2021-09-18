@@ -2,77 +2,62 @@ Return-Path: <SRS0=9D0o=OI=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.0 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
+	SPF_HELO_NONE autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 71B33C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 18 Sep 2021 21:12:59 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EC197C433F5
+	for <buildroot@archiver.kernel.org>; Sat, 18 Sep 2021 21:17:30 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 302F4610F7
-	for <buildroot@archiver.kernel.org>; Sat, 18 Sep 2021 21:12:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 302F4610F7
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
+	by mail.kernel.org (Postfix) with ESMTPS id 5640D6103B
+	for <buildroot@archiver.kernel.org>; Sat, 18 Sep 2021 21:17:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5640D6103B
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 014BC83F59;
-	Sat, 18 Sep 2021 21:12:59 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 231A34016B;
+	Sat, 18 Sep 2021 21:17:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VLmAgrCN1ZMd; Sat, 18 Sep 2021 21:12:58 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 53BAD83F4D;
-	Sat, 18 Sep 2021 21:12:57 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C1C061BF842
- for <buildroot@lists.busybox.net>; Sat, 18 Sep 2021 21:12:55 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AFDE840135
- for <buildroot@lists.busybox.net>; Sat, 18 Sep 2021 21:12:55 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DCpIXzXQs5Zb for <buildroot@lists.busybox.net>;
- Sat, 18 Sep 2021 21:12:54 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp2.osuosl.org (Postfix) with ESMTPS id AD09C40018
- for <buildroot@buildroot.org>; Sat, 18 Sep 2021 21:12:54 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:ed4a:2560:2180:38b6])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id F0A0EB0051E;
- Sat, 18 Sep 2021 23:12:46 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1631999573;
- bh=66/eZ6UvxrehOUG4CtJStRZZFHnWGT8yQOA0ifILcwY=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=NmldRWAFZT6znBP8xwjR+z2vX8Kgd1lXtFaqnRSdgJVsm+YnZFhJdsB9TZt3dS4Gv
- I1zSYQvc9IAEYwqmthBRp5KLeD9VOkn8UX1dQYFfU+eN3n54b+51AoJzvxGfjwyoqs
- CE8NUeBYoLGq/v2auLpxCCA81pGEbb1NQkQ/9Km6k7D80GXJp7GMiM8clbgLMhl/xZ
- Y9i9+Cq+cLryy8GjxYyzHh5befgZdv6xYVgZPko+MjGDIwTXGsR1Qcf1JCOGao24HQ
- 96QjHwwSQE4O9lnDRlGmvdOAnExFu85TCMs/if5l0oe2almT94LaQwSzR+8uh8kdki
- GpGBPmR63x/mw==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 18 Sep 2021 23:12:46 +0200
-Date: Sat, 18 Sep 2021 23:12:46 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Martin Elshuber <martin.elshuber@theobroma-systems.com>
-Message-ID: <20210918211246.GC1053080@scaer>
-References: <20210913142652.942533-1-martin.elshuber@theobroma-systems.com>
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id nNmXZrYh7ViS; Sat, 18 Sep 2021 21:17:29 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2E7C540135;
+	Sat, 18 Sep 2021 21:17:28 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 382A71BF298
+ for <buildroot@lists.busybox.net>; Sat, 18 Sep 2021 21:17:27 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2B1B1605E1
+ for <buildroot@lists.busybox.net>; Sat, 18 Sep 2021 21:17:27 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id IfGMG01c3KqP for <buildroot@lists.busybox.net>;
+ Sat, 18 Sep 2021 21:17:26 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id F2F77605DF
+ for <buildroot@buildroot.org>; Sat, 18 Sep 2021 21:17:25 +0000 (UTC)
+Received: (Authenticated sender: peter@casa-korsgaard.com)
+ by relay11.mail.gandi.net (Postfix) with ESMTPSA id 67BF1100003;
+ Sat, 18 Sep 2021 21:17:22 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
+ (envelope-from <peter@korsgaard.com>)
+ id 1mRhi5-0004pQ-Pb; Sat, 18 Sep 2021 23:17:21 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: James Knight <james.d.knight@live.com>
+References: <DM6PR08MB39931F9CC3A0472896C5CD87A0D19@DM6PR08MB3993.namprd08.prod.outlook.com>
+Date: Sat, 18 Sep 2021 23:17:21 +0200
+In-Reply-To: <DM6PR08MB39931F9CC3A0472896C5CD87A0D19@DM6PR08MB3993.namprd08.prod.outlook.com>
+ (James Knight's message of "Sat, 4 Sep 2021 21:35:19 -0400")
+Message-ID: <87ilyxshwe.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20210913142652.942533-1-martin.elshuber@theobroma-systems.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 1/3] package/strongswan: fix broken
- dependency relation
+Subject: Re: [Buildroot] [PATCH v2 1/1] utils/getdeveloperlib.py: explicitly
+ set devs document encoding
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,74 +70,57 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: =?utf-8?B?SsOpcsO0bWU=?= Pouiller <jezz@sysmic.org>,
- buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-Martin, All,
-
-On 2021-09-13 16:26 +0200, Martin Elshuber spake thusly:
-> The AKA backend for 3GPP2 requires libgmp (see
-> https://wiki.strongswan.org/projects/strongswan/wiki/Autoconf). Since
-> the AKA backend for 3GPP2 is included by BR2_PACKAGE_STRONGSWAN_EAP,
-> when selecting a crypto backend different from
-> BR2_PACKAGE_STRONGSWAN_GMP, there is no guarantee the gmp package is
-> selected as well. When doing so, make fails since the package is in the
-> dependency chain but not selected:
-> 
->   $ make
->   Makefile:585: *** gmp is in the dependency chain of strongswan that has added it to its _DEPENDENCIES variable without selecting it or depending on it from Config.in.  Stop.
->   make: *** [Makefile:23: _all] Error 2
-> 
-> To fix this, select BR2_PACKAGE_GMP when selecting BR2_PACKAGE_STRONGSWAN_EAP.
-> 
-> Signed-off-by: Martin Elshuber <martin.elshuber@theobroma-systems.com>
-
-Applied to master, thanks.
-
-I was a bit confused as to what would happen if both gmp and other
-crypto backend were used to gether, but there are explicitl options to
-select each of them at ./configure time, so it seems it should be OK, I
-guess...
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/strongswan/Config.in | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/strongswan/Config.in b/package/strongswan/Config.in
-> index 47c7107f59..368cd1ecc0 100644
-> --- a/package/strongswan/Config.in
-> +++ b/package/strongswan/Config.in
-> @@ -75,6 +75,7 @@ config BR2_PACKAGE_STRONGSWAN_TNCCS_DYNAMIC
->  
->  config BR2_PACKAGE_STRONGSWAN_EAP
->  	bool "Enable EAP protocols"
-> +	select BR2_PACKAGE_GMP
->  	help
->  	  Enable various EAP protocols:
->  	    - mschapv2
-> -- 
-> 2.30.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@lists.buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
-_______________________________________________
-buildroot mailing list
-buildroot@lists.buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+Pj4+Pj4gIkphbWVzIiA9PSBKYW1lcyBLbmlnaHQgPGphbWVzLmQua25pZ2h0QGxpdmUuY29tPiB3
+cml0ZXM6CgogPiBFeHBsaWNpdGx5IGluZGljYXRlIHRoZSBmaWxlIGVuY29kaW5nIHRvIFVURi04
+IGZvciB0aGUgREVWRUxPUEVSUwogPiBkb2N1bWVudC4gVGhpcyBwcmV2ZW50cyBVbmljb2RlIGRl
+Y29kaW5nIGVycm9ycyB3aGVuIHByaW50aW5nIEUtTWFpbAogPiBlbnRyaWVzIHdpdGggVW5pY29k
+ZSBjaGFyYWN0ZXJzIG9uIHN5c3RlbXMgdXNpbmcgYW4gYWx0ZXJuYXRpdmUgZGVmYXVsdAogPiBl
+bmNvZGluZyAoZS5nLiAnQ1AxMjUyJykuCgogPiBUaGlzIGNvcnJlY3RzIHRoZSBmb2xsb3dpbmcg
+b2JzZXJ2ZWQgZXJyb3I6CgogPiAgICAgJCAuL3V0aWxzL2dldC1kZXZlbG9wZXJzIG91dGdvaW5n
+LyoKID4gICAgIFRyYWNlYmFjayAobW9zdCByZWNlbnQgY2FsbCBsYXN0KToKID4gICAgICAgRmls
+ZSAidXRpbHNcZ2V0LWRldmVsb3BlcnMiLCBsaW5lIDEwNSwgaW4gPG1vZHVsZT4KID4gICAgICAg
+ICBfX21haW5fXygpCiA+ICAgICAgIEZpbGUgInV0aWxzXGdldC1kZXZlbG9wZXJzIiwgbGluZSA0
+NywgaW4gX19tYWluX18KID4gICAgICAgICBkZXZzID0gZ2V0ZGV2ZWxvcGVybGliLnBhcnNlX2Rl
+dmVsb3BlcnMoKQogPiAgICAgICBGaWxlICIuLi5cYnVpbGRyb290XHV0aWxzXGdldGRldmVsb3Bl
+cmxpYi5weSIsIGxpbmUgMjM5LCBpbiBwYXJzZV9kZXZlbG9wZXJzCiA+ICAgICAgICAgZm9yIGxp
+bmUgaW4gZjoKID4gICAgICAgRmlsZSAiLi4uXFB5dGhvbjx2ZXI+XGxpYlxlbmNvZGluZ3NcY3Ax
+MjUyLnB5IiwgbGluZSAyMywgaW4gZGVjb2RlCiA+ICAgICAgICAgcmV0dXJuIGNvZGVjcy5jaGFy
+bWFwX2RlY29kZShpbnB1dCxzZWxmLmVycm9ycyxkZWNvZGluZ190YWJsZSlbMF0KID4gICAgIFVu
+aWNvZGVEZWNvZGVFcnJvcjogJ2NoYXJtYXAnIGNvZGVjIGNhbid0IGRlY29kZSBieXRlIDB4ODEg
+aW4gcG9zaXRpb24gNjY1OTogY2hhcmFjdGVyIG1hcHMgdG8gPHVuZGVmaW5lZD4KCiA+IFNpZ25l
+ZC1vZmYtYnk6IEphbWVzIEtuaWdodCA8amFtZXMuZC5rbmlnaHRAbGl2ZS5jb20+CgpIbW0sIHRo
+aXMgZG9lc24ndCBxdWl0ZSBzZWVtIHRvIHdvcmsgd2hlbiBzdGRvdXQgaXMgbm90IGEgVVRGLTgg
+Y29uc29sZQooRS5HLiB3aGVuIHVzaW5nIGFzIGdpdCBzZW5kLWVtYWlsIC0tY2MtY21kKToKCmVj
+aG8gJExBTkcKZW5fREsuVVRGLTgKCi4vdXRpbHMvZ2V0LWRldmVsb3BlcnMgLXAgbGlieWFuZwpI
+ZWlrbyBUaGllcnkgPGhlaWtvLnRoaWVyeUBnbWFpbC5jb20+CkphbiBLdW5kcsOhdCA8amFuLmt1
+bmRyYXRAY2VzbmV0LmN6PgoKTEFORz1DIC4vdXRpbHMvZ2V0LWRldmVsb3BlcnMgLXAgbGlieWFu
+ZwpIZWlrbyBUaGllcnkgPGhlaWtvLnRoaWVyeUBnbWFpbC5jb20+ClRyYWNlYmFjayAobW9zdCBy
+ZWNlbnQgY2FsbCBsYXN0KToKICBGaWxlICIuL3V0aWxzL2dldC1kZXZlbG9wZXJzIiwgbGluZSAx
+MDUsIGluIDxtb2R1bGU+CiAgICBfX21haW5fXygpCiAgRmlsZSAiLi91dGlscy9nZXQtZGV2ZWxv
+cGVycyIsIGxpbmUgNjgsIGluIF9fbWFpbl9fCiAgICBwcmludChkZXYubmFtZSkKVW5pY29kZUVu
+Y29kZUVycm9yOiAnYXNjaWknIGNvZGVjIGNhbid0IGVuY29kZSBjaGFyYWN0ZXIgdSdceGUxJyBp
+biBwb3NpdGlvbiA5OiBvcmRpbmFsIG5vdCBpbiByYW5nZSgxMjgpCgouL3V0aWxzL2dldC1kZXZl
+bG9wZXJzIC1wIGxpYnlhbmcgfCBjYXQKVHJhY2ViYWNrIChtb3N0IHJlY2VudCBjYWxsIGxhc3Qp
+OgogIEZpbGUgIi4vdXRpbHMvZ2V0LWRldmVsb3BlcnMiLCBsaW5lIDEwNSwgaW4gPG1vZHVsZT4K
+ICAgIF9fbWFpbl9fKCkKICBGaWxlICIuL3V0aWxzL2dldC1kZXZlbG9wZXJzIiwgbGluZSA2OCwg
+aW4gX19tYWluX18KICAgIEhlaWtvIFRoaWVyeSA8aGVpa28udGhpZXJ5QGdtYWlsLmNvbT4KcHJp
+bnQoZGV2Lm5hbWUpClVuaWNvZGVFbmNvZGVFcnJvcjogJ2FzY2lpJyBjb2RlYyBjYW4ndCBlbmNv
+ZGUgY2hhcmFjdGVyIHUnXHhlMScgaW4gcG9zaXRpb24gOTogb3JkaW5hbCBub3QgaW4gcmFuZ2Uo
+MTI4KQoKClJldmVydGluZyA5ZjEyN2NjNDIwODg0YWQgZml4ZXMgaXQ6CgouL3V0aWxzL2dldC1k
+ZXZlbG9wZXJzIC1wIGxpYnlhbmcKSGVpa28gVGhpZXJ5IDxoZWlrby50aGllcnlAZ21haWwuY29t
+PgpKYW4gS3VuZHLDoXQgPGphbi5rdW5kcmF0QGNlc25ldC5jej4KCkxBTkc9QyAuL3V0aWxzL2dl
+dC1kZXZlbG9wZXJzIC1wIGxpYnlhbmcKSGVpa28gVGhpZXJ5IDxoZWlrby50aGllcnlAZ21haWwu
+Y29tPgpKYW4gS3VuZHLDoXQgPGphbi5rdW5kcmF0QGNlc25ldC5jej4KCi4vdXRpbHMvZ2V0LWRl
+dmVsb3BlcnMgLXAgbGlieWFuZyB8IGNhdApIZWlrbyBUaGllcnkgPGhlaWtvLnRoaWVyeUBnbWFp
+bC5jb20+CkphbiBLdW5kcsOhdCA8amFuLmt1bmRyYXRAY2VzbmV0LmN6PgoKCkFueSBpZGVhIGFi
+b3V0IGhvdyB0byBmaXggdGhpcywgb3Igc2hvdWxkIGl0IGp1c3QgYmUgcmV2ZXJ0ZWQ/CgotLSAK
+QnllLCBQZXRlciBLb3JzZ2FhcmQKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAbGlzdHMuYnVpbGRy
+b290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWls
+ZHJvb3QK
