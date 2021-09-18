@@ -2,76 +2,89 @@ Return-Path: <SRS0=9D0o=OI=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.0 required=3.0 tests=BAYES_00,DKIM_INVALID,
+X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 127D0C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 18 Sep 2021 20:34:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 44C05C433F5
+	for <buildroot@archiver.kernel.org>; Sat, 18 Sep 2021 20:34:57 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id C75CC60F51
-	for <buildroot@archiver.kernel.org>; Sat, 18 Sep 2021 20:34:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C75CC60F51
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
+	by mail.kernel.org (Postfix) with ESMTPS id 0342F610CB
+	for <buildroot@archiver.kernel.org>; Sat, 18 Sep 2021 20:34:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0342F610CB
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmx.net
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A33BF60622;
-	Sat, 18 Sep 2021 20:34:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6A1DE605A5;
+	Sat, 18 Sep 2021 20:34:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WD4VrgbUDWkQ; Sat, 18 Sep 2021 20:34:42 +0000 (UTC)
+	with ESMTP id h3OlOScJTmsC; Sat, 18 Sep 2021 20:34:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F1E6F60657;
-	Sat, 18 Sep 2021 20:34:41 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9B1B21BF27C
- for <buildroot@lists.busybox.net>; Sat, 18 Sep 2021 20:34:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 882D0606B9;
+	Sat, 18 Sep 2021 20:34:53 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 97A691BF27C
+ for <buildroot@lists.busybox.net>; Sat, 18 Sep 2021 20:34:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 979B6819D5
- for <buildroot@lists.busybox.net>; Sat, 18 Sep 2021 20:34:39 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 87BFF403EB
+ for <buildroot@lists.busybox.net>; Sat, 18 Sep 2021 20:34:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BQRR6w1vca4m for <buildroot@lists.busybox.net>;
- Sat, 18 Sep 2021 20:34:37 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9FFEB80F80
- for <buildroot@buildroot.org>; Sat, 18 Sep 2021 20:34:37 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:ed4a:2560:2180:38b6])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 0A1D5B00535;
- Sat, 18 Sep 2021 22:34:29 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1631997276;
- bh=gsGJjB6MmvQ1rv2aP9X0OARp4Dzo1jZfcZOKQ57oJEc=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=f4jDOTcyty6hLOKS0cY59D0XxHdmPxV6Ab4tww8yhWTqgNG+/6zCXEQ5rckDGfdGk
- dp/XfM3v1nAoJyoMHqtU9dbo6GIm9x9gIC4V79o/0cP2Td2i/qi2YEMaXtfjZK7kRN
- 1vJnxAcyFnkzEUGXHTQap8ZKDhWc0+dyhNWs/bcE+I6ssz5jPwG/t1uG/ey00x3aa6
- wVt68D8c4AEDhxxbbWBG4r9SCobIc43bJ/KfguNFSFhulPIOY03SaW5twa0vmDJkCI
- erIUiXm5ePMhZAmENf7455/H4PA9hdSO8WbBE9hUvZ3Yk7aZM7yD82dWb5KEZKNyLh
- y2utdj54eS6rg==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 18 Sep 2021 22:34:29 +0200
-Date: Sat, 18 Sep 2021 22:34:29 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20210918203429.GT1053080@scaer>
-References: <20210912195333.2718045-1-fontaine.fabrice@gmail.com>
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (1024-bit key) header.d=gmx.net
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VnM8LB3ozmut for <buildroot@lists.busybox.net>;
+ Sat, 18 Sep 2021 20:34:41 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 104A7403AE
+ for <buildroot@buildroot.org>; Sat, 18 Sep 2021 20:34:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+ s=badeba3b8450; t=1631997278;
+ bh=sGEeRDMsp1IJslD+SMmZj4XLYE3kA5N55EM5hf5BRr8=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+ b=JgWkdk6iz0ny2edDqtIqdx+P/Ag+AnZVxfbOW5NC0JX3H16zcFee4cA6L8aCYKwS7
+ AkUg88vktaPooNek8WXCvmkfDuhTZHEVXpdWzcxDD1ttrYTAjdrup3Lbw1YwRLehDb
+ 15hRxORs7Tqz0lGIfX90MJ9pUkWmG7Y9CNH+Rfr4=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from localhost.fritz.box ([62.216.209.115]) by mail.gmx.net
+ (mrgmx105 [212.227.17.168]) with ESMTPSA (Nemesis) id
+ 1M9Wyy-1mV0QL404y-005bPq; Sat, 18 Sep 2021 22:34:38 +0200
+From: Peter Seiderer <ps.report@gmx.net>
+To: buildroot@buildroot.org
+Date: Sat, 18 Sep 2021 22:34:37 +0200
+Message-Id: <20210918203437.6948-1-ps.report@gmx.net>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20210912195333.2718045-1-fontaine.fabrice@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 1/1] package/dovecot: drop host-gettext
+X-Provags-ID: V03:K1:OWJH5M71ACWnYspQDBpTo9+r2uCv+th3YXZq7i7CV2glqL3ht4u
+ 3ffSQpWR07sLb9oionFoMkJ+IiP6/+az2+mp2vV1L1q5kU7XeSAaFCcQbBNpLC1QbU0ycyv
+ 2fWpG2xcKbo2jrPQv9DE1p4tYci8AE4R+4a2PgkqxY7JbL9/MvwphiEcQwNgAYOJ9Q5fTiz
+ yKcSMq8++MQ9SB1jf1/TA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:OuGR9ptIOt8=:k19iCAd9kjDu82/9+yitWX
+ usC8HMJNB4i3VIzSPGpmyErDeDjfoyPrmTT9dyI0ws8L9beeFfUNvV8fhmAociEYhBJiXGEiW
+ Y2VGqHMextd2cR7xwngE19cKfr01LGTXd6ZPbUpprK313EVzibUa1PmHCQG5WIZywfiJI8IOW
+ 9+ameAvOk6npd7ZP5w5Rudtg2ZZdjFoBAuvnV9krjBh4slfrk7nx1sB4X26dzSuK2UUvIkuCX
+ wgOI+APIOq2rU6AhUfQznOJ/PHZErD830jhVsxRC2YoWFJTAqrjKUnZtunmeKtzLZFHFBTYHt
+ p1m/+vFKE3H+Sv+Zj1faMWGEi9YWNqG6RBC9aH9EyVmE9b5N1dh06tLNnKroYRRIcmH/4oxMz
+ 1Mx92UxKk3lOsLraUgGrZ/Ivz623R9kc1MtpOFgJ7gATZOk38vOWV1uuBK1my/C1Jlf42L2zR
+ Xxy7Ssy4YQFmeh3t/+7CaKimJRwtTL/HLVe+27GOMKRz+BR6ZFHxzSxKS3TYZf7ZbvFdxQslc
+ Yr0i73Gb++JRH6r4hA9Vjx6vreP2numt7CpjwTsiWwAh6MKNQ4LhKvZtGe1mpw44FhXxdV9u0
+ ML7iWdbqAjGmZFcOGwh/XLHG2CR/vW2d6VdkF9+dWhOLDGo7G21E+zgEAL6WxVochOfFn7hRe
+ /z9STvFX5CnB3vPHneKhqyIOEowXfMMBnklAWaijT0tWWSL1Hgwyt96n/4qGLSp3sKS5qvIPY
+ OUhyP4grkaSfJaEmM8xjwCEioe2fT8DUxu0yO58lj4+0RIDFgx0fzOGOqBgtPXKoqmIT6IXrQ
+ CcRwbuWUcx/15XwaFwPaok108IfM7WOvNHiPv8M5ektgCOux5t1yGXdHyKS28W0QirVigSQKu
+ qieVtueHfQA+lIV5DyO0HSHbIELxIrfFo5D84Rj23fv4UEsMofET+3WgdqC6xq2g345swH6m+
+ dbqUQsKcWJ3jekZUmuxP8H9DLmLogcnfsuzBF42pxeBREX/2myVVr+UbYw4y+AxaCxkwPBPgy
+ zW4Son44g8BBVjXtBgIkVILXxI/yS6hsVXv4ixnfNb9vpGD/W5ikFU1soSqiMYXockIfYzynw
+ Qo+8AgJVms7WkE=
+Subject: [Buildroot] [PATCH v1] package/libxkbcommon: change
+ homepage/download url to https
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,57 +97,47 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-Fabrice, All,
+- change homepage url to https (and remove trailing slash)
+- change download url to https
 
-On 2021-09-12 21:53 +0200, Fabrice Fontaine spake thusly:
-> AM_ICONV is not needed since drop of autoreconf in commit
-> 03fbb81b8bab7bad135b59267533be7688babe39
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/libxkbcommon/Config.in       | 2 +-
+ package/libxkbcommon/libxkbcommon.mk | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/dovecot/dovecot.mk | 2 --
->  1 file changed, 2 deletions(-)
-> 
-> diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
-> index cd637f19a1..733917b062 100644
-> --- a/package/dovecot/dovecot.mk
-> +++ b/package/dovecot/dovecot.mk
-> @@ -16,8 +16,6 @@ DOVECOT_DEPENDENCIES = \
->  	host-pkgconf \
->  	$(if $(BR2_PACKAGE_LIBICONV),libiconv) \
->  	openssl
-> -# add host-gettext for AM_ICONV macro
-> -DOVECOT_DEPENDENCIES += host-gettext
->  
->  # CVE-2016-4983 is an issue in a postinstall script in the dovecot rpm, which
->  # is part of the Red Hat packaging and not part of upstream dovecot
-> -- 
-> 2.33.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@lists.buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/package/libxkbcommon/Config.in b/package/libxkbcommon/Config.in
+index 4da12897f2..4e73a24abb 100644
+--- a/package/libxkbcommon/Config.in
++++ b/package/libxkbcommon/Config.in
+@@ -6,4 +6,4 @@ config BR2_PACKAGE_LIBXKBCOMMON
+ 	  processes a reduced subset of keymaps as defined by the XKB
+ 	  specification.
+ 
+-	  http://xkbcommon.org/
++	  https://xkbcommon.org
+diff --git a/package/libxkbcommon/libxkbcommon.mk b/package/libxkbcommon/libxkbcommon.mk
+index 790083614f..ee2bc1ee99 100644
+--- a/package/libxkbcommon/libxkbcommon.mk
++++ b/package/libxkbcommon/libxkbcommon.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LIBXKBCOMMON_VERSION = 1.3.1
+-LIBXKBCOMMON_SITE = http://xkbcommon.org/download
++LIBXKBCOMMON_SITE = https://xkbcommon.org/download
+ LIBXKBCOMMON_SOURCE = libxkbcommon-$(LIBXKBCOMMON_VERSION).tar.xz
+ LIBXKBCOMMON_LICENSE = MIT/X11
+ LIBXKBCOMMON_LICENSE_FILES = LICENSE
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.33.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
