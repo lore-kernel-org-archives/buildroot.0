@@ -2,75 +2,86 @@ Return-Path: <SRS0=9D0o=OI=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.0 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
+X-Spam-Status: No, score=-16.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0124DC433EF
-	for <buildroot@archiver.kernel.org>; Sat, 18 Sep 2021 20:30:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C2417C433F5
+	for <buildroot@archiver.kernel.org>; Sat, 18 Sep 2021 20:30:35 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9F6C5610E9
-	for <buildroot@archiver.kernel.org>; Sat, 18 Sep 2021 20:30:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9F6C5610E9
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
+	by mail.kernel.org (Postfix) with ESMTPS id 37B81610E9
+	for <buildroot@archiver.kernel.org>; Sat, 18 Sep 2021 20:30:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 37B81610E9
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=lists.buildroot.org
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6DF82415A7;
-	Sat, 18 Sep 2021 20:30:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 13B7E4066F;
+	Sat, 18 Sep 2021 20:30:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ANezTxwTzRKl; Sat, 18 Sep 2021 20:30:20 +0000 (UTC)
+	with ESMTP id L_ZyRAp3-WZT; Sat, 18 Sep 2021 20:30:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B94F040825;
-	Sat, 18 Sep 2021 20:30:19 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 347441BF27C
- for <buildroot@lists.busybox.net>; Sat, 18 Sep 2021 20:30:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4B37F41633;
+	Sat, 18 Sep 2021 20:30:33 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A246C1BF27C
+ for <buildroot@lists.busybox.net>; Sat, 18 Sep 2021 20:30:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2333040825
- for <buildroot@lists.busybox.net>; Sat, 18 Sep 2021 20:30:18 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9E6A560643
+ for <buildroot@lists.busybox.net>; Sat, 18 Sep 2021 20:30:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kj9hFSfSv2Nk for <buildroot@lists.busybox.net>;
- Sat, 18 Sep 2021 20:30:17 +0000 (UTC)
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=googlemail.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id F-1ZViua95Nb for <buildroot@lists.busybox.net>;
+ Sat, 18 Sep 2021 20:30:30 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2E751406A0
- for <buildroot@buildroot.org>; Sat, 18 Sep 2021 20:30:16 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:ed4a:2560:2180:38b6])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 05627B0053D;
- Sat, 18 Sep 2021 22:30:06 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1631997015;
- bh=ykc0vAjRjSTFkmW7fWyJQTyrlC7abe8iaH7WGFnnPMI=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=uxifu+5gb0kZrsfGV9pFZmI3SKNE1vi+Q5zaXadtZj9orZ6itVwMILLLICrGAp34K
- sPLjwZpEY7jH2vBT5uinAvQ/ydhZEcrFRwqI6KhdRnq24cXQUfORw0wAeDJl4gM0hV
- tG7CCbJ4u1JnSqkqpkoeoMdVpiPb3GtHzrH2NRIiChfyXBxUx6Cv4Ahj5uvq7P2hXp
- 2Ui7aqhA4xPz/mn0ZczUxzTK/7idtHtUXrvEMXPt1jjw3oUKkMRss7QxSpLPSERV/g
- 1MOYUVcHU2iqtRndnPU6IHsJ7WwyBy6fB3ImSbweOGwJfUgGy91079M6lXtAU5o8+F
- yLp7NGhIvI/kA==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 18 Sep 2021 22:30:06 +0200
-Date: Sat, 18 Sep 2021 22:30:06 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Peter Korsgaard <peter@korsgaard.com>
-Message-ID: <20210918203006.GR1053080@scaer>
-References: <20210918185816.14928-1-peter@korsgaard.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20210918185816.14928-1-peter@korsgaard.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH] package/libyang: security bump to version
- 1.0.240
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com
+ [IPv6:2a00:1450:4864:20::535])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7DFA66059C
+ for <buildroot@buildroot.org>; Sat, 18 Sep 2021 20:30:30 +0000 (UTC)
+Received: by mail-ed1-x535.google.com with SMTP id j13so43854593edv.13
+ for <buildroot@buildroot.org>; Sat, 18 Sep 2021 13:30:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=googlemail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id;
+ bh=XW7+cPFjW+V2vtFmNFqC01UvqY66QjYiVGtt8VHrCQE=;
+ b=kkKdS9P5Ug9ChBrIOM430l501ZjH/8PKD0xKjPRrgGa5AT59DyCC4S3DIMOAUaIqRy
+ 9jprcwSRH0wG2eqfu5PkcNp4LN7i3Th2mhglsIip14BgBkASB+mkkjYVMvV51Bx12gqH
+ 1+u918NejM3+l7NF2YkU1iOY09436ZpE/yYAENcNHZWvGZDfXdu2B5jAcJRTcXw8LZl8
+ zTNRgtzLywEizDF0yiwFLG54J14IFBOQwO9K6R42NlmIMQggtJVXcflPELIuaMD0UyTi
+ q+WIQddejzloBxfwyItPlIRfPipeaOer6n7qtaCg/7NoUtFHD2vi/V3pCBSLAQFkuMAT
+ SP4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id;
+ bh=XW7+cPFjW+V2vtFmNFqC01UvqY66QjYiVGtt8VHrCQE=;
+ b=Rwsrr3XxZWzNtT/R3OZt9RW4GT+ZD7bVOacr3zmfY6bcaqjbP0ReTU63w55bqWWiLb
+ Yd5wrHunJH+EfC+WD7WTwFX6Nt6p9sPkLgFDWTLZ8b6kzu2rkJGC+iozQkbX4oKrBoVc
+ E2IUAd5U79oDAcdDKUVr4MX9tUZHy702abgblqsvKM1bfJawDC9I8EW0n5uOwzCwtQV8
+ YUUUASYAVU4C+YK7crRD/FjQbMFjk+b1zJU10dBAP1C6uLuT9i/vlhrpGXvTcJ0/+HQe
+ e3Js7/pC3x4hyA+bKBJzLRUndFBXBYpUy1IeNsbDUMGEq+hRMwPtI8fnYBFuNzu7rC31
+ fxsQ==
+X-Gm-Message-State: AOAM532yhwwXao7SCqMvBC35iovZMhbAU8YYYAwuEUP1eNM21ceSnuhQ
+ 9duGqTzIhz7a/GJxg81xcMZJSM+ANXA=
+X-Google-Smtp-Source: ABdhPJzKLt43J8GvJxywbz3KAvXuEIneWo5eQbPi2Bxy3AkN1FJHOWoKkCZqtajxVrmCo0hT7eX8Mg==
+X-Received: by 2002:a50:bb09:: with SMTP id y9mr20052712ede.89.1631997028441; 
+ Sat, 18 Sep 2021 13:30:28 -0700 (PDT)
+Received: from development1.visionsystems.de (mail.visionsystems.de.
+ [213.209.99.202])
+ by smtp.gmail.com with ESMTPSA id bj10sm4085237ejb.17.2021.09.18.13.30.27
+ (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+ Sat, 18 Sep 2021 13:30:27 -0700 (PDT)
+To: buildroot@buildroot.org
+Date: Sat, 18 Sep 2021 22:30:23 +0200
+Message-Id: <20210918203023.24093-1-yegorslists@googlemail.com>
+X-Mailer: git-send-email 2.17.0
+Subject: [Buildroot] [PATCH] package/modem-manager: bump to version 1.18.2
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,91 +94,151 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: Jan Kundrat <jan.kundrat@cesnet.cz>, Heiko Thiery <heiko.thiery@gmail.com>,
- buildroot@buildroot.org
+From: yegorslists--- via buildroot <buildroot@lists.buildroot.org>
+Reply-To: yegorslists@googlemail.com
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ Aleksander Morgado <aleksander@aleksander.es>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-Peter, All,
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-On 2021-09-18 20:58 +0200, Peter Korsgaard spake thusly:
-> Fixes the following security issues:
-> 
-> - CVE-2021-28902: In function read_yin_container() in libyang <= v1.0.225,
->   it doesn't check whether the value of retval->ext[r] is NULL.  In some
->   cases, it can be NULL, which leads to the operation of
->   retval->ext[r]->flags that results in a crash.
-> 
-> - CVE-2021-28903: A stack overflow in libyang <= v1.0.225 can cause a denial
->   of service through function lyxml_parse_mem().  lyxml_parse_elem()
->   function will be called recursively, which will consume stack space and
->   lead to crash.
-> 
-> - CVE-2021-28904: In function ext_get_plugin() in libyang <= v1.0.225, it
->   doesn't check whether the value of revision is NULL.  If revision is NULL,
->   the operation of strcmp(revision, ext_plugins[u].revision) will lead to a
->   crash.
-> 
-> - CVE-2021-28905: In function lys_node_free() in libyang <= v1.0.225, it
->   asserts that the value of node->module can't be NULL.  But in some cases,
->   node->module can be null, which triggers a reachable assertion (CWE-617).
-> 
-> - CVE-2021-28906: In function read_yin_leaf() in libyang <= v1.0.225, it
->   doesn't check whether the value of retval->ext[r] is NULL.  In some cases,
->   it can be NULL, which leads to the operation of retval->ext[r]->flags that
->   results in a crash.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+This release introduces meson build system support.
 
-Applied to master, thanks.
+As meson files are only available in git, switch the location to
+https://gitlab.freedesktop.org.
 
-Regards,
-Yann E. MORIN.
+Add support for bash-completion.
 
-> ---
->  package/libyang/libyang.hash | 2 +-
->  package/libyang/libyang.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/libyang/libyang.hash b/package/libyang/libyang.hash
-> index 94685cb4de..755ecf390a 100644
-> --- a/package/libyang/libyang.hash
-> +++ b/package/libyang/libyang.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated
-> -sha256  1b736443d2c69b5d7a71ac412655e6edab0647b18f35f7bf504b0a24e06cb046  libyang-1.0.225.tar.gz
-> +sha256  8576cad398b451b1c622b0652a2030fcf83ee1d9a39e6cd93d17b0a5a43118d6  libyang-1.0.240.tar.gz
->  sha256  f942fe693e03e4e3ff67a351c00dc8f468a042e0d7273b0aa6bc53060b568112  LICENSE
-> diff --git a/package/libyang/libyang.mk b/package/libyang/libyang.mk
-> index ed61ec97d2..f784367ea3 100644
-> --- a/package/libyang/libyang.mk
-> +++ b/package/libyang/libyang.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -LIBYANG_VERSION = 1.0.225
-> +LIBYANG_VERSION = 1.0.240
->  LIBYANG_SITE = $(call github,CESNET,libyang,v$(LIBYANG_VERSION))
->  LIBYANG_LICENSE = BSD-3-Clause
->  LIBYANG_LICENSE_FILES = LICENSE
-> -- 
-> 2.20.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@lists.buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+dbus is now a build-time dependency.
 
+Also add support for systemd and polkit and disable the manpage
+generation.
+
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/modem-manager/Config.in          |  2 +-
+ package/modem-manager/modem-manager.hash |  2 +-
+ package/modem-manager/modem-manager.mk   | 50 +++++++++++++++++-------
+ 3 files changed, 38 insertions(+), 16 deletions(-)
+
+diff --git a/package/modem-manager/Config.in b/package/modem-manager/Config.in
+index c4c723776d..d211d68ee1 100644
+--- a/package/modem-manager/Config.in
++++ b/package/modem-manager/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_MODEM_MANAGER
+ 	depends on BR2_USE_WCHAR # libglib2 and gnutls
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
+ 	depends on BR2_USE_MMU # dbus
+-	select BR2_PACKAGE_DBUS # runtime dependency
++	select BR2_PACKAGE_DBUS
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_LIBGUDEV if BR2_PACKAGE_HAS_UDEV
+ 	help
+diff --git a/package/modem-manager/modem-manager.hash b/package/modem-manager/modem-manager.hash
+index 14597215df..fb0ddec4a5 100644
+--- a/package/modem-manager/modem-manager.hash
++++ b/package/modem-manager/modem-manager.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  2ccf1f716c2d121e8e6709bcf8af29ee86971a90adacca2e8d6288b30278862e  ModemManager-1.16.10.tar.xz
++sha256  79e83f7082d02e72a5c5e7fdf9b67bd3dd71da0da3d02607dee76ae06b9d4aa9  ModemManager-1.18.2.tar.bz2
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
+index a881edc272..7a7bd3bb4c 100644
+--- a/package/modem-manager/modem-manager.mk
++++ b/package/modem-manager/modem-manager.mk
+@@ -4,42 +4,64 @@
+ #
+ ################################################################################
+ 
+-MODEM_MANAGER_VERSION = 1.16.10
+-MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.xz
+-MODEM_MANAGER_SITE = http://www.freedesktop.org/software/ModemManager
++MODEM_MANAGER_VERSION = 1.18.2
++MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.bz2
++MODEM_MANAGER_SITE = https://gitlab.freedesktop.org/mobile-broadband/ModemManager/-/archive/$(MODEM_MANAGER_VERSION)
+ MODEM_MANAGER_LICENSE = GPL-2.0+ (programs, plugins), LGPL-2.0+ (libmm-glib)
+ MODEM_MANAGER_LICENSE_FILES = COPYING COPYING.LIB
+ MODEM_MANAGER_SELINUX_MODULES = modemmanager
+-MODEM_MANAGER_DEPENDENCIES = host-pkgconf libglib2 $(TARGET_NLS_DEPENDENCIES)
++MODEM_MANAGER_DEPENDENCIES = host-pkgconf libglib2 dbus $(TARGET_NLS_DEPENDENCIES)
+ MODEM_MANAGER_INSTALL_STAGING = YES
+-MODEM_MANAGER_CONF_OPTS = --disable-more-warnings
++
++MODEM_MANAGER_CONF_OPTS = -Dman=false
+ 
+ ifeq ($(BR2_PACKAGE_MODEM_MANAGER_LIBQMI),y)
+ MODEM_MANAGER_DEPENDENCIES += libqmi
+-MODEM_MANAGER_CONF_OPTS += --with-qmi
++MODEM_MANAGER_CONF_OPTS += -Dqmi=enabled
++else
++MODEM_MANAGER_CONF_OPTS += -Dqmi=disabled
++endif
++
++ifeq ($(BR2_PACKAGE_SYSTEMD),y)
++MODEM_MANAGER_DEPENDENCIES += systemd
++MODEM_MANAGER_CONF_OPTS += -Dsystemd_suspend_resume=true -Dsystemd_journal=true
++else
++MODEM_MANAGER_CONF_OPTS += -Dsystemdsystemunitdir=no -Dsystemd_suspend_resume=false -Dsystemd_journal=false
++endif
++
++ifeq ($(BR2_PACKAGE_POLKIT),y)
++MODEM_MANAGER_DEPENDENCIES += polkit
++MODEM_MANAGER_CONF_OPTS += -Dpolkit=strict
+ else
+-MODEM_MANAGER_CONF_OPTS += --without-qmi
++MODEM_MANAGER_CONF_OPTS += -Dpolkit=no
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBGUDEV),y)
+ MODEM_MANAGER_DEPENDENCIES += libgudev
+-MODEM_MANAGER_CONF_OPTS += --with-udev
++MODEM_MANAGER_CONF_OPTS += -Dudev=enabled
+ else
+-MODEM_MANAGER_CONF_OPTS += --without-udev
++MODEM_MANAGER_CONF_OPTS += -Dudev=disabled
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_MODEM_MANAGER_LIBMBIM),y)
+ MODEM_MANAGER_DEPENDENCIES += libmbim
+-MODEM_MANAGER_CONF_OPTS += --with-mbim
++MODEM_MANAGER_CONF_OPTS += -Dmbim=enabled
+ else
+-MODEM_MANAGER_CONF_OPTS += --without-mbim
++MODEM_MANAGER_CONF_OPTS += -Dmbim=disabled
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
+ MODEM_MANAGER_DEPENDENCIES += gobject-introspection
+-MODEM_MANAGER_CONF_OPTS += --enable-introspection
++MODEM_MANAGER_CONF_OPTS += -Dintrospection=enabled
++else
++MODEM_MANAGER_CONF_OPTS += -Dintrospection=disabled
++endif
++
++ifeq ($(BR2_PACKAGE_BASH_COMPLETION),y)
++MODEM_MANAGER_DEPENDENCIES += bash-completion
++MODEM_MANAGER_CONF_OPTS += -Dbash_completion=true
+ else
+-MODEM_MANAGER_CONF_OPTS += --disable-introspection
++MODEM_MANAGER_CONF_OPTS += -Dbash_completion=false
+ endif
+ 
+ define MODEM_MANAGER_INSTALL_INIT_SYSV
+@@ -47,4 +69,4 @@ define MODEM_MANAGER_INSTALL_INIT_SYSV
+ 		$(TARGET_DIR)/etc/init.d/S44modem-manager
+ endef
+ 
+-$(eval $(autotools-package))
++$(eval $(meson-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.17.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
