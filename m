@@ -2,76 +2,56 @@ Return-Path: <SRS0=9D0o=OI=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.7 required=3.0 tests=BAYES_00,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 70B21C433F5
-	for <buildroot@archiver.kernel.org>; Sat, 18 Sep 2021 15:12:56 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9CAD1C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 18 Sep 2021 15:13:49 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 31A1D610E9
-	for <buildroot@archiver.kernel.org>; Sat, 18 Sep 2021 15:12:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 31A1D610E9
+	by mail.kernel.org (Postfix) with ESMTPS id 626E36126A
+	for <buildroot@archiver.kernel.org>; Sat, 18 Sep 2021 15:13:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 626E36126A
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F375A4074C;
-	Sat, 18 Sep 2021 15:12:55 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 283664021E;
+	Sat, 18 Sep 2021 15:13:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hUdGHnboeBoG; Sat, 18 Sep 2021 15:12:55 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id tdQKDRAAzUZX; Sat, 18 Sep 2021 15:13:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5323642541;
-	Sat, 18 Sep 2021 15:12:54 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 55D20400C3;
+	Sat, 18 Sep 2021 15:13:47 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 11ACC1BF861
- for <buildroot@lists.busybox.net>; Sat, 18 Sep 2021 15:12:53 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0DF9A1BF861
+ for <buildroot@lists.busybox.net>; Sat, 18 Sep 2021 15:13:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0E565606B6
- for <buildroot@lists.busybox.net>; Sat, 18 Sep 2021 15:12:53 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 077CF606B6
+ for <buildroot@lists.busybox.net>; Sat, 18 Sep 2021 15:13:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZysTnBu9bZ4h for <buildroot@lists.busybox.net>;
- Sat, 18 Sep 2021 15:12:52 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 28CB060662
- for <buildroot@buildroot.org>; Sat, 18 Sep 2021 15:12:52 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:ed4a:2560:2180:38b6])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 96D61B00535;
- Sat, 18 Sep 2021 17:12:46 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1631977970;
- bh=nFlt/V2aFHWrS+vEj/3F+FwjExpsSepUXWVmCzAVcok=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=OlJPVRW++WmXtZeUG9oMn3XsNX+fo++iuyW6lxfExsUZiSDDdNbOA/18BGD3oC+BE
- 0+KEB3d1FoT4Xf15YYzz8IPLlN9z4MhBG8a/27AnQJpLvlAI152XnQM27RjDq+iFC6
- K3oOIX9FhpZSXUEBOzurah8E6jgmqH94Jn7i+eUmywEKiHuChyf6RnKbKGxATBaC/+
- psFtbYf7Bk/YykpXyGd65OooWRgAE76adKcBkGioQVI0onm62jswKx1npXHEY2n8Jj
- quAI3p/Cqy+cEz5WBgmPXHp9zWC66v2IK2Xg64j2Dt2L1zQKKBzU9Zkmukmkh5RZFA
- XCKEUtaSwAozQ==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 18 Sep 2021 17:12:46 +0200
-Date: Sat, 18 Sep 2021 17:12:46 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20210918151246.GU1053080@scaer>
-References: <20210916164925.1940844-1-fontaine.fabrice@gmail.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20210916164925.1940844-1-fontaine.fabrice@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 1/1] package/gerbera: bump to version 1.9.1
+ with ESMTP id x1KPGDUf9q_g for <buildroot@lists.busybox.net>;
+ Sat, 18 Sep 2021 15:13:44 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 56CB960662
+ for <buildroot@buildroot.org>; Sat, 18 Sep 2021 15:13:44 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id E2B0D87F7F; Sat, 18 Sep 2021 15:11:49 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sat, 18 Sep 2021 17:13:06 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 94b88517d7f9923ce2f82c12c43a7f484afb0edc
+X-Git-Newrev: 9a48be36d5b188e0cd0f670875acfeb1a724e4d4
+X-Patchwork-Hint: ignore
+Message-Id: <20210918151149.E2B0D87F7F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/lxc: bump to version 4.0.10
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,66 +64,48 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=9a48be36d5b188e0cd0f670875acfeb1a724e4d4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-09-16 18:49 +0200, Fabrice Fontaine spake thusly:
-> https://github.com/gerbera/gerbera/blob/v1.9.1/ChangeLog.md
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+https://discuss.linuxcontainers.org/t/lxc-4-0-10-has-been-released/11618
+https://discuss.linuxcontainers.org/t/lxc-4-0-9-lts-has-been-released/10999
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/lxc/lxc.hash | 2 +-
+ package/lxc/lxc.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/gerbera/gerbera.hash | 2 +-
->  package/gerbera/gerbera.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/gerbera/gerbera.hash b/package/gerbera/gerbera.hash
-> index ed856bbf62..345d86693c 100644
-> --- a/package/gerbera/gerbera.hash
-> +++ b/package/gerbera/gerbera.hash
-> @@ -1,3 +1,3 @@
->  # Locally computed:
-> -sha256  b1e5591515f05a46de052ef4d95a2bb3387e96f565a5ce7abb6a77dbe581f09a  gerbera-1.8.2.tar.gz
-> +sha256  5d323c6cb4150e3454b8c6e0012f41648441799ba44cb59436b124b54d3fc82b  gerbera-1.9.1.tar.gz
->  sha256  cae4138373be41fd2be75faf41ce7efbcf49fb17d0e05ad1c51cc01ac335b9b6  LICENSE.md
-> diff --git a/package/gerbera/gerbera.mk b/package/gerbera/gerbera.mk
-> index d6251912ac..49b702e59c 100644
-> --- a/package/gerbera/gerbera.mk
-> +++ b/package/gerbera/gerbera.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -GERBERA_VERSION = 1.8.2
-> +GERBERA_VERSION = 1.9.1
->  GERBERA_SITE = $(call github,gerbera,gerbera,v$(GERBERA_VERSION))
->  GERBERA_LICENSE = GPL-2.0
->  GERBERA_LICENSE_FILES = LICENSE.md
-> -- 
-> 2.33.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@lists.buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/lxc/lxc.hash b/package/lxc/lxc.hash
+index 85cdecceb2..efd7a8e42c 100644
+--- a/package/lxc/lxc.hash
++++ b/package/lxc/lxc.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  9165dabc0bb6ef7f2fda2009aee90b20fbefe77ed8008347e9f06048eba1e463  lxc-4.0.6.tar.gz
++sha256  a10c518056d2e497bd600e4ffac2853bdeab1e835bf455a6d87cc8df128bfae9  lxc-4.0.10.tar.gz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE.GPL2
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.LGPL2.1
+diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
+index 24a1f3c588..93f6d2535f 100644
+--- a/package/lxc/lxc.mk
++++ b/package/lxc/lxc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LXC_VERSION = 4.0.6
++LXC_VERSION = 4.0.10
+ LXC_SITE = https://linuxcontainers.org/downloads/lxc
+ LXC_LICENSE = GPL-2.0 (some tools), LGPL-2.1+
+ LXC_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
