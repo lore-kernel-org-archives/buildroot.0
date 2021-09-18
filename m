@@ -2,77 +2,56 @@ Return-Path: <SRS0=9D0o=OI=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 84F3EC433F5
-	for <buildroot@archiver.kernel.org>; Sat, 18 Sep 2021 14:53:15 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D7942C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 18 Sep 2021 14:56:29 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1F96561019
-	for <buildroot@archiver.kernel.org>; Sat, 18 Sep 2021 14:53:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1F96561019
+	by mail.kernel.org (Postfix) with ESMTPS id 3F2016127B
+	for <buildroot@archiver.kernel.org>; Sat, 18 Sep 2021 14:56:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3F2016127B
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AAB63605E5;
-	Sat, 18 Sep 2021 14:53:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D583183F8C;
+	Sat, 18 Sep 2021 14:56:28 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id W7CTm5IrsfiR; Sat, 18 Sep 2021 14:56:28 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4EF3E83F89;
+	Sat, 18 Sep 2021 14:56:27 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 6F6341BF5A3
+ for <buildroot@lists.busybox.net>; Sat, 18 Sep 2021 14:56:26 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6B9356060A
+ for <buildroot@lists.busybox.net>; Sat, 18 Sep 2021 14:56:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rsgryAGmF6mz; Sat, 18 Sep 2021 14:53:13 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8571F6060A;
-	Sat, 18 Sep 2021 14:53:12 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 869951BF5A3
- for <buildroot@lists.busybox.net>; Sat, 18 Sep 2021 14:53:10 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8302542535
- for <buildroot@lists.busybox.net>; Sat, 18 Sep 2021 14:53:10 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2I9xmZm_BVDz for <buildroot@lists.busybox.net>;
- Sat, 18 Sep 2021 14:53:08 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9075B42534
- for <buildroot@buildroot.org>; Sat, 18 Sep 2021 14:53:08 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:ed4a:2560:2180:38b6])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 2D55BB00568;
- Sat, 18 Sep 2021 16:53:01 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1631976785;
- bh=V6ossXazhIsLBQBFMGdiNBOMDE4p1dHurzEyqCRDoqw=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=T6JSiX9CunxY7u91Q2DZ/yDFU8pGM4wduHBD3V5x+P26O7CsMVVO3TswwhemxtGwu
- LORgMucstep9thcS1WEj8pgE/FJRZnNvA0HiZyfw23M0kjT5LUezxSt/Iw/v9nj1Zb
- UcS+2aGFyYGSKnanVvtEo1aXLeTBhB5hznZxVww92yNBSj1i/Kgp/ZqNNvXNQNCC2K
- kfe4YM45eWNpFySkCIGYm/D2+JPinVgeXPxJn/teTHoCmSOEpkRvkVZOvJyUhIMF6M
- F9gRaQrlJasmweyIn0AALphbuukRaVh+WxEVoN0CJ91yqAXYtDeAU9b2UDXYXH3KH3
- KserhpURkRYZw==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 18 Sep 2021 16:53:00 +0200
-Date: Sat, 18 Sep 2021 16:53:00 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Adrian Perez de Castro <aperez@igalia.com>
-Message-ID: <20210918145300.GP1053080@scaer>
-References: <20210914222629.2670193-1-aperez@igalia.com>
- <20210917183132.2531120-1-aperez@igalia.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20210917183132.2531120-1-aperez@igalia.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH v4 1/1] package/seatd: bump to version 0.6.2
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Sm_-m-QAix5L for <buildroot@lists.busybox.net>;
+ Sat, 18 Sep 2021 14:56:25 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id A44B8605E5
+ for <buildroot@buildroot.org>; Sat, 18 Sep 2021 14:56:25 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id 40344878D5; Sat, 18 Sep 2021 14:54:31 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sat, 18 Sep 2021 16:55:33 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: c54f85ca0d2ba7b73c899a27e62c67d3389617b8
+X-Git-Newrev: 30479788f18d4a625687b3228a3b527dab63c239
+X-Patchwork-Hint: ignore
+Message-Id: <20210918145431.40344878D5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libxcrypt: bump to version 4.4.26
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,455 +64,62 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-Adrian, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=30479788f18d4a625687b3228a3b527dab63c239
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-09-17 21:31 +0300, Adrian Perez de Castro spake thusly:
-> Update seatd to version 0.6.2, which makes the patches unnecessary (they
-> have all been integrated in 0.6.0) and fixes a number of bugs. Some
-> Meson build options have been renamed, so the build recipe is updated
-> accordingly, too.
-> 
-> Release notes:
-> 
->   https://git.sr.ht/~kennylevinsen/seatd/refs/0.6.0
->   https://git.sr.ht/~kennylevinsen/seatd/refs/0.6.1
->   https://git.sr.ht/~kennylevinsen/seatd/refs/0.6.2
-> 
-> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+This bump contains a single change to fix the following build failure
+with Microblaze raised since bump to version 4.4.25 in commit
+a071bec0a0cd928443223132d47564c90bc64713:
 
-Applied to master, thanks.
+lib/crypt-gensalt-static.c:33:1: error: symver is only supported on ELF platforms
+   33 | SYMVER_crypt_gensalt;
+      | ^~~~~~~~~~~~~~~~~~~~
 
-Regards,
-Yann E. MORIN.
+Update hash of LICENSING due to new file being added with
+https://github.com/besser82/libxcrypt/commit/4ab5f672eb6fb43c9bd83060ef48f90decd4989c
 
-> ---
-> Changes v3 -> v4:
->   - Changed version 0.6.1 to 0.6.2
-> ---
-> Changes v2 -> v3:
->   - Also link release notes for 0.6.0 (suggested by Peter Seiderer)
-> ---
-> Changes v1 -> v2:
->   - Changed version 0.6.0 to 0.6.1
-> 
-> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-> ---
->  ...pport-building-builtin-without-seatd.patch |  37 ---
->  package/seatd/0002-Add-no-op-session.patch    | 223 ------------------
->  ...003-meson.build-fix-build-with-gcc-7.patch |  48 ----
->  package/seatd/seatd.hash                      |   2 +-
->  package/seatd/seatd.mk                        |  14 +-
->  5 files changed, 8 insertions(+), 316 deletions(-)
->  delete mode 100644 package/seatd/0001-meson-Support-building-builtin-without-seatd.patch
->  delete mode 100644 package/seatd/0002-Add-no-op-session.patch
->  delete mode 100644 package/seatd/0003-meson.build-fix-build-with-gcc-7.patch
-> 
-> diff --git a/package/seatd/0001-meson-Support-building-builtin-without-seatd.patch b/package/seatd/0001-meson-Support-building-builtin-without-seatd.patch
-> deleted file mode 100644
-> index fcaa355dc4..0000000000
-> --- a/package/seatd/0001-meson-Support-building-builtin-without-seatd.patch
-> +++ /dev/null
-> @@ -1,37 +0,0 @@
-> -From 11bf7d5d11424749d549239540e5db06b8754bb5 Mon Sep 17 00:00:00 2001
-> -From: Kenny Levinsen <kl@kl.wtf>
-> -Date: Sun, 25 Apr 2021 20:16:19 +0200
-> -Subject: [PATCH] meson: Support building builtin without seatd
-> -
-> -The builtin backend relies on the seatd backend implementation. When
-> -builtin was enabled without seatd, compilation would fail due to the
-> -implementation not being included.
-> -
-> -Include the implementation if either seatd or builtin is enabled.
-> -
-> -Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-> -Upstream-Status: backport [with adaptations]
-> ----
-> - meson.build | 5 ++++-
-> - 1 file changed, 4 insertions(+), 1 deletion(-)
-> -
-> -diff --git a/meson.build b/meson.build
-> -index ff56845..8cb4fc6 100644
-> ---- a/meson.build
-> -+++ b/meson.build
-> -@@ -105,8 +105,11 @@ server_files = [
-> - 	'seatd/server.c',
-> - ]
-> - 
-> --if get_option('seatd').enabled()
-> -+if get_option('seatd').enabled() or get_option('builtin').enabled()
-> - 	private_files += 'libseat/backend/seatd.c'
-> -+endif
-> -+
-> -+if get_option('seatd').enabled()
-> - 	add_project_arguments('-DSEATD_ENABLED=1', language: 'c')
-> - endif
-> - 
-> --- 
-> -2.31.1
-> -
-> diff --git a/package/seatd/0002-Add-no-op-session.patch b/package/seatd/0002-Add-no-op-session.patch
-> deleted file mode 100644
-> index 44798126d9..0000000000
-> --- a/package/seatd/0002-Add-no-op-session.patch
-> +++ /dev/null
-> @@ -1,223 +0,0 @@
-> -From 9a7824b7c3ff5c957632671e91454fc84fbcdda8 Mon Sep 17 00:00:00 2001
-> -From: Simon Ser <contact@emersion.fr>
-> -Date: Fri, 26 Mar 2021 10:05:12 +0100
-> -Subject: [PATCH] Add no-op session
-> -
-> -This is useful for headless testing, for instance with VKMS:
-> -
-> -    modprobe vkms
-> -    export WLR_DRM_DEVICES=/dev/dri/card1
-> -    export WLR_BACKENDS=drm
-> -    export LIBSEAT_BACKEND=noop
-> -    sway
-> -
-> -We don't need any of the VT handling in this case.
-> -
-> -[Retrieved from:
-> -https://github.com/kennylevinsen/seatd/commit/9a7824b7c3ff5c957632671e91454fc84fbcdda8]
-> -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ----
-> - include/libseat.h      |   2 +
-> - libseat/backend/noop.c | 135 +++++++++++++++++++++++++++++++++++++++++
-> - libseat/libseat.c      |   5 ++
-> - meson.build            |   2 +-
-> - 4 files changed, 143 insertions(+), 1 deletion(-)
-> - create mode 100644 libseat/backend/noop.c
-> -
-> -diff --git a/include/libseat.h b/include/libseat.h
-> -index 5375cd6..82098ea 100644
-> ---- a/include/libseat.h
-> -+++ b/include/libseat.h
-> -@@ -1,6 +1,8 @@
-> - #ifndef _LIBSEAT_H
-> - #define _LIBSEAT_H
-> - 
-> -+#include <stdarg.h>
-> -+
-> - /*
-> -  * An opaque struct containing an opened seat, created by libseat_open_seat and
-> -  * destroyed by libseat_close_seat.
-> -diff --git a/libseat/backend/noop.c b/libseat/backend/noop.c
-> -new file mode 100644
-> -index 0000000..71d0224
-> ---- /dev/null
-> -+++ b/libseat/backend/noop.c
-> -@@ -0,0 +1,135 @@
-> -+#include <assert.h>
-> -+#include <errno.h>
-> -+#include <fcntl.h>
-> -+#include <poll.h>
-> -+#include <stdbool.h>
-> -+#include <stdlib.h>
-> -+#include <string.h>
-> -+#include <sys/socket.h>
-> -+#include <unistd.h>
-> -+
-> -+#include "backend.h"
-> -+#include "log.h"
-> -+
-> -+struct backend_noop {
-> -+	struct libseat base;
-> -+	struct libseat_seat_listener *seat_listener;
-> -+	void *seat_listener_data;
-> -+
-> -+	bool initial_setup;
-> -+	int sockets[2];
-> -+};
-> -+
-> -+extern const struct seat_impl noop_impl;
-> -+
-> -+static struct backend_noop *backend_noop_from_libseat_backend(struct libseat *base) {
-> -+	assert(base->impl == &noop_impl);
-> -+	return (struct backend_noop *)base;
-> -+}
-> -+
-> -+static void destroy(struct backend_noop *backend) {
-> -+	close(backend->sockets[0]);
-> -+	close(backend->sockets[1]);
-> -+	free(backend);
-> -+}
-> -+
-> -+static int close_seat(struct libseat *base) {
-> -+	struct backend_noop *backend = backend_noop_from_libseat_backend(base);
-> -+	destroy(backend);
-> -+	return 0;
-> -+}
-> -+
-> -+static int disable_seat(struct libseat *base) {
-> -+	(void)base;
-> -+	return 0;
-> -+}
-> -+
-> -+static const char *seat_name(struct libseat *base) {
-> -+	(void)base;
-> -+	return "noop";
-> -+}
-> -+
-> -+static int open_device(struct libseat *base, const char *path, int *fd) {
-> -+	(void)base;
-> -+
-> -+	int tmpfd = open(path, O_RDWR | O_CLOEXEC);
-> -+	if (tmpfd < 0) {
-> -+		log_errorf("Failed to open device: %s", strerror(errno));
-> -+		return -1;
-> -+	}
-> -+
-> -+	*fd = tmpfd;
-> -+	return tmpfd;
-> -+}
-> -+
-> -+static int close_device(struct libseat *base, int device_id) {
-> -+	(void)base;
-> -+	(void)device_id;
-> -+	return 0;
-> -+}
-> -+
-> -+static int switch_session(struct libseat *base, int s) {
-> -+	(void)base;
-> -+	(void)s;
-> -+	log_errorf("No-op backend cannot switch to session %d", s);
-> -+	return -1;
-> -+}
-> -+
-> -+static int get_fd(struct libseat *base) {
-> -+	struct backend_noop *backend = backend_noop_from_libseat_backend(base);
-> -+	return backend->sockets[0];
-> -+}
-> -+
-> -+static int dispatch_background(struct libseat *base, int timeout) {
-> -+	struct backend_noop *backend = backend_noop_from_libseat_backend(base);
-> -+
-> -+	if (backend->initial_setup) {
-> -+		backend->initial_setup = false;
-> -+		backend->seat_listener->enable_seat(&backend->base, backend->seat_listener_data);
-> -+	}
-> -+
-> -+	struct pollfd fd = {
-> -+		.fd = backend->sockets[0],
-> -+		.events = POLLIN,
-> -+	};
-> -+	if (poll(&fd, 1, timeout) < 0) {
-> -+		if (errno == EAGAIN || errno == EINTR) {
-> -+			return 0;
-> -+		} else {
-> -+			return -1;
-> -+		}
-> -+	}
-> -+
-> -+	return 0;
-> -+}
-> -+
-> -+static struct libseat *noop_open_seat(struct libseat_seat_listener *listener, void *data) {
-> -+	struct backend_noop *backend = calloc(1, sizeof(struct backend_noop));
-> -+	if (backend == NULL) {
-> -+		return NULL;
-> -+	}
-> -+
-> -+	if (socketpair(AF_UNIX, SOCK_STREAM, 0, backend->sockets) != 0) {
-> -+		log_errorf("socketpair() failed: %s", strerror(errno));
-> -+		free(backend);
-> -+		return NULL;
-> -+	}
-> -+
-> -+	backend->seat_listener = listener;
-> -+	backend->seat_listener_data = data;
-> -+	backend->base.impl = &noop_impl;
-> -+
-> -+	return &backend->base;
-> -+}
-> -+
-> -+const struct seat_impl noop_impl = {
-> -+	.open_seat = noop_open_seat,
-> -+	.disable_seat = disable_seat,
-> -+	.close_seat = close_seat,
-> -+	.seat_name = seat_name,
-> -+	.open_device = open_device,
-> -+	.close_device = close_device,
-> -+	.switch_session = switch_session,
-> -+	.get_fd = get_fd,
-> -+	.dispatch = dispatch_background,
-> -+};
-> -diff --git a/libseat/libseat.c b/libseat/libseat.c
-> -index b1e8bb2..a7e079c 100644
-> ---- a/libseat/libseat.c
-> -+++ b/libseat/libseat.c
-> -@@ -13,6 +13,7 @@
-> - extern const struct seat_impl seatd_impl;
-> - extern const struct seat_impl logind_impl;
-> - extern const struct seat_impl builtin_impl;
-> -+extern const struct seat_impl noop_impl;
-> - 
-> - static const struct named_backend impls[] = {
-> - #ifdef SEATD_ENABLED
-> -@@ -24,6 +25,7 @@ static const struct named_backend impls[] = {
-> - #ifdef BUILTIN_ENABLED
-> - 	{"builtin", &builtin_impl},
-> - #endif
-> -+	{"noop", &noop_impl},
-> - 	{NULL, NULL},
-> - };
-> - 
-> -@@ -62,6 +64,9 @@ struct libseat *libseat_open_seat(struct libseat_seat_listener *listener, void *
-> - 
-> - 	struct libseat *backend = NULL;
-> - 	for (const struct named_backend *iter = impls; iter->backend != NULL; iter++) {
-> -+		if (iter->backend == &noop_impl) {
-> -+			continue;
-> -+		}
-> - 		backend = iter->backend->open_seat(listener, data);
-> - 		if (backend != NULL) {
-> - 			log_infof("Seat opened with backend '%s'", iter->name);
-> -diff --git a/meson.build b/meson.build
-> -index f41b621..c3800ae 100644
-> ---- a/meson.build
-> -+++ b/meson.build
-> -@@ -145,7 +145,7 @@ symbols_file = 'libseat/libseat.syms'
-> - symbols_flag = '-Wl,--version-script,@0@/@1@'.format(meson.current_source_dir(), symbols_file)
-> - lib = library(
-> - 	'seat', # This results in the library being called 'libseat'
-> --	[ 'libseat/libseat.c' ],
-> -+	[ 'libseat/libseat.c', 'libseat/backend/noop.c' ],
-> - 	soversion: libseat_soversion,
-> - 	link_with: private_lib,
-> - 	include_directories: [include_directories('.', 'include')],
-> diff --git a/package/seatd/0003-meson.build-fix-build-with-gcc-7.patch b/package/seatd/0003-meson.build-fix-build-with-gcc-7.patch
-> deleted file mode 100644
-> index 0e9f437cc3..0000000000
-> --- a/package/seatd/0003-meson.build-fix-build-with-gcc-7.patch
-> +++ /dev/null
-> @@ -1,48 +0,0 @@
-> -From 0b32c33978fbe8772df6d185c9b9d646c442dc5d Mon Sep 17 00:00:00 2001
-> -From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> -Date: Sun, 8 Aug 2021 19:00:35 +0200
-> -Subject: [PATCH] meson.build: fix build with gcc < 7
-> -
-> -Test if -Wimplicit-fallthrough is available before using it as it has
-> -been added only since gcc 7.1 and
-> -https://github.com/gcc-mirror/gcc/commit/81fea426da8c4687bb32e6894dc26f00ae211822
-> -and so it will raise the following build failure with gcc < 7:
-> -
-> -arm-none-linux-gnueabi-gcc: error: unrecognized command line option '-Wimplicit-fallthrough'
-> -
-> -Fixes:
-> - - http://autobuild.buildroot.org/results/0ee6816a7cceebdafd07612677a594bdf68e0790
-> -
-> -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> -[Upstream status: https://github.com/kennylevinsen/seatd/pull/1]
-> ----
-> - meson.build | 6 +++++-
-> - 1 file changed, 5 insertions(+), 1 deletion(-)
-> -
-> -diff --git a/meson.build b/meson.build
-> -index 1131b4b..c366a59 100644
-> ---- a/meson.build
-> -+++ b/meson.build
-> -@@ -31,7 +31,6 @@ add_project_arguments(
-> - 		'-Wold-style-definition', # nop
-> - 		'-Wpointer-arith',
-> - 		'-Wstrict-prototypes',
-> --		'-Wimplicit-fallthrough',
-> - 		'-Wmissing-prototypes',
-> - 		'-Wno-unknown-warning-option',
-> - 		'-Wno-unused-command-line-argument',
-> -@@ -45,6 +44,11 @@ add_project_arguments(
-> - 	language: 'c',
-> - )
-> - 
-> -+cc = meson.get_compiler('c')
-> -+if cc.has_argument('-Wimplicit-fallthrough')
-> -+	add_project_arguments('-Wimplicit-fallthrough' , language : 'c')
-> -+endif
-> -+
-> - if ['debugoptimized', 'release', 'minsize'].contains(get_option('buildtype'))
-> - 	add_project_arguments('-D_FORTIFY_SOURCE=2', language: 'c')
-> - endif
-> --- 
-> -2.30.2
-> -
-> diff --git a/package/seatd/seatd.hash b/package/seatd/seatd.hash
-> index 342079e958..980c0faded 100644
-> --- a/package/seatd/seatd.hash
-> +++ b/package/seatd/seatd.hash
-> @@ -1,5 +1,5 @@
->  # Calculated locally
-> -sha256  274b56324fc81ca6002bc1cdd387668dee34a6e1063e5f3896805c3770948988  0.5.0.tar.gz
-> +sha256  1e2745ea39266de40d5beb24011782da95468b81ecfa410dd0db5ff75c665727  0.6.2.tar.gz
->  
->  # License files
->  sha256  282a494803d666616bd726e0279636b5f6a31387ae19a707459074050f2600d3  LICENSE
-> diff --git a/package/seatd/seatd.mk b/package/seatd/seatd.mk
-> index bf582f0d1d..98eea650dd 100644
-> --- a/package/seatd/seatd.mk
-> +++ b/package/seatd/seatd.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -SEATD_VERSION = 0.5.0
-> +SEATD_VERSION = 0.6.2
->  SEATD_SOURCE = $(SEATD_VERSION).tar.gz
->  SEATD_SITE = https://git.sr.ht/~kennylevinsen/seatd/archive
->  SEATD_LICENSE = MIT
-> @@ -17,20 +17,20 @@ SEATD_CONF_OPTS += \
->  	-Dwerror=false
->  
->  ifeq ($(BR2_PACKAGE_SYSTEMD_LOGIND),y)
-> -SEATD_CONF_OPTS += -Dlogind=enabled
-> +SEATD_CONF_OPTS += -Dlibseat-logind=enabled
->  SEATD_DEPENDENCIES += systemd
->  else
-> -SEATD_CONF_OPTS += -Dlogind=disabled
-> +SEATD_CONF_OPTS += -Dlibseat-logind=disabled
->  endif
->  
->  ifeq ($(BR2_PACKAGE_SEATD_BUILTIN),y)
-> -SEATD_CONF_OPTS += -Dbuiltin=enabled
-> +SEATD_CONF_OPTS += -Dlibseat-builtin=enabled
->  else
-> -SEATD_CONF_OPTS += -Dbuiltin=disabled
-> +SEATD_CONF_OPTS += -Dlibseat-builtin=disabled
->  endif
->  
->  ifeq ($(BR2_PACKAGE_SEATD_DAEMON),y)
-> -SEATD_CONF_OPTS += -Dseatd=enabled -Dserver=enabled
-> +SEATD_CONF_OPTS += -Dlibseat-seatd=enabled -Dserver=enabled
->  
->  define SEATD_USERS
->  	- - video -1 - - - - -
-> @@ -47,7 +47,7 @@ define SEATD_INSTALL_INIT_SYSTEMD
->  endef
->  
->  else
-> -SEATD_CONF_OPTS += -Dseatd=disabled -Dserver=disabled
-> +SEATD_CONF_OPTS += -Dlibseat-seatd=disabled -Dserver=disabled
->  endif
->  
->  $(eval $(meson-package))
-> -- 
-> 2.33.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@lists.buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+https://github.com/besser82/libxcrypt/blob/v4.4.26/NEWS
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Fixes:
+ - http://autobuild.buildroot.org/results/4766bfce9813b7f321369ec45298d16cd6dc251a
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/libxcrypt/libxcrypt.hash | 4 ++--
+ package/libxcrypt/libxcrypt.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/libxcrypt/libxcrypt.hash b/package/libxcrypt/libxcrypt.hash
+index e0b96406cc..b47f470020 100644
+--- a/package/libxcrypt/libxcrypt.hash
++++ b/package/libxcrypt/libxcrypt.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  caea3d032a46c4855ff818637884c7f5719ad228b79387b62ee023c8fbef17b4  libxcrypt-4.4.25.tar.gz
+-sha256  3c1ff7a7c9da111853ada463c54b65b42b7b1d3d6592dd527281db0827331d77  LICENSING
++sha256  e8a544dd19171c1e6191a6044c96cc31496d781ba08b5a00f53310d001d58114  libxcrypt-4.4.26.tar.gz
++sha256  cead8b3d94a143f64ccb571ada1cea47a70a0b847c8d95306e8d78ed68951f3d  LICENSING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+diff --git a/package/libxcrypt/libxcrypt.mk b/package/libxcrypt/libxcrypt.mk
+index 4627d21b62..3c98b30dd5 100644
+--- a/package/libxcrypt/libxcrypt.mk
++++ b/package/libxcrypt/libxcrypt.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBXCRYPT_VERSION = 4.4.25
++LIBXCRYPT_VERSION = 4.4.26
+ LIBXCRYPT_SITE = $(call github,besser82,libxcrypt,v$(LIBXCRYPT_VERSION))
+ LIBXCRYPT_LICENSE = LGPL-2.1+
+ LIBXCRYPT_LICENSE_FILES = LICENSING COPYING.LIB
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
