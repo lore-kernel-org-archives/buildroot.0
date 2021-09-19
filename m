@@ -8,86 +8,87 @@ X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 62AA3C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 19 Sep 2021 08:36:32 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B41EC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 19 Sep 2021 08:53:19 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1FB9F60F50
-	for <buildroot@archiver.kernel.org>; Sun, 19 Sep 2021 08:36:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1FB9F60F50
+	by mail.kernel.org (Postfix) with ESMTPS id AC649611C3
+	for <buildroot@archiver.kernel.org>; Sun, 19 Sep 2021 08:53:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org AC649611C3
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A8973401B1;
-	Sun, 19 Sep 2021 08:36:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3E2F6606AF;
+	Sun, 19 Sep 2021 08:53:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OKsfTcx4TFAb; Sun, 19 Sep 2021 08:36:30 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 1MyDlCwwcSdk; Sun, 19 Sep 2021 08:53:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E962140182;
-	Sun, 19 Sep 2021 08:36:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 921366067F;
+	Sun, 19 Sep 2021 08:53:16 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id EE30E1BF2AB
- for <buildroot@lists.busybox.net>; Sun, 19 Sep 2021 08:36:27 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0EF1C1BF842
+ for <buildroot@lists.busybox.net>; Sun, 19 Sep 2021 08:53:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DDCA282B61
- for <buildroot@lists.busybox.net>; Sun, 19 Sep 2021 08:36:27 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id F1DA682FAE
+ for <buildroot@lists.busybox.net>; Sun, 19 Sep 2021 08:53:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TYeT2exF6dUV for <buildroot@lists.busybox.net>;
- Sun, 19 Sep 2021 08:36:27 +0000 (UTC)
+ with ESMTP id J2xxcyXKlNYJ for <buildroot@lists.busybox.net>;
+ Sun, 19 Sep 2021 08:53:13 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
- [IPv6:2a00:1450:4864:20::332])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D90F082BBA
- for <buildroot@buildroot.org>; Sun, 19 Sep 2021 08:36:26 +0000 (UTC)
-Received: by mail-wm1-x332.google.com with SMTP id
- b21-20020a1c8015000000b003049690d882so13242211wmd.5
- for <buildroot@buildroot.org>; Sun, 19 Sep 2021 01:36:26 -0700 (PDT)
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
+ [IPv6:2a00:1450:4864:20::32d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7098482FA9
+ for <buildroot@buildroot.org>; Sun, 19 Sep 2021 08:53:13 +0000 (UTC)
+Received: by mail-wm1-x32d.google.com with SMTP id
+ u19-20020a7bc053000000b002f8d045b2caso9896382wmc.1
+ for <buildroot@buildroot.org>; Sun, 19 Sep 2021 01:53:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=9r6SGwyEWvErPw3p4C7iX0zQglDjoSSD8MPynV1omWA=;
- b=TBtZf/34FfoMYNwQ/zQR8qv4n7nshtHZT08LEJiW0jvKyuFWE0POTLfu05eQy+TZqO
- eTlcsQDV0F18G7PnoEDUhiB2c+7tTe5c63TqP5vNjP9y13wRHr+0xTMeKFfCw64Cr6Vn
- LgZQTLPR5vJ9jhJUmgCaZQCYTlJTlGwDpIVbes+SWZSCOFjDUsfdKquW34sv3kshhCpx
- oJeelZRucBx/PMpSlere6rwWbMJcHFUUCA7eFdRIQjPVjTLcEzI9mGbsPH9NJ0yUWIOj
- FloRaBMn5sVkku7XFUsZZBzXfSlbGPf0L//no3omdN5EPi4cu6vgqrj0HDJehKSEivk1
- Oz7g==
+ bh=kL8550kovQ+/iiHhGv0XBMU80uGpJl3t3YMwQltuykQ=;
+ b=XHwQXAVRMB5riTG47uCSDbp4t8iRtH3oJ/PR4+rNrXhHxhK7QL6TnWAUSlqNxslXrw
+ PVVKKcLOcj5TLr1zkoKB/kUJc1RHbxFotqJwbq5CbSmXJl9yMKUOnqcTp3wtYSXo3jhY
+ eA5eRg37/3XgptGlrpX1qXhY3ByMBuZ32uV68AGeqjGwuG5I3Bu1gUsrsqibCFXIOlvI
+ aSAcH3b7QZt7I/u/DBkExpKJDyZOv9Hejz68ps97ST3FvEOWZKsCzvQAwHru9oLN2/zq
+ kieZ2h69jQM1cX/+rKK+Vh5Obeqrmm5lkWD+pTYy+izhDPHEiFNL8wiuNab1xJGFDaFc
+ rUuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=9r6SGwyEWvErPw3p4C7iX0zQglDjoSSD8MPynV1omWA=;
- b=zxPQMtsunCq+bBv8QRNje5rKzk9V4fViSpiaOJyavNkwXucMTKHvbyuisV4y0yyMBw
- 5woDB/zb1xqkPJCX//aqySoql+M2l95UsVbalc4Tvgp+6iWw9u9Ckf7ZzF3rA+0luk5a
- 8+LQZ5oZA/BeWl75OHUU+8Y1CEFv0R7atbibbOI3RxNm1AmJoWZKKCuRnWfgsdLDch0n
- 3a9p9BHD1HL7zz26HZj83jbaOfIg5sAeXySun0YMosj+978CASH17fTJHrchNiAg3ymB
- vj4RasIQlAdA63nVX5P6xkep9hgeQC2SUS+g91N6wG0I8n6oGVaPwwXR3CDQDRgXtCK2
- ycYw==
-X-Gm-Message-State: AOAM533vzdn+qcCFkxp0FENr8GI+rBiU9zPNQleKsMBV+UFWQdG1+U75
- 0nkYF4RfonzMk5zRiGjirlv/rCaOS8U=
-X-Google-Smtp-Source: ABdhPJxnsLCKnEQBgxRoLAyzmPcjiZEZJKrNNJonsguUWovn1eFS+ikTmk615I2rBaKDH0J0U/RArQ==
-X-Received: by 2002:a1c:f002:: with SMTP id a2mr23571801wmb.79.1632040584646; 
- Sun, 19 Sep 2021 01:36:24 -0700 (PDT)
+ bh=kL8550kovQ+/iiHhGv0XBMU80uGpJl3t3YMwQltuykQ=;
+ b=72fFOcAI78peqOJQ8yKjdHBZGX18T4mVpkX5DQwqoTviMuE0AiAWwpdSfS5OrDlnk8
+ 3KhFTYAoxOMBN6l6YPpOk14oyD7/pep7ZkFgu3KDygd089fsGO5EsdScPP8yX8E+cAMp
+ AXY3xzy+ykVJCtcbiBVCF+2vWtSckGTmOSYqfYK2oT3U3TBMzlG4NckMQWJHjRxXcA2S
+ jQzahmmsNc2fet6sApjtGSwewEQr4Sm0t62lL2DtY47FdX+erQ++hfCNfd6NxmAm3WSf
+ ILuF1OaBGazROvprRarvetKcfy0sQAts14xGqx5/8cS/2hXSSwnEn6djNuIaWmF0S5d1
+ dzBQ==
+X-Gm-Message-State: AOAM530md4XiE8vLXE6umRBzkju/gC0Ar6L3mmIY4+8LVyvY5+5emOWP
+ kyO3/kPGcO6Pu0yKZdxcQvJkUpp3cn0=
+X-Google-Smtp-Source: ABdhPJxR1vsjdds3qmB827EgGAK3ZFOzWiP/+X6BhtNGuMB8FqwXaljKNPNgYjvCOZX6hTVoTduQig==
+X-Received: by 2002:a05:600c:1c9e:: with SMTP id
+ k30mr18376658wms.74.1632041591484; 
+ Sun, 19 Sep 2021 01:53:11 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-2139-166.w92-167.abo.wanadoo.fr.
  [92.167.218.166])
- by smtp.gmail.com with ESMTPSA id j21sm11988142wrd.48.2021.09.19.01.36.24
+ by smtp.gmail.com with ESMTPSA id l124sm16000489wml.8.2021.09.19.01.53.10
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 19 Sep 2021 01:36:24 -0700 (PDT)
+ Sun, 19 Sep 2021 01:53:11 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 19 Sep 2021 10:36:06 +0200
-Message-Id: <20210919083606.1607325-1-fontaine.fabrice@gmail.com>
+Date: Sun, 19 Sep 2021 10:52:44 +0200
+Message-Id: <20210919085244.1796002-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/wayland-protocols: add host-wayland dependency
+Subject: [Buildroot] [PATCH 1/1] package/python-rsa: add
+ PYTHON_RSA_CPE_ID_VENDOR
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,44 +101,36 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
+Cc: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-host-wayland is needed to avoid the following build failure raised since
-bump to version 1.23 in commit 7eedc9cc1e0c3cce1c18cb150157cb2346075b23:
+cpe:2.3:a:python-rsa_project:python-rsa is a valid CPE identifier for
+this package:
 
-Build-time dependency wayland-scanner found: NO (tried pkgconfig and cmake)
-
-../output-1/build/wayland-protocols-1.23/meson.build:11:0: ERROR: Dependency "wayland-scanner" not found, tried pkgconfig and cmake
-
-Fixes:
- - http://autobuild.buildroot.org/results/2744e50465a9cd9d3726d23298ad6c943ef49a21
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Apython-rsa_project%3Apython-rsa
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Changes v1 -> v2 (after review of Yann E. Morin):
- - Use host-wayland dependency instead of wayland
-
- package/wayland-protocols/wayland-protocols.mk | 1 +
+ package/python-rsa/python-rsa.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/wayland-protocols/wayland-protocols.mk b/package/wayland-protocols/wayland-protocols.mk
-index 41ab1e1c99..ea1639ea2d 100644
---- a/package/wayland-protocols/wayland-protocols.mk
-+++ b/package/wayland-protocols/wayland-protocols.mk
-@@ -11,6 +11,7 @@ WAYLAND_PROTOCOLS_LICENSE = MIT
- WAYLAND_PROTOCOLS_LICENSE_FILES = COPYING
- WAYLAND_PROTOCOLS_INSTALL_STAGING = YES
- WAYLAND_PROTOCOLS_INSTALL_TARGET = NO
-+WAYLAND_PROTOCOLS_DEPENDENCIES = host-wayland
+diff --git a/package/python-rsa/python-rsa.mk b/package/python-rsa/python-rsa.mk
+index eaa47e8037..a3d4bb8235 100644
+--- a/package/python-rsa/python-rsa.mk
++++ b/package/python-rsa/python-rsa.mk
+@@ -10,5 +10,6 @@ PYTHON_RSA_SITE = https://files.pythonhosted.org/packages/db/b5/475c45a58650b058
+ PYTHON_RSA_SETUP_TYPE = setuptools
+ PYTHON_RSA_LICENSE = Apache-2.0
+ PYTHON_RSA_LICENSE_FILES = LICENSE
++PYTHON_RSA_CPE_ID_VENDOR = python-rsa_project
  
- WAYLAND_PROTOCOLS_CONF_OPTS = -Dtests=false
- 
+ $(eval $(python-package))
 -- 
 2.33.0
 
