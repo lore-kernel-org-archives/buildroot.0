@@ -7,70 +7,70 @@ X-Spam-Status: No, score=-15.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C44FEC433F5
-	for <buildroot@archiver.kernel.org>; Sun, 19 Sep 2021 15:20:19 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 580AEC433F5
+	for <buildroot@archiver.kernel.org>; Sun, 19 Sep 2021 15:21:27 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id E873160FC2
-	for <buildroot@archiver.kernel.org>; Sun, 19 Sep 2021 15:20:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E873160FC2
+	by mail.kernel.org (Postfix) with ESMTPS id B786E61019
+	for <buildroot@archiver.kernel.org>; Sun, 19 Sep 2021 15:21:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B786E61019
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=benettiengineering.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 850BE4016C;
-	Sun, 19 Sep 2021 15:20:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7EEDD404A5;
+	Sun, 19 Sep 2021 15:21:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id itmEkpZzktZH; Sun, 19 Sep 2021 15:20:17 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 7yyqMsxU1q_W; Sun, 19 Sep 2021 15:21:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3E6DA40176;
-	Sun, 19 Sep 2021 15:20:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DE6764049E;
+	Sun, 19 Sep 2021 15:21:24 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 22F1B1BF5A2
- for <buildroot@lists.busybox.net>; Sun, 19 Sep 2021 15:20:15 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3B85C1BF5A2
+ for <buildroot@lists.busybox.net>; Sun, 19 Sep 2021 15:21:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 11A384035C
- for <buildroot@lists.busybox.net>; Sun, 19 Sep 2021 15:20:15 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2B47E4049E
+ for <buildroot@lists.busybox.net>; Sun, 19 Sep 2021 15:21:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=aruba.it
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fqzQI0yvi9TQ for <buildroot@lists.busybox.net>;
- Sun, 19 Sep 2021 15:20:13 +0000 (UTC)
-X-Greylist: delayed 00:07:02 by SQLgrey-1.8.0
-Received: from smtpcmd14161.aruba.it (smtpcmd14161.aruba.it [62.149.156.161])
- by smtp4.osuosl.org (Postfix) with ESMTP id E6269402FB
- for <buildroot@buildroot.org>; Sun, 19 Sep 2021 15:20:12 +0000 (UTC)
+ with ESMTP id QssOgXtYZSmk for <buildroot@lists.busybox.net>;
+ Sun, 19 Sep 2021 15:21:22 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtpcmd14162.aruba.it (smtpcmd14162.aruba.it [62.149.156.162])
+ by smtp4.osuosl.org (Postfix) with ESMTP id E1D4C4049D
+ for <buildroot@buildroot.org>; Sun, 19 Sep 2021 15:21:21 +0000 (UTC)
 Received: from [192.168.126.129] ([146.241.166.2])
  by Aruba Outgoing Smtp  with ESMTPSA
- id RyVAmntfPrIRlRyVAmF4pp; Sun, 19 Sep 2021 17:13:08 +0200
+ id Ryd6mo7dYrIRlRyd6mFBAg; Sun, 19 Sep 2021 17:21:20 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1632064389; bh=ORgTEUd778tzzBRPnGB36fBDvLlhlojMwQIpYJaY82w=;
+ t=1632064880; bh=/5VPJdJO6pQcFZr5Bao5GmGeu7JUoNAal//iHdJ/DL0=;
  h=Subject:To:From:Date:MIME-Version:Content-Type;
- b=B18D2PUxfNtWCdobv0kEwa0qQEfa3JyCQ9Uf9QPvruBG2bwRB5iZaHHireRsLECa5
- U8PHU4RhaRrmDrvR/C+Yw0bC6KUmKC3mdiX/Zg2eaFs5nkr/LpQZkowYdrpRMvh9dv
- Lpzz/k/QqRfClcXhxvrzAjQNaH5Bf9DCJ5JODojrbmr7wR4whzvl40LzDyWLPDq9wf
- PDeHl66Ko67oKr881HgL1UBU1qLxAkd8r3HSX2+Y2pIXWfps/7pZk8LUbW4xejT1el
- eASmiVpqUEQCrtEHb+1GwhnJiQefv/f20oguRbeS7nmraXjlgO2Io/rtH937CH4h7Z
- yryz7xCGwesjw==
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-References: <20210906213938.201161-1-giulio.benetti@benettiengineering.com>
- <20210919071555.GF1053080@scaer>
+ b=M0JFhBRAfal/wnWrrywSNcxQxAdsgI/7sHCRoFApASXp4Gv0F4AwpA+oHKnlcV5LT
+ t+wpY0Jx9SHZXMSJT2114Sol4vefBuBC3JvTyUCNrPwwXPMIShBxk5L2Qb7BOQD9yh
+ fEEEfuVfaGxo91Cz9CIZ3G4S6I4xeOu+t3igmlQmZjn6pV3kWejbfPsho9/fw3oaCW
+ O9CsomPVMJrKsxCmidJf/JKcCTkCf8eqTxH46OksIlwMYAWTz3Dd7zp9+nPoJP4Y3B
+ xuJWY+7xVKQWdJG88u64PyaHvh2VtaEzUtcSkyiS5WNYKm+Bk7eCIw36QMkHjBojVQ
+ 0ZD/BdHdC60Sg==
+To: Arnout Vandecappelle <arnout@mind.be>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>
+References: <20210914221053.265590-1-giulio.benetti@benettiengineering.com>
+ <20210918124739.GN1053080@scaer>
+ <fdda838e-e64b-d3bb-8745-260443d61122@mind.be>
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <1a389193-3d8d-ffad-b744-7cf5f7412c7d@benettiengineering.com>
-Date: Sun, 19 Sep 2021 17:13:08 +0200
+Message-ID: <b67c109d-cbca-82f5-6856-450be99f887e@benettiengineering.com>
+Date: Sun, 19 Sep 2021 17:21:20 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.13.0
 MIME-Version: 1.0
-In-Reply-To: <20210919071555.GF1053080@scaer>
+In-Reply-To: <fdda838e-e64b-d3bb-8745-260443d61122@mind.be>
 Content-Language: en-US
-X-CMAE-Envelope: MS4wfFnq+AfahaanyaRdNEAp6x9LowWWMwAnxyj4sDG+eRSp/sHPh1E8kX1YbBWuhCV9fCaqDEyJuWqgP6S6lcie+QQs43PFEkwRGRjZRUDCe3uABboWvAwl
- +POWuislOFnaZMp5Jm/X/hI3sNyWo8MeWWsOPZyarX48L+QgtF2xpl0940VH1mhaC10p5dN/jeHF52P1aXe0WfrxjjFMX8GxodDElh8Zc4Ts3WkDJgdnNOKU
- Kln+S53Dzqx5/XOFrssVDdzPqilWi6XkZIPgm/y+c8Q=
-Subject: Re: [Buildroot] [PATCH] package/libfuse3: bump to version 3.10.5
+X-CMAE-Envelope: MS4wfEY/Zu5T4gCgK8QjhyWkySeJR3g3l3BSgYxs02fKu4464TipnAu8jEsff5o+G7BchA9fclneB9cnT+HCmjEwns+c/Jpv5zFDdJNYKqPdU6fmz5ulLEwq
+ EdHGiSdHOyn64aQ5lYLz595ohZ8SWVESJwXJHxNf5N4f2xwBVdZo46e9rmzKC/WFrQugvs59aNR5LlyH77/Z3A0LuIquRqOZPc6NoZeZiq9BHPcOPHf4rCt5
+ iWIh7cSDFuvVzp6yhiq+xdb569Gprjvodqkjt4SpI6ngp5ferkuHIbFVxjmwKuQz8lAy1JXxQmqo8xuzCM7oC+QVNOhKdGp+MtTuLI8HvGs=
+Subject: Re: [Buildroot] [PATCH] package/mesa3d: fix build on m68k
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,149 +83,70 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
+ Romain Naour <romain.naour@gmail.com>, buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-Hi Yann,
+Hi Arnout,
 
-On 9/19/21 9:15 AM, Yann E. MORIN wrote:
-> Giulio, All,
+On 9/19/21 1:49 PM, Arnout Vandecappelle wrote:
 > 
-> On 2021-09-06 23:39 +0200, Giulio Benetti spake thusly:
->> Bump libfuse3 to version 3.10.5 and remove local patch that has been
->> upstreamed.
+> 
+> On 18/09/2021 14:47, Yann E. MORIN wrote:
+>> Giulio, All,
 >>
->> Release notes:
->> Various improvements to make unit tests more robust.
+>> On 2021-09-15 00:10 +0200, Giulio Benetti spake thusly:
+>>> To build mesa3d for m68k we need to pass -mlong-jump-table-offsets CFLAG
+>>> since 'switch' blocks are pretty wide and lead to build failure. This way
+>>> 'switch' blocks will have a 32-bit addressing by default instead of the
+>>> standard 16-bit.
+>>>
+>>> Fixes:
+>>> http://autobuild.buildroot.net/results/60c4653c2a93125edbdd0beb43cd47301643464a/
+>>>
+>>> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+>>> ---
+>>>    package/mesa3d/mesa3d.mk | 9 +++++++++
+>>>    1 file changed, 9 insertions(+)
+>>>
+>>> diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+>>> index 54b50f684f..809a7d8e88 100644
+>>> --- a/package/mesa3d/mesa3d.mk
+>>> +++ b/package/mesa3d/mesa3d.mk
+>>> @@ -259,4 +259,13 @@ else
+>>>    MESA3D_CONF_OPTS += -Dzstd=disabled
+>>>    endif
+>>>    
+>>> +MESA3D_CFLAGS = $(TARGET_CFLAGS)
+>>> +
+>>> +# m68k needs 32-bit offsets in switch tables to build
+>>> +ifeq ($(BR2_m68k),y)
+>>> +MESA3D_CFLAGS += -mlong-jump-table-offsets
 >>
->> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+>> That option has only been added to gcc-7 [0] [1], which makes gcc >= 7 a
+>> pre-requisite for m68k, while mesa3d currently has no such requirement.
 > 
-> Applied to master, thanks.
-> 
-> It should also fix the same build failure that occurs with glibc 2.34 on
-> the old libfuse (pre-3).
+>    It's been merged, so OK for now, but I think this is exactly the reason why we
+> decided some time ago to just pass -O0 to work around compiler bugs for niche
+> architectures...
 
-I don't understand here. There is a patch already applied for glibc 2.34 
-on the old libfuse:
-https://patchwork.ozlabs.org/project/buildroot/patch/20210912194057.2556882-1-fontaine.fabrice@gmail.com/
+My bad here. I was sure that -O0 didn't work instead it works while 
+another package I was facing had no work-around. So this is only due to
+my mistake :-/
 
-I don't understand how this version bump of libfuse3 can help. Have I 
-missed something?
-
-Kind regards
 -- 
 Giulio Benetti
 Benetti Engineering sas
 
-> Regards,
-> Yann E. MORIN.
-> 
->> ---
->>   ...on.build-fix-wrong-.symver-detection.patch | 61 -------------------
->>   package/libfuse3/libfuse3.hash                |  2 +-
->>   package/libfuse3/libfuse3.mk                  |  2 +-
->>   3 files changed, 2 insertions(+), 63 deletions(-)
->>   delete mode 100644 package/libfuse3/0001-meson.build-fix-wrong-.symver-detection.patch
->>
->> diff --git a/package/libfuse3/0001-meson.build-fix-wrong-.symver-detection.patch b/package/libfuse3/0001-meson.build-fix-wrong-.symver-detection.patch
->> deleted file mode 100644
->> index da20c26f19..0000000000
->> --- a/package/libfuse3/0001-meson.build-fix-wrong-.symver-detection.patch
->> +++ /dev/null
->> @@ -1,61 +0,0 @@
->> -From 3aba09a5c56e017746c5c1652dbc845f4db7374a Mon Sep 17 00:00:00 2001
->> -From: Giulio Benetti <giulio.benetti@benettiengineering.com>
->> -Date: Tue, 3 Aug 2021 23:39:46 +0200
->> -Subject: [PATCH] meson.build: fix wrong .symver detection
->> -
->> -As pointed here [1] __has_attribute() is broken for many attributes and
->> -if it doesn't support the specific attribute it returns true, so we
->> -can't really rely on that for this check. This lead to Buildroot
->> -libfuse3 build failure [2] where that shows up with:
->> -```
->> -error: symver is only supported on ELF platforms
->> -```
->> -Indeed Microblaze doesn't support ELF since it doesn't include elfos.h,
->> -but __has_attribute(symver) returns true.
->> -
->> -So let's substitute the #ifdef __has_attribute() with a stronger test on
->> -a function foo() with __attribute__((symver ("test@TEST"))).
->> -
->> -[1]: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101766
->> -[2]: http://autobuild.buildroot.net/results/d6c/d6cfaf2aafaeda3c12d127f6a2d2e175b25e654f/build-end.log
->> -
->> -Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
->> ----
->> - meson.build | 16 +++++++---------
->> - 1 file changed, 7 insertions(+), 9 deletions(-)
->> -
->> -diff --git a/meson.build b/meson.build
->> -index b0250ee..a7281f3 100644
->> ---- a/meson.build
->> -+++ b/meson.build
->> -@@ -96,20 +96,18 @@ endif
->> - # to have __has_attribute, then they are too old to support symver)
->> - # other compilers might not have __has_attribute, but in those cases
->> - # it is safe for this check to fail and for us to fallback to the old _asm_
->> --# method for symver
->> -+# method for symver. Anyway the attributes not supported by __has_attribute()
->> -+# unfortunately return true giving a false positive. So let's try to build
->> -+# using __attribute__ ((symver )) and see the result.
->> - code = '''
->> --#if defined __has_attribute
->> --# if !__has_attribute (symver)
->> --# error symver attribute not supported
->> --# endif
->> --#else
->> --#error __has_attribute not defined, assume we do not have symver
->> --#endif
->> -+__attribute__ ((symver ("test@TEST")))
->> -+void foo(void) {
->> -+}
->> -
->> - int main(void) {
->> -     return 0;
->> - }'''
->> --if cc.compiles(code, args: [ '-O0', '-c'])
->> -+if cc.compiles(code, args: [ '-O0', '-c', '-Werror'])
->> -      message('Compiler supports symver attribute')
->> -      add_project_arguments('-DHAVE_SYMVER_ATTRIBUTE', language: 'c')
->> - else
->> ---
->> -2.25.1
->> -
->> diff --git a/package/libfuse3/libfuse3.hash b/package/libfuse3/libfuse3.hash
->> index 0414264bf8..cce2b11171 100644
->> --- a/package/libfuse3/libfuse3.hash
->> +++ b/package/libfuse3/libfuse3.hash
->> @@ -1,3 +1,3 @@
->>   # Locally calculated sha256 checksums
->> -sha256  bfcb2520fd83db29e9fefd57d3abd5285f38ad484739aeee8e03fbec9b2d984a  libfuse3-3.10.4.tar.gz
->> +sha256  e73f75e58da59a0e333d337c105093c496c0fd7356ef3a5a540f560697c9c4e6  libfuse3-3.10.5.tar.gz
->>   sha256  b8832d9caaa075bbbd2aef24efa09f8b7ab66a832812d88c602da0c7b4397fad  LICENSE
->> diff --git a/package/libfuse3/libfuse3.mk b/package/libfuse3/libfuse3.mk
->> index fc747c5bfd..767382271e 100644
->> --- a/package/libfuse3/libfuse3.mk
->> +++ b/package/libfuse3/libfuse3.mk
->> @@ -4,7 +4,7 @@
->>   #
->>   ################################################################################
->>   
->> -LIBFUSE3_VERSION = 3.10.4
->> +LIBFUSE3_VERSION = 3.10.5
->>   LIBFUSE3_SITE = $(call github,libfuse,libfuse,fuse-$(LIBFUSE3_VERSION))
->>   LIBFUSE3_LICENSE = LGPL-2.1
->>   LIBFUSE3_LICENSE_FILES = LICENSE
->> -- 
->> 2.25.1
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot@lists.buildroot.org
->> https://lists.buildroot.org/mailman/listinfo/buildroot
+>    Regards,
+>    Arnout
+> _______________________________________________
+> buildroot mailing list
+> buildroot@lists.buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 > 
 
 _______________________________________________
