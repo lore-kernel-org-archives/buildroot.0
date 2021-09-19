@@ -2,90 +2,72 @@ Return-Path: <SRS0=qoEm=OJ=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.5 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
-	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.0 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E7ECC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 19 Sep 2021 20:26:09 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3FFB1C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 19 Sep 2021 21:10:35 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id AFF1661074
-	for <buildroot@archiver.kernel.org>; Sun, 19 Sep 2021 20:26:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org AFF1661074
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id 7336860F38
+	for <buildroot@archiver.kernel.org>; Sun, 19 Sep 2021 21:10:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7336860F38
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=benettiengineering.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 40BE28407F;
-	Sun, 19 Sep 2021 20:26:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 172BD6075E;
+	Sun, 19 Sep 2021 21:10:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bT83JaI2fpW6; Sun, 19 Sep 2021 20:26:07 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id x0y_gJLmU2XE; Sun, 19 Sep 2021 21:10:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9771583E9B;
-	Sun, 19 Sep 2021 20:26:06 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C47B01BF4D5
- for <buildroot@lists.busybox.net>; Sun, 19 Sep 2021 20:26:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8A223606BE;
+	Sun, 19 Sep 2021 21:10:32 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id AEB431BF21A
+ for <buildroot@lists.busybox.net>; Sun, 19 Sep 2021 21:10:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B41F940420
- for <buildroot@lists.busybox.net>; Sun, 19 Sep 2021 20:26:04 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9E26F818C9
+ for <buildroot@lists.busybox.net>; Sun, 19 Sep 2021 21:10:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FePli1hYfuty for <buildroot@lists.busybox.net>;
- Sun, 19 Sep 2021 20:26:04 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
- [IPv6:2a00:1450:4864:20::432])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D3CDF4039A
- for <buildroot@buildroot.org>; Sun, 19 Sep 2021 20:26:03 +0000 (UTC)
-Received: by mail-wr1-x432.google.com with SMTP id w29so24983146wra.8
- for <buildroot@buildroot.org>; Sun, 19 Sep 2021 13:26:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=WZtmXnGR32hcvufQIZi19id/5PXkTaDjzo6yOQ1dg9c=;
- b=A5OjhTHTndajrzXYnlsrizi+3tf3KRRskDK4dC9JwXiXKbkKLEG2MEof4mmQY1wwA/
- ChbE6y/wQbvUQllCYen81wRq53bN+nxGBlKRBKnW1dZ8OofyvuKwWgS5eHi3fOkIYy6T
- vmvh3ICv7KZpHjZQgfsOwZOf+K7kCk7Pqlec133NT4SabIHdTXWZAfJzIGQlBfRv/eRj
- eR3GthI957kdCurMOvJ2cYewP14ygTrdM8TXb2pfL6iuYMkpG3VM1OVJ6MwNyBrw7u2N
- g/15uVboq4ElPqoKa78+NVTlGHOe55swH8gstR+rTcnTzxMqdRJnohorFwiRPyC51OVY
- RjZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=WZtmXnGR32hcvufQIZi19id/5PXkTaDjzo6yOQ1dg9c=;
- b=ZLxTeI1W6mkmFSleuavUywaT79aeoLsHfQvjFhtyY1XVAI1hTeEfoln2nL1kbEjdJs
- H1DnVQEHKKE6p33OSr7Bxz+QScjbPySWckcaOvl1HY6KHCtXoTIzuzE3kSn49a1k+eDL
- PK72O7UrIiW/TxhK4OodtdasyUAWcH1ji8vwQ1rdZi/iMhNVlwGLP+ldpqKbYw84PIYX
- nW2LfgOtC/BN+ohQkHreoOdHTtQnFBQ6tVmLHdkFwcjzCaW6d9w0mE+tWd/rzAh4CWtW
- 9ovGhSQpNoypSGGL3n1+khqXBEzNiA7cEZAddtAJq88dplpVxo5sK226vfbUVGAQUSuL
- 4eaw==
-X-Gm-Message-State: AOAM530JtuikVGl1/SxykoyhUyGLlBeCLLRkxmryAcifRBwiPHRsu6dH
- HMIIbSGWY/xIbr4IVKcEyIGZr5JP0es=
-X-Google-Smtp-Source: ABdhPJyXQg5pE/eJbezHpxDUZr7Pes6YLE2OsdRo5Qr9T6c4IegNFfc0iPBRUJkXxPeoRuM9zAJ4Bw==
-X-Received: by 2002:adf:f0c7:: with SMTP id x7mr24588747wro.432.1632083161740; 
- Sun, 19 Sep 2021 13:26:01 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-2139-166.w92-167.abo.wanadoo.fr.
- [92.167.218.166])
- by smtp.gmail.com with ESMTPSA id g13sm12343634wmh.20.2021.09.19.13.26.01
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 19 Sep 2021 13:26:01 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Sun, 19 Sep 2021 22:25:23 +0200
-Message-Id: <20210919202523.69758-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.33.0
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=aruba.it
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id E3HuNcnSTpAI for <buildroot@lists.busybox.net>;
+ Sun, 19 Sep 2021 21:10:28 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtpcmd0986.aruba.it (smtpcmd0986.aruba.it [62.149.156.86])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 41002818C4
+ for <buildroot@buildroot.org>; Sun, 19 Sep 2021 21:10:27 +0000 (UTC)
+Received: from [192.168.126.129] ([146.241.167.42])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id S44tmB1c0FA2gS44um4grh; Sun, 19 Sep 2021 23:10:24 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+ t=1632085824; bh=sOyr5eFzU8dflSBlgFifd9C6RXsPd/jBL4VXVTq+5Qg=;
+ h=To:From:Subject:Date:MIME-Version:Content-Type;
+ b=E/atvWAH71u2yPHkxGgPtzGzH8E6IkK4u4hLLkTVpFILkiQ8yULXMWDlTaINoPpSB
+ 4ZJwfJ7uGwpOq4ekx71dWoIdTMlw4yd/eJ/viTyOEJiw2f9wwMe9Een6b9h2GB1Ro2
+ wG9Q851oiBy+k/Pao3310nQam9qeJki3NK6ZAXtSEOREUwO66NrKLwBf+ezT2TKmvz
+ C160ox0W9Rmakd2emjV/vngYka4zbKonVMoPLxI22NhPkYRsTBJljDDM5tgkpN6klb
+ q9Ns/9gZk1OyMS2AmlgKS0Ec7oOeE+EkcsKVVF2a0hzwzvIRACjNMqv3nCGj9bRQ0H
+ +AAGCh1YQS2tg==
+To: Buildroot Mailing List <buildroot@buildroot.org>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Message-ID: <f98c560b-9a4f-26df-3bcb-3bdb4509786d@benettiengineering.com>
+Date: Sun, 19 Sep 2021 23:10:23 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/libsrtp: bump to version 2.4.1
+Content-Language: en-US
+X-CMAE-Envelope: MS4wfP5PB+mAuPYUe7+MAIh42QlY2nJwpkCefIGvLB/oyjiI4kWYfTfZV1ONqAit2O/Dpe91DCAAGjc3WP/vARPt7J3kHAunEa6yI5hlqFeBkwQA8TKL1e60
+ dbgoMdzTK1IxDS1MeMC5s305bTCuEvyj0FDxRFKrii/401/+t5wgEwDCWQetFqCrEuYgGbHdpLM8eRKLASA68EHLmWnby+0vTRAKJiqfHzz1GRLYOHiWklcO
+ +Vvq7etgzEex5rkMeLlIFMD78cgpoTFl8QkcgD0jhCgJi/WuvGIjfzAKTkNBlN/xxgJX0zN/n9wseIDJxmceDs6tZ8ViHR2FwOmHj0pkFA8=
+Subject: [Buildroot] Harfbuzz bump major version question
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,77 +80,30 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: Gregory Dymarek <gregd72002@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-- libnss is an optional dependency since version 2.3.0 and
-  https://github.com/cisco/libsrtp/commit/a946b3f561757a08b879cb337bfa932086df3081
-- Drop comment about pkg-config as libsrtp uses PKG_CHECK_MODULES to
-  find libnss and openssl
-- Update indentation in hash file (two spaces)
+Hi All,
 
-https://github.com/cisco/libsrtp/blob/v2.4.1/CHANGES
+I'm going to bump harfbuzz to version 3.0.0 but being a major version it 
+looses 15 apis[1] and introduce some new ones. So I'm not that sure if 
+this can be a normal bump or I need to introduce the new package 
+harfbuzz3. Package pango that requires harfbuzz builds fine, but how 
+should I proceed? Should I build every package that depends on it and 
+check if it builds fine? Or should I add package harfbuzz3 and then 
+every package that depends on harfbuzz should move to harfbuzz3 package 
+per package? I'm new to this case so help is appreciated.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libsrtp/libsrtp.hash |  4 ++--
- package/libsrtp/libsrtp.mk   | 13 ++++++-------
- 2 files changed, 8 insertions(+), 9 deletions(-)
+Thanks in advance!
 
-diff --git a/package/libsrtp/libsrtp.hash b/package/libsrtp/libsrtp.hash
-index d4b7b54d03..3de0130f4c 100644
---- a/package/libsrtp/libsrtp.hash
-+++ b/package/libsrtp/libsrtp.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 44fd7497bce78767e96b54a11bca520adb2ad32effd515f04bce602b60a1a50b  libsrtp-2.2.0.tar.gz
--sha256 8e19d42a1eec9561f3f347253ddf2e385c55f392f025bb0fd41b88dbf38db5ae  LICENSE
-+sha256  3cb580928fcd502426809c68406d04aaa5ef1af7ebb0a3a41a52a13576f2fc07  libsrtp-2.4.1.tar.gz
-+sha256  8e19d42a1eec9561f3f347253ddf2e385c55f392f025bb0fd41b88dbf38db5ae  LICENSE
-diff --git a/package/libsrtp/libsrtp.mk b/package/libsrtp/libsrtp.mk
-index 5cbd97957a..885f05a33c 100644
---- a/package/libsrtp/libsrtp.mk
-+++ b/package/libsrtp/libsrtp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBSRTP_VERSION = 2.2.0
-+LIBSRTP_VERSION = 2.4.1
- LIBSRTP_SITE = $(call github,cisco,libsrtp,v$(LIBSRTP_VERSION))
- LIBSRTP_INSTALL_STAGING = YES
- LIBSRTP_LICENSE = BSD-3-Clause
-@@ -19,18 +19,17 @@ else
- LIBSRTP_MAKE_OPTS = libsrtp2.a shared_library
- endif
- 
--# While libsrtp is not using pkg-config itself, it checks if
--# pkg-config is available to determine whether it should install
--# libsrtp.pc. Since installing it seems useful, let's depend on
--# host-pkgconf to make sure pkg-config is installed.
- LIBSRTP_DEPENDENCIES = host-pkgconf
- 
- # openssl handling needs libdl support
- ifeq ($(BR2_PACKAGE_OPENSSL)x$(BR2_STATIC_LIBS),yx)
- LIBSRTP_DEPENDENCIES += openssl
--LIBSRTP_CONF_OPTS += --enable-openssl
-+LIBSRTP_CONF_OPTS += --disable-nss --enable-openssl
-+else ifeq ($(BR2_PACKAGE_LIBNSS),y)
-+LIBSRTP_DEPENDENCIES += libnss
-+LIBSRTP_CONF_OPTS += --enable-nss --disable-openssl
- else
--LIBSRTP_CONF_OPTS += --disable-openssl
-+LIBSRTP_CONF_OPTS += --disable-nss --disable-openssl
- endif
- 
- $(eval $(autotools-package))
+[1]: https://github.com/harfbuzz/harfbuzz/blob/main/NEWS#L29-L49
 -- 
-2.33.0
-
+Giulio Benetti
+Benetti Engineering sas
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
