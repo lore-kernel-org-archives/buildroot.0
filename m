@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C1CCEC433F5
-	for <buildroot@archiver.kernel.org>; Sun, 19 Sep 2021 13:10:19 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 56210C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 19 Sep 2021 13:10:34 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 6F91661268
-	for <buildroot@archiver.kernel.org>; Sun, 19 Sep 2021 13:10:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6F91661268
+	by mail.kernel.org (Postfix) with ESMTPS id C2216611F0
+	for <buildroot@archiver.kernel.org>; Sun, 19 Sep 2021 13:10:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C2216611F0
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3BD56400E4;
-	Sun, 19 Sep 2021 13:10:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 91315826C1;
+	Sun, 19 Sep 2021 13:10:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id v8nJ8FJv1ffw; Sun, 19 Sep 2021 13:10:18 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id xyqEN6HfHLxH; Sun, 19 Sep 2021 13:10:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5CA06401D1;
-	Sun, 19 Sep 2021 13:10:17 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0E9801BF5AC
+	by smtp1.osuosl.org (Postfix) with ESMTP id E0FF181DA0;
+	Sun, 19 Sep 2021 13:10:29 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id DF8591BF5AC
  for <buildroot@lists.busybox.net>; Sun, 19 Sep 2021 13:08:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F277940261
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5EC0240210
  for <buildroot@lists.busybox.net>; Sun, 19 Sep 2021 13:08:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JlDiMmqY_aM8 for <buildroot@lists.busybox.net>;
- Sun, 19 Sep 2021 13:08:46 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id YFLSqSVOku_o for <buildroot@lists.busybox.net>;
+ Sun, 19 Sep 2021 13:08:47 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id E72A540134
- for <buildroot@buildroot.org>; Sun, 19 Sep 2021 13:08:46 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 05B0E4023D
+ for <buildroot@buildroot.org>; Sun, 19 Sep 2021 13:08:47 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 5F8A78B7F4; Sun, 19 Sep 2021 13:06:50 +0000 (UTC)
+ id 73CD28B7F3; Sun, 19 Sep 2021 13:06:50 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sun, 19 Sep 2021 14:37:58 +0200
+Date: Sun, 19 Sep 2021 15:04:18 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0185914515f9739d0fde05ec60916da373292e28
-X-Git-Newrev: a6ccb7c28de3eb088c7e91dc2f43628e3f6768ac
+X-Git-Oldrev: dc95693ddf35d99e6f3e8a95bd3a96be06461417
+X-Git-Newrev: abd008b29f50077966a72fd978912e6a02b1c0c8
 X-Patchwork-Hint: ignore
-Message-Id: <20210919130650.5F8A78B7F4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-attrs: bump to version
- 21.2.0
+Message-Id: <20210919130650.73CD28B7F3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-bsdiff4: bump to version
+ 1.2.1
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,44 +71,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a6ccb7c28de3eb088c7e91dc2f43628e3f6768ac
+commit: https://git.buildroot.net/buildroot/commit/?id=abd008b29f50077966a72fd978912e6a02b1c0c8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Plus, use two spaces for indentation in the hash file.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/python-attrs/python-attrs.hash | 4 ++--
- package/python-attrs/python-attrs.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-bsdiff4/python-bsdiff4.hash | 6 +++---
+ package/python-bsdiff4/python-bsdiff4.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-attrs/python-attrs.hash b/package/python-attrs/python-attrs.hash
-index 3841595754..5d4c46304e 100644
---- a/package/python-attrs/python-attrs.hash
-+++ b/package/python-attrs/python-attrs.hash
+diff --git a/package/python-bsdiff4/python-bsdiff4.hash b/package/python-bsdiff4/python-bsdiff4.hash
+index e64e817f9c..4fddd137e6 100644
+--- a/package/python-bsdiff4/python-bsdiff4.hash
++++ b/package/python-bsdiff4/python-bsdiff4.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/attrs/json
--md5  5b2db50fcc31be34d32798183c9bd062  attrs-19.3.0.tar.gz
--sha256  f7b7ce16570fe9965acd6d30101a28f62fb4a7f9e926b3bbc9b61f8b04247e72  attrs-19.3.0.tar.gz
-+md5  06af884070d9180694becdb106e5cd65  attrs-21.2.0.tar.gz
-+sha256  ef6aaac3ca6cd92904cdd0d83f629a15f18053ec84e6432106f7a4d04ae4f5fb  attrs-21.2.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/bsdiff4/json
+-md5	a0d047e91429ce67a3b0231facf41169  bsdiff4-1.2.0.tar.gz
+-sha256	3c2f7f5504f41a54d238b54b00b4544d0eb4276179edabf02b9d00415a03cc9d  bsdiff4-1.2.0.tar.gz
++md5  58889a1cd439c82c78aa2e4776b1ff38  bsdiff4-1.2.1.tar.gz
++sha256  87cffc7522effdda03fd1564b212ad2279c0af50d16c3e65776f80acb6705d4b  bsdiff4-1.2.1.tar.gz
  # Locally computed sha256
- sha256  bf659a28b49240602f56bbdf490cbe2ec509b15b98f99d7b19a52c740e327863  LICENSE
-diff --git a/package/python-attrs/python-attrs.mk b/package/python-attrs/python-attrs.mk
-index 72b280c333..b99a98501c 100644
---- a/package/python-attrs/python-attrs.mk
-+++ b/package/python-attrs/python-attrs.mk
+-sha256	c6c921c90383f1c43beb53c49a652d28309a410a7c394c729fd8870271451cf0  LICENSE
++sha256  c6c921c90383f1c43beb53c49a652d28309a410a7c394c729fd8870271451cf0  LICENSE
+diff --git a/package/python-bsdiff4/python-bsdiff4.mk b/package/python-bsdiff4/python-bsdiff4.mk
+index 3b789ac9b4..e1c3f7765b 100644
+--- a/package/python-bsdiff4/python-bsdiff4.mk
++++ b/package/python-bsdiff4/python-bsdiff4.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_ATTRS_VERSION = 19.3.0
-+PYTHON_ATTRS_VERSION = 21.2.0
- PYTHON_ATTRS_SOURCE = attrs-$(PYTHON_ATTRS_VERSION).tar.gz
--PYTHON_ATTRS_SITE = https://files.pythonhosted.org/packages/98/c3/2c227e66b5e896e15ccdae2e00bbc69aa46e9a8ce8869cc5fa96310bf612
-+PYTHON_ATTRS_SITE = https://files.pythonhosted.org/packages/ed/d6/3ebca4ca65157c12bd08a63e20ac0bdc21ac7f3694040711f9fd073c0ffb
- PYTHON_ATTRS_SETUP_TYPE = setuptools
- PYTHON_ATTRS_LICENSE = MIT
- PYTHON_ATTRS_LICENSE_FILES = LICENSE
+-PYTHON_BSDIFF4_VERSION = 1.2.0
++PYTHON_BSDIFF4_VERSION = 1.2.1
+ PYTHON_BSDIFF4_SOURCE = bsdiff4-$(PYTHON_BSDIFF4_VERSION).tar.gz
+-PYTHON_BSDIFF4_SITE = https://files.pythonhosted.org/packages/9b/ca/06cd939630ca78125c36489f92b52918980cbcfee2dcc0969411eb5ae8a8
++PYTHON_BSDIFF4_SITE = https://files.pythonhosted.org/packages/d8/97/101315b0d8c8d6340ee310484a1af6a2ccf65d7bb4762c3a669cf9457c71
+ PYTHON_BSDIFF4_LICENSE = BSD-2-Clause, BSD-Protection (core.c)
+ PYTHON_BSDIFF4_LICENSE_FILES = LICENSE
+ PYTHON_BSDIFF4_CPE_ID_VENDOR = pypi
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
