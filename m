@@ -2,88 +2,99 @@ Return-Path: <SRS0=qoEm=OJ=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E87C4C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 19 Sep 2021 11:45:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 31D44C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 19 Sep 2021 11:49:16 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id ABC9E61205
-	for <buildroot@archiver.kernel.org>; Sun, 19 Sep 2021 11:45:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org ABC9E61205
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
+	by mail.kernel.org (Postfix) with ESMTPS id 76EBC6104F
+	for <buildroot@archiver.kernel.org>; Sun, 19 Sep 2021 11:49:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 76EBC6104F
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 64E214023D;
-	Sun, 19 Sep 2021 11:45:57 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id ED68E4023D;
+	Sun, 19 Sep 2021 11:49:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vqXQYUemNao2; Sun, 19 Sep 2021 11:45:56 +0000 (UTC)
+	with ESMTP id DTCL09mr8WOi; Sun, 19 Sep 2021 11:49:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3DE6F402AA;
-	Sun, 19 Sep 2021 11:45:55 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 289581BF2BF
- for <buildroot@lists.busybox.net>; Sun, 19 Sep 2021 11:45:54 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0A627402BA;
+	Sun, 19 Sep 2021 11:49:12 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 57E001BF2BF
+ for <buildroot@lists.busybox.net>; Sun, 19 Sep 2021 11:49:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1658C402AA
- for <buildroot@lists.busybox.net>; Sun, 19 Sep 2021 11:45:54 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 545FA80E5C
+ for <buildroot@lists.busybox.net>; Sun, 19 Sep 2021 11:49:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NDSVdo4RIcYO for <buildroot@lists.busybox.net>;
- Sun, 19 Sep 2021 11:45:53 +0000 (UTC)
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id c6RSHeBrnM5q for <buildroot@lists.busybox.net>;
+ Sun, 19 Sep 2021 11:49:06 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
- [IPv6:2a00:1450:4864:20::435])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 23B554023D
- for <buildroot@buildroot.org>; Sun, 19 Sep 2021 11:45:53 +0000 (UTC)
-Received: by mail-wr1-x435.google.com with SMTP id t8so16459818wri.1
- for <buildroot@buildroot.org>; Sun, 19 Sep 2021 04:45:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=sender:from:to:cc:subject:date:message-id:mime-version
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com
+ [IPv6:2a00:1450:4864:20::530])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 68D7880E40
+ for <buildroot@buildroot.org>; Sun, 19 Sep 2021 11:49:06 +0000 (UTC)
+Received: by mail-ed1-x530.google.com with SMTP id v5so48733819edc.2
+ for <buildroot@buildroot.org>; Sun, 19 Sep 2021 04:49:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=Mog5HPmKs7iRR7jiO7MryQQ3aLsBrsLPdv7M0O/PVeo=;
- b=qwyhoAe5++AundRS84o/88n0y5Xt4JsW3r2WXWdX5aD4ARvcAXUdnqXAIPymiids2+
- +l5zmffjEhsHvdQ/obPkItZ1aIEMscuIxtWYhKVeCnQVlevu1PQebO7oGrAUOYGn2D24
- XFzeWqhjcZN4b9ZLXJ+GJeJjcO8iDKaRChPlW2UASVrwT5aV8UU3lMilRAkbdQotUFxj
- 2tA2ymVefJs4OveXI8lPfnvpF5VJTmQ2k1xfgzwKA7NYWNlkc1T3NUArc3qpfBAHIfLv
- Fk0CqdEnYnViZt4+bZulesKV15rzHfU66Jamg+Vq3+nr8V6ZlaAOtdvTiUNn+hjwjdhK
- lBAQ==
+ bh=iubvlBgRwY4wcU2Vz1ISG7XXT2qxaZJIt9hAT9EA47Y=;
+ b=L4YOHh4s+/VNkrS08+sS1SZ1GewLicBrb6nn25XsZ9KojmEHVFWUnLJ5Di5SmasrUb
+ /0Szz+qgQma61k7lsF/fKG94E44TSTU/ctAeF3AKKPQlVE85IbW9xq4cf2gRzcdX8hNF
+ Dsx8e8oRHkcrbrSwrdYADUw81Dl7+zHgnO7wtLgHwV+p7ZITzbChBK16IyKjRgp9obba
+ 46D5kvmHGZkHdizOZggu+2TfwqfTtqeuyYlQJiR/3S33btZrlPSLa5eqqLyytCs8kYWi
+ oG64d0p9dZjH+1MbnRACREuGZM0LDtaujMYZp9xsUR6uHlEC5VNNby2xwZsiMLW1dQgi
+ LS9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
- :mime-version:content-transfer-encoding;
- bh=Mog5HPmKs7iRR7jiO7MryQQ3aLsBrsLPdv7M0O/PVeo=;
- b=sHl02+71M+Weve1yMm6ifNmFMcpDfnHKtOsaYptgi8tJ5tGblDvW/Yohs3bftrA5VG
- Im2CUNem3KkCVP+tuzYGfnd2F26cGdWqVwNiP9McaKdmWh0mcjnWgCbRikD6Ao9vN9LQ
- 4Om1vkGVVEzc+4+LJGthz7aHDIm5FgfpvoIelmwztZgzeWaYdkfuoPvrLP1Ht67r5V6a
- +W9BIckRGCG35jj0PiHgg0Mz9aGifnlmbvEpwGRUvKzmCGg2HAiWEugqP8JuzfsGjHWV
- LpdjMlS5Fg4L/31esIGInHKSnSQax8gOfWoLVNdSPn2jOzvRnV9UUtY/9nqoEOj4RawQ
- NclQ==
-X-Gm-Message-State: AOAM531Q8v9AsS9ymD9qk93v3cbqpQ9ZN/6BC2i4eJicT4mRYA0uQSum
- 8yNc/frs7+8UscV9PMOHU/ZZU0ed1CA=
-X-Google-Smtp-Source: ABdhPJwTU07/YKYIMrgoFQLVoGnrMlbQhPq7dzXngBDIXNisQXpAjFeWyLbI0x+lYr/epRpB4uht+g==
-X-Received: by 2002:adf:9ccc:: with SMTP id h12mr21845615wre.385.1632051951197; 
- Sun, 19 Sep 2021 04:45:51 -0700 (PDT)
-Received: from scaer.home ([2a01:cb19:8b51:cb00:35ad:6fdd:a5c5:c816])
- by smtp.gmail.com with ESMTPSA id r27sm12607844wrr.70.2021.09.19.04.45.50
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 19 Sep 2021 04:45:50 -0700 (PDT)
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Sun, 19 Sep 2021 13:45:47 +0200
-Message-Id: <20210919114547.103955-1-yann.morin.1998@free.fr>
-X-Mailer: git-send-email 2.25.1
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=iubvlBgRwY4wcU2Vz1ISG7XXT2qxaZJIt9hAT9EA47Y=;
+ b=4Hq9dQFJIsS/46sQvRbtF8qIQ5vJKZVfZUueCJ1LzaAL94ySbQg0/sWJ3NBFyrGSXz
+ zN54M4QOHNT/txIuv6h3ByPMyWOf15EEUq6VYJFsTiMdH7MEXpvdMqvM1Eb6ECY7SVPB
+ DBLWdpdLpCpj09c6aoW27bqZ07EuYqIm8aXCUVJ2TT75eYFqCs4ADYpOqG3HxLrRW8tJ
+ ffmAZvBcc+OfQ9/1rEJYXlYlYWyUgMAU90S2BRrELdJUsrycBA0IxiqhE5k3qvLb4xuE
+ IWI7wZANJfUmxHdiTT5/fqQsCz9uhHbe3OPKbV5SqhcM56oK+HJy3eqhrQdwXyIDgAsr
+ EVLw==
+X-Gm-Message-State: AOAM532UlWIdlhXrgWlgVqw4XRtegrZj6I0m3PVK5KbOK2l21+d728Jv
+ hyVlMl8sK+7Y6fApU0PDJIBq8A==
+X-Google-Smtp-Source: ABdhPJwrUdGa7cYHexQUQ713b1yY5fOgSrusY04uMGBawV2EcXkmRJJ3vkHQY+qu8Vlz1zzya4JluQ==
+X-Received: by 2002:a50:cc48:: with SMTP id n8mr23199708edi.304.1632052144326; 
+ Sun, 19 Sep 2021 04:49:04 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id br21sm4881371ejb.112.2021.09.19.04.49.03
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sun, 19 Sep 2021 04:49:03 -0700 (PDT)
+Message-ID: <fdda838e-e64b-d3bb-8745-260443d61122@mind.be>
+Date: Sun, 19 Sep 2021 13:49:02 +0200
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] toolchain/custom: hide away incompatible gcc
- versions
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.1.0
+Content-Language: en-GB
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>
+References: <20210914221053.265590-1-giulio.benetti@benettiengineering.com>
+ <20210918124739.GN1053080@scaer>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20210918124739.GN1053080@scaer>
+Subject: Re: [Buildroot] [PATCH] package/mesa3d: fix build on m68k
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,122 +107,55 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
- Romain Naour <romain.naour@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
+ Romain Naour <romain.naour@gmail.com>, buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-Some CPUs have a requirement on a minimal gcc version. Until now, ot was
-possible to use a custom external toolchain that has a gcc older than
-the requirement, which would lead to build failures (early!) during the
-build.
 
-Propagate the gcc version requirement down to the external toolchain gcc
-version choice. By limiting the selection to acceptable gcc versions, we
-inform the user that its toolchain is too old, and if they decide to lie
-and select one of available version, we still check that when we extract
-and install their toolchain.
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Cc: Romain Naour <romain.naour@gmail.com>
-Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
----
- .../Config.in.options                          | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+On 18/09/2021 14:47, Yann E. MORIN wrote:
+> Giulio, All,
+> 
+> On 2021-09-15 00:10 +0200, Giulio Benetti spake thusly:
+>> To build mesa3d for m68k we need to pass -mlong-jump-table-offsets CFLAG
+>> since 'switch' blocks are pretty wide and lead to build failure. This way
+>> 'switch' blocks will have a 32-bit addressing by default instead of the
+>> standard 16-bit.
+>>
+>> Fixes:
+>> http://autobuild.buildroot.net/results/60c4653c2a93125edbdd0beb43cd47301643464a/
+>>
+>> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+>> ---
+>>   package/mesa3d/mesa3d.mk | 9 +++++++++
+>>   1 file changed, 9 insertions(+)
+>>
+>> diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+>> index 54b50f684f..809a7d8e88 100644
+>> --- a/package/mesa3d/mesa3d.mk
+>> +++ b/package/mesa3d/mesa3d.mk
+>> @@ -259,4 +259,13 @@ else
+>>   MESA3D_CONF_OPTS += -Dzstd=disabled
+>>   endif
+>>   
+>> +MESA3D_CFLAGS = $(TARGET_CFLAGS)
+>> +
+>> +# m68k needs 32-bit offsets in switch tables to build
+>> +ifeq ($(BR2_m68k),y)
+>> +MESA3D_CFLAGS += -mlong-jump-table-offsets
+> 
+> That option has only been added to gcc-7 [0] [1], which makes gcc >= 7 a
+> pre-requisite for m68k, while mesa3d currently has no such requirement.
 
-diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-index ae78c0ef9e..99d5b7df42 100644
---- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-+++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-@@ -31,60 +31,78 @@ choice
- 	  Set to the gcc version that is used by your external
- 	  toolchain.
- 
-+	  If the gcc version in your toolchain is not available below,
-+	  then your toolchain is too old to be used in the current
-+	  configuration (e.g. your CPU requires a more recent gcc
-+	  version).
-+
- config BR2_TOOLCHAIN_EXTERNAL_GCC_11
- 	bool "11.x"
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_11
- 
- config BR2_TOOLCHAIN_EXTERNAL_GCC_10
- 	bool "10.x"
-+	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_11
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_10
- 
- config BR2_TOOLCHAIN_EXTERNAL_GCC_9
- 	bool "9.x"
-+	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_10
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_9
- 
- config BR2_TOOLCHAIN_EXTERNAL_GCC_8
- 	bool "8.x"
-+	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_9
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_8
- 
- config BR2_TOOLCHAIN_EXTERNAL_GCC_7
- 	bool "7.x"
-+	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_8
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_7
- 
- config BR2_TOOLCHAIN_EXTERNAL_GCC_6
- 	bool "6.x"
-+	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_7
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_6
- 
- config BR2_TOOLCHAIN_EXTERNAL_GCC_5
- 	bool "5.x"
-+	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_6
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_5
- 
- config BR2_TOOLCHAIN_EXTERNAL_GCC_4_9
- 	bool "4.9.x"
-+	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_5
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 
- config BR2_TOOLCHAIN_EXTERNAL_GCC_4_8
- 	bool "4.8.x"
-+	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_9
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
- 
- config BR2_TOOLCHAIN_EXTERNAL_GCC_4_7
- 	bool "4.7.x"
-+	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
- 
- config BR2_TOOLCHAIN_EXTERNAL_GCC_4_6
- 	bool "4.6.x"
-+	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
- 
- config BR2_TOOLCHAIN_EXTERNAL_GCC_4_5
- 	bool "4.5.x"
-+	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
- 
- config BR2_TOOLCHAIN_EXTERNAL_GCC_4_4
- 	bool "4.4.x"
-+	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_4
- 
- config BR2_TOOLCHAIN_EXTERNAL_GCC_4_3
- 	bool "4.3.x"
-+	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_3
- 
- config BR2_TOOLCHAIN_EXTERNAL_GCC_OLD
--- 
-2.25.1
+  It's been merged, so OK for now, but I think this is exactly the reason why we 
+decided some time ago to just pass -O0 to work around compiler bugs for niche 
+architectures...
 
+  Regards,
+  Arnout
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
