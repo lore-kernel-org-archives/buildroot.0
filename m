@@ -2,75 +2,78 @@ Return-Path: <SRS0=qoEm=OJ=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 580AEC433F5
-	for <buildroot@archiver.kernel.org>; Sun, 19 Sep 2021 15:21:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 569E3C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 19 Sep 2021 16:26:01 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B786E61019
-	for <buildroot@archiver.kernel.org>; Sun, 19 Sep 2021 15:21:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B786E61019
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=benettiengineering.com
+	by mail.kernel.org (Postfix) with ESMTPS id AE32B60D07
+	for <buildroot@archiver.kernel.org>; Sun, 19 Sep 2021 16:26:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org AE32B60D07
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7EEDD404A5;
-	Sun, 19 Sep 2021 15:21:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 552CA40494;
+	Sun, 19 Sep 2021 16:26:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7yyqMsxU1q_W; Sun, 19 Sep 2021 15:21:25 +0000 (UTC)
+	with ESMTP id vSTFy0ZcAMsv; Sun, 19 Sep 2021 16:25:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DE6764049E;
-	Sun, 19 Sep 2021 15:21:24 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 3B85C1BF5A2
- for <buildroot@lists.busybox.net>; Sun, 19 Sep 2021 15:21:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A33A04046D;
+	Sun, 19 Sep 2021 16:25:58 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 2B3E01BF4E4
+ for <buildroot@lists.busybox.net>; Sun, 19 Sep 2021 16:25:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2B47E4049E
- for <buildroot@lists.busybox.net>; Sun, 19 Sep 2021 15:21:23 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1B39580F75
+ for <buildroot@lists.busybox.net>; Sun, 19 Sep 2021 16:25:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QssOgXtYZSmk for <buildroot@lists.busybox.net>;
- Sun, 19 Sep 2021 15:21:22 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtpcmd14162.aruba.it (smtpcmd14162.aruba.it [62.149.156.162])
- by smtp4.osuosl.org (Postfix) with ESMTP id E1D4C4049D
- for <buildroot@buildroot.org>; Sun, 19 Sep 2021 15:21:21 +0000 (UTC)
-Received: from [192.168.126.129] ([146.241.166.2])
- by Aruba Outgoing Smtp  with ESMTPSA
- id Ryd6mo7dYrIRlRyd6mFBAg; Sun, 19 Sep 2021 17:21:20 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1632064880; bh=/5VPJdJO6pQcFZr5Bao5GmGeu7JUoNAal//iHdJ/DL0=;
- h=Subject:To:From:Date:MIME-Version:Content-Type;
- b=M0JFhBRAfal/wnWrrywSNcxQxAdsgI/7sHCRoFApASXp4Gv0F4AwpA+oHKnlcV5LT
- t+wpY0Jx9SHZXMSJT2114Sol4vefBuBC3JvTyUCNrPwwXPMIShBxk5L2Qb7BOQD9yh
- fEEEfuVfaGxo91Cz9CIZ3G4S6I4xeOu+t3igmlQmZjn6pV3kWejbfPsho9/fw3oaCW
- O9CsomPVMJrKsxCmidJf/JKcCTkCf8eqTxH46OksIlwMYAWTz3Dd7zp9+nPoJP4Y3B
- xuJWY+7xVKQWdJG88u64PyaHvh2VtaEzUtcSkyiS5WNYKm+Bk7eCIw36QMkHjBojVQ
- 0ZD/BdHdC60Sg==
-To: Arnout Vandecappelle <arnout@mind.be>,
- "Yann E. MORIN" <yann.morin.1998@free.fr>
-References: <20210914221053.265590-1-giulio.benetti@benettiengineering.com>
- <20210918124739.GN1053080@scaer>
- <fdda838e-e64b-d3bb-8745-260443d61122@mind.be>
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <b67c109d-cbca-82f5-6856-450be99f887e@benettiengineering.com>
-Date: Sun, 19 Sep 2021 17:21:20 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=free.fr
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wv57OTwbGEbg for <buildroot@lists.busybox.net>;
+ Sun, 19 Sep 2021 16:25:55 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B526880F69
+ for <buildroot@buildroot.org>; Sun, 19 Sep 2021 16:25:55 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:35ad:6fdd:a5c5:c816])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPSA id 9F9132003DC;
+ Sun, 19 Sep 2021 18:25:46 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+ s=smtp-20201208; t=1632068752;
+ bh=yfnluv1MWYHETVpYerDvDK8I8LZO21JedAE17pgQR+o=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=dcQS9uz+oAbWdSqAVoGoV37v/r6IsqZ7UGhoDZkKZJ5YkanCGVPOaBNvksehAy/M4
+ CtvOdGwEre3A9pkcQ8edEqtzmxnHJcn0sOx0Oa5F195YX/KsSgBGKcRHHzzY7vQAoO
+ vsXnwGLtgolkjJcGODWvG9JtWz4jkS14Vljh/3zwIWKP/7YvngI3sSG5ghW6IFddv/
+ F/ZW/NLKgvnIBdtvUdmlkWffgoKzVm1Yh+lyqhZfAFDZYdoFB2iREegv4PcVCIrhab
+ FMdvdoatmhaZTEoy1WPOLScp/v/0RuX1t9PYp0HP+/EhHcg/cWaEpJdhnZr9F9ciV3
+ y7kNfaurDpBNg==
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sun, 19 Sep 2021 18:25:46 +0200
+Date: Sun, 19 Sep 2021 18:25:46 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Message-ID: <20210919162546.GU1053080@scaer>
+References: <20210906213938.201161-1-giulio.benetti@benettiengineering.com>
+ <20210919071555.GF1053080@scaer>
+ <1a389193-3d8d-ffad-b744-7cf5f7412c7d@benettiengineering.com>
 MIME-Version: 1.0
-In-Reply-To: <fdda838e-e64b-d3bb-8745-260443d61122@mind.be>
-Content-Language: en-US
-X-CMAE-Envelope: MS4wfEY/Zu5T4gCgK8QjhyWkySeJR3g3l3BSgYxs02fKu4464TipnAu8jEsff5o+G7BchA9fclneB9cnT+HCmjEwns+c/Jpv5zFDdJNYKqPdU6fmz5ulLEwq
- EdHGiSdHOyn64aQ5lYLz595ohZ8SWVESJwXJHxNf5N4f2xwBVdZo46e9rmzKC/WFrQugvs59aNR5LlyH77/Z3A0LuIquRqOZPc6NoZeZiq9BHPcOPHf4rCt5
- iWIh7cSDFuvVzp6yhiq+xdb569Gprjvodqkjt4SpI6ngp5ferkuHIbFVxjmwKuQz8lAy1JXxQmqo8xuzCM7oC+QVNOhKdGp+MtTuLI8HvGs=
-Subject: Re: [Buildroot] [PATCH] package/mesa3d: fix build on m68k
+Content-Disposition: inline
+In-Reply-To: <1a389193-3d8d-ffad-b744-7cf5f7412c7d@benettiengineering.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+Subject: Re: [Buildroot] [PATCH] package/libfuse3: bump to version 3.10.5
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,72 +86,64 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
- Romain Naour <romain.naour@gmail.com>, buildroot@buildroot.org
+Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-Hi Arnout,
+Giulio, All,
 
-On 9/19/21 1:49 PM, Arnout Vandecappelle wrote:
+On 2021-09-19 17:13 +0200, Giulio Benetti spake thusly:
+> On 9/19/21 9:15 AM, Yann E. MORIN wrote:
+> >Giulio, All,
+> >
+> >On 2021-09-06 23:39 +0200, Giulio Benetti spake thusly:
+> >>Bump libfuse3 to version 3.10.5 and remove local patch that has been
+> >>upstreamed.
+> >>
+> >>Release notes:
+> >>Various improvements to make unit tests more robust.
+> >>
+> >>Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> >
+> >Applied to master, thanks.
+> >
+> >It should also fix the same build failure that occurs with glibc 2.34 on
+> >the old libfuse (pre-3).
 > 
+> I don't understand here. There is a patch already applied for glibc 2.34 on
+> the old libfuse:
+> https://patchwork.ozlabs.org/project/buildroot/patch/20210912194057.2556882-1-fontaine.fabrice@gmail.com/
 > 
-> On 18/09/2021 14:47, Yann E. MORIN wrote:
->> Giulio, All,
->>
->> On 2021-09-15 00:10 +0200, Giulio Benetti spake thusly:
->>> To build mesa3d for m68k we need to pass -mlong-jump-table-offsets CFLAG
->>> since 'switch' blocks are pretty wide and lead to build failure. This way
->>> 'switch' blocks will have a 32-bit addressing by default instead of the
->>> standard 16-bit.
->>>
->>> Fixes:
->>> http://autobuild.buildroot.net/results/60c4653c2a93125edbdd0beb43cd47301643464a/
->>>
->>> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
->>> ---
->>>    package/mesa3d/mesa3d.mk | 9 +++++++++
->>>    1 file changed, 9 insertions(+)
->>>
->>> diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
->>> index 54b50f684f..809a7d8e88 100644
->>> --- a/package/mesa3d/mesa3d.mk
->>> +++ b/package/mesa3d/mesa3d.mk
->>> @@ -259,4 +259,13 @@ else
->>>    MESA3D_CONF_OPTS += -Dzstd=disabled
->>>    endif
->>>    
->>> +MESA3D_CFLAGS = $(TARGET_CFLAGS)
->>> +
->>> +# m68k needs 32-bit offsets in switch tables to build
->>> +ifeq ($(BR2_m68k),y)
->>> +MESA3D_CFLAGS += -mlong-jump-table-offsets
->>
->> That option has only been added to gcc-7 [0] [1], which makes gcc >= 7 a
->> pre-requisite for m68k, while mesa3d currently has no such requirement.
-> 
->    It's been merged, so OK for now, but I think this is exactly the reason why we
-> decided some time ago to just pass -O0 to work around compiler bugs for niche
-> architectures...
+> I don't understand how this version bump of libfuse3 can help. Have I missed
+> something?
 
-My bad here. I was sure that -O0 didn't work instead it works while 
-another package I was facing had no work-around. So this is only due to
-my mistake :-/
+libfuse and libfuse3 are really just the same upstream project.
+
+The patch that Fabrice submitted on libfuse is a backport of an upstream
+commit that was applied between libfuse 3.10.4 and 3.10.5.
+
+So:
+
+  - libfuse is fixed thanks to the backport of the upstream commit;
+
+  - libfuse3 is fixed thanks to the version bump that includes the
+    upstream commit.
+
+But we so far had no such build failiure on libfuse3, probably because
+the autobuilders have not had time yet to hit it.
+
+Regards,
+Yann E. MORIN.
 
 -- 
-Giulio Benetti
-Benetti Engineering sas
-
->    Regards,
->    Arnout
-> _______________________________________________
-> buildroot mailing list
-> buildroot@lists.buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-> 
-
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
