@@ -2,98 +2,56 @@ Return-Path: <SRS0=qoEm=OJ=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.7 required=3.0 tests=BAYES_00,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 49EF5C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 19 Sep 2021 07:13:28 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A8A3C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 19 Sep 2021 07:14:42 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D91A360F50
-	for <buildroot@archiver.kernel.org>; Sun, 19 Sep 2021 07:13:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D91A360F50
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=lists.buildroot.org
+	by mail.kernel.org (Postfix) with ESMTPS id AA70C611C8
+	for <buildroot@archiver.kernel.org>; Sun, 19 Sep 2021 07:14:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org AA70C611C8
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8FE4B606CF;
-	Sun, 19 Sep 2021 07:13:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 79DB2403EB;
+	Sun, 19 Sep 2021 07:14:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HLdXNvQIFeWd; Sun, 19 Sep 2021 07:13:26 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D05B960684;
-	Sun, 19 Sep 2021 07:13:25 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 3FBB81BF314
- for <buildroot@lists.busybox.net>; Sun, 19 Sep 2021 07:13:24 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2DF80403EB
- for <buildroot@lists.busybox.net>; Sun, 19 Sep 2021 07:13:24 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=paral.in
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Ju_u1zqfskrn for <buildroot@lists.busybox.net>;
- Sun, 19 Sep 2021 07:13:23 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-oo1-xc2a.google.com (mail-oo1-xc2a.google.com
- [IPv6:2607:f8b0:4864:20::c2a])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 55C314036B
- for <buildroot@buildroot.org>; Sun, 19 Sep 2021 07:13:23 +0000 (UTC)
-Received: by mail-oo1-xc2a.google.com with SMTP id
- v20-20020a4a2554000000b0028f8cc17378so4741397ooe.0
- for <buildroot@buildroot.org>; Sun, 19 Sep 2021 00:13:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=paral.in; s=google;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=ZtDQ1y5h9FJFHrDN72K8Dic8pk5TrDSH1YdUz+3ogLY=;
- b=hE9IQ9XL/488H1O/cuonRTcjMdSIP/0SoAq51EV/T/WcSGnQvgYoL2o+rf5IMdgN36
- q9Vtfqz6XqfkMPAz4aytHB7bmDt7GE6Ld44kzU83L6ispmXdgztJCex8DmBKOCx4ZxKo
- d1/daTfZOj1mFRsIuKtrO2fND7SnLFmQxqziiRaiNuvI26Xx8vpIdDzxu8TVfwDHtIOP
- uFkovhB94XLjAp4T4xmBxZxPYZ7KLA9l5dtRSPsGemfcZugLygIIe/c6i9wWNqvlf4We
- cvcDaFe5c83SZgIg27k5hl2u5RK34CRKnP5XvI9+sNLrrLhFBwuavXXRoU5ABhQqI9FJ
- rZUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=ZtDQ1y5h9FJFHrDN72K8Dic8pk5TrDSH1YdUz+3ogLY=;
- b=IT8vVWpJUWN0kNcRHbTSm3C61lmE3KSjMx1cQ6BsVyeLaqOaubXf5KeqlOHF9lYEhv
- NfWtRnMcgKJs+UISt+PZD6NhSVmnCGen+s7kBiUCqaV15CXoC5h+VThOiY9/NplLuD3z
- xDRefNp2tLezAkH2UhfAvQl+dHkW4RbyB71i+FuT/YvztwphNtz+ZmzvvW4ZG8x2tgi6
- EH0mUzpY6r2vL3sjR7I47NUyV7986ejhz9djftSbg7KUpZBG9KwuyzICGqy5e9Blny+x
- Liw3swt0avxykczLycuPHXQR4FV/aMg5/KVM4EDBkgQjHuGt5Pfyx2LoJHgpMwndno7+
- O5mA==
-X-Gm-Message-State: AOAM533uRGNMfvsRp1oJvBPInkKrrS9Is5a2Y86ka1X6HL4qJLP0rTbC
- JyKv7ujw7hYPqRxrejM0lv1wRs1WqovZCA==
-X-Google-Smtp-Source: ABdhPJxOMNuU8f6Oi9c5wtF7GUOXEJc5vATf8GNsxBYNLbo6yc8p2bszLT1XBe3ViklZH2Ggnnc/1A==
-X-Received: by 2002:a4a:d185:: with SMTP id j5mr169431oor.16.1632035602258;
- Sun, 19 Sep 2021 00:13:22 -0700 (PDT)
-Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com.
- [209.85.210.51])
- by smtp.gmail.com with ESMTPSA id e28sm1647384otj.51.2021.09.19.00.13.21
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 19 Sep 2021 00:13:22 -0700 (PDT)
-Received: by mail-ot1-f51.google.com with SMTP id
- j11-20020a9d190b000000b00546fac94456so2658972ota.6
- for <buildroot@buildroot.org>; Sun, 19 Sep 2021 00:13:21 -0700 (PDT)
-X-Received: by 2002:a9d:60d5:: with SMTP id b21mr9123285otk.306.1632035601728; 
- Sun, 19 Sep 2021 00:13:21 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210919071016.3339939-1-christian@paral.in>
- <20210919071016.3339939-4-christian@paral.in>
-In-Reply-To: <20210919071016.3339939-4-christian@paral.in>
-Date: Sun, 19 Sep 2021 00:13:10 -0700
-X-Gmail-Original-Message-ID: <CA+h8R2oMNTH9U61KBfCkqK=VEZTfwt57NAX_USNqu5t96PKsYQ@mail.gmail.com>
-Message-ID: <CA+h8R2oMNTH9U61KBfCkqK=VEZTfwt57NAX_USNqu5t96PKsYQ@mail.gmail.com>
-To: Christian Stewart <christian@paral.in>
-Subject: Re: [Buildroot] [PATCH-NEXT v2 4/5]
- support/download/go-post-process: implement Go vendoring support
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id I2SueufM15ia; Sun, 19 Sep 2021 07:14:40 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id BDE15403BB;
+	Sun, 19 Sep 2021 07:14:39 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 595E71BF314
+ for <buildroot@lists.busybox.net>; Sun, 19 Sep 2021 07:14:38 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4901781D73
+ for <buildroot@lists.busybox.net>; Sun, 19 Sep 2021 07:14:38 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ClRMiZI1Uy6f for <buildroot@lists.busybox.net>;
+ Sun, 19 Sep 2021 07:14:37 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6DF5981D0C
+ for <buildroot@buildroot.org>; Sun, 19 Sep 2021 07:14:37 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id 71F528B55A; Sun, 19 Sep 2021 07:12:41 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sun, 19 Sep 2021 09:12:38 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 49b659b32db138219959c16cf0ff95ca1bd3730f
+X-Git-Newrev: 8862c71837a2827e0f20409107ffe52072d4074a
+X-Patchwork-Hint: ignore
+Message-Id: <20210919071241.71F528B55A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libfuse3: bump to version 3.10.5
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -106,48 +64,118 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-From: Christian Stewart via buildroot <buildroot@lists.buildroot.org>
-Reply-To: Christian Stewart <christian@paral.in>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Anisse Astier <anisse@astier.eu>, "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Buildroot Mailing List <buildroot@buildroot.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-All,
+commit: https://git.buildroot.net/buildroot/commit/?id=8862c71837a2827e0f20409107ffe52072d4074a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Re-submitted this series to fix determinism issues mentioned here:
+Bump libfuse3 to version 3.10.5 and remove local patch that has been
+upstreamed.
 
- - https://github.com/skiffos/SkiffOS/issues/164
- - https://yhbt.net/lore/all/20210801070830.GP3189549@scaer/t/#r2e8e5fab88a021fa81f6d22e44bd6d06ea740c67
+Release notes:
+Various improvements to make unit tests more robust.
 
-On Sun, Sep 19, 2021 at 12:10 AM Christian Stewart <christian@paral.in> wrote:
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ ...1-meson.build-fix-wrong-.symver-detection.patch | 61 ----------------------
+ package/libfuse3/libfuse3.hash                     |  2 +-
+ package/libfuse3/libfuse3.mk                       |  2 +-
+ 3 files changed, 2 insertions(+), 63 deletions(-)
 
-> +# Helpers for the post-process step to re-pack vendored archives.
-> +
-> +. "${0%/*}/helpers"
->
->  unpack() {
-> -        dest="$1"
-> -        tarball="$2"
-> +    dest="$1"
-> +    tarball="$2"
->
-> -        mkdir ${dest}
-> -        tar -C ${dest} --strip-components=1 -xf ${tarball}
-> +    mkdir ${dest}
-> +    tar -C ${dest} --strip-components=1 -xf ${tarball}
->  }
-
-... probably these changes should be in the commit just before this
-one, where the file is introduced.
-
-my mistake.
-
-Thanks,
-Christian Stewart
+diff --git a/package/libfuse3/0001-meson.build-fix-wrong-.symver-detection.patch b/package/libfuse3/0001-meson.build-fix-wrong-.symver-detection.patch
+deleted file mode 100644
+index da20c26f19..0000000000
+--- a/package/libfuse3/0001-meson.build-fix-wrong-.symver-detection.patch
++++ /dev/null
+@@ -1,61 +0,0 @@
+-From 3aba09a5c56e017746c5c1652dbc845f4db7374a Mon Sep 17 00:00:00 2001
+-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+-Date: Tue, 3 Aug 2021 23:39:46 +0200
+-Subject: [PATCH] meson.build: fix wrong .symver detection
+-
+-As pointed here [1] __has_attribute() is broken for many attributes and
+-if it doesn't support the specific attribute it returns true, so we
+-can't really rely on that for this check. This lead to Buildroot
+-libfuse3 build failure [2] where that shows up with:
+-```
+-error: symver is only supported on ELF platforms
+-```
+-Indeed Microblaze doesn't support ELF since it doesn't include elfos.h,
+-but __has_attribute(symver) returns true.
+-
+-So let's substitute the #ifdef __has_attribute() with a stronger test on
+-a function foo() with __attribute__((symver ("test@TEST"))).
+-
+-[1]: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101766
+-[2]: http://autobuild.buildroot.net/results/d6c/d6cfaf2aafaeda3c12d127f6a2d2e175b25e654f/build-end.log
+-
+-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+----
+- meson.build | 16 +++++++---------
+- 1 file changed, 7 insertions(+), 9 deletions(-)
+-
+-diff --git a/meson.build b/meson.build
+-index b0250ee..a7281f3 100644
+---- a/meson.build
+-+++ b/meson.build
+-@@ -96,20 +96,18 @@ endif
+- # to have __has_attribute, then they are too old to support symver)
+- # other compilers might not have __has_attribute, but in those cases
+- # it is safe for this check to fail and for us to fallback to the old _asm_
+--# method for symver
+-+# method for symver. Anyway the attributes not supported by __has_attribute()
+-+# unfortunately return true giving a false positive. So let's try to build
+-+# using __attribute__ ((symver )) and see the result.
+- code = '''
+--#if defined __has_attribute
+--# if !__has_attribute (symver)
+--# error symver attribute not supported
+--# endif
+--#else
+--#error __has_attribute not defined, assume we do not have symver
+--#endif
+-+__attribute__ ((symver ("test@TEST")))
+-+void foo(void) {
+-+}
+- 
+- int main(void) {
+-     return 0;
+- }'''
+--if cc.compiles(code, args: [ '-O0', '-c'])
+-+if cc.compiles(code, args: [ '-O0', '-c', '-Werror'])
+-      message('Compiler supports symver attribute')
+-      add_project_arguments('-DHAVE_SYMVER_ATTRIBUTE', language: 'c')
+- else
+--- 
+-2.25.1
+-
+diff --git a/package/libfuse3/libfuse3.hash b/package/libfuse3/libfuse3.hash
+index 0414264bf8..cce2b11171 100644
+--- a/package/libfuse3/libfuse3.hash
++++ b/package/libfuse3/libfuse3.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated sha256 checksums
+-sha256  bfcb2520fd83db29e9fefd57d3abd5285f38ad484739aeee8e03fbec9b2d984a  libfuse3-3.10.4.tar.gz
++sha256  e73f75e58da59a0e333d337c105093c496c0fd7356ef3a5a540f560697c9c4e6  libfuse3-3.10.5.tar.gz
+ sha256  b8832d9caaa075bbbd2aef24efa09f8b7ab66a832812d88c602da0c7b4397fad  LICENSE
+diff --git a/package/libfuse3/libfuse3.mk b/package/libfuse3/libfuse3.mk
+index fc747c5bfd..767382271e 100644
+--- a/package/libfuse3/libfuse3.mk
++++ b/package/libfuse3/libfuse3.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBFUSE3_VERSION = 3.10.4
++LIBFUSE3_VERSION = 3.10.5
+ LIBFUSE3_SITE = $(call github,libfuse,libfuse,fuse-$(LIBFUSE3_VERSION))
+ LIBFUSE3_LICENSE = LGPL-2.1
+ LIBFUSE3_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
