@@ -8,82 +8,82 @@ X-Spam-Status: No, score=-18.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 11468C433FE
-	for <buildroot@archiver.kernel.org>; Mon, 20 Sep 2021 18:44:28 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 60CEDC433F5
+	for <buildroot@archiver.kernel.org>; Mon, 20 Sep 2021 18:44:40 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B062A60EDF
-	for <buildroot@archiver.kernel.org>; Mon, 20 Sep 2021 18:44:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B062A60EDF
+	by mail.kernel.org (Postfix) with ESMTPS id 0A95861252
+	for <buildroot@archiver.kernel.org>; Mon, 20 Sep 2021 18:44:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0A95861252
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmx.net
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5B39040398;
-	Mon, 20 Sep 2021 18:44:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C9EB26062C;
+	Mon, 20 Sep 2021 18:44:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Bq4Zt9_btB_J; Mon, 20 Sep 2021 18:44:26 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id bGbFJxpvXEzt; Mon, 20 Sep 2021 18:44:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BEC8E403BA;
-	Mon, 20 Sep 2021 18:44:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8C8C4605EA;
+	Mon, 20 Sep 2021 18:44:37 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 53D6A1BF23C
- for <buildroot@lists.busybox.net>; Mon, 20 Sep 2021 18:44:24 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 938C31BF23C
+ for <buildroot@lists.busybox.net>; Mon, 20 Sep 2021 18:44:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 50CDA403C0
+ by smtp4.osuosl.org (Postfix) with ESMTP id 81BE240398
  for <buildroot@lists.busybox.net>; Mon, 20 Sep 2021 18:44:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (1024-bit key) header.d=gmx.net
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id G58HNTNxXeBL for <buildroot@lists.busybox.net>;
- Mon, 20 Sep 2021 18:44:22 +0000 (UTC)
+ with ESMTP id N6HZ_2b-O3V2 for <buildroot@lists.busybox.net>;
+ Mon, 20 Sep 2021 18:44:23 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5815C40398
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B06D3403BA
  for <buildroot@buildroot.org>; Mon, 20 Sep 2021 18:44:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
  s=badeba3b8450; t=1632163456;
- bh=Eas9QXvN6/7sWkJTeheXE+7B0xQrg+NF0sn3ad44kRk=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
- b=c7IxGbd37O3Tkh+iEQ153dNxtXD02c2Tx1Q2ecqiiU60saoYAxbnMIYQ4XHGIMwRV
- K/NSXoBxkYPIS9GjBHcsaIJmcBxla6VB97pXh/3UPxd9xCU8/tMow85irHN3Ea1jbw
- NlrHJhBb3rQQNM8xIAOyfww1/qqjTom9noP13yJk=
+ bh=unFu6ZiJxO4cDlGCRAli2LzEM9N3+0CRhNAdUpjzihw=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+ b=G5i4BalCCtPC2OP2txF5xUo6rDjbjuMF/SqAOayHKblZHUrbm6ubiF6UC5ryoMc/G
+ BHrWSnTs7517D6w5Q63er+PE4HJFQsv/XeoluYtAZf4te30Cv5sMCFwB2f+EQMUPwN
+ fzgvE6bIMfvb2SQIwcNMWs80FGYPoNGiy7yY2Gkk=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
 Received: from localhost.fritz.box ([62.216.209.129]) by mail.gmx.net
  (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 1MLR1V-1mBXyl20YN-00IWDk; Mon, 20 Sep 2021 20:44:16 +0200
+ 1MWAOW-1mMIQs1AxG-00XeOL; Mon, 20 Sep 2021 20:44:16 +0200
 From: Peter Seiderer <ps.report@gmx.net>
 To: buildroot@buildroot.org
-Date: Mon, 20 Sep 2021 20:44:15 +0200
-Message-Id: <20210920184415.13599-2-ps.report@gmx.net>
+Date: Mon, 20 Sep 2021 20:44:14 +0200
+Message-Id: <20210920184415.13599-1-ps.report@gmx.net>
 X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20210920184415.13599-1-ps.report@gmx.net>
-References: <20210920184415.13599-1-ps.report@gmx.net>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:+uWBk3ru3ZjaARpAl5HFEMx8JFCWNhoDuqErXqzLVV2dSmIsK9w
- 94j/vuia999S5tEJ1P0AhrpYjDWYQS06CmF6XJSdNdiX+5YuRB6SGa1oOeZ1nl3BmPfD7T3
- xGZELw74apH+DEu5i2FSqtajz7HdCPffxPxxyOwBkUnfsP/xUGJaxpwAPeFx0QGP0g43oir
- X9l/Tbd4JGrXqvUeGhYUQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:PveGe6x5AYQ=:jbB3s3OB3gxKdrZRMGeOO3
- XpeUfv6p6AcnQezyuWFqTF6XHootjswndcNVyG/Su8pxCPfSDByd5hNspfDGyItdZWk8VcJ1H
- FvSrOGjaEwnhtvW+Q3SNNuZY+50Sp4wvcJKb+HV7NIOH3LIOSlSYMBCGOFbMmQlndGnm17Txd
- wpy7bVUtjrYSvQFOFGtTXthX+LI1ER8vVzasqIFhL9JLq55KQRKAiSWvAI6XeGxuxBlzuCRXJ
- iN3WS3KfrvnwSLCqyZO5xk0fQ1ZC1IGG+Hjm5YxFoi1DK+Q7YiMpKuyJDvbybEy45plJ/mPSS
- JjKgq1UHErtXKGuZrVrKqNLjM/vsGZGQvtr0y4n4P3x5WmDOhvHt6+HruCHQ5oB7wMvY7OGOI
- dyZssL45QLADVfAq4V9xou+V6WsFI9/90odEtgkPrBW5pS1umgsfSpJQXIqHfO7hGZfLthaPB
- 5nxEi9mRcx2LDnQAW+zZbSHoopZ6y/Jlk7tNlNI1e1uz1N7LPYCPGss6cVTuJiwypOrOpwtnG
- yy0XOay/VHw/OSk+TJHOfk3afcNR/DgkOetgfkm1f+Q1EdnPwdcgHjctC/iMOELenqE1I6YBp
- w57VTHwSSQfnCAVjYwZprqzznIF0aHh0R72ovlZvJkJVoc5zCmdNav458mNDboL8nfSPqw8/i
- bkGo8dtlnjGGzan4to976bKhcrODIqeXLlLEk+MhlB4crov8q2VeaY++eVsiDmJGfJ2a4/xgt
- 1ENeTu4GIGXh+nxycOeAd8Z3G8qC75kfN7egQHDbX5lj+8IpPuzmm5gRj96kaPNkcISIEI7z6
- VQFY9gOahSDpEwS47BC7HPtvQpjjc+iLR5ftkFQ6AibsEeYG0JN2t1QjjIdwZPG8KYq6IlkTw
- zhw8hT59IudheaOtU1NjCgZj8UgIeojUd82NCcDTdhCXnonuajQFiQGUEsWLWLQ8zoOcc/nFQ
- QIThvKUE35SVKr0Pe9MXSilgD8iTeziGvou+QK7ZjSNr5vXsFewZGwaVp9nLrc7FZkVZZTkt+
- Zu8CEfeQFPJrNF97jVytuINktETRtd2mBhIOxu+SZ0DO0tg3vZW6DDHdaCLH5yEZ2be5fnuAS
- mzu5qIB+BA6G/U=
-Subject: [Buildroot] [PATCH v1 2/2] package/iwd: bump version to 1.18
+X-Provags-ID: V03:K1:bPeezbQWb9upfMyfhRpFBl6afO7tOFqjK2HEO2UhPQnK3+Es3uT
+ rBfdS0f4p6DRWCWsQ+FNk83MMz9hGKse+LmISqGwwBtpIt0dcMw82HX7lBk+dGPr9RiDNQ7
+ vS6UFpkAwuYOcs/VpCzcU9OUAlCtPrmom854IkgxnKmD90jCrCTJn8YqCfhm5ZfzztrspCe
+ z+hdJqhe9Wf60YT/tVz8g==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:ZD2JE0CgnDM=:h9PTYJ3LQeiBxkS5miMjy4
+ IVLhq9imleyOtkdV0tiWGmzVeZzb5g+sztcEWAW0Ngazt3ISi9Fjjq+8+IcGVvZLxMxHrNALT
+ /j6Cce+buaf6SxIWQGQZsH7Ra4KLL1mjGXDmuBMZarHFGGqacTtjnpWxoSsUGBtA0uLkvH55V
+ Ys7xS7gZyIb0glSM1IEGZ/vXmuCMRV04ZUHHrEbmTsJgRlW2z1v++t7wjxh1aDB6suMaAwmt2
+ vDT6+i1DnqPwQaIUA+8ThZyAK7H6CZxceh6Bn9MqaohaUIdR+Iww/iY78MHMg+mn4z0BWk59b
+ mo11FvOzav/2X9jUtDMpVxCohhMBnLSRrm9nqYXk7lQcrcQxCq5wyJdhRHp2YTzYFkWAs0fEN
+ FpuTC5atmtf4xvHGIEGxH/EzOhu8xSMueJPgJ2xOtay15074UucZrZpFRkHM9A392L7nv6nHB
+ TKhvfeaA7UtOxvOvZUX2ro/9k2xvYqNNN4D1BoGtnbEqTLCFomlogAT70xKzO6bmHPMsCtRtp
+ ChpUDnAHDk3mBSVWr+YMgKrS4H9omDf0Qw+K9X5ne3F9BOHR4Wxngnf5F3xu6nXcC8Z+SHRep
+ cDl0wR544AVgtJiLMldeIbGWzKxf0IyHtFCfBpPsTz3mhI0YoSA6fEYDgPBCyD+GqCkUd6DYO
+ dScZvYNtGrtze2G0Vzvp/Bed3S8FxbInmhRtU2YZjig7L+dYTggD32mPknV7jYBP49/jvbpUE
+ nclsLnCpK2am23GvsUhpgzvDSJu0XnkyEnkeA+tvdrbMaCw4f0mb39tEyRIw+IPUgt2vWrZ7n
+ /QwnoG6PCk5J9X3t/OVmeZMFmvvxqRB/n1wGxzeEMRQoCTUl9sOBOEoPtiD7WmQgVqX+P+HNH
+ IAY5Fvymz8ny8Wob7e3C2cy+Bb/D91boaAjXb3XRJXphDyTA5AwiXD9dNHFzGxStF8P0sNkIm
+ VF4BRfgjPr/cbzqxQtj7jPzaBISw60O6x4Ga1YgRA8r6nAo4SBfj9ufcwf0LE5/cffpH5M428
+ cPjEMoGfrR263TTnLCX4YgkW7HmgYQWn1zw2qh6JsJLdzWJlrez+T+jnXnLXoBNEjTLBAkfQx
+ EoPGE8YSQfwswc=
+Subject: [Buildroot] [PATCH v1 1/2] package/ell: bump version to 0.44
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,46 +102,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-- Changelog (since 1.17, from [1]):
+- Changelog (since 0.43, from [1]):
 
-  ver 1.18:
-    Add support for Access Point FILS IP Address Assignment IE.
-    Add support for P2P GO-side 4-way handshake IP allocation.
-    Add support for forcing SAE group 19 if BSS requires it.
-    Fix issue with handling faulty SAE duplicate commits.
+  ver 0.44:
+    Fix issue with allowing zero byte input for AEAD cipher.
+    Fix issue with filling in DNS info in DHCP lease objects.
+    Add support neighbor discovery utility helpers.
 
-[1] https://git.kernel.org/pub/scm/network/wireless/iwd.git/tree/ChangeLog
+[1] https://git.kernel.org/pub/scm/libs/ell/ell.git/tree/ChangeLog
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/iwd/iwd.hash | 2 +-
- package/iwd/iwd.mk   | 2 +-
+ package/ell/ell.hash | 2 +-
+ package/ell/ell.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/iwd/iwd.hash b/package/iwd/iwd.hash
-index 9bd8f9c252..7c010ed891 100644
---- a/package/iwd/iwd.hash
-+++ b/package/iwd/iwd.hash
+diff --git a/package/ell/ell.hash b/package/ell/ell.hash
+index 316d3fb81d..84016c0ce0 100644
+--- a/package/ell/ell.hash
++++ b/package/ell/ell.hash
 @@ -1,5 +1,5 @@
- # From https://mirrors.edge.kernel.org/pub/linux/network/wireless/sha256sums.asc
--sha256  6f946f823b0dc3205e4e72becf8ad1915448d194f5b10d8003e4c8c5a18e4ef7  iwd-1.17.tar.xz
-+sha256  0225ab81579f027e0fcbf255517f432fcf355d14f3645c36813c71a441dfab55  iwd-1.18.tar.xz
+ # From https://mirrors.edge.kernel.org/pub/linux/libs/ell/sha256sums.asc
+-sha256  b6c75895ad64bf78f5b5c464de871048d02f9403be518084e0d64b58f508c9fc  ell-0.43.tar.xz
++sha256  41a6f8fa4d285b52cb7a5a87bda3e7370ecaac02d94aaa7ec1a23f0480b8bc3f  ell-0.44.tar.xz
  
  # License files
  sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING
-diff --git a/package/iwd/iwd.mk b/package/iwd/iwd.mk
-index 9737f2c626..ecbe810316 100644
---- a/package/iwd/iwd.mk
-+++ b/package/iwd/iwd.mk
+diff --git a/package/ell/ell.mk b/package/ell/ell.mk
+index 261dc1a6db..47137e2530 100644
+--- a/package/ell/ell.mk
++++ b/package/ell/ell.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--IWD_VERSION = 1.17
-+IWD_VERSION = 1.18
- IWD_SOURCE = iwd-$(IWD_VERSION).tar.xz
- IWD_SITE = $(BR2_KERNEL_MIRROR)/linux/network/wireless
- IWD_LICENSE = LGPL-2.1+
+-ELL_VERSION = 0.43
++ELL_VERSION = 0.44
+ ELL_SOURCE = ell-$(ELL_VERSION).tar.xz
+ ELL_SITE = $(BR2_KERNEL_MIRROR)/linux/libs/ell
+ ELL_LICENSE = LGPL-2.1+
 -- 
 2.33.0
 
