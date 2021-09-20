@@ -6,52 +6,51 @@ X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
 	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 00EF0C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 20 Sep 2021 13:09:11 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B5B64C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 20 Sep 2021 13:09:54 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id DE7C8610F9
-	for <buildroot@archiver.kernel.org>; Mon, 20 Sep 2021 13:09:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org DE7C8610F9
+	by mail.kernel.org (Postfix) with ESMTPS id 131E5610F9
+	for <buildroot@archiver.kernel.org>; Mon, 20 Sep 2021 13:09:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 131E5610F9
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8F96C605AD;
-	Mon, 20 Sep 2021 13:09:09 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A379040450;
+	Mon, 20 Sep 2021 13:09:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id snOhM5lRWJa4; Mon, 20 Sep 2021 13:09:05 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id tStw_9gCpdUP; Mon, 20 Sep 2021 13:09:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C62CB605B1;
-	Mon, 20 Sep 2021 13:09:04 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2E43D1BF32E
- for <buildroot@lists.busybox.net>; Mon,  6 Sep 2021 07:08:18 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4D8544044D;
+	Mon, 20 Sep 2021 13:09:50 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B795C1BF3DC
+ for <buildroot@lists.busybox.net>; Mon, 20 Sep 2021 06:57:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1C00A60629
- for <buildroot@lists.busybox.net>; Mon,  6 Sep 2021 07:08:18 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 968CB82560
+ for <buildroot@lists.busybox.net>; Mon, 20 Sep 2021 06:57:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3Ss-LzxjlZGY for <buildroot@lists.busybox.net>;
- Mon,  6 Sep 2021 07:08:15 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id tpTRToXfePN6 for <buildroot@lists.busybox.net>;
+ Mon, 20 Sep 2021 06:57:30 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6E19A60617
- for <buildroot@buildroot.org>; Mon,  6 Sep 2021 07:08:13 +0000 (UTC)
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C704F82548
+ for <buildroot@buildroot.org>; Mon, 20 Sep 2021 06:57:29 +0000 (UTC)
 Received: (Authenticated sender: bot@bootlin.com)
- by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id 168DB1BF204
- for <buildroot@buildroot.org>; Mon,  6 Sep 2021 07:08:09 +0000 (UTC)
+ by relay11.mail.gandi.net (Postfix) with ESMTPSA id 26BE2100014
+ for <buildroot@buildroot.org>; Mon, 20 Sep 2021 06:57:25 +0000 (UTC)
 MIME-Version: 1.0
 To: buildroot@buildroot.org
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 06 Sep 2021 07:08:09 -0000
-Message-Id: <20210906070818.1C00A60629@smtp3.osuosl.org>
+Date: Mon, 20 Sep 2021 06:57:25 -0000
+Message-Id: <20210920065733.968CB82560@smtp1.osuosl.org>
 X-Mailman-Approved-At: Mon, 20 Sep 2021 13:09:03 +0000
-Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2021-09-05
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2021-09-19
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,54 +70,49 @@ Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
 Hello,
 
-Autobuild statistics for 2021-09-05
+Autobuild statistics for 2021-09-19
 ===================================
 
       branch |  OK | NOK | TIM | TOT |
-  2021.02.x  | 42  | 10  |  0  | 52  |
-  2021.05.x  | 47  |  8  |  0  | 55  |
-  2021.08.x  | 20  |  2  |  0  | 22  |
-    master   | 176 | 74  |  2  | 252 |
+  2021.02.x  | 59  |  7  |  0  | 66  |
+  2021.05.x  | 46  |  7  |  0  | 53  |
+  2021.08.x  | 43  |  4  |  2  | 49  |
+    master   | 184 | 69  |  1  | 254 |
 
 Classification of failures by reason for master
 -----------------------------------------------
 
-              host-libcap-2.52 | 11
-               libglib2-2.68.2 | 7 
-                  uhd-3.15.0.0 | 6 
-          refpolicy-2.20210203 | 5 
-              gnuradio-3.8.2.0 | 4 
-tvheadend-dbaa0f850394af8ab... | 4 
-                 apitrace-10.0 | 3 
-                  zeromq-4.3.4 | 3 
-               capnproto-0.8.0 | 2 
-                    ffmpeg-4.4 | 2 
-                       mongodb | 2 
-                mono-6.12.0.90 | 2 
+              host-libcap-2.52 | 10
+                  uhd-3.15.0.0 | 10
+                      iwd-1.17 | 6 
+                       unknown | 4 
+                  zeromq-4.3.4 | 4 
+                   gstd-0.13.0 | 3 
+                 mesa3d-21.1.8 | 3 
+            erlang-jiffy-1.0.6 | 2 
+              gnuradio-3.8.2.0 | 2 
                   mupdf-1.18.0 | 2 
-android-tools-4.2.2+git2013... | 1 
-                    atk-2.36.0 | 1 
-                  autofs-5.1.7 | 1 
-                  boost-1.77.0 | 1 
-                dovecot-2.3.15 | 1 
-            erlang-jiffy-1.0.6 | 1 
-  gobject-introspection-1.68.0 | 1 
-                host-odb-2.4.0 | 1 
-          libmodsecurity-3.0.5 | 1 
-               linux-pam-1.5.1 | 1 
-                  netsurf-3.10 | 1 
-                 openal-1.21.1 | 1 
+               pipewire-0.3.35 | 2 
+          refpolicy-2.20210203 | 2 
+        wayland-protocols-1.23 | 2 
+                      bmon-4.0 | 1 
+                 diffutils-3.7 | 1 
+                    ffmpeg-4.4 | 1 
+                      fio-3.27 | 1 
+                 libfuse-2.9.9 | 1 
+                 libnss-3.69.1 | 1 
+                mongodb-4.2.11 | 1 
+                mono-6.12.0.90 | 1 
+                    mpv-0.33.1 | 1 
+                  ndisc6-1.0.4 | 1 
+open2300-f21982e0b1f8321561... | 1 
    openvmtools-10.3.5-10430147 | 1 
-               osm2pgsql-1.5.1 | 1 
+                    proj-7.2.1 | 1 
            python-pybind-2.6.1 | 1 
-            qt5location-5.15.2 | 1 
-               qt5webkit-5.9.1 | 1 
-            resiprocate-1.12.0 | 1 
+              rsyslog-8.2010.0 | 1 
+                 samba4-4.14.7 | 1 
                 suricata-6.0.3 | 1 
-    trace-cmd-trace-cmd-v2.9.1 | 1 
-                 umtprd-1.3.10 | 1 
-                       unknown | 1 
-                  waffle-1.6.1 | 1 
+                     webkitgtk | 1 
 
 
 Detail of failures for master
@@ -126,94 +120,85 @@ Detail of failures for master
 
     arch     |             reason             | OK? |                                       url                                       | orph?
 -------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
- powerpc64   | android-tools-4.2.2+git2013... | NOK | http://autobuild.buildroot.net/results/c8e303cabe9d0b3cfcc3ccaa8502f994346f4b57 |     
-   s390x     |         apitrace-10.0          | NOK | http://autobuild.buildroot.net/results/676bd35d3c8f679e9b2dea4a83b7b2d3862a005e |     
-    arm      |         apitrace-10.0          | NOK | http://autobuild.buildroot.net/results/9acff020d8f42bb28b97cd590ed5be7bf9e379cc |     
-    arm      |         apitrace-10.0          | NOK | http://autobuild.buildroot.net/results/7009e8e39503b977b3d1bc2bedd82f264da9fdaf |     
-  riscv32    |           atk-2.36.0           | NOK | http://autobuild.buildroot.net/results/b0a2ffce22cf797cc1be7b8bc65809711309837f | ORPH
-   s390x     |          autofs-5.1.7          | NOK | http://autobuild.buildroot.net/results/580aa5df70e9dea27a719fb455c77b43404ee888 |     
-    arm      |          boost-1.77.0          | NOK | http://autobuild.buildroot.net/results/40b8af6ce273ebd5fca56d6734f64dacd562efb1 |     
-  riscv64    |        capnproto-0.8.0         | NOK | http://autobuild.buildroot.net/results/5a1c90b20ca7056852e911a3477bc048a1dbc5c7 |     
-  riscv64    |        capnproto-0.8.0         | NOK | http://autobuild.buildroot.net/results/c626aba423d0e0efbd24e3a22fb86566641292be |     
- aarch64_be  |         dovecot-2.3.15         | NOK | http://autobuild.buildroot.net/results/e8a2f2f3606930ba2a04bba5fbf72026b380bcfd |     
-  aarch64    |       erlang-jiffy-1.0.6       | NOK | http://autobuild.buildroot.net/results/cdbe29d21691b946016fc9079dd12a59e8957a46 |     
-   mipsel    |           ffmpeg-4.4           | NOK | http://autobuild.buildroot.net/results/2c74546e009d4a71176c1c60945fc44df5bfb7fd |     
-   mipsel    |           ffmpeg-4.4           | NOK | http://autobuild.buildroot.net/results/8f2822cfe7a69d081d463fbe06cc97b0b54e2433 |     
-  sparc64    |        gnuradio-3.8.2.0        | NOK | http://autobuild.buildroot.net/results/1b3ee78ecf1dce926bc2b10b5d14382e2fefb7b5 |     
-    m68k     |        gnuradio-3.8.2.0        | NOK | http://autobuild.buildroot.net/results/f505d16c61c84281b954733ff1119bc7c0fef7b1 |     
-    i686     |        gnuradio-3.8.2.0        | NOK | http://autobuild.buildroot.net/results/810c4421b2d686957b574722f1d5ee2b2b4862ba |     
- powerpc64   |        gnuradio-3.8.2.0        | NOK | http://autobuild.buildroot.net/results/badbfa32f1d7fcccdfe7db1f8d1cfcfc1a5eefe8 |     
-   x86_64    |  gobject-introspection-1.68.0  | NOK | http://autobuild.buildroot.net/results/42e05296abd6aa7e3a9b69467c7fcf8f86df6dc4 | ORPH
-  aarch64    |        host-libcap-2.52        | NOK | http://autobuild.buildroot.net/results/f1b6ba0a87e6b1a8999136db6ef522e72e4a15c2 |     
-   xtensa    |        host-libcap-2.52        | NOK | http://autobuild.buildroot.net/results/cffb0e8482e7c5583c1ed6a126a59298115b31b4 |     
-    m68k     |        host-libcap-2.52        | NOK | http://autobuild.buildroot.net/results/95d56966c24da6f014eb3842b1a32a15540648ae |     
-microblazeel |        host-libcap-2.52        | NOK | http://autobuild.buildroot.net/results/43dc801f72bb6f42745590cab87fe4658d505014 |     
-    m68k     |        host-libcap-2.52        | NOK | http://autobuild.buildroot.net/results/4505e24ca8a2dbe7d69a175fcfcc88ede7b04772 |     
-  powerpc    |        host-libcap-2.52        | NOK | http://autobuild.buildroot.net/results/317ddc465ce1407739fc11eb8ae57d35c9171d36 |     
-    arc      |        host-libcap-2.52        | NOK | http://autobuild.buildroot.net/results/4f07152249ad1c8da66cbbae08c5327e719acf83 |     
-  aarch64    |        host-libcap-2.52        | NOK | http://autobuild.buildroot.net/results/7344f09306176b3a604a3dfd08aab4655f50c376 |     
-  powerpc    |        host-libcap-2.52        | NOK | http://autobuild.buildroot.net/results/a1261b3f05d82bdcbdcc2c0ed6a621b3106ff65e |     
-powerpc64le  |        host-libcap-2.52        | NOK | http://autobuild.buildroot.net/results/88cc2be14a5f134dc2aa22ca838836dc11e39930 |     
-    i686     |        host-libcap-2.52        | NOK | http://autobuild.buildroot.net/results/ff3ed5aa2b15dd2dfe2c4931e00876ff0e2d6fa1 |     
-    m68k     |         host-odb-2.4.0         | NOK | http://autobuild.buildroot.net/results/57c86e6bf1a6cda9304d96c616ac7ac9b920e589 | ORPH
-    arc      |        libglib2-2.68.2         | NOK | http://autobuild.buildroot.net/results/2573b2be1da38aa42c9206cd88566f0db5d95bee |     
-    arc      |        libglib2-2.68.2         | NOK | http://autobuild.buildroot.net/results/95263b9bb62c2bf0491d0771fb540e803d04096b |     
-    arc      |        libglib2-2.68.2         | NOK | http://autobuild.buildroot.net/results/7871e9a1d33f1b2bce9bdcd3c5717923466dd6df |     
-   s390x     |        libglib2-2.68.2         | NOK | http://autobuild.buildroot.net/results/852412c84319c040a6fe2d82c7273e29edf5328e |     
-    arm      |        libglib2-2.68.2         | NOK | http://autobuild.buildroot.net/results/979f9da13f50779dc3e7048bee9a95aab73a29c1 |     
-   s390x     |        libglib2-2.68.2         | NOK | http://autobuild.buildroot.net/results/bb80713fc36ab1f396e1888975169367a7836ab5 |     
-   s390x     |        libglib2-2.68.2         | NOK | http://autobuild.buildroot.net/results/58e9f5a3002728d64e241eb6c9abdf33cf7490ae |     
-    arm      |      libmodsecurity-3.0.5      | NOK | http://autobuild.buildroot.net/results/befd87ac585e94c5bec2d848ef92023bb5bf80a4 |     
-   xtensa    |        linux-pam-1.5.1         | NOK | http://autobuild.buildroot.net/results/174da651276305c451f026c52e2d9cddfc487a27 | ORPH
-  aarch64    |            mongodb             | TIM | http://autobuild.buildroot.net/results/a07f98e55279dbcb4d618a2b756104c5bb560c9e |     
-   x86_64    |            mongodb             | TIM | http://autobuild.buildroot.net/results/8e41588c2e17c905d4da24520f4158a704ff486c |     
-    arm      |         mono-6.12.0.90         | NOK | http://autobuild.buildroot.net/results/6d10a4bd43fbc9c1d3fa26d5eef394c8023cb85f |     
-    arm      |         mono-6.12.0.90         | NOK | http://autobuild.buildroot.net/results/a4a618df36e437ee63bcb1372050afb28b681962 |     
-   xtensa    |          mupdf-1.18.0          | NOK | http://autobuild.buildroot.net/results/b8c317aa055c5115ab7416687b924120c1f2d9b2 |     
-   xtensa    |          mupdf-1.18.0          | NOK | http://autobuild.buildroot.net/results/8e7479a07fd5f052d90081de5e2fe76b6c9f3c18 |     
- powerpc64   |          netsurf-3.10          | NOK | http://autobuild.buildroot.net/results/a09581e5c7ed48041e0157d7d7e019bbd8c44d58 |     
-    or1k     |         openal-1.21.1          | NOK | http://autobuild.buildroot.net/results/b05638dd86b2556d1e25ee6962a94f6f2160a59c |     
-   x86_64    |  openvmtools-10.3.5-10430147   | NOK | http://autobuild.buildroot.net/results/b18231d734cfe351fdaccb66607b888b9daa020d |     
-    arm      |        osm2pgsql-1.5.1         | NOK | http://autobuild.buildroot.net/results/30ae4b9405454919437098d29abbd743638c9423 |     
-   x86_64    |      python-pybind-2.6.1       | NOK | http://autobuild.buildroot.net/results/4c621a95ead596a972aab5e9784851d5ec1c10c1 |     
-    i586     |       qt5location-5.15.2       | NOK | http://autobuild.buildroot.net/results/10b88e9780cecd6c42df73dad190d596340e27e1 |     
-   mipsel    |        qt5webkit-5.9.1         | NOK | http://autobuild.buildroot.net/results/3ecd010ab1df99302d39820f7ca724f4915e6f9d |     
-    mips     |      refpolicy-2.20210203      | NOK | http://autobuild.buildroot.net/results/e17a8d194246cb9ebc9ebcace25a0931b5396ab6 |     
-  riscv64    |      refpolicy-2.20210203      | NOK | http://autobuild.buildroot.net/results/344fba8920e2fb9eaf9e28bf8fca6a8a27cf1a7c |     
-microblazeel |      refpolicy-2.20210203      | NOK | http://autobuild.buildroot.net/results/93214478966479dac9a1a13da2d72eb8b7f594f9 |     
-    m68k     |      refpolicy-2.20210203      | NOK | http://autobuild.buildroot.net/results/a0f13b0a34f094f16e873b3fc17636cd57c29cd8 |     
-    i686     |      refpolicy-2.20210203      | NOK | http://autobuild.buildroot.net/results/c88036ecc8370a8d3cf279e65eeb2c44ed07c706 |     
-    arm      |       resiprocate-1.12.0       | NOK | http://autobuild.buildroot.net/results/3acbbd3bc1c7384d420dd0d6481522079bae920e |     
-    i586     |         suricata-6.0.3         | NOK | http://autobuild.buildroot.net/results/fa178d041769c198c975e38ec1505d1e5a6360db |     
-  sparc64    |   trace-cmd-trace-cmd-v2.9.1   | NOK | http://autobuild.buildroot.net/results/b6199a9cd75eff1ba9a9daaf593529ba0fa90bae |     
-    arm      | tvheadend-dbaa0f850394af8ab... | NOK | http://autobuild.buildroot.net/results/0d8fede2256dba9a160ac15243fa9085b14bfa8a |     
-  aarch64    | tvheadend-dbaa0f850394af8ab... | NOK | http://autobuild.buildroot.net/results/e74fa4a9f380a0eaa11d2002ad0b555ef9e4b6a2 |     
-  nds32le    | tvheadend-dbaa0f850394af8ab... | NOK | http://autobuild.buildroot.net/results/bbaee4e00e0eface17b1ff817b9a05fe7b1b4774 |     
-    or1k     | tvheadend-dbaa0f850394af8ab... | NOK | http://autobuild.buildroot.net/results/b1fc1d85c0f75f5c41887f31e9f538b7321a1a22 |     
- powerpc64   |          uhd-3.15.0.0          | NOK | http://autobuild.buildroot.net/results/d8501783c8f9c5c2086c61089007c0fd59720a1e |     
-  riscv64    |          uhd-3.15.0.0          | NOK | http://autobuild.buildroot.net/results/b4abf17d05f9418472017a4465b20dd07e5e11de |     
-   xtensa    |          uhd-3.15.0.0          | NOK | http://autobuild.buildroot.net/results/ac61afa16a38a9641a8a0b66870bdf0fca14d2f8 |     
-    arc      |          uhd-3.15.0.0          | NOK | http://autobuild.buildroot.net/results/5b28591b4c4a7ae4cc6d428c42d96db138ef3ee7 |     
-  mips64el   |          uhd-3.15.0.0          | NOK | http://autobuild.buildroot.net/results/70f6db101c9d35cdd88da602a863ddf35706fd7d |     
-microblazeel |          uhd-3.15.0.0          | NOK | http://autobuild.buildroot.net/results/49c6fd980911e10293924120603ad966d63b1716 |     
-    arm      |         umtprd-1.3.10          | NOK | http://autobuild.buildroot.net/results/dbb7e346622ffe4d9625bde313478d6dbf5caeef |     
-  aarch64    |            unknown             | NOK | http://autobuild.buildroot.net/results/1ae95fdb1c37036cf86ca781bde1025c018a79dc |     
-    arm      |          waffle-1.6.1          | NOK | http://autobuild.buildroot.net/results/33bd9fbf3b525e5693844c44e65f94203f2c21cf |     
-    or1k     |          zeromq-4.3.4          | NOK | http://autobuild.buildroot.net/results/44f3a05d571618e9ea6a82847c0fdc659ea3718d |     
-    or1k     |          zeromq-4.3.4          | NOK | http://autobuild.buildroot.net/results/e6cc39d04b6e0f5d81eef73533c1539bcf573ac9 |     
-    or1k     |          zeromq-4.3.4          | NOK | http://autobuild.buildroot.net/results/a8a56878147c5908b4fd3e4c46f4c1e7cd92e6fc |     
+  riscv64    |            bmon-4.0            | NOK | http://autobuild.buildroot.net/results/797f3cc2eeb6a20cd06a7d2ffdd35f11436d1414 | ORPH
+    arm      |         diffutils-3.7          | NOK | http://autobuild.buildroot.net/results/f2b8e34e8630550e420fdac5586c883a9e2b45a3 | ORPH
+   x86_64    |       erlang-jiffy-1.0.6       | NOK | http://autobuild.buildroot.net/results/222f0b8e45a8ca1565f8d67255805fc0b3674f8d |     
+  aarch64    |       erlang-jiffy-1.0.6       | NOK | http://autobuild.buildroot.net/results/cf4f3c8f4b1cd16d231a922654dd41b4676e9d17 |     
+   mipsel    |           ffmpeg-4.4           | NOK | http://autobuild.buildroot.net/results/f827e97c0182787b6e136113f753bc58544a9a25 |     
+   s390x     |            fio-3.27            | NOK | http://autobuild.buildroot.net/results/512f19c5b6fc4a69ee859f325ce18046c15622bc |     
+   xtensa    |        gnuradio-3.8.2.0        | NOK | http://autobuild.buildroot.net/results/a641335c5ce21072859cf29373eb5a8461bc8aad |     
+    arc      |        gnuradio-3.8.2.0        | NOK | http://autobuild.buildroot.net/results/14758895481cd1e3985ab1ec9bcb08e22b9d37f2 |     
+  riscv64    |          gstd-0.13.0           | NOK | http://autobuild.buildroot.net/results/2f4de1b229df47d9bfd5a2576fd59da2ad45aeb6 |     
+  riscv64    |          gstd-0.13.0           | NOK | http://autobuild.buildroot.net/results/57803eb3a919116b8232da03507ec5a446485697 |     
+   xtensa    |          gstd-0.13.0           | NOK | http://autobuild.buildroot.net/results/4f994e0fce83d2d5b96f5ce7a58cd85e9c0d4451 |     
+    arm      |        host-libcap-2.52        | NOK | http://autobuild.buildroot.net/results/599c5640f418b8ffea9a69c4c1f393f31b18acb4 |     
+    arm      |        host-libcap-2.52        | NOK | http://autobuild.buildroot.net/results/43165e71cdeba9500111ae70281b5663e605a32f |     
+    arm      |        host-libcap-2.52        | NOK | http://autobuild.buildroot.net/results/58a8771eae11fb1a69ae82fc7254a91ff03a0095 |     
+    i586     |        host-libcap-2.52        | NOK | http://autobuild.buildroot.net/results/5a8d96060607fc87706d70994b080fca99f5e6fb |     
+    m68k     |        host-libcap-2.52        | NOK | http://autobuild.buildroot.net/results/f1500d7505e05ce783cdc394a9fd8bcdbee4ebbc |     
+   sparc     |        host-libcap-2.52        | NOK | http://autobuild.buildroot.net/results/afc15c9262f527e91e1e70e3d68b819b835a172a |     
+    arm      |        host-libcap-2.52        | NOK | http://autobuild.buildroot.net/results/8a46bde654ab087a7b5938122ca0e65c17ecee01 |     
+    or1k     |        host-libcap-2.52        | NOK | http://autobuild.buildroot.net/results/0ac7bdb91f75c21ddeab96c4599746798c8e3917 |     
+  aarch64    |        host-libcap-2.52        | NOK | http://autobuild.buildroot.net/results/2d4d3912ead1daf734b3c3eb71eff988eb92ab9d |     
+  aarch64    |        host-libcap-2.52        | NOK | http://autobuild.buildroot.net/results/30b85875d3957fd2dcf5067bd87576b31f74f9ec |     
+  powerpc    |            iwd-1.17            | NOK | http://autobuild.buildroot.net/results/25151ffa8061d3c039b6793b48eec64befa15fc0 |     
+    arm      |            iwd-1.17            | NOK | http://autobuild.buildroot.net/results/713c9a042542ea18b3c5bafb839d8072d84485e7 |     
+  riscv64    |            iwd-1.17            | NOK | http://autobuild.buildroot.net/results/3742cb6604f928cc4f79fd05bac26f1216fba6a1 |     
+   xtensa    |            iwd-1.17            | NOK | http://autobuild.buildroot.net/results/c6d3f86282c44645b4f1c61882dc63ccfc8eb35a |     
+  powerpc    |            iwd-1.17            | NOK | http://autobuild.buildroot.net/results/f330e22736d43f2c5c61aef58aba1fbd662990cd |     
+  riscv64    |            iwd-1.17            | NOK | http://autobuild.buildroot.net/results/f1446e4f9c31da23c9c4460fdb2278d0fcb0b2c3 |     
+    arm      |         libfuse-2.9.9          | NOK | http://autobuild.buildroot.net/results/026af46bcd1feb49a78a6d19819d612d09885749 | ORPH
+powerpc64le  |         libnss-3.69.1          | NOK | http://autobuild.buildroot.net/results/a895ed7aa48edc5cd9ac8bbbd689433a98c9c057 |     
+    arm      |         mesa3d-21.1.8          | NOK | http://autobuild.buildroot.net/results/e422ef28ad607b608d487d475d88305ea87640a7 |     
+    arm      |         mesa3d-21.1.8          | NOK | http://autobuild.buildroot.net/results/d1f5a6cea1b815676ba6624d8892603ae112321d |     
+    arm      |         mesa3d-21.1.8          | NOK | http://autobuild.buildroot.net/results/b6d91d68f82d207cd5ab9c07f3adeddfa4e024d0 |     
+    arm      |         mongodb-4.2.11         | NOK | http://autobuild.buildroot.net/results/660679e62317e6f7e28be8a6124c5ae2423ebf42 |     
+    arm      |         mono-6.12.0.90         | NOK | http://autobuild.buildroot.net/results/a21f21ba01a0c81cd7743a077eee3164617f4bc6 |     
+   mipsel    |           mpv-0.33.1           | NOK | http://autobuild.buildroot.net/results/433f60a1f9943933cbc308670e5cf2226757f0b5 |     
+  mips64el   |          mupdf-1.18.0          | NOK | http://autobuild.buildroot.net/results/1c5f48f2abb034f6af48ef5a14ebaa2278afe07f |     
+   mipsel    |          mupdf-1.18.0          | NOK | http://autobuild.buildroot.net/results/f71ad5936f27327a30381695fd89df20dab4fa5f |     
+    arm      |          ndisc6-1.0.4          | NOK | http://autobuild.buildroot.net/results/ceddafe23908b5d1b09ea82f3cb1e408de4a849c | ORPH
+  mips64el   | open2300-f21982e0b1f8321561... | NOK | http://autobuild.buildroot.net/results/b42c8c86e9574ba9f2c04daa3476206270241a66 | ORPH
+    i586     |  openvmtools-10.3.5-10430147   | NOK | http://autobuild.buildroot.net/results/6eeceffc0e2e68c2572b4f13b914ac8a189357b3 |     
+   mipsel    |        pipewire-0.3.35         | NOK | http://autobuild.buildroot.net/results/c748ef2d5ec89e3867f812d9a6fbd4de62bcda16 |     
+   mipsel    |        pipewire-0.3.35         | NOK | http://autobuild.buildroot.net/results/febd8da09f0f7d787aeb1402d8e7d8f2828ec1dc |     
+    mips     |           proj-7.2.1           | NOK | http://autobuild.buildroot.net/results/7630d0a605f1be5b8dafa58e0b971cba171d0b42 |     
+   xtensa    |      python-pybind-2.6.1       | NOK | http://autobuild.buildroot.net/results/520b32c2feee8b3a916e667650096c9307cb3a46 |     
+   mipsel    |      refpolicy-2.20210203      | NOK | http://autobuild.buildroot.net/results/1798f8afaba11a84d3da083175d8342a26f52edd |     
+ powerpc64   |      refpolicy-2.20210203      | NOK | http://autobuild.buildroot.net/results/7f7c03beaff47119ff63d27b779f9ac79a15b30f |     
+  riscv64    |        rsyslog-8.2010.0        | NOK | http://autobuild.buildroot.net/results/724142cef4d786c41d358b2632edabdd13e67406 |     
+    arm      |         samba4-4.14.7          | NOK | http://autobuild.buildroot.net/results/fef5f5f3932aa5906872373d17039fcec6aa7f3a |     
+   x86_64    |         suricata-6.0.3         | NOK | http://autobuild.buildroot.net/results/78dd239c3e64a190376c31bfa802cc44857f1f2e |     
+    arm      |          uhd-3.15.0.0          | NOK | http://autobuild.buildroot.net/results/a4790b334ebad0ba8a94996b01267397af5902ce |     
+  aarch64    |          uhd-3.15.0.0          | NOK | http://autobuild.buildroot.net/results/fe5cefd91d098bbcaa5fe53ca39fcb05c09a5d02 |     
+  mips64el   |          uhd-3.15.0.0          | NOK | http://autobuild.buildroot.net/results/a5c6e9358f9b62d41bdf0ad251b73f7266d1b845 |     
+    arc      |          uhd-3.15.0.0          | NOK | http://autobuild.buildroot.net/results/fd6b07a4730c2404c6aee6537a8acca1e4200543 |     
+    m68k     |          uhd-3.15.0.0          | NOK | http://autobuild.buildroot.net/results/309247989fb99e239d8cba4d94d23651bba6875d |     
+    i686     |          uhd-3.15.0.0          | NOK | http://autobuild.buildroot.net/results/74161e1ca7f78cfe0400569072259887bef60c05 |     
+  sparc64    |          uhd-3.15.0.0          | NOK | http://autobuild.buildroot.net/results/242cae9b3ec4180d05cdb9f0bcac23602b3d4721 |     
+  aarch64    |          uhd-3.15.0.0          | NOK | http://autobuild.buildroot.net/results/ec41627c6d0638143769a30f6c312df8927a7fd5 |     
+    arc      |          uhd-3.15.0.0          | NOK | http://autobuild.buildroot.net/results/7e40072717a888bf4f7919602421bc05b27b8107 |     
+  riscv64    |          uhd-3.15.0.0          | NOK | http://autobuild.buildroot.net/results/10a2a3511089ae8becd314d77d89a14176234db2 |     
+    arm      |            unknown             | NOK | http://autobuild.buildroot.net/results/21ad56dfe82d4887aab1b67c6008bd79f3f0f710 |     
+ powerpc64   |            unknown             | NOK | http://autobuild.buildroot.net/results/6d8aed2f5a72c36c5e9b9b94119ec507b60ba804 |     
+    m68k     |            unknown             | NOK | http://autobuild.buildroot.net/results/b3495983256f508f9df39a409abe57b15fb5472e |     
+  riscv64    |            unknown             | NOK | http://autobuild.buildroot.net/results/0812a8387192124fa1aa3bf6d10f74ab73b19e78 |     
+powerpc64le  |     wayland-protocols-1.23     | NOK | http://autobuild.buildroot.net/results/2744e50465a9cd9d3726d23298ad6c943ef49a21 | ORPH
+   mipsel    |     wayland-protocols-1.23     | NOK | http://autobuild.buildroot.net/results/563397f7b5f56039f97a8ee4f85658f14d728ab3 | ORPH
+    arm      |           webkitgtk            | TIM | http://autobuild.buildroot.net/results/1b62d60acdad429cab1b72ab1e54bde774a91ccf |     
+    or1k     |          zeromq-4.3.4          | NOK | http://autobuild.buildroot.net/results/4618c09e28f8fdf7c91e0d369b770c47d5303c62 |     
+    or1k     |          zeromq-4.3.4          | NOK | http://autobuild.buildroot.net/results/ae3cb0bde24347c93a5e0f247a52727890fabde5 |     
+    or1k     |          zeromq-4.3.4          | NOK | http://autobuild.buildroot.net/results/3959b977b31d80d7dcd18c64d7b8a98154596b85 |     
+    or1k     |          zeromq-4.3.4          | NOK | http://autobuild.buildroot.net/results/b3bd6831f6fa161ae169a8287470e06a43f5a3ad |     
 
 
 Classification of failures by reason for 2021.02.x
 --------------------------------------------------
 
         host-sentry-cli-1.57.0 | 3 
-                  zeromq-4.3.4 | 2 
-               apcupsd-3.14.14 | 1 
-        glib-networking-2.66.0 | 1 
-        kf5-kcoreaddons-5.47.0 | 1 
-                 openal-1.20.1 | 1 
-                rocksdb-6.13.3 | 1 
+                 openal-1.20.1 | 2 
+                  gensio-2.2.3 | 1 
+                libkrb5-1.18.4 | 1 
 
 
 Detail of failures for 2021.02.x
@@ -221,27 +206,24 @@ Detail of failures for 2021.02.x
 
     arch     |             reason             | OK? |                                       url                                       | orph?
 -------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-   sparc     |        apcupsd-3.14.14         | NOK | http://autobuild.buildroot.net/results/49443bb112bebc874ca2f580b3f3e73bad3d7bf1 |     
-  riscv32    |     glib-networking-2.66.0     | NOK | http://autobuild.buildroot.net/results/579313fd15a42d83386c04da3795133726b1e50f | ORPH
-    m68k     |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/59da132eec4f696e9b29f29607c34a95817fe930 |     
-    arm      |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/7081cd925c4a32f7359c62d77c291032eace15e5 |     
-  riscv64    |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/bacb04f32b224239a757964155232e0e451ff118 |     
-  powerpc    |     kf5-kcoreaddons-5.47.0     | NOK | http://autobuild.buildroot.net/results/82a5eff601e19429e85c8b18802b27fb6ffdd8f0 |     
-    or1k     |         openal-1.20.1          | NOK | http://autobuild.buildroot.net/results/07c8f1039be81f23f3f45ed6e5a73d14dd0c54bd |     
-    m68k     |         rocksdb-6.13.3         | NOK | http://autobuild.buildroot.net/results/f7438ed90311d97836bf5a40940a3e7906339649 |     
-    or1k     |          zeromq-4.3.4          | NOK | http://autobuild.buildroot.net/results/c04ad7bae1d061ec6f394b55212daf816ca4c611 |     
-    or1k     |          zeromq-4.3.4          | NOK | http://autobuild.buildroot.net/results/96c2c2bf8fafc150a7af409e311eb075ccbf3822 |     
+  riscv32    |          gensio-2.2.3          | NOK | http://autobuild.buildroot.net/results/af6b390a7a4512e2f7abdf4c3625de8cb592027e |     
+   nios2     |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/f9f9236e9954bfebdb2e4376b0facb28cffcc387 |     
+   mipsel    |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/20e093b6fa732f19c4bb8214d87cc76709a2aa05 |     
+  powerpc    |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/b0ee908c1e9e47ddfa9be5873793784477714f7b |     
+  riscv32    |         libkrb5-1.18.4         | NOK | http://autobuild.buildroot.net/results/ef6987ff94641c6e8db2b4200d98c129e59392f2 |     
+    or1k     |         openal-1.20.1          | NOK | http://autobuild.buildroot.net/results/a8ee84de9b5cc6c0b2e209e17fb87b59dd0fd991 |     
+    or1k     |         openal-1.20.1          | NOK | http://autobuild.buildroot.net/results/00f2a270c34f763f94c172468d527ef9709f5fa4 |     
 
 
 Classification of failures by reason for 2021.05.x
 --------------------------------------------------
 
-                    ffmpeg-4.4 | 2 
-        host-sentry-cli-1.57.0 | 2 
-  gobject-introspection-1.64.1 | 1 
-                 openal-1.20.1 | 1 
-           python-pybind-2.6.1 | 1 
-               qt5webkit-5.9.1 | 1 
+                  zeromq-4.3.4 | 2 
+               capnproto-0.8.0 | 1 
+                host-odb-2.4.0 | 1 
+              host-perl-5.32.1 | 1 
+        host-sentry-cli-1.57.0 | 1 
+                 mesa3d-21.0.3 | 1 
 
 
 Detail of failures for 2021.05.x
@@ -249,21 +231,24 @@ Detail of failures for 2021.05.x
 
     arch     |             reason             | OK? |                                       url                                       | orph?
 -------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-  nds32le    |           ffmpeg-4.4           | NOK | http://autobuild.buildroot.net/results/3e2dd89b10e6605299cf08895ad30f512dd47f62 |     
-   mipsel    |           ffmpeg-4.4           | NOK | http://autobuild.buildroot.net/results/7aaf7a6c2ea6b8befd8b6f29ec71dfd65c398987 |     
-   s390x     |  gobject-introspection-1.64.1  | NOK | http://autobuild.buildroot.net/results/149b5dc9f92c1090fab414af7f4c4cd405848b31 | ORPH
-  riscv64    |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/7fe4b88822e475b1418ac5c1a75375d772012f5b |     
-    m68k     |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/943f16e89a03ccd58dea4a3fc12a4914f6613917 |     
-    or1k     |         openal-1.20.1          | NOK | http://autobuild.buildroot.net/results/02414ef031317411a31203bca86052fd33184ed8 |     
-    i586     |      python-pybind-2.6.1       | NOK | http://autobuild.buildroot.net/results/19618c65d46c8ab526851d96cfb6a8eebc4e1e6c |     
-   mipsel    |        qt5webkit-5.9.1         | NOK | http://autobuild.buildroot.net/results/7f1f18c7b7f0b96b499e77acbd1e4fe30bb1a027 |     
+  riscv64    |        capnproto-0.8.0         | NOK | http://autobuild.buildroot.net/results/3e3921fb2f64eb9ed057e5287365ce22c4c3119e |     
+  mips64el   |         host-odb-2.4.0         | NOK | http://autobuild.buildroot.net/results/5db0c25cae858d4268a3b7706a85444b916dfa8e | ORPH
+  aarch64    |        host-perl-5.32.1        | NOK | http://autobuild.buildroot.net/results/499289bfff288ae794579c91323d58d812afa890 |     
+  riscv32    |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/733c09c0e3e17f1436bd25c559ed2053c1cbdf5b |     
+    arm      |         mesa3d-21.0.3          | NOK | http://autobuild.buildroot.net/results/d44248f6a85bef1f9c3a76ff83e1ab3bfebec700 |     
+    or1k     |          zeromq-4.3.4          | NOK | http://autobuild.buildroot.net/results/7731be7ac5ced563ee083867c31e203bcf9c8973 |     
+    or1k     |          zeromq-4.3.4          | NOK | http://autobuild.buildroot.net/results/97e33c88ba1ed12b40f18b3075b5b81d1dbae034 |     
 
 
 Classification of failures by reason for 2021.08.x
 --------------------------------------------------
 
-               apcupsd-3.14.14 | 1 
-           uboot-tools-2021.07 | 1 
+               capnproto-0.8.0 | 1 
+  gobject-introspection-1.68.0 | 1 
+                     host-llvm | 1 
+                       mongodb | 1 
+            qt5location-5.15.2 | 1 
+                  zeromq-4.3.4 | 1 
 
 
 Detail of failures for 2021.08.x
@@ -271,8 +256,12 @@ Detail of failures for 2021.08.x
 
     arch     |             reason             | OK? |                                       url                                       | orph?
 -------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-   sparc     |        apcupsd-3.14.14         | NOK | http://autobuild.buildroot.net/results/03ebede9d9f469b96c2dc00c6ea66ff874f1be50 |     
-    arm      |      uboot-tools-2021.07       | NOK | http://autobuild.buildroot.net/results/8c17c29a988c743950ae1827a434c71d00a45df9 |     
+  riscv64    |        capnproto-0.8.0         | NOK | http://autobuild.buildroot.net/results/3032dad104ac71d4e7041cc3a962834f336d3fa8 |     
+   x86_64    |  gobject-introspection-1.68.0  | NOK | http://autobuild.buildroot.net/results/035dc537aee189f753b3d7f5b30cd6d72bc2a9df | ORPH
+    i586     |           host-llvm            | TIM | http://autobuild.buildroot.net/results/1983d53817cea222ea0d10891cd4e9f02cd90de5 |     
+  aarch64    |            mongodb             | TIM | http://autobuild.buildroot.net/results/d3f7f0f08cbdc68e591f1981c8e57d36cd974ed0 |     
+    arm      |       qt5location-5.15.2       | NOK | http://autobuild.buildroot.net/results/a445b5f2cfb412ecebf7778fa96bf12916ee78f8 |     
+    or1k     |          zeromq-4.3.4          | NOK | http://autobuild.buildroot.net/results/82e12e0373d20b58104f52fc17830d091acd1722 |     
 
 
 Packages having a newer version
@@ -281,14 +270,16 @@ Packages having a newer version
              name              | found by |        link to release-monitoring.org        |   version    |   upstream   | orph?
 -------------------------------+----------+----------------------------------------------+--------------+--------------+-------
                         acpica |  DISTRO  | https://release-monitoring.org/project/00018 | 20200717     | 20210730     |     
-            adwaita-icon-theme |  DISTRO  | https://release-monitoring.org/project/13117 | 3.37.2       | 40.1.1       |     
+                         acpid |  DISTRO  | https://release-monitoring.org/project/00019 | 2.0.32       | 2.0.33       | ORPH
+            adwaita-icon-theme |  DISTRO  | https://release-monitoring.org/project/13117 | 3.37.2       | 41.0         |     
                        agentpp |  DISTRO  | https://release-monitoring.org/project/21316 | 4.3.1        | 4.5.1        |     
                     alsa-utils |  DISTRO  | https://release-monitoring.org/project/00037 | 1.2.4        | 1.2.5.1      |     
-                 android-tools |  DISTRO  | https://release-monitoring.org/project/13989 | 4.2.2+git... | 11.0.0_r42   |     
+                 android-tools |  DISTRO  | https://release-monitoring.org/project/13989 | 4.2.2+git... | 11.0.0_r45   |     
                      armadillo |  DISTRO  | https://release-monitoring.org/project/07006 | 9.900.2      | 10.6.2       |     
                       asterisk |  DISTRO  | https://release-monitoring.org/project/09838 | 16.14.1      | 18.6.0       |     
                    at-spi2-atk |  DISTRO  | https://release-monitoring.org/project/07840 | 2.34.2       | 2.38.0       |     
-                  at-spi2-core |  DISTRO  | https://release-monitoring.org/project/07841 | 2.36.0       | 2.40.3       |     
+                  at-spi2-core |  DISTRO  | https://release-monitoring.org/project/07841 | 2.36.0       | 2.42.0       |     
+                         atftp |  DISTRO  | https://release-monitoring.org/project/15219 | 0.7.4        | 0.7.5        |     
                          atkmm |  DISTRO  | https://release-monitoring.org/project/07962 | 2.24.2       | 2.36.1       |     
                          audit |  DISTRO  | https://release-monitoring.org/project/15225 | 3.0.1        | 3.0.5        |     
                       autoconf |  DISTRO  | https://release-monitoring.org/project/00141 | 2.69         | 2.71         | ORPH
@@ -299,34 +290,33 @@ Packages having a newer version
                azure-iot-sdk-c |  DISTRO  | https://release-monitoring.org/project/21322 | LTS_01_20... | 2020-12-09   |     
                         babeld |  DISTRO  | https://release-monitoring.org/project/00154 | 1.9.2        | 1.10         | ORPH
                    babeltrace2 |  DISTRO  | https://release-monitoring.org/project/07137 | 2.0.3        | 2.0.4        |     
-                 balena-engine |  DISTRO  | https://release-monitoring.org/project/141616 | 19.03.14     | 19.03.26     | ORPH
+                 balena-engine |  DISTRO  | https://release-monitoring.org/project/141616 | 19.03.14     | 19.03.29     | ORPH
                     bandwidthd |  DISTRO  | https://release-monitoring.org/project/20544 | 2.0.1-aut... | 2.0.1        |     
                           bash |  DISTRO  | https://release-monitoring.org/project/00166 | 5.1          | 5.1.8        | ORPH
-                        batctl |  DISTRO  | https://release-monitoring.org/project/14740 | 2021.0       | 2021.2       |     
-                    batman-adv |  DISTRO  | https://release-monitoring.org/project/19529 | 2021.1       | 2021.2       |     
+                        batctl |  DISTRO  | https://release-monitoring.org/project/14740 | 2021.0       | 2021.3       |     
+                    batman-adv |  DISTRO  | https://release-monitoring.org/project/19529 | 2021.1       | 2021.3       |     
                         bcg729 |  DISTRO  | https://release-monitoring.org/project/14743 | 1.0.4        | 1.1.1        |     
                      bctoolbox |  DISTRO  | https://release-monitoring.org/project/14746 | 4.4.8        | 5.1.0-alpha  | ORPH
                      belle-sip |  DISTRO  | https://release-monitoring.org/project/14378 | 4.4.8        | 5.1.0-alpha  |     
                           belr |  DISTRO  | https://release-monitoring.org/project/80042 | 4.4.8        | 5.1.0-alpha  |     
                     berkeleydb |  DISTRO  | https://release-monitoring.org/project/138386 | 5.3.28       | 18.1.4       | ORPH
-                          bind |  DISTRO  | https://release-monitoring.org/project/14923 | 9.11.31      | 9.17.17      | ORPH
+                          bind |  DISTRO  | https://release-monitoring.org/project/14923 | 9.11.35      | 9.17.18      | ORPH
                       binutils |  DISTRO  | https://release-monitoring.org/project/07981 | 2.36.1       | 2.37         |     
-                  bluez5_utils |  DISTRO  | https://release-monitoring.org/project/10029 | 5.60         | 5.61         |     
-          bluez5_utils-headers |  DISTRO  | https://release-monitoring.org/project/10029 | 5.60         | 5.61         |     
+                       bitcoin |  DISTRO  | https://release-monitoring.org/project/13618 | 0.21.1       | 22.0         |     
                          boinc |  DISTRO  | https://release-monitoring.org/project/00211 | 7.16.18      | 7.18.1       |     
                         bonnie |  DISTRO  | https://release-monitoring.org/project/00212 | 1.03e        | 2.00a        | ORPH
-                     bootstrap |  DISTRO  | https://release-monitoring.org/project/21578 | 4.3.1        | 5.1.0        |     
-                         botan |  DISTRO  | https://release-monitoring.org/project/00214 | 2.17.3       | 3.0.0-alpha0 | ORPH
-                   btrfs-progs |  DISTRO  | https://release-monitoring.org/project/00227 | 5.11         | 5.13.1       | ORPH
+                     bootstrap |  DISTRO  | https://release-monitoring.org/project/21578 | 4.3.1        | 5.1.1        |     
+                         botan |  DISTRO  | https://release-monitoring.org/project/00214 | 2.18.1       | 3.0.0-alpha0 | ORPH
+                   btrfs-progs |  DISTRO  | https://release-monitoring.org/project/00227 | 5.11         | 5.14         | ORPH
                         bullet |  DISTRO  | https://release-monitoring.org/project/07669 | 3.09         | 3.17         |     
                        busybox |  DISTRO  | https://release-monitoring.org/project/00230 | 1.33.1       | 1.34.0       | ORPH
-                        c-icap |  DISTRO  | https://release-monitoring.org/project/21325 | 0.5.7        | 0.5.8        | ORPH
+                        c-icap |  DISTRO  | https://release-monitoring.org/project/21325 | 0.5.7        | 0.5.9        | ORPH
                 c-icap-modules |  DISTRO  | https://release-monitoring.org/project/21326 | 0.5.4        | 0.5.5        | ORPH
                          cairo |  DISTRO  | https://release-monitoring.org/project/00247 | 1.16.0       | 1.17.4       |     
                        cairomm |  DISTRO  | https://release-monitoring.org/project/07959 | 1.12.0       | 1.16.1       |     
                      cantarell |  DISTRO  | https://release-monitoring.org/project/10888 | 0.0.25       | 0.301        | ORPH
                      capnproto |  DISTRO  | https://release-monitoring.org/project/11515 | 0.8.0        | 0.9.0        |     
-                        ccache |  DISTRO  | https://release-monitoring.org/project/00257 | 3.7.12       | 4.4          | ORPH
+                        ccache |  DISTRO  | https://release-monitoring.org/project/00257 | 3.7.12       | 4.4.1        | ORPH
                           ccid |  DISTRO  | https://release-monitoring.org/project/02612 | 1.4.34       | 1.4.36       | ORPH
                        chartjs |  DISTRO  | https://release-monitoring.org/project/85785 | 2.9.4        | 3.5.1        |     
                    checkpolicy |  DISTRO  | https://release-monitoring.org/project/00276 | 3.2          | 20200710     |     
@@ -339,27 +329,27 @@ Packages having a newer version
                         clinfo |  DISTRO  | https://release-monitoring.org/project/10503 | 3.0.21.02.21 | 20170207     |     
                          cloop |  DISTRO  | https://release-monitoring.org/project/21332 | 3.14.1.2     | 3.14.1.3     |     
                          cmake |  DISTRO  | https://release-monitoring.org/project/00306 | 3.16.9       | 3.21.2       |     
-                    containerd |  DISTRO  | https://release-monitoring.org/project/16460 | 1.4.4        | 1.5.5        |     
+                           cog |  DISTRO  | https://release-monitoring.org/project/21333 | 0.10.0       | 0.10.1       |     
+                    containerd |  DISTRO  | https://release-monitoring.org/project/16460 | 1.4.9        | 1.5.5        |     
                         cppcms |  DISTRO  | https://release-monitoring.org/project/21334 | 1.2.1        | 2.0.0.beta2  | ORPH
-                        cppzmq |  DISTRO  | https://release-monitoring.org/project/18648 | 4.7.1        | 4.8.0        |     
-                      cryptopp |  DISTRO  | https://release-monitoring.org/project/14487 | 8.3.0        | 8.5.0        |     
-                    cryptsetup |  DISTRO  | https://release-monitoring.org/project/13709 | 2.3.4        | 2.4.0        |     
+                    cryptsetup |  DISTRO  | https://release-monitoring.org/project/13709 | 2.3.4        | 2.4.1        |     
                   cups-filters |  DISTRO  | https://release-monitoring.org/project/05541 | 1.28.9       | 1.28.10      |     
                       cutelyst |  DISTRO  | https://release-monitoring.org/project/21335 | 2.11.0       | 3.1.0        |     
                         dacapo |  DISTRO  | https://release-monitoring.org/project/20546 | 9.12-MR1-... | 9.12-vbump   |     
                    dahdi-linux |  DISTRO  | https://release-monitoring.org/project/21412 | 3.0.0        | 3.1.0        |     
                    dahdi-tools |  DISTRO  | https://release-monitoring.org/project/10252 | 3.0.0        | 3.1.0        |     
                          dante |  DISTRO  | https://release-monitoring.org/project/14716 | 1.4.2        | 1.4.3        | ORPH
+                          daq3 |  DISTRO  | https://release-monitoring.org/project/212345 | 3.0.4        | 3.0.5        |     
                           dash |  DISTRO  | https://release-monitoring.org/project/00394 | 0.5.11.3     | 0.5.11.5     | ORPH
-                    datatables |  DISTRO  | https://release-monitoring.org/project/141588 | 1.10.20      | 1.11.1       |     
+                    datatables |  DISTRO  | https://release-monitoring.org/project/141588 | 1.10.20      | 1.11.2       |     
             datatables-buttons |  DISTRO  | https://release-monitoring.org/project/141589 | 1.6.1        | 2.0.0        |     
        datatables-fixedcolumns |  DISTRO  | https://release-monitoring.org/project/141590 | 3.3.0        | 3.3.3        |     
          datatables-responsive |  DISTRO  | https://release-monitoring.org/project/141591 | 2.2.3        | 2.2.9        |     
-                         dav1d |  DISTRO  | https://release-monitoring.org/project/18920 | 0.9.1        | 0.9.2        |     
+                        davici |  DISTRO  | https://release-monitoring.org/project/21340 | 1.3          | 1.4          |     
                           dbus |  DISTRO  | https://release-monitoring.org/project/05356 | 1.12.20      | 1.13.18      | ORPH
                    dbus-python |  DISTRO  | https://release-monitoring.org/project/00402 | 1.2.16       | 1.2.18       | ORPH
                          dc3dd |  DISTRO  | https://release-monitoring.org/project/15086 | 7.2.641      | 7.2.646      | ORPH
-                   debianutils |  DISTRO  | https://release-monitoring.org/project/21341 | 4.11         | 5.4          | ORPH
+                   debianutils |  DISTRO  | https://release-monitoring.org/project/21341 | 4.11         | 5.5          | ORPH
                     dehydrated |  DISTRO  | https://release-monitoring.org/project/11312 | 0.6.5        | 0.7.0        |     
                          delve |  DISTRO  | https://release-monitoring.org/project/40149 | 1.6.1        | 1.7.1        |     
                       dfu-util |  DISTRO  | https://release-monitoring.org/project/10195 | 0.10         | 0.11         | ORPH
@@ -367,14 +357,12 @@ Packages having a newer version
                         dialog |  DISTRO  | https://release-monitoring.org/project/00431 | 1.3-20200327 | 1.3-20210621 | ORPH
                      diffutils |  DISTRO  | https://release-monitoring.org/project/00436 | 3.7          | 3.8          | ORPH
                        dmalloc |  DISTRO  | https://release-monitoring.org/project/21417 | 5.5.2        | 5.6.5        | ORPH
+                       dnsmasq |  DISTRO  | https://release-monitoring.org/project/00444 | 2.85         | 2.86         |     
                     docker-cli |  DISTRO  | https://release-monitoring.org/project/21076 | 20.10.7      | 20.10.8      |     
                 docker-compose |  DISTRO  | https://release-monitoring.org/project/06185 | 1.24.1       | 2.0.0-rc.3   |     
                  docker-engine |  DISTRO  | https://release-monitoring.org/project/00447 | 20.10.7      | 20.10.8      |     
-                       dovecot |  DISTRO  | https://release-monitoring.org/project/00456 | 2.3.15       | 2.3.16       |     
-            dovecot-pigeonhole |  DISTRO  | https://release-monitoring.org/project/21418 | 0.5.15       | 0.5.16       |     
                     drbd-utils |  DISTRO  | https://release-monitoring.org/project/00462 | 9.15.0       | 9.18.2       |     
                             dt |  DISTRO  | https://release-monitoring.org/project/21844 | 18.32        | 21.27        | ORPH
-                     e2fsprogs |  DISTRO  | https://release-monitoring.org/project/00646 | 1.46.3       | 1.46.4       | ORPH
                       earlyoom |  DISTRO  | https://release-monitoring.org/project/17392 | 1.6          | 1.6.2        |     
                             ed |  DISTRO  | https://release-monitoring.org/project/00659 | 1.16         | 1.17         | ORPH
                           edk2 |  DISTRO  | https://release-monitoring.org/project/125953 | edk2-stab... | 202108       |     
@@ -382,7 +370,7 @@ Packages having a newer version
                       ejabberd |  DISTRO  | https://release-monitoring.org/project/00667 | 20.07        | 21.07        |     
                       elfutils |  DISTRO  | https://release-monitoring.org/project/05679 | 0.184        | 0.185        | ORPH
                         elixir |  DISTRO  | https://release-monitoring.org/project/00673 | 1.9.4        | 1.12.3       |     
-                           ell |  DISTRO  | https://release-monitoring.org/project/17781 | 0.41         | 0.43         |     
+                           ell |  DISTRO  | https://release-monitoring.org/project/17781 | 0.43         | 0.44         |     
                        enchant |  DISTRO  | https://release-monitoring.org/project/06601 | 2.2.15       | 2.3.1        |     
                         erlang |  DISTRO  | https://release-monitoring.org/project/00707 | 22.2         | 24.0.6       |     
                    erlang-eimp |  DISTRO  | https://release-monitoring.org/project/17060 | 1.0.17       | 1.0.21       |     
@@ -406,16 +394,15 @@ Packages having a newer version
                 erlang-p1-yaml |  DISTRO  | https://release-monitoring.org/project/10243 | 1.0.28       | 1.0.32       |     
                erlang-p1-yconf |  DISTRO  | https://release-monitoring.org/project/45378 | 1.0.8        | 1.0.12       |     
                 erlang-p1-zlib |  DISTRO  | https://release-monitoring.org/project/09283 | 1.0.9        | 1.0.10       |     
-                       ethtool |  DISTRO  | https://release-monitoring.org/project/00763 | 5.12         | 5.13         |     
+                       ethtool |  DISTRO  | https://release-monitoring.org/project/00763 | 5.12         | 5.14         |     
                     exfatprogs |  DISTRO  | https://release-monitoring.org/project/94441 | 1.1.0        | 1.1.2        |     
-                         exiv2 |  DISTRO  | https://release-monitoring.org/project/00769 | 0.27.4       | 0.27.5-RC1   |     
+                         exiv2 |  DISTRO  | https://release-monitoring.org/project/00769 | 0.27.4       | 0.27.5-RC2   |     
+                      fakeroot |  DISTRO  | https://release-monitoring.org/project/12048 | 1.25.3       | 1.26         | ORPH
                          fastd |  DISTRO  | https://release-monitoring.org/project/17116 | 21           | 22           |     
-                       fdk-aac |  DISTRO  | https://release-monitoring.org/project/16208 | 2.0.1        | 2.0.2        |     
-                           feh |  DISTRO  | https://release-monitoring.org/project/00790 | 3.6.3        | 3.7.1        |     
-                   fftw-double |  DISTRO  | https://release-monitoring.org/project/00803 | 3.3.8        | 3.3.9        | ORPH
-              fftw-long-double |  DISTRO  | https://release-monitoring.org/project/00803 | 3.3.8        | 3.3.9        | ORPH
-                     fftw-quad |  DISTRO  | https://release-monitoring.org/project/00803 | 3.3.8        | 3.3.9        | ORPH
-                   fftw-single |  DISTRO  | https://release-monitoring.org/project/00803 | 3.3.8        | 3.3.9        | ORPH
+                   fftw-double |  DISTRO  | https://release-monitoring.org/project/00803 | 3.3.8        | 3.3.10       | ORPH
+              fftw-long-double |  DISTRO  | https://release-monitoring.org/project/00803 | 3.3.8        | 3.3.10       | ORPH
+                     fftw-quad |  DISTRO  | https://release-monitoring.org/project/00803 | 3.3.8        | 3.3.10       | ORPH
+                   fftw-single |  DISTRO  | https://release-monitoring.org/project/00803 | 3.3.8        | 3.3.10       | ORPH
                           file |  DISTRO  | https://release-monitoring.org/project/00807 | 5.38         | 5.40         | ORPH
                   flare-engine |  DISTRO  | https://release-monitoring.org/project/21433 | 1.11         | 1.12         |     
                     flare-game |  DISTRO  | https://release-monitoring.org/project/21434 | 1.11         | 1.12         |     
@@ -432,11 +419,10 @@ Packages having a newer version
                           gdbm |  DISTRO  | https://release-monitoring.org/project/00882 | 1.18.1       | 1.21         | ORPH
                     gdk-pixbuf |  DISTRO  | https://release-monitoring.org/project/09533 | 2.42.4       | 2.42.6       | ORPH
                         gensio |  DISTRO  | https://release-monitoring.org/project/67634 | 2.2.8        | 2.2.9        |     
-                       gerbera |  DISTRO  | https://release-monitoring.org/project/18420 | 1.8.2        | 1.9.1        |     
                    gettext-gnu |  DISTRO  | https://release-monitoring.org/project/00898 | 0.20.1       | 0.21         | ORPH
                    ghostscript |  DISTRO  | https://release-monitoring.org/project/01157 | 9.53.3       | 9.54.0       |     
                            git |  DISTRO  | https://release-monitoring.org/project/05350 | 2.31.1       | 2.33.0       |     
-               glib-networking |  DISTRO  | https://release-monitoring.org/project/21353 | 2.66.0       | 2.70.rc      | ORPH
+               glib-networking |  DISTRO  | https://release-monitoring.org/project/21353 | 2.66.0       | 2.70.0       | ORPH
                         glibmm |  DISTRO  | https://release-monitoring.org/project/07960 | 2.66.0       | 2.68.1       |     
                            glm |  DISTRO  | https://release-monitoring.org/project/01181 | 0.9.9.5      | 0.9.9.8      | ORPH
                           glog |  DISTRO  | https://release-monitoring.org/project/08732 | 0.4.0        | 0.5.0        |     
@@ -445,69 +431,65 @@ Packages having a newer version
                       gnuchess |  DISTRO  | https://release-monitoring.org/project/01206 | 6.2.8        | 6.2.9        | ORPH
                         gnupg2 |  DISTRO  | https://release-monitoring.org/project/01215 | 2.2.28       | 2.3.2        | ORPH
                       gnuradio |  DISTRO  | https://release-monitoring.org/project/01217 | 3.8.2.0      | 3.9.2.0      |     
-                        gnutls |  DISTRO  | https://release-monitoring.org/project/01221 | 3.7.1        | 3.7.2        |     
-         gobject-introspection |  DISTRO  | https://release-monitoring.org/project/01223 | 1.68.0       | 1.69.0       | ORPH
+         gobject-introspection |  DISTRO  | https://release-monitoring.org/project/01223 | 1.68.0       | 1.70.0       | ORPH
                            gpm |  DISTRO  | https://release-monitoring.org/project/01242 | 1.20.7       | 1.99.7       |     
                           gpsd |  DISTRO  | https://release-monitoring.org/project/06846 | 3.21         | 3.23         |     
                        granite |  DISTRO  | https://release-monitoring.org/project/05410 | 6.0.0        | 6.1.1        | ORPH
                           grep |  DISTRO  | https://release-monitoring.org/project/01251 | 3.6          | 3.7          |     
-                          grpc |  DISTRO  | https://release-monitoring.org/project/19117 | 1.39.0       | 1.39.1       |     
                          grub2 |  DISTRO  | https://release-monitoring.org/project/01257 | 2.04         | 2.06         |     
-     gsettings-desktop-schemas |  DISTRO  | https://release-monitoring.org/project/13139 | 3.36.1       | 41.rc        | ORPH
+     gsettings-desktop-schemas |  DISTRO  | https://release-monitoring.org/project/13139 | 3.36.1       | 41.0         | ORPH
                            gsl |  DISTRO  | https://release-monitoring.org/project/01267 | 2.6          | 2.7          | ORPH
-                         gssdp |  DISTRO  | https://release-monitoring.org/project/01262 | 1.3.0        | 1.3.1        |     
-                       gst-omx |  DISTRO  | https://release-monitoring.org/project/21845 | 1.18.4       | 1.19.1       | ORPH
-                 gst1-devtools |  DISTRO  | https://release-monitoring.org/project/21856 | 1.18.4       | 1.19.1       |     
+                         gssdp |  DISTRO  | https://release-monitoring.org/project/01262 | 1.3.0        | 1.4.0.1      |     
+                       gst-omx |  DISTRO  | https://release-monitoring.org/project/21845 | 1.18.5       | 1.19.1       | ORPH
+                 gst1-devtools |  DISTRO  | https://release-monitoring.org/project/21856 | 1.18.5       | 1.19.1       |     
                       gst1-imx |  DISTRO  | https://release-monitoring.org/project/21846 | 0.13.1       | 2.0.0        |     
-                gst1-interpipe |  DISTRO  | https://release-monitoring.org/project/21847 | 1.1.4        | 1.1.5        |     
-                    gst1-libav |  DISTRO  | https://release-monitoring.org/project/21848 | 1.18.4       | 1.19.1       | ORPH
-              gst1-plugins-bad |  DISTRO  | https://release-monitoring.org/project/21849 | 1.18.4       | 1.19.1       | ORPH
-             gst1-plugins-base |  DISTRO  | https://release-monitoring.org/project/21850 | 1.18.4       | 1.19.1       | ORPH
-             gst1-plugins-good |  DISTRO  | https://release-monitoring.org/project/21852 | 1.18.4       | 1.19.1       | ORPH
-             gst1-plugins-ugly |  DISTRO  | https://release-monitoring.org/project/15187 | 1.18.4       | 1.19.1       | ORPH
-                   gst1-python |  DISTRO  | https://release-monitoring.org/project/03881 | 1.18.4       | 1.19.1       | ORPH
-              gst1-rtsp-server |  DISTRO  | https://release-monitoring.org/project/21853 | 1.18.4       | 1.19.1       | ORPH
-                    gst1-shark |  DISTRO  | https://release-monitoring.org/project/21854 | v0.7.2       | 0.7.3        |     
-                    gst1-vaapi |  DISTRO  | https://release-monitoring.org/project/21855 | 1.18.4       | 1.19.1       | ORPH
-                    gstreamer1 |  DISTRO  | https://release-monitoring.org/project/01263 | 1.18.4       | 1.19.1       | ORPH
+                    gst1-libav |  DISTRO  | https://release-monitoring.org/project/21848 | 1.18.5       | 1.19.1       | ORPH
+              gst1-plugins-bad |  DISTRO  | https://release-monitoring.org/project/21849 | 1.18.5       | 1.19.1       | ORPH
+             gst1-plugins-base |  DISTRO  | https://release-monitoring.org/project/21850 | 1.18.5       | 1.19.1       | ORPH
+             gst1-plugins-good |  DISTRO  | https://release-monitoring.org/project/21852 | 1.18.5       | 1.19.1       | ORPH
+             gst1-plugins-ugly |  DISTRO  | https://release-monitoring.org/project/15187 | 1.18.5       | 1.19.1       | ORPH
+                   gst1-python |  DISTRO  | https://release-monitoring.org/project/03881 | 1.18.5       | 1.19.1       | ORPH
+              gst1-rtsp-server |  DISTRO  | https://release-monitoring.org/project/21853 | 1.18.5       | 1.19.1       | ORPH
+                    gst1-vaapi |  DISTRO  | https://release-monitoring.org/project/21855 | 1.18.5       | 1.19.1       | ORPH
+                    gstreamer1 |  DISTRO  | https://release-monitoring.org/project/01263 | 1.18.5       | 1.19.1       | ORPH
                   gtk2-engines |  DISTRO  | https://release-monitoring.org/project/13141 | 2.20.2       | 2.91.1       | ORPH
-                        gtkmm3 |  DISTRO  | https://release-monitoring.org/project/07963 | 3.22.0       | 4.2.0        |     
+                        gtkmm3 |  DISTRO  | https://release-monitoring.org/project/07963 | 3.22.0       | 4.4.0        |     
                  gtksourceview |  DISTRO  | https://release-monitoring.org/project/07724 | 3.24.7       | 5.2.0        |     
                          guile |  DISTRO  | https://release-monitoring.org/project/01277 | 3.0.4        | 3.0.7        | ORPH
-                         gupnp |  DISTRO  | https://release-monitoring.org/project/01281 | 1.3.0        | 1.3.1        |     
-                      gupnp-av |  DISTRO  | https://release-monitoring.org/project/01282 | 0.13.0       | 0.13.1       |     
-                    gupnp-dlna |  DISTRO  | https://release-monitoring.org/project/01283 | 0.10.5       | 0.11.0       |     
+                         gupnp |  DISTRO  | https://release-monitoring.org/project/01281 | 1.3.0        | 1.4.0        |     
+                      gupnp-av |  DISTRO  | https://release-monitoring.org/project/01282 | 0.13.0       | 0.14.0       |     
+                    gupnp-dlna |  DISTRO  | https://release-monitoring.org/project/01283 | 0.10.5       | 0.12.0       |     
                    gupnp-tools |  DISTRO  | https://release-monitoring.org/project/01284 | 0.10.0       | 0.10.1       |     
                     gutenprint |  DISTRO  | https://release-monitoring.org/project/01285 | 5.2.14       | 5.3.4        | ORPH
                           gvfs |  DISTRO  | https://release-monitoring.org/project/05496 | 1.44.1       | 1.48.1       | ORPH
                           gzip |  DISTRO  | https://release-monitoring.org/project/01290 | 1.10         | 1.11         | ORPH
                         hackrf |  DISTRO  | https://release-monitoring.org/project/06136 | 2018.01.1    | 2021.03.1    | ORPH
+                      harfbuzz |  DISTRO  | https://release-monitoring.org/project/01299 | 2.9.1        | 3.0.0        |     
                       hiawatha |  DISTRO  | https://release-monitoring.org/project/13375 | 10.11        | 11.0         |     
                          hplip |  DISTRO  | https://release-monitoring.org/project/01327 | 3.17.10      | 3.21.8       | ORPH
                         hwdata |  DISTRO  | https://release-monitoring.org/project/05387 | 0.345        | 0.351        | ORPH
                          hwloc |  DISTRO  | https://release-monitoring.org/project/13501 | 2.4.1        | 2.5.0        |     
                           i2pd |  DISTRO  | https://release-monitoring.org/project/21355 | 2.38.0       | 2.39.0       |     
-                   ibm-sw-tpm2 |  DISTRO  | https://release-monitoring.org/project/18952 | 1563         | 1661         |     
+                           icu |  DISTRO  | https://release-monitoring.org/project/16134 | 69-1         | 69.1         | ORPH
                      ifenslave |  DISTRO  | https://release-monitoring.org/project/21670 | 2.9          | 2.12         | ORPH
                       ifupdown |  DISTRO  | https://release-monitoring.org/project/21673 | 0.8.16       | 0.8.36+nmu1  | ORPH
-                   imagemagick |  DISTRO  | https://release-monitoring.org/project/01372 | 7.0.11-13    | 7.1.0-6      | ORPH
-                        imlib2 |  DISTRO  | https://release-monitoring.org/project/21676 | 1.7.1        | 1.7.3        |     
+                   imagemagick |  DISTRO  | https://release-monitoring.org/project/01372 | 7.0.11-13    | 7.1.0-8      | ORPH
+                        imlib2 |  DISTRO  | https://release-monitoring.org/project/21676 | 1.7.3        | 1.7.4        |     
                  inotify-tools |  DISTRO  | https://release-monitoring.org/project/08864 | 3.20.2.2     | 3.20.11.0    | ORPH
-                  intel-gmmlib |  DISTRO  | https://release-monitoring.org/project/20342 | 21.2.1       | 21.2.2       |     
+                  intel-gmmlib |  DISTRO  | https://release-monitoring.org/project/20342 | 21.2.1       | 21.3.1       |     
              intel-mediadriver |  DISTRO  | https://release-monitoring.org/project/20341 | 21.2.3       | 21.3.3       |     
                 intel-mediasdk |  DISTRO  | https://release-monitoring.org/project/21814 | 21.2.3       | 21.3.3       |     
                         iozone |  DISTRO  | https://release-monitoring.org/project/21679 | 3.490        | 3.492        |     
                         ipcalc |  DISTRO  | https://release-monitoring.org/project/07555 | 1.0.0        | 1.0.1        |     
                          iperf |  DISTRO  | https://release-monitoring.org/project/01388 | 2.0.13       | 2.1.4        |     
-                      iproute2 |  DISTRO  | https://release-monitoring.org/project/01392 | 5.13.0       | 5.14.0       |     
                          irssi |  DISTRO  | https://release-monitoring.org/project/01404 | 1.0.8        | 1.2.3        |     
                            isl |  DISTRO  | https://release-monitoring.org/project/13286 | 0.23         | 0.24         | ORPH
-                           iwd |  DISTRO  | https://release-monitoring.org/project/18380 | 1.14         | 1.17         |     
+                           iwd |  DISTRO  | https://release-monitoring.org/project/18380 | 1.17         | 1.18         |     
                          jack2 |  DISTRO  | https://release-monitoring.org/project/21358 | 1.9.17       | 1.9.19       |     
-                         janet |  DISTRO  | https://release-monitoring.org/project/155612 | 1.16.1       | 1.17.1       |     
-                 janus-gateway |  DISTRO  | https://release-monitoring.org/project/15715 | 0.10.10      | 0.11.3       |     
+                         janet |  DISTRO  | https://release-monitoring.org/project/155612 | 1.16.1       | 1.17.2       |     
+                 janus-gateway |  DISTRO  | https://release-monitoring.org/project/15715 | 0.10.10      | 0.11.4       |     
                         jasper |  DISTRO  | https://release-monitoring.org/project/01421 | 2.0.28       | 2.0.33       |     
-         jitterentropy-library |  DISTRO  | https://release-monitoring.org/project/29701 | 2.2.0        | 3.2.0        |     
+         jitterentropy-library |  DISTRO  | https://release-monitoring.org/project/29701 | 2.2.0        | 3.3.0        |     
                           jose |  DISTRO  | https://release-monitoring.org/project/11761 | 10           | 11           |     
                     jpeg-turbo |  DISTRO  | https://release-monitoring.org/project/01648 | 2.0.6        | 2.1.1        |     
          jquery-datetimepicker |  DISTRO  | https://release-monitoring.org/project/13910 | 2.4.5        | 2.5.20       |     
@@ -518,24 +500,45 @@ Packages having a newer version
                      json-glib |  DISTRO  | https://release-monitoring.org/project/13144 | 1.4.4        | 1.6.6        |     
                          jszip |  DISTRO  | https://release-monitoring.org/project/141558 | 3.2.2        | 3.7.1        |     
                     keepalived |  DISTRO  | https://release-monitoring.org/project/01504 | 2.1.4        | 2.2.4        |     
-       kf5-extra-cmake-modules |  DISTRO  | https://release-monitoring.org/project/08762 | 5.47.0       | 5.86.0-rc1   |     
-               kf5-kcoreaddons |  DISTRO  | https://release-monitoring.org/project/08762 | 5.47.0       | 5.86.0-rc1   |     
-           kf5-modemmanager-qt |  DISTRO  | https://release-monitoring.org/project/08762 | 5.47.0       | 5.86.0-rc1   |     
-         kf5-networkmanager-qt |  DISTRO  | https://release-monitoring.org/project/08762 | 5.47.0       | 5.86.0-rc1   |     
+       kf5-extra-cmake-modules |  DISTRO  | https://release-monitoring.org/project/08762 | 5.47.0       | 5.86.0       |     
+               kf5-kcoreaddons |  DISTRO  | https://release-monitoring.org/project/08762 | 5.47.0       | 5.86.0       |     
+           kf5-modemmanager-qt |  DISTRO  | https://release-monitoring.org/project/08762 | 5.47.0       | 5.86.0       |     
+         kf5-networkmanager-qt |  DISTRO  | https://release-monitoring.org/project/08762 | 5.47.0       | 5.86.0       |     
                         kismet |  DISTRO  | https://release-monitoring.org/project/06966 | 2021-06-R1   | 2021-08-R1   | ORPH
                           kmod |  DISTRO  | https://release-monitoring.org/project/01517 | 28           | 29           |     
-    kodi-audiodecoder-nosefart |  DISTRO  | https://release-monitoring.org/project/21819 | 3.0.0-Matrix | 20.0.0-Nexus |     
+    kodi-audiodecoder-nosefart |  DISTRO  | https://release-monitoring.org/project/21819 | 19.0.0-Ma... | 20.0.0-Nexus |     
         kodi-audioencoder-flac |  DISTRO  | https://release-monitoring.org/project/17755 | 19.0.0-Ma... | 20.0.0-Nexus |     
         kodi-audioencoder-lame |  DISTRO  | https://release-monitoring.org/project/21798 | 19.0.0-Ma... | 20.0.0-Nexus |     
       kodi-audioencoder-vorbis |  DISTRO  | https://release-monitoring.org/project/21797 | 19.0.0-Ma... | 20.0.0-Nexus |     
          kodi-audioencoder-wav |  DISTRO  | https://release-monitoring.org/project/21796 | 19.0.0-Ma... | 20.0.0-Nexus |     
+     kodi-inputstream-adaptive |  DISTRO  | https://release-monitoring.org/project/21795 | 2.6.23-Ma... | 20.0.0-Nexus |     
+ kodi-inputstream-ffmpegdirect |  DISTRO  | https://release-monitoring.org/project/177174 | 1.21.8-Ma... | 20.0.0-Nexus |     
+         kodi-inputstream-rtmp |  DISTRO  | https://release-monitoring.org/project/21794 | 3.4.0-Matrix | 20.0.0-Nexus |     
       kodi-peripheral-joystick |  DISTRO  | https://release-monitoring.org/project/21793 | 19.0.0-Ma... | 20.0.0-Nexus |     
-               kodi-pvr-filmon |  DISTRO  | https://release-monitoring.org/project/21785 | 6.1.2-Matrix | 6.1.3-Matrix |     
-           kodi-pvr-iptvsimple |  DISTRO  | https://release-monitoring.org/project/21782 | 7.6.9-Matrix | 7.6.10-Ma... |     
-              kodi-pvr-nextpvr |  DISTRO  | https://release-monitoring.org/project/21779 | 8.2.6-Matrix | 8.2.7-Matrix |     
-               kodi-pvr-vuplus |  DISTRO  | https://release-monitoring.org/project/21773 | 7.4.9-Matrix | 7.4.11-Ma... |     
-               kodi-pvr-zattoo |  DISTRO  | https://release-monitoring.org/project/100438 | 19.7.9-Ma... | 19.7.10-M... |     
-  kodi-visualisation-shadertoy |  DISTRO  | https://release-monitoring.org/project/21756 | 19.0.1-Ma... | 20.0.0-Nexus |     
+       kodi-peripheral-xarcade |  DISTRO  | https://release-monitoring.org/project/21791 | 1.2.0-Matrix | 20.0.0-Nexus |     
+              kodi-pvr-argustv |  DISTRO  | https://release-monitoring.org/project/21788 | 7.1.2-Matrix | 20.0.0-Nexus |     
+              kodi-pvr-dvblink |  DISTRO  | https://release-monitoring.org/project/21787 | 9.1.2-Matrix | 20.0.0-Nexus |     
+            kodi-pvr-dvbviewer |  DISTRO  | https://release-monitoring.org/project/21786 | 7.3.3-Matrix | 19.0.1-Ma... |     
+               kodi-pvr-filmon |  DISTRO  | https://release-monitoring.org/project/21785 | 6.1.3-Matrix | 20.0.0-Nexus |     
+            kodi-pvr-hdhomerun |  DISTRO  | https://release-monitoring.org/project/21784 | 7.1.1-Matrix | 20.0.0-Nexus |     
+                  kodi-pvr-hts |  DISTRO  | https://release-monitoring.org/project/21783 | 8.4.0-Matrix | 20.0.0-Nexus |     
+           kodi-pvr-iptvsimple |  DISTRO  | https://release-monitoring.org/project/21782 | 7.6.10-Ma... | 20.0.0-Nexus |     
+ kodi-pvr-mediaportal-tvserver |  DISTRO  | https://release-monitoring.org/project/21781 | 8.2.1-Matrix | 20.0.0-Nexus |     
+               kodi-pvr-mythtv |  DISTRO  | https://release-monitoring.org/project/21780 | 7.3.1-Matrix | 7.3.4-Matrix |     
+              kodi-pvr-nextpvr |  DISTRO  | https://release-monitoring.org/project/21779 | 8.2.7-Matrix | 20.0.0-Nexus |     
+                 kodi-pvr-njoy |  DISTRO  | https://release-monitoring.org/project/21778 | 7.1.1-Matrix | 20.0.0-Nexus |     
+              kodi-pvr-octonet |  DISTRO  | https://release-monitoring.org/project/100437 | 4.1.0-2-M... | 20.0.0-Nexus |     
+                 kodi-pvr-pctv |  DISTRO  | https://release-monitoring.org/project/21777 | 6.1.1-Matrix | 20.0.0-Nexus |     
+              kodi-pvr-stalker |  DISTRO  | https://release-monitoring.org/project/21776 | 7.1.1-Matrix | 20.0.0-Nexus |     
+                 kodi-pvr-vbox |  DISTRO  | https://release-monitoring.org/project/21775 | 8.1.2-Matrix | 20.0.0-Nexus |     
+             kodi-pvr-vdr-vnsi |  DISTRO  | https://release-monitoring.org/project/21774 | 8.2.3-Matrix | 20.0.0-Nexus |     
+               kodi-pvr-vuplus |  DISTRO  | https://release-monitoring.org/project/21773 | 7.4.11-Ma... | 20.0.0-Nexus |     
+                  kodi-pvr-wmc |  DISTRO  | https://release-monitoring.org/project/21772 | 6.1.2-Matrix | 20.0.0-Nexus |     
+               kodi-pvr-zattoo |  DISTRO  | https://release-monitoring.org/project/100438 | 19.7.10-M... | 20.0.0-Nexus |     
+    kodi-visualisation-fishbmc |  DISTRO  | https://release-monitoring.org/project/21758 | 6.3.0-Matrix | 20.0.0-Nexus |     
+       kodi-visualisation-goom |  DISTRO  | https://release-monitoring.org/project/21757 | 3.4.0-Matrix | 20.0.0-Nexus |     
+     kodi-visualisation-matrix |  DISTRO  | https://release-monitoring.org/project/177172 | 1.0.1-Matrix | 20.0.0-Nexus |     
+  kodi-visualisation-shadertoy |  DISTRO  | https://release-monitoring.org/project/21756 | 19.0.1-Ma... | 20.1.1-Nexus |     
    kodi-visualisation-spectrum |  DISTRO  | https://release-monitoring.org/project/21755 | 19.0.0-Ma... | 20.0.0-Nexus |     
   kodi-visualisation-starburst |  DISTRO  | https://release-monitoring.org/project/85703 | 19.0.0-Ma... | 20.0.0-Nexus |     
    kodi-visualisation-waveform |  DISTRO  | https://release-monitoring.org/project/21753 | 19.0.1-Ma... | 20.0.1-Nexus |     
@@ -546,25 +549,28 @@ Packages having a newer version
                        leveldb |  DISTRO  | https://release-monitoring.org/project/09338 | 1.22         | 1.23         |     
                            lft |  DISTRO  | https://release-monitoring.org/project/21863 | 3.8          | 3.91         | ORPH
                          libao |  DISTRO  | https://release-monitoring.org/project/07629 | 1.2.0        | 1.2.2        | ORPH
+                        libass |  DISTRO  | https://release-monitoring.org/project/01560 | 0.15.1       | 0.15.2       |     
+                 libatomic_ops |  DISTRO  | https://release-monitoring.org/project/01561 | 7.6.10       | 7.6.12       | ORPH
                    libblockdev |  DISTRO  | https://release-monitoring.org/project/09397 | 2.25         | 2.26-1       | ORPH
+                        libbpf |  DISTRO  | https://release-monitoring.org/project/141355 | 0.4.0        | 0.5.0        |     
                         libbsd |  DISTRO  | https://release-monitoring.org/project/01567 | 0.10.0       | 0.11.3       |     
                    libbytesize |  DISTRO  | https://release-monitoring.org/project/07869 | 2.5          | 2.6          | ORPH
-                        libcap |  DISTRO  | https://release-monitoring.org/project/01569 | 2.52         | 2.56         |     
+                        libcap |  DISTRO  | https://release-monitoring.org/project/01569 | 2.52         | 2.58         |     
                      libcgroup |  DISTRO  | https://release-monitoring.org/project/01575 | 0.42.2       | 2.0          |     
                         libcli |  DISTRO  | https://release-monitoring.org/project/21470 | 1.10.4       | 1.10.7       |     
                        libcoap |  DISTRO  | https://release-monitoring.org/project/21471 | 4.2.1        | 4.3.0        |     
                      libcodec2 |  DISTRO  | https://release-monitoring.org/project/14605 | 0.9.2        | 1.0.0        |     
+                       libcurl |  DISTRO  | https://release-monitoring.org/project/00381 | 7.78.0       | 7.79.0       |     
                        libdnet |  DISTRO  | https://release-monitoring.org/project/06308 | 1.11         | 1.14         | ORPH
                     libeXosip2 |  DISTRO  | https://release-monitoring.org/project/21475 | 5.2.0        | 5.2.1        |     
-                       libedit |  DISTRO  | https://release-monitoring.org/project/01599 | 20191231-3.1 | 20210714-3.1 |     
+                       libedit |  DISTRO  | https://release-monitoring.org/project/01599 | 20191231-3.1 | 20210910-3.1 |     
                          libev |  DISTRO  | https://release-monitoring.org/project/01605 | 4.27         | 4.33         | ORPH
-                       libfuse |  DISTRO  | https://release-monitoring.org/project/00861 | 2.9.9        | 3.10.4       | ORPH
-                     libgcrypt |  DISTRO  | https://release-monitoring.org/project/01623 | 1.9.3        | 1.9.4        | ORPH
+                       libfuse |  DISTRO  | https://release-monitoring.org/project/00861 | 2.9.9        | 3.10.5       | ORPH
                     libgeotiff |  DISTRO  | https://release-monitoring.org/project/21361 | 1.6.0        | 1.7.0        |     
                        libgit2 |  DISTRO  | https://release-monitoring.org/project/01627 | 1.1.0        | 1.2.0        |     
                       libglade |  DISTRO  | https://release-monitoring.org/project/01174 | 2.6.4        | 3.38.2       | ORPH
                        libglfw |  DISTRO  | https://release-monitoring.org/project/01180 | 3.3.2        | 3.3.4        |     
-                      libglib2 |  DISTRO  | https://release-monitoring.org/project/10024 | 2.68.2       | 2.69.2       |     
+                      libglib2 |  DISTRO  | https://release-monitoring.org/project/10024 | 2.68.2       | 2.70.0       |     
                       libgpgme |  DISTRO  | https://release-monitoring.org/project/01239 | 1.15.1       | 1.16.0       | ORPH
                     libgphoto2 |  DISTRO  | https://release-monitoring.org/project/12558 | 2.5.26       | 2.5.27       | ORPH
                         libgta |  DISTRO  | https://release-monitoring.org/project/01564 | 1.0.8        | 1.2.1        |     
@@ -576,22 +582,19 @@ Packages having a newer version
                        libical |  DISTRO  | https://release-monitoring.org/project/01637 | 1.0.1        | 3.0.10       |     
                       libiconv |  DISTRO  | https://release-monitoring.org/project/10656 | 1.15         | 1.16         | ORPH
                   libimxvpuapi |  DISTRO  | https://release-monitoring.org/project/21479 | 0.10.3       | 2.2.0        |     
-                      libinput |  DISTRO  | https://release-monitoring.org/project/05781 | 1.18.1       | 1.18.901     |     
                         libite |  DISTRO  | https://release-monitoring.org/project/17367 | 2.2.0        | 2.4.0        | ORPH
                       libkcapi |  DISTRO  | https://release-monitoring.org/project/16828 | 1.1.5        | 1.3.1        | ORPH
                      liblinear |  DISTRO  | https://release-monitoring.org/project/21363 | 2.30         | 2.43         |     
                    liblockfile |  DISTRO  | https://release-monitoring.org/project/21484 | 1.09         | 1.17         |     
-                  libmaxminddb |  DISTRO  | https://release-monitoring.org/project/07470 | 1.5.2        | 1.6.0        |     
-                       libmdbx |  DISTRO  | https://release-monitoring.org/project/141559 | 0.10.2       | 0.10.3       |     
                    libmediaart |  DISTRO  | https://release-monitoring.org/project/13148 | 1.9.4        | 1.9.5        |     
                       libmhash |  DISTRO  | https://release-monitoring.org/project/21488 | 0.9.9.9      | 1.4          | ORPH
                   libminiupnpc |  DISTRO  | https://release-monitoring.org/project/01986 | 2.1.20201016 | 2.2.2        |     
                      libmspack |  DISTRO  | https://release-monitoring.org/project/16827 | 0.10.1alpha  | 1.9.1        |     
                    libnetconf2 |  DISTRO  | https://release-monitoring.org/project/31639 | 1.1.43       | 2.0.1        |     
                       libnftnl |  DISTRO  | https://release-monitoring.org/project/01681 | 1.1.7        | 1.2.0        |     
-                        libnss |  DISTRO  | https://release-monitoring.org/project/02503 | 3.69.1       | 3.70         |     
-                        libolm |  DISTRO  | https://release-monitoring.org/project/29706 | 3.2.1        | 3.2.4        |     
+                        libolm |  DISTRO  | https://release-monitoring.org/project/29706 | 3.2.1        | 3.2.6        |     
                       libosip2 |  DISTRO  | https://release-monitoring.org/project/15135 | 5.2.0        | 5.2.1        |     
+                     libostree |  DISTRO  | https://release-monitoring.org/project/10899 | 2021.3       | 2021.4       |     
                    libpagekite |  DISTRO  | https://release-monitoring.org/project/21366 | 0.91.190530  | 0.91.201110  |     
             libpam-radius-auth |  DISTRO  | https://release-monitoring.org/project/57834 | 1.4.0        | 2.0.0        | ORPH
                     libphidget |  DISTRO  | https://release-monitoring.org/project/115726 | 2.1.8.201... | 2.1.9.201... |     
@@ -600,48 +603,42 @@ Packages having a newer version
                        libpqxx |  DISTRO  | https://release-monitoring.org/project/21367 | 6.4.5        | 7.6.0        |     
                         libpri |  DISTRO  | https://release-monitoring.org/project/11042 | 1.5.0        | 1.6.0        |     
                          libqb |  DISTRO  | https://release-monitoring.org/project/09399 | 2.0.2        | 2.0.3        |     
-                      libressl |  DISTRO  | https://release-monitoring.org/project/12102 | 3.3.3        | 3.3.4        | ORPH
-                       librsvg |  DISTRO  | https://release-monitoring.org/project/05420 | 2.50.7       | 2.51.4       |     
+                      libressl |  DISTRO  | https://release-monitoring.org/project/12102 | 3.3.4        | 3.4.0        | ORPH
+                       librsvg |  DISTRO  | https://release-monitoring.org/project/05420 | 2.50.7       | 2.52.0       |     
                     libseccomp |  DISTRO  | https://release-monitoring.org/project/13823 | 2.4.4        | 2.5.2        |     
                     libselinux |  DISTRO  | https://release-monitoring.org/project/01717 | 3.2          | 20200710     |     
                    libsemanage |  DISTRO  | https://release-monitoring.org/project/01718 | 3.2          | 20200710     |     
                       libsepol |  DISTRO  | https://release-monitoring.org/project/01719 | 3.2          | 20200710     |     
                        libsigc |  DISTRO  | https://release-monitoring.org/project/07961 | 2.10.6       | 3.0.7        | ORPH
                     libsndfile |  DISTRO  | https://release-monitoring.org/project/13277 | 1.0.31       | 1.1.0beta1   |     
-                 libsoundtouch |  DISTRO  | https://release-monitoring.org/project/115722 | 2.2          | 2.3.0        |     
-                       libsoup |  DISTRO  | https://release-monitoring.org/project/11483 | 2.74.0       | 2.99.9       |     
-                       libsrtp |  DISTRO  | https://release-monitoring.org/project/18547 | 2.2.0        | 2.4.0        |     
+                 libsoundtouch |  DISTRO  | https://release-monitoring.org/project/115722 | 2.2          | 2.3.1        |     
+                       libsoup |  DISTRO  | https://release-monitoring.org/project/11483 | 2.74.0       | 3.0.0        |     
+                       libsrtp |  DISTRO  | https://release-monitoring.org/project/18547 | 2.2.0        | 2.4.1        |     
                         libss7 |  DISTRO  | https://release-monitoring.org/project/21690 | 2.0.0        | 2.0.1        |     
-                        libssh |  DISTRO  | https://release-monitoring.org/project/01729 | 0.9.5        | 0.9.6        | ORPH
-                       libssh2 |  DISTRO  | https://release-monitoring.org/project/01730 | 1.9.0        | 1.10.0       |     
                       libsysfs |  DISTRO  | https://release-monitoring.org/project/04928 | 2.1.0        | 2.1.1        | ORPH
                      libtalloc |  DISTRO  | https://release-monitoring.org/project/01733 | 2.3.1        | 2.3.3        |     
                   libtextstyle |  DISTRO  | https://release-monitoring.org/project/00898 | 0.20.1       | 0.21         | ORPH
                      libtheora |  DISTRO  | https://release-monitoring.org/project/11793 | 1.1.1        | 1.2.0alpha1  | ORPH
           libtorrent-rasterbar |  DISTRO  | https://release-monitoring.org/project/04166 | 1.2.12       | 2.0.4        |     
-                     libuhttpd |  DISTRO  | https://release-monitoring.org/project/89386 | 3.12.1       | 3.13.0       |     
+                     libuhttpd |  DISTRO  | https://release-monitoring.org/project/89386 | 3.12.1       | 3.14.0       |     
                        libupnp |  DISTRO  | https://release-monitoring.org/project/21315 | 1.14.7       | 1.14.10      |     
                        liburcu |  DISTRO  | https://release-monitoring.org/project/07134 | 0.12.1       | 0.13.0       |     
-                         libuv |  DISTRO  | https://release-monitoring.org/project/10784 | 1.41.0       | 1.42.0       |     
                       libvdpau |  DISTRO  | https://release-monitoring.org/project/01755 | 1.3          | 1.4          |     
                        libvips |  DISTRO  | https://release-monitoring.org/project/05097 | 8.10.6       | 8.11.3       |     
-                       libvirt |  DISTRO  | https://release-monitoring.org/project/224041 | 7.4.0        | 7.7.0        |     
                  libwebsockets |  DISTRO  | https://release-monitoring.org/project/11181 | 4.0.21       | 4.2.2        |     
                         libwpe |  DISTRO  | https://release-monitoring.org/project/17789 | 1.10.1       | 1.11.1       |     
-                     libxcrypt |  DISTRO  | https://release-monitoring.org/project/16436 | 4.4.18       | 4.4.25       |     
-                  libxkbcommon |  DISTRO  | https://release-monitoring.org/project/01780 | 1.1.0        | 1.3.0        |     
                       libxmlpp |  DISTRO  | https://release-monitoring.org/project/11129 | 3.2.0        | 5.0.1        | ORPH
                      libxmlrpc |  DISTRO  | https://release-monitoring.org/project/09024 | r3119        | 1.51.07      |     
-                       libyang |  DISTRO  | https://release-monitoring.org/project/18554 | 1.0.225      | 2.0.7        |     
+                       libyang |  DISTRO  | https://release-monitoring.org/project/18554 | 1.0.240      | 2.0.7        |     
                         libzip |  DISTRO  | https://release-monitoring.org/project/10649 | 1.7.3        | 1.8.0        |     
-                         links |  DISTRO  | https://release-monitoring.org/project/01822 | 2.22         | 2.23         | ORPH
                       linphone |  DISTRO  | https://release-monitoring.org/project/01823 | 4.4.8        | 5.1.0-alpha  | ORPH
-                linux-firmware |  DISTRO  | https://release-monitoring.org/project/141464 | 20210511     | 20210818     |     
+                linux-firmware |  DISTRO  | https://release-monitoring.org/project/141464 | 20210511     | 20210919     |     
                      linux-pam |  DISTRO  | https://release-monitoring.org/project/12244 | 1.5.1        | 1.5.2        | ORPH
              linuxconsoletools |  DISTRO  | https://release-monitoring.org/project/01827 | 1.7.0        | 1.7.1        |     
                        live555 |  DISTRO  | https://release-monitoring.org/project/12414 | 2021.05.03   | 2021.08.24   | ORPH
                          lldpd |  DISTRO  | https://release-monitoring.org/project/14019 | 1.0.9        | 1.0.12       | ORPH
                           llvm |  DISTRO  | https://release-monitoring.org/project/01830 | 9.0.1        | 2020.06-a... |     
+                    lm-sensors |  DISTRO  | https://release-monitoring.org/project/01831 | 3-6-0        | 3.6.0        | ORPH
                 lockfile-progs |  DISTRO  | https://release-monitoring.org/project/10135 | 0.1.18       | 0.1.19       | ORPH
                      log4cplus |  DISTRO  | https://release-monitoring.org/project/01835 | 2.0.6        | 2.0.7        |     
                        log4cxx |  DISTRO  | https://release-monitoring.org/project/15330 | 0.11.0       | 0.12.0       |     
@@ -656,33 +653,32 @@ Packages having a newer version
                    lttng-tools |  DISTRO  | https://release-monitoring.org/project/07136 | 2.12.3       | 2.13.0       |     
                            lua |  DISTRO  | https://release-monitoring.org/project/01847 | 5.1.5        | 5.4.3        |     
                 lua-resty-http |  DISTRO  | https://release-monitoring.org/project/13887 | 0.15-0       | 0.16.1       |     
+                           luv |  DISTRO  | https://release-monitoring.org/project/21510 | 1.41.1-0     | 1.42.0-0     |     
                           lvm2 |  DISTRO  | https://release-monitoring.org/project/05354 | 2.03.12      | 2.03.13      | ORPH
-                           lxc |  DISTRO  | https://release-monitoring.org/project/01860 | 4.0.6        | 4.0.10       |     
                           lynx |  DISTRO  | https://release-monitoring.org/project/01863 | 2.8.9rel.1   | 2.9.0        |     
                           lzop |  DISTRO  | https://release-monitoring.org/project/07486 | 1.03         | 1.04         |     
-                            m4 |  DISTRO  | https://release-monitoring.org/project/01871 | 1.4.18       | 1.4.19       | ORPH
                           make |  DISTRO  | https://release-monitoring.org/project/01877 | 4.2.1        | 4.3          | ORPH
                        mariadb |  DISTRO  | https://release-monitoring.org/project/01887 | 10.3.30      | 10.6.4       | ORPH
              matchbox-keyboard |  DISTRO  | https://release-monitoring.org/project/230595 | 0.1          | 0.1.1        |     
                        mbuffer |  DISTRO  | https://release-monitoring.org/project/15518 | 20210328     | 20210829     |     
-                            mc |  DISTRO  | https://release-monitoring.org/project/01954 | 4.8.26       | 4.8.27       |     
                         mcelog |  DISTRO  | https://release-monitoring.org/project/08093 | 172          | 178          |     
                  mediastreamer |  DISTRO  | https://release-monitoring.org/project/21746 | 4.4.8        | 5.1.0-alpha  | ORPH
                      memcached |  DISTRO  | https://release-monitoring.org/project/01965 | 1.6.9        | 1.6.10       | ORPH
                      memtest86 |  DISTRO  | https://release-monitoring.org/project/01966 | 5.01         | 5.31b        |     
                      memtester |  DISTRO  | https://release-monitoring.org/project/01967 | 4.5.0        | 4.5.1        |     
-                        mesa3d |  DISTRO  | https://release-monitoring.org/project/01970 | 21.1.7       | 21.2.1       |     
-                mesa3d-headers |  DISTRO  | https://release-monitoring.org/project/01970 | 21.1.7       | 21.2.1       |     
+                        mesa3d |  DISTRO  | https://release-monitoring.org/project/01970 | 21.1.8       | 21.2.1       |     
+                mesa3d-headers |  DISTRO  | https://release-monitoring.org/project/01970 | 21.1.8       | 21.2.1       |     
                          meson |  DISTRO  | https://release-monitoring.org/project/06472 | 0.59.0       | 0.59.1       |     
                       metacity |  DISTRO  | https://release-monitoring.org/project/15392 | 2.25.1       | 3.40.0       | ORPH
                       mfgtools |  DISTRO  | https://release-monitoring.org/project/21519 | 0.02         | 2.8.0        |     
                    micropython |  DISTRO  | https://release-monitoring.org/project/10539 | 1.14         | 1.17         |     
                         midori |  DISTRO  | https://release-monitoring.org/project/01974 | 0.5.11       | 9.0          | ORPH
                          mimic |  DISTRO  | https://release-monitoring.org/project/21521 | 1.1.0        | 1.3.0.1      |     
+                       minizip |  DISTRO  | https://release-monitoring.org/project/17546 | 3.0.2        | 3.0.3        |     
                     mjpegtools |  DISTRO  | https://release-monitoring.org/project/14612 | 2.1.0        | 2.2.1        |     
-                        moarvm |  DISTRO  | https://release-monitoring.org/project/21100 | 2021.06      | 2021.08      |     
+                        moarvm |  DISTRO  | https://release-monitoring.org/project/21100 | 2021.06      | 2021.09      |     
 mobile-broadband-provider-info |  DISTRO  | https://release-monitoring.org/project/10267 | 20190618     | 20210805     | ORPH
-                 modem-manager |  DISTRO  | https://release-monitoring.org/project/07306 | 1.16.6       | 1.17.900     |     
+                 modem-manager |  DISTRO  | https://release-monitoring.org/project/07306 | 1.16.10      | 1.18.2       |     
                        mongodb |  DISTRO  | https://release-monitoring.org/project/02008 | 4.2.11       | 5.1.0-alpha  |     
                       mongoose |  DISTRO  | https://release-monitoring.org/project/07603 | 7.2          | 7.3          |     
                          monit |  DISTRO  | https://release-monitoring.org/project/05483 | 5.26.0       | 5.29.0       |     
@@ -692,26 +688,30 @@ mobile-broadband-provider-info |  DISTRO  | https://release-monitoring.org/proje
                      mpdecimal |  DISTRO  | https://release-monitoring.org/project/11578 | 2.5.0        | 2.5.1        |     
                         mpg123 |  DISTRO  | https://release-monitoring.org/project/12413 | 1.25.15      | 1.29.0       | ORPH
                           mraa |  DISTRO  | https://release-monitoring.org/project/21528 | 2.1.0        | 2.2.0        |     
+                       mrouted |  DISTRO  | https://release-monitoring.org/project/17370 | 4.2          | 4.3          |     
                        msgpack |  DISTRO  | https://release-monitoring.org/project/12278 | 3.3.0        | 4.0.2        |     
-                         msmtp |  DISTRO  | https://release-monitoring.org/project/02024 | 1.8.14       | 1.8.15       |     
+                         msmtp |  DISTRO  | https://release-monitoring.org/project/02024 | 1.8.14       | 1.8.16       |     
                         mtools |  DISTRO  | https://release-monitoring.org/project/02028 | 4.0.26       | 4.0.35       |     
                            mtr |  DISTRO  | https://release-monitoring.org/project/02029 | 0.93         | 0.94         | ORPH
-                          mutt |  DISTRO  | https://release-monitoring.org/project/02035 | 2.1.1        | 2.1.2        |     
+               multipath-tools |  DISTRO  | https://release-monitoring.org/project/00424 | 0.8.6        | 0.8.7        |     
+                          mutt |  DISTRO  | https://release-monitoring.org/project/02035 | 2.1.1        | 2.1.3        |     
                           ncdu |  DISTRO  | https://release-monitoring.org/project/06045 | 1.15.1       | 1.16         |     
-                       ncurses |  DISTRO  | https://release-monitoring.org/project/02057 | 6.1          | 6.2-20210905 | ORPH
+                       ncurses |  DISTRO  | https://release-monitoring.org/project/02057 | 6.1          | 6.2-20210911 | ORPH
+                        ndisc6 |  DISTRO  | https://release-monitoring.org/project/21531 | 1.0.4        | 1.0.5        | ORPH
                           neon |  DISTRO  | https://release-monitoring.org/project/07604 | 0.30.2       | 0.31.2       | ORPH
                 netcat-openbsd |  DISTRO  | https://release-monitoring.org/project/21534 | debian_1.... | 1.217.1      | ORPH
                        netdata |  DISTRO  | https://release-monitoring.org/project/11046 | 1.21.1       | 1.31.0       |     
                        netifrc |  DISTRO  | https://release-monitoring.org/project/21917 | 0.6.1        | 0.7.3        |     
                      netopeer2 |  DISTRO  | https://release-monitoring.org/project/114978 | 1.1.70       | 2.0.0        |     
                        netsnmp |  DISTRO  | https://release-monitoring.org/project/02062 | 5.9          | 5.9.1        | ORPH
-               network-manager |  DISTRO  | https://release-monitoring.org/project/21197 | 1.32.2       | 1.33.1-dev   | ORPH
+               network-manager |  DISTRO  | https://release-monitoring.org/project/21197 | 1.32.2       | 1.33.2-dev   | ORPH
        network-manager-openvpn |  DISTRO  | https://release-monitoring.org/project/69977 | 1.8.14       | 1.8.15-dev   |     
+                     nfs-utils |  DISTRO  | https://release-monitoring.org/project/02081 | 2.5.4        | 2.5.5        |     
                       nftables |  DISTRO  | https://release-monitoring.org/project/02082 | 0.9.6        | 1.0.0        |     
                        nghttp2 |  DISTRO  | https://release-monitoring.org/project/08651 | 1.41.0       | 1.44.0       |     
-                         nginx |  DISTRO  | https://release-monitoring.org/project/05413 | 1.20.1       | 1.21.2       |     
+                         nginx |  DISTRO  | https://release-monitoring.org/project/05413 | 1.20.1       | 1.21.3       |     
                           nmap |  DISTRO  | https://release-monitoring.org/project/02096 | 7.91         | 7.92         | ORPH
-                        nodejs |  DISTRO  | https://release-monitoring.org/project/08251 | 12.22.5      | 16.8.0       |     
+                        nodejs |  DISTRO  | https://release-monitoring.org/project/08251 | 12.22.6      | 16.9.1       |     
                       nss-mdns |  DISTRO  | https://release-monitoring.org/project/05491 | 0.14.1       | 0.15.1       | ORPH
                        ntfs-3g |  DISTRO  | https://release-monitoring.org/project/02504 | 2017.3.23    | 2021.8.22    | ORPH
                         nuttcp |  DISTRO  | https://release-monitoring.org/project/02511 | 6.1.2        | 8.2.2        |     
@@ -719,17 +719,17 @@ mobile-broadband-provider-info |  DISTRO  | https://release-monitoring.org/proje
                nvidia-modprobe |  DISTRO  | https://release-monitoring.org/project/141657 | 450.57       | 470.63.01    | ORPH
                           nvme |  DISTRO  | https://release-monitoring.org/project/09074 | 1.12         | 1.15         | ORPH
                      ocf-linux |  DISTRO  | https://release-monitoring.org/project/21541 | 20120127     | 20171122     | ORPH
-                         ofono |  DISTRO  | https://release-monitoring.org/project/16859 | 1.31         | 1.32         |     
+                         ofono |  DISTRO  | https://release-monitoring.org/project/16859 | 1.31         | 1.33         |     
                           ogre |  DISTRO  | https://release-monitoring.org/project/33334 | 1.12.0       | 13.0.1       |     
                       openblas |  DISTRO  | https://release-monitoring.org/project/02540 | 0.3.9        | 0.3.17       | ORPH
                        opencv3 |  DISTRO  | https://release-monitoring.org/project/06615 | 3.4.15       | 4.5.3        |     
                       openipmi |  DISTRO  | https://release-monitoring.org/project/02549 | 2.0.28       | 2.0.31       |     
-                       openjdk |  DISTRO  | https://release-monitoring.org/project/176098 | 11.0.11+9    | 18+13        |     
+                       openjdk |  DISTRO  | https://release-monitoring.org/project/176098 | 11.0.12+7    | 18+15        |     
+                    openlayers |  DISTRO  | https://release-monitoring.org/project/06847 | 6.6.1        | 6.7.0        |     
                       openldap |  DISTRO  | https://release-monitoring.org/project/02551 | 2.4.58       | 2.5.7        |     
                        openmpi |  DISTRO  | https://release-monitoring.org/project/02554 | 4.0.0        | 4.1.1        | ORPH
                  openpowerlink |  DISTRO  | https://release-monitoring.org/project/21550 | 2.7.1        | 2.7.2        |     
-                        openrc |  DISTRO  | https://release-monitoring.org/project/11687 | 0.43.3       | 0.43.5       |     
-                    openresolv |  DISTRO  | https://release-monitoring.org/project/21551 | 3.10.0       | 3.12.0       |     
+                        openrc |  DISTRO  | https://release-monitoring.org/project/11687 | 0.43.3       | 0.44.4       |     
                        openssh |  DISTRO  | https://release-monitoring.org/project/02565 | 8.6p1        | 8.7p1        | ORPH
                opentracing-cpp |  DISTRO  | https://release-monitoring.org/project/21553 | 1.5.1        | 1.6.0        |     
                    openvmtools |  DISTRO  | https://release-monitoring.org/project/10998 | 10.3.5-10... | 11.3.0       |     
@@ -748,29 +748,26 @@ mobile-broadband-provider-info |  DISTRO  | https://release-monitoring.org/proje
                       patchelf |  DISTRO  | https://release-monitoring.org/project/02598 | 0.9          | 0.13         | ORPH
                      pax-utils |  DISTRO  | https://release-monitoring.org/project/02601 | 1.2.6        | 1.3.3        | ORPH
                      pcm-tools |  DISTRO  | https://release-monitoring.org/project/21377 | 201812       | 202107       | ORPH
-                          pcre |  DISTRO  | https://release-monitoring.org/project/02610 | 8.44         | 8.45         | ORPH
                          pcre2 |  DISTRO  | https://release-monitoring.org/project/05832 | 10.36        | 10.37        | ORPH
                      pcsc-lite |  DISTRO  | https://release-monitoring.org/project/02611 | 1.9.1        | 1.9.3        | ORPH
                           perl |  DISTRO  | https://release-monitoring.org/project/13599 | 5.32.1       | 5.35.3       |     
                 perl-crypt-cbc |  DISTRO  | https://release-monitoring.org/project/11930 | 2.33         | 3.04         |     
       perl-crypt-openssl-guess |  DISTRO  | https://release-monitoring.org/project/17375 | 0.12         | 0.13         |     
+        perl-crypt-openssl-rsa |  DISTRO  | https://release-monitoring.org/project/02748 | 0.31         | 0.32         |     
                 perl-dbd-mysql |  DISTRO  | https://release-monitoring.org/project/02807 | 4.046        | 4.050        |     
-            perl-io-socket-ssl |  DISTRO  | https://release-monitoring.org/project/06569 | 2.071        | 2.072        |     
-              perl-libwww-perl |  DISTRO  | https://release-monitoring.org/project/03024 | 6.55         | 6.56         |     
                 perl-mail-dkim |  DISTRO  | https://release-monitoring.org/project/11868 | 1.20200824   | 1.20200907   |     
               perl-mojolicious |  DISTRO  | https://release-monitoring.org/project/05966 | 9.19         | 9.21         |     
                perl-net-ssleay |  DISTRO  | https://release-monitoring.org/project/06575 | 1.85         | 1.90         |     
                   perl-sys-cpu |  DISTRO  | https://release-monitoring.org/project/14338 | 0.52         | 0.61         |     
-                perl-type-tiny |  DISTRO  | https://release-monitoring.org/project/14406 | 1.012003     | 1.012004     |     
                perl-xml-libxml |  DISTRO  | https://release-monitoring.org/project/03527 | 2.0134       | 2.0207       |     
              phidgetwebservice |  DISTRO  | https://release-monitoring.org/project/21842 | 2.1.8.201... | 2.1.9.201... |     
-                           php |  DISTRO  | https://release-monitoring.org/project/03627 | 8.0.10       | 8.1.0RC1     |     
+                           php |  DISTRO  | https://release-monitoring.org/project/03627 | 8.0.10       | 8.1.0RC2     |     
                       php-amqp |  DISTRO  | https://release-monitoring.org/project/15603 | 1.10.2       | 1.11.0beta   |     
                    php-imagick |  DISTRO  | https://release-monitoring.org/project/17401 | 3.5.0        | 3.5.1        | ORPH
-                    php-xdebug |  DISTRO  | https://release-monitoring.org/project/13302 | 3.0.4        | 3.1.0beta1   |     
+                    php-xdebug |  DISTRO  | https://release-monitoring.org/project/13302 | 3.0.4        | 3.1.0beta2   |     
                         pigpio |  DISTRO  | https://release-monitoring.org/project/21577 | 79           | 7301         |     
                       pinentry |  DISTRO  | https://release-monitoring.org/project/03643 | 1.1.1        | 1.2.0        | ORPH
-                      pipewire |  DISTRO  | https://release-monitoring.org/project/57357 | 0.3.32       | 0.3.34       |     
+                      pipewire |  DISTRO  | https://release-monitoring.org/project/57357 | 0.3.35       | 0.3.36       |     
                        pkgconf |  DISTRO  | https://release-monitoring.org/project/12753 | 1.6.3        | 1.8.0        | ORPH
                           poco |  DISTRO  | https://release-monitoring.org/project/05418 | 1.10.1       | 1.11.0       |     
                           poke |  DISTRO  | https://release-monitoring.org/project/179926 | 1.2          | 1.3          | ORPH
@@ -788,11 +785,10 @@ mobile-broadband-provider-info |  DISTRO  | https://release-monitoring.org/proje
                       protobuf |  DISTRO  | https://release-monitoring.org/project/03715 | 3.17.3       | 4.0.0-rc2    |     
                     protobuf-c |  DISTRO  | https://release-monitoring.org/project/03716 | 1.3.3        | 1.4.0        |     
                 proxychains-ng |  DISTRO  | https://release-monitoring.org/project/06499 | 4.14         | 4.15         | ORPH
-          pru-software-support |  DISTRO  | https://release-monitoring.org/project/21825 | 5.7.0        | 5.8.0        |     
+          pru-software-support |  DISTRO  | https://release-monitoring.org/project/21825 | 5.8.0        | 5.9.0        |     
                           ptpd |  DISTRO  | https://release-monitoring.org/project/03726 | 1.1.0        | 2.3.1        | ORPH
                     pulseaudio |  DISTRO  | https://release-monitoring.org/project/03729 | 14.2         | 15.0         |     
                          putty |  DISTRO  | https://release-monitoring.org/project/05749 | 0.75         | 0.76         |     
-                            pv |  DISTRO  | https://release-monitoring.org/project/03736 | 1.6.6        | 1.6.19       | ORPH
                   python-aenum |  DISTRO  | https://release-monitoring.org/project/34074 | 2.2.3        | 3.1.0        |     
                 python-aiocoap |  DISTRO  | https://release-monitoring.org/project/21243 | 0.3          | 0.4.1        |     
              python-aioconsole |  DISTRO  | https://release-monitoring.org/project/21244 | 0.3.1        | 0.3.2        |     
@@ -808,16 +804,13 @@ mobile-broadband-provider-info |  DISTRO  | https://release-monitoring.org/proje
                   python-arrow |  DISTRO  | https://release-monitoring.org/project/05314 | 0.15.2       | 1.1.1        |     
                 python-asgiref |  DISTRO  | https://release-monitoring.org/project/18462 | 3.3.4        | 3.4.1        |     
           python-async-timeout |  DISTRO  | https://release-monitoring.org/project/12525 | 3.0.1        | 4.0.0a3      |     
-                  python-attrs |  DISTRO  | https://release-monitoring.org/project/15099 | 19.3.0       | 21.2.0       |     
                    python-avro |  DISTRO  | https://release-monitoring.org/project/59411 | 1.10.0       | 1.10.2       |     
                   python-babel |  DISTRO  | https://release-monitoring.org/project/11984 | 2.7.0        | 2.9.1        |     
 python-backports-functools-... |  DISTRO  | https://release-monitoring.org/project/28328 | 1.5          | 1.6.4        |     
-         python-beautifulsoup4 |  DISTRO  | https://release-monitoring.org/project/03779 | 4.8.1        | 4.9.3        |     
-              python-bitstring |  DISTRO  | https://release-monitoring.org/project/14665 | 3.1.7        | 3.1.9        |     
+         python-beautifulsoup4 |  DISTRO  | https://release-monitoring.org/project/03779 | 4.8.1        | 4.10.0       |     
                   python-bleak |  DISTRO  | https://release-monitoring.org/project/26271 | 0.11.0       | 0.12.1       |     
-                  python-boto3 |  DISTRO  | https://release-monitoring.org/project/08778 | 1.16.50      | 1.18.36      |     
-               python-botocore |  DISTRO  | https://release-monitoring.org/project/08748 | 1.19.48      | 1.21.36      |     
-                python-bsdiff4 |  DISTRO  | https://release-monitoring.org/project/44268 | 1.2.0        | 1.2.1        |     
+                  python-boto3 |  DISTRO  | https://release-monitoring.org/project/08778 | 1.16.50      | 1.18.44      |     
+               python-botocore |  DISTRO  | https://release-monitoring.org/project/08748 | 1.19.48      | 1.21.44      |     
         python-cached-property |  DISTRO  | https://release-monitoring.org/project/06048 | 1.5.1        | 1.5.2        |     
                     python-can |  DISTRO  | https://release-monitoring.org/project/17873 | 3.3.4        | 4.0.0-dev.0  |     
                 python-canopen |  DISTRO  | https://release-monitoring.org/project/23230 | 1.0.0        | 1.2.1        |     
@@ -837,9 +830,9 @@ python-backports-functools-... |  DISTRO  | https://release-monitoring.org/proje
                  python-cython |  DISTRO  | https://release-monitoring.org/project/12679 | 0.29.23      | 3.0.0a9      |     
                  python-daemon |  DISTRO  | https://release-monitoring.org/project/03816 | 2.2.3        | 2.3.0        |     
                  python-daphne |  DISTRO  | https://release-monitoring.org/project/21939 | 2.4.1        | 3.0.2        |     
-           python-dataproperty |  DISTRO  | https://release-monitoring.org/project/21697 | 0.50.1       | 0.52.0       |     
+           python-dataproperty |  DISTRO  | https://release-monitoring.org/project/21697 | 0.50.1       | 0.53.0       |     
                python-dateutil |  DISTRO  | https://release-monitoring.org/project/05621 | 2.8.1        | 2.8.2        |     
-              python-decorator |  DISTRO  | https://release-monitoring.org/project/03819 | 4.4.1        | 5.0.9        |     
+              python-decorator |  DISTRO  | https://release-monitoring.org/project/03819 | 4.4.1        | 5.1.0        |     
              python-defusedxml |  DISTRO  | https://release-monitoring.org/project/03821 | 0.6.0        | 0.7.1        |     
                  python-dialog |  DISTRO  | https://release-monitoring.org/project/03823 | 3.4.0        | 3.5.2        |     
                 python-dialog3 |  DISTRO  | https://release-monitoring.org/project/03823 | 3.5.1        | 3.5.2        |     
@@ -858,7 +851,7 @@ python-backports-functools-... |  DISTRO  | https://release-monitoring.org/proje
               python-flask-wtf |  DISTRO  | https://release-monitoring.org/project/05702 | 0.14.3       | 0.15.1       |     
              python-frozenlist |  DISTRO  | https://release-monitoring.org/project/41138 | 1.1.0        | 1.1.1        |     
                  python-gitdb2 |  DISTRO  | https://release-monitoring.org/project/12730 | 2.0.6        | 4.0.7        |     
-                python-gobject |  DISTRO  | https://release-monitoring.org/project/13158 | 3.36.1       | 3.40.1       |     
+                python-gobject |  DISTRO  | https://release-monitoring.org/project/13158 | 3.36.1       | 3.42.0       |     
                python-greenlet |  DISTRO  | https://release-monitoring.org/project/06870 | 0.4.16       | 1.1.1        |     
                python-gunicorn |  DISTRO  | https://release-monitoring.org/project/03882 | 19.9.0       | 20.1.0       |     
                      python-h2 |  DISTRO  | https://release-monitoring.org/project/19033 | 3.2.0        | 4.0.0        |     
@@ -869,7 +862,6 @@ python-backports-functools-... |  DISTRO  | https://release-monitoring.org/proje
               python-hyperlink |  DISTRO  | https://release-monitoring.org/project/19142 | 19.0.0       | 21.0.0       |     
             python-incremental |  DISTRO  | https://release-monitoring.org/project/15162 | 17.5.0       | 21.3.0       |     
              python-inflection |  DISTRO  | https://release-monitoring.org/project/67637 | 0.3.1        | 0.5.1        |     
-                   python-ipdb |  DISTRO  | https://release-monitoring.org/project/12710 | 0.13.2       | 0.13.9       |     
                     python-ipy |  DISTRO  | https://release-monitoring.org/project/19783 | 1.00         | 1.01         |     
                 python-ipython |  DISTRO  | https://release-monitoring.org/project/01399 | 7.9.0        | 7.27.0       |     
                 python-iso8601 |  DISTRO  | https://release-monitoring.org/project/17228 | 0.1.14       | 1.0.0a1      |     
@@ -879,7 +871,7 @@ python-backports-functools-... |  DISTRO  | https://release-monitoring.org/proje
        python-jaraco-functools |  DISTRO  | https://release-monitoring.org/project/20165 | 2.0          | 3.3.0        |     
                  python-jinja2 |  DISTRO  | https://release-monitoring.org/project/03894 | 2.11.3       | 3.0.1        |     
              python-jsonschema |  DISTRO  | https://release-monitoring.org/project/03898 | 2.5.1        | 4.0.0a6      |     
-                python-keyring |  DISTRO  | https://release-monitoring.org/project/03901 | 19.2.0       | 23.1.0       |     
+                python-keyring |  DISTRO  | https://release-monitoring.org/project/03901 | 19.2.0       | 23.2.1       |     
              python-kiwisolver |  DISTRO  | https://release-monitoring.org/project/16910 | 1.1.0        | 1.3.2        |     
                 python-libusb1 |  DISTRO  | https://release-monitoring.org/project/12301 | 1.7.1        | 1.9.3        |     
                    python-lmdb |  DISTRO  | https://release-monitoring.org/project/15512 | 0.99         | 1.2.1        |     
@@ -889,13 +881,13 @@ python-backports-functools-... |  DISTRO  | https://release-monitoring.org/proje
              python-matplotlib |  DISTRO  | https://release-monitoring.org/project/03919 | 3.0.3        | 3.5.0b1      |     
                   python-meld3 |  DISTRO  | https://release-monitoring.org/project/10562 | 2.0.0        | 2.0.1        |     
                 python-mistune |  DISTRO  | https://release-monitoring.org/project/06189 | 0.8.4        | 2.0.0a6      |     
-         python-more-itertools |  DISTRO  | https://release-monitoring.org/project/12201 | 8.4.0        | 8.9.0        |     
+         python-more-itertools |  DISTRO  | https://release-monitoring.org/project/12201 | 8.4.0        | 8.10.0       |     
                 python-msgpack |  DISTRO  | https://release-monitoring.org/project/21831 | 1.0.0        | 1.0.2        |     
               python-multidict |  DISTRO  | https://release-monitoring.org/project/11132 | 5.0.2        | 5.1.0        |     
                 python-mutagen |  DISTRO  | https://release-monitoring.org/project/03931 | 1.42.0       | 1.45.1       |     
               python-netifaces |  DISTRO  | https://release-monitoring.org/project/05644 | 0.10.9       | 0.11.0       |     
          python-networkmanager |  DISTRO  | https://release-monitoring.org/project/12909 | 2.1          | 2.2          |     
-               python-networkx |  DISTRO  | https://release-monitoring.org/project/07791 | 2.4          | 2.6.2        |     
+               python-networkx |  DISTRO  | https://release-monitoring.org/project/07791 | 2.4          | 2.6.3        |     
                     python-nfc |  DISTRO  | https://release-monitoring.org/project/21829 | 0.13.5       | 1.0.3        |     
                   python-numpy |  DISTRO  | https://release-monitoring.org/project/02509 | 1.18.2       | 1.22.0.dev0  |     
                python-oauthlib |  DISTRO  | https://release-monitoring.org/project/05377 | 3.1.0        | 3.1.1        |     
@@ -907,7 +899,6 @@ python-backports-functools-... |  DISTRO  | https://release-monitoring.org/proje
                  python-pathpy |  DISTRO  | https://release-monitoring.org/project/21703 | 12.0.1       | 12.5.0       |     
            python-pathvalidate |  DISTRO  | https://release-monitoring.org/project/21704 | 0.29.0       | 2.4.1        |     
                     python-pbr |  DISTRO  | https://release-monitoring.org/project/03960 | 5.4.3        | 5.6.0        |     
-                 python-pillow |  DISTRO  | https://release-monitoring.org/project/07974 | 8.3.1        | 8.3.2        |     
                     python-pip |  DISTRO  | https://release-monitoring.org/project/06529 | 20.0.2       | 21.2.4       |     
                  python-pluggy |  DISTRO  | https://release-monitoring.org/project/07500 | 0.13.1       | 1.0.0        |     
                 python-portend |  DISTRO  | https://release-monitoring.org/project/20203 | 2.5          | 2.7.1        |     
@@ -915,7 +906,6 @@ python-backports-functools-... |  DISTRO  | https://release-monitoring.org/proje
                python-priority |  DISTRO  | https://release-monitoring.org/project/19036 | 1.3.0        | 2.0.0        |     
          python-prompt-toolkit |  DISTRO  | https://release-monitoring.org/project/08742 | 2.0.10       | 3.0.20       |     
                python-protobuf |  DISTRO  | https://release-monitoring.org/project/03715 | 3.17.3       | 4.0.0-rc2    |     
-                 python-psutil |  DISTRO  | https://release-monitoring.org/project/03978 | 5.7.2        | 5.8.0        |     
                python-psycopg2 |  DISTRO  | https://release-monitoring.org/project/03979 | 2.8.5        | 2.9.1        |     
              python-ptyprocess |  DISTRO  | https://release-monitoring.org/project/06446 | 0.6.0        | 0.7.0        |     
                    python-pudb |  DISTRO  | https://release-monitoring.org/project/03980 | 2019.1       | 2021.1       |     
@@ -931,40 +921,38 @@ python-backports-functools-... |  DISTRO  | https://release-monitoring.org/proje
                   python-pyicu |  DISTRO  | https://release-monitoring.org/project/12004 | 1.9.7        | 2.7.4        |     
               python-pylibftdi |  DISTRO  | https://release-monitoring.org/project/21583 | 0.18.1       | 0.19.0       |     
                python-pymodbus |  DISTRO  | https://release-monitoring.org/project/15600 | 2.2.0        | 2.5.3rc1     |     
-                python-pymupdf |  DISTRO  | https://release-monitoring.org/project/17320 | 1.18.14      | 1.18.17      |     
+                python-pymupdf |  DISTRO  | https://release-monitoring.org/project/17320 | 1.18.14      | 1.18.19      |     
                 python-pymysql |  DISTRO  | https://release-monitoring.org/project/07284 | 0.9.3        | 1.0.2        |     
               python-pyopenssl |  DISTRO  | https://release-monitoring.org/project/05535 | 19.1.0       | 20.0.1       |     
                python-pyparted |  DISTRO  | https://release-monitoring.org/project/15558 | 3.11.6       | 3.11.7       |     
                   python-pyqt5 |  DISTRO  | https://release-monitoring.org/project/20104 | 5.7          | 5.15.4       |     
-                   python-pyro |  DISTRO  | https://release-monitoring.org/project/19993 | 3.16         | 4.80         |     
+                   python-pyro |  DISTRO  | https://release-monitoring.org/project/19993 | 3.16         | 4.81         |     
                python-pyroute2 |  DISTRO  | https://release-monitoring.org/project/20081 | 0.5.7        | 0.6.4        |     
           python-pytablereader |  DISTRO  | https://release-monitoring.org/project/21592 | 0.26.1       | 0.31.0       |     
           python-pytablewriter |  DISTRO  | https://release-monitoring.org/project/21593 | 0.46.1       | 0.62.0       |     
                  python-pytest |  DISTRO  | https://release-monitoring.org/project/03765 | 6.2.4        | 6.2.5        |     
                    python-pytz |  DISTRO  | https://release-monitoring.org/project/06537 | 2019.3       | 2021.1       |     
                   python-pyusb |  DISTRO  | https://release-monitoring.org/project/21595 | 1.1.1        | 1.2.1        |     
-                  python-pyzmq |  DISTRO  | https://release-monitoring.org/project/04104 | 19.0.2       | 22.2.1       |     
+                  python-pyzmq |  DISTRO  | https://release-monitoring.org/project/04104 | 19.0.2       | 22.3.0       |     
                 python-reentry |  DISTRO  | https://release-monitoring.org/project/21596 | 1.3.1        | 1.3.2        |     
                   python-regex |  DISTRO  | https://release-monitoring.org/project/05548 | 2021.4.4     | 2021.8.28    |     
              python-request-id |  DISTRO  | https://release-monitoring.org/project/21598 | 1.0          | 1.0.1        |     
                python-requests |  DISTRO  | https://release-monitoring.org/project/04004 | 2.25.1       | 2.26.0       |     
               python-rtslib-fb |  DISTRO  | https://release-monitoring.org/project/19641 | 2.1.fb57     | 3.0-pre4     |     
              python-s3transfer |  DISTRO  | https://release-monitoring.org/project/10428 | 0.3.3        | 0.5.0        |     
-                  python-scapy |  DISTRO  | https://release-monitoring.org/project/04764 | 2.4.4        | 2.4.5        |     
                python-schedule |  DISTRO  | https://release-monitoring.org/project/21600 | 0.6.0        | 1.1.0        |     
           python-secretstorage |  DISTRO  | https://release-monitoring.org/project/04020 | 3.1.2        | 3.3.1        |     
                  python-semver |  DISTRO  | https://release-monitoring.org/project/12989 | 2.10.2       | 3.0.0-dev.1  |     
              python-sentry-sdk |  DISTRO  | https://release-monitoring.org/project/21603 | 0.17.3       | 1.3.1        |     
        python-service-identity |  DISTRO  | https://release-monitoring.org/project/07917 | 18.1.0       | 21.1.0       |     
            python-setproctitle |  DISTRO  | https://release-monitoring.org/project/11699 | 1.1.10       | 1.2.2        |     
-             python-setuptools |  DISTRO  | https://release-monitoring.org/project/04021 | 44.0.0       | 58.0.0       |     
-         python-setuptools-scm |  DISTRO  | https://release-monitoring.org/project/07874 | 5.0.1        | 6.3.1        |     
+             python-setuptools |  DISTRO  | https://release-monitoring.org/project/04021 | 44.0.0       | 58.0.4       |     
+         python-setuptools-scm |  DISTRO  | https://release-monitoring.org/project/07874 | 5.0.1        | 6.3.2        |     
                      python-sh |  DISTRO  | https://release-monitoring.org/project/10429 | 1.13.1       | 1.14.2       |     
              python-simplejson |  DISTRO  | https://release-monitoring.org/project/04026 | 3.17.0       | 3.17.5       |     
            python-simplesqlite |  DISTRO  | https://release-monitoring.org/project/21608 | 0.45.2       | 1.3.0        |     
          python-singledispatch |  DISTRO  | https://release-monitoring.org/project/12013 | 3.4.0.3      | 3.7.0        |     
                     python-sip |  DISTRO  | https://release-monitoring.org/project/13626 | 4.18         | 5.0.0        |     
-                    python-six |  DISTRO  | https://release-monitoring.org/project/04027 | 1.15.0       | 1.16.0       |     
                  python-smmap2 |  DISTRO  | https://release-monitoring.org/project/12729 | 2.0.5        | 4.0.0        |     
                  python-snappy |  DISTRO  | https://release-monitoring.org/project/07203 | 0.5.4        | 0.6.0        |     
                python-socketio |  DISTRO  | https://release-monitoring.org/project/21611 | 4.3.1        | 5.4.0        |     
@@ -972,8 +960,8 @@ python-backports-functools-... |  DISTRO  | https://release-monitoring.org/proje
               python-soupsieve |  DISTRO  | https://release-monitoring.org/project/27570 | 1.9.4        | 2.2.1        |     
              python-sqlalchemy |  DISTRO  | https://release-monitoring.org/project/04034 | 1.3.10       | 1.4.23       |     
            python-sqliteschema |  DISTRO  | https://release-monitoring.org/project/29718 | 0.16.2       | 1.2.0        |     
-               python-sqlparse |  DISTRO  | https://release-monitoring.org/project/04038 | 0.3.0        | 0.4.1        |     
-              python-tabledata |  DISTRO  | https://release-monitoring.org/project/21613 | 1.1.2        | 1.2.0        |     
+               python-sqlparse |  DISTRO  | https://release-monitoring.org/project/04038 | 0.3.0        | 0.4.2        |     
+              python-tabledata |  DISTRO  | https://release-monitoring.org/project/21613 | 1.1.2        | 1.3.0        |     
                 python-tempora |  DISTRO  | https://release-monitoring.org/project/21225 | 1.14.1       | 4.1.1        |     
               python-texttable |  DISTRO  | https://release-monitoring.org/project/11635 | 1.6.3        | 1.6.4        |     
                 python-tinyrpc |  DISTRO  | https://release-monitoring.org/project/12824 | 1.0.4        | 1.1.1        |     
@@ -994,7 +982,7 @@ python-backports-functools-... |  DISTRO  | https://release-monitoring.org/proje
                   python-webob |  DISTRO  | https://release-monitoring.org/project/06181 | 1.8.6        | 1.8.7        |     
                   python-webpy |  DISTRO  | https://release-monitoring.org/project/04090 | 0.40         | 0.62         |     
        python-websocket-client |  DISTRO  | https://release-monitoring.org/project/07288 | 0.58.0       | 1.2.1        |     
-             python-websockets |  DISTRO  | https://release-monitoring.org/project/08100 | 8.0.2        | 9.1          |     
+             python-websockets |  DISTRO  | https://release-monitoring.org/project/08100 | 8.0.2        | 10.0         |     
                python-werkzeug |  DISTRO  | https://release-monitoring.org/project/04092 | 1.0.1        | 2.0.1        |     
                   python-wrapt |  DISTRO  | https://release-monitoring.org/project/06108 | 1.11.2       | 1.12.1       |     
                 python-wsaccel |  DISTRO  | https://release-monitoring.org/project/07278 | 0.6.2        | 0.6.3        |     
@@ -1002,76 +990,76 @@ python-backports-functools-... |  DISTRO  | https://release-monitoring.org/proje
                    python-xlib |  DISTRO  | https://release-monitoring.org/project/12180 | 0.27         | 0.31         |     
                    python-xlrd |  DISTRO  | https://release-monitoring.org/project/15107 | 1.2.0        | 2.0.1        |     
              python-xlsxwriter |  DISTRO  | https://release-monitoring.org/project/12031 | 1.2.2        | 3.0.1        |     
-               python-zeroconf |  DISTRO  | https://release-monitoring.org/project/12681 | 0.29.0       | 0.36.2       |     
+               python-zeroconf |  DISTRO  | https://release-monitoring.org/project/12681 | 0.29.0       | 0.36.5       |     
          python-zope-interface |  DISTRO  | https://release-monitoring.org/project/04112 | 5.3.0        | 5.4.0        |     
                        python3 |  DISTRO  | https://release-monitoring.org/project/13254 | 3.9.7        | 3.10.0b4     |     
                   python3-cffi |  DISTRO  | https://release-monitoring.org/project/05536 | 1.14.2       | 1.14.6       |     
                python3-cheetah |  DISTRO  | https://release-monitoring.org/project/13246 | 3.2.6.post2  | 3.2.7b1      |     
           python3-cryptography |  DISTRO  | https://release-monitoring.org/project/05532 | 3.3.2        | 3.4.8        |     
                 python3-cython |  DISTRO  | https://release-monitoring.org/project/12679 | 0.29.23      | 3.0.0a9      |     
-             python3-decorator |  DISTRO  | https://release-monitoring.org/project/03819 | 4.4.1        | 5.0.9        |     
+             python3-decorator |  DISTRO  | https://release-monitoring.org/project/03819 | 4.4.1        | 5.1.0        |     
                 python3-jinja2 |  DISTRO  | https://release-monitoring.org/project/03894 | 2.11.3       | 3.0.1        |     
                   python3-mako |  DISTRO  | https://release-monitoring.org/project/03915 | 1.1.3        | 1.1.5        |     
             python3-markupsafe |  DISTRO  | https://release-monitoring.org/project/03918 | 1.1.1        | 2.0.1        |     
                    python3-pip |  DISTRO  | https://release-monitoring.org/project/06529 | 20.0.2       | 21.2.4       |     
-                python3-psutil |  DISTRO  | https://release-monitoring.org/project/03978 | 5.7.2        | 5.8.0        |     
          python3-pycryptodomex |  DISTRO  | https://release-monitoring.org/project/36851 | 3.9.9        | 3.10.1       |     
                  python3-regex |  DISTRO  | https://release-monitoring.org/project/05548 | 2021.4.4     | 2021.8.28    |     
               python3-requests |  DISTRO  | https://release-monitoring.org/project/04004 | 2.25.1       | 2.26.0       |     
-            python3-setuptools |  DISTRO  | https://release-monitoring.org/project/04021 | 44.0.0       | 58.0.0       |     
-                   python3-six |  DISTRO  | https://release-monitoring.org/project/04027 | 1.15.0       | 1.16.0       |     
+            python3-setuptools |  DISTRO  | https://release-monitoring.org/project/04021 | 44.0.0       | 58.0.4       |     
                           qemu |  DISTRO  | https://release-monitoring.org/project/13607 | 6.0.0        | 6.1.0        |     
                           qpdf |  DISTRO  | https://release-monitoring.org/project/05542 | 9.1.1        | 10.3.2       |     
-                         qt53d |  DISTRO  | https://release-monitoring.org/project/07927 | 5.15.2       | 6.2.0-beta3  |     
-                       qt5base |  DISTRO  | https://release-monitoring.org/project/07927 | 5.15.2       | 6.2.0-beta3  |     
-                     qt5charts |  DISTRO  | https://release-monitoring.org/project/07927 | 5.15.2       | 6.2.0-beta3  |     
-                       qt5coap |  DISTRO  | https://release-monitoring.org/project/07927 | 5.15.2       | 6.2.0-beta3  |     
-               qt5connectivity |  DISTRO  | https://release-monitoring.org/project/07927 | 5.15.2       | 6.2.0-beta3  |     
-                qt5declarative |  DISTRO  | https://release-monitoring.org/project/07927 | 5.15.2       | 6.2.0-beta3  |     
-           qt5graphicaleffects |  DISTRO  | https://release-monitoring.org/project/07927 | 5.15.2       | 6.2.0-beta3  |     
-               qt5imageformats |  DISTRO  | https://release-monitoring.org/project/07927 | 5.15.2       | 6.2.0-beta3  |     
-                        qt5knx |  DISTRO  | https://release-monitoring.org/project/07927 | 5.15.2       | 6.2.0-beta3  |     
-                   qt5location |  DISTRO  | https://release-monitoring.org/project/07927 | 5.15.2       | 6.2.0-beta3  |     
-                     qt5lottie |  DISTRO  | https://release-monitoring.org/project/07927 | 5.15.2       | 6.2.0-beta3  |     
-                       qt5mqtt |  DISTRO  | https://release-monitoring.org/project/07927 | 5.15.2       | 6.2.0-beta3  |     
-                 qt5multimedia |  DISTRO  | https://release-monitoring.org/project/07927 | 5.15.2       | 6.2.0-beta3  |     
-                      qt5opcua |  DISTRO  | https://release-monitoring.org/project/07927 | 5.15.2       | 6.2.0-beta3  | ORPH
-              qt5quickcontrols |  DISTRO  | https://release-monitoring.org/project/07927 | 5.15.2       | 6.2.0-beta3  |     
-             qt5quickcontrols2 |  DISTRO  | https://release-monitoring.org/project/07927 | 5.15.2       | 6.2.0-beta3  |     
-              qt5quicktimeline |  DISTRO  | https://release-monitoring.org/project/07927 | 5.15.2       | 6.2.0-beta3  |     
-              qt5remoteobjects |  DISTRO  | https://release-monitoring.org/project/07927 | 5.15.2       | 6.2.0-beta3  |     
-                     qt5script |  DISTRO  | https://release-monitoring.org/project/07927 | 5.15.2       | 6.2.0-beta3  |     
-                      qt5scxml |  DISTRO  | https://release-monitoring.org/project/07927 | 5.15.2       | 6.2.0-beta3  |     
-                    qt5sensors |  DISTRO  | https://release-monitoring.org/project/07927 | 5.15.2       | 6.2.0-beta3  |     
-                  qt5serialbus |  DISTRO  | https://release-monitoring.org/project/07927 | 5.15.2       | 6.2.0-beta3  |     
-                 qt5serialport |  DISTRO  | https://release-monitoring.org/project/07927 | 5.15.2       | 6.2.0-beta3  |     
-                        qt5svg |  DISTRO  | https://release-monitoring.org/project/07927 | 5.15.2       | 6.2.0-beta3  |     
-                      qt5tools |  DISTRO  | https://release-monitoring.org/project/07927 | 5.15.2       | 6.2.0-beta3  |     
-            qt5virtualkeyboard |  DISTRO  | https://release-monitoring.org/project/07927 | 5.15.2       | 6.2.0-beta3  |     
-                    qt5wayland |  DISTRO  | https://release-monitoring.org/project/07927 | 5.15.2       | 6.2.0-beta3  |     
-                 qt5webchannel |  DISTRO  | https://release-monitoring.org/project/07927 | 5.15.2       | 6.2.0-beta3  |     
-                  qt5webengine |  DISTRO  | https://release-monitoring.org/project/07927 | 5.15.2       | 6.2.0-beta3  |     
-                     qt5webkit |  DISTRO  | https://release-monitoring.org/project/07927 | 5.9.1        | 6.2.0-beta3  |     
-            qt5webkit-examples |  DISTRO  | https://release-monitoring.org/project/07927 | 5.9.1        | 6.2.0-beta3  |     
-                 qt5websockets |  DISTRO  | https://release-monitoring.org/project/07927 | 5.15.2       | 6.2.0-beta3  |     
-                    qt5webview |  DISTRO  | https://release-monitoring.org/project/07927 | 5.15.2       | 6.2.0-beta3  |     
-                  qt5x11extras |  DISTRO  | https://release-monitoring.org/project/07927 | 5.15.2       | 6.2.0-beta3  |     
-                qt5xmlpatterns |  DISTRO  | https://release-monitoring.org/project/07927 | 5.15.2       | 6.2.0-beta3  |     
+                         qt53d |  DISTRO  | https://release-monitoring.org/project/07927 | 5.15.2       | 6.2.0-rc1    |     
+                       qt5base |  DISTRO  | https://release-monitoring.org/project/07927 | 5.15.2       | 6.2.0-rc1    |     
+                     qt5charts |  DISTRO  | https://release-monitoring.org/project/07927 | 5.15.2       | 6.2.0-rc1    |     
+                       qt5coap |  DISTRO  | https://release-monitoring.org/project/07927 | 5.15.2       | 6.2.0-rc1    |     
+               qt5connectivity |  DISTRO  | https://release-monitoring.org/project/07927 | 5.15.2       | 6.2.0-rc1    |     
+                qt5declarative |  DISTRO  | https://release-monitoring.org/project/07927 | 5.15.2       | 6.2.0-rc1    |     
+           qt5graphicaleffects |  DISTRO  | https://release-monitoring.org/project/07927 | 5.15.2       | 6.2.0-rc1    |     
+               qt5imageformats |  DISTRO  | https://release-monitoring.org/project/07927 | 5.15.2       | 6.2.0-rc1    |     
+                        qt5knx |  DISTRO  | https://release-monitoring.org/project/07927 | 5.15.2       | 6.2.0-rc1    |     
+                   qt5location |  DISTRO  | https://release-monitoring.org/project/07927 | 5.15.2       | 6.2.0-rc1    |     
+                     qt5lottie |  DISTRO  | https://release-monitoring.org/project/07927 | 5.15.2       | 6.2.0-rc1    |     
+                       qt5mqtt |  DISTRO  | https://release-monitoring.org/project/07927 | 5.15.2       | 6.2.0-rc1    |     
+                 qt5multimedia |  DISTRO  | https://release-monitoring.org/project/07927 | 5.15.2       | 6.2.0-rc1    |     
+                      qt5opcua |  DISTRO  | https://release-monitoring.org/project/07927 | 5.15.2       | 6.2.0-rc1    | ORPH
+              qt5quickcontrols |  DISTRO  | https://release-monitoring.org/project/07927 | 5.15.2       | 6.2.0-rc1    |     
+             qt5quickcontrols2 |  DISTRO  | https://release-monitoring.org/project/07927 | 5.15.2       | 6.2.0-rc1    |     
+              qt5quicktimeline |  DISTRO  | https://release-monitoring.org/project/07927 | 5.15.2       | 6.2.0-rc1    |     
+              qt5remoteobjects |  DISTRO  | https://release-monitoring.org/project/07927 | 5.15.2       | 6.2.0-rc1    |     
+                     qt5script |  DISTRO  | https://release-monitoring.org/project/07927 | 5.15.2       | 6.2.0-rc1    |     
+                      qt5scxml |  DISTRO  | https://release-monitoring.org/project/07927 | 5.15.2       | 6.2.0-rc1    |     
+                    qt5sensors |  DISTRO  | https://release-monitoring.org/project/07927 | 5.15.2       | 6.2.0-rc1    |     
+                  qt5serialbus |  DISTRO  | https://release-monitoring.org/project/07927 | 5.15.2       | 6.2.0-rc1    |     
+                 qt5serialport |  DISTRO  | https://release-monitoring.org/project/07927 | 5.15.2       | 6.2.0-rc1    |     
+                        qt5svg |  DISTRO  | https://release-monitoring.org/project/07927 | 5.15.2       | 6.2.0-rc1    |     
+                      qt5tools |  DISTRO  | https://release-monitoring.org/project/07927 | 5.15.2       | 6.2.0-rc1    |     
+            qt5virtualkeyboard |  DISTRO  | https://release-monitoring.org/project/07927 | 5.15.2       | 6.2.0-rc1    |     
+                    qt5wayland |  DISTRO  | https://release-monitoring.org/project/07927 | 5.15.2       | 6.2.0-rc1    |     
+                 qt5webchannel |  DISTRO  | https://release-monitoring.org/project/07927 | 5.15.2       | 6.2.0-rc1    |     
+                  qt5webengine |  DISTRO  | https://release-monitoring.org/project/07927 | 5.15.2       | 6.2.0-rc1    |     
+                     qt5webkit |  DISTRO  | https://release-monitoring.org/project/07927 | 5.9.1        | 6.2.0-rc1    |     
+            qt5webkit-examples |  DISTRO  | https://release-monitoring.org/project/07927 | 5.9.1        | 6.2.0-rc1    |     
+                 qt5websockets |  DISTRO  | https://release-monitoring.org/project/07927 | 5.15.2       | 6.2.0-rc1    |     
+                    qt5webview |  DISTRO  | https://release-monitoring.org/project/07927 | 5.15.2       | 6.2.0-rc1    |     
+                  qt5x11extras |  DISTRO  | https://release-monitoring.org/project/07927 | 5.15.2       | 6.2.0-rc1    |     
+                qt5xmlpatterns |  DISTRO  | https://release-monitoring.org/project/07927 | 5.15.2       | 6.2.0-rc1    |     
                            qwt |  DISTRO  | https://release-monitoring.org/project/04147 | 6.1.6        | 6.2.0        | ORPH
-               rabbitmq-server |  DISTRO  | https://release-monitoring.org/project/05585 | 3.8.2        | 3.9.5        |     
+               rabbitmq-server |  DISTRO  | https://release-monitoring.org/project/05585 | 3.8.2        | 3.9.6        |     
                         ranger |  DISTRO  | https://release-monitoring.org/project/07426 | 1.7.2        | 1.9.3        |     
                            re2 |  DISTRO  | https://release-monitoring.org/project/10500 | 2021-08-01   | 2021-09-01   |     
+                     refpolicy |  DISTRO  | https://release-monitoring.org/project/21663 | 2.20210203   | 2.20210908   |     
                    restorecond |  DISTRO  | https://release-monitoring.org/project/16520 | 3.2          | 20200710     | ORPH
                      rng-tools |  DISTRO  | https://release-monitoring.org/project/04202 | 6.12         | 6.14         |     
                        rocksdb |  DISTRO  | https://release-monitoring.org/project/15560 | 6.20.3       | 6.22.1       |     
                       rp-pppoe |  DISTRO  | https://release-monitoring.org/project/04209 | 3.14         | 3.15         | ORPH
                        rsyslog |  DISTRO  | https://release-monitoring.org/project/04218 | 8.2010.0     | 8.2108.0     |     
                       rt-tests |  DISTRO  | https://release-monitoring.org/project/59450 | 1.10         | 2.2          |     
-                          rtai |  DISTRO  | https://release-monitoring.org/project/21658 | 4.0.1        | 5.2          | ORPH
-                          rtty |  DISTRO  | https://release-monitoring.org/project/87994 | 7.4.0        | 7.4.2        |     
-                          runc |  DISTRO  | https://release-monitoring.org/project/07462 | 1.0.0-rc95   | 1.0.2        |     
-                         rygel |  DISTRO  | https://release-monitoring.org/project/04751 | 0.38.3       | 0.40.1       |     
-                        samba4 |  DISTRO  | https://release-monitoring.org/project/04758 | 4.14.7       | 4.15.0rc4    |     
+                          rtai |  DISTRO  | https://release-monitoring.org/project/21658 | 4.0.1        | 5.3          | ORPH
+                          rtty |  DISTRO  | https://release-monitoring.org/project/87994 | 7.4.0        | 7.5.0        |     
+                          rust |  DISTRO  | https://release-monitoring.org/project/07635 | 1.54.0       | 1.55.0       |     
+                      rust-bin |  DISTRO  | https://release-monitoring.org/project/07635 | 1.54.0       | 1.55.0       |     
+                         rygel |  DISTRO  | https://release-monitoring.org/project/04751 | 0.38.3       | 0.40.2       |     
+                        samba4 |  DISTRO  | https://release-monitoring.org/project/04758 | 4.14.7       | 4.15.0rc7    |     
                          scons |  DISTRO  | https://release-monitoring.org/project/04770 | 3.1.2        | 4.2.0        |     
                        sdl_gfx |  DISTRO  | https://release-monitoring.org/project/04778 | 2.0.23       | 2.0.25       |     
                         sdparm |  DISTRO  | https://release-monitoring.org/project/04787 | 1.10         | 1.12         |     
@@ -1084,12 +1072,11 @@ python-backports-functools-... |  DISTRO  | https://release-monitoring.org/proje
               shared-mime-info |  DISTRO  | https://release-monitoring.org/project/05524 | 1.12         | 2.1          | ORPH
                     sigrok-cli |  DISTRO  | https://release-monitoring.org/project/09550 | 0.7.1        | 0.7.2        |     
                       sispmctl |  DISTRO  | https://release-monitoring.org/project/21653 | 4.8          | 4.9          |     
-                      smcroute |  DISTRO  | https://release-monitoring.org/project/17369 | 2.4.4        | 2.5.2        |     
                         snappy |  DISTRO  | https://release-monitoring.org/project/04844 | 1.1.8        | 1.1.9        |     
                         sngrep |  DISTRO  | https://release-monitoring.org/project/17075 | 1.4.7        | 1.4.9        | ORPH
                         snmppp |  DISTRO  | https://release-monitoring.org/project/21318 | 3.4.2        | 3.4.7        |     
                          snort |  DISTRO  | https://release-monitoring.org/project/212335 | 2.9.17.1     | 2.9.18.1     |     
-                        snort3 |  DISTRO  | https://release-monitoring.org/project/13263 | 3.1.6.0      | 3.1.10.0     |     
+                        snort3 |  DISTRO  | https://release-monitoring.org/project/13263 | 3.1.6.0      | 3.1.12.0     |     
                      sofia-sip |  DISTRO  | https://release-monitoring.org/project/10509 | 1.13.3-80... | 1.13.4.69... |     
                      softether |  DISTRO  | https://release-monitoring.org/project/21383 | 4.30-9700... | 4.38-9760... |     
        sound-theme-freedesktop |  DISTRO  | https://release-monitoring.org/project/10152 | 0.7          | 0.8          |     
@@ -1099,19 +1086,19 @@ python-backports-functools-... |  DISTRO  | https://release-monitoring.org/proje
                          squid |  DISTRO  | https://release-monitoring.org/project/04880 | 4.15         | 5.1          | ORPH
                          sshfs |  DISTRO  | https://release-monitoring.org/project/11058 | 3.7.1        | 3.7.2        | ORPH
                        sshpass |  DISTRO  | https://release-monitoring.org/project/12961 | 1.06         | 1.09         |     
-                          sslh |  DISTRO  | https://release-monitoring.org/project/06184 | 1.21c        | 1.22b        |     
+                          sslh |  DISTRO  | https://release-monitoring.org/project/06184 | 1.21c        | 1.22c        |     
              start-stop-daemon |  DISTRO  | https://release-monitoring.org/project/08127 | 1.20.7.1     | 1.20.9       | ORPH
           startup-notification |  DISTRO  | https://release-monitoring.org/project/10089 | 0.9          | 0.12         | ORPH
                         stella |  DISTRO  | https://release-monitoring.org/project/06861 | 6.4          | 6.5.3        |     
                         strace |  DISTRO  | https://release-monitoring.org/project/04897 | 5.13         | 5.14         |     
-                     stress-ng |  DISTRO  | https://release-monitoring.org/project/12538 | 0.12.02      | 0.13.01      |     
+                     stress-ng |  DISTRO  | https://release-monitoring.org/project/12538 | 0.13.01      | 0.13.03      |     
                     strongswan |  DISTRO  | https://release-monitoring.org/project/04899 | 5.9.1        | 5.9.3        |     
-                          sudo |  DISTRO  | https://release-monitoring.org/project/04906 | 1.9.5p2      | 1.9.7p2      | ORPH
+                          sudo |  DISTRO  | https://release-monitoring.org/project/04906 | 1.9.5p2      | 1.9.8p1      | ORPH
                       supertux |  DISTRO  | https://release-monitoring.org/project/04911 | 0.6.0        | 0.6.2        |     
                   supertuxkart |  DISTRO  | https://release-monitoring.org/project/04912 | 1.1          | 1.2          |     
                     supervisor |  DISTRO  | https://release-monitoring.org/project/16289 | 4.1.0        | 4.2.2        | ORPH
                         sysdig |  DISTRO  | https://release-monitoring.org/project/16898 | 0.23.1       | 0.27.1       |     
-                     syslog-ng |  DISTRO  | https://release-monitoring.org/project/04930 | 3.33.1       | 3.33.2       |     
+                     syslog-ng |  DISTRO  | https://release-monitoring.org/project/04930 | 3.33.2       | 3.34.1       |     
                        sysprof |  DISTRO  | https://release-monitoring.org/project/21649 | 1.2.0        | 3.40.1       |     
                        sysrepo |  DISTRO  | https://release-monitoring.org/project/34820 | 1.4.122      | 2.0.1        |     
                        sysstat |  DISTRO  | https://release-monitoring.org/project/04931 | 12.4.2       | 12.5.4       | ORPH
@@ -1119,11 +1106,10 @@ python-backports-functools-... |  DISTRO  | https://release-monitoring.org/proje
                         taglib |  DISTRO  | https://release-monitoring.org/project/01982 | 1.11.1       | 1.12         |     
                   targetcli-fb |  DISTRO  | https://release-monitoring.org/project/09174 | 2.1.fb41     | 3.0-pre4     |     
                            tcl |  DISTRO  | https://release-monitoring.org/project/04941 | 8.6.9        | 8.7a5        | ORPH
-                         tclap |  DISTRO  | https://release-monitoring.org/project/04942 | 1.2.2        | 1.2.4        |     
                         tcllib |  DISTRO  | https://release-monitoring.org/project/04943 | 1.13         | 1.20         |     
                      tcpreplay |  DISTRO  | https://release-monitoring.org/project/13716 | 4.3.3        | 4.3.4        | ORPH
                       thermald |  DISTRO  | https://release-monitoring.org/project/14500 | 1.9.1        | 2.4.6        |     
-                        thrift |  DISTRO  | https://release-monitoring.org/project/05581 | 0.14.1       | 0.14.2       | ORPH
+                        thrift |  DISTRO  | https://release-monitoring.org/project/05581 | 0.14.1       | 0.15.0       | ORPH
                    timescaledb |  DISTRO  | https://release-monitoring.org/project/17545 | 2.4.0        | 2.4.1        |     
                           tinc |  DISTRO  | https://release-monitoring.org/project/07716 | 1.0.36       | 1.1pre18     |     
                       tinyalsa |  DISTRO  | https://release-monitoring.org/project/21382 | 1.1.1        | 2.0.0        | ORPH
@@ -1131,69 +1117,62 @@ python-backports-functools-... |  DISTRO  | https://release-monitoring.org/proje
                        tinyxml |  DISTRO  | https://release-monitoring.org/project/10162 | 2.6.2_2      | 2.6.2        | ORPH
                       tinyxml2 |  DISTRO  | https://release-monitoring.org/project/04976 | 8.0.0        | 9.0.0        |     
                             tk |  DISTRO  | https://release-monitoring.org/project/11426 | 8.6.6        | 8.7a5        |     
-                          tmux |  DISTRO  | https://release-monitoring.org/project/04980 | 3.1c         | 3.2a         |     
-                           tor |  DISTRO  | https://release-monitoring.org/project/04991 | 0.4.6.7      | 0.4.7.0-a... |     
+                          tmux |  DISTRO  | https://release-monitoring.org/project/04980 | 3.1c         | 3.3-rc       |     
+                           tor |  DISTRO  | https://release-monitoring.org/project/04991 | 0.4.6.7      | 0.4.7.1-a... |     
                      tpm-tools |  DISTRO  | https://release-monitoring.org/project/21640 | 1.3.9.1      | 1.3.9.2      |     
                     tpm2-abrmd |  DISTRO  | https://release-monitoring.org/project/16819 | 2.3.3        | 2.4.0        | ORPH
-                   tpm2-pkcs11 |  DISTRO  | https://release-monitoring.org/project/18777 | 1.6.0        | 1.7.0-rc0    |     
+                   tpm2-pkcs11 |  DISTRO  | https://release-monitoring.org/project/18777 | 1.6.0        | 1.7.0-rc1    |     
                     tpm2-tools |  DISTRO  | https://release-monitoring.org/project/12841 | 4.3.2        | 5.2-rc0      | ORPH
                      tpm2-totp |  DISTRO  | https://release-monitoring.org/project/18790 | 0.2.1        | 0.3.0        |     
                       tpm2-tss |  DISTRO  | https://release-monitoring.org/project/12683 | 3.0.3        | 3.1.0        | ORPH
                      trace-cmd |  DISTRO  | https://release-monitoring.org/project/07873 | trace-cmd... | 2.9.4        |     
-                   uboot-tools |  DISTRO  | https://release-monitoring.org/project/05022 | 2021.07      | 2021.10-rc3  |     
-                       uftrace |  DISTRO  | https://release-monitoring.org/project/195039 | 0.9.4        | 0.10         |     
-                           uhd |  DISTRO  | https://release-monitoring.org/project/12572 | 3.15.0.0     | 4.1.0.2-rc3  |     
+                   uboot-tools |  DISTRO  | https://release-monitoring.org/project/05022 | 2021.07      | 2021.10-rc4  |     
+                           uhd |  DISTRO  | https://release-monitoring.org/project/12572 | 3.15.0.0     | 4.1.0.2      |     
               unclutter-xfixes |  DISTRO  | https://release-monitoring.org/project/09206 | 1.5          | 1.6          |     
+                       unionfs |  DISTRO  | https://release-monitoring.org/project/17617 | 2.1          | 2.2          |     
                          unrar |  DISTRO  | https://release-monitoring.org/project/13306 | 5.9.4        | 6.0.7        | ORPH
                       usbredir |  DISTRO  | https://release-monitoring.org/project/16012 | 0.8.0        | 0.11.0       |     
                     util-linux |  DISTRO  | https://release-monitoring.org/project/08179 | 2.36.2       | 2.37.2       | ORPH
                util-linux-libs |  DISTRO  | https://release-monitoring.org/project/08179 | 2.36.2       | 2.37.2       | ORPH
-                           uvw |  DISTRO  | https://release-monitoring.org/project/33083 | 2.9.0_lib... | 2.10.0_li... |     
-                          vala |  DISTRO  | https://release-monitoring.org/project/05065 | 0.52.4       | 0.53.2       | ORPH
-                      valijson |  DISTRO  | https://release-monitoring.org/project/18452 | 0.3          | 0.5          |     
-                           vim |  DISTRO  | https://release-monitoring.org/project/05092 | 8.2.0000     | 8.2.3404     | ORPH
+                          vala |  DISTRO  | https://release-monitoring.org/project/05065 | 0.52.4       | 0.54.0       | ORPH
+                      valijson |  DISTRO  | https://release-monitoring.org/project/18452 | 0.3          | 0.6          |     
+                           vim |  DISTRO  | https://release-monitoring.org/project/05092 | 8.2.3432     | 8.2.3450     | ORPH
                            vlc |  DISTRO  | https://release-monitoring.org/project/06504 | 3.0.16       | 4.0.0-dev    |     
                         vnstat |  DISTRO  | https://release-monitoring.org/project/07283 | 2.7          | 2.8          |     
                            vte |  DISTRO  | https://release-monitoring.org/project/10895 | 0.48.3       | 0.65.91      | ORPH
-                         vuejs |  DISTRO  | https://release-monitoring.org/project/89353 | 3.1.5        | 3.2.9        |     
-                  vuejs-router |  DISTRO  | https://release-monitoring.org/project/234796 | 4.0.10       | 4.0.11       | ORPH
+                         vuejs |  DISTRO  | https://release-monitoring.org/project/89353 | 3.2.6        | 3.2.12       |     
                         waffle |  DISTRO  | https://release-monitoring.org/project/21633 | 1.6.1        | 1.7.0        |     
-                       wavemon |  DISTRO  | https://release-monitoring.org/project/05120 | 0.9.1        | 0.9.3        |     
-             wayland-protocols |  DISTRO  | https://release-monitoring.org/project/13997 | 1.21         | 1.22         | ORPH
-                     webkitgtk |  DISTRO  | https://release-monitoring.org/project/05355 | 2.32.3       | 2.33.90      |     
+                       wavemon |  DISTRO  | https://release-monitoring.org/project/05120 | 0.9.1        | 0.9.4        |     
+                     webkitgtk |  DISTRO  | https://release-monitoring.org/project/05355 | 2.32.3       | 2.33.91      |     
                           webp |  DISTRO  | https://release-monitoring.org/project/01761 | 1.2.0        | 1.2.1        |     
        webrtc-audio-processing |  DISTRO  | https://release-monitoring.org/project/15929 | 0.3.1        | 1.0          | ORPH
+                          wget |  DISTRO  | https://release-monitoring.org/project/05124 | 1.21.1       | 1.21.2       | ORPH
              wilc1000-firmware |  DISTRO  | https://release-monitoring.org/project/65598 | 14.1         | 15.5         |     
-                          wine |  DISTRO  | https://release-monitoring.org/project/05134 | 6.0          | 6.16         |     
+                          wine |  DISTRO  | https://release-monitoring.org/project/05134 | 6.0          | 6.17         |     
         wireguard-linux-compat |  DISTRO  | https://release-monitoring.org/project/62379 | 1.0.20210219 | 1.0.20210606 |     
-               wireguard-tools |  DISTRO  | https://release-monitoring.org/project/62381 | 1.0.20210223 | 1.0.20210424 |     
+               wireguard-tools |  DISTRO  | https://release-monitoring.org/project/62381 | 1.0.20210223 | 1.0.20210914 |     
                 wireless-regdb |  DISTRO  | https://release-monitoring.org/project/15257 | 2021.04.21   | 2021.08.28   |     
                      wireshark |  DISTRO  | https://release-monitoring.org/project/05137 | 3.4.7        | 3.5.0        | ORPH
-                     wpewebkit |  DISTRO  | https://release-monitoring.org/project/17557 | 2.32.3       | 2.33.2       |     
+                     wpewebkit |  DISTRO  | https://release-monitoring.org/project/17557 | 2.32.3       | 2.33.90      |     
                           x265 |  DISTRO  | https://release-monitoring.org/project/07275 | 3.3          | 3.4          |     
                      xapp_luit |  DISTRO  | https://release-monitoring.org/project/15047 | 1.1.1        | 20210218     |     
-                    xapp_xeyes |  DISTRO  | https://release-monitoring.org/project/15025 | 1.1.2        | 1.2.0        |     
-                     xapp_xrdb |  DISTRO  | https://release-monitoring.org/project/14956 | 1.2.0        | 1.2.1        |     
-                      xapp_xwd |  DISTRO  | https://release-monitoring.org/project/14950 | 1.0.7        | 1.0.8        |     
                        xdotool |  DISTRO  | https://release-monitoring.org/project/08648 | 3.20160805.1 | 3.20210903.1 |     
+   xdriver_xf86-input-libinput |  DISTRO  | https://release-monitoring.org/project/05782 | 1.1.0        | 1.2.0        |     
       xdriver_xf86-input-tslib |  DISTRO  | https://release-monitoring.org/project/21713 | 1.1.1        | 1.2.0-rc1    |     
      xdriver_xf86-video-amdgpu |  DISTRO  | https://release-monitoring.org/project/15900 | 19.1.0       | 21.0.0       |     
-                           xen |  DISTRO  | https://release-monitoring.org/project/05181 | 4.14.2       | 4.15.0       |     
+                           xen |  DISTRO  | https://release-monitoring.org/project/05181 | 4.14.2       | 4.15.1       |     
                       xfsprogs |  DISTRO  | https://release-monitoring.org/project/05188 | 5.10.0       | 5.13.0       | ORPH
                         xinetd |  DISTRO  | https://release-monitoring.org/project/06382 | 2.3.15       | 2.3.15.4     |     
               xkeyboard-config |  DISTRO  | https://release-monitoring.org/project/05191 | 2.32         | 2.33         |     
-                xlib_libXfont2 |  DISTRO  | https://release-monitoring.org/project/17165 | 2.0.4        | 2.0.5        |     
-                   xlib_libXft |  DISTRO  | https://release-monitoring.org/project/01777 | 2.3.3        | 2.3.4        |     
-                    xlib_libXi |  DISTRO  | https://release-monitoring.org/project/01778 | 1.7.10       | 1.7.99.2     |     
-                         xmrig |  DISTRO  | https://release-monitoring.org/project/17499 | 6.14.1       | 6.15.0       |     
-                     xorgproto |  DISTRO  | https://release-monitoring.org/project/17190 | 2021.4       | 2021.4.99.2  |     
+                    xlib_libXi |  DISTRO  | https://release-monitoring.org/project/01778 | 1.7.10       | 1.8          |     
+                     xorgproto |  DISTRO  | https://release-monitoring.org/project/17190 | 2021.4       | 2021.5       |     
                   xscreensaver |  DISTRO  | https://release-monitoring.org/project/05269 | 5.45         | 6.01         |     
            xserver_xorg-server |  DISTRO  | https://release-monitoring.org/project/05250 | 1.20.13      | 21.0.99.1    |     
                 xtables-addons |  DISTRO  | https://release-monitoring.org/project/07736 | 3.17         | 3.18         | ORPH
                          xterm |  DISTRO  | https://release-monitoring.org/project/05272 | 367          | 368          | ORPH
                       yaml-cpp |  DISTRO  | https://release-monitoring.org/project/05284 | 0.6.3        | 0.7.0        | ORPH
                           zbar |  DISTRO  | https://release-monitoring.org/project/13689 | 0.23.1       | 0.23.90      |     
-                           zfs |  DISTRO  | https://release-monitoring.org/project/11706 | 2.0.5        | 2.1.0        |     
+                           zfs |  DISTRO  | https://release-monitoring.org/project/11706 | 2.0.5        | 2.1.1        |     
                            zic |  DISTRO  | https://release-monitoring.org/project/16905 | 2020f        | 2021a        |     
                        zlib-ng |  DISTRO  | https://release-monitoring.org/project/115592 | 1.9.9-b1     | 2.0.5        | ORPH
                  zynq-boot-bin |  DISTRO  | https://release-monitoring.org/project/21623 | 2015.1       | 2021.1       | ORPH
@@ -1232,7 +1211,6 @@ CVEs for the 'master' branch
                         apache | CVE-2010-0434    | https://security-tracker.debian.org/tracker/CVE-2010-0434   
                         apache | CVE-2010-1452    | https://security-tracker.debian.org/tracker/CVE-2010-1452   
                         apache | CVE-2014-0231    | https://security-tracker.debian.org/tracker/CVE-2014-0231   
-                        apache | CVE-2021-33193   | https://security-tracker.debian.org/tracker/CVE-2021-33193  
                       apparmor | CVE-2016-1585    | https://security-tracker.debian.org/tracker/CVE-2016-1585   
                          argus | CVE-2011-3332    | https://security-tracker.debian.org/tracker/CVE-2011-3332   
                          asn1c | CVE-2017-12966   | https://security-tracker.debian.org/tracker/CVE-2017-12966  
@@ -1273,10 +1251,8 @@ CVEs for the 'master' branch
                          cairo | CVE-2020-35492   | https://security-tracker.debian.org/tracker/CVE-2020-35492  
                         cereal | CVE-2020-11104   | https://security-tracker.debian.org/tracker/CVE-2020-11104  
                         clamav | CVE-2016-1405    | https://security-tracker.debian.org/tracker/CVE-2016-1405   
-                    containerd | CVE-2021-32760   | https://security-tracker.debian.org/tracker/CVE-2021-32760  
                      coreutils | CVE-2016-2781    | https://security-tracker.debian.org/tracker/CVE-2016-2781   
                           cpio | CVE-2010-4226    | https://security-tracker.debian.org/tracker/CVE-2010-4226   
-                      cryptopp | CVE-2019-14318   | https://security-tracker.debian.org/tracker/CVE-2019-14318  
                           cups | CVE-2018-6553    | https://security-tracker.debian.org/tracker/CVE-2018-6553   
                            cvs | CVE-2017-12836   | https://security-tracker.debian.org/tracker/CVE-2017-12836  
                           dbus | CVE-2020-35512   | https://security-tracker.debian.org/tracker/CVE-2020-35512  
@@ -1356,7 +1332,6 @@ CVEs for the 'master' branch
                           edk2 | CVE-2019-14586   | https://security-tracker.debian.org/tracker/CVE-2019-14586  
                           edk2 | CVE-2019-14587   | https://security-tracker.debian.org/tracker/CVE-2019-14587  
                         erlang | CVE-2020-35733   | https://security-tracker.debian.org/tracker/CVE-2020-35733  
-                        erlang | CVE-2021-29221   | https://security-tracker.debian.org/tracker/CVE-2021-29221  
                           exim | CVE-2020-28017   | https://security-tracker.debian.org/tracker/CVE-2020-28017  
                           exim | CVE-2021-38371   | https://security-tracker.debian.org/tracker/CVE-2021-38371  
                          exiv2 | CVE-2007-6353    | https://security-tracker.debian.org/tracker/CVE-2007-6353   
@@ -1372,12 +1347,10 @@ CVEs for the 'master' branch
                          exiv2 | CVE-2021-37621   | https://security-tracker.debian.org/tracker/CVE-2021-37621  
                          exiv2 | CVE-2021-37622   | https://security-tracker.debian.org/tracker/CVE-2021-37622  
                          exiv2 | CVE-2021-37623   | https://security-tracker.debian.org/tracker/CVE-2021-37623  
-                     fetchmail | CVE-2021-39272   | https://security-tracker.debian.org/tracker/CVE-2021-39272  
                         ffmpeg | CVE-2021-33815   | https://security-tracker.debian.org/tracker/CVE-2021-33815  
                         ffmpeg | CVE-2021-38114   | https://security-tracker.debian.org/tracker/CVE-2021-38114  
                         ffmpeg | CVE-2021-38171   | https://security-tracker.debian.org/tracker/CVE-2021-38171  
                         ffmpeg | CVE-2021-38291   | https://security-tracker.debian.org/tracker/CVE-2021-38291  
-                            gd | CVE-2021-40145   | https://security-tracker.debian.org/tracker/CVE-2021-40145  
                          glibc | CVE-2010-4756    | https://security-tracker.debian.org/tracker/CVE-2010-4756   
                          glibc | CVE-2019-1010022 | https://security-tracker.debian.org/tracker/CVE-2019-1010022
                          glibc | CVE-2019-1010023 | https://security-tracker.debian.org/tracker/CVE-2019-1010023
@@ -1493,7 +1466,6 @@ CVEs for the 'master' branch
                        libkrb5 | CVE-2007-5902    | https://security-tracker.debian.org/tracker/CVE-2007-5902   
                        libkrb5 | CVE-2009-0844    | https://security-tracker.debian.org/tracker/CVE-2009-0844   
                        libkrb5 | CVE-2009-0846    | https://security-tracker.debian.org/tracker/CVE-2009-0846   
-                       libkrb5 | CVE-2021-37750   | https://security-tracker.debian.org/tracker/CVE-2021-37750  
                         libmad | CVE-2018-7263    | https://security-tracker.debian.org/tracker/CVE-2018-7263   
                         libndp | CVE-2014-3554    | https://security-tracker.debian.org/tracker/CVE-2014-3554   
                       libplist | CVE-2017-5834    | https://security-tracker.debian.org/tracker/CVE-2017-5834   
@@ -1506,11 +1478,6 @@ CVEs for the 'master' branch
                        libvirt | CVE-2015-5313    | https://security-tracker.debian.org/tracker/CVE-2015-5313   
                        libvirt | CVE-2018-5748    | https://security-tracker.debian.org/tracker/CVE-2018-5748   
                        libvirt | CVE-2018-6764    | https://security-tracker.debian.org/tracker/CVE-2018-6764   
-                       libyang | CVE-2021-28902   | https://security-tracker.debian.org/tracker/CVE-2021-28902  
-                       libyang | CVE-2021-28903   | https://security-tracker.debian.org/tracker/CVE-2021-28903  
-                       libyang | CVE-2021-28904   | https://security-tracker.debian.org/tracker/CVE-2021-28904  
-                       libyang | CVE-2021-28905   | https://security-tracker.debian.org/tracker/CVE-2021-28905  
-                       libyang | CVE-2021-28906   | https://security-tracker.debian.org/tracker/CVE-2021-28906  
                      lightning | CVE-2020-7747    | https://security-tracker.debian.org/tracker/CVE-2020-7747   
                          lrzsz | CVE-2018-10195   | https://security-tracker.debian.org/tracker/CVE-2018-10195  
                            lua | CVE-2014-5461    | https://security-tracker.debian.org/tracker/CVE-2014-5461   
@@ -1599,6 +1566,7 @@ CVEs for the 'master' branch
                            php | CVE-2007-4596    | https://security-tracker.debian.org/tracker/CVE-2007-4596   
                     postgresql | CVE-2017-8806    | https://security-tracker.debian.org/tracker/CVE-2017-8806   
                  powerpc-utils | CVE-2014-8165    | https://security-tracker.debian.org/tracker/CVE-2014-8165   
+                     pure-ftpd | CVE-2021-40524   | https://security-tracker.debian.org/tracker/CVE-2021-40524  
                         python | CVE-2015-5652    | https://security-tracker.debian.org/tracker/CVE-2015-5652   
                         python | CVE-2017-17522   | https://security-tracker.debian.org/tracker/CVE-2017-17522  
                         python | CVE-2017-18207   | https://security-tracker.debian.org/tracker/CVE-2017-18207  
@@ -1607,7 +1575,6 @@ CVEs for the 'master' branch
                         python | CVE-2021-23336   | https://security-tracker.debian.org/tracker/CVE-2021-23336  
                python-m2crypto | CVE-2020-25657   | https://security-tracker.debian.org/tracker/CVE-2020-25657  
                     python-pip | CVE-2018-20225   | https://security-tracker.debian.org/tracker/CVE-2018-20225  
-                    python-rsa | CVE-2020-25658   | https://security-tracker.debian.org/tracker/CVE-2020-25658  
                    python3-pip | CVE-2018-20225   | https://security-tracker.debian.org/tracker/CVE-2018-20225  
                           qemu | CVE-2018-18438   | https://security-tracker.debian.org/tracker/CVE-2018-18438  
                           qemu | CVE-2019-12067   | https://security-tracker.debian.org/tracker/CVE-2019-12067  
@@ -1693,6 +1660,7 @@ CVEs for the 'master' branch
                            xen | CVE-2021-28698   | https://security-tracker.debian.org/tracker/CVE-2021-28698  
                            xen | CVE-2021-28699   | https://security-tracker.debian.org/tracker/CVE-2021-28699  
                            xen | CVE-2021-28700   | https://security-tracker.debian.org/tracker/CVE-2021-28700  
+                           xen | CVE-2021-28701   | https://security-tracker.debian.org/tracker/CVE-2021-28701  
                         xerces | CVE-2012-0880    | https://security-tracker.debian.org/tracker/CVE-2012-0880   
                   xscreensaver | CVE-2021-34557   | https://security-tracker.debian.org/tracker/CVE-2021-34557  
                            zip | CVE-2018-13410   | https://security-tracker.debian.org/tracker/CVE-2018-13410  
@@ -1770,6 +1738,7 @@ CVEs for the '2021.02.x' branch
           bluez5_utils-headers | CVE-2020-24490   | https://security-tracker.debian.org/tracker/CVE-2020-24490  
           bluez5_utils-headers | CVE-2021-0129    | https://security-tracker.debian.org/tracker/CVE-2021-0129   
           bluez5_utils-headers | CVE-2021-3588    | https://security-tracker.debian.org/tracker/CVE-2021-3588   
+                         botan | CVE-2021-40529   | https://security-tracker.debian.org/tracker/CVE-2021-40529  
                         bsdiff | CVE-2020-14315   | https://security-tracker.debian.org/tracker/CVE-2020-14315  
                          cairo | CVE-2019-6461    | https://security-tracker.debian.org/tracker/CVE-2019-6461   
                          cairo | CVE-2019-6462    | https://security-tracker.debian.org/tracker/CVE-2019-6462   
@@ -1778,8 +1747,8 @@ CVEs for the '2021.02.x' branch
                         clamav | CVE-2016-1405    | https://security-tracker.debian.org/tracker/CVE-2016-1405   
                      coreutils | CVE-2016-2781    | https://security-tracker.debian.org/tracker/CVE-2016-2781   
                           cpio | CVE-2010-4226    | https://security-tracker.debian.org/tracker/CVE-2010-4226   
-                          cpio | CVE-2021-38185   | https://security-tracker.debian.org/tracker/CVE-2021-38185  
                       cryptopp | CVE-2019-14318   | https://security-tracker.debian.org/tracker/CVE-2019-14318  
+                      cryptopp | CVE-2021-40530   | https://security-tracker.debian.org/tracker/CVE-2021-40530  
                           cups | CVE-2018-6553    | https://security-tracker.debian.org/tracker/CVE-2018-6553   
                            cvs | CVE-2017-12836   | https://security-tracker.debian.org/tracker/CVE-2017-12836  
                           dbus | CVE-2020-35512   | https://security-tracker.debian.org/tracker/CVE-2020-35512  
@@ -1870,10 +1839,8 @@ CVEs for the '2021.02.x' branch
                         ffmpeg | CVE-2021-30123   | https://security-tracker.debian.org/tracker/CVE-2021-30123  
                         ffmpeg | CVE-2021-38291   | https://security-tracker.debian.org/tracker/CVE-2021-38291  
                    flatbuffers | CVE-2020-35864   | https://security-tracker.debian.org/tracker/CVE-2020-35864  
-                    fluidsynth | CVE-2021-21417   | https://security-tracker.debian.org/tracker/CVE-2021-21417  
                        freerdp | CVE-2021-37594   | https://security-tracker.debian.org/tracker/CVE-2021-37594  
                        freerdp | CVE-2021-37595   | https://security-tracker.debian.org/tracker/CVE-2021-37595  
-                            gd | CVE-2021-40145   | https://security-tracker.debian.org/tracker/CVE-2021-40145  
                          glibc | CVE-2010-4756    | https://security-tracker.debian.org/tracker/CVE-2010-4756   
                          glibc | CVE-2019-1010022 | https://security-tracker.debian.org/tracker/CVE-2019-1010022
                          glibc | CVE-2019-1010023 | https://security-tracker.debian.org/tracker/CVE-2019-1010023
@@ -1892,14 +1859,10 @@ CVEs for the '2021.02.x' branch
                             go | CVE-2020-29509   | https://security-tracker.debian.org/tracker/CVE-2020-29509  
                             go | CVE-2020-29511   | https://security-tracker.debian.org/tracker/CVE-2020-29511  
                             go | CVE-2021-29923   | https://security-tracker.debian.org/tracker/CVE-2021-29923  
-                            go | CVE-2021-34558   | https://security-tracker.debian.org/tracker/CVE-2021-34558  
                 graphicsmagick | CVE-2007-0770    | https://security-tracker.debian.org/tracker/CVE-2007-0770   
                 graphicsmagick | CVE-2008-6621    | https://security-tracker.debian.org/tracker/CVE-2008-6621   
                      graphite2 | CVE-2017-5436    | https://security-tracker.debian.org/tracker/CVE-2017-5436   
                        haproxy | CVE-2016-2102    | https://security-tracker.debian.org/tracker/CVE-2016-2102   
-                       haproxy | CVE-2021-39240   | https://security-tracker.debian.org/tracker/CVE-2021-39240  
-                       haproxy | CVE-2021-39241   | https://security-tracker.debian.org/tracker/CVE-2021-39241  
-                       haproxy | CVE-2021-39242   | https://security-tracker.debian.org/tracker/CVE-2021-39242  
                 heirloom-mailx | CVE-2004-2771    | https://security-tracker.debian.org/tracker/CVE-2004-2771   
                    imagemagick | CVE-2007-1667    | https://security-tracker.debian.org/tracker/CVE-2007-1667   
                    imagemagick | CVE-2014-9804    | https://security-tracker.debian.org/tracker/CVE-2014-9804   
@@ -2002,8 +1965,6 @@ CVEs for the '2021.02.x' branch
                        libkrb5 | CVE-2021-37750   | https://security-tracker.debian.org/tracker/CVE-2021-37750  
                         libmad | CVE-2018-7263    | https://security-tracker.debian.org/tracker/CVE-2018-7263   
                         libndp | CVE-2014-3554    | https://security-tracker.debian.org/tracker/CVE-2014-3554   
-                    libopenssl | CVE-2021-3711    | https://security-tracker.debian.org/tracker/CVE-2021-3711   
-                    libopenssl | CVE-2021-3712    | https://security-tracker.debian.org/tracker/CVE-2021-3712   
                       libplist | CVE-2017-5834    | https://security-tracker.debian.org/tracker/CVE-2017-5834   
                       libplist | CVE-2017-5835    | https://security-tracker.debian.org/tracker/CVE-2017-5835   
                       libplist | CVE-2017-5836    | https://security-tracker.debian.org/tracker/CVE-2017-5836   
@@ -2040,8 +2001,6 @@ CVEs for the '2021.02.x' branch
                network-manager | CVE-2015-0272    | https://security-tracker.debian.org/tracker/CVE-2015-0272   
                network-manager | CVE-2020-10754   | https://security-tracker.debian.org/tracker/CVE-2020-10754  
                network-manager | CVE-2021-20297   | https://security-tracker.debian.org/tracker/CVE-2021-20297  
-                        nodejs | CVE-2021-22939   | https://security-tracker.debian.org/tracker/CVE-2021-22939  
-                        nodejs | CVE-2021-22940   | https://security-tracker.debian.org/tracker/CVE-2021-22940  
                            ntp | CVE-2014-9750    | https://security-tracker.debian.org/tracker/CVE-2014-9750   
                            ntp | CVE-2014-9751    | https://security-tracker.debian.org/tracker/CVE-2014-9751   
                            ntp | CVE-2015-7691    | https://security-tracker.debian.org/tracker/CVE-2015-7691   
@@ -2107,6 +2066,7 @@ CVEs for the '2021.02.x' branch
                    php-imagick | CVE-2019-11037   | https://security-tracker.debian.org/tracker/CVE-2019-11037  
                     postgresql | CVE-2017-8806    | https://security-tracker.debian.org/tracker/CVE-2017-8806   
                  powerpc-utils | CVE-2014-8165    | https://security-tracker.debian.org/tracker/CVE-2014-8165   
+                     pure-ftpd | CVE-2021-40524   | https://security-tracker.debian.org/tracker/CVE-2021-40524  
                         python | CVE-2015-5652    | https://security-tracker.debian.org/tracker/CVE-2015-5652   
                         python | CVE-2017-17522   | https://security-tracker.debian.org/tracker/CVE-2017-17522  
                         python | CVE-2017-18207   | https://security-tracker.debian.org/tracker/CVE-2017-18207  
@@ -2116,7 +2076,6 @@ CVEs for the '2021.02.x' branch
                python-autobahn | CVE-2020-35678   | https://security-tracker.debian.org/tracker/CVE-2020-35678  
            python-cryptography | CVE-2020-36242   | https://security-tracker.debian.org/tracker/CVE-2020-36242  
                python-m2crypto | CVE-2020-25657   | https://security-tracker.debian.org/tracker/CVE-2020-25657  
-                 python-pillow | CVE-2021-34552   | https://security-tracker.debian.org/tracker/CVE-2021-34552  
                     python-pip | CVE-2018-20225   | https://security-tracker.debian.org/tracker/CVE-2018-20225  
                           qemu | CVE-2018-18438   | https://security-tracker.debian.org/tracker/CVE-2018-18438  
                           qemu | CVE-2019-12067   | https://security-tracker.debian.org/tracker/CVE-2019-12067  
@@ -2220,6 +2179,7 @@ CVEs for the '2021.02.x' branch
                            xen | CVE-2021-28698   | https://security-tracker.debian.org/tracker/CVE-2021-28698  
                            xen | CVE-2021-28699   | https://security-tracker.debian.org/tracker/CVE-2021-28699  
                            xen | CVE-2021-28700   | https://security-tracker.debian.org/tracker/CVE-2021-28700  
+                           xen | CVE-2021-28701   | https://security-tracker.debian.org/tracker/CVE-2021-28701  
                         xerces | CVE-2012-0880    | https://security-tracker.debian.org/tracker/CVE-2012-0880   
                   xscreensaver | CVE-2021-34557   | https://security-tracker.debian.org/tracker/CVE-2021-34557  
                            zip | CVE-2018-13410   | https://security-tracker.debian.org/tracker/CVE-2018-13410  
@@ -2292,6 +2252,7 @@ CVEs for the '2021.05.x' branch
                   bluez5_utils | CVE-2020-24490   | https://security-tracker.debian.org/tracker/CVE-2020-24490  
           bluez5_utils-headers | CVE-2020-12352   | https://security-tracker.debian.org/tracker/CVE-2020-12352  
           bluez5_utils-headers | CVE-2020-24490   | https://security-tracker.debian.org/tracker/CVE-2020-24490  
+                         botan | CVE-2021-40529   | https://security-tracker.debian.org/tracker/CVE-2021-40529  
                         bsdiff | CVE-2020-14315   | https://security-tracker.debian.org/tracker/CVE-2020-14315  
                          cairo | CVE-2019-6461    | https://security-tracker.debian.org/tracker/CVE-2019-6461   
                          cairo | CVE-2019-6462    | https://security-tracker.debian.org/tracker/CVE-2019-6462   
@@ -2301,8 +2262,8 @@ CVEs for the '2021.05.x' branch
                     containerd | CVE-2021-32760   | https://security-tracker.debian.org/tracker/CVE-2021-32760  
                      coreutils | CVE-2016-2781    | https://security-tracker.debian.org/tracker/CVE-2016-2781   
                           cpio | CVE-2010-4226    | https://security-tracker.debian.org/tracker/CVE-2010-4226   
-                          cpio | CVE-2021-38185   | https://security-tracker.debian.org/tracker/CVE-2021-38185  
                       cryptopp | CVE-2019-14318   | https://security-tracker.debian.org/tracker/CVE-2019-14318  
+                      cryptopp | CVE-2021-40530   | https://security-tracker.debian.org/tracker/CVE-2021-40530  
                           cups | CVE-2018-6553    | https://security-tracker.debian.org/tracker/CVE-2018-6553   
                            cvs | CVE-2017-12836   | https://security-tracker.debian.org/tracker/CVE-2017-12836  
                           dbus | CVE-2020-35512   | https://security-tracker.debian.org/tracker/CVE-2020-35512  
@@ -2396,7 +2357,6 @@ CVEs for the '2021.05.x' branch
                    flatbuffers | CVE-2020-35864   | https://security-tracker.debian.org/tracker/CVE-2020-35864  
                        freerdp | CVE-2021-37594   | https://security-tracker.debian.org/tracker/CVE-2021-37594  
                        freerdp | CVE-2021-37595   | https://security-tracker.debian.org/tracker/CVE-2021-37595  
-                            gd | CVE-2021-40145   | https://security-tracker.debian.org/tracker/CVE-2021-40145  
                          glibc | CVE-2010-4756    | https://security-tracker.debian.org/tracker/CVE-2010-4756   
                          glibc | CVE-2019-1010022 | https://security-tracker.debian.org/tracker/CVE-2019-1010022
                          glibc | CVE-2019-1010023 | https://security-tracker.debian.org/tracker/CVE-2019-1010023
@@ -2419,9 +2379,6 @@ CVEs for the '2021.05.x' branch
                 graphicsmagick | CVE-2008-6621    | https://security-tracker.debian.org/tracker/CVE-2008-6621   
                      graphite2 | CVE-2017-5436    | https://security-tracker.debian.org/tracker/CVE-2017-5436   
                        haproxy | CVE-2016-2102    | https://security-tracker.debian.org/tracker/CVE-2016-2102   
-                       haproxy | CVE-2021-39240   | https://security-tracker.debian.org/tracker/CVE-2021-39240  
-                       haproxy | CVE-2021-39241   | https://security-tracker.debian.org/tracker/CVE-2021-39241  
-                       haproxy | CVE-2021-39242   | https://security-tracker.debian.org/tracker/CVE-2021-39242  
                 heirloom-mailx | CVE-2004-2771    | https://security-tracker.debian.org/tracker/CVE-2004-2771   
                    imagemagick | CVE-2007-1667    | https://security-tracker.debian.org/tracker/CVE-2007-1667   
                    imagemagick | CVE-2014-9804    | https://security-tracker.debian.org/tracker/CVE-2014-9804   
@@ -2524,8 +2481,6 @@ CVEs for the '2021.05.x' branch
                        libkrb5 | CVE-2021-37750   | https://security-tracker.debian.org/tracker/CVE-2021-37750  
                         libmad | CVE-2018-7263    | https://security-tracker.debian.org/tracker/CVE-2018-7263   
                         libndp | CVE-2014-3554    | https://security-tracker.debian.org/tracker/CVE-2014-3554   
-                    libopenssl | CVE-2021-3711    | https://security-tracker.debian.org/tracker/CVE-2021-3711   
-                    libopenssl | CVE-2021-3712    | https://security-tracker.debian.org/tracker/CVE-2021-3712   
                       libplist | CVE-2017-5834    | https://security-tracker.debian.org/tracker/CVE-2017-5834   
                       libplist | CVE-2017-5835    | https://security-tracker.debian.org/tracker/CVE-2017-5835   
                       libplist | CVE-2017-5836    | https://security-tracker.debian.org/tracker/CVE-2017-5836   
@@ -2559,8 +2514,6 @@ CVEs for the '2021.05.x' branch
                network-manager | CVE-2015-0272    | https://security-tracker.debian.org/tracker/CVE-2015-0272   
                network-manager | CVE-2020-10754   | https://security-tracker.debian.org/tracker/CVE-2020-10754  
                network-manager | CVE-2021-20297   | https://security-tracker.debian.org/tracker/CVE-2021-20297  
-                        nodejs | CVE-2021-22939   | https://security-tracker.debian.org/tracker/CVE-2021-22939  
-                        nodejs | CVE-2021-22940   | https://security-tracker.debian.org/tracker/CVE-2021-22940  
                            ntp | CVE-2014-9750    | https://security-tracker.debian.org/tracker/CVE-2014-9750   
                            ntp | CVE-2014-9751    | https://security-tracker.debian.org/tracker/CVE-2014-9751   
                            ntp | CVE-2015-7691    | https://security-tracker.debian.org/tracker/CVE-2015-7691   
@@ -2626,6 +2579,7 @@ CVEs for the '2021.05.x' branch
                    php-imagick | CVE-2019-11037   | https://security-tracker.debian.org/tracker/CVE-2019-11037  
                     postgresql | CVE-2017-8806    | https://security-tracker.debian.org/tracker/CVE-2017-8806   
                  powerpc-utils | CVE-2014-8165    | https://security-tracker.debian.org/tracker/CVE-2014-8165   
+                     pure-ftpd | CVE-2021-40524   | https://security-tracker.debian.org/tracker/CVE-2021-40524  
                         python | CVE-2015-5652    | https://security-tracker.debian.org/tracker/CVE-2015-5652   
                         python | CVE-2017-17522   | https://security-tracker.debian.org/tracker/CVE-2017-17522  
                         python | CVE-2017-18207   | https://security-tracker.debian.org/tracker/CVE-2017-18207  
@@ -2635,7 +2589,6 @@ CVEs for the '2021.05.x' branch
                python-autobahn | CVE-2020-35678   | https://security-tracker.debian.org/tracker/CVE-2020-35678  
            python-cryptography | CVE-2020-36242   | https://security-tracker.debian.org/tracker/CVE-2020-36242  
                python-m2crypto | CVE-2020-25657   | https://security-tracker.debian.org/tracker/CVE-2020-25657  
-                 python-pillow | CVE-2021-34552   | https://security-tracker.debian.org/tracker/CVE-2021-34552  
                     python-pip | CVE-2018-20225   | https://security-tracker.debian.org/tracker/CVE-2018-20225  
           python3-cryptography | CVE-2020-36242   | https://security-tracker.debian.org/tracker/CVE-2020-36242  
                    python3-pip | CVE-2018-20225   | https://security-tracker.debian.org/tracker/CVE-2018-20225  
@@ -2738,6 +2691,7 @@ CVEs for the '2021.05.x' branch
                            xen | CVE-2021-28698   | https://security-tracker.debian.org/tracker/CVE-2021-28698  
                            xen | CVE-2021-28699   | https://security-tracker.debian.org/tracker/CVE-2021-28699  
                            xen | CVE-2021-28700   | https://security-tracker.debian.org/tracker/CVE-2021-28700  
+                           xen | CVE-2021-28701   | https://security-tracker.debian.org/tracker/CVE-2021-28701  
                         xerces | CVE-2012-0880    | https://security-tracker.debian.org/tracker/CVE-2012-0880   
                   xscreensaver | CVE-2021-34557   | https://security-tracker.debian.org/tracker/CVE-2021-34557  
                            zip | CVE-2018-13410   | https://security-tracker.debian.org/tracker/CVE-2018-13410  
@@ -2808,6 +2762,7 @@ CVEs for the '2021.08.x' branch
                   bluez5_utils | CVE-2020-24490   | https://security-tracker.debian.org/tracker/CVE-2020-24490  
           bluez5_utils-headers | CVE-2020-12352   | https://security-tracker.debian.org/tracker/CVE-2020-12352  
           bluez5_utils-headers | CVE-2020-24490   | https://security-tracker.debian.org/tracker/CVE-2020-24490  
+                         botan | CVE-2021-40529   | https://security-tracker.debian.org/tracker/CVE-2021-40529  
                         bsdiff | CVE-2020-14315   | https://security-tracker.debian.org/tracker/CVE-2020-14315  
                          cairo | CVE-2019-6461    | https://security-tracker.debian.org/tracker/CVE-2019-6461   
                          cairo | CVE-2019-6462    | https://security-tracker.debian.org/tracker/CVE-2019-6462   
@@ -2818,6 +2773,7 @@ CVEs for the '2021.08.x' branch
                      coreutils | CVE-2016-2781    | https://security-tracker.debian.org/tracker/CVE-2016-2781   
                           cpio | CVE-2010-4226    | https://security-tracker.debian.org/tracker/CVE-2010-4226   
                       cryptopp | CVE-2019-14318   | https://security-tracker.debian.org/tracker/CVE-2019-14318  
+                      cryptopp | CVE-2021-40530   | https://security-tracker.debian.org/tracker/CVE-2021-40530  
                           cups | CVE-2018-6553    | https://security-tracker.debian.org/tracker/CVE-2018-6553   
                            cvs | CVE-2017-12836   | https://security-tracker.debian.org/tracker/CVE-2017-12836  
                           dbus | CVE-2020-35512   | https://security-tracker.debian.org/tracker/CVE-2020-35512  
@@ -2918,7 +2874,6 @@ CVEs for the '2021.08.x' branch
                         ffmpeg | CVE-2021-38114   | https://security-tracker.debian.org/tracker/CVE-2021-38114  
                         ffmpeg | CVE-2021-38171   | https://security-tracker.debian.org/tracker/CVE-2021-38171  
                         ffmpeg | CVE-2021-38291   | https://security-tracker.debian.org/tracker/CVE-2021-38291  
-                            gd | CVE-2021-40145   | https://security-tracker.debian.org/tracker/CVE-2021-40145  
                          glibc | CVE-2010-4756    | https://security-tracker.debian.org/tracker/CVE-2010-4756   
                          glibc | CVE-2019-1010022 | https://security-tracker.debian.org/tracker/CVE-2019-1010022
                          glibc | CVE-2019-1010023 | https://security-tracker.debian.org/tracker/CVE-2019-1010023
@@ -3142,6 +3097,7 @@ CVEs for the '2021.08.x' branch
                            php | CVE-2007-4596    | https://security-tracker.debian.org/tracker/CVE-2007-4596   
                     postgresql | CVE-2017-8806    | https://security-tracker.debian.org/tracker/CVE-2017-8806   
                  powerpc-utils | CVE-2014-8165    | https://security-tracker.debian.org/tracker/CVE-2014-8165   
+                     pure-ftpd | CVE-2021-40524   | https://security-tracker.debian.org/tracker/CVE-2021-40524  
                         python | CVE-2015-5652    | https://security-tracker.debian.org/tracker/CVE-2015-5652   
                         python | CVE-2017-17522   | https://security-tracker.debian.org/tracker/CVE-2017-17522  
                         python | CVE-2017-18207   | https://security-tracker.debian.org/tracker/CVE-2017-18207  
@@ -3150,7 +3106,6 @@ CVEs for the '2021.08.x' branch
                         python | CVE-2021-23336   | https://security-tracker.debian.org/tracker/CVE-2021-23336  
                python-autobahn | CVE-2020-35678   | https://security-tracker.debian.org/tracker/CVE-2020-35678  
                python-m2crypto | CVE-2020-25657   | https://security-tracker.debian.org/tracker/CVE-2020-25657  
-                 python-pillow | CVE-2021-34552   | https://security-tracker.debian.org/tracker/CVE-2021-34552  
                     python-pip | CVE-2018-20225   | https://security-tracker.debian.org/tracker/CVE-2018-20225  
                    python3-pip | CVE-2018-20225   | https://security-tracker.debian.org/tracker/CVE-2018-20225  
                           qemu | CVE-2018-18438   | https://security-tracker.debian.org/tracker/CVE-2018-18438  
@@ -3237,6 +3192,7 @@ CVEs for the '2021.08.x' branch
                            xen | CVE-2021-28698   | https://security-tracker.debian.org/tracker/CVE-2021-28698  
                            xen | CVE-2021-28699   | https://security-tracker.debian.org/tracker/CVE-2021-28699  
                            xen | CVE-2021-28700   | https://security-tracker.debian.org/tracker/CVE-2021-28700  
+                           xen | CVE-2021-28701   | https://security-tracker.debian.org/tracker/CVE-2021-28701  
                         xerces | CVE-2012-0880    | https://security-tracker.debian.org/tracker/CVE-2012-0880   
                   xscreensaver | CVE-2021-34557   | https://security-tracker.debian.org/tracker/CVE-2021-34557  
                            zip | CVE-2018-13410   | https://security-tracker.debian.org/tracker/CVE-2018-13410  
