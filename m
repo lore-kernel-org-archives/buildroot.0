@@ -8,85 +8,86 @@ X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 56729C433FE
-	for <buildroot@archiver.kernel.org>; Mon, 20 Sep 2021 14:22:58 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DB12EC433EF
+	for <buildroot@archiver.kernel.org>; Mon, 20 Sep 2021 14:23:09 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id C5ACA610CE
-	for <buildroot@archiver.kernel.org>; Mon, 20 Sep 2021 14:22:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C5ACA610CE
+	by mail.kernel.org (Postfix) with ESMTPS id 785F060F5D
+	for <buildroot@archiver.kernel.org>; Mon, 20 Sep 2021 14:23:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 785F060F5D
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6A7F082468;
-	Mon, 20 Sep 2021 14:22:57 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3933140101;
+	Mon, 20 Sep 2021 14:23:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kyTbVSiHgAc7; Mon, 20 Sep 2021 14:22:56 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id QwCzB6Zkg13V; Mon, 20 Sep 2021 14:23:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C1F0181CDB;
-	Mon, 20 Sep 2021 14:22:55 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4B7E0402F3;
+	Mon, 20 Sep 2021 14:23:07 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 665951BF289
- for <buildroot@lists.busybox.net>; Mon, 20 Sep 2021 14:22:33 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 771B01BF289
+ for <buildroot@lists.busybox.net>; Mon, 20 Sep 2021 14:22:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 63414403F3
- for <buildroot@lists.busybox.net>; Mon, 20 Sep 2021 14:22:33 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 62348403D8
+ for <buildroot@lists.busybox.net>; Mon, 20 Sep 2021 14:22:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp4.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Osz3HztGAXBK for <buildroot@lists.busybox.net>;
- Mon, 20 Sep 2021 14:22:32 +0000 (UTC)
+ with ESMTP id LekXLahmoFFj for <buildroot@lists.busybox.net>;
+ Mon, 20 Sep 2021 14:22:35 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
- [IPv6:2a00:1450:4864:20::432])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6F009403CC
- for <buildroot@buildroot.org>; Mon, 20 Sep 2021 14:22:32 +0000 (UTC)
-Received: by mail-wr1-x432.google.com with SMTP id q26so30198456wrc.7
- for <buildroot@buildroot.org>; Mon, 20 Sep 2021 07:22:32 -0700 (PDT)
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
+ [IPv6:2a00:1450:4864:20::435])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 475A0403CB
+ for <buildroot@buildroot.org>; Mon, 20 Sep 2021 14:22:35 +0000 (UTC)
+Received: by mail-wr1-x435.google.com with SMTP id i23so30261531wrb.2
+ for <buildroot@buildroot.org>; Mon, 20 Sep 2021 07:22:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=iaQCPNV0EmSVH82QdjQzow/f2qLw0E5Mr+E20BpLIH8=;
- b=SQdEcWPYqfzDVh0z6kDUPMwRY1TmMCWH3YDre1PoeRDhPDBg+50DwgMYCC/apqscrH
- HVyYr1ICObEtxjHEmFYjJCDaeXlETOh/6Uw3kTonvwbvN4xrXRXBaBvLUkcghy0mUNhd
- gnklSfW4TKFw0OcfspuNcNONYkn6rMPVI/h3++WkVnAYxkcrdaiCZpjNaWy/gVcIL7Rc
- +NytpJH0qHNUHT7lxhGaWS1B5g2xxq6M6s5H7gqxOebg3d4QFWV3dJFqviE7U7BncXez
- ZWNr00DmU5BewipXbFI3MT2Ubqia2+NTGTaEQvgDZiCpTv/YdppnhFQqUCDARpmeQ6Sc
- 6cFQ==
+ bh=RQhr5YEVbcryRp1ErS+exLOdtWHmNRo3jDRUYCyhSf0=;
+ b=QO4tqiHkNFVvIAjjbyYbaFJXF1Lt4N3L4HJzZSNfQXSfEXHc4omw31qzfgP+1nkSqs
+ A6tLni1eNacvfhAtwMSc0aLIs/pwBQuyLjOV0gF0WykDOQ2URxk4bt2V4BnkMVQtdU4F
+ P4jK396OGUHRakBaLvz/na6YOuJK1NJYnyoutfoXdw7D5EsPLtjJcXwejNWcSaF2IjbZ
+ whtZk6pV43WuCKo70Sq06kRKqX+Hb9E1DnstRa6hC1u8GHvjFB6yxAz0ZRvCqD1mnT4B
+ rrNBu0TPFYqSFGY75+k1D2fybH/+YNaG0aup+gvL7ZbETKccYgxWBiV3FgAUX1vcMDN9
+ qb9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
  :references:mime-version:content-transfer-encoding;
- bh=iaQCPNV0EmSVH82QdjQzow/f2qLw0E5Mr+E20BpLIH8=;
- b=skI1pRfJai5ijqCAY3rmSBgDUS+vqldYh4lQsNsAs9PpzeujLW3NVyIn8/MN6bAXAZ
- s9j0zRWY80EVq6dd7oNxxiWduXB/U8dTLOaUz6w3SHKujY8vH/3ueuDfzzBp44XTFE8E
- hfyJlDOqC54pqi+lRAuGtwZve26mVylADHf8HYZKikV5QYMDxdwlkVteVPR6Cv/Loolf
- wlLFNkVgRsKrWkE+6WaCsi17Gtv/cYZsOgF4HSnk+ZmiBTnSQbBCmCPZ2wKof5INOMaI
- AjPkR+e8jlhifjggs6oK8NK7DffafK/mo4CjgpPE5GKr3ihAeoe+olQU4cMo095jUoQn
- P3gA==
-X-Gm-Message-State: AOAM533h7mT0Dq6Q2LkTP3TY3Hl8InxMSoHmQHwUUI9teOSfQjkRsWzn
- PzzuYxcoHulh8eyv6ePGkXBiC04b4X4=
-X-Google-Smtp-Source: ABdhPJwv0lwyTxJ2II/DPaAXmij5fdxmAgSJ9ev1RK89tYKmDxnNxDJSy1WfrRF82A4iSAAyW02esw==
-X-Received: by 2002:a7b:cc8d:: with SMTP id p13mr24633170wma.10.1632147750469; 
- Mon, 20 Sep 2021 07:22:30 -0700 (PDT)
+ bh=RQhr5YEVbcryRp1ErS+exLOdtWHmNRo3jDRUYCyhSf0=;
+ b=OIAzOHHwPCB6qKNaqG4IVP5mNC3uJEP1FbzzlAyjfBF4LYxl35CZ0Jh5OVnhlJkLkP
+ LBk8xulbvI03lxlQ3UwNk4eBV6kVjJuzC7oy9Y1P6mK6PNoyO8LbCP5U+Pc5Ky8q6fGd
+ HngjNQuFtcrystvJEx9riUh8vQCD4l7oPQw6hi2kOYzCPAT7OsgL4RJQMKsps1QZzcxV
+ zpc1cLw5XhE+VtK6Aqrwp4mnXfH55lsu/jkmS1T2vBBRsdicHAVoJCIvGG+UKIQhQHmM
+ jsRzrqjMR+WP/artswjmrOOMYDFMwu61py1ObJ6LuxYA9Yc2sY7Jl42ASOarBD8dMZXi
+ //Mg==
+X-Gm-Message-State: AOAM530QVOx6Cqdc1uYKar0WCiw23l7emAQ0nuP9iwvOHpVyWFhjezov
+ n1jYtirh7TLIMenQlG+lHaDCV6QMPAU=
+X-Google-Smtp-Source: ABdhPJzcuC1WVdg+pd7FuJ5QmTLwq2fTfwn/P7UNpWlqw1HgXWR9mNnkyfTCJ6iY48xNU2R8tKBsTQ==
+X-Received: by 2002:a5d:6343:: with SMTP id b3mr27758708wrw.124.1632147752174; 
+ Mon, 20 Sep 2021 07:22:32 -0700 (PDT)
 Received: from asaf.. ([2a10:8002:6b25:0:ed43:881f:d7cd:d42d])
- by smtp.gmail.com with ESMTPSA id e2sm16295494wra.40.2021.09.20.07.22.29
+ by smtp.gmail.com with ESMTPSA id e2sm16295494wra.40.2021.09.20.07.22.30
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 20 Sep 2021 07:22:30 -0700 (PDT)
+ Mon, 20 Sep 2021 07:22:31 -0700 (PDT)
 From: Asaf Kahlon <asafka7@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 20 Sep 2021 17:22:19 +0300
-Message-Id: <20210920142221.299817-3-asafka7@gmail.com>
+Date: Mon, 20 Sep 2021 17:22:20 +0300
+Message-Id: <20210920142221.299817-4-asafka7@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210920142221.299817-1-asafka7@gmail.com>
 References: <20210920142221.299817-1-asafka7@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/python-webob: bump to version 1.8.7
+Subject: [Buildroot] [PATCH 1/1] package/python-wsaccel: bump to version
+ 0.6.3
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -106,40 +107,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
+Plus, add license file and corresponding hash.
+
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-webob/python-webob.hash | 4 ++--
- package/python-webob/python-webob.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-wsaccel/python-wsaccel.hash | 8 +++++---
+ package/python-wsaccel/python-wsaccel.mk   | 5 +++--
+ 2 files changed, 8 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-webob/python-webob.hash b/package/python-webob/python-webob.hash
-index aab2f1d9e4..a46c1dbc94 100644
---- a/package/python-webob/python-webob.hash
-+++ b/package/python-webob/python-webob.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/webob/json
--md5  dc3cc8c317d4acd03a6fd97cb0a9121a  WebOb-1.8.6.tar.gz
--sha256  aa3a917ed752ba3e0b242234b2a373f9c4e2a75d35291dcbe977649bd21fd108  WebOb-1.8.6.tar.gz
-+md5  10191c69fa5a2c00f3b9abfb8937b415  WebOb-1.8.7.tar.gz
-+sha256  b64ef5141be559cfade448f044fa45c2260351edcb6a8ef6b7e00c7dcef0c323  WebOb-1.8.7.tar.gz
- # Locally computed sha256 checksums
- sha256  27bc4919e7e9e6b6cda40644517ca74d32203e32fba89ef832aba1ed93e457b3  docs/license.txt
-diff --git a/package/python-webob/python-webob.mk b/package/python-webob/python-webob.mk
-index 051c117538..11ba104476 100644
---- a/package/python-webob/python-webob.mk
-+++ b/package/python-webob/python-webob.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/python-wsaccel/python-wsaccel.hash b/package/python-wsaccel/python-wsaccel.hash
+index a02b5a8712..9d0002d41d 100644
+--- a/package/python-wsaccel/python-wsaccel.hash
++++ b/package/python-wsaccel/python-wsaccel.hash
+@@ -1,3 +1,5 @@
+-# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=2b4ea3d6847855c0587d37fca9db0557, sha256 locally computed.
+-md5	2b4ea3d6847855c0587d37fca9db0557  wsaccel-0.6.2.tar.gz
+-sha256	425706acf0724d2f6bfa391ec37b4ef121d3432c956029de3cea4e101c218e0c  wsaccel-0.6.2.tar.gz
++# md5, sha256 from https://pypi.org/pypi/wsaccel/json
++md5  973168711818dd98b8b28a4c2db77a27  wsaccel-0.6.3.tar.gz
++sha256  fdb27866bb6b6e7a29e45222778ff97938782a0ce92eff07dfb20af8fb9301c4  wsaccel-0.6.3.tar.gz
++# Locally computed sha256 checksums
++sha256  b6982974cb838b985b54b663d1780d280735086249c2e28015f25dd455df25da  LICENSE
+diff --git a/package/python-wsaccel/python-wsaccel.mk b/package/python-wsaccel/python-wsaccel.mk
+index 016ff2d72a..7c78951f2f 100644
+--- a/package/python-wsaccel/python-wsaccel.mk
++++ b/package/python-wsaccel/python-wsaccel.mk
+@@ -4,10 +4,11 @@
  #
  ################################################################################
  
--PYTHON_WEBOB_VERSION = 1.8.6
-+PYTHON_WEBOB_VERSION = 1.8.7
- PYTHON_WEBOB_SOURCE = WebOb-$(PYTHON_WEBOB_VERSION).tar.gz
--PYTHON_WEBOB_SITE = https://files.pythonhosted.org/packages/2a/32/5f3f43d0784bdd9392db0cb98434d7cd23a0d8a420c4d243ad4cb8517f2a
-+PYTHON_WEBOB_SITE = https://files.pythonhosted.org/packages/c7/45/ee5f034fb4ebe3236fa49e5a4fcbc54444dd22ecf33079cf56f9606d479d
- PYTHON_WEBOB_SETUP_TYPE = setuptools
- PYTHON_WEBOB_LICENSE = MIT
- PYTHON_WEBOB_LICENSE_FILES = docs/license.txt
+-PYTHON_WSACCEL_VERSION = 0.6.2
++PYTHON_WSACCEL_VERSION = 0.6.3
+ PYTHON_WSACCEL_SOURCE = wsaccel-$(PYTHON_WSACCEL_VERSION).tar.gz
+-PYTHON_WSACCEL_SITE = https://pypi.python.org/packages/source/w/wsaccel
++PYTHON_WSACCEL_SITE = https://files.pythonhosted.org/packages/f5/d1/3e99875a764d0d6ec94a74977ed72dd3022a7f31d036622da9cff8fc072f
+ PYTHON_WSACCEL_LICENSE = Apache-2.0
++PYTHON_WSACCEL_LICENSE_FILES = LICENSE
+ PYTHON_WSACCEL_SETUP_TYPE = setuptools
+ 
+ $(eval $(python-package))
 -- 
 2.33.0
 
