@@ -8,83 +8,85 @@ X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C297C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 20 Sep 2021 21:13:42 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DE978C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 20 Sep 2021 21:13:53 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id E3D1561177
-	for <buildroot@archiver.kernel.org>; Mon, 20 Sep 2021 21:13:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E3D1561177
+	by mail.kernel.org (Postfix) with ESMTPS id 84B0861177
+	for <buildroot@archiver.kernel.org>; Mon, 20 Sep 2021 21:13:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 84B0861177
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmx.net
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8BC1683B42;
-	Mon, 20 Sep 2021 21:13:41 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2B3C9404D6;
+	Mon, 20 Sep 2021 21:13:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8p05lDDsXE2G; Mon, 20 Sep 2021 21:13:40 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id km95Ow8103v1; Mon, 20 Sep 2021 21:13:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9889C83B4C;
-	Mon, 20 Sep 2021 21:13:39 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 726181BF3C6
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5C9A1404CC;
+	Mon, 20 Sep 2021 21:13:51 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 7E8D31BF97F
  for <buildroot@lists.busybox.net>; Mon, 20 Sep 2021 21:13:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6EBB260AFC
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6ECD4401BA
  for <buildroot@lists.busybox.net>; Mon, 20 Sep 2021 21:13:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
  dkim=pass (1024-bit key) header.d=gmx.net
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OWcvf8CCfnLp for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2zQLntB1qqQ1 for <buildroot@lists.busybox.net>;
  Mon, 20 Sep 2021 21:13:35 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
 Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E714060AF0
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E79BF401B1
  for <buildroot@buildroot.org>; Mon, 20 Sep 2021 21:13:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
- s=badeba3b8450; t=1632172410;
- bh=y2cRYoIzyXR+dJPbzg5iwXcwqmvrx26O2xAZ/FU8ay0=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
- b=C1kNlM0vjdMXhWCMkBzqnEplBLSlaVvLSEX/FSb8eKHpKCpXuBwKUbybUHsd5toXh
- Eoa1dSLIBJy+hnwP8ICGLXQAbAYWgW8JOMgokg2X/HKIAN8SJmb5EBr9b2+Ac2uNZp
- HABEBB+niYP8Y/9KTfUb8oBGN165E21rz56/xCv8=
+ s=badeba3b8450; t=1632172411;
+ bh=ab/kwb15QywIvnA/6u+4gNSEPGMJhD/VB9oIS7+ordg=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+ b=l0UW690NabqjEBAOpiVhkwodsPjGRK/OZFHcfPO0+rh1ZkVIR8mBIEHInxzv5kuTx
+ tJYMU1hEGal4XTWlAua+8fdRh22pNixqqAIRoj2veOnbjhai44P1fyAxPl3Mo8mJYt
+ Uauyx1RR4ZiC/nzzQF7tpusDu/6qG61NzvAPSvmE=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
 Received: from localhost.fritz.box ([62.216.209.129]) by mail.gmx.net
  (mrgmx105 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1MiaYJ-1n7nlF02Ip-00fmFM; Mon, 20 Sep 2021 23:13:30 +0200
+ 1N4zAy-1mtgqt0Hm0-010rch; Mon, 20 Sep 2021 23:13:31 +0200
 From: Peter Seiderer <ps.report@gmx.net>
 To: buildroot@buildroot.org
-Date: Mon, 20 Sep 2021 23:13:25 +0200
-Message-Id: <20210920211328.17526-1-ps.report@gmx.net>
+Date: Mon, 20 Sep 2021 23:13:28 +0200
+Message-Id: <20210920211328.17526-4-ps.report@gmx.net>
 X-Mailer: git-send-email 2.33.0
+In-Reply-To: <20210920211328.17526-1-ps.report@gmx.net>
+References: <20210920211328.17526-1-ps.report@gmx.net>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:GkAfNRVw2t619U9aIM76oI0FaNxF1HGSQFFl2iE+vIVDCBXsZkr
- T8E4qeeDXefRPGInGA8lD5F7uollYibSqP9GSnrWpY9NxdV8AoGajJYZgp6BXzbnJc20HX8
- un91md0MP5kFOlRejM/rgmfAIzsAZqpmW+kgsHDP4QUxkDk54oZgiVvXgM/LeRpj+75pLif
- At8dVqt7kuO1WCuh67p6Q==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:WZ+xHIjOVeU=:V9CqRuNfZYhJsghiFIbwzk
- ckGpTw1ZoyHh3ML0xvXDwhlDrWf6KU1dA97HservL3Or14VkyuivdJLsrhQxnif0rrEr7fRki
- J85alOgzYhUkab2Hb6qXma0qGNsUeAYEaW75wOZi7zwnqRAAIX/iQfXSo6VUn65OT7W7w4o+Y
- gFZ3u8Z+Ab158W25t4RGNVRWIQqGF90wuaF7Mzvs3K7itfeOtzw0jw9WShC3svCtp4Uv1Aud3
- ex123/j0JfITVNcEGN2p/MJbaJ0LDK9KobT5e0jW/4nF0TzHkXzw9tHUZANTVXzJ/pa2tsUaM
- 4TU61DBIVU505GYMN6SJ4+BG9LdLuPvt8+e7sOLUq8BiejMzH4PoKHbU7pOvDG3l7kO0nv34p
- z3M/brW6crIjmMh1ZBOrwvBx3yO0pd+IOgzuJalHaaA2O5J0zw15aT0jApAIgpv49Nb4PDAIL
- aKc8WDtcP5sT+h3bm6oFOP37eRbSn2jpQDY/PWS9i3to17z9bSce2Xz6RfnqTC9t3gM9Idwlc
- ad2QJCOS+6XuGBCPSUQzDKemZDMR+QFYvf+97588aTUEiwHKzyYTKay2rVU/8i8+7O0xFG+PQ
- ca7/RenYLXLQjO8QmP7wPlThqtHWA2N/TNmJ3h+fh4QnN+gefeTBybGgJ6foJXK2Yq1H45XzX
- KGkvLOjVO6yI5b4iDt4BSuMbjA5tSeSvt0vPzaViHRsiMcjrCbWROYlGjdmt1kg4PL8CbbgzH
- ex/so4T1QhwrT+9LywZVxLnBQ+yn7xaSKMuNL2uzjADPptkuBZipjOpL0IYh4yOlVF0jeDbzd
- oWWmzX8MYrG+dazH73piuT8kCd2mI5Uy1Xl7RL9I9sBaGiaW5V71M3bj5xEE8srIzAU8XT4jX
- e+UhMmLDTemGB7sBzdKofF3nuilLfITH3bbb+7N7vqorFG/AWEqCkeXls/o3s4kvF2PvaWi1W
- ZDsKobdT8nXq7+aRSXkOp02VRG5yvBUCiUxYo/ifGB7Hpf9OUdzmo/Onx01KegB7y1nUy0W5Y
- vh49WXDaHzh43QDbUOR1EduGWyfctqd2EOD8jewO6TrWXO4wgatNQ8m+6ydh/2lAH/S1lvGX9
- dnVqmLteoBxu+w=
-Subject: [Buildroot] [PATCH v1 1/4] configs/raspberrypi*: bump kernel
- version to 3e1698e (5.10.63)
+X-Provags-ID: V03:K1:uEKmAKbEDh5Nrw8lGaMk7fxuanWDFutfzn5K40u0HjIl3bTRvPq
+ kMQsKysOi9mTeAe9AxeirCn2ys4qiWSi6K7g6fkSXqU0KnyGlYrhlYkFLAPfEgxqltgtVOd
+ lXyqT0f5CJR+3KsHNmv+QJLeg+2aSFxKx+ab3gIX5eZQxLwdionrmssMvxrhvJS+VgIZ9q9
+ uJZ/s+mBhiSJMouKMRm+w==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:bi904zloyGE=:JWGlWLxIaWsNILh49m9yyn
+ l9Jz01CUINrtEG7R+h23g1DszS/UYatKqp4c9XqO/R/DzCUDpNgMVqGKDzpN6f6Jlr0+Y5FsV
+ EMM7lQ0kf0UVIo34Wo7GrNoCT4S4vwBF9h/Tk9Sb0XY2rbZX8emiLMwvmf29HQBT3F2RObSnP
+ g4QChivZG/Vm3ddxZFtvrwVtjAFKJEGu1tzE1vJbgb9uNLlmgB8MvNiOKVYUvPBsr20p/QsOy
+ n4g7v2SJk7TPyoiruk0NtmrcsEfX/PdUd01i9bCDb/WI1wL6Hbfx1t7MN6/q4DKVs0YArlrzK
+ YBWLNd/Rt93s/OWTPHmtCze/yGWSXAue+SzNsxxCdk9ofwhWyvB/yJc4LxkksisZP5Cnu4BJj
+ 8Uv2yzElu81yhQYdkcfGclV7PjdPZl1/IwEq1R8Mgj8K0PvrzVB5AY+Ip2doGIFjaGRZsLlTY
+ bBRSqc6GsKM3VlejSkT1u/S5WdIQWpsk4NRi2/PPFXQe+57AMKLEttRDxbXLMCFeL9ecl0SFr
+ StFVen80NeexGLn+2kMBLkkVTy6F/FxblKV9U0mJSTbP3kP+9jj50gxdt0dXLiIF9v3PoxvVe
+ 9yJ/sDxR0y3aw0JJSwm23fF+VXWw6509euzTgTyoC5hcsG1q9WR+GoeNXhmQIj2N5bJSMpQjq
+ 8AR+6TKb29jkfOfy/iuBIBHjfMmp0DBOqccweIUOgB8rTpQ3GnIGx2yYFvbFjOvRMh408EirP
+ fMuNqwBXclWaLF9L+Vn+nraHSX8avLlTNVOsbBNq4RknznqzUKpR0iH3XI4dVUalOD11wFa4f
+ eCry9I2MnbB68JIacPFfGEW+iOZQT9NueArHz2ixfF0JKNIiMNTFpNfGXCpnubWy63hEguCE8
+ bP7/rzEj9POwAEhEeBqITrCIqBD+Ni+/yIeSDeQyGdTnY1XLE56N+hN+Kq8XlqPERcq6IEJDU
+ SOfA56fjRozcddXcRPaNmKFjnvDXUr0hdR0s7Trq3aAoZMuF/GXBkoSIhsGKYLl3CHuJFewjr
+ GwNPW+LlCwYr78tuHNXgJfEkvMpbR+3q2lIYdVulDnbC+5g9/nt8GtXnOkudyCrymqFKwsmHw
+ oAPeT0gZfgVfY4=
+Subject: [Buildroot] [PATCH v1 4/4] package/rpi-wifi-firmware: bump version
+ to 883b726
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -105,166 +107,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-Now based on 5.10.63 (from 5.10.46).
+Changelog:
+  - Update CYW43455 bluetooth firmware,
+    Second Spectra fix for CYW43455 (CVE-2020-10370)
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- configs/raspberrypi0_defconfig        | 2 +-
- configs/raspberrypi0w_defconfig       | 2 +-
- configs/raspberrypi2_defconfig        | 2 +-
- configs/raspberrypi3_64_defconfig     | 2 +-
- configs/raspberrypi3_defconfig        | 2 +-
- configs/raspberrypi3_qt5we_defconfig  | 2 +-
- configs/raspberrypi4_64_defconfig     | 2 +-
- configs/raspberrypi4_defconfig        | 2 +-
- configs/raspberrypi_defconfig         | 2 +-
- configs/raspberrypicm4io_64_defconfig | 2 +-
- configs/raspberrypicm4io_defconfig    | 2 +-
- 11 files changed, 11 insertions(+), 11 deletions(-)
+ package/rpi-wifi-firmware/rpi-wifi-firmware.hash | 2 +-
+ package/rpi-wifi-firmware/rpi-wifi-firmware.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/configs/raspberrypi0_defconfig b/configs/raspberrypi0_defconfig
-index c17fe99c45..5d611aae3f 100644
---- a/configs/raspberrypi0_defconfig
-+++ b/configs/raspberrypi0_defconfig
-@@ -9,7 +9,7 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
+diff --git a/package/rpi-wifi-firmware/rpi-wifi-firmware.hash b/package/rpi-wifi-firmware/rpi-wifi-firmware.hash
+index 4db3e15c80..3bd62306eb 100644
+--- a/package/rpi-wifi-firmware/rpi-wifi-firmware.hash
++++ b/package/rpi-wifi-firmware/rpi-wifi-firmware.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  ae665baa465a09dddf7f4bdec67e108a74b2a3787550cc9ee53c2bea9651f327  rpi-wifi-firmware-4c47758bed7cd547dff3618a1739dcf64b5a52a7.tar.gz
++sha256  0e7fcfe75a8990815a184dc55f8fdf5d0644d351a15a7aef865ff90ff4ca8eb4  rpi-wifi-firmware-883b72628de1d7efa45b421da0cbf175ac2374f8.tar.gz
+ sha256  b16056fc91b82a0e3e8de8f86c2dac98201aa9dc3cbd33e8d38f1b087fcec30d  LICENCE.broadcom_bcm43xx
+diff --git a/package/rpi-wifi-firmware/rpi-wifi-firmware.mk b/package/rpi-wifi-firmware/rpi-wifi-firmware.mk
+index a643c4df9c..28926ff4f0 100644
+--- a/package/rpi-wifi-firmware/rpi-wifi-firmware.mk
++++ b/package/rpi-wifi-firmware/rpi-wifi-firmware.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,4afd064509b23882268922824edc5b391a1ea55d)/linux-4afd064509b23882268922824edc5b391a1ea55d.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,3e1698ed5013c1054e3dbf8a9fcd3a8549a95ece)/linux-3e1698ed5013c1054e3dbf8a9fcd3a8549a95ece.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
- 
- # Build the DTBs for A/B from the kernel sources: the zero is the same
-diff --git a/configs/raspberrypi0w_defconfig b/configs/raspberrypi0w_defconfig
-index 3a5e306299..394ef9c574 100644
---- a/configs/raspberrypi0w_defconfig
-+++ b/configs/raspberrypi0w_defconfig
-@@ -9,7 +9,7 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,4afd064509b23882268922824edc5b391a1ea55d)/linux-4afd064509b23882268922824edc5b391a1ea55d.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,3e1698ed5013c1054e3dbf8a9fcd3a8549a95ece)/linux-3e1698ed5013c1054e3dbf8a9fcd3a8549a95ece.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2708-rpi-zero-w"
-diff --git a/configs/raspberrypi2_defconfig b/configs/raspberrypi2_defconfig
-index 1eee3ae37e..516cc378d4 100644
---- a/configs/raspberrypi2_defconfig
-+++ b/configs/raspberrypi2_defconfig
-@@ -12,7 +12,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,4afd064509b23882268922824edc5b391a1ea55d)/linux-4afd064509b23882268922824edc5b391a1ea55d.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,3e1698ed5013c1054e3dbf8a9fcd3a8549a95ece)/linux-3e1698ed5013c1054e3dbf8a9fcd3a8549a95ece.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
- 
- # Build the DTB from the kernel sources
-diff --git a/configs/raspberrypi3_64_defconfig b/configs/raspberrypi3_64_defconfig
-index 859d95314c..210ded73c4 100644
---- a/configs/raspberrypi3_64_defconfig
-+++ b/configs/raspberrypi3_64_defconfig
-@@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,4afd064509b23882268922824edc5b391a1ea55d)/linux-4afd064509b23882268922824edc5b391a1ea55d.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,3e1698ed5013c1054e3dbf8a9fcd3a8549a95ece)/linux-3e1698ed5013c1054e3dbf8a9fcd3a8549a95ece.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi3"
- 
- # Build the DTB from the kernel sources
-diff --git a/configs/raspberrypi3_defconfig b/configs/raspberrypi3_defconfig
-index 67ce0d5314..58b2abcfb8 100644
---- a/configs/raspberrypi3_defconfig
-+++ b/configs/raspberrypi3_defconfig
-@@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,4afd064509b23882268922824edc5b391a1ea55d)/linux-4afd064509b23882268922824edc5b391a1ea55d.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,3e1698ed5013c1054e3dbf8a9fcd3a8549a95ece)/linux-3e1698ed5013c1054e3dbf8a9fcd3a8549a95ece.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
- 
- # Build the DTB from the kernel sources
-diff --git a/configs/raspberrypi3_qt5we_defconfig b/configs/raspberrypi3_qt5we_defconfig
-index d9538dc648..24e1f53bae 100644
---- a/configs/raspberrypi3_qt5we_defconfig
-+++ b/configs/raspberrypi3_qt5we_defconfig
-@@ -12,7 +12,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,4afd064509b23882268922824edc5b391a1ea55d)/linux-4afd064509b23882268922824edc5b391a1ea55d.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,3e1698ed5013c1054e3dbf8a9fcd3a8549a95ece)/linux-3e1698ed5013c1054e3dbf8a9fcd3a8549a95ece.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
- 
- # Build the DTB from the kernel sources
-diff --git a/configs/raspberrypi4_64_defconfig b/configs/raspberrypi4_64_defconfig
-index 312ec64471..05331f7ae7 100644
---- a/configs/raspberrypi4_64_defconfig
-+++ b/configs/raspberrypi4_64_defconfig
-@@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,4afd064509b23882268922824edc5b391a1ea55d)/linux-4afd064509b23882268922824edc5b391a1ea55d.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,3e1698ed5013c1054e3dbf8a9fcd3a8549a95ece)/linux-3e1698ed5013c1054e3dbf8a9fcd3a8549a95ece.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
- 
- # Build the DTB from the kernel sources
-diff --git a/configs/raspberrypi4_defconfig b/configs/raspberrypi4_defconfig
-index 3ae2d253fb..d954c845d8 100644
---- a/configs/raspberrypi4_defconfig
-+++ b/configs/raspberrypi4_defconfig
-@@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,4afd064509b23882268922824edc5b391a1ea55d)/linux-4afd064509b23882268922824edc5b391a1ea55d.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,3e1698ed5013c1054e3dbf8a9fcd3a8549a95ece)/linux-3e1698ed5013c1054e3dbf8a9fcd3a8549a95ece.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
- 
- # Build the DTB from the kernel sources
-diff --git a/configs/raspberrypi_defconfig b/configs/raspberrypi_defconfig
-index 75e7177974..fd869693fa 100644
---- a/configs/raspberrypi_defconfig
-+++ b/configs/raspberrypi_defconfig
-@@ -11,7 +11,7 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,4afd064509b23882268922824edc5b391a1ea55d)/linux-4afd064509b23882268922824edc5b391a1ea55d.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,3e1698ed5013c1054e3dbf8a9fcd3a8549a95ece)/linux-3e1698ed5013c1054e3dbf8a9fcd3a8549a95ece.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
- 
- # Build the DTBs for A/B, A+/B+ and compute module from the kernel sources
-diff --git a/configs/raspberrypicm4io_64_defconfig b/configs/raspberrypicm4io_64_defconfig
-index 304428ec64..4abff0f2d9 100644
---- a/configs/raspberrypicm4io_64_defconfig
-+++ b/configs/raspberrypicm4io_64_defconfig
-@@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,4afd064509b23882268922824edc5b391a1ea55d)/linux-4afd064509b23882268922824edc5b391a1ea55d.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,3e1698ed5013c1054e3dbf8a9fcd3a8549a95ece)/linux-3e1698ed5013c1054e3dbf8a9fcd3a8549a95ece.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
- 
- # Build the DTB from the kernel sources
-diff --git a/configs/raspberrypicm4io_defconfig b/configs/raspberrypicm4io_defconfig
-index f4ba22dfe5..6fa9e5bc9f 100644
---- a/configs/raspberrypicm4io_defconfig
-+++ b/configs/raspberrypicm4io_defconfig
-@@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,4afd064509b23882268922824edc5b391a1ea55d)/linux-4afd064509b23882268922824edc5b391a1ea55d.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,3e1698ed5013c1054e3dbf8a9fcd3a8549a95ece)/linux-3e1698ed5013c1054e3dbf8a9fcd3a8549a95ece.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
- 
- # Build the DTB from the kernel sources
+-RPI_WIFI_FIRMWARE_VERSION = 4c47758bed7cd547dff3618a1739dcf64b5a52a7
++RPI_WIFI_FIRMWARE_VERSION = 883b72628de1d7efa45b421da0cbf175ac2374f8
+ RPI_WIFI_FIRMWARE_SITE = $(call github,LibreELEC,brcmfmac_sdio-firmware-rpi,$(RPI_WIFI_FIRMWARE_VERSION))
+ RPI_WIFI_FIRMWARE_LICENSE = PROPRIETARY
+ RPI_WIFI_FIRMWARE_LICENSE_FILES = LICENCE.broadcom_bcm43xx
 -- 
 2.33.0
 
