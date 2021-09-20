@@ -2,90 +2,66 @@ Return-Path: <SRS0=GPX0=OK=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_2 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AA2EEC433EF
-	for <buildroot@archiver.kernel.org>; Mon, 20 Sep 2021 18:32:06 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3030AC433F5
+	for <buildroot@archiver.kernel.org>; Mon, 20 Sep 2021 18:44:04 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2B45260F23
-	for <buildroot@archiver.kernel.org>; Mon, 20 Sep 2021 18:32:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2B45260F23
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmx.net
+	by mail.kernel.org (Postfix) with ESMTPS id 4D29760EDF
+	for <buildroot@archiver.kernel.org>; Mon, 20 Sep 2021 18:44:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4D29760EDF
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=igalia.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C9ED44039E;
-	Mon, 20 Sep 2021 18:32:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E27358176E;
+	Mon, 20 Sep 2021 18:44:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id knigwe-Rfh9O; Mon, 20 Sep 2021 18:32:04 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id x3uBmPqss4xa; Mon, 20 Sep 2021 18:44:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C6F064045C;
-	Mon, 20 Sep 2021 18:32:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A0A788177A;
+	Mon, 20 Sep 2021 18:44:00 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 89CDE1BF23C
- for <buildroot@lists.busybox.net>; Mon, 20 Sep 2021 18:32:02 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 13FB61BF23C
+ for <buildroot@lists.busybox.net>; Mon, 20 Sep 2021 18:43:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 86B208242D
- for <buildroot@lists.busybox.net>; Mon, 20 Sep 2021 18:32:02 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 111308176E
+ for <buildroot@lists.busybox.net>; Mon, 20 Sep 2021 18:43:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=gmx.net
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mf8EyyNd0Hea for <buildroot@lists.busybox.net>;
- Mon, 20 Sep 2021 18:31:58 +0000 (UTC)
+ with ESMTP id uBp5lzHct4MJ for <buildroot@lists.busybox.net>;
+ Mon, 20 Sep 2021 18:43:56 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B691882425
- for <buildroot@buildroot.org>; Mon, 20 Sep 2021 18:31:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
- s=badeba3b8450; t=1632162710;
- bh=eNPMvCPpGNbhk4Q6dvKi0INsChtsOLuyBo81iTgyHqs=;
- h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
- b=Lcsw2W2qts4BvdYLs7y9xY4cTYAyABSsPGkw+ZgDvHbDd7wPKPnIva/0x+2rrPRPV
- yzrjqy6KvsepAHF6Ko6pT8BUljml/Qykdt4nlbK5AncW/m7EvZXFNFKSTOeilaAwyr
- jR31XN/v4way4/yTNq1QLPsNhxinPrcTrNkrGesw=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from localhost ([62.216.209.129]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MfpOT-1n3ucZ08Qj-00gKxx; Mon, 20
- Sep 2021 20:31:50 +0200
-Date: Mon, 20 Sep 2021 20:31:48 +0200
-From: Peter Seiderer <ps.report@gmx.net>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20210920203148.3eb59c22@gmx.net>
-In-Reply-To: <20210920163031.197937-1-fontaine.fabrice@gmail.com>
-References: <20210920163031.197937-1-fontaine.fabrice@gmail.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-suse-linux-gnu)
+Received: from fanzine.igalia.com (fanzine.igalia.com [178.60.130.6])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3C8D980F05
+ for <buildroot@buildroot.org>; Mon, 20 Sep 2021 18:43:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+ s=20170329; 
+ h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:Cc:To:From;
+ bh=drl7aJBA7XPtvyctZs6ta+j4Rm74rY+mbH6l4123pOU=; 
+ b=TvbCXGDWIo8o24liYoU14EDt6tI58Y6+TDeH1ynxVazv68Y9HyLibsOEu2sIyKLl9TUqeSCL7QF8LjBXSf3Po9reQ6c75Jj5JOYeu1kUMC/1kvobBPaI82Sk8UsSJ+GsN9AuO6YscAwqDeqYOtlYmsNPS9N88/nqeNOprdhD3lAXGiYQCofL/RjT94NRB0Fw5WCgB4tlJ2tumOCZ+QrDB0LqAqnFXpQBDpZp3Z9g6CflXYUYC9pd1/kq0Xls3J8AjxAYQQQI2M/jJb8NjZnYRID4Xsl63g6YVbATL0y35KOJ9nFMhYcAvt2b++YGgp3HujF2H8xWxaH5gHSZhhdqtQ==;
+Received: from 91-153-34-142.elisa-laajakaista.fi ([91.153.34.142] helo=kodama)
+ by fanzine.igalia.com with esmtpsa 
+ (Cipher TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256) (Exim)
+ id 1mSOGf-0006zI-6O; Mon, 20 Sep 2021 20:43:53 +0200
+Received: from localhost (kodama [local])
+ by kodama (OpenSMTPD) with ESMTPA id 86e9d97c;
+ Mon, 20 Sep 2021 18:43:41 +0000 (UTC)
+From: Adrian Perez de Castro <aperez@igalia.com>
+To: buildroot@buildroot.org
+Date: Mon, 20 Sep 2021 21:43:41 +0300
+Message-Id: <20210920184341.641935-1-aperez@igalia.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:KN7qRuNh8LGggg19LZtJ0prL3NwIEPdD62f8mldp66CP8snLOzB
- KQzY6XShkVy4uScLtKravrYOCNLIZCdobaNQdA/0q8EdwKMUTr13rDqG8PKSgERUWBfEL5k
- boC9zYvtzwmkITgei23TRP5pJUmb0PhFkOPaNxYYRe701Z8+fnGKLN+xibVNhvn+Yrf+ADr
- MZMYp1Z4hqAoAsT92G8oQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:5dTmlW4RPDY=:ZXlcaEG/5VLQ9s0cXoktJa
- Nln86gHv9LdsDUOE/NNlbTUsg7JL9hX1UWlNiXI4H4rfBa2LUibOP3FqmXpOlaL6x5IaNAgLh
- pLhM0QdW2x9AgCNMC8s3UMqlqJ03a9HBHVwewR/t4kFN+B2KixK+KFuosjHdDAjo12ELrBm7S
- DD46zFbWcxc9yfG/3IpwWvwUmRWhW407LTt5KRSXxzxBStI5s4U3Rs36n+XdBCr0AYgj0xQF8
- EURr+T9IpbHiG37fXHDda9nFUPLTMxy81xRtBB/OrGkXKpPXnoZCkGbm5nFTRwJSVHnAYymtZ
- dj1Oq5RTcI43IeSAWiGrHa7gwVydvS1ri3WMIV0LPU2TWwYUXzS/i7zq1CspXPAj1KHzQ6Z2Z
- ID6Ixx98ecXGnOHO3cgrZEix9SvqScmOm0L2vn2Qi4TiPQkl42SGI9sSaBTMMeMGjXvhnWu7P
- heYMiNrUHpNcRwwG/xNGaOtuIEDc/aXkErezVk/CRLWWkyAfuNCe8jbfYOIyOdSy0r9PIQA2l
- BDW0i3Wi46AEh/AWKDy4es151OSu9bwGuklozrxuYtJAi66n5wdvtS/ipaRVTUcJqxcj6YbVO
- HkgbFaADDjpOK6zkYQTiOKjOR5xZBezWORe4oACYofto50VKzso1FvPzew1e5iMRF7EIY/Oe3
- GW8VhPjATwp2CMIYjsdHRE6yXhT8o5ClKKcn5De16HgqrCRpFEOdRysH1w2JTax+xluhBM7GQ
- pkJX6H4lRJltXy2L04nq9g7t0BnQEbCQcrTlRoxSHtUjmiipvv7IUsR7phV87wNW8mRNEs9u5
- EPLG+CBXm1zGd58fbnh1ZFVQFgJ956GQdS/nUg1TFrQSVyqk0r3ulX7rvSdZATim0YWVpcd0j
- i10tJjm1gWK+eU3swKZo5/+kvH5m2eIe+z1iUEneBAMH7ok4IdcSraG5cO9dJYGSbQ2Fvmy0k
- v5XNaGkx0s2uD7GGSWqut9r7WxyRuWtsRn03Xw/T+W5EQfRp710wJ7ZLhvxFeHpDL4IPYNzRu
- QB5IeRcM/gsgfkZHYll9ylbB1PMDTKmwLMjJuK1Iwy49hO2fsaqBcJahRE/jnGOR1mHhn2n+B
- gbAvH2BD4WtiWk=
-Subject: Re: [Buildroot] [PATCH 1/1] package/iwd: fix build with uclibc-ng
+Subject: [Buildroot] [PATCH 1/1] package/webkitgtk: security bump to version
+ 2.32.4
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,114 +74,452 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: Matt Weber <matthew.weber@collins.com>, buildroot@buildroot.org
+Cc: Adrian Perez de Castro <aperez@igalia.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-Hello Fabrice,
+This is a minor release which provides fixes for CVE-2021-30858 and
+a number of other potential security issues without an associated CVE.
+Patch "0001-Add-ldp-and-stp-support-for-FP-registers-plus-some-b.patch"
+is deleted as it has been included in this release.
 
-On Mon, 20 Sep 2021 18:30:31 +0200, Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Full release notes can be found at:
 
-> Fix the following build failure with uclibc-ng raised since bump to
-> version 1.17 in commit 9badccc9d4887aa2365d7350e3b26bd4250dad48:
->
-> /home/giuliobenetti/autobuild/run/instance-3/output-1/host/lib/gcc/xtensa-buildroot-linux-uclibc/10.3.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld: src/sae.o: in function `sae_rx_authenticate':
-> sae.c:(.text+0xd74): undefined reference to `reallocarray'
->
-> Fixes:
->  - http://autobuild.buildroot.org/results/c6d3f86282c44645b4f1c61882dc63ccfc8eb35a
->
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+  https://webkitgtk.org/2021/09/17/webkitgtk2.32.4-released.html
 
-Thanks for fixing the failure!
+An accompanying security advisory has been published at:
 
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+  https://webkitgtk.org/security/WSA-2021-0005.html
 
-Regards,
-Peter
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+---
+ ...support-for-FP-registers-plus-some-b.patch | 382 ------------------
+ package/webkitgtk/webkitgtk.hash              |   8 +-
+ package/webkitgtk/webkitgtk.mk                |   2 +-
+ 3 files changed, 5 insertions(+), 387 deletions(-)
+ delete mode 100644 package/webkitgtk/0001-Add-ldp-and-stp-support-for-FP-registers-plus-some-b.patch
 
-> ---
->  ...-build-Add-reallocarray-to-missing-h.patch | 55 +++++++++++++++++++
->  package/iwd/iwd.mk                            |  2 +
->  2 files changed, 57 insertions(+)
->  create mode 100644 package/iwd/0001-build-Add-reallocarray-to-missing-h.patch
->
-> diff --git a/package/iwd/0001-build-Add-reallocarray-to-missing-h.patch b/package/iwd/0001-build-Add-reallocarray-to-missing-h.patch
-> new file mode 100644
-> index 0000000000..ef6114f1af
-> --- /dev/null
-> +++ b/package/iwd/0001-build-Add-reallocarray-to-missing-h.patch
-> @@ -0,0 +1,55 @@
-> +From ec1c348b4fd67619fa0c2f55ae644f6a8014d971 Mon Sep 17 00:00:00 2001
-> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +Date: Sun, 19 Sep 2021 21:17:44 +0200
-> +Subject: build: Add reallocarray to missing.h
-> +
-> +reallocarray has been added to glibc relatively recently (version 2.26,
-> +from 2017) and apparently not all users run new enough glibc. Moreover,
-> +reallocarray is not available with uclibc-ng. So use realloc if
-> +reallocarray is not available to avoid the following build failure
-> +raised since commit 891b78e9e892a3bcd800eb3a298e6380e9a15dd1:
-> +
-> +/home/giuliobenetti/autobuild/run/instance-3/output-1/host/lib/gcc/xtensa-buildroot-linux-uclibc/10.3.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld: src/sae.o: in function `sae_rx_authenticate':
-> +sae.c:(.text+0xd74): undefined reference to `reallocarray'
-> +
-> +Fixes:
-> + - http://autobuild.buildroot.org/results/c6d3f86282c44645b4f1c61882dc63ccfc8eb35a
-> +
-> +[Retrieved from:
-> +https://git.kernel.org/pub/scm/network/wireless/iwd.git/commit/?id=ec1c348b4fd67619fa0c2f55ae644f6a8014d971]
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +---
-> + configure.ac  | 1 +
-> + src/missing.h | 7 +++++++
-> + 2 files changed, 8 insertions(+)
-> +
-> +diff --git a/configure.ac b/configure.ac
-> +index c6250401..51d9da93 100644
-> +--- a/configure.ac
-> ++++ b/configure.ac
-> +@@ -129,6 +129,7 @@ AC_DEFINE_UNQUOTED(WIRED_STORAGEDIR, "${wired_storagedir}",
-> +
-> + AC_CHECK_FUNCS(explicit_bzero)
-> + AC_CHECK_FUNCS(rawmemchr)
-> ++AC_CHECK_FUNCS(reallocarray)
-> +
-> + AC_CHECK_HEADERS(linux/types.h linux/if_alg.h)
-> +
-> +diff --git a/src/missing.h b/src/missing.h
-> +index 2cc80aee..a5b92952 100644
-> +--- a/src/missing.h
-> ++++ b/src/missing.h
-> +@@ -37,3 +37,10 @@ _Pragma("GCC diagnostic ignored \"-Wstringop-overflow=\"")
-> + _Pragma("GCC diagnostic pop")
-> + }
-> + #endif
-> ++
-> ++#ifndef HAVE_REALLOCARRAY
-> ++static inline void *reallocarray(void *ptr, size_t nmemb, size_t size)
-> ++{
-> ++	return realloc(ptr, nmemb * size);
-> ++}
-> ++#endif
-> +--
-> +cgit 1.2.3-1.el7
-> +
-> diff --git a/package/iwd/iwd.mk b/package/iwd/iwd.mk
-> index 9737f2c626..58535b1aa1 100644
-> --- a/package/iwd/iwd.mk
-> +++ b/package/iwd/iwd.mk
-> @@ -12,6 +12,8 @@ IWD_LICENSE_FILES = COPYING
->  IWD_CPE_ID_VENDOR = intel
->  IWD_CPE_ID_PRODUCT = inet_wireless_daemon
->  IWD_SELINUX_MODULES = networkmanager
-> +# We're patching configure.ac
-> +IWD_AUTORECONF = YES
->
->  IWD_CONF_OPTS = \
->  	--disable-manual-pages \
+diff --git a/package/webkitgtk/0001-Add-ldp-and-stp-support-for-FP-registers-plus-some-b.patch b/package/webkitgtk/0001-Add-ldp-and-stp-support-for-FP-registers-plus-some-b.patch
+deleted file mode 100644
+index c8b8501bdb..0000000000
+--- a/package/webkitgtk/0001-Add-ldp-and-stp-support-for-FP-registers-plus-some-b.patch
++++ /dev/null
+@@ -1,382 +0,0 @@
+-From 05f6ba814422a392d59037ebe4412168da0e44db Mon Sep 17 00:00:00 2001
+-From: Mark Lam <mark.lam@apple.com>
+-Date: Tue, 15 Jun 2021 01:04:01 +0000
+-Subject: [PATCH] Add ldp and stp support for FP registers, plus some bug
+- fixes. https://bugs.webkit.org/show_bug.cgi?id=226998 rdar://79313717
+-
+-Reviewed by Robin Morisset.
+-
+-This patch does the following:
+-1. Add ldp and stp support for FP registers.
+-   This simply entails providing wrappers that take FPRegisterID and passing true
+-   for the V bit to the underlying loadStoreRegisterPairXXX encoding function.
+-   V is for vector (aka floating point).  This will cause bit 26 in the instruction
+-   to be set indicating that it's loading / storing floating point registers.
+-
+-2. Add ARM64 disassembler support ldp and stp for FP registers.
+-   This includes fixing A64DOpcodeLoadStoreRegisterPair::mask to not exclude the
+-   FP versions of the instructions.
+-
+-3. Add ARM64Assembler query methods for determining if an immediate is encodable
+-   as the signed 12 bit immediate of ldp and stp instructions.
+-
+-4. Fix ldp and stp offset form to take an int instead of an unsigned.  The
+-   immediate it takes is a 12-bit signed int, not unsigned.
+-
+-5. In loadStoreRegisterPairXXX encoding functions used by the forms of ldp and stp,
+-   RELEASE_ASSERT that the passed in immediate is encodable.  Unlike ldur / stur,
+-   there is no form of ldp / stp that takes the offset in a register that can be
+-   used as a fail over.  Hence, if the immediate is not encodable, this is a
+-   non-recoverable event.  The client is responsible for ensuring that the offset
+-   is encodable.
+-
+-6. Added some testmasm tests for testing the offset form (as opposed to PreIndex
+-   and PostIndex forms) of ldp and stp.  We currently only use the offset form
+-   in our JITs.
+-
+-* assembler/ARM64Assembler.h:
+-(JSC::ARM64Assembler::isValidLDPImm):
+-(JSC::ARM64Assembler::isValidLDPFPImm):
+-(JSC::ARM64Assembler::ldp):
+-(JSC::ARM64Assembler::ldnp):
+-(JSC::ARM64Assembler::isValidSTPImm):
+-(JSC::ARM64Assembler::isValidSTPFPImm):
+-(JSC::ARM64Assembler::stp):
+-(JSC::ARM64Assembler::stnp):
+-(JSC::ARM64Assembler::loadStoreRegisterPairPostIndex):
+-(JSC::ARM64Assembler::loadStoreRegisterPairPreIndex):
+-(JSC::ARM64Assembler::loadStoreRegisterPairOffset):
+-(JSC::ARM64Assembler::loadStoreRegisterPairNonTemporal):
+-* assembler/AssemblerCommon.h:
+-(JSC::isValidSignedImm7):
+-* assembler/MacroAssemblerARM64.h:
+-(JSC::MacroAssemblerARM64::loadPair64):
+-(JSC::MacroAssemblerARM64::storePair64):
+-* assembler/testmasm.cpp:
+-(JSC::testLoadStorePair64Int64):
+-(JSC::testLoadStorePair64Double):
+-* disassembler/ARM64/A64DOpcode.cpp:
+-(JSC::ARM64Disassembler::A64DOpcodeLoadStoreRegisterPair::format):
+-* disassembler/ARM64/A64DOpcode.h:
+-
+-
+-
+-Canonical link: https://commits.webkit.org/238801@main
+-git-svn-id: https://svn.webkit.org/repository/webkit/trunk@278856 268f45cc-cd09-0410-ab3c-d52691b4dbfc
+-
+-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+-[james.hilliard1@gmail.com: backport from upstream commit
+-05f6ba814422a392d59037ebe4412168da0e44db]
+----
+- Source/JavaScriptCore/ChangeLog               |  61 +++
+- .../JavaScriptCore/assembler/ARM64Assembler.h | 104 ++++-
+- .../assembler/AssemblerCommon.h               |  11 +-
+- .../assembler/MacroAssemblerARM64.h           |  20 +
+- Source/JavaScriptCore/assembler/testmasm.cpp  | 437 ++++++++++++++++++
+- .../disassembler/ARM64/A64DOpcode.cpp         |   8 +-
+- .../disassembler/ARM64/A64DOpcode.h           |   4 +-
+- 7 files changed, 630 insertions(+), 15 deletions(-)
+-
+-diff --git a/Source/JavaScriptCore/assembler/ARM64Assembler.h b/Source/JavaScriptCore/assembler/ARM64Assembler.h
+-index 2cc53c8ccda5..758cbe402779 100644
+---- a/Source/JavaScriptCore/assembler/ARM64Assembler.h
+-+++ b/Source/JavaScriptCore/assembler/ARM64Assembler.h
+-@@ -1,5 +1,5 @@
+- /*
+-- * Copyright (C) 2012-2020 Apple Inc. All rights reserved.
+-+ * Copyright (C) 2012-2021 Apple Inc. All rights reserved.
+-  *
+-  * Redistribution and use in source and binary forms, with or without
+-  * modification, are permitted provided that the following conditions
+-@@ -1114,6 +1114,20 @@ public:
+-         insn(0x0);
+-     }
+- 
+-+    template<int datasize>
+-+    ALWAYS_INLINE static bool isValidLDPImm(int immediate)
+-+    {
+-+        unsigned immedShiftAmount = memPairOffsetShift(false, MEMPAIROPSIZE_INT(datasize));
+-+        return isValidSignedImm7(immediate, immedShiftAmount);
+-+    }
+-+
+-+    template<int datasize>
+-+    ALWAYS_INLINE static bool isValidLDPFPImm(int immediate)
+-+    {
+-+        unsigned immedShiftAmount = memPairOffsetShift(true, MEMPAIROPSIZE_FP(datasize));
+-+        return isValidSignedImm7(immediate, immedShiftAmount);
+-+    }
+-+
+-     template<int datasize>
+-     ALWAYS_INLINE void ldp(RegisterID rt, RegisterID rt2, RegisterID rn, PairPostIndex simm)
+-     {
+-@@ -1129,17 +1143,45 @@ public:
+-     }
+- 
+-     template<int datasize>
+--    ALWAYS_INLINE void ldp(RegisterID rt, RegisterID rt2, RegisterID rn, unsigned pimm = 0)
+-+    ALWAYS_INLINE void ldp(RegisterID rt, RegisterID rt2, RegisterID rn, int simm = 0)
+-+    {
+-+        CHECK_DATASIZE();
+-+        insn(loadStoreRegisterPairOffset(MEMPAIROPSIZE_INT(datasize), false, MemOp_LOAD, simm, rn, rt, rt2));
+-+    }
+-+
+-+    template<int datasize>
+-+    ALWAYS_INLINE void ldnp(RegisterID rt, RegisterID rt2, RegisterID rn, int simm = 0)
+-+    {
+-+        CHECK_DATASIZE();
+-+        insn(loadStoreRegisterPairNonTemporal(MEMPAIROPSIZE_INT(datasize), false, MemOp_LOAD, simm, rn, rt, rt2));
+-+    }
+-+
+-+    template<int datasize>
+-+    ALWAYS_INLINE void ldp(FPRegisterID rt, FPRegisterID rt2, RegisterID rn, PairPostIndex simm)
+-+    {
+-+        CHECK_DATASIZE();
+-+        insn(loadStoreRegisterPairPostIndex(MEMPAIROPSIZE_FP(datasize), true, MemOp_LOAD, simm, rn, rt, rt2));
+-+    }
+-+
+-+    template<int datasize>
+-+    ALWAYS_INLINE void ldp(FPRegisterID rt, FPRegisterID rt2, RegisterID rn, PairPreIndex simm)
+-+    {
+-+        CHECK_DATASIZE();
+-+        insn(loadStoreRegisterPairPreIndex(MEMPAIROPSIZE_FP(datasize), true, MemOp_LOAD, simm, rn, rt, rt2));
+-+    }
+-+
+-+    template<int datasize>
+-+    ALWAYS_INLINE void ldp(FPRegisterID rt, FPRegisterID rt2, RegisterID rn, int simm = 0)
+-     {
+-         CHECK_DATASIZE();
+--        insn(loadStoreRegisterPairOffset(MEMPAIROPSIZE_INT(datasize), false, MemOp_LOAD, pimm, rn, rt, rt2));
+-+        insn(loadStoreRegisterPairOffset(MEMPAIROPSIZE_FP(datasize), true, MemOp_LOAD, simm, rn, rt, rt2));
+-     }
+- 
+-     template<int datasize>
+--    ALWAYS_INLINE void ldnp(RegisterID rt, RegisterID rt2, RegisterID rn, unsigned pimm = 0)
+-+    ALWAYS_INLINE void ldnp(FPRegisterID rt, FPRegisterID rt2, RegisterID rn, int simm = 0)
+-     {
+-         CHECK_DATASIZE();
+--        insn(loadStoreRegisterPairNonTemporal(MEMPAIROPSIZE_INT(datasize), false, MemOp_LOAD, pimm, rn, rt, rt2));
+-+        insn(loadStoreRegisterPairNonTemporal(MEMPAIROPSIZE_FP(datasize), true, MemOp_LOAD, simm, rn, rt, rt2));
+-     }
+- 
+-     template<int datasize>
+-@@ -1743,6 +1785,18 @@ public:
+-         smaddl(rd, rn, rm, ARM64Registers::zr);
+-     }
+- 
+-+    template<int datasize>
+-+    ALWAYS_INLINE static bool isValidSTPImm(int immediate)
+-+    {
+-+        return isValidLDPImm<datasize>(immediate);
+-+    }
+-+
+-+    template<int datasize>
+-+    ALWAYS_INLINE static bool isValidSTPFPImm(int immediate)
+-+    {
+-+        return isValidLDPFPImm<datasize>(immediate);
+-+    }
+-+
+-     template<int datasize>
+-     ALWAYS_INLINE void stp(RegisterID rt, RegisterID rt2, RegisterID rn, PairPostIndex simm)
+-     {
+-@@ -1758,17 +1812,45 @@ public:
+-     }
+- 
+-     template<int datasize>
+--    ALWAYS_INLINE void stp(RegisterID rt, RegisterID rt2, RegisterID rn, unsigned pimm = 0)
+-+    ALWAYS_INLINE void stp(RegisterID rt, RegisterID rt2, RegisterID rn, int simm = 0)
+-+    {
+-+        CHECK_DATASIZE();
+-+        insn(loadStoreRegisterPairOffset(MEMPAIROPSIZE_INT(datasize), false, MemOp_STORE, simm, rn, rt, rt2));
+-+    }
+-+
+-+    template<int datasize>
+-+    ALWAYS_INLINE void stnp(RegisterID rt, RegisterID rt2, RegisterID rn, int simm = 0)
+-+    {
+-+        CHECK_DATASIZE();
+-+        insn(loadStoreRegisterPairNonTemporal(MEMPAIROPSIZE_INT(datasize), false, MemOp_STORE, simm, rn, rt, rt2));
+-+    }
+-+
+-+    template<int datasize>
+-+    ALWAYS_INLINE void stp(FPRegisterID rt, FPRegisterID rt2, RegisterID rn, PairPostIndex simm)
+-+    {
+-+        CHECK_DATASIZE();
+-+        insn(loadStoreRegisterPairPostIndex(MEMPAIROPSIZE_FP(datasize), true, MemOp_STORE, simm, rn, rt, rt2));
+-+    }
+-+
+-+    template<int datasize>
+-+    ALWAYS_INLINE void stp(FPRegisterID rt, FPRegisterID rt2, RegisterID rn, PairPreIndex simm)
+-+    {
+-+        CHECK_DATASIZE();
+-+        insn(loadStoreRegisterPairPreIndex(MEMPAIROPSIZE_FP(datasize), true, MemOp_STORE, simm, rn, rt, rt2));
+-+    }
+-+
+-+    template<int datasize>
+-+    ALWAYS_INLINE void stp(FPRegisterID rt, FPRegisterID rt2, RegisterID rn, int simm = 0)
+-     {
+-         CHECK_DATASIZE();
+--        insn(loadStoreRegisterPairOffset(MEMPAIROPSIZE_INT(datasize), false, MemOp_STORE, pimm, rn, rt, rt2));
+-+        insn(loadStoreRegisterPairOffset(MEMPAIROPSIZE_FP(datasize), true, MemOp_STORE, simm, rn, rt, rt2));
+-     }
+- 
+-     template<int datasize>
+--    ALWAYS_INLINE void stnp(RegisterID rt, RegisterID rt2, RegisterID rn, unsigned pimm = 0)
+-+    ALWAYS_INLINE void stnp(FPRegisterID rt, FPRegisterID rt2, RegisterID rn, int simm = 0)
+-     {
+-         CHECK_DATASIZE();
+--        insn(loadStoreRegisterPairNonTemporal(MEMPAIROPSIZE_INT(datasize), false, MemOp_STORE, pimm, rn, rt, rt2));
+-+        insn(loadStoreRegisterPairNonTemporal(MEMPAIROPSIZE_FP(datasize), true, MemOp_STORE, simm, rn, rt, rt2));
+-     }
+- 
+-     template<int datasize>
+-@@ -3544,6 +3626,7 @@ protected:
+-         ASSERT(opc == (opc & 1)); // Only load or store, load signed 64 is handled via size.
+-         ASSERT(V || (size != MemPairOp_LoadSigned_32) || (opc == MemOp_LOAD)); // There isn't an integer store signed.
+-         unsigned immedShiftAmount = memPairOffsetShift(V, size);
+-+        RELEASE_ASSERT(isValidSignedImm7(immediate, immedShiftAmount));
+-         int imm7 = immediate >> immedShiftAmount;
+-         ASSERT((imm7 << immedShiftAmount) == immediate && isInt<7>(imm7));
+-         return (0x28800000 | size << 30 | V << 26 | opc << 22 | (imm7 & 0x7f) << 15 | rt2 << 10 | xOrSp(rn) << 5 | rt);
+-@@ -3575,6 +3658,7 @@ protected:
+-         ASSERT(opc == (opc & 1)); // Only load or store, load signed 64 is handled via size.
+-         ASSERT(V || (size != MemPairOp_LoadSigned_32) || (opc == MemOp_LOAD)); // There isn't an integer store signed.
+-         unsigned immedShiftAmount = memPairOffsetShift(V, size);
+-+        RELEASE_ASSERT(isValidSignedImm7(immediate, immedShiftAmount));
+-         int imm7 = immediate >> immedShiftAmount;
+-         ASSERT((imm7 << immedShiftAmount) == immediate && isInt<7>(imm7));
+-         return (0x29800000 | size << 30 | V << 26 | opc << 22 | (imm7 & 0x7f) << 15 | rt2 << 10 | xOrSp(rn) << 5 | rt);
+-@@ -3592,6 +3676,7 @@ protected:
+-         ASSERT(opc == (opc & 1)); // Only load or store, load signed 64 is handled via size.
+-         ASSERT(V || (size != MemPairOp_LoadSigned_32) || (opc == MemOp_LOAD)); // There isn't an integer store signed.
+-         unsigned immedShiftAmount = memPairOffsetShift(V, size);
+-+        RELEASE_ASSERT(isValidSignedImm7(immediate, immedShiftAmount));
+-         int imm7 = immediate >> immedShiftAmount;
+-         ASSERT((imm7 << immedShiftAmount) == immediate && isInt<7>(imm7));
+-         return (0x29000000 | size << 30 | V << 26 | opc << 22 | (imm7 & 0x7f) << 15 | rt2 << 10 | xOrSp(rn) << 5 | rt);
+-@@ -3609,6 +3694,7 @@ protected:
+-         ASSERT(opc == (opc & 1)); // Only load or store, load signed 64 is handled via size.
+-         ASSERT(V || (size != MemPairOp_LoadSigned_32) || (opc == MemOp_LOAD)); // There isn't an integer store signed.
+-         unsigned immedShiftAmount = memPairOffsetShift(V, size);
+-+        RELEASE_ASSERT(isValidSignedImm7(immediate, immedShiftAmount));
+-         int imm7 = immediate >> immedShiftAmount;
+-         ASSERT((imm7 << immedShiftAmount) == immediate && isInt<7>(imm7));
+-         return (0x28000000 | size << 30 | V << 26 | opc << 22 | (imm7 & 0x7f) << 15 | rt2 << 10 | xOrSp(rn) << 5 | rt);
+-diff --git a/Source/JavaScriptCore/assembler/AssemblerCommon.h b/Source/JavaScriptCore/assembler/AssemblerCommon.h
+-index a594823d6a4d..2e50ffdbc82a 100644
+---- a/Source/JavaScriptCore/assembler/AssemblerCommon.h
+-+++ b/Source/JavaScriptCore/assembler/AssemblerCommon.h
+-@@ -1,5 +1,5 @@
+- /*
+-- * Copyright (C) 2012-2019 Apple Inc. All rights reserved.
+-+ * Copyright (C) 2012-2021 Apple Inc. All rights reserved.
+-  *
+-  * Redistribution and use in source and binary forms, with or without
+-  * modification, are permitted provided that the following conditions
+-@@ -74,6 +74,15 @@ ALWAYS_INLINE bool isValidSignedImm9(int32_t value)
+-     return isInt9(value);
+- }
+- 
+-+ALWAYS_INLINE bool isValidSignedImm7(int32_t value, int alignmentShiftAmount)
+-+{
+-+    constexpr int32_t disallowedHighBits = 32 - 7;
+-+    int32_t shiftedValue = value >> alignmentShiftAmount;
+-+    bool fitsIn7Bits = shiftedValue == ((shiftedValue << disallowedHighBits) >> disallowedHighBits);
+-+    bool hasCorrectAlignment = value == (shiftedValue << alignmentShiftAmount);
+-+    return fitsIn7Bits && hasCorrectAlignment;
+-+}
+-+
+- class ARM64LogicalImmediate {
+- public:
+-     static ARM64LogicalImmediate create32(uint32_t value)
+-diff --git a/Source/JavaScriptCore/assembler/MacroAssemblerARM64.h b/Source/JavaScriptCore/assembler/MacroAssemblerARM64.h
+-index f86aec1c5400..14e477fde3b8 100644
+---- a/Source/JavaScriptCore/assembler/MacroAssemblerARM64.h
+-+++ b/Source/JavaScriptCore/assembler/MacroAssemblerARM64.h
+-@@ -1244,6 +1244,16 @@ public:
+-         m_assembler.ldnp<64>(dest1, dest2, src, offset.m_value);
+-     }
+- 
+-+    void loadPair64(RegisterID src, FPRegisterID dest1, FPRegisterID dest2)
+-+    {
+-+        loadPair64(src, TrustedImm32(0), dest1, dest2);
+-+    }
+-+
+-+    void loadPair64(RegisterID src, TrustedImm32 offset, FPRegisterID dest1, FPRegisterID dest2)
+-+    {
+-+        m_assembler.ldp<64>(dest1, dest2, src, offset.m_value);
+-+    }
+-+
+-     void abortWithReason(AbortReason reason)
+-     {
+-         // It is safe to use dataTempRegister directly since this is a crashing JIT Assert.
+-@@ -1568,6 +1578,16 @@ public:
+-         m_assembler.stnp<64>(src1, src2, dest, offset.m_value);
+-     }
+- 
+-+    void storePair64(FPRegisterID src1, FPRegisterID src2, RegisterID dest)
+-+    {
+-+        storePair64(src1, src2, dest, TrustedImm32(0));
+-+    }
+-+
+-+    void storePair64(FPRegisterID src1, FPRegisterID src2, RegisterID dest, TrustedImm32 offset)
+-+    {
+-+        m_assembler.stp<64>(src1, src2, dest, offset.m_value);
+-+    }
+-+
+-     void store32(RegisterID src, ImplicitAddress address)
+-     {
+-         if (tryStoreWithOffset<32>(src, address.base, address.offset))
+-diff --git a/Source/JavaScriptCore/disassembler/ARM64/A64DOpcode.cpp b/Source/JavaScriptCore/disassembler/ARM64/A64DOpcode.cpp
+-index 247c79dcb428..dfe09b671470 100644
+---- a/Source/JavaScriptCore/disassembler/ARM64/A64DOpcode.cpp
+-+++ b/Source/JavaScriptCore/disassembler/ARM64/A64DOpcode.cpp
+-@@ -1,5 +1,5 @@
+- /*
+-- * Copyright (C) 2012, 2016 Apple Inc. All rights reserved.
+-+ * Copyright (C) 2012-2021 Apple Inc. All rights reserved.
+-  *
+-  * Redistribution and use in source and binary forms, with or without
+-  * modification, are permitted provided that the following conditions
+-@@ -72,6 +72,8 @@ static const OpcodeGroupInitializer opcodeGroupList[] = {
+-     OPCODE_GROUP_ENTRY(0x0a, A64DOpcodeLogicalShiftedRegister),
+-     OPCODE_GROUP_ENTRY(0x0b, A64DOpcodeAddSubtractExtendedRegister),
+-     OPCODE_GROUP_ENTRY(0x0b, A64DOpcodeAddSubtractShiftedRegister),
+-+    OPCODE_GROUP_ENTRY(0x0c, A64DOpcodeLoadStoreRegisterPair),
+-+    OPCODE_GROUP_ENTRY(0x0d, A64DOpcodeLoadStoreRegisterPair),
+-     OPCODE_GROUP_ENTRY(0x11, A64DOpcodeAddSubtractImmediate),
+-     OPCODE_GROUP_ENTRY(0x12, A64DOpcodeMoveWide),
+-     OPCODE_GROUP_ENTRY(0x12, A64DOpcodeLogicalImmediate),
+-@@ -1363,9 +1365,9 @@ const char* A64DOpcodeLoadStoreRegisterPair::format()
+-     appendInstructionName(thisOpName);
+-     unsigned offsetShift;
+-     if (vBit()) {
+--        appendFPRegisterName(rt(), size());
+-+        appendFPRegisterName(rt(), size() + 2);
+-         appendSeparator();
+--        appendFPRegisterName(rt2(), size());
+-+        appendFPRegisterName(rt2(), size() + 2);
+-         offsetShift = size() + 2;
+-     } else {
+-         if (!lBit())
+-diff --git a/Source/JavaScriptCore/disassembler/ARM64/A64DOpcode.h b/Source/JavaScriptCore/disassembler/ARM64/A64DOpcode.h
+-index e071babb8e01..fd9db7cae58e 100644
+---- a/Source/JavaScriptCore/disassembler/ARM64/A64DOpcode.h
+-+++ b/Source/JavaScriptCore/disassembler/ARM64/A64DOpcode.h
+-@@ -1,5 +1,5 @@
+- /*
+-- * Copyright (C) 2012-2019 Apple Inc. All rights reserved.
+-+ * Copyright (C) 2012-2021 Apple Inc. All rights reserved.
+-  *
+-  * Redistribution and use in source and binary forms, with or without
+-  * modification, are permitted provided that the following conditions
+-@@ -787,7 +787,7 @@ public:
+- 
+- class A64DOpcodeLoadStoreRegisterPair : public A64DOpcodeLoadStore {
+- public:
+--    static constexpr uint32_t mask = 0x3a000000;
+-+    static constexpr uint32_t mask = 0x38000000;
+-     static constexpr uint32_t pattern = 0x28000000;
+- 
+-     DEFINE_STATIC_FORMAT(A64DOpcodeLoadStoreRegisterPair, thisObj);
+--- 
+-2.25.1
+-
+diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+index 1208dfce6c..7cb6c90b21 100644
+--- a/package/webkitgtk/webkitgtk.hash
++++ b/package/webkitgtk/webkitgtk.hash
+@@ -1,7 +1,7 @@
+-# From https://webkitgtk.org/releases/webkitgtk-2.32.3.tar.xz.sums
+-md5  f31b802de421865ea9f1391ec8190519  webkitgtk-2.32.3.tar.xz
+-sha1  9c9b2cb2638ea40706765768dd5cb3c95ab46dcb  webkitgtk-2.32.3.tar.xz
+-sha256  c1f496f5ac654efe4cef62fbd4f2fbeeef265a07c5e7419e5d2900bfeea52cbc  webkitgtk-2.32.3.tar.xz
++# From https://webkitgtk.org/releases/webkitgtk-2.32.4.tar.xz.sums
++md5  51a167e5d03bacf30c5c588e6aa23143  webkitgtk-2.32.4.tar.xz
++sha1  f7255ffb488e727e9e250e0dae9f192266f50f01  webkitgtk-2.32.4.tar.xz
++sha256  00ce2d3f798d7bc5e9039d9059f0c3c974d51de38c8b716f00e94452a177d3fd  webkitgtk-2.32.4.tar.xz
+ 
+ # Hashes for license files:
+ sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index 00972744c7..708884fbf6 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WEBKITGTK_VERSION = 2.32.3
++WEBKITGTK_VERSION = 2.32.4
+ WEBKITGTK_SITE = https://www.webkitgtk.org/releases
+ WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
+ WEBKITGTK_INSTALL_STAGING = YES
+-- 
+2.33.0
 
 _______________________________________________
 buildroot mailing list
