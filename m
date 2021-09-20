@@ -7,93 +7,93 @@ X-Spam-Status: No, score=-15.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 13988C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 20 Sep 2021 19:22:49 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AFA21C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 20 Sep 2021 19:23:00 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id BAD9D610A0
-	for <buildroot@archiver.kernel.org>; Mon, 20 Sep 2021 19:22:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org BAD9D610A0
+	by mail.kernel.org (Postfix) with ESMTPS id 5B32F610A0
+	for <buildroot@archiver.kernel.org>; Mon, 20 Sep 2021 19:23:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5B32F610A0
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7FC2A60ACD;
-	Mon, 20 Sep 2021 19:22:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 161FF82A7F;
+	Mon, 20 Sep 2021 19:23:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id m5vIgImB8e9x; Mon, 20 Sep 2021 19:22:47 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3upYwooO6Y9n; Mon, 20 Sep 2021 19:22:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CAF91608FA;
-	Mon, 20 Sep 2021 19:22:46 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 966641BF955
- for <buildroot@lists.busybox.net>; Mon, 20 Sep 2021 19:22:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 633AE829FD;
+	Mon, 20 Sep 2021 19:22:58 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id A21971BF955
+ for <buildroot@lists.busybox.net>; Mon, 20 Sep 2021 19:22:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 921D9401B6
- for <buildroot@lists.busybox.net>; Mon, 20 Sep 2021 19:22:31 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 901AF403A1
+ for <buildroot@lists.busybox.net>; Mon, 20 Sep 2021 19:22:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fIng9wuoUhx5 for <buildroot@lists.busybox.net>;
- Mon, 20 Sep 2021 19:22:30 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6-2MZiC-mzTx for <buildroot@lists.busybox.net>;
+ Mon, 20 Sep 2021 19:22:32 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com
- [IPv6:2a00:1450:4864:20::532])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1B4304012E
- for <buildroot@buildroot.org>; Mon, 20 Sep 2021 19:22:29 +0000 (UTC)
-Received: by mail-ed1-x532.google.com with SMTP id eg28so42728663edb.1
- for <buildroot@buildroot.org>; Mon, 20 Sep 2021 12:22:29 -0700 (PDT)
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com
+ [IPv6:2a00:1450:4864:20::536])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A0FA34045C
+ for <buildroot@buildroot.org>; Mon, 20 Sep 2021 19:22:32 +0000 (UTC)
+Received: by mail-ed1-x536.google.com with SMTP id c22so65189885edn.12
+ for <buildroot@buildroot.org>; Mon, 20 Sep 2021 12:22:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=WsoMB18pJA6xPqxKBzPSQF7xt0r2YyzexSP8LiaE2F0=;
- b=U8jXQN+lSCUql8hnaCaWa7+nZynHwU+q7aASorQxONgugDjRr8knqp8126WToyULOE
- TzHlSdoXQgNyUIy6dcQHcm2yhN5mXmXID5VrXxHNi5icgEwRddY3FKr5WR5gMyIPPuLS
- z43J2QurpI8aq+pCYRv/njzie8vwfQ4d/U3kGaOJfmulHP+Z/SwROKESIhDcnVchTbX4
- OaeOvlMjwc5/LlnPnQZhFEtPUx73A/9u41mfuP3N8XOcWWYv1HhTY0LqAtR2IXzFTBmy
- 12ZX0kyEygRaCBCCGOLYclnVEFIcvQs5Sq2wGSO5IuqJjQPEbeI+WYFuRVAo/wF08nuE
- EKGQ==
+ bh=Rm8xirwWDNHFWlWgh9/uDd4rcstpfai2yPEVEMIzFf4=;
+ b=S+ndE97+PfN/ezx1Q07Z5ru1YLW2XqqHRj7fFscOf2mhoyg36fCHMnY4crCbh+6H8V
+ E4rbMA8xviBko3JJXGi6OwNEiZCODLN8eP5ZIN9m14Q+UfknZr153E6OYXKWOrbR8pJa
+ /IVK1GHOpwvyIk4Rp9WBcVtVLxdKNxawOPEZWhP/ZLfIhKhfhXHMF7LQAxNW8OLpCzgD
+ SHbKIxmyN+M8oYzBj+Jk6BnCXvwtZcUfd6SGwp/YPvnpRaUeYvSyOXsIllMGXRbDbeBP
+ RkRHmggkXWFThkLZ1lEvSsdWIQu5sJWppDUF0nbqESfAE3xprkpCd7NzK6ve/6/TO7V4
+ 4f0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=WsoMB18pJA6xPqxKBzPSQF7xt0r2YyzexSP8LiaE2F0=;
- b=vDkJjluLLIexHO2165Wz0tekrZ8hZ9K7LNU4L0wp2dbbTNkqmt4TW+gBifpmV8BttU
- nby2LkPFIFL8TzMItBzBqu2Aimg0PyQluMRByVSn+W2WgOLfK1HrcrhvajRDUusqyPfc
- /8hbkMUVE0WCDgmQ23FsQhUkSDTp5eDzQKBeUnW4+jARjtItZURAWXZqIrSBV6/D14I7
- Fnfqbt6BJFE0qam+LwGyY5MqN+gZX5eAiSpZjx+zpGFiKuvYn9jDIOlJzGm7gVHQ6oeO
- vyEYpLXEapMhFccJtObrl+wQ1Wo/ywFXAP8BmoiSHU8znbf8PTzIh+hK+JeX9yqoKkRF
- IYgA==
-X-Gm-Message-State: AOAM532kvl1yTLXPjvtORs0JMrHfy9FamDpVcDh8YLIFgwmgEMiXm9t4
- p4mxXFkH5EkfALaGhQ0FAZrLWQ==
-X-Google-Smtp-Source: ABdhPJyraS81TZpczY8LTc1ZGvldJFP5xCDX8eew+gdSFRh0wB62/vz/zvXFry/becrPlmmxgJDdwQ==
-X-Received: by 2002:a17:906:2505:: with SMTP id
- i5mr30038359ejb.450.1632165748219; 
- Mon, 20 Sep 2021 12:22:28 -0700 (PDT)
+ bh=Rm8xirwWDNHFWlWgh9/uDd4rcstpfai2yPEVEMIzFf4=;
+ b=gyKbY/CZOC3cc10b09JDoHOy1TgMtiLtUUvFJfIr71zbpMWgl1Ej9ckMvAng4ckxo7
+ ibDE3t6UF6eBd3smaGyGtdErYSf5zWGOJ61bGT/oBP6Fs8IBBZWnUSu9Vwsgr45af1B/
+ WxuRybY+wTbCIC/tZRnxCg0r79MxgKpzRTFz/5KL+PANUk7NRRgrxzKY1wEBC+qwazLL
+ CNVedw9r3W1waTi208BhI7i4GM6q4MyqLp/gc6DmcpeIAn8Fz1dVKy0DMRykLizm0z/S
+ r4tN0YaBvUF5NA6KGyb47dxPSN9fnTsKvzwqgA6xiSJ8J+GNd/IO5G92nGL/5/aIw9mk
+ J03w==
+X-Gm-Message-State: AOAM5317jrl2wCyCM9FH2D/2styr30bqDWtgUMqgJO6xzExhJQE+obpK
+ IRQzXohKfkVrEc/zjZw7nkMInjlTyAEUPw==
+X-Google-Smtp-Source: ABdhPJz5Tj9/gh+ZTNyFyZVCu2XKLm3BFRB6KuOgiCRta6q48B0LqIM43P2wdwVopTCiPx+f+6kjnA==
+X-Received: by 2002:a17:906:d8a4:: with SMTP id
+ qc4mr30853598ejb.323.1632165750887; 
+ Mon, 20 Sep 2021 12:22:30 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id k15sm6383652ejb.92.2021.09.20.12.22.27
+ by smtp.gmail.com with ESMTPSA id e22sm7684599edu.35.2021.09.20.12.22.30
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 20 Sep 2021 12:22:27 -0700 (PDT)
-Message-ID: <46f94abf-34f1-3b12-6e32-79b9b57dd4aa@mind.be>
-Date: Mon, 20 Sep 2021 21:22:26 +0200
+ Mon, 20 Sep 2021 12:22:30 -0700 (PDT)
+Message-ID: <78bc73e5-3ce9-4bb3-e7cc-b05c549e7a5a@mind.be>
+Date: Mon, 20 Sep 2021 21:22:30 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.1.0
 Content-Language: en-GB
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-References: <20210908202752.925823-1-fontaine.fabrice@gmail.com>
+References: <20210908202509.860895-1-fontaine.fabrice@gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20210908202752.925823-1-fontaine.fabrice@gmail.com>
-Subject: Re: [Buildroot] [PATCH 1/1] package/gupnp: bump to version 1.3.1
+In-Reply-To: <20210908202509.860895-1-fontaine.fabrice@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package/gssdp: bump to version 1.3.1
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -114,8 +114,11 @@ Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
 
 
-On 08/09/2021 22:27, Fabrice Fontaine wrote:
-> https://gitlab.gnome.org/GNOME/gupnp/-/blob/gupnp-1.3.1/NEWS
+On 08/09/2021 22:25, Fabrice Fontaine wrote:
+> Disable gtk_doc (enabled by default since
+> https://gitlab.gnome.org/GNOME/gssdp/-/commit/652edd5c0145c0a542017840e3f3bc22b9ade159)
+> 
+> https://gitlab.gnome.org/GNOME/gssdp/-/blob/gssdp-1.3.1/NEWS
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
@@ -125,35 +128,43 @@ On 08/09/2021 22:27, Fabrice Fontaine wrote:
   Arnout
 
 > ---
->   package/gupnp/gupnp.hash | 4 ++--
->   package/gupnp/gupnp.mk   | 2 +-
->   2 files changed, 3 insertions(+), 3 deletions(-)
+>   package/gssdp/gssdp.hash | 4 ++--
+>   package/gssdp/gssdp.mk   | 4 ++--
+>   2 files changed, 4 insertions(+), 4 deletions(-)
 > 
-> diff --git a/package/gupnp/gupnp.hash b/package/gupnp/gupnp.hash
-> index d7868b99b9..9eb1eb467b 100644
-> --- a/package/gupnp/gupnp.hash
-> +++ b/package/gupnp/gupnp.hash
+> diff --git a/package/gssdp/gssdp.hash b/package/gssdp/gssdp.hash
+> index 2f13c0a847..4954568420 100644
+> --- a/package/gssdp/gssdp.hash
+> +++ b/package/gssdp/gssdp.hash
 > @@ -1,5 +1,5 @@
-> -# Hash from: http://ftp.gnome.org/pub/gnome/sources/gupnp/1.3/gupnp-1.3.0.sha256sum:
-> -sha256  df8279293aae45ea6bb6de1b13bf1988285c8f2f4f25569fb0d79325a8471666  gupnp-1.3.0.tar.xz
-> +# Hash from: http://ftp.gnome.org/pub/gnome/sources/gupnp/1.3/gupnp-1.3.1.sha256sum:
-> +sha256  df70fe8321bfc53cadb6860edcff2e0dc456ec81899b463f41723684803d1408  gupnp-1.3.1.tar.xz
+> -# Hash from: http://ftp.gnome.org/pub/gnome/sources/gssdp/1.3/gssdp-1.3.0.sha256sum:
+> -sha256  e739cf33f813403a53973cd8f2882dcd7208bad9582269f7066fc9e8ea3a52cc  gssdp-1.3.0.tar.xz
+> +# Hash from: http://ftp.gnome.org/pub/gnome/sources/gssdp/1.3/gssdp-1.3.1.sha256sum:
+> +sha256  affbf145c26e02dda9d31f9da9fd5182bd2cc36565ab8ee2e877567b2fd206cd  gssdp-1.3.1.tar.xz
 >   
 >   # Hash for license file:
 >   sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-> diff --git a/package/gupnp/gupnp.mk b/package/gupnp/gupnp.mk
-> index 421d12d3d2..bbba9ecf32 100644
-> --- a/package/gupnp/gupnp.mk
-> +++ b/package/gupnp/gupnp.mk
-> @@ -5,7 +5,7 @@
+> diff --git a/package/gssdp/gssdp.mk b/package/gssdp/gssdp.mk
+> index 9e67d35db1..c7982f16c5 100644
+> --- a/package/gssdp/gssdp.mk
+> +++ b/package/gssdp/gssdp.mk
+> @@ -5,14 +5,14 @@
 >   ################################################################################
 >   
->   GUPNP_VERSION_MAJOR = 1.3
-> -GUPNP_VERSION = $(GUPNP_VERSION_MAJOR).0
-> +GUPNP_VERSION = $(GUPNP_VERSION_MAJOR).1
->   GUPNP_SOURCE = gupnp-$(GUPNP_VERSION).tar.xz
->   GUPNP_SITE = http://ftp.gnome.org/pub/gnome/sources/gupnp/$(GUPNP_VERSION_MAJOR)
->   GUPNP_LICENSE = LGPL-2.1+
+>   GSSDP_VERSION_MAJOR = 1.3
+> -GSSDP_VERSION = $(GSSDP_VERSION_MAJOR).0
+> +GSSDP_VERSION = $(GSSDP_VERSION_MAJOR).1
+>   GSSDP_SOURCE = gssdp-$(GSSDP_VERSION).tar.xz
+>   GSSDP_SITE = http://ftp.gnome.org/pub/gnome/sources/gssdp/$(GSSDP_VERSION_MAJOR)
+>   GSSDP_LICENSE = LGPL-2.1+
+>   GSSDP_LICENSE_FILES = COPYING
+>   GSSDP_INSTALL_STAGING = YES
+>   GSSDP_DEPENDENCIES = host-pkgconf libglib2 libsoup
+> -GSSDP_CONF_OPTS = -Dexamples=false -Dsniffer=false
+> +GSSDP_CONF_OPTS = -Dexamples=false -Dgtk_doc=false -Dsniffer=false
+>   
+>   ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
+>   GSSDP_CONF_OPTS += -Dintrospection=true -Dvapi=true
 > 
 _______________________________________________
 buildroot mailing list
