@@ -2,89 +2,90 @@ Return-Path: <SRS0=GPX0=OK=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.5 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
-	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_2 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 780F1C4332F
-	for <buildroot@archiver.kernel.org>; Mon, 20 Sep 2021 17:31:51 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AA2EEC433EF
+	for <buildroot@archiver.kernel.org>; Mon, 20 Sep 2021 18:32:06 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1FB6361AEF
-	for <buildroot@archiver.kernel.org>; Mon, 20 Sep 2021 17:31:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1FB6361AEF
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id 2B45260F23
+	for <buildroot@archiver.kernel.org>; Mon, 20 Sep 2021 18:32:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2B45260F23
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmx.net
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BA3F1400C6;
-	Mon, 20 Sep 2021 17:31:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C9ED44039E;
+	Mon, 20 Sep 2021 18:32:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RlZG8q9_4XZ1; Mon, 20 Sep 2021 17:31:49 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E2E0540364;
-	Mon, 20 Sep 2021 17:31:48 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9A97D1BF859
- for <buildroot@lists.busybox.net>; Mon, 20 Sep 2021 17:31:47 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8198240407
- for <buildroot@lists.busybox.net>; Mon, 20 Sep 2021 17:31:47 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6U7WLHSM4lHo for <buildroot@lists.busybox.net>;
- Mon, 20 Sep 2021 17:31:46 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com
- [IPv6:2607:f8b0:4864:20::32b])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 94659403BA
- for <buildroot@buildroot.org>; Mon, 20 Sep 2021 17:31:46 +0000 (UTC)
-Received: by mail-ot1-x32b.google.com with SMTP id
- c6-20020a9d2786000000b005471981d559so3129838otb.5
- for <buildroot@buildroot.org>; Mon, 20 Sep 2021 10:31:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc:content-transfer-encoding;
- bh=ZXAblkeD0203lJai2SoRezraEM6jEhYF8D8ODnY5MBM=;
- b=Ef4fm8Oilq6aVH5uhCP1wEIyX1GHWuQIOBJ0dIqTcVWvjl8WM9zSugL3+l/p0E4nWT
- ulTIz7qkY8b5hlRv9VacpSXKRcnZN0+sq4JyWs8/jDj75rPLieeKrm8cGkT6gUI/fGBb
- pNBFXoyU3vryg4G+L7j2BdWdfI+RGNFKYZArvi7Io4cTKV67tVJyYcY2hSjgDA1wykkY
- igbPuK0ra98N28VhOHOSvtS6yonMzgRxCOMRiApczLDsaeChHB2zkGkrlme7bm3UPWd+
- vI3NQ3uR+6iHUMgYu82rCV04vj0tbi451sC/HOJLFVk2iSWPUKQbV3Z5S/xwLrmkh2U5
- FaYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc:content-transfer-encoding;
- bh=ZXAblkeD0203lJai2SoRezraEM6jEhYF8D8ODnY5MBM=;
- b=V5JVnJwsd3wRZ3qezM8V+WCCS57ES01+uH8Tou9C8jjYDMc+JDmY9fPKXICJ/SuH0n
- SZqmgCa2YMuLUOA01ao3K+TeOcwgZBItZFtsY+s0newEzCLfDRhQh1kLIqmrlH9A5mz9
- 0jV+hvuVDdr20+pEsqNVl7mq4wbRUSQyFM094b9busE4wCgALEKDezY6wGYmbg1Hwvlk
- OzCiDo3LyXldrxS+eQtTEAfkSWdaUOfd8xrPb8/orJKCy9ksnzjCF/j2UkGzBqXoyuEo
- Lk2a/pzdE4poKIX+yb6bh2YGhfcmhkWfeo22K6cyWtDyCX4EM4ry49W2Kt/XWAAVfhaP
- XjWg==
-X-Gm-Message-State: AOAM532qCviTeJgYqeBjK8345aESk1DwwVLmbsXO8v/G5L92rYAO04kC
- Z5DfNJiSiTCLCuE2C73GUB8TZY7Ox1PAdogKB2CKlwVq2mE=
-X-Google-Smtp-Source: ABdhPJxVJqqufGHUIo6q1zLbdZ5OrmxWwhYH2svG0gKB6hqIQQi8/xhA4+kYiAlRjwFu6iAnfskoBKpU/fr7Dbxvrmg=
-X-Received: by 2002:a05:6830:4182:: with SMTP id
- r2mr8645735otu.242.1632159105421; 
- Mon, 20 Sep 2021 10:31:45 -0700 (PDT)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id knigwe-Rfh9O; Mon, 20 Sep 2021 18:32:04 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id C6F064045C;
+	Mon, 20 Sep 2021 18:32:03 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 89CDE1BF23C
+ for <buildroot@lists.busybox.net>; Mon, 20 Sep 2021 18:32:02 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 86B208242D
+ for <buildroot@lists.busybox.net>; Mon, 20 Sep 2021 18:32:02 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (1024-bit key) header.d=gmx.net
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mf8EyyNd0Hea for <buildroot@lists.busybox.net>;
+ Mon, 20 Sep 2021 18:31:58 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B691882425
+ for <buildroot@buildroot.org>; Mon, 20 Sep 2021 18:31:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+ s=badeba3b8450; t=1632162710;
+ bh=eNPMvCPpGNbhk4Q6dvKi0INsChtsOLuyBo81iTgyHqs=;
+ h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
+ b=Lcsw2W2qts4BvdYLs7y9xY4cTYAyABSsPGkw+ZgDvHbDd7wPKPnIva/0x+2rrPRPV
+ yzrjqy6KvsepAHF6Ko6pT8BUljml/Qykdt4nlbK5AncW/m7EvZXFNFKSTOeilaAwyr
+ jR31XN/v4way4/yTNq1QLPsNhxinPrcTrNkrGesw=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from localhost ([62.216.209.129]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MfpOT-1n3ucZ08Qj-00gKxx; Mon, 20
+ Sep 2021 20:31:50 +0200
+Date: Mon, 20 Sep 2021 20:31:48 +0200
+From: Peter Seiderer <ps.report@gmx.net>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20210920203148.3eb59c22@gmx.net>
+In-Reply-To: <20210920163031.197937-1-fontaine.fabrice@gmail.com>
+References: <20210920163031.197937-1-fontaine.fabrice@gmail.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-References: <20210920173017.695537-1-aduskett@gmail.com>
-In-Reply-To: <20210920173017.695537-1-aduskett@gmail.com>
-From: Adam Duskett <aduskett@gmail.com>
-Date: Mon, 20 Sep 2021 10:31:34 -0700
-Message-ID: <CAFSsvmoERFpbx9HkX9EgiSYDvuPKdiA2M0tZsp2Zpfpd+We-kg@mail.gmail.com>
-To: buildroot <buildroot@buildroot.org>
-Subject: Re: [Buildroot] [PATCH v2 1/1] package/libglib2: bump version to
- 2.68.4
+X-Provags-ID: V03:K1:KN7qRuNh8LGggg19LZtJ0prL3NwIEPdD62f8mldp66CP8snLOzB
+ KQzY6XShkVy4uScLtKravrYOCNLIZCdobaNQdA/0q8EdwKMUTr13rDqG8PKSgERUWBfEL5k
+ boC9zYvtzwmkITgei23TRP5pJUmb0PhFkOPaNxYYRe701Z8+fnGKLN+xibVNhvn+Yrf+ADr
+ MZMYp1Z4hqAoAsT92G8oQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:5dTmlW4RPDY=:ZXlcaEG/5VLQ9s0cXoktJa
+ Nln86gHv9LdsDUOE/NNlbTUsg7JL9hX1UWlNiXI4H4rfBa2LUibOP3FqmXpOlaL6x5IaNAgLh
+ pLhM0QdW2x9AgCNMC8s3UMqlqJ03a9HBHVwewR/t4kFN+B2KixK+KFuosjHdDAjo12ELrBm7S
+ DD46zFbWcxc9yfG/3IpwWvwUmRWhW407LTt5KRSXxzxBStI5s4U3Rs36n+XdBCr0AYgj0xQF8
+ EURr+T9IpbHiG37fXHDda9nFUPLTMxy81xRtBB/OrGkXKpPXnoZCkGbm5nFTRwJSVHnAYymtZ
+ dj1Oq5RTcI43IeSAWiGrHa7gwVydvS1ri3WMIV0LPU2TWwYUXzS/i7zq1CspXPAj1KHzQ6Z2Z
+ ID6Ixx98ecXGnOHO3cgrZEix9SvqScmOm0L2vn2Qi4TiPQkl42SGI9sSaBTMMeMGjXvhnWu7P
+ heYMiNrUHpNcRwwG/xNGaOtuIEDc/aXkErezVk/CRLWWkyAfuNCe8jbfYOIyOdSy0r9PIQA2l
+ BDW0i3Wi46AEh/AWKDy4es151OSu9bwGuklozrxuYtJAi66n5wdvtS/ipaRVTUcJqxcj6YbVO
+ HkgbFaADDjpOK6zkYQTiOKjOR5xZBezWORe4oACYofto50VKzso1FvPzew1e5iMRF7EIY/Oe3
+ GW8VhPjATwp2CMIYjsdHRE6yXhT8o5ClKKcn5De16HgqrCRpFEOdRysH1w2JTax+xluhBM7GQ
+ pkJX6H4lRJltXy2L04nq9g7t0BnQEbCQcrTlRoxSHtUjmiipvv7IUsR7phV87wNW8mRNEs9u5
+ EPLG+CBXm1zGd58fbnh1ZFVQFgJ956GQdS/nUg1TFrQSVyqk0r3ulX7rvSdZATim0YWVpcd0j
+ i10tJjm1gWK+eU3swKZo5/+kvH5m2eIe+z1iUEneBAMH7ok4IdcSraG5cO9dJYGSbQ2Fvmy0k
+ v5XNaGkx0s2uD7GGSWqut9r7WxyRuWtsRn03Xw/T+W5EQfRp710wJ7ZLhvxFeHpDL4IPYNzRu
+ QB5IeRcM/gsgfkZHYll9ylbB1PMDTKmwLMjJuK1Iwy49hO2fsaqBcJahRE/jnGOR1mHhn2n+B
+ gbAvH2BD4WtiWk=
+Subject: Re: [Buildroot] [PATCH 1/1] package/iwd: fix build with uclibc-ng
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,85 +98,116 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Matt Weber <matthew.weber@collins.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-VGhpcyB0aW1lIHdpdGggMTAwJSBsZXNzIG5leHQgYnJhbmNoIGFuZCAxMDAlIG1vcmUgbWFzdGVy
-IGJyYW5jaC4KCk9uIE1vbiwgU2VwIDIwLCAyMDIxIGF0IDEwOjMwIEFNIEFkYW0gRHVza2V0dCA8
-YWR1c2tldHRAZ21haWwuY29tPiB3cm90ZToKPgo+IFNpZ25lZC1vZmYtYnk6IEFkYW0gRHVza2V0
-dCA8YWR1c2tldHRAZ21haWwuY29tPgo+IC0tLQo+IENoYW5nZXMgVjEgLT4gVjI6Cj4gICAtIFJl
-ZmFjdG9yIGFnYWluc3QgbWFzdGVyIGJyYW5jaCBpbnN0ZWFkIG9mIG5leHQuCj4KPiAgLi4uLzAw
-MDItcmVtb3ZlLWNwcC1yZXF1aXJlbWVudC5wYXRjaCAgICAgICAgIHwgIDIgKy0KPiAgLi4udGx5
-LXVzZS0zLXBhcmFtZXRlcnMtZm9yLWNsb3NlX3JhbmdlLnBhdGNoIHwgMzMgLS0tLS0tLS0tLS0t
-LS0tLS0tLQo+ICBwYWNrYWdlL2xpYmdsaWIyL2xpYmdsaWIyLmhhc2ggICAgICAgICAgICAgICAg
-fCAgNCArLS0KPiAgcGFja2FnZS9saWJnbGliMi9saWJnbGliMi5tayAgICAgICAgICAgICAgICAg
-IHwgIDIgKy0KPiAgNCBmaWxlcyBjaGFuZ2VkLCA0IGluc2VydGlvbnMoKyksIDM3IGRlbGV0aW9u
-cygtKQo+ICBkZWxldGUgbW9kZSAxMDA2NDQgcGFja2FnZS9saWJnbGliMi8wMDA0LWNvcnJlY3Rs
-eS11c2UtMy1wYXJhbWV0ZXJzLWZvci1jbG9zZV9yYW5nZS5wYXRjaAo+Cj4gZGlmZiAtLWdpdCBh
-L3BhY2thZ2UvbGliZ2xpYjIvMDAwMi1yZW1vdmUtY3BwLXJlcXVpcmVtZW50LnBhdGNoIGIvcGFj
-a2FnZS9saWJnbGliMi8wMDAyLXJlbW92ZS1jcHAtcmVxdWlyZW1lbnQucGF0Y2gKPiBpbmRleCA5
-MzkzYmQyNThhLi5jNDAyY2JhZmE1IDEwMDY0NAo+IC0tLSBhL3BhY2thZ2UvbGliZ2xpYjIvMDAw
-Mi1yZW1vdmUtY3BwLXJlcXVpcmVtZW50LnBhdGNoCj4gKysrIGIvcGFja2FnZS9saWJnbGliMi8w
-MDAyLXJlbW92ZS1jcHAtcmVxdWlyZW1lbnQucGF0Y2gKPiBAQCAtMzUsNyArMzUsNyBAQCBpbmRl
-eCA0YmJmNGMyLi5hYzU5ZjRlIDEwMDY0NAo+ICBAQCAtMSw0ICsxLDQgQEAKPiAgLXByb2plY3Qo
-J2dsaWInLCAnYycsICdjcHAnLAo+ICArcHJvamVjdCgnZ2xpYicsICdjJywKPiAtICAgdmVyc2lv
-biA6ICcyLjY4LjInLAo+ICsgICB2ZXJzaW9uIDogJzIuNjguNCcsCj4gICAgICMgTk9URTogV2Ug
-a2VlcCB0aGlzIHBpbm5lZCBhdCAwLjQ5IGJlY2F1c2UgdGhhdCdzIHdoYXQgRGViaWFuIDEwIHNo
-aXBzCj4gICAgIG1lc29uX3ZlcnNpb24gOiAnPj0gMC40OS4yJywKPiAgQEAgLTEwLDcgKzEwLDYg
-QEAgcHJvamVjdCgnZ2xpYicsICdjJywgJ2NwcCcsCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvbGli
-Z2xpYjIvMDAwNC1jb3JyZWN0bHktdXNlLTMtcGFyYW1ldGVycy1mb3ItY2xvc2VfcmFuZ2UucGF0
-Y2ggYi9wYWNrYWdlL2xpYmdsaWIyLzAwMDQtY29ycmVjdGx5LXVzZS0zLXBhcmFtZXRlcnMtZm9y
-LWNsb3NlX3JhbmdlLnBhdGNoCj4gZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0Cj4gaW5kZXggYmZj
-YTRiMTRlZi4uMDAwMDAwMDAwMAo+IC0tLSBhL3BhY2thZ2UvbGliZ2xpYjIvMDAwNC1jb3JyZWN0
-bHktdXNlLTMtcGFyYW1ldGVycy1mb3ItY2xvc2VfcmFuZ2UucGF0Y2gKPiArKysgL2Rldi9udWxs
-Cj4gQEAgLTEsMzMgKzAsMCBAQAo+IC1Gcm9tIGI3MTExN2Q4OTQzNGRiODNkMzRiYzFiOTgxY2Ew
-M2Q0YmUyOTk1NzYgTW9uIFNlcCAxNyAwMDowMDowMCAyMDAxCj4gLUZyb206IEtoZW0gUmFqIDxy
-YWoua2hlbUBnbWFpbC5jb20+Cj4gLURhdGU6IFRodSwgOCBKdWwgMjAyMSAxNzoyNjo0MyAtMDcw
-MAo+IC1TdWJqZWN0OiBbUEFUQ0hdIGNvcnJlY3RseSB1c2UgMyBwYXJhbWV0ZXJzIGZvciBjbG9z
-ZV9yYW5nZQo+IC0KPiAtbGliYyBpbXBsZW1lbnRhdGlvbiBoYXMgMyBwYXJhbWV0ZXIgZS5nLgo+
-IC1odHRwczovL3d3dy5mcmVlYnNkLm9yZy9jZ2kvbWFuLmNnaT9xdWVyeT1jbG9zZV9yYW5nZSZz
-ZWt0aW9uPTImZm9ybWF0PWh0bWwKPiAtCj4gLVNpZ25lZC1vZmYtYnk6IEtoZW0gUmFqIDxyYWou
-a2hlbUBnbWFpbC5jb20+Cj4gLQo+IC1bUmV0cmlldmVkIGZyb206Cj4gLWh0dHBzOi8vZ2l0bGFi
-Lmdub21lLm9yZy9HTk9NRS9nbGliLy0vY29tbWl0L2I3MTExN2Q4OTQzNGRiODNkMzRiYzFiOTgx
-Y2EwM2Q0YmUyOTk1NzZdCj4gLVNpZ25lZC1vZmYtYnk6IEZhYnJpY2UgRm9udGFpbmUgPGZvbnRh
-aW5lLmZhYnJpY2VAZ21haWwuY29tPgo+IC0tLS0KPiAtIGdsaWIvZ3NwYXduLmMgfCAyICstCj4g
-LSAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRpb24oLSkKPiAtCj4gLWRp
-ZmYgLS1naXQgYS9nbGliL2dzcGF3bi5jIGIvZ2xpYi9nc3Bhd24uYwo+IC1pbmRleCA4OTk2NDdj
-MmYuLjMwNzNhMTBhNCAxMDA2NDQKPiAtLS0tIGEvZ2xpYi9nc3Bhd24uYwo+IC0rKysgYi9nbGli
-L2dzcGF3bi5jCj4gLUBAIC0xNTIwLDcgKzE1MjAsNyBAQCBzYWZlX2Nsb3NlZnJvbSAoaW50IGxv
-d2ZkKQo+IC0gICAgKgo+IC0gICAgKiBIYW5kbGUgRU5PU1lTIGluIGNhc2UgaXTigJlzIHN1cHBv
-cnRlZCBpbiBsaWJjIGJ1dCBub3QgdGhlIGtlcm5lbDsgaWYgc28sCj4gLSAgICAqIGZhbGwgYmFj
-ayB0byBzYWZlX2Zkd2FsaygpLiAqLwo+IC0tICBpZiAoY2xvc2VfcmFuZ2UgKGxvd2ZkLCBHX01B
-WFVJTlQpICE9IDAgJiYgZXJybm8gPT0gRU5PU1lTKQo+IC0rICBpZiAoY2xvc2VfcmFuZ2UgKGxv
-d2ZkLCBHX01BWFVJTlQsIDApICE9IDAgJiYgZXJybm8gPT0gRU5PU1lTKQo+IC0gI2VuZGlmICAv
-KiBIQVZFX0NMT1NFX1JBTkdFICovCj4gLSAgICh2b2lkKSBzYWZlX2Zkd2FsayAoY2xvc2VfZnVu
-YywgR0lOVF9UT19QT0lOVEVSIChsb3dmZCkpOwo+IC0gI2VuZGlmCj4gLS0tCj4gLUdpdExhYgo+
-IC0KPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9saWJnbGliMi9saWJnbGliMi5oYXNoIGIvcGFja2Fn
-ZS9saWJnbGliMi9saWJnbGliMi5oYXNoCj4gaW5kZXggMTVlMDA4NWY3OC4uZDQyMWUwMjVmZiAx
-MDA2NDQKPiAtLS0gYS9wYWNrYWdlL2xpYmdsaWIyL2xpYmdsaWIyLmhhc2gKPiArKysgYi9wYWNr
-YWdlL2xpYmdsaWIyL2xpYmdsaWIyLmhhc2gKPiBAQCAtMSw0ICsxLDQgQEAKPiAtIyBodHRwczov
-L2Rvd25sb2FkLmdub21lLm9yZy9zb3VyY2VzL2dsaWIvMi42OC9nbGliLTIuNjguMi5zaGEyNTZz
-dW0KPiAtc2hhMjU2ICBlY2M3Nzk4YTljYzAzNGVhYmRmZDdmMjQ2ZTZkZDQ2MWNkYmYxMTc1ZmNj
-MmU5ODY3Y2M3ZGE3YjczMDllMGZiICBnbGliLTIuNjguMi50YXIueHoKPiArIyBodHRwczovL2Rv
-d25sb2FkLmdub21lLm9yZy9zb3VyY2VzL2dsaWIvMi42OC9nbGliLTIuNjguNC5zaGEyNTZzdW0K
-PiArc2hhMjU2ICA2MmZkMDYxZDA4YTc1NDkyNjE3ZTYyNWE3M2UyYzA1ZTI1OWY4MzFhY2JiOGUx
-ZjhiOWM4MWYyM2Y3OTkzYTNiICBnbGliLTIuNjguNC50YXIueHoKPiAgIyBMaWNlbnNlIGZpbGVz
-LCBsb2NhbGx5IGNhbGN1bGF0ZWQKPiAgc2hhMjU2ICBkYzYyNjUyMGRjZDUzYTIyZjcyN2FmM2Vl
-NDJjNzcwZTU2Yzk3YTY0ZmUzYWRiMDYzNzk5ZDhhYjAzMmZlNTUxICBDT1BZSU5HCj4gZGlmZiAt
-LWdpdCBhL3BhY2thZ2UvbGliZ2xpYjIvbGliZ2xpYjIubWsgYi9wYWNrYWdlL2xpYmdsaWIyL2xp
-YmdsaWIyLm1rCj4gaW5kZXggNGYxMzYyMmUzNi4uYWY3M2FlYjNiZiAxMDA2NDQKPiAtLS0gYS9w
-YWNrYWdlL2xpYmdsaWIyL2xpYmdsaWIyLm1rCj4gKysrIGIvcGFja2FnZS9saWJnbGliMi9saWJn
-bGliMi5tawo+IEBAIC01LDcgKzUsNyBAQAo+ICAjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIwo+Cj4g
-IExJQkdMSUIyX1ZFUlNJT05fTUFKT1IgPSAyLjY4Cj4gLUxJQkdMSUIyX1ZFUlNJT04gPSAkKExJ
-QkdMSUIyX1ZFUlNJT05fTUFKT1IpLjIKPiArTElCR0xJQjJfVkVSU0lPTiA9ICQoTElCR0xJQjJf
-VkVSU0lPTl9NQUpPUikuNAo+ICBMSUJHTElCMl9TT1VSQ0UgPSBnbGliLSQoTElCR0xJQjJfVkVS
-U0lPTikudGFyLnh6Cj4gIExJQkdMSUIyX1NJVEUgPSBodHRwOi8vZnRwLmdub21lLm9yZy9wdWIv
-Z25vbWUvc291cmNlcy9nbGliLyQoTElCR0xJQjJfVkVSU0lPTl9NQUpPUikKPiAgTElCR0xJQjJf
-TElDRU5TRSA9IExHUEwtMi4xKwo+IC0tCj4gMi4zMC4yCj4KX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJv
-b3RAbGlzdHMuYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1h
-bi9saXN0aW5mby9idWlsZHJvb3QK
+Hello Fabrice,
+
+On Mon, 20 Sep 2021 18:30:31 +0200, Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+
+> Fix the following build failure with uclibc-ng raised since bump to
+> version 1.17 in commit 9badccc9d4887aa2365d7350e3b26bd4250dad48:
+>
+> /home/giuliobenetti/autobuild/run/instance-3/output-1/host/lib/gcc/xtensa-buildroot-linux-uclibc/10.3.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld: src/sae.o: in function `sae_rx_authenticate':
+> sae.c:(.text+0xd74): undefined reference to `reallocarray'
+>
+> Fixes:
+>  - http://autobuild.buildroot.org/results/c6d3f86282c44645b4f1c61882dc63ccfc8eb35a
+>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Thanks for fixing the failure!
+
+Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+
+Regards,
+Peter
+
+> ---
+>  ...-build-Add-reallocarray-to-missing-h.patch | 55 +++++++++++++++++++
+>  package/iwd/iwd.mk                            |  2 +
+>  2 files changed, 57 insertions(+)
+>  create mode 100644 package/iwd/0001-build-Add-reallocarray-to-missing-h.patch
+>
+> diff --git a/package/iwd/0001-build-Add-reallocarray-to-missing-h.patch b/package/iwd/0001-build-Add-reallocarray-to-missing-h.patch
+> new file mode 100644
+> index 0000000000..ef6114f1af
+> --- /dev/null
+> +++ b/package/iwd/0001-build-Add-reallocarray-to-missing-h.patch
+> @@ -0,0 +1,55 @@
+> +From ec1c348b4fd67619fa0c2f55ae644f6a8014d971 Mon Sep 17 00:00:00 2001
+> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +Date: Sun, 19 Sep 2021 21:17:44 +0200
+> +Subject: build: Add reallocarray to missing.h
+> +
+> +reallocarray has been added to glibc relatively recently (version 2.26,
+> +from 2017) and apparently not all users run new enough glibc. Moreover,
+> +reallocarray is not available with uclibc-ng. So use realloc if
+> +reallocarray is not available to avoid the following build failure
+> +raised since commit 891b78e9e892a3bcd800eb3a298e6380e9a15dd1:
+> +
+> +/home/giuliobenetti/autobuild/run/instance-3/output-1/host/lib/gcc/xtensa-buildroot-linux-uclibc/10.3.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld: src/sae.o: in function `sae_rx_authenticate':
+> +sae.c:(.text+0xd74): undefined reference to `reallocarray'
+> +
+> +Fixes:
+> + - http://autobuild.buildroot.org/results/c6d3f86282c44645b4f1c61882dc63ccfc8eb35a
+> +
+> +[Retrieved from:
+> +https://git.kernel.org/pub/scm/network/wireless/iwd.git/commit/?id=ec1c348b4fd67619fa0c2f55ae644f6a8014d971]
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +---
+> + configure.ac  | 1 +
+> + src/missing.h | 7 +++++++
+> + 2 files changed, 8 insertions(+)
+> +
+> +diff --git a/configure.ac b/configure.ac
+> +index c6250401..51d9da93 100644
+> +--- a/configure.ac
+> ++++ b/configure.ac
+> +@@ -129,6 +129,7 @@ AC_DEFINE_UNQUOTED(WIRED_STORAGEDIR, "${wired_storagedir}",
+> +
+> + AC_CHECK_FUNCS(explicit_bzero)
+> + AC_CHECK_FUNCS(rawmemchr)
+> ++AC_CHECK_FUNCS(reallocarray)
+> +
+> + AC_CHECK_HEADERS(linux/types.h linux/if_alg.h)
+> +
+> +diff --git a/src/missing.h b/src/missing.h
+> +index 2cc80aee..a5b92952 100644
+> +--- a/src/missing.h
+> ++++ b/src/missing.h
+> +@@ -37,3 +37,10 @@ _Pragma("GCC diagnostic ignored \"-Wstringop-overflow=\"")
+> + _Pragma("GCC diagnostic pop")
+> + }
+> + #endif
+> ++
+> ++#ifndef HAVE_REALLOCARRAY
+> ++static inline void *reallocarray(void *ptr, size_t nmemb, size_t size)
+> ++{
+> ++	return realloc(ptr, nmemb * size);
+> ++}
+> ++#endif
+> +--
+> +cgit 1.2.3-1.el7
+> +
+> diff --git a/package/iwd/iwd.mk b/package/iwd/iwd.mk
+> index 9737f2c626..58535b1aa1 100644
+> --- a/package/iwd/iwd.mk
+> +++ b/package/iwd/iwd.mk
+> @@ -12,6 +12,8 @@ IWD_LICENSE_FILES = COPYING
+>  IWD_CPE_ID_VENDOR = intel
+>  IWD_CPE_ID_PRODUCT = inet_wireless_daemon
+>  IWD_SELINUX_MODULES = networkmanager
+> +# We're patching configure.ac
+> +IWD_AUTORECONF = YES
+>
+>  IWD_CONF_OPTS = \
+>  	--disable-manual-pages \
+
+_______________________________________________
+buildroot mailing list
+buildroot@lists.buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
