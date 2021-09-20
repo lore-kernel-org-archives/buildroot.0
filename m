@@ -2,98 +2,98 @@ Return-Path: <SRS0=GPX0=OK=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-20.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
+X-Spam-Status: No, score=-15.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E822DC433EF
-	for <buildroot@archiver.kernel.org>; Mon, 20 Sep 2021 19:18:27 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 948C6C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 20 Sep 2021 19:22:24 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 8A13461050
-	for <buildroot@archiver.kernel.org>; Mon, 20 Sep 2021 19:18:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8A13461050
+	by mail.kernel.org (Postfix) with ESMTPS id 56150610A0
+	for <buildroot@archiver.kernel.org>; Mon, 20 Sep 2021 19:22:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 56150610A0
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4AD8D8275C;
-	Mon, 20 Sep 2021 19:18:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F144D40352;
+	Mon, 20 Sep 2021 19:22:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id a4tzRKq_vaH8; Mon, 20 Sep 2021 19:18:26 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id V1L3qgG6AeSu; Mon, 20 Sep 2021 19:22:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 70BBB82423;
-	Mon, 20 Sep 2021 19:18:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 57BC840389;
+	Mon, 20 Sep 2021 19:22:22 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1186E1BF955
- for <buildroot@lists.busybox.net>; Mon, 20 Sep 2021 19:18:24 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 43A501BF955
+ for <buildroot@lists.busybox.net>; Mon, 20 Sep 2021 19:22:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id F37AD40277
- for <buildroot@lists.busybox.net>; Mon, 20 Sep 2021 19:18:23 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2EBCA401B6
+ for <buildroot@lists.busybox.net>; Mon, 20 Sep 2021 19:22:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp2.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Fyx6M03loS7x for <buildroot@lists.busybox.net>;
- Mon, 20 Sep 2021 19:18:22 +0000 (UTC)
+ with ESMTP id V3QsEnfyqz26 for <buildroot@lists.busybox.net>;
+ Mon, 20 Sep 2021 19:22:19 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com
- [IPv6:2a00:1450:4864:20::52c])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 8109C4012E
- for <buildroot@buildroot.org>; Mon, 20 Sep 2021 19:18:22 +0000 (UTC)
-Received: by mail-ed1-x52c.google.com with SMTP id eg28so42689954edb.1
- for <buildroot@buildroot.org>; Mon, 20 Sep 2021 12:18:22 -0700 (PDT)
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com
+ [IPv6:2a00:1450:4864:20::52b])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D05EE4012E
+ for <buildroot@buildroot.org>; Mon, 20 Sep 2021 19:22:18 +0000 (UTC)
+Received: by mail-ed1-x52b.google.com with SMTP id v5so64211271edc.2
+ for <buildroot@buildroot.org>; Mon, 20 Sep 2021 12:22:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
- :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=a3oQOj9ynu9G1jIQqQRomVJFJdrohq9m0OSpVt/fDxI=;
- b=cce4b4AS68EWrv7HKbQYy/JbKw6YkQR0sKlX7bvICtdQWFOcPqhWqUpYNDTI66A9il
- 1my2+ITwrf0a/Jo3m7cQO4BQmMUHFMxoibULtgQ66EQ8P/XRauIoMeHCSEhXSlYZ+Rx+
- 60R9zOJzNwwAMQexMsSVpCgEqjkiyySTCCURZ2+kZa1j3YVrf5lnSLwQlhHJtBDVylMq
- mEq3S69Cxzx+jr9WCP0nbITbvurzkP8AdM/slHgn5Q0BCEm8pgU+Odt/Krbu5JoLiRIL
- zxpBh/B/fdDLtR+uOXp2nOby8PAi7W1wSoJbWwwYNrKdeERTL15HkFT71VltAe5Ao7rh
- LwAw==
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=y0RI7GFignlfbfdmxk9x+ac1oFsJc00dpZ+OLgrc6NM=;
+ b=K7NQHWaQH3otVKOZsfuUv4AjD8RwDZbHz7ynm3jREQpB+72GJ8qJjvdO/6abT2t0D0
+ w/HFHXkZiDhivETamHtB/mVbZz3T9j7GoCZOD9nTAIO/T0r/E7QgED+7E7qU5KjM7t1C
+ aKSVhboLQvtafP8V8BxXAui58GplcLe8WTiG8aQRw1utQ3sBhOEh/DeyvadQ/YSyBlGM
+ 64ZGCXz9r5cefoJN7yKNaHoNTylaLkjy85tHcMYMpG3XIc6fifP4TOkXpGbTk1xyv9f1
+ NDRW8YHtSUV9YfMCPw8VGutrEwaWgjCa7u2RiyCBHdUdAwBl1+Rrw2ma6gR6nSjP8poj
+ wmag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:references:from:organization:in-reply-to
+ :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=a3oQOj9ynu9G1jIQqQRomVJFJdrohq9m0OSpVt/fDxI=;
- b=eAzL4flqqJU5fhSiXFfJVFCyblUOHMNv0h+DO2QosY6HakzdGlaO2yGJTsBDHL+9Qw
- kqO7PjmYBgzcSJUa5UhOa6rvObHr0GKOTMHGvWT5Oai8I6wA7wFsWOskmlCZ1VXnTRJT
- j7X+wCCW7MdPjCrhhz0CIav8iw8uC3BuwicYywEGLqso4QkTDKuN7yDaaYa692DgaUsQ
- tABRH4hp/RpcbfTcvc0RzsMp8iVha/OrCzwewNtIvTeHtjjnUVoE/+3sL4Zf54smnAea
- niRrDatt/psT8NdGzcVeTarW4x+ASBjDjhBoBPhkO9gvZSjNkjHZMtgXH+4D2M3A9zvU
- MKpw==
-X-Gm-Message-State: AOAM5300q500Xz7QCIu7dhqFbNK2XoCDA1tag4fkjpV9Lfc76UJA+AKn
- /GKc/QOluwlFVblfOKX/TWZbr2eyYqGmJQ==
-X-Google-Smtp-Source: ABdhPJzURWMQxPQxxCy7bIZAa+zG9fs0VcstEaHKWrGDj72ri+LezDfqOZ1qzqRAV+Ko9D66lrwg5g==
-X-Received: by 2002:a17:906:dbe5:: with SMTP id
- yd5mr29752082ejb.134.1632165500319; 
- Mon, 20 Sep 2021 12:18:20 -0700 (PDT)
+ bh=y0RI7GFignlfbfdmxk9x+ac1oFsJc00dpZ+OLgrc6NM=;
+ b=s2krXapJSym7dlxBz0GckEPYYh7+RKqklg0gPTFvn/VjPikPvQQLhSLdoJ8Q1j5Kli
+ +PwxzaepqcSuOvDTCz54bsKyNnpsFZJ0EBRNtCfCgO9PiLDGz2oOCXCaB9aVPi8N8vxX
+ SVvC+6FMnyfP8fOBneITbhmvnkYhUZKdpZWf8iFXcyzyR9gZm7bH1W6DlNEOXVppkTSX
+ 7OXFqBhV2apic+zjRQEvx0FaQiNwqTwM+A6pMOx2RjpT1OQVw8Ie7utIr4CzErkFnloX
+ ymH+60TRKD9YNSd+HAWgrQyy6WMVYzd8HNUDIt5bVZGvD7TRdF3llWK8QdWvkGfCAZZy
+ jKWA==
+X-Gm-Message-State: AOAM531BMDy+xWICnInmlsSX+m4S7TOaWWyoeHGU/Cf62lawKTyd+Bup
+ eRq6bkQ9Clp9CgtEko08UOkOrw==
+X-Google-Smtp-Source: ABdhPJxSRTeKiA0GSAfS0ZnuBCzTYIfp3pXuNrSGfZeJzAPKk3SAP5xk82Y1ZdhVMYbJpVofTKGc6A==
+X-Received: by 2002:a17:906:2f10:: with SMTP id
+ v16mr8512565eji.434.1632165736842; 
+ Mon, 20 Sep 2021 12:22:16 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id a7sm301382eda.70.2021.09.20.12.18.19
+ by smtp.gmail.com with ESMTPSA id br21sm6598857ejb.112.2021.09.20.12.22.16
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 20 Sep 2021 12:18:19 -0700 (PDT)
-Message-ID: <b6eaed9d-1861-2d37-53fd-6a97f5a783b0@mind.be>
-Date: Mon, 20 Sep 2021 21:18:18 +0200
+ Mon, 20 Sep 2021 12:22:16 -0700 (PDT)
+Message-ID: <58de71ec-a4ab-23d8-739f-052b3ebb8513@mind.be>
+Date: Mon, 20 Sep 2021 21:22:15 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.1.0
 Content-Language: en-GB
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-References: <20210908194847.582017-1-fontaine.fabrice@gmail.com>
+To: David GOUARIN <dgouarin@gmail.com>, buildroot@buildroot.org
+References: <20210909080221.6143-1-david.gouarin@thalesgroup.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20210908194847.582017-1-fontaine.fabrice@gmail.com>
-Subject: Re: [Buildroot] [PATCH 1/1] package/kismet: bump to version
- 2021-08-R1
+In-Reply-To: <20210909080221.6143-1-david.gouarin@thalesgroup.com>
+Subject: Re: [Buildroot] [PATCH v2] package/libtalloc: bump to version 2.3.3
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -106,6 +106,7 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
+Cc: David GOUARIN <david.gouarin@thalesgroup.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@lists.buildroot.org
@@ -113,112 +114,62 @@ Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
 
 
-On 08/09/2021 21:48, Fabrice Fontaine wrote:
-> Drop patch (already in version)
+On 09/09/2021 10:02, David GOUARIN wrote:
+> license is now LGPL-3.0+ for both talloc and pytalloc
 > 
-> https://www.kismetwireless.net/release/kismet-2021-08-R1
+> Signed-off-by: David GOUARIN <david.gouarin@thalesgroup.com>
+> ---
+> v1 -> v2
+>     update license informations
+> ---
+>   package/libtalloc/libtalloc.hash | 6 +++---
+>   package/libtalloc/libtalloc.mk   | 4 ++--
+>   2 files changed, 5 insertions(+), 5 deletions(-)
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> diff --git a/package/libtalloc/libtalloc.hash b/package/libtalloc/libtalloc.hash
+> index 9d48a965d0..84b0320df8 100644
+> --- a/package/libtalloc/libtalloc.hash
+> +++ b/package/libtalloc/libtalloc.hash
+> @@ -1,4 +1,4 @@
+>   # Locally calculated
+> -sha256  ef4822d2fdafd2be8e0cabc3ec3c806ae29b8268e932c5e9a4cd5585f37f9f77  talloc-2.3.1.tar.gz
+> -sha256  15c2767545d1e43dc35832736253bde5be956f8ffec0474a6d0f70349b646ed3  talloc.h
+> -sha256  8742f2dad3aaf885c7b4b699c20bfa0e9edeab380689f91a88aa90af03e6947b  pytalloc.h
+> +sha256  6be95b2368bd0af1c4cd7a88146eb6ceea18e46c3ffc9330bf6262b40d1d8aaa  talloc-2.3.3.tar.gz
+> +sha256  f8340c449dd64a55c6605b02fcad2aec6f473612ac6026739a22995380a8043c  talloc.h
+> +sha256  cca17b31b2f00d7a737764b70e2be3a32f3b047ac8535c3b53759eb2946e5053  pytalloc.h
+> diff --git a/package/libtalloc/libtalloc.mk b/package/libtalloc/libtalloc.mk
+> index fb382cff76..03414a9f53 100644
+> --- a/package/libtalloc/libtalloc.mk
+> +++ b/package/libtalloc/libtalloc.mk
+> @@ -4,10 +4,10 @@
+>   #
+>   ################################################################################
+>   
+> -LIBTALLOC_VERSION = 2.3.1
+> +LIBTALLOC_VERSION = 2.3.3
+>   LIBTALLOC_SOURCE = talloc-$(LIBTALLOC_VERSION).tar.gz
+>   LIBTALLOC_SITE = https://www.samba.org/ftp/talloc
+> -LIBTALLOC_LICENSE = LGPL-3.0+, GPL-3.0+
+> +LIBTALLOC_LICENSE = LGPL-3.0+
+>   LIBTALLOC_LICENSE_FILES = talloc.h pytalloc.h
 
-  Applied to master, thanks.
+  Since pytalloc license is now the same, we don't need to include pytalloc.h as 
+a license file. So I removed that from here and from the hash file, and applied 
+to master, thanks.
+
+  I see that there's actually one file left that still has GPL-3.0+ in its 
+blurb: pytalloc_private.h. Since this is clearly a mistake, I kept the license 
+as is, but could you report this to upstream please?
+
+  Thanks!
 
   Regards,
   Arnout
 
-> ---
->   .../0001-nrf_51822.h-fix-build-on-sparc.patch | 59 -------------------
->   package/kismet/kismet.hash                    |  2 +-
->   package/kismet/kismet.mk                      |  2 +-
->   3 files changed, 2 insertions(+), 61 deletions(-)
->   delete mode 100644 package/kismet/0001-nrf_51822.h-fix-build-on-sparc.patch
-> 
-> diff --git a/package/kismet/0001-nrf_51822.h-fix-build-on-sparc.patch b/package/kismet/0001-nrf_51822.h-fix-build-on-sparc.patch
-> deleted file mode 100644
-> index c675654721..0000000000
-> --- a/package/kismet/0001-nrf_51822.h-fix-build-on-sparc.patch
-> +++ /dev/null
-> @@ -1,59 +0,0 @@
-> -From b347fea1a5ba0f66bf15e7de56d748e0f0dd624a Mon Sep 17 00:00:00 2001
-> -From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> -Date: Tue, 20 Jul 2021 22:27:45 +0200
-> -Subject: [PATCH] nrf_51822.h: fix build on sparc
-> -
-> -apple is not the only target that miss some defines, for example build
-> -fails on sparc with:
-> -
-> -capture_nrf_51822.c: In function 'get_baud':
-> -capture_nrf_51822.c:80:16: error: 'B2500000' undeclared (first use in this function); did you mean 'B2000000'?
-> -   80 |         return B2500000;
-> -      |                ^~~~~~~~
-> -      |                B2000000
-> -capture_nrf_51822.c:80:16: note: each undeclared identifier is reported only once for each function it appears in
-> -capture_nrf_51822.c:82:16: error: 'B3000000' undeclared (first use in this function); did you mean 'B2000000'?
-> -   82 |         return B3000000;
-> -      |                ^~~~~~~~
-> -      |                B2000000
-> -capture_nrf_51822.c:84:16: error: 'B3500000' undeclared (first use in this function); did you mean 'B500000'?
-> -   84 |         return B3500000;
-> -      |                ^~~~~~~~
-> -      |                B500000
-> -capture_nrf_51822.c:86:16: error: 'B4000000' undeclared (first use in this function); did you mean 'B2000000'?
-> -   86 |         return B4000000;
-> -      |                ^~~~~~~~
-> -      |                B2000000
-> -
-> -Fixes:
-> - - http://autobuild.buildroot.org/results/38f20816a654894c0625f00b1360c92fdc251e8b
-> -
-> -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> -[Upstream status: https://github.com/kismetwireless/kismet/pull/388]
-> ----
-> - capture_nrf_51822/nrf_51822.h | 2 --
-> - 1 file changed, 2 deletions(-)
-> -
-> -diff --git a/capture_nrf_51822/nrf_51822.h b/capture_nrf_51822/nrf_51822.h
-> -index cf7fee1e..d9203f61 100644
-> ---- a/capture_nrf_51822/nrf_51822.h
-> -+++ b/capture_nrf_51822/nrf_51822.h
-> -@@ -3,7 +3,6 @@
-> - #ifndef __NRF51822_H__
-> - #define __NRF51822_H__
-> -
-> --#ifdef __APPLE__
-> - #ifndef B9600
-> - #define B9600 9600
-> - #endif
-> -@@ -58,7 +57,6 @@
-> - #ifndef B4000000
-> - #define B4000000 4000000
-> - #endif
-> --#endif
-> -
-> -
-> -
-> ---
-> -2.30.2
-> -
-> diff --git a/package/kismet/kismet.hash b/package/kismet/kismet.hash
-> index 4c986a159b..9a9d2260b9 100644
-> --- a/package/kismet/kismet.hash
-> +++ b/package/kismet/kismet.hash
-> @@ -1,3 +1,3 @@
->   # Locally computed
-> -sha256  f85939c9d32fa72d777db35c68af84c379171b94380acad0db7924f95a81bdaa  kismet-2021-06-R1.tar.xz
-> +sha256  1c8e31b1babdb0fc93ac38fd0772a24d4b40f865fbc292fa8ec7f4a18ced0135  kismet-2021-08-R1.tar.xz
->   sha256  93c7f0d7e356b0abfb6f494ff3ea37f96abc84e9a5619b25d4e43f7553a55739  LICENSE
-> diff --git a/package/kismet/kismet.mk b/package/kismet/kismet.mk
-> index 64f9501db8..819ed510d7 100644
-> --- a/package/kismet/kismet.mk
-> +++ b/package/kismet/kismet.mk
-> @@ -4,7 +4,7 @@
->   #
->   ################################################################################
+
+>   LIBTALLOC_INSTALL_STAGING = YES
 >   
-> -KISMET_VERSION = 2021-06-R1
-> +KISMET_VERSION = 2021-08-R1
->   KISMET_SOURCE = kismet-$(KISMET_VERSION).tar.xz
->   KISMET_SITE = http://www.kismetwireless.net/code
->   KISMET_DEPENDENCIES = \
 > 
 _______________________________________________
 buildroot mailing list
