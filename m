@@ -2,101 +2,70 @@ Return-Path: <SRS0=GPX0=OK=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E1A7FC433F5
-	for <buildroot@archiver.kernel.org>; Mon, 20 Sep 2021 09:18:42 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DED39C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 20 Sep 2021 09:30:24 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 61CCD60F38
-	for <buildroot@archiver.kernel.org>; Mon, 20 Sep 2021 09:18:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 61CCD60F38
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
+	by mail.kernel.org (Postfix) with ESMTPS id 7429360F46
+	for <buildroot@archiver.kernel.org>; Mon, 20 Sep 2021 09:30:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7429360F46
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0387E4025C;
-	Mon, 20 Sep 2021 09:18:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 45B1F6064C;
+	Mon, 20 Sep 2021 09:30:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Dfob6IUbIgSo; Mon, 20 Sep 2021 09:18:41 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id op7zkUM0DsKY; Mon, 20 Sep 2021 09:30:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1BF4240179;
-	Mon, 20 Sep 2021 09:18:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B538E605A6;
+	Mon, 20 Sep 2021 09:30:21 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A7BFE1BF36E
- for <buildroot@lists.busybox.net>; Mon, 20 Sep 2021 09:18:38 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2DC3D1BF36E
+ for <buildroot@lists.busybox.net>; Mon, 20 Sep 2021 09:30:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9122240209
- for <buildroot@lists.busybox.net>; Mon, 20 Sep 2021 09:18:38 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 18A1940437
+ for <buildroot@lists.busybox.net>; Mon, 20 Sep 2021 09:30:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
+ dkim=pass (2048-bit key) header.d=kernel.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3wmGSuujNESs for <buildroot@lists.busybox.net>;
- Mon, 20 Sep 2021 09:18:37 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com
- [IPv6:2a00:1450:4864:20::533])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 697E740200
- for <buildroot@buildroot.org>; Mon, 20 Sep 2021 09:18:37 +0000 (UTC)
-Received: by mail-ed1-x533.google.com with SMTP id t6so58657283edi.9
- for <buildroot@buildroot.org>; Mon, 20 Sep 2021 02:18:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=I0EANPnk5WngRjs2UVY7DRKUKHgKolLVnrDO56RckXo=;
- b=EnJyLOv86IvW0xNgxYAKwu1KLIL1ElGvjsUIuuqzgdA1KPWoMb15t4wkFqoJxkkhIx
- DFpIU6NBOKtg4yypKxyqGZfYnAONVIzGH54hbCz/2iBZkel67kIJSrGBGFTG4QlCRcXI
- eMCp6+wSOSFjvbFLAFKaijMpyjQoqI/xEufyKopXtqx7BEGvvbEv7PoxTY3YC7FlWJ6m
- 8fHceoHpH9a7D5RCCHNAvdeNKVZP9M9cdlkfxBZZc+/Hj3ZeFZ7ReYvHqJu1m+pAmP4l
- 8C7nU2UNiEd4armh7Ya3YSyJSEQXLWbP1YHQ0dMEA0twUVgcJlyjhPUtnWQvzwZfUfaq
- /YlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=I0EANPnk5WngRjs2UVY7DRKUKHgKolLVnrDO56RckXo=;
- b=0tRZRTMQXm11gFJillPRKbENY9qtg2WpWI6rh4uamMfxIttWMyuWRHQ/cZXDo8UrVT
- VID+plHqQ3i2T2P6sojRzUPvHtYL9sFio0OBmgcMdgoHni2CoOlBaz2j4WGmV3z8JA4H
- AS8LcLKf20bisdLG1tONfdDDJ9lGPw55pAvK3QVOUYRh0bOhml0lpz91vzNKBnl4qnQb
- zW7hwhDRDJNUvA+sFl5qRT1SyFVxZaUyYcblM9oMDftqD/QjnUOL9zX0p/D4hV93l/nN
- TB/QuuptYBv+p3hSRY9ttpc2EJFr5WGNaEQuiOnLP/KInvFPUn0RFQsDDQpe52mojHFJ
- 889w==
-X-Gm-Message-State: AOAM530htl5wlAHstc6rVLMzZPcpTod3W20NdR2QCksA+78ntSYGsskF
- EBDsMY3jzDHDiIItLW147AB2nQ==
-X-Google-Smtp-Source: ABdhPJzhQCus9Z53zMSjtm9KYOioip3IJaXJrHcR4xREJQbKjCn6STkiKELXeNtIcPvGQGbBjSxoEA==
-X-Received: by 2002:a17:906:f8d4:: with SMTP id
- lh20mr27996729ejb.382.1632129515418; 
- Mon, 20 Sep 2021 02:18:35 -0700 (PDT)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
- (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id z12sm6633591edx.66.2021.09.20.02.18.34
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 20 Sep 2021 02:18:35 -0700 (PDT)
-Message-ID: <f8756bf0-c955-f301-299e-f5d8c0aabe04@mind.be>
-Date: Mon, 20 Sep 2021 11:18:34 +0200
+ with ESMTP id F-dFFVuCWzOy for <buildroot@lists.busybox.net>;
+ Mon, 20 Sep 2021 09:30:19 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9217040337
+ for <buildroot@buildroot.org>; Mon, 20 Sep 2021 09:30:19 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7B4F960F56;
+ Mon, 20 Sep 2021 09:30:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+ s=k20201202; t=1632130219;
+ bh=iJV5NUDz2OnYoyLlZjUf4m3d3e5eUPsytOaTccJkV50=;
+ h=In-Reply-To:References:Subject:Cc:To:From:Date:From;
+ b=pHkA/jZ5e+KmJqnXuSX3QeA0TUg8DpKA4Ir7X9lo38yb/tUWmr5S8eRRfRa2z3yr0
+ ihJHsomQjiZelBhXX3sDbKSkWLh7UpKdBEvtyfnxVb7HgQIB/acTvt6q8F1HxlQcwC
+ 1amJvh33zFPWBh0oMV8TXZM8pxguCNAYs1X44NMnjllYV4eLaA8eCJO0aOWEjFxoX7
+ 4ZWNLT6UBNum109J0psXy7LUBR/jE/IJkL7be6dZU/my2XI9QWr/4E16iQ4QXyCmGh
+ 3Fpz9TjcipZHUUsWHklH2rOnULHdclfAoGMYaRMdQaheDKkhgWueMRfZKM7mT3qycT
+ 6XspW+4MSNMVw==
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.1.0
-Content-Language: en-GB
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20210908081630.3404221-1-kory.maincent@bootlin.com>
- <ecec6557-9d20-134b-497c-e6c7e55deee6@mind.be>
- <20210919150904.04051568@windsurf>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <20210919150904.04051568@windsurf>
-Subject: Re: [Buildroot] [PATCH] package/arm-gnu-a-toolchain: bump to
- version 10.3-2021.07
+In-Reply-To: <CAJPV9MrYNwrrZ34-JgRPO62Y_6yT0HZ564YuB_qFKYdsRo7nXQ@mail.gmail.com>
+References: <20210830114531.2285178-1-jose.pekkarinen@unikie.com>
+ <163189935709.536094.10717640766848618610@kwain>
+ <CAJPV9MrYNwrrZ34-JgRPO62Y_6yT0HZ564YuB_qFKYdsRo7nXQ@mail.gmail.com>
+To: José Pekkarinen <jose.pekkarinen@unikie.com>
+From: Antoine Tenart <atenart@kernel.org>
+Message-ID: <163213021612.4283.1135197152174473636@kwain>
+Date: Mon, 20 Sep 2021 11:30:16 +0200
+Subject: Re: [Buildroot] [PATCH] package/refpolicy: Treat all modules as
+ custom
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -109,70 +78,38 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: Kory Maincent <kory.maincent@bootlin.com>, buildroot@buildroot.org
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-
-
-On 19/09/2021 15:09, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Sun, 19 Sep 2021 14:35:56 +0200
-> Arnout Vandecappelle <arnout@mind.be> wrote:
-> 
->>> -ARM_GNU_A_TOOLCHAIN_VERSION = 9.2-2019.12
->>> -ARM_GNU_A_TOOLCHAIN_SITE = https://developer.arm.com/-/media/Files/downloads/gnu-a/$(ARM_GNU_A_TOOLCHAIN_VERSION)/binrel
->>> -ARM_GNU_A_TOOLCHAIN_SOURCE = gcc-arm-$(ARM_GNU_A_TOOLCHAIN_VERSION)-x86_64-arm-none-eabi.tar.xz
->>> +ARM_GNU_A_TOOLCHAIN_VERSION = 10.3-2021.07
->>> +ARM_GNU_A_TOOLCHAIN_SITE = https://developer.arm.com/-/media/Files/downloads/gnu-rm/$(ARM_GNU_A_TOOLCHAIN_VERSION)
->>> +ARM_GNU_A_TOOLCHAIN_SOURCE = gcc-arm-none-eabi-$(ARM_GNU_A_TOOLCHAIN_VERSION)-x86_64-linux.tar.bz2
->>
->>    Err, this can't be right... 'gnu-rm' stands for "GNU-based toolchain for
->> Cortex-R and Cortex-M", and "arm-none-eabi" means it's a toolchain without libc...
->>
->>    So either someone made a huge mistake at ARM, or you haven't actually tested
->> this patch :-)
-
-  Or, of course, I can't read and I see 
-toolchain/toolchain-external/toolchain-external-arm-arm instead of 
-package/arm-gnu-a-toolchain...
-
-  Worse still: I didn't see that the old one already *was* arm-none-eabi, it was 
-just specified at the end of the tarball name instead of at the beginning.
-
-
-> It was tested to build code for a Cortex-M4.
-> 
-> This package was originally introduced to build ARM 32-bit code in the
-> context of TF-A (boot/arm-trusted-firmware/). At the very beginning,
-> was submitted by a Marvell person, who also had to build code for a
-> Cortex-M3 co-processor IIRC, but then was taken over by a person from
-> Amarula, who needed it to build ARM 32-bit code running on a Cortex-A.
-> 
-> If it's truly a bare-metal toolchain with no libraries, it should not
-> matter, right? You just pass to gcc -march=XYZ, and it will produce the
-> right code. However, my understanding is that those bare-metal
-> toolchains do have some libraries built for the target, which can
-> potentially get linked with the code produced.
-
-  Yeah, you get libgcc and libstdc++ from the gcc source. libstdc++ is probably 
-not used . libgcc may not be linked in either if -nostdlib is used (which it 
-probably is).
-
-
-> So, long story short: do we need arm-gnu-a-toolchaind and
-> arm-gnu-rm-toolchain packages ?
-
-  Easy to check: build a bunch of the defconfigs which set 
-BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_ARM32_TOOLCHAIN=y. And maybe double-check 
-if indeed ATF doesn't link with libgcc.
-
-  Regards,
-  Arnout
-_______________________________________________
-buildroot mailing list
-buildroot@lists.buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+UXVvdGluZyBKb3PDqSBQZWtrYXJpbmVuICgyMDIxLTA5LTIwIDA4OjAxOjI3KQo+ICAgIE9uIEZy
+aSwgU2VwIDE3LCAyMDIxIGF0IDg6MjIgUE0gQW50b2luZSBUZW5hcnQgPFsxXWF0ZW5hcnRAa2Vy
+bmVsLm9yZz4KPiAgICB3cm90ZToKPiAgICAgIFF1b3RpbmcgSm9zw6kgUGVra2FyaW5lbiAoMjAy
+MS0wOC0zMCAxMzo0NTozMSkKPiAgICAgID4gVGhlIGN1cnJlbnQgcHJvY2Vzc2luZyBvZiB0aGUg
+bW9kdWxlcyBkb2Vzbid0IHdvcmsgZm9yCj4gICAgICA+IGN1c3RvbSBtYWRlIHBvbGljaWVzIGFw
+cGVuZGVkIHRocm91Z2ggdGhlIGV4dHJhIGRpciBtZWNoYW5pc20sCj4gICAgICA+IHNpbmNlIHNl
+ZCB3b24ndCBmaW5kIGEgbWF0Y2ggZm9yIGN1c3RvbSBtb2R1bGVzLCBpdCB3aWxsCj4gICAgICA+
+IGNvbnRpbnVlIHdpdGhvdXQgdHJpZ2dlcmluZyBhbmQgZXJyb3IuIFRoaXMgcGF0Y2ggcmVtb3Zl
+cwo+ICAgICAgPiBhbGwgdGhlIG1vZHVsZXMgZnJvbSBtb2R1bGVzLmNvbmYgYW5kIGFkZCB0aGVt
+IG9uZSBieQo+ICAgICAgPiBvbmUgdXNpbmcgUkVGUE9MSUNZX01PRFVMRVMgdmFsdWVzLgo+IAo+
+ICAgICAgSSdtIGZhaWxpbmcgdG8gc2VlIHdoYXQgcGFydGljdWxhciBzZXR1cCB0aGUgY2hhbmdl
+IGJlbG93IHdvdWxkIGZpeC4KPiAKPiAgICAgIENvdWxkIHlvdSBlbGFib3JhdGUgb24gdGhlIGFi
+b3ZlPyBNYXliZSBpbmNsdWRpbmcgY29uZmlndXJhdGlvbgo+ICAgICAgc25pcHBldHMgYW5kIGV4
+YW1wbGUgb2Ygc3VjaCBhIG1vZHVsZSAod2l0aCB0aGUgZmlsZSB0cmVlLCBzdGFydGluZyBmcm9t
+Cj4gICAgICBSRUZQT0xJQ1lfRVhUUkFfTU9EVUxFU19ESVJTKS4KPiAKPiAgICBBYnNvbHV0ZWx5
+LCBpbiB0aGUgc2VjdXJpdHkgc2VjdGlvbiBvZiBteSAuY29uZmlnIHdlIGNhbiByZWFkIHRoZQo+
+ICAgIGZvbGxvd2luZzoKPiAgICBCUjJfUEFDS0FHRV9QT0xJQ1lDT1JFVVRJTFM9eQo+ICAgIEJS
+Ml9QQUNLQUdFX1JFRlBPTElDWT15Cj4gICAgQlIyX1JFRlBPTElDWV9FWFRSQV9NT0RVTEVTX0RJ
+UlM9IiRPVVRQVVRfRElSL3NlbGludXgiCj4gICAgQlIyX1BBQ0tBR0VfUkVGUE9MSUNZX1BPTElD
+WV9TVEFURV9FTkZPUkNJTkc9eQoKVGhpcyBzaG91bGQgd29yay4gRGlkIHlvdSBjaGVjayB0aGUg
+Y29udGVudCBvZiB5b3VyIG1vZHVsZSBzaG93IHVwIGFmdGVyCmFwcGx5aW5nIHRoaXMgcGF0Y2g/
+CgpJJ20gd29uZGVyaW5nIGlmIHRoaXMgaGFzIHRvIGRvIHdpdGg6CgogIEJSMl9SRUZQT0xJQ1lf
+RVhUUkFfTU9EVUxFU19ESVJTPSIkT1VUUFVUX0RJUi9zZWxpbnV4IgoKV2hhdCBpcyB0aGUgdmFs
+dWUgb2YgJE9VVFBVVF9ESVI/IFdoZXJlIGRvZXMgdGhpcyBjb21lIGZyb20/IENvdWxkIHlvdQp0
+cnkgd2l0aG91dCB1c2luZyBhIHZhcmlhYmxlIGluIEJSMl9SRUZQT0xJQ1lfRVhUUkFfTU9EVUxF
+U19ESVJTPwoKVGhhbmtzLApBbnRvaW5lCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGxpc3RzLmJ1
+aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8v
+YnVpbGRyb290Cg==
