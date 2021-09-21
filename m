@@ -2,57 +2,56 @@ Return-Path: <SRS0=W/Lv=OL=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AFA8EC433EF
-	for <buildroot@archiver.kernel.org>; Tue, 21 Sep 2021 19:28:11 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 628EDC433EF
+	for <buildroot@archiver.kernel.org>; Tue, 21 Sep 2021 19:28:25 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 72B6B61050
-	for <buildroot@archiver.kernel.org>; Tue, 21 Sep 2021 19:28:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 72B6B61050
+	by mail.kernel.org (Postfix) with ESMTPS id 2D36861050
+	for <buildroot@archiver.kernel.org>; Tue, 21 Sep 2021 19:28:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2D36861050
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4593581846;
-	Tue, 21 Sep 2021 19:28:11 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0C62A40420;
+	Tue, 21 Sep 2021 19:28:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zQf-wuOlhIiA; Tue, 21 Sep 2021 19:28:10 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id jOH1R96wlkbm; Tue, 21 Sep 2021 19:28:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6F49283E66;
-	Tue, 21 Sep 2021 19:28:09 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 22E251BF995
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0710E40417;
+	Tue, 21 Sep 2021 19:28:21 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D874B1BF578
  for <buildroot@lists.busybox.net>; Tue, 21 Sep 2021 19:26:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1FFD340662
- for <buildroot@lists.busybox.net>; Tue, 21 Sep 2021 19:26:47 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4323F403F9
+ for <buildroot@lists.busybox.net>; Tue, 21 Sep 2021 19:26:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kvl5s5ACKpp8 for <buildroot@lists.busybox.net>;
- Tue, 21 Sep 2021 19:26:44 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id AtwWxKm9VBu6 for <buildroot@lists.busybox.net>;
+ Tue, 21 Sep 2021 19:26:45 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A556A40653
- for <buildroot@buildroot.org>; Tue, 21 Sep 2021 19:26:44 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3A4C540409
+ for <buildroot@buildroot.org>; Tue, 21 Sep 2021 19:26:45 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id D3FFA8C071; Tue, 21 Sep 2021 19:24:42 +0000 (UTC)
+ id 64FF98C1EA; Tue, 21 Sep 2021 19:24:43 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Tue, 21 Sep 2021 20:59:02 +0200
+Date: Tue, 21 Sep 2021 21:24:21 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 279167ee8dc37b1c41ff9076d6769c950d5a33f1
-X-Git-Newrev: 7b5a13eb3d393c7aa3e443219d6eeae65ffe1794
+X-Git-Oldrev: bdd05a2b1323b4bdfbcaf559e0567a7d09f4837d
+X-Git-Newrev: 59a19eb4c877067ec0db4eeed091f9bddccdd667
 X-Patchwork-Hint: ignore
-Message-Id: <20210921192442.D3FFA8C071@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mono: fix external libatomic_ops
- linkage
+Message-Id: <20210921192443.64FF98C1EA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/cog: bump to version 0.10.1
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,88 +70,66 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7b5a13eb3d393c7aa3e443219d6eeae65ffe1794
+commit: https://git.buildroot.net/buildroot/commit/?id=59a19eb4c877067ec0db4eeed091f9bddccdd667
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Added patch fixes linkage of libgc with external libtomic-ops.
-Mono uses bundeled bdwgc which doesn't link external libatomic-ops.
-Patch is a fix cherry-picked from bdwgc upstream.
+Update to version 0.10.1, which fixes the build when the DRM platform
+module is enabled, fixes handling of absolute pointer events, and makes
+the headless platform optional.
 
-Problem found on ARMv5 processors, on newer ARM processors
-it uses header based functions and doesn't need built library.
+Although the headless platform is optional, Buildroot keeps it enabled
+unconditionally (as previously) because the wpebackend-fdo dependency
+is always needed anyway because Buildroot does not include any other
+WPE backend.
 
-Error:
-/home/buildroot/autobuild/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/9.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: ../../external/bdwgc/.libs/libgc.a(gc.o): in function `GC_steal_mark_stack':
-gc.c:(.text+0x2020): undefined reference to `AO_store_full_emulation'
+Release notes:
 
-Fixes:
-http://autobuild.buildroot.net/results/ebc54e5dea63aca21a4072d294fdede41de559c7
-http://autobuild.buildroot.net/results/6d10a4bd43fbc9c1d3fa26d5eef394c8023cb85f
+  https://wpewebkit.org/release/cog-0.10.1.html
 
-Signed-off-by: Illia Bitkov <illia.bitkov@mind.be>
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- ...ith-a-system-libatomic_ops-shared-library.patch | 52 ++++++++++++++++++++++
- 1 file changed, 52 insertions(+)
+ package/cog/cog.hash | 8 ++++----
+ package/cog/cog.mk   | 3 ++-
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/mono/0001-Fix-linkage-with-a-system-libatomic_ops-shared-library.patch b/package/mono/0001-Fix-linkage-with-a-system-libatomic_ops-shared-library.patch
-new file mode 100644
-index 0000000000..66d4d8e100
---- /dev/null
-+++ b/package/mono/0001-Fix-linkage-with-a-system-libatomic_ops-shared-library.patch
-@@ -0,0 +1,52 @@
-+From 02a44ee1df8176c72e75fd706d1a8f063d3196d5 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 5 Nov 2018 22:50:40 +0100
-+Subject: Fix linkage with a system libatomic_ops shared library
-+
-+Issue #247 (bdwgc).
-+
-+When bdwgc is linked with the external libatomic_ops, bdw-gc.pc must
-+contain the needed dynamic libraries (such as -latomic_ops) otherwise
-+build of applications could fail on the link stage on some hosts:
-+* libgc.so: undefined reference to 'AO_fetch_compare_and_swap_emulation'
-+* libgc.so: undefined reference to 'AO_store_full_emulation'
-+
-+So, this commit sets ATOMIC_OPS_LIBS to "-latomic_ops" when a system
-+atomic_ops library is used and uses ATOMIC_OPS_LIBS in bdw-gc.pc.in.
-+
-+* bdw-gc.pc.in (Libs): Add @ATOMIC_OPS_LIBS@.
-+* configure.ac [$with_libatomic_ops!=no && $with_libatomic_ops!=none
-+&& $THREADS!=none] (ATOMIC_OPS_LIBS): Set to -latomic_ops; do AC_SUBST.
-+
-+Fix is cherry-picked from bdwgc upstream
-+
-+Link to original commit https://github.com/ivmai/bdwgc/commit/02a44ee1df8176c72e75fd706d1a8f063d3196d5?branch=02a44ee1df8176c72e75fd706d1a8f063d3196d5&diff=unified  
-+
-+Signed-off-by: Illia Bitkov <illia.bitkov@mind.be>
-+
-+diff --git a/external/bdwgc/bdw-gc.pc.in b/external/bdwgc/bdw-gc.pc.in
-+index ef4c2341..a32e7598 100644
-+--- a/external/bdwgc/bdw-gc.pc.in
-++++ b/external/bdwgc/bdw-gc.pc.in
-+@@ -6,5 +6,5 @@ includedir=@includedir@
-+ Name: Boehm-Demers-Weiser Conservative Garbage Collector
-+ Description: A garbage collector for C and C++
-+ Version: @PACKAGE_VERSION@
-+-Libs: -L${libdir} -lgc
-++Libs: -L${libdir} @ATOMIC_OPS_LIBS@ -lgc
-+ Cflags: -I${includedir}
-+diff --git a/external/bdwgc/configure.ac b/external/bdwgc/configure.ac
-+index 21abe8fa..9ffe81de 100644
-+--- a/external/bdwgc/configure.ac
-++++ b/external/bdwgc/configure.ac
-+@@ -1081,7 +1081,9 @@ AS_IF([test x"$with_libatomic_ops" = xno \
-+ AC_MSG_CHECKING([which libatomic_ops to use])
-+ AS_IF([test x"$with_libatomic_ops" != xno],
-+   [ AS_IF([test x"$with_libatomic_ops" != xnone -a x"$THREADS" != xnone],
-+-          [ AC_MSG_RESULT([external]) ],
-++          [ AC_MSG_RESULT([external])
-++            ATOMIC_OPS_LIBS="-latomic_ops"
-++            AC_SUBST([ATOMIC_OPS_LIBS]) ],
-+           [ AC_MSG_RESULT([none])
-+             AS_IF([test x"$THREADS" != xnone],
-+                   [ AC_DEFINE([GC_BUILTIN_ATOMIC], [1],
+diff --git a/package/cog/cog.hash b/package/cog/cog.hash
+index 566d30fa2a..3abc5f2c83 100644
+--- a/package/cog/cog.hash
++++ b/package/cog/cog.hash
+@@ -1,7 +1,7 @@
+-# From https://wpewebkit.org/releases/cog-0.10.0.tar.xz.sums
+-md5  1b0407b6163a3a01afdfc0fb454a7570  cog-0.10.0.tar.xz
+-sha1  911816c00a2b08f4cfd388b1d2e176835c9b4e9e  cog-0.10.0.tar.xz
+-sha256  2c72369c636ca4684370adad1344071b23c9ee2c851eb7d738fa2e1d7092031f  cog-0.10.0.tar.xz
++# From https://wpewebkit.org/releases/cog-0.10.1.tar.xz.sums
++md5  b997da3c143bc34ec5e953eb7e7ccefc  cog-0.10.1.tar.xz
++sha1  f25312141de918f41add3e3c9984faa985cda0a9  cog-0.10.1.tar.xz
++sha256  aecf546d7b0645119d79559c5574cb5eb68364fc8409dfbd47a4920bd1f221bc  cog-0.10.1.tar.xz
+ 
+ # Hashes for license files:
+ sha256  e6c42d93c68b292bcccf6d2ec3e13da85df90b718ba27c2c2a01053a9d009252  COPYING
+diff --git a/package/cog/cog.mk b/package/cog/cog.mk
+index d373e6e1b6..07b8e245ef 100644
+--- a/package/cog/cog.mk
++++ b/package/cog/cog.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-COG_VERSION = 0.10.0
++COG_VERSION = 0.10.1
+ COG_SITE = https://wpewebkit.org/releases
+ COG_SOURCE = cog-$(COG_VERSION).tar.xz
+ COG_INSTALL_STAGING = YES
+@@ -13,6 +13,7 @@ COG_LICENSE = MIT
+ COG_LICENSE_FILES = COPYING
+ COG_CONF_OPTS = \
+ 	-DCOG_BUILD_PROGRAMS=ON \
++	-DCOG_PLATFORM_HEADLESS=ON \
+ 	-DCOG_WESTON_DIRECT_DISPLAY=OFF \
+ 	-DINSTALL_MAN_PAGES=OFF \
+ 	-DCOG_HOME_URI='$(call qstrip,$(BR2_PACKAGE_COG_PROGRAMS_HOME_URI))'
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
