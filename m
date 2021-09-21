@@ -4,58 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UPPERCASE_50_75,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 238F2C433F5
-	for <buildroot@archiver.kernel.org>; Tue, 21 Sep 2021 13:29:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E11A8C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 21 Sep 2021 13:29:37 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id BD2036115A
-	for <buildroot@archiver.kernel.org>; Tue, 21 Sep 2021 13:29:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org BD2036115A
+	by mail.kernel.org (Postfix) with ESMTPS id 86F8B61131
+	for <buildroot@archiver.kernel.org>; Tue, 21 Sep 2021 13:29:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 86F8B61131
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8B98A40336;
-	Tue, 21 Sep 2021 13:29:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 607314035D;
+	Tue, 21 Sep 2021 13:29:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yDbfBTfLyoP3; Tue, 21 Sep 2021 13:29:24 +0000 (UTC)
+	with ESMTP id CY4Yx8ryTfxF; Tue, 21 Sep 2021 13:29:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D94FD4031F;
-	Tue, 21 Sep 2021 13:29:23 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A42951BF995
- for <buildroot@lists.busybox.net>; Tue, 21 Sep 2021 13:28:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9772840397;
+	Tue, 21 Sep 2021 13:29:35 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1FF231BF2F5
+ for <buildroot@lists.busybox.net>; Tue, 21 Sep 2021 13:28:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 92B97403BB
- for <buildroot@lists.busybox.net>; Tue, 21 Sep 2021 13:28:34 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0F2B083372
+ for <buildroot@lists.busybox.net>; Tue, 21 Sep 2021 13:28:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id A7RUvdo7SNzx for <buildroot@lists.busybox.net>;
- Tue, 21 Sep 2021 13:28:33 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OKGguF4niG_0 for <buildroot@lists.busybox.net>;
+ Tue, 21 Sep 2021 13:28:34 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
 Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
  [217.70.183.193])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4D6E3401F3
- for <buildroot@buildroot.org>; Tue, 21 Sep 2021 13:28:33 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 46C438332A
+ for <buildroot@buildroot.org>; Tue, 21 Sep 2021 13:28:34 +0000 (UTC)
 Received: (Authenticated sender: kory.maincent@bootlin.com)
- by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 6E90524000F;
- Tue, 21 Sep 2021 13:28:31 +0000 (UTC)
+ by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 68AEC24000D;
+ Tue, 21 Sep 2021 13:28:32 +0000 (UTC)
 From: Kory Maincent <kory.maincent@bootlin.com>
 To: buildroot@buildroot.org
-Date: Tue, 21 Sep 2021 15:28:26 +0200
-Message-Id: <20210921132829.56405-4-kory.maincent@bootlin.com>
+Date: Tue, 21 Sep 2021 15:28:28 +0200
+Message-Id: <20210921132829.56405-6-kory.maincent@bootlin.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210921132829.56405-1-kory.maincent@bootlin.com>
 References: <20210921132829.56405-1-kory.maincent@bootlin.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2 3/6] fs/iso9660: add support for hybrid image
- using Grub bootloader on BIOS and EFI
+Subject: [Buildroot] [PATCH v2 5/6] boot/edk2: add support to i386
+ architecture
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,112 +74,83 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-Add support for building an hybrid ISO9660 image compatible with legacy
-and UEFI BIOS.
-The option -eltorito-alt-boot need to be used in the xorriso command
-to generate the hybrid image.
+Add support the build the firmware for QEMU i386 pc machine
 
 Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
 ---
+ boot/edk2/Config.in | 12 +++++++++++-
+ boot/edk2/edk2.mk   | 12 ++++++++++--
+ 2 files changed, 21 insertions(+), 3 deletions(-)
 
-Changes in v2:
-- Fix typos
-
- fs/iso9660/iso9660.mk | 34 ++++++++++++++++++++++++----------
- 1 file changed, 24 insertions(+), 10 deletions(-)
-
-diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
-index d46aec002b..499d19c9bb 100644
---- a/fs/iso9660/iso9660.mk
-+++ b/fs/iso9660/iso9660.mk
-@@ -66,18 +66,20 @@ ROOTFS_ISO9660_DEPENDENCIES += grub2
- ROOTFS_ISO9660_BOOTLOADER_CONFIG_PATH = \
- 	$(ROOTFS_ISO9660_TMP_TARGET_DIR)/boot/grub/grub.cfg
- ROOTFS_ISO9660_BOOT_IMAGE = boot/grub/grub-eltorito.img
--define ROOTFS_ISO9660_INSTALL_BOOTLOADER
-+define ROOTFS_ISO9660_INSTALL_BOOTLOADER_BIOS
- 	$(INSTALL) -D -m 0644 $(BINARIES_DIR)/grub-eltorito.img \
- 		$(ROOTFS_ISO9660_TMP_TARGET_DIR)/boot/grub/grub-eltorito.img
- endef
--else ifeq ($(BR2_TARGET_ROOTFS_ISO9660_GRUB2)$(BR2_TARGET_ROOTFS_ISO9660_EFI_BOOTLOADER),yy)
-+endif
+diff --git a/boot/edk2/Config.in b/boot/edk2/Config.in
+index 150806899f..9f8988bcca 100644
+--- a/boot/edk2/Config.in
++++ b/boot/edk2/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_TARGET_EDK2
+ 	bool "EDK2"
+-	depends on BR2_x86_64 || BR2_aarch64
++	depends on BR2_x86_64 || BR2_aarch64 || BR2_i386
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5
+ 	select BR2_PACKAGE_EDK2_PLATFORMS
+ 	help
+@@ -13,9 +13,18 @@ if BR2_TARGET_EDK2
+ 
+ choice
+ 	prompt "Platform"
++	default BR2_TARGET_EDK2_PLATFORM_OVMF_I386 if BR2_i386
+ 	default BR2_TARGET_EDK2_PLATFORM_OVMF_X64 if BR2_x86_64
+ 	default BR2_TARGET_EDK2_PLATFORM_ARM_VIRT_QEMU if BR2_aarch64
+ 
++config BR2_TARGET_EDK2_PLATFORM_OVMF_I386
++	bool "i386"
++	depends on BR2_i386 || BR2_x86_64
++	help
++	  Platform configuration for a generic i386 target.
++	  This platform will boot from flash address 0x0.
++	  It should therefore be used as the first bootloader.
 +
-+ifeq ($(BR2_TARGET_ROOTFS_ISO9660_GRUB2)$(BR2_TARGET_ROOTFS_ISO9660_EFI_BOOTLOADER),yy)
- ROOTFS_ISO9660_DEPENDENCIES += grub2 host-dosfstools host-mtools
- ROOTFS_ISO9660_EFI_PARTITION = boot/fat.efi
- ROOTFS_ISO9660_EFI_PARTITION_PATH = $(ROOTFS_ISO9660_TMP_TARGET_DIR)/$(ROOTFS_ISO9660_EFI_PARTITION)
- ROOTFS_ISO9660_EFI_PARTITION_CONTENT = $(BINARIES_DIR)/efi-part
- ROOTFS_ISO9660_BOOTLOADER_CONFIG_PATH = \
- 	$(ROOTFS_ISO9660_TMP_TARGET_DIR)/boot/grub/grub.cfg
--define ROOTFS_ISO9660_INSTALL_BOOTLOADER
-+define ROOTFS_ISO9660_INSTALL_BOOTLOADER_EFI
- 	rm -rf $(ROOTFS_ISO9660_EFI_PARTITION_PATH)
- 	mkdir -p $(dir $(ROOTFS_ISO9660_EFI_PARTITION_PATH))
- 	dd if=/dev/zero of=$(ROOTFS_ISO9660_EFI_PARTITION_PATH) bs=1M count=1
-@@ -85,12 +87,14 @@ define ROOTFS_ISO9660_INSTALL_BOOTLOADER
- 	$(HOST_DIR)/bin/mcopy -p -m -i $(ROOTFS_ISO9660_EFI_PARTITION_PATH) -s \
- 		$(ROOTFS_ISO9660_EFI_PARTITION_CONTENT)/* ::/
- endef
--else ifeq ($(BR2_TARGET_ROOTFS_ISO9660_ISOLINUX),y)
-+endif
+ config BR2_TARGET_EDK2_PLATFORM_OVMF_X64
+ 	bool "x86-64"
+ 	depends on BR2_x86_64
+@@ -94,6 +103,7 @@ endchoice
+ 
+ config BR2_TARGET_EDK2_FD_NAME
+ 	string
++	default "OVMF" if BR2_TARGET_EDK2_PLATFORM_OVMF_I386
+ 	default "OVMF" if BR2_TARGET_EDK2_PLATFORM_OVMF_X64
+ 	default "QEMU_EFI" if BR2_TARGET_EDK2_PLATFORM_ARM_VIRT_QEMU
+ 	default "QEMU_EFI" if BR2_TARGET_EDK2_PLATFORM_ARM_VIRT_QEMU_KERNEL
+diff --git a/boot/edk2/edk2.mk b/boot/edk2/edk2.mk
+index fabd0c5b45..ab3cdad464 100644
+--- a/boot/edk2/edk2.mk
++++ b/boot/edk2/edk2.mk
+@@ -14,7 +14,9 @@ EDK2_DEPENDENCIES = edk2-platforms host-python3 host-acpica host-util-linux
+ EDK2_INSTALL_TARGET = NO
+ EDK2_INSTALL_IMAGES = YES
+ 
+-ifeq ($(BR2_x86_64),y)
++ifeq ($(BR2_i386),y)
++EDK2_ARCH = IA32
++else ifeq ($(BR2_x86_64),y)
+ EDK2_ARCH = X64
+ else ifeq ($(BR2_aarch64),y)
+ EDK2_ARCH = AARCH64
+@@ -55,7 +57,13 @@ EDK2_GIT_SUBMODULES = YES
+ EDK2_BUILD_PACKAGES = $(@D)/Build/Buildroot
+ EDK2_PACKAGES_PATH = $(@D):$(EDK2_BUILD_PACKAGES):$(STAGING_DIR)/usr/share/edk2-platforms
+ 
+-ifeq ($(BR2_TARGET_EDK2_PLATFORM_OVMF_X64),y)
++ifeq ($(BR2_TARGET_EDK2_PLATFORM_OVMF_I386),y)
++EDK2_DEPENDENCIES += host-nasm
++EDK2_PACKAGE_NAME = OvmfPkg
++EDK2_PLATFORM_NAME = OvmfPkgIa32
++EDK2_BUILD_DIR = OvmfIa32
 +
-+ifeq ($(BR2_TARGET_ROOTFS_ISO9660_ISOLINUX),y)
- ROOTFS_ISO9660_DEPENDENCIES += syslinux
- ROOTFS_ISO9660_BOOTLOADER_CONFIG_PATH = \
- 	$(ROOTFS_ISO9660_TMP_TARGET_DIR)/isolinux/isolinux.cfg
- ROOTFS_ISO9660_BOOT_IMAGE = isolinux/isolinux.bin
--define ROOTFS_ISO9660_INSTALL_BOOTLOADER
-+define ROOTFS_ISO9660_INSTALL_BOOTLOADER_BIOS
- 	$(INSTALL) -D -m 0644 $(BINARIES_DIR)/syslinux/* \
- 		$(ROOTFS_ISO9660_TMP_TARGET_DIR)/isolinux/
- 	$(INSTALL) -D -m 0644 $(HOST_DIR)/share/syslinux/ldlinux.c32 \
-@@ -103,7 +107,8 @@ define ROOTFS_ISO9660_PREPARATION
- 		$(ROOTFS_ISO9660_BOOTLOADER_CONFIG_PATH)
- 	$(SED) "s%__KERNEL_PATH__%/boot/$(LINUX_IMAGE_NAME)%" \
- 		$(ROOTFS_ISO9660_BOOTLOADER_CONFIG_PATH)
--	$(ROOTFS_ISO9660_INSTALL_BOOTLOADER)
-+	$(ROOTFS_ISO9660_INSTALL_BOOTLOADER_BIOS)
-+	$(ROOTFS_ISO9660_INSTALL_BOOTLOADER_EFI)
- endef
- 
- ROOTFS_ISO9660_PRE_GEN_HOOKS += ROOTFS_ISO9660_PREPARATION
-@@ -147,23 +152,32 @@ ROOTFS_ISO9660_PRE_GEN_HOOKS += ROOTFS_ISO9660_DISABLE_EXTERNAL_INITRD
- 
- endif # ROOTFS_ISO9660_USE_INITRD
- 
--ifeq ($(BR2_TARGET_ROOTFS_ISO9660_BIOS_BOOTLOADER),y)
--ROOTFS_ISO9660_OPTS += \
-+ROOTFS_ISO9660_BOOTLOADER_OPTS_BIOS = \
- 	-J \
- 	-R \
- 	-boot-load-size 4 \
- 	-boot-info-table \
- 	-no-emul-boot \
- 	-b $(ROOTFS_ISO9660_BOOT_IMAGE)
--else ifeq ($(BR2_TARGET_ROOTFS_ISO9660_EFI_BOOTLOADER),y)
--ROOTFS_ISO9660_OPTS += \
-+
-+ROOTFS_ISO9660_BOOTLOADER_OPTS_EFI = \
- 	--efi-boot $(ROOTFS_ISO9660_EFI_PARTITION) \
- 	-no-emul-boot
-+
-+ifeq ($(BR2_TARGET_ROOTFS_ISO9660_BIOS_BOOTLOADER)$(BR2_TARGET_ROOTFS_ISO9660_EFI_BOOTLOADER),yy)
-+ROOTFS_ISO9660_BOOTLOADER_OPTS = $(ROOTFS_ISO9660_BOOTLOADER_OPTS_BIOS)
-+ROOTFS_ISO9660_BOOTLOADER_OPTS += -eltorito-alt-boot
-+ROOTFS_ISO9660_BOOTLOADER_OPTS += $(ROOTFS_ISO9660_BOOTLOADER_OPTS_EFI)
-+else ifeq ($(BR2_TARGET_ROOTFS_ISO9660_BIOS_BOOTLOADER),y)
-+ROOTFS_ISO9660_BOOTLOADER_OPTS = $(ROOTFS_ISO9660_BOOTLOADER_OPTS_BIOS)
-+else ifeq ($(BR2_TARGET_ROOTFS_ISO9660_EFI_BOOTLOADER),y)
-+ROOTFS_ISO9660_BOOTLOADER_OPTS = $(ROOTFS_ISO9660_BOOTLOADER_OPTS_EFI)
- endif
- 
- define ROOTFS_ISO9660_CMD
- 	$(HOST_DIR)/bin/xorriso -as mkisofs \
- 		$(ROOTFS_ISO9660_OPTS) \
-+		$(ROOTFS_ISO9660_BOOTLOADER_OPTS) \
- 		-o $@ $(ROOTFS_ISO9660_TMP_TARGET_DIR)
- endef
- 
++else ifeq ($(BR2_TARGET_EDK2_PLATFORM_OVMF_X64),y)
+ EDK2_DEPENDENCIES += host-nasm
+ EDK2_PACKAGE_NAME = OvmfPkg
+ EDK2_PLATFORM_NAME = OvmfPkgX64
 -- 
 2.25.1
 
