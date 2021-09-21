@@ -2,60 +2,99 @@ Return-Path: <SRS0=W/Lv=OL=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B932AC433F5
-	for <buildroot@archiver.kernel.org>; Tue, 21 Sep 2021 19:17:09 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A948AC433F5
+	for <buildroot@archiver.kernel.org>; Tue, 21 Sep 2021 19:17:30 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id DAFDA61165
-	for <buildroot@archiver.kernel.org>; Tue, 21 Sep 2021 19:17:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org DAFDA61165
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
+	by mail.kernel.org (Postfix) with ESMTPS id 5258661165
+	for <buildroot@archiver.kernel.org>; Tue, 21 Sep 2021 19:17:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5258661165
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A434E60792;
-	Tue, 21 Sep 2021 19:17:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 23C76406D4;
+	Tue, 21 Sep 2021 19:17:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id s9VTXQ2z8VwS; Tue, 21 Sep 2021 19:17:07 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id k7MVA-zR2UA5; Tue, 21 Sep 2021 19:17:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 982A960877;
-	Tue, 21 Sep 2021 19:17:06 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 293741BF578
- for <buildroot@lists.busybox.net>; Tue, 21 Sep 2021 19:17:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7B83F40696;
+	Tue, 21 Sep 2021 19:17:28 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id EC50C1BF578
+ for <buildroot@lists.busybox.net>; Tue, 21 Sep 2021 19:17:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 184FE60877
- for <buildroot@lists.busybox.net>; Tue, 21 Sep 2021 19:17:05 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id D84B3403F9
+ for <buildroot@lists.busybox.net>; Tue, 21 Sep 2021 19:17:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Z_DRt0ueGhrX for <buildroot@lists.busybox.net>;
- Tue, 21 Sep 2021 19:17:03 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 506B160792
- for <buildroot@buildroot.org>; Tue, 21 Sep 2021 19:17:02 +0000 (UTC)
-Received: (Authenticated sender: peter@casa-korsgaard.com)
- by relay11.mail.gandi.net (Postfix) with ESMTPSA id EE313100008;
- Tue, 21 Sep 2021 19:16:58 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
- (envelope-from <peko@dell.be.48ers.dk>)
- id 1mSlGD-0006i9-6A; Tue, 21 Sep 2021 21:16:57 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Tue, 21 Sep 2021 21:16:50 +0200
-Message-Id: <20210921191651.25744-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.20.1
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4qiZP4kWmc1I for <buildroot@lists.busybox.net>;
+ Tue, 21 Sep 2021 19:17:26 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com
+ [IPv6:2a00:1450:4864:20::52f])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id F2434400CF
+ for <buildroot@buildroot.org>; Tue, 21 Sep 2021 19:17:25 +0000 (UTC)
+Received: by mail-ed1-x52f.google.com with SMTP id c21so673937edj.0
+ for <buildroot@buildroot.org>; Tue, 21 Sep 2021 12:17:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=Hjf5blSb+2kmiuPMJ2uYJ4ptmcefKNCPKft/XgUDCzw=;
+ b=CxW+wRWwKabcE6TYYqfh7nY83CXBlAwq1puBlvKCZjjxqbWjd6LmpEJwWJYAwJL9wP
+ rUjMc9RlO1iGn/KAOo8hsZkmQhftgL4J6zT+f0UHE8bJ9wFtUN9LQJL2l8Z0QvSMFEln
+ EJiqkRmfLOHCtbaAn04cDza/8YoYIg0/Af+jjjIlyRMkD/hVOVarvEd7FvScEZNG03R3
+ JNW9tDWrx4ddVemHKqqnz76/yhknGUTCefcGl+kVh9vGwq1JFysOTk+beVhr2sojBDOc
+ KQlFCVGYryMag7cpk3dTqVFlvXQeX9Ew/eK/C29YCVNGFNNmspYlLpciNUOGBc1NXG3p
+ AY/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=Hjf5blSb+2kmiuPMJ2uYJ4ptmcefKNCPKft/XgUDCzw=;
+ b=TJ7saK1SljkVQuOvhX1YeyE5cRDkQi0Yg/GhDSnYhxYYmQVdR6Nb7PCAfTLx+WSNxB
+ uLi+UB/7kdIrTWqtPBbjvGEmvpmCe3olodzHcJZ3b9CCBTR9Gcetpb1/dDie1HcxOzA0
+ pqDtyT2xvvnBW+TnwTPcDfKNGxerogdgYF0RQs5YuMVKes0DuLsQyo3b7vev30YMdIgs
+ RvZm1jPruSinP/9JX37+SUpJ+Rcej2iD4WxiCdIXxpEbQMbLRo1RECsd05qsXxcGkmkR
+ 1NwTHrciM7CkZ9PMsraRuetzLT6i7cG/EUOM8iTmXipM4R8jxl7YFy/kH0fSyqQCDZJH
+ qOug==
+X-Gm-Message-State: AOAM5319743sDQ1xUq1VyrFyVvb3Ks3FHakBEZWcZ00kG45/Bfp7XA2E
+ 2LyxLdLvoa+PU9tidP1c1iZOKg==
+X-Google-Smtp-Source: ABdhPJyoWtqw8GEjq4iT3OIn2mKXlWF68AkmATi+xJT6S5TXuMXdFKbjB77IgX0trqUBeQPYHP735A==
+X-Received: by 2002:a05:6402:142e:: with SMTP id
+ c14mr19834921edx.209.1632251844237; 
+ Tue, 21 Sep 2021 12:17:24 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id s3sm8044997ejm.49.2021.09.21.12.17.23
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Tue, 21 Sep 2021 12:17:23 -0700 (PDT)
+Message-ID: <7c1a8cb8-62eb-3fef-1c5a-71268809178e@mind.be>
+Date: Tue, 21 Sep 2021 21:17:23 +0200
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/ghostscript: add upstream security
- patch for CVE-2021-3781
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.1.0
+Content-Language: en-GB
+To: Christian Stewart <christian@paral.in>, buildroot@buildroot.org
+References: <20210910104758.519291-1-christian@paral.in>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20210910104758.519291-1-christian@paral.in>
+Subject: Re: [Buildroot] [PATCH-NEXT v1 1/1] package/protobuf-c: bump to
+ version 1.4.0
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,288 +107,52 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
-Content-Type: text/plain; charset="us-ascii"
+Cc: Anisse Astier <anisse@astier.eu>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-The file access protection built into Ghostscript proved insufficient for
-the "%pipe%" PostScript device, when combined with Ghostscript's requirement
-to be able to create and control temporary files in the conventional
-temporary file directories (for example, "/tmp" or "/temp).  This exploit is
-restricted to Unix-like systems (i.e., it doesn't affect Windows).  The most
-severe claimed results are only feasible if the exploit is run as a "high
-privilege" user (root/superuser level) \u2013 a practice we would discourage
-under any circumstances.
 
-For more details, see the advisory:
-https://ghostscript.com/CVE-2021-3781.html
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...de-device-specifier-strings-in-acces.patch | 234 ++++++++++++++++++
- package/ghostscript/ghostscript.mk            |   3 +
- 2 files changed, 237 insertions(+)
- create mode 100644 package/ghostscript/0002-Bug-704342-Include-device-specifier-strings-in-acces.patch
+On 10/09/2021 12:47, Christian Stewart via buildroot wrote:
+> Signed-off-by: Christian Stewart <christian@paral.in>
 
-diff --git a/package/ghostscript/0002-Bug-704342-Include-device-specifier-strings-in-acces.patch b/package/ghostscript/0002-Bug-704342-Include-device-specifier-strings-in-acces.patch
-new file mode 100644
-index 0000000000..81436d8228
---- /dev/null
-+++ b/package/ghostscript/0002-Bug-704342-Include-device-specifier-strings-in-acces.patch
-@@ -0,0 +1,234 @@
-+From a9bd3dec9fde03327a4a2c69dad1036bf9632e20 Mon Sep 17 00:00:00 2001
-+From: Chris Liddell <chris.liddell@artifex.com>
-+Date: Tue, 7 Sep 2021 20:36:12 +0100
-+Subject: [PATCH] Bug 704342: Include device specifier strings in access
-+ validation
-+
-+for the "%pipe%", %handle%" and %printer% io devices.
-+
-+We previously validated only the part after the "%pipe%" Postscript device
-+specifier, but this proved insufficient.
-+
-+This rebuilds the original file name string, and validates it complete. The
-+slight complication for "%pipe%" is it can be reached implicitly using
-+"|" so we have to check both prefixes.
-+
-+Addresses CVE-2021-3781
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ base/gdevpipe.c | 22 +++++++++++++++-
-+ base/gp_mshdl.c | 11 +++++++-
-+ base/gp_msprn.c | 10 ++++++-
-+ base/gp_os2pr.c | 13 +++++++++-
-+ base/gslibctx.c | 69 ++++++++++---------------------------------------
-+ 5 files changed, 65 insertions(+), 60 deletions(-)
-+
-+diff --git a/base/gdevpipe.c b/base/gdevpipe.c
-+index 96d71f5d8..5bdc485be 100644
-+--- a/base/gdevpipe.c
-++++ b/base/gdevpipe.c
-+@@ -72,8 +72,28 @@ pipe_fopen(gx_io_device * iodev, const char *fname, const char *access,
-+ #else
-+     gs_lib_ctx_t *ctx = mem->gs_lib_ctx;
-+     gs_fs_list_t *fs = ctx->core->fs;
-++    /* The pipe device can be reached in two ways, explicltly with %pipe%
-++       or implicitly with "|", so we have to check for both
-++     */
-++    char f[gp_file_name_sizeof];
-++    const char *pipestr = "|";
-++    const size_t pipestrlen = strlen(pipestr);
-++    const size_t preflen = strlen(iodev->dname);
-++    const size_t nlen = strlen(fname);
-++    int code1;
-++
-++    if (preflen + nlen >= gp_file_name_sizeof)
-++        return_error(gs_error_invalidaccess);
-++
-++    memcpy(f, iodev->dname, preflen);
-++    memcpy(f + preflen, fname, nlen + 1);
-++
-++    code1 = gp_validate_path(mem, f, access);
-++
-++    memcpy(f, pipestr, pipestrlen);
-++    memcpy(f + pipestrlen, fname, nlen + 1);
-+ 
-+-    if (gp_validate_path(mem, fname, access) != 0)
-++    if (code1 != 0 && gp_validate_path(mem, f, access) != 0 )
-+         return gs_error_invalidfileaccess;
-+ 
-+     /*
-+diff --git a/base/gp_mshdl.c b/base/gp_mshdl.c
-+index 2b964ed74..8d87ceadc 100644
-+--- a/base/gp_mshdl.c
-++++ b/base/gp_mshdl.c
-+@@ -95,8 +95,17 @@ mswin_handle_fopen(gx_io_device * iodev, const char *fname, const char *access,
-+     long hfile;	/* Correct for Win32, may be wrong for Win64 */
-+     gs_lib_ctx_t *ctx = mem->gs_lib_ctx;
-+     gs_fs_list_t *fs = ctx->core->fs;
-++    char f[gp_file_name_sizeof];
-++    const size_t preflen = strlen(iodev->dname);
-++    const size_t nlen = strlen(fname);
-+ 
-+-    if (gp_validate_path(mem, fname, access) != 0)
-++    if (preflen + nlen >= gp_file_name_sizeof)
-++        return_error(gs_error_invalidaccess);
-++
-++    memcpy(f, iodev->dname, preflen);
-++    memcpy(f + preflen, fname, nlen + 1);
-++
-++    if (gp_validate_path(mem, f, access) != 0)
-+         return gs_error_invalidfileaccess;
-+ 
-+     /* First we try the open_handle method. */
-+diff --git a/base/gp_msprn.c b/base/gp_msprn.c
-+index ed4827968..746a974f7 100644
-+--- a/base/gp_msprn.c
-++++ b/base/gp_msprn.c
-+@@ -168,8 +168,16 @@ mswin_printer_fopen(gx_io_device * iodev, const char *fname, const char *access,
-+     uintptr_t *ptid = &((tid_t *)(iodev->state))->tid;
-+     gs_lib_ctx_t *ctx = mem->gs_lib_ctx;
-+     gs_fs_list_t *fs = ctx->core->fs;
-++    const size_t preflen = strlen(iodev->dname);
-++    const size_t nlen = strlen(fname);
-+ 
-+-    if (gp_validate_path(mem, fname, access) != 0)
-++    if (preflen + nlen >= gp_file_name_sizeof)
-++        return_error(gs_error_invalidaccess);
-++
-++    memcpy(pname, iodev->dname, preflen);
-++    memcpy(pname + preflen, fname, nlen + 1);
-++
-++    if (gp_validate_path(mem, pname, access) != 0)
-+         return gs_error_invalidfileaccess;
-+ 
-+     /* First we try the open_printer method. */
-+diff --git a/base/gp_os2pr.c b/base/gp_os2pr.c
-+index f852c71fc..ba54cde66 100644
-+--- a/base/gp_os2pr.c
-++++ b/base/gp_os2pr.c
-+@@ -107,9 +107,20 @@ os2_printer_fopen(gx_io_device * iodev, const char *fname, const char *access,
-+            FILE ** pfile, char *rfname, uint rnamelen)
-+ {
-+     os2_printer_t *pr = (os2_printer_t *)iodev->state;
-+-    char driver_name[256];
-++    char driver_name[gp_file_name_sizeof];
-+     gs_lib_ctx_t *ctx = mem->gs_lib_ctx;
-+     gs_fs_list_t *fs = ctx->core->fs;
-++    const size_t preflen = strlen(iodev->dname);
-++    const int size_t = strlen(fname);
-++
-++    if (preflen + nlen >= gp_file_name_sizeof)
-++        return_error(gs_error_invalidaccess);
-++
-++    memcpy(driver_name, iodev->dname, preflen);
-++    memcpy(driver_name + preflen, fname, nlen + 1);
-++
-++    if (gp_validate_path(mem, driver_name, access) != 0)
-++        return gs_error_invalidfileaccess;
-+ 
-+     /* First we try the open_printer method. */
-+     /* Note that the loop condition here ensures we don't
-+diff --git a/base/gslibctx.c b/base/gslibctx.c
-+index 6dfed6cd5..318039fad 100644
-+--- a/base/gslibctx.c
-++++ b/base/gslibctx.c
-+@@ -655,82 +655,39 @@ rewrite_percent_specifiers(char *s)
-+ int
-+ gs_add_outputfile_control_path(gs_memory_t *mem, const char *fname)
-+ {
-+-    char *fp, f[gp_file_name_sizeof];
-+-    const int pipe = 124; /* ASCII code for '|' */
-+-    const int len = strlen(fname);
-+-    int i, code;
-++    char f[gp_file_name_sizeof];
-++    int code;
-+ 
-+     /* Be sure the string copy will fit */
-+-    if (len >= gp_file_name_sizeof)
-++    if (strlen(fname) >= gp_file_name_sizeof)
-+         return gs_error_rangecheck;
-+     strcpy(f, fname);
-+-    fp = f;
-+     /* Try to rewrite any %d (or similar) in the string */
-+     rewrite_percent_specifiers(f);
-+-    for (i = 0; i < len; i++) {
-+-        if (f[i] == pipe) {
-+-           fp = &f[i + 1];
-+-           /* Because we potentially have to check file permissions at two levels
-+-              for the output file (gx_device_open_output_file and the low level
-+-              fopen API, if we're using a pipe, we have to add both the full string,
-+-              (including the '|', and just the command to which we pipe - since at
-+-              the pipe_fopen(), the leading '|' has been stripped.
-+-            */
-+-           code = gs_add_control_path(mem, gs_permit_file_writing, f);
-+-           if (code < 0)
-+-               return code;
-+-           code = gs_add_control_path(mem, gs_permit_file_control, f);
-+-           if (code < 0)
-+-               return code;
-+-           break;
-+-        }
-+-        if (!IS_WHITESPACE(f[i]))
-+-            break;
-+-    }
-+-    code = gs_add_control_path(mem, gs_permit_file_control, fp);
-++
-++    code = gs_add_control_path(mem, gs_permit_file_control, f);
-+     if (code < 0)
-+         return code;
-+-    return gs_add_control_path(mem, gs_permit_file_writing, fp);
-++    return gs_add_control_path(mem, gs_permit_file_writing, f);
-+ }
-+ 
-+ int
-+ gs_remove_outputfile_control_path(gs_memory_t *mem, const char *fname)
-+ {
-+-    char *fp, f[gp_file_name_sizeof];
-+-    const int pipe = 124; /* ASCII code for '|' */
-+-    const int len = strlen(fname);
-+-    int i, code;
-++    char f[gp_file_name_sizeof];
-++    int code;
-+ 
-+     /* Be sure the string copy will fit */
-+-    if (len >= gp_file_name_sizeof)
-++    if (strlen(fname) >= gp_file_name_sizeof)
-+         return gs_error_rangecheck;
-+     strcpy(f, fname);
-+-    fp = f;
-+     /* Try to rewrite any %d (or similar) in the string */
-+-    for (i = 0; i < len; i++) {
-+-        if (f[i] == pipe) {
-+-           fp = &f[i + 1];
-+-           /* Because we potentially have to check file permissions at two levels
-+-              for the output file (gx_device_open_output_file and the low level
-+-              fopen API, if we're using a pipe, we have to add both the full string,
-+-              (including the '|', and just the command to which we pipe - since at
-+-              the pipe_fopen(), the leading '|' has been stripped.
-+-            */
-+-           code = gs_remove_control_path(mem, gs_permit_file_writing, f);
-+-           if (code < 0)
-+-               return code;
-+-           code = gs_remove_control_path(mem, gs_permit_file_control, f);
-+-           if (code < 0)
-+-               return code;
-+-           break;
-+-        }
-+-        if (!IS_WHITESPACE(f[i]))
-+-            break;
-+-    }
-+-    code = gs_remove_control_path(mem, gs_permit_file_control, fp);
-++    rewrite_percent_specifiers(f);
-++
-++    code = gs_remove_control_path(mem, gs_permit_file_control, f);
-+     if (code < 0)
-+         return code;
-+-    return gs_remove_control_path(mem, gs_permit_file_writing, fp);
-++    return gs_remove_control_path(mem, gs_permit_file_writing, f);
-+ }
-+ 
-+ int
-+-- 
-+2.20.1
-+
-diff --git a/package/ghostscript/ghostscript.mk b/package/ghostscript/ghostscript.mk
-index 5b50c94405..ca24c61678 100644
---- a/package/ghostscript/ghostscript.mk
-+++ b/package/ghostscript/ghostscript.mk
-@@ -21,6 +21,9 @@ GHOSTSCRIPT_DEPENDENCIES = \
- 	libpng \
- 	tiff
- 
-+# 0002-Bug-704342-Include-device-specifier-strings-in-acces.patch
-+GHOSTSCRIPT_IGNORE_CVES += CVE-2021-3781
-+
- # Ghostscript includes (old) copies of several libraries, delete them.
- # Inspired by linuxfromscratch:
- # http://www.linuxfromscratch.org/blfs/view/svn/pst/gs.html
--- 
-2.20.1
+  Applied to master, thanks.
 
+  Regards,
+  Arnout
+
+> ---
+>   package/protobuf-c/protobuf-c.hash | 2 +-
+>   package/protobuf-c/protobuf-c.mk   | 2 +-
+>   2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/protobuf-c/protobuf-c.hash b/package/protobuf-c/protobuf-c.hash
+> index abc11afc58..13e1b474bc 100644
+> --- a/package/protobuf-c/protobuf-c.hash
+> +++ b/package/protobuf-c/protobuf-c.hash
+> @@ -1,3 +1,3 @@
+>   # Locally calculated
+> -sha256  8515da8b84ea36768ae69a52f9ede8d718936d6058077265b6e458cfc55f8bdb  protobuf-c-1.3.3.tar.gz
+> +sha256  1068bca1e9870e9492096f97c409cd15f10c5019c183e52ec6d53e8d18630cbf  protobuf-c-1.4.0.tar.gz
+>   sha256  20e800cad4550f4b19bb37fc9577dac21de13333ae66497c4c45ae489c35c34a  LICENSE
+> diff --git a/package/protobuf-c/protobuf-c.mk b/package/protobuf-c/protobuf-c.mk
+> index f28f5ff57f..baea4d623f 100644
+> --- a/package/protobuf-c/protobuf-c.mk
+> +++ b/package/protobuf-c/protobuf-c.mk
+> @@ -4,7 +4,7 @@
+>   #
+>   ################################################################################
+>   
+> -PROTOBUF_C_VERSION = 1.3.3
+> +PROTOBUF_C_VERSION = 1.4.0
+>   PROTOBUF_C_SITE = $(call github,protobuf-c,protobuf-c,v$(PROTOBUF_C_VERSION))
+>   PROTOBUF_C_DEPENDENCIES = host-protobuf-c
+>   HOST_PROTOBUF_C_DEPENDENCIES = host-protobuf host-pkgconf
+> 
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
