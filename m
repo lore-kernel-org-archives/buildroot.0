@@ -2,56 +2,57 @@ Return-Path: <SRS0=W/Lv=OL=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CB821C433F5
-	for <buildroot@archiver.kernel.org>; Tue, 21 Sep 2021 19:27:59 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AFA8EC433EF
+	for <buildroot@archiver.kernel.org>; Tue, 21 Sep 2021 19:28:11 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9673461050
-	for <buildroot@archiver.kernel.org>; Tue, 21 Sep 2021 19:27:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9673461050
+	by mail.kernel.org (Postfix) with ESMTPS id 72B6B61050
+	for <buildroot@archiver.kernel.org>; Tue, 21 Sep 2021 19:28:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 72B6B61050
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 732E061395;
-	Tue, 21 Sep 2021 19:27:59 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NZ07UjfBXpdP; Tue, 21 Sep 2021 19:27:58 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A920961396;
-	Tue, 21 Sep 2021 19:27:57 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 19D891BF578
- for <buildroot@lists.busybox.net>; Tue, 21 Sep 2021 19:26:47 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 99E998330B
- for <buildroot@lists.busybox.net>; Tue, 21 Sep 2021 19:26:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4593581846;
+	Tue, 21 Sep 2021 19:28:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fZZwk_SQ5mqz for <buildroot@lists.busybox.net>;
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id zQf-wuOlhIiA; Tue, 21 Sep 2021 19:28:10 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6F49283E66;
+	Tue, 21 Sep 2021 19:28:09 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 22E251BF995
+ for <buildroot@lists.busybox.net>; Tue, 21 Sep 2021 19:26:47 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1FFD340662
+ for <buildroot@lists.busybox.net>; Tue, 21 Sep 2021 19:26:47 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kvl5s5ACKpp8 for <buildroot@lists.busybox.net>;
  Tue, 21 Sep 2021 19:26:44 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id E3B778332A
+ by smtp4.osuosl.org (Postfix) with ESMTP id A556A40653
  for <buildroot@buildroot.org>; Tue, 21 Sep 2021 19:26:44 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 222C48C071; Tue, 21 Sep 2021 19:24:43 +0000 (UTC)
+ id D3FFA8C071; Tue, 21 Sep 2021 19:24:42 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Tue, 21 Sep 2021 21:16:17 +0200
+Date: Tue, 21 Sep 2021 20:59:02 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 69555543db7c3136d617547bd311eca091253598
-X-Git-Newrev: 9c87fada02d336383d144292bd6bea66f4c73ee6
+X-Git-Oldrev: 279167ee8dc37b1c41ff9076d6769c950d5a33f1
+X-Git-Newrev: 7b5a13eb3d393c7aa3e443219d6eeae65ffe1794
 X-Patchwork-Hint: ignore
-Message-Id: <20210921192443.222C48C071@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/protobuf-c: bump to version 1.4.0
+Message-Id: <20210921192442.D3FFA8C071@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/mono: fix external libatomic_ops
+ linkage
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,38 +71,88 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9c87fada02d336383d144292bd6bea66f4c73ee6
+commit: https://git.buildroot.net/buildroot/commit/?id=7b5a13eb3d393c7aa3e443219d6eeae65ffe1794
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Christian Stewart <christian@paral.in>
+Added patch fixes linkage of libgc with external libtomic-ops.
+Mono uses bundeled bdwgc which doesn't link external libatomic-ops.
+Patch is a fix cherry-picked from bdwgc upstream.
+
+Problem found on ARMv5 processors, on newer ARM processors
+it uses header based functions and doesn't need built library.
+
+Error:
+/home/buildroot/autobuild/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/9.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: ../../external/bdwgc/.libs/libgc.a(gc.o): in function `GC_steal_mark_stack':
+gc.c:(.text+0x2020): undefined reference to `AO_store_full_emulation'
+
+Fixes:
+http://autobuild.buildroot.net/results/ebc54e5dea63aca21a4072d294fdede41de559c7
+http://autobuild.buildroot.net/results/6d10a4bd43fbc9c1d3fa26d5eef394c8023cb85f
+
+Signed-off-by: Illia Bitkov <illia.bitkov@mind.be>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/protobuf-c/protobuf-c.hash | 2 +-
- package/protobuf-c/protobuf-c.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...ith-a-system-libatomic_ops-shared-library.patch | 52 ++++++++++++++++++++++
+ 1 file changed, 52 insertions(+)
 
-diff --git a/package/protobuf-c/protobuf-c.hash b/package/protobuf-c/protobuf-c.hash
-index abc11afc58..13e1b474bc 100644
---- a/package/protobuf-c/protobuf-c.hash
-+++ b/package/protobuf-c/protobuf-c.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  8515da8b84ea36768ae69a52f9ede8d718936d6058077265b6e458cfc55f8bdb  protobuf-c-1.3.3.tar.gz
-+sha256  1068bca1e9870e9492096f97c409cd15f10c5019c183e52ec6d53e8d18630cbf  protobuf-c-1.4.0.tar.gz
- sha256  20e800cad4550f4b19bb37fc9577dac21de13333ae66497c4c45ae489c35c34a  LICENSE
-diff --git a/package/protobuf-c/protobuf-c.mk b/package/protobuf-c/protobuf-c.mk
-index f28f5ff57f..baea4d623f 100644
---- a/package/protobuf-c/protobuf-c.mk
-+++ b/package/protobuf-c/protobuf-c.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PROTOBUF_C_VERSION = 1.3.3
-+PROTOBUF_C_VERSION = 1.4.0
- PROTOBUF_C_SITE = $(call github,protobuf-c,protobuf-c,v$(PROTOBUF_C_VERSION))
- PROTOBUF_C_DEPENDENCIES = host-protobuf-c
- HOST_PROTOBUF_C_DEPENDENCIES = host-protobuf host-pkgconf
+diff --git a/package/mono/0001-Fix-linkage-with-a-system-libatomic_ops-shared-library.patch b/package/mono/0001-Fix-linkage-with-a-system-libatomic_ops-shared-library.patch
+new file mode 100644
+index 0000000000..66d4d8e100
+--- /dev/null
++++ b/package/mono/0001-Fix-linkage-with-a-system-libatomic_ops-shared-library.patch
+@@ -0,0 +1,52 @@
++From 02a44ee1df8176c72e75fd706d1a8f063d3196d5 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Mon, 5 Nov 2018 22:50:40 +0100
++Subject: Fix linkage with a system libatomic_ops shared library
++
++Issue #247 (bdwgc).
++
++When bdwgc is linked with the external libatomic_ops, bdw-gc.pc must
++contain the needed dynamic libraries (such as -latomic_ops) otherwise
++build of applications could fail on the link stage on some hosts:
++* libgc.so: undefined reference to 'AO_fetch_compare_and_swap_emulation'
++* libgc.so: undefined reference to 'AO_store_full_emulation'
++
++So, this commit sets ATOMIC_OPS_LIBS to "-latomic_ops" when a system
++atomic_ops library is used and uses ATOMIC_OPS_LIBS in bdw-gc.pc.in.
++
++* bdw-gc.pc.in (Libs): Add @ATOMIC_OPS_LIBS@.
++* configure.ac [$with_libatomic_ops!=no && $with_libatomic_ops!=none
++&& $THREADS!=none] (ATOMIC_OPS_LIBS): Set to -latomic_ops; do AC_SUBST.
++
++Fix is cherry-picked from bdwgc upstream
++
++Link to original commit https://github.com/ivmai/bdwgc/commit/02a44ee1df8176c72e75fd706d1a8f063d3196d5?branch=02a44ee1df8176c72e75fd706d1a8f063d3196d5&diff=unified  
++
++Signed-off-by: Illia Bitkov <illia.bitkov@mind.be>
++
++diff --git a/external/bdwgc/bdw-gc.pc.in b/external/bdwgc/bdw-gc.pc.in
++index ef4c2341..a32e7598 100644
++--- a/external/bdwgc/bdw-gc.pc.in
+++++ b/external/bdwgc/bdw-gc.pc.in
++@@ -6,5 +6,5 @@ includedir=@includedir@
++ Name: Boehm-Demers-Weiser Conservative Garbage Collector
++ Description: A garbage collector for C and C++
++ Version: @PACKAGE_VERSION@
++-Libs: -L${libdir} -lgc
+++Libs: -L${libdir} @ATOMIC_OPS_LIBS@ -lgc
++ Cflags: -I${includedir}
++diff --git a/external/bdwgc/configure.ac b/external/bdwgc/configure.ac
++index 21abe8fa..9ffe81de 100644
++--- a/external/bdwgc/configure.ac
+++++ b/external/bdwgc/configure.ac
++@@ -1081,7 +1081,9 @@ AS_IF([test x"$with_libatomic_ops" = xno \
++ AC_MSG_CHECKING([which libatomic_ops to use])
++ AS_IF([test x"$with_libatomic_ops" != xno],
++   [ AS_IF([test x"$with_libatomic_ops" != xnone -a x"$THREADS" != xnone],
++-          [ AC_MSG_RESULT([external]) ],
+++          [ AC_MSG_RESULT([external])
+++            ATOMIC_OPS_LIBS="-latomic_ops"
+++            AC_SUBST([ATOMIC_OPS_LIBS]) ],
++           [ AC_MSG_RESULT([none])
++             AS_IF([test x"$THREADS" != xnone],
++                   [ AC_DEFINE([GC_BUILTIN_ATOMIC], [1],
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
