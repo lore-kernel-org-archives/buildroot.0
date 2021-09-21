@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CD5A5C433F5
-	for <buildroot@archiver.kernel.org>; Tue, 21 Sep 2021 20:46:39 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A61CBC433F5
+	for <buildroot@archiver.kernel.org>; Tue, 21 Sep 2021 20:46:51 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 7C1A160FC1
-	for <buildroot@archiver.kernel.org>; Tue, 21 Sep 2021 20:46:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7C1A160FC1
+	by mail.kernel.org (Postfix) with ESMTPS id 52CEB60FC1
+	for <buildroot@archiver.kernel.org>; Tue, 21 Sep 2021 20:46:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 52CEB60FC1
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 978634042B;
-	Tue, 21 Sep 2021 20:46:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1E17283E7A;
+	Tue, 21 Sep 2021 20:46:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id A_Tr_xVnLuGp; Tue, 21 Sep 2021 20:46:37 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id gmcoNSeS2MPx; Tue, 21 Sep 2021 20:46:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 95E3E401B0;
-	Tue, 21 Sep 2021 20:46:36 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E701E1BF995
- for <buildroot@lists.busybox.net>; Tue, 21 Sep 2021 20:46:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6A8DA83E4A;
+	Tue, 21 Sep 2021 20:46:49 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 757B71BF47E
+ for <buildroot@lists.busybox.net>; Tue, 21 Sep 2021 20:46:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D4CCB400CF
- for <buildroot@lists.busybox.net>; Tue, 21 Sep 2021 20:46:22 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 63C1783E4B
+ for <buildroot@lists.busybox.net>; Tue, 21 Sep 2021 20:46:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id K8dY81h5-7ek for <buildroot@lists.busybox.net>;
- Tue, 21 Sep 2021 20:46:21 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id S6_iQLiJKqaW for <buildroot@lists.busybox.net>;
+ Tue, 21 Sep 2021 20:46:22 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id DEB0B400E9
+ by smtp1.osuosl.org (Postfix) with ESMTP id 038A283E4A
  for <buildroot@buildroot.org>; Tue, 21 Sep 2021 20:46:21 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id EDD558C981; Tue, 21 Sep 2021 20:44:19 +0000 (UTC)
+ id 1613A8C981; Tue, 21 Sep 2021 20:44:20 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Tue, 21 Sep 2021 22:39:11 +0200
+Date: Tue, 21 Sep 2021 22:44:02 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 521b6f85508ee9ab848b0b2ea1d36edaf1701bc1
-X-Git-Newrev: ddad938149e80d14ab2c7695ac3ba7e7de6c327b
+X-Git-Oldrev: e1ee121caee78380722f9cc0fae6b77ddacdaafc
+X-Git-Newrev: f0e204d99b1830cec4426ab28089777cb4ddedb8
 X-Patchwork-Hint: ignore
-Message-Id: <20210921204419.EDD558C981@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/pipewire: add option to enable
- media-session support
+Message-Id: <20210921204420.1613A8C981@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] toolchain/helpers.mk: gdbinit: set
+ auto-load-safe-path before sysroot
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,60 +71,67 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ddad938149e80d14ab2c7695ac3ba7e7de6c327b
+commit: https://git.buildroot.net/buildroot/commit/?id=f0e204d99b1830cec4426ab28089777cb4ddedb8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The example media-session pipewire session manager requires
-pipewire to be built with examples enabled, add support for
-enabling this while depending on examples being enabled.
+The gdbinit supplied by Buildroot does two things:
+A. specify the sysroot where gdb can find shared libraries
+B. mark the sysroot as a 'safe path' for its auto-load feature, to make sure
+  that pretty printers for libstdc++.so are added automatically (see commit
+  6fb3216a80c64c08375429d89497eaeec5622150)
 
-To simplify adding support for additional session managers in
-the future such as wireplumber we pass a comma separated list
-to the -Dsession-managers meson config option. This also will
-ensure that systemd services that depend on media-session are
-only installed if media-session support is enabled.
+When debugging a core file, and the gdbinit file is specified via '-x'
+rather than '-ix', then the order of these settings matters: If you first
+set the sysroot, then gdb will immediately start finding the shared
+libraries it needs for the core file, detect libstdc++ and its associated
+libstdc++-gdb.py file, then give a big warning about safe paths:
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+  warning: File ".../i686-buildroot-linux-gnu/sysroot/lib/libstdc++.so.6.0.24-gdb.py"
+          auto-loading has been declined by your `auto-load safe-path' set
+          to "$debugdir:$datadir/auto-load".
+  To enable execution of this file add
+          add-auto-load-safe-path .../i686-buildroot-linux-gnu/sysroot/lib/libstdc++.so.6.0.24-gdb.py
+  line to your configuration file "/home/me/.gdbinit".
+  To completely disable this security protection add
+          set auto-load safe-path /
+  line to your configuration file "/home/me/.gdbinit".
+  For more information about this security protection see the
+  "Auto-loading safe path" section in the GDB manual.  E.g., run from the shell:
+          info "(gdb)Auto-loading safe path"
+
+and the pretty printing code is not loaded. This is because the second
+line from the gdbinit file was not yet parsed at this point.
+
+By changing the order (first configuring the safe path, then setting the
+sysroot), this issue does not appear and everything is as expected.
+
+Note that when '-ix' were used instead of '-x' to pass the gdbinit file to
+gdb, then the order would not matter, because the entire gdbinit file would
+be parsed before considering the core file.
+However, even though the Buildroot manual now suggests '-ix', users may not
+have noticed this change and continue to use '-x'.
+
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/pipewire/Config.in   | 6 ++++++
- package/pipewire/pipewire.mk | 6 ++++++
- 2 files changed, 12 insertions(+)
+ toolchain/helpers.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/pipewire/Config.in b/package/pipewire/Config.in
-index b15bbfa8d3..506b85e856 100644
---- a/package/pipewire/Config.in
-+++ b/package/pipewire/Config.in
-@@ -19,6 +19,12 @@ config BR2_PACKAGE_PIPEWIRE_EXAMPLES
- 	help
- 	  Build pipewire examples
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 1dfb52ac38..ef8e9a5f64 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -481,8 +481,8 @@ check_toolchain_ssp = \
+ #
+ gen_gdbinit_file = \
+ 	mkdir -p $(STAGING_DIR)/usr/share/buildroot/ ; \
+-	echo "set sysroot $(STAGING_DIR)" > $(STAGING_DIR)/usr/share/buildroot/gdbinit ; \
+-	echo "add-auto-load-safe-path $(STAGING_DIR)" >> $(STAGING_DIR)/usr/share/buildroot/gdbinit
++	echo "add-auto-load-safe-path $(STAGING_DIR)" > $(STAGING_DIR)/usr/share/buildroot/gdbinit ; \
++	echo "set sysroot $(STAGING_DIR)" >> $(STAGING_DIR)/usr/share/buildroot/gdbinit
  
-+config BR2_PACKAGE_PIPEWIRE_MEDIA_SESSION
-+	bool "pipewire media-session"
-+	depends on BR2_PACKAGE_PIPEWIRE_EXAMPLES
-+	help
-+	  Build pipewire media-session support
-+
- config BR2_PACKAGE_PIPEWIRE_GSTREAMER
- 	bool "pipewire gstreamer plugins"
- 	depends on BR2_USE_WCHAR # libglib2
-diff --git a/package/pipewire/pipewire.mk b/package/pipewire/pipewire.mk
-index d088710827..d6cbe1605f 100644
---- a/package/pipewire/pipewire.mk
-+++ b/package/pipewire/pipewire.mk
-@@ -156,6 +156,12 @@ else
- PIPEWIRE_CONF_OPTS += -Decho-cancel-webrtc=disabled
- endif
- 
-+ifeq ($(BR2_PACKAGE_PIPEWIRE_MEDIA_SESSION),y)
-+PIPEWIRE_SESSION_MANAGERS_LIST = media-session
-+endif
-+
-+PIPEWIRE_CONF_OPTS += -Dsession-managers='$(subst $(space),$(comma),$(PIPEWIRE_SESSION_MANAGERS_LIST))'
-+
- define PIPEWIRE_USERS
- 	pipewire -1 pipewire -1 * - - - PipeWire System Daemon
- endef
+ # Given a path, determine the relative prefix (../) needed to return to the
+ # root level. Note that the last component is treated as a file component; use a
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
