@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 913A7C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 21 Sep 2021 19:29:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5EA06C433FE
+	for <buildroot@archiver.kernel.org>; Tue, 21 Sep 2021 19:29:12 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 6085061166
-	for <buildroot@archiver.kernel.org>; Tue, 21 Sep 2021 19:29:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6085061166
+	by mail.kernel.org (Postfix) with ESMTPS id 2F1B561050
+	for <buildroot@archiver.kernel.org>; Tue, 21 Sep 2021 19:29:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2F1B561050
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 315C3610D8;
-	Tue, 21 Sep 2021 19:29:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0981161397;
+	Tue, 21 Sep 2021 19:29:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id x_5kuAnC0r2Y; Tue, 21 Sep 2021 19:28:59 +0000 (UTC)
+	with ESMTP id UOK3NGywibMH; Tue, 21 Sep 2021 19:29:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8C04F6082A;
-	Tue, 21 Sep 2021 19:28:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5B41461392;
+	Tue, 21 Sep 2021 19:29:10 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A77A21BF578
- for <buildroot@lists.busybox.net>; Tue, 21 Sep 2021 19:26:49 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B792B1BF578
+ for <buildroot@lists.busybox.net>; Tue, 21 Sep 2021 19:26:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0756583508
- for <buildroot@lists.busybox.net>; Tue, 21 Sep 2021 19:26:46 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 33F5681846
+ for <buildroot@lists.busybox.net>; Tue, 21 Sep 2021 19:26:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HeUtK6HoEt69 for <buildroot@lists.busybox.net>;
+ with ESMTP id Z_Y2TZtEoJ3m for <buildroot@lists.busybox.net>;
  Tue, 21 Sep 2021 19:26:45 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1ECB583E3B
- for <buildroot@buildroot.org>; Tue, 21 Sep 2021 19:26:45 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 01D50834B9
+ for <buildroot@buildroot.org>; Tue, 21 Sep 2021 19:26:44 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 51FCF8C071; Tue, 21 Sep 2021 19:24:43 +0000 (UTC)
+ id 36A908C071; Tue, 21 Sep 2021 19:24:43 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Tue, 21 Sep 2021 21:19:00 +0200
+Date: Tue, 21 Sep 2021 21:17:57 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7471b13ebd0e169d0d9ad0ef616126b82313f4f5
-X-Git-Newrev: 791938d1dcde4a4e32b301ad6aa484dc82b41a68
+X-Git-Oldrev: 51b41b4908251d2375f8a65a99b648002e7475f2
+X-Git-Newrev: db201b65e68e3ea3f09fcb1621c5b723a44dc772
 X-Patchwork-Hint: ignore
-Message-Id: <20210921192443.51FCF8C071@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pluggy: bump to version
- 1.0.0
+Message-Id: <20210921192443.36A908C071@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-bleak: bump to version
+ 0.12.1
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,44 +71,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=791938d1dcde4a4e32b301ad6aa484dc82b41a68
+commit: https://git.buildroot.net/buildroot/commit/?id=db201b65e68e3ea3f09fcb1621c5b723a44dc772
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/python-pluggy/python-pluggy.hash | 4 ++--
- package/python-pluggy/python-pluggy.mk   | 4 ++--
+ package/python-bleak/python-bleak.hash | 4 ++--
+ package/python-bleak/python-bleak.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pluggy/python-pluggy.hash b/package/python-pluggy/python-pluggy.hash
-index 24e207bfad..39f172a82b 100644
---- a/package/python-pluggy/python-pluggy.hash
-+++ b/package/python-pluggy/python-pluggy.hash
+diff --git a/package/python-bleak/python-bleak.hash b/package/python-bleak/python-bleak.hash
+index 9931bce202..5acac877c9 100644
+--- a/package/python-bleak/python-bleak.hash
++++ b/package/python-bleak/python-bleak.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pluggy/json
--md5  7f610e28b8b34487336b585a3dfb803d  pluggy-0.13.1.tar.gz
--sha256  15b2acde666561e1298d71b523007ed7364de07029219b604cf808bfa1c765b0  pluggy-0.13.1.tar.gz
-+md5  daa6fddfb6cd364f3c82e52098911e4b  pluggy-1.0.0.tar.gz
-+sha256  4224373bacce55f955a878bf9cfa763c1e360858e330072059e10bad68531159  pluggy-1.0.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/bleak/json
+-md5  f15b43e4a6380eadb96b4235385c2ba1  bleak-0.11.0.tar.gz
+-sha256  7796a6188547cf77f668406e6513d5d23316c508ca929882ed429d90c7a745ff  bleak-0.11.0.tar.gz
++md5  0c26b270358a782767012220fc595aa5  bleak-0.12.1.tar.gz
++sha256  4a80a24cc944e52e856054639f298229c39a2fc720e5f7adbeebb117d10849ed  bleak-0.12.1.tar.gz
  # Locally computed sha256 checksums
- sha256  d6b65e6c213a5d0b577911d34d6e5949b9f59d76c238c5071a2f3fc16cfb2606  LICENSE
-diff --git a/package/python-pluggy/python-pluggy.mk b/package/python-pluggy/python-pluggy.mk
-index 03cdecf4b9..59382518ed 100644
---- a/package/python-pluggy/python-pluggy.mk
-+++ b/package/python-pluggy/python-pluggy.mk
+ sha256  c4029a2b63b3824ab68be841f414addbdde20cb79cdbe272fa80c0b2abe65374  LICENSE
+diff --git a/package/python-bleak/python-bleak.mk b/package/python-bleak/python-bleak.mk
+index 870bfce10f..3ae6d90311 100644
+--- a/package/python-bleak/python-bleak.mk
++++ b/package/python-bleak/python-bleak.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PLUGGY_VERSION = 0.13.1
-+PYTHON_PLUGGY_VERSION = 1.0.0
- PYTHON_PLUGGY_SOURCE = pluggy-$(PYTHON_PLUGGY_VERSION).tar.gz
--PYTHON_PLUGGY_SITE = https://files.pythonhosted.org/packages/f8/04/7a8542bed4b16a65c2714bf76cf5a0b026157da7f75e87cc88774aa10b14
-+PYTHON_PLUGGY_SITE = https://files.pythonhosted.org/packages/a1/16/db2d7de3474b6e37cbb9c008965ee63835bba517e22cdb8c35b5116b5ce1
- PYTHON_PLUGGY_SETUP_TYPE = setuptools
- PYTHON_PLUGGY_LICENSE = MIT
- PYTHON_PLUGGY_LICENSE_FILES = LICENSE
+-PYTHON_BLEAK_VERSION = 0.11.0
++PYTHON_BLEAK_VERSION = 0.12.1
+ PYTHON_BLEAK_SOURCE = bleak-$(PYTHON_BLEAK_VERSION).tar.gz
+-PYTHON_BLEAK_SITE = https://files.pythonhosted.org/packages/7c/f3/817132098d57f5717f7f7dc46357e4ca2647c9addaf8e571382d12a28546
++PYTHON_BLEAK_SITE = https://files.pythonhosted.org/packages/67/4b/ba00c69a24a8d08c86f02caa45727a2ad2844c7bee9630ccb063be226f71
+ PYTHON_BLEAK_SETUP_TYPE = setuptools
+ PYTHON_BLEAK_LICENSE = MIT
+ PYTHON_BLEAK_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
