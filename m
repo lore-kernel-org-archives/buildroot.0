@@ -2,79 +2,61 @@ Return-Path: <SRS0=W/Lv=OL=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,HTML_MESSAGE,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 76604C433F5
-	for <buildroot@archiver.kernel.org>; Tue, 21 Sep 2021 06:29:57 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3CF86C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 21 Sep 2021 07:12:58 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id DCE1B6115A
-	for <buildroot@archiver.kernel.org>; Tue, 21 Sep 2021 06:29:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org DCE1B6115A
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=unikie.com
+	by mail.kernel.org (Postfix) with ESMTPS id A983E6115B
+	for <buildroot@archiver.kernel.org>; Tue, 21 Sep 2021 07:12:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A983E6115B
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8191C605B1;
-	Tue, 21 Sep 2021 06:29:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 54FFE82F98;
+	Tue, 21 Sep 2021 07:12:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 96LSNGoy6EX6; Tue, 21 Sep 2021 06:29:55 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9AAAE60658;
-	Tue, 21 Sep 2021 06:29:54 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A84AE1BF281
- for <buildroot@lists.busybox.net>; Tue, 21 Sep 2021 06:29:52 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A4EB282EBA
- for <buildroot@lists.busybox.net>; Tue, 21 Sep 2021 06:29:52 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=unikie-com.20210112.gappssmtp.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id abUHhs2Tn1-I for <buildroot@lists.busybox.net>;
- Tue, 21 Sep 2021 06:29:51 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com
- [IPv6:2a00:1450:4864:20::52c])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2D2F4829AF
- for <buildroot@buildroot.org>; Tue, 21 Sep 2021 06:29:51 +0000 (UTC)
-Received: by mail-ed1-x52c.google.com with SMTP id c21so69720530edj.0
- for <buildroot@buildroot.org>; Mon, 20 Sep 2021 23:29:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=unikie-com.20210112.gappssmtp.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=IL9jZwDPurxpKZJ89C2dlAGZ0UPKjtQ5BuvLDn3vsfM=;
- b=FIupzrHMyvKJ3VNivIdEbFCmiPQP3IAPl4Q04hG0lLcvaGCWCgviFMKFG6de6au8Cg
- 9+W9akqKxyzHkzyY9KGTLBe9LhS0SZxD2gg1K3KdKhXAQ5heFq3oz+DKfhxetrs7DTI5
- 1ZaLr3t43VhxCYdRaQObCmRFPZXxNGyiGSLkk0LpPMv5k3C1PZTAY+NCcFOm9tfISpjY
- 6/aDy8gsg17Mgx+a+3Lz7YFc+PtlBfiSQ0F0jlFQNo0CFZz1m+Zge1sL6NFORisUosaM
- 2qIQR4nqBr5iKL5EgoolB2H0a8rxgpfL0/M1XkY3YowJL6F3bb3J0M6m8o3ane3/62Ce
- Pmfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=IL9jZwDPurxpKZJ89C2dlAGZ0UPKjtQ5BuvLDn3vsfM=;
- b=VZm8xT5NSx2+tlrZWMWP+mzmwLX6JFfcsa6nJZJUGyqSsRtzjbRwA/ydJ2vF6XNIG5
- eBWhdMKt/O+9Bzw0HP8RCTE9fJK/wFFaFySbG49Ii/CsMmshxcZdczW32pLEESbAEmIi
- 0+DzddG6UCtz8hVtBwB/CDh0Hj7WQZv1Dc5WLPsAw28HmELgy70Jba7+Z7FMYooXIqnR
- /DHd7C3e0FxKOLWIu/OZOwA73IronFwhSWoovTHv4U1LmePnxGdIsuVO3YeXXw9pKTKh
- S3+3yh4Hqk62IXqO2YqQqAGjGdW55pl4OvXKK6ykdUDnPzJDI3l7HbYZCuO0MqNkU2pX
- AMag==
-X-Gm-Message-State: AOAM532jT/NNEqu+bSynaXtqibsO3/9tNVcAuZhr5I+il+2PSGf7CKkq
- DDwDBOo5varDj5jkIJMFlOxBv+vhoX9S8s88e31+nQ==
-X-Google-Smtp-Source: ABdhPJz35QNAN/jqfmkvANw4QDt5ybRCNqkdEUv/PqqG9J2idWCWsN3lpBv6e4H3/2VJ+elbuiOvuNbarp/ijrGEeyk=
-X-Received: by 2002:a17:907:2bdb:: with SMTP id
- gv27mr32257051ejc.483.1632205789236; 
- Mon, 20 Sep 2021 23:29:49 -0700 (PDT)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id TtulHyGy2E4H; Tue, 21 Sep 2021 07:12:56 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id B382282F87;
+	Tue, 21 Sep 2021 07:12:55 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 8F5531BF2CB
+ for <buildroot@lists.busybox.net>; Tue, 21 Sep 2021 07:12:54 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 833A840114
+ for <buildroot@lists.busybox.net>; Tue, 21 Sep 2021 07:12:54 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=kernel.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id cD3fsEE2rj0Y for <buildroot@lists.busybox.net>;
+ Tue, 21 Sep 2021 07:12:50 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E3509400C9
+ for <buildroot@buildroot.org>; Tue, 21 Sep 2021 07:12:50 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7FA32611C5;
+ Tue, 21 Sep 2021 07:12:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+ s=k20201202; t=1632208370;
+ bh=DXJ3dlD9PqoSHDI6yUahC/H31G6OTz8Xqh1csKxyMLY=;
+ h=In-Reply-To:References:Subject:Cc:To:From:Date:From;
+ b=dqrdN3hQYMh4/qN5Vzyhz0ZnWU1QTmhHXFbWL/ZhyN+PowT93kLO5N65eT33wg7ii
+ QqXsd1pg5mB7DJUlcdnyDkQ+Q5nAd2g3ZlPOTTfPdVc+fJjireyII78PwkcRW5g8EV
+ l6MSNPvNcfG55UtvRbEZqlWvTXOtpD0GNwCWIDiEqKpGWe3QgJW5JmP2ShmcJ2F76o
+ 6UoGe9rLIoYdq/Yi/z733NW4uqwYhWRpuptt8FxwEqhULPJTI94QTkkOUhpirSQn7P
+ 5b+6X83KuA/WYZ7Dc3pWwwWrk9D6xbRpTfstuQu0Go4XxRpyp4jowaSzlXTohGaC8k
+ /p1sRLC5O+UzA==
 MIME-Version: 1.0
+In-Reply-To: <CAJPV9MqsdZa5oCYSE-+ZsNi4w1w8CWVeUPd4CohXddt5pcr7zQ@mail.gmail.com>
 References: <20210830114531.2285178-1-jose.pekkarinen@unikie.com>
  <163189935709.536094.10717640766848618610@kwain>
  <CAJPV9MrYNwrrZ34-JgRPO62Y_6yT0HZ564YuB_qFKYdsRo7nXQ@mail.gmail.com>
@@ -83,11 +65,11 @@ References: <20210830114531.2285178-1-jose.pekkarinen@unikie.com>
  <163214406368.4283.14394760824414034461@kwain>
  <CAJPV9MrgZcVw3cmO1+w_zn6M2yub+nCZ73H_YJ0g=OTpuu1MeA@mail.gmail.com>
  <163214596519.4283.5229631383777844599@kwain>
-In-Reply-To: <163214596519.4283.5229631383777844599@kwain>
-From: =?UTF-8?Q?Jos=C3=A9_Pekkarinen?= <jose.pekkarinen@unikie.com>
-Date: Tue, 21 Sep 2021 09:29:38 +0300
-Message-ID: <CAJPV9MqsdZa5oCYSE-+ZsNi4w1w8CWVeUPd4CohXddt5pcr7zQ@mail.gmail.com>
-To: Antoine Tenart <atenart@kernel.org>
+ <CAJPV9MqsdZa5oCYSE-+ZsNi4w1w8CWVeUPd4CohXddt5pcr7zQ@mail.gmail.com>
+To: José Pekkarinen <jose.pekkarinen@unikie.com>
+From: Antoine Tenart <atenart@kernel.org>
+Message-ID: <163220836697.4283.6363157164675068449@kwain>
+Date: Tue, 21 Sep 2021 09:12:46 +0200
 Subject: Re: [Buildroot] [PATCH] package/refpolicy: Treat all modules as
  custom
 X-BeenThere: buildroot@lists.buildroot.org
@@ -103,203 +85,33 @@ List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
 Cc: buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============4959029639249346488=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
---===============4959029639249346488==
-Content-Type: multipart/alternative; boundary="00000000000044a6b605cc7b86c0"
-
---00000000000044a6b605cc7b86c0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-On Mon, Sep 20, 2021 at 4:52 PM Antoine Tenart <atenart@kernel.org> wrote:
-
-> Quoting Jos=C3=A9 Pekkarinen (2021-09-20 15:39:13)
-> >    On Mon, Sep 20, 2021 at 4:21 PM Antoine Tenart <[1]atenart@kernel.or=
-g
-> >
-> >    wrote:
-> >
-> >      The logic is the following in Buildroot for extra modules:
-> >
-> >      1. The modules are rsynced in policy/modules/buildrood/.
-> >      2. If not already there, a metadata.xml file is added.
-> >      3. The refpolicy build system is used[2] to generate modules.conf
-> using
-> >         all modules matching 'policy/modules/*/*.te'.
-> >      4. All modules in modules.conf are disabled and then only the ones
-> in
-> >         REFPOLICY_MODULES are enabled.
-> >
-> >      It looks like more of a refpolicy/module issue than a Buildroot on=
-e:
-> >      steps 1 and 2 seem to work, but not step 3. If you retrieve the
-> >      refpolicy project outside of Builroot and mimic the above steps, a=
-re
-> >      your modules listed in modules.conf? If not that might be a good
-> >      starting point. I don't have a better idea for now...
-> >
-> >    I did, and this is how modules.conf looks like when
-> >    it comes to the section of my module:
-> >    [...]
-> >    # Module: xscreensaver
-> >    #
-> >    # Modular screen saver and locker for X11.
-> >    #
-> >    xscreensaver =3D module
-> >
-> >    # Layer: buildroot
-> >    # Module: secure
-> >    #
-> >    # Layer: kernel
-> >    # Module: storage
-> >    [...]
-> >
-> >    Now, reading the INSTALL file, it says the following:
-> >    If you do not have a modules.conf, one can be generated:
-> >
-> >       make conf
-> >
-> >    This will create a default modules.conf.
-> >
-> >    This default makes me think it implies you'd need to
-> >    activate your own modules if they are there, and why I believe
-> >    buildroot would require that extra logic. refpolicy project may
-> >    stand for letting users add their own, but not taking part on
-> >    it theirselves.
->
-> Reproducing locally the modules were correctly listed and enabled.
-> However looking at the modules.conf generated on your machine, your
-> modules' documentation is included but the modules aren't enabled (as
-> modules) by default. There might be some rules in the refpolicy build
-> system that can explain such a difference.
->
-> I think the issue comes down to understanding how modules are selected
-> to be enabled by default (or not enabled), and why your modules are
-> impacted. (Then there might be something to improve in Buildroot).
->
-
-Can this be that I'm working with an out of date version of buildroot?
-
-My project was started with 2021.02 and I observe the refpolicy dates from
-August last year. I plan to start the works on fixing this, since it impact=
-s
-any sort of upstreaming.
-
-Best regards.
-
-
-Jos=C3=A9.
-
---00000000000044a6b605cc7b86c0
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div dir=3D"ltr"><br></div><br><div class=3D"gmail_quote">=
-<div dir=3D"ltr" class=3D"gmail_attr">On Mon, Sep 20, 2021 at 4:52 PM Antoi=
-ne Tenart &lt;<a href=3D"mailto:atenart@kernel.org" target=3D"_blank">atena=
-rt@kernel.org</a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote" sty=
-le=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);paddi=
-ng-left:1ex">Quoting Jos=C3=A9 Pekkarinen (2021-09-20 15:39:13)<br>
-&gt;=C2=A0 =C2=A0 On Mon, Sep 20, 2021 at 4:21 PM Antoine Tenart &lt;[1]<a =
-href=3D"mailto:atenart@kernel.org" target=3D"_blank">atenart@kernel.org</a>=
-&gt;<br>
-&gt;=C2=A0 =C2=A0 wrote:<br>
-&gt; <br>
-&gt;=C2=A0 =C2=A0 =C2=A0 The logic is the following in Buildroot for extra =
-modules:<br>
-&gt; <br>
-&gt;=C2=A0 =C2=A0 =C2=A0 1. The modules are rsynced in policy/modules/build=
-rood/.<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 2. If not already there, a metadata.xml file is ad=
-ded.<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 3. The refpolicy build system is used[2] to genera=
-te modules.conf using<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0all modules matching &#39;policy/modu=
-les/*/*.te&#39;.<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 4. All modules in modules.conf are disabled and th=
-en only the ones in<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0REFPOLICY_MODULES are enabled.<br>
-&gt; <br>
-&gt;=C2=A0 =C2=A0 =C2=A0 It looks like more of a refpolicy/module issue tha=
-n a Buildroot one:<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 steps 1 and 2 seem to work, but not step 3. If you=
- retrieve the<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 refpolicy project outside of Builroot and mimic th=
-e above steps, are<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 your modules listed in modules.conf? If not that m=
-ight be a good<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 starting point. I don&#39;t have a better idea for=
- now...<br>
-&gt; <br>
-&gt;=C2=A0 =C2=A0 I did, and this is how modules.conf looks like when<br>
-&gt;=C2=A0 =C2=A0 it comes to the section of my module:<br>
-&gt;=C2=A0 =C2=A0 [...]<br>
-&gt;=C2=A0 =C2=A0 # Module: xscreensaver<br>
-&gt;=C2=A0 =C2=A0 #<br>
-&gt;=C2=A0 =C2=A0 # Modular screen saver and locker for X11.<br>
-&gt;=C2=A0 =C2=A0 # =C2=A0<br>
-&gt;=C2=A0 =C2=A0 xscreensaver =3D module<br>
-&gt; <br>
-&gt;=C2=A0 =C2=A0 # Layer: buildroot<br>
-&gt;=C2=A0 =C2=A0 # Module: secure<br>
-&gt;=C2=A0 =C2=A0 #<br>
-&gt;=C2=A0 =C2=A0 # Layer: kernel<br>
-&gt;=C2=A0 =C2=A0 # Module: storage<br>
-&gt;=C2=A0 =C2=A0 [...]=C2=A0<br>
-&gt; <br>
-&gt;=C2=A0 =C2=A0 Now, reading the INSTALL file, it says the following:<br>
-&gt;=C2=A0 =C2=A0 If you do not have a modules.conf, one can be generated:<=
-br>
-&gt; <br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0make conf<br>
-&gt; <br>
-&gt;=C2=A0 =C2=A0 This will create a default modules.conf.<br>
-&gt; <br>
-&gt;=C2=A0 =C2=A0 This default makes me think it implies you&#39;d need to<=
-br>
-&gt;=C2=A0 =C2=A0 activate your own modules if they are there, and why I be=
-lieve<br>
-&gt;=C2=A0 =C2=A0 buildroot would require that extra logic. refpolicy proje=
-ct may<br>
-&gt;=C2=A0 =C2=A0 stand for letting users add their own, but not taking par=
-t on<br>
-&gt;=C2=A0 =C2=A0 it theirselves.<br>
-<br>
-Reproducing locally the modules were correctly listed and enabled.<br>
-However looking at the modules.conf generated on your machine, your<br>
-modules&#39; documentation is included but the modules aren&#39;t enabled (=
-as<br>
-modules) by default. There might be some rules in the refpolicy build<br>
-system that can explain such a difference.<br>
-<br>
-I think the issue comes down to understanding how modules are selected<br>
-to be enabled by default (or not enabled), and why your modules are<br>
-impacted. (Then there might be something to improve in Buildroot).<br></blo=
-ckquote><div><br></div></div><blockquote style=3D"margin:0 0 0 40px;border:=
-none;padding:0px"><div class=3D"gmail_quote"><div>Can this be that I&#39;m =
-working with an out of date version of buildroot?</div></div></blockquote>M=
-y project was started with 2021.02 and I observe the refpolicy dates from<d=
-iv>August last year. I plan to start the works on fixing this, since it imp=
-acts</div><div>any sort of upstreaming.<br><div><div><br></div></div></div>=
-<blockquote style=3D"margin:0 0 0 40px;border:none;padding:0px"><div><div><=
-div>Best regards.</div></div></div></blockquote><div><div><br><div dir=3D"l=
-tr"><div dir=3D"ltr"><blockquote style=3D"margin:0px 0px 0px 40px;border:no=
-ne;padding:0px">Jos=C3=A9.</blockquote></div></div></div></div></div>
-
---00000000000044a6b605cc7b86c0--
-
---===============4959029639249346488==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@lists.buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4959029639249346488==--
+UXVvdGluZyBKb3PDqSBQZWtrYXJpbmVuICgyMDIxLTA5LTIxIDA4OjI5OjM4KQo+ICAgIE9uIE1v
+biwgU2VwIDIwLCAyMDIxIGF0IDQ6NTIgUE0gQW50b2luZSBUZW5hcnQgPFsxXWF0ZW5hcnRAa2Vy
+bmVsLm9yZz4KPiAgICB3cm90ZToKPiAKPiAgICAgIFJlcHJvZHVjaW5nIGxvY2FsbHkgdGhlIG1v
+ZHVsZXMgd2VyZSBjb3JyZWN0bHkgbGlzdGVkIGFuZCBlbmFibGVkLgo+ICAgICAgSG93ZXZlciBs
+b29raW5nIGF0IHRoZSBtb2R1bGVzLmNvbmYgZ2VuZXJhdGVkIG9uIHlvdXIgbWFjaGluZSwgeW91
+cgo+ICAgICAgbW9kdWxlcycgZG9jdW1lbnRhdGlvbiBpcyBpbmNsdWRlZCBidXQgdGhlIG1vZHVs
+ZXMgYXJlbid0IGVuYWJsZWQgKGFzCj4gICAgICBtb2R1bGVzKSBieSBkZWZhdWx0LiBUaGVyZSBt
+aWdodCBiZSBzb21lIHJ1bGVzIGluIHRoZSByZWZwb2xpY3kgYnVpbGQKPiAgICAgIHN5c3RlbSB0
+aGF0IGNhbiBleHBsYWluIHN1Y2ggYSBkaWZmZXJlbmNlLgo+IAo+ICAgICAgSSB0aGluayB0aGUg
+aXNzdWUgY29tZXMgZG93biB0byB1bmRlcnN0YW5kaW5nIGhvdyBtb2R1bGVzIGFyZSBzZWxlY3Rl
+ZAo+ICAgICAgdG8gYmUgZW5hYmxlZCBieSBkZWZhdWx0IChvciBub3QgZW5hYmxlZCksIGFuZCB3
+aHkgeW91ciBtb2R1bGVzIGFyZQo+ICAgICAgaW1wYWN0ZWQuIChUaGVuIHRoZXJlIG1pZ2h0IGJl
+IHNvbWV0aGluZyB0byBpbXByb3ZlIGluIEJ1aWxkcm9vdCkuCj4gCj4gICAgQ2FuIHRoaXMgYmUg
+dGhhdCBJJ20gd29ya2luZyB3aXRoIGFuIG91dCBvZiBkYXRlIHZlcnNpb24gb2YgYnVpbGRyb290
+Pwo+IAo+ICAgIE15IHByb2plY3Qgd2FzIHN0YXJ0ZWQgd2l0aCAyMDIxLjAyIGFuZCBJIG9ic2Vy
+dmUgdGhlIHJlZnBvbGljeSBkYXRlcyBmcm9tCj4gICAgQXVndXN0IGxhc3QgeWVhci4gSSBwbGFu
+IHRvIHN0YXJ0IHRoZSB3b3JrcyBvbiBmaXhpbmcgdGhpcywgc2luY2UgaXQKPiAgICBpbXBhY3Rz
+IGFueSBzb3J0IG9mIHVwc3RyZWFtaW5nLgoKWW91IGNhbiB0cnkgd2l0aCBhIG5ld2VyIHZlcnNp
+b24gb2YgcmVmcG9saWN5LCBpbiBjYXNlIHRoZXkgZGlkIGZpeCBhCmJ1ZyByZWxhdGVkIHRvIHRo
+aXM7IGl0J3MgYSBnb29kIGZpcnN0IHRlc3QgdG8gbWFrZS4gQnV0IHRoZXJlIGFyZQpjaGFuY2Vz
+IHRoaXMgaXMgZHVlIHRvIGhvdyBtb2R1bGVzIGFyZSBzZWxlY3RlZCBieSBkZWZhdWx0LCB0aGVy
+ZSBtaWdodApiZSBzb21lIGV4dHJhIGxvZ2ljIHdlIGRvbid0IGtub3cgYWJvdXQuCgpUaGFua3Ms
+CkFudG9pbmUKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18K
+YnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAbGlzdHMuYnVpbGRyb290Lm9yZwpodHRw
+czovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
