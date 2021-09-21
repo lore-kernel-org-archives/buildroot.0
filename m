@@ -2,98 +2,91 @@ Return-Path: <SRS0=W/Lv=OL=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.0 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
-	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A5158C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 21 Sep 2021 20:20:43 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B8DCCC433EF
+	for <buildroot@archiver.kernel.org>; Tue, 21 Sep 2021 20:21:48 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 18E4461168
-	for <buildroot@archiver.kernel.org>; Tue, 21 Sep 2021 20:20:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 18E4461168
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id 3684C61168
+	for <buildroot@archiver.kernel.org>; Tue, 21 Sep 2021 20:21:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3684C61168
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmx.net
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B513260ECD;
-	Tue, 21 Sep 2021 20:20:42 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id EF497400CF;
+	Tue, 21 Sep 2021 20:21:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EoiG88rfoCQI; Tue, 21 Sep 2021 20:20:41 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id QJbKOGPioNS6; Tue, 21 Sep 2021 20:21:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 13D0F611D8;
-	Tue, 21 Sep 2021 20:20:41 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 132311BF47E
- for <buildroot@lists.busybox.net>; Tue, 21 Sep 2021 20:20:40 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 16DF3400E9;
+	Tue, 21 Sep 2021 20:21:46 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 513B81BF47E
+ for <buildroot@lists.busybox.net>; Tue, 21 Sep 2021 20:21:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 027B1406CE
- for <buildroot@lists.busybox.net>; Tue, 21 Sep 2021 20:20:40 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3DE50834B6
+ for <buildroot@lists.busybox.net>; Tue, 21 Sep 2021 20:21:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JcBMPpt8E2g9 for <buildroot@lists.busybox.net>;
- Tue, 21 Sep 2021 20:20:39 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
- [IPv6:2a00:1450:4864:20::434])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 09D6840661
- for <buildroot@buildroot.org>; Tue, 21 Sep 2021 20:20:38 +0000 (UTC)
-Received: by mail-wr1-x434.google.com with SMTP id u18so349352wrg.5
- for <buildroot@buildroot.org>; Tue, 21 Sep 2021 13:20:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=subject:to:cc:references:from:message-id:date:user-agent
- :mime-version:in-reply-to:content-language:content-transfer-encoding;
- bh=LBOvkHIxbn+6syiTcqLtwegMp7oEkUb7xa2VpuuYW90=;
- b=HhwEy5X0YuuzsxSV2cNEfjQQ6tQp3Q32rodhMaFxhC0Rz2sKuGvn19Ih9ha2eqJs0D
- EKGTjXo33g+QU9AvLR6fK1B891WjWC7760QeP3DWrY6m6ef8J5VK+0vrY6ki+SSugh7a
- DobEszgM+VtSxh8W8UZsete0k4wQUFR2LLqLR0ydJHZAQuvfY6Jj3HLC7lxs1fN2UIoP
- dUKJCSoVGA8SvIZhJu38AlDtEtxfvhRIE1gv/9MkNmOaGFOHm4EF8kjUCcfFI3KRHH5y
- 4nHDShgCpbwedI8+WZaVeTavtYlsp+t3AtwwVmLMdOSA6+zcvaNulaZF1EOhlqGewWxY
- l16w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:subject:to:cc:references:from:message-id:date
- :user-agent:mime-version:in-reply-to:content-language
- :content-transfer-encoding;
- bh=LBOvkHIxbn+6syiTcqLtwegMp7oEkUb7xa2VpuuYW90=;
- b=Ac9Af5Bmnub5seBCn8cMgBhtf7PW3K1kN3Cx3Cf2UvzcBSpHq/lh1I+Fk8DQ4mMM8h
- ZM2dTxpRw2WLuc6Y0RkgFVZth33epuxsJGyEwrAZbUfyvsrMKT+c9o2HY7PEWB95ivz/
- xgV6bbm330svrM2Hec9jnFurF2xi+ElUAWngG2jDWRJh4UlAwF8SUjlBeBqqvAQl3EP1
- juy6NDEk0ApnBHKFR+NC6o5tozxLGXk5M1jgMjsVTrhf9/DsgjXLb92ATbkCIm+dkVSG
- V+agyK6+B7p2mVzZXH/KOxOpPVcp724RRTBHr6BPMU7ow4H6xj4U5OMCzTucqo85/UsN
- iteQ==
-X-Gm-Message-State: AOAM5301dwkyfAN2Pd3bqnIIyviimvVBx351M8MDgfrT9IQx5Bk1F7dj
- JAMvWD4cZo4kTY9KcKQpH64=
-X-Google-Smtp-Source: ABdhPJzv/cXQnE90AO0msydghabKB0Aywz1udNuBdT3/gW3cpjp6OMMkUlwrmQvOO42zQv/RPHBFGQ==
-X-Received: by 2002:adf:ef48:: with SMTP id c8mr36644969wrp.349.1632255637184; 
- Tue, 21 Sep 2021 13:20:37 -0700 (PDT)
-Received: from ?IPv6:2a01:cb05:8f8a:1800:23a5:a748:5a4b:18cd?
- (2a01cb058f8a180023a5a7485a4b18cd.ipv6.abo.wanadoo.fr.
- [2a01:cb05:8f8a:1800:23a5:a748:5a4b:18cd])
- by smtp.gmail.com with ESMTPSA id v191sm3838551wme.36.2021.09.21.13.20.36
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 21 Sep 2021 13:20:36 -0700 (PDT)
-To: Petr Vorel <petr.vorel@gmail.com>, buildroot@buildroot.org
-References: <20210915194839.22122-1-petr.vorel@gmail.com>
- <20210915194839.22122-2-petr.vorel@gmail.com>
-From: Romain Naour <romain.naour@gmail.com>
-Message-ID: <41cb0bdf-845d-ab94-0322-c4d1393f40b8@gmail.com>
-Date: Tue, 21 Sep 2021 22:20:35 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (1024-bit key) header.d=gmx.net
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WKDhgHOONkFE for <buildroot@lists.busybox.net>;
+ Tue, 21 Sep 2021 20:21:43 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2E0C682D49
+ for <buildroot@buildroot.org>; Tue, 21 Sep 2021 20:21:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+ s=badeba3b8450; t=1632255698;
+ bh=4Zu91/x8UTMtsmtLsAk+Gq4GDYSc1XvxRNjQWuPXoIY=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+ b=INFHMIdbMQpXysZ168QhEnnrDRSRwdSa8ZayOmk9YzxkzlBUa34lwpiCkEngDsX3T
+ AO1uRvW+TmZ6IPa+//WB9euziCMbnkrU9PvhrOnf41yw4VEBocI33rXodsLRcaklyJ
+ 8k1/7Jy7R93x+tC4H1QEOsDbhoRl8sp1WGjpMkbk=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from localhost.fritz.box ([62.216.209.170]) by mail.gmx.net
+ (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
+ 1MxUrx-1mn22l1xvd-00xqDU; Tue, 21 Sep 2021 22:21:38 +0200
+From: Peter Seiderer <ps.report@gmx.net>
+To: buildroot@buildroot.org
+Date: Tue, 21 Sep 2021 22:21:33 +0200
+Message-Id: <20210921202137.7092-2-ps.report@gmx.net>
+X-Mailer: git-send-email 2.33.0
+In-Reply-To: <20210921202137.7092-1-ps.report@gmx.net>
+References: <20210921202137.7092-1-ps.report@gmx.net>
 MIME-Version: 1.0
-In-Reply-To: <20210915194839.22122-2-petr.vorel@gmail.com>
-Content-Language: en-US
-Subject: Re: [Buildroot] [PATCH v2 1/4] support: utils: use python3
- explicitly
+X-Provags-ID: V03:K1:+Ma1O6PTC66A+GSIVUACc+As8pPX1TOskGcjefSj1rcgDNGgHY0
+ NkyvDMoyyhCJeMBABU2IZfXpDohoavC6khuQRJytJs+xa11/7AY+7nxdUFS2HBIYxCDOEgG
+ UqFWZ2nM8Gk11vrgOT8gnIRAeIs5pRbrlxzfWcgKoiltdzD/yszVJtlhRAS6+eIDnjn1fUh
+ qUKZWw/BhitFT1qKJ85cg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:I13v1jANi+Q=:LWV1Vdr9qPooV/Z8lEyFhP
+ GGMpoTA1epTKLiJCLehZ1LZ6MUfo3b36IIKtuYWG4crD1pkifj3ZSY8OpXhP6QFU3WnWcaw2u
+ fD7CPgF7ooSl1J1pzFj1WsswI9ES6W0npV2+EiidO5wQLeZ+NZU1Ijj/2/OOpq1G9mAc0WCw9
+ /Pm/+C5Gohv5hcQp2Wy5fqAJ2UfUolI0UhNxI/WZApuVpN+8c8EZmGHay7lr+eASMwyQULTHh
+ 12mrmeOaP0oYAn2JP2eiWkfwp0PC5tdhLB9O/8MVjNtxRKe8a6cFL7O5n5XANmfNyX3ftRxOv
+ vQlh7XOx/CfEPWQgpNxxQKiEnDUCQZEFt9LEjFzSKM0+X+FenKJudIcwcY+spdjzS5U+W6Y44
+ KfSBeGlf5Em0SluFddL2nj3OqFCN45Oq70oQTvjHqtEnVRMRbnoZkyoZ6g5/71g90h0mD3um4
+ CZwRrcRjIM+dvvT7XzL/MMASz/oyUY4/qumKx6IC2bym4Mev009PoZnjQ18smBqP9Hajev5SJ
+ IRidXAZ/QlBPNc0Eh13sD7oTgo+RqRu3+C3PxTigw0rhCIsyAu2twytgKwilFkkORvfQPq5ll
+ Nhh218VxZrINuRid2ctfM4qyr2tM9lSRHKRSFfJ/3NWcyGwZfVqmIsA5H43Z3VBZYCCj7vWMa
+ z5jur9tZ2yOiZxmxmbGYgN30MEojDoCNCWgyFbu4pA9z0Iv022VOArX5HRoEkKpcTWZ0Os8D4
+ ZkWIrgtEVGEwW1PLR50nPCibR3+IfJCoUWvD/G9k23tZuikEzpYFsCB7QtpSP5DhuFKebT5Oz
+ jtNnwupYlmLaaq1hLRYPWcbppAuKFldwlRYa2THUFVugyq2PRsF9SZ2qO0elJ1LVxfvRpvQAB
+ EU53UFbqiTWO2f/y3IwhfHfITqoYQjrfmY5H7FB43vqp83g5c3NPGGSkx/reaRxAH1U0sTRFi
+ Y6hr2K07cvadGHh9xmU8OoVghFA8xRgp0N8ROK2PZL/ga/AaQdjREbuxHY6ydGGQ4Wvetb3AZ
+ qjCHrmKngvL/blAl74/sENF1yL7tojvoYXr68N+IfHP2qgoAE2H4nvz+5O6Ys+FEx7Vt2+myc
+ 8+n2Z9eLOCHEw0=
+Subject: [Buildroot] [PATCH v5 2/6] board/raspberrypicm4io: enable RTC and
+ USB overlays
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -106,38 +99,43 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: David Laight <David.Laight@ACULAB.COM>,
- Edgar Bonet <bonet@grenoble.cnrs.fr>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Arthur Courtel <arthur.courtel@smile.fr>,
+ Mahyar Koshkouei <mahyar.koshkouei@gmail.com>,
+ Martin Bark <martin@barkynet.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-SGVsbG8gUGV0ciwKCkxlIDE1LzA5LzIwMjEgw6AgMjE6NDgsIFBldHIgVm9yZWwgYSDDqWNyaXTC
-oDoKPiBQeXRob24gMiBpcyBFT0wgc2ljZSAyMDIwIFsxXSwgaXQncyBzdGlsbCBhdmFpbGFibGUg
-b24gZGlzdHJvcywgYnV0IG1heSBub3QKPiBiZSBpbnN0YWxsZWQgYnkgZGVmYXVsdCAoYXMgYmVp
-bmcgcmVwbGFjZWQgYnkgcHl0aG9uMykuCj4gCj4gVGh1cyByZW1vdmUgY29tcGF0aWJpbGl0eSBp
-bXBvcnRzOgo+IGZyb20gX19mdXR1cmVfXyBpbXBvcnQgcHJpbnRfZnVuY3Rpb24KPiBmcm9tIF9f
-ZnV0dXJlX18gaW1wb3J0IGFic29sdXRlX2ltcG9ydAo+IAo+IFRlc3RlZCB3aXRoIHB5dGhvbjMg
-LW0gcHlfY29tcGlsZS4KPiAKPiBbMV0gaHR0cHM6Ly93d3cucHl0aG9uLm9yZy9kb2Mvc3Vuc2V0
-LXB5dGhvbi0yLwo+IAo+IFNpZ25lZC1vZmYtYnk6IFBldHIgVm9yZWwgPHBldHIudm9yZWxAZ21h
-aWwuY29tPgo+IC0tLQoKPiBkaWZmIC0tZ2l0IGEvdXRpbHMvZ2V0LWRldmVsb3BlcnMgYi91dGls
-cy9nZXQtZGV2ZWxvcGVycwo+IGluZGV4IDkxODJiMmQ4NWYuLjIyYWNjYWYxODEgMTAwNzU1Cj4g
-LS0tIGEvdXRpbHMvZ2V0LWRldmVsb3BlcnMKPiArKysgYi91dGlscy9nZXQtZGV2ZWxvcGVycwo+
-IEBAIC0xLDQgKzEsNCBAQAo+IC0jIS91c3IvYmluL2VudiBweXRob24KPiArIyEvdXNyL2Jpbi9l
-bnYgcHl0aG9uMwo+ICAKPiAgaW1wb3J0IGFyZ3BhcnNlCj4gIGltcG9ydCBnZXRkZXZlbG9wZXJs
-aWIKClRoZXJlIGlzIG9uZSByZW1haW5pbmcgX19mdXR1cmVfXyB0byByZW1vdmU6Cgp1dGlscy9n
-ZXRkZXZlbG9wZXJsaWIucHk6ZnJvbSBfX2Z1dHVyZV9fIGltcG9ydCBwcmludF9mdW5jdGlvbgoK
-SXQgd2FzIHJlbW92ZWQgYnkgeW91ciBwYXRjaCAzLzQgYnV0IGl0IHdhcyByZWplY3RlZDoKaHR0
-cDovL3BhdGNod29yay5vemxhYnMub3JnL3Byb2plY3QvYnVpbGRyb290L3BhdGNoLzIwMjEwOTE1
-MTk0ODM5LjIyMTIyLTQtcGV0ci52b3JlbEBnbWFpbC5jb20vCgpNYXliZSBpdCBjYW4gYmUgcmVt
-b3ZlZCBkaXJlY3RseSBmcm9tIHRoaXMgcGF0Y2guCgpCZXN0IHJlZ2FyZHMsClJvbWFpbgoKCj4g
-ZGlmZiAtLWdpdCBhL3V0aWxzL3NpemUtc3RhdHMtY29tcGFyZSBiL3V0aWxzL3NpemUtc3RhdHMt
-Y29tcGFyZQo+IGluZGV4IGEzZDdmMjUwYzYuLjQyMjk3MmU0ODggMTAwNzU1Cj4gLS0tIGEvdXRp
-bHMvc2l6ZS1zdGF0cy1jb21wYXJlCj4gKysrIGIvdXRpbHMvc2l6ZS1zdGF0cy1jb21wYXJlCj4g
-QEAgLTEsNCArMSw0IEBACj4gLSMhL3Vzci9iaW4vZW52IHB5dGhvbgo+ICsjIS91c3IvYmluL2Vu
-diBweXRob24zCj4gIAo+ICAjIENvcHlyaWdodCAoQykgMjAxNiBUaG9tYXMgRGUgU2NoYW1waGVs
-ZWlyZSA8dGhvbWFzLmRlLnNjaGFtcGhlbGVpcmVAZ21haWwuY29tPgo+ICAKPiAKCl9fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5n
-IGxpc3QKYnVpbGRyb290QGxpc3RzLmJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJv
-b3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+- add RTC and USB dtoverlay entries to config_cm4io.txt
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+Changes v4 -> v5:
+  - new patch
+---
+ board/raspberrypi/config_cm4io.txt | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/board/raspberrypi/config_cm4io.txt b/board/raspberrypi/config_cm4io.txt
+index 01f60395b3..cf7e6df1a1 100644
+--- a/board/raspberrypi/config_cm4io.txt
++++ b/board/raspberrypi/config_cm4io.txt
+@@ -24,3 +24,10 @@ gpu_mem_1024=100
+ 
+ # fixes rpi (3B, 3B+, 3A+, 4B and Zero W) ttyAMA0 serial console
+ dtoverlay=miniuart-bt
++
++# enable RTC
++dtparam=i2c_vc=on
++dtoverlay=i2c-rtc,pcf85063a,i2c_csi_dsi
++
++# enable dwc2 USB controller (USB 2.0)
++dtoverlay=dwc2,dr_mode=host
+-- 
+2.33.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@lists.buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
