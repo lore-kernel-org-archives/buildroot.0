@@ -7,91 +7,94 @@ X-Spam-Status: No, score=-15.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 39955C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 22 Sep 2021 19:27:35 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4CD96C433F5
+	for <buildroot@archiver.kernel.org>; Wed, 22 Sep 2021 19:28:03 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 03F5A61100
-	for <buildroot@archiver.kernel.org>; Wed, 22 Sep 2021 19:27:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 03F5A61100
+	by mail.kernel.org (Postfix) with ESMTPS id 1469F60EE0
+	for <buildroot@archiver.kernel.org>; Wed, 22 Sep 2021 19:28:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1469F60EE0
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D88D984033;
-	Wed, 22 Sep 2021 19:27:34 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D5EFE40121;
+	Wed, 22 Sep 2021 19:28:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XFSCb6RDqz8i; Wed, 22 Sep 2021 19:27:33 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id PaCldRdidvBJ; Wed, 22 Sep 2021 19:28:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CCA0084095;
-	Wed, 22 Sep 2021 19:27:32 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 288D91BF321
- for <buildroot@lists.busybox.net>; Wed, 22 Sep 2021 19:27:31 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B74C3401FD;
+	Wed, 22 Sep 2021 19:28:00 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 547781BF321
+ for <buildroot@lists.busybox.net>; Wed, 22 Sep 2021 19:27:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 184BF84033
- for <buildroot@lists.busybox.net>; Wed, 22 Sep 2021 19:27:31 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 50CB841596
+ for <buildroot@lists.busybox.net>; Wed, 22 Sep 2021 19:27:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wC2Cn-AsRx3T for <buildroot@lists.busybox.net>;
- Wed, 22 Sep 2021 19:27:29 +0000 (UTC)
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id i-mVRAGiLDcG for <buildroot@lists.busybox.net>;
+ Wed, 22 Sep 2021 19:27:58 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com
- [IPv6:2a00:1450:4864:20::52d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 844A18412F
- for <buildroot@buildroot.org>; Wed, 22 Sep 2021 19:27:29 +0000 (UTC)
-Received: by mail-ed1-x52d.google.com with SMTP id v10so9382394edj.10
- for <buildroot@buildroot.org>; Wed, 22 Sep 2021 12:27:29 -0700 (PDT)
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com
+ [IPv6:2a00:1450:4864:20::529])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 07A3441594
+ for <buildroot@buildroot.org>; Wed, 22 Sep 2021 19:27:57 +0000 (UTC)
+Received: by mail-ed1-x529.google.com with SMTP id y89so3383185ede.2
+ for <buildroot@buildroot.org>; Wed, 22 Sep 2021 12:27:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=/4x+PYBCZXrv+SoXm638X5Px3zxh81HTgiuhQspzo20=;
- b=HxzLBrdGmeKfwu+kCcmYWElM8XKelVPXrYwrqrGK/xlB5K/lof9RiJ9JrMrKm3zNF+
- 7l8iYH1wYGOkfSPA7Bunf9UaDgZyeQwTDmTBwXi7CuVVt/6O5eO4XFivdFn/gwV2k1pC
- cepuOPc/nQ6fZ6TC4IrGDpL4wcReSdYQELc8JhDqUX3mnQ7SLer1CyCGQZFJsa+G/6KY
- BaAsu4uPw7dkz0CIt3KKCgz1+ACldUgVIC0pIojyyIFYMRwbw5Db3o2etfE0Ec5ckyz1
- aPRysfW1r0ilc1knmIjO0vVH2YKgbeUhMeD5yecuAv7jpiG4dXedgS0g9/Arlq5tZOB6
- hUQg==
+ bh=CRhL2sOQEnb3n+4HMIcXR6j06oMmk6d+/1AFHwnYa+I=;
+ b=G1ZzhILZWT74pQf7ZKcC4OYPgjNtU7DEE0By8+KfQbt+MYJ3ilHLV4y45xLzfXxmle
+ FAGQo8GDtWASqL/BOtLGHveyTcr3sU6sYeASY9pOit0svQAZ+DpaM6Urt/vqgeVup554
+ 5YFfZhlgGt0sQxSySq/agav3TfpBI9xop3Q5xM8UHf8FnzJN7xo/epABBQHhsroGoh+M
+ K7+mDhQcQkWKJAqisflSBO3WQT1RafeZ2mxust7w+vEIBWr1YWDnROSaWt92EfJDXj36
+ f4JMA7kVIDLRSHOvgIn2A9Bf8LVKuf1ZD7mta/T5ucp4uwleuJTI88N9hvqpNHuOI1Vu
+ 7v7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=/4x+PYBCZXrv+SoXm638X5Px3zxh81HTgiuhQspzo20=;
- b=OdjLrgwFz9XE9YeuNbpTzbdyo2Z2NAEmXe3s+kO3QUJc2SeubbEyDCxCKr6DAloQA/
- TKD8Grvk/hRE88gfY9xtg3IhikHVbfJe5uncrKFpuFS6lQ1e30iojFIOFG1OLUE1+Gmw
- qFx+wOFX/LJ0mlbu1ZeOGAPHq07n040aHhxjTi8e1FvIdTWLcKvbNMCt6s/lkHmh2Dw1
- 7hTqvJ0IfDcFatGCpRlaNImc9F0T0vpFUlFM6yuLqcbNHLPUjtiwbRoX3iy4NVZrW8oR
- HEpCWvREUuGyDBd34o3iyQP8zj5sxz72qWmn+fMmHXZPAxlxXBlCwbdmnzX1jDV53UTL
- rJIg==
-X-Gm-Message-State: AOAM531h9eTKK7XtCdRMkNUuWe+qicMIilCaJm/MepMzRBa19+JpF+RJ
- xZvVOzzD3yQblauRH6j4FINWEA==
-X-Google-Smtp-Source: ABdhPJyK1o4ppXSbYX4pr2gxRCMP5MFNhMeJOni4geeXD3MXjvGHt30OhN7COn2pPXVCjeXZYxG6Vg==
-X-Received: by 2002:a50:bae6:: with SMTP id x93mr1172667ede.232.1632338847759; 
- Wed, 22 Sep 2021 12:27:27 -0700 (PDT)
+ bh=CRhL2sOQEnb3n+4HMIcXR6j06oMmk6d+/1AFHwnYa+I=;
+ b=AhTRtt+pzmLxv0y2TRvQa5BAvr8qdpHXid20GZBZQ+Q10LejqhU2n8NzJ+CytXJNNq
+ QRZIcIQ0zGM9aC/UncsSuFoti45Ae9V+G9xTRoaZCMPZ1q5ZqJJ12I+fQg92J6G8hXdr
+ DuYdEYWUTBS5bp7aJ78QW0JKSYJriSb0epiChyG9d1NczJsaHAyyScbziiJ8ZZ3RpGmA
+ DCRMqTyNA2M1odxlKLiAloFp1CW7e9Q/oDWYnDXq2HcrMhaKhZ1Y9nttkp7RzACqzCY8
+ Jk4LgV84PsMCu9VJEBwA0dHD8TQVOC27mxjjYcCGDCd0ICQhvRUgzoA9y2E28KLm10kp
+ zQow==
+X-Gm-Message-State: AOAM531fvxpidU9Gmt+rB9BXPUzNQERzW9mWU0litl+0qML+tbgHrdEi
+ 2jmUxtZqqHHCIQ8tB0rbxkDjIg==
+X-Google-Smtp-Source: ABdhPJwLFZizwbApeMxJuFdT3m59FBPFJBrPFM7xLUsOOt0d5f0d5UnzdppJ3Wk4T6Pd5UvgVZD3Ww==
+X-Received: by 2002:a17:907:33ce:: with SMTP id
+ zk14mr1019274ejb.84.1632338876102; 
+ Wed, 22 Sep 2021 12:27:56 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id f4sm1446902ejf.61.2021.09.22.12.27.27
+ by smtp.gmail.com with ESMTPSA id w5sm1464830ejz.25.2021.09.22.12.27.55
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 22 Sep 2021 12:27:27 -0700 (PDT)
-Message-ID: <ad036ce5-06f0-71c5-5270-d11456a8c900@mind.be>
-Date: Wed, 22 Sep 2021 21:27:26 +0200
+ Wed, 22 Sep 2021 12:27:55 -0700 (PDT)
+Message-ID: <9646cf85-2fb2-b0bc-fae8-64eb7576d860@mind.be>
+Date: Wed, 22 Sep 2021 21:27:55 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.1.0
 Content-Language: en-GB
 To: Peter Korsgaard <peter@korsgaard.com>, buildroot@buildroot.org
-References: <20210921191651.25744-1-peter@korsgaard.com>
+References: <20210922085308.17902-1-peter@korsgaard.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20210921191651.25744-1-peter@korsgaard.com>
-Subject: Re: [Buildroot] [PATCH] package/ghostscript: add upstream security
- patch for CVE-2021-3781
+In-Reply-To: <20210922085308.17902-1-peter@korsgaard.com>
+Subject: Re: [Buildroot] [PATCH] package/libcurl: security bump to version
+ 7.79.1
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -104,7 +107,7 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Cc: Matt Weber <matthew.weber@collins.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@lists.buildroot.org
@@ -112,18 +115,49 @@ Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
 
 
-On 21/09/2021 21:16, Peter Korsgaard wrote:
-> The file access protection built into Ghostscript proved insufficient for
-> the "%pipe%" PostScript device, when combined with Ghostscript's requirement
-> to be able to create and control temporary files in the conventional
-> temporary file directories (for example, "/tmp" or "/temp).  This exploit is
-> restricted to Unix-like systems (i.e., it doesn't affect Windows).  The most
-> severe claimed results are only feasible if the exploit is run as a "high
-> privilege" user (root/superuser level) \u2013 a practice we would discourage
-> under any circumstances.
+On 22/09/2021 10:53, Peter Korsgaard wrote:
+> Fixes the following security issues:
 > 
-> For more details, see the advisory:
-> https://ghostscript.com/CVE-2021-3781.html
+> - CVE-2021-22945: UAF and double-free in MQTT sending
+>    When sending data to an MQTT server, libcurl could in some circumstances
+>    erroneously keep a pointer to an already freed memory area and both use
+>    that again in a subsequent call to send data and also free it again.
+> 
+>    https://curl.se/docs/CVE-2021-22945.html
+> 
+> - CVE-2021-22946: Protocol downgrade required TLS bypassed
+>    A user can tell curl to require a successful upgrade to TLS when speaking
+>    to an IMAP, POP3 or FTP server (--ssl-reqd on the command line or
+>    CURLOPT_USE_SSL set to CURLUSESSL_CONTROL or CURLUSESSL_ALL with libcurl).
+>    This requirement could be bypassed if the server would return a properly
+>    crafted but perfectly legitimate response.
+> 
+>    This flaw would then make curl silently continue its operations without
+>    TLS contrary to the instructions and expectations, exposing possibly
+>    sensitive data in clear text over the network.
+> 
+>    https://curl.se/docs/CVE-2021-22946.html
+> 
+> - CVE-2021-22947: STARTTLS protocol injection via MITM
+>    When curl connects to an IMAP, POP3, SMTP or FTP server to exchange data
+>    securely using STARTTLS to upgrade the connection to TLS level, the server
+>    can still respond and send back multiple responses before the TLS upgrade.
+>    Such multiple "pipelined" responses are cached by curl.  curl would then
+>    upgrade to TLS but not flush the in-queue of cached responses and instead
+>    use and trust the responses it got before the TLS handshake as if they
+>    were authenticated.
+> 
+>    Using this flaw, it allows a Man-In-The-Middle attacker to first inject
+>    the fake responses, then pass-through the TLS traffic from the legitimate
+>    server and trick curl into sending data back to the user thinking the
+>    attacker's injected data comes from the TLS-protected server.
+> 
+>    Over POP3 and IMAP an attacker can inject fake response data.
+> 
+>    https://curl.se/docs/CVE-2021-22947.html
+> 
+> In addition, 7.79.1 fixes a number of regressions in 7.79.0:
+> https://daniel.haxx.se/blog/2021/09/22/curl-7-79-1-patched-up-and-ready/
 > 
 > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
@@ -133,265 +167,35 @@ On 21/09/2021 21:16, Peter Korsgaard wrote:
   Arnout
 
 > ---
->   ...de-device-specifier-strings-in-acces.patch | 234 ++++++++++++++++++
->   package/ghostscript/ghostscript.mk            |   3 +
->   2 files changed, 237 insertions(+)
->   create mode 100644 package/ghostscript/0002-Bug-704342-Include-device-specifier-strings-in-acces.patch
+>   package/libcurl/libcurl.hash | 4 ++--
+>   package/libcurl/libcurl.mk   | 2 +-
+>   2 files changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/ghostscript/0002-Bug-704342-Include-device-specifier-strings-in-acces.patch b/package/ghostscript/0002-Bug-704342-Include-device-specifier-strings-in-acces.patch
-> new file mode 100644
-> index 0000000000..81436d8228
-> --- /dev/null
-> +++ b/package/ghostscript/0002-Bug-704342-Include-device-specifier-strings-in-acces.patch
-> @@ -0,0 +1,234 @@
-> +From a9bd3dec9fde03327a4a2c69dad1036bf9632e20 Mon Sep 17 00:00:00 2001
-> +From: Chris Liddell <chris.liddell@artifex.com>
-> +Date: Tue, 7 Sep 2021 20:36:12 +0100
-> +Subject: [PATCH] Bug 704342: Include device specifier strings in access
-> + validation
-> +
-> +for the "%pipe%", %handle%" and %printer% io devices.
-> +
-> +We previously validated only the part after the "%pipe%" Postscript device
-> +specifier, but this proved insufficient.
-> +
-> +This rebuilds the original file name string, and validates it complete. The
-> +slight complication for "%pipe%" is it can be reached implicitly using
-> +"|" so we have to check both prefixes.
-> +
-> +Addresses CVE-2021-3781
-> +
-> +Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> +---
-> + base/gdevpipe.c | 22 +++++++++++++++-
-> + base/gp_mshdl.c | 11 +++++++-
-> + base/gp_msprn.c | 10 ++++++-
-> + base/gp_os2pr.c | 13 +++++++++-
-> + base/gslibctx.c | 69 ++++++++++---------------------------------------
-> + 5 files changed, 65 insertions(+), 60 deletions(-)
-> +
-> +diff --git a/base/gdevpipe.c b/base/gdevpipe.c
-> +index 96d71f5d8..5bdc485be 100644
-> +--- a/base/gdevpipe.c
-> ++++ b/base/gdevpipe.c
-> +@@ -72,8 +72,28 @@ pipe_fopen(gx_io_device * iodev, const char *fname, const char *access,
-> + #else
-> +     gs_lib_ctx_t *ctx = mem->gs_lib_ctx;
-> +     gs_fs_list_t *fs = ctx->core->fs;
-> ++    /* The pipe device can be reached in two ways, explicltly with %pipe%
-> ++       or implicitly with "|", so we have to check for both
-> ++     */
-> ++    char f[gp_file_name_sizeof];
-> ++    const char *pipestr = "|";
-> ++    const size_t pipestrlen = strlen(pipestr);
-> ++    const size_t preflen = strlen(iodev->dname);
-> ++    const size_t nlen = strlen(fname);
-> ++    int code1;
-> ++
-> ++    if (preflen + nlen >= gp_file_name_sizeof)
-> ++        return_error(gs_error_invalidaccess);
-> ++
-> ++    memcpy(f, iodev->dname, preflen);
-> ++    memcpy(f + preflen, fname, nlen + 1);
-> ++
-> ++    code1 = gp_validate_path(mem, f, access);
-> ++
-> ++    memcpy(f, pipestr, pipestrlen);
-> ++    memcpy(f + pipestrlen, fname, nlen + 1);
-> +
-> +-    if (gp_validate_path(mem, fname, access) != 0)
-> ++    if (code1 != 0 && gp_validate_path(mem, f, access) != 0 )
-> +         return gs_error_invalidfileaccess;
-> +
-> +     /*
-> +diff --git a/base/gp_mshdl.c b/base/gp_mshdl.c
-> +index 2b964ed74..8d87ceadc 100644
-> +--- a/base/gp_mshdl.c
-> ++++ b/base/gp_mshdl.c
-> +@@ -95,8 +95,17 @@ mswin_handle_fopen(gx_io_device * iodev, const char *fname, const char *access,
-> +     long hfile;	/* Correct for Win32, may be wrong for Win64 */
-> +     gs_lib_ctx_t *ctx = mem->gs_lib_ctx;
-> +     gs_fs_list_t *fs = ctx->core->fs;
-> ++    char f[gp_file_name_sizeof];
-> ++    const size_t preflen = strlen(iodev->dname);
-> ++    const size_t nlen = strlen(fname);
-> +
-> +-    if (gp_validate_path(mem, fname, access) != 0)
-> ++    if (preflen + nlen >= gp_file_name_sizeof)
-> ++        return_error(gs_error_invalidaccess);
-> ++
-> ++    memcpy(f, iodev->dname, preflen);
-> ++    memcpy(f + preflen, fname, nlen + 1);
-> ++
-> ++    if (gp_validate_path(mem, f, access) != 0)
-> +         return gs_error_invalidfileaccess;
-> +
-> +     /* First we try the open_handle method. */
-> +diff --git a/base/gp_msprn.c b/base/gp_msprn.c
-> +index ed4827968..746a974f7 100644
-> +--- a/base/gp_msprn.c
-> ++++ b/base/gp_msprn.c
-> +@@ -168,8 +168,16 @@ mswin_printer_fopen(gx_io_device * iodev, const char *fname, const char *access,
-> +     uintptr_t *ptid = &((tid_t *)(iodev->state))->tid;
-> +     gs_lib_ctx_t *ctx = mem->gs_lib_ctx;
-> +     gs_fs_list_t *fs = ctx->core->fs;
-> ++    const size_t preflen = strlen(iodev->dname);
-> ++    const size_t nlen = strlen(fname);
-> +
-> +-    if (gp_validate_path(mem, fname, access) != 0)
-> ++    if (preflen + nlen >= gp_file_name_sizeof)
-> ++        return_error(gs_error_invalidaccess);
-> ++
-> ++    memcpy(pname, iodev->dname, preflen);
-> ++    memcpy(pname + preflen, fname, nlen + 1);
-> ++
-> ++    if (gp_validate_path(mem, pname, access) != 0)
-> +         return gs_error_invalidfileaccess;
-> +
-> +     /* First we try the open_printer method. */
-> +diff --git a/base/gp_os2pr.c b/base/gp_os2pr.c
-> +index f852c71fc..ba54cde66 100644
-> +--- a/base/gp_os2pr.c
-> ++++ b/base/gp_os2pr.c
-> +@@ -107,9 +107,20 @@ os2_printer_fopen(gx_io_device * iodev, const char *fname, const char *access,
-> +            FILE ** pfile, char *rfname, uint rnamelen)
-> + {
-> +     os2_printer_t *pr = (os2_printer_t *)iodev->state;
-> +-    char driver_name[256];
-> ++    char driver_name[gp_file_name_sizeof];
-> +     gs_lib_ctx_t *ctx = mem->gs_lib_ctx;
-> +     gs_fs_list_t *fs = ctx->core->fs;
-> ++    const size_t preflen = strlen(iodev->dname);
-> ++    const int size_t = strlen(fname);
-> ++
-> ++    if (preflen + nlen >= gp_file_name_sizeof)
-> ++        return_error(gs_error_invalidaccess);
-> ++
-> ++    memcpy(driver_name, iodev->dname, preflen);
-> ++    memcpy(driver_name + preflen, fname, nlen + 1);
-> ++
-> ++    if (gp_validate_path(mem, driver_name, access) != 0)
-> ++        return gs_error_invalidfileaccess;
-> +
-> +     /* First we try the open_printer method. */
-> +     /* Note that the loop condition here ensures we don't
-> +diff --git a/base/gslibctx.c b/base/gslibctx.c
-> +index 6dfed6cd5..318039fad 100644
-> +--- a/base/gslibctx.c
-> ++++ b/base/gslibctx.c
-> +@@ -655,82 +655,39 @@ rewrite_percent_specifiers(char *s)
-> + int
-> + gs_add_outputfile_control_path(gs_memory_t *mem, const char *fname)
-> + {
-> +-    char *fp, f[gp_file_name_sizeof];
-> +-    const int pipe = 124; /* ASCII code for '|' */
-> +-    const int len = strlen(fname);
-> +-    int i, code;
-> ++    char f[gp_file_name_sizeof];
-> ++    int code;
-> +
-> +     /* Be sure the string copy will fit */
-> +-    if (len >= gp_file_name_sizeof)
-> ++    if (strlen(fname) >= gp_file_name_sizeof)
-> +         return gs_error_rangecheck;
-> +     strcpy(f, fname);
-> +-    fp = f;
-> +     /* Try to rewrite any %d (or similar) in the string */
-> +     rewrite_percent_specifiers(f);
-> +-    for (i = 0; i < len; i++) {
-> +-        if (f[i] == pipe) {
-> +-           fp = &f[i + 1];
-> +-           /* Because we potentially have to check file permissions at two levels
-> +-              for the output file (gx_device_open_output_file and the low level
-> +-              fopen API, if we're using a pipe, we have to add both the full string,
-> +-              (including the '|', and just the command to which we pipe - since at
-> +-              the pipe_fopen(), the leading '|' has been stripped.
-> +-            */
-> +-           code = gs_add_control_path(mem, gs_permit_file_writing, f);
-> +-           if (code < 0)
-> +-               return code;
-> +-           code = gs_add_control_path(mem, gs_permit_file_control, f);
-> +-           if (code < 0)
-> +-               return code;
-> +-           break;
-> +-        }
-> +-        if (!IS_WHITESPACE(f[i]))
-> +-            break;
-> +-    }
-> +-    code = gs_add_control_path(mem, gs_permit_file_control, fp);
-> ++
-> ++    code = gs_add_control_path(mem, gs_permit_file_control, f);
-> +     if (code < 0)
-> +         return code;
-> +-    return gs_add_control_path(mem, gs_permit_file_writing, fp);
-> ++    return gs_add_control_path(mem, gs_permit_file_writing, f);
-> + }
-> +
-> + int
-> + gs_remove_outputfile_control_path(gs_memory_t *mem, const char *fname)
-> + {
-> +-    char *fp, f[gp_file_name_sizeof];
-> +-    const int pipe = 124; /* ASCII code for '|' */
-> +-    const int len = strlen(fname);
-> +-    int i, code;
-> ++    char f[gp_file_name_sizeof];
-> ++    int code;
-> +
-> +     /* Be sure the string copy will fit */
-> +-    if (len >= gp_file_name_sizeof)
-> ++    if (strlen(fname) >= gp_file_name_sizeof)
-> +         return gs_error_rangecheck;
-> +     strcpy(f, fname);
-> +-    fp = f;
-> +     /* Try to rewrite any %d (or similar) in the string */
-> +-    for (i = 0; i < len; i++) {
-> +-        if (f[i] == pipe) {
-> +-           fp = &f[i + 1];
-> +-           /* Because we potentially have to check file permissions at two levels
-> +-              for the output file (gx_device_open_output_file and the low level
-> +-              fopen API, if we're using a pipe, we have to add both the full string,
-> +-              (including the '|', and just the command to which we pipe - since at
-> +-              the pipe_fopen(), the leading '|' has been stripped.
-> +-            */
-> +-           code = gs_remove_control_path(mem, gs_permit_file_writing, f);
-> +-           if (code < 0)
-> +-               return code;
-> +-           code = gs_remove_control_path(mem, gs_permit_file_control, f);
-> +-           if (code < 0)
-> +-               return code;
-> +-           break;
-> +-        }
-> +-        if (!IS_WHITESPACE(f[i]))
-> +-            break;
-> +-    }
-> +-    code = gs_remove_control_path(mem, gs_permit_file_control, fp);
-> ++    rewrite_percent_specifiers(f);
-> ++
-> ++    code = gs_remove_control_path(mem, gs_permit_file_control, f);
-> +     if (code < 0)
-> +         return code;
-> +-    return gs_remove_control_path(mem, gs_permit_file_writing, fp);
-> ++    return gs_remove_control_path(mem, gs_permit_file_writing, f);
-> + }
-> +
-> + int
-> +--
-> +2.20.1
-> +
-> diff --git a/package/ghostscript/ghostscript.mk b/package/ghostscript/ghostscript.mk
-> index 5b50c94405..ca24c61678 100644
-> --- a/package/ghostscript/ghostscript.mk
-> +++ b/package/ghostscript/ghostscript.mk
-> @@ -21,6 +21,9 @@ GHOSTSCRIPT_DEPENDENCIES = \
->   	libpng \
->   	tiff
+> diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+> index 5e5776d1e3..b13f01c874 100644
+> --- a/package/libcurl/libcurl.hash
+> +++ b/package/libcurl/libcurl.hash
+> @@ -1,5 +1,5 @@
+>   # Locally calculated after checking pgp signature
+> -# https://curl.se/download/curl-7.78.0.tar.xz.asc
+> +# https://curl.se/download/curl-7.79.1.tar.xz.asc
+>   # signed with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
+> -sha256  be42766d5664a739c3974ee3dfbbcbe978a4ccb1fe628bb1d9b59ac79e445fb5  curl-7.78.0.tar.xz
+> +sha256  0606f74b1182ab732a17c11613cbbaf7084f2e6cca432642d0e3ad7c224c3689  curl-7.79.1.tar.xz
+>   sha256  6fd1a1c008b5ef4c4741dd188c3f8af6944c14c25afa881eb064f98fb98358e7  COPYING
+> diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+> index 4e3c6d4523..a70ebe4113 100644
+> --- a/package/libcurl/libcurl.mk
+> +++ b/package/libcurl/libcurl.mk
+> @@ -4,7 +4,7 @@
+>   #
+>   ################################################################################
 >   
-> +# 0002-Bug-704342-Include-device-specifier-strings-in-acces.patch
-> +GHOSTSCRIPT_IGNORE_CVES += CVE-2021-3781
-> +
->   # Ghostscript includes (old) copies of several libraries, delete them.
->   # Inspired by linuxfromscratch:
->   # http://www.linuxfromscratch.org/blfs/view/svn/pst/gs.html
+> -LIBCURL_VERSION = 7.78.0
+> +LIBCURL_VERSION = 7.79.1
+>   LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
+>   LIBCURL_SITE = https://curl.se/download
+>   LIBCURL_DEPENDENCIES = host-pkgconf \
 > 
 _______________________________________________
 buildroot mailing list
