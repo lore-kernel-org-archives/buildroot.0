@@ -7,93 +7,92 @@ X-Spam-Status: No, score=-20.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 63632C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 22 Sep 2021 20:13:16 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 29F72C433EF
+	for <buildroot@archiver.kernel.org>; Wed, 22 Sep 2021 20:27:35 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9902361100
-	for <buildroot@archiver.kernel.org>; Wed, 22 Sep 2021 20:13:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9902361100
+	by mail.kernel.org (Postfix) with ESMTPS id CA3AD610D1
+	for <buildroot@archiver.kernel.org>; Wed, 22 Sep 2021 20:27:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org CA3AD610D1
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3D6AC84072;
-	Wed, 22 Sep 2021 20:13:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6B9DC40770;
+	Wed, 22 Sep 2021 20:27:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YJmchztKk3yw; Wed, 22 Sep 2021 20:13:14 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id dy1EuabE7VHy; Wed, 22 Sep 2021 20:27:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 78B5A84073;
-	Wed, 22 Sep 2021 20:13:13 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C2F281BF37F
- for <buildroot@lists.busybox.net>; Wed, 22 Sep 2021 20:13:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AFDD9415B6;
+	Wed, 22 Sep 2021 20:27:32 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 747761BF37F
+ for <buildroot@lists.busybox.net>; Wed, 22 Sep 2021 20:27:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BF9D9614E7
- for <buildroot@lists.busybox.net>; Wed, 22 Sep 2021 20:13:11 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6471880F1B
+ for <buildroot@lists.busybox.net>; Wed, 22 Sep 2021 20:27:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Sq3YA9TgN_uO for <buildroot@lists.busybox.net>;
- Wed, 22 Sep 2021 20:13:10 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id oBiL6XPHJ5-Z for <buildroot@lists.busybox.net>;
+ Wed, 22 Sep 2021 20:27:30 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com
- [IPv6:2a00:1450:4864:20::536])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8EE53614E3
- for <buildroot@buildroot.org>; Wed, 22 Sep 2021 20:13:10 +0000 (UTC)
-Received: by mail-ed1-x536.google.com with SMTP id c22so14260296edn.12
- for <buildroot@buildroot.org>; Wed, 22 Sep 2021 13:13:10 -0700 (PDT)
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com
+ [IPv6:2a00:1450:4864:20::52e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2DE5A80F17
+ for <buildroot@buildroot.org>; Wed, 22 Sep 2021 20:27:29 +0000 (UTC)
+Received: by mail-ed1-x52e.google.com with SMTP id c22so14409201edn.12
+ for <buildroot@buildroot.org>; Wed, 22 Sep 2021 13:27:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
- :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=HX+YyHwhdNtnmp4quP6vEzM26mRvSXYZvqiAHdLTDng=;
- b=epYojJYWDK56rWDU6z9kDfG79hh1uMhMVb8N0vC5lCxHqyERWk7smxzZw+tZz8w7Ow
- u5kOFD7ZKc0Xb3jRRPeDQLAQEnPO7j/jwIc+/wXx6HDrCqB+6u/NsYkQk0ZBpfnEt8wl
- JwFTGYWQRs8QOjbR14xbsSBxH8cjlGQ79Dpk6BnhxDI3okSmLtWrdhJBDCJLnu7r3wjX
- eHWCsPo+L6HOPSXaTw9oJ+qIZOW53gMEVF2tErb6cjmiA9DhQFaax6HwFv7EsqAHqh8I
- kSBbxyUKg+uhQXjMB2lPR9jJJCsVup1IJPCM6HBmDKP1Bn3YZV9oXRS2dJh0w6GFCpJU
- i4ag==
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=NZOFnmqAoRL0JjMCAinCYcLiNVvv2Gr+2jDph3x1smo=;
+ b=WO3YLizbGNlW9Swe9wc34XC5VBVh/EkFDJiF3CMf+SbMzpEzidy5VRGb+x08n+Xy1A
+ pLxL5wo0K8K968gMTSDCXtJo/Rjh70zOZxg8hemeEiKViIzFfhCtYTqY/JajVtx1eU8r
+ raS5peE7RDzkRpIG69CrDfN88qrcoOSwAjCG8kZFypy0zSyKfXI+vVm+vcf/nNLiv1Rk
+ gfXizeAqXEdeYYoGB8oClljQjJWqEzMRoCM3FNr1pvk9NzQOCVogipAoAXWq+X/AU4Tn
+ bNIVHDYiYReL+7kpxTFrAtfD3HP5xl0QlrHR0CFgaZzJ+5ZmC5N3xf9OSmwDHeURVHfe
+ n/eQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:references:from:organization:in-reply-to
+ :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=HX+YyHwhdNtnmp4quP6vEzM26mRvSXYZvqiAHdLTDng=;
- b=037J3Z/UdZb0toF+1ozb4jqhtbmKD9k9l99mcVMJ19Hz4JvEdMnGchcC5Gv6gYPT7V
- QctgrSY4mONIi1sszbLVVk4aUuYY7/4mejAVJQPtWpBDDlY7ATol5QtiG9XxXGxL/6AB
- 0cgR83uKWZD3bLQVytA+MH7WchRxC9ZwYLl5ga8ZyFHULHMgrpLR9j+mq7KIksnfImqQ
- /orWYwkW0gkAN2Is8GDghZBJo3JBSQ9yXAg06sulS5dqwsAjFzpPWYMP6e6S+KQVqHgd
- i34zeI9l7Ypw38cAOjk5dfda4RaZ0JqjmgAONDSMii57w+C4OFGdbbkP21AMJ4WcDQpD
- jwNQ==
-X-Gm-Message-State: AOAM530pcOnogZ8nOz51exxD3EyA+tITrwCNApHvZzRRX59Cz0JPr3bL
- 9Ld2lX/P5b6BZmlwGiTk3dWxDemiTQ9MGQ==
-X-Google-Smtp-Source: ABdhPJxw1E7QdwVALw3xL2El4DSft/A0cVcBHlJCPL7/FzTf0yUFkEGoLKxFKcYZ4MhISWtnfjgOWw==
-X-Received: by 2002:aa7:d619:: with SMTP id c25mr1303815edr.365.1632341588723; 
- Wed, 22 Sep 2021 13:13:08 -0700 (PDT)
+ bh=NZOFnmqAoRL0JjMCAinCYcLiNVvv2Gr+2jDph3x1smo=;
+ b=7edmuz5VvnrcvzQZyjK+HIP2IpgL1vDHQAbBU91aDly4OF/qgRgOoK/x9vkXggMx4w
+ l3rwthifps/JHxHgk55tLhlD7RM90KeuyGQymG2Ka0pUeD+MLJ6ESUu8mrxwsLsZABF4
+ /cWtnJoFI+IjzWZDjMK+PwOLmFKRWziwtx0dYlOGe8NGLnbMR54HC+B4OCbN18Dh0yb+
+ bZULsA0MZ59e6VI6rFDcriiZiFLIFVBhhchTGjmWFEZBdr0zhH21X/XmJnsd8TE4xJCv
+ iBRuyryl8gxrKSM03tXD41jzMOW13XvuTDYRshnkldw5TMnOVpmtqMDB+zmgKEoNI5oR
+ /wcw==
+X-Gm-Message-State: AOAM533lExe2XOPSCT00p7LcjgSeg/Vu7aB/m5mE7JHzeT1qKQUQzOoi
+ 77hB40BDmYFdEKbz8oEqKzcGMS0P9trV+A==
+X-Google-Smtp-Source: ABdhPJxIAbKUiixfNGtijDWcve33iOLFaRjDyxyMUOrsuHvfhRXzCwIj0HHG5Q7YDVnP8mVtTYBqkg==
+X-Received: by 2002:a50:d713:: with SMTP id t19mr1491533edi.2.1632342448027;
+ Wed, 22 Sep 2021 13:27:28 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id t19sm1500313ejb.115.2021.09.22.13.13.08
+ by smtp.gmail.com with ESMTPSA id r2sm1717633edo.59.2021.09.22.13.27.27
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 22 Sep 2021 13:13:08 -0700 (PDT)
-Message-ID: <d70bb907-428e-ba30-ed79-9700113e00fe@mind.be>
-Date: Wed, 22 Sep 2021 22:13:07 +0200
+ Wed, 22 Sep 2021 13:27:27 -0700 (PDT)
+Message-ID: <ed3325a7-7721-51e6-913f-6916bb2b9525@mind.be>
+Date: Wed, 22 Sep 2021 22:27:26 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.1.0
 Content-Language: en-GB
-To: Romain Naour <romain.naour@gmail.com>, buildroot@buildroot.org
-References: <20210912141140.253778-1-romain.naour@gmail.com>
- <20210912141140.253778-9-romain.naour@gmail.com>
+To: Alexey Brodkin <Alexey.Brodkin@synopsys.com>, buildroot@buildroot.org
+References: <20210913125911.52199-1-abrodkin@synopsys.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20210912141140.253778-9-romain.naour@gmail.com>
-Subject: Re: [Buildroot] [PATCH 11/16] support/docker: bump docker image for
- the gitlab-ci to Debian bullseye
+In-Reply-To: <20210913125911.52199-1-abrodkin@synopsys.com>
+Subject: Re: [Buildroot] [PATCH] package/ntp: Fix building with glibc 2.34+
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -106,6 +105,7 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
+Cc: arc-buildroot@synopsys.com
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@lists.buildroot.org
@@ -113,78 +113,81 @@ Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
 
 
-On 12/09/2021 16:11, Romain Naour wrote:
-> Starting with Qemu 6.1.0, gcc 7.5 is needed to build.
-> Since we build host-qemu package for qemu defconfig, we have to
-> upgrade to (at least) Debian buster that provide gcc 8 as host compiler.
+On 13/09/2021 14:59, Alexey Brodkin via buildroot wrote:
+> On attempt to build ntp with glibc 2.34 the following error happens:
+> -------------------------------->8------------------------------
+> In file included from .../output/host/lib/gcc/i586-buildroot-linux-gnu/10.3.0/include-fixed/pthread.h:42,
+>                   from work_thread.c:13:
+> work_thread.c:45:57: error: missing binary operator before token "("
+>     45 | #if defined(PTHREAD_STACK_MIN) && THREAD_MINSTACKSIZE < PTHREAD_STACK_MIN
+>        |                                                         ^~~~~~~~~~~~~~~~~
+> -------------------------------->8------------------------------
 > 
-> While testing this upgrate, the test_edk2 failed since it actually
-> requires Qemu >= 4.1.0 to support arm SBSA reference machine [1].
-> Debian Buster only provide Qemu 3.1.
+> That's because starting from glibc 2.34 PTHREAD_STACK_MIN gets determined
+> dynamically in runtime via sysconf(), see [1].
 > 
-> Finally, upgrade to Debian bullseye but it requires some linux
-> kernel version bump in several defconfigs since host gcc is based
-> on gcc-10 [2].
-> 
-> Add explicitely python package in the Docker file to install python2
-> on the host.
-> 
-> [1] https://git.qemu.org/?p=qemu.git;a=commit;h=64580903c2b3aee08d74d64e6248a313b246cb69
-> [2] http://git.kernel.org/cgit/linux/kernel/git/stable/linux-stable.git/commit/?id=621f2ded601546119fabccd1651b1ae29d26cd38
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
-> The docker image must be rebuild and pushed to https://hub.docker.com/r/buildroot/base/
-> ---
->   support/docker/Dockerfile       | 4 +++-
->   support/docker/apt-sources.list | 8 ++++----
->   2 files changed, 7 insertions(+), 5 deletions(-)
-> 
-> diff --git a/support/docker/Dockerfile b/support/docker/Dockerfile
-> index a9bacca3a0..795b26c276 100644
-> --- a/support/docker/Dockerfile
-> +++ b/support/docker/Dockerfile
-> @@ -6,7 +6,7 @@
->   # We use a specific tag for the base image *and* the corresponding date
->   # for the repository., so do not forget to update the apt-sources.list
->   # file that is shipped next to this Dockerfile.
-> -FROM debian:stretch-20171210
-> +FROM debian:bullseye-20210902
->   
->   LABEL maintainer="Buildroot mailing list <buildroot@buildroot.org>" \
->         vendor="Buildroot" \
-> @@ -36,6 +36,8 @@ RUN apt-get install -y --no-install-recommends \
->           libncurses5-dev \
->           locales \
->           mercurial \
-> +        python \
-> +        python-six \
+> Original fix proposed by Khem Raj in OpenEmbedded, see [2].
 
-  As discussed, I applied to master without these python changes, pushed a new 
-docker image to dockerhub, and sent a patch that updates .gitlab-ci.yml.
+  I was looking for an upstream fix instead, since ntp is supposed to be a 
+maintained project, but there seems to be no public git repository (the one on 
+github hasn't been touched for 6 years), so I guess this is the best we can do...
 
-  I believe the rest of the series can only be applied after that update is 
-committed, right?
+  Applied to master, thanks.
 
   Regards,
   Arnout
 
->           python3 \
->           python3-flake8 \
->           python3-nose2 \
-> diff --git a/support/docker/apt-sources.list b/support/docker/apt-sources.list
-> index 789fb8fc17..0f872fd398 100644
-> --- a/support/docker/apt-sources.list
-> +++ b/support/docker/apt-sources.list
-> @@ -1,4 +1,4 @@
-> -# Latest just before 20171210T000000Z:
-> -deb [check-valid-until=no] http://snapshot.debian.org/archive/debian/20171209T220346Z/ stretch main
-> -deb [check-valid-until=no] http://snapshot.debian.org/archive/debian/20171209T220346Z/ stretch-updates main
-> -deb [check-valid-until=no] http://snapshot.debian.org/archive/debian-security/20171209T224618Z/ stretch/updates main
-> +# Latest just before 20210817T000000Z:
-> +deb [check-valid-until=no] http://snapshot.debian.org/archive/debian/20210902T205533Z/ bullseye main
-> +deb [check-valid-until=no] http://snapshot.debian.org/archive/debian-security/20210902T193650Z/ bullseye-security main
-> +deb [check-valid-until=no] http://snapshot.debian.org/archive/debian/20210902T205533Z/ bullseye-updates main
+
+> 
+> [1] https://sourceware.org/git/?p=glibc.git;a=commit;h=5d98a7dae955bafa6740c26eaba9c86060ae0344
+> [2] https://github.com/openembedded/meta-openembedded/commit/7055c764c83150f9310ce04bcfb19330460582fc
+> 
+> Suggested-by: Artem Panfilov <artemp@synopsys.com>
+> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+> ---
+>   ...ntp-Do-not-use-PTHREAD_STACK_MIN-on-glibc.patch | 33 ++++++++++++++++++++++
+>   1 file changed, 33 insertions(+)
+>   create mode 100644 package/ntp/0004-libntp-Do-not-use-PTHREAD_STACK_MIN-on-glibc.patch
+> 
+> diff --git a/package/ntp/0004-libntp-Do-not-use-PTHREAD_STACK_MIN-on-glibc.patch b/package/ntp/0004-libntp-Do-not-use-PTHREAD_STACK_MIN-on-glibc.patch
+> new file mode 100644
+> index 0000000000..da03ad4aac
+> --- /dev/null
+> +++ b/package/ntp/0004-libntp-Do-not-use-PTHREAD_STACK_MIN-on-glibc.patch
+> @@ -0,0 +1,33 @@
+> +From 082a504cfcc046c3d8adaae1164268bc94e5108a Mon Sep 17 00:00:00 2001
+> +From: Khem Raj <raj.khem@gmail.com>
+> +Date: Sat, 31 Jul 2021 10:51:41 -0700
+> +Subject: [PATCH] libntp: Do not use PTHREAD_STACK_MIN on glibc
+> +
+> +In glibc 2.34+ PTHREAD_STACK_MIN is not a compile-time constant which
+> +could mean different stack sizes at runtime on different architectures
+> +and it also causes compile failure. Default glibc thread stack size
+> +or 64Kb set by ntp should be good in glibc these days.
+> +
+> +Signed-off-by: Khem Raj <raj.khem@gmail.com>
+> +[Copied from https://github.com/openembedded/meta-openembedded/blob/master/meta-networking/recipes-support/ntp/ntp/0001-libntp-Do-not-use-PTHREAD_STACK_MIN-on-glibc.patch]
+> +Signed-off-by: Alexey Brodkin <abrokdin@synopsys.com>
+> +---
+> + libntp/work_thread.c | 2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+> +diff --git a/libntp/work_thread.c b/libntp/work_thread.c
+> +index 03a5647..3ddd751 100644
+> +--- a/libntp/work_thread.c
+> ++++ b/libntp/work_thread.c
+> +@@ -41,7 +41,7 @@
+> + #ifndef THREAD_MINSTACKSIZE
+> + # define THREAD_MINSTACKSIZE	(64U * 1024)
+> + #endif
+> +-#ifndef __sun
+> ++#if !defined(__sun) && !defined(__GLIBC__)
+> + #if defined(PTHREAD_STACK_MIN) && THREAD_MINSTACKSIZE < PTHREAD_STACK_MIN
+> + # undef THREAD_MINSTACKSIZE
+> + # define THREAD_MINSTACKSIZE PTHREAD_STACK_MIN
+> +--
+> +2.32.0
+> +
 > 
 _______________________________________________
 buildroot mailing list
