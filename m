@@ -7,51 +7,51 @@ X-Spam-Status: No, score=-12.2 required=3.0 tests=BAYES_00,DATE_IN_PAST_06_12,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 17D3EC433EF
-	for <buildroot@archiver.kernel.org>; Thu, 23 Sep 2021 07:15:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B9CDC433EF
+	for <buildroot@archiver.kernel.org>; Thu, 23 Sep 2021 07:15:19 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 41FF461164
-	for <buildroot@archiver.kernel.org>; Thu, 23 Sep 2021 07:15:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 41FF461164
+	by mail.kernel.org (Postfix) with ESMTPS id 6E6C361050
+	for <buildroot@archiver.kernel.org>; Thu, 23 Sep 2021 07:15:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6E6C361050
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DBA08415EC;
-	Thu, 23 Sep 2021 07:15:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E08A3415F9;
+	Thu, 23 Sep 2021 07:15:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id STQxb0N2__m1; Thu, 23 Sep 2021 07:15:05 +0000 (UTC)
+	with ESMTP id FxLCPi1FtiB2; Thu, 23 Sep 2021 07:15:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 32B9B415F9;
-	Thu, 23 Sep 2021 07:15:04 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 7CCE11BF342
- for <buildroot@lists.busybox.net>; Thu, 23 Sep 2021 07:15:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4D45E4161D;
+	Thu, 23 Sep 2021 07:15:16 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1CA901BF342
+ for <buildroot@lists.busybox.net>; Thu, 23 Sep 2021 07:15:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6AE2D4160B
+ by smtp1.osuosl.org (Postfix) with ESMTP id 52B2884212
  for <buildroot@lists.busybox.net>; Thu, 23 Sep 2021 07:15:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id F3F92T1WXn5h for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4vQH1mZ5ymY6 for <buildroot@lists.busybox.net>;
  Thu, 23 Sep 2021 07:15:01 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5A0AC415F9
+ by smtp1.osuosl.org (Postfix) with ESMTP id 47BDB84213
  for <buildroot@buildroot.org>; Thu, 23 Sep 2021 07:15:01 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 1BF318CA55; Thu, 23 Sep 2021 07:12:56 +0000 (UTC)
+ id 082F08CA57; Thu, 23 Sep 2021 07:12:56 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Wed, 22 Sep 2021 23:34:16 +0200
+Date: Wed, 22 Sep 2021 23:23:10 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4906e77d5957a78df3181a0c8a1b5f0e55ce44da
-X-Git-Newrev: db7d78614098fcab204a00bc767ec509ae633ca6
+X-Git-Oldrev: 84a2723568871745a0a50504dc741d77bb8d5470
+X-Git-Newrev: 67b3d6820eb9792af875628b92c56062b734868f
 X-Patchwork-Hint: ignore
-Message-Id: <20210923071256.1BF318CA55@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] fs/ext2: fix namespace for variables
+Message-Id: <20210923071256.082F08CA57@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/mpd: update to version 0.22.11
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,67 +70,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=db7d78614098fcab204a00bc767ec509ae633ca6
+commit: https://git.buildroot.net/buildroot/commit/?id=67b3d6820eb9792af875628b92c56062b734868f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In filesystems, variables must be prefixed with ROOTFS_, to avoid
-ckashing with packages of the same name.
+mpd 0.22.10 terminates with segmentation fault on graphical clients while
+retrieving album information. This bug was fixed in version 0.22.11
 
-We do not have a package named 'ext2', so we currently have no clash,
-but it is still ebtter that the variables be properly namespaced.
+Tested on x86_64 using M.A.L.P. Android client
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Kory Maincent <kory.maincent@bootlin.com>
+Signed-off-by: Andreas Ziegler <br015@umbiko.net>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- fs/ext2/ext2.mk | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ package/mpd/mpd.hash | 2 +-
+ package/mpd/mpd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/fs/ext2/ext2.mk b/fs/ext2/ext2.mk
-index 74c99bd7b1..0b797f315f 100644
---- a/fs/ext2/ext2.mk
-+++ b/fs/ext2/ext2.mk
-@@ -4,32 +4,32 @@
- #
+diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
+index 3847fc6724..2501be65de 100644
+--- a/package/mpd/mpd.hash
++++ b/package/mpd/mpd.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking pgp signature
+-sha256  07c82535e9999c3d4a099d8e652c88724635125b3c9f265ba9b6f2974ff9e614  mpd-0.22.10.tar.xz
++sha256  143f7f34aaee6e87888f3dd35d49aade6656052651b960ca42b46cbb518ca0a0  mpd-0.22.11.tar.xz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index 62e31860c0..fe6b8d539b 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--EXT2_SIZE = $(call qstrip,$(BR2_TARGET_ROOTFS_EXT2_SIZE))
--ifeq ($(BR2_TARGET_ROOTFS_EXT2)-$(EXT2_SIZE),y-)
-+ROOTFS_EXT2_SIZE = $(call qstrip,$(BR2_TARGET_ROOTFS_EXT2_SIZE))
-+ifeq ($(BR2_TARGET_ROOTFS_EXT2)-$(ROOTFS_EXT2_SIZE),y-)
- $(error BR2_TARGET_ROOTFS_EXT2_SIZE cannot be empty)
- endif
- 
--EXT2_MKFS_OPTS = $(call qstrip,$(BR2_TARGET_ROOTFS_EXT2_MKFS_OPTIONS))
-+ROOTFS_EXT2_MKFS_OPTS = $(call qstrip,$(BR2_TARGET_ROOTFS_EXT2_MKFS_OPTIONS))
- 
- # qstrip results in stripping consecutive spaces into a single one. So the
- # variable is not qstrip-ed to preserve the integrity of the string value.
--EXT2_LABEL = $(subst ",,$(BR2_TARGET_ROOTFS_EXT2_LABEL))
-+ROOTFS_EXT2_LABEL = $(subst ",,$(BR2_TARGET_ROOTFS_EXT2_LABEL))
- #" Syntax highlighting... :-/ )
- 
--EXT2_OPTS = \
-+ROOTFS_EXT2_OPTS = \
- 	-d $(TARGET_DIR) \
- 	-r $(BR2_TARGET_ROOTFS_EXT2_REV) \
- 	-N $(BR2_TARGET_ROOTFS_EXT2_INODES) \
- 	-m $(BR2_TARGET_ROOTFS_EXT2_RESBLKS) \
- 	-L "$(EXT2_LABEL)" \
--	$(EXT2_MKFS_OPTS)
-+	$(ROOTFS_EXT2_MKFS_OPTS)
- 
- ROOTFS_EXT2_DEPENDENCIES = host-e2fsprogs
- 
- define ROOTFS_EXT2_CMD
- 	rm -f $@
--	$(HOST_DIR)/sbin/mkfs.ext$(BR2_TARGET_ROOTFS_EXT2_GEN) $(EXT2_OPTS) $@ \
--		"$(EXT2_SIZE)" \
-+	$(HOST_DIR)/sbin/mkfs.ext$(BR2_TARGET_ROOTFS_EXT2_GEN) $(ROOTFS_EXT2_OPTS) $@ \
-+		"$(ROOTFS_EXT2_SIZE)" \
- 	|| { ret=$$?; \
- 	     echo "*** Maybe you need to increase the filesystem size (BR2_TARGET_ROOTFS_EXT2_SIZE)" 1>&2; \
- 	     exit $$ret; \
+ MPD_VERSION_MAJOR = 0.22
+-MPD_VERSION = $(MPD_VERSION_MAJOR).10
++MPD_VERSION = $(MPD_VERSION_MAJOR).11
+ MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
+ MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
+ MPD_DEPENDENCIES = host-pkgconf boost
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
