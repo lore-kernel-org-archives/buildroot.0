@@ -7,62 +7,64 @@ X-Spam-Status: No, score=-16.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C4D0FC433F5
-	for <buildroot@archiver.kernel.org>; Wed, 22 Sep 2021 12:39:48 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B28EBC433FE
+	for <buildroot@archiver.kernel.org>; Wed, 22 Sep 2021 12:44:00 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id E44D561019
-	for <buildroot@archiver.kernel.org>; Wed, 22 Sep 2021 12:39:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E44D561019
+	by mail.kernel.org (Postfix) with ESMTPS id 08DFD6115A
+	for <buildroot@archiver.kernel.org>; Wed, 22 Sep 2021 12:43:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 08DFD6115A
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=lists.buildroot.org
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BC449835C8;
-	Wed, 22 Sep 2021 12:39:47 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C41BD4054A;
+	Wed, 22 Sep 2021 12:43:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uza8n1a29cLp; Wed, 22 Sep 2021 12:39:47 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id bNLDr-joaOt7; Wed, 22 Sep 2021 12:43:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2199F8305A;
-	Wed, 22 Sep 2021 12:39:46 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id F0EDE403AA;
+	Wed, 22 Sep 2021 12:43:57 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A902D1BF3B0
- for <buildroot@lists.busybox.net>; Wed, 22 Sep 2021 12:39:44 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5680C1BF3EF
+ for <buildroot@lists.busybox.net>; Wed, 22 Sep 2021 12:43:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 971D98305A
- for <buildroot@lists.busybox.net>; Wed, 22 Sep 2021 12:39:44 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 45FC783F98
+ for <buildroot@lists.busybox.net>; Wed, 22 Sep 2021 12:43:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=tkos.co.il
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mPdUTIRVIv2p for <buildroot@lists.busybox.net>;
- Wed, 22 Sep 2021 12:39:41 +0000 (UTC)
+ with ESMTP id PNOP46MF4cOV for <buildroot@lists.busybox.net>;
+ Wed, 22 Sep 2021 12:43:56 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
 Received: from mx.tkos.co.il (guitar.tcltek.co.il [192.115.133.116])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 93BAE82EB5
- for <buildroot@busybox.net>; Wed, 22 Sep 2021 12:39:41 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7F4EA83F6E
+ for <buildroot@busybox.net>; Wed, 22 Sep 2021 12:43:56 +0000 (UTC)
 Received: from tarshish.tkos.co.il (unknown [10.0.8.2])
  (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
  (No client certificate requested)
- by mx.tkos.co.il (Postfix) with ESMTPS id 4B82E4408C8;
- Wed, 22 Sep 2021 15:39:06 +0300 (IDT)
+ by mx.tkos.co.il (Postfix) with ESMTPS id 5C31C4408C8;
+ Wed, 22 Sep 2021 15:43:21 +0300 (IDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tkos.co.il;
- s=default; t=1632314346;
- bh=SOMN0HI0ObdUPRRMui0zXjUDEMbOC1CqIIkd84LBXtg=;
+ s=default; t=1632314601;
+ bh=RBNH+zzHK8MF3PEapsxJGH+qX//NZqLXBk/+T7OLt5M=;
  h=From:To:Cc:Subject:Date:From;
- b=dIRRVDds+cC7ptqhRcN34pl5NJc4HwTCLbgJlnYak+NRCCVd9Bq5F/8oK2aQyYTLD
- XnKHP0LVIkX1r2vRQ7OOsFuDvhGoJ+PvmzuBvcp+bAPwiL+gWa0P1tNkh9u0geR66Y
- RY0L4cIt/jP9UVMbQkpKbLWD9QvOCDpeCzeYT2QYK5mJyRlDxorWr19exPgUyxphuh
- 6oC3GevbHX6jO4wa0iUhZXUA0jnSEjQwfdzF5SsAIELRtKZH1yjh7SX85pE8Taw4Xh
- 33dERA3uR1McFtJkM46VajjhkjLPtkZoCsLAFMmebQEU7honuCf/pOYbOD8dwl0CGQ
- 3IMguB55HGivQ==
+ b=kOV8OgdX9vsbj0b3TzPJN0j9fUDpw6QfNTw4DJpb5wg3zXTFNi0VxBD85d+9CeJCT
+ e+yoZo1OLjGOY9VacWJmWhUrWK2BtMoxMHWx63Mel6DUebi84idgbMsXaxMTaCw2iL
+ k9TM6qdapTqkfN8uB1eOc/QQNzFoON+rKm7nHYfLDv2o7TfxnsD+bOLkWJt7cn9CeX
+ lknqE1QjloVqoebQwK+Rpf8p4R/FbJqfvBKER1dnzKjCq8lQJnX0LOvhgEM/e11eV3
+ zEMZBi++K0j6cArUgx26vGyTolHoRjQUAgbshBPOf9G1MyStOYbxuRjGNdnqeVB4jG
+ Qk1eDg2QvNa6w==
 To: buildroot@busybox.net
-Date: Wed, 22 Sep 2021 15:39:31 +0300
-Message-Id: <c2323e09e0a4871b6c613a92e74a31463624f62b.1632314371.git.baruch@tkos.co.il>
+Date: Wed, 22 Sep 2021 15:43:36 +0300
+Message-Id: <1b69453d90cdcf874e4545dcd60b87e9599e16d0.1632314616.git.baruch@tkos.co.il>
 X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/strace: bump to version 5.14
+Subject: [Buildroot] [PATCH] DEVELOPERS: remove Baruch Siach from openipmi
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,35 +86,21 @@ Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/strace/strace.hash | 4 ++--
- package/strace/strace.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ DEVELOPERS | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/strace/strace.hash b/package/strace/strace.hash
-index 93c9b57f46f0..eb3e97424f5a 100644
---- a/package/strace/strace.hash
-+++ b/package/strace/strace.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking signature with RSA key 0xA8041FA839E16E36
--# https://strace.io/files/5.13/strace-5.13.tar.xz.asc
--sha256  5acc34888b9d510ad6ac915d4a8df08f51cf1ae920ea24649f6a4bb984d0b656  strace-5.13.tar.xz
-+# https://strace.io/files/5.14/strace-5.14.tar.xz.asc
-+sha256  901bee6db5e17debad4530dd9ffb4dc9a96c4a656edbe1c3141b7cb307b11e73  strace-5.14.tar.xz
- sha256  f847d5ef26ad1151ca63bb88536b23a4cac5040c67917f3d5ee7ea1316e2b736  COPYING
- sha256  7c379436436a562834aa7d2f5dcae1f80a25230fa74201046ca1fba4367d39aa  LGPL-2.1-or-later
-diff --git a/package/strace/strace.mk b/package/strace/strace.mk
-index 29736678d89c..798d7077d642 100644
---- a/package/strace/strace.mk
-+++ b/package/strace/strace.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--STRACE_VERSION = 5.13
-+STRACE_VERSION = 5.14
- STRACE_SOURCE = strace-$(STRACE_VERSION).tar.xz
- STRACE_SITE = https://strace.io/files/$(STRACE_VERSION)
- STRACE_LICENSE = LGPL-2.1+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 926c6a27d78c..95142fec58b9 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -294,7 +294,6 @@ F:	package/ebtables/
+ F:	package/i2c-tools/
+ F:	package/libcurl/
+ F:	package/libpcap/
+-F:	package/openipmi/
+ F:	package/socat/
+ F:	package/strace/
+ F:	package/tcpdump/
 -- 
 2.33.0
 
