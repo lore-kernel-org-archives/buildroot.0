@@ -2,91 +2,101 @@ Return-Path: <SRS0=bh6H=OM=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_2 autolearn=no autolearn_force=no
+X-Spam-Status: No, score=-5.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A2DDC4332F
-	for <buildroot@archiver.kernel.org>; Wed, 22 Sep 2021 17:40:58 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4821FC433EF
+	for <buildroot@archiver.kernel.org>; Wed, 22 Sep 2021 19:12:57 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id A4CC46120F
-	for <buildroot@archiver.kernel.org>; Wed, 22 Sep 2021 17:40:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A4CC46120F
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmx.net
+	by mail.kernel.org (Postfix) with ESMTPS id 8A53260F4C
+	for <buildroot@archiver.kernel.org>; Wed, 22 Sep 2021 19:12:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8A53260F4C
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3F053613FA;
-	Wed, 22 Sep 2021 17:40:57 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 20DE1401FD;
+	Wed, 22 Sep 2021 19:12:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7-tlVV9-5AOz; Wed, 22 Sep 2021 17:40:56 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id t-CKzrqqo045; Wed, 22 Sep 2021 19:12:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8883861436;
-	Wed, 22 Sep 2021 17:40:55 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 970D81BF59D
- for <buildroot@lists.busybox.net>; Wed, 22 Sep 2021 17:40:54 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8C48E405FC;
+	Wed, 22 Sep 2021 19:12:53 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 3B7C71BF321
+ for <buildroot@lists.busybox.net>; Wed, 22 Sep 2021 19:12:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9247283D7B
- for <buildroot@lists.busybox.net>; Wed, 22 Sep 2021 17:40:54 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2A924414B9
+ for <buildroot@lists.busybox.net>; Wed, 22 Sep 2021 19:12:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=gmx.net
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vXG1c79DuGE7 for <buildroot@lists.busybox.net>;
- Wed, 22 Sep 2021 17:40:53 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B849F82969
- for <buildroot@busybox.net>; Wed, 22 Sep 2021 17:40:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
- s=badeba3b8450; t=1632332449;
- bh=ZyUa213useetKR5+rMKcSFmOsDS/61rwyujSHC9sexk=;
- h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
- b=AlB2flgTeZL+H1mhoL3iQJJPT9eldrX4S0EXO4eXczDeP2QcjonRNZBDW0s6HTK2y
- Lh9tDHS/ZqxViJ7AsuhmoPTS0Q1e5n+BHY0k80nGJTPUnGq1pnNKZty12twiUkJmxx
- YmuRfwovC1P1YbK6RBllhafdqUnW3868oqBMXRPk=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from localhost ([62.216.209.208]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1M2wGi-1mRzmG45L2-003Nlw; Wed, 22
- Sep 2021 19:40:49 +0200
-Date: Wed, 22 Sep 2021 19:40:47 +0200
-From: Peter Seiderer <ps.report@gmx.net>
-To: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-Message-ID: <20210922194047.32914074@gmx.net>
-In-Reply-To: <76537c4d-163e-7947-5956-69969420e083@green-communications.fr>
-References: <CAHpv4cOfQv_PoRU0YN3NANLjcK9tooxUM-zFcQm-t2Xc0zP5xQ@mail.gmail.com>
- <76537c4d-163e-7947-5956-69969420e083@green-communications.fr>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-suse-linux-gnu)
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id nsGvbEu4-Ftx for <buildroot@lists.busybox.net>;
+ Wed, 22 Sep 2021 19:12:50 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com
+ [IPv6:2a00:1450:4864:20::529])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3AB6B414B2
+ for <buildroot@buildroot.org>; Wed, 22 Sep 2021 19:12:49 +0000 (UTC)
+Received: by mail-ed1-x529.google.com with SMTP id bx4so14026005edb.4
+ for <buildroot@buildroot.org>; Wed, 22 Sep 2021 12:12:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=JAsgbyBbBueeGGTB2WEHOqK5CfiErKstr8Wkm4r0XSA=;
+ b=Y4aiGpFEzkgaWtpYNM0hMbAlLnXrZzYNfrrSLAAfZL6Qy+n3fGMEI8u2OtDf/Dkm00
+ YFax/I+jJh/ctn4Xhb553P1TCrVVIruvkQnEA+42BEhVlngimKRHjM04fQJl1kNjIXpM
+ Thbryj/UJcoIvntDiu0qygD4/SAJi8ILnjOreFsWaHH/ebheqFl70CHUvKKQr99hiHr2
+ nTbOfgZcHKvx8MPsLNW6FWXEqvaPZGAsCH9JxdittRwFjqDfpdGIAuILc+1okmXXroim
+ LtCOC+jWP/IrBuvb+QX98F/lBFMp4bk0SQipzM2HWDdFmvuQsi/myjvRM1lA1OsLp5ps
+ Bo+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=JAsgbyBbBueeGGTB2WEHOqK5CfiErKstr8Wkm4r0XSA=;
+ b=za8+V3Cf7ae5HSrQhxfN0VE+Y4uVutu142tNVOeRtd7oSPyOBWWqi1t2t7zI6vDcAr
+ blydY6UOIDNPW3f1fH9Kp2goIbgd1SbS+IPMKAC3jAq5vjLHr67WRQA0r5bgyMbYt2xz
+ /qtT+ID0puiUYpS74g37xX3gdL68n1gJqb44hTRFAPS+EAg3i3krYXniWjWK7/J75lM2
+ RdNCtkIBvnzQU7bxm+R/8WfrTfU7gZJ1HcFNd3PZQGFnOzcwSAUiKk7sDpi1nUVhNLht
+ d2GGpBQdGjzL+Py2oluUKYwLDfVsyzsSdDMSaQtd4O1HsW/Cyd06fF002rB6ezUIjoy7
+ kW+A==
+X-Gm-Message-State: AOAM530YHWdTVpVsKa/AlMYS63OHvxnqLdLhjw/T5LZLfnAepDFWCZcF
+ ndKzw58jNYw0kLOV+9s4z5oZ+g==
+X-Google-Smtp-Source: ABdhPJwG9lETK5/a8RLMyQJ9mRWd5WUeSgremcXyeYpX6mjgl8P4dMlpz15/lUWs0tpuShMishKCQQ==
+X-Received: by 2002:a17:907:d23:: with SMTP id
+ gn35mr920293ejc.556.1632337968126; 
+ Wed, 22 Sep 2021 12:12:48 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id jl12sm1399487ejc.120.2021.09.22.12.12.47
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 22 Sep 2021 12:12:47 -0700 (PDT)
+Message-ID: <0c6aa3b2-ac0d-5b3e-c427-b0f95df42ce3@mind.be>
+Date: Wed, 22 Sep 2021 21:12:46 +0200
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:jJYq/KKlA4jc10dBKc+8U1Wv4R7KlkC9p+ZDPGNefDjjvNhnMmE
- D9wq2sFVFTspepYI1CDP5TsQYEDsK/MihxiNhq0mqRO8lFGoSIEN4bJe9hADq7D57/130nP
- XPjhQ1Fm/UxNACjF6kTJmzbMuy8UpiSsaL9ynUcnZ2BZkkgjjeV+/qCScTNBr89A6xxapk4
- MIn5YATMhLcjBElSCJr+w==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:4qjDYvXnoUo=:aQ9kEYzfpJcciftagy44XF
- RbBsfPciH3O8zKDxtYo4vYNPNqjLFaBSXDlb0WFE/KwDOgUsWj/Xkrd1YYphBscANqDaiOOgy
- Ze2Dy8963RH9hAxUlxsIhDSpQTYZ6R1ACXb8nvYPoWm/2LYMYuoXStDan9Ml/I0UoLmbyqWrq
- 4k14CI9cvWY9YNjEUSWvIMTS8JtG7psVGUs38i2bbbDfgFcubysdJOoRTaXLmHqRgimjwsgwE
- iV2rwpRKMfZWadtdIMd0fSj4z98IDprbJv+2qmIdwhny2+cfSuuZy05PuQ0RwdWfyaS0epm3n
- +ePT8LmWBDzEcIdJIi9HpUXjEf4RxAnzfjvoZdJvUejhUg3VbcQsk7bO+4iFKbMhDdPt/chiM
- KAHeVKBQvcNZZaH+Y9MrkpONwj2H6MHm751Z9usddpa27Qni42IR/fyytsaD3WTXCU2/JtIf8
- 1rUliAG9q9S4zfJEBV0oQaXTsP2GEFy++o/ALgIGJDYad7mz531P5kqooC9Xk7i/gjHgL71Xn
- PjbSohLXCsq8cNdXJgxlVGkdZRBGEznEeJ+3Ohwg2f8KCn3ybaulhjSLvzkf6ryg9YwYiPh37
- qzZuygl1HYm7SqzkA4PNdllE90+4tBVtgdmEK7UQzKkzsd4RdxZKHLu2HEeeONAx+Jue7ENDA
- 7fY4MqGp22e2n3noT239QLfdKxXnb0+uc3zsruRhcKGajbQ6E44+YU0lh7C0CGBT7LQvoqC88
- +WJ1w617oKKBFz42MDVtIPW+PNzRfLLPD3F91WSU5dXeJNcV0tPNqHn/ZlTk/32ISTGE0ijH7
- krnAkJWxmDkoSzveAeoM6o7aZ5uufeuHuPHeKWn5jGiCGGsaIUdlgsrsJQYmLWSbu944i1dFD
- WRICJtCUIGYBiNTZS0EYMYplKiPy/zkK+OW+/VIPZGFipvKesFuz3C38iC3z708o1+WnZ8BHi
- TkQBLR/lOQ4CFborW8Nn7Y2ez9AMxKoHE55yzf/DjIFETTlI2v2aV+ei8ynIPnzwlOxgbGxrd
- ny16Z5dbyZGBCMNDAqa2QBzz5UjH+uVkmH7mAbQk5v1S7IIVtPryB79egHE+IuWa0upJZHE5r
- 28FpzgA6cyHDQc=
-Subject: Re: [Buildroot] Recommended way to auto-reconnect wifi?
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.1.0
+Content-Language: en-GB
+To: James Knight <james.d.knight@live.com>, Petr Vorel <petr.vorel@gmail.com>
+References: <20210921210438.41808-1-petr.vorel@gmail.com>
+ <20210921210438.41808-2-petr.vorel@gmail.com>
+ <CALAjcgWNGy=1CbbrOMO9Ocu9ncpqxHDaX-+33rC9uToVp2-3hA@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <CALAjcgWNGy=1CbbrOMO9Ocu9ncpqxHDaX-+33rC9uToVp2-3hA@mail.gmail.com>
+Subject: Re: [Buildroot] [RFC PATCH v3 1/2] support: utils: use python3
+ explicitly
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,89 +109,45 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: buildroot@busybox.net, Jeremy Fleischman <jeremyfleischman@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
+Cc: Romain Naour <romain.naour@gmail.com>,
+ David Laight <David.Laight@aculab.com>, Edgar Bonet <bonet@grenoble.cnrs.fr>,
+ buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-Hello Jeremy, Nicolas,
-
-On Wed, 22 Sep 2021 10:19:27 +0200, Nicolas Cavallari <nicolas.cavallari@green-communications.fr> wrote:
-
-> On 22/09/2021 02:16, Jeremy Fleischman wrote:
-> > I've been happily using buildroot for a growing number of Raspberry PIs at
-> > home. However, I've noticed that whenever our wifi cuts out, they do not
-> > reconnect when it comes back.
-> >
-> > I've got them configured using BusyBox init + mdev + ifupdown +
-> > wpa_supplicant. I've skimmed through /etc/inittab, and I think I understand
-> > how everything is wired together:
-> >
-> >    - /etc/init.d/S10mdev: mdev starts up, and asynchronously starts
-> > discovering devices.
-> >    - /etc/init.d/S40network: This runs /sbin/ifup -a. I think this runs
-> > while mdev is still discovering devices, which is fine, because there's a
-> > wait-delay configured in /etc/network/interfaces:
-> >
-> > # cat /etc/network/interfaces
-> > auto lo
-> > iface lo inet loopback
-> >
-> > auto wlan0
-> > iface wlan0 inet dhcp
-> >      hostname thermometer
-> >      pre-up wpa_supplicant -D nl80211 -i wlan0 -c /etc/wpa_supplicant.conf -B
-> >      post-down killall -q wpa_supplicant
-> >      *wait-delay 15*
-> >
-> > iface default inet dhcp
-> >
-> > As far as I can tell, this all only ever happens at startup, and there
-> > isn't any mechanism that would attempt to reconnect to a wifi network after
-> > a disconnect. I've done some googling, and here's what I've learned:
-> >
-> >    - I'm pretty sure that wpa_supplicant is not supposed to handle this.
-> >    - It looks like some people write scripts to handle this for themselves.
-> > See this SO answer <https://raspberrypi.stackexchange.com/a/5121> and
-> > this dweeber/WiFi_Check
-> > repo <https://github.com/dweeber/WiFi_Check>.
-> >
-> > Am I correct that this is something I should fix by adding some sort of
-> > background/cron process to do something like the WiFi_Check script above?
-> > Or is this something buildroot does have baked in support for, and I just
-> > haven't found it yet?
->
-> Buildroot has nothing out of the box for this, short of
-> NetworkManager/connman or the likes.
->
-> In your case, wpasupplicant should reconnect automatically if it is
-> disconnected, but the busybox DHCP client, udhcpc  won't retry
-> indefinitely by default. If you use a custom busybox configuration, you
-> can modify CONFIG_IFUPDOWN_UDHCPC_CMD_OPTIONS to make udhcpc go into
-> background and retry indefinitely.
-
-Alternatively use the following patch [1] to change the ifupdown-scripts...,
-or do a complete change away from wpasupplicant and use iwd (see [2])
-providing AutoConnect and DHCP...
-
-Regards,
-Peter
-
-[1] https://patchwork.ozlabs.org/project/buildroot/patch/20210216202022.27264-1-ps.report@gmx.net/
-[2] https://iwd.wiki.kernel.org/start
 
 
->
-> Also, note that you can copy the Debian ifupdown scripts into your image
-> and then use the Debian's wpa-* options in /etc/network/interface. You
-> will have to tweak them a bit because buildroot install wpasupplicant in
-> /usr/sbin instead of /sbin.
+On 22/09/2021 05:09, James Knight wrote:
+> On Tue, Sep 21, 2021 at 5:04 PM Petr Vorel <petr.vorel@gmail.com> wrote:
+>> Python 2 is EOL sice 2020 [1], it's still available on distros, but may not
+>> be installed by default (as being replaced by python3).
+> 
+> I do not mind if everyone wants to make a transition to Python 3-only
+> support utilities, but I just wanted to mention that RHEL still
+> supports Python 2.x until June 2024 [1]. I am not aware of what
+> environments may be using RHEL8 to perform Buildroot-related
+> development and RHEL8 does support Python 3, so it may not be an
+> issue.
+
+  Even on RHEL, it's possible to install python3.6 (maybe even 3.7) through 
+rhscl. So RedHat is definitely not keeping us back to switch to Python3.
+
+  The reason RHEL still maintains python2 is to keep existing scripts that 
+*don't* work on python3 operational.
+
+
+  Regards,
+  Arnout
+
+> 
+> [1]: https://access.redhat.com/support/policy/updates/rhel8-app-streams-life-cycle
 > _______________________________________________
 > buildroot mailing list
 > buildroot@lists.buildroot.org
 > https://lists.buildroot.org/mailman/listinfo/buildroot
-
+> 
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
