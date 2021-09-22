@@ -2,70 +2,83 @@ Return-Path: <SRS0=bh6H=OM=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.5 required=3.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+	DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,HTML_MESSAGE,HTML_OBFUSCATE_10_20,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D40EC433EF
-	for <buildroot@archiver.kernel.org>; Wed, 22 Sep 2021 00:00:12 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D3BFC433F5
+	for <buildroot@archiver.kernel.org>; Wed, 22 Sep 2021 00:17:13 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 66D3A6115A
-	for <buildroot@archiver.kernel.org>; Wed, 22 Sep 2021 00:00:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 66D3A6115A
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=benettiengineering.com
+	by mail.kernel.org (Postfix) with ESMTPS id 9B96161166
+	for <buildroot@archiver.kernel.org>; Wed, 22 Sep 2021 00:17:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9B96161166
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0A960608B6;
-	Wed, 22 Sep 2021 00:00:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5DED240696;
+	Wed, 22 Sep 2021 00:17:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mJtE-bFa9DYn; Wed, 22 Sep 2021 00:00:10 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id loCugmHXkCPy; Wed, 22 Sep 2021 00:17:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5442C60839;
-	Wed, 22 Sep 2021 00:00:09 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 02BA91BF471
- for <buildroot@lists.busybox.net>; Tue, 21 Sep 2021 23:59:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B1A6340694;
+	Wed, 22 Sep 2021 00:17:10 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A029F1BF44C
+ for <buildroot@lists.busybox.net>; Wed, 22 Sep 2021 00:17:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F3423605AA
- for <buildroot@lists.busybox.net>; Tue, 21 Sep 2021 23:59:55 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9C4B382EAD
+ for <buildroot@lists.busybox.net>; Wed, 22 Sep 2021 00:17:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id W4SIw1ycLMhb for <buildroot@lists.busybox.net>;
- Tue, 21 Sep 2021 23:59:54 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtpcmd12131.aruba.it (smtpcmd12131.aruba.it [62.149.156.131])
- by smtp3.osuosl.org (Postfix) with ESMTP id 68FD26059A
- for <buildroot@buildroot.org>; Tue, 21 Sep 2021 23:59:54 +0000 (UTC)
-Received: from ubuntu.localdomain ([146.241.167.42])
- by Aruba Outgoing Smtp  with ESMTPSA
- id SpfzmxW6InxSqSpg0mPcET; Wed, 22 Sep 2021 01:59:52 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1632268792; bh=hFS3LRjOQBPYDGywF1euhFEgTyyWZa1FzZcKBT3fbE4=;
- h=From:To:Subject:Date:MIME-Version;
- b=GHft+iAnTpNbqTaxImzi68N8+4zYWkKqx2NAHyAPXz1A5pV2GBT3VJLrFAyF2SBn6
- 0EcC3XnKOUK87YHxfPhYn84FxGnf4yfkSbpEOc0TVKk/74G1LSvYWBtq7KlvDOyvaM
- zA5fiZbbDsjLazsARIQtVMF+TM+XCKbK2g53wXdPUPsGGHNsb8qfIZlkW4xjNkxsxc
- hLLgeYZpwe8SDffwqz/s+/BVdVL6APS/YyqOU2qqG7jkK47aBofSh6Ab/LKMUE/gAj
- F5l4uECEoSP2o10ZHClPru0bYo6UAwU4CkJsDuzgwXePKTjd/rsF+cbuayPA4roj6F
- 6du7q336/lpXg==
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-To: buildroot@buildroot.org
-Date: Wed, 22 Sep 2021 01:59:51 +0200
-Message-Id: <20210921235951.805592-2-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210921235951.805592-1-giulio.benetti@benettiengineering.com>
-References: <20210921235951.805592-1-giulio.benetti@benettiengineering.com>
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id uROnkfb_Pwsp for <buildroot@lists.busybox.net>;
+ Wed, 22 Sep 2021 00:17:08 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com
+ [IPv6:2607:f8b0:4864:20::52f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8E12B82CDE
+ for <buildroot@busybox.net>; Wed, 22 Sep 2021 00:17:08 +0000 (UTC)
+Received: by mail-pg1-x52f.google.com with SMTP id t1so815927pgv.3
+ for <buildroot@busybox.net>; Tue, 21 Sep 2021 17:17:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=mime-version:from:date:message-id:subject:to;
+ bh=JndYN5zOZFgI9sIQHXMBjvGAGl5Lm6MdmtaS9Y/eFK4=;
+ b=i0X4X+5VClAp/00f39us5aTtI7bV3SDe/DLuXcwUFbI/Rc7fH+TsMzpQbxrCaqeZrD
+ Ao9C+w+n8lAKBtezByAdlsqe/j8LbzrC0LTJlMtWB6ZU+ibniU4p+13s4sgwJuUwFtmM
+ t1hb20TLXYU6PNsQQ8pzTUZPUgzk9zH1+bBZC+XI8aB5Mzu1SvZWQduNErlK5wMEZflB
+ ZMC7l1J9TGnKVlAvqLnJXfG8UUyEWYzep3DWDo8IDiAFGNL6ERrXwAE74YNgVAiYg2xF
+ Wg1jU8wvelqgZ5Ml+QCXdxKY/DHNSsRnD3WOlyqe2t3q5d2EGJlSu04nIuh+9pJLpFoj
+ CYgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+ bh=JndYN5zOZFgI9sIQHXMBjvGAGl5Lm6MdmtaS9Y/eFK4=;
+ b=DPVXnnsF2AUwkSPYrMzSLW4FnevRfcte12/trfXpGZfAIgglBKK0yiLgdunee+rARq
+ qzYpY9EK8ZwHEivp63L+5EwQP94zkJIc/Wnzb9JSneXviI2kgvh3PrTDKwILyHLEKG/Y
+ gMtg8XUM9mUhREsrea/ULMUMueL9b1eq6YauKn2v1tVdwM1ECUg+pW+w7hKzB+tAfYjT
+ FyLPc3GwmeqTeDBIHFhQ9r5BfFf7QX6ZW9D9bO5udnolD2Kx1wLpo80DdcLZ47QZHNJ8
+ nJN1PUwTMmAKBMXkfFPykb416TQWVkgOImDTzEDfJ+69JUp8sd8KqeKuctd+lSAPwLTE
+ TlHA==
+X-Gm-Message-State: AOAM532MQa2ZtPd6Qhir6pXPtpM1pgAYUdO+brSfNptm98BQY9jxL7kf
+ RQPxdIJeddXfNCJ02DpRqQ4wq6DRS27e6ol8OaiweZizitc=
+X-Google-Smtp-Source: ABdhPJxaq5tZBMxpjTCQhOmnMFa/2XzktnfYbqf6d4E7qjhTR4EsqpkpXxI3IW3e72UdVWsQbw0A8Ncx1cxL+wZYQQU=
+X-Received: by 2002:aa7:9832:0:b0:44b:232a:a15d with SMTP id
+ q18-20020aa79832000000b0044b232aa15dmr332261pfl.51.1632269826879; Tue, 21 Sep
+ 2021 17:17:06 -0700 (PDT)
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4wfErVAxk3ZlJ8oKHAVc8glviiKtV4bGnZqw8MgLc7zD9ADZaBpoRBDrJ52fGFneXl4kgJT/uVYrgz2dSO17ewc5C6QBShbpb46W/mjUO4BmvMHmvqxXG8
- hLrNuvPWsox5X1UWL+lEKCoe+p+QgFVOyK0sQ/kLTaEp5WyTUvyDwJjdFqKwNl59j4b9UXT5IfhYZxpxy72KYSwoR3jKfYRnEAT/aw+SsGuxdnWBSFfVNtAm
- pJx2Sr7SFKWJpHYuLG4UVA0s2qpxqDCedWQzPWhikvrFq56ErzRpz5PyyRDL6tBL
-Subject: [Buildroot] [PATCH 1/1] package/libnss: fix parallel build failure
+From: Jeremy Fleischman <jeremyfleischman@gmail.com>
+Date: Tue, 21 Sep 2021 17:16:55 -0700
+Message-ID: <CAHpv4cOfQv_PoRU0YN3NANLjcK9tooxUM-zFcQm-t2Xc0zP5xQ@mail.gmail.com>
+To: buildroot@busybox.net
+Subject: [Buildroot] Recommended way to auto-reconnect wifi?
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,72 +91,107 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: Joseph Kogut <joseph.kogut@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============3776183688290281420=="
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-As explained in the patch itself(pending here[1]), I couldn't reproduce
-the failure but it seems to be right. Basically I'm making not parallel
-every 'nsinstall -R' command that is where it fails.
+--===============3776183688290281420==
+Content-Type: multipart/alternative; boundary="0000000000003575cf05cc8a6f18"
 
-[1]: https://bugzilla.mozilla.org/show_bug.cgi?id=1731911
+--0000000000003575cf05cc8a6f18
+Content-Type: text/plain; charset="UTF-8"
 
-Fixes:
-http://autobuild.buildroot.net/results/a895ed7aa48edc5cd9ac8bbbd689433a98c9c057/
+I've been happily using buildroot for a growing number of Raspberry PIs at
+home. However, I've noticed that whenever our wifi cuts out, they do not
+reconnect when it comes back.
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- ...31911-Fix-nsinstall-parallel-failure.patch | 34 +++++++++++++++++++
- 1 file changed, 34 insertions(+)
- create mode 100644 package/libnss/0001-Bug-1731911-Fix-nsinstall-parallel-failure.patch
+I've got them configured using BusyBox init + mdev + ifupdown +
+wpa_supplicant. I've skimmed through /etc/inittab, and I think I understand
+how everything is wired together:
 
-diff --git a/package/libnss/0001-Bug-1731911-Fix-nsinstall-parallel-failure.patch b/package/libnss/0001-Bug-1731911-Fix-nsinstall-parallel-failure.patch
-new file mode 100644
-index 0000000000..7ac340f1ca
---- /dev/null
-+++ b/package/libnss/0001-Bug-1731911-Fix-nsinstall-parallel-failure.patch
-@@ -0,0 +1,34 @@
-+From 7ba4d627212507f876dc112e89c68e82e1c50188 Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Wed, 22 Sep 2021 01:40:31 +0200
-+Subject: [PATCH] Bug 1731911 - Fix nsinstall parallel failure
-+
-+Fix nsinstall race condition when building using Makefile with parallel
-+options on. I've end up making $(1) recipe in copy_varlist_into_dir_RULE
-+.NOTPARALLEL. I can't test it that much since it's very very rare, but
-+it seems to be the correct way. This way every copy_varlist_into_dir_RULE
-+called should occur not parallel and I think that this is acceptable
-+since it only create symlinks that takes very few. Further improving is
-+possible of course.
-+
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ nss/coreconf/rules.mk | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/nss/coreconf/rules.mk b/nss/coreconf/rules.mk
-+index dc72e9cef..a341b8385 100644
-+--- a/nss/coreconf/rules.mk
-++++ b/nss/coreconf/rules.mk
-+@@ -377,6 +377,8 @@ $(3)/%: %
-+ 	$$(INSTALL) -m 444 $$^ $(3)
-+ 
-+ $(1): $$(addprefix $(3)/,$$($(2))) | $(3)/d
-++
-++.NOTPARALLEL: $(1)
-+ endif
-+ else
-+ $(1):
-+-- 
-+2.25.1
-+
--- 
-2.25.1
+  - /etc/init.d/S10mdev: mdev starts up, and asynchronously starts
+discovering devices.
+  - /etc/init.d/S40network: This runs /sbin/ifup -a. I think this runs
+while mdev is still discovering devices, which is fine, because there's a
+wait-delay configured in /etc/network/interfaces:
+
+# cat /etc/network/interfaces
+auto lo
+iface lo inet loopback
+
+auto wlan0
+iface wlan0 inet dhcp
+    hostname thermometer
+    pre-up wpa_supplicant -D nl80211 -i wlan0 -c /etc/wpa_supplicant.conf -B
+    post-down killall -q wpa_supplicant
+    *wait-delay 15*
+
+iface default inet dhcp
+
+As far as I can tell, this all only ever happens at startup, and there
+isn't any mechanism that would attempt to reconnect to a wifi network after
+a disconnect. I've done some googling, and here's what I've learned:
+
+  - I'm pretty sure that wpa_supplicant is not supposed to handle this.
+  - It looks like some people write scripts to handle this for themselves.
+See this SO answer <https://raspberrypi.stackexchange.com/a/5121> and
+this dweeber/WiFi_Check
+repo <https://github.com/dweeber/WiFi_Check>.
+
+Am I correct that this is something I should fix by adding some sort of
+background/cron process to do something like the WiFi_Check script above?
+Or is this something buildroot does have baked in support for, and I just
+haven't found it yet?
+
+Thanks,
+Jeremy
+
+--0000000000003575cf05cc8a6f18
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">I&#39;ve been happily using buildroot for a growing number=
+ of Raspberry PIs at home. However, I&#39;ve noticed that whenever our=C2=
+=A0<span class=3D"gmail-il">wifi</span>=C2=A0cuts out, they do not=C2=A0<sp=
+an class=3D"gmail-il">reconnect</span>=C2=A0when it comes back.<br><br>I&#3=
+9;ve got them configured using BusyBox init + mdev + ifupdown + wpa_supplic=
+ant. I&#39;ve skimmed through /etc/inittab, and I think I understand how ev=
+erything is wired together:<br><br>=C2=A0 - /etc/init.d/S10mdev: mdev start=
+s up, and asynchronously starts discovering devices.<br>=C2=A0 - /etc/init.=
+d/S40network: This runs /sbin/ifup -a. I think this runs while mdev is stil=
+l discovering devices, which is fine, because there&#39;s a wait-delay conf=
+igured in /etc/network/interfaces:<br><br><font face=3D"monospace"># cat /e=
+tc/network/interfaces<br><span class=3D"gmail-il">auto</span>=C2=A0lo<br>if=
+ace lo inet loopback<br><br><span class=3D"gmail-il">auto</span>=C2=A0wlan0=
+<br>iface wlan0 inet dhcp<br>=C2=A0 =C2=A0 hostname thermometer<br>=C2=A0 =
+=C2=A0 pre-up wpa_supplicant -D nl80211 -i wlan0 -c /etc/wpa_supplicant.con=
+f -B<br>=C2=A0 =C2=A0 post-down killall -q wpa_supplicant<br>=C2=A0 =C2=A0 =
+<b>wait-delay 15</b><br><br>iface default inet dhcp</font><br><br>As far as=
+ I can tell, this all only ever happens at startup, and there isn&#39;t any=
+ mechanism that would attempt to=C2=A0<span class=3D"gmail-il">reconnect</s=
+pan>=C2=A0to a=C2=A0<span class=3D"gmail-il">wifi</span>=C2=A0network after=
+ a disconnect. I&#39;ve done some googling, and here&#39;s what I&#39;ve le=
+arned:<br><br>=C2=A0 - I&#39;m pretty sure that wpa_supplicant is not suppo=
+sed to handle this.<br>=C2=A0 - It looks like some people write scripts to =
+handle this for themselves. See this <a href=3D"https://raspberrypi.stackex=
+change.com/a/5121">SO answer</a> and this <a href=3D"https://github.com/dwe=
+eber/WiFi_Check">dweeber/WiFi_Check repo</a>.<br><br>Am I correct that this=
+ is something I should fix by adding some sort of background/cron process t=
+o do something like the WiFi_Check script above? Or is this something build=
+root does have baked in support for, and I just haven&#39;t found it yet?<b=
+r><br>Thanks,<br>Jeremy</div>
+
+--0000000000003575cf05cc8a6f18--
+
+--===============3776183688290281420==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============3776183688290281420==--
