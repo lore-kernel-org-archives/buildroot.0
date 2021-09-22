@@ -2,77 +2,87 @@ Return-Path: <SRS0=bh6H=OM=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
+	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 58DFBC433EF
-	for <buildroot@archiver.kernel.org>; Wed, 22 Sep 2021 08:19:39 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B8D0FC433F5
+	for <buildroot@archiver.kernel.org>; Wed, 22 Sep 2021 08:31:32 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B055E61184
-	for <buildroot@archiver.kernel.org>; Wed, 22 Sep 2021 08:19:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B055E61184
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=green-communications.fr
+	by mail.kernel.org (Postfix) with ESMTPS id 3F1FA61215
+	for <buildroot@archiver.kernel.org>; Wed, 22 Sep 2021 08:31:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3F1FA61215
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8088540774;
-	Wed, 22 Sep 2021 08:19:38 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D7D104049D;
+	Wed, 22 Sep 2021 08:31:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Cj3KMEY2HZlD; Wed, 22 Sep 2021 08:19:37 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ega_fLsOAfPe; Wed, 22 Sep 2021 08:31:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D69B04072B;
-	Wed, 22 Sep 2021 08:19:36 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 744E51BF30E
- for <buildroot@lists.busybox.net>; Wed, 22 Sep 2021 08:19:35 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id ECC7C4048D;
+	Wed, 22 Sep 2021 08:31:29 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5DD811BF30E
+ for <buildroot@lists.busybox.net>; Wed, 22 Sep 2021 08:31:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 64145833A0
- for <buildroot@lists.busybox.net>; Wed, 22 Sep 2021 08:19:35 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 54C524036F
+ for <buildroot@lists.busybox.net>; Wed, 22 Sep 2021 08:31:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vPUR1ge4LK4l for <buildroot@lists.busybox.net>;
- Wed, 22 Sep 2021 08:19:34 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8E4EB83372
- for <buildroot@busybox.net>; Wed, 22 Sep 2021 08:19:33 +0000 (UTC)
-Received: from [192.168.0.175] ([151.127.53.97]) by mrelayeu.kundenserver.de
- (mreue010 [213.165.67.103]) with ESMTPSA (Nemesis) id
- 1Mn2Jj-1nBbMr0hfD-00k4Jp; Wed, 22 Sep 2021 10:19:30 +0200
-To: Jeremy Fleischman <jeremyfleischman@gmail.com>, buildroot@busybox.net
-References: <CAHpv4cOfQv_PoRU0YN3NANLjcK9tooxUM-zFcQm-t2Xc0zP5xQ@mail.gmail.com>
-From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-Message-ID: <76537c4d-163e-7947-5956-69969420e083@green-communications.fr>
-Date: Wed, 22 Sep 2021 10:19:27 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lgH3AAptR9Gn for <buildroot@lists.busybox.net>;
+ Wed, 22 Sep 2021 08:31:27 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com
+ [IPv6:2607:f8b0:4864:20::52c])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 7A24840161
+ for <buildroot@buildroot.org>; Wed, 22 Sep 2021 08:31:27 +0000 (UTC)
+Received: by mail-pg1-x52c.google.com with SMTP id m21so1857213pgu.13
+ for <buildroot@buildroot.org>; Wed, 22 Sep 2021 01:31:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=eIlUFdTgIaEZad4zovA0z+9U26Ntv3AK6o7hpUtPlqE=;
+ b=iD8Gd2UWjR3GNS5E2WNjI+1Ecm8VM9eP+AnMsXqfiti22Tr4RmEw+Y6oTVnTFsK0nT
+ NElVeeK+ymCaOC+2PLhm4tpHftnPu5iFWPlB01Pz4axb1iljxCzfHnFTnTOjvFPs8+wM
+ cF+E75M76cq+1WwSa+WjGVg/TmMngGtyP/I12+vv+dgW4pxCZWc8POPPO3Gkh7sT6G0i
+ G4qTxNnivDAMKydNcfLxIhRlMZ0PW4l/uLnQ/XtiJGvP0BKE6WnHeMuzfh2QDdDwcmD5
+ zfLjcTlsSMeTXkPY8X2eThRehIGhDeprzxLhQ4x7eVYV7/ypRybFq3aphPaatFyUIa00
+ Sh1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=eIlUFdTgIaEZad4zovA0z+9U26Ntv3AK6o7hpUtPlqE=;
+ b=QGk67LjmmG+NIQpJQzzvlY79ftgGCx5/qJYf3iwQJMvyMogHv448DjaYNh+53stKxy
+ +DricTVqnoFB/ocJPMz7v0qD0RLJ0Lpru3kvdAC8SYNDVE4xzHCAWddpzX7Py2Js5L4u
+ LI7wVZ28GEfECDIYpBMEoBHfDvxsncj6oX2Mx3XALN4P8Oplqy8T+4STzETlD2bzeH7e
+ 9gjpfets5r2EaXNn+EIXRD48n1nncDAm3XXsOioz2tXA+z0plT9laDFTd9MEEJdaw422
+ E9aS6TL0h9v0kvb9y6QoDrSuLYDZdIg9XBMY2Cz6B64i2OBqJlWIwWoEpfF6NswpMH3K
+ Q93w==
+X-Gm-Message-State: AOAM531laUTDoVtwXae1ly9fYxVMr//0+YfU8/294JxYdbjO9/1Cmn42
+ 4MwQ4HrYH71eUeUwLkCtAP55Tr/Z6YkDXQ==
+X-Google-Smtp-Source: ABdhPJwO7O8FAdfi18Ns5G45xhBJQ1V7h+7wi3PSt7ce6/e/ZyvZZBpjEviDTHjww0TI41ELfjWFQA==
+X-Received: by 2002:a63:841:: with SMTP id 62mr31648110pgi.354.1632299486534; 
+ Wed, 22 Sep 2021 01:31:26 -0700 (PDT)
+Received: from chrisp-dl.atlnz.lc ([2001:df5:b000:22:45c1:823f:9f7c:20d])
+ by smtp.gmail.com with ESMTPSA id g3sm1631656pfk.178.2021.09.22.01.31.24
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 22 Sep 2021 01:31:25 -0700 (PDT)
+From: Chris Packham <judge.packham@gmail.com>
+To: buildroot@buildroot.org
+Date: Wed, 22 Sep 2021 20:31:13 +1200
+Message-Id: <20210922083114.545106-1-judge.packham@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-In-Reply-To: <CAHpv4cOfQv_PoRU0YN3NANLjcK9tooxUM-zFcQm-t2Xc0zP5xQ@mail.gmail.com>
-Content-Language: fr
-X-Provags-ID: V03:K1:OoHDrFCTr0I3hO997ajGhzCriACzcsxuc8kqCOtd22TZbb5tB/7
- rbXc/f8kLrtVj1PqcAjMlM92QilubTJImUonVGCcnVNEC1cSJufk8QqxwXog6T+humjOvvo
- Mt/AJqx2QtFGFxZqt8vGZJP7I/FsqQCt/xQRYJf5oVA8+v9ReOne6NoSzSBvkGjtrE7prFa
- h9dfRAld7o2OiOfdbbDhA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:xK7QarqLBwM=:Zpr4O7Maamc8Rf4E+hJxPs
- FXlAtL9jKHGfi/CbHC67Rq/obbebcTR7KMNpgAiwpA+dOJzBXHjDD2F7Gbnf36gCydhbcxQ+T
- 19NZ2Y/xStpWoSGVjDSMWErObFNjYhrqu5GDUwjHI6tbqbxJNM7bOBqBSRvgHpkxNDfpWohwR
- QcNwKJusEeXjPgNMHojm0f09Lb55fjmwktYKnq5XBvqD7EKzifAXqjnDjnLlDnnqsVW5o1y85
- kbQv2NDGs/uH5zYy7kQCijeDo8gLLhAEbMHPQr8jpg3lRlFX9fS3PdgZwz8cggLryoD8KugLt
- h2xaAlGgmVA34NhfQV/775bz+GwKBGNudfq4lnyf6L3rb4CFvkg4xA+EYxTBv2+HssuEO7igs
- iygbl14FECOdOwSJEARNJyQwJtsw5fxfUL5yMAxLFpMYLA5rB+k5pE5NcKEZe74cUxs5ZSSJI
- 5ypFXSZ8a3dBzRFo9bNEotJbxHyMap6f4orueLmd+Ay1gwpVK1N08+uSIxzydGRHLWT1qZ0Ns
- fLxwfGjAQOjx1suVlcqTdyDu4crtiqwPMqaVAt4cC+ZDgE0BvVJ+vlJD5qaZK4jFoFRgZXtfz
- N7UJLyalCDxJYQd15igbZAco3aRkb5ycXIjHJqIePDtzHyj/HhN507J+jDRWB1GVhp74WMQIk
- FZnVMn1JWlT+65cYdu9thqLGOKJeuzQ1dHGMdGqsC4sYeCkMwsXdtIX964BbfCCCkjDvTL+Xt
- vnZubplL6BTD9DAoaZDZrZo4bCen3NNT4BYE0h6JpnBciBiP6f4G30Njr3BK9UEKmorLQYuk6
- zqhB+K9
-Subject: Re: [Buildroot] Recommended way to auto-reconnect wifi?
+Subject: [Buildroot] [PATCH 1/2] package/micropython: Update LICENSE info
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,67 +95,39 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
+Cc: Chris Packham <judge.packham@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-On 22/09/2021 02:16, Jeremy Fleischman wrote:
-> I've been happily using buildroot for a growing number of Raspberry PIs at
-> home. However, I've noticed that whenever our wifi cuts out, they do not
-> reconnect when it comes back.
-> 
-> I've got them configured using BusyBox init + mdev + ifupdown +
-> wpa_supplicant. I've skimmed through /etc/inittab, and I think I understand
-> how everything is wired together:
-> 
->    - /etc/init.d/S10mdev: mdev starts up, and asynchronously starts
-> discovering devices.
->    - /etc/init.d/S40network: This runs /sbin/ifup -a. I think this runs
-> while mdev is still discovering devices, which is fine, because there's a
-> wait-delay configured in /etc/network/interfaces:
-> 
-> # cat /etc/network/interfaces
-> auto lo
-> iface lo inet loopback
-> 
-> auto wlan0
-> iface wlan0 inet dhcp
->      hostname thermometer
->      pre-up wpa_supplicant -D nl80211 -i wlan0 -c /etc/wpa_supplicant.conf -B
->      post-down killall -q wpa_supplicant
->      *wait-delay 15*
-> 
-> iface default inet dhcp
-> 
-> As far as I can tell, this all only ever happens at startup, and there
-> isn't any mechanism that would attempt to reconnect to a wifi network after
-> a disconnect. I've done some googling, and here's what I've learned:
-> 
->    - I'm pretty sure that wpa_supplicant is not supposed to handle this.
->    - It looks like some people write scripts to handle this for themselves.
-> See this SO answer <https://raspberrypi.stackexchange.com/a/5121> and
-> this dweeber/WiFi_Check
-> repo <https://github.com/dweeber/WiFi_Check>.
-> 
-> Am I correct that this is something I should fix by adding some sort of
-> background/cron process to do something like the WiFi_Check script above?
-> Or is this something buildroot does have baked in support for, and I just
-> haven't found it yet?
+The various micropython ports may include code licensed under different
+licenses compared to the core micropython. List these in MICROPYTHON_LICENSE.
 
-Buildroot has nothing out of the box for this, short of 
-NetworkManager/connman or the likes.
+Signed-off-by: Chris Packham <judge.packham@gmail.com>
+---
+ package/micropython/micropython.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-In your case, wpasupplicant should reconnect automatically if it is 
-disconnected, but the busybox DHCP client, udhcpc  won't retry 
-indefinitely by default. If you use a custom busybox configuration, you 
-can modify CONFIG_IFUPDOWN_UDHCPC_CMD_OPTIONS to make udhcpc go into 
-background and retry indefinitely.
+diff --git a/package/micropython/micropython.mk b/package/micropython/micropython.mk
+index fa28da9be3..7a752efd69 100644
+--- a/package/micropython/micropython.mk
++++ b/package/micropython/micropython.mk
+@@ -6,7 +6,10 @@
+ 
+ MICROPYTHON_VERSION = 1.14
+ MICROPYTHON_SITE = $(call github,micropython,micropython,v$(MICROPYTHON_VERSION))
+-MICROPYTHON_LICENSE = MIT
++MICROPYTHON_LICENSE = MIT, Apache-2.0, BSD-1-clause, BSD-3-clause, BSD-4-clause, \
++		      GPL-2.0 with FreeRTOS exception, GPL-2.0+, GPL-2.0, LGPL-3.0-only, \
++		      MCD-ST Liberty SW License Agreement V2, MIT + BSD-3-clause, OFL-1.1, \
++		      PJRC.COM, Zlib
+ MICROPYTHON_LICENSE_FILES = LICENSE
+ MICROPYTHON_DEPENDENCIES = host-pkgconf libffi $(BR2_PYTHON3_HOST_DEPENDENCY)
+ 
+-- 
+2.33.0
 
-Also, note that you can copy the Debian ifupdown scripts into your image 
-and then use the Debian's wpa-* options in /etc/network/interface. You 
-will have to tweak them a bit because buildroot install wpasupplicant in 
-/usr/sbin instead of /sbin.
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
