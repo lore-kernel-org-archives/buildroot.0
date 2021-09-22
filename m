@@ -2,94 +2,73 @@ Return-Path: <SRS0=bh6H=OM=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,HTML_MESSAGE,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E4E9C433F5
-	for <buildroot@archiver.kernel.org>; Wed, 22 Sep 2021 14:00:57 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F01D2C433F5
+	for <buildroot@archiver.kernel.org>; Wed, 22 Sep 2021 14:09:10 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id F001C60F43
-	for <buildroot@archiver.kernel.org>; Wed, 22 Sep 2021 14:00:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org F001C60F43
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=unikie.com
+	by mail.kernel.org (Postfix) with ESMTPS id 2C4AB61168
+	for <buildroot@archiver.kernel.org>; Wed, 22 Sep 2021 14:09:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2C4AB61168
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=grenoble.cnrs.fr
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9902E4057E;
-	Wed, 22 Sep 2021 14:00:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CF40040813;
+	Wed, 22 Sep 2021 14:09:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cUiGvPZ4p2KZ; Wed, 22 Sep 2021 14:00:54 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id dmRgX6DT-cre; Wed, 22 Sep 2021 14:09:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AC15740582;
-	Wed, 22 Sep 2021 14:00:53 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D83561BF2EB
- for <buildroot@lists.busybox.net>; Wed, 22 Sep 2021 14:00:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3EFAC41480;
+	Wed, 22 Sep 2021 14:09:08 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 95EFE1BF3AF
+ for <buildroot@lists.busybox.net>; Wed, 22 Sep 2021 14:09:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D276740582
- for <buildroot@lists.busybox.net>; Wed, 22 Sep 2021 14:00:52 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8556460632
+ for <buildroot@lists.busybox.net>; Wed, 22 Sep 2021 14:09:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3sjUfQXOQzeH for <buildroot@lists.busybox.net>;
- Wed, 22 Sep 2021 14:00:51 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com
- [IPv6:2a00:1450:4864:20::52f])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2B7DE4057E
- for <buildroot@buildroot.org>; Wed, 22 Sep 2021 14:00:50 +0000 (UTC)
-Received: by mail-ed1-x52f.google.com with SMTP id v5so10178419edc.2
- for <buildroot@buildroot.org>; Wed, 22 Sep 2021 07:00:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=unikie-com.20210112.gappssmtp.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=9XfaFwMSQXNXcRhX6SgaWNzNrsuuDcuUay93rgzc5do=;
- b=btdn9uZV4nrL+bk7nW1oE26MpW6jvlgkpcdk330VL28jVqTRYIkbxXUbixnm6S6zLZ
- CGPvdENyc6tF0VEuuQSg1BNUIOgmUaKVpmk5Q7X3OBPZYqHaflxRxY2zFMnWVQO5GtgZ
- 401KRLoxfts+rfBe4pmp1Hs15GIdcuiNgKW8j0VBJMK1vx2x4C79ba/SkcILmOykRb63
- OEd1bq8xeAloIcYKFOUUYkqZcCb86YAOhwzDz1/TAwAuyq94fz5/6drSp04yizSe4k8I
- Da/b7luc350uOXQmyQ02OpgPDofHKwlDSipkpDXdDyDycQE3IQ5VHDtvJOqPdo+uWX4T
- Oh5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=9XfaFwMSQXNXcRhX6SgaWNzNrsuuDcuUay93rgzc5do=;
- b=phK1wML04m5BtXew8LxT84P+XpOsE/vwfuJuUmtqA5vt1Vft8UVaQH9tK/RVwKAB0M
- z28/Ax7msOWemDSx+ngMUV5LpJqDdO7cfjM8nj9RdaBUf1AqTTtENhGUm0uHB6idQxoD
- w+pU03141c4mW6DSLakvT7lHFNlV3o+dwW/Qy2WfxXSkuO8cAJe9LXFzAyQ2qMEGRLz0
- m2UzhtqrYcfWaxghHesY46tXHToVfNsunkGJaZIGZ/IhzSgn1ajA1RaIirVgg3tDaKD/
- ddp0itQ7v0RH4QKYJzg9Nks5P8Aw3KU476ZPo2FCQGt6HqiYsbgWuvKufFKlceBCQZ44
- EhZQ==
-X-Gm-Message-State: AOAM5316d2pu5iccAgMYTolrt2d1It/NbJwQ1szB+FDQSImE3LtLoOp/
- 0njSIon7ISBgSOuJOZSysA/wUtSSnIFzGRAVILBnpU9nteTNlg==
-X-Google-Smtp-Source: ABdhPJw+VvwRknqfWHDuDdIfS9VH+WyNt34WS1tUZzD7sH1em1+yNmIdYy4J1PmPuaDbjcYvATmiDLhBQLxHVjLx+LU=
-X-Received: by 2002:a17:906:1901:: with SMTP id
- a1mr42104918eje.129.1632319230382; 
- Wed, 22 Sep 2021 07:00:30 -0700 (PDT)
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=grenoble.cnrs.fr
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id V0xFKw6Sl4hY for <buildroot@lists.busybox.net>;
+ Wed, 22 Sep 2021 14:09:01 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from mailgw-out1.grenoble.cnrs.fr (mailgw-out1.grenoble.cnrs.fr
+ [IPv6:2001:660:530d:201::44])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 70E37605BA
+ for <buildroot@buildroot.org>; Wed, 22 Sep 2021 14:09:01 +0000 (UTC)
+Received: from [147.173.65.159] (pulsar.grenoble.cnrs.fr [147.173.65.159])
+ (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+ (No client certificate requested)
+ by mailgw-out1.grenoble.cnrs.fr (Postfix) with ESMTPSA id 4B807BFBF6
+ for <buildroot@buildroot.org>; Wed, 22 Sep 2021 16:08:58 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=grenoble.cnrs.fr;
+ s=202106-grenoble.cnrs.fr; t=1632319738;
+ bh=Dx0/G6vhqix8oxU3362lxJB4QiUPuAkO7zS5WDhRw6E=;
+ h=To:From:Subject:Date:From;
+ b=k6dtafDOmjsuTxRMK8wEb9jtS0TTwixCH0ACliVYeDgNs8B2DqSi784FRYVC34GMB
+ E5R+WqDgUNvpDiLcOxKtJt0b1tus7y8l1WzVbfjvtT2iaDAPAmTpuIQwvT8cAAQZUn
+ FyOsZ7k8MSemFe2u9QiuYaMdaMihKVolHIAiovpOsXOrpMCG7WWVM2bRfn1Xv5wugq
+ DBMXA2jGtUsVq98mLYFIPVQJcpNQiFv56CxHoj8IB4ZVx1hrBNP7yP93DYTDfJrxA/
+ LnCI+TvDDJwYoJIefQwHuJZx0ojwqP4Lse6mIcvprGizUBLoXLrVHTyqP69OYAbx2p
+ pl4mLDy0esNTw==
+To: buildroot@buildroot.org
+From: Edgar Bonet <bonet@grenoble.cnrs.fr>
+Message-ID: <2426ca2d-7fa8-d8a1-c542-0abbfcec3ec8@grenoble.cnrs.fr>
+Date: Wed, 22 Sep 2021 16:08:58 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-References: <20210830114531.2285178-1-jose.pekkarinen@unikie.com>
- <CAJPV9MrYNwrrZ34-JgRPO62Y_6yT0HZ564YuB_qFKYdsRo7nXQ@mail.gmail.com>
- <163213021612.4283.1135197152174473636@kwain>
- <CAJPV9Mphsf6BhYHhsD7BFRXms2Psbi0xFX9SUaBbyu40iZCecQ@mail.gmail.com>
- <163214406368.4283.14394760824414034461@kwain>
- <CAJPV9MrgZcVw3cmO1+w_zn6M2yub+nCZ73H_YJ0g=OTpuu1MeA@mail.gmail.com>
- <163214596519.4283.5229631383777844599@kwain>
- <CAJPV9MqsdZa5oCYSE-+ZsNi4w1w8CWVeUPd4CohXddt5pcr7zQ@mail.gmail.com>
- <163220836697.4283.6363157164675068449@kwain>
- <CAJPV9MpNh0rXA6ZTJJyj5A58goFtt7GnPNimddk94eZw8S2bdQ@mail.gmail.com>
- <163223176981.4283.2007173106051805069@kwain>
-In-Reply-To: <163223176981.4283.2007173106051805069@kwain>
-From: =?UTF-8?Q?Jos=C3=A9_Pekkarinen?= <jose.pekkarinen@unikie.com>
-Date: Wed, 22 Sep 2021 17:00:19 +0300
-Message-ID: <CAJPV9Mp-6PBtw5G2YDORJ_5cqypjtrc2CR3cMrzfe36RpUW2oQ@mail.gmail.com>
-To: Antoine Tenart <atenart@kernel.org>
-Subject: Re: [Buildroot] [PATCH] package/refpolicy: Treat all modules as
- custom
+Content-Language: en-US
+Subject: [Buildroot] [PATCH 1/1] support/kconfig: fix compiler warnings
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,110 +81,46 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============1644389105575103653=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
---===============1644389105575103653==
-Content-Type: multipart/alternative; boundary="000000000000e32e9a05cc95ef44"
-
---000000000000e32e9a05cc95ef44
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-On Tue, Sep 21, 2021 at 4:42 PM Antoine Tenart <atenart@kernel.org> wrote:
-
-> Quoting Jos=C3=A9 Pekkarinen (2021-09-21 15:32:32)
-> > On Tue, Sep 21, 2021 at 10:12 AM Antoine Tenart <[1]atenart@kernel.org>
-> > wrote:
-> >
-> > I tested today to build the system with buildroot 2021.05.2(without
-> > the patch) and it reproduces exactly the same behaviour,
-> > policy/modules.conf doesn't receive the line to activate the secure
-> > module, and if I search in policy.conf or policy.32 through sesearch I
-> > find no sign of the policies defined in the module.  I'll attempt the
-> > upgrade to 2021.08, but that will require a bit more time.
->
-> Alternatively you can just test with newer refpolicy versions, outside
-> of Buildroot and look at the generated modules.conf. This will give the
-> same information and should be easier to do. (My feeling is this won't
-> change and we'll have to dive into the refpolicy logic for enabling
-> modules when running 'make conf').
->
-
-The config generator requires a summary line in the module.if file
-
-to be added in policy/modules.conf, otherwise it doesn't process any
-further.
-It seems to be something tricky to address, in your end developing a check
-the summary is in place doesn't make sense, in their end, not using that
-hook to learn the modules from the xml make be also complicated. All
-in all, thanks for the comments, at least I have a way out without this
-patch. If there is something I can address for you in this topic, feel free
-to ask.
-
-Best regards.
-
-Jos=C3=A9.
-
---000000000000e32e9a05cc95ef44
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div dir=3D"ltr"><br></div><br><div class=3D"gmail_quote">=
-<div dir=3D"ltr" class=3D"gmail_attr">On Tue, Sep 21, 2021 at 4:42 PM Antoi=
-ne Tenart &lt;<a href=3D"mailto:atenart@kernel.org" target=3D"_blank">atena=
-rt@kernel.org</a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote" sty=
-le=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);paddi=
-ng-left:1ex">Quoting Jos=C3=A9 Pekkarinen (2021-09-21 15:32:32)<br>
-&gt; On Tue, Sep 21, 2021 at 10:12 AM Antoine Tenart &lt;[1]<a href=3D"mail=
-to:atenart@kernel.org" target=3D"_blank">atenart@kernel.org</a>&gt;<br>
-&gt; wrote:<br>
-&gt; <br>
-&gt; I tested today to build the system with buildroot 2021.05.2(without<br=
->
-&gt; the patch) and it reproduces exactly the same behaviour,<br>
-&gt; policy/modules.conf doesn&#39;t receive the line to activate the secur=
-e<br>
-&gt; module, and if I search in policy.conf or policy.32 through sesearch I=
-<br>
-&gt; find no sign of the policies defined in the module.=C2=A0 I&#39;ll att=
-empt the<br>
-&gt; upgrade to 2021.08, but that will require a bit more time.<br>
-<br>
-Alternatively you can just test with newer refpolicy versions, outside<br>
-of Buildroot and look at the generated modules.conf. This will give the<br>
-same information and should be easier to do. (My feeling is this won&#39;t<=
-br>
-change and we&#39;ll have to dive into the refpolicy logic for enabling<br>
-modules when running &#39;make conf&#39;).<br></blockquote><div><br></div><=
-/div><blockquote style=3D"margin:0 0 0 40px;border:none;padding:0px"><div c=
-lass=3D"gmail_quote"><div>The config generator requires a summary line in t=
-he module.if file</div></div></blockquote>to be added in policy/modules.con=
-f, otherwise it doesn&#39;t process any further.<div><div>It seems to be so=
-mething tricky to address, in your end developing a check</div><div>the sum=
-mary is in place doesn&#39;t make sense, in their end, not using that</div>=
-<div>hook to learn the modules from the xml make be also complicated. All</=
-div><div>in all, thanks for the comments, at least I have a way out without=
- this</div><div>patch. If there is something I can address for you in this =
-topic, feel free</div><div>to ask.</div><div><br></div><blockquote style=3D=
-"margin:0 0 0 40px;border:none;padding:0px"><div>Best regards.</div><div><b=
-r></div></blockquote><div dir=3D"ltr"><div dir=3D"ltr"><blockquote style=3D=
-"margin:0px 0px 0px 40px;border:none;padding:0px">Jos=C3=A9.</blockquote></=
-div></div></div></div>
-
---000000000000e32e9a05cc95ef44--
-
---===============1644389105575103653==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@lists.buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============1644389105575103653==--
+Q29tcGlsaW5nIG9uIFVidW50dSAyMC4wNCBnZW5lcmF0ZXMgdGhpczoKCi4vdXRpbC5jOiBJbiBm
+dW5jdGlvbiDigJhmaWxlX3dyaXRlX2RlcOKAmQouL3V0aWwuYzo1NDoxODogd2FybmluZzog4oCY
+Li5jb25maWcudG1w4oCZIGRpcmVjdGl2ZSB3cml0aW5nIDEyIGJ5dGVzIGludG8gYSByZWdpb24g
+b2Ygc2l6ZSBiZXR3ZWVuIDEgYW5kIDQwOTcgWy1XZm9ybWF0LW92ZXJmbG93PV0KICAgNTQgfCAg
+c3ByaW50ZihidWYsICIlcy4uY29uZmlnLnRtcCIsIGRpcik7CiAgICAgIHwgICAgICAgICAgICAg
+ICAgICBefn5+fn5+fn5+fn4KLi91dGlsLmM6NTQ6Mjogbm90ZTog4oCYc3ByaW50ZuKAmSBvdXRw
+dXQgYmV0d2VlbiAxMyBhbmQgNDEwOSBieXRlcyBpbnRvIGEgZGVzdGluYXRpb24gb2Ygc2l6ZSA0
+MDk3CiAgIDU0IHwgIHNwcmludGYoYnVmLCAiJXMuLmNvbmZpZy50bXAiLCBkaXIpOwogICAgICB8
+ICBefn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fgoKYW5kIHNpbWlsYXIgd2Fybmlu
+Z3Mgb24gY29uZmRhdGEuYywgbGluZXMgNzc4LCA5ODksIDk5NSwgMTAwMCwgMTAwNywKMTA0MCwg
+MTA0NiBhbmQgMTA1NC4gQXZvaWQgdGhlIHdhcm5pbmdzIGJ5IGVubGFyZ2luZyB0aGUgZGVzdGlu
+YXRpb24KYnVmZmVyIG9mIGZwcmludGYoKS4KClNpZ25lZC1vZmYtYnk6IEVkZ2FyIEJvbmV0IDxi
+b25ldEBncmVub2JsZS5jbnJzLmZyPgotLS0KIHN1cHBvcnQva2NvbmZpZy9jb25mZGF0YS5jIHwg
+NCArKy0tCiBzdXBwb3J0L2tjb25maWcvdXRpbC5jICAgICB8IDIgKy0KIDIgZmlsZXMgY2hhbmdl
+ZCwgMyBpbnNlcnRpb25zKCspLCAzIGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL3N1cHBvcnQv
+a2NvbmZpZy9jb25mZGF0YS5jIGIvc3VwcG9ydC9rY29uZmlnL2NvbmZkYXRhLmMKaW5kZXggODky
+ZGE3NGZkYy4uOWFiOTgwZWRkOCAxMDA2NDQKLS0tIGEvc3VwcG9ydC9rY29uZmlnL2NvbmZkYXRh
+LmMKKysrIGIvc3VwcG9ydC9rY29uZmlnL2NvbmZkYXRhLmMKQEAgLTc0NCw3ICs3NDQsNyBAQCBp
+bnQgY29uZl93cml0ZShjb25zdCBjaGFyICpuYW1lKQogCXN0cnVjdCBtZW51ICptZW51OwogCWNv
+bnN0IGNoYXIgKmJhc2VuYW1lOwogCWNvbnN0IGNoYXIgKnN0cjsKLQljaGFyIGRpcm5hbWVbUEFU
+SF9NQVgrMV0sIHRtcG5hbWVbUEFUSF9NQVgrMV0sIG5ld25hbWVbUEFUSF9NQVgrMV07CisJY2hh
+ciBkaXJuYW1lW1BBVEhfTUFYKzFdLCB0bXBuYW1lW1BBVEhfTUFYKzIwXSwgbmV3bmFtZVtQQVRI
+X01BWCsxXTsKIAljaGFyICplbnY7CiAKIAlpZiAoIW5hbWUpCkBAIC05NzQsNyArOTc0LDcgQEAg
+aW50IGNvbmZfd3JpdGVfYXV0b2NvbmYodm9pZCkKIAljb25zdCBjaGFyICpuYW1lOwogCUZJTEUg
+Km91dCwgKnRyaXN0YXRlLCAqb3V0X2g7CiAJaW50IGk7Ci0JY2hhciBkaXJbUEFUSF9NQVgrMV0s
+IGJ1ZltQQVRIX01BWCsxXTsKKwljaGFyIGRpcltQQVRIX01BWCsxXSwgYnVmW1BBVEhfTUFYKzIw
+XTsKIAljaGFyICpzOwogCiAJc3RyY3B5KGRpciwgY29uZl9nZXRfY29uZmlnbmFtZSgpKTsKZGlm
+ZiAtLWdpdCBhL3N1cHBvcnQva2NvbmZpZy91dGlsLmMgYi9zdXBwb3J0L2tjb25maWcvdXRpbC5j
+CmluZGV4IDE4YThlNTIzOTEuLjg2NjVmNWJiODkgMTAwNjQ0Ci0tLSBhL3N1cHBvcnQva2NvbmZp
+Zy91dGlsLmMKKysrIGIvc3VwcG9ydC9rY29uZmlnL3V0aWwuYwpAQCAtMzUsNyArMzUsNyBAQCBz
+dHJ1Y3QgZmlsZSAqZmlsZV9sb29rdXAoY29uc3QgY2hhciAqbmFtZSkKIGludCBmaWxlX3dyaXRl
+X2RlcChjb25zdCBjaGFyICpuYW1lKQogewogCWNoYXIgKnN0cjsKLQljaGFyIGJ1ZltQQVRIX01B
+WCsxXSwgYnVmMltQQVRIX01BWCsxXSwgZGlyW1BBVEhfTUFYKzFdOworCWNoYXIgYnVmW1BBVEhf
+TUFYKzIwXSwgYnVmMltQQVRIX01BWCsxXSwgZGlyW1BBVEhfTUFYKzFdOwogCXN0cnVjdCBzeW1i
+b2wgKnN5bSwgKmVudl9zeW07CiAJc3RydWN0IGV4cHIgKmU7CiAJc3RydWN0IGZpbGUgKmZpbGU7
+Ci0tIAoyLjI1LjEKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAbGlzdHMuYnVpbGRyb290Lm9yZwpo
+dHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
