@@ -2,56 +2,72 @@ Return-Path: <SRS0=bh6H=OM=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-16.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 34766C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 22 Sep 2021 21:06:25 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 27257C433F5
+	for <buildroot@archiver.kernel.org>; Wed, 22 Sep 2021 21:10:09 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id F05EF6112F
-	for <buildroot@archiver.kernel.org>; Wed, 22 Sep 2021 21:06:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org F05EF6112F
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
+	by mail.kernel.org (Postfix) with ESMTPS id 647CF611C6
+	for <buildroot@archiver.kernel.org>; Wed, 22 Sep 2021 21:10:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 647CF611C6
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=benettiengineering.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C07E941580;
-	Wed, 22 Sep 2021 21:06:24 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OGWVs6JR8yFk; Wed, 22 Sep 2021 21:06:23 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ED735415A1;
-	Wed, 22 Sep 2021 21:06:22 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8E6EC1BF2F7
- for <buildroot@lists.busybox.net>; Wed, 22 Sep 2021 21:05:55 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2FDAB40598
- for <buildroot@lists.busybox.net>; Wed, 22 Sep 2021 21:05:54 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2D5DD40607;
+	Wed, 22 Sep 2021 21:10:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id K9oRSbaZRqXO for <buildroot@lists.busybox.net>;
- Wed, 22 Sep 2021 21:05:53 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id F1DC340617
- for <buildroot@buildroot.org>; Wed, 22 Sep 2021 21:05:52 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id ABED78CA2D; Wed, 22 Sep 2021 21:03:48 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-To: buildroot@buildroot.org
-Date: Wed, 22 Sep 2021 23:03:53 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4cc074f43f1009bdacba4395bd8b94988064e5b1
-X-Git-Newrev: 98503116b4c0dee6720eb7b12f8ea19e405fd7c3
-X-Patchwork-Hint: ignore
-Message-Id: <20210922210348.ABED78CA2D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/busybox: bump version to 1.34.0
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id MWtxvuRrftWS; Wed, 22 Sep 2021 21:10:07 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 592E740598;
+	Wed, 22 Sep 2021 21:10:06 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 3AFF71BF2F7
+ for <buildroot@lists.busybox.net>; Wed, 22 Sep 2021 21:10:05 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2AFD884032
+ for <buildroot@lists.busybox.net>; Wed, 22 Sep 2021 21:10:05 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=aruba.it
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JkxvUV-MkR_q for <buildroot@lists.busybox.net>;
+ Wed, 22 Sep 2021 21:10:03 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtpcmd12132.aruba.it (smtpcmd12132.aruba.it [62.149.156.132])
+ by smtp1.osuosl.org (Postfix) with ESMTP id AEBF183FFD
+ for <buildroot@buildroot.org>; Wed, 22 Sep 2021 21:10:02 +0000 (UTC)
+Received: from ubuntu.localdomain ([146.241.167.42])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id T9VAmKknWnxSqT9VAmZQwF; Wed, 22 Sep 2021 23:10:01 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+ t=1632345001; bh=Bc4aDwUNtM+Ay41NULi+N4rP4/e+RAgtdc2ruTBwXhU=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=TqkKGfAlTgd9ZBC4L32AG1NdASBC59CeI1a65aWzHSH60vX7zRzKbuBkQMaFvsj5J
+ FD2FtvnNhY+6sgdLGITzoq0nHh8A0rZPEVVyEa/C2mv8jJPBUrO+SxJcOUqize+nG3
+ SUG5G+H826Y8vD8PMGuIhE4mytd3CmAqniZ9NxsRyByPSmBm+sxL/jVK2HzBd6d5sN
+ aTmI9QfmCXz5Ao+CroFZv+t0SMXsw7+dKeUrtlLcQZclLGkCpZ/qA+ly60ISNer+8H
+ jc5qQa92dyyRDXwfkZbh5nvN87PP0c0FHX25gk4lbdGMnRYjvrnOrfTCaLdpfZQSBg
+ pojrUP+iTE0Lg==
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+To: Arnout Vandecappelle <arnout@mind.be>,
+	buildroot@buildroot.org
+Date: Wed, 22 Sep 2021 23:09:59 +0200
+Message-Id: <20210922210959.3604227-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+X-CMAE-Envelope: MS4wfE5in/duEToptSMQue/fwWbEVY0a5g+pGHj5xv2v+rq99BTcg8rKxy//5uWYv0ZtYr6YJpbM/VmSqKBXpNAgXsMx8TG4volEIP29ir6Jsb904aKg8hHr
+ AZoBsTl0Xi5mJh/crdVgqWOAJpV/sQpROM/uCsgegkwitgzsnNv0V8VGoKBr1NzCFaxaW4TkRWaW2lgL/LH/yp+/IkJfztSORWtpV62bAudI+BwWpII181/d
+ dhLbJHTWawl8ccrN/VsPh4inPiBZ4cWZvSmbp+ZuwcRDvrcxchUm0PmSWGfmC1QYlv6KpDGhRJbA1R/HisX+AXbB8smrPXAwPwN9JqTHKDvhdqoOhUbe0mer
+ ywFKr0us
+Subject: [Buildroot] [PATCH v2] package/ffmpeg: fix build on mips
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,177 +80,50 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=98503116b4c0dee6720eb7b12f8ea19e405fd7c3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+mips_32 is not supported by ffmpeg and it tries to build with loongson3
+SIMD support that leads to build failure due to:
+/tmp/ccFO2LRa.s: Assembler messages:
+/tmp/ccFO2LRa.s:15314: Error: opcode not supported on this processor: mips32 (mips32) `dmult $2,$6'
+/tmp/ccFO2LRa.s:15316: Error: opcode not supported on this processor: mips32 (mips32) `dsrl $2,$2,32'
 
-* backport fix from 1_34_stable branch
-* refresh patches
+So let's --disable-asm to prevent using those unsupported opcodes for every
+mips architecture according to Arnout.
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Fixes:
+http://autobuild.buildroot.net/results/f01/f01d9cedec8e1b371308d0f7af561a75883fa27c/
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- ...libiproute-use-linux-if_packet.h-instead-.patch | 18 +++++++---
- ...ags-strip-non-l-arguments-returned-by-pkg.patch | 15 +++++----
- .../0003-udhcp-fix-build-breakage-on-MIPS.patch    | 39 ++++++++++++++++++++++
- package/busybox/busybox.hash                       |  4 +--
- package/busybox/busybox.mk                         |  2 +-
- 5 files changed, 63 insertions(+), 15 deletions(-)
+ package/ffmpeg/ffmpeg.mk | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/package/busybox/0001-networking-libiproute-use-linux-if_packet.h-instead-.patch b/package/busybox/0001-networking-libiproute-use-linux-if_packet.h-instead-.patch
-index 3aabc96053..9b5eaf89bd 100644
---- a/package/busybox/0001-networking-libiproute-use-linux-if_packet.h-instead-.patch
-+++ b/package/busybox/0001-networking-libiproute-use-linux-if_packet.h-instead-.patch
-@@ -1,4 +1,4 @@
--From d4fec31889ad660a58dab633c511221feb66e817 Mon Sep 17 00:00:00 2001
-+From 60da1d0763224698008d847eb8ad8d4d8c6f54ff Mon Sep 17 00:00:00 2001
- From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- Date: Sat, 5 Oct 2013 15:55:06 +0200
- Subject: [PATCH] networking/libiproute: use <linux/if_packet.h> instead of
-@@ -14,10 +14,15 @@ This commit fixes the build of iplink with the musl C library.
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index 8ff8ea8c6c..b3ce4c0656 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -507,10 +507,8 @@ else
+ FFMPEG_CONF_OPTS += --enable-mipsfpu
+ endif
  
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- [Gustavo: update for busybox 1.22.0]
-+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-+---
-+ networking/libiproute/iplink.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
+-# Fix build failure on "addi opcode not supported"
+-ifeq ($(BR2_mips_32r6)$(BR2_mips_64r6),y)
++# Fix build failure on several missing assembly instructions
+ FFMPEG_CONF_OPTS += --disable-asm
+-endif
+ endif # MIPS
  
--diff -Nura busybox-1.22.0.orig/networking/libiproute/iplink.c busybox-1.22.0/networking/libiproute/iplink.c
----- busybox-1.22.0.orig/networking/libiproute/iplink.c	2014-01-01 09:42:40.301137882 -0300
--+++ busybox-1.22.0/networking/libiproute/iplink.c	2014-01-01 09:43:01.282827700 -0300
-+diff --git a/networking/libiproute/iplink.c b/networking/libiproute/iplink.c
-+index 1a1064bdc..a4c3ad307 100644
-+--- a/networking/libiproute/iplink.c
-++++ b/networking/libiproute/iplink.c
- @@ -7,7 +7,7 @@
-   */
-  #include <net/if.h>
-@@ -25,5 +30,8 @@ diff -Nura busybox-1.22.0.orig/networking/libiproute/iplink.c busybox-1.22.0/net
- -#include <netpacket/packet.h>
- +#include <linux/if_packet.h>
-  #include <netinet/if_ether.h>
-- 
-+
-  #include <linux/if_vlan.h>
-+--
-+2.33.0
-+
-diff --git a/package/busybox/0002-Makefile.flags-strip-non-l-arguments-returned-by-pkg.patch b/package/busybox/0002-Makefile.flags-strip-non-l-arguments-returned-by-pkg.patch
-index 84435442c9..3a94241043 100644
---- a/package/busybox/0002-Makefile.flags-strip-non-l-arguments-returned-by-pkg.patch
-+++ b/package/busybox/0002-Makefile.flags-strip-non-l-arguments-returned-by-pkg.patch
-@@ -1,7 +1,8 @@
--From 67eb23d2be8aba3c474dac81a15b0fa11e5847b7 Mon Sep 17 00:00:00 2001
-+From 59daea82e7b5abcdb42a4f97a0109f14d5a774ea Mon Sep 17 00:00:00 2001
- From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- Date: Mon, 25 Nov 2013 22:51:53 +0100
--Subject: [PATCH] Makefile.flags: strip non -l arguments returned by pkg-config
-+Subject: [PATCH] Makefile.flags: strip non -l arguments returned by
-+ pkg-config
- 
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- [yann.morin.1998@free.fr: refresh for 1.29.0]
-@@ -13,10 +14,10 @@ Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-  1 file changed, 3 insertions(+), 1 deletion(-)
- 
- diff --git a/Makefile.flags b/Makefile.flags
--index 307afa7..885e323 100644
-+index 667481983..88d76efec 100644
- --- a/Makefile.flags
- +++ b/Makefile.flags
--@@ -176,7 +176,9 @@ ifeq ($(CONFIG_SELINUX),y)
-+@@ -180,7 +180,9 @@ ifeq ($(CONFIG_SELINUX),y)
-  SELINUX_PC_MODULES = libselinux libsepol
-  $(eval $(call pkg_check_modules,SELINUX,$(SELINUX_PC_MODULES)))
-  CPPFLAGS += $(SELINUX_CFLAGS)
-@@ -25,8 +26,8 @@ index 307afa7..885e323 100644
- +       $(patsubst -l%,%,$(filter -l%,$(SELINUX_LIBS))),\
- +       $(SELINUX_PC_MODULES:lib%=%))
-  endif
-- 
-+
-  ifeq ($(CONFIG_FEATURE_NSLOOKUP_BIG),y)
---- 
--1.8.1.2
-+--
-+2.33.0
- 
-diff --git a/package/busybox/0003-udhcp-fix-build-breakage-on-MIPS.patch b/package/busybox/0003-udhcp-fix-build-breakage-on-MIPS.patch
-new file mode 100644
-index 0000000000..d54d45da43
---- /dev/null
-+++ b/package/busybox/0003-udhcp-fix-build-breakage-on-MIPS.patch
-@@ -0,0 +1,39 @@
-+From 56824284b749e5b9d568b75d5c5bc471b1814d46 Mon Sep 17 00:00:00 2001
-+From: Denys Vlasenko <vda.linux@googlemail.com>
-+Date: Fri, 20 Aug 2021 13:33:50 +0200
-+Subject: [PATCH] udhcp: fix build breakage on MIPS
-+
-+Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
-+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-+---
-+upstream status: 00adcdb64 ("udhcp: fix build breakage on MIPS")
-+
-+ networking/udhcp/common.h | 12 ------------
-+ 1 file changed, 12 deletions(-)
-+
-+diff --git a/networking/udhcp/common.h b/networking/udhcp/common.h
-+index 8c678dd32..ca778dab8 100644
-+--- a/networking/udhcp/common.h
-++++ b/networking/udhcp/common.h
-+@@ -304,18 +304,6 @@ void udhcp_dump_packet(struct dhcp_packet *packet) FAST_FUNC;
-+ # define log3s(msg) ((void)0)
-+ #endif
-+
-+-#if defined(__mips__)
-+-/*
-+- * The 'simple' message functions have a negative impact on the size of the
-+- * DHCP code when compiled for MIPS, so don't use them in this case.
-+- */
-+-#define bb_simple_info_msg bb_info_msg
-+-#define bb_simple_error_msg bb_error_msg
-+-#define bb_simple_perror_msg_and_die bb_perror_msg_and_die
-+-#undef log1s
-+-#define log1s log1
-+-#endif
-+-
-+ /*** Other shared functions ***/
-+
-+ /* 2nd param is "uint32_t*" */
-+--
-+2.33.0
-+
-diff --git a/package/busybox/busybox.hash b/package/busybox/busybox.hash
-index 3e9c30cad0..4782f68819 100644
---- a/package/busybox/busybox.hash
-+++ b/package/busybox/busybox.hash
-@@ -1,5 +1,5 @@
--# From https://busybox.net/downloads/busybox-1.33.1.tar.bz2.sha256
--sha256  12cec6bd2b16d8a9446dd16130f2b92982f1819f6e1c5f5887b6db03f5660d28  busybox-1.33.1.tar.bz2
-+# From https://busybox.net/downloads/busybox-1.34.0.tar.bz2.sha256
-+sha256  ec8d1615edb045b83b81966604759c4d4ac921434ab4011da604f629c06074ce  busybox-1.34.0.tar.bz2
- # Locally computed
- sha256  bbfc9843646d483c334664f651c208b9839626891d8f17604db2146962f43548  LICENSE
- sha256  b5a136ed67798e51fe2e0ca0b2a21cb01b904ff0c9f7d563a6292e276607e58f  archival/libarchive/bz/LICENSE
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 560c4fe7b6..08b5c55c50 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BUSYBOX_VERSION = 1.33.1
-+BUSYBOX_VERSION = 1.34.0
- BUSYBOX_SITE = https://www.busybox.net/downloads
- BUSYBOX_SOURCE = busybox-$(BUSYBOX_VERSION).tar.bz2
- BUSYBOX_LICENSE = GPL-2.0, bzip2-1.0.4
+ ifeq ($(BR2_POWERPC_CPU_HAS_ALTIVEC),y)
+-- 
+2.25.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
