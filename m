@@ -8,86 +8,86 @@ X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A03DC433F5
-	for <buildroot@archiver.kernel.org>; Wed, 22 Sep 2021 06:46:30 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C29BC433EF
+	for <buildroot@archiver.kernel.org>; Wed, 22 Sep 2021 06:48:05 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D0F1C61184
-	for <buildroot@archiver.kernel.org>; Wed, 22 Sep 2021 06:46:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D0F1C61184
+	by mail.kernel.org (Postfix) with ESMTPS id 3102B61178
+	for <buildroot@archiver.kernel.org>; Wed, 22 Sep 2021 06:48:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3102B61178
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 96D734020A;
-	Wed, 22 Sep 2021 06:46:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EBE7C40704;
+	Wed, 22 Sep 2021 06:48:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id X5DKOkmcyD_5; Wed, 22 Sep 2021 06:46:28 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id HMb66IIN4aAk; Wed, 22 Sep 2021 06:48:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 89921400F5;
-	Wed, 22 Sep 2021 06:46:27 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 11A6F1BF409
- for <buildroot@lists.busybox.net>; Wed, 22 Sep 2021 06:46:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3D264406D5;
+	Wed, 22 Sep 2021 06:48:03 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id CB3251BF409
+ for <buildroot@lists.busybox.net>; Wed, 22 Sep 2021 06:48:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0E89081C26
- for <buildroot@lists.busybox.net>; Wed, 22 Sep 2021 06:46:26 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id C681C403E8
+ for <buildroot@lists.busybox.net>; Wed, 22 Sep 2021 06:48:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hz_8ErxOvzfe for <buildroot@lists.busybox.net>;
- Wed, 22 Sep 2021 06:46:23 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id v4fUOEcilsnB for <buildroot@lists.busybox.net>;
+ Wed, 22 Sep 2021 06:48:00 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com
- [IPv6:2607:f8b0:4864:20::d33])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8BBDE81BE3
- for <buildroot@buildroot.org>; Wed, 22 Sep 2021 06:46:23 +0000 (UTC)
-Received: by mail-io1-xd33.google.com with SMTP id r75so2031354iod.7
- for <buildroot@buildroot.org>; Tue, 21 Sep 2021 23:46:23 -0700 (PDT)
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com
+ [IPv6:2607:f8b0:4864:20::12c])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B6B11400DB
+ for <buildroot@buildroot.org>; Wed, 22 Sep 2021 06:48:00 +0000 (UTC)
+Received: by mail-il1-x12c.google.com with SMTP id d11so1623885ilc.8
+ for <buildroot@buildroot.org>; Tue, 21 Sep 2021 23:48:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=REgWyReQMfS0CO82WE/96Bf9V1GO6a6RiUYTJ7wChZU=;
- b=E6mw0LGZkWkHSVDrz5Kidr9oJ61L5oWd1gCRm4xKO6YDorNfwGiPrGFJ/MOif3bHUa
- LFYFQvjxU6HSa2cwFwcwkBKofcRURCUVfNmU5LWmK4ZNFp1zlKKIHN02L8Evjm96neTh
- a/9cFlzgbPruOJ6k3DVtfwfphFnuUzNuIFqqtejzgwuzNIrM3VYn/3cLcD0wlyeQLlpJ
- efQb4+/3uzj/DRBLCNrjZcoMfhNRXSnH2jeYdpZazWUOqHbluc5pL9679jlI2ExZI4Eg
- jT/k1aUnmwEJQjyrbOabyEoYgz2nx88Y4td0uHt+C+JHe1CBTBbbc7/EybBqIH5dQgXa
- 3Iwg==
+ bh=kPB6aC5bih0w0hF5+mi7JFzelunls5ySUNFvyZ68ByA=;
+ b=LOzlD0VuXjYcNg2DzTYwswSWDhLui9z18Yulk7p/LwV4k9lWPoLp7ZuVJLywSjUZdH
+ iJhd23on7qu7Q6T/VFwQ4mFJ+CQvp2++/WRyLuf21DGAtfA3SwGaO1WAPUatMQktZtp1
+ Sl8FvPxDfVy4yK6RkR6CHYaSeKAKvRCVmF9Iq1IwYE9Mqc2yp3VCY2H5GO7mGYWtfSWh
+ fIFXo9PfDay7X6XXYP7m4RJh52JCNgaZQGwHOLOhQkvfXAGrqIqcqd/W5zHW2TBI2uJa
+ hvJDJaIJMgKwQ3YamLABUge1EYi8xmlOe/nGCV2iSmcb+cMZgEtqzRjfJqAUUW1ts0gZ
+ Gp8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=REgWyReQMfS0CO82WE/96Bf9V1GO6a6RiUYTJ7wChZU=;
- b=0qMUgqsi8azM5q+ztoQOUkdAwY1E7vcskZoPYdE5/W87Bah0Tc+AQqdoVYUZljyZOT
- 3yHu+4s4PgDleTpts1NImgor/uYHlt1Vg0aGI1zQ6CPQYTEOLl1FVUySv6gmi/p+Galx
- uD0CQvplQ/L9Lc+ynTdsvv7PQQ0MTROorauvQr/jKCAq3C585wgYlwr8H0R0puk0kwZ8
- 0w8Ht6MhiKeNooste490Ct/wIgVNm1Q6YWP4XuFhDGUknRHPWfaGoEkPspeBIFB3LaT0
- TBNFfmASedu3ZvR07o9kB3/UwdUkhrTD2tQDsNOoQ5pFrzbqfkVY11NHWVg3H8fDvrI+
- 5IBA==
-X-Gm-Message-State: AOAM530cZArMjCiDOAYTVrPhD9/4Z2ToHTGI87RjMmiVJpra5euM7K9x
- P2IvnSDx+nA9EeiGAmkmxjuomLqLA7A=
-X-Google-Smtp-Source: ABdhPJyNhZ/Vd3bF3qSJ7X2VldJVJnERdsRyd3NNOVKqp8YpnjvVd0o/kot0DJSzkegvBkyqNlr45A==
-X-Received: by 2002:a05:6602:2cc5:: with SMTP id
- j5mr3144572iow.156.1632293182337; 
- Tue, 21 Sep 2021 23:46:22 -0700 (PDT)
+ bh=kPB6aC5bih0w0hF5+mi7JFzelunls5ySUNFvyZ68ByA=;
+ b=n4vYLQoiiIWYAZCsWQMlLzU1tnxMWxOXmc1SNF/P4vlqsvBeBgz6cmXmZ7WiDP25Z/
+ +zvGddB+qKh2OnIEkW1/tgX0GyK/sf30a4ddlKdJ31ToF/KHHpJ6iJ2ni5mlUoBf1Mak
+ Vn+MwVe3avMwVlAH4G5I/DUFJA2wOOVDZMfD1y3XjQt3Wc9bcCm9V9+zGOe1eAkdFdUI
+ wdwbOKJ08dM0JHhpEm2fOHpBcTZMuKXdXpNBN4TV1Oj5WQElXW76ILXrogCX3RCwErQQ
+ T3J8b8cFkcMYlw3D82+aMqWQL0vdHauiI7muTlIEGzmy0Qt1XoeFddZvNQgs1hLcxdMf
+ lahQ==
+X-Gm-Message-State: AOAM532kedsQgngXnJ2vxsOSLUtSBlN5jIZoRQKJdauBUVxnX04eNSpo
+ D1XQ0TONbh30uMTmqJwmj9VmnIV6HT8=
+X-Google-Smtp-Source: ABdhPJyhMCZrswZiAFaPpOjMnQxQiJfIRvzqyXrj7kafg9s+cffgR1NH2O4xUJhhGKjllw0xL2zR1Q==
+X-Received: by 2002:a05:6e02:dd3:: with SMTP id
+ l19mr24382597ilj.144.1632293279643; 
+ Tue, 21 Sep 2021 23:47:59 -0700 (PDT)
 Received: from james-x399.localdomain (71-33-146-72.hlrn.qwest.net.
  [71.33.146.72])
- by smtp.gmail.com with ESMTPSA id r13sm634544ilh.80.2021.09.21.23.46.21
+ by smtp.gmail.com with ESMTPSA id d10sm645273ilu.54.2021.09.21.23.47.59
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 21 Sep 2021 23:46:22 -0700 (PDT)
+ Tue, 21 Sep 2021 23:47:59 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 22 Sep 2021 00:46:20 -0600
-Message-Id: <20210922064620.132726-1-james.hilliard1@gmail.com>
+Date: Wed, 22 Sep 2021 00:47:58 -0600
+Message-Id: <20210922064758.190101-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/python-msgpack: bump to version
- 1.0.2
+Subject: [Buildroot] [PATCH 1/1] package/python-multidict: bump to version
+ 5.1.0
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,8 +100,7 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: "Wojciech M . Zabolotny" <wzab01@gmail.com>,
- James Hilliard <james.hilliard1@gmail.com>,
+Cc: James Hilliard <james.hilliard1@gmail.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
  Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
@@ -111,38 +110,38 @@ Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-msgpack/python-msgpack.hash | 4 ++--
- package/python-msgpack/python-msgpack.mk   | 4 ++--
+ package/python-multidict/python-multidict.hash | 4 ++--
+ package/python-multidict/python-multidict.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-msgpack/python-msgpack.hash b/package/python-msgpack/python-msgpack.hash
-index e34ea118ed..8e192e3717 100644
---- a/package/python-msgpack/python-msgpack.hash
-+++ b/package/python-msgpack/python-msgpack.hash
+diff --git a/package/python-multidict/python-multidict.hash b/package/python-multidict/python-multidict.hash
+index 6b78301200..65af9a58e5 100644
+--- a/package/python-multidict/python-multidict.hash
++++ b/package/python-multidict/python-multidict.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/msgpack/json
--md5  c35ee8f991dad3969884e9585e56ebba  msgpack-1.0.0.tar.gz
--sha256  9534d5cc480d4aff720233411a1f765be90885750b07df772380b34c10ecb5c0  msgpack-1.0.0.tar.gz
-+md5  68d5804254642905ba87ede509e68970  msgpack-1.0.2.tar.gz
-+sha256  fae04496f5bc150eefad4e9571d1a76c55d021325dcd484ce45065ebbdd00984  msgpack-1.0.2.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/multidict/json
+-md5  b1dab3349efe90934ae3612f1202b733  multidict-5.0.2.tar.gz
+-sha256  e5bf89fe57f702a046c7ec718fe330ed50efd4bcf74722940db2eb0919cddb1c  multidict-5.0.2.tar.gz
++md5  df8b37f069809779214d6b80b250e45b  multidict-5.1.0.tar.gz
++sha256  25b4e5f22d3a37ddf3effc0710ba692cfc792c2b9edfb9c05aefe823256e84d5  multidict-5.1.0.tar.gz
  # Locally computed sha256 checksums
- sha256  492dedba85da5872f78e6091bcd1fea474d660d35acb4dee964b8aab3f007427  COPYING
-diff --git a/package/python-msgpack/python-msgpack.mk b/package/python-msgpack/python-msgpack.mk
-index 18d5a998ff..dcb525ed1f 100644
---- a/package/python-msgpack/python-msgpack.mk
-+++ b/package/python-msgpack/python-msgpack.mk
+ sha256  a1c5825513279d3085a0ba46880e148ea3710c149bbaedcf2d11605a5ed3c4ad  LICENSE
+diff --git a/package/python-multidict/python-multidict.mk b/package/python-multidict/python-multidict.mk
+index a7043643c5..edf9656043 100644
+--- a/package/python-multidict/python-multidict.mk
++++ b/package/python-multidict/python-multidict.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_MSGPACK_VERSION = 1.0.0
-+PYTHON_MSGPACK_VERSION = 1.0.2
- PYTHON_MSGPACK_SOURCE = msgpack-$(PYTHON_MSGPACK_VERSION).tar.gz
--PYTHON_MSGPACK_SITE = https://files.pythonhosted.org/packages/e4/4f/057549afbd12fdd5d9aae9df19a6773a3d91988afe7be45b277e8cee2f4d
-+PYTHON_MSGPACK_SITE = https://files.pythonhosted.org/packages/59/04/87fc6708659c2ed3b0b6d4954f270b6e931def707b227c4554f99bd5401e
- PYTHON_MSGPACK_LICENSE = Apache-2.0
- PYTHON_MSGPACK_LICENSE_FILES = COPYING
- PYTHON_MSGPACK_SETUP_TYPE = setuptools
+-PYTHON_MULTIDICT_VERSION = 5.0.2
++PYTHON_MULTIDICT_VERSION = 5.1.0
+ PYTHON_MULTIDICT_SOURCE = multidict-$(PYTHON_MULTIDICT_VERSION).tar.gz
+-PYTHON_MULTIDICT_SITE = https://files.pythonhosted.org/packages/da/e6/50c7f52781f45c2b37c77e962c30a3944a9e79a46ea92956e826c24d3432
++PYTHON_MULTIDICT_SITE = https://files.pythonhosted.org/packages/1c/74/e8b46156f37ca56d10d895d4e8595aa2b344cff3c1fb3629ec97a8656ccb
+ PYTHON_MULTIDICT_SETUP_TYPE = setuptools
+ PYTHON_MULTIDICT_LICENSE = Apache-2.0
+ PYTHON_MULTIDICT_LICENSE_FILES = LICENSE
 -- 
 2.25.1
 
