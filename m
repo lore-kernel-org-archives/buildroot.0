@@ -2,100 +2,91 @@ Return-Path: <SRS0=bh6H=OM=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.1 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
 	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
 	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,NICE_REPLY_A,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
-	version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E9C5C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 22 Sep 2021 21:46:07 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EFF15C433EF
+	for <buildroot@archiver.kernel.org>; Wed, 22 Sep 2021 21:47:18 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id BFC476120E
-	for <buildroot@archiver.kernel.org>; Wed, 22 Sep 2021 21:46:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org BFC476120E
+	by mail.kernel.org (Postfix) with ESMTPS id 9187C60FA0
+	for <buildroot@archiver.kernel.org>; Wed, 22 Sep 2021 21:47:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9187C60FA0
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 96131614FC;
-	Wed, 22 Sep 2021 21:46:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 648DF84341;
+	Wed, 22 Sep 2021 21:47:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nwQXkhrgA7oo; Wed, 22 Sep 2021 21:46:05 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 9sRfJgVWW9KP; Wed, 22 Sep 2021 21:47:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1065D614A6;
-	Wed, 22 Sep 2021 21:46:05 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E633B1BF2F7
- for <buildroot@lists.busybox.net>; Wed, 22 Sep 2021 21:46:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B8DC28433C;
+	Wed, 22 Sep 2021 21:47:16 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 685C51BF2F7
+ for <buildroot@lists.busybox.net>; Wed, 22 Sep 2021 21:47:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D48D5415B9
- for <buildroot@lists.busybox.net>; Wed, 22 Sep 2021 21:46:02 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 572C56148D
+ for <buildroot@lists.busybox.net>; Wed, 22 Sep 2021 21:47:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7x3-w2e9eeyy for <buildroot@lists.busybox.net>;
- Wed, 22 Sep 2021 21:46:00 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lax0a7XcpMIQ for <buildroot@lists.busybox.net>;
+ Wed, 22 Sep 2021 21:47:14 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
- [IPv6:2a00:1450:4864:20::435])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8FD874000E
- for <buildroot@buildroot.org>; Wed, 22 Sep 2021 21:46:00 +0000 (UTC)
-Received: by mail-wr1-x435.google.com with SMTP id u15so11078155wru.6
- for <buildroot@buildroot.org>; Wed, 22 Sep 2021 14:46:00 -0700 (PDT)
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
+ [IPv6:2a00:1450:4864:20::42e])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 76AF8614C7
+ for <buildroot@buildroot.org>; Wed, 22 Sep 2021 21:47:14 +0000 (UTC)
+Received: by mail-wr1-x42e.google.com with SMTP id t8so11239115wri.1
+ for <buildroot@buildroot.org>; Wed, 22 Sep 2021 14:47:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=subject:to:cc:references:from:message-id:date:user-agent
- :mime-version:in-reply-to:content-language:content-transfer-encoding;
- bh=9HHMJB/P6ESG4OhV6W26atk0D/W9v+bBCg9rPvztirk=;
- b=T8b8Luu3mr5erYVtLPtxD3V0lJbVmG3NOwrgmsWMN6lN7VshSjU8buI8+o3KtPwL3K
- cS9J6FfvIS6aybtgJYiALDw5ewiudwZIU0+q5QPJnBa4oXaOGj5/UhCF/ZOat8qjaxMq
- sq1ZQYJS01SLyl73E0PmfuiYu8hGjPXtpKlbdzmOFe5Onn6Ja+Tk/r/7eyeSQaYzZEa+
- LqA2Uvv8qGsqxFEVotpk05JZfVpLtPbgPW3597xsNU23ai9aQEg3Cyy/pLx9hHROCERD
- Opc0CAa5lifxMN3uXvnJOiEdppPt/TruX9sNevNCIyrHqGQ4IVilWkIyAS+KVNz4f+Sd
- 9ObA==
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=UQaDQlxmRb3oKRWkuNSuKeVvanuJ8HajR//eAyiUCr0=;
+ b=fO0mgS+e0kMzD/J5BPmHvgJZwX0gbhdSV7SO+lyWrq/FP4lvev8LCAE5v5AiAIBLth
+ aruOhrCuHoSInRhqqILWAkn59en45823BkKO32p4/RwReXMn8uShQMMLFBzd73NnpnQ/
+ kRHmzSOS43i84ad7bkxnEqEG3zL3bqMAkmOFr+Fodfusw75vhJWAfRDjlKm/OrvpkL8D
+ 7TImMhjIG7j2VT36fe96cr+RYOoV/J8micoHAHpxic9HjOOeOUNs3blAM6mqIo4Gx7Gh
+ kQkm6m8LPpYGYmxK9KOdU8EOkmFep7eAla3XhHZTsR2xBC83+8pjiXpFNJtFcZkEF9pJ
+ zB6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:subject:to:cc:references:from:message-id:date
- :user-agent:mime-version:in-reply-to:content-language
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=9HHMJB/P6ESG4OhV6W26atk0D/W9v+bBCg9rPvztirk=;
- b=NOReroeuWHZsnWGgfyhw9k8WJXKK+6pqRq2OQV8bUKrcu/w2QDuy0eRS5GgVlTCegR
- 2FkXsh0ZFS05hEpyo3pvVz+k6peCWEqLHlZId1MGRw8UPWg3AHrR58vMTyP+h44olh9R
- QcM5HAozsCVv35Mka+N6pqUkUKPk4sFocA1w4DTLEUOod1ZSFWH35C5RjXIj46lLMVYw
- haDsPWGJqncjedXaJzIzafex3+dTCQImH6IL2qs8QJ51ypBLJ3DdQW56QtPiOoo1qk5v
- l8F/xyqScdr4AXlCGNzec4qVEhqBHUL62k73ZjQsq5Tdy/u4tk0H37H3d26CMkMuuR2b
- QMLw==
-X-Gm-Message-State: AOAM532jDSNT0E6CUzXb5cRIbypYJdyU+83UDuqSriM5IezF3D0LbKva
- 0pGhHOxTXgiC6q9DyBjo4jRrlPdzGaQ=
-X-Google-Smtp-Source: ABdhPJxmKv7o2Ow0U5NYDBU63ClaAyO0WF0yq6J9PMPZRH7jOqDhWRpdahd4n4+AD8vgLioR3f5CRw==
-X-Received: by 2002:a5d:54cf:: with SMTP id x15mr1311816wrv.27.1632347158827; 
- Wed, 22 Sep 2021 14:45:58 -0700 (PDT)
-Received: from ?IPv6:2a01:cb05:8f8a:1800:23a5:a748:5a4b:18cd?
- (2a01cb058f8a180023a5a7485a4b18cd.ipv6.abo.wanadoo.fr.
- [2a01:cb05:8f8a:1800:23a5:a748:5a4b:18cd])
- by smtp.gmail.com with ESMTPSA id c135sm7410649wme.6.2021.09.22.14.45.58
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 22 Sep 2021 14:45:58 -0700 (PDT)
-To: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>,
- buildroot@buildroot.org
-References: <20210912141140.253778-9-romain.naour@gmail.com>
- <20210922201027.934860-1-arnout@mind.be>
-From: Romain Naour <romain.naour@gmail.com>
-Message-ID: <074d7a6f-bebc-1b36-f845-34ab5297d707@gmail.com>
-Date: Wed, 22 Sep 2021 23:45:57 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+ bh=UQaDQlxmRb3oKRWkuNSuKeVvanuJ8HajR//eAyiUCr0=;
+ b=xXjSM8z4etC47mtD7inkc0z8I03q7T/53wfjALAQHYPWD4iCFqLS7yZpGPTFuorf2f
+ x73aAEIGj9sW5LFwxyJjDFuxsoqjcNl3mLCBZyurcmZigcwqWa9xXGihGyPtmCsYTPlC
+ iElTinOOD3X7umnclhQNz7MhsXrl+BRjFJtC86Vx9dzeOkYcsDAOmBUWOEdezO1xI8bQ
+ DC0Z+cRWXTL7Bd3SXt1/YW6wDv2z7fMSDQ4kC/Rjw6UIR9Jlol/1OzyTU5EQ5MeQgzKF
+ Q0lVptWCmbjqX2/iGhISBWRSWBY35u5WU26CWusmtzUBMq1zPseLuj5mQvszbnxMb7tg
+ o/Pw==
+X-Gm-Message-State: AOAM532xUyWvHfATw0/6uqYpoLPxHxsOtuP7aTqD8IwsQyrh0RDr/cwx
+ ZR+0q0Pg5OR5WZ6a4pt1jemqu4oLIL0=
+X-Google-Smtp-Source: ABdhPJzW8hKtleGJSpgotO5LFyoqktpJKgeNS2OYl3vYbtNjhiJPoHbskUalIMSuZ13jT3U3S2yqZQ==
+X-Received: by 2002:a7b:cf21:: with SMTP id m1mr1161414wmg.95.1632347232515;
+ Wed, 22 Sep 2021 14:47:12 -0700 (PDT)
+Received: from kali.home (pop.92-184-100-47.mobile.abo.orange.fr.
+ [92.184.100.47])
+ by smtp.gmail.com with ESMTPSA id r4sm3393910wma.48.2021.09.22.14.47.10
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 22 Sep 2021 14:47:11 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Wed, 22 Sep 2021 23:46:27 +0200
+Message-Id: <20210922214627.828388-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-In-Reply-To: <20210922201027.934860-1-arnout@mind.be>
-Content-Language: en-US
-Subject: Re: [Buildroot] [PATCH] .gitlab-ci.yml: update docker image to
- 20210922.2200
+Subject: [Buildroot] [PATCH 1/1] package/liblinear: fix shared library
+ install
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -108,43 +99,45 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Romain Naour <romain.naour@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-SGkgQXJub3V0LAoKTGUgMjIvMDkvMjAyMSDDoCAyMjoxMCwgQXJub3V0IFZhbmRlY2FwcGVsbGUg
-KEVzc2Vuc2l1bS9NaW5kKSBhIMOpY3JpdMKgOgo+IENvbW1pdCA3MWI4MzIyNzEyOGJlNjJjMTY5
-MzEzZTg1YmI4ZjMzOWY5NzdhZDY3IHVwZGF0ZWQgdGhlIERvY2tlcmZpbGUKPiB0byBiZSB1c2Vk
-IGluIENJIHRlc3RzLiBJbiBvcmRlciB0byBhY3R1YWxseSB1c2UgdGhpcyBuZXcgZG9ja2VyIGlt
-YWdlLAo+IHVwZGF0ZSAuZ2l0bGFiLWNpLnltbCB0byBwb2ludCB0byB0aGUgZG9ja2VyIGltYWdl
-IHRoYXQgd2FzIGNyZWF0ZWQgd2l0aAo+IHRoZSB1cGRhdGVkIERvY2tlcmZpbGUuCj4gCj4gU2ln
-bmVkLW9mZi1ieTogQXJub3V0IFZhbmRlY2FwcGVsbGUgKEVzc2Vuc2l1bS9NaW5kKSA8YXJub3V0
-QG1pbmQuYmU+CgpUaGVyZSBhcmUgc29tZSBuZXcgaXNzdWVzIHNpbmNlIGxhc3QgdGltZSBJIHRl
-c3RlZDoKCldpdGhvdXQgcHl0aG9uIGluc3RhbGxlZCwgc3lzbGludXggZG9lc24ndCBidWlsZC4K
-ClRlc3RTeXNMaW51eFg4NkVGSS9idWlsZC9zeXNsaW51eC02LjAzL2NvbTMyL2NtZW51L21lbnVn
-ZW4ucHkgWy4uLl0KbWFrZVs2XTogcHl0aG9uOiBObyBzdWNoIGZpbGUgb3IgZGlyZWN0b3J5Cgpo
-dHRwczovL2dpdGxhYi5jb20va3VidTkzL2J1aWxkcm9vdC8tL2pvYnMvMTYxNDQ0Njc2NgoKClRo
-ZXJlIGlzIGEgbmV3IGlzc3VlIHdpdGggcHl0aG9uLWF0dHJzIHRlc3Qgd2hlbiBweXRob24yIGlz
-IG5vdCBpbnN0YWxsZWQ6Cmh0dHBzOi8vZ2l0bGFiLmNvbS9rdWJ1OTMvYnVpbGRyb290Ly0vam9i
-cy8xNjE0NDQ2OTQzCmh0dHBzOi8vZ2l0bGFiLmNvbS9rdWJ1OTMvYnVpbGRyb290Ly0vam9icy8x
-NjE0NDQ2OTM5CgoKU3RyYW5nZSBweXRob24gaXNzdWUgd2l0aCByZWZwb2xpY3ktMi4yMDIxMDkw
-OCBidWlsZDoKaHR0cHM6Ly9naXRsYWIuY29tL2t1YnU5My9idWlsZHJvb3QvLS9qb2JzLzE2MTQ0
-NDY4MjYvCgoKQnV0IHRoZSBpc3N1ZSBJIGhhZCB3aXRoIFRlc3RDaGVja1BhY2thZ2UgaXMgZml4
-ZWQgd2l0aCB0aGUgcmVjZW50IHN3aXRjaCB0bwpweXRob24zLgoKaHR0cHM6Ly9naXRsYWIuY29t
-L2t1YnU5My9idWlsZHJvb3QvLS9qb2JzLzE2MTQ0NDcyMzYKCldpdGggYWxsIGlzc3VlcyBmaXhl
-ZDoKICBBY2tlZC1ieTogUm9tYWluIE5hb3VyIDxyb21haW4ubmFvdXJAZ21haWwuY29tPgogIFRl
-c3RlZC1ieTogUm9tYWluIE5hb3VyIDxyb21haW4ubmFvdXJAZ21haWwuY29tPgoKQmVzdCByZWdh
-cmRzLApSb21haW4KCj4gLS0tCj4gIC5naXRsYWItY2kueW1sIHwgMiArLQo+ICAxIGZpbGUgY2hh
-bmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRpb24oLSkKPiAKPiBkaWZmIC0tZ2l0IGEvLmdp
-dGxhYi1jaS55bWwgYi8uZ2l0bGFiLWNpLnltbAo+IGluZGV4IGJmOWYyZGNhNmMuLjE1MGI4ZWFj
-MWEgMTAwNjQ0Cj4gLS0tIGEvLmdpdGxhYi1jaS55bWwKPiArKysgYi8uZ2l0bGFiLWNpLnltbAo+
-IEBAIC0xLDcgKzEsNyBAQAo+ICAjIENvbmZpZ3VyYXRpb24gZm9yIEdpdGxhYi1DSS4KPiAgIyBC
-dWlsZHMgYXBwZWFyIG9uIGh0dHBzOi8vZ2l0bGFiLmNvbS9idWlsZHJvb3Qub3JnL2J1aWxkcm9v
-dC9waXBlbGluZXMKPiAgCj4gLWltYWdlOiBidWlsZHJvb3QvYmFzZToyMDIwMDgxNC4yMjI4Cj4g
-K2ltYWdlOiBidWlsZHJvb3QvYmFzZToyMDIxMDkyMi4yMjAwCj4gIAo+ICBzdGFnZXM6Cj4gICAg
-LSBnZW5lcmF0ZS1naXRsYWItY2kKPiAKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGxpc3RzLmJ1
-aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8v
-YnVpbGRyb290Cg==
+Fix the following build failure raised since bump to version 2.43 in
+commit bdd05a2b1323b4bdfbcaf559e0567a7d09f4837d:
+
+/usr/bin/install: cannot stat '/tmp/instance-0/output-1/build/liblinear-2.43/liblinear.so.3': No such file or directory
+
+Fixes:
+ - http://autobuild.buildroot.org/results/97c2a3babe8f9df7cda069858f13e3be2508cf40
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/liblinear/liblinear.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/liblinear/liblinear.mk b/package/liblinear/liblinear.mk
+index 3b137ed518..1ad734c756 100644
+--- a/package/liblinear/liblinear.mk
++++ b/package/liblinear/liblinear.mk
+@@ -14,8 +14,8 @@ LIBLINEAR_CFLAGS = $(TARGET_CFLAGS)
+ ifeq ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
+ # $1: destination directory
+ define LIBLINEAR_INSTALL_SHARED
+-	$(INSTALL) -m 0644 -D $(@D)/liblinear.so.3 $(1)/usr/lib/liblinear.so.3
+-	ln -sf liblinear.so.3 $(1)/usr/lib/liblinear.so
++	$(INSTALL) -m 0644 -D $(@D)/liblinear.so.4 $(1)/usr/lib/liblinear.so.4
++	ln -sf liblinear.so.4 $(1)/usr/lib/liblinear.so
+ endef
+ LIBLINEAR_CFLAGS += -fPIC
+ endif
+-- 
+2.33.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@lists.buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
