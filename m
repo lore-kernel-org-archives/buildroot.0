@@ -7,92 +7,92 @@ X-Spam-Status: No, score=-15.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D4ECC433F5
-	for <buildroot@archiver.kernel.org>; Wed, 22 Sep 2021 19:26:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B7ACC433EF
+	for <buildroot@archiver.kernel.org>; Wed, 22 Sep 2021 19:26:49 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 981B960EE0
-	for <buildroot@archiver.kernel.org>; Wed, 22 Sep 2021 19:26:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 981B960EE0
+	by mail.kernel.org (Postfix) with ESMTPS id 669AD60EE0
+	for <buildroot@archiver.kernel.org>; Wed, 22 Sep 2021 19:26:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 669AD60EE0
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5E96340121;
-	Wed, 22 Sep 2021 19:26:35 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 13C6D401FD;
+	Wed, 22 Sep 2021 19:26:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WJ7f5s3mBZqd; Wed, 22 Sep 2021 19:26:33 +0000 (UTC)
+	with ESMTP id Je5aArzdVSTw; Wed, 22 Sep 2021 19:26:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A0C43401FD;
-	Wed, 22 Sep 2021 19:26:32 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7C77F1BF321
- for <buildroot@lists.busybox.net>; Wed, 22 Sep 2021 19:26:31 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A477A4060F;
+	Wed, 22 Sep 2021 19:26:45 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B27701BF321
+ for <buildroot@lists.busybox.net>; Wed, 22 Sep 2021 19:26:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6C19F83FDD
- for <buildroot@lists.busybox.net>; Wed, 22 Sep 2021 19:26:31 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id AEA1841596
+ for <buildroot@lists.busybox.net>; Wed, 22 Sep 2021 19:26:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nMC7_b7Oqzmz for <buildroot@lists.busybox.net>;
- Wed, 22 Sep 2021 19:26:29 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id r3vacCg3iDvX for <buildroot@lists.busybox.net>;
+ Wed, 22 Sep 2021 19:26:40 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com
- [IPv6:2a00:1450:4864:20::532])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7836083F6E
- for <buildroot@buildroot.org>; Wed, 22 Sep 2021 19:26:29 +0000 (UTC)
-Received: by mail-ed1-x532.google.com with SMTP id co2so13882637edb.8
- for <buildroot@buildroot.org>; Wed, 22 Sep 2021 12:26:29 -0700 (PDT)
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com
+ [IPv6:2a00:1450:4864:20::52c])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id CE03741594
+ for <buildroot@buildroot.org>; Wed, 22 Sep 2021 19:26:39 +0000 (UTC)
+Received: by mail-ed1-x52c.google.com with SMTP id u27so13939939edi.9
+ for <buildroot@buildroot.org>; Wed, 22 Sep 2021 12:26:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=XVfPQ+wJYEOibDcUxoLlVeBQwBDjHOEAmjsBS2AIpAU=;
- b=Epp25hxnNEk39wnu5TCBOeVLjoabqQv5FgcJs8Gdm7ZpcQBvtFC4rXWvLAuiFyfsb9
- mWrHosiru3qdjI39d3jR1cA19Lj/O9MNpvb1ar9y6/3eeRiEWpreIEbiGdwQEn1xm6af
- olnhME1iOQ1kLUaASSa5gV0Khj5RlTP0V8fUDtTyqN22zYLy3WBtLRuHZu6FlGfge7cz
- OQksrns9tTCQmKUmmOKsB+IYw4EhKzH7TtC+0f5n8MlmofqUm8Rz0iwkURLlpwEMOqlN
- 8fOT+uYfsEU59f10YOYXAzaKo/o4ITRW4akJYnwpTXSZ/iQEuwaKaJd0UtGgwotxfWeX
- cUQA==
+ bh=t3N0+1BWCFvaU64GTEZ/TLiBBqjcKOil76IkJE+Z34s=;
+ b=PW358uPPalFQpr2eDBI+2V8egeFIA0GafkOOZP2GbBNUdc0Uns/AYnlwSyowdGGS2x
+ Bd2yyg2lMjXg9q05+FG90NPMZ41AdjDTo1qaF248VMTMjKYaJC+4lERT4f7/FNpky25x
+ Qx/J1WGlaQ00J+ZtWjf3ToOBOFkASKgj9UEsIpLdzsHQ+BAOfBO16jRIRvZlFPyIJCIo
+ GZWa8Q0zenFflfVSSlr0j5Dey+ciz9je3fMaIz6OQUA+OW2Sacvo1pVFGXu8ZoMMhGeh
+ rhULiO8h0Z5JLDSgz7zmww/Pilm+zUcPXoskE4LJcYmA5XXRMqYkm48d09NtI/MJJiIf
+ PbDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=XVfPQ+wJYEOibDcUxoLlVeBQwBDjHOEAmjsBS2AIpAU=;
- b=lLCNpjPqaHdOMTCqw1lY0YZgDVsIoEdQTvMLDH/V5zA2TA0F0BMK3t2/TICM6AXSeU
- jfz9Ob+tQSoOv4ToZ4hdVt7TiEdU1vHhD5OWTxrJN4d+1RQ9EnTFKlwmZR74Kvi0Ij1n
- pee9b+dqVxJ8///cZM4Ec5ZWmITa7DiH8eT3PrujN1E9MqvTJMaXQKlVXeUj54+/9Eoa
- VqAD50uPpSbPnhqPpFo3JTvCor77Cv9BBPXehFlYAOm5dbGjcalD/fdv0N797DroRJhE
- tN1hUD9EP7/1vj0CWUFp6p7o5kykWqYPHsOvIn56hSuF4VxaIWWpMj5iFU+q4l/lVhly
- 7tqg==
-X-Gm-Message-State: AOAM531bbPixShcVTRvBdnghcEJZlUWx8yDsEDJ9JPHJ2vW+qLUZ1Xgf
- 1RrenxD+6GfV1BgRzIQz+Cy6Ww==
-X-Google-Smtp-Source: ABdhPJyf8ZU/ZqTLZGme87NdUM3W5J1i6LyJgLMHR82AxpCMmWMSM/+Oyskk50+mz5av0R+4M+IYFw==
-X-Received: by 2002:a17:906:4310:: with SMTP id
- j16mr991565ejm.48.1632338787469; 
- Wed, 22 Sep 2021 12:26:27 -0700 (PDT)
+ bh=t3N0+1BWCFvaU64GTEZ/TLiBBqjcKOil76IkJE+Z34s=;
+ b=xV/lNwaQvbS9Wr6FCUDE5Un01HQbCSGEilU9Wf65Xcaye62U1iwIPV4efceFi8UVcC
+ WzsBVwrCtdZZV7E7f9+IythJBDk9SkKjx/djyENnTIq2OwDqzjQ6hVEFI4mHOv5QYB90
+ DAfpDz/r+Nt/RPEeTb+1SY5gPfhjhYaVXuyK472mz4MnhrOXORrHCJuQeBLT6HhP4Bxi
+ p7crEqtiL565F1dRq9sdcFw/AWq6Q80QpIu95hWHkK5NP9XtRon4GKWWrjJhzCBzJFZC
+ 9HW/3ep4IPEDzArIjxvp7vz5GUKtpcZNMz0ffPM6R4C8n0QNVhgO4C4f5aAZl8my8Fm2
+ qwqA==
+X-Gm-Message-State: AOAM530XJ5yALKYhpgVb1oBKxboO1E6yof70H+I1s65doGSdMefITT1C
+ S/nMHEms/FtBmRaGw+PIaeV+eA==
+X-Google-Smtp-Source: ABdhPJztV3kmvnph1VncGH0wsvytrNQZO9om7htkBk/Ae8vE5Br4Bdiy6dEP8Eb6AUosOcitJlt6dw==
+X-Received: by 2002:a17:906:a08a:: with SMTP id
+ q10mr992711ejy.100.1632338797922; 
+ Wed, 22 Sep 2021 12:26:37 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id ck10sm1648021edb.43.2021.09.22.12.26.26
+ by smtp.gmail.com with ESMTPSA id z20sm1678341edl.61.2021.09.22.12.26.37
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 22 Sep 2021 12:26:27 -0700 (PDT)
-Message-ID: <453916af-9c27-a00e-b31e-1150c84e9718@mind.be>
-Date: Wed, 22 Sep 2021 21:26:26 +0200
+ Wed, 22 Sep 2021 12:26:37 -0700 (PDT)
+Message-ID: <396a317b-83d3-7c09-903e-7b753293534e@mind.be>
+Date: Wed, 22 Sep 2021 21:26:36 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.1.0
 Content-Language: en-GB
 To: Adrian Perez de Castro <aperez@igalia.com>, buildroot@buildroot.org
-References: <20210920124632.3472855-1-aperez@igalia.com>
+References: <20210920184341.641935-1-aperez@igalia.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20210920124632.3472855-1-aperez@igalia.com>
-Subject: Re: [Buildroot] [PATCH 1/1] package/wpewebkit: security bump to
+In-Reply-To: <20210920184341.641935-1-aperez@igalia.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package/webkitgtk: security bump to
  version 2.32.4
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
@@ -113,7 +113,7 @@ Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
 
 
-On 20/09/2021 14:46, Adrian Perez de Castro wrote:
+On 20/09/2021 20:43, Adrian Perez de Castro wrote:
 > This is a minor release which provides fixes for CVE-2021-30858 and
 > a number of other potential security issues without an associated CVE.
 > Patch "0001-Add-ldp-and-stp-support-for-FP-registers-plus-some-b.patch"
@@ -121,11 +121,11 @@ On 20/09/2021 14:46, Adrian Perez de Castro wrote:
 > 
 > Full release notes can be found at:
 > 
->    https://wpewebkit.org/release/wpewebkit-2.32.4.html
+>    https://webkitgtk.org/2021/09/17/webkitgtk2.32.4-released.html
 > 
 > An accompanying security advisory has been published at:
 > 
->    https://wpewebkit.org/security/WSA-2021-0005.html
+>    https://webkitgtk.org/security/WSA-2021-0005.html
 > 
 > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 
@@ -136,15 +136,15 @@ On 20/09/2021 14:46, Adrian Perez de Castro wrote:
 
 > ---
 >   ...support-for-FP-registers-plus-some-b.patch | 382 ------------------
->   package/wpewebkit/wpewebkit.hash              |   9 +-
->   package/wpewebkit/wpewebkit.mk                |   2 +-
->   3 files changed, 5 insertions(+), 388 deletions(-)
->   delete mode 100644 package/wpewebkit/0001-Add-ldp-and-stp-support-for-FP-registers-plus-some-b.patch
+>   package/webkitgtk/webkitgtk.hash              |   8 +-
+>   package/webkitgtk/webkitgtk.mk                |   2 +-
+>   3 files changed, 5 insertions(+), 387 deletions(-)
+>   delete mode 100644 package/webkitgtk/0001-Add-ldp-and-stp-support-for-FP-registers-plus-some-b.patch
 > 
-> diff --git a/package/wpewebkit/0001-Add-ldp-and-stp-support-for-FP-registers-plus-some-b.patch b/package/wpewebkit/0001-Add-ldp-and-stp-support-for-FP-registers-plus-some-b.patch
+> diff --git a/package/webkitgtk/0001-Add-ldp-and-stp-support-for-FP-registers-plus-some-b.patch b/package/webkitgtk/0001-Add-ldp-and-stp-support-for-FP-registers-plus-some-b.patch
 > deleted file mode 100644
 > index c8b8501bdb..0000000000
-> --- a/package/wpewebkit/0001-Add-ldp-and-stp-support-for-FP-registers-plus-some-b.patch
+> --- a/package/webkitgtk/0001-Add-ldp-and-stp-support-for-FP-registers-plus-some-b.patch
 > +++ /dev/null
 > @@ -1,382 +0,0 @@
 > -From 05f6ba814422a392d59037ebe4412168da0e44db Mon Sep 17 00:00:00 2001
@@ -529,36 +529,35 @@ On 20/09/2021 14:46, Adrian Perez de Castro wrote:
 > ---
 > -2.25.1
 > -
-> diff --git a/package/wpewebkit/wpewebkit.hash b/package/wpewebkit/wpewebkit.hash
-> index 39bf8829d0..ff8bd1f30a 100644
-> --- a/package/wpewebkit/wpewebkit.hash
-> +++ b/package/wpewebkit/wpewebkit.hash
-> @@ -1,8 +1,7 @@
-> -
-> -# From https://wpewebkit.org/releases/wpewebkit-2.32.3.tar.xz.sums
-> -md5  1e34412c50fe8d1ff084738477ecad7e  wpewebkit-2.32.3.tar.xz
-> -sha1  157344d8febfc89d6731404c30857f122f220d6e  wpewebkit-2.32.3.tar.xz
-> -sha256  859bd1bbe51026aecfb2b6f5c8c024d88fb69ac6fcdc74c788c9fbe9499d740d  wpewebkit-2.32.3.tar.xz
-> +# From https://wpewebkit.org/releases/wpewebkit-2.32.4.tar.xz.sums
-> +md5  94ca1cc3f7b2de8b96c59d6e59cafcd0  wpewebkit-2.32.4.tar.xz
-> +sha1  19b8ebdbfef193ca50f7625703d871db87624f86  wpewebkit-2.32.4.tar.xz
-> +sha256  381f1422cbc319db1aa42dda48de39590ed90ac3bec6b81ec83f3f2cae5c3eeb  wpewebkit-2.32.4.tar.xz
+> diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+> index 1208dfce6c..7cb6c90b21 100644
+> --- a/package/webkitgtk/webkitgtk.hash
+> +++ b/package/webkitgtk/webkitgtk.hash
+> @@ -1,7 +1,7 @@
+> -# From https://webkitgtk.org/releases/webkitgtk-2.32.3.tar.xz.sums
+> -md5  f31b802de421865ea9f1391ec8190519  webkitgtk-2.32.3.tar.xz
+> -sha1  9c9b2cb2638ea40706765768dd5cb3c95ab46dcb  webkitgtk-2.32.3.tar.xz
+> -sha256  c1f496f5ac654efe4cef62fbd4f2fbeeef265a07c5e7419e5d2900bfeea52cbc  webkitgtk-2.32.3.tar.xz
+> +# From https://webkitgtk.org/releases/webkitgtk-2.32.4.tar.xz.sums
+> +md5  51a167e5d03bacf30c5c588e6aa23143  webkitgtk-2.32.4.tar.xz
+> +sha1  f7255ffb488e727e9e250e0dae9f192266f50f01  webkitgtk-2.32.4.tar.xz
+> +sha256  00ce2d3f798d7bc5e9039d9059f0c3c974d51de38c8b716f00e94452a177d3fd  webkitgtk-2.32.4.tar.xz
 >   
 >   # Hashes for license files:
 >   sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
-> diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
-> index 42bea291e6..4c11cd21a7 100644
-> --- a/package/wpewebkit/wpewebkit.mk
-> +++ b/package/wpewebkit/wpewebkit.mk
+> diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+> index 00972744c7..708884fbf6 100644
+> --- a/package/webkitgtk/webkitgtk.mk
+> +++ b/package/webkitgtk/webkitgtk.mk
 > @@ -4,7 +4,7 @@
 >   #
 >   ################################################################################
 >   
-> -WPEWEBKIT_VERSION = 2.32.3
-> +WPEWEBKIT_VERSION = 2.32.4
->   WPEWEBKIT_SITE = http://www.wpewebkit.org/releases
->   WPEWEBKIT_SOURCE = wpewebkit-$(WPEWEBKIT_VERSION).tar.xz
->   WPEWEBKIT_INSTALL_STAGING = YES
+> -WEBKITGTK_VERSION = 2.32.3
+> +WEBKITGTK_VERSION = 2.32.4
+>   WEBKITGTK_SITE = https://www.webkitgtk.org/releases
+>   WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
+>   WEBKITGTK_INSTALL_STAGING = YES
 > 
 _______________________________________________
 buildroot mailing list
