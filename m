@@ -7,51 +7,51 @@ X-Spam-Status: No, score=-12.2 required=3.0 tests=BAYES_00,DATE_IN_PAST_06_12,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B9CDC433EF
-	for <buildroot@archiver.kernel.org>; Thu, 23 Sep 2021 07:15:19 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 42573C4332F
+	for <buildroot@archiver.kernel.org>; Thu, 23 Sep 2021 07:15:31 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 6E6C361050
-	for <buildroot@archiver.kernel.org>; Thu, 23 Sep 2021 07:15:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6E6C361050
+	by mail.kernel.org (Postfix) with ESMTPS id BC21560FE6
+	for <buildroot@archiver.kernel.org>; Thu, 23 Sep 2021 07:15:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org BC21560FE6
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E08A3415F9;
-	Thu, 23 Sep 2021 07:15:17 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 633AE40702;
+	Thu, 23 Sep 2021 07:15:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FxLCPi1FtiB2; Thu, 23 Sep 2021 07:15:17 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 2dQNZV13haPb; Thu, 23 Sep 2021 07:15:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4D45E4161D;
-	Thu, 23 Sep 2021 07:15:16 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 55DA3406FE;
+	Thu, 23 Sep 2021 07:15:28 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1CA901BF342
- for <buildroot@lists.busybox.net>; Thu, 23 Sep 2021 07:15:03 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3DFDA1BF342
+ for <buildroot@lists.busybox.net>; Thu, 23 Sep 2021 07:15:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 52B2884212
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5BCFC84213
  for <buildroot@lists.busybox.net>; Thu, 23 Sep 2021 07:15:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4vQH1mZ5ymY6 for <buildroot@lists.busybox.net>;
+ with ESMTP id ZGo4DIAD5xNw for <buildroot@lists.busybox.net>;
  Thu, 23 Sep 2021 07:15:01 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 47BDB84213
+ by smtp1.osuosl.org (Postfix) with ESMTP id 527C184214
  for <buildroot@buildroot.org>; Thu, 23 Sep 2021 07:15:01 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 082F08CA57; Thu, 23 Sep 2021 07:12:56 +0000 (UTC)
+ id 1203D8CA58; Thu, 23 Sep 2021 07:12:56 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Wed, 22 Sep 2021 23:23:10 +0200
+Date: Wed, 22 Sep 2021 23:27:21 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 84a2723568871745a0a50504dc741d77bb8d5470
-X-Git-Newrev: 67b3d6820eb9792af875628b92c56062b734868f
+X-Git-Oldrev: 67b3d6820eb9792af875628b92c56062b734868f
+X-Git-Newrev: 4906e77d5957a78df3181a0c8a1b5f0e55ce44da
 X-Patchwork-Hint: ignore
-Message-Id: <20210923071256.082F08CA57@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mpd: update to version 0.22.11
+Message-Id: <20210923071256.1203D8CA58@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/iptables: add init script
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,49 +65,118 @@ List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============5057677989493728202=="
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=67b3d6820eb9792af875628b92c56062b734868f
+--===============5057677989493728202==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=4906e77d5957a78df3181a0c8a1b5f0e55ce44da
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-mpd 0.22.10 terminates with segmentation fault on graphical clients while
-retrieving album information. This bug was fixed in version 0.22.11
+This patch will add an init script that allows
+to set a ruleset in /etc/iptables.conf to be loaded
+on boot, or flushed on stop, as well as a saving
+command to generate a new file.
 
-Tested on x86_64 using M.A.L.P. Android client
-
-Signed-off-by: Andreas Ziegler <br015@umbiko.net>
+Signed-off-by: José Pekkarinen <jose.pekkarinen@unikie.com>
+[Arnout: change handling of readonly filesystem]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/mpd/mpd.hash | 2 +-
- package/mpd/mpd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/iptables/S35iptables | 58 ++++++++++++++++++++++++++++++++++++++++++++
+ package/iptables/iptables.mk |  6 +++++
+ 2 files changed, 64 insertions(+)
 
-diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
-index 3847fc6724..2501be65de 100644
---- a/package/mpd/mpd.hash
-+++ b/package/mpd/mpd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256  07c82535e9999c3d4a099d8e652c88724635125b3c9f265ba9b6f2974ff9e614  mpd-0.22.10.tar.xz
-+sha256  143f7f34aaee6e87888f3dd35d49aade6656052651b960ca42b46cbb518ca0a0  mpd-0.22.11.tar.xz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index 62e31860c0..fe6b8d539b 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/iptables/S35iptables b/package/iptables/S35iptables
+new file mode 100644
+index 0000000000..ff3f51a2ba
+--- /dev/null
++++ b/package/iptables/S35iptables
+@@ -0,0 +1,58 @@
++#!/bin/sh
++
++DAEMON="iptables"
++
++IPTABLES_ARGS=""
++
++start() {
++	printf 'Starting %s: ' "$DAEMON"
++	iptables-restore < /etc/iptables.conf
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
++}
++
++stop() {
++	printf 'Stopping %s: ' "$DAEMON"
++	iptables -F
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
++}
++
++restart() {
++	stop
++	sleep 1
++	start
++}
++
++save() {
++	printf 'Saving %s: ' "$DAEMON"
++	iptables-save > /etc/iptables.conf
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "SKIP (read-only file system detected)"
++	fi
++	return "$status"
++}
++
++case "$1" in
++	start|stop|restart|save)
++		"$1";;
++	reload)
++		# Restart, since there is no true "reload" feature.
++		restart;;
++	*)
++		echo "Usage: $0 {start|stop|restart|reload}"
++		exit 1
++esac
+diff --git a/package/iptables/iptables.mk b/package/iptables/iptables.mk
+index ca8178425e..555bb384fd 100644
+--- a/package/iptables/iptables.mk
++++ b/package/iptables/iptables.mk
+@@ -57,4 +57,10 @@ define IPTABLES_LINUX_CONFIG_FIXUPS
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XTABLES)
+ endef
  
- MPD_VERSION_MAJOR = 0.22
--MPD_VERSION = $(MPD_VERSION_MAJOR).10
-+MPD_VERSION = $(MPD_VERSION_MAJOR).11
- MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
- MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
- MPD_DEPENDENCIES = host-pkgconf boost
++define IPTABLES_INSTALL_INIT_SYSV
++	$(INSTALL) -m 0755 -D package/iptables/S35iptables \
++		$(TARGET_DIR)/etc/init.d/S35iptables
++	touch $(TARGET_DIR)/etc/iptables.conf
++endef
++
+ $(eval $(autotools-package))
+
+--===============5057677989493728202==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============5057677989493728202==--
