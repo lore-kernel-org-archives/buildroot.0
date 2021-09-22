@@ -2,72 +2,99 @@ Return-Path: <SRS0=bh6H=OM=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
+X-Spam-Status: No, score=-15.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 27257C433F5
-	for <buildroot@archiver.kernel.org>; Wed, 22 Sep 2021 21:10:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BE9FDC433EF
+	for <buildroot@archiver.kernel.org>; Wed, 22 Sep 2021 21:23:16 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 647CF611C6
-	for <buildroot@archiver.kernel.org>; Wed, 22 Sep 2021 21:10:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 647CF611C6
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=benettiengineering.com
+	by mail.kernel.org (Postfix) with ESMTPS id 4236361168
+	for <buildroot@archiver.kernel.org>; Wed, 22 Sep 2021 21:23:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4236361168
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2D5DD40607;
-	Wed, 22 Sep 2021 21:10:08 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DE13A40121;
+	Wed, 22 Sep 2021 21:23:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MWtxvuRrftWS; Wed, 22 Sep 2021 21:10:07 +0000 (UTC)
+	with ESMTP id p6Y4UeBtGhp9; Wed, 22 Sep 2021 21:23:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 592E740598;
-	Wed, 22 Sep 2021 21:10:06 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3AFF71BF2F7
- for <buildroot@lists.busybox.net>; Wed, 22 Sep 2021 21:10:05 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E39D24047E;
+	Wed, 22 Sep 2021 21:23:13 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 0AE501BF2F7
+ for <buildroot@lists.busybox.net>; Wed, 22 Sep 2021 21:23:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2AFD884032
- for <buildroot@lists.busybox.net>; Wed, 22 Sep 2021 21:10:05 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 07BA76148D
+ for <buildroot@lists.busybox.net>; Wed, 22 Sep 2021 21:23:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=aruba.it
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JkxvUV-MkR_q for <buildroot@lists.busybox.net>;
- Wed, 22 Sep 2021 21:10:03 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtpcmd12132.aruba.it (smtpcmd12132.aruba.it [62.149.156.132])
- by smtp1.osuosl.org (Postfix) with ESMTP id AEBF183FFD
- for <buildroot@buildroot.org>; Wed, 22 Sep 2021 21:10:02 +0000 (UTC)
-Received: from ubuntu.localdomain ([146.241.167.42])
- by Aruba Outgoing Smtp  with ESMTPSA
- id T9VAmKknWnxSqT9VAmZQwF; Wed, 22 Sep 2021 23:10:01 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1632345001; bh=Bc4aDwUNtM+Ay41NULi+N4rP4/e+RAgtdc2ruTBwXhU=;
- h=From:To:Subject:Date:MIME-Version;
- b=TqkKGfAlTgd9ZBC4L32AG1NdASBC59CeI1a65aWzHSH60vX7zRzKbuBkQMaFvsj5J
- FD2FtvnNhY+6sgdLGITzoq0nHh8A0rZPEVVyEa/C2mv8jJPBUrO+SxJcOUqize+nG3
- SUG5G+H826Y8vD8PMGuIhE4mytd3CmAqniZ9NxsRyByPSmBm+sxL/jVK2HzBd6d5sN
- aTmI9QfmCXz5Ao+CroFZv+t0SMXsw7+dKeUrtlLcQZclLGkCpZ/qA+ly60ISNer+8H
- jc5qQa92dyyRDXwfkZbh5nvN87PP0c0FHX25gk4lbdGMnRYjvrnOrfTCaLdpfZQSBg
- pojrUP+iTE0Lg==
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-To: Arnout Vandecappelle <arnout@mind.be>,
-	buildroot@buildroot.org
-Date: Wed, 22 Sep 2021 23:09:59 +0200
-Message-Id: <20210922210959.3604227-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.25.1
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kRtzVYqma95E for <buildroot@lists.busybox.net>;
+ Wed, 22 Sep 2021 21:23:11 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com
+ [IPv6:2a00:1450:4864:20::52c])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id BC1B16077B
+ for <buildroot@buildroot.org>; Wed, 22 Sep 2021 21:23:10 +0000 (UTC)
+Received: by mail-ed1-x52c.google.com with SMTP id dj4so15418758edb.5
+ for <buildroot@buildroot.org>; Wed, 22 Sep 2021 14:23:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=tLdy1eZr2XAQB+72oQ7cFjvQPofUfElu9x6i6sKub24=;
+ b=dBsXAiBeGAhDYvlZeeUSp5SbgB6f5b2a8C1IKE0zy5dGzaa493fXsa5G5SqdVc1Eiv
+ Upba1S6i1UoSV7EQlXp0PmJoIWmlU7jkd43KebF5uMK+UcWygXXrcFYV+HTC4hQzbl6L
+ KOplrKRO75tkNNrlerbGxI2B5YWIrvyarKbUQJxLaYfZoRPRE0bNIbPc7vw63D/pWBQo
+ ut8BMy2dzkYmwZSosGfJ6E5crQ99tTySvz+RF8jtoIqsEtuNiT2TwNOwuJJE7+0OHWwu
+ UTSOyqSTKBfOdEguBgfECory4EK4uodIy725oUGhTQ53A2t2QV9N7UPIiwBR4/GO5j/o
+ A1RA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=tLdy1eZr2XAQB+72oQ7cFjvQPofUfElu9x6i6sKub24=;
+ b=YG774pOlYBe2zJKwp+HVJf77KI9G9BOUPGLXIlNIyrOJlBaSVxXfmcikKxUTwl2yi1
+ MSw3pg1FRQkSW65iCcz2gvSKqsLNbjiGgEQ3E9C5/4z3qoOALW3A4QNQ+9o1V+G43TPN
+ jfpJ/+wr6xMmRRElbULckuEUyY/vb40oDaCWfVSbe5MmngfT1WvRFjGN4CDwAt766lXQ
+ 6OBII8qLTTVUUtXs1Wqo29M/ZpnwqmTnKAirWN14YBV21bB5nvXcD1GjnHrJWsuFowlU
+ OebBbU+3833vYr6e4Ig9GwzgzcjpyZofbkegr1T96AGzPbcMPLvV2g/CXE9v6CWt20Fn
+ Ye1Q==
+X-Gm-Message-State: AOAM533AYTajOSyumGACWGFITeJghQC0E+b0ZpodrzNAUp6gs9I+lR5b
+ d8NiL4tU3r5kRdoXaQyCFL2PxDbJkuujWg==
+X-Google-Smtp-Source: ABdhPJzPkV31ne6hSsSmdD3MlaPvJCJfXI0yjFmUIp1IDs3dXI/D4diZJAUY3+qoCB714ljUNWrwZQ==
+X-Received: by 2002:a17:906:a012:: with SMTP id
+ p18mr1447333ejy.331.1632345788792; 
+ Wed, 22 Sep 2021 14:23:08 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id r22sm1588372ejj.91.2021.09.22.14.23.01
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 22 Sep 2021 14:23:04 -0700 (PDT)
+Message-ID: <bda2bf67-a20c-f793-1d1f-024095091a38@mind.be>
+Date: Wed, 22 Sep 2021 23:23:00 +0200
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4wfE5in/duEToptSMQue/fwWbEVY0a5g+pGHj5xv2v+rq99BTcg8rKxy//5uWYv0ZtYr6YJpbM/VmSqKBXpNAgXsMx8TG4volEIP29ir6Jsb904aKg8hHr
- AZoBsTl0Xi5mJh/crdVgqWOAJpV/sQpROM/uCsgegkwitgzsnNv0V8VGoKBr1NzCFaxaW4TkRWaW2lgL/LH/yp+/IkJfztSORWtpV62bAudI+BwWpII181/d
- dhLbJHTWawl8ccrN/VsPh4inPiBZ4cWZvSmbp+ZuwcRDvrcxchUm0PmSWGfmC1QYlv6KpDGhRJbA1R/HisX+AXbB8smrPXAwPwN9JqTHKDvhdqoOhUbe0mer
- ywFKr0us
-Subject: [Buildroot] [PATCH v2] package/ffmpeg: fix build on mips
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.1.0
+Content-Language: en-GB
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+References: <20210914211501.403653-1-fontaine.fabrice@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20210914211501.403653-1-fontaine.fabrice@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package/uboot-tools: fix static build
+ with musl
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,50 +107,81 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
+Cc: Matt Weber <matthew.weber@collins.com>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-mips_32 is not supported by ffmpeg and it tries to build with loongson3
-SIMD support that leads to build failure due to:
-/tmp/ccFO2LRa.s: Assembler messages:
-/tmp/ccFO2LRa.s:15314: Error: opcode not supported on this processor: mips32 (mips32) `dmult $2,$6'
-/tmp/ccFO2LRa.s:15316: Error: opcode not supported on this processor: mips32 (mips32) `dsrl $2,$2,32'
 
-So let's --disable-asm to prevent using those unsupported opcodes for every
-mips architecture according to Arnout.
 
-Fixes:
-http://autobuild.buildroot.net/results/f01/f01d9cedec8e1b371308d0f7af561a75883fa27c/
+On 14/09/2021 23:15, Fabrice Fontaine wrote:
+> Static build with musl fails since bump to version 2020.04 in commit
+> fe97212976ea0b2a80fe1e076ad17d6f648cd1de because LDFLAGS, which contains
+> -static, is not passed resulting in the following build failure:
+> 
+> /tmp/instance-1/output-1/host/lib/gcc/arm-buildroot-linux-musleabihf/10.3.0/../../../../arm-buildroot-linux-musleabihf/bin/ld: /tmp/instance-1/output-1/host/lib/gcc/arm-buildroot-linux-musleabihf/10.3.0/libgcc.a(_dvmd_lnx.o): in function `__aeabi_ldiv0':
+> /tmp/instance-1/output-1/build/host-gcc-final-10.3.0/build/arm-buildroot-linux-musleabihf/libgcc/../../../libgcc/config/arm/lib1funcs.S:1499: undefined reference to `raise'
+> collect2: error: ld returned 1 exit status
+> 
+> Fixes:
+>   - http://autobuild.buildroot.org/results/d71aba27ff0c7711f2cb67261183506f25217a5f
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- package/ffmpeg/ffmpeg.mk | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+  Applied to master, thanks.
 
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index 8ff8ea8c6c..b3ce4c0656 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -507,10 +507,8 @@ else
- FFMPEG_CONF_OPTS += --enable-mipsfpu
- endif
- 
--# Fix build failure on "addi opcode not supported"
--ifeq ($(BR2_mips_32r6)$(BR2_mips_64r6),y)
-+# Fix build failure on several missing assembly instructions
- FFMPEG_CONF_OPTS += --disable-asm
--endif
- endif # MIPS
- 
- ifeq ($(BR2_POWERPC_CPU_HAS_ALTIVEC),y)
--- 
-2.25.1
+  What's the upstream status of the patch?
 
+  Regards,
+  Arnout
+
+> ---
+>   ...ix-C-LD-FLAGS-with-CROSS_BUILD_TOOLS.patch | 34 +++++++++++++++++++
+>   1 file changed, 34 insertions(+)
+>   create mode 100644 package/uboot-tools/0003-tools-Makefile-fix-C-LD-FLAGS-with-CROSS_BUILD_TOOLS.patch
+> 
+> diff --git a/package/uboot-tools/0003-tools-Makefile-fix-C-LD-FLAGS-with-CROSS_BUILD_TOOLS.patch b/package/uboot-tools/0003-tools-Makefile-fix-C-LD-FLAGS-with-CROSS_BUILD_TOOLS.patch
+> new file mode 100644
+> index 0000000000..502458e219
+> --- /dev/null
+> +++ b/package/uboot-tools/0003-tools-Makefile-fix-C-LD-FLAGS-with-CROSS_BUILD_TOOLS.patch
+> @@ -0,0 +1,34 @@
+> +From 3b89170333ef0fdfffee14751ce3e1d66d7dfa00 Mon Sep 17 00:00:00 2001
+> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +Date: Tue, 14 Sep 2021 19:08:02 +0200
+> +Subject: [PATCH] tools/Makefile: fix {C,LD}FLAGS with CROSS_BUILD_TOOLS
+> +
+> +When CROSS_BUILD_TOOLS is set, set KBUILD_HOST{CF,LD}FLAGS to
+> +{C,LD}FLAGS otherwise CC will be used with HOST{C,LD}FLAGS which seems
+> +wrong.
+> +
+> +It should be noted that, for an unknown reason, overriding
+> +HOST{C,LD}FLAGS don't work.
+> +
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +---
+> + tools/Makefile | 3 ++-
+> + 1 file changed, 2 insertions(+), 1 deletion(-)
+> +
+> +diff --git a/tools/Makefile b/tools/Makefile
+> +index 4a86321f64..98bb92990d 100644
+> +--- a/tools/Makefile
+> ++++ b/tools/Makefile
+> +@@ -316,7 +316,8 @@ subdir- += env
+> +
+> + ifneq ($(CROSS_BUILD_TOOLS),)
+> + override HOSTCC = $(CC)
+> +-override HOSTCFLAGS = $(CFLAGS)
+> ++override KBUILD_HOSTCFLAGS = $(CFLAGS)
+> ++override KBUILD_HOSTLDFLAGS = $(LDFLAGS)
+> +
+> + quiet_cmd_crosstools_strip = STRIP   $^
+> +       cmd_crosstools_strip = $(STRIP) $^; touch $@
+> +--
+> +2.33.0
+> +
+> 
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
