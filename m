@@ -8,86 +8,86 @@ X-Spam-Status: No, score=-18.5 required=3.0 tests=BAYES_00,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C7925C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 22 Sep 2021 06:37:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B78AC433EF
+	for <buildroot@archiver.kernel.org>; Wed, 22 Sep 2021 06:40:28 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 6DF3061184
-	for <buildroot@archiver.kernel.org>; Wed, 22 Sep 2021 06:37:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6DF3061184
+	by mail.kernel.org (Postfix) with ESMTPS id 86623611C6
+	for <buildroot@archiver.kernel.org>; Wed, 22 Sep 2021 06:40:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 86623611C6
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1EBDF60AC4;
-	Wed, 22 Sep 2021 06:37:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 322EC60ABE;
+	Wed, 22 Sep 2021 06:40:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WJcGybUZygiA; Wed, 22 Sep 2021 06:37:46 +0000 (UTC)
+	with ESMTP id wDfCDpUMHjfy; Wed, 22 Sep 2021 06:40:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 86F3D60ABE;
-	Wed, 22 Sep 2021 06:37:45 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 16B1D1BF409
- for <buildroot@lists.busybox.net>; Wed, 22 Sep 2021 06:37:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 75D9560839;
+	Wed, 22 Sep 2021 06:40:25 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 80D781BF409
+ for <buildroot@lists.busybox.net>; Wed, 22 Sep 2021 06:40:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0FD324070E
- for <buildroot@lists.busybox.net>; Wed, 22 Sep 2021 06:37:44 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7B68D80F4B
+ for <buildroot@lists.busybox.net>; Wed, 22 Sep 2021 06:40:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1BOvk98NPcel for <buildroot@lists.busybox.net>;
- Wed, 22 Sep 2021 06:37:42 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hsD1ydv7Af4O for <buildroot@lists.busybox.net>;
+ Wed, 22 Sep 2021 06:40:23 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com
- [IPv6:2607:f8b0:4864:20::12a])
- by smtp4.osuosl.org (Postfix) with ESMTPS id CD91440704
- for <buildroot@buildroot.org>; Wed, 22 Sep 2021 06:37:42 +0000 (UTC)
-Received: by mail-il1-x12a.google.com with SMTP id w1so1663180ilv.1
- for <buildroot@buildroot.org>; Tue, 21 Sep 2021 23:37:42 -0700 (PDT)
+Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com
+ [IPv6:2607:f8b0:4864:20::12b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9F1BE80F2D
+ for <buildroot@buildroot.org>; Wed, 22 Sep 2021 06:40:23 +0000 (UTC)
+Received: by mail-il1-x12b.google.com with SMTP id d11so1606336ilc.8
+ for <buildroot@buildroot.org>; Tue, 21 Sep 2021 23:40:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=nTglbYwqw5Y7UhQ8q4/ukasBM1dbbTejp2GPIRVtE5Y=;
- b=O4X9rmlNGn4lgNXMnFYO7LHskeqNQXtbIlVbse/AXsDJa8eVwf0t0kJNS9e8n0WrDb
- ps/gKvZr3+nWyE56Tq/WVzg4QR+p55AejFYPsAGrDzR7EQjOmutFd4da/r4dMjZ12ipP
- XuVDE9qDj810Zson0G3JAbuteNubaOgKcBU1BgpM4fqDB58gQok8rEmdkJ82zaH2dvx3
- wkun4EQ0c7s3QfSaqHKKb4mWMMVoQgzsQafru68JVDSJ0M2LXvY8AgnnWZtD0g2HqwZR
- UocTzr2qIR0pj+KjMPyeKnsTz3coQVr8tsHYDz8ryGgkdIbX6Ei5FhCJvVLqi1d92eJM
- hO6A==
+ bh=/ytgITc+iEu1lirwdG7cKP15Xda7H+108vTSd2PB0EE=;
+ b=ZaU0sez8Mcy+yPzTJFGFEcUorR9a8s4PyN1gOdI/7Q1/M//c2lOwI0+ipsZIPP4VqP
+ ESU+DpzZaQ8qt6UEtxeuUWe14DVllLEKscJVZqwlNfZHGyrpRPMlJwsfePPRNeStWmNF
+ L473dPmxZG3igdqItGI+0XxTKCul9if27tGWVSgP0ZjpJNRQSpYzxmq39LFkujPVfQyM
+ DM64irBQYciWdvLz2Si5pwm5Pu8PF4yhj/X5PwTknosumdvC6jdzzJAtiMw+Kb6x9ZOR
+ huaf9rj8JbZ/EW+/70KezgyW8LU3hhpbJneT4ZG1N+neE2jBL2BKK7jinAnQiguYnXsy
+ jizQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=nTglbYwqw5Y7UhQ8q4/ukasBM1dbbTejp2GPIRVtE5Y=;
- b=SsRxoLAr4pcKYJCJRY4pbTEMBiEAhQZr8u9NIkOv0SZiJyalwbmyNHj780wJIxA1IK
- PnnglrmZ0UAAw64EXJtjq1L5aY2AogQX4J0wP1WTwcT90wvZ9Hhwwoj0s2UZcuAojwgP
- jvsqzklyJNnupWakcMqt/1mXw/RMrG0796/6d2F0JSlZH+QWo7T8tScenAXRtM+oazAP
- wsJr489PVgW/teZyU+EhzHCIByt86kd7NcoTRFULJkX09wuiKa8K3X52oGz2jiyk9Dcg
- OQZRE5A0s/EaJG1LnIwacZPvSY+jtKvg6hR5B7vFT7LcdW4q/WegUEmeiXEP9ahcdQzq
- otIQ==
-X-Gm-Message-State: AOAM532G+Fv9nO6n58/Kahe7rbFmzW5kbDdiMK9+zDlR1UAxJv3DLSeD
- VeRsa+kVfKexJYn6KofZkSyOa+Sn6Bk=
-X-Google-Smtp-Source: ABdhPJxW+lFCzO2F0M9tsbk4b6EsQx0GOZJAArqoGhn/zibsxGeB/5uBO2ctph5GvOod6SmKv3wHcw==
-X-Received: by 2002:a05:6e02:b4e:: with SMTP id
- f14mr12660716ilu.172.1632292661811; 
- Tue, 21 Sep 2021 23:37:41 -0700 (PDT)
+ bh=/ytgITc+iEu1lirwdG7cKP15Xda7H+108vTSd2PB0EE=;
+ b=nlUYYDfI83EZpgCAp5zZXjm64djwb9ct3q3WyZ/AJJW4JqYiyPknBKMP/XAJ5tPYGr
+ msGpRJ42kQrqYlxYqrGvs9QPBRaBDpoacetiJrryzvNSmNhXE9ExhVIUfYMF3/VaiBF6
+ dxrmPqhWGl2A5KZ3T6IXuNV9mkcnaEIwI82sgPjr6g/dxO3bfzybwjmK77p5ZBBgpqOU
+ RKdQMGo5V6g9Sp7IszNwYPgW55wVFHYfx1g8pX2VjlsAsVM1YGJNG1qGnURvqFa20ES8
+ E1FWSIFzvHuLfCFL9+fdK2aTLGYGmbIshCLT1jW+pLwIfft+D7IE0LJqEaB3mf+b/Kn2
+ dOew==
+X-Gm-Message-State: AOAM5329aQ5XKsEfuEmu+Z7oQOHOBMDPDAb/XT0zvrfI0lKrguTe8O6N
+ HqP5Yr1PKhuVpu2mAJCDSe5Vp5Kij9o=
+X-Google-Smtp-Source: ABdhPJxVIlKbouJZPJM1fkLzHyWAxi1AVYERYkPaPKyNY59aoHqk8GCo9wagI9lw6QyvaKEx6PCvqA==
+X-Received: by 2002:a05:6e02:e13:: with SMTP id
+ a19mr24628181ilk.11.1632292822659; 
+ Tue, 21 Sep 2021 23:40:22 -0700 (PDT)
 Received: from james-x399.localdomain (71-33-146-72.hlrn.qwest.net.
  [71.33.146.72])
- by smtp.gmail.com with ESMTPSA id p73sm595126iod.43.2021.09.21.23.37.41
+ by smtp.gmail.com with ESMTPSA id m13sm623765ilh.45.2021.09.21.23.40.22
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 21 Sep 2021 23:37:41 -0700 (PDT)
+ Tue, 21 Sep 2021 23:40:22 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 22 Sep 2021 00:37:40 -0600
-Message-Id: <20210922063740.4066870-1-james.hilliard1@gmail.com>
+Date: Wed, 22 Sep 2021 00:40:20 -0600
+Message-Id: <20210922064020.4173488-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/python-greenlet: bump to version
- 1.1.1
+Subject: [Buildroot] [PATCH 1/1] package/python-hyperlink: bump to version
+ 21.0.0
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -108,47 +108,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-License hash change due to path change in:
-https://github.com/python-greenlet/greenlet/commit/8448b094d1b81788ac9cbaf86a184712f1daf5e0
+License hash change due to name being added:
+https://github.com/python-hyper/hyperlink/commit/c7509785af58fa4d065faed2557e57943e31f53d
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-greenlet/python-greenlet.hash | 6 +++---
- package/python-greenlet/python-greenlet.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/python-hyperlink/python-hyperlink.hash | 6 +++---
+ package/python-hyperlink/python-hyperlink.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-greenlet/python-greenlet.hash b/package/python-greenlet/python-greenlet.hash
-index eed8e59713..ad216b0368 100644
---- a/package/python-greenlet/python-greenlet.hash
-+++ b/package/python-greenlet/python-greenlet.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/greenlet/json
--md5  9aebea08f7beb6b87143d0588578c984  greenlet-0.4.16.tar.gz
--sha256  6e06eac722676797e8fce4adb8ad3dc57a1bb3adfb0dd3fdf8306c055a38456c  greenlet-0.4.16.tar.gz
-+md5  a3fbf41851a6b5e1e823e8c18905877c  greenlet-1.1.1.tar.gz
-+sha256  c0f22774cd8294078bdf7392ac73cf00bfa1e5e0ed644bd064fdabc5f2a2f481  greenlet-1.1.1.tar.gz
+diff --git a/package/python-hyperlink/python-hyperlink.hash b/package/python-hyperlink/python-hyperlink.hash
+index 94535002e6..c7621a96ac 100644
+--- a/package/python-hyperlink/python-hyperlink.hash
++++ b/package/python-hyperlink/python-hyperlink.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/hyperlink/json
+-md5	4772fb4d87c26a1ab22a6161424e3cba  hyperlink-19.0.0.tar.gz
+-sha256	4288e34705da077fada1111a24a0aa08bb1e76699c9ce49876af722441845654  hyperlink-19.0.0.tar.gz
++md5  6285ac13e7d6be4157698ad7960ed490  hyperlink-21.0.0.tar.gz
++sha256  427af957daa58bc909471c6c40f74c5450fa123dd093fc53efd2e91d2705a56b  hyperlink-21.0.0.tar.gz
  # Locally computed sha256 checksums
--sha256  bbde55d5456a1e912633ed3f66d1dbd9504e3e3dce4f4c2015043cdcbc56e697  LICENSE
-+sha256  769831d6e5dfaf2c20802faccff1fafb4c2025dd8f6253dfa47fcad59d4d0979  LICENSE
- sha256  e5ff3c23c110e494cd7d736c10fd96d462457bafeca310840db6527298c7d46b  LICENSE.PSF
-diff --git a/package/python-greenlet/python-greenlet.mk b/package/python-greenlet/python-greenlet.mk
-index 9243afe514..e9feec5321 100644
---- a/package/python-greenlet/python-greenlet.mk
-+++ b/package/python-greenlet/python-greenlet.mk
-@@ -4,10 +4,10 @@
+-sha256	9577b66fb599aa5700b4981078ab0a319416a086beee646cd282aa9f33c8c74c  LICENSE
++sha256  7468ded55310f64fbf085b8e892df81d1bcc49263bf535d3c2c58b014cfae214  LICENSE
+diff --git a/package/python-hyperlink/python-hyperlink.mk b/package/python-hyperlink/python-hyperlink.mk
+index deff4feac3..a80c555450 100644
+--- a/package/python-hyperlink/python-hyperlink.mk
++++ b/package/python-hyperlink/python-hyperlink.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_GREENLET_VERSION = 0.4.16
-+PYTHON_GREENLET_VERSION = 1.1.1
- PYTHON_GREENLET_SOURCE = greenlet-$(PYTHON_GREENLET_VERSION).tar.gz
--PYTHON_GREENLET_SITE = https://files.pythonhosted.org/packages/20/5e/b989a19f4597b825f44125345cd8a8574216fae7fafe69e2cb1238ebd18a
--PYTHON_GREENLET_SETUP_TYPE = distutils
-+PYTHON_GREENLET_SITE = https://files.pythonhosted.org/packages/72/7e/d8586068d47adba73afc085249712bd266cd7ffbf27d8bc260c33e9d6133
-+PYTHON_GREENLET_SETUP_TYPE = setuptools
- PYTHON_GREENLET_LICENSE = MIT, PSF-2.0
- PYTHON_GREENLET_LICENSE_FILES = LICENSE LICENSE.PSF
- 
+-PYTHON_HYPERLINK_VERSION = 19.0.0
++PYTHON_HYPERLINK_VERSION = 21.0.0
+ PYTHON_HYPERLINK_SOURCE = hyperlink-$(PYTHON_HYPERLINK_VERSION).tar.gz
+-PYTHON_HYPERLINK_SITE = https://files.pythonhosted.org/packages/e0/46/1451027b513a75edf676d25a47f601ca00b06a6a7a109e5644d921e7462d
++PYTHON_HYPERLINK_SITE = https://files.pythonhosted.org/packages/3a/51/1947bd81d75af87e3bb9e34593a4cf118115a8feb451ce7a69044ef1412e
+ PYTHON_HYPERLINK_SETUP_TYPE = setuptools
+ PYTHON_HYPERLINK_LICENSE = MIT
+ PYTHON_HYPERLINK_LICENSE_FILES = LICENSE
 -- 
 2.25.1
 
