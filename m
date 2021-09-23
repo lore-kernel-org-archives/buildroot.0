@@ -2,60 +2,60 @@ Return-Path: <SRS0=dUZC=ON=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UPPERCASE_50_75,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D779C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 23 Sep 2021 15:57:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 18289C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 23 Sep 2021 15:58:11 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id BF38C60F0F
-	for <buildroot@archiver.kernel.org>; Thu, 23 Sep 2021 15:57:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org BF38C60F0F
+	by mail.kernel.org (Postfix) with ESMTPS id AF47261019
+	for <buildroot@archiver.kernel.org>; Thu, 23 Sep 2021 15:58:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org AF47261019
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 98A1860A58;
-	Thu, 23 Sep 2021 15:57:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8B558606A6;
+	Thu, 23 Sep 2021 15:58:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bP2XjxwHr-Yi; Thu, 23 Sep 2021 15:57:56 +0000 (UTC)
+	with ESMTP id 1U_wDlbg-9o9; Thu, 23 Sep 2021 15:58:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 16B4260AF7;
-	Thu, 23 Sep 2021 15:57:55 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 393161BF3C4
+	by smtp3.osuosl.org (Postfix) with ESMTP id 34D3360B72;
+	Thu, 23 Sep 2021 15:58:07 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 7C77C1BF3C4
  for <buildroot@lists.busybox.net>; Thu, 23 Sep 2021 15:57:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C6843406DE
+ by smtp3.osuosl.org (Postfix) with ESMTP id C24BC60692
  for <buildroot@lists.busybox.net>; Thu, 23 Sep 2021 15:57:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 479aiapp2h_t for <buildroot@lists.busybox.net>;
- Thu, 23 Sep 2021 15:57:30 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id eMyDva_L_pnW for <buildroot@lists.busybox.net>;
+ Thu, 23 Sep 2021 15:57:31 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
 Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
  [217.70.183.196])
- by smtp4.osuosl.org (Postfix) with ESMTPS id EE493406D2
- for <buildroot@buildroot.org>; Thu, 23 Sep 2021 15:57:29 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B0035606A6
+ for <buildroot@buildroot.org>; Thu, 23 Sep 2021 15:57:30 +0000 (UTC)
 Received: (Authenticated sender: kory.maincent@bootlin.com)
- by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id BA8E8E0012;
- Thu, 23 Sep 2021 15:57:27 +0000 (UTC)
+ by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id C8864E0006;
+ Thu, 23 Sep 2021 15:57:28 +0000 (UTC)
 From: Kory Maincent <kory.maincent@bootlin.com>
 To: buildroot@buildroot.org
-Date: Thu, 23 Sep 2021 17:57:21 +0200
-Message-Id: <20210923155726.87851-3-kory.maincent@bootlin.com>
+Date: Thu, 23 Sep 2021 17:57:23 +0200
+Message-Id: <20210923155726.87851-5-kory.maincent@bootlin.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210923155726.87851-1-kory.maincent@bootlin.com>
 References: <20210923155726.87851-1-kory.maincent@bootlin.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v3 2/7] boot/grub2: add support to build
- multiple Grub2 configurations in the same build
+Subject: [Buildroot] [PATCH v3 4/7] fs/iso9660: add support for hybrid image
+ using Grub bootloader on BIOS and EFI
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,444 +74,161 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-When Grub2 is build it is configured only for one boot set-up, BIOS Legacy,
-EFI 32 bit or EFI 64 bit. It can not deal with several boot set-up on the
-same image.
-
-This patch allows to build Grub2 for different configurations simultaneously.
-To cover Grub2 configuration of legacy BIOS platforms (32-bit), 32-bit EFI
-BIOS and 64-bit EFI BIOS in the same build, multi-build system felt much more
-reasonable to just extend the grub2 package into 3 packages.
-
-We can no longer use autotools-package as a consequence of this multi-build, and
-we have to resort to generic-package and a partial duplication of
-the autotools-infra. Grub2 was already using custom option like --prefix or
---exec-prefix so this won't add much more weirdness.
-
-We use a GRUB2_TUPLES list to describe all the configurations selected.
-For each boot case described in the GRUB2_TUPLES list, it configures and
-builds Grub2 in a separate folder named build-$(tuple).
-We use a foreach loop to make actions on each tuple selected.
-
-We have to separate the BR2_TARGET_GRUB2_BUILTIN_MODULES and the
-BR2_TARGET_GRUB2_BUILTIN_CONFIG for each BIOS or EFI boot cases.
+Add support for building an hybrid ISO9660 image compatible with legacy
+and UEFI BIOS.
+The option -eltorito-alt-boot need to be used in the xorriso command
+to generate the hybrid image.
 
 Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
 ---
 
 Changes in v2:
-Following the review from Yann E. Morin:
-- Update the tuples configurations to makes the code more readable.
-- Move "--target" and "--with-platform" parameters into the
-  GRUB2_CONFIGURE_CMD.
-- Fix startup.nsh installation.
-- Fix Grub2 configuration to be sure that at least one platform is always enabled.
-- Fix legacy builtin configurations to string in place of bool.
+- Fix typos
 
 Changes in v3:
-Following the review from Yann E. Morin:
-- Update the tuples configurations to remove the conditions and makes it
-  more readable.
-- Update the tuples configurations for builtin config and modules options.
-- Fix typo.
-- Remove the generation of startup.nsh.
+- Follow changes brougt by modification of the third patch.
 
- Config.in.legacy                         |  24 ++++
- boot/grub2/Config.in                     |  53 +++++--
- boot/grub2/grub2.mk                      | 175 +++++++++++++----------
- support/testing/tests/fs/test_iso9660.py |   6 +-
- 4 files changed, 169 insertions(+), 89 deletions(-)
+ fs/iso9660/Config.in  | 16 +++++++--------
+ fs/iso9660/iso9660.mk | 45 ++++++++++++++++++++++++++++---------------
+ 2 files changed, 36 insertions(+), 25 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 35a11f4dc6..33cee0202b 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -168,6 +168,30 @@ config BR2_KERNEL_HEADERS_5_12
- 
- comment "Legacy options removed in 2021.08"
- 
-+config BR2_TARGET_GRUB2_BUILTIN_MODULES
-+	string "the grub2 builtin modules has been renamed"
-+	help
-+	  This option has been split to separate the builtin modules
-+	  between BR2_TARGET_GRUB2_BUILTIN_MODULES_PC and
-+	  BR2_TARGET_GRUB2_BUILTIN_MODULES_EFI.
-+
-+config BR2_TARGET_GRUB2_BUILTIN_MODULES_WRAP
-+	bool
-+	default y if BR2_TARGET_GRUB2_BUILTIN_MODULES != ""
-+	select BR2_LEGACY
-+
-+config BR2_TARGET_GRUB2_BUILTIN_CONFIG
-+	string "the grub2 builtin configuration has been renamed"
-+	help
-+	  This option has been split to separate the builtin configuration
-+	  between BR2_TARGET_GRUB2_BUILTIN_CONFIG_PC and
-+	  BR2_TARGET_GRUB2_BUILTIN_CONFIG_EFI.
-+
-+config BR2_TARGET_GRUB2_BUILTIN_CONFIG_WRAP
-+	bool
-+	default y if BR2_TARGET_GRUB2_BUILTIN_CONFIG != ""
-+	select BR2_LEGACY
-+
- config BR2_PACKAGE_LIBMCRYPT
- 	bool "libmcrypt package was removed"
- 	select BR2_LEGACY
-diff --git a/boot/grub2/Config.in b/boot/grub2/Config.in
-index e45133999e..10bba6c5e4 100644
---- a/boot/grub2/Config.in
-+++ b/boot/grub2/Config.in
-@@ -10,6 +10,13 @@ config BR2_TARGET_GRUB2
+diff --git a/fs/iso9660/Config.in b/fs/iso9660/Config.in
+index f8f577506d..8c4e7badf8 100644
+--- a/fs/iso9660/Config.in
++++ b/fs/iso9660/Config.in
+@@ -27,6 +27,10 @@ choice
+ config BR2_TARGET_ROOTFS_ISO9660_GRUB2
  	bool "grub2"
- 	depends on BR2_TARGET_GRUB2_ARCH_SUPPORTS
- 	depends on BR2_USE_WCHAR
-+	select BR2_TARGET_GRUB2_I386_PC if \
-+		!BR2_TARGET_GRUB2_HAS_PTF && \
-+		(BR2_i386 || BR2_x86_64)
-+	select BR2_TARGET_GRUB2_ARM_UBOOT if \
-+		!BR2_TARGET_GRUB2_HAS_PTF && \
-+		BR2_arm
-+	select BR2_TARGET_GRUB2_ARM64_EFI if BR2_aarch64
+ 	depends on BR2_TARGET_GRUB2
++	select BR2_TARGET_ROOTFS_ISO9660_BIOS_BOOTLOADER \
++		if BR2_TARGET_GRUB2_I386_PC
++	select BR2_TARGET_ROOTFS_ISO9660_EFI_BOOTLOADER \
++		if (BR2_TARGET_GRUB2_I386_EFI || BR2_TARGET_GRUB2_X86_64_EFI)
  	help
- 	  GNU GRUB is a Multiboot boot loader. It was derived from
- 	  GRUB, the GRand Unified Bootloader, which was originally
-@@ -25,10 +32,10 @@ config BR2_TARGET_GRUB2
+ 	  Use Grub 2 as the bootloader for the ISO9660 image. Make
+ 	  sure to enable the 'iso9660' module in
+@@ -39,21 +43,15 @@ config BR2_TARGET_ROOTFS_ISO9660_GRUB2
+ config BR2_TARGET_ROOTFS_ISO9660_ISOLINUX
+ 	bool "isolinux"
+ 	depends on BR2_TARGET_SYSLINUX_ISOLINUX
++	select BR2_TARGET_ROOTFS_ISO9660_BIOS_BOOTLOADER
  
- 	  http://www.gnu.org/software/grub/
- 
--if BR2_TARGET_GRUB2
-+config BR2_TARGET_GRUB2_HAS_PTF
-+	bool
+ endchoice
  
 -choice
--	prompt "Platform"
-+if BR2_TARGET_GRUB2
+-	prompt "Boot payload"
+-
+ config BR2_TARGET_ROOTFS_ISO9660_BIOS_BOOTLOADER
+-	bool "legacy bios"
+-	depends on BR2_TARGET_GRUB2_I386_PC || BR2_TARGET_ROOTFS_ISO9660_ISOLINUX
++	bool
  
- config BR2_TARGET_GRUB2_I386_PC
- 	bool "i386-pc"
-@@ -40,6 +47,7 @@ config BR2_TARGET_GRUB2_I386_PC
- config BR2_TARGET_GRUB2_I386_EFI
- 	bool "i386-efi"
- 	depends on BR2_i386 || BR2_x86_64
-+	select BR2_TARGET_GRUB2_HAS_PTF
- 	help
- 	  Select this option if the platform you're targetting has a
- 	  32 bits EFI BIOS. Note that some x86-64 platforms use a 32
-@@ -48,6 +56,7 @@ config BR2_TARGET_GRUB2_I386_EFI
- config BR2_TARGET_GRUB2_X86_64_EFI
- 	bool "x86-64-efi"
- 	depends on BR2_x86_64
-+	select BR2_TARGET_GRUB2_HAS_PTF
- 	help
- 	  Select this option if the platform you're targetting has a
- 	  64 bits EFI BIOS.
-@@ -63,6 +72,7 @@ config BR2_TARGET_GRUB2_ARM_UBOOT
- config BR2_TARGET_GRUB2_ARM_EFI
- 	bool "arm-efi"
- 	depends on BR2_arm
-+	select BR2_TARGET_GRUB2_HAS_PTF
- 	help
- 	  Select this option if the platform you're targetting is an
- 	  ARM platform and you want to boot Grub 2 as an EFI
-@@ -76,10 +86,10 @@ config BR2_TARGET_GRUB2_ARM64_EFI
- 	  Aarch64 platform and you want to boot Grub 2 as an EFI
- 	  application.
- 
+ config BR2_TARGET_ROOTFS_ISO9660_EFI_BOOTLOADER
+-	bool "UEFI"
+-	depends on BR2_TARGET_GRUB2_I386_EFI || BR2_TARGET_GRUB2_X86_64_EFI
+-
 -endchoice
--
- if BR2_TARGET_GRUB2_I386_PC || BR2_TARGET_GRUB2_ARM_UBOOT
++	bool
  
-+comment "Options for the x86 legacy BIOS or ARM U-Boot support"
-+
- config BR2_TARGET_GRUB2_BOOT_PARTITION
- 	string "boot partition"
- 	default "hd0,msdos1"
-@@ -89,24 +99,43 @@ config BR2_TARGET_GRUB2_BOOT_PARTITION
- 	  first disk if using a legacy partition table, or 'hd0,gpt1'
- 	  if using GPT partition table.
- 
--endif # BR2_TARGET_GRUB2_I386_PC || BR2_TARGET_GRUB2_ARM_UBOOT
--
--config BR2_TARGET_GRUB2_BUILTIN_MODULES
-+config BR2_TARGET_GRUB2_BUILTIN_MODULES_PC
- 	string "builtin modules"
-+	default BR2_TARGET_GRUB2_BUILTIN_MODULES if BR2_TARGET_GRUB2_BUILTIN_MODULES != "" # legacy
- 	default "boot linux ext2 fat squash4 part_msdos part_gpt normal biosdisk" if BR2_TARGET_GRUB2_I386_PC
--	default "boot linux ext2 fat squash4 part_msdos part_gpt normal efi_gop" \
--		if BR2_TARGET_GRUB2_I386_EFI || BR2_TARGET_GRUB2_X86_64_EFI || \
--		   BR2_TARGET_GRUB2_ARM_EFI  || BR2_TARGET_GRUB2_ARM64_EFI
- 	default "linux ext2 fat part_msdos normal" if BR2_TARGET_GRUB2_ARM_UBOOT
- 
--config BR2_TARGET_GRUB2_BUILTIN_CONFIG
-+config BR2_TARGET_GRUB2_BUILTIN_CONFIG_PC
-+	string "builtin config"
-+	default BR2_TARGET_GRUB2_BUILTIN_CONFIG if BR2_TARGET_GRUB2_BUILTIN_CONFIG != "" # legacy
-+	help
-+	  Path to a Grub 2 configuration file that will be embedded
-+	  into the Grub image itself. This allows to set the root
-+	  device and other configuration parameters, but however menu
-+	  entries cannot be described in this embedded configuration.
-+
-+endif # BR2_TARGET_GRUB2_I386_PC || BR2_TARGET_GRUB2_ARM_UBOOT
-+
-+if BR2_TARGET_GRUB2_I386_EFI || BR2_TARGET_GRUB2_X86_64_EFI || \
-+	BR2_TARGET_GRUB2_ARM_EFI  || BR2_TARGET_GRUB2_ARM64_EFI
-+
-+comment "Options for the EFI BIOS or ARM EFI support"
-+
-+config BR2_TARGET_GRUB2_BUILTIN_MODULES_EFI
-+	string "builtin modules"
-+	default BR2_TARGET_GRUB2_BUILTIN_MODULES if BR2_TARGET_GRUB2_BUILTIN_MODULES != "" # legacy
-+	default "boot linux ext2 fat squash4 part_msdos part_gpt normal efi_gop"
-+
-+config BR2_TARGET_GRUB2_BUILTIN_CONFIG_EFI
- 	string "builtin config"
-+	default BR2_TARGET_GRUB2_BUILTIN_CONFIG if BR2_TARGET_GRUB2_BUILTIN_CONFIG != "" # legacy
- 	help
- 	  Path to a Grub 2 configuration file that will be embedded
- 	  into the Grub image itself. This allows to set the root
- 	  device and other configuration parameters, but however menu
- 	  entries cannot be described in this embedded configuration.
- 
+ config BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU
+ 	string "Boot menu config file"
+diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
+index 921efa1b02..9c2535d102 100644
+--- a/fs/iso9660/iso9660.mk
++++ b/fs/iso9660/iso9660.mk
+@@ -67,18 +67,20 @@ ROOTFS_ISO9660_DEPENDENCIES += grub2
+ ROOTFS_ISO9660_BOOTLOADER_CONFIG_PATH = \
+ 	$(ROOTFS_ISO9660_TMP_TARGET_DIR)/boot/grub/grub.cfg
+ ROOTFS_ISO9660_BOOT_IMAGE = boot/grub/grub-eltorito.img
+-define ROOTFS_ISO9660_INSTALL_BOOTLOADER
++define ROOTFS_ISO9660_INSTALL_BOOTLOADER_BIOS
+ 	$(INSTALL) -D -m 0644 $(BINARIES_DIR)/grub-eltorito.img \
+ 		$(ROOTFS_ISO9660_TMP_TARGET_DIR)/boot/grub/grub-eltorito.img
+ endef
+-else ifeq ($(BR2_TARGET_ROOTFS_ISO9660_GRUB2)$(BR2_TARGET_ROOTFS_ISO9660_EFI_BOOTLOADER),yy)
 +endif
- config BR2_TARGET_GRUB2_INSTALL_TOOLS
- 	bool "install tools"
- 	help
-diff --git a/boot/grub2/grub2.mk b/boot/grub2/grub2.mk
-index ad2edf17aa..e01ebb2edb 100644
---- a/boot/grub2/grub2.mk
-+++ b/boot/grub2/grub2.mk
-@@ -57,53 +57,65 @@ GRUB2_INSTALL_TARGET = NO
++
++ifeq ($(BR2_TARGET_ROOTFS_ISO9660_GRUB2)$(BR2_TARGET_ROOTFS_ISO9660_EFI_BOOTLOADER),yy)
+ ROOTFS_ISO9660_DEPENDENCIES += grub2 host-dosfstools host-mtools
+ ROOTFS_ISO9660_EFI_PARTITION = boot/fat.efi
+ ROOTFS_ISO9660_EFI_PARTITION_PATH = $(ROOTFS_ISO9660_TMP_TARGET_DIR)/$(ROOTFS_ISO9660_EFI_PARTITION)
+ ROOTFS_ISO9660_EFI_PARTITION_CONTENT = $(BINARIES_DIR)/efi-part
+ ROOTFS_ISO9660_BOOTLOADER_CONFIG_PATH = \
+ 	$(ROOTFS_ISO9660_TMP_TARGET_DIR)/boot/grub/grub.cfg
+-define ROOTFS_ISO9660_INSTALL_BOOTLOADER
++define ROOTFS_ISO9660_INSTALL_BOOTLOADER_EFI
+ 	rm -rf $(ROOTFS_ISO9660_EFI_PARTITION_PATH)
+ 	mkdir -p $(dir $(ROOTFS_ISO9660_EFI_PARTITION_PATH))
+ 	dd if=/dev/zero of=$(ROOTFS_ISO9660_EFI_PARTITION_PATH) bs=1M count=1
+@@ -87,12 +89,14 @@ define ROOTFS_ISO9660_INSTALL_BOOTLOADER
+ 	$(HOST_DIR)/bin/mcopy -p -m -i $(ROOTFS_ISO9660_EFI_PARTITION_PATH) -s \
+ 		$(ROOTFS_ISO9660_EFI_PARTITION_CONTENT)/* ::/
+ endef
+-else ifeq ($(BR2_TARGET_ROOTFS_ISO9660_ISOLINUX),y)
++endif
++
++ifeq ($(BR2_TARGET_ROOTFS_ISO9660_ISOLINUX),y)
+ ROOTFS_ISO9660_DEPENDENCIES += syslinux
+ ROOTFS_ISO9660_BOOTLOADER_CONFIG_PATH = \
+ 	$(ROOTFS_ISO9660_TMP_TARGET_DIR)/isolinux/isolinux.cfg
+ ROOTFS_ISO9660_BOOT_IMAGE = isolinux/isolinux.bin
+-define ROOTFS_ISO9660_INSTALL_BOOTLOADER
++define ROOTFS_ISO9660_INSTALL_BOOTLOADER_BIOS
+ 	$(INSTALL) -D -m 0644 $(BINARIES_DIR)/syslinux/* \
+ 		$(ROOTFS_ISO9660_TMP_TARGET_DIR)/isolinux/
+ 	$(INSTALL) -D -m 0644 $(HOST_DIR)/share/syslinux/ldlinux.c32 \
+@@ -105,7 +109,8 @@ define ROOTFS_ISO9660_PREPARATION
+ 		$(ROOTFS_ISO9660_BOOTLOADER_CONFIG_PATH)
+ 	$(SED) "s%__KERNEL_PATH__%/boot/$(LINUX_IMAGE_NAME)%" \
+ 		$(ROOTFS_ISO9660_BOOTLOADER_CONFIG_PATH)
+-	$(ROOTFS_ISO9660_INSTALL_BOOTLOADER)
++	$(ROOTFS_ISO9660_INSTALL_BOOTLOADER_BIOS)
++	$(ROOTFS_ISO9660_INSTALL_BOOTLOADER_EFI)
+ endef
+ 
+ ROOTFS_ISO9660_PRE_GEN_HOOKS += ROOTFS_ISO9660_PREPARATION
+@@ -151,24 +156,32 @@ endif # ROOTFS_ISO9660_USE_INITRD
+ 
+ ROOTFS_ISO9660_OPTS += \
+ 	-J \
+-	-R \
+-	-no-emul-boot
++	-R
+ 
+-ifeq ($(BR2_TARGET_ROOTFS_ISO9660_BIOS_BOOTLOADER),y)
+-ROOTFS_ISO9660_OPTS += \
++ROOTFS_ISO9660_BOOTLOADER_OPTS_BIOS = \
++	-b $(ROOTFS_ISO9660_BOOT_IMAGE) \
++	-no-emul-boot \
+ 	-boot-load-size 4 \
+-	-boot-info-table \
+-	-b $(ROOTFS_ISO9660_BOOT_IMAGE)
+-endif
++	-boot-info-table
+ 
+-ifeq ($(BR2_TARGET_ROOTFS_ISO9660_EFI_BOOTLOADER),y)
+-ROOTFS_ISO9660_OPTS += \
+-	--efi-boot $(ROOTFS_ISO9660_EFI_PARTITION)
++ROOTFS_ISO9660_BOOTLOADER_OPTS_EFI = \
++	--efi-boot $(ROOTFS_ISO9660_EFI_PARTITION) \
++	-no-emul-boot
++
++ifeq ($(BR2_TARGET_ROOTFS_ISO9660_BIOS_BOOTLOADER)$(BR2_TARGET_ROOTFS_ISO9660_EFI_BOOTLOADER),yy)
++ROOTFS_ISO9660_BOOTLOADER_OPTS = $(ROOTFS_ISO9660_BOOTLOADER_OPTS_BIOS)
++ROOTFS_ISO9660_BOOTLOADER_OPTS += -eltorito-alt-boot
++ROOTFS_ISO9660_BOOTLOADER_OPTS += $(ROOTFS_ISO9660_BOOTLOADER_OPTS_EFI)
++else ifeq ($(BR2_TARGET_ROOTFS_ISO9660_BIOS_BOOTLOADER),y)
++ROOTFS_ISO9660_BOOTLOADER_OPTS = $(ROOTFS_ISO9660_BOOTLOADER_OPTS_BIOS)
++else ifeq ($(BR2_TARGET_ROOTFS_ISO9660_EFI_BOOTLOADER),y)
++ROOTFS_ISO9660_BOOTLOADER_OPTS = $(ROOTFS_ISO9660_BOOTLOADER_OPTS_EFI)
  endif
- GRUB2_CPE_ID_VENDOR = gnu
  
--GRUB2_BUILTIN_MODULES = $(call qstrip,$(BR2_TARGET_GRUB2_BUILTIN_MODULES))
--GRUB2_BUILTIN_CONFIG = $(call qstrip,$(BR2_TARGET_GRUB2_BUILTIN_CONFIG))
-+GRUB2_BUILTIN_MODULES_PC = $(call qstrip,$(BR2_TARGET_GRUB2_BUILTIN_MODULES_PC))
-+GRUB2_BUILTIN_MODULES_EFI = $(call qstrip,$(BR2_TARGET_GRUB2_BUILTIN_MODULES_EFI))
-+GRUB2_BUILTIN_CONFIG_PC = $(call qstrip,$(BR2_TARGET_GRUB2_BUILTIN_CONFIG_PC))
-+GRUB2_BUILTIN_CONFIG_EFI = $(call qstrip,$(BR2_TARGET_GRUB2_BUILTIN_CONFIG_EFI))
- GRUB2_BOOT_PARTITION = $(call qstrip,$(BR2_TARGET_GRUB2_BOOT_PARTITION))
- 
--ifeq ($(BR2_TARGET_GRUB2_I386_PC),y)
--GRUB2_IMAGE = $(BINARIES_DIR)/grub.img
--GRUB2_CFG = $(TARGET_DIR)/boot/grub/grub.cfg
--GRUB2_PREFIX = ($(GRUB2_BOOT_PARTITION))/boot/grub
--GRUB2_TUPLE = i386-pc
--GRUB2_TARGET = i386
--GRUB2_PLATFORM = pc
--else ifeq ($(BR2_TARGET_GRUB2_I386_EFI),y)
--GRUB2_IMAGE = $(BINARIES_DIR)/efi-part/EFI/BOOT/bootia32.efi
--GRUB2_CFG = $(BINARIES_DIR)/efi-part/EFI/BOOT/grub.cfg
--GRUB2_PREFIX = /EFI/BOOT
--GRUB2_TUPLE = i386-efi
--GRUB2_TARGET = i386
--GRUB2_PLATFORM = efi
--else ifeq ($(BR2_TARGET_GRUB2_X86_64_EFI),y)
--GRUB2_IMAGE = $(BINARIES_DIR)/efi-part/EFI/BOOT/bootx64.efi
--GRUB2_CFG = $(BINARIES_DIR)/efi-part/EFI/BOOT/grub.cfg
--GRUB2_PREFIX = /EFI/BOOT
--GRUB2_TUPLE = x86_64-efi
--GRUB2_TARGET = x86_64
--GRUB2_PLATFORM = efi
--else ifeq ($(BR2_TARGET_GRUB2_ARM_UBOOT),y)
--GRUB2_IMAGE = $(BINARIES_DIR)/boot-part/grub/grub.img
--GRUB2_CFG = $(BINARIES_DIR)/boot-part/grub/grub.cfg
--GRUB2_PREFIX = ($(GRUB2_BOOT_PARTITION))/boot/grub
--GRUB2_TUPLE = arm-uboot
--GRUB2_TARGET = arm
--GRUB2_PLATFORM = uboot
--else ifeq ($(BR2_TARGET_GRUB2_ARM_EFI),y)
--GRUB2_IMAGE = $(BINARIES_DIR)/efi-part/EFI/BOOT/bootarm.efi
--GRUB2_CFG = $(BINARIES_DIR)/efi-part/EFI/BOOT/grub.cfg
--GRUB2_PREFIX = /EFI/BOOT
--GRUB2_TUPLE = arm-efi
--GRUB2_TARGET = arm
--GRUB2_PLATFORM = efi
--else ifeq ($(BR2_TARGET_GRUB2_ARM64_EFI),y)
--GRUB2_IMAGE = $(BINARIES_DIR)/efi-part/EFI/BOOT/bootaa64.efi
--GRUB2_CFG = $(BINARIES_DIR)/efi-part/EFI/BOOT/grub.cfg
--GRUB2_PREFIX = /EFI/BOOT
--GRUB2_TUPLE = arm64-efi
--GRUB2_TARGET = aarch64
--GRUB2_PLATFORM = efi
--endif
-+GRUB2_IMAGE_i386-pc = $(BINARIES_DIR)/grub.img
-+GRUB2_CFG_i386-pc = $(TARGET_DIR)/boot/grub/grub.cfg
-+GRUB2_PREFIX_i386-pc = ($(GRUB2_BOOT_PARTITION))/boot/grub
-+GRUB2_TARGET_i386-pc = i386
-+GRUB2_PLATFORM_i386-pc = pc
-+GRUB2_BUILTIN_CONFIG_i386-pc = $(GRUB2_BUILTIN_CONFIG_PC)
-+GRUB2_BUILTIN_MODULES_i386-pc = $(GRUB2_BUILTIN_MODULES_PC)
-+GRUB2_TUPLES-$(BR2_TARGET_GRUB2_I386_PC) += i386-pc
-+
-+GRUB2_IMAGE_i386-efi = $(BINARIES_DIR)/efi-part/EFI/BOOT/bootia32.efi
-+GRUB2_CFG_i386-efi = $(BINARIES_DIR)/efi-part/EFI/BOOT/grub.cfg
-+GRUB2_PREFIX_i386-efi = /EFI/BOOT
-+GRUB2_TARGET_i386-efi = i386
-+GRUB2_PLATFORM_i386-efi = efi
-+GRUB2_BUILTIN_CONFIG_i386-efi = $(GRUB2_BUILTIN_CONFIG_EFI)
-+GRUB2_BUILTIN_MODULES_i386-efi = $(GRUB2_BUILTIN_MODULES_EFI)
-+GRUB2_TUPLES-$(BR2_TARGET_GRUB2_I386_EFI) += i386-efi
-+
-+GRUB2_IMAGE_x86_64-efi = $(BINARIES_DIR)/efi-part/EFI/BOOT/bootx64.efi
-+GRUB2_CFG_x86_64-efi = $(BINARIES_DIR)/efi-part/EFI/BOOT/grub.cfg
-+GRUB2_PREFIX_x86_64-efi = /EFI/BOOT
-+GRUB2_TARGET_x86_64-efi = x86_64
-+GRUB2_PLATFORM_x86_64-efi = efi
-+GRUB2_BUILTIN_CONFIG_x86_64-efi = $(GRUB2_BUILTIN_CONFIG_EFI)
-+GRUB2_BUILTIN_MODULES_x86_64-efi = $(GRUB2_BUILTIN_MODULES_EFI)
-+GRUB2_TUPLES-$(BR2_TARGET_GRUB2_X86_64_EFI) += x86_64-efi
-+
-+GRUB2_IMAGE_arm-uboot = $(BINARIES_DIR)/boot-part/grub/grub.img
-+GRUB2_CFG_arm-uboot = $(BINARIES_DIR)/boot-part/grub/grub.cfg
-+GRUB2_PREFIX_arm-uboot = ($(GRUB2_BOOT_PARTITION))/boot/grub
-+GRUB2_TARGET_arm-uboot = arm
-+GRUB2_PLATFORM_arm-uboot = uboot
-+GRUB2_BUILTIN_CONFIG_arm-uboot = $(GRUB2_BUILTIN_CONFIG_PC)
-+GRUB2_BUILTIN_MODULES_arm-uboot = $(GRUB2_BUILTIN_MODULES_PC)
-+GRUB2_TUPLES-$(BR2_TARGET_GRUB2_ARM_UBOOT) += arm-uboot
-+
-+GRUB2_IMAGE_arm-efi = $(BINARIES_DIR)/efi-part/EFI/BOOT/bootarm.efi
-+GRUB2_CFG_arm-efi = $(BINARIES_DIR)/efi-part/EFI/BOOT/grub.cfg
-+GRUB2_PREFIX_arm-efi = /EFI/BOOT
-+GRUB2_TARGET_arm-efi = arm
-+GRUB2_PLATFORM_arm-efi = efi
-+GRUB2_BUILTIN_CONFIG_arm-efi = $(GRUB2_BUILTIN_CONFIG_EFI)
-+GRUB2_BUILTIN_MODULES_arm-efi = $(GRUB2_BUILTIN_MODULES_EFI)
-+GRUB2_TUPLES-$(BR2_TARGET_GRUB2_ARM_EFI) += arm-efi
-+
-+GRUB2_IMAGE_arm64-efi = $(BINARIES_DIR)/efi-part/EFI/BOOT/bootaa64.efi
-+GRUB2_CFG_arm64-efi = $(BINARIES_DIR)/efi-part/EFI/BOOT/grub.cfg
-+GRUB2_PREFIX_arm64-efi = /EFI/BOOT
-+GRUB2_TARGET_arm64-efi = aarch64
-+GRUB2_PLATFORM_arm64-efi = efi
-+GRUB2_BUILTIN_CONFIG_arm64-efi = $(GRUB2_BUILTIN_CONFIG_EFI)
-+GRUB2_BUILTIN_MODULES_arm64-efi = $(GRUB2_BUILTIN_MODULES_EFI)
-+GRUB2_TUPLES-$(BR2_TARGET_GRUB2_ARM64_EFI) += arm64-efi
- 
- # Grub2 is kind of special: it considers CC, LD and so on to be the
- # tools to build the host programs and uses TARGET_CC, TARGET_CFLAGS,
-@@ -127,18 +139,6 @@ GRUB2_CONF_ENV = \
- 	TARGET_OBJCOPY="$(TARGET_OBJCOPY)" \
- 	TARGET_STRIP="$(TARGET_CROSS)strip"
- 
--GRUB2_CONF_OPTS = \
--	--target=$(GRUB2_TARGET) \
--	--with-platform=$(GRUB2_PLATFORM) \
--	--prefix=/ \
--	--exec-prefix=/ \
--	--disable-grub-mkfont \
--	--enable-efiemu=no \
--	ac_cv_lib_lzma_lzma_code=no \
--	--enable-device-mapper=no \
--	--enable-libzfs=no \
--	--disable-werror
--
- HOST_GRUB2_CONF_OPTS = \
- 	--disable-grub-mkfont \
- 	--enable-efiemu=no \
-@@ -147,26 +147,53 @@ HOST_GRUB2_CONF_OPTS = \
- 	--enable-libzfs=no \
- 	--disable-werror
- 
--ifeq ($(BR2_TARGET_GRUB2_I386_PC),y)
--define GRUB2_IMAGE_INSTALL_ELTORITO
--	cat $(HOST_DIR)/lib/grub/$(GRUB2_TUPLE)/cdboot.img $(GRUB2_IMAGE) > \
--		$(BINARIES_DIR)/grub-eltorito.img
-+define GRUB2_CONFIGURE_CMDS
-+	$(foreach tuple, $(GRUB2_TUPLES-y), \
-+		mkdir -p $(@D)/build-$(tuple) ; \
-+		cd $(@D)/build-$(tuple) ; \
-+		$(TARGET_CONFIGURE_OPTS) \
-+		$(TARGET_CONFIGURE_ARGS) \
-+		$(GRUB2_CONF_ENV) \
-+		../configure \
-+			--target=$(GRUB2_TARGET_$(tuple)) \
-+			--with-platform=$(GRUB2_PLATFORM_$(tuple)) \
-+			--host=$(GNU_TARGET_NAME) \
-+			--build=$(GNU_HOST_NAME) \
-+			--prefix=/ \
-+			--exec-prefix=/ \
-+			--disable-grub-mkfont \
-+			--enable-efiemu=no \
-+			ac_cv_lib_lzma_lzma_code=no \
-+			--enable-device-mapper=no \
-+			--enable-libzfs=no \
-+			--disable-werror
-+	)
-+endef
-+
-+define GRUB2_BUILD_CMDS
-+	$(foreach tuple, $(GRUB2_TUPLES-y), \
-+		$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/build-$(tuple)
-+	)
+ define ROOTFS_ISO9660_CMD
+ 	$(HOST_DIR)/bin/xorriso -as mkisofs \
+ 		$(ROOTFS_ISO9660_OPTS) \
++		$(ROOTFS_ISO9660_BOOTLOADER_OPTS) \
+ 		-o $@ $(ROOTFS_ISO9660_TMP_TARGET_DIR)
  endef
--endif
- 
- define GRUB2_INSTALL_IMAGES_CMDS
--	mkdir -p $(dir $(GRUB2_IMAGE))
--	$(HOST_DIR)/usr/bin/grub-mkimage \
--		-d $(@D)/grub-core/ \
--		-O $(GRUB2_TUPLE) \
--		-o $(GRUB2_IMAGE) \
--		-p "$(GRUB2_PREFIX)" \
--		$(if $(GRUB2_BUILTIN_CONFIG),-c $(GRUB2_BUILTIN_CONFIG)) \
--		$(GRUB2_BUILTIN_MODULES)
--	mkdir -p $(dir $(GRUB2_CFG))
--	$(INSTALL) -D -m 0644 boot/grub2/grub.cfg $(GRUB2_CFG)
--	$(GRUB2_IMAGE_INSTALL_ELTORITO)
-+	$(foreach tuple, $(GRUB2_TUPLES-y), \
-+		mkdir -p $(dir $(GRUB2_IMAGE_$(tuple))) ; \
-+		$(HOST_DIR)/usr/bin/grub-mkimage \
-+			-d $(@D)/build-$(tuple)/grub-core/ \
-+			-O $(tuple) \
-+			-o $(GRUB2_IMAGE_$(tuple)) \
-+			-p "$(GRUB2_PREFIX_$(tuple))" \
-+			$(if $(GRUB2_BUILTIN_CONFIG_$(tuple)), \
-+				-c $(GRUB2_BUILTIN_CONFIG_$(tuple))) \
-+			$(GRUB2_BUILTIN_MODULES_$(tuple)) ; \
-+		$(INSTALL) -D -m 0644 boot/grub2/grub.cfg $(GRUB2_CFG_$(tuple)) ; \
-+		$(if $(findstring $(GRUB2_PLATFORM_$(tuple)), pc), \
-+			cat $(HOST_DIR)/lib/grub/$(tuple)/cdboot.img $(GRUB2_IMAGE_$(tuple)) > \
-+				$(BINARIES_DIR)/grub-eltorito.img ; \
-+		) \
-+	)
- endef
- 
--$(eval $(autotools-package))
-+$(eval $(generic-package))
- $(eval $(host-autotools-package))
-diff --git a/support/testing/tests/fs/test_iso9660.py b/support/testing/tests/fs/test_iso9660.py
-index 68f4840852..1b699e1fef 100644
---- a/support/testing/tests/fs/test_iso9660.py
-+++ b/support/testing/tests/fs/test_iso9660.py
-@@ -54,7 +54,7 @@ class TestIso9660Grub2External(infra.basetest.BRTest):
-         # BR2_TARGET_ROOTFS_ISO9660_INITRD is not set
-         BR2_TARGET_GRUB2=y
-         BR2_TARGET_GRUB2_BOOT_PARTITION="cd"
--        BR2_TARGET_GRUB2_BUILTIN_MODULES="boot linux ext2 fat part_msdos part_gpt normal biosdisk iso9660"
-+        BR2_TARGET_GRUB2_BUILTIN_MODULES_PC="boot linux ext2 fat part_msdos part_gpt normal biosdisk iso9660"
-         BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU="{}"
-         """.format(infra.filepath("conf/grub2.cfg"))
- 
-@@ -75,7 +75,7 @@ class TestIso9660Grub2ExternalCompress(infra.basetest.BRTest):
-         BR2_TARGET_ROOTFS_ISO9660_TRANSPARENT_COMPRESSION=y
-         BR2_TARGET_GRUB2=y
-         BR2_TARGET_GRUB2_BOOT_PARTITION="cd"
--        BR2_TARGET_GRUB2_BUILTIN_MODULES="boot linux ext2 fat part_msdos part_gpt normal biosdisk iso9660"
-+        BR2_TARGET_GRUB2_BUILTIN_MODULES_PC="boot linux ext2 fat part_msdos part_gpt normal biosdisk iso9660"
-         BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU="{}"
-         """.format(infra.filepath("conf/grub2.cfg"))
- 
-@@ -95,7 +95,7 @@ class TestIso9660Grub2Internal(infra.basetest.BRTest):
-         BR2_TARGET_ROOTFS_ISO9660_INITRD=y
-         BR2_TARGET_GRUB2=y
-         BR2_TARGET_GRUB2_BOOT_PARTITION="cd"
--        BR2_TARGET_GRUB2_BUILTIN_MODULES="boot linux ext2 fat part_msdos part_gpt normal biosdisk iso9660"
-+        BR2_TARGET_GRUB2_BUILTIN_MODULES_PC="boot linux ext2 fat part_msdos part_gpt normal biosdisk iso9660"
-         BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU="{}"
-         """.format(infra.filepath("conf/grub2.cfg"))
  
 -- 
 2.25.1
