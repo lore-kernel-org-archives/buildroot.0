@@ -2,56 +2,56 @@ Return-Path: <SRS0=dUZC=ON=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B5E7C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 23 Sep 2021 21:06:57 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 60246C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 23 Sep 2021 21:07:09 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 44C3660EFF
-	for <buildroot@archiver.kernel.org>; Thu, 23 Sep 2021 21:06:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 44C3660EFF
+	by mail.kernel.org (Postfix) with ESMTPS id 1219F60EB2
+	for <buildroot@archiver.kernel.org>; Thu, 23 Sep 2021 21:07:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1219F60EB2
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id ECAF18413E;
-	Thu, 23 Sep 2021 21:06:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D8760406EB;
+	Thu, 23 Sep 2021 21:07:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xavs2OpBqDT9; Thu, 23 Sep 2021 21:06:56 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 91Pq_X6hEGHz; Thu, 23 Sep 2021 21:07:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3A0C284283;
-	Thu, 23 Sep 2021 21:06:55 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9091D1BF317
+	by smtp4.osuosl.org (Postfix) with ESMTP id 283BD40767;
+	Thu, 23 Sep 2021 21:07:07 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A89BD1BF9C2
  for <buildroot@lists.busybox.net>; Thu, 23 Sep 2021 21:06:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8099A8408B
+ by smtp3.osuosl.org (Postfix) with ESMTP id 98BB060B25
  for <buildroot@lists.busybox.net>; Thu, 23 Sep 2021 21:06:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hrEDBetoTP0B for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JcxPzAD5yf7I for <buildroot@lists.busybox.net>;
  Thu, 23 Sep 2021 21:06:48 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id BEC07840CE
+ by smtp3.osuosl.org (Postfix) with ESMTP id DC8F96064B
  for <buildroot@buildroot.org>; Thu, 23 Sep 2021 21:06:48 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 29D448D210; Thu, 23 Sep 2021 21:04:42 +0000 (UTC)
+ id 5B0798D211; Thu, 23 Sep 2021 21:04:42 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Thu, 23 Sep 2021 22:16:10 +0200
+Date: Thu, 23 Sep 2021 22:32:58 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0132f4748c8ab9596057b3fa217ae3621800dd79
-X-Git-Newrev: 3252ac7b639db48e15bb72e356a9caca6150d3a4
+X-Git-Oldrev: c3712a86adca8f512b0e7c45c9196732841af10c
+X-Git-Newrev: 5cae1a0d675eca41125b6430157d3d0d78d1220c
 X-Patchwork-Hint: ignore
-Message-Id: <20210923210442.29D448D210@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/rt-tests: bump version to 2.2
+Message-Id: <20210923210442.5B0798D211@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/wavemon: bump to version 0.9.4
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,39 +70,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3252ac7b639db48e15bb72e356a9caca6150d3a4
+commit: https://git.buildroot.net/buildroot/commit/?id=5cae1a0d675eca41125b6430157d3d0d78d1220c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Florian La Roche <Florian.LaRoche@gmail.com>
+Use the new LICENSE file added in version 0.9.3 with
+https://github.com/uoaerg/wavemon/commit/2251870415c5be3850ce59d99d0e352e55a3280a
+as COPYING has been dropped with
+https://github.com/uoaerg/wavemon/commit/bfa12c46c773e5fe49ec4f91fc6260aa4f66e258
+The text has been updated with https URLs.
+
+https://github.com/uoaerg/wavemon/releases/tag/v0.9.2
+https://github.com/uoaerg/wavemon/releases/tag/v0.9.3
+https://github.com/uoaerg/wavemon/releases/tag/v0.9.4
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/rt-tests/rt-tests.hash | 2 +-
- package/rt-tests/rt-tests.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/wavemon/wavemon.hash | 4 ++--
+ package/wavemon/wavemon.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/rt-tests/rt-tests.hash b/package/rt-tests/rt-tests.hash
-index f56500c26e..c731feaf21 100644
---- a/package/rt-tests/rt-tests.hash
-+++ b/package/rt-tests/rt-tests.hash
-@@ -1,4 +1,4 @@
- # From https://mirrors.edge.kernel.org/pub/linux/utils/rt-tests/sha256sums.asc
--sha256 3740ad97b164a1cd77d9ee32bba23a4a0b2495a76468bcf40ff60b55c2a3a709  rt-tests-1.10.tar.xz
-+sha256 48346ab2b5bf2ffbdb1ed0d4540e9e8e22f6665e6bb3d59c22614f9722b13a91  rt-tests-2.2.tar.xz
- # locally computed hash
- sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/rt-tests/rt-tests.mk b/package/rt-tests/rt-tests.mk
-index 0d959bda31..a0d7f76e8e 100644
---- a/package/rt-tests/rt-tests.mk
-+++ b/package/rt-tests/rt-tests.mk
-@@ -6,7 +6,7 @@
+diff --git a/package/wavemon/wavemon.hash b/package/wavemon/wavemon.hash
+index 455e64cba8..7c685f6500 100644
+--- a/package/wavemon/wavemon.hash
++++ b/package/wavemon/wavemon.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  5ebd5b79d3b7c546bc16b95161872c699a75e9acdfc6e3f02ec48dad10802067  wavemon-0.9.1.tar.gz
+-sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
++sha256  e7e4167292136ca7ff12ddeb880904c10f33e97620ea6aa5f7838e859fdb40ed  wavemon-0.9.4.tar.gz
++sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  LICENSE
+diff --git a/package/wavemon/wavemon.mk b/package/wavemon/wavemon.mk
+index d2af6c2bc0..50e3fd275e 100644
+--- a/package/wavemon/wavemon.mk
++++ b/package/wavemon/wavemon.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
  
- RT_TESTS_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/rt-tests
- RT_TESTS_SOURCE = rt-tests-$(RT_TESTS_VERSION).tar.xz
--RT_TESTS_VERSION = 1.10
-+RT_TESTS_VERSION = 2.2
- RT_TESTS_LICENSE = GPL-2.0+
- RT_TESTS_LICENSE_FILES = COPYING
+-WAVEMON_VERSION = 0.9.1
++WAVEMON_VERSION = 0.9.4
+ WAVEMON_SITE = $(call github,uoaerg,wavemon,v$(WAVEMON_VERSION))
+ WAVEMON_LICENSE = GPL-3.0+
+-WAVEMON_LICENSE_FILES = COPYING
++WAVEMON_LICENSE_FILES = LICENSE
+ WAVEMON_DEPENDENCIES = host-pkgconf libnl ncurses
  
+ # Handwritten Makefile.in, automake isn't used
 _______________________________________________
 buildroot mailing list
 buildroot@lists.buildroot.org
