@@ -2,96 +2,98 @@ Return-Path: <SRS0=dUZC=ON=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-20.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
+X-Spam-Status: No, score=-15.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A6655C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 23 Sep 2021 21:04:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 35A94C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 23 Sep 2021 21:05:09 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2E69D61029
-	for <buildroot@archiver.kernel.org>; Thu, 23 Sep 2021 21:04:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2E69D61029
+	by mail.kernel.org (Postfix) with ESMTPS id CC49A61029
+	for <buildroot@archiver.kernel.org>; Thu, 23 Sep 2021 21:05:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org CC49A61029
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B83624053C;
-	Thu, 23 Sep 2021 21:04:21 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A10DA400F2;
+	Thu, 23 Sep 2021 21:05:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hI2_4YzbnXvf; Thu, 23 Sep 2021 21:04:20 +0000 (UTC)
+	with ESMTP id 8iNcuHEiY-dL; Thu, 23 Sep 2021 21:05:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AE7054052E;
-	Thu, 23 Sep 2021 21:04:19 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 126301BF304
- for <buildroot@lists.busybox.net>; Thu, 23 Sep 2021 21:04:18 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9A27A4049B;
+	Thu, 23 Sep 2021 21:05:06 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C598B1BF317
+ for <buildroot@lists.busybox.net>; Thu, 23 Sep 2021 21:05:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 096F1404FA
- for <buildroot@lists.busybox.net>; Thu, 23 Sep 2021 21:04:18 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id AE0398407B
+ for <buildroot@lists.busybox.net>; Thu, 23 Sep 2021 21:05:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jBm5lIN9vdWU for <buildroot@lists.busybox.net>;
- Thu, 23 Sep 2021 21:04:17 +0000 (UTC)
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hf4NuTMgf9lR for <buildroot@lists.busybox.net>;
+ Thu, 23 Sep 2021 21:05:03 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com
- [IPv6:2a00:1450:4864:20::52c])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D346E40530
- for <buildroot@buildroot.org>; Thu, 23 Sep 2021 21:04:16 +0000 (UTC)
-Received: by mail-ed1-x52c.google.com with SMTP id v22so27082752edd.11
- for <buildroot@buildroot.org>; Thu, 23 Sep 2021 14:04:16 -0700 (PDT)
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com
+ [IPv6:2a00:1450:4864:20::536])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8323182F4F
+ for <buildroot@buildroot.org>; Thu, 23 Sep 2021 21:05:03 +0000 (UTC)
+Received: by mail-ed1-x536.google.com with SMTP id c22so27518345edn.12
+ for <buildroot@buildroot.org>; Thu, 23 Sep 2021 14:05:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=y3kQR5L5hvAU1NwPuzFH5tqBoHQyJe9Pm2J9FUjWNQo=;
- b=KkZsBmYRJDEAdaQLd/rkuSuGQGCtj3vQP3qo62g8fcEZdKBe0WiBQZMAStaO/KfKVo
- UfSfXTWdzJs2bst+DPtDM8u/wpG2E0jn+7stE+NdaFRUvjdVtHzGtg26EnXLtOmurePh
- M2+b3ww3CXN9KD9noteUXfWaXz7Gr9ye3Y0d5WsMWhsS/JNz0jrjZdBYbexfEycpbbRi
- 1YPLBenqXnWumwsmjV3My7f4fr7lyYJKlOHiar0t6ixwoOmpL0/F1KolsZAbWFsLF9An
- 4uO0jRvihGNkkY9esFOjoiDvYuhkpkVfqibu/7qnWc7NlxG86G2Bp8LLjBzZBnxKN/qW
- zJDw==
+ bh=x9IPhEUdBFriW4whpZRabCFGV/pmAmKEF+dWseRqDe0=;
+ b=cST8uqio5g/OvnsBjV+8yBzGfnD8Re/zlTHjm0FmCnNUp7br9IQb/QxDP4sDoyKKSA
+ 0hhyq5rzIR/HA3M8Mi5MRPzqJ2twarWPSatCiLeJxKHXD/pHNm4yD2Ima3F4ardeL2Yh
+ Vo8caFRN4eYzO2OIGcKvF43iNBjqlFavxS5e9zk3lKxUlMQuEVngQ70QmPhBngH2fhC2
+ fOirhRmG5IgSKISixIRA1J8pN3kxZItRB+cgZ7ILkp1cLJy9yjcfuzicFMspQsVWM/e0
+ /yeSFDO2h2HlJAkX9E0uKUx6X/WviEYD1MjT0nC3tahZcuJk42lE4xv5P4yjUVCoTwwF
+ PrgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=y3kQR5L5hvAU1NwPuzFH5tqBoHQyJe9Pm2J9FUjWNQo=;
- b=tCmhWi1SQCfqN5hVZhz/qCKLq5wX7nC4cilsCbmGOZxG3vYnihY3YpPMl3YKlMR4OU
- somkvpMwgjbFb/Mtz5iqMLsXzECHlwM8jkL7GX4O4z+m1AVo8jKaoNXg54MqSqT0TcEL
- +ec2WTiavl0fIOYabN9yhegPUUr3RbviMuhSfTtGEgvSgGpwDI+gCpHVpKQprULenK3b
- Oe9WpMc84putv3nC6b7/ZIjW6el6ShAzv1RLavTHQde5PAxxdNvv3CGcd5Vzbtx+p70D
- hcLxmlN34XmE3LrHv7LnoS1jHO3ubrWaMUf3wiSU3+C+adJeuPSeD+jWpvxayZq/ujYZ
- d3jA==
-X-Gm-Message-State: AOAM533H6OFw7jv+UWikD5aKN1Y5PlGese1jSI952d9Q2oJrwlfbwGDQ
- +0t6jGHgCViO9V6bDzzIa0NWJssNC+4XwQ==
-X-Google-Smtp-Source: ABdhPJzXhawmHJUpygQ+KnpcNVCEKvGHFEitJ7uQ5g+YRo4ASec4/T5L022OZXuBnNGOznEy3sXVlA==
-X-Received: by 2002:a17:906:eb0f:: with SMTP id
- mb15mr7486605ejb.113.1632431052453; 
- Thu, 23 Sep 2021 14:04:12 -0700 (PDT)
+ bh=x9IPhEUdBFriW4whpZRabCFGV/pmAmKEF+dWseRqDe0=;
+ b=z+bP6uRB8FXGfTccRa/fdDYbltjDcKcR/JJzdZMd5cUL7qphTi40j1VgYyajn3lUaA
+ 4uUrCE5xYcOVYOBa7kZHMMGcIKCdgEsXfujwF5qBuXITGNDdhg66ctieqX+/PDqZd+y2
+ CqC/0+6IhymgXwu1hJufwjNwXfbwBaw4WvJ6Sda3vufR27nT4uj5V30KoWQMwkFL6laH
+ UwMhb+TeX9CegeNhczAMDgZZL79E/DA3GEDXXK8la+AutAGP8RFPHdbj8FgXm6eBCLIU
+ If82L94VyQ78UjKfRDYVgBQbFVMaFFce5V2N3S64kP2JAJ+mJTyLkqghe+d3yq6+hx0g
+ y4mg==
+X-Gm-Message-State: AOAM533zoLiU0zJOoz/86USm8ZOrMpT1OMBbovO+07u7V6nyUfuxlf+a
+ 9JLeyChuN6xTLFjxBj5He43TNg==
+X-Google-Smtp-Source: ABdhPJx3ntvb0/1uC5EEfgKTfm4lO2fzw3YXke+bAl9bvFwBka2cKIEcJESt+btllfvX6Mp4IgH1TQ==
+X-Received: by 2002:a17:906:dbf0:: with SMTP id
+ yd16mr7367500ejb.445.1632431101714; 
+ Thu, 23 Sep 2021 14:05:01 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id d9sm4335282ede.31.2021.09.23.14.04.11
+ by smtp.gmail.com with ESMTPSA id la1sm3772391ejc.48.2021.09.23.14.05.01
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Thu, 23 Sep 2021 14:04:12 -0700 (PDT)
-Message-ID: <97189c5c-6d7c-1d09-a3aa-53f193591a43@mind.be>
-Date: Thu, 23 Sep 2021 23:04:11 +0200
+ Thu, 23 Sep 2021 14:05:01 -0700 (PDT)
+Message-ID: <6bd0654a-8d40-48a0-0ac4-14975ffbcebb@mind.be>
+Date: Thu, 23 Sep 2021 23:05:00 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.1.0
 Content-Language: en-GB
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-References: <20210919141214.3283829-1-fontaine.fabrice@gmail.com>
+References: <20210919142149.3298025-1-fontaine.fabrice@gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20210919141214.3283829-1-fontaine.fabrice@gmail.com>
-Subject: Re: [Buildroot] [PATCH 1/1] package/proj: bump to version 8.1.1
+In-Reply-To: <20210919142149.3298025-1-fontaine.fabrice@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package/usbredir: bump to version 0.11.0
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -104,7 +106,8 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@lists.buildroot.org
@@ -112,52 +115,125 @@ Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
 
 
-On 19/09/2021 16:12, Fabrice Fontaine wrote:
-> Update hash of COPYING (Change mention of PROJ.4 to PROJ and change 'I'
-> pronoun to Frank Warmerdam:
-> https://github.com/OSGeo/PROJ/commit/b56f39dec5464cecd7bc1dbb24042bb51e5c96e5)
-> 
-> https://github.com/OSGeo/PROJ/blob/8.1.1/NEWS
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+On 19/09/2021 16:21, Fabrice Fontaine wrote:
+> - Switch to meson-package
+> - Update indentation in hash file (two spaces)
+
+  I've added some blurb about why tools are disabled.
 
   Applied to master, thanks.
 
   Regards,
   Arnout
 
-> ---
->   package/proj/proj.hash | 8 ++++----
->   package/proj/proj.mk   | 2 +-
->   2 files changed, 5 insertions(+), 5 deletions(-)
 > 
-> diff --git a/package/proj/proj.hash b/package/proj/proj.hash
-> index 27cbc38490..96d94e458e 100644
-> --- a/package/proj/proj.hash
-> +++ b/package/proj/proj.hash
-> @@ -1,5 +1,5 @@
-> -# Fetched from http://download.osgeo.org/proj/proj-7.2.1.tar.gz.md5
-> -md5  befbafd25e65ddf0c26a8321d8bcdcd2  proj-7.2.1.tar.gz
-> +# Fetched from http://download.osgeo.org/proj/proj-8.1.1.tar.gz.md5
-> +md5  f017fd7d35311b0d65b2cf0503844690  proj-8.1.1.tar.gz
->   # Locally calculated
-> -sha256  b384f42e5fb9c6d01fe5fa4d31da2e91329668863a684f97be5d4760dbbf0a14  proj-7.2.1.tar.gz
-> -sha256  2dcac4af6990093ef48b896bfb81452d46a31b08d46cce34b27e83f93b2e37f6  COPYING
-> +sha256  82f1345e5fa530c407cb1fc0752e83f8d08d2b98772941bbdc7820241f7fada2  proj-8.1.1.tar.gz
-> +sha256  6a8f30793e877d32e3f88b972f0970a051a3b5a26cd057d3993cb51e21c43319  COPYING
-> diff --git a/package/proj/proj.mk b/package/proj/proj.mk
-> index 03ed9c0a2e..bc924b41fb 100644
-> --- a/package/proj/proj.mk
-> +++ b/package/proj/proj.mk
-> @@ -4,7 +4,7 @@
+> https://gitlab.freedesktop.org/spice/usbredir/-/blob/usbredir-0.11.0/ChangeLog.md
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>   .../0001-meson-add-tests-option.patch         | 46 +++++++++++++++++++
+>   package/usbredir/usbredir.hash                | 10 ++--
+>   package/usbredir/usbredir.mk                  | 10 ++--
+>   3 files changed, 59 insertions(+), 7 deletions(-)
+>   create mode 100644 package/usbredir/0001-meson-add-tests-option.patch
+> 
+> diff --git a/package/usbredir/0001-meson-add-tests-option.patch b/package/usbredir/0001-meson-add-tests-option.patch
+> new file mode 100644
+> index 0000000000..b2df1587b1
+> --- /dev/null
+> +++ b/package/usbredir/0001-meson-add-tests-option.patch
+> @@ -0,0 +1,46 @@
+> +From 8490a7ac101d4ee0a78c44b252d3b7a6c2508c74 Mon Sep 17 00:00:00 2001
+> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +Date: Sat, 21 Aug 2021 11:55:48 +0200
+> +Subject: [PATCH] meson: add tests option
+> +
+> +Add tests option to allow the user to disable them
+> +
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +[Retrieved from:
+> +https://gitlab.freedesktop.org/spice/usbredir/-/commit/8490a7ac101d4ee0a78c44b252d3b7a6c2508c74]
+> +---
+> + meson.build       | 4 +++-
+> + meson_options.txt | 5 +++++
+> + 2 files changed, 8 insertions(+), 1 deletion(-)
+> +
+> +diff --git a/meson.build b/meson.build
+> +index 6e773a7..a6d21b8 100644
+> +--- a/meson.build
+> ++++ b/meson.build
+> +@@ -106,7 +106,9 @@ if host_machine.system() != 'windows'
+> +         subdir('fuzzing')
+> +     endif
+> + endif
+> +-subdir('tests')
+> ++if get_option('tests').enabled()
+> ++    subdir('tests')
+> ++endif
+> + subdir('data')
+> +
+> + summary(summary_info, bool_yn: true)
+> +diff --git a/meson_options.txt b/meson_options.txt
+> +index b35732b..63e8c85 100644
+> +--- a/meson_options.txt
+> ++++ b/meson_options.txt
+> +@@ -21,3 +21,8 @@ option('tools',
+> +     type : 'feature',
+> +     value : 'enabled',
+> +     description : 'Build usbredir\'s tools such as usbredirect')
+> ++
+> ++option('tests',
+> ++    type : 'feature',
+> ++    value : 'enabled',
+> ++    description : 'Build usbredir\'s tests such as filter')
+> +--
+> +GitLab
+> +
+> diff --git a/package/usbredir/usbredir.hash b/package/usbredir/usbredir.hash
+> index 485315d28c..e11d4aa720 100644
+> --- a/package/usbredir/usbredir.hash
+> +++ b/package/usbredir/usbredir.hash
+> @@ -1,4 +1,6 @@
+> -# locally computed hash
+> -sha256 87bc9c5a81c982517a1bec70dc8d22e15ae197847643d58f20c0ced3c38c5e00  usbredir-0.8.0.tar.bz2
+> -sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+> -sha256 592987e8510228d546540b84a22444bde98e48d03078d3b2eefcd889bec5ce8c  COPYING.LIB
+> +# https://spice-space.org/download/usbredir/usbredir-0.11.0.tar.xz.sha256sum
+> +sha256  72dd5f3aa90dfbc0510b5149bb5b1654c8f21fdc405dfce7b5dc163dcff19cba  usbredir-0.11.0.tar.xz
+> +
+> +# Hash for license files
+> +sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+> +sha256  592987e8510228d546540b84a22444bde98e48d03078d3b2eefcd889bec5ce8c  COPYING.LIB
+> diff --git a/package/usbredir/usbredir.mk b/package/usbredir/usbredir.mk
+> index 8848670ea9..25c4bb382e 100644
+> --- a/package/usbredir/usbredir.mk
+> +++ b/package/usbredir/usbredir.mk
+> @@ -4,13 +4,17 @@
 >   #
 >   ################################################################################
 >   
-> -PROJ_VERSION = 7.2.1
-> +PROJ_VERSION = 8.1.1
->   PROJ_SITE = http://download.osgeo.org/proj
->   PROJ_LICENSE = MIT
->   PROJ_LICENSE_FILES = COPYING
+> -USBREDIR_VERSION = 0.8.0
+> -USBREDIR_SOURCE = usbredir-$(USBREDIR_VERSION).tar.bz2
+> +USBREDIR_VERSION = 0.11.0
+> +USBREDIR_SOURCE = usbredir-$(USBREDIR_VERSION).tar.xz
+>   USBREDIR_SITE = http://spice-space.org/download/usbredir
+>   USBREDIR_LICENSE = LGPL-2.1+ (libraries)
+>   USBREDIR_LICENSE_FILES = COPYING.LIB
+>   USBREDIR_INSTALL_STAGING = YES
+>   USBREDIR_DEPENDENCIES = host-pkgconf libusb
+> +USBREDIR_CONF_OPTS = \
+> +	-Dgit_werror=disabled \
+> +	-Dtests=disabled \
+> +	-Dtools=disabled
+>   
+>   ifeq ($(BR2_PACKAGE_USBREDIR_SERVER),y)
+>   
+> @@ -26,4 +30,4 @@ USBREDIR_POST_INSTALL_TARGET_HOOKS += USBREDIR_POST_INSTALL_TARGET_RM_SERVER
+>   
+>   endif # BR2_PACKAGE_USBREDIR_SERVER
+>   
+> -$(eval $(autotools-package))
+> +$(eval $(meson-package))
 > 
 _______________________________________________
 buildroot mailing list
