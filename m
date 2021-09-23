@@ -2,89 +2,58 @@ Return-Path: <SRS0=dUZC=ON=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BA609C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 23 Sep 2021 15:49:22 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B47A6C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 23 Sep 2021 15:57:34 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 121526115A
-	for <buildroot@archiver.kernel.org>; Thu, 23 Sep 2021 15:49:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 121526115A
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
+	by mail.kernel.org (Postfix) with ESMTPS id EE18260EDF
+	for <buildroot@archiver.kernel.org>; Thu, 23 Sep 2021 15:57:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org EE18260EDF
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9DFC460692;
-	Thu, 23 Sep 2021 15:49:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9764D84017;
+	Thu, 23 Sep 2021 15:57:33 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ItjwWntHzV_p; Thu, 23 Sep 2021 15:57:32 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id E462483FB1;
+	Thu, 23 Sep 2021 15:57:31 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 3A4E21BF3C4
+ for <buildroot@lists.busybox.net>; Thu, 23 Sep 2021 15:57:31 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 28DA7606B1
+ for <buildroot@lists.busybox.net>; Thu, 23 Sep 2021 15:57:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8qOlDad7YAYI; Thu, 23 Sep 2021 15:49:21 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0BF9960AC8;
-	Thu, 23 Sep 2021 15:49:20 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1DD041BF3C4
- for <buildroot@lists.busybox.net>; Thu, 23 Sep 2021 15:49:19 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0C3F240486
- for <buildroot@lists.busybox.net>; Thu, 23 Sep 2021 15:49:19 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id oOAASHVbNShU for <buildroot@lists.busybox.net>;
- Thu, 23 Sep 2021 15:49:18 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
- [IPv6:2a00:1450:4864:20::434])
- by smtp2.osuosl.org (Postfix) with ESMTPS id EE9874042D
- for <buildroot@buildroot.org>; Thu, 23 Sep 2021 15:49:17 +0000 (UTC)
-Received: by mail-wr1-x434.google.com with SMTP id t28so5130613wra.7
- for <buildroot@buildroot.org>; Thu, 23 Sep 2021 08:49:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=sender:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=gGOjmDt/cqLLrWY+5LgwiKEC81AsnstsphwgGakEHrA=;
- b=i1OqvGD7g55QWbbnuKGbf3PXqkXz+mVoBOUiY5xz4JLnLxAmwfcfg9kuOcSyH15HgP
- nECDvXAFluN1b1DY99nPeeICcsh1eu0SNc3+B5Y8wTKNDkeFmL7XgldpHQ1MnVZxdFJ9
- sFxFRLhWTZMerjrY+yT1NroCcfeDWYaXargn0Da5OtCzkB8A9qXplXI2LutsuY4YiM3R
- B2brYzZNuFzW9xLcRk8tTrBFYjpvPSewoS95VkdiSfFFff9l5PjuBMqEAIZLtTkCQ7x0
- bNsLkxrIp+3qJVE0RDTCyrKfb4JttPr7in7tfP2h15EDbb2mq1tA47kayFrGy6zl+FNV
- GPog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
- :mime-version:content-transfer-encoding;
- bh=gGOjmDt/cqLLrWY+5LgwiKEC81AsnstsphwgGakEHrA=;
- b=ifY4Im/aNoc0hGKYZkOkrZI/3ExRfMQu7dp1bwdKcwQxyWkOT1TMgHP1LRsEqkvMjC
- hcr/qgzALDEcihbYbSxAVHkxa+7riBd+hAXdxj4stdBieACASqip4ananHfx3Aeubqp7
- IvxF2TLHYnFOTaN7gdi5tQeoD1xJCyDo2GcjL3XNq54KPoMrUXvCFYuR4YbrdiisboqQ
- Mr77aK1ypZqb/59Pl05czxT5vXoiPh9NscHNtAYSVFKfJ/QLnNLPpF+I/EOgmdKccefe
- hESChvsw3CuCi11EQGqwIYgV0/iOnuABYERQCCVctaumaXZI9zS/xjRPSu7qBHxFs1eG
- bOUg==
-X-Gm-Message-State: AOAM532uk6OeN2I7778Zflgg7TXETGFjHdlkFa/Rn873QWNZ7tp4yBtw
- DvvCTz2BrX0VkgVjj8Q+YJsnVBgoCEw=
-X-Google-Smtp-Source: ABdhPJzHVkJRKg/ArPKNUk10Mz+jDje4f1LkNq2mixayv90oq4j/CVsmFghKPGev+9/NVOGcqAzSbw==
-X-Received: by 2002:adf:f24a:: with SMTP id b10mr6112815wrp.281.1632412156152; 
- Thu, 23 Sep 2021 08:49:16 -0700 (PDT)
-Received: from scaer.home ([2a01:cb19:8b51:cb00:c870:4c29:b48d:530e])
- by smtp.gmail.com with ESMTPSA id j21sm6048982wmj.40.2021.09.23.08.49.15
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 23 Sep 2021 08:49:15 -0700 (PDT)
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id a1-tDfjT7BZz for <buildroot@lists.busybox.net>;
+ Thu, 23 Sep 2021 15:57:30 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E102760692
+ for <buildroot@buildroot.org>; Thu, 23 Sep 2021 15:57:29 +0000 (UTC)
+Received: (Authenticated sender: kory.maincent@bootlin.com)
+ by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 9CF77E000F;
+ Thu, 23 Sep 2021 15:57:26 +0000 (UTC)
+From: Kory Maincent <kory.maincent@bootlin.com>
 To: buildroot@buildroot.org
-Date: Thu, 23 Sep 2021 17:49:12 +0200
-Message-Id: <20210923154912.268966-1-yann.morin.1998@free.fr>
+Date: Thu, 23 Sep 2021 17:57:19 +0200
+Message-Id: <20210923155726.87851-1-kory.maincent@bootlin.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] boot/mv-ddr-marvell: fix license file hash
+Subject: [Buildroot] [PATCH v3 0/7] Add support for ISO9660 image compatible
+ with Legacy and EFI BIOS
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,33 +66,96 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>, nyanyamiau@gmail.com
+Cc: yann.morin.1998@free.fr, thomas.petazzoni@bootlin.com
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-Commit 2cfdf8b8a269 (boot/mv-ddr-marvell: Bump to HEAD as of 20201207)
-forgot to update the hash a a source file that we use as license file.
+This series of patches aims to support the generation of an ISO9660 hybrid
+image compatible with Legacy BIOS and EFI BIOS. To implement this, we need
+to improve the grub2 package and modify the ISO9660 image support
 
-Fixes: #14221
+Grub2 was written to build only one configuration at a time. For the hybrid
+image we need to have several configuration of Grub2 in the same image.
+For example we might want to have Grub2 built for BIOS, EFI 32 bits and EFI
+64 bits in the same image. To support this, we chose to fill a list of
+configuration name tuples, and then build each Grub2 configuration in a
+separate build-$(tuple) folder. It seems simpler than having multiple
+duplicated grub2 packages for each possible configuration.
 
-Reported-by: nyanyamiau@gmail.com
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: D. Olsson <hi@senzilla.io>
----
- boot/mv-ddr-marvell/mv-ddr-marvell.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The generation of ISO9660 image was only supporting bootloaders based on
+Legacy BIOS boot. We first change the ISO9660 image generation to use
+xorriso instead of genimageiso, in order to be able to build an image
+compatible with both legacy and EFI BIOS. Then we add the generation of an
+EFI System Partition in iso9660 so that we can install the EFI-compatible
+bootloader."
 
-diff --git a/boot/mv-ddr-marvell/mv-ddr-marvell.hash b/boot/mv-ddr-marvell/mv-ddr-marvell.hash
-index e1a86008db..5bfae8af45 100644
---- a/boot/mv-ddr-marvell/mv-ddr-marvell.hash
-+++ b/boot/mv-ddr-marvell/mv-ddr-marvell.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
- sha256  bfab74a625d65238c569b9df282b55c0fc9a1e2d3decedcf194d44774df2ede4  mv-ddr-marvell-305d923e6bc4236cd3b902f6679b0aef9e5fa52d.tar.gz
--sha256  69208236fc322026920b92d1d839ebdc521ca65379bfdb3368a24945e794fc78  ddr3_init.c
-+sha256  48bb930b6fbc3f5db72e29c849b096df3868e4a6d2bdc0e2dd3365c768241cd5  ddr3_init.c
+In detail:
+
+ - PATCH 1 drop the usage of the useless startup.nsh file
+ - PATCH 2 implements simultaneous build of GRUB for different configurations
+ - PATCH 3 implements the generation of ISO9660 image booting on a EFI BIOS
+ - PATCH 4 implements the generation of hybrid image compatible with Legacy
+   and EFI BIOS
+ - PATCH 5 updates the encoding of the text return from testing emulator
+ - PATCH 6 add support to i386 architecture to edk2 package
+ - PATCH 7 updates iso9660 tests and implements a test for EFI image and
+   hybrid image.
+
+Changes in v2:
+- Update the typo of Grub2 configuration tuples to make more legible code
+- Expand explanation in few commit messages.
+- Fix typos.
+- Fix Grub2 Legacy builtin configurations.
+- Add mkfs and mcopy parameters in iso9660 package to build reproducible
+  images.
+- Remove the implementation of host-efi-bios package.
+- Add support for i386 architecture to edk2 package.
+
+Changes in v3:
+- Add a patch to drop all the startup.nsh usage in Buildroot. The EFI
+  payload naming is sufficient to choose the right boot payload.
+- Update the Grub2 tuples management to have a more readable package.
+- Fix ISO9660 EFI image generation options.
+- Fix Kconfig options between EFI and BIOS bootloader in the ISO9660
+  package.
+
+Thanks in advance for your review and feedback
+
+Kory Maincent (7):
+  board, boot, package: remove usage of startup.nsh in EFI partition
+  boot/grub2: add support to build multiple Grub2 configurations in the
+    same build
+  fs/iso9660: add support to Grub EFI bootloader in the image
+  fs/iso9660: add support for hybrid image using Grub bootloader on BIOS
+    and EFI
+  support/testing/infra/emulator.py: update encoding when calling qemu
+  boot/edk2: add support to i386 architecture
+  support/testing/tests/fs/test_iso9660.py: add support to test using
+    EFI BIOS
+
+ Config.in.legacy                         |  24 +++
+ board/aarch64-efi/genimage-efi.cfg       |   3 -
+ board/intel/galileo/genimage.cfg         |   3 -
+ board/minnowboard/genimage.cfg           |   3 -
+ board/pc/genimage-efi.cfg                |   3 -
+ board/pc/post-build.sh                   |   2 +-
+ board/qemu/aarch64-sbsa/genimage.cfg     |   3 -
+ boot/edk2/Config.in                      |  12 +-
+ boot/edk2/edk2.mk                        |  12 +-
+ boot/grub2/Config.in                     |  53 +++++--
+ boot/grub2/grub2.mk                      | 181 +++++++++++++----------
+ boot/gummiboot/gummiboot.mk              |   2 -
+ fs/iso9660/Config.in                     |  27 +++-
+ fs/iso9660/iso9660.mk                    |  64 +++++++-
+ package/systemd/systemd.mk               |   2 -
+ support/testing/conf/grub2-efi.cfg       |   2 +
+ support/testing/infra/emulator.py        |   2 +-
+ support/testing/tests/fs/test_iso9660.py |  80 +++++++++-
+ 18 files changed, 342 insertions(+), 136 deletions(-)
+ create mode 100644 support/testing/conf/grub2-efi.cfg
+
 -- 
 2.25.1
 
