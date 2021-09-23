@@ -2,61 +2,76 @@ Return-Path: <SRS0=dUZC=ON=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,HTML_MESSAGE,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B9B86C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 23 Sep 2021 08:33:12 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 695B7C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 23 Sep 2021 08:48:09 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 386FD6105A
-	for <buildroot@archiver.kernel.org>; Thu, 23 Sep 2021 08:33:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 386FD6105A
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+	by mail.kernel.org (Postfix) with ESMTPS id DFCB960F3A
+	for <buildroot@archiver.kernel.org>; Thu, 23 Sep 2021 08:48:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org DFCB960F3A
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=unikie.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D4940400D8;
-	Thu, 23 Sep 2021 08:33:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7412C60771;
+	Thu, 23 Sep 2021 08:48:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wf0VUzPgXhqf; Thu, 23 Sep 2021 08:33:10 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id jdoyz10u-wN2; Thu, 23 Sep 2021 08:48:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D80CB40151;
-	Thu, 23 Sep 2021 08:33:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5C94D6077A;
+	Thu, 23 Sep 2021 08:48:06 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 51A151BF325
- for <buildroot@lists.busybox.net>; Thu, 23 Sep 2021 08:33:08 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B66441BF325
+ for <buildroot@lists.busybox.net>; Thu, 23 Sep 2021 08:48:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4DC8B61553
- for <buildroot@lists.busybox.net>; Thu, 23 Sep 2021 08:33:08 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 991746154D
+ for <buildroot@lists.busybox.net>; Thu, 23 Sep 2021 08:48:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=kernel.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id K0oPGb7I8jAe for <buildroot@lists.busybox.net>;
- Thu, 23 Sep 2021 08:33:07 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A51846154D
- for <buildroot@buildroot.org>; Thu, 23 Sep 2021 08:33:07 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6EF616103C;
- Thu, 23 Sep 2021 08:33:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
- s=k20201202; t=1632385987;
- bh=UJVk5CkAcIwvajLgVqX46J6nb9oRr4VqaqXfVLrOqOw=;
- h=In-Reply-To:References:From:To:Subject:Cc:Date:From;
- b=MvnBc1wWmy2eq48G3v+QYbcBTECjgtuLI78Wml8VGD2w4TxoT3xMLAIb9Tj7ims5A
- PR+aXAZg61hCWIR3hs1owTqrS72f7ciu89cEPY8RACFGcDnasAoXZpFDtaLt4VTs/x
- o/a/lUlLSCCJ4wy/FkQLRMCsyCHvly4GcOjodv3qJlIsEEveS6/RaaOkkGoUoYHIah
- 0z9DgGguZwzSM28GKwJ02KuKWQb1r2JCUaLXzzY5m7kbYS/yey6aryAmvIplEXkVb6
- BACS55/krTqCCLeKm1+9Y9Hd0tASTAsy/pGcYv7uuiPw4uwdNvfn2IbJs9kQjtzzwW
- c02qrWdpu3OGA==
+ with ESMTP id uBJC6HTimdAl for <buildroot@lists.busybox.net>;
+ Thu, 23 Sep 2021 08:48:03 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com
+ [IPv6:2a00:1450:4864:20::52c])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 176E760771
+ for <buildroot@buildroot.org>; Thu, 23 Sep 2021 08:48:02 +0000 (UTC)
+Received: by mail-ed1-x52c.google.com with SMTP id s17so2459818edd.8
+ for <buildroot@buildroot.org>; Thu, 23 Sep 2021 01:48:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=unikie-com.20210112.gappssmtp.com; s=20210112;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=bb/AtvGePH2f3u+xKahQMn7t1StWGYywJMc8gtGtmKM=;
+ b=OywVtXQEKWmZx/VUed5JLVowiFJHZwqMASmXPs+vpyVSrbK3+Uu3aExeLsdsL+OYKs
+ ub/Bfece0qqw5hzG1DEZfzopldPIp/+lk4eYjpWXuor6O4v5flU1jrmDfQidllEHFfbQ
+ r8j8TbvcYXo0ieYIIRV5+FJZOLfrZKA/tYK3W6QLeZppx/QII9bu9Tjk9234GtJ3BjP+
+ lRuaa6mtt3iJgrd2bnyx6THso0pd78oZAjM4Ba5fY6kbETiiYnLl684a6r7vC+1PFvQ2
+ n47OtnzYLe+C1+/Oa26lLID8dqrrCd66Tll0nA2LudjtFYW6UIoi57gozznNs/IXyDaZ
+ 6cZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=bb/AtvGePH2f3u+xKahQMn7t1StWGYywJMc8gtGtmKM=;
+ b=xpcNTVi8sc4T8gvxLbZ5IsCFkFCMkZ+Yg0oyYjzOgExwri2aOTItl16rAY/OdkH2Dx
+ /vafFem4v3BkDemdoW0qJQaGT0G3QxaUfiAt3GHX8/O19mUgMdpZpmbFcnXGpraPyQem
+ xtDZ6X1s4QaqgLlFOb/cVVFv2E0pdxI/yz1hkL71Kwq+ixT6KHMD0Mel5Flvycyyaw4W
+ pCSA7Mw+t3tLE4BgomLA6nZR9Z2Pc2YAzhhXNvcESYSqptQIe2wUJMczka+q7v7R/aBV
+ X3sSGeEOpKBQZYjM9qTgvFT+97WhX15rqb4tCxrV6/CX559TOrCml+TL0DY9jehlHrIK
+ 3SPg==
+X-Gm-Message-State: AOAM530utf0zRdAPU8lGEdh61hoxkLAPbVOo7momDugnDze221O/vBJu
+ SkRXD2cS2rZ8PuWeqlIH4HPretYQNnm86HTfFL1vHHmw9ZspgQ==
+X-Google-Smtp-Source: ABdhPJwS98h+kkI81UjLjGRZmDSz3JoUXGhzeaSN3BwGUdJz7UonsUcYLOXfE2lZGi0LIZLtKwed9bd7f1IjEaSmvFw=
+X-Received: by 2002:aa7:c78f:: with SMTP id n15mr4178870eds.338.1632386880938; 
+ Thu, 23 Sep 2021 01:48:00 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <163238398624.3979.10768324598204859494@kwain>
 References: <20210830114531.2285178-1-jose.pekkarinen@unikie.com>
  <163214596519.4283.5229631383777844599@kwain>
  <CAJPV9MqsdZa5oCYSE-+ZsNi4w1w8CWVeUPd4CohXddt5pcr7zQ@mail.gmail.com>
@@ -67,10 +82,12 @@ References: <20210830114531.2285178-1-jose.pekkarinen@unikie.com>
  <163232062091.4283.13096713479109144471@kwain>
  <CAJPV9MpWep997PN1v+R0E6RKhe4EOwY=ogFECnyfG0ppz2ekww@mail.gmail.com>
  <163238398624.3979.10768324598204859494@kwain>
-From: Antoine Tenart <atenart@kernel.org>
-To: José Pekkarinen <jose.pekkarinen@unikie.com>
-Message-ID: <163238598414.3979.800122284643311265@kwain>
-Date: Thu, 23 Sep 2021 10:33:04 +0200
+ <163238598414.3979.800122284643311265@kwain>
+In-Reply-To: <163238598414.3979.800122284643311265@kwain>
+From: =?UTF-8?Q?Jos=C3=A9_Pekkarinen?= <jose.pekkarinen@unikie.com>
+Date: Thu, 23 Sep 2021 11:47:50 +0300
+Message-ID: <CAJPV9Mqx=iiTN4k-P+DgAfPFV1HQuDi_vOPSC1O_z4nzGZ7rAA@mail.gmail.com>
+To: Antoine Tenart <atenart@kernel.org>
 Subject: Re: [Buildroot] [PATCH] package/refpolicy: Treat all modules as
  custom
 X-BeenThere: buildroot@lists.buildroot.org
@@ -86,94 +103,394 @@ List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
 Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============6268195038813027679=="
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-UXVvdGluZyBBbnRvaW5lIFRlbmFydCAoMjAyMS0wOS0yMyAwOTo1OTo0NikKPiBRdW90aW5nIEpv
-c8OpIFBla2thcmluZW4gKDIwMjEtMDktMjMgMDg6MjY6MDIpCj4gPiAgT24gV2VkLCBTZXAgMjIs
-IDIwMjEgYXQgNToyMyBQTSBBbnRvaW5lIFRlbmFydCA8WzFdYXRlbmFydEBrZXJuZWwub3JnPgo+
-ID4gIHdyb3RlOgo+ID4KPiA+ICAgIEhvd2V2ZXIgSSdtIHN1cnByaXNlZCBhcyBteSB1bmRlcnN0
-YW5kaW5nIHdhcyB0aGUgc3VtbWFyeSB3YXMgcmVxdWlyZWQKPiA+ICAgIGZvciB0aGUgcmVmcG9s
-aWN5IGNvbmZpZ3VyYXRpb24gc3RlcCB0byBzdWNjZWVkIChJIGRpZCB1c2UgYSBzdW1tYXJ5Cj4g
-PiAgICBmb3IgYWxsIG15IHRlc3RzIGJlY2F1c2Ugb2YgdGhpcykuIFdoZW4gcmVtb3ZpbmcgYSBz
-dW1tYXJ5IGZyb20gYSBtb2R1bGUKPiA+ICAgIEkgYWx3YXlzIGdldCB0aGUgZm9sbG93aW5nIGVy
-cm9yLCBhbmQgdGhlIEJ1aWxkcm9vdCBidWlsZCBzdG9wcy4KPiA+Cj4gPiAgICDCoCBkb2MvcG9s
-aWN5LnhtbDo4Mzc2OiBlbGVtZW50IG1vZHVsZTogdmFsaWRpdHkgZXJyb3IgOiBFbGVtZW50IG1v
-ZHVsZQo+ID4gICAgY29udGVudCBkb2VzIG5vdCBmb2xsb3cgdGhlIERURCwgZXhwZWN0aW5nIChz
-dW1tYXJ5ICwgZGVzYz8gLCByZXF1aXJlZD8KPiA+ICAgICwgKGludGVyZmFjZSB8IHRlbXBsYXRl
-KSogLCAoYm9vbCB8IHR1bmFibGUpKiksIGdvdCAoKQo+ID4gICAgwqAgRG9jdW1lbnQgZG9jL3Bv
-bGljeS54bWwgZG9lcyBub3QgdmFsaWRhdGUgYWdhaW5zdCBkb2MvcG9saWN5LmR0ZAo+ID4KPiA+
-ICAgIERvIHlvdSBoYXZlIGFuIGlkZWEgd2hhdCBtYWRlIHlvdXIgYnVpbGQgdG8gc3VjY2VlZCBl
-dmVuIHRob3VnaCB5b3UgZGlkCj4gPiAgICBub3QgaGF2ZSBhIHN1bW1hcnkgaW4geW91ciBtb2R1
-bGU/Cj4gPgo+ID4gIEkgYmVsaWV2ZSBpdCBpcyB2YWxpZGF0aW5nIHRvIHRoZSBzdW1tYXJ5IHBy
-aW9yIHRvIHRoZSBtb2R1bGUsCj4gPiAgdGhlIG9uZSB5b3UgcHV0IGluIG1ldGFkYXRhLnhtbCwg
-YnV0IG5vdCBhbnkgaW50ZXJuYWwgc3VtbWFyeSBmb3IKPiA+ICB0aGUgaW50ZXJmYWNlLiBUaGlz
-IGlzIGhvdyBwb2xpY3kueG1sIGxvb2tzIGxpa2UgaW4gYSBjYXNlIHdoZXJlIEkgZGlkbid0Cj4g
-PiAgYXBwbHkgdGhlIG1pdGlnYXRpb246Cj4gPiAgPGxheWVyIG5hbWU9ImJ1aWxkcm9vdCI+Cj4g
-PiAgPHN1bW1hcnk+QnVpbGRyb290IGV4dHJhIG1vZHVsZXM8L3N1bW1hcnk+Cj4gPiAgPG1vZHVs
-ZSBuYW1lPSJiYXNlIiBmaWxlbmFtZT0icG9saWN5L21vZHVsZXMvYnVpbGRyb290L2Jhc2UuaWYi
-Pgo+ID4gIDwvbW9kdWxlPgo+ID4gIDxtb2R1bGUgbmFtZT0ic2VjdXJlIiBmaWxlbmFtZT0icG9s
-aWN5L21vZHVsZXMvYnVpbGRyb290L3NlY3VyZS5pZiI+Cj4gPiAgPC9tb2R1bGU+Cj4gPiAgPC9s
-YXllcj4KPiA+Cj4gPiAgV2l0aCB0aGlzIHRoZSBtb2R1bGVzLmNvbmYgY29tZXMgYXM6Cj4gPgo+
-ID4gICMgTGF5ZXI6IGJ1aWxkcm9vdAo+ID4gICMgTW9kdWxlOiBiYXNlCj4gPiAgIwo+ID4gICMg
-TGF5ZXI6IGJ1aWxkcm9vdAo+ID4gICMgTW9kdWxlOiBzZWN1cmUKPiA+ICAjCj4gPgo+ID4gIFRo
-ZXJlIGlzIGEgc3VtbWFyeSBmb2xsb3dlZCBieSBhIG1vZHVsZSwgdmFsaWRhdGlvbiBwYXNzLCBi
-dXQKPiA+Cj4gPiAgdGhlIG1vZHVsZSBpcyBub3QgYnVpbHQuIElmIEkgYWRkIHRoZSBmb2xsb3dp
-bmcgbGluZXMgaW4gdGhlIGJ1aWxkIGZvbGRlcgo+ID4gIG1vZHVsZXNbMV0KPiA+ICBhbmQgcnVu
-IG1ha2UuY29uZjoKPiA+ICBbMV3CoHJlZnBvbGljeS0yLjIwMjAwODE4L3BvbGljeS9tb2R1bGVz
-L2J1aWxkcm9vdC9zZWN1cmUuaWY6ICMjCj4gPiAgPHN1bW1hcnk+RXh0ZXJuYWwgc2VjdXJlIG1v
-ZHVsZS48L3N1bW1hcnk+Cj4gPiAgcmVmcG9saWN5LTIuMjAyMDA4MTgvcG9saWN5L21vZHVsZXMv
-YnVpbGRyb290L2Jhc2UuaWY6ICMjCj4gPiAgPHN1bW1hcnk+RXh0ZXJuYWwgYmFzZSBtb2R1bGUu
-PC9zdW1tYXJ5Pgo+ID4KPiA+ICBUaGUgcG9saWN5LnhtbCBsb29rcyBsaWtlOgo+ID4KPiA+ICA8
-bGF5ZXIgbmFtZT0iYnVpbGRyb290Ij4KPiA+ICA8c3VtbWFyeT5CdWlsZHJvb3QgZXh0cmEgbW9k
-dWxlczwvc3VtbWFyeT4KPiA+ICA8bW9kdWxlIG5hbWU9ImJhc2UiIGZpbGVuYW1lPSJwb2xpY3kv
-bW9kdWxlcy9idWlsZHJvb3QvYmFzZS5pZiI+Cj4gPiAgPHN1bW1hcnk+RXh0ZXJuYWwgYmFzZSBt
-b2R1bGVzLjwvc3VtbWFyeT4KPiA+ICA8L21vZHVsZT4KPiA+ICA8bW9kdWxlIG5hbWU9InNlY3Vy
-ZSIgZmlsZW5hbWU9InBvbGljeS9tb2R1bGVzL2J1aWxkcm9vdC9zZWN1cmUuaWYiPgo+ID4gIDxz
-dW1tYXJ5PkV4dGVybmFsIHNlY3VyZSBvcyB2bSBtb2R1bGUuPC9zdW1tYXJ5Pgo+ID4gIDwvbW9k
-dWxlPgo+ID4gIDwvbGF5ZXI+Cj4gPgo+ID4gIFRoZW4gcG9saWN5L21vZHVsZXMuY29uZiBsb29r
-cyB0aGlzIHdheToKPiA+Cj4gPiAgIyBMYXllcjogYnVpbGRyb290Cj4gPiAgIyBNb2R1bGU6IGJh
-c2UKPiA+ICAjCj4gPiAgIyBFeHRlcm5hbCBiYXNlIG1vZHVsZXMuCj4gPiAgIyDCoAo+ID4gIGJh
-c2UgPSBtb2R1bGUKPiA+Cj4gPiAgIyBMYXllcjogYnVpbGRyb290Cj4gPiAgIyBNb2R1bGU6IHNl
-Y3VyZQo+ID4gICMKPiA+ICAjIEV4dGVybmFsIHNlY3VyZSBvcyB2bSBtb2R1bGUuCj4gPiAgIyDC
-oAo+ID4gIHNlY3VyZSA9IG1vZHVsZQo+ID4KPiA+ICBBbmQgdGhpcyBwcm9kdWNlcyB0aGUgbW9k
-dWxlcyB0byBnZXQgaW50byB0aGUgcG9saWN5LjMyIGZpbGUuCj4gPiAgRG9lcyBpdCBtYWtlcyBh
-bnkgc2Vuc2Ugb24geW91ciBlbmQ/Cj4gCj4gVGhlIGFib3ZlIGRvZXMgbm90IHJlcHJvZHVjZSBm
-b3IgbWUuIEJ1dCBJIG1pZ2h0IGtub3cgd2hhdCdzIGdvaW5nIG9uOgo+IGRvIHlvdSBoYXZlIHht
-bGxpbnQgaW5zdGFsbGVkIG9uIHlvdXIgbWFjaGluZT8KCk9yIG5vdCBhdCAvdXNyL2Jpbi94bWxs
-aW50Cgo+IElmIG5vdCwgdGhlIHZhbGlkYXRpb24gc3RlcCBpcyBza2lwcGVkIGJ1dCB0aGUgYnVp
-bGQgaXMgbm90IHN0b3BwZWQsCj4gd2hpY2ggd291bGQgZXhwbGFpbiB0aGUgZGlmZmVyZW5jZSBp
-biBiZWhhdmlvdXIgd2UgaGF2ZSBiZXR3ZWVuIG91cgo+IHRlc3RzOgo+IAo+ICAgTWFrZWZpbGU6
-NDUzOgo+ICAgJCh2ZXJib3NlKSBpZiB0ZXN0IC14ICQoWE1MTElOVCkgJiYgdGVzdCAtZiAkKHht
-bGR0ZCk7IHRoZW4gXAo+ICAgICAgICAgICAkKFhNTExJTlQpIC0tbm9vdXQgLS1wYXRoICQoZGly
-ICQoeG1sZHRkKSkgLS1kdGR2YWxpZCAkKHhtbGR0ZCkgJEAgO1wKPiAgICAgICAgICAgZWxzZSBc
-Cj4gICAgICAgICAgIGVjaG8gIiRAIFhNTCB2YWxpZGF0aW9uIG5vdCBydW4uIFBsZWFzZSBpbnN0
-YWxsIHRoZSB4bWxsaW50IHRvb2wuIiA7XAo+ICAgZmkKPiAKPiBJIGJlbGlldmUgd2Ugc2hvdWxk
-IG1ha2UgcmVmcG9saWN5IGRlcGVuZCBvbiBob3N0LWxpYnhtbDIgYW5kIGZvcmNlIGl0Cj4gdG8g
-dXNlIHRoZSBCdWlsZHJvb3QgdmVyc2lvbiBvZiB4bWxsaW50IGJ5IHNldHRpbmcgWE1MTElOVCBp
-biB0aGUKPiBjb25maWd1cmF0aW9uIHN0ZXAuCj4gCj4gRG8gdGhlIGZvbGxvd2luZyBmaXhlcyB0
-aGUgaXNzdWVbMV0gb24geW91ciBzaWRlPwo+IAo+ICAgZGlmZiAtLWdpdCBhL3BhY2thZ2UvcmVm
-cG9saWN5L3JlZnBvbGljeS5tayBiL3BhY2thZ2UvcmVmcG9saWN5L3JlZnBvbGljeS5tawo+ICAg
-aW5kZXggMTE4MGYwZDM4YmFlLi5lY2Q4Y2YyMjZiNDUgMTAwNjQ0Cj4gICAtLS0gYS9wYWNrYWdl
-L3JlZnBvbGljeS9yZWZwb2xpY3kubWsKPiAgICsrKyBiL3BhY2thZ2UvcmVmcG9saWN5L3JlZnBv
-bGljeS5tawo+ICAgQEAgLTE0LDcgKzE0LDggQEAgUkVGUE9MSUNZX0RFUEVOREVOQ0lFUyA9IFwK
-PiAgICAgICAgICAgaG9zdC1wb2xpY3ljb3JldXRpbHMgXAo+ICAgICAgICAgICBob3N0LXB5dGhv
-bjMgXAo+ICAgICAgICAgICBob3N0LXNldG9vbHMgXAo+ICAgLSAgICAgICBob3N0LWdhd2sKPiAg
-ICsgICAgICAgaG9zdC1nYXdrIFwKPiAgICsgICAgICAgaG9zdC1saWJ4bWwyCj4gCj4gICAgaWZl
-cSAoJChCUjJfUEFDS0FHRV9SRUZQT0xJQ1lfQ1VTVE9NX0dJVCkseSkKPiAgICBSRUZQT0xJQ1lf
-VkVSU0lPTiA9ICQoY2FsbCBxc3RyaXAsJChCUjJfUEFDS0FHRV9SRUZQT0xJQ1lfQ1VTVE9NX1JF
-UE9fVkVSU0lPTikpCj4gICBAQCAtMzAsNiArMzEsNyBAQCBlbmRpZgo+ICAgICMgQ2Fubm90IHVz
-ZSBtdWx0aXBsZSB0aHJlYWRzIHRvIGJ1aWxkIHRoZSByZWZlcmVuY2UgcG9saWN5Cj4gICAgUkVG
-UE9MSUNZX01BS0UgPSBcCj4gICAgICAgICAgIFBZVEhPTj0kKEhPU1RfRElSKS91c3IvYmluL3B5
-dGhvbjMgXAo+ICAgKyAgICAgICBYTUxMSU5UPSQoTElCWE1MMl9IT1NUX0JJTkFSWSkgXAo+ICAg
-ICAgICAgICBURVNUX1RPT0xDSEFJTj0kKEhPU1RfRElSKSBcCj4gICAgICAgICAgICQoVEFSR0VU
-X01BS0VfRU5WKSBcCj4gICAgICAgICAgICQoTUFLRTEpCj4gCj4gKEkgYWxzbyBjaGVja2VkIGZv
-ciBvdGhlciBgdGVzdCAteGAgY29uZGl0aW9ucyBpbiB0aGUgcmVmcG9saWN5Cj4gTWFrZWZpbGU7
-IHhtbGxpbnQgc2VlbXMgdG8gYmUgdGhlIG9ubHkgb25lKS4KPiAKPiBbMV0gImZpeCB0aGUgaXNz
-dWUiIGFrYSB0aHJvdyBhbiBlcnJvciB3aGlsZSBhZGRpbmcgbW9kdWxlcyB3aXRob3V0IGEKPiAg
-ICAgc3VtbWFyeS4KPiAKPiBUaGFua3MsCj4gQW50b2luZQo+IApfX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxk
-cm9vdEBsaXN0cy5idWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWls
-bWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+--===============6268195038813027679==
+Content-Type: multipart/alternative; boundary="0000000000002cc0e605cca5b003"
+
+--0000000000002cc0e605cca5b003
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+On Thu, Sep 23, 2021 at 11:33 AM Antoine Tenart <atenart@kernel.org> wrote:
+
+> Quoting Antoine Tenart (2021-09-23 09:59:46)
+> > Quoting Jos=C3=A9 Pekkarinen (2021-09-23 08:26:02)
+> > >  On Wed, Sep 22, 2021 at 5:23 PM Antoine Tenart <[1]atenart@kernel.or=
+g
+> >
+> > >  wrote:
+> > >
+> > >    However I'm surprised as my understanding was the summary was
+> required
+> > >    for the refpolicy configuration step to succeed (I did use a summa=
+ry
+> > >    for all my tests because of this). When removing a summary from a
+> module
+> > >    I always get the following error, and the Buildroot build stops.
+> > >
+> > >      doc/policy.xml:8376: element module: validity error : Element
+> module
+> > >    content does not follow the DTD, expecting (summary , desc? ,
+> required?
+> > >    , (interface | template)* , (bool | tunable)*), got ()
+> > >      Document doc/policy.xml does not validate against doc/policy.dtd
+> > >
+> > >    Do you have an idea what made your build to succeed even though yo=
+u
+> did
+> > >    not have a summary in your module?
+> > >
+> > >  I believe it is validating to the summary prior to the module,
+> > >  the one you put in metadata.xml, but not any internal summary for
+> > >  the interface. This is how policy.xml looks like in a case where I
+> didn't
+> > >  apply the mitigation:
+> > >  <layer name=3D"buildroot">
+> > >  <summary>Buildroot extra modules</summary>
+> > >  <module name=3D"base" filename=3D"policy/modules/buildroot/base.if">
+> > >  </module>
+> > >  <module name=3D"secure" filename=3D"policy/modules/buildroot/secure.=
+if">
+> > >  </module>
+> > >  </layer>
+> > >
+> > >  With this the modules.conf comes as:
+> > >
+> > >  # Layer: buildroot
+> > >  # Module: base
+> > >  #
+> > >  # Layer: buildroot
+> > >  # Module: secure
+> > >  #
+> > >
+> > >  There is a summary followed by a module, validation pass, but
+> > >
+> > >  the module is not built. If I add the following lines in the build
+> folder
+> > >  modules[1]
+> > >  and run make.conf:
+> > >  [1] refpolicy-2.20200818/policy/modules/buildroot/secure.if: ##
+> > >  <summary>External secure module.</summary>
+> > >  refpolicy-2.20200818/policy/modules/buildroot/base.if: ##
+> > >  <summary>External base module.</summary>
+> > >
+> > >  The policy.xml looks like:
+> > >
+> > >  <layer name=3D"buildroot">
+> > >  <summary>Buildroot extra modules</summary>
+> > >  <module name=3D"base" filename=3D"policy/modules/buildroot/base.if">
+> > >  <summary>External base modules.</summary>
+> > >  </module>
+> > >  <module name=3D"secure" filename=3D"policy/modules/buildroot/secure.=
+if">
+> > >  <summary>External secure os vm module.</summary>
+> > >  </module>
+> > >  </layer>
+> > >
+> > >  Then policy/modules.conf looks this way:
+> > >
+> > >  # Layer: buildroot
+> > >  # Module: base
+> > >  #
+> > >  # External base modules.
+> > >  #
+> > >  base =3D module
+> > >
+> > >  # Layer: buildroot
+> > >  # Module: secure
+> > >  #
+> > >  # External secure os vm module.
+> > >  #
+> > >  secure =3D module
+> > >
+> > >  And this produces the modules to get into the policy.32 file.
+> > >  Does it makes any sense on your end?
+> >
+> > The above does not reproduce for me. But I might know what's going on:
+> > do you have xmllint installed on your machine?
+>
+> Or not at /usr/bin/xmllint
+>
+
+It was built in a container without it, I'm testing the patch, bear
+
+for a bit.
+
+Jos=C3=A9.
+
+
+
+> > If not, the validation step is skipped but the build is not stopped,
+> > which would explain the difference in behaviour we have between our
+> > tests:
+> >
+> >   Makefile:453:
+> >   $(verbose) if test -x $(XMLLINT) && test -f $(xmldtd); then \
+> >           $(XMLLINT) --noout --path $(dir $(xmldtd)) --dtdvalid
+> $(xmldtd) $@ ;\
+> >           else \
+> >           echo "$@ XML validation not run. Please install the xmllint
+> tool." ;\
+> >   fi
+> >
+> > I believe we should make refpolicy depend on host-libxml2 and force it
+> > to use the Buildroot version of xmllint by setting XMLLINT in the
+> > configuration step.
+> >
+> > Do the following fixes the issue[1] on your side?
+> >
+> >   diff --git a/package/refpolicy/refpolicy.mk b/package/refpolicy/
+> refpolicy.mk
+> >   index 1180f0d38bae..ecd8cf226b45 100644
+> >   --- a/package/refpolicy/refpolicy.mk
+> >   +++ b/package/refpolicy/refpolicy.mk
+> >   @@ -14,7 +14,8 @@ REFPOLICY_DEPENDENCIES =3D \
+> >           host-policycoreutils \
+> >           host-python3 \
+> >           host-setools \
+> >   -       host-gawk
+> >   +       host-gawk \
+> >   +       host-libxml2
+> >
+> >    ifeq ($(BR2_PACKAGE_REFPOLICY_CUSTOM_GIT),y)
+> >    REFPOLICY_VERSION =3D $(call
+> qstrip,$(BR2_PACKAGE_REFPOLICY_CUSTOM_REPO_VERSION))
+> >   @@ -30,6 +31,7 @@ endif
+> >    # Cannot use multiple threads to build the reference policy
+> >    REFPOLICY_MAKE =3D \
+> >           PYTHON=3D$(HOST_DIR)/usr/bin/python3 \
+> >   +       XMLLINT=3D$(LIBXML2_HOST_BINARY) \
+> >           TEST_TOOLCHAIN=3D$(HOST_DIR) \
+> >           $(TARGET_MAKE_ENV) \
+> >           $(MAKE1)
+> >
+> > (I also checked for other `test -x` conditions in the refpolicy
+> > Makefile; xmllint seems to be the only one).
+> >
+> > [1] "fix the issue" aka throw an error while adding modules without a
+> >     summary.
+> >
+> > Thanks,
+> > Antoine
+> >
+>
+
+
+--=20
+
+Jos=C3=A9.
+
+--0000000000002cc0e605cca5b003
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div dir=3D"ltr"><br></div><br><div class=3D"gmail_quote">=
+<div dir=3D"ltr" class=3D"gmail_attr">On Thu, Sep 23, 2021 at 11:33 AM Anto=
+ine Tenart &lt;<a href=3D"mailto:atenart@kernel.org">atenart@kernel.org</a>=
+&gt; wrote:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px =
+0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">Quot=
+ing Antoine Tenart (2021-09-23 09:59:46)<br>
+&gt; Quoting Jos=C3=A9 Pekkarinen (2021-09-23 08:26:02)<br>
+&gt; &gt;=C2=A0 On Wed, Sep 22, 2021 at 5:23 PM Antoine Tenart &lt;[1]<a hr=
+ef=3D"mailto:atenart@kernel.org" target=3D"_blank">atenart@kernel.org</a>&g=
+t;<br>
+&gt; &gt;=C2=A0 wrote:<br>
+&gt; &gt;<br>
+&gt; &gt;=C2=A0 =C2=A0 However I&#39;m surprised as my understanding was th=
+e summary was required<br>
+&gt; &gt;=C2=A0 =C2=A0 for the refpolicy configuration step to succeed (I d=
+id use a summary<br>
+&gt; &gt;=C2=A0 =C2=A0 for all my tests because of this). When removing a s=
+ummary from a module<br>
+&gt; &gt;=C2=A0 =C2=A0 I always get the following error, and the Buildroot =
+build stops.<br>
+&gt; &gt;<br>
+&gt; &gt;=C2=A0 =C2=A0 =C2=A0 doc/policy.xml:8376: element module: validity=
+ error : Element module<br>
+&gt; &gt;=C2=A0 =C2=A0 content does not follow the DTD, expecting (summary =
+, desc? , required?<br>
+&gt; &gt;=C2=A0 =C2=A0 , (interface | template)* , (bool | tunable)*), got =
+()<br>
+&gt; &gt;=C2=A0 =C2=A0 =C2=A0 Document doc/policy.xml does not validate aga=
+inst doc/policy.dtd<br>
+&gt; &gt;<br>
+&gt; &gt;=C2=A0 =C2=A0 Do you have an idea what made your build to succeed =
+even though you did<br>
+&gt; &gt;=C2=A0 =C2=A0 not have a summary in your module?<br>
+&gt; &gt;<br>
+&gt; &gt;=C2=A0 I believe it is validating to the summary prior to the modu=
+le,<br>
+&gt; &gt;=C2=A0 the one you put in metadata.xml, but not any internal summa=
+ry for<br>
+&gt; &gt;=C2=A0 the interface. This is how policy.xml looks like in a case =
+where I didn&#39;t<br>
+&gt; &gt;=C2=A0 apply the mitigation:<br>
+&gt; &gt;=C2=A0 &lt;layer name=3D&quot;buildroot&quot;&gt;<br>
+&gt; &gt;=C2=A0 &lt;summary&gt;Buildroot extra modules&lt;/summary&gt;<br>
+&gt; &gt;=C2=A0 &lt;module name=3D&quot;base&quot; filename=3D&quot;policy/=
+modules/buildroot/base.if&quot;&gt;<br>
+&gt; &gt;=C2=A0 &lt;/module&gt;<br>
+&gt; &gt;=C2=A0 &lt;module name=3D&quot;secure&quot; filename=3D&quot;polic=
+y/modules/buildroot/secure.if&quot;&gt;<br>
+&gt; &gt;=C2=A0 &lt;/module&gt;<br>
+&gt; &gt;=C2=A0 &lt;/layer&gt;<br>
+&gt; &gt;<br>
+&gt; &gt;=C2=A0 With this the modules.conf comes as:<br>
+&gt; &gt;<br>
+&gt; &gt;=C2=A0 # Layer: buildroot<br>
+&gt; &gt;=C2=A0 # Module: base<br>
+&gt; &gt;=C2=A0 #<br>
+&gt; &gt;=C2=A0 # Layer: buildroot<br>
+&gt; &gt;=C2=A0 # Module: secure<br>
+&gt; &gt;=C2=A0 #<br>
+&gt; &gt;<br>
+&gt; &gt;=C2=A0 There is a summary followed by a module, validation pass, b=
+ut<br>
+&gt; &gt;<br>
+&gt; &gt;=C2=A0 the module is not built. If I add the following lines in th=
+e build folder<br>
+&gt; &gt;=C2=A0 modules[1]<br>
+&gt; &gt;=C2=A0 and run make.conf:<br>
+&gt; &gt;=C2=A0 [1]=C2=A0refpolicy-2.20200818/policy/modules/buildroot/secu=
+re.if: ##<br>
+&gt; &gt;=C2=A0 &lt;summary&gt;External secure module.&lt;/summary&gt;<br>
+&gt; &gt;=C2=A0 refpolicy-2.20200818/policy/modules/buildroot/base.if: ##<b=
+r>
+&gt; &gt;=C2=A0 &lt;summary&gt;External base module.&lt;/summary&gt;<br>
+&gt; &gt;<br>
+&gt; &gt;=C2=A0 The policy.xml looks like:<br>
+&gt; &gt;<br>
+&gt; &gt;=C2=A0 &lt;layer name=3D&quot;buildroot&quot;&gt;<br>
+&gt; &gt;=C2=A0 &lt;summary&gt;Buildroot extra modules&lt;/summary&gt;<br>
+&gt; &gt;=C2=A0 &lt;module name=3D&quot;base&quot; filename=3D&quot;policy/=
+modules/buildroot/base.if&quot;&gt;<br>
+&gt; &gt;=C2=A0 &lt;summary&gt;External base modules.&lt;/summary&gt;<br>
+&gt; &gt;=C2=A0 &lt;/module&gt;<br>
+&gt; &gt;=C2=A0 &lt;module name=3D&quot;secure&quot; filename=3D&quot;polic=
+y/modules/buildroot/secure.if&quot;&gt;<br>
+&gt; &gt;=C2=A0 &lt;summary&gt;External secure os vm module.&lt;/summary&gt=
+;<br>
+&gt; &gt;=C2=A0 &lt;/module&gt;<br>
+&gt; &gt;=C2=A0 &lt;/layer&gt;<br>
+&gt; &gt;<br>
+&gt; &gt;=C2=A0 Then policy/modules.conf looks this way:<br>
+&gt; &gt;<br>
+&gt; &gt;=C2=A0 # Layer: buildroot<br>
+&gt; &gt;=C2=A0 # Module: base<br>
+&gt; &gt;=C2=A0 #<br>
+&gt; &gt;=C2=A0 # External base modules.<br>
+&gt; &gt;=C2=A0 # =C2=A0<br>
+&gt; &gt;=C2=A0 base =3D module<br>
+&gt; &gt;<br>
+&gt; &gt;=C2=A0 # Layer: buildroot<br>
+&gt; &gt;=C2=A0 # Module: secure<br>
+&gt; &gt;=C2=A0 #<br>
+&gt; &gt;=C2=A0 # External secure os vm module.<br>
+&gt; &gt;=C2=A0 # =C2=A0<br>
+&gt; &gt;=C2=A0 secure =3D module<br>
+&gt; &gt;<br>
+&gt; &gt;=C2=A0 And this produces the modules to get into the policy.32 fil=
+e.<br>
+&gt; &gt;=C2=A0 Does it makes any sense on your end?<br>
+&gt; <br>
+&gt; The above does not reproduce for me. But I might know what&#39;s going=
+ on:<br>
+&gt; do you have xmllint installed on your machine?<br>
+<br>
+Or not at /usr/bin/xmllint<br></blockquote><div><br></div></div><blockquote=
+ style=3D"margin:0 0 0 40px;border:none;padding:0px"><div class=3D"gmail_qu=
+ote"><div>It was built in a container without it, I&#39;m testing the patch=
+, bear</div></div></blockquote>for a bit.<div><br></div><blockquote style=
+=3D"margin:0 0 0 40px;border:none;padding:0px"><div>Jos=C3=A9.</div><div>=
+=C2=A0</div></blockquote><div><div class=3D"gmail_quote"><blockquote class=
+=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rg=
+b(204,204,204);padding-left:1ex">
+<br>
+&gt; If not, the validation step is skipped but the build is not stopped,<b=
+r>
+&gt; which would explain the difference in behaviour we have between our<br=
+>
+&gt; tests:<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0Makefile:453:<br>
+&gt;=C2=A0 =C2=A0$(verbose) if test -x $(XMLLINT) &amp;&amp; test -f $(xmld=
+td); then \<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0$(XMLLINT) --noout --path $(di=
+r $(xmldtd)) --dtdvalid $(xmldtd) $@ ;\<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0else \<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0echo &quot;$@ XML validation n=
+ot run. Please install the xmllint tool.&quot; ;\<br>
+&gt;=C2=A0 =C2=A0fi<br>
+&gt; <br>
+&gt; I believe we should make refpolicy depend on host-libxml2 and force it=
+<br>
+&gt; to use the Buildroot version of xmllint by setting XMLLINT in the<br>
+&gt; configuration step.<br>
+&gt; <br>
+&gt; Do the following fixes the issue[1] on your side?<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0diff --git a/package/refpolicy/<a href=3D"http://refpolicy=
+.mk" rel=3D"noreferrer" target=3D"_blank">refpolicy.mk</a> b/package/refpol=
+icy/<a href=3D"http://refpolicy.mk" rel=3D"noreferrer" target=3D"_blank">re=
+fpolicy.mk</a><br>
+&gt;=C2=A0 =C2=A0index 1180f0d38bae..ecd8cf226b45 100644<br>
+&gt;=C2=A0 =C2=A0--- a/package/refpolicy/<a href=3D"http://refpolicy.mk" re=
+l=3D"noreferrer" target=3D"_blank">refpolicy.mk</a><br>
+&gt;=C2=A0 =C2=A0+++ b/package/refpolicy/<a href=3D"http://refpolicy.mk" re=
+l=3D"noreferrer" target=3D"_blank">refpolicy.mk</a><br>
+&gt;=C2=A0 =C2=A0@@ -14,7 +14,8 @@ REFPOLICY_DEPENDENCIES =3D \<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0host-policycoreutils \<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0host-python3 \<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0host-setools \<br>
+&gt;=C2=A0 =C2=A0-=C2=A0 =C2=A0 =C2=A0 =C2=A0host-gawk<br>
+&gt;=C2=A0 =C2=A0+=C2=A0 =C2=A0 =C2=A0 =C2=A0host-gawk \<br>
+&gt;=C2=A0 =C2=A0+=C2=A0 =C2=A0 =C2=A0 =C2=A0host-libxml2<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 ifeq ($(BR2_PACKAGE_REFPOLICY_CUSTOM_GIT),y)<br>
+&gt;=C2=A0 =C2=A0 REFPOLICY_VERSION =3D $(call qstrip,$(BR2_PACKAGE_REFPOLI=
+CY_CUSTOM_REPO_VERSION))<br>
+&gt;=C2=A0 =C2=A0@@ -30,6 +31,7 @@ endif<br>
+&gt;=C2=A0 =C2=A0 # Cannot use multiple threads to build the reference poli=
+cy<br>
+&gt;=C2=A0 =C2=A0 REFPOLICY_MAKE =3D \<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0PYTHON=3D$(HOST_DIR)/usr/bin/p=
+ython3 \<br>
+&gt;=C2=A0 =C2=A0+=C2=A0 =C2=A0 =C2=A0 =C2=A0XMLLINT=3D$(LIBXML2_HOST_BINAR=
+Y) \<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0TEST_TOOLCHAIN=3D$(HOST_DIR) \=
+<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0$(TARGET_MAKE_ENV) \<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0$(MAKE1)<br>
+&gt; <br>
+&gt; (I also checked for other `test -x` conditions in the refpolicy<br>
+&gt; Makefile; xmllint seems to be the only one).<br>
+&gt; <br>
+&gt; [1] &quot;fix the issue&quot; aka throw an error while adding modules =
+without a<br>
+&gt;=C2=A0 =C2=A0 =C2=A0summary.<br>
+&gt; <br>
+&gt; Thanks,<br>
+&gt; Antoine<br>
+&gt; <br>
+</blockquote></div><br clear=3D"all"><div><br></div>-- <br><div dir=3D"ltr"=
+ class=3D"gmail_signature"><div dir=3D"ltr"><blockquote style=3D"margin:0px=
+ 0px 0px 40px;border:none;padding:0px">Jos=C3=A9.</blockquote></div></div><=
+/div></div>
+
+--0000000000002cc0e605cca5b003--
+
+--===============6268195038813027679==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@lists.buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============6268195038813027679==--
