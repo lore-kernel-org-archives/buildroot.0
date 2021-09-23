@@ -2,64 +2,95 @@ Return-Path: <SRS0=dUZC=ON=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CB7F3C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 23 Sep 2021 19:55:29 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 68886C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 23 Sep 2021 20:05:22 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 05A0B61107
-	for <buildroot@archiver.kernel.org>; Thu, 23 Sep 2021 19:55:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 05A0B61107
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
+	by mail.kernel.org (Postfix) with ESMTPS id C2C2E61107
+	for <buildroot@archiver.kernel.org>; Thu, 23 Sep 2021 20:05:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C2C2E61107
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9605B400B5;
-	Thu, 23 Sep 2021 19:55:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 94FEE80F75;
+	Thu, 23 Sep 2021 20:05:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TkoTxrAPVvbS; Thu, 23 Sep 2021 19:55:27 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 5a2xWcKtdnva; Thu, 23 Sep 2021 20:05:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 90E55400BE;
-	Thu, 23 Sep 2021 19:55:26 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 98CFA1BF2B8
- for <buildroot@lists.busybox.net>; Thu, 23 Sep 2021 19:55:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9FCCC840BA;
+	Thu, 23 Sep 2021 20:05:19 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 72D431BF3EB
+ for <buildroot@lists.busybox.net>; Thu, 23 Sep 2021 20:05:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8815E406EB
- for <buildroot@lists.busybox.net>; Thu, 23 Sep 2021 19:55:24 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6F2CE840BA
+ for <buildroot@lists.busybox.net>; Thu, 23 Sep 2021 20:05:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KbCHMaU23kpB for <buildroot@lists.busybox.net>;
- Thu, 23 Sep 2021 19:55:22 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 97D1C406E2
- for <buildroot@buildroot.org>; Thu, 23 Sep 2021 19:55:22 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay10.mail.gandi.net (Postfix) with ESMTPSA id D3C97240009;
- Thu, 23 Sep 2021 19:55:18 +0000 (UTC)
-Date: Thu, 23 Sep 2021 21:55:17 +0200
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Arnout Vandecappelle <arnout@mind.be>
-Message-ID: <20210923215517.1c2bd3f8@windsurf>
-In-Reply-To: <ad51da8c-2b94-3969-b26c-2d8b168d198b@mind.be>
-References: <20210908081630.3404221-1-kory.maincent@bootlin.com>
- <ecec6557-9d20-134b-497c-e6c7e55deee6@mind.be>
- <20210919150904.04051568@windsurf>
- <f8756bf0-c955-f301-299e-f5d8c0aabe04@mind.be>
- <20210920140127.1de86c50@windsurf>
- <ad51da8c-2b94-3969-b26c-2d8b168d198b@mind.be>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ujyfAEYBd8Th for <buildroot@lists.busybox.net>;
+ Thu, 23 Sep 2021 20:05:12 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com
+ [IPv6:2a00:1450:4864:20::536])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1AF4080F75
+ for <buildroot@buildroot.org>; Thu, 23 Sep 2021 20:05:11 +0000 (UTC)
+Received: by mail-ed1-x536.google.com with SMTP id v22so26471392edd.11
+ for <buildroot@buildroot.org>; Thu, 23 Sep 2021 13:05:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :references:from:organization:in-reply-to:content-transfer-encoding;
+ bh=QS2lxSGXWyQtst1LGUSWi/wxgLcngHxmp88J4Dj0+wc=;
+ b=CpKAKEWjdBO7UEAH/ZuCACB/wNjIgUgTIbqAstMjx9ovNpEoGGCwUw4KVo9BrV/JqE
+ KE9wK4Gnr+IjDYRBLGFx5B+fkCTNLioYAe0ImhTTwZy508x9Yic7rbbVoyVLGGwnZTOr
+ ArBNFrq9LUfYOY+yM13KKhNDFJOpCtHRYzt6lIdv+0SCGyhhvGO0UWm7wO5NiIYxjcEy
+ sIpnuCJJgl2mXKnbqZh0UCtGsi7W7Bg0HKvRcapI5WbKA8TTzirQDkGK0eLl3KlhrL6B
+ fjg2dz5yrKdugCChHS4EA4TNtTAtaHDCJKWA2fZuZjx5VtAD3hu5w9AI3Za1e06WOm8T
+ NGew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=QS2lxSGXWyQtst1LGUSWi/wxgLcngHxmp88J4Dj0+wc=;
+ b=nvOWCXxmuIxrzBgLOeXPaEox34LwYT1V4N74JO/ryJfkGKepTNS0AgD9gksCxQ8HP9
+ KP4Veta7LD9njIhE95ur3m8ujLFhkZmUc6GPALevPW9bjmTI3mRC5TsosQLHIEfu5jLq
+ qEA/jtegbsRX2g0/FCf4V9nDMaQHDGW88Bzu9sChJ0r1Zp73coJgPG3tFSQoeuj4ctfo
+ B66WEie94e2DS5br9Q4FjpRk5cBJ6+ZWuYSBhfRSkdQs9SRAH5+5zPYNlBGTvrPg1Tg1
+ 6iuw1dB53JcIiaPBY8CMNI5asHO4pvqcjrPI1dhqa8lNM69fI8M57nBaKYmvUBO6PaXd
+ jlRA==
+X-Gm-Message-State: AOAM53187rwCbwgxbWhdTpcmAUNKTsj7P4ACiSWZC5DuxHL11xQUrs0a
+ BF9dlXq800Nqb7dN4J08Gehn/w==
+X-Google-Smtp-Source: ABdhPJw9mwnV13qPNtMkT88eyd3KCe1k/W1TL0KsCWKi6LR/x0XE/6mL9iuJTveNtF26RAkpTROAbg==
+X-Received: by 2002:a17:906:30d6:: with SMTP id
+ b22mr7378100ejb.442.1632427509930; 
+ Thu, 23 Sep 2021 13:05:09 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id j2sm4240862edt.0.2021.09.23.13.05.08
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Thu, 23 Sep 2021 13:05:09 -0700 (PDT)
+Message-ID: <9d059656-1d10-51e7-c337-34322fe3f3cd@mind.be>
+Date: Thu, 23 Sep 2021 22:05:07 +0200
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/arm-gnu-a-toolchain: bump to
- version 10.3-2021.07
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.1.0
+Content-Language: en-GB
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+References: <20210919121140.2323338-1-fontaine.fabrice@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20210919121140.2323338-1-fontaine.fabrice@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package/gstd: needs gst-debug
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,48 +103,48 @@ List-Post: <mailto:buildroot@lists.buildroot.org>
 List-Help: <mailto:buildroot-request@lists.buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@lists.buildroot.org?subject=subscribe>
-Cc: Kory Maincent <kory.maincent@bootlin.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-SGVsbG8gQXJub3V0LAoKT24gTW9uLCAyMCBTZXAgMjAyMSAyMDo1MjoyOSArMDIwMApBcm5vdXQg
-VmFuZGVjYXBwZWxsZSA8YXJub3V0QG1pbmQuYmU+IHdyb3RlOgoKPiA+IEkgdGhpbmsgdGhlcmUn
-cyBtb3JlIHRoYW4gdGhhdCwgdGhlcmUgaXMgYSBjX25hbm8gbGlicmFyeSBpbnRlZ3JhdGVkIGlu
-Cj4gPiB0aGlzIHRvb2xjaGFpbi4gSSdtIG5vdCBzdXJlIHdoYXQgaXQgaXMsIGJ1dCB0aGUgQ29y
-dGV4LU00IGNvZGUgd2UncmUKPiA+IGJ1aWxkaW5nIGxpbmtzIGFnYWluc3QgdGhhdCBsaWJyYXJ5
-IChJIGhhdmVuJ3QgaW52ZXN0aWdhdGVkIGZ1cnRoZXIgZm9yCj4gPiBub3cpLiAgCj4gCj4gICBP
-YnZpb3VzbHksIEkgY2FuJ3QgY29tbWVudCBvbiBzb21lIG15c3RlcmlvdXMgb3V0LW9mLXRyZWUg
-cGFja2FnZSB5b3UgaGF2ZS4uLgoKSXQncyBub3QgdGhhdCBteXN0ZXJpb3VzIGluIGZhY3QsIHdl
-IGFyZSBidWlsZGluZyB0aGUgZXhhbXBsZXMgcHJvdmlkZWQKYnkgU1QgZm9yIHRoZSBDb3J0ZXgt
-TTQgaW5jbHVkZWQgaW4gdGhlaXIgU1RNMzJNUDE1Ny4gSSB3b3VsZCBpZGVhbGx5Cmxpa2UgdGhp
-cyBwYWNrYWdlIHRvIGJlIHN1Ym1pdHRlZCB0byB1cHN0cmVhbSBCdWlsZHJvb3QsIGJ1dCBpdCBo
-YXMKc29tZSBub3Qgc28gbmljZSBhc3BlY3RzOiB0aGVzZSBleGFtcGxlcyBhcmUgaW1wbGVtZW50
-ZWQgdXNpbmcgc29tZQpmYW5jeSBJREUsIHdoaWNoIHNhdmVzIHNvbWUgInByb2plY3QgZmlsZXMi
-LCBhbmQgeW91IGNhbiBvbmx5IGJ1aWxkIHRoZQpleGFtcGxlcyB1c2luZyB0aGUgSURFLiBUaGUg
-WW9jdG8gcGFja2FnaW5nLCB3aGljaCB3ZSBoYXZlIHJlcGxpY2F0ZWQKaW4gb3VyIEJ1aWxkcm9v
-dCBwYWNrYWdpbmcsIGNvbnNpc3RzIGluIGEgTWFrZWZpbGUgKyBzb21lIHNjcmlwdGluZwp0aGF0
-IHBhcnNlcyB0aG9zZSAicHJvamVjdCBmaWxlcyIgdG8gZ2VuZXJhdGUgdGhlIGZpbmFsIE1ha2Vm
-aWxlcyB0bwpidWlsZCB0aG9zZSBleGFtcGxlcyB3aXRob3V0IHRoZSBkYW1uIElERS4KClllYWgs
-IG5vdCBncmVhdCA6LS8KCj4gICBJZiB0aGF0IHBhY2thZ2UgKHdoaWNoIEkgZ3Vlc3Mgd2lsbCBl
-dmVudHVhbGx5IGJlIHVwc3RyZWFtZWQpIGxpbmtzIHdpdGggCj4gYW55dGhpbmcgdGhhdCBpcyBw
-YXJ0IG9mIHRoZSB0b29sY2hhaW4sIHRoYXQncyBzdGlsbCBmaW5lIGFzIGxvbmcgYXMgdGhlcmUn
-cyBubyAKPiBvdGhlciBwYWNrYWdlIChpLmUuIEFURikgbGlua3Mgd2l0aCBpdCAoYW5kIGV4cGVj
-dHMgYSBkaWZmZXJlbnQgdGFyZ2V0IAo+IGFyY2hpdGVjdHVyZSkuCgpBcyB5b3UgY2FuIHNlZSBm
-cm9tIGFib3ZlLCBpdCB3b24ndCBsaW5rIHdpdGggYW55IG90aGVyIHRoaW5nOiBpdCdzCmJhcmUt
-bWV0YWwgY29kZSBmb3IgYSBDb3J0ZXgtTTQgbWljcm8tY29udHJvbGxlci4KCj4gICBIb3dldmVy
-LCBpZiB0aGUgaW50ZW50aW9uIGlzIHRvIHVzZSB0aGUgdG9vbGNoYWluIGZvciBhIENvcnRleC1N
-IGFuZCB5b3UgbmVlZCAKPiBhbnkgb2YgaXRzIGxpYnJhcmllcywgaXQncyBwcm9iYWJseSBhIGxv
-dCBjbGVhbmVyIHRvIHNpbXBseSBoYXZlIGEgc2VwYXJhdGUgCj4gYXJtLWdudS1hLXRvb2xjaGFp
-biBhbmQgYXJtLWdudS1ybS10b29sY2hhaW4uIEl0J3MgZGVmaW5pdGVseSBhIGJpdCB3ZWlyZCB0
-byAKPiBoYXZlIGEgcGFja2FnZSAiYXJtLWdudS1hLXRvb2xjaGFpbiIgdGhhdCBhY3R1YWxseSB1
-c2VzIHRoZSAtcm0gb25lLi4uCgpZZXMsIEkgYWdyZWUgdGhhdCB3ZSBzaG91bGQgcHJvYmFibHkg
-YWRkIGEgYXJtLWdudS1ybS10b29sY2hhaW4gcGFja2FnZQpzaWRlLWJ5LXNpZGUgd2l0aCB0aGUg
-YXJtLWdudS1hLXRvb2xjaGFpbi4gS8O2cnk6IHNvbWV0aGluZyBmb3IgeW91IHRvCmxvb2sgYXQs
-IHBlcmhhcHM/IDotKQoKQmVzdCByZWdhcmRzLAoKVGhvbWFzIFBldGF6em9uaQotLSAKVGhvbWFz
-IFBldGF6em9uaSwgY28tb3duZXIgYW5kIENFTywgQm9vdGxpbgpFbWJlZGRlZCBMaW51eCBhbmQg
-S2VybmVsIGVuZ2luZWVyaW5nIGFuZCB0cmFpbmluZwpodHRwczovL2Jvb3RsaW4uY29tCl9fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWls
-aW5nIGxpc3QKYnVpbGRyb290QGxpc3RzLmJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWls
-ZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+
+
+On 19/09/2021 14:11, Fabrice Fontaine wrote:
+> gstd needs gst-debug since its addition in commit
+> 02ea01ea22e94ef353a638bf16f62f6e3ed1208e:
+> 
+> /home/giuliobenetti/autobuild/run/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/riscv64-buildroot-linux-gnu/10.2.0/../../../../riscv64-buildroot-linux-gnu/bin/ld: gstd/libgstd-core.so.0.13.0.p/gstd_pipeline.c.o: in function `gstd_pipeline_get_property':
+> gstd_pipeline.c:(.text+0x5d8): undefined reference to `gst_debug_bin_to_dot_data'
+> 
+> Fixes:
+>   - http://autobuild.buildroot.org/results/2f4de1b229df47d9bfd5a2576fd59da2ad45aeb6
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+  Applied to master, thanks.
+
+  Regards,
+  Arnout
+
+> ---
+>   package/gstreamer1/gstd/Config.in | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/gstreamer1/gstd/Config.in b/package/gstreamer1/gstd/Config.in
+> index 14cda7c45f..f36d25f11f 100644
+> --- a/package/gstreamer1/gstd/Config.in
+> +++ b/package/gstreamer1/gstd/Config.in
+> @@ -3,6 +3,7 @@ config BR2_PACKAGE_GSTD
+>   	depends on BR2_USE_WCHAR # libglib2 -> gettext, libsoup
+>   	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2, libsoup
+>   	depends on BR2_USE_MMU # libdaemon, libglib2
+> +	select BR2_PACKAGE_GSTREAMER1_GST_DEBUG # gst_debug_bin_to_dot_data
+>   	select BR2_PACKAGE_JANSSON
+>   	select BR2_PACKAGE_JSON_GLIB
+>   	select BR2_PACKAGE_LIBDAEMON
+> 
+_______________________________________________
+buildroot mailing list
+buildroot@lists.buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
