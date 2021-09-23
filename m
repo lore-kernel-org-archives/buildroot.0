@@ -2,58 +2,60 @@ Return-Path: <SRS0=dUZC=ON=lists.buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B47A6C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 23 Sep 2021 15:57:34 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A32EC433EF
+	for <buildroot@archiver.kernel.org>; Thu, 23 Sep 2021 15:57:46 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id EE18260EDF
-	for <buildroot@archiver.kernel.org>; Thu, 23 Sep 2021 15:57:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org EE18260EDF
+	by mail.kernel.org (Postfix) with ESMTPS id B51CB60EDF
+	for <buildroot@archiver.kernel.org>; Thu, 23 Sep 2021 15:57:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B51CB60EDF
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=lists.buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9764D84017;
-	Thu, 23 Sep 2021 15:57:33 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ItjwWntHzV_p; Thu, 23 Sep 2021 15:57:32 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E462483FB1;
-	Thu, 23 Sep 2021 15:57:31 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3A4E21BF3C4
- for <buildroot@lists.busybox.net>; Thu, 23 Sep 2021 15:57:31 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 28DA7606B1
- for <buildroot@lists.busybox.net>; Thu, 23 Sep 2021 15:57:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5DA91607BA;
+	Thu, 23 Sep 2021 15:57:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id a1-tDfjT7BZz for <buildroot@lists.busybox.net>;
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ilJa6BVHPGyf; Thu, 23 Sep 2021 15:57:44 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 74D26606A6;
+	Thu, 23 Sep 2021 15:57:43 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 476071BF9C2
+ for <buildroot@lists.busybox.net>; Thu, 23 Sep 2021 15:57:31 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 37280406DE
+ for <buildroot@lists.busybox.net>; Thu, 23 Sep 2021 15:57:31 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3fwj0Ua9hyT3 for <buildroot@lists.busybox.net>;
  Thu, 23 Sep 2021 15:57:30 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
 Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
  [217.70.183.196])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E102760692
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E18264065A
  for <buildroot@buildroot.org>; Thu, 23 Sep 2021 15:57:29 +0000 (UTC)
 Received: (Authenticated sender: kory.maincent@bootlin.com)
- by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 9CF77E000F;
- Thu, 23 Sep 2021 15:57:26 +0000 (UTC)
+ by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 31F52E000E;
+ Thu, 23 Sep 2021 15:57:27 +0000 (UTC)
 From: Kory Maincent <kory.maincent@bootlin.com>
 To: buildroot@buildroot.org
-Date: Thu, 23 Sep 2021 17:57:19 +0200
-Message-Id: <20210923155726.87851-1-kory.maincent@bootlin.com>
+Date: Thu, 23 Sep 2021 17:57:20 +0200
+Message-Id: <20210923155726.87851-2-kory.maincent@bootlin.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210923155726.87851-1-kory.maincent@bootlin.com>
+References: <20210923155726.87851-1-kory.maincent@bootlin.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v3 0/7] Add support for ISO9660 image compatible
- with Legacy and EFI BIOS
+Subject: [Buildroot] [PATCH v3 1/7] board, boot,
+ package: remove usage of startup.nsh in EFI partition
 X-BeenThere: buildroot@lists.buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,90 +74,159 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@lists.buildroot.org
 Sender: "buildroot" <buildroot-bounces@lists.buildroot.org>
 
-This series of patches aims to support the generation of an ISO9660 hybrid
-image compatible with Legacy BIOS and EFI BIOS. To implement this, we need
-to improve the grub2 package and modify the ISO9660 image support
+The startup.nsh file is useless to boot EFI payloads. We just need to
+follow the naming detection specified in the UEFI spec.
+The EFI payload need to be placed in the boot/efi folder in the EFI partition
+and follow the architecture naming as described below:
+32bit : bootia32.efi
+x64 : bootx64.efi
+aarch32 : bootarm.efi
+aarch64 : bootaa64.efi
 
-Grub2 was written to build only one configuration at a time. For the hybrid
-image we need to have several configuration of Grub2 in the same image.
-For example we might want to have Grub2 built for BIOS, EFI 32 bits and EFI
-64 bits in the same image. To support this, we chose to fill a list of
-configuration name tuples, and then build each Grub2 configuration in a
-separate build-$(tuple) folder. It seems simpler than having multiple
-duplicated grub2 packages for each possible configuration.
+This naming is already right in the packages involved (systemd, grub2,
+gummiboot), therefore we just need to drop the generation of the
+startup.nsh file.
 
-The generation of ISO9660 image was only supporting bootloaders based on
-Legacy BIOS boot. We first change the ISO9660 image generation to use
-xorriso instead of genimageiso, in order to be able to build an image
-compatible with both legacy and EFI BIOS. Then we add the generation of an
-EFI System Partition in iso9660 so that we can install the EFI-compatible
-bootloader."
+The usage of the startup.nsh in genimage is also dropped to avoid errors in
+the image generation.
 
-In detail:
+Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
+---
+ board/aarch64-efi/genimage-efi.cfg   | 3 ---
+ board/intel/galileo/genimage.cfg     | 3 ---
+ board/minnowboard/genimage.cfg       | 3 ---
+ board/pc/genimage-efi.cfg            | 3 ---
+ board/pc/post-build.sh               | 2 +-
+ board/qemu/aarch64-sbsa/genimage.cfg | 3 ---
+ boot/grub2/grub2.mk                  | 8 --------
+ boot/gummiboot/gummiboot.mk          | 2 --
+ package/systemd/systemd.mk           | 2 --
+ 9 files changed, 1 insertion(+), 28 deletions(-)
 
- - PATCH 1 drop the usage of the useless startup.nsh file
- - PATCH 2 implements simultaneous build of GRUB for different configurations
- - PATCH 3 implements the generation of ISO9660 image booting on a EFI BIOS
- - PATCH 4 implements the generation of hybrid image compatible with Legacy
-   and EFI BIOS
- - PATCH 5 updates the encoding of the text return from testing emulator
- - PATCH 6 add support to i386 architecture to edk2 package
- - PATCH 7 updates iso9660 tests and implements a test for EFI image and
-   hybrid image.
-
-Changes in v2:
-- Update the typo of Grub2 configuration tuples to make more legible code
-- Expand explanation in few commit messages.
-- Fix typos.
-- Fix Grub2 Legacy builtin configurations.
-- Add mkfs and mcopy parameters in iso9660 package to build reproducible
-  images.
-- Remove the implementation of host-efi-bios package.
-- Add support for i386 architecture to edk2 package.
-
-Changes in v3:
-- Add a patch to drop all the startup.nsh usage in Buildroot. The EFI
-  payload naming is sufficient to choose the right boot payload.
-- Update the Grub2 tuples management to have a more readable package.
-- Fix ISO9660 EFI image generation options.
-- Fix Kconfig options between EFI and BIOS bootloader in the ISO9660
-  package.
-
-Thanks in advance for your review and feedback
-
-Kory Maincent (7):
-  board, boot, package: remove usage of startup.nsh in EFI partition
-  boot/grub2: add support to build multiple Grub2 configurations in the
-    same build
-  fs/iso9660: add support to Grub EFI bootloader in the image
-  fs/iso9660: add support for hybrid image using Grub bootloader on BIOS
-    and EFI
-  support/testing/infra/emulator.py: update encoding when calling qemu
-  boot/edk2: add support to i386 architecture
-  support/testing/tests/fs/test_iso9660.py: add support to test using
-    EFI BIOS
-
- Config.in.legacy                         |  24 +++
- board/aarch64-efi/genimage-efi.cfg       |   3 -
- board/intel/galileo/genimage.cfg         |   3 -
- board/minnowboard/genimage.cfg           |   3 -
- board/pc/genimage-efi.cfg                |   3 -
- board/pc/post-build.sh                   |   2 +-
- board/qemu/aarch64-sbsa/genimage.cfg     |   3 -
- boot/edk2/Config.in                      |  12 +-
- boot/edk2/edk2.mk                        |  12 +-
- boot/grub2/Config.in                     |  53 +++++--
- boot/grub2/grub2.mk                      | 181 +++++++++++++----------
- boot/gummiboot/gummiboot.mk              |   2 -
- fs/iso9660/Config.in                     |  27 +++-
- fs/iso9660/iso9660.mk                    |  64 +++++++-
- package/systemd/systemd.mk               |   2 -
- support/testing/conf/grub2-efi.cfg       |   2 +
- support/testing/infra/emulator.py        |   2 +-
- support/testing/tests/fs/test_iso9660.py |  80 +++++++++-
- 18 files changed, 342 insertions(+), 136 deletions(-)
- create mode 100644 support/testing/conf/grub2-efi.cfg
-
+diff --git a/board/aarch64-efi/genimage-efi.cfg b/board/aarch64-efi/genimage-efi.cfg
+index 34cca1d64e..2daa70c361 100644
+--- a/board/aarch64-efi/genimage-efi.cfg
++++ b/board/aarch64-efi/genimage-efi.cfg
+@@ -1,8 +1,5 @@
+ image efi-part.vfat {
+   vfat {
+-    file startup.nsh {
+-      image = "efi-part/startup.nsh"
+-    }
+     file EFI {
+       image = "efi-part/EFI"
+     }
+diff --git a/board/intel/galileo/genimage.cfg b/board/intel/galileo/genimage.cfg
+index 31add21e67..b930c0deb9 100644
+--- a/board/intel/galileo/genimage.cfg
++++ b/board/intel/galileo/genimage.cfg
+@@ -1,9 +1,6 @@
+ # Create an image of the efi partition
+ image efi-part.vfat {
+ 	vfat {
+-		file startup.nsh {
+-			image = "efi-part/startup.nsh"
+-		}
+ 		file EFI {
+ 			image = "efi-part/EFI"
+ 		}
+diff --git a/board/minnowboard/genimage.cfg b/board/minnowboard/genimage.cfg
+index c5b07179b4..521385aadd 100644
+--- a/board/minnowboard/genimage.cfg
++++ b/board/minnowboard/genimage.cfg
+@@ -1,9 +1,6 @@
+ # Create an image of the efi partition
+ image efi-part.vfat {
+ 	vfat {
+-		file startup.nsh {
+-			image = "efi-part/startup.nsh"
+-		}
+ 		file EFI {
+ 			image = "efi-part/EFI"
+ 		}
+diff --git a/board/pc/genimage-efi.cfg b/board/pc/genimage-efi.cfg
+index ec7e85b06c..34befb7d69 100644
+--- a/board/pc/genimage-efi.cfg
++++ b/board/pc/genimage-efi.cfg
+@@ -1,8 +1,5 @@
+ image efi-part.vfat {
+   vfat {
+-    file startup.nsh {
+-      image = "efi-part/startup.nsh"
+-    }
+     file EFI {
+       image = "efi-part/EFI"
+     }
+diff --git a/board/pc/post-build.sh b/board/pc/post-build.sh
+index ed37b3b87e..db23795e27 100755
+--- a/board/pc/post-build.sh
++++ b/board/pc/post-build.sh
+@@ -5,7 +5,7 @@ set -e
+ BOARD_DIR=$(dirname "$0")
+ 
+ # Detect boot strategy, EFI or BIOS
+-if [ -f "$BINARIES_DIR/efi-part/startup.nsh" ]; then
++if [ -d "$BINARIES_DIR/efi-part/" ]; then
+     cp -f "$BOARD_DIR/grub-efi.cfg" "$BINARIES_DIR/efi-part/EFI/BOOT/grub.cfg"
+ else
+     cp -f "$BOARD_DIR/grub-bios.cfg" "$TARGET_DIR/boot/grub/grub.cfg"
+diff --git a/board/qemu/aarch64-sbsa/genimage.cfg b/board/qemu/aarch64-sbsa/genimage.cfg
+index 285b308d90..c75d9fcca1 100644
+--- a/board/qemu/aarch64-sbsa/genimage.cfg
++++ b/board/qemu/aarch64-sbsa/genimage.cfg
+@@ -1,8 +1,5 @@
+ image efi-part.vfat {
+   vfat {
+-    file startup.nsh {
+-      image = "efi-part/startup.nsh"
+-    }
+     file EFI {
+       image = "efi-part/EFI"
+     }
+diff --git a/boot/grub2/grub2.mk b/boot/grub2/grub2.mk
+index 52e9199ae9..ad2edf17aa 100644
+--- a/boot/grub2/grub2.mk
++++ b/boot/grub2/grub2.mk
+@@ -168,13 +168,5 @@ define GRUB2_INSTALL_IMAGES_CMDS
+ 	$(GRUB2_IMAGE_INSTALL_ELTORITO)
+ endef
+ 
+-ifeq ($(GRUB2_PLATFORM),efi)
+-define GRUB2_EFI_STARTUP_NSH
+-	echo $(notdir $(GRUB2_IMAGE)) > \
+-		$(BINARIES_DIR)/efi-part/startup.nsh
+-endef
+-GRUB2_POST_INSTALL_IMAGES_HOOKS += GRUB2_EFI_STARTUP_NSH
+-endif
+-
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+diff --git a/boot/gummiboot/gummiboot.mk b/boot/gummiboot/gummiboot.mk
+index 748e87030e..eb1f3da78c 100644
+--- a/boot/gummiboot/gummiboot.mk
++++ b/boot/gummiboot/gummiboot.mk
+@@ -32,8 +32,6 @@ GUMMIBOOT_CONF_OPTS = \
+ define GUMMIBOOT_INSTALL_IMAGES_CMDS
+ 	$(INSTALL) -D -m 0644 $(@D)/gummiboot$(GUMMIBOOT_IMGARCH).efi \
+ 		$(BINARIES_DIR)/efi-part/EFI/BOOT/boot$(GUMMIBOOT_IMGARCH).efi
+-	echo "boot$(GUMMIBOOT_IMGARCH).efi" > \
+-		$(BINARIES_DIR)/efi-part/startup.nsh
+ 	$(INSTALL) -D -m 0644 boot/gummiboot/loader.conf \
+ 		$(BINARIES_DIR)/efi-part/loader/loader.conf
+ 	$(INSTALL) -D -m 0644 boot/gummiboot/buildroot.conf \
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 5a76f2f246..c403896759 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -514,8 +514,6 @@ SYSTEMD_BOOT_EFI_ARCH = $(call qstrip,$(BR2_PACKAGE_SYSTEMD_BOOT_EFI_ARCH))
+ define SYSTEMD_INSTALL_BOOT_FILES
+ 	$(INSTALL) -D -m 0644 $(@D)/build/src/boot/efi/systemd-boot$(SYSTEMD_BOOT_EFI_ARCH).efi \
+ 		$(BINARIES_DIR)/efi-part/EFI/BOOT/boot$(SYSTEMD_BOOT_EFI_ARCH).efi
+-	echo "boot$(SYSTEMD_BOOT_EFI_ARCH).efi" > \
+-		$(BINARIES_DIR)/efi-part/startup.nsh
+ 	$(INSTALL) -D -m 0644 $(SYSTEMD_PKGDIR)/boot-files/loader.conf \
+ 		$(BINARIES_DIR)/efi-part/loader/loader.conf
+ 	$(INSTALL) -D -m 0644 $(SYSTEMD_PKGDIR)/boot-files/buildroot.conf \
 -- 
 2.25.1
 
