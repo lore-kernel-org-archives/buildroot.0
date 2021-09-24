@@ -2,83 +2,71 @@ Return-Path: <SRS0=IJqM=OO=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E3113C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 24 Sep 2021 20:28:37 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 56DF2C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 24 Sep 2021 21:27:13 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 23E26611C8
-	for <buildroot@archiver.kernel.org>; Fri, 24 Sep 2021 20:28:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 23E26611C8
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id 51F7B61038
+	for <buildroot@archiver.kernel.org>; Fri, 24 Sep 2021 21:27:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 51F7B61038
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=benettiengineering.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DE763402F1;
-	Fri, 24 Sep 2021 20:28:36 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D4AB4402C3;
+	Fri, 24 Sep 2021 21:27:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0XVBF7qUy3kD; Fri, 24 Sep 2021 20:28:36 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3937040294;
-	Fri, 24 Sep 2021 20:28:35 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id DCB041BF865
- for <buildroot@lists.busybox.net>; Fri, 24 Sep 2021 20:28:33 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C7FFB400D4
- for <buildroot@lists.busybox.net>; Fri, 24 Sep 2021 20:28:32 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kfakHoPnLd5K for <buildroot@lists.busybox.net>;
- Fri, 24 Sep 2021 20:28:32 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com
- [IPv6:2a00:1450:4864:20::134])
- by smtp2.osuosl.org (Postfix) with ESMTPS id EF80040168
- for <buildroot@buildroot.org>; Fri, 24 Sep 2021 20:28:31 +0000 (UTC)
-Received: by mail-lf1-x134.google.com with SMTP id b20so45402089lfv.3
- for <buildroot@buildroot.org>; Fri, 24 Sep 2021 13:28:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc:content-transfer-encoding;
- bh=RFLAHWwseNcjj6pKJQJ7lalWp6sz80+4/RojJihUraY=;
- b=Y/Z181yX7hVRgsola9BBK9Fi4wHFslvsMHwCxu/TE798ITeJung9OTTKrk2YWQJAVf
- pwa/LpP9zdb0DgArYDutKWpmzpbHq8D3i4IVZfYcmf/ZiKDiJ/oBu+9vn2jO7hBOlj7H
- cuQWDePdtE1dYcEO1cNSM5DXLm5RlxODU1t4r86uxLjVE7W/U96dJuJS6Ng06+dARsIq
- bblTycp+MKAXEPiafv+1/U9D8sotF6BfD5WAuKdt5uiZ96r0e97VqIsWZzLxhCodd3Hn
- JryMFRiUqIqQp7IddDVLpnbYFEQX8pIShj8XQg2i1+2R2u8os13zgNdBzhIVFxjtyEFr
- AVyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc:content-transfer-encoding;
- bh=RFLAHWwseNcjj6pKJQJ7lalWp6sz80+4/RojJihUraY=;
- b=pH3fnn6xYM8suKI/NAQh0dqi4z1Ztzz5tqTGut+HSlWuLunsvq7aRw5PKewQaplELT
- nk0f7TTVfx/OwHJet5z3YDIkLvXAiRJgKN6154bzmi6OwuYvhFyw2EFQbVTclNas8WVm
- 0HdVDz8CINPSGrCTp9ltPIZhsvSjc4HfTc9N/HIGDDG/Mz5PElvx0IUHmJWH9C0OAuuS
- E9HtQVTANldvq2ShwycQFYLvOdhnwXKkZiraiJemb4QuoiRupv+eFJycyCDx23a8vadq
- 1mD4Ej247OYerFgo6MeCW3Z5r3IpZbCqpc/H+/CxGZIqWdqcGWeHgkrH9LoLSLW+LDbX
- aiOQ==
-X-Gm-Message-State: AOAM5309bFoWc0t3tEHjfXKujAAdXAFJK2G/XjKEkGYh6XcnM93qjaWf
- jKxHos8YR5xtVY98E8F547WbNUGqRT3fyCiAy8E=
-X-Google-Smtp-Source: ABdhPJzMUb7FiUoA6ohwU/Ae/4DrZS0i+xdeht5+YV8iA5+mE5fIKQmiUpSZQ/VHDjlM4SUWdzIH3w3mHhNDcr4EtGU=
-X-Received: by 2002:a19:6a0b:: with SMTP id u11mr11514539lfu.383.1632515309771; 
- Fri, 24 Sep 2021 13:28:29 -0700 (PDT)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Z7eTMCOk1-jJ; Fri, 24 Sep 2021 21:27:10 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id E5F0F402C1;
+	Fri, 24 Sep 2021 21:27:09 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id A946A1BF3B5
+ for <buildroot@lists.busybox.net>; Fri, 24 Sep 2021 21:27:08 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id A480E42351
+ for <buildroot@lists.busybox.net>; Fri, 24 Sep 2021 21:27:08 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=aruba.it
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id YNT3Ovxn0XF9 for <buildroot@lists.busybox.net>;
+ Fri, 24 Sep 2021 21:27:07 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtpcmd01-sp1.aruba.it (smtpcmd01-sp1.aruba.it [62.149.158.218])
+ by smtp4.osuosl.org (Postfix) with ESMTP id F31A342350
+ for <buildroot@buildroot.org>; Fri, 24 Sep 2021 21:27:06 +0000 (UTC)
+Received: from [192.168.126.129] ([146.241.167.42])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id TsimmiKqUJzjeTsimmA2km; Fri, 24 Sep 2021 23:27:05 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+ t=1632518825; bh=BcdfI5ENXHcP7ihI0r3GeBJ9OotPCPAofAdNlPCDfXU=;
+ h=Subject:To:From:Date:MIME-Version:Content-Type;
+ b=CWCsGB3M24r2Owqpit7TSUVOH+c/j0rwjNCJtA86mYZpT0A7ELJRJ7FSq8EvOrh8x
+ tEPcHMoh9grQM2aVkUNPm0AGj3J2DPWKANF9EfyAyOG6X9tNlDkZl2wC9l9hAgi2B5
+ 1FV7NJ26HkamsR6sIrKCiiIMZFBqeu/Ou8yG86RsryzVlcm0QLpjJJZ9bMEFfzFOyW
+ 1yK0IPjdHq1ZY9WUHhHCdrKjNvowukx2KHbh/Kzy9PSRtqxgCUmQytyZyVsNF57v9C
+ P/UjnhMPygtm9PMz8OTOUAV2eqUs4myhJAaCmjp47TlFZLDuh4PXPC2YD0lUCKNR75
+ GxitaHGQfcttA==
+To: buildroot@buildroot.org
+References: <20210923164553.1218801-1-giulio.benetti@benettiengineering.com>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Message-ID: <0a3bb8bf-27b6-8ee5-7b4e-a57169c7f18e@benettiengineering.com>
+Date: Fri, 24 Sep 2021 23:27:04 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-References: <20210923155726.87851-1-kory.maincent@bootlin.com>
- <20210923155726.87851-2-kory.maincent@bootlin.com>
- <20210923200640.GE3176@scaer>
-In-Reply-To: <20210923200640.GE3176@scaer>
-From: Erico Nunes <nunes.erico@gmail.com>
-Date: Fri, 24 Sep 2021 22:28:18 +0200
-Message-ID: <CAK4VdL0E-SjUJ9b9B6VSFPdGfu7eR9yxMtx83q+c5DOukqe9xg@mail.gmail.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Subject: Re: [Buildroot] [PATCH v3 1/7] board, boot,
- package: remove usage of startup.nsh in EFI partition
+In-Reply-To: <20210923164553.1218801-1-giulio.benetti@benettiengineering.com>
+Content-Language: en-US
+X-CMAE-Envelope: MS4wfGjg4du1I1BViZkYWr7Q4XI/7pWWp6pn0mRbcA3LF4uyH3DFs7FYpGm9WBFc//C1gIymV8eUi0hSaLw+nKBCD0VID8KUvIkCJEi3DWcCIcwg27de8DkD
+ xVPbxmrq8JGi4KB6TrZoMAma6Uj1TjUeN3RnOc95f9eZxjTINQQYhdhMuKApeOn5rQCSBCnhwhwukvhz442q0G8RgZnDH5i0QYEJxMhFUIy8Fuej8ggXIfNZ
+ gApA/TbQt1B/UBdt3ehlRdcL0n92qQyF2anPXdB4tXGMG+/teRLD/J9KbLXB6qoSAj/pj1SlmP/uH60RU0SLW9YNOFR7V7SOD8TMsry81FKh531VoHSy7PV2
+ eAcW9bwoUyBdR4KNbSG7e5XBoVUTXgEbUiN9INaJtlVF4oFH4is=
+Subject: Re: [Buildroot] [PATCH 1/2] toolchain: introduce
+ BR2_TOOLCHAIN_HAS_GCC_BUG_102472
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,24 +78,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Kory Maincent <kory.maincent@bootlin.com>,
- Nicholas Sielicki <sielicki@yandex.com>, buildroot <buildroot@buildroot.org>,
- Gerome Burlats <gerome.burlats@smile.fr>,
+Cc: Asaf Kahlon <asafka7@gmail.com>, Romain Naour <romain.naour@gmail.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Romain Naour <romain.naour@gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gVGh1LCBTZXAgMjMsIDIwMjEgYXQgMTA6MDcgUE0gWWFubiBFLiBNT1JJTiA8eWFubi5tb3Jp
-bi4xOTk4QGZyZWUuZnI+IHdyb3RlOgo+Cj4gS8O2cnksIEFsbCwKPgo+ICtEaWNrLCBFcmljbywg
-R2Vyb21lLCBOaWNob2xhcywgUGV0ZXIsIFJvbWFpbjoKPgo+IFRoaXMgcGF0Y2ggdG91Y2hlcyBi
-b2FyZHMgZm9yIHdoaWNoIHlvdSBhcmUgcmVnaXN0ZXJlZCBpbiB0aGUgREVWRUxPUEVSUwo+IGZp
-bGUuIENvdWxkIHlvdSB2ZXJpZnkgdGhhdCB0aG9zZSBib2FyZHMgc3RpbGwgYm9vdCB3aXRoIHRo
-aXMgcGF0Y2gKPiBhcHBsaWVkLCBwbGVhc2U/CgpUaGUgcGF0Y2ggbG9va3Mgb2sgYW5kIG9uIGEg
-cXVpY2sgdGVzdCwgYm90aCBhYXJjaDY0X2VmaV9kZWZjb25maWcgYW5kCnBjX3g4Nl82NF9lZmlf
-ZGVmY29uZmlnIGNvbnRpbnVlIHRvIHdvcmsgYXMgdXN1YWwuIFNvIGxvb2tzIGdvb2QgdG8KbWUu
-CgpFcmljbwpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpi
-dWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlz
-dHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+Hi All,
+
+On 9/23/21 6:45 PM, Giulio Benetti wrote:
+> python-uvloop package hang while building for the m68k architecture with
+> optimization enabled with gcc = 11.2.0:
+> http://autobuild.buildroot.net/results/17d/17d6e6422abadcd6313c430c40f2a5d7162dbbd3/
+
+Here it's not true. I've found out that it doesn't really time out, it 
+only takes a lot to build with optimization enabled since loop.c file is 
+7Mb big. So please drop this patch and the next one. I've marked them 
+both as rejected in patchwork already.
+
+Sorry for the noise!
+
+Kind regards
+-- 
+Giulio Benetti
+Benetti Engineering sas
+
+> It's been reported upstream:
+> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=102472
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> ---
+>   toolchain/Config.in | 7 +++++++
+>   1 file changed, 7 insertions(+)
+> 
+> diff --git a/toolchain/Config.in b/toolchain/Config.in
+> index 8b01067105..adb4d63759 100644
+> --- a/toolchain/Config.in
+> +++ b/toolchain/Config.in
+> @@ -210,6 +210,13 @@ config BR2_TOOLCHAIN_HAS_GCC_BUG_101952
+>   	bool
+>   	default y if BR2_sh4
+>   
+> +# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=102472
+> +# ICE: on m68k it enters an infinite loop
+> +# This bug still exists in gcc = 11.2.0
+> +config BR2_TOOLCHAIN_HAS_GCC_BUG_102472
+> +	bool
+> +	default y if BR2_m68k
+> +
+>   config BR2_TOOLCHAIN_HAS_NATIVE_RPC
+>   	bool
+>   
+> 
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
