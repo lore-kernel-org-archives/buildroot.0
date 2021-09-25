@@ -2,82 +2,84 @@ Return-Path: <SRS0=vewd=OP=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CA9EBC433EF
-	for <buildroot@archiver.kernel.org>; Sat, 25 Sep 2021 09:46:37 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A11AC433EF
+	for <buildroot@archiver.kernel.org>; Sat, 25 Sep 2021 09:46:49 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1C50860EDF
-	for <buildroot@archiver.kernel.org>; Sat, 25 Sep 2021 09:46:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1C50860EDF
+	by mail.kernel.org (Postfix) with ESMTPS id B08EB60F70
+	for <buildroot@archiver.kernel.org>; Sat, 25 Sep 2021 09:46:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B08EB60F70
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AE457404EF;
-	Sat, 25 Sep 2021 09:46:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 527116070B;
+	Sat, 25 Sep 2021 09:46:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id m5qkEG692vAY; Sat, 25 Sep 2021 09:46:35 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 4WRJYyKRT2GO; Sat, 25 Sep 2021 09:46:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 08A13404EA;
-	Sat, 25 Sep 2021 09:46:35 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id BB02B1BF29E
- for <buildroot@lists.busybox.net>; Sat, 25 Sep 2021 09:46:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9679D6070E;
+	Sat, 25 Sep 2021 09:46:46 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 5D6A71BF29E
+ for <buildroot@lists.busybox.net>; Sat, 25 Sep 2021 09:46:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B693E404EA
- for <buildroot@lists.busybox.net>; Sat, 25 Sep 2021 09:46:33 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4D4596070B
+ for <buildroot@lists.busybox.net>; Sat, 25 Sep 2021 09:46:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wPfnhmqnsKwv for <buildroot@lists.busybox.net>;
- Sat, 25 Sep 2021 09:46:32 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id T4AXmmGr9_75 for <buildroot@lists.busybox.net>;
+ Sat, 25 Sep 2021 09:46:34 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
- [IPv6:2a00:1450:4864:20::42b])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B674E404E7
- for <buildroot@buildroot.org>; Sat, 25 Sep 2021 09:46:32 +0000 (UTC)
-Received: by mail-wr1-x42b.google.com with SMTP id t8so34995966wri.1
- for <buildroot@buildroot.org>; Sat, 25 Sep 2021 02:46:32 -0700 (PDT)
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
+ [IPv6:2a00:1450:4864:20::434])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5AEB260644
+ for <buildroot@buildroot.org>; Sat, 25 Sep 2021 09:46:34 +0000 (UTC)
+Received: by mail-wr1-x434.google.com with SMTP id t18so34943590wrb.0
+ for <buildroot@buildroot.org>; Sat, 25 Sep 2021 02:46:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=2CSQwjNxyzQi2RGMqAqeVsJai7rOxtrMtpRSgU04wnQ=;
- b=iC7fd6yPnC7Cwz5b0Yu2g1RjO78PETvXNeH4aVu1gLnEs3QI6Hi75yOCFeBcXt57Az
- 5DhFLUQXIkyPEC4wf21HV+Em9ToSOB9SpFcuTkYtsUQRTiKNtlF5NDNOwPRHrRhHns2S
- I4DGcq15qtKGa/P0sk4PDxOMRpVHktpbbcuM1iitbm0tJEed5C1DpPs7ZMP71/WeoKB5
- nUQPqyo3q4EK+RRy6MJmhkcDRKQJvamCLCh5IYTaA+7/SE2zmtpswi/MVfhqw1ozGD+P
- rEPUf6qT6GO9P3u+1pwOqxQrZhNkxUl5wD0kQWw9IsxBP91gxR14VxdI4xcUVRvpiujN
- xLjg==
+ h=from:to:cc:subject:date:message-id:in-reply-to:references
+ :mime-version:content-transfer-encoding;
+ bh=SEK+K3wuW5e+doR0guTukiqOQ1Nap+o9v2pKt8rHXZY=;
+ b=XdEElo6MiafFta2y8tna2wQQAGOjRkNkcB6kR8GUBIWHY73b6MbT5fH9Fh2P0hxWOY
+ 15eh6ps2NICAvYjdz6AaSGSgaxFV8/HbIs6NWq7bgQc8rsbeftoAznpCww/39x1C5yDl
+ ncwjPN83ErJxC18VqSAqED7ZdP89OiTjCtRFJOw0QGZAJxwVi/dzt6maUdmH9C5xZCsg
+ cN5GjxMDz655vdQuLlBXZrGVFRCgT9S89Eu2T6ivfeCCPvXXywX80yCrNKe2e47W2hNq
+ 2JEB/k5I6WVrcALhKNQqh5kyd13cSqLToDlZXJGMVNgV+XYX+dSwosRMsL2RzrMnu+7z
+ TFpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=2CSQwjNxyzQi2RGMqAqeVsJai7rOxtrMtpRSgU04wnQ=;
- b=YmdWvoKWJHN0ga/99mzxRgerVbRu0ZRxCduoBcLNPx87pQZLvWgC83n2V/TKoDZluo
- MQ5H8MXMCehEa5MKobRSIV8Pw+zEdTTYUadjyYjSLFEmfs0Qhi0uKmnd5jqLaRgAIL/D
- AUz49N8AM7GyH8NbyaUD6qI88PVBqJSluPqGkOh+fyFNFjAukU4AUxRxf5zPcKmSzKmv
- MdHXh0mvQv8UhCfZGbgZBOF8AqBtYh/7SZ2RT0QaBrDgS9o53C/2KvhC4et8T/qadAWM
- 5XJLx7mIK9zG0ELa1pCTl2Zxx3S7cBcGHAw3cB7kOm5vscA8rOXUgcsuHOmkl+zNOIDR
- 2Byg==
-X-Gm-Message-State: AOAM530FYo3QWnJ2Lvy6pp0gNo4Xtw6VGjNt0eQ2uwTxVvDcLK90Jn+W
- wFz+2u5N0Y2TSwf9qjz2Tc6B5uT7pH8=
-X-Google-Smtp-Source: ABdhPJyEALeZqCAFyhVOe6/X7AYgJqlSyDGDNGWW93v0t3RXPnHM63n+uw+oQGFNSHGbb2DxbQrVhg==
-X-Received: by 2002:adf:e88d:: with SMTP id d13mr15960116wrm.91.1632563190829; 
- Sat, 25 Sep 2021 02:46:30 -0700 (PDT)
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+ :references:mime-version:content-transfer-encoding;
+ bh=SEK+K3wuW5e+doR0guTukiqOQ1Nap+o9v2pKt8rHXZY=;
+ b=YfjoghbxW+vASJ6AQe7n2kybwC2+ILsGFxbHD58vOC4IxtjSI5fYM4zdTqLKQ0r0Op
+ O6itGi2cB/PUggvlbCn/l6u1AebdldQykom/3F8HcturnJ0djBkuIUTivDhJmB+Iufin
+ IxDgBbKWMSNfMyndHcDyjJ/T9onKvikkbi+p+CNW9GewejBbxoLi8GAY1ooV5TVsNjLP
+ f5EBca+iZR0wrZxsD7W854DoQTvFKfDYjTlkxqgxWZeSc9DL/eBNVbYaRzQ1V2LZWycS
+ Vi17YemraBnJKxLbkzmEOQ95m7cBNdExZWPdUJTacnRl2cF+WV8+/yXM9YN8i/ng0ONV
+ LsKg==
+X-Gm-Message-State: AOAM531Vm4CeMgYOIboFOZAR2+7qDJGjfBP2HSGGQ6wgTkFjbi/jz4yZ
+ WD6CrCjs1D32MHIvoVYN7AVDGeWxBb0=
+X-Google-Smtp-Source: ABdhPJx5cx+54VXPWLIgsZC08Yf6KOe2TY2BWTMAyLe+JkcE1PJ0XnPyKsOqaQ1Fx7hSZqANnSjhtA==
+X-Received: by 2002:a5d:46c7:: with SMTP id g7mr16085966wrs.316.1632563192306; 
+ Sat, 25 Sep 2021 02:46:32 -0700 (PDT)
 Received: from asaf.. ([2a10:8002:6b25:0:7829:fae8:ae6e:81f0])
- by smtp.gmail.com with ESMTPSA id d2sm10297194wrc.32.2021.09.25.02.46.29
+ by smtp.gmail.com with ESMTPSA id d2sm10297194wrc.32.2021.09.25.02.46.31
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 25 Sep 2021 02:46:30 -0700 (PDT)
+ Sat, 25 Sep 2021 02:46:31 -0700 (PDT)
 From: Asaf Kahlon <asafka7@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 25 Sep 2021 12:46:21 +0300
-Message-Id: <20210925094626.365400-1-asafka7@gmail.com>
+Date: Sat, 25 Sep 2021 12:46:22 +0300
+Message-Id: <20210925094626.365400-2-asafka7@gmail.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210925094626.365400-1-asafka7@gmail.com>
+References: <20210925094626.365400-1-asafka7@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/python-frozenlist: bump to version
- 1.1.1
+Subject: [Buildroot] [PATCH 1/1] package/python-inflection: bump to version
+ 0.5.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,40 +98,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+License file update was a year bump.
+
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-frozenlist/python-frozenlist.hash | 4 ++--
- package/python-frozenlist/python-frozenlist.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-inflection/python-inflection.hash | 10 +++++-----
+ package/python-inflection/python-inflection.mk   |  4 ++--
+ 2 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/python-frozenlist/python-frozenlist.hash b/package/python-frozenlist/python-frozenlist.hash
-index 0ecc5f9cdf..d8ca0d8b3c 100644
---- a/package/python-frozenlist/python-frozenlist.hash
-+++ b/package/python-frozenlist/python-frozenlist.hash
+diff --git a/package/python-inflection/python-inflection.hash b/package/python-inflection/python-inflection.hash
+index bdad35ad25..b170d3f6b0 100644
+--- a/package/python-inflection/python-inflection.hash
++++ b/package/python-inflection/python-inflection.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/frozenlist/json
--md5  2a83a520014203d0a56993c332ff7e23  frozenlist-1.1.0.tar.gz
--sha256  d167a5050628323fcb3db410375eb06390ab135454fd85fd79c5832f5ec2b8ed  frozenlist-1.1.0.tar.gz
-+md5  3d6747897187eb413327168329ecccde  frozenlist-1.1.1.tar.gz
-+sha256  32fa8c86eee5c6f11b44863c0d3e945b2b1a03df3bf218617e832f1f04ba3146  frozenlist-1.1.1.tar.gz
- # Locally computed sha256 checksums
- sha256  6fd5243e92dd7f98ec69c7ac377728e74905709ff527a5bf98d6d0263c04f5b6  LICENSE.txt
-diff --git a/package/python-frozenlist/python-frozenlist.mk b/package/python-frozenlist/python-frozenlist.mk
-index b113c38080..e17578879f 100644
---- a/package/python-frozenlist/python-frozenlist.mk
-+++ b/package/python-frozenlist/python-frozenlist.mk
+-# Hashes from https://pypi.python.org/pypi/inflection/json
+-md5     7941165e9f148e0520023941c0886b40  inflection-0.3.1.tar.gz
+-sha256  18ea7fb7a7d152853386523def08736aa8c32636b047ade55f7578c4edeb16ca  inflection-0.3.1.tar.gz
+-# License file, locally calculated
+-sha256  4a3f52ac1012a90db398e4c55f1d1bea501dddafef8a4b3adb7533b1d820e148  LICENSE
++# md5, sha256 from https://pypi.org/pypi/inflection/json
++md5  c3287d4f0e3bdf625a52d655cc514403  inflection-0.5.1.tar.gz
++sha256  1a29730d366e996aaacffb2f1f1cb9593dc38e2ddd30c91250c6dde09ea9b417  inflection-0.5.1.tar.gz
++# Locally computed sha256 checksums
++sha256  9e9f9b4b2e7543ad1486f1328bf9ec50e5a5e2bb9caceb59652496dd61e64133  LICENSE
+diff --git a/package/python-inflection/python-inflection.mk b/package/python-inflection/python-inflection.mk
+index 7309880c6a..7c030e99b9 100644
+--- a/package/python-inflection/python-inflection.mk
++++ b/package/python-inflection/python-inflection.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_FROZENLIST_VERSION = 1.1.0
-+PYTHON_FROZENLIST_VERSION = 1.1.1
- PYTHON_FROZENLIST_SOURCE = frozenlist-$(PYTHON_FROZENLIST_VERSION).tar.gz
--PYTHON_FROZENLIST_SITE = https://files.pythonhosted.org/packages/12/0e/119f1f186e93c21d078db1ddd7b21247a8a49261689d9284dec28be3b08e
-+PYTHON_FROZENLIST_SITE = https://files.pythonhosted.org/packages/ab/bb/80e0fdd91fe4018c6c11a1bfe9bb8cb1da8dbb2ed3faa3c1317161d056fa
- PYTHON_FROZENLIST_SETUP_TYPE = setuptools
- PYTHON_FROZENLIST_LICENSE = Apache-2.0
- PYTHON_FROZENLIST_LICENSE_FILES = LICENSE.txt
+-PYTHON_INFLECTION_VERSION = 0.3.1
++PYTHON_INFLECTION_VERSION = 0.5.1
+ PYTHON_INFLECTION_SOURCE = inflection-$(PYTHON_INFLECTION_VERSION).tar.gz
+-PYTHON_INFLECTION_SITE = https://pypi.python.org/packages/d5/35/a6eb45b4e2356fe688b21570864d4aa0d0a880ce387defe9c589112077f8
++PYTHON_INFLECTION_SITE = https://files.pythonhosted.org/packages/e1/7e/691d061b7329bc8d54edbf0ec22fbfb2afe61facb681f9aaa9bff7a27d04
+ PYTHON_INFLECTION_SETUP_TYPE = setuptools
+ PYTHON_INFLECTION_LICENSE = MIT
+ PYTHON_INFLECTION_LICENSE_FILES = LICENSE
 -- 
 2.33.0
 
