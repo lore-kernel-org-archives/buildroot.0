@@ -2,83 +2,86 @@ Return-Path: <SRS0=vewd=OP=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6962DC433EF
-	for <buildroot@archiver.kernel.org>; Sat, 25 Sep 2021 09:47:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0430AC433F5
+	for <buildroot@archiver.kernel.org>; Sat, 25 Sep 2021 09:47:12 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 09A2760F70
-	for <buildroot@archiver.kernel.org>; Sat, 25 Sep 2021 09:47:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 09A2760F70
+	by mail.kernel.org (Postfix) with ESMTPS id 87AD360F70
+	for <buildroot@archiver.kernel.org>; Sat, 25 Sep 2021 09:47:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 87AD360F70
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D0F1E832D9;
-	Sat, 25 Sep 2021 09:46:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5F297833B7;
+	Sat, 25 Sep 2021 09:47:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id y56oPkmZ4BQK; Sat, 25 Sep 2021 09:46:59 +0000 (UTC)
+	with ESMTP id GgFcbigDN2qy; Sat, 25 Sep 2021 09:47:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 20BE382C89;
-	Sat, 25 Sep 2021 09:46:58 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A71B71BF29E
- for <buildroot@lists.busybox.net>; Sat, 25 Sep 2021 09:46:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AD5BC83339;
+	Sat, 25 Sep 2021 09:47:09 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 357541BF29E
+ for <buildroot@lists.busybox.net>; Sat, 25 Sep 2021 09:46:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A453982C33
- for <buildroot@lists.busybox.net>; Sat, 25 Sep 2021 09:46:36 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 31780401C4
+ for <buildroot@lists.busybox.net>; Sat, 25 Sep 2021 09:46:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6xKjb2yrHzLK for <buildroot@lists.busybox.net>;
- Sat, 25 Sep 2021 09:46:35 +0000 (UTC)
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LXY5wK7rSK2x for <buildroot@lists.busybox.net>;
+ Sat, 25 Sep 2021 09:46:37 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
 Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
  [IPv6:2a00:1450:4864:20::434])
- by smtp1.osuosl.org (Postfix) with ESMTPS id AAFCF82C89
- for <buildroot@buildroot.org>; Sat, 25 Sep 2021 09:46:35 +0000 (UTC)
-Received: by mail-wr1-x434.google.com with SMTP id t8so34996183wri.1
- for <buildroot@buildroot.org>; Sat, 25 Sep 2021 02:46:35 -0700 (PDT)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 109F04018C
+ for <buildroot@buildroot.org>; Sat, 25 Sep 2021 09:46:36 +0000 (UTC)
+Received: by mail-wr1-x434.google.com with SMTP id u18so34923124wrg.5
+ for <buildroot@buildroot.org>; Sat, 25 Sep 2021 02:46:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=taFd85z1K+79eheBAHODB4RKrfAnvsLMQ3+xxit8wps=;
- b=XHEFV2Bgofdnc1HtNy6ZT+sBvMknlEiIpx2PI1hYKfRpat3FHi8TfwZNSIzBs04yp9
- 0QPwv90N0dn70A8JjrlAN3lEXlZxj9IRv0MydwnwsvBiI1MgOVh5P77zEo82Qd5ZDeHC
- +Sj3srJjze3i8MUt6yvlvBfn/YVX8Gl6SSuVKLpmEeMYL0MX7ySSy3iflFBYCiX9B/em
- R4FQsSmEBzTldHsOD2dfiDmYSPyAEa9+AkHWwrSaMYm0xn7pX48HndQTNwWfwRWxnXoC
- v7+wzxfkcrAu3A7HLOd3Mh9T9ol5biG8Luj2r2Z4R6qsJ169QOk69jtsyXZWgBdhpaBL
- qBmg==
+ bh=aJ6t/MsrHmKB+PUKlC1pYcr1yEJLO8x2vmJw6aCt84A=;
+ b=GsKC6VxXs6b0JL9UsfgfQP4tNOQi2fyfNOQ4EgdFAvCZuEAIyAedhsuKESwJeUV37J
+ 1SJGPL+XA06NaxBpIrCZnNXU8cn928mmKl+e1CHfvEZuaATb6pPrxZwRDAEo+W1yLg0s
+ hc4gc3IRTKVYf8tX3QSDnDwYy00APJRmKrlkKdhMzj0QHsWOU6hxs6C4zg6Lu2zuddh1
+ THZPcUK/TKg63dQeNwatklScEIN8Nu7SmacAz799uZMTFZdY7DgtEBJDTZjKmnm9pNGN
+ BA6DEs0F4Xgu3r1VMegQrhqi4+XYq41jr7MSbWrzSXp1TMlWZHLpZw9ja80g3PAnNz/R
+ nkgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
  :references:mime-version:content-transfer-encoding;
- bh=taFd85z1K+79eheBAHODB4RKrfAnvsLMQ3+xxit8wps=;
- b=hgkezcRJilFrkWly1I6yIylSzn5HbKjBAKyUILppFox8nJYqafB9cPhU2hJPJ3Lkqk
- 7J6WcF+uxgsmOYTuvTCWgE6YvnnuZHCyzq+oLmp2OIQBl6PZqn6UQFFtu8TyVOBtl3+P
- 2stHslWBbZryOuuyi7Jlgwh6szBSATmA5kGhrOUv7WpFZVMOl1otX2w3efxtw1ghzdQ4
- k5RNwCov93lpk/wftCaquSYbAlqjZwMDCvrVfyThhIjbo+AfKqJrw12/5QIzvsk7++ih
- 9frwZB86SPesb4YAuYZRJ3YGL4dkXAqichIpysKHdJhqX9j6TcyogfiEbLg3OdikUgmC
- cg1A==
-X-Gm-Message-State: AOAM530b5/uDr00/2+NiAFpEdvftdnHmo3UE6aQgMLfM01miOsvt25jM
- YdC6t6FzSV63Epy5PywuBRl4FNLMZwY=
-X-Google-Smtp-Source: ABdhPJzF1iCMlshYlZKYc1ZrisVAj42zS6EKNEinLUkhteIbMFrYfXiCe7vPt5p9zfvam2WYjsrmkQ==
-X-Received: by 2002:adf:f48d:: with SMTP id l13mr16212565wro.94.1632563193608; 
- Sat, 25 Sep 2021 02:46:33 -0700 (PDT)
+ bh=aJ6t/MsrHmKB+PUKlC1pYcr1yEJLO8x2vmJw6aCt84A=;
+ b=j0BhAtAizTujVEuoUyb/+Qa4xE8ZoOtv10zTPgp6WFwYEpCej5pbrl+kAIMmBI9XDg
+ zD0vhWLbiMUn52kZbipczFiiRXiORXBPKpX4x0oLSrQ/Fd3/z0ttDS7gvTABdOZNu+ZM
+ SoTf+hPQBEuMPuqKpHTmMdT1KWMh/i99sEo2qIoiKp9Z8spLo+et92ziGXdLXU6ntqq5
+ +gr4ISkdQO9GlQwtGuM6gtIO2qVSg+1D9zh450JFmvHgJ0dCWHqkcP4pIZeTu2VC+kjk
+ 76mk0d/AiEQ29AxRem3/TDHfQLZ9pkmNbe8pL4cTZiy1TzdJRd+I3/XneHhWB66Q/gPp
+ BB9Q==
+X-Gm-Message-State: AOAM5332w4vzqzqQQ8c/PA2wiZaO1hiJ8uE7z5cqSqIBdmx3cpy60mzG
+ vU4uZSAwVzv9YMSPM6l1jDfBHt3F8cI=
+X-Google-Smtp-Source: ABdhPJwyWSTkLASG7w4N5AO127hs0aNDxGKSrVUg6+w/JlZS+47kTZz1RRM8t2hVDW5JKkwrtTvXIA==
+X-Received: by 2002:a1c:1fc2:: with SMTP id f185mr6358860wmf.22.1632563194902; 
+ Sat, 25 Sep 2021 02:46:34 -0700 (PDT)
 Received: from asaf.. ([2a10:8002:6b25:0:7829:fae8:ae6e:81f0])
- by smtp.gmail.com with ESMTPSA id d2sm10297194wrc.32.2021.09.25.02.46.32
+ by smtp.gmail.com with ESMTPSA id d2sm10297194wrc.32.2021.09.25.02.46.34
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 25 Sep 2021 02:46:33 -0700 (PDT)
+ Sat, 25 Sep 2021 02:46:34 -0700 (PDT)
 From: Asaf Kahlon <asafka7@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 25 Sep 2021 12:46:23 +0300
-Message-Id: <20210925094626.365400-3-asafka7@gmail.com>
+Date: Sat, 25 Sep 2021 12:46:24 +0300
+Message-Id: <20210925094626.365400-4-asafka7@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210925094626.365400-1-asafka7@gmail.com>
 References: <20210925094626.365400-1-asafka7@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/python-ipy: bump to version 1.01
+Subject: [Buildroot] [PATCH 1/1] package/python-multidict: bump to version
+ 5.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,56 +100,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-* The package supports both python versions.
-* Indent with two spaces in hash file.
-
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-ipy/Config.in       | 1 -
- package/python-ipy/python-ipy.hash | 6 +++---
- package/python-ipy/python-ipy.mk   | 4 ++--
- 3 files changed, 5 insertions(+), 6 deletions(-)
+ package/python-multidict/python-multidict.hash | 4 ++--
+ package/python-multidict/python-multidict.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-ipy/Config.in b/package/python-ipy/Config.in
-index bead932da8..b4f0c8cb5e 100644
---- a/package/python-ipy/Config.in
-+++ b/package/python-ipy/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_PYTHON_IPY
- 	bool "python-ipy"
--	depends on BR2_PACKAGE_PYTHON
- 	help
- 	  IPy - class and tools for handling of IPv4 and
- 	  IPv6 addresses and networks.
-diff --git a/package/python-ipy/python-ipy.hash b/package/python-ipy/python-ipy.hash
-index 641a2eb21f..3d8e1e8c71 100644
---- a/package/python-ipy/python-ipy.hash
-+++ b/package/python-ipy/python-ipy.hash
+diff --git a/package/python-multidict/python-multidict.hash b/package/python-multidict/python-multidict.hash
+index 6b78301200..65af9a58e5 100644
+--- a/package/python-multidict/python-multidict.hash
++++ b/package/python-multidict/python-multidict.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/ipy/json
--md5	1a90c68174234672241a7e60c7ea0fb9  IPy-1.00.tar.gz
--sha256	2f2bf658a858d43868d8a4352b3889cf78c66e2ce678b300dcf518c9149ba621  IPy-1.00.tar.gz
-+md5  d6cf83e7f418ebbd23324ba1c658b907  IPy-1.01.tar.gz
-+sha256  edeca741dea2d54aca568fa23740288c3fe86c0f3ea700344571e9ef14a7cc1a  IPy-1.01.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/multidict/json
+-md5  b1dab3349efe90934ae3612f1202b733  multidict-5.0.2.tar.gz
+-sha256  e5bf89fe57f702a046c7ec718fe330ed50efd4bcf74722940db2eb0919cddb1c  multidict-5.0.2.tar.gz
++md5  df8b37f069809779214d6b80b250e45b  multidict-5.1.0.tar.gz
++sha256  25b4e5f22d3a37ddf3effc0710ba692cfc792c2b9edfb9c05aefe823256e84d5  multidict-5.1.0.tar.gz
  # Locally computed sha256 checksums
--sha256	078bb46799e46e51e7239c24ff130d345db911c11efafef5e3c45dfb7adb0a61  COPYING
-+sha256  078bb46799e46e51e7239c24ff130d345db911c11efafef5e3c45dfb7adb0a61  COPYING
-diff --git a/package/python-ipy/python-ipy.mk b/package/python-ipy/python-ipy.mk
-index 817b531e0b..2a01daf4ca 100644
---- a/package/python-ipy/python-ipy.mk
-+++ b/package/python-ipy/python-ipy.mk
+ sha256  a1c5825513279d3085a0ba46880e148ea3710c149bbaedcf2d11605a5ed3c4ad  LICENSE
+diff --git a/package/python-multidict/python-multidict.mk b/package/python-multidict/python-multidict.mk
+index a7043643c5..edf9656043 100644
+--- a/package/python-multidict/python-multidict.mk
++++ b/package/python-multidict/python-multidict.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_IPY_VERSION = 1.00
-+PYTHON_IPY_VERSION = 1.01
- PYTHON_IPY_SOURCE = IPy-$(PYTHON_IPY_VERSION).tar.gz
--PYTHON_IPY_SITE = https://files.pythonhosted.org/packages/e1/66/b6dd22472bb027556849876beae2dd4dca3a4eaf2dd3039277b4edb8c6af
-+PYTHON_IPY_SITE = https://files.pythonhosted.org/packages/64/a4/9c0d88d95666ff1571d7baec6c5e26abc08051801feb6e6ddf40f6027e22
- PYTHON_IPY_LICENSE = BSD-3-Clause
- PYTHON_IPY_LICENSE_FILES = COPYING
- PYTHON_IPY_SETUP_TYPE = distutils
+-PYTHON_MULTIDICT_VERSION = 5.0.2
++PYTHON_MULTIDICT_VERSION = 5.1.0
+ PYTHON_MULTIDICT_SOURCE = multidict-$(PYTHON_MULTIDICT_VERSION).tar.gz
+-PYTHON_MULTIDICT_SITE = https://files.pythonhosted.org/packages/da/e6/50c7f52781f45c2b37c77e962c30a3944a9e79a46ea92956e826c24d3432
++PYTHON_MULTIDICT_SITE = https://files.pythonhosted.org/packages/1c/74/e8b46156f37ca56d10d895d4e8595aa2b344cff3c1fb3629ec97a8656ccb
+ PYTHON_MULTIDICT_SETUP_TYPE = setuptools
+ PYTHON_MULTIDICT_LICENSE = Apache-2.0
+ PYTHON_MULTIDICT_LICENSE_FILES = LICENSE
 -- 
 2.33.0
 
