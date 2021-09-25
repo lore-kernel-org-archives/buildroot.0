@@ -2,85 +2,82 @@ Return-Path: <SRS0=vewd=OP=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D456C433F5
-	for <buildroot@archiver.kernel.org>; Sat, 25 Sep 2021 21:24:39 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 163C5C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 25 Sep 2021 21:38:33 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 7B78461041
-	for <buildroot@archiver.kernel.org>; Sat, 25 Sep 2021 21:24:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7B78461041
+	by mail.kernel.org (Postfix) with ESMTPS id 6ED5161051
+	for <buildroot@archiver.kernel.org>; Sat, 25 Sep 2021 21:38:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6ED5161051
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1C68760622;
-	Sat, 25 Sep 2021 21:24:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 28838401D6;
+	Sat, 25 Sep 2021 21:38:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yI1SnZq28X27; Sat, 25 Sep 2021 21:24:37 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id NtzzZ0I1-qnJ; Sat, 25 Sep 2021 21:38:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7AB1A605F9;
-	Sat, 25 Sep 2021 21:24:36 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id DF2F01BF33B
- for <buildroot@lists.busybox.net>; Sat, 25 Sep 2021 21:24:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8E4BD4019A;
+	Sat, 25 Sep 2021 21:38:30 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 8DA841BF33B
+ for <buildroot@lists.busybox.net>; Sat, 25 Sep 2021 21:38:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C885E80FF4
- for <buildroot@lists.busybox.net>; Sat, 25 Sep 2021 21:24:35 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 53D1A40001
+ for <buildroot@lists.busybox.net>; Sat, 25 Sep 2021 21:38:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OdxWnqM4eSR1 for <buildroot@lists.busybox.net>;
- Sat, 25 Sep 2021 21:24:35 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id c2HaeVcRxsxF for <buildroot@lists.busybox.net>;
+ Sat, 25 Sep 2021 21:38:27 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
 Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
  [IPv6:2a00:1450:4864:20::42d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id DC5EE80E5E
- for <buildroot@buildroot.org>; Sat, 25 Sep 2021 21:24:34 +0000 (UTC)
-Received: by mail-wr1-x42d.google.com with SMTP id t28so25122203wra.7
- for <buildroot@buildroot.org>; Sat, 25 Sep 2021 14:24:34 -0700 (PDT)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6A34F40305
+ for <buildroot@buildroot.org>; Sat, 25 Sep 2021 21:38:27 +0000 (UTC)
+Received: by mail-wr1-x42d.google.com with SMTP id w17so38481961wrv.10
+ for <buildroot@buildroot.org>; Sat, 25 Sep 2021 14:38:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=76TlHzEAp59pYur1WOKp2qGOs7FosiswT9ZAym3Il9g=;
- b=mGzTgU/F5TVph5HMBAOP7rRDArWhLB6CRZFo5nRafyv8STZ6/iTVZTaDyffIoG+4M5
- PXit32gkCfF4bsWzVHWmCnPxGuJh37hO81NGTQRbI6ni1MzR3lOI5u6V/il4OczGkoCE
- DQO93LmmdDvnOIHcj+QQFqbuzV3aBO5w6W9AIsxpTEmw99zxjngiHRy/4f7CUqDosWds
- s5KAnR4TVVnTia4OMn62EofDD35pxwGMRycemO/V1Rz5aXd0KKZfYLfJOZG8tb4zX2Wv
- JxcTRhlYwZpC6APJ3YgFTjvWnLHHQ3LxPN+ToVDtEe8BbYc2E7Z4nYKBS0omLJ99tFtr
- 7YZA==
+ bh=sbNf+k6x5xQJmrWC+ud2o3hSKiKIw6VKxiM4VjqdPig=;
+ b=duc3vlQ2ztS0gaYwx323VbCZ/11ycLnbPS/9c+khwp/2Ool8FzPjoY3c6B0SX+xWHF
+ tjz/KLLzosQKFY3Ww0Zc/nys3xotgN5we9+C3UboErZNCk6suW5GGfKbGGCOyiWlmRy2
+ uB7GAXXCC/0zUmzOdqqthtkmS992KsHrH9PwYzEuJ+kDojxRdsG8R3UiNDrnrxar221q
+ vMWWp4TwaWXLz31W/SyQmXNdSmmBtMxyB/QP8J9Hob3k0sLslfgG4Uq5l/9PCCy/vGZ0
+ 4xgszRi/i9TWvmUaabNs8b00FrdxwwEjpmeCydLX9l2KJ24v8gKbjxrppSikjWERVksf
+ CAcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=76TlHzEAp59pYur1WOKp2qGOs7FosiswT9ZAym3Il9g=;
- b=rYG1LE+jryJ9dEiS1WLFByW/F5+V9Pq7GYmMkTlbVFOurqXpAtZEmlAv/Hb6xWanTW
- wttvVV+HI0lrzLiO+/r0uajmFM8+g2kzhsGdAYLDln6MZFpVMvw5HKxFjSnxC55G0JbP
- vrq676+zp39NS0MjFpx7K5oTkMjHYjvu3xZxqvfXW8XYszxqrrfS+jl8KX7qS8z5jIdg
- Wx2OGuO8F50LtA+D4+OwxpOJKdK2iIMvD35E04BTrfu4lROdSkUYPxoJxJfMq7rVhqPv
- UxH0ZZ22Kg6HwsDO6/aK2FLVgbOI26DMMxtTpUmhw02di6UEXeHNxpHKhoRJmHFKrzEH
- Bkgg==
-X-Gm-Message-State: AOAM532hPGWdWJiqCj8Ucc9vkp1gR5p9bFzM3pT24drOAWgciaIdWhtn
- oXPXU/+PiCHY5JyEEmvbTHbNO46yg14=
-X-Google-Smtp-Source: ABdhPJxpoJEZyufoW5/8BddYg691Ktsd69bxESYWgd9eV11yJVmrB7lPtuFQ/k9ab+maFaxkENFheg==
-X-Received: by 2002:a05:600c:1c26:: with SMTP id
- j38mr8860132wms.12.1632605072842; 
- Sat, 25 Sep 2021 14:24:32 -0700 (PDT)
+ bh=sbNf+k6x5xQJmrWC+ud2o3hSKiKIw6VKxiM4VjqdPig=;
+ b=K9r+KbBqSBOkOz4sGwOUrPG/XJabWTKETvjPmf0QPLMYWkNCygpfsdEMHqJeWTQ16V
+ tOdb8Uuyf+jph4WeSt2gRQCEm+AHN+GgMF89+ud3cEyifnuNoILqp3WJFWk2/QA4KjYQ
+ 8L4sfYfQhHVwhwmalQKIKY5oPmgA+Fr3ivCaf65gwX3v+Ar4lssFC9O5uTCNgH+Lfdzq
+ Fdyxl1Wgd4HijrH3BQL74q44pz334y2lLGfAdptSH4vN5phiq5SuJATeZDaOF8nyMYmf
+ 5q+kA5qLnF3SN0wUzOsEl5VMGwbvLLwdF14FKxAAmWh2E27mwTPnDa6p8SAg7xAvt9f2
+ 5CCw==
+X-Gm-Message-State: AOAM533XqC/hTV/ZfKAeTAsoMuUK3l/ppZB3re1ir0BOZDhhFuTyNotD
+ gi5KF04FoLeUtn6edSuX2/72QQwOMi8=
+X-Google-Smtp-Source: ABdhPJyw8e57Pf8bQvPIZ3HDfhOYgwwUnozuvJPWST6MIaJSi33zT/hnziV6+O4WeDeHTMG+N4U4Zw==
+X-Received: by 2002:a5d:69c8:: with SMTP id s8mr2741923wrw.235.1632605905169; 
+ Sat, 25 Sep 2021 14:38:25 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-421-88.w2-10.abo.wanadoo.fr.
  [2.10.246.88])
- by smtp.gmail.com with ESMTPSA id j27sm12110933wms.6.2021.09.25.14.24.32
+ by smtp.gmail.com with ESMTPSA id r9sm11921761wru.2.2021.09.25.14.38.24
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 25 Sep 2021 14:24:32 -0700 (PDT)
+ Sat, 25 Sep 2021 14:38:24 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 25 Sep 2021 23:24:11 +0200
-Message-Id: <20210925212411.3359812-1-fontaine.fabrice@gmail.com>
+Date: Sat, 25 Sep 2021 23:38:03 +0200
+Message-Id: <20210925213803.3405981-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/minizip: bump to version 3.0.3
+Subject: [Buildroot] [PATCH 1/1] package/mtr: add libcap optional dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,36 +95,31 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/zlib-ng/minizip-ng/releases/tag/3.0.3
+libcap is an optional dependency which is enabled by default since
+version 0.88 and
+https://github.com/traviscross/mtr/commit/2ff8de310222d26d10b13a104a1a82f2b86a84c6
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/minizip/minizip.hash | 2 +-
- package/minizip/minizip.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/mtr/mtr.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/package/minizip/minizip.hash b/package/minizip/minizip.hash
-index b006f32bfc..6043f96f3a 100644
---- a/package/minizip/minizip.hash
-+++ b/package/minizip/minizip.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  6ba4b6629c107c27ab526e517bdb105612232f0965a6747f60150e5a04c2fe5a  minizip-3.0.2.tar.gz
-+sha256  5f1dd0d38adbe9785cb9c4e6e47738c109d73a0afa86e58c4025ce3e2cc504ed  minizip-3.0.3.tar.gz
- sha256  675181c03fc1302a1c8554c00f7be9bb420c5dbc9dcc2013433cec144413de03  LICENSE
-diff --git a/package/minizip/minizip.mk b/package/minizip/minizip.mk
-index 351aee464c..2d0f63959e 100644
---- a/package/minizip/minizip.mk
-+++ b/package/minizip/minizip.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MINIZIP_VERSION = 3.0.2
-+MINIZIP_VERSION = 3.0.3
- MINIZIP_SITE = $(call github,nmoinvaz,minizip,$(MINIZIP_VERSION))
- MINIZIP_DEPENDENCIES = host-pkgconf
- MINIZIP_INSTALL_STAGING = YES
+diff --git a/package/mtr/mtr.mk b/package/mtr/mtr.mk
+index 263482534e..7198cbcc1c 100644
+--- a/package/mtr/mtr.mk
++++ b/package/mtr/mtr.mk
+@@ -8,7 +8,10 @@ MTR_VERSION = 0.93
+ MTR_SITE = $(call github,traviscross,mtr,v$(MTR_VERSION))
+ MTR_AUTORECONF = YES
+ MTR_CONF_OPTS = --without-gtk
+-MTR_DEPENDENCIES = host-pkgconf $(if $(BR2_PACKAGE_NCURSES),ncurses)
++MTR_DEPENDENCIES = \
++	host-pkgconf \
++	$(if $(BR2_PACKAGE_LIBCAP),libcap) \
++	$(if $(BR2_PACKAGE_NCURSES),ncurses)
+ MTR_LICENSE = GPL-2.0
+ MTR_LICENSE_FILES = COPYING
+ MTR_SELINUX_MODULES = netutils
 -- 
 2.33.0
 
