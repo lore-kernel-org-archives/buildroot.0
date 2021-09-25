@@ -2,84 +2,85 @@ Return-Path: <SRS0=vewd=OP=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0CD53C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 25 Sep 2021 21:21:31 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D456C433F5
+	for <buildroot@archiver.kernel.org>; Sat, 25 Sep 2021 21:24:39 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 34D7A6054E
-	for <buildroot@archiver.kernel.org>; Sat, 25 Sep 2021 21:21:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 34D7A6054E
+	by mail.kernel.org (Postfix) with ESMTPS id 7B78461041
+	for <buildroot@archiver.kernel.org>; Sat, 25 Sep 2021 21:24:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7B78461041
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B8A07400CC;
-	Sat, 25 Sep 2021 21:21:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1C68760622;
+	Sat, 25 Sep 2021 21:24:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id boUAhrr-FUvv; Sat, 25 Sep 2021 21:21:28 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id yI1SnZq28X27; Sat, 25 Sep 2021 21:24:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 994CD4013D;
-	Sat, 25 Sep 2021 21:21:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7AB1A605F9;
+	Sat, 25 Sep 2021 21:24:36 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4AFBB1BF33B
- for <buildroot@lists.busybox.net>; Sat, 25 Sep 2021 21:21:26 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id DF2F01BF33B
+ for <buildroot@lists.busybox.net>; Sat, 25 Sep 2021 21:24:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 44E2880F49
- for <buildroot@lists.busybox.net>; Sat, 25 Sep 2021 21:21:26 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C885E80FF4
+ for <buildroot@lists.busybox.net>; Sat, 25 Sep 2021 21:24:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xVSyHOuWGT3Z for <buildroot@lists.busybox.net>;
- Sat, 25 Sep 2021 21:21:25 +0000 (UTC)
+ with ESMTP id OdxWnqM4eSR1 for <buildroot@lists.busybox.net>;
+ Sat, 25 Sep 2021 21:24:35 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
- [IPv6:2a00:1450:4864:20::429])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 265E280F3B
- for <buildroot@buildroot.org>; Sat, 25 Sep 2021 21:21:25 +0000 (UTC)
-Received: by mail-wr1-x429.google.com with SMTP id w29so38401487wra.8
- for <buildroot@buildroot.org>; Sat, 25 Sep 2021 14:21:24 -0700 (PDT)
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
+ [IPv6:2a00:1450:4864:20::42d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id DC5EE80E5E
+ for <buildroot@buildroot.org>; Sat, 25 Sep 2021 21:24:34 +0000 (UTC)
+Received: by mail-wr1-x42d.google.com with SMTP id t28so25122203wra.7
+ for <buildroot@buildroot.org>; Sat, 25 Sep 2021 14:24:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=eQs5VI95u/amSBa2rusrs8tClgTdL7vTgQ3MEJf1EIs=;
- b=Ja6UM4V5TV4qI5rr+v6NmiBFzBB0alCnn5Zip6Bb5fKAelssUnohN+3W2R/zP6Nilo
- d1fjb6RyBKAqBBAV232UvrahZGZ51AgIe3WFjHnpk4etmdvwQCHAfk1iXWF8n6ZD0Vk4
- CLGs/YshkNbfEh5VBsvdwINEq4e3WimbP9HadS7jci8Mjcp2CaHFaaj2FN+xN4N9WJNH
- zWznTxIo6ExTTkLs2nzJELmuBhIE/IFJaxDVsRBWyr2fMXzhbOTSij/Xq+lKS6AcX9kl
- 9zVpp+/MYooEXRJnz9i8iUfyZf+oXOjRLhxDG6w7cws1V1Mvhged3otR4eCzXzAZ4Gy4
- +CFw==
+ bh=76TlHzEAp59pYur1WOKp2qGOs7FosiswT9ZAym3Il9g=;
+ b=mGzTgU/F5TVph5HMBAOP7rRDArWhLB6CRZFo5nRafyv8STZ6/iTVZTaDyffIoG+4M5
+ PXit32gkCfF4bsWzVHWmCnPxGuJh37hO81NGTQRbI6ni1MzR3lOI5u6V/il4OczGkoCE
+ DQO93LmmdDvnOIHcj+QQFqbuzV3aBO5w6W9AIsxpTEmw99zxjngiHRy/4f7CUqDosWds
+ s5KAnR4TVVnTia4OMn62EofDD35pxwGMRycemO/V1Rz5aXd0KKZfYLfJOZG8tb4zX2Wv
+ JxcTRhlYwZpC6APJ3YgFTjvWnLHHQ3LxPN+ToVDtEe8BbYc2E7Z4nYKBS0omLJ99tFtr
+ 7YZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=eQs5VI95u/amSBa2rusrs8tClgTdL7vTgQ3MEJf1EIs=;
- b=j82DdB4svZCCyZc1jMAz84sitzdccFKC0sLb0gSEdEqfkM/g/V8yCoWmQjbWnzr9Uk
- vzlYj0g9k3OBQ3Bw8BXVwV9vuDrb0jhgr611JeKKTwyYTboAuya+5pdYO8/6T/MWwivq
- 1AWg/HcMx0f4qbV4DcjP/E7MLPYIQ6zX98PnpR040Q7DxrORS0PeCSRB/VIsusfqsjt2
- iDZ6kXf6bXuXVSNvEkYCwydptSSSxrb0AP3vwJWR+HMBlhiiuKBSBJjAEtrh4aK/Lra8
- ER4wniBefNwP5/zkNqMw0jEgQjqMQ5kkFKMRa7A1oO/AGAzJT9py0uiODpCHd5/KR0Yt
- e4tQ==
-X-Gm-Message-State: AOAM533rhlXlqd7KGmtcJhMB/nujBpU2CYVEwJ+zbhKBanRnAfp4KHeH
- dm3FZlpzrmEUpRutae57+FD4bMcNkUo=
-X-Google-Smtp-Source: ABdhPJw5lt941zy+g8dA8mxYdDyRu3+QuXkqoeJnps3eokgVe4bgKWUEHjdz9+SHxSKZzLj5I0quwQ==
-X-Received: by 2002:a1c:a942:: with SMTP id s63mr8438060wme.45.1632604882988; 
- Sat, 25 Sep 2021 14:21:22 -0700 (PDT)
+ bh=76TlHzEAp59pYur1WOKp2qGOs7FosiswT9ZAym3Il9g=;
+ b=rYG1LE+jryJ9dEiS1WLFByW/F5+V9Pq7GYmMkTlbVFOurqXpAtZEmlAv/Hb6xWanTW
+ wttvVV+HI0lrzLiO+/r0uajmFM8+g2kzhsGdAYLDln6MZFpVMvw5HKxFjSnxC55G0JbP
+ vrq676+zp39NS0MjFpx7K5oTkMjHYjvu3xZxqvfXW8XYszxqrrfS+jl8KX7qS8z5jIdg
+ Wx2OGuO8F50LtA+D4+OwxpOJKdK2iIMvD35E04BTrfu4lROdSkUYPxoJxJfMq7rVhqPv
+ UxH0ZZ22Kg6HwsDO6/aK2FLVgbOI26DMMxtTpUmhw02di6UEXeHNxpHKhoRJmHFKrzEH
+ Bkgg==
+X-Gm-Message-State: AOAM532hPGWdWJiqCj8Ucc9vkp1gR5p9bFzM3pT24drOAWgciaIdWhtn
+ oXPXU/+PiCHY5JyEEmvbTHbNO46yg14=
+X-Google-Smtp-Source: ABdhPJxpoJEZyufoW5/8BddYg691Ktsd69bxESYWgd9eV11yJVmrB7lPtuFQ/k9ab+maFaxkENFheg==
+X-Received: by 2002:a05:600c:1c26:: with SMTP id
+ j38mr8860132wms.12.1632605072842; 
+ Sat, 25 Sep 2021 14:24:32 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-421-88.w2-10.abo.wanadoo.fr.
  [2.10.246.88])
- by smtp.gmail.com with ESMTPSA id g2sm12776495wrb.20.2021.09.25.14.21.22
+ by smtp.gmail.com with ESMTPSA id j27sm12110933wms.6.2021.09.25.14.24.32
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 25 Sep 2021 14:21:22 -0700 (PDT)
+ Sat, 25 Sep 2021 14:24:32 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 25 Sep 2021 23:20:35 +0200
-Message-Id: <20210925212035.3357456-1-fontaine.fabrice@gmail.com>
+Date: Sat, 25 Sep 2021 23:24:11 +0200
+Message-Id: <20210925212411.3359812-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/mjpegtools: bump to version 2.2.1
+Subject: [Buildroot] [PATCH 1/1] package/minizip: bump to version 3.0.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,138 +92,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Steve Kenton <skenton@ou.edu>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- Drop patch (already in version) and so autoreconf
-- Update indentation in hash file (two spaces)
+https://github.com/zlib-ng/minizip-ng/releases/tag/3.0.3
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...uses-problems-on-some-x86_64-systems.patch | 73 -------------------
- package/mjpegtools/mjpegtools.hash            |  9 ++-
- package/mjpegtools/mjpegtools.mk              |  4 +-
- 3 files changed, 6 insertions(+), 80 deletions(-)
- delete mode 100644 package/mjpegtools/0001-PROGRAM_NOPIC-apparently-causes-problems-on-some-x86_64-systems.patch
+ package/minizip/minizip.hash | 2 +-
+ package/minizip/minizip.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mjpegtools/0001-PROGRAM_NOPIC-apparently-causes-problems-on-some-x86_64-systems.patch b/package/mjpegtools/0001-PROGRAM_NOPIC-apparently-causes-problems-on-some-x86_64-systems.patch
-deleted file mode 100644
-index f5de8ee969..0000000000
---- a/package/mjpegtools/0001-PROGRAM_NOPIC-apparently-causes-problems-on-some-x86_64-systems.patch
-+++ /dev/null
-@@ -1,73 +0,0 @@
--From e69557bea18eb7c3069c9527cc30f7cd91be27b7 Mon Sep 17 00:00:00 2001
--From: sms00 <sms00@3be20b7b-d6de-45d7-9b51-1db703c412de>
--Date: Thu, 28 Nov 2013 22:39:41 +0000
--Subject: [PATCH] PROGRAM_NOPIC apparently causes problems on some x86_64
-- systems, has little to no performance effect on x86_64 systems and even on
-- x86 systems most programs are I/O bound anyhow.  So remove the 4 uses of the
-- flag
--
--git-svn-id: https://svn.code.sf.net/p/mjpeg/Code/trunk/mjpeg_play@3359 3be20b7b-d6de-45d7-9b51-1db703c412de
--
--[Retrieved (and backported by removing INSTALL updates) from:
--https://github.com/jaystevens/mjpegtools/commit/e69557bea18eb7c3069c9527cc30f7cd91be27b7]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- y4mdenoise/Makefile.am |   4 +-
-- y4munsharp/Makefile.am |   2 +-
-- y4mutils/Makefile.am   |   2 +-
-- yuvscaler/Makefile.am  |   2 +-
-- 5 files changed, 26 insertions(+), 94 deletions(-)
--
--diff --git a/y4mdenoise/Makefile.am b/y4mdenoise/Makefile.am
--index dee9064f..d7fa76e2 100644
----- a/y4mdenoise/Makefile.am
--+++ b/y4mdenoise/Makefile.am
--@@ -4,8 +4,8 @@ MAINTAINERCLEANFILES = Makefile.in
-- 
-- EXTRA_DIST = implementation.html
-- 
---AM_CFLAGS = -DNDEBUG -finline-functions @PROGRAM_NOPIC@
---AM_CXXFLAGS = -DNDEBUG -finline-functions @PROGRAM_NOPIC@
--+AM_CFLAGS = -DNDEBUG -finline-functions
--+AM_CXXFLAGS = -DNDEBUG -finline-functions
-- 
-- INCLUDES =  -I$(top_srcdir) -I$(top_srcdir)/utils
-- 
--diff --git a/y4munsharp/Makefile.am b/y4munsharp/Makefile.am
--index a7f98acc..f99ff5cf 100644
----- a/y4munsharp/Makefile.am
--+++ b/y4munsharp/Makefile.am
--@@ -4,7 +4,7 @@ MAINTAINERCLEANFILES = Makefile.in
-- 
-- INCLUDES = -I $(top_srcdir)/utils -I $(top_srcdir)
-- 
---y4munharp_CFLAGS=@PROGRAM_NOPIC@
--+y4munharp_CFLAGS=
-- 
-- bin_PROGRAMS = y4munsharp
-- 
--diff --git a/y4mutils/Makefile.am b/y4mutils/Makefile.am
--index f3b0a671..7b8b1881 100644
----- a/y4mutils/Makefile.am
--+++ b/y4mutils/Makefile.am
--@@ -2,7 +2,7 @@
-- 
-- MAINTAINERCLEANFILES = Makefile.in
-- 
---AM_CFLAGS   = @PROGRAM_NOPIC@
--+AM_CFLAGS   =
-- AM_CPPFLAGS = -I$(top_srcdir) -I$(top_srcdir)/utils
-- 
-- LIBMJPEGUTILS = $(top_builddir)/utils/libmjpegutils.la
--diff --git a/yuvscaler/Makefile.am b/yuvscaler/Makefile.am
--index 1fe4d757..6d2adaca 100644
----- a/yuvscaler/Makefile.am
--+++ b/yuvscaler/Makefile.am
--@@ -18,6 +18,6 @@ noinst_HEADERS = \
-- 
-- EXTRA_DIST = yuvscaler_implementation.txt
-- 
---yuvscaler_CFLAGS=@PROGRAM_NOPIC@
--+yuvscaler_CFLAGS=
-- yuvscaler_SOURCES = yuvscaler.c yuvscaler_resample.c yuvscaler_bicubic.c
-- yuvscaler_LDADD = $(LIBMJPEGUTILS) $(LIBM_LIBS)
-diff --git a/package/mjpegtools/mjpegtools.hash b/package/mjpegtools/mjpegtools.hash
-index 76e9403f83..8d74907b26 100644
---- a/package/mjpegtools/mjpegtools.hash
-+++ b/package/mjpegtools/mjpegtools.hash
-@@ -1,5 +1,6 @@
--# From http://sourceforge.net/projects/mjpeg/files/mjpegtools/2.1.0/
--md5	57bf5dd78976ca9bac972a6511b236f3	mjpegtools-2.1.0.tar.gz
--sha1	b9effa86280e23d67369e842e5cb645948583097	mjpegtools-2.1.0.tar.gz
-+# From http://sourceforge.net/projects/mjpeg/files/mjpegtools/2.2.1/
-+md5  168e0131c0b8a2e31df7a73eb602fc32  mjpegtools-2.2.1.tar.gz
-+sha1  26e980912cd06f31033964acbc4b8d1932788bfc  mjpegtools-2.2.1.tar.gz
+diff --git a/package/minizip/minizip.hash b/package/minizip/minizip.hash
+index b006f32bfc..6043f96f3a 100644
+--- a/package/minizip/minizip.hash
++++ b/package/minizip/minizip.hash
+@@ -1,3 +1,3 @@
  # Locally computed
--sha256	32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670	COPYING
-+sha256  b180536d7d9960b05e0023a197b00dcb100929a49aab71d19d55f4a1b210f49a  mjpegtools-2.2.1.tar.gz
-+sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-diff --git a/package/mjpegtools/mjpegtools.mk b/package/mjpegtools/mjpegtools.mk
-index e2c6b7d8b7..8d6c475518 100644
---- a/package/mjpegtools/mjpegtools.mk
-+++ b/package/mjpegtools/mjpegtools.mk
-@@ -4,14 +4,12 @@
+-sha256  6ba4b6629c107c27ab526e517bdb105612232f0965a6747f60150e5a04c2fe5a  minizip-3.0.2.tar.gz
++sha256  5f1dd0d38adbe9785cb9c4e6e47738c109d73a0afa86e58c4025ce3e2cc504ed  minizip-3.0.3.tar.gz
+ sha256  675181c03fc1302a1c8554c00f7be9bb420c5dbc9dcc2013433cec144413de03  LICENSE
+diff --git a/package/minizip/minizip.mk b/package/minizip/minizip.mk
+index 351aee464c..2d0f63959e 100644
+--- a/package/minizip/minizip.mk
++++ b/package/minizip/minizip.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MJPEGTOOLS_VERSION = 2.1.0
-+MJPEGTOOLS_VERSION = 2.2.1
- MJPEGTOOLS_SITE = http://sourceforge.net/projects/mjpeg/files/mjpegtools/$(MJPEGTOOLS_VERSION)
- MJPEGTOOLS_DEPENDENCIES = host-pkgconf jpeg
- MJPEGTOOLS_INSTALL_STAGING = YES
- MJPEGTOOLS_LICENSE = GPL-2.0+
- MJPEGTOOLS_LICENSE_FILES = COPYING
--# We're patching Makefile.am
--MJPEGTOOLS_AUTORECONF = YES
- 
- ifeq ($(BR2_PACKAGE_MJPEGTOOLS_SIMD_SUPPORT),y)
- MJPEGTOOLS_CONF_OPTS += --enable-simd-accel
+-MINIZIP_VERSION = 3.0.2
++MINIZIP_VERSION = 3.0.3
+ MINIZIP_SITE = $(call github,nmoinvaz,minizip,$(MINIZIP_VERSION))
+ MINIZIP_DEPENDENCIES = host-pkgconf
+ MINIZIP_INSTALL_STAGING = YES
 -- 
 2.33.0
 
