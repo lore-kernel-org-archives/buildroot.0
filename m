@@ -2,87 +2,91 @@ Return-Path: <SRS0=Tewt=OQ=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BE8D8C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 20:35:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 826E4C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 20:57:51 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 83E0061019
-	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 20:35:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 83E0061019
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id ADD5060F11
+	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 20:57:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org ADD5060F11
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 298108102D;
-	Sun, 26 Sep 2021 20:35:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4C59080F1B;
+	Sun, 26 Sep 2021 20:57:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wkCfYTlu2k5v; Sun, 26 Sep 2021 20:35:37 +0000 (UTC)
+	with ESMTP id ix4tda2w_P2R; Sun, 26 Sep 2021 20:57:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8C41780F29;
-	Sun, 26 Sep 2021 20:35:36 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 099B91BF3DB
- for <buildroot@lists.busybox.net>; Sun, 26 Sep 2021 20:35:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 92ABE81751;
+	Sun, 26 Sep 2021 20:57:48 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B31981BF3DB
+ for <buildroot@lists.busybox.net>; Sun, 26 Sep 2021 20:57:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 02991402CA
- for <buildroot@lists.busybox.net>; Sun, 26 Sep 2021 20:35:25 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A2DC281751
+ for <buildroot@lists.busybox.net>; Sun, 26 Sep 2021 20:57:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mpiabyrMa4sm for <buildroot@lists.busybox.net>;
- Sun, 26 Sep 2021 20:35:24 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kv4JK8h5vHMh for <buildroot@lists.busybox.net>;
+ Sun, 26 Sep 2021 20:57:46 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
- [IPv6:2a00:1450:4864:20::436])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0C76E40246
- for <buildroot@buildroot.org>; Sun, 26 Sep 2021 20:35:23 +0000 (UTC)
-Received: by mail-wr1-x436.google.com with SMTP id c21so16234520wrb.13
- for <buildroot@buildroot.org>; Sun, 26 Sep 2021 13:35:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=/riH72c6nmqjDLr5c1xsMZaTYV4qW7VsWV9EN9R8Dak=;
- b=UpgBVnGLolof6YXpInnCZEZHVb+fhZG0mDxXzcbRuk6P5i+h7GSbmUN+xNUrUP0vqp
- /XPrz9tTK0H1HF+d/0hNVUNbxXnhQwRYf/v6xIHtyxo7HWnsXKcxfzv8wpYO3LXdGzR9
- VWx5wl+j0bMSdjWW2p9vfgKW6n2yNFrMk/1bD6ary0xp1Tty8vmvkErG+OwDw5t/GuXo
- 19qIUaTga8gntafjtvgJMBV04RX4sbRhmeoM4a5gVo4nYfdh69JAf+OfH0uOj5Ok0B5F
- vE0AixeuWafJd4K+7tKhjpfNzEJTxG1bgdqeNvlmjJjevnkoXJaAznn0MqsKQdUSqOzB
- RvsA==
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com
+ [IPv6:2a00:1450:4864:20::530])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6F07680F1B
+ for <buildroot@buildroot.org>; Sun, 26 Sep 2021 20:57:46 +0000 (UTC)
+Received: by mail-ed1-x530.google.com with SMTP id dj4so60609296edb.5
+ for <buildroot@buildroot.org>; Sun, 26 Sep 2021 13:57:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=4HaMkI8QUJTGWPbn/xD5hrBDAfRKs0t47fabMaXeazk=;
+ b=Rd3d/ZFyq3PjCoFYAkiTbaWnfsWWQKTmYWBeisO7rSpXTJntSzMv3ZmiNLAWtDd3P6
+ w5CjBNNv37yUmf7tAVAIMs2xftOEgT3Q/Q4owAQB1GtvNWCdlukM02/teW+12tyN0mIF
+ kye5Ye4D+5cd9UsLJylEA4GpQNXbSy39eKbu5cZRAEY5GpEXQsjyV7IcjS4kv1E1JU9S
+ WmO/dE/sAAAe7/bDMJOViopTs0dgdST3RQJiq2VHkWbdPEttKBcHGTCIA+gfexoitS/q
+ akHLRRHRisCUN9O6aAuxQ2rffDP6pfFshxIK97pnZbGctG983RQMkuwWdlXrY8NLpgme
+ p73g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=/riH72c6nmqjDLr5c1xsMZaTYV4qW7VsWV9EN9R8Dak=;
- b=ckjuqB3VBdshNo4j/DFZTbddYTCUQ7t0PX3Mm0EFgeMmhhQrgSxAVK9gHkZG5aUGHt
- /uMSGFnGk+1yWzRtYx5a9anWBgoRwULNr5LZ7/cEHxKWNZQsl1p+8yVc+5qIxAKY0hq3
- JBujgYVa1EFDNbfcvDjXMZDnVmS4g/DH5PsXKlYfcNvCh29SCEMWeXEuGZ3YfNsTjCYm
- 4KAHYgdJYWCnazY/fcrj/usan3Q+liZ8FwasoYZ3ipSGhXXHPFSokubzwiVL3NmSQWxC
- JzEUjQXykWybz4elHua6Vuvo4Uuu4txvbATpS6962KuWopyvj6dgSariDwDJNbg2siqV
- GJjQ==
-X-Gm-Message-State: AOAM5331KgDbZ8z1GPTx9mlX6pT1PwRFBLN5rgC/0fRJ6XLSiJrO0hbq
- UHcELsS1mpCetPUatsFEsHb3vzTarP0=
-X-Google-Smtp-Source: ABdhPJwid2hd8eTeaNmGtkkmQuiBCV0u50czTxKjZp3dimd8eP8AAiuL9E/AxvoohIuANMBSQGY/sg==
-X-Received: by 2002:a1c:141:: with SMTP id 62mr7335768wmb.188.1632688521313;
- Sun, 26 Sep 2021 13:35:21 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-421-88.w2-10.abo.wanadoo.fr.
- [2.10.246.88])
- by smtp.gmail.com with ESMTPSA id d1sm16340074wrr.72.2021.09.26.13.35.20
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 26 Sep 2021 13:35:21 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Sun, 26 Sep 2021 22:34:29 +0200
-Message-Id: <20210926203429.261419-2-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20210926203429.261419-1-fontaine.fabrice@gmail.com>
-References: <20210926203429.261419-1-fontaine.fabrice@gmail.com>
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=4HaMkI8QUJTGWPbn/xD5hrBDAfRKs0t47fabMaXeazk=;
+ b=WAvOvu00H0ghbDKvqwjqzWMUZ8/awqLPOR0pOeTAQauHXiFDfwnEGvtK+vpd10XEGQ
+ IpNSkMwbZVnT7fJgrNKAJ/Kc0FMygG1MPVfiIQFJPYsNzrhVz446F6A9FqtjUslmXRxI
+ kfjAmDqeWyWgTFCHy6FGu3ee2NJvF4eFZJlB0DgLQXJ4gnndoF7NcMZNjdY6FpsX7uvd
+ 2jirgvs7zrcoWqn4MRENmyu6Lp9G9q7c4lBTPwVIeBXyD0IP6DAaG7FvB43b2VradtJP
+ qYH6BKZ+12lV4imvMDSqFu/ZT1xBdaKZanH0MhhtoCjtzm/2aoxnJhCjqjQQ2ZdK5K1G
+ 1zJQ==
+X-Gm-Message-State: AOAM532rZScAokLwK8aHSzzAXcx3WjD8zzkt3NNIOOwG6zCFBkrw3mIS
+ TViIti7gZ8cC789kLXO3ASO9ow==
+X-Google-Smtp-Source: ABdhPJywksyQDvc75q0dveLuyUfhPd7c1Tj7JZ6d/Q+RHul1Y0urEoYMtKxx06M/IdNEebJEuCikZQ==
+X-Received: by 2002:aa7:c5d9:: with SMTP id h25mr18874467eds.159.1632689864392; 
+ Sun, 26 Sep 2021 13:57:44 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id r19sm8979868edt.54.2021.09.26.13.57.43
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sun, 26 Sep 2021 13:57:44 -0700 (PDT)
+Message-ID: <ea27257c-18c6-c09e-3bb8-63ad483677c5@mind.be>
+Date: Sun, 26 Sep 2021 22:57:42 +0200
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v3,
- 2/2] package/libvirt: add host-lvm2 dependency
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.1.0
+Content-Language: en-GB
+To: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
+References: <20210922041943.3269673-1-james.hilliard1@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20210922041943.3269673-1-james.hilliard1@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-aioconsole: bump to
+ version 0.3.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,45 +98,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Jared Bents <jared.bents@rockwellcollins.com>
-Content-Type: text/plain; charset="us-ascii"
+Cc: Asaf Kahlon <asafka7@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-host-lvm2 is needed to avoid the following build failure raised since
-the addition of the package in commit
-ccfc90e1010e42e6529afae3a5ea8bf7226dabc1:
 
-Program pvcreate found: NO
 
-../output-1/build/libvirt-7.7.0/meson.build:1888:6: ERROR: Program 'pvcreate' not found
+On 22/09/2021 06:19, James Hilliard wrote:
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
-Fixes:
- - http://autobuild.buildroot.org/results/13c12086a0ce06c348d5971b56b5f4f27fa0f317
+  All your python package bumps from September 22 applied to master, thanks.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libvirt/libvirt.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+  Regards,
+  Arnout
 
-diff --git a/package/libvirt/libvirt.mk b/package/libvirt/libvirt.mk
-index 0f6c7cef7f..3118de4d58 100644
---- a/package/libvirt/libvirt.mk
-+++ b/package/libvirt/libvirt.mk
-@@ -180,7 +180,7 @@ endif
- 
- ifeq ($(BR2_PACKAGE_LVM2_STANDARD_INSTALL),y)
- LIBVIRT_CONF_OPTS += -Dstorage_lvm=enabled
--LIBVIRT_DEPENDENCIES += lvm2
-+LIBVIRT_DEPENDENCIES += host-lvm2 lvm2
- else
- LIBVIRT_CONF_OPTS += -Dstorage_lvm=disabled
- endif
--- 
-2.33.0
-
+> ---
+>   package/python-aioconsole/python-aioconsole.hash | 4 ++--
+>   package/python-aioconsole/python-aioconsole.mk   | 4 ++--
+>   2 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/python-aioconsole/python-aioconsole.hash b/package/python-aioconsole/python-aioconsole.hash
+> index dea2216fcf..a9823aa7a5 100644
+> --- a/package/python-aioconsole/python-aioconsole.hash
+> +++ b/package/python-aioconsole/python-aioconsole.hash
+> @@ -1,3 +1,3 @@
+>   # md5, sha256 from https://pypi.org/pypi/aioconsole/json
+> -md5  66d4b05e3bc75267daf0f773d839f62b  aioconsole-0.3.1.tar.gz
+> -sha256  7c038bb40b7690bf5be6b17154830b7bff25e7be1c02d8420a346c3efbd5d8e5  aioconsole-0.3.1.tar.gz
+> +md5  b8cbcb6e00d8e535256526dfe4f27db3  aioconsole-0.3.2.tar.gz
+> +sha256  9355b36d41d5fbdd3dbb01510deb2b985b508b2ebcd5b8bd85af61a707e2f6c8  aioconsole-0.3.2.tar.gz
+> diff --git a/package/python-aioconsole/python-aioconsole.mk b/package/python-aioconsole/python-aioconsole.mk
+> index b32d2bea0f..393fdf6e45 100644
+> --- a/package/python-aioconsole/python-aioconsole.mk
+> +++ b/package/python-aioconsole/python-aioconsole.mk
+> @@ -4,9 +4,9 @@
+>   #
+>   ################################################################################
+>   
+> -PYTHON_AIOCONSOLE_VERSION = 0.3.1
+> +PYTHON_AIOCONSOLE_VERSION = 0.3.2
+>   PYTHON_AIOCONSOLE_SOURCE = aioconsole-$(PYTHON_AIOCONSOLE_VERSION).tar.gz
+> -PYTHON_AIOCONSOLE_SITE = https://files.pythonhosted.org/packages/5a/12/fce04ddc0a8ebd6482e5ec293d8bda47c9e05c82826b061f7b73523b8601
+> +PYTHON_AIOCONSOLE_SITE = https://files.pythonhosted.org/packages/7a/b2/747ab3cb965596cd84c5159941613d901d8771acad3c51c4f5da362aa9f0
+>   PYTHON_AIOCONSOLE_SETUP_TYPE = setuptools
+>   PYTHON_AIOCONSOLE_LICENSE = GPL-3.0
+>   
+> 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
