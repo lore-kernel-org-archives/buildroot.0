@@ -2,91 +2,92 @@ Return-Path: <SRS0=Tewt=OQ=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 826E4C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 20:57:51 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 78A98C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 20:59:40 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id ADD5060F11
-	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 20:57:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org ADD5060F11
+	by mail.kernel.org (Postfix) with ESMTPS id 954A960F11
+	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 20:59:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 954A960F11
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4C59080F1B;
-	Sun, 26 Sep 2021 20:57:50 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2057440344;
+	Sun, 26 Sep 2021 20:59:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ix4tda2w_P2R; Sun, 26 Sep 2021 20:57:49 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3q8oC7nRR_5K; Sun, 26 Sep 2021 20:59:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 92ABE81751;
-	Sun, 26 Sep 2021 20:57:48 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B31981BF3DB
- for <buildroot@lists.busybox.net>; Sun, 26 Sep 2021 20:57:47 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1DAF140241;
+	Sun, 26 Sep 2021 20:59:37 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 178B11BF20B
+ for <buildroot@lists.busybox.net>; Sun, 26 Sep 2021 20:59:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A2DC281751
- for <buildroot@lists.busybox.net>; Sun, 26 Sep 2021 20:57:47 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 141B36071A
+ for <buildroot@lists.busybox.net>; Sun, 26 Sep 2021 20:59:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kv4JK8h5vHMh for <buildroot@lists.busybox.net>;
- Sun, 26 Sep 2021 20:57:46 +0000 (UTC)
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3WWJsOdEmK1J for <buildroot@lists.busybox.net>;
+ Sun, 26 Sep 2021 20:59:33 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com
- [IPv6:2a00:1450:4864:20::530])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6F07680F1B
- for <buildroot@buildroot.org>; Sun, 26 Sep 2021 20:57:46 +0000 (UTC)
-Received: by mail-ed1-x530.google.com with SMTP id dj4so60609296edb.5
- for <buildroot@buildroot.org>; Sun, 26 Sep 2021 13:57:46 -0700 (PDT)
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com
+ [IPv6:2a00:1450:4864:20::52d])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id AF38160711
+ for <buildroot@buildroot.org>; Sun, 26 Sep 2021 20:59:33 +0000 (UTC)
+Received: by mail-ed1-x52d.google.com with SMTP id x7so45760609edd.6
+ for <buildroot@buildroot.org>; Sun, 26 Sep 2021 13:59:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=4HaMkI8QUJTGWPbn/xD5hrBDAfRKs0t47fabMaXeazk=;
- b=Rd3d/ZFyq3PjCoFYAkiTbaWnfsWWQKTmYWBeisO7rSpXTJntSzMv3ZmiNLAWtDd3P6
- w5CjBNNv37yUmf7tAVAIMs2xftOEgT3Q/Q4owAQB1GtvNWCdlukM02/teW+12tyN0mIF
- kye5Ye4D+5cd9UsLJylEA4GpQNXbSy39eKbu5cZRAEY5GpEXQsjyV7IcjS4kv1E1JU9S
- WmO/dE/sAAAe7/bDMJOViopTs0dgdST3RQJiq2VHkWbdPEttKBcHGTCIA+gfexoitS/q
- akHLRRHRisCUN9O6aAuxQ2rffDP6pfFshxIK97pnZbGctG983RQMkuwWdlXrY8NLpgme
- p73g==
+ :references:from:organization:in-reply-to:content-transfer-encoding;
+ bh=lt8P1BVZeIDdqodAsBbgJrlRlRoXo0F+fgi/NKsvrpA=;
+ b=iAoLrOpLk3gxkAZ3RHUC29LmMI2lCfeqOAPVhY1qmcHCj5menQXR+TFbVRvKFCbMcf
+ vWpwoXbENlGcTg4F7Pqa4rcCFXzZurGdVf9OJ5ho0gsoAQOsWwsNzsT8v7/9WWyYLor5
+ hnS5UaLIB8bhBWZJ+NR/8vc1rOL0tvSunF37ZyVG8KIBDEyzS7UnuyKtrLplb8Vh68L9
+ 9g4JaCE0dHNGK3RUWfk082DGGY2rRStz6nNVjooiFyPIwfJuSJWl6juJ1GcS2pmEWMQ0
+ EHV1y4vf55etGax5Ba/4WmOPeow5Zo4Ik1Zyo2howD++yp3PLfyAMX7j6u+1hBNs3OrB
+ QPtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
+ :content-language:to:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=4HaMkI8QUJTGWPbn/xD5hrBDAfRKs0t47fabMaXeazk=;
- b=WAvOvu00H0ghbDKvqwjqzWMUZ8/awqLPOR0pOeTAQauHXiFDfwnEGvtK+vpd10XEGQ
- IpNSkMwbZVnT7fJgrNKAJ/Kc0FMygG1MPVfiIQFJPYsNzrhVz446F6A9FqtjUslmXRxI
- kfjAmDqeWyWgTFCHy6FGu3ee2NJvF4eFZJlB0DgLQXJ4gnndoF7NcMZNjdY6FpsX7uvd
- 2jirgvs7zrcoWqn4MRENmyu6Lp9G9q7c4lBTPwVIeBXyD0IP6DAaG7FvB43b2VradtJP
- qYH6BKZ+12lV4imvMDSqFu/ZT1xBdaKZanH0MhhtoCjtzm/2aoxnJhCjqjQQ2ZdK5K1G
- 1zJQ==
-X-Gm-Message-State: AOAM532rZScAokLwK8aHSzzAXcx3WjD8zzkt3NNIOOwG6zCFBkrw3mIS
- TViIti7gZ8cC789kLXO3ASO9ow==
-X-Google-Smtp-Source: ABdhPJywksyQDvc75q0dveLuyUfhPd7c1Tj7JZ6d/Q+RHul1Y0urEoYMtKxx06M/IdNEebJEuCikZQ==
-X-Received: by 2002:aa7:c5d9:: with SMTP id h25mr18874467eds.159.1632689864392; 
- Sun, 26 Sep 2021 13:57:44 -0700 (PDT)
+ bh=lt8P1BVZeIDdqodAsBbgJrlRlRoXo0F+fgi/NKsvrpA=;
+ b=3V7+mERI6c03slaaJNQqFJes0A5iaowCd03gDeUniBG7d65SgjmmshTfGHoXKjy2ZO
+ Qzg+K4fo9NYYOpWAIj4iBOYtoPVH+xE5+o4rTn9Gxdn4BiKnhUkTSWtyUi/cUWxoipS1
+ lBISCsnvdnM0F7SCSw/VQy5KjhUhA4Rofgv7G+E1a5XLDs5vHVH2L6Qxf1x/ywcUv+Q2
+ gPG97AnW2zv7tp8lL6rZgsXOxD9GCM78wvsOH4BVYd6Ww+dq7k5mRlzh7AEPHpNdccHN
+ /1rtp4PMefvWPzVlVEpjpwQubWuvvZtFu03qsSJr3C8WDMDBVi083liMaDwULHeL/NpX
+ sjXA==
+X-Gm-Message-State: AOAM533RDfhQi3Y0vNVbU5EOJR1kVl2CW9ptX0f/MasLM+/hXOsIjzR9
+ Cn8oLpTrfsqn58syey4g05Jo8A==
+X-Google-Smtp-Source: ABdhPJyC2Jql2hesGrvAZNYZBzrN09L5IjhpT1NR6dsZ2g+4ycO3Xn8vMnazWMdYyQpgcIV9PUnu2g==
+X-Received: by 2002:a17:906:a2d4:: with SMTP id
+ by20mr23574545ejb.566.1632689971778; 
+ Sun, 26 Sep 2021 13:59:31 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id r19sm8979868edt.54.2021.09.26.13.57.43
+ by smtp.gmail.com with ESMTPSA id y4sm7703190ejr.101.2021.09.26.13.59.31
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 26 Sep 2021 13:57:44 -0700 (PDT)
-Message-ID: <ea27257c-18c6-c09e-3bb8-63ad483677c5@mind.be>
-Date: Sun, 26 Sep 2021 22:57:42 +0200
+ Sun, 26 Sep 2021 13:59:31 -0700 (PDT)
+Message-ID: <c55c6439-1b99-ce07-9ce9-e9e88013b62f@mind.be>
+Date: Sun, 26 Sep 2021 22:59:30 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.1.0
 Content-Language: en-GB
-To: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
-References: <20210922041943.3269673-1-james.hilliard1@gmail.com>
+To: Chris Packham <judge.packham@gmail.com>, buildroot@buildroot.org
+References: <20210922083114.545106-1-judge.packham@gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20210922041943.3269673-1-james.hilliard1@gmail.com>
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-aioconsole: bump to
- version 0.3.2
+In-Reply-To: <20210922083114.545106-1-judge.packham@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/2] package/micropython: Update LICENSE info
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,8 +99,6 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Asaf Kahlon <asafka7@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -107,44 +106,40 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 22/09/2021 06:19, James Hilliard wrote:
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+On 22/09/2021 10:31, Chris Packham wrote:
+> The various micropython ports may include code licensed under different
+> licenses compared to the core micropython. List these in MICROPYTHON_LICENSE.
+> 
+> Signed-off-by: Chris Packham <judge.packham@gmail.com>
+> ---
+>   package/micropython/micropython.mk | 5 ++++-
+>   1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/micropython/micropython.mk b/package/micropython/micropython.mk
+> index fa28da9be3..7a752efd69 100644
+> --- a/package/micropython/micropython.mk
+> +++ b/package/micropython/micropython.mk
+> @@ -6,7 +6,10 @@
+>   
+>   MICROPYTHON_VERSION = 1.14
+>   MICROPYTHON_SITE = $(call github,micropython,micropython,v$(MICROPYTHON_VERSION))
+> -MICROPYTHON_LICENSE = MIT
+> +MICROPYTHON_LICENSE = MIT, Apache-2.0, BSD-1-clause, BSD-3-clause, BSD-4-clause, \
+> +		      GPL-2.0 with FreeRTOS exception, GPL-2.0+, GPL-2.0, LGPL-3.0-only, \
+> +		      MCD-ST Liberty SW License Agreement V2, MIT + BSD-3-clause, OFL-1.1, \
+> +		      PJRC.COM, Zlib
 
-  All your python package bumps from September 22 applied to master, thanks.
+  Actually, we don't use most of those in the Unix build. So I've checked 
+everything and stripped it down the ones we really do use, which is just BSD-1c, 
+BSD-3c and Zlib in addition to MIT.
+
+  Applied both to master with that fixed.
 
   Regards,
   Arnout
 
-> ---
->   package/python-aioconsole/python-aioconsole.hash | 4 ++--
->   package/python-aioconsole/python-aioconsole.mk   | 4 ++--
->   2 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/python-aioconsole/python-aioconsole.hash b/package/python-aioconsole/python-aioconsole.hash
-> index dea2216fcf..a9823aa7a5 100644
-> --- a/package/python-aioconsole/python-aioconsole.hash
-> +++ b/package/python-aioconsole/python-aioconsole.hash
-> @@ -1,3 +1,3 @@
->   # md5, sha256 from https://pypi.org/pypi/aioconsole/json
-> -md5  66d4b05e3bc75267daf0f773d839f62b  aioconsole-0.3.1.tar.gz
-> -sha256  7c038bb40b7690bf5be6b17154830b7bff25e7be1c02d8420a346c3efbd5d8e5  aioconsole-0.3.1.tar.gz
-> +md5  b8cbcb6e00d8e535256526dfe4f27db3  aioconsole-0.3.2.tar.gz
-> +sha256  9355b36d41d5fbdd3dbb01510deb2b985b508b2ebcd5b8bd85af61a707e2f6c8  aioconsole-0.3.2.tar.gz
-> diff --git a/package/python-aioconsole/python-aioconsole.mk b/package/python-aioconsole/python-aioconsole.mk
-> index b32d2bea0f..393fdf6e45 100644
-> --- a/package/python-aioconsole/python-aioconsole.mk
-> +++ b/package/python-aioconsole/python-aioconsole.mk
-> @@ -4,9 +4,9 @@
->   #
->   ################################################################################
->   
-> -PYTHON_AIOCONSOLE_VERSION = 0.3.1
-> +PYTHON_AIOCONSOLE_VERSION = 0.3.2
->   PYTHON_AIOCONSOLE_SOURCE = aioconsole-$(PYTHON_AIOCONSOLE_VERSION).tar.gz
-> -PYTHON_AIOCONSOLE_SITE = https://files.pythonhosted.org/packages/5a/12/fce04ddc0a8ebd6482e5ec293d8bda47c9e05c82826b061f7b73523b8601
-> +PYTHON_AIOCONSOLE_SITE = https://files.pythonhosted.org/packages/7a/b2/747ab3cb965596cd84c5159941613d901d8771acad3c51c4f5da362aa9f0
->   PYTHON_AIOCONSOLE_SETUP_TYPE = setuptools
->   PYTHON_AIOCONSOLE_LICENSE = GPL-3.0
+>   MICROPYTHON_LICENSE_FILES = LICENSE
+>   MICROPYTHON_DEPENDENCIES = host-pkgconf libffi $(BR2_PYTHON3_HOST_DEPENDENCY)
 >   
 > 
 _______________________________________________
