@@ -2,52 +2,52 @@ Return-Path: <SRS0=Tewt=OQ=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DDA2DC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 21:02:23 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A8589C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 21:02:35 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9F62A60F6B
-	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 21:02:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9F62A60F6B
+	by mail.kernel.org (Postfix) with ESMTPS id 57EE360F24
+	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 21:02:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 57EE360F24
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 78E5560753;
-	Sun, 26 Sep 2021 21:02:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2A65581A5F;
+	Sun, 26 Sep 2021 21:02:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3DHTajUpUiig; Sun, 26 Sep 2021 21:02:22 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id IyY_ciwpys02; Sun, 26 Sep 2021 21:02:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BD88760725;
-	Sun, 26 Sep 2021 21:02:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7497581A58;
+	Sun, 26 Sep 2021 21:02:33 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 731B61BF3DB
- for <buildroot@lists.busybox.net>; Sun, 26 Sep 2021 21:00:15 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 82F2A1BF3DB
+ for <buildroot@lists.busybox.net>; Sun, 26 Sep 2021 21:00:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7583D40305
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8D96140309
  for <buildroot@lists.busybox.net>; Sun, 26 Sep 2021 21:00:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iVrgeqfF42xj for <buildroot@lists.busybox.net>;
+ with ESMTP id G63L6WNY21KP for <buildroot@lists.busybox.net>;
  Sun, 26 Sep 2021 21:00:10 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5204140314
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5BA164031B
  for <buildroot@buildroot.org>; Sun, 26 Sep 2021 21:00:10 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id B0C3C8D2B1; Sun, 26 Sep 2021 20:57:56 +0000 (UTC)
+ id CB72D8D2AD; Sun, 26 Sep 2021 20:57:56 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sun, 26 Sep 2021 22:17:18 +0200
+Date: Sun, 26 Sep 2021 22:17:28 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b1e1b56e6fad837c59828247c62e23529440381d
-X-Git-Newrev: f5b17124f67907bdb436edfa0c72dbd9b6305186
+X-Git-Oldrev: fecd7db594e97d3bc823ca6477d6fc424507fd9e
+X-Git-Newrev: 47ef8ab6cea619060d07c8618f6777dd23db0728
 X-Patchwork-Hint: ignore
-Message-Id: <20210926205756.B0C3C8D2B1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python{3}-cython: bump to version
- 0.29.24
+Message-Id: <20210926205756.CB72D8D2AD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-greenlet: bump to version
+ 1.1.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,62 +65,51 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f5b17124f67907bdb436edfa0c72dbd9b6305186
+commit: https://git.buildroot.net/buildroot/commit/?id=47ef8ab6cea619060d07c8618f6777dd23db0728
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+License hash change due to path change in:
+https://github.com/python-greenlet/greenlet/commit/8448b094d1b81788ac9cbaf86a184712f1daf5e0
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/python-cython/python-cython.hash | 4 ++--
- package/python-cython/python-cython.mk   | 4 ++--
- package/python3-cython/python3-cython.mk | 4 ++--
- 3 files changed, 6 insertions(+), 6 deletions(-)
+ package/python-greenlet/python-greenlet.hash | 6 +++---
+ package/python-greenlet/python-greenlet.mk   | 6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-cython/python-cython.hash b/package/python-cython/python-cython.hash
-index 04961ff03f..70469c012b 100644
---- a/package/python-cython/python-cython.hash
-+++ b/package/python-cython/python-cython.hash
+diff --git a/package/python-greenlet/python-greenlet.hash b/package/python-greenlet/python-greenlet.hash
+index eed8e59713..ad216b0368 100644
+--- a/package/python-greenlet/python-greenlet.hash
++++ b/package/python-greenlet/python-greenlet.hash
 @@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/cython/json
--md5  82837814b8d72d353e16bb9344e914b1  Cython-0.29.23.tar.gz
--sha256  6a0d31452f0245daacb14c979c77e093eb1a546c760816b5eed0047686baad8e  Cython-0.29.23.tar.gz
-+md5  81aff945f5bfdfb86e7a5d24f5467668  Cython-0.29.24.tar.gz
-+sha256  cdf04d07c3600860e8c2ebaad4e8f52ac3feb212453c1764a49ac08c827e8443  Cython-0.29.24.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/greenlet/json
+-md5  9aebea08f7beb6b87143d0588578c984  greenlet-0.4.16.tar.gz
+-sha256  6e06eac722676797e8fce4adb8ad3dc57a1bb3adfb0dd3fdf8306c055a38456c  greenlet-0.4.16.tar.gz
++md5  a3fbf41851a6b5e1e823e8c18905877c  greenlet-1.1.1.tar.gz
++sha256  c0f22774cd8294078bdf7392ac73cf00bfa1e5e0ed644bd064fdabc5f2a2f481  greenlet-1.1.1.tar.gz
  # Locally computed sha256 checksums
- sha256  a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9  LICENSE.txt
- sha256  e1eb1c49a8508e8173dac30157e4a6439a44ad8846194746c424fbc3fc2b95d7  COPYING.txt
-diff --git a/package/python-cython/python-cython.mk b/package/python-cython/python-cython.mk
-index cf32fc19d1..ffc8e719cd 100644
---- a/package/python-cython/python-cython.mk
-+++ b/package/python-cython/python-cython.mk
-@@ -5,9 +5,9 @@
+-sha256  bbde55d5456a1e912633ed3f66d1dbd9504e3e3dce4f4c2015043cdcbc56e697  LICENSE
++sha256  769831d6e5dfaf2c20802faccff1fafb4c2025dd8f6253dfa47fcad59d4d0979  LICENSE
+ sha256  e5ff3c23c110e494cd7d736c10fd96d462457bafeca310840db6527298c7d46b  LICENSE.PSF
+diff --git a/package/python-greenlet/python-greenlet.mk b/package/python-greenlet/python-greenlet.mk
+index 9243afe514..e9feec5321 100644
+--- a/package/python-greenlet/python-greenlet.mk
++++ b/package/python-greenlet/python-greenlet.mk
+@@ -4,10 +4,10 @@
+ #
  ################################################################################
  
- # Please keep in sync with package/python3-cython/python3-cython.mk
--PYTHON_CYTHON_VERSION = 0.29.23
-+PYTHON_CYTHON_VERSION = 0.29.24
- PYTHON_CYTHON_SOURCE = Cython-$(PYTHON_CYTHON_VERSION).tar.gz
--PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/d9/cd/0d2d90b27219c07f68f1c25bcc7b02dd27639d2180add9d4b73e70945869
-+PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/59/e3/78c921adf4423fff68da327cc91b73a16c63f29752efe7beb6b88b6dd79d
- PYTHON_CYTHON_SETUP_TYPE = setuptools
- PYTHON_CYTHON_LICENSE = Apache-2.0
- PYTHON_CYTHON_LICENSE_FILES = COPYING.txt LICENSE.txt
-diff --git a/package/python3-cython/python3-cython.mk b/package/python3-cython/python3-cython.mk
-index 2c65f1f1a4..2f15ad8c36 100644
---- a/package/python3-cython/python3-cython.mk
-+++ b/package/python3-cython/python3-cython.mk
-@@ -5,9 +5,9 @@
- ################################################################################
+-PYTHON_GREENLET_VERSION = 0.4.16
++PYTHON_GREENLET_VERSION = 1.1.1
+ PYTHON_GREENLET_SOURCE = greenlet-$(PYTHON_GREENLET_VERSION).tar.gz
+-PYTHON_GREENLET_SITE = https://files.pythonhosted.org/packages/20/5e/b989a19f4597b825f44125345cd8a8574216fae7fafe69e2cb1238ebd18a
+-PYTHON_GREENLET_SETUP_TYPE = distutils
++PYTHON_GREENLET_SITE = https://files.pythonhosted.org/packages/72/7e/d8586068d47adba73afc085249712bd266cd7ffbf27d8bc260c33e9d6133
++PYTHON_GREENLET_SETUP_TYPE = setuptools
+ PYTHON_GREENLET_LICENSE = MIT, PSF-2.0
+ PYTHON_GREENLET_LICENSE_FILES = LICENSE LICENSE.PSF
  
- # Please keep in sync with package/python-cython/python-cython.mk
--PYTHON3_CYTHON_VERSION = 0.29.23
-+PYTHON3_CYTHON_VERSION = 0.29.24
- PYTHON3_CYTHON_SOURCE = Cython-$(PYTHON3_CYTHON_VERSION).tar.gz
--PYTHON3_CYTHON_SITE = https://files.pythonhosted.org/packages/d9/cd/0d2d90b27219c07f68f1c25bcc7b02dd27639d2180add9d4b73e70945869
-+PYTHON3_CYTHON_SITE = https://files.pythonhosted.org/packages/59/e3/78c921adf4423fff68da327cc91b73a16c63f29752efe7beb6b88b6dd79d
- PYTHON3_CYTHON_SETUP_TYPE = setuptools
- PYTHON3_CYTHON_LICENSE = Apache-2.0
- PYTHON3_CYTHON_LICENSE_FILES = COPYING.txt LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
