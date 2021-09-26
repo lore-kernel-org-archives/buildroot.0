@@ -2,52 +2,52 @@ Return-Path: <SRS0=Tewt=OQ=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 46996C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 21:46:22 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 01789C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 21:46:34 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 042A76103B
-	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 21:46:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 042A76103B
+	by mail.kernel.org (Postfix) with ESMTPS id B5A7960F43
+	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 21:46:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B5A7960F43
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A03466071B;
-	Sun, 26 Sep 2021 21:46:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 93EB740312;
+	Sun, 26 Sep 2021 21:46:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pEY1oICCSIYA; Sun, 26 Sep 2021 21:46:20 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ku-haSjwOsU2; Sun, 26 Sep 2021 21:46:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EB5B66071C;
-	Sun, 26 Sep 2021 21:46:19 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 625C11BF95D
- for <buildroot@lists.busybox.net>; Sun, 26 Sep 2021 21:44:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 759FC40327;
+	Sun, 26 Sep 2021 21:46:31 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 42D6C1BF370
+ for <buildroot@lists.busybox.net>; Sun, 26 Sep 2021 21:44:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5A5A8403B4
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0D4F240242
  for <buildroot@lists.busybox.net>; Sun, 26 Sep 2021 21:44:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id k14FeaU-Ojx4 for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id QdSX7waZskuD for <buildroot@lists.busybox.net>;
  Sun, 26 Sep 2021 21:44:43 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 30005403C1
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2D94D402DC
  for <buildroot@buildroot.org>; Sun, 26 Sep 2021 21:44:43 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 8BC688D30A; Sun, 26 Sep 2021 21:42:29 +0000 (UTC)
+ id 983228D308; Sun, 26 Sep 2021 21:42:29 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
 Date: Sun, 26 Sep 2021 23:37:21 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c7feecad61771bda1497a56a613ae03f2b51b682
-X-Git-Newrev: f71e240229894acee49ed556b2d939a875939dc6
+X-Git-Oldrev: f71e240229894acee49ed556b2d939a875939dc6
+X-Git-Newrev: ca6a2907c27c8171336643d1ab41bd5c34ee3794
 X-Patchwork-Hint: ignore
-Message-Id: <20210926214229.8BC688D30A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-django: bump to version
- 3.2.7
+Message-Id: <20210926214229.983228D308@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] make: support: use `command -v' instead of
+ `which'
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,60 +65,298 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f71e240229894acee49ed556b2d939a875939dc6
+commit: https://git.buildroot.net/buildroot/commit/?id=ca6a2907c27c8171336643d1ab41bd5c34ee3794
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bugfix release, fixing a number of regressions:
+`which' has been discontinued after 2.21 release in 2015 due this (git
+repository is empty [1]) and version shipped in Debian produces warning
+[2]:
 
-- Fixed a regression in Django 3.2 that caused a crash validating "NaN"
-  input with a forms.DecimalField when additional constraints, e.g.
-  max_value, were specified (#32949).
+/usr/bin/which: this version of `which' is deprecated; use `command -v' in scripts instead.
 
-- Fixed a bug in Django 3.2 where a system check would crash on a model with
-  a reverse many-to-many relation inherited from a parent class (#32947).
+`command is POSIX [3] and supported on all common shells (bash, zsh,
+dash, busybox sh, mksh).
 
-- Fixed a regression in Django 3.2 that caused the incorrect offset
-  extraction from fixed offset timezones (#32992).
+Patch tested on dash as the default shell.
 
-https://docs.djangoproject.com/en/3.2/releases/3.2.6/
-https://docs.djangoproject.com/en/3.2/releases/3.2.7/
+[1] https://git.savannah.gnu.org/cgit/which.git
+[2] https://salsa.debian.org/debian/debianutils/-/commit/3a8dd10b4502f7bae8fc6973c13ce23fc9da7efb
+[3] https://pubs.opengroup.org/onlinepubs/9699919799/utilities/command.html
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/python-django/python-django.hash | 4 ++--
- package/python-django/python-django.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ Makefile                                           | 22 +++++++++++-----------
+ package/Makefile.in                                |  8 ++++----
+ support/dependencies/check-host-bison-flex.mk      |  4 ++--
+ support/dependencies/check-host-cmake.sh           |  2 +-
+ support/dependencies/check-host-gzip.sh            |  2 +-
+ support/dependencies/check-host-lzip.sh            |  4 ++--
+ support/dependencies/check-host-python3.sh         |  2 +-
+ support/dependencies/check-host-tar.sh             |  4 ++--
+ support/dependencies/check-host-xzcat.sh           |  4 ++--
+ support/dependencies/dependencies.sh               | 16 ++++++++--------
+ .../toolchain-external/pkg-toolchain-external.mk   |  2 +-
+ 11 files changed, 35 insertions(+), 35 deletions(-)
 
-diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
-index 2f5f96a501..ab89f0341c 100644
---- a/package/python-django/python-django.hash
-+++ b/package/python-django/python-django.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/django/json
--md5  46e306a5a775cace03a03d5a158ff767  Django-3.2.5.tar.gz
--sha256  3da05fea54fdec2315b54a563d5b59f3b4e2b1e69c3a5841dda35019c01855cd  Django-3.2.5.tar.gz
-+md5  2ade1eecca77640abbde6c4589da27dd  Django-3.2.7.tar.gz
-+sha256  95b318319d6997bac3595517101ad9cc83fe5672ac498ba48d1a410f47afecd2  Django-3.2.7.tar.gz
- # Locally computed sha256 checksums
- sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
-diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
-index 1603063beb..0850aa1358 100644
---- a/package/python-django/python-django.mk
-+++ b/package/python-django/python-django.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
+diff --git a/Makefile b/Makefile
+index c960b53a6d..1b080bc10f 100644
+--- a/Makefile
++++ b/Makefile
+@@ -284,12 +284,12 @@ HOSTAS := as
+ endif
+ ifndef HOSTCC
+ HOSTCC := gcc
+-HOSTCC := $(shell which $(HOSTCC) || type -p $(HOSTCC) || echo gcc)
++HOSTCC := $(shell command -v $(HOSTCC) || type -p $(HOSTCC) || echo gcc)
+ endif
+ HOSTCC_NOCCACHE := $(HOSTCC)
+ ifndef HOSTCXX
+ HOSTCXX := g++
+-HOSTCXX := $(shell which $(HOSTCXX) || type -p $(HOSTCXX) || echo g++)
++HOSTCXX := $(shell command -v $(HOSTCXX) || type -p $(HOSTCXX) || echo g++)
+ endif
+ HOSTCXX_NOCCACHE := $(HOSTCXX)
+ ifndef HOSTCPP
+@@ -310,15 +310,15 @@ endif
+ ifndef HOSTRANLIB
+ HOSTRANLIB := ranlib
+ endif
+-HOSTAR := $(shell which $(HOSTAR) || type -p $(HOSTAR) || echo ar)
+-HOSTAS := $(shell which $(HOSTAS) || type -p $(HOSTAS) || echo as)
+-HOSTCPP := $(shell which $(HOSTCPP) || type -p $(HOSTCPP) || echo cpp)
+-HOSTLD := $(shell which $(HOSTLD) || type -p $(HOSTLD) || echo ld)
+-HOSTLN := $(shell which $(HOSTLN) || type -p $(HOSTLN) || echo ln)
+-HOSTNM := $(shell which $(HOSTNM) || type -p $(HOSTNM) || echo nm)
+-HOSTOBJCOPY := $(shell which $(HOSTOBJCOPY) || type -p $(HOSTOBJCOPY) || echo objcopy)
+-HOSTRANLIB := $(shell which $(HOSTRANLIB) || type -p $(HOSTRANLIB) || echo ranlib)
+-SED := $(shell which sed || type -p sed) -i -e
++HOSTAR := $(shell command -v $(HOSTAR) || type -p $(HOSTAR) || echo ar)
++HOSTAS := $(shell command -v $(HOSTAS) || type -p $(HOSTAS) || echo as)
++HOSTCPP := $(shell command -v $(HOSTCPP) || type -p $(HOSTCPP) || echo cpp)
++HOSTLD := $(shell command -v $(HOSTLD) || type -p $(HOSTLD) || echo ld)
++HOSTLN := $(shell command -v $(HOSTLN) || type -p $(HOSTLN) || echo ln)
++HOSTNM := $(shell command -v $(HOSTNM) || type -p $(HOSTNM) || echo nm)
++HOSTOBJCOPY := $(shell command -v $(HOSTOBJCOPY) || type -p $(HOSTOBJCOPY) || echo objcopy)
++HOSTRANLIB := $(shell command -v $(HOSTRANLIB) || type -p $(HOSTRANLIB) || echo ranlib)
++SED := $(shell command -v sed || type -p sed) -i -e
  
--PYTHON_DJANGO_VERSION = 3.2.5
-+PYTHON_DJANGO_VERSION = 3.2.7
- PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
- # The official Django site has an unpractical URL
--PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/95/3b/468fa33908feefac03c0a773bd73bb8a1ab1fb4ee06e9dd62d24981f4603
-+PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/59/45/c6fbb3a206df0b7dc3e6e8fae738e042c63d4ddf828c6e1ba10d7417a1d9
- PYTHON_DJANGO_LICENSE = BSD-3-Clause
- PYTHON_DJANGO_LICENSE_FILES = LICENSE
- PYTHON_DJANGO_CPE_ID_VENDOR = djangoproject
+ export HOSTAR HOSTAS HOSTCC HOSTCXX HOSTLD
+ export HOSTCC_NOCCACHE HOSTCXX_NOCCACHE
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 86db62ba5b..09092fad54 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -4,7 +4,7 @@ endif
+ ifndef HOSTMAKE
+ HOSTMAKE = $(MAKE)
+ endif
+-HOSTMAKE := $(shell which $(HOSTMAKE) || type -p $(HOSTMAKE) || echo make)
++HOSTMAKE := $(shell command -v $(HOSTMAKE) || type -p $(HOSTMAKE) || echo make)
+ 
+ # If BR2_JLEVEL is 0, scale the maximum concurrency with the number of
+ # CPUs. An additional job is used in order to keep processors busy
+@@ -222,8 +222,8 @@ else
+ TARGET_STRIP = /bin/true
+ STRIPCMD = $(TARGET_STRIP)
+ endif
+-INSTALL := $(shell which install || type -p install)
+-UNZIP := $(shell which unzip || type -p unzip) -q
++INSTALL := $(shell command -v install || type -p install)
++UNZIP := $(shell command -v unzip || type -p unzip) -q
+ 
+ APPLY_PATCHES = PATH=$(HOST_DIR)/bin:$$PATH support/scripts/apply-patches.sh $(if $(QUIET),-s)
+ 
+@@ -237,7 +237,7 @@ HOST_LDFLAGS  += -L$(HOST_DIR)/lib -Wl,-rpath,$(HOST_DIR)/lib
+ # the path to the system perl, before a host-perl built by Buildroot
+ # might get installed into $(HOST_DIR)/bin and therefore appears
+ # in our PATH. This system perl will be used as INTLTOOL_PERL.
+-export PERL=$(shell which perl)
++export PERL=$(shell command -v perl)
+ 
+ # host-intltool needs libxml-parser-perl, which Buildroot installs in
+ # $(HOST_DIR)/lib/perl, so we must make sure that the system perl
+diff --git a/support/dependencies/check-host-bison-flex.mk b/support/dependencies/check-host-bison-flex.mk
+index 14a232fd44..e5db578941 100644
+--- a/support/dependencies/check-host-bison-flex.mk
++++ b/support/dependencies/check-host-bison-flex.mk
+@@ -5,10 +5,10 @@
+ # that runs on host, e.g. Kconfig. To build code for target use plain
+ # host-{bison,flex}.
+ 
+-ifeq ($(shell which bison 2>/dev/null),)
++ifeq ($(shell command -v bison 2>/dev/null),)
+ BR2_BISON_HOST_DEPENDENCY = host-bison
+ endif
+ 
+-ifeq ($(shell which flex 2>/dev/null),)
++ifeq ($(shell command -v flex 2>/dev/null),)
+ BR2_FLEX_HOST_DEPENDENCY = host-flex
+ endif
+diff --git a/support/dependencies/check-host-cmake.sh b/support/dependencies/check-host-cmake.sh
+index fadeae9f6b..f202d72a98 100755
+--- a/support/dependencies/check-host-cmake.sh
++++ b/support/dependencies/check-host-cmake.sh
+@@ -11,7 +11,7 @@ shift
+ for candidate; do
+ 
+     # Try to locate the candidate. Discard it if not located.
+-    cmake=`which "${candidate}" 2>/dev/null`
++    cmake=`command -v "${candidate}" 2>/dev/null`
+     [ -n "${cmake}" ] || continue
+ 
+     # Extract version X.Y from versions in the form X.Y or X.Y.Z
+diff --git a/support/dependencies/check-host-gzip.sh b/support/dependencies/check-host-gzip.sh
+index 5f344c5f9b..4dbce72676 100755
+--- a/support/dependencies/check-host-gzip.sh
++++ b/support/dependencies/check-host-gzip.sh
+@@ -2,7 +2,7 @@
+ 
+ candidate="$1" # ignored
+ 
+-gzip="$(which gzip)"
++gzip="$(command -v gzip)"
+ if [ ! -x "${gzip}" ]; then
+     # echo nothing: no suitable gzip found
+     exit 1
+diff --git a/support/dependencies/check-host-lzip.sh b/support/dependencies/check-host-lzip.sh
+index 4f8a2ba3de..ffd20e2809 100755
+--- a/support/dependencies/check-host-lzip.sh
++++ b/support/dependencies/check-host-lzip.sh
+@@ -2,9 +2,9 @@
+ 
+ candidate="$1"
+ 
+-lzip=`which $candidate 2>/dev/null`
++lzip=`command -v $candidate 2>/dev/null`
+ if [ ! -x "$lzip" ]; then
+-	lzip=`which lzip 2>/dev/null`
++	lzip=`command -v lzip 2>/dev/null`
+ 	if [ ! -x "$lzip" ]; then
+ 		# echo nothing: no suitable lzip found
+ 		exit 1
+diff --git a/support/dependencies/check-host-python3.sh b/support/dependencies/check-host-python3.sh
+index 17cafd2883..7b3f4f8451 100755
+--- a/support/dependencies/check-host-python3.sh
++++ b/support/dependencies/check-host-python3.sh
+@@ -14,7 +14,7 @@ shift
+ # a more recent version.
+ 
+ for candidate in "${@}" ; do
+-	python3=`which $candidate 2>/dev/null`
++	python3=`command -v $candidate 2>/dev/null`
+ 	if [ ! -x "$python3" ]; then
+ 		continue
+ 	fi
+diff --git a/support/dependencies/check-host-tar.sh b/support/dependencies/check-host-tar.sh
+index b7d607a47a..369e1ae393 100755
+--- a/support/dependencies/check-host-tar.sh
++++ b/support/dependencies/check-host-tar.sh
+@@ -2,9 +2,9 @@
+ 
+ candidate="$1"
+ 
+-tar=`which $candidate`
++tar=`command -v $candidate`
+ if [ ! -x "$tar" ]; then
+-	tar=`which tar`
++	tar=`command -v tar`
+ 	if [ ! -x "$tar" ]; then
+ 		# echo nothing: no suitable tar found
+ 		exit 1
+diff --git a/support/dependencies/check-host-xzcat.sh b/support/dependencies/check-host-xzcat.sh
+index 10f1c4562a..1fbcecf0ff 100755
+--- a/support/dependencies/check-host-xzcat.sh
++++ b/support/dependencies/check-host-xzcat.sh
+@@ -2,9 +2,9 @@
+ 
+ candidate="$1"
+ 
+-xzcat=`which $candidate 2>/dev/null`
++xzcat=`command -v $candidate 2>/dev/null`
+ if [ ! -x "$xzcat" ]; then
+-	xzcat=`which xzcat 2>/dev/null`
++	xzcat=`command -v xzcat 2>/dev/null`
+ 	if [ ! -x "$xzcat" ]; then
+ 		# echo nothing: no suitable xzcat found
+ 		exit 1
+diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+index c604a9efcc..c5dcb86231 100755
+--- a/support/dependencies/dependencies.sh
++++ b/support/dependencies/dependencies.sh
+@@ -58,7 +58,7 @@ fi
+ check_prog_host()
+ {
+ 	prog="$1"
+-	if ! which $prog > /dev/null ; then
++	if ! command -v $prog > /dev/null ; then
+ 		echo >&2
+ 		echo "You must install '$prog' on your build machine" >&2
+ 		exit 1
+@@ -75,7 +75,7 @@ check_prog_host "sed"
+ check_prog_host "/usr/bin/file"
+ 
+ # Check make
+-MAKE=$(which make 2> /dev/null)
++MAKE=$(command -v make 2> /dev/null)
+ if [ -z "$MAKE" ] ; then
+ 	echo
+ 	echo "You must install 'make' on your build machine";
+@@ -96,9 +96,9 @@ if [ $MAKE_MAJOR -lt 3 ] || [ $MAKE_MAJOR -eq 3 -a $MAKE_MINOR -lt 81 ] ; then
+ fi;
+ 
+ # Check host gcc
+-COMPILER=$(which $HOSTCC_NOCCACHE 2> /dev/null)
++COMPILER=$(command -v $HOSTCC_NOCCACHE 2> /dev/null)
+ if [ -z "$COMPILER" ] ; then
+-	COMPILER=$(which cc 2> /dev/null)
++	COMPILER=$(command -v cc 2> /dev/null)
+ fi;
+ if [ -z "$COMPILER" ] ; then
+ 	echo
+@@ -122,9 +122,9 @@ if [ $COMPILER_MAJOR -lt 4 -o $COMPILER_MAJOR -eq 4 -a $COMPILER_MINOR -lt 8 ] ;
+ fi;
+ 
+ # check for host CXX
+-CXXCOMPILER=$(which $HOSTCXX_NOCCACHE 2> /dev/null)
++CXXCOMPILER=$(command -v $HOSTCXX_NOCCACHE 2> /dev/null)
+ if [ -z "$CXXCOMPILER" ] ; then
+-	CXXCOMPILER=$(which c++ 2> /dev/null)
++	CXXCOMPILER=$(command -v c++ 2> /dev/null)
+ fi
+ 
+ if [ -z "$CXXCOMPILER" ] ; then
+@@ -164,7 +164,7 @@ fi
+ # Check that a few mandatory programs are installed
+ missing_progs="no"
+ for prog in perl tar wget cpio unzip rsync bc ${DL_TOOLS} ; do
+-	if ! which $prog > /dev/null ; then
++	if ! command -v $prog > /dev/null ; then
+ 		echo "You must install '$prog' on your build machine";
+ 		missing_progs="yes"
+ 		if test $prog = "svn" ; then
+@@ -198,7 +198,7 @@ if [ "${PATCH_MAJOR}" -lt 2 ] || [ "${PATCH_MAJOR}" -eq 2 -a "${PATCH_MINOR}" -l
+ fi
+ 
+ if grep ^BR2_NEEDS_HOST_UTF8_LOCALE=y $BR2_CONFIG > /dev/null; then
+-	if ! which locale > /dev/null ; then
++	if ! command -v locale > /dev/null ; then
+ 		echo
+ 		echo "You need locale support on your build machine to build a toolchain supporting locales"
+ 		exit 1 ;
+diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+index 68d7a3fe21..e3f61294f8 100644
+--- a/toolchain/toolchain-external/pkg-toolchain-external.mk
++++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+@@ -74,7 +74,7 @@ endif
+ ifeq ($(TOOLCHAIN_EXTERNAL_INSTALL_DIR),)
+ ifneq ($(TOOLCHAIN_EXTERNAL_PREFIX),)
+ # if no path set, figure it out from path
+-TOOLCHAIN_EXTERNAL_BIN := $(dir $(shell which $(TOOLCHAIN_EXTERNAL_PREFIX)-gcc))
++TOOLCHAIN_EXTERNAL_BIN := $(dir $(shell command -v $(TOOLCHAIN_EXTERNAL_PREFIX)-gcc))
+ endif
+ else
+ TOOLCHAIN_EXTERNAL_REL_BIN_PATH = $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_REL_BIN_PATH))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
