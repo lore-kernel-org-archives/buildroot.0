@@ -2,60 +2,63 @@ Return-Path: <SRS0=Tewt=OQ=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C3B1CC433F5
-	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 11:05:25 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A6D61C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 11:57:25 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id E727860F92
-	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 11:05:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E727860F92
+	by mail.kernel.org (Postfix) with ESMTPS id 2CA4D61038
+	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 11:57:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2CA4D61038
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=t-online.de
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8C6406066B;
-	Sun, 26 Sep 2021 11:05:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C928780B96;
+	Sun, 26 Sep 2021 11:57:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fzXyehJpTGnn; Sun, 26 Sep 2021 11:05:23 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id orYa4r6WfqJu; Sun, 26 Sep 2021 11:57:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A05FB60622;
-	Sun, 26 Sep 2021 11:05:22 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D347A1BF354
- for <buildroot@lists.busybox.net>; Sun, 26 Sep 2021 11:05:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2BA5D80EF3;
+	Sun, 26 Sep 2021 11:57:23 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1C5AF1BF354
+ for <buildroot@lists.busybox.net>; Sun, 26 Sep 2021 11:57:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CF63D400E6
- for <buildroot@lists.busybox.net>; Sun, 26 Sep 2021 11:05:20 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id F205480EF3
+ for <buildroot@lists.busybox.net>; Sun, 26 Sep 2021 11:57:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id acy8LEpuABf3 for <buildroot@lists.busybox.net>;
- Sun, 26 Sep 2021 11:05:19 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id CnuJFmuQ2K2u for <buildroot@lists.busybox.net>;
+ Sun, 26 Sep 2021 11:57:21 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mailout04.t-online.de (mailout04.t-online.de [194.25.134.18])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C960B400A8
- for <buildroot@buildroot.org>; Sun, 26 Sep 2021 11:05:18 +0000 (UTC)
-Received: from fwd79.dcpf.telekom.de (fwd79.aul.t-online.de [10.223.144.105])
- by mailout04.t-online.de (Postfix) with SMTP id BAB82C24
- for <buildroot@buildroot.org>; Sun, 26 Sep 2021 13:05:15 +0200 (CEST)
-Received: from fli4l.lan.fli4l ([79.214.205.79]) by fwd79.t-online.de
+Received: from mailout05.t-online.de (mailout05.t-online.de [194.25.134.82])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2D00D80B96
+ for <buildroot@buildroot.org>; Sun, 26 Sep 2021 11:57:21 +0000 (UTC)
+Received: from fwd75.dcpf.telekom.de (fwd75.aul.t-online.de [10.223.144.101])
+ by mailout05.t-online.de (Postfix) with SMTP id 592D13C2A
+ for <buildroot@buildroot.org>; Sun, 26 Sep 2021 13:57:18 +0200 (CEST)
+Received: from fli4l.lan.fli4l ([79.214.205.79]) by fwd75.t-online.de
  with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1mURy6-2kJK2j0; Sun, 26 Sep 2021 13:05:14 +0200
-Received: from [192.168.1.109] (port=47020 helo=bruckner.lan.fli4l)
+ esmtp id 1mUSmU-25hJCL0; Sun, 26 Sep 2021 13:57:18 +0200
+Received: from [192.168.1.109] (port=47022 helo=bruckner.lan.fli4l)
  by fli4l.lan.fli4l with esmtp (Exim 4.94.2)
- (envelope-from <bernd.kuhls@t-online.de>) id 1mURy5-0000Ea-Pc
- for buildroot@buildroot.org; Sun, 26 Sep 2021 13:05:13 +0200
+ (envelope-from <bernd.kuhls@t-online.de>) id 1mUSmT-0000iz-My
+ for buildroot@buildroot.org; Sun, 26 Sep 2021 13:57:17 +0200
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Sun, 26 Sep 2021 13:05:13 +0200
-Message-Id: <20210926110513.1660955-1-bernd.kuhls@t-online.de>
+Date: Sun, 26 Sep 2021 13:56:37 +0200
+Message-Id: <20210926115717.1687968-2-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210926115717.1687968-1-bernd.kuhls@t-online.de>
+References: <20210926115717.1687968-1-bernd.kuhls@t-online.de>
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1632654314-0000146E-25F540B1/0/0 CLEAN NORMAL
-X-TOI-MSGID: 18801a3e-7c2e-41c6-86bc-d63a3de0555e
-Subject: [Buildroot] [PATCH 1/1] package/kodi: fix build with fmt 8.x
+X-TOI-EXPURGATEID: 150726::1632657438-00001454-B4D11BA8/0/0 CLEAN NORMAL
+X-TOI-MSGID: e9549d37-b452-4a45-bf93-22216eb21548
+Subject: [Buildroot] [PATCH 02/42] package/kodi-audiodecoder-stsound: bump
+ version to 19.0.0-Matrix
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,54 +75,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Backport upstream patch, no autobuild errors detected so far.
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../kodi/0002-utils-include-fmt-xchar.h.patch | 34 +++++++++++++++++++
- 1 file changed, 34 insertions(+)
- create mode 100644 package/kodi/0002-utils-include-fmt-xchar.h.patch
+ .../kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.hash    | 2 +-
+ package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.mk  | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi/0002-utils-include-fmt-xchar.h.patch b/package/kodi/0002-utils-include-fmt-xchar.h.patch
-new file mode 100644
-index 0000000000..70c88412e9
---- /dev/null
-+++ b/package/kodi/0002-utils-include-fmt-xchar.h.patch
-@@ -0,0 +1,34 @@
-+From 18ff80a9c169fb969b75e2143d9f1f234b71a730 Mon Sep 17 00:00:00 2001
-+From: Craig Andrews <candrews@integralblue.com>
-+Date: Thu, 24 Jun 2021 20:41:11 -0400
-+Subject: [PATCH] [utils] include fmt/xchar.h
-+
-+fmt 8 moved wchar/custom char overloads to xchar.h, so for fmt 8 compatibility, xchar.h must be included
-+
-+See https://github.com/fmtlib/fmt/commit/76ee490468212f8705a1421b4c88f8f814b2d351
-+
-+Downloaded from upstream commit
-+https://github.com/xbmc/xbmc/commit/18ff80a9c169fb969b75e2143d9f1f234b71a730
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ xbmc/utils/StringUtils.h | 3 +++
-+ 1 file changed, 3 insertions(+)
-+
-+diff --git a/xbmc/utils/StringUtils.h b/xbmc/utils/StringUtils.h
-+index ca6f82953d..2dc5c3f03a 100644
-+--- a/xbmc/utils/StringUtils.h
-++++ b/xbmc/utils/StringUtils.h
-+@@ -36,6 +36,9 @@
-+ #if FMT_VERSION >= 40000
-+ #include <fmt/printf.h>
-+ #endif
-++#if FMT_VERSION >= 80000
-++#include <fmt/xchar.h>
-++#endif
-+ 
-+ #include "XBDateTime.h"
-+ #include "utils/params_check_macros.h"
-+-- 
-+2.30.2
-+
+diff --git a/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.hash b/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.hash
+index ae6a5aa528..d370ca5566 100644
+--- a/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.hash
++++ b/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  65b452cd3bdf8b21929084ca0dc238147784defdfb25351c857fa459230e2f3f  kodi-audiodecoder-stsound-3.0.0-Matrix.tar.gz
++sha256  dc168de296dafae86a83e36f687f4dd4fd41c3d3134afbb05415f860f750e779  kodi-audiodecoder-stsound-19.0.0-Matrix.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.mk b/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.mk
+index 6a5bb721bc..bd432e734a 100644
+--- a/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.mk
++++ b/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_AUDIODECODER_STSOUND_VERSION = 3.0.0-Matrix
++KODI_AUDIODECODER_STSOUND_VERSION = 19.0.0-Matrix
+ KODI_AUDIODECODER_STSOUND_SITE = $(call github,xbmc,audiodecoder.stsound,$(KODI_AUDIODECODER_STSOUND_VERSION))
+ KODI_AUDIODECODER_STSOUND_LICENSE = GPL-2.0+
+ KODI_AUDIODECODER_STSOUND_LICENSE_FILES = LICENSE.md
 -- 
 2.30.2
 
