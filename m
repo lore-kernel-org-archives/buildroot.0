@@ -2,63 +2,63 @@ Return-Path: <SRS0=Tewt=OQ=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 735CAC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 12:05:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B0D07C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 12:05:32 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 3B0C160234
-	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 12:05:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3B0C160234
+	by mail.kernel.org (Postfix) with ESMTPS id 6EC6160F45
+	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 12:05:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6EC6160F45
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=t-online.de
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1AD8A81D0B;
-	Sun, 26 Sep 2021 12:05:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 46F0D818CA;
+	Sun, 26 Sep 2021 12:05:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LSQZVc0a0C2V; Sun, 26 Sep 2021 12:05:18 +0000 (UTC)
+	with ESMTP id QVmkjRf_QPsj; Sun, 26 Sep 2021 12:05:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E836C81AAC;
-	Sun, 26 Sep 2021 12:05:17 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C5AE41BF354
- for <buildroot@lists.busybox.net>; Sun, 26 Sep 2021 11:58:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AF9CF81D73;
+	Sun, 26 Sep 2021 12:05:29 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 4AF461BF20B
+ for <buildroot@lists.busybox.net>; Sun, 26 Sep 2021 11:59:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B21DA80B96
- for <buildroot@lists.busybox.net>; Sun, 26 Sep 2021 11:58:01 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3AA4040319
+ for <buildroot@lists.busybox.net>; Sun, 26 Sep 2021 11:59:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ud7Yrl1An2iA for <buildroot@lists.busybox.net>;
- Sun, 26 Sep 2021 11:58:01 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vYXchjpNTPV6 for <buildroot@lists.busybox.net>;
+ Sun, 26 Sep 2021 11:59:13 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mailout02.t-online.de (mailout02.t-online.de [194.25.134.17])
- by smtp1.osuosl.org (Postfix) with ESMTPS id DD03180EF3
- for <buildroot@buildroot.org>; Sun, 26 Sep 2021 11:58:00 +0000 (UTC)
-Received: from fwd77.dcpf.telekom.de (fwd77.aul.t-online.de [10.223.144.103])
- by mailout02.t-online.de (Postfix) with SMTP id A8FB62B48
- for <buildroot@buildroot.org>; Sun, 26 Sep 2021 13:57:25 +0200 (CEST)
-Received: from fli4l.lan.fli4l ([79.214.205.79]) by fwd77.t-online.de
+Received: from mailout12.t-online.de (mailout12.t-online.de [194.25.134.22])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7186A4025D
+ for <buildroot@buildroot.org>; Sun, 26 Sep 2021 11:59:13 +0000 (UTC)
+Received: from fwd89.dcpf.telekom.de (fwd89.aul.t-online.de [10.223.144.115])
+ by mailout12.t-online.de (Postfix) with SMTP id 89A40F690
+ for <buildroot@buildroot.org>; Sun, 26 Sep 2021 13:57:24 +0200 (CEST)
+Received: from fli4l.lan.fli4l ([79.214.205.79]) by fwd89.t-online.de
  with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1mUSmY-3lgovh0; Sun, 26 Sep 2021 13:57:22 +0200
+ esmtp id 1mUSmZ-1ldYzR0; Sun, 26 Sep 2021 13:57:23 +0200
 Received: from [192.168.1.109] (port=47022 helo=bruckner.lan.fli4l)
  by fli4l.lan.fli4l with esmtp (Exim 4.94.2)
- (envelope-from <bernd.kuhls@t-online.de>) id 1mUSmX-0000iz-Md
- for buildroot@buildroot.org; Sun, 26 Sep 2021 13:57:21 +0200
+ (envelope-from <bernd.kuhls@t-online.de>) id 1mUSmZ-0000iz-A2
+ for buildroot@buildroot.org; Sun, 26 Sep 2021 13:57:23 +0200
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Sun, 26 Sep 2021 13:56:56 +0200
-Message-Id: <20210926115717.1687968-21-bernd.kuhls@t-online.de>
+Date: Sun, 26 Sep 2021 13:57:04 +0200
+Message-Id: <20210926115717.1687968-29-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210926115717.1687968-1-bernd.kuhls@t-online.de>
 References: <20210926115717.1687968-1-bernd.kuhls@t-online.de>
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1632657442-00001440-382EE788/0/0 CLEAN NORMAL
-X-TOI-MSGID: 65b74a7a-43d6-4464-b303-79192462a786
-Subject: [Buildroot] [PATCH 21/42] package/kodi-screensaver-pingpong: bump
- version to 19.0.0-Matrix
+X-TOI-EXPURGATEID: 150726::1632657443-0000145D-24EC2382/0/0 CLEAN NORMAL
+X-TOI-MSGID: 61ac81ad-7572-4291-95ef-d53be76ebf06
+Subject: [Buildroot] [PATCH 29/42] package/kodi-pvr-hdhomerun: bump version
+ to 19.0.0-Matrix
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,32 +77,32 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../kodi-screensaver-pingpong/kodi-screensaver-pingpong.hash    | 2 +-
- package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk  | 2 +-
+ package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.hash | 2 +-
+ package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.hash b/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.hash
-index 245fdfdbe9..b62a96b235 100644
---- a/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.hash
-+++ b/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.hash
+diff --git a/package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.hash b/package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.hash
+index cfd2f272f8..8409c222b1 100644
+--- a/package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.hash
++++ b/package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  c38cda571b345d61882b43cea839536fa6fbfbb08e07231e8d8bc8adb8d28c08  kodi-screensaver-pingpong-2.4.0-Matrix.tar.gz
-+sha256  42d7a0b25dc1b8e1c9171efe066643a7b57162709fcba137f90eb9d24496d2e4  kodi-screensaver-pingpong-19.0.0-Matrix.tar.gz
+-sha256  90a44fb73b471813c9ca99b802b5a119287c9d7fde705ae215d9f59bb8da9830  kodi-pvr-hdhomerun-7.1.1-Matrix.tar.gz
++sha256  c3692e70b96f229115f3fc545232885066224a801ada052b8c20633c210e76bc  kodi-pvr-hdhomerun-19.0.0-Matrix.tar.gz
  sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk b/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk
-index cd794128f3..71588031e5 100644
---- a/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk
-+++ b/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk
+diff --git a/package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.mk b/package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.mk
+index 53197c49c2..1b5a71d015 100644
+--- a/package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.mk
++++ b/package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_SCREENSAVER_PINGPONG_VERSION = 2.4.0-Matrix
-+KODI_SCREENSAVER_PINGPONG_VERSION = 19.0.0-Matrix
- KODI_SCREENSAVER_PINGPONG_SITE = $(call github,xbmc,screensaver.pingpong,$(KODI_SCREENSAVER_PINGPONG_VERSION))
- KODI_SCREENSAVER_PINGPONG_LICENSE = GPL-2.0+
- KODI_SCREENSAVER_PINGPONG_LICENSE_FILES = LICENSE.md
+-KODI_PVR_HDHOMERUN_VERSION = 7.1.1-Matrix
++KODI_PVR_HDHOMERUN_VERSION = 19.0.0-Matrix
+ KODI_PVR_HDHOMERUN_SITE = $(call github,kodi-pvr,pvr.hdhomerun,$(KODI_PVR_HDHOMERUN_VERSION))
+ KODI_PVR_HDHOMERUN_LICENSE = GPL-2.0+
+ KODI_PVR_HDHOMERUN_LICENSE_FILES = LICENSE.md
 -- 
 2.30.2
 
