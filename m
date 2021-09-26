@@ -2,83 +2,61 @@ Return-Path: <SRS0=Tewt=OQ=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B311C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 13:12:09 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 29733C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 13:21:37 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id EC3ED61019
-	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 13:12:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org EC3ED61019
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id 50BCC60ED4
+	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 13:21:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 50BCC60ED4
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=t-online.de
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 85EA5605CA;
-	Sun, 26 Sep 2021 13:12:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 122AB81CA3;
+	Sun, 26 Sep 2021 13:21:36 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id uRVToOISQkDI; Sun, 26 Sep 2021 13:21:35 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5AE9681C71;
+	Sun, 26 Sep 2021 13:21:34 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 74D911BF30A
+ for <buildroot@lists.busybox.net>; Sun, 26 Sep 2021 13:21:32 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 63E03606BD
+ for <buildroot@lists.busybox.net>; Sun, 26 Sep 2021 13:21:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ip1TmjULQ_Nh; Sun, 26 Sep 2021 13:12:04 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 162C9606C5;
-	Sun, 26 Sep 2021 13:12:04 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D6A2C1BF30A
- for <buildroot@lists.busybox.net>; Sun, 26 Sep 2021 13:12:02 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D1E4740298
- for <buildroot@lists.busybox.net>; Sun, 26 Sep 2021 13:12:02 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id guXUsD0zYhDE for <buildroot@lists.busybox.net>;
- Sun, 26 Sep 2021 13:12:01 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com
- [IPv6:2a00:1450:4864:20::529])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 907B7400A8
- for <buildroot@buildroot.org>; Sun, 26 Sep 2021 13:12:01 +0000 (UTC)
-Received: by mail-ed1-x529.google.com with SMTP id ee50so56979973edb.13
- for <buildroot@buildroot.org>; Sun, 26 Sep 2021 06:12:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc:content-transfer-encoding;
- bh=x94L0yyHFZ8huXRyIgymXfGlS120ly1OlGl6tRwshhU=;
- b=XFibR2aahrstZPfnC3+NZc0jfJvBQdE+mWx1dmHCfLN3ZJsUHIT6VtvWNgM0CfCPUX
- S8wxzhu61XC3AqgmlHRCob/Ir6rVFGkhzv99Uxf5lsMm9r3sdU2K4+0ABJKj0xVWktfl
- Fvt6XbNJfxOZigzMWtqEogaBVh73yvNF84hdbCHIsyhMwluXk/0b0L/Uy+bbmzdPAtP1
- UCvlw7J1aX/lz8ubHddvpAKchXlSvWOf7gTq84/hI99Qailsgx8hl4Az7+sX7GeUEb+J
- OVa03Skrz6ErxYZvCzlbKlLgnpDcTm9KfJipGAZIHKVOLJzPRZFf7wTWbxRo2hAaehdt
- MJsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc:content-transfer-encoding;
- bh=x94L0yyHFZ8huXRyIgymXfGlS120ly1OlGl6tRwshhU=;
- b=o/pVrdyLAYKLe3n8nxUC6Rpj9SCfMe8wrAyaTXNLT77jrkD4TFLsmA3fNXIA1EaN9m
- rfq/b/1ofK+P8T7bMejhdi7FN2NpEMNtMCZUcJS91cXYEbkGANvmGeY/m36B8KCtTdbp
- tj1KvEfqEYQ7usPwlVDAP9BGboWKzZ9z2/wxXxl2ZbAlepJdAo7Hgfon3IJk9pcZZ1ta
- nmNbZYcXxiC2Lcg3hOJtLMkbhsR57UiJmyG0UfgEB0yAGAPc79nziu8pgBy5pCU/Djh6
- SRLvA2nuY/LJIlsczZDRATP1iXb7TDwnRKUw6kMOKJxiYHDqj9GdZtyUCvUn8FN8isHr
- IIDg==
-X-Gm-Message-State: AOAM531gws0b3sfcea/cjAaV2t5+vJjq9eNIqrfuZf8itvnjfC8NkBDd
- hMtet51db6ZInawX1KS4badPt7ryMCT1L4eFZHI=
-X-Google-Smtp-Source: ABdhPJxAiQOIdEVtqejIsgkaNFJQt8K7EV0KIK66oHqPce/Ims9IKLqk9ie1wCQ6oYghJYpSRI1wBzGuIcTZoZYlV5A=
-X-Received: by 2002:a05:6402:14c3:: with SMTP id
- f3mr17416279edx.312.1632661919753; 
- Sun, 26 Sep 2021 06:11:59 -0700 (PDT)
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qLgiISuVl1uu for <buildroot@lists.busybox.net>;
+ Sun, 26 Sep 2021 13:21:31 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from mailout05.t-online.de (mailout05.t-online.de [194.25.134.82])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2744C605D8
+ for <buildroot@buildroot.org>; Sun, 26 Sep 2021 13:21:31 +0000 (UTC)
+Received: from fwd76.dcpf.telekom.de (fwd76.aul.t-online.de [10.223.144.102])
+ by mailout05.t-online.de (Postfix) with SMTP id 54A2C18583
+ for <buildroot@buildroot.org>; Sun, 26 Sep 2021 15:21:24 +0200 (CEST)
+Received: from fli4l.lan.fli4l ([79.214.205.79]) by fwd76.t-online.de
+ with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
+ esmtp id 1mUU5n-27AbR30; Sun, 26 Sep 2021 15:21:20 +0200
+Received: from [192.168.1.109] (port=47024 helo=bruckner.lan.fli4l)
+ by fli4l.lan.fli4l with esmtp (Exim 4.94.2)
+ (envelope-from <bernd.kuhls@t-online.de>)
+ id 1mUU5n-0006Zy-EK; Sun, 26 Sep 2021 15:21:19 +0200
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+To: buildroot@buildroot.org
+Date: Sun, 26 Sep 2021 15:21:19 +0200
+Message-Id: <20210926132119.2664730-1-bernd.kuhls@t-online.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20210924170014.111889-1-asafka7@gmail.com>
- <20210925163308.GQ3176@scaer>
- <4cb6b204-b005-02dc-f2c3-e0c09dc37ed1@gmail.com>
-In-Reply-To: <4cb6b204-b005-02dc-f2c3-e0c09dc37ed1@gmail.com>
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Sun, 26 Sep 2021 16:11:48 +0300
-Message-ID: <CALFsTFVnNei7-VHFhy0p66qNeDy6O4r4Q0=HVpFNe-HvQupVMQ@mail.gmail.com>
-To: Romain Naour <romain.naour@gmail.com>
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-attrs: depends on python3
+X-TOI-EXPURGATEID: 150726::1632662480-0000144F-83BA8033/0/0 CLEAN NORMAL
+X-TOI-MSGID: ca38d292-3bca-4151-b372-f047f4cda918
+Subject: [Buildroot] [PATCH 1/1] package/kodi-pvr-octonet: fix json
+ dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,61 +68,61 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- buildroot <buildroot@buildroot.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-UmFtYWluLAoKT24gU3VuLCBTZXAgMjYsIDIwMjEgYXQgMzo1NSBQTSBSb21haW4gTmFvdXIgPHJv
-bWFpbi5uYW91ckBnbWFpbC5jb20+IHdyb3RlOgo+Cj4gQXNhZiwgQWxsLAo+Cj4gTGUgMjUvMDkv
-MjAyMSDDoCAxODozMywgWWFubiBFLiBNT1JJTiBhIMOpY3JpdCA6Cj4gPiBBc2FmLCBBbGwsCj4g
-Pgo+ID4gT24gMjAyMS0wOS0yNCAyMDowMCArMDMwMCwgQXNhZiBLYWhsb24gc3Bha2UgdGh1c2x5
-Ogo+ID4+IHB5dGhvbi1hdHRycyBjb250YWlucyBhIGZpbGUgd2l0aCBBUEkgZm9yIHB5dGhvbiAz
-LjYrLgo+ID4+IEFsdGhvdWdoIHdlIGNhbiBtYWtlIGEgInR3ZWFrIiBhbmQgcmVtb3ZlIHRoaXMg
-c3BlY2lmaWMgZmlsZQo+ID4+IGZvciBweXRob24yLCB3ZSBwcmVmZXIgdG8gbWFrZSB0aGlzIHBh
-Y2thZ2UgYXZhaWxhYmxlIG9ubHkgZm9yCj4gPj4gcHl0aG9uMywgYmVjYXVzZSB0aGUgZGF5IHRo
-aXMgcGFja2FnZSAoYW5kIG1hbnkgb3RoZXJzKSB3aWxsIGRyb3AKPiA+PiBzdXBwb3J0IGZvciBw
-eXRob24yIGlzIHByb2JhYmx5IHZlcnkgY2xvc2UuCj4gPj4KPiA+PiBJbiBhZGRpdGlvbiwgdXBk
-YXRlIHB5dGhvbi1hdHRycyByZWN1cnNpdmUgZGVwZW5kZW5jaWVzIHRvCj4gPj4gZGVwZW5kIG9u
-IHB5dGhvbjMgdG9vIChweXRob24tYXV0b21hdCBpcyB0aGUgb25seSBvbmUgbGVmdCkuCj4KPiBQ
-bGVhc2UgQXNhZiwgdGFrZSBjYXJlIG9mIHB5dGhvbiB0ZXN0cyBpbiB0aGUgQnVpbGRyb290IHRl
-c3RzdWl0ZS4KPgo+IFNpbmNlIHB5dGhvbi1hdHRycyBpcyBub3cgcHl0aG9uMyBvbmx5IHdlIGNh
-biByZW1vdmUgKGF0IGxlYXN0KSB0d28gdGVzdHM6Cj4KPiBUZXN0UHl0aG9uUHkyQXR0cnMKPiBU
-ZXN0UHl0aG9uUHkyQXV0b21hdApZb3UncmUgcmlnaHQsIHRoYW5rcy4KSSdsbCB0YWtlIGEgbG9v
-ayBhbmQgc2VuZCBhIHByb3BlciBwYXRjaC4KCj4KPiBCZXN0IHJlZ2FyZHMsCj4gUm9tYWluCj4K
-Pgo+ID4+Cj4gPj4gRml4ZXM6Cj4gPj4gIC0gaHR0cDovL2F1dG9idWlsZC5idWlsZHJvb3QubmV0
-L3Jlc3VsdHMvYWE2L2FhNjg4OWJjMjU0ZWFhOTNhZGI0ZmMxYTcxYmNlZTlmMmYyM2NiMzMvCj4g
-Pj4KPiA+PiBTaWduZWQtb2ZmLWJ5OiBBc2FmIEthaGxvbiA8YXNhZmthN0BnbWFpbC5jb20+Cj4g
-Pj4gLS0tCj4gPj4gIHBhY2thZ2UvcHl0aG9uLWF0dHJzL0NvbmZpZy5pbiAgIHwgMSArCj4gPj4g
-IHBhY2thZ2UvcHl0aG9uLWF1dG9tYXQvQ29uZmlnLmluIHwgMSArCj4gPj4gIDIgZmlsZXMgY2hh
-bmdlZCwgMiBpbnNlcnRpb25zKCspCj4gPj4KPiA+PiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9weXRo
-b24tYXR0cnMvQ29uZmlnLmluIGIvcGFja2FnZS9weXRob24tYXR0cnMvQ29uZmlnLmluCj4gPj4g
-aW5kZXggZmIwYWIyNDhmYS4uYjY1OGQyMGVjOSAxMDA2NDQKPiA+PiAtLS0gYS9wYWNrYWdlL3B5
-dGhvbi1hdHRycy9Db25maWcuaW4KPiA+PiArKysgYi9wYWNrYWdlL3B5dGhvbi1hdHRycy9Db25m
-aWcuaW4KPiA+PiBAQCAtMSw0ICsxLDUgQEAKPiA+PiAgY29uZmlnIEJSMl9QQUNLQUdFX1BZVEhP
-Tl9BVFRSUwo+ID4+ICsgICAgZGVwZW5kcyBvbiBCUjJfUEFDS0FHRV9QWVRIT04zCj4gPgo+ID4g
-ICAgICQgbWFrZSBjaGVjay1wYWNrYWdlCj4gPiAgICAgcGFja2FnZS9weXRob24tYXR0cnMvQ29u
-ZmlnLmluOjM6IGF0dHJpYnV0ZXMgb3JkZXI6IHR5cGUsIGRlZmF1bHQsCj4gPiAgICAgZGVwZW5k
-cyBvbiwgc2VsZWN0LCBoZWxwIChodHRwOi8vbmlnaHRseS5idWlsZHJvb3Qub3JnLyNfY29uZmln
-X2ZpbGVzKQo+ID4KPiA+IEFwcGxpZWQgdG8gbWFzdGVyIHdpdGggdGhlIGFib3ZlIGZpeGVkLCB0
-aGFua3MuCj4gPgo+ID4gUmVnYXJkcywKPiA+IFlhbm4gRS4gTU9SSU4uCj4gPgo+ID4+ICAgICAg
-Ym9vbCAicHl0aG9uLWF0dHJzIgo+ID4+ICAgICAgaGVscAo+ID4+ICAgICAgICBhdHRycyBpcyB0
-aGUgUHl0aG9uIHBhY2thZ2UgdGhhdCB3aWxsIGJyaW5nIGJhY2sgdGhlIGpveSBvZgo+ID4+IGRp
-ZmYgLS1naXQgYS9wYWNrYWdlL3B5dGhvbi1hdXRvbWF0L0NvbmZpZy5pbiBiL3BhY2thZ2UvcHl0
-aG9uLWF1dG9tYXQvQ29uZmlnLmluCj4gPj4gaW5kZXggZWUwMmQyMmI1Yi4uOWQyMjI3NmMyYyAx
-MDA2NDQKPiA+PiAtLS0gYS9wYWNrYWdlL3B5dGhvbi1hdXRvbWF0L0NvbmZpZy5pbgo+ID4+ICsr
-KyBiL3BhY2thZ2UvcHl0aG9uLWF1dG9tYXQvQ29uZmlnLmluCj4gPj4gQEAgLTEsNSArMSw2IEBA
-Cj4gPj4gIGNvbmZpZyBCUjJfUEFDS0FHRV9QWVRIT05fQVVUT01BVAo+ID4+ICAgICAgYm9vbCAi
-cHl0aG9uLWF1dG9tYXQiCj4gPj4gKyAgICBkZXBlbmRzIG9uIEJSMl9QQUNLQUdFX1BZVEhPTjMg
-IyBweXRob24tYXR0cnMKPiA+PiAgICAgIHNlbGVjdCBCUjJfUEFDS0FHRV9QWVRIT05fQVRUUlMg
-IyBydW50aW1lCj4gPj4gICAgICBzZWxlY3QgQlIyX1BBQ0tBR0VfUFlUSE9OX1NJWCAjIHJ1bnRp
-bWUKPiA+PiAgICAgIGhlbHAKPiA+PiAtLQo+ID4+IDIuMzAuMgo+ID4+Cj4gPj4gX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPiA+PiBidWlsZHJvb3QgbWFp
-bGluZyBsaXN0Cj4gPj4gYnVpbGRyb290QGxpc3RzLmJ1aWxkcm9vdC5vcmcKPiA+PiBodHRwczov
-L2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QKPiA+Cj4KClRo
-YW5rcywKQXNhZgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-XwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8v
-bGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+While creating the initial package file a wrong dependency was chosen.
+
+This package really depends on jsoncpp, not json-for-modern-cpp:
+https://github.com/DigitalDevices/pvr.octonet/commit/f724c5934c63c64a0085c3dbe4cd3c3fc58f1318
+
+This bug was found while testing per-package directories.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/kodi-pvr-octonet/Config.in           | 8 ++++----
+ package/kodi-pvr-octonet/kodi-pvr-octonet.mk | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/package/kodi-pvr-octonet/Config.in b/package/kodi-pvr-octonet/Config.in
+index e831194ba5..7b46cccb2a 100644
+--- a/package/kodi-pvr-octonet/Config.in
++++ b/package/kodi-pvr-octonet/Config.in
+@@ -1,11 +1,11 @@
+ config BR2_PACKAGE_KODI_PVR_OCTONET
+ 	bool "kodi-pvr-octonet"
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # json-for-modern-cpp
+-	select BR2_PACKAGE_JSON_FOR_MODERN_CPP
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # jsoncpp
++	select BR2_PACKAGE_JSONCPP
+ 	help
+ 	  DigitalDevices Octonet PVR client addon for Kodi
+ 
+ 	  https://github.com/DigitalDevices/pvr.octonet
+ 
+-comment "kodi-pvr-octonet needs a toolchain w/ gcc >= 4.9"
+-	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
++comment "kodi-pvr-octonet needs a toolchain w/ gcc >= 4.7"
++	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+diff --git a/package/kodi-pvr-octonet/kodi-pvr-octonet.mk b/package/kodi-pvr-octonet/kodi-pvr-octonet.mk
+index 170f56f7f5..e2699bc44d 100644
+--- a/package/kodi-pvr-octonet/kodi-pvr-octonet.mk
++++ b/package/kodi-pvr-octonet/kodi-pvr-octonet.mk
+@@ -8,6 +8,6 @@ KODI_PVR_OCTONET_VERSION = 19.0.0-Matrix
+ KODI_PVR_OCTONET_SITE = $(call github,DigitalDevices,pvr.octonet,$(KODI_PVR_OCTONET_VERSION))
+ KODI_PVR_OCTONET_LICENSE = GPL-2.0+
+ KODI_PVR_OCTONET_LICENSE_FILES = LICENSE.md
+-KODI_PVR_OCTONET_DEPENDENCIES = json-for-modern-cpp kodi
++KODI_PVR_OCTONET_DEPENDENCIES = jsoncpp kodi
+ 
+ $(eval $(cmake-package))
+-- 
+2.30.2
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
