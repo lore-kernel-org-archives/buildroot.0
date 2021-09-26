@@ -2,52 +2,52 @@ Return-Path: <SRS0=Tewt=OQ=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DF2B5C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 20:06:46 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8BF63C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 20:06:58 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id A23BF60F9E
-	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 20:06:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A23BF60F9E
+	by mail.kernel.org (Postfix) with ESMTPS id 59EBC60F9E
+	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 20:06:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 59EBC60F9E
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8025181A64;
-	Sun, 26 Sep 2021 20:06:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 358E96076C;
+	Sun, 26 Sep 2021 20:06:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MfEkJcxMhkmE; Sun, 26 Sep 2021 20:06:45 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id v88Xgn7AD0b9; Sun, 26 Sep 2021 20:06:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B82A781A5C;
-	Sun, 26 Sep 2021 20:06:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7A4DD6072E;
+	Sun, 26 Sep 2021 20:06:56 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E296F1BF3DB
- for <buildroot@lists.busybox.net>; Sun, 26 Sep 2021 20:05:14 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 07E161BF95D
+ for <buildroot@lists.busybox.net>; Sun, 26 Sep 2021 20:05:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BB2B940201
+ by smtp4.osuosl.org (Postfix) with ESMTP id EF3BB402A5
  for <buildroot@lists.busybox.net>; Sun, 26 Sep 2021 20:05:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Cl7rvRAOQnTt for <buildroot@lists.busybox.net>;
- Sun, 26 Sep 2021 20:05:10 +0000 (UTC)
+ with ESMTP id 4x2fe_ZKANM0 for <buildroot@lists.busybox.net>;
+ Sun, 26 Sep 2021 20:05:09 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C47A24028F
+ by smtp4.osuosl.org (Postfix) with ESMTP id B316D40217
  for <buildroot@buildroot.org>; Sun, 26 Sep 2021 20:05:09 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 615908D2A7; Sun, 26 Sep 2021 20:02:56 +0000 (UTC)
+ id 347AA8D2A7; Sun, 26 Sep 2021 20:02:56 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sun, 26 Sep 2021 21:56:36 +0200
+Date: Sun, 26 Sep 2021 21:56:29 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 548750a257381af6f59da45daa10c77cafe11461
-X-Git-Newrev: da86ffbe307143315939ff5ea3a688c8a6cb6eef
+X-Git-Oldrev: 49fb95a06207b8ddf10b8eca3d68f8c074032378
+X-Git-Newrev: a19a88a6b592318dfbf0e7b306b868016d915695
 X-Patchwork-Hint: ignore
-Message-Id: <20210926200256.615908D2A7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-wsaccel: bump to version
- 0.6.3
+Message-Id: <20210926200256.347AA8D2A7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-dominate: bump to version
+ 2.6.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,49 +65,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=da86ffbe307143315939ff5ea3a688c8a6cb6eef
+commit: https://git.buildroot.net/buildroot/commit/?id=a19a88a6b592318dfbf0e7b306b868016d915695
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Plus, add license file and corresponding hash.
+Plus, indent with two spaces in the hash file.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/python-wsaccel/python-wsaccel.hash | 8 +++++---
- package/python-wsaccel/python-wsaccel.mk   | 5 +++--
- 2 files changed, 8 insertions(+), 5 deletions(-)
+ package/python-dominate/python-dominate.hash | 6 +++---
+ package/python-dominate/python-dominate.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-wsaccel/python-wsaccel.hash b/package/python-wsaccel/python-wsaccel.hash
-index a02b5a8712..9d0002d41d 100644
---- a/package/python-wsaccel/python-wsaccel.hash
-+++ b/package/python-wsaccel/python-wsaccel.hash
-@@ -1,3 +1,5 @@
--# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=2b4ea3d6847855c0587d37fca9db0557, sha256 locally computed.
--md5	2b4ea3d6847855c0587d37fca9db0557  wsaccel-0.6.2.tar.gz
--sha256	425706acf0724d2f6bfa391ec37b4ef121d3432c956029de3cea4e101c218e0c  wsaccel-0.6.2.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/wsaccel/json
-+md5  973168711818dd98b8b28a4c2db77a27  wsaccel-0.6.3.tar.gz
-+sha256  fdb27866bb6b6e7a29e45222778ff97938782a0ce92eff07dfb20af8fb9301c4  wsaccel-0.6.3.tar.gz
-+# Locally computed sha256 checksums
-+sha256  b6982974cb838b985b54b663d1780d280735086249c2e28015f25dd455df25da  LICENSE
-diff --git a/package/python-wsaccel/python-wsaccel.mk b/package/python-wsaccel/python-wsaccel.mk
-index 016ff2d72a..7c78951f2f 100644
---- a/package/python-wsaccel/python-wsaccel.mk
-+++ b/package/python-wsaccel/python-wsaccel.mk
-@@ -4,10 +4,11 @@
+diff --git a/package/python-dominate/python-dominate.hash b/package/python-dominate/python-dominate.hash
+index 168e56e740..2e77d72a2e 100644
+--- a/package/python-dominate/python-dominate.hash
++++ b/package/python-dominate/python-dominate.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/dominate/json
+-md5	27d3aa7e0d67902c505e248e705e5e2e  dominate-2.4.0.tar.gz
+-sha256	a92474b4312bd8b4c1789792f3ec8c571cd8afa8e7502a2b1c64dd48cd67e59c  dominate-2.4.0.tar.gz
++md5  9f714324ca99eee98bb3c3cdbe838de6  dominate-2.6.0.tar.gz
++sha256  76ec2cde23700a6fc4fee098168b9dee43b99c2f1dd0ca6a711f683e8eb7e1e4  dominate-2.6.0.tar.gz
+ # Locally computed sha256 checksums
+-sha256	9ccf26cfe845e0eb8bb58053e47366e7ab6b697ae010f7650978d4b71b7d1fc1  LICENSE.txt
++sha256  9ccf26cfe845e0eb8bb58053e47366e7ab6b697ae010f7650978d4b71b7d1fc1  LICENSE.txt
+diff --git a/package/python-dominate/python-dominate.mk b/package/python-dominate/python-dominate.mk
+index e87b6842dd..79fc058737 100644
+--- a/package/python-dominate/python-dominate.mk
++++ b/package/python-dominate/python-dominate.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_WSACCEL_VERSION = 0.6.2
-+PYTHON_WSACCEL_VERSION = 0.6.3
- PYTHON_WSACCEL_SOURCE = wsaccel-$(PYTHON_WSACCEL_VERSION).tar.gz
--PYTHON_WSACCEL_SITE = https://pypi.python.org/packages/source/w/wsaccel
-+PYTHON_WSACCEL_SITE = https://files.pythonhosted.org/packages/f5/d1/3e99875a764d0d6ec94a74977ed72dd3022a7f31d036622da9cff8fc072f
- PYTHON_WSACCEL_LICENSE = Apache-2.0
-+PYTHON_WSACCEL_LICENSE_FILES = LICENSE
- PYTHON_WSACCEL_SETUP_TYPE = setuptools
- 
- $(eval $(python-package))
+-PYTHON_DOMINATE_VERSION = 2.4.0
++PYTHON_DOMINATE_VERSION = 2.6.0
+ PYTHON_DOMINATE_SOURCE = dominate-$(PYTHON_DOMINATE_VERSION).tar.gz
+-PYTHON_DOMINATE_SITE = https://files.pythonhosted.org/packages/46/dd/0fde17069c908951941475eee110c84467591caa1cd8ca30136294c26621
++PYTHON_DOMINATE_SITE = https://files.pythonhosted.org/packages/29/23/edf8e470f1053245c1aa99d92c8a3da9e83f6c7d3eb39205486965425be5
+ PYTHON_DOMINATE_SETUP_TYPE = setuptools
+ PYTHON_DOMINATE_LICENSE = LGPL-3.0+
+ PYTHON_DOMINATE_LICENSE_FILES = LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
