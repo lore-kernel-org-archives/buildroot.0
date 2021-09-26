@@ -2,84 +2,82 @@ Return-Path: <SRS0=Tewt=OQ=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DF36FC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 21:15:52 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2CA5EC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 21:24:38 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id AA10460F70
-	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 21:15:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org AA10460F70
+	by mail.kernel.org (Postfix) with ESMTPS id CA53660E54
+	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 21:24:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org CA53660E54
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 83F6960711;
-	Sun, 26 Sep 2021 21:15:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9AE7240327;
+	Sun, 26 Sep 2021 21:24:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QYLAeFiHrqUA; Sun, 26 Sep 2021 21:15:51 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id d_I6hQxpz5BY; Sun, 26 Sep 2021 21:24:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CD5316077C;
-	Sun, 26 Sep 2021 21:15:50 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1B3BB1BF370
- for <buildroot@lists.busybox.net>; Sun, 26 Sep 2021 21:15:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E552C40266;
+	Sun, 26 Sep 2021 21:24:35 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B9CAF1BF370
+ for <buildroot@lists.busybox.net>; Sun, 26 Sep 2021 21:24:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0AD08605D6
- for <buildroot@lists.busybox.net>; Sun, 26 Sep 2021 21:15:39 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A97FD40266
+ for <buildroot@lists.busybox.net>; Sun, 26 Sep 2021 21:24:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yejwjmQ7YUyL for <buildroot@lists.busybox.net>;
- Sun, 26 Sep 2021 21:15:38 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id uqqgog3hesTm for <buildroot@lists.busybox.net>;
+ Sun, 26 Sep 2021 21:24:33 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
- [IPv6:2a00:1450:4864:20::432])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1F110605A7
- for <buildroot@buildroot.org>; Sun, 26 Sep 2021 21:15:38 +0000 (UTC)
-Received: by mail-wr1-x432.google.com with SMTP id s21so6102492wra.7
- for <buildroot@buildroot.org>; Sun, 26 Sep 2021 14:15:37 -0700 (PDT)
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
+ [IPv6:2a00:1450:4864:20::430])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9AFB740245
+ for <buildroot@buildroot.org>; Sun, 26 Sep 2021 21:24:33 +0000 (UTC)
+Received: by mail-wr1-x430.google.com with SMTP id x20so1467309wrg.10
+ for <buildroot@buildroot.org>; Sun, 26 Sep 2021 14:24:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=r0X04Q49CjYh8sfLQLOQ/FP3JJgXfzl1G27SKSOKr6c=;
- b=bSE3t1Py0rWVYZmOb/8mTv7sT1XDCHTc4/znYsyqGMaVM1XrBm15ZhXCiSEiNqpRNg
- XHNqwVIabB3b+Na1lHGHoJLO7htTA34Zer9cAS1BqmjKfg9FjqtOZky8SJ+AKxbCuKjY
- qU1BNvRJK2eYTYQVFLSzY2miTzmRhk5JXnzno7fffGM0yLuOCbrVmBOP4/QKYUjj7wwe
- zmLzR04Ahs9kjE3JVqJftUnNiyZa0JvHl8WITFh6yIAmcuj9OFbzD4T9967TCHFTBC41
- ECUgt+3OF8w6H/ANWNxbwbieQlvMxY/m0UAnHjQC5dMeXrXHoWopDTrT+Jc2NgJ7j40h
- KrWA==
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=RY2YCnkgkcKw7nZi8VgCg0EArOslMmfUrd5Eho3e2TA=;
+ b=Uj/LnBKq06/Pnjbi2L1gCHvqp/vFbwfB6u8rE245DlEx5bfnIdKE7jkCwkwP7rh8AK
+ KDrC+XlzEMGbxUkTg66beA6df/6Jds+1/3LifbN5ShRN/PftCDuoeLmed9Ro+v3fnkku
+ 9Umme+UAVG0hcPbveFfvEanNsVr3XbxtlROqgux/DOe9sv7yFTDWyUq58kHpLV/JyFBG
+ 6xbf7poMMpGEOKSNSHtB6Qpiunc3wZawR5M53i2Gv++k5zC9n9A5kE+ywzQ5Cp/ZEoaz
+ X+roQpbSvqRP/axzC8jVluwGC3S3048wLD/1ZHFgLVAvjXsdkWExrrVU9Fb66w6olhzR
+ Ta+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=r0X04Q49CjYh8sfLQLOQ/FP3JJgXfzl1G27SKSOKr6c=;
- b=YeIXkdn1/ynfJpqWEyJ9DtFQqXnmb7+7EfvFZ8rvz6I1o74G2RXNTLkvYaFnHTxS5H
- i222krDuYeZ5vrJLaCQQOMhVeoMKJW60GHQeMvMdThGYn75faTGJYtlkzLk4xu0U+m+4
- OttJBg0FeCxrV3Jdj75CHQb2uZm++BvnTd67Dl5mpb6xmec/qAs8VfCvVhSr2EG/czmZ
- P2AwOYDAJCOjvIVit/uLJJIPY1prWsNTQXnms/SFnUTeXn74tha5j8TTAXolht01NWom
- cJKqNc1zRmUcKZtyn+aFPxvXTBJ6V5VFOYSLAA+mbB0NbLTSekUDar7DjJGT8+g/bDVY
- D+1w==
-X-Gm-Message-State: AOAM530bfXP+idt5k6KTtpAc0Pa6U9iPJrOZYgq/5DRs5zugDIb7NWjs
- PiKvSSIfthrgKXx4QafeRvDiUhXOPG8=
-X-Google-Smtp-Source: ABdhPJyk2z5D4bFc/2I8K4Woa9QpVD6Qk6CA9+OisdKXce7jW4GB4QV/jpTog9v49G26uhspKb/UvQ==
-X-Received: by 2002:a5d:424c:: with SMTP id s12mr1805330wrr.294.1632690936153; 
- Sun, 26 Sep 2021 14:15:36 -0700 (PDT)
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=RY2YCnkgkcKw7nZi8VgCg0EArOslMmfUrd5Eho3e2TA=;
+ b=WdAQsxcxY3l2V791xkP3YKKxcRwS8lEd8nRF7A5n7miEfpwJ74T/xVcAybUm028Eq8
+ sO3bK8b6E3IAKtD9DIzVAK17s930+oHqeFaHH6sOqVovEy7S/VyAd7EabFcA2c0BZvO0
+ ITMC2VzVnebok/YO//VNmm+Zjwafi0DfzM0685FkmgUYs5CP8uBpSQc7jIqzKfny/ZJD
+ k+wSOsr+JNZTSnPwlpmB6iUlm3sSyv5yRg5/PRd+yqRoLY7Q2IEw/9yIdOi8rmN7ML93
+ VOyw9guAione1ll5LMF6nnTCPtrI658zbGEihTJnxSvs/f9s/E3iTDs/7n/XoNUe3EGW
+ hL1w==
+X-Gm-Message-State: AOAM532jKTdma5HIMu/0MQwtYFGhW/qAxj/tFeYAKFK0SzEPt55WR4Ey
+ seuVbAxLMg9ckqzyMmXdYT2x5IMkfRI=
+X-Google-Smtp-Source: ABdhPJzk9M4zNxPaGqB1x05AfImSBTXwC84PJHMX6RAz3jGZLqDlaD1N7YVpBmmsFwt1fksgMno7VA==
+X-Received: by 2002:adf:f64d:: with SMTP id x13mr7126769wrp.360.1632691471608; 
+ Sun, 26 Sep 2021 14:24:31 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-421-88.w2-10.abo.wanadoo.fr.
  [2.10.246.88])
- by smtp.gmail.com with ESMTPSA id g2sm15475087wrb.20.2021.09.26.14.15.35
+ by smtp.gmail.com with ESMTPSA id i203sm19230114wma.7.2021.09.26.14.24.31
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 26 Sep 2021 14:15:35 -0700 (PDT)
+ Sun, 26 Sep 2021 14:24:31 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 26 Sep 2021 23:15:03 +0200
-Message-Id: <20210926211503.897587-2-fontaine.fabrice@gmail.com>
+Date: Sun, 26 Sep 2021 23:24:06 +0200
+Message-Id: <20210926212406.914262-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20210926211503.897587-1-fontaine.fabrice@gmail.com>
-References: <20210926211503.897587-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 2/2] package/mtr: bump to version 0.94
+Subject: [Buildroot] [PATCH 1/1] package/liburcu: bump to version 0.13.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,71 +89,97 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Philippe Proulx <eeppeliteloop@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- Add jansson optional dependency:
-  https://github.com/traviscross/mtr/commit/c2739eaf139b96f4b4937aee9aa484f0e6d1df55
-- Add libgtk3 optional dependency:
-  https://github.com/traviscross/mtr/commit/5bd8e6c3ba67fdb9445b1ddc3777aca3b0f7053e
-- Update indentation in hash file (two spaces)
+Update first patch due to
+https://github.com/urcu/userspace-rcu/commit/3f0dd283a89ab114ffbf5c3dd46463217c6bb2ff
+
+https://github.com/urcu/userspace-rcu/blob/v0.13.0/ChangeLog
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/mtr/mtr.hash |  4 ++--
- package/mtr/mtr.mk   | 17 +++++++++++++++--
- 2 files changed, 17 insertions(+), 4 deletions(-)
+ ...ly-blacklist-ARM-gcc-4.8.0-and-4.8.1.patch | 22 ++++++++++---------
+ package/liburcu/liburcu.hash                  |  4 ++--
+ package/liburcu/liburcu.mk                    |  2 +-
+ 3 files changed, 15 insertions(+), 13 deletions(-)
 
-diff --git a/package/mtr/mtr.hash b/package/mtr/mtr.hash
-index 7771e091e2..d6062ef08f 100644
---- a/package/mtr/mtr.hash
-+++ b/package/mtr/mtr.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256	3a1ab330104ddee3135af3cfa567b9608001c5deecbf200c08b545ed6d7a4c8f	mtr-0.93.tar.gz
--sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
-+sha256  ea036fdd45da488c241603f6ea59a06bbcfe6c26177ebd34fff54336a44494b8  mtr-0.94.tar.gz
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/mtr/mtr.mk b/package/mtr/mtr.mk
-index 0400a12021..07c58a1e93 100644
---- a/package/mtr/mtr.mk
-+++ b/package/mtr/mtr.mk
-@@ -4,10 +4,9 @@
+diff --git a/package/liburcu/0001-Only-blacklist-ARM-gcc-4.8.0-and-4.8.1.patch b/package/liburcu/0001-Only-blacklist-ARM-gcc-4.8.0-and-4.8.1.patch
+index 658e1721f0..554c4aba1f 100644
+--- a/package/liburcu/0001-Only-blacklist-ARM-gcc-4.8.0-and-4.8.1.patch
++++ b/package/liburcu/0001-Only-blacklist-ARM-gcc-4.8.0-and-4.8.1.patch
+@@ -8,17 +8,19 @@ their latest releases based on gcc-4.8.2, then only blacklist gcc 4.8.0
+ and 4.8.1.
+ 
+ Signed-off-by: Samuel Martin <s.martin49@gmail.com>
++[Fabrice: update for 0.13.0]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ ---
+  urcu/compiler.h | 9 ++++++++-
+  1 file changed, 8 insertions(+), 1 deletion(-)
+ 
+-diff --git a/include/urcu/compiler.h b/include/urcu/compiler.h
++diff --git a/include/urcu/arch/arm.h b/include/urcu/arch/arm.h
+ index 1e30903..56115f1 100644
+---- a/include/urcu/compiler.h
+-+++ b/include/urcu/compiler.h
++--- a/include/urcu/arch/arm.h
+++++ b/include/urcu/arch/arm.h
+ @@ -118,10 +118,17 @@
+- 				+ __GNUC_PATCHLEVEL__)
+-
++  */
++ 
+  /*
+ + * Official gcc releases from 4.8.0 to 4.8.2 have the following bug,
+ + * however, many arm toolchain providers have the included the fix for
+@@ -29,12 +31,12 @@ index 1e30903..56115f1 100644
+ + *
+   * http://gcc.gnu.org/bugzilla/show_bug.cgi?id=58854
+   */
+- # ifdef __ARMEL__
+--#  if URCU_GCC_VERSION >= 40800 && URCU_GCC_VERSION <= 40802
+-+#  if URCU_GCC_VERSION >= 40800 && URCU_GCC_VERSION <= 40801
+- #   error Your gcc version produces clobbered frame accesses
+- #  endif
++ #ifdef URCU_GCC_VERSION
++-# if URCU_GCC_VERSION >= 40800 && URCU_GCC_VERSION <= 40802
+++# if URCU_GCC_VERSION >= 40800 && URCU_GCC_VERSION <= 40801
++ #  error Your gcc version produces clobbered frame accesses
+  # endif
++ #endif
+ --
+ 1.9.0
+ 
+diff --git a/package/liburcu/liburcu.hash b/package/liburcu/liburcu.hash
+index da7d12a76c..8ff11623d0 100644
+--- a/package/liburcu/liburcu.hash
++++ b/package/liburcu/liburcu.hash
+@@ -1,5 +1,5 @@
+-# http://www.lttng.org/files/urcu/userspace-rcu-0.12.1.tar.bz2.sha256
+-sha256  bbfaead0345642b97e0de90f889dfbab4b2643a6a5e5c6bb59cd0d26fc0bcd0e  userspace-rcu-0.12.1.tar.bz2
++# http://www.lttng.org/files/urcu/userspace-rcu-0.13.0.tar.bz2.sha256
++sha256  cbb20dbe1a892c2a4d8898bac4316176e585392693d498766ccbbc68cf20ba20  userspace-rcu-0.13.0.tar.bz2
+ 
+ # Hash for license files
+ sha256  36b6d3fa47916943fd5fec313c584784946047ec1337a78b440e5992cb595f89  lgpl-2.1.txt
+diff --git a/package/liburcu/liburcu.mk b/package/liburcu/liburcu.mk
+index fa2ad0de83..c0a44764f1 100644
+--- a/package/liburcu/liburcu.mk
++++ b/package/liburcu/liburcu.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MTR_VERSION = 0.93
-+MTR_VERSION = 0.94
- MTR_SITE = $(call github,traviscross,mtr,v$(MTR_VERSION))
- MTR_AUTORECONF = YES
--MTR_CONF_OPTS = --without-gtk
- MTR_DEPENDENCIES = \
- 	host-pkgconf \
- 	$(if $(BR2_PACKAGE_LIBCAP),libcap)
-@@ -15,6 +14,20 @@ MTR_LICENSE = GPL-2.0
- MTR_LICENSE_FILES = COPYING
- MTR_SELINUX_MODULES = netutils
- 
-+ifeq ($(BR2_PACKAGE_JANSSON),y)
-+MTR_CONF_OPTS += --with-jansson
-+MTR_DEPENDENCIES += jansson
-+else
-+MTR_CONF_OPTS += --without-jansson
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBGTK3),y)
-+MTR_CONF_OPTS += --with-gtk
-+MTR_DEPENDENCIES += libgtk3
-+else
-+MTR_CONF_OPTS += --without-gtk
-+endif
-+
- ifeq ($(BR2_PACKAGE_NCURSES),y)
- MTR_CONF_OPTS += --with-ncurses
- MTR_DEPENDENCIES += ncurses
+-LIBURCU_VERSION = 0.12.1
++LIBURCU_VERSION = 0.13.0
+ LIBURCU_SITE = http://lttng.org/files/urcu
+ LIBURCU_SOURCE = userspace-rcu-$(LIBURCU_VERSION).tar.bz2
+ LIBURCU_LICENSE = LGPL-2.1+ (library), MIT-like (few source files listed in LICENSE), GPL-2.0+ (test), GPL-3.0 (few *.m4 files)
 -- 
 2.33.0
 
