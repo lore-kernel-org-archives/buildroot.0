@@ -2,52 +2,52 @@ Return-Path: <SRS0=Tewt=OQ=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CE1F6C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 19:59:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 66A95C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 19:59:34 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 92A4C60FDC
-	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 19:59:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 92A4C60FDC
+	by mail.kernel.org (Postfix) with ESMTPS id 26A7760F9E
+	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 19:59:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 26A7760F9E
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 706B260748;
-	Sun, 26 Sep 2021 19:59:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 06247607AA;
+	Sun, 26 Sep 2021 19:59:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ynkQmEb6sVgJ; Sun, 26 Sep 2021 19:59:21 +0000 (UTC)
+	with ESMTP id qo8ujkaUs_gz; Sun, 26 Sep 2021 19:59:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C936260708;
-	Sun, 26 Sep 2021 19:59:20 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1E30A1BF383
+	by smtp3.osuosl.org (Postfix) with ESMTP id 59C86605C2;
+	Sun, 26 Sep 2021 19:59:32 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 88CB91BF383
  for <buildroot@lists.busybox.net>; Sun, 26 Sep 2021 19:52:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 98DA240198
- for <buildroot@lists.busybox.net>; Sun, 26 Sep 2021 19:52:34 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C28EC6072E
+ for <buildroot@lists.busybox.net>; Sun, 26 Sep 2021 19:52:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DS2d2OHabBQX for <buildroot@lists.busybox.net>;
- Sun, 26 Sep 2021 19:52:32 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KXuE71rtb3DL for <buildroot@lists.busybox.net>;
+ Sun, 26 Sep 2021 19:52:31 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id EF9BF403AB
+ by smtp3.osuosl.org (Postfix) with ESMTP id 69C396074F
  for <buildroot@buildroot.org>; Sun, 26 Sep 2021 19:52:31 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 90B0D8D25E; Sun, 26 Sep 2021 19:50:18 +0000 (UTC)
+ id 004298D25B; Sun, 26 Sep 2021 19:50:17 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sun, 26 Sep 2021 21:29:39 +0200
+Date: Sun, 26 Sep 2021 21:08:34 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9c66439bb7fce5ac429066d71fd0fe518938fefc
-X-Git-Newrev: 6c09567e6b6f2cc826e64cd9b36fb41ed7c6e00c
+X-Git-Oldrev: e3da7ebb509a471f8aff3e76331c1eda6af32904
+X-Git-Newrev: 99bed3c20629410ae7f10be437ed129d36c2be2a
 X-Patchwork-Hint: ignore
-Message-Id: <20210926195018.90B0D8D25E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-inflection: bump to version
- 0.5.1
+Message-Id: <20210926195018.004298D25B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kodi-screensaver-biogenesis: bump
+ version to 19.0.0-Matrix
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,48 +65,37 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6c09567e6b6f2cc826e64cd9b36fb41ed7c6e00c
+commit: https://git.buildroot.net/buildroot/commit/?id=99bed3c20629410ae7f10be437ed129d36c2be2a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-License file update was a year bump.
-
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/python-inflection/python-inflection.hash | 10 +++++-----
- package/python-inflection/python-inflection.mk   |  4 ++--
- 2 files changed, 7 insertions(+), 7 deletions(-)
+ package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.hash | 2 +-
+ package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-inflection/python-inflection.hash b/package/python-inflection/python-inflection.hash
-index bdad35ad25..b170d3f6b0 100644
---- a/package/python-inflection/python-inflection.hash
-+++ b/package/python-inflection/python-inflection.hash
-@@ -1,5 +1,5 @@
--# Hashes from https://pypi.python.org/pypi/inflection/json
--md5     7941165e9f148e0520023941c0886b40  inflection-0.3.1.tar.gz
--sha256  18ea7fb7a7d152853386523def08736aa8c32636b047ade55f7578c4edeb16ca  inflection-0.3.1.tar.gz
--# License file, locally calculated
--sha256  4a3f52ac1012a90db398e4c55f1d1bea501dddafef8a4b3adb7533b1d820e148  LICENSE
-+# md5, sha256 from https://pypi.org/pypi/inflection/json
-+md5  c3287d4f0e3bdf625a52d655cc514403  inflection-0.5.1.tar.gz
-+sha256  1a29730d366e996aaacffb2f1f1cb9593dc38e2ddd30c91250c6dde09ea9b417  inflection-0.5.1.tar.gz
-+# Locally computed sha256 checksums
-+sha256  9e9f9b4b2e7543ad1486f1328bf9ec50e5a5e2bb9caceb59652496dd61e64133  LICENSE
-diff --git a/package/python-inflection/python-inflection.mk b/package/python-inflection/python-inflection.mk
-index 7309880c6a..7c030e99b9 100644
---- a/package/python-inflection/python-inflection.mk
-+++ b/package/python-inflection/python-inflection.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.hash b/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.hash
+index 1f2c5e6305..0cd96aeb5f 100644
+--- a/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.hash
++++ b/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  bf56384e6956674cd911c52b2807993d0a6e0ffa9623b5a1981a3153911e135a  kodi-screensaver-biogenesis-2.5.0-Matrix.tar.gz
++sha256  11aceaa34851c7f400bb362d202289b767b3d1d45fbb4addeb151b6ea60ac37c  kodi-screensaver-biogenesis-19.0.0-Matrix.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk b/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk
+index 8b2d6b2ee5..e2acb44797 100644
+--- a/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk
++++ b/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_INFLECTION_VERSION = 0.3.1
-+PYTHON_INFLECTION_VERSION = 0.5.1
- PYTHON_INFLECTION_SOURCE = inflection-$(PYTHON_INFLECTION_VERSION).tar.gz
--PYTHON_INFLECTION_SITE = https://pypi.python.org/packages/d5/35/a6eb45b4e2356fe688b21570864d4aa0d0a880ce387defe9c589112077f8
-+PYTHON_INFLECTION_SITE = https://files.pythonhosted.org/packages/e1/7e/691d061b7329bc8d54edbf0ec22fbfb2afe61facb681f9aaa9bff7a27d04
- PYTHON_INFLECTION_SETUP_TYPE = setuptools
- PYTHON_INFLECTION_LICENSE = MIT
- PYTHON_INFLECTION_LICENSE_FILES = LICENSE
+-KODI_SCREENSAVER_BIOGENESIS_VERSION = 2.5.0-Matrix
++KODI_SCREENSAVER_BIOGENESIS_VERSION = 19.0.0-Matrix
+ KODI_SCREENSAVER_BIOGENESIS_SITE = $(call github,xbmc,screensaver.biogenesis,$(KODI_SCREENSAVER_BIOGENESIS_VERSION))
+ KODI_SCREENSAVER_BIOGENESIS_LICENSE = GPL-2.0+
+ KODI_SCREENSAVER_BIOGENESIS_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
