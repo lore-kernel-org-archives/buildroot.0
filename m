@@ -2,52 +2,51 @@ Return-Path: <SRS0=Tewt=OQ=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 95EF9C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 20:06:00 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B718C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 20:06:12 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 5A81C60EB4
-	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 20:06:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5A81C60EB4
+	by mail.kernel.org (Postfix) with ESMTPS id E352260FDC
+	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 20:06:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E352260FDC
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 26A6A60725;
-	Sun, 26 Sep 2021 20:06:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BF70C403B8;
+	Sun, 26 Sep 2021 20:06:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5fupkkuSYKSR; Sun, 26 Sep 2021 20:05:59 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id upptM5XuQvGX; Sun, 26 Sep 2021 20:06:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 38FE16071A;
-	Sun, 26 Sep 2021 20:05:58 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 856841BF383
+	by smtp4.osuosl.org (Postfix) with ESMTP id CE4B74037F;
+	Sun, 26 Sep 2021 20:06:09 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id AAAD01BF40B
  for <buildroot@lists.busybox.net>; Sun, 26 Sep 2021 20:05:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 80C5480E53
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7939640213
  for <buildroot@lists.busybox.net>; Sun, 26 Sep 2021 20:05:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EhpNegQbGVwK for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id r9mg9rVOizIk for <buildroot@lists.busybox.net>;
  Sun, 26 Sep 2021 20:05:09 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id C0E1B80E8D
+ by smtp4.osuosl.org (Postfix) with ESMTP id B929840283
  for <buildroot@buildroot.org>; Sun, 26 Sep 2021 20:05:09 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 4C4AB8D2AA; Sun, 26 Sep 2021 20:02:56 +0000 (UTC)
+ id 574618D25C; Sun, 26 Sep 2021 20:02:56 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sun, 26 Sep 2021 21:56:32 +0200
+Date: Sun, 26 Sep 2021 21:56:34 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7537d8dade05529e277a9ce54ca0a909ff52be28
-X-Git-Newrev: 882506b8182a866130a36469da97f51121d9fbe4
+X-Git-Oldrev: 882506b8182a866130a36469da97f51121d9fbe4
+X-Git-Newrev: 548750a257381af6f59da45daa10c77cafe11461
 X-Patchwork-Hint: ignore
-Message-Id: <20210926200256.4C4AB8D2AA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-tinyrpc: bump to version
- 1.1.1
+Message-Id: <20210926200256.574618D25C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-webob: bump to version 1.8.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,47 +64,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=882506b8182a866130a36469da97f51121d9fbe4
+commit: https://git.buildroot.net/buildroot/commit/?id=548750a257381af6f59da45daa10c77cafe11461
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Plus, indent with two spaces on hash file.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/python-tinyrpc/python-tinyrpc.hash | 7 ++++---
- package/python-tinyrpc/python-tinyrpc.mk   | 4 ++--
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ package/python-webob/python-webob.hash | 4 ++--
+ package/python-webob/python-webob.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-tinyrpc/python-tinyrpc.hash b/package/python-tinyrpc/python-tinyrpc.hash
-index b4bc7ae863..c5bdad567e 100644
---- a/package/python-tinyrpc/python-tinyrpc.hash
-+++ b/package/python-tinyrpc/python-tinyrpc.hash
-@@ -1,4 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/tinyrpc/json
--sha256	4b41fab967fb1c978f573bf0d609a3b12cc3b6ed62bd3108f43f575563746396  tinyrpc-1.0.4.tar.gz
--md5	cd61e3cbc01ea940abc97d3a87abf4a7  tinyrpc-1.0.4.tar.gz
--sha256	587f1ea174824613f4a7e0d7fb95fda000a7f58ca17df12416e014c9ee82e619  LICENSE
-+md5  34d7b41ab48297b6b8fbf937e3d43a57  tinyrpc-1.1.1.tar.gz
-+sha256  9e68d7b9688dac8deaa342a2507d04f0b2ece64a9d19382aa2ee13d692e87d7f  tinyrpc-1.1.1.tar.gz
-+# Locally computed sha256 checksums
-+sha256  587f1ea174824613f4a7e0d7fb95fda000a7f58ca17df12416e014c9ee82e619  LICENSE
-diff --git a/package/python-tinyrpc/python-tinyrpc.mk b/package/python-tinyrpc/python-tinyrpc.mk
-index 0ac0470f74..f3f7dcc52b 100644
---- a/package/python-tinyrpc/python-tinyrpc.mk
-+++ b/package/python-tinyrpc/python-tinyrpc.mk
+diff --git a/package/python-webob/python-webob.hash b/package/python-webob/python-webob.hash
+index aab2f1d9e4..a46c1dbc94 100644
+--- a/package/python-webob/python-webob.hash
++++ b/package/python-webob/python-webob.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/webob/json
+-md5  dc3cc8c317d4acd03a6fd97cb0a9121a  WebOb-1.8.6.tar.gz
+-sha256  aa3a917ed752ba3e0b242234b2a373f9c4e2a75d35291dcbe977649bd21fd108  WebOb-1.8.6.tar.gz
++md5  10191c69fa5a2c00f3b9abfb8937b415  WebOb-1.8.7.tar.gz
++sha256  b64ef5141be559cfade448f044fa45c2260351edcb6a8ef6b7e00c7dcef0c323  WebOb-1.8.7.tar.gz
+ # Locally computed sha256 checksums
+ sha256  27bc4919e7e9e6b6cda40644517ca74d32203e32fba89ef832aba1ed93e457b3  docs/license.txt
+diff --git a/package/python-webob/python-webob.mk b/package/python-webob/python-webob.mk
+index 051c117538..11ba104476 100644
+--- a/package/python-webob/python-webob.mk
++++ b/package/python-webob/python-webob.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_TINYRPC_VERSION = 1.0.4
-+PYTHON_TINYRPC_VERSION = 1.1.1
- PYTHON_TINYRPC_SOURCE = tinyrpc-$(PYTHON_TINYRPC_VERSION).tar.gz
--PYTHON_TINYRPC_SITE = https://files.pythonhosted.org/packages/9d/91/c639ba014aada92446516c5fc4b04f2cee3539ab2d0758a6a87a6da973cb
-+PYTHON_TINYRPC_SITE = https://files.pythonhosted.org/packages/6a/63/0851365686da1ca9ab03d63b035eccf87a1d85b743ce07d079462350da33
- PYTHON_TINYRPC_SETUP_TYPE = setuptools
- PYTHON_TINYRPC_LICENSE = MIT
- PYTHON_TINYRPC_LICENSE_FILES = LICENSE
+-PYTHON_WEBOB_VERSION = 1.8.6
++PYTHON_WEBOB_VERSION = 1.8.7
+ PYTHON_WEBOB_SOURCE = WebOb-$(PYTHON_WEBOB_VERSION).tar.gz
+-PYTHON_WEBOB_SITE = https://files.pythonhosted.org/packages/2a/32/5f3f43d0784bdd9392db0cb98434d7cd23a0d8a420c4d243ad4cb8517f2a
++PYTHON_WEBOB_SITE = https://files.pythonhosted.org/packages/c7/45/ee5f034fb4ebe3236fa49e5a4fcbc54444dd22ecf33079cf56f9606d479d
+ PYTHON_WEBOB_SETUP_TYPE = setuptools
+ PYTHON_WEBOB_LICENSE = MIT
+ PYTHON_WEBOB_LICENSE_FILES = docs/license.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
