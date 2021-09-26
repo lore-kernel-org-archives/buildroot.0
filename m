@@ -2,52 +2,52 @@ Return-Path: <SRS0=Tewt=OQ=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A7B51C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 20:02:17 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A67EDC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 20:02:29 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 7662360F9E
-	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 20:02:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7662360F9E
+	by mail.kernel.org (Postfix) with ESMTPS id 3C5EA60FDC
+	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 20:02:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3C5EA60FDC
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4E27381ADE;
-	Sun, 26 Sep 2021 20:02:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 142C740396;
+	Sun, 26 Sep 2021 20:02:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yYKnFpl7xPnQ; Sun, 26 Sep 2021 20:02:16 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 0wfM2dmg5V8A; Sun, 26 Sep 2021 20:02:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A165381AAD;
-	Sun, 26 Sep 2021 20:02:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5073740383;
+	Sun, 26 Sep 2021 20:02:27 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 0C7B11BF383
- for <buildroot@lists.busybox.net>; Sun, 26 Sep 2021 19:52:57 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1C5EA1BF383
+ for <buildroot@lists.busybox.net>; Sun, 26 Sep 2021 19:52:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CBEE3606DA
+ by smtp3.osuosl.org (Postfix) with ESMTP id DC6DC6076C
  for <buildroot@lists.busybox.net>; Sun, 26 Sep 2021 19:52:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SVRfGW45JMoK for <buildroot@lists.busybox.net>;
- Sun, 26 Sep 2021 19:52:33 +0000 (UTC)
+ with ESMTP id l5Ty89Tg3Lhq for <buildroot@lists.busybox.net>;
+ Sun, 26 Sep 2021 19:52:34 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0B3566076C
+ by smtp3.osuosl.org (Postfix) with ESMTP id E4A4E607B3
  for <buildroot@buildroot.org>; Sun, 26 Sep 2021 19:52:32 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id A28048D25B; Sun, 26 Sep 2021 19:50:18 +0000 (UTC)
+ id 8792C8D25B; Sun, 26 Sep 2021 19:50:19 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sun, 26 Sep 2021 21:29:40 +0200
+Date: Sun, 26 Sep 2021 21:29:42 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9c0d6a574bfd4a13a6dec3f02d38e2a2942c7700
-X-Git-Newrev: 09417e47d706e5d7d58c0f886b4679064c5175fa
+X-Git-Oldrev: 02a73ea33d176bbc4e0da5927c95d558c7a9d604
+X-Git-Newrev: 7e4bcddb5648365d47b4885612f5461f7848557b
 X-Patchwork-Hint: ignore
-Message-Id: <20210926195018.A28048D25B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-psycopg2: bump to version
- 2.9.1
+Message-Id: <20210926195019.8792C8D25B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kodi-pvr-vdr-vnsi: bump version to
+ 19.0.0-Matrix
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,43 +65,37 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=09417e47d706e5d7d58c0f886b4679064c5175fa
+commit: https://git.buildroot.net/buildroot/commit/?id=7e4bcddb5648365d47b4885612f5461f7848557b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/python-psycopg2/python-psycopg2.hash | 4 ++--
- package/python-psycopg2/python-psycopg2.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.hash | 2 +-
+ package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-psycopg2/python-psycopg2.hash b/package/python-psycopg2/python-psycopg2.hash
-index bf73f8ad25..d02ffc2ec8 100644
---- a/package/python-psycopg2/python-psycopg2.hash
-+++ b/package/python-psycopg2/python-psycopg2.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/psycopg2/json
--md5  c232ff3e3bfee35e1a0e15bc089cb294  psycopg2-2.8.5.tar.gz
--sha256  f7d46240f7a1ae1dd95aab38bd74f7428d46531f69219954266d669da60c0818  psycopg2-2.8.5.tar.gz
-+md5  182e3e8cf3381c254f65f70cad4976e5  psycopg2-2.9.1.tar.gz
-+sha256  de5303a6f1d0a7a34b9d40e4d3bef684ccc44a49bbe3eb85e3c0bffb4a131b7c  psycopg2-2.9.1.tar.gz
- # Locally computed sha256 checksums
- sha256  9614b85dfc9a72c5b2ca33144c1d7e1ed3b1c297459d9fb28a6a5762c2e8d71b  LICENSE
-diff --git a/package/python-psycopg2/python-psycopg2.mk b/package/python-psycopg2/python-psycopg2.mk
-index b6f1f6ab70..de466e2c59 100644
---- a/package/python-psycopg2/python-psycopg2.mk
-+++ b/package/python-psycopg2/python-psycopg2.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.hash b/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.hash
+index 872afd891e..6759dfc5f5 100644
+--- a/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.hash
++++ b/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  702410caf142c76434ed716900221f1292b3713501e3744330df6c2feb890614  kodi-pvr-vdr-vnsi-8.2.3-Matrix.tar.gz
++sha256  ab7ba632438d12001cb1e10c2ccb75816be9a9181ec2fdb739bd8eb2f173cf7f  kodi-pvr-vdr-vnsi-19.0.0-Matrix.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk b/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk
+index a3933752ac..51a22d6cb5 100644
+--- a/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk
++++ b/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_PSYCOPG2_VERSION = 2.8.5
-+PYTHON_PSYCOPG2_VERSION = 2.9.1
- PYTHON_PSYCOPG2_SOURCE = psycopg2-$(PYTHON_PSYCOPG2_VERSION).tar.gz
--PYTHON_PSYCOPG2_SITE = https://files.pythonhosted.org/packages/a8/8f/1c5690eebf148d1d1554fc00ccf9101e134636553dbb75bdfef4f85d7647
-+PYTHON_PSYCOPG2_SITE = https://files.pythonhosted.org/packages/aa/8a/7c80e7e44fb1b4277e89bd9ca509aefdd4dd1b2c547c6f293afe9f7ffd04
- PYTHON_PSYCOPG2_SETUP_TYPE = setuptools
- PYTHON_PSYCOPG2_LICENSE = LGPL-3.0+
- PYTHON_PSYCOPG2_LICENSE_FILES = LICENSE
+-KODI_PVR_VDR_VNSI_VERSION = 8.2.3-Matrix
++KODI_PVR_VDR_VNSI_VERSION = 19.0.0-Matrix
+ KODI_PVR_VDR_VNSI_SITE = $(call github,kodi-pvr,pvr.vdr.vnsi,$(KODI_PVR_VDR_VNSI_VERSION))
+ KODI_PVR_VDR_VNSI_LICENSE = GPL-2.0+
+ KODI_PVR_VDR_VNSI_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
