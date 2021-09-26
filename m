@@ -2,51 +2,51 @@ Return-Path: <SRS0=Tewt=OQ=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 91AD6C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 19:56:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C9F5C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 19:57:04 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 3939160F9E
-	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 19:56:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3939160F9E
+	by mail.kernel.org (Postfix) with ESMTPS id B4BFC60F6D
+	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 19:57:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B4BFC60F6D
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0EA1E81C04;
-	Sun, 26 Sep 2021 19:56:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8852081C38;
+	Sun, 26 Sep 2021 19:57:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2E78VA_MaO9A; Sun, 26 Sep 2021 19:56:51 +0000 (UTC)
+	with ESMTP id ZRcAPV7UuQ07; Sun, 26 Sep 2021 19:57:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5C73781BCF;
-	Sun, 26 Sep 2021 19:56:50 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2EE431BF97A
+	by smtp1.osuosl.org (Postfix) with ESMTP id C091781C18;
+	Sun, 26 Sep 2021 19:57:01 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id EF11C1BF383
  for <buildroot@lists.busybox.net>; Sun, 26 Sep 2021 19:52:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 128DF607B7
- for <buildroot@lists.busybox.net>; Sun, 26 Sep 2021 19:52:33 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 404554029D
+ for <buildroot@lists.busybox.net>; Sun, 26 Sep 2021 19:52:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3gWaDbiq9e4Y for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 751VEu3AiYyB for <buildroot@lists.busybox.net>;
  Sun, 26 Sep 2021 19:52:32 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id A507260590
- for <buildroot@buildroot.org>; Sun, 26 Sep 2021 19:52:31 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1299340305
+ for <buildroot@buildroot.org>; Sun, 26 Sep 2021 19:52:32 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 4150A8D25B; Sun, 26 Sep 2021 19:50:18 +0000 (UTC)
+ id 994B78D269; Sun, 26 Sep 2021 19:50:18 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sun, 26 Sep 2021 21:29:38 +0200
+Date: Sun, 26 Sep 2021 21:29:39 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f46f080d64318680bdf6c9fe1f4280ec57e7abe1
-X-Git-Newrev: 4e6de6d541b7dcc56d4872600d9ea133800d5f48
+X-Git-Oldrev: 6c09567e6b6f2cc826e64cd9b36fb41ed7c6e00c
+X-Git-Newrev: 9c0d6a574bfd4a13a6dec3f02d38e2a2942c7700
 X-Patchwork-Hint: ignore
-Message-Id: <20210926195018.4150A8D25B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/kodi: fix build with fmt 8.x
+Message-Id: <20210926195018.994B78D269@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-ipy: bump to version 1.01
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,56 +64,59 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4e6de6d541b7dcc56d4872600d9ea133800d5f48
+commit: https://git.buildroot.net/buildroot/commit/?id=9c0d6a574bfd4a13a6dec3f02d38e2a2942c7700
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Backport upstream patch, no autobuild errors detected so far.
+* The package supports both python versions.
+* Indent with two spaces in hash file.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/kodi/0002-utils-include-fmt-xchar.h.patch | 34 +++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
+ package/python-ipy/Config.in       | 1 -
+ package/python-ipy/python-ipy.hash | 6 +++---
+ package/python-ipy/python-ipy.mk   | 4 ++--
+ 3 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/package/kodi/0002-utils-include-fmt-xchar.h.patch b/package/kodi/0002-utils-include-fmt-xchar.h.patch
-new file mode 100644
-index 0000000000..70c88412e9
---- /dev/null
-+++ b/package/kodi/0002-utils-include-fmt-xchar.h.patch
-@@ -0,0 +1,34 @@
-+From 18ff80a9c169fb969b75e2143d9f1f234b71a730 Mon Sep 17 00:00:00 2001
-+From: Craig Andrews <candrews@integralblue.com>
-+Date: Thu, 24 Jun 2021 20:41:11 -0400
-+Subject: [PATCH] [utils] include fmt/xchar.h
-+
-+fmt 8 moved wchar/custom char overloads to xchar.h, so for fmt 8 compatibility, xchar.h must be included
-+
-+See https://github.com/fmtlib/fmt/commit/76ee490468212f8705a1421b4c88f8f814b2d351
-+
-+Downloaded from upstream commit
-+https://github.com/xbmc/xbmc/commit/18ff80a9c169fb969b75e2143d9f1f234b71a730
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ xbmc/utils/StringUtils.h | 3 +++
-+ 1 file changed, 3 insertions(+)
-+
-+diff --git a/xbmc/utils/StringUtils.h b/xbmc/utils/StringUtils.h
-+index ca6f82953d..2dc5c3f03a 100644
-+--- a/xbmc/utils/StringUtils.h
-++++ b/xbmc/utils/StringUtils.h
-+@@ -36,6 +36,9 @@
-+ #if FMT_VERSION >= 40000
-+ #include <fmt/printf.h>
-+ #endif
-++#if FMT_VERSION >= 80000
-++#include <fmt/xchar.h>
-++#endif
-+ 
-+ #include "XBDateTime.h"
-+ #include "utils/params_check_macros.h"
-+-- 
-+2.30.2
-+
+diff --git a/package/python-ipy/Config.in b/package/python-ipy/Config.in
+index bead932da8..b4f0c8cb5e 100644
+--- a/package/python-ipy/Config.in
++++ b/package/python-ipy/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_PYTHON_IPY
+ 	bool "python-ipy"
+-	depends on BR2_PACKAGE_PYTHON
+ 	help
+ 	  IPy - class and tools for handling of IPv4 and
+ 	  IPv6 addresses and networks.
+diff --git a/package/python-ipy/python-ipy.hash b/package/python-ipy/python-ipy.hash
+index 641a2eb21f..3d8e1e8c71 100644
+--- a/package/python-ipy/python-ipy.hash
++++ b/package/python-ipy/python-ipy.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/ipy/json
+-md5	1a90c68174234672241a7e60c7ea0fb9  IPy-1.00.tar.gz
+-sha256	2f2bf658a858d43868d8a4352b3889cf78c66e2ce678b300dcf518c9149ba621  IPy-1.00.tar.gz
++md5  d6cf83e7f418ebbd23324ba1c658b907  IPy-1.01.tar.gz
++sha256  edeca741dea2d54aca568fa23740288c3fe86c0f3ea700344571e9ef14a7cc1a  IPy-1.01.tar.gz
+ # Locally computed sha256 checksums
+-sha256	078bb46799e46e51e7239c24ff130d345db911c11efafef5e3c45dfb7adb0a61  COPYING
++sha256  078bb46799e46e51e7239c24ff130d345db911c11efafef5e3c45dfb7adb0a61  COPYING
+diff --git a/package/python-ipy/python-ipy.mk b/package/python-ipy/python-ipy.mk
+index 817b531e0b..2a01daf4ca 100644
+--- a/package/python-ipy/python-ipy.mk
++++ b/package/python-ipy/python-ipy.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_IPY_VERSION = 1.00
++PYTHON_IPY_VERSION = 1.01
+ PYTHON_IPY_SOURCE = IPy-$(PYTHON_IPY_VERSION).tar.gz
+-PYTHON_IPY_SITE = https://files.pythonhosted.org/packages/e1/66/b6dd22472bb027556849876beae2dd4dca3a4eaf2dd3039277b4edb8c6af
++PYTHON_IPY_SITE = https://files.pythonhosted.org/packages/64/a4/9c0d88d95666ff1571d7baec6c5e26abc08051801feb6e6ddf40f6027e22
+ PYTHON_IPY_LICENSE = BSD-3-Clause
+ PYTHON_IPY_LICENSE_FILES = COPYING
+ PYTHON_IPY_SETUP_TYPE = distutils
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
