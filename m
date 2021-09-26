@@ -2,52 +2,52 @@ Return-Path: <SRS0=Tewt=OQ=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 47583C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 20:05:15 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A4D17C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 20:05:25 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 09AC860EB4
-	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 20:05:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 09AC860EB4
+	by mail.kernel.org (Postfix) with ESMTPS id 618DD60FDC
+	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 20:05:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 618DD60FDC
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CE03A401FD;
-	Sun, 26 Sep 2021 20:05:14 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id V60rD3Ls4Q4o; Sun, 26 Sep 2021 20:05:12 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E7EF14028F;
-	Sun, 26 Sep 2021 20:05:11 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4CF221BF383
- for <buildroot@lists.busybox.net>; Sun, 26 Sep 2021 20:05:10 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 39DBD80E92
- for <buildroot@lists.busybox.net>; Sun, 26 Sep 2021 20:05:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3150680E53;
+	Sun, 26 Sep 2021 20:05:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3NVpx9ooLySn for <buildroot@lists.busybox.net>;
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id T71eFwuWKITF; Sun, 26 Sep 2021 20:05:24 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 77B4680E8D;
+	Sun, 26 Sep 2021 20:05:23 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 72A8E1BF40B
+ for <buildroot@lists.busybox.net>; Sun, 26 Sep 2021 20:05:10 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5FDAE606DA
+ for <buildroot@lists.busybox.net>; Sun, 26 Sep 2021 20:05:10 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id L0mp3DGF36-h for <buildroot@lists.busybox.net>;
  Sun, 26 Sep 2021 20:05:09 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 769A880E53
+ by smtp3.osuosl.org (Postfix) with ESMTP id B2119605D6
  for <buildroot@buildroot.org>; Sun, 26 Sep 2021 20:05:09 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 02C598D2A7; Sun, 26 Sep 2021 20:02:55 +0000 (UTC)
+ id 423938D25C; Sun, 26 Sep 2021 20:02:56 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sun, 26 Sep 2021 21:56:23 +0200
+Date: Sun, 26 Sep 2021 21:56:31 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 95cedf8ee48c4ff2cd87090bdd5a3ff53c6c5434
-X-Git-Newrev: 7f5f9618d86adc3aa021680f87c842926bebe3af
+X-Git-Oldrev: a19a88a6b592318dfbf0e7b306b868016d915695
+X-Git-Newrev: 7537d8dade05529e277a9ce54ca0a909ff52be28
 X-Patchwork-Hint: ignore
-Message-Id: <20210926200256.02C598D2A7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-aioconsole: bump to version
- 0.3.2
+Message-Id: <20210926200256.423938D25C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-simplejson: bump to version
+ 3.17.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,48 +65,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7f5f9618d86adc3aa021680f87c842926bebe3af
+commit: https://git.buildroot.net/buildroot/commit/?id=7537d8dade05529e277a9ce54ca0a909ff52be28
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Plus, add LICENSE_FILES and the corresponding hash.
+Plus, indent with two spaces in hash file.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/python-aioconsole/python-aioconsole.hash | 6 ++++--
- package/python-aioconsole/python-aioconsole.mk   | 5 +++--
- 2 files changed, 7 insertions(+), 4 deletions(-)
+ package/python-simplejson/python-simplejson.hash | 6 +++---
+ package/python-simplejson/python-simplejson.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-aioconsole/python-aioconsole.hash b/package/python-aioconsole/python-aioconsole.hash
-index dea2216fcf..45139a6606 100644
---- a/package/python-aioconsole/python-aioconsole.hash
-+++ b/package/python-aioconsole/python-aioconsole.hash
-@@ -1,3 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/aioconsole/json
--md5  66d4b05e3bc75267daf0f773d839f62b  aioconsole-0.3.1.tar.gz
--sha256  7c038bb40b7690bf5be6b17154830b7bff25e7be1c02d8420a346c3efbd5d8e5  aioconsole-0.3.1.tar.gz
-+md5  b8cbcb6e00d8e535256526dfe4f27db3  aioconsole-0.3.2.tar.gz
-+sha256  9355b36d41d5fbdd3dbb01510deb2b985b508b2ebcd5b8bd85af61a707e2f6c8  aioconsole-0.3.2.tar.gz
-+# Locally computed sha256 checksums
-+sha256  fe3eea6c599e23a00c08c5f5cb2320c30adc8f8687db5fcec9b79a662c53ff6b  LICENSE
-diff --git a/package/python-aioconsole/python-aioconsole.mk b/package/python-aioconsole/python-aioconsole.mk
-index b32d2bea0f..75ea3c2a2a 100644
---- a/package/python-aioconsole/python-aioconsole.mk
-+++ b/package/python-aioconsole/python-aioconsole.mk
-@@ -4,10 +4,11 @@
+diff --git a/package/python-simplejson/python-simplejson.hash b/package/python-simplejson/python-simplejson.hash
+index d89d824d14..bb44bdfc79 100644
+--- a/package/python-simplejson/python-simplejson.hash
++++ b/package/python-simplejson/python-simplejson.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/simplejson/json
+-md5	8a5ed75c367b90fedc3d685742e2a1c7  simplejson-3.17.0.tar.gz
+-sha256	2b4b2b738b3b99819a17feaf118265d0753d5536049ea570b3c43b51c4701e81  simplejson-3.17.0.tar.gz
++md5  1756427859454004e90e028d263cf23e  simplejson-3.17.5.tar.gz
++sha256  91cfb43fb91ff6d1e4258be04eee84b51a4ef40a28d899679b9ea2556322fb50  simplejson-3.17.5.tar.gz
+ # Locally computed sha256 checksums
+-sha256	fcaa1e313a99304322e2e0836ea4ee7d839ce9a480438f3922a853edfdde129f  LICENSE.txt
++sha256  fcaa1e313a99304322e2e0836ea4ee7d839ce9a480438f3922a853edfdde129f  LICENSE.txt
+diff --git a/package/python-simplejson/python-simplejson.mk b/package/python-simplejson/python-simplejson.mk
+index cf5bd3a482..5bed8d20a9 100644
+--- a/package/python-simplejson/python-simplejson.mk
++++ b/package/python-simplejson/python-simplejson.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_AIOCONSOLE_VERSION = 0.3.1
-+PYTHON_AIOCONSOLE_VERSION = 0.3.2
- PYTHON_AIOCONSOLE_SOURCE = aioconsole-$(PYTHON_AIOCONSOLE_VERSION).tar.gz
--PYTHON_AIOCONSOLE_SITE = https://files.pythonhosted.org/packages/5a/12/fce04ddc0a8ebd6482e5ec293d8bda47c9e05c82826b061f7b73523b8601
-+PYTHON_AIOCONSOLE_SITE = https://files.pythonhosted.org/packages/7a/b2/747ab3cb965596cd84c5159941613d901d8771acad3c51c4f5da362aa9f0
- PYTHON_AIOCONSOLE_SETUP_TYPE = setuptools
- PYTHON_AIOCONSOLE_LICENSE = GPL-3.0
-+PYTHON_AIOCONSOLE_LICENSE_FILES = LICENSE
- 
- $(eval $(python-package))
+-PYTHON_SIMPLEJSON_VERSION = 3.17.0
++PYTHON_SIMPLEJSON_VERSION = 3.17.5
+ PYTHON_SIMPLEJSON_SOURCE = simplejson-$(PYTHON_SIMPLEJSON_VERSION).tar.gz
+-PYTHON_SIMPLEJSON_SITE = https://files.pythonhosted.org/packages/98/87/a7b98aa9256c8843f92878966dc3d8d914c14aad97e2c5ce4798d5743e07
++PYTHON_SIMPLEJSON_SITE = https://files.pythonhosted.org/packages/01/52/41c71718f941c9a5abebfaa24e3c14e3c0229327b7ebd21348989845ed8f
+ PYTHON_SIMPLEJSON_LICENSE = Academic Free License (AFL), MIT
+ PYTHON_SIMPLEJSON_LICENSE_FILES = LICENSE.txt
+ PYTHON_SIMPLEJSON_CPE_ID_VENDOR = simplejson_project
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
