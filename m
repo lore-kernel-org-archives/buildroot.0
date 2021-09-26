@@ -2,52 +2,51 @@ Return-Path: <SRS0=Tewt=OQ=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F6ABC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 20:03:40 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B03F2C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 20:03:52 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 54A6660F9E
-	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 20:03:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 54A6660F9E
+	by mail.kernel.org (Postfix) with ESMTPS id 74D2D60F9E
+	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 20:03:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 74D2D60F9E
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 31D7581C2F;
-	Sun, 26 Sep 2021 20:03:40 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 39FA7403A2;
+	Sun, 26 Sep 2021 20:03:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IUVz-ets42HL; Sun, 26 Sep 2021 20:03:39 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id m1xP42Gg0nZY; Sun, 26 Sep 2021 20:03:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 603BF81BC6;
-	Sun, 26 Sep 2021 20:03:38 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5173A4027A;
+	Sun, 26 Sep 2021 20:03:50 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E802B1BF383
- for <buildroot@lists.busybox.net>; Sun, 26 Sep 2021 19:53:04 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B43BF1BF383
+ for <buildroot@lists.busybox.net>; Sun, 26 Sep 2021 19:53:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A5408607A2
+ by smtp3.osuosl.org (Postfix) with ESMTP id EA7EA6075F
  for <buildroot@lists.busybox.net>; Sun, 26 Sep 2021 19:52:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tPAhmNVihpnj for <buildroot@lists.busybox.net>;
+ with ESMTP id pOcX8cz_CcBa for <buildroot@lists.busybox.net>;
  Sun, 26 Sep 2021 19:52:32 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D4A346075F
+ by smtp3.osuosl.org (Postfix) with ESMTP id C2DBE60712
  for <buildroot@buildroot.org>; Sun, 26 Sep 2021 19:52:31 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 755898D25B; Sun, 26 Sep 2021 19:50:18 +0000 (UTC)
+ id 5803D8D25B; Sun, 26 Sep 2021 19:50:18 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
 Date: Sun, 26 Sep 2021 21:29:39 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3d99699f82eeb4d7c3eec00aba547556969a85ad
-X-Git-Newrev: 57adb82576c403dc59bcfbe354466778d1177c17
+X-Git-Oldrev: e1d37ab0a7b2b8735e69c070519978d2898d2e79
+X-Git-Newrev: 12a336c3239e474ccaa2c89b08f76db773604fca
 X-Patchwork-Hint: ignore
-Message-Id: <20210926195018.755898D25B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/ntfs-3g: security bump to version
- 2021.8.22
+Message-Id: <20210926195018.5803D8D25B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/minizip: bump to version 3.0.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,134 +64,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=57adb82576c403dc59bcfbe354466778d1177c17
+commit: https://git.buildroot.net/buildroot/commit/?id=12a336c3239e474ccaa2c89b08f76db773604fca
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Fixed vulnerability threats caused by maliciously tampered NTFS
-  partitions (CVE-2021-33285, CVE-2021-33286, CVE-2021-33287, etc.):
-  https://github.com/tuxera/ntfs-3g/security/advisories/GHSA-q759-8j5v-q5jp
-- Drop patch (already in version)
-
-https://github.com/tuxera/ntfs-3g/wiki/NTFS-3G-Release-History
+https://github.com/zlib-ng/minizip-ng/releases/tag/3.0.3
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...ting-an-error-when-failed-to-build-the-mo.patch | 72 ----------------------
- package/ntfs-3g/ntfs-3g.hash                       |  2 +-
- package/ntfs-3g/ntfs-3g.mk                         |  5 +-
- 3 files changed, 2 insertions(+), 77 deletions(-)
+ package/minizip/minizip.hash | 2 +-
+ package/minizip/minizip.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ntfs-3g/0001-Fixed-reporting-an-error-when-failed-to-build-the-mo.patch b/package/ntfs-3g/0001-Fixed-reporting-an-error-when-failed-to-build-the-mo.patch
-deleted file mode 100644
-index 9ba8aae50c..0000000000
---- a/package/ntfs-3g/0001-Fixed-reporting-an-error-when-failed-to-build-the-mo.patch
-+++ /dev/null
-@@ -1,72 +0,0 @@
--From 85c1634a26faa572d3c558d4cf8aaaca5202d4e9 Mon Sep 17 00:00:00 2001
--From: =?UTF-8?q?Jean-Pierre=20Andr=C3=A9?= <jean-pierre.andre@wanadoo.fr>
--Date: Wed, 19 Dec 2018 15:57:50 +0100
--Subject: [PATCH] Fixed reporting an error when failed to build the mountpoint
--
--The size check was inefficient because getcwd() uses an unsigned int
--argument.
--
--Fixes CVE-2019-9755: An integer underflow issue exists in ntfs-3g 2017.3.23.
--A local attacker could potentially exploit this by running /bin/ntfs-3g with
--specially crafted arguments from a specially crafted directory to cause a
--heap buffer overflow, resulting in a crash or the ability to execute
--arbitrary code.  In installations where /bin/ntfs-3g is a setuid-root
--binary, this could lead to a local escalation of privileges.
--
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-----
-- src/lowntfs-3g.c | 6 +++++-
-- src/ntfs-3g.c    | 6 +++++-
-- 2 files changed, 10 insertions(+), 2 deletions(-)
--
--diff --git a/src/lowntfs-3g.c b/src/lowntfs-3g.c
--index 993867fa..0660439b 100644
----- a/src/lowntfs-3g.c
--+++ b/src/lowntfs-3g.c
--@@ -4411,7 +4411,8 @@ int main(int argc, char *argv[])
-- 	else {
-- 		ctx->abs_mnt_point = (char*)ntfs_malloc(PATH_MAX);
-- 		if (ctx->abs_mnt_point) {
---			if (getcwd(ctx->abs_mnt_point,
--+			if ((strlen(opts.mnt_point) < PATH_MAX)
--+			    && getcwd(ctx->abs_mnt_point,
-- 				     PATH_MAX - strlen(opts.mnt_point) - 1)) {
-- 				strcat(ctx->abs_mnt_point, "/");
-- 				strcat(ctx->abs_mnt_point, opts.mnt_point);
--@@ -4419,6 +4420,9 @@ int main(int argc, char *argv[])
-- 			/* Solaris also wants the absolute mount point */
-- 				opts.mnt_point = ctx->abs_mnt_point;
-- #endif /* defined(__sun) && defined (__SVR4) */
--+			} else {
--+				free(ctx->abs_mnt_point);
--+				ctx->abs_mnt_point = (char*)NULL;
-- 			}
-- 		}
-- 	}
--diff --git a/src/ntfs-3g.c b/src/ntfs-3g.c
--index 6ce89fef..4e0912ae 100644
----- a/src/ntfs-3g.c
--+++ b/src/ntfs-3g.c
--@@ -4148,7 +4148,8 @@ int main(int argc, char *argv[])
-- 	else {
-- 		ctx->abs_mnt_point = (char*)ntfs_malloc(PATH_MAX);
-- 		if (ctx->abs_mnt_point) {
---			if (getcwd(ctx->abs_mnt_point,
--+			if ((strlen(opts.mnt_point) < PATH_MAX)
--+			    && getcwd(ctx->abs_mnt_point,
-- 				     PATH_MAX - strlen(opts.mnt_point) - 1)) {
-- 				strcat(ctx->abs_mnt_point, "/");
-- 				strcat(ctx->abs_mnt_point, opts.mnt_point);
--@@ -4156,6 +4157,9 @@ int main(int argc, char *argv[])
-- 			/* Solaris also wants the absolute mount point */
-- 				opts.mnt_point = ctx->abs_mnt_point;
-- #endif /* defined(__sun) && defined (__SVR4) */
--+			} else {
--+				free(ctx->abs_mnt_point);
--+				ctx->abs_mnt_point = (char*)NULL;
-- 			}
-- 		}
-- 	}
---- 
--2.20.1
--
-diff --git a/package/ntfs-3g/ntfs-3g.hash b/package/ntfs-3g/ntfs-3g.hash
-index 63c999f253..668e11a800 100644
---- a/package/ntfs-3g/ntfs-3g.hash
-+++ b/package/ntfs-3g/ntfs-3g.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  3e5a021d7b761261836dcb305370af299793eedbded731df3d6943802e1262d5  ntfs-3g_ntfsprogs-2017.3.23.tgz
-+sha256  55b883aa05d94b2ec746ef3966cb41e66bed6db99f22ddd41d1b8b94bb202efb  ntfs-3g_ntfsprogs-2021.8.22.tgz
- sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
- sha256  d7bf9d064ac3e5840f9dd02422b7eeec4f1fd03f37fadbd043602be5e882304f  COPYING.LIB
-diff --git a/package/ntfs-3g/ntfs-3g.mk b/package/ntfs-3g/ntfs-3g.mk
-index 1a388af761..21f7cfc46d 100644
---- a/package/ntfs-3g/ntfs-3g.mk
-+++ b/package/ntfs-3g/ntfs-3g.mk
+diff --git a/package/minizip/minizip.hash b/package/minizip/minizip.hash
+index b006f32bfc..6043f96f3a 100644
+--- a/package/minizip/minizip.hash
++++ b/package/minizip/minizip.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  6ba4b6629c107c27ab526e517bdb105612232f0965a6747f60150e5a04c2fe5a  minizip-3.0.2.tar.gz
++sha256  5f1dd0d38adbe9785cb9c4e6e47738c109d73a0afa86e58c4025ce3e2cc504ed  minizip-3.0.3.tar.gz
+ sha256  675181c03fc1302a1c8554c00f7be9bb420c5dbc9dcc2013433cec144413de03  LICENSE
+diff --git a/package/minizip/minizip.mk b/package/minizip/minizip.mk
+index 351aee464c..2d0f63959e 100644
+--- a/package/minizip/minizip.mk
++++ b/package/minizip/minizip.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--NTFS_3G_VERSION = 2017.3.23
-+NTFS_3G_VERSION = 2021.8.22
- NTFS_3G_SOURCE = ntfs-3g_ntfsprogs-$(NTFS_3G_VERSION).tgz
- NTFS_3G_SITE = http://tuxera.com/opensource
- NTFS_3G_CONF_OPTS = --disable-ldconfig
-@@ -14,9 +14,6 @@ NTFS_3G_LICENSE = GPL-2.0+, LGPL-2.0+
- NTFS_3G_LICENSE_FILES = COPYING COPYING.LIB
- NTFS_3G_CPE_ID_VENDOR = tuxera
- 
--# 0001-Fixed-reporting-an-error-when-failed-to-build-the-mo.patch
--NTFS_3G_IGNORE_CVES += CVE-2019-9755
--
- ifeq ($(BR2_PACKAGE_LIBFUSE),y)
- NTFS_3G_CONF_OPTS += --with-fuse=external
- NTFS_3G_DEPENDENCIES += libfuse
+-MINIZIP_VERSION = 3.0.2
++MINIZIP_VERSION = 3.0.3
+ MINIZIP_SITE = $(call github,nmoinvaz,minizip,$(MINIZIP_VERSION))
+ MINIZIP_DEPENDENCIES = host-pkgconf
+ MINIZIP_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
