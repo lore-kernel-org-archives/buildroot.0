@@ -2,52 +2,52 @@ Return-Path: <SRS0=Tewt=OQ=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2332FC433F5
-	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 20:02:06 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A7B51C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 20:02:17 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id E1E5F60FDC
-	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 20:02:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E1E5F60FDC
+	by mail.kernel.org (Postfix) with ESMTPS id 7662360F9E
+	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 20:02:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7662360F9E
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B840E40378;
-	Sun, 26 Sep 2021 20:02:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4E27381ADE;
+	Sun, 26 Sep 2021 20:02:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rWSVeZsoxNFz; Sun, 26 Sep 2021 20:02:04 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id yYKnFpl7xPnQ; Sun, 26 Sep 2021 20:02:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 06A4340398;
-	Sun, 26 Sep 2021 20:02:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A165381AAD;
+	Sun, 26 Sep 2021 20:02:15 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id ECCA51BF95D
- for <buildroot@lists.busybox.net>; Sun, 26 Sep 2021 19:52:54 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0C7B11BF383
+ for <buildroot@lists.busybox.net>; Sun, 26 Sep 2021 19:52:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B140B6078E
+ by smtp3.osuosl.org (Postfix) with ESMTP id CBEE3606DA
  for <buildroot@lists.busybox.net>; Sun, 26 Sep 2021 19:52:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WlH-m35JMCtD for <buildroot@lists.busybox.net>;
- Sun, 26 Sep 2021 19:52:34 +0000 (UTC)
+ with ESMTP id SVRfGW45JMoK for <buildroot@lists.busybox.net>;
+ Sun, 26 Sep 2021 19:52:33 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D2ADB607A2
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0B3566076C
  for <buildroot@buildroot.org>; Sun, 26 Sep 2021 19:52:32 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 688548D25B; Sun, 26 Sep 2021 19:50:19 +0000 (UTC)
+ id A28048D25B; Sun, 26 Sep 2021 19:50:18 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sun, 26 Sep 2021 21:29:42 +0200
+Date: Sun, 26 Sep 2021 21:29:40 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9d5727bff9ae7af10cd5c4e6b549374dc4f727d8
-X-Git-Newrev: c68e1f676edb716f4d78e2e84f0ebf69f3023bb9
+X-Git-Oldrev: 9c0d6a574bfd4a13a6dec3f02d38e2a2942c7700
+X-Git-Newrev: 09417e47d706e5d7d58c0f886b4679064c5175fa
 X-Patchwork-Hint: ignore
-Message-Id: <20210926195019.688548D25B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/kodi-pvr-pctv: bump version to
- 19.0.0-Matrix
+Message-Id: <20210926195018.A28048D25B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-psycopg2: bump to version
+ 2.9.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,37 +65,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c68e1f676edb716f4d78e2e84f0ebf69f3023bb9
+commit: https://git.buildroot.net/buildroot/commit/?id=09417e47d706e5d7d58c0f886b4679064c5175fa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/kodi-pvr-pctv/kodi-pvr-pctv.hash | 2 +-
- package/kodi-pvr-pctv/kodi-pvr-pctv.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-psycopg2/python-psycopg2.hash | 4 ++--
+ package/python-psycopg2/python-psycopg2.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/kodi-pvr-pctv/kodi-pvr-pctv.hash b/package/kodi-pvr-pctv/kodi-pvr-pctv.hash
-index 45c32ac0e9..8946250980 100644
---- a/package/kodi-pvr-pctv/kodi-pvr-pctv.hash
-+++ b/package/kodi-pvr-pctv/kodi-pvr-pctv.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  2692fc0387762f62e8fc9e57f21d613e4c2e52553d3eb30ee042f91cc61155ac  kodi-pvr-pctv-6.1.1-Matrix.tar.gz
-+sha256  004d9f8801e9c5d2d76c0c84d0844c4560ede7e2ed02c4c43286991a54d720c9  kodi-pvr-pctv-19.0.0-Matrix.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-pctv/kodi-pvr-pctv.mk b/package/kodi-pvr-pctv/kodi-pvr-pctv.mk
-index 3483bfed9e..61557eb301 100644
---- a/package/kodi-pvr-pctv/kodi-pvr-pctv.mk
-+++ b/package/kodi-pvr-pctv/kodi-pvr-pctv.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-psycopg2/python-psycopg2.hash b/package/python-psycopg2/python-psycopg2.hash
+index bf73f8ad25..d02ffc2ec8 100644
+--- a/package/python-psycopg2/python-psycopg2.hash
++++ b/package/python-psycopg2/python-psycopg2.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/psycopg2/json
+-md5  c232ff3e3bfee35e1a0e15bc089cb294  psycopg2-2.8.5.tar.gz
+-sha256  f7d46240f7a1ae1dd95aab38bd74f7428d46531f69219954266d669da60c0818  psycopg2-2.8.5.tar.gz
++md5  182e3e8cf3381c254f65f70cad4976e5  psycopg2-2.9.1.tar.gz
++sha256  de5303a6f1d0a7a34b9d40e4d3bef684ccc44a49bbe3eb85e3c0bffb4a131b7c  psycopg2-2.9.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256  9614b85dfc9a72c5b2ca33144c1d7e1ed3b1c297459d9fb28a6a5762c2e8d71b  LICENSE
+diff --git a/package/python-psycopg2/python-psycopg2.mk b/package/python-psycopg2/python-psycopg2.mk
+index b6f1f6ab70..de466e2c59 100644
+--- a/package/python-psycopg2/python-psycopg2.mk
++++ b/package/python-psycopg2/python-psycopg2.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--KODI_PVR_PCTV_VERSION = 6.1.1-Matrix
-+KODI_PVR_PCTV_VERSION = 19.0.0-Matrix
- KODI_PVR_PCTV_SITE = $(call github,kodi-pvr,pvr.pctv,$(KODI_PVR_PCTV_VERSION))
- KODI_PVR_PCTV_LICENSE = GPL-2.0+
- KODI_PVR_PCTV_LICENSE_FILES = LICENSE.md
+-PYTHON_PSYCOPG2_VERSION = 2.8.5
++PYTHON_PSYCOPG2_VERSION = 2.9.1
+ PYTHON_PSYCOPG2_SOURCE = psycopg2-$(PYTHON_PSYCOPG2_VERSION).tar.gz
+-PYTHON_PSYCOPG2_SITE = https://files.pythonhosted.org/packages/a8/8f/1c5690eebf148d1d1554fc00ccf9101e134636553dbb75bdfef4f85d7647
++PYTHON_PSYCOPG2_SITE = https://files.pythonhosted.org/packages/aa/8a/7c80e7e44fb1b4277e89bd9ca509aefdd4dd1b2c547c6f293afe9f7ffd04
+ PYTHON_PSYCOPG2_SETUP_TYPE = setuptools
+ PYTHON_PSYCOPG2_LICENSE = LGPL-3.0+
+ PYTHON_PSYCOPG2_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
