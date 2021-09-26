@@ -2,51 +2,52 @@ Return-Path: <SRS0=Tewt=OQ=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B718C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 20:06:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F912C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 20:06:24 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id E352260FDC
-	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 20:06:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E352260FDC
+	by mail.kernel.org (Postfix) with ESMTPS id CD01360EB4
+	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 20:06:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org CD01360EB4
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BF70C403B8;
-	Sun, 26 Sep 2021 20:06:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 95BA4403DB;
+	Sun, 26 Sep 2021 20:06:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id upptM5XuQvGX; Sun, 26 Sep 2021 20:06:10 +0000 (UTC)
+	with ESMTP id u0nxl4fNoUWK; Sun, 26 Sep 2021 20:06:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CE4B74037F;
-	Sun, 26 Sep 2021 20:06:09 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id AAAD01BF40B
+	by smtp4.osuosl.org (Postfix) with ESMTP id 763B9403C1;
+	Sun, 26 Sep 2021 20:06:21 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id CEA711BF383
  for <buildroot@lists.busybox.net>; Sun, 26 Sep 2021 20:05:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7939640213
- for <buildroot@lists.busybox.net>; Sun, 26 Sep 2021 20:05:10 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id BDA7240109
+ for <buildroot@lists.busybox.net>; Sun, 26 Sep 2021 20:05:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id r9mg9rVOizIk for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id d-7SSXTkCCeE for <buildroot@lists.busybox.net>;
  Sun, 26 Sep 2021 20:05:09 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B929840283
+ by smtp2.osuosl.org (Postfix) with ESMTP id DBE5840198
  for <buildroot@buildroot.org>; Sun, 26 Sep 2021 20:05:09 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 574618D25C; Sun, 26 Sep 2021 20:02:56 +0000 (UTC)
+ id 6AF3D8D2A7; Sun, 26 Sep 2021 20:02:56 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sun, 26 Sep 2021 21:56:34 +0200
+Date: Sun, 26 Sep 2021 21:56:37 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 882506b8182a866130a36469da97f51121d9fbe4
-X-Git-Newrev: 548750a257381af6f59da45daa10c77cafe11461
+X-Git-Oldrev: da86ffbe307143315939ff5ea3a688c8a6cb6eef
+X-Git-Newrev: b7f70eaa4e39c549b7c39aa0159ff765ab7a2a25
 X-Patchwork-Hint: ignore
-Message-Id: <20210926200256.574618D25C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-webob: bump to version 1.8.7
+Message-Id: <20210926200256.6AF3D8D2A7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-zope-interface: bump to
+ version 5.4.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,44 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=548750a257381af6f59da45daa10c77cafe11461
+commit: https://git.buildroot.net/buildroot/commit/?id=b7f70eaa4e39c549b7c39aa0159ff765ab7a2a25
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/python-webob/python-webob.hash | 4 ++--
- package/python-webob/python-webob.mk   | 4 ++--
+ package/python-zope-interface/python-zope-interface.hash | 4 ++--
+ package/python-zope-interface/python-zope-interface.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-webob/python-webob.hash b/package/python-webob/python-webob.hash
-index aab2f1d9e4..a46c1dbc94 100644
---- a/package/python-webob/python-webob.hash
-+++ b/package/python-webob/python-webob.hash
+diff --git a/package/python-zope-interface/python-zope-interface.hash b/package/python-zope-interface/python-zope-interface.hash
+index 6c2f75303d..f7fa673e24 100644
+--- a/package/python-zope-interface/python-zope-interface.hash
++++ b/package/python-zope-interface/python-zope-interface.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/webob/json
--md5  dc3cc8c317d4acd03a6fd97cb0a9121a  WebOb-1.8.6.tar.gz
--sha256  aa3a917ed752ba3e0b242234b2a373f9c4e2a75d35291dcbe977649bd21fd108  WebOb-1.8.6.tar.gz
-+md5  10191c69fa5a2c00f3b9abfb8937b415  WebOb-1.8.7.tar.gz
-+sha256  b64ef5141be559cfade448f044fa45c2260351edcb6a8ef6b7e00c7dcef0c323  WebOb-1.8.7.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/zope-interface/json
+-md5  291fd76bd83dda946674af1526b6c2cd  zope.interface-5.3.0.tar.gz
+-sha256  b18a855f8504743e0a2d8b75d008c7720d44e4c76687e13f959e35d9a13eb397  zope.interface-5.3.0.tar.gz
++md5  c58b31da83449631efb499de13c68c6a  zope.interface-5.4.0.tar.gz
++sha256  5dba5f530fec3f0988d83b78cc591b58c0b6eb8431a85edd1569a0539a8a5a0e  zope.interface-5.4.0.tar.gz
  # Locally computed sha256 checksums
- sha256  27bc4919e7e9e6b6cda40644517ca74d32203e32fba89ef832aba1ed93e457b3  docs/license.txt
-diff --git a/package/python-webob/python-webob.mk b/package/python-webob/python-webob.mk
-index 051c117538..11ba104476 100644
---- a/package/python-webob/python-webob.mk
-+++ b/package/python-webob/python-webob.mk
+ sha256  3e671db11df687516cc1db5b3d65e4aa383eaca3c20cea3faf53a0f7335d0a3c  LICENSE.txt
+diff --git a/package/python-zope-interface/python-zope-interface.mk b/package/python-zope-interface/python-zope-interface.mk
+index db0739405d..beacfb4f5e 100644
+--- a/package/python-zope-interface/python-zope-interface.mk
++++ b/package/python-zope-interface/python-zope-interface.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_WEBOB_VERSION = 1.8.6
-+PYTHON_WEBOB_VERSION = 1.8.7
- PYTHON_WEBOB_SOURCE = WebOb-$(PYTHON_WEBOB_VERSION).tar.gz
--PYTHON_WEBOB_SITE = https://files.pythonhosted.org/packages/2a/32/5f3f43d0784bdd9392db0cb98434d7cd23a0d8a420c4d243ad4cb8517f2a
-+PYTHON_WEBOB_SITE = https://files.pythonhosted.org/packages/c7/45/ee5f034fb4ebe3236fa49e5a4fcbc54444dd22ecf33079cf56f9606d479d
- PYTHON_WEBOB_SETUP_TYPE = setuptools
- PYTHON_WEBOB_LICENSE = MIT
- PYTHON_WEBOB_LICENSE_FILES = docs/license.txt
+-PYTHON_ZOPE_INTERFACE_VERSION = 5.3.0
++PYTHON_ZOPE_INTERFACE_VERSION = 5.4.0
+ PYTHON_ZOPE_INTERFACE_SOURCE = zope.interface-$(PYTHON_ZOPE_INTERFACE_VERSION).tar.gz
+-PYTHON_ZOPE_INTERFACE_SITE = https://files.pythonhosted.org/packages/b1/f8/aa59109d5345ece4820e8e7a05a97203ef21a0ac2c0460c6c929ea5be889
++PYTHON_ZOPE_INTERFACE_SITE = https://files.pythonhosted.org/packages/ae/58/e0877f58daa69126a5fb325d6df92b20b77431cd281e189c5ec42b722f58
+ PYTHON_ZOPE_INTERFACE_SETUP_TYPE = setuptools
+ PYTHON_ZOPE_INTERFACE_LICENSE = ZPL-2.1
+ PYTHON_ZOPE_INTERFACE_LICENSE_FILES = LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
