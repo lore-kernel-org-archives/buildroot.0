@@ -2,52 +2,52 @@ Return-Path: <SRS0=Tewt=OQ=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 829ADC433F5
-	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 21:01:01 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2834C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 21:01:12 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 4C2C160F24
-	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 21:01:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4C2C160F24
+	by mail.kernel.org (Postfix) with ESMTPS id BFC7060F39
+	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 21:01:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org BFC7060F39
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1EFE360748;
-	Sun, 26 Sep 2021 21:01:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9955840305;
+	Sun, 26 Sep 2021 21:01:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LSJM67bKtSkt; Sun, 26 Sep 2021 21:01:00 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id yVvT33mBn3aZ; Sun, 26 Sep 2021 21:01:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7B2D060725;
-	Sun, 26 Sep 2021 21:00:59 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 519591BF97A
+	by smtp4.osuosl.org (Postfix) with ESMTP id 050FC40300;
+	Sun, 26 Sep 2021 21:01:11 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 5EF811BF3DB
  for <buildroot@lists.busybox.net>; Sun, 26 Sep 2021 21:00:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 419D46071A
- for <buildroot@lists.busybox.net>; Sun, 26 Sep 2021 21:00:11 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D2124819F3
+ for <buildroot@lists.busybox.net>; Sun, 26 Sep 2021 21:00:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MvFLCBuJYBtH for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PqDZhkRPuXCe for <buildroot@lists.busybox.net>;
  Sun, 26 Sep 2021 21:00:10 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 815A160711
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1CF4C81A18
  for <buildroot@buildroot.org>; Sun, 26 Sep 2021 21:00:10 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id F02688D2AF; Sun, 26 Sep 2021 20:57:56 +0000 (UTC)
+ id 89A7D8D2AF; Sun, 26 Sep 2021 20:57:56 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sun, 26 Sep 2021 22:17:41 +0200
+Date: Sun, 26 Sep 2021 22:15:59 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 795c2d06af3cdd6653eab92c37c3f64e1b5ce4c2
-X-Git-Newrev: f403309ed8ff1db2c91e304c59cb3b10ac16cc45
+X-Git-Oldrev: a1c790cec7407da402fef89cd7de2e0a2f7e0bab
+X-Git-Newrev: 659ea506090b2f8149075e5ac5e61f529b34966a
 X-Patchwork-Hint: ignore
-Message-Id: <20210926205756.F02688D2AF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-multidict: bump to version
- 5.1.0
+Message-Id: <20210926205756.89A7D8D2AF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-aiosignal: bump to version
+ 1.1.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,44 +65,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f403309ed8ff1db2c91e304c59cb3b10ac16cc45
+commit: https://git.buildroot.net/buildroot/commit/?id=659ea506090b2f8149075e5ac5e61f529b34966a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/python-multidict/python-multidict.hash | 4 ++--
- package/python-multidict/python-multidict.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-aiosignal/python-aiosignal.hash | 6 +++---
+ package/python-aiosignal/python-aiosignal.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-multidict/python-multidict.hash b/package/python-multidict/python-multidict.hash
-index 6b78301200..65af9a58e5 100644
---- a/package/python-multidict/python-multidict.hash
-+++ b/package/python-multidict/python-multidict.hash
+diff --git a/package/python-aiosignal/python-aiosignal.hash b/package/python-aiosignal/python-aiosignal.hash
+index 17c69c8144..3fdd459502 100644
+--- a/package/python-aiosignal/python-aiosignal.hash
++++ b/package/python-aiosignal/python-aiosignal.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/multidict/json
--md5  b1dab3349efe90934ae3612f1202b733  multidict-5.0.2.tar.gz
--sha256  e5bf89fe57f702a046c7ec718fe330ed50efd4bcf74722940db2eb0919cddb1c  multidict-5.0.2.tar.gz
-+md5  df8b37f069809779214d6b80b250e45b  multidict-5.1.0.tar.gz
-+sha256  25b4e5f22d3a37ddf3effc0710ba692cfc792c2b9edfb9c05aefe823256e84d5  multidict-5.1.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/aiosignal/json
+-md5	0831ab9e46799842ed84529dbaa86196  aiosignal-1.0.0.tar.gz
+-sha256	7cd33cbe05bc2d83e77f80d688b4717e424d15eecf6d65384e173b2873e62f13  aiosignal-1.0.0.tar.gz
++md5  f3edf1b700b4fee6ea6ed375c3f6555c  aiosignal-1.1.2.tar.gz
++sha256  15605698a0401075a03d36cea979e3c0e6cf8467a9e3b9047040514dd9e6f43b  aiosignal-1.1.2.tar.gz
  # Locally computed sha256 checksums
- sha256  a1c5825513279d3085a0ba46880e148ea3710c149bbaedcf2d11605a5ed3c4ad  LICENSE
-diff --git a/package/python-multidict/python-multidict.mk b/package/python-multidict/python-multidict.mk
-index a7043643c5..edf9656043 100644
---- a/package/python-multidict/python-multidict.mk
-+++ b/package/python-multidict/python-multidict.mk
+-sha256	6fd5243e92dd7f98ec69c7ac377728e74905709ff527a5bf98d6d0263c04f5b6  LICENSE.txt
++sha256  6fd5243e92dd7f98ec69c7ac377728e74905709ff527a5bf98d6d0263c04f5b6  LICENSE.txt
+diff --git a/package/python-aiosignal/python-aiosignal.mk b/package/python-aiosignal/python-aiosignal.mk
+index 14b4264620..ea11d97060 100644
+--- a/package/python-aiosignal/python-aiosignal.mk
++++ b/package/python-aiosignal/python-aiosignal.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_MULTIDICT_VERSION = 5.0.2
-+PYTHON_MULTIDICT_VERSION = 5.1.0
- PYTHON_MULTIDICT_SOURCE = multidict-$(PYTHON_MULTIDICT_VERSION).tar.gz
--PYTHON_MULTIDICT_SITE = https://files.pythonhosted.org/packages/da/e6/50c7f52781f45c2b37c77e962c30a3944a9e79a46ea92956e826c24d3432
-+PYTHON_MULTIDICT_SITE = https://files.pythonhosted.org/packages/1c/74/e8b46156f37ca56d10d895d4e8595aa2b344cff3c1fb3629ec97a8656ccb
- PYTHON_MULTIDICT_SETUP_TYPE = setuptools
- PYTHON_MULTIDICT_LICENSE = Apache-2.0
- PYTHON_MULTIDICT_LICENSE_FILES = LICENSE
+-PYTHON_AIOSIGNAL_VERSION = 1.0.0
++PYTHON_AIOSIGNAL_VERSION = 1.1.2
+ PYTHON_AIOSIGNAL_SOURCE = aiosignal-$(PYTHON_AIOSIGNAL_VERSION).tar.gz
+-PYTHON_AIOSIGNAL_SITE = https://files.pythonhosted.org/packages/ca/b7/5ae01ed039ea51cc8280d87b8a1269ba2f1343d7466c1e50c618558352e5
++PYTHON_AIOSIGNAL_SITE = https://files.pythonhosted.org/packages/ac/f7/c3df3b7eac6ea96175e0817b272b43b398d5ba589be09a50d1b758d5b852
+ PYTHON_AIOSIGNAL_SETUP_TYPE = setuptools
+ PYTHON_AIOSIGNAL_LICENSE = Apache-2.0
+ PYTHON_AIOSIGNAL_LICENSE_FILES = LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
