@@ -2,52 +2,52 @@ Return-Path: <SRS0=Tewt=OQ=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 66A95C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 19:59:34 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5478BC433F5
+	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 19:59:46 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 26A7760F9E
-	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 19:59:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 26A7760F9E
+	by mail.kernel.org (Postfix) with ESMTPS id 059F360FDC
+	for <buildroot@archiver.kernel.org>; Sun, 26 Sep 2021 19:59:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 059F360FDC
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 06247607AA;
-	Sun, 26 Sep 2021 19:59:34 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C98584020E;
+	Sun, 26 Sep 2021 19:59:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qo8ujkaUs_gz; Sun, 26 Sep 2021 19:59:33 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 8OtmDh5qnhWe; Sun, 26 Sep 2021 19:59:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 59C86605C2;
-	Sun, 26 Sep 2021 19:59:32 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 88CB91BF383
- for <buildroot@lists.busybox.net>; Sun, 26 Sep 2021 19:52:42 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E3F5740198;
+	Sun, 26 Sep 2021 19:59:43 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 280861BF383
+ for <buildroot@lists.busybox.net>; Sun, 26 Sep 2021 19:52:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C28EC6072E
- for <buildroot@lists.busybox.net>; Sun, 26 Sep 2021 19:52:33 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E4C5B403AB
+ for <buildroot@lists.busybox.net>; Sun, 26 Sep 2021 19:52:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KXuE71rtb3DL for <buildroot@lists.busybox.net>;
- Sun, 26 Sep 2021 19:52:31 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id oYl5rgn_lA0X for <buildroot@lists.busybox.net>;
+ Sun, 26 Sep 2021 19:52:32 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 69C396074F
- for <buildroot@buildroot.org>; Sun, 26 Sep 2021 19:52:31 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id D50FE403A9
+ for <buildroot@buildroot.org>; Sun, 26 Sep 2021 19:52:32 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 004298D25B; Sun, 26 Sep 2021 19:50:17 +0000 (UTC)
+ id 71F4E8D25E; Sun, 26 Sep 2021 19:50:19 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sun, 26 Sep 2021 21:08:34 +0200
+Date: Sun, 26 Sep 2021 21:29:42 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e3da7ebb509a471f8aff3e76331c1eda6af32904
-X-Git-Newrev: 99bed3c20629410ae7f10be437ed129d36c2be2a
+X-Git-Oldrev: c68e1f676edb716f4d78e2e84f0ebf69f3023bb9
+X-Git-Newrev: 37019b979b0354240951bb16ab44e4607613470c
 X-Patchwork-Hint: ignore
-Message-Id: <20210926195018.004298D25B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/kodi-screensaver-biogenesis: bump
- version to 19.0.0-Matrix
+Message-Id: <20210926195019.71F4E8D25E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kodi-pvr-stalker: bump version to
+ 19.0.0-Matrix
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,37 +65,37 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=99bed3c20629410ae7f10be437ed129d36c2be2a
+commit: https://git.buildroot.net/buildroot/commit/?id=37019b979b0354240951bb16ab44e4607613470c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.hash | 2 +-
- package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk   | 2 +-
+ package/kodi-pvr-stalker/kodi-pvr-stalker.hash | 2 +-
+ package/kodi-pvr-stalker/kodi-pvr-stalker.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.hash b/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.hash
-index 1f2c5e6305..0cd96aeb5f 100644
---- a/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.hash
-+++ b/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.hash
+diff --git a/package/kodi-pvr-stalker/kodi-pvr-stalker.hash b/package/kodi-pvr-stalker/kodi-pvr-stalker.hash
+index 62d5e458c8..66d587b19d 100644
+--- a/package/kodi-pvr-stalker/kodi-pvr-stalker.hash
++++ b/package/kodi-pvr-stalker/kodi-pvr-stalker.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  bf56384e6956674cd911c52b2807993d0a6e0ffa9623b5a1981a3153911e135a  kodi-screensaver-biogenesis-2.5.0-Matrix.tar.gz
-+sha256  11aceaa34851c7f400bb362d202289b767b3d1d45fbb4addeb151b6ea60ac37c  kodi-screensaver-biogenesis-19.0.0-Matrix.tar.gz
+-sha256  4450dcdacfb471d8d10e3a487bace8c57f1cab4629f1be1c57adae2165fcc5b8  kodi-pvr-stalker-7.1.1-Matrix.tar.gz
++sha256  6161f0593feb67865e78f9aecc8c59019933ddda273e495ffadb0bdb42dde2a3  kodi-pvr-stalker-19.0.0-Matrix.tar.gz
  sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk b/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk
-index 8b2d6b2ee5..e2acb44797 100644
---- a/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk
-+++ b/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk
+diff --git a/package/kodi-pvr-stalker/kodi-pvr-stalker.mk b/package/kodi-pvr-stalker/kodi-pvr-stalker.mk
+index 0e6058bf48..d0ffebb063 100644
+--- a/package/kodi-pvr-stalker/kodi-pvr-stalker.mk
++++ b/package/kodi-pvr-stalker/kodi-pvr-stalker.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_SCREENSAVER_BIOGENESIS_VERSION = 2.5.0-Matrix
-+KODI_SCREENSAVER_BIOGENESIS_VERSION = 19.0.0-Matrix
- KODI_SCREENSAVER_BIOGENESIS_SITE = $(call github,xbmc,screensaver.biogenesis,$(KODI_SCREENSAVER_BIOGENESIS_VERSION))
- KODI_SCREENSAVER_BIOGENESIS_LICENSE = GPL-2.0+
- KODI_SCREENSAVER_BIOGENESIS_LICENSE_FILES = LICENSE.md
+-KODI_PVR_STALKER_VERSION = 7.1.1-Matrix
++KODI_PVR_STALKER_VERSION = 19.0.0-Matrix
+ KODI_PVR_STALKER_SITE = $(call github,kodi-pvr,pvr.stalker,$(KODI_PVR_STALKER_VERSION))
+ KODI_PVR_STALKER_LICENSE = GPL-2.0+
+ KODI_PVR_STALKER_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
