@@ -2,84 +2,65 @@ Return-Path: <SRS0=V1ZZ=OR=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 46B01C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 27 Sep 2021 19:10:18 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2CBFCC433F5
+	for <buildroot@archiver.kernel.org>; Mon, 27 Sep 2021 19:25:49 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id E412C60F92
-	for <buildroot@archiver.kernel.org>; Mon, 27 Sep 2021 19:10:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E412C60F92
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmx.net
+	by mail.kernel.org (Postfix) with ESMTPS id 3AAA260FED
+	for <buildroot@archiver.kernel.org>; Mon, 27 Sep 2021 19:25:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3AAA260FED
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=benettiengineering.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B2D2B4040A;
-	Mon, 27 Sep 2021 19:10:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D756F80CDC;
+	Mon, 27 Sep 2021 19:25:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1H2Ykk09FTCf; Mon, 27 Sep 2021 19:10:17 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 1jjtqdIp_wan; Mon, 27 Sep 2021 19:25:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 17F9540418;
-	Mon, 27 Sep 2021 19:10:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3371080C83;
+	Mon, 27 Sep 2021 19:25:46 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 459D61BF2F4
- for <buildroot@lists.busybox.net>; Mon, 27 Sep 2021 19:10:14 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3F7001BF379
+ for <buildroot@lists.busybox.net>; Mon, 27 Sep 2021 19:25:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 33BA74014E
- for <buildroot@lists.busybox.net>; Mon, 27 Sep 2021 19:10:14 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3A7F740173
+ for <buildroot@lists.busybox.net>; Mon, 27 Sep 2021 19:25:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=gmx.net
+ dkim=pass (2048-bit key) header.d=aruba.it
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XwgCIrBFvK6T for <buildroot@lists.busybox.net>;
- Mon, 27 Sep 2021 19:10:13 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 7BA42400E5
- for <buildroot@buildroot.org>; Mon, 27 Sep 2021 19:10:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
- s=badeba3b8450; t=1632769806;
- bh=gDXk4AWPKHWA/YP6OJDnz39Rca11qftBW66djSPNfto=;
- h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
- b=WziWN1cYrQDS84pnGNnwEYFKjj6mX5jpcyLx3fUEHpBPbKLP5sY6kWtaqfC0P1yqu
- G7uIDMADY5K/sr60QqnwvixgQ+psAze1+4SiM5ZRwt7VyITmenYbZ6YHyoL0zytMhu
- GmUDQYvBIJr9N6E/0lS4DdZg9sTMzr5MmiD0rTtY=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from localhost ([62.216.209.132]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MZTmO-1mIMie1lFW-00WYgv; Mon, 27
- Sep 2021 21:10:06 +0200
-Date: Mon, 27 Sep 2021 21:10:05 +0200
-From: Peter Seiderer <ps.report@gmx.net>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20210927211005.7e200ca3@gmx.net>
-In-Reply-To: <20210927163516.1472524-1-fontaine.fabrice@gmail.com>
-References: <20210927163516.1472524-1-fontaine.fabrice@gmail.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-suse-linux-gnu)
+ with ESMTP id xaWPrMX1pfJp for <buildroot@lists.busybox.net>;
+ Mon, 27 Sep 2021 19:25:43 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtpcmd0872.aruba.it (smtpcmd0872.aruba.it [62.149.156.72])
+ by smtp2.osuosl.org (Postfix) with ESMTP id C2FDD40150
+ for <buildroot@buildroot.org>; Mon, 27 Sep 2021 19:25:42 +0000 (UTC)
+Received: from ubuntu.localdomain ([146.241.216.221])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id UwFwm0GM9KBZzUwFxmkMF2; Mon, 27 Sep 2021 21:25:41 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+ t=1632770741; bh=SYGegj0lfbDr5HFfk2BE14z42lcEf8OIM9lpaQxE1ug=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=cKANTYZzsBZfwPb0mCLeBM7lopT7xzWGOX8oIXg2EYsZ4o2NcLirRicdM3MFNuMO3
+ wz47E3NjdAL+A7PwOudRJxS4dieeIzjUKteeS2rYbnE87Y7ZRXlff/h9NJAMVFOR0/
+ Di3OJuXqn+EK3VujZehbtMKezi6AqTSrUFiMFWCCDy47kp0EZ4Rd5R7wJ+1EQ9jUEx
+ bu4ei7PFnH0IvNf7KnRCjJY+UWJdH4jwA+x8AOIB5KMH/W+Po4BtRHFdan7RMkbM14
+ VAvGtzwVt/pTS4nRP7N8Tx2ZJVcKt0Zif4Jn+OpyK9ECF4OLaLlV8mQiX6rN6a1JGE
+ U/hPVmIsUc6tg==
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+To: buildroot@buildroot.org
+Date: Mon, 27 Sep 2021 21:25:40 +0200
+Message-Id: <20210927192540.1940198-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:oGLiUMGEsbjnUhmCRf9fpqSPqn/z376Q+nbvetdBzmMx4BEWdIC
- 9ElGRAv1jEEV926ni2sIbufwwB+hiC9FuOkaM+0RfnopGCXxXoT7CKHCDMbuoOxyzKePDv+
- rodI0bqPSjZd8mr+lrkcuT6jqr1HZJlv+DBRMZgUHZvaBiNb4C+4979oh52qiEo1WY7oiRg
- x31B9DZnYlWO3uiLToisQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:DvBtGPTcHdY=:LAQavEJpRr+hQOVv9zNuD+
- vS7nxIqqNyZyGgOgIabB8O5PRS48wWOdBxSAa7ID/LBeTQqMwvW8jBe4tkQUguj062XpDR8kQ
- 0d6Dpsu19CJdvMN7/jocc7WAujpTMo35hlzawvpzCcQPGol+4j/6nmnBBiG40E2Dlu8mZVVTt
- gE/RNk8ENc7tkZGsMwW2HuyvTPX4Oq19wGxH8nB7HqKYmb7kCtoE7ebQHOaS4ACz7m5m/1l1I
- OqoC7kv+cT6laPW5JAyohrA+3T11vlRxeana0WtKNNUSfJOCOFIihlyDK4qqhfoeKLWT41JXA
- UJ1vTQBM0cMRNHea4IhMHUScBXuI7KwXB93u/cUuU1uiRG842wu8MMbKprst245lS8bYUSeYT
- fSalYyQLyX7KClF7Im1oKZRNzOuxbVh3C1x0akAog6d0Tih7fia2tkhwNOumrgkaJ8KfXg+z6
- /fIp36l9VItey7KxdQZdeQB5j9nFzgxxFz7nJ8ni4InlY8rI96l1ZNmhhDnG7J/0kDU/X4rpv
- HaBFyPSHTIsYOALkIdsff3N/WZdMjoSy6XhhYOCZbpd996stJF4T8Qgc3n1IW+DZhUr0QqYeD
- 7FBumBUkLDIVacvJPRzhUHRIZcy1dfP8obtybAYIKT8/ltzWdcdAgIeIb+DciA7+2+xVzfkTq
- 0vJZb2+8OqtDRmpARzVOR/zKUBthNeFz5+P2kHWXJVNQSeHwL3l3LXVpj76cvBvyg009RHP0l
- H6Qi/QCITgwy3hI5pH8wa+Fb4BZiyKQkswJ+Q06fHb5rch9unMUKgsZMQ+UDwDMPiTMJkFtkc
- 6yzUEwAcjkGBBhgGzSebPHxkDZxlWUhA3Jr85iiRKBMGiTnYujJJpuSWl2GZ3OlUP066zWdCk
- QOUy/rjNn3v2XuVxd4su/ljwvg8vua5o4FSDzJ30wxX2qHz1WJ9NqAd/u9ZrdFwO4vP6p0B6z
- bMyWDgFqKZE5gFzta221m486eb2IFflJJqW0HiyettiXK8vao9IlRFXsEUM2Bs9byL+/UcMsF
- nWvYS3k8PVp/Hkj2cSVXb2b6dKNQZKfBXR58FVZO1UDlpjxBn6zsuVEJdkH+3bTZRVPImLUAD
- Nk8BKQzsKB0VFY=
-Subject: Re: [Buildroot] [PATCH 1/1] package/iwd: fix musl build
+X-CMAE-Envelope: MS4wfLMWbO3ep4cjQBe55bDAShvqzhT/1/iVDRbTYII+7gKnWb+8MNzOdhwJb6h0O6UnoZJj6xOpWUb+0Fss2UvhSRdLyytp12UdXnccnAH4HhZMIByB0rhg
+ cvl5uByIPIVYHH+BrPoBCrp+SdJX0xXMZefj65Sb0AkmktkkoGlxl7Qz+ZRzZKO8MhK1MSSHx8rezp+fWK6Zg61FFZAo3Xw4mfs+kJxhu3MehBJGVyJ8vVKm
+ X11M/lYAbHsIJQkQrlpskm5pzh9VpjrwRhTZziXSlYQ=
+Subject: [Buildroot] [PATCH] package/dc3dd: disable on arc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,80 +72,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Matt Weber <matthew.weber@collins.com>, buildroot@buildroot.org
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Fabrice,
+Disable dc3dd on arc like we've done for riscv32 because of the size of
+time_t:
 
-On Mon, 27 Sep 2021 18:35:16 +0200, Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+In file included from getdate.y:40:
+verify.h:132:30: error: negative width in bit-field 'verify_error_if_negative_size__'
+  132 |       (struct { unsigned int verify_error_if_negative_size__: (R) ? 1 : -1; }))
+      |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+verify.h:138:61: note: in expansion of macro 'verify_true'
+  138 | # define verify(R) extern int (* verify_function__ (void)) [verify_true (R)]
+      |                                                             ^~~~~~~~~~~
+getdate.y:116:1: note: in expansion of macro 'verify'
+  116 | verify (LONG_MIN <= TYPE_MINIMUM (time_t) && TYPE_MAXIMUM (time_t) <= LONG_MAX);
+      | ^~~~~~
 
-> Fix the following build failure with musl raised since bump to version
-> 1.18 in commit 1a7be12e1e10cc09e3a28a8d04a352bbbb63ba3a:
->
-> src/netconfig.c: In function 'netconfig_ipv6_to_string':
-> src/netconfig.c:188:18: error: 'struct in6_addr' has no member named '__in6_u'; did you mean '__in6_union'?
->   188 |  memcpy(in6_addr.__in6_u.__u6_addr8, addr, 16);
->       |                  ^~~~~~~
->       |                  __in6_union
->
-> Fixes:
->  - http://autobuild.buildroot.org/results/2c4e6cf22e6fb5582470930241904878070f1144
+Fixes:
+http://autobuild.buildroot.net/results/9e2/9e2a8f0548ecb5ce9539eda007cd886ddea7dc0a/
 
-Thanks for fixing....
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+ package/dc3dd/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
-
-Regards,
-Peter
-
->
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...nfig-Remove-usage-of-in6_addr__in6_u.patch | 32 +++++++++++++++++++
->  1 file changed, 32 insertions(+)
->  create mode 100644 package/iwd/0002-netconfig-Remove-usage-of-in6_addr__in6_u.patch
->
-> diff --git a/package/iwd/0002-netconfig-Remove-usage-of-in6_addr__in6_u.patch b/package/iwd/0002-netconfig-Remove-usage-of-in6_addr__in6_u.patch
-> new file mode 100644
-> index 0000000000..f6b3d24516
-> --- /dev/null
-> +++ b/package/iwd/0002-netconfig-Remove-usage-of-in6_addr__in6_u.patch
-> @@ -0,0 +1,32 @@
-> +From 42bd5ba7c2665c5bf95ba102a8115c4cf01d31d7 Mon Sep 17 00:00:00 2001
-> +From: Andrew Zaborowski <andrew.zaborowski@intel.com>
-> +Date: Thu, 16 Sep 2021 01:58:29 +0200
-> +Subject: netconfig: Remove usage of in6_addr.__in6_u
-> +
-> +in6_addr.__in6_u.__u6_addr8 is glibc-specific and named differently in
-> +the headers shipped with musl libc for example.  The POSIX compliant and
-> +universal way of accessing it is in6_addr.s6_addr.
-> +
-> +[Retrieved from:
-> +https://git.kernel.org/pub/scm/network/wireless/iwd.git/commit/?id=42bd5ba7c2665c5bf95ba102a8115c4cf01d31d7]
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +---
-> + src/netconfig.c | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/src/netconfig.c b/src/netconfig.c
-> +index ce95db0b..421270c9 100644
-> +--- a/src/netconfig.c
-> ++++ b/src/netconfig.c
-> +@@ -171,7 +171,7 @@ static inline char *netconfig_ipv6_to_string(const uint8_t *addr)
-> + 	struct in6_addr in6_addr;
-> + 	char *addr_str = l_malloc(INET6_ADDRSTRLEN);
-> +
-> +-	memcpy(in6_addr.__in6_u.__u6_addr8, addr, 16);
-> ++	memcpy(in6_addr.s6_addr, addr, 16);
-> +
-> + 	if (L_WARN_ON(unlikely(!inet_ntop(AF_INET6, &in6_addr, addr_str,
-> + 						INET6_ADDRSTRLEN)))) {
-> +--
-> +cgit 1.2.3-1.el7
-> +
+diff --git a/package/dc3dd/Config.in b/package/dc3dd/Config.in
+index 715451beb7..bd181b7065 100644
+--- a/package/dc3dd/Config.in
++++ b/package/dc3dd/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_DC3DD
+ 	bool "dc3dd"
+ 	depends on !BR2_RISCV_32
++	depends on !BR2_arc
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_TOOLCHAIN_USES_MUSL
+ 	help
+@@ -13,5 +14,6 @@ config BR2_PACKAGE_DC3DD
+ 
+ comment "dc3dd needs a glibc or uClibc toolchain w/ threads"
+ 	depends on !BR2_RISCV_32
++	depends on !BR2_arc
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
+ 		BR2_TOOLCHAIN_USES_MUSL
+-- 
+2.25.1
 
 _______________________________________________
 buildroot mailing list
