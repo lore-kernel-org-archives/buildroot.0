@@ -2,58 +2,52 @@ Return-Path: <SRS0=V1ZZ=OR=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 83ECCC433F5
-	for <buildroot@archiver.kernel.org>; Mon, 27 Sep 2021 17:51:33 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 73524C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 27 Sep 2021 17:52:36 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9046A60F9B
-	for <buildroot@archiver.kernel.org>; Mon, 27 Sep 2021 17:51:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9046A60F9B
+	by mail.kernel.org (Postfix) with ESMTPS id 046FC60EE2
+	for <buildroot@archiver.kernel.org>; Mon, 27 Sep 2021 17:52:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 046FC60EE2
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3E313406BE;
-	Mon, 27 Sep 2021 17:51:32 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C1292400E5;
+	Mon, 27 Sep 2021 17:52:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 94fxBttkCDN2; Mon, 27 Sep 2021 17:51:31 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id i-j-m2DOfO-l; Mon, 27 Sep 2021 17:52:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A7582406AD;
-	Mon, 27 Sep 2021 17:51:30 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 28A2D1BF5F6
- for <buildroot@lists.busybox.net>; Mon, 27 Sep 2021 17:51:29 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 24C5A4011D;
+	Mon, 27 Sep 2021 17:52:33 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 30EEE1BF5F6
+ for <buildroot@lists.busybox.net>; Mon, 27 Sep 2021 17:51:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1883E81029
- for <buildroot@lists.busybox.net>; Mon, 27 Sep 2021 17:51:29 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1E4D04011D
+ for <buildroot@lists.busybox.net>; Mon, 27 Sep 2021 17:51:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QOZm7p99lKkW for <buildroot@lists.busybox.net>;
- Mon, 27 Sep 2021 17:51:28 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E5CEB81028
- for <buildroot@busybox.net>; Mon, 27 Sep 2021 17:51:27 +0000 (UTC)
-Received: (Authenticated sender: peter@casa-korsgaard.com)
- by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id 1F6DE1BF204;
- Mon, 27 Sep 2021 17:51:23 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
- (envelope-from <peter@korsgaard.com>)
- id 1mUumh-0005fP-5j; Mon, 27 Sep 2021 19:51:23 +0200
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Yl3pbH7XLJUd for <buildroot@lists.busybox.net>;
+ Mon, 27 Sep 2021 17:51:30 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2590B400E5
+ for <buildroot@buildroot.org>; Mon, 27 Sep 2021 17:51:30 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 8B71D8D333; Mon, 27 Sep 2021 17:49:14 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Francois Perrad <fperrad@gmail.com>
-References: <20210906152540.1831522-1-francois.perrad@gadz.org>
-Date: Mon, 27 Sep 2021 19:51:23 +0200
-In-Reply-To: <20210906152540.1831522-1-francois.perrad@gadz.org> (Francois
- Perrad's message of "Mon, 6 Sep 2021 17:25:40 +0200")
-Message-ID: <8735pprjok.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/libressl: bump to version 3.3.4
+To: buildroot@buildroot.org
+Date: Mon, 27 Sep 2021 19:50:10 +0200
+X-Git-Refname: refs/heads/2021.05.x
+X-Git-Oldrev: 3466797cedb15097924bf207774d11a79d03a9ac
+X-Git-Newrev: 21a5bc35f119215b89be2b9a30e381209b27c66d
+X-Patchwork-Hint: ignore
+Message-Id: <20210927174914.8B71D8D333@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.05.x] package/libressl: bump to
+ version 3.2.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,23 +59,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@busybox.net
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=21a5bc35f119215b89be2b9a30e381209b27c66d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
 
- > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Bugfix release, fixing a crash issue:
+https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-3.2.6-relnotes.txt
 
-Committed to 2021.08.x, thanks.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libressl/libressl.hash | 2 +-
+ package/libressl/libressl.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-For 2021.02.x / 2021.05.x I have instead bumped to 3.2.6 which contains
-the same fixes.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libressl/libressl.hash b/package/libressl/libressl.hash
+index 9f216bf2f1..14b9165d8c 100644
+--- a/package/libressl/libressl.hash
++++ b/package/libressl/libressl.hash
+@@ -1,4 +1,4 @@
+ # From https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/SHA256
+-sha256  798a65fd61d385e09d559810cdfa46512f8def5919264cfef241a7b086ce7cfe  libressl-3.2.5.tar.gz
++sha256  b043640520d2eec56bd16ae639ce53017eecacc3d86388b54f838a548de3325b  libressl-3.2.6.tar.gz
+ # Locally computed
+ sha256  5c63613f008f16a9c0025c096bbd736cecf720494d121b5c5203e0ec6e5955b1  COPYING
+diff --git a/package/libressl/libressl.mk b/package/libressl/libressl.mk
+index d09df8f40f..62d1e85d5b 100644
+--- a/package/libressl/libressl.mk
++++ b/package/libressl/libressl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBRESSL_VERSION = 3.2.5
++LIBRESSL_VERSION = 3.2.6
+ LIBRESSL_SITE = https://ftp.openbsd.org/pub/OpenBSD/LibreSSL
+ LIBRESSL_LICENSE = ISC (new additions), OpenSSL or SSLeay (original OpenSSL code)
+ LIBRESSL_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
