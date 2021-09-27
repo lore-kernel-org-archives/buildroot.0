@@ -2,86 +2,85 @@ Return-Path: <SRS0=V1ZZ=OR=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E4979C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 27 Sep 2021 16:35:58 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 44EB1C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 27 Sep 2021 16:38:02 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 7AC5C610E8
-	for <buildroot@archiver.kernel.org>; Mon, 27 Sep 2021 16:35:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7AC5C610E8
+	by mail.kernel.org (Postfix) with ESMTPS id C255061074
+	for <buildroot@archiver.kernel.org>; Mon, 27 Sep 2021 16:38:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C255061074
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 280C76084D;
-	Mon, 27 Sep 2021 16:35:58 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8DFCC4017C;
+	Mon, 27 Sep 2021 16:38:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9FSHCHag7SkH; Mon, 27 Sep 2021 16:35:56 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id vgPQUsIXAG50; Mon, 27 Sep 2021 16:38:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F3E9F60623;
-	Mon, 27 Sep 2021 16:35:55 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id DF88C1BF955
- for <buildroot@lists.busybox.net>; Mon, 27 Sep 2021 16:35:54 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BBEE840247;
+	Mon, 27 Sep 2021 16:37:59 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B66E51BF955
+ for <buildroot@lists.busybox.net>; Mon, 27 Sep 2021 16:37:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D00AF81024
- for <buildroot@lists.busybox.net>; Mon, 27 Sep 2021 16:35:54 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9EC81406BC
+ for <buildroot@lists.busybox.net>; Mon, 27 Sep 2021 16:37:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wtZfqrtSMgN3 for <buildroot@lists.busybox.net>;
- Mon, 27 Sep 2021 16:35:54 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id N54TXJfoJee7 for <buildroot@lists.busybox.net>;
+ Mon, 27 Sep 2021 16:37:56 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
- [IPv6:2a00:1450:4864:20::32e])
- by smtp1.osuosl.org (Postfix) with ESMTPS id DFF568101C
- for <buildroot@buildroot.org>; Mon, 27 Sep 2021 16:35:53 +0000 (UTC)
-Received: by mail-wm1-x32e.google.com with SMTP id
- c73-20020a1c9a4c000000b0030d040bb895so457668wme.2
- for <buildroot@buildroot.org>; Mon, 27 Sep 2021 09:35:53 -0700 (PDT)
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
+ [IPv6:2a00:1450:4864:20::434])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A9716406B2
+ for <buildroot@buildroot.org>; Mon, 27 Sep 2021 16:37:56 +0000 (UTC)
+Received: by mail-wr1-x434.google.com with SMTP id x20so8353602wrg.10
+ for <buildroot@buildroot.org>; Mon, 27 Sep 2021 09:37:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=1POTAGvGMQkWPQoknkmNwgFaMpcgBviDDN5AxSsmzXc=;
- b=hAK1+R5l6g8nqjKVWeyEjm+pM5ZH2z6Y++gavcUQHGZ7ZGxkCpkMQC3FhA3SGg3X1E
- LKv/3xLPj/PhbSxHbW4Op57jpsTHLJbcA3FcDEfR0nhoH40hzlqW7Q23Ot6pTfvKBtA0
- 5LioLoG7FCXDYW7W7Iw0TkAvTO6tnxY9ucoycQvLdhpZi8LAYdkKr2RJEJhXej1Ak4dn
- T7277oSSAOIAasdSeNeQuYPd4yHRNfLBbZYQx7zdv4Ab7M5K5L0g1iBTWMZKYges3/BM
- qYuxIEjv+/SC42F+KD7szsB9jUgH9SOElS3eSf8zWRLybwOR3hhkR59Wn7h2Q7CDMYI6
- Y0MQ==
+ bh=ZYzZX+eG0JT/pmv6t8z8OItcbcLKNIEsjFRugRaciWA=;
+ b=BdcxqkmtlhihwYacOnOg1lQYAb/s3a+Td3w7FrSZJQWn5eG4tZAfC8wBPtmyHdLSeJ
+ 3UPk7w1JjutsdXANQynF577ZHp5j1wYAO79b2aDy49t9j+wgwJqKtwE/h70fKLt3ROHl
+ u+sAMngCa+3XVkI1NCa6paLV36v7aBBxswtiiGuEwRRqo78jkzopROVtU69RWTaHXBGX
+ s2pcNg85P0/JycZOqX77eNcrMWmGV0e4O15AjPM8gYlzELFXbQogDy/vaERj1qHpXmlR
+ +lhTncNeaM7+rK7tifqoQvPd3f83yonWMLtTWkmfDS8+1uZDlYY69eC9x1t2SXr+FTEn
+ 79Nw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=1POTAGvGMQkWPQoknkmNwgFaMpcgBviDDN5AxSsmzXc=;
- b=Gk4C85bf52Ic1yBinVWl97NjlvxK4pfowTc0dMOUssuD0V88Dm4VbACLPY50K/Lonn
- WMmS8ys0Jeto9PiHHJESbZEduUrneVr8xDhMvWkYi1A7W+0lOVVqYRwhozuM51wStCof
- +QtxH9tjBEjWhHrEcaN5+qSFSkjw+T+c8QQN/9l8VzIA4+OJPKVZXas5hidtThcZ8zx8
- ShRRFzr6DYAFSlCfKEMpp2qjzyUtHPqi4R8BfqdYcDRiVmzA2V/DAffNHwxk1AqjpD48
- 6Ev+SZuVcfrnuLpYMpQiIuyY0MkJHRDzcZ3YXnOa7hpYgeD1YZloBGQAtF/1/ggMOs7V
- +oPA==
-X-Gm-Message-State: AOAM533vZVqbyPblOnrp9erjzPvZBdMVX5IM1H2UTxtQTBeeu5UI90c2
- 7OILT7qqfxot/Wa+RQbmHa1CawtuRMw=
-X-Google-Smtp-Source: ABdhPJw+1krYXH3okI+IQQf9vR5dSLzEZiuCGWNpH208W2q6SeD8ol8SwYTyeMm9b/AsvQQxKgRq+A==
-X-Received: by 2002:a05:600c:210d:: with SMTP id
- u13mr13948wml.102.1632760551886; 
- Mon, 27 Sep 2021 09:35:51 -0700 (PDT)
+ bh=ZYzZX+eG0JT/pmv6t8z8OItcbcLKNIEsjFRugRaciWA=;
+ b=oVwQYL8RcCLy9WIdWMsS6ZRCan+KxbQJn3Mi9qE1h5Lj9EFim+Jrfv4PRaOHxgfnIQ
+ 0/WlUXRr8PdpHDBgN82tkUUTgAVZQKVC75iHbYA8dQ0pKRg9ZDvjjYAHNsxZFf45Zl6Y
+ Jh9Niu5mPwpAM0l62m4o9TF8SbrHXzbZVQltw3RyGVuTqMEqqGnr/Y0UvBA+eoK3c71s
+ xOhy189x21aQnEvMI88lx0I8C2Ka5RZSh6t6T2/rUMmGt+zvbDBx7/3RmVhJMP9lVwdJ
+ 6+4OQdvkqctEiuql8f6NC8ccLVEhMR7NitJ/B3pYiVuIMKmgC6SM8zRVSZuW1zr9szBQ
+ l9lQ==
+X-Gm-Message-State: AOAM531p/XOXsCyyfa0Rjs9GiCbnxJyXpTnAuQZ3dWHPzgImgq6X7oAV
+ jfOsQ/p93N8z3zICEeAds9IAjrGXRso=
+X-Google-Smtp-Source: ABdhPJy2hyxAbbcMIyz/Pvmf7Ak+3ie3TdErkdghs9n2lPI7MS0LBAowCWceB1CmLJ2NsIhg06cAEw==
+X-Received: by 2002:a05:6000:1090:: with SMTP id
+ y16mr961824wrw.208.1632760674580; 
+ Mon, 27 Sep 2021 09:37:54 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-421-88.w2-10.abo.wanadoo.fr.
  [2.10.246.88])
- by smtp.gmail.com with ESMTPSA id u5sm18511886wrg.57.2021.09.27.09.35.51
+ by smtp.gmail.com with ESMTPSA id w18sm1815048wrt.79.2021.09.27.09.37.53
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 27 Sep 2021 09:35:51 -0700 (PDT)
+ Mon, 27 Sep 2021 09:37:54 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 27 Sep 2021 18:35:16 +0200
-Message-Id: <20210927163516.1472524-1-fontaine.fabrice@gmail.com>
+Date: Mon, 27 Sep 2021 18:37:27 +0200
+Message-Id: <20210927163727.1472686-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/iwd: fix musl build
+Subject: [Buildroot] [PATCH v2,1/1] package/wget: bump to version 1.21.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,69 +92,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Peter Seiderer <ps.report@gmx.net>, Matt Weber <matthew.weber@collins.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following build failure with musl raised since bump to version
-1.18 in commit 1a7be12e1e10cc09e3a28a8d04a352bbbb63ba3a:
-
-src/netconfig.c: In function 'netconfig_ipv6_to_string':
-src/netconfig.c:188:18: error: 'struct in6_addr' has no member named '__in6_u'; did you mean '__in6_union'?
-  188 |  memcpy(in6_addr.__in6_u.__u6_addr8, addr, 16);
-      |                  ^~~~~~~
-      |                  __in6_union
-
-Fixes:
- - http://autobuild.buildroot.org/results/2c4e6cf22e6fb5582470930241904878070f1144
+https://lists.gnu.org/archive/html/bug-wget/2021-09/msg00005.html
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...nfig-Remove-usage-of-in6_addr__in6_u.patch | 32 +++++++++++++++++++
- 1 file changed, 32 insertions(+)
- create mode 100644 package/iwd/0002-netconfig-Remove-usage-of-in6_addr__in6_u.patch
+Changes v1 -> v2 (after review of Arnout Vandecappelle):
+ - Fix tarball hash
 
-diff --git a/package/iwd/0002-netconfig-Remove-usage-of-in6_addr__in6_u.patch b/package/iwd/0002-netconfig-Remove-usage-of-in6_addr__in6_u.patch
-new file mode 100644
-index 0000000000..f6b3d24516
---- /dev/null
-+++ b/package/iwd/0002-netconfig-Remove-usage-of-in6_addr__in6_u.patch
-@@ -0,0 +1,32 @@
-+From 42bd5ba7c2665c5bf95ba102a8115c4cf01d31d7 Mon Sep 17 00:00:00 2001
-+From: Andrew Zaborowski <andrew.zaborowski@intel.com>
-+Date: Thu, 16 Sep 2021 01:58:29 +0200
-+Subject: netconfig: Remove usage of in6_addr.__in6_u
-+
-+in6_addr.__in6_u.__u6_addr8 is glibc-specific and named differently in
-+the headers shipped with musl libc for example.  The POSIX compliant and
-+universal way of accessing it is in6_addr.s6_addr.
-+
-+[Retrieved from:
-+https://git.kernel.org/pub/scm/network/wireless/iwd.git/commit/?id=42bd5ba7c2665c5bf95ba102a8115c4cf01d31d7]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ src/netconfig.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/netconfig.c b/src/netconfig.c
-+index ce95db0b..421270c9 100644
-+--- a/src/netconfig.c
-++++ b/src/netconfig.c
-+@@ -171,7 +171,7 @@ static inline char *netconfig_ipv6_to_string(const uint8_t *addr)
-+ 	struct in6_addr in6_addr;
-+ 	char *addr_str = l_malloc(INET6_ADDRSTRLEN);
-+ 
-+-	memcpy(in6_addr.__in6_u.__u6_addr8, addr, 16);
-++	memcpy(in6_addr.s6_addr, addr, 16);
-+ 
-+ 	if (L_WARN_ON(unlikely(!inet_ntop(AF_INET6, &in6_addr, addr_str,
-+ 						INET6_ADDRSTRLEN)))) {
-+-- 
-+cgit 1.2.3-1.el7
-+
+ package/wget/wget.hash | 4 ++--
+ package/wget/wget.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/wget/wget.hash b/package/wget/wget.hash
+index 11071566aa..7f89bedb88 100644
+--- a/package/wget/wget.hash
++++ b/package/wget/wget.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature
+-# https://ftp.gnu.org/gnu/wget/wget-1.21.tar.lz.sig
++# https://ftp.gnu.org/gnu/wget/wget-1.21.2.tar.lz.sig
+ # with key 6B98F637D879C5236E277C5C64FF90AAE8C70AF9
+-sha256  db9bbe5347e6faa06fc78805eeb808b268979455ead9003a608569c9d4fc90ad  wget-1.21.1.tar.lz
++sha256  1727a330a86acacb3e57615ce268f5f29978bf7adec4abe6a30d370207bc91b3  wget-1.21.2.tar.lz
+ # Locally calculated
+ sha256  e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b  COPYING
+diff --git a/package/wget/wget.mk b/package/wget/wget.mk
+index ae036478b8..f30fa39917 100644
+--- a/package/wget/wget.mk
++++ b/package/wget/wget.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WGET_VERSION = 1.21.1
++WGET_VERSION = 1.21.2
+ WGET_SOURCE = wget-$(WGET_VERSION).tar.lz
+ WGET_SITE = $(BR2_GNU_MIRROR)/wget
+ WGET_DEPENDENCIES = host-pkgconf
 -- 
 2.33.0
 
