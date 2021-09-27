@@ -2,85 +2,93 @@ Return-Path: <SRS0=V1ZZ=OR=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6AA0CC433EF
-	for <buildroot@archiver.kernel.org>; Mon, 27 Sep 2021 16:44:10 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E880C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 27 Sep 2021 16:56:31 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 0EF7361074
-	for <buildroot@archiver.kernel.org>; Mon, 27 Sep 2021 16:44:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0EF7361074
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id 7863260EE7
+	for <buildroot@archiver.kernel.org>; Mon, 27 Sep 2021 16:56:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7863260EE7
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DFFED6084D;
-	Mon, 27 Sep 2021 16:44:09 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 397854011D;
+	Mon, 27 Sep 2021 16:56:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Wbnow9URf4Xl; Mon, 27 Sep 2021 16:44:09 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ZNLLcfkYLe4J; Mon, 27 Sep 2021 16:56:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3B6D360A3B;
-	Mon, 27 Sep 2021 16:44:08 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8BEF21BF955
- for <buildroot@lists.busybox.net>; Mon, 27 Sep 2021 16:43:46 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 636B64017C;
+	Mon, 27 Sep 2021 16:56:28 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id DA5F71BF955
+ for <buildroot@lists.busybox.net>; Mon, 27 Sep 2021 16:56:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 842D1608A5
- for <buildroot@lists.busybox.net>; Mon, 27 Sep 2021 16:43:46 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id D43A54017C
+ for <buildroot@lists.busybox.net>; Mon, 27 Sep 2021 16:56:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dNirCM7K-cgB for <buildroot@lists.busybox.net>;
- Mon, 27 Sep 2021 16:43:44 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pgvtpJfMmhvt for <buildroot@lists.busybox.net>;
+ Mon, 27 Sep 2021 16:56:26 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
- [IPv6:2a00:1450:4864:20::32b])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7B3716066B
- for <buildroot@buildroot.org>; Mon, 27 Sep 2021 16:43:44 +0000 (UTC)
-Received: by mail-wm1-x32b.google.com with SMTP id v127so1051321wme.5
- for <buildroot@buildroot.org>; Mon, 27 Sep 2021 09:43:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=tgf6euyIA3m1MqakaXgGhtS5QPMZYJXo3QBU7xRtyGU=;
- b=W1yvpGOlAEiiei81KZ9hNR50JljziS+5DOQxwNc2FHWnE6tRDkCSg3cOEqn+AKhLYN
- GRHXR/RWQFZ9FtZvLzecam8barwpcjUYjQCETAWdgV4KjGzDFIPPHj67e61eQUVAAEvS
- 9qC80t8rjB0soFu0JgI9dODBUGMILGUROQbjMqMuggP5EySWUUYIWHMrcUeXTdjxNyBi
- HOm9YQ+F2wequ2TGvEBJCiA/x/pgfQQGHEyW2b8/uiQEYtyww3GJZgj+6R5UOhl4thMv
- 22Q6qh8QUGu6msByOnpPUcLWUcHg2ZEY/+2zLFTiSXJ+mT64UzsjgxFl1vOgnHAFWgSg
- 1Xqg==
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com
+ [IPv6:2a00:1450:4864:20::529])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B40E74011D
+ for <buildroot@buildroot.org>; Mon, 27 Sep 2021 16:56:25 +0000 (UTC)
+Received: by mail-ed1-x529.google.com with SMTP id g7so12439229edv.1
+ for <buildroot@buildroot.org>; Mon, 27 Sep 2021 09:56:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=Jh/BlpVFtsKbUdIIJQ4TFgcVnP942/v8zM8fqmU5g2g=;
+ b=C7B5NhbFM8ohIdWGvPA/Kj8HHPq7UPKPanrCpLAwiHj6r3wXrkOoPvADVb57UVRxN+
+ EuuZKWNYypctXh5GepeEO8ZX0yHVeKsb6ZGikDV+Tbe3/5g8sBet6eqYYg4cI4RcZmw0
+ BcH01EaFF3UKEQMnIb6Ev8DWsCYPvmBtoRIlD4X2bf9qbxMvOMbxmtSVohLd3SWzhz7S
+ a4RleondkakUNG3jpp4odloZ3ogdQ7KgRAV4ApZFKkG0iKuzoGt+HLjnH3MLnyHM/2aL
+ DwqrxExRlQcoln/w/MFv8xJhWupOTxNH/Qj6nFvj0N8N4by7cWzbic5bV3/j664pwg4M
+ ke5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=tgf6euyIA3m1MqakaXgGhtS5QPMZYJXo3QBU7xRtyGU=;
- b=poK7IaHjfhJg4H3PVM0RcXA2qNcrqOiKHcosw5cSV/0Ki+Ak9vltLFDVMlVmOViZim
- h5+RRdSi0aAjiPYePVDlCEIAv2HT+4A8Z304RjT9v+HWZ5dOxJIe8BP+PtBBVd8KUdXD
- sDWPyH32mX3qu34jfYQY/DWSjosKB50GizebYXoHpCD+C+XpTo3R7z9ELsWYuBGOjni7
- IFBEuJ2MQ/+t61sGnNJ9C9mnQlCVrwtDiHBozpwZO3JUfwEsvoWeUbqQtG/+8PB9yOt8
- mmnaJHyDF84iSTdzpqYx8wy0yz4g2balNr4YP0C58ezKZor7AzBz7SerbtIPFx4bp5zU
- iaeg==
-X-Gm-Message-State: AOAM530PQVAEe9IqHxvUcv1Jnc5hnXf/8+OWVNaLzyHJSwWFzNH+SelY
- ajXGnS1Q79zuEzZS0dWiQeyGn86k5VU=
-X-Google-Smtp-Source: ABdhPJy7tjcuyZpzWy4ghlMjxihbPJ8vk7yycwdE3w8SYfwYhxKnXQ0HxotyMC2jX72OTXdR0ZQhsQ==
-X-Received: by 2002:a05:600c:3506:: with SMTP id h6mr58700wmq.62.1632761022521; 
- Mon, 27 Sep 2021 09:43:42 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-421-88.w2-10.abo.wanadoo.fr.
- [2.10.246.88])
- by smtp.gmail.com with ESMTPSA id o1sm17296774wru.91.2021.09.27.09.43.41
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 27 Sep 2021 09:43:42 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Mon, 27 Sep 2021 18:43:06 +0200
-Message-Id: <20210927164306.1488012-3-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20210927164306.1488012-1-fontaine.fabrice@gmail.com>
-References: <20210927164306.1488012-1-fontaine.fabrice@gmail.com>
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=Jh/BlpVFtsKbUdIIJQ4TFgcVnP942/v8zM8fqmU5g2g=;
+ b=3lj2R/9xltIu8EMiC2PRjL1MYGmCewnlBw63VJAVLdSzqv8V38nW6tPq+ZEiwRLMyd
+ BzaCpKJVshL28IFo5EZBytli88hH8JJfyGxy21NLCUA3vLXhQha041vw+qND2s+6XIa2
+ PvuoMWjgYR0VCgvTLKfuIVs/ZzunFOJeTysTDoFTozWSIbwV6EfBaFrbsF36sFQkhnXz
+ 8E8B7OiZFjlSt++skUEFQ54ZBpn0lspOYpOk8oXG+YvkcCIA8gMRcUylYjvUnp8KWVPb
+ 8IktRdQGe5qyNGzYkEHyXBLH90y4IY+EDXZ5RIQBanf63KVPTYHGjDKF/F3r0SW7tXBF
+ Gzew==
+X-Gm-Message-State: AOAM530OOdYO4J+c40UF+/1bmlmP7htUpQ/tBoNi8upnzQU6yWaQhk3e
+ SNp6vgR6Pj0/bLLPXWjUlZwGkg==
+X-Google-Smtp-Source: ABdhPJwZZAOdER7bYvqQPqlmM0dZv4DrzN4U4KkSGWs3BzAEfhwJfdwXRqtrxXePL9agrkreEoOBVg==
+X-Received: by 2002:a50:cf48:: with SMTP id d8mr1122521edk.293.1632761783797; 
+ Mon, 27 Sep 2021 09:56:23 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id k21sm4681418edx.61.2021.09.27.09.56.23
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Mon, 27 Sep 2021 09:56:23 -0700 (PDT)
+Message-ID: <0b09997d-7df9-2385-aede-f6620d8d3292@mind.be>
+Date: Mon, 27 Sep 2021 18:56:22 +0200
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 3/3] package/autoconf-archive: bump to version
- 2021.02.19
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.1.0
+Content-Language: en-GB
+To: Martin Elshuber <martin.elshuber@theobroma-systems.com>,
+ buildroot@buildroot.org
+References: <20210913142652.942533-2-martin.elshuber@theobroma-systems.com>
+ <20210920152831.2489077-1-martin.elshuber@theobroma-systems.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20210920152831.2489077-1-martin.elshuber@theobroma-systems.com>
+Subject: Re: [Buildroot] [PATCH v2 1/2] package/strongswan: Add options to
+ select EAP plugins
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,51 +100,82 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bartosz Golaszewski <brgl@bgdev.pl>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ =?UTF-8?B?SsOpcsO0bWUgUG91aWxsZXI=?= <jezz@sysmic.org>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Update indentation in hash file (two spaces)
 
-https://git.savannah.gnu.org/cgit/autoconf-archive.git/tree/NEWS?h=v2021.02.19
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/autoconf-archive/autoconf-archive.hash | 6 +++---
- package/autoconf-archive/autoconf-archive.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+On 20/09/2021 17:28, Martin Elshuber wrote:
+> Add options to chose EAP plugins.
+> 
+> Since the only plugin requiring libgmp is
+> BR2_PACKAGE_STRONGSWAN_EAP_AKA_3GPP2, the selection of BR2_PACKAGE_GMP
+> is moved down accordingly.
+> 
+> Signed-off-by: Martin Elshuber <martin.elshuber@theobroma-systems.com>
+> 
+> ---
+> Changes v1 -> v2:
+>    - use conditional defaults and mark as legacy
+>    - drop 'ifeq ($(BR2_PACKAGE_STRONGSWAN_EAP),y)'
+>    - fix title for BR2_PACKAGE_STRONGSWAN_EAP_DYNAMIC
+> 
+> Signed-off-by: Martin Elshuber <martin.elshuber@theobroma-systems.com>
+> ---
+>   package/strongswan/Config.in     | 89 +++++++++++++++++++++++++-------
+>   package/strongswan/strongswan.mk | 40 +++++++-------
+>   2 files changed, 87 insertions(+), 42 deletions(-)
+> 
+> diff --git a/package/strongswan/Config.in b/package/strongswan/Config.in
+> index 368cd1ecc0..8eae568b6a 100644
+> --- a/package/strongswan/Config.in
+> +++ b/package/strongswan/Config.in
+> @@ -75,34 +75,83 @@ config BR2_PACKAGE_STRONGSWAN_TNCCS_DYNAMIC
+>   
+>   config BR2_PACKAGE_STRONGSWAN_EAP
+>   	bool "Enable EAP protocols"
+> -	select BR2_PACKAGE_GMP
+> -	help
+> -	  Enable various EAP protocols:
+> -	    - mschapv2
+> -	    - tls
+> -	    - ttls
+> -	    - peap
+> -	    - sim
+> -	    - sim-file
+> -	    - aka
+> -	    - aka-3gpp2
+> -	    - simaka-sql
+> -	    - simaka-pseudonym
+> -	    - simaka-reauth
+> -	    - identity
+> -	    - md5
+> -	    - gtc
+> -	    - tnc
+> -	    - dynamic
+> -	    - radius
+>   
+>   if BR2_PACKAGE_STRONGSWAN_EAP
+>   
+> +config BR2_PACKAGE_STRONGSWAN_EAP_SIM
+> +	bool "Enable EAP-SIM"
+> +	default y if BR2_PACKAGE_STRONGSWAN_EAP # legacy
 
-diff --git a/package/autoconf-archive/autoconf-archive.hash b/package/autoconf-archive/autoconf-archive.hash
-index 3ef98f2f14..79ee5ff68a 100644
---- a/package/autoconf-archive/autoconf-archive.hash
-+++ b/package/autoconf-archive/autoconf-archive.hash
-@@ -1,4 +1,4 @@
- # Computed locally
--sha256 17195c833098da79de5778ee90948f4c5d90ed1a0cf8391b4ab348e2ec511e3f  autoconf-archive-2019.01.06.tar.xz
--sha256 e6037104443f9a7829b2aa7c5370d0789a7bda3ca65a0b904cdc0c2e285d9195  COPYING
--sha256 23ed0b84fa023bfa33433b498192cd08a3bfb1f4864a8ed791a84f3eb48b2dd2  COPYING.EXCEPTION
-+sha256  e8a6eb9d28ddcba8ffef3fa211653239e9bf239aba6a01a6b7cfc7ceaec69cbd  autoconf-archive-2021.02.19.tar.xz
-+sha256  e6037104443f9a7829b2aa7c5370d0789a7bda3ca65a0b904cdc0c2e285d9195  COPYING
-+sha256  23ed0b84fa023bfa33433b498192cd08a3bfb1f4864a8ed791a84f3eb48b2dd2  COPYING.EXCEPTION
-diff --git a/package/autoconf-archive/autoconf-archive.mk b/package/autoconf-archive/autoconf-archive.mk
-index 3f1f0a5b3c..bd4a09d96d 100644
---- a/package/autoconf-archive/autoconf-archive.mk
-+++ b/package/autoconf-archive/autoconf-archive.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--AUTOCONF_ARCHIVE_VERSION = 2019.01.06
-+AUTOCONF_ARCHIVE_VERSION = 2021.02.19
- AUTOCONF_ARCHIVE_SOURCE = autoconf-archive-$(AUTOCONF_ARCHIVE_VERSION).tar.xz
- AUTOCONF_ARCHIVE_SITE = $(BR2_GNU_MIRROR)/autoconf-archive
- AUTOCONF_ARCHIVE_LICENSE = GPL-3.0+ with exception
--- 
-2.33.0
+  This is already inside if BR2_PACKAGE_STRONGSWAN_EAP, so the condition on the 
+default is meaningless. Yann said something about this legacy stuff which I 
+don't quite follow, since the BR2_PACKAGE_STRONGSWAN_EAP is not legacy. Yann, 
+did you mean that BR2_PACKAGE_STRONGSWAN_EAP should be removed (i.e. moved to 
+Config.in.legacy), or was it a mistake?
 
+
+  Regards,
+  Arnout
+
+[snip]
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
