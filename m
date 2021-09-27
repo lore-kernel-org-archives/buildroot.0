@@ -2,51 +2,51 @@ Return-Path: <SRS0=V1ZZ=OR=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D98DC433EF
-	for <buildroot@archiver.kernel.org>; Mon, 27 Sep 2021 14:39:12 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3CC10C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 27 Sep 2021 14:39:24 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2949060FC0
-	for <buildroot@archiver.kernel.org>; Mon, 27 Sep 2021 14:39:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2949060FC0
+	by mail.kernel.org (Postfix) with ESMTPS id 0A31E60FC2
+	for <buildroot@archiver.kernel.org>; Mon, 27 Sep 2021 14:39:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0A31E60FC2
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 00F7480C7B;
-	Mon, 27 Sep 2021 14:39:12 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D6A194021C;
+	Mon, 27 Sep 2021 14:39:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id R88IKdQHu3If; Mon, 27 Sep 2021 14:39:11 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id zQMDFlad-uth; Mon, 27 Sep 2021 14:39:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 445D980C37;
-	Mon, 27 Sep 2021 14:39:10 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6BAA11BF275
- for <buildroot@lists.busybox.net>; Mon, 27 Sep 2021 14:38:10 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D18994036F;
+	Mon, 27 Sep 2021 14:39:21 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 023891BF275
+ for <buildroot@lists.busybox.net>; Mon, 27 Sep 2021 14:38:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 574BD4067F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6A4F66084D
  for <buildroot@lists.busybox.net>; Mon, 27 Sep 2021 14:38:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id I0w1gnWRNGDj for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id n4PwbFDrP_Gn for <buildroot@lists.busybox.net>;
  Mon, 27 Sep 2021 14:38:09 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8386840631
+ by smtp3.osuosl.org (Postfix) with ESMTP id AC37B60890
  for <buildroot@buildroot.org>; Mon, 27 Sep 2021 14:38:09 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 46E438D2AE; Mon, 27 Sep 2021 14:35:54 +0000 (UTC)
+ id 7008B8D2AE; Mon, 27 Sep 2021 14:35:54 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Mon, 27 Sep 2021 16:20:41 +0200
+Date: Mon, 27 Sep 2021 16:34:21 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e1319f20a54074212d97e251d7508a2ec3d3cf41
-X-Git-Newrev: 9cedbcf494e647371f92368014d31091848772bb
+X-Git-Oldrev: 90ad7f53ec8d2929f2c4ef231bc2404204daae0f
+X-Git-Newrev: ac120d277704fb212654356a6d2a2ff7be90737a
 X-Patchwork-Hint: ignore
-Message-Id: <20210927143554.46E438D2AE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/liburcu: bump to version 0.13.0
+Message-Id: <20210927143554.7008B8D2AE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-inflection: needs python3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,93 +64,56 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9cedbcf494e647371f92368014d31091848772bb
+commit: https://git.buildroot.net/buildroot/commit/?id=ac120d277704fb212654356a6d2a2ff7be90737a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update first patch due to
-https://github.com/urcu/userspace-rcu/commit/3f0dd283a89ab114ffbf5c3dd46463217c6bb2ff
+python 2 support has been removed since version 0.4.0 and
+https://github.com/jpvanhal/inflection/commit/a826dac7a562e67881ab704adbef45440566836e
+resulting in the following build failure since bump to version 0.5.1 in
+commit 6c09567e6b6f2cc826e64cd9b36fb41ed7c6e00c:
 
-https://github.com/urcu/userspace-rcu/blob/v0.13.0/ChangeLog
+  File "/home/giuliobenetti/autobuild/run/instance-1/output-1/build/host-python-inflection-0.5.1/inflection/__init__.py", line 91
+    def _irregular(singular: str, plural: str) -> None:
+                           ^
+
+Propagate host-python3 dependency to host-sdbusplus
+
+Fixes:
+ - http://autobuild.buildroot.org/results/6d6e937135ef95c63001359fec5f8c28183fc0a9
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...01-Only-blacklist-ARM-gcc-4.8.0-and-4.8.1.patch | 22 ++++++++++++----------
- package/liburcu/liburcu.hash                       |  4 ++--
- package/liburcu/liburcu.mk                         |  2 +-
- 3 files changed, 15 insertions(+), 13 deletions(-)
+ package/python-inflection/Config.in | 4 ++--
+ package/sdbusplus/sdbusplus.mk      | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/liburcu/0001-Only-blacklist-ARM-gcc-4.8.0-and-4.8.1.patch b/package/liburcu/0001-Only-blacklist-ARM-gcc-4.8.0-and-4.8.1.patch
-index 658e1721f0..554c4aba1f 100644
---- a/package/liburcu/0001-Only-blacklist-ARM-gcc-4.8.0-and-4.8.1.patch
-+++ b/package/liburcu/0001-Only-blacklist-ARM-gcc-4.8.0-and-4.8.1.patch
-@@ -8,17 +8,19 @@ their latest releases based on gcc-4.8.2, then only blacklist gcc 4.8.0
- and 4.8.1.
- 
- Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-+[Fabrice: update for 0.13.0]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- ---
-  urcu/compiler.h | 9 ++++++++-
-  1 file changed, 8 insertions(+), 1 deletion(-)
- 
--diff --git a/include/urcu/compiler.h b/include/urcu/compiler.h
-+diff --git a/include/urcu/arch/arm.h b/include/urcu/arch/arm.h
- index 1e30903..56115f1 100644
----- a/include/urcu/compiler.h
--+++ b/include/urcu/compiler.h
-+--- a/include/urcu/arch/arm.h
-++++ b/include/urcu/arch/arm.h
- @@ -118,10 +118,17 @@
-- 				+ __GNUC_PATCHLEVEL__)
--
-+  */
-+ 
-  /*
- + * Official gcc releases from 4.8.0 to 4.8.2 have the following bug,
- + * however, many arm toolchain providers have the included the fix for
-@@ -29,12 +31,12 @@ index 1e30903..56115f1 100644
- + *
-   * http://gcc.gnu.org/bugzilla/show_bug.cgi?id=58854
-   */
-- # ifdef __ARMEL__
---#  if URCU_GCC_VERSION >= 40800 && URCU_GCC_VERSION <= 40802
--+#  if URCU_GCC_VERSION >= 40800 && URCU_GCC_VERSION <= 40801
-- #   error Your gcc version produces clobbered frame accesses
-- #  endif
-+ #ifdef URCU_GCC_VERSION
-+-# if URCU_GCC_VERSION >= 40800 && URCU_GCC_VERSION <= 40802
-++# if URCU_GCC_VERSION >= 40800 && URCU_GCC_VERSION <= 40801
-+ #  error Your gcc version produces clobbered frame accesses
-  # endif
-+ #endif
- --
- 1.9.0
- 
-diff --git a/package/liburcu/liburcu.hash b/package/liburcu/liburcu.hash
-index da7d12a76c..8ff11623d0 100644
---- a/package/liburcu/liburcu.hash
-+++ b/package/liburcu/liburcu.hash
-@@ -1,5 +1,5 @@
--# http://www.lttng.org/files/urcu/userspace-rcu-0.12.1.tar.bz2.sha256
--sha256  bbfaead0345642b97e0de90f889dfbab4b2643a6a5e5c6bb59cd0d26fc0bcd0e  userspace-rcu-0.12.1.tar.bz2
-+# http://www.lttng.org/files/urcu/userspace-rcu-0.13.0.tar.bz2.sha256
-+sha256  cbb20dbe1a892c2a4d8898bac4316176e585392693d498766ccbbc68cf20ba20  userspace-rcu-0.13.0.tar.bz2
- 
- # Hash for license files
- sha256  36b6d3fa47916943fd5fec313c584784946047ec1337a78b440e5992cb595f89  lgpl-2.1.txt
-diff --git a/package/liburcu/liburcu.mk b/package/liburcu/liburcu.mk
-index fa2ad0de83..c0a44764f1 100644
---- a/package/liburcu/liburcu.mk
-+++ b/package/liburcu/liburcu.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBURCU_VERSION = 0.12.1
-+LIBURCU_VERSION = 0.13.0
- LIBURCU_SITE = http://lttng.org/files/urcu
- LIBURCU_SOURCE = userspace-rcu-$(LIBURCU_VERSION).tar.bz2
- LIBURCU_LICENSE = LGPL-2.1+ (library), MIT-like (few source files listed in LICENSE), GPL-2.0+ (test), GPL-3.0 (few *.m4 files)
+diff --git a/package/python-inflection/Config.in b/package/python-inflection/Config.in
+index 427275bc71..5b6a26fead 100644
+--- a/package/python-inflection/Config.in
++++ b/package/python-inflection/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_PYTHON_INFLECTION
+ 	bool "python-inflection"
+-	select BR2_PACKAGE_PYTHON_UNICODEDATA if BR2_PACKAGE_PYTHON
+-	select BR2_PACKAGE_PYTHON3_UNICODEDATA if BR2_PACKAGE_PYTHON3
++	depends on BR2_PACKAGE_PYTHON3
++	select BR2_PACKAGE_PYTHON3_UNICODEDATA
+ 	help
+ 	  A string transformation library that singularizes and
+ 	  pluralizes English words, and transforms strings from
+diff --git a/package/sdbusplus/sdbusplus.mk b/package/sdbusplus/sdbusplus.mk
+index f4e258089b..498b835052 100644
+--- a/package/sdbusplus/sdbusplus.mk
++++ b/package/sdbusplus/sdbusplus.mk
+@@ -10,7 +10,7 @@ SDBUSPLUS_DEPENDENCIES = host-autoconf-archive host-pkgconf systemd
+ HOST_SDBUSPLUS_DEPENDENCIES = \
+ 	host-autoconf-archive \
+ 	host-pkgconf \
+-	$(if $(BR2_PACKAGE_PYTHON3),host-python3,host-python) \
++	host-python3 \
+ 	host-python-inflection \
+ 	host-python-mako \
+ 	host-python-pyyaml
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
