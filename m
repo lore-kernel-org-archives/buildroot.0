@@ -2,51 +2,52 @@ Return-Path: <SRS0=V1ZZ=OR=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A235EC433EF
-	for <buildroot@archiver.kernel.org>; Mon, 27 Sep 2021 14:41:33 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 16B5AC433EF
+	for <buildroot@archiver.kernel.org>; Mon, 27 Sep 2021 14:41:45 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 62F0760F46
-	for <buildroot@archiver.kernel.org>; Mon, 27 Sep 2021 14:41:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 62F0760F46
+	by mail.kernel.org (Postfix) with ESMTPS id D59F060FD7
+	for <buildroot@archiver.kernel.org>; Mon, 27 Sep 2021 14:41:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D59F060FD7
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 350C681852;
-	Mon, 27 Sep 2021 14:41:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id ACFC7402A1;
+	Mon, 27 Sep 2021 14:41:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GDmJydcF3N7r; Mon, 27 Sep 2021 14:41:32 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id BLGYAYoYbwlx; Mon, 27 Sep 2021 14:41:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 99C6F8188A;
-	Mon, 27 Sep 2021 14:41:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 21EF8404F6;
+	Mon, 27 Sep 2021 14:41:43 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 670691BF275
- for <buildroot@lists.busybox.net>; Mon, 27 Sep 2021 14:38:14 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 197751BF275
+ for <buildroot@lists.busybox.net>; Mon, 27 Sep 2021 14:38:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B6A5580E6E
- for <buildroot@lists.busybox.net>; Mon, 27 Sep 2021 14:38:10 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 38FFC817FD
+ for <buildroot@lists.busybox.net>; Mon, 27 Sep 2021 14:38:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HB_i1zMSVBxf for <buildroot@lists.busybox.net>;
- Mon, 27 Sep 2021 14:38:10 +0000 (UTC)
+ with ESMTP id bezyxGGbB3xu for <buildroot@lists.busybox.net>;
+ Mon, 27 Sep 2021 14:38:09 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id DA26481852
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7FD3781826
  for <buildroot@buildroot.org>; Mon, 27 Sep 2021 14:38:09 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id AB28B8D266; Mon, 27 Sep 2021 14:35:54 +0000 (UTC)
+ id 509148D307; Mon, 27 Sep 2021 14:35:54 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Mon, 27 Sep 2021 16:34:22 +0200
+Date: Mon, 27 Sep 2021 16:20:41 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ace87cd389efcbc7323ca503a3096e9dcdc6e215
-X-Git-Newrev: 29af6acca2a163b56d8cb39bec050e80f610fc23
+X-Git-Oldrev: 9cedbcf494e647371f92368014d31091848772bb
+X-Git-Newrev: 4d4fcb8cf37de94ff672416e454310be66c3778d
 X-Patchwork-Hint: ignore
-Message-Id: <20210927143554.AB28B8D266@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-urwid: bump to version 2.1.2
+Message-Id: <20210927143554.509148D307@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/multipath-tools: bump to version
+ 0.8.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,47 +65,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=29af6acca2a163b56d8cb39bec050e80f610fc23
+commit: https://git.buildroot.net/buildroot/commit/?id=4d4fcb8cf37de94ff672416e454310be66c3778d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Plus, indent with two spaces on the hash file.
-
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Signed-off-by: Alexander Egorenkov <egorenar-dev@posteo.net>
 ---
- package/python-urwid/python-urwid.hash | 8 ++++----
- package/python-urwid/python-urwid.mk   | 4 ++--
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/multipath-tools/multipath-tools.hash | 2 +-
+ package/multipath-tools/multipath-tools.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-urwid/python-urwid.hash b/package/python-urwid/python-urwid.hash
-index 51a6e12ea1..3d7be017a7 100644
---- a/package/python-urwid/python-urwid.hash
-+++ b/package/python-urwid/python-urwid.hash
+diff --git a/package/multipath-tools/multipath-tools.hash b/package/multipath-tools/multipath-tools.hash
+index 7b8cfe98f6..ac41e4815b 100644
+--- a/package/multipath-tools/multipath-tools.hash
++++ b/package/multipath-tools/multipath-tools.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/urwid/json
--md5	c70a7016fa1ad2c2a979dbebd4de78c2  urwid-2.0.1.tar.gz
--sha256	644d3e3900867161a2fc9287a9762753d66bd194754679adb26aede559bcccbc  urwid-2.0.1.tar.gz
--# Locally computed sha256
--sha256	36b6d3fa47916943fd5fec313c584784946047ec1337a78b440e5992cb595f89  COPYING
-+md5  f7f4e6bed9ba38965dbd619520f39287  urwid-2.1.2.tar.gz
-+sha256  588bee9c1cb208d0906a9f73c613d2bd32c3ed3702012f51efe318a3f2127eae  urwid-2.1.2.tar.gz
-+# Locally computed sha256 checksums
-+sha256  36b6d3fa47916943fd5fec313c584784946047ec1337a78b440e5992cb595f89  COPYING
-diff --git a/package/python-urwid/python-urwid.mk b/package/python-urwid/python-urwid.mk
-index f8a370234c..78b369ef86 100644
---- a/package/python-urwid/python-urwid.mk
-+++ b/package/python-urwid/python-urwid.mk
-@@ -4,9 +4,9 @@
+ # Locally computed:
+-sha256  ba781d981bd6e8efa5f9f3af6727f85520af6395958e852c1907f59f6124f08e  multipath-tools-0.8.6.tar.gz
++sha256  7c5962be6068c78d5256e8fc979cf327988f7560705bb9cc25b508c50ca997c0  multipath-tools-0.8.7.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSES/GPL-2.0
+ sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  LICENSES/GPL-3.0
+ sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  LICENSES/LGPL-2.0
+diff --git a/package/multipath-tools/multipath-tools.mk b/package/multipath-tools/multipath-tools.mk
+index e9db802258..3d8095b0b0 100644
+--- a/package/multipath-tools/multipath-tools.mk
++++ b/package/multipath-tools/multipath-tools.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_URWID_VERSION = 2.0.1
-+PYTHON_URWID_VERSION = 2.1.2
- PYTHON_URWID_SOURCE = urwid-$(PYTHON_URWID_VERSION).tar.gz
--PYTHON_URWID_SITE = https://files.pythonhosted.org/packages/c7/90/415728875c230fafd13d118512bde3184d810d7bf798a631abc05fac09d0
-+PYTHON_URWID_SITE = https://files.pythonhosted.org/packages/94/3f/e3010f4a11c08a5690540f7ebd0b0d251cc8a456895b7e49be201f73540c
- PYTHON_URWID_LICENSE = LGPL-2.1+
- PYTHON_URWID_LICENSE_FILES = COPYING
- PYTHON_URWID_SETUP_TYPE = setuptools
+-MULTIPATH_TOOLS_VERSION = 0.8.6
++MULTIPATH_TOOLS_VERSION = 0.8.7
+ MULTIPATH_TOOLS_SITE = $(call github,opensvc,multipath-tools,$(MULTIPATH_TOOLS_VERSION))
+ 
+ MULTIPATH_TOOLS_LICENSE = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
