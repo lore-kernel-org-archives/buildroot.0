@@ -2,52 +2,70 @@ Return-Path: <SRS0=V1ZZ=OR=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 26059C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 27 Sep 2021 19:26:48 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7FC2CC433EF
+	for <buildroot@archiver.kernel.org>; Mon, 27 Sep 2021 19:27:58 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 7F759600EF
-	for <buildroot@archiver.kernel.org>; Mon, 27 Sep 2021 19:26:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7F759600EF
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
+	by mail.kernel.org (Postfix) with ESMTPS id F24DC600EF
+	for <buildroot@archiver.kernel.org>; Mon, 27 Sep 2021 19:27:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org F24DC600EF
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 49C5D40150;
-	Mon, 27 Sep 2021 19:26:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C2905605DA;
+	Mon, 27 Sep 2021 19:27:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lf8xkczZ-y0b; Mon, 27 Sep 2021 19:26:46 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id qS7FsaceAZ2D; Mon, 27 Sep 2021 19:27:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 46FF640173;
-	Mon, 27 Sep 2021 19:26:45 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 217651BF379
- for <buildroot@lists.busybox.net>; Mon, 27 Sep 2021 19:26:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D043D60651;
+	Mon, 27 Sep 2021 19:27:55 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 328071BF379
+ for <buildroot@lists.busybox.net>; Mon, 27 Sep 2021 19:27:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 11B0880E8A
- for <buildroot@lists.busybox.net>; Mon, 27 Sep 2021 19:26:10 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1F41660651
+ for <buildroot@lists.busybox.net>; Mon, 27 Sep 2021 19:27:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WKpGBwfaFbZg for <buildroot@lists.busybox.net>;
- Mon, 27 Sep 2021 19:26:09 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4F6A080E7A
- for <buildroot@buildroot.org>; Mon, 27 Sep 2021 19:26:09 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 913988D366; Mon, 27 Sep 2021 19:23:53 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Mon, 27 Sep 2021 21:24:32 +0200
-X-Git-Refname: refs/heads/2021.08.x
-X-Git-Oldrev: 5c755115edd00ac134ede6f4da0a3e0aeff72a7f
-X-Git-Newrev: 7a2c56636c046a56465c11b8678789ff79deb811
-X-Patchwork-Hint: ignore
-Message-Id: <20210927192353.913988D366@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.08.x] package/kodi: fix
- selection of dependencies
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PSjpJHvz_RrE for <buildroot@lists.busybox.net>;
+ Mon, 27 Sep 2021 19:27:52 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 88A6D605DA
+ for <buildroot@buildroot.org>; Mon, 27 Sep 2021 19:27:52 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:9ded:7cc8:164a:d8a6])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id 0FB5D7802CE;
+ Mon, 27 Sep 2021 21:27:42 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+ s=smtp-20201208; t=1632770869;
+ bh=1BdruYok7jYk3PxFOA9b6zSk9oH7Nr42iUNwkZxK8pI=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=hA11SxW/lHaAWfEsOcCykKFhG7byEs9zYJTlYpVAQ+SHaHsbalb3r8cM55d/rtpmR
+ yvbvfUCUGUkxEwFWhREc1iZXuaCgjsRJSHNOaY63Bhdm8jw+AFY6YfHiZG3GJok3jK
+ 6QjeGLuk/b5gDy3kS0iI37XadPVZUHorgMwhNZ4mKtqJutF+3Ql+bzM03WHlm+tmdU
+ VaL2UqcoqCJTzYf+wGv/syIIWddCi1kjcfLgbyp5t+9ZtvUCQDtA96ktd8R3pdRe2D
+ RxgpznDjTjYLQXwSNZjju9KZUNu9KDRVU86r7x2dRLPDZGFBSfUMd1umABhD966nVK
+ 8QxKbzbirXAlQ==
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Mon, 27 Sep 2021 21:27:42 +0200
+Date: Mon, 27 Sep 2021 21:27:42 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Kory Maincent <kory.maincent@bootlin.com>
+Message-ID: <20210927192742.GB1504958@scaer>
+References: <20210923155726.87851-1-kory.maincent@bootlin.com>
+ <20210923155726.87851-2-kory.maincent@bootlin.com>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20210923155726.87851-2-kory.maincent@bootlin.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+Subject: Re: [Buildroot] [PATCH v3 1/7] board, boot,
+ package: remove usage of startup.nsh in EFI partition
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,96 +77,126 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: thomas.petazzoni@bootlin.com, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7a2c56636c046a56465c11b8678789ff79deb811
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.08.x
-
-Commit 148e695e3756 (package/kodi: bump version to 19.0-Matrix) extended
-the set of required libraries for various "platform" backends, by
-selecting those libraries from the blind options. For example, we have:
-
-    config BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_GBM
-        bool
-        default y
-        depends on [...]
-        select BR2_PACKAGE_LIBINPUT
-        [...]
-
-However, that option is true as soon as the requirements are met (the
-depends on), even when Kodi itself is not enabled.
-
-This means that extra libraries are pulled in to the build, even when
-not required.
-
-We fix that by moving the actual selects to the main symbol, along with
-the proper conditions. This means that we have two lines that select
-libxbcommon, under two different conditions; we could make that a single
-select, but the codition would need to be on two lines anyway, so meh...
-
-This is not an ideal solution, because it is a bit ugly, but:
- 1) adding three new blind options just for the select is kinda extreme
-    and superfluous;
- 2) our Kodi packaging is already a bit ugly anyway.
-
-Fixes: #14206
-
-Reported-by: Thomas Ruschival <t.ruschival@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
-(cherry picked from commit b80c488d04940cf1280657cf294d58d0022f222f)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/kodi/Config.in | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 074a457d1b..af7604428e 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -25,8 +25,6 @@ config BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_GBM
- 	depends on BR2_PACKAGE_MESA3D_GBM
- 	depends on BR2_PACKAGE_HAS_UDEV # libinput
- 	select BR2_PACKAGE_KODI_PLATFORM_SUPPORTS
--	select BR2_PACKAGE_LIBINPUT
--	select BR2_PACKAGE_LIBXKBCOMMON
- 
- config BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_WAYLAND
- 	bool
-@@ -38,8 +36,6 @@ config BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_WAYLAND
- 	depends on BR2_INSTALL_LIBSTDCPP # waylandpp
- 	depends on BR2_PACKAGE_WAYLAND # waylandpp
- 	select BR2_PACKAGE_KODI_PLATFORM_SUPPORTS
--	select BR2_PACKAGE_LIBXKBCOMMON
--	select BR2_PACKAGE_WAYLANDPP
- 
- config BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_X11
- 	bool
-@@ -47,7 +43,6 @@ config BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_X11
- 	depends on BR2_PACKAGE_HAS_LIBGL || BR2_PACKAGE_HAS_LIBGLES
- 	depends on BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_KODI_PLATFORM_SUPPORTS
--	select BR2_PACKAGE_XLIB_LIBXRANDR
- 
- comment "kodi needs an OpenGL EGL backend with OpenGL or GLES support"
- 	depends on !BR2_PACKAGE_KODI_PLATFORM_SUPPORTS
-@@ -102,6 +97,11 @@ menuconfig BR2_PACKAGE_KODI
- 	select BR2_PACKAGE_TINYXML
- 	select BR2_PACKAGE_ZLIB
- 	select BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_COPY if BR2_TOOLCHAIN_USES_GLIBC # runtime UTF conversion support
-+	select BR2_PACKAGE_LIBINPUT if BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_GBM
-+	select BR2_PACKAGE_LIBXKBCOMMON if BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_GBM
-+	select BR2_PACKAGE_LIBXKBCOMMON if BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_WAYLAND
-+	select BR2_PACKAGE_WAYLANDPP if BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_WAYLAND
-+	select BR2_PACKAGE_XLIB_LIBXRANDR if BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_X11
- 	help
- 	  Kodi is an award-winning free and open source (GPL) software
- 	  media player and entertainment hub for digital media.
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+S8O2cnksIEFsbCwKCk9uIDIwMjEtMDktMjMgMTc6NTcgKzAyMDAsIEtvcnkgTWFpbmNlbnQgc3Bh
+a2UgdGh1c2x5Ogo+IFRoZSBzdGFydHVwLm5zaCBmaWxlIGlzIHVzZWxlc3MgdG8gYm9vdCBFRkkg
+cGF5bG9hZHMuIFdlIGp1c3QgbmVlZCB0bwo+IGZvbGxvdyB0aGUgbmFtaW5nIGRldGVjdGlvbiBz
+cGVjaWZpZWQgaW4gdGhlIFVFRkkgc3BlYy4KPiBUaGUgRUZJIHBheWxvYWQgbmVlZCB0byBiZSBw
+bGFjZWQgaW4gdGhlIGJvb3QvZWZpIGZvbGRlciBpbiB0aGUgRUZJIHBhcnRpdGlvbgo+IGFuZCBm
+b2xsb3cgdGhlIGFyY2hpdGVjdHVyZSBuYW1pbmcgYXMgZGVzY3JpYmVkIGJlbG93Ogo+IDMyYml0
+IDogYm9vdGlhMzIuZWZpCj4geDY0IDogYm9vdHg2NC5lZmkKPiBhYXJjaDMyIDogYm9vdGFybS5l
+ZmkKPiBhYXJjaDY0IDogYm9vdGFhNjQuZWZpCj4gCj4gVGhpcyBuYW1pbmcgaXMgYWxyZWFkeSBy
+aWdodCBpbiB0aGUgcGFja2FnZXMgaW52b2x2ZWQgKHN5c3RlbWQsIGdydWIyLAo+IGd1bW1pYm9v
+dCksIHRoZXJlZm9yZSB3ZSBqdXN0IG5lZWQgdG8gZHJvcCB0aGUgZ2VuZXJhdGlvbiBvZiB0aGUK
+PiBzdGFydHVwLm5zaCBmaWxlLgo+IAo+IFRoZSB1c2FnZSBvZiB0aGUgc3RhcnR1cC5uc2ggaW4g
+Z2VuaW1hZ2UgaXMgYWxzbyBkcm9wcGVkIHRvIGF2b2lkIGVycm9ycyBpbgo+IHRoZSBpbWFnZSBn
+ZW5lcmF0aW9uLgo+IAo+IFNpZ25lZC1vZmYtYnk6IEtvcnkgTWFpbmNlbnQgPGtvcnkubWFpbmNl
+bnRAYm9vdGxpbi5jb20+CgpBcHBsaWVkIHRvIG1hc3RlciwgdGhhbmtzLgoKUmVnYXJkcywKWWFu
+biBFLiBNT1JJTi4KCj4gLS0tCj4gIGJvYXJkL2FhcmNoNjQtZWZpL2dlbmltYWdlLWVmaS5jZmcg
+ICB8IDMgLS0tCj4gIGJvYXJkL2ludGVsL2dhbGlsZW8vZ2VuaW1hZ2UuY2ZnICAgICB8IDMgLS0t
+Cj4gIGJvYXJkL21pbm5vd2JvYXJkL2dlbmltYWdlLmNmZyAgICAgICB8IDMgLS0tCj4gIGJvYXJk
+L3BjL2dlbmltYWdlLWVmaS5jZmcgICAgICAgICAgICB8IDMgLS0tCj4gIGJvYXJkL3BjL3Bvc3Qt
+YnVpbGQuc2ggICAgICAgICAgICAgICB8IDIgKy0KPiAgYm9hcmQvcWVtdS9hYXJjaDY0LXNic2Ev
+Z2VuaW1hZ2UuY2ZnIHwgMyAtLS0KPiAgYm9vdC9ncnViMi9ncnViMi5tayAgICAgICAgICAgICAg
+ICAgIHwgOCAtLS0tLS0tLQo+ICBib290L2d1bW1pYm9vdC9ndW1taWJvb3QubWsgICAgICAgICAg
+fCAyIC0tCj4gIHBhY2thZ2Uvc3lzdGVtZC9zeXN0ZW1kLm1rICAgICAgICAgICB8IDIgLS0KPiAg
+OSBmaWxlcyBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgMjggZGVsZXRpb25zKC0pCj4gCj4gZGlm
+ZiAtLWdpdCBhL2JvYXJkL2FhcmNoNjQtZWZpL2dlbmltYWdlLWVmaS5jZmcgYi9ib2FyZC9hYXJj
+aDY0LWVmaS9nZW5pbWFnZS1lZmkuY2ZnCj4gaW5kZXggMzRjY2ExZDY0ZS4uMmRhYTcwYzM2MSAx
+MDA2NDQKPiAtLS0gYS9ib2FyZC9hYXJjaDY0LWVmaS9nZW5pbWFnZS1lZmkuY2ZnCj4gKysrIGIv
+Ym9hcmQvYWFyY2g2NC1lZmkvZ2VuaW1hZ2UtZWZpLmNmZwo+IEBAIC0xLDggKzEsNSBAQAo+ICBp
+bWFnZSBlZmktcGFydC52ZmF0IHsKPiAgICB2ZmF0IHsKPiAtICAgIGZpbGUgc3RhcnR1cC5uc2gg
+ewo+IC0gICAgICBpbWFnZSA9ICJlZmktcGFydC9zdGFydHVwLm5zaCIKPiAtICAgIH0KPiAgICAg
+IGZpbGUgRUZJIHsKPiAgICAgICAgaW1hZ2UgPSAiZWZpLXBhcnQvRUZJIgo+ICAgICAgfQo+IGRp
+ZmYgLS1naXQgYS9ib2FyZC9pbnRlbC9nYWxpbGVvL2dlbmltYWdlLmNmZyBiL2JvYXJkL2ludGVs
+L2dhbGlsZW8vZ2VuaW1hZ2UuY2ZnCj4gaW5kZXggMzFhZGQyMWU2Ny4uYjkzMGMwZGViOSAxMDA2
+NDQKPiAtLS0gYS9ib2FyZC9pbnRlbC9nYWxpbGVvL2dlbmltYWdlLmNmZwo+ICsrKyBiL2JvYXJk
+L2ludGVsL2dhbGlsZW8vZ2VuaW1hZ2UuY2ZnCj4gQEAgLTEsOSArMSw2IEBACj4gICMgQ3JlYXRl
+IGFuIGltYWdlIG9mIHRoZSBlZmkgcGFydGl0aW9uCj4gIGltYWdlIGVmaS1wYXJ0LnZmYXQgewo+
+ICAJdmZhdCB7Cj4gLQkJZmlsZSBzdGFydHVwLm5zaCB7Cj4gLQkJCWltYWdlID0gImVmaS1wYXJ0
+L3N0YXJ0dXAubnNoIgo+IC0JCX0KPiAgCQlmaWxlIEVGSSB7Cj4gIAkJCWltYWdlID0gImVmaS1w
+YXJ0L0VGSSIKPiAgCQl9Cj4gZGlmZiAtLWdpdCBhL2JvYXJkL21pbm5vd2JvYXJkL2dlbmltYWdl
+LmNmZyBiL2JvYXJkL21pbm5vd2JvYXJkL2dlbmltYWdlLmNmZwo+IGluZGV4IGM1YjA3MTc5YjQu
+LjUyMTM4NWFhZGQgMTAwNjQ0Cj4gLS0tIGEvYm9hcmQvbWlubm93Ym9hcmQvZ2VuaW1hZ2UuY2Zn
+Cj4gKysrIGIvYm9hcmQvbWlubm93Ym9hcmQvZ2VuaW1hZ2UuY2ZnCj4gQEAgLTEsOSArMSw2IEBA
+Cj4gICMgQ3JlYXRlIGFuIGltYWdlIG9mIHRoZSBlZmkgcGFydGl0aW9uCj4gIGltYWdlIGVmaS1w
+YXJ0LnZmYXQgewo+ICAJdmZhdCB7Cj4gLQkJZmlsZSBzdGFydHVwLm5zaCB7Cj4gLQkJCWltYWdl
+ID0gImVmaS1wYXJ0L3N0YXJ0dXAubnNoIgo+IC0JCX0KPiAgCQlmaWxlIEVGSSB7Cj4gIAkJCWlt
+YWdlID0gImVmaS1wYXJ0L0VGSSIKPiAgCQl9Cj4gZGlmZiAtLWdpdCBhL2JvYXJkL3BjL2dlbmlt
+YWdlLWVmaS5jZmcgYi9ib2FyZC9wYy9nZW5pbWFnZS1lZmkuY2ZnCj4gaW5kZXggZWM3ZTg1YjA2
+Yy4uMzRiZWZiN2Q2OSAxMDA2NDQKPiAtLS0gYS9ib2FyZC9wYy9nZW5pbWFnZS1lZmkuY2ZnCj4g
+KysrIGIvYm9hcmQvcGMvZ2VuaW1hZ2UtZWZpLmNmZwo+IEBAIC0xLDggKzEsNSBAQAo+ICBpbWFn
+ZSBlZmktcGFydC52ZmF0IHsKPiAgICB2ZmF0IHsKPiAtICAgIGZpbGUgc3RhcnR1cC5uc2ggewo+
+IC0gICAgICBpbWFnZSA9ICJlZmktcGFydC9zdGFydHVwLm5zaCIKPiAtICAgIH0KPiAgICAgIGZp
+bGUgRUZJIHsKPiAgICAgICAgaW1hZ2UgPSAiZWZpLXBhcnQvRUZJIgo+ICAgICAgfQo+IGRpZmYg
+LS1naXQgYS9ib2FyZC9wYy9wb3N0LWJ1aWxkLnNoIGIvYm9hcmQvcGMvcG9zdC1idWlsZC5zaAo+
+IGluZGV4IGVkMzdiM2I4N2UuLmRiMjM3OTVlMjcgMTAwNzU1Cj4gLS0tIGEvYm9hcmQvcGMvcG9z
+dC1idWlsZC5zaAo+ICsrKyBiL2JvYXJkL3BjL3Bvc3QtYnVpbGQuc2gKPiBAQCAtNSw3ICs1LDcg
+QEAgc2V0IC1lCj4gIEJPQVJEX0RJUj0kKGRpcm5hbWUgIiQwIikKPiAgCj4gICMgRGV0ZWN0IGJv
+b3Qgc3RyYXRlZ3ksIEVGSSBvciBCSU9TCj4gLWlmIFsgLWYgIiRCSU5BUklFU19ESVIvZWZpLXBh
+cnQvc3RhcnR1cC5uc2giIF07IHRoZW4KPiAraWYgWyAtZCAiJEJJTkFSSUVTX0RJUi9lZmktcGFy
+dC8iIF07IHRoZW4KPiAgICAgIGNwIC1mICIkQk9BUkRfRElSL2dydWItZWZpLmNmZyIgIiRCSU5B
+UklFU19ESVIvZWZpLXBhcnQvRUZJL0JPT1QvZ3J1Yi5jZmciCj4gIGVsc2UKPiAgICAgIGNwIC1m
+ICIkQk9BUkRfRElSL2dydWItYmlvcy5jZmciICIkVEFSR0VUX0RJUi9ib290L2dydWIvZ3J1Yi5j
+ZmciCj4gZGlmZiAtLWdpdCBhL2JvYXJkL3FlbXUvYWFyY2g2NC1zYnNhL2dlbmltYWdlLmNmZyBi
+L2JvYXJkL3FlbXUvYWFyY2g2NC1zYnNhL2dlbmltYWdlLmNmZwo+IGluZGV4IDI4NWIzMDhkOTAu
+LmM3NWQ5ZmNjYTEgMTAwNjQ0Cj4gLS0tIGEvYm9hcmQvcWVtdS9hYXJjaDY0LXNic2EvZ2VuaW1h
+Z2UuY2ZnCj4gKysrIGIvYm9hcmQvcWVtdS9hYXJjaDY0LXNic2EvZ2VuaW1hZ2UuY2ZnCj4gQEAg
+LTEsOCArMSw1IEBACj4gIGltYWdlIGVmaS1wYXJ0LnZmYXQgewo+ICAgIHZmYXQgewo+IC0gICAg
+ZmlsZSBzdGFydHVwLm5zaCB7Cj4gLSAgICAgIGltYWdlID0gImVmaS1wYXJ0L3N0YXJ0dXAubnNo
+Igo+IC0gICAgfQo+ICAgICAgZmlsZSBFRkkgewo+ICAgICAgICBpbWFnZSA9ICJlZmktcGFydC9F
+RkkiCj4gICAgICB9Cj4gZGlmZiAtLWdpdCBhL2Jvb3QvZ3J1YjIvZ3J1YjIubWsgYi9ib290L2dy
+dWIyL2dydWIyLm1rCj4gaW5kZXggNTJlOTE5OWFlOS4uYWQyZWRmMTdhYSAxMDA2NDQKPiAtLS0g
+YS9ib290L2dydWIyL2dydWIyLm1rCj4gKysrIGIvYm9vdC9ncnViMi9ncnViMi5tawo+IEBAIC0x
+NjgsMTMgKzE2OCw1IEBAIGRlZmluZSBHUlVCMl9JTlNUQUxMX0lNQUdFU19DTURTCj4gIAkkKEdS
+VUIyX0lNQUdFX0lOU1RBTExfRUxUT1JJVE8pCj4gIGVuZGVmCj4gIAo+IC1pZmVxICgkKEdSVUIy
+X1BMQVRGT1JNKSxlZmkpCj4gLWRlZmluZSBHUlVCMl9FRklfU1RBUlRVUF9OU0gKPiAtCWVjaG8g
+JChub3RkaXIgJChHUlVCMl9JTUFHRSkpID4gXAo+IC0JCSQoQklOQVJJRVNfRElSKS9lZmktcGFy
+dC9zdGFydHVwLm5zaAo+IC1lbmRlZgo+IC1HUlVCMl9QT1NUX0lOU1RBTExfSU1BR0VTX0hPT0tT
+ICs9IEdSVUIyX0VGSV9TVEFSVFVQX05TSAo+IC1lbmRpZgo+IC0KPiAgJChldmFsICQoYXV0b3Rv
+b2xzLXBhY2thZ2UpKQo+ICAkKGV2YWwgJChob3N0LWF1dG90b29scy1wYWNrYWdlKSkKPiBkaWZm
+IC0tZ2l0IGEvYm9vdC9ndW1taWJvb3QvZ3VtbWlib290Lm1rIGIvYm9vdC9ndW1taWJvb3QvZ3Vt
+bWlib290Lm1rCj4gaW5kZXggNzQ4ZTg3MDMwZS4uZWIxZjNkYTc4YyAxMDA2NDQKPiAtLS0gYS9i
+b290L2d1bW1pYm9vdC9ndW1taWJvb3QubWsKPiArKysgYi9ib290L2d1bW1pYm9vdC9ndW1taWJv
+b3QubWsKPiBAQCAtMzIsOCArMzIsNiBAQCBHVU1NSUJPT1RfQ09ORl9PUFRTID0gXAo+ICBkZWZp
+bmUgR1VNTUlCT09UX0lOU1RBTExfSU1BR0VTX0NNRFMKPiAgCSQoSU5TVEFMTCkgLUQgLW0gMDY0
+NCAkKEBEKS9ndW1taWJvb3QkKEdVTU1JQk9PVF9JTUdBUkNIKS5lZmkgXAo+ICAJCSQoQklOQVJJ
+RVNfRElSKS9lZmktcGFydC9FRkkvQk9PVC9ib290JChHVU1NSUJPT1RfSU1HQVJDSCkuZWZpCj4g
+LQllY2hvICJib290JChHVU1NSUJPT1RfSU1HQVJDSCkuZWZpIiA+IFwKPiAtCQkkKEJJTkFSSUVT
+X0RJUikvZWZpLXBhcnQvc3RhcnR1cC5uc2gKPiAgCSQoSU5TVEFMTCkgLUQgLW0gMDY0NCBib290
+L2d1bW1pYm9vdC9sb2FkZXIuY29uZiBcCj4gIAkJJChCSU5BUklFU19ESVIpL2VmaS1wYXJ0L2xv
+YWRlci9sb2FkZXIuY29uZgo+ICAJJChJTlNUQUxMKSAtRCAtbSAwNjQ0IGJvb3QvZ3VtbWlib290
+L2J1aWxkcm9vdC5jb25mIFwKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9zeXN0ZW1kL3N5c3RlbWQu
+bWsgYi9wYWNrYWdlL3N5c3RlbWQvc3lzdGVtZC5tawo+IGluZGV4IDVhNzZmMmYyNDYuLmM0MDM4
+OTY3NTkgMTAwNjQ0Cj4gLS0tIGEvcGFja2FnZS9zeXN0ZW1kL3N5c3RlbWQubWsKPiArKysgYi9w
+YWNrYWdlL3N5c3RlbWQvc3lzdGVtZC5tawo+IEBAIC01MTQsOCArNTE0LDYgQEAgU1lTVEVNRF9C
+T09UX0VGSV9BUkNIID0gJChjYWxsIHFzdHJpcCwkKEJSMl9QQUNLQUdFX1NZU1RFTURfQk9PVF9F
+RklfQVJDSCkpCj4gIGRlZmluZSBTWVNURU1EX0lOU1RBTExfQk9PVF9GSUxFUwo+ICAJJChJTlNU
+QUxMKSAtRCAtbSAwNjQ0ICQoQEQpL2J1aWxkL3NyYy9ib290L2VmaS9zeXN0ZW1kLWJvb3QkKFNZ
+U1RFTURfQk9PVF9FRklfQVJDSCkuZWZpIFwKPiAgCQkkKEJJTkFSSUVTX0RJUikvZWZpLXBhcnQv
+RUZJL0JPT1QvYm9vdCQoU1lTVEVNRF9CT09UX0VGSV9BUkNIKS5lZmkKPiAtCWVjaG8gImJvb3Qk
+KFNZU1RFTURfQk9PVF9FRklfQVJDSCkuZWZpIiA+IFwKPiAtCQkkKEJJTkFSSUVTX0RJUikvZWZp
+LXBhcnQvc3RhcnR1cC5uc2gKPiAgCSQoSU5TVEFMTCkgLUQgLW0gMDY0NCAkKFNZU1RFTURfUEtH
+RElSKS9ib290LWZpbGVzL2xvYWRlci5jb25mIFwKPiAgCQkkKEJJTkFSSUVTX0RJUikvZWZpLXBh
+cnQvbG9hZGVyL2xvYWRlci5jb25mCj4gIAkkKElOU1RBTEwpIC1EIC1tIDA2NDQgJChTWVNURU1E
+X1BLR0RJUikvYm9vdC1maWxlcy9idWlsZHJvb3QuY29uZiBcCj4gLS0gCj4gMi4yNS4xCj4gCj4g
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPiBidWlsZHJv
+b3QgbWFpbGluZyBsaXN0Cj4gYnVpbGRyb290QGxpc3RzLmJ1aWxkcm9vdC5vcmcKPiBodHRwczov
+L2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QKCi0tIAouLS0t
+LS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLi0t
+LS0tLS0tLS0tLS0tLS0tLS0tLgp8ICBZYW5uIEUuIE1PUklOICB8IFJlYWwtVGltZSBFbWJlZGRl
+ZCB8IC8iXCBBU0NJSSBSSUJCT04gfCBFcmljcycgY29uc3BpcmFjeTogfAp8ICszMyA2NjIgMzc2
+IDA1NiB8IFNvZnR3YXJlICBEZXNpZ25lciB8IFwgLyBDQU1QQUlHTiAgICAgfCAgX19fICAgICAg
+ICAgICAgICAgfAp8ICszMyA1NjEgMDk5IDQyNyBgLS0tLS0tLS0tLS0tLi0tLS0tLS06ICBYICBB
+R0FJTlNUICAgICAgfCAgXGUvICBUaGVyZSBpcyBubyAgfAp8IGh0dHA6Ly95bW9yaW4uaXMtYS1n
+ZWVrLm9yZy8gfCBfLypcXyB8IC8gXCBIVE1MIE1BSUwgICAgfCAgIHYgICBjb25zcGlyYWN5LiAg
+fAonLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tXi0tLS0tLS1eLS0tLS0tLS0tLS0tLS0t
+LS0tXi0tLS0tLS0tLS0tLS0tLS0tLS0tJwpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJv
+b3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxk
+cm9vdAo=
