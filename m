@@ -2,86 +2,87 @@ Return-Path: <SRS0=V1ZZ=OR=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 464B9C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 27 Sep 2021 19:52:00 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 78D1AC433F5
+	for <buildroot@archiver.kernel.org>; Mon, 27 Sep 2021 19:52:11 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id C078E60F91
-	for <buildroot@archiver.kernel.org>; Mon, 27 Sep 2021 19:51:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C078E60F91
+	by mail.kernel.org (Postfix) with ESMTPS id 46C7260FD7
+	for <buildroot@archiver.kernel.org>; Mon, 27 Sep 2021 19:52:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 46C7260FD7
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 99A3B81008;
-	Mon, 27 Sep 2021 19:51:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E775140276;
+	Mon, 27 Sep 2021 19:52:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ba_1lXHn3BwX; Mon, 27 Sep 2021 19:51:58 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id O9OpQfH22D8H; Mon, 27 Sep 2021 19:52:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F187380F81;
-	Mon, 27 Sep 2021 19:51:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4E5EB40261;
+	Mon, 27 Sep 2021 19:52:09 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 87D0A1BF379
- for <buildroot@lists.busybox.net>; Mon, 27 Sep 2021 19:51:46 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C6E241BF379
+ for <buildroot@lists.busybox.net>; Mon, 27 Sep 2021 19:51:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8216E60ABD
- for <buildroot@lists.busybox.net>; Mon, 27 Sep 2021 19:51:46 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C360060ABD
+ for <buildroot@lists.busybox.net>; Mon, 27 Sep 2021 19:51:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp3.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ioT0zP-gl96b for <buildroot@lists.busybox.net>;
- Mon, 27 Sep 2021 19:51:45 +0000 (UTC)
+ with ESMTP id bKl2C_dLe3BK for <buildroot@lists.busybox.net>;
+ Mon, 27 Sep 2021 19:51:48 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
- [IPv6:2a00:1450:4864:20::42a])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 9368460A57
- for <buildroot@buildroot.org>; Mon, 27 Sep 2021 19:51:45 +0000 (UTC)
-Received: by mail-wr1-x42a.google.com with SMTP id d6so53740160wrc.11
- for <buildroot@buildroot.org>; Mon, 27 Sep 2021 12:51:45 -0700 (PDT)
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
+ [IPv6:2a00:1450:4864:20::332])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id CD76560AC1
+ for <buildroot@buildroot.org>; Mon, 27 Sep 2021 19:51:47 +0000 (UTC)
+Received: by mail-wm1-x332.google.com with SMTP id
+ t16-20020a1c7710000000b003049690d882so1621431wmi.5
+ for <buildroot@buildroot.org>; Mon, 27 Sep 2021 12:51:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=jGCDKwddsyobYV38Y7Dbp297PPi23xsDXCs1SXYiUc8=;
- b=jF6Yd+/rKAdxNgHSD1zn8DkMk6n/pV4AITPsswc+FkHEts+ACJXhauS/FVOw97UOY+
- oCQbHu+bd4eAXkwr4Qk0brfAcwDJ91YJ08mP7EaVK8QF/Zi5ynf6KOGGPhrEyywNIHgr
- AGm17MuO0guEBBJPGT4T94dE0o+a0jLQOp+UOXfVahBpY5d8M4eW1LlvLWbg7AU0f2Yy
- 2lNoU6GAaXIJcG/ZxHUxP8iQ66PUMdOjZ2gYo1Bw1uDEbf8Wbc0SeDlDTRWToW8n631x
- RkiU3jx61tkJ9/El7xsa4CSIyCXwfdxa/tYpFoEJnADY+Pxn/Bd3JYEaqpfSqaB9bXmh
- TMqg==
+ bh=AloUPttiSamrE22jQssIjNv4+hB8wKdHEiLYm12mIls=;
+ b=FacmucV+GzmdIuFy2hYEWhaW3kZCXe6Ygfnn8o5brLW/99rgpu5sHSVnhJke+rf0GS
+ 9VbbfD2sDVgpNpYgKmnD6gCRcnuKJwVKhJl/VamIFbPZjsbTwAbqfZMDyuc2OdoqUf2N
+ U0Fg1o6U6OrfomlrdaeN2K9kLZFztrtlrE5/DpVDVLVnHsJQ1o41PrD2KXP6Q0/Wb4O5
+ 9KY9bxwEgWWsPwXRbtIZU+9j+gG5mCxw+zDQV04IQXpNl7pK4q3KCVOYJdqKzOTwJKWb
+ kEpKpoXuDef1zyp1lwLf5GGUXeS0HSmGCt8Pukkr/OaI4jrU6Feh/EUMqF3MoOyHM4LX
+ 73Ig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
  :references:mime-version:content-transfer-encoding;
- bh=jGCDKwddsyobYV38Y7Dbp297PPi23xsDXCs1SXYiUc8=;
- b=laWtRaXltR0S8zm6RgF3gj70PcgTpqttH30ChInxXahBNLnG09ft3OkW9iReDn1CqR
- RbAavBANEqG3x1OwLk3zz2+VT+9fzVYWennzIrCdnhy3fdK3uPdxZJ1YbpNGGBcvDTlf
- Y0We+X9FjQ9aKGAYrqnng0QHqzPgpJlSb6fj2/v854GZ5U7PJ1aEdOpeSEOB99vPB3ag
- /ITzXs6WO/+9/vqnvPztt1ZS4mBVCMtc5X/oa9LtHdxQ+S5QE6LbpT7J+iehZC/r0sTz
- 1WauRcLWDTLHG/NfpOlI5lnRRJLWN0mS9ZUokP5f4fi54m1IoK1OClevzWJFCG6l4+Kn
- m/cA==
-X-Gm-Message-State: AOAM532/PJUTdu6ArkrjMLE+RijfMlg5Fu250x7mM1s4Katy23wKjK9+
- 0pVMvyz8fviUzTQ1cL0AWgQLnX1SKuM=
-X-Google-Smtp-Source: ABdhPJzFyTo5Kt8C6hOAccmnOm6yQAqd937vyWVu9rFVzTzW6lYZ8dEd+LvMM1uyTwsUKaO/9gQ6vA==
-X-Received: by 2002:a05:6000:1379:: with SMTP id
- q25mr1974404wrz.429.1632772303703; 
- Mon, 27 Sep 2021 12:51:43 -0700 (PDT)
+ bh=AloUPttiSamrE22jQssIjNv4+hB8wKdHEiLYm12mIls=;
+ b=roRXiJKYFCI60ueflyfgHVxmXojnpVnv98KRN/US5X4RRgHqWrQgAcX+ZlWlndvtau
+ 7PIzcNLh9Ase0bMgExuovAJVFXbyWelEKfkkQIRV5dAq4piIFV+YwJGYcZc3vCgMvaru
+ KA3Z7c3rueCONz5Ac0RDG3NZi6+auy/RkauCUHk29i5b6Dz0Htse45Tb7f1i8/VEnV4Z
+ wcFYZwXzNO+7WmaYgpvMbjGVzaYr0r4HgwIkOgBxWF7CFKnNGZlUNrmXKTNqJnSXfd+l
+ Eqf5cJTbLgYRouIOMsmSDrXlFdjuMGfSXqiXxv4NLurrT+qnZJa6W3qWWIz/GRi3y3MZ
+ 0+0w==
+X-Gm-Message-State: AOAM532TVQmEbIhSsYGorK0Kzs3RqPahEIfdiefUbc+QYo0lKT1ZAbkV
+ NgDZN9gExwXr26Mvu0DsyQI6EWPWO7c=
+X-Google-Smtp-Source: ABdhPJyD89MabKSiu5Kake8+TMHnovalYzTS0pTkGOSWIc/NG5hoVCBwgv6yYRb26ytNLfjTkmYawg==
+X-Received: by 2002:a1c:f703:: with SMTP id v3mr828912wmh.177.1632772305978;
+ Mon, 27 Sep 2021 12:51:45 -0700 (PDT)
 Received: from asaf.. ([2a10:8002:6b25:0:fc32:81cf:8e3a:84a0])
- by smtp.gmail.com with ESMTPSA id w23sm485359wmi.6.2021.09.27.12.51.42
+ by smtp.gmail.com with ESMTPSA id w23sm485359wmi.6.2021.09.27.12.51.45
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 27 Sep 2021 12:51:43 -0700 (PDT)
+ Mon, 27 Sep 2021 12:51:45 -0700 (PDT)
 From: Asaf Kahlon <asafka7@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 27 Sep 2021 22:51:26 +0300
-Message-Id: <20210927195136.549542-2-asafka7@gmail.com>
+Date: Mon, 27 Sep 2021 22:51:27 +0300
+Message-Id: <20210927195136.549542-3-asafka7@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210927195136.549542-1-asafka7@gmail.com>
 References: <20210927195136.549542-1-asafka7@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/python-babel: bump to version 2.9.1
+Subject: [Buildroot] [PATCH 1/1] package/python-boto3: bump to version
+ 1.18.48
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,44 +101,54 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-* License was updated with a year bump.
-* Indent with two spaces on the hash file.
+The package doesn't support python2 anymore.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-babel/python-babel.hash | 6 +++---
- package/python-babel/python-babel.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-boto3/Config.in         | 1 +
+ package/python-boto3/python-boto3.hash | 4 ++--
+ package/python-boto3/python-boto3.mk   | 4 ++--
+ 3 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-babel/python-babel.hash b/package/python-babel/python-babel.hash
-index 95f9d725fb..5211f20110 100644
---- a/package/python-babel/python-babel.hash
-+++ b/package/python-babel/python-babel.hash
+diff --git a/package/python-boto3/Config.in b/package/python-boto3/Config.in
+index 67b1420388..1cb1ebfd12 100644
+--- a/package/python-boto3/Config.in
++++ b/package/python-boto3/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_PYTHON_BOTO3
+ 	bool "python-boto3"
++	depends on BR2_PACKAGE_PYTHON3
+ 	select BR2_PACKAGE_PYTHON_BOTOCORE # runtime
+ 	select BR2_PACKAGE_PYTHON_JMESPATH # runtime
+ 	select BR2_PACKAGE_PYTHON_S3TRANSFER # runtime
+diff --git a/package/python-boto3/python-boto3.hash b/package/python-boto3/python-boto3.hash
+index 6752a2cca0..e4d924e786 100644
+--- a/package/python-boto3/python-boto3.hash
++++ b/package/python-boto3/python-boto3.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/babel/json
--md5	83c158b7dae9135750a7cf204e6e2eea  Babel-2.7.0.tar.gz
--sha256	e86135ae101e31e2c8ec20a4e0c5220f4eed12487d5cf3f78be7e98d3a57fc28  Babel-2.7.0.tar.gz
-+md5  7166099733d78aa857d74fa50d8ff58c  Babel-2.9.1.tar.gz
-+sha256  bc0c176f9f6a994582230df350aa6e05ba2ebe4b3ac317eab29d9be5d2768da0  Babel-2.9.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/boto3/json
+-md5  8cecdbf7ef6702837d7ddabaa3e39a89  boto3-1.16.50.tar.gz
+-sha256  4d502a842b81fdac4b950d3b88a5b9067ce118213b122b20f4192003cb067986  boto3-1.16.50.tar.gz
++md5  0f37b054b9c14fe05a8194f85b122918  boto3-1.18.48.tar.gz
++sha256  7b45b224442c479de4bc6e6e9cb0557b642fc7a77edc8702e393ccaa2e0aa128  boto3-1.18.48.tar.gz
  # Locally computed sha256 checksums
--sha256	5a0df5d46e8cb14bd5d4c2cd77338b22f681fe88bd34236626b1a3ae3b50101a  LICENSE
-+sha256  28c97bf33e7506e277487bdaa3a69b70f170d6af5a82785ac0a74c8428042e40  LICENSE
-diff --git a/package/python-babel/python-babel.mk b/package/python-babel/python-babel.mk
-index cf0a8ab14f..a503a139f9 100644
---- a/package/python-babel/python-babel.mk
-+++ b/package/python-babel/python-babel.mk
+ sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE
+diff --git a/package/python-boto3/python-boto3.mk b/package/python-boto3/python-boto3.mk
+index a5c2b6ab31..d1e01de855 100644
+--- a/package/python-boto3/python-boto3.mk
++++ b/package/python-boto3/python-boto3.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_BABEL_VERSION = 2.7.0
-+PYTHON_BABEL_VERSION = 2.9.1
- PYTHON_BABEL_SOURCE = Babel-$(PYTHON_BABEL_VERSION).tar.gz
--PYTHON_BABEL_SITE = https://files.pythonhosted.org/packages/bd/78/9fb975cbb3f4b136de2cd4b5e5ce4a3341169ebf4c6c03630996d05428f1
-+PYTHON_BABEL_SITE = https://files.pythonhosted.org/packages/17/e6/ec9aa6ac3d00c383a5731cc97ed7c619d3996232c977bb8326bcbb6c687e
- PYTHON_BABEL_SETUP_TYPE = setuptools
- PYTHON_BABEL_LICENSE = BSD-3-Clause
- PYTHON_BABEL_LICENSE_FILES = LICENSE
+-PYTHON_BOTO3_VERSION = 1.16.50
++PYTHON_BOTO3_VERSION = 1.18.48
+ PYTHON_BOTO3_SOURCE = boto3-$(PYTHON_BOTO3_VERSION).tar.gz
+-PYTHON_BOTO3_SITE = https://files.pythonhosted.org/packages/c8/c6/b4d9547a493ac2837f296f4a004dff6e7136cf6750d181769b8a61d63813
++PYTHON_BOTO3_SITE = https://files.pythonhosted.org/packages/d4/1e/7d6bf1b92199121ec5c020868402b90ba1a4fef6941aafaff970a664d83a
+ PYTHON_BOTO3_SETUP_TYPE = setuptools
+ PYTHON_BOTO3_LICENSE = Apache-2.0
+ PYTHON_BOTO3_LICENSE_FILES = LICENSE
 -- 
 2.33.0
 
