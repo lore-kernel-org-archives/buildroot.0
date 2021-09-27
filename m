@@ -2,87 +2,83 @@ Return-Path: <SRS0=V1ZZ=OR=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B158C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 27 Sep 2021 19:53:31 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B2A46C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 27 Sep 2021 19:53:42 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 256A260FD7
-	for <buildroot@archiver.kernel.org>; Mon, 27 Sep 2021 19:53:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 256A260FD7
+	by mail.kernel.org (Postfix) with ESMTPS id 7168360FD7
+	for <buildroot@archiver.kernel.org>; Mon, 27 Sep 2021 19:53:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7168360FD7
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F3B1581008;
-	Mon, 27 Sep 2021 19:53:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 501F9403B9;
+	Mon, 27 Sep 2021 19:53:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IVe67TWC6bSO; Mon, 27 Sep 2021 19:53:30 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id u32VLuphLljK; Mon, 27 Sep 2021 19:53:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5521980F81;
-	Mon, 27 Sep 2021 19:53:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A80BC403E2;
+	Mon, 27 Sep 2021 19:53:40 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 490D71BF379
- for <buildroot@lists.busybox.net>; Mon, 27 Sep 2021 19:51:59 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 028D11BF379
+ for <buildroot@lists.busybox.net>; Mon, 27 Sep 2021 19:52:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 392C040261
- for <buildroot@lists.busybox.net>; Mon, 27 Sep 2021 19:51:59 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E6EC640261
+ for <buildroot@lists.busybox.net>; Mon, 27 Sep 2021 19:52:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ovbZhU9ByHOk for <buildroot@lists.busybox.net>;
- Mon, 27 Sep 2021 19:51:58 +0000 (UTC)
+ with ESMTP id OstakWgYAuXI for <buildroot@lists.busybox.net>;
+ Mon, 27 Sep 2021 19:52:00 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
- [IPv6:2a00:1450:4864:20::336])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 47F4440251
- for <buildroot@buildroot.org>; Mon, 27 Sep 2021 19:51:58 +0000 (UTC)
-Received: by mail-wm1-x336.google.com with SMTP id
- b204-20020a1c80d5000000b0030cd967c674so640854wmd.0
- for <buildroot@buildroot.org>; Mon, 27 Sep 2021 12:51:58 -0700 (PDT)
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
+ [IPv6:2a00:1450:4864:20::42d])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E87F940251
+ for <buildroot@buildroot.org>; Mon, 27 Sep 2021 19:51:59 +0000 (UTC)
+Received: by mail-wr1-x42d.google.com with SMTP id u18so53944676wrg.5
+ for <buildroot@buildroot.org>; Mon, 27 Sep 2021 12:51:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=clt2Z25OMWYNsRrCm5xONGd2woetOvo7E9v60yFq/j8=;
- b=lxFmTZRxFgjjl3s1o9KOdvCDPwRW8cYk/sU2pIKFUMq7QmV3TxacH9290KlbNMqMks
- XVbw/GUVxLfM9RQktn/EY5g3jr0pRtF2eDnsZ/c7T8vlYVW0DTt2mMsLGkikh9MB6qeh
- NcNjmPQQFDvLfs9an1srp2zCNXuiASvPsSSfNEuk1duLmYEbDeObKNPPurUq+j8GTfkb
- h+b+FMqHcJ1VIdNw+NZFo/N6gvmYi8180fUWNfBgCDPN7Gs4hudOyuM/84Q9IksccSqR
- y8xc/F6uG/NRZxyW4SHV4bAe/viqBk5Zjm1AeTtpa8OlTN81VwKulxygL1n2PMgZHNnr
- gTaA==
+ bh=BWg+0FGi1DHui59IbZ6qsMmCLA+JMGoX0XdbexR6btY=;
+ b=HWkyFBY0S3Z6RuAE1A561ezTEwZP4+u/zwUm28dHQ4luFoNOH9g7X4qzYmkdEflwWa
+ eVlHI8R+hY51lcIeuGY7ABRIvtCJLV982coWXlAHnuY7TiJlv1BE8DDQ3qGPmXF7+J64
+ kBEjFKalJW707xbQGJM3OzOciVKNC0YMd3EKyiYOICaFKjWlHNwonmAGIuWcLp1ZAV/W
+ /KHAK+5IQ4+WmuAAEpM3Hw2Qmjap1ToRsEnIPSPUjxhH4rEO2nCBaaepCrWJkBgWNJkk
+ ua0GywdbfHjNSEqbOlU0GDBUFo2v8v+9pYN7kJnkWCOC40uVEjzJdDjHR94XDfoDHa+f
+ cBrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
  :references:mime-version:content-transfer-encoding;
- bh=clt2Z25OMWYNsRrCm5xONGd2woetOvo7E9v60yFq/j8=;
- b=Kq2skq7KudpbCqxVRy4Nvxv//zWkwsvRyMUqTtbDEBji6WZ5iCP7PZeD/LV35gWPJv
- 4IB3X/Yo4FQpnQSvGc3elNXH0GYhVgKH+AgJ9BQ0nsh3BXm2XVEvOy7NwlRchmi3Vonq
- 9oxYvHyoCFfz0w/PndOJH2XbEsYQj/RXh6CZ8p4wspc6fUrwBDdyF7O34lNmKB56PJV5
- djhtEPmr2IJZTvDwva1YK7cpArPmGxIe/PwRPnwxdWLqBXGa0PMyfheodTcePmKlavBI
- pn3oTUMbZTaVwopbgCJ2v/Fbsa73DXJEFPZghNCZy0YyfcHUwaViyDC02dJh0NRSCUDy
- UQ2Q==
-X-Gm-Message-State: AOAM530odoqIsOIOKGb1llz+Ccbz4YHZWKEtgZVnErhqtttQVoRlJFOC
- wP34L2fDOTQ7fFrnNqo2sEFU91Yq0Do=
-X-Google-Smtp-Source: ABdhPJxGNG7iMj9ZIkN7UnZMw3SxB2vUoyyzTY4A/3omA2jL9mtrnAl26iDU4vZVBHV3H52qRGWYHQ==
-X-Received: by 2002:a05:600c:350f:: with SMTP id
- h15mr906806wmq.144.1632772316397; 
- Mon, 27 Sep 2021 12:51:56 -0700 (PDT)
+ bh=BWg+0FGi1DHui59IbZ6qsMmCLA+JMGoX0XdbexR6btY=;
+ b=czz5XO07c0BLrGL5CsAMSQtfzzmZYmp5hGuWY2AFZwC1AJpORJUMkfQkICBWwofYfU
+ PRr/V6AgkLqZFJtMCHKC000bY6RKFJqu6gf6fWH0X2+ajsko1niypP2nNzLG3xVPrc4n
+ yhw1YuW1SAddyooAuRhWMe10hQhf5Sptun6c2ZcPunASA/vmOCwzzcPxgtF4znHMhE+u
+ UEKM9DTVdecCsqt+j9zoxzyiRJqxcVslqBec10mF35/JsMkuUmYHz8+TOK/zDim3Yuav
+ ZerxAKreuFPUu7JSAw3vti33RqdOmiAmkgeYmtvrL80D3fI8TAdBANYyvPfwwQI2W55W
+ 508Q==
+X-Gm-Message-State: AOAM530OFA3zF1S1Y323O+wthZ84WRlP4KFrfM1qWvY1v3q7Gh/VeLNO
+ op/pWvEEOD9vkWD00pSAk9+0/WQuwgw=
+X-Google-Smtp-Source: ABdhPJzIG60FsbQlbZ4fSaPXni0Hm30v7xuE5mjo3D/f2i7wh21OzzYQ/eEhJrfKgAudnpieH4KiSQ==
+X-Received: by 2002:adf:cd92:: with SMTP id q18mr1935201wrj.211.1632772317944; 
+ Mon, 27 Sep 2021 12:51:57 -0700 (PDT)
 Received: from asaf.. ([2a10:8002:6b25:0:fc32:81cf:8e3a:84a0])
- by smtp.gmail.com with ESMTPSA id w23sm485359wmi.6.2021.09.27.12.51.55
+ by smtp.gmail.com with ESMTPSA id w23sm485359wmi.6.2021.09.27.12.51.56
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 27 Sep 2021 12:51:56 -0700 (PDT)
+ Mon, 27 Sep 2021 12:51:57 -0700 (PDT)
 From: Asaf Kahlon <asafka7@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 27 Sep 2021 22:51:34 +0300
-Message-Id: <20210927195136.549542-10-asafka7@gmail.com>
+Date: Mon, 27 Sep 2021 22:51:35 +0300
+Message-Id: <20210927195136.549542-11-asafka7@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210927195136.549542-1-asafka7@gmail.com>
 References: <20210927195136.549542-1-asafka7@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/python-ecdsa: bump to version 0.17.0
+Subject: [Buildroot] [PATCH 1/1] package/python-html5lib: bump to version 1.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,53 +97,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-And correct the URL in Config.in.
+Plus, indent with two spaces in the hash file.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-ecdsa/Config.in         | 2 +-
- package/python-ecdsa/python-ecdsa.hash | 4 ++--
- package/python-ecdsa/python-ecdsa.mk   | 4 ++--
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-html5lib/python-html5lib.hash | 6 +++---
+ package/python-html5lib/python-html5lib.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-ecdsa/Config.in b/package/python-ecdsa/Config.in
-index eb0d65801f..54a363b367 100644
---- a/package/python-ecdsa/Config.in
-+++ b/package/python-ecdsa/Config.in
-@@ -4,4 +4,4 @@ config BR2_PACKAGE_PYTHON_ECDSA
- 	help
- 	  ECDSA cryptographic signature library (pure python).
- 
--	  http://github.com/warner/python-ecdsa
-+	  http://github.com/tlsfuzzer/python-ecdsa
-diff --git a/package/python-ecdsa/python-ecdsa.hash b/package/python-ecdsa/python-ecdsa.hash
-index fcb8093826..a082d30b0f 100644
---- a/package/python-ecdsa/python-ecdsa.hash
-+++ b/package/python-ecdsa/python-ecdsa.hash
+diff --git a/package/python-html5lib/python-html5lib.hash b/package/python-html5lib/python-html5lib.hash
+index 04c64c10c1..5023f5ab66 100644
+--- a/package/python-html5lib/python-html5lib.hash
++++ b/package/python-html5lib/python-html5lib.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/ecdsa/json
--md5  98c0da4c046286e892fdba727f93edea  ecdsa-0.16.1.tar.gz
--sha256  cfc046a2ddd425adbd1a78b3c46f0d1325c657811c0f45ecc3a0a6236c1e50ff  ecdsa-0.16.1.tar.gz
-+md5  d0dd59c43af0f640a60599551529f5d0  ecdsa-0.17.0.tar.gz
-+sha256  b9f500bb439e4153d0330610f5d26baaf18d17b8ced1bc54410d189385ea68aa  ecdsa-0.17.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/html5lib/json
+-md5	942a0688d6bdf20d087c9805c40182ad  html5lib-1.0.1.tar.gz
+-sha256	66cb0dcfdbbc4f9c3ba1a63fdb511ffdbd4f513b2b6d81b80cd26ce6b3fb3736  html5lib-1.0.1.tar.gz
++md5  6748742e2ec4cb99287a6bc82bcfe2b0  html5lib-1.1.tar.gz
++sha256  b2e5b40261e20f354d198eae92afc10d750afb487ed5e50f9c4eaf07c184146f  html5lib-1.1.tar.gz
  # Locally computed sha256 checksums
- sha256  3eca9845773d2e5b8cc9d8c119d345f00a4806e4bd660d4a3d6cdf9c0e9d8bb2  LICENSE
-diff --git a/package/python-ecdsa/python-ecdsa.mk b/package/python-ecdsa/python-ecdsa.mk
-index 75c970518e..eda35616de 100644
---- a/package/python-ecdsa/python-ecdsa.mk
-+++ b/package/python-ecdsa/python-ecdsa.mk
+-sha256	16a39991619e92f18680932da2a9199fdf7d95df3ecaedc52ea06218aabafd6f  LICENSE
++sha256  16a39991619e92f18680932da2a9199fdf7d95df3ecaedc52ea06218aabafd6f  LICENSE
+diff --git a/package/python-html5lib/python-html5lib.mk b/package/python-html5lib/python-html5lib.mk
+index 1d6aef1aad..84229eabd0 100644
+--- a/package/python-html5lib/python-html5lib.mk
++++ b/package/python-html5lib/python-html5lib.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_ECDSA_VERSION = 0.16.1
-+PYTHON_ECDSA_VERSION = 0.17.0
- PYTHON_ECDSA_SOURCE = ecdsa-$(PYTHON_ECDSA_VERSION).tar.gz
--PYTHON_ECDSA_SITE = https://files.pythonhosted.org/packages/1d/d4/0684a83b3c16a9d1446ace27a506cef1db9b23984ac7ed6aaf764fdd56e8
-+PYTHON_ECDSA_SITE = https://files.pythonhosted.org/packages/bf/3d/3d909532ad541651390bf1321e097404cbd39d1d89c2046f42a460220fb3
- PYTHON_ECDSA_SETUP_TYPE = setuptools
- PYTHON_ECDSA_LICENSE = MIT
- PYTHON_ECDSA_LICENSE_FILES = LICENSE
+-PYTHON_HTML5LIB_VERSION = 1.0.1
++PYTHON_HTML5LIB_VERSION = 1.1
+ PYTHON_HTML5LIB_SOURCE = html5lib-$(PYTHON_HTML5LIB_VERSION).tar.gz
+-PYTHON_HTML5LIB_SITE = https://files.pythonhosted.org/packages/85/3e/cf449cf1b5004e87510b9368e7a5f1acd8831c2d6691edd3c62a0823f98f
++PYTHON_HTML5LIB_SITE = https://files.pythonhosted.org/packages/ac/b6/b55c3f49042f1df3dcd422b7f224f939892ee94f22abcf503a9b7339eaf2
+ PYTHON_HTML5LIB_LICENSE = MIT
+ PYTHON_HTML5LIB_LICENSE_FILES = LICENSE
+ PYTHON_HTML5LIB_SETUP_TYPE = setuptools
 -- 
 2.33.0
 
