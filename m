@@ -2,85 +2,84 @@ Return-Path: <SRS0=V1ZZ=OR=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 44EB1C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 27 Sep 2021 16:38:02 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1DF1DC433EF
+	for <buildroot@archiver.kernel.org>; Mon, 27 Sep 2021 16:43:48 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id C255061074
-	for <buildroot@archiver.kernel.org>; Mon, 27 Sep 2021 16:38:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C255061074
+	by mail.kernel.org (Postfix) with ESMTPS id AF574608FE
+	for <buildroot@archiver.kernel.org>; Mon, 27 Sep 2021 16:43:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org AF574608FE
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8DFCC4017C;
-	Mon, 27 Sep 2021 16:38:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 285E060067;
+	Mon, 27 Sep 2021 16:43:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vgPQUsIXAG50; Mon, 27 Sep 2021 16:38:00 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 5IpAOpOj34TD; Mon, 27 Sep 2021 16:43:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BBEE840247;
-	Mon, 27 Sep 2021 16:37:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 84DA86084D;
+	Mon, 27 Sep 2021 16:43:45 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B66E51BF955
- for <buildroot@lists.busybox.net>; Mon, 27 Sep 2021 16:37:57 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 886071BF955
+ for <buildroot@lists.busybox.net>; Mon, 27 Sep 2021 16:43:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9EC81406BC
- for <buildroot@lists.busybox.net>; Mon, 27 Sep 2021 16:37:57 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 77F6A402E5
+ for <buildroot@lists.busybox.net>; Mon, 27 Sep 2021 16:43:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp4.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id N54TXJfoJee7 for <buildroot@lists.busybox.net>;
- Mon, 27 Sep 2021 16:37:56 +0000 (UTC)
+ with ESMTP id IUI-hUXoXedq for <buildroot@lists.busybox.net>;
+ Mon, 27 Sep 2021 16:43:41 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
- [IPv6:2a00:1450:4864:20::434])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A9716406B2
- for <buildroot@buildroot.org>; Mon, 27 Sep 2021 16:37:56 +0000 (UTC)
-Received: by mail-wr1-x434.google.com with SMTP id x20so8353602wrg.10
- for <buildroot@buildroot.org>; Mon, 27 Sep 2021 09:37:56 -0700 (PDT)
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
+ [IPv6:2a00:1450:4864:20::432])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7830340272
+ for <buildroot@buildroot.org>; Mon, 27 Sep 2021 16:43:41 +0000 (UTC)
+Received: by mail-wr1-x432.google.com with SMTP id g16so53077641wrb.3
+ for <buildroot@buildroot.org>; Mon, 27 Sep 2021 09:43:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=ZYzZX+eG0JT/pmv6t8z8OItcbcLKNIEsjFRugRaciWA=;
- b=BdcxqkmtlhihwYacOnOg1lQYAb/s3a+Td3w7FrSZJQWn5eG4tZAfC8wBPtmyHdLSeJ
- 3UPk7w1JjutsdXANQynF577ZHp5j1wYAO79b2aDy49t9j+wgwJqKtwE/h70fKLt3ROHl
- u+sAMngCa+3XVkI1NCa6paLV36v7aBBxswtiiGuEwRRqo78jkzopROVtU69RWTaHXBGX
- s2pcNg85P0/JycZOqX77eNcrMWmGV0e4O15AjPM8gYlzELFXbQogDy/vaERj1qHpXmlR
- +lhTncNeaM7+rK7tifqoQvPd3f83yonWMLtTWkmfDS8+1uZDlYY69eC9x1t2SXr+FTEn
- 79Nw==
+ bh=FwNNt0y7LQEug+ADLXUM9K9eTIWyL+S5Y+2ExOvImBE=;
+ b=goFr0QhrGFnvTK7YFvsSYjkyd2WO5ZHSVzC5e/Pq/6N2yxD2w0nZ1BIMScMkIrDw8n
+ jwfQfc06QyVOTpPkdkR67B0bQfZ3hSfKwZ1FNH69CK1ItuSZoqZitZO1GKOhhguCeifw
+ 3LQUt95flBBdJrnyYl/7VrtL+FeVjyV7SM5CoIrh8eQW9kD5SLlaeWJLfHyUZIyIOWBL
+ NbGTvW6o11ADys2Cx4OPmyiJGiOJNqmm+Gn1UXknEUlngLRysh/DbmlyU3yxsrYr9bTx
+ A++sh5SIq0/HmSGct68xXpLNJyLG/Ak1wRUJlsyudm1uExI7NwccEhLWoiGTSLwLz3Ma
+ ZROA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=ZYzZX+eG0JT/pmv6t8z8OItcbcLKNIEsjFRugRaciWA=;
- b=oVwQYL8RcCLy9WIdWMsS6ZRCan+KxbQJn3Mi9qE1h5Lj9EFim+Jrfv4PRaOHxgfnIQ
- 0/WlUXRr8PdpHDBgN82tkUUTgAVZQKVC75iHbYA8dQ0pKRg9ZDvjjYAHNsxZFf45Zl6Y
- Jh9Niu5mPwpAM0l62m4o9TF8SbrHXzbZVQltw3RyGVuTqMEqqGnr/Y0UvBA+eoK3c71s
- xOhy189x21aQnEvMI88lx0I8C2Ka5RZSh6t6T2/rUMmGt+zvbDBx7/3RmVhJMP9lVwdJ
- 6+4OQdvkqctEiuql8f6NC8ccLVEhMR7NitJ/B3pYiVuIMKmgC6SM8zRVSZuW1zr9szBQ
- l9lQ==
-X-Gm-Message-State: AOAM531p/XOXsCyyfa0Rjs9GiCbnxJyXpTnAuQZ3dWHPzgImgq6X7oAV
- jfOsQ/p93N8z3zICEeAds9IAjrGXRso=
-X-Google-Smtp-Source: ABdhPJy2hyxAbbcMIyz/Pvmf7Ak+3ie3TdErkdghs9n2lPI7MS0LBAowCWceB1CmLJ2NsIhg06cAEw==
-X-Received: by 2002:a05:6000:1090:: with SMTP id
- y16mr961824wrw.208.1632760674580; 
- Mon, 27 Sep 2021 09:37:54 -0700 (PDT)
+ bh=FwNNt0y7LQEug+ADLXUM9K9eTIWyL+S5Y+2ExOvImBE=;
+ b=Ya2NIR4OQajelIHqTG10hr068rKaTlT38grVz7RNghn8XlsG6ebcygNzvVynOQ/Fup
+ YVOsNgYo6tP30f3I1W88LzGHvIuo0VpQQzXEOLNfKg6FPxIQjWFdyLuYdjGIo8hwzxIb
+ Z5RwPxrVClBUmTIAJSfB6D7JBBE9kwpZyy9eOQtFRDJDcO5LA6WTdwuDlsBypYcevX4O
+ mzbQ+X2wICcXN71OFmZC5HIH0v64vMpg6Ky6UqDK3LmQ9ONxKS0dw+sOLa5RGlsCv32/
+ uRPn8uT+wJNlfN5P3BYVsxDqC/Q+iKEWacJGR6U1TcT9jVGJ9yf9T92ta1vpU5aoGlbi
+ dlPw==
+X-Gm-Message-State: AOAM531uoilMdh2Lo/iEToDK2otD4oaF5gZjDXnCsK4jPcbTg2lK0w80
+ h1oDrCbLa1wZ6bSQKt5Rsmk1vlxIN6Y=
+X-Google-Smtp-Source: ABdhPJwQn9VLk7Q2ge9VqkiRHvScokyrEJ5C5rmtwNPtLn38CXdYfRG5Rf6K7aeON65+4cmPfizmQw==
+X-Received: by 2002:adf:f486:: with SMTP id l6mr886424wro.375.1632761019466;
+ Mon, 27 Sep 2021 09:43:39 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-421-88.w2-10.abo.wanadoo.fr.
  [2.10.246.88])
- by smtp.gmail.com with ESMTPSA id w18sm1815048wrt.79.2021.09.27.09.37.53
+ by smtp.gmail.com with ESMTPSA id o1sm17296774wru.91.2021.09.27.09.43.38
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 27 Sep 2021 09:37:54 -0700 (PDT)
+ Mon, 27 Sep 2021 09:43:38 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 27 Sep 2021 18:37:27 +0200
-Message-Id: <20210927163727.1472686-1-fontaine.fabrice@gmail.com>
+Date: Mon, 27 Sep 2021 18:43:04 +0200
+Message-Id: <20210927164306.1488012-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2,1/1] package/wget: bump to version 1.21.2
+Subject: [Buildroot] [PATCH 1/3] package/autoconf: bump to version 2.71
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,49 +91,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Bartosz Golaszewski <brgl@bgdev.pl>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://lists.gnu.org/archive/html/bug-wget/2021-09/msg00005.html
+- Update hash of license files due to links being updated:
+  http://git.savannah.gnu.org/gitweb/?p=autoconf.git;a=commit;h=61024bf52ba8a58f8992490134280eb9575e2525
+- Update indentation in hash file (two spaces)
+
+https://git.savannah.gnu.org/cgit/autoconf.git/tree/NEWS?h=v2.71
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Changes v1 -> v2 (after review of Arnout Vandecappelle):
- - Fix tarball hash
+ package/autoconf/autoconf.hash | 6 +++---
+ package/autoconf/autoconf.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
- package/wget/wget.hash | 4 ++--
- package/wget/wget.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/wget/wget.hash b/package/wget/wget.hash
-index 11071566aa..7f89bedb88 100644
---- a/package/wget/wget.hash
-+++ b/package/wget/wget.hash
-@@ -1,6 +1,6 @@
+diff --git a/package/autoconf/autoconf.hash b/package/autoconf/autoconf.hash
+index f53e8979c0..de0840dd84 100644
+--- a/package/autoconf/autoconf.hash
++++ b/package/autoconf/autoconf.hash
+@@ -1,4 +1,4 @@
  # Locally calculated after checking pgp signature
--# https://ftp.gnu.org/gnu/wget/wget-1.21.tar.lz.sig
-+# https://ftp.gnu.org/gnu/wget/wget-1.21.2.tar.lz.sig
- # with key 6B98F637D879C5236E277C5C64FF90AAE8C70AF9
--sha256  db9bbe5347e6faa06fc78805eeb808b268979455ead9003a608569c9d4fc90ad  wget-1.21.1.tar.lz
-+sha256  1727a330a86acacb3e57615ce268f5f29978bf7adec4abe6a30d370207bc91b3  wget-1.21.2.tar.lz
- # Locally calculated
- sha256  e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b  COPYING
-diff --git a/package/wget/wget.mk b/package/wget/wget.mk
-index ae036478b8..f30fa39917 100644
---- a/package/wget/wget.mk
-+++ b/package/wget/wget.mk
+-sha256	64ebcec9f8ac5b2487125a86a7760d2591ac9e1d3dbd59489633f9de62a57684  autoconf-2.69.tar.xz
+-sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYINGv3
+-sha256	23ed0b84fa023bfa33433b498192cd08a3bfb1f4864a8ed791a84f3eb48b2dd2  COPYING.EXCEPTION
++sha256  f14c83cfebcc9427f2c3cea7258bd90df972d92eb26752da4ddad81c87a0faa4  autoconf-2.71.tar.xz
++sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYINGv3
++sha256  1f1cde9fb68b9b3cff18c420894bec5bd4defacd700b7d13df54a887301e5350  COPYING.EXCEPTION
+diff --git a/package/autoconf/autoconf.mk b/package/autoconf/autoconf.mk
+index 336ac59b42..5742ea6c55 100644
+--- a/package/autoconf/autoconf.mk
++++ b/package/autoconf/autoconf.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WGET_VERSION = 1.21.1
-+WGET_VERSION = 1.21.2
- WGET_SOURCE = wget-$(WGET_VERSION).tar.lz
- WGET_SITE = $(BR2_GNU_MIRROR)/wget
- WGET_DEPENDENCIES = host-pkgconf
+-AUTOCONF_VERSION = 2.69
++AUTOCONF_VERSION = 2.71
+ AUTOCONF_SOURCE = autoconf-$(AUTOCONF_VERSION).tar.xz
+ AUTOCONF_SITE = $(BR2_GNU_MIRROR)/autoconf
+ 
 -- 
 2.33.0
 
