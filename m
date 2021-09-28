@@ -2,52 +2,52 @@ Return-Path: <SRS0=iTAH=OS=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EC161C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 28 Sep 2021 20:36:46 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F4ACC433EF
+	for <buildroot@archiver.kernel.org>; Tue, 28 Sep 2021 20:44:40 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 942D76127A
-	for <buildroot@archiver.kernel.org>; Tue, 28 Sep 2021 20:36:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 942D76127A
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
+	by mail.kernel.org (Postfix) with ESMTPS id E5CFF61381
+	for <buildroot@archiver.kernel.org>; Tue, 28 Sep 2021 20:44:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E5CFF61381
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6F3C682CA3;
-	Tue, 28 Sep 2021 20:36:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B460A415B1;
+	Tue, 28 Sep 2021 20:44:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZKcNLklg7ogm; Tue, 28 Sep 2021 20:36:45 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id NgURHNrV8nJF; Tue, 28 Sep 2021 20:44:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D8DD082591;
-	Tue, 28 Sep 2021 20:36:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2BD83415B2;
+	Tue, 28 Sep 2021 20:44:35 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B7B231BF990
- for <buildroot@lists.busybox.net>; Tue, 28 Sep 2021 20:36:15 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7A9C91BF5E6
+ for <buildroot@lists.busybox.net>; Tue, 28 Sep 2021 20:44:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A4225405E9
- for <buildroot@lists.busybox.net>; Tue, 28 Sep 2021 20:36:15 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 76A78405E9
+ for <buildroot@lists.busybox.net>; Tue, 28 Sep 2021 20:44:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2Q_It19nGk-E for <buildroot@lists.busybox.net>;
- Tue, 28 Sep 2021 20:36:14 +0000 (UTC)
+ with ESMTP id XH8LT_VGWTup for <buildroot@lists.busybox.net>;
+ Tue, 28 Sep 2021 20:44:32 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id CB86140019
- for <buildroot@buildroot.org>; Tue, 28 Sep 2021 20:36:14 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id A19998D45C; Tue, 28 Sep 2021 20:33:56 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ by smtp2.osuosl.org (Postfix) with ESMTP id 98BE1405F2
+ for <buildroot@buildroot.org>; Tue, 28 Sep 2021 20:44:32 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id 6E2C68D46D; Tue, 28 Sep 2021 20:42:14 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 28 Sep 2021 22:35:45 +0200
-X-Git-Refname: refs/heads/2021.08.x
-X-Git-Oldrev: 96a48f122250335f6a5d76d5ea1c6c9d9d8d461d
-X-Git-Newrev: 1cebcd27b86f57b41c0de7f1ff3ab6ddf49ca9a6
+Date: Tue, 28 Sep 2021 22:44:18 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 89f20c1c3f9d667ec0a40bcfe17db94ff098e6c0
+X-Git-Newrev: 3b1659107d8b0e80e2b19ad83b5fa7e564c411e1
 X-Patchwork-Hint: ignore
-Message-Id: <20210928203356.A19998D45C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.08.x] package/libvirt: add
- libnl optional dependency
+Message-Id: <20210928204214.6E2C68D46D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/strongswan: add md4 hash algorithm
+ option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,39 +65,57 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1cebcd27b86f57b41c0de7f1ff3ab6ddf49ca9a6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=3b1659107d8b0e80e2b19ad83b5fa7e564c411e1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-libnl is an optional dependency (which is enabled by default) since the
-addition of the package in commit
-ccfc90e1010e42e6529afae3a5ea8bf7226dabc1
+Add the option to enable the md4 hash algorithm and default it to 'no'
+since this is a new option.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Since md4 is required by EAP-MSCHAPv2 it is selected by
+BR2_PACKAGE_STRONGSWAN_EAP_MSCHAPV2. See
+https://wiki.strongswan.org/projects/strongswan/wiki/Autoconf for
+further details.
+
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 69bcb52766e8a877fa024f963c544b886217aa46)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libvirt/libvirt.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/strongswan/Config.in     | 4 ++++
+ package/strongswan/strongswan.mk | 1 +
+ 2 files changed, 5 insertions(+)
 
-diff --git a/package/libvirt/libvirt.mk b/package/libvirt/libvirt.mk
-index 396dd61577..f30baaab71 100644
---- a/package/libvirt/libvirt.mk
-+++ b/package/libvirt/libvirt.mk
-@@ -134,6 +134,13 @@ else
- LIBVIRT_CONF_OPTS += -Dlibiscsi=disabled
- endif
+diff --git a/package/strongswan/Config.in b/package/strongswan/Config.in
+index f6e78db22e..4f02efb79d 100644
+--- a/package/strongswan/Config.in
++++ b/package/strongswan/Config.in
+@@ -57,6 +57,9 @@ config BR2_PACKAGE_STRONGSWAN_CURL
+ 	bool "Enable CURL fetcher plugin to fetch files via libcurl"
+ 	select BR2_PACKAGE_LIBCURL
  
-+ifeq ($(BR2_PACKAGE_LIBNL),y)
-+LIBVIRT_CONF_OPTS += -Dlibnl=enabled
-+LIBVIRT_DEPENDENCIES += libnl
-+else
-+LIBVIRT_CONF_OPTS += -Dlibnl=disabled
-+endif
++config BR2_PACKAGE_STRONGSWAN_MD4
++	bool "Enable MD4 hash algorithm"
 +
- ifeq ($(BR2_PACKAGE_LIBPCAP),y)
- LIBVIRT_CONF_OPTS += -Dlibpcap=enabled
- LIBVIRT_DEPENDENCIES += libpcap
+ config BR2_PACKAGE_STRONGSWAN_CHARON
+ 	bool "Enable the IKEv1/IKEv2 keying daemon charon"
+ 	default y
+@@ -125,6 +128,7 @@ config BR2_PACKAGE_STRONGSWAN_EAP_GTC
+ config BR2_PACKAGE_STRONGSWAN_EAP_MSCHAPV2
+ 	bool "Enable EAP-MSCHAPv2"
+ 	default y if BR2_PACKAGE_STRONGSWAN_EAP # legacy
++	select BR2_PACKAGE_STRONGSWAN_MD4
+ 
+ config BR2_PACKAGE_STRONGSWAN_EAP_PEAP
+ 	bool "Enable EAP-PEAP"
+diff --git a/package/strongswan/strongswan.mk b/package/strongswan/strongswan.mk
+index a23ac8af22..2967682767 100644
+--- a/package/strongswan/strongswan.mk
++++ b/package/strongswan/strongswan.mk
+@@ -37,6 +37,7 @@ STRONGSWAN_CONF_OPTS += \
+ 	--enable-vici=$(if $(BR2_PACKAGE_STRONGSWAN_VICI),yes,no) \
+ 	--enable-swanctl=$(if $(BR2_PACKAGE_STRONGSWAN_VICI),yes,no) \
+ 	--enable-wolfssl=$(if $(BR2_PACKAGE_STRONGSWAN_WOLFSSL),yes,no) \
++	--enable-md4=$(if $(BR2_PACKAGE_STRONGSWAN_MD4),yes,no) \
+ 	--enable-systime-fix=$(if $(BR2_PACKAGE_STRONGSWAN_SYSTIME_FIX),yes,no) \
+ 	--enable-eap-sim=$(if $(BR2_PACKAGE_STRONGSWAN_EAP_SIM),yes,no) \
+ 	--enable-eap-sim-file=$(if $(BR2_PACKAGE_STRONGSWAN_EAP_SIM_FILE),yes,no) \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
