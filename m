@@ -2,83 +2,86 @@ Return-Path: <SRS0=iTAH=OS=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ABBAEC433EF
-	for <buildroot@archiver.kernel.org>; Tue, 28 Sep 2021 11:02:25 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EE874C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 28 Sep 2021 11:02:38 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 0E53E60FF2
-	for <buildroot@archiver.kernel.org>; Tue, 28 Sep 2021 11:02:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0E53E60FF2
+	by mail.kernel.org (Postfix) with ESMTPS id 3B6CA60FF2
+	for <buildroot@archiver.kernel.org>; Tue, 28 Sep 2021 11:02:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3B6CA60FF2
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9BC7660AF0;
-	Tue, 28 Sep 2021 11:02:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0142680F18;
+	Tue, 28 Sep 2021 11:02:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id js8D8sBgiiN2; Tue, 28 Sep 2021 11:02:23 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id wEhNdXeHKwsS; Tue, 28 Sep 2021 11:02:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 05BDA608CB;
-	Tue, 28 Sep 2021 11:02:23 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A27E01BF84C
- for <buildroot@lists.busybox.net>; Tue, 28 Sep 2021 11:02:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5045880F16;
+	Tue, 28 Sep 2021 11:02:36 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id CD8AB1BF84C
+ for <buildroot@lists.busybox.net>; Tue, 28 Sep 2021 11:02:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9D14E4012A
- for <buildroot@lists.busybox.net>; Tue, 28 Sep 2021 11:02:21 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B9753403BB
+ for <buildroot@lists.busybox.net>; Tue, 28 Sep 2021 11:02:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id n3FeXoRfwv3Y for <buildroot@lists.busybox.net>;
- Tue, 28 Sep 2021 11:02:20 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ABVdfoKeCChX for <buildroot@lists.busybox.net>;
+ Tue, 28 Sep 2021 11:02:22 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
- [IPv6:2a00:1450:4864:20::432])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3598C400BF
- for <buildroot@buildroot.org>; Tue, 28 Sep 2021 11:02:20 +0000 (UTC)
-Received: by mail-wr1-x432.google.com with SMTP id v17so13881332wrv.9
- for <buildroot@buildroot.org>; Tue, 28 Sep 2021 04:02:19 -0700 (PDT)
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
+ [IPv6:2a00:1450:4864:20::42e])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id BC07440331
+ for <buildroot@buildroot.org>; Tue, 28 Sep 2021 11:02:21 +0000 (UTC)
+Received: by mail-wr1-x42e.google.com with SMTP id s21so17258937wra.7
+ for <buildroot@buildroot.org>; Tue, 28 Sep 2021 04:02:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=YHmf3eVF+4RxfGn+vG275fTfd//n+/HwIm1JT5Ait6U=;
- b=h0l9Zs5zplQQhUWa+YBz/RgZ5NGo/e+Q0LDU5WaqG3XwpdFf6XDnfy7BseK5Jcleja
- X9yhiLQYjpPehwv/b7NtTyvnYUOL0nh6y/tJzTgpSScsfrVjvcNtMUth0JeGPyCjjKET
- VcjoZ7spH0zwVU9HZ8ujjPN1vJPn06kjN3vAmQqXgwiTYgJpJlax+BeMSMuGUYSh2j5F
- GCKaGIz4+QL9oSftwyikGXPcCFSssvZwWuKHIWLPAXLQXEVDijm9gOxAGq8UF8iN16Be
- VtksGHCjHBqgR+caPl7SbVFLl1VWRGfp+nax1KBp7An4ybYlkL7TJP5+slbFPHRqfKIW
- yQhQ==
+ h=from:to:cc:subject:date:message-id:in-reply-to:references
+ :mime-version:content-transfer-encoding;
+ bh=MbcKu5Pn6wRR3VmlkWI8Wqgz7S4XuXdQqSfl/6yypVc=;
+ b=CCq6TLnerof4NkrqT4hOJwhY02MULitOLGqjkCXtUIucL1nm21CJ1m6JR1J5rMKtdp
+ fWYGjHMSThc9TfXJUWgXDhiPdrjxQVjc5EEmI8a3oiJAG+Ge5XYGUj6dJsci27ks2lPX
+ unySHXP6Qxxwrv0TlQjbKQGWokGtHjZQipfgbDtcWzZ82xfX5pw0dOnOQVJb2kl7jOhZ
+ vlFAsF8tRFtQBpkCsMXE8C/oQ9doHWuDScYhsGbOlNrpSPsMKW86krM65VJ8OL7n0USb
+ ooStFDYoNa89IHjDyxM4rbIKjzE+hCtVEaKSNdSMxzvCcklq3SMRtyDcGGIYem3Ud/hw
+ 9r/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=YHmf3eVF+4RxfGn+vG275fTfd//n+/HwIm1JT5Ait6U=;
- b=VlbIoj4kcp13ISYGLMBziH30OsHfQ8pm4Hv8Q8R98XWVA5ORUXK/QPQMujDPL441au
- mYXUmH+rPrG1ogSC3imqwk9Mh+y6MsXaRGOjEeRnWBqGXHUYMNxfKOrN1zVu4dGd17oG
- LA+YvTtwp7D/5VM9F+5XEa/TSrpcLJzWTSz0gI/yyOjNzHruk4T46nAzzIR9Q1PLvUWb
- iklPlboPWWC0jifXt3+B7yj3XKf4mbxlhvlNug4vsbgWXXrwCbW1F48PmQfj05099LAR
- CbDraXHYSobz485Pjr02hZ9O/Xs2jy3Ltta/yhYpLxaFPfPTtmzWRo8RR+YxAARWDHjy
- I41w==
-X-Gm-Message-State: AOAM532hGVhxBtW3H35q8/au6y6kl0BUgW7l4El71nW6qdRdLlE1iBaq
- gGehuywjDYqtC9ClIEAcKmVOfzuAegM=
-X-Google-Smtp-Source: ABdhPJyXw5c9RifYrZnUvUCDotpzfkQUSerzCkhEYLYvt0RTOYkO6TYI3TPsmWL33+Us1EQfysG+ZA==
-X-Received: by 2002:a5d:4a46:: with SMTP id v6mr5658734wrs.262.1632826938265; 
- Tue, 28 Sep 2021 04:02:18 -0700 (PDT)
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+ :references:mime-version:content-transfer-encoding;
+ bh=MbcKu5Pn6wRR3VmlkWI8Wqgz7S4XuXdQqSfl/6yypVc=;
+ b=ja2kxdk3Qf4HZEmn0RKVt09JK8jLO+Nj6uziIlVaH+UhnyJ06xf1CmeMHDdOgoPXLM
+ lHmHtLywnI8RUHmT1iUPKAbhUFfbkG3JfUIxIZ083CLBNOmjU5FzC77AbdrZvtuqRLs7
+ w0/sER6j7YQsVtFDIGB7J0tqSlhexj6I26rhfB4bWWMkcCnSZlDx5lGloiMKKyOiN00w
+ y9oN5mPuHOXgDeXmOSKc/IgxChOilVmFN1Fk6CJ1k2i+wKK42kyjKxFUN5qyOX7L3HpN
+ qogf2x2n71kFJ5UkZFkrHrjLRmZfXguXK5yI4tTBqLdMDCS6laUHKWvxe7JYWAq8wB1v
+ ewjw==
+X-Gm-Message-State: AOAM5330DDMEou98q7VPVEixmEE8rIc2NNyJetvU6J6UK2mXFpT8cG7+
+ RvbqgZtRC8KoqVAGd1kv7+AW6QBCUJA=
+X-Google-Smtp-Source: ABdhPJy/m5DvsgU6T62wt5Viu1RoZAWwaMD0e5/oG0/A//LlAu2AjzRIu/lffaggeo+QQM+oQiChXA==
+X-Received: by 2002:a5d:6dad:: with SMTP id u13mr5554035wrs.55.1632826939675; 
+ Tue, 28 Sep 2021 04:02:19 -0700 (PDT)
 Received: from asaf.. ([2a10:8002:6b25:0:1254:64a2:465:81e0])
- by smtp.gmail.com with ESMTPSA id c4sm19432155wrt.23.2021.09.28.04.02.17
+ by smtp.gmail.com with ESMTPSA id c4sm19432155wrt.23.2021.09.28.04.02.18
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 28 Sep 2021 04:02:18 -0700 (PDT)
+ Tue, 28 Sep 2021 04:02:19 -0700 (PDT)
 From: Asaf Kahlon <asafka7@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 28 Sep 2021 14:02:07 +0300
-Message-Id: <20210928110212.596939-1-asafka7@gmail.com>
+Date: Tue, 28 Sep 2021 14:02:08 +0300
+Message-Id: <20210928110212.596939-2-asafka7@gmail.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210928110212.596939-1-asafka7@gmail.com>
+References: <20210928110212.596939-1-asafka7@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/python-pbr: bump to version 5.6.0
+Subject: [Buildroot] [PATCH 1/1] package/python-posix-ipc: bump to version
+ 1.0.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,41 +104,39 @@ Plus, indent with two spaces in the hash file.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-pbr/python-pbr.hash | 8 ++++----
- package/python-pbr/python-pbr.mk   | 4 ++--
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/python-posix-ipc/python-posix-ipc.hash | 6 +++---
+ package/python-posix-ipc/python-posix-ipc.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-pbr/python-pbr.hash b/package/python-pbr/python-pbr.hash
-index cca9de0178..8cf2a18d36 100644
---- a/package/python-pbr/python-pbr.hash
-+++ b/package/python-pbr/python-pbr.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/pbr/json
--md5	477d2aa285ad97250a172b199f4060b7  pbr-5.4.3.tar.gz
--sha256	2c8e420cd4ed4cec4e7999ee47409e876af575d4c35a45840d59e8b5f3155ab8  pbr-5.4.3.tar.gz
-+md5  62565acc6bf3e7e10b082463421f8b46  pbr-5.6.0.tar.gz
-+sha256  42df03e7797b796625b1029c0400279c7c34fd7df24a7d7818a1abb5b38710dd  pbr-5.6.0.tar.gz
+diff --git a/package/python-posix-ipc/python-posix-ipc.hash b/package/python-posix-ipc/python-posix-ipc.hash
+index d267cabc88..4258af6348 100644
+--- a/package/python-posix-ipc/python-posix-ipc.hash
++++ b/package/python-posix-ipc/python-posix-ipc.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/posix-ipc/json
+-md5	c4fd0065244ccb2f59cb8ceedf287cf6  posix_ipc-1.0.4.tar.gz
+-sha256	ff6c9077633fc62a491d6997c43b094d885bb45a7ca1f36c9a0d647c54b74b14  posix_ipc-1.0.4.tar.gz
++md5  8c9443859492ecf3aae9182aa6b5c78c  posix_ipc-1.0.5.tar.gz
++sha256  6cddb1ce2cf4aae383f2a0079c26c69bee257fe2720f372201ef047f8ceb8b97  posix_ipc-1.0.5.tar.gz
  # Locally computed sha256 checksums
--sha256	5df2a0d87d6c562f0ea11c688ac52532aa28d744cabc7994ff0537f64b3b3320  LICENSE
--sha256	eb4a8c8791f6caab1cf36df26db2b6f4e2ddda52657b060ff7f02abc63910aef  pbr/tests/testpackage/LICENSE.txt
-+sha256  5df2a0d87d6c562f0ea11c688ac52532aa28d744cabc7994ff0537f64b3b3320  LICENSE
-+sha256  eb4a8c8791f6caab1cf36df26db2b6f4e2ddda52657b060ff7f02abc63910aef  pbr/tests/testpackage/LICENSE.txt
-diff --git a/package/python-pbr/python-pbr.mk b/package/python-pbr/python-pbr.mk
-index 12b5b56811..3cc7ab81fa 100644
---- a/package/python-pbr/python-pbr.mk
-+++ b/package/python-pbr/python-pbr.mk
+-sha256	61f0669e70518e6d32f87e485965fe9309de60e4bef938b29cecd068b3db9a98  LICENSE
++sha256  61f0669e70518e6d32f87e485965fe9309de60e4bef938b29cecd068b3db9a98  LICENSE
+diff --git a/package/python-posix-ipc/python-posix-ipc.mk b/package/python-posix-ipc/python-posix-ipc.mk
+index d4429f117e..359dee6d7c 100644
+--- a/package/python-posix-ipc/python-posix-ipc.mk
++++ b/package/python-posix-ipc/python-posix-ipc.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PBR_VERSION = 5.4.3
-+PYTHON_PBR_VERSION = 5.6.0
- PYTHON_PBR_SOURCE = pbr-$(PYTHON_PBR_VERSION).tar.gz
--PYTHON_PBR_SITE = https://files.pythonhosted.org/packages/99/f1/7807d3409c79905a907f1c616d910c921b2a8e73c17b2969930318f44777
-+PYTHON_PBR_SITE = https://files.pythonhosted.org/packages/35/8c/69ed04ae31ad498c9bdea55766ed4c0c72de596e75ac0d70b58aa25e0acf
- PYTHON_PBR_SETUP_TYPE = setuptools
- PYTHON_PBR_LICENSE = Apache-2.0 (module), BSD-3-Clause (test package)
- PYTHON_PBR_LICENSE_FILES = LICENSE pbr/tests/testpackage/LICENSE.txt
+-PYTHON_POSIX_IPC_VERSION = 1.0.4
++PYTHON_POSIX_IPC_VERSION = 1.0.5
+ PYTHON_POSIX_IPC_SOURCE = posix_ipc-$(PYTHON_POSIX_IPC_VERSION).tar.gz
+-PYTHON_POSIX_IPC_SITE = https://files.pythonhosted.org/packages/c9/3e/54217da71aa26b488295d878df4d3132093253b4ae5798ac66fcb6921ef0
++PYTHON_POSIX_IPC_SITE = https://files.pythonhosted.org/packages/bc/2f/9a7901aa26fb0e02a671b989ba814d059a0f45af85cea31b9c9eef7e2dda
+ PYTHON_POSIX_IPC_LICENSE = BSD-3-Clause
+ PYTHON_POSIX_IPC_LICENSE_FILES = LICENSE
+ PYTHON_POSIX_IPC_SETUP_TYPE = setuptools
 -- 
 2.33.0
 
