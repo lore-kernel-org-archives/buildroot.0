@@ -2,55 +2,54 @@ Return-Path: <SRS0=iTAH=OS=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 04EE5C433F5
-	for <buildroot@archiver.kernel.org>; Tue, 28 Sep 2021 22:38:54 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C46FFC433F5
+	for <buildroot@archiver.kernel.org>; Tue, 28 Sep 2021 22:39:05 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id BCE736139E
-	for <buildroot@archiver.kernel.org>; Tue, 28 Sep 2021 22:38:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org BCE736139E
+	by mail.kernel.org (Postfix) with ESMTPS id 6373D61391
+	for <buildroot@archiver.kernel.org>; Tue, 28 Sep 2021 22:39:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6373D61391
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6E340415F7;
-	Tue, 28 Sep 2021 22:38:53 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 365D840108;
+	Tue, 28 Sep 2021 22:39:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7AT5vXZcvjKk; Tue, 28 Sep 2021 22:38:52 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Q6Az8Qv-RJY3; Tue, 28 Sep 2021 22:39:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B8E7D415EA;
-	Tue, 28 Sep 2021 22:38:51 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A3B141BF990
- for <buildroot@lists.busybox.net>; Tue, 28 Sep 2021 22:38:04 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4ECD24061C;
+	Tue, 28 Sep 2021 22:39:03 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 754F91BF319
+ for <buildroot@lists.busybox.net>; Tue, 28 Sep 2021 22:38:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A092382AED
- for <buildroot@lists.busybox.net>; Tue, 28 Sep 2021 22:38:04 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6464B4061E
+ for <buildroot@lists.busybox.net>; Tue, 28 Sep 2021 22:38:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id V1YcIc_GAlZ8 for <buildroot@lists.busybox.net>;
- Tue, 28 Sep 2021 22:38:03 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1msS_c-XAnnb for <buildroot@lists.busybox.net>;
+ Tue, 28 Sep 2021 22:38:04 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 986C482AAA
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 35E3C4061C
  for <buildroot@buildroot.org>; Tue, 28 Sep 2021 22:38:03 +0000 (UTC)
 Received: (Authenticated sender: kamel.bouhara@bootlin.com)
- by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id D9CA11C0004;
+ by relay10.mail.gandi.net (Postfix) with ESMTPSA id 28BF7240002;
  Tue, 28 Sep 2021 22:38:01 +0000 (UTC)
 From: Kamel Bouhara <kamel.bouhara@bootlin.com>
 To: buildroot@buildroot.org
-Date: Wed, 29 Sep 2021 00:37:53 +0200
-Message-Id: <20210928223754.3398867-6-kamel.bouhara@bootlin.com>
+Date: Wed, 29 Sep 2021 00:37:52 +0200
+Message-Id: <20210928223754.3398867-5-kamel.bouhara@bootlin.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210928223754.3398867-1-kamel.bouhara@bootlin.com>
 References: <20210928223754.3398867-1-kamel.bouhara@bootlin.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2 6/7] package/kmscube: use libgbm virtual
- package
+Subject: [Buildroot] [PATCH v2 5/7] package/sunxi-mali-mainline: provides
+ libgbm
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,63 +69,81 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-kmscube requires a libgbm implementation, which until now, only Mesa3D
-was providing, so kmscube had a direct dependency on Mesa3D.
-
-However, now that we have a proper libgbm virtual package, so this
-commit converts the kmscube package to use the libegl, libgbm and
-libgles virtual packages.
+Registers the package as a libgbm provider.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Kamel Bouhara <kamel.bouhara@bootlin.com>
-[ Kamel : add dependency on recent libgbm ]
 ---
- package/kmscube/Config.in  | 18 ++++++++++++++----
- package/kmscube/kmscube.mk |  2 +-
- 2 files changed, 15 insertions(+), 5 deletions(-)
+Changes v1 -> v2:
+ - Fixed gbm features are provided only when wayland is set
 
-diff --git a/package/kmscube/Config.in b/package/kmscube/Config.in
-index b6ad305bfb..3876f93491 100644
---- a/package/kmscube/Config.in
-+++ b/package/kmscube/Config.in
-@@ -1,9 +1,19 @@
- config BR2_PACKAGE_KMSCUBE
- 	bool "kmscube"
--	# requires libgbm from mesa3d
--	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL
--	depends on BR2_PACKAGE_MESA3D_OPENGL_ES
-+	depends on BR2_PACKAGE_HAS_LIBEGL
-+	depends on BR2_PACKAGE_HAS_LIBGBM
-+	depends on BR2_PACKAGE_LIBGBM_HAS_FEATURE_FORMAT_MODIFIER_PLANE_COUNT
-+	depends on BR2_PACKAGE_HAS_LIBGLES
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm
-+	select BR2_PACKAGE_LIBDRM
+ package/sunxi-mali-mainline/Config.in              |  6 ++++++
+ package/sunxi-mali-mainline/gbm.pc                 | 12 ++++++++++++
+ package/sunxi-mali-mainline/sunxi-mali-mainline.mk |  1 +
+ 3 files changed, 19 insertions(+)
+ create mode 100644 package/sunxi-mali-mainline/gbm.pc
+
+diff --git a/package/sunxi-mali-mainline/Config.in b/package/sunxi-mali-mainline/Config.in
+index 31a9152407..0a32cb456c 100644
+--- a/package/sunxi-mali-mainline/Config.in
++++ b/package/sunxi-mali-mainline/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_SUNXI_MALI_MAINLINE
+ 	depends on BR2_aarch64 || (BR2_ARM_EABIHF && BR2_arm)
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC
+ 	select BR2_PACKAGE_HAS_LIBEGL
++	select BR2_PACKAGE_HAS_LIBGBM
+ 	select BR2_PACKAGE_HAS_LIBGLES
  	help
- 	  kmscube is an application to test kms/drm drivers.
+ 	  Install userspace Allwinner OpenGL libraries.
+@@ -14,6 +15,9 @@ if BR2_PACKAGE_SUNXI_MALI_MAINLINE
+ config BR2_PACKAGE_PROVIDES_LIBEGL
+ 	default "sunxi-mali-mainline"
  
--	  https://gitlab.freedesktop.org/mesa/kmscube
-+	  https://cgit.freedesktop.org/mesa/kmscube/
++config BR2_PACKAGE_PROVIDES_LIBGBM
++	default "sunxi-mali-mainline" if BR2_PACKAGE_SUNXI_MALI_MAINLINE_OUTPUT_WAYLAND
 +
-+comment "kmscube needs EGL, GBM and OpenGL ES, and a toolchain w/ thread support"
-+	depends on BR2_PACKAGE_HAS_LIBEGL
-+	depends on BR2_PACKAGE_HAS_LIBGBM
-+	depends on BR2_PACKAGE_LIBGBM_HAS_FEATURE_FORMAT_MODIFIER_PLANE_COUNT
-+	depends on BR2_PACKAGE_HAS_LIBGLES
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/kmscube/kmscube.mk b/package/kmscube/kmscube.mk
-index 7b458376dc..5719f72ba3 100644
---- a/package/kmscube/kmscube.mk
-+++ b/package/kmscube/kmscube.mk
-@@ -8,6 +8,6 @@ KMSCUBE_VERSION = 4660a7dca6512b6e658759d00cff7d4ad2a2059d
- KMSCUBE_SITE = https://gitlab.freedesktop.org/mesa/kmscube/-/archive/$(KMSCUBE_VERSION)
- KMSCUBE_LICENSE = MIT
- KMSCUBE_LICENSE_FILES = COPYING
--KMSCUBE_DEPENDENCIES = host-pkgconf mesa3d libdrm
-+KMSCUBE_DEPENDENCIES = host-pkgconf libgles libegl libgbm libdrm
+ config BR2_PACKAGE_PROVIDES_LIBGLES
+ 	default "sunxi-mali-mainline"
  
- $(eval $(meson-package))
+@@ -26,6 +30,8 @@ config BR2_PACKAGE_SUNXI_MALI_MAINLINE_OUTPUT_FBDEV
+ config BR2_PACKAGE_SUNXI_MALI_MAINLINE_OUTPUT_WAYLAND
+ 	bool "wayland"
+ 	depends on BR2_PACKAGE_WAYLAND
++	select BR2_PACKAGE_LIBGBM_HAS_FEATURE_DMA_BUF
++	select BR2_PACKAGE_HAS_LIBGBM
+ 
+ config BR2_PACKAGE_SUNXI_MALI_MAINLINE_OUTPUT_X11_DMABUF
+ 	bool "x11 dma-buf"
+diff --git a/package/sunxi-mali-mainline/gbm.pc b/package/sunxi-mali-mainline/gbm.pc
+new file mode 100644
+index 0000000000..e2f6c04a82
+--- /dev/null
++++ b/package/sunxi-mali-mainline/gbm.pc
+@@ -0,0 +1,12 @@
++prefix=/usr
++exec_prefix=/usr
++libdir=${exec_prefix}/lib
++includedir=${prefix}/include
++
++Name: gbm
++Description: ARM Mali implementation of gbm
++Requires.private: 
++Version: 1.0
++Libs: -L${libdir} -lgbm
++Libs.private: 
++Cflags: -I${includedir}
+diff --git a/package/sunxi-mali-mainline/sunxi-mali-mainline.mk b/package/sunxi-mali-mainline/sunxi-mali-mainline.mk
+index e9091b05a2..8a76b46aba 100644
+--- a/package/sunxi-mali-mainline/sunxi-mali-mainline.mk
++++ b/package/sunxi-mali-mainline/sunxi-mali-mainline.mk
+@@ -38,6 +38,7 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_SUNXI_MALI_MAINLINE_OUTPUT_WAYLAND),y)
+ SUNXI_MALI_MAINLINE_DEPENDENCIES += wayland
++SUNXI_MALI_MAINLINE_PROVIDES += libgbm
+ endif
+ 
+ # FIXME: install gbm.pc conditionally
 -- 
 2.30.2
 
