@@ -2,58 +2,58 @@ Return-Path: <SRS0=iTAH=OS=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0FFDEC433EF
-	for <buildroot@archiver.kernel.org>; Tue, 28 Sep 2021 21:37:03 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 31279C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 28 Sep 2021 22:03:14 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 4D30961209
-	for <buildroot@archiver.kernel.org>; Tue, 28 Sep 2021 21:37:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4D30961209
+	by mail.kernel.org (Postfix) with ESMTPS id 7B6F46137A
+	for <buildroot@archiver.kernel.org>; Tue, 28 Sep 2021 22:03:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7B6F46137A
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gallagher.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DC9E7401A4;
-	Tue, 28 Sep 2021 21:37:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1935E415DD;
+	Tue, 28 Sep 2021 22:03:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lSYI5BXGTYgl; Tue, 28 Sep 2021 21:37:00 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id mm49E8HV8WjS; Tue, 28 Sep 2021 22:03:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DD5EB405FD;
-	Tue, 28 Sep 2021 21:36:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 570ED415D7;
+	Tue, 28 Sep 2021 22:03:11 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C67511BF5DA
- for <buildroot@lists.busybox.net>; Tue, 28 Sep 2021 21:36:57 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 123C21BF5DA
+ for <buildroot@lists.busybox.net>; Tue, 28 Sep 2021 22:03:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B5A8960B94
- for <buildroot@lists.busybox.net>; Tue, 28 Sep 2021 21:36:57 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id F1D9760B89
+ for <buildroot@lists.busybox.net>; Tue, 28 Sep 2021 22:03:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZT_4WZQnP8Gf for <buildroot@lists.busybox.net>;
- Tue, 28 Sep 2021 21:36:57 +0000 (UTC)
+ with ESMTP id kCyMAernJezn for <buildroot@lists.busybox.net>;
+ Tue, 28 Sep 2021 22:03:08 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
 Received: from mail.gallagher.co.nz (mail.gallagher.co.nz [203.167.229.98])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B90CD60B88
- for <buildroot@buildroot.org>; Tue, 28 Sep 2021 21:36:56 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id EBA1260B88
+ for <buildroot@buildroot.org>; Tue, 28 Sep 2021 22:03:07 +0000 (UTC)
 Received: from gglnzdom1.gallagher.local (Not Verified[172.16.0.58]) by
  mail.gallagher.co.nz (using TLS: TLSv1.2, ECDHE-RSA-AES256-GCM-SHA384)
- id <B61538af50000>; Wed, 29 Sep 2021 10:36:53 +1300
+ id <B6153911a0000>; Wed, 29 Sep 2021 11:03:05 +1300
 Received: from GNZ-PC2807.gallagher.local ([10.70.3.151])
- by gglnzdom1.gallagher.local with ESMTP id 2021092910365263-1082492 ;
- Wed, 29 Sep 2021 10:36:52 +1300 
+ by gglnzdom1.gallagher.local with ESMTP id 2021092911030568-1083076 ;
+ Wed, 29 Sep 2021 11:03:05 +1300 
 From: Ankur Tyagi <ankur.tyagi@gallagher.com>
 To: buildroot@buildroot.org
-Date: Wed, 29 Sep 2021 10:36:50 +1300
-Message-Id: <20210928213650.912-1-ankur.tyagi@gallagher.com>
+Date: Wed, 29 Sep 2021 11:03:00 +1300
+Message-Id: <20210928220300.961-1-ankur.tyagi@gallagher.com>
 MIME-Version: 1.0
 X-TNEFEvaluated: 1
 X-SEG-SpamProfiler-Analysis: v=2.3 cv=A8gSwJeG c=1 sm=1 tr=0
  a=qhWWnufYDz1ULA0Yxl8pUQ==:117 a=7QKq2e-ADPsA:10 a=uwzVE2XeAAAA:8
- a=vBNek-IZ6iLIW3PCQBAA:9 a=56Ks2SYG_ayP3Q2IVBAz:22
+ a=3gMZq0sycSoF5YAW8rcA:9 a=56Ks2SYG_ayP3Q2IVBAz:22
 X-SEG-SpamProfiler-Score: 0
-Subject: [Buildroot] [PATCH 1/1] package/libevent: add -fPIC to CFLAGS when
+Subject: [Buildroot] [PATCH 1/1] package/libgpiod: compile with -fPIC when
  BR2_PIC_PIE is set
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -66,42 +66,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Pierre-Jean Texier <texier.pj2@gmail.com>,
- Ankur Tyagi <ankur.tyagi@gallagher.com>
+Cc: Ankur Tyagi <ankur.tyagi@gallagher.com>,
+ Bartosz Golaszewski <brgl@bgdev.pl>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Otherwise build fails with following error:
-Toolchain wrapper executing: '/tools/aarch64-linux-gnu/bin//aarch64-linux-gnu-gcc' '--sysroot' '/home/user/work/buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot' '-mabi=lp64' '-fstack-protector-strong' '-fstack-clash-protection' '-mcpu=cortex-a35' '-fPIE' '-Wl,-z,now' '-Wl,-z,relro' '-shared' '.libs/buffer.o' '.libs/bufferevent.o' '.libs/bufferevent_filter.o' '.libs/bufferevent_pair.o' '.libs/bufferevent_ratelim.o' '.libs/bufferevent_sock.o' '.libs/event.o' '.libs/evmap.o' '.libs/evthread.o' '.libs/evutil.o' '.libs/evutil_rand.o' '.libs/evutil_time.o' '.libs/listener.o' '.libs/log.o' '.libs/strlcpy.o' '.libs/select.o' '.libs/poll.o' '.libs/epoll.o' '.libs/signal.o' '-Os' '-g2' '-pthread' '-pthread' '-Wl,-soname' '-Wl,libevent_core-2.1.so.7' '-o' '.libs/libevent_core-2.1.so.7.0.1'
-/tools/aarch64-linux-gnu/bin/../lib/gcc/aarch64-linux-gnu/8.3.0/../../../../aarch64-linux-gnu/bin/ld: .libs/evmap.o: relocation R_AARCH64_ADR_PREL_PG_HI21 against symbol `event_changelist_add_' which may bind externally can not be used when making a shared object; recompile with -fPIC
-.libs/evmap.o: in function `evmap_check_integrity_':
-/home/user/work/cxos-buildroot/output/build/libevent-2.1.12/evmap.c:1007:(.text+0x13ac): dangerous relocation: unsupported relocation
+Toolchain wrapper executing: '/tools/aarch64-linux-gnu/bin//aarch64-linux-gnu-g++' '--sysroot' '/home/user/work/buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot' '-mabi=lp64' '-fstack-protector-strong' '-fstack-clash-protection' '-mcpu=cortex-a35' '-fPIE' '-Wl,-z,now' '-Wl,-z,relro' '-shared' '-nostdlib' '/home/user/work/buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/../lib64/crti.o' '/tools/aarch64-linux-gnu/bin/../lib/gcc/aarch64-linux-gnu/8.3.0/crtbeginS.o' '.libs/libgpiodcxx_la-chip.o' '.libs/libgpiodcxx_la-iter.o' '.libs/libgpiodcxx_la-line.o' '.libs/libgpiodcxx_la-line_bulk.o' '-Wl,-rpath' '-Wl,/home/user/work/buildroot/output/build/libgpiod-1.4.5/lib/.libs' '/home/user/work/buildroot/output/build/libgpiod-1.4.5/lib/.libs/libgpiod.so' '-L../../lib' '-L/tools/aarch64-linux-gnu/bin/../lib/gcc/aarch64-linux-gnu/8.3.0' '-L/tools/aarch64-linux-gnu/bin/../lib/gcc' '-L/tools/aarch64-linux-gnu/bin/../lib/gcc/aarch64-linux-gnu/8.3.0/../../../../aarch64-linux-
+ gnu/lib/../lib64' '-L/home/user/work/buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot/lib/../lib64' '-L/home/user/work/buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/../lib64' '-L/tools/aarch64-linux-gnu/bin/../lib/gcc/aarch64-linux-gnu/8.3.0/../../../../aarch64-linux-gnu/lib' '-L/home/user/work/buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot/lib' '-L/home/user/work/buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib' '-lstdc++' '-lm' '-lc' '-lgcc_s' '/tools/aarch64-linux-gnu/bin/../lib/gcc/aarch64-linux-gnu/8.3.0/crtendS.o' '/home/user/work/buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/../lib64/crtn.o' '-Os' '-g2' '-Wl,-soname' '-Wl,libgpiodcxx.so.1' '-o' '.libs/libgpiodcxx.so.1.0.5'
+/tools/aarch64-linux-gnu/bin/../lib/gcc/aarch64-linux-gnu/8.3.0/../../../../aarch64-linux-gnu/bin/ld: .libs/libgpiodcxx_la-chip.o: relocation R_AARCH64_ADR_PREL_PG_HI21 against symbol `_ZNSt14_Function_base13_Base_managerIPFP10gpiod_chipRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEEE10_M_managerERSt9_Any_dataRKSE_St18_Manager_operation' which may bind externally can not be used when making a shared object; recompile with -fPIC
+.libs/libgpiodcxx_la-chip.o: in function `std::function<gpiod_chip* (std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)>::function<gpiod_chip* (*)(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&), void, void>(gpiod_chip* (*)(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&))':
+/tools/aarch64-linux-gnu/aarch64-linux-gnu/include/c++/8.3.0/bits/std_function.h:676:(.text.startup+0x48): dangerous relocation: unsupported relocation
+/tools/aarch64-linux-gnu/bin/../lib/gcc/aarch64-linux-gnu/8.3.0/../../../../aarch64-linux-gnu/bin/ld: .libs/libgpiodcxx_la-line_bulk.o: relocation R_AARCH64_ADR_PREL_PG_HI21 against symbol `_ZNSt3mapIiiSt4lessIiESaISt4pairIKiiEEED1Ev' which may bind externally can not be used when making a shared object; recompile with -fPIC
+.libs/libgpiodcxx_la-line_bulk.o: in function `__static_initialization_and_destruction_0':
+/home/user/work/buildroot/output/build/libgpiod-1.4.5/bindings/cxx/line_bulk.cpp:20:(.text.startup+0x188): dangerous relocation: unsupported relocation
 collect2: error: ld returned 1 exit status
-Makefile:1516: recipe for target 'libevent_core.la' failed
-make[3]: *** [libevent_core.la] Error 1
+Makefile:499: recipe for target 'libgpiodcxx.la' failed
+make[6]: *** [libgpiodcxx.la] Error 1
 
 Signed-off-by: Ankur Tyagi <ankur.tyagi@gallagher.com>
 ---
- package/libevent/libevent.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/libgpiod/libgpiod.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/libevent/libevent.mk b/package/libevent/libevent.mk
-index 93ba88ca88..dac3b589c0 100644
---- a/package/libevent/libevent.mk
-+++ b/package/libevent/libevent.mk
-@@ -36,5 +36,10 @@ else
- LIBEVENT_CONF_OPTS += --disable-openssl
+diff --git a/package/libgpiod/libgpiod.mk b/package/libgpiod/libgpiod.mk
+index 35d003fa33..2161e68e62 100644
+--- a/package/libgpiod/libgpiod.mk
++++ b/package/libgpiod/libgpiod.mk
+@@ -41,4 +41,10 @@ else
+ LIBGPIOD_CONF_OPTS += --disable-bindings-python
  endif
  
 +ifeq ($(BR2_PIC_PIE),y)
-+LIBEVENT_CFLAGS += -fPIC
-+LIBEVENT_CONF_OPTS += CFLAGS="$(LIBEVENT_CFLAGS)"
++LIBGPIOD_CFLAGS += -fPIC
++LIBGPIOD_CXXFLAGS += -fPIC
++LIBGPIOD_CONF_OPTS += CFLAGS="$(LIBGPIOD_CFLAGS)" CXXFLAGS="$(LIBGPIOD_CXXFLAGS)"
 +endif
 +
  $(eval $(autotools-package))
- $(eval $(host-autotools-package))
 -- 
 2.25.1
 
