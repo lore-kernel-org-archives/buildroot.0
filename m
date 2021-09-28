@@ -2,52 +2,52 @@ Return-Path: <SRS0=iTAH=OS=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C241C433F5
-	for <buildroot@archiver.kernel.org>; Tue, 28 Sep 2021 16:13:35 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 91F5AC433F5
+	for <buildroot@archiver.kernel.org>; Tue, 28 Sep 2021 16:13:46 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1DCBC60FE3
-	for <buildroot@archiver.kernel.org>; Tue, 28 Sep 2021 16:13:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1DCBC60FE3
+	by mail.kernel.org (Postfix) with ESMTPS id 3938C61206
+	for <buildroot@archiver.kernel.org>; Tue, 28 Sep 2021 16:13:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3938C61206
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D1C8A606E6;
-	Tue, 28 Sep 2021 16:13:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0636A82451;
+	Tue, 28 Sep 2021 16:13:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LMQBKFIIdyfQ; Tue, 28 Sep 2021 16:13:33 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 0Nb0Lguaydn2; Tue, 28 Sep 2021 16:13:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B3E656077A;
-	Tue, 28 Sep 2021 16:13:32 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2E4A11BF386
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3F5FF80E1B;
+	Tue, 28 Sep 2021 16:13:44 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B9C7B1BF386
  for <buildroot@lists.busybox.net>; Tue, 28 Sep 2021 16:13:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1C5AB40105
- for <buildroot@lists.busybox.net>; Tue, 28 Sep 2021 16:13:08 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A82B880C3C
+ for <buildroot@lists.busybox.net>; Tue, 28 Sep 2021 16:13:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id untAbd5DWtNB for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xdk0oG08_06M for <buildroot@lists.busybox.net>;
  Tue, 28 Sep 2021 16:13:06 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 94960400C5
+ by smtp1.osuosl.org (Postfix) with ESMTP id A694A80EA2
  for <buildroot@buildroot.org>; Tue, 28 Sep 2021 16:13:06 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id D4ED48D39F; Tue, 28 Sep 2021 16:10:48 +0000 (UTC)
+ id 028D18D41A; Tue, 28 Sep 2021 16:10:49 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 28 Sep 2021 17:37:19 +0200
+Date: Tue, 28 Sep 2021 17:48:14 +0200
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 0d7153ee3e9a78d2c69d4c76119d41b771101e31
-X-Git-Newrev: aca81799780bc1c686e34b0dbd1371f09bad0080
+X-Git-Oldrev: d6156fc8a55e63deb2d621bd78e632d909757e89
+X-Git-Newrev: 6726e6b7cfdc4a2540557054d1905741e1a822c0
 X-Patchwork-Hint: ignore
-Message-Id: <20210928161048.D4ED48D39F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/openjdk{,
- -bin}: bump latest to version 16.0.1+9
+Message-Id: <20210928161049.028D18D41A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/openjdk{-bin}:
+ security bump versions to 11.0.12+7 and 16.0.2+7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,276 +65,107 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aca81799780bc1c686e34b0dbd1371f09bad0080
+commit: https://git.buildroot.net/buildroot/commit/?id=6726e6b7cfdc4a2540557054d1905741e1a822c0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-When introducing OpenJDK to buildroot, the OpenJDK project did not put
-releases on their GitHub page. Since then, the OpenJDK developers have
-not only added OpenJDK releases to Github, they are starting to phase
-out adding releases to their public-facing mercurial repository.
+As the github repository has changed from github.com/AdoptOpenJDK/ to
+github.com/adoptium, both versions are updated in the same patch.
 
-Compare the following URLs:
-https://wiki.openjdk.java.net/display/JDKUpdates/JDK+14u
-https://wiki.openjdk.java.net/display/JDKUpdates/JDK+15u
-https://wiki.openjdk.java.net/display/JDKUpdates/JDK+16u
+Security fixes
 
-With JDK14, only the mercurial repository is listed. With OpenJDK15,
-both the GitHub and mercurial repository are listed. Finally, with
-OpenJDK16, only the GitHub repository is listed.
-
-For consistency's sake, and for the version bump of JDK latest from 14
-to 16 do the following:
-
-  - Change the repository for OpenJDK14 to point to the official GitHub
-    repository,
-
-  - In order to simplify and reuse the GitHub URL, modify the
-    OPENJDK_VERSION_MAJOR and OPENJDK_VERSION_MINOR definitions to only
-    include a single number for the MAJOR definition.
-
-  - Change openjdk-bin.mk to also use the same format as the openjdk.mk
-    file
-
-Unfortunately, we can't yet do the switch for OpenJDK11: the Github
-repository is missing a Mercurial-related file, so that the archive
-for OpenJDK11 11.0.11+9 would change from the one we already have on
-s.b.o and that people would alreay have locally, and we'd have a hash
-mismatch, either on master, or on all pur previous relases. OpenJDK11
-just got a new release mere hours ago (as of this writing), but it
-hasn't yet trickled down to AdoptOpenJDK/openjdk11-binaries, so we
-can't do the bump just yet...
-
-Add a note to the OpenJDK11 case, to prepare the migration to Github
-with the next version bump.
-
-Finally, remove upstreamed patch 0001-fix-gcc-10-support.patch as it's
-no longer needed.
+    JD K-8256157: Improve bytecode assembly
+    JDK-8256491: Better HTTP transport
+    JDK-8258432, CVE-2021-2341: Improve file transfers
+    JDK-8260453: Improve Font Bounding
+    JDK-8260960: Signs of jarsigner signing
+    JDK-8260967, CVE-2021-2369: Better jar file validation
+    JDK-8262380: Enhance XML processing passes
+    JDK-8262403: Enhanced data transfer
+    JDK-8262410: Enhanced rules for zones
+    JDK-8262477: Enhance String Conclusions
+    JDK-8262967: Improve Zip file support
+    JDK-8264066, CVE-2021-2388: Enhance compiler validation
+    JDK-8264079: Improve abstractions
+    JDK-8264460: Improve NTLM support
 
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
-[yann.morin.1998@free.fr:
-  - meld the github switch and 14->16 bump together
-  - drop the github switch for 11 9because hash mismatch)
-  - expand commit log accordingly
-]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 057e27029c9811ba8cc4922e30cc3878bed98807)
+(cherry picked from commit baaf71b9bb13c3c42ed99ae4488e80dcefe28513)
+[Peter: mention security fixes]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openjdk-bin/openjdk-bin.hash               |   4 +-
- package/openjdk-bin/openjdk-bin.mk                 |  12 ++-
- .../14.0.2+12/0001-fix-gcc-10-support.patch        | 119 ---------------------
- package/openjdk/Config.in                          |   2 +-
- package/openjdk/openjdk.hash                       |   2 +-
- package/openjdk/openjdk.mk                         |  10 +-
- 6 files changed, 17 insertions(+), 132 deletions(-)
+ package/openjdk-bin/openjdk-bin.hash | 6 +++---
+ package/openjdk-bin/openjdk-bin.mk   | 6 +++---
+ package/openjdk/openjdk.hash         | 4 ++--
+ package/openjdk/openjdk.mk           | 4 ++--
+ 4 files changed, 10 insertions(+), 10 deletions(-)
 
 diff --git a/package/openjdk-bin/openjdk-bin.hash b/package/openjdk-bin/openjdk-bin.hash
-index a08aa16d47..04b3c42d25 100644
+index 04b3c42d25..696371eb51 100644
 --- a/package/openjdk-bin/openjdk-bin.hash
 +++ b/package/openjdk-bin/openjdk-bin.hash
-@@ -1,5 +1,5 @@
--# From https://github.com/AdoptOpenJDK/openjdk14-binaries/releases
--sha256  7d5ee7e06909b8a99c0d029f512f67b092597aa5b0e78c109bd59405bbfa74fe  OpenJDK14U-jdk_x64_linux_hotspot_14.0.2_12.tar.gz
-+# From https://github.com/AdoptOpenJDK/openjdk16-binaries/releases
-+sha256  7fdda042207efcedd30cd76d6295ed56b9c2e248cb3682c50898a560d4aa1c6f  OpenJDK16U-jdk_x64_linux_hotspot_16.0.1_9.tar.gz
+@@ -1,8 +1,8 @@
+ # From https://github.com/AdoptOpenJDK/openjdk16-binaries/releases
+-sha256  7fdda042207efcedd30cd76d6295ed56b9c2e248cb3682c50898a560d4aa1c6f  OpenJDK16U-jdk_x64_linux_hotspot_16.0.1_9.tar.gz
++sha256  323d6d7474a359a28eff7ddd0df8e65bd61554a8ed12ef42fd9365349e573c2c  OpenJDK16U-jdk_x64_linux_hotspot_16.0.2_7.tar.gz
  
- # From https://github.com/AdoptOpenJDK/openjdk11-binaries/releases
- sha256  e99b98f851541202ab64401594901e583b764e368814320eba442095251e78cb  OpenJDK11U-jdk_x64_linux_hotspot_11.0.11_9.tar.gz
+-# From https://github.com/AdoptOpenJDK/openjdk11-binaries/releases
+-sha256  e99b98f851541202ab64401594901e583b764e368814320eba442095251e78cb  OpenJDK11U-jdk_x64_linux_hotspot_11.0.11_9.tar.gz
++# From https://github.com/adoptium/temurin11-binaries/releases
++sha256  8770f600fc3b89bf331213c7aa21f8eedd9ca5d96036d1cd48cb2748a3dbefd2  OpenJDK11U-jdk_x64_linux_hotspot_11.0.12_7.tar.gz
+ 
+ # Locally calculated
+ sha256  4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  legal/java.prefs/LICENSE
 diff --git a/package/openjdk-bin/openjdk-bin.mk b/package/openjdk-bin/openjdk-bin.mk
-index 61e7ecac4c..e63278be76 100644
+index b48155dc28..a34ba355bd 100644
 --- a/package/openjdk-bin/openjdk-bin.mk
 +++ b/package/openjdk-bin/openjdk-bin.mk
-@@ -5,12 +5,14 @@
- ################################################################################
+@@ -6,14 +6,14 @@
  
  ifeq ($(BR2_OPENJDK_VERSION_LATEST),y)
--HOST_OPENJDK_BIN_VERSION_MAJOR = 14.0.2
--HOST_OPENJDK_BIN_VERSION_MINOR = 12
--HOST_OPENJDK_BIN_VERSION = $(HOST_OPENJDK_BIN_VERSION_MAJOR)_$(HOST_OPENJDK_BIN_VERSION_MINOR)
--HOST_OPENJDK_BIN_SOURCE = OpenJDK14U-jdk_x64_linux_hotspot_$(HOST_OPENJDK_BIN_VERSION).tar.gz
--HOST_OPENJDK_BIN_SITE = https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-$(HOST_OPENJDK_BIN_VERSION_MAJOR)%2B$(HOST_OPENJDK_BIN_VERSION_MINOR)
-+HOST_OPENJDK_BIN_VERSION_MAJOR = 16
-+HOST_OPENJDK_BIN_VERSION_MINOR = 0.1_9
-+HOST_OPENJDK_BIN_VERSION = $(HOST_OPENJDK_BIN_VERSION_MAJOR).$(HOST_OPENJDK_BIN_VERSION_MINOR)
-+HOST_OPENJDK_BIN_SOURCE = OpenJDK$(HOST_OPENJDK_BIN_VERSION_MAJOR)U-jdk_x64_linux_hotspot_$(HOST_OPENJDK_BIN_VERSION).tar.gz
-+HOST_OPENJDK_BIN_SITE = https://github.com/AdoptOpenJDK/openjdk$(HOST_OPENJDK_BIN_VERSION_MAJOR)-binaries/releases/download/jdk-$(subst _,%2B,$(HOST_OPENJDK_BIN_VERSION))
+ HOST_OPENJDK_BIN_VERSION_MAJOR = 16
+-HOST_OPENJDK_BIN_VERSION_MINOR = 0.1_9
++HOST_OPENJDK_BIN_VERSION_MINOR = 0.2_7
  else
-+# NOTE! When bumping the 11 version, be sure to switch to github,
-+# *and* commonalise the _VERSION, _SOURCE, and _SITE variables, above
- HOST_OPENJDK_BIN_VERSION_MAJOR = 11.0.11
- HOST_OPENJDK_BIN_VERSION_MINOR = 9
- HOST_OPENJDK_BIN_VERSION = $(HOST_OPENJDK_BIN_VERSION_MAJOR)_$(HOST_OPENJDK_BIN_VERSION_MINOR)
-diff --git a/package/openjdk/14.0.2+12/0001-fix-gcc-10-support.patch b/package/openjdk/14.0.2+12/0001-fix-gcc-10-support.patch
-deleted file mode 100644
-index 5364c47252..0000000000
---- a/package/openjdk/14.0.2+12/0001-fix-gcc-10-support.patch
-+++ /dev/null
-@@ -1,119 +0,0 @@
--From 58911e9de888aece29f491995a8b8a31f7d6b424 Mon Sep 17 00:00:00 2001
--From: Patrick Zhang <patrick.zhang@amperecomputing.com>
--Date: Wed, 05 Feb 2020 17:14:15 -0700
--Subject: [PATCH] fix gcc 10 support
--
--This patch fixes the "multiple definition" link errors with GCC10 due to
--GCC10 setting -fno-common by default.
--
--This is a combination of the following upstream commits:
--  - https://hg.openjdk.java.net/jdk/jdk/rev/8e6fa89397ca
--  - https://hg.openjdk.java.net/jdk/jdk/rev/6925fca95959
--  - https://hg.openjdk.java.net/jdk/jdk/rev/9e54ea7d9cd9
--
--Signed-off-by: Patrick Zhang <patrick.zhang@amperecomputing.com>
--Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-----
-- src/java.base/unix/native/libjava/childproc.c        |  1 +
-- src/java.base/unix/native/libjava/childproc.h        |  2 +-
-- .../share/native/libj2gss/NativeFunc.c               |  3 +++
-- .../share/native/libj2gss/NativeFunc.h               |  2 +-
-- src/jdk.sctp/unix/native/libsctp/Sctp.h              | 12 ++++++------
-- src/jdk.sctp/unix/native/libsctp/SctpNet.c           |  7 +++++++
-- 6 files changed, 19 insertions(+), 8 deletions(-)
--
--diff --git a/src/java.base/unix/native/libjava/childproc.c b/src/java.base/unix/native/libjava/childproc.c
--index 811aaeac5..16480bfbf 100644
----- a/src/java.base/unix/native/libjava/childproc.c
--+++ b/src/java.base/unix/native/libjava/childproc.c
--@@ -34,6 +34,7 @@
-- 
-- #include "childproc.h"
-- 
--+const char * const *parentPathv;
-- 
-- ssize_t
-- restartableWrite(int fd, const void *buf, size_t count)
--diff --git a/src/java.base/unix/native/libjava/childproc.h b/src/java.base/unix/native/libjava/childproc.h
--index 091150930..d57e44b6e 100644
----- a/src/java.base/unix/native/libjava/childproc.h
--+++ b/src/java.base/unix/native/libjava/childproc.h
--@@ -126,7 +126,7 @@ typedef struct _SpawnInfo {
--  * The cached and split version of the JDK's effective PATH.
--  * (We don't support putenv("PATH=...") in native code)
--  */
---const char * const *parentPathv;
--+extern const char * const *parentPathv;
-- 
-- ssize_t restartableWrite(int fd, const void *buf, size_t count);
-- int restartableDup2(int fd_from, int fd_to);
--diff --git a/src/java.security.jgss/share/native/libj2gss/NativeFunc.c b/src/java.security.jgss/share/native/libj2gss/NativeFunc.c
--index da7bc0445..5941f7b5a 100644
----- a/src/java.security.jgss/share/native/libj2gss/NativeFunc.c
--+++ b/src/java.security.jgss/share/native/libj2gss/NativeFunc.c
--@@ -27,6 +27,9 @@
-- #include <stdlib.h>
-- #include "NativeFunc.h"
-- 
--+/* global GSS function table */
--+GSS_FUNCTION_TABLE_PTR ftab;
--+
-- /* standard GSS method names (ordering is from mapfile) */
-- static const char RELEASE_NAME[]                = "gss_release_name";
-- static const char IMPORT_NAME[]                 = "gss_import_name";
--diff --git a/src/java.security.jgss/share/native/libj2gss/NativeFunc.h b/src/java.security.jgss/share/native/libj2gss/NativeFunc.h
--index 82914387c..e4a4981a3 100644
----- a/src/java.security.jgss/share/native/libj2gss/NativeFunc.h
--+++ b/src/java.security.jgss/share/native/libj2gss/NativeFunc.h
--@@ -277,6 +277,6 @@ typedef struct GSS_FUNCTION_TABLE {
-- typedef GSS_FUNCTION_TABLE *GSS_FUNCTION_TABLE_PTR;
-- 
-- /* global GSS function table */
---GSS_FUNCTION_TABLE_PTR ftab;
--+extern GSS_FUNCTION_TABLE_PTR ftab;
-- 
-- #endif
--diff --git a/src/jdk.sctp/unix/native/libsctp/Sctp.h b/src/jdk.sctp/unix/native/libsctp/Sctp.h
--index cc1367f78..46b07db0a 100644
----- a/src/jdk.sctp/unix/native/libsctp/Sctp.h
--+++ b/src/jdk.sctp/unix/native/libsctp/Sctp.h
--@@ -322,12 +322,12 @@ typedef int sctp_peeloff_func(int sock, sctp_assoc_t id);
-- 
-- #endif /* __linux__ */
-- 
---sctp_getladdrs_func* nio_sctp_getladdrs;
---sctp_freeladdrs_func* nio_sctp_freeladdrs;
---sctp_getpaddrs_func* nio_sctp_getpaddrs;
---sctp_freepaddrs_func* nio_sctp_freepaddrs;
---sctp_bindx_func* nio_sctp_bindx;
---sctp_peeloff_func* nio_sctp_peeloff;
--+extern sctp_getladdrs_func* nio_sctp_getladdrs;
--+extern sctp_freeladdrs_func* nio_sctp_freeladdrs;
--+extern sctp_getpaddrs_func* nio_sctp_getpaddrs;
--+extern sctp_freepaddrs_func* nio_sctp_freepaddrs;
--+extern sctp_bindx_func* nio_sctp_bindx;
--+extern sctp_peeloff_func* nio_sctp_peeloff;
-- 
-- jboolean loadSocketExtensionFuncs(JNIEnv* env);
-- 
--diff --git a/src/jdk.sctp/unix/native/libsctp/SctpNet.c b/src/jdk.sctp/unix/native/libsctp/SctpNet.c
--index d40c15aa3..ab9b6e093 100644
----- a/src/jdk.sctp/unix/native/libsctp/SctpNet.c
--+++ b/src/jdk.sctp/unix/native/libsctp/SctpNet.c
--@@ -43,6 +43,13 @@ static jmethodID isaCtrID = 0;
-- static const char* nativeSctpLib = "libsctp.so.1";
-- static jboolean funcsLoaded = JNI_FALSE;
-- 
--+sctp_getladdrs_func* nio_sctp_getladdrs;
--+sctp_freeladdrs_func* nio_sctp_freeladdrs;
--+sctp_getpaddrs_func* nio_sctp_getpaddrs;
--+sctp_freepaddrs_func* nio_sctp_freepaddrs;
--+sctp_bindx_func* nio_sctp_bindx;
--+sctp_peeloff_func* nio_sctp_peeloff;
--+
-- JNIEXPORT jint JNICALL DEF_JNI_OnLoad
--   (JavaVM *vm, void *reserved) {
--     return JNI_VERSION_1_2;
---- 
--2.26.2
--
-diff --git a/package/openjdk/Config.in b/package/openjdk/Config.in
-index 1b60d80dc2..f2b7f5ffd7 100644
---- a/package/openjdk/Config.in
-+++ b/package/openjdk/Config.in
-@@ -59,7 +59,7 @@ config BR2_OPENJDK_VERSION_LTS
- 	bool "LTS (OpenJDK 11)"
+ HOST_OPENJDK_BIN_VERSION_MAJOR = 11
+-HOST_OPENJDK_BIN_VERSION_MINOR = 0.11_9
++HOST_OPENJDK_BIN_VERSION_MINOR = 0.12_7
+ endif
+ HOST_OPENJDK_BIN_VERSION = $(HOST_OPENJDK_BIN_VERSION_MAJOR).$(HOST_OPENJDK_BIN_VERSION_MINOR)
+ HOST_OPENJDK_BIN_SOURCE = OpenJDK$(HOST_OPENJDK_BIN_VERSION_MAJOR)U-jdk_x64_linux_hotspot_$(HOST_OPENJDK_BIN_VERSION).tar.gz
+-HOST_OPENJDK_BIN_SITE = https://github.com/AdoptOpenJDK/openjdk$(HOST_OPENJDK_BIN_VERSION_MAJOR)-binaries/releases/download/jdk-$(subst _,%2B,$(HOST_OPENJDK_BIN_VERSION))
++HOST_OPENJDK_BIN_SITE = https://github.com/adoptium/temurin$(HOST_OPENJDK_BIN_VERSION_MAJOR)-binaries/releases/download/jdk-$(subst _,%2B,$(HOST_OPENJDK_BIN_VERSION))
  
- config BR2_OPENJDK_VERSION_LATEST
--	bool "latest (OpenJDK 14)"
-+	bool "latest (OpenJDK 16)"
- 
- endchoice
- 
+ HOST_OPENJDK_BIN_LICENSE = GPL-2.0+ with exception
+ HOST_OPENJDK_BIN_LICENSE_FILES = legal/java.prefs/LICENSE legal/java.prefs/ASSEMBLY_EXCEPTION
 diff --git a/package/openjdk/openjdk.hash b/package/openjdk/openjdk.hash
-index 05a0c12c45..f96c638d40 100644
+index ba6c4385e7..2b4a2c7a62 100644
 --- a/package/openjdk/openjdk.hash
 +++ b/package/openjdk/openjdk.hash
 @@ -1,4 +1,4 @@
  # Locally computed
--sha256  dfb3607f1b675458f29a185a40f1dbbf896439cf33b3aa0f3d89df297e604935  jdk-14.0.2+12.tar.gz
-+sha256  3b3aca61fe2834322e51636d99bcd09c4abba7d8a2cde231dbcbcbdedf829baf  jdk-16.0.1+9.tar.gz
- sha256  c8b9d92028f6e46d94bde65ebce3b593fdcc0d1ca1fa00482f38815ed37c92a1  jdk-11.0.11+9.tar.gz
+-sha256  3b3aca61fe2834322e51636d99bcd09c4abba7d8a2cde231dbcbcbdedf829baf  openjdk-16.0.1+9.tar.gz
+-sha256  55841c01dbe6606e0d5f88045fb2da02632ce3a2d9d9b25d030a06eadeee0f62  openjdk-11.0.11+9.tar.gz
++sha256  b4a0e71e41a11175e8a7c1dba86ed5b0aa878413158c8d48813db1b64ac9536c  openjdk-16.0.2+7.tar.gz
++sha256  9a37c9641b45f5c51fe19c1ccae141daeb5dcdbd59fa2f56e7dea7bf09484bec  openjdk-11.0.12+7.tar.gz
  sha256  4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  LICENSE
 diff --git a/package/openjdk/openjdk.mk b/package/openjdk/openjdk.mk
-index 6ed5085fdb..ec5b23314b 100644
+index cbb975ca25..aac5c87e73 100644
 --- a/package/openjdk/openjdk.mk
 +++ b/package/openjdk/openjdk.mk
-@@ -5,12 +5,14 @@
- ################################################################################
+@@ -6,10 +6,10 @@
  
  ifeq ($(BR2_OPENJDK_VERSION_LATEST),y)
--OPENJDK_VERSION_MAJOR = 14.0.2
--OPENJDK_VERSION_MINOR = 12
--OPENJDK_VERSION = $(OPENJDK_VERSION_MAJOR)+$(OPENJDK_VERSION_MINOR)
-+OPENJDK_VERSION_MAJOR = 16
-+OPENJDK_VERSION_MINOR = 0.1+9
-+OPENJDK_VERSION = $(OPENJDK_VERSION_MAJOR).$(OPENJDK_VERSION_MINOR)
- OPENJDK_SOURCE = jdk-$(OPENJDK_VERSION).tar.gz
--OPENJDK_SITE = https://hg.openjdk.java.net/jdk-updates/jdk14u/archive
-+OPENJDK_SITE = $(call github,openjdk,jdk$(OPENJDK_VERSION_MAJOR)u,jdk-$(OPENJDK_VERSION))
+ OPENJDK_VERSION_MAJOR = 16
+-OPENJDK_VERSION_MINOR = 0.1+9
++OPENJDK_VERSION_MINOR = 0.2+7
  else
-+# NOTE! When bumping the 11 version, be sure to switch to github,
-+# *and* commonalise the _VERSION, _SOURCE, and _SITE variables, above
- OPENJDK_VERSION_MAJOR = 11.0.11
- OPENJDK_VERSION_MINOR = 9
- OPENJDK_VERSION = $(OPENJDK_VERSION_MAJOR)+$(OPENJDK_VERSION_MINOR)
+ OPENJDK_VERSION_MAJOR = 11
+-OPENJDK_VERSION_MINOR = 0.11+9
++OPENJDK_VERSION_MINOR = 0.12+7
+ endif
+ OPENJDK_VERSION = $(OPENJDK_VERSION_MAJOR).$(OPENJDK_VERSION_MINOR)
+ OPENJDK_SITE = $(call github,openjdk,jdk$(OPENJDK_VERSION_MAJOR)u,jdk-$(OPENJDK_VERSION))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
