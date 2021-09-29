@@ -2,52 +2,52 @@ Return-Path: <SRS0=V5PJ=OT=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1750AC433EF
-	for <buildroot@archiver.kernel.org>; Wed, 29 Sep 2021 14:56:01 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 538C9C433EF
+	for <buildroot@archiver.kernel.org>; Wed, 29 Sep 2021 14:56:13 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D2ECB61501
-	for <buildroot@archiver.kernel.org>; Wed, 29 Sep 2021 14:56:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D2ECB61501
+	by mail.kernel.org (Postfix) with ESMTPS id EA9A161452
+	for <buildroot@archiver.kernel.org>; Wed, 29 Sep 2021 14:56:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org EA9A161452
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AA93360BE9;
-	Wed, 29 Sep 2021 14:56:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C4EC7415B2;
+	Wed, 29 Sep 2021 14:56:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 27JYxs-R6ZiB; Wed, 29 Sep 2021 14:55:59 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id oCKL-he_JQZ0; Wed, 29 Sep 2021 14:56:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1124960BE8;
-	Wed, 29 Sep 2021 14:55:59 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9C6201BF426
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6D51A424F8;
+	Wed, 29 Sep 2021 14:56:10 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B8AA91BF9B4
  for <buildroot@lists.busybox.net>; Wed, 29 Sep 2021 14:55:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8A95860BF7
+ by smtp1.osuosl.org (Postfix) with ESMTP id A9265832DC
  for <buildroot@lists.busybox.net>; Wed, 29 Sep 2021 14:55:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yOWbprPHG-1T for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id G9liZdKdZLvU for <buildroot@lists.busybox.net>;
  Wed, 29 Sep 2021 14:55:19 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D1C4460BE8
+ by smtp1.osuosl.org (Postfix) with ESMTP id EE65180DD3
  for <buildroot@buildroot.org>; Wed, 29 Sep 2021 14:55:19 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id E6F098D48F; Wed, 29 Sep 2021 14:52:59 +0000 (UTC)
+ id 095F38D48F; Wed, 29 Sep 2021 14:53:00 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 29 Sep 2021 16:44:23 +0200
+Date: Wed, 29 Sep 2021 16:54:15 +0200
 X-Git-Refname: refs/heads/2021.08.x
-X-Git-Oldrev: 02d9c80438376e30d361176e185f32ed3a76babd
-X-Git-Newrev: e6b7f3146be2e270b181acc30f79c610ab8715b5
+X-Git-Oldrev: e0baa69b7e601628ae34f10ae89256c70c787ab8
+X-Git-Newrev: ffa393b32e609197024b8ccd52644a6b931bce6f
 X-Patchwork-Hint: ignore
-Message-Id: <20210929145259.E6F098D48F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.08.x] package/bind: security
- bump version to 9.11.35
+Message-Id: <20210929145300.095F38D48F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.08.x] package/imlib2: bump
+ version to 1.7.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,51 +65,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e6b7f3146be2e270b181acc30f79c610ab8715b5
+commit: https://git.buildroot.net/buildroot/commit/?id=ffa393b32e609197024b8ccd52644a6b931bce6f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.08.x
-
-Named failed to check the opcode of responses when performing zone
-refreshes, stub zone updates, and UPDATE forwarding.  This could lead to an
-assertion failure under certain conditions and has been addressed by
-rejecting responses whose opcode does not match the expected value. [GL #2762]
-
-For details, see the release notes:
-https://downloads.isc.org/isc/bind9/9.11.35/RELEASE-NOTES-bind-9.11.35.html
 
 Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 6977ee6e0ecf9cc9b24e5f41f9598f22fd0fcaf3)
+(cherry picked from commit 4b897e778a487fb8693d8595009d6c2c4692dd99)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/bind/bind.hash | 6 +++---
- package/bind/bind.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/imlib2/imlib2.hash | 8 ++++----
+ package/imlib2/imlib2.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/bind/bind.hash b/package/bind/bind.hash
-index 9311d82d6d..12b80149c5 100644
---- a/package/bind/bind.hash
-+++ b/package/bind/bind.hash
-@@ -1,4 +1,4 @@
--# Verified from https://ftp.isc.org/isc/bind9/9.11.31/bind-9.11.31.tar.gz.asc
--# with key 2455774D42FDFE6B9C383EB8FE1002BC5970811F
--sha256  f5f24457f42b2e86870d887596e47500e4d40521a098dcb96f3a06f18adfa36a  bind-9.11.31.tar.gz
-+# Verified from https://ftp.isc.org/isc/bind9/9.11.35/bind-9.11.35.tar.gz.asc
-+# with key E9AB6E79233C0416E8993F450C03AFA90A5967C4
-+sha256  1c882705827b6aafa45d917ae3b20eccccc8d5df3c4477df44b04382e6c47562  bind-9.11.35.tar.gz
- sha256  cad49daa42654bc241762cd998630168a2542c8fd6fad3881e2eac1510bb6fcd  COPYRIGHT
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index a5c246a54a..0d95da209c 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
+diff --git a/package/imlib2/imlib2.hash b/package/imlib2/imlib2.hash
+index 3df3deffec..690d836c2e 100644
+--- a/package/imlib2/imlib2.hash
++++ b/package/imlib2/imlib2.hash
+@@ -1,8 +1,8 @@
+-# From https://sourceforge.net/projects/enlightenment/files/imlib2-src/1.7.1/
+-md5  98569de9b10bcb6fd5d13e4d331ddd81  imlib2-1.7.1.tar.bz2
+-sha1  092c66ae0180798a4036e68c68d7f316de192e36  imlib2-1.7.1.tar.bz2
++# From https://sourceforge.net/projects/enlightenment/files/imlib2-src/1.7.3/
++md5  1e79055a0b8fe27d208b6f8bb1bde60c  imlib2-1.7.3.tar.bz2
++sha1  3d55965f946d0b2754a84c8e57c78ddc227252c6  imlib2-1.7.3.tar.bz2
+ 
+ # Locally computed
+-sha256  033a6a639dcbc8e03f65ff05e57068e7346d50ee2f2fff304bb9095a1b2bc407  imlib2-1.7.1.tar.bz2
++sha256  158d0b8c20bc11221af9e77a64a116fca7051b03cdea2c4f31d31f469382f997  imlib2-1.7.3.tar.bz2
+ sha256  fb70339dd33a77b6213c7ae067fccf93d04af44ff3f937c61f8863f7970e73f6  COPYING
+ sha256  8c9a2e92ed4937e2d30c2ea95439c36ed3002fc47e34efee43455a460fee8ef5  COPYING-PLAIN
+diff --git a/package/imlib2/imlib2.mk b/package/imlib2/imlib2.mk
+index 6d973827dc..89b4769f92 100644
+--- a/package/imlib2/imlib2.mk
++++ b/package/imlib2/imlib2.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--BIND_VERSION = 9.11.31
-+BIND_VERSION = 9.11.35
- BIND_SITE = https://ftp.isc.org/isc/bind9/$(BIND_VERSION)
- # bind does not support parallel builds.
- BIND_MAKE = $(MAKE1)
+-IMLIB2_VERSION = 1.7.1
++IMLIB2_VERSION = 1.7.3
+ IMLIB2_SOURCE = imlib2-$(IMLIB2_VERSION).tar.bz2
+ IMLIB2_SITE = http://downloads.sourceforge.net/project/enlightenment/imlib2-src/$(IMLIB2_VERSION)
+ IMLIB2_LICENSE = Imlib2
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
