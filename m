@@ -2,52 +2,70 @@ Return-Path: <SRS0=V5PJ=OT=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 53801C433FE
-	for <buildroot@archiver.kernel.org>; Wed, 29 Sep 2021 21:20:04 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CCB31C433EF
+	for <buildroot@archiver.kernel.org>; Wed, 29 Sep 2021 21:26:31 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 847A0615E1
-	for <buildroot@archiver.kernel.org>; Wed, 29 Sep 2021 21:20:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 847A0615E1
+	by mail.kernel.org (Postfix) with ESMTPS id 43F07615E3
+	for <buildroot@archiver.kernel.org>; Wed, 29 Sep 2021 21:26:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 43F07615E3
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 55A0C83FA0;
-	Wed, 29 Sep 2021 21:20:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2A167422B5;
+	Wed, 29 Sep 2021 21:26:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uVjJq5OEmPON; Wed, 29 Sep 2021 21:20:02 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id B7bboqYj0w1P; Wed, 29 Sep 2021 21:26:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8C39B83F9D;
-	Wed, 29 Sep 2021 21:20:01 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id AAF5E1BF3DC
- for <buildroot@lists.busybox.net>; Wed, 29 Sep 2021 21:19:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5C3B5422B0;
+	Wed, 29 Sep 2021 21:26:28 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id A9B111BF3DC
+ for <buildroot@lists.busybox.net>; Wed, 29 Sep 2021 21:26:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9AC5660657
- for <buildroot@lists.busybox.net>; Wed, 29 Sep 2021 21:19:59 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 989FA422B0
+ for <buildroot@lists.busybox.net>; Wed, 29 Sep 2021 21:26:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EjfnXKLXyMqe for <buildroot@lists.busybox.net>;
- Wed, 29 Sep 2021 21:19:58 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9E9DF60595
- for <buildroot@buildroot.org>; Wed, 29 Sep 2021 21:19:58 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 18D518D6B1; Wed, 29 Sep 2021 21:17:38 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Wed, 29 Sep 2021 22:58:57 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3b1659107d8b0e80e2b19ad83b5fa7e564c411e1
-X-Git-Newrev: 5916cc501120aab59452cbe6f99ac8797558e1ca
-X-Patchwork-Hint: ignore
-Message-Id: <20210929211738.18D518D6B1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] fs/iso9660: add support for hybrid image
- using Grub2 on BIOS and EFI
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2-cZZoPyiC0j for <buildroot@lists.busybox.net>;
+ Wed, 29 Sep 2021 21:26:25 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B042742204
+ for <buildroot@buildroot.org>; Wed, 29 Sep 2021 21:26:24 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:719f:4fd6:1de4:46be])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPSA id 9E5772003C8;
+ Wed, 29 Sep 2021 23:26:14 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+ s=smtp-20201208; t=1632950781;
+ bh=jxRyl4zL34H4NtsrnJYEDJDaeKnn2aPMBPBK2GB6R4U=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=MRIfZI6iKt6rS25ey48bPuNM/xc7916vZ8ht+/hBC58zOn9715Tmq2UFGQwfKyFHZ
+ +030MeYTCFnleyCB20yhDEoDpsL9cY4mcz/Luqhp9lsd6J1xtTui/9+YJsbRclSCIt
+ S8AhPMD5WVqXfEhIrrbeKRE+ttfVyb5UHORva6uN+aUrVvRJ+RbGo0oyLboUWeI4jH
+ N7YvpWxo6tk5oBHM9VuW8FlBr0BkQ4W1Eq4AJTLJn0o6P2ZruDhY2syNURPSXMveya
+ IMWuY8di7VeFL0nKa0W8mBSp3W6MaQUS6vDrf4iHjpnCiu9hcmKYlKEoAYe82TIu17
+ HURnqCgxiWwOA==
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Wed, 29 Sep 2021 23:26:14 +0200
+Date: Wed, 29 Sep 2021 23:26:14 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Kory Maincent <kory.maincent@bootlin.com>
+Message-ID: <20210929212614.GM1504958@scaer>
+References: <20210923155726.87851-1-kory.maincent@bootlin.com>
+ <20210923155726.87851-5-kory.maincent@bootlin.com>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20210923155726.87851-5-kory.maincent@bootlin.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+Subject: Re: [Buildroot] [PATCH v3 4/7] fs/iso9660: add support for hybrid
+ image using Grub bootloader on BIOS and EFI
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,183 +77,142 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: thomas.petazzoni@bootlin.com, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5916cc501120aab59452cbe6f99ac8797558e1ca
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Add support for building an hybrid ISO9660 image compatible with legacy
-and UEFI BIOS. Note that this is not about an (iso)hybrid image, which
-can boot from both a CDROM or a USB stick, but really about an image
-being bootable from the legay BIOS or EFI; the two are orthognal.
-
-The option -eltorito-alt-boot need to be used in the xorriso command
-to generate the hybrid image. That option is a separator, meaning the
-previous boot entry is done, and the following boot options define a new
-boot entry.
-
-The -no-emul-boot defines the type of the current boot image; that's why
-it has to now be repeated in each of the BIOS and EFI options.
-
-Finally, for symetry and consistency between the BIOS and EFI options,
-we move the BIOS image option first.
-
-Note: the BIOS boot image options have to be provided before the EFI
-ones, or the system won't boot; the underlying reason is not known...
-
-Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
-[yann.morin.1998@free.fr:
-  - note about hybrid vs. (iso)hybrid
-  - explain -eltorito-alt-boot
-  - explain duplication of -no-emul-boot
-  - rename the variables
-  - note about the BIOS-EFI ordering
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- fs/iso9660/Config.in  | 16 +++++++---------
- fs/iso9660/iso9660.mk | 45 ++++++++++++++++++++++++++++-----------------
- 2 files changed, 35 insertions(+), 26 deletions(-)
-
-diff --git a/fs/iso9660/Config.in b/fs/iso9660/Config.in
-index f8f577506d..8c4e7badf8 100644
---- a/fs/iso9660/Config.in
-+++ b/fs/iso9660/Config.in
-@@ -27,6 +27,10 @@ choice
- config BR2_TARGET_ROOTFS_ISO9660_GRUB2
- 	bool "grub2"
- 	depends on BR2_TARGET_GRUB2
-+	select BR2_TARGET_ROOTFS_ISO9660_BIOS_BOOTLOADER \
-+		if BR2_TARGET_GRUB2_I386_PC
-+	select BR2_TARGET_ROOTFS_ISO9660_EFI_BOOTLOADER \
-+		if (BR2_TARGET_GRUB2_I386_EFI || BR2_TARGET_GRUB2_X86_64_EFI)
- 	help
- 	  Use Grub 2 as the bootloader for the ISO9660 image. Make
- 	  sure to enable the 'iso9660' module in
-@@ -39,21 +43,15 @@ config BR2_TARGET_ROOTFS_ISO9660_GRUB2
- config BR2_TARGET_ROOTFS_ISO9660_ISOLINUX
- 	bool "isolinux"
- 	depends on BR2_TARGET_SYSLINUX_ISOLINUX
-+	select BR2_TARGET_ROOTFS_ISO9660_BIOS_BOOTLOADER
- 
- endchoice
- 
--choice
--	prompt "Boot payload"
--
- config BR2_TARGET_ROOTFS_ISO9660_BIOS_BOOTLOADER
--	bool "legacy bios"
--	depends on BR2_TARGET_GRUB2_I386_PC || BR2_TARGET_ROOTFS_ISO9660_ISOLINUX
-+	bool
- 
- config BR2_TARGET_ROOTFS_ISO9660_EFI_BOOTLOADER
--	bool "UEFI"
--	depends on BR2_TARGET_GRUB2_I386_EFI || BR2_TARGET_GRUB2_X86_64_EFI
--
--endchoice
-+	bool
- 
- config BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU
- 	string "Boot menu config file"
-diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
-index faa15833c2..0524f94c35 100644
---- a/fs/iso9660/iso9660.mk
-+++ b/fs/iso9660/iso9660.mk
-@@ -69,18 +69,20 @@ ROOTFS_ISO9660_DEPENDENCIES += grub2
- ROOTFS_ISO9660_BOOTLOADER_CONFIG_PATH = \
- 	$(ROOTFS_ISO9660_TMP_TARGET_DIR)/boot/grub/grub.cfg
- ROOTFS_ISO9660_BOOT_IMAGE = boot/grub/grub-eltorito.img
--define ROOTFS_ISO9660_INSTALL_BOOTLOADER
-+define ROOTFS_ISO9660_INSTALL_BOOTLOADER_BIOS
- 	$(INSTALL) -D -m 0644 $(BINARIES_DIR)/grub-eltorito.img \
- 		$(ROOTFS_ISO9660_TMP_TARGET_DIR)/boot/grub/grub-eltorito.img
- endef
--else ifeq ($(BR2_TARGET_ROOTFS_ISO9660_GRUB2)$(BR2_TARGET_ROOTFS_ISO9660_EFI_BOOTLOADER),yy)
-+endif
-+
-+ifeq ($(BR2_TARGET_ROOTFS_ISO9660_GRUB2)$(BR2_TARGET_ROOTFS_ISO9660_EFI_BOOTLOADER),yy)
- ROOTFS_ISO9660_DEPENDENCIES += grub2 host-dosfstools host-mtools
- ROOTFS_ISO9660_EFI_PARTITION = boot/fat.efi
- ROOTFS_ISO9660_EFI_PARTITION_PATH = $(ROOTFS_ISO9660_TMP_TARGET_DIR)/$(ROOTFS_ISO9660_EFI_PARTITION)
- ROOTFS_ISO9660_EFI_PARTITION_CONTENT = $(BINARIES_DIR)/efi-part
- ROOTFS_ISO9660_BOOTLOADER_CONFIG_PATH = \
- 	$(ROOTFS_ISO9660_TMP_TARGET_DIR)/boot/grub/grub.cfg
--define ROOTFS_ISO9660_INSTALL_BOOTLOADER
-+define ROOTFS_ISO9660_INSTALL_BOOTLOADER_EFI
- 	rm -rf $(ROOTFS_ISO9660_EFI_PARTITION_PATH)
- 	mkdir -p $(dir $(ROOTFS_ISO9660_EFI_PARTITION_PATH))
- 	dd if=/dev/zero of=$(ROOTFS_ISO9660_EFI_PARTITION_PATH) bs=1M count=1
-@@ -90,12 +92,14 @@ define ROOTFS_ISO9660_INSTALL_BOOTLOADER
- 		$(ROOTFS_ISO9660_EFI_PARTITION_CONTENT)/* ::/
- 	$(ROOTFS_ISO9660_FIX_TIME) $(ROOTFS_ISO9660_EFI_PARTITION_PATH)
- endef
--else ifeq ($(BR2_TARGET_ROOTFS_ISO9660_ISOLINUX),y)
-+endif
-+
-+ifeq ($(BR2_TARGET_ROOTFS_ISO9660_ISOLINUX),y)
- ROOTFS_ISO9660_DEPENDENCIES += syslinux
- ROOTFS_ISO9660_BOOTLOADER_CONFIG_PATH = \
- 	$(ROOTFS_ISO9660_TMP_TARGET_DIR)/isolinux/isolinux.cfg
- ROOTFS_ISO9660_BOOT_IMAGE = isolinux/isolinux.bin
--define ROOTFS_ISO9660_INSTALL_BOOTLOADER
-+define ROOTFS_ISO9660_INSTALL_BOOTLOADER_BIOS
- 	$(INSTALL) -D -m 0644 $(BINARIES_DIR)/syslinux/* \
- 		$(ROOTFS_ISO9660_TMP_TARGET_DIR)/isolinux/
- 	$(INSTALL) -D -m 0644 $(HOST_DIR)/share/syslinux/ldlinux.c32 \
-@@ -108,7 +112,8 @@ define ROOTFS_ISO9660_PREPARATION
- 		$(ROOTFS_ISO9660_BOOTLOADER_CONFIG_PATH)
- 	$(SED) "s%__KERNEL_PATH__%/boot/$(LINUX_IMAGE_NAME)%" \
- 		$(ROOTFS_ISO9660_BOOTLOADER_CONFIG_PATH)
--	$(ROOTFS_ISO9660_INSTALL_BOOTLOADER)
-+	$(ROOTFS_ISO9660_INSTALL_BOOTLOADER_BIOS)
-+	$(ROOTFS_ISO9660_INSTALL_BOOTLOADER_EFI)
- endef
- 
- ROOTFS_ISO9660_PRE_GEN_HOOKS += ROOTFS_ISO9660_PREPARATION
-@@ -152,21 +157,27 @@ ROOTFS_ISO9660_PRE_GEN_HOOKS += ROOTFS_ISO9660_DISABLE_EXTERNAL_INITRD
- 
- endif # ROOTFS_ISO9660_USE_INITRD
- 
--ROOTFS_ISO9660_OPTS += \
--	-J \
--	-R \
--	-no-emul-boot
-+ROOTFS_ISO9660_OPTS += -J -R
- 
--ifeq ($(BR2_TARGET_ROOTFS_ISO9660_BIOS_BOOTLOADER),y)
--ROOTFS_ISO9660_OPTS += \
-+ROOTFS_ISO9660_OPTS_BIOS = \
-+	-b $(ROOTFS_ISO9660_BOOT_IMAGE) \
-+	-no-emul-boot \
- 	-boot-load-size 4 \
--	-boot-info-table \
--	-b $(ROOTFS_ISO9660_BOOT_IMAGE)
--endif
-+	-boot-info-table
-+
-+ROOTFS_ISO9660_OPTS_EFI = \
-+	--efi-boot $(ROOTFS_ISO9660_EFI_PARTITION) \
-+	-no-emul-boot
- 
--ifeq ($(BR2_TARGET_ROOTFS_ISO9660_EFI_BOOTLOADER),y)
-+ifeq ($(BR2_TARGET_ROOTFS_ISO9660_BIOS_BOOTLOADER)$(BR2_TARGET_ROOTFS_ISO9660_EFI_BOOTLOADER),yy)
- ROOTFS_ISO9660_OPTS += \
--	--efi-boot $(ROOTFS_ISO9660_EFI_PARTITION)
-+	$(ROOTFS_ISO9660_OPTS_BIOS) \
-+	-eltorito-alt-boot \
-+	$(ROOTFS_ISO9660_OPTS_EFI)
-+else ifeq ($(BR2_TARGET_ROOTFS_ISO9660_BIOS_BOOTLOADER),y)
-+ROOTFS_ISO9660_OPTS += $(ROOTFS_ISO9660_OPTS_BIOS)
-+else ifeq ($(BR2_TARGET_ROOTFS_ISO9660_EFI_BOOTLOADER),y)
-+ROOTFS_ISO9660_OPTS += $(ROOTFS_ISO9660_OPTS_EFI)
- endif
- 
- define ROOTFS_ISO9660_CMD
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+S8O2cnksIEFsbCwKCk9uIDIwMjEtMDktMjMgMTc6NTcgKzAyMDAsIEtvcnkgTWFpbmNlbnQgc3Bh
+a2UgdGh1c2x5Ogo+IEFkZCBzdXBwb3J0IGZvciBidWlsZGluZyBhbiBoeWJyaWQgSVNPOTY2MCBp
+bWFnZSBjb21wYXRpYmxlIHdpdGggbGVnYWN5Cj4gYW5kIFVFRkkgQklPUy4KPiBUaGUgb3B0aW9u
+IC1lbHRvcml0by1hbHQtYm9vdCBuZWVkIHRvIGJlIHVzZWQgaW4gdGhlIHhvcnJpc28gY29tbWFu
+ZAo+IHRvIGdlbmVyYXRlIHRoZSBoeWJyaWQgaW1hZ2UuCj4gCj4gU2lnbmVkLW9mZi1ieTogS29y
+eSBNYWluY2VudCA8a29yeS5tYWluY2VudEBib290bGluLmNvbT4KCkFwcGxpZWQgdG8gbWFzdGVy
+LCB0aGFua3MsIHdpdGggdGhlIGZvbG93aW5nIGNoYW5nZXM7CgogIC0gbm90ZSBhYm91dCBoeWJy
+aWQgdnMuIChpc28paHlicmlkCiAgLSBleHBsYWluIC1lbHRvcml0by1hbHQtYm9vdAogIC0gZXhw
+bGFpbiBkdXBsaWNhdGlvbiBvZiAtbm8tZW11bC1ib290CiAgLSByZW5hbWUgdGhlIHZhcmlhYmxl
+cwogIC0gbm90ZSBhYm91dCB0aGUgQklPUy1FRkkgb3JkZXJpbmcKClNpbmNlIEkgaGFkIGRvbmUg
+YSBmZXcgY2hhbmdlcyBpbiB0aGUgcHJldmlvdXMgcGF0Y2hlcywgb2YgY291cnNlIEkgaGFkCnRv
+IHJlc29sdmUgdGhlIGNvbmZsaWN0cyB3aGVuIGFwcGx5aW5nIHRoaXMgcGF0Y2guLi4gSSd2ZSB0
+cmllZCB0byBiZSBhcwpjYXJlZnVsbCBhcyBJIGNvdWxkLCBidXQgSSBtYXkgaGF2ZSAoYWdhaW4h
+KSBsZXQgc29tZSBpc3N1ZXMgc2xpcAp0aGVvdWdoLi4uCgpDb3VsZCB5b3UgcGxlYXNlIHJldmll
+dy90ZXN0IHRoYXQgaXQgaXMgdGlsbCB3b3JrcyBhcyBleHBlY3RlZD8KCkkgZG9uJ3QgdGhpbmsg
+dGhlIHJlbWFpbmluZyBwYXRjaGVzIG5lZWQgcmViYXNpbmcsIHRob3VnaCwgc28gSSBob3BlIEkK
+Y2FuIGhhbmRsZSBtb3JlIHRoYW4gb25lIG5leHQgZXZlbmluZy4uLiA6LS8KClJlZ2FyZHMsCllh
+bm4gRS4gTU9SSU4uCgo+IC0tLQo+IAo+IENoYW5nZXMgaW4gdjI6Cj4gLSBGaXggdHlwb3MKPiAK
+PiBDaGFuZ2VzIGluIHYzOgo+IC0gRm9sbG93IGNoYW5nZXMgYnJvdWd0IGJ5IG1vZGlmaWNhdGlv
+biBvZiB0aGUgdGhpcmQgcGF0Y2guCj4gCj4gIGZzL2lzbzk2NjAvQ29uZmlnLmluICB8IDE2ICsr
+KysrKystLS0tLS0tLQo+ICBmcy9pc285NjYwL2lzbzk2NjAubWsgfCA0NSArKysrKysrKysrKysr
+KysrKysrKysrKysrKysrLS0tLS0tLS0tLS0tLS0tCj4gIDIgZmlsZXMgY2hhbmdlZCwgMzYgaW5z
+ZXJ0aW9ucygrKSwgMjUgZGVsZXRpb25zKC0pCj4gCj4gZGlmZiAtLWdpdCBhL2ZzL2lzbzk2NjAv
+Q29uZmlnLmluIGIvZnMvaXNvOTY2MC9Db25maWcuaW4KPiBpbmRleCBmOGY1Nzc1MDZkLi44YzRl
+N2JhZGY4IDEwMDY0NAo+IC0tLSBhL2ZzL2lzbzk2NjAvQ29uZmlnLmluCj4gKysrIGIvZnMvaXNv
+OTY2MC9Db25maWcuaW4KPiBAQCAtMjcsNiArMjcsMTAgQEAgY2hvaWNlCj4gIGNvbmZpZyBCUjJf
+VEFSR0VUX1JPT1RGU19JU085NjYwX0dSVUIyCj4gIAlib29sICJncnViMiIKPiAgCWRlcGVuZHMg
+b24gQlIyX1RBUkdFVF9HUlVCMgo+ICsJc2VsZWN0IEJSMl9UQVJHRVRfUk9PVEZTX0lTTzk2NjBf
+QklPU19CT09UTE9BREVSIFwKPiArCQlpZiBCUjJfVEFSR0VUX0dSVUIyX0kzODZfUEMKPiArCXNl
+bGVjdCBCUjJfVEFSR0VUX1JPT1RGU19JU085NjYwX0VGSV9CT09UTE9BREVSIFwKPiArCQlpZiAo
+QlIyX1RBUkdFVF9HUlVCMl9JMzg2X0VGSSB8fCBCUjJfVEFSR0VUX0dSVUIyX1g4Nl82NF9FRkkp
+Cj4gIAloZWxwCj4gIAkgIFVzZSBHcnViIDIgYXMgdGhlIGJvb3Rsb2FkZXIgZm9yIHRoZSBJU085
+NjYwIGltYWdlLiBNYWtlCj4gIAkgIHN1cmUgdG8gZW5hYmxlIHRoZSAnaXNvOTY2MCcgbW9kdWxl
+IGluCj4gQEAgLTM5LDIxICs0MywxNSBAQCBjb25maWcgQlIyX1RBUkdFVF9ST09URlNfSVNPOTY2
+MF9HUlVCMgo+ICBjb25maWcgQlIyX1RBUkdFVF9ST09URlNfSVNPOTY2MF9JU09MSU5VWAo+ICAJ
+Ym9vbCAiaXNvbGludXgiCj4gIAlkZXBlbmRzIG9uIEJSMl9UQVJHRVRfU1lTTElOVVhfSVNPTElO
+VVgKPiArCXNlbGVjdCBCUjJfVEFSR0VUX1JPT1RGU19JU085NjYwX0JJT1NfQk9PVExPQURFUgo+
+ICAKPiAgZW5kY2hvaWNlCj4gIAo+IC1jaG9pY2UKPiAtCXByb21wdCAiQm9vdCBwYXlsb2FkIgo+
+IC0KPiAgY29uZmlnIEJSMl9UQVJHRVRfUk9PVEZTX0lTTzk2NjBfQklPU19CT09UTE9BREVSCj4g
+LQlib29sICJsZWdhY3kgYmlvcyIKPiAtCWRlcGVuZHMgb24gQlIyX1RBUkdFVF9HUlVCMl9JMzg2
+X1BDIHx8IEJSMl9UQVJHRVRfUk9PVEZTX0lTTzk2NjBfSVNPTElOVVgKPiArCWJvb2wKPiAgCj4g
+IGNvbmZpZyBCUjJfVEFSR0VUX1JPT1RGU19JU085NjYwX0VGSV9CT09UTE9BREVSCj4gLQlib29s
+ICJVRUZJIgo+IC0JZGVwZW5kcyBvbiBCUjJfVEFSR0VUX0dSVUIyX0kzODZfRUZJIHx8IEJSMl9U
+QVJHRVRfR1JVQjJfWDg2XzY0X0VGSQo+IC0KPiAtZW5kY2hvaWNlCj4gKwlib29sCj4gIAo+ICBj
+b25maWcgQlIyX1RBUkdFVF9ST09URlNfSVNPOTY2MF9CT09UX01FTlUKPiAgCXN0cmluZyAiQm9v
+dCBtZW51IGNvbmZpZyBmaWxlIgo+IGRpZmYgLS1naXQgYS9mcy9pc285NjYwL2lzbzk2NjAubWsg
+Yi9mcy9pc285NjYwL2lzbzk2NjAubWsKPiBpbmRleCA5MjFlZmExYjAyLi45YzI1MzVkMTAyIDEw
+MDY0NAo+IC0tLSBhL2ZzL2lzbzk2NjAvaXNvOTY2MC5tawo+ICsrKyBiL2ZzL2lzbzk2NjAvaXNv
+OTY2MC5tawo+IEBAIC02NywxOCArNjcsMjAgQEAgUk9PVEZTX0lTTzk2NjBfREVQRU5ERU5DSUVT
+ICs9IGdydWIyCj4gIFJPT1RGU19JU085NjYwX0JPT1RMT0FERVJfQ09ORklHX1BBVEggPSBcCj4g
+IAkkKFJPT1RGU19JU085NjYwX1RNUF9UQVJHRVRfRElSKS9ib290L2dydWIvZ3J1Yi5jZmcKPiAg
+Uk9PVEZTX0lTTzk2NjBfQk9PVF9JTUFHRSA9IGJvb3QvZ3J1Yi9ncnViLWVsdG9yaXRvLmltZwo+
+IC1kZWZpbmUgUk9PVEZTX0lTTzk2NjBfSU5TVEFMTF9CT09UTE9BREVSCj4gK2RlZmluZSBST09U
+RlNfSVNPOTY2MF9JTlNUQUxMX0JPT1RMT0FERVJfQklPUwo+ICAJJChJTlNUQUxMKSAtRCAtbSAw
+NjQ0ICQoQklOQVJJRVNfRElSKS9ncnViLWVsdG9yaXRvLmltZyBcCj4gIAkJJChST09URlNfSVNP
+OTY2MF9UTVBfVEFSR0VUX0RJUikvYm9vdC9ncnViL2dydWItZWx0b3JpdG8uaW1nCj4gIGVuZGVm
+Cj4gLWVsc2UgaWZlcSAoJChCUjJfVEFSR0VUX1JPT1RGU19JU085NjYwX0dSVUIyKSQoQlIyX1RB
+UkdFVF9ST09URlNfSVNPOTY2MF9FRklfQk9PVExPQURFUikseXkpCj4gK2VuZGlmCj4gKwo+ICtp
+ZmVxICgkKEJSMl9UQVJHRVRfUk9PVEZTX0lTTzk2NjBfR1JVQjIpJChCUjJfVEFSR0VUX1JPT1RG
+U19JU085NjYwX0VGSV9CT09UTE9BREVSKSx5eSkKPiAgUk9PVEZTX0lTTzk2NjBfREVQRU5ERU5D
+SUVTICs9IGdydWIyIGhvc3QtZG9zZnN0b29scyBob3N0LW10b29scwo+ICBST09URlNfSVNPOTY2
+MF9FRklfUEFSVElUSU9OID0gYm9vdC9mYXQuZWZpCj4gIFJPT1RGU19JU085NjYwX0VGSV9QQVJU
+SVRJT05fUEFUSCA9ICQoUk9PVEZTX0lTTzk2NjBfVE1QX1RBUkdFVF9ESVIpLyQoUk9PVEZTX0lT
+Tzk2NjBfRUZJX1BBUlRJVElPTikKPiAgUk9PVEZTX0lTTzk2NjBfRUZJX1BBUlRJVElPTl9DT05U
+RU5UID0gJChCSU5BUklFU19ESVIpL2VmaS1wYXJ0Cj4gIFJPT1RGU19JU085NjYwX0JPT1RMT0FE
+RVJfQ09ORklHX1BBVEggPSBcCj4gIAkkKFJPT1RGU19JU085NjYwX1RNUF9UQVJHRVRfRElSKS9i
+b290L2dydWIvZ3J1Yi5jZmcKPiAtZGVmaW5lIFJPT1RGU19JU085NjYwX0lOU1RBTExfQk9PVExP
+QURFUgo+ICtkZWZpbmUgUk9PVEZTX0lTTzk2NjBfSU5TVEFMTF9CT09UTE9BREVSX0VGSQo+ICAJ
+cm0gLXJmICQoUk9PVEZTX0lTTzk2NjBfRUZJX1BBUlRJVElPTl9QQVRIKQo+ICAJbWtkaXIgLXAg
+JChkaXIgJChST09URlNfSVNPOTY2MF9FRklfUEFSVElUSU9OX1BBVEgpKQo+ICAJZGQgaWY9L2Rl
+di96ZXJvIG9mPSQoUk9PVEZTX0lTTzk2NjBfRUZJX1BBUlRJVElPTl9QQVRIKSBicz0xTSBjb3Vu
+dD0xCj4gQEAgLTg3LDEyICs4OSwxNCBAQCBkZWZpbmUgUk9PVEZTX0lTTzk2NjBfSU5TVEFMTF9C
+T09UTE9BREVSCj4gIAkkKEhPU1RfRElSKS9iaW4vbWNvcHkgLXAgLW0gLWkgJChST09URlNfSVNP
+OTY2MF9FRklfUEFSVElUSU9OX1BBVEgpIC1zIFwKPiAgCQkkKFJPT1RGU19JU085NjYwX0VGSV9Q
+QVJUSVRJT05fQ09OVEVOVCkvKiA6Oi8KPiAgZW5kZWYKPiAtZWxzZSBpZmVxICgkKEJSMl9UQVJH
+RVRfUk9PVEZTX0lTTzk2NjBfSVNPTElOVVgpLHkpCj4gK2VuZGlmCj4gKwo+ICtpZmVxICgkKEJS
+Ml9UQVJHRVRfUk9PVEZTX0lTTzk2NjBfSVNPTElOVVgpLHkpCj4gIFJPT1RGU19JU085NjYwX0RF
+UEVOREVOQ0lFUyArPSBzeXNsaW51eAo+ICBST09URlNfSVNPOTY2MF9CT09UTE9BREVSX0NPTkZJ
+R19QQVRIID0gXAo+ICAJJChST09URlNfSVNPOTY2MF9UTVBfVEFSR0VUX0RJUikvaXNvbGludXgv
+aXNvbGludXguY2ZnCj4gIFJPT1RGU19JU085NjYwX0JPT1RfSU1BR0UgPSBpc29saW51eC9pc29s
+aW51eC5iaW4KPiAtZGVmaW5lIFJPT1RGU19JU085NjYwX0lOU1RBTExfQk9PVExPQURFUgo+ICtk
+ZWZpbmUgUk9PVEZTX0lTTzk2NjBfSU5TVEFMTF9CT09UTE9BREVSX0JJT1MKPiAgCSQoSU5TVEFM
+TCkgLUQgLW0gMDY0NCAkKEJJTkFSSUVTX0RJUikvc3lzbGludXgvKiBcCj4gIAkJJChST09URlNf
+SVNPOTY2MF9UTVBfVEFSR0VUX0RJUikvaXNvbGludXgvCj4gIAkkKElOU1RBTEwpIC1EIC1tIDA2
+NDQgJChIT1NUX0RJUikvc2hhcmUvc3lzbGludXgvbGRsaW51eC5jMzIgXAo+IEBAIC0xMDUsNyAr
+MTA5LDggQEAgZGVmaW5lIFJPT1RGU19JU085NjYwX1BSRVBBUkFUSU9OCj4gIAkJJChST09URlNf
+SVNPOTY2MF9CT09UTE9BREVSX0NPTkZJR19QQVRIKQo+ICAJJChTRUQpICJzJV9fS0VSTkVMX1BB
+VEhfXyUvYm9vdC8kKExJTlVYX0lNQUdFX05BTUUpJSIgXAo+ICAJCSQoUk9PVEZTX0lTTzk2NjBf
+Qk9PVExPQURFUl9DT05GSUdfUEFUSCkKPiAtCSQoUk9PVEZTX0lTTzk2NjBfSU5TVEFMTF9CT09U
+TE9BREVSKQo+ICsJJChST09URlNfSVNPOTY2MF9JTlNUQUxMX0JPT1RMT0FERVJfQklPUykKPiAr
+CSQoUk9PVEZTX0lTTzk2NjBfSU5TVEFMTF9CT09UTE9BREVSX0VGSSkKPiAgZW5kZWYKPiAgCj4g
+IFJPT1RGU19JU085NjYwX1BSRV9HRU5fSE9PS1MgKz0gUk9PVEZTX0lTTzk2NjBfUFJFUEFSQVRJ
+T04KPiBAQCAtMTUxLDI0ICsxNTYsMzIgQEAgZW5kaWYgIyBST09URlNfSVNPOTY2MF9VU0VfSU5J
+VFJECj4gIAo+ICBST09URlNfSVNPOTY2MF9PUFRTICs9IFwKPiAgCS1KIFwKPiAtCS1SIFwKPiAt
+CS1uby1lbXVsLWJvb3QKPiArCS1SCj4gIAo+IC1pZmVxICgkKEJSMl9UQVJHRVRfUk9PVEZTX0lT
+Tzk2NjBfQklPU19CT09UTE9BREVSKSx5KQo+IC1ST09URlNfSVNPOTY2MF9PUFRTICs9IFwKPiAr
+Uk9PVEZTX0lTTzk2NjBfQk9PVExPQURFUl9PUFRTX0JJT1MgPSBcCj4gKwktYiAkKFJPT1RGU19J
+U085NjYwX0JPT1RfSU1BR0UpIFwKPiArCS1uby1lbXVsLWJvb3QgXAo+ICAJLWJvb3QtbG9hZC1z
+aXplIDQgXAo+IC0JLWJvb3QtaW5mby10YWJsZSBcCj4gLQktYiAkKFJPT1RGU19JU085NjYwX0JP
+T1RfSU1BR0UpCj4gLWVuZGlmCj4gKwktYm9vdC1pbmZvLXRhYmxlCj4gIAo+IC1pZmVxICgkKEJS
+Ml9UQVJHRVRfUk9PVEZTX0lTTzk2NjBfRUZJX0JPT1RMT0FERVIpLHkpCj4gLVJPT1RGU19JU085
+NjYwX09QVFMgKz0gXAo+IC0JLS1lZmktYm9vdCAkKFJPT1RGU19JU085NjYwX0VGSV9QQVJUSVRJ
+T04pCj4gK1JPT1RGU19JU085NjYwX0JPT1RMT0FERVJfT1BUU19FRkkgPSBcCj4gKwktLWVmaS1i
+b290ICQoUk9PVEZTX0lTTzk2NjBfRUZJX1BBUlRJVElPTikgXAo+ICsJLW5vLWVtdWwtYm9vdAo+
+ICsKPiAraWZlcSAoJChCUjJfVEFSR0VUX1JPT1RGU19JU085NjYwX0JJT1NfQk9PVExPQURFUikk
+KEJSMl9UQVJHRVRfUk9PVEZTX0lTTzk2NjBfRUZJX0JPT1RMT0FERVIpLHl5KQo+ICtST09URlNf
+SVNPOTY2MF9CT09UTE9BREVSX09QVFMgPSAkKFJPT1RGU19JU085NjYwX0JPT1RMT0FERVJfT1BU
+U19CSU9TKQo+ICtST09URlNfSVNPOTY2MF9CT09UTE9BREVSX09QVFMgKz0gLWVsdG9yaXRvLWFs
+dC1ib290Cj4gK1JPT1RGU19JU085NjYwX0JPT1RMT0FERVJfT1BUUyArPSAkKFJPT1RGU19JU085
+NjYwX0JPT1RMT0FERVJfT1BUU19FRkkpCj4gK2Vsc2UgaWZlcSAoJChCUjJfVEFSR0VUX1JPT1RG
+U19JU085NjYwX0JJT1NfQk9PVExPQURFUikseSkKPiArUk9PVEZTX0lTTzk2NjBfQk9PVExPQURF
+Ul9PUFRTID0gJChST09URlNfSVNPOTY2MF9CT09UTE9BREVSX09QVFNfQklPUykKPiArZWxzZSBp
+ZmVxICgkKEJSMl9UQVJHRVRfUk9PVEZTX0lTTzk2NjBfRUZJX0JPT1RMT0FERVIpLHkpCj4gK1JP
+T1RGU19JU085NjYwX0JPT1RMT0FERVJfT1BUUyA9ICQoUk9PVEZTX0lTTzk2NjBfQk9PVExPQURF
+Ul9PUFRTX0VGSSkKPiAgZW5kaWYKPiAgCj4gIGRlZmluZSBST09URlNfSVNPOTY2MF9DTUQKPiAg
+CSQoSE9TVF9ESVIpL2Jpbi94b3JyaXNvIC1hcyBta2lzb2ZzIFwKPiAgCQkkKFJPT1RGU19JU085
+NjYwX09QVFMpIFwKPiArCQkkKFJPT1RGU19JU085NjYwX0JPT1RMT0FERVJfT1BUUykgXAo+ICAJ
+CS1vICRAICQoUk9PVEZTX0lTTzk2NjBfVE1QX1RBUkdFVF9ESVIpCj4gIGVuZGVmCj4gIAo+IC0t
+IAo+IDIuMjUuMQo+IAo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fCj4gYnVpbGRyb290IG1haWxpbmcgbGlzdAo+IGJ1aWxkcm9vdEBsaXN0cy5idWlsZHJv
+b3Qub3JnCj4gaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVp
+bGRyb290CgotLSAKLi0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS0tLi0tLS0t
+LS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0tLS4KfCAgWWFubiBFLiBNT1JJTiAgfCBS
+ZWFsLVRpbWUgRW1iZWRkZWQgfCAvIlwgQVNDSUkgUklCQk9OIHwgRXJpY3MnIGNvbnNwaXJhY3k6
+IHwKfCArMzMgNjYyIDM3NiAwNTYgfCBTb2Z0d2FyZSAgRGVzaWduZXIgfCBcIC8gQ0FNUEFJR04g
+ICAgIHwgIF9fXyAgICAgICAgICAgICAgIHwKfCArMzMgNTYxIDA5OSA0MjcgYC0tLS0tLS0tLS0t
+LS4tLS0tLS0tOiAgWCAgQUdBSU5TVCAgICAgIHwgIFxlLyAgVGhlcmUgaXMgbm8gIHwKfCBodHRw
+Oi8veW1vcmluLmlzLWEtZ2Vlay5vcmcvIHwgXy8qXF8gfCAvIFwgSFRNTCBNQUlMICAgIHwgICB2
+ICAgY29uc3BpcmFjeS4gIHwKJy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0t
+Xi0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0tLS0tLScKX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApi
+dWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1h
+bi9saXN0aW5mby9idWlsZHJvb3QK
