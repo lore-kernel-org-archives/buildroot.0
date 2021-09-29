@@ -2,52 +2,52 @@ Return-Path: <SRS0=V5PJ=OT=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B3112C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 29 Sep 2021 14:56:28 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F11DCC433EF
+	for <buildroot@archiver.kernel.org>; Wed, 29 Sep 2021 14:56:35 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 741B561526
-	for <buildroot@archiver.kernel.org>; Wed, 29 Sep 2021 14:56:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 741B561526
+	by mail.kernel.org (Postfix) with ESMTPS id 94F79613CD
+	for <buildroot@archiver.kernel.org>; Wed, 29 Sep 2021 14:56:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 94F79613CD
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 45303406FE;
-	Wed, 29 Sep 2021 14:56:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 639FB41978;
+	Wed, 29 Sep 2021 14:56:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JrvhYQzvZrWI; Wed, 29 Sep 2021 14:56:22 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id x1lo25jAfcAP; Wed, 29 Sep 2021 14:56:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B5C31406F9;
-	Wed, 29 Sep 2021 14:56:21 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D49E21BF9B6
- for <buildroot@lists.busybox.net>; Wed, 29 Sep 2021 14:55:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CD493422B8;
+	Wed, 29 Sep 2021 14:56:33 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D32481BF426
+ for <buildroot@lists.busybox.net>; Wed, 29 Sep 2021 14:55:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C4375402B6
- for <buildroot@lists.busybox.net>; Wed, 29 Sep 2021 14:55:20 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id CBF1460C0D
+ for <buildroot@lists.busybox.net>; Wed, 29 Sep 2021 14:55:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RgUWTLEXF0bt for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id G3WiPzvA7srD for <buildroot@lists.busybox.net>;
  Wed, 29 Sep 2021 14:55:19 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id DDA5A4016A
+ by smtp3.osuosl.org (Postfix) with ESMTP id CCA69600BB
  for <buildroot@buildroot.org>; Wed, 29 Sep 2021 14:55:19 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id F038E8D4C3; Wed, 29 Sep 2021 14:52:59 +0000 (UTC)
+ id DDD818D4C0; Wed, 29 Sep 2021 14:52:59 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 29 Sep 2021 16:50:53 +0200
+Date: Wed, 29 Sep 2021 16:41:20 +0200
 X-Git-Refname: refs/heads/2021.08.x
-X-Git-Oldrev: e6b7f3146be2e270b181acc30f79c610ab8715b5
-X-Git-Newrev: e0baa69b7e601628ae34f10ae89256c70c787ab8
+X-Git-Oldrev: 7e93d664d9a63e4b804a40419830c2803c7af97b
+X-Git-Newrev: 02d9c80438376e30d361176e185f32ed3a76babd
 X-Patchwork-Hint: ignore
-Message-Id: <20210929145259.F038E8D4C3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.08.x] package/links: bump
- version to 2.24
+Message-Id: <20210929145259.DDD818D4C0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.08.x] package/lxc: bump to
+ version 4.0.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,40 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e0baa69b7e601628ae34f10ae89256c70c787ab8
+commit: https://git.buildroot.net/buildroot/commit/?id=02d9c80438376e30d361176e185f32ed3a76babd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.08.x
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+https://discuss.linuxcontainers.org/t/lxc-4-0-10-has-been-released/11618
+https://discuss.linuxcontainers.org/t/lxc-4-0-9-lts-has-been-released/10999
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 7433ca40ae9fec9542efdf5652e35be863c97bc0)
+(cherry picked from commit 9a48be36d5b188e0cd0f670875acfeb1a724e4d4)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/links/links.hash | 2 +-
- package/links/links.mk   | 2 +-
+ package/lxc/lxc.hash | 2 +-
+ package/lxc/lxc.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/links/links.hash b/package/links/links.hash
-index 156b73fb63..6dbb9d13c0 100644
---- a/package/links/links.hash
-+++ b/package/links/links.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/lxc/lxc.hash b/package/lxc/lxc.hash
+index 85cdecceb2..efd7a8e42c 100644
+--- a/package/lxc/lxc.hash
++++ b/package/lxc/lxc.hash
+@@ -1,4 +1,4 @@
  # Locally calculated
--sha256  0364986b3a7f1e8e3171bea362b53f71e1dd3360a8842d66fdc65580ebc2084d  links-2.22.tar.bz2
-+sha256  9b12f5ba2d068306d7ff7385b520cdcafdc0e55c87eec877abb0e78288525430  links-2.24.tar.bz2
- sha256  92deeb70791366630095d4e0714fe37d6e2bd5db0e6ef498ebb8de328f45b253  COPYING
-diff --git a/package/links/links.mk b/package/links/links.mk
-index 015878f892..5f075a70da 100644
---- a/package/links/links.mk
-+++ b/package/links/links.mk
+-sha256  9165dabc0bb6ef7f2fda2009aee90b20fbefe77ed8008347e9f06048eba1e463  lxc-4.0.6.tar.gz
++sha256  a10c518056d2e497bd600e4ffac2853bdeab1e835bf455a6d87cc8df128bfae9  lxc-4.0.10.tar.gz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE.GPL2
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.LGPL2.1
+diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
+index 24a1f3c588..93f6d2535f 100644
+--- a/package/lxc/lxc.mk
++++ b/package/lxc/lxc.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LINKS_VERSION = 2.22
-+LINKS_VERSION = 2.24
- LINKS_SOURCE = links-$(LINKS_VERSION).tar.bz2
- LINKS_SITE = http://links.twibright.com/download
- LINKS_DEPENDENCIES = host-pkgconf
+-LXC_VERSION = 4.0.6
++LXC_VERSION = 4.0.10
+ LXC_SITE = https://linuxcontainers.org/downloads/lxc
+ LXC_LICENSE = GPL-2.0 (some tools), LGPL-2.1+
+ LXC_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
