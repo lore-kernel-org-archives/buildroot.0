@@ -2,52 +2,60 @@ Return-Path: <SRS0=V5PJ=OT=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F11DCC433EF
-	for <buildroot@archiver.kernel.org>; Wed, 29 Sep 2021 14:56:35 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 53EC3C433F5
+	for <buildroot@archiver.kernel.org>; Wed, 29 Sep 2021 15:05:28 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 94F79613CD
-	for <buildroot@archiver.kernel.org>; Wed, 29 Sep 2021 14:56:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 94F79613CD
+	by mail.kernel.org (Postfix) with ESMTPS id E0C53613A6
+	for <buildroot@archiver.kernel.org>; Wed, 29 Sep 2021 15:05:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E0C53613A6
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 639FB41978;
-	Wed, 29 Sep 2021 14:56:35 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A74794071B;
+	Wed, 29 Sep 2021 15:05:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id x1lo25jAfcAP; Wed, 29 Sep 2021 14:56:34 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Pv2WI_N3Enm2; Wed, 29 Sep 2021 15:05:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CD493422B8;
-	Wed, 29 Sep 2021 14:56:33 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D32481BF426
- for <buildroot@lists.busybox.net>; Wed, 29 Sep 2021 14:55:21 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id CAADD40709;
+	Wed, 29 Sep 2021 15:05:25 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id D02D01BF21A
+ for <buildroot@lists.busybox.net>; Wed, 29 Sep 2021 15:05:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CBF1460C0D
- for <buildroot@lists.busybox.net>; Wed, 29 Sep 2021 14:55:21 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id CCA9C80F3A
+ for <buildroot@lists.busybox.net>; Wed, 29 Sep 2021 15:05:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id G3WiPzvA7srD for <buildroot@lists.busybox.net>;
- Wed, 29 Sep 2021 14:55:19 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id CCA69600BB
- for <buildroot@buildroot.org>; Wed, 29 Sep 2021 14:55:19 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id DDD818D4C0; Wed, 29 Sep 2021 14:52:59 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id at99gRIc9_E3 for <buildroot@lists.busybox.net>;
+ Wed, 29 Sep 2021 15:05:23 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A70D380F38
+ for <buildroot@buildroot.org>; Wed, 29 Sep 2021 15:05:23 +0000 (UTC)
+Received: (Authenticated sender: peter@casa-korsgaard.com)
+ by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id DE0BD60004;
+ Wed, 29 Sep 2021 15:05:19 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
+ (envelope-from <peter@korsgaard.com>)
+ id 1mVb95-0000yo-0d; Wed, 29 Sep 2021 17:05:19 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Wed, 29 Sep 2021 16:41:20 +0200
-X-Git-Refname: refs/heads/2021.08.x
-X-Git-Oldrev: 7e93d664d9a63e4b804a40419830c2803c7af97b
-X-Git-Newrev: 02d9c80438376e30d361176e185f32ed3a76babd
-X-Patchwork-Hint: ignore
-Message-Id: <20210929145259.DDD818D4C0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.08.x] package/lxc: bump to
- version 4.0.10
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+References: <20210913210412.24042-1-ps.report@gmx.net>
+ <20210918160034.GE1053080@scaer>
+Date: Wed, 29 Sep 2021 17:05:18 +0200
+In-Reply-To: <20210918160034.GE1053080@scaer> (Yann E. MORIN's message of
+ "Sat, 18 Sep 2021 18:00:34 +0200")
+Message-ID: <87y27fmngx.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH v1 00/13] GStreamer 1.18.5 stable bug fix
+ release
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,50 +67,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Peter Seiderer <ps.report@gmx.net>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=02d9c80438376e30d361176e185f32ed3a76babd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.08.x
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-https://discuss.linuxcontainers.org/t/lxc-4-0-10-has-been-released/11618
-https://discuss.linuxcontainers.org/t/lxc-4-0-9-lts-has-been-released/10999
+ > Peter, All,
+ > On 2021-09-13 23:03 +0200, Peter Seiderer spake thusly:
+ >> GStreamer 1.18.5 stable bug fix release
+ >> 
+ >> For details see [1].
+ >> 
+ >> [1] https://gstreamer.freedesktop.org/releases/1.18/#1.18.5
+ >> 
+ >> Peter Seiderer (13):
+ >> package/gstreamer1: bump version to 1.18.5
+ >> package/gst1-plugins-base: bump version to 1.18.5
+ >> package/gst1-plugins-good: bump version to 1.18.5
+ >> package/gst1-plugins-bad: bump version to 1.18.5
+ >> package/gst1-plugins-ugly: bump version to 1.18.5
+ >> package/gst1-devtools: bump version to 1.18.5
+ >> package/gst1-libav: bump version to 1.18.5
+ >> package/gst1-vaapi: bump version to 1.18.5
+ >> package/gst1-rtsp-server: bump version to 1.18.5
+ >> package/gstreamer1-editing-services: bump version to 1.18.5
+ >> package/gst-omx: bump version to 1.18.5
+ >> package/gst1-python: bump version to 1.18.5
+ >> package/gst1-interpipe: bump version to 1.1.5
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 9a48be36d5b188e0cd0f670875acfeb1a724e4d4)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/lxc/lxc.hash | 2 +-
- package/lxc/lxc.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > Whole series applied to master, thanks.
 
-diff --git a/package/lxc/lxc.hash b/package/lxc/lxc.hash
-index 85cdecceb2..efd7a8e42c 100644
---- a/package/lxc/lxc.hash
-+++ b/package/lxc/lxc.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  9165dabc0bb6ef7f2fda2009aee90b20fbefe77ed8008347e9f06048eba1e463  lxc-4.0.6.tar.gz
-+sha256  a10c518056d2e497bd600e4ffac2853bdeab1e835bf455a6d87cc8df128bfae9  lxc-4.0.10.tar.gz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE.GPL2
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.LGPL2.1
-diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
-index 24a1f3c588..93f6d2535f 100644
---- a/package/lxc/lxc.mk
-+++ b/package/lxc/lxc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LXC_VERSION = 4.0.6
-+LXC_VERSION = 4.0.10
- LXC_SITE = https://linuxcontainers.org/downloads/lxc
- LXC_LICENSE = GPL-2.0 (some tools), LGPL-2.1+
- LXC_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1
+Committed series to 2021.02.x, 2021.05.x and 2021.08.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
