@@ -1,59 +1,59 @@
-Return-Path: <SRS0=iTAH=OS=buildroot.org=buildroot-bounces@kernel.org>
+Return-Path: <SRS0=V5PJ=OT=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B8DEC433EF
-	for <buildroot@archiver.kernel.org>; Tue, 28 Sep 2021 23:19:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 48E32C433EF
+	for <buildroot@archiver.kernel.org>; Wed, 29 Sep 2021 00:07:48 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 0C6DF613A9
-	for <buildroot@archiver.kernel.org>; Tue, 28 Sep 2021 23:19:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0C6DF613A9
+	by mail.kernel.org (Postfix) with ESMTPS id 9170B613B1
+	for <buildroot@archiver.kernel.org>; Wed, 29 Sep 2021 00:07:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9170B613B1
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gallagher.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D05CC40108;
-	Tue, 28 Sep 2021 23:19:48 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3279140004;
+	Wed, 29 Sep 2021 00:07:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LvfUkDuuhocE; Tue, 28 Sep 2021 23:19:47 +0000 (UTC)
+	with ESMTP id i3AQ1tofL2cS; Wed, 29 Sep 2021 00:07:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E660340636;
-	Tue, 28 Sep 2021 23:19:46 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4A51C1BF2F3
- for <buildroot@lists.busybox.net>; Tue, 28 Sep 2021 23:19:45 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 386954045A;
+	Wed, 29 Sep 2021 00:07:45 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 09BF11BF5AC
+ for <buildroot@lists.busybox.net>; Wed, 29 Sep 2021 00:07:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3991841582
- for <buildroot@lists.busybox.net>; Tue, 28 Sep 2021 23:19:45 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id ED82D60B00
+ for <buildroot@lists.busybox.net>; Wed, 29 Sep 2021 00:07:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TaavigGybYby for <buildroot@lists.busybox.net>;
- Tue, 28 Sep 2021 23:19:44 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pMxIfULF6Xel for <buildroot@lists.busybox.net>;
+ Wed, 29 Sep 2021 00:07:42 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
 Received: from mail.gallagher.co.nz (mail.gallagher.co.nz [203.167.229.98])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3F65F4148C
- for <buildroot@buildroot.org>; Tue, 28 Sep 2021 23:19:44 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0B7DC60799
+ for <buildroot@buildroot.org>; Wed, 29 Sep 2021 00:07:41 +0000 (UTC)
 Received: from gglnzdom1.gallagher.local (Not Verified[172.16.0.58]) by
  mail.gallagher.co.nz (using TLS: TLSv1.2, ECDHE-RSA-AES256-GCM-SHA384)
- id <B6153a30d0000>; Wed, 29 Sep 2021 12:19:41 +1300
+ id <B6153ae4b0000>; Wed, 29 Sep 2021 13:07:39 +1300
 Received: from GNZ-PC2807.gallagher.local ([10.70.3.151])
- by gglnzdom1.gallagher.local with ESMTP id 2021092912194135-1084728 ;
- Wed, 29 Sep 2021 12:19:41 +1300 
+ by gglnzdom1.gallagher.local with ESMTP id 2021092913073865-1085693 ;
+ Wed, 29 Sep 2021 13:07:38 +1300 
 From: Ankur Tyagi <ankur.tyagi@gallagher.com>
 To: buildroot@buildroot.org
-Date: Wed, 29 Sep 2021 12:19:36 +1300
-Message-Id: <20210928231936.1161-1-ankur.tyagi@gallagher.com>
+Date: Wed, 29 Sep 2021 13:07:35 +1300
+Message-Id: <20210929000735.1210-1-ankur.tyagi@gallagher.com>
 MIME-Version: 1.0
 X-TNEFEvaluated: 1
 X-SEG-SpamProfiler-Analysis: v=2.3 cv=A8gSwJeG c=1 sm=1 tr=0
  a=qhWWnufYDz1ULA0Yxl8pUQ==:117 a=7QKq2e-ADPsA:10 a=uwzVE2XeAAAA:8
- a=Cj0rhF1uM9BG82e3gqUA:9 a=56Ks2SYG_ayP3Q2IVBAz:22
+ a=LagCUVnbLj4cb_cBqrsA:9 a=56Ks2SYG_ayP3Q2IVBAz:22
 X-SEG-SpamProfiler-Score: 0
-Subject: [Buildroot] [PATCH 1/1] package/pcsc-lite: compile with -fPIC when
+Subject: [Buildroot] [PATCH 1/1] package/pcre: compile with -fPIC when
  BR2_PIC_PIE is set
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -72,33 +72,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Otherwise build fails with following error:Toolchain wrapper executing: '/tools/arm-unknown-linux-gnueabi/bin//arm-unknown-linux-gnueabi-gcc' '--sysroot' '/home/user/work/buildroot/output/host/arm-buildroot-linux-gnueabi/sysroot' '-mabi=aapcs-linux' '-msoft-float' '-marm' '-fstack-protector-strong' '-march=armv5te' '-msoft-float' '-mfpu=vfp' '-mfloat-abi=soft' '-mcpu=arm926ej-s' '-fPIE' '-pie' '-Wl,-z,now' '-Wl,-z,relro' '-Wall' '-fno-common' '-D_LARGEFILE_SOURCE' '-D_LARGEFILE64_SOURCE' '-D_FILE_OFFSET_BITS=64' '-Os' '-g2' '-D_FORTIFY_SOURCE=1' '-o' 'pcsc-wirecheck-gen' 'pcsc-wirecheck-gen.o' '-ldl' '-lrt'
-/tools/arm-unknown-linux-gnueabi/bin/../lib/gcc/arm-unknown-linux-gnueabi/7.3.0/../../../../arm-unknown-linux-gnueabi/bin/ld: .libs/libpcsclite_la-error.o(.text+0x3bc): R_ARM_TLS_LE32 relocation not permitted in shared object
-.libs/libpcsclite_la-error.o: In function `pcsc_stringify_error':
-/home/user/work/buildroot/output/build/pcsc-lite-1.9.1/src/error.c:98:(.text+0x3bc): dangerous relocation: unsupported relocation
+Otherwise build fails with following error:
+Toolchain wrapper executing: '/tools/aarch64-linux-gnu/bin//aarch64-linux-gnu-g++' '--sysroot' '/home/user/work/buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot' '-mabi=lp64' '-fstack-protector-strong' '-fstack-clash-protection' '-mcpu=cortex-a35' '-fPIE' '-Wl,-z,now' '-Wl,-z,relro' '-shared' '-nostdlib' '/home/user/work/buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/../lib64/crti.o' '/tools/aarch64-linux-gnu/bin/../lib/gcc/aarch64-linux-gnu/8.3.0/crtbeginS.o' '.libs/libpcrecpp_la-pcrecpp.o' '.libs/libpcrecpp_la-pcre_scanner.o' '.libs/libpcrecpp_la-pcre_stringpiece.o' '-Wl,-rpath' '-Wl,/home/user/work/buildroot/output/build/pcre-8.44/.libs' './.libs/libpcre.so' '-L/tools/aarch64-linux-gnu/bin/../lib/gcc/aarch64-linux-gnu/8.3.0' '-L/tools/aarch64-linux-gnu/bin/../lib/gcc' '-L/tools/aarch64-linux-gnu/bin/../lib/gcc/aarch64-linux-gnu/8.3.0/../../../../aarch64-linux-gnu/lib/../lib64' '-L/home/user/work/buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot/
+ lib/../lib64' '-L/home/user/work/buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/../lib64' '-L/tools/aarch64-linux-gnu/bin/../lib/gcc/aarch64-linux-gnu/8.3.0/../../../../aarch64-linux-gnu/lib' '-L/home/user/work/buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot/lib' '-L/home/user/work/buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib' '-lstdc++' '-lm' '-lc' '-lgcc_s' '/tools/aarch64-linux-gnu/bin/../lib/gcc/aarch64-linux-gnu/8.3.0/crtendS.o' '/home/user/work/buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/../lib64/crtn.o' '-Os' '-g2' '-Wl,-soname' '-Wl,libpcrecpp.so.0' '-o' '.libs/libpcrecpp.so.0.0.2'
+  CCLD     pcretest
+  CCLD     pcregrep
+/tools/aarch64-linux-gnu/bin/../lib/gcc/aarch64-linux-gnu/8.3.0/../../../../aarch64-linux-gnu/bin/ld: warning: -z noexecheap ignored
+/tools/aarch64-linux-gnu/bin/../lib/gcc/aarch64-linux-gnu/8.3.0/../../../../aarch64-linux-gnu/bin/ld: .libs/libpcrecpp_la-pcrecpp.o: relocation R_AARCH64_ADR_PREL_PG_HI21 against symbol `_ZN7pcrecpp3Arg10parse_nullEPKciPv' which may bind externally can not be used when making a shared object; recompile with -fPIC
+.libs/libpcrecpp_la-pcrecpp.o: in function `pcrecpp::Arg::Arg(void*)':
+/home/user/work/buildroot/output/build/pcre-8.44/./pcrecpparg.h:139:(.text.startup+0x4): dangerous relocation: unsupported relocation
 collect2: error: ld returned 1 exit status
-Makefile:703: recipe for target 'libpcsclite.la' failed
-make[4]: *** [libpcsclite.la] Error 1
+Makefile:1568: recipe for target 'libpcrecpp.la' failed
+make[3]: *** [libpcrecpp.la] Error 1
 
 Signed-off-by: Ankur Tyagi <ankur.tyagi@gallagher.com>
 ---
- package/pcsc-lite/pcsc-lite.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/pcre/pcre.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/pcsc-lite/pcsc-lite.mk b/package/pcsc-lite/pcsc-lite.mk
-index 94f38b3d85..510ed2c4a0 100644
---- a/package/pcsc-lite/pcsc-lite.mk
-+++ b/package/pcsc-lite/pcsc-lite.mk
-@@ -44,4 +44,9 @@ ifeq ($(PACKAGE_PCSC_LITE_EMBEDDED),y)
- PCSC_LITE_CONF_OPTS += --enable-embedded
- endif
+diff --git a/package/pcre/pcre.mk b/package/pcre/pcre.mk
+index 264eaa10c7..cbef01fc59 100644
+--- a/package/pcre/pcre.mk
++++ b/package/pcre/pcre.mk
+@@ -27,5 +27,11 @@ PCRE_CONF_OPTS += $(if $(BR2_PACKAGE_PCRE_32),--enable-pcre32,--disable-pcre32)
+ PCRE_CONF_OPTS += $(if $(BR2_PACKAGE_PCRE_UTF),--enable-utf,--disable-utf)
+ PCRE_CONF_OPTS += $(if $(BR2_PACKAGE_PCRE_UCP),--enable-unicode-properties,--disable-unicode-properties)
  
 +ifeq ($(BR2_PIC_PIE),y)
-+PCSC_LITE_CFLAGS += -fPIC
-+PCSC_LITE_CONF_OPTS += CFLAGS="$(PCSC_LITE_CFLAGS)"
++PCRE_CFLAGS += -fPIC
++PCRE_CXXFLAGS += -fPIC
++PCRE_CONF_OPTS += CFLAGS="$(PCRE_CFLAGS)" CXXFLAGS="$(PCRE_CXXFLAGS)"
 +endif
 +
  $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 -- 
 2.25.1
 
