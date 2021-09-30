@@ -2,84 +2,83 @@ Return-Path: <SRS0=LUVO=OU=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 61171C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 30 Sep 2021 18:38:56 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 49D7BC433EF
+	for <buildroot@archiver.kernel.org>; Thu, 30 Sep 2021 19:00:51 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 281AD619E5
-	for <buildroot@archiver.kernel.org>; Thu, 30 Sep 2021 18:38:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 281AD619E5
+	by mail.kernel.org (Postfix) with ESMTPS id 9B9B361527
+	for <buildroot@archiver.kernel.org>; Thu, 30 Sep 2021 19:00:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9B9B361527
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DDB55841B7;
-	Thu, 30 Sep 2021 18:38:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6D81041584;
+	Thu, 30 Sep 2021 19:00:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lChub0OLtX-9; Thu, 30 Sep 2021 18:38:54 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id DCFVTcicx4qJ; Thu, 30 Sep 2021 19:00:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9CD28841B9;
-	Thu, 30 Sep 2021 18:38:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4068A41970;
+	Thu, 30 Sep 2021 19:00:47 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 39AAF1BF289
- for <buildroot@lists.busybox.net>; Thu, 30 Sep 2021 18:38:52 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A01A31BF289
+ for <buildroot@lists.busybox.net>; Thu, 30 Sep 2021 19:00:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2826A4019A
- for <buildroot@lists.busybox.net>; Thu, 30 Sep 2021 18:38:52 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9B86040259
+ for <buildroot@lists.busybox.net>; Thu, 30 Sep 2021 19:00:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp2.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hi2R2Pt_Q63a for <buildroot@lists.busybox.net>;
- Thu, 30 Sep 2021 18:38:49 +0000 (UTC)
+ with ESMTP id h7pifT7V-c2D for <buildroot@lists.busybox.net>;
+ Thu, 30 Sep 2021 19:00:44 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
- [IPv6:2a00:1450:4864:20::434])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6B3FF40181
- for <buildroot@buildroot.org>; Thu, 30 Sep 2021 18:38:49 +0000 (UTC)
-Received: by mail-wr1-x434.google.com with SMTP id h15so10026992wrc.3
- for <buildroot@buildroot.org>; Thu, 30 Sep 2021 11:38:49 -0700 (PDT)
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
+ [IPv6:2a00:1450:4864:20::42c])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1F1A340181
+ for <buildroot@buildroot.org>; Thu, 30 Sep 2021 19:00:44 +0000 (UTC)
+Received: by mail-wr1-x42c.google.com with SMTP id h15so10115188wrc.3
+ for <buildroot@buildroot.org>; Thu, 30 Sep 2021 12:00:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=rPSJKtQYWl62UdpGtqZCP0pF+P8RyOOKJtDZnfBcs8g=;
- b=Ap8AxN0w5gN8dA2Jie3cVjtwAGg3DDJdhuq9PVn5YacjFNNwknGnOtY7DwTFGTF0UA
- 3RV/5fNCxnSk+ynehBpmilNbwUuUDJffKnWcpNR8aWdJQbl/TWDiDwz3a0a1sz/Sctkr
- iMKVa+eiTwEDJi6KKvev24vJzXw94LAlzcQAHU3mTXYx2MjnN0o+bc6sUXzF1pNGoFkh
- glDtMwLGLXrQTx6uYkoAeRB5GDiNBC+kY8G4wSu7Ef1DJqtFUvdWMUOZE1BC+P4Mx/qt
- AV4E+OH5b4y/Sh1CNu/i+ue/nGEEE3Lkv/IK890/acxjond3NcEMLxS2KI5fXQ6TgD0o
- 3z4w==
+ bh=zlxL65XrNsYBkZsiTKEcRbMA/TA/V1cdCQ2wVKX4URI=;
+ b=aSyq0KyLoe/WDs4i+eh15a7Mm53/ATq8JGVbzp1JuhnQmU4JsTvbCWEh0PDmPMm+Ye
+ 4SWmPvIpx2tg3fbNHOcv64SOM8jGWyS5NIfAUeRqojqhInQjzghm1R6PLpL/xizObSXm
+ xBMQ9ODUow9l2Gjg5Nyq/dA9Uh+RQG3ZtWDn6DvOG6kT9C/S4zfyxJsox0R+omZoXdpD
+ QgoOYYbBlpNaTwz0UIa9vKOyMfCjCb/ZbCUhjA9fUtQI8Mj69jsGdTkUP+j0+1Ise0NB
+ g90TFQ/o/SEHz+951xMXn/OwfT9jQ9ob3qFqiv2msJsk/PaHHJuXaocZ/y1fuSpimseu
+ 36WA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=rPSJKtQYWl62UdpGtqZCP0pF+P8RyOOKJtDZnfBcs8g=;
- b=Tz191KQuFrEnQ0tAk+RpCp54/pfrCAqXR5hGec0Lc5K4kfJuY3IktpYlvnBZ8GjQYn
- PCSP9iZjYfUyXiyk/aTM7Qmtnb4Sq/D/glhy9bpgYG2mtLxUAAUkiqt10sfkwCkD0FVT
- Xv4Dxb6rmcRc0oBNRnu6P/Gkwcnsz6aNDmOdfdHGK/OP933OBO/VxpOUH0s11TuZJvAH
- eIz1O7WF4f5IlLSSflZco1R1HIMLlZWiIOSUsreKWf4KLXPB2ONB5XQya2uAqPp+Fns4
- EgdEMWmGTwhWOsaIq3JONMQd/G4Ud79sYEqjtTqg6yh22cOPsVV/q17Hq8W+QJeJQ9Ku
- sDRw==
-X-Gm-Message-State: AOAM532AHGijf+d9MXeaLsaLT0vrh6o8g2sJAUth9LBNoChIcqWgatRu
- x5NMnSMbeSs7lzIWvUmi9bEsgRJX/TE=
-X-Google-Smtp-Source: ABdhPJwcmBo0DRKE/XCxJ/EObbZobrFIZVyTr23STZviDAwOaouNILEpmXB4h948bsMSdb5IQ6lTzw==
-X-Received: by 2002:a05:6000:8e:: with SMTP id
- m14mr7834531wrx.308.1633027127371; 
- Thu, 30 Sep 2021 11:38:47 -0700 (PDT)
+ bh=zlxL65XrNsYBkZsiTKEcRbMA/TA/V1cdCQ2wVKX4URI=;
+ b=rg9ZV/Ij6oX7CVoOJriGID8i8BP7oNPkND9XpV4933q+sM3zo4Iwe7Pe1HCLjoEcXD
+ PPu6jHQQ5reLV3y9KCLVJPXSu1hU9CRI8vSZjwc2s/9OqPywqQCBeAx1KmdryzeBo4Ub
+ /mk/Vz3GQXPkvSkKeE276VADAxe0brp5PgXYnowHXdfsv/HNF2+lSIigEpDWNXlU4sVa
+ +QVa7FmBs9Bj27H3RaoYAD6Xbs57l/SrsaGOQI0rRRVPNIh2D8cjL9Wx9uJ+GJJP2tyz
+ egcfwkVMQltShN+armC57sVy6u2m3lYCe8BCtb5O0TnoKH7WpUWZ4Ea9GVTtnO+sHOAK
+ /lXA==
+X-Gm-Message-State: AOAM532B3MnbOUwVZBxjPA9Pyek3DHuu6Dh15UIwcFRmuS0WD7vW7ODi
+ b2turfFUN6+dKnqblqpND9IM1TLAQ28=
+X-Google-Smtp-Source: ABdhPJznlzN3IULqzd+ZKdGcwgmI/3Up5WV+HEDr2r3dI6b4UVgI2fKcxFmsbIo7lyrsV1Se5+MduQ==
+X-Received: by 2002:a5d:664f:: with SMTP id f15mr8054923wrw.143.1633028442063; 
+ Thu, 30 Sep 2021 12:00:42 -0700 (PDT)
 Received: from dell5510.suse.de (gw1.ms-free.net. [185.243.124.10])
- by smtp.gmail.com with ESMTPSA id l16sm3932312wmj.33.2021.09.30.11.38.45
+ by smtp.gmail.com with ESMTPSA id a3sm3666950wrn.16.2021.09.30.12.00.41
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 30 Sep 2021 11:38:46 -0700 (PDT)
+ Thu, 30 Sep 2021 12:00:41 -0700 (PDT)
 From: Petr Vorel <petr.vorel@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu, 30 Sep 2021 20:38:36 +0200
-Message-Id: <20210930183836.25592-1-petr.vorel@gmail.com>
+Date: Thu, 30 Sep 2021 21:00:35 +0200
+Message-Id: <20210930190035.25090-1-petr.vorel@gmail.com>
 X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/ltp-testsuite: bump version to
+Subject: [Buildroot] [PATCH v2 1/1] package/ltp-testsuite: bump version to
  20210927
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -109,6 +108,15 @@ this release)
 
 Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 ---
+NOTE: would it be possible to get updated toolchains? I have to carry
+downstream patch
+0001-lapi-Add-sysinfo.h-to-fix-build-with-MUSL-libc.patch (the only
+motivation for me to fix it in kernel was to fix buildroot, but
+buildroot does not take this fix in toolchain).
+
+changes v1->v2:
+* nit: remove */5 from patch subject
+
  ...ysinfo.h-to-fix-build-with-MUSL-libc.patch | 61 +++++++++++--------
  .../0002-lib-fix-MemAvailable-parsing.patch   | 36 +++++++++++
  ...-lapi-rtnetlink.h-Fix-include-guards.patch | 37 +++++++++++
