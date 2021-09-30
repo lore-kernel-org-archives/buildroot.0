@@ -2,78 +2,86 @@ Return-Path: <SRS0=LUVO=OU=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9279CC433F5
-	for <buildroot@archiver.kernel.org>; Thu, 30 Sep 2021 02:13:32 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DBF6AC433F5
+	for <buildroot@archiver.kernel.org>; Thu, 30 Sep 2021 03:53:02 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 22E92610E6
-	for <buildroot@archiver.kernel.org>; Thu, 30 Sep 2021 02:13:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 22E92610E6
+	by mail.kernel.org (Postfix) with ESMTPS id 090EE615E1
+	for <buildroot@archiver.kernel.org>; Thu, 30 Sep 2021 03:53:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 090EE615E1
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BD675613A0;
-	Thu, 30 Sep 2021 02:13:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8DB5942572;
+	Thu, 30 Sep 2021 03:53:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hLpL9kdVDPdQ; Thu, 30 Sep 2021 02:13:31 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id HlK7LO_ZHTuf; Thu, 30 Sep 2021 03:53:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 265706139B;
-	Thu, 30 Sep 2021 02:13:30 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E075C1BF400
- for <buildroot@lists.busybox.net>; Thu, 30 Sep 2021 02:13:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CD7FB42570;
+	Thu, 30 Sep 2021 03:52:59 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 84D3C1BF97F
+ for <buildroot@lists.busybox.net>; Thu, 30 Sep 2021 03:52:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DD1BB6139B
- for <buildroot@lists.busybox.net>; Thu, 30 Sep 2021 02:13:28 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 72E41402B5
+ for <buildroot@lists.busybox.net>; Thu, 30 Sep 2021 03:52:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YITEvF9zxE3U for <buildroot@lists.busybox.net>;
- Thu, 30 Sep 2021 02:13:28 +0000 (UTC)
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hzn5SUVaXd6E for <buildroot@lists.busybox.net>;
+ Thu, 30 Sep 2021 03:52:57 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-vk1-xa2e.google.com (mail-vk1-xa2e.google.com
- [IPv6:2607:f8b0:4864:20::a2e])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 51E90605FB
- for <buildroot@buildroot.org>; Thu, 30 Sep 2021 02:13:28 +0000 (UTC)
-Received: by mail-vk1-xa2e.google.com with SMTP id f73so2116385vkf.6
- for <buildroot@buildroot.org>; Wed, 29 Sep 2021 19:13:28 -0700 (PDT)
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com
+ [IPv6:2607:f8b0:4864:20::82a])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9A16E40190
+ for <buildroot@buildroot.org>; Thu, 30 Sep 2021 03:52:57 +0000 (UTC)
+Received: by mail-qt1-x82a.google.com with SMTP id b16so4452404qtt.7
+ for <buildroot@buildroot.org>; Wed, 29 Sep 2021 20:52:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=w/UXV1PK+Do6EqgL9QMEysIRuX4ME2JcwixvK3pBEuc=;
- b=VfmGMNa2qAnkbkgowrqO/x+56vXfZGKZGnMRwMssh6fGKLhH945m7ghbeFS8nwfpv1
- KuHGWL3VJx+QklQ/R+lVUY1W1/wEqKZfSe+gObIbYZGxEEMaeWsj/lGMlfxbZrwI4/x2
- MVj2HWSyZ3DSa3Gse8MfagjNygaRkmpBswJvouvNceCxqdH2+ksae6RfS7fMbB1CkB3X
- AKDp/EjOrq/4n+0M6yK1myXNL9SWECnXtpBAARx2cYUIW0TbpgEfvwVWdvp6IUyTj5hy
- 8iEiK3q6NT4Z84oudaes7UqH5gCNV0v99SYk9AJo1W5XQFM/hhPs0C+UNrfcgf+UjH+0
- /Afw==
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=ZtSLnUeQRC3Q1QFW23UO1CdghWRjnAaHXzvdo0bydfc=;
+ b=mwR5/c9+QtwtbeYu2QphTRa5b3W3wJbgGkRumjr/5FAUmiA80jHDwxcD4Z8hCYusaO
+ kqcfSj1ELB2Fj02FOYTZpiHqX1dVDwPCx/eokk+4re5lNwy8m+A28Zh54UZvWdNUcYtE
+ JKweKzZ7m5MsdvSQgNgdrC0ecs2x5Qysb7kQMJbFBtqtF8qL6uA9QZ5cLvvVBcbycEfq
+ FMUD+57+cYD4BEds9nACyopgxJzBBeraXIHC1ywXuOmhj2g0pv2pxU3sVBU7t/DycwWe
+ wG1YGoOMRwQ/9OGItzVjJAg0qj2r7eI3vbYjUqiQKPn2iJWHOeFNTi1/j+hJm6MezmgB
+ Yp0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=w/UXV1PK+Do6EqgL9QMEysIRuX4ME2JcwixvK3pBEuc=;
- b=ZYmXaMr7eO4nHlryY0szR9cIj26d5tsc1Ao06eMcfJywEieu0U+GTjG9NX3VfUV9yA
- kpvXSHu15Y1NGym6yHdR5QaWfdifWT9a7ZA0a5wfF9DLkHlXkWwkuNs9lUtkgfUf7EHd
- S2qK2lFLdel1cymikzPqdk8rEoIPEkF2Q2vWotdo3Zn76Dm6oOik2XK+/HMdv7+VW4nE
- VpFTzvSEszMWkHBax/trb+32pkJxXQdE1S/MuGGKBiNKfR/kUs3bdvPAgMHlG83Yn19/
- 5Kmnr1tavbtx1vtuy6dvFBZ02zXa3wHVyncNUsPU/2iYZvMi/4EZD5G8YjMWmgcKSoHH
- tQeQ==
-X-Gm-Message-State: AOAM531CLwgZDq+jslGL/fwRx7VNwYSAmC44Sv+Vsy4JETSliCQrf9+T
- pHsagEJeK8y2eCDzlnKby09P968EDmXHUymBOl7EZMKaMV4=
-X-Google-Smtp-Source: ABdhPJybUZXFu1ax2+DFJAbrGB3FVzLI6vjG2yZCWpJe8jZ2CeT2klUjTkjuy1DesOMuNE426ZlsxJEFXvMWfkaJHao=
-X-Received: by 2002:a1f:b417:: with SMTP id d23mr1591622vkf.8.1632968007257;
- Wed, 29 Sep 2021 19:13:27 -0700 (PDT)
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=ZtSLnUeQRC3Q1QFW23UO1CdghWRjnAaHXzvdo0bydfc=;
+ b=uDU+KijtZXHzo9bUdc4/tQ9oMPHrIJZS0ahGets0Ep+xKcy5wOGNZO20a1TNl5iQqv
+ eTx0+uOxo/xWD9FTkGOTyMwrXeumWg4RCl36K570njW8ZeY4QibHoNOEOzWiYtLmzhUe
+ gAwx5TE1nbmnX3UtLqhA1CP4QUdeLcxnJ0ccDEtCovprurtZeB2F9pkZ7F4N5CRmSfPr
+ r7ReFX10eHnJdPMPcyrpaWeI50TZsWpec4O8MQJ/hwQ21HJ9iByo/JGvqFFjleW8FhDr
+ gE2s8enyPIPrhl14Q72/raAu+9FSJ89j7Xr9+zHHlBvGkwejVYTaBsMmZRf9yshjczmQ
+ ZhhA==
+X-Gm-Message-State: AOAM532UNC0aEq03JgdAbg5kcwS8xpsGpUhNmyoIAKNAIN5YKKKW/ufI
+ Ag+4yeWqBshGPTcGN9Pj2ebrsfaIyQcCkHvO
+X-Google-Smtp-Source: ABdhPJxyipuzm0W3ffzjUPidYnsd6LGVGJc793EGT8bVBiJN1/8V2Nid8RCpS0+nn82BqlAQ9Jl46A==
+X-Received: by 2002:a05:622a:1815:: with SMTP id
+ t21mr4115359qtc.373.1632973976328; 
+ Wed, 29 Sep 2021 20:52:56 -0700 (PDT)
+Received: from blueberry.lan (199-189-229-49.dhcp.imoncommunications.net.
+ [199.189.229.49])
+ by smtp.gmail.com with ESMTPSA id u12sm904093qkk.109.2021.09.29.20.52.55
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 29 Sep 2021 20:52:55 -0700 (PDT)
+From: sam.voss@gmail.com
+To: buildroot@buildroot.org
+Date: Wed, 29 Sep 2021 22:52:49 -0500
+Message-Id: <20210930035250.23687-1-sam.voss@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-References: <CAJ+vNU0DmMfBTdmnrD9UYxCqEJq6gbut6WJv3Nr5QKDe_UL3UQ@mail.gmail.com>
-In-Reply-To: <CAJ+vNU0DmMfBTdmnrD9UYxCqEJq6gbut6WJv3Nr5QKDe_UL3UQ@mail.gmail.com>
-From: Fabio Estevam <festevam@gmail.com>
-Date: Wed, 29 Sep 2021 23:13:16 -0300
-Message-ID: <CAOMZO5DZxRFKF=tnkHRk5wKzoRW2_F9py8onUk_5ppzz0S2nuw@mail.gmail.com>
-To: Tim Harvey <tharvey@gateworks.com>
-Subject: Re: [Buildroot] buildroot config for installing kernel and dtbs to
- rootfs?
+Subject: [Buildroot] [PATCH] package/ripgrep: ignore CVE-2021-3013 as
+ Windows only
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,34 +93,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot <buildroot@buildroot.org>
+Cc: Sam Voss <sam.voss@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Tim,
+From: Sam Voss <sam.voss@gmail.com>
 
-On Wed, Sep 29, 2021 at 10:52 PM Tim Harvey <tharvey@gateworks.com> wrote:
->
-> Greetings,
->
-> I see the buildroot has the ability to build dtb's from the kernel
-> source (BR2_LINUX_KENREL_DTS*) but I haven't seen any configs that
-> instruct buildroot to copy the dtb's or kernel image to the root
-> filesystem.
->
-> Is there a config for this and if not what do people usually do for this?
+CVE-2021-3013 does not impact any buildroot versions of ripgrep as it is
+a Windows-only exploit targeting ripgrep versions earlier than 13. It
+can be safely ignored on our LTS branches.
 
-It is BR2_LINUX_KERNEL_INSTALL_TARGET=y.
+Signed-off-by: Sam Voss <sam.voss@gmail.com>
 
-configs/wandboard_defconfig is an example that selects
-BR2_LINUX_KERNEL_INSTALL_TARGET=y
-and install zImage and dtbs into the rootfs.
+---
 
-Regards,
+Note: Please apply this patch to:
 
-Fabio Estevam
+  * 2021.02.x
+  * 2021.05.x
+  * 2021.08.x
+
+Master currently has version 13, which does not report this CVE.
+---
+ package/ripgrep/ripgrep.mk | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/package/ripgrep/ripgrep.mk b/package/ripgrep/ripgrep.mk
+index 450bb020e3..8d0185595d 100644
+--- a/package/ripgrep/ripgrep.mk
++++ b/package/ripgrep/ripgrep.mk
+@@ -10,6 +10,9 @@ RIPGREP_LICENSE = MIT
+ RIPGREP_LICENSE_FILES = LICENSE-MIT
+ RIPGREP_CPE_ID_VENDOR = ripgrep_project
+ 
++# CVE only impacts ripgrep on Windows
++RIPGREP_IGNORE_CVES += CVE-2021-3013
++
+ RIPGREP_DEPENDENCIES = host-rustc
+ RIPGREP_CARGO_ENV = CARGO_HOME=$(HOST_DIR)/share/cargo \
+ 	__CARGO_TEST_CHANNEL_OVERRIDE_DO_NOT_USE_THIS="nightly" \
+-- 
+2.33.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
