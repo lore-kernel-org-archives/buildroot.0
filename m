@@ -2,50 +2,84 @@ Return-Path: <SRS0=LUVO=OU=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D2C7CC433EF
-	for <buildroot@archiver.kernel.org>; Thu, 30 Sep 2021 10:30:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 519CCC433F5
+	for <buildroot@archiver.kernel.org>; Thu, 30 Sep 2021 15:22:10 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id EC73861980
-	for <buildroot@archiver.kernel.org>; Thu, 30 Sep 2021 10:30:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org EC73861980
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=trabucayre.com
+	by mail.kernel.org (Postfix) with ESMTPS id 91D8F619F5
+	for <buildroot@archiver.kernel.org>; Thu, 30 Sep 2021 15:22:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 91D8F619F5
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=gateworks.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9720B42581;
-	Thu, 30 Sep 2021 10:30:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3BBF1425A9;
+	Thu, 30 Sep 2021 15:22:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6YttWYOBvYjO; Thu, 30 Sep 2021 10:30:48 +0000 (UTC)
+	with ESMTP id ZiUdg7ZoJaMZ; Thu, 30 Sep 2021 15:22:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 00D694252A;
-	Thu, 30 Sep 2021 10:30:48 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id EF5E21BF94B
- for <buildroot@lists.busybox.net>; Thu, 30 Sep 2021 10:30:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9B5A6425A7;
+	Thu, 30 Sep 2021 15:22:07 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 8E20E1BF2C2
+ for <buildroot@lists.busybox.net>; Thu, 30 Sep 2021 15:22:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DCC274252A
- for <buildroot@lists.busybox.net>; Thu, 30 Sep 2021 10:30:46 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 89D7440354
+ for <buildroot@lists.busybox.net>; Thu, 30 Sep 2021 15:22:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wbUcEZkkbkjX for <buildroot@lists.busybox.net>;
- Thu, 30 Sep 2021 10:30:45 +0000 (UTC)
-X-Greylist: delayed 00:05:19 by SQLgrey-1.8.0
-Received: from mail (kmf.trabucayre.com [91.121.117.161])
- by smtp4.osuosl.org (Postfix) with ESMTP id AA5F542525
- for <buildroot@buildroot.org>; Thu, 30 Sep 2021 10:30:45 +0000 (UTC)
-Received: from localhost.localdomain (localhost [127.0.0.1])
- by mail (Postfix) with ESMTP id A2BEA39856;
- Thu, 30 Sep 2021 11:55:16 +0200 (CEST)
-From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-To: buildroot@buildroot.org
-Date: Thu, 30 Sep 2021 11:55:15 +0200
-Message-Id: <1632995715-74056-1-git-send-email-gwenj@trabucayre.com>
-X-Mailer: git-send-email 1.6.4.2
-Subject: [Buildroot] [PATCH] package/uhd: fix usrp2 build
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gateworks-com.20210112.gappssmtp.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pJ4tH5DhnNMl for <buildroot@lists.busybox.net>;
+ Thu, 30 Sep 2021 15:22:02 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com
+ [IPv6:2607:f8b0:4864:20::1034])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9F8B640346
+ for <buildroot@buildroot.org>; Thu, 30 Sep 2021 15:22:02 +0000 (UTC)
+Received: by mail-pj1-x1034.google.com with SMTP id
+ om12-20020a17090b3a8c00b0019eff43daf5so5048071pjb.4
+ for <buildroot@buildroot.org>; Thu, 30 Sep 2021 08:22:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gateworks-com.20210112.gappssmtp.com; s=20210112;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=zRZlICZtHycOjS3Y4pZXLbWXPa7BThauEK73YiSXicM=;
+ b=LsDelpJLL1GzXiprONHPY/mNit9REcJ9BqzWpiJHfIqiWMIHtDQtnnA4ly7OcTp8gP
+ q41s4Y6TD644db/ZjJcZBbzQRquJezdyHjGelRS0rrrined8Xqrj7DPqWaWRj0pWxdPZ
+ 66YIpC4vvMhBTNniORRZA/2VxHF0xMD56dozVbNOFjlxeGZks2nVPN9KKA9uKxcS5YrO
+ PgZysVccUFRzITpQ+xLmUcqiYMhfEGW+Ahw71VHyJT2nSNWVmwFz1s2N3qbRi3JH0XrX
+ 4hB5/fRKMVKJqGXoAqAhTqoHXWBuHk7a3f0iRyhXoCnQtU6KrTSDguxr4LsHZSk6fhCI
+ CXTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=zRZlICZtHycOjS3Y4pZXLbWXPa7BThauEK73YiSXicM=;
+ b=TfzEFQyxLXoyQ9jmop58hGE9Q91MCor0O8Vv/Uhj4nzrxIEWOB6rFcMcdjyojaHcl2
+ NwBxBtTc5oy7+VaLbtdgxb8HO0vGEQuNocDITuuAR+qVF10qHHx2Gkxdylrkwbm/sMTc
+ 3MuFOpNIvXIQ+Bn2mVvTIoWC57JgyySxXhgZhaBiGsZG94d4WBio9SFPSQfY80Co9Mhf
+ DW3RYWS9GAWaYkGnxNZQrnUBU0i2ljGSSuZTaEsF5DUMFS8v47g7RfAP40uQ1GYV+srl
+ BciAfFN2FYY5p0/NVphIuCSs6gcejMi77Tx10o/RvQP6EOQAFiN3mkEFOSaOUt3v7kPr
+ Gz5w==
+X-Gm-Message-State: AOAM533EDAFs7h1suOxWWoNA+JZOpBWHmsrEP6jIXXuxf2JGVt2ma82c
+ FLxgH38iiS6TJsvGmcuYSnk7r1C/ZgEs6fik+c6hZg==
+X-Google-Smtp-Source: ABdhPJy8vhChEGZ/PbKUnvT6t94yoxrCiR9lGgVZG4jkTZBbI/InXN+7PyJm8+EDMbFjdamflBEsHq6YcpE5fsBmYlk=
+X-Received: by 2002:a17:90a:dc81:: with SMTP id
+ j1mr7124186pjv.155.1633015322008; 
+ Thu, 30 Sep 2021 08:22:02 -0700 (PDT)
+MIME-Version: 1.0
+References: <CAJ+vNU0DmMfBTdmnrD9UYxCqEJq6gbut6WJv3Nr5QKDe_UL3UQ@mail.gmail.com>
+ <CAOMZO5DZxRFKF=tnkHRk5wKzoRW2_F9py8onUk_5ppzz0S2nuw@mail.gmail.com>
+In-Reply-To: <CAOMZO5DZxRFKF=tnkHRk5wKzoRW2_F9py8onUk_5ppzz0S2nuw@mail.gmail.com>
+From: Tim Harvey <tharvey@gateworks.com>
+Date: Thu, 30 Sep 2021 08:21:50 -0700
+Message-ID: <CAJ+vNU16uqMnCDBmOMnVyLtLHzU=K61YU2Rtx_3BWYzLzMBaPQ@mail.gmail.com>
+To: Fabio Estevam <festevam@gmail.com>
+Subject: Re: [Buildroot] buildroot config for installing kernel and dtbs to
+ rootfs?
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,97 +91,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-MIME-Version: 1.0
+Cc: buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+On Wed, Sep 29, 2021 at 7:13 PM Fabio Estevam <festevam@gmail.com> wrote:
+>
+> Hi Tim,
+>
+> On Wed, Sep 29, 2021 at 10:52 PM Tim Harvey <tharvey@gateworks.com> wrote:
+> >
+> > Greetings,
+> >
+> > I see the buildroot has the ability to build dtb's from the kernel
+> > source (BR2_LINUX_KENREL_DTS*) but I haven't seen any configs that
+> > instruct buildroot to copy the dtb's or kernel image to the root
+> > filesystem.
+> >
+> > Is there a config for this and if not what do people usually do for this?
+>
+> It is BR2_LINUX_KERNEL_INSTALL_TARGET=y.
+>
+> configs/wandboard_defconfig is an example that selects
+> BR2_LINUX_KERNEL_INSTALL_TARGET=y
+> and install zImage and dtbs into the rootfs.
+>
 
-Fix build failure:
-uhd-3.15.0.0/host/lib/usrp/usrp2/usrp2_impl.cpp:847:29: error: 'boost::math' has not been declared
-for boost::math::sign and boost::math::iround
+Thanks Fabio, I didn't see it because I had BR2_TARGET_ROOTFS_INITRAMFS=y.
 
-Backport and adapt commits:
-- 3796175f32f0cc24c16809d8175d423bc7053de9
-- d1c6290fe9c8b01068abfca6f272e2a1e031b9de
+BR2_LINUX_KERNEL_INSTALL_TARGET only installs the kernel image. It
+looks like perhaps to install dtbs you need
+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/post-image.sh".
+It seems to me installing of the dtbs to the rootfs should be moved
+into a defconfig like the kernel image for those who are trying to
+simply generate a tarball but not an image?
 
-Fixes:
-- http://autobuild.buildroot.net/results/aa2bd1fbe1b4880aa8de389238380a3d35f80b53/
+Best regards,
 
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
----
- ...ost-math-iround-math-sign-with-std-l.patch | 56 +++++++++++++++++++
- 1 file changed, 56 insertions(+)
- create mode 100644 package/uhd/0006-usrp2-Replace-boost-math-iround-math-sign-with-std-l.patch
-
-diff --git a/package/uhd/0006-usrp2-Replace-boost-math-iround-math-sign-with-std-l.patch b/package/uhd/0006-usrp2-Replace-boost-math-iround-math-sign-with-std-l.patch
-new file mode 100644
-index 0000000000..d2460dfd35
---- /dev/null
-+++ b/package/uhd/0006-usrp2-Replace-boost-math-iround-math-sign-with-std-l.patch
-@@ -0,0 +1,56 @@
-+From 025e8a9e9334ea1111003e3b42c75fcb3036c639 Mon Sep 17 00:00:00 2001
-+From: StefanBruens <stefan.bruens@rwth-aachen.de>
-+Date: Wed, 5 May 2021 18:24:58 +0200
-+Subject: [PATCH] usrp2: Replace boost::math::iround/math::sign with
-+ std::lround
-+
-+Instead of multiplying zone with the sign repeatedly just make
-+the zone a signed value.
-+
-+See #437, #438
-+
-+Signed-off-by: Aaron Rossetto <aaron.rossetto@ni.com>
-+---
-+ host/lib/usrp/usrp2/usrp2_impl.cpp | 10 +++++-----
-+ 1 file changed, 5 insertions(+), 5 deletions(-)
-+
-+diff --git a/host/lib/usrp/usrp2/usrp2_impl.cpp b/host/lib/usrp/usrp2/usrp2_impl.cpp
-+index 1be4c7339..41bd0fa89 100644
-+--- a/host/lib/usrp/usrp2/usrp2_impl.cpp
-++++ b/host/lib/usrp/usrp2/usrp2_impl.cpp
-+@@ -22,6 +22,7 @@
-+ #include <boost/asio/ip/address_v4.hpp>
-+ #include <boost/asio.hpp> //used for htonl and ntohl
-+ #include <boost/thread.hpp>
-++#include <cmath>
-+ 
-+ using namespace uhd;
-+ using namespace uhd::usrp;
-+@@ -844,20 +845,19 @@ double usrp2_impl::set_tx_dsp_freq(
-+         _tree->access<double>("/mboards/"+mb+"/tick_rate").get();
-+ 
-+     //calculate the DAC shift (multiples of rate)
-+-    const int sign = boost::math::sign(new_freq);
-+-    const int zone = std::min(boost::math::iround(new_freq/tick_rate), 2);
-+-    const double dac_shift = sign*zone*tick_rate;
-++    const int zone         = std::max(std::min<int>(std::lround(new_freq / tick_rate), 2), -2);
-++    const double dac_shift = zone*tick_rate;
-+     new_freq -= dac_shift; //update FPGA DSP target freq
-+     UHD_LOG_TRACE("USRP2",
-+         "DSP Tuning: Requested " + std::to_string(freq_/1e6) + " MHz, Using "
-+-        "Nyquist zone " + std::to_string(sign*zone) + ", leftover DSP tuning: "
-++        "Nyquist zone " + std::to_string(zone) + ", leftover DSP tuning: "
-+         + std::to_string(new_freq/1e6) + " MHz.");
-+ 
-+     //set the DAC shift (modulation mode)
-+     if (zone == 0) {
-+         _mbc[mb].codec->set_tx_mod_mode(0); //no shift
-+     } else {
-+-        _mbc[mb].codec->set_tx_mod_mode(sign*4/zone); //DAC interp = 4
-++        _mbc[mb].codec->set_tx_mod_mode(4/zone); //DAC interp = 4
-+     }
-+ 
-+     return _mbc[mb].tx_dsp->set_freq(new_freq) + dac_shift; //actual freq
-+-- 
-+2.32.0
-+
--- 
-2.30.2
-
+Tim
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
