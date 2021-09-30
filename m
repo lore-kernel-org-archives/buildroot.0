@@ -2,84 +2,86 @@ Return-Path: <SRS0=LUVO=OU=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 71A10C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 30 Sep 2021 07:01:04 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6DB39C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 30 Sep 2021 07:01:15 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id DB15A6162E
-	for <buildroot@archiver.kernel.org>; Thu, 30 Sep 2021 07:01:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org DB15A6162E
+	by mail.kernel.org (Postfix) with ESMTPS id 09F4E615E1
+	for <buildroot@archiver.kernel.org>; Thu, 30 Sep 2021 07:01:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 09F4E615E1
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 83046613AF;
-	Thu, 30 Sep 2021 07:01:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BAEDB83F7D;
+	Thu, 30 Sep 2021 07:01:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AglBwVOOW3gV; Thu, 30 Sep 2021 07:01:02 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C12B1613AD;
-	Thu, 30 Sep 2021 07:01:01 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 618F51BF2B7
- for <buildroot@lists.busybox.net>; Thu, 30 Sep 2021 07:01:00 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 50A3A83F5D
- for <buildroot@lists.busybox.net>; Thu, 30 Sep 2021 07:01:00 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VfSbMmYiHwPf for <buildroot@lists.busybox.net>;
- Thu, 30 Sep 2021 07:00:59 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 5Lc7TvAczU7N; Thu, 30 Sep 2021 07:01:14 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 298FC83F8A;
+	Thu, 30 Sep 2021 07:01:13 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 9877D1BF2B7
+ for <buildroot@lists.busybox.net>; Thu, 30 Sep 2021 07:01:01 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 940AE613AD
+ for <buildroot@lists.busybox.net>; Thu, 30 Sep 2021 07:01:01 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7eF874qcjhxj for <buildroot@lists.busybox.net>;
+ Thu, 30 Sep 2021 07:01:00 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
- [IPv6:2a00:1450:4864:20::42d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 49EB783F5B
- for <buildroot@buildroot.org>; Thu, 30 Sep 2021 07:00:59 +0000 (UTC)
-Received: by mail-wr1-x42d.google.com with SMTP id v17so8251061wrv.9
- for <buildroot@buildroot.org>; Thu, 30 Sep 2021 00:00:59 -0700 (PDT)
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
+ [IPv6:2a00:1450:4864:20::429])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A79D160715
+ for <buildroot@buildroot.org>; Thu, 30 Sep 2021 07:01:00 +0000 (UTC)
+Received: by mail-wr1-x429.google.com with SMTP id h15so6665247wrc.3
+ for <buildroot@buildroot.org>; Thu, 30 Sep 2021 00:01:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=PtRR3D5gIEFR+KupJ9kSU2KCXqgo3xOWBk6ZqQkdoig=;
- b=jvKa1iFBv4WXvtDkSobzEVqEWDn8Wxm8+XgcyjS29SUj9TVhYIr6TcD16/2c1Iq4qd
- +N2rOvvMn4ARiuYFLOdnjTkuOcJZwqYVfCqhwdrlkoXdyv11mPv0kw4mw3hbm1fv9KKu
- JfqTxTaZwdA8qRtvUDgGXnqRRGvApxXN8fe9z9nwEmvcqTDww7qwAZHb8RxBshhrPtk7
- mCpkXf8IqOos3rFSRniK4Xh1l4oRyUkh4o8xLYQLcElyepjJcsh+WUyO67K4x598ZNap
- iQveaPb9myU6+C/BgzN+ZLKMIV9r6pvtYn2Zc5m+tFYiN30wlOP2c4fvN6scZfrrTiJW
- 1D0w==
+ h=from:to:cc:subject:date:message-id:in-reply-to:references
+ :mime-version:content-transfer-encoding;
+ bh=Xn7I8hFOhDDsEkcpByc11U+eDPFYiBLsElmlcnNVD04=;
+ b=TvJn12k9jvc80raU6CYYbGzUFe0t0gEERwfH8ZKNACfsX8Zemv6irH7z25iJ5JxBmf
+ R0VoZ3ibzQOHKanLKGxRbGHKnOL55Rz3ElRwqHgib+buMXRat6JoVVNmW9clmHA8VrLu
+ /ZWYYsoJSDME8DzfJaN3bnC+d0nsUqmqPsqLwT3rjQPvcJHexdusk5QcO3NMcHKIgFO4
+ fCgee4eIH/pVky6RB4mb6fKRhXOQjId/HEEbMQWSiKLfSoHqeAwoNvkvlH4Ztn0gH9NK
+ rkk8iybAUrQVI2/K+MkurYdGRkkL8EI1jpBU7fCBJUsNqpteRbQ+hFJCH2rcQfa5TQDP
+ 9EWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=PtRR3D5gIEFR+KupJ9kSU2KCXqgo3xOWBk6ZqQkdoig=;
- b=PL3D8zZbr2AkugLE/rM5Nu91LvbrTJ0jsbcO5OQ3MwCyS8sJZ6+U9qwV2hM19zFBDd
- hPzud4IlOxkkF53VkNrTp+ccnKALRFtfHapudqs17I20DMWWw6psADWz86GHDYyPfSNb
- w0j50tpa92naTu6zZZ4RSCkvsm5AjuqBMAwkst7q87fIFKEQJrFyhxQWLfERT5RdPg01
- bf9kL1vy0E9FRqyCj5EP1OiCn8aU1PgMjS34UqokBnhk5A65J2979v9OxaGYw7Ohzsym
- l+3FUd+mEgFdibC5p6dWYKC2K72sWd/4hBxnygCJ5BHt6t9b2d82OJF8cCTlLoulbPKG
- nHXQ==
-X-Gm-Message-State: AOAM531n0ZBTvcLEZnwIB1f0tucmU8e5qlZtK54cjU2coKTpTtzuuMaK
- PpeU50jHmTkPK8dYPhJNg5eSYbM9REc=
-X-Google-Smtp-Source: ABdhPJyOBT288J2Oo12V8U1iEcCKcwtxqvKZlR5aRt+fosM5tgYKFc8W9pFiU++MtgyInXyzersX4A==
-X-Received: by 2002:a5d:4a46:: with SMTP id v6mr4259644wrs.262.1632985257246; 
- Thu, 30 Sep 2021 00:00:57 -0700 (PDT)
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+ :references:mime-version:content-transfer-encoding;
+ bh=Xn7I8hFOhDDsEkcpByc11U+eDPFYiBLsElmlcnNVD04=;
+ b=pmHP6W8O65+XNSrqRvx66KavBfv+/ms5oRbW6AysE92WTFLb3kAHuk97KJMEv0xIte
+ x4rdA2dxmrU4GV4kpuAr7OgK0fbK1zes9xzcaiNq6HLUbenTwgwVEJsnvLQ4fWSGmK8h
+ 17NChx3qhTY547y6DEhUbUoJsBTp5Y2do+XZCNLVEh0o4ql6JEs3BH9bFyN7/q2iChdB
+ F6mEqDD9sNuhZoeZVuk+751ej8q+9XaQRnIlx1k5O9YHQmgdnwzkr2Ao25nJmktSDV6d
+ bNXeXz5GqkCR4APZDXZ1T0TLvo4tGo5V8AwSZAO+9w0n3HnE9GPUOtyLmLwkME1Gfw6r
+ E7Ow==
+X-Gm-Message-State: AOAM532As8yf4NqeGYguwwJyI0QGSHf99FVll7J5ZL+jQOfyNvWs9wCz
+ YKu/0ufTqNsgn8u0mEZz8BzU3wj3EmY=
+X-Google-Smtp-Source: ABdhPJxO4Vx3kJ4K5m0dMRrKyjFryzBpJK2d8brb34MgQ2P8D1LautXBKYbpJWsOL53pvRxpSXvP4w==
+X-Received: by 2002:adf:e0c1:: with SMTP id m1mr4247068wri.241.1632985258780; 
+ Thu, 30 Sep 2021 00:00:58 -0700 (PDT)
 Received: from asaf.. ([2a10:8002:6b25:0:c4c3:c3e7:ea7f:250b])
- by smtp.gmail.com with ESMTPSA id n26sm3801088wmi.43.2021.09.30.00.00.55
+ by smtp.gmail.com with ESMTPSA id n26sm3801088wmi.43.2021.09.30.00.00.57
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 30 Sep 2021 00:00:56 -0700 (PDT)
+ Thu, 30 Sep 2021 00:00:58 -0700 (PDT)
 From: Asaf Kahlon <asafka7@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu, 30 Sep 2021 10:00:37 +0300
-Message-Id: <20210930070051.40361-1-asafka7@gmail.com>
+Date: Thu, 30 Sep 2021 10:00:38 +0300
+Message-Id: <20210930070051.40361-2-asafka7@gmail.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210930070051.40361-1-asafka7@gmail.com>
+References: <20210930070051.40361-1-asafka7@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/python-pymysql: bump to version
- 1.0.2
+Subject: [Buildroot] [PATCH 1/1] package/python-reentry: bump to version
+ 1.3.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,56 +100,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-* The package doesn't support python2 anymore.
-* Indent with two spaces in the hash file.
+Plus, indent with two spaces in the hash file.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-pymysql/Config.in           | 1 +
- package/python-pymysql/python-pymysql.hash | 6 +++---
- package/python-pymysql/python-pymysql.mk   | 4 ++--
- 3 files changed, 6 insertions(+), 5 deletions(-)
+ package/python-reentry/python-reentry.hash | 6 +++---
+ package/python-reentry/python-reentry.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-pymysql/Config.in b/package/python-pymysql/Config.in
-index 75b447cbd1..69ba485e77 100644
---- a/package/python-pymysql/Config.in
-+++ b/package/python-pymysql/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_PYMYSQL
- 	bool "python-pymysql"
-+	depends on BR2_PACKAGE_PYTHON3
- 	help
- 	  PyMySQL is a pure-Python MySQL client library. It follows
- 	  the DB-API 2.0.
-diff --git a/package/python-pymysql/python-pymysql.hash b/package/python-pymysql/python-pymysql.hash
-index 36323ca73a..dd81bdab7e 100644
---- a/package/python-pymysql/python-pymysql.hash
-+++ b/package/python-pymysql/python-pymysql.hash
+diff --git a/package/python-reentry/python-reentry.hash b/package/python-reentry/python-reentry.hash
+index 089d8594f5..522b936118 100644
+--- a/package/python-reentry/python-reentry.hash
++++ b/package/python-reentry/python-reentry.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pymysql/json
--md5	e5d9183cc0a775ac29f9e0365cca6556  PyMySQL-0.9.3.tar.gz
--sha256	d8c059dcd81dedb85a9f034d5e22dcb4442c0b201908bede99e306d65ea7c8e7  PyMySQL-0.9.3.tar.gz
-+md5  3fe6ff2eefb58af5c54d335c6e0216de  PyMySQL-1.0.2.tar.gz
-+sha256  816927a350f38d56072aeca5dfb10221fe1dc653745853d30a216637f5d7ad36  PyMySQL-1.0.2.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/reentry/json
+-md5	819931cd0a766a7c226879e57ccea9c7  reentry-1.3.1.tar.gz
+-sha256	2fe18c1a6946f3e2a51e1d5aa78228a11e879fbb0da14da5bf1e6252e83d26b1  reentry-1.3.1.tar.gz
++md5  398c1e5bbda657aa645c8d2d38afb63f  reentry-1.3.2.tar.gz
++sha256  c6667e59aeabbb4d122aadc2170102a270e6a811d16a5431c5c3b91fabd7cf02  reentry-1.3.2.tar.gz
  # Locally computed sha256 checksums
--sha256	314120dc65f0800f738a4b31400c76ee14decd1fbe77ce9c3540a421b86ea7b6  LICENSE
-+sha256  314120dc65f0800f738a4b31400c76ee14decd1fbe77ce9c3540a421b86ea7b6  LICENSE
-diff --git a/package/python-pymysql/python-pymysql.mk b/package/python-pymysql/python-pymysql.mk
-index edb08ee054..3703572f35 100644
---- a/package/python-pymysql/python-pymysql.mk
-+++ b/package/python-pymysql/python-pymysql.mk
+-sha256	4ae7f3216208a7e2327236e95bcd2397b2495f1c2298c708986c893bea608509  LICENSE
++sha256  4ae7f3216208a7e2327236e95bcd2397b2495f1c2298c708986c893bea608509  LICENSE
+diff --git a/package/python-reentry/python-reentry.mk b/package/python-reentry/python-reentry.mk
+index 428dbf2b1b..ec33c17452 100644
+--- a/package/python-reentry/python-reentry.mk
++++ b/package/python-reentry/python-reentry.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYMYSQL_VERSION = 0.9.3
-+PYTHON_PYMYSQL_VERSION = 1.0.2
- PYTHON_PYMYSQL_SOURCE = PyMySQL-$(PYTHON_PYMYSQL_VERSION).tar.gz
--PYTHON_PYMYSQL_SITE = https://files.pythonhosted.org/packages/da/15/23ba6592920e21cb40eb0fe0ea002d2b6177beb1ca8a4c1add5a8f32754d
-+PYTHON_PYMYSQL_SITE = https://files.pythonhosted.org/packages/60/ea/33b8430115d9b617b713959b21dfd5db1df77425e38efea08d121e83b712
- PYTHON_PYMYSQL_LICENSE = MIT
- PYTHON_PYMYSQL_LICENSE_FILES = LICENSE
- PYTHON_PYMYSQL_SETUP_TYPE = setuptools
+-PYTHON_REENTRY_VERSION = 1.3.1
++PYTHON_REENTRY_VERSION = 1.3.2
+ PYTHON_REENTRY_SOURCE = reentry-$(PYTHON_REENTRY_VERSION).tar.gz
+-PYTHON_REENTRY_SITE = https://files.pythonhosted.org/packages/ee/3f/a90789e01c4d2b67a57e9bd758e60ecb9338d428604f66130b57684ba8cc
++PYTHON_REENTRY_SITE = https://files.pythonhosted.org/packages/a0/88/eb0c107c19227a2292ed11711034a3d80c0dc1368d2b3ebeb3fe7b936a8e
+ PYTHON_REENTRY_SETUP_TYPE = setuptools
+ PYTHON_REENTRY_LICENSE = MIT
+ PYTHON_REENTRY_LICENSE_FILES = LICENSE
 -- 
 2.33.0
 
