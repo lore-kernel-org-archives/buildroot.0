@@ -2,84 +2,72 @@ Return-Path: <SRS0=lBh3=OV=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 24AB9C433EF
-	for <buildroot@archiver.kernel.org>; Fri,  1 Oct 2021 22:18:28 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AB648C433F5
+	for <buildroot@archiver.kernel.org>; Fri,  1 Oct 2021 22:30:01 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 7622061A8E
-	for <buildroot@archiver.kernel.org>; Fri,  1 Oct 2021 22:18:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7622061A8E
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id 8657661AA3
+	for <buildroot@archiver.kernel.org>; Fri,  1 Oct 2021 22:30:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8657661AA3
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=buildroot.org
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 08DCD60759;
-	Fri,  1 Oct 2021 22:18:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2A92840436;
+	Fri,  1 Oct 2021 22:30:00 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id aARlyumPPj1l; Fri,  1 Oct 2021 22:29:59 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 89D804031B;
+	Fri,  1 Oct 2021 22:29:58 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 5186C1BF3EF
+ for <buildroot@lists.busybox.net>; Fri,  1 Oct 2021 22:29:57 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 317BD6071D
+ for <buildroot@lists.busybox.net>; Fri,  1 Oct 2021 22:29:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ahi2jz9yMhro; Fri,  1 Oct 2021 22:18:26 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 634A46071D;
-	Fri,  1 Oct 2021 22:18:25 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DF30F1BF3EF
- for <buildroot@lists.busybox.net>; Fri,  1 Oct 2021 22:18:23 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DC20A42651
- for <buildroot@lists.busybox.net>; Fri,  1 Oct 2021 22:18:23 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VfZuVg6mJU7q for <buildroot@lists.busybox.net>;
- Fri,  1 Oct 2021 22:18:23 +0000 (UTC)
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id seTwSPO1JiGJ for <buildroot@lists.busybox.net>;
+ Fri,  1 Oct 2021 22:29:56 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
- [IPv6:2a00:1450:4864:20::42a])
- by smtp4.osuosl.org (Postfix) with ESMTPS id DB79D4263F
- for <buildroot@buildroot.org>; Fri,  1 Oct 2021 22:18:22 +0000 (UTC)
-Received: by mail-wr1-x42a.google.com with SMTP id v17so17584151wrv.9
- for <buildroot@buildroot.org>; Fri, 01 Oct 2021 15:18:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=xH4b7gmkzZhOaO9IY6fxrKkyqJw9eSKpB8yufDwdayw=;
- b=BPVeKNJPCB5+katOV8f3RaE3Ta8E8F3kAt64JJXRR7zLRSrEjETHeqHU5bSVxx57R3
- /fU5Q2vn8LRM9bVPEfjX3XfrnGgGioe5OJ32WtkLEAbv1JoPXN8oy5i5HRpGw9t6kaX4
- lcbVAi1ALADRaGDrY0Jvzbu+ZZCa2eJZk/3sbsQ2xmvMNwOhXsALOADzty12/x7MuJI1
- qWeMtIxzi1Iqu9eIK1XlIfItxj/2Fe2slmp9JlCa9bzUu6xOtXc+OnXvOy+axjYpRIzp
- LtRiseO8PjF66fnJC4W7itSvT1mDYqGHE1y+SpAeBtTbrve77kYbVwXd616FYx2QGC2k
- 9pHg==
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com
+ [209.85.210.172])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A6AAE60711
+ for <buildroot@buildroot.org>; Fri,  1 Oct 2021 22:29:56 +0000 (UTC)
+Received: by mail-pf1-f172.google.com with SMTP id g2so9157586pfc.6
+ for <buildroot@buildroot.org>; Fri, 01 Oct 2021 15:29:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=xH4b7gmkzZhOaO9IY6fxrKkyqJw9eSKpB8yufDwdayw=;
- b=kIcJ7jM2C8p82Mtp2dIzn42RbOgJW/W3xRuJaJjtXYdQbSlBK2k7psnPrpaSqB98Gy
- Q9eVcht020Cdlo4jX6yU4QMvZI5/IV6jPJn6tNrACRkkUzc4QoDM5k4BTb8xoRV+b35C
- wjVT+m99eSqxGS+J8ucax0gURWpg4tkfN7mdZr/CConG4K+SSufRcSo5d0UQ6iR7VZOi
- X1jPP4m5KrckyZK/kG04ZOWjsfvCmxMVAy/g7RPq9H6T8hzJ6399ZyNC9sAIbKGTYQ8h
- 5mRAAuzH2vvesV4Br3PLBFC9xyfTzTZ+7/Ai3oJvYTeR/vVLuWgwQAkyoE4Kv+1mh7Uk
- /c4w==
-X-Gm-Message-State: AOAM533OAyVBX8AVuieXlXILLYHiYApo+za0cPFS1jkstCdXQgFIrOpM
- +UNCjsD64djCvF6vC2ztO7dcL504Iy8=
-X-Google-Smtp-Source: ABdhPJzxwR0+M69dSXmTPoKohSW9wpQ1ndUqA8rKFGYoMxRgRjl9BN9M5SOBm36E7fFjQBLL9QfXSA==
-X-Received: by 2002:adf:a2d4:: with SMTP id t20mr347676wra.229.1633126700745; 
- Fri, 01 Oct 2021 15:18:20 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-421-88.w2-10.abo.wanadoo.fr.
- [2.10.246.88])
- by smtp.gmail.com with ESMTPSA id a8sm7031630wrp.61.2021.10.01.15.17.43
+ bh=QzxCrpWZVHe+QH4LGkPn7QaegckQZntArh5GXi1kbaU=;
+ b=5582IMvtxnWMOOMlexkBOsZPYM4drQPs+RWDBWIE1tlm0vGh8Jh80qYNxnopAq1of+
+ tQLq1Y/UF6dlsOfdHZ3ve1H97dgVsW0B0P4QXQInIFq90onbgM0RM5ojxZITQ1crODeV
+ sEQMYVghcYuVgQztBfoebhl3fZd2Bq3UfjEx6q9KOEH3+2xTCYHozedPc9KI4ylK+GfB
+ FnJ/Nvy0SWrEPNGNEtDK2tE8EQWth+AtiFyrx1R0cAyyzr1I9ZuZXNg4ReHW6XZ68XM8
+ 5+dHWMuXzTnJDEDfl0pxUj/kT0y5BhpBb9SCwf4LANctdYG3loFNYDnzMKUUs8UDF8/N
+ +1TA==
+X-Gm-Message-State: AOAM530fgYNF2ysDriTxZyTtrmCFXpORkd0L2YfTua9q5k9pABtQXLW5
+ tMoeUDbsEfsUNEwvXYDhdNY5H5fYFinQSw==
+X-Google-Smtp-Source: ABdhPJzU+etWFcNXuuv4kDwodqxR7TT4ghona1Wz1yiKOnCxTIgbhjohHWZ7KiGOAi5n/9+afREpMQ==
+X-Received: by 2002:a65:4008:: with SMTP id f8mr402522pgp.310.1633127395852;
+ Fri, 01 Oct 2021 15:29:55 -0700 (PDT)
+Received: from localhost.localdomain (ip68-111-8-11.sb.sd.cox.net.
+ [68.111.8.11])
+ by smtp.gmail.com with ESMTPSA id u6sm7119790pgc.68.2021.10.01.15.29.54
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 01 Oct 2021 15:18:15 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Fri, 01 Oct 2021 15:29:55 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Sat,  2 Oct 2021 00:16:54 +0200
-Message-Id: <20211001221654.3087199-1-fontaine.fabrice@gmail.com>
+Date: Fri,  1 Oct 2021 15:29:51 -0700
+Message-Id: <20211001222952.670649-1-christian@paral.in>
 X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/supervisor: bump to version 4.2.2
+Subject: [Buildroot] [PATCH 1/2] package/lxc: fix typo of toolchain in
+ config.in
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,49 +79,33 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+From: Christian Stewart via buildroot <buildroot@buildroot.org>
+Reply-To: Christian Stewart <christian@paral.in>
+Cc: Christian Stewart <christian@paral.in>, Anisse Astier <anisse@astier.eu>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Update indentation in hash file (two spaces)
+BR2_TOOLCHAN_USES_UCLIBC -> BR2_TOOLCHAIN_USES_UCLIBC
 
-https://github.com/Supervisor/supervisor/blob/4.2.2/CHANGES.rst
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- package/supervisor/supervisor.hash | 6 +++---
- package/supervisor/supervisor.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/lxc/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/supervisor/supervisor.hash b/package/supervisor/supervisor.hash
-index 98a03aa1be..f6e9cf97b1 100644
---- a/package/supervisor/supervisor.hash
-+++ b/package/supervisor/supervisor.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256 2dc86fe0476e945e61483d614ceb2cf4f93b95282eb243bdf792621994360383  supervisor-4.1.0.tar.gz
--sha256 7b8dbd54ab1543b07b2fc5f6f5ab50d89d26c1c4952af93a579d8c52c56b8de4  COPYRIGHT.txt
--sha256 4c35fda9f70bb7883fd94e5a4d5addd88ad1a6d5d15e21c9d17c4d96fdc5e369  LICENSES.txt
-+sha256  5b2b8882ec8a3c3733cce6965cc098b6d80b417f21229ab90b18fe551d619f90  supervisor-4.2.2.tar.gz
-+sha256  7b8dbd54ab1543b07b2fc5f6f5ab50d89d26c1c4952af93a579d8c52c56b8de4  COPYRIGHT.txt
-+sha256  4c35fda9f70bb7883fd94e5a4d5addd88ad1a6d5d15e21c9d17c4d96fdc5e369  LICENSES.txt
-diff --git a/package/supervisor/supervisor.mk b/package/supervisor/supervisor.mk
-index 92e8323080..ad34c031e4 100644
---- a/package/supervisor/supervisor.mk
-+++ b/package/supervisor/supervisor.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--SUPERVISOR_VERSION = 4.1.0
--SUPERVISOR_SITE = https://files.pythonhosted.org/packages/de/87/ee1ad8fa533a4b5f2c7623f4a2b585d3c1947af7bed8e65bc7772274320e
-+SUPERVISOR_VERSION = 4.2.2
-+SUPERVISOR_SITE = https://files.pythonhosted.org/packages/d3/7f/c780b7471ba0ff4548967a9f7a8b0bfce222c3a496c3dfad0164172222b0
- SUPERVISOR_LICENSE = BSD-like, rdflib (http_client.py), PSF (medusa)
- SUPERVISOR_LICENSE_FILES = COPYRIGHT.txt LICENSES.txt
- SUPERVISOR_CPE_ID_VENDOR = supervisord
+diff --git a/package/lxc/Config.in b/package/lxc/Config.in
+index 72b675113d..a3f9be0c90 100644
+--- a/package/lxc/Config.in
++++ b/package/lxc/Config.in
+@@ -21,4 +21,4 @@ comment "lxc needs a glibc or musl toolchain w/ threads, headers >= 3.0, dynamic
+ 		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 \
+ 		|| !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 \
+ 		|| BR2_STATIC_LIBS \
+-		|| BR2_TOOLCHAN_USES_UCLIBC
++		|| BR2_TOOLCHAIN_USES_UCLIBC
 -- 
 2.33.0
 
