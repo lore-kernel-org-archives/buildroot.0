@@ -2,64 +2,87 @@ Return-Path: <SRS0=lBh3=OV=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1CD0AC433F5
-	for <buildroot@archiver.kernel.org>; Fri,  1 Oct 2021 10:59:05 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C4BF3C433F5
+	for <buildroot@archiver.kernel.org>; Fri,  1 Oct 2021 11:10:32 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 3D7D161507
-	for <buildroot@archiver.kernel.org>; Fri,  1 Oct 2021 10:59:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3D7D161507
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=igalia.com
+	by mail.kernel.org (Postfix) with ESMTPS id A531561A82
+	for <buildroot@archiver.kernel.org>; Fri,  1 Oct 2021 11:10:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A531561A82
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=buildroot.org
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D8DC640100;
-	Fri,  1 Oct 2021 10:59:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3E246843EC;
+	Fri,  1 Oct 2021 11:10:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DSFudcU17brO; Fri,  1 Oct 2021 10:59:02 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id JyP88P1fYENh; Fri,  1 Oct 2021 11:10:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D4E4D40218;
-	Fri,  1 Oct 2021 10:59:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A656C84382;
+	Fri,  1 Oct 2021 11:10:29 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 151E51BF2C2
- for <buildroot@lists.busybox.net>; Fri,  1 Oct 2021 10:59:00 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 894391BF5A7
+ for <buildroot@lists.busybox.net>; Fri,  1 Oct 2021 11:10:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0054040523
- for <buildroot@lists.busybox.net>; Fri,  1 Oct 2021 10:59:00 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 85DD840578
+ for <buildroot@lists.busybox.net>; Fri,  1 Oct 2021 11:10:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=igalia.com
+ dkim=pass (2048-bit key) header.d=paral.in
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id svZyJTFFI7BT for <buildroot@lists.busybox.net>;
- Fri,  1 Oct 2021 10:58:59 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from fanzine.igalia.com (fanzine.igalia.com [178.60.130.6])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 34E78403B3
- for <buildroot@buildroot.org>; Fri,  1 Oct 2021 10:58:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
- s=20170329; 
- h=Content-Type:MIME-Version:References:In-Reply-To:Subject:Cc:To:From:Message-ID:Date;
- bh=8MF5p6pS11qPaQ1uJdJABpAcSdQqE6VugFgCm5C4Y0Y=; 
- b=hoefst5+M/uQSk+zKMdM/hxZmuRUk+qCwgRNjFtZu2heJcUMvNT7HkLSlsSMGLAYfCQ+Z8/5roOcpNacOSvKKhrEy3eYwcjx9jfuE0a+zjRnzWYoMUAicbBwIkXBj+9GIhw3ox0cbHbPv0rVmyak7j6sRYMi4UpXBhzf+gxurEHn1K5psRcCU+JQLgQyU5Yvd/luHS7TiMr+JZBwEq0Hf1Cl/uOcpD0ir4rVDs5KS27s5VD/Mxzfq10fzwBvAWuc9vPepOvmYzGXAZlitXvltw8ATASv3mcTN0NZbFy3Sk2duFAoJTA1+OriDYjN/m+pWDVkogdzGZDfcMvXkA9ukQ==;
-Received: from 91-158-76-100.elisa-laajakaista.fi ([91.158.76.100] helo=momiji)
- by fanzine.igalia.com with esmtpsa 
- (Cipher TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256) (Exim)
- id 1mWGFk-0000Mf-K7; Fri, 01 Oct 2021 12:58:56 +0200
-Received: from localhost (momiji [local])
- by momiji (OpenSMTPD) with ESMTPA id 01bd2ba0;
- Fri, 1 Oct 2021 10:58:45 +0000 (UTC)
-Date: Fri, 1 Oct 2021 13:58:41 +0300
-Message-ID: <20211001135841.GB1082333@momiji>
-From: Adrian Perez de Castro <aperez@igalia.com>
-To: James Hilliard <james.hilliard1@gmail.com>
-In-Reply-To: <20210924105340.3514180-1-james.hilliard1@gmail.com>
-References: <20210924105340.3514180-1-james.hilliard1@gmail.com>
+ with ESMTP id 4Fg1sG2EJbr1 for <buildroot@lists.busybox.net>;
+ Fri,  1 Oct 2021 11:10:27 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com
+ [IPv6:2607:f8b0:4864:20::e2a])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A20E44052A
+ for <buildroot@buildroot.org>; Fri,  1 Oct 2021 11:10:27 +0000 (UTC)
+Received: by mail-vs1-xe2a.google.com with SMTP id p9so5370117vst.9
+ for <buildroot@buildroot.org>; Fri, 01 Oct 2021 04:10:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=paral.in; s=google;
+ h=mime-version:from:date:message-id:subject:to;
+ bh=tkHVA0bECh6KH/5/5Z9+dQ/tBqg8F73oH3+lM59VUo8=;
+ b=SiECehNLXyogptgnS0atfXKJYkOMLs+7TyB+m4XawJ+/NpqvqWIdhxDRUPyx8n0K0x
+ fTV6Tg3pTEPtfVtWd3MoID9bii2PPaUKpxoV6xXV2NK0E0eM3EvTW9wzT+rfIH+bXPKL
+ tD8lVWpoqLmoILhl7ugACBw0HR4bmS5YU66GBqbrRB4129GIbcdQg4gs9AkpMGCOSYS0
+ CCZS4EBPDnSa2YRG9PF/KufsdkDwovI606jE2m2Dmipvk9PBYW6Tl6SpdP49pyLdAwzS
+ yrOcz6gc7Fir199irQXNVqTTiB4lSZHJk+H0m4NeUped6iwEu/kPgM839tumRyi9SfmB
+ LT4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+ bh=tkHVA0bECh6KH/5/5Z9+dQ/tBqg8F73oH3+lM59VUo8=;
+ b=EmA4LOlAcI4+ZL3BWRs8tHLIQaOZa+v9kIrX56VE+GEbEmp+hjMrKLXyfKIP8oTxxc
+ 5PiBRJqex0BXbHTOADPyiA9qSw+tWCHWI/1tz1dvGuvYqTvVJZdMpGH3dMvN7Fiq4Nig
+ OvWl6eScO2o0on9OdfuBzg3dlsogIicqZKtPQjYtpcUM73P+ha1TYDdNAk4f6iCo6EFd
+ 3QvQRlHShxQp1cEtQDK/SRFA+dtaC2hTqb/tAKlHHSasjVfnZPihyM0awiEpDRooCONv
+ DTGM6nMrE/yQBLn9uFoiPqr+G3EL8UF7SKkSHfplhTM6d6rUyx9MygN+clMIf5vaKVdL
+ PSJA==
+X-Gm-Message-State: AOAM530qQpkUEggmql1Brd8N32Bv8r0RiZWxsXqtvkjJ7aDbYEUWMlcY
+ 7/gtconSu93E0U5M16WBPbx0//aqw72KvQ==
+X-Google-Smtp-Source: ABdhPJy03f+43Ig8AbEH0uQ9X1TB6UcZIQqiEhgYTDhxNYXtukdcB7umFyvhc5Rz6sgZlXhh3x03yA==
+X-Received: by 2002:a67:7282:: with SMTP id n124mr3128037vsc.15.1633086626194; 
+ Fri, 01 Oct 2021 04:10:26 -0700 (PDT)
+Received: from mail-vs1-f44.google.com (mail-vs1-f44.google.com.
+ [209.85.217.44])
+ by smtp.gmail.com with ESMTPSA id l25sm3084275uai.6.2021.10.01.04.10.25
+ for <buildroot@buildroot.org>
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Fri, 01 Oct 2021 04:10:25 -0700 (PDT)
+Received: by mail-vs1-f44.google.com with SMTP id h30so10845935vsq.3
+ for <buildroot@buildroot.org>; Fri, 01 Oct 2021 04:10:25 -0700 (PDT)
+X-Received: by 2002:a05:6102:b13:: with SMTP id
+ b19mr3210487vst.37.1633086625242; 
+ Fri, 01 Oct 2021 04:10:25 -0700 (PDT)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/wpewebkit: add option to enable
- media-stream
+Date: Fri, 1 Oct 2021 04:10:14 -0700
+X-Gmail-Original-Message-ID: <CA+h8R2rm0EvjGOf01o8UDfKTTjFoY62bY5W3iwAHteqX+PtXyA@mail.gmail.com>
+Message-ID: <CA+h8R2rm0EvjGOf01o8UDfKTTjFoY62bY5W3iwAHteqX+PtXyA@mail.gmail.com>
+To: Buildroot Mailing List <buildroot@buildroot.org>
+Subject: [Buildroot] Docker Compose v2 released
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,89 +94,34 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============5188288522051343329=="
+From: Christian Stewart via buildroot <buildroot@buildroot.org>
+Reply-To: Christian Stewart <christian@paral.in>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Hi all,
 
---===============5188288522051343329==
-Content-Type: multipart/signed; boundary="seOFB1vJ+qRMKvOG"; micalg="pgp-sha1"; protocol="application/pgp-signature"
+Docker Compose v2 was released. It's a rewrite in Go (from Python).
 
+https://github.com/docker/compose
 
---seOFB1vJ+qRMKvOG
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: base64
+The changes for Buildroot will need to be (for backwards compat):
 
-SGkgSmFtZXMsIGFsbCwKCk9uIEZyaSwgMjQgU2VwIDIwMjEgMDQ6NTM6NDAgLTA2MDAgSmFtZXMg
-SGlsbGlhcmQgPGphbWVzLmhpbGxpYXJkMUBnbWFpbC5jb20+IHdyb3RlOgo+IFRoaXMgaGFzIGEg
-Y29tcGlsZSB0aW1lIGRlcGVuZGVuY3kgb24gZ3N0MS1wbHVnaW5zLWJhZCBkdWUgdG8KPiB0aGUg
-Y29kZWNwYXJzZXJzIGRlcGVuZGVuY3kuCj4gCj4gU2lnbmVkLW9mZi1ieTogSmFtZXMgSGlsbGlh
-cmQgPGphbWVzLmhpbGxpYXJkMUBnbWFpbC5jb20+Cj4gLS0tCj4gIHBhY2thZ2Uvd3Bld2Via2l0
-L0NvbmZpZy5pbiAgICB8IDYgKysrKysrCj4gIHBhY2thZ2Uvd3Bld2Via2l0L3dwZXdlYmtpdC5t
-ayB8IDcgKysrKysrKwo+ICAyIGZpbGVzIGNoYW5nZWQsIDEzIGluc2VydGlvbnMoKykKPiAKPiBk
-aWZmIC0tZ2l0IGEvcGFja2FnZS93cGV3ZWJraXQvQ29uZmlnLmluIGIvcGFja2FnZS93cGV3ZWJr
-aXQvQ29uZmlnLmluCj4gaW5kZXggMDRiMmJmM2JlYi4uZGYxYzkwMGQ5ZiAxMDA2NDQKPiAtLS0g
-YS9wYWNrYWdlL3dwZXdlYmtpdC9Db25maWcuaW4KPiArKysgYi9wYWNrYWdlL3dwZXdlYmtpdC9D
-b25maWcuaW4KPiBAQCAtMTA1LDYgKzEwNSwxMiBAQCBjb25maWcgQlIyX1BBQ0tBR0VfV1BFV0VC
-S0lUX01VTFRJTUVESUEKPiAgCSAgVGhpcyBvcHRpb24gcHVsbHMgaW4gYWxsIG9mIHRoZSByZXF1
-aXJlZCBkZXBlbmRlbmNpZXMKPiAgCSAgdG8gZW5hYmxlIG11bHRpbWVkaWEgKHZpZGVvL2F1ZGlv
-KSBzdXBwb3J0Lgo+ICAKPiArY29uZmlnIEJSMl9QQUNLQUdFX1dQRVdFQktJVF9NRURJQV9TVFJF
-QU0KPiArCWJvb2wgIm1lZGlhLXN0cmVhbSBzdXBwb3J0Igo+ICsJZGVwZW5kcyBvbiBCUjJfUEFD
-S0FHRV9XUEVXRUJLSVRfTVVMVElNRURJQQo+ICsJaGVscAo+ICsJICBUaGlzIG9wdGlvbiBlbmFi
-bGVzIG1lZGlhLXN0cmVhbSBzdXBwb3J0Lgo+ICsKPiAgaWYgQlIyX1BBQ0tBR0VfV1BFV0VCS0lU
-X01VTFRJTUVESUEKPiAgCj4gIGNvbmZpZyBCUjJfUEFDS0FHRV9XUEVXRUJLSVRfVVNFX0dTVFJF
-QU1FUl9HTAo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL3dwZXdlYmtpdC93cGV3ZWJraXQubWsgYi9w
-YWNrYWdlL3dwZXdlYmtpdC93cGV3ZWJraXQubWsKPiBpbmRleCA1YzVlNjYyNWY4Li45YWQ1Njlh
-NDcyIDEwMDY0NAo+IC0tLSBhL3BhY2thZ2Uvd3Bld2Via2l0L3dwZXdlYmtpdC5tawo+ICsrKyBi
-L3BhY2thZ2Uvd3Bld2Via2l0L3dwZXdlYmtpdC5tawo+IEBAIC00Niw2ICs0NiwxMyBAQCBXUEVX
-RUJLSVRfQ09ORl9PUFRTICs9IFwKPiAgCS1ERU5BQkxFX1dFQl9BVURJTz1PRkYKPiAgZW5kaWYK
-PiAgCj4gK2lmZXEgKCQoQlIyX1BBQ0tBR0VfV1BFV0VCS0lUX01FRElBX1NUUkVBTSkseSkKPiAr
-V1BFV0VCS0lUX0NPTkZfT1BUUyArPSAtREVOQUJMRV9NRURJQV9TVFJFQU09T04KPiArV1BFV0VC
-S0lUX0RFUEVOREVOQ0lFUyArPSBnc3QxLXBsdWdpbnMtYmFkCj4gK2Vsc2UKPiArV1BFV0VCS0lU
-X0NPTkZfT1BUUyArPSAtREVOQUJMRV9NRURJQV9TVFJFQU09T0ZGCgpUaGUgcHJvYmxlbSBJIHNl
-ZSBoZXJlIGlzIHRoYXQgd2UgYXJlIGZvcmNpbmcgdG8gZGlzYWJsZSBhIGZlYXR1cmUgd2hpY2gK
-d2lsZGx5IHBvcHVsYXIgd2ViIHNpdGVzIChlLmcuIFlvdVR1YmUpIHVzZSBtb3JlIGFuZCBtb3Jl
-IGFuZCBiZWluZyBhYmxlCnRvIGRpc2FibGUgaXQgaXMgbGlrZWx5IHRvIGRvIG1vcmUgaGFybSB0
-aGFuIGdvb2QuIFNpdGVzIHdpbGwgYnJlYWsgYW5kCnBlb3BsZSB3aWxsIHdyb25nbHkgYmxhbWUg
-V1BFIFdlYktpdCA6LVwKClRoZSByaWdodCBhcHByb2FjaCBoZXJlIHdvdWxkIGJlIHRvIGJyZWFr
-IHRoZSBjaXJjdWxhciBkZXBlbmRlbmN5IGlzIGRvaW5nCnR3byBwYXNzZXMgb24gdGhlIGdzdDEt
-cGx1Z2lucy1iYWQgYnVpbGQ6IG9uZSBiYXNpYyBidWlsZCB3aGljaCBoYXMgdGhlCnRoaW5ncyB0
-aGF0IFdlYktpdCBuZWVkcyAoaS5lLiBjb2RlY3BhcnNlcnMpLCB0aGVuIHVzZSB0aGF0IHRvIGJ1
-aWxkIFdlYktpdCwKdGhlbiByZWJ1aWxkIHdpdGggYWxsIHRoZSBvcHRpb25zIGVuYWJsZWQuIFRo
-aXMgc2Vjb25kIGdzdDEtcGx1Z2lucy1iYWQKYnVpbGQgd291bGQgYmUgdGhlIG9uZSB0byBpbnN0
-YWxsIHRvIHRoZSB0YXJnZXQgaW1hZ2UuCgpVbmZvcnR1bmF0ZWx5LCBJIHRoaW5rIHRoZSDigJxn
-b29k4oCdIHNvbHV0aW9uIGl0IGlzIG5vdCB0cml2aWFsIHRvIGFjaGlldmUKd2l0aCBCdWlsZHJv
-b3QuIFdoYXQgY29tZXMgdG8gbWluZCBpcyBoYXZpbmcgYSBuZXcgZ3N0MS1wbHVnaW5zLWJhZC1t
-aW5pbWFsCnBhY2thZ2Ugd2hpY2ggaXMgdXNlZCBvbmx5IGFzIGEgdGhyb3dhd2F5IGRlcGVuZGVu
-Y3kgdG8gYnVpbGQgd3Bld2Via2l0LgpJZiBzb21lYm9keSBoYXMgYSBiZXR0ZXIgc3VnZ2VzdGlv
-biwgSSB3b3VsZCBsb3ZlIHRvIGtub3cgOikKCj4gK2VuZGlmCj4gKwo+ICBpZmVxICgkKEJSMl9Q
-QUNLQUdFX1dQRVdFQktJVF9VU0VfR1NUUkVBTUVSX0dMKSx5KQo+ICBXUEVXRUJLSVRfQ09ORl9P
-UFRTICs9IC1EVVNFX0dTVFJFQU1FUl9HTD1PTgo+ICBlbHNlCj4gLS0gCj4gMi4yNS4xCj4gCgpD
-aGVlcnMsCuKAlEFkcmnDoW4K
+ - docker-compose: switch to go package
+ - docker-compose: depend on docker-cli
+ - install docker-compose binary to /usr/libexec/docker/cli-plugins
+ - install https://github.com/docker/compose-switch to /usr/bin/docker-compose
 
---seOFB1vJ+qRMKvOG
-Content-Type: application/pgp-signature; name="signature.asc"
+The new command is "docker compose" with a CLI plugin, and
+compose-switch fills in for the old "docker-compose" binary.
 
------BEGIN PGP SIGNATURE-----
+I'll have a look at making these changes soon.
 
-iF0EABECAB0WIQRao7wzT9fjNp58d7KRxVnb5MkSOwUCYVbp4QAKCRCRxVnb5MkS
-OxMnAJsFOvN/2MBOGWniJIk4yL0jpTd/OwCdHL0OOBBdkn5OpzUYmfuooCpU8LY=
-=k5UM
------END PGP SIGNATURE-----
-
---seOFB1vJ+qRMKvOG--
-
---===============5188288522051343329==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+Thanks,
+Christian Stewart
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5188288522051343329==--
