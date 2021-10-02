@@ -2,89 +2,84 @@ Return-Path: <SRS0=UKoJ=OW=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F01BC433EF
-	for <buildroot@archiver.kernel.org>; Sat,  2 Oct 2021 15:58:36 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B5F36C433F5
+	for <buildroot@archiver.kernel.org>; Sat,  2 Oct 2021 16:59:31 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id C932361A58
-	for <buildroot@archiver.kernel.org>; Sat,  2 Oct 2021 15:58:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C932361A58
+	by mail.kernel.org (Postfix) with ESMTPS id EED1261B28
+	for <buildroot@archiver.kernel.org>; Sat,  2 Oct 2021 16:59:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org EED1261B28
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 547D8606CC;
-	Sat,  2 Oct 2021 15:58:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9385C4043F;
+	Sat,  2 Oct 2021 16:59:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hoxtfAU7CWnj; Sat,  2 Oct 2021 15:58:34 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ixFNPw6-6BzA; Sat,  2 Oct 2021 16:59:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A4A926063A;
-	Sat,  2 Oct 2021 15:58:33 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 77FE11BF38B
- for <buildroot@lists.busybox.net>; Sat,  2 Oct 2021 15:58:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D77044041B;
+	Sat,  2 Oct 2021 16:59:28 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 79A771BF267
+ for <buildroot@lists.busybox.net>; Sat,  2 Oct 2021 16:59:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5EE426063A
- for <buildroot@lists.busybox.net>; Sat,  2 Oct 2021 15:58:32 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 67424404B7
+ for <buildroot@lists.busybox.net>; Sat,  2 Oct 2021 16:59:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nY_cHZD7pJq5 for <buildroot@lists.busybox.net>;
- Sat,  2 Oct 2021 15:58:28 +0000 (UTC)
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7fr2rt1FcbX7 for <buildroot@lists.busybox.net>;
+ Sat,  2 Oct 2021 16:59:26 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
- [IPv6:2a00:1450:4864:20::32a])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A734060592
- for <buildroot@buildroot.org>; Sat,  2 Oct 2021 15:58:28 +0000 (UTC)
-Received: by mail-wm1-x32a.google.com with SMTP id
- m14-20020a05600c3b0e00b0030d4dffd04fso3671923wms.3
- for <buildroot@buildroot.org>; Sat, 02 Oct 2021 08:58:28 -0700 (PDT)
+Received: from mail-il1-x136.google.com (mail-il1-x136.google.com
+ [IPv6:2607:f8b0:4864:20::136])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 14E8E404B3
+ for <buildroot@buildroot.org>; Sat,  2 Oct 2021 16:59:25 +0000 (UTC)
+Received: by mail-il1-x136.google.com with SMTP id i13so13894611ilm.4
+ for <buildroot@buildroot.org>; Sat, 02 Oct 2021 09:59:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:in-reply-to:content-transfer-encoding;
- bh=hPkuKXuzyBbAhXVaE5La7WRh4dG53uy+TqVBuOzVD3k=;
- b=bKoKPRP1H05alc81gJ/o6o0GazYAGvGzO2Uk1aIaDzvwdfowLJJmWM5SZWR82I9hZr
- F5mBwI8BfEg2Llk3Sw+2rRdJSt1FLXJBw4Mda99wTxflRHOxovbEU5hPk+WI8D/ScS9r
- IdDNFwZc/ZpF521hjKr1rsrbVHDuBdWsOmtDn00FzQXljZKhpFemVikRpkKHDgJBXr+L
- 3nHqfMDbgGrv+nVnmIJSIUzJCY2PIwOU8ttDIhllq6cqR4gViE1jzSuWqP1fMERzI7Ll
- WvZGxgkJBqGAsYrY9SRq/3IZ5Qt7XZ0RNoJ6SA9e998XA3aK9CIW0yGq1i9SR7ZDjyOa
- p17A==
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=An0bOeBkRt4aN8Xfr3obDqtX8reU+dLxg7ZLpEbV+bU=;
+ b=EsDyrLKl8b4ovzr23nPGGhpupEHtdMemzk5NBkiaysj6bEPuoUQLpFbKf8bC91PzKQ
+ mRp4hSu6XKd7dTOjk9ujZxWGvRHN42UQUiurTL6A24X0Gt196e/dh0llFfT/eMwssefz
+ ujenJugxNIHOU5SjW84Y3MzQatE5tvWxNpIgl3O0YO8Yh6tMoxEqAoIrii7aWtStCPrL
+ Bon+SD0ay6DeNi6Lr3N/8ffRrRdTQZw+KvrZ8MI5aLyM3xMsEl15xg5hQcoE8Nc3lsne
+ pwWfA4ersbOeNeOA6YpwrC+w8uRK6vtL7rJ99PuvhV3vomWNF8sSZjeK/+68Cl+IVDoS
+ //OQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:in-reply-to
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=hPkuKXuzyBbAhXVaE5La7WRh4dG53uy+TqVBuOzVD3k=;
- b=W7GNcZARiYVuPNYgTgRQmAnidcbGUiZ4jZl0HNloxN2dh8nTZ07RCI0aGAqFT3UvGN
- j+UJwZNAXfkMG0guZgchmbjPWREAuxcz4X4xvS+7avxF45Qo5yRAVZnTJ+XdnzkBnatN
- pc70x2jeUpvYsJsUu0t8hs47GEVFmx/AqNSgwIXlMAQA978TMPBAHAEi55k8yPMBgtd4
- OoSVUQPzXt8gC1JivgPEP2A1Pb1lf8ahQ424J7do5FoHgLDe3uQNZp4U9ARdJjAR8zys
- FWSQ9pdlQwmDKfX1++tpTi+gee/k1I0x/PRFBfhPIr2KwSb3YJA+EDTs3rJpEGNiS7lh
- aUXg==
-X-Gm-Message-State: AOAM531k/gdok1P5P1WjL3iA3bS7fYTBCQoG4oqdYnDabMaZmU3ezBDR
- deIJT7nX6AHJcy+cgjUIQ7Q=
-X-Google-Smtp-Source: ABdhPJzhRGUd7ru5QCZnWrFhUsx8DS39PAtQUYfqy71krU1mW+fTxdv6dPhJwUEkVjF/6LrhjYmIeQ==
-X-Received: by 2002:a1c:4d2:: with SMTP id 201mr9833199wme.156.1633190306770; 
- Sat, 02 Oct 2021 08:58:26 -0700 (PDT)
-Received: from [192.168.1.39] (arennes-651-1-314-16.w2-12.abo.wanadoo.fr.
- [2.12.73.16])
- by smtp.gmail.com with ESMTPSA id n15sm9203012wrg.58.2021.10.02.08.58.25
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 02 Oct 2021 08:58:26 -0700 (PDT)
-Message-ID: <6d635d7e-e88a-3b23-9682-a19ff3d08b7d@gmail.com>
-Date: Sat, 2 Oct 2021 17:58:24 +0200
+ bh=An0bOeBkRt4aN8Xfr3obDqtX8reU+dLxg7ZLpEbV+bU=;
+ b=qDEydoQXsyv3IQ/89mE/wWaBrKWdWbds/MKw2C09fRUIk42l7Odx/lTskhpwBRFphc
+ 4lLEFaIEcJQziba5S1lhMlBUdzJ8tI2FLIoSnJmMl1iK/KwZ9OeAWttjMETE4LStIGbS
+ RhtetuaObThdjgvbgeph0+Kx1Sw3Q2+BCFAgMxkgO+FFKl9Io24CNZqsMa3coGEtyLaN
+ +u4Uy/ldfSXPzpeF7CoNqU+AkVKg9WzJyrq8oU4itnFyJtxa/dYMNgNWKmdHdnJC2T6t
+ gXLwiR4wRR4NXdSDRbif2AG5+81wz93VEQOSvvdbxuezNAMPF1QB4ioH9W2txv6VLmrr
+ raqw==
+X-Gm-Message-State: AOAM532nSkyoL311qFuVHbJzRpPLmt38FPPvIbLQXtNH1UQ6mqtLB/zw
+ gwllGpN85SEq3D6wvXu6oQ2nM+Hxw3E=
+X-Google-Smtp-Source: ABdhPJyLC67Pson8Uo84KKfkaWQsQxSejTk7ccZ9XI9Q+UsuTfvHoVv2/nDAVPpo3Yk8quCkY7NrJQ==
+X-Received: by 2002:a92:c04c:: with SMTP id o12mr3455606ilf.124.1633193964914; 
+ Sat, 02 Oct 2021 09:59:24 -0700 (PDT)
+Received: from james-x399.localdomain (97-118-169-148.hlrn.qwest.net.
+ [97.118.169.148])
+ by smtp.gmail.com with ESMTPSA id x18sm3579653ile.18.2021.10.02.09.59.24
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 02 Oct 2021 09:59:24 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
+To: buildroot@buildroot.org
+Date: Sat,  2 Oct 2021 10:59:22 -0600
+Message-Id: <20211002165922.2184567-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.1.0
-Content-Language: en-US
-To: Arnout Vandecappelle <arnout@mind.be>, Guo Ren <ren_guo@c-sky.com>
-References: <37a2790a-8c48-1cfd-a160-567618850bbe@gmail.com>
- <24407e05-d940-826a-690f-5bbe1aeec252@mind.be>
-From: Romain Naour <romain.naour@gmail.com>
-In-Reply-To: <24407e05-d940-826a-690f-5bbe1aeec252@mind.be>
-Subject: Re: [Buildroot] csky 8xx toolchain issue
+Subject: [Buildroot] [PATCH 1/1] package/pipewire: bump to version 0.3.38
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,54 +91,83 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- buildroot <buildroot@buildroot.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: James Hilliard <james.hilliard1@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gQXJub3V0LAoKTGUgMjYvMDgvMjAyMSDDoCAyMzo1OSwgQXJub3V0IFZhbmRlY2FwcGVs
-bGUgYSDDqWNyaXTCoDoKPiAKPiAKPiBPbiAyNi8wOC8yMDIxIDIxOjM5LCBSb21haW4gTmFvdXIg
-d3JvdGU6Cj4+IEhlbGxvIEd1bywKPj4KPj4gSSBub3RpY2VkIHRoYXQgdGhlIGNza3kgOHh4IHRv
-b2xjaGFpbiBkb2Vzbid0IGJ1aWxkIHdpdGggYSByZWNlbnQgY29tcGlsZXIuCj4+IEl0IHRyaWdn
-ZXIgYW4gaW50ZXJuYWwgY29tcGlsZXIgZXJyb3Igd2l0aCB0aGUgZ2NjIGluc3RhbGxlZCBvbiB0
-aGUgaG9zdCAoRGViaWFuCj4+IGJ1c3RlciwgZ2NjIDguMy4wLTYpOyBGZWRvcmEgMzMsIGdjYyAx
-MC4zLjEtMTsgRmVkb3JhIDM0LCBnY2MgMTEuMC4xLTAuMykuCj4+Cj4+IFtxZW11X2Nza3k4MDdf
-dmlydF9kZWZjb25maWddCj4+IGh0dHBzOi8vZ2l0bGFiLmNvbS9rdWJ1OTMvYnVpbGRyb290Ly0v
-am9icy8xNTM1NDY0OTc0Cj4+Cj4+IFtxZW11X2Nza3k4MTBfdmlydF9kZWZjb25maWddCj4+IGh0
-dHBzOi8vZ2l0bGFiLmNvbS9rdWJ1OTMvYnVpbGRyb290Ly0vam9icy8xNTM1NDY0OTc1Cj4+Cj4+
-IFtxZW11X2Nza3k4NjBfdmlydF9kZWZjb25maWddCj4+IGh0dHBzOi8vZ2l0bGFiLmNvbS9rdWJ1
-OTMvYnVpbGRyb290Ly0vam9icy8xNTM1NDY0OTc2Cj4+Cj4+IFRoZSBsYXN0IGtub3cgaG9zdCBj
-b21waWxlciBpcyBnY2MgNiBmcm9tIERlYmlhbiBzdHJldGNoIHRoYXQgaXMgc3RpbGwgdXNlZCBi
-eQo+PiB0aGUgZ2l0bGFiLWNpIGJ1aWxkcy4gSXQgd2FzIG5vdCBub3RpY2VkIGJlZm9yZSBiZWNh
-dXNlIGNza3kgaXMgbm90IHRlc3RlZCBieQo+PiBCdWlsZHJvb3QgYXV0b2J1aWxkZXJzLgo+Pgo+
-PiBTaW5jZSBjc2t5IGlzIG5vdyB1cHN0cmVhbSBpbiBnY2MvYmludXRpbHMgYW5kIHRoZSBjc2t5
-IGludGVybmFsIHRvb2xjaGFpbiBpcwo+PiBiYXNlZCBvbiBnY2MgNiwgaXQgd291bGQgbWFrZSBz
-ZW5zIHRvIHVwZ3JhZGUgdG8gYW4gdXBzdHJlYW0gdmVyc2lvbi4KPj4KPj4gQ2FuIHlvdSB1cGRh
-dGUgdGhlIGNza3kgdG9vbGNoYWluPwo+Pgo+PiBJJ20gbm90IHN1cmUgd2hhdCB3ZSBoYXZlIHRv
-IGRvIGZvciB0aGUgdXBjb21pbmcgMjAyMS4wOCByZWxlYXNlLgo+PiBSZW1vdmUgY3NreSBkZWZj
-b25maWdzIGFuZCB0aGUgZ2NjIGNza3kgZm9yayAoc2VsZWN0Cj4+IEJSMl9BUkNIX0hBU19OT19U
-T09MQ0hBSU5fQlVJTERST09UKT8KPj4gVGhvbWFzLCB3aGF0IGRvIHlvdSB0aGluaz8KPiAKPiAg
-SSB0aGluayByZW1vdmluZyB0aGluZ3MgaXMgYSBiaXQgaGVhdnktaGFuZGVkLiBPdXIgQ0kgaXMg
-c3RpbGwgcGFzc2luZywgc28gaXQncwo+IG9ubHkgcGVvcGxlIHdobyByZWFsbHkgYnVpbGQgYW5k
-IHVzZSBjc2t5IHdobyBzZWUgdGhlIHByb2JsZW0uIEluIGEgc2ltaWxhcgo+IHZlaW4sIEkgdGhp
-bmsgaXQncyBPSyB0byBzdGlsbCBhcHBseSB0b29sY2hhaW4gdXBkYXRlcyBmb3IgY3NreSB0aGlz
-IGxhdGUgaW4gdGhlCj4gY3ljbGUuCgpUaGUgY3NreSB0b29sY2hhaW4gaXMgc3RpbGwgYnJva2Vu
-IHdpdGggcmVjZW50IGhvc3QgY29tcGlsZXIgYW5kIG91ciBDSSB3aWxsCnN3aXRjaCB0byBEZWJp
-YW4gYnVsbHNleWUgc29vbi4KCkkgdHJpZWQgdG8gYnVpbGQgd2l0aCB0aGUgbGF0ZXN0IHVwc3Ry
-ZWFtIHZlcnNpb24gb2YgYmludXRpbHMsIGdjYyBhbmQgZ2xpYmMgYW5kCm5vdGhpbmcgYnVpbGQu
-Cgp1cHN0cmVhbSBnY2MtMTEgZG9lc24ndCBzdXBwb3J0IGNza3k2MTAgYW5kIGNza3k4NjAgbmVl
-ZGVkIGZvcgpxZW11X2Nza3k2MTBfdmlydF9kZWZjb25maWcgYW5kIHFlbXVfY3NreTg2MF92aXJ0
-X2RlZmNvbmZpZy4KCnFlbXVfY3NreTgwN192aXJ0X2RlZmNvbmZpZyBhbmQgcWVtdV9jc2t5ODEw
-X3ZpcnRfZGVmY29uZmlnIGZhaWwgdG8gYnVpbGQgZ2xpYmMKd2l0aCB0aGUgZm9sbG93aW5nIGVy
-cm9yOgoKZ2xpYmMtMi4zNC05LWc5YWNhYjBiYmE2YTVhNTczMjNiMWY5NGJmOTViMjE2MThhOWU1
-YWE0L2J1aWxkL2VsZi9saWJydGxkLm9zOiBpbgpmdW5jdGlvbiBgX19zeW5jX2ZldGNoX2FuZF9h
-ZGRfMic6CgpidWlsZC9ob3N0LWdjYy1pbml0aWFsLTExLjIuMC9idWlsZC9jc2t5LWJ1aWxkcm9v
-dC1saW51eC1nbnVhYml2Mi9saWJnY2MvLi4vLi4vLi4vbGliZ2NjL2NvbmZpZy9jc2t5L2xpbnV4
-LWF0b21pYy5jOjExNjoKdW5kZWZpbmVkIHJlZmVyZW5jZSB0byBgX19rZXJuZWxfY21weGNoZycK
-CkJ1dCBldmVuIGlmIHRoZSBidWlsZCBzdWNjZWVkZWQgdGhlcmUgaXMgbm8gcWVtdSBiaW5hcnkg
-dG8gZG8gYSBydW50aW1lIHRlc3QuCgpCZXN0IHJlZ2FyZHMsClJvbWFpbgoKPiAKPiAgUmVnYXJk
-cywKPiAgQXJub3V0Cj4gCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0
-dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+We need to backport an ARM compilation build fix.
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ .../0001-cpu-fix-compilation-on-ARM.patch     | 28 +++++++++++++++++++
+ package/pipewire/pipewire.hash                |  2 +-
+ package/pipewire/pipewire.mk                  |  2 +-
+ 3 files changed, 30 insertions(+), 2 deletions(-)
+ create mode 100644 package/pipewire/0001-cpu-fix-compilation-on-ARM.patch
+
+diff --git a/package/pipewire/0001-cpu-fix-compilation-on-ARM.patch b/package/pipewire/0001-cpu-fix-compilation-on-ARM.patch
+new file mode 100644
+index 0000000000..445cab08bd
+--- /dev/null
++++ b/package/pipewire/0001-cpu-fix-compilation-on-ARM.patch
+@@ -0,0 +1,28 @@
++From f8817b439433798bd7217dc4ae72197887b0fc96 Mon Sep 17 00:00:00 2001
++From: Wim Taymans <wtaymans@redhat.com>
++Date: Thu, 30 Sep 2021 11:12:27 +0200
++Subject: [PATCH] cpu: fix compilation on ARM
++
++Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
++[james.hilliard1@gmail.com: backport from upstream commit
++f8817b439433798bd7217dc4ae72197887b0fc96]
++---
++ spa/plugins/support/cpu-arm.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/spa/plugins/support/cpu-arm.c b/spa/plugins/support/cpu-arm.c
++index d80b8ad87..de07ebf41 100644
++--- a/spa/plugins/support/cpu-arm.c
+++++ b/spa/plugins/support/cpu-arm.c
++@@ -80,7 +80,7 @@ arm_init(struct impl *impl)
++ 	int arch;
++ 
++ 	if (!(cpuinfo = get_cpuinfo())) {
++-		spa_log_warn(impl->log, NAME " %p: Can't read cpuinfo", impl);
+++		spa_log_warn(impl->log, "%p: Can't read cpuinfo", impl);
++ 		return 1;
++ 	}
++ 
++-- 
++2.25.1
++
+diff --git a/package/pipewire/pipewire.hash b/package/pipewire/pipewire.hash
+index a289464988..879cfa41cb 100644
+--- a/package/pipewire/pipewire.hash
++++ b/package/pipewire/pipewire.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  ce7dbd71bce46c9d81c549d8c846e8f3a8a263a19bf981d141d57bd2d316e3ac  pipewire-0.3.35.tar.bz2
++sha256  f4ae272e8d3fa3ff6a6ba2a465d1f951405b08fd31bbb82c27bb7cf55e113ba1  pipewire-0.3.38.tar.bz2
+ sha256  8909c319a7e27dbb33a15b9035f89ab3b7b2f6a12f8bcddc755206a8db1ada44  COPYING
+ sha256  be4be5d77424833edf31f53fc1f1cecb6996b9e2d747d9e6fb8f878362ebc92b  LICENSE
+diff --git a/package/pipewire/pipewire.mk b/package/pipewire/pipewire.mk
+index d6cbe1605f..d2097a3389 100644
+--- a/package/pipewire/pipewire.mk
++++ b/package/pipewire/pipewire.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PIPEWIRE_VERSION = 0.3.35
++PIPEWIRE_VERSION = 0.3.38
+ PIPEWIRE_SOURCE = pipewire-$(PIPEWIRE_VERSION).tar.bz2
+ PIPEWIRE_SITE = https://gitlab.freedesktop.org/pipewire/pipewire/-/archive/$(PIPEWIRE_VERSION)
+ PIPEWIRE_LICENSE = MIT, LGPL-2.1+ (libspa-alsa), GPL-2.0 (libjackserver)
+-- 
+2.25.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
