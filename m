@@ -2,51 +2,52 @@ Return-Path: <SRS0=UivC=OX=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D482DC433F5
-	for <buildroot@archiver.kernel.org>; Sun,  3 Oct 2021 19:56:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E12CC433EF
+	for <buildroot@archiver.kernel.org>; Sun,  3 Oct 2021 19:57:03 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 6C4126120D
-	for <buildroot@archiver.kernel.org>; Sun,  3 Oct 2021 19:56:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6C4126120D
+	by mail.kernel.org (Postfix) with ESMTPS id 0E80260F48
+	for <buildroot@archiver.kernel.org>; Sun,  3 Oct 2021 19:57:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0E80260F48
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 42A5F60B2E;
-	Sun,  3 Oct 2021 19:56:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D705060791;
+	Sun,  3 Oct 2021 19:57:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yjKwZZ3DP0JR; Sun,  3 Oct 2021 19:56:50 +0000 (UTC)
+	with ESMTP id ivkYfqOboUYr; Sun,  3 Oct 2021 19:57:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8D67E60791;
-	Sun,  3 Oct 2021 19:56:49 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 94BA41BF45A
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0D2CA60B41;
+	Sun,  3 Oct 2021 19:57:00 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 974751BF963
  for <buildroot@lists.busybox.net>; Sun,  3 Oct 2021 19:55:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6E5A6843CD
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1290C4080D
  for <buildroot@lists.busybox.net>; Sun,  3 Oct 2021 19:55:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id p6oopJsDZtdK for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Idqea2SZ_5Wh for <buildroot@lists.busybox.net>;
  Sun,  3 Oct 2021 19:55:38 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id A24A8843D5
+ by smtp4.osuosl.org (Postfix) with ESMTP id 59ABE407D8
  for <buildroot@buildroot.org>; Sun,  3 Oct 2021 19:55:38 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 042AA87B03; Sun,  3 Oct 2021 19:53:08 +0000 (UTC)
+ id BAA3887B03; Sun,  3 Oct 2021 19:53:08 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 3 Oct 2021 21:40:39 +0200
+Date: Sun, 3 Oct 2021 21:32:20 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 036185d87ef7f77463dbdcefb13d071c58c13c41
-X-Git-Newrev: 5aa6130f3482768c1002fdfeaa462d2a1cdb9dc4
+X-Git-Oldrev: 247d3bf567bfcb6e2e7ad3406e971b8916aaeb66
+X-Git-Newrev: c513d89ab0e6767bc6173b9da686e229fcae26aa
 X-Patchwork-Hint: ignore
-Message-Id: <20211003195309.042AA87B03@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pbr: bump to version 5.6.0
+Message-Id: <20211003195308.BAA3887B03@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-mutagen: bump to version
+ 1.45.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,49 +65,71 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5aa6130f3482768c1002fdfeaa462d2a1cdb9dc4
+commit: https://git.buildroot.net/buildroot/commit/?id=c513d89ab0e6767bc6173b9da686e229fcae26aa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Plus, indent with two spaces in the hash file.
+* The package doesn't support python2 anymore.
+* SETUP_TYPE was changed to setuptools.
+* Indent with two spaces in the hash file.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-pbr/python-pbr.hash | 8 ++++----
- package/python-pbr/python-pbr.mk   | 4 ++--
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/python-mutagen/Config.in           | 7 +++----
+ package/python-mutagen/python-mutagen.hash | 9 +++++----
+ package/python-mutagen/python-mutagen.mk   | 6 +++---
+ 3 files changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/package/python-pbr/python-pbr.hash b/package/python-pbr/python-pbr.hash
-index cca9de0178..8cf2a18d36 100644
---- a/package/python-pbr/python-pbr.hash
-+++ b/package/python-pbr/python-pbr.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/pbr/json
--md5	477d2aa285ad97250a172b199f4060b7  pbr-5.4.3.tar.gz
--sha256	2c8e420cd4ed4cec4e7999ee47409e876af575d4c35a45840d59e8b5f3155ab8  pbr-5.4.3.tar.gz
-+md5  62565acc6bf3e7e10b082463421f8b46  pbr-5.6.0.tar.gz
-+sha256  42df03e7797b796625b1029c0400279c7c34fd7df24a7d7818a1abb5b38710dd  pbr-5.6.0.tar.gz
- # Locally computed sha256 checksums
--sha256	5df2a0d87d6c562f0ea11c688ac52532aa28d744cabc7994ff0537f64b3b3320  LICENSE
--sha256	eb4a8c8791f6caab1cf36df26db2b6f4e2ddda52657b060ff7f02abc63910aef  pbr/tests/testpackage/LICENSE.txt
-+sha256  5df2a0d87d6c562f0ea11c688ac52532aa28d744cabc7994ff0537f64b3b3320  LICENSE
-+sha256  eb4a8c8791f6caab1cf36df26db2b6f4e2ddda52657b060ff7f02abc63910aef  pbr/tests/testpackage/LICENSE.txt
-diff --git a/package/python-pbr/python-pbr.mk b/package/python-pbr/python-pbr.mk
-index 12b5b56811..3cc7ab81fa 100644
---- a/package/python-pbr/python-pbr.mk
-+++ b/package/python-pbr/python-pbr.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/python-mutagen/Config.in b/package/python-mutagen/Config.in
+index 3c95e37447..655562893f 100644
+--- a/package/python-mutagen/Config.in
++++ b/package/python-mutagen/Config.in
+@@ -1,9 +1,8 @@
+ config BR2_PACKAGE_PYTHON_MUTAGEN
+ 	bool "python-mutagen"
+-	select BR2_PACKAGE_PYTHON_PYEXPAT if BR2_PACKAGE_PYTHON # runtime
+-	select BR2_PACKAGE_PYTHON3_PYEXPAT if BR2_PACKAGE_PYTHON3 # runtime
+-	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON # runtime
+-	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3 # runtime
++	depends on BR2_PACKAGE_PYTHON3
++	select BR2_PACKAGE_PYTHON3_PYEXPAT # runtime
++	select BR2_PACKAGE_PYTHON3_ZLIB # runtime
+ 	help
+ 	  Mutagen is a Python module to handle audio metadata.  It
+ 	  supports ASF, FLAC, MP4, Monkey's Audio, MP3, Musepack, Ogg
+diff --git a/package/python-mutagen/python-mutagen.hash b/package/python-mutagen/python-mutagen.hash
+index 5ee8ed17c7..0cf25fd5fe 100644
+--- a/package/python-mutagen/python-mutagen.hash
++++ b/package/python-mutagen/python-mutagen.hash
+@@ -1,4 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/mutagen/json, sha256 locally computed
+-md5 3729218f974c3a79ee9972ffa5ca5d12 mutagen-1.42.0.tar.gz
+-sha256 bb61e2456f59a9a4a259fbc08def6d01ba45a42da8eeaa97d00633b0ec5de71c mutagen-1.42.0.tar.gz
+-sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 COPYING
++# md5, sha256 from https://pypi.org/pypi/mutagen/json
++md5  76e1f7fc2386813c0ff2716695fb06e1  mutagen-1.45.1.tar.gz
++sha256  6397602efb3c2d7baebd2166ed85731ae1c1d475abca22090b7141ff5034b3e1  mutagen-1.45.1.tar.gz
++# Locally computed sha256 checksums
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/python-mutagen/python-mutagen.mk b/package/python-mutagen/python-mutagen.mk
+index 5477d6f4c8..627ec70e96 100644
+--- a/package/python-mutagen/python-mutagen.mk
++++ b/package/python-mutagen/python-mutagen.mk
+@@ -4,11 +4,11 @@
  #
  ################################################################################
  
--PYTHON_PBR_VERSION = 5.4.3
-+PYTHON_PBR_VERSION = 5.6.0
- PYTHON_PBR_SOURCE = pbr-$(PYTHON_PBR_VERSION).tar.gz
--PYTHON_PBR_SITE = https://files.pythonhosted.org/packages/99/f1/7807d3409c79905a907f1c616d910c921b2a8e73c17b2969930318f44777
-+PYTHON_PBR_SITE = https://files.pythonhosted.org/packages/35/8c/69ed04ae31ad498c9bdea55766ed4c0c72de596e75ac0d70b58aa25e0acf
- PYTHON_PBR_SETUP_TYPE = setuptools
- PYTHON_PBR_LICENSE = Apache-2.0 (module), BSD-3-Clause (test package)
- PYTHON_PBR_LICENSE_FILES = LICENSE pbr/tests/testpackage/LICENSE.txt
+-PYTHON_MUTAGEN_VERSION = 1.42.0
++PYTHON_MUTAGEN_VERSION = 1.45.1
+ PYTHON_MUTAGEN_SOURCE = mutagen-$(PYTHON_MUTAGEN_VERSION).tar.gz
+-PYTHON_MUTAGEN_SITE = https://files.pythonhosted.org/packages/30/4c/5ad1a6e1ccbcfaf6462db727989c302d9d721beedd9b09c11e6f0c7065b0
++PYTHON_MUTAGEN_SITE = https://files.pythonhosted.org/packages/f3/d9/2232a4cb9a98e2d2501f7e58d193bc49c956ef23756d7423ba1bd87e386d
+ PYTHON_MUTAGEN_LICENSE = GPL-2.0
+ PYTHON_MUTAGEN_LICENSE_FILES = COPYING
+-PYTHON_MUTAGEN_SETUP_TYPE = distutils
++PYTHON_MUTAGEN_SETUP_TYPE = setuptools
+ 
+ $(eval $(python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
