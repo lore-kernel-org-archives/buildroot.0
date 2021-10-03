@@ -2,93 +2,94 @@ Return-Path: <SRS0=UivC=OX=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CB393C433F5
-	for <buildroot@archiver.kernel.org>; Sun,  3 Oct 2021 10:14:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BFED8C433F5
+	for <buildroot@archiver.kernel.org>; Sun,  3 Oct 2021 10:15:42 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D8E7F61AFB
-	for <buildroot@archiver.kernel.org>; Sun,  3 Oct 2021 10:14:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D8E7F61AFB
+	by mail.kernel.org (Postfix) with ESMTPS id 5EE4E61B00
+	for <buildroot@archiver.kernel.org>; Sun,  3 Oct 2021 10:15:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5EE4E61B00
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9DEB64017A;
-	Sun,  3 Oct 2021 10:14:36 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 26F8640552;
+	Sun,  3 Oct 2021 10:15:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5nSNzQ63k8h3; Sun,  3 Oct 2021 10:14:35 +0000 (UTC)
+	with ESMTP id qIyG0Xbpurxw; Sun,  3 Oct 2021 10:15:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A67324020C;
-	Sun,  3 Oct 2021 10:14:34 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4DCDA1BF59F
- for <buildroot@lists.busybox.net>; Sun,  3 Oct 2021 10:14:33 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 27317404D1;
+	Sun,  3 Oct 2021 10:15:40 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 7FC3B1BF59F
+ for <buildroot@lists.busybox.net>; Sun,  3 Oct 2021 10:15:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3C27F8469C
- for <buildroot@lists.busybox.net>; Sun,  3 Oct 2021 10:14:33 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6EDA160AD8
+ for <buildroot@lists.busybox.net>; Sun,  3 Oct 2021 10:15:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gkliJ60FIzyK for <buildroot@lists.busybox.net>;
- Sun,  3 Oct 2021 10:14:32 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8UhG0reiX2iu for <buildroot@lists.busybox.net>;
+ Sun,  3 Oct 2021 10:15:37 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com
- [IPv6:2a00:1450:4864:20::531])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 04CA884524
- for <buildroot@buildroot.org>; Sun,  3 Oct 2021 10:14:31 +0000 (UTC)
-Received: by mail-ed1-x531.google.com with SMTP id l7so29039663edq.3
- for <buildroot@buildroot.org>; Sun, 03 Oct 2021 03:14:31 -0700 (PDT)
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com
+ [IPv6:2a00:1450:4864:20::532])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 90339606A0
+ for <buildroot@buildroot.org>; Sun,  3 Oct 2021 10:15:37 +0000 (UTC)
+Received: by mail-ed1-x532.google.com with SMTP id z20so1346420edc.13
+ for <buildroot@buildroot.org>; Sun, 03 Oct 2021 03:15:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=f2EY+MwFoINAuk2gMP3EEIcvyP1UWizfpn4JY86wvrM=;
- b=RD9jQ25U6l2PIrLJDoAsFNYX24wcpQNSP85V6/9kR3znq6kqaqmK9JPjj9cG6U+3zn
- 3OKM4xJeNZi0X/2OL2sGZisMXQeYSuNBsaeTmhB61JWOL4w5MOdSgvOysBFUfZ4OL5J8
- WgJxmif7xWdv1jqhYHMKUyXC17N0JDY28sU5kanBrOs0hakaoT1W0zTA3lzM7oSdzSlL
- BPZgLhASqe91bbxPdB8Zg4w6/bRGBy3EzAGH1rdjK7oIo8RqTdwlLtf59l62QwoYFvrl
- bZ8QMKBnd8U2FSLkUED12JnYtLToBrvIEnRu3quDq0vKPvEWfgKJ5348OGOWh2VRlCkw
- SN3A==
+ bh=5BjyxtXsBP2prMZoer2td6+sza+2nRZl4fi95aq9A+o=;
+ b=NfzK+g79rJnJNTpzF9vK644uVZ+TVoCAyrtU7azw1Al6BGxaSeYS4m44xPWMU3BaPl
+ 5FCAeyzuykySbngav9j64UGc0XYLxbCG8opK8IMIjRnYjqK6ZHGRFbh4sgMfcpSuTyuk
+ oeTbtMXKuILRgHairspSeZg7vuoy7RC/1M75lgjioYx7OAH6whojQk4FM9QQQceeRiSi
+ 5VbIbUijZzdNmG9UckS4bRrZmymQ3g0bhy4PiXXQc0WsPJWFJkhgxwT2/EEgfSokF0Dm
+ nbPLV4oKf3eFBCMXrIge6UO7xXxs95QLp9rbAogaDOoMVtHfylLX9zmfX0U1xq8i/gPL
+ yckg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=f2EY+MwFoINAuk2gMP3EEIcvyP1UWizfpn4JY86wvrM=;
- b=Mpz+sq+z9BbaUmN1sqPq9ro5grVsTj4668IoVH5DqQCTGQMQXERNR0wWQpJnXTVjlo
- yIRENaMEcPtbmmhWoIi7N8b5T2Pr5cpSs2sTf+u2JSbYekCdiMpAM0f7kNlfSa1tIlp1
- nlSDCY/+hxGPJS1fiJhM3BZSCjlAIFlLzqlYI5WUHXFj0KXJX1NKV2rUSAKJUAqYqY2Y
- BnbWX9lCGZRq3+7HpM5ZaB4ZTlUAiZLu+m7XZYd+QSp42TPwEV7No76xDt2tJeEzJQvk
- 4A7tkdxs7a1S3nVviX7yAC4fMPIyUv65z4tV0y6lDQ25CtNP5RPYwoL/uK4VKt+5K3hF
- 9dqQ==
-X-Gm-Message-State: AOAM533sTcWKmf0pYxbdogz6oRDoMVq3YpZ6nSwl8VfgB9PHoTtUKcDG
- NfyVWGG1zTQrPaxClWYmg0bQKA==
-X-Google-Smtp-Source: ABdhPJzOW4Oke+HG4r66w/J8ThU9XdElItN3swJ0DguGg/6juCvgyAavNJqR+sRT5OacNqi/7lYT0g==
-X-Received: by 2002:a17:906:4452:: with SMTP id
- i18mr9280058ejp.374.1633256070018; 
- Sun, 03 Oct 2021 03:14:30 -0700 (PDT)
+ bh=5BjyxtXsBP2prMZoer2td6+sza+2nRZl4fi95aq9A+o=;
+ b=Rshq4ARfuoBoIeNeTbyKq+2Z2Tfz9qJpcAULgH6JE/1BZPvOjrOOlkUFroGf3Tr2Ol
+ bCb2Uruhkhn5LqjO/T3WRnTGFw9D51sqO4UwemyFpaym5VZZmc/bd/sOJ29Ykr66VCa/
+ TIc4miturQNTxkj6L+fpXMX9hUT3RhzqnB/3nCw7DBGZmQg6OgsVdYVqyaxhMN4gKNFi
+ vknyjIHqe+bnCcvWudC7wQfbz/mpXOFZQum3Br05+7Lt9IOI6HFUbzk5JuOATQpgBC2s
+ TiSkKMKfYxnCYG3yQ+LQzTXK8Q6RuuwNtQ4ugZbrazqd9umSxXOvX6gPK6z9DzD0fBBL
+ nAbA==
+X-Gm-Message-State: AOAM532ISouuPMz4gJg0rzLS+NPelvkr1KLCZ1KQzVIBLkOzoR2pgmkL
+ QnRUhZOeMXJFPc8JEVoBdOSORw==
+X-Google-Smtp-Source: ABdhPJw1cS1EBPu95NIq2J8FKkTeK0LSkCcxQZ1nCOuV82Im5uuVgNPGyMO6aRwjWUhPvXj5M0Kv9w==
+X-Received: by 2002:a05:6402:1e88:: with SMTP id
+ f8mr9988419edf.126.1633256135619; 
+ Sun, 03 Oct 2021 03:15:35 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id l12sm5206817ejo.41.2021.10.03.03.14.28
+ by smtp.gmail.com with ESMTPSA id dj8sm5597770edb.53.2021.10.03.03.15.35
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 03 Oct 2021 03:14:29 -0700 (PDT)
-Message-ID: <be59ca6e-1eee-a48b-809b-4dd815a7ac64@mind.be>
-Date: Sun, 3 Oct 2021 12:14:28 +0200
+ Sun, 03 Oct 2021 03:15:35 -0700 (PDT)
+Message-ID: <07d1425c-7351-cc34-381c-a6fde26185fd@mind.be>
+Date: Sun, 3 Oct 2021 12:15:34 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.1.0
 Content-Language: en-GB
-To: Romain Naour <romain.naour@gmail.com>, buildroot@buildroot.org
-References: <20210929220027.10505-1-romain.naour@gmail.com>
+To: =?UTF-8?Q?Jos=c3=a9_Pekkarinen?= <jose.pekkarinen@unikie.com>,
+ buildroot@buildroot.org
+References: <20211001062052.770583-1-jose.pekkarinen@unikie.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20210929220027.10505-1-romain.naour@gmail.com>
-Subject: Re: [Buildroot] [PATCH RFC] package/binutils: build deterministic
- archives by default
+In-Reply-To: <20211001062052.770583-1-jose.pekkarinen@unikie.com>
+Subject: Re: [Buildroot] [PATCH] package/audit: Fix type output on log
+ folder creation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,65 +101,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-
-
-On 30/09/2021 00:00, Romain Naour wrote:
-> The option --enable-deterministic-archives that build deterministic
-> archives is supported by binutils since binutils 2.23 [1][2].
-
-  Should we make this dependent on BR2_REPRODUCIBLE? AFAICS it sets the date 
-fields in static libraries to zero.
-
-  Is this going to fix a reproducibility issue detected by the autobuilders?
-
-  Regards,
-  Arnout
-
-> 
-> See "Static libraries" chapter [3].
-> https://reproducible-builds.org/docs/archives/
-> 
-> Enable this option for target and host variant.
-> 
-> It was added to Yocto Morty (2.2) in 2016 [4].
-> 
-> [1] https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=commitdiff;h=2e30cb575a1d2b1eb8f776356ed59b0722a943d1
-> [2] https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=commitdiff;h=9cb80f72d8b8b2f59562692d9385cd5a533e9b3f
-> [3] https://reproducible-builds.org/docs/archives
-> [4] https://github.com/openembedded/openembedded-core/commit/df0d525c02780b5a0bd7a177a249c55f41797476
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
->   package/binutils/binutils.mk | 2 ++
->   1 file changed, 2 insertions(+)
-> 
-> diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
-> index 8ec76134bc..c5c685ac85 100644
-> --- a/package/binutils/binutils.mk
-> +++ b/package/binutils/binutils.mk
-> @@ -57,6 +57,7 @@ BINUTILS_CONF_OPTS = \
->   	--target=$(GNU_TARGET_NAME) \
->   	--enable-install-libiberty \
->   	--enable-build-warnings=no \
-> +	--enable-deterministic-archives \
->   	$(BINUTILS_DISABLE_GDB_CONF_OPTS) \
->   	$(BINUTILS_EXTRA_CONFIG_OPTIONS)
->   
-> @@ -93,6 +94,7 @@ HOST_BINUTILS_CONF_OPTS = \
->   	--disable-shared \
->   	--enable-static \
->   	--with-sysroot=$(STAGING_DIR) \
-> +	--enable-deterministic-archives \
->   	--enable-poison-system-directories \
->   	--without-debuginfod \
->   	$(BINUTILS_DISABLE_GDB_CONF_OPTS) \
-> 
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+CgpPbiAwMS8xMC8yMDIxIDA4OjIwLCBKb3PDqSBQZWtrYXJpbmVuIHdyb3RlOgo+IFRlc3Rpbmcg
+YnVpbGRyb290IDIwMjEuMDUgSSBvYnNlcnZlZCB0aGF0IGFmdGVyIGZpcnN0Cj4gYm9vdCBJIHdh
+cyBoYXZpbmcgdGhlIGZvbGxvd2luZyBmb2xkZXJzOgo+IAo+IC9jb250ZXh0Ogo+IC9zeXN0ZW1f
+dTpvYmplY3RfcjphdWRpdGRfbG9nX3QKPiAKPiBUaGUgcm9vdCBvZiB0aGlzIHByb2JsZW0gdHVy
+bmVkIHRvIGJlIGEgZGlmZmVyZW5jZSBpbiB0aGUKPiBvdXRwdXQgb2YgJChzZWxhYmVsX2xvb2t1
+cCAtYiBmaWxlIC1rIC92YXIvbG9nL2F1ZGl0KSBjYWxsZWQKPiBieSBTMDJhdWRpdGQgdGhhdCBm
+cm9tIHRoaXMgdmVyaXNvbiBvbiBsb29rcyBsaWtlOgo+IAo+ICQgc2VsYWJlbF9sb29rdXAgLWIg
+ZmlsZSAtayAvdmFyL2xvZy9hdWRpdAo+IERlZmF1bHQgY29udGV4dDogc3lzdGVtX3U6b2JqZWN0
+X3I6YXVkaXRkX2xvZ190CgogIFdoYXQgaXMgdGhlIGNoYW5jZSB0aGF0IHRoaXMgb3V0cHV0IGZv
+cm1hdCBpcyBnb2luZyB0byBjaGFuZ2UgYWdhaW4/IERvZXMgCnNlbGFiZWxfbG9va3VwIGhhcyBh
+ICJzY3JpcHRhYmxlIiBvdXRwdXQgZm9ybWF0IHRoYXQgd2UgY2FuIHJlbHkgb24gbm90IHRvIGNo
+YW5nZT8KCgogIFJlZ2FyZHMsCiAgQXJub3V0Cgo+IAo+IFRoaXMgcGF0Y2ggd2lsbCBjdXQgaXQg
+dG8gcmV0cmlldmUgdGhlIHR5cGUgcGllY2Ugb25seS4KPiAKPiBTaWduZWQtb2ZmLWJ5OiBKb3PD
+qSBQZWtrYXJpbmVuIDxqb3NlLnBla2thcmluZW5AdW5pa2llLmNvbT4KPiAtLS0KPiAgIHBhY2th
+Z2UvYXVkaXQvUzAyYXVkaXRkIHwgMiArLQo+ICAgMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9u
+KCspLCAxIGRlbGV0aW9uKC0pCj4gCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvYXVkaXQvUzAyYXVk
+aXRkIGIvcGFja2FnZS9hdWRpdC9TMDJhdWRpdGQKPiBpbmRleCAwZWVmODgxY2VlLi5kZDNkYzIy
+ZDZkIDEwMDY0NAo+IC0tLSBhL3BhY2thZ2UvYXVkaXQvUzAyYXVkaXRkCj4gKysrIGIvcGFja2Fn
+ZS9hdWRpdC9TMDJhdWRpdGQKPiBAQCAtMjAsNyArMjAsNyBAQCBzdGFydCgpewo+ICAgCSMgdGhl
+IGRpcmVjdG9yeSB3aXRoIFNFTGludXggcGVybWlzc2lvbnMgaWYgcG9zc2libGUKPiAgIAljb21t
+YW5kIC12IHNlbGFiZWxfbG9va3VwID4vZGV2L251bGwgMj4mMQo+ICAgCWlmIFsgJD8gPSAwIF07
+IHRoZW4KPiAtCQlta2RpciAtcCAvdmFyL2xvZy9hdWRpdCAtWiBgc2VsYWJlbF9sb29rdXAgLWIg
+ZmlsZSAtayAvdmFyL2xvZy9hdWRpdGAKPiArCQlta2RpciAtcCAvdmFyL2xvZy9hdWRpdCAtWiBg
+c2VsYWJlbF9sb29rdXAgLWIgZmlsZSAtayAvdmFyL2xvZy9hdWRpdCB8IGN1dCAtZCAnICcgLWYg
+M2AKPiAgIAllbHNlCj4gICAJCW1rZGlyIC1wIC92YXIvbG9nL2F1ZGl0Cj4gICAJZmkKPiAKX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1h
+aWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9v
+dC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
