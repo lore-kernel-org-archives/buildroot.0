@@ -2,51 +2,52 @@ Return-Path: <SRS0=UivC=OX=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C30C3C433EF
-	for <buildroot@archiver.kernel.org>; Sun,  3 Oct 2021 08:25:48 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2294C433F5
+	for <buildroot@archiver.kernel.org>; Sun,  3 Oct 2021 08:26:00 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 8D3A161B40
-	for <buildroot@archiver.kernel.org>; Sun,  3 Oct 2021 08:25:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8D3A161B40
+	by mail.kernel.org (Postfix) with ESMTPS id B2FCF6124C
+	for <buildroot@archiver.kernel.org>; Sun,  3 Oct 2021 08:26:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B2FCF6124C
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5B91B404EC;
-	Sun,  3 Oct 2021 08:25:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8D100426F9;
+	Sun,  3 Oct 2021 08:26:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fxgxdjW5l1Ri; Sun,  3 Oct 2021 08:25:47 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id cmq8p5p2k1Ww; Sun,  3 Oct 2021 08:25:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7ECE44019B;
-	Sun,  3 Oct 2021 08:25:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D93B6426CA;
+	Sun,  3 Oct 2021 08:25:58 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C67061BF5A4
- for <buildroot@lists.busybox.net>; Sun,  3 Oct 2021 08:23:29 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D79111BF5A4
+ for <buildroot@lists.busybox.net>; Sun,  3 Oct 2021 08:23:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 609B340536
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7F658400F3
  for <buildroot@lists.busybox.net>; Sun,  3 Oct 2021 08:23:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OTM7pPFZWVgM for <buildroot@lists.busybox.net>;
+ with ESMTP id uZxmppMQwJpT for <buildroot@lists.busybox.net>;
  Sun,  3 Oct 2021 08:23:24 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1C21E40552
- for <buildroot@buildroot.org>; Sun,  3 Oct 2021 08:23:24 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E9E7B40545
+ for <buildroot@buildroot.org>; Sun,  3 Oct 2021 08:23:23 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 824B28DB44; Sun,  3 Oct 2021 08:20:55 +0000 (UTC)
+ id 657818DB40; Sun,  3 Oct 2021 08:20:55 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 3 Oct 2021 10:22:49 +0200
+Date: Sun, 3 Oct 2021 10:22:42 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: cfcd0af9a528f8aa9e62c94c013b212be7c645d6
-X-Git-Newrev: 8c1a9b2f1cdd7d4306364edc472606ee623cb64d
+X-Git-Oldrev: c2fd6d7a13ee6137786699b7583aefb3742fe337
+X-Git-Newrev: dc0583bd34d330fcc2bbef2c8a1f0da7a3da4b1a
 X-Patchwork-Hint: ignore
-Message-Id: <20211003082055.824B28DB44@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-xlrd: bump to version 2.0.1
+Message-Id: <20211003082055.657818DB40@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-urllib3: bump to version
+ 1.26.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,45 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8c1a9b2f1cdd7d4306364edc472606ee623cb64d
+commit: https://git.buildroot.net/buildroot/commit/?id=dc0583bd34d330fcc2bbef2c8a1f0da7a3da4b1a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-xlrd/python-xlrd.hash | 6 +++---
- package/python-xlrd/python-xlrd.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-urllib3/python-urllib3.hash | 4 ++--
+ package/python-urllib3/python-urllib3.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-xlrd/python-xlrd.hash b/package/python-xlrd/python-xlrd.hash
-index 0a66a2112a..003ccc9a72 100644
---- a/package/python-xlrd/python-xlrd.hash
-+++ b/package/python-xlrd/python-xlrd.hash
+diff --git a/package/python-urllib3/python-urllib3.hash b/package/python-urllib3/python-urllib3.hash
+index 288d986e7c..066bfb7288 100644
+--- a/package/python-urllib3/python-urllib3.hash
++++ b/package/python-urllib3/python-urllib3.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/xlrd/json
--md5	e5d5b96924d791b22898b622eb3e918e  xlrd-1.2.0.tar.gz
--sha256	546eb36cee8db40c3eaa46c351e67ffee6eeb5fa2650b71bc4c758a29a1b29b2  xlrd-1.2.0.tar.gz
--# locally calculated
-+md5  ae3f951c857a490d432f0a7d722352bf  xlrd-2.0.1.tar.gz
-+sha256  f72f148f54442c6b056bf931dbc34f986fd0c3b0b6b5a58d013c9aef274d0c88  xlrd-2.0.1.tar.gz
-+# Locally computed sha256 checksums
- sha256  b5a5dbce60265e305a815a6cb83ed07f24519d8ba644f2a307994488bced8815  LICENSE
-diff --git a/package/python-xlrd/python-xlrd.mk b/package/python-xlrd/python-xlrd.mk
-index c94e054b5b..1f280bd432 100644
---- a/package/python-xlrd/python-xlrd.mk
-+++ b/package/python-xlrd/python-xlrd.mk
+ # md5, sha256 from https://pypi.org/pypi/urllib3/json
+-md5  3a88ec3bcb761ca23df2c3583949be37  urllib3-1.26.6.tar.gz
+-sha256  f57b4c16c62fa2760b7e3d97c35b255512fb6b59a259730f36ba32ce9f8e342f  urllib3-1.26.6.tar.gz
++md5  e0051a87a956e618a6bb514a07fa7773  urllib3-1.26.7.tar.gz
++sha256  4987c65554f7a2dbf30c18fd48778ef124af6fab771a377103da0585e2336ece  urllib3-1.26.7.tar.gz
+ # Locally computed sha256 checksums
+ sha256  c37bf186e27cf9dbe9619e55edfe3cea7b30091ceb3da63c7dacbe0e6d77907b  LICENSE.txt
+diff --git a/package/python-urllib3/python-urllib3.mk b/package/python-urllib3/python-urllib3.mk
+index 775986d516..a1d22e023a 100644
+--- a/package/python-urllib3/python-urllib3.mk
++++ b/package/python-urllib3/python-urllib3.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_XLRD_VERSION = 1.2.0
-+PYTHON_XLRD_VERSION = 2.0.1
- PYTHON_XLRD_SOURCE = xlrd-$(PYTHON_XLRD_VERSION).tar.gz
--PYTHON_XLRD_SITE = https://files.pythonhosted.org/packages/aa/05/ec9d4fcbbb74bbf4da9f622b3b61aec541e4eccf31d3c60c5422ec027ce2
-+PYTHON_XLRD_SITE = https://files.pythonhosted.org/packages/a6/b3/19a2540d21dea5f908304375bd43f5ed7a4c28a370dc9122c565423e6b44
- PYTHON_XLRD_SETUP_TYPE = setuptools
- PYTHON_XLRD_LICENSE = BSD-3-Clause
- PYTHON_XLRD_LICENSE_FILES = LICENSE
+-PYTHON_URLLIB3_VERSION = 1.26.6
++PYTHON_URLLIB3_VERSION = 1.26.7
+ PYTHON_URLLIB3_SOURCE = urllib3-$(PYTHON_URLLIB3_VERSION).tar.gz
+-PYTHON_URLLIB3_SITE = https://files.pythonhosted.org/packages/4f/5a/597ef5911cb8919efe4d86206aa8b2658616d676a7088f0825ca08bd7cb8
++PYTHON_URLLIB3_SITE = https://files.pythonhosted.org/packages/80/be/3ee43b6c5757cabea19e75b8f46eaf05a2f5144107d7db48c7cf3a864f73
+ PYTHON_URLLIB3_LICENSE = MIT
+ PYTHON_URLLIB3_LICENSE_FILES = LICENSE.txt
+ PYTHON_URLLIB3_CPE_ID_VENDOR = python
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
