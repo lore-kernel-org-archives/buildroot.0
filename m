@@ -2,61 +2,60 @@ Return-Path: <SRS0=UivC=OX=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D21FC433EF
-	for <buildroot@archiver.kernel.org>; Sun,  3 Oct 2021 08:26:46 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B8A5C433F5
+	for <buildroot@archiver.kernel.org>; Sun,  3 Oct 2021 08:56:46 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 3E84B610C8
-	for <buildroot@archiver.kernel.org>; Sun,  3 Oct 2021 08:26:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3E84B610C8
+	by mail.kernel.org (Postfix) with ESMTPS id DC1AF611C7
+	for <buildroot@archiver.kernel.org>; Sun,  3 Oct 2021 08:56:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org DC1AF611C7
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=t-online.de
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 13C75848A9;
-	Sun,  3 Oct 2021 08:26:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9E4BA426C8;
+	Sun,  3 Oct 2021 08:56:45 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id YKs-w2qrh8NE; Sun,  3 Oct 2021 08:56:44 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 02579404BC;
+	Sun,  3 Oct 2021 08:56:44 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id F11461BF5A4
+ for <buildroot@lists.busybox.net>; Sun,  3 Oct 2021 08:56:42 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id E0A51847E0
+ for <buildroot@lists.busybox.net>; Sun,  3 Oct 2021 08:56:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id F-6U24rfJpIX; Sun,  3 Oct 2021 08:26:45 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 657A1848DA;
-	Sun,  3 Oct 2021 08:26:44 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 034741BF5A4
- for <buildroot@lists.busybox.net>; Sun,  3 Oct 2021 08:26:08 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E483A60AD7
- for <buildroot@lists.busybox.net>; Sun,  3 Oct 2021 08:26:06 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 52qLKyVA-rRE for <buildroot@lists.busybox.net>;
- Sun,  3 Oct 2021 08:26:05 +0000 (UTC)
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vwYrzoUWPA-1 for <buildroot@lists.busybox.net>;
+ Sun,  3 Oct 2021 08:56:42 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mailout12.t-online.de (mailout12.t-online.de [194.25.134.22])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A279960AD6
- for <buildroot@buildroot.org>; Sun,  3 Oct 2021 08:26:05 +0000 (UTC)
-Received: from fwd71.dcpf.telekom.de (fwd71.aul.t-online.de [10.223.144.97])
- by mailout12.t-online.de (Postfix) with SMTP id 0975110A42
- for <buildroot@buildroot.org>; Sun,  3 Oct 2021 10:22:48 +0200 (CEST)
-Received: from fli4l.lan.fli4l ([79.214.202.198]) by fwd71.t-online.de
+Received: from mailout05.t-online.de (mailout05.t-online.de [194.25.134.82])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id F2F25847DE
+ for <buildroot@buildroot.org>; Sun,  3 Oct 2021 08:56:41 +0000 (UTC)
+Received: from fwd75.dcpf.telekom.de (fwd75.aul.t-online.de [10.223.144.101])
+ by mailout05.t-online.de (Postfix) with SMTP id BC90D1FE19;
+ Sun,  3 Oct 2021 10:56:38 +0200 (CEST)
+Received: from fli4l.lan.fli4l ([79.214.202.198]) by fwd75.t-online.de
  with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1mWwlj-04B24P0; Sun, 3 Oct 2021 10:22:47 +0200
-Received: from [192.168.1.109] (port=42688 helo=bruckner.lan.fli4l)
+ esmtp id 1mWxIU-0KiRRh0; Sun, 3 Oct 2021 10:56:38 +0200
+Received: from [192.168.1.109] (port=42690 helo=bruckner.lan.fli4l)
  by fli4l.lan.fli4l with esmtp (Exim 4.95)
- (envelope-from <bernd.kuhls@t-online.de>) id 1mWwlj-0001yS-4u
- for buildroot@buildroot.org; Sun, 03 Oct 2021 10:22:47 +0200
+ (envelope-from <bernd.kuhls@t-online.de>) id 1mWxIT-0007j4-Vj;
+ Sun, 03 Oct 2021 10:56:38 +0200
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Sun,  3 Oct 2021 10:22:47 +0200
-Message-Id: <20211003082247.7120-1-bernd.kuhls@t-online.de>
+Date: Sun,  3 Oct 2021 10:56:37 +0200
+Message-Id: <20211003085637.535029-1-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1633249367-00001441-877E5335/0/0 CLEAN NORMAL
-X-TOI-MSGID: 909e50be-1f6d-4de6-b1b6-9520488337bc
-Subject: [Buildroot] [PATCH 1/1] package/kodi-pvr-mythtv: bump version to
- 19.0.0-Matrix
+X-TOI-EXPURGATEID: 150726::1633251398-00001454-7E8E1DF4/0/0 CLEAN NORMAL
+X-TOI-MSGID: 381b0612-f4c1-4407-93dd-cbeac260c302
+Subject: [Buildroot] [PATCH 1/1] package/boinc: bump version to 7.18.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,39 +67,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Release notes: https://boinc.berkeley.edu/wiki/Release_Notes
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash | 2 +-
- package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/boinc/boinc.hash | 2 +-
+ package/boinc/boinc.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
-index 9184932ec1..f336c39f2f 100644
---- a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
-+++ b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  8adfda3b257debf231b313b8d825afae5ae98c67afd4655d69d2ea40acd9861b  kodi-pvr-mythtv-7.3.4-Matrix.tar.gz
-+sha256  14d76fda4b9c8e7ac068071e322432fe585357154a2b2bae23d051def766f06d  kodi-pvr-mythtv-19.0.0-Matrix.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
-index df2e4ff890..fe89082913 100644
---- a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
-+++ b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/boinc/boinc.hash b/package/boinc/boinc.hash
+index 981d9141ea..35e59ce415 100644
+--- a/package/boinc/boinc.hash
++++ b/package/boinc/boinc.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+-sha256  e66fe2e2a804687c1fef2a0d2819d634dc24c9af1cb371c71ac468352f7a562a  boinc-7.16.18.tar.gz
++sha256  274388d9c49e488b6c8502ffc6eb605d5ceae391fb0c2fc56dbb0254d0ceb27e  boinc-7.18.1.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+ sha256  a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c  COPYING.LESSER
+diff --git a/package/boinc/boinc.mk b/package/boinc/boinc.mk
+index 079b065efd..12394ae924 100644
+--- a/package/boinc/boinc.mk
++++ b/package/boinc/boinc.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--KODI_PVR_MYTHTV_VERSION = 7.3.4-Matrix
-+KODI_PVR_MYTHTV_VERSION = 19.0.0-Matrix
- KODI_PVR_MYTHTV_SITE = $(call github,janbar,pvr.mythtv,$(KODI_PVR_MYTHTV_VERSION))
- KODI_PVR_MYTHTV_LICENSE = GPL-2.0+
- KODI_PVR_MYTHTV_LICENSE_FILES = LICENSE.md
+-BOINC_VERSION_MAJOR = 7.16
+-BOINC_VERSION = $(BOINC_VERSION_MAJOR).18
++BOINC_VERSION_MAJOR = 7.18
++BOINC_VERSION = $(BOINC_VERSION_MAJOR).1
+ BOINC_SITE = \
+ 	$(call github,BOINC,boinc,client_release/$(BOINC_VERSION_MAJOR)/$(BOINC_VERSION))
+ BOINC_LICENSE = LGPL-3.0+
 -- 
 2.30.2
 
