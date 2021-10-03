@@ -2,52 +2,52 @@ Return-Path: <SRS0=UivC=OX=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C50ECC433F5
-	for <buildroot@archiver.kernel.org>; Sun,  3 Oct 2021 08:23:39 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A19A8C433F5
+	for <buildroot@archiver.kernel.org>; Sun,  3 Oct 2021 08:23:51 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 6820D6124C
-	for <buildroot@archiver.kernel.org>; Sun,  3 Oct 2021 08:23:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6820D6124C
+	by mail.kernel.org (Postfix) with ESMTPS id 5F72E6124C
+	for <buildroot@archiver.kernel.org>; Sun,  3 Oct 2021 08:23:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5F72E6124C
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 308DC400F3;
-	Sun,  3 Oct 2021 08:23:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 36E324263F;
+	Sun,  3 Oct 2021 08:23:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OC4d-g08AtFU; Sun,  3 Oct 2021 08:23:38 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id A0oJYT1opikw; Sun,  3 Oct 2021 08:23:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2FDB44019B;
-	Sun,  3 Oct 2021 08:23:37 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6B6AD1BF95A
+	by smtp4.osuosl.org (Postfix) with ESMTP id 83501406CF;
+	Sun,  3 Oct 2021 08:23:49 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A9D041BF5A4
  for <buildroot@lists.busybox.net>; Sun,  3 Oct 2021 08:23:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5B0E561746
+ by smtp2.osuosl.org (Postfix) with ESMTP id 95F2640560
  for <buildroot@lists.busybox.net>; Sun,  3 Oct 2021 08:23:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YNgthQmv0byX for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id R7ZzeiL6zRYJ for <buildroot@lists.busybox.net>;
  Sun,  3 Oct 2021 08:23:23 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8863360ACF
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9BF2A400F3
  for <buildroot@buildroot.org>; Sun,  3 Oct 2021 08:23:23 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 0158F8DB40; Sun,  3 Oct 2021 08:20:54 +0000 (UTC)
+ id 15E9B8DB53; Sun,  3 Oct 2021 08:20:55 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 3 Oct 2021 10:22:17 +0200
+Date: Sun, 3 Oct 2021 10:22:21 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: dd817ef6e6c53aed04a7ad97be9c2e0326f583bf
-X-Git-Newrev: e72a59b283d9b45c434646e9b70931a1baad80ab
+X-Git-Oldrev: 6e3e94d45ef331ce08b1a125ee44820a1896dd51
+X-Git-Newrev: b25dd5eb96ce54c96df7911f6e646428cbe4e221
 X-Patchwork-Hint: ignore
-Message-Id: <20211003082055.0158F8DB40@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pymysql: bump to version
- 1.0.2
+Message-Id: <20211003082055.15E9B8DB53@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-request-id: bump to version
+ 1.0.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,60 +65,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e72a59b283d9b45c434646e9b70931a1baad80ab
+commit: https://git.buildroot.net/buildroot/commit/?id=b25dd5eb96ce54c96df7911f6e646428cbe4e221
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-* The package doesn't support python2 anymore.
-* Indent with two spaces in the hash file.
+Plus, indent with two spaces in the hash file.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-pymysql/Config.in           | 1 +
- package/python-pymysql/python-pymysql.hash | 6 +++---
- package/python-pymysql/python-pymysql.mk   | 4 ++--
- 3 files changed, 6 insertions(+), 5 deletions(-)
+ package/python-request-id/python-request-id.hash | 6 +++---
+ package/python-request-id/python-request-id.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-pymysql/Config.in b/package/python-pymysql/Config.in
-index 75b447cbd1..69ba485e77 100644
---- a/package/python-pymysql/Config.in
-+++ b/package/python-pymysql/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_PYMYSQL
- 	bool "python-pymysql"
-+	depends on BR2_PACKAGE_PYTHON3
- 	help
- 	  PyMySQL is a pure-Python MySQL client library. It follows
- 	  the DB-API 2.0.
-diff --git a/package/python-pymysql/python-pymysql.hash b/package/python-pymysql/python-pymysql.hash
-index 36323ca73a..dd81bdab7e 100644
---- a/package/python-pymysql/python-pymysql.hash
-+++ b/package/python-pymysql/python-pymysql.hash
+diff --git a/package/python-request-id/python-request-id.hash b/package/python-request-id/python-request-id.hash
+index ecf9d6508d..a0e59a3260 100644
+--- a/package/python-request-id/python-request-id.hash
++++ b/package/python-request-id/python-request-id.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pymysql/json
--md5	e5d9183cc0a775ac29f9e0365cca6556  PyMySQL-0.9.3.tar.gz
--sha256	d8c059dcd81dedb85a9f034d5e22dcb4442c0b201908bede99e306d65ea7c8e7  PyMySQL-0.9.3.tar.gz
-+md5  3fe6ff2eefb58af5c54d335c6e0216de  PyMySQL-1.0.2.tar.gz
-+sha256  816927a350f38d56072aeca5dfb10221fe1dc653745853d30a216637f5d7ad36  PyMySQL-1.0.2.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/request-id/json
+-md5	81d6159edc745384181cb97f045c51b4  request-id-1.0.tar.gz
+-sha256	4928002c8e4c767f3f8319194c9f3080ff98f14cabf44c0674a81ee58ec20fc4  request-id-1.0.tar.gz
++md5  abf0125561fb38198893ba4b46c5ce28  request-id-1.0.1.tar.gz
++sha256  4adf1dc880085571454667ee4dba36a12b720eea5dbbfbbbd840c5a24268b4f7  request-id-1.0.1.tar.gz
  # Locally computed sha256 checksums
--sha256	314120dc65f0800f738a4b31400c76ee14decd1fbe77ce9c3540a421b86ea7b6  LICENSE
-+sha256  314120dc65f0800f738a4b31400c76ee14decd1fbe77ce9c3540a421b86ea7b6  LICENSE
-diff --git a/package/python-pymysql/python-pymysql.mk b/package/python-pymysql/python-pymysql.mk
-index edb08ee054..3703572f35 100644
---- a/package/python-pymysql/python-pymysql.mk
-+++ b/package/python-pymysql/python-pymysql.mk
+-sha256	2d65d17b4df34f184557b8031df05e4c264d2fa6b82e560be074967eff3b326c  LICENSE.txt
++sha256  2d65d17b4df34f184557b8031df05e4c264d2fa6b82e560be074967eff3b326c  LICENSE.txt
+diff --git a/package/python-request-id/python-request-id.mk b/package/python-request-id/python-request-id.mk
+index 4812e53c72..8fe8dc04fb 100644
+--- a/package/python-request-id/python-request-id.mk
++++ b/package/python-request-id/python-request-id.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYMYSQL_VERSION = 0.9.3
-+PYTHON_PYMYSQL_VERSION = 1.0.2
- PYTHON_PYMYSQL_SOURCE = PyMySQL-$(PYTHON_PYMYSQL_VERSION).tar.gz
--PYTHON_PYMYSQL_SITE = https://files.pythonhosted.org/packages/da/15/23ba6592920e21cb40eb0fe0ea002d2b6177beb1ca8a4c1add5a8f32754d
-+PYTHON_PYMYSQL_SITE = https://files.pythonhosted.org/packages/60/ea/33b8430115d9b617b713959b21dfd5db1df77425e38efea08d121e83b712
- PYTHON_PYMYSQL_LICENSE = MIT
- PYTHON_PYMYSQL_LICENSE_FILES = LICENSE
- PYTHON_PYMYSQL_SETUP_TYPE = setuptools
+-PYTHON_REQUEST_ID_VERSION = 1.0
++PYTHON_REQUEST_ID_VERSION = 1.0.1
+ PYTHON_REQUEST_ID_SOURCE = request-id-$(PYTHON_REQUEST_ID_VERSION).tar.gz
+-PYTHON_REQUEST_ID_SITE = https://files.pythonhosted.org/packages/bc/b6/ade909d4af3dffe492789d36ea58a0ecbd637f8200bc480b282d455fe497
++PYTHON_REQUEST_ID_SITE = https://files.pythonhosted.org/packages/9b/b3/30617b85b1766b6a804f2b8abc0ca7496f6349236f7eec28cb42687ca8e3
+ PYTHON_REQUEST_ID_SETUP_TYPE = setuptools
+ PYTHON_REQUEST_ID_LICENSE = MIT
+ PYTHON_REQUEST_ID_LICENSE_FILES = LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
