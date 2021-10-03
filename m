@@ -2,72 +2,71 @@ Return-Path: <SRS0=UivC=OX=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 71FB7C433EF
-	for <buildroot@archiver.kernel.org>; Sun,  3 Oct 2021 19:59:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 200BAC433F5
+	for <buildroot@archiver.kernel.org>; Sun,  3 Oct 2021 20:00:11 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 3872C6187D
-	for <buildroot@archiver.kernel.org>; Sun,  3 Oct 2021 19:59:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3872C6187D
+	by mail.kernel.org (Postfix) with ESMTPS id C9049619E7
+	for <buildroot@archiver.kernel.org>; Sun,  3 Oct 2021 20:00:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C9049619E7
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 10D6B406B6;
-	Sun,  3 Oct 2021 19:59:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9732040805;
+	Sun,  3 Oct 2021 20:00:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rpbwmfe2vcgu; Sun,  3 Oct 2021 19:59:19 +0000 (UTC)
+	with ESMTP id Sy1vlPEgpzby; Sun,  3 Oct 2021 20:00:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 48F4A4069B;
-	Sun,  3 Oct 2021 19:59:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DF479406BC;
+	Sun,  3 Oct 2021 20:00:08 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4E2DA1BF20D
- for <buildroot@lists.busybox.net>; Sun,  3 Oct 2021 19:59:13 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7D4481BF45A
+ for <buildroot@lists.busybox.net>; Sun,  3 Oct 2021 20:00:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4B17A80ADE
- for <buildroot@lists.busybox.net>; Sun,  3 Oct 2021 19:59:13 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6C5DF8495C
+ for <buildroot@lists.busybox.net>; Sun,  3 Oct 2021 20:00:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=free.fr
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id swYvGg-IgA7q for <buildroot@lists.busybox.net>;
- Sun,  3 Oct 2021 19:59:12 +0000 (UTC)
+ with ESMTP id AAB1iamYkK8W for <buildroot@lists.busybox.net>;
+ Sun,  3 Oct 2021 20:00:06 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
 Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2AD6C84833
- for <buildroot@buildroot.org>; Sun,  3 Oct 2021 19:59:12 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 73A8D8494B
+ for <buildroot@buildroot.org>; Sun,  3 Oct 2021 20:00:06 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b51:cb00:1d3d:918b:43fc:aadd])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id A61F413F81D;
- Sun,  3 Oct 2021 21:59:03 +0200 (CEST)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id CD63613F81D;
+ Sun,  3 Oct 2021 21:59:58 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1633291149;
- bh=KTUh3u/zhkxDpES21j5ppDx15LRWeJ+6I4Y7/7dOgYE=;
+ s=smtp-20201208; t=1633291205;
+ bh=m1adDekkG2McyfDV9n6n6MhvtuR9ALvNw4ul+oj43vQ=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=TNoMr3IXi94ueFrP4bA/XpCZ+hFl3govqmq8SeEcEvdTfgzN1ShIWT8IfR8aAlrv/
- Ku+WcTMdOkQbM84yINhtJOgJL7MDtV/Hb8PVuzronk7MGMFycve713h0cIxSuR9SQw
- /InWeuXD5diPEB2s8Y2TTqEFO2ewFrCRxCJi6xP4/wYzqfzT6AKtX699AZI6NkrO2u
- Ef79mzYam5JhJAJ3LYvlx8XyEeqxAXPhArUw4T4mOj5h+vH4IQkCn4F1RAI+AA1A9k
- DFmADCMVIdu2DII63kzfauv5QGs1UuQ6EinV13mDhTHzjA0qXHFA8nrJc3O3ITu0l2
- 24FYHE+WqhokA==
+ b=Qy9hCh5eDYXE0TtsWmd9Bnpnoa8yoZKP+E2mpp6DwYXcWYwO7EwG1XAXBjNkebiAC
+ QM+rcZdwXWCgnf61cshCVSQ4wZJbJG9vXeGC7YEvuH47pwlcPIIAwGgfCQsC9PvifM
+ ofTS9/v7Zi8uyNCVFJ2f+g09k6xAZ17t8IE1tc1DJOU4l5ptPR+9FFeBrXgZZwvMCm
+ zD9TVXJ3cYNlbkJ+Nxo/y+BI8kh0gU5xFbNcbWkzEX21wtPZ+LHUiDqS+9hG8ACJuY
+ 7KSs6UEB7Lb6SerivoU6zFomx8r296fr0pVI09TbZF6t6XROjq5mMIHDK3wJxBwhA3
+ PSVRcJFPznzew==
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 03 Oct 2021 21:59:03 +0200
-Date: Sun, 3 Oct 2021 21:59:03 +0200
+ Sun, 03 Oct 2021 21:59:58 +0200
+Date: Sun, 3 Oct 2021 21:59:58 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: Asaf Kahlon <asafka7@gmail.com>
-Message-ID: <20211003195903.GQ1504958@scaer>
-References: <20210928110212.596939-1-asafka7@gmail.com>
- <20210928110212.596939-4-asafka7@gmail.com>
+Message-ID: <20211003195958.GR1504958@scaer>
+References: <20210928123257.617634-1-asafka7@gmail.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20210928110212.596939-4-asafka7@gmail.com>
+In-Reply-To: <20210928123257.617634-1-asafka7@gmail.com>
 User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-prompt-toolkit: bump to
- version 3.0.20
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-pyhamcrest: bump to
+ version 2.0.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,78 +84,68 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Asaf, All
+AsaF, All,
 
-On 2021-09-28 14:02 +0300, Asaf Kahlon spake thusly:
+On 2021-09-28 15:32 +0300, Asaf Kahlon spake thusly:
 > * The package doesn't support python2 anymore.
 
-You forgot to add the proper "depends on BR2_PACKAGE_PYTHON3", so I've
-done that.
-
-I've also added a note about the reverse dependency, ipython, which
-already depends on python3.
+I've updated the comment in the reverese dependency, twisted.
 
 Applied to master, thanks.
 
 Regards,
 Yann E. MORIN.
 
-> * Update URL in Config.in.
 > * Indent with two spaces in the hash file.
+> * License was changed with a year bump.
 > 
 > Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 > ---
->  package/python-prompt-toolkit/Config.in                  | 5 ++---
->  package/python-prompt-toolkit/python-prompt-toolkit.hash | 6 +++---
->  package/python-prompt-toolkit/python-prompt-toolkit.mk   | 4 ++--
->  3 files changed, 7 insertions(+), 8 deletions(-)
+>  package/python-pyhamcrest/Config.in              | 1 +
+>  package/python-pyhamcrest/python-pyhamcrest.hash | 6 +++---
+>  package/python-pyhamcrest/python-pyhamcrest.mk   | 4 ++--
+>  3 files changed, 6 insertions(+), 5 deletions(-)
 > 
-> diff --git a/package/python-prompt-toolkit/Config.in b/package/python-prompt-toolkit/Config.in
-> index 1066e166d9..ad4f8162de 100644
-> --- a/package/python-prompt-toolkit/Config.in
-> +++ b/package/python-prompt-toolkit/Config.in
-> @@ -2,10 +2,9 @@ config BR2_PACKAGE_PYTHON_PROMPT_TOOLKIT
->  	bool "python-prompt-toolkit"
+> diff --git a/package/python-pyhamcrest/Config.in b/package/python-pyhamcrest/Config.in
+> index c2a4dc06f7..1bbae3fec7 100644
+> --- a/package/python-pyhamcrest/Config.in
+> +++ b/package/python-pyhamcrest/Config.in
+> @@ -1,5 +1,6 @@
+>  config BR2_PACKAGE_PYTHON_PYHAMCREST
+>  	bool "python-pyhamcrest"
+> +	depends on BR2_PACKAGE_PYTHON3
+>  	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
 >  	select BR2_PACKAGE_PYTHON_SIX # runtime
->  	select BR2_PACKAGE_PYTHON_WCWIDTH # runtime
-> -	select BR2_PACKAGE_PYTHON_PYEXPAT if BR2_PACKAGE_PYTHON # runtime
-> -	select BR2_PACKAGE_PYTHON3_PYEXPAT if BR2_PACKAGE_PYTHON3 # runtime
-> +	select BR2_PACKAGE_PYTHON3_PYEXPAT # runtime
 >  	help
->  	  Library for building powerful interactive command lines in
->  	  Python.
->  
-> -	  https://github.com/jonathanslenders/python-prompt-toolkit
-> +	  https://github.com/prompt-toolkit/python-prompt-toolkit
-> diff --git a/package/python-prompt-toolkit/python-prompt-toolkit.hash b/package/python-prompt-toolkit/python-prompt-toolkit.hash
-> index 2d0c7ec95e..5a24634a56 100644
-> --- a/package/python-prompt-toolkit/python-prompt-toolkit.hash
-> +++ b/package/python-prompt-toolkit/python-prompt-toolkit.hash
+> diff --git a/package/python-pyhamcrest/python-pyhamcrest.hash b/package/python-pyhamcrest/python-pyhamcrest.hash
+> index 0c1660e08a..b2e84d7d1f 100644
+> --- a/package/python-pyhamcrest/python-pyhamcrest.hash
+> +++ b/package/python-pyhamcrest/python-pyhamcrest.hash
 > @@ -1,5 +1,5 @@
->  # md5, sha256 from https://pypi.org/pypi/prompt-toolkit/json
-> -md5	5016c523e603cd7119644fbc0f00ce53  prompt_toolkit-2.0.10.tar.gz
-> -sha256	f15af68f66e664eaa559d4ac8a928111eebd5feda0c11738b5998045224829db  prompt_toolkit-2.0.10.tar.gz
-> +md5  ba9e63c3e7e5a4f4ce4e4770a4daba96  prompt_toolkit-3.0.20.tar.gz
-> +sha256  eb71d5a6b72ce6db177af4a7d4d7085b99756bf656d98ffcc4fecd36850eea6c  prompt_toolkit-3.0.20.tar.gz
+>  # md5, sha256 from https://pypi.org/pypi/pyhamcrest/json
+> -md5	8b833a3fa30197455df79424f30c8c3f  PyHamcrest-1.9.0.tar.gz
+> -sha256	8ffaa0a53da57e89de14ced7185ac746227a8894dbd5a3c718bf05ddbd1d56cd  PyHamcrest-1.9.0.tar.gz
+> +md5  7a086f0b067f8d38958ec32f054559b4  PyHamcrest-2.0.2.tar.gz
+> +sha256  412e00137858f04bde0729913874a48485665f2d36fe9ee449f26be864af9316  PyHamcrest-2.0.2.tar.gz
 >  # Locally computed sha256 checksums
-> -sha256	303574d9bdd85c757d6025017942bf17baeedf2778f62bd7f425d07d880f4c4a  LICENSE
-> +sha256  303574d9bdd85c757d6025017942bf17baeedf2778f62bd7f425d07d880f4c4a  LICENSE
-> diff --git a/package/python-prompt-toolkit/python-prompt-toolkit.mk b/package/python-prompt-toolkit/python-prompt-toolkit.mk
-> index 183c7d258b..b575783f96 100644
-> --- a/package/python-prompt-toolkit/python-prompt-toolkit.mk
-> +++ b/package/python-prompt-toolkit/python-prompt-toolkit.mk
+> -sha256	ec76c04449607010d061b1e29c9d20a5ffae74db9d04670ae82538ccfe68b941  LICENSE.txt
+> +sha256  71beae6c8151362cfe398cbd350191a1cc52d3d28499839a7830b25f5b50a7fe  LICENSE.txt
+> diff --git a/package/python-pyhamcrest/python-pyhamcrest.mk b/package/python-pyhamcrest/python-pyhamcrest.mk
+> index 244aa8c606..28979600dd 100644
+> --- a/package/python-pyhamcrest/python-pyhamcrest.mk
+> +++ b/package/python-pyhamcrest/python-pyhamcrest.mk
 > @@ -4,9 +4,9 @@
 >  #
 >  ################################################################################
 >  
-> -PYTHON_PROMPT_TOOLKIT_VERSION = 2.0.10
-> +PYTHON_PROMPT_TOOLKIT_VERSION = 3.0.20
->  PYTHON_PROMPT_TOOLKIT_SOURCE = prompt_toolkit-$(PYTHON_PROMPT_TOOLKIT_VERSION).tar.gz
-> -PYTHON_PROMPT_TOOLKIT_SITE = https://files.pythonhosted.org/packages/0c/37/7ad3bf3c6dbe96facf9927ddf066fdafa0f86766237cff32c3c7355d3b7c
-> +PYTHON_PROMPT_TOOLKIT_SITE = https://files.pythonhosted.org/packages/b4/56/9ab5868f34ab2657fba7e2192f41316252ab04edbbeb2a8583759960a1a7
->  PYTHON_PROMPT_TOOLKIT_SETUP_TYPE = setuptools
->  PYTHON_PROMPT_TOOLKIT_LICENSE = BSD-3-Clause
->  PYTHON_PROMPT_TOOLKIT_LICENSE_FILES = LICENSE
+> -PYTHON_PYHAMCREST_VERSION = 1.9.0
+> +PYTHON_PYHAMCREST_VERSION = 2.0.2
+>  PYTHON_PYHAMCREST_SOURCE = PyHamcrest-$(PYTHON_PYHAMCREST_VERSION).tar.gz
+> -PYTHON_PYHAMCREST_SITE = https://files.pythonhosted.org/packages/a4/89/a469aad9256aedfbb47a29ec2b2eeb855d9f24a7a4c2ff28bd8d1042ef02
+> +PYTHON_PYHAMCREST_SITE = https://files.pythonhosted.org/packages/58/05/7b993fabb44ff0b52a90916d96bfd91a65ecf90b8248e72bba325ba8e438
+>  PYTHON_PYHAMCREST_SETUP_TYPE = setuptools
+>  PYTHON_PYHAMCREST_LICENSE = BSD-3-Clause
+>  PYTHON_PYHAMCREST_LICENSE_FILES = LICENSE.txt
 > -- 
 > 2.33.0
 > 
