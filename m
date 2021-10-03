@@ -2,52 +2,51 @@ Return-Path: <SRS0=UivC=OX=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4EF61C433F5
-	for <buildroot@archiver.kernel.org>; Sun,  3 Oct 2021 19:56:17 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DBF39C433EF
+	for <buildroot@archiver.kernel.org>; Sun,  3 Oct 2021 19:56:28 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1B2D4617E1
-	for <buildroot@archiver.kernel.org>; Sun,  3 Oct 2021 19:56:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1B2D4617E1
+	by mail.kernel.org (Postfix) with ESMTPS id 7F8AB61872
+	for <buildroot@archiver.kernel.org>; Sun,  3 Oct 2021 19:56:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7F8AB61872
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DD17D60B2B;
-	Sun,  3 Oct 2021 19:56:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5B05B4147E;
+	Sun,  3 Oct 2021 19:56:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gY3SZFgGzZx5; Sun,  3 Oct 2021 19:56:16 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id zAfnIPXMM7te; Sun,  3 Oct 2021 19:56:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 46D2360791;
-	Sun,  3 Oct 2021 19:56:15 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 812341BF45A
+	by smtp4.osuosl.org (Postfix) with ESMTP id C30F5407E8;
+	Sun,  3 Oct 2021 19:56:26 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id CA0F01BF45A
  for <buildroot@lists.busybox.net>; Sun,  3 Oct 2021 19:55:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 285B1843E2
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0B3C1407B9
  for <buildroot@lists.busybox.net>; Sun,  3 Oct 2021 19:55:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ViTLONrX262s for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id s7wMGtt9NzWu for <buildroot@lists.busybox.net>;
  Sun,  3 Oct 2021 19:55:38 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7AF04843CF
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4F7FB407BE
  for <buildroot@buildroot.org>; Sun,  3 Oct 2021 19:55:38 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id D055087B03; Sun,  3 Oct 2021 19:53:08 +0000 (UTC)
+ id A29D487B23; Sun,  3 Oct 2021 19:53:08 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 3 Oct 2021 21:32:25 +0200
+Date: Sun, 3 Oct 2021 21:32:16 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a07b7259277afc3629d3b72a7caeb5b405173005
-X-Git-Newrev: b15a471a1f3f7f2db3f0ce76d32224c0a734a98f
+X-Git-Oldrev: 906019688998df36bfff3994a26d3b2055a082f0
+X-Git-Newrev: 0138db0f4d8445cc7a5cdcb646f04ab47961ad2d
 X-Patchwork-Hint: ignore
-Message-Id: <20211003195308.D055087B03@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-networkx: bump to version
- 2.6.3
+Message-Id: <20211003195308.A29D487B23@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-meld3: bump to version 2.0.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,49 +64,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b15a471a1f3f7f2db3f0ce76d32224c0a734a98f
+commit: https://git.buildroot.net/buildroot/commit/?id=0138db0f4d8445cc7a5cdcb646f04ab47961ad2d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-* License was updated with a year bump.
-* Added md5 from pypi and reformat indentation with two spaces.
+Plus, indent with two spaces in the hash file.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-networkx/python-networkx.hash | 9 +++++----
- package/python-networkx/python-networkx.mk   | 4 ++--
- 2 files changed, 7 insertions(+), 6 deletions(-)
+ package/python-meld3/python-meld3.hash | 8 ++++----
+ package/python-meld3/python-meld3.mk   | 4 ++--
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-networkx/python-networkx.hash b/package/python-networkx/python-networkx.hash
-index 6c4b793e0d..ace5c6721a 100644
---- a/package/python-networkx/python-networkx.hash
-+++ b/package/python-networkx/python-networkx.hash
-@@ -1,4 +1,5 @@
--# From: https://pypi.org/project/networkx/
--sha256 f8f4ff0b6f96e4f9b16af6b84622597b5334bf9cae8cf9b2e42e7985d5c95c64 networkx-2.4.tar.gz
--# Locally computed
--sha256 f421f7c5d30022aa268174976e43e488b856ad953f32cdd13f0675630996d8c0 LICENSE.txt
-+# md5, sha256 from https://pypi.org/pypi/networkx/json
-+md5  407eb28c54e08725559754ca7ab185e0  networkx-2.6.3.tar.gz
-+sha256  c0946ed31d71f1b732b5aaa6da5a0388a345019af232ce2f49c766e2d6795c51  networkx-2.6.3.tar.gz
-+# Locally computed sha256 checksums
-+sha256  f9c25c92ced5a264a3fe857231205d5eb625ae367935aaf8d61cdd5087dfb90e  LICENSE.txt
-diff --git a/package/python-networkx/python-networkx.mk b/package/python-networkx/python-networkx.mk
-index 8ebbc84bde..e84bddf86f 100644
---- a/package/python-networkx/python-networkx.mk
-+++ b/package/python-networkx/python-networkx.mk
+diff --git a/package/python-meld3/python-meld3.hash b/package/python-meld3/python-meld3.hash
+index f423b0bf19..69b303e60e 100644
+--- a/package/python-meld3/python-meld3.hash
++++ b/package/python-meld3/python-meld3.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/meld3/json
+-md5	56fff5d6599efeefc81cf2d3b8cf6b4e  meld3-2.0.0.tar.gz
+-sha256	1efda676264490db2e30bfb81b27a918cc6d9c2de6d609491aa43410b9537eb9  meld3-2.0.0.tar.gz
++md5  1add16caefc9e6b82ef4f40532cb4918  meld3-2.0.1.tar.gz
++sha256  3ea266994f1aa83507679a67b493b852c232a7905e29440a6b868558cad5e775  meld3-2.0.1.tar.gz
+ # Locally computed sha256 checksums
+-sha256	5fe11cd858707131b6ec1338b5c2cd68dd1fdb875e3ec967149bc6fea858ecec  LICENSE.txt
+-sha256	2422945b49554688d529e1f8d4ac6e0ab77a817e8889158e1e56cf963ecf5c4d  COPYRIGHT.txt
++sha256  5fe11cd858707131b6ec1338b5c2cd68dd1fdb875e3ec967149bc6fea858ecec  LICENSE.txt
++sha256  2422945b49554688d529e1f8d4ac6e0ab77a817e8889158e1e56cf963ecf5c4d  COPYRIGHT.txt
+diff --git a/package/python-meld3/python-meld3.mk b/package/python-meld3/python-meld3.mk
+index f67172e6f8..c7973d9c71 100644
+--- a/package/python-meld3/python-meld3.mk
++++ b/package/python-meld3/python-meld3.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_NETWORKX_VERSION = 2.4
-+PYTHON_NETWORKX_VERSION = 2.6.3
- PYTHON_NETWORKX_SOURCE = networkx-$(PYTHON_NETWORKX_VERSION).tar.gz
--PYTHON_NETWORKX_SITE = https://pypi.python.org/packages/bf/63/7b579dd3b1c49ce6b7fd8f6f864038f255201410905dd183cf7f4a3845cf
-+PYTHON_NETWORKX_SITE = https://files.pythonhosted.org/packages/97/ae/7497bc5e1c84af95e585e3f98585c9f06c627fac6340984c4243053e8f44
- PYTHON_NETWORKX_LICENSE = BSD-3-Clause
- PYTHON_NETWORKX_LICENSE_FILES = LICENSE.txt
- PYTHON_NETWORKX_CPE_ID_VENDOR = python
+-PYTHON_MELD3_VERSION = 2.0.0
++PYTHON_MELD3_VERSION = 2.0.1
+ PYTHON_MELD3_SOURCE = meld3-$(PYTHON_MELD3_VERSION).tar.gz
+-PYTHON_MELD3_SITE = https://files.pythonhosted.org/packages/00/3b/023446ddc1bf0b519c369cbe88269c30c6a64bd10af4817c73f560c302f7
++PYTHON_MELD3_SITE = https://files.pythonhosted.org/packages/53/af/5b8b67d04a36980de03505446d35db39c7b2a01b9bac1cb673434769ddb8
+ PYTHON_MELD3_LICENSE = ZPL-2.1
+ PYTHON_MELD3_LICENSE_FILES = COPYRIGHT.txt LICENSE.txt
+ PYTHON_MELD3_SETUP_TYPE = setuptools
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
