@@ -2,97 +2,83 @@ Return-Path: <SRS0=UivC=OX=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 111EAC433EF
-	for <buildroot@archiver.kernel.org>; Sun,  3 Oct 2021 10:52:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A5CF1C433EF
+	for <buildroot@archiver.kernel.org>; Sun,  3 Oct 2021 12:40:39 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id E26B161B40
-	for <buildroot@archiver.kernel.org>; Sun,  3 Oct 2021 10:52:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E26B161B40
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
+	by mail.kernel.org (Postfix) with ESMTPS id DE41E61361
+	for <buildroot@archiver.kernel.org>; Sun,  3 Oct 2021 12:40:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org DE41E61361
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 675F6426F0;
-	Sun,  3 Oct 2021 10:52:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 80692424F5;
+	Sun,  3 Oct 2021 12:40:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0W3QgyEsBEWc; Sun,  3 Oct 2021 10:52:51 +0000 (UTC)
+	with ESMTP id DY3Zr6rI24SX; Sun,  3 Oct 2021 12:40:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A299F426F2;
-	Sun,  3 Oct 2021 10:52:50 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8A7E41BF59F
- for <buildroot@lists.busybox.net>; Sun,  3 Oct 2021 10:52:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A9DFC4256C;
+	Sun,  3 Oct 2021 12:40:36 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 91D681BF327
+ for <buildroot@lists.busybox.net>; Sun,  3 Oct 2021 12:40:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 785884020C
- for <buildroot@lists.busybox.net>; Sun,  3 Oct 2021 10:52:48 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7F96E4256C
+ for <buildroot@lists.busybox.net>; Sun,  3 Oct 2021 12:40:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gzR_drEzurdz for <buildroot@lists.busybox.net>;
- Sun,  3 Oct 2021 10:52:47 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id O1sd5YW5I5t2 for <buildroot@lists.busybox.net>;
+ Sun,  3 Oct 2021 12:40:34 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com
- [IPv6:2a00:1450:4864:20::52f])
- by smtp2.osuosl.org (Postfix) with ESMTPS id DD680400D8
- for <buildroot@buildroot.org>; Sun,  3 Oct 2021 10:52:46 +0000 (UTC)
-Received: by mail-ed1-x52f.google.com with SMTP id v10so53237008edj.10
- for <buildroot@buildroot.org>; Sun, 03 Oct 2021 03:52:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
+ [IPv6:2a00:1450:4864:20::433])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 60C1C424F5
+ for <buildroot@buildroot.org>; Sun,  3 Oct 2021 12:40:34 +0000 (UTC)
+Received: by mail-wr1-x433.google.com with SMTP id v17so24954275wrv.9
+ for <buildroot@buildroot.org>; Sun, 03 Oct 2021 05:40:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=7z+m9bQQqZ1sn+ShGtNaskgGZH2g1d2lprM4KxLvpDw=;
- b=LYTO8j78Ceqyn31mENRb5ALMao/X1cQEbG2Ju9h25ZXOcS6TRTGN+ZRuGYhB1wCOVs
- irnrUg/hA0i6dxDdFmtihn84FwDU6Ue1x+w8qup04HUpmdmY7rwZaHJ+FgjIkS3ZLoRX
- TUaNAVOW7Y/mGlUUwlw9GULLk4lQuJON51vpHpK/9TBxMpbu6GN/iIuTSLT+WLgnnR4f
- sbf3syuUO9bLv16o/8AK7tV9rkJMsQN4JsWyHxefh0f6MucMO6/9L1MNPPWnyUAGmODB
- eWsXQVc6CZQU+4hQDA1rMjkLnNr/EabkWlpcvZNSWbvAfOs2myIs7fa4zoHIw5RVcvMz
- fXzg==
+ bh=F7V8VidC0RWV8T9ZJ68mtl2Dfi4iK3tP2O8vLkXyLoc=;
+ b=RqQioDY3zrkCl2n3LZw1tMP+dVvBvi/8YLFPlgK7az3WkNnwRYgLpx+cVcB+R4u/KC
+ WoLDH5MOyJb0N2GbLhIfmhGmiAFtUlgt1W03P2XTfuJ79ve+3i8JeJRwX6fJOcE8vwDS
+ Iu56lWjW1kOR44Orh+V9b50/mNO4lJIFZ7CnmLdK76ACLFK7wO0g5HQIO2YEoV3Gh8FE
+ XbMwUnC3FtLuxWtkDo2KwcQbF3VE+7rvO8esfxS8J8sQymJGWOjC4DCV8DWGKePfA67A
+ SqTFx0yvm1HfTxhqvf7Sr1pZ+mL52GFEPjRkqvvNTY1YRyhDD20BTGM9EaOHB7yOGeaH
+ Bbrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=7z+m9bQQqZ1sn+ShGtNaskgGZH2g1d2lprM4KxLvpDw=;
- b=2ua5GErOv+F+torls0Sfbbq2AwT39bFBdSoR8Oa3n9hctMAR2lEAE9aRCfgH6Wl129
- x6TrAreDuCQgPw3Eia6mf9gusfBrcJjWrNq9SjZMME0AVsx7DNA53UPjf2McooGyPKZT
- HBKlKs8PlGH1OKa1gILui7wBE1jaxTkJHmzz4rXCBV96I6PJ6ZRUzNhaEYix2CO+44oE
- OsIpRmBXPo9pP02yUsQ0ZpVRoKmk8g1eBSPN+xzgPM7OmdvYrm8UBwu873fnsdIAyIcA
- MB4J+ti0wtb8K7KxKfsGvefRJMc+SvNLTS7dae/kcv8z+YhyqScO8kgu95XuHiUV2+ZL
- s4HA==
-X-Gm-Message-State: AOAM532KAubZeh6uvMPGsdnZvV0X3hjduBLr+Qjg6BoSR5lwAC2SHA0b
- ZxFwSdvaOpKYUHKYyRvVYvcX2g==
-X-Google-Smtp-Source: ABdhPJyV2ZjqO/imhu6KY+rWcjRzfeA2Jmm/3GaQvDS/yaDm11NGxKGObxDbSgl6B0dZykFpmOLPqg==
-X-Received: by 2002:a17:906:165a:: with SMTP id
- n26mr9514700ejd.236.1633258364684; 
- Sun, 03 Oct 2021 03:52:44 -0700 (PDT)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
- (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id k19sm2497210ejg.13.2021.10.03.03.52.43
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 03 Oct 2021 03:52:44 -0700 (PDT)
-Message-ID: <2439f331-726c-4192-b821-addce6518bfc@mind.be>
-Date: Sun, 3 Oct 2021 12:52:42 +0200
+ bh=F7V8VidC0RWV8T9ZJ68mtl2Dfi4iK3tP2O8vLkXyLoc=;
+ b=vHNhrx1uWpn6zYyJJiLCyAls75TJWPJBo6eDsFY83U0pDN/lGJDn/+7698KwvkVM9f
+ FPxCvi5Uhl76u0EoN0lCrHTq7aWjyhgKSrelIA79JZOAiNKzMahZzW69U1PfGahCGmFV
+ zmhDyHz5BHERdBevM6RsWs2qwDmqxXDBqcB6QN1Hz96KQ5wpPOMw3BUgbQBm9XC0P9w7
+ VszXFvvzX3HWfxl3yqImRgMezfU1AKs7Zu0Sey7Tc/8cpO3VtK5HcISmKFpb3CTcvJJL
+ EdJq37qkTmrYIqJk2fzEi8K6eC5HwKSxo8DV0VM6bIyVWToiOPl0cr2MPFLysSMsXZfx
+ otmA==
+X-Gm-Message-State: AOAM5302l6GJz4d4Zkz6fZUizV1Bb2r3Yb7JWvfyFBVvSnV6j6IP62xJ
+ S1ejw9XKhn6fqvFyGoFy/3aWyfPdyM4=
+X-Google-Smtp-Source: ABdhPJxX8sTJ1VGYaSMZWi0G9VRG1nCgczl7rbAjoo7XpX9s5LJScEmKInwTctw9vnbEL57vhzy+Zg==
+X-Received: by 2002:a5d:5986:: with SMTP id n6mr8355725wri.75.1633264832435;
+ Sun, 03 Oct 2021 05:40:32 -0700 (PDT)
+Received: from localhost.localdomain
+ (2a01cb058f8a18003dbee9eed79eb521.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:8f8a:1800:3dbe:e9ee:d79e:b521])
+ by smtp.gmail.com with ESMTPSA id 143sm1258704wma.37.2021.10.03.05.40.31
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 03 Oct 2021 05:40:32 -0700 (PDT)
+From: Romain Naour <romain.naour@gmail.com>
+To: buildroot@buildroot.org
+Date: Sun,  3 Oct 2021 14:40:23 +0200
+Message-Id: <20211003124027.343390-1-romain.naour@gmail.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.1.0
-Content-Language: en-GB
-To: Tim Harvey <tharvey@gateworks.com>, Fabio Estevam <festevam@gmail.com>
-References: <CAJ+vNU0DmMfBTdmnrD9UYxCqEJq6gbut6WJv3Nr5QKDe_UL3UQ@mail.gmail.com>
- <CAOMZO5DZxRFKF=tnkHRk5wKzoRW2_F9py8onUk_5ppzz0S2nuw@mail.gmail.com>
- <CAJ+vNU16uqMnCDBmOMnVyLtLHzU=K61YU2Rtx_3BWYzLzMBaPQ@mail.gmail.com>
- <CAJ+vNU3qyPwoSy2YfH7yjTSkX6A=mWV6iqk8difayO0MFU42VQ@mail.gmail.com>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <CAJ+vNU3qyPwoSy2YfH7yjTSkX6A=mWV6iqk8difayO0MFU42VQ@mail.gmail.com>
-Subject: Re: [Buildroot] buildroot config for installing kernel and dtbs to
- rootfs?
+Subject: [Buildroot] [PATCH 1/5] configs: remove qemu_csky defconfigs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -104,152 +90,241 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot <buildroot@buildroot.org>
+Cc: Romain Naour <romain.naour@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, Guo Ren <ren_guo@c-sky.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+We are going to remove the gcc fork for csky since it doesn't build
+with the latest compilers (gcc 8, 10, 11 tested) [1].
 
+Removing theses defconfigs and the csky gcc fork has become unavoidable
+since the Buildroot Docker image used by the gitlab CI will switch soon
+to Debian bullseye soon [2].
 
-On 01/10/2021 16:38, Tim Harvey wrote:
-> On Thu, Sep 30, 2021 at 8:21 AM Tim Harvey <tharvey@gateworks.com> wrote:
->>
->> On Wed, Sep 29, 2021 at 7:13 PM Fabio Estevam <festevam@gmail.com> wrote:
->>>
->>> Hi Tim,
->>>
->>> On Wed, Sep 29, 2021 at 10:52 PM Tim Harvey <tharvey@gateworks.com> wrote:
->>>>
->>>> Greetings,
->>>>
->>>> I see the buildroot has the ability to build dtb's from the kernel
->>>> source (BR2_LINUX_KENREL_DTS*) but I haven't seen any configs that
->>>> instruct buildroot to copy the dtb's or kernel image to the root
->>>> filesystem.
->>>>
->>>> Is there a config for this and if not what do people usually do for this?
->>>
->>> It is BR2_LINUX_KERNEL_INSTALL_TARGET=y.
->>>
->>> configs/wandboard_defconfig is an example that selects
->>> BR2_LINUX_KERNEL_INSTALL_TARGET=y
->>> and install zImage and dtbs into the rootfs.
->>>
->>
->> Thanks Fabio, I didn't see it because I had BR2_TARGET_ROOTFS_INITRAMFS=y.
->>
->> BR2_LINUX_KERNEL_INSTALL_TARGET only installs the kernel image. It
->> looks like perhaps to install dtbs you need
->> BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/post-image.sh".
->> It seems to me installing of the dtbs to the rootfs should be moved
->> into a defconfig like the kernel image for those who are trying to
->> simply generate a tarball but not an image?
->>
-> 
-> Fabio,
-> 
-> Digging into the image creation used for freescale_imx8mmevk_defconfig
-> things seem flawed to me or at least limited.
-> 
-> I'm still trying to wrap my head around what
-> BR2_LINUX_KERNEL_INTREE_DTS_NAME is trying to accomplish
+The cksy gcc fork based on gcc 6 has not been updated since it has been
+added to Buildroot [3]. Since then, csky has been added to binutils and
+gcc but using the latest upstream version (binutils 2.37 and gcc 11) is
+not yet possible due to build issue with glibc 2.34 [4].
 
-  Very simple: to use a dts that is in the kernel source.
+Moreover, qemu_csky defconfigs was to be used with the csky qemu fork
+(based on Qemu 3.x) added by commit [5] and removed by commit [6].
+Since then it's not possible to do a runtime test with theses
+defconfigs.
 
-> but one thing
-> I see is that board/freescale/common/imx/imx8-bootloader-prepare.sh
-> and board/freescale/common/imx/post-image.sh are creating images
-> assuming the U-Boot dtb and the Linux kernel dtb are one and the same
-> which is wrong.
+Theses defconfigs can be added back later if the csky toolchain support
+is fixed and csky supported by upstream Qemu.
 
-  Saying that it is wrong is a bit exaggerated. You can say that they're not 
-necessarily the same. The intention is that device trees are OS-independent, so 
-the *intention* is that the same device tree works for both U-Boot and the 
-kernel. That said, indeed, in practice it is sometimes not the case. That said, 
-the parts that are actually used by U-Boot usually don't change any more, so 
-usually it's fine to use the kernel's dtb for U-Boot as well. In particular, for 
-the imx8mm EVK, this is the case.
+[1] http://lists.busybox.net/pipermail/buildroot/2021-August/621504.html
+[2] 71b83227128be62c169313e85bb8f339f977ad67
+[3] 7873a5bd5ebbeb1674293dae6b06b50f0a1f2184
+[4] http://lists.busybox.net/pipermail/buildroot/2021-October/624596.html
+[5] f816e5b276f1ef15840bec6667f1e8219717ab7d
+[6] 58af9a70cc0f195116dedb3fd0e2ca5b4fec9e70
 
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Guo Ren <ren_guo@c-sky.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ board/qemu/csky/linux-ck610.config.fragment |  6 ------
+ board/qemu/csky/linux-ck807.config.fragment |  5 -----
+ board/qemu/csky/linux-ck810.config.fragment |  5 -----
+ board/qemu/csky/linux-ck860.config.fragment |  9 ---------
+ board/qemu/csky/readme.txt                  | 15 ---------------
+ configs/qemu_csky610_virt_defconfig         | 20 --------------------
+ configs/qemu_csky807_virt_defconfig         | 20 --------------------
+ configs/qemu_csky810_virt_defconfig         | 20 --------------------
+ configs/qemu_csky860_virt_defconfig         | 20 --------------------
+ 9 files changed, 120 deletions(-)
+ delete mode 100644 board/qemu/csky/linux-ck610.config.fragment
+ delete mode 100644 board/qemu/csky/linux-ck807.config.fragment
+ delete mode 100644 board/qemu/csky/linux-ck810.config.fragment
+ delete mode 100644 board/qemu/csky/linux-ck860.config.fragment
+ delete mode 100644 board/qemu/csky/readme.txt
+ delete mode 100644 configs/qemu_csky610_virt_defconfig
+ delete mode 100644 configs/qemu_csky807_virt_defconfig
+ delete mode 100644 configs/qemu_csky810_virt_defconfig
+ delete mode 100644 configs/qemu_csky860_virt_defconfig
 
-> There are specific details that differ between the two
-> especially if you are trying to boot different kernels with differing
-> support.
+diff --git a/board/qemu/csky/linux-ck610.config.fragment b/board/qemu/csky/linux-ck610.config.fragment
+deleted file mode 100644
+index b690c7d6ec..0000000000
+--- a/board/qemu/csky/linux-ck610.config.fragment
++++ /dev/null
+@@ -1,6 +0,0 @@
+-CONFIG_COMPILE_TEST=y
+-CONFIG_CPU_CK610=y
+-CONFIG_CPU_PM_WAIT=y
+-CONFIG_RAM_BASE=0x10000000
+-CONFIG_CSKY_APB_INTC=y
+-CONFIG_GX6605S_TIMER=y
+diff --git a/board/qemu/csky/linux-ck807.config.fragment b/board/qemu/csky/linux-ck807.config.fragment
+deleted file mode 100644
+index b6974f0157..0000000000
+--- a/board/qemu/csky/linux-ck807.config.fragment
++++ /dev/null
+@@ -1,5 +0,0 @@
+-CONFIG_COMPILE_TEST=y
+-CONFIG_CPU_CK807=y
+-# CONFIG_CPU_HAS_FPU is not set
+-CONFIG_CPU_PM_WAIT=y
+-CONFIG_CSKY_APB_INTC=y
+diff --git a/board/qemu/csky/linux-ck810.config.fragment b/board/qemu/csky/linux-ck810.config.fragment
+deleted file mode 100644
+index 50fa1f4f79..0000000000
+--- a/board/qemu/csky/linux-ck810.config.fragment
++++ /dev/null
+@@ -1,5 +0,0 @@
+-CONFIG_COMPILE_TEST=y
+-CONFIG_CPU_CK810=y
+-# CONFIG_CPU_HAS_FPU is not set
+-CONFIG_CPU_PM_WAIT=y
+-CONFIG_CSKY_APB_INTC=y
+diff --git a/board/qemu/csky/linux-ck860.config.fragment b/board/qemu/csky/linux-ck860.config.fragment
+deleted file mode 100644
+index e8f6af10ba..0000000000
+--- a/board/qemu/csky/linux-ck860.config.fragment
++++ /dev/null
+@@ -1,9 +0,0 @@
+-CONFIG_COMPILE_TEST=y
+-CONFIG_CPU_CK860=y
+-# CONFIG_CPU_HAS_FPU is not set
+-CONFIG_CPU_PM_WAIT=y
+-CONFIG_SMP=y
+-CONFIG_HOTPLUG_CPU=y
+-CONFIG_CSKY_APB_INTC=y
+-CONFIG_CSKY_MPINTC=y
+-CONFIG_CSKY_MP_TIMER=y
+diff --git a/board/qemu/csky/readme.txt b/board/qemu/csky/readme.txt
+deleted file mode 100644
+index 5e4cb1871c..0000000000
+--- a/board/qemu/csky/readme.txt
++++ /dev/null
+@@ -1,15 +0,0 @@
+-Run with qemu:
+-
+-For ck860 smp:
+- qemu-system-cskyv2 -M virt -cpu ck860 -smp 2 -nographic -kernel vmlinux # qemu_csky860_virt_defconfig
+-
+-For ck807:
+- qemu-system-cskyv2 -M virt -nographic -kernel vmlinux # qemu_csky807_virt_defconfig
+-
+-For ck810:
+- qemu-system-cskyv2 -M virt -nographic -kernel vmlinux # qemu_csky810_virt_defconfig
+-
+-For ck610:
+- qemu-system-cskyv1 -M virt -nographic -kernel vmlinux # qemu_csky610_virt_defconfig
+-
+-The login prompt will appear in the terminal that started Qemu. Username is root and no password.
+diff --git a/configs/qemu_csky610_virt_defconfig b/configs/qemu_csky610_virt_defconfig
+deleted file mode 100644
+index e7d75f5f49..0000000000
+--- a/configs/qemu_csky610_virt_defconfig
++++ /dev/null
+@@ -1,20 +0,0 @@
+-# Architecture
+-BR2_csky=y
+-BR2_ck610=y
+-
+-# System
+-BR2_TARGET_ROOTFS_INITRAMFS=y
+-
+-# Image
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
+-
+-# linux kernel header, the same version with linux kernel
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
+-
+-# Kernel
+-BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0.12"
+-BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+-BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/csky/linux-ck610.config.fragment"
+diff --git a/configs/qemu_csky807_virt_defconfig b/configs/qemu_csky807_virt_defconfig
+deleted file mode 100644
+index df12450a55..0000000000
+--- a/configs/qemu_csky807_virt_defconfig
++++ /dev/null
+@@ -1,20 +0,0 @@
+-# Architecture
+-BR2_csky=y
+-BR2_ck807=y
+-
+-# System
+-BR2_TARGET_ROOTFS_INITRAMFS=y
+-
+-# Image
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
+-
+-# linux kernel header, the same version with linux kernel
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
+-
+-# Kernel
+-BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0.12"
+-BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+-BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/csky/linux-ck807.config.fragment"
+diff --git a/configs/qemu_csky810_virt_defconfig b/configs/qemu_csky810_virt_defconfig
+deleted file mode 100644
+index dd1fd329f5..0000000000
+--- a/configs/qemu_csky810_virt_defconfig
++++ /dev/null
+@@ -1,20 +0,0 @@
+-# Architecture
+-BR2_csky=y
+-BR2_ck810=y
+-
+-# System
+-BR2_TARGET_ROOTFS_INITRAMFS=y
+-
+-# Image
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
+-
+-# linux kernel header, the same version with linux kernel
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
+-
+-# Kernel
+-BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0.12"
+-BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+-BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/csky/linux-ck810.config.fragment"
+diff --git a/configs/qemu_csky860_virt_defconfig b/configs/qemu_csky860_virt_defconfig
+deleted file mode 100644
+index 6edfba4e8e..0000000000
+--- a/configs/qemu_csky860_virt_defconfig
++++ /dev/null
+@@ -1,20 +0,0 @@
+-# Architecture
+-BR2_csky=y
+-BR2_ck860=y
+-
+-# System
+-BR2_TARGET_ROOTFS_INITRAMFS=y
+-
+-# Image
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
+-
+-# linux kernel header, the same version with linux kernel
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
+-
+-# Kernel
+-BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0.12"
+-BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+-BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/csky/linux-ck860.config.fragment"
+-- 
+2.31.1
 
-  If you're going to boot two different kernels, you're going to need two 
-different Buildroot configurations anyway. So you're also going to have two 
-different dtbs. Which one of those you're going to use for U-Boot, or maybe you 
-use the dts that comes with U-Boot.
-
-
-> It's always best to decouple these.
-
-  They are decoupled by default. Normally you'd generate a U-Boot binary that 
-has the dtb (as specified in the U-Boot config) linked in. I'm not sure why for 
-imx8mmevk it's done differently.
-
-
-> The other thing I'm
-> noticing is that these scripts assume one dtb per image which is
-> limiting.
-
-  I think you're not entirely up to speed with what the configs/ and board/ 
-directories are meant to be. They are just minimal example configurations to get 
-a minimal working system on a specific board. The idea is that you start from 
-such a config, boot it on the board to be sure you have a working baseline, and 
-then start customising. In particular, it is not the intention to use the 
-scripts in board/ as-is. You'd make a copy and adapt them to your specific needs.
-
-
-> It looks like imx8mm-venice is the only U-Boot board that
-> supports multiple dtbs for imx8mm but for imx6 there are many.
-> 
-> So I think we need a way to make linux.mk copy desired kernel dtbs to
-> BINARIES_DIR separate from desired u-boot dtbs.
-
-  This is already the case - cfr. BR2_TARGET_UBOOT_CUSTOM_DTS_PATH.
-
-  What is maybe missing is to copy the U-Boot dtbs to BINARIES_DIR. Currently, 
-it's assumed to be linked in with the U-Boot binary and not copied explicitly.
-
-
-> This means we probably
-> need different DTB defines for each.
-> 
-> I also don't see any bootscript creation facility in buildroot which
-> seems to be something that may be desirable as well.
-
-  Do you mean calling mkimage on a U-Boot script? That is done in e.g. 
-board/boundarydevices/common/post-build.sh
-
-  We don't have support in the Buildroot config for it, because there's just too 
-many different ways that you want to generate boot scripts. It's much more 
-flexible to do in a post-image script.
-
-
-> For example the
-> freescale_imx8mmevk_defconfig only boots because it's U-Boot default
-> environment tries distro-config first which requires a bootscript then
-> falls back to a hard-coded loading of the kernel/fdt from the
-> filesystem thus no bootscript is needed. I'm not sure how many boards
-> in U-Boot have a hard coded fallback like that?
-
-  For most new boards we prefer to use the extlinux.conf approach. But in the 
-end, it's mostly up to the person contributing the defconfig to use what they 
-prefer.
-
-  Regards,
-  Arnout
-
-> 
-> Best regards,
-> 
-> Tim
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-> 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
