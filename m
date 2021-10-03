@@ -2,52 +2,72 @@ Return-Path: <SRS0=UivC=OX=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C4FC8C433EF
-	for <buildroot@archiver.kernel.org>; Sun,  3 Oct 2021 12:46:17 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2D95C433EF
+	for <buildroot@archiver.kernel.org>; Sun,  3 Oct 2021 12:47:33 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 894E361A0C
-	for <buildroot@archiver.kernel.org>; Sun,  3 Oct 2021 12:46:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 894E361A0C
+	by mail.kernel.org (Postfix) with ESMTPS id 8A3816126A
+	for <buildroot@archiver.kernel.org>; Sun,  3 Oct 2021 12:47:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8A3816126A
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 65114843E6;
-	Sun,  3 Oct 2021 12:46:17 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 42FE1400F1;
+	Sun,  3 Oct 2021 12:47:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rPCMsKEspq3z; Sun,  3 Oct 2021 12:46:16 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id xsNcaS5SWRW4; Sun,  3 Oct 2021 12:47:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 93981848F5;
-	Sun,  3 Oct 2021 12:46:15 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B1AE31BF327
- for <buildroot@lists.busybox.net>; Sun,  3 Oct 2021 12:45:51 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2F922402A2;
+	Sun,  3 Oct 2021 12:47:31 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C6F231BF327
+ for <buildroot@lists.busybox.net>; Sun,  3 Oct 2021 12:47:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9CDE760AD5
- for <buildroot@lists.busybox.net>; Sun,  3 Oct 2021 12:45:50 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B676A426C7
+ for <buildroot@lists.busybox.net>; Sun,  3 Oct 2021 12:47:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7SaS4ijuCGdB for <buildroot@lists.busybox.net>;
- Sun,  3 Oct 2021 12:45:49 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id B6E2A60896
- for <buildroot@buildroot.org>; Sun,  3 Oct 2021 12:45:49 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id BD3828DBBE; Sun,  3 Oct 2021 12:43:20 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Sun, 3 Oct 2021 14:45:10 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e827bfd0dddab16e95cd5d1edfc780d96477be37
-X-Git-Newrev: c656373aeb78658c1991cc1470995b8f5efa61dc
-X-Patchwork-Hint: ignore
-Message-Id: <20211003124320.BD3828DBBE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/testing/tests/fs/test_iso9660.py:
- add support to test using EFI BIOS
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=free.fr
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WgjUdN3FAKPn for <buildroot@lists.busybox.net>;
+ Sun,  3 Oct 2021 12:47:28 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 619BC426C6
+ for <buildroot@buildroot.org>; Sun,  3 Oct 2021 12:47:28 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:acc5:ef3b:8cb0:272a])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 8CE3AB00563;
+ Sun,  3 Oct 2021 14:47:19 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+ s=smtp-20201208; t=1633265245;
+ bh=IYSzFoAU93uGeKKZXxKE58kx2qelgzmuRmcBYl0SPCE=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=EnPDB0XwazNA4KUNpjHj0jJJ8CkGjbB0zHsBbwONK8pRs5qHKbIHmpb1FuPSMoLeL
+ iD/jKgiH8loFPiZw2y8mbvLR7aar2WmMcw2zkHtDAFEDY51/Nxtl3AYNTrqG1GkDc5
+ 0NE8XeTVp2OYFW3xwRDhspdsg+0c/+DpN84X9fdPoEoNaS+PURQvvkesXh8d0Y3onb
+ 1DGlaentlHDIeV1yuPSCMzU4YzpbwdyhClGA3Ji2b9XhCrbD6GgRGYsisbMAlf3Scm
+ P5PcDoDujw9Q1kqMFvxiQiIXo0qimK0bu40nfsxyQXNaLZrAzUegmael2BUSiehZ/d
+ atrGj9OsuKhtw==
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sun, 03 Oct 2021 14:47:19 +0200
+Date: Sun, 3 Oct 2021 14:47:19 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Kory Maincent <kory.maincent@bootlin.com>
+Message-ID: <20211003124719.GH1504958@scaer>
+References: <20210923155726.87851-1-kory.maincent@bootlin.com>
+ <20210923155726.87851-6-kory.maincent@bootlin.com>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20210923155726.87851-6-kory.maincent@bootlin.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+Subject: Re: [Buildroot] [PATCH v3 5/7] support/testing/infra/emulator.py:
+ update encoding when calling qemu
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,126 +79,69 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: thomas.petazzoni@bootlin.com, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c656373aeb78658c1991cc1470995b8f5efa61dc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-The ISO9660 tests are only testing BIOS Legacy.
-Add support to test an ISO9660 image based on EFI BIOS.
-Add support to test an ISO9660 hybrid image based on Legacy and EFI BIOS.
-Add dedicated Grub2 builtin config for the EFI compatible cases.
-
-Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- support/testing/conf/grub2-efi.cfg       |  2 +
- support/testing/tests/fs/test_iso9660.py | 71 +++++++++++++++++++++++++++++++-
- 2 files changed, 71 insertions(+), 2 deletions(-)
-
-diff --git a/support/testing/conf/grub2-efi.cfg b/support/testing/conf/grub2-efi.cfg
-new file mode 100644
-index 0000000000..11c32e880e
---- /dev/null
-+++ b/support/testing/conf/grub2-efi.cfg
-@@ -0,0 +1,2 @@
-+set root=(cd0)
-+set prefix=/boot/grub
-diff --git a/support/testing/tests/fs/test_iso9660.py b/support/testing/tests/fs/test_iso9660.py
-index b294d0ba0c..692291267e 100644
---- a/support/testing/tests/fs/test_iso9660.py
-+++ b/support/testing/tests/fs/test_iso9660.py
-@@ -25,9 +25,13 @@ BASIC_CONFIG = \
-     """.format(infra.filepath("conf/minimal-x86-qemu-kernel.config"))
- 
- 
--def test_mount_internal_external(emulator, builddir, internal=True):
-+def test_mount_internal_external(emulator, builddir, internal=True, efi=False):
-     img = os.path.join(builddir, "images", "rootfs.iso9660")
--    emulator.boot(arch="i386", options=["-cdrom", img])
-+    if efi:
-+        efi_img = os.path.join(builddir, "images", "OVMF.fd")
-+        emulator.boot(arch="i386", options=["-cdrom", img, "-bios", efi_img])
-+    else:
-+        emulator.boot(arch="i386", options=["-cdrom", img])
-     emulator.login()
- 
-     if internal:
-@@ -107,6 +111,69 @@ class TestIso9660Grub2Internal(infra.basetest.BRTest):
-         exit_code = test_touch_file(self.emulator)
-         self.assertEqual(exit_code, 0)
- 
-+
-+class TestIso9660Grub2EFI(infra.basetest.BRTest):
-+    config = BASIC_CONFIG + \
-+        """
-+        BR2_TARGET_ROOTFS_ISO9660=y
-+        BR2_TARGET_ROOTFS_ISO9660_INITRD=y
-+        BR2_TARGET_GRUB2=y
-+        BR2_TARGET_GRUB2_I386_EFI=y
-+        BR2_TARGET_GRUB2_BUILTIN_MODULES_EFI="boot linux ext2 fat part_msdos part_gpt normal iso9660"
-+        BR2_TARGET_GRUB2_BUILTIN_CONFIG_EFI="{}"
-+        BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU="{}"
-+        BR2_TARGET_EDK2=y
-+        """.format(infra.filepath("conf/grub2-efi.cfg"),
-+                   infra.filepath("conf/grub2.cfg"))
-+
-+    def test_run(self):
-+        exit_code = test_mount_internal_external(self.emulator,
-+                                                 self.builddir, internal=True,
-+                                                 efi=True)
-+        self.assertEqual(exit_code, 0)
-+
-+        exit_code = test_touch_file(self.emulator)
-+        self.assertEqual(exit_code, 0)
-+
-+
-+class TestIso9660Grub2Hybrid(infra.basetest.BRTest):
-+    config = BASIC_CONFIG + \
-+        """
-+        BR2_TARGET_ROOTFS_ISO9660=y
-+        BR2_TARGET_ROOTFS_ISO9660_INITRD=y
-+        BR2_TARGET_GRUB2=y
-+        BR2_TARGET_GRUB2_I386_PC=y
-+        BR2_TARGET_GRUB2_I386_EFI=y
-+        BR2_TARGET_GRUB2_BOOT_PARTITION="cd"
-+        BR2_TARGET_GRUB2_BUILTIN_MODULES_PC="boot linux ext2 fat squash4 part_msdos part_gpt normal iso9660 biosdisk"
-+        BR2_TARGET_GRUB2_BUILTIN_CONFIG_PC=""
-+        BR2_TARGET_GRUB2_BUILTIN_MODULES_EFI="boot linux ext2 fat squash4 part_msdos part_gpt normal iso9660 efi_gop"
-+        BR2_TARGET_GRUB2_BUILTIN_CONFIG_EFI="{}"
-+        BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU="{}"
-+        BR2_TARGET_EDK2=y
-+        """.format(infra.filepath("conf/grub2-efi.cfg"),
-+                   infra.filepath("conf/grub2.cfg"))
-+
-+    def test_run(self):
-+        exit_code = test_mount_internal_external(self.emulator,
-+                                                 self.builddir, internal=True,
-+                                                 efi=False)
-+        self.assertEqual(exit_code, 0)
-+
-+        exit_code = test_touch_file(self.emulator)
-+        self.assertEqual(exit_code, 0)
-+
-+        self.emulator.stop()
-+
-+        exit_code = test_mount_internal_external(self.emulator,
-+                                                 self.builddir, internal=True,
-+                                                 efi=True)
-+        self.assertEqual(exit_code, 0)
-+
-+        exit_code = test_touch_file(self.emulator)
-+        self.assertEqual(exit_code, 0)
-+
-+
- #
- # Syslinux
- 
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+S8O2cnksIEFsbCwKCk9uIDIwMjEtMDktMjMgMTc6NTcgKzAyMDAsIEtvcnkgTWFpbmNlbnQgc3Bh
+a2UgdGh1c2x5Ogo+IFdpdGggVVRGLTggZ290IGlzc3VlIHdpdGggd3JvbmcgY2hhcmFjdGVyIHJl
+dHVybmVkIGJ5IFFlbXUgd2hlbiB1c2luZyBFRkkKPiBCSU9TLiBUaGlzIGJyZWFrcyB0aGUgdGVz
+dCBwcm9jZXNzIHdpdGggdGhlIGZvbGxvd2luZyBlcnJvci4gVXBkYXRlIHRvCj4gSVNPLTg4NTkt
+MSBlbmNvZGluZyB0byBhdm9pZCBpdC4KPiAKPiAgICAgZW11bGF0b3IubG9naW4oKQo+ICAgRmls
+ZSAiL2hvbWUva21haW5jZW50L0RvY3VtZW50cy9wcm9qZWN0cy9hcmlhbmUtZ3JvdXBlL2J1aWxk
+cm9vdC9zdXBwb3J0L3Rlc3RpbmcvaW5mcmEvZW11bGF0b3IucHkiLCBsaW5lIDg5LCBpbiBsb2dp
+bgo+ICAgICBpbmRleCA9IHNlbGYucWVtdS5leHBlY3QoWyJidWlsZHJvb3QgbG9naW46IiwgcGV4
+cGVjdC5USU1FT1VUXSwKPiAgIEZpbGUgIi91c3IvbGliL3B5dGhvbjMvZGlzdC1wYWNrYWdlcy9w
+ZXhwZWN0L3NwYXduYmFzZS5weSIsIGxpbmUgMzQwLCBpbiBleHBlY3QKPiAgICAgcmV0dXJuIHNl
+bGYuZXhwZWN0X2xpc3QoY29tcGlsZWRfcGF0dGVybl9saXN0LAo+ICAgRmlsZSAiL3Vzci9saWIv
+cHl0aG9uMy9kaXN0LXBhY2thZ2VzL3BleHBlY3Qvc3Bhd25iYXNlLnB5IiwgbGluZSAzNjksIGlu
+IGV4cGVjdF9saXN0Cj4gICAgIHJldHVybiBleHAuZXhwZWN0X2xvb3AodGltZW91dCkKPiAgIEZp
+bGUgIi91c3IvbGliL3B5dGhvbjMvZGlzdC1wYWNrYWdlcy9wZXhwZWN0L2V4cGVjdC5weSIsIGxp
+bmUgMTExLCBpbiBleHBlY3RfbG9vcAo+ICAgICBpbmNvbWluZyA9IHNwYXduLnJlYWRfbm9uYmxv
+Y2tpbmcoc3Bhd24ubWF4cmVhZCwgdGltZW91dCkKPiAgIEZpbGUgIi91c3IvbGliL3B5dGhvbjMv
+ZGlzdC1wYWNrYWdlcy9wZXhwZWN0L3B0eV9zcGF3bi5weSIsIGxpbmUgNDg1LCBpbiByZWFkX25v
+bmJsb2NraW5nCj4gICAgIHJldHVybiBzdXBlcihzcGF3biwgc2VsZikucmVhZF9ub25ibG9ja2lu
+ZyhzaXplKQo+ICAgRmlsZSAiL3Vzci9saWIvcHl0aG9uMy9kaXN0LXBhY2thZ2VzL3BleHBlY3Qv
+c3Bhd25iYXNlLnB5IiwgbGluZSAxNzgsIGluIHJlYWRfbm9uYmxvY2tpbmcKPiAgICAgcyA9IHNl
+bGYuX2RlY29kZXIuZGVjb2RlKHMsIGZpbmFsPUZhbHNlKQo+ICAgRmlsZSAiL3Vzci9saWIvcHl0
+aG9uMy44L2NvZGVjcy5weSIsIGxpbmUgMzIyLCBpbiBkZWNvZGUKPiAgICAgKHJlc3VsdCwgY29u
+c3VtZWQpID0gc2VsZi5fYnVmZmVyX2RlY29kZShkYXRhLCBzZWxmLmVycm9ycywgZmluYWwpCj4g
+VW5pY29kZURlY29kZUVycm9yOiAndXRmLTgnIGNvZGVjIGNhbid0IGRlY29kZSBieXRlIDB4ZGEg
+aW4gcG9zaXRpb24gMDogaW52YWxpZCBjb250aW51YXRpb24gYnl0ZQo+IAo+IFNpZ25lZC1vZmYt
+Ynk6IEtvcnkgTWFpbmNlbnQgPGtvcnkubWFpbmNlbnRAYm9vdGxpbi5jb20+Cj4gLS0tCj4gIHN1
+cHBvcnQvdGVzdGluZy9pbmZyYS9lbXVsYXRvci5weSB8IDIgKy0KPiAgMSBmaWxlIGNoYW5nZWQs
+IDEgaW5zZXJ0aW9uKCspLCAxIGRlbGV0aW9uKC0pCj4gCj4gZGlmZiAtLWdpdCBhL3N1cHBvcnQv
+dGVzdGluZy9pbmZyYS9lbXVsYXRvci5weSBiL3N1cHBvcnQvdGVzdGluZy9pbmZyYS9lbXVsYXRv
+ci5weQo+IGluZGV4IDBhNzdlYjgwZmMuLjFmYWI5Y2FhZDggMTAwNjQ0Cj4gLS0tIGEvc3VwcG9y
+dC90ZXN0aW5nL2luZnJhL2VtdWxhdG9yLnB5Cj4gKysrIGIvc3VwcG9ydC90ZXN0aW5nL2luZnJh
+L2VtdWxhdG9yLnB5Cj4gQEAgLTc2LDcgKzc2LDcgQEAgY2xhc3MgRW11bGF0b3Iob2JqZWN0KToK
+PiAgICAgICAgICBzZWxmLmxvZ2ZpbGUud3JpdGUoIj4gc3RhcnRpbmcgcWVtdSB3aXRoICclcydc
+biIgJSAiICIuam9pbihxZW11X2NtZCkpCj4gICAgICAgICAgc2VsZi5xZW11ID0gcGV4cGVjdC5z
+cGF3bihxZW11X2NtZFswXSwgcWVtdV9jbWRbMTpdLAo+ICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgdGltZW91dD01ICogc2VsZi50aW1lb3V0X211bHRpcGxpZXIsCj4gLSAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICBlbmNvZGluZz0ndXRmLTgnLAo+ICsgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgZW5jb2Rpbmc9J0lTTy04ODU5LTEnLAoKQWZ0ZXIg
+cmV2aWV3IGZyb20gVGhvbWFzLCBJJ3ZlIGluZGVlZCByZXZlcnRlZCB0byB1c2luZyB1dGYtOCwg
+YnV0IHVzaW5nCmNvZGVjZXJyb3JzPSdyZXBsYWNlJyB0byBmaXggaW52YWxpZCB1dGYtOCBzZXF1
+ZW5jZXMuCgpJJ3ZlIGFsc28gcmV3b3JkZWQgdGhlIGNvbW1pdCBsb2cgYWNjb3JkaW5nbHkuCgpB
+cHBsaWVkIHRvIG1hc3RlciwgdGhhbmtzLgoKUmVnYXJkcywKWWFubiBFLiBNT1JJTi4KCj4gICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBlbnY9eyJRRU1VX0FVRElPX0RSViI6ICJu
+b25lIn0pCj4gICAgICAgICAgIyBXZSB3YW50IG9ubHkgc3Rkb3V0IGludG8gdGhlIGxvZyB0byBh
+dm9pZCBkb3VibGUgZWNobwo+ICAgICAgICAgIHNlbGYucWVtdS5sb2dmaWxlX3JlYWQgPSBzZWxm
+LmxvZ2ZpbGUKPiAtLSAKPiAyLjI1LjEKPiAKPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fXwo+IGJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKPiBidWlsZHJvb3RA
+bGlzdHMuYnVpbGRyb290Lm9yZwo+IGh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFu
+L2xpc3RpbmZvL2J1aWxkcm9vdAoKLS0gCi4tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0t
+LS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLS0uCnwgIFlhbm4g
+RS4gTU9SSU4gIHwgUmVhbC1UaW1lIEVtYmVkZGVkIHwgLyJcIEFTQ0lJIFJJQkJPTiB8IEVyaWNz
+JyBjb25zcGlyYWN5OiB8CnwgKzMzIDY2MiAzNzYgMDU2IHwgU29mdHdhcmUgIERlc2lnbmVyIHwg
+XCAvIENBTVBBSUdOICAgICB8ICBfX18gICAgICAgICAgICAgICB8CnwgKzMzIDU2MSAwOTkgNDI3
+IGAtLS0tLS0tLS0tLS0uLS0tLS0tLTogIFggIEFHQUlOU1QgICAgICB8ICBcZS8gIFRoZXJlIGlz
+IG5vICB8CnwgaHR0cDovL3ltb3Jpbi5pcy1hLWdlZWsub3JnLyB8IF8vKlxfIHwgLyBcIEhUTUwg
+TUFJTCAgICB8ICAgdiAgIGNvbnNwaXJhY3kuICB8CictLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS1eLS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0tLS1eLS0tLS0tLS0tLS0tLS0tLS0tLS0nCl9f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBt
+YWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJv
+b3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
