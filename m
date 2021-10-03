@@ -2,89 +2,87 @@ Return-Path: <SRS0=UivC=OX=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 56F5EC433EF
-	for <buildroot@archiver.kernel.org>; Sun,  3 Oct 2021 12:40:51 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C851C433EF
+	for <buildroot@archiver.kernel.org>; Sun,  3 Oct 2021 12:41:02 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 8DE7E6187D
-	for <buildroot@archiver.kernel.org>; Sun,  3 Oct 2021 12:40:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8DE7E6187D
+	by mail.kernel.org (Postfix) with ESMTPS id 13C9961994
+	for <buildroot@archiver.kernel.org>; Sun,  3 Oct 2021 12:41:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 13C9961994
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 31ABE84812;
-	Sun,  3 Oct 2021 12:40:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B5CCE42590;
+	Sun,  3 Oct 2021 12:41:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bjZJ8g0yCalC; Sun,  3 Oct 2021 12:40:49 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 0ENu89dYywBC; Sun,  3 Oct 2021 12:41:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 94E37847FF;
-	Sun,  3 Oct 2021 12:40:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 05935426BD;
+	Sun,  3 Oct 2021 12:40:59 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id DF03B1BF327
- for <buildroot@lists.busybox.net>; Sun,  3 Oct 2021 12:40:36 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id BE5421BF327
+ for <buildroot@lists.busybox.net>; Sun,  3 Oct 2021 12:40:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D68ED402A2
- for <buildroot@lists.busybox.net>; Sun,  3 Oct 2021 12:40:36 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B9E11402A2
+ for <buildroot@lists.busybox.net>; Sun,  3 Oct 2021 12:40:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp2.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nkYwhgeBhvWR for <buildroot@lists.busybox.net>;
- Sun,  3 Oct 2021 12:40:35 +0000 (UTC)
+ with ESMTP id FgW9nzV7bYjd for <buildroot@lists.busybox.net>;
+ Sun,  3 Oct 2021 12:40:36 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
- [IPv6:2a00:1450:4864:20::336])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 8B2F5400F1
- for <buildroot@buildroot.org>; Sun,  3 Oct 2021 12:40:35 +0000 (UTC)
-Received: by mail-wm1-x336.google.com with SMTP id
- j10-20020a1c230a000000b0030d523b6693so5950128wmj.2
- for <buildroot@buildroot.org>; Sun, 03 Oct 2021 05:40:35 -0700 (PDT)
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
+ [IPv6:2a00:1450:4864:20::42e])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5936340269
+ for <buildroot@buildroot.org>; Sun,  3 Oct 2021 12:40:36 +0000 (UTC)
+Received: by mail-wr1-x42e.google.com with SMTP id s21so24914992wra.7
+ for <buildroot@buildroot.org>; Sun, 03 Oct 2021 05:40:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=hLV+EGeMI5H1jc7bbaA3+A5kqu8Y4s4JC4Ui+wsLRlo=;
- b=WSFkyYeReAnYEE/JxN0D6LmUISIy2uXMNw1CleJkpg4BuZG6zkhCQLaL05Swue7yms
- 83OQFDbZSMr3KQdAT/dL+Y74wc0+/e3p2gA3cAo4xmPGr33l26pMroEAJD98sgD15Zv0
- M5On4ZGK+m1QFP6swqHEWNjHxF7dl1MbeYO/3wTUvIpQPfVbHweVmeEaT1NUMPqWfX09
- kHdlds4ubSbi32M2qH6SY5ICM8+DakfHnnu+0Y8/TD5nIKi1/y6vwWimXbGC/cj61897
- YqMda8CUGVFYBIuENTefbWlOo02dGYcSEK+ElwTfnpHxigmNFvZ9UE8z/FR5icYIhnZh
- 9D6Q==
+ bh=WZv733Z/KVqp3WZaIkqGluzn3VgGgCtQ7GMwI9Tf4ms=;
+ b=lGvOLVasHd2AI8WCKOvtt9ZnYd6E44/Ecub7xxhv9TaPzi+5udv7LWgc6X5ktI9+pF
+ VMsMYhWJL1ZatMskdEbeKU1JHsh8zkWMQ4Xqb9ep0XFur4j1JCHjvhPyl1BiBjNfnwu6
+ 2XT7gUTNpI6E6BcB/6mQfJPmedz8k1Lm45PkvJmiGrZwHoqmjklfVUvapPsYAddb3Qe/
+ L6wka+Z2PCROXaG1cAC18jSEvkWtkgj/8aY53EFIorDqny0OVFzgq0Bwo4P9yZ1Tj1y0
+ 5D3z05buKR8bRLWsmaRJdhj52ukzBYSZZiig1rDjuRMG9Qapf+LUNWJZGXKlCraz2Cyo
+ 2xyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
  :references:mime-version:content-transfer-encoding;
- bh=hLV+EGeMI5H1jc7bbaA3+A5kqu8Y4s4JC4Ui+wsLRlo=;
- b=KcbHDORvR/YKoMkxxLQORe87kpw9P0T1CtyRr81LBjGztJZa+9+YuHJ18xoYQUWNY8
- yhxPxLXQhWfmYERN/2A5M1L3ZWg+4Ew40JSvfKcnme1bPLO+7vnLw8mCwC1Onj7CiBa2
- 4CRTskPiTNvXdNmUhefF5hte6RHXgxWJQC6NOWMRIQaFk4SFMQWoUDxL48RTZsDai3Ae
- vecFPOUMfX6pdobyTEpPVpk70F0ep91fCzeJDPGgccpiuTHPRau5NG17gSJel9lgjH0w
- gPFo5L9lK3IFY+ROECvzkdA1KXXggrdpoX4kok+1URGqRTuE9/8PiUX+g3+FOzdGH+as
- B7Sw==
-X-Gm-Message-State: AOAM5314Zd6zj3dGgjs16TqlLz18lVPxnkyH70U8I6bPmA97O8uDyAkd
- 43jwhe4BmeFCIs66NXtE1TEmoR2FtNk=
-X-Google-Smtp-Source: ABdhPJxKK1q8qTu+/gthRXsr7Q307XZ8YnJUnVOqIeQus9/jXKz4rOBSqgyk4Q+xrCsfphHQ9Pmkqw==
-X-Received: by 2002:a1c:21d7:: with SMTP id h206mr8544016wmh.163.1633264833539; 
- Sun, 03 Oct 2021 05:40:33 -0700 (PDT)
+ bh=WZv733Z/KVqp3WZaIkqGluzn3VgGgCtQ7GMwI9Tf4ms=;
+ b=Z9jr72xP3w4ZRG0+zxCDZ6tzRdDPKP0GnWVZ7lw+YH0u+T9KUHtHvkQSC3e42XZcQR
+ WdbsCZfpqeCLc46PNzBfd2OVVcSFcCrHxmnxWUFxcsfdCUDANOXxfFFLDctSqUGmgpnt
+ BMjGbNe4fHG0pqMgwn5G8JuGj+0G+ZIy6+LLCdOc9qWzxU9IKjwenfnoPStbdLtwdqnl
+ w1twfy5jYkkQBPGZcwjbhGxlm6GIIYlHXXgUkpkD2oJzHEojVN0XPeCpscWgWKTkW5yc
+ f0VwlxBP5aiBTbO7aYI2UzuknFXGVKYYBPpzs4uT4gstooTWqRatZD+94HRMEkmP53NA
+ 2NNQ==
+X-Gm-Message-State: AOAM530sgdfeyqhH4OLKynkkcRX/GHf3HRSGb5isr5U3C46Ts51hySQS
+ R0QZvQyummd/tZMePdIyZmhsP2csrus=
+X-Google-Smtp-Source: ABdhPJxJwTUSB4BpB5eKhyMkoTlv0G8iXBd3QtCgZCuDOWQAVHWtGdAeIlCyYYNE3rqR/qk1frTfbg==
+X-Received: by 2002:adf:9b97:: with SMTP id d23mr7079753wrc.135.1633264834505; 
+ Sun, 03 Oct 2021 05:40:34 -0700 (PDT)
 Received: from localhost.localdomain
  (2a01cb058f8a18003dbee9eed79eb521.ipv6.abo.wanadoo.fr.
  [2a01:cb05:8f8a:1800:3dbe:e9ee:d79e:b521])
- by smtp.gmail.com with ESMTPSA id 143sm1258704wma.37.2021.10.03.05.40.32
+ by smtp.gmail.com with ESMTPSA id 143sm1258704wma.37.2021.10.03.05.40.33
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 03 Oct 2021 05:40:33 -0700 (PDT)
+ Sun, 03 Oct 2021 05:40:34 -0700 (PDT)
 From: Romain Naour <romain.naour@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun,  3 Oct 2021 14:40:24 +0200
-Message-Id: <20211003124027.343390-2-romain.naour@gmail.com>
+Date: Sun,  3 Oct 2021 14:40:25 +0200
+Message-Id: <20211003124027.343390-3-romain.naour@gmail.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20211003124027.343390-1-romain.naour@gmail.com>
 References: <20211003124027.343390-1-romain.naour@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 2/5] arch/Config.in: disable internal toolchain
- backend for csky
+Subject: [Buildroot] [PATCH 3/5] package/glibc: remove glibc csky fork
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,28 +101,52 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-We are going to remove the gcc fork for csky, first disable
-the internal toolchain backend.
+Before removing csky gcc fork, remove the glibc fork.
+
+csky support has been merged in glibc 2.29 [1].
+
+[1] https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=5f72b00591ce4d1b4c0418294ffe1623983d5679
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Cc: Guo Ren <ren_guo@c-sky.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- arch/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ .../7630ed2fa60caea98f500e4a7a51b88f9bf1e176/glibc.hash      | 2 --
+ package/glibc/glibc.mk                                       | 5 -----
+ 2 files changed, 7 deletions(-)
+ delete mode 100644 package/glibc/7630ed2fa60caea98f500e4a7a51b88f9bf1e176/glibc.hash
 
-diff --git a/arch/Config.in b/arch/Config.in
-index 1853e26bb4..ab40294ddc 100644
---- a/arch/Config.in
-+++ b/arch/Config.in
-@@ -77,6 +77,7 @@ config BR2_aarch64_be
+diff --git a/package/glibc/7630ed2fa60caea98f500e4a7a51b88f9bf1e176/glibc.hash b/package/glibc/7630ed2fa60caea98f500e4a7a51b88f9bf1e176/glibc.hash
+deleted file mode 100644
+index a61bd65f80..0000000000
+--- a/package/glibc/7630ed2fa60caea98f500e4a7a51b88f9bf1e176/glibc.hash
++++ /dev/null
+@@ -1,2 +0,0 @@
+-# Locally calculated (fetched from https://github.com/c-sky/glibc)
+-sha512 9deb2deceefe347d72de13510a5baa3de00f94c684f3b25e136ca3660f61e65a69f2115abb488c2ab0fa93cda8535853ce1e13e186efcc8434ecc4049efd82b5  glibc-7630ed2fa60caea98f500e4a7a51b88f9bf1e176.tar.gz
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index c911c29554..3862e0624b 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -4,10 +4,6 @@
+ #
+ ################################################################################
  
- config BR2_csky
- 	bool "csky"
-+	select BR2_ARCH_HAS_NO_TOOLCHAIN_BUILDROOT
- 	select BR2_ARCH_HAS_MMU_MANDATORY
- 	# Most variants are supported by gcc-9+, except one that is
- 	# handled as a special exception in package/gcc/Config.in.host
+-ifeq ($(BR2_csky),y)
+-GLIBC_VERSION = 7630ed2fa60caea98f500e4a7a51b88f9bf1e176
+-GLIBC_SITE = $(call github,c-sky,glibc,$(GLIBC_VERSION))
+-else
+ # Generate version string using:
+ #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
+ # When updating the version, please also update localedef
+@@ -19,7 +15,6 @@ GLIBC_VERSION = 2.34-9-g9acab0bba6a5a57323b1f94bf95b21618a9e5aa4
+ # *NEVER* decide on a version string by looking at the mirror.
+ # Then check that the mirror has been synced already (happens once a day.)
+ GLIBC_SITE = $(call github,bminor,glibc,$(GLIBC_VERSION))
+-endif
+ 
+ GLIBC_LICENSE = GPL-2.0+ (programs), LGPL-2.1+, BSD-3-Clause, MIT (library)
+ GLIBC_LICENSE_FILES = COPYING COPYING.LIB LICENSES
 -- 
 2.31.1
 
