@@ -2,59 +2,58 @@ Return-Path: <SRS0=dj6D=OY=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D60AC433F5
-	for <buildroot@archiver.kernel.org>; Mon,  4 Oct 2021 13:10:07 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B6A38C433EF
+	for <buildroot@archiver.kernel.org>; Mon,  4 Oct 2021 13:18:49 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 19D5A61BF8
-	for <buildroot@archiver.kernel.org>; Mon,  4 Oct 2021 13:10:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 19D5A61BF8
+	by mail.kernel.org (Postfix) with ESMTPS id 6159A63258
+	for <buildroot@archiver.kernel.org>; Mon,  4 Oct 2021 13:18:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6159A63258
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DE40484405;
-	Mon,  4 Oct 2021 13:10:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 06C04605AF;
+	Mon,  4 Oct 2021 13:18:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3wENOLiATrc4; Mon,  4 Oct 2021 13:10:06 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id f0C599Oh3eFy; Mon,  4 Oct 2021 13:18:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4A67D8428F;
-	Mon,  4 Oct 2021 13:10:05 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 94D211BF2FE
- for <buildroot@lists.busybox.net>; Mon,  4 Oct 2021 13:10:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4901061B69;
+	Mon,  4 Oct 2021 13:18:46 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 622061BF2FE
+ for <buildroot@lists.busybox.net>; Mon,  4 Oct 2021 13:18:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 910D5415E5
- for <buildroot@lists.busybox.net>; Mon,  4 Oct 2021 13:10:04 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4ED6C61B67
+ for <buildroot@lists.busybox.net>; Mon,  4 Oct 2021 13:18:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qNGAK1ykmIV0 for <buildroot@lists.busybox.net>;
- Mon,  4 Oct 2021 13:10:03 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9or1Z-oA_k9j for <buildroot@lists.busybox.net>;
+ Mon,  4 Oct 2021 13:18:43 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2E73E415E3
- for <buildroot@buildroot.org>; Mon,  4 Oct 2021 13:10:02 +0000 (UTC)
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id DE6EE61B2A
+ for <buildroot@buildroot.org>; Mon,  4 Oct 2021 13:18:42 +0000 (UTC)
 Received: (Authenticated sender: peter@casa-korsgaard.com)
- by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 41A1820010;
- Mon,  4 Oct 2021 13:09:58 +0000 (UTC)
+ by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id AF13BFF80D;
+ Mon,  4 Oct 2021 13:18:39 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
  (envelope-from <peter@korsgaard.com>)
- id 1mXNjC-0000Go-B3; Mon, 04 Oct 2021 15:09:58 +0200
+ id 1mXNra-0000wn-W4; Mon, 04 Oct 2021 15:18:39 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-References: <20210908133010.31005-1-nicolas.cavallari@green-communications.fr>
- <20210908133010.31005-2-nicolas.cavallari@green-communications.fr>
-Date: Mon, 04 Oct 2021 15:09:58 +0200
-In-Reply-To: <20210908133010.31005-2-nicolas.cavallari@green-communications.fr>
- (Nicolas Cavallari's message of "Wed, 8 Sep 2021 15:30:10 +0200")
-Message-ID: <87r1d1hr6h.fsf@dell.be.48ers.dk>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20210908200058.593544-1-fontaine.fabrice@gmail.com>
+Date: Mon, 04 Oct 2021 15:18:38 +0200
+In-Reply-To: <20210908200058.593544-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Wed, 8 Sep 2021 22:00:58 +0200")
+Message-ID: <87mtnphqs1.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/libressl: depend on threads
+Subject: Re: [Buildroot] [PATCH 1/1] package/tinycbor: bump to version 0.5.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,20 +71,16 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Nicolas" == Nicolas Cavallari <nicolas.cavallari@green-communications.fr> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > If the toolchain does not have threads (e.g. br-arm-full-nothread),
- > compilation fails:
+ > - Drop patch (already in version)
+ > - Update indentation in hash file (two spaces)
 
- > In file included from /home/fail/br-test-pkg/br-arm-full-nothread/build/libressl-3.3.3/crypto/cryptlib.c:117:
- > /home/fail/br-test-pkg/br-arm-full-nothread/build/libressl-3.3.3/crypto/../include/compat/pthread.h:114:15: fatal error: pthread.h: No such file or directory
- >   114 | #include_next <pthread.h>
- >       |               ^~~~~~~~~~~
- > compilation terminated.
+ > https://github.com/intel/tinycbor/releases/tag/v0.5.4
 
- > Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Committed to 2021.02.x, 2021.05.x and 2021.08.x, thanks.
+Committed to 2021.02.x, 2021.05.x and 2021.08.x given the fixes, thanks.
 
 -- 
 Bye, Peter Korsgaard
