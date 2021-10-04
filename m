@@ -2,60 +2,52 @@ Return-Path: <SRS0=dj6D=OY=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 20E25C433EF
-	for <buildroot@archiver.kernel.org>; Mon,  4 Oct 2021 20:09:31 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5375BC433EF
+	for <buildroot@archiver.kernel.org>; Mon,  4 Oct 2021 20:09:47 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id A761C613D2
-	for <buildroot@archiver.kernel.org>; Mon,  4 Oct 2021 20:09:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A761C613D2
+	by mail.kernel.org (Postfix) with ESMTPS id 1B87E6137C
+	for <buildroot@archiver.kernel.org>; Mon,  4 Oct 2021 20:09:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1B87E6137C
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7E62A60727;
-	Mon,  4 Oct 2021 20:09:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E42174053D;
+	Mon,  4 Oct 2021 20:09:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tBGuO4JIgqy8; Mon,  4 Oct 2021 20:09:29 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id l8ycdsVq8CSR; Mon,  4 Oct 2021 20:09:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E736B606FD;
-	Mon,  4 Oct 2021 20:09:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 465F54051F;
+	Mon,  4 Oct 2021 20:09:45 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 7316E1BF2BA
- for <buildroot@lists.busybox.net>; Mon,  4 Oct 2021 20:09:27 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 280B21BF2BA
+ for <buildroot@lists.busybox.net>; Mon,  4 Oct 2021 20:09:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7033C4053D
- for <buildroot@lists.busybox.net>; Mon,  4 Oct 2021 20:09:27 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1775B40537
+ for <buildroot@lists.busybox.net>; Mon,  4 Oct 2021 20:09:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Af8uxu9RBZ3u for <buildroot@lists.busybox.net>;
- Mon,  4 Oct 2021 20:09:26 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0E1AE40501
- for <buildroot@buildroot.org>; Mon,  4 Oct 2021 20:09:25 +0000 (UTC)
-Received: (Authenticated sender: peter@casa-korsgaard.com)
- by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 84EA020002;
- Mon,  4 Oct 2021 20:09:22 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
- (envelope-from <peter@korsgaard.com>)
- id 1mXUH3-0008I9-IQ; Mon, 04 Oct 2021 22:09:21 +0200
+ with ESMTP id HTYQvdaIPBZY for <buildroot@lists.busybox.net>;
+ Mon,  4 Oct 2021 20:09:43 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5F50A40501
+ for <buildroot@buildroot.org>; Mon,  4 Oct 2021 20:09:43 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 602868E734; Mon,  4 Oct 2021 20:07:11 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Romain Naour <romain.naour@gmail.com>
-References: <20210912141140.253778-1-romain.naour@gmail.com>
- <20210912141140.253778-8-romain.naour@gmail.com>
-Date: Mon, 04 Oct 2021 22:09:21 +0200
-In-Reply-To: <20210912141140.253778-8-romain.naour@gmail.com> (Romain Naour's
- message of "Sun, 12 Sep 2021 16:11:34 +0200")
-Message-ID: <87tuhwft72.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 10/16] support/testing: switch to prebuilt
- toolchain, core2duo to Nehalem
+To: buildroot@buildroot.org
+Date: Mon, 4 Oct 2021 21:13:53 +0200
+X-Git-Refname: refs/heads/2021.02.x
+X-Git-Oldrev: a2430fc7103ece928ee6c8754b0280c067fedc32
+X-Git-Newrev: 9dd387c93c1f62987b0d3c97b883f79459b7e526
+X-Patchwork-Hint: ignore
+Message-Id: <20211004200711.602868E734@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] support/testing:
+ test_systemd: bump to kernel 4.19.204
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -67,32 +59,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=9dd387c93c1f62987b0d3c97b883f79459b7e526
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
- > To avoid spending some time to build the x86_64 toolchain (~20min),
- > switch to corei7 cpu (Nahalem) and use the prebuilt Bootlin toolchain.
+The kernel 4.11.3 curently used by the test doesn't build with host
+gcc >= 10 due the gcc default -fno-common. See GCC 10 porting guide [1].
 
- > We have to use the "stable" Bootlin toolchain to use the same kernel version
- > for the toolchain kernel headers and the running kernel.
+/usr/bin/ld: scripts/dtc/dtc-parser.tab.o:(.bss+0x20): multiple definition of `yylloc'; scripts/dtc/dtc-lexer.lex.o:(.bss+0x0): first defined here
 
- > With the "bleeding-edge" toolchain we have the "kernel too old" issue
- > (running kernel 4.19 vs kernel headers 5.4)
+Bump to the next LTS release.
 
- > Runtime tested locally.
+[1] https://gcc.gnu.org/gcc-10/porting_to.html
 
- > Signed-off-by: Romain Naour <romain.naour@gmail.com>
- > Cc: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit 69de111c46ffbc276fd32dedc93c617d384a7e42)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ support/testing/tests/init/test_systemd.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Committed to 2021.02.x, 2021.05.x and 2021.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/support/testing/tests/init/test_systemd.py b/support/testing/tests/init/test_systemd.py
+index c0ef5e1202..4f3c098c11 100644
+--- a/support/testing/tests/init/test_systemd.py
++++ b/support/testing/tests/init/test_systemd.py
+@@ -13,7 +13,7 @@ class InitSystemSystemdBase(InitSystemBase):
+         BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+         BR2_LINUX_KERNEL=y
+         BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.11.3"
++        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.204"
+         BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
+         BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{}"
+         BR2_LINUX_KERNEL_DTS_SUPPORT=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
