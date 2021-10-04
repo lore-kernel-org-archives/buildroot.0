@@ -2,52 +2,52 @@ Return-Path: <SRS0=dj6D=OY=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BD5B8C433F5
-	for <buildroot@archiver.kernel.org>; Mon,  4 Oct 2021 21:59:32 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8FC37C433F5
+	for <buildroot@archiver.kernel.org>; Mon,  4 Oct 2021 21:59:44 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 85E376159A
-	for <buildroot@archiver.kernel.org>; Mon,  4 Oct 2021 21:59:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 85E376159A
+	by mail.kernel.org (Postfix) with ESMTPS id 5842A6159A
+	for <buildroot@archiver.kernel.org>; Mon,  4 Oct 2021 21:59:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5842A6159A
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5DF29405BE;
-	Mon,  4 Oct 2021 21:59:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 36B4783B28;
+	Mon,  4 Oct 2021 21:59:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AgDaBVxlPWvR; Mon,  4 Oct 2021 21:59:31 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id MSCgSD4Wxij2; Mon,  4 Oct 2021 21:59:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9BAD0404A0;
-	Mon,  4 Oct 2021 21:59:30 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 155421BF97F
+	by smtp1.osuosl.org (Postfix) with ESMTP id 50FFD83B46;
+	Mon,  4 Oct 2021 21:59:42 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 4A43F1BF20F
  for <buildroot@lists.busybox.net>; Mon,  4 Oct 2021 21:57:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 04F526076F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 474D9405BB
  for <buildroot@lists.busybox.net>; Mon,  4 Oct 2021 21:57:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kEToBr5TE08T for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id oN4_62vQqWmi for <buildroot@lists.busybox.net>;
  Mon,  4 Oct 2021 21:57:33 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2AF3F60752
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3E7AA405B8
  for <buildroot@buildroot.org>; Mon,  4 Oct 2021 21:57:33 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 045138F4FF; Mon,  4 Oct 2021 21:55:01 +0000 (UTC)
+ id 179988F4FF; Mon,  4 Oct 2021 21:55:01 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 4 Oct 2021 23:42:50 +0200
+Date: Mon, 4 Oct 2021 23:44:41 +0200
 X-Git-Refname: refs/heads/2021.08.x
-X-Git-Oldrev: 81a4fa016affb974650a821f6995f65fcff62943
-X-Git-Newrev: 8216b7f4ccbe5b59efaee4c386a1f18bb923a34f
+X-Git-Oldrev: a55107344dbb6d1db823135709bed26ba21745bd
+X-Git-Newrev: a89080ce30cda82267ef0b090ae0e3b999dac0eb
 X-Patchwork-Hint: ignore
-Message-Id: <20211004215501.045138F4FF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.08.x] package/xen: security
- bump to version 4.14.3
+Message-Id: <20211004215501.179988F4FF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.08.x] package/ghostscript: add
+ upstream security patch for CVE-2021-3781
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,102 +65,284 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8216b7f4ccbe5b59efaee4c386a1f18bb923a34f
+commit: https://git.buildroot.net/buildroot/commit/?id=a89080ce30cda82267ef0b090ae0e3b999dac0eb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.08.x
 
-Includes a number of bugfixes and the security fixes up to xsa-384:
-https://xenproject.org/downloads/xen-project-archives/xen-project-4-14-series/xen-project-4-14-3/
+The file access protection built into Ghostscript proved insufficient for
+the "%pipe%" PostScript device, when combined with Ghostscript's requirement
+to be able to create and control temporary files in the conventional
+temporary file directories (for example, "/tmp" or "/temp).  This exploit is
+restricted to Unix-like systems (i.e., it doesn't affect Windows).  The most
+severe claimed results are only feasible if the exploit is run as a "high
+privilege" user (root/superuser level) \u2013 a practice we would discourage
+under any circumstances.
 
-Drop the now upstream
-0002-libs-foreignmemory-Fix-osdep_xenforeignmemory_map-prototype.patch, and
-renumber the remaining patches.
+For more details, see the advisory:
+https://ghostscript.com/CVE-2021-3781.html
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 69e4493fb1e676f29347701a58f67d81bd76b1eb)
+(cherry picked from commit 4e415b4164551e712643e9608d8813cc749fd279)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...ch => 0002-Fix-build-with-64-bits-time_t.patch} |  0
- ...-Fix-osdep_xenforeignmemory_map-prototype.patch | 33 ----------------------
- ...0003-libs-light-fix-tv_sec-printf-format.patch} |  0
- ...004-libs-light-fix-tv_sec-fprintf-format.patch} |  0
- package/xen/xen.hash                               |  2 +-
- package/xen/xen.mk                                 |  2 +-
- 6 files changed, 2 insertions(+), 35 deletions(-)
+ ...Include-device-specifier-strings-in-acces.patch | 234 +++++++++++++++++++++
+ package/ghostscript/ghostscript.mk                 |   3 +
+ 2 files changed, 237 insertions(+)
 
-diff --git a/package/xen/0003-Fix-build-with-64-bits-time_t.patch b/package/xen/0002-Fix-build-with-64-bits-time_t.patch
-similarity index 100%
-rename from package/xen/0003-Fix-build-with-64-bits-time_t.patch
-rename to package/xen/0002-Fix-build-with-64-bits-time_t.patch
-diff --git a/package/xen/0002-libs-foreignmemory-Fix-osdep_xenforeignmemory_map-prototype.patch b/package/xen/0002-libs-foreignmemory-Fix-osdep_xenforeignmemory_map-prototype.patch
-deleted file mode 100644
-index 170d1c22c2..0000000000
---- a/package/xen/0002-libs-foreignmemory-Fix-osdep_xenforeignmemory_map-prototype.patch
-+++ /dev/null
-@@ -1,33 +0,0 @@
--From 5d3e4ebb5c71477d74a0c503438545a0126d3863 Mon Sep 17 00:00:00 2001
--From: Anthony PERARD <anthony.perard@citrix.com>
--Date: Tue, 1 Jun 2021 16:41:47 +0100
--Subject: [PATCH] libs/foreignmemory: Fix osdep_xenforeignmemory_map prototype
--
--Commit cf8c4d3d13b8 made some preparation to have one day
--variable-length-array argument, but didn't declare the array in the
--function prototype the same way as in the function definition. And now
--GCC 11 complains about it.
--
--Fixes: cf8c4d3d13b8 ("tools/libs/foreignmemory: pull array length argument to map forward")
--Signed-off-by: Anthony PERARD <anthony.perard@citrix.com>
--Reviewed-by: Jan Beulich <jbeulich@suse.com>
--[Retrieved from:
--https://github.com/xen-project/xen/commit/5d3e4ebb5c71477d74a0c503438545a0126d3863]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- tools/libs/foreignmemory/private.h | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/tools/libs/foreignmemory/private.h b/tools/libs/foreignmemory/private.h
--index 1ee3626dd278..5bb0cefb0987 100644
----- a/tools/libs/foreignmemory/private.h
--+++ b/tools/libs/foreignmemory/private.h
--@@ -32,7 +32,7 @@ int osdep_xenforeignmemory_close(xenforeignmemory_handle *fmem);
-- void *osdep_xenforeignmemory_map(xenforeignmemory_handle *fmem,
--                                  uint32_t dom, void *addr,
--                                  int prot, int flags, size_t num,
---                                 const xen_pfn_t arr[num], int err[num]);
--+                                 const xen_pfn_t arr[/*num*/], int err[/*num*/]);
-- int osdep_xenforeignmemory_unmap(xenforeignmemory_handle *fmem,
--                                  void *addr, size_t num);
-- 
-diff --git a/package/xen/0004-libs-light-fix-tv_sec-printf-format.patch b/package/xen/0003-libs-light-fix-tv_sec-printf-format.patch
-similarity index 100%
-rename from package/xen/0004-libs-light-fix-tv_sec-printf-format.patch
-rename to package/xen/0003-libs-light-fix-tv_sec-printf-format.patch
-diff --git a/package/xen/0005-libs-light-fix-tv_sec-fprintf-format.patch b/package/xen/0004-libs-light-fix-tv_sec-fprintf-format.patch
-similarity index 100%
-rename from package/xen/0005-libs-light-fix-tv_sec-fprintf-format.patch
-rename to package/xen/0004-libs-light-fix-tv_sec-fprintf-format.patch
-diff --git a/package/xen/xen.hash b/package/xen/xen.hash
-index fd0310c921..e30db09516 100644
---- a/package/xen/xen.hash
-+++ b/package/xen/xen.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  e35099a963070e3c9f425d1e36cbb1c40b7874ef449bfafd6688343783cb25ad  xen-4.14.2.tar.gz
-+sha256  a3dad76a772393a1875e8f44a6059a95fea4bde40f97b800966969ac6f3a498d  xen-4.14.3.tar.gz
- sha256  ecca9538e9d3f7e3c2bff827502f4495e2ef9e22c451298696ea08886b176c2c  COPYING
-diff --git a/package/xen/xen.mk b/package/xen/xen.mk
-index b84214ed16..b635996afb 100644
---- a/package/xen/xen.mk
-+++ b/package/xen/xen.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/ghostscript/0002-Bug-704342-Include-device-specifier-strings-in-acces.patch b/package/ghostscript/0002-Bug-704342-Include-device-specifier-strings-in-acces.patch
+new file mode 100644
+index 0000000000..81436d8228
+--- /dev/null
++++ b/package/ghostscript/0002-Bug-704342-Include-device-specifier-strings-in-acces.patch
+@@ -0,0 +1,234 @@
++From a9bd3dec9fde03327a4a2c69dad1036bf9632e20 Mon Sep 17 00:00:00 2001
++From: Chris Liddell <chris.liddell@artifex.com>
++Date: Tue, 7 Sep 2021 20:36:12 +0100
++Subject: [PATCH] Bug 704342: Include device specifier strings in access
++ validation
++
++for the "%pipe%", %handle%" and %printer% io devices.
++
++We previously validated only the part after the "%pipe%" Postscript device
++specifier, but this proved insufficient.
++
++This rebuilds the original file name string, and validates it complete. The
++slight complication for "%pipe%" is it can be reached implicitly using
++"|" so we have to check both prefixes.
++
++Addresses CVE-2021-3781
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ base/gdevpipe.c | 22 +++++++++++++++-
++ base/gp_mshdl.c | 11 +++++++-
++ base/gp_msprn.c | 10 ++++++-
++ base/gp_os2pr.c | 13 +++++++++-
++ base/gslibctx.c | 69 ++++++++++---------------------------------------
++ 5 files changed, 65 insertions(+), 60 deletions(-)
++
++diff --git a/base/gdevpipe.c b/base/gdevpipe.c
++index 96d71f5d8..5bdc485be 100644
++--- a/base/gdevpipe.c
+++++ b/base/gdevpipe.c
++@@ -72,8 +72,28 @@ pipe_fopen(gx_io_device * iodev, const char *fname, const char *access,
++ #else
++     gs_lib_ctx_t *ctx = mem->gs_lib_ctx;
++     gs_fs_list_t *fs = ctx->core->fs;
+++    /* The pipe device can be reached in two ways, explicltly with %pipe%
+++       or implicitly with "|", so we have to check for both
+++     */
+++    char f[gp_file_name_sizeof];
+++    const char *pipestr = "|";
+++    const size_t pipestrlen = strlen(pipestr);
+++    const size_t preflen = strlen(iodev->dname);
+++    const size_t nlen = strlen(fname);
+++    int code1;
+++
+++    if (preflen + nlen >= gp_file_name_sizeof)
+++        return_error(gs_error_invalidaccess);
+++
+++    memcpy(f, iodev->dname, preflen);
+++    memcpy(f + preflen, fname, nlen + 1);
+++
+++    code1 = gp_validate_path(mem, f, access);
+++
+++    memcpy(f, pipestr, pipestrlen);
+++    memcpy(f + pipestrlen, fname, nlen + 1);
++ 
++-    if (gp_validate_path(mem, fname, access) != 0)
+++    if (code1 != 0 && gp_validate_path(mem, f, access) != 0 )
++         return gs_error_invalidfileaccess;
++ 
++     /*
++diff --git a/base/gp_mshdl.c b/base/gp_mshdl.c
++index 2b964ed74..8d87ceadc 100644
++--- a/base/gp_mshdl.c
+++++ b/base/gp_mshdl.c
++@@ -95,8 +95,17 @@ mswin_handle_fopen(gx_io_device * iodev, const char *fname, const char *access,
++     long hfile;	/* Correct for Win32, may be wrong for Win64 */
++     gs_lib_ctx_t *ctx = mem->gs_lib_ctx;
++     gs_fs_list_t *fs = ctx->core->fs;
+++    char f[gp_file_name_sizeof];
+++    const size_t preflen = strlen(iodev->dname);
+++    const size_t nlen = strlen(fname);
++ 
++-    if (gp_validate_path(mem, fname, access) != 0)
+++    if (preflen + nlen >= gp_file_name_sizeof)
+++        return_error(gs_error_invalidaccess);
+++
+++    memcpy(f, iodev->dname, preflen);
+++    memcpy(f + preflen, fname, nlen + 1);
+++
+++    if (gp_validate_path(mem, f, access) != 0)
++         return gs_error_invalidfileaccess;
++ 
++     /* First we try the open_handle method. */
++diff --git a/base/gp_msprn.c b/base/gp_msprn.c
++index ed4827968..746a974f7 100644
++--- a/base/gp_msprn.c
+++++ b/base/gp_msprn.c
++@@ -168,8 +168,16 @@ mswin_printer_fopen(gx_io_device * iodev, const char *fname, const char *access,
++     uintptr_t *ptid = &((tid_t *)(iodev->state))->tid;
++     gs_lib_ctx_t *ctx = mem->gs_lib_ctx;
++     gs_fs_list_t *fs = ctx->core->fs;
+++    const size_t preflen = strlen(iodev->dname);
+++    const size_t nlen = strlen(fname);
++ 
++-    if (gp_validate_path(mem, fname, access) != 0)
+++    if (preflen + nlen >= gp_file_name_sizeof)
+++        return_error(gs_error_invalidaccess);
+++
+++    memcpy(pname, iodev->dname, preflen);
+++    memcpy(pname + preflen, fname, nlen + 1);
+++
+++    if (gp_validate_path(mem, pname, access) != 0)
++         return gs_error_invalidfileaccess;
++ 
++     /* First we try the open_printer method. */
++diff --git a/base/gp_os2pr.c b/base/gp_os2pr.c
++index f852c71fc..ba54cde66 100644
++--- a/base/gp_os2pr.c
+++++ b/base/gp_os2pr.c
++@@ -107,9 +107,20 @@ os2_printer_fopen(gx_io_device * iodev, const char *fname, const char *access,
++            FILE ** pfile, char *rfname, uint rnamelen)
++ {
++     os2_printer_t *pr = (os2_printer_t *)iodev->state;
++-    char driver_name[256];
+++    char driver_name[gp_file_name_sizeof];
++     gs_lib_ctx_t *ctx = mem->gs_lib_ctx;
++     gs_fs_list_t *fs = ctx->core->fs;
+++    const size_t preflen = strlen(iodev->dname);
+++    const int size_t = strlen(fname);
+++
+++    if (preflen + nlen >= gp_file_name_sizeof)
+++        return_error(gs_error_invalidaccess);
+++
+++    memcpy(driver_name, iodev->dname, preflen);
+++    memcpy(driver_name + preflen, fname, nlen + 1);
+++
+++    if (gp_validate_path(mem, driver_name, access) != 0)
+++        return gs_error_invalidfileaccess;
++ 
++     /* First we try the open_printer method. */
++     /* Note that the loop condition here ensures we don't
++diff --git a/base/gslibctx.c b/base/gslibctx.c
++index 6dfed6cd5..318039fad 100644
++--- a/base/gslibctx.c
+++++ b/base/gslibctx.c
++@@ -655,82 +655,39 @@ rewrite_percent_specifiers(char *s)
++ int
++ gs_add_outputfile_control_path(gs_memory_t *mem, const char *fname)
++ {
++-    char *fp, f[gp_file_name_sizeof];
++-    const int pipe = 124; /* ASCII code for '|' */
++-    const int len = strlen(fname);
++-    int i, code;
+++    char f[gp_file_name_sizeof];
+++    int code;
++ 
++     /* Be sure the string copy will fit */
++-    if (len >= gp_file_name_sizeof)
+++    if (strlen(fname) >= gp_file_name_sizeof)
++         return gs_error_rangecheck;
++     strcpy(f, fname);
++-    fp = f;
++     /* Try to rewrite any %d (or similar) in the string */
++     rewrite_percent_specifiers(f);
++-    for (i = 0; i < len; i++) {
++-        if (f[i] == pipe) {
++-           fp = &f[i + 1];
++-           /* Because we potentially have to check file permissions at two levels
++-              for the output file (gx_device_open_output_file and the low level
++-              fopen API, if we're using a pipe, we have to add both the full string,
++-              (including the '|', and just the command to which we pipe - since at
++-              the pipe_fopen(), the leading '|' has been stripped.
++-            */
++-           code = gs_add_control_path(mem, gs_permit_file_writing, f);
++-           if (code < 0)
++-               return code;
++-           code = gs_add_control_path(mem, gs_permit_file_control, f);
++-           if (code < 0)
++-               return code;
++-           break;
++-        }
++-        if (!IS_WHITESPACE(f[i]))
++-            break;
++-    }
++-    code = gs_add_control_path(mem, gs_permit_file_control, fp);
+++
+++    code = gs_add_control_path(mem, gs_permit_file_control, f);
++     if (code < 0)
++         return code;
++-    return gs_add_control_path(mem, gs_permit_file_writing, fp);
+++    return gs_add_control_path(mem, gs_permit_file_writing, f);
++ }
++ 
++ int
++ gs_remove_outputfile_control_path(gs_memory_t *mem, const char *fname)
++ {
++-    char *fp, f[gp_file_name_sizeof];
++-    const int pipe = 124; /* ASCII code for '|' */
++-    const int len = strlen(fname);
++-    int i, code;
+++    char f[gp_file_name_sizeof];
+++    int code;
++ 
++     /* Be sure the string copy will fit */
++-    if (len >= gp_file_name_sizeof)
+++    if (strlen(fname) >= gp_file_name_sizeof)
++         return gs_error_rangecheck;
++     strcpy(f, fname);
++-    fp = f;
++     /* Try to rewrite any %d (or similar) in the string */
++-    for (i = 0; i < len; i++) {
++-        if (f[i] == pipe) {
++-           fp = &f[i + 1];
++-           /* Because we potentially have to check file permissions at two levels
++-              for the output file (gx_device_open_output_file and the low level
++-              fopen API, if we're using a pipe, we have to add both the full string,
++-              (including the '|', and just the command to which we pipe - since at
++-              the pipe_fopen(), the leading '|' has been stripped.
++-            */
++-           code = gs_remove_control_path(mem, gs_permit_file_writing, f);
++-           if (code < 0)
++-               return code;
++-           code = gs_remove_control_path(mem, gs_permit_file_control, f);
++-           if (code < 0)
++-               return code;
++-           break;
++-        }
++-        if (!IS_WHITESPACE(f[i]))
++-            break;
++-    }
++-    code = gs_remove_control_path(mem, gs_permit_file_control, fp);
+++    rewrite_percent_specifiers(f);
+++
+++    code = gs_remove_control_path(mem, gs_permit_file_control, f);
++     if (code < 0)
++         return code;
++-    return gs_remove_control_path(mem, gs_permit_file_writing, fp);
+++    return gs_remove_control_path(mem, gs_permit_file_writing, f);
++ }
++ 
++ int
++-- 
++2.20.1
++
+diff --git a/package/ghostscript/ghostscript.mk b/package/ghostscript/ghostscript.mk
+index 5b50c94405..ca24c61678 100644
+--- a/package/ghostscript/ghostscript.mk
++++ b/package/ghostscript/ghostscript.mk
+@@ -21,6 +21,9 @@ GHOSTSCRIPT_DEPENDENCIES = \
+ 	libpng \
+ 	tiff
  
--XEN_VERSION = 4.14.2
-+XEN_VERSION = 4.14.3
- XEN_SITE = https://downloads.xenproject.org/release/xen/$(XEN_VERSION)
- XEN_LICENSE = GPL-2.0
- XEN_LICENSE_FILES = COPYING
++# 0002-Bug-704342-Include-device-specifier-strings-in-acces.patch
++GHOSTSCRIPT_IGNORE_CVES += CVE-2021-3781
++
+ # Ghostscript includes (old) copies of several libraries, delete them.
+ # Inspired by linuxfromscratch:
+ # http://www.linuxfromscratch.org/blfs/view/svn/pst/gs.html
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
