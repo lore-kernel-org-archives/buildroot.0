@@ -2,52 +2,60 @@ Return-Path: <SRS0=dj6D=OY=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D80DC433F5
-	for <buildroot@archiver.kernel.org>; Mon,  4 Oct 2021 15:24:02 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A28DBC433EF
+	for <buildroot@archiver.kernel.org>; Mon,  4 Oct 2021 15:26:31 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id C19256137C
-	for <buildroot@archiver.kernel.org>; Mon,  4 Oct 2021 15:24:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C19256137C
+	by mail.kernel.org (Postfix) with ESMTPS id 5BA636139E
+	for <buildroot@archiver.kernel.org>; Mon,  4 Oct 2021 15:26:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5BA636139E
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8CA3C84A6E;
-	Mon,  4 Oct 2021 15:24:01 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 250AD40898;
+	Mon,  4 Oct 2021 15:26:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lD8-q0kOoIcS; Mon,  4 Oct 2021 15:24:00 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id gvmuKI4fm8Ow; Mon,  4 Oct 2021 15:26:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E54F084A59;
-	Mon,  4 Oct 2021 15:23:59 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2DD841BF2FE
- for <buildroot@lists.busybox.net>; Mon,  4 Oct 2021 15:23:58 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 18DA640895;
+	Mon,  4 Oct 2021 15:26:29 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id EB9691BF2FE
+ for <buildroot@lists.busybox.net>; Mon,  4 Oct 2021 15:26:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1DDE484A59
- for <buildroot@lists.busybox.net>; Mon,  4 Oct 2021 15:23:58 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id DB16C427E2
+ for <buildroot@lists.busybox.net>; Mon,  4 Oct 2021 15:26:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id P5AcPDkPOAHY for <buildroot@lists.busybox.net>;
- Mon,  4 Oct 2021 15:23:57 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5927484785
- for <buildroot@buildroot.org>; Mon,  4 Oct 2021 15:23:57 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id C95A88E35F; Mon,  4 Oct 2021 15:21:25 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xcJSZ5ze3FU6 for <buildroot@lists.busybox.net>;
+ Mon,  4 Oct 2021 15:26:26 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6C96A427E1
+ for <buildroot@buildroot.org>; Mon,  4 Oct 2021 15:26:26 +0000 (UTC)
+Received: (Authenticated sender: peter@casa-korsgaard.com)
+ by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id 7CCB160010;
+ Mon,  4 Oct 2021 15:26:22 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
+ (envelope-from <peter@korsgaard.com>)
+ id 1mXPrB-0003ST-Od; Mon, 04 Oct 2021 17:26:21 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Mon, 4 Oct 2021 17:21:51 +0200
-X-Git-Refname: refs/heads/2021.08.x
-X-Git-Oldrev: ffdcd18d2abdd30e95832b894fbc72c428640864
-X-Git-Newrev: 185b7ffdb6d0126d5292459421f9ee592e707fdf
-X-Patchwork-Hint: ignore
-Message-Id: <20211004152125.C95A88E35F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.08.x] package/cog: bump to
- version 0.10.1
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20210919100842.2071860-1-fontaine.fabrice@gmail.com>
+ <874k9xj8iy.fsf@dell.be.48ers.dk>
+ <CAPi7W83=ocwDu6LUCx9A16R2Q8zm1+SPbL1kb_PQySbOrU+Giw@mail.gmail.com>
+Date: Mon, 04 Oct 2021 17:26:21 +0200
+In-Reply-To: <CAPi7W83=ocwDu6LUCx9A16R2Q8zm1+SPbL1kb_PQySbOrU+Giw@mail.gmail.com>
+ (Fabrice Fontaine's message of "Mon, 4 Oct 2021 14:14:17 +0200")
+Message-ID: <871r50izfm.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/cryptopp: bump to version 8.5.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,75 +67,27 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Julian Scheel <julian@jusst.de>,
+ Buildroot Mailing List <buildroot@buildroot.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=185b7ffdb6d0126d5292459421f9ee592e707fdf
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.08.x
-
-Update to version 0.10.1, which fixes the build when the DRM platform
-module is enabled, fixes handling of absolute pointer events, and makes
-the headless platform optional.
-
-Although the headless platform is optional, Buildroot keeps it enabled
-unconditionally (as previously) because the wpebackend-fdo dependency
-is always needed anyway because Buildroot does not include any other
-WPE backend.
-
-Release notes:
-
-  https://wpewebkit.org/release/cog-0.10.1.html
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 59a19eb4c877067ec0db4eeed091f9bddccdd667)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/cog/cog.hash | 8 ++++----
- package/cog/cog.mk   | 3 ++-
- 2 files changed, 6 insertions(+), 5 deletions(-)
-
-diff --git a/package/cog/cog.hash b/package/cog/cog.hash
-index 566d30fa2a..3abc5f2c83 100644
---- a/package/cog/cog.hash
-+++ b/package/cog/cog.hash
-@@ -1,7 +1,7 @@
--# From https://wpewebkit.org/releases/cog-0.10.0.tar.xz.sums
--md5  1b0407b6163a3a01afdfc0fb454a7570  cog-0.10.0.tar.xz
--sha1  911816c00a2b08f4cfd388b1d2e176835c9b4e9e  cog-0.10.0.tar.xz
--sha256  2c72369c636ca4684370adad1344071b23c9ee2c851eb7d738fa2e1d7092031f  cog-0.10.0.tar.xz
-+# From https://wpewebkit.org/releases/cog-0.10.1.tar.xz.sums
-+md5  b997da3c143bc34ec5e953eb7e7ccefc  cog-0.10.1.tar.xz
-+sha1  f25312141de918f41add3e3c9984faa985cda0a9  cog-0.10.1.tar.xz
-+sha256  aecf546d7b0645119d79559c5574cb5eb68364fc8409dfbd47a4920bd1f221bc  cog-0.10.1.tar.xz
- 
- # Hashes for license files:
- sha256  e6c42d93c68b292bcccf6d2ec3e13da85df90b718ba27c2c2a01053a9d009252  COPYING
-diff --git a/package/cog/cog.mk b/package/cog/cog.mk
-index d373e6e1b6..07b8e245ef 100644
---- a/package/cog/cog.mk
-+++ b/package/cog/cog.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--COG_VERSION = 0.10.0
-+COG_VERSION = 0.10.1
- COG_SITE = https://wpewebkit.org/releases
- COG_SOURCE = cog-$(COG_VERSION).tar.xz
- COG_INSTALL_STAGING = YES
-@@ -13,6 +13,7 @@ COG_LICENSE = MIT
- COG_LICENSE_FILES = COPYING
- COG_CONF_OPTS = \
- 	-DCOG_BUILD_PROGRAMS=ON \
-+	-DCOG_PLATFORM_HEADLESS=ON \
- 	-DCOG_WESTON_DIRECT_DISPLAY=OFF \
- 	-DINSTALL_MAN_PAGES=OFF \
- 	-DCOG_HOME_URI='$(call qstrip,$(BR2_PACKAGE_COG_PROGRAMS_HOME_URI))'
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+Pj4+Pj4gIkZhYnJpY2UiID09IEZhYnJpY2UgRm9udGFpbmUgPGZvbnRhaW5lLmZhYnJpY2VAZ21h
+aWwuY29tPiB3cml0ZXM6CgogPiBMZSBsdW4uIDQgb2N0LiAyMDIxIMOgIDE0OjA5LCBQZXRlciBL
+b3JzZ2FhcmQgPHBldGVyQGtvcnNnYWFyZC5jb20+IGEgw6ljcml0IDoKID4+IAogPj4gPj4+Pj4g
+IkZhYnJpY2UiID09IEZhYnJpY2UgRm9udGFpbmUgPGZvbnRhaW5lLmZhYnJpY2VAZ21haWwuY29t
+PiB3cml0ZXM6CiA+PiAKID4+ID4gaHR0cHM6Ly93d3cuY3J5cHRvcHAuY29tL3JlbGVhc2U4NTAu
+aHRtbAogPj4gPiBodHRwczovL3d3dy5jcnlwdG9wcC5jb20vcmVsZWFzZTg0MC5odG1sCiA+PiAK
+ID4+ID4gU2lnbmVkLW9mZi1ieTogRmFicmljZSBGb250YWluZSA8Zm9udGFpbmUuZmFicmljZUBn
+bWFpbC5jb20+CiA+PiAKID4+IEhtbSwgc28gOC40LjAgcmV2ZXJ0ZWQgdGhlIHNlY3VyaXR5IGZp
+eCBpbiA4LjMuMD8gV2hhdCBkbyB3ZSB0aGVuIGRvPwogPj4gQnVtcCB0byA4LjUuMCBpbiBhbGwg
+c3RhYmxlIGJyYW5jaGVzPwogPiBJIHdvdWxkIGFkdmlzZSB0byBidW1wIHRvIDguNi4wIGluIGFs
+bCBzdGFibGUgYnJhbmNoZXMgYXMgOC42LjAgaXMgYQogPiBzZWN1cml0eSByZWxlYXNlIHRoYXQg
+Y2xlYXJzIENWRS0yMDIxLTQwNTMwLgoKQWhoLCBJIGhhZG4ndCBub3RpY2VkIHRoZSA4LjYuMCBy
+ZWxlYXNlLCBJJ2xsIGNoZXJyeSBwaWNrIHRoYXQgd2hlbiBJCmdldCB0aGF0IGZhciAtIFRoYW5r
+cy4KCi0tIApCeWUsIFBldGVyIEtvcnNnYWFyZApfX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWls
+ZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1
+aWxkcm9vdAo=
