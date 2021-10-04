@@ -2,51 +2,51 @@ Return-Path: <SRS0=dj6D=OY=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EE946C433EF
-	for <buildroot@archiver.kernel.org>; Mon,  4 Oct 2021 15:21:24 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 31297C433EF
+	for <buildroot@archiver.kernel.org>; Mon,  4 Oct 2021 15:21:36 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2999D613DB
-	for <buildroot@archiver.kernel.org>; Mon,  4 Oct 2021 15:21:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2999D613DB
+	by mail.kernel.org (Postfix) with ESMTPS id A74F961154
+	for <buildroot@archiver.kernel.org>; Mon,  4 Oct 2021 15:21:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A74F961154
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F26CA60BF6;
-	Mon,  4 Oct 2021 15:21:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7D12C427D3;
+	Mon,  4 Oct 2021 15:21:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nGXBo3nCZQWz; Mon,  4 Oct 2021 15:21:23 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id eEeGNel-t3re; Mon,  4 Oct 2021 15:21:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 59D0560BBB;
-	Mon,  4 Oct 2021 15:21:22 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 074291BF2FE
- for <buildroot@lists.busybox.net>; Mon,  4 Oct 2021 15:21:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DCF8C427CD;
+	Mon,  4 Oct 2021 15:21:33 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 866721BF2FE
+ for <buildroot@lists.busybox.net>; Mon,  4 Oct 2021 15:21:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EB84F84A65
- for <buildroot@lists.busybox.net>; Mon,  4 Oct 2021 15:21:20 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 83115427D2
+ for <buildroot@lists.busybox.net>; Mon,  4 Oct 2021 15:21:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id b5y3tVdZc0gu for <buildroot@lists.busybox.net>;
- Mon,  4 Oct 2021 15:21:19 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hU0Km0GJOSSw for <buildroot@lists.busybox.net>;
+ Mon,  4 Oct 2021 15:21:23 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id CF27984785
- for <buildroot@buildroot.org>; Mon,  4 Oct 2021 15:21:19 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D8B74427CD
+ for <buildroot@buildroot.org>; Mon,  4 Oct 2021 15:21:23 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 4B9A38E01D; Mon,  4 Oct 2021 15:18:48 +0000 (UTC)
+ id 598A78E2B0; Mon,  4 Oct 2021 15:18:52 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 4 Oct 2021 15:40:57 +0200
-X-Git-Refname: refs/heads/2021.08.x
-X-Git-Oldrev: 1eff0b131fcd8d6bc4c0ce9af3d28a8517aa94f6
-X-Git-Newrev: ffdcd18d2abdd30e95832b894fbc72c428640864
+Date: Mon, 4 Oct 2021 15:42:15 +0200
+X-Git-Refname: refs/heads/2021.05.x
+X-Git-Oldrev: 5f8e900d5e73ffc0abafd428cb189af7ed09886f
+X-Git-Newrev: a3f3c3c417f85ff379df86a6d06ff4dca0c3f70f
 X-Patchwork-Hint: ignore
-Message-Id: <20211004151848.4B9A38E01D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.08.x] package/alsa-lib:
+Message-Id: <20211004151852.598A78E2B0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.05.x] package/alsa-lib:
  smixer-python module supports python3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -65,8 +65,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ffdcd18d2abdd30e95832b894fbc72c428640864
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=a3f3c3c417f85ff379df86a6d06ff4dca0c3f70f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
 
 Add simple mixer python bindings to build when "Python support for
 alsa-lib" is active. smixer-python is the only python module which
@@ -95,7 +95,7 @@ index f334b66bff..4168d1f220 100644
  	  Add python support for alsa-lib.
  	  Python will be built and libpython will be installed
 diff --git a/package/alsa-lib/alsa-lib.mk b/package/alsa-lib/alsa-lib.mk
-index c71ad5dd58..99c53f9408 100644
+index b1bfaf30e5..ad205aaa1d 100644
 --- a/package/alsa-lib/alsa-lib.mk
 +++ b/package/alsa-lib/alsa-lib.mk
 @@ -57,12 +57,22 @@ ALSA_LIB_CONF_OPTS += --disable-old-symbols
