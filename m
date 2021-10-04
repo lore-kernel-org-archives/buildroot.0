@@ -2,52 +2,58 @@ Return-Path: <SRS0=dj6D=OY=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BB79BC433F5
-	for <buildroot@archiver.kernel.org>; Mon,  4 Oct 2021 15:21:47 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 735DEC433F5
+	for <buildroot@archiver.kernel.org>; Mon,  4 Oct 2021 15:22:35 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 4AD2F61154
-	for <buildroot@archiver.kernel.org>; Mon,  4 Oct 2021 15:21:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4AD2F61154
+	by mail.kernel.org (Postfix) with ESMTPS id 1B731613D5
+	for <buildroot@archiver.kernel.org>; Mon,  4 Oct 2021 15:22:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1B731613D5
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 04D9E427E4;
-	Mon,  4 Oct 2021 15:21:47 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DA9C540893;
+	Mon,  4 Oct 2021 15:22:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AIpl8Ony394Q; Mon,  4 Oct 2021 15:21:46 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id knSmx31TKbUA; Mon,  4 Oct 2021 15:22:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4545F427DE;
-	Mon,  4 Oct 2021 15:21:45 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 572481BF2FE
- for <buildroot@lists.busybox.net>; Mon,  4 Oct 2021 15:21:31 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0749040704;
+	Mon,  4 Oct 2021 15:22:33 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id E118B1BF2FE
+ for <buildroot@lists.busybox.net>; Mon,  4 Oct 2021 15:22:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4711860BF7
- for <buildroot@lists.busybox.net>; Mon,  4 Oct 2021 15:21:31 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D0B0B84A59
+ for <buildroot@lists.busybox.net>; Mon,  4 Oct 2021 15:22:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id f7dvjdlg-Wtm for <buildroot@lists.busybox.net>;
- Mon,  4 Oct 2021 15:21:30 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 503B360BF4
- for <buildroot@buildroot.org>; Mon,  4 Oct 2021 15:21:30 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id C52698E322; Mon,  4 Oct 2021 15:18:58 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id iSDOxCWbrXMJ for <buildroot@lists.busybox.net>;
+ Mon,  4 Oct 2021 15:22:31 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B87BE84785
+ for <buildroot@buildroot.org>; Mon,  4 Oct 2021 15:22:30 +0000 (UTC)
+Received: (Authenticated sender: peter@casa-korsgaard.com)
+ by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id AE738E0013;
+ Mon,  4 Oct 2021 15:22:26 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
+ (envelope-from <peter@korsgaard.com>)
+ id 1mXPnO-0003DN-4k; Mon, 04 Oct 2021 17:22:26 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Mon, 4 Oct 2021 15:42:35 +0200
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 3135229759b00e655bfc5efa9fc9d49821797a8a
-X-Git-Newrev: 3511b3a73a7209e38abeeae909bc80428f0e4a9b
-X-Patchwork-Hint: ignore
-Message-Id: <20211004151858.C52698E322@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/alsa-lib:
- smixer-python module supports python3
+To: Adrian Perez de Castro <aperez@igalia.com>
+References: <20210912092855.2427158-1-aperez@igalia.com>
+Date: Mon, 04 Oct 2021 17:22:26 +0200
+In-Reply-To: <20210912092855.2427158-1-aperez@igalia.com> (Adrian Perez de
+ Castro's message of "Sun, 12 Sep 2021 12:28:55 +0300")
+Message-ID: <875yucizm5.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/cog: bump to version 0.10.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,68 +65,31 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3511b3a73a7209e38abeeae909bc80428f0e4a9b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+>>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
 
-Add simple mixer python bindings to build when "Python support for
-alsa-lib" is active. smixer-python is the only python module which
-exists in alsa-lib. It is compatible with Python2 and Python3.
+ > Update to version 0.10.1, which fixes the build when the DRM platform
+ > module is enabled, fixes handling of absolute pointer events, and makes
+ > the headless platform optional. Note that while optional, Buildroot
+ > keeps it enabled (as previously) because the wpebackend-fdo dependency
+ > is always needed anyway because Buildroot does not include any other
+ > WPE backend.
 
-Signed-off-by: Illia Bitkov <illia.bitkov@mind.be>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit fde3bf94b105d94d3d9a04acb11ee31f6e73f11d)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/alsa-lib/Config.in   |  2 +-
- package/alsa-lib/alsa-lib.mk | 10 ++++++++++
- 2 files changed, 11 insertions(+), 1 deletion(-)
+ > Release notes:
 
-diff --git a/package/alsa-lib/Config.in b/package/alsa-lib/Config.in
-index f334b66bff..4168d1f220 100644
---- a/package/alsa-lib/Config.in
-+++ b/package/alsa-lib/Config.in
-@@ -22,7 +22,7 @@ if BR2_PACKAGE_ALSA_LIB
- 
- config BR2_PACKAGE_ALSA_LIB_PYTHON
- 	bool "Python support for alsa-lib"
--	depends on BR2_PACKAGE_PYTHON
-+	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
- 	help
- 	  Add python support for alsa-lib.
- 	  Python will be built and libpython will be installed
-diff --git a/package/alsa-lib/alsa-lib.mk b/package/alsa-lib/alsa-lib.mk
-index b1bfaf30e5..ad205aaa1d 100644
---- a/package/alsa-lib/alsa-lib.mk
-+++ b/package/alsa-lib/alsa-lib.mk
-@@ -57,12 +57,22 @@ ALSA_LIB_CONF_OPTS += --disable-old-symbols
- endif
- 
- ifeq ($(BR2_PACKAGE_ALSA_LIB_PYTHON),y)
-+ALSA_LIB_CONF_OPTS += \
-+	--enable-mixer-pymods
-+ifeq ($(BR2_PACKAGE_PYTHON),y)
- ALSA_LIB_CONF_OPTS += \
- 	--with-pythonlibs=-lpython$(PYTHON_VERSION_MAJOR) \
- 	--with-pythonincludes=$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)
- ALSA_LIB_CFLAGS += -I$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)
- ALSA_LIB_DEPENDENCIES = python
- else
-+ALSA_LIB_CONF_OPTS += \
-+	--with-pythonlibs=-lpython$(PYTHON3_VERSION_MAJOR) \
-+	--with-pythonincludes=$(STAGING_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)
-+ALSA_LIB_CFLAGS += -I$(STAGING_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)
-+ALSA_LIB_DEPENDENCIES = python3
-+endif
-+else
- ALSA_LIB_CONF_OPTS += --disable-python
- endif
- 
+ >   https://wpewebkit.org/release/cog-0.10.1.html
+
+ > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+
+Committed to 2021.08.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
