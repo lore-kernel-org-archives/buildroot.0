@@ -2,52 +2,52 @@ Return-Path: <SRS0=dj6D=OY=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D7293C433EF
-	for <buildroot@archiver.kernel.org>; Mon,  4 Oct 2021 20:14:39 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 80668C433F5
+	for <buildroot@archiver.kernel.org>; Mon,  4 Oct 2021 20:14:51 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 913F861409
-	for <buildroot@archiver.kernel.org>; Mon,  4 Oct 2021 20:14:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 913F861409
+	by mail.kernel.org (Postfix) with ESMTPS id 45981613C8
+	for <buildroot@archiver.kernel.org>; Mon,  4 Oct 2021 20:14:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 45981613C8
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6098040194;
-	Mon,  4 Oct 2021 20:14:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2164C40553;
+	Mon,  4 Oct 2021 20:14:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yWP3eZQlq2nw; Mon,  4 Oct 2021 20:14:38 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id JPyY8dQg-QoN; Mon,  4 Oct 2021 20:14:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7558C40133;
-	Mon,  4 Oct 2021 20:14:37 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 420A41BF97D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8F7E840668;
+	Mon,  4 Oct 2021 20:14:49 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id E0F5F1BF2BA
  for <buildroot@lists.busybox.net>; Mon,  4 Oct 2021 20:10:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 71B7840194
+ by smtp1.osuosl.org (Postfix) with ESMTP id 323DE833CA
  for <buildroot@lists.busybox.net>; Mon,  4 Oct 2021 20:10:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zOctag9YsTF8 for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8tqRJI5YhPfp for <buildroot@lists.busybox.net>;
  Mon,  4 Oct 2021 20:10:18 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 76DC34017A
+ by smtp1.osuosl.org (Postfix) with ESMTP id 94DD6833CB
  for <buildroot@buildroot.org>; Mon,  4 Oct 2021 20:10:18 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 7AB6A8EF7E; Mon,  4 Oct 2021 20:07:46 +0000 (UTC)
+ id 96A498EF7E; Mon,  4 Oct 2021 20:07:46 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 4 Oct 2021 21:16:26 +0200
+Date: Mon, 4 Oct 2021 21:18:34 +0200
 X-Git-Refname: refs/heads/2021.08.x
-X-Git-Oldrev: 1bfbf16d686662106ae66b36295a2ae03fcc80e6
-X-Git-Newrev: c98c3418d84a7f5cf84a71b8e2d20504a4a28351
+X-Git-Oldrev: 808c529200b5f09553a3272e9e9fa895c7bc11bb
+X-Git-Newrev: 5b75693dccb2b08b4232cdea13d94576a2ddf979
 X-Patchwork-Hint: ignore
-Message-Id: <20211004200746.7AB6A8EF7E@busybox.osuosl.org>
+Message-Id: <20211004200746.96A498EF7E@busybox.osuosl.org>
 Subject: [Buildroot] [git commit branch/2021.08.x] support/testing:
- test_iso9660: bump to kernel 4.19.204
+ test_openssh: use a prebuilt toolchain
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,58 +65,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c98c3418d84a7f5cf84a71b8e2d20504a4a28351
+commit: https://git.buildroot.net/buildroot/commit/?id=5b75693dccb2b08b4232cdea13d94576a2ddf979
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.08.x
 
-The kernel 4.11 curently used by the test doesn't build with host
-gcc >= 10 due the gcc default -fno-common. See GCC 10 porting guide [1].
+Switch from the Buildroot internal toolchain for armv5 to
+the prebuilt Bootlin external toolchain.
 
-/usr/bin/ld: scripts/dtc/dtc-parser.tab.o:(.bss+0x20): multiple definition of `yylloc'; scripts/dtc/dtc-lexer.lex.o:(.bss+0x0): first defined here
-
-Update to the latest 4.19 LTS version but doing so requires to
-disable CONFIG_RETPOLINE since the toolchain is not retpoline
-capable [2].
-
-Fixes:
-https://gitlab.com/kubu93/buildroot/-/jobs/1564202078
-
-[1] https://gcc.gnu.org/gcc-10/porting_to.html
-[2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=8c4ad5d39144776c2987e81609204e1766ed4190
+The test doesn't require to build a toolchain, there was
+no prebuilt glibc toolchain recent enough at the time this
+test has been introduced.
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 23a8baa779825554105c6b002d4acbe4e9bbe340)
+(cherry picked from commit 184d20404e8a5b95f2b2940f4d959d09be7ae2f0)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/testing/conf/minimal-x86-qemu-kernel.config | 1 +
- support/testing/tests/fs/test_iso9660.py            | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ support/testing/tests/package/test_openssh.py | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/support/testing/conf/minimal-x86-qemu-kernel.config b/support/testing/conf/minimal-x86-qemu-kernel.config
-index cc8ee6a713..45994f804d 100644
---- a/support/testing/conf/minimal-x86-qemu-kernel.config
-+++ b/support/testing/conf/minimal-x86-qemu-kernel.config
-@@ -2,6 +2,7 @@ CONFIG_SYSVIPC=y
- CONFIG_MODULES=y
- CONFIG_MODULE_UNLOAD=y
- CONFIG_SMP=y
-+# CONFIG_RETPOLINE is not set
- CONFIG_HYPERVISOR_GUEST=y
- CONFIG_PARAVIRT=y
- CONFIG_NET=y
-diff --git a/support/testing/tests/fs/test_iso9660.py b/support/testing/tests/fs/test_iso9660.py
-index 68f4840852..412430318b 100644
---- a/support/testing/tests/fs/test_iso9660.py
-+++ b/support/testing/tests/fs/test_iso9660.py
-@@ -18,7 +18,7 @@ BASIC_CONFIG = \
-     BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200=y
-     BR2_LINUX_KERNEL=y
-     BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--    BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.11"
-+    BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.204"
-     BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-     BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="{}"
-     # BR2_TARGET_ROOTFS_TAR is not set
+diff --git a/support/testing/tests/package/test_openssh.py b/support/testing/tests/package/test_openssh.py
+index 490147f86f..4b48059573 100644
+--- a/support/testing/tests/package/test_openssh.py
++++ b/support/testing/tests/package/test_openssh.py
+@@ -47,9 +47,8 @@ class TestOpenSshGlibc(TestOpensshBase):
+         TestOpensshBase.opensshconfig + \
+         """
+         BR2_arm=y
+-        BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+-        BR2_KERNEL_HEADERS_4_19=y
+-        BR2_TOOLCHAIN_BUILDROOT_CXX=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+         BR2_PACKAGE_RNG_TOOLS=y
+         BR2_TARGET_ROOTFS_CPIO=y
+         """
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
