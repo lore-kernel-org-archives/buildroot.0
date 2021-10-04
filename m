@@ -2,52 +2,52 @@ Return-Path: <SRS0=dj6D=OY=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 74905C433F5
-	for <buildroot@archiver.kernel.org>; Mon,  4 Oct 2021 21:57:32 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 83C42C433EF
+	for <buildroot@archiver.kernel.org>; Mon,  4 Oct 2021 21:57:44 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 39A5E61029
-	for <buildroot@archiver.kernel.org>; Mon,  4 Oct 2021 21:57:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 39A5E61029
+	by mail.kernel.org (Postfix) with ESMTPS id 2D0BA613D2
+	for <buildroot@archiver.kernel.org>; Mon,  4 Oct 2021 21:57:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2D0BA613D2
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 14AEC83C54;
-	Mon,  4 Oct 2021 21:57:32 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id F1B7B400F3;
+	Mon,  4 Oct 2021 21:57:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id O_UOooJiEEei; Mon,  4 Oct 2021 21:57:31 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3pvHZEln0YTY; Mon,  4 Oct 2021 21:57:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6F23C83C4F;
-	Mon,  4 Oct 2021 21:57:30 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3F0051BF97F
+	by smtp2.osuosl.org (Postfix) with ESMTP id DC019401EE;
+	Mon,  4 Oct 2021 21:57:41 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 9E2EE1BF20F
  for <buildroot@lists.busybox.net>; Mon,  4 Oct 2021 21:57:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2D9DB6073C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8BB1D402AF
  for <buildroot@lists.busybox.net>; Mon,  4 Oct 2021 21:57:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 44HGHdxToehc for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LXdlwkhfY5cX for <buildroot@lists.busybox.net>;
  Mon,  4 Oct 2021 21:57:15 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 64F8F60752
+ by smtp2.osuosl.org (Postfix) with ESMTP id 85A59400F3
  for <buildroot@buildroot.org>; Mon,  4 Oct 2021 21:57:15 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 3CB298F2A9; Mon,  4 Oct 2021 21:54:43 +0000 (UTC)
+ id 5BDF88F2A9; Mon,  4 Oct 2021 21:54:43 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 4 Oct 2021 23:43:50 +0200
+Date: Mon, 4 Oct 2021 23:56:43 +0200
 X-Git-Refname: refs/heads/2021.05.x
-X-Git-Oldrev: 73a442b63374763b671ce88b7003e0a8a1d9f557
-X-Git-Newrev: e8cf6198b363e285ac0da66b797bba9b590fdd9b
+X-Git-Oldrev: 0e8cb91538d1cde1fde87ef003bac08bf769be21
+X-Git-Newrev: ec57641a02883db4ec0edbf36d7313b487ac53db
 X-Patchwork-Hint: ignore
-Message-Id: <20211004215443.3CB298F2A9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.05.x] package/lynx: add
- security patch for CVE-2021-38165
+Message-Id: <20211004215443.5BDF88F2A9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.05.x] package/libsndfile: add
+ security patch for CVE-2021-3246
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,51 +65,83 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e8cf6198b363e285ac0da66b797bba9b590fdd9b
+commit: https://git.buildroot.net/buildroot/commit/?id=ec57641a02883db4ec0edbf36d7313b487ac53db
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
 
-Lynx through 2.8.9 mishandles the userinfo subcomponent of a URI, which
-allows remote attackers to discover cleartext credentials because they may
-appear in SNI data.
+A heap buffer overflow vulnerability in msadpcm_decode_block of libsndfile
+1.0.30 allows attackers to execute arbitrary code via a crafted WAV file.
 
-https://lists.nongnu.org/archive/html/lynx-dev/2021-08/msg00002.html
-
-Upstream unfortunately does not provide a public VCS (only source
-snapshots), so fetch the security patch from Debian.
+https://nvd.nist.gov/vuln/detail/CVE-2021-3246
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 5bb9d79f276551c8fb7a774d8c7bd0f47a9e9809)
+(cherry picked from commit cb18218ad125c1e4c13010c8ee946057ee07103c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/lynx/lynx.hash | 1 +
- package/lynx/lynx.mk   | 4 ++++
- 2 files changed, 5 insertions(+)
+ .../0011-ms_adpcm-Fix-and-extend-size-checks.patch | 40 ++++++++++++++++++++++
+ package/libsndfile/libsndfile.mk                   |  3 ++
+ 2 files changed, 43 insertions(+)
 
-diff --git a/package/lynx/lynx.hash b/package/lynx/lynx.hash
-index 76d7614a7c..62e2555a99 100644
---- a/package/lynx/lynx.hash
-+++ b/package/lynx/lynx.hash
-@@ -1,3 +1,4 @@
- # Locally calculated:
- sha256  387f193d7792f9cfada14c60b0e5c0bff18f227d9257a39483e14fa1aaf79595  lynx2.8.9rel.1.tar.bz2
-+sha256  b2207e757dbbefc34a20a32b1b4a216b4a4316e1dc812bceca4ac6294871119a  90_CVE-2021-38165.patch
- sha256  8406a30ff3134ec23cf752d1ceda92ddaabbe41b4f2dc07ea3cfa139de12d6d6  COPYING
-diff --git a/package/lynx/lynx.mk b/package/lynx/lynx.mk
-index d115682d64..44d52d90a5 100644
---- a/package/lynx/lynx.mk
-+++ b/package/lynx/lynx.mk
-@@ -7,6 +7,10 @@
- LYNX_VERSION = 2.8.9rel.1
- LYNX_SOURCE = lynx$(LYNX_VERSION).tar.bz2
- LYNX_SITE = ftp://ftp.invisible-island.net/lynx/tarballs
-+LYNX_PATCH = \
-+	https://salsa.debian.org/lynx-team/lynx/-/raw/debian/2.9.0dev.6-3_deb11u1/debian/patches/90_CVE-2021-38165.patch
-+# 90_CVE-2021-38165.patch
-+LYNX_IGNORE_CVES += CVE-2021-38165
- LYNX_LICENSE = GPL-2.0
- LYNX_LICENSE_FILES = COPYING
- 
+diff --git a/package/libsndfile/0011-ms_adpcm-Fix-and-extend-size-checks.patch b/package/libsndfile/0011-ms_adpcm-Fix-and-extend-size-checks.patch
+new file mode 100644
+index 0000000000..edacbda01a
+--- /dev/null
++++ b/package/libsndfile/0011-ms_adpcm-Fix-and-extend-size-checks.patch
+@@ -0,0 +1,40 @@
++From deb669ee8be55a94565f6f8a6b60890c2e7c6f32 Mon Sep 17 00:00:00 2001
++From: bobsayshilol <bobsayshilol@live.co.uk>
++Date: Thu, 18 Feb 2021 21:52:09 +0000
++Subject: [PATCH] ms_adpcm: Fix and extend size checks
++
++'blockalign' is the size of a block, and each block contains 7 samples
++per channel as part of the preamble, so check against 'samplesperblock'
++rather than 'blockalign'. Also add an additional check that the block
++is big enough to hold the samples it claims to hold.
++
++https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=26803
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ src/ms_adpcm.c | 10 ++++++++--
++ 1 file changed, 8 insertions(+), 2 deletions(-)
++
++diff --git a/src/ms_adpcm.c b/src/ms_adpcm.c
++index 5e8f1a31..a21cb994 100644
++--- a/src/ms_adpcm.c
+++++ b/src/ms_adpcm.c
++@@ -128,8 +128,14 @@ wavlike_msadpcm_init	(SF_PRIVATE *psf, int blockalign, int samplesperblock)
++ 	if (psf->file.mode == SFM_WRITE)
++ 		samplesperblock = 2 + 2 * (blockalign - 7 * psf->sf.channels) / psf->sf.channels ;
++ 
++-	if (blockalign < 7 * psf->sf.channels)
++-	{	psf_log_printf (psf, "*** Error blockalign (%d) should be > %d.\n", blockalign, 7 * psf->sf.channels) ;
+++	/* There's 7 samples per channel in the preamble of each block */
+++	if (samplesperblock < 7 * psf->sf.channels)
+++	{	psf_log_printf (psf, "*** Error samplesperblock (%d) should be >= %d.\n", samplesperblock, 7 * psf->sf.channels) ;
+++		return SFE_INTERNAL ;
+++		} ;
+++
+++	if (2 * blockalign < samplesperblock * psf->sf.channels)
+++	{	psf_log_printf (psf, "*** Error blockalign (%d) should be >= %d.\n", blockalign, samplesperblock * psf->sf.channels / 2) ;
++ 		return SFE_INTERNAL ;
++ 		} ;
++ 
++-- 
++2.20.1
++
+diff --git a/package/libsndfile/libsndfile.mk b/package/libsndfile/libsndfile.mk
+index eb15426146..81bf804eb8 100644
+--- a/package/libsndfile/libsndfile.mk
++++ b/package/libsndfile/libsndfile.mk
+@@ -19,6 +19,9 @@ LIBSNDFILE_IGNORE_CVES += CVE-2018-13139 CVE-2018-19432
+ LIBSNDFILE_IGNORE_CVES += \
+ 	CVE-2017-14245 CVE-2017-14246 CVE-2017-17456 CVE-2017-17457 \
+ 	CVE-2018-19661 CVE-2018-19662
++# 0011-ms_adpcm-Fix-and-extend-size-checks.patch
++LIBSNDFILE_IGNORE_CVES += CVE-2021-3246
++
+ # disputed, https://github.com/erikd/libsndfile/issues/398
+ LIBSNDFILE_IGNORE_CVES += CVE-2018-13419
+ # 0004-src-wav.c-Fix-heap-read-overflow.patch
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
