@@ -2,58 +2,59 @@ Return-Path: <SRS0=dj6D=OY=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 330E8C433EF
-	for <buildroot@archiver.kernel.org>; Mon,  4 Oct 2021 21:43:33 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DC3D4C433F5
+	for <buildroot@archiver.kernel.org>; Mon,  4 Oct 2021 21:44:23 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id E87BC61166
-	for <buildroot@archiver.kernel.org>; Mon,  4 Oct 2021 21:43:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E87BC61166
+	by mail.kernel.org (Postfix) with ESMTPS id 73C5F61528
+	for <buildroot@archiver.kernel.org>; Mon,  4 Oct 2021 21:44:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 73C5F61528
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C583983C56;
-	Mon,  4 Oct 2021 21:43:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 417F36073C;
+	Mon,  4 Oct 2021 21:44:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id O86BrRm47cyC; Mon,  4 Oct 2021 21:43:32 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id LqFQKRcy3E2A; Mon,  4 Oct 2021 21:44:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3A36A83C40;
-	Mon,  4 Oct 2021 21:43:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 988A460698;
+	Mon,  4 Oct 2021 21:44:21 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 7ACAB1BF20F
- for <buildroot@lists.busybox.net>; Mon,  4 Oct 2021 21:43:29 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2DD491BF20F
+ for <buildroot@lists.busybox.net>; Mon,  4 Oct 2021 21:44:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6A41440048
- for <buildroot@lists.busybox.net>; Mon,  4 Oct 2021 21:43:29 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1D2E24044F
+ for <buildroot@lists.busybox.net>; Mon,  4 Oct 2021 21:44:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uTljvMdv1Fnt for <buildroot@lists.busybox.net>;
- Mon,  4 Oct 2021 21:43:28 +0000 (UTC)
+ with ESMTP id B31p91g08Jdu for <buildroot@lists.busybox.net>;
+ Mon,  4 Oct 2021 21:44:19 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 65FD240553
- for <buildroot@buildroot.org>; Mon,  4 Oct 2021 21:43:28 +0000 (UTC)
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id F196C40553
+ for <buildroot@buildroot.org>; Mon,  4 Oct 2021 21:44:18 +0000 (UTC)
 Received: (Authenticated sender: peter@casa-korsgaard.com)
- by relay11.mail.gandi.net (Postfix) with ESMTPSA id 17023100005;
- Mon,  4 Oct 2021 21:43:24 +0000 (UTC)
+ by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id B5A6660005;
+ Mon,  4 Oct 2021 21:44:15 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
  (envelope-from <peter@korsgaard.com>)
- id 1mXVk4-00074V-CL; Mon, 04 Oct 2021 23:43:24 +0200
+ id 1mXVkt-0007CK-1P; Mon, 04 Oct 2021 23:44:15 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-References: <20210922192612.D53578C980@busybox.osuosl.org>
-Date: Mon, 04 Oct 2021 23:43:24 +0200
-In-Reply-To: <20210922192612.D53578C980@busybox.osuosl.org> (Arnout
- Vandecappelle's message of "Wed, 22 Sep 2021 21:19:31 +0200")
-Message-ID: <874k9wfoub.fsf@dell.be.48ers.dk>
+References: <20210922192612.E075F8C9E3@busybox.osuosl.org>
+Date: Mon, 04 Oct 2021 23:44:14 +0200
+In-Reply-To: <20210922192612.E075F8C9E3@busybox.osuosl.org> (Arnout
+ Vandecappelle's message of "Wed, 22 Sep 2021 21:20:02 +0200")
+Message-ID: <87zgroea8h.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [git commit] package/xen: security bump to version
- 4.14.3
+Subject: Re: [Buildroot] [git commit] package/lynx: add security patch for
+ CVE-2021-38165
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,15 +74,17 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=69e4493fb1e676f29347701a58f67d81bd76b1eb
+ > commit: https://git.buildroot.net/buildroot/commit/?id=5bb9d79f276551c8fb7a774d8c7bd0f47a9e9809
  > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Includes a number of bugfixes and the security fixes up to xsa-384:
- > https://xenproject.org/downloads/xen-project-archives/xen-project-4-14-series/xen-project-4-14-3/
+ > Lynx through 2.8.9 mishandles the userinfo subcomponent of a URI, which
+ > allows remote attackers to discover cleartext credentials because they may
+ > appear in SNI data.
 
- > Drop the now upstream
- > 0002-libs-foreignmemory-Fix-osdep_xenforeignmemory_map-prototype.patch, and
- > renumber the remaining patches.
+ > https://lists.nongnu.org/archive/html/lynx-dev/2021-08/msg00002.html
+
+ > Upstream unfortunately does not provide a public VCS (only source
+ > snapshots), so fetch the security patch from Debian.
 
  > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
