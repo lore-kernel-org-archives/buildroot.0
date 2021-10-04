@@ -2,52 +2,52 @@ Return-Path: <SRS0=dj6D=OY=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E1E8EC433EF
-	for <buildroot@archiver.kernel.org>; Mon,  4 Oct 2021 21:58:33 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A751C433EF
+	for <buildroot@archiver.kernel.org>; Mon,  4 Oct 2021 21:58:46 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B02E9613D2
-	for <buildroot@archiver.kernel.org>; Mon,  4 Oct 2021 21:58:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B02E9613D2
+	by mail.kernel.org (Postfix) with ESMTPS id BDFDF613D2
+	for <buildroot@archiver.kernel.org>; Mon,  4 Oct 2021 21:58:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org BDFDF613D2
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 885E5404A0;
-	Mon,  4 Oct 2021 21:58:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 998AC60855;
+	Mon,  4 Oct 2021 21:58:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qE5iPYDSoNEg; Mon,  4 Oct 2021 21:58:32 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id j8jXOdftU0qU; Mon,  4 Oct 2021 21:58:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D85154034F;
-	Mon,  4 Oct 2021 21:58:31 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5995B1BF97F
+	by smtp3.osuosl.org (Postfix) with ESMTP id CB45D6076F;
+	Mon,  4 Oct 2021 21:58:43 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 683B11BF982
  for <buildroot@lists.busybox.net>; Mon,  4 Oct 2021 21:57:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 49A30405C1
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5826B83C4F
  for <buildroot@lists.busybox.net>; Mon,  4 Oct 2021 21:57:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id r3WIIefPRQzs for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 48bskX9bSbfd for <buildroot@lists.busybox.net>;
  Mon,  4 Oct 2021 21:57:20 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7D63540640
+ by smtp1.osuosl.org (Postfix) with ESMTP id 818E383C4D
  for <buildroot@buildroot.org>; Mon,  4 Oct 2021 21:57:20 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 646F88F2B9; Mon,  4 Oct 2021 21:54:48 +0000 (UTC)
+ id 5AB0C8F2BA; Mon,  4 Oct 2021 21:54:48 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 4 Oct 2021 23:56:27 +0200
+Date: Mon, 4 Oct 2021 23:45:40 +0200
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: afe4f30e17072a9890b6b3224098f93a76abf6b2
-X-Git-Newrev: 7c392e2bfdc39c3c4f392418336966f2846bdb78
+X-Git-Oldrev: 5062b1e13f73d6703ceb866f66d90183418a3cd9
+X-Git-Newrev: afe4f30e17072a9890b6b3224098f93a76abf6b2
 X-Patchwork-Hint: ignore
-Message-Id: <20211004215448.646F88F2B9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/libsndfile: add
- security patch for CVE-2021-3246
+Message-Id: <20211004215448.5AB0C8F2BA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/libcurl: security
+ bump to version 7.79.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,83 +65,86 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7c392e2bfdc39c3c4f392418336966f2846bdb78
+commit: https://git.buildroot.net/buildroot/commit/?id=afe4f30e17072a9890b6b3224098f93a76abf6b2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-A heap buffer overflow vulnerability in msadpcm_decode_block of libsndfile
-1.0.30 allows attackers to execute arbitrary code via a crafted WAV file.
+Fixes the following security issues:
 
-https://nvd.nist.gov/vuln/detail/CVE-2021-3246
+- CVE-2021-22945: UAF and double-free in MQTT sending
+  When sending data to an MQTT server, libcurl could in some circumstances
+  erroneously keep a pointer to an already freed memory area and both use
+  that again in a subsequent call to send data and also free it again.
+
+  https://curl.se/docs/CVE-2021-22945.html
+
+- CVE-2021-22946: Protocol downgrade required TLS bypassed
+  A user can tell curl to require a successful upgrade to TLS when speaking
+  to an IMAP, POP3 or FTP server (--ssl-reqd on the command line or
+  CURLOPT_USE_SSL set to CURLUSESSL_CONTROL or CURLUSESSL_ALL with libcurl).
+  This requirement could be bypassed if the server would return a properly
+  crafted but perfectly legitimate response.
+
+  This flaw would then make curl silently continue its operations without
+  TLS contrary to the instructions and expectations, exposing possibly
+  sensitive data in clear text over the network.
+
+  https://curl.se/docs/CVE-2021-22946.html
+
+- CVE-2021-22947: STARTTLS protocol injection via MITM
+  When curl connects to an IMAP, POP3, SMTP or FTP server to exchange data
+  securely using STARTTLS to upgrade the connection to TLS level, the server
+  can still respond and send back multiple responses before the TLS upgrade.
+  Such multiple "pipelined" responses are cached by curl.  curl would then
+  upgrade to TLS but not flush the in-queue of cached responses and instead
+  use and trust the responses it got before the TLS handshake as if they
+  were authenticated.
+
+  Using this flaw, it allows a Man-In-The-Middle attacker to first inject
+  the fake responses, then pass-through the TLS traffic from the legitimate
+  server and trick curl into sending data back to the user thinking the
+  attacker's injected data comes from the TLS-protected server.
+
+  Over POP3 and IMAP an attacker can inject fake response data.
+
+  https://curl.se/docs/CVE-2021-22947.html
+
+In addition, 7.79.1 fixes a number of regressions in 7.79.0:
+https://daniel.haxx.se/blog/2021/09/22/curl-7-79-1-patched-up-and-ready/
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit cb18218ad125c1e4c13010c8ee946057ee07103c)
+(cherry picked from commit 6d6842130b456499d3ff230a3b70cec756cbccd1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0011-ms_adpcm-Fix-and-extend-size-checks.patch | 40 ++++++++++++++++++++++
- package/libsndfile/libsndfile.mk                   |  3 ++
- 2 files changed, 43 insertions(+)
+ package/libcurl/libcurl.hash | 4 ++--
+ package/libcurl/libcurl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libsndfile/0011-ms_adpcm-Fix-and-extend-size-checks.patch b/package/libsndfile/0011-ms_adpcm-Fix-and-extend-size-checks.patch
-new file mode 100644
-index 0000000000..edacbda01a
---- /dev/null
-+++ b/package/libsndfile/0011-ms_adpcm-Fix-and-extend-size-checks.patch
-@@ -0,0 +1,40 @@
-+From deb669ee8be55a94565f6f8a6b60890c2e7c6f32 Mon Sep 17 00:00:00 2001
-+From: bobsayshilol <bobsayshilol@live.co.uk>
-+Date: Thu, 18 Feb 2021 21:52:09 +0000
-+Subject: [PATCH] ms_adpcm: Fix and extend size checks
-+
-+'blockalign' is the size of a block, and each block contains 7 samples
-+per channel as part of the preamble, so check against 'samplesperblock'
-+rather than 'blockalign'. Also add an additional check that the block
-+is big enough to hold the samples it claims to hold.
-+
-+https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=26803
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/ms_adpcm.c | 10 ++++++++--
-+ 1 file changed, 8 insertions(+), 2 deletions(-)
-+
-+diff --git a/src/ms_adpcm.c b/src/ms_adpcm.c
-+index 5e8f1a31..a21cb994 100644
-+--- a/src/ms_adpcm.c
-++++ b/src/ms_adpcm.c
-+@@ -128,8 +128,14 @@ wavlike_msadpcm_init	(SF_PRIVATE *psf, int blockalign, int samplesperblock)
-+ 	if (psf->file.mode == SFM_WRITE)
-+ 		samplesperblock = 2 + 2 * (blockalign - 7 * psf->sf.channels) / psf->sf.channels ;
-+ 
-+-	if (blockalign < 7 * psf->sf.channels)
-+-	{	psf_log_printf (psf, "*** Error blockalign (%d) should be > %d.\n", blockalign, 7 * psf->sf.channels) ;
-++	/* There's 7 samples per channel in the preamble of each block */
-++	if (samplesperblock < 7 * psf->sf.channels)
-++	{	psf_log_printf (psf, "*** Error samplesperblock (%d) should be >= %d.\n", samplesperblock, 7 * psf->sf.channels) ;
-++		return SFE_INTERNAL ;
-++		} ;
-++
-++	if (2 * blockalign < samplesperblock * psf->sf.channels)
-++	{	psf_log_printf (psf, "*** Error blockalign (%d) should be >= %d.\n", blockalign, samplesperblock * psf->sf.channels / 2) ;
-+ 		return SFE_INTERNAL ;
-+ 		} ;
-+ 
-+-- 
-+2.20.1
-+
-diff --git a/package/libsndfile/libsndfile.mk b/package/libsndfile/libsndfile.mk
-index eb15426146..81bf804eb8 100644
---- a/package/libsndfile/libsndfile.mk
-+++ b/package/libsndfile/libsndfile.mk
-@@ -19,6 +19,9 @@ LIBSNDFILE_IGNORE_CVES += CVE-2018-13139 CVE-2018-19432
- LIBSNDFILE_IGNORE_CVES += \
- 	CVE-2017-14245 CVE-2017-14246 CVE-2017-17456 CVE-2017-17457 \
- 	CVE-2018-19661 CVE-2018-19662
-+# 0011-ms_adpcm-Fix-and-extend-size-checks.patch
-+LIBSNDFILE_IGNORE_CVES += CVE-2021-3246
-+
- # disputed, https://github.com/erikd/libsndfile/issues/398
- LIBSNDFILE_IGNORE_CVES += CVE-2018-13419
- # 0004-src-wav.c-Fix-heap-read-overflow.patch
+diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+index 5e5776d1e3..b13f01c874 100644
+--- a/package/libcurl/libcurl.hash
++++ b/package/libcurl/libcurl.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://curl.se/download/curl-7.78.0.tar.xz.asc
++# https://curl.se/download/curl-7.79.1.tar.xz.asc
+ # signed with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
+-sha256  be42766d5664a739c3974ee3dfbbcbe978a4ccb1fe628bb1d9b59ac79e445fb5  curl-7.78.0.tar.xz
++sha256  0606f74b1182ab732a17c11613cbbaf7084f2e6cca432642d0e3ad7c224c3689  curl-7.79.1.tar.xz
+ sha256  6fd1a1c008b5ef4c4741dd188c3f8af6944c14c25afa881eb064f98fb98358e7  COPYING
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index 4e3c6d4523..a70ebe4113 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBCURL_VERSION = 7.78.0
++LIBCURL_VERSION = 7.79.1
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
+ LIBCURL_SITE = https://curl.se/download
+ LIBCURL_DEPENDENCIES = host-pkgconf \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
