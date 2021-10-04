@@ -2,52 +2,52 @@ Return-Path: <SRS0=dj6D=OY=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F52AC433F5
-	for <buildroot@archiver.kernel.org>; Mon,  4 Oct 2021 20:12:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A052CC433F5
+	for <buildroot@archiver.kernel.org>; Mon,  4 Oct 2021 20:13:07 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id CFF0261409
-	for <buildroot@archiver.kernel.org>; Mon,  4 Oct 2021 20:12:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org CFF0261409
+	by mail.kernel.org (Postfix) with ESMTPS id 6DCC461409
+	for <buildroot@archiver.kernel.org>; Mon,  4 Oct 2021 20:13:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6DCC461409
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A81D383410;
-	Mon,  4 Oct 2021 20:12:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3BA8683403;
+	Mon,  4 Oct 2021 20:13:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kQcKSiowTI75; Mon,  4 Oct 2021 20:12:54 +0000 (UTC)
+	with ESMTP id Kkz_MPZAhh_k; Mon,  4 Oct 2021 20:13:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0A19283403;
-	Mon,  4 Oct 2021 20:12:54 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8C08F1BF97D
- for <buildroot@lists.busybox.net>; Mon,  4 Oct 2021 20:10:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7F48883C1C;
+	Mon,  4 Oct 2021 20:13:05 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 7AC3E1BF2BA
+ for <buildroot@lists.busybox.net>; Mon,  4 Oct 2021 20:10:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 66A6E606A9
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5054A833AF
  for <buildroot@lists.busybox.net>; Mon,  4 Oct 2021 20:10:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DEz9t6X-3NVS for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZyOcVopjyiOY for <buildroot@lists.busybox.net>;
  Mon,  4 Oct 2021 20:10:11 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id AF20B60727
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8F8CB833CA
  for <buildroot@buildroot.org>; Mon,  4 Oct 2021 20:10:11 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id B264B8ED8C; Mon,  4 Oct 2021 20:07:39 +0000 (UTC)
+ id 937F68ED89; Mon,  4 Oct 2021 20:07:39 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 4 Oct 2021 21:17:54 +0200
+Date: Mon, 4 Oct 2021 21:15:26 +0200
 X-Git-Refname: refs/heads/2021.05.x
-X-Git-Oldrev: c1ce260e2e1400eb6dbb1ca08098187edbaabb79
-X-Git-Newrev: d98654f3e46f4f50ec127980503cfdbd6c3f8954
+X-Git-Oldrev: 2ac076a49c250b4575a1f5456d4aafc93123e262
+X-Git-Newrev: 9420af6c55f25cf2dd6f0860450269a7bedeca3f
 X-Patchwork-Hint: ignore
-Message-Id: <20211004200739.B264B8ED8C@busybox.osuosl.org>
+Message-Id: <20211004200739.937F68ED89@busybox.osuosl.org>
 Subject: [Buildroot] [git commit branch/2021.05.x] support/testing:
- test_rust: remove kernel build
+ test_openrc: switch to ARM arm toolchain and builtin kernel
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,62 +65,76 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d98654f3e46f4f50ec127980503cfdbd6c3f8954
+commit: https://git.buildroot.net/buildroot/commit/?id=9420af6c55f25cf2dd6f0860450269a7bedeca3f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
 
-This test already use builtin kernel provided by the testsuite infra:
+The kernel 5.5.7 curently used by the test doesn't build with host
+gcc >= 10 due the gcc default -fno-common. See GCC 10 porting guide [1].
 
-    self.emulator.boot(arch="armv7",
-                       kernel="builtin",
-                       options=["-initrd", img])
+/usr/bin/ld: scripts/dtc/dtc-parser.tab.o:(.bss+0x20): multiple definition of `yylloc'; scripts/dtc/dtc-lexer.lex.o:(.bss+0x0): first defined here
 
-But a second kernel is build from the its defconfig. This second kernel
-is not used by the test.
+But we can't just update this test to the next linux kernel LTS 5.10.y since
+the minimum gcc version has been updated to gcc 4.9 since 5.8 kernel [2]
+and the Sourcery CodeBench ARM 2014.05 is used (gcc 4.8 based).
 
-The TestRust (using BR2_PACKAGE_HOST_RUST=y) is really long to build,
-save some cpu time by removing the kernel build.
+Enable arm cortex A9 and VFP support to switch to the ARM arm prebuilt
+toolchain (the Bootlin toolchain could be used).
+While at it use the prebuilt buildin kernel for the vexpress target
+recently updated to 5.10.7.
 
-This unused kernel (based on 4.11.3 release) doesn't even build with
-host gcc >= 10.
+Fixes:
+https://gitlab.com/kubu93/buildroot/-/jobs/1564202094
+
+[1] https://gcc.gnu.org/gcc-10/porting_to.html
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6ec4476ac82512f09c94aff5972654b70f3772b2
+[3] 3cf2782906d5cc05a3966c25518d2ce01f11afc8
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit f6d438d59fbb291e677edc030150944ee61feb4d)
+(cherry picked from commit e0ad7c641155a06dac385f2ffc4961d6a4e5c1b4)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/testing/tests/package/test_rust.py | 12 ------------
- 1 file changed, 12 deletions(-)
+ support/testing/tests/init/test_openrc.py | 12 ++++--------
+ 1 file changed, 4 insertions(+), 8 deletions(-)
 
-diff --git a/support/testing/tests/package/test_rust.py b/support/testing/tests/package/test_rust.py
-index 15bb93dd97..728a24e299 100644
---- a/support/testing/tests/package/test_rust.py
-+++ b/support/testing/tests/package/test_rust.py
-@@ -65,12 +65,6 @@ class TestRustBin(TestRustBase):
+diff --git a/support/testing/tests/init/test_openrc.py b/support/testing/tests/init/test_openrc.py
+index 14839434ef..c6ade7676d 100644
+--- a/support/testing/tests/init/test_openrc.py
++++ b/support/testing/tests/init/test_openrc.py
+@@ -5,15 +5,11 @@ class InitSystemOpenrcBase(InitSystemBase):
+     config = \
+         """
+         BR2_arm=y
++        BR2_cortex_a9=y
++        BR2_ARM_ENABLE_VFP=y
          BR2_TOOLCHAIN_EXTERNAL=y
+         BR2_INIT_OPENRC=y
          BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-         BR2_SYSTEM_DHCP="eth0"
 -        BR2_LINUX_KERNEL=y
 -        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.11.3"
+-        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.5.7"
 -        BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
 -        BR2_LINUX_KERNEL_DTS_SUPPORT=y
 -        BR2_LINUX_KERNEL_INTREE_DTS_NAME="vexpress-v2p-ca9"
-         BR2_TARGET_ROOTFS_CPIO=y
          # BR2_TARGET_ROOTFS_TAR is not set
-         BR2_PACKAGE_HOST_RUSTC=y
-@@ -93,12 +87,6 @@ class TestRust(TestRustBase):
-         BR2_TOOLCHAIN_EXTERNAL=y
-         BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-         BR2_SYSTEM_DHCP="eth0"
--        BR2_LINUX_KERNEL=y
--        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.11.3"
--        BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
--        BR2_LINUX_KERNEL_DTS_SUPPORT=y
--        BR2_LINUX_KERNEL_INTREE_DTS_NAME="vexpress-v2p-ca9"
-         BR2_TARGET_ROOTFS_CPIO=y
-         # BR2_TARGET_ROOTFS_TAR is not set
-         BR2_PACKAGE_HOST_RUSTC=y
+         """
+ 
+@@ -34,7 +30,7 @@ class TestInitSystemOpenrcRoFull(InitSystemOpenrcBase):
+         """
+ 
+     def test_run(self):
+-        self.start_emulator("squashfs", "zImage", "vexpress-v2p-ca9")
++        self.start_emulator("squashfs")
+         self.check_init()
+ 
+ 
+@@ -46,5 +42,5 @@ class TestInitSystemOpenrcRwFull(InitSystemOpenrcBase):
+         """
+ 
+     def test_run(self):
+-        self.start_emulator("ext2", "zImage", "vexpress-v2p-ca9")
++        self.start_emulator("ext2")
+         self.check_init()
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
