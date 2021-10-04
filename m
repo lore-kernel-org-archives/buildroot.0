@@ -2,54 +2,52 @@ Return-Path: <SRS0=dj6D=OY=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 79203C433FE
-	for <buildroot@archiver.kernel.org>; Mon,  4 Oct 2021 12:44:32 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E2F3C433F5
+	for <buildroot@archiver.kernel.org>; Mon,  4 Oct 2021 12:49:45 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 033CF61264
-	for <buildroot@archiver.kernel.org>; Mon,  4 Oct 2021 12:44:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 033CF61264
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
+	by mail.kernel.org (Postfix) with ESMTPS id 8BFA961264
+	for <buildroot@archiver.kernel.org>; Mon,  4 Oct 2021 12:49:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8BFA961264
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 86B1684B95;
-	Mon,  4 Oct 2021 12:44:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5E4E260668;
+	Mon,  4 Oct 2021 12:49:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id puwk9CGBBFt1; Mon,  4 Oct 2021 12:44:30 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 8kzthA0yffOa; Mon,  4 Oct 2021 12:49:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9DBEC84B80;
-	Mon,  4 Oct 2021 12:44:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D717B60AF5;
+	Mon,  4 Oct 2021 12:49:39 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 311B71BF330
- for <buildroot@lists.busybox.net>; Mon,  4 Oct 2021 12:43:57 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id BF5611BF330
+ for <buildroot@lists.busybox.net>; Mon,  4 Oct 2021 12:49:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 212A884B6B
- for <buildroot@lists.busybox.net>; Mon,  4 Oct 2021 12:43:57 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id AEF6784BC2
+ for <buildroot@lists.busybox.net>; Mon,  4 Oct 2021 12:49:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vaBXFOPPnaV1 for <buildroot@lists.busybox.net>;
- Mon,  4 Oct 2021 12:43:56 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp1.osuosl.org (Postfix) with ESMTPS id CFAA784B6D
- for <buildroot@buildroot.org>; Mon,  4 Oct 2021 12:43:55 +0000 (UTC)
-Received: (Authenticated sender: herve.codina@bootlin.com)
- by relay1-d.mail.gandi.net (Postfix) with ESMTPA id B458B24001A;
- Mon,  4 Oct 2021 12:43:53 +0000 (UTC)
-From: Herve Codina <herve.codina@bootlin.com>
+ with ESMTP id fpGh_1p95cjj for <buildroot@lists.busybox.net>;
+ Mon,  4 Oct 2021 12:49:36 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id B076284BB2
+ for <buildroot@buildroot.org>; Mon,  4 Oct 2021 12:49:36 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 5B6F38DC9B; Mon,  4 Oct 2021 12:47:05 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon,  4 Oct 2021 14:43:16 +0200
-Message-Id: <20211004124316.355770-4-herve.codina@bootlin.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20211004124316.355770-1-herve.codina@bootlin.com>
-References: <20211004124316.355770-1-herve.codina@bootlin.com>
-MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 3/3] package/collectd: add dbi support
+Date: Mon, 4 Oct 2021 14:14:55 +0200
+X-Git-Refname: refs/heads/2021.08.x
+X-Git-Oldrev: b5f184d898972edfcb1ffdcb2f197c76c33ffaf7
+X-Git-Newrev: 789efcea4f8040fb8f956236a86194c9f33741ba
+X-Patchwork-Hint: ignore
+Message-Id: <20211004124705.5B6F38DC9B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.08.x] package/syslog-ng: Bump
+ version to 3.33.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -61,76 +59,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Herve Codina <herve.codina@bootlin.com>, Asaf Kahlon <asafka7@gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The DBI plugin uses libdbi, a database abstraction library,
-to execute SQL statements on a database and read back the
-result.
+commit: https://git.buildroot.net/buildroot/commit/?id=789efcea4f8040fb8f956236a86194c9f33741ba
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.08.x
 
-https://collectd.org/wiki/index.php/Plugin:DBI
+Bugfix release, fixing a regression in 3.33.1:
 
-Based on initial work from Nicolas Carrier <nicolas.carrier@orolia.com>
+- disk-buffer: fixed a bug, which was introduced in 3.33.1, where we
+  sometimes corrupted the disk-buffer file when it reached full size.
 
-Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+https://github.com/syslog-ng/syslog-ng/releases/tag/syslog-ng-3.33.2
+
+Signed-off-by: Chris Packham <judge.packham@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit e8752217fdbeb4978eef9cdc26d2f63a12b14ace)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/collectd/Config.in   | 7 +++++++
- package/collectd/collectd.mk | 4 +++-
- 2 files changed, 10 insertions(+), 1 deletion(-)
+ package/syslog-ng/syslog-ng.hash | 2 +-
+ package/syslog-ng/syslog-ng.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/collectd/Config.in b/package/collectd/Config.in
-index 82c24fdbc3..d44d4e4913 100644
---- a/package/collectd/Config.in
-+++ b/package/collectd/Config.in
-@@ -212,6 +212,13 @@ config BR2_PACKAGE_COLLECTD_CURL_XML
- 	help
- 	  Reads files using libcurl and parses it as XML.
+diff --git a/package/syslog-ng/syslog-ng.hash b/package/syslog-ng/syslog-ng.hash
+index fdf37ec3d9..df8002341c 100644
+--- a/package/syslog-ng/syslog-ng.hash
++++ b/package/syslog-ng/syslog-ng.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  35913654582947705a5679c9a2dcd4d25b4c98f3f3734cd55e94c5c780c22877  syslog-ng-3.33.1.tar.gz
++sha256  0b786a06077b9150191d714f45a1b4b3792952cb58163a3af336f074da9fb14b  syslog-ng-3.33.2.tar.gz
+ sha256  e912cf1e1c09b81d61c0154eb6c179588622c31ad07bfb4a90c612d07ff09d9b  COPYING
+ sha256  ce3324c9f22299cfc7c281e5a6ab40fbe9c2ea1a67cee87226cb8cd39db1e1d2  GPL.txt
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LGPL.txt
+diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
+index b5aa5ca027..765e886b12 100644
+--- a/package/syslog-ng/syslog-ng.mk
++++ b/package/syslog-ng/syslog-ng.mk
+@@ -6,7 +6,7 @@
  
-+config BR2_PACKAGE_COLLECTD_DBI
-+	bool "dbi"
-+	select BR2_PACKAGE_LIBDBI
-+	help
-+	  Executes SQL statements on various databases and
-+	  interprets the returned data.
-+
- config BR2_PACKAGE_COLLECTD_DF
- 	bool "df"
- 	help
-diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
-index 9bfbc784ab..d01058471d 100644
---- a/package/collectd/collectd.mk
-+++ b/package/collectd/collectd.mk
-@@ -17,7 +17,7 @@ COLLECTD_SELINUX_MODULES = apache collectd
- 
- # These require unmet dependencies, are fringe, pointless or deprecated
- COLLECTD_PLUGINS_DISABLE = \
--	apple_sensors aquaero ascent barometer dbi dpdkstat email \
-+	apple_sensors aquaero ascent barometer dpdkstat email \
- 	gmond hddtemp intel_rdt ipmi java lpar \
- 	madwifi mbmon mic multimeter netapp notify_desktop numa \
- 	oracle perl pf pinba powerdns python routeros \
-@@ -67,6 +67,7 @@ COLLECTD_CONF_OPTS += \
- 	$(if $(BR2_PACKAGE_COLLECTD_CURL),--enable-curl,--disable-curl) \
- 	$(if $(BR2_PACKAGE_COLLECTD_CURL_JSON),--enable-curl_json,--disable-curl_json) \
- 	$(if $(BR2_PACKAGE_COLLECTD_CURL_XML),--enable-curl_xml,--disable-curl_xml) \
-+	$(if $(BR2_PACKAGE_COLLECTD_DBI),--enable-dbi,--disable-dbi) \
- 	$(if $(BR2_PACKAGE_COLLECTD_DF),--enable-df,--disable-df) \
- 	$(if $(BR2_PACKAGE_COLLECTD_DISK),--enable-disk,--disable-disk) \
- 	$(if $(BR2_PACKAGE_COLLECTD_DNS),--enable-dns,--disable-dns) \
-@@ -168,6 +169,7 @@ COLLECTD_DEPENDENCIES = \
- 	$(if $(BR2_PACKAGE_COLLECTD_CURL),libcurl) \
- 	$(if $(BR2_PACKAGE_COLLECTD_CURL_JSON),libcurl yajl) \
- 	$(if $(BR2_PACKAGE_COLLECTD_CURL_XML),libcurl libxml2) \
-+	$(if $(BR2_PACKAGE_COLLECTD_DBI),libdbi) \
- 	$(if $(BR2_PACKAGE_COLLECTD_DNS),libpcap) \
- 	$(if $(BR2_PACKAGE_COLLECTD_DPDK_TELEMETRY),jansson) \
- 	$(if $(BR2_PACKAGE_COLLECTD_GPS),gpsd) \
--- 
-2.31.1
-
+ # When updating the version, please check at runtime if the version in
+ # syslog-ng.conf header needs to be updated
+-SYSLOG_NG_VERSION = 3.33.1
++SYSLOG_NG_VERSION = 3.33.2
+ SYSLOG_NG_SITE = https://github.com/balabit/syslog-ng/releases/download/syslog-ng-$(SYSLOG_NG_VERSION)
+ SYSLOG_NG_LICENSE = LGPL-2.1+ (syslog-ng core), GPL-2.0+ (modules)
+ SYSLOG_NG_LICENSE_FILES = COPYING GPL.txt LGPL.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
