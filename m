@@ -2,92 +2,90 @@ Return-Path: <SRS0=EGOI=OZ=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5846EC433F5
-	for <buildroot@archiver.kernel.org>; Tue,  5 Oct 2021 19:36:12 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F33ACC433F5
+	for <buildroot@archiver.kernel.org>; Tue,  5 Oct 2021 19:36:23 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id EC398611C5
-	for <buildroot@archiver.kernel.org>; Tue,  5 Oct 2021 19:36:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org EC398611C5
+	by mail.kernel.org (Postfix) with ESMTPS id 9525261211
+	for <buildroot@archiver.kernel.org>; Tue,  5 Oct 2021 19:36:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9525261211
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C90D1408B9;
-	Tue,  5 Oct 2021 19:36:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3D32383D69;
+	Tue,  5 Oct 2021 19:36:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FSC89nXq6gcO; Tue,  5 Oct 2021 19:36:11 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id hr039YmevFDT; Tue,  5 Oct 2021 19:36:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 27A5C406D6;
-	Tue,  5 Oct 2021 19:36:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 95DA183D37;
+	Tue,  5 Oct 2021 19:36:21 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 47C9B1BF334
- for <buildroot@lists.busybox.net>; Tue,  5 Oct 2021 19:36:07 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 98EE91BF334
+ for <buildroot@lists.busybox.net>; Tue,  5 Oct 2021 19:36:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 44CD583D37
- for <buildroot@lists.busybox.net>; Tue,  5 Oct 2021 19:36:07 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8878B83D37
+ for <buildroot@lists.busybox.net>; Tue,  5 Oct 2021 19:36:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cUIj0TE3rvsc for <buildroot@lists.busybox.net>;
- Tue,  5 Oct 2021 19:36:06 +0000 (UTC)
+ with ESMTP id fT22UCsrEKQV for <buildroot@lists.busybox.net>;
+ Tue,  5 Oct 2021 19:36:16 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com
- [IPv6:2a00:1450:4864:20::52b])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 48A7483D36
- for <buildroot@busybox.net>; Tue,  5 Oct 2021 19:36:06 +0000 (UTC)
-Received: by mail-ed1-x52b.google.com with SMTP id d8so789578edx.9
- for <buildroot@busybox.net>; Tue, 05 Oct 2021 12:36:06 -0700 (PDT)
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com
+ [IPv6:2a00:1450:4864:20::530])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8A69783D36
+ for <buildroot@busybox.net>; Tue,  5 Oct 2021 19:36:16 +0000 (UTC)
+Received: by mail-ed1-x530.google.com with SMTP id f9so900872edx.4
+ for <buildroot@busybox.net>; Tue, 05 Oct 2021 12:36:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=jZN031y9BM3bCLhRpToDMkMwc0LOIwXQdqQhDc13WnM=;
- b=Sfs6pCiBvIYpl90v0kjydZWsxjURHc7JEse0/Oq+j3qKpeqpw9aZoQo6bsLe5orFeQ
- M76WpHnvtpRRAwOn0ugobHdEV8qPYQplAIRh/anAsfTiKTE5L2XL27NmxtACeeOPG7Rk
- cDSr78eGro6PLiMosCmb892OqvwzZUCgH3zzVfRX5/Q/WncHOi2yRR/bb0s5bHWtjOsn
- oXIa0GeLBxVFgBQ/IFJI3IVH9BsScYXG0/ANtTHe4mSTpXOgUW7opQIJkDzHhyELMPcp
- 9dHqFHuOQBjBUZFcSVoo9VAMET6T5/AagtOrSFV8dbyl0QAJvjBlREq9LoiQLe1bAXkm
- wXrA==
+ bh=2HXW4uHFzgH/ilTJXWLHdZdR+4bGf0O3HPGoz7sMlZ0=;
+ b=ACrI+Ga0T7XnoMUObTFdMpGT362Qb16+wXnKnrOc4YATjtMhCX9AEqRelq4lWevV6b
+ 78DmnId78bWoPyAe+ZADTcER4HS2eO+YMy8HU2Ura8xxsvA2OLcAnrJHIU6+q2BXglc7
+ jPkNuRELdvhCIRBSL2jXr4sKh/nWJ8Ha6y9hgRdHJ6k6eT8wE1Wxo4m/YElkVp6wPvUi
+ o9yDchCiiF0grI+fcvZN1cPLGBh4HyHsoCg8QjXKk2CWSd2urD/fmcZT5kvqTiUqDHe7
+ gv1epngQWtwUJkiTzNy1c2n6yCk7C++1w/l66ud74dEMy9meaok+vTFa+9Knv+h6ctr3
+ JtYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=jZN031y9BM3bCLhRpToDMkMwc0LOIwXQdqQhDc13WnM=;
- b=kdJ662oJZIO25BmkdldnC6egeiBBm0bljjyJUlVnmwdZ4CoBvwfMqACuDYq7AW/SrR
- h3KDTrkOw9D6eVLohnoZsZIRGIDiVMxjNrKW1KLDmRz1UduaJB5/MREFxUW0CG2+V2ZI
- 4cwZ4NX46lBSEF81fz+ny5Bug/iILH9Eqhm89GmQ+b45d9MbQo7/vA/3aoxvWfBLsTv7
- UsYwWjWnJs6uwjKaGaiaN9lnrYrAxu88Ws0oiuk2I6HUHZrC/lFcNl3ZZzW2aIeSuXqJ
- 6b+fYTFe7gItZS0Uv3jTcycmioxEPIegQXoZDX8xAQw/vzWLgcR58D4aWv3qNFTebGnc
- zYxg==
-X-Gm-Message-State: AOAM530ZNu0td04u2PShT1ryiGsXGEJj1t3ZixGCqJSonADR763RtSX1
- h9xmqnnXrewrbC/RmDmoVQGXwA==
-X-Google-Smtp-Source: ABdhPJyhhdGfUc5FSrsEt7UHObxPNCzgJ2ZdA/wEjp1GbKnc9fIzwb33ueW6YdRMUILTpYIxfMGIQQ==
-X-Received: by 2002:a17:906:1f95:: with SMTP id
- t21mr137440ejr.234.1633462564305; 
- Tue, 05 Oct 2021 12:36:04 -0700 (PDT)
+ bh=2HXW4uHFzgH/ilTJXWLHdZdR+4bGf0O3HPGoz7sMlZ0=;
+ b=Iyuo7Zmf7sO7X1Iu3WCxC1RKLJlXpwWyho/fTI2adnZ6827zEKvXBr6MUI0/rlMW3C
+ 0EXBJs1Wa6CI9S826wX7E4doJZx6J8lT+xCV/0WUSjXyyyS068zJIV4QJU25pX+m9mK9
+ G4sv8fdzPbg6lStkN8z1RXrlHihL7Y4hrk6rmALwomdDNnNcuoKxvaguK3rcME7drTg6
+ z0XBeaUjS29PIqCf1sDoPuLhvBN89uU0DGJXCg7NzKR3jGo/mzm+N9bA/NsINFgjw1Mw
+ kxEOVQWh4JVs5Q7I8xkj/6epa3cFEtJhmKEcX6w3+S840XkcNBOaXQZeFdqGkWB1u2W0
+ D7wQ==
+X-Gm-Message-State: AOAM530jOUHq2UgSHKduQfSqzk6hPzvujQbedNzonBeM5oYtiNLwSWY2
+ Cgk34WNFgRPSMSN0/bnA3I7wPg==
+X-Google-Smtp-Source: ABdhPJz4mdWpImCVt83vc4JncKAWqZl0pkq8XyE/lKw/cVtGHwLt57pZSbDqA5pNpsMM7U9IbhEOHg==
+X-Received: by 2002:a17:906:a404:: with SMTP id
+ l4mr26383854ejz.175.1633462574727; 
+ Tue, 05 Oct 2021 12:36:14 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id d10sm8048674eja.81.2021.10.05.12.36.03
+ by smtp.gmail.com with ESMTPSA id dt4sm8266594ejb.27.2021.10.05.12.36.13
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 05 Oct 2021 12:36:04 -0700 (PDT)
-Message-ID: <298b4c58-9c48-1ede-caf4-23ff120a4e54@mind.be>
-Date: Tue, 5 Oct 2021 21:36:03 +0200
+ Tue, 05 Oct 2021 12:36:14 -0700 (PDT)
+Message-ID: <8bb4a041-b89a-52cb-bab3-b6852af5d024@mind.be>
+Date: Tue, 5 Oct 2021 21:36:12 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.1.0
 Content-Language: en-GB
 To: Francois Perrad <fperrad@gmail.com>, buildroot@busybox.net
-References: <20210927201753.122703-1-francois.perrad@gadz.org>
+References: <20210927201805.122757-1-francois.perrad@gadz.org>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20210927201753.122703-1-francois.perrad@gadz.org>
-Subject: Re: [Buildroot] [PATCH] package/pcre2: bump to version 10.37
+In-Reply-To: <20210927201805.122757-1-francois.perrad@gadz.org>
+Subject: Re: [Buildroot] [PATCH] package/openldap: bump to version 2.4.59
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -106,13 +104,7 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 27/09/2021 22:17, Francois Perrad wrote:
-> diff LICENSE:
-> -Copyright (c) 1997-2020 University of Cambridge
-> +Copyright (c) 1997-2021 University of Cambridge
-> -Copyright(c) 2010-2020 Zoltan Herczeg
-> +Copyright(c) 2010-2021 Zoltan Herczeg
-> 
+On 27/09/2021 22:18, Francois Perrad wrote:
 > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
   Applied to master, thanks.
@@ -121,36 +113,54 @@ On 27/09/2021 22:17, Francois Perrad wrote:
   Arnout
 
 > ---
->   package/pcre2/pcre2.hash | 6 +++---
->   package/pcre2/pcre2.mk   | 2 +-
->   2 files changed, 4 insertions(+), 4 deletions(-)
+>   package/openldap/Config.in     |  2 +-
+>   package/openldap/openldap.hash | 10 +++++-----
+>   package/openldap/openldap.mk   |  2 +-
+>   3 files changed, 7 insertions(+), 7 deletions(-)
 > 
-> diff --git a/package/pcre2/pcre2.hash b/package/pcre2/pcre2.hash
-> index b30a29096..130ce1f59 100644
-> --- a/package/pcre2/pcre2.hash
-> +++ b/package/pcre2/pcre2.hash
-> @@ -1,5 +1,5 @@
->   # Locally calculated after checking pgp signature
-> -# https://ftp.pcre.org/pub/pcre/pcre2-10.36.tar.bz2.sig
-> -sha256  a9ef39278113542968c7c73a31cfcb81aca1faa64690f400b907e8ab6b4a665c  pcre2-10.36.tar.bz2
-> +# https://ftp.pcre.org/pub/pcre/pcre2-10.37.tar.bz2.sig
-> +sha256  4d95a96e8b80529893b4562be12648d798b957b1ba1aae39606bbc2ab956d270  pcre2-10.37.tar.bz2
+> diff --git a/package/openldap/Config.in b/package/openldap/Config.in
+> index bd39d0d02..7a0b2f4b8 100644
+> --- a/package/openldap/Config.in
+> +++ b/package/openldap/Config.in
+> @@ -8,7 +8,7 @@ config BR2_PACKAGE_OPENLDAP
+>   
+>   	  This only installs client-side support.
+>   
+> -	  http://www.openldap.org/
+> +	  https://www.openldap.org/
+>   
+>   if BR2_PACKAGE_OPENLDAP
+>   
+> diff --git a/package/openldap/openldap.hash b/package/openldap/openldap.hash
+> index 8ce50d613..71092c93d 100644
+> --- a/package/openldap/openldap.hash
+> +++ b/package/openldap/openldap.hash
+> @@ -1,7 +1,7 @@
+> -# From https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.58.md5
+> -md5  c203d735ba69976e5b28dc39006f29b5  openldap-2.4.58.tgz
+> -# From https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.58.sha1
+> -sha1  875416827be3ad63f20004510a354db0aaceb2ed  openldap-2.4.58.tgz
+> +# From https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.59.md5
+> +md5  6036a03b3a67b4a1fe1246e0a2c7265a  openldap-2.4.59.tgz
+> +# From https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.59.sha1
+> +sha1  b154d06bbf40fafafb34fffc4b116946d931efef  openldap-2.4.59.tgz
 >   # Locally computed
-> -sha256  8937734bbb1ba65d9f8ac7a7c8fc9016759a09aa2fb37d2175c06c9e7a856a24  LICENCE
-> +sha256  9c9488256e3612ec5ea40fd12abe7ec55a58f23bd36e6f465116c2b3cbffba02  LICENCE
-> diff --git a/package/pcre2/pcre2.mk b/package/pcre2/pcre2.mk
-> index d02772650..220eb8a99 100644
-> --- a/package/pcre2/pcre2.mk
-> +++ b/package/pcre2/pcre2.mk
+> -sha256  57b59254be15d0bf6a9ab3d514c1c05777b02123291533134a87c94468f8f47b  openldap-2.4.58.tgz
+> +sha256  99f37d6747d88206c470067eda624d5e48c1011e943ec0ab217bae8712e22f34  openldap-2.4.59.tgz
+>   sha256  310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  LICENSE
+> diff --git a/package/openldap/openldap.mk b/package/openldap/openldap.mk
+> index daa409ae1..b5373544a 100644
+> --- a/package/openldap/openldap.mk
+> +++ b/package/openldap/openldap.mk
 > @@ -4,7 +4,7 @@
 >   #
 >   ################################################################################
 >   
-> -PCRE2_VERSION = 10.36
-> +PCRE2_VERSION = 10.37
->   PCRE2_SITE = https://ftp.pcre.org/pub/pcre
->   PCRE2_SOURCE = pcre2-$(PCRE2_VERSION).tar.bz2
->   PCRE2_LICENSE = BSD-3-Clause
+> -OPENLDAP_VERSION = 2.4.58
+> +OPENLDAP_VERSION = 2.4.59
+>   OPENLDAP_SOURCE = openldap-$(OPENLDAP_VERSION).tgz
+>   OPENLDAP_SITE = https://www.openldap.org/software/download/OpenLDAP/openldap-release
+>   OPENLDAP_LICENSE = OpenLDAP Public License
 > 
 _______________________________________________
 buildroot mailing list
