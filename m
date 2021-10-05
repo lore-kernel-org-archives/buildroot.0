@@ -2,52 +2,58 @@ Return-Path: <SRS0=EGOI=OZ=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 81F0DC433F5
-	for <buildroot@archiver.kernel.org>; Tue,  5 Oct 2021 14:45:38 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4939BC433EF
+	for <buildroot@archiver.kernel.org>; Tue,  5 Oct 2021 14:48:08 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 4D29C61371
-	for <buildroot@archiver.kernel.org>; Tue,  5 Oct 2021 14:45:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4D29C61371
+	by mail.kernel.org (Postfix) with ESMTPS id D34BC61354
+	for <buildroot@archiver.kernel.org>; Tue,  5 Oct 2021 14:48:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D34BC61354
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2188D4086B;
-	Tue,  5 Oct 2021 14:45:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7ECE683DB5;
+	Tue,  5 Oct 2021 14:48:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id J2-FLq1HK4sq; Tue,  5 Oct 2021 14:45:37 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id hH_0MZlH1dDf; Tue,  5 Oct 2021 14:48:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 211AF407AD;
-	Tue,  5 Oct 2021 14:45:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E7F8283DB3;
+	Tue,  5 Oct 2021 14:48:05 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4D21A1BF34A
- for <buildroot@lists.busybox.net>; Tue,  5 Oct 2021 14:44:58 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B19311BF34A
+ for <buildroot@lists.busybox.net>; Tue,  5 Oct 2021 14:48:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 95B3B83DA4
- for <buildroot@lists.busybox.net>; Tue,  5 Oct 2021 14:44:56 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A1D3883DB3
+ for <buildroot@lists.busybox.net>; Tue,  5 Oct 2021 14:48:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Su9zzf1HQrmu for <buildroot@lists.busybox.net>;
- Tue,  5 Oct 2021 14:44:55 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id DC6A583DA5
- for <buildroot@buildroot.org>; Tue,  5 Oct 2021 14:44:55 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 1C18390981; Tue,  5 Oct 2021 14:42:22 +0000 (UTC)
+ with ESMTP id pH29MfybO9cp for <buildroot@lists.busybox.net>;
+ Tue,  5 Oct 2021 14:48:03 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0FD6583DAD
+ for <buildroot@buildroot.org>; Tue,  5 Oct 2021 14:48:02 +0000 (UTC)
+Received: (Authenticated sender: peter@casa-korsgaard.com)
+ by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 81903E000D;
+ Tue,  5 Oct 2021 14:47:59 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
+ (envelope-from <peter@korsgaard.com>)
+ id 1mXlja-0003Jc-Kv; Tue, 05 Oct 2021 16:47:58 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Tue, 5 Oct 2021 16:42:20 +0200
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 4f44314a47d25cf3fb026f498a4f5685b084ceab
-X-Git-Newrev: ad38cfabe16c19bf3ff4a2aadda54e3a61750b2a
-X-Patchwork-Hint: ignore
-Message-Id: <20211005144222.1C18390981@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x]
- boot/arm-trusted-firmware: point LICENSE_FILES to correct file
+To: Romain Naour <romain.naour@gmail.com>
+References: <20210923212831.391084-1-romain.naour@gmail.com>
+Date: Tue, 05 Oct 2021 16:47:58 +0200
+In-Reply-To: <20210923212831.391084-1-romain.naour@gmail.com> (Romain Naour's
+ message of "Thu, 23 Sep 2021 23:28:31 +0200")
+Message-ID: <87a6jncyu9.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH] boot/syslinux: add missing python dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,65 +65,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ad38cfabe16c19bf3ff4a2aadda54e3a61750b2a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
-Since v2.2 release (commits 8cc36aec912 "doc: De-duplicate readme and
-license files" and 9f1622b018ab "doc: Move content out of readme and
-create new index page "), the license.rst file at the root of the git
-repo is only telling to look at docs/license.rst file.
+ > Syslinux use some python scripts during the build and they
+ > are using python interpreter by default. It fail to build
+ > when there is no python interpreter on the host.
 
-Let's point the ARM_TRUSTED_FIRMWARE_LICENSE_FILES to the correct file
-and modify the .hash file accordingly.
+ > [...]/syslinux-6.03/com32/cmenu/menugen.py
+ > make[6]: python: No such file or directory
 
-The comment has also been wrong since we bumped from version 1.4 to 2.2
-in commit  a757d173f179  (boot/arm-trusted-firmware: bump to version
-2.2). Drop referencing an explicit version, so that is is never wrong
-again.
+ > Since Syslinux 5.00, we can override the python interpreter
+ > used during the build:
 
-Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
-[yann.morin.1998@free.fr: also fix the comment.]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 83541769159ed7a8241cf82ab56db56e5c96a126)
-[Peter: update hash for v2.4]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- boot/arm-trusted-firmware/arm-trusted-firmware.hash | 2 +-
- boot/arm-trusted-firmware/arm-trusted-firmware.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ > https://repo.or.cz/syslinux.git/commitdiff/4dec62ce9c2c0d170f21b3ae2d7c618eb7a30c05
 
-diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.hash b/boot/arm-trusted-firmware/arm-trusted-firmware.hash
-index 970613f38d..9bd17a3cf8 100644
---- a/boot/arm-trusted-firmware/arm-trusted-firmware.hash
-+++ b/boot/arm-trusted-firmware/arm-trusted-firmware.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
- sha256  4bfda9fdbe5022f2e88ad3344165f7d38a8ae4a0e2d91d44d9a1603425cc642d  arm-trusted-firmware-v2.4.tar.gz
--sha256  487795b8023df866259fa159bab94706b747fb0d623b7913f1c4955c0ab5f164  license.rst
-+sha256  13676fa9170d3e6da3f7562d2d47b8b71090b1b45013fbd329ef847841f3a0b1  docs/license.rst
-diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-index d6979a12cc..cccdb3c522 100644
---- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-+++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-@@ -18,10 +18,10 @@ else
- # Handle stable official ATF versions
- ARM_TRUSTED_FIRMWARE_SITE = $(call github,ARM-software,arm-trusted-firmware,$(ARM_TRUSTED_FIRMWARE_VERSION))
- # The licensing of custom or from-git versions is unknown.
--# This is valid only for the official v1.4.
-+# This is valid only for the latest (i.e. known) version.
- ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_VERSION),y)
- ARM_TRUSTED_FIRMWARE_LICENSE = BSD-3-Clause
--ARM_TRUSTED_FIRMWARE_LICENSE_FILES = license.rst
-+ARM_TRUSTED_FIRMWARE_LICENSE_FILES = docs/license.rst
- endif
- endif
- 
+ > Add the	missing	host-python3 dependency and override
+ > it in SYSLINUX_BUILD_CMDS.
+
+ > Fixes:
+ > https://gitlab.com/kubu93/buildroot/-/jobs/1614446766
+
+ > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+ > Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+Committed to 2021.02.x, 2021.05.x and 2021.08.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
