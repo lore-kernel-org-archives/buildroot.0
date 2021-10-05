@@ -2,52 +2,51 @@ Return-Path: <SRS0=EGOI=OZ=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 40D85C433F5
-	for <buildroot@archiver.kernel.org>; Tue,  5 Oct 2021 19:40:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A75CFC433EF
+	for <buildroot@archiver.kernel.org>; Tue,  5 Oct 2021 19:40:24 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 0048361372
-	for <buildroot@archiver.kernel.org>; Tue,  5 Oct 2021 19:40:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0048361372
+	by mail.kernel.org (Postfix) with ESMTPS id 51CA561371
+	for <buildroot@archiver.kernel.org>; Tue,  5 Oct 2021 19:40:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 51CA561371
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CAEB1607A3;
-	Tue,  5 Oct 2021 19:40:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2E5A66068B;
+	Tue,  5 Oct 2021 19:40:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FImgqUyW9E2P; Tue,  5 Oct 2021 19:40:12 +0000 (UTC)
+	with ESMTP id K7V4c11IoXdE; Tue,  5 Oct 2021 19:40:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3378E6068B;
-	Tue,  5 Oct 2021 19:40:11 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id BF0E41BF983
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7D95A60D55;
+	Tue,  5 Oct 2021 19:40:22 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E6AAF1BF334
  for <buildroot@lists.busybox.net>; Tue,  5 Oct 2021 19:37:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 71123607A3
+ by smtp2.osuosl.org (Postfix) with ESMTP id E8545407C7
  for <buildroot@lists.busybox.net>; Tue,  5 Oct 2021 19:37:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CZgKSGKdPW29 for <buildroot@lists.busybox.net>;
- Tue,  5 Oct 2021 19:37:25 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id a1U4BA5qhwL8 for <buildroot@lists.busybox.net>;
+ Tue,  5 Oct 2021 19:37:26 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1DD5B60BF1
+ by smtp2.osuosl.org (Postfix) with ESMTP id A4F6F407C6
  for <buildroot@buildroot.org>; Tue,  5 Oct 2021 19:37:25 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id DE9A691216; Tue,  5 Oct 2021 19:34:50 +0000 (UTC)
+ id 7353A91223; Tue,  5 Oct 2021 19:34:51 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Tue, 5 Oct 2021 21:31:15 +0200
+Date: Tue, 5 Oct 2021 21:31:16 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8298e285dd65dfa2a57739191471ee98d6c22a09
-X-Git-Newrev: d112444d288811b92ad0ccb35b5381d960c74fd0
+X-Git-Oldrev: daa315e1787168d221d513bbe98aff40d0e271eb
+X-Git-Newrev: 71e99d573c2b00e352ff0e82c97553aafce51d17
 X-Patchwork-Hint: ignore
-Message-Id: <20211005193450.DE9A691216@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-cached-property: bump to
- version 1.5.2
+Message-Id: <20211005193451.7353A91223@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/dash: bump to version 0.5.11.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,47 +64,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d112444d288811b92ad0ccb35b5381d960c74fd0
+commit: https://git.buildroot.net/buildroot/commit/?id=71e99d573c2b00e352ff0e82c97553aafce51d17
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Plus, indent with two spaces in the hash file.
-
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/python-cached-property/python-cached-property.hash | 6 +++---
- package/python-cached-property/python-cached-property.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/dash/dash.hash | 4 ++--
+ package/dash/dash.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-cached-property/python-cached-property.hash b/package/python-cached-property/python-cached-property.hash
-index cfe34ca1df..835e9e0200 100644
---- a/package/python-cached-property/python-cached-property.hash
-+++ b/package/python-cached-property/python-cached-property.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/cached-property/json
--md5	4b6f3cd429da5f487f4ebf3242bb991f  cached-property-1.5.1.tar.gz
--sha256	9217a59f14a5682da7c4b8829deadbfc194ac22e9908ccf7c8820234e80a1504  cached-property-1.5.1.tar.gz
-+md5  3451c63f8733ea0756ca1dd2b0c04bb8  cached-property-1.5.2.tar.gz
-+sha256  9fa5755838eecbb2d234c3aa390bd80fbd3ac6b6869109bfc1b499f7bd89a130  cached-property-1.5.2.tar.gz
- # Locally computed sha256 checksums
--sha256	ba4756c8039b25b66e3c456cc5bf635aa528cf459b97ee1499d06684ccd89b9a  LICENSE
-+sha256  ba4756c8039b25b66e3c456cc5bf635aa528cf459b97ee1499d06684ccd89b9a  LICENSE
-diff --git a/package/python-cached-property/python-cached-property.mk b/package/python-cached-property/python-cached-property.mk
-index f83a1f18f4..9e1b3f8aff 100644
---- a/package/python-cached-property/python-cached-property.mk
-+++ b/package/python-cached-property/python-cached-property.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/dash/dash.hash b/package/dash/dash.hash
+index 24cc7318bd..1803bcdb2c 100644
+--- a/package/dash/dash.hash
++++ b/package/dash/dash.hash
+@@ -1,4 +1,4 @@
+-# From http://gondor.apana.org.au/~herbert/dash/files/dash-0.5.11.2.tar.gz.sha256sum
+-sha256  62b9f1676ba6a7e8eaec541a39ea037b325253240d1f378c72360baa1cbcbc2a  dash-0.5.11.3.tar.gz
++# From http://gondor.apana.org.au/~herbert/dash/files/dash-0.5.11.5.tar.gz.sha512sum
++sha512  5387e213820eeb44d812bb4697543023fd4662b51a9ffd52a702810fed8b28d23fbe35a7f371e6686107de9f81902eff109458964b4622f4c5412d60190a66bf  dash-0.5.11.5.tar.gz
+ # Locally calculated
+ sha256  254a7894923ff62e69184a991dcbccae97edee58a1105e8efbe78caf10595d72  COPYING
+diff --git a/package/dash/dash.mk b/package/dash/dash.mk
+index 1712dcf599..fed3a99551 100644
+--- a/package/dash/dash.mk
++++ b/package/dash/dash.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_CACHED_PROPERTY_VERSION = 1.5.1
-+PYTHON_CACHED_PROPERTY_VERSION = 1.5.2
- PYTHON_CACHED_PROPERTY_SOURCE = cached-property-$(PYTHON_CACHED_PROPERTY_VERSION).tar.gz
--PYTHON_CACHED_PROPERTY_SITE = https://files.pythonhosted.org/packages/57/8e/0698e10350a57d46b3bcfe8eff1d4181642fd1724073336079cb13c5cf7f
-+PYTHON_CACHED_PROPERTY_SITE = https://files.pythonhosted.org/packages/61/2c/d21c1c23c2895c091fa7a91a54b6872098fea913526932d21902088a7c41
- PYTHON_CACHED_PROPERTY_SETUP_TYPE = setuptools
- PYTHON_CACHED_PROPERTY_LICENSE = BSD-3-Clause
- PYTHON_CACHED_PROPERTY_LICENSE_FILES = LICENSE
+-DASH_VERSION = 0.5.11.3
++DASH_VERSION = 0.5.11.5
+ DASH_SITE = http://gondor.apana.org.au/~herbert/dash/files
+ DASH_LICENSE = BSD-3-Clause, GPL-2.0+ (mksignames.c)
+ DASH_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
