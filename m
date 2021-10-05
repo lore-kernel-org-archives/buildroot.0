@@ -2,83 +2,82 @@ Return-Path: <SRS0=EGOI=OZ=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5520DC433F5
-	for <buildroot@archiver.kernel.org>; Tue,  5 Oct 2021 20:06:53 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 03080C433EF
+	for <buildroot@archiver.kernel.org>; Tue,  5 Oct 2021 20:14:11 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 055AB610CE
-	for <buildroot@archiver.kernel.org>; Tue,  5 Oct 2021 20:06:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 055AB610CE
+	by mail.kernel.org (Postfix) with ESMTPS id 96F3E61090
+	for <buildroot@archiver.kernel.org>; Tue,  5 Oct 2021 20:14:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 96F3E61090
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmx.net
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CA93260C2E;
-	Tue,  5 Oct 2021 20:06:52 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3D42D4028C;
+	Tue,  5 Oct 2021 20:14:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Xej-bkRHQSl3; Tue,  5 Oct 2021 20:06:52 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 10WY0j6xrnBd; Tue,  5 Oct 2021 20:14:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 41A5860C03;
-	Tue,  5 Oct 2021 20:06:51 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 63964403EB;
+	Tue,  5 Oct 2021 20:14:08 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 11CC81BF2CC
- for <buildroot@lists.busybox.net>; Tue,  5 Oct 2021 20:06:49 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7563B1BF2CC
+ for <buildroot@lists.busybox.net>; Tue,  5 Oct 2021 20:14:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 01D2083B91
- for <buildroot@lists.busybox.net>; Tue,  5 Oct 2021 20:06:49 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7242D83A4F
+ for <buildroot@lists.busybox.net>; Tue,  5 Oct 2021 20:14:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (1024-bit key) header.d=gmx.net
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id woaH_diO1WeJ for <buildroot@lists.busybox.net>;
- Tue,  5 Oct 2021 20:06:48 +0000 (UTC)
+ with ESMTP id Cq2af1jiTX-N for <buildroot@lists.busybox.net>;
+ Tue,  5 Oct 2021 20:14:05 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7D8C683B87
- for <buildroot@buildroot.org>; Tue,  5 Oct 2021 20:06:47 +0000 (UTC)
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C94E28295A
+ for <buildroot@buildroot.org>; Tue,  5 Oct 2021 20:14:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
- s=badeba3b8450; t=1633464404;
- bh=bTKe2+IKPn8k1mhKqcTPqm2KqcGGnCS+/umF/lZUOOw=;
- h=X-UI-Sender-Class:From:To:Subject:Date;
- b=H/+aObKwMPU6fNblz+DpEIsF/OIiqMmFm05dlzlK7Jr5MrWR3J4vzubKPSNWwiq9P
- P8SbVi5G96gLIaLMkIcgsMnuL1P2UxNkZ1z0/nK3p2esnE7uH46mAO2yihtoV08daK
- 15HrWXTj7fjbLIpsQRaP6xKw76iNhisQJHp25wQo=
+ s=badeba3b8450; t=1633464841;
+ bh=bq2H38uVHLrscAZkK2ho1kwZd34uN7GwT7MOe1pAZIY=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+ b=UrfMBfXLeKhWOu4IBtef+BUhV7F4jMpQ6wJoCCztBMxJh8/M3vVZOevp/IEKIMWEJ
+ VZu4hz9zFKQRG4mA9/G27vR13BHeVn8cDNntz7IjIn7wkQwxsZovwxH/zxAaQS/sVq
+ ZF/jzwEMhng3DlOtwWUEHmQ1OxOwR8v5ZmW+1YnI=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
 Received: from localhost.fritz.box ([62.216.209.251]) by mail.gmx.net
- (mrgmx105 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1MDhhX-1mgLZL2wHn-00AoFE for <buildroot@buildroot.org>; Tue, 05 Oct 2021
- 22:06:44 +0200
+ (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
+ 1M3DO3-1mUq9M37vx-003b6X; Tue, 05 Oct 2021 22:14:01 +0200
 From: Peter Seiderer <ps.report@gmx.net>
 To: buildroot@buildroot.org
-Date: Tue,  5 Oct 2021 22:06:44 +0200
-Message-Id: <20211005200644.8006-1-ps.report@gmx.net>
+Date: Tue,  5 Oct 2021 22:14:01 +0200
+Message-Id: <20211005201401.10843-1-ps.report@gmx.net>
 X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:JlF25etaBcYKdwCYLTEu66b83q8EWo7jkU6mW8vMWbi4nkOBy8s
- Lxq8Ennfjje468GfFYNMnrkxxENr3t7kuh06Z/l4JqT++6JNACmd4C2cW0lLyBkYtTythZz
- QoIT7PdM+sz/NeaRh9J0dHfXPtPFTl5adNO46McgJUJndygX5coiJJPbxpKgrobBnI6ZxAd
- BYq8L34i1M/KMb6JCjt8Q==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:cr+bg5uFKfE=:oys7H4uSqugLBXlrx5K57S
- 9MHT5Qjrr8FKfPSSDApMs/I0VpcEBF5hdj8t2K58R5Np1gi9mlgeImIdQEMCYvwFAtRtUoQ41
- lfZbksOZGneGd7CA4qCx6OOGPLdUcmQtEh2mirZoe00urjP23/ZKz8j8CsYVNHwy7YPnSmZYM
- vbIYai2RB2iU2dtOO1IP99IcLWST/qXq8oiTTImZxa++HZD6hZ+DB8H3EVd2rtGlobOlAWMul
- h+0ynHpkCic3cgkXcV9p0yCRIfn4rtgrekDRQAG9Vewp9E0kVuAHbNcnuqGXceo5wgMljkwyN
- Z/2jzgNfYRUV/3FLlsHjPb8nO+qjkWKz9gbaI5EeTMOO8Lb2MkFVWnLDLsFctqE1tnTaLVgoL
- Jv2uCEF6+5955/5C3MczWdecS9OGYx+fT2FpA/LCr4vASVCcgWtw4CmcwiOaDyrMewUPYZMB3
- 5HzqPeF1SJUoWUGFR+U8NZo+1wFsdMNhYdp0kZtybyOecYrAQa+9XCQJkWEohWwY10+fRj1Ro
- rG48TDiHRPdsYisyp2F+EMDEQvlj8QA4rEUlFyhTyWdEtxmcrCgp7JteZVKCKU9js0uF3tGI6
- DhNiMaJq22Qw7MjDp53U44biLgcH6FFs1iPTYryEuX9RKvGr/BlChQpoQV7VQBncmMLmE84hB
- 5eLpsrDGYKJethRsTvn6wxmlfhDeIJ6InGeb+8dnfymlhPCYPzqNslnHzEdXlIy8d2ymeTOGF
- KJ7mWrOQhKhjL/z1dapV2H9te7J9vnhNSE2PyqBV9Cb+Yv420NRFVFJTnR7cdFsC1jhI0wigG
- o5L02k7iMGVg22Y6VXv6cWtpGb5PP8MFIZbq3+BDVSVPIjC341T/jFv9YKQ9Vhn0cazTFvZbE
- WYCpavj/06/pL5WZdGentXyhA3CFqVu3dzKH7+HQQ5ZleINQ24UdPbfRO9NouvF42c0f4AeG4
- JyB9wdAEjpbb4YeEMWN0Q2AZav3OcxQCLoTIJlIJTGzFfVT8TCGj9R/WXneacAnvP5BOA1hbZ
- sQ6wzS5un6wycTz0qrJ5BQwLlquP2dhcqf9G6tJxFQv8Y/Q9rPdotl6JcNfLgV9QMyot/ovU/
- /GtWlRpXl1y9Yw=
-Subject: [Buildroot] [PATCH v1] package/gst1-interpipe: bump version to 1.1.6
+X-Provags-ID: V03:K1:EZtkbovzoSQWQoRWtLPQSeUDlWBG2DeYX4sLWB0XDsDAPt0E5tM
+ j6aXFMk+9QJl1fB9FWrFItwgJC+7luAqFuwu6oBpm1GgValb5OoK6yo0rS1ZzsFVhdB3xif
+ Lp2THzC3aXR2SuNlXwPasuOG8df7S4YBIl6rJ+NzsVJK5m+NzLVXawIVmESC76nGKuOxbDM
+ Xs/wyDp6aJki5UEv8lKdg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:CXBm2e+giL8=:/rNG1EaEJWva4eDyXQQ/No
+ Fbxq38hMPHlAk3pm18XthCzCGzERRU/F9V9j1ebi+sXL3NfO8mScaPPQHl9tm7ENwtF/YE5xN
+ Dg27fackZltd6Px6KRFBu/TG+rQL7ttqp8yKSKW1rdbvuApg6/AHSbN8dMOKsef6m48Z2l+mD
+ UepI4UsqnnwkUxRfcMkJb2yxDIyS9kaV1m+4mkRWZXcyzfaFgcjVDzLjbZNSTn8awOKcDT3xj
+ prm4M83XmM9Ki1b+u2TnuVLSyyg3k4+IIJRHN8kySwLLVpdSgPD7KcahUBHdPvlBjiSDJHkNR
+ bLBiuR8SP2ajy4sMcNZyEEepJVfGD60XdVwJyAnHWak7nhHd2I3Tuc4/zUkBOjYdjaEsPtD77
+ JTNuOPid+7F3ch/6yq0SVMuz9R6H+UbUhGgSiE80a/8yTJYt3Ka4EoOyko3mZtnJl89ecrXFB
+ GpPwn9srWIx47Ln0f5D622l9lOPs2R9Q0s1tmZiwxGuf2OtrpY35Yyh5LaQutrybkWVBROSn9
+ FJsIvhkn2gbiQJVO3rrPXZ/pMwyRZXl/6wv7bl4PbXWiTtGpus9TxtTGrE841x0kIjxIbLU8n
+ iKb6eJfnfGhdM+LGN1A7gv9B9Dfi+nLm2kXgd9P+Ecq8MyMYBUQ4hhkDjFkvinoU8UTQCKCpc
+ 0yR2wLkN6iPzTbHlyfJEqC34OH21cIar8r1F9rOzptEkCX8SxPaODMtNThUenDVK4CnbVPuQI
+ 13i8a1lGiyeQYmR8eCm2wdKkhY5Aqzwwu7aQASmLcoSW+6Jv80TN9bZ86lP8ZoYudV2yt1PUH
+ Vhz0quWpQgU2Wvn6fFWvyOYTHKe7jPxcyVyLfIOH2MlYn7eOHsNRf3Lht/6R60P7tjoR+V06N
+ +nZ55iboXIvqPChiprxmJDhku3r8ns+Qz+ss6fV6JXInbZkSB3K42uvwcbowF+1zgQYE6zCmq
+ 4zLQRjgJ1POsraqV0Pe4y/t5NIdkth3LIX0sM6nM/NdPpxHKNxp/0jrm4ZKYZtOGpp7oKBZLg
+ vHk4ZducjCKW1SNmDp5vNwr7UIqGbIh1BsFAiZ3NakVdmiYpMj7gs0oex8kyqxv31IgvtgW+t
+ RxBkyOAdc9wu+g=
+Subject: [Buildroot] [PATCH v1] package/libinput: bump version to 1.19.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,47 +89,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changelog (for details see [1]):
+For details see [1].
 
-  - Fix for memory corruption issue when listening to same node (#99)
-
-[1] https://github.com/RidgeRun/gst-interpipe/releases/tag/1.1.6
+[1] https://lists.freedesktop.org/archives/wayland-devel/2021-September/041989.html
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/gstreamer1/gst1-interpipe/gst1-interpipe.hash | 2 +-
- package/gstreamer1/gst1-interpipe/gst1-interpipe.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libinput/libinput.hash | 6 +++---
+ package/libinput/libinput.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-interpipe/gst1-interpipe.hash b/package/gstreamer1/gst1-interpipe/gst1-interpipe.hash
-index a84be7a085..b3fc8ef018 100644
---- a/package/gstreamer1/gst1-interpipe/gst1-interpipe.hash
-+++ b/package/gstreamer1/gst1-interpipe/gst1-interpipe.hash
-@@ -1,5 +1,5 @@
- # locally computed hash
--sha256  4543b2872ee5985679375aa4e588b2dcf8b8c4f61f106655989c89f4aab0d736  gst1-interpipe-1.1.5-br1.tar.gz
-+sha256  00d3a91625f6cc5d263f35b9330b4ba6eb40781be2e823231e5b2be9281e1fb4  gst1-interpipe-1.1.6-br1.tar.gz
+diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
+index 7d57ae9b2d..0f0b12bc49 100644
+--- a/package/libinput/libinput.hash
++++ b/package/libinput/libinput.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.freedesktop.org/archives/wayland-devel/2021-September/041977.html
+-sha256  3d3a2f12b4a65cd82684121ae4b33cdc3ad541c761a55e8eb73a8e5e443cccbb  libinput-1.19.0.tar.xz
+-sha512  daf42ce797f2b5aef8d6f7a5c0d967590581e6ac12c26fa6bde5fbc619d75319e39ca55d65d5347e554dd6a48b91f5fed4d3167eabef8ad1ebc43bc0c3e8e220  libinput-1.19.0.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2021-September/041989.html
++sha256  0bdcf5b1783b737854b7af1ca22df67bc36a6fe7c9cfa71f01e9149f9220446d  libinput-1.19.1.tar.xz
++sha512  63084f5e081ee4918fee8584d99e6feb84ce9b771015c556c930843e0097abb9b93b6f9731c488b8493eac18fa4086f4822a2ed00f3cb3258346341ad0061c36  libinput-1.19.1.tar.xz
  
- # Hashes for license files:
- sha256  16d7caa6cabbfd0ca47e064a7b48cb446d013e84ca88c854d6470851752136d5  COPYING
-diff --git a/package/gstreamer1/gst1-interpipe/gst1-interpipe.mk b/package/gstreamer1/gst1-interpipe/gst1-interpipe.mk
-index 8d1da080a1..80e5b577f6 100644
---- a/package/gstreamer1/gst1-interpipe/gst1-interpipe.mk
-+++ b/package/gstreamer1/gst1-interpipe/gst1-interpipe.mk
+ # License files
+ sha256  80de50b2022a840db044c56db804ca3565600a692c0714babface587acc6d1b0  COPYING
+diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
+index 3ab1a2c38f..0c232994df 100644
+--- a/package/libinput/libinput.mk
++++ b/package/libinput/libinput.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GST1_INTERPIPE_VERSION = 1.1.5
-+GST1_INTERPIPE_VERSION = 1.1.6
- GST1_INTERPIPE_SITE = https://github.com/RidgeRun/gst-interpipe
- GST1_INTERPIPE_SITE_METHOD = git
- # fetch gst-interpipe/common sub module
+-LIBINPUT_VERSION = 1.19.0
++LIBINPUT_VERSION = 1.19.1
+ LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
+ LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
+ LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
 -- 
 2.33.0
 
