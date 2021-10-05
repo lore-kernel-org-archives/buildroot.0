@@ -2,51 +2,51 @@ Return-Path: <SRS0=EGOI=OZ=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A2E7FC433F5
-	for <buildroot@archiver.kernel.org>; Tue,  5 Oct 2021 06:29:17 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 86347C433EF
+	for <buildroot@archiver.kernel.org>; Tue,  5 Oct 2021 06:29:29 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 3E9C361264
-	for <buildroot@archiver.kernel.org>; Tue,  5 Oct 2021 06:29:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3E9C361264
+	by mail.kernel.org (Postfix) with ESMTPS id 205C3604AC
+	for <buildroot@archiver.kernel.org>; Tue,  5 Oct 2021 06:29:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 205C3604AC
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1E3704075A;
-	Tue,  5 Oct 2021 06:29:17 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E0237400B9;
+	Tue,  5 Oct 2021 06:29:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bJjPJ_ysmP3W; Tue,  5 Oct 2021 06:29:16 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id M1qbUzX9iSNv; Tue,  5 Oct 2021 06:29:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 803C7407A9;
-	Tue,  5 Oct 2021 06:29:15 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0775C1BF3C9
- for <buildroot@lists.busybox.net>; Tue,  5 Oct 2021 06:29:06 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 09283401B3;
+	Tue,  5 Oct 2021 06:29:27 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id EBD081BF3C9
+ for <buildroot@lists.busybox.net>; Tue,  5 Oct 2021 06:29:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EBFC440741
- for <buildroot@lists.busybox.net>; Tue,  5 Oct 2021 06:29:05 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id DBDF883B86
+ for <buildroot@lists.busybox.net>; Tue,  5 Oct 2021 06:29:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xEGHj_FU3wpN for <buildroot@lists.busybox.net>;
- Tue,  5 Oct 2021 06:29:05 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RF_W6i0TXWeT for <buildroot@lists.busybox.net>;
+ Tue,  5 Oct 2021 06:29:09 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 387FC40738
- for <buildroot@buildroot.org>; Tue,  5 Oct 2021 06:29:05 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 43DC183B89
+ for <buildroot@buildroot.org>; Tue,  5 Oct 2021 06:29:09 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 3AAE08F2A7; Tue,  5 Oct 2021 06:26:32 +0000 (UTC)
+ id 45A338F6EB; Tue,  5 Oct 2021 06:26:36 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 5 Oct 2021 08:19:16 +0200
-X-Git-Refname: refs/heads/2021.05.x
-X-Git-Oldrev: ec57641a02883db4ec0edbf36d7313b487ac53db
-X-Git-Newrev: cfd851970c2b9c776b05f6d579efd22e6bfe0ed5
+Date: Tue, 5 Oct 2021 08:19:08 +0200
+X-Git-Refname: refs/heads/2021.02.x
+X-Git-Oldrev: 7c392e2bfdc39c3c4f392418336966f2846bdb78
+X-Git-Newrev: 7ae5a4a9d6280a571d5b4215ee6e2e6ac39bcabc
 X-Patchwork-Hint: ignore
-Message-Id: <20211005062632.3AAE08F2A7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.05.x] utils/scanpypi: remove
+Message-Id: <20211005062636.45A338F6EB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] utils/scanpypi: remove
  python2 compatibility imports
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -65,8 +65,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cfd851970c2b9c776b05f6d579efd22e6bfe0ed5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=7ae5a4a9d6280a571d5b4215ee6e2e6ac39bcabc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
 ee8b680816 ("utils/scanpypi: use python3 explicitly") started to use python3,
 thus compatibility can be removed:
