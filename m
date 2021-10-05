@@ -2,58 +2,52 @@ Return-Path: <SRS0=EGOI=OZ=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 11B95C433EF
-	for <buildroot@archiver.kernel.org>; Tue,  5 Oct 2021 14:51:34 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 58951C433EF
+	for <buildroot@archiver.kernel.org>; Tue,  5 Oct 2021 14:52:01 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9C3496128A
-	for <buildroot@archiver.kernel.org>; Tue,  5 Oct 2021 14:51:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9C3496128A
+	by mail.kernel.org (Postfix) with ESMTPS id 0FA6E6117A
+	for <buildroot@archiver.kernel.org>; Tue,  5 Oct 2021 14:52:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0FA6E6117A
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6763383DBE;
-	Tue,  5 Oct 2021 14:51:33 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ism9KMlHPks4; Tue,  5 Oct 2021 14:51:32 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D67F583DB9;
-	Tue,  5 Oct 2021 14:51:31 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8C9A51BF215
- for <buildroot@lists.busybox.net>; Tue,  5 Oct 2021 14:51:29 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7C90D4086A
- for <buildroot@lists.busybox.net>; Tue,  5 Oct 2021 14:51:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DA8294086B;
+	Tue,  5 Oct 2021 14:52:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XbepCXxGRIAW for <buildroot@lists.busybox.net>;
- Tue,  5 Oct 2021 14:51:28 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 92738401B2
- for <buildroot@buildroot.org>; Tue,  5 Oct 2021 14:51:28 +0000 (UTC)
-Received: (Authenticated sender: peter@casa-korsgaard.com)
- by relay12.mail.gandi.net (Postfix) with ESMTPSA id 829D5200012;
- Tue,  5 Oct 2021 14:51:26 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
- (envelope-from <peter@korsgaard.com>)
- id 1mXlmw-0003gd-0t; Tue, 05 Oct 2021 16:51:26 +0200
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 6JxkgVeKCx_v; Tue,  5 Oct 2021 14:52:00 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 573C3407BE;
+	Tue,  5 Oct 2021 14:51:59 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1C1AC1BF215
+ for <buildroot@lists.busybox.net>; Tue,  5 Oct 2021 14:51:58 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0C18E60BD8
+ for <buildroot@lists.busybox.net>; Tue,  5 Oct 2021 14:51:58 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6kA65JakY9KO for <buildroot@lists.busybox.net>;
+ Tue,  5 Oct 2021 14:51:57 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 563DF60BD2
+ for <buildroot@buildroot.org>; Tue,  5 Oct 2021 14:51:57 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 86F5790BCC; Tue,  5 Oct 2021 14:49:23 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20210924162844.2192755-1-fontaine.fabrice@gmail.com>
-Date: Tue, 05 Oct 2021 16:51:25 +0200
-In-Reply-To: <20210924162844.2192755-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Fri, 24 Sep 2021 18:28:44 +0200")
-Message-ID: <871r4zcyoi.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/cryptopp: security bump to
- version 8.6.0
+To: buildroot@buildroot.org
+Date: Tue, 5 Oct 2021 16:48:23 +0200
+X-Git-Refname: refs/heads/2021.02.x
+X-Git-Oldrev: 9281e6c68b2bb00943772e7100ac14c03efe9f0f
+X-Git-Newrev: b5fd0bbbad9854f1fd3533a86ec8cea35a0db8d8
+X-Patchwork-Hint: ignore
+Message-Id: <20211005144923.86F5790BCC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] DEVELOPERS: remove Baruch
+ Siach from openipmi
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,29 +59,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julian Scheel <julian@jusst.de>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=b5fd0bbbad9854f1fd3533a86ec8cea35a0db8d8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
- > This release clears CVE-2021-40530 and fixes a problem with ChaCha20
- > AVX2 implementation. The CVE was due to ElGamal encryption using a work
- > estimate to size encryption exponents instead subgroup order. The
- > ChaCha20 issue was due to mishandling a carry in the AVX2 code path. The
- > ChaCha20 issue was difficult to duplicate, so most users should not
- > experience it.
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 0f6b4a67b7003e2b564e59d89c13e35059c747a3)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ DEVELOPERS | 1 -
+ 1 file changed, 1 deletion(-)
 
- > https://github.com/weidai11/cryptopp/releases/tag/CRYPTOPP_8_6_0
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Committed to 2021.02.x, 2021.05.x and 2021.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/DEVELOPERS b/DEVELOPERS
+index cf980ce20c..1412889954 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -289,7 +289,6 @@ F:	package/ebtables/
+ F:	package/i2c-tools/
+ F:	package/libcurl/
+ F:	package/libpcap/
+-F:	package/openipmi/
+ F:	package/socat/
+ F:	package/strace/
+ F:	package/tcpdump/
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
