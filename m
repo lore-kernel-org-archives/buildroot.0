@@ -2,52 +2,85 @@ Return-Path: <SRS0=EGOI=OZ=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 86347C433EF
-	for <buildroot@archiver.kernel.org>; Tue,  5 Oct 2021 06:29:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D3CFCC433EF
+	for <buildroot@archiver.kernel.org>; Tue,  5 Oct 2021 06:44:40 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 205C3604AC
-	for <buildroot@archiver.kernel.org>; Tue,  5 Oct 2021 06:29:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 205C3604AC
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
+	by mail.kernel.org (Postfix) with ESMTPS id 7214F6137F
+	for <buildroot@archiver.kernel.org>; Tue,  5 Oct 2021 06:44:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7214F6137F
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E0237400B9;
-	Tue,  5 Oct 2021 06:29:28 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 06865401B1;
+	Tue,  5 Oct 2021 06:44:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id M1qbUzX9iSNv; Tue,  5 Oct 2021 06:29:28 +0000 (UTC)
+	with ESMTP id IDuG9Bpw4yqH; Tue,  5 Oct 2021 06:44:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 09283401B3;
-	Tue,  5 Oct 2021 06:29:27 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2944B40193;
+	Tue,  5 Oct 2021 06:44:38 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id EBD081BF3C9
- for <buildroot@lists.busybox.net>; Tue,  5 Oct 2021 06:29:09 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7F1301BF3C9
+ for <buildroot@lists.busybox.net>; Tue,  5 Oct 2021 06:44:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DBDF883B86
- for <buildroot@lists.busybox.net>; Tue,  5 Oct 2021 06:29:09 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7C42783B05
+ for <buildroot@lists.busybox.net>; Tue,  5 Oct 2021 06:44:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RF_W6i0TXWeT for <buildroot@lists.busybox.net>;
- Tue,  5 Oct 2021 06:29:09 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 43DC183B89
- for <buildroot@buildroot.org>; Tue,  5 Oct 2021 06:29:09 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 45A338F6EB; Tue,  5 Oct 2021 06:26:36 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ with ESMTP id ob455LWbuuWe for <buildroot@lists.busybox.net>;
+ Tue,  5 Oct 2021 06:44:34 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
+ [IPv6:2a00:1450:4864:20::436])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 68EEA835B1
+ for <buildroot@buildroot.org>; Tue,  5 Oct 2021 06:44:34 +0000 (UTC)
+Received: by mail-wr1-x436.google.com with SMTP id t8so35507597wri.1
+ for <buildroot@buildroot.org>; Mon, 04 Oct 2021 23:44:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=XPJNSgm6jTWqH9hqb2nCW0dc0nBcwHaPKvve0LPM6aA=;
+ b=PEni1ptei3XGxD8mP6YuJjXdMzePqBPFG39DDCilIVfKC1st5AYj87njzlu5rPkyVy
+ pLa8OK0lQG+ETpLEid/gqfslQLwyka5YhTa9NP+7Zs+0RrkOUfD5BXJe7zb4cwJ9lBGa
+ DZqIzuDnMiT4K5fxDgnefOO8YtO7BPle8ueo0MK8HC7FMiAQu1u28xXUW2xC1EvuSWaW
+ k4T7Py7pWToBhNPkqNfZpmp1PhL7a/A1siCi/ZAPLcrA+EdEtG4oBUsw8mDaECp5tuN/
+ e5PkArH+mWauAcjEJ28wQeqlwmfi5+7b4cdPyHKXOAc7XoK+DNCw1YxseQbfyQbRpFmf
+ /Ysg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=XPJNSgm6jTWqH9hqb2nCW0dc0nBcwHaPKvve0LPM6aA=;
+ b=DSIriFJ9GBZzu2lHHyccd/7uPFwf1YJ2TW64SMkO8c+SQrpS8vL5qcD/wUtInUbky4
+ 8dAsm2AF6fz2EdPlqtFSBWZgWPqi7dqxsCH4CU+FErDHqHSxWPppmxo18adW7ELrEL/u
+ J6vvOzOtb5NAumINGRLpokyovU+WFq/wgl614Oas557NvPOqPqhryRmJZL7Zy91TXzia
+ fvo2i/PN9gMvKgV6OcwUOt8Md/+MRy8fHs4v0ZTyfN7FS2d/81FEBt1XLFk+wNzWdldU
+ JLjZ9DlrTB4RNHTJVUUF9qvbfjQZaC5bouM3esC3hPXTtP0Mf1X87axLG+D5NtNk2E6F
+ yeYw==
+X-Gm-Message-State: AOAM530pSb5Yo0vgYr9YgkAIgHwNcNor5+qz33JZq8GSjQByd5Gg5pus
+ 0REvMt56bj/byVHigdhdP/kpwfttJOs=
+X-Google-Smtp-Source: ABdhPJyIeRcd/wPkCrieoIT7kYTMxt3HunEyDcTKwYzxwLbojrv30aSF1ZWdb+dOGfqJ8hc7wMYICg==
+X-Received: by 2002:adf:fe0b:: with SMTP id n11mr19571182wrr.371.1633416272437; 
+ Mon, 04 Oct 2021 23:44:32 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-421-88.w2-10.abo.wanadoo.fr.
+ [2.10.246.88])
+ by smtp.gmail.com with ESMTPSA id 143sm817384wma.37.2021.10.04.23.44.31
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 04 Oct 2021 23:44:32 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 5 Oct 2021 08:19:08 +0200
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 7c392e2bfdc39c3c4f392418336966f2846bdb78
-X-Git-Newrev: 7ae5a4a9d6280a571d5b4215ee6e2e6ac39bcabc
-X-Patchwork-Hint: ignore
-Message-Id: <20211005062636.45A338F6EB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] utils/scanpypi: remove
- python2 compatibility imports
+Date: Tue,  5 Oct 2021 08:43:33 +0200
+Message-Id: <20211005064334.737168-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.33.0
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH 1/2] package/net-tools: add
+ NET_TOOLS_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,44 +92,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7ae5a4a9d6280a571d5b4215ee6e2e6ac39bcabc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+cpe:2.3:a:net-tools_project:net-tools is a valid CPE identifier for this
+package:
 
-ee8b680816 ("utils/scanpypi: use python3 explicitly") started to use python3,
-thus compatibility can be removed:
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Anet-tools_project%3Anet-tools
 
-from __future__ import print_function
-from __future__ import absolute_import
-
-Tested with python3 -m py_compile.
-
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit d50290764ea3fd7f7fafd1a10aedbe652689ac29)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- utils/scanpypi | 2 --
- 1 file changed, 2 deletions(-)
+ package/net-tools/net-tools.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/utils/scanpypi b/utils/scanpypi
-index 9dede4e119..1f3326cf4d 100755
---- a/utils/scanpypi
-+++ b/utils/scanpypi
-@@ -6,8 +6,6 @@ Utility for building Buildroot packages for existing PyPI packages
- Any package built by scanpypi should be manually checked for
- errors.
- """
--from __future__ import print_function
--from __future__ import absolute_import
- import argparse
- import json
- import sys
+diff --git a/package/net-tools/net-tools.mk b/package/net-tools/net-tools.mk
+index 985fe2e35e..eb268a6e14 100644
+--- a/package/net-tools/net-tools.mk
++++ b/package/net-tools/net-tools.mk
+@@ -9,6 +9,7 @@ NET_TOOLS_SITE = git://git.code.sf.net/p/net-tools/code
+ NET_TOOLS_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
+ NET_TOOLS_LICENSE = GPL-2.0+
+ NET_TOOLS_LICENSE_FILES = COPYING
++NET_TOOLS_CPE_ID_VENDOR = net-tools_project
+ 
+ define NET_TOOLS_CONFIGURE_CMDS
+ 	(cd $(@D); yes "" | ./configure.sh config.in )
+-- 
+2.33.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
