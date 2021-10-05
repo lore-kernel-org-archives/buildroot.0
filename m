@@ -2,52 +2,52 @@ Return-Path: <SRS0=EGOI=OZ=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DB673C433EF
-	for <buildroot@archiver.kernel.org>; Tue,  5 Oct 2021 14:45:26 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 81F0DC433F5
+	for <buildroot@archiver.kernel.org>; Tue,  5 Oct 2021 14:45:38 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 6AEA761130
-	for <buildroot@archiver.kernel.org>; Tue,  5 Oct 2021 14:45:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6AEA761130
+	by mail.kernel.org (Postfix) with ESMTPS id 4D29C61371
+	for <buildroot@archiver.kernel.org>; Tue,  5 Oct 2021 14:45:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4D29C61371
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 385614086A;
-	Tue,  5 Oct 2021 14:45:26 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2188D4086B;
+	Tue,  5 Oct 2021 14:45:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zNds54Etf1Yw; Tue,  5 Oct 2021 14:45:25 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id J2-FLq1HK4sq; Tue,  5 Oct 2021 14:45:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 99E8140872;
-	Tue,  5 Oct 2021 14:45:24 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 211AF407AD;
+	Tue,  5 Oct 2021 14:45:36 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A7F871BF34A
- for <buildroot@lists.busybox.net>; Tue,  5 Oct 2021 14:44:57 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4D21A1BF34A
+ for <buildroot@lists.busybox.net>; Tue,  5 Oct 2021 14:44:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7A27983DA3
+ by smtp1.osuosl.org (Postfix) with ESMTP id 95B3B83DA4
  for <buildroot@lists.busybox.net>; Tue,  5 Oct 2021 14:44:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 30nBIge33TOI for <buildroot@lists.busybox.net>;
+ with ESMTP id Su9zzf1HQrmu for <buildroot@lists.busybox.net>;
  Tue,  5 Oct 2021 14:44:55 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id D24DD83DA4
+ by smtp1.osuosl.org (Postfix) with ESMTP id DC6A583DA5
  for <buildroot@buildroot.org>; Tue,  5 Oct 2021 14:44:55 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 11EC090A39; Tue,  5 Oct 2021 14:42:22 +0000 (UTC)
+ id 1C18390981; Tue,  5 Oct 2021 14:42:22 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 5 Oct 2021 16:31:19 +0200
+Date: Tue, 5 Oct 2021 16:42:20 +0200
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 34a1b25c69e71fb19e69d2e0ff87602413ce2f4f
-X-Git-Newrev: 4f44314a47d25cf3fb026f498a4f5685b084ceab
+X-Git-Oldrev: 4f44314a47d25cf3fb026f498a4f5685b084ceab
+X-Git-Newrev: ad38cfabe16c19bf3ff4a2aadda54e3a61750b2a
 X-Patchwork-Hint: ignore
-Message-Id: <20211005144222.11EC090A39@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] boot/mv-ddr-marvell: fix
- license file hash
+Message-Id: <20211005144222.1C18390981@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x]
+ boot/arm-trusted-firmware: point LICENSE_FILES to correct file
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,33 +65,59 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4f44314a47d25cf3fb026f498a4f5685b084ceab
+commit: https://git.buildroot.net/buildroot/commit/?id=ad38cfabe16c19bf3ff4a2aadda54e3a61750b2a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Commit 2cfdf8b8a269 (boot/mv-ddr-marvell: Bump to HEAD as of 20201207)
-forgot to update the hash a a source file that we use as license file.
+Since v2.2 release (commits 8cc36aec912 "doc: De-duplicate readme and
+license files" and 9f1622b018ab "doc: Move content out of readme and
+create new index page "), the license.rst file at the root of the git
+repo is only telling to look at docs/license.rst file.
 
-Fixes: #14221
+Let's point the ARM_TRUSTED_FIRMWARE_LICENSE_FILES to the correct file
+and modify the .hash file accordingly.
 
-Reported-by: nyanyamiau@gmail.com
+The comment has also been wrong since we bumped from version 1.4 to 2.2
+in commit  a757d173f179  (boot/arm-trusted-firmware: bump to version
+2.2). Drop referencing an explicit version, so that is is never wrong
+again.
+
+Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+[yann.morin.1998@free.fr: also fix the comment.]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: D. Olsson <hi@senzilla.io>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit f05136090de781d038070b1b197fb868c7c339cd)
+(cherry picked from commit 83541769159ed7a8241cf82ab56db56e5c96a126)
+[Peter: update hash for v2.4]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/mv-ddr-marvell/mv-ddr-marvell.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ boot/arm-trusted-firmware/arm-trusted-firmware.hash | 2 +-
+ boot/arm-trusted-firmware/arm-trusted-firmware.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/boot/mv-ddr-marvell/mv-ddr-marvell.hash b/boot/mv-ddr-marvell/mv-ddr-marvell.hash
-index e1a86008db..5bfae8af45 100644
---- a/boot/mv-ddr-marvell/mv-ddr-marvell.hash
-+++ b/boot/mv-ddr-marvell/mv-ddr-marvell.hash
+diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.hash b/boot/arm-trusted-firmware/arm-trusted-firmware.hash
+index 970613f38d..9bd17a3cf8 100644
+--- a/boot/arm-trusted-firmware/arm-trusted-firmware.hash
++++ b/boot/arm-trusted-firmware/arm-trusted-firmware.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
- sha256  bfab74a625d65238c569b9df282b55c0fc9a1e2d3decedcf194d44774df2ede4  mv-ddr-marvell-305d923e6bc4236cd3b902f6679b0aef9e5fa52d.tar.gz
--sha256  69208236fc322026920b92d1d839ebdc521ca65379bfdb3368a24945e794fc78  ddr3_init.c
-+sha256  48bb930b6fbc3f5db72e29c849b096df3868e4a6d2bdc0e2dd3365c768241cd5  ddr3_init.c
+ sha256  4bfda9fdbe5022f2e88ad3344165f7d38a8ae4a0e2d91d44d9a1603425cc642d  arm-trusted-firmware-v2.4.tar.gz
+-sha256  487795b8023df866259fa159bab94706b747fb0d623b7913f1c4955c0ab5f164  license.rst
++sha256  13676fa9170d3e6da3f7562d2d47b8b71090b1b45013fbd329ef847841f3a0b1  docs/license.rst
+diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+index d6979a12cc..cccdb3c522 100644
+--- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
++++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+@@ -18,10 +18,10 @@ else
+ # Handle stable official ATF versions
+ ARM_TRUSTED_FIRMWARE_SITE = $(call github,ARM-software,arm-trusted-firmware,$(ARM_TRUSTED_FIRMWARE_VERSION))
+ # The licensing of custom or from-git versions is unknown.
+-# This is valid only for the official v1.4.
++# This is valid only for the latest (i.e. known) version.
+ ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_VERSION),y)
+ ARM_TRUSTED_FIRMWARE_LICENSE = BSD-3-Clause
+-ARM_TRUSTED_FIRMWARE_LICENSE_FILES = license.rst
++ARM_TRUSTED_FIRMWARE_LICENSE_FILES = docs/license.rst
+ endif
+ endif
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
