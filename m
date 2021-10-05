@@ -2,53 +2,55 @@ Return-Path: <SRS0=EGOI=OZ=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AFFE4C433F5
-	for <buildroot@archiver.kernel.org>; Tue,  5 Oct 2021 14:52:49 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 22E13C433F5
+	for <buildroot@archiver.kernel.org>; Tue,  5 Oct 2021 14:53:12 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 6FC4461216
-	for <buildroot@archiver.kernel.org>; Tue,  5 Oct 2021 14:52:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6FC4461216
+	by mail.kernel.org (Postfix) with ESMTPS id 32DC861371
+	for <buildroot@archiver.kernel.org>; Tue,  5 Oct 2021 14:53:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 32DC861371
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 39B8183B53;
-	Tue,  5 Oct 2021 14:52:49 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 09FE340297;
+	Tue,  5 Oct 2021 14:53:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id S5I9ly9MWm5N; Tue,  5 Oct 2021 14:52:46 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id t76l4qOz3UQp; Tue,  5 Oct 2021 14:53:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C50DD83DB9;
-	Tue,  5 Oct 2021 14:52:45 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id F212340898;
+	Tue,  5 Oct 2021 14:53:05 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 85DBD1BF215
- for <buildroot@lists.busybox.net>; Tue,  5 Oct 2021 14:52:11 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 442241BF215
+ for <buildroot@lists.busybox.net>; Tue,  5 Oct 2021 14:52:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 76D624086F
- for <buildroot@lists.busybox.net>; Tue,  5 Oct 2021 14:52:11 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 26C6D4086F
+ for <buildroot@lists.busybox.net>; Tue,  5 Oct 2021 14:52:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pRXEUlBrYZ5B for <buildroot@lists.busybox.net>;
+ with ESMTP id pDZ8maJfzAQi for <buildroot@lists.busybox.net>;
  Tue,  5 Oct 2021 14:52:09 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
 Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
  [217.70.183.200])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3A1364086D
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 70ED040870
  for <buildroot@buildroot.org>; Tue,  5 Oct 2021 14:52:08 +0000 (UTC)
 Received: (Authenticated sender: kory.maincent@bootlin.com)
- by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id E800720009;
- Tue,  5 Oct 2021 14:52:05 +0000 (UTC)
+ by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 6FBA320005;
+ Tue,  5 Oct 2021 14:52:06 +0000 (UTC)
 From: Kory Maincent <kory.maincent@bootlin.com>
 To: buildroot@buildroot.org
-Date: Tue,  5 Oct 2021 16:52:04 +0200
-Message-Id: <20211005145205.27617-1-kory.maincent@bootlin.com>
+Date: Tue,  5 Oct 2021 16:52:05 +0200
+Message-Id: <20211005145205.27617-2-kory.maincent@bootlin.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20211005145205.27617-1-kory.maincent@bootlin.com>
+References: <20211005145205.27617-1-kory.maincent@bootlin.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/2] configs/octavo_osd32mp1_brk_defconfig: Add
- support for octavo brk board
+Subject: [Buildroot] [PATCH 2/2] configs/octavo_osd32mp1_red_defconfig: Add
+ support for octavo red board
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -67,68 +69,67 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Very similar to the other stm32mp157-based boards. We use the TF-A, U-boot
-and Linux version from ST used by the Octavo constructor.
+and Linux version from ST selected by the Octavo constructor.
 
 Reference:
-    https://octavosystems.com/octavo_products/osd32mp1-brk/
+    https://octavosystems.com/octavo_products/osd32mp1-red/
 
 The device tree blobs come from Octavo System:
-    https://github.com/octavosystems/OSD32MP1-BRK-device-tree.git
+    https://github.com/octavosystems/OSD32MP1-RED-Device-tree.git
 
 The uboot patches come from Octavo System:
-    https://github.com/octavosystems/BRK_Developer_Package_patches/tree/master/u-boot-v2020.01-stm32mp
+    https://github.com/octavosystems/osd32mp1-build-tools/tree/master/patches/u-boot-2018.11
 
-It is licensed under BSD 2-Clause.
+It is licensed under BSD 3-Clause.
 
 Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
 ---
- DEVELOPERS                                    |    4 +
- board/octavo/brk/genimage.cfg                 |   23 +
- .../linux-dts/stm32mp157c-osd32mp1-brk.dts    | 1167 ++++++++++
- board/octavo/brk/linux.config                 |  841 +++++++
- .../brk/overlay/boot/extlinux/extlinux.conf   |    4 +
- board/octavo/brk/post-image.sh                |   39 +
- board/octavo/brk/tfa-dts/osd32mp1_ddr.dtsi    |  119 +
- .../brk/tfa-dts/stm32mp157c-osd32mp1-brk.dts  |  581 +++++
- .../0006-osd32mpp1-BRK-board-added.patch      | 1989 +++++++++++++++++
- ...2MP1-BRK-features-and-fix-formatting.patch |  976 ++++++++
- .../0008-Fix-missing-DDR-include-file.patch   |  263 +++
- ...x-Cube-programmer-GPIO-default-level.patch |   25 +
- configs/octavo_osd32mp1_brk_defconfig         |   39 +
- 13 files changed, 6070 insertions(+)
- create mode 100644 board/octavo/brk/genimage.cfg
- create mode 100644 board/octavo/brk/linux-dts/stm32mp157c-osd32mp1-brk.dts
- create mode 100644 board/octavo/brk/linux.config
- create mode 100644 board/octavo/brk/overlay/boot/extlinux/extlinux.conf
- create mode 100755 board/octavo/brk/post-image.sh
- create mode 100644 board/octavo/brk/tfa-dts/osd32mp1_ddr.dtsi
- create mode 100644 board/octavo/brk/tfa-dts/stm32mp157c-osd32mp1-brk.dts
- create mode 100644 board/octavo/brk/uboot-patches/0006-osd32mpp1-BRK-board-added.patch
- create mode 100644 board/octavo/brk/uboot-patches/0007-Add-OSD32MP1-BRK-features-and-fix-formatting.patch
- create mode 100644 board/octavo/brk/uboot-patches/0008-Fix-missing-DDR-include-file.patch
- create mode 100644 board/octavo/brk/uboot-patches/0009-Fix-Cube-programmer-GPIO-default-level.patch
- create mode 100644 configs/octavo_osd32mp1_brk_defconfig
+ DEVELOPERS                                    |    2 +
+ board/octavo/red/genimage.cfg                 |   23 +
+ board/octavo/red/linux-dts/osd32mp1-red.dts   | 1469 ++++++++++++
+ .../linux-dts/stm32mp157c-osd32mp1-red.dtsi   | 2077 +++++++++++++++++
+ board/octavo/red/linux.config                 |  936 ++++++++
+ .../red/overlay/boot/extlinux/extlinux.conf   |    4 +
+ board/octavo/red/post-image.sh                |   39 +
+ board/octavo/red/tfa-dts/osd32mp1-red.dts     |  615 +++++
+ ...m32mp15-osd32mp1-ddr3-1x4Gb-1066-binG.dtsi |  119 +
+ ...Add-OSD32MP1-RED-Device-Tree-support.patch | 1708 ++++++++++++++
+ ...-Fix-Ethernet-Clock-for-OSD32MP1-RED.patch |   32 +
+ ...5_trusted_defconfig-disable-environm.patch |   32 +
+ configs/octavo_osd32mp1_red_defconfig         |   39 +
+ 13 files changed, 7095 insertions(+)
+ create mode 100644 board/octavo/red/genimage.cfg
+ create mode 100644 board/octavo/red/linux-dts/osd32mp1-red.dts
+ create mode 100644 board/octavo/red/linux-dts/stm32mp157c-osd32mp1-red.dtsi
+ create mode 100644 board/octavo/red/linux.config
+ create mode 100644 board/octavo/red/overlay/boot/extlinux/extlinux.conf
+ create mode 100755 board/octavo/red/post-image.sh
+ create mode 100644 board/octavo/red/tfa-dts/osd32mp1-red.dts
+ create mode 100644 board/octavo/red/tfa-dts/stm32mp15-osd32mp1-ddr3-1x4Gb-1066-binG.dtsi
+ create mode 100644 board/octavo/red/uboot-patches/0001-Add-OSD32MP1-RED-Device-Tree-support.patch
+ create mode 100644 board/octavo/red/uboot-patches/0002-Fix-Ethernet-Clock-for-OSD32MP1-RED.patch
+ create mode 100644 board/octavo/red/uboot-patches/0003-configs-stm32mp15_trusted_defconfig-disable-environm.patch
+ create mode 100644 configs/octavo_osd32mp1_red_defconfig
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 1f977190ab..f0749be912 100644
+index f0749be912..be2be47806 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1539,6 +1539,10 @@ N:	Koen Martens <gmc@sonologic.nl>
- F:	package/capnproto/
- F:	package/linuxconsoletools/
+@@ -1541,7 +1541,9 @@ F:	package/linuxconsoletools/
  
-+N:	Kory Maincent <kory.maincent@bootlin.com
-+F:	board/octavo/brk/
-+F:	configs/octavo_osd32mp1_brk_defconfig
-+
+ N:	Kory Maincent <kory.maincent@bootlin.com
+ F:	board/octavo/brk/
++F:	board/octavo/red/
+ F:	configs/octavo_osd32mp1_brk_defconfig
++F:	configs/octavo_osd32mp1_red_defconfig
+ 
  N:	Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
  F:	package/bcusdk/
- F:	package/libpthsem/
-diff --git a/board/octavo/brk/genimage.cfg b/board/octavo/brk/genimage.cfg
+diff --git a/board/octavo/red/genimage.cfg b/board/octavo/red/genimage.cfg
 new file mode 100644
 index 0000000000..03fba8daf0
 --- /dev/null
-+++ b/board/octavo/brk/genimage.cfg
++++ b/board/octavo/red/genimage.cfg
 @@ -0,0 +1,23 @@
 +image sdcard.img {
 +	hdimage {
@@ -153,15 +154,16 @@ index 0000000000..03fba8daf0
 +		bootable = "yes"
 +	}
 +}
-diff --git a/board/octavo/brk/linux-dts/stm32mp157c-osd32mp1-brk.dts b/board/octavo/brk/linux-dts/stm32mp157c-osd32mp1-brk.dts
+diff --git a/board/octavo/red/linux-dts/osd32mp1-red.dts b/board/octavo/red/linux-dts/osd32mp1-red.dts
 new file mode 100644
-index 0000000000..d763b48945
+index 0000000000..ec461b80f0
 --- /dev/null
-+++ b/board/octavo/brk/linux-dts/stm32mp157c-osd32mp1-brk.dts
-@@ -0,0 +1,1167 @@
++++ b/board/octavo/red/linux-dts/osd32mp1-red.dts
+@@ -0,0 +1,1469 @@
 +/* SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause) */
 +/*
-+ * Copyright (C) Octavo Systems LLC 2020 - All Rights Reserved
++ * Copyright (C) STMicroelectronics 2020 - All Rights Reserved
++ * Author: STM32CubeMX code generation for STMicroelectronics.
 + */
 +
 +/* For more information on Device Tree configuration, please refer to
@@ -169,22 +171,27 @@ index 0000000000..d763b48945
 + */
 +
 +/dts-v1/;
-+#include <dt-bindings/pinctrl/stm32-pinfunc.h>
++#include "stm32mp157c-osd32mp1-red.dtsi"
++#include "stm32mp157cac-pinctrl.dtsi"
++#include "stm32mp157c-m4-srm.dtsi"
 +
-+#include "stm32mp157.dtsi"
-+#include "stm32mp15xc.dtsi"
-+#include "stm32mp15xxac-pinctrl.dtsi"
-+#include "stm32mp157-m4-srm.dtsi"
++
++#include <dt-bindings/input/input.h>
 +#include <dt-bindings/mfd/st,stpmic1.h>
 +#include <dt-bindings/rtc/rtc-stm32.h>
 +
++
 +/ {
-+	model = "Octavo OSD32MP1 BRK board";
-+	compatible = "st,stm32mp157c-osd32mp1-brk", "st,stm32mp157";
++	model = "Octavo OSD32MP1-RED board";
++	compatible = "octavo,osd32mp1-red", "st,stm32mp157";
 +
 +	memory@c0000000 {
-+		device_type = "memory";
 +		reg = <0xc0000000 0x20000000>;
++	};
++
++	wifi_pwrseq: wifi-pwrseq {
++		compatible = "mmc-pwrseq-simple";
++		reset-gpios = <&gpiog 5 GPIO_ACTIVE_LOW>;
 +	};
 +
 +	reserved-memory {
@@ -192,87 +199,100 @@ index 0000000000..d763b48945
 +		#size-cells = <1>;
 +		ranges;
 +
-+		mcuram2:mcuram2@10000000{
-+			compatible = "shared-dma-pool";
-+			reg = <0x10000000 0x40000>;
-+			no-map;
-+		};
 +
-+		vdev0vring0:vdev0vring0@10040000{
-+			compatible = "shared-dma-pool";
-+			reg = <0x10040000 0x1000>;
-+			no-map;
-+		};
 +
-+		vdev0vring1:vdev0vring1@10041000{
-+			compatible = "shared-dma-pool";
-+			reg = <0x10041000 0x1000>;
-+			no-map;
-+		};
-+
-+		vdev0buffer:vdev0buffer@10042000{
-+			compatible = "shared-dma-pool";
-+			reg = <0x10042000 0x4000>;
-+			no-map;
-+		};
-+
-+		mcuram:mcuram@30000000{
-+			compatible = "shared-dma-pool";
-+			reg = <0x30000000 0x40000>;
-+			no-map;
-+		};
-+
-+		retram:retram@38000000{
++		retram: retram@0x38000000 {
 +			compatible = "shared-dma-pool";
 +			reg = <0x38000000 0x10000>;
 +			no-map;
 +		};
 +
-+		gpu_reserved:gpu@da000000{
-+			reg = <0xda000000 0x4000000>;
++		mcuram: mcuram@0x30000000 {
++			compatible = "shared-dma-pool";
++			reg = <0x30000000 0x40000>;
 +			no-map;
 +		};
 +
-+		optee_memory:optee@0xde000000{
-+			reg = <0xde000000 0x02000000>;
++		mcuram2: mcuram2@0x10000000 {
++			compatible = "shared-dma-pool";
++			reg = <0x10000000 0x40000>;
 +			no-map;
-+			status = "okay";
++		};
++
++		vdev0vring0: vdev0vring0@10040000 {
++			compatible = "shared-dma-pool";
++			reg = <0x10040000 0x2000>;
++			no-map;
++		};
++
++		vdev0vring1: vdev0vring1@10042000 {
++			compatible = "shared-dma-pool";
++			reg = <0x10042000 0x2000>;
++			no-map;
++		};
++
++		vdev0buffer: vdev0buffer@10044000 {
++			compatible = "shared-dma-pool";
++			reg = <0x10044000 0x4000>;
++			no-map;
++		};
++
++
++		gpu_reserved: gpu@d4000000 {
++			reg = <0xd4000000 0x4000000>;
++			no-map;
 +		};
 +	};
 +
-+	led{
++
++	aliases {
++		ethernet0 = &ethernet0;
++		serial0 = &uart4;
++		serial1 = &usart3;
++		serial2 = &uart7;
++		serial3 = &usart2;
++	};
++
++	chosen {
++		stdout-path = "serial0:115200n8";
++	};
++
++	sram: sram@10050000 {
++		compatible = "mmio-sram";
++		reg = <0x10050000 0x10000>;
++		#address-cells = <1>;
++		#size-cells = <1>;
++		ranges = <0 0x10050000 0x10000>;
++
++		dma_pool: dma_pool@0 {
++			reg = <0x0 0x10000>;
++			pool;
++		};
++	};
++
++	led {
 +		compatible = "gpio-leds";
-+
-+		red1{
-+			label = "LED1_RED";
-+			gpios = <&gpioz 6 GPIO_ACTIVE_LOW>;
++		blue {
++			label = "heartbeat";
++			gpios = <&gpiod 11 GPIO_ACTIVE_HIGH>;
 +			linux,default-trigger = "heartbeat";
-+			status = "okay";
 +			default-state = "off";
 +		};
 +
-+		green1{
-+			label = "LED1_GRN";
-+			gpios = <&gpioz 7 GPIO_ACTIVE_LOW>;
-+			status = "okay";
-+			default-state = "on";
-+		};
-+
-+		red2{
-+			label = "LED2_RED";
-+			gpios = <&gpioi 8 GPIO_ACTIVE_LOW>;
-+			status = "okay";
-+			default-state = "off";
-+		};
-+
-+		green2{
-+			label = "LED2_GRN";
-+			gpios = <&gpioi 9 GPIO_ACTIVE_LOW>;
-+			default-state = "off";
-+		};
 +	};
 +
-+	usb_phy_tuning:usb-phy-tuning{
++	sound {
++		compatible = "audio-graph-card";
++		label = "STM32MP1-DK";
++		routing =
++			"Playback" , "MCLK",
++			"Capture" , "MCLK",
++			"MICL" , "Mic Bias";
++		dais = <&i2s2_port>;
++		status = "okay";
++	};
++
++	usb_phy_tuning: usb-phy-tuning {
 +		st,hs-dc-level = <2>;
 +		st,fs-rftime-tuning;
 +		st,hs-rftime-reduction;
@@ -283,45 +303,36 @@ index 0000000000..d763b48945
 +		st,no-lsfs-sc;
 +	};
 +
-+	vin:vin{
-+		compatible = "regulator-fixed";
-+		regulator-name = "vin";
-+		regulator-min-microvolt = <5000000>;
-+		regulator-max-microvolt = <5000000>;
-+		regulator-always-on;
-+	};
 +
-+	aliases{
-+		serial0 = &uart4;
-+    serial2 = &usart2;
-+    serial5 = &uart5;
-+    serial7 = &uart7;
-+    serial1 = &uart8;
-+	};
-+
-+	chosen{
-+		stdout-path = "serial0:115200n8";
-+	};
 +
 +	clocks {
 +
-+#ifndef CONFIG_STM32MP1_TRUSTED
++    clk_ext_camera: clk-ext-camera {
++			#clock-cells = <0>;
++			compatible = "fixed-clock";
++			clock-frequency = <24000000>;
++		};
++
++
 +		clk_lsi: clk-lsi {
 +			clock-frequency = <32000>;
 +		};
++
 +		clk_hsi: clk-hsi {
 +			clock-frequency = <64000000>;
 +		};
++
 +		clk_csi: clk-csi {
 +			clock-frequency = <4000000>;
 +		};
++
 +		clk_lse: clk-lse {
 +			clock-frequency = <32768>;
 +		};
++
 +		clk_hse: clk-hse {
 +			clock-frequency = <24000000>;
 +		};
-+#endif	/*CONFIG_STM32MP1_TRUSTED*/
 +	};
 +
 +}; /*root*/
@@ -329,318 +340,232 @@ index 0000000000..d763b48945
 +&pinctrl {
 +	u-boot,dm-pre-reloc;
 +
-+  i2c1_pins_mx: i2c1-0 {
++	dcmi_pins_mx: dcmi_mx-0 {
 +		pins {
-+			pinmux = <STM32_PINMUX('H', 11, AF5)>, /* I2C1_SCL */
-+				 <STM32_PINMUX('H', 12, AF5)>; /* I2C1_SDA */
++			pinmux = <STM32_PINMUX('A', 4, AF13)>, /* DCMI_HSYNC */
++					 <STM32_PINMUX('A', 6, AF13)>, /* DCMI_PIXCLK */
++					 <STM32_PINMUX('A', 10, AF13)>, /* DCMI_D1 */
++					 <STM32_PINMUX('B', 9, AF13)>, /* DCMI_D7 */
++					 <STM32_PINMUX('C', 6, AF13)>, /* DCMI_D0 */
++					 <STM32_PINMUX('E', 0, AF13)>, /* DCMI_D2 */
++					 <STM32_PINMUX('E', 1, AF13)>, /* DCMI_D3 */
++					 <STM32_PINMUX('E', 4, AF13)>, /* DCMI_D4 */
++					 <STM32_PINMUX('E', 13, AF13)>, /* DCMI_D6 */
++					 <STM32_PINMUX('G', 9, AF13)>, /* DCMI_VSYNC */
++					 <STM32_PINMUX('H', 6, AF13)>, /* DCMI_D8 */
++					 <STM32_PINMUX('H', 7, AF13)>, /* DCMI_D9 */
++					 <STM32_PINMUX('H', 15, AF13)>, /* DCMI_D11 */
++					 <STM32_PINMUX('I', 3, AF13)>, /* DCMI_D10 */
++					 <STM32_PINMUX('I', 4, AF13)>; /* DCMI_D5 */
++			bias-disable;
++		};
++	};
++
++	dcmi_sleep_pins_mx: dcmi_sleep_mx-0 {
++		pins {
++			pinmux = <STM32_PINMUX('A', 4, ANALOG)>, /* DCMI_HSYNC */
++					 <STM32_PINMUX('A', 6, ANALOG)>, /* DCMI_PIXCLK */
++					 <STM32_PINMUX('A', 10, ANALOG)>, /* DCMI_D1 */
++					 <STM32_PINMUX('B', 9, ANALOG)>, /* DCMI_D7 */
++					 <STM32_PINMUX('C', 6, ANALOG)>, /* DCMI_D0 */
++					 <STM32_PINMUX('E', 0, ANALOG)>, /* DCMI_D2 */
++					 <STM32_PINMUX('E', 1, ANALOG)>, /* DCMI_D3 */
++					 <STM32_PINMUX('E', 4, ANALOG)>, /* DCMI_D4 */
++					 <STM32_PINMUX('E', 13, ANALOG)>, /* DCMI_D6 */
++					 <STM32_PINMUX('G', 9, ANALOG)>, /* DCMI_VSYNC */
++					 <STM32_PINMUX('H', 6, ANALOG)>, /* DCMI_D8 */
++					 <STM32_PINMUX('H', 7, ANALOG)>, /* DCMI_D9 */
++					 <STM32_PINMUX('H', 15, ANALOG)>, /* DCMI_D11 */
++					 <STM32_PINMUX('I', 3, ANALOG)>, /* DCMI_D10 */
++					 <STM32_PINMUX('I', 4, ANALOG)>; /* DCMI_D5 */
++		};
++	};
++
++	eth1_pins_mx: eth1_mx-0 {
++		pins1 {
++			pinmux = <STM32_PINMUX('A', 1, AF11)>, /* ETH1_RX_CLK */
++					 <STM32_PINMUX('A', 7, AF11)>, /* ETH1_RX_CTL */
++					 <STM32_PINMUX('B', 0, AF11)>, /* ETH1_RXD2 */
++					 <STM32_PINMUX('B', 1, AF11)>, /* ETH1_RXD3 */
++					 <STM32_PINMUX('C', 4, AF11)>, /* ETH1_RXD0 */
++					 <STM32_PINMUX('C', 5, AF11)>; /* ETH1_RXD1 */
++			bias-disable;
++		};
++		pins2 {
++			pinmux = <STM32_PINMUX('A', 2, AF11)>; /* ETH1_MDIO */
++			bias-disable;
++			drive-push-pull;
++			slew-rate = <0>;
++		};
++		pins3 {
++			pinmux = <STM32_PINMUX('B', 11, AF11)>, /* ETH1_TX_CTL */
++					 <STM32_PINMUX('C', 1, AF11)>, /* ETH1_MDC */
++					 <STM32_PINMUX('C', 2, AF11)>, /* ETH1_TXD2 */
++					 <STM32_PINMUX('E', 2, AF11)>, /* ETH1_TXD3 */
++					 <STM32_PINMUX('G', 4, AF11)>, /* ETH1_GTX_CLK */
++					 <STM32_PINMUX('G', 13, AF11)>, /* ETH1_TXD0 */
++					 <STM32_PINMUX('G', 14, AF11)>; /* ETH1_TXD1 */
++			bias-disable;
++			drive-push-pull;
++			slew-rate = <2>;
++		};
++	};
++
++	eth1_sleep_pins_mx: eth1_sleep_mx-0 {
++		pins {
++			pinmux = <STM32_PINMUX('A', 1, ANALOG)>, /* ETH1_RX_CLK */
++					 <STM32_PINMUX('A', 2, ANALOG)>, /* ETH1_MDIO */
++					 <STM32_PINMUX('A', 7, ANALOG)>, /* ETH1_RX_CTL */
++					 <STM32_PINMUX('B', 0, ANALOG)>, /* ETH1_RXD2 */
++					 <STM32_PINMUX('B', 1, ANALOG)>, /* ETH1_RXD3 */
++					 <STM32_PINMUX('B', 11, ANALOG)>, /* ETH1_TX_CTL */
++					 <STM32_PINMUX('C', 1, ANALOG)>, /* ETH1_MDC */
++					 <STM32_PINMUX('C', 2, ANALOG)>, /* ETH1_TXD2 */
++					 <STM32_PINMUX('C', 4, ANALOG)>, /* ETH1_RXD0 */
++					 <STM32_PINMUX('C', 5, ANALOG)>, /* ETH1_RXD1 */
++					 <STM32_PINMUX('E', 2, ANALOG)>, /* ETH1_TXD3 */
++					 <STM32_PINMUX('G', 4, ANALOG)>, /* ETH1_GTX_CLK */
++					 <STM32_PINMUX('G', 13, ANALOG)>, /* ETH1_TXD0 */
++					 <STM32_PINMUX('G', 14, ANALOG)>; /* ETH1_TXD1 */
++		};
++	};
++
++	i2c1_pins_mx: i2c1_mx-0 {
++		pins {
++			pinmux = <STM32_PINMUX('D', 12, AF5)>, /* I2C1_SCL */
++			         <STM32_PINMUX('F', 15, AF5)>; /* I2C1_SDA */
 +			bias-disable;
 +			drive-open-drain;
 +			slew-rate = <0>;
 +		};
 +	};
 +
-+	i2c1_pins_sleep_mx: i2c1-1 {
++	i2c1_sleep_pins_mx: i2c1_sleep_mx-0 {
 +		pins {
-+			pinmux = <STM32_PINMUX('H', 11, ANALOG)>, /* I2C1_SCL */
-+				 <STM32_PINMUX('H', 12, ANALOG)>; /* I2C1_SDA */
++			pinmux = <STM32_PINMUX('D', 12, ANALOG)>, /* I2C1_SCL */
++			         <STM32_PINMUX('F', 15, ANALOG)>; /* I2C1_SDA */
 +		};
 +	};
 +
-+  i2c2_pins_mx: i2c2-0 {
-+    pins {
-+      pinmux = <STM32_PINMUX('F', 1, AF4)>, /* I2C2_SCL */
-+         <STM32_PINMUX('G', 15, AF4)>; /* I2C2_SDA */
-+      bias-disable;
-+      drive-open-drain;
-+      slew-rate = <0>;
-+    };
-+  };
++	i2c2_pins_mx: i2c2_mx-0 {
++		pins {
++			pinmux = <STM32_PINMUX('H', 5, AF4)>; /* I2C2_SDA */
++			bias-disable;
++			drive-open-drain;
++			slew-rate = <0>;
++		};
++	};
 +
-+  i2c2_pins_sleep_mx: i2c2-1 {
-+    pins {
-+      pinmux = <STM32_PINMUX('F', 1, ANALOG)>, /* I2C2_SCL */
-+         <STM32_PINMUX('G', 15, ANALOG)>; /* I2C2_SDA */
-+    };
-+  };
++	i2c2_sleep_pins_mx: i2c2_sleep_mx-0 {
++		pins {
++			pinmux = <STM32_PINMUX('H', 5, ANALOG)>; /* I2C2_SDA */
++		};
++	};
 +
-+  i2c5_pins_mx: i2c5-0 {
-+    pins {
-+      pinmux = <STM32_PINMUX('D', 1, AF4)>, /* I2C5_SCL */
-+         <STM32_PINMUX('D', 0, AF4)>; /* I2C5_SDA */
-+      bias-disable;
-+      drive-open-drain;
-+      slew-rate = <0>;
-+    };
-+  };
++	i2c5_pins_mx: i2c5_mx-0 {
++		pins {
++			pinmux = <STM32_PINMUX('A', 11, AF4)>, /* I2C5_SCL */
++					 <STM32_PINMUX('A', 12, AF4)>; /* I2C5_SDA */
++			bias-disable;
++			drive-open-drain;
++			slew-rate = <0>;
++		};
++	};
 +
-+  i2c5_pins_sleep_mx: i2c5-1 {
-+    pins {
-+      pinmux = <STM32_PINMUX('D', 1, ANALOG)>, /* I2C5_SCL */
-+         <STM32_PINMUX('D', 0, ANALOG)>; /* I2C5_SDA */
-+    };
-+  };
++	i2c5_sleep_pins_mx: i2c5_sleep_mx-0 {
++		pins {
++			pinmux = <STM32_PINMUX('A', 11, ANALOG)>, /* I2C5_SCL */
++					 <STM32_PINMUX('A', 12, ANALOG)>; /* I2C5_SDA */
++		};
++	};
 +
-+  spi2_pins_mx: spi2-0 {
-+    pins1 {
-+      pinmux = <STM32_PINMUX('I', 1, AF5)>, /* SPI2_SCK */
-+         <STM32_PINMUX('I', 3, AF5)>; /* SPI2_MOSI */
-+      bias-disable;
-+      drive-push-pull;
-+      slew-rate = <1>;
-+    };
++	i2s2_pins_mx: i2s2_mx-0 {
++		pins {
++			pinmux = <STM32_PINMUX('B', 12, AF5)>, /* I2S2_WS */
++					 <STM32_PINMUX('B', 13, AF5)>, /* I2S2_CK */
++					 <STM32_PINMUX('C', 3, AF5)>; /* I2S2_SDO */
++			bias-disable;
++			drive-push-pull;
++			slew-rate = <1>;
++		};
++	};
 +
-+    pins2 {
-+      pinmux = <STM32_PINMUX('I', 2, AF5)>; /* SPI2_MISO */
-+      bias-disable;
-+    };
-+  };
++	i2s2_sleep_pins_mx: i2s2_sleep_mx-0 {
++		pins {
++			pinmux = <STM32_PINMUX('B', 12, ANALOG)>, /* I2S2_WS */
++					 <STM32_PINMUX('B', 13, ANALOG)>, /* I2S2_CK */
++					 <STM32_PINMUX('C', 3, ANALOG)>; /* I2S2_SDO */
++		};
++	};
 +
-+  spi2_sleep_pins_mx: spi2-sleep-0 {
-+    pins {
-+      pinmux = <STM32_PINMUX('I', 1, ANALOG)>, /* SPI2_SCK */
-+         <STM32_PINMUX('I', 2, ANALOG)>, /* SPI2_MISO */
-+         <STM32_PINMUX('I', 3, ANALOG)>; /* SPI2_MOSI */
-+    };
-+  };
++	ltdc_pins_mx: ltdc_mx-0 {
++		pins1 {
++			pinmux = <STM32_PINMUX('A', 3, AF14)>, /* LTDC_B5 */
++					 <STM32_PINMUX('B', 8, AF14)>, /* LTDC_B6 */
++					 <STM32_PINMUX('C', 0, AF14)>, /* LTDC_R5 */
++					 <STM32_PINMUX('D', 8, AF14)>, /* LTDC_B7 */
++					 <STM32_PINMUX('D', 9, AF14)>, /* LTDC_B0 */
++					 <STM32_PINMUX('D', 10, AF14)>, /* LTDC_B3 */
++					 <STM32_PINMUX('E', 6, AF14)>, /* LTDC_G1 */
++					 <STM32_PINMUX('E', 12, AF14)>, /* LTDC_B4 */
++					 <STM32_PINMUX('E', 14, AF13)>, /* LTDC_G0 */
++					 <STM32_PINMUX('E', 15, AF14)>, /* LTDC_R7 */
++					 <STM32_PINMUX('F', 10, AF14)>, /* LTDC_DE */
++					 <STM32_PINMUX('G', 10, AF14)>, /* LTDC_B2 */
++					 <STM32_PINMUX('G', 12, AF14)>, /* LTDC_B1 */
++					 <STM32_PINMUX('H', 2, AF14)>, /* LTDC_R0 */
++					 <STM32_PINMUX('H', 3, AF14)>, /* LTDC_R1 */
++					 <STM32_PINMUX('H', 4, AF14)>, /* LTDC_G4 */
++					 <STM32_PINMUX('H', 8, AF14)>, /* LTDC_R2 */
++					 <STM32_PINMUX('H', 9, AF14)>, /* LTDC_R3 */
++					 <STM32_PINMUX('H', 10, AF14)>, /* LTDC_R4 */
++					 <STM32_PINMUX('H', 12, AF14)>, /* LTDC_R6 */
++					 <STM32_PINMUX('H', 13, AF14)>, /* LTDC_G2 */
++					 <STM32_PINMUX('H', 14, AF14)>, /* LTDC_G3 */
++					 <STM32_PINMUX('I', 0, AF14)>, /* LTDC_G5 */
++					 <STM32_PINMUX('I', 1, AF14)>, /* LTDC_G6 */
++					 <STM32_PINMUX('I', 2, AF14)>, /* LTDC_G7 */
++					<STM32_PINMUX('G', 7, AF14)>, /* LTDC_CLK */
++					 <STM32_PINMUX('I', 9, AF14)>, /* LTDC_VSYNC */
++					 <STM32_PINMUX('I', 10, AF14)>; /* LTDC_HSYNC */
++			bias-disable;
++			drive-push-pull;
++			slew-rate = <1>;
++		};
++	};
 +
-+  spi4_pins_mx: spi4-0 {
-+    pins1 {
-+      pinmux = <STM32_PINMUX('E', 12, AF5)>, /* SPI4_SCK */
-+         <STM32_PINMUX('E', 14, AF5)>; /* SPI4_MOSI */
-+      bias-disable;
-+      drive-push-pull;
-+      slew-rate = <1>;
-+    };
-+
-+    pins2 {
-+      pinmux = <STM32_PINMUX('E', 13, AF5)>; /* SPI4_MISO */
-+      bias-disable;
-+    };
-+  };
-+
-+  spi4_sleep_pins_mx: spi4-sleep-0 {
-+    pins {
-+      pinmux = <STM32_PINMUX('E', 12, ANALOG)>, /* SPI2_SCK */
-+         <STM32_PINMUX('E', 13, ANALOG)>, /* SPI2_MISO */
-+         <STM32_PINMUX('E', 14, ANALOG)>; /* SPI2_MOSI */
-+    };
-+  };
-+
-+  usart2_pins_mx: usart2-0 {
-+      pins1 {
-+        pinmux = <STM32_PINMUX('F', 5, AF7)>; /* USART2_TX */
-+        bias-disable;
-+        drive-push-pull;
-+        slew-rate = <0>;
-+      };
-+      pins2 {
-+        pinmux = <STM32_PINMUX('F', 4, AF7)>; /* USART2_RX */
-+        bias-disable;
-+      };
-+    };
-+
-+    usart2_idle_pins_mx: usart2-idle-0 {
-+      pins1 {
-+        pinmux = <STM32_PINMUX('F', 5, ANALOG)>; /* USART2_TX */
-+      };
-+      pins2 {
-+        pinmux = <STM32_PINMUX('F', 4, AF7)>; /* USART2_RX */
-+        bias-disable;
-+      };
-+    };
-+
-+    usart2_sleep_pins_mx: usart2-sleep-0 {
-+      pins {
-+        pinmux = <STM32_PINMUX('F', 5, ANALOG)>, /* USART2_TX */
-+           <STM32_PINMUX('F', 4, ANALOG)>; /* USART2_RX */
-+      };
-+    };
-+
-+    uart5_pins_mx: uart5-0 {
-+      pins1 {
-+        pinmux = <STM32_PINMUX('B', 13, AF14)>; /* USART5_TX */
-+        bias-disable;
-+        drive-push-pull;
-+        slew-rate = <0>;
-+      };
-+      pins2 {
-+        pinmux = <STM32_PINMUX('B', 12, AF14)>; /* USART5_RX */
-+        bias-disable;
-+      };
-+    };
-+
-+    uart5_idle_pins_mx: uart5-idle-0 {
-+      pins1 {
-+        pinmux = <STM32_PINMUX('B', 13, ANALOG)>; /* USART5_TX */
-+      };
-+      pins2 {
-+        pinmux = <STM32_PINMUX('B', 12, AF14)>; /* USART5_RX */
-+        bias-disable;
-+      };
-+    };
-+
-+    uart5_sleep_pins_mx: uart5-sleep-0 {
-+      pins {
-+        pinmux = <STM32_PINMUX('B', 13, ANALOG)>, /* USART5_TX */
-+           <STM32_PINMUX('B', 12, ANALOG)>; /* USART5_RX */
-+      };
-+    };
-+
-+    uart7_pins_mx: uart7-0 {
-+      pins1 {
-+        pinmux = <STM32_PINMUX('A', 15, AF13)>; /* USART7_TX */
-+        bias-disable;
-+        drive-push-pull;
-+        slew-rate = <0>;
-+      };
-+      pins2 {
-+        pinmux = <STM32_PINMUX('B', 3, AF13)>; /* USART7_RX */
-+        bias-disable;
-+      };
-+    };
-+
-+  uart7_idle_pins_mx: uart7-idle-0 {
-+    pins1 {
-+      pinmux = <STM32_PINMUX('A', 15, ANALOG)>; /* USART7_TX */
-+    };
-+    pins2 {
-+      pinmux = <STM32_PINMUX('B', 3, AF13)>; /* USART7_RX */
-+      bias-disable;
-+    };
-+  };
-+
-+  uart7_sleep_pins_mx: uart7-sleep-0 {
-+    pins {
-+      pinmux = <STM32_PINMUX('A', 15, ANALOG)>, /* USART7_TX */
-+        <STM32_PINMUX('B', 3, ANALOG)>; /* USART7_RX */
-+    };
-+  };
-+
-+  uart8_pins_mx: uart8-0 {
-+    pins1 {
-+      pinmux = <STM32_PINMUX('E', 1, AF8)>; /* USART8_TX */
-+      bias-disable;
-+      drive-push-pull;
-+      slew-rate = <0>;
-+    };
-+    pins2 {
-+      pinmux = <STM32_PINMUX('E', 0, AF8)>; /* USART8_RX */
-+      bias-disable;
-+    };
-+  };
-+
-+  uart8_idle_pins_mx: uart8-idle-0 {
-+    pins1 {
-+      pinmux = <STM32_PINMUX('E', 1, ANALOG)>; /* USART8_TX */
-+    };
-+    pins2 {
-+      pinmux = <STM32_PINMUX('E', 0, AF8)>; /* USART8_RX */
-+      bias-disable;
-+    };
-+  };
-+
-+  uart8_sleep_pins_mx: uart8-sleep-0 {
-+    pins {
-+      pinmux = <STM32_PINMUX('E', 1, ANALOG)>, /* USART8_TX */
-+        <STM32_PINMUX('E', 0, ANALOG)>; /* USART8_RX */
-+    };
-+  };
-+
-+  m_can1_pins_mx: m-can1-0 {
-+    pins1 {
-+      pinmux = <STM32_PINMUX('H', 13, AF9)>; /* CAN1_TX */
-+      slew-rate = <0>;
-+      drive-push-pull;
-+      bias-disable;
-+    };
-+    pins2 {
-+      pinmux = <STM32_PINMUX('H', 14, AF9)>; /* CAN1_RX */
-+      bias-disable;
-+    };
-+  };
-+
-+  m_can1_sleep_pins_mx: m_can1-sleep@0 {
-+    pins {
-+      pinmux = <STM32_PINMUX('H', 13, ANALOG)>, /* CAN1_TX */
-+        <STM32_PINMUX('H', 14, ANALOG)>; /* CAN1_RX */
-+    };
-+  };
-+
-+  pwm1_pins_mx: pwm1-0 {
-+    pins {
-+      pinmux = <STM32_PINMUX('A', 9, AF1)>; /* TIM1_CH2 */
-+      bias-pull-down;
-+      drive-push-pull;
-+      slew-rate = <0>;
-+    };
-+  };
-+
-+  pwm1_sleep_pins_mx: pwm1-sleep-0 {
-+    pins {
-+      pinmux = <STM32_PINMUX('A', 9, ANALOG)>; /* TIM1_CH1 */
-+    };
-+  };
-+
-+  pwm3_pins_mx: pwm3-0 {
-+    pins {
-+      pinmux = <STM32_PINMUX('B', 5, AF2)>; /* TIM3_CH2 */
-+      bias-pull-down;
-+      drive-push-pull;
-+      slew-rate = <0>;
-+    };
-+  };
-+
-+  pwm3_sleep_pins_mx: pwm3-sleep-0 {
-+    pins {
-+      pinmux = <STM32_PINMUX('B', 5, ANALOG)>; /* TIM3_CH2 */
-+    };
-+  };
-+
-+  pwm4_pins_mx: pwm4-0 {
-+    pins {
-+      pinmux = <STM32_PINMUX('B', 7, AF2)>; /* TIM4_CH2 */
-+      bias-pull-down;
-+      drive-push-pull;
-+      slew-rate = <0>;
-+    };
-+  };
-+
-+  pwm4_sleep_pins_mx: pwm4-sleep-0 {
-+    pins {
-+      pinmux = <STM32_PINMUX('B', 7, ANALOG)>; /* TIM4_CH2 */
-+    };
-+  };
-+
-+  pwm8_pins_mx: pwm8-0 {
-+    pins {
-+      pinmux = <STM32_PINMUX('I', 6, AF3)>; /* TIM8_CH2 */
-+      bias-pull-down;
-+      drive-push-pull;
-+      slew-rate = <0>;
-+    };
-+  };
-+
-+  pwm8_sleep_pins_mx: pwm8-sleep-0 {
-+    pins {
-+      pinmux = <STM32_PINMUX('I', 6, ANALOG)>; /* TIM8_CH2 */
-+    };
-+  };
-+
-+
-+  pwm12_pins_mx: pwm12-0 {
-+    pins {
-+      pinmux = <STM32_PINMUX('H', 9, AF2)>; /* TIM12_CH2 */
-+      bias-pull-down;
-+      drive-push-pull;
-+      slew-rate = <0>;
-+    };
-+  };
-+
-+  pwm12_sleep_pins_mx: pwm12-sleep-0 {
-+    pins {
-+      pinmux = <STM32_PINMUX('H', 9, ANALOG)>; /* TIM12_CH2 */
-+    };
-+  };
++	ltdc_sleep_pins_mx: ltdc_sleep_mx-0 {
++		pins {
++			pinmux = <STM32_PINMUX('A', 3, ANALOG)>, /* LTDC_B5 */
++					 <STM32_PINMUX('B', 8, ANALOG)>, /* LTDC_B6 */
++					 <STM32_PINMUX('C', 0, ANALOG)>, /* LTDC_R5 */
++					 <STM32_PINMUX('D', 8, ANALOG)>, /* LTDC_B7 */
++					 <STM32_PINMUX('D', 9, ANALOG)>, /* LTDC_B0 */
++					 <STM32_PINMUX('D', 10, ANALOG)>, /* LTDC_B3 */
++					 <STM32_PINMUX('E', 6, ANALOG)>, /* LTDC_G1 */
++					 <STM32_PINMUX('E', 12, ANALOG)>, /* LTDC_B4 */
++					 <STM32_PINMUX('E', 14, ANALOG)>, /* LTDC_G0 */
++					 <STM32_PINMUX('E', 15, ANALOG)>, /* LTDC_R7 */
++					 <STM32_PINMUX('F', 10, ANALOG)>, /* LTDC_DE */
++					 <STM32_PINMUX('G', 7, ANALOG)>, /* LTDC_CLK */
++					 <STM32_PINMUX('G', 10, ANALOG)>, /* LTDC_B2 */
++					 <STM32_PINMUX('G', 12, ANALOG)>, /* LTDC_B1 */
++					 <STM32_PINMUX('H', 2, ANALOG)>, /* LTDC_R0 */
++					 <STM32_PINMUX('H', 3, ANALOG)>, /* LTDC_R1 */
++					 <STM32_PINMUX('H', 4, ANALOG)>, /* LTDC_G4 */
++					 <STM32_PINMUX('H', 8, ANALOG)>, /* LTDC_R2 */
++					 <STM32_PINMUX('H', 9, ANALOG)>, /* LTDC_R3 */
++					 <STM32_PINMUX('H', 10, ANALOG)>, /* LTDC_R4 */
++					 <STM32_PINMUX('H', 12, ANALOG)>, /* LTDC_R6 */
++					 <STM32_PINMUX('H', 13, ANALOG)>, /* LTDC_G2 */
++					 <STM32_PINMUX('H', 14, ANALOG)>, /* LTDC_G3 */
++					 <STM32_PINMUX('I', 0, ANALOG)>, /* LTDC_G5 */
++					 <STM32_PINMUX('I', 1, ANALOG)>, /* LTDC_G6 */
++					 <STM32_PINMUX('I', 2, ANALOG)>, /* LTDC_G7 */
++					 <STM32_PINMUX('I', 9, ANALOG)>, /* LTDC_VSYNC */
++					 <STM32_PINMUX('I', 10, ANALOG)>; /* LTDC_HSYNC */
++		};
++	};
 +
 +	sdmmc1_pins_mx: sdmmc1_mx-0 {
 +		u-boot,dm-pre-reloc;
@@ -660,7 +585,7 @@ index 0000000000..d763b48945
 +			pinmux = <STM32_PINMUX('C', 12, AF12)>; /* SDMMC1_CK */
 +			bias-disable;
 +			drive-push-pull;
-+			slew-rate = <2>;
++			slew-rate = <3>;
 +		};
 +	};
 +
@@ -681,7 +606,7 @@ index 0000000000..d763b48945
 +			pinmux = <STM32_PINMUX('C', 12, AF12)>; /* SDMMC1_CK */
 +			bias-disable;
 +			drive-push-pull;
-+			slew-rate = <2>;
++			slew-rate = <3>;
 +		};
 +		pins3 {
 +			u-boot,dm-pre-reloc;
@@ -705,13 +630,184 @@ index 0000000000..d763b48945
 +		};
 +	};
 +
++	sdmmc2_pins_mx: sdmmc2_mx-0 {
++		u-boot,dm-pre-reloc;
++		pins1 {
++			u-boot,dm-pre-reloc;
++			pinmux = <STM32_PINMUX('A', 8, AF9)>, /* SDMMC2_D4 */
++					 <STM32_PINMUX('A', 9, AF10)>, /* SDMMC2_D5 */
++					 <STM32_PINMUX('B', 3, AF9)>, /* SDMMC2_D2 */
++					 <STM32_PINMUX('B', 4, AF9)>, /* SDMMC2_D3 */
++					 <STM32_PINMUX('B', 14, AF9)>, /* SDMMC2_D0 */
++					 <STM32_PINMUX('B', 15, AF9)>, /* SDMMC2_D1 */
++					 <STM32_PINMUX('C', 7, AF10)>, /* SDMMC2_D7 */
++					 <STM32_PINMUX('E', 5, AF9)>, /* SDMMC2_D6 */
++					 <STM32_PINMUX('G', 6, AF10)>; /* SDMMC2_CMD */
++			bias-pull-up;
++			drive-push-pull;
++			slew-rate = <1>;
++		};
++		pins2 {
++			u-boot,dm-pre-reloc;
++			pinmux = <STM32_PINMUX('E', 3, AF9)>; /* SDMMC2_CK */
++			bias-pull-up;
++			drive-push-pull;
++			slew-rate = <2>;
++		};
++	};
++
++	sdmmc2_opendrain_pins_mx: sdmmc2_opendrain_mx-0 {
++		u-boot,dm-pre-reloc;
++		pins1 {
++			u-boot,dm-pre-reloc;
++			pinmux = <STM32_PINMUX('A', 8, AF9)>, /* SDMMC2_D4 */
++					 <STM32_PINMUX('A', 9, AF10)>, /* SDMMC2_D5 */
++					 <STM32_PINMUX('B', 3, AF9)>, /* SDMMC2_D2 */
++					 <STM32_PINMUX('B', 4, AF9)>, /* SDMMC2_D3 */
++					 <STM32_PINMUX('B', 14, AF9)>, /* SDMMC2_D0 */
++					 <STM32_PINMUX('B', 15, AF9)>, /* SDMMC2_D1 */
++					 <STM32_PINMUX('C', 7, AF10)>, /* SDMMC2_D7 */
++					 <STM32_PINMUX('E', 5, AF9)>; /* SDMMC2_D6 */
++			bias-pull-up;
++			drive-push-pull;
++			slew-rate = <1>;
++		};
++		pins2 {
++			u-boot,dm-pre-reloc;
++			pinmux = <STM32_PINMUX('E', 3, AF9)>; /* SDMMC2_CK */
++			bias-pull-up;
++			drive-push-pull;
++			slew-rate = <2>;
++		};
++		pins3 {
++			u-boot,dm-pre-reloc;
++			pinmux = <STM32_PINMUX('G', 6, AF10)>; /* SDMMC2_CMD */
++			bias-pull-up;
++			drive-open-drain;
++			slew-rate = <1>;
++		};
++	};
++
++	sdmmc2_sleep_pins_mx: sdmmc2_sleep_mx-0 {
++		u-boot,dm-pre-reloc;
++		pins {
++			u-boot,dm-pre-reloc;
++			pinmux = <STM32_PINMUX('A', 8, ANALOG)>, /* SDMMC2_D4 */
++					 <STM32_PINMUX('A', 9, ANALOG)>, /* SDMMC2_D5 */
++					 <STM32_PINMUX('B', 3, ANALOG)>, /* SDMMC2_D2 */
++					 <STM32_PINMUX('B', 4, ANALOG)>, /* SDMMC2_D3 */
++					 <STM32_PINMUX('B', 14, ANALOG)>, /* SDMMC2_D0 */
++					 <STM32_PINMUX('B', 15, ANALOG)>, /* SDMMC2_D1 */
++					 <STM32_PINMUX('C', 7, ANALOG)>, /* SDMMC2_D7 */
++					 <STM32_PINMUX('E', 3, ANALOG)>, /* SDMMC2_CK */
++					 <STM32_PINMUX('E', 5, ANALOG)>, /* SDMMC2_D6 */
++					 <STM32_PINMUX('G', 6, ANALOG)>; /* SDMMC2_CMD */
++		};
++	};
++
++	sdmmc3_pins_mx: sdmmc3_mx-0 {
++		u-boot,dm-pre-reloc;
++		pins1 {
++			u-boot,dm-pre-reloc;
++			pinmux = <STM32_PINMUX('D', 7, AF10)>, /* SDMMC3_D3 */
++					 <STM32_PINMUX('F', 0, AF9)>, /* SDMMC3_D0 */
++					 <STM32_PINMUX('F', 1, AF9)>, /* SDMMC3_CMD */
++					 <STM32_PINMUX('F', 4, AF9)>, /* SDMMC3_D1 */
++					 <STM32_PINMUX('F', 5, AF9)>; /* SDMMC3_D2 */
++			bias-disable;
++			drive-push-pull;
++			slew-rate = <1>;
++		};
++		pins2 {
++			u-boot,dm-pre-reloc;
++			pinmux = <STM32_PINMUX('G', 15, AF10)>; /* SDMMC3_CK */
++			bias-disable;
++			drive-push-pull;
++			slew-rate = <2>;
++		};
++	};
++
++	sdmmc3_opendrain_pins_mx: sdmmc3_opendrain_mx-0 {
++		u-boot,dm-pre-reloc;
++		pins1 {
++			u-boot,dm-pre-reloc;
++			pinmux = <STM32_PINMUX('D', 7, AF10)>, /* SDMMC3_D3 */
++					 <STM32_PINMUX('F', 0, AF9)>, /* SDMMC3_D0 */
++					 <STM32_PINMUX('F', 4, AF9)>, /* SDMMC3_D1 */
++					 <STM32_PINMUX('F', 5, AF9)>; /* SDMMC3_D2 */
++			bias-disable;
++			drive-push-pull;
++			slew-rate = <1>;
++		};
++		pins2 {
++			u-boot,dm-pre-reloc;
++			pinmux = <STM32_PINMUX('F', 1, AF9)>; /* SDMMC3_CMD */
++			bias-disable;
++			drive-open-drain;
++			slew-rate = <1>;
++		};
++		pins3 {
++			u-boot,dm-pre-reloc;
++			pinmux = <STM32_PINMUX('G', 15, AF10)>; /* SDMMC3_CK */
++			bias-disable;
++			drive-push-pull;
++			slew-rate = <2>;
++		};
++	};
++
++	sdmmc3_sleep_pins_mx: sdmmc3_sleep_mx-0 {
++		u-boot,dm-pre-reloc;
++		pins {
++			u-boot,dm-pre-reloc;
++			pinmux = <STM32_PINMUX('D', 7, ANALOG)>, /* SDMMC3_D3 */
++					 <STM32_PINMUX('F', 0, ANALOG)>, /* SDMMC3_D0 */
++					 <STM32_PINMUX('F', 1, ANALOG)>, /* SDMMC3_CMD */
++					 <STM32_PINMUX('F', 4, ANALOG)>, /* SDMMC3_D1 */
++					 <STM32_PINMUX('F', 5, ANALOG)>, /* SDMMC3_D2 */
++					 <STM32_PINMUX('G', 15, ANALOG)>; /* SDMMC3_CK */
++		};
++	};
++
++	spi5_pins_mx: spi5_mx-0 {
++		pins {
++			pinmux = <STM32_PINMUX('F', 7, AF5)>, /* SPI5_SCK */
++					 <STM32_PINMUX('F', 8, AF5)>, /* SPI5_MISO */
++					 <STM32_PINMUX('F', 9, AF5)>; /* SPI5_MOSI */
++			bias-disable;
++			drive-push-pull;
++			slew-rate = <1>;
++		};
++	};
++
++	spi5_sleep_pins_mx: spi5_sleep_mx-0 {
++		pins {
++			pinmux = <STM32_PINMUX('F', 7, ANALOG)>, /* SPI5_SCK */
++					 <STM32_PINMUX('F', 8, ANALOG)>, /* SPI5_MISO */
++					 <STM32_PINMUX('F', 9, ANALOG)>; /* SPI5_MOSI */
++		};
++	};
++
++	tim5_pwm_pins_mx: tim5_pwm_mx-0 {
++		pins {
++			pinmux = <STM32_PINMUX('H', 11, AF2)>; /* TIM5_CH2 */
++			bias-disable;
++			drive-push-pull;
++			slew-rate = <0>;
++		};
++	};
++
++	tim5_pwm_sleep_pins_mx: tim5_pwm_sleep_mx-0 {
++		pins {
++			pinmux = <STM32_PINMUX('H', 11, ANALOG)>; /* TIM5_CH2 */
++		};
++	};
++
 +	uart4_pins_mx: uart4_mx-0 {
 +		u-boot,dm-pre-reloc;
 +		pins1 {
 +			u-boot,dm-pre-reloc;
 +			pinmux = <STM32_PINMUX('B', 2, AF8)>; /* UART4_RX */
-+      /* pull-up on rx to avoid floating level */
-+      bias-pull-up;
++			bias-disable;
 +		};
 +		pins2 {
 +			u-boot,dm-pre-reloc;
@@ -730,10 +826,91 @@ index 0000000000..d763b48945
 +					 <STM32_PINMUX('G', 11, ANALOG)>; /* UART4_TX */
 +		};
 +	};
++
++	usart2_pins_mx: usart2_mx-0 {
++		pins1 {
++			pinmux = <STM32_PINMUX('D', 3, AF7)>, /* USART2_CTS */
++				 <STM32_PINMUX('D', 6, AF7)>; /* USART2_RX */
++			bias-disable;
++		};
++		pins2 {
++			pinmux = <STM32_PINMUX('D', 4, AF7)>, /* USART2_RTS */
++			         <STM32_PINMUX('D', 5, AF7)>; /* USART2_TX */
++			bias-disable;
++			drive-push-pull;
++			slew-rate = <0>;
++		};
++	};
++
++	usart2_idle_pins_mx: usart2_sleep_mx-0 {
++		pins1 {
++			pinmux = <STM32_PINMUX('D', 5, ANALOG)>, /* USART2_TX */
++				 <STM32_PINMUX('D', 4, ANALOG)>, /* USART2_RTS */
++				 <STM32_PINMUX('D', 3, ANALOG)>; /* USART2_CTS_NSS */
++		};
++		pins2 {
++			pinmux = <STM32_PINMUX('D', 6, AF7)>; /* USART2_RX */
++			bias-disable;
++		};
++	};
++
++	usart2_sleep_pins_mx: usart2_sleep_mx-0 {
++		pins {
++			pinmux = <STM32_PINMUX('D', 3, ANALOG)>, /* USART2_CTS */
++				 <STM32_PINMUX('D', 4, ANALOG)>, /* USART2_RTS */
++				 <STM32_PINMUX('D', 5, ANALOG)>, /* USART2_TX */
++				 <STM32_PINMUX('D', 6, ANALOG)>; /* USART2_RX */
++		};
++	};
++
++	m_can1_pins_mx: m_can1_sleep_mx-0 {
++		pins1 {
++			pinmux = <STM32_PINMUX('D', 1, AF9)>; /* CAN1_TX */
++			slew-rate = <0>;
++			drive-push-pull;
++			bias-disable;
++		};
++		pins2 {
++			pinmux = <STM32_PINMUX('D', 0, AF9)>; /* CAN1_RX */
++			bias-disable;
++		};
++	};
++
++	m_can1_sleep_pins_mx: m_can1_sleep-0 {
++		pins {
++			pinmux = <STM32_PINMUX('D', 1, ANALOG)>, /* CAN1_TX */
++				 <STM32_PINMUX('D', 0, ANALOG)>; /* CAN1_RX */
++		};
++	};
++
++
++
++	stusb1600_pins_mx: stusb1600_mx-0 {
++		pins {
++			pinmux = <STM32_PINMUX('E', 8, ANALOG)>;
++			bias-pull-up;
++		};
++	};
++
 +};
 +
 +&pinctrl_z {
 +	u-boot,dm-pre-reloc;
++
++	i2c2_pins_z_mx: i2c2_mx-0 {
++		pins {
++			pinmux = <STM32_PINMUX('Z', 6, AF3)>; /* I2C2_SCL */
++			bias-disable;
++			drive-open-drain;
++			slew-rate = <0>;
++		};
++	};
++
++	i2c2_sleep_pins_z_mx: i2c2_sleep_mx-0 {
++		pins {
++			pinmux = <STM32_PINMUX('Z', 6, ANALOG)>; /* I2C2_SCL */
++		};
++	};
 +
 +	i2c4_pins_z_mx: i2c4_mx-0 {
 +		u-boot,dm-pre-reloc;
@@ -756,127 +933,228 @@ index 0000000000..d763b48945
 +		};
 +	};
 +
-+  spi6_pins_mx: spi6-0 {
-+    pins1 {
-+      pinmux = <STM32_PINMUX('Z', 0, AF8)>, /* SPI6_SCK */
-+         <STM32_PINMUX('Z', 2, AF8)>; /* SPI6_MOSI */
-+      bias-disable;
-+      drive-push-pull;
-+      slew-rate = <1>;
-+    };
-+
-+    pins2 {
-+      pinmux = <STM32_PINMUX('Z', 1, AF8)>; /* SPI6_MISO */
-+      bias-disable;
-+    };
-+  };
-+
-+  spi6_sleep_pins_mx: spi6-sleep-0 {
-+    pins {
-+      pinmux = <STM32_PINMUX('Z', 0, ANALOG)>, /* SPI6_SCK */
-+         <STM32_PINMUX('Z', 1, ANALOG)>, /* SPI6_MISO */
-+         <STM32_PINMUX('Z', 2, ANALOG)>; /* SPI6_MOSI */
-+    };
-+  };
 +};
 +
-+&m4_rproc{
-+	/*Restriction: "memory-region" property is not managed - please to use User-Section if needed*/
-+	mboxes = <&ipcc 0>, <&ipcc 1>, <&ipcc 2>;
-+	mbox-names = "vq0", "vq1", "shutdown";
-+	status = "okay";
++&m4_rproc {
 +	memory-region = <&retram>, <&mcuram>, <&mcuram2>, <&vdev0vring0>,
 +			<&vdev0vring1>, <&vdev0buffer>;
++	mboxes = <&ipcc 0>, <&ipcc 1>, <&ipcc 2>;
++	mbox-names = "vq0", "vq1", "shutdown";
 +	interrupt-parent = <&exti>;
 +	interrupts = <68 1>;
++	interrupt-names = "wdg";
 +	wakeup-source;
-+};
-+
-+&pwr_regulators {
-+	vdd-supply = <&vdd>;
-+	vdd_3v3_usbfs-supply = <&vdd_usb>;
++	recovery;
++	status = "okay";
 +};
 +
 +&bsec{
 +	status = "okay";
++
 +};
 +
-+&crc1{
++&dcmi{
++	pinctrl-names = "default", "sleep";
++	pinctrl-0 = <&dcmi_pins_mx>;
++	pinctrl-1 = <&dcmi_sleep_pins_mx>;
 +	status = "okay";
++
++
++
++  	port {
++		dcmi_0: endpoint {
++			remote-endpoint = <&ov5640_0>;
++			bus-width = <8>;
++			hsync-active = <0>;
++			vsync-active = <0>;
++			pclk-sample = <1>;
++			pclk-max-frequency = <77000000>;
++		};
++	};
++
 +};
 +
-+&cryp1{
-+	u-boot,dm-pre-reloc;
++&dsi{
 +	status = "okay";
++
++  #address-cells = <1>;
++	#size-cells = <0>;
++	status = "okay";
++
++	ports {
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		port@0 {
++			reg = <0>;
++			dsi_in: endpoint {
++				remote-endpoint = <&ltdc_ep1_out>;
++			};
++		};
++
++		port@1 {
++			reg = <1>;
++			dsi_out: endpoint {
++				remote-endpoint = <&panel_in>;
++			};
++		};
++	};
++
++	panel@0 {
++		compatible = "orisetech,otm8009a";
++		reg = <0>;
++		reset-gpios = <&gpioe 9 GPIO_ACTIVE_LOW>;
++		power-supply = <&v3v3>;
++		status = "okay";
++
++		port {
++			panel_in: endpoint {
++				remote-endpoint = <&dsi_out>;
++			};
++		};
++	};
++
++
 +};
 +
-+&dma1{
++&ethernet0{
++	pinctrl-names = "default", "sleep";
++	pinctrl-0 = <&eth1_pins_mx>;
++	pinctrl-1 = <&eth1_sleep_pins_mx>;
 +	status = "okay";
-+	sram = <&dma_pool>;
-+};
 +
-+&dma2{
-+	status = "okay";
-+	sram = <&dma_pool>;
-+};
 +
-+&dmamux1{
++  st,eth_clk_sel = <1>;
++  phy-mode = "rgmii-id";
++	max-speed = <1000>;
++	phy-handle = <&phy0>;
 +
-+	dma-masters = <&dma1 &dma2>;
-+	dma-channels = <16>;
++	mdio0 {
++		#address-cells = <1>;
++		#size-cells = <0>;
++		compatible = "snps,dwmac-mdio";
++		phy0: ethernet-phy@0 {
++			reg = <3>;
++		};
++	};
 +
-+	status = "okay";
-+};
-+
-+&dts{
-+	status = "okay";
 +};
 +
 +&gpu{
 +	status = "okay";
-+	contiguous-area = <&gpu_reserved>;
-+};
 +
-+&hash1{
-+	u-boot,dm-pre-reloc;
-+	status = "okay";
++
++	contiguous-area = <&gpu_reserved>;
++
 +};
 +
 +&hsem{
 +	status = "okay";
++
 +};
 +
-+&i2c1 {
++&i2c1{
 +	pinctrl-names = "default", "sleep";
 +	pinctrl-0 = <&i2c1_pins_mx>;
-+	pinctrl-1 = <&i2c1_pins_sleep_mx>;
++	pinctrl-1 = <&i2c1_sleep_pins_mx>;
++	status = "okay";
++
++
++
 +	i2c-scl-rising-time-ns = <100>;
 +	i2c-scl-falling-time-ns = <7>;
-+	status = "okay";
++
 +	/delete-property/dmas;
 +	/delete-property/dma-names;
++
++
++	touchscreen@2a {
++		compatible = "focaltech,ft6236";
++		reg = <0x2a>;
++		interrupts = <2 2>;
++		interrupt-parent = <&gpiof>;
++		interrupt-controller;
++		touchscreen-size-x = <480>;
++		touchscreen-size-y = <800>;
++		status = "okay";
++	};
++	touchscreen@38 {
++		compatible = "focaltech,ft6336";
++		reg = <0x38>;
++		interrupts = <2 2>;
++		interrupt-parent = <&gpiof>;
++		interrupt-controller;
++		touchscreen-size-x = <480>;
++		touchscreen-size-y = <800>;
++		status = "okay";
++	};
++	hdmi-transmitter@39 {
++		compatible = "sil,sii9022";
++		reg = <0x39>;
++		reset-gpios = <&gpiog 0 GPIO_ACTIVE_LOW>;
++		interrupts = <1 IRQ_TYPE_EDGE_FALLING>;
++		interrupt-parent = <&gpiog>;
++		pinctrl-names = "default", "sleep";
++		pinctrl-0 = <&ltdc_pins_mx>;
++		pinctrl-1 = <&ltdc_sleep_pins_mx>;
++		status = "okay";
++
++		ports {
++			#address-cells = <1>;
++			#size-cells = <0>;
++
++			port@0 {
++				reg = <0>;
++				sii9022_in: endpoint {
++					remote-endpoint = <&ltdc_ep0_out>;
++				};
++			};
++
++      port@1 {
++        reg = <1>;
++        sii9022_tx_endpoint: endpoint {
++          remote-endpoint = <&i2s2_endpoint>;
++        };
++      };
++		};
++	};
++
 +};
 +
-+&i2c2 {
++&i2c2{
 +	pinctrl-names = "default", "sleep";
-+	pinctrl-0 = <&i2c2_pins_mx>;
-+	pinctrl-1 = <&i2c2_pins_sleep_mx>;
-+	i2c-scl-rising-time-ns = <100>;
-+	i2c-scl-falling-time-ns = <7>;
++	pinctrl-0 = <&i2c2_pins_mx &i2c2_pins_z_mx>;
++	pinctrl-1 = <&i2c2_sleep_pins_mx &i2c2_sleep_pins_z_mx>;
 +	status = "okay";
-+	/delete-property/dmas;
-+	/delete-property/dma-names;
-+};
 +
-+&i2c5 {
-+	pinctrl-names = "default", "sleep";
-+	pinctrl-0 = <&i2c5_pins_mx>;
-+	pinctrl-1 = <&i2c5_pins_sleep_mx>;
-+	i2c-scl-rising-time-ns = <100>;
-+	i2c-scl-falling-time-ns = <7>;
-+	status = "okay";
++  	i2c-scl-rising-time-ns = <185>;
++	i2c-scl-falling-time-ns = <20>;
++
 +	/delete-property/dmas;
 +	/delete-property/dma-names;
++
++  	ov5640: camera@3c {
++		compatible = "ovti,ov5640";
++		reg = <0x3c>;
++		clocks = <&clk_ext_camera>;
++		clock-names = "xclk";
++		DOVDD-supply = <&v3v3>;
++		rotation = <180>;
++		status = "okay";
++
++		port {
++			ov5640_0: endpoint {
++				remote-endpoint = <&dcmi_0>;
++				bus-width = <8>;
++				data-shift = <2>; /* lines 9:2 are used */
++				hsync-active = <0>;
++				vsync-active = <0>;
++				pclk-sample = <1>;
++				pclk-max-frequency = <77000000>;
++			};
++		};
++	};
++
 +};
 +
 +&i2c4{
@@ -886,13 +1164,30 @@ index 0000000000..d763b48945
 +	pinctrl-1 = <&i2c4_sleep_pins_z_mx>;
 +	status = "okay";
 +
++
 +	i2c-scl-rising-time-ns = <185>;
 +	i2c-scl-falling-time-ns = <20>;
-+	clock-frequency = <400000>;
-+	/delete-property/ dmas;
-+	/delete-property/ dma-names;
++	/delete-property/dmas;
++	/delete-property/dma-names;
 +
-+	pmic:stpmic@33{
++	typec: stusb1600@28 {
++		compatible = "st,stusb1600";
++		reg = <0x28>;
++		interrupt-parent = <&gpioe>;
++		interrupts = <8 IRQ_TYPE_EDGE_FALLING>;
++		pinctrl-0 = <&stusb1600_pins_mx>;
++		pinctrl-names = "default";
++		status = "okay";
++
++		typec_con: connector {
++			compatible = "usb-c-connector";
++			label = "USB-C";
++			power-role = "dual";
++			power-opmode = "default";
++		};
++	};
++
++	pmic: stpmic@33 {
 +		compatible = "st,stpmic1";
 +		reg = <0x33>;
 +		interrupts-extended = <&exti_pwr 55 IRQ_TYPE_EDGE_FALLING>;
@@ -900,24 +1195,20 @@ index 0000000000..d763b48945
 +		#interrupt-cells = <2>;
 +		status = "okay";
 +
-+		regulators{
++		st,main-control-register = <0x04>;
++		st,vin-control-register = <0xc0>;
++		st,usb-control-register = <0x20>;
++
++		regulators {
 +			compatible = "st,stpmic1-regulators";
-+			buck1-supply = <&vin>;
-+			buck2-supply = <&vin>;
-+			buck3-supply = <&vin>;
-+			buck4-supply = <&vin>;
++
 +			ldo1-supply = <&v3v3>;
-+			ldo2-supply = <&vin>;
 +			ldo3-supply = <&vdd_ddr>;
-+			ldo4-supply = <&vin>;
-+			ldo5-supply = <&vin>;
 +			ldo6-supply = <&v3v3>;
-+			vref_ddr-supply = <&vin>;
-+			boost-supply = <&vin>;
 +			pwr_sw1-supply = <&bst_out>;
 +			pwr_sw2-supply = <&bst_out>;
 +
-+			vddcore:buck1{
++			vddcore: buck1 {
 +				regulator-name = "vddcore";
 +				regulator-min-microvolt = <1200000>;
 +				regulator-max-microvolt = <1350000>;
@@ -926,7 +1217,7 @@ index 0000000000..d763b48945
 +				regulator-over-current-protection;
 +			};
 +
-+			vdd_ddr:buck2{
++			vdd_ddr: buck2 {
 +				regulator-name = "vdd_ddr";
 +				regulator-min-microvolt = <1350000>;
 +				regulator-max-microvolt = <1350000>;
@@ -935,7 +1226,7 @@ index 0000000000..d763b48945
 +				regulator-over-current-protection;
 +			};
 +
-+			vdd:buck3{
++			vdd: buck3 {
 +				regulator-name = "vdd";
 +				regulator-min-microvolt = <3300000>;
 +				regulator-max-microvolt = <3300000>;
@@ -945,7 +1236,7 @@ index 0000000000..d763b48945
 +				regulator-over-current-protection;
 +			};
 +
-+			v3v3:buck4{
++			v3v3: buck4 {
 +				regulator-name = "v3v3";
 +				regulator-min-microvolt = <3300000>;
 +				regulator-max-microvolt = <3300000>;
@@ -954,23 +1245,25 @@ index 0000000000..d763b48945
 +				regulator-initial-mode = <0>;
 +			};
 +
-+			v1v8_audio:ldo1{
-+				regulator-name = "v1v8_audio";
++			v1v8_ldo1: ldo1 {
++				regulator-name = "v1v8_ldo1";
 +				regulator-min-microvolt = <1800000>;
 +				regulator-max-microvolt = <1800000>;
 +				regulator-always-on;
 +				interrupts = <IT_CURLIM_LDO1 0>;
++
 +			};
 +
-+			v3v3_hdmi:ldo2{
-+				regulator-name = "v3v3_hdmi";
-+				regulator-min-microvolt = <3300000>;
-+				regulator-max-microvolt = <3300000>;
++			v2v8_ldo2: ldo2 {			//custom
++				regulator-name = "v2v8_ldo2";
++				regulator-min-microvolt = <2800000>;
++				regulator-max-microvolt = <2800000>;
 +				regulator-always-on;
 +				interrupts = <IT_CURLIM_LDO2 0>;
++
 +			};
 +
-+			vtt_ddr:ldo3{
++			vtt_ddr: ldo3 {
 +				regulator-name = "vtt_ddr";
 +				regulator-min-microvolt = <500000>;
 +				regulator-max-microvolt = <750000>;
@@ -978,58 +1271,61 @@ index 0000000000..d763b48945
 +				regulator-over-current-protection;
 +			};
 +
-+			vdd_usb:ldo4{
++			vdd_usb: ldo4 {
 +				regulator-name = "vdd_usb";
 +				regulator-min-microvolt = <3300000>;
 +				regulator-max-microvolt = <3300000>;
 +				interrupts = <IT_CURLIM_LDO4 0>;
-+				regulator-always-on;
 +			};
 +
-+			vdda:ldo5{
-+				regulator-name = "vdda";
-+				regulator-min-microvolt = <2900000>;
-+				regulator-max-microvolt = <2900000>;
++                        v3v3_eth: ldo5 {
++				regulator-name = "v3v3_eth";
++				regulator-min-microvolt = <3300000>;
++				regulator-max-microvolt = <3300000>;
 +				interrupts = <IT_CURLIM_LDO5 0>;
 +				regulator-boot-on;
 +			};
 +
-+			v1v2_hdmi:ldo6{
-+				regulator-name = "v1v2_hdmi";
++			v3v3_dsi: ldo6 {
++				regulator-name = "v3v3_dsi";
 +				regulator-min-microvolt = <1200000>;
 +				regulator-max-microvolt = <1200000>;
 +				regulator-always-on;
 +				interrupts = <IT_CURLIM_LDO6 0>;
++
 +			};
 +
-+			vref_ddr:vref_ddr{
++			vref_ddr: vref_ddr {
 +				regulator-name = "vref_ddr";
 +				regulator-always-on;
 +				regulator-over-current-protection;
 +			};
 +
-+			bst_out:boost{
-+				regulator-name = "bst_out";
-+				interrupts = <IT_OCP_BOOST 0>;
-+			};
++      bst_out: boost {
++       regulator-name = "bst_out";
++       interrupts = <IT_OCP_BOOST 0>;
++       regulator-always-on;
++      };
 +
-+			vbus_otg:pwr_sw1{
-+				regulator-name = "vbus_otg";
-+				interrupts = <IT_OCP_OTG 0>;
-+			};
++     vbus_otg: pwr_sw1 {
++       regulator-name = "vbus_otg";
++       interrupts = <IT_OCP_OTG 0>;
++       regulator-active-discharge;
++       regulator-always-on;
++      };
 +
-+			vbus_sw:pwr_sw2{
-+				regulator-name = "vbus_sw";
-+				interrupts = <IT_OCP_SWOUT 0>;
-+				regulator-active-discharge = <1>;
-+			};
++      vbus_sw: pwr_sw2 {
++       regulator-name = "vbus_sw";
++       interrupts = <IT_OCP_SWOUT 0>;
++       regulator-active-discharge;
++       regulator-always-on;
++      };
 +		};
 +
-+		onkey{
++		onkey {
 +			compatible = "st,stpmic1-onkey";
-+			interrupts = <IT_PONKEY_F 0>, <IT_PONKEY_R 0>;
++			interrupts = <IT_PONKEY_F 0>, <IT_PONKEY_R 1>;
 +			interrupt-names = "onkey-falling", "onkey-rising";
-+			power-off-time-sec = <10>;
 +			status = "okay";
 +		};
 +
@@ -1038,37 +1334,97 @@ index 0000000000..d763b48945
 +			status = "disabled";
 +		};
 +	};
-+	eeprom@50 {
-+		compatible = "atmel,24c02";
-+		reg = <0x50>;
-+		pagesize = <16>;
++};
++
++&i2c5{
++	pinctrl-names = "default", "sleep";
++	pinctrl-0 = <&i2c5_pins_mx>;
++	pinctrl-1 = <&i2c5_sleep_pins_mx>;
++	status = "okay";
++
++	/delete-property/dmas;
++	/delete-property/dma-names;
++
++};
++
++&i2s2{
++  clocks = <&rcc SPI2>, <&rcc SPI2_K>, <&rcc PLL3_Q>, <&rcc PLL3_R>;
++  clock-names = "pclk", "i2sclk", "x8k", "x11k";
++	pinctrl-names = "default", "sleep";
++	pinctrl-0 = <&i2s2_pins_mx>;
++	pinctrl-1 = <&i2s2_sleep_pins_mx>;
++	status = "okay";
++
++  i2s2_port: port {
++		i2s2_endpoint: endpoint {
++			remote-endpoint = <&sii9022_tx_endpoint>;
++			format = "i2s";
++			mclk-fs = <256>;
++		};
 +	};
++
 +};
 +
 +&ipcc{
 +	status = "okay";
++
 +};
 +
 +&iwdg2{
 +	status = "okay";
++
++
 +	timeout-sec = <32>;
++
 +};
 +
-+&mdma1{
++&ltdc{
++
 +	status = "okay";
++
++	port {
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		ltdc_ep0_out: endpoint@0 {
++			reg = <0>;
++			remote-endpoint = <&sii9022_in>;
++		};
++
++		ltdc_ep1_out: endpoint@1 {
++			reg = <1>;
++			remote-endpoint = <&dsi_in>;
++		};
++
++	};
++
++};
++
++&pwr{
++	status = "okay";
++
++
++	pwr-regulators {
++		vdd-supply = <&vdd>;
++		vdd_3v3_usbfs-supply = <&vdd_usb>;
++	};
++
 +};
 +
 +&rcc{
 +	u-boot,dm-pre-reloc;
 +	status = "okay";
++
 +};
 +
 +&rng1{
 +	status = "okay";
++
 +};
 +
 +&rtc{
 +	status = "okay";
++	st,lsco = <RTC_OUT2_RMP>;
 +};
 +
 +&sdmmc1{
@@ -1078,16 +1434,77 @@ index 0000000000..d763b48945
 +	pinctrl-1 = <&sdmmc1_opendrain_pins_mx>;
 +	pinctrl-2 = <&sdmmc1_sleep_pins_mx>;
 +	status = "okay";
-+
-+	cd-gpios = <&gpiog 7 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
-+	disable-wp;
++	broken-cd;
 +	st,neg-edge;
 +	bus-width = <4>;
 +	vmmc-supply = <&v3v3>;
++
++};
++
++&sdmmc2{
++	u-boot,dm-pre-reloc;
++	pinctrl-names = "default", "opendrain", "sleep";
++	pinctrl-0 = <&sdmmc2_pins_mx>;
++	pinctrl-1 = <&sdmmc2_opendrain_pins_mx>;
++	pinctrl-2 = <&sdmmc2_sleep_pins_mx>;
++	status = "okay";
++        non-removable;
++	no-sd;
++	no-sdio;
++	st,neg-edge;
++	bus-width = <8>;
++	vmmc-supply = <&v3v3>;
++	vqmmc-supply = <&v3v3>;
++	mmc-ddr-3_3v;
++
++};
++
++&sdmmc3{
++	u-boot,dm-pre-reloc;
++	pinctrl-names = "default", "opendrain", "sleep";
++	pinctrl-0 = <&sdmmc3_pins_mx>;
++	pinctrl-1 = <&sdmmc3_opendrain_pins_mx>;
++	pinctrl-2 = <&sdmmc3_sleep_pins_mx>;
++	status = "okay";
++
++
++	arm,primecell-periphid = <0x10153180>;
++	non-removable;
++	st,neg-edge;
++	bus-width = <4>;
++	vmmc-supply = <&v3v3>;
++	mmc-pwrseq = <&wifi_pwrseq>;
++	#address-cells = <1>;
++	#size-cells = <0>;
++	keep-power-in-suspend;
++	status = "okay";
++
++	brcmf: bcrmf@1 {
++		reg = <1>;
++		compatible = "brcm,bcm4329-fmac";
++		status = "okay";
++	};
++
 +};
 +
 +&tamp{
 +	status = "okay";
++
++};
++
++&timers5 {
++	/delete-property/dmas;
++	/delete-property/dma-names;
++	status = "okay";
++	pwm {
++		pinctrl-0 = <&tim5_pwm_pins_mx>;
++		pinctrl-1 = <&tim5_pwm_sleep_pins_mx>;
++		pinctrl-names = "default", "sleep";
++		status = "okay";
++	};
++	timer@4 {
++		status = "okay";
++	};
 +};
 +
 +&uart4{
@@ -1097,260 +1514,2240 @@ index 0000000000..d763b48945
 +	pinctrl-1 = <&uart4_sleep_pins_mx>;
 +	status = "okay";
 +
-+	/delete-property/ dmas;
-+	/delete-property/ dma-names;
 +};
 +
-+&usbh_ehci{
-+	status = "okay";
-+	phys = <&usbphyc_port0>;
-+};
-+
-+&usbh_ohci{
-+	status = "okay";
-+};
-+
-+&usbotg_hs{
-+	u-boot,dm-pre-reloc;
-+	status = "okay";
-+	phys = <&usbphyc_port1 0>;
-+	phy-names = "usb2-phy";
-+};
-+
-+&usbphyc{
-+	u-boot,dm-pre-reloc;
-+	status = "okay";
-+};
-+
-+&usbphyc_port0{
-+	u-boot,dm-pre-reloc;
-+	status = "okay";
-+	phy-supply = <&vdd_usb>;
-+	st,phy-tuning = <&usb_phy_tuning>;
-+};
-+
-+&usbphyc_port1{
-+	u-boot,dm-pre-reloc;
-+	status = "okay";
-+	phy-supply = <&vdd_usb>;
-+	st,phy-tuning = <&usb_phy_tuning>;
-+};
-+
-+&adc {
-+  vdd-supply = <&vdd>;
-+  vdda-supply = <&vdda>;
-+  vref-supply = <&vdda>;
-+	status = "okay";
-+  adc1: adc@0 {
-+    st,min-sample-time-nsecs = <5000>;
-+    st,adc-channels = <0 1>;
-+    status = "okay";
-+  };
-+
-+  adc2: adc@100 {
-+    status = "okay";
-+  };
-+
-+  adc_temp: temp {
-+    status = "okay";
-+  };
-+};
-+
-+&usbh_ohci{
-+	phys = <&usbphyc_port0>;
-+};
-+
-+&cpu0{
-+	cpu-supply = <&vddcore>;
-+};
-+
-+&cpu1{
-+	cpu-supply = <&vddcore>;
-+};
-+
-+&sram{
-+	dma_pool:dma_pool@0{
-+		reg = <0x50000 0x10000>;
-+		pool;
-+	};
-+};
-+
-+&optee{
-+	status = "okay";
-+};
-+
-+&spi2 {
-+	pinctrl-names = "default", "sleep";
-+	pinctrl-0 = <&spi2_pins_mx>;
-+	pinctrl-1 = <&spi2_sleep_pins_mx>;
-+  cs-gpios = <&gpioi 0 0>;
-+	status = "okay";
-+
-+  spidev2: spidev2@0{
-+    compatible = "rohm,dh2228fv";
-+    spi-max-frequency = <30000000>;
-+    reg = <0>;
-+  };
-+};
-+
-+&spi4 {
-+	pinctrl-names = "default", "sleep";
-+	pinctrl-0 = <&spi4_pins_mx>;
-+	pinctrl-1 = <&spi4_sleep_pins_mx>;
-+  cs-gpios = <&gpioe 11 0>;
-+	status = "okay";
-+
-+  spidev4: spidev4@0{
-+    compatible = "rohm,dh2228fv";
-+    spi-max-frequency = <30000000>;
-+    reg = <0>;
-+  };
-+};
-+
-+&spi6 {
-+	pinctrl-names = "default", "sleep";
-+	pinctrl-0 = <&spi6_pins_mx>;
-+	pinctrl-1 = <&spi6_sleep_pins_mx>;
-+  cs-gpios = <&gpioz 3 0>;
-+	status = "okay";
-+
-+  spidev6: spidev6@0{
-+    compatible = "rohm,dh2228fv";
-+    spi-max-frequency = <30000000>;
-+    reg = <0>;
-+  };
-+};
-+
-+&usart2 {
++&usart2{
 +	pinctrl-names = "default", "sleep", "idle";
 +	pinctrl-0 = <&usart2_pins_mx>;
 +	pinctrl-1 = <&usart2_sleep_pins_mx>;
 +	pinctrl-2 = <&usart2_idle_pins_mx>;
++	st,hw-flow-ctrl;
++	status = "okay";
++
++	bluetooth {
++		shutdown-gpios = <&gpioe 10 GPIO_ACTIVE_HIGH>;
++		compatible = "brcm,bcm43438-bt";
++		max-speed = <3000000>;
++	};
++};
++
++
++&m4_rproc {
++memory-region = <&retram>, <&mcuram>, <&mcuram2>, <&vdev0vring0>,
++		<&vdev0vring1>, <&vdev0buffer>;
++};
++
++&dma1 {
++	sram = <&dma_pool>;
++};
++
++&dma2 {
++	sram = <&dma_pool>;
++};
++
++
++&usbh_ehci {
++	phys = <&usbphyc_port0>;
++	phy-names = "usb";
 +	status = "okay";
 +};
 +
-+&uart5 {
-+	pinctrl-names = "default", "sleep", "idle";
-+	pinctrl-0 = <&uart5_pins_mx>;
-+	pinctrl-1 = <&uart5_sleep_pins_mx>;
-+	pinctrl-2 = <&uart5_idle_pins_mx>;
++&usbh_ohci{
++  phys = <&usbphyc_port0>;
++  phy-names = "usb";
++  status = "okay";
++};
++
++&usbotg_hs {
++	extcon = <&typec>;
++	phys = <&usbphyc_port1 0>;
++	phy-names = "usb2-phy";
 +	status = "okay";
 +};
 +
-+&uart7 {
-+	pinctrl-names = "default", "sleep", "idle";
-+	pinctrl-0 = <&uart7_pins_mx>;
-+	pinctrl-1 = <&uart7_sleep_pins_mx>;
-+	pinctrl-2 = <&uart7_idle_pins_mx>;
++&usbphyc {
++	vdd3v3-supply = <&vdd_usb>;
 +	status = "okay";
 +};
 +
-+&uart8 {
-+	pinctrl-names = "default", "sleep", "idle";
-+	pinctrl-0 = <&uart8_pins_mx>;
-+	pinctrl-1 = <&uart8_sleep_pins_mx>;
-+	pinctrl-2 = <&uart8_idle_pins_mx>;
++&usbphyc_port0 {
++	st,phy-tuning = <&usb_phy_tuning>;
++};
++
++&usbphyc_port1 {
++	st,phy-tuning = <&usb_phy_tuning>;
++};
++
++&spi5 {
++	pinctrl-names = "default", "sleep";
++	pinctrl-0 = <&spi5_pins_mx>;
++	pinctrl-1 = <&spi5_sleep_pins_mx>;
++	cs-gpios = <&gpiof 6 0>;
 +	status = "okay";
++
++	spidev: spidev@0 {
++		compatible = "rohm,dh2228fv";
++		spi-max-frequency = <30000000>;
++		reg = <0>;
++	};
++};
++
++// WARNING: Do not try to enable DAC1 and DCMI
++// This devices share the same pin PA4
++&dac {
++	pinctrl-names = "default";
++	vref-supply = <&vrefbuf>;
++	status = "okay";
++	dac1: dac@1 {
++		pinctrl-0 = <&dac_ch1_pins_a>;
++		status = "disabled";
++	};
++	dac2: dac@2 {
++		pinctrl-0 = <&dac_ch2_pins_a>;
++		status = "okay";
++	};
++};
++
++&adc {
++	vdd-supply = <&vdd>;
++	vdda-supply = <&vdd>;
++	vref-supply = <&v3v3_eth>;
++	status = "okay";
++	adc1: adc@0 {
++		st,adc-channels = <0 1>; //ANA0 ANA1
++		status = "okay";
++	};
++	adc2: adc@100 {
++		//st,adc-channels = <0 1 2 6 12 18 19>;
++		status = "okay";
++	};
 +};
 +
 +&m_can1 {
-+	pinctrl-names = "default";
++	pinctrl-names = "default", "sleep";
 +	pinctrl-0 = <&m_can1_pins_mx>;
++	pinctrl-1 = <&m_can1_sleep_pins_mx>;
 +	status = "okay";
-+  can-transceiver {
-+    max-bitrate = <5000000>;
-+  };
 +};
-+
-+&timers1 {
-+	status = "okay";
-+	/* spare dmas for other usage */
-+	/delete-property/dmas;
-+	/delete-property/dma-names;
-+	pwm1: pwm {
-+    pinctrl-names = "default", "sleep";
-+	  pinctrl-0 = <&pwm1_pins_mx>;
-+	  pinctrl-1 = <&pwm1_sleep_pins_mx>;
-+		status = "okay";
-+	};
-+};
-+
-+&timers3 {
-+	status = "okay";
-+	/* spare dmas for other usage */
-+	/delete-property/dmas;
-+	/delete-property/dma-names;
-+	pwm3: pwm {
-+    pinctrl-names = "default", "sleep";
-+	  pinctrl-0 = <&pwm3_pins_mx>;
-+	  pinctrl-1 = <&pwm3_sleep_pins_mx>;
-+		status = "okay";
-+	};
-+};
-+
-+&timers4 {
-+	status = "okay";
-+	/* spare dmas for other usage */
-+	/delete-property/dmas;
-+	/delete-property/dma-names;
-+	pwm4: pwm {
-+    pinctrl-names = "default", "sleep";
-+	  pinctrl-0 = <&pwm4_pins_mx>;
-+	  pinctrl-1 = <&pwm4_sleep_pins_mx>;
-+		status = "okay";
-+	};
-+};
-+
-+&timers8 {
-+	status = "okay";
-+	/* spare dmas for other usage */
-+	/delete-property/dmas;
-+	/delete-property/dma-names;
-+	pwm8: pwm {
-+    pinctrl-names = "default", "sleep";
-+	  pinctrl-0 = <&pwm8_pins_mx>;
-+	  pinctrl-1 = <&pwm8_sleep_pins_mx>;
-+		status = "okay";
-+	};
-+};
-+
-+&timers12 {
-+	status = "okay";
-+	/* spare dmas for other usage */
-+	/delete-property/dmas;
-+	/delete-property/dma-names;
-+	pwm12: pwm {
-+    pinctrl-names = "default", "sleep";
-+	  pinctrl-0 = <&pwm12_pins_mx>;
-+	  pinctrl-1 = <&pwm12_sleep_pins_mx>;
-+		status = "okay";
-+	};
-+};
-diff --git a/board/octavo/brk/linux.config b/board/octavo/brk/linux.config
+diff --git a/board/octavo/red/linux-dts/stm32mp157c-osd32mp1-red.dtsi b/board/octavo/red/linux-dts/stm32mp157c-osd32mp1-red.dtsi
 new file mode 100644
-index 0000000000..1a5a088de0
+index 0000000000..b1e6303950
 --- /dev/null
-+++ b/board/octavo/brk/linux.config
-@@ -0,0 +1,841 @@
++++ b/board/octavo/red/linux-dts/stm32mp157c-osd32mp1-red.dtsi
+@@ -0,0 +1,2077 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*//
++ * Copyright (C) STMicroelectronics 2017 - All Rights Reserved
++ * Author: Ludovic Barre <ludovic.barre@st.com> for STMicroelectronics.
++ */
++#include <dt-bindings/interrupt-controller/arm-gic.h>
++#include <dt-bindings/clock/stm32mp1-clks.h>
++#include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/reset/stm32mp1-resets.h>
++
++/ {
++	#address-cells = <1>;
++	#size-cells = <1>;
++
++	cpus {
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		cpu0: cpu@0 {
++			compatible = "arm,cortex-a7";
++			device_type = "cpu";
++			reg = <0>;
++			clocks = <&rcc CK_MPU>;
++			clock-names = "cpu";
++			operating-points-v2 = <&cpu0_opp_table>;
++			nvmem-cells = <&part_number_otp>;
++			nvmem-cell-names = "part_number";
++		};
++
++		cpu1: cpu@1 {
++			compatible = "arm,cortex-a7";
++			device_type = "cpu";
++			reg = <1>;
++			clocks = <&rcc CK_MPU>;
++			clock-names = "cpu";
++			operating-points-v2 = <&cpu0_opp_table>;
++		};
++	};
++
++	cpu0_opp_table: cpu0-opp-table {
++		compatible = "operating-points-v2";
++		opp-shared;
++
++		opp-650000000 {
++			opp-hz = /bits/ 64 <650000000>;
++			opp-microvolt = <1200000>;
++			opp-supported-hw = <0x1>;
++		};
++		opp-800000000 {
++			opp-hz = /bits/ 64 <800000000>;
++			opp-microvolt = <1350000>;
++			opp-supported-hw = <0x2>;
++		};
++	};
++
++	arm-pmu {
++		compatible = "arm,cortex-a7-pmu";
++		interrupts = <GIC_SPI 200 IRQ_TYPE_LEVEL_HIGH>,
++			     <GIC_SPI 201 IRQ_TYPE_LEVEL_HIGH>;
++		interrupt-affinity = <&cpu0>, <&cpu1>;
++		interrupt-parent = <&intc>;
++	};
++
++	psci {
++		compatible = "arm,psci-1.0";
++		method = "smc";
++	};
++
++	intc: interrupt-controller@a0021000 {
++		compatible = "arm,cortex-a7-gic";
++		#interrupt-cells = <3>;
++		interrupt-controller;
++		reg = <0xa0021000 0x1000>,
++		      <0xa0022000 0x2000>;
++	};
++
++	timer {
++		compatible = "arm,armv7-timer";
++		interrupts = <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
++			     <GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
++			     <GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
++			     <GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>;
++		interrupt-parent = <&intc>;
++		always-on;
++	};
++
++	clocks {
++		clk_hse: clk-hse {
++			#clock-cells = <0>;
++			compatible = "fixed-clock";
++			clock-frequency = <24000000>;
++		};
++
++		clk_hsi: clk-hsi {
++			#clock-cells = <0>;
++			compatible = "fixed-clock";
++			clock-frequency = <64000000>;
++		};
++
++		clk_lse: clk-lse {
++			#clock-cells = <0>;
++			compatible = "fixed-clock";
++			clock-frequency = <32768>;
++		};
++
++		clk_lsi: clk-lsi {
++			#clock-cells = <0>;
++			compatible = "fixed-clock";
++			clock-frequency = <32000>;
++		};
++
++		clk_csi: clk-csi {
++			#clock-cells = <0>;
++			compatible = "fixed-clock";
++			clock-frequency = <4000000>;
++		};
++
++		clk_i2s_ckin: i2s_ckin {
++			#clock-cells = <0>;
++			compatible = "fixed-clock";
++			clock-frequency = <0>;
++		};
++
++		clk_dsi_phy: ck_dsi_phy {
++			#clock-cells = <0>;
++			compatible = "fixed-clock";
++			clock-frequency = <0>;
++		};
++	};
++
++	pm_domain {
++		#address-cells = <1>;
++		#size-cells = <0>;
++		compatible = "st,stm32mp157c-pd";
++
++		pd_core_ret: core-ret-power-domain@1 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <1>;
++			#power-domain-cells = <0>;
++			label = "CORE-RETENTION";
++
++			pd_core: core-power-domain@2 {
++				reg = <2>;
++				#power-domain-cells = <0>;
++				label = "CORE";
++			};
++		};
++	};
++
++	thermal-zones {
++		cpu_thermal: cpu-thermal {
++			polling-delay-passive = <0>;
++			polling-delay = <0>;
++			thermal-sensors = <&dts>;
++
++			trips {
++				cpu-crit {
++					temperature = <120000>;
++					hysteresis = <0>;
++					type = "critical";
++				};
++			};
++
++			cooling-maps {
++			};
++		};
++	};
++
++	reboot {
++		compatible = "syscon-reboot";
++		regmap = <&rcc>;
++		offset = <0x404>;
++		mask = <0x1>;
++	};
++
++	replicator {
++		/*
++		 * non-configurable replicators don't show up on the
++		 * AMBA bus.  As such no need to add "arm,primecell"
++		 */
++		compatible = "arm,coresight-replicator";
++		clocks = <&rcc CK_TRACE>;
++		clock-names = "apb_pclk";
++
++		ports {
++			#address-cells = <1>;
++			#size-cells = <0>;
++
++			/* replicator output ports */
++			port@0 {
++				reg = <0>;
++				replicator_out_port0: endpoint {
++					remote-endpoint = <&funnel_in_port4>;
++				};
++			};
++		};
++	};
++
++	soc {
++		compatible = "simple-bus";
++		#address-cells = <1>;
++		#size-cells = <1>;
++		interrupt-parent = <&intc>;
++		ranges;
++
++		timers2: timer@40000000 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			compatible = "st,stm32-timers";
++			reg = <0x40000000 0x400>;
++			clocks = <&rcc TIM2_K>;
++			clock-names = "int";
++			dmas = <&dmamux1 18 0x400 0x5>,
++			       <&dmamux1 19 0x400 0x5>,
++			       <&dmamux1 20 0x400 0x5>,
++			       <&dmamux1 21 0x400 0x5>,
++			       <&dmamux1 22 0x400 0x5>;
++			dma-names = "ch1", "ch2", "ch3", "ch4", "up";
++			status = "disabled";
++
++			pwm {
++				compatible = "st,stm32-pwm";
++				#pwm-cells = <3>;
++				status = "disabled";
++			};
++
++			timer@1 {
++				compatible = "st,stm32h7-timer-trigger";
++				reg = <1>;
++				status = "disabled";
++			};
++		};
++
++		timers3: timer@40001000 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			compatible = "st,stm32-timers";
++			reg = <0x40001000 0x400>;
++			clocks = <&rcc TIM3_K>;
++			clock-names = "int";
++			dmas = <&dmamux1 23 0x400 0x5>,
++			       <&dmamux1 24 0x400 0x5>,
++			       <&dmamux1 25 0x400 0x5>,
++			       <&dmamux1 26 0x400 0x5>,
++			       <&dmamux1 27 0x400 0x5>,
++			       <&dmamux1 28 0x400 0x5>;
++			dma-names = "ch1", "ch2", "ch3", "ch4", "up", "trig";
++			status = "disabled";
++
++			pwm {
++				compatible = "st,stm32-pwm";
++				#pwm-cells = <3>;
++				status = "disabled";
++			};
++
++			timer@2 {
++				compatible = "st,stm32h7-timer-trigger";
++				reg = <2>;
++				status = "disabled";
++			};
++		};
++
++		timers4: timer@40002000 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			compatible = "st,stm32-timers";
++			reg = <0x40002000 0x400>;
++			clocks = <&rcc TIM4_K>;
++			clock-names = "int";
++			dmas = <&dmamux1 29 0x400 0x5>,
++			       <&dmamux1 30 0x400 0x5>,
++			       <&dmamux1 31 0x400 0x5>,
++			       <&dmamux1 32 0x400 0x5>;
++			dma-names = "ch1", "ch2", "ch3", "ch4";
++			status = "disabled";
++
++			pwm {
++				compatible = "st,stm32-pwm";
++				#pwm-cells = <3>;
++				status = "disabled";
++			};
++
++			timer@3 {
++				compatible = "st,stm32h7-timer-trigger";
++				reg = <3>;
++				status = "disabled";
++			};
++		};
++
++		timers5: timer@40003000 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			compatible = "st,stm32-timers";
++			reg = <0x40003000 0x400>;
++			clocks = <&rcc TIM5_K>;
++			clock-names = "int";
++			dmas = <&dmamux1 55 0x400 0x5>,
++			       <&dmamux1 56 0x400 0x5>,
++			       <&dmamux1 57 0x400 0x5>,
++			       <&dmamux1 58 0x400 0x5>,
++			       <&dmamux1 59 0x400 0x5>,
++			       <&dmamux1 60 0x400 0x5>;
++			dma-names = "ch1", "ch2", "ch3", "ch4", "up", "trig";
++			status = "disabled";
++
++			pwm {
++				compatible = "st,stm32-pwm";
++				#pwm-cells = <3>;
++				status = "disabled";
++			};
++
++			timer@4 {
++				compatible = "st,stm32h7-timer-trigger";
++				reg = <4>;
++				status = "disabled";
++			};
++		};
++
++		timers6: timer@40004000 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			compatible = "st,stm32-timers";
++			reg = <0x40004000 0x400>;
++			clocks = <&rcc TIM6_K>;
++			clock-names = "int";
++			dmas = <&dmamux1 69 0x400 0x5>;
++			dma-names = "up";
++			status = "disabled";
++
++			timer@5 {
++				compatible = "st,stm32h7-timer-trigger";
++				reg = <5>;
++				status = "disabled";
++			};
++		};
++
++		timers7: timer@40005000 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			compatible = "st,stm32-timers";
++			reg = <0x40005000 0x400>;
++			clocks = <&rcc TIM7_K>;
++			clock-names = "int";
++			dmas = <&dmamux1 70 0x400 0x5>;
++			dma-names = "up";
++			status = "disabled";
++
++			timer@6 {
++				compatible = "st,stm32h7-timer-trigger";
++				reg = <6>;
++				status = "disabled";
++			};
++		};
++
++		timers12: timer@40006000 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			compatible = "st,stm32-timers";
++			reg = <0x40006000 0x400>;
++			clocks = <&rcc TIM12_K>;
++			clock-names = "int";
++			status = "disabled";
++
++			pwm {
++				compatible = "st,stm32-pwm";
++				#pwm-cells = <3>;
++				status = "disabled";
++			};
++
++			timer@11 {
++				compatible = "st,stm32h7-timer-trigger";
++				reg = <11>;
++				status = "disabled";
++			};
++		};
++
++		timers13: timer@40007000 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			compatible = "st,stm32-timers";
++			reg = <0x40007000 0x400>;
++			clocks = <&rcc TIM13_K>;
++			clock-names = "int";
++			status = "disabled";
++
++			pwm {
++				compatible = "st,stm32-pwm";
++				#pwm-cells = <3>;
++				status = "disabled";
++			};
++
++			timer@12 {
++				compatible = "st,stm32h7-timer-trigger";
++				reg = <12>;
++				status = "disabled";
++			};
++		};
++
++		timers14: timer@40008000 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			compatible = "st,stm32-timers";
++			reg = <0x40008000 0x400>;
++			clocks = <&rcc TIM14_K>;
++			clock-names = "int";
++			status = "disabled";
++
++			pwm {
++				compatible = "st,stm32-pwm";
++				#pwm-cells = <3>;
++				status = "disabled";
++			};
++
++			timer@13 {
++				compatible = "st,stm32h7-timer-trigger";
++				reg = <13>;
++				status = "disabled";
++			};
++		};
++
++		lptimer1: timer@40009000 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			compatible = "st,stm32-lptimer";
++			reg = <0x40009000 0x400>;
++			clocks = <&rcc LPTIM1_K>;
++			clock-names = "mux";
++			power-domains = <&pd_core>;
++			status = "disabled";
++
++			pwm {
++				compatible = "st,stm32-pwm-lp";
++				#pwm-cells = <3>;
++				status = "disabled";
++			};
++
++			trigger@0 {
++				compatible = "st,stm32-lptimer-trigger";
++				reg = <0>;
++				status = "disabled";
++			};
++
++			counter {
++				compatible = "st,stm32-lptimer-counter";
++				status = "disabled";
++			};
++		};
++
++		spi2: spi@4000b000 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			compatible = "st,stm32h7-spi";
++			reg = <0x4000b000 0x400>;
++			interrupts = <GIC_SPI 36 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&rcc SPI2_K>;
++			resets = <&rcc SPI2_R>;
++			dmas = <&dmamux1 39 0x400 0x01>,
++			       <&dmamux1 40 0x400 0x01>;
++			dma-names = "rx", "tx";
++			power-domains = <&pd_core>;
++			status = "disabled";
++		};
++
++		i2s2: audio-controller@4000b000 {
++			compatible = "st,stm32h7-i2s";
++			#sound-dai-cells = <0>;
++			reg = <0x4000b000 0x400>;
++			interrupts = <GIC_SPI 36 IRQ_TYPE_LEVEL_HIGH>;
++			dmas = <&dmamux1 39 0x400 0x01>,
++			       <&dmamux1 40 0x400 0x01>;
++			dma-names = "rx", "tx";
++			status = "disabled";
++		};
++
++		spi3: spi@4000c000 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			compatible = "st,stm32h7-spi";
++			reg = <0x4000c000 0x400>;
++			interrupts = <GIC_SPI 51 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&rcc SPI3_K>;
++			resets = <&rcc SPI3_R>;
++			dmas = <&dmamux1 61 0x400 0x01>,
++			       <&dmamux1 62 0x400 0x01>;
++			dma-names = "rx", "tx";
++			power-domains = <&pd_core>;
++			status = "disabled";
++		};
++
++		i2s3: audio-controller@4000c000 {
++			compatible = "st,stm32h7-i2s";
++			#sound-dai-cells = <0>;
++			reg = <0x4000c000 0x400>;
++			interrupts = <GIC_SPI 51 IRQ_TYPE_LEVEL_HIGH>;
++			dmas = <&dmamux1 61 0x400 0x01>,
++			       <&dmamux1 62 0x400 0x01>;
++			dma-names = "rx", "tx";
++			status = "disabled";
++		};
++
++		spdifrx: audio-controller@4000d000 {
++			compatible = "st,stm32h7-spdifrx";
++			#sound-dai-cells = <0>;
++			reg = <0x4000d000 0x400>;
++			clocks = <&rcc SPDIF_K>;
++			clock-names = "kclk";
++			interrupts = <GIC_SPI 97 IRQ_TYPE_LEVEL_HIGH>;
++			dmas = <&dmamux1 93 0x400 0x01>,
++			       <&dmamux1 94 0x400 0x01>;
++			dma-names = "rx", "rx-ctrl";
++			status = "disabled";
++		};
++
++		usart2: serial@4000e000 {
++			compatible = "st,stm32h7-uart";
++			reg = <0x4000e000 0x400>;
++			interrupt-names = "event", "wakeup";
++			interrupts-extended = <&intc GIC_SPI 38 IRQ_TYPE_LEVEL_HIGH>,
++					      <&exti 27 1>;
++			clocks = <&rcc USART2_K>;
++			resets = <&rcc USART2_R>;
++			wakeup-source;
++			power-domains = <&pd_core>;
++			dmas = <&dmamux1 43 0x400 0x21>,
++			       <&dmamux1 44 0x400 0x1>;
++			dma-names = "rx", "tx";
++			status = "disabled";
++		};
++
++		usart3: serial@4000f000 {
++			compatible = "st,stm32h7-uart";
++			reg = <0x4000f000 0x400>;
++			interrupt-names = "event", "wakeup";
++			interrupts-extended = <&intc GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>,
++					      <&exti 28 1>;
++			clocks = <&rcc USART3_K>;
++			resets = <&rcc USART3_R>;
++			wakeup-source;
++			power-domains = <&pd_core>;
++			dmas = <&dmamux1 45 0x400 0x21>,
++			       <&dmamux1 46 0x400 0x1>;
++			dma-names = "rx", "tx";
++			status = "disabled";
++		};
++
++		uart4: serial@40010000 {
++			compatible = "st,stm32h7-uart";
++			reg = <0x40010000 0x400>;
++			interrupt-names = "event", "wakeup";
++			interrupts-extended = <&intc GIC_SPI 52 IRQ_TYPE_LEVEL_HIGH>,
++					      <&exti 30 1>;
++			clocks = <&rcc UART4_K>;
++			resets = <&rcc UART4_R>;
++			wakeup-source;
++			power-domains = <&pd_core>;
++			dmas = <&dmamux1 63 0x400 0x21>,
++			       <&dmamux1 64 0x400 0x1>;
++			dma-names = "rx", "tx";
++			status = "disabled";
++		};
++
++		uart5: serial@40011000 {
++			compatible = "st,stm32h7-uart";
++			reg = <0x40011000 0x400>;
++			interrupt-names = "event", "wakeup";
++			interrupts-extended = <&intc GIC_SPI 53 IRQ_TYPE_LEVEL_HIGH>,
++					      <&exti 31 1>;
++			clocks = <&rcc UART5_K>;
++			resets = <&rcc UART5_R>;
++			wakeup-source;
++			power-domains = <&pd_core>;
++			dmas = <&dmamux1 65 0x400 0x21>,
++			       <&dmamux1 66 0x400 0x1>;
++			dma-names = "rx", "tx";
++			status = "disabled";
++		};
++
++		i2c1: i2c@40012000 {
++			compatible = "st,stm32f7-i2c";
++			reg = <0x40012000 0x400>;
++			interrupt-names = "event", "error", "wakeup";
++			interrupts-extended = <&intc GIC_SPI 31 IRQ_TYPE_LEVEL_HIGH>,
++					      <&intc GIC_SPI 32 IRQ_TYPE_LEVEL_HIGH>,
++					      <&exti 21 1>;
++			clocks = <&rcc I2C1_K>;
++			resets = <&rcc I2C1_R>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++			dmas = <&dmamux1 33 0x400 0x05>,
++			       <&dmamux1 34 0x400 0x05>;
++			dma-names = "rx", "tx";
++			power-domains = <&pd_core>;
++			st,syscfg-fmp = <&syscfg 0x4 0x1>;
++			st,syscfg-fmp-clr = <&syscfg 0x44 0x1>;
++			status = "disabled";
++		};
++
++		i2c2: i2c@40013000 {
++			compatible = "st,stm32f7-i2c";
++			reg = <0x40013000 0x400>;
++			interrupt-names = "event", "error", "wakeup";
++			interrupts-extended = <&intc GIC_SPI 33 IRQ_TYPE_LEVEL_HIGH>,
++					      <&intc GIC_SPI 34 IRQ_TYPE_LEVEL_HIGH>,
++					      <&exti 22 1>;
++			clocks = <&rcc I2C2_K>;
++			resets = <&rcc I2C2_R>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++			dmas = <&dmamux1 35 0x400 0x05>,
++			       <&dmamux1 36 0x400 0x05>;
++			dma-names = "rx", "tx";
++			power-domains = <&pd_core>;
++			st,syscfg-fmp = <&syscfg 0x4 0x2>;
++			st,syscfg-fmp-clr = <&syscfg 0x44 0x2>;
++			status = "disabled";
++		};
++
++		i2c3: i2c@40014000 {
++			compatible = "st,stm32f7-i2c";
++			reg = <0x40014000 0x400>;
++			interrupt-names = "event", "error", "wakeup";
++			interrupts-extended = <&intc GIC_SPI 72 IRQ_TYPE_LEVEL_HIGH>,
++					      <&intc GIC_SPI 73 IRQ_TYPE_LEVEL_HIGH>,
++					      <&exti 23 1>;
++			clocks = <&rcc I2C3_K>;
++			resets = <&rcc I2C3_R>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++			dmas = <&dmamux1 73 0x400 0x05>,
++			       <&dmamux1 74 0x400 0x05>;
++			dma-names = "rx", "tx";
++			power-domains = <&pd_core>;
++			st,syscfg-fmp = <&syscfg 0x4 0x4>;
++			st,syscfg-fmp-clr = <&syscfg 0x44 0x4>;
++			status = "disabled";
++		};
++
++		i2c5: i2c@40015000 {
++			compatible = "st,stm32f7-i2c";
++			reg = <0x40015000 0x400>;
++			interrupt-names = "event", "error", "wakeup";
++			interrupts-extended = <&intc GIC_SPI 107 IRQ_TYPE_LEVEL_HIGH>,
++					      <&intc GIC_SPI 108 IRQ_TYPE_LEVEL_HIGH>,
++					      <&exti 25 1>;
++			clocks = <&rcc I2C5_K>;
++			resets = <&rcc I2C5_R>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++			dmas = <&dmamux1 115 0x400 0x05>,
++			       <&dmamux1 116 0x400 0x05>;
++			dma-names = "rx", "tx";
++			power-domains = <&pd_core>;
++			st,syscfg-fmp = <&syscfg 0x4 0x10>;
++			st,syscfg-fmp-clr = <&syscfg 0x44 0x10>;
++			status = "disabled";
++		};
++
++		cec: cec@40016000 {
++			compatible = "st,stm32-cec";
++			reg = <0x40016000 0x400>;
++			interrupts = <GIC_SPI 94 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&rcc CEC_K>, <&rcc CEC>;
++			clock-names = "cec", "hdmi-cec";
++			power-domains = <&pd_core>;
++			status = "disabled";
++		};
++
++		dac: dac@40017000 {
++			compatible = "st,stm32h7-dac-core";
++			reg = <0x40017000 0x400>;
++			clocks = <&rcc DAC12>;
++			clock-names = "pclk";
++			#address-cells = <1>;
++			#size-cells = <0>;
++			status = "disabled";
++
++			dac1: dac@1 {
++				compatible = "st,stm32-dac";
++				#io-channels-cells = <1>;
++				reg = <1>;
++				status = "disabled";
++			};
++
++			dac2: dac@2 {
++				compatible = "st,stm32-dac";
++				#io-channels-cells = <1>;
++				reg = <2>;
++				status = "disabled";
++			};
++		};
++
++		uart7: serial@40018000 {
++			compatible = "st,stm32h7-uart";
++			reg = <0x40018000 0x400>;
++			interrupt-names = "event", "wakeup";
++			interrupts-extended = <&intc GIC_SPI 82 IRQ_TYPE_LEVEL_HIGH>,
++					      <&exti 32 1>;
++			clocks = <&rcc UART7_K>;
++			resets = <&rcc UART7_R>;
++			wakeup-source;
++			power-domains = <&pd_core>;
++			dmas = <&dmamux1 79 0x400 0x21>,
++			       <&dmamux1 80 0x400 0x1>;
++			dma-names = "rx", "tx";
++			status = "disabled";
++		};
++
++		uart8: serial@40019000 {
++			compatible = "st,stm32h7-uart";
++			reg = <0x40019000 0x400>;
++			interrupt-names = "event", "wakeup";
++			interrupts-extended = <&intc GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>,
++					      <&exti 33 1>;
++			clocks = <&rcc UART8_K>;
++			resets = <&rcc UART8_R>;
++			wakeup-source;
++			power-domains = <&pd_core>;
++			dmas = <&dmamux1 81 0x400 0x21>,
++			       <&dmamux1 82 0x400 0x1>;
++			dma-names = "rx", "tx";
++			status = "disabled";
++		};
++
++		timers1: timer@44000000 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			compatible = "st,stm32-timers";
++			reg = <0x44000000 0x400>;
++			clocks = <&rcc TIM1_K>;
++			clock-names = "int";
++			dmas = <&dmamux1 11 0x400 0x5>,
++			       <&dmamux1 12 0x400 0x5>,
++			       <&dmamux1 13 0x400 0x5>,
++			       <&dmamux1 14 0x400 0x5>,
++			       <&dmamux1 15 0x400 0x5>,
++			       <&dmamux1 16 0x400 0x5>,
++			       <&dmamux1 17 0x400 0x5>;
++			dma-names = "ch1", "ch2", "ch3", "ch4",
++				    "up", "trig", "com";
++			status = "disabled";
++
++			pwm {
++				compatible = "st,stm32-pwm";
++				#pwm-cells = <3>;
++				status = "disabled";
++			};
++
++			timer@0 {
++				compatible = "st,stm32h7-timer-trigger";
++				reg = <0>;
++				status = "disabled";
++			};
++		};
++
++		timers8: timer@44001000 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			compatible = "st,stm32-timers";
++			reg = <0x44001000 0x400>;
++			clocks = <&rcc TIM8_K>;
++			clock-names = "int";
++			dmas = <&dmamux1 47 0x400 0x5>,
++			       <&dmamux1 48 0x400 0x5>,
++			       <&dmamux1 49 0x400 0x5>,
++			       <&dmamux1 50 0x400 0x5>,
++			       <&dmamux1 51 0x400 0x5>,
++			       <&dmamux1 52 0x400 0x5>,
++			       <&dmamux1 53 0x400 0x5>;
++			dma-names = "ch1", "ch2", "ch3", "ch4",
++				    "up", "trig", "com";
++			status = "disabled";
++
++			pwm {
++				compatible = "st,stm32-pwm";
++				#pwm-cells = <3>;
++				status = "disabled";
++			};
++
++			timer@7 {
++				compatible = "st,stm32h7-timer-trigger";
++				reg = <7>;
++				status = "disabled";
++			};
++		};
++
++		usart6: serial@44003000 {
++			compatible = "st,stm32h7-uart";
++			reg = <0x44003000 0x400>;
++			interrupt-names = "event", "wakeup";
++			interrupts-extended = <&intc GIC_SPI 71 IRQ_TYPE_LEVEL_HIGH>,
++					      <&exti 29 1>;
++			clocks = <&rcc USART6_K>;
++			resets = <&rcc USART6_R>;
++			wakeup-source;
++			power-domains = <&pd_core>;
++			dmas = <&dmamux1 71 0x400 0x21>,
++			       <&dmamux1 72 0x400 0x1>;
++			dma-names = "rx", "tx";
++			status = "disabled";
++		};
++
++		spi1: spi@44004000 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			compatible = "st,stm32h7-spi";
++			reg = <0x44004000 0x400>;
++			interrupts = <GIC_SPI 35 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&rcc SPI1_K>;
++			resets = <&rcc SPI1_R>;
++			dmas = <&dmamux1 37 0x400 0x01>,
++			       <&dmamux1 38 0x400 0x01>;
++			dma-names = "rx", "tx";
++			power-domains = <&pd_core>;
++			status = "disabled";
++		};
++
++		i2s1: audio-controller@44004000 {
++			compatible = "st,stm32h7-i2s";
++			#sound-dai-cells = <0>;
++			reg = <0x44004000 0x400>;
++			interrupts = <GIC_SPI 35 IRQ_TYPE_LEVEL_HIGH>;
++			dmas = <&dmamux1 37 0x400 0x01>,
++			       <&dmamux1 38 0x400 0x01>;
++			dma-names = "rx", "tx";
++			status = "disabled";
++		};
++
++		spi4: spi@44005000 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			compatible = "st,stm32h7-spi";
++			reg = <0x44005000 0x400>;
++			interrupts = <GIC_SPI 84 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&rcc SPI4_K>;
++			resets = <&rcc SPI4_R>;
++			dmas = <&dmamux1 83 0x400 0x01>,
++			       <&dmamux1 84 0x400 0x01>;
++			dma-names = "rx", "tx";
++			power-domains = <&pd_core>;
++			status = "disabled";
++		};
++
++		timers15: timer@44006000 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			compatible = "st,stm32-timers";
++			reg = <0x44006000 0x400>;
++			clocks = <&rcc TIM15_K>;
++			clock-names = "int";
++			dmas = <&dmamux1 105 0x400 0x5>,
++			       <&dmamux1 106 0x400 0x5>,
++			       <&dmamux1 107 0x400 0x5>,
++			       <&dmamux1 108 0x400 0x5>;
++			dma-names = "ch1", "up", "trig", "com";
++			status = "disabled";
++
++			pwm {
++				compatible = "st,stm32-pwm";
++				#pwm-cells = <3>;
++				status = "disabled";
++			};
++
++			timer@14 {
++				compatible = "st,stm32h7-timer-trigger";
++				reg = <14>;
++				status = "disabled";
++			};
++		};
++
++		timers16: timer@44007000 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			compatible = "st,stm32-timers";
++			reg = <0x44007000 0x400>;
++			clocks = <&rcc TIM16_K>;
++			clock-names = "int";
++			dmas = <&dmamux1 109 0x400 0x5>,
++			       <&dmamux1 110 0x400 0x5>;
++			dma-names = "ch1", "up";
++			status = "disabled";
++
++			pwm {
++				compatible = "st,stm32-pwm";
++				#pwm-cells = <3>;
++				status = "disabled";
++			};
++			timer@15 {
++				compatible = "st,stm32h7-timer-trigger";
++				reg = <15>;
++				status = "disabled";
++			};
++		};
++
++		timers17: timer@44008000 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			compatible = "st,stm32-timers";
++			reg = <0x44008000 0x400>;
++			clocks = <&rcc TIM17_K>;
++			clock-names = "int";
++			dmas = <&dmamux1 111 0x400 0x5>,
++			       <&dmamux1 112 0x400 0x5>;
++			dma-names = "ch1", "up";
++			status = "disabled";
++
++			pwm {
++				compatible = "st,stm32-pwm";
++				#pwm-cells = <3>;
++				status = "disabled";
++			};
++
++			timer@16 {
++				compatible = "st,stm32h7-timer-trigger";
++				reg = <16>;
++				status = "disabled";
++			};
++		};
++
++		spi5: spi@44009000 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			compatible = "st,stm32h7-spi";
++			reg = <0x44009000 0x400>;
++			interrupts = <GIC_SPI 85 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&rcc SPI5_K>;
++			resets = <&rcc SPI5_R>;
++			dmas = <&dmamux1 85 0x400 0x01>,
++			       <&dmamux1 86 0x400 0x01>;
++			dma-names = "rx", "tx";
++			power-domains = <&pd_core>;
++			status = "disabled";
++		};
++
++		sai1: sai@4400a000 {
++			compatible = "st,stm32h7-sai";
++			#address-cells = <1>;
++			#size-cells = <1>;
++			ranges = <0 0x4400a000 0x400>;
++			reg = <0x4400a000 0x4>;
++			interrupts = <GIC_SPI 87 IRQ_TYPE_LEVEL_HIGH>;
++			resets = <&rcc SAI1_R>;
++			status = "disabled";
++
++			sai1a: audio-controller@4400a004 {
++				#sound-dai-cells = <0>;
++
++				compatible = "st,stm32-sai-sub-a";
++				reg = <0x4 0x1c>;
++				clocks = <&rcc SAI1_K>;
++				clock-names = "sai_ck";
++				dmas = <&dmamux1 87 0x400 0x01>;
++				status = "disabled";
++			};
++
++			sai1b: audio-controller@4400a024 {
++				#sound-dai-cells = <0>;
++				compatible = "st,stm32-sai-sub-b";
++				reg = <0x24 0x1c>;
++				clocks = <&rcc SAI1_K>;
++				clock-names = "sai_ck";
++				dmas = <&dmamux1 88 0x400 0x01>;
++				status = "disabled";
++			};
++		};
++
++		sai2: sai@4400b000 {
++			compatible = "st,stm32h7-sai";
++			#address-cells = <1>;
++			#size-cells = <1>;
++			ranges = <0 0x4400b000 0x400>;
++			reg = <0x4400b000 0x4>;
++			interrupts = <GIC_SPI 91 IRQ_TYPE_LEVEL_HIGH>;
++			resets = <&rcc SAI2_R>;
++			status = "disabled";
++
++			sai2a: audio-controller@4400b004 {
++				#sound-dai-cells = <0>;
++				compatible = "st,stm32-sai-sub-a";
++				reg = <0x4 0x1c>;
++				clocks = <&rcc SAI2_K>;
++				clock-names = "sai_ck";
++				dmas = <&dmamux1 89 0x400 0x01>;
++				status = "disabled";
++			};
++
++			sai2b: audio-controller@4400b024 {
++				#sound-dai-cells = <0>;
++				compatible = "st,stm32-sai-sub-b";
++				reg = <0x24 0x1c>;
++				clocks = <&rcc SAI2_K>;
++				clock-names = "sai_ck";
++				dmas = <&dmamux1 90 0x400 0x01>;
++				status = "disabled";
++			};
++		};
++
++		sai3: sai@4400c000 {
++			compatible = "st,stm32h7-sai";
++			#address-cells = <1>;
++			#size-cells = <1>;
++			ranges = <0 0x4400c000 0x400>;
++			reg = <0x4400c000 0x4>;
++			interrupts = <GIC_SPI 114 IRQ_TYPE_LEVEL_HIGH>;
++			resets = <&rcc SAI3_R>;
++			status = "disabled";
++
++			sai3a: audio-controller@4400c004 {
++				#sound-dai-cells = <0>;
++				compatible = "st,stm32-sai-sub-a";
++				reg = <0x04 0x1c>;
++				clocks = <&rcc SAI3_K>;
++				clock-names = "sai_ck";
++				dmas = <&dmamux1 113 0x400 0x01>;
++				status = "disabled";
++			};
++
++			sai3b: audio-controller@4400c024 {
++				#sound-dai-cells = <0>;
++				compatible = "st,stm32-sai-sub-b";
++				reg = <0x24 0x1c>;
++				clocks = <&rcc SAI3_K>;
++				clock-names = "sai_ck";
++				dmas = <&dmamux1 114 0x400 0x01>;
++				status = "disabled";
++			};
++		};
++
++		dfsdm: dfsdm@4400d000 {
++			compatible = "st,stm32mp1-dfsdm";
++			reg = <0x4400d000 0x800>;
++			clocks = <&rcc DFSDM_K>;
++			clock-names = "dfsdm";
++			#address-cells = <1>;
++			#size-cells = <0>;
++			status = "disabled";
++
++			dfsdm0: filter@0 {
++				compatible = "st,stm32-dfsdm-adc";
++				#io-channel-cells = <1>;
++				reg = <0>;
++				interrupts = <GIC_SPI 110 IRQ_TYPE_LEVEL_HIGH>;
++				dmas = <&dmamux1 101 0x400 0x01>;
++				dma-names = "rx";
++				status = "disabled";
++			};
++
++			dfsdm1: filter@1 {
++				compatible = "st,stm32-dfsdm-adc";
++				#io-channel-cells = <1>;
++				reg = <1>;
++				interrupts = <GIC_SPI 111 IRQ_TYPE_LEVEL_HIGH>;
++				dmas = <&dmamux1 102 0x400 0x01>;
++				dma-names = "rx";
++				status = "disabled";
++			};
++
++			dfsdm2: filter@2 {
++				compatible = "st,stm32-dfsdm-adc";
++				#io-channel-cells = <1>;
++				reg = <2>;
++				interrupts = <GIC_SPI 112 IRQ_TYPE_LEVEL_HIGH>;
++				dmas = <&dmamux1 103 0x400 0x01>;
++				dma-names = "rx";
++				status = "disabled";
++			};
++
++			dfsdm3: filter@3 {
++				compatible = "st,stm32-dfsdm-adc";
++				#io-channel-cells = <1>;
++				reg = <3>;
++				interrupts = <GIC_SPI 113 IRQ_TYPE_LEVEL_HIGH>;
++				dmas = <&dmamux1 104 0x400 0x01>;
++				dma-names = "rx";
++				status = "disabled";
++			};
++
++			dfsdm4: filter@4 {
++				compatible = "st,stm32-dfsdm-adc";
++				#io-channel-cells = <1>;
++				reg = <4>;
++				interrupts = <GIC_SPI 115 IRQ_TYPE_LEVEL_HIGH>;
++				dmas = <&dmamux1 91 0x400 0x01>;
++				dma-names = "rx";
++				status = "disabled";
++			};
++
++			dfsdm5: filter@5 {
++				compatible = "st,stm32-dfsdm-adc";
++				#io-channel-cells = <1>;
++				reg = <5>;
++				interrupts = <GIC_SPI 126 IRQ_TYPE_LEVEL_HIGH>;
++				dmas = <&dmamux1 92 0x400 0x01>;
++				dma-names = "rx";
++				status = "disabled";
++			};
++		};
++
++		m_can1: can@4400e000 {
++			compatible = "bosch,m_can";
++			reg = <0x4400e000 0x400>, <0x44011000 0x1400>;
++			reg-names = "m_can", "message_ram";
++			interrupts = <GIC_SPI 19 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 21 IRQ_TYPE_LEVEL_HIGH>;
++			interrupt-names = "int0", "int1";
++			clocks = <&rcc FDCAN>, <&rcc FDCAN_K>;
++			clock-names = "hclk", "cclk";
++			bosch,mram-cfg = <0x0 0 0 32 0 0 2 2>;
++			status = "disabled";
++		};
++
++		m_can2: can@4400f000 {
++			compatible = "bosch,m_can";
++			reg = <0x4400f000 0x400>, <0x44011000 0x2800>;
++			reg-names = "m_can", "message_ram";
++			interrupts = <GIC_SPI 20 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 22 IRQ_TYPE_LEVEL_HIGH>;
++			interrupt-names = "int0", "int1";
++			clocks = <&rcc FDCAN>, <&rcc FDCAN_K>;
++			clock-names = "hclk", "cclk";
++			bosch,mram-cfg = <0x1400 0 0 32 0 0 2 2>;
++			status = "disabled";
++		};
++
++		dma1: dma@48000000 {
++			compatible = "st,stm32-dma";
++			reg = <0x48000000 0x400>;
++			interrupts = <GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 12 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 13 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 14 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 15 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 16 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 17 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 47 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&rcc DMA1>;
++			resets = <&rcc DMA1_R>;
++			#dma-cells = <4>;
++			st,mem2mem;
++			dma-requests = <8>;
++			dmas = <&mdma1 0 0x3 0x1200000a 0x48000008 0x00000020 1>,
++			       <&mdma1 1 0x3 0x1200000a 0x48000008 0x00000800 1>,
++			       <&mdma1 2 0x3 0x1200000a 0x48000008 0x00200000 1>,
++			       <&mdma1 3 0x3 0x1200000a 0x48000008 0x08000000 1>,
++			       <&mdma1 4 0x3 0x1200000a 0x4800000C 0x00000020 1>,
++			       <&mdma1 5 0x3 0x1200000a 0x4800000C 0x00000800 1>,
++			       <&mdma1 6 0x3 0x1200000a 0x4800000C 0x00200000 1>,
++			       <&mdma1 7 0x3 0x1200000a 0x4800000C 0x08000000 1>;
++			dma-names = "ch0", "ch1", "ch2", "ch3", "ch4", "ch5", "ch6", "ch7";
++		};
++
++		dma2: dma@48001000 {
++			compatible = "st,stm32-dma";
++			reg = <0x48001000 0x400>;
++			interrupts = <GIC_SPI 56 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 57 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 58 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 59 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 60 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 68 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 69 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 70 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&rcc DMA2>;
++			resets = <&rcc DMA2_R>;
++			#dma-cells = <4>;
++			st,mem2mem;
++			dma-requests = <8>;
++			dmas = <&mdma1 8 0x3 0x1200000a 0x48001008 0x00000020 1>,
++			       <&mdma1 9 0x3 0x1200000a 0x48001008 0x00000800 1>,
++			       <&mdma1 10 0x3 0x1200000a 0x48001008 0x00200000 1>,
++			       <&mdma1 11 0x3 0x1200000a 0x48001008 0x08000000 1>,
++			       <&mdma1 12 0x3 0x1200000a 0x4800100C 0x00000020 1>,
++			       <&mdma1 13 0x3 0x1200000a 0x4800100C 0x00000800 1>,
++			       <&mdma1 14 0x3 0x1200000a 0x4800100C 0x00200000 1>,
++			       <&mdma1 15 0x3 0x1200000a 0x4800100C 0x08000000 1>;
++			dma-names = "ch0", "ch1", "ch2", "ch3", "ch4", "ch5", "ch6", "ch7";
++		};
++
++		dmamux1: dma-router@48002000 {
++			compatible = "st,stm32h7-dmamux";
++			reg = <0x48002000 0x1c>;
++			#dma-cells = <3>;
++			dma-requests = <128>;
++			dma-masters = <&dma1 &dma2>;
++			dma-channels = <16>;
++			clocks = <&rcc DMAMUX>;
++			resets = <&rcc DMAMUX_R>;
++		};
++
++		adc: adc@48003000 {
++			compatible = "st,stm32mp1-adc-core";
++			reg = <0x48003000 0x400>;
++			interrupts = <GIC_SPI 18 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 90 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&rcc ADC12>, <&rcc ADC12_K>;
++			clock-names = "bus", "adc";
++			interrupt-controller;
++			st,syscfg-vbooster = <&syscfg 0x4 0x100>;
++			st,syscfg-vbooster-clr = <&syscfg 0x44 0x100>;
++			st,syscfg-anaswvdd = <&syscfg 0x4 0x200>;
++			st,syscfg-anaswvdd-clr = <&syscfg 0x44 0x200>;
++			#interrupt-cells = <1>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++			status = "disabled";
++
++			adc1: adc@0 {
++				compatible = "st,stm32mp1-adc";
++				#io-channel-cells = <1>;
++				reg = <0x0>;
++				interrupt-parent = <&adc>;
++				interrupts = <0>;
++				dmas = <&dmamux1 9 0x400 0x05>;
++				dma-names = "rx";
++				status = "disabled";
++			};
++
++			adc2: adc@100 {
++				compatible = "st,stm32mp1-adc";
++				#io-channel-cells = <1>;
++				reg = <0x100>;
++				interrupt-parent = <&adc>;
++				interrupts = <1>;
++				dmas = <&dmamux1 10 0x400 0x05>;
++				dma-names = "rx";
++				/* temperature sensor */
++				st,adc-channels = <12>;
++				st,min-sample-time-nsecs = <10000>;
++				status = "disabled";
++			};
++
++			jadc1: jadc@0 {
++				compatible = "st,stm32mp1-adc";
++				st,injected;
++				#io-channel-cells = <1>;
++				reg = <0x0>;
++				interrupt-parent = <&adc>;
++				interrupts = <3>;
++				status = "disabled";
++			};
++
++			jadc2: jadc@100 {
++				compatible = "st,stm32mp1-adc";
++				st,injected;
++				#io-channel-cells = <1>;
++				reg = <0x100>;
++				interrupt-parent = <&adc>;
++				interrupts = <4>;
++				/* temperature sensor */
++				st,adc-channels = <12>;
++				st,min-sample-time-nsecs = <10000>;
++				status = "disabled";
++			};
++
++			adc_temp: temp {
++				compatible = "st,stm32mp1-adc-temp";
++				io-channels = <&adc2 12>;
++				nvmem-cells = <&ts_cal1>, <&ts_cal2>;
++				nvmem-cell-names = "ts_cal1", "ts_cal2";
++				#io-channel-cells = <0>;
++				#thermal-sensor-cells = <0>;
++				status = "disabled";
++			};
++		};
++
++		sdmmc3: sdmmc@48004000 {
++			compatible = "arm,pl18x", "arm,primecell";
++			arm,primecell-periphid = <0x00253180>;
++			reg = <0x48004000 0x400>, <0x48005000 0x400>;
++			interrupts = <GIC_SPI 137 IRQ_TYPE_LEVEL_HIGH>;
++			interrupt-names = "cmd_irq";
++			clocks = <&rcc SDMMC3_K>;
++			clock-names = "apb_pclk";
++			resets = <&rcc SDMMC3_R>;
++			cap-sd-highspeed;
++			cap-mmc-highspeed;
++			max-frequency = <120000000>;
++			status = "disabled";
++		};
++
++		usbotg_hs: usb-otg@49000000 {
++			compatible = "st,stm32mp1-hsotg", "snps,dwc2";
++			reg = <0x49000000 0x10000>;
++			clocks = <&rcc USBO_K>;
++			clock-names = "otg";
++			resets = <&rcc USBO_R>;
++			reset-names = "dwc2";
++			interrupts-extended = <&intc GIC_SPI 98 IRQ_TYPE_LEVEL_HIGH>,
++					      <&exti 44 1>;
++			interrupt-names = "event", "wakeup";
++			g-rx-fifo-size = <256>;
++			g-np-tx-fifo-size = <32>;
++			g-tx-fifo-size = <128 128 64 64 64 64 32 32>;
++			dr_mode = "otg";
++			usb33d-supply = <&usb33>;
++			power-domains = <&pd_core>;
++			wakeup-source;
++			status = "disabled";
++		};
++
++		hsem: hwspinlock@4c000000 {
++			compatible = "st,stm32-hwspinlock";
++			#hwlock-cells = <1>;
++			reg = <0x4c000000 0x400>;
++			clocks = <&rcc HSEM>;
++			clock-names = "hsem";
++			status = "okay";
++		};
++
++		ipcc: mailbox@4c001000 {
++			compatible = "st,stm32mp1-ipcc";
++			#mbox-cells = <1>;
++			reg = <0x4c001000 0x400>;
++			st,proc-id = <0>;
++			interrupts-extended =
++				<&intc GIC_SPI 100 IRQ_TYPE_LEVEL_HIGH>,
++				<&intc GIC_SPI 101 IRQ_TYPE_LEVEL_HIGH>,
++				<&exti 61 1>;
++			interrupt-names = "rx", "tx", "wakeup";
++			clocks = <&rcc IPCC>;
++			wakeup-source;
++			power-domains = <&pd_core>;
++			status = "disabled";
++		};
++
++		dcmi: dcmi@4c006000 {
++			compatible = "st,stm32-dcmi";
++			reg = <0x4c006000 0x400>;
++			interrupts = <GIC_SPI 78 IRQ_TYPE_LEVEL_HIGH>;
++			resets = <&rcc CAMITF_R>;
++			clocks = <&rcc DCMI>;
++			clock-names = "mclk";
++			dmas = <&dmamux1 75 0x400 0x1d>;
++			dma-names = "tx";
++			status = "disabled";
++		};
++
++		rcc: rcc@50000000 {
++			compatible = "st,stm32mp1-rcc", "syscon";
++			reg = <0x50000000 0x1000>;
++			#clock-cells = <1>;
++			#reset-cells = <1>;
++			interrupts = <GIC_SPI 5 IRQ_TYPE_LEVEL_HIGH>;
++		};
++
++		pwr: pwr@50001000 {
++			compatible = "st,stm32mp1-pwr", "syscon", "simple-mfd";
++			reg = <0x50001000 0x400>;
++
++			interrupts = <GIC_SPI 149 IRQ_TYPE_LEVEL_HIGH>;
++
++			interrupt-controller;
++			#interrupt-cells = <3>;
++
++			wakeup-gpios = <&gpioa 0 GPIO_ACTIVE_HIGH>,
++				       <&gpioa 2 GPIO_ACTIVE_HIGH>,
++				       <&gpioc 13 GPIO_ACTIVE_HIGH>,
++				       <&gpioi 8 GPIO_ACTIVE_HIGH>,
++				       <&gpioi 11 GPIO_ACTIVE_HIGH>,
++				       <&gpioc 1 GPIO_ACTIVE_HIGH>;
++
++			pwr-regulators {
++				compatible = "st,stm32mp1,pwr-reg";
++				st,tzcr = <&rcc 0x0 0x1>;
++
++				reg11: reg11 {
++					regulator-name = "reg11";
++					regulator-min-microvolt = <1100000>;
++					regulator-max-microvolt = <1100000>;
++				};
++
++				reg18: reg18 {
++					regulator-name = "reg18";
++					regulator-min-microvolt = <1800000>;
++					regulator-max-microvolt = <1800000>;
++				};
++
++				usb33: usb33 {
++					regulator-name = "usb33";
++					regulator-min-microvolt = <3300000>;
++					regulator-max-microvolt = <3300000>;
++				};
++			};
++		};
++
++		exti: interrupt-controller@5000d000 {
++			compatible = "st,stm32mp1-exti", "syscon";
++			interrupt-controller;
++			#interrupt-cells = <2>;
++			reg = <0x5000d000 0x400>;
++			hwlocks = <&hsem 1>;
++
++			/* exti_pwr is an extra interrupt controller used for
++			 * EXTI 55 to 60. It's mapped on pwr interrupt
++			 * controller.
++			 */
++			exti_pwr: exti-pwr {
++				interrupt-controller;
++				#interrupt-cells = <2>;
++				interrupt-parent = <&pwr>;
++				st,irq-number = <6>;
++			};
++		};
++
++		syscfg: syscon@50020000 {
++			compatible = "st,stm32mp157-syscfg", "syscon";
++			reg = <0x50020000 0x400>;
++			clocks = <&rcc SYSCFG>;
++		};
++
++		lptimer2: timer@50021000 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			compatible = "st,stm32-lptimer";
++			reg = <0x50021000 0x400>;
++			clocks = <&rcc LPTIM2_K>;
++			clock-names = "mux";
++			power-domains = <&pd_core>;
++			status = "disabled";
++
++			pwm {
++				compatible = "st,stm32-pwm-lp";
++				#pwm-cells = <3>;
++				status = "disabled";
++			};
++
++			trigger@1 {
++				compatible = "st,stm32-lptimer-trigger";
++				reg = <1>;
++				status = "disabled";
++			};
++
++			counter {
++				compatible = "st,stm32-lptimer-counter";
++				status = "disabled";
++			};
++		};
++
++		lptimer3: timer@50022000 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			compatible = "st,stm32-lptimer";
++			reg = <0x50022000 0x400>;
++			clocks = <&rcc LPTIM3_K>;
++			clock-names = "mux";
++			power-domains = <&pd_core>;
++			status = "disabled";
++
++			pwm {
++				compatible = "st,stm32-pwm-lp";
++				#pwm-cells = <3>;
++				status = "disabled";
++			};
++
++			trigger@2 {
++				compatible = "st,stm32-lptimer-trigger";
++				reg = <2>;
++				status = "disabled";
++			};
++		};
++
++		lptimer4: timer@50023000 {
++			compatible = "st,stm32-lptimer";
++			reg = <0x50023000 0x400>;
++			clocks = <&rcc LPTIM4_K>;
++			clock-names = "mux";
++			power-domains = <&pd_core>;
++			status = "disabled";
++
++			pwm {
++				compatible = "st,stm32-pwm-lp";
++				#pwm-cells = <3>;
++				status = "disabled";
++			};
++		};
++
++		lptimer5: timer@50024000 {
++			compatible = "st,stm32-lptimer";
++			reg = <0x50024000 0x400>;
++			clocks = <&rcc LPTIM5_K>;
++			clock-names = "mux";
++			power-domains = <&pd_core>;
++			status = "disabled";
++
++			pwm {
++				compatible = "st,stm32-pwm-lp";
++				#pwm-cells = <3>;
++				status = "disabled";
++			};
++		};
++
++		vrefbuf: vrefbuf@50025000 {
++			compatible = "st,stm32-vrefbuf";
++			reg = <0x50025000 0x8>;
++			regulator-min-microvolt = <1500000>;
++			regulator-max-microvolt = <2500000>;
++			clocks = <&rcc VREF>;
++			status = "disabled";
++		};
++
++		sai4: sai@50027000 {
++			compatible = "st,stm32h7-sai";
++			#address-cells = <1>;
++			#size-cells = <1>;
++			ranges = <0 0x50027000 0x400>;
++			reg = <0x50027000 0x4>;
++			interrupts = <GIC_SPI 146 IRQ_TYPE_LEVEL_HIGH>;
++			resets = <&rcc SAI4_R>;
++			status = "disabled";
++
++			sai4a: audio-controller@50027004 {
++				#sound-dai-cells = <0>;
++				compatible = "st,stm32-sai-sub-a";
++				reg = <0x04 0x1c>;
++				clocks = <&rcc SAI4_K>;
++				clock-names = "sai_ck";
++				dmas = <&dmamux1 99 0x400 0x01>;
++				status = "disabled";
++			};
++
++			sai4b: audio-controller@50027024 {
++				#sound-dai-cells = <0>;
++				compatible = "st,stm32-sai-sub-b";
++				reg = <0x24 0x1c>;
++				clocks = <&rcc SAI4_K>;
++				clock-names = "sai_ck";
++				dmas = <&dmamux1 100 0x400 0x01>;
++				status = "disabled";
++			};
++		};
++
++		dts: thermal@50028000 {
++			compatible = "st,stm32-thermal";
++			reg = <0x50028000 0x100>;
++			interrupts = <GIC_SPI 147 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&rcc TMPSENS>;
++			clock-names = "pclk";
++			#thermal-sensor-cells = <0>;
++			status = "disabled";
++		};
++
++		hdp: hdp@5002a000 {
++			compatible = "st,stm32mp1-hdp";
++			reg = <0x5002a000 0x400>;
++			clocks = <&rcc HDP>;
++			clock-names = "hdp";
++			status = "disabled";
++		};
++
++		funnel: funnel@50091000 {
++			compatible = "arm,coresight-funnel", "arm,primecell";
++			reg = <0x50091000 0x1000>;
++			clocks = <&rcc CK_TRACE>;
++			clock-names = "apb_pclk";
++			ports {
++				#address-cells = <1>;
++				#size-cells = <0>;
++
++				/* funnel input ports */
++				port@0 {
++					reg = <0>;
++					funnel_in_port0: endpoint {
++					  slave-mode;
++					  remote-endpoint = <&stm_out_port>;
++					};
++				};
++
++				port@1 {
++					reg = <1>;
++					funnel_in_port1: endpoint {
++					  slave-mode; /* A7-1 input */
++					  remote-endpoint = <&etm1_out_port>;
++					};
++				};
++
++				port@2 {
++					reg = <2>;
++					funnel_in_port2: endpoint {
++					  slave-mode; /* A7-2 input */
++					  remote-endpoint = <&etm2_out_port>;
++					};
++				};
++
++				port@4 {
++					reg = <4>;
++					funnel_in_port4: endpoint {
++					  slave-mode; /* REPLICATOR input */
++					  remote-endpoint = <&replicator_out_port0>;
++					};
++				};
++
++				port@5 {
++					reg = <0>;
++					funnel_out_port0: endpoint {
++					  remote-endpoint = <&etf_in_port>;
++					};
++				};
++			};
++		};
++
++		etf: etf@50092000 {
++			compatible = "arm,coresight-tmc", "arm,primecell";
++			reg = <0x50092000 0x1000>;
++			clocks = <&rcc CK_TRACE>;
++			clock-names = "apb_pclk";
++
++			ports {
++				#address-cells = <1>;
++				#size-cells = <0>;
++
++				port@0 {
++					reg = <0>;
++					etf_in_port: endpoint {
++						slave-mode;
++						remote-endpoint = <&funnel_out_port0>;
++					};
++				};
++
++				port@1 {
++					reg = <0>;
++					etf_out_port: endpoint {
++						remote-endpoint = <&tpiu_in_port>;
++					};
++				};
++			};
++		};
++
++		tpiu: tpiu@50093000 {
++			compatible = "arm,coresight-tpiu", "arm,primecell";
++			reg = <0x50093000 0x1000>;
++			clocks = <&rcc CK_TRACE>;
++			clock-names = "apb_pclk";
++
++			port {
++				tpiu_in_port: endpoint {
++					slave-mode;
++					remote-endpoint = <&etf_out_port>;
++				};
++			};
++		};
++
++		stm: stm@500a0000 {
++			compatible = "arm,coresight-stm", "arm,primecell";
++			reg = <0x500a0000 0x1000>, <0x90000000 0x1000000>,
++			      <0x50094000 0x1000>;
++			reg-names = "stm-base", "stm-stimulus-base", "cti-base";
++
++			clocks = <&rcc CK_TRACE>;
++			clock-names = "apb_pclk";
++
++			ports {
++				#address-cells = <1>;
++				#size-cells = <0>;
++
++				port@0 {
++					reg = <0>;
++					stm_out_port: endpoint {
++						remote-endpoint = <&funnel_in_port0>;
++					};
++				};
++			};
++		};
++
++		/* Cortex A7-1 */
++		etm1: etm@500dc000 {
++			compatible = "arm,coresight-etm3x", "arm,primecell";
++			reg = <0x500dc000 0x1000>;
++			cpu = <&cpu0>;
++			clocks = <&rcc CK_TRACE>;
++			clock-names = "apb_pclk";
++			port {
++				etm1_out_port: endpoint {
++					remote-endpoint = <&funnel_in_port1>;
++				};
++			};
++		};
++
++		/* Cortex A7-2 */
++		etm2: etm@500dd000 {
++			compatible = "arm,coresight-etm3x", "arm,primecell";
++			reg = <0x500dd000 0x1000>;
++			cpu = <&cpu1>;
++			clocks = <&rcc CK_TRACE>;
++			clock-names = "apb_pclk";
++
++			port {
++				etm2_out_port: endpoint {
++					remote-endpoint = <&funnel_in_port2>;
++				};
++			};
++		};
++
++		cryp1: cryp@54001000 {
++			compatible = "st,stm32mp1-cryp";
++			reg = <0x54001000 0x400>;
++			interrupts = <GIC_SPI 79 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&rcc CRYP1>;
++			resets = <&rcc CRYP1_R>;
++			status = "disabled";
++		};
++
++		hash1: hash@54002000 {
++			compatible = "st,stm32f756-hash";
++			reg = <0x54002000 0x400>;
++			interrupts = <GIC_SPI 80 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&rcc HASH1>;
++			resets = <&rcc HASH1_R>;
++			dmas = <&mdma1 31 0x2 0x1000A02 0x0 0x0 0x0>;
++			dma-names = "in";
++			dma-maxburst = <2>;
++			status = "disabled";
++		};
++
++		rng1: rng@54003000 {
++			compatible = "st,stm32-rng";
++			reg = <0x54003000 0x400>;
++			clocks = <&rcc RNG1_K>;
++			resets = <&rcc RNG1_R>;
++			status = "disabled";
++		};
++
++		mdma1: dma@58000000 {
++			compatible = "st,stm32h7-mdma";
++			reg = <0x58000000 0x1000>;
++			interrupts = <GIC_SPI 122 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&rcc MDMA>;
++			resets = <&rcc MDMA_R>;
++			#dma-cells = <6>;
++			dma-channels = <32>;
++			dma-requests = <48>;
++		};
++
++		fmc: nand-controller@58002000 {
++			compatible = "st,stm32mp15-fmc2";
++			reg = <0x58002000 0x1000>,
++			      <0x80000000 0x1000>,
++			      <0x88010000 0x1000>,
++			      <0x88020000 0x1000>,
++			      <0x81000000 0x1000>,
++			      <0x89010000 0x1000>,
++			      <0x89020000 0x1000>;
++			interrupts = <GIC_SPI 48 IRQ_TYPE_LEVEL_HIGH>;
++			dmas = <&mdma1 20 0x2 0x12000A02 0x0 0x0 0>,
++			       <&mdma1 20 0x2 0x12000A08 0x0 0x0 0>,
++			       <&mdma1 21 0x2 0x12000A0A 0x0 0x0 0>;
++			dma-names = "tx", "rx", "ecc";
++			clocks = <&rcc FMC_K>;
++			resets = <&rcc FMC_R>;
++			status = "disabled";
++		};
++
++		qspi: spi@58003000 {
++			compatible = "st,stm32f469-qspi";
++			reg = <0x58003000 0x1000>, <0x70000000 0x10000000>;
++			reg-names = "qspi", "qspi_mm";
++			interrupts = <GIC_SPI 92 IRQ_TYPE_LEVEL_HIGH>;
++			dmas = <&mdma1 22 0x2 0x100002 0x0 0x0 0x0>,
++			       <&mdma1 22 0x2 0x100008 0x0 0x0 0x0>;
++			dma-names = "tx", "rx";
++			clocks = <&rcc QSPI_K>;
++			resets = <&rcc QSPI_R>;
++			status = "disabled";
++		};
++
++		sdmmc1: sdmmc@58005000 {
++			compatible = "arm,pl18x", "arm,primecell";
++			arm,primecell-periphid = <0x00253180>;
++			reg = <0x58005000 0x1000>, <0x58006000 0x1000>;
++			interrupts = <GIC_SPI 49 IRQ_TYPE_LEVEL_HIGH>;
++			interrupt-names = "cmd_irq";
++			clocks = <&rcc SDMMC1_K>;
++			clock-names = "apb_pclk";
++			resets = <&rcc SDMMC1_R>;
++			cap-sd-highspeed;
++			cap-mmc-highspeed;
++			max-frequency = <120000000>;
++			status = "disabled";
++		};
++
++		sdmmc2: sdmmc@58007000 {
++			compatible = "arm,pl18x", "arm,primecell";
++			arm,primecell-periphid = <0x00253180>;
++			reg = <0x58007000 0x1000>, <0x58008000 0x1000>;
++			interrupts = <GIC_SPI 124 IRQ_TYPE_LEVEL_HIGH>;
++			interrupt-names = "cmd_irq";
++			clocks = <&rcc SDMMC2_K>;
++			clock-names = "apb_pclk";
++			resets = <&rcc SDMMC2_R>;
++			cap-sd-highspeed;
++			cap-mmc-highspeed;
++			max-frequency = <120000000>;
++			status = "disabled";
++		};
++
++		crc1: crc@58009000 {
++			compatible = "st,stm32f7-crc";
++			reg = <0x58009000 0x400>;
++			clocks = <&rcc CRC1>;
++			status = "disabled";
++		};
++
++		stmmac_axi_config_0: stmmac-axi-config {
++			snps,wr_osr_lmt = <0x7>;
++			snps,rd_osr_lmt = <0x7>;
++			snps,blen = <0 0 0 0 16 8 4>;
++		};
++
++		ethernet0: ethernet@5800a000 {
++			compatible = "st,stm32mp1-dwmac", "snps,dwmac-4.20a";
++			reg = <0x5800a000 0x2000>;
++			reg-names = "stmmaceth";
++			interrupts-extended = <&intc GIC_SPI 61 IRQ_TYPE_LEVEL_HIGH>,
++					      <&intc GIC_SPI 62 IRQ_TYPE_LEVEL_HIGH>,
++					      <&exti 70 1>;
++			interrupt-names = "macirq",
++					  "eth_wake_irq",
++					  "stm32_pwr_wakeup";
++			clock-names = "stmmaceth",
++				      "mac-clk-tx",
++				      "mac-clk-rx",
++				      "eth-ck",    //custom
++				      "syscfg-clk", //custom
++				      "ethstp";
++			clocks = <&rcc ETHMAC>,
++				 <&rcc ETHTX>,
++				 <&rcc ETHRX>,
++				 <&rcc ETHCK_K>, //custom
++				 <&rcc SYSCFG>,  //custom
++				 <&rcc ETHSTP>;
++			st,syscon = <&syscfg 0x4>;
++			snps,mixed-burst;
++			snps,pbl = <2>;
++			snps,en-tx-lpi-clockgating;
++			snps,axi-config = <&stmmac_axi_config_0>;
++			snps,tso;
++			power-domains = <&pd_core>;
++			status = "disabled";
++		};
++
++		usbh_ohci: usbh-ohci@5800c000 {
++			compatible = "generic-ohci";
++			reg = <0x5800c000 0x1000>;
++			clocks = <&rcc USBH>;
++			resets = <&rcc USBH_R>;
++			interrupts = <GIC_SPI 74 IRQ_TYPE_LEVEL_HIGH>;
++			status = "disabled";
++		};
++
++		usbh_ehci: usbh-ehci@5800d000 {
++			compatible = "generic-ehci";
++			reg = <0x5800d000 0x1000>;
++			clocks = <&rcc USBH>;
++			resets = <&rcc USBH_R>;
++			interrupts-extended = <&intc GIC_SPI 75 IRQ_TYPE_LEVEL_HIGH>,
++					      <&exti 43 1>;
++			interrupt-names = "event", "wakeup";
++			companion = <&usbh_ohci>;
++			power-domains = <&pd_core>;
++			wakeup-source;
++			status = "disabled";
++		};
++
++		gpu: gpu@59000000 {
++			compatible = "vivante,gc";
++			reg = <0x59000000 0x800>;
++			interrupts = <GIC_SPI 109 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&rcc GPU>, <&rcc GPU_K>;
++			clock-names = "bus" ,"core";
++			resets = <&rcc GPU_R>;
++			status = "disabled";
++		};
++
++		dsi: dsi@5a000000 {
++			compatible = "st,stm32-dsi";
++			reg = <0x5a000000 0x800>;
++			clocks = <&rcc DSI_K>, <&clk_hse>, <&rcc DSI_PX>;
++			clock-names = "pclk", "ref", "px_clk";
++			resets = <&rcc DSI_R>;
++			reset-names = "apb";
++			phy-dsi-supply = <&reg18>;
++			status = "disabled";
++		};
++
++		ltdc: display-controller@5a001000 {
++			compatible = "st,stm32-ltdc";
++			reg = <0x5a001000 0x400>;
++			interrupts = <GIC_SPI 88 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 89 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&rcc LTDC_PX>;
++			clock-names = "lcd";
++			resets = <&rcc LTDC_R>;
++			status = "disabled";
++		};
++
++		iwdg2: watchdog@5a002000 {
++			compatible = "st,stm32mp1-iwdg";
++			reg = <0x5a002000 0x400>;
++			clocks = <&rcc IWDG2>, <&rcc CK_LSI>;
++			clock-names = "pclk", "lsi";
++			status = "disabled";
++		};
++
++		usbphyc: usbphyc@5a006000 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			#clock-cells = <0>;
++			compatible = "st,stm32mp1-usbphyc";
++			reg = <0x5a006000 0x1000>;
++			clocks = <&rcc USBPHY_K>;
++			resets = <&rcc USBPHY_R>;
++			vdda1v1-supply = <&reg11>;
++			vdda1v8-supply = <&reg18>;
++			status = "disabled";
++
++			usbphyc_port0: usb-phy@0 {
++				#phy-cells = <0>;
++				reg = <0>;
++			};
++
++			usbphyc_port1: usb-phy@1 {
++				#phy-cells = <1>;
++				reg = <1>;
++			};
++		};
++
++		ddrperfm: perf@5a007000 {
++			compatible = "st,stm32-ddr-pmu";
++			reg = <0x5a007000 0x400>;
++			clocks = <&rcc DDRPERFM>, <&rcc PLL2_R>;
++			clock-names = "bus", "ddr";
++			resets = <&rcc DDRPERFM_R>;
++			status = "okay";
++		};
++
++		usart1: serial@5c000000 {
++			compatible = "st,stm32h7-uart";
++			reg = <0x5c000000 0x400>;
++			interrupt-names = "event", "wakeup";
++			interrupts-extended = <&intc GIC_SPI 37 IRQ_TYPE_LEVEL_HIGH>,
++					      <&exti 26 1>;
++			clocks = <&rcc USART1_K>;
++			resets = <&rcc USART1_R>;
++			wakeup-source;
++			power-domains = <&pd_core>;
++			status = "disabled";
++		};
++
++		spi6: spi@5c001000 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			compatible = "st,stm32h7-spi";
++			reg = <0x5c001000 0x400>;
++			interrupts = <GIC_SPI 86 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&rcc SPI6_K>;
++			resets = <&rcc SPI6_R>;
++			dmas = <&mdma1 34 0x0 0x40008 0x0 0x0 0x0>,
++			       <&mdma1 35 0x0 0x40002 0x0 0x0 0x0>;
++			dma-names = "rx", "tx";
++			power-domains = <&pd_core>;
++			status = "disabled";
++		};
++
++		i2c4: i2c@5c002000 {
++			compatible = "st,stm32f7-i2c";
++			reg = <0x5c002000 0x400>;
++			interrupt-names = "event", "error", "wakeup";
++			interrupts-extended = <&intc GIC_SPI 95 IRQ_TYPE_LEVEL_HIGH>,
++					      <&intc GIC_SPI 96 IRQ_TYPE_LEVEL_HIGH>,
++					      <&exti 24 1>;
++			clocks = <&rcc I2C4_K>;
++			resets = <&rcc I2C4_R>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++			dmas = <&mdma1 36 0x0 0x40008 0x0 0x0 0>,
++			       <&mdma1 37 0x0 0x40002 0x0 0x0 0>;
++			dma-names = "rx", "tx";
++			power-domains = <&pd_core>;
++			st,syscfg-fmp = <&syscfg 0x4 0x8>;
++			st,syscfg-fmp-clr = <&syscfg 0x44 0x8>;
++			status = "disabled";
++		};
++
++		rtc: rtc@5c004000 {
++			compatible = "st,stm32mp1-rtc";
++			reg = <0x5c004000 0x400>;
++			clocks = <&rcc RTCAPB>, <&rcc RTC>;
++			clock-names = "pclk", "rtc_ck";
++			interrupts-extended = <&intc GIC_SPI 3 IRQ_TYPE_LEVEL_HIGH>,
++					      <&exti 19 1>;
++			status = "disabled";
++		};
++
++		bsec: nvmem@5c005000 {
++			compatible = "st,stm32mp15-bsec";
++			reg = <0x5c005000 0x400>;
++			#address-cells = <1>;
++			#size-cells = <1>;
++
++			part_number_otp: part_number_otp@4 {
++				reg = <0x4 0x1>;
++			};
++			ts_cal1: calib@5c {
++				reg = <0x5c 0x2>;
++			};
++			ts_cal2: calib@5e {
++				reg = <0x5e 0x2>;
++			};
++		};
++
++		i2c6: i2c@5c009000 {
++			compatible = "st,stm32f7-i2c";
++			reg = <0x5c009000 0x400>;
++			interrupt-names = "event", "error", "wakeup";
++			interrupts-extended = <&intc GIC_SPI 135 IRQ_TYPE_LEVEL_HIGH>,
++					      <&intc GIC_SPI 136 IRQ_TYPE_LEVEL_HIGH>,
++					      <&exti 54 1>;
++			clocks = <&rcc I2C6_K>;
++			resets = <&rcc I2C6_R>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++			dmas = <&mdma1 38 0x0 0x40008 0x0 0x0 0>,
++			       <&mdma1 39 0x0 0x40002 0x0 0x0 0>;
++			dma-names = "rx", "tx";
++			power-domains = <&pd_core>;
++			st,syscfg-fmp = <&syscfg 0x4 0x20>;
++			st,syscfg-fmp-clr = <&syscfg 0x44 0x20>;
++			status = "disabled";
++		};
++
++		tamp: tamp@5c00a000 {
++			compatible = "simple-bus", "syscon", "simple-mfd";
++			reg = <0x5c00a000 0x400>;
++
++			reboot-mode {
++				compatible = "syscon-reboot-mode";
++				offset = <0x150>; /* reg20 */
++				mask = <0xff>;
++				mode-normal = <0>;
++				mode-fastboot = <0x1>;
++				mode-recovery = <0x2>;
++				mode-stm32cubeprogrammer = <0x3>;
++				mode-ums_mmc0 = <0x10>;
++				mode-ums_mmc1 = <0x11>;
++				mode-ums_mmc2 = <0x12>;
++			};
++		};
++	};
++
++	m4_rproc: m4@0 {
++		compatible = "st,stm32mp1-rproc";
++		#address-cells = <1>;
++		#size-cells = <1>;
++
++		ranges = <0x00000000 0x38000000 0x10000>,
++			 <0x30000000 0x30000000 0x60000>,
++			 <0x10000000 0x10000000 0x60000>;
++		resets = <&rcc MCU_R>;
++		reset-names = "mcu_rst";
++		st,syscfg-pdds = <&pwr 0x014 0x1>;
++		st,syscfg-holdboot = <&rcc 0x10C 0x1>;
++		st,syscfg-tz = <&rcc 0x000 0x1>;
++		st,syscfg-rsc-tbl = <&tamp 0x144 0xFFFFFFFF>;
++		status = "disabled";
++
++		m4_system_resources {
++			compatible = "rproc-srm-core";
++			status = "disabled";
++		};
++	};
++
++	firmware {
++		optee {
++			compatible = "linaro,optee-tz";
++			method = "smc";
++		};
++	};
++};
+diff --git a/board/octavo/red/linux.config b/board/octavo/red/linux.config
+new file mode 100644
+index 0000000000..97e4e56c19
+--- /dev/null
++++ b/board/octavo/red/linux.config
+@@ -0,0 +1,936 @@
 +CONFIG_SYSVIPC=y
 +CONFIG_POSIX_MQUEUE=y
 +CONFIG_USELIB=y
 +CONFIG_NO_HZ=y
 +CONFIG_HIGH_RES_TIMERS=y
 +CONFIG_PREEMPT=y
++CONFIG_TASKSTATS=y
++CONFIG_TASK_DELAY_ACCT=y
++CONFIG_TASK_XACCT=y
++CONFIG_TASK_IO_ACCOUNTING=y
 +CONFIG_IKCONFIG=y
 +CONFIG_IKCONFIG_PROC=y
 +CONFIG_LOG_BUF_SHIFT=16
 +CONFIG_CGROUPS=y
 +CONFIG_MEMCG=y
++CONFIG_BLK_CGROUP=y
++CONFIG_CGROUP_SCHED=y
++CONFIG_CFS_BANDWIDTH=y
++CONFIG_CGROUP_FREEZER=y
++CONFIG_CPUSETS=y
++CONFIG_CGROUP_DEVICE=y
++CONFIG_CGROUP_CPUACCT=y
++CONFIG_CGROUP_BPF=y
 +CONFIG_NAMESPACES=y
++CONFIG_USER_NS=y
++CONFIG_CHECKPOINT_RESTORE=y
 +CONFIG_BLK_DEV_INITRD=y
++CONFIG_BPF_SYSCALL=y
 +CONFIG_EMBEDDED=y
 +CONFIG_PROFILING=y
-+CONFIG_ARCH_ASPEED=y
-+CONFIG_MACH_ASPEED_G6=y
-+CONFIG_ARCH_MILBEAUT=y
-+CONFIG_ARCH_MILBEAUT_M10V=y
 +CONFIG_ARCH_STM32=y
 +CONFIG_ARM_THUMBEE=y
 +# CONFIG_CACHE_L2X0 is not set
@@ -1361,30 +3758,35 @@ index 0000000000..1a5a088de0
 +CONFIG_ARM_ERRATA_764369=y
 +CONFIG_ARM_ERRATA_775420=y
 +CONFIG_ARM_ERRATA_798181=y
++CONFIG_PCI_ENDPOINT=y
++CONFIG_PCI_ENDPOINT_CONFIGFS=y
++CONFIG_PCI_EPF_TEST=m
 +CONFIG_SMP=y
 +CONFIG_SCHED_MC=y
 +CONFIG_MCPM=y
-+CONFIG_NR_CPUS=2
 +CONFIG_HIGHMEM=y
 +CONFIG_FORCE_MAX_ZONEORDER=12
++CONFIG_SECCOMP=y
 +# CONFIG_ATAGS is not set
++CONFIG_ZBOOT_ROM_TEXT=0x0
++CONFIG_ZBOOT_ROM_BSS=0x0
 +CONFIG_ARM_APPENDED_DTB=y
 +CONFIG_ARM_ATAG_DTB_COMPAT=y
++CONFIG_EFI=y
 +CONFIG_CPU_FREQ=y
 +CONFIG_CPU_FREQ_STAT=y
-+CONFIG_CPU_FREQ_DEFAULT_GOV_ONDEMAND=y
 +CONFIG_CPU_FREQ_GOV_POWERSAVE=m
 +CONFIG_CPU_FREQ_GOV_USERSPACE=m
++CONFIG_CPU_FREQ_GOV_ONDEMAND=y
 +CONFIG_CPU_FREQ_GOV_CONSERVATIVE=m
 +CONFIG_CPU_FREQ_GOV_SCHEDUTIL=y
 +CONFIG_CPUFREQ_DT=y
-+CONFIG_CPU_IDLE=y
-+CONFIG_ARM_STM32_CPUIDLE=y
++CONFIG_QORIQ_CPUFREQ=y
 +CONFIG_VFP=y
 +CONFIG_NEON=y
 +CONFIG_KERNEL_MODE_NEON=y
-+CONFIG_ARM_SCMI_PROTOCOL=y
-+CONFIG_TRUSTED_FOUNDATIONS=y
++CONFIG_EFI_VARS=m
++CONFIG_EFI_CAPSULE_LOADER=m
 +CONFIG_ARM_CRYPTO=y
 +CONFIG_CRYPTO_SHA1_ARM_NEON=m
 +CONFIG_CRYPTO_SHA1_ARM_CE=m
@@ -1397,31 +3799,316 @@ index 0000000000..1a5a088de0
 +CONFIG_CRYPTO_CRC32_ARM_CE=m
 +CONFIG_CRYPTO_CHACHA20_NEON=m
 +CONFIG_MODULES=y
++CONFIG_MODULE_FORCE_LOAD=y
 +CONFIG_MODULE_UNLOAD=y
++CONFIG_MODVERSIONS=y
 +CONFIG_PARTITION_ADVANCED=y
 +CONFIG_CMDLINE_PARTITION=y
++CONFIG_CMA=y
 +CONFIG_NET=y
 +CONFIG_PACKET=y
 +CONFIG_UNIX=y
++CONFIG_UNIX_DIAG=m
++CONFIG_TLS=m
 +CONFIG_INET=y
++CONFIG_IP_MULTICAST=y
++CONFIG_IP_ADVANCED_ROUTER=y
++CONFIG_IP_FIB_TRIE_STATS=y
++CONFIG_IP_MULTIPLE_TABLES=y
++CONFIG_IP_ROUTE_MULTIPATH=y
++CONFIG_IP_ROUTE_VERBOSE=y
 +CONFIG_IP_PNP=y
 +CONFIG_IP_PNP_DHCP=y
 +CONFIG_IP_PNP_BOOTP=y
 +CONFIG_IP_PNP_RARP=y
++CONFIG_NET_IPIP=m
++CONFIG_NET_IPGRE_DEMUX=m
++CONFIG_NET_IPGRE=m
++CONFIG_NET_IPGRE_BROADCAST=y
++CONFIG_IP_MROUTE=y
++CONFIG_IP_MROUTE_MULTIPLE_TABLES=y
++CONFIG_IP_PIMSM_V1=y
++CONFIG_IP_PIMSM_V2=y
++CONFIG_NET_IPVTI=m
++CONFIG_NET_FOU_IP_TUNNELS=y
++CONFIG_INET_AH=m
++CONFIG_INET_ESP=m
++CONFIG_INET_ESP_OFFLOAD=m
++CONFIG_INET_IPCOMP=m
++CONFIG_INET_XFRM_MODE_TRANSPORT=m
++CONFIG_INET_XFRM_MODE_TUNNEL=m
++CONFIG_INET_XFRM_MODE_BEET=m
++CONFIG_INET_DIAG=m
++CONFIG_INET_UDP_DIAG=m
++CONFIG_INET_RAW_DIAG=m
++CONFIG_INET_DIAG_DESTROY=y
++CONFIG_TCP_CONG_ADVANCED=y
++CONFIG_TCP_MD5SIG=y
++CONFIG_IPV6=m
 +CONFIG_IPV6_ROUTER_PREF=y
++CONFIG_IPV6_ROUTE_INFO=y
 +CONFIG_IPV6_OPTIMISTIC_DAD=y
 +CONFIG_INET6_AH=m
 +CONFIG_INET6_ESP=m
++CONFIG_INET6_ESP_OFFLOAD=m
 +CONFIG_INET6_IPCOMP=m
 +CONFIG_IPV6_MIP6=m
-+CONFIG_IPV6_TUNNEL=m
-+CONFIG_IPV6_MULTIPLE_TABLES=y
++CONFIG_INET6_XFRM_MODE_ROUTEOPTIMIZATION=m
++CONFIG_IPV6_VTI=m
++CONFIG_IPV6_SIT_6RD=y
++CONFIG_IPV6_GRE=m
++CONFIG_IPV6_SUBTREES=y
++CONFIG_IPV6_MROUTE=y
++CONFIG_IPV6_MROUTE_MULTIPLE_TABLES=y
++CONFIG_IPV6_PIMSM_V2=y
++CONFIG_IPV6_SEG6_LWTUNNEL=y
++CONFIG_IPV6_SEG6_HMAC=y
++CONFIG_NETWORK_SECMARK=y
++CONFIG_NETWORK_PHY_TIMESTAMPING=y
++CONFIG_NETFILTER=y
++CONFIG_NF_CONNTRACK=m
++CONFIG_NF_LOG_NETDEV=m
++CONFIG_NF_CONNTRACK_SECMARK=y
++CONFIG_NF_CONNTRACK_EVENTS=y
++CONFIG_NF_CONNTRACK_TIMEOUT=y
++CONFIG_NF_CONNTRACK_TIMESTAMP=y
++CONFIG_NF_CONNTRACK_AMANDA=m
++CONFIG_NF_CONNTRACK_FTP=m
++CONFIG_NF_CONNTRACK_H323=m
++CONFIG_NF_CONNTRACK_IRC=m
++CONFIG_NF_CONNTRACK_NETBIOS_NS=m
++CONFIG_NF_CONNTRACK_SNMP=m
++CONFIG_NF_CONNTRACK_PPTP=m
++CONFIG_NF_CONNTRACK_SIP=m
++CONFIG_NF_CONNTRACK_TFTP=m
++CONFIG_NF_CT_NETLINK=m
++CONFIG_NF_CT_NETLINK_TIMEOUT=m
++CONFIG_NF_CT_NETLINK_HELPER=m
++CONFIG_NETFILTER_NETLINK_GLUE_CT=y
++CONFIG_NF_TABLES=m
++CONFIG_NFT_NUMGEN=m
++CONFIG_NFT_CT=m
++CONFIG_NFT_COUNTER=m
++CONFIG_NFT_LOG=m
++CONFIG_NFT_LIMIT=m
++CONFIG_NFT_MASQ=m
++CONFIG_NFT_REDIR=m
++CONFIG_NFT_NAT=m
++CONFIG_NFT_OBJREF=m
++CONFIG_NFT_QUEUE=m
++CONFIG_NFT_QUOTA=m
++CONFIG_NFT_REJECT=m
++CONFIG_NFT_HASH=m
++CONFIG_NETFILTER_XT_TARGET_CLASSIFY=m
++CONFIG_NETFILTER_XT_TARGET_CONNMARK=m
++CONFIG_NETFILTER_XT_TARGET_CONNSECMARK=m
++CONFIG_NETFILTER_XT_TARGET_HMARK=m
++CONFIG_NETFILTER_XT_TARGET_IDLETIMER=m
++CONFIG_NETFILTER_XT_TARGET_LED=m
++CONFIG_NETFILTER_XT_TARGET_LOG=m
++CONFIG_NETFILTER_XT_TARGET_MARK=m
++CONFIG_NETFILTER_XT_TARGET_NFLOG=m
++CONFIG_NETFILTER_XT_TARGET_NFQUEUE=m
++CONFIG_NETFILTER_XT_TARGET_TEE=m
++CONFIG_NETFILTER_XT_TARGET_SECMARK=m
++CONFIG_NETFILTER_XT_TARGET_TCPMSS=m
++CONFIG_NETFILTER_XT_MATCH_ADDRTYPE=m
++CONFIG_NETFILTER_XT_MATCH_BPF=m
++CONFIG_NETFILTER_XT_MATCH_CGROUP=m
++CONFIG_NETFILTER_XT_MATCH_CLUSTER=m
++CONFIG_NETFILTER_XT_MATCH_COMMENT=m
++CONFIG_NETFILTER_XT_MATCH_CONNBYTES=m
++CONFIG_NETFILTER_XT_MATCH_CONNLABEL=m
++CONFIG_NETFILTER_XT_MATCH_CONNLIMIT=m
++CONFIG_NETFILTER_XT_MATCH_CONNMARK=m
++CONFIG_NETFILTER_XT_MATCH_CONNTRACK=m
++CONFIG_NETFILTER_XT_MATCH_CPU=m
++CONFIG_NETFILTER_XT_MATCH_DCCP=m
++CONFIG_NETFILTER_XT_MATCH_DEVGROUP=m
++CONFIG_NETFILTER_XT_MATCH_DSCP=m
++CONFIG_NETFILTER_XT_MATCH_ESP=m
++CONFIG_NETFILTER_XT_MATCH_HASHLIMIT=m
++CONFIG_NETFILTER_XT_MATCH_HELPER=m
++CONFIG_NETFILTER_XT_MATCH_IPCOMP=m
++CONFIG_NETFILTER_XT_MATCH_IPRANGE=m
++CONFIG_NETFILTER_XT_MATCH_LENGTH=m
++CONFIG_NETFILTER_XT_MATCH_LIMIT=m
++CONFIG_NETFILTER_XT_MATCH_MAC=m
++CONFIG_NETFILTER_XT_MATCH_MARK=m
++CONFIG_NETFILTER_XT_MATCH_MULTIPORT=m
++CONFIG_NETFILTER_XT_MATCH_NFACCT=m
++CONFIG_NETFILTER_XT_MATCH_OSF=m
++CONFIG_NETFILTER_XT_MATCH_OWNER=m
++CONFIG_NETFILTER_XT_MATCH_POLICY=m
++CONFIG_NETFILTER_XT_MATCH_PHYSDEV=m
++CONFIG_NETFILTER_XT_MATCH_PKTTYPE=m
++CONFIG_NETFILTER_XT_MATCH_QUOTA=m
++CONFIG_NETFILTER_XT_MATCH_RATEEST=m
++CONFIG_NETFILTER_XT_MATCH_REALM=m
++CONFIG_NETFILTER_XT_MATCH_RECENT=m
++CONFIG_NETFILTER_XT_MATCH_SCTP=m
++CONFIG_NETFILTER_XT_MATCH_STATE=m
++CONFIG_NETFILTER_XT_MATCH_STATISTIC=m
++CONFIG_NETFILTER_XT_MATCH_STRING=m
++CONFIG_NETFILTER_XT_MATCH_TCPMSS=m
++CONFIG_NETFILTER_XT_MATCH_TIME=m
++CONFIG_NETFILTER_XT_MATCH_U32=m
++CONFIG_IP_SET=m
++CONFIG_IP_VS=m
++CONFIG_NF_SOCKET_IPV4=m
++CONFIG_NF_LOG_ARP=m
++CONFIG_IP_NF_IPTABLES=m
++CONFIG_IP_NF_MATCH_AH=m
++CONFIG_IP_NF_MATCH_ECN=m
++CONFIG_IP_NF_MATCH_RPFILTER=m
++CONFIG_IP_NF_MATCH_TTL=m
++CONFIG_IP_NF_FILTER=m
++CONFIG_IP_NF_TARGET_REJECT=m
++CONFIG_IP_NF_TARGET_SYNPROXY=m
++CONFIG_IP_NF_NAT=m
++CONFIG_IP_NF_TARGET_MASQUERADE=m
++CONFIG_IP_NF_TARGET_NETMAP=m
++CONFIG_IP_NF_TARGET_REDIRECT=m
++CONFIG_IP_NF_MANGLE=m
++CONFIG_IP_NF_TARGET_CLUSTERIP=m
++CONFIG_IP_NF_TARGET_ECN=m
++CONFIG_IP_NF_TARGET_TTL=m
++CONFIG_IP_NF_RAW=m
++CONFIG_IP_NF_ARPTABLES=m
++CONFIG_IP_NF_ARPFILTER=m
++CONFIG_IP_NF_ARP_MANGLE=m
++CONFIG_NF_SOCKET_IPV6=m
++CONFIG_IP6_NF_IPTABLES=m
++CONFIG_IP6_NF_MATCH_AH=m
++CONFIG_IP6_NF_MATCH_EUI64=m
++CONFIG_IP6_NF_MATCH_FRAG=m
++CONFIG_IP6_NF_MATCH_OPTS=m
++CONFIG_IP6_NF_MATCH_HL=m
++CONFIG_IP6_NF_MATCH_IPV6HEADER=m
++CONFIG_IP6_NF_MATCH_MH=m
++CONFIG_IP6_NF_MATCH_RPFILTER=m
++CONFIG_IP6_NF_MATCH_RT=m
++CONFIG_IP6_NF_TARGET_HL=m
++CONFIG_IP6_NF_FILTER=m
++CONFIG_IP6_NF_TARGET_REJECT=m
++CONFIG_IP6_NF_TARGET_SYNPROXY=m
++CONFIG_IP6_NF_MANGLE=m
++CONFIG_IP6_NF_RAW=m
++CONFIG_IP6_NF_NAT=m
++CONFIG_IP6_NF_TARGET_MASQUERADE=m
++CONFIG_IP6_NF_TARGET_NPT=m
++CONFIG_BRIDGE_NF_EBTABLES=m
++CONFIG_BRIDGE_EBT_BROUTE=m
++CONFIG_BRIDGE_EBT_T_FILTER=m
++CONFIG_BRIDGE_EBT_T_NAT=m
++CONFIG_BRIDGE_EBT_802_3=m
++CONFIG_BRIDGE_EBT_AMONG=m
++CONFIG_BRIDGE_EBT_ARP=m
++CONFIG_BRIDGE_EBT_IP=m
++CONFIG_BRIDGE_EBT_IP6=m
++CONFIG_BRIDGE_EBT_LIMIT=m
++CONFIG_BRIDGE_EBT_MARK=m
++CONFIG_BRIDGE_EBT_PKTTYPE=m
++CONFIG_BRIDGE_EBT_STP=m
++CONFIG_BRIDGE_EBT_VLAN=m
++CONFIG_BRIDGE_EBT_ARPREPLY=m
++CONFIG_BRIDGE_EBT_DNAT=m
++CONFIG_BRIDGE_EBT_MARK_T=m
++CONFIG_BRIDGE_EBT_REDIRECT=m
++CONFIG_BRIDGE_EBT_SNAT=m
++CONFIG_BRIDGE_EBT_LOG=m
++CONFIG_BRIDGE_EBT_NFLOG=m
++CONFIG_L2TP=m
++CONFIG_BRIDGE=m
 +CONFIG_NET_DSA=m
++CONFIG_VLAN_8021Q=m
++CONFIG_VLAN_8021Q_GVRP=y
++CONFIG_VLAN_8021Q_MVRP=y
++CONFIG_LLC2=m
++CONFIG_6LOWPAN=m
++CONFIG_6LOWPAN_DEBUGFS=y
++CONFIG_IEEE802154=m
++CONFIG_NET_SCHED=y
++CONFIG_NET_SCH_CBQ=m
++CONFIG_NET_SCH_HTB=m
++CONFIG_NET_SCH_HFSC=m
++CONFIG_NET_SCH_PRIO=m
++CONFIG_NET_SCH_MULTIQ=m
++CONFIG_NET_SCH_RED=m
++CONFIG_NET_SCH_SFB=m
++CONFIG_NET_SCH_SFQ=m
++CONFIG_NET_SCH_TEQL=m
++CONFIG_NET_SCH_TBF=m
++CONFIG_NET_SCH_GRED=m
++CONFIG_NET_SCH_DSMARK=m
++CONFIG_NET_SCH_NETEM=m
++CONFIG_NET_SCH_DRR=m
++CONFIG_NET_SCH_MQPRIO=m
++CONFIG_NET_SCH_CHOKE=m
++CONFIG_NET_SCH_QFQ=m
++CONFIG_NET_SCH_CODEL=m
++CONFIG_NET_SCH_FQ_CODEL=m
++CONFIG_NET_SCH_FQ=m
++CONFIG_NET_SCH_HHF=m
++CONFIG_NET_SCH_PIE=m
++CONFIG_NET_SCH_PLUG=m
++CONFIG_NET_SCH_DEFAULT=y
++CONFIG_NET_CLS_BASIC=m
++CONFIG_NET_CLS_TCINDEX=m
++CONFIG_NET_CLS_ROUTE4=m
++CONFIG_NET_CLS_FW=m
++CONFIG_NET_CLS_U32=m
++CONFIG_CLS_U32_PERF=y
++CONFIG_CLS_U32_MARK=y
++CONFIG_NET_CLS_RSVP=m
++CONFIG_NET_CLS_RSVP6=m
++CONFIG_NET_CLS_FLOW=m
++CONFIG_NET_CLS_CGROUP=m
++CONFIG_NET_CLS_BPF=m
++CONFIG_NET_CLS_FLOWER=m
++CONFIG_NET_CLS_MATCHALL=m
++CONFIG_NET_EMATCH=y
++CONFIG_NET_EMATCH_CMP=m
++CONFIG_NET_EMATCH_NBYTE=m
++CONFIG_NET_EMATCH_U32=m
++CONFIG_NET_EMATCH_META=m
++CONFIG_NET_EMATCH_TEXT=m
++CONFIG_NET_EMATCH_CANID=m
++CONFIG_NET_CLS_ACT=y
++CONFIG_NET_ACT_POLICE=m
++CONFIG_NET_ACT_GACT=m
++CONFIG_GACT_PROB=y
++CONFIG_NET_ACT_MIRRED=m
++CONFIG_NET_ACT_SAMPLE=m
++CONFIG_NET_ACT_NAT=m
++CONFIG_NET_ACT_PEDIT=m
++CONFIG_NET_ACT_CSUM=m
++CONFIG_NET_ACT_VLAN=m
++CONFIG_NET_ACT_BPF=m
++CONFIG_NET_ACT_SKBMOD=m
++CONFIG_NET_ACT_IFE=m
++CONFIG_NET_ACT_TUNNEL_KEY=m
++CONFIG_NET_IFE_SKBMARK=m
++CONFIG_NET_IFE_SKBPRIO=m
++CONFIG_NET_IFE_SKBTCINDEX=m
++CONFIG_NET_CLS_IND=y
++CONFIG_DCB=y
++CONFIG_BATMAN_ADV=m
++CONFIG_BATMAN_ADV_NC=y
++CONFIG_BATMAN_ADV_MCAST=y
++CONFIG_OPENVSWITCH=m
++CONFIG_VSOCKETS=m
++CONFIG_VIRTIO_VSOCKETS=m
++CONFIG_NETLINK_DIAG=m
++CONFIG_HSR=m
++CONFIG_CGROUP_NET_PRIO=y
++CONFIG_BPF_JIT=y
 +CONFIG_CAN=y
 +CONFIG_CAN_FLEXCAN=m
 +CONFIG_CAN_M_CAN=y
-+CONFIG_CAN_M_CAN_PLATFORM=y
 +CONFIG_BT=m
++CONFIG_BT_6LOWPAN=m
++CONFIG_BT_HCIBTUSB=m
 +CONFIG_BT_HCIUART=m
 +CONFIG_BT_HCIUART_BCM=y
 +CONFIG_BT_MRVL=m
@@ -1431,35 +4118,23 @@ index 0000000000..1a5a088de0
 +CONFIG_RFKILL=y
 +CONFIG_RFKILL_INPUT=y
 +CONFIG_RFKILL_GPIO=y
-+CONFIG_NFC=m
-+CONFIG_NFC_DIGITAL=m
-+CONFIG_NFC_NCI=m
-+CONFIG_NFC_NCI_SPI=m
-+CONFIG_NFC_NCI_UART=m
-+CONFIG_NFC_HCI=m
-+CONFIG_NFC_SHDLC=y
-+CONFIG_NFC_S3FWRN5_I2C=m
 +CONFIG_DEVTMPFS=y
 +CONFIG_DEVTMPFS_MOUNT=y
++CONFIG_DMA_CMA=y
++CONFIG_CMA_SIZE_MBYTES=128
 +CONFIG_BRCMSTB_GISB_ARB=y
 +CONFIG_SIMPLE_PM_BUS=y
 +CONFIG_VEXPRESS_CONFIG=y
 +CONFIG_MTD=y
 +CONFIG_MTD_CMDLINE_PARTS=y
 +CONFIG_MTD_BLOCK=y
-+CONFIG_MTD_CFI=y
-+CONFIG_MTD_CFI_INTELEXT=y
-+CONFIG_MTD_PHYSMAP=y
-+CONFIG_MTD_PHYSMAP_OF=y
-+CONFIG_MTD_MCHP23K256=m
-+CONFIG_MTD_RAW_NAND=y
++CONFIG_MTD_M25P80=y
++CONFIG_MTD_NAND=y
 +CONFIG_MTD_NAND_DENALI_DT=y
 +CONFIG_MTD_NAND_BRCMNAND=y
 +CONFIG_MTD_NAND_STM32_FMC2=y
-+CONFIG_MTD_SPI_NAND=y
 +CONFIG_MTD_SPI_NOR=y
 +# CONFIG_MTD_SPI_NOR_USE_4K_SECTORS is not set
-+CONFIG_SPI_ASPEED_SMC=m
 +CONFIG_MTD_UBI=y
 +CONFIG_BLK_DEV_LOOP=y
 +CONFIG_BLK_DEV_RAM=y
@@ -1470,6 +4145,7 @@ index 0000000000..1a5a088de0
 +CONFIG_ICS932S401=y
 +CONFIG_APDS9802ALS=y
 +CONFIG_ISL29003=y
++CONFIG_SRAM=y
 +CONFIG_EEPROM_AT24=y
 +CONFIG_BLK_DEV_SD=y
 +CONFIG_BLK_DEV_SR=y
@@ -1477,31 +4153,35 @@ index 0000000000..1a5a088de0
 +CONFIG_ATA=y
 +CONFIG_SATA_AHCI_PLATFORM=y
 +CONFIG_NETDEVICES=y
++CONFIG_MACVLAN=m
++CONFIG_MACVTAP=m
++CONFIG_TUN=m
++CONFIG_TUN_VNET_CROSS_LE=y
++CONFIG_VETH=m
 +CONFIG_VIRTIO_NET=y
 +CONFIG_B53_SPI_DRIVER=m
 +CONFIG_B53_MDIO_DRIVER=m
 +CONFIG_B53_MMAP_DRIVER=m
 +CONFIG_B53_SRAB_DRIVER=m
-+CONFIG_B53_SERDES=m
 +CONFIG_NET_DSA_BCM_SF2=m
 +CONFIG_BCMGENET=m
 +CONFIG_SYSTEMPORT=m
 +CONFIG_MACB=y
-+CONFIG_FTGMAC100=m
 +CONFIG_HIX5HD2_GMAC=y
 +CONFIG_MVMDIO=y
 +CONFIG_KS8851=y
 +CONFIG_SMSC911X=y
 +CONFIG_STMMAC_ETH=y
 +CONFIG_DWMAC_DWC_QOS_ETH=y
++CONFIG_MDIO_BITBANG=y
++CONFIG_AT803X_PHY=y
 +CONFIG_BROADCOM_PHY=y
 +CONFIG_ICPLUS_PHY=y
 +CONFIG_MARVELL_PHY=y
 +CONFIG_MICREL_PHY=y
-+CONFIG_AT803X_PHY=y
 +CONFIG_REALTEK_PHY=y
 +CONFIG_ROCKCHIP_PHY=y
-+CONFIG_MDIO_BITBANG=y
++CONFIG_SMSC_PHY=y
 +CONFIG_USB_PEGASUS=y
 +CONFIG_USB_RTL8152=m
 +CONFIG_USB_LAN78XX=m
@@ -1513,20 +4193,20 @@ index 0000000000..1a5a088de0
 +CONFIG_MWIFIEX_SDIO=m
 +CONFIG_RT2X00=m
 +CONFIG_RT2800USB=m
++CONFIG_RTL8192CU=m
 +CONFIG_INPUT_JOYDEV=y
 +CONFIG_INPUT_EVDEV=y
 +CONFIG_KEYBOARD_QT1070=m
 +CONFIG_KEYBOARD_GPIO=y
 +CONFIG_KEYBOARD_SAMSUNG=m
++CONFIG_KEYBOARD_CROS_EC=m
 +CONFIG_KEYBOARD_BCM=y
 +CONFIG_MOUSE_PS2_ELANTECH=y
 +CONFIG_MOUSE_CYAPA=m
 +CONFIG_MOUSE_ELAN_I2C=y
 +CONFIG_INPUT_TOUCHSCREEN=y
-+CONFIG_TOUCHSCREEN_ADC=m
 +CONFIG_TOUCHSCREEN_ATMEL_MXT=m
-+CONFIG_TOUCHSCREEN_GOODIX=y
-+CONFIG_TOUCHSCREEN_ELAN=m
++CONFIG_TOUCHSCREEN_GOODIX=m
 +CONFIG_TOUCHSCREEN_MMS114=m
 +CONFIG_TOUCHSCREEN_EDT_FT5X06=y
 +CONFIG_TOUCHSCREEN_ST1232=m
@@ -1536,36 +4216,31 @@ index 0000000000..1a5a088de0
 +CONFIG_INPUT_MAX8997_HAPTIC=m
 +CONFIG_INPUT_CPCAP_PWRBUTTON=m
 +CONFIG_INPUT_AXP20X_PEK=m
-+CONFIG_INPUT_DA9063_ONKEY=m
++CONFIG_INPUT_UINPUT=m
 +CONFIG_INPUT_ADXL34X=m
 +CONFIG_INPUT_STPMIC1_ONKEY=y
 +CONFIG_SERIO_AMBAKMI=y
-+CONFIG_LEGACY_PTY_COUNT=8
++CONFIG_SERIAL_NONSTANDARD=y
 +CONFIG_SERIAL_AMBA_PL011=y
 +CONFIG_SERIAL_AMBA_PL011_CONSOLE=y
 +CONFIG_SERIAL_STM32=y
 +CONFIG_SERIAL_STM32_CONSOLE=y
-+CONFIG_SERIAL_NONSTANDARD=y
 +CONFIG_SERIAL_DEV_BUS=y
-+CONFIG_ASPEED_KCS_IPMI_BMC=m
-+CONFIG_ASPEED_BT_IPMI_BMC=m
 +CONFIG_HW_RANDOM=y
-+CONFIG_TCG_TPM=m
-+CONFIG_TCG_TIS_I2C_INFINEON=m
 +CONFIG_I2C_CHARDEV=y
 +CONFIG_I2C_ARB_GPIO_CHALLENGE=m
 +CONFIG_I2C_MUX_PCA954x=y
 +CONFIG_I2C_MUX_PINCTRL=y
 +CONFIG_I2C_DEMUX_PINCTRL=y
-+CONFIG_I2C_ASPEED=m
 +CONFIG_I2C_NOMADIK=y
 +CONFIG_I2C_STM32F7=y
++CONFIG_I2C_CROS_EC_TUNNEL=m
 +CONFIG_SPI=y
 +CONFIG_SPI_CADENCE=y
 +CONFIG_SPI_GPIO=m
 +CONFIG_SPI_PL022=y
 +CONFIG_SPI_ROCKCHIP=m
-+CONFIG_SPI_STM32=m
++CONFIG_SPI_STM32=y
 +CONFIG_SPI_STM32_QSPI=y
 +CONFIG_SPI_XILINX=y
 +CONFIG_SPI_SPIDEV=y
@@ -1574,7 +4249,6 @@ index 0000000000..1a5a088de0
 +CONFIG_PINCTRL_SINGLE=y
 +CONFIG_PINCTRL_STMFX=y
 +CONFIG_PINCTRL_PALMAS=y
-+CONFIG_GPIO_ASPEED_SGPIO=y
 +CONFIG_GPIO_DWAPB=y
 +CONFIG_GPIO_PL061=y
 +CONFIG_GPIO_SYSCON=y
@@ -1593,31 +4267,17 @@ index 0000000000..1a5a088de0
 +CONFIG_POWER_RESET_SYSCON=y
 +CONFIG_POWER_RESET_SYSCON_POWEROFF=y
 +CONFIG_SYSCON_REBOOT_MODE=y
-+CONFIG_BATTERY_ACT8945A=y
-+CONFIG_BATTERY_CPCAP=m
-+CONFIG_BATTERY_SBS=y
-+CONFIG_BATTERY_BQ27XXX=m
-+CONFIG_AXP20X_POWER=m
-+CONFIG_BATTERY_MAX17040=m
-+CONFIG_BATTERY_MAX17042=m
-+CONFIG_CHARGER_GPIO=m
-+CONFIG_CHARGER_MAX14577=m
-+CONFIG_CHARGER_MAX77693=m
-+CONFIG_CHARGER_MAX8997=m
-+CONFIG_CHARGER_MAX8998=m
-+CONFIG_CHARGER_TPS65090=y
-+CONFIG_SENSORS_ASPEED=m
 +CONFIG_SENSORS_IIO_HWMON=y
 +CONFIG_SENSORS_LM90=y
 +CONFIG_SENSORS_LM95245=y
 +CONFIG_SENSORS_NTC_THERMISTOR=m
 +CONFIG_SENSORS_PWM_FAN=m
 +CONFIG_SENSORS_INA2XX=m
++CONFIG_THERMAL=y
 +CONFIG_CPU_THERMAL=y
-+CONFIG_DEVFREQ_THERMAL=y
 +CONFIG_ST_THERMAL_MEMMAP=y
++CONFIG_WATCHDOG=y
 +CONFIG_WATCHDOG_NOWAYOUT=y
-+CONFIG_WATCHDOG_SYSFS=y
 +CONFIG_DA9063_WATCHDOG=m
 +CONFIG_XILINX_WATCHDOG=y
 +CONFIG_ARM_SP805_WATCHDOG=y
@@ -1635,6 +4295,7 @@ index 0000000000..1a5a088de0
 +CONFIG_MFD_ATMEL_HLCDC=m
 +CONFIG_MFD_BCM590XX=y
 +CONFIG_MFD_AXP20X_I2C=y
++CONFIG_MFD_CROS_EC=m
 +CONFIG_MFD_DA9063=m
 +CONFIG_MFD_MAX14577=y
 +CONFIG_MFD_MAX77686=y
@@ -1657,12 +4318,14 @@ index 0000000000..1a5a088de0
 +CONFIG_MFD_TPS65910=y
 +CONFIG_TWL4030_CORE=y
 +CONFIG_TWL4030_POWER=y
-+CONFIG_MFD_WM8994=m
++CONFIG_MFD_WM8994=y
 +CONFIG_MFD_STM32_LPTIMER=y
 +CONFIG_MFD_STPMIC1=y
++CONFIG_REGULATOR=y
 +CONFIG_REGULATOR_FIXED_VOLTAGE=y
 +CONFIG_REGULATOR_ACT8865=y
 +CONFIG_REGULATOR_ACT8945A=y
++CONFIG_REGULATOR_ANATOP=y
 +CONFIG_REGULATOR_AS3711=y
 +CONFIG_REGULATOR_AS3722=y
 +CONFIG_REGULATOR_AXP20X=y
@@ -1674,21 +4337,18 @@ index 0000000000..1a5a088de0
 +CONFIG_REGULATOR_LP872X=y
 +CONFIG_REGULATOR_MAX14577=m
 +CONFIG_REGULATOR_MAX8907=y
-+CONFIG_REGULATOR_MAX8952=m
 +CONFIG_REGULATOR_MAX8973=y
 +CONFIG_REGULATOR_MAX8997=m
 +CONFIG_REGULATOR_MAX8998=m
 +CONFIG_REGULATOR_MAX77686=y
 +CONFIG_REGULATOR_MAX77693=m
-+CONFIG_REGULATOR_MAX77802=y
++CONFIG_REGULATOR_MAX77802=m
 +CONFIG_REGULATOR_PALMAS=y
 +CONFIG_REGULATOR_PWM=y
 +CONFIG_REGULATOR_RK808=y
 +CONFIG_REGULATOR_RN5T618=y
-+CONFIG_REGULATOR_S2MPA01=m
 +CONFIG_REGULATOR_S2MPS11=y
 +CONFIG_REGULATOR_S5M8767=y
-+CONFIG_REGULATOR_STM32_BOOSTER=m
 +CONFIG_REGULATOR_STM32_VREFBUF=y
 +CONFIG_REGULATOR_STM32_PWR=y
 +CONFIG_REGULATOR_STPMIC1=y
@@ -1701,177 +4361,27 @@ index 0000000000..1a5a088de0
 +CONFIG_REGULATOR_TPS65910=y
 +CONFIG_REGULATOR_TWL4030=y
 +CONFIG_REGULATOR_VEXPRESS=y
-+CONFIG_CEC_STM32=m
-+CONFIG_MEDIA_SUPPORT=m
-+# CONFIG_DVB_NET is not set
-+# CONFIG_DVB_DYNAMIC_MINORS is not set
++CONFIG_MEDIA_SUPPORT=y
++CONFIG_MEDIA_CAMERA_SUPPORT=y
++CONFIG_MEDIA_CEC_SUPPORT=y
++CONFIG_MEDIA_CONTROLLER=y
++CONFIG_VIDEO_V4L2_SUBDEV_API=y
 +CONFIG_MEDIA_USB_SUPPORT=y
 +CONFIG_USB_VIDEO_CLASS=m
 +CONFIG_V4L_PLATFORM_DRIVERS=y
-+CONFIG_VIDEO_ASPEED=m
-+CONFIG_VIDEO_STM32_DCMI=m
++CONFIG_VIDEO_STM32_DCMI=y
++CONFIG_SOC_CAMERA=m
++CONFIG_SOC_CAMERA_PLATFORM=m
 +CONFIG_V4L_MEM2MEM_DRIVERS=y
 +CONFIG_V4L_TEST_DRIVERS=y
 +CONFIG_VIDEO_VIVID=m
++CONFIG_CEC_PLATFORM_DRIVERS=y
++CONFIG_VIDEO_STM32_HDMI_CEC=m
++# CONFIG_MEDIA_SUBDRV_AUTOSELECT is not set
 +CONFIG_VIDEO_ADV7180=m
-+CONFIG_VIDEO_ADV7604=m
-+CONFIG_VIDEO_ADV7604_CEC=y
 +CONFIG_VIDEO_ML86V7667=m
-+CONFIG_VIDEO_ST_MIPID02=m
-+CONFIG_VIDEO_OV5640=m
-+CONFIG_VIDEO_OV7670=m
-+# CONFIG_CXD2880_SPI_DRV is not set
-+# CONFIG_MEDIA_TUNER_SIMPLE is not set
-+# CONFIG_MEDIA_TUNER_TDA18250 is not set
-+# CONFIG_MEDIA_TUNER_TDA8290 is not set
-+# CONFIG_MEDIA_TUNER_TDA827X is not set
-+# CONFIG_MEDIA_TUNER_TDA18271 is not set
-+# CONFIG_MEDIA_TUNER_TDA9887 is not set
-+# CONFIG_MEDIA_TUNER_TEA5761 is not set
-+# CONFIG_MEDIA_TUNER_TEA5767 is not set
-+# CONFIG_MEDIA_TUNER_MSI001 is not set
-+# CONFIG_MEDIA_TUNER_MT20XX is not set
-+# CONFIG_MEDIA_TUNER_MT2060 is not set
-+# CONFIG_MEDIA_TUNER_MT2063 is not set
-+# CONFIG_MEDIA_TUNER_MT2266 is not set
-+# CONFIG_MEDIA_TUNER_MT2131 is not set
-+# CONFIG_MEDIA_TUNER_QT1010 is not set
-+# CONFIG_MEDIA_TUNER_XC2028 is not set
-+# CONFIG_MEDIA_TUNER_XC5000 is not set
-+# CONFIG_MEDIA_TUNER_XC4000 is not set
-+# CONFIG_MEDIA_TUNER_MXL5005S is not set
-+# CONFIG_MEDIA_TUNER_MXL5007T is not set
-+# CONFIG_MEDIA_TUNER_MC44S803 is not set
-+# CONFIG_MEDIA_TUNER_MAX2165 is not set
-+# CONFIG_MEDIA_TUNER_TDA18218 is not set
-+# CONFIG_MEDIA_TUNER_FC0011 is not set
-+# CONFIG_MEDIA_TUNER_FC0012 is not set
-+# CONFIG_MEDIA_TUNER_FC0013 is not set
-+# CONFIG_MEDIA_TUNER_TDA18212 is not set
-+# CONFIG_MEDIA_TUNER_E4000 is not set
-+# CONFIG_MEDIA_TUNER_FC2580 is not set
-+# CONFIG_MEDIA_TUNER_M88RS6000T is not set
-+# CONFIG_MEDIA_TUNER_TUA9001 is not set
-+# CONFIG_MEDIA_TUNER_SI2157 is not set
-+# CONFIG_MEDIA_TUNER_IT913X is not set
-+# CONFIG_MEDIA_TUNER_R820T is not set
-+# CONFIG_MEDIA_TUNER_MXL301RF is not set
-+# CONFIG_MEDIA_TUNER_QM1D1C0042 is not set
-+# CONFIG_MEDIA_TUNER_QM1D1B0004 is not set
-+# CONFIG_DVB_STB0899 is not set
-+# CONFIG_DVB_STB6100 is not set
-+# CONFIG_DVB_STV090x is not set
-+# CONFIG_DVB_STV0910 is not set
-+# CONFIG_DVB_STV6110x is not set
-+# CONFIG_DVB_STV6111 is not set
-+# CONFIG_DVB_MXL5XX is not set
-+# CONFIG_DVB_M88DS3103 is not set
-+# CONFIG_DVB_DRXK is not set
-+# CONFIG_DVB_TDA18271C2DD is not set
-+# CONFIG_DVB_SI2165 is not set
-+# CONFIG_DVB_MN88472 is not set
-+# CONFIG_DVB_MN88473 is not set
-+# CONFIG_DVB_CX24110 is not set
-+# CONFIG_DVB_CX24123 is not set
-+# CONFIG_DVB_MT312 is not set
-+# CONFIG_DVB_ZL10036 is not set
-+# CONFIG_DVB_ZL10039 is not set
-+# CONFIG_DVB_S5H1420 is not set
-+# CONFIG_DVB_STV0288 is not set
-+# CONFIG_DVB_STB6000 is not set
-+# CONFIG_DVB_STV0299 is not set
-+# CONFIG_DVB_STV6110 is not set
-+# CONFIG_DVB_STV0900 is not set
-+# CONFIG_DVB_TDA8083 is not set
-+# CONFIG_DVB_TDA10086 is not set
-+# CONFIG_DVB_TDA8261 is not set
-+# CONFIG_DVB_VES1X93 is not set
-+# CONFIG_DVB_TUNER_ITD1000 is not set
-+# CONFIG_DVB_TUNER_CX24113 is not set
-+# CONFIG_DVB_TDA826X is not set
-+# CONFIG_DVB_TUA6100 is not set
-+# CONFIG_DVB_CX24116 is not set
-+# CONFIG_DVB_CX24117 is not set
-+# CONFIG_DVB_CX24120 is not set
-+# CONFIG_DVB_SI21XX is not set
-+# CONFIG_DVB_TS2020 is not set
-+# CONFIG_DVB_DS3000 is not set
-+# CONFIG_DVB_MB86A16 is not set
-+# CONFIG_DVB_TDA10071 is not set
-+# CONFIG_DVB_SP8870 is not set
-+# CONFIG_DVB_SP887X is not set
-+# CONFIG_DVB_CX22700 is not set
-+# CONFIG_DVB_CX22702 is not set
-+# CONFIG_DVB_S5H1432 is not set
-+# CONFIG_DVB_DRXD is not set
-+# CONFIG_DVB_L64781 is not set
-+# CONFIG_DVB_TDA1004X is not set
-+# CONFIG_DVB_NXT6000 is not set
-+# CONFIG_DVB_MT352 is not set
-+# CONFIG_DVB_ZL10353 is not set
-+# CONFIG_DVB_DIB3000MB is not set
-+# CONFIG_DVB_DIB3000MC is not set
-+# CONFIG_DVB_DIB7000M is not set
-+# CONFIG_DVB_DIB7000P is not set
-+# CONFIG_DVB_DIB9000 is not set
-+# CONFIG_DVB_TDA10048 is not set
-+# CONFIG_DVB_AF9013 is not set
-+# CONFIG_DVB_EC100 is not set
-+# CONFIG_DVB_STV0367 is not set
-+# CONFIG_DVB_CXD2820R is not set
-+# CONFIG_DVB_CXD2841ER is not set
-+# CONFIG_DVB_RTL2830 is not set
-+# CONFIG_DVB_RTL2832 is not set
-+# CONFIG_DVB_RTL2832_SDR is not set
-+# CONFIG_DVB_SI2168 is not set
-+# CONFIG_DVB_ZD1301_DEMOD is not set
-+# CONFIG_DVB_CXD2880 is not set
-+# CONFIG_DVB_VES1820 is not set
-+# CONFIG_DVB_TDA10021 is not set
-+# CONFIG_DVB_TDA10023 is not set
-+# CONFIG_DVB_STV0297 is not set
-+# CONFIG_DVB_NXT200X is not set
-+# CONFIG_DVB_OR51211 is not set
-+# CONFIG_DVB_OR51132 is not set
-+# CONFIG_DVB_BCM3510 is not set
-+# CONFIG_DVB_LGDT330X is not set
-+# CONFIG_DVB_LGDT3305 is not set
-+# CONFIG_DVB_LGDT3306A is not set
-+# CONFIG_DVB_LG2160 is not set
-+# CONFIG_DVB_S5H1409 is not set
-+# CONFIG_DVB_AU8522_DTV is not set
-+# CONFIG_DVB_AU8522_V4L is not set
-+# CONFIG_DVB_S5H1411 is not set
-+# CONFIG_DVB_S921 is not set
-+# CONFIG_DVB_DIB8000 is not set
-+# CONFIG_DVB_MB86A20S is not set
-+# CONFIG_DVB_TC90522 is not set
-+# CONFIG_DVB_MN88443X is not set
-+# CONFIG_DVB_PLL is not set
-+# CONFIG_DVB_TUNER_DIB0070 is not set
-+# CONFIG_DVB_TUNER_DIB0090 is not set
-+# CONFIG_DVB_DRX39XYJ is not set
-+# CONFIG_DVB_LNBH25 is not set
-+# CONFIG_DVB_LNBH29 is not set
-+# CONFIG_DVB_LNBP21 is not set
-+# CONFIG_DVB_LNBP22 is not set
-+# CONFIG_DVB_ISL6405 is not set
-+# CONFIG_DVB_ISL6421 is not set
-+# CONFIG_DVB_ISL6423 is not set
-+# CONFIG_DVB_A8293 is not set
-+# CONFIG_DVB_LGS8GL5 is not set
-+# CONFIG_DVB_LGS8GXX is not set
-+# CONFIG_DVB_ATBM8830 is not set
-+# CONFIG_DVB_TDA665x is not set
-+# CONFIG_DVB_IX2505V is not set
-+# CONFIG_DVB_M88RS2000 is not set
-+# CONFIG_DVB_AF9033 is not set
-+# CONFIG_DVB_HORUS3A is not set
-+# CONFIG_DVB_ASCOT2E is not set
-+# CONFIG_DVB_HELENE is not set
-+# CONFIG_DVB_CXD2099 is not set
-+# CONFIG_DVB_SP2 is not set
-+CONFIG_IMX_IPUV3_CORE=m
++CONFIG_VIDEO_ADV7511=m
++CONFIG_VIDEO_OV5640=y
 +CONFIG_DRM=y
 +# CONFIG_DRM_FBDEV_EMULATION is not set
 +CONFIG_DRM_EXYNOS=m
@@ -1891,61 +4401,50 @@ index 0000000000..1a5a088de0
 +CONFIG_DRM_PANEL_RAYDIUM_RM68200=y
 +CONFIG_DRM_PANEL_SAMSUNG_S6E63J0X03=m
 +CONFIG_DRM_PANEL_SAMSUNG_S6E8AA0=m
++CONFIG_DRM_DUMB_VGA_DAC=m
 +CONFIG_DRM_NXP_PTN3460=m
 +CONFIG_DRM_PARADE_PS8622=m
 +CONFIG_DRM_SII902X=y
 +CONFIG_DRM_SII9234=m
-+CONFIG_DRM_SIMPLE_BRIDGE=m
-+CONFIG_DRM_TOSHIBA_TC358764=m
-+CONFIG_DRM_I2C_ADV7511=y
++CONFIG_DRM_I2C_ADV7511=m
 +CONFIG_DRM_I2C_ADV7511_AUDIO=y
 +CONFIG_DRM_STI=m
-+CONFIG_DRM_IMX=m
-+CONFIG_DRM_IMX_PARALLEL_DISPLAY=m
-+CONFIG_DRM_IMX_TVE=m
-+CONFIG_DRM_IMX_LDB=m
-+CONFIG_DRM_IMX_HDMI=m
 +CONFIG_DRM_MXSFB=m
-+CONFIG_DRM_PL111=m
-+CONFIG_DRM_LIMA=m
-+CONFIG_DRM_PANFROST=m
-+CONFIG_DRM_ASPEED_GFX=m
-+CONFIG_DRM_LEGACY=y
-+CONFIG_FB_MODE_HELPERS=y
++CONFIG_FB_ARMCLCD=y
++CONFIG_FB_EFI=y
 +CONFIG_FB_SIMPLE=y
-+CONFIG_BACKLIGHT_CLASS_DEVICE=y
++CONFIG_LCD_PLATFORM=m
 +CONFIG_BACKLIGHT_PWM=y
 +CONFIG_BACKLIGHT_AS3711=y
 +CONFIG_BACKLIGHT_GPIO=y
 +CONFIG_FRAMEBUFFER_CONSOLE=y
 +CONFIG_FRAMEBUFFER_CONSOLE_ROTATION=y
-+CONFIG_SOUND=m
-+CONFIG_SND=m
++CONFIG_SOUND=y
++CONFIG_SND=y
 +CONFIG_SND_DYNAMIC_MINORS=y
-+CONFIG_SND_USB_AUDIO=m
-+CONFIG_SND_SOC=m
++CONFIG_SND_USB_AUDIO=y
++CONFIG_SND_SOC=y
 +CONFIG_SND_ATMEL_SOC=m
 +CONFIG_SND_SOC_FSL_SAI=m
-+CONFIG_SND_SOC_STM32_SAI=m
-+CONFIG_SND_SOC_STM32_I2S=m
-+CONFIG_SND_SOC_STM32_SPDIFRX=m
-+CONFIG_SND_SOC_STM32_DFSDM=m
++CONFIG_SND_SOC_STM32_SAI=y
++CONFIG_SND_SOC_STM32_I2S=y
++CONFIG_SND_SOC_STM32_SPDIFRX=y
++CONFIG_SND_SOC_STM32_DFSDM=y
 +CONFIG_SND_SOC_AK4642=m
 +CONFIG_SND_SOC_CPCAP=m
-+CONFIG_SND_SOC_CS42L51_I2C=m
-+CONFIG_SND_SOC_RT5631=m
++CONFIG_SND_SOC_CS42L42=y
++CONFIG_SND_SOC_CS42L51_I2C=y
 +CONFIG_SND_SOC_SGTL5000=m
 +CONFIG_SND_SOC_STI_SAS=m
 +CONFIG_SND_SOC_TLV320AIC23_I2C=m
 +CONFIG_SND_SOC_TS3A227E=m
 +CONFIG_SND_SOC_WM8753=m
 +CONFIG_SND_SOC_WM8903=m
-+CONFIG_SND_SOC_WM8904=m
 +CONFIG_SND_SOC_WM8978=m
-+CONFIG_SND_SOC_WM8994=m
++CONFIG_SND_SOC_WM8994=y
 +CONFIG_SND_SIMPLE_CARD=m
-+CONFIG_SND_AUDIO_GRAPH_CARD=m
-+CONFIG_USB_CONN_GPIO=y
++CONFIG_SND_SIMPLE_SCU_CARD=m
++CONFIG_SND_AUDIO_GRAPH_CARD=y
 +CONFIG_USB=y
 +CONFIG_USB_OTG=y
 +CONFIG_USB_XHCI_HCD=y
@@ -1955,7 +4454,7 @@ index 0000000000..1a5a088de0
 +CONFIG_USB_OHCI_HCD=y
 +CONFIG_USB_OHCI_HCD_PLATFORM=y
 +CONFIG_USB_R8A66597_HCD=m
-+CONFIG_USB_ACM=m
++CONFIG_USB_ACM=y
 +CONFIG_USB_STORAGE=y
 +CONFIG_USB_UAS=m
 +CONFIG_USB_DWC2=y
@@ -1972,8 +4471,7 @@ index 0000000000..1a5a088de0
 +CONFIG_USB_GADGET=y
 +CONFIG_USB_SNP_UDC_PLAT=y
 +CONFIG_USB_BDC_UDC=y
-+CONFIG_USB_ASPEED_VHUB=m
-+CONFIG_USB_CONFIGFS=m
++CONFIG_USB_CONFIGFS=y
 +CONFIG_USB_CONFIGFS_SERIAL=y
 +CONFIG_USB_CONFIGFS_ACM=y
 +CONFIG_USB_CONFIGFS_OBEX=y
@@ -1993,8 +4491,8 @@ index 0000000000..1a5a088de0
 +CONFIG_USB_CONFIGFS_F_UVC=y
 +CONFIG_USB_CONFIGFS_F_PRINTER=y
 +CONFIG_USB_ETH=m
-+CONFIG_TYPEC=m
-+CONFIG_TYPEC_STUSB160X=m
++CONFIG_TYPEC=y
++CONFIG_TYPEC_STUSB=y
 +CONFIG_MMC=y
 +CONFIG_MMC_BLOCK_MINORS=16
 +CONFIG_MMC_ARMMMCI=y
@@ -2023,7 +4521,7 @@ index 0000000000..1a5a088de0
 +CONFIG_LEDS_TRIGGER_DEFAULT_ON=y
 +CONFIG_LEDS_TRIGGER_TRANSIENT=y
 +CONFIG_LEDS_TRIGGER_CAMERA=y
-+CONFIG_LEDS_TRIGGER_AUDIO=m
++CONFIG_EDAC=y
 +CONFIG_RTC_CLASS=y
 +CONFIG_RTC_DRV_AS3722=y
 +CONFIG_RTC_DRV_DS1307=y
@@ -2034,7 +4532,6 @@ index 0000000000..1a5a088de0
 +CONFIG_RTC_DRV_MAX77686=y
 +CONFIG_RTC_DRV_RK808=m
 +CONFIG_RTC_DRV_RS5C372=m
-+CONFIG_RTC_DRV_PCF85363=m
 +CONFIG_RTC_DRV_BQ32K=m
 +CONFIG_RTC_DRV_TWL4030=y
 +CONFIG_RTC_DRV_PALMAS=y
@@ -2045,10 +4542,10 @@ index 0000000000..1a5a088de0
 +CONFIG_RTC_DRV_EM3027=y
 +CONFIG_RTC_DRV_S5M=m
 +CONFIG_RTC_DRV_DA9063=m
++CONFIG_RTC_DRV_EFI=m
 +CONFIG_RTC_DRV_PL031=y
 +CONFIG_RTC_DRV_STM32=y
 +CONFIG_RTC_DRV_CPCAP=m
-+CONFIG_RTC_DRV_ASPEED=m
 +CONFIG_DMADEVICES=y
 +CONFIG_FSL_EDMA=y
 +CONFIG_PL330_DMA=y
@@ -2057,79 +4554,63 @@ index 0000000000..1a5a088de0
 +CONFIG_STM32_MDMA=y
 +CONFIG_DW_DMAC=y
 +CONFIG_VIRTIO_MMIO=y
++CONFIG_CROS_EC_I2C=m
++CONFIG_CROS_EC_SPI=m
 +CONFIG_COMMON_CLK_MAX77686=y
 +CONFIG_COMMON_CLK_RK808=m
-+CONFIG_COMMON_CLK_SCMI=y
 +CONFIG_COMMON_CLK_S2MPS11=m
-+CONFIG_CLK_QORIQ=y
 +CONFIG_HWSPINLOCK=y
 +CONFIG_HWSPINLOCK_STM32=y
-+CONFIG_CLKSRC_STM32_LP=y
-+CONFIG_ARM_SMC_MBOX=y
++CONFIG_ARM_TIMER_SP804=y
 +CONFIG_PL320_MBOX=y
 +CONFIG_STM32_IPCC=y
 +CONFIG_REMOTEPROC=y
-+CONFIG_REMOTEPROC_SRM_CORE=y
-+CONFIG_REMOTEPROC_SRM_DEV=y
 +CONFIG_STM32_RPROC=y
 +CONFIG_RPMSG_VIRTIO=y
-+CONFIG_RPMSG_TTY=m
-+CONFIG_ASPEED_LPC_CTRL=m
-+CONFIG_ASPEED_LPC_SNOOP=m
-+CONFIG_ASPEED_P2A_CTRL=m
-+CONFIG_DEVFREQ_GOV_PASSIVE=m
-+CONFIG_PM_DEVFREQ_EVENT=y
-+CONFIG_EXTCON_MAX14577=m
-+CONFIG_EXTCON_MAX77693=m
-+CONFIG_EXTCON_MAX8997=m
-+CONFIG_MEMORY=y
-+CONFIG_STM32_FMC2_EBI=y
++CONFIG_RPMSG_TTY=y
 +CONFIG_IIO=y
 +CONFIG_IIO_SW_TRIGGER=y
-+CONFIG_ASPEED_ADC=m
 +CONFIG_CPCAP_ADC=m
 +CONFIG_SD_ADC_MODULATOR=y
-+CONFIG_STM32_ADC_CORE=m
-+CONFIG_STM32_ADC=m
-+CONFIG_STM32_DFSDM_ADC=m
++CONFIG_STM32_ADC_CORE=y
++CONFIG_STM32_ADC=y
++CONFIG_STM32_ADC_TEMP=y
++CONFIG_STM32_DFSDM_ADC=y
 +CONFIG_VF610_ADC=m
-+CONFIG_XILINX_XADC=y
-+CONFIG_STM32_DAC=m
++CONFIG_STM32_LPTIMER_CNT=y
++CONFIG_STM32_DAC=y
 +CONFIG_MPU3050_I2C=y
++CONFIG_HTS221=y
++CONFIG_IIO_ST_LSM6DSX=m
 +CONFIG_CM36651=m
 +CONFIG_SENSORS_ISL29018=y
 +CONFIG_SENSORS_ISL29028=y
 +CONFIG_AK8975=y
 +CONFIG_IIO_HRTIMER_TRIGGER=y
-+CONFIG_IIO_STM32_LPTIMER_TRIGGER=m
++CONFIG_IIO_STM32_LPTIMER_TRIGGER=y
++CONFIG_IIO_ST_PRESS=m
 +CONFIG_PWM=y
 +CONFIG_PWM_ATMEL_HLCDC_PWM=m
 +CONFIG_PWM_FSL_FTM=m
-+CONFIG_PWM_STM32=m
-+CONFIG_PWM_STM32_LP=m
-+CONFIG_RESET_BRCMSTB_RESCAL=y
++CONFIG_PWM_STM32=y
++CONFIG_PWM_STM32_LP=y
 +CONFIG_PHY_CPCAP_USB=m
 +CONFIG_PHY_SAMSUNG_USB2=m
 +CONFIG_PHY_STM32_USBPHYC=y
++CONFIG_STM32_DDR_PMU=y
++CONFIG_RAS=y
 +CONFIG_NVMEM_STM32_ROMEM=y
-+CONFIG_FSI=m
-+CONFIG_FSI_MASTER_GPIO=m
-+CONFIG_FSI_MASTER_HUB=m
-+CONFIG_FSI_MASTER_ASPEED=m
-+CONFIG_FSI_SCOM=m
-+CONFIG_FSI_SBEFIFO=m
-+CONFIG_FSI_OCC=m
 +CONFIG_TEE=y
 +CONFIG_OPTEE=y
-+CONFIG_COUNTER=m
-+CONFIG_STM32_TIMER_CNT=m
-+CONFIG_STM32_LPTIMER_CNT=m
 +CONFIG_EXT4_FS=y
++CONFIG_EXT4_FS_POSIX_ACL=y
 +CONFIG_AUTOFS4_FS=y
++CONFIG_FUSE_FS=y
 +CONFIG_OVERLAY_FS=y
 +CONFIG_MSDOS_FS=y
 +CONFIG_VFAT_FS=y
 +CONFIG_NTFS_FS=y
++CONFIG_TMPFS=y
 +CONFIG_TMPFS_POSIX_ACL=y
 +CONFIG_JFFS2_FS=y
 +CONFIG_UBIFS_FS=y
@@ -2140,27 +4621,27 @@ index 0000000000..1a5a088de0
 +CONFIG_PSTORE_CONSOLE=y
 +CONFIG_PSTORE_PMSG=y
 +CONFIG_PSTORE_RAM=y
++CONFIG_SYSV_FS=y
 +CONFIG_NFS_FS=y
 +CONFIG_NFS_V3_ACL=y
 +CONFIG_NFS_V4=y
-+CONFIG_NFS_V4_1=y
-+CONFIG_NFS_V4_2=y
 +CONFIG_ROOT_NFS=y
 +CONFIG_NLS_CODEPAGE_437=y
 +CONFIG_NLS_ISO8859_1=y
 +CONFIG_NLS_UTF8=y
 +CONFIG_CRYPTO_USER=m
-+CONFIG_CRYPTO_XTS=m
++CONFIG_CRYPTO_CCM=y
++CONFIG_CRYPTO_GCM=y
++CONFIG_CRYPTO_CMAC=y
 +CONFIG_CRYPTO_SHA512=m
-+CONFIG_CRYPTO_USER_API_HASH=m
++CONFIG_CRYPTO_ARC4=y
++CONFIG_CRYPTO_USER_API_HASH=y
 +CONFIG_CRYPTO_USER_API_SKCIPHER=m
 +CONFIG_CRYPTO_USER_API_RNG=m
 +CONFIG_CRYPTO_USER_API_AEAD=m
-+CONFIG_CRYPTO_DEV_STM32_CRC=m
-+CONFIG_CRYPTO_DEV_STM32_HASH=m
-+CONFIG_CRYPTO_DEV_STM32_CRYP=m
-+CONFIG_CRYPTO_DEV_AMLOGIC_GXL=m
-+CONFIG_CMA_SIZE_MBYTES=128
++CONFIG_CRYPTO_DEV_STM32_CRC=y
++CONFIG_CRYPTO_DEV_STM32_HASH=y
++CONFIG_CRYPTO_DEV_STM32_CRYP=y
 +CONFIG_PRINTK_TIME=y
 +CONFIG_DYNAMIC_DEBUG=y
 +CONFIG_DEBUG_INFO=y
@@ -2169,25 +4650,25 @@ index 0000000000..1a5a088de0
 +CONFIG_DEBUG_SECTION_MISMATCH=y
 +# CONFIG_SECTION_MISMATCH_WARN_ONLY is not set
 +CONFIG_MAGIC_SYSRQ=y
-+CONFIG_DEBUG_FS=y
 +# CONFIG_SCHED_DEBUG is not set
++CONFIG_RCU_TRACE=y
 +CONFIG_SAMPLES=y
 +CONFIG_SAMPLE_RPMSG_CLIENT=m
-diff --git a/board/octavo/brk/overlay/boot/extlinux/extlinux.conf b/board/octavo/brk/overlay/boot/extlinux/extlinux.conf
+diff --git a/board/octavo/red/overlay/boot/extlinux/extlinux.conf b/board/octavo/red/overlay/boot/extlinux/extlinux.conf
 new file mode 100644
-index 0000000000..025eff9354
+index 0000000000..a3f8a75d35
 --- /dev/null
-+++ b/board/octavo/brk/overlay/boot/extlinux/extlinux.conf
++++ b/board/octavo/red/overlay/boot/extlinux/extlinux.conf
 @@ -0,0 +1,4 @@
 +label stm32mp157c-dk2-buildroot
 +  kernel /boot/zImage
-+  devicetree /boot/stm32mp157c-osd32mp1-brk.dtb
-+  append root=/dev/mmcblk0p4 rootwait
-diff --git a/board/octavo/brk/post-image.sh b/board/octavo/brk/post-image.sh
++  devicetree /boot/osd32mp1-red.dtb
++  append root=/dev/mmcblk1p4 rootwait
+diff --git a/board/octavo/red/post-image.sh b/board/octavo/red/post-image.sh
 new file mode 100755
 index 0000000000..fc2fbd1134
 --- /dev/null
-+++ b/board/octavo/brk/post-image.sh
++++ b/board/octavo/red/post-image.sh
 @@ -0,0 +1,39 @@
 +#!/usr/bin/env bash
 +
@@ -2228,11 +4709,632 @@ index 0000000000..fc2fbd1134
 +}
 +
 +main $@
-diff --git a/board/octavo/brk/tfa-dts/osd32mp1_ddr.dtsi b/board/octavo/brk/tfa-dts/osd32mp1_ddr.dtsi
+diff --git a/board/octavo/red/tfa-dts/osd32mp1-red.dts b/board/octavo/red/tfa-dts/osd32mp1-red.dts
 new file mode 100644
-index 0000000000..e8c9eebfc6
+index 0000000000..b7864fbc55
 --- /dev/null
-+++ b/board/octavo/brk/tfa-dts/osd32mp1_ddr.dtsi
++++ b/board/octavo/red/tfa-dts/osd32mp1-red.dts
+@@ -0,0 +1,615 @@
++/* SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause) */
++/*
++ * Copyright (C) STMicroelectronics 2020 - All Rights Reserved
++ * Author: STM32CubeMX code generation for STMicroelectronics.
++ */
++
++/* For more information on Device Tree configuration, please refer to
++ * https://wiki.st.com/stm32mpu/wiki/Category:Device_tree_configuration
++ */
++
++/dts-v1/;
++#include <dt-bindings/clock/stm32mp1-clksrc.h>
++#include "stm32mp15-osd32mp1-ddr3-1x4Gb-1066-binG.dtsi"
++
++#include "stm32mp157c.dtsi"
++#include "stm32mp157cac-pinctrl.dtsi"
++#include "stm32mp15-ddr.dtsi"
++#include "stm32mp157c-security.dtsi"
++#include <dt-bindings/power/stm32mp1-power.h>
++
++
++/ {
++	model = "Octavo OSD32MP1-RED board";
++	compatible = "octavo,osd32mp1-red", "st,stm32mp157";
++
++
++	chosen {
++		stdout-path = "serial0:115200n8";
++	};
++
++	aliases {
++		serial0 = &uart4;
++		serial1 = &usart3;
++		serial2 = &uart7;
++		gpio0 = &gpioa;
++		gpio1 = &gpiob;
++		gpio2 = &gpioc;
++		gpio3 = &gpiod;
++		gpio4 = &gpioe;
++		gpio5 = &gpiof;
++		gpio6 = &gpiog;
++		gpio7 = &gpioh;
++		gpio8 = &gpioi;
++		gpio25 = &gpioz;
++		i2c3 = &i2c4;
++	};
++
++
++	clocks {
++
++
++
++		clk_lse: clk-lse {
++			st,drive = < LSEDRV_MEDIUM_HIGH >;
++
++
++
++		};
++
++		clk_hse: clk-hse {
++			st,digbypass;
++
++
++
++		};
++	};
++
++}; /*root*/
++
++&pinctrl {
++	sdmmc1_pins_mx: sdmmc1_mx-0 {
++		pins1 {
++			pinmux = <STM32_PINMUX('C', 8, AF12)>, /* SDMMC1_D0 */
++					 <STM32_PINMUX('C', 9, AF12)>, /* SDMMC1_D1 */
++					 <STM32_PINMUX('C', 10, AF12)>, /* SDMMC1_D2 */
++					 <STM32_PINMUX('C', 11, AF12)>, /* SDMMC1_D3 */
++					 <STM32_PINMUX('D', 2, AF12)>; /* SDMMC1_CMD */
++			bias-disable;
++			drive-push-pull;
++			slew-rate = <1>;
++		};
++		pins2 {
++			pinmux = <STM32_PINMUX('C', 12, AF12)>; /* SDMMC1_CK */
++			bias-disable;
++			drive-push-pull;
++			slew-rate = <3>;
++		};
++	};
++
++	sdmmc2_pins_mx: sdmmc2_mx-0 {
++		pins1 {
++			pinmux = <STM32_PINMUX('A', 8, AF9)>, /* SDMMC2_D4 */
++					 <STM32_PINMUX('A', 9, AF10)>, /* SDMMC2_D5 */
++					 <STM32_PINMUX('B', 3, AF9)>, /* SDMMC2_D2 */
++					 <STM32_PINMUX('B', 4, AF9)>, /* SDMMC2_D3 */
++					 <STM32_PINMUX('B', 14, AF9)>, /* SDMMC2_D0 */
++					 <STM32_PINMUX('B', 15, AF9)>, /* SDMMC2_D1 */
++					 <STM32_PINMUX('C', 7, AF10)>, /* SDMMC2_D7 */
++					 <STM32_PINMUX('E', 5, AF9)>, /* SDMMC2_D6 */
++					 <STM32_PINMUX('G', 6, AF10)>; /* SDMMC2_CMD */
++			bias-pull-up;
++			drive-push-pull;
++			slew-rate = <1>;
++		};
++		pins2 {
++			pinmux = <STM32_PINMUX('E', 3, AF9)>; /* SDMMC2_CK */
++			bias-pull-up;
++			drive-push-pull;
++			slew-rate = <2>;
++		};
++	};
++
++	sdmmc3_pins_mx: sdmmc3_mx-0 {
++		pins1 {
++			pinmux = <STM32_PINMUX('D', 7, AF10)>, /* SDMMC3_D3 */
++					 <STM32_PINMUX('F', 0, AF9)>, /* SDMMC3_D0 */
++					 <STM32_PINMUX('F', 1, AF9)>, /* SDMMC3_CMD */
++					 <STM32_PINMUX('F', 4, AF9)>, /* SDMMC3_D1 */
++					 <STM32_PINMUX('F', 5, AF9)>; /* SDMMC3_D2 */
++			bias-disable;
++			drive-push-pull;
++			slew-rate = <1>;
++		};
++		pins2 {
++			pinmux = <STM32_PINMUX('G', 15, AF10)>; /* SDMMC3_CK */
++			bias-disable;
++			drive-push-pull;
++			slew-rate = <2>;
++		};
++	};
++
++	uart4_pins_mx: uart4_mx-0 {
++		pins1 {
++			pinmux = <STM32_PINMUX('B', 2, AF8)>; /* UART4_RX */
++			bias-disable;
++		};
++		pins2 {
++			pinmux = <STM32_PINMUX('G', 11, AF6)>; /* UART4_TX */
++			bias-disable;
++			drive-push-pull;
++			slew-rate = <0>;
++		};
++	};
++
++
++
++};
++
++&pinctrl_z {
++	i2c4_pins_z_mx: i2c4_mx-0 {
++		pins {
++			pinmux = <STM32_PINMUX('Z', 4, AF6)>, /* I2C4_SCL */
++			         <STM32_PINMUX('Z', 5, AF6)>; /* I2C4_SDA */
++			bias-disable;
++			drive-open-drain;
++			slew-rate = <0>;
++		};
++	};
++
++
++
++};
++
++&rcc {
++	st,csi-cal;
++	st,hsi-cal;
++	st,cal-sec = <60>;
++	st,clksrc = <
++		CLK_MPU_PLL1P
++		CLK_AXI_PLL2P
++		CLK_MCU_PLL3P
++		CLK_PLL12_HSE
++		CLK_PLL3_HSE
++		CLK_PLL4_HSE
++		CLK_RTC_LSE
++		CLK_MCO1_DISABLED
++		CLK_MCO2_DISABLED
++	>;
++	st,clkdiv = <
++		1 		/*MPU*/
++		0 		/*AXI*/
++		0 		/*MCU*/
++		1 		/*APB1*/
++		1 		/*APB2*/
++		1 		/*APB3*/
++		1 		/*APB4*/
++		2 		/*APB5*/
++		23 		/*RTC*/
++		0 		/*MCO1*/
++		0 		/*MCO2*/
++	>;
++	st,pkcs = <
++		CLK_CKPER_HSE
++		CLK_ETH_PLL3Q
++		CLK_SDMMC12_PLL4P
++		CLK_DSI_DSIPLL
++		CLK_STGEN_HSE
++		CLK_USBPHY_HSE
++		CLK_SPI2S1_DISABLED
++		CLK_SPI2S23_PLL3Q
++		CLK_SPI45_PCLK2
++		CLK_SPI6_DISABLED
++		CLK_I2C46_HSI
++		CLK_SDMMC3_PLL4P
++                CLK_USBO_USBPHY
++		CLK_ADC_CKPER
++		CLK_CEC_DISABLED
++		CLK_I2C12_HSI
++		CLK_I2C35_PCLK1
++		CLK_UART1_DISABLED
++		CLK_UART24_HSI
++		CLK_UART35_HSI
++		CLK_UART6_DISABLED
++		CLK_UART78_DISABLED
++		CLK_SPDIF_DISABLED
++		CLK_SAI1_DISABLED
++		CLK_SAI2_CKPER
++		CLK_SAI3_DISABLED
++		CLK_SAI4_DISABLED
++		CLK_RNG1_LSI
++		CLK_LPTIM1_DISABLED
++		CLK_LPTIM23_DISABLED
++		CLK_LPTIM45_DISABLED
++	>;
++	pll1:st,pll@0 {
++		cfg = < 2 80 0 1 1 PQR(1,0,0) >;
++		frac = < 0x800>;
++	};
++	pll2:st,pll@1 {
++		cfg = < 2 65 1 0 0 PQR(1,1,1) >;
++		frac = < 0x1400>;
++	};
++	pll3:st,pll@2 {
++		cfg = < 1 61 3 5 36 PQR(1,1,0) >;
++		frac = < 0x1000 >;
++	};
++	/* VCO = 594.0 MHz => P = 99, Q = 74, R = 74 */
++	pll4: st,pll@3 {
++		cfg = < 3 98 5 7 7 PQR(1,1,1) >;
++	};
++};
++
++&bsec{
++	status = "okay";
++	secure-status = "okay";
++
++
++	board_id: board_id@ec {
++		reg = <0xec 0x4>;
++		status = "okay";
++		secure-status = "okay";
++	};
++
++};
++
++&etzpc{
++	st,decprot = <
++	/*"Non Secured" peripherals*/
++	DECPROT(STM32MP1_ETZPC_DCMI_ID, DECPROT_NS_RW, DECPROT_UNLOCK)
++	DECPROT(STM32MP1_ETZPC_ETH_ID, DECPROT_NS_RW, DECPROT_UNLOCK)
++	DECPROT(STM32MP1_ETZPC_I2C1_ID, DECPROT_NS_RW, DECPROT_UNLOCK)
++	DECPROT(STM32MP1_ETZPC_I2C2_ID, DECPROT_NS_RW, DECPROT_UNLOCK)
++	DECPROT(STM32MP1_ETZPC_I2C4_ID, DECPROT_NS_RW, DECPROT_UNLOCK)
++	DECPROT(STM32MP1_ETZPC_I2C5_ID, DECPROT_NS_RW, DECPROT_UNLOCK)
++	DECPROT(STM32MP1_ETZPC_SPI2_ID, DECPROT_NS_RW, DECPROT_UNLOCK)
++	DECPROT(STM32MP1_ETZPC_RNG1_ID, DECPROT_NS_RW, DECPROT_UNLOCK)
++	DECPROT(STM32MP1_ETZPC_SAI2_ID, DECPROT_NS_RW, DECPROT_UNLOCK)
++	DECPROT(STM32MP1_ETZPC_SDMMC3_ID, DECPROT_NS_RW, DECPROT_UNLOCK)
++	DECPROT(STM32MP1_ETZPC_DLYBSD3_ID, DECPROT_NS_RW, DECPROT_UNLOCK)
++	DECPROT(STM32MP1_ETZPC_SPI5_ID, DECPROT_NS_RW, DECPROT_UNLOCK)
++	DECPROT(STM32MP1_ETZPC_TIM5_ID, DECPROT_NS_RW, DECPROT_UNLOCK)
++	DECPROT(STM32MP1_ETZPC_UART4_ID, DECPROT_NS_RW, DECPROT_UNLOCK)
++	DECPROT(STM32MP1_ETZPC_USART2_ID, DECPROT_NS_RW, DECPROT_UNLOCK)
++
++	/*Restriction: following IDs are not managed  - please to use User-Section if needed:
++		STM32MP1_ETZPC_DMA1_ID, STM32MP1_ETZPC_DMA2_ID, STM32MP1_ETZPC_DMAMUX_ID,
++		STM32MP1_ETZPC_SRAMx_ID, STM32MP1_ETZPC_RETRAM_ID, STM32MP1_ETZPC_BKPSRAM_ID*/
++
++
++		/*STM32CubeMX generates a basic and standard configuration for ETZPC.
++		Additional device configurations can be added here if needed.
++		"etzpc" node could be also overloaded in "addons" User-Section.*/
++
++	>;
++
++	secure-status = "okay";
++
++
++
++};
++
++&i2c4{
++	pinctrl-names = "default";
++	pinctrl-0 = <&i2c4_pins_z_mx>;
++	status = "okay";
++	secure-status = "okay";
++
++
++	i2c-scl-rising-time-ns = <185>;
++	i2c-scl-falling-time-ns = <20>;
++
++	pmic: stpmic@33 {
++		compatible = "st,stpmic1";
++		reg = <0x33>;
++		interrupts-extended = <&exti_pwr 55 IRQ_TYPE_EDGE_FALLING>;
++		interrupt-controller;
++		#interrupt-cells = <2>;
++		status = "okay";
++
++		st,main-control-register = <0x04>;
++		st,vin-control-register = <0xc0>;
++		st,usb-control-register = <0x20>;
++
++		regulators {
++			compatible = "st,stpmic1-regulators";
++
++			ldo1-supply = <&v3v3>;
++			ldo3-supply = <&vdd_ddr>;
++			ldo6-supply = <&v3v3>;
++
++			vddcore: buck1 {
++				regulator-name = "vddcore";
++				regulator-min-microvolt = <1200000>;
++				regulator-max-microvolt = <1350000>;
++				regulator-always-on;
++				regulator-initial-mode = <0>;
++				regulator-over-current-protection;
++				lp-stop {
++					regulator-on-in-suspend;
++					regulator-suspend-microvolt = <1200000>;
++				};
++				standby-ddr-sr {
++					regulator-off-in-suspend;
++				};
++				standby-ddr-off {
++					regulator-off-in-suspend;
++				};
++			};
++
++			vdd_ddr: buck2 {
++				regulator-name = "vdd_ddr";
++				regulator-min-microvolt = <1350000>;
++				regulator-max-microvolt = <1350000>;
++				regulator-always-on;
++				regulator-initial-mode = <0>;
++				regulator-over-current-protection;
++				lp-stop {
++					regulator-suspend-microvolt = <1350000>;
++					regulator-on-in-suspend;
++				};
++				standby-ddr-sr {
++					regulator-suspend-microvolt = <1350000>;
++					regulator-on-in-suspend;
++				};
++				standby-ddr-off {
++					regulator-off-in-suspend;
++				};
++			};
++
++			vdd: buck3 {
++				regulator-name = "vdd";
++				regulator-min-microvolt = <3300000>;
++				regulator-max-microvolt = <3300000>;
++				regulator-always-on;
++				st,mask-reset;
++				regulator-initial-mode = <0>;
++				regulator-over-current-protection;
++				lp-stop {
++					regulator-suspend-microvolt = <3300000>;
++					regulator-on-in-suspend;
++				};
++				standby-ddr-sr {
++					regulator-suspend-microvolt = <3300000>;
++					regulator-on-in-suspend;
++				};
++				standby-ddr-off {
++					regulator-suspend-microvolt = <3300000>;
++					regulator-on-in-suspend;
++				};
++			};
++
++			v3v3: buck4 {
++				regulator-name = "v3v3";
++				regulator-min-microvolt = <3300000>;
++				regulator-max-microvolt = <3300000>;
++				regulator-always-on;
++				regulator-over-current-protection;
++				regulator-initial-mode = <0>;
++				lp-stop {
++					regulator-suspend-microvolt = <3300000>;
++					regulator-on-in-suspend;
++				};
++				standby-ddr-sr {
++					regulator-off-in-suspend;
++				};
++				standby-ddr-off {
++					regulator-off-in-suspend;
++				};
++			};
++
++			v1v8_audio: ldo1 {
++				regulator-name = "v1v8_audio";
++				regulator-min-microvolt = <1800000>;
++				regulator-max-microvolt = <1800000>;
++				regulator-always-on;
++				standby-ddr-sr {
++						regulator-off-in-suspend;
++					};
++					standby-ddr-off {
++						regulator-off-in-suspend;
++					};
++			};
++
++			v3v3_hdmi: ldo2 {
++				regulator-name = "v3v3_hdmi";
++				regulator-min-microvolt = <3300000>;
++				regulator-max-microvolt = <3300000>;
++				regulator-always-on;
++				standby-ddr-sr {
++					regulator-off-in-suspend;
++				};
++				standby-ddr-off {
++					regulator-off-in-suspend;
++				};
++			};
++
++			vtt_ddr: ldo3 {
++				regulator-name = "vtt_ddr";
++				regulator-min-microvolt = <500000>;
++				regulator-max-microvolt = <750000>;
++				regulator-always-on;
++				regulator-over-current-protection;
++				lp-stop {
++					regulator-off-in-suspend;
++				};
++				standby-ddr-sr {
++					regulator-off-in-suspend;
++				};
++				standby-ddr-off {
++					regulator-off-in-suspend;
++				};
++			};
++
++			vdd_usb: ldo4 {
++				regulator-name = "vdd_usb";
++				regulator-min-microvolt = <3300000>;
++				regulator-max-microvolt = <3300000>;
++				standby-ddr-sr {
++					regulator-off-in-suspend;
++				};
++				standby-ddr-off {
++					regulator-off-in-suspend;
++				};
++			};
++
++			vdda: ldo5 {
++				regulator-name = "vdda";
++				regulator-min-microvolt = <2900000>;
++				regulator-max-microvolt = <2900000>;
++				regulator-boot-on;
++				standby-ddr-sr {
++					regulator-off-in-suspend;
++				};
++				standby-ddr-off {
++					regulator-off-in-suspend;
++				};
++			};
++
++			v1v2_hdmi: ldo6 {
++				regulator-name = "v1v2_hdmi";
++				regulator-min-microvolt = <1200000>;
++				regulator-max-microvolt = <1200000>;
++				regulator-always-on;
++				standby-ddr-sr {
++					regulator-off-in-suspend;
++				};
++				standby-ddr-off {
++					regulator-off-in-suspend;
++				};
++			};
++
++			vref_ddr: vref_ddr {
++				regulator-name = "vref_ddr";
++				regulator-always-on;
++				regulator-over-current-protection;
++				lp-stop {
++					regulator-on-in-suspend;
++				};
++				standby-ddr-sr {
++					regulator-on-in-suspend;
++				};
++				standby-ddr-off {
++					regulator-off-in-suspend;
++				};
++			};
++		};
++	};
++
++};
++
++&iwdg2{
++	status = "okay";
++	secure-status = "okay";
++
++
++	timeout-sec = <32>;
++
++};
++
++&pwr{
++	status = "okay";
++	secure-status = "okay";
++
++
++	system_suspend_supported_soc_modes = <
++		STM32_PM_CSLEEP_RUN
++		STM32_PM_CSTOP_ALLOW_LP_STOP
++		STM32_PM_CSTOP_ALLOW_STANDBY_DDR_SR
++	>;
++	system_off_soc_mode = <STM32_PM_CSTOP_ALLOW_STANDBY_DDR_OFF>;
++
++	pwr-regulators {
++		vdd-supply = <&vdd>;
++	};
++
++};
++
++&rcc{
++	status = "okay";
++	secure-status = "okay";
++
++
++
++};
++
++&rng1{
++	status = "okay";
++	secure-status = "okay";
++
++
++
++};
++
++&rtc{
++	status = "okay";
++	secure-status = "okay";
++
++
++
++};
++
++&sdmmc1{
++	pinctrl-names = "default";
++	pinctrl-0 = <&sdmmc1_pins_mx>;
++	status = "okay";
++
++
++	broken-cd;
++	st,neg-edge;
++	bus-width = <4>;
++	vmmc-supply = <&v3v3>;
++
++};
++
++&sdmmc2{
++	pinctrl-names = "default";
++	pinctrl-0 = <&sdmmc2_pins_mx>;
++	status = "okay";
++
++
++
++};
++
++&sdmmc3{
++	pinctrl-names = "default";
++	pinctrl-0 = <&sdmmc3_pins_mx>;
++	status = "okay";
++
++
++
++};
++
++&tamp{
++	status = "okay";
++	secure-status = "okay";
++
++
++
++};
++
++&uart4{
++	pinctrl-names = "default";
++	pinctrl-0 = <&uart4_pins_mx>;
++	status = "okay";
++
++
++
++};
++
++
++/delete-node/ &qspi_bk1_pins_a;
++/delete-node/ &qspi_bk2_pins_a;
++/delete-node/ &qspi_clk_pins_a;
++/delete-node/ &sdmmc1_b4_pins_a;
++/delete-node/ &sdmmc1_dir_pins_a;
++/delete-node/ &sdmmc1_dir_pins_b;
++/delete-node/ &sdmmc2_b4_pins_a;
++/delete-node/ &sdmmc2_d47_pins_a;
++/delete-node/ &uart4_pins_a;
++/delete-node/ &uart7_pins_a;
++/delete-node/ &usart3_pins_a;
++/delete-node/ &usart3_pins_b;
++/delete-node/ &i2c4_pins_a;
++
++
+diff --git a/board/octavo/red/tfa-dts/stm32mp15-osd32mp1-ddr3-1x4Gb-1066-binG.dtsi b/board/octavo/red/tfa-dts/stm32mp15-osd32mp1-ddr3-1x4Gb-1066-binG.dtsi
+new file mode 100644
+index 0000000000..b85f6cde72
+--- /dev/null
++++ b/board/octavo/red/tfa-dts/stm32mp15-osd32mp1-ddr3-1x4Gb-1066-binG.dtsi
 @@ -0,0 +1,119 @@
 +/*
 + * Copyright (C) 2015-2018, STMicroelectronics - All Rights Reserved
@@ -2250,7 +5352,7 @@ index 0000000000..e8c9eebfc6
 + * Relaxed Timing Mode: false
 + * Address mapping type: RBC
 + *
-+ * Save Date: 2020.08.27, save Time: 15:22:11
++ * Save Date: 2020.02.08, save Time: 23:22:33
 + */
 +
 +#define DDR_MEM_NAME	"DDR3-DDR3L 16bits 533000Khz"
@@ -2339,12 +5441,12 @@ index 0000000000..e8c9eebfc6
 +#define DDR_ZQ0CR1 0x00000038
 +#define DDR_DX0GCR 0x0000CE81
 +#define DDR_DX0DLLCR 0x40000000
-+#define DDR_DX0DQTR 0x00112121
-+#define DDR_DX0DQSTR 0x3D200000
++#define DDR_DX0DQTR 0xFFFFFFFF
++#define DDR_DX0DQSTR 0x3DB02000
 +#define DDR_DX1GCR 0x0000CE81
 +#define DDR_DX1DLLCR 0x40000000
-+#define DDR_DX1DQTR 0x11100121
-+#define DDR_DX1DQSTR 0x3D200000
++#define DDR_DX1DQTR 0xFFFFFFFF
++#define DDR_DX1DQSTR 0x3DB02000
 +#define DDR_DX2GCR 0x0000CE80
 +#define DDR_DX2DLLCR 0x40000000
 +#define DDR_DX2DQTR 0xFFFFFFFF
@@ -2353,648 +5455,1597 @@ index 0000000000..e8c9eebfc6
 +#define DDR_DX3DLLCR 0x40000000
 +#define DDR_DX3DQTR 0xFFFFFFFF
 +#define DDR_DX3DQSTR 0x3DB02000
-diff --git a/board/octavo/brk/tfa-dts/stm32mp157c-osd32mp1-brk.dts b/board/octavo/brk/tfa-dts/stm32mp157c-osd32mp1-brk.dts
+diff --git a/board/octavo/red/uboot-patches/0001-Add-OSD32MP1-RED-Device-Tree-support.patch b/board/octavo/red/uboot-patches/0001-Add-OSD32MP1-RED-Device-Tree-support.patch
 new file mode 100644
-index 0000000000..1820c60160
+index 0000000000..a2e39f2c35
 --- /dev/null
-+++ b/board/octavo/brk/tfa-dts/stm32mp157c-osd32mp1-brk.dts
-@@ -0,0 +1,581 @@
-+/* SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause) */
-+/*
-+ * Copyright (C) STMicroelectronics 2020 - All Rights Reserved
-+ * Author: STM32CubeMX code generation for STMicroelectronics.
-+ */
-+
-+/* For more information on Device Tree configuration, please refer to
-+ * https://wiki.st.com/stm32mpu/wiki/Category:Device_tree_configuration
-+ */
-+
-+/dts-v1/;
-+#include <dt-bindings/pinctrl/stm32-pinfunc.h>
-+#include <dt-bindings/clock/stm32mp1-clksrc.h>
-+#include <dt-bindings/soc/st,stm32-etzpc.h>
-+#include <dt-bindings/power/stm32mp1-power.h>
-+
-+#include "osd32mp1_ddr.dtsi"
-+#include "stm32mp157.dtsi"
-+#include "stm32mp15xc.dtsi"
-+#include "stm32mp15xxac-pinctrl.dtsi"
-+#include "stm32mp15-ddr.dtsi"
-+
-+/ {
-+	model = "Octavo OSD32MP1 BRK board";
-+	compatible = "st,stm32mp157c-osd32mp1-brk", "st,stm32mp157";
-+
-+	memory@c0000000{
-+		device_type = "memory";
-+		reg = <0xc0000000 0x20000000>;
-+	};
-+
-+	vin:vin{
-+		compatible = "regulator-fixed";
-+		regulator-name = "vin";
-+		regulator-min-microvolt = <5000000>;
-+		regulator-max-microvolt = <5000000>;
-+		regulator-always-on;
-+	};
-+
-+	aliases{
-+		serial0 = &uart4;
-+	};
-+
-+	chosen{
-+		stdout-path = "serial0:115200n8";
-+	};
-+
-+	clocks {
-+		clk_lse: clk-lse {
-+			st,drive = < LSEDRV_MEDIUM_HIGH >;
-+		};
-+	};
-+
-+};
-+
-+&clk_hse {
-+	st,digbypass;
-+};
-+
-+&pinctrl {
-+	sdmmc1_pins_mx: sdmmc1_mx-0 {
-+		pins1 {
-+			pinmux = <STM32_PINMUX('C', 8, AF12)>, /* SDMMC1_D0 */
-+					 <STM32_PINMUX('C', 9, AF12)>, /* SDMMC1_D1 */
-+					 <STM32_PINMUX('C', 10, AF12)>, /* SDMMC1_D2 */
-+					 <STM32_PINMUX('C', 11, AF12)>, /* SDMMC1_D3 */
-+					 <STM32_PINMUX('D', 2, AF12)>; /* SDMMC1_CMD */
-+			bias-disable;
-+			drive-push-pull;
-+			slew-rate = <1>;
-+		};
-+		pins2 {
-+			pinmux = <STM32_PINMUX('C', 12, AF12)>; /* SDMMC1_CK */
-+			bias-disable;
-+			drive-push-pull;
-+			slew-rate = <2>;
-+		};
-+	};
-+
-+	uart4_pins_mx: uart4_mx-0 {
-+		pins1 {
-+			pinmux = <STM32_PINMUX('B', 2, AF8)>; /* UART4_RX */
-+			bias-disable;
-+		};
-+		pins2 {
-+			pinmux = <STM32_PINMUX('G', 11, AF6)>; /* UART4_TX */
-+			bias-disable;
-+			drive-push-pull;
-+			slew-rate = <0>;
-+		};
-+	};
-+
-+	/* USER CODE BEGIN pinctrl */
-+	/* USER CODE END pinctrl */
-+};
-+
-+&pinctrl_z {
-+	i2c4_pins_z_mx: i2c4_mx-0 {
-+		pins {
-+			pinmux = <STM32_PINMUX('Z', 4, AF6)>, /* I2C4_SCL */
-+					 <STM32_PINMUX('Z', 5, AF6)>; /* I2C4_SDA */
-+			bias-disable;
-+			drive-open-drain;
-+			slew-rate = <0>;
-+		};
-+	};
-+
-+	/* USER CODE BEGIN pinctrl_z */
-+	/* USER CODE END pinctrl_z */
-+};
-+
-+&rcc {
-+	st,hsi-cal;
-+	st,csi-cal;
-+	st,cal-sec = <60>;
-+	st,clksrc = <
-+	  CLK_MPU_PLL1P
-+	  CLK_AXI_PLL2P
-+	  CLK_MCU_PLL3P
-+	  CLK_PLL12_HSE
-+	  CLK_PLL3_HSE
-+	  CLK_PLL4_HSE
-+	  CLK_RTC_LSE
-+	  CLK_MCO1_DISABLED
-+	  CLK_MCO2_DISABLED
-+	>;
-+
-+	st,clkdiv = <
-+	  1 /*MPU*/
-+	  0 /*AXI*/
-+	  0 /*MCU*/
-+	  1 /*APB1*/
-+	  1 /*APB2*/
-+	  1 /*APB3*/
-+	  1 /*APB4*/
-+	  2 /*APB5*/
-+	  23 /*RTC*/
-+	  0 /*MCO1*/
-+	  0 /*MCO2*/
-+	>;
-+
-+	st,pkcs = <
-+	  CLK_CKPER_HSE
-+	  CLK_FMC_ACLK
-+	  CLK_QSPI_ACLK
-+	  CLK_ETH_DISABLED
-+	  CLK_SDMMC12_PLL4P
-+	  CLK_DSI_DSIPLL
-+	  CLK_STGEN_HSE
-+	  CLK_USBPHY_HSE
-+	  CLK_SPI2S1_PLL3Q
-+	  CLK_SPI2S23_PLL3Q
-+	  CLK_SPI45_HSI
-+	  CLK_SPI6_HSI
-+	  CLK_I2C46_HSI
-+	  CLK_SDMMC3_PLL4P
-+	  CLK_USBO_USBPHY
-+	  CLK_ADC_CKPER
-+	  CLK_CEC_LSE
-+	  CLK_I2C12_HSI
-+	  CLK_I2C35_HSI
-+	  CLK_UART1_HSI
-+	  CLK_UART24_HSI
-+	  CLK_UART35_HSI
-+	  CLK_UART6_HSI
-+	  CLK_UART78_HSI
-+	  CLK_SPDIF_PLL4P
-+	  CLK_FDCAN_PLL4R
-+	  CLK_SAI1_PLL3Q
-+	  CLK_SAI2_PLL3Q
-+	  CLK_SAI3_PLL3Q
-+	  CLK_SAI4_PLL3Q
-+	  CLK_RNG1_LSI
-+	  CLK_RNG2_LSI
-+	  CLK_LPTIM1_PCLK1
-+	  CLK_LPTIM23_PCLK3
-+	  CLK_LPTIM45_LSE
-+	>;
-+
-+	/* VCO = 1066.0 MHz => P = 266 (AXI), Q = 533 (GPU), R = 533 (DDR) */
-+	pll2: st,pll@1 {
-+	  compatible = "st,stm32mp1-pll";
-+	  reg = <1>;
-+	  cfg = <2 65 1 0 0 PQR(1,1,1)>;
-+	  frac = <0x1400>;
-+	};
-+
-+	/* VCO = 417.8 MHz => P = 209, Q = 24, R = 11 */
-+	pll3: st,pll@2 {
-+	  compatible = "st,stm32mp1-pll";
-+	  reg = <2>;
-+	  cfg = <1 33 1 16 36 PQR(1,1,1)>;
-+	  frac = <0x1a04>;
-+	};
-+
-+	/* VCO = 594.0 MHz => P = 99, Q = 74, R = 74 */
-+	pll4: st,pll@3 {
-+	  compatible = "st,stm32mp1-pll";
-+	  reg = <3>;
-+	  cfg = <3 98 5 7 7 PQR(1,1,1)>;
-+	  };
-+};
-+
-+&bsec{
-+	board_id:board_id@ec{
-+		reg = <0xec 0x4>;
-+		st,non-secure-otp;
-+	};
-+};
-+
-+&cryp1{
-+	status = "okay";
-+
-+	/* USER CODE BEGIN cryp1 */
-+	/* USER CODE END cryp1 */
-+};
-+
-+&etzpc{
-+	st,decprot = <
-+  DECPROT(STM32MP1_ETZPC_USART1_ID, DECPROT_NS_RW, DECPROT_UNLOCK)
-+  DECPROT(STM32MP1_ETZPC_SPI6_ID, DECPROT_NS_RW, DECPROT_UNLOCK)
-+  DECPROT(STM32MP1_ETZPC_I2C4_ID, DECPROT_NS_RW, DECPROT_UNLOCK)
-+  DECPROT(STM32MP1_ETZPC_I2C6_ID, DECPROT_NS_RW, DECPROT_UNLOCK)
-+  DECPROT(STM32MP1_ETZPC_RNG1_ID, DECPROT_NS_RW, DECPROT_UNLOCK)
-+  DECPROT(STM32MP1_ETZPC_HASH1_ID, DECPROT_NS_RW, DECPROT_UNLOCK)
-+  DECPROT(STM32MP1_ETZPC_CRYP1_ID, DECPROT_NS_RW, DECPROT_UNLOCK)
-+  DECPROT(STM32MP1_ETZPC_DDRCTRL_ID, DECPROT_S_RW, DECPROT_LOCK)
-+  DECPROT(STM32MP1_ETZPC_DDRPHYC_ID, DECPROT_S_RW, DECPROT_LOCK)
-+  DECPROT(STM32MP1_ETZPC_STGENC_ID, DECPROT_S_RW, DECPROT_LOCK)
-+  DECPROT(STM32MP1_ETZPC_BKPSRAM_ID, DECPROT_S_RW, DECPROT_LOCK)
-+  DECPROT(STM32MP1_ETZPC_IWDG1_ID, DECPROT_S_RW, DECPROT_LOCK)
-+	>;
-+	secure-status = "okay";
-+};
-+
-+&hash1{
-+	status = "okay";
-+};
-+
-+&i2c4{
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&i2c4_pins_z_mx>;
-+	status = "okay";
-+	secure-status = "okay";
-+	i2c-scl-rising-time-ns = <185>;
-+	i2c-scl-falling-time-ns = <20>;
-+	clock-frequency = <400000>;
-+
-+	pmic:stpmic@33{
-+		compatible = "st,stpmic1";
-+		reg = <0x33>;
-+		interrupts-extended = <&exti_pwr 55 IRQ_TYPE_EDGE_FALLING>;
-+		interrupt-controller;
-+		#interrupt-cells = <2>;
-+		status = "okay";
-+    secure-status = "okay";
-+
-+		regulators{
-+			compatible = "st,stpmic1-regulators";
-+			buck1-supply = <&vin>;
-+			buck2-supply = <&vin>;
-+			buck3-supply = <&vin>;
-+			buck4-supply = <&vin>;
-+			ldo1-supply = <&v3v3>;
-+			ldo2-supply = <&vin>;
-+			ldo3-supply = <&vdd_ddr>;
-+			ldo4-supply = <&vin>;
-+			ldo5-supply = <&vin>;
-+			ldo6-supply = <&v3v3>;
-+			vref_ddr-supply = <&vin>;
-+			boost-supply = <&vin>;
-+			pwr_sw1-supply = <&bst_out>;
-+			pwr_sw2-supply = <&bst_out>;
-+
-+			vddcore:buck1{
-+				regulator-name = "vddcore";
-+				regulator-min-microvolt = <1200000>;
-+				regulator-max-microvolt = <1350000>;
-+				regulator-always-on;
-+				regulator-initial-mode = <0>;
-+				regulator-over-current-protection;
-+				lp-stop{
-+					regulator-on-in-suspend;
-+					regulator-suspend-microvolt = <1200000>;
-+				};
-+				standby-ddr-sr{
-+					regulator-off-in-suspend;
-+				};
-+				standby-ddr-off{
-+					regulator-off-in-suspend;
-+				};
-+			};
-+
-+			vdd_ddr:buck2{
-+				regulator-name = "vdd_ddr";
-+				regulator-min-microvolt = <1350000>;
-+				regulator-max-microvolt = <1350000>;
-+				regulator-always-on;
-+				regulator-initial-mode = <0>;
-+				regulator-over-current-protection;
-+				lp-stop{
-+					regulator-suspend-microvolt = <1350000>;
-+					regulator-on-in-suspend;
-+				};
-+				standby-ddr-sr{
-+					regulator-suspend-microvolt = <1350000>;
-+					regulator-on-in-suspend;
-+				};
-+				standby-ddr-off{
-+					regulator-off-in-suspend;
-+				};
-+			};
-+
-+			vdd:buck3{
-+				regulator-name = "vdd";
-+				regulator-min-microvolt = <3300000>;
-+				regulator-max-microvolt = <3300000>;
-+				regulator-always-on;
-+				st,mask-reset;
-+				regulator-initial-mode = <0>;
-+				regulator-over-current-protection;
-+				lp-stop{
-+					regulator-suspend-microvolt = <3300000>;
-+					regulator-on-in-suspend;
-+				};
-+				standby-ddr-sr{
-+					regulator-suspend-microvolt = <3300000>;
-+					regulator-on-in-suspend;
-+				};
-+				standby-ddr-off{
-+					regulator-suspend-microvolt = <3300000>;
-+					regulator-on-in-suspend;
-+				};
-+			};
-+
-+			v3v3:buck4{
-+				regulator-name = "v3v3";
-+				regulator-min-microvolt = <3300000>;
-+				regulator-max-microvolt = <3300000>;
-+				regulator-always-on;
-+				regulator-over-current-protection;
-+				regulator-initial-mode = <0>;
-+				lp-stop{
-+					regulator-suspend-microvolt = <3300000>;
-+					regulator-on-in-suspend;
-+				};
-+				standby-ddr-sr{
-+					regulator-off-in-suspend;
-+				};
-+				standby-ddr-off{
-+					regulator-off-in-suspend;
-+				};
-+			};
-+
-+			v1v8_audio:ldo1{
-+				regulator-name = "v1v8_audio";
-+				regulator-min-microvolt = <1800000>;
-+				regulator-max-microvolt = <1800000>;
-+				regulator-always-on;
-+				standby-ddr-sr{
-+					regulator-off-in-suspend;
-+				};
-+				standby-ddr-off{
-+					regulator-off-in-suspend;
-+				};
-+			};
-+
-+			v3v3_hdmi:ldo2{
-+				regulator-name = "v3v3_hdmi";
-+				regulator-min-microvolt = <3300000>;
-+				regulator-max-microvolt = <3300000>;
-+				regulator-always-on;
-+				standby-ddr-sr{
-+					regulator-off-in-suspend;
-+				};
-+				standby-ddr-off{
-+					regulator-off-in-suspend;
-+				};
-+			};
-+
-+			vtt_ddr:ldo3{
-+				regulator-name = "vtt_ddr";
-+				regulator-min-microvolt = <500000>;
-+				regulator-max-microvolt = <750000>;
-+				regulator-always-on;
-+				regulator-over-current-protection;
-+				lp-stop{
-+					regulator-off-in-suspend;
-+				};
-+				standby-ddr-sr{
-+					regulator-off-in-suspend;
-+				};
-+				standby-ddr-off{
-+					regulator-off-in-suspend;
-+				};
-+			};
-+
-+			vdd_usb:ldo4{
-+				regulator-name = "vdd_usb";
-+				regulator-min-microvolt = <3300000>;
-+				regulator-max-microvolt = <3300000>;
-+				regulator-always-on;
-+				standby-ddr-sr{
-+					regulator-on-in-suspend;
-+				};
-+				standby-ddr-off{
-+					regulator-off-in-suspend;
-+				};
-+			};
-+
-+			vdda:ldo5{
-+				regulator-name = "vdda";
-+				regulator-min-microvolt = <2900000>;
-+				regulator-max-microvolt = <2900000>;
-+				regulator-boot-on;
-+				standby-ddr-sr{
-+					regulator-off-in-suspend;
-+				};
-+				standby-ddr-off{
-+					regulator-off-in-suspend;
-+				};
-+			};
-+
-+			v1v2_hdmi:ldo6{
-+				regulator-name = "v1v2_hdmi";
-+				regulator-min-microvolt = <1200000>;
-+				regulator-max-microvolt = <1200000>;
-+				regulator-always-on;
-+				standby-ddr-sr{
-+					regulator-off-in-suspend;
-+				};
-+				standby-ddr-off{
-+					regulator-off-in-suspend;
-+				};
-+			};
-+
-+			vref_ddr:vref_ddr{
-+				regulator-name = "vref_ddr";
-+				regulator-always-on;
-+				regulator-over-current-protection;
-+				lp-stop{
-+					regulator-on-in-suspend;
-+				};
-+				standby-ddr-sr{
-+					regulator-on-in-suspend;
-+				};
-+				standby-ddr-off{
-+					regulator-off-in-suspend;
-+				};
-+			};
-+
-+			bst_out:boost{
-+				regulator-name = "bst_out";
-+			};
-+
-+			vbus_otg:pwr_sw1{
-+				regulator-name = "vbus_otg";
-+			};
-+
-+			vbus_sw:pwr_sw2{
-+				regulator-name = "vbus_sw";
-+				regulator-active-discharge = <1>;
-+			};
-+		};
-+	};
-+	/* USER CODE END i2c4 */
-+};
-+
-+&iwdg2{
-+	status = "okay";
-+	secure-status = "okay";
-+	timeout-sec = <32>;
-+};
-+
-+&rcc{
-+	status = "okay";
-+	secure-status = "okay";
-+
-+	/* USER CODE BEGIN rcc */
-+	/* USER CODE END rcc */
-+};
-+
-+&rng1{
-+	status = "okay";
-+	secure-status = "okay";
-+};
-+
-+&rtc{
-+	status = "okay";
-+	secure-status = "okay";
-+};
-+
-+&sdmmc1{
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&sdmmc1_pins_mx>;
-+	status = "okay";
-+	disable-wp;
-+	st,neg-edge;
-+	bus-width = <4>;
-+	vmmc-supply = <&v3v3>;
-+};
-+
-+&tamp{
-+	status = "okay";
-+	secure-status = "okay";
-+
-+	/* USER CODE BEGIN tamp */
-+	/* USER CODE END tamp */
-+};
-+
-+&uart4{
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&uart4_pins_mx>;
-+	status = "okay";
-+};
-+
-+&usbotg_hs{
-+	status = "okay";
-+	phys = <&usbphyc_port1 0>;
-+	phy-names = "usb2-phy";
-+	usb-role-switch;
-+};
-+
-+&usbphyc{
-+	status = "okay";
-+};
-+
-+&usbphyc_port0{
-+	phy-supply = <&vdd_usb>;
-+};
-+
-+&usbphyc_port1{
-+	phy-supply = <&vdd_usb>;
-+};
-+
-+&cpu0{
-+	cpu-supply = <&vddcore>;
-+};
-+
-+&cpu1{
-+	cpu-supply = <&vddcore>;
-+};
-+
-+&pwr_regulators {
-+	system_suspend_supported_soc_modes = <
-+		STM32_PM_CSLEEP_RUN
-+		STM32_PM_CSTOP_ALLOW_LP_STOP
-+		STM32_PM_CSTOP_ALLOW_STANDBY_DDR_SR
-+	>;
-+	system_off_soc_mode = <STM32_PM_CSTOP_ALLOW_STANDBY_DDR_OFF>;
-+	vdd-supply = <&vdd>;
-+	vdd_3v3_usbfs-supply = <&vdd_usb>;
-+};
-+
-+&nvmem_layout{
-+	nvmem-cells = <&cfg0_otp>,
-+			<&part_number_otp>,
-+			<&monotonic_otp>,
-+			<&nand_otp>,
-+			<&uid_otp>,
-+			<&package_otp>,
-+			<&hw2_otp>,
-+			<&pkh_otp>,
-+			<&board_id>;
-+
-+	nvmem-cell-names = "cfg0_otp",
-+			"part_number_otp",
-+			"monotonic_otp",
-+			"nand_otp",
-+			"uid_otp",
-+			"package_otp",
-+			"hw2_otp",
-+			"pkh_otp",
-+			"board_id";
-+};
-+
-+&timers15{
-+	secure-status = "okay";
-+	st,hsi-cal-input = <7>;
-+	st,csi-cal-input = <8>;
-+};
-diff --git a/board/octavo/brk/uboot-patches/0006-osd32mpp1-BRK-board-added.patch b/board/octavo/brk/uboot-patches/0006-osd32mpp1-BRK-board-added.patch
-new file mode 100644
-index 0000000000..4ddfc5b982
---- /dev/null
-+++ b/board/octavo/brk/uboot-patches/0006-osd32mpp1-BRK-board-added.patch
-@@ -0,0 +1,1989 @@
-+From 2efe6be348489dbdc856947eda6e5187494aefc8 Mon Sep 17 00:00:00 2001
-+From: Martin Lesniak <martin.lesniak@st.com>
-+Date: Thu, 27 Aug 2020 14:44:46 -0500
-+Subject: [PATCH 1/4] osd32mpp1 BRK board added
-+
-+New board definition for Octavo's OSD32MP1-BRK
++++ b/board/octavo/red/uboot-patches/0001-Add-OSD32MP1-RED-Device-Tree-support.patch
+@@ -0,0 +1,1708 @@
++From cc7f758f6059f6d64010a1639ca57c9c010f916e Mon Sep 17 00:00:00 2001
++From: "neeraj.dantu" <neeraj.dantu@octavosystems.com>
++Date: Sun, 31 Jan 2021 21:03:30 -0600
++Subject: [PATCH 1/2] Add OSD32MP1-RED Device Tree support
 +
 +Signed-off-by: neeraj.dantu <neeraj.dantu@octavosystems.com>
 +---
-+ arch/arm/dts/Makefile                         |   3 +-
-+ arch/arm/dts/osd32mp1.dtsi                    | 119 +++
-+ .../dts/stm32mp157c-osd32mp1-brk-u-boot.dtsi  | 255 ++++++
-+ arch/arm/dts/stm32mp157c-osd32mp1-brk.dts     | 756 ++++++++++++++++++
-+ arch/arm/dts/stm32mp15xx-dkx.dtsi             |   3 +-
-+ arch/arm/mach-stm32mp/Kconfig                 |  10 +-
-+ board/octavo/osd32mp1-brk/Kconfig             |  13 +
-+ board/octavo/osd32mp1-brk/MAINTAINERS         |   7 +
-+ board/octavo/osd32mp1-brk/Makefile            |   9 +
-+ board/octavo/osd32mp1-brk/board.c             | 547 +++++++++++++
-+ configs/osd32mp1_brk_trusted_defconfig        | 148 ++++
-+ 11 files changed, 1867 insertions(+), 3 deletions(-)
-+ create mode 100644 arch/arm/dts/osd32mp1.dtsi
-+ create mode 100644 arch/arm/dts/stm32mp157c-osd32mp1-brk-u-boot.dtsi
-+ create mode 100644 arch/arm/dts/stm32mp157c-osd32mp1-brk.dts
-+ create mode 100644 board/octavo/osd32mp1-brk/Kconfig
-+ create mode 100644 board/octavo/osd32mp1-brk/MAINTAINERS
-+ create mode 100644 board/octavo/osd32mp1-brk/Makefile
-+ create mode 100644 board/octavo/osd32mp1-brk/board.c
-+ create mode 100644 configs/osd32mp1_brk_trusted_defconfig
++ arch/arm/dts/osd32mp1-red-u-boot.dtsi         |  242 +++
++ arch/arm/dts/osd32mp1-red.dts                 | 1311 +++++++++++++++++
++ ...m32mp15-osd32mp1-ddr3-1x4Gb-1066-binG.dtsi |  119 ++
++ 3 files changed, 1672 insertions(+)
++ create mode 100644 arch/arm/dts/osd32mp1-red-u-boot.dtsi
++ create mode 100644 arch/arm/dts/osd32mp1-red.dts
++ create mode 100644 arch/arm/dts/stm32mp15-osd32mp1-ddr3-1x4Gb-1066-binG.dtsi
 +
-+diff --git a/arch/arm/dts/Makefile b/arch/arm/dts/Makefile
-+index c3fd89b8be..7494fca9bb 100644
-+--- a/arch/arm/dts/Makefile
-++++ b/arch/arm/dts/Makefile
-+@@ -837,7 +837,8 @@ dtb-$(CONFIG_STM32MP15x) += \
-+ 	stm32mp157f-dk2.dtb \
-+ 	stm32mp157f-ed1.dtb \
-+ 	stm32mp157f-ev1.dtb \
-+-	stm32mp15xx-dhcom-pdk2.dtb
-++	stm32mp15xx-dhcom-pdk2.dtb \
-++	stm32mp157c-osd32mp1-brk.dtb
-+ 
-+ dtb-$(CONFIG_SOC_K3_AM6) += k3-am654-base-board.dtb k3-am654-r5-base-board.dtb
-+ dtb-$(CONFIG_SOC_K3_J721E) += k3-j721e-common-proc-board.dtb \
-+diff --git a/arch/arm/dts/osd32mp1.dtsi b/arch/arm/dts/osd32mp1.dtsi
++diff --git a/arch/arm/dts/osd32mp1-red-u-boot.dtsi b/arch/arm/dts/osd32mp1-red-u-boot.dtsi
 +new file mode 100644
-+index 0000000000..362f3281b8
++index 0000000000..801b021145
 +--- /dev/null
-++++ b/arch/arm/dts/osd32mp1.dtsi
+++++ b/arch/arm/dts/osd32mp1-red-u-boot.dtsi
++@@ -0,0 +1,242 @@
+++/* SPDX-License-Identifier: GPL-2.0+ OR BSD-3-Clause*/
+++/*
+++ * Copyright (C) 2020, STMicroelectronics - All Rights Reserved
+++ * Author: STM32CubeMX code generation for STMicroelectronics.
+++ */
+++
+++/* For more information on Device Tree configuration, please refer to
+++ * https://wiki.st.com/stm32mpu/wiki/Category:Device_tree_configuration
+++ */
+++
+++#include <dt-bindings/clock/stm32mp1-clksrc.h>
+++#include "stm32mp15-osd32mp1-ddr3-1x4Gb-1066-binG.dtsi"
+++
+++#include "stm32mp157-u-boot.dtsi"
+++#include "stm32mp15-ddr.dtsi"
+++
+++
+++
+++
+++/ {
+++
+++
+++	aliases {
+++		i2c3 = &i2c4;
+++		mmc0 = &sdmmc1;					//orig
+++		//mmc0 = &sdmmc2;						//custom
+++	};
+++	config {
+++		u-boot,boot-led = "heartbeat";
+++		u-boot,error-led = "error";
+++		st,adc_usb_pd = <&adc1 18>, <&adc1 19>;
+++		//st,fastboot-gpios = <&gpioa 13 GPIO_ACTIVE_LOW>;	//custom
+++		//st,stm32prog-gpios = <&gpioa 14 GPIO_ACTIVE_LOW>;	//custom
+++	};
+++	led {
+++		red {
+++			label = "error";
+++			gpios = <&gpioa 13 GPIO_ACTIVE_LOW>;
+++			default-state = "off";
+++			status = "okay";
+++		};
+++
+++		blue {
+++			default-state = "on";
+++		};
+++	};
+++
+++
+++	clocks {
+++		u-boot,dm-pre-reloc;
+++
+++
+++
+++
+++		clk_lsi: clk-lsi {
+++			u-boot,dm-pre-reloc;
+++
+++
+++
+++		};
+++
+++		clk_hsi: clk-hsi {
+++			u-boot,dm-pre-reloc;
+++
+++
+++
+++		};
+++
+++		clk_csi: clk-csi {
+++			u-boot,dm-pre-reloc;
+++			status = "disabled";
+++
+++
+++
+++		};
+++
+++		clk_lse: clk-lse {
+++			u-boot,dm-pre-reloc;
+++			st,drive = < LSEDRV_MEDIUM_HIGH >;
+++
+++
+++
+++		};
+++
+++		clk_hse: clk-hse {
+++			u-boot,dm-pre-reloc;
+++			st,digbypass;
+++
+++
+++
+++		};
+++	};
+++
+++}; /*root*/
+++
+++&rcc {
+++	u-boot,dm-pre-reloc;
+++	st,clksrc = <
+++		CLK_MPU_PLL1P
+++		CLK_AXI_PLL2P
+++		CLK_MCU_PLL3P
+++		CLK_PLL12_HSE
+++		CLK_PLL3_HSE
+++		CLK_PLL4_HSE
+++		CLK_RTC_LSE
+++		CLK_MCO1_DISABLED
+++		CLK_MCO2_DISABLED
+++	>;
+++	st,clkdiv = <
+++		1 		/*MPU*/
+++		0 		/*AXI*/
+++		0 		/*MCU*/
+++		1 		/*APB1*/
+++		1 		/*APB2*/
+++		1 		/*APB3*/
+++		1 		/*APB4*/
+++		2 		/*APB5*/
+++		23 		/*RTC*/
+++		0 		/*MCO1*/
+++		0 		/*MCO2*/
+++	>;
+++	st,pkcs = <
+++		CLK_CKPER_DISABLED
+++		CLK_ETH_PLL3Q
+++		CLK_SDMMC12_PLL4P
+++		CLK_DSI_DSIPLL
+++		CLK_STGEN_HSE
+++		CLK_USBPHY_DISABLED
+++		CLK_SPI2S1_DISABLED
+++		CLK_SPI2S23_PLL3Q
+++		CLK_SPI45_DISABLED
+++		CLK_SPI6_DISABLED
+++		CLK_I2C46_HSI
+++		CLK_SDMMC3_PLL4P
+++		CLK_ADC_DISABLED
+++		CLK_CEC_DISABLED
+++		CLK_I2C12_HSI
+++		CLK_I2C35_DISABLED
+++		CLK_UART1_DISABLED
+++		CLK_UART24_HSI
+++		CLK_UART35_DISABLED
+++		CLK_UART6_DISABLED
+++		CLK_UART78_DISABLED
+++		CLK_SPDIF_DISABLED
+++		CLK_SAI2_CKPER
+++		CLK_SAI2_DISABLED
+++		CLK_SAI3_DISABLED
+++		CLK_SAI4_DISABLED
+++		CLK_RNG1_LSI
+++		CLK_LPTIM1_DISABLED
+++		CLK_LPTIM23_DISABLED
+++		CLK_LPTIM45_DISABLED
+++	>;
+++	pll1:st,pll@0 {
+++		cfg = < 2 80 0 1 1 PQR(1,0,0) >;
+++		frac = < 0x800>;
+++		u-boot,dm-pre-reloc;
+++	};
+++	pll2:st,pll@1 {
+++		cfg = < 2 65 1 0 0 PQR(1,1,1) >;
+++		frac = < 0x1400>;
+++		u-boot,dm-pre-reloc;
+++	};
+++	pll3:st,pll@2 {
+++		cfg = < 1 61 3 5 36 PQR(1,1,0) >;
+++		frac = < 0x1000 >;
+++		u-boot,dm-pre-reloc;
+++	};
+++	pll4:st,pll@3 {
+++		cfg = < 3 98 5 7 7 PQR(1,1,1) >;
+++		u-boot,dm-pre-reloc;
+++	};
+++};
+++
+++&i2c4{
+++	u-boot,dm-pre-reloc;
+++
+++
+++
+++};
+++
+++&rcc{
+++	u-boot,dm-pre-reloc;
+++
+++
+++
+++};
+++
+++&sdmmc1{
+++	u-boot,dm-pre-reloc;
+++
+++
+++
+++};
+++
+++&sdmmc2{
+++	u-boot,dm-pre-reloc;
+++
+++
+++
+++};
+++
+++&sdmmc3{
+++	u-boot,dm-pre-reloc;
+++
+++
+++
+++};
+++
+++&uart4{
+++	u-boot,dm-pre-reloc;
+++
+++
+++
+++};
+++
+++
+++&pmic {
+++	u-boot,dm-pre-reloc;
+++};
+++
+++&v3v3 {
+++	regulator-always-on;
+++};
+++
+++&uart4_pins_mx {
+++	u-boot,dm-pre-reloc;
+++	pins1 {
+++		u-boot,dm-pre-reloc;
+++		/* pull-up on rx to avoid floating level */
+++		bias-pull-up;
+++	};
+++	pins2 {
+++		u-boot,dm-pre-reloc;
+++	};
+++};
+++
+++&adc {
+++	status = "okay";
+++};
+++
+++
++diff --git a/arch/arm/dts/osd32mp1-red.dts b/arch/arm/dts/osd32mp1-red.dts
++new file mode 100644
++index 0000000000..2cc1961d08
++--- /dev/null
+++++ b/arch/arm/dts/osd32mp1-red.dts
++@@ -0,0 +1,1311 @@
+++/* SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause) */
+++/*
+++ * Copyright (C) STMicroelectronics 2020 - All Rights Reserved
+++ * Author: STM32CubeMX code generation for STMicroelectronics.
+++ */
+++
+++/* For more information on Device Tree configuration, please refer to
+++ * https://wiki.st.com/stm32mpu/wiki/Category:Device_tree_configuration
+++ */
+++
+++/dts-v1/;
+++#include "stm32mp157c.dtsi"
+++#include "stm32mp157cac-pinctrl.dtsi"
+++#include "stm32mp157c-m4-srm.dtsi"
+++
+++
+++#include <dt-bindings/input/input.h>
+++#include <dt-bindings/mfd/st,stpmic1.h>
+++#include <dt-bindings/rtc/rtc-stm32.h>
+++
+++
+++/ {
+++	model = "Octavo OSD32MP1-RED board";
+++	compatible = "octavo,osd32mp1-red", "st,stm32mp157";
+++
+++	memory@c0000000 {
+++		reg = <0xc0000000 0x20000000>;
+++
+++
+++    wifi_pwrseq: wifi-pwrseq {
+++  		compatible = "mmc-pwrseq-simple";
+++  		reset-gpios = <&gpiog 5 GPIO_ACTIVE_LOW>;     //custom
+++  	};
+++
+++	};
+++
+++	reserved-memory {
+++		#address-cells = <1>;
+++		#size-cells = <1>;
+++		ranges;
+++
+++
+++
+++		retram: retram@0x38000000 {
+++			compatible = "shared-dma-pool";
+++			reg = <0x38000000 0x10000>;
+++			no-map;
+++		};
+++
+++		mcuram: mcuram@0x30000000 {
+++			compatible = "shared-dma-pool";
+++			reg = <0x30000000 0x40000>;
+++			no-map;
+++		};
+++
+++		mcuram2: mcuram2@0x10000000 {
+++			compatible = "shared-dma-pool";
+++			reg = <0x10000000 0x40000>;
+++			no-map;
+++		};
+++
+++		vdev0vring0: vdev0vring0@10040000 {
+++			compatible = "shared-dma-pool";
+++			reg = <0x10040000 0x2000>;
+++			no-map;
+++		};
+++
+++		vdev0vring1: vdev0vring1@10042000 {
+++			compatible = "shared-dma-pool";
+++			reg = <0x10042000 0x2000>;
+++			no-map;
+++		};
+++
+++		vdev0buffer: vdev0buffer@10044000 {
+++			compatible = "shared-dma-pool";
+++			reg = <0x10044000 0x4000>;
+++			no-map;
+++		};
+++
+++
+++		gpu_reserved: gpu@d4000000 {
+++			reg = <0xd4000000 0x4000000>;
+++			no-map;
+++		};
+++	};
+++
+++
+++	aliases {
+++		ethernet0 = &ethernet0;
+++		serial0 = &uart4;
+++		serial1 = &usart3;
+++		serial2 = &uart7;
+++		serial3 = &usart2;
+++	};
+++
+++	chosen {
+++		stdout-path = "serial0:115200n8";
+++	};
+++
+++	sram: sram@10050000 {
+++		compatible = "mmio-sram";
+++		reg = <0x10050000 0x10000>;
+++		#address-cells = <1>;
+++		#size-cells = <1>;
+++		ranges = <0 0x10050000 0x10000>;
+++
+++		dma_pool: dma_pool@0 {
+++			reg = <0x0 0x10000>;
+++			pool;
+++		};
+++	};
+++
+++	led {
+++		compatible = "gpio-leds";
+++		blue {
+++			label = "heartbeat";
+++			gpios = <&gpiod 11 GPIO_ACTIVE_HIGH>;
+++			linux,default-trigger = "heartbeat";
+++			default-state = "off";
+++		};
+++
+++    //custom_gpios{                             //custom
+++    //gpios = <&gpiod 11 GPIO_ACTIVE_HIGH>;
+++    //default-state = "on";
+++    //};
+++	};
+++
+++	/*sound {
+++		compatible = "audio-graph-card";
+++		label = "STM32MP1-DK";
+++		routing =
+++			"Playback" , "MCLK",
+++			"Capture" , "MCLK",
+++			"MICL" , "Mic Bias";
+++		dais = <&sai2a_port &sai2b_port &i2s2_port>;
+++		status = "okay";
+++	}; */
+++
+++	usb_phy_tuning: usb-phy-tuning {
+++		st,hs-dc-level = <2>;
+++		st,fs-rftime-tuning;
+++		st,hs-rftime-reduction;
+++		st,hs-current-trim = <15>;
+++		st,hs-impedance-trim = <1>;
+++		st,squelch-level = <3>;
+++		st,hs-rx-offset = <2>;
+++		st,no-lsfs-sc;
+++	};
+++
+++
+++
+++	clocks {
+++
+++    clk_ext_camera: clk-ext-camera {
+++			#clock-cells = <0>;
+++			compatible = "fixed-clock";
+++			clock-frequency = <24000000>;
+++		};
+++
+++
+++		clk_lsi: clk-lsi {
+++			clock-frequency = <32000>;
+++		};
+++
+++		clk_hsi: clk-hsi {
+++			clock-frequency = <64000000>;
+++		};
+++
+++		clk_csi: clk-csi {
+++			clock-frequency = <4000000>;
+++		};
+++
+++		clk_lse: clk-lse {
+++			clock-frequency = <32768>;
+++		};
+++
+++		clk_hse: clk-hse {
+++			clock-frequency = <24000000>;
+++		};
+++	};
+++
+++}; /*root*/
+++
+++&pinctrl {
+++	u-boot,dm-pre-reloc;
+++
+++	dcmi_pins_mx: dcmi_mx-0 {
+++		pins {
+++			pinmux = <STM32_PINMUX('A', 4, AF13)>, /* DCMI_HSYNC */
+++					 <STM32_PINMUX('A', 6, AF13)>, /* DCMI_PIXCLK */
+++					 <STM32_PINMUX('A', 10, AF13)>, /* DCMI_D1 */
+++					 <STM32_PINMUX('B', 9, AF13)>, /* DCMI_D7 */
+++					 <STM32_PINMUX('C', 6, AF13)>, /* DCMI_D0 */
+++					 <STM32_PINMUX('E', 0, AF13)>, /* DCMI_D2 */
+++					 <STM32_PINMUX('E', 1, AF13)>, /* DCMI_D3 */
+++					 <STM32_PINMUX('E', 4, AF13)>, /* DCMI_D4 */
+++					 <STM32_PINMUX('E', 13, AF13)>, /* DCMI_D6 */
+++					 <STM32_PINMUX('G', 9, AF13)>, /* DCMI_VSYNC */
+++					 <STM32_PINMUX('H', 6, AF13)>, /* DCMI_D8 */
+++					 <STM32_PINMUX('H', 7, AF13)>, /* DCMI_D9 */
+++					 <STM32_PINMUX('H', 15, AF13)>, /* DCMI_D11 */
+++					 <STM32_PINMUX('I', 3, AF13)>, /* DCMI_D10 */
+++					 <STM32_PINMUX('I', 4, AF13)>; /* DCMI_D5 */
+++			bias-disable;
+++		};
+++	};
+++
+++	dcmi_sleep_pins_mx: dcmi_sleep_mx-0 {
+++		pins {
+++			pinmux = <STM32_PINMUX('A', 4, ANALOG)>, /* DCMI_HSYNC */
+++					 <STM32_PINMUX('A', 6, ANALOG)>, /* DCMI_PIXCLK */
+++					 <STM32_PINMUX('A', 10, ANALOG)>, /* DCMI_D1 */
+++					 <STM32_PINMUX('B', 9, ANALOG)>, /* DCMI_D7 */
+++					 <STM32_PINMUX('C', 6, ANALOG)>, /* DCMI_D0 */
+++					 <STM32_PINMUX('E', 0, ANALOG)>, /* DCMI_D2 */
+++					 <STM32_PINMUX('E', 1, ANALOG)>, /* DCMI_D3 */
+++					 <STM32_PINMUX('E', 4, ANALOG)>, /* DCMI_D4 */
+++					 <STM32_PINMUX('E', 13, ANALOG)>, /* DCMI_D6 */
+++					 <STM32_PINMUX('G', 9, ANALOG)>, /* DCMI_VSYNC */
+++					 <STM32_PINMUX('H', 6, ANALOG)>, /* DCMI_D8 */
+++					 <STM32_PINMUX('H', 7, ANALOG)>, /* DCMI_D9 */
+++					 <STM32_PINMUX('H', 15, ANALOG)>, /* DCMI_D11 */
+++					 <STM32_PINMUX('I', 3, ANALOG)>, /* DCMI_D10 */
+++					 <STM32_PINMUX('I', 4, ANALOG)>; /* DCMI_D5 */
+++		};
+++	};
+++
+++	eth1_pins_mx: eth1_mx-0 {
+++		pins1 {
+++			pinmux = <STM32_PINMUX('A', 1, AF11)>, /* ETH1_RX_CLK */
+++					 <STM32_PINMUX('A', 7, AF11)>, /* ETH1_RX_CTL */
+++					 <STM32_PINMUX('B', 0, AF11)>, /* ETH1_RXD2 */
+++					 <STM32_PINMUX('B', 1, AF11)>, /* ETH1_RXD3 */
+++					 <STM32_PINMUX('C', 4, AF11)>, /* ETH1_RXD0 */
+++					 <STM32_PINMUX('C', 5, AF11)>; /* ETH1_RXD1 */
+++			bias-disable;
+++		};
+++		pins2 {
+++			pinmux = <STM32_PINMUX('A', 2, AF11)>; /* ETH1_MDIO */
+++			bias-disable;
+++			drive-push-pull;
+++			slew-rate = <0>;
+++		};
+++		pins3 {
+++			pinmux = <STM32_PINMUX('B', 11, AF11)>, /* ETH1_TX_CTL */
+++					 <STM32_PINMUX('C', 1, AF11)>, /* ETH1_MDC */
+++					 <STM32_PINMUX('C', 2, AF11)>, /* ETH1_TXD2 */
+++					 <STM32_PINMUX('E', 2, AF11)>, /* ETH1_TXD3 */
+++					 <STM32_PINMUX('G', 4, AF11)>, /* ETH1_GTX_CLK */
+++					 <STM32_PINMUX('G', 13, AF11)>, /* ETH1_TXD0 */
+++					 <STM32_PINMUX('G', 14, AF11)>; /* ETH1_TXD1 */
+++			bias-disable;
+++			drive-push-pull;
+++			slew-rate = <2>;
+++		};
+++	};
+++
+++	eth1_sleep_pins_mx: eth1_sleep_mx-0 {
+++		pins {
+++			pinmux = <STM32_PINMUX('A', 1, ANALOG)>, /* ETH1_RX_CLK */
+++					 <STM32_PINMUX('A', 2, ANALOG)>, /* ETH1_MDIO */
+++					 <STM32_PINMUX('A', 7, ANALOG)>, /* ETH1_RX_CTL */
+++					 <STM32_PINMUX('B', 0, ANALOG)>, /* ETH1_RXD2 */
+++					 <STM32_PINMUX('B', 1, ANALOG)>, /* ETH1_RXD3 */
+++					 <STM32_PINMUX('B', 11, ANALOG)>, /* ETH1_TX_CTL */
+++					 <STM32_PINMUX('C', 1, ANALOG)>, /* ETH1_MDC */
+++					 <STM32_PINMUX('C', 2, ANALOG)>, /* ETH1_TXD2 */
+++					 <STM32_PINMUX('C', 4, ANALOG)>, /* ETH1_RXD0 */
+++					 <STM32_PINMUX('C', 5, ANALOG)>, /* ETH1_RXD1 */
+++					 <STM32_PINMUX('E', 2, ANALOG)>, /* ETH1_TXD3 */
+++					 <STM32_PINMUX('G', 4, ANALOG)>, /* ETH1_GTX_CLK */
+++					 <STM32_PINMUX('G', 13, ANALOG)>, /* ETH1_TXD0 */
+++					 <STM32_PINMUX('G', 14, ANALOG)>; /* ETH1_TXD1 */
+++		};
+++	};
+++
+++	i2c1_pins_mx: i2c1_mx-0 {
+++		pins {
+++			pinmux = <STM32_PINMUX('D', 12, AF5)>, /* I2C1_SCL */
+++					 <STM32_PINMUX('F', 15, AF5)>; /* I2C1_SDA */
+++			bias-disable;
+++			drive-open-drain;
+++			slew-rate = <0>;
+++		};
+++	};
+++
+++	i2c1_sleep_pins_mx: i2c1_sleep_mx-0 {
+++		pins {
+++			pinmux = <STM32_PINMUX('D', 12, ANALOG)>, /* I2C1_SCL */
+++					 <STM32_PINMUX('F', 15, ANALOG)>; /* I2C1_SDA */
+++		};
+++	};
+++
+++	i2c2_pins_mx: i2c2_mx-0 {
+++		pins {
+++			pinmux = <STM32_PINMUX('H', 5, AF4)>; /* I2C2_SDA */
+++			bias-disable;
+++			drive-open-drain;
+++			slew-rate = <0>;
+++		};
+++	};
+++
+++	i2c2_sleep_pins_mx: i2c2_sleep_mx-0 {
+++		pins {
+++			pinmux = <STM32_PINMUX('H', 5, ANALOG)>; /* I2C2_SDA */
+++		};
+++	};
+++
+++	i2s2_pins_mx: i2s2_mx-0 {
+++		pins {
+++			pinmux = <STM32_PINMUX('B', 12, AF5)>, /* I2S2_WS */
+++					 <STM32_PINMUX('B', 13, AF5)>, /* I2S2_CK */
+++					 <STM32_PINMUX('C', 3, AF5)>; /* I2S2_SDO */
+++			bias-disable;
+++			drive-push-pull;
+++			slew-rate = <1>;
+++		};
+++	};
+++
+++	i2s2_sleep_pins_mx: i2s2_sleep_mx-0 {
+++		pins {
+++			pinmux = <STM32_PINMUX('B', 12, ANALOG)>, /* I2S2_WS */
+++					 <STM32_PINMUX('B', 13, ANALOG)>, /* I2S2_CK */
+++					 <STM32_PINMUX('C', 3, ANALOG)>; /* I2S2_SDO */
+++		};
+++	};
+++
+++	ltdc_pins_mx: ltdc_mx-0 {
+++		pins1 {
+++			pinmux = <STM32_PINMUX('A', 3, AF14)>, /* LTDC_B5 */
+++					 <STM32_PINMUX('B', 8, AF14)>, /* LTDC_B6 */
+++					 <STM32_PINMUX('C', 0, AF14)>, /* LTDC_R5 */
+++					 <STM32_PINMUX('D', 8, AF14)>, /* LTDC_B7 */
+++					 <STM32_PINMUX('D', 9, AF14)>, /* LTDC_B0 */
+++					 <STM32_PINMUX('D', 10, AF14)>, /* LTDC_B3 */
+++					 <STM32_PINMUX('E', 6, AF14)>, /* LTDC_G1 */
+++					 <STM32_PINMUX('E', 12, AF14)>, /* LTDC_B4 */
+++					 <STM32_PINMUX('E', 14, AF13)>, /* LTDC_G0 */
+++					 <STM32_PINMUX('E', 15, AF14)>, /* LTDC_R7 */
+++					 <STM32_PINMUX('F', 10, AF14)>, /* LTDC_DE */
+++					 <STM32_PINMUX('G', 10, AF14)>, /* LTDC_B2 */
+++					 <STM32_PINMUX('G', 12, AF14)>, /* LTDC_B1 */
+++					 <STM32_PINMUX('H', 2, AF14)>, /* LTDC_R0 */
+++					 <STM32_PINMUX('H', 3, AF14)>, /* LTDC_R1 */
+++					 <STM32_PINMUX('H', 4, AF14)>, /* LTDC_G4 */
+++					 <STM32_PINMUX('H', 8, AF14)>, /* LTDC_R2 */
+++					 <STM32_PINMUX('H', 9, AF14)>, /* LTDC_R3 */
+++					 <STM32_PINMUX('H', 10, AF14)>, /* LTDC_R4 */
+++					 <STM32_PINMUX('H', 12, AF14)>, /* LTDC_R6 */
+++					 <STM32_PINMUX('H', 13, AF14)>, /* LTDC_G2 */
+++					 <STM32_PINMUX('H', 14, AF14)>, /* LTDC_G3 */
+++					 <STM32_PINMUX('I', 0, AF14)>, /* LTDC_G5 */
+++					 <STM32_PINMUX('I', 1, AF14)>, /* LTDC_G6 */
+++					 <STM32_PINMUX('I', 2, AF14)>, /* LTDC_G7 */
+++					 <STM32_PINMUX('I', 9, AF14)>, /* LTDC_VSYNC */
+++					 <STM32_PINMUX('I', 10, AF14)>; /* LTDC_HSYNC */
+++			bias-disable;
+++			drive-push-pull;
+++			slew-rate = <0>;
+++		};
+++		pins2 {
+++			pinmux = <STM32_PINMUX('G', 7, AF14)>; /* LTDC_CLK */
+++			bias-disable;
+++			drive-push-pull;
+++			slew-rate = <1>;
+++		};
+++	};
+++
+++	ltdc_sleep_pins_mx: ltdc_sleep_mx-0 {
+++		pins {
+++			pinmux = <STM32_PINMUX('A', 3, ANALOG)>, /* LTDC_B5 */
+++					 <STM32_PINMUX('B', 8, ANALOG)>, /* LTDC_B6 */
+++					 <STM32_PINMUX('C', 0, ANALOG)>, /* LTDC_R5 */
+++					 <STM32_PINMUX('D', 8, ANALOG)>, /* LTDC_B7 */
+++					 <STM32_PINMUX('D', 9, ANALOG)>, /* LTDC_B0 */
+++					 <STM32_PINMUX('D', 10, ANALOG)>, /* LTDC_B3 */
+++					 <STM32_PINMUX('E', 6, ANALOG)>, /* LTDC_G1 */
+++					 <STM32_PINMUX('E', 12, ANALOG)>, /* LTDC_B4 */
+++					 <STM32_PINMUX('E', 14, ANALOG)>, /* LTDC_G0 */
+++					 <STM32_PINMUX('E', 15, ANALOG)>, /* LTDC_R7 */
+++					 <STM32_PINMUX('F', 10, ANALOG)>, /* LTDC_DE */
+++					 <STM32_PINMUX('G', 7, ANALOG)>, /* LTDC_CLK */
+++					 <STM32_PINMUX('G', 10, ANALOG)>, /* LTDC_B2 */
+++					 <STM32_PINMUX('G', 12, ANALOG)>, /* LTDC_B1 */
+++					 <STM32_PINMUX('H', 2, ANALOG)>, /* LTDC_R0 */
+++					 <STM32_PINMUX('H', 3, ANALOG)>, /* LTDC_R1 */
+++					 <STM32_PINMUX('H', 4, ANALOG)>, /* LTDC_G4 */
+++					 <STM32_PINMUX('H', 8, ANALOG)>, /* LTDC_R2 */
+++					 <STM32_PINMUX('H', 9, ANALOG)>, /* LTDC_R3 */
+++					 <STM32_PINMUX('H', 10, ANALOG)>, /* LTDC_R4 */
+++					 <STM32_PINMUX('H', 12, ANALOG)>, /* LTDC_R6 */
+++					 <STM32_PINMUX('H', 13, ANALOG)>, /* LTDC_G2 */
+++					 <STM32_PINMUX('H', 14, ANALOG)>, /* LTDC_G3 */
+++					 <STM32_PINMUX('I', 0, ANALOG)>, /* LTDC_G5 */
+++					 <STM32_PINMUX('I', 1, ANALOG)>, /* LTDC_G6 */
+++					 <STM32_PINMUX('I', 2, ANALOG)>, /* LTDC_G7 */
+++					 <STM32_PINMUX('I', 9, ANALOG)>, /* LTDC_VSYNC */
+++					 <STM32_PINMUX('I', 10, ANALOG)>; /* LTDC_HSYNC */
+++		};
+++	};
+++
+++	sdmmc1_pins_mx: sdmmc1_mx-0 {
+++		u-boot,dm-pre-reloc;
+++		pins1 {
+++			u-boot,dm-pre-reloc;
+++			pinmux = <STM32_PINMUX('C', 8, AF12)>, /* SDMMC1_D0 */
+++					 <STM32_PINMUX('C', 9, AF12)>, /* SDMMC1_D1 */
+++					 <STM32_PINMUX('C', 10, AF12)>, /* SDMMC1_D2 */
+++					 <STM32_PINMUX('C', 11, AF12)>, /* SDMMC1_D3 */
+++					 <STM32_PINMUX('D', 2, AF12)>; /* SDMMC1_CMD */
+++			bias-disable;
+++			drive-push-pull;
+++			slew-rate = <1>;
+++		};
+++		pins2 {
+++			u-boot,dm-pre-reloc;
+++			pinmux = <STM32_PINMUX('C', 12, AF12)>; /* SDMMC1_CK */
+++			bias-disable;
+++			drive-push-pull;
+++			slew-rate = <3>;
+++		};
+++	};
+++
+++	sdmmc1_opendrain_pins_mx: sdmmc1_opendrain_mx-0 {
+++		u-boot,dm-pre-reloc;
+++		pins1 {
+++			u-boot,dm-pre-reloc;
+++			pinmux = <STM32_PINMUX('C', 8, AF12)>, /* SDMMC1_D0 */
+++					 <STM32_PINMUX('C', 9, AF12)>, /* SDMMC1_D1 */
+++					 <STM32_PINMUX('C', 10, AF12)>, /* SDMMC1_D2 */
+++					 <STM32_PINMUX('C', 11, AF12)>; /* SDMMC1_D3 */
+++			bias-disable;
+++			drive-push-pull;
+++			slew-rate = <1>;
+++		};
+++		pins2 {
+++			u-boot,dm-pre-reloc;
+++			pinmux = <STM32_PINMUX('C', 12, AF12)>; /* SDMMC1_CK */
+++			bias-disable;
+++			drive-push-pull;
+++			slew-rate = <3>;
+++		};
+++		pins3 {
+++			u-boot,dm-pre-reloc;
+++			pinmux = <STM32_PINMUX('D', 2, AF12)>; /* SDMMC1_CMD */
+++			bias-disable;
+++			drive-open-drain;
+++			slew-rate = <1>;
+++		};
+++	};
+++
+++	sdmmc1_sleep_pins_mx: sdmmc1_sleep_mx-0 {
+++		u-boot,dm-pre-reloc;
+++		pins {
+++			u-boot,dm-pre-reloc;
+++			pinmux = <STM32_PINMUX('C', 8, ANALOG)>, /* SDMMC1_D0 */
+++					 <STM32_PINMUX('C', 9, ANALOG)>, /* SDMMC1_D1 */
+++					 <STM32_PINMUX('C', 10, ANALOG)>, /* SDMMC1_D2 */
+++					 <STM32_PINMUX('C', 11, ANALOG)>, /* SDMMC1_D3 */
+++					 <STM32_PINMUX('C', 12, ANALOG)>, /* SDMMC1_CK */
+++					 <STM32_PINMUX('D', 2, ANALOG)>; /* SDMMC1_CMD */
+++		};
+++	};
+++
+++	sdmmc2_pins_mx: sdmmc2_mx-0 {
+++		u-boot,dm-pre-reloc;
+++		pins1 {
+++			u-boot,dm-pre-reloc;
+++			pinmux = <STM32_PINMUX('A', 8, AF9)>, /* SDMMC2_D4 */
+++					 <STM32_PINMUX('A', 9, AF10)>, /* SDMMC2_D5 */
+++					 <STM32_PINMUX('B', 3, AF9)>, /* SDMMC2_D2 */
+++					 <STM32_PINMUX('B', 4, AF9)>, /* SDMMC2_D3 */
+++					 <STM32_PINMUX('B', 14, AF9)>, /* SDMMC2_D0 */
+++					 <STM32_PINMUX('B', 15, AF9)>, /* SDMMC2_D1 */
+++					 <STM32_PINMUX('C', 7, AF10)>, /* SDMMC2_D7 */
+++					 <STM32_PINMUX('E', 5, AF9)>, /* SDMMC2_D6 */
+++					 <STM32_PINMUX('G', 6, AF10)>; /* SDMMC2_CMD */
+++			bias-pull-up;
+++			drive-push-pull;
+++			slew-rate = <1>;
+++		};
+++		pins2 {
+++			u-boot,dm-pre-reloc;
+++			pinmux = <STM32_PINMUX('E', 3, AF9)>; /* SDMMC2_CK */
+++			bias-pull-up;
+++			drive-push-pull;
+++			slew-rate = <2>;
+++		};
+++	};
+++
+++	sdmmc2_opendrain_pins_mx: sdmmc2_opendrain_mx-0 {
+++		u-boot,dm-pre-reloc;
+++		pins1 {
+++			u-boot,dm-pre-reloc;
+++			pinmux = <STM32_PINMUX('A', 8, AF9)>, /* SDMMC2_D4 */
+++					 <STM32_PINMUX('A', 9, AF10)>, /* SDMMC2_D5 */
+++					 <STM32_PINMUX('B', 3, AF9)>, /* SDMMC2_D2 */
+++					 <STM32_PINMUX('B', 4, AF9)>, /* SDMMC2_D3 */
+++					 <STM32_PINMUX('B', 14, AF9)>, /* SDMMC2_D0 */
+++					 <STM32_PINMUX('B', 15, AF9)>, /* SDMMC2_D1 */
+++					 <STM32_PINMUX('C', 7, AF10)>, /* SDMMC2_D7 */
+++					 <STM32_PINMUX('E', 5, AF9)>; /* SDMMC2_D6 */
+++			bias-pull-up;
+++			drive-push-pull;
+++			slew-rate = <1>;
+++		};
+++		pins2 {
+++			u-boot,dm-pre-reloc;
+++			pinmux = <STM32_PINMUX('E', 3, AF9)>; /* SDMMC2_CK */
+++			bias-pull-up;
+++			drive-push-pull;
+++			slew-rate = <2>;
+++		};
+++		pins3 {
+++			u-boot,dm-pre-reloc;
+++			pinmux = <STM32_PINMUX('G', 6, AF10)>; /* SDMMC2_CMD */
+++			bias-pull-up;
+++			drive-open-drain;
+++			slew-rate = <1>;
+++		};
+++	};
+++
+++	sdmmc2_sleep_pins_mx: sdmmc2_sleep_mx-0 {
+++		u-boot,dm-pre-reloc;
+++		pins {
+++			u-boot,dm-pre-reloc;
+++			pinmux = <STM32_PINMUX('A', 8, ANALOG)>, /* SDMMC2_D4 */
+++					 <STM32_PINMUX('A', 9, ANALOG)>, /* SDMMC2_D5 */
+++					 <STM32_PINMUX('B', 3, ANALOG)>, /* SDMMC2_D2 */
+++					 <STM32_PINMUX('B', 4, ANALOG)>, /* SDMMC2_D3 */
+++					 <STM32_PINMUX('B', 14, ANALOG)>, /* SDMMC2_D0 */
+++					 <STM32_PINMUX('B', 15, ANALOG)>, /* SDMMC2_D1 */
+++					 <STM32_PINMUX('C', 7, ANALOG)>, /* SDMMC2_D7 */
+++					 <STM32_PINMUX('E', 3, ANALOG)>, /* SDMMC2_CK */
+++					 <STM32_PINMUX('E', 5, ANALOG)>, /* SDMMC2_D6 */
+++					 <STM32_PINMUX('G', 6, ANALOG)>; /* SDMMC2_CMD */
+++		};
+++	};
+++
+++	sdmmc3_pins_mx: sdmmc3_mx-0 {
+++		u-boot,dm-pre-reloc;
+++		pins1 {
+++			u-boot,dm-pre-reloc;
+++			pinmux = <STM32_PINMUX('D', 7, AF10)>, /* SDMMC3_D3 */
+++					 <STM32_PINMUX('F', 0, AF9)>, /* SDMMC3_D0 */
+++					 <STM32_PINMUX('F', 1, AF9)>, /* SDMMC3_CMD */
+++					 <STM32_PINMUX('F', 4, AF9)>, /* SDMMC3_D1 */
+++					 <STM32_PINMUX('F', 5, AF9)>; /* SDMMC3_D2 */
+++			bias-disable;
+++			drive-push-pull;
+++			slew-rate = <1>;
+++		};
+++		pins2 {
+++			u-boot,dm-pre-reloc;
+++			pinmux = <STM32_PINMUX('G', 15, AF10)>; /* SDMMC3_CK */
+++			bias-disable;
+++			drive-push-pull;
+++			slew-rate = <2>;
+++		};
+++	};
+++
+++	sdmmc3_opendrain_pins_mx: sdmmc3_opendrain_mx-0 {
+++		u-boot,dm-pre-reloc;
+++		pins1 {
+++			u-boot,dm-pre-reloc;
+++			pinmux = <STM32_PINMUX('D', 7, AF10)>, /* SDMMC3_D3 */
+++					 <STM32_PINMUX('F', 0, AF9)>, /* SDMMC3_D0 */
+++					 <STM32_PINMUX('F', 4, AF9)>, /* SDMMC3_D1 */
+++					 <STM32_PINMUX('F', 5, AF9)>; /* SDMMC3_D2 */
+++			bias-disable;
+++			drive-push-pull;
+++			slew-rate = <1>;
+++		};
+++		pins2 {
+++			u-boot,dm-pre-reloc;
+++			pinmux = <STM32_PINMUX('F', 1, AF9)>; /* SDMMC3_CMD */
+++			bias-disable;
+++			drive-open-drain;
+++			slew-rate = <1>;
+++		};
+++		pins3 {
+++			u-boot,dm-pre-reloc;
+++			pinmux = <STM32_PINMUX('G', 15, AF10)>; /* SDMMC3_CK */
+++			bias-disable;
+++			drive-push-pull;
+++			slew-rate = <2>;
+++		};
+++	};
+++
+++	sdmmc3_sleep_pins_mx: sdmmc3_sleep_mx-0 {
+++		u-boot,dm-pre-reloc;
+++		pins {
+++			u-boot,dm-pre-reloc;
+++			pinmux = <STM32_PINMUX('D', 7, ANALOG)>, /* SDMMC3_D3 */
+++					 <STM32_PINMUX('F', 0, ANALOG)>, /* SDMMC3_D0 */
+++					 <STM32_PINMUX('F', 1, ANALOG)>, /* SDMMC3_CMD */
+++					 <STM32_PINMUX('F', 4, ANALOG)>, /* SDMMC3_D1 */
+++					 <STM32_PINMUX('F', 5, ANALOG)>, /* SDMMC3_D2 */
+++					 <STM32_PINMUX('G', 15, ANALOG)>; /* SDMMC3_CK */
+++		};
+++	};
+++
+++	uart4_pins_mx: uart4_mx-0 {
+++		u-boot,dm-pre-reloc;
+++		pins1 {
+++			u-boot,dm-pre-reloc;
+++			pinmux = <STM32_PINMUX('B', 2, AF8)>; /* UART4_RX */
+++			bias-disable;
+++		};
+++		pins2 {
+++			u-boot,dm-pre-reloc;
+++			pinmux = <STM32_PINMUX('G', 11, AF6)>; /* UART4_TX */
+++			bias-disable;
+++			drive-push-pull;
+++			slew-rate = <0>;
+++		};
+++	};
+++
+++	uart4_sleep_pins_mx: uart4_sleep_mx-0 {
+++		u-boot,dm-pre-reloc;
+++		pins {
+++			u-boot,dm-pre-reloc;
+++			pinmux = <STM32_PINMUX('B', 2, ANALOG)>, /* UART4_RX */
+++					 <STM32_PINMUX('G', 11, ANALOG)>; /* UART4_TX */
+++		};
+++	};
+++
+++	usart2_pins_mx: usart2_mx-0 {
+++		pins1 {
+++			pinmux = <STM32_PINMUX('D', 3, AF7)>, /* USART2_CTS */
+++					 <STM32_PINMUX('D', 6, AF7)>; /* USART2_RX */
+++			bias-disable;
+++		};
+++		pins2 {
+++			pinmux = <STM32_PINMUX('D', 4, AF7)>, /* USART2_RTS */
+++					 <STM32_PINMUX('D', 5, AF7)>; /* USART2_TX */
+++			bias-disable;
+++			drive-push-pull;
+++			slew-rate = <0>;
+++		};
+++	};
+++
+++	usart2_sleep_pins_mx: usart2_sleep_mx-0 {
+++		pins {
+++			pinmux = <STM32_PINMUX('D', 3, ANALOG)>, /* USART2_CTS */
+++					 <STM32_PINMUX('D', 4, ANALOG)>, /* USART2_RTS */
+++					 <STM32_PINMUX('D', 5, ANALOG)>, /* USART2_TX */
+++					 <STM32_PINMUX('D', 6, ANALOG)>; /* USART2_RX */
+++		};
+++	};
+++
+++
+++
+++};
+++
+++&pinctrl_z {
+++	u-boot,dm-pre-reloc;
+++
+++	i2c2_pins_z_mx: i2c2_mx-0 {
+++		pins {
+++			pinmux = <STM32_PINMUX('Z', 6, AF3)>; /* I2C2_SCL */
+++			bias-disable;
+++			drive-open-drain;
+++			slew-rate = <0>;
+++		};
+++	};
+++
+++	i2c2_sleep_pins_z_mx: i2c2_sleep_mx-0 {
+++		pins {
+++			pinmux = <STM32_PINMUX('Z', 6, ANALOG)>; /* I2C2_SCL */
+++		};
+++	};
+++
+++	i2c4_pins_z_mx: i2c4_mx-0 {
+++		u-boot,dm-pre-reloc;
+++		pins {
+++			u-boot,dm-pre-reloc;
+++			pinmux = <STM32_PINMUX('Z', 4, AF6)>, /* I2C4_SCL */
+++					 <STM32_PINMUX('Z', 5, AF6)>; /* I2C4_SDA */
+++			bias-disable;
+++			drive-open-drain;
+++			slew-rate = <0>;
+++		};
+++	};
+++
+++	i2c4_sleep_pins_z_mx: i2c4_sleep_mx-0 {
+++		u-boot,dm-pre-reloc;
+++		pins {
+++			u-boot,dm-pre-reloc;
+++			pinmux = <STM32_PINMUX('Z', 4, ANALOG)>, /* I2C4_SCL */
+++					 <STM32_PINMUX('Z', 5, ANALOG)>; /* I2C4_SDA */
+++		};
+++	};
+++
+++
+++
+++};
+++
+++&m4_rproc{
+++	/*Restriction: "memory-region" property is not managed - please to use User-Section if needed*/
+++	mboxes = <&ipcc 2>;
+++	mbox-names = "shutdown";
+++	recovery;
+++	status = "okay";
+++
+++
+++	interrupt-parent = <&exti>;
+++	interrupts = <68 1>;
+++	interrupt-names = "wdg";
+++	wakeup-source;
+++
+++};
+++
+++&bsec{
+++	status = "okay";
+++
+++
+++
+++};
+++
+++&dcmi{
+++	pinctrl-names = "default", "sleep";
+++	pinctrl-0 = <&dcmi_pins_mx>;
+++	pinctrl-1 = <&dcmi_sleep_pins_mx>;
+++	status = "okay";
+++
+++
+++
+++  port {
+++		dcmi_0: endpoint {
+++			remote-endpoint = <&ov5640_0>;
+++			bus-width = <8>;
+++			hsync-active = <0>;
+++			vsync-active = <0>;
+++			pclk-sample = <1>;
+++			pclk-max-frequency = <77000000>;
+++		};
+++	};
+++
+++
+++};
+++
+++&dsi{
+++	status = "okay";
+++
+++
+++
+++  #address-cells = <1>;
+++	#size-cells = <0>;
+++	status = "okay";
+++
+++	ports {
+++		#address-cells = <1>;
+++		#size-cells = <0>;
+++
+++		port@0 {
+++			reg = <0>;
+++			dsi_in: endpoint {
+++				remote-endpoint = <&ltdc_ep1_out>;
+++			};
+++		};
+++
+++		port@1 {
+++			reg = <1>;
+++			dsi_out: endpoint {
+++				remote-endpoint = <&panel_in>;
+++			};
+++		};
+++	};
+++
+++	panel@0 {
+++		compatible = "orisetech,otm8009a";
+++		reg = <0>;
+++		reset-gpios = <&gpioe 9 GPIO_ACTIVE_LOW>;
+++		power-supply = <&v3v3>;
+++		status = "okay";
+++
+++		port {
+++			panel_in: endpoint {
+++				remote-endpoint = <&dsi_out>;
+++			};
+++		};
+++	};
+++
+++
+++};
+++
+++&ethernet0{
+++	pinctrl-names = "default", "sleep";
+++	pinctrl-0 = <&eth1_pins_mx>;
+++	pinctrl-1 = <&eth1_sleep_pins_mx>;
+++	status = "okay";
+++
+++
+++  st,eth_clk_sel = <1>;  //custom
+++  phy-mode = "rgmii-id";
+++	max-speed = <1000>;
+++	phy-handle = <&phy0>;
+++
+++	mdio0 {
+++		#address-cells = <1>;
+++		#size-cells = <0>;
+++		compatible = "snps,dwmac-mdio";
+++		phy0: ethernet-phy@0 {
+++			reg = <0>;
+++		};
+++	};
+++
+++
+++};
+++
+++&gpu{
+++	status = "okay";
+++
+++
+++	contiguous-area = <&gpu_reserved>;
+++
+++};
+++
+++&hsem{
+++	status = "okay";
+++
+++
+++
+++};
+++
+++&i2c1{
+++	pinctrl-names = "default", "sleep";
+++	pinctrl-0 = <&i2c1_pins_mx>;
+++	pinctrl-1 = <&i2c1_sleep_pins_mx>;
+++	status = "okay";
+++
+++
+++
+++  i2c-scl-rising-time-ns = <100>;
+++	i2c-scl-falling-time-ns = <7>;
+++
+++	/delete-property/dmas;
+++	/delete-property/dma-names;
+++
+++
+++	touchscreen@2a {
+++		compatible = "focaltech,ft6236";
+++		reg = <0x2a>;
+++		interrupts = <2 2>;
+++		interrupt-parent = <&gpiof>;
+++		interrupt-controller;
+++		touchscreen-size-x = <480>;
+++		touchscreen-size-y = <800>;
+++		status = "okay";
+++	};
+++	touchscreen@38 {
+++		compatible = "focaltech,ft6336";
+++		reg = <0x38>;
+++		interrupts = <2 2>;
+++		interrupt-parent = <&gpiof>;
+++		interrupt-controller;
+++		touchscreen-size-x = <480>;
+++		touchscreen-size-y = <800>;
+++		status = "okay";
+++	};
+++
+++
+++};
+++
+++&i2c2{
+++	pinctrl-names = "default", "sleep";
+++	pinctrl-0 = <&i2c2_pins_mx &i2c2_pins_z_mx>;
+++	pinctrl-1 = <&i2c2_sleep_pins_mx &i2c2_sleep_pins_z_mx>;
+++	status = "okay";
+++
+++
+++
+++  i2c-scl-rising-time-ns = <185>;
+++	i2c-scl-falling-time-ns = <20>;
+++
+++	/delete-property/dmas;
+++	/delete-property/dma-names;
+++
+++  ov5640: camera@3c {
+++		compatible = "ovti,ov5640";
+++		reg = <0x3c>;
+++		clocks = <&clk_ext_camera>;
+++		clock-names = "xclk";
+++		DOVDD-supply = <&v3v3>;
+++		//powerdown-gpios = <&stmfx_pinctrl 18 (GPIO_ACTIVE_HIGH | GPIO_PUSH_PULL)>;
+++		//reset-gpios = <&stmfx_pinctrl 19 (GPIO_ACTIVE_LOW | GPIO_PUSH_PULL)>;
+++    //powerdown-gpios = <&gpioc 3 GPIO_ACTIVE_HIGH>;  //custom
+++    //reset-gpios = <&gpioa 14 GPIO_ACTIVE_LOW>;  //custom
+++		rotation = <180>;
+++		status = "okay";
+++
+++		port {
+++			ov5640_0: endpoint {
+++				remote-endpoint = <&dcmi_0>;
+++				bus-width = <8>;
+++				data-shift = <2>; /* lines 9:2 are used */
+++				hsync-active = <0>;
+++				vsync-active = <0>;
+++				pclk-sample = <1>;
+++				pclk-max-frequency = <77000000>;
+++			};
+++		};
+++	};
+++
+++
+++};
+++
+++&i2c4{
+++	u-boot,dm-pre-reloc;
+++	pinctrl-names = "default", "sleep";
+++	pinctrl-0 = <&i2c4_pins_z_mx>;
+++	pinctrl-1 = <&i2c4_sleep_pins_z_mx>;
+++	status = "okay";
+++
+++
+++	i2c-scl-rising-time-ns = <185>;
+++	i2c-scl-falling-time-ns = <20>;
+++	/delete-property/dmas;
+++	/delete-property/dma-names;
+++
+++	typec: stusb1600@28 {
+++		compatible = "st,stusb1600";
+++		reg = <0x28>;
+++		interrupt-parent = <&gpioe>;
+++		interrupts = <8 IRQ_TYPE_EDGE_FALLING>;
+++		pinctrl-0 = <&stusb1600_pins_a>;
+++		pinctrl-names = "default";
+++		status = "okay";
+++
+++		typec_con: connector {
+++			compatible = "usb-c-connector";
+++			label = "USB-C";
+++			power-role = "dual";
+++			power-opmode = "default";
+++		};
+++	};
+++
+++	pmic: stpmic@33 {
+++		compatible = "st,stpmic1";
+++		reg = <0x33>;
+++		interrupts-extended = <&exti_pwr 55 IRQ_TYPE_EDGE_FALLING>;
+++		interrupt-controller;
+++		#interrupt-cells = <2>;
+++		status = "okay";
+++
+++		st,main-control-register = <0x04>;
+++		st,vin-control-register = <0xc0>;
+++		st,usb-control-register = <0x20>;
+++
+++		regulators {
+++			compatible = "st,stpmic1-regulators";
+++
+++			ldo1-supply = <&v3v3>;
+++			ldo3-supply = <&vdd_ddr>;
+++			ldo6-supply = <&v3v3>;
+++			pwr_sw1-supply = <&bst_out>;
+++			pwr_sw2-supply = <&bst_out>;
+++
+++			vddcore: buck1 {
+++				regulator-name = "vddcore";
+++				regulator-min-microvolt = <1200000>;
+++				regulator-max-microvolt = <1350000>;
+++				regulator-always-on;
+++				regulator-initial-mode = <0>;
+++				regulator-over-current-protection;
+++			};
+++
+++			vdd_ddr: buck2 {
+++				regulator-name = "vdd_ddr";
+++				regulator-min-microvolt = <1350000>;
+++				regulator-max-microvolt = <1350000>;
+++				regulator-always-on;
+++				regulator-initial-mode = <0>;
+++				regulator-over-current-protection;
+++			};
+++
+++			vdd: buck3 {
+++				regulator-name = "vdd";
+++				regulator-min-microvolt = <3300000>;
+++				regulator-max-microvolt = <3300000>;
+++				regulator-always-on;
+++				st,mask-reset;
+++				regulator-initial-mode = <0>;
+++				regulator-over-current-protection;
+++			};
+++
+++			v3v3: buck4 {
+++				regulator-name = "v3v3";
+++				regulator-min-microvolt = <3300000>;
+++				regulator-max-microvolt = <3300000>;
+++				regulator-always-on;
+++				regulator-over-current-protection;
+++				regulator-initial-mode = <0>;
+++			};
+++
+++			v1v8_audio: ldo1 {
+++				regulator-name = "v1v8_audio";
+++				regulator-min-microvolt = <1800000>;
+++				regulator-max-microvolt = <1800000>;
+++				regulator-always-on;
+++				interrupts = <IT_CURLIM_LDO1 0>;
+++
+++			};
+++
+++			v3v3_hdmi: ldo2 {
+++				regulator-name = "v3v3_hdmi";
+++				regulator-min-microvolt = <3300000>;
+++				regulator-max-microvolt = <3300000>;
+++				regulator-always-on;
+++				interrupts = <IT_CURLIM_LDO2 0>;
+++
+++			};
+++
+++			vtt_ddr: ldo3 {
+++				regulator-name = "vtt_ddr";
+++				regulator-min-microvolt = <500000>;
+++				regulator-max-microvolt = <750000>;
+++				regulator-always-on;
+++				regulator-over-current-protection;
+++			};
+++
+++			vdd_usb: ldo4 {
+++				regulator-name = "vdd_usb";
+++				regulator-min-microvolt = <3300000>;
+++				regulator-max-microvolt = <3300000>;
+++				interrupts = <IT_CURLIM_LDO4 0>;
+++			};
+++
+++      v3v3_eth: ldo5 {                           //custom
+++				regulator-name = "v3v3_eth";
+++				regulator-min-microvolt = <3300000>;
+++				regulator-max-microvolt = <3300000>;
+++				interrupts = <IT_CURLIM_LDO5 0>;
+++				regulator-boot-on;
+++			};
+++
+++			v3v3_dsi: ldo6 {                           //custom
+++				regulator-name = "v3v3_dsi";
+++				regulator-min-microvolt = <3300000>;
+++				regulator-max-microvolt = <3300000>;
+++				regulator-always-on;
+++				interrupts = <IT_CURLIM_LDO6 0>;
+++
+++			};
+++
+++			vref_ddr: vref_ddr {
+++				regulator-name = "vref_ddr";
+++				regulator-always-on;
+++				regulator-over-current-protection;
+++			};
+++
+++      bst_out: boost {
+++       regulator-name = "bst_out";
+++       interrupts = <IT_OCP_BOOST 0>;
+++       regulator-always-on;                    //custom
+++      };
+++
+++     vbus_otg: pwr_sw1 {
+++       regulator-name = "vbus_otg";
+++       interrupts = <IT_OCP_OTG 0>;
+++       regulator-active-discharge;
+++       regulator-always-on;                    //custom
+++      };
+++
+++      vbus_sw: pwr_sw2 {
+++       regulator-name = "vbus_sw";
+++       interrupts = <IT_OCP_SWOUT 0>;
+++       regulator-active-discharge;
+++       regulator-always-on;                    //custom
+++      };
+++		};
+++
+++		onkey {
+++			compatible = "st,stpmic1-onkey";
+++			interrupts = <IT_PONKEY_F 0>, <IT_PONKEY_R 1>;
+++			interrupt-names = "onkey-falling", "onkey-rising";
+++			status = "okay";
+++		};
+++
+++		watchdog {
+++			compatible = "st,stpmic1-wdt";
+++			status = "disabled";
+++		};
+++	};
+++
+++};
+++
+++&i2s2{
+++	pinctrl-names = "default", "sleep";
+++	pinctrl-0 = <&i2s2_pins_mx>;
+++	pinctrl-1 = <&i2s2_sleep_pins_mx>;
+++	status = "okay";
+++
+++
+++
+++};
+++
+++&ipcc{
+++	status = "okay";
+++
+++
+++
+++};
+++
+++&iwdg2{
+++	status = "okay";
+++
+++
+++	timeout-sec = <32>;
+++
+++};
+++
+++&ltdc{
+++	pinctrl-names = "default", "sleep";
+++	pinctrl-0 = <&ltdc_pins_mx>;
+++	pinctrl-1 = <&ltdc_sleep_pins_mx>;
+++	status = "okay";
+++
+++
+++
+++  port {
+++		#address-cells = <1>;
+++		#size-cells = <0>;
+++
+++		ltdc_ep1_out: endpoint@1 {
+++			reg = <1>;
+++			remote-endpoint = <&dsi_in>;
+++		};
+++	};
+++
+++
+++
+++};
+++
+++&pwr{
+++	status = "okay";
+++
+++
+++	pwr-regulators {
+++		vdd-supply = <&vdd>;
+++		vdd_3v3_usbfs-supply = <&vdd_usb>;
+++	};
+++
+++};
+++
+++&rcc{
+++	u-boot,dm-pre-reloc;
+++	status = "okay";
+++
+++
+++
+++};
+++
+++&rng1{
+++	status = "okay";
+++
+++
+++
+++};
+++
+++&rtc{
+++	status = "okay";
+++
+++
+++	st,lsco = <RTC_OUT2_RMP>;
+++
+++};
+++
+++&sdmmc1{
+++	u-boot,dm-pre-reloc;
+++	pinctrl-names = "default", "opendrain", "sleep";
+++	pinctrl-0 = <&sdmmc1_pins_mx>;
+++	pinctrl-1 = <&sdmmc1_opendrain_pins_mx>;
+++	pinctrl-2 = <&sdmmc1_sleep_pins_mx>;
+++	status = "okay";
+++
+++
+++	broken-cd;
+++	st,neg-edge;
+++	bus-width = <4>;
+++	vmmc-supply = <&v3v3>;
+++
+++};
+++
+++&sdmmc2{
+++	u-boot,dm-pre-reloc;
+++	pinctrl-names = "default", "opendrain", "sleep";
+++	pinctrl-0 = <&sdmmc2_pins_mx>;
+++	pinctrl-1 = <&sdmmc2_opendrain_pins_mx>;
+++	pinctrl-2 = <&sdmmc2_sleep_pins_mx>;
+++	status = "okay";
+++
+++
+++  	non-removable;
+++	no-sd;
+++	no-sdio;
+++	st,neg-edge;
+++	bus-width = <8>;
+++	vmmc-supply = <&v3v3>;
+++	vqmmc-supply = <&v3v3>;
+++	mmc-ddr-3_3v;
+++
+++
+++};
+++
+++&sdmmc3{
+++	u-boot,dm-pre-reloc;
+++	pinctrl-names = "default", "opendrain", "sleep";
+++	pinctrl-0 = <&sdmmc3_pins_mx>;
+++	pinctrl-1 = <&sdmmc3_opendrain_pins_mx>;
+++	pinctrl-2 = <&sdmmc3_sleep_pins_mx>;
+++	//status = "okay";
+++
+++
+++	arm,primecell-periphid = <0x10153180>;
+++  	non-removable;
+++	st,neg-edge;
+++	bus-width = <4>;
+++	vmmc-supply = <&v3v3>;
+++	//mmc-pwrseq = <&wifi_pwrseq>; //messes up sdmmc alias shifting when used
+++	#address-cells = <1>;
+++	#size-cells = <0>;
+++	keep-power-in-suspend;
+++	//status = "okay";
+++
+++	brcmf: bcrmf@1 {
+++		reg = <1>;
+++		compatible = "brcm,bcm4329-fmac";
+++	};
+++
+++
+++};
+++
+++&tamp{
+++	status = "okay";
+++
+++
+++
+++};
+++
+++&uart4{
+++	u-boot,dm-pre-reloc;
+++	pinctrl-names = "default", "sleep";
+++	pinctrl-0 = <&uart4_pins_mx>;
+++	pinctrl-1 = <&uart4_sleep_pins_mx>;
+++	status = "okay";
+++
+++
+++
+++};
+++
+++&usart2{
+++	pinctrl-names = "default", "sleep";
+++	pinctrl-0 = <&usart2_pins_mx>;
+++	pinctrl-1 = <&usart2_sleep_pins_mx>;
+++	status = "okay";
+++
+++
+++  bluetooth {
+++		shutdown-gpios = <&gpioe 10 GPIO_ACTIVE_HIGH>;
+++		compatible = "brcm,bcm43438-bt";
+++		max-speed = <3000000>;
+++	};
+++
+++};
+++
+++
+++&m4_rproc {
+++memory-region = <&retram>, <&mcuram>, <&mcuram2>, <&vdev0vring0>,
+++		<&vdev0vring1>, <&vdev0buffer>;
+++};
+++
+++&dma1 {
+++	sram = <&dma_pool>;
+++};
+++
+++&dma2 {
+++	sram = <&dma_pool>;
+++};
+++
+++&adc {
+++	status = "disabled";
+++};
+++
+++
+++&usbh_ehci {
+++	phys = <&usbphyc_port0>;
+++	phy-names = "usb";
+++	status = "okay";
+++};
+++
+++&usbotg_hs {
+++	extcon = <&typec>;
+++	phys = <&usbphyc_port1 0>;
+++	phy-names = "usb2-phy";
+++	status = "okay";
+++};
+++
+++&usbphyc {
+++	vdd3v3-supply = <&vdd_usb>;
+++	status = "okay";
+++};
+++
+++&usbphyc_port0 {
+++	st,phy-tuning = <&usb_phy_tuning>;
+++};
+++
+++&usbphyc_port1 {
+++	st,phy-tuning = <&usb_phy_tuning>;
+++};
++diff --git a/arch/arm/dts/stm32mp15-osd32mp1-ddr3-1x4Gb-1066-binG.dtsi b/arch/arm/dts/stm32mp15-osd32mp1-ddr3-1x4Gb-1066-binG.dtsi
++new file mode 100644
++index 0000000000..f33886f2b4
++--- /dev/null
+++++ b/arch/arm/dts/stm32mp15-osd32mp1-ddr3-1x4Gb-1066-binG.dtsi
 +@@ -0,0 +1,119 @@
 ++/*
 ++ * Copyright (C) 2015-2018, STMicroelectronics - All Rights Reserved
@@ -3012,7 +7063,7 @@ index 0000000000..4ddfc5b982
 ++ * Relaxed Timing Mode: false
 ++ * Address mapping type: RBC
 ++ *
-++ * Save Date: 2020.08.20, save Time: 10:57:25
+++ * Save Date: 2020.02.08, save Time: 23:22:33
 ++ */
 ++
 ++#define DDR_MEM_NAME	"DDR3-DDR3L 16bits 533000Khz"
@@ -3115,3128 +7166,105 @@ index 0000000000..4ddfc5b982
 ++#define DDR_DX3DLLCR 0x40000000
 ++#define DDR_DX3DQTR 0xFFFFFFFF
 ++#define DDR_DX3DQSTR 0x3DB02000
-+diff --git a/arch/arm/dts/stm32mp157c-osd32mp1-brk-u-boot.dtsi b/arch/arm/dts/stm32mp157c-osd32mp1-brk-u-boot.dtsi
-+new file mode 100644
-+index 0000000000..8f0e39f040
-+--- /dev/null
-++++ b/arch/arm/dts/stm32mp157c-osd32mp1-brk-u-boot.dtsi
-+@@ -0,0 +1,255 @@
-++/* SPDX-License-Identifier: GPL-2.0+ OR BSD-3-Clause*/
-++/*
-++ * Copyright (C) 2020, STMicroelectronics - All Rights Reserved
-++ * Author: STM32CubeMX code generation for STMicroelectronics.
-++ */
-++
-++/* For more information on Device Tree configuration, please refer to
-++ * https://wiki.st.com/stm32mpu/wiki/Category:Device_tree_configuration
-++ */
-++
-++#include <dt-bindings/clock/stm32mp1-clksrc.h>
-++#include "osd32mp1.dtsi"
-++
-++#include "stm32mp15-u-boot.dtsi"
-++#include "stm32mp15-ddr.dtsi"
-++
-++/* USER CODE BEGIN includes */
-++/* USER CODE END includes */
-++
-++/ {
-++
-++	/* USER CODE BEGIN root */
-++
-++	aliases{
-++		i2c0 = &i2c4;
-++		mmc0 = &sdmmc1;
-++		usb0 = &usbotg_hs;
-++	};
-++
-++	config{
-++		u-boot,boot-led = "LED2_GRN";
-++		u-boot,error-led = "LED2_RED";
-++		u-boot,mmc-env-partition = "ssbl";
-++		st,stm32prog-gpios = <&gpiod 9 GPIO_ACTIVE_LOW>;
-++	};
-++
-++	/* USER CODE END root */
-++
-++	clocks {
-++		u-boot,dm-pre-reloc;
-++
-++		/* USER CODE BEGIN clocks */
-++		/* USER CODE END clocks */
-++
-++#ifndef CONFIG_STM32MP1_TRUSTED
-++		clk_lsi: clk-lsi {
-++			u-boot,dm-pre-reloc;
-++
-++			/* USER CODE BEGIN clk_lsi */
-++			/* USER CODE END clk_lsi */
-++		};
-++		clk_hsi: clk-hsi {
-++			u-boot,dm-pre-reloc;
-++
-++			/* USER CODE BEGIN clk_hsi */
-++			/* USER CODE END clk_hsi */
-++		};
-++		clk_csi: clk-csi {
-++			u-boot,dm-pre-reloc;
-++			status = "disabled";
-++
-++			/* USER CODE BEGIN clk_csi */
-++			/* USER CODE END clk_csi */
-++		};
-++		clk_lse: clk-lse {
-++			u-boot,dm-pre-reloc;
-++			st,drive = < LSEDRV_MEDIUM_HIGH >;
-++
-++			/* USER CODE BEGIN clk_lse */
-++			/* USER CODE END clk_lse */
-++		};
-++		clk_hse: clk-hse {
-++			u-boot,dm-pre-reloc;
-++			st,digbypass;
-++
-++			/* USER CODE BEGIN clk_hse */
-++			/* USER CODE END clk_hse */
-++		};
-++#endif	/*CONFIG_STM32MP1_TRUSTED*/
-++	};
-++
-++}; /*root*/
-++
-++#ifndef CONFIG_STM32MP1_TRUSTED
-++
-++&rcc {
-++	u-boot,dm-pre-reloc;
-++	st,clksrc = <
-++		CLK_MPU_PLL1P
-++		CLK_AXI_PLL2P
-++		CLK_MCU_PLL3P
-++		CLK_PLL12_HSE
-++		CLK_PLL3_HSE
-++		CLK_PLL4_HSE
-++		CLK_RTC_LSE
-++		CLK_MCO1_DISABLED
-++		CLK_MCO2_DISABLED
-++	>;
-++	st,clkdiv = <
-++		1 		/*MPU*/
-++		0 		/*AXI*/
-++		0 		/*MCU*/
-++		1 		/*APB1*/
-++		1 		/*APB2*/
-++		1 		/*APB3*/
-++		1 		/*APB4*/
-++		2 		/*APB5*/
-++		23 		/*RTC*/
-++		0 		/*MCO1*/
-++		0 		/*MCO2*/
-++	>;
-++	st,pkcs = <
-++		CLK_CKPER_DISABLED
-++		CLK_ETH_DISABLED
-++		CLK_SDMMC12_PLL4P
-++		CLK_STGEN_HSE
-++		CLK_USBPHY_HSE
-++		CLK_SPI2S1_DISABLED
-++		CLK_SPI2S23_DISABLED
-++		CLK_SPI45_DISABLED
-++		CLK_SPI6_DISABLED
-++		CLK_I2C46_HSI
-++		CLK_SDMMC3_DISABLED
-++		CLK_USBO_USBPHY
-++		CLK_ADC_DISABLED
-++		CLK_CEC_DISABLED
-++		CLK_I2C12_DISABLED
-++		CLK_I2C35_DISABLED
-++		CLK_UART1_DISABLED
-++		CLK_UART24_HSI
-++		CLK_UART35_DISABLED
-++		CLK_UART6_DISABLED
-++		CLK_UART78_DISABLED
-++		CLK_SPDIF_DISABLED
-++		CLK_SAI1_DISABLED
-++		CLK_SAI2_DISABLED
-++		CLK_SAI3_DISABLED
-++		CLK_SAI4_DISABLED
-++		CLK_RNG1_LSI
-++		CLK_LPTIM1_DISABLED
-++		CLK_LPTIM23_DISABLED
-++		CLK_LPTIM45_DISABLED
-++	>;
-++	pll2:st,pll@1 {
-++		compatible = "st,stm32mp1-pll";
-++		reg = <1>;
-++		cfg = < 2 65 1 0 0 PQR(1,1,1) >;
-++		frac = < 0x1400 >;
-++		u-boot,dm-pre-reloc;
-++	};
-++	pll3:st,pll@2 {
-++		compatible = "st,stm32mp1-pll";
-++		reg = <2>;
-++		cfg = < 1 33 1 16 36 PQR(1,0,0) >;
-++		frac = < 0x1a04 >;
-++		u-boot,dm-pre-reloc;
-++	};
-++	pll4:st,pll@3 {
-++		compatible = "st,stm32mp1-pll";
-++		reg = <3>;
-++		cfg = < 3 98 5 7 7 PQR(1,0,0) >;
-++		u-boot,dm-pre-reloc;
-++	};
-++};
-++
-++&i2c4{
-++	u-boot,dm-pre-reloc;
-++
-++	/* USER CODE BEGIN i2c4 */
-++	/* USER CODE END i2c4 */
-++};
-++
-++&sdmmc1{
-++	u-boot,dm-pre-reloc;
-++
-++	/* USER CODE BEGIN sdmmc1 */
-++	/* USER CODE END sdmmc1 */
-++};
-++
-++#endif	/*CONFIG_STM32MP1_TRUSTED*/
-++
-++&cryp1{
-++	u-boot,dm-pre-reloc;
-++
-++	/* USER CODE BEGIN cryp1 */
-++	/* USER CODE END cryp1 */
-++};
-++
-++&hash1{
-++	u-boot,dm-pre-reloc;
-++
-++	/* USER CODE BEGIN hash1 */
-++	/* USER CODE END hash1 */
-++};
-++
-++&uart4{
-++	u-boot,dm-pre-reloc;
-++
-++	/* USER CODE BEGIN uart4 */
-++	/* USER CODE END uart4 */
-++};
-++
-++&usbotg_hs{
-++	u-boot,dm-pre-reloc;
-++
-++	/* USER CODE BEGIN usbotg_hs */
-++	u-boot,force-b-session-valid;
-++	hnp-srp-disable;
-++	dr_mode = "peripheral";
-++	/* USER CODE END usbotg_hs */
-++};
-++
-++&usbphyc{
-++	u-boot,dm-pre-reloc;
-++
-++	/* USER CODE BEGIN usbphyc */
-++	/* USER CODE END usbphyc */
-++};
-++
-++&usbphyc_port0{
-++	u-boot,dm-pre-reloc;
-++
-++	/* USER CODE BEGIN usbphyc_port0 */
-++	/* USER CODE END usbphyc_port0 */
-++};
-++
-++&usbphyc_port1{
-++	u-boot,dm-pre-reloc;
-++
-++	/* USER CODE BEGIN usbphyc_port1 */
-++	/* USER CODE END usbphyc_port1 */
-++};
-++
-++/* USER CODE BEGIN addons */
-++
-++&adc{
-++	status = "okay";
-++};
-++
-++#ifndef CONFIG_STM32MP1_TRUSTED
-++&i2s2{
-++	clocks = <&rcc SPI2>, <&rcc SPI2_K>, <&rcc PLL3_Q>, <&rcc PLL3_R>;
-++};
-++
-++&pmic{
-++	u-boot,dm-pre-reloc;
-++};
-++
-++&sai2{
-++	clocks = <&rcc SAI2>, <&rcc PLL3_Q>, <&rcc PLL3_R>;
-++};
-++#endif /*CONFIG_STM32MP1_TRUSTED*/
-++
-++/* USER CODE END addons */
-++
-+diff --git a/arch/arm/dts/stm32mp157c-osd32mp1-brk.dts b/arch/arm/dts/stm32mp157c-osd32mp1-brk.dts
-+new file mode 100644
-+index 0000000000..51eff6e221
-+--- /dev/null
-++++ b/arch/arm/dts/stm32mp157c-osd32mp1-brk.dts
-+@@ -0,0 +1,756 @@
-++/* SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause) */
-++/*
-++ * Copyright (C) STMicroelectronics 2020 - All Rights Reserved
-++ * Author: STM32CubeMX code generation for STMicroelectronics.
-++ */
-++
-++/* For more information on Device Tree configuration, please refer to
-++ * https://wiki.st.com/stm32mpu/wiki/Category:Device_tree_configuration
-++ */
-++
-++/dts-v1/;
-++#include <dt-bindings/pinctrl/stm32-pinfunc.h>
-++
-++#include "stm32mp157.dtsi"
-++#include "stm32mp15xc.dtsi"
-++#include "stm32mp15xxac-pinctrl.dtsi"
-++#include "stm32mp157-m4-srm.dtsi"
-++
-++/* USER CODE BEGIN includes */
-++#include <dt-bindings/mfd/st,stpmic1.h>
-++#include <dt-bindings/rtc/rtc-stm32.h>
-++/* USER CODE END includes */
-++
-++/ {
-++	model = "Octavo OSD32MP1 BRK board";
-++	compatible = "st,stm32mp157c-osd32mp1-brk", "st,stm32mp157";
-++
-++	memory@c0000000 {
-++		device_type = "memory";
-++		reg = <0xc0000000 0x20000000>;
-++
-++		/* USER CODE BEGIN memory */
-++		/* USER CODE END memory */
-++	};
-++
-++	reserved-memory {
-++		#address-cells = <1>;
-++		#size-cells = <1>;
-++		ranges;
-++
-++		/* USER CODE BEGIN reserved-memory */
-++
-++		mcuram2:mcuram2@10000000{
-++			compatible = "shared-dma-pool";
-++			reg = <0x10000000 0x40000>;
-++			no-map;
-++		};
-++
-++		vdev0vring0:vdev0vring0@10040000{
-++			compatible = "shared-dma-pool";
-++			reg = <0x10040000 0x1000>;
-++			no-map;
-++		};
-++
-++		vdev0vring1:vdev0vring1@10041000{
-++			compatible = "shared-dma-pool";
-++			reg = <0x10041000 0x1000>;
-++			no-map;
-++		};
-++
-++		vdev0buffer:vdev0buffer@10042000{
-++			compatible = "shared-dma-pool";
-++			reg = <0x10042000 0x4000>;
-++			no-map;
-++		};
-++
-++		mcuram:mcuram@30000000{
-++			compatible = "shared-dma-pool";
-++			reg = <0x30000000 0x40000>;
-++			no-map;
-++		};
-++
-++		retram:retram@38000000{
-++			compatible = "shared-dma-pool";
-++			reg = <0x38000000 0x10000>;
-++			no-map;
-++		};
-++
-++		gpu_reserved:gpu@da000000{
-++			reg = <0xda000000 0x4000000>;
-++			no-map;
-++		};
-++
-++		optee_memory:optee@0xde000000{
-++			reg = <0xde000000 0x02000000>;
-++			no-map;
-++			status = "okay";
-++		};
-++		/* USER CODE END reserved-memory */
-++	};
-++
-++	/* USER CODE BEGIN root */
-++
-++	led{
-++		compatible = "gpio-leds";
-++
-++		red1{
-++			label = "LED1_RED";
-++			gpios = <&gpioz 6 GPIO_ACTIVE_LOW>;
-++			linux,default-trigger = "heartbeat";
-++			status = "okay";
-++			default-state = "off";
-++		};
-++		
-++		green1{
-++			label = "LED1_GRN";
-++			gpios = <&gpioz 7 GPIO_ACTIVE_LOW>;
-++			status = "okay";
-++			default-state = "on";
-++		};
-++		
-++		red2{
-++			label = "LED2_RED";
-++			gpios = <&gpioi 8 GPIO_ACTIVE_LOW>;
-++			status = "okay";
-++			default-state = "off";
-++		};
-++				
-++		green2{
-++			label = "LED2_GRN";
-++			gpios = <&gpioi 9 GPIO_ACTIVE_LOW>;
-++			default-state = "off";
-++		};
-++	};
-++
-++	usb_phy_tuning:usb-phy-tuning{
-++		st,hs-dc-level = <2>;
-++		st,fs-rftime-tuning;
-++		st,hs-rftime-reduction;
-++		st,hs-current-trim = <15>;
-++		st,hs-impedance-trim = <1>;
-++		st,squelch-level = <3>;
-++		st,hs-rx-offset = <2>;
-++		st,no-lsfs-sc;
-++	};
-++
-++	vin:vin{
-++		compatible = "regulator-fixed";
-++		regulator-name = "vin";
-++		regulator-min-microvolt = <5000000>;
-++		regulator-max-microvolt = <5000000>;
-++		regulator-always-on;
-++	};
-++
-++	aliases{
-++		ethernet0 = &ethernet0;
-++		serial0 = &uart4;
-++	};
-++
-++	chosen{
-++		stdout-path = "serial0:115200n8";
-++	};
-++
-++	/* USER CODE END root */
-++
-++	clocks {
-++
-++		/* USER CODE BEGIN clocks */
-++		/* USER CODE END clocks */
-++
-++#ifndef CONFIG_STM32MP1_TRUSTED
-++		clk_lsi: clk-lsi {
-++			clock-frequency = <32000>;
-++		};
-++		clk_hsi: clk-hsi {
-++			clock-frequency = <64000000>;
-++		};
-++		clk_csi: clk-csi {
-++			clock-frequency = <4000000>;
-++		};
-++		clk_lse: clk-lse {
-++			clock-frequency = <32768>;
-++		};
-++		clk_hse: clk-hse {
-++			clock-frequency = <24000000>;
-++		};
-++#endif	/*CONFIG_STM32MP1_TRUSTED*/
-++	};
-++
-++}; /*root*/
-++
-++&pinctrl {
-++	u-boot,dm-pre-reloc;
-++
-++	rtc_pins_mx: rtc_mx-0 {
-++		pins {
-++			pinmux = <STM32_PINMUX('I', 8, ANALOG)>; /* RTC_LSCO */
-++		};
-++	};
-++
-++	rtc_sleep_pins_mx: rtc_sleep_mx-0 {
-++		pins {
-++			pinmux = <STM32_PINMUX('I', 8, ANALOG)>; /* RTC_LSCO */
-++		};
-++	};
-++
-++	sdmmc1_pins_mx: sdmmc1_mx-0 {
-++		u-boot,dm-pre-reloc;
-++		pins1 {
-++			u-boot,dm-pre-reloc;
-++			pinmux = <STM32_PINMUX('C', 8, AF12)>, /* SDMMC1_D0 */
-++					 <STM32_PINMUX('C', 9, AF12)>, /* SDMMC1_D1 */
-++					 <STM32_PINMUX('C', 10, AF12)>, /* SDMMC1_D2 */
-++					 <STM32_PINMUX('C', 11, AF12)>, /* SDMMC1_D3 */
-++					 <STM32_PINMUX('D', 2, AF12)>; /* SDMMC1_CMD */
-++			bias-disable;
-++			drive-push-pull;
-++			slew-rate = <1>;
-++		};
-++		pins2 {
-++			u-boot,dm-pre-reloc;
-++			pinmux = <STM32_PINMUX('C', 12, AF12)>; /* SDMMC1_CK */
-++			bias-disable;
-++			drive-push-pull;
-++			slew-rate = <2>;
-++		};
-++	};
-++
-++	sdmmc1_opendrain_pins_mx: sdmmc1_opendrain_mx-0 {
-++		u-boot,dm-pre-reloc;
-++		pins1 {
-++			u-boot,dm-pre-reloc;
-++			pinmux = <STM32_PINMUX('C', 8, AF12)>, /* SDMMC1_D0 */
-++					 <STM32_PINMUX('C', 9, AF12)>, /* SDMMC1_D1 */
-++					 <STM32_PINMUX('C', 10, AF12)>, /* SDMMC1_D2 */
-++					 <STM32_PINMUX('C', 11, AF12)>; /* SDMMC1_D3 */
-++			bias-disable;
-++			drive-push-pull;
-++			slew-rate = <1>;
-++		};
-++		pins2 {
-++			u-boot,dm-pre-reloc;
-++			pinmux = <STM32_PINMUX('C', 12, AF12)>; /* SDMMC1_CK */
-++			bias-disable;
-++			drive-push-pull;
-++			slew-rate = <2>;
-++		};
-++		pins3 {
-++			u-boot,dm-pre-reloc;
-++			pinmux = <STM32_PINMUX('D', 2, AF12)>; /* SDMMC1_CMD */
-++			bias-disable;
-++			drive-open-drain;
-++			slew-rate = <1>;
-++		};
-++	};
-++
-++	sdmmc1_sleep_pins_mx: sdmmc1_sleep_mx-0 {
-++		u-boot,dm-pre-reloc;
-++		pins {
-++			u-boot,dm-pre-reloc;
-++			pinmux = <STM32_PINMUX('C', 8, ANALOG)>, /* SDMMC1_D0 */
-++					 <STM32_PINMUX('C', 9, ANALOG)>, /* SDMMC1_D1 */
-++					 <STM32_PINMUX('C', 10, ANALOG)>, /* SDMMC1_D2 */
-++					 <STM32_PINMUX('C', 11, ANALOG)>, /* SDMMC1_D3 */
-++					 <STM32_PINMUX('C', 12, ANALOG)>, /* SDMMC1_CK */
-++					 <STM32_PINMUX('D', 2, ANALOG)>; /* SDMMC1_CMD */
-++		};
-++	};
-++
-++	uart4_pins_mx: uart4_mx-0 {
-++		u-boot,dm-pre-reloc;
-++		pins1 {
-++			u-boot,dm-pre-reloc;
-++			pinmux = <STM32_PINMUX('B', 2, AF8)>; /* UART4_RX */
-++			bias-disable;
-++		};
-++		pins2 {
-++			u-boot,dm-pre-reloc;
-++			pinmux = <STM32_PINMUX('G', 11, AF6)>; /* UART4_TX */
-++			bias-disable;
-++			drive-push-pull;
-++			slew-rate = <0>;
-++		};
-++	};
-++
-++	uart4_sleep_pins_mx: uart4_sleep_mx-0 {
-++		u-boot,dm-pre-reloc;
-++		pins {
-++			u-boot,dm-pre-reloc;
-++			pinmux = <STM32_PINMUX('B', 2, ANALOG)>, /* UART4_RX */
-++					 <STM32_PINMUX('G', 11, ANALOG)>; /* UART4_TX */
-++		};
-++	};
-++
-++	/* USER CODE BEGIN pinctrl */
-++	/* USER CODE END pinctrl */
-++};
-++
-++&pinctrl_z {
-++	u-boot,dm-pre-reloc;
-++
-++	i2c4_pins_z_mx: i2c4_mx-0 {
-++		u-boot,dm-pre-reloc;
-++		pins {
-++			u-boot,dm-pre-reloc;
-++			pinmux = <STM32_PINMUX('Z', 4, AF6)>, /* I2C4_SCL */
-++					 <STM32_PINMUX('Z', 5, AF6)>; /* I2C4_SDA */
-++			bias-disable;
-++			drive-open-drain;
-++			slew-rate = <0>;
-++		};
-++	};
-++
-++	i2c4_sleep_pins_z_mx: i2c4_sleep_mx-0 {
-++		u-boot,dm-pre-reloc;
-++		pins {
-++			u-boot,dm-pre-reloc;
-++			pinmux = <STM32_PINMUX('Z', 4, ANALOG)>, /* I2C4_SCL */
-++					 <STM32_PINMUX('Z', 5, ANALOG)>; /* I2C4_SDA */
-++		};
-++	};
-++
-++	/* USER CODE BEGIN pinctrl_z */
-++	/* USER CODE END pinctrl_z */
-++};
-++
-++&m4_rproc{
-++	/*Restriction: "memory-region" property is not managed - please to use User-Section if needed*/
-++	mboxes = <&ipcc 0>, <&ipcc 1>, <&ipcc 2>;
-++	mbox-names = "vq0", "vq1", "shutdown";
-++	status = "okay";
-++
-++	/* USER CODE BEGIN m4_rproc */
-++	memory-region = <&retram>, <&mcuram>, <&mcuram2>, <&vdev0vring0>,
-++			<&vdev0vring1>, <&vdev0buffer>;
-++	interrupt-parent = <&exti>;
-++	interrupts = <68 1>;
-++	wakeup-source;
-++	/* USER CODE END m4_rproc */
-++};
-++
-++&bsec{
-++	status = "okay";
-++
-++	/* USER CODE BEGIN bsec */
-++	/* USER CODE END bsec */
-++};
-++
-++&crc1{
-++	status = "okay";
-++
-++	/* USER CODE BEGIN crc1 */
-++	/* USER CODE END crc1 */
-++};
-++
-++&cryp1{
-++	u-boot,dm-pre-reloc;
-++	status = "okay";
-++
-++	/* USER CODE BEGIN cryp1 */
-++	/* USER CODE END cryp1 */
-++};
-++
-++&dma1{
-++	status = "okay";
-++
-++	/* USER CODE BEGIN dma1 */
-++	sram = <&dma_pool>;
-++	/* USER CODE END dma1 */
-++};
-++
-++&dma2{
-++	status = "okay";
-++
-++	/* USER CODE BEGIN dma2 */
-++	sram = <&dma_pool>;
-++	/* USER CODE END dma2 */
-++};
-++
-++&dmamux1{
-++
-++	dma-masters = <&dma1 &dma2>;
-++	dma-channels = <16>;
-++
-++	status = "okay";
-++
-++	/* USER CODE BEGIN dmamux1 */
-++	/* USER CODE END dmamux1 */
-++};
-++
-++&dts{
-++	status = "okay";
-++
-++	/* USER CODE BEGIN dts */
-++	/* USER CODE END dts */
-++};
-++
-++&gpu{
-++	status = "okay";
-++
-++	/* USER CODE BEGIN gpu */
-++	contiguous-area = <&gpu_reserved>;
-++	/* USER CODE END gpu */
-++};
-++
-++&hash1{
-++	u-boot,dm-pre-reloc;
-++	status = "okay";
-++
-++	/* USER CODE BEGIN hash1 */
-++	/* USER CODE END hash1 */
-++};
-++
-++&hsem{
-++	status = "okay";
-++
-++	/* USER CODE BEGIN hsem */
-++	/* USER CODE END hsem */
-++};
-++
-++&i2c4{
-++	u-boot,dm-pre-reloc;
-++	pinctrl-names = "default", "sleep";
-++	pinctrl-0 = <&i2c4_pins_z_mx>;
-++	pinctrl-1 = <&i2c4_sleep_pins_z_mx>;
-++	status = "okay";
-++
-++	/* USER CODE BEGIN i2c4 */
-++	i2c-scl-rising-time-ns = <185>;
-++	i2c-scl-falling-time-ns = <20>;
-++	clock-frequency = <100000>;
-++	/delete-property/ dmas;
-++	/delete-property/ dma-names;
-++
-++	pmic:stpmic@33{
-++		compatible = "st,stpmic1";
-++		reg = <0x33>;
-++		interrupts-extended = <&exti_pwr 55 IRQ_TYPE_EDGE_FALLING>;
-++		interrupt-controller;
-++		#interrupt-cells = <2>;
-++		status = "okay";
-++
-++		regulators{
-++			compatible = "st,stpmic1-regulators";
-++			buck1-supply = <&vin>;
-++			buck2-supply = <&vin>;
-++			buck3-supply = <&vin>;
-++			buck4-supply = <&vin>;
-++			ldo1-supply = <&v3v3>;
-++			ldo2-supply = <&vin>;
-++			ldo3-supply = <&vdd_ddr>;
-++			ldo4-supply = <&vin>;
-++			ldo5-supply = <&vin>;
-++			ldo6-supply = <&v3v3>;
-++			vref_ddr-supply = <&vin>;
-++			boost-supply = <&vin>;
-++			pwr_sw1-supply = <&bst_out>;
-++			pwr_sw2-supply = <&bst_out>;
-++
-++			vddcore:buck1{
-++				regulator-name = "vddcore";
-++				regulator-min-microvolt = <1200000>;
-++				regulator-max-microvolt = <1350000>;
-++				regulator-always-on;
-++				regulator-initial-mode = <0>;
-++				regulator-over-current-protection;
-++			};
-++
-++			vdd_ddr:buck2{
-++				regulator-name = "vdd_ddr";
-++				regulator-min-microvolt = <1350000>;
-++				regulator-max-microvolt = <1350000>;
-++				regulator-always-on;
-++				regulator-initial-mode = <0>;
-++				regulator-over-current-protection;
-++			};
-++
-++			vdd:buck3{
-++				regulator-name = "vdd";
-++				regulator-min-microvolt = <3300000>;
-++				regulator-max-microvolt = <3300000>;
-++				regulator-always-on;
-++				st,mask-reset;
-++				regulator-initial-mode = <0>;
-++				regulator-over-current-protection;
-++			};
-++
-++			v3v3:buck4{
-++				regulator-name = "v3v3";
-++				regulator-min-microvolt = <3300000>;
-++				regulator-max-microvolt = <3300000>;
-++				regulator-always-on;
-++				regulator-over-current-protection;
-++				regulator-initial-mode = <0>;
-++			};
-++
-++			v1v8_audio:ldo1{
-++				regulator-name = "v1v8_audio";
-++				regulator-min-microvolt = <1800000>;
-++				regulator-max-microvolt = <1800000>;
-++				regulator-always-on;
-++				interrupts = <IT_CURLIM_LDO1 0>;
-++			};
-++
-++			v3v3_hdmi:ldo2{
-++				regulator-name = "v3v3_hdmi";
-++				regulator-min-microvolt = <3300000>;
-++				regulator-max-microvolt = <3300000>;
-++				regulator-always-on;
-++				interrupts = <IT_CURLIM_LDO2 0>;
-++			};
-++
-++			vtt_ddr:ldo3{
-++				regulator-name = "vtt_ddr";
-++				regulator-min-microvolt = <500000>;
-++				regulator-max-microvolt = <750000>;
-++				regulator-always-on;
-++				regulator-over-current-protection;
-++			};
-++
-++			vdd_usb:ldo4{
-++				regulator-name = "vdd_usb";
-++				regulator-min-microvolt = <3300000>;
-++				regulator-max-microvolt = <3300000>;
-++				interrupts = <IT_CURLIM_LDO4 0>;
-++				regulator-always-on;
-++			};
-++
-++			vdda:ldo5{
-++				regulator-name = "vdda";
-++				regulator-min-microvolt = <2900000>;
-++				regulator-max-microvolt = <2900000>;
-++				interrupts = <IT_CURLIM_LDO5 0>;
-++				regulator-boot-on;
-++			};
-++
-++			v1v2_hdmi:ldo6{
-++				regulator-name = "v1v2_hdmi";
-++				regulator-min-microvolt = <1200000>;
-++				regulator-max-microvolt = <1200000>;
-++				regulator-always-on;
-++				interrupts = <IT_CURLIM_LDO6 0>;
-++			};
-++
-++			vref_ddr:vref_ddr{
-++				regulator-name = "vref_ddr";
-++				regulator-always-on;
-++				regulator-over-current-protection;
-++			};
-++
-++			bst_out:boost{
-++				regulator-name = "bst_out";
-++				interrupts = <IT_OCP_BOOST 0>;
-++			};
-++
-++			vbus_otg:pwr_sw1{
-++				regulator-name = "vbus_otg";
-++				interrupts = <IT_OCP_OTG 0>;
-++			};
-++
-++			vbus_sw:pwr_sw2{
-++				regulator-name = "vbus_sw";
-++				interrupts = <IT_OCP_SWOUT 0>;
-++				regulator-active-discharge = <1>;
-++			};
-++		};
-++
-++		onkey{
-++			compatible = "st,stpmic1-onkey";
-++			interrupts = <IT_PONKEY_F 0>, <IT_PONKEY_R 0>;
-++			interrupt-names = "onkey-falling", "onkey-rising";
-++			power-off-time-sec = <10>;
-++			status = "okay";
-++		};
-++
-++		watchdog {
-++			compatible = "st,stpmic1-wdt";
-++			status = "disabled";
-++		};
-++	};
-++	eeprom@50 {
-++		compatible = "atmel,24c02";
-++		reg = <0x50>;
-++		pagesize = <16>;
-++	};
-++	/* USER CODE END i2c4 */
-++};
-++
-++&ipcc{
-++	status = "okay";
-++
-++	/* USER CODE BEGIN ipcc */
-++	/* USER CODE END ipcc */
-++};
-++
-++&iwdg2{
-++	status = "okay";
-++
-++	/* USER CODE BEGIN iwdg2 */
-++	timeout-sec = <32>;
-++	/* USER CODE END iwdg2 */
-++};
-++
-++&mdma1{
-++	status = "okay";
-++
-++	/* USER CODE BEGIN mdma1 */
-++	/* USER CODE END mdma1 */
-++};
-++
-++&rcc{
-++	u-boot,dm-pre-reloc;
-++	status = "okay";
-++
-++	/* USER CODE BEGIN rcc */
-++	/* USER CODE END rcc */
-++};
-++
-++&rng1{
-++	status = "okay";
-++
-++	/* USER CODE BEGIN rng1 */
-++	/* USER CODE END rng1 */
-++};
-++
-++&rtc{
-++	pinctrl-names = "default", "sleep";
-++	pinctrl-0 = <&rtc_pins_mx>;
-++	pinctrl-1 = <&rtc_sleep_pins_mx>;
-++	status = "okay";
-++
-++	/* USER CODE BEGIN rtc */
-++	st,lsco = <RTC_OUT2_RMP>;
-++	/* USER CODE END rtc */
-++};
-++
-++&sdmmc1{
-++	u-boot,dm-pre-reloc;
-++	pinctrl-names = "default", "opendrain", "sleep";
-++	pinctrl-0 = <&sdmmc1_pins_mx>;
-++	pinctrl-1 = <&sdmmc1_opendrain_pins_mx>;
-++	pinctrl-2 = <&sdmmc1_sleep_pins_mx>;
-++	status = "okay";
-++
-++	/* USER CODE BEGIN sdmmc1 */
-++	cd-gpios = <&gpiog 7 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
-++	disable-wp;
-++	st,neg-edge;
-++	bus-width = <4>;
-++	vmmc-supply = <&v3v3>;
-++	/* USER CODE END sdmmc1 */
-++};
-++
-++&tamp{
-++	status = "okay";
-++
-++	/* USER CODE BEGIN tamp */
-++	/* USER CODE END tamp */
-++};
-++
-++&uart4{
-++	u-boot,dm-pre-reloc;
-++	pinctrl-names = "default", "sleep";
-++	pinctrl-0 = <&uart4_pins_mx>;
-++	pinctrl-1 = <&uart4_sleep_pins_mx>;
-++	status = "okay";
-++
-++	/* USER CODE BEGIN uart4 */
-++	/delete-property/ dmas;
-++	/delete-property/ dma-names;
-++	/* USER CODE END uart4 */
-++};
-++
-++&usbh_ehci{
-++	status = "okay";
-++
-++	/* USER CODE BEGIN usbh_ehci */
-++	phys = <&usbphyc_port0>;
-++	/* USER CODE END usbh_ehci */
-++};
-++
-++&usbh_ohci{
-++	status = "okay";
-++
-++	/* USER CODE BEGIN usbh_ohci */
-++	/* USER CODE END usbh_ohci */
-++};
-++
-++&usbotg_hs{
-++	u-boot,dm-pre-reloc;
-++	status = "okay";
-++
-++	/* USER CODE BEGIN usbotg_hs */
-++	phys = <&usbphyc_port1 0>;
-++	phy-names = "usb2-phy";
-++	/* USER CODE END usbotg_hs */
-++};
-++
-++&usbphyc{
-++	u-boot,dm-pre-reloc;
-++	status = "okay";
-++
-++	/* USER CODE BEGIN usbphyc */
-++	/* USER CODE END usbphyc */
-++};
-++
-++&usbphyc_port0{
-++	u-boot,dm-pre-reloc;
-++	status = "okay";
-++
-++	/* USER CODE BEGIN usbphyc_port0 */
-++	phy-supply = <&vdd_usb>;
-++	st,phy-tuning = <&usb_phy_tuning>;
-++	/* USER CODE END usbphyc_port0 */
-++};
-++
-++&usbphyc_port1{
-++	u-boot,dm-pre-reloc;
-++	status = "okay";
-++
-++	/* USER CODE BEGIN usbphyc_port1 */
-++	phy-supply = <&vdd_usb>;
-++	st,phy-tuning = <&usb_phy_tuning>;
-++	/* USER CODE END usbphyc_port1 */
-++};
-++
-++&vrefbuf{
-++	status = "okay";
-++
-++	/* USER CODE BEGIN vrefbuf */
-++	regulator-min-microvolt = <2500000>;
-++	regulator-max-microvolt = <2500000>;
-++	vdda-supply = <&vdd>;
-++	/* USER CODE END vrefbuf */
-++};
-++
-++/* USER CODE BEGIN addons */
-++&adc {
-++	status = "disabled";
-++};
-++
-++&usbh_ohci{
-++	phys = <&usbphyc_port0>;
-++};
-++
-++&cpu0{
-++	cpu-supply = <&vddcore>;
-++};
-++
-++&cpu1{
-++	cpu-supply = <&vddcore>;
-++};
-++
-++&sram{
-++
-++	dma_pool:dma_pool@0{
-++		reg = <0x50000 0x10000>;
-++		pool;
-++	};
-++};
-++
-++&optee{
-++	status = "okay";
-++};
-++/* USER CODE END addons */
-++
-+diff --git a/arch/arm/dts/stm32mp15xx-dkx.dtsi b/arch/arm/dts/stm32mp15xx-dkx.dtsi
-+index 35169385fd..f43c45bd3d 100644
-+--- a/arch/arm/dts/stm32mp15xx-dkx.dtsi
-++++ b/arch/arm/dts/stm32mp15xx-dkx.dtsi
-+@@ -572,7 +572,8 @@
-+ 	pinctrl-0 = <&sdmmc1_b4_pins_a>;
-+ 	pinctrl-1 = <&sdmmc1_b4_od_pins_a>;
-+ 	pinctrl-2 = <&sdmmc1_b4_sleep_pins_a>;
-+-	cd-gpios = <&gpiob 7 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
-++	//cd-gpios = <&gpiob 7 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
-++	cd-gpios = <&gpiog 7 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
-+ 	disable-wp;
-+ 	st,neg-edge;
-+ 	bus-width = <4>;
-+diff --git a/arch/arm/mach-stm32mp/Kconfig b/arch/arm/mach-stm32mp/Kconfig
-+index f9f79437e4..ff54cb4cfa 100644
-+--- a/arch/arm/mach-stm32mp/Kconfig
-++++ b/arch/arm/mach-stm32mp/Kconfig
-+@@ -85,6 +85,14 @@ config TARGET_DH_STM32MP1_PDK2
-+ 	help
-+ 		Target the DH PDK2 development kit with STM32MP15x SoM.
-+ 
-++config TARGET_OCTAVO_OSD32MP1_BRK
-++	bool "Octavo OSD32MP1 BRK"
-++	select STM32MP15x
-++	imply BOOTCOUNT_LIMIT
-++	imply CMD_BOOTCOUNT
-++	help
-++		Target the Octavo BRK board based on OSD32MP1 SiP.
-++
-+ endchoice
-+ 
-+ config STM32MP1_TRUSTED
-+@@ -178,5 +186,5 @@ endif
-+ 
-+ source "board/st/stm32mp1/Kconfig"
-+ source "board/dhelectronics/dh_stm32mp1/Kconfig"
-+-
-++source "board/octavo/osd32mp1-brk/Kconfig"
-+ endif
-+diff --git a/board/octavo/osd32mp1-brk/Kconfig b/board/octavo/osd32mp1-brk/Kconfig
-+new file mode 100644
-+index 0000000000..907a09c170
-+--- /dev/null
-++++ b/board/octavo/osd32mp1-brk/Kconfig
-+@@ -0,0 +1,13 @@
-++if TARGET_OCTAVO_OSD32MP1_BRK
-++
-++config SYS_BOARD
-++	default "osd32mp1-brk"
-++
-++config SYS_VENDOR
-++	default "octavo"
-++
-++config SYS_CONFIG_NAME
-++	default "stm32mp1"
-++
-++source "board/st/common/Kconfig"
-++endif
-+diff --git a/board/octavo/osd32mp1-brk/MAINTAINERS b/board/octavo/osd32mp1-brk/MAINTAINERS
-+new file mode 100644
-+index 0000000000..5c4fc6eea2
-+--- /dev/null
-++++ b/board/octavo/osd32mp1-brk/MAINTAINERS
-+@@ -0,0 +1,7 @@
-++OCTAVO osd32mp1-brk BOARD
-++M:	Martin Lesniak <martin.lesniak@st.com>
-++S:	Maintained
-++F:	arch/arm/dts/stm32mp157c-osd32mp1-brk*
-++F:	board/Octavo/osd32mp1-brk/
-++F:	configs/osd32mp1_brk_trusted_defconfig
-++F:	include/configs/stm32mp1.h
-+diff --git a/board/octavo/osd32mp1-brk/Makefile b/board/octavo/osd32mp1-brk/Makefile
-+new file mode 100644
-+index 0000000000..381579c590
-+--- /dev/null
-++++ b/board/octavo/osd32mp1-brk/Makefile
-+@@ -0,0 +1,9 @@
-++# SPDX-License-Identifier: GPL-2.0+ OR BSD-3-Clause
-++#
-++# Copyright (C) 2018, STMicroelectronics - All Rights Reserved
-++#
-++
-++obj-y += ../../st/stm32mp1/board.o board.o
-++
-++obj-$(CONFIG_SYS_MTDPARTS_RUNTIME) += ../../st/common/stm32mp_mtdparts.o
-++obj-$(CONFIG_SET_DFU_ALT_INFO) += ../../st/common/stm32mp_dfu.o
-+diff --git a/board/octavo/osd32mp1-brk/board.c b/board/octavo/osd32mp1-brk/board.c
-+new file mode 100644
-+index 0000000000..53325e87f6
-+--- /dev/null
-++++ b/board/octavo/osd32mp1-brk/board.c
-+@@ -0,0 +1,547 @@
-++// SPDX-License-Identifier: GPL-2.0+ OR BSD-3-Clause
-++/*
-++ * Copyright (C) 2018, STMicroelectronics - All Rights Reserved
-++ */
-++
-++#include <common.h>
-++#include <adc.h>
-++#include <asm/arch/stm32.h>
-++#include <asm/arch/sys_proto.h>
-++#include <asm/gpio.h>
-++#include <asm/io.h>
-++#include <bootm.h>
-++#include <clk.h>
-++#include <config.h>
-++#include <dm.h>
-++#include <dm/device.h>
-++#include <dm/uclass.h>
-++#include <env.h>
-++#include <env_internal.h>
-++#include <g_dnl.h>
-++#include <generic-phy.h>
-++#include <i2c.h>
-++#include <i2c_eeprom.h>
-++#include <init.h>
-++#include <led.h>
-++#include <memalign.h>
-++#include <misc.h>
-++#include <mtd.h>
-++#include <mtd_node.h>
-++#include <netdev.h>
-++#include <phy.h>
-++#include <power/regulator.h>
-++#include <remoteproc.h>
-++#include <reset.h>
-++#include <syscon.h>
-++#include <usb.h>
-++#include <usb/dwc2_udc.h>
-++#include <watchdog.h>
-++
-++/* SYSCFG registers */
-++#define SYSCFG_BOOTR		0x00
-++#define SYSCFG_PMCSETR		0x04
-++#define SYSCFG_IOCTRLSETR	0x18
-++#define SYSCFG_ICNR		0x1C
-++#define SYSCFG_CMPCR		0x20
-++#define SYSCFG_CMPENSETR	0x24
-++#define SYSCFG_PMCCLRR		0x44
-++
-++#define SYSCFG_BOOTR_BOOT_MASK		GENMASK(2, 0)
-++#define SYSCFG_BOOTR_BOOTPD_SHIFT	4
-++
-++#define SYSCFG_IOCTRLSETR_HSLVEN_TRACE		BIT(0)
-++#define SYSCFG_IOCTRLSETR_HSLVEN_QUADSPI	BIT(1)
-++#define SYSCFG_IOCTRLSETR_HSLVEN_ETH		BIT(2)
-++#define SYSCFG_IOCTRLSETR_HSLVEN_SDMMC		BIT(3)
-++#define SYSCFG_IOCTRLSETR_HSLVEN_SPI		BIT(4)
-++
-++#define SYSCFG_CMPCR_SW_CTRL		BIT(1)
-++#define SYSCFG_CMPCR_READY		BIT(8)
-++
-++#define SYSCFG_CMPENSETR_MPU_EN		BIT(0)
-++
-++#define SYSCFG_PMCSETR_ETH_CLK_SEL	BIT(16)
-++#define SYSCFG_PMCSETR_ETH_REF_CLK_SEL	BIT(17)
-++
-++#define SYSCFG_PMCSETR_ETH_SELMII	BIT(20)
-++
-++#define SYSCFG_PMCSETR_ETH_SEL_MASK	GENMASK(23, 21)
-++#define SYSCFG_PMCSETR_ETH_SEL_GMII_MII	0
-++#define SYSCFG_PMCSETR_ETH_SEL_RGMII	BIT(21)
-++#define SYSCFG_PMCSETR_ETH_SEL_RMII	BIT(23)
-++
-++/*
-++ * Get a global data pointer
-++ */
-++DECLARE_GLOBAL_DATA_PTR;
-++
-++int setup_mac_address(void)
-++{
-++	struct udevice *dev;
-++	ofnode eeprom;
-++	unsigned char enetaddr[6];
-++	int ret;
-++
-++	ret = eth_env_get_enetaddr("ethaddr", enetaddr);
-++	if (ret)	/* ethaddr is already set */
-++		return 0;
-++
-++	eeprom = ofnode_path("/soc/i2c@5c002000/eeprom@50");
-++	if (!ofnode_valid(eeprom)) {
-++		printf("Invalid hardware path to EEPROM!\n");
-++		return -ENODEV;
-++	}
-++
-++	ret = uclass_get_device_by_ofnode(UCLASS_I2C_EEPROM, eeprom, &dev);
-++	if (ret) {
-++		printf("Cannot find EEPROM!\n");
-++		return ret;
-++	}
-++
-++	ret = i2c_eeprom_read(dev, 0xfa, enetaddr, 0x6);
-++	if (ret) {
-++		printf("Error reading configuration EEPROM!\n");
-++		return ret;
-++	}
-++
-++	if (is_valid_ethaddr(enetaddr))
-++		eth_env_set_enetaddr("ethaddr", enetaddr);
-++
-++	return 0;
-++}
-++
-++int checkboard(void)
-++{
-++	char *mode;
-++	const char *fdt_compat;
-++	int fdt_compat_len;
-++
-++	if (IS_ENABLED(CONFIG_STM32MP1_TRUSTED))
-++		mode = "trusted";
-++	else
-++		mode = "basic";
-++
-++	printf("Board: stm32mp1 in %s mode", mode);
-++	fdt_compat = fdt_getprop(gd->fdt_blob, 0, "compatible",
-++				 &fdt_compat_len);
-++	if (fdt_compat && fdt_compat_len)
-++		printf(" (%s)", fdt_compat);
-++	puts("\n");
-++
-++	return 0;
-++}
-++
-++static void board_key_check(void)
-++{
-++#if defined(CONFIG_FASTBOOT) || defined(CONFIG_CMD_STM32PROG)
-++	ofnode node;
-++	struct gpio_desc gpio;
-++	enum forced_boot_mode boot_mode = BOOT_NORMAL;
-++
-++	node = ofnode_path("/config");
-++	if (!ofnode_valid(node)) {
-++		debug("%s: no /config node?\n", __func__);
-++		return;
-++	}
-++#ifdef CONFIG_FASTBOOT
-++	if (gpio_request_by_name_nodev(node, "st,fastboot-gpios", 0,
-++				       &gpio, GPIOD_IS_IN)) {
-++		debug("%s: could not find a /config/st,fastboot-gpios\n",
-++		      __func__);
-++	} else {
-++		if (dm_gpio_get_value(&gpio)) {
-++			puts("Fastboot key pressed, ");
-++			boot_mode = BOOT_FASTBOOT;
-++		}
-++
-++		dm_gpio_free(NULL, &gpio);
-++	}
-++#endif
-++#ifdef CONFIG_CMD_STM32PROG
-++	if (gpio_request_by_name_nodev(node, "st,stm32prog-gpios", 0,
-++				       &gpio, GPIOD_IS_IN)) {
-++		debug("%s: could not find a /config/st,stm32prog-gpios\n",
-++		      __func__);
-++	} else {
-++		if (dm_gpio_get_value(&gpio)) {
-++			puts("STM32Programmer key pressed, ");
-++			boot_mode = BOOT_STM32PROG;
-++		}
-++		dm_gpio_free(NULL, &gpio);
-++	}
-++#endif
-++
-++	if (boot_mode != BOOT_NORMAL) {
-++		puts("entering download mode...\n");
-++		clrsetbits_le32(TAMP_BOOT_CONTEXT,
-++				TAMP_BOOT_FORCED_MASK,
-++				boot_mode);
-++	}
-++#endif
-++}
-++
-++#if defined(CONFIG_USB_GADGET) && defined(CONFIG_USB_GADGET_DWC2_OTG)
-++
-++#include <usb/dwc2_udc.h>
-++int g_dnl_board_usb_cable_connected(void)
-++{
-++	struct udevice *dwc2_udc_otg;
-++	int ret;
-++
-++	ret = uclass_get_device_by_driver(UCLASS_USB_GADGET_GENERIC,
-++					  DM_GET_DRIVER(dwc2_udc_otg),
-++					  &dwc2_udc_otg);
-++	if (!ret)
-++		debug("dwc2_udc_otg init failed\n");
-++
-++	return dwc2_udc_B_session_valid(dwc2_udc_otg);
-++}
-++
-++#define STM32MP1_G_DNL_DFU_PRODUCT_NUM 0xdf11
-++#define STM32MP1_G_DNL_FASTBOOT_PRODUCT_NUM 0x0afb
-++
-++int g_dnl_bind_fixup(struct usb_device_descriptor *dev, const char *name)
-++{
-++	if (!strcmp(name, "usb_dnl_dfu"))
-++		put_unaligned(STM32MP1_G_DNL_DFU_PRODUCT_NUM, &dev->idProduct);
-++	else if (!strcmp(name, "usb_dnl_fastboot"))
-++		put_unaligned(STM32MP1_G_DNL_FASTBOOT_PRODUCT_NUM,
-++			      &dev->idProduct);
-++	else
-++		put_unaligned(CONFIG_USB_GADGET_PRODUCT_NUM, &dev->idProduct);
-++
-++	return 0;
-++}
-++
-++#endif /* CONFIG_USB_GADGET */
-++
-++#ifdef CONFIG_LED
-++static int get_led(struct udevice **dev, char *led_string)
-++{
-++	char *led_name;
-++	int ret;
-++
-++	led_name = fdtdec_get_config_string(gd->fdt_blob, led_string);
-++	if (!led_name) {
-++		pr_debug("%s: could not find %s config string\n",
-++			 __func__, led_string);
-++		return -ENOENT;
-++	}
-++	ret = led_get_by_label(led_name, dev);
-++	if (ret) {
-++		debug("%s: get=%d\n", __func__, ret);
-++		return ret;
-++	}
-++
-++	return 0;
-++}
-++
-++static int setup_led(enum led_state_t cmd)
-++{
-++	struct udevice *dev;
-++	int ret;
-++
-++	ret = get_led(&dev, "u-boot,boot-led");
-++	if (ret)
-++		return ret;
-++
-++	ret = led_set_state(dev, cmd);
-++	return ret;
-++}
-++#endif
-++
-++static void __maybe_unused led_error_blink(u32 nb_blink)
-++{
-++#ifdef CONFIG_LED
-++	int ret;
-++	struct udevice *led;
-++	u32 i;
-++#endif
-++
-++	if (!nb_blink)
-++		return;
-++
-++#ifdef CONFIG_LED
-++	ret = get_led(&led, "u-boot,error-led");
-++	if (!ret) {
-++		/* make u-boot,error-led blinking */
-++		/* if U32_MAX and 125ms interval, for 17.02 years */
-++		for (i = 0; i < 2 * nb_blink; i++) {
-++			led_set_state(led, LEDST_TOGGLE);
-++			mdelay(125);
-++			WATCHDOG_RESET();
-++		}
-++	}
-++#endif
-++
-++	/* infinite: the boot process must be stopped */
-++	if (nb_blink == U32_MAX)
-++		hang();
-++}
-++
-++static void sysconf_init(void)
-++{
-++#ifndef CONFIG_STM32MP1_TRUSTED
-++	u8 *syscfg;
-++#ifdef CONFIG_DM_REGULATOR
-++	struct udevice *pwr_dev;
-++	struct udevice *pwr_reg;
-++	struct udevice *dev;
-++	int ret;
-++	u32 otp = 0;
-++#endif
-++	u32 bootr;
-++
-++	syscfg = (u8 *)syscon_get_first_range(STM32MP_SYSCON_SYSCFG);
-++
-++	/* interconnect update : select master using the port 1 */
-++	/* LTDC = AXI_M9 */
-++	/* GPU  = AXI_M8 */
-++	/* today information is hardcoded in U-Boot */
-++	writel(BIT(9), syscfg + SYSCFG_ICNR);
-++
-++	/* disable Pull-Down for boot pin connected to VDD */
-++	bootr = readl(syscfg + SYSCFG_BOOTR);
-++	bootr &= ~(SYSCFG_BOOTR_BOOT_MASK << SYSCFG_BOOTR_BOOTPD_SHIFT);
-++	bootr |= (bootr & SYSCFG_BOOTR_BOOT_MASK) << SYSCFG_BOOTR_BOOTPD_SHIFT;
-++	writel(bootr, syscfg + SYSCFG_BOOTR);
-++
-++#ifdef CONFIG_DM_REGULATOR
-++	/* High Speed Low Voltage Pad mode Enable for SPI, SDMMC, ETH, QSPI
-++	 * and TRACE. Needed above ~50MHz and conditioned by AFMUX selection.
-++	 * The customer will have to disable this for low frequencies
-++	 * or if AFMUX is selected but the function not used, typically for
-++	 * TRACE. Otherwise, impact on power consumption.
-++	 *
-++	 * WARNING:
-++	 *   enabling High Speed mode while VDD>2.7V
-++	 *   with the OTP product_below_2v5 (OTP 18, BIT 13)
-++	 *   erroneously set to 1 can damage the IC!
-++	 *   => U-Boot set the register only if VDD < 2.7V (in DT)
-++	 *      but this value need to be consistent with board design
-++	 */
-++	ret = uclass_get_device_by_driver(UCLASS_PMIC,
-++					  DM_GET_DRIVER(stm32mp_pwr_pmic),
-++					  &pwr_dev);
-++	if (!ret) {
-++		ret = uclass_get_device_by_driver(UCLASS_MISC,
-++						  DM_GET_DRIVER(stm32mp_bsec),
-++						  &dev);
-++		if (ret) {
-++			pr_err("Can't find stm32mp_bsec driver\n");
-++			return;
-++		}
-++
-++		ret = misc_read(dev, STM32_BSEC_SHADOW(18), &otp, 4);
-++		if (ret > 0)
-++			otp = otp & BIT(13);
-++
-++		/* get VDD = vdd-supply */
-++		ret = device_get_supply_regulator(pwr_dev, "vdd-supply",
-++						  &pwr_reg);
-++
-++		/* check if VDD is Low Voltage */
-++		if (!ret) {
-++			if (regulator_get_value(pwr_reg) < 2700000) {
-++				writel(SYSCFG_IOCTRLSETR_HSLVEN_TRACE |
-++				       SYSCFG_IOCTRLSETR_HSLVEN_QUADSPI |
-++				       SYSCFG_IOCTRLSETR_HSLVEN_ETH |
-++				       SYSCFG_IOCTRLSETR_HSLVEN_SDMMC |
-++				       SYSCFG_IOCTRLSETR_HSLVEN_SPI,
-++				       syscfg + SYSCFG_IOCTRLSETR);
-++
-++				if (!otp)
-++					pr_err("product_below_2v5=0: HSLVEN protected by HW\n");
-++			} else {
-++				if (otp)
-++					pr_err("product_below_2v5=1: HSLVEN update is destructive, no update as VDD>2.7V\n");
-++			}
-++		} else {
-++			debug("VDD unknown");
-++		}
-++	}
-++#endif
-++
-++	/* activate automatic I/O compensation
-++	 * warning: need to ensure CSI enabled and ready in clock driver
-++	 */
-++	writel(SYSCFG_CMPENSETR_MPU_EN, syscfg + SYSCFG_CMPENSETR);
-++
-++	while (!(readl(syscfg + SYSCFG_CMPCR) & SYSCFG_CMPCR_READY))
-++		;
-++	clrbits_le32(syscfg + SYSCFG_CMPCR, SYSCFG_CMPCR_SW_CTRL);
-++#endif
-++}
-++
-++/* board dependent setup after realloc */
-++int board_init(void)
-++{
-++	struct udevice *dev;
-++
-++	/* address of boot parameters */
-++	gd->bd->bi_boot_params = STM32_DDR_BASE + 0x100;
-++
-++	/* probe all PINCTRL for hog */
-++	for (uclass_first_device(UCLASS_PINCTRL, &dev);
-++	     dev;
-++	     uclass_next_device(&dev)) {
-++		pr_debug("probe pincontrol = %s\n", dev->name);
-++	}
-++
-++	board_key_check();
-++
-++#ifdef CONFIG_DM_REGULATOR
-++	regulators_enable_boot_on(_DEBUG);
-++#endif
-++
-++	sysconf_init();
-++
-++	if (CONFIG_IS_ENABLED(LED))
-++		led_default_state();
-++
-++	return 0;
-++}
-++
-++int board_late_init(void)
-++{
-++	char *boot_device;
-++#ifdef CONFIG_ENV_VARS_UBOOT_RUNTIME_CONFIG
-++	const void *fdt_compat;
-++	int fdt_compat_len;
-++
-++	fdt_compat = fdt_getprop(gd->fdt_blob, 0, "compatible",
-++				 &fdt_compat_len);
-++	if (fdt_compat && fdt_compat_len) {
-++		if (strncmp(fdt_compat, "st,", 3) != 0)
-++			env_set("board_name", fdt_compat);
-++		else
-++			env_set("board_name", fdt_compat + 3);
-++	}
-++#endif
-++
-++	/* Check the boot-source to disable bootdelay */
-++	boot_device = env_get("boot_device");
-++	if (!strcmp(boot_device, "serial") || !strcmp(boot_device, "usb"))
-++		env_set("bootdelay", "0");
-++
-++	return 0;
-++}
-++
-++void board_quiesce_devices(void)
-++{
-++#ifdef CONFIG_LED
-++	setup_led(LEDST_OFF);
-++#endif
-++}
-++
-++/* eth init function : weak called in eqos driver */
-++int board_interface_eth_init(struct udevice *dev,
-++			     phy_interface_t interface_type)
-++{
-++	u8 *syscfg;
-++	u32 value;
-++	bool eth_clk_sel_reg = false;
-++	bool eth_ref_clk_sel_reg = false;
-++
-++	/* Gigabit Ethernet 125MHz clock selection. */
-++	eth_clk_sel_reg = dev_read_bool(dev, "st,eth_clk_sel");
-++
-++	/* Ethernet 50Mhz RMII clock selection */
-++	eth_ref_clk_sel_reg =
-++		dev_read_bool(dev, "st,eth_ref_clk_sel");
-++
-++	syscfg = (u8 *)syscon_get_first_range(STM32MP_SYSCON_SYSCFG);
-++
-++	if (!syscfg)
-++		return -ENODEV;
-++
-++	switch (interface_type) {
-++	case PHY_INTERFACE_MODE_MII:
-++		value = SYSCFG_PMCSETR_ETH_SEL_GMII_MII |
-++			SYSCFG_PMCSETR_ETH_REF_CLK_SEL;
-++		debug("%s: PHY_INTERFACE_MODE_MII\n", __func__);
-++		break;
-++	case PHY_INTERFACE_MODE_GMII:
-++		if (eth_clk_sel_reg)
-++			value = SYSCFG_PMCSETR_ETH_SEL_GMII_MII |
-++				SYSCFG_PMCSETR_ETH_CLK_SEL;
-++		else
-++			value = SYSCFG_PMCSETR_ETH_SEL_GMII_MII;
-++		debug("%s: PHY_INTERFACE_MODE_GMII\n", __func__);
-++		break;
-++	case PHY_INTERFACE_MODE_RMII:
-++		if (eth_ref_clk_sel_reg)
-++			value = SYSCFG_PMCSETR_ETH_SEL_RMII |
-++				SYSCFG_PMCSETR_ETH_REF_CLK_SEL;
-++		else
-++			value = SYSCFG_PMCSETR_ETH_SEL_RMII;
-++		debug("%s: PHY_INTERFACE_MODE_RMII\n", __func__);
-++		break;
-++	case PHY_INTERFACE_MODE_RGMII:
-++	case PHY_INTERFACE_MODE_RGMII_ID:
-++	case PHY_INTERFACE_MODE_RGMII_RXID:
-++	case PHY_INTERFACE_MODE_RGMII_TXID:
-++		if (eth_clk_sel_reg)
-++			value = SYSCFG_PMCSETR_ETH_SEL_RGMII |
-++				SYSCFG_PMCSETR_ETH_CLK_SEL;
-++		else
-++			value = SYSCFG_PMCSETR_ETH_SEL_RGMII;
-++		debug("%s: PHY_INTERFACE_MODE_RGMII\n", __func__);
-++		break;
-++	default:
-++		debug("%s: Do not manage %d interface\n",
-++		      __func__, interface_type);
-++		/* Do not manage others interfaces */
-++		return -EINVAL;
-++	}
-++
-++	/* clear and set ETH configuration bits */
-++	writel(SYSCFG_PMCSETR_ETH_SEL_MASK | SYSCFG_PMCSETR_ETH_SELMII |
-++	       SYSCFG_PMCSETR_ETH_REF_CLK_SEL | SYSCFG_PMCSETR_ETH_CLK_SEL,
-++	       syscfg + SYSCFG_PMCCLRR);
-++	writel(value, syscfg + SYSCFG_PMCSETR);
-++
-++	return 0;
-++}
-++
-++enum env_location env_get_location(enum env_operation op, int prio)
-++{
-++	if (prio)
-++		return ENVL_UNKNOWN;
-++
-++#ifdef CONFIG_ENV_IS_IN_SPI_FLASH
-++	return ENVL_SPI_FLASH;
-++#else
-++	return ENVL_NOWHERE;
-++#endif
-++}
-++
-++#if defined(CONFIG_OF_BOARD_SETUP)
-++int ft_board_setup(void *blob, bd_t *bd)
-++{
-++	return 0;
-++}
-++#endif
-++
-++static void board_copro_image_process(ulong fw_image, size_t fw_size)
-++{
-++	int ret, id = 0; /* Copro id fixed to 0 as only one coproc on mp1 */
-++
-++	if (!rproc_is_initialized())
-++		if (rproc_init()) {
-++			printf("Remote Processor %d initialization failed\n",
-++			       id);
-++			return;
-++		}
-++
-++	ret = rproc_load(id, fw_image, fw_size);
-++	printf("Load Remote Processor %d with data@addr=0x%08lx %u bytes:%s\n",
-++	       id, fw_image, fw_size, ret ? " Failed!" : " Success!");
-++
-++	if (!ret) {
-++		rproc_start(id);
-++		env_set("copro_state", "booted");
-++	}
-++}
-++
-++U_BOOT_FIT_LOADABLE_HANDLER(IH_TYPE_COPRO, board_copro_image_process);
-+diff --git a/configs/osd32mp1_brk_trusted_defconfig b/configs/osd32mp1_brk_trusted_defconfig
-+new file mode 100644
-+index 0000000000..dd94f6155c
-+--- /dev/null
-++++ b/configs/osd32mp1_brk_trusted_defconfig
-+@@ -0,0 +1,148 @@
-++CONFIG_ARM=y
-++CONFIG_ARCH_STM32MP=y
-++CONFIG_SYS_MALLOC_F_LEN=0x3000
-++CONFIG_ENV_OFFSET=0x280000
-++# CONFIG_TARGET_ST_STM32MP15x=y
-++CONFIG_TARGET_OCTAVO_OSD32MP1_BRK=y
-++CONFIG_CMD_STM32PROG=y
-++CONFIG_ENV_SECT_SIZE=0x40000
-++CONFIG_ENV_OFFSET_REDUND=0x2C0000
-++CONFIG_DISTRO_DEFAULTS=y
-++CONFIG_FIT=y
-++CONFIG_BOOTCOMMAND="run bootcmd_stm32mp"
-++CONFIG_SYS_PROMPT="OSD32MP> "
-++# CONFIG_CMD_BOOTD is not set
-++CONFIG_CMD_DTIMG=y
-++# CONFIG_CMD_ELF is not set
-++# CONFIG_CMD_IMI is not set
-++# CONFIG_CMD_XIMG is not set
-++# CONFIG_CMD_EXPORTENV is not set
-++# CONFIG_CMD_IMPORTENV is not set
-++CONFIG_CMD_EEPROM=y
-++CONFIG_CMD_ERASEENV=y
-++CONFIG_CMD_MEMINFO=y
-++CONFIG_CMD_MEMTEST=y
-++CONFIG_CMD_ADC=y
-++CONFIG_CMD_CLK=y
-++CONFIG_CMD_DFU=y
-++CONFIG_CMD_FUSE=y
-++CONFIG_CMD_GPIO=y
-++CONFIG_CMD_I2C=y
-++CONFIG_CMD_MMC=y
-++CONFIG_CMD_REMOTEPROC=y
-++CONFIG_CMD_SPI=y
-++CONFIG_CMD_USB=y
-++CONFIG_CMD_USB_MASS_STORAGE=y
-++CONFIG_CMD_BMP=y
-++CONFIG_CMD_CACHE=y
-++CONFIG_CMD_TIME=y
-++CONFIG_CMD_TIMER=y
-++CONFIG_CMD_PMIC=y
-++CONFIG_CMD_REGULATOR=y
-++CONFIG_CMD_EXT4_WRITE=y
-++CONFIG_CMD_MTDPARTS=y
-++CONFIG_CMD_UBI=y
-++CONFIG_DEFAULT_DEVICE_TREE="stm32mp157c-osd32mp1-brk"
-++CONFIG_ENV_IS_NOWHERE=y
-++CONFIG_ENV_IS_IN_MMC=y
-++//CONFIG_ENV_IS_IN_SPI_FLASH=y
-++CONFIG_ENV_IS_IN_UBI=y
-++CONFIG_SYS_REDUNDAND_ENVIRONMENT=y
-++CONFIG_ENV_UBI_PART="UBI"
-++CONFIG_ENV_UBI_VOLUME="uboot_config"
-++CONFIG_ENV_UBI_VOLUME_REDUND="uboot_config_r"
-++CONFIG_SYS_RELOC_GD_ENV_ADDR=y
-++CONFIG_STM32_ADC=y
-++CONFIG_CLK_SCMI=y
-++CONFIG_SET_DFU_ALT_INFO=y
-++CONFIG_USB_FUNCTION_FASTBOOT=y
-++CONFIG_FASTBOOT_BUF_ADDR=0xC0000000
-++CONFIG_FASTBOOT_BUF_SIZE=0x02000000
-++CONFIG_FASTBOOT_USB_DEV=1
-++CONFIG_FASTBOOT_FLASH=y
-++CONFIG_FASTBOOT_FLASH_MMC_DEV=1
-++CONFIG_FASTBOOT_MMC_BOOT_SUPPORT=y
-++CONFIG_FASTBOOT_MMC_BOOT1_NAME="mmc1boot0"
-++CONFIG_FASTBOOT_MMC_BOOT2_NAME="mmc1boot1"
-++CONFIG_FASTBOOT_MMC_USER_SUPPORT=y
-++CONFIG_FASTBOOT_MMC_USER_NAME="mmc1"
-++CONFIG_FASTBOOT_CMD_OEM_FORMAT=y
-++CONFIG_FASTBOOT_CMD_OEM_PARTCONF=y
-++CONFIG_FASTBOOT_CMD_OEM_BOOTBUS=y
-++CONFIG_GPIO_HOG=y
-++CONFIG_DM_HWSPINLOCK=y
-++CONFIG_HWSPINLOCK_STM32=y
-++CONFIG_DM_I2C=y
-++CONFIG_SYS_I2C_STM32F7=y
-++CONFIG_LED=y
-++CONFIG_LED_GPIO=y
-++CONFIG_DM_MAILBOX=y
-++CONFIG_STM32_IPCC=y
-++CONFIG_I2C_EEPROM=y
-++CONFIG_ARM_SMC_MAILBOX=y
-++CONFIG_DM_MMC=y
-++CONFIG_SUPPORT_EMMC_BOOT=y
-++CONFIG_STM32_SDMMC2=y
-++CONFIG_MTD=y
-++CONFIG_DM_MTD=y
-++CONFIG_SYS_MTDPARTS_RUNTIME=y
-++CONFIG_MTD_RAW_NAND=y
-++CONFIG_NAND_STM32_FMC2=y
-++CONFIG_MTD_SPI_NAND=y
-++CONFIG_DM_SPI_FLASH=y
-++CONFIG_SPI_FLASH_MACRONIX=y
-++CONFIG_SPI_FLASH_SPANSION=y
-++CONFIG_SPI_FLASH_STMICRO=y
-++CONFIG_SPI_FLASH_WINBOND=y
-++# CONFIG_SPI_FLASH_USE_4K_SECTORS is not set
-++CONFIG_SPI_FLASH_MTD=y
-++CONFIG_PHY_REALTEK=y
-++CONFIG_DM_ETH=y
-++CONFIG_DWC_ETH_QOS=y
-++CONFIG_PHY=y
-++CONFIG_PHY_STM32_USBPHYC=y
-++CONFIG_PINCONF=y
-++CONFIG_PINCTRL_STMFX=y
-++CONFIG_DM_PMIC=y
-++CONFIG_PMIC_STPMIC1=y
-++CONFIG_DM_REGULATOR_FIXED=y
-++CONFIG_DM_REGULATOR_GPIO=y
-++CONFIG_DM_REGULATOR_STM32_VREFBUF=y
-++CONFIG_DM_REGULATOR_STPMIC1=y
-++CONFIG_REMOTEPROC_STM32_COPRO=y
-++CONFIG_RESET_SCMI=y
-++CONFIG_DM_RTC=y
-++CONFIG_RTC_STM32=y
-++CONFIG_SERIAL_RX_BUFFER=y
-++CONFIG_SPI=y
-++CONFIG_DM_SPI=y
-++CONFIG_STM32_QSPI=y
-++CONFIG_STM32_SPI=y
-++CONFIG_TEE=y
-++CONFIG_OPTEE=y
-++# CONFIG_OPTEE_TA_AVB is not set
-++CONFIG_USB=y
-++CONFIG_DM_USB=y
-++CONFIG_DM_USB_GADGET=y
-++CONFIG_USB_EHCI_HCD=y
-++CONFIG_USB_EHCI_GENERIC=y
-++CONFIG_USB_GADGET=y
-++CONFIG_USB_GADGET_MANUFACTURER="STMicroelectronics"
-++CONFIG_USB_GADGET_VENDOR_NUM=0x0483
-++CONFIG_USB_GADGET_PRODUCT_NUM=0x5720
-++CONFIG_USB_GADGET_DWC2_OTG=y
-++CONFIG_DM_VIDEO=y
-++CONFIG_BACKLIGHT_GPIO=y
-++CONFIG_VIDEO_BPP8=y
-++CONFIG_VIDEO_BPP16=y
-++CONFIG_VIDEO_BPP32=y
-++CONFIG_VIDEO_LCD_ORISETECH_OTM8009A=y
-++CONFIG_VIDEO_LCD_RAYDIUM_RM68200=y
-++CONFIG_VIDEO_STM32=y
-++CONFIG_VIDEO_STM32_DSI=y
-++CONFIG_VIDEO_STM32_MAX_XRES=1280
-++CONFIG_VIDEO_STM32_MAX_YRES=800
-++CONFIG_WDT=y
-++CONFIG_WDT_STM32MP=y
-++CONFIG_ERRNO_STR=y
-++CONFIG_FDT_FIXUP_PARTITIONS=y
 +-- 
 +2.17.1
 +
-diff --git a/board/octavo/brk/uboot-patches/0007-Add-OSD32MP1-BRK-features-and-fix-formatting.patch b/board/octavo/brk/uboot-patches/0007-Add-OSD32MP1-BRK-features-and-fix-formatting.patch
+diff --git a/board/octavo/red/uboot-patches/0002-Fix-Ethernet-Clock-for-OSD32MP1-RED.patch b/board/octavo/red/uboot-patches/0002-Fix-Ethernet-Clock-for-OSD32MP1-RED.patch
 new file mode 100644
-index 0000000000..ffa9505dad
+index 0000000000..c5bea5fd4d
 --- /dev/null
-+++ b/board/octavo/brk/uboot-patches/0007-Add-OSD32MP1-BRK-features-and-fix-formatting.patch
-@@ -0,0 +1,976 @@
-+From a473ef7f04c60d7a4a878a50890730cb0e788b40 Mon Sep 17 00:00:00 2001
++++ b/board/octavo/red/uboot-patches/0002-Fix-Ethernet-Clock-for-OSD32MP1-RED.patch
+@@ -0,0 +1,32 @@
++From eab9f046a43599fd46f41ac52eb7d20be9f9e7ab Mon Sep 17 00:00:00 2001
 +From: "neeraj.dantu" <neeraj.dantu@octavosystems.com>
-+Date: Tue, 22 Sep 2020 17:30:17 -0500
-+Subject: [PATCH 2/4] Add OSD32MP1-BRK features and fix formatting
++Date: Sun, 31 Jan 2021 21:06:08 -0600
++Subject: [PATCH 2/2] Fix Ethernet Clock for OSD32MP1-RED
 +
++Signed-off-by: neeraj.dantu <neeraj.dantu@octavosystems.com>
 +---
-+ ...tsi => stm32mp15-osd32mp1-ddr3-1x4Gb.dtsi} |   0
-+ arch/arm/dts/stm32mp157c-osd32mp1-brk.dts     | 667 ++++++++++++++----
-+ 2 files changed, 539 insertions(+), 128 deletions(-)
-+ rename arch/arm/dts/{osd32mp1.dtsi => stm32mp15-osd32mp1-ddr3-1x4Gb.dtsi} (100%)
++ arch/arm/dts/stm32mp157c.dtsi | 4 ++++
++ 1 file changed, 4 insertions(+)
 +
-+diff --git a/arch/arm/dts/osd32mp1.dtsi b/arch/arm/dts/stm32mp15-osd32mp1-ddr3-1x4Gb.dtsi
-+similarity index 100%
-+rename from arch/arm/dts/osd32mp1.dtsi
-+rename to arch/arm/dts/stm32mp15-osd32mp1-ddr3-1x4Gb.dtsi
-+diff --git a/arch/arm/dts/stm32mp157c-osd32mp1-brk.dts b/arch/arm/dts/stm32mp157c-osd32mp1-brk.dts
-+index 51eff6e221..d763b48945 100644
-+--- a/arch/arm/dts/stm32mp157c-osd32mp1-brk.dts
-++++ b/arch/arm/dts/stm32mp157c-osd32mp1-brk.dts
-+@@ -1,7 +1,6 @@
-+ /* SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause) */
-+ /*
-+- * Copyright (C) STMicroelectronics 2020 - All Rights Reserved
-+- * Author: STM32CubeMX code generation for STMicroelectronics.
-++ * Copyright (C) Octavo Systems LLC 2020 - All Rights Reserved
-+  */
-+ 
-+ /* For more information on Device Tree configuration, please refer to
-+@@ -15,11 +14,8 @@
-+ #include "stm32mp15xc.dtsi"
-+ #include "stm32mp15xxac-pinctrl.dtsi"
-+ #include "stm32mp157-m4-srm.dtsi"
-+-
-+-/* USER CODE BEGIN includes */
-+ #include <dt-bindings/mfd/st,stpmic1.h>
-+ #include <dt-bindings/rtc/rtc-stm32.h>
-+-/* USER CODE END includes */
-+ 
-+ / {
-+ 	model = "Octavo OSD32MP1 BRK board";
-+@@ -28,9 +24,6 @@
-+ 	memory@c0000000 {
-+ 		device_type = "memory";
-+ 		reg = <0xc0000000 0x20000000>;
-+-
-+-		/* USER CODE BEGIN memory */
-+-		/* USER CODE END memory */
-+ 	};
-+ 
-+ 	reserved-memory {
-+@@ -38,8 +31,6 @@
-+ 		#size-cells = <1>;
-+ 		ranges;
-+ 
-+-		/* USER CODE BEGIN reserved-memory */
-+-
-+ 		mcuram2:mcuram2@10000000{
-+ 			compatible = "shared-dma-pool";
-+ 			reg = <0x10000000 0x40000>;
-+@@ -86,11 +77,8 @@
-+ 			no-map;
-+ 			status = "okay";
-+ 		};
-+-		/* USER CODE END reserved-memory */
-+ 	};
-+ 
-+-	/* USER CODE BEGIN root */
-+-
-+ 	led{
-+ 		compatible = "gpio-leds";
-+ 
-+@@ -101,21 +89,21 @@
-+ 			status = "okay";
-+ 			default-state = "off";
-+ 		};
-+-		
-++
-+ 		green1{
-+ 			label = "LED1_GRN";
-+ 			gpios = <&gpioz 7 GPIO_ACTIVE_LOW>;
-+ 			status = "okay";
-+ 			default-state = "on";
-+ 		};
-+-		
-++
-+ 		red2{
-+ 			label = "LED2_RED";
-+ 			gpios = <&gpioi 8 GPIO_ACTIVE_LOW>;
-+ 			status = "okay";
-+ 			default-state = "off";
-+ 		};
-+-				
-++
-+ 		green2{
-+ 			label = "LED2_GRN";
-+ 			gpios = <&gpioi 9 GPIO_ACTIVE_LOW>;
-+@@ -143,21 +131,19 @@
-+ 	};
-+ 
-+ 	aliases{
-+-		ethernet0 = &ethernet0;
-+ 		serial0 = &uart4;
-++    serial2 = &usart2;
-++    serial5 = &uart5;
-++    serial7 = &uart7;
-++    serial1 = &uart8;
-+ 	};
-+ 
-+ 	chosen{
-+ 		stdout-path = "serial0:115200n8";
-+ 	};
-+ 
-+-	/* USER CODE END root */
-+-
-+ 	clocks {
-+ 
-+-		/* USER CODE BEGIN clocks */
-+-		/* USER CODE END clocks */
-+-
-+ #ifndef CONFIG_STM32MP1_TRUSTED
-+ 		clk_lsi: clk-lsi {
-+ 			clock-frequency = <32000>;
-+@@ -182,18 +168,319 @@
-+ &pinctrl {
-+ 	u-boot,dm-pre-reloc;
-+ 
-+-	rtc_pins_mx: rtc_mx-0 {
-++  i2c1_pins_mx: i2c1-0 {
-+ 		pins {
-+-			pinmux = <STM32_PINMUX('I', 8, ANALOG)>; /* RTC_LSCO */
-++			pinmux = <STM32_PINMUX('H', 11, AF5)>, /* I2C1_SCL */
-++				 <STM32_PINMUX('H', 12, AF5)>; /* I2C1_SDA */
-++			bias-disable;
-++			drive-open-drain;
-++			slew-rate = <0>;
-+ 		};
-+ 	};
-+ 
-+-	rtc_sleep_pins_mx: rtc_sleep_mx-0 {
-++	i2c1_pins_sleep_mx: i2c1-1 {
-+ 		pins {
-+-			pinmux = <STM32_PINMUX('I', 8, ANALOG)>; /* RTC_LSCO */
-++			pinmux = <STM32_PINMUX('H', 11, ANALOG)>, /* I2C1_SCL */
-++				 <STM32_PINMUX('H', 12, ANALOG)>; /* I2C1_SDA */
-+ 		};
-+ 	};
-+ 
-++  i2c2_pins_mx: i2c2-0 {
-++    pins {
-++      pinmux = <STM32_PINMUX('F', 1, AF4)>, /* I2C2_SCL */
-++         <STM32_PINMUX('G', 15, AF4)>; /* I2C2_SDA */
-++      bias-disable;
-++      drive-open-drain;
-++      slew-rate = <0>;
-++    };
-++  };
-++
-++  i2c2_pins_sleep_mx: i2c2-1 {
-++    pins {
-++      pinmux = <STM32_PINMUX('F', 1, ANALOG)>, /* I2C2_SCL */
-++         <STM32_PINMUX('G', 15, ANALOG)>; /* I2C2_SDA */
-++    };
-++  };
-++
-++  i2c5_pins_mx: i2c5-0 {
-++    pins {
-++      pinmux = <STM32_PINMUX('D', 1, AF4)>, /* I2C5_SCL */
-++         <STM32_PINMUX('D', 0, AF4)>; /* I2C5_SDA */
-++      bias-disable;
-++      drive-open-drain;
-++      slew-rate = <0>;
-++    };
-++  };
-++
-++  i2c5_pins_sleep_mx: i2c5-1 {
-++    pins {
-++      pinmux = <STM32_PINMUX('D', 1, ANALOG)>, /* I2C5_SCL */
-++         <STM32_PINMUX('D', 0, ANALOG)>; /* I2C5_SDA */
-++    };
-++  };
-++
-++  spi2_pins_mx: spi2-0 {
-++    pins1 {
-++      pinmux = <STM32_PINMUX('I', 1, AF5)>, /* SPI2_SCK */
-++         <STM32_PINMUX('I', 3, AF5)>; /* SPI2_MOSI */
-++      bias-disable;
-++      drive-push-pull;
-++      slew-rate = <1>;
-++    };
-++
-++    pins2 {
-++      pinmux = <STM32_PINMUX('I', 2, AF5)>; /* SPI2_MISO */
-++      bias-disable;
-++    };
-++  };
-++
-++  spi2_sleep_pins_mx: spi2-sleep-0 {
-++    pins {
-++      pinmux = <STM32_PINMUX('I', 1, ANALOG)>, /* SPI2_SCK */
-++         <STM32_PINMUX('I', 2, ANALOG)>, /* SPI2_MISO */
-++         <STM32_PINMUX('I', 3, ANALOG)>; /* SPI2_MOSI */
-++    };
-++  };
-++
-++  spi4_pins_mx: spi4-0 {
-++    pins1 {
-++      pinmux = <STM32_PINMUX('E', 12, AF5)>, /* SPI4_SCK */
-++         <STM32_PINMUX('E', 14, AF5)>; /* SPI4_MOSI */
-++      bias-disable;
-++      drive-push-pull;
-++      slew-rate = <1>;
-++    };
-++
-++    pins2 {
-++      pinmux = <STM32_PINMUX('E', 13, AF5)>; /* SPI4_MISO */
-++      bias-disable;
-++    };
-++  };
-++
-++  spi4_sleep_pins_mx: spi4-sleep-0 {
-++    pins {
-++      pinmux = <STM32_PINMUX('E', 12, ANALOG)>, /* SPI2_SCK */
-++         <STM32_PINMUX('E', 13, ANALOG)>, /* SPI2_MISO */
-++         <STM32_PINMUX('E', 14, ANALOG)>; /* SPI2_MOSI */
-++    };
-++  };
-++
-++  usart2_pins_mx: usart2-0 {
-++      pins1 {
-++        pinmux = <STM32_PINMUX('F', 5, AF7)>; /* USART2_TX */
-++        bias-disable;
-++        drive-push-pull;
-++        slew-rate = <0>;
-++      };
-++      pins2 {
-++        pinmux = <STM32_PINMUX('F', 4, AF7)>; /* USART2_RX */
-++        bias-disable;
-++      };
-++    };
-++
-++    usart2_idle_pins_mx: usart2-idle-0 {
-++      pins1 {
-++        pinmux = <STM32_PINMUX('F', 5, ANALOG)>; /* USART2_TX */
-++      };
-++      pins2 {
-++        pinmux = <STM32_PINMUX('F', 4, AF7)>; /* USART2_RX */
-++        bias-disable;
-++      };
-++    };
-++
-++    usart2_sleep_pins_mx: usart2-sleep-0 {
-++      pins {
-++        pinmux = <STM32_PINMUX('F', 5, ANALOG)>, /* USART2_TX */
-++           <STM32_PINMUX('F', 4, ANALOG)>; /* USART2_RX */
-++      };
-++    };
-++
-++    uart5_pins_mx: uart5-0 {
-++      pins1 {
-++        pinmux = <STM32_PINMUX('B', 13, AF14)>; /* USART5_TX */
-++        bias-disable;
-++        drive-push-pull;
-++        slew-rate = <0>;
-++      };
-++      pins2 {
-++        pinmux = <STM32_PINMUX('B', 12, AF14)>; /* USART5_RX */
-++        bias-disable;
-++      };
-++    };
-++
-++    uart5_idle_pins_mx: uart5-idle-0 {
-++      pins1 {
-++        pinmux = <STM32_PINMUX('B', 13, ANALOG)>; /* USART5_TX */
-++      };
-++      pins2 {
-++        pinmux = <STM32_PINMUX('B', 12, AF14)>; /* USART5_RX */
-++        bias-disable;
-++      };
-++    };
-++
-++    uart5_sleep_pins_mx: uart5-sleep-0 {
-++      pins {
-++        pinmux = <STM32_PINMUX('B', 13, ANALOG)>, /* USART5_TX */
-++           <STM32_PINMUX('B', 12, ANALOG)>; /* USART5_RX */
-++      };
-++    };
-++
-++    uart7_pins_mx: uart7-0 {
-++      pins1 {
-++        pinmux = <STM32_PINMUX('A', 15, AF13)>; /* USART7_TX */
-++        bias-disable;
-++        drive-push-pull;
-++        slew-rate = <0>;
-++      };
-++      pins2 {
-++        pinmux = <STM32_PINMUX('B', 3, AF13)>; /* USART7_RX */
-++        bias-disable;
-++      };
-++    };
-++
-++  uart7_idle_pins_mx: uart7-idle-0 {
-++    pins1 {
-++      pinmux = <STM32_PINMUX('A', 15, ANALOG)>; /* USART7_TX */
-++    };
-++    pins2 {
-++      pinmux = <STM32_PINMUX('B', 3, AF13)>; /* USART7_RX */
-++      bias-disable;
-++    };
-++  };
-++
-++  uart7_sleep_pins_mx: uart7-sleep-0 {
-++    pins {
-++      pinmux = <STM32_PINMUX('A', 15, ANALOG)>, /* USART7_TX */
-++        <STM32_PINMUX('B', 3, ANALOG)>; /* USART7_RX */
-++    };
-++  };
-++
-++  uart8_pins_mx: uart8-0 {
-++    pins1 {
-++      pinmux = <STM32_PINMUX('E', 1, AF8)>; /* USART8_TX */
-++      bias-disable;
-++      drive-push-pull;
-++      slew-rate = <0>;
-++    };
-++    pins2 {
-++      pinmux = <STM32_PINMUX('E', 0, AF8)>; /* USART8_RX */
-++      bias-disable;
-++    };
-++  };
-++
-++  uart8_idle_pins_mx: uart8-idle-0 {
-++    pins1 {
-++      pinmux = <STM32_PINMUX('E', 1, ANALOG)>; /* USART8_TX */
-++    };
-++    pins2 {
-++      pinmux = <STM32_PINMUX('E', 0, AF8)>; /* USART8_RX */
-++      bias-disable;
-++    };
-++  };
-++
-++  uart8_sleep_pins_mx: uart8-sleep-0 {
-++    pins {
-++      pinmux = <STM32_PINMUX('E', 1, ANALOG)>, /* USART8_TX */
-++        <STM32_PINMUX('E', 0, ANALOG)>; /* USART8_RX */
-++    };
-++  };
-++
-++  m_can1_pins_mx: m-can1-0 {
-++    pins1 {
-++      pinmux = <STM32_PINMUX('H', 13, AF9)>; /* CAN1_TX */
-++      slew-rate = <0>;
-++      drive-push-pull;
-++      bias-disable;
-++    };
-++    pins2 {
-++      pinmux = <STM32_PINMUX('H', 14, AF9)>; /* CAN1_RX */
-++      bias-disable;
-++    };
-++  };
-++
-++  m_can1_sleep_pins_mx: m_can1-sleep@0 {
-++    pins {
-++      pinmux = <STM32_PINMUX('H', 13, ANALOG)>, /* CAN1_TX */
-++        <STM32_PINMUX('H', 14, ANALOG)>; /* CAN1_RX */
-++    };
-++  };
-++
-++  pwm1_pins_mx: pwm1-0 {
-++    pins {
-++      pinmux = <STM32_PINMUX('A', 9, AF1)>; /* TIM1_CH2 */
-++      bias-pull-down;
-++      drive-push-pull;
-++      slew-rate = <0>;
-++    };
-++  };
-++
-++  pwm1_sleep_pins_mx: pwm1-sleep-0 {
-++    pins {
-++      pinmux = <STM32_PINMUX('A', 9, ANALOG)>; /* TIM1_CH1 */
-++    };
-++  };
-++
-++  pwm3_pins_mx: pwm3-0 {
-++    pins {
-++      pinmux = <STM32_PINMUX('B', 5, AF2)>; /* TIM3_CH2 */
-++      bias-pull-down;
-++      drive-push-pull;
-++      slew-rate = <0>;
-++    };
-++  };
-++
-++  pwm3_sleep_pins_mx: pwm3-sleep-0 {
-++    pins {
-++      pinmux = <STM32_PINMUX('B', 5, ANALOG)>; /* TIM3_CH2 */
-++    };
-++  };
-++
-++  pwm4_pins_mx: pwm4-0 {
-++    pins {
-++      pinmux = <STM32_PINMUX('B', 7, AF2)>; /* TIM4_CH2 */
-++      bias-pull-down;
-++      drive-push-pull;
-++      slew-rate = <0>;
-++    };
-++  };
-++
-++  pwm4_sleep_pins_mx: pwm4-sleep-0 {
-++    pins {
-++      pinmux = <STM32_PINMUX('B', 7, ANALOG)>; /* TIM4_CH2 */
-++    };
-++  };
-++
-++  pwm8_pins_mx: pwm8-0 {
-++    pins {
-++      pinmux = <STM32_PINMUX('I', 6, AF3)>; /* TIM8_CH2 */
-++      bias-pull-down;
-++      drive-push-pull;
-++      slew-rate = <0>;
-++    };
-++  };
-++
-++  pwm8_sleep_pins_mx: pwm8-sleep-0 {
-++    pins {
-++      pinmux = <STM32_PINMUX('I', 6, ANALOG)>; /* TIM8_CH2 */
-++    };
-++  };
-++
-++
-++  pwm12_pins_mx: pwm12-0 {
-++    pins {
-++      pinmux = <STM32_PINMUX('H', 9, AF2)>; /* TIM12_CH2 */
-++      bias-pull-down;
-++      drive-push-pull;
-++      slew-rate = <0>;
-++    };
-++  };
-++
-++  pwm12_sleep_pins_mx: pwm12-sleep-0 {
-++    pins {
-++      pinmux = <STM32_PINMUX('H', 9, ANALOG)>; /* TIM12_CH2 */
-++    };
-++  };
-++
-+ 	sdmmc1_pins_mx: sdmmc1_mx-0 {
-+ 		u-boot,dm-pre-reloc;
-+ 		pins1 {
-+@@ -262,7 +549,8 @@
-+ 		pins1 {
-+ 			u-boot,dm-pre-reloc;
-+ 			pinmux = <STM32_PINMUX('B', 2, AF8)>; /* UART4_RX */
-+-			bias-disable;
-++      /* pull-up on rx to avoid floating level */
-++      bias-pull-up;
-+ 		};
-+ 		pins2 {
-+ 			u-boot,dm-pre-reloc;
-+@@ -281,9 +569,6 @@
-+ 					 <STM32_PINMUX('G', 11, ANALOG)>; /* UART4_TX */
-+ 		};
-+ 	};
-+-
-+-	/* USER CODE BEGIN pinctrl */
-+-	/* USER CODE END pinctrl */
-+ };
-+ 
-+ &pinctrl_z {
-+@@ -310,8 +595,28 @@
-+ 		};
-+ 	};
-+ 
-+-	/* USER CODE BEGIN pinctrl_z */
-+-	/* USER CODE END pinctrl_z */
-++  spi6_pins_mx: spi6-0 {
-++    pins1 {
-++      pinmux = <STM32_PINMUX('Z', 0, AF8)>, /* SPI6_SCK */
-++         <STM32_PINMUX('Z', 2, AF8)>; /* SPI6_MOSI */
-++      bias-disable;
-++      drive-push-pull;
-++      slew-rate = <1>;
-++    };
-++
-++    pins2 {
-++      pinmux = <STM32_PINMUX('Z', 1, AF8)>; /* SPI6_MISO */
-++      bias-disable;
-++    };
-++  };
-++
-++  spi6_sleep_pins_mx: spi6-sleep-0 {
-++    pins {
-++      pinmux = <STM32_PINMUX('Z', 0, ANALOG)>, /* SPI6_SCK */
-++         <STM32_PINMUX('Z', 1, ANALOG)>, /* SPI6_MISO */
-++         <STM32_PINMUX('Z', 2, ANALOG)>; /* SPI6_MOSI */
-++    };
-++  };
-+ };
-+ 
-+ &m4_rproc{
-+@@ -319,52 +624,39 @@
-+ 	mboxes = <&ipcc 0>, <&ipcc 1>, <&ipcc 2>;
-+ 	mbox-names = "vq0", "vq1", "shutdown";
-+ 	status = "okay";
-+-
-+-	/* USER CODE BEGIN m4_rproc */
-+ 	memory-region = <&retram>, <&mcuram>, <&mcuram2>, <&vdev0vring0>,
-+ 			<&vdev0vring1>, <&vdev0buffer>;
-+ 	interrupt-parent = <&exti>;
-+ 	interrupts = <68 1>;
-+ 	wakeup-source;
-+-	/* USER CODE END m4_rproc */
-++};
-++
-++&pwr_regulators {
-++	vdd-supply = <&vdd>;
-++	vdd_3v3_usbfs-supply = <&vdd_usb>;
-+ };
-+ 
-+ &bsec{
-+ 	status = "okay";
-+-
-+-	/* USER CODE BEGIN bsec */
-+-	/* USER CODE END bsec */
-+ };
-+ 
-+ &crc1{
-+ 	status = "okay";
-+-
-+-	/* USER CODE BEGIN crc1 */
-+-	/* USER CODE END crc1 */
-+ };
-+ 
-+ &cryp1{
-+ 	u-boot,dm-pre-reloc;
-+ 	status = "okay";
-+-
-+-	/* USER CODE BEGIN cryp1 */
-+-	/* USER CODE END cryp1 */
-+ };
-+ 
-+ &dma1{
-+ 	status = "okay";
-+-
-+-	/* USER CODE BEGIN dma1 */
-+ 	sram = <&dma_pool>;
-+-	/* USER CODE END dma1 */
-+ };
-+ 
-+ &dma2{
-+ 	status = "okay";
-+-
-+-	/* USER CODE BEGIN dma2 */
-+ 	sram = <&dma_pool>;
-+-	/* USER CODE END dma2 */
-+ };
-+ 
-+ &dmamux1{
-+@@ -373,39 +665,57 @@
-+ 	dma-channels = <16>;
-+ 
-+ 	status = "okay";
-+-
-+-	/* USER CODE BEGIN dmamux1 */
-+-	/* USER CODE END dmamux1 */
-+ };
-+ 
-+ &dts{
-+ 	status = "okay";
-+-
-+-	/* USER CODE BEGIN dts */
-+-	/* USER CODE END dts */
-+ };
-+ 
-+ &gpu{
-+ 	status = "okay";
-+-
-+-	/* USER CODE BEGIN gpu */
-+ 	contiguous-area = <&gpu_reserved>;
-+-	/* USER CODE END gpu */
-+ };
-+ 
-+ &hash1{
-+ 	u-boot,dm-pre-reloc;
-+ 	status = "okay";
-+-
-+-	/* USER CODE BEGIN hash1 */
-+-	/* USER CODE END hash1 */
-+ };
-+ 
-+ &hsem{
-+ 	status = "okay";
-++};
-++
-++&i2c1 {
-++	pinctrl-names = "default", "sleep";
-++	pinctrl-0 = <&i2c1_pins_mx>;
-++	pinctrl-1 = <&i2c1_pins_sleep_mx>;
-++	i2c-scl-rising-time-ns = <100>;
-++	i2c-scl-falling-time-ns = <7>;
-++	status = "okay";
-++	/delete-property/dmas;
-++	/delete-property/dma-names;
-++};
-++
-++&i2c2 {
-++	pinctrl-names = "default", "sleep";
-++	pinctrl-0 = <&i2c2_pins_mx>;
-++	pinctrl-1 = <&i2c2_pins_sleep_mx>;
-++	i2c-scl-rising-time-ns = <100>;
-++	i2c-scl-falling-time-ns = <7>;
-++	status = "okay";
-++	/delete-property/dmas;
-++	/delete-property/dma-names;
-++};
-+ 
-+-	/* USER CODE BEGIN hsem */
-+-	/* USER CODE END hsem */
-++&i2c5 {
-++	pinctrl-names = "default", "sleep";
-++	pinctrl-0 = <&i2c5_pins_mx>;
-++	pinctrl-1 = <&i2c5_pins_sleep_mx>;
-++	i2c-scl-rising-time-ns = <100>;
-++	i2c-scl-falling-time-ns = <7>;
-++	status = "okay";
-++	/delete-property/dmas;
-++	/delete-property/dma-names;
-+ };
-+ 
-+ &i2c4{
-+@@ -415,10 +725,9 @@
-+ 	pinctrl-1 = <&i2c4_sleep_pins_z_mx>;
-+ 	status = "okay";
-+ 
-+-	/* USER CODE BEGIN i2c4 */
-+ 	i2c-scl-rising-time-ns = <185>;
-+ 	i2c-scl-falling-time-ns = <20>;
-+-	clock-frequency = <100000>;
-++	clock-frequency = <400000>;
-+ 	/delete-property/ dmas;
-+ 	/delete-property/ dma-names;
-+ 
-+@@ -573,55 +882,32 @@
-+ 		reg = <0x50>;
-+ 		pagesize = <16>;
-+ 	};
-+-	/* USER CODE END i2c4 */
-+ };
-+ 
-+ &ipcc{
-+ 	status = "okay";
-+-
-+-	/* USER CODE BEGIN ipcc */
-+-	/* USER CODE END ipcc */
-+ };
-+ 
-+ &iwdg2{
-+ 	status = "okay";
-+-
-+-	/* USER CODE BEGIN iwdg2 */
-+ 	timeout-sec = <32>;
-+-	/* USER CODE END iwdg2 */
-+ };
-+ 
-+ &mdma1{
-+ 	status = "okay";
-+-
-+-	/* USER CODE BEGIN mdma1 */
-+-	/* USER CODE END mdma1 */
-+ };
-+ 
-+ &rcc{
-+ 	u-boot,dm-pre-reloc;
-+ 	status = "okay";
-+-
-+-	/* USER CODE BEGIN rcc */
-+-	/* USER CODE END rcc */
-+ };
-+ 
-+ &rng1{
-+ 	status = "okay";
-+-
-+-	/* USER CODE BEGIN rng1 */
-+-	/* USER CODE END rng1 */
-+ };
-+ 
-+ &rtc{
-+-	pinctrl-names = "default", "sleep";
-+-	pinctrl-0 = <&rtc_pins_mx>;
-+-	pinctrl-1 = <&rtc_sleep_pins_mx>;
-+ 	status = "okay";
-+-
-+-	/* USER CODE BEGIN rtc */
-+-	st,lsco = <RTC_OUT2_RMP>;
-+-	/* USER CODE END rtc */
-+ };
-+ 
-+ &sdmmc1{
-+@@ -632,20 +918,15 @@
-+ 	pinctrl-2 = <&sdmmc1_sleep_pins_mx>;
-+ 	status = "okay";
-+ 
-+-	/* USER CODE BEGIN sdmmc1 */
-+ 	cd-gpios = <&gpiog 7 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
-+ 	disable-wp;
-+ 	st,neg-edge;
-+ 	bus-width = <4>;
-+ 	vmmc-supply = <&v3v3>;
-+-	/* USER CODE END sdmmc1 */
-+ };
-+ 
-+ &tamp{
-+ 	status = "okay";
-+-
-+-	/* USER CODE BEGIN tamp */
-+-	/* USER CODE END tamp */
-+ };
-+ 
-+ &uart4{
-+@@ -655,78 +936,63 @@
-+ 	pinctrl-1 = <&uart4_sleep_pins_mx>;
-+ 	status = "okay";
-+ 
-+-	/* USER CODE BEGIN uart4 */
-+ 	/delete-property/ dmas;
-+ 	/delete-property/ dma-names;
-+-	/* USER CODE END uart4 */
-+ };
-+ 
-+ &usbh_ehci{
-+ 	status = "okay";
-+-
-+-	/* USER CODE BEGIN usbh_ehci */
-+ 	phys = <&usbphyc_port0>;
-+-	/* USER CODE END usbh_ehci */
-+ };
-+ 
-+ &usbh_ohci{
-+ 	status = "okay";
-+-
-+-	/* USER CODE BEGIN usbh_ohci */
-+-	/* USER CODE END usbh_ohci */
-+ };
-+ 
-+ &usbotg_hs{
-+ 	u-boot,dm-pre-reloc;
-+ 	status = "okay";
-+-
-+-	/* USER CODE BEGIN usbotg_hs */
-+ 	phys = <&usbphyc_port1 0>;
-+ 	phy-names = "usb2-phy";
-+-	/* USER CODE END usbotg_hs */
-+ };
-+ 
-+ &usbphyc{
-+ 	u-boot,dm-pre-reloc;
-+ 	status = "okay";
-+-
-+-	/* USER CODE BEGIN usbphyc */
-+-	/* USER CODE END usbphyc */
-+ };
-+ 
-+ &usbphyc_port0{
-+ 	u-boot,dm-pre-reloc;
-+ 	status = "okay";
-+-
-+-	/* USER CODE BEGIN usbphyc_port0 */
-+ 	phy-supply = <&vdd_usb>;
-+ 	st,phy-tuning = <&usb_phy_tuning>;
-+-	/* USER CODE END usbphyc_port0 */
-+ };
-+ 
-+ &usbphyc_port1{
-+ 	u-boot,dm-pre-reloc;
-+ 	status = "okay";
-+-
-+-	/* USER CODE BEGIN usbphyc_port1 */
-+ 	phy-supply = <&vdd_usb>;
-+ 	st,phy-tuning = <&usb_phy_tuning>;
-+-	/* USER CODE END usbphyc_port1 */
-+-};
-+-
-+-&vrefbuf{
-+-	status = "okay";
-+-
-+-	/* USER CODE BEGIN vrefbuf */
-+-	regulator-min-microvolt = <2500000>;
-+-	regulator-max-microvolt = <2500000>;
-+-	vdda-supply = <&vdd>;
-+-	/* USER CODE END vrefbuf */
-+ };
-+ 
-+-/* USER CODE BEGIN addons */
-+ &adc {
-+-	status = "disabled";
-++  vdd-supply = <&vdd>;
-++  vdda-supply = <&vdda>;
-++  vref-supply = <&vdda>;
-++	status = "okay";
-++  adc1: adc@0 {
-++    st,min-sample-time-nsecs = <5000>;
-++    st,adc-channels = <0 1>;
-++    status = "okay";
-++  };
-++
-++  adc2: adc@100 {
-++    status = "okay";
-++  };
-++
-++  adc_temp: temp {
-++    status = "okay";
-++  };
-+ };
-+ 
-+ &usbh_ohci{
-+@@ -742,7 +1008,6 @@
-+ };
-+ 
-+ &sram{
-+-
-+ 	dma_pool:dma_pool@0{
-+ 		reg = <0x50000 0x10000>;
-+ 		pool;
-+@@ -752,5 +1017,151 @@
-+ &optee{
-+ 	status = "okay";
-+ };
-+-/* USER CODE END addons */
-+ 
-++&spi2 {
-++	pinctrl-names = "default", "sleep";
-++	pinctrl-0 = <&spi2_pins_mx>;
-++	pinctrl-1 = <&spi2_sleep_pins_mx>;
-++  cs-gpios = <&gpioi 0 0>;
-++	status = "okay";
-++
-++  spidev2: spidev2@0{
-++    compatible = "rohm,dh2228fv";
-++    spi-max-frequency = <30000000>;
-++    reg = <0>;
-++  };
-++};
-++
-++&spi4 {
-++	pinctrl-names = "default", "sleep";
-++	pinctrl-0 = <&spi4_pins_mx>;
-++	pinctrl-1 = <&spi4_sleep_pins_mx>;
-++  cs-gpios = <&gpioe 11 0>;
-++	status = "okay";
-++
-++  spidev4: spidev4@0{
-++    compatible = "rohm,dh2228fv";
-++    spi-max-frequency = <30000000>;
-++    reg = <0>;
-++  };
-++};
-++
-++&spi6 {
-++	pinctrl-names = "default", "sleep";
-++	pinctrl-0 = <&spi6_pins_mx>;
-++	pinctrl-1 = <&spi6_sleep_pins_mx>;
-++  cs-gpios = <&gpioz 3 0>;
-++	status = "okay";
-++
-++  spidev6: spidev6@0{
-++    compatible = "rohm,dh2228fv";
-++    spi-max-frequency = <30000000>;
-++    reg = <0>;
-++  };
-++};
-++
-++&usart2 {
-++	pinctrl-names = "default", "sleep", "idle";
-++	pinctrl-0 = <&usart2_pins_mx>;
-++	pinctrl-1 = <&usart2_sleep_pins_mx>;
-++	pinctrl-2 = <&usart2_idle_pins_mx>;
-++	status = "okay";
-++};
-++
-++&uart5 {
-++	pinctrl-names = "default", "sleep", "idle";
-++	pinctrl-0 = <&uart5_pins_mx>;
-++	pinctrl-1 = <&uart5_sleep_pins_mx>;
-++	pinctrl-2 = <&uart5_idle_pins_mx>;
-++	status = "okay";
-++};
-++
-++&uart7 {
-++	pinctrl-names = "default", "sleep", "idle";
-++	pinctrl-0 = <&uart7_pins_mx>;
-++	pinctrl-1 = <&uart7_sleep_pins_mx>;
-++	pinctrl-2 = <&uart7_idle_pins_mx>;
-++	status = "okay";
-++};
-++
-++&uart8 {
-++	pinctrl-names = "default", "sleep", "idle";
-++	pinctrl-0 = <&uart8_pins_mx>;
-++	pinctrl-1 = <&uart8_sleep_pins_mx>;
-++	pinctrl-2 = <&uart8_idle_pins_mx>;
-++	status = "okay";
-++};
-++
-++&m_can1 {
-++	pinctrl-names = "default";
-++	pinctrl-0 = <&m_can1_pins_mx>;
-++	status = "okay";
-++  can-transceiver {
-++    max-bitrate = <5000000>;
-++  };
-++};
-++
-++&timers1 {
-++	status = "okay";
-++	/* spare dmas for other usage */
-++	/delete-property/dmas;
-++	/delete-property/dma-names;
-++	pwm1: pwm {
-++    pinctrl-names = "default", "sleep";
-++	  pinctrl-0 = <&pwm1_pins_mx>;
-++	  pinctrl-1 = <&pwm1_sleep_pins_mx>;
-++		status = "okay";
-++	};
-++};
-++
-++&timers3 {
-++	status = "okay";
-++	/* spare dmas for other usage */
-++	/delete-property/dmas;
-++	/delete-property/dma-names;
-++	pwm3: pwm {
-++    pinctrl-names = "default", "sleep";
-++	  pinctrl-0 = <&pwm3_pins_mx>;
-++	  pinctrl-1 = <&pwm3_sleep_pins_mx>;
-++		status = "okay";
-++	};
-++};
-++
-++&timers4 {
-++	status = "okay";
-++	/* spare dmas for other usage */
-++	/delete-property/dmas;
-++	/delete-property/dma-names;
-++	pwm4: pwm {
-++    pinctrl-names = "default", "sleep";
-++	  pinctrl-0 = <&pwm4_pins_mx>;
-++	  pinctrl-1 = <&pwm4_sleep_pins_mx>;
-++		status = "okay";
-++	};
-++};
-++
-++&timers8 {
-++	status = "okay";
-++	/* spare dmas for other usage */
-++	/delete-property/dmas;
-++	/delete-property/dma-names;
-++	pwm8: pwm {
-++    pinctrl-names = "default", "sleep";
-++	  pinctrl-0 = <&pwm8_pins_mx>;
-++	  pinctrl-1 = <&pwm8_sleep_pins_mx>;
-++		status = "okay";
-++	};
-++};
-++
-++&timers12 {
-++	status = "okay";
-++	/* spare dmas for other usage */
-++	/delete-property/dmas;
-++	/delete-property/dma-names;
-++	pwm12: pwm {
-++    pinctrl-names = "default", "sleep";
-++	  pinctrl-0 = <&pwm12_pins_mx>;
-++	  pinctrl-1 = <&pwm12_sleep_pins_mx>;
-++		status = "okay";
-++	};
-++};
++diff --git a/arch/arm/dts/stm32mp157c.dtsi b/arch/arm/dts/stm32mp157c.dtsi
++index c94a1f254e..c0f94bb19c 100644
++--- a/arch/arm/dts/stm32mp157c.dtsi
+++++ b/arch/arm/dts/stm32mp157c.dtsi
++@@ -1768,10 +1768,14 @@
++ 			clock-names = "stmmaceth",
++ 				      "mac-clk-tx",
++ 				      "mac-clk-rx",
+++				      "eth-ck",    //custom
+++				      "syscfg-clk", //custom
++ 				      "ethstp";
++ 			clocks = <&rcc ETHMAC>,
++ 				 <&rcc ETHTX>,
++ 				 <&rcc ETHRX>,
+++				 <&rcc ETHCK_K>, //custom
+++				 <&rcc SYSCFG>,  //custom
++ 				 <&rcc ETHSTP>;
++ 			st,syscon = <&syscfg 0x4>;
++ 			snps,mixed-burst;
 +-- 
 +2.17.1
 +
-diff --git a/board/octavo/brk/uboot-patches/0008-Fix-missing-DDR-include-file.patch b/board/octavo/brk/uboot-patches/0008-Fix-missing-DDR-include-file.patch
+diff --git a/board/octavo/red/uboot-patches/0003-configs-stm32mp15_trusted_defconfig-disable-environm.patch b/board/octavo/red/uboot-patches/0003-configs-stm32mp15_trusted_defconfig-disable-environm.patch
 new file mode 100644
-index 0000000000..098ab8fe9f
+index 0000000000..05ea816498
 --- /dev/null
-+++ b/board/octavo/brk/uboot-patches/0008-Fix-missing-DDR-include-file.patch
-@@ -0,0 +1,263 @@
-+From 067c36c6e425a85113dc279f33174c315272a3ac Mon Sep 17 00:00:00 2001
-+From: "neeraj.dantu" <neeraj.dantu@octavosystems.com>
-+Date: Wed, 23 Sep 2020 11:48:28 -0500
-+Subject: [PATCH 3/4] Fix missing DDR include file
++++ b/board/octavo/red/uboot-patches/0003-configs-stm32mp15_trusted_defconfig-disable-environm.patch
+@@ -0,0 +1,32 @@
++From c0f7d94955600dac6b326630f90f887f45009eb7 Mon Sep 17 00:00:00 2001
++From: Kory Maincent <kory.maincent@bootlin.com>
++Date: Tue, 5 Oct 2021 14:31:28 +0200
++Subject: [PATCH] configs/stm32mp15_trusted_defconfig: disable environment
 +
++select only ENV_IS_NOWHERE
++
++Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
 +---
-+ .../dts/stm32mp157c-osd32mp1-brk-u-boot.dtsi  | 130 ++++++------------
-+ 1 file changed, 39 insertions(+), 91 deletions(-)
++ configs/stm32mp15_trusted_defconfig | 6 ------
++ 1 file changed, 6 deletions(-)
 +
-+diff --git a/arch/arm/dts/stm32mp157c-osd32mp1-brk-u-boot.dtsi b/arch/arm/dts/stm32mp157c-osd32mp1-brk-u-boot.dtsi
-+index 8f0e39f040..c061308628 100644
-+--- a/arch/arm/dts/stm32mp157c-osd32mp1-brk-u-boot.dtsi
-++++ b/arch/arm/dts/stm32mp157c-osd32mp1-brk-u-boot.dtsi
-+@@ -1,7 +1,6 @@
-+ /* SPDX-License-Identifier: GPL-2.0+ OR BSD-3-Clause*/
-+ /*
-+- * Copyright (C) 2020, STMicroelectronics - All Rights Reserved
-+- * Author: STM32CubeMX code generation for STMicroelectronics.
-++ * Copyright (C) 2020, Octavo Systems LLC - All Rights Reserved
-+  */
-+ 
-+ /* For more information on Device Tree configuration, please refer to
-+@@ -9,18 +8,14 @@
-+  */
-+ 
-+ #include <dt-bindings/clock/stm32mp1-clksrc.h>
-+-#include "osd32mp1.dtsi"
-++#include "stm32mp15-osd32mp1-ddr3-1x4Gb.dtsi"
-+ 
-+ #include "stm32mp15-u-boot.dtsi"
-+ #include "stm32mp15-ddr.dtsi"
-+ 
-+-/* USER CODE BEGIN includes */
-+-/* USER CODE END includes */
-+ 
-+ / {
-+ 
-+-	/* USER CODE BEGIN root */
-+-
-+ 	aliases{
-+ 		i2c0 = &i2c4;
-+ 		mmc0 = &sdmmc1;
-+@@ -34,47 +29,27 @@
-+ 		st,stm32prog-gpios = <&gpiod 9 GPIO_ACTIVE_LOW>;
-+ 	};
-+ 
-+-	/* USER CODE END root */
-+-
-+ 	clocks {
-+ 		u-boot,dm-pre-reloc;
-+ 
-+-		/* USER CODE BEGIN clocks */
-+-		/* USER CODE END clocks */
-+-
-+ #ifndef CONFIG_STM32MP1_TRUSTED
-+ 		clk_lsi: clk-lsi {
-+ 			u-boot,dm-pre-reloc;
-+-
-+-			/* USER CODE BEGIN clk_lsi */
-+-			/* USER CODE END clk_lsi */
-+ 		};
-+ 		clk_hsi: clk-hsi {
-+ 			u-boot,dm-pre-reloc;
-+-
-+-			/* USER CODE BEGIN clk_hsi */
-+-			/* USER CODE END clk_hsi */
-+ 		};
-+ 		clk_csi: clk-csi {
-+ 			u-boot,dm-pre-reloc;
-+ 			status = "disabled";
-+-
-+-			/* USER CODE BEGIN clk_csi */
-+-			/* USER CODE END clk_csi */
-+ 		};
-+ 		clk_lse: clk-lse {
-+ 			u-boot,dm-pre-reloc;
-+ 			st,drive = < LSEDRV_MEDIUM_HIGH >;
-+-
-+-			/* USER CODE BEGIN clk_lse */
-+-			/* USER CODE END clk_lse */
-+ 		};
-+ 		clk_hse: clk-hse {
-+ 			u-boot,dm-pre-reloc;
-+ 			st,digbypass;
-+-
-+-			/* USER CODE BEGIN clk_hse */
-+-			/* USER CODE END clk_hse */
-+ 		};
-+ #endif	/*CONFIG_STM32MP1_TRUSTED*/
-+ 	};
-+@@ -110,36 +85,41 @@
-+ 		0 		/*MCO2*/
-+ 	>;
-+ 	st,pkcs = <
-+-		CLK_CKPER_DISABLED
-+-		CLK_ETH_DISABLED
-+-		CLK_SDMMC12_PLL4P
-+-		CLK_STGEN_HSE
-+-		CLK_USBPHY_HSE
-+-		CLK_SPI2S1_DISABLED
-+-		CLK_SPI2S23_DISABLED
-+-		CLK_SPI45_DISABLED
-+-		CLK_SPI6_DISABLED
-+-		CLK_I2C46_HSI
-+-		CLK_SDMMC3_DISABLED
-+-		CLK_USBO_USBPHY
-+-		CLK_ADC_DISABLED
-+-		CLK_CEC_DISABLED
-+-		CLK_I2C12_DISABLED
-+-		CLK_I2C35_DISABLED
-+-		CLK_UART1_DISABLED
-+-		CLK_UART24_HSI
-+-		CLK_UART35_DISABLED
-+-		CLK_UART6_DISABLED
-+-		CLK_UART78_DISABLED
-+-		CLK_SPDIF_DISABLED
-+-		CLK_SAI1_DISABLED
-+-		CLK_SAI2_DISABLED
-+-		CLK_SAI3_DISABLED
-+-		CLK_SAI4_DISABLED
-+-		CLK_RNG1_LSI
-+-		CLK_LPTIM1_DISABLED
-+-		CLK_LPTIM23_DISABLED
-+-		CLK_LPTIM45_DISABLED
-++    CLK_CKPER_HSE
-++    CLK_FMC_ACLK
-++    CLK_QSPI_ACLK
-++    CLK_ETH_DISABLED
-++    CLK_SDMMC12_PLL4P
-++    CLK_DSI_DSIPLL
-++    CLK_STGEN_HSE
-++    CLK_USBPHY_HSE
-++    CLK_SPI2S1_PLL3Q
-++    CLK_SPI2S23_PLL3Q
-++    CLK_SPI45_HSI
-++    CLK_SPI6_HSI
-++    CLK_I2C46_HSI
-++    CLK_SDMMC3_PLL4P
-++    CLK_USBO_USBPHY
-++    CLK_ADC_CKPER
-++    CLK_CEC_LSE
-++    CLK_I2C12_HSI
-++    CLK_I2C35_HSI
-++    CLK_UART1_HSI
-++    CLK_UART24_HSI
-++    CLK_UART35_HSI
-++    CLK_UART6_HSI
-++    CLK_UART78_HSI
-++    CLK_SPDIF_PLL4P
-++    CLK_FDCAN_PLL4R
-++    CLK_SAI1_PLL3Q
-++    CLK_SAI2_PLL3Q
-++    CLK_SAI3_PLL3Q
-++    CLK_SAI4_PLL3Q
-++    CLK_RNG1_LSI
-++    CLK_RNG2_LSI
-++    CLK_LPTIM1_PCLK1
-++    CLK_LPTIM23_PCLK3
-++    CLK_LPTIM45_LSE
-+ 	>;
-+ 	pll2:st,pll@1 {
-+ 		compatible = "st,stm32mp1-pll";
-+@@ -151,88 +131,59 @@
-+ 	pll3:st,pll@2 {
-+ 		compatible = "st,stm32mp1-pll";
-+ 		reg = <2>;
-+-		cfg = < 1 33 1 16 36 PQR(1,0,0) >;
-++		cfg = < 1 33 1 16 36 PQR(1,1,1) >;
-+ 		frac = < 0x1a04 >;
-+ 		u-boot,dm-pre-reloc;
-+ 	};
-+ 	pll4:st,pll@3 {
-+ 		compatible = "st,stm32mp1-pll";
-+ 		reg = <3>;
-+-		cfg = < 3 98 5 7 7 PQR(1,0,0) >;
-++		cfg = < 3 98 5 7 7 PQR(1,1,1) >;
-+ 		u-boot,dm-pre-reloc;
-+ 	};
-+ };
-+ 
-+ &i2c4{
-+ 	u-boot,dm-pre-reloc;
-+-
-+-	/* USER CODE BEGIN i2c4 */
-+-	/* USER CODE END i2c4 */
-+ };
-+ 
-+ &sdmmc1{
-+ 	u-boot,dm-pre-reloc;
-+-
-+-	/* USER CODE BEGIN sdmmc1 */
-+-	/* USER CODE END sdmmc1 */
-+ };
-+ 
-+ #endif	/*CONFIG_STM32MP1_TRUSTED*/
-+ 
-+ &cryp1{
-+ 	u-boot,dm-pre-reloc;
-+-
-+-	/* USER CODE BEGIN cryp1 */
-+-	/* USER CODE END cryp1 */
-+ };
-+ 
-+ &hash1{
-+ 	u-boot,dm-pre-reloc;
-+-
-+-	/* USER CODE BEGIN hash1 */
-+-	/* USER CODE END hash1 */
-+ };
-+ 
-+ &uart4{
-+ 	u-boot,dm-pre-reloc;
-+-
-+-	/* USER CODE BEGIN uart4 */
-+-	/* USER CODE END uart4 */
-+ };
-+ 
-+ &usbotg_hs{
-+ 	u-boot,dm-pre-reloc;
-+-
-+-	/* USER CODE BEGIN usbotg_hs */
-+ 	u-boot,force-b-session-valid;
-+ 	hnp-srp-disable;
-+ 	dr_mode = "peripheral";
-+-	/* USER CODE END usbotg_hs */
-+ };
-+ 
-+ &usbphyc{
-+ 	u-boot,dm-pre-reloc;
-+-
-+-	/* USER CODE BEGIN usbphyc */
-+-	/* USER CODE END usbphyc */
-+ };
-+ 
-+ &usbphyc_port0{
-+ 	u-boot,dm-pre-reloc;
-+-
-+-	/* USER CODE BEGIN usbphyc_port0 */
-+-	/* USER CODE END usbphyc_port0 */
-+ };
-+ 
-+ &usbphyc_port1{
-+ 	u-boot,dm-pre-reloc;
-+-
-+-	/* USER CODE BEGIN usbphyc_port1 */
-+-	/* USER CODE END usbphyc_port1 */
-+ };
-+ 
-+-/* USER CODE BEGIN addons */
-+-
-+ &adc{
-+ 	status = "okay";
-+ };
-+@@ -250,6 +201,3 @@
-+ 	clocks = <&rcc SAI2>, <&rcc PLL3_Q>, <&rcc PLL3_R>;
-+ };
-+ #endif /*CONFIG_STM32MP1_TRUSTED*/
-+-
-+-/* USER CODE END addons */
-+-
++diff --git a/configs/stm32mp15_trusted_defconfig b/configs/stm32mp15_trusted_defconfig
++index 7635d7f6c7..6ec4bcd080 100644
++--- a/configs/stm32mp15_trusted_defconfig
+++++ b/configs/stm32mp15_trusted_defconfig
++@@ -38,12 +38,6 @@ CONFIG_CMD_MTDPARTS=y
++ CONFIG_CMD_UBI=y
++ CONFIG_DEFAULT_DEVICE_TREE="stm32mp157c-ev1"
++ CONFIG_ENV_IS_NOWHERE=y
++-CONFIG_ENV_IS_IN_EXT4=y
++-CONFIG_ENV_IS_IN_SPI_FLASH=y
++-CONFIG_ENV_IS_IN_UBI=y
++-CONFIG_ENV_EXT4_INTERFACE="mmc"
++-CONFIG_ENV_EXT4_DEVICE_AND_PART="0:auto"
++-CONFIG_ENV_EXT4_FILE="/uboot.env"
++ CONFIG_STM32_ADC=y
++ CONFIG_USB_FUNCTION_FASTBOOT=y
++ CONFIG_FASTBOOT_BUF_ADDR=0xC0000000
 +-- 
-+2.17.1
++2.25.1
 +
-diff --git a/board/octavo/brk/uboot-patches/0009-Fix-Cube-programmer-GPIO-default-level.patch b/board/octavo/brk/uboot-patches/0009-Fix-Cube-programmer-GPIO-default-level.patch
+diff --git a/configs/octavo_osd32mp1_red_defconfig b/configs/octavo_osd32mp1_red_defconfig
 new file mode 100644
-index 0000000000..522a55f300
+index 0000000000..b4f76b38d1
 --- /dev/null
-+++ b/board/octavo/brk/uboot-patches/0009-Fix-Cube-programmer-GPIO-default-level.patch
-@@ -0,0 +1,25 @@
-+From 7c5db44f99c2945b510160269b73d305a4db3c96 Mon Sep 17 00:00:00 2001
-+From: "neeraj.dantu" <neeraj.dantu@octavosystems.com>
-+Date: Wed, 23 Sep 2020 18:29:52 -0500
-+Subject: [PATCH 4/4] Fix Cube programmer GPIO default level
-+
-+---
-+ arch/arm/dts/stm32mp157c-osd32mp1-brk-u-boot.dtsi | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/arch/arm/dts/stm32mp157c-osd32mp1-brk-u-boot.dtsi b/arch/arm/dts/stm32mp157c-osd32mp1-brk-u-boot.dtsi
-+index c061308628..38a0458838 100644
-+--- a/arch/arm/dts/stm32mp157c-osd32mp1-brk-u-boot.dtsi
-++++ b/arch/arm/dts/stm32mp157c-osd32mp1-brk-u-boot.dtsi
-+@@ -26,7 +26,7 @@
-+ 		u-boot,boot-led = "LED2_GRN";
-+ 		u-boot,error-led = "LED2_RED";
-+ 		u-boot,mmc-env-partition = "ssbl";
-+-		st,stm32prog-gpios = <&gpiod 9 GPIO_ACTIVE_LOW>;
-++		st,stm32prog-gpios = <&gpiod 9 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
-+ 	};
-+ 
-+ 	clocks {
-+-- 
-+2.17.1
-+
-diff --git a/configs/octavo_osd32mp1_brk_defconfig b/configs/octavo_osd32mp1_brk_defconfig
-new file mode 100644
-index 0000000000..3cb333441d
---- /dev/null
-+++ b/configs/octavo_osd32mp1_brk_defconfig
++++ b/configs/octavo_osd32mp1_red_defconfig
 @@ -0,0 +1,39 @@
 +BR2_arm=y
 +BR2_cortex_a7=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
-+BR2_ROOTFS_OVERLAY="board/octavo/brk/overlay/"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/octavo/brk/post-image.sh"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
++BR2_ROOTFS_OVERLAY="board/octavo/red/overlay/"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/octavo/red/post-image.sh"
 +BR2_LINUX_KERNEL=y
 +BR2_LINUX_KERNEL_CUSTOM_GIT=y
 +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/STMicroelectronics/linux.git"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="v5.4-stm32mp-r1.1"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="v4.19-stm32mp-r3.3"
 +BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/octavo/brk/linux.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/octavo/red/linux.config"
 +BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="stm32mp157c-osd32mp1-brk"
-+BR2_LINUX_KERNEL_CUSTOM_DTS_PATH="board/octavo/brk/linux-dts/*"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="osd32mp1-red"
++BR2_LINUX_KERNEL_CUSTOM_DTS_PATH="board/octavo/red/linux-dts/*"
 +BR2_LINUX_KERNEL_INSTALL_TARGET=y
 +BR2_TARGET_ROOTFS_EXT2=y
 +BR2_TARGET_ROOTFS_EXT2_4=y
@@ -6245,25 +7273,26 @@ index 0000000000..3cb333441d
 +BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
 +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
 +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/STMicroelectronics/arm-trusted-firmware.git"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="v2.2-stm32mp-r2.2"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="v2.0-stm32mp-r1.5"
 +BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="stm32mp1"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_DTS_PATH="board/octavo/brk/tfa-dts/*"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="STM32MP_SDMMC=1 AARCH32_SP=sp_min DTB_FILE_NAME=stm32mp157c-osd32mp1-brk.dtb STM32MP_USB_PROGRAMMER=1"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_DTS_PATH="board/octavo/red/tfa-dts/*"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="STM32MP_SDMMC=1 AARCH32_SP=sp_min DTB_FILE_NAME=osd32mp1-red.dtb STM32MP_USB_PROGRAMMER=1 CFLAGS=-Wno-array-bounds"
 +BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES="*.stm32"
 +BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_DTC=y
 +BR2_TARGET_UBOOT=y
 +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
 +BR2_TARGET_UBOOT_CUSTOM_GIT=y
 +BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/STMicroelectronics/u-boot.git"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="v2020.01-stm32mp-r1.1"
-+BR2_TARGET_UBOOT_PATCH="board/octavo/brk/uboot-patches/*.patch"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="v2018.11-stm32mp-r3.2"
++BR2_TARGET_UBOOT_PATCH="board/octavo/red/uboot-patches/*.patch"
 +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="stm32mp15_trusted"
 +# BR2_TARGET_UBOOT_FORMAT_BIN is not set
 +BR2_TARGET_UBOOT_FORMAT_STM32=y
-+BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=stm32mp157c-osd32mp1-brk"
++BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=osd32mp1-red"
 +BR2_PACKAGE_HOST_GENIMAGE=y
 -- 
 2.25.1
+
 
 _______________________________________________
 buildroot mailing list
