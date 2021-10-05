@@ -2,52 +2,52 @@ Return-Path: <SRS0=EGOI=OZ=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CA50DC433F5
-	for <buildroot@archiver.kernel.org>; Tue,  5 Oct 2021 15:18:48 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CB65FC433F5
+	for <buildroot@archiver.kernel.org>; Tue,  5 Oct 2021 15:18:59 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 5786861502
-	for <buildroot@archiver.kernel.org>; Tue,  5 Oct 2021 15:18:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5786861502
+	by mail.kernel.org (Postfix) with ESMTPS id 90CE961506
+	for <buildroot@archiver.kernel.org>; Tue,  5 Oct 2021 15:18:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 90CE961506
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0E6E383B23;
-	Tue,  5 Oct 2021 15:18:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7047B60B38;
+	Tue,  5 Oct 2021 15:18:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XwR1CKVr1e2e; Tue,  5 Oct 2021 15:18:47 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Jr59QKEatN9p; Tue,  5 Oct 2021 15:18:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 672F783AFE;
-	Tue,  5 Oct 2021 15:18:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D24C460AF5;
+	Tue,  5 Oct 2021 15:18:57 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 024E31BF315
- for <buildroot@lists.busybox.net>; Tue,  5 Oct 2021 15:18:35 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A1AFE1BF315
+ for <buildroot@lists.busybox.net>; Tue,  5 Oct 2021 15:18:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1332460C03
+ by smtp3.osuosl.org (Postfix) with ESMTP id 25ED7606BF
  for <buildroot@lists.busybox.net>; Tue,  5 Oct 2021 15:18:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id T3jZFUTyqPPM for <buildroot@lists.busybox.net>;
+ with ESMTP id ZiGLjLkTbwm9 for <buildroot@lists.busybox.net>;
  Tue,  5 Oct 2021 15:18:33 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4435B606BF
+ by smtp3.osuosl.org (Postfix) with ESMTP id 63A4D60B38
  for <buildroot@buildroot.org>; Tue,  5 Oct 2021 15:18:33 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 6684791118; Tue,  5 Oct 2021 15:15:59 +0000 (UTC)
+ id 867708FED0; Tue,  5 Oct 2021 15:15:59 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 5 Oct 2021 16:21:24 +0200
+Date: Tue, 5 Oct 2021 16:46:29 +0200
 X-Git-Refname: refs/heads/2021.08.x
-X-Git-Oldrev: e5131f94af55dba3f8fbb9d14a061901c5f96abb
-X-Git-Newrev: 62b89dc76f6f980580bfe92dc9894bec31099102
+X-Git-Oldrev: 21ecb76ea4d8504104395d7e6aac3c12f3ded62d
+X-Git-Newrev: 6910ae6e63d5dfe13120be9a0f533eb753485d1c
 X-Patchwork-Hint: ignore
-Message-Id: <20211005151559.6684791118@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.08.x] package/sispmctl: bump to
- version 4.9
+Message-Id: <20211005151559.867708FED0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.08.x] boot/syslinux: add
+ missing python dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,107 +65,63 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=62b89dc76f6f980580bfe92dc9894bec31099102
+commit: https://git.buildroot.net/buildroot/commit/?id=6910ae6e63d5dfe13120be9a0f533eb753485d1c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.08.x
 
-Drop patch (already in version)
+Syslinux use some python scripts during the build and they
+are using python interpreter by default. It fail to build
+when there is no python interpreter on the host.
 
-https://sourceforge.net/p/sispmctl/git/ci/release-4.9/tree/ChangeLog
+[...]/syslinux-6.03/com32/cmenu/menugen.py
+make[6]: python: No such file or directory
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 63847a4b2e4e3ace65e6a2d6a4c7e62b62b29a29)
+Since Syslinux 5.00, we can override the python interpreter
+used during the build:
+
+https://repo.or.cz/syslinux.git/commitdiff/4dec62ce9c2c0d170f21b3ae2d7c618eb7a30c05
+
+Add the	missing	host-python3 dependency and override
+it in SYSLINUX_BUILD_CMDS.
+
+Fixes:
+https://gitlab.com/kubu93/buildroot/-/jobs/1614446766
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+[yann.morin.1998@free.fr: fix check-package]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 6ccfd40711e122c720145044eb4d145a8bacd9db)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...001-src-schedule.c-fix-build-with-gcc-4.8.patch | 56 ----------------------
- package/sispmctl/sispmctl.hash                     |  2 +-
- package/sispmctl/sispmctl.mk                       |  2 +-
- 3 files changed, 2 insertions(+), 58 deletions(-)
+ boot/syslinux/syslinux.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/package/sispmctl/0001-src-schedule.c-fix-build-with-gcc-4.8.patch b/package/sispmctl/0001-src-schedule.c-fix-build-with-gcc-4.8.patch
-deleted file mode 100644
-index 69dc31e353..0000000000
---- a/package/sispmctl/0001-src-schedule.c-fix-build-with-gcc-4.8.patch
-+++ /dev/null
-@@ -1,56 +0,0 @@
--From 3ccbb67c71aa13b9a37a58363d37a18b8fdbf300 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Thu, 29 Oct 2020 13:36:00 +0100
--Subject: [PATCH] src/schedule.c: fix build with gcc 4.8
--
--Fix the following build failure with gcc 4.8:
--
--schedule.c:19:2: error: 'for' loop initial declarations are only allowed in C99 mode
--  for (int i = 0; i < 4; ++i) {
--  ^
--schedule.c:19:2: note: use option -std=c99 or -std=gnu99 to compile your code
--schedule.c: In function 'pms2_read_block':
--schedule.c:39:2: error: 'for' loop initial declarations are only allowed in C99 mode
--  for (int i = 0; i < 4; ++i) {
--  ^
--
--Fixes:
-- - http://autobuild.buildroot.org/results/079f1454121d38a83c49529c0f6cc8ed61fd5abb
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status:
--https://sourceforge.net/p/sispmctl/git/merge-requests/1]
-----
-- src/schedule.c | 6 ++++--
-- 1 file changed, 4 insertions(+), 2 deletions(-)
--
--diff --git a/src/schedule.c b/src/schedule.c
--index 4dd908d..1725421 100644
----- a/src/schedule.c
--+++ b/src/schedule.c
--@@ -15,8 +15,9 @@
-- static unsigned char
-- *pms2_write_block(uint8_t action, uint32_t time, unsigned char *ptr)
-- {
--+	int i;
-- 	*ptr++ = action;	
---	for (int i = 0; i < 4; ++i) {
--+	for (i = 0; i < 4; ++i) {
-- 		*ptr++ = (uint8_t)time;
-- 		time >>= 8;
-- 	}
--@@ -34,9 +35,10 @@ static unsigned char
-- static const unsigned char
-- *pms2_read_block(uint8_t *action, uint32_t *time, const unsigned char *ptr)
-- {
--+	int i;
-- 	*action = *ptr++;
-- 	*time = 0;
---	for (int i = 0; i < 4; ++i) {
--+	for (i = 0; i < 4; ++i) {
-- 		*time >>= 8;
-- 		*time += (uint32_t)*ptr++ << 24;
-- 	}
---- 
--2.28.0
--
-diff --git a/package/sispmctl/sispmctl.hash b/package/sispmctl/sispmctl.hash
-index 95129cec03..e22efcfbed 100644
---- a/package/sispmctl/sispmctl.hash
-+++ b/package/sispmctl/sispmctl.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  0f8391f7e95cbf1fb96a68686a1dcf1e16747b050ae1b8ff90653c99976068db  sispmctl-4.8.tar.gz
-+sha256  6a9ec7125e8c01bb45d4a3b56f07fb41fc437020c8dcd8c0f29ebb98dc55a647  sispmctl-4.9.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/sispmctl/sispmctl.mk b/package/sispmctl/sispmctl.mk
-index 3e4252a8d8..b6e156c66a 100644
---- a/package/sispmctl/sispmctl.mk
-+++ b/package/sispmctl/sispmctl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/boot/syslinux/syslinux.mk b/boot/syslinux/syslinux.mk
+index 67bc69254e..0643f85a99 100644
+--- a/boot/syslinux/syslinux.mk
++++ b/boot/syslinux/syslinux.mk
+@@ -14,7 +14,12 @@ SYSLINUX_LICENSE_FILES = COPYING
+ SYSLINUX_INSTALL_IMAGES = YES
  
--SISPMCTL_VERSION = 4.8
-+SISPMCTL_VERSION = 4.9
- SISPMCTL_SITE = http://downloads.sourceforge.net/project/sispmctl/sispmctl/sispmctl-$(SISPMCTL_VERSION)
- SISPMCTL_LICENSE = GPL-2.0+
- SISPMCTL_LICENSE_FILES = COPYING
+ # host-util-linux needed to provide libuuid when building host tools
+-SYSLINUX_DEPENDENCIES = host-nasm host-upx util-linux host-util-linux
++SYSLINUX_DEPENDENCIES = \
++	host-nasm \
++	host-python3 \
++	host-upx \
++	host-util-linux \
++	util-linux
+ 
+ ifeq ($(BR2_TARGET_SYSLINUX_LEGACY_BIOS),y)
+ SYSLINUX_TARGET += bios
+@@ -59,6 +64,7 @@ define SYSLINUX_BUILD_CMDS
+ 		CC_FOR_BUILD="$(HOSTCC)" \
+ 		CFLAGS_FOR_BUILD="$(HOST_CFLAGS)" \
+ 		LDFLAGS_FOR_BUILD="$(HOST_LDFLAGS)" \
++		PYTHON=$(HOST_DIR)/bin/python3 \
+ 		$(SYSLINUX_EFI_ARGS) -C $(@D) $(SYSLINUX_TARGET)
+ endef
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
