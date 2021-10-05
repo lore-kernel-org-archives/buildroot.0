@@ -2,81 +2,83 @@ Return-Path: <SRS0=EGOI=OZ=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1161BC433EF
-	for <buildroot@archiver.kernel.org>; Tue,  5 Oct 2021 21:00:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 85C54C433F5
+	for <buildroot@archiver.kernel.org>; Tue,  5 Oct 2021 21:02:30 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 20DD3613AC
-	for <buildroot@archiver.kernel.org>; Tue,  5 Oct 2021 21:00:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 20DD3613AC
+	by mail.kernel.org (Postfix) with ESMTPS id 3E1BA61139
+	for <buildroot@archiver.kernel.org>; Tue,  5 Oct 2021 21:02:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3E1BA61139
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmx.net
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E2E464089E;
-	Tue,  5 Oct 2021 21:00:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DBBCC408C8;
+	Tue,  5 Oct 2021 21:02:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1PuuQECbfOFW; Tue,  5 Oct 2021 20:59:59 +0000 (UTC)
+	with ESMTP id 3Fm5D4i2Occi; Tue,  5 Oct 2021 21:02:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EFEF0408A8;
-	Tue,  5 Oct 2021 20:59:58 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E3A0E1BF20F
- for <buildroot@lists.busybox.net>; Tue,  5 Oct 2021 20:59:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D0EA0408C9;
+	Tue,  5 Oct 2021 21:02:27 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D25C51BF315
+ for <buildroot@lists.busybox.net>; Tue,  5 Oct 2021 21:02:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D2EB1408A8
- for <buildroot@lists.busybox.net>; Tue,  5 Oct 2021 20:59:57 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id CD8B240224
+ for <buildroot@lists.busybox.net>; Tue,  5 Oct 2021 21:02:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NERP2x5gx3UB for <buildroot@lists.busybox.net>;
- Tue,  5 Oct 2021 20:59:56 +0000 (UTC)
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (1024-bit key) header.d=gmx.net
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZXXOs-3RGClW for <buildroot@lists.busybox.net>;
+ Tue,  5 Oct 2021 21:02:24 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 41C0A4089E
- for <buildroot@buildroot.org>; Tue,  5 Oct 2021 20:59:56 +0000 (UTC)
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 409F34012F
+ for <buildroot@buildroot.org>; Tue,  5 Oct 2021 21:02:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
- s=badeba3b8450; t=1633467594;
- bh=0Q0NMY7PQtLalDdrSpiVj5emEAF52UIvygQxQX1/LOY=;
+ s=badeba3b8450; t=1633467741;
+ bh=Cm6s2meqbFUWF02EIC8wexjDJvmUQXRdrD3Nng+TXt8=;
  h=X-UI-Sender-Class:From:To:Subject:Date;
- b=bOq5L9M1Wwa4toEaci1MWAPEA4MwqQhUGia/wy0V3OR458ubVRhJNP5H42poECQD0
- EfFRU5BLR5pUKRUwEhUSJYG6JRTpxP1JfNqUXDF2o+OUGQps+7u7KC/9bApUYJGcLO
- 8LuHBdOAbqp7yXgOXSK/thOhniQhcavj84kA59Y8=
+ b=abhqHo5UuJgww/zDK/9KgFljKVi1UpRThuFCxa+Vh5RHlDABRerxeoO8Mf6wuD213
+ 4AvchbQVehE5QAwH3KFN6UffjjKWJ7KHxqDSRmgLrE1B8bItRPSLgOwKr1eEW2OnF1
+ ph5oQuRQf9uqpZ/wZ8/PGomOYMV2u2SfJIEyfCFw=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
 Received: from localhost.fritz.box ([62.216.209.251]) by mail.gmx.net
- (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1MhlGq-1n2VOj3JYW-00dpN6 for <buildroot@buildroot.org>; Tue, 05 Oct 2021
- 22:59:53 +0200
+ (mrgmx105 [212.227.17.168]) with ESMTPSA (Nemesis) id
+ 1M9nxt-1mScFE2l5p-005sty for <buildroot@buildroot.org>; Tue, 05 Oct 2021
+ 23:02:21 +0200
 From: Peter Seiderer <ps.report@gmx.net>
 To: buildroot@buildroot.org
-Date: Tue,  5 Oct 2021 22:59:52 +0200
-Message-Id: <20211005205952.13829-1-ps.report@gmx.net>
+Date: Tue,  5 Oct 2021 23:02:21 +0200
+Message-Id: <20211005210221.14054-1-ps.report@gmx.net>
 X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:5RFP85Qd0YW+NsadOxSwVgGmTsR68OoZA/2aVijdoaOJYMAAJ/z
- qhOSn1MrCdPxjgd0OsRvLR3C3sR9p45cvmMaTAzEsJS8ocJAfe2MBP7VQIORcuRKsMo0l/E
- IQ3lPSAaF1M+0ScTup54/+15kXIcEWosI28KgiihHh0IYxd3nlrdS7pIoGmarw6M3aB2qRH
- DY6Ooo99XaK1+HuIYtIag==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:hevSbmpX3U8=:UQ9jA1w74sNgpiV7vY4cZc
- fR2T02joj1JTiv5A/ie2oDehr9NtJXpoWejg5F1TFUQjo30IM9QgmMYr/aK+pJRNyWqh/g1Y6
- +ZnJVlejyY6PBlQpFbnVcnMICArD4By/7cEPw4NYMaWW8vb/6SD0kktq4ydKJcsUQQYcDITn5
- jUsNw83x6IrL7JnINCeP09WKhZB/4d+qqi2P5WkOcTxqTsfC+z0NR6hhDVML7Jf439qxqZQRN
- Woeam1YDRJkgSB6X6xpko0kROY6BAudVSsdBHx4ak6qVt8/6stdHEHbrO9zn6cN4kg1Bb4AjK
- nnRCLqXLIpEld0IddT+Sp8IFrHB0rYjye1oLPL/uC4IF/zT3QoHnvV5DFOa5l9lA2+LU4XLVk
- dnGnDPvf0dYGO8v340N2rQwkyndkhVfwpOceiLD83ck3kDrmDCvZ9omqRLSueLvj/WrTpZNZo
- 1OrC1/UVQu7PtfVOsAtU60+CHYQ4YHxyuIlUP+cuVtU2F3rSCoWppB0OQjzMKA7npOp3Ies7S
- 2rx988JGBFYts3agFSK5yiCMmd1A0/BhVKnySiUne5NJuVhFPUD+xWHxQWn1AIEEDZGshF+Jp
- TEkBTwcDqOtF23obrhFKaDErQuEBDFmpd4Jxm0gqZbELxiXqxh2Yut8aIMnSxOHTLoD45A6u4
- qH7Own7Ti6Ymv6btbG+56S6FySTPkpYApfi3sfM5LLzydKwqG4wat4idQzfLvexFepC7+tYVb
- 3pvNBDaLKKuZXKT02R6DE/2KcouJZjhzJm8hhBpH25899Ar/nRkVigVY154uiwOFHY1NwcByi
- knzoTxAbAOPMfMByy3N+ILcI83vtlLMZ6gKQ55MgiIjJT/SoXOoHMg4zwnfaKe6YUrYr+Nk4q
- wzQO5f/qLAyDjflmizIOoP/lbiJXqmW5p+5mB/t0MQ1iN2uVI9ikSfUfnNuUwHYy37RoS0iFn
- 8Uhh85qn/1PRkt2l4JBEFl4svXvS+/sIecE5rdp+fbAZBDqWylJfEJPvRm1O+8Sp9kTQoFkW4
- JRriO9x29JdoKYWzii6R4+X32K9DCqf3GvzcBuP0eLYb+daPfwnjvJ3ksFWz7+aty5iH32Prc
- rrDFdyayHxGLao=
-Subject: [Buildroot] [PATCH v1] package/coreutils: bump version to 9.0
+X-Provags-ID: V03:K1:jcPLKO4wvU3N0apaPnfh0bX7zUk32D5hbDsJHKJzlJNAxinS3jw
+ Gv6tyFFk6rmrtnrHObdCYeBR42NPX7HUM15BxKGRii0BOHs+jgyAgw/HbXxqz2kI+jgLr1A
+ YpWXJUtyHHS7GJCVjUlLGDTHEfwJFQNsM6MkhVG13p6P1pCa3iubabhIsWJkTjFOJKdSONh
+ 8M2zsDHxRKp6VuGX08fwQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:LwOXrv6cjdI=:G6QieI9ZlhiQi3L35eOj+q
+ ZyoTLURWy5sYmtMAw6fFSeTVVtJip7kqIVfjcY0AVFMiMP082BK5VUU/Z4Iv6K/kzWFShoDsR
+ eO1Xm1mCsWc50XMwCkpSWKHgzB/0hiiwIUvqoFxnxT+syov2oJhb220azM2T2UMFEx/5+LLe+
+ 1Sk7EX+40guRe3Z5dQjJzrNp3pJblCTuGwk6ohQKSQ5uD09oNrUT4EpyD4IFFjlMyCTNAkvJR
+ xABSVIkGN6iRgaNpO/yuPn4zWgxcHbWMvBb6QBx/Z0wGVBXbk3qt2vhUXuKAseI5oxDxPJDvU
+ nKUhj7qV0SWY0AS12pThpURyWKy5ByWIUD5JtYL09MyaUXSKOQ+7LPdgRsEibGlGMAmN9xuCV
+ gg1dAZdMbKrlsF2tEF+dMyQq/nEntJNqYV2NxdtnMFnLYsNX1ekGi2EsBK6Oj3PRaN1QFc1NK
+ 0zWDj/8DU925fuZvYxYmSXZn9tdZFk4XfTlE2CdQsAabVvUKfWI5+xUhPhGm1e/iANvRlEJxi
+ xyxr9e+FhX+CoslzWLsDR0eemWrjBz4knMHLBsMGBmKMpERU7m9lYDKxXkonEw70ySrcmTV0V
+ UigDXT12QjJ1N+A7YueuwifdtpMbqr2tVw8c1tDSficza3sPEz9LJwpuVRIwyaBXZP6uhlorY
+ Z1cBLy2/BodIhRzZgPtDXQehw3+oJCKA4D5MfjS7O/+mGYTq6YGrXKdqgP+U+k7ZcN5h4lN8t
+ dACUJuOOcV4VKhh//DV8Y+8J0K0NMpKBXEvqPVNgAObEHEteKGqzP67yorQmNobG3y6P+5vY5
+ YT5EY1FRGY6fZ6dyWhI6feMFBD8dJQh+u58KT0KoHLQ3bua2txwVj9aiM2+cbS1wqaBDWbr33
+ tZwn20vEy1UGCj7SXX63mBYBuasNW23NLih0w77/y8btGm8oFTCfAds2FObqX/beyO0VahId9
+ R0TKNZg4ZfnbjeiKJmiCJVbqcDj0vn4Y9VL1v7WEXMY7mdLwOPVwWc/k/DNbqR7T4+c3nPpf0
+ zmMl2gHckebiwXczQX2OvfRfLXFt8AGjwIFoQB/uWX0PthkGhGgDp7rmBaerID/LmgWGzUnTn
+ rs1iKqA6hPzCj0=
+Subject: [Buildroot] [PATCH v2] package/coreutils: bump version to 9.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -109,12 +111,15 @@ For details see [2].
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
+Changes v1 -> v2:
+  - commit/add the drop AUTORECONF change
+---
  ...8.31-behavior-on-removed-directories.patch | 118 ------------------
  ...ad-cond.m4-fix-build-without-threads.patch |  59 ---------
  ...ond.c-use-tv.nsec-instead-of-tv.usec.patch |  35 ------
  package/coreutils/coreutils.hash              |   2 +-
- package/coreutils/coreutils.mk                |   2 +-
- 5 files changed, 2 insertions(+), 214 deletions(-)
+ package/coreutils/coreutils.mk                |   4 +-
+ 5 files changed, 2 insertions(+), 216 deletions(-)
  delete mode 100644 package/coreutils/0001-ls-restore-8.31-behavior-on-removed-directories.patch
  delete mode 100644 package/coreutils/0002-m4-pthread-cond.m4-fix-build-without-threads.patch
  delete mode 100644 package/coreutils/0003-lib-pthread-cond.c-use-tv.nsec-instead-of-tv.usec.patch
@@ -360,7 +365,7 @@ index 54cdf4c551..758a6341a3 100644
  # Locally computed
  sha256 3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
 diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
-index 3ec3c847c2..ac2bf07d45 100644
+index 3ec3c847c2..6822c58a32 100644
 --- a/package/coreutils/coreutils.mk
 +++ b/package/coreutils/coreutils.mk
 @@ -4,7 +4,7 @@
@@ -372,6 +377,15 @@ index 3ec3c847c2..ac2bf07d45 100644
  COREUTILS_SITE = $(BR2_GNU_MIRROR)/coreutils
  COREUTILS_SOURCE = coreutils-$(COREUTILS_VERSION).tar.xz
  COREUTILS_LICENSE = GPL-3.0+
+@@ -14,8 +14,6 @@ COREUTILS_CPE_ID_VENDOR = gnu
+ COREUTILS_IGNORE_CVES = CVE-2013-0221
+ COREUTILS_IGNORE_CVES += CVE-2013-0222
+ COREUTILS_IGNORE_CVES += CVE-2013-0223
+-# We're patching m4/pthread-cond.m4
+-COREUTILS_AUTORECONF = YES
+ 
+ COREUTILS_CONF_OPTS = --disable-rpath \
+ 	$(if $(BR2_TOOLCHAIN_USES_MUSL),--with-included-regex)
 -- 
 2.33.0
 
