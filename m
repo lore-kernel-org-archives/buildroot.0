@@ -2,59 +2,52 @@ Return-Path: <SRS0=EGOI=OZ=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E3919C433F5
-	for <buildroot@archiver.kernel.org>; Tue,  5 Oct 2021 14:43:19 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E4FEBC433EF
+	for <buildroot@archiver.kernel.org>; Tue,  5 Oct 2021 14:45:00 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 08A0F61372
-	for <buildroot@archiver.kernel.org>; Tue,  5 Oct 2021 14:43:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 08A0F61372
+	by mail.kernel.org (Postfix) with ESMTPS id 7BA1261371
+	for <buildroot@archiver.kernel.org>; Tue,  5 Oct 2021 14:45:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7BA1261371
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A49EA40840;
-	Tue,  5 Oct 2021 14:43:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 49BD783DA6;
+	Tue,  5 Oct 2021 14:45:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Oadbd8CSsFAJ; Tue,  5 Oct 2021 14:43:17 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id QwOhMNTQfBKV; Tue,  5 Oct 2021 14:44:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0C16640857;
-	Tue,  5 Oct 2021 14:43:17 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 31B1D1BF34A
- for <buildroot@lists.busybox.net>; Tue,  5 Oct 2021 14:43:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A3FDD83DA4;
+	Tue,  5 Oct 2021 14:44:58 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 706211BF34A
+ for <buildroot@lists.busybox.net>; Tue,  5 Oct 2021 14:44:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2CB7E60BD2
- for <buildroot@lists.busybox.net>; Tue,  5 Oct 2021 14:43:16 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6083983DA6
+ for <buildroot@lists.busybox.net>; Tue,  5 Oct 2021 14:44:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pLSp9flJrU26 for <buildroot@lists.busybox.net>;
- Tue,  5 Oct 2021 14:43:15 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D6A5060BC7
- for <buildroot@buildroot.org>; Tue,  5 Oct 2021 14:43:14 +0000 (UTC)
-Received: (Authenticated sender: peter@casa-korsgaard.com)
- by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 2234420004;
- Tue,  5 Oct 2021 14:43:09 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
- (envelope-from <peter@korsgaard.com>)
- id 1mXlev-0002wX-0E; Tue, 05 Oct 2021 16:43:09 +0200
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yanWcXZO9bUg for <buildroot@lists.busybox.net>;
+ Tue,  5 Oct 2021 14:44:55 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id C364883DA3
+ for <buildroot@buildroot.org>; Tue,  5 Oct 2021 14:44:55 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id F2E8590901; Tue,  5 Oct 2021 14:42:21 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Quentin Schulz <quentin.schulz@theobroma-systems.com>
-References: <20210924162349.2802374-1-quentin.schulz@theobroma-systems.com>
-Date: Tue, 05 Oct 2021 16:43:08 +0200
-In-Reply-To: <20210924162349.2802374-1-quentin.schulz@theobroma-systems.com>
- (Quentin Schulz's message of "Fri, 24 Sep 2021 18:23:49 +0200")
-Message-ID: <87ee8zcz2b.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] boot/arm-trusted-firmware: point
- LICENSE_FILES to correct file
+To: buildroot@buildroot.org
+Date: Tue, 5 Oct 2021 16:17:26 +0200
+X-Git-Refname: refs/heads/2021.02.x
+X-Git-Oldrev: 2fd8f5bd41bf79cdd688abfed683a30fceff59dc
+X-Git-Newrev: 85e17e43c7ab0539f4fb68049275375cc4b488cc
+X-Patchwork-Hint: ignore
+Message-Id: <20211005144221.F2E8590901@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/wavemon: add
+ libcap optional dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,31 +59,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Sergey Matyukevich <geomatsi@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Quentin" == Quentin Schulz <quentin.schulz@theobroma-systems.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=85e17e43c7ab0539f4fb68049275375cc4b488cc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
- > Since v2.2 release (commits 8cc36aec912 "doc: De-duplicate readme and
- > license files" and 9f1622b018ab "doc: Move content out of readme and
- > create new index page "), the license.rst file at the root of the git
- > repo is only telling to look at docs/license.rst file.
+libcap is an optional dependency which is enabled by default since
+version 0.7.1 and
+https://github.com/uoaerg/wavemon/commit/669c53e3359af5f6d4044126e22ab95f40a968f4
+and can be explicitly enabled or disabled since version 0.9.0 and
+https://github.com/uoaerg/wavemon/commit/af36fbe75649f745e205cd961302b656b8461e06
 
- > Let's point the ARM_TRUSTED_FIRMWARE_LICENSE_FILES to the correct file
- > and modify the .hash file accordingly.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit c3712a86adca8f512b0e7c45c9196732841af10c)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/wavemon/wavemon.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
- > Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
-
-Committed to 2021.02.x, 2021.05.x and 2021.08.x, thanks.
-
-For 2021.02.x / 2021.05.x I updated the license hash to match the
-version we use there (v2.4).
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/wavemon/wavemon.mk b/package/wavemon/wavemon.mk
+index 3ae1141ec4..d2af6c2bc0 100644
+--- a/package/wavemon/wavemon.mk
++++ b/package/wavemon/wavemon.mk
+@@ -13,4 +13,11 @@ WAVEMON_DEPENDENCIES = host-pkgconf libnl ncurses
+ # Handwritten Makefile.in, automake isn't used
+ WAVEMON_MAKE_OPTS = CC="$(TARGET_CC)"
+ 
++ifeq ($(BR2_PACKAGE_LIBCAP),y)
++WAVEMON_CONF_OPTS += --with-libcap
++WAVEMON_DEPENDENCIES += libcap
++else
++WAVEMON_CONF_OPTS += --without-libcap
++endif
++
+ $(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
