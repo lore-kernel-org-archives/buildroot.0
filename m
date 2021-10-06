@@ -2,52 +2,52 @@ Return-Path: <SRS0=BIUF=O2=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C2952C433EF
-	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 12:57:38 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A323C433F5
+	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 12:57:50 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 878BF610A1
-	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 12:57:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 878BF610A1
+	by mail.kernel.org (Postfix) with ESMTPS id CF35461056
+	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 12:57:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org CF35461056
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 61FB060E7A;
-	Wed,  6 Oct 2021 12:57:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A148683938;
+	Wed,  6 Oct 2021 12:57:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WOwTaRqVc0zy; Wed,  6 Oct 2021 12:57:37 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id JMSD1vzj5hiL; Wed,  6 Oct 2021 12:57:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 97B6E60D55;
-	Wed,  6 Oct 2021 12:57:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id ED6EB838B2;
+	Wed,  6 Oct 2021 12:57:47 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 012771BF42C
- for <buildroot@lists.busybox.net>; Wed,  6 Oct 2021 12:54:46 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 04DE91BF42C
+ for <buildroot@lists.busybox.net>; Wed,  6 Oct 2021 12:54:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3950F4016B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5D3EC40100
  for <buildroot@lists.busybox.net>; Wed,  6 Oct 2021 12:54:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JpYN_mm1NARl for <buildroot@lists.busybox.net>;
+ with ESMTP id TVl-BJhn8kzb for <buildroot@lists.busybox.net>;
  Wed,  6 Oct 2021 12:54:43 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3895E40100
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6638940218
  for <buildroot@buildroot.org>; Wed,  6 Oct 2021 12:54:43 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 59E8D92162; Wed,  6 Oct 2021 12:52:07 +0000 (UTC)
+ id 7AC2A91AA4; Wed,  6 Oct 2021 12:52:07 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 6 Oct 2021 14:33:28 +0200
+Date: Wed, 6 Oct 2021 14:48:16 +0200
 X-Git-Refname: refs/heads/2021.08.x
-X-Git-Oldrev: 6568871b6ca40b6a23c7870d6974e1362018d85e
-X-Git-Newrev: f77a1f84abb8b32dea4ab9014dfdf08f3a18e869
+X-Git-Oldrev: ea5eb12eba22cc5a88aff29e1e84ad78fdb3fa4f
+X-Git-Newrev: 2e70020efbf9bd2cd0cd7b3c86caaebc85abd73e
 X-Patchwork-Hint: ignore
-Message-Id: <20211006125207.59E8D92162@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.08.x] package/python{3}-cython:
- bump to version 0.29.24
+Message-Id: <20211006125207.7AC2A91AA4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.08.x] package/libglib2: bump
+ version to 2.68.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,64 +65,56 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f77a1f84abb8b32dea4ab9014dfdf08f3a18e869
+commit: https://git.buildroot.net/buildroot/commit/?id=2e70020efbf9bd2cd0cd7b3c86caaebc85abd73e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.08.x
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit f5b17124f67907bdb436edfa0c72dbd9b6305186)
+(cherry picked from commit 81ffda4ff3232f8fa2de67dae03cf9b778323b20)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-cython/python-cython.hash | 4 ++--
- package/python-cython/python-cython.mk   | 4 ++--
- package/python3-cython/python3-cython.mk | 4 ++--
- 3 files changed, 6 insertions(+), 6 deletions(-)
+ package/libglib2/0002-remove-cpp-requirement.patch | 2 +-
+ package/libglib2/libglib2.hash                     | 4 ++--
+ package/libglib2/libglib2.mk                       | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-cython/python-cython.hash b/package/python-cython/python-cython.hash
-index 04961ff03f..70469c012b 100644
---- a/package/python-cython/python-cython.hash
-+++ b/package/python-cython/python-cython.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/cython/json
--md5  82837814b8d72d353e16bb9344e914b1  Cython-0.29.23.tar.gz
--sha256  6a0d31452f0245daacb14c979c77e093eb1a546c760816b5eed0047686baad8e  Cython-0.29.23.tar.gz
-+md5  81aff945f5bfdfb86e7a5d24f5467668  Cython-0.29.24.tar.gz
-+sha256  cdf04d07c3600860e8c2ebaad4e8f52ac3feb212453c1764a49ac08c827e8443  Cython-0.29.24.tar.gz
- # Locally computed sha256 checksums
- sha256  a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9  LICENSE.txt
- sha256  e1eb1c49a8508e8173dac30157e4a6439a44ad8846194746c424fbc3fc2b95d7  COPYING.txt
-diff --git a/package/python-cython/python-cython.mk b/package/python-cython/python-cython.mk
-index cf32fc19d1..ffc8e719cd 100644
---- a/package/python-cython/python-cython.mk
-+++ b/package/python-cython/python-cython.mk
-@@ -5,9 +5,9 @@
+diff --git a/package/libglib2/0002-remove-cpp-requirement.patch b/package/libglib2/0002-remove-cpp-requirement.patch
+index 9393bd258a..c402cbafa5 100644
+--- a/package/libglib2/0002-remove-cpp-requirement.patch
++++ b/package/libglib2/0002-remove-cpp-requirement.patch
+@@ -35,7 +35,7 @@ index 4bbf4c2..ac59f4e 100644
+ @@ -1,4 +1,4 @@
+ -project('glib', 'c', 'cpp',
+ +project('glib', 'c',
+-   version : '2.68.2',
++   version : '2.68.4',
+    # NOTE: We keep this pinned at 0.49 because that's what Debian 10 ships
+    meson_version : '>= 0.49.2',
+ @@ -10,7 +10,6 @@ project('glib', 'c', 'cpp',
+diff --git a/package/libglib2/libglib2.hash b/package/libglib2/libglib2.hash
+index 15e0085f78..d421e025ff 100644
+--- a/package/libglib2/libglib2.hash
++++ b/package/libglib2/libglib2.hash
+@@ -1,4 +1,4 @@
+-# https://download.gnome.org/sources/glib/2.68/glib-2.68.2.sha256sum
+-sha256  ecc7798a9cc034eabdfd7f246e6dd461cdbf1175fcc2e9867cc7da7b7309e0fb  glib-2.68.2.tar.xz
++# https://download.gnome.org/sources/glib/2.68/glib-2.68.4.sha256sum
++sha256  62fd061d08a75492617e625a73e2c05e259f831acbb8e1f8b9c81f23f7993a3b  glib-2.68.4.tar.xz
+ # License files, locally calculated
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index 4f13622e36..af73aeb3bf 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
- # Please keep in sync with package/python3-cython/python3-cython.mk
--PYTHON_CYTHON_VERSION = 0.29.23
-+PYTHON_CYTHON_VERSION = 0.29.24
- PYTHON_CYTHON_SOURCE = Cython-$(PYTHON_CYTHON_VERSION).tar.gz
--PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/d9/cd/0d2d90b27219c07f68f1c25bcc7b02dd27639d2180add9d4b73e70945869
-+PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/59/e3/78c921adf4423fff68da327cc91b73a16c63f29752efe7beb6b88b6dd79d
- PYTHON_CYTHON_SETUP_TYPE = setuptools
- PYTHON_CYTHON_LICENSE = Apache-2.0
- PYTHON_CYTHON_LICENSE_FILES = COPYING.txt LICENSE.txt
-diff --git a/package/python3-cython/python3-cython.mk b/package/python3-cython/python3-cython.mk
-index 2c65f1f1a4..2f15ad8c36 100644
---- a/package/python3-cython/python3-cython.mk
-+++ b/package/python3-cython/python3-cython.mk
-@@ -5,9 +5,9 @@
- ################################################################################
- 
- # Please keep in sync with package/python-cython/python-cython.mk
--PYTHON3_CYTHON_VERSION = 0.29.23
-+PYTHON3_CYTHON_VERSION = 0.29.24
- PYTHON3_CYTHON_SOURCE = Cython-$(PYTHON3_CYTHON_VERSION).tar.gz
--PYTHON3_CYTHON_SITE = https://files.pythonhosted.org/packages/d9/cd/0d2d90b27219c07f68f1c25bcc7b02dd27639d2180add9d4b73e70945869
-+PYTHON3_CYTHON_SITE = https://files.pythonhosted.org/packages/59/e3/78c921adf4423fff68da327cc91b73a16c63f29752efe7beb6b88b6dd79d
- PYTHON3_CYTHON_SETUP_TYPE = setuptools
- PYTHON3_CYTHON_LICENSE = Apache-2.0
- PYTHON3_CYTHON_LICENSE_FILES = COPYING.txt LICENSE.txt
+ LIBGLIB2_VERSION_MAJOR = 2.68
+-LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).2
++LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).4
+ LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.xz
+ LIBGLIB2_SITE = http://ftp.gnome.org/pub/gnome/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
+ LIBGLIB2_LICENSE = LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
