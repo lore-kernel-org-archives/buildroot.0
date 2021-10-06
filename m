@@ -2,81 +2,81 @@ Return-Path: <SRS0=BIUF=O2=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 19C91C433EF
-	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 06:23:50 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B54BC433FE
+	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 06:28:46 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id AFE9A611C0
-	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 06:23:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org AFE9A611C0
+	by mail.kernel.org (Postfix) with ESMTPS id AB0E160EC0
+	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 06:28:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org AB0E160EC0
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=unikie.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 30AC8605C2;
-	Wed,  6 Oct 2021 06:23:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 53B0283F55;
+	Wed,  6 Oct 2021 06:28:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VA6CKd4HQpnf; Wed,  6 Oct 2021 06:23:48 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id M-wnhCZ-VeH1; Wed,  6 Oct 2021 06:28:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6D19E60E61;
-	Wed,  6 Oct 2021 06:23:47 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1DA891BF25F
- for <buildroot@lists.busybox.net>; Wed,  6 Oct 2021 06:23:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7EBF583F53;
+	Wed,  6 Oct 2021 06:28:43 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 769071BF25F
+ for <buildroot@lists.busybox.net>; Wed,  6 Oct 2021 06:28:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 094CE60E61
- for <buildroot@lists.busybox.net>; Wed,  6 Oct 2021 06:23:46 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 666FE83F53
+ for <buildroot@lists.busybox.net>; Wed,  6 Oct 2021 06:28:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Fsh_DmTzLsKb for <buildroot@lists.busybox.net>;
- Wed,  6 Oct 2021 06:23:44 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0g9cNHLv056W for <buildroot@lists.busybox.net>;
+ Wed,  6 Oct 2021 06:28:39 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com
- [IPv6:2a00:1450:4864:20::52b])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E635960E5F
- for <buildroot@buildroot.org>; Wed,  6 Oct 2021 06:23:43 +0000 (UTC)
-Received: by mail-ed1-x52b.google.com with SMTP id r18so5484348edv.12
- for <buildroot@buildroot.org>; Tue, 05 Oct 2021 23:23:43 -0700 (PDT)
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com
+ [IPv6:2a00:1450:4864:20::531])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7A54183F50
+ for <buildroot@buildroot.org>; Wed,  6 Oct 2021 06:28:39 +0000 (UTC)
+Received: by mail-ed1-x531.google.com with SMTP id b8so5750132edk.2
+ for <buildroot@buildroot.org>; Tue, 05 Oct 2021 23:28:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=unikie-com.20210112.gappssmtp.com; s=20210112;
  h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=jyFYxcpH6orpFd7wnu2rM4Wfe5EF396DMUWdGUJs7CM=;
- b=eqn6QcE5N/Bg/m4oyY4SGHVY2AZI9FgwXRSUk+2SV2ASTBTEsVtmApMi5Ra7eYLUrq
- p80rXaapRX9clKqX8Yc8RdDpqqDIq4IKhQCVjUek0cQamz53mmEStR4oCUH3f7jf9How
- fwdw6GebmMtjVogFmJXovCh1J9dvPlkBVNF36SRYidhj8d5M+E74GunZ8N0Gw5dnJSxV
- /zSrMe3E7VGM3YLhSN0xDzxnsY/2UXmro1v46CwRzwgs1Vs+5NnaBdcgnjKigjePIXqm
- g71GdKgczIdZSelBPWwR1StcAS2HCyieeWai+wSPq0MyUqvZYS3/uUkCkQTdynncue2Q
- 50RA==
+ :cc; bh=4bZUnVQSS5L8wiVc1qgOA94tjcGlRFc9WpZPI4EBwZg=;
+ b=kpIQIBBm4YGPRuIaL7cuf5aQy4B0vBfyPJ0sJNlvB7mW79bQFtlmkC7iwnzpQsEWqW
+ /xyeJY9FX/TIzU7YBTE+Bp11+/SGcMhCGCNvv89C0Y2Kj4HcJHtkdWc4RRWcPOFoTTUu
+ 1M/Pk1ap2pjaMezFzbMI7jKJH6KCII68w8UE8MsgscbTv6RImuIo9V+Q8k8tYEjx3RS2
+ VKpQ5+Ds4sYet+WrbcYfRnUGKdVr58dJ5aV4yIxQc3iOqxVgEa/TGRLdyZfvz67CuLOX
+ 2GrAHLCHi4NyukxqN8vS43B5mZlp8eqz8UGwoO9D7LUh2OkK/ojaDB7tejfj0hwvYQ05
+ mEWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:mime-version:references:in-reply-to:from:date
  :message-id:subject:to:cc;
- bh=jyFYxcpH6orpFd7wnu2rM4Wfe5EF396DMUWdGUJs7CM=;
- b=2QDR/FpFI1MXFiS6FnP/5ScXp7ZlcqN0y6hh7KyinE5cJyCiSHxm9qQpgyn0uy8p73
- TDfFWEptf26NVLnsOCjPfo3tg5Nl93BvnXngAYWCrhsM1nc0l1ywod5aMdAnCVNKXB9k
- ZKAU85EBtV/GFq29ZuKrmdUKsSvkh6ZTwG3PKKuQG9S8caQFSzSgu4x2u+ivmeOvv/oQ
- LUIwDd7++YFLernzJfZqbpff5GP/N51aDedCeQcFfs3Wt0TrKl4P4zYa0npaUPz4Hvvn
- aWlODQGCxtvrvsdaptBQzj3kjL8VF6RmW9/wNOMsCJEu7WBHU/mSyTSIAgoQ31vRH7wU
- 9xOQ==
-X-Gm-Message-State: AOAM533zVpHPCFSu6qJ4M1pYMtvIhHm5zo2d2iciD6pTf9tQC0X3SvCI
- 9PCACMjP1h2p8SS6oHcPyJelBhYLjiGYjSmPR4s2Wg==
-X-Google-Smtp-Source: ABdhPJwMp2KzZyOYQ002qtgPPTuTz8c9W2yr+zHEnRb0JcXpqsTirbYesDQwxdh8dEw56GXcpdP/WT9qLE+Ta4VJXiM=
-X-Received: by 2002:a50:da0a:: with SMTP id z10mr31354026edj.298.1633501422139; 
- Tue, 05 Oct 2021 23:23:42 -0700 (PDT)
+ bh=4bZUnVQSS5L8wiVc1qgOA94tjcGlRFc9WpZPI4EBwZg=;
+ b=kMPEAgKPGjsPYZI+5+Ur8f+BY1TrCv5GkMoQVcncAluRY9zdCxfGoqB+OQheAy5+MP
+ tTKbyPyYjRfwQqZ3ssiwgyB4ZXFskir8tteHhfrKwojDMh07R/JgLtrVGZTUQO/aqrf+
+ 5AKiH3QbiqafPA2qCQXTWSgAVp/i77e2DKvnQ7t39sylFZEMt3TYV1Gj/BvaKaNxsHA/
+ ssQQOkDBTbkhszWpcrQdBMfGh4pVmf6q3f/RINYKwM8ZZCwg876tarTXdZGQwfjXRCDm
+ a7WrTK+SuugakKTR33ml88MjluOlVQXyUafv4ks2iVKWc7KEDtyb/fRqJCSOMxeujjPG
+ 9Nlg==
+X-Gm-Message-State: AOAM530w7mMiTLnxr+U/ad9S5M/izV+a59KLkLVQmgO2AtXwBpt2Bn2I
+ ZWrLtj20pp3A4IMhDl6gsON2NkthphLD4jn7pmPKZg==
+X-Google-Smtp-Source: ABdhPJxhHZ4K+Bk1CxfTNlm4QeOg5qgzV//xiAEsdGlMDMMm8uNX0kkuzQI9l0cGP9D2T8Pw4Bgqi6B3RjjFYFgAGXc=
+X-Received: by 2002:a17:906:4c8c:: with SMTP id
+ q12mr29988276eju.254.1633501717692; 
+ Tue, 05 Oct 2021 23:28:37 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210915130620.3162787-1-jose.pekkarinen@unikie.com>
- <87zgrnd1xu.fsf@dell.be.48ers.dk>
- <CAJPV9MqO8ZLq9TUH7Oj_-JrxZpXjQeDZ3a+-sNg-nXFNbwwV7A@mail.gmail.com>
- <87o883beeg.fsf@dell.be.48ers.dk>
-In-Reply-To: <87o883beeg.fsf@dell.be.48ers.dk>
+References: <20210922113820.3628-1-jose.pekkarinen@unikie.com>
+ <8ab0b36d-c9a4-1e61-96d1-f874127b3c1e@green-communications.fr>
+In-Reply-To: <8ab0b36d-c9a4-1e61-96d1-f874127b3c1e@green-communications.fr>
 From: =?UTF-8?Q?Jos=C3=A9_Pekkarinen?= <jose.pekkarinen@unikie.com>
-Date: Wed, 6 Oct 2021 09:23:31 +0300
-Message-ID: <CAJPV9MoR2R-5wPShChCECaCfJSLRjc6Magobz7BNRMQ7sNtHwA@mail.gmail.com>
-To: Peter Korsgaard <peter@korsgaard.com>
-Subject: Re: [Buildroot] [PATCH v3] package/iptables: add init script
+Date: Wed, 6 Oct 2021 09:28:27 +0300
+Message-ID: <CAJPV9MrkZ5UOyXCqvh2K=zR7PQahS98GxbMyUnGKvfo9R2mvdQ@mail.gmail.com>
+To: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+Subject: Re: [Buildroot] [PATCH v2] package/wpa_supplicant: Allow mesh
+ configuration
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,101 +89,133 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============1909646256153284692=="
+Content-Type: multipart/mixed; boundary="===============8342550267542451002=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1909646256153284692==
-Content-Type: multipart/alternative; boundary="00000000000001d33505cda9308c"
+--===============8342550267542451002==
+Content-Type: multipart/alternative; boundary="0000000000009f9a0705cda94142"
 
---00000000000001d33505cda9308c
+--0000000000009f9a0705cda94142
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Oct 5, 2021 at 7:54 PM Peter Korsgaard <peter@korsgaard.com> wrote:
+On Wed, Sep 29, 2021 at 11:37 AM Nicolas Cavallari <
+nicolas.cavallari@green-communications.fr> wrote:
 
-> >>>>> "Jos=C3=A9" =3D=3D Jos=C3=A9 Pekkarinen <jose.pekkarinen@unikie.com=
-> writes:
+> On 22/09/2021 13:38, Jos=C3=A9 Pekkarinen wrote:
+> > wpa_supplicant defconfig doesn't enable CONFIG_MESH
+> > by default, and currently there is only a path to
+> > disable it in buildroot. This patch will restore
+> > the logic to enable it.
+> >
+> > Signed-off-by: Jos=C3=A9 Pekkarinen <jose.pekkarinen@unikie.com>
+> > ---
+> > [ v1 -> v2 ] s/CONFIG__MESH/CONFIG_MESH/
+> >
+> >   package/wpa_supplicant/wpa_supplicant.mk | 4 +++-
+> >   1 file changed, 3 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/package/wpa_supplicant/wpa_supplicant.mk
+> b/package/wpa_supplicant/wpa_supplicant.mk
+> > index e9078b9f89..3c0b0c1dfc 100644
+> > --- a/package/wpa_supplicant/wpa_supplicant.mk
+> > +++ b/package/wpa_supplicant/wpa_supplicant.mk
+> > @@ -104,7 +104,9 @@ else
+> >   WPA_SUPPLICANT_CONFIG_DISABLE +=3D CONFIG_WIFI_DISPLAY
+> >   endif
+> >
+> > -ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_MESH_NETWORKING),)
+> > +ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_MESH_NETWORKING),y)
+> > +WPA_SUPPLICANT_CONFIG_ENABLE +=3D CONFIG_MESH
+> > +else
+> >   WPA_SUPPLICANT_CONFIG_DISABLE +=3D CONFIG_MESH
+> >   endif
+> >
+> >
 >
-> Hi,
->
->  >> Any special reason for the redirect? iptables-save / restor accepts a
->  >> filename argument.
->  >>
->
->  > Not from my side, I just didn't notice. I can
->
->  > change it for you if you want.
->
-> Yes, please.
->
->
->  >> > +            echo "Usage: $0 {start|stop|restart|reload}"
->  >>
->  >> NIT: This doesn't document the save argument.
->  >>
->
->  > Very true, please let me know and I'm happy to send a v3
->
->  > tomorrow with those stuff.
->
-> Ehh, this was already v3 and it was applied, so you will need to send a
-> followup patch changing the script instead.
+> Tested-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+> Acked-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
 >
 
-Just sent, thanks!
+Thanks Nicolas for double checking!
+
+I haven't receive any comments nor signs
+
+of this landing in the master, so please let me know
+if you need anything to proceed with the patch.
+
+Best regards.
 
 
 Jos=C3=A9.
 
---00000000000001d33505cda9308c
+--0000000000009f9a0705cda94142
 Content-Type: text/html; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
 <div dir=3D"ltr"><div dir=3D"ltr"><br></div><br><div class=3D"gmail_quote">=
-<div dir=3D"ltr" class=3D"gmail_attr">On Tue, Oct 5, 2021 at 7:54 PM Peter =
-Korsgaard &lt;<a href=3D"mailto:peter@korsgaard.com">peter@korsgaard.com</a=
->&gt; wrote:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px=
- 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">&gt=
-;&gt;&gt;&gt;&gt; &quot;Jos=C3=A9&quot; =3D=3D Jos=C3=A9 Pekkarinen &lt;<a =
-href=3D"mailto:jose.pekkarinen@unikie.com" target=3D"_blank">jose.pekkarine=
-n@unikie.com</a>&gt; writes:<br>
+<div dir=3D"ltr" class=3D"gmail_attr">On Wed, Sep 29, 2021 at 11:37 AM Nico=
+las Cavallari &lt;<a href=3D"mailto:nicolas.cavallari@green-communications.=
+fr">nicolas.cavallari@green-communications.fr</a>&gt; wrote:<br></div><bloc=
+kquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:=
+1px solid rgb(204,204,204);padding-left:1ex">On 22/09/2021 13:38, Jos=C3=A9=
+ Pekkarinen wrote:<br>
+&gt; wpa_supplicant defconfig doesn&#39;t enable CONFIG_MESH<br>
+&gt; by default, and currently there is only a path to<br>
+&gt; disable it in buildroot. This patch will restore<br>
+&gt; the logic to enable it.<br>
+&gt; <br>
+&gt; Signed-off-by: Jos=C3=A9 Pekkarinen &lt;<a href=3D"mailto:jose.pekkari=
+nen@unikie.com" target=3D"_blank">jose.pekkarinen@unikie.com</a>&gt;<br>
+&gt; ---<br>
+&gt; [ v1 -&gt; v2 ] s/CONFIG__MESH/CONFIG_MESH/<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0package/wpa_supplicant/<a href=3D"http://wpa_supplicant.mk=
+" rel=3D"noreferrer" target=3D"_blank">wpa_supplicant.mk</a> | 4 +++-<br>
+&gt;=C2=A0 =C2=A01 file changed, 3 insertions(+), 1 deletion(-)<br>
+&gt; <br>
+&gt; diff --git a/package/wpa_supplicant/<a href=3D"http://wpa_supplicant.m=
+k" rel=3D"noreferrer" target=3D"_blank">wpa_supplicant.mk</a> b/package/wpa=
+_supplicant/<a href=3D"http://wpa_supplicant.mk" rel=3D"noreferrer" target=
+=3D"_blank">wpa_supplicant.mk</a><br>
+&gt; index e9078b9f89..3c0b0c1dfc 100644<br>
+&gt; --- a/package/wpa_supplicant/<a href=3D"http://wpa_supplicant.mk" rel=
+=3D"noreferrer" target=3D"_blank">wpa_supplicant.mk</a><br>
+&gt; +++ b/package/wpa_supplicant/<a href=3D"http://wpa_supplicant.mk" rel=
+=3D"noreferrer" target=3D"_blank">wpa_supplicant.mk</a><br>
+&gt; @@ -104,7 +104,9 @@ else<br>
+&gt;=C2=A0 =C2=A0WPA_SUPPLICANT_CONFIG_DISABLE +=3D CONFIG_WIFI_DISPLAY<br>
+&gt;=C2=A0 =C2=A0endif<br>
+&gt;=C2=A0 =C2=A0<br>
+&gt; -ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_MESH_NETWORKING),)<br>
+&gt; +ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_MESH_NETWORKING),y)<br>
+&gt; +WPA_SUPPLICANT_CONFIG_ENABLE +=3D CONFIG_MESH<br>
+&gt; +else<br>
+&gt;=C2=A0 =C2=A0WPA_SUPPLICANT_CONFIG_DISABLE +=3D CONFIG_MESH<br>
+&gt;=C2=A0 =C2=A0endif<br>
+&gt;=C2=A0 =C2=A0<br>
+&gt; <br>
 <br>
-Hi,<br>
-<br>
-=C2=A0&gt;&gt; Any special reason for the redirect? iptables-save / restor =
-accepts a<br>
-=C2=A0&gt;&gt; filename argument.<br>
-=C2=A0&gt;&gt; <br>
-<br>
-=C2=A0&gt; Not from my side, I just didn&#39;t notice. I can<br>
-<br>
-=C2=A0&gt; change it for you if you want.<br>
-<br>
-Yes, please.<br>
-<br>
-<br>
-=C2=A0&gt;&gt; &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 echo &quot;U=
-sage: $0 {start|stop|restart|reload}&quot;<br>
-=C2=A0&gt;&gt; <br>
-=C2=A0&gt;&gt; NIT: This doesn&#39;t document the save argument.<br>
-=C2=A0&gt;&gt; <br>
-<br>
-=C2=A0&gt; Very true, please let me know and I&#39;m happy to send a v3<br>
-<br>
-=C2=A0&gt; tomorrow with those stuff.<br>
-<br>
-Ehh, this was already v3 and it was applied, so you will need to send a<br>
-followup patch changing the script instead.<br></blockquote><div><br></div>=
-</div><blockquote style=3D"margin:0 0 0 40px;border:none;padding:0px"><div =
-class=3D"gmail_quote"><div>Just sent, thanks!=C2=A0</div></div></blockquote=
-><br><div dir=3D"ltr" class=3D"gmail_signature"><div dir=3D"ltr"><blockquot=
-e style=3D"margin:0px 0px 0px 40px;border:none;padding:0px">Jos=C3=A9.</blo=
-ckquote></div></div></div>
+Tested-by: Nicolas Cavallari &lt;<a href=3D"mailto:nicolas.cavallari@green-=
+communications.fr" target=3D"_blank">nicolas.cavallari@green-communications=
+.fr</a>&gt;<br>
+Acked-by: Nicolas Cavallari &lt;<a href=3D"mailto:nicolas.cavallari@green-c=
+ommunications.fr" target=3D"_blank">nicolas.cavallari@green-communications.=
+fr</a>&gt;<br>
+</blockquote></div><br clear=3D"all"><div><blockquote style=3D"margin:0 0 0=
+ 40px;border:none;padding:0px">Thanks Nicolas for double checking!<br><br>I=
+ haven&#39;t receive any comments nor signs<br></blockquote>of this landing=
+ in the master, so please let me know</div><div>if you need anything to pro=
+ceed with the patch.</div><div><br></div><div><blockquote style=3D"margin:0=
+ 0 0 40px;border:none;padding:0px"><div>Best regards.</div></blockquote></d=
+iv><br><div dir=3D"ltr" class=3D"gmail_signature"><div dir=3D"ltr"><blockqu=
+ote style=3D"margin:0px 0px 0px 40px;border:none;padding:0px">Jos=C3=A9.</b=
+lockquote></div></div></div>
 
---00000000000001d33505cda9308c--
+--0000000000009f9a0705cda94142--
 
---===============1909646256153284692==
+--===============8342550267542451002==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -194,4 +226,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============1909646256153284692==--
+--===============8342550267542451002==--
