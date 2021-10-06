@@ -2,52 +2,52 @@ Return-Path: <SRS0=BIUF=O2=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4302DC433EF
-	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 12:56:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A0CCDC433EF
+	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 12:56:29 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id E1A9D610CE
-	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 12:56:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E1A9D610CE
+	by mail.kernel.org (Postfix) with ESMTPS id 6675360F92
+	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 12:56:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6675360F92
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BC70B4070C;
-	Wed,  6 Oct 2021 12:56:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 42A4340855;
+	Wed,  6 Oct 2021 12:56:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zC4zRLQr9ZIm; Wed,  6 Oct 2021 12:56:17 +0000 (UTC)
+	with ESMTP id NukuPvK9--wS; Wed,  6 Oct 2021 12:56:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DC618406EB;
-	Wed,  6 Oct 2021 12:56:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9A2434088C;
+	Wed,  6 Oct 2021 12:56:27 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3C3941BF42C
- for <buildroot@lists.busybox.net>; Wed,  6 Oct 2021 12:54:11 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4C89B1BF42C
+ for <buildroot@lists.busybox.net>; Wed,  6 Oct 2021 12:54:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 47124823E8
+ by smtp1.osuosl.org (Postfix) with ESMTP id EE4D88264C
  for <buildroot@lists.busybox.net>; Wed,  6 Oct 2021 12:54:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LuKiIH-0vOFj for <buildroot@lists.busybox.net>;
+ with ESMTP id SfivOXP8n5P8 for <buildroot@lists.busybox.net>;
  Wed,  6 Oct 2021 12:54:09 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1C9D482640
- for <buildroot@buildroot.org>; Wed,  6 Oct 2021 12:54:09 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id F35DB823AA
+ for <buildroot@buildroot.org>; Wed,  6 Oct 2021 12:54:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 30D429210A; Wed,  6 Oct 2021 12:51:33 +0000 (UTC)
+ id 1280992109; Wed,  6 Oct 2021 12:51:33 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 6 Oct 2021 14:35:05 +0200
+Date: Wed, 6 Oct 2021 13:33:32 +0200
 X-Git-Refname: refs/heads/2021.05.x
-X-Git-Oldrev: 83938cb9d68c06c0fa26346333ff8f3dc9c05a20
-X-Git-Newrev: 866763c0438324a3e67758246e64e029fba5be80
+X-Git-Oldrev: 1e24a5e13af813663eaa34c49e4a9044e8f47e96
+X-Git-Newrev: c7626b5c3504ef6fcc01c07a341c1042fcf55c4d
 X-Patchwork-Hint: ignore
-Message-Id: <20211006125133.30D429210A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.05.x] package/python-dateutil:
- bump to version 2.8.2
+Message-Id: <20211006125133.1280992109@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.05.x]
+ package/python-aioconsole: bump to version 0.3.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,46 +65,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=866763c0438324a3e67758246e64e029fba5be80
+commit: https://git.buildroot.net/buildroot/commit/?id=c7626b5c3504ef6fcc01c07a341c1042fcf55c4d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Plus, add LICENSE_FILES and the corresponding hash.
+
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 7bd23d3d1eefa10d2abebbcf0016ae78a17dc19f)
+(cherry picked from commit 7f5f9618d86adc3aa021680f87c842926bebe3af)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-dateutil/python-dateutil.hash | 6 +++---
- package/python-dateutil/python-dateutil.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-aioconsole/python-aioconsole.hash | 6 ++++--
+ package/python-aioconsole/python-aioconsole.mk   | 5 +++--
+ 2 files changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-dateutil/python-dateutil.hash b/package/python-dateutil/python-dateutil.hash
-index f3dc69f272..a52fb30a0f 100644
---- a/package/python-dateutil/python-dateutil.hash
-+++ b/package/python-dateutil/python-dateutil.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/python-dateutil/json
--md5	f2a1d4b680b297b367a974664ca3a4f6  python-dateutil-2.8.1.tar.gz
--sha256	73ebfe9dbf22e832286dafa60473e4cd239f8592f699aa5adaf10050e6e1823c  python-dateutil-2.8.1.tar.gz
-+md5  5970010bb72452344df3d76a10281b65  python-dateutil-2.8.2.tar.gz
-+sha256  0123cacc1627ae19ddf3c27a5de5bd67ee4586fbdd6440d9748f8abb483d3e86  python-dateutil-2.8.2.tar.gz
- # Locally computed sha256 checksums
--sha256	ba00f51a0d92823b5a1cde27d8b5b9d2321e67ed8da9bc163eff96d5e17e577e  LICENSE
-+sha256  ba00f51a0d92823b5a1cde27d8b5b9d2321e67ed8da9bc163eff96d5e17e577e  LICENSE
-diff --git a/package/python-dateutil/python-dateutil.mk b/package/python-dateutil/python-dateutil.mk
-index 759261d2d1..b75f510bce 100644
---- a/package/python-dateutil/python-dateutil.mk
-+++ b/package/python-dateutil/python-dateutil.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/python-aioconsole/python-aioconsole.hash b/package/python-aioconsole/python-aioconsole.hash
+index dea2216fcf..45139a6606 100644
+--- a/package/python-aioconsole/python-aioconsole.hash
++++ b/package/python-aioconsole/python-aioconsole.hash
+@@ -1,3 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/aioconsole/json
+-md5  66d4b05e3bc75267daf0f773d839f62b  aioconsole-0.3.1.tar.gz
+-sha256  7c038bb40b7690bf5be6b17154830b7bff25e7be1c02d8420a346c3efbd5d8e5  aioconsole-0.3.1.tar.gz
++md5  b8cbcb6e00d8e535256526dfe4f27db3  aioconsole-0.3.2.tar.gz
++sha256  9355b36d41d5fbdd3dbb01510deb2b985b508b2ebcd5b8bd85af61a707e2f6c8  aioconsole-0.3.2.tar.gz
++# Locally computed sha256 checksums
++sha256  fe3eea6c599e23a00c08c5f5cb2320c30adc8f8687db5fcec9b79a662c53ff6b  LICENSE
+diff --git a/package/python-aioconsole/python-aioconsole.mk b/package/python-aioconsole/python-aioconsole.mk
+index b32d2bea0f..75ea3c2a2a 100644
+--- a/package/python-aioconsole/python-aioconsole.mk
++++ b/package/python-aioconsole/python-aioconsole.mk
+@@ -4,10 +4,11 @@
  #
  ################################################################################
  
--PYTHON_DATEUTIL_VERSION = 2.8.1
--PYTHON_DATEUTIL_SITE = https://files.pythonhosted.org/packages/be/ed/5bbc91f03fa4c839c4c7360375da77f9659af5f7086b7a7bdda65771c8e0
-+PYTHON_DATEUTIL_VERSION = 2.8.2
-+PYTHON_DATEUTIL_SITE = https://files.pythonhosted.org/packages/4c/c4/13b4776ea2d76c115c1d1b84579f3764ee6d57204f6be27119f13a61d0a9
- PYTHON_DATEUTIL_SETUP_TYPE = setuptools
- PYTHON_DATEUTIL_LICENSE = BSD-3-Clause
- PYTHON_DATEUTIL_LICENSE_FILES = LICENSE
+-PYTHON_AIOCONSOLE_VERSION = 0.3.1
++PYTHON_AIOCONSOLE_VERSION = 0.3.2
+ PYTHON_AIOCONSOLE_SOURCE = aioconsole-$(PYTHON_AIOCONSOLE_VERSION).tar.gz
+-PYTHON_AIOCONSOLE_SITE = https://files.pythonhosted.org/packages/5a/12/fce04ddc0a8ebd6482e5ec293d8bda47c9e05c82826b061f7b73523b8601
++PYTHON_AIOCONSOLE_SITE = https://files.pythonhosted.org/packages/7a/b2/747ab3cb965596cd84c5159941613d901d8771acad3c51c4f5da362aa9f0
+ PYTHON_AIOCONSOLE_SETUP_TYPE = setuptools
+ PYTHON_AIOCONSOLE_LICENSE = GPL-3.0
++PYTHON_AIOCONSOLE_LICENSE_FILES = LICENSE
+ 
+ $(eval $(python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
