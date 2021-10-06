@@ -2,52 +2,52 @@ Return-Path: <SRS0=BIUF=O2=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 811B9C433EF
-	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 12:54:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C687C433EF
+	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 12:55:08 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 4CDDF60F92
-	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 12:54:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4CDDF60F92
+	by mail.kernel.org (Postfix) with ESMTPS id 3E9DE61039
+	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 12:55:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3E9DE61039
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1F52E40218;
-	Wed,  6 Oct 2021 12:54:54 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A6C5840762;
+	Wed,  6 Oct 2021 12:55:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7qUsa_rnZpU6; Wed,  6 Oct 2021 12:54:53 +0000 (UTC)
+	with ESMTP id nB-whPAQoDpj; Wed,  6 Oct 2021 12:55:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 477A040100;
-	Wed,  6 Oct 2021 12:54:52 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id CD6E21BF9AF
- for <buildroot@lists.busybox.net>; Wed,  6 Oct 2021 12:54:05 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D7CF440459;
+	Wed,  6 Oct 2021 12:55:04 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 113001BF42C
+ for <buildroot@lists.busybox.net>; Wed,  6 Oct 2021 12:54:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B9D884016B
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8A51980AEC
  for <buildroot@lists.busybox.net>; Wed,  6 Oct 2021 12:54:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id muowbisDQzoG for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Nwao2N16TbW9 for <buildroot@lists.busybox.net>;
  Wed,  6 Oct 2021 12:54:04 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id D24CE40100
+ by smtp1.osuosl.org (Postfix) with ESMTP id D634183F43
  for <buildroot@buildroot.org>; Wed,  6 Oct 2021 12:54:04 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id F3DBE920B9; Wed,  6 Oct 2021 12:51:28 +0000 (UTC)
+ id E9045918CC; Wed,  6 Oct 2021 12:51:28 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 6 Oct 2021 14:45:32 +0200
+Date: Wed, 6 Oct 2021 14:35:14 +0200
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: d61e48e8df269d4a95ad74be9a110f103d34532b
-X-Git-Newrev: c747085a07fbcc7aa0c914c7f23903fed4b90457
+X-Git-Oldrev: e149ec942843263fb571f4d59fa9623335d5960f
+X-Git-Newrev: d61e48e8df269d4a95ad74be9a110f103d34532b
 X-Patchwork-Hint: ignore
-Message-Id: <20211006125128.F3DBE920B9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/micropython:
- Update LICENSE info
+Message-Id: <20211006125128.E9045918CC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/python-dateutil:
+ bump to version 2.8.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,36 +65,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c747085a07fbcc7aa0c914c7f23903fed4b90457
+commit: https://git.buildroot.net/buildroot/commit/?id=d61e48e8df269d4a95ad74be9a110f103d34532b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-The various micropython ports may include code licensed under different
-licenses compared to the core micropython. List these in MICROPYTHON_LICENSE.
-
-Signed-off-by: Chris Packham <judge.packham@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 4dc40c21ea2f4c2682855231fe409a74d6cbe911)
+(cherry picked from commit 7bd23d3d1eefa10d2abebbcf0016ae78a17dc19f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/micropython/micropython.mk | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ package/python-dateutil/python-dateutil.hash | 6 +++---
+ package/python-dateutil/python-dateutil.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/micropython/micropython.mk b/package/micropython/micropython.mk
-index 010ac35e8c..d5dda43a3a 100644
---- a/package/micropython/micropython.mk
-+++ b/package/micropython/micropython.mk
-@@ -6,7 +6,10 @@
+diff --git a/package/python-dateutil/python-dateutil.hash b/package/python-dateutil/python-dateutil.hash
+index f3dc69f272..a52fb30a0f 100644
+--- a/package/python-dateutil/python-dateutil.hash
++++ b/package/python-dateutil/python-dateutil.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/python-dateutil/json
+-md5	f2a1d4b680b297b367a974664ca3a4f6  python-dateutil-2.8.1.tar.gz
+-sha256	73ebfe9dbf22e832286dafa60473e4cd239f8592f699aa5adaf10050e6e1823c  python-dateutil-2.8.1.tar.gz
++md5  5970010bb72452344df3d76a10281b65  python-dateutil-2.8.2.tar.gz
++sha256  0123cacc1627ae19ddf3c27a5de5bd67ee4586fbdd6440d9748f8abb483d3e86  python-dateutil-2.8.2.tar.gz
+ # Locally computed sha256 checksums
+-sha256	ba00f51a0d92823b5a1cde27d8b5b9d2321e67ed8da9bc163eff96d5e17e577e  LICENSE
++sha256  ba00f51a0d92823b5a1cde27d8b5b9d2321e67ed8da9bc163eff96d5e17e577e  LICENSE
+diff --git a/package/python-dateutil/python-dateutil.mk b/package/python-dateutil/python-dateutil.mk
+index 759261d2d1..b75f510bce 100644
+--- a/package/python-dateutil/python-dateutil.mk
++++ b/package/python-dateutil/python-dateutil.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
- MICROPYTHON_VERSION = 1.13
- MICROPYTHON_SITE = $(call github,micropython,micropython,v$(MICROPYTHON_VERSION))
--MICROPYTHON_LICENSE = MIT
-+# Micropython has a lot of code copied from other projects, and also a number
-+# of submodules for various libs. However, we don't even clone the submodules,
-+# and most of the copied code is not used in the unix build.
-+MICROPYTHON_LICENSE = MIT, BSD-1-clause, BSD-3-clause, Zlib
- MICROPYTHON_LICENSE_FILES = LICENSE
- MICROPYTHON_DEPENDENCIES = host-pkgconf libffi $(BR2_PYTHON3_HOST_DEPENDENCY)
- 
+-PYTHON_DATEUTIL_VERSION = 2.8.1
+-PYTHON_DATEUTIL_SITE = https://files.pythonhosted.org/packages/be/ed/5bbc91f03fa4c839c4c7360375da77f9659af5f7086b7a7bdda65771c8e0
++PYTHON_DATEUTIL_VERSION = 2.8.2
++PYTHON_DATEUTIL_SITE = https://files.pythonhosted.org/packages/4c/c4/13b4776ea2d76c115c1d1b84579f3764ee6d57204f6be27119f13a61d0a9
+ PYTHON_DATEUTIL_SETUP_TYPE = setuptools
+ PYTHON_DATEUTIL_LICENSE = BSD-3-Clause
+ PYTHON_DATEUTIL_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
