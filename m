@@ -2,94 +2,93 @@ Return-Path: <SRS0=BIUF=O2=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 555E6C433EF
-	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 19:24:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1DF0DC433F5
+	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 19:24:40 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D8C66611C1
-	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 19:24:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D8C66611C1
+	by mail.kernel.org (Postfix) with ESMTPS id DC7F3611C1
+	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 19:24:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org DC7F3611C1
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9CE6F40789;
-	Wed,  6 Oct 2021 19:24:14 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id AA7F640D95;
+	Wed,  6 Oct 2021 19:24:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LN_zLN1JXREK; Wed,  6 Oct 2021 19:24:13 +0000 (UTC)
+	with ESMTP id zb47PSlcGQSr; Wed,  6 Oct 2021 19:24:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9A1E04078D;
-	Wed,  6 Oct 2021 19:24:12 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id CD3B240D9A;
+	Wed,  6 Oct 2021 19:24:37 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 835B51BF350
- for <buildroot@lists.busybox.net>; Wed,  6 Oct 2021 19:24:11 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B30AF1BF350
+ for <buildroot@lists.busybox.net>; Wed,  6 Oct 2021 19:24:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 73875825E8
- for <buildroot@lists.busybox.net>; Wed,  6 Oct 2021 19:24:11 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A34D883B3D
+ for <buildroot@lists.busybox.net>; Wed,  6 Oct 2021 19:24:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id exwOacWemjGl for <buildroot@lists.busybox.net>;
- Wed,  6 Oct 2021 19:24:10 +0000 (UTC)
+ with ESMTP id XgaUPHeYxGQG for <buildroot@lists.busybox.net>;
+ Wed,  6 Oct 2021 19:24:35 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com
- [IPv6:2a00:1450:4864:20::52e])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5F3C28258A
- for <buildroot@buildroot.org>; Wed,  6 Oct 2021 19:24:10 +0000 (UTC)
-Received: by mail-ed1-x52e.google.com with SMTP id d8so13835452edx.9
- for <buildroot@buildroot.org>; Wed, 06 Oct 2021 12:24:10 -0700 (PDT)
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com
+ [IPv6:2a00:1450:4864:20::52f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 441718381F
+ for <buildroot@buildroot.org>; Wed,  6 Oct 2021 19:24:35 +0000 (UTC)
+Received: by mail-ed1-x52f.google.com with SMTP id p13so14291195edw.0
+ for <buildroot@buildroot.org>; Wed, 06 Oct 2021 12:24:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=WnM4mmhGr07XX+LCex+o7b4In89Pn/eJVXgIKPWyv6U=;
- b=RvaGC7vF/trSjwlICmgYBQKWAjxlqcm6sGoY2Fq9goy68B9ldluivEnRK+Lrd2k8/w
- Umlk1+7Y8vD+vHPke5djBniU0WgSSB0pptczctvQz+VnujF3Oa72GAk58Nfl8xY7Lxta
- RQTyIFhn3j2ynfuEsWNF7G9SdVOyZJQkuvKtgHxtjZhIS5swPjABjz/NlfWasuOgXUAe
- Ggf4Za6lEVEVtHItae7VbvlmwTPZeIvZE+Xz/51FkJGRLsW+yHp7tKeEcgLwemOEdUXh
- im0z1J+fTZwaBjSjm8lQc0CSvf9xHqmUbd94tnV6UH73SCBYPvgeznxsRXKr8TeTEZSe
- OWvg==
+ bh=3OL+nattd4VF+EWKDyYOIRsbDZboF2PZPZRn46/jcns=;
+ b=alotX1Ii0695Aa1RbUgfloOb3zKhdhe0Dodh5j013B6A+xAggkJ/Lt59pyQK0t5yuH
+ wHH4m45pYCSP1p2gg61XBzWnsFHFGpxAJwUUS1gj2m5I5lBw5oFG4JYKMTMhWfDytC9U
+ es6/6CeYUZs30POZpkPkTsE2l7/3LicLJIcTHkcjckGrzH3haLmdjaIoOJ54tLm3T9hr
+ 7PYbIfYig99rXanMRXiwqHmucPIPE3mgcRjP8p+QxlYGoyA3xzmbvvvVKFTaWPD1LpmU
+ ise1tQKfc7Kio51Jhih2P/yU+7bmJ30qdjEr9PkGkgkurIh9FP10JmxavfXG6Wmm2p2V
+ r88A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=WnM4mmhGr07XX+LCex+o7b4In89Pn/eJVXgIKPWyv6U=;
- b=Rix1kxAXTaduYND2dF4p7C6S+LYYJOkIXcFSH8cD2O2+KQdFs33JZ0pilXwvQZjL9X
- M//VRDamrN6QPjv7IqNh0/QwzcC+fof8pUyArCoNglm5GDrnFFutviHW+EV1Ba3Whl23
- AUMxKoFDSn/B9UpStrFhQuZMbvRP/N7TVP7FFTdfabkOKMNiqWV3tXVrClwlkBmYKBiy
- 4TrgjQN0fxQ/jbg1APdgu2n0smm5XlrPKx4HDbVuw/LJKUBOjQo9hzYN1AvDPAnWtUJI
- kIzE7f5cPNmtzHKZNNRgY2IUTKf1ht8Gx95VGiwLeYc+IM7P5kvLcIfyMzYT2R9SoSAq
- Tftw==
-X-Gm-Message-State: AOAM5333PIiHw0t3UjUKy3yRjX4smB18ut8R8UsDX6s+WVszqdQg50A5
- SYuRLCcfEiPplyK9cOXenR1CWw==
-X-Google-Smtp-Source: ABdhPJwv8j1qEYHDbi/WnwFTP7Eoac/tLiBLGe4hzSJ3esICaDlsElyZpgq7fVOgRzY46Ut4Xp3LWA==
-X-Received: by 2002:a05:6402:143b:: with SMTP id
- c27mr58249edx.224.1633548248455; 
- Wed, 06 Oct 2021 12:24:08 -0700 (PDT)
+ bh=3OL+nattd4VF+EWKDyYOIRsbDZboF2PZPZRn46/jcns=;
+ b=B1jlEQ4SudwY81CuZ/fSXHVtmBBM4C2p1X1fEHsHYx3gEZMiU7LDeV1ivT9XhQt7Pp
+ nx8pIXNPGkKTUWe656FZOxYj2NvRIrq23B8K59DkWrhC9oAb3GjUVfa3rt3xdZM9ijeK
+ dBddjnz3mgaoOM7T5BCo8pKvBKQHsUJfkcYxLOMfwuY1q0UIKdv5ExzLnjGo/my3vMMk
+ ycK1UYmfWxrpkKYWC4aYwBrmLJ+RvFcCuX5694JFvn4AA3MrfWC0hCVPw0tuItJUR9OX
+ uAJc0lTZFwOAXLS6bQa0JnB8kmwznHjKwshZV60vXbrNRkjlA+1PUoJHPpa+dg5IrM03
+ 4gvA==
+X-Gm-Message-State: AOAM531RtFI2LvhIH9qA8r7Ypww9ClPG1wKZl3PjzpNkQBOPNZ1MSbuq
+ /IToaJsTUoPJOmE7DDp+jmS85Q==
+X-Google-Smtp-Source: ABdhPJw+VaAd//A8LyL5cTqMfCGEFN0+E2XdZltPGVpnkc6Gm9QNct6S9Nn622haF14Y2tsfKCCE7g==
+X-Received: by 2002:aa7:cd8b:: with SMTP id x11mr37734edv.384.1633548273370;
+ Wed, 06 Oct 2021 12:24:33 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id di4sm10381635edb.34.2021.10.06.12.24.07
+ by smtp.gmail.com with ESMTPSA id u16sm9180014ejy.14.2021.10.06.12.24.32
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 06 Oct 2021 12:24:08 -0700 (PDT)
-Message-ID: <dacf4e3d-fd13-f1e8-2768-a39af12f50f6@mind.be>
-Date: Wed, 6 Oct 2021 21:24:07 +0200
+ Wed, 06 Oct 2021 12:24:33 -0700 (PDT)
+Message-ID: <f8f3102b-c9dc-d1a3-7605-582c2471d74d@mind.be>
+Date: Wed, 6 Oct 2021 21:24:32 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.1.0
 Content-Language: en-GB
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- buildroot@buildroot.org
-References: <20210922210959.3604227-1-giulio.benetti@benettiengineering.com>
+To: Lang Daniel <d.lang@abatec.at>,
+ "buildroot@buildroot.org" <buildroot@buildroot.org>
+References: <VI1P190MB0493556D0B2FAAE08AE4F4299FA39@VI1P190MB0493.EURP190.PROD.OUTLOOK.COM>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20210922210959.3604227-1-giulio.benetti@benettiengineering.com>
-Subject: Re: [Buildroot] [PATCH v2] package/ffmpeg: fix build on mips
+In-Reply-To: <VI1P190MB0493556D0B2FAAE08AE4F4299FA39@VI1P190MB0493.EURP190.PROD.OUTLOOK.COM>
+Subject: Re: [Buildroot] [PATCH 1/1] package/sam-ba: bump version to 3.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,8 +100,8 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
- Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
+Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -110,20 +109,11 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 22/09/2021 23:09, Giulio Benetti wrote:
-> mips_32 is not supported by ffmpeg and it tries to build with loongson3
-> SIMD support that leads to build failure due to:
-> /tmp/ccFO2LRa.s: Assembler messages:
-> /tmp/ccFO2LRa.s:15314: Error: opcode not supported on this processor: mips32 (mips32) `dmult $2,$6'
-> /tmp/ccFO2LRa.s:15316: Error: opcode not supported on this processor: mips32 (mips32) `dsrl $2,$2,32'
+On 23/09/2021 17:48, Lang Daniel wrote:
+> Sadly the most recent version of Microchip's SAM-BA programming tool is no longer hosted
+> on GitHub. Therefore the package is downloaded from Microchip directly.
 > 
-> So let's --disable-asm to prevent using those unsupported opcodes for every
-> mips architecture according to Arnout.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/f01/f01d9cedec8e1b371308d0f7af561a75883fa27c/
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> Signed-off-by: Daniel Lang <d.lang@abatec.at>
 
   Applied to master, thanks.
 
@@ -131,25 +121,44 @@ On 22/09/2021 23:09, Giulio Benetti wrote:
   Arnout
 
 > ---
->   package/ffmpeg/ffmpeg.mk | 4 +---
->   1 file changed, 1 insertion(+), 3 deletions(-)
+>   package/sam-ba/Config.in.host | 1 +
+>   package/sam-ba/sam-ba.hash    | 2 +-
+>   package/sam-ba/sam-ba.mk      | 4 ++--
+>   3 files changed, 4 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-> index 8ff8ea8c6c..b3ce4c0656 100644
-> --- a/package/ffmpeg/ffmpeg.mk
-> +++ b/package/ffmpeg/ffmpeg.mk
-> @@ -507,10 +507,8 @@ else
->   FFMPEG_CONF_OPTS += --enable-mipsfpu
->   endif
+> diff --git a/package/sam-ba/Config.in.host b/package/sam-ba/Config.in.host
+> index 2236b5f48a..b96e377e79 100644
+> --- a/package/sam-ba/Config.in.host
+> +++ b/package/sam-ba/Config.in.host
+> @@ -8,3 +8,4 @@ config BR2_PACKAGE_HOST_SAM_BA
+>   	  microcontrollers.
 >   
-> -# Fix build failure on "addi opcode not supported"
-> -ifeq ($(BR2_mips_32r6)$(BR2_mips_64r6),y)
-> +# Fix build failure on several missing assembly instructions
->   FFMPEG_CONF_OPTS += --disable-asm
-> -endif
->   endif # MIPS
+>   	  http://www.at91.com/linux4sam/bin/view/Linux4SAM/SoftwareTools
+> +	  https://www.microchip.com/en-us/development-tool/SAM-BA-IN-SYSTEM-PROGRAMMER
+> diff --git a/package/sam-ba/sam-ba.hash b/package/sam-ba/sam-ba.hash
+> index 1bc14f3fd7..10b95c9c0e 100644
+> --- a/package/sam-ba/sam-ba.hash
+> +++ b/package/sam-ba/sam-ba.hash
+> @@ -1,3 +1,3 @@
+>   # sha256 locally computed
+> -sha256  dc32c49688bbfab5aa687042caae5f611fe3d9e722098a561f8f5d2fbc57249d  sam-ba_3.3.1-linux_x86_64.tar.gz
+> +sha256  f66e431f0401b197e80599156ea93aa3aab050bc4d16523c95fae1107ef9101c  sam-ba_3.5-linux_x86_64.tar.gz
+>   sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.txt
+> diff --git a/package/sam-ba/sam-ba.mk b/package/sam-ba/sam-ba.mk
+> index 3082d49192..10bea8ef70 100644
+> --- a/package/sam-ba/sam-ba.mk
+> +++ b/package/sam-ba/sam-ba.mk
+> @@ -4,8 +4,8 @@
+>   #
+>   ################################################################################
 >   
->   ifeq ($(BR2_POWERPC_CPU_HAS_ALTIVEC),y)
+> -SAM_BA_VERSION = 3.3.1
+> -SAM_BA_SITE = https://github.com/atmelcorp/sam-ba/releases/download/v$(SAM_BA_VERSION)
+> +SAM_BA_VERSION = 3.5
+> +SAM_BA_SITE = https://www.microchip.com/content/dam/mchp/documents/MPU32/ProductDocuments/SoftwareTools
+>   SAM_BA_SOURCE = sam-ba_$(SAM_BA_VERSION)-linux_x86_64.tar.gz
+>   SAM_BA_LICENSE = GPLv2
+>   SAM_BA_LICENSE_FILES = LICENSE.txt
 > 
 _______________________________________________
 buildroot mailing list
