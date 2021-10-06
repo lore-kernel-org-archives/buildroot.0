@@ -2,86 +2,87 @@ Return-Path: <SRS0=BIUF=O2=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EA321C433F5
-	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 20:43:47 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A6F21C433EF
+	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 20:43:59 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B336D61163
-	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 20:43:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B336D61163
+	by mail.kernel.org (Postfix) with ESMTPS id 6925561152
+	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 20:43:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6925561152
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=boundarydevices.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8B9B360F52;
-	Wed,  6 Oct 2021 20:43:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3B28D40395;
+	Wed,  6 Oct 2021 20:43:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7DLFzop1s1jq; Wed,  6 Oct 2021 20:43:46 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id xFgaZmofQcmH; Wed,  6 Oct 2021 20:43:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DCCD260F49;
-	Wed,  6 Oct 2021 20:43:45 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9808F1BF34F
- for <buildroot@lists.busybox.net>; Wed,  6 Oct 2021 20:42:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 65303403C7;
+	Wed,  6 Oct 2021 20:43:57 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E08061BF34F
+ for <buildroot@lists.busybox.net>; Wed,  6 Oct 2021 20:42:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8811184025
- for <buildroot@lists.busybox.net>; Wed,  6 Oct 2021 20:42:06 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id D082360F3F
+ for <buildroot@lists.busybox.net>; Wed,  6 Oct 2021 20:42:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
  dkim=pass (1024-bit key) header.d=boundarydevices.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qo3xlS7kzVUF for <buildroot@lists.busybox.net>;
- Wed,  6 Oct 2021 20:42:05 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id x-gJpk_DHcbV for <buildroot@lists.busybox.net>;
+ Wed,  6 Oct 2021 20:42:08 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com
- [IPv6:2607:f8b0:4864:20::62a])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5D68D84042
- for <buildroot@buildroot.org>; Wed,  6 Oct 2021 20:42:05 +0000 (UTC)
-Received: by mail-pl1-x62a.google.com with SMTP id c4so2475711pls.6
- for <buildroot@buildroot.org>; Wed, 06 Oct 2021 13:42:05 -0700 (PDT)
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com
+ [IPv6:2607:f8b0:4864:20::1034])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D0D1460F3E
+ for <buildroot@buildroot.org>; Wed,  6 Oct 2021 20:42:08 +0000 (UTC)
+Received: by mail-pj1-x1034.google.com with SMTP id
+ oa6-20020a17090b1bc600b0019ffc4b9c51so5273422pjb.2
+ for <buildroot@buildroot.org>; Wed, 06 Oct 2021 13:42:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=boundarydevices.com; s=google;
  h=from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=soYK79l/C99YRANbq/54S3k+auA1zAFutF09zGEW5gI=;
- b=ghJAYBi8l24O9x6XmW8x0BiT7SLudiyPdPSZVeniXS7rnXMfgmY4azFex1q2ziq0IM
- W7QuUetw5q3Emw4PEyifu0NqsyuO2uC6pPwJGF/eVxtYt5x8H5dKwIZGDx/9DHhsyHWL
- Yrq1ua22s1hfpFB8q2fXw+fJS8qjLi3/9gQDI=
+ bh=hutSnbpsY2dq5/CewKW8h2KgX51QCaUQkqvPey4ZMpo=;
+ b=Q7LXgPI1jZpANx1YjB96m4zjMSGcj2lArN0Zc6WCK+wxnDVSx1Thck5gjO0KlXbnp/
+ 3RXQfm9fj+X0PC14PMhA+gbweiFv7qPNm4xSHEpuAOf60LQbHSsHQO5k1WewjubTZWSV
+ smmYHU2E6TwCpq2cO9ZLOvxtl6L/KR+RaPqAQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
  :references:mime-version:content-transfer-encoding;
- bh=soYK79l/C99YRANbq/54S3k+auA1zAFutF09zGEW5gI=;
- b=4QK/+95VWR07R3b407az3Fh19Z4plOmW0RybZTHm1zMoblXW7KqMMUumAFwWXvTWiu
- Mxa2bShL9GL1IoGVUuoX+/joSusSqR07yYjy5SvAr3WIC3pnxXNXHSrcWKkLtBaE3j+7
- KGOIqdPKP07twrv4jQCw525fm0kpxNmiXHlofrLUjjMEHgP6a1JsU+8yeOsgDPAr3TnF
- NuH6VEbtlsQiVO7Ym+40FApiIwdEKP3ErMrt6WjkuP53p/7Ec5AaheIYpMHohDxMxnHK
- Jj5bUg1ZvHv2QGMNhoehp4Mt8C1X0ERrzJQXKp9AUo2aTdRiNNiDgqLJp0al7TUzDuR9
- tMVA==
-X-Gm-Message-State: AOAM532u01/yOw/bRTcUZRgO/FxbcMSLar78civYmDMQOD4XJP7jWYun
- taXqUN8EuMTHmXL1ljVJNFA4V7XWcQrduWop
-X-Google-Smtp-Source: ABdhPJzEI5Srt3Lj7SYWqEn9a5QQsnQVD35PGhYlvBs4uZDNbIOJe1PVEngpDeaCy15kLzWKbgRgHA==
-X-Received: by 2002:a17:90b:1e01:: with SMTP id
- pg1mr305882pjb.81.1633552924484; 
- Wed, 06 Oct 2021 13:42:04 -0700 (PDT)
+ bh=hutSnbpsY2dq5/CewKW8h2KgX51QCaUQkqvPey4ZMpo=;
+ b=VB7E31cLvvJ12Tziw5kRmQLivRkNiDss3WNrUmJaG1+PhX8r19HDsTHB2xpocVaP3Q
+ x8spdnhIc2Io85gAZq+ApplSPXs7b9HKz1nZAU7s/jjuYB70z+PUR7ud+RwSja7/Cf+r
+ nQ2NpLvtomxgMhY52xiDEKbehMz3inNOeR5pecQoeT6n/RDlKKkqW8hDcczZb1EdScs/
+ qaGvMSJjWYY4g4l8RbIJb60tq0ofldkdlzZd1hBXNgAqQLh7WW2hG6hGaGxe596TxNU2
+ hZTrm2ImaHqnXJvOPANlSpvxNceC+fvpje5f7R+uNJKmmy1pkm5az0iekUaQA7Uc6/Dz
+ fGpg==
+X-Gm-Message-State: AOAM533EOeE5iHHpsK7k39FRcE9QbmBLVu0LYql4PdrTlIQXJ67Tnerg
+ ei4XAbaTtxiwKBUOIDe/wyXaQEbVHUkgytBg
+X-Google-Smtp-Source: ABdhPJzOhlpHs3Sc+y4ioHKV4Nvof+HV1OtmwnVL38g+nYxFpMySrV08IL3FcbgoHGumCU5pi/a3fQ==
+X-Received: by 2002:a17:90a:c703:: with SMTP id
+ o3mr954534pjt.176.1633552927874; 
+ Wed, 06 Oct 2021 13:42:07 -0700 (PDT)
 Received: from chrisubuntu.hollywoodparkca.com
  ([2600:8802:604:7300:1546:3656:4c77:10ff])
- by smtp.googlemail.com with ESMTPSA id g14sm3581308pjd.24.2021.10.06.13.42.03
+ by smtp.googlemail.com with ESMTPSA id g14sm3581308pjd.24.2021.10.06.13.42.04
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 06 Oct 2021 13:42:04 -0700 (PDT)
+ Wed, 06 Oct 2021 13:42:07 -0700 (PDT)
 From: Chris Dimich <chris.dimich@boundarydevices.com>
 To: buildroot@buildroot.org
-Date: Wed,  6 Oct 2021 13:41:32 -0700
-Message-Id: <20211006204135.2813745-9-chris.dimich@boundarydevices.com>
+Date: Wed,  6 Oct 2021 13:41:33 -0700
+Message-Id: <20211006204135.2813745-10-chris.dimich@boundarydevices.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20211006204135.2813745-1-chris.dimich@boundarydevices.com>
 References: <20211006204135.2813745-1-chris.dimich@boundarydevices.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 09/12] package/freescale-imx/basler-camera: add
- package
+Subject: [Buildroot] [PATCH 10/12] configs/nitrogen*: update kernel to
+ 5.10.x_2.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,89 +103,202 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Basler camera binary drivers.
+Also bump linux headers version to 5.10.
+Based on NXP 5.10.35-2.0.0 release.
 
 Signed-off-by: Chris Dimich <chris.dimich@boundarydevices.com>
 ---
- package/freescale-imx/Config.in               |  1 +
- package/freescale-imx/basler-camera/Config.in |  8 ++++++
- .../basler-camera/basler-camera.hash          |  4 +++
- .../basler-camera/basler-camera.mk            | 28 +++++++++++++++++++
- 4 files changed, 41 insertions(+)
- create mode 100644 package/freescale-imx/basler-camera/Config.in
- create mode 100644 package/freescale-imx/basler-camera/basler-camera.hash
- create mode 100644 package/freescale-imx/basler-camera/basler-camera.mk
+ configs/nitrogen6sx_defconfig | 8 ++++----
+ configs/nitrogen6x_defconfig  | 8 ++++----
+ configs/nitrogen7_defconfig   | 8 ++++----
+ configs/nitrogen8m_defconfig  | 8 ++++----
+ configs/nitrogen8mm_defconfig | 8 ++++----
+ configs/nitrogen8mn_defconfig | 8 ++++----
+ configs/nitrogen8mp_defconfig | 8 ++++----
+ 7 files changed, 28 insertions(+), 28 deletions(-)
 
-diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Config.in
-index 0f0f5c50fd..6149e4bf13 100644
---- a/package/freescale-imx/Config.in
-+++ b/package/freescale-imx/Config.in
-@@ -118,6 +118,7 @@ source "package/freescale-imx/imx-seco/Config.in"
- source "package/freescale-imx/imx-vpu-hantro-vc/Config.in"
- source "package/freescale-imx/isp-vvcam-module/Config.in"
- source "package/freescale-imx/isp-imx/Config.in"
-+source "package/freescale-imx/basler-camera/Config.in"
- if (BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX51 || BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX53)
- source "package/freescale-imx/gpu-amd-bin-mx51/Config.in"
- source "package/freescale-imx/libz160/Config.in"
-diff --git a/package/freescale-imx/basler-camera/Config.in b/package/freescale-imx/basler-camera/Config.in
-new file mode 100644
-index 0000000000..6458dd323f
---- /dev/null
-+++ b/package/freescale-imx/basler-camera/Config.in
-@@ -0,0 +1,8 @@
-+comment "basler camera needs a Linux kernel to be built"
-+	depends on !BR2_LINUX_KERNEL
-+
-+config BR2_PACKAGE_BASLER_CAMERA
-+	bool "Basler Camera Driver"
-+	depends on BR2_LINUX_KERNEL
-+	help
-+	  Basler camera binary drivers.
-diff --git a/package/freescale-imx/basler-camera/basler-camera.hash b/package/freescale-imx/basler-camera/basler-camera.hash
-new file mode 100644
-index 0000000000..43980d2e24
---- /dev/null
-+++ b/package/freescale-imx/basler-camera/basler-camera.hash
-@@ -0,0 +1,4 @@
-+# Locally computed:
-+sha256  3f09f7a2de290b0580faee9e180a78a322144d316fbbbc80b8a36fb83ab538b1  basler-camera-4.2.2.13.0.bin
-+sha256  ea58636bf34f589048fcd46e38497c47229fde8498df086ff5fb52f9ef8e15ee  COPYING
-+sha256  50099e283cfd307f84f159aeb1a6f462351320273dbcdb80d7f2c9db0494b71c  EULA
-diff --git a/package/freescale-imx/basler-camera/basler-camera.mk b/package/freescale-imx/basler-camera/basler-camera.mk
-new file mode 100644
-index 0000000000..743edd5b95
---- /dev/null
-+++ b/package/freescale-imx/basler-camera/basler-camera.mk
-@@ -0,0 +1,28 @@
-+################################################################################
-+#
-+# basler-camera
-+#
-+################################################################################
-+
-+BASLER_CAMERA_VERSION = 4.2.2.13.0
-+BASLER_CAMERA_SITE = $(FREESCALE_IMX_SITE)
-+BASLER_CAMERA_SOURCE = basler-camera-$(BASLER_CAMERA_VERSION).bin
-+BASLER_CAMERA_DEPENDENCIES = linux
-+
-+BASLER_CAMERA_LICENSE = NXP Semiconductor Software License Agreement
-+BASLER_CAMERA_LICENSE_FILES = EULA COPYING
-+BASLER_CAMERA_REDISTRIBUTE = NO
-+
-+define BASLER_CAMERA_EXTRACT_CMDS
-+	$(call FREESCALE_IMX_EXTRACT_HELPER,$(BASLER_CAMERA_DL_DIR)/$(BASLER_CAMERA_SOURCE))
-+endef
-+
-+define BASLER_CAMERA_INSTALL_TARGET_CMDS
-+	mkdir -p $(TARGET_DIR)/opt/imx8-isp/bin
-+	cp -r $(@D)/opt/imx8-isp/bin/* $(TARGET_DIR)/opt/imx8-isp/bin
-+	ln -sf /opt/imx8-isp/bin/DAA3840_30MC_1080P.drv $(TARGET_DIR)/usr/lib64/DAA3840_30MC_1080P.drv
-+	ln -sf /opt/imx8-isp/bin/DAA3840_30MC_4K.drv $(TARGET_DIR)/usr/lib64/DAA3840_30MC_4K.drv
-+	cp -r $(@D)/usr/lib/* $(TARGET_DIR)/usr/lib/
-+endef
-+
-+$(eval $(generic-package))
+diff --git a/configs/nitrogen6sx_defconfig b/configs/nitrogen6sx_defconfig
+index 73dfe2caff..317bf192af 100644
+--- a/configs/nitrogen6sx_defconfig
++++ b/configs/nitrogen6sx_defconfig
+@@ -17,8 +17,8 @@ BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ 
+-# Linux headers same as kernel, a 5.4 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
++# Linux headers same as kernel, a 5.10 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ 
+ # bootloader
+ BR2_TARGET_UBOOT=y
+@@ -35,8 +35,8 @@ BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/boundarydevices/common/bo
+ # kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-# Last version of branch boundary-imx_5.4.x_2.3.0
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/8961f5c1.tar.gz"
++# Latest revision  of branch boundary-imx_5.10.x_2.0.0
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/950d5f1b.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="boundary"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+diff --git a/configs/nitrogen6x_defconfig b/configs/nitrogen6x_defconfig
+index 8e4b268356..b3d97c52e9 100644
+--- a/configs/nitrogen6x_defconfig
++++ b/configs/nitrogen6x_defconfig
+@@ -16,8 +16,8 @@ BR2_PACKAGE_HOST_GENIMAGE=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ 
+-# Linux headers same as kernel, a 5.4 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
++# Linux headers same as kernel, a 5.10 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ 
+ # bootloader
+ BR2_TARGET_UBOOT=y
+@@ -34,8 +34,8 @@ BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/boundarydevices/common/bo
+ # kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-# Last version of branch boundary-imx_5.4.x_2.3.0
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/8961f5c1.tar.gz"
++# Latest revision  of branch boundary-imx_5.10.x_2.0.0
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/950d5f1b.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="boundary"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+diff --git a/configs/nitrogen7_defconfig b/configs/nitrogen7_defconfig
+index 8b152d931b..7656fe20d9 100644
+--- a/configs/nitrogen7_defconfig
++++ b/configs/nitrogen7_defconfig
+@@ -16,8 +16,8 @@ BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ 
+-# Linux headers same as kernel, a 5.4 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
++# Linux headers same as kernel, a 5.10 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ 
+ # bootloader
+ BR2_TARGET_UBOOT=y
+@@ -34,8 +34,8 @@ BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/boundarydevices/common/bo
+ # kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-# Last version of branch boundary-imx_5.4.x_2.3.0
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/8961f5c1.tar.gz"
++# Latest revision  of branch boundary-imx_5.10.x_2.0.0
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/950d5f1b.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="boundary"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+diff --git a/configs/nitrogen8m_defconfig b/configs/nitrogen8m_defconfig
+index 438a0bc29e..9e0e0983ee 100644
+--- a/configs/nitrogen8m_defconfig
++++ b/configs/nitrogen8m_defconfig
+@@ -17,8 +17,8 @@ BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ 
+-# Linux headers same as kernel, a 5.4 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
++# Linux headers same as kernel, a 5.10 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ 
+ # DDR training binaries
+ BR2_PACKAGE_FREESCALE_IMX=y
+@@ -49,8 +49,8 @@ BR2_TARGET_UBOOT_SPL=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-# Latest revision  of branch boundary-imx_5.4.x_2.3.0
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/8961f5c1.tar.gz"
++# Latest revision  of branch boundary-imx_5.10.x_2.0.0
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/950d5f1b.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="boundary"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+diff --git a/configs/nitrogen8mm_defconfig b/configs/nitrogen8mm_defconfig
+index 567636ee4c..db5ccef156 100644
+--- a/configs/nitrogen8mm_defconfig
++++ b/configs/nitrogen8mm_defconfig
+@@ -17,8 +17,8 @@ BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ 
+-# Linux headers same as kernel, a 5.4 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
++# Linux headers same as kernel, a 5.10 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ 
+ # DDR training binaries
+ BR2_PACKAGE_FREESCALE_IMX=y
+@@ -49,8 +49,8 @@ BR2_TARGET_UBOOT_SPL=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-# Latest revision  of branch boundary-imx_5.4.x_2.3.0
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/8961f5c1.tar.gz"
++# Latest revision  of branch boundary-imx_5.10.x_2.0.0
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/950d5f1b.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="boundary"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+diff --git a/configs/nitrogen8mn_defconfig b/configs/nitrogen8mn_defconfig
+index 71fb0e7914..95a2a45780 100644
+--- a/configs/nitrogen8mn_defconfig
++++ b/configs/nitrogen8mn_defconfig
+@@ -17,8 +17,8 @@ BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ 
+-# Linux headers same as kernel, a 5.4 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
++# Linux headers same as kernel, a 5.10 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ 
+ # DDR training binaries
+ BR2_PACKAGE_FREESCALE_IMX=y
+@@ -49,8 +49,8 @@ BR2_TARGET_UBOOT_SPL=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-# Latest revision  of branch boundary-imx_5.4.x_2.3.0
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/8961f5c1.tar.gz"
++# Latest revision  of branch boundary-imx_5.10.x_2.0.0
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/950d5f1b.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="boundary"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+diff --git a/configs/nitrogen8mp_defconfig b/configs/nitrogen8mp_defconfig
+index 14bd26724d..53933b6b8d 100644
+--- a/configs/nitrogen8mp_defconfig
++++ b/configs/nitrogen8mp_defconfig
+@@ -17,8 +17,8 @@ BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ 
+-# Linux headers same as kernel, a 5.4 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
++# Linux headers same as kernel, a 5.10 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ 
+ # DDR training binaries
+ BR2_PACKAGE_FREESCALE_IMX=y
+@@ -49,8 +49,8 @@ BR2_TARGET_UBOOT_SPL=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-# Latest revision  of branch boundary-imx_5.4.x_2.3.0
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/8961f5c1.tar.gz"
++# Latest revision  of branch boundary-imx_5.10.x_2.0.0
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/950d5f1b.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="boundary"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
 -- 
 2.31.1
 
