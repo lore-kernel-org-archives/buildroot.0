@@ -2,51 +2,52 @@ Return-Path: <SRS0=BIUF=O2=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3962EC433EF
-	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 19:31:28 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C848C433EF
+	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 19:31:39 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 04D7F61074
-	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 19:31:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 04D7F61074
+	by mail.kernel.org (Postfix) with ESMTPS id 2B53561077
+	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 19:31:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2B53561077
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CD3D583F8E;
-	Wed,  6 Oct 2021 19:31:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 06FFE60F33;
+	Wed,  6 Oct 2021 19:31:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id C94pinpWxBRQ; Wed,  6 Oct 2021 19:31:27 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id GgEQZuLRvzno; Wed,  6 Oct 2021 19:31:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1AA1D83F35;
-	Wed,  6 Oct 2021 19:31:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6F65760F22;
+	Wed,  6 Oct 2021 19:31:37 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6F73B1BF9B6
- for <buildroot@lists.busybox.net>; Wed,  6 Oct 2021 19:30:51 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4F3551BF350
+ for <buildroot@lists.busybox.net>; Wed,  6 Oct 2021 19:30:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5E69A40803
+ by smtp2.osuosl.org (Postfix) with ESMTP id AE1D240111
  for <buildroot@lists.busybox.net>; Wed,  6 Oct 2021 19:30:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Kac8Dt-pDrsj for <buildroot@lists.busybox.net>;
+ with ESMTP id puKWwvhdhTSY for <buildroot@lists.busybox.net>;
  Wed,  6 Oct 2021 19:30:50 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6C8D740111
+ by smtp2.osuosl.org (Postfix) with ESMTP id B48AD407F9
  for <buildroot@buildroot.org>; Wed,  6 Oct 2021 19:30:50 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id D69C493467; Wed,  6 Oct 2021 19:28:13 +0000 (UTC)
+ id 2780F93465; Wed,  6 Oct 2021 19:28:14 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Wed, 6 Oct 2021 21:11:09 +0200
+Date: Wed, 6 Oct 2021 21:11:10 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0ae5ca9b67f321552f6428de14105192cebd7e8f
-X-Git-Newrev: 324612d68e09d0db44c51c451bc6b87466f7f874
+X-Git-Oldrev: eade72275f81c5df36607b707b85a9907e2ec9f6
+X-Git-Newrev: f2c358c9477e82de681a88fb7d7f3a170c4c5458
 X-Patchwork-Hint: ignore
-Message-Id: <20211006192813.D69C493467@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/kconfig: fix compiler warnings
+Message-Id: <20211006192814.2780F93465@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-uvloop: bump version to
+ 0.16.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,88 +60,53 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7144983427720103193=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============7144983427720103193==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=324612d68e09d0db44c51c451bc6b87466f7f874
+commit: https://git.buildroot.net/buildroot/commit/?id=f2c358c9477e82de681a88fb7d7f3a170c4c5458
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Compiling on Ubuntu 20.04 generates this:
+Bump version to 0.16.0
 
-./util.c: In function ‘file_write_dep’
-./util.c:54:18: warning: ‘..config.tmp’ directive writing 12 bytes into a region of size between 1 and 4097 [-Wformat-overflow=]
-   54 |  sprintf(buf, "%s..config.tmp", dir);
-      |                  ^~~~~~~~~~~~
-./util.c:54:2: note: ‘sprintf’ output between 13 and 4109 bytes into a destination of size 4097
-   54 |  sprintf(buf, "%s..config.tmp", dir);
-      |  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-and similar warnings on confdata.c, lines 778, 989, 995, 1000, 1007,
-1040, 1046 and 1054. Avoid the warnings by enlarging the destination
-buffer of fprintf().
-
-Normally, we want changes to kconfig to be reflected by patches in
-support/kconfig/patches. This makes it easier to resync with upstream
-kconfig. However, in this case, everything that is changed here is
-already changed completely (and differently) upstream, so there is no
-added value in keeping the patch.
-
-Signed-off-by: Edgar Bonet <bonet@grenoble.cnrs.fr>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- support/kconfig/confdata.c | 4 ++--
- support/kconfig/util.c     | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-uvloop/python-uvloop.hash | 4 ++--
+ package/python-uvloop/python-uvloop.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/support/kconfig/confdata.c b/support/kconfig/confdata.c
-index 892da74fdc..9ab980edd8 100644
---- a/support/kconfig/confdata.c
-+++ b/support/kconfig/confdata.c
-@@ -744,7 +744,7 @@ int conf_write(const char *name)
- 	struct menu *menu;
- 	const char *basename;
- 	const char *str;
--	char dirname[PATH_MAX+1], tmpname[PATH_MAX+1], newname[PATH_MAX+1];
-+	char dirname[PATH_MAX+1], tmpname[PATH_MAX+20], newname[PATH_MAX+1];
- 	char *env;
+diff --git a/package/python-uvloop/python-uvloop.hash b/package/python-uvloop/python-uvloop.hash
+index 13bb3b7ee9..39951b50bb 100644
+--- a/package/python-uvloop/python-uvloop.hash
++++ b/package/python-uvloop/python-uvloop.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/uvloop/json
+-md5  c97447b8b386971be5e6f4328563be42  uvloop-0.15.0.tar.gz
+-sha256  1a503d5b49da6e3dd5607d6e533a5315b1caedbf629901807c65a23a09cad065  uvloop-0.15.0.tar.gz
++md5  79f9a7f3cfe154daf0aade23555dc9d4  uvloop-0.16.0.tar.gz
++sha256  f74bc20c7b67d1c27c72601c78cf95be99d5c2cdd4514502b4f3eb0933ff1228  uvloop-0.16.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  2fdc436a67077941295c58647f521fbef8f50e46db0970552fa1a4dd8ae261c6  LICENSE-APACHE
+ sha256  9185f3c77e9f6ef8859a6ba4c94128ac1329876be3e813aad32d7645e51ae409  LICENSE-MIT
+diff --git a/package/python-uvloop/python-uvloop.mk b/package/python-uvloop/python-uvloop.mk
+index ff98d747b2..cfd9b1a66f 100644
+--- a/package/python-uvloop/python-uvloop.mk
++++ b/package/python-uvloop/python-uvloop.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- 	if (!name)
-@@ -974,7 +974,7 @@ int conf_write_autoconf(void)
- 	const char *name;
- 	FILE *out, *tristate, *out_h;
- 	int i;
--	char dir[PATH_MAX+1], buf[PATH_MAX+1];
-+	char dir[PATH_MAX+1], buf[PATH_MAX+20];
- 	char *s;
- 
- 	strcpy(dir, conf_get_configname());
-diff --git a/support/kconfig/util.c b/support/kconfig/util.c
-index 18a8e52391..8665f5bb89 100644
---- a/support/kconfig/util.c
-+++ b/support/kconfig/util.c
-@@ -35,7 +35,7 @@ struct file *file_lookup(const char *name)
- int file_write_dep(const char *name)
- {
- 	char *str;
--	char buf[PATH_MAX+1], buf2[PATH_MAX+1], dir[PATH_MAX+1];
-+	char buf[PATH_MAX+20], buf2[PATH_MAX+1], dir[PATH_MAX+1];
- 	struct symbol *sym, *env_sym;
- 	struct expr *e;
- 	struct file *file;
-
---===============7144983427720103193==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-PYTHON_UVLOOP_VERSION = 0.15.0
++PYTHON_UVLOOP_VERSION = 0.16.0
+ PYTHON_UVLOOP_SOURCE = uvloop-$(PYTHON_UVLOOP_VERSION).tar.gz
+-PYTHON_UVLOOP_SITE = https://files.pythonhosted.org/packages/df/fb/0e1b479ac5502f3d4531a2fc3f046312616f1ad020c686da353c2ff3bbc6
++PYTHON_UVLOOP_SITE = https://files.pythonhosted.org/packages/ab/d9/22bbffa8f8d7e075ccdb29e8134107adfb4710feb10039f9d357db8b589c
+ PYTHON_UVLOOP_SETUP_TYPE = setuptools
+ PYTHON_UVLOOP_LICENSE = Apache-2.0, MIT
+ PYTHON_UVLOOP_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============7144983427720103193==--
