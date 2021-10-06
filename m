@@ -2,85 +2,84 @@ Return-Path: <SRS0=BIUF=O2=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CF710C433F5
-	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 21:38:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 57FB8C433F5
+	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 22:47:34 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9A276611C6
-	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 21:38:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9A276611C6
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmx.net
+	by mail.kernel.org (Postfix) with ESMTPS id 8900660FD8
+	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 22:47:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8900660FD8
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7474960F55;
-	Wed,  6 Oct 2021 21:38:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2BC8C60F4C;
+	Wed,  6 Oct 2021 22:47:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GJQt6LlUkj20; Wed,  6 Oct 2021 21:38:43 +0000 (UTC)
+	with ESMTP id oiSt3ckMvsLR; Wed,  6 Oct 2021 22:47:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B23F560F5E;
-	Wed,  6 Oct 2021 21:38:42 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B88CD1BF2A1
- for <buildroot@lists.busybox.net>; Wed,  6 Oct 2021 21:37:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9584160F52;
+	Wed,  6 Oct 2021 22:47:31 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 433B11BF34E
+ for <buildroot@lists.busybox.net>; Wed,  6 Oct 2021 22:47:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A748840802
- for <buildroot@lists.busybox.net>; Wed,  6 Oct 2021 21:37:48 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 31D3B4094F
+ for <buildroot@lists.busybox.net>; Wed,  6 Oct 2021 22:47:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=gmx.net
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HF1p5rTn821Z for <buildroot@lists.busybox.net>;
- Wed,  6 Oct 2021 21:37:46 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
- by smtp2.osuosl.org (Postfix) with ESMTPS id DB29940801
- for <buildroot@buildroot.org>; Wed,  6 Oct 2021 21:37:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
- s=badeba3b8450; t=1633556251;
- bh=ab/kwb15QywIvnA/6u+4gNSEPGMJhD/VB9oIS7+ordg=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
- b=NHDXEfLTznVL0BEhc2Kl7UJ41P2N+gf96rKIpM5x4hlqwYBK934oQ/fVke95uvGp7
- yKuJHsy9Txd1OIYnVYA4CseQFBrpXjIjE7sMTNjKg4jsTgdxnmx25Lx5g/8HgEaLqF
- sAVH7hKe2liStgbgUtvcziStqS8KOOlDDiRjahNw=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from localhost.fritz.box ([62.216.209.251]) by mail.gmx.net
- (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 1Mwwdl-1mj9bl3i15-00yQtX; Wed, 06 Oct 2021 23:37:31 +0200
-From: Peter Seiderer <ps.report@gmx.net>
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JwvMap93o45O for <buildroot@lists.busybox.net>;
+ Wed,  6 Oct 2021 22:47:29 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com
+ [IPv6:2607:f8b0:4864:20::d33])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0FB074094E
+ for <buildroot@buildroot.org>; Wed,  6 Oct 2021 22:47:28 +0000 (UTC)
+Received: by mail-io1-xd33.google.com with SMTP id e144so4630931iof.3
+ for <buildroot@buildroot.org>; Wed, 06 Oct 2021 15:47:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=lWPoo/hKQ0DiUEwZPKcyBLa+AdKm+a6YRFuqoqu2ncM=;
+ b=NWUBFlSAH1L6qOGIMNMggtySZUbHFFPX5ozvifDvw7kmhTceQxXEXlB7jgsXE6WCvL
+ /eA39XjuWWDiYenWGl2jy+W2vuhh7kb5UsYQnJ3Ej0SpvyDRnzjtynfz1rDtrnPsQZjv
+ a9ICty6josfgtRrpg144cXIS7JWmQeNwBzL6WKsigmcjTpokwtBUBOrQl+3I8CsFwHHv
+ aCH77uUIptpJcqqb2VaGL46X+krRbbP6gFweTspzsHKB75WKESQSkE4pw1Ku7ieEizqz
+ FBzNi3vrdUuwNQoovQj+j8pMYHha4Tj8r6NkqZ1al2tRXzphUaGh2QCzAA0qO+8y/8k3
+ Yx8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=lWPoo/hKQ0DiUEwZPKcyBLa+AdKm+a6YRFuqoqu2ncM=;
+ b=Po8a69iZK1//NoUOMK+RkXF9qnCPoLHAWdkI50riO/vo4yxA1D4Pzh69nYQYrQk7FG
+ EETZcgF+cs5J6bC2witU7zAvOfDZYfFmlhyFFXoKxMoXjYRsB1MGjqPCPgHM0mgsSOlQ
+ q2e5PTd26+UrQ2rCpEeFxWJ8kUbO78Dvuf2p/VrD8ISKm+JYwYqcP0aSgbvS1Z4gBRxV
+ PWeLDfsE/xq3DpDURYnwhdZp8p3NwWUd6qSfarMx2R1NOolHFuknqJTb+fezG1fbpjJv
+ cHogdi/ujSLAOc/nsndKeDoOAYdgJU1AlzU7ghS9N8fkmrGBebGnSlEWeX86k7I1hgXo
+ A7nQ==
+X-Gm-Message-State: AOAM532Re2orZAjrgXgBRZcwfnXdzJmyGj9YY8hWvkpirgYHAkhkpyhw
+ sTuFjT/jbq5SnL4GQa8vwqpjl7xFHfE=
+X-Google-Smtp-Source: ABdhPJyReYb0knRtiRqMfhEuPjm3RRTQrviVMub783nfNKy3vC9zHtOxC6BMJ+UBz/yFNsxkPjXAMQ==
+X-Received: by 2002:a02:b0de:: with SMTP id w30mr316119jah.0.1633560448074;
+ Wed, 06 Oct 2021 15:47:28 -0700 (PDT)
+Received: from james-x399.localdomain (97-118-169-148.hlrn.qwest.net.
+ [97.118.169.148])
+ by smtp.gmail.com with ESMTPSA id s5sm12963002ilq.59.2021.10.06.15.47.27
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 06 Oct 2021 15:47:27 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed,  6 Oct 2021 23:37:28 +0200
-Message-Id: <20211006213728.1069-5-ps.report@gmx.net>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211006213728.1069-1-ps.report@gmx.net>
-References: <20211006213728.1069-1-ps.report@gmx.net>
+Date: Wed,  6 Oct 2021 16:47:26 -0600
+Message-Id: <20211006224726.3184241-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:x6GNwT7N9Ueo893kwuoD50IVfMo2MkGXJKp8TSvqGnb15Akbxee
- NipWVz27KwS5vRdiMLiLW/4pdJi7rcmt3dWeJ4w8MICHu6fEk6nAUxtgBeaWskRO2dO2UBa
- fJfam3SpqCaOfslhrgX9kgPNaibZySKcuQkYeUZr7xTAjkU5534M431HE0VpuwTZe2vjade
- jBBjDW0+WZMNae+NIXmMw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:odU4BsAPOsk=:dFDD9aTHavwsUkLSrnRlIz
- 7AhKhDdfXiAM2bANRdCZ8o09GCAVKLCxE/yVj2fGbjq1+vC9winIjsaHC2nn4jpEEj74J+iRw
- l98knHxJCji2mL0GakzpNj9GVDP5RIBbLrPE+kHvLjBwU/EkZjn0uFxIRryODdJMDAZBf+vZy
- z5ENh20UIVPSnx0p7apsse3uFeksiBrXq0IkCces1OUUiZOfLq3aQtGBlJ+CGi5A5uFfm9zOY
- WkebvmJ+cbPnr5CYlAbOvGHlSl2EiMgIj1p4zE29uNzjkhGQ2wFMdh14H3osQwkYzmgUGhmcv
- /5fpTu40m+4QDEGtEYQSDIPKW+wWnStjQmldGVtzTrSs6vynCUwXdYGx9ZfkEFTqYq6lELJby
- F/TZqPYHINFYPW1LJMh9QgjhR6fttR0/omAIbwgRkhJLQlvJNyXp41w64BHmc3RSMTBqJXUvK
- JuJTWMOVTw03ftYs2uuCCUdsyg55gpKzgq6qA1v5gX5aK87ofbcXhTv9hmXp2NhbqCR3uIcGs
- 2NS3fi99orJCICKTB8srvz/dY44w/jgizsavNVS9uoAYkRk8jYWa2thT8783G6RYH0NKvWM/c
- 8nJcCLZDBXdOM+aQWAaVnGmpeoj9mBGMY8UP+rCDAGTwxRuCEk7WM1L4WGPwOZNgdveKrEYNJ
- pfxZSkon6Oe0iyMt6Zckx2GtqWaGkiA3O5JDBnQtWlc2lrLDDxHtOkjbXJ09nosBelVB7QnOG
- q4tcx++eWp8Y1mhQzN1dn50FPvhMe5dSqh8SdOcS4LlfgIcxOMCD0ffz3h8VzvkPUnMtLtvWg
- J4NpaRPR6j97fyiA9WirryqaiXQZkPsygO9AsaSHI+I8B80S2dcR9Bs+cGzZ1t6Mrfqqo66+U
- 9YFE5aKkLcoUbEgpRsAeM+ejU8DL01QYEtQ3DV3CqZLqI2uDLYi+oEGRuZS/ZrnTVTg0LXPwo
- FsRlyUmJPKBrD8sHKTBIUe9kM+kMh+7N/WmGYEUmUECJbK/ZDojW4TPHepKjd0NkS5XfN2SJ0
- UeEbl+nC1UJ0rK4oH1SRUyb0CwSvLOeNyY9UC/JuRVjVfsftZ7i/9SRE/CCP+BZrZT7kvP+07
- FJBL2wi6/f9LzY=
-Subject: [Buildroot] [PATCH v2 5/5] package/rpi-wifi-firmware: bump version
- to 883b726
+Subject: [Buildroot] [PATCH 1/1] package/gensio: bump to version 2.2.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,49 +91,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Vincent Fazio <vfazio@xes-inc.com>,
- Arthur Courtel <arthur.courtel@smile.fr>,
- Mahyar Koshkouei <mahyar.koshkouei@gmail.com>,
- Martin Bark <martin@barkynet.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changelog:
-  - Update CYW43455 bluetooth firmware,
-    Second Spectra fix for CYW43455 (CVE-2020-10370)
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/rpi-wifi-firmware/rpi-wifi-firmware.hash | 2 +-
- package/rpi-wifi-firmware/rpi-wifi-firmware.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/gensio/gensio.hash | 6 +++---
+ package/gensio/gensio.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/rpi-wifi-firmware/rpi-wifi-firmware.hash b/package/rpi-wifi-firmware/rpi-wifi-firmware.hash
-index 4db3e15c80..3bd62306eb 100644
---- a/package/rpi-wifi-firmware/rpi-wifi-firmware.hash
-+++ b/package/rpi-wifi-firmware/rpi-wifi-firmware.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  ae665baa465a09dddf7f4bdec67e108a74b2a3787550cc9ee53c2bea9651f327  rpi-wifi-firmware-4c47758bed7cd547dff3618a1739dcf64b5a52a7.tar.gz
-+sha256  0e7fcfe75a8990815a184dc55f8fdf5d0644d351a15a7aef865ff90ff4ca8eb4  rpi-wifi-firmware-883b72628de1d7efa45b421da0cbf175ac2374f8.tar.gz
- sha256  b16056fc91b82a0e3e8de8f86c2dac98201aa9dc3cbd33e8d38f1b087fcec30d  LICENCE.broadcom_bcm43xx
-diff --git a/package/rpi-wifi-firmware/rpi-wifi-firmware.mk b/package/rpi-wifi-firmware/rpi-wifi-firmware.mk
-index a643c4df9c..28926ff4f0 100644
---- a/package/rpi-wifi-firmware/rpi-wifi-firmware.mk
-+++ b/package/rpi-wifi-firmware/rpi-wifi-firmware.mk
+diff --git a/package/gensio/gensio.hash b/package/gensio/gensio.hash
+index 94f964faad..930a2fff81 100644
+--- a/package/gensio/gensio.hash
++++ b/package/gensio/gensio.hash
+@@ -1,7 +1,7 @@
+ # From https://sourceforge.net/projects/ser2net/files/ser2net/
+-md5  0adab57c4fbb55a280595f6541f202da  gensio-2.2.8.tar.gz
+-sha1  3030b398eef379579680240d0c732d88fdad72a8  gensio-2.2.8.tar.gz
++md5  45cd3a4d9058816e50351b0700a035ad  gensio-2.2.9.tar.gz
++sha1  4bb34517931f5be4dc5982f6e7a567cf6fdc41b8  gensio-2.2.9.tar.gz
+ # Locally computed:
+-sha256  d495bfdacd30e8fe3879b29baab034eb553e606dbf145243989c97e83ad83115  gensio-2.2.8.tar.gz
++sha256  3609f66e61c98cce181ec1b37508b727b636d7cfffdb6edd4c254d2f6097a000  gensio-2.2.9.tar.gz
+ sha256  501f3108e6c03e5a0a5585ebaaa369171aead5319cd0a7a4dc1f66211c1f09f1  COPYING
+ sha256  dcac7d447dd81ab96d28dce00a07a6486e623f7ded94e2a2a8e83312405cdf89  COPYING.LIB
+diff --git a/package/gensio/gensio.mk b/package/gensio/gensio.mk
+index 9163c6a37b..ad6c39b6fa 100644
+--- a/package/gensio/gensio.mk
++++ b/package/gensio/gensio.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RPI_WIFI_FIRMWARE_VERSION = 4c47758bed7cd547dff3618a1739dcf64b5a52a7
-+RPI_WIFI_FIRMWARE_VERSION = 883b72628de1d7efa45b421da0cbf175ac2374f8
- RPI_WIFI_FIRMWARE_SITE = $(call github,LibreELEC,brcmfmac_sdio-firmware-rpi,$(RPI_WIFI_FIRMWARE_VERSION))
- RPI_WIFI_FIRMWARE_LICENSE = PROPRIETARY
- RPI_WIFI_FIRMWARE_LICENSE_FILES = LICENCE.broadcom_bcm43xx
+-GENSIO_VERSION = 2.2.8
++GENSIO_VERSION = 2.2.9
+ GENSIO_SITE = http://downloads.sourceforge.net/project/ser2net/ser2net
+ GENSIO_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (tools)
+ GENSIO_LICENSE_FILES = COPYING.LIB COPYING
 -- 
-2.33.0
+2.25.1
 
 _______________________________________________
 buildroot mailing list
