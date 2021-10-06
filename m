@@ -2,86 +2,87 @@ Return-Path: <SRS0=BIUF=O2=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DD1D9C433F5
-	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 23:39:47 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 68FAEC433F5
+	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 23:39:59 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 4263E610CC
-	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 23:39:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4263E610CC
+	by mail.kernel.org (Postfix) with ESMTPS id 01B33610A2
+	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 23:39:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 01B33610A2
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 09B7540901;
-	Wed,  6 Oct 2021 23:39:47 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C8FA740A3C;
+	Wed,  6 Oct 2021 23:39:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id r0lprCCq4AQc; Wed,  6 Oct 2021 23:39:46 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 4_Z9XORge81n; Wed,  6 Oct 2021 23:39:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5458240911;
-	Wed,  6 Oct 2021 23:39:45 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5A9161BF30B
- for <buildroot@lists.busybox.net>; Wed,  6 Oct 2021 23:39:35 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A9764403A1;
+	Wed,  6 Oct 2021 23:39:56 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 7EE641BF30B
+ for <buildroot@lists.busybox.net>; Wed,  6 Oct 2021 23:39:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5712260753
- for <buildroot@lists.busybox.net>; Wed,  6 Oct 2021 23:39:35 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6F4A1840E0
+ for <buildroot@lists.busybox.net>; Wed,  6 Oct 2021 23:39:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id reayACMWgtc9 for <buildroot@lists.busybox.net>;
- Wed,  6 Oct 2021 23:39:34 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bSgoVUHMXT9h for <buildroot@lists.busybox.net>;
+ Wed,  6 Oct 2021 23:39:37 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com
- [IPv6:2607:f8b0:4864:20::d31])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 62C816071B
- for <buildroot@buildroot.org>; Wed,  6 Oct 2021 23:39:34 +0000 (UTC)
-Received: by mail-io1-xd31.google.com with SMTP id m20so3987185iol.4
- for <buildroot@buildroot.org>; Wed, 06 Oct 2021 16:39:34 -0700 (PDT)
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com
+ [IPv6:2607:f8b0:4864:20::d34])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 81350840DF
+ for <buildroot@buildroot.org>; Wed,  6 Oct 2021 23:39:37 +0000 (UTC)
+Received: by mail-io1-xd34.google.com with SMTP id e144so4739795iof.3
+ for <buildroot@buildroot.org>; Wed, 06 Oct 2021 16:39:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=fnFWDhp1YQlNOgdurR+63X8WASenOyyhtc5kFU18DCE=;
- b=Ax5PdlzAPyitJVqwBMVP4O6e18fb349Vd6HjBLi5NAIOSgjd24BGwjd/evxgNE2yqr
- CCGjAgroE3rdKSSH68cdaWi17T2st2Bv5pfuLMqNHWjvcdkbsS5KkgLAgcE406OMW2Ex
- 68UwZSgagkQNDi0eSFMbtrYvk0lG8gx0F3N5ybP8gabZ3VrqScYPeTDpn8AIZnIeT/Tc
- /lnuB3u3HJXLfE6R1qLtAUXfO21ux2+WBwvWsKkOLxatuPmfqVH5Bdr0K8mriqPwCN7o
- 1g1PlxUnSvIy1RKF0Dgrlkb0t2tZkfpaPIzlI+PVA6l4xtEdmcYBxFi1niqcJzufuH07
- L9Xg==
+ bh=yUFv6z0bVQtCzxHRGp0rUVoFUVN0mmoD8MwizveIRgM=;
+ b=nUbWJCuR6V4+c0UQSNr20hRvgWjDhVK8WCSMD3WSF/UJXKGyk9U4HPCkdH5OoWEQTH
+ MHasmDnDVQBY+IvhRqV2zDhgMLMkg6Y6J31ajwjdyhQq7a5yr2WrrA3CTWxIfPXE5d+Y
+ H8m58V7gZhPD/4aMbw6T9rfOgv5PIe4P6kOOIFr4WTOs4xgIAGy3yVd8rPP0hiiDVZrK
+ ZHBrze4OqRe6Sg+wciNtFQFAFHa9cAHHpUe192w8cnATGKrNJunmkpBKazI7v8dotwOb
+ MOy+DAi1lHSHdDdSq/s1fV/sboptV3qRfjAgzFsYE+4bYj5xXMkCDNKnDJ4D0hjCVRF/
+ thvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
  :references:mime-version:content-transfer-encoding;
- bh=fnFWDhp1YQlNOgdurR+63X8WASenOyyhtc5kFU18DCE=;
- b=1/CQV53W/m6WtAxUquiB80mMvVLaylKQM0OiuBAjLoox0p+8W8pAIi5R4HpEd0uDPm
- 2zFbmo2ej9tH+kKd569WMYoXgp21SypB2j/7/VjzPXJ9PF10hhZ7TVmqJhsd5aVNg9YF
- Yac/YJ/ceiIfAWZ7BQkjUHqJk61q1qlVOUkvbebYFP6Z4BNVGu0MO0PWCuslI3Zu3iQw
- nIbxb7qGpvw+1aypoSdmsc6T/oQKtqUnbaCQUb//qaMuUdZIGJZntFfhlFGx9c83kLAP
- CdrZXVZ5h++Za8hcD+8xlnEmoIcmEEW1eu2q9WVvQVc86VVCZaNkYs5oyrGYcCg7Ved7
- HOGg==
-X-Gm-Message-State: AOAM530zMMgb09URwffzf3bmNa33MYr10ZPYKm0wB4nN7I2ejvTUI/Q1
- OzaTNj90kgAVsliDWtNVNyMVowT7fx4=
-X-Google-Smtp-Source: ABdhPJxFbPzb65+THiVEUh0diLHJjaIhYKCxdpwkiGXoe+SCnhU8kPeAW3apgZ/D+MqksppkIwW0UA==
-X-Received: by 2002:a02:3b5e:: with SMTP id i30mr426577jaf.127.1633563572322; 
- Wed, 06 Oct 2021 16:39:32 -0700 (PDT)
+ bh=yUFv6z0bVQtCzxHRGp0rUVoFUVN0mmoD8MwizveIRgM=;
+ b=dzwwfSjU8NXUnyEOYZTP3lf2fduBWIgKLQNPkuMg0qCkftIas0gF/c4zR83hLOs4m9
+ /V2Ge7EiMIX1J6iykPaJWDdVS05VYXrtq+JCJkBhm4Hv+a2EueEzVtlcUnCopA7f/xCM
+ ksBU37nsgL1QdBGN1dozsEAnU4mpJ2e6rnmcAxxwD1d1E/A2mud9mm0GyqMx70pWnzlF
+ /zLHpjx/6iRPPmCux+B8r4sR73XoUpiNdyJDiPUHoXKPw+hsV//4ZQwjasPMLKO9uodU
+ aaMWtAsVHc+QeRqnaaOIBTTV2tagsagP19QXhuMNRLWRauCUrr1D3jDEvXyJUOoxSu+j
+ rNIw==
+X-Gm-Message-State: AOAM533V+5cGfLs8rxE2tVBhIgRBR854hxFzTYfHjqb6KZSsdCmn1N6U
+ 8yg/QscMgRutKDsRKIanQBOxx8QJ5Iw=
+X-Google-Smtp-Source: ABdhPJwD19VjGmt/eD35O0IALyow1M7djb3VCcZvfglOURtIN22xRnKpvB+Zmi7spthACr41EadT5g==
+X-Received: by 2002:a02:c85a:: with SMTP id r26mr450548jao.116.1633563576473; 
+ Wed, 06 Oct 2021 16:39:36 -0700 (PDT)
 Received: from james-x399.localdomain (97-118-169-148.hlrn.qwest.net.
  [97.118.169.148])
- by smtp.gmail.com with ESMTPSA id o3sm12400335iou.11.2021.10.06.16.39.31
+ by smtp.gmail.com with ESMTPSA id o3sm12400335iou.11.2021.10.06.16.39.35
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 06 Oct 2021 16:39:32 -0700 (PDT)
+ Wed, 06 Oct 2021 16:39:36 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed,  6 Oct 2021 17:39:22 -0600
-Message-Id: <20211006233923.3225201-2-james.hilliard1@gmail.com>
+Date: Wed,  6 Oct 2021 17:39:23 -0600
+Message-Id: <20211006233923.3225201-3-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211006233923.3225201-1-james.hilliard1@gmail.com>
 References: <20211006233923.3225201-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 2/3] package/python-bidict: new package
+Subject: [Buildroot] [PATCH 3/3] package/python-socketio: bump to version
+ 5.4.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,73 +102,70 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Remove six dependency which is no longer required.
+
+Add new bidict dependency.
+
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/Config.in                        |  1 +
- package/python-bidict/Config.in          |  7 +++++++
- package/python-bidict/python-bidict.hash |  5 +++++
- package/python-bidict/python-bidict.mk   | 14 ++++++++++++++
- 4 files changed, 27 insertions(+)
- create mode 100644 package/python-bidict/Config.in
- create mode 100644 package/python-bidict/python-bidict.hash
- create mode 100644 package/python-bidict/python-bidict.mk
+ package/python-socketio/Config.in            |  2 +-
+ package/python-socketio/python-socketio.hash |  6 +++---
+ package/python-socketio/python-socketio.mk   | 14 ++------------
+ 3 files changed, 6 insertions(+), 16 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 2f83c87582..91afefbb06 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -925,6 +925,7 @@ menu "External python modules"
- 	source "package/python-backports-ssl-match-hostname/Config.in"
- 	source "package/python-bcrypt/Config.in"
- 	source "package/python-beautifulsoup4/Config.in"
-+	source "package/python-bidict/Config.in"
- 	source "package/python-bitstring/Config.in"
- 	source "package/python-bleak/Config.in"
- 	source "package/python-bluezero/Config.in"
-diff --git a/package/python-bidict/Config.in b/package/python-bidict/Config.in
-new file mode 100644
-index 0000000000..adbfda69b8
---- /dev/null
-+++ b/package/python-bidict/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_BIDICT
-+	bool "python-bidict"
-+	depends on BR2_PACKAGE_PYTHON3
-+	help
-+	  The bidirectional mapping library for Python.
-+
-+	  https://bidict.readthedocs.io
-diff --git a/package/python-bidict/python-bidict.hash b/package/python-bidict/python-bidict.hash
-new file mode 100644
-index 0000000000..59229f96d9
---- /dev/null
-+++ b/package/python-bidict/python-bidict.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/bidict/json
-+md5  d9342771969dd0d42092a669ed6f3241  bidict-0.21.3.tar.gz
-+sha256  d50bd81fae75e34198ffc94979a0eb0939ff9adb3ef32bcc93a913d8b3e3ed1d  bidict-0.21.3.tar.gz
-+# Locally computed sha256 checksums
-+sha256  1f256ecad192880510e84ad60474eab7589218784b9a50bc7ceee34c2b91f1d5  LICENSE
-diff --git a/package/python-bidict/python-bidict.mk b/package/python-bidict/python-bidict.mk
-new file mode 100644
-index 0000000000..bff10e4a82
---- /dev/null
-+++ b/package/python-bidict/python-bidict.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-bidict
-+#
-+################################################################################
-+
-+PYTHON_BIDICT_VERSION = 0.21.3
-+PYTHON_BIDICT_SOURCE = bidict-$(PYTHON_BIDICT_VERSION).tar.gz
-+PYTHON_BIDICT_SITE = https://files.pythonhosted.org/packages/3f/81/7221b28d692af5c5fc180c4850b8e4a48c7db92b3d529b430488f67db74f
-+PYTHON_BIDICT_SETUP_TYPE = setuptools
-+PYTHON_BIDICT_LICENSE = Mozilla Public License 2.0 (MPL 2.0)
-+PYTHON_BIDICT_LICENSE_FILES = LICENSE
-+
-+$(eval $(python-package))
+diff --git a/package/python-socketio/Config.in b/package/python-socketio/Config.in
+index 096e75a623..89d23b6ddf 100644
+--- a/package/python-socketio/Config.in
++++ b/package/python-socketio/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_PYTHON_SOCKETIO
+ 	bool "python-socketio"
+ 	depends on BR2_PACKAGE_PYTHON3
+-	select BR2_PACKAGE_PYTHON_SIX # runtime
++	select BR2_PACKAGE_PYTHON_BIDICT # runtime
+ 	select BR2_PACKAGE_PYTHON_ENGINEIO # runtime
+ 	help
+ 	  Socket.IO server.
+diff --git a/package/python-socketio/python-socketio.hash b/package/python-socketio/python-socketio.hash
+index d0d8a87dcf..40e74cef96 100644
+--- a/package/python-socketio/python-socketio.hash
++++ b/package/python-socketio/python-socketio.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/python-socketio/json
+-md5	86cd47dddea1785ce7a6c72f55c93fe7  python-socketio-4.3.1.tar.gz
+-sha256	506b2cf7a520b40ea0b3f25e1272eff8de134dce6f471c1f6bc0de8c90fe8c57  python-socketio-4.3.1.tar.gz
++md5  0507825ca4bd6527cbaed81ec5767bfe  python-socketio-5.4.0.tar.gz
++sha256  ca807c9e1f168e96dea412d64dd834fb47c470d27fd83da0504aa4b248ba2544  python-socketio-5.4.0.tar.gz
+ # Locally computed sha256 checksums
+-sha256	c9e97d3dbc1fbbcdb4f7808b282cd646db887aff4f5313fe6bbe8d4c31405a9c  LICENSE
++sha256  c9e97d3dbc1fbbcdb4f7808b282cd646db887aff4f5313fe6bbe8d4c31405a9c  LICENSE
+diff --git a/package/python-socketio/python-socketio.mk b/package/python-socketio/python-socketio.mk
+index 73dab26f3c..f23342b776 100644
+--- a/package/python-socketio/python-socketio.mk
++++ b/package/python-socketio/python-socketio.mk
+@@ -4,20 +4,10 @@
+ #
+ ################################################################################
+ 
+-PYTHON_SOCKETIO_VERSION = 4.3.1
+-PYTHON_SOCKETIO_SITE = https://files.pythonhosted.org/packages/36/87/e9128a4da04df991fbdb01f44dc4d6dd8f6c03bfd4d1f42dcd6779fd975a
++PYTHON_SOCKETIO_VERSION = 5.4.0
++PYTHON_SOCKETIO_SITE = https://files.pythonhosted.org/packages/72/70/9b992f4b8adfcbf0724c079c18629d83f20b36fb0eb64d4fdf874054becf
+ PYTHON_SOCKETIO_SETUP_TYPE = setuptools
+ PYTHON_SOCKETIO_LICENSE = MIT
+ PYTHON_SOCKETIO_LICENSE_FILES = LICENSE
+ 
+-ifeq ($(BR2_PACKAGE_PYTHON),y)
+-# only needed/valid for python 3.x
+-define PYTHON_SOCKETIO_RM_PY3_FILES
+-	rm -f $(TARGET_DIR)/usr/lib/python*/site-packages/socketio/asgi.py \
+-		$(TARGET_DIR)/usr/lib/python*/site-packages/socketio/asyncio_*.py
+-endef
+-
+-PYTHON_SOCKETIO_POST_INSTALL_TARGET_HOOKS += PYTHON_SOCKETIO_RM_PY3_FILES
+-endif
+-
+ $(eval $(python-package))
 -- 
 2.25.1
 
