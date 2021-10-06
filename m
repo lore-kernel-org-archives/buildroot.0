@@ -2,95 +2,83 @@ Return-Path: <SRS0=BIUF=O2=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 95CBEC433FE
-	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 20:57:29 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B8E1C433F5
+	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 21:37:51 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id DCC4B61152
-	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 20:57:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org DCC4B61152
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
+	by mail.kernel.org (Postfix) with ESMTPS id EBFCA611C6
+	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 21:37:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org EBFCA611C6
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmx.net
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A5FEB60675;
-	Wed,  6 Oct 2021 20:57:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8FFF084153;
+	Wed,  6 Oct 2021 21:37:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zFT0-Zrp5nFx; Wed,  6 Oct 2021 20:57:27 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id uYXud7XN0rzS; Wed,  6 Oct 2021 21:37:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4AD19606A5;
-	Wed,  6 Oct 2021 20:57:26 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 121DB1BF34F
- for <buildroot@lists.busybox.net>; Wed,  6 Oct 2021 20:57:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BB8388418F;
+	Wed,  6 Oct 2021 21:37:48 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 444711BF2A1
+ for <buildroot@lists.busybox.net>; Wed,  6 Oct 2021 21:37:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 08C8E40924
- for <buildroot@lists.busybox.net>; Wed,  6 Oct 2021 20:57:25 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3FEF860F53
+ for <buildroot@lists.busybox.net>; Wed,  6 Oct 2021 21:37:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ron52JbJWuM2 for <buildroot@lists.busybox.net>;
- Wed,  6 Oct 2021 20:57:24 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com
- [IPv6:2a00:1450:4864:20::52a])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C88AD4074D
- for <buildroot@buildroot.org>; Wed,  6 Oct 2021 20:57:23 +0000 (UTC)
-Received: by mail-ed1-x52a.google.com with SMTP id p13so15134815edw.0
- for <buildroot@buildroot.org>; Wed, 06 Oct 2021 13:57:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=MkM2lR3LOFBtrpC/uTC5wMTdNjtaqwG6SOSgKsnVVcw=;
- b=XYXsEswLYHkS93bc8M0DLaWe2yy8DV3cJbNKMzNVLrGLSgjyZYzn1QWYlfUaD8zetl
- xF1FrfAVdja7ZsfXyOrsc93AXIPkQzxmOzjUA+3gaVzD50pge/vVUORW8mSwy0fHLIKF
- 17wSMv868tLmQZFt8UTLj1P9bzrlh7RMU+o9m0jwzLZxz7ejHdpj0Ohm/P20Hneokr91
- 99uCh5P57VUpz24N2x+1ggE4tbUtUuZVUxyqkr8vne8wPqg/Lus1IYUd6SpMtFzEjwsL
- RHmGrsuu7l8I2fOOtz2h9DdEvwb90pfrdfIKWxGYhUiTQWwTp5thaDbu+egXvw9w8nCt
- d8Xg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=MkM2lR3LOFBtrpC/uTC5wMTdNjtaqwG6SOSgKsnVVcw=;
- b=DsKtZ00dZoSizoJtiDGeu2MVF9umZ1gZLZJE1vzkfIzQSgsjWpd1xdHrsQWjfUz8vZ
- dCXe+AN5m4x3haBA/ItcIj/3nfHXOrSrTOXDWzr80rbsCHBnbLwJwgVlEI/1WKm6/XBf
- E8GD8OkbG6lmnKVn/InX7QEIQnXQhhQ/E69h6fVmvST/NzI5a2ATHo6o6FmeOs2gxM7g
- YDybeAYE9hV1739ujJPFjJTZcNlyFxufJD82avxu0KaBJre20RB3fnKGEMCZkk9QLU6a
- LIo9Hmh4MUQhpEVSTDZPeWmOZWFJtHdqITnv3pGZ6XgqLKfHr7Ornzrz7DzHliPUstRP
- KGSQ==
-X-Gm-Message-State: AOAM5333jDydiyyPGvzT/3RX86sywR4DnV1Y/Lwktnx4V9CTfX/+lPk2
- Dzv9yf9PEuYBh4GfUDDgQgG3rg==
-X-Google-Smtp-Source: ABdhPJyZolu6+ueijcDGmaOf/OK2QNGazSVG1PRjLRwC+h1lb1LcyTU8K0XfdWKOpRisrRfLqEw03A==
-X-Received: by 2002:a05:6402:1b92:: with SMTP id
- cc18mr624632edb.31.1633553841821; 
- Wed, 06 Oct 2021 13:57:21 -0700 (PDT)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
- (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id c6sm2621053ejb.41.2021.10.06.13.57.20
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 06 Oct 2021 13:57:21 -0700 (PDT)
-Message-ID: <2f76c008-c7e9-3cc3-e381-5fd413670d9f@mind.be>
-Date: Wed, 6 Oct 2021 22:57:20 +0200
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (1024-bit key) header.d=gmx.net
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TPFvvKWBxWlM for <buildroot@lists.busybox.net>;
+ Wed,  6 Oct 2021 21:37:46 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 848C3606A5
+ for <buildroot@buildroot.org>; Wed,  6 Oct 2021 21:37:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+ s=badeba3b8450; t=1633556249;
+ bh=8SonxDq9GNLXa4mbWNumA0tcoqgFZ44Gm7ZmkWn53V4=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+ b=eDm9s2m4I6cDeT/rFAGfyLAAde2ZrPlpZDA2sBJBB6lxVbGDc1DtQnw7dQ69U8frp
+ iiMXDS0yyrAHrphjC1zx5WpUjx4tYwp4moklQ4Roi1CP7jSOY/shP9uHBPuYq9JiDl
+ a6l2enc2hvSBtTG48MkMN0TmN6EkPT4R6D4kG6qk=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from localhost.fritz.box ([62.216.209.251]) by mail.gmx.net
+ (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
+ 1M6Ue3-1mRts81Jmr-006shd; Wed, 06 Oct 2021 23:37:29 +0200
+From: Peter Seiderer <ps.report@gmx.net>
+To: buildroot@buildroot.org
+Date: Wed,  6 Oct 2021 23:37:24 +0200
+Message-Id: <20211006213728.1069-1-ps.report@gmx.net>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.1.0
-Content-Language: en-GB
-To: Peter Seiderer <ps.report@gmx.net>, Takumi Takahashi <takumiiinn@gmail.com>
-References: <20211003175446.3076312-1-takumiiinn@gmail.com>
- <20211006190922.5baf43b9@gmx.net>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <20211006190922.5baf43b9@gmx.net>
-Subject: Re: [Buildroot] [PATCH 1/1] package/rpi-firmware: Support Device
- Tree Overlay
+X-Provags-ID: V03:K1:oLtSDWPiJ6R/QbGEDUDSupzaT4wuhNM4xVRDHfILVom2ehalOgE
+ GUukXMdl4yVPvexf6rxB9WNngn2Q/D3LvikXvvesWBy/m00B843mhcKGSXJv1cAMv/QWx+G
+ YXqB5CfzflpUNi/oxuRGFuAvhGuvvs0CWD+XImR3ywU7Mtm5tL6b6bje3wRtGP+4G6ByR+b
+ 4eRPpQeuJSo/jIeM+1bEw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:8gbvjNd19/E=:Wmbo3mkhavzCF/gLTVNYhp
+ Ke+2SuMPvo3V1zbgOBYbzoQg28j/AhS/tOCfIYiDhDaZhoBpn/R8HTDhfOaHUQYF+6KEb8r/N
+ J7EogaAG/y08tLXCDVP2ZQ/Ri58vISd7Zn1oJADUbV/QCRkL4PadYhhwPJzpjLpUK/A5Jn41C
+ gMv9MtJgE9i5qS68ku81em2nouBoxlyY7P+KXxIsohPJUNO78bLtoFS5klgNXyzadMCThE6BS
+ HZOERAopo8QBkIoWZWpDqCHIzk4oamdCG173yCGpqS/8GtqCLY/KLNeybbkSlO7QiUzu42ED1
+ xyKFJsJunj/a765jqpjrnzCxuOGw9WwtOh8GQHg1JUNTixB2jHi3JraYCB3w6PsDE6OIo4XDn
+ jfS/qyohLq7HmK4yFejyoxTapE6EVPifyKXqDBCdYgVC5i5uMO+hUm8jybpJoTlLAJOBa097s
+ trY8MSQhHnMKnxq/5UKiwFpjsLUnWlZ1VvBHVwmXwzy31lq0wsAT7yWXrsAphMKwbn/0ggKRE
+ V9zSZmvQEq8Dn8pDphLgNlGmhnAuzdR/JMs75y69P//o75z/fQEzZ6REzJ2uAxt0+DLvps+37
+ L8YnfM1uWrklPjljY3EA33JeA7ppt53h9aOLfTJWdNzqMfhGw3WayN/qCvXRg6sDnh2Sv/a0O
+ vDjDhtFAtSbUA/m6pq647tknW+NWFPRCH41QfiA8LxO4bbaabG7Vh47uw9qdH4gx3ZiNdRIoI
+ dOLgcpR6lUXnsc0Hlq1TjrxEVDLiFLErRutqYOykgiGX51QoiXWPkJqEuInWeyr9PaUM+IQch
+ MPZd6p1xkA03EvKmwzjRjFFcCBF12Zj4PXPOvp5ukYRaVWEa2MTqslQBZknzLa2Nag+PtOgJ6
+ Gz2uv/TKJNaHtLhxx6enRs3ID/ZOtHhunxoAe7xhUNQqM7t+Ahq24xT+xiheWT87bORA2mt6a
+ s57S5S9dnVqJGHeCE8fQchh31z9zvNqtFVebDqmstzA0Oa+cuJIsyHB6p0edShyBxS9vye3/J
+ k4JYnX1pLoKUT4mjmNobIntr6vSk22ryt+gVo/y7pTG7wJrsJIsLk4e6k3OBQeIiYzzUGMfi1
+ wtZIPKgmXgWe1k=
+Subject: [Buildroot] [PATCH v2 1/5] configs/raspberrypi*: bump kernel
+ version to 24c8b05 (5.10.63)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,101 +90,181 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org, Martin Bark <martin@barkynet.com>,
- Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
+Cc: Vincent Fazio <vfazio@xes-inc.com>,
+ Arthur Courtel <arthur.courtel@smile.fr>,
+ Mahyar Koshkouei <mahyar.koshkouei@gmail.com>,
+ Martin Bark <martin@barkynet.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Now based on 5.10.63 (from 5.10.46).
 
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+Changes v1 -> v2:
+  - update from 3e1698e to 24c8b05 (still 5.10.63)
+---
+ configs/raspberrypi0_defconfig        | 2 +-
+ configs/raspberrypi0w_defconfig       | 2 +-
+ configs/raspberrypi2_defconfig        | 2 +-
+ configs/raspberrypi3_64_defconfig     | 2 +-
+ configs/raspberrypi3_defconfig        | 2 +-
+ configs/raspberrypi3_qt5we_defconfig  | 2 +-
+ configs/raspberrypi4_64_defconfig     | 2 +-
+ configs/raspberrypi4_defconfig        | 2 +-
+ configs/raspberrypi_defconfig         | 2 +-
+ configs/raspberrypicm4io_64_defconfig | 2 +-
+ configs/raspberrypicm4io_defconfig    | 2 +-
+ 11 files changed, 11 insertions(+), 11 deletions(-)
 
-On 06/10/2021 19:09, Peter Seiderer wrote:
-> Hello Takumi,
-> 
-> thanks for suggested patch...., comment below:
-> 
-> On Mon,  4 Oct 2021 02:54:46 +0900, Takumi Takahashi <takumiiinn@gmail.com> wrote:
-> 
->> Building the Raspberry Pi GitHub official kernel repository
->> will generate a Device Tree Overlay Blob files under
->> `$(LINUX_DIR)/arch/$(KERNEL_ARCH)/boot/dts/overlays`.
->>
->> This commit changes to install the Device Tree Overlay Blob file
->> generated during kernel build under the following conditions:
->>
->> - `$(BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS)`
->>    - `n`
->> - `$(BR2_LINUX_KERNEL_DTB_OVERLAY_SUPPORT)`
->>    - `y`
->>
->> Signed-off-by: Takumi Takahashi <takumiiinn@gmail.com>
->> ---
->>   package/rpi-firmware/rpi-firmware.mk | 10 ++++++++++
->>   1 file changed, 10 insertions(+)
->>
->> diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
->> index 181650fa08..39962b3d70 100644
->> --- a/package/rpi-firmware/rpi-firmware.mk
->> +++ b/package/rpi-firmware/rpi-firmware.mk
->> @@ -30,6 +30,16 @@ else
->>   define RPI_FIRMWARE_INSTALL_DTB_OVERLAYS
->>   	$(INSTALL) -d $(BINARIES_DIR)/rpi-firmware/overlays
->>   endef
->> +ifeq ($(BR2_LINUX_KERNEL_DTB_OVERLAY_SUPPORT),y)
->> +# If you are using the official raspberry pi kernel, dtbo will be created under
->> +# the overlays directory, so use that.
->> +define RPI_FIRMWARE_INSTALL_KERNEL_DTB_OVERLAYS
->> +	for dtbo in $(LINUX_DIR)/arch/$(KERNEL_ARCH)/boot/dts/overlays/*.dtbo; do \
+diff --git a/configs/raspberrypi0_defconfig b/configs/raspberrypi0_defconfig
+index c17fe99c45..ffe4037db0 100644
+--- a/configs/raspberrypi0_defconfig
++++ b/configs/raspberrypi0_defconfig
+@@ -9,7 +9,7 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,4afd064509b23882268922824edc5b391a1ea55d)/linux-4afd064509b23882268922824edc5b391a1ea55d.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,24c8b0546a820222a1ebcfe606dfacb0e228c466)/linux-24c8b0546a820222a1ebcfe606dfacb0e228c466.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
+ 
+ # Build the DTBs for A/B from the kernel sources: the zero is the same
+diff --git a/configs/raspberrypi0w_defconfig b/configs/raspberrypi0w_defconfig
+index 3a5e306299..1413c275b1 100644
+--- a/configs/raspberrypi0w_defconfig
++++ b/configs/raspberrypi0w_defconfig
+@@ -9,7 +9,7 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,4afd064509b23882268922824edc5b391a1ea55d)/linux-4afd064509b23882268922824edc5b391a1ea55d.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,24c8b0546a820222a1ebcfe606dfacb0e228c466)/linux-24c8b0546a820222a1ebcfe606dfacb0e228c466.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2708-rpi-zero-w"
+diff --git a/configs/raspberrypi2_defconfig b/configs/raspberrypi2_defconfig
+index 1eee3ae37e..180dc84c41 100644
+--- a/configs/raspberrypi2_defconfig
++++ b/configs/raspberrypi2_defconfig
+@@ -12,7 +12,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,4afd064509b23882268922824edc5b391a1ea55d)/linux-4afd064509b23882268922824edc5b391a1ea55d.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,24c8b0546a820222a1ebcfe606dfacb0e228c466)/linux-24c8b0546a820222a1ebcfe606dfacb0e228c466.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
+ 
+ # Build the DTB from the kernel sources
+diff --git a/configs/raspberrypi3_64_defconfig b/configs/raspberrypi3_64_defconfig
+index 859d95314c..da43f2416e 100644
+--- a/configs/raspberrypi3_64_defconfig
++++ b/configs/raspberrypi3_64_defconfig
+@@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,4afd064509b23882268922824edc5b391a1ea55d)/linux-4afd064509b23882268922824edc5b391a1ea55d.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,24c8b0546a820222a1ebcfe606dfacb0e228c466)/linux-24c8b0546a820222a1ebcfe606dfacb0e228c466.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi3"
+ 
+ # Build the DTB from the kernel sources
+diff --git a/configs/raspberrypi3_defconfig b/configs/raspberrypi3_defconfig
+index 67ce0d5314..48db2e4941 100644
+--- a/configs/raspberrypi3_defconfig
++++ b/configs/raspberrypi3_defconfig
+@@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,4afd064509b23882268922824edc5b391a1ea55d)/linux-4afd064509b23882268922824edc5b391a1ea55d.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,24c8b0546a820222a1ebcfe606dfacb0e228c466)/linux-24c8b0546a820222a1ebcfe606dfacb0e228c466.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
+ 
+ # Build the DTB from the kernel sources
+diff --git a/configs/raspberrypi3_qt5we_defconfig b/configs/raspberrypi3_qt5we_defconfig
+index d9538dc648..051b384314 100644
+--- a/configs/raspberrypi3_qt5we_defconfig
++++ b/configs/raspberrypi3_qt5we_defconfig
+@@ -12,7 +12,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,4afd064509b23882268922824edc5b391a1ea55d)/linux-4afd064509b23882268922824edc5b391a1ea55d.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,24c8b0546a820222a1ebcfe606dfacb0e228c466)/linux-24c8b0546a820222a1ebcfe606dfacb0e228c466.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
+ 
+ # Build the DTB from the kernel sources
+diff --git a/configs/raspberrypi4_64_defconfig b/configs/raspberrypi4_64_defconfig
+index 312ec64471..d8d330ac25 100644
+--- a/configs/raspberrypi4_64_defconfig
++++ b/configs/raspberrypi4_64_defconfig
+@@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,4afd064509b23882268922824edc5b391a1ea55d)/linux-4afd064509b23882268922824edc5b391a1ea55d.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,24c8b0546a820222a1ebcfe606dfacb0e228c466)/linux-24c8b0546a820222a1ebcfe606dfacb0e228c466.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
+ 
+ # Build the DTB from the kernel sources
+diff --git a/configs/raspberrypi4_defconfig b/configs/raspberrypi4_defconfig
+index 3ae2d253fb..04d13ef7db 100644
+--- a/configs/raspberrypi4_defconfig
++++ b/configs/raspberrypi4_defconfig
+@@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,4afd064509b23882268922824edc5b391a1ea55d)/linux-4afd064509b23882268922824edc5b391a1ea55d.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,24c8b0546a820222a1ebcfe606dfacb0e228c466)/linux-24c8b0546a820222a1ebcfe606dfacb0e228c466.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
+ 
+ # Build the DTB from the kernel sources
+diff --git a/configs/raspberrypi_defconfig b/configs/raspberrypi_defconfig
+index 75e7177974..dd51758912 100644
+--- a/configs/raspberrypi_defconfig
++++ b/configs/raspberrypi_defconfig
+@@ -11,7 +11,7 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,4afd064509b23882268922824edc5b391a1ea55d)/linux-4afd064509b23882268922824edc5b391a1ea55d.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,24c8b0546a820222a1ebcfe606dfacb0e228c466)/linux-24c8b0546a820222a1ebcfe606dfacb0e228c466.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
+ 
+ # Build the DTBs for A/B, A+/B+ and compute module from the kernel sources
+diff --git a/configs/raspberrypicm4io_64_defconfig b/configs/raspberrypicm4io_64_defconfig
+index 304428ec64..7b21bd1294 100644
+--- a/configs/raspberrypicm4io_64_defconfig
++++ b/configs/raspberrypicm4io_64_defconfig
+@@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,4afd064509b23882268922824edc5b391a1ea55d)/linux-4afd064509b23882268922824edc5b391a1ea55d.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,24c8b0546a820222a1ebcfe606dfacb0e228c466)/linux-24c8b0546a820222a1ebcfe606dfacb0e228c466.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
+ 
+ # Build the DTB from the kernel sources
+diff --git a/configs/raspberrypicm4io_defconfig b/configs/raspberrypicm4io_defconfig
+index f4ba22dfe5..0480462f41 100644
+--- a/configs/raspberrypicm4io_defconfig
++++ b/configs/raspberrypicm4io_defconfig
+@@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,4afd064509b23882268922824edc5b391a1ea55d)/linux-4afd064509b23882268922824edc5b391a1ea55d.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,24c8b0546a820222a1ebcfe606dfacb0e228c466)/linux-24c8b0546a820222a1ebcfe606dfacb0e228c466.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
+ 
+ # Build the DTB from the kernel sources
+-- 
+2.33.0
 
-  It is possible to use an upstream kernel that doesn't have this, and enable 
-overlay support in the upstream kernel (i.e. using upstream overlays instead of 
-the RPi hacks). In that case, this will fail with something like '*.dtbo: no 
-such file or directory'.
-
-  To fix that, use a make loop instead of a shell loop. Something like (untested):
-
-	$(foreach dtbo,$(wildcard 
-$(LINUX_DIR)/arch/$(KERNEL_ARCH)/boot/dts/overlays/*.dtbo),\
-		$(INSTALL) -D -m 0644 ${dtbo} $(BINARIES_DIR)/rpi-firmware/overlays/$(notdir 
-$(dtbo))$(sep))
-
-  Note that you also don't need the 'exit 1' any more because they're all 
-separate commands.
-
->> +		$(INSTALL) -D -m 0644 $${dtbo} $(BINARIES_DIR)/rpi-firmware/overlays/$${dtbo##*/} || exit 1; \
->> +	done
->> +endef
->> +LINUX_POST_INSTALL_IMAGES_HOOKS += RPI_FIRMWARE_INSTALL_KERNEL_DTB_OVERLAYS
->> +endif
-> 
-> I believe this is the wrong place to copy the linux-kernel generated overlays
-> (as they are independent of the rpi-firmware package), a better place would
-> be a BR2_ROOTFS_POST_BUILD_SCRIPT script...
-
-  Indeed, if this feature would be added anywhere, it would have to be in the 
-linux package, not in rpi-firmware. You'd need to add BR2_PACKAGE_RPI_FIRMWARE 
-to the condition as well.
-
-  I've marked the patch as Changes Requested in patchwork.
-
-  Regards,
-  Arnout
-
-
-> 
-> Regards,
-> Peter
-> 
->>   endif
->>
->>   ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_INSTALL_VCDBG),y)
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-> 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
