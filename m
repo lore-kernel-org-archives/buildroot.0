@@ -2,52 +2,52 @@ Return-Path: <SRS0=BIUF=O2=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AC118C433EF
-	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 14:35:45 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EF556C433EF
+	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 14:35:56 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 72CE461130
-	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 14:35:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 72CE461130
+	by mail.kernel.org (Postfix) with ESMTPS id 9A29A61130
+	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 14:35:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9A29A61130
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 292A283FA0;
-	Wed,  6 Oct 2021 14:35:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7639960EA4;
+	Wed,  6 Oct 2021 14:35:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cK5wS2fhDvXq; Wed,  6 Oct 2021 14:35:44 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Enk3INKT-86c; Wed,  6 Oct 2021 14:35:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8626583F1C;
-	Wed,  6 Oct 2021 14:35:43 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0F6211BF36B
+	by smtp3.osuosl.org (Postfix) with ESMTP id C22D860EA0;
+	Wed,  6 Oct 2021 14:35:54 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 81A491BF36B
  for <buildroot@lists.busybox.net>; Wed,  6 Oct 2021 14:35:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BC42E40100
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6F125605FB
  for <buildroot@lists.busybox.net>; Wed,  6 Oct 2021 14:35:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0EAdwg65FdW0 for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id G5qGs0NOzZW3 for <buildroot@lists.busybox.net>;
  Wed,  6 Oct 2021 14:35:07 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id C28174041A
+ by smtp3.osuosl.org (Postfix) with ESMTP id BD29A60600
  for <buildroot@buildroot.org>; Wed,  6 Oct 2021 14:35:07 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id ADE7192267; Wed,  6 Oct 2021 14:32:31 +0000 (UTC)
+ id B798892264; Wed,  6 Oct 2021 14:32:31 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 6 Oct 2021 16:30:36 +0200
+Date: Wed, 6 Oct 2021 16:31:55 +0200
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 43088ce478612a8009d737c21130d483df70ab8e
-X-Git-Newrev: 7da52aaf0f77f908c6e06d778361d43d7f068099
+X-Git-Oldrev: 7da52aaf0f77f908c6e06d778361d43d7f068099
+X-Git-Newrev: bba5c4345aade8cf5c39f9cc4dc029f6ad7dbbac
 X-Patchwork-Hint: ignore
-Message-Id: <20211006143231.ADE7192267@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/python-texttable:
- bump to version 1.6.4
+Message-Id: <20211006143231.B798892264@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/refpolicy: make
+ sure xmllint is used
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,54 +60,68 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============7622094727471256191=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7da52aaf0f77f908c6e06d778361d43d7f068099
+--===============7622094727471256191==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=bba5c4345aade8cf5c39f9cc4dc029f6ad7dbbac
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Plus, indent with two spaces in the hash file.
+When parsing and adding modules the refpolicy build system checks their
+validity using xmllint. By default the host system version is used and
+if not found an error is displayed but the build is not stopped. This
+leads to interesting issues where modules are not added correctly to
+modules.conf[1] (other possible issues are likely).
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
-(cherry picked from commit 1c543c729ede329cf57c6a5a3afbc02a8297188f)
+Fix this by adding a dependency on host-libxml2 and explicitly use the
+xmllint binary built by Buildroot.
+
+[1] https://lore.kernel.org/buildroot/20210830114531.2285178-1-jose.pekkarinen@unikie.com/
+
+Tested-by: José Pekkarinen <jose.pekkarinen@unikie.com>
+Signed-off-by: Antoine Tenart <atenart@kernel.org>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 5141cee10939c56da3741967c128c58eac190222)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-texttable/python-texttable.hash | 6 +++---
- package/python-texttable/python-texttable.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/refpolicy/refpolicy.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/python-texttable/python-texttable.hash b/package/python-texttable/python-texttable.hash
-index a69e8ed465..a769e91772 100644
---- a/package/python-texttable/python-texttable.hash
-+++ b/package/python-texttable/python-texttable.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/texttable/json
--md5  68e6b31d36f5c20221da7d5db3eca772  texttable-1.6.3.tar.gz
--sha256  ce0faf21aa77d806bbff22b107cc22cce68dc9438f97a2df32c93e9afa4ce436  texttable-1.6.3.tar.gz
-+md5  15faadc07ba44d337cc1675ea6092a02  texttable-1.6.4.tar.gz
-+sha256  42ee7b9e15f7b225747c3fa08f43c5d6c83bc899f80ff9bae9319334824076e9  texttable-1.6.4.tar.gz
- # Locally computed sha256 checksums
--sha256	4ba7bdab54504a3bc44eb33ecca873a26a63ab902822101a87bb46235da63594  LICENSE
-+sha256  4ba7bdab54504a3bc44eb33ecca873a26a63ab902822101a87bb46235da63594  LICENSE
-diff --git a/package/python-texttable/python-texttable.mk b/package/python-texttable/python-texttable.mk
-index 6af23917b9..59df5f6ff5 100644
---- a/package/python-texttable/python-texttable.mk
-+++ b/package/python-texttable/python-texttable.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/package/refpolicy/refpolicy.mk b/package/refpolicy/refpolicy.mk
+index 1180f0d38b..ecd8cf226b 100644
+--- a/package/refpolicy/refpolicy.mk
++++ b/package/refpolicy/refpolicy.mk
+@@ -14,7 +14,8 @@ REFPOLICY_DEPENDENCIES = \
+ 	host-policycoreutils \
+ 	host-python3 \
+ 	host-setools \
+-	host-gawk
++	host-gawk \
++	host-libxml2
  
--PYTHON_TEXTTABLE_VERSION = 1.6.3
-+PYTHON_TEXTTABLE_VERSION = 1.6.4
- PYTHON_TEXTTABLE_SOURCE = texttable-$(PYTHON_TEXTTABLE_VERSION).tar.gz
--PYTHON_TEXTTABLE_SITE = https://files.pythonhosted.org/packages/f5/be/716342325d6d6e05608e3a10e15f192f3723e454a25ce14bc9b9d1332772
-+PYTHON_TEXTTABLE_SITE = https://files.pythonhosted.org/packages/d5/78/dbc2a5eab57a01fedaf975f2c16f04e76f09336dbeadb9994258aa0a2b1a
- PYTHON_TEXTTABLE_SETUP_TYPE = setuptools
- PYTHON_TEXTTABLE_LICENSE = MIT
- PYTHON_TEXTTABLE_LICENSE_FILES = LICENSE
+ ifeq ($(BR2_PACKAGE_REFPOLICY_CUSTOM_GIT),y)
+ REFPOLICY_VERSION = $(call qstrip,$(BR2_PACKAGE_REFPOLICY_CUSTOM_REPO_VERSION))
+@@ -30,6 +31,7 @@ endif
+ # Cannot use multiple threads to build the reference policy
+ REFPOLICY_MAKE = \
+ 	PYTHON=$(HOST_DIR)/usr/bin/python3 \
++	XMLLINT=$(LIBXML2_HOST_BINARY) \
+ 	TEST_TOOLCHAIN=$(HOST_DIR) \
+ 	$(TARGET_MAKE_ENV) \
+ 	$(MAKE1)
+
+--===============7622094727471256191==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============7622094727471256191==--
