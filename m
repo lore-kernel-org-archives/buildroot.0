@@ -2,56 +2,95 @@ Return-Path: <SRS0=BIUF=O2=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2BC88C433F5
-	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 20:44:48 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 95CBEC433FE
+	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 20:57:29 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D146761163
-	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 20:44:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D146761163
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
+	by mail.kernel.org (Postfix) with ESMTPS id DCC4B61152
+	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 20:57:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org DCC4B61152
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AD5EC83EBE;
-	Wed,  6 Oct 2021 20:44:47 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DlI_sUBSMr1b; Wed,  6 Oct 2021 20:44:47 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2201D83D22;
-	Wed,  6 Oct 2021 20:44:46 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 088B01BF34F
- for <buildroot@lists.busybox.net>; Wed,  6 Oct 2021 20:44:19 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id ECAC360F56
- for <buildroot@lists.busybox.net>; Wed,  6 Oct 2021 20:44:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A5FEB60675;
+	Wed,  6 Oct 2021 20:57:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LtGToByyMRll for <buildroot@lists.busybox.net>;
- Wed,  6 Oct 2021 20:44:17 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 9047260F3E
- for <buildroot@buildroot.org>; Wed,  6 Oct 2021 20:44:17 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id 60EF440008;
- Wed,  6 Oct 2021 20:44:14 +0000 (UTC)
-Date: Wed, 6 Oct 2021 22:44:13 +0200
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Message-ID: <20211006224413.31235052@windsurf>
-In-Reply-To: <20211006203823.2740442-1-yann.morin.1998@free.fr>
-References: <20211006203823.2740442-1-yann.morin.1998@free.fr>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id zFT0-Zrp5nFx; Wed,  6 Oct 2021 20:57:27 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4AD19606A5;
+	Wed,  6 Oct 2021 20:57:26 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 121DB1BF34F
+ for <buildroot@lists.busybox.net>; Wed,  6 Oct 2021 20:57:25 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 08C8E40924
+ for <buildroot@lists.busybox.net>; Wed,  6 Oct 2021 20:57:25 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ron52JbJWuM2 for <buildroot@lists.busybox.net>;
+ Wed,  6 Oct 2021 20:57:24 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com
+ [IPv6:2a00:1450:4864:20::52a])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C88AD4074D
+ for <buildroot@buildroot.org>; Wed,  6 Oct 2021 20:57:23 +0000 (UTC)
+Received: by mail-ed1-x52a.google.com with SMTP id p13so15134815edw.0
+ for <buildroot@buildroot.org>; Wed, 06 Oct 2021 13:57:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=MkM2lR3LOFBtrpC/uTC5wMTdNjtaqwG6SOSgKsnVVcw=;
+ b=XYXsEswLYHkS93bc8M0DLaWe2yy8DV3cJbNKMzNVLrGLSgjyZYzn1QWYlfUaD8zetl
+ xF1FrfAVdja7ZsfXyOrsc93AXIPkQzxmOzjUA+3gaVzD50pge/vVUORW8mSwy0fHLIKF
+ 17wSMv868tLmQZFt8UTLj1P9bzrlh7RMU+o9m0jwzLZxz7ejHdpj0Ohm/P20Hneokr91
+ 99uCh5P57VUpz24N2x+1ggE4tbUtUuZVUxyqkr8vne8wPqg/Lus1IYUd6SpMtFzEjwsL
+ RHmGrsuu7l8I2fOOtz2h9DdEvwb90pfrdfIKWxGYhUiTQWwTp5thaDbu+egXvw9w8nCt
+ d8Xg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=MkM2lR3LOFBtrpC/uTC5wMTdNjtaqwG6SOSgKsnVVcw=;
+ b=DsKtZ00dZoSizoJtiDGeu2MVF9umZ1gZLZJE1vzkfIzQSgsjWpd1xdHrsQWjfUz8vZ
+ dCXe+AN5m4x3haBA/ItcIj/3nfHXOrSrTOXDWzr80rbsCHBnbLwJwgVlEI/1WKm6/XBf
+ E8GD8OkbG6lmnKVn/InX7QEIQnXQhhQ/E69h6fVmvST/NzI5a2ATHo6o6FmeOs2gxM7g
+ YDybeAYE9hV1739ujJPFjJTZcNlyFxufJD82avxu0KaBJre20RB3fnKGEMCZkk9QLU6a
+ LIo9Hmh4MUQhpEVSTDZPeWmOZWFJtHdqITnv3pGZ6XgqLKfHr7Ornzrz7DzHliPUstRP
+ KGSQ==
+X-Gm-Message-State: AOAM5333jDydiyyPGvzT/3RX86sywR4DnV1Y/Lwktnx4V9CTfX/+lPk2
+ Dzv9yf9PEuYBh4GfUDDgQgG3rg==
+X-Google-Smtp-Source: ABdhPJyZolu6+ueijcDGmaOf/OK2QNGazSVG1PRjLRwC+h1lb1LcyTU8K0XfdWKOpRisrRfLqEw03A==
+X-Received: by 2002:a05:6402:1b92:: with SMTP id
+ cc18mr624632edb.31.1633553841821; 
+ Wed, 06 Oct 2021 13:57:21 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id c6sm2621053ejb.41.2021.10.06.13.57.20
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 06 Oct 2021 13:57:21 -0700 (PDT)
+Message-ID: <2f76c008-c7e9-3cc3-e381-5fd413670d9f@mind.be>
+Date: Wed, 6 Oct 2021 22:57:20 +0200
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] support/testing: fix
- python_flask_expect_python
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.1.0
+Content-Language: en-GB
+To: Peter Seiderer <ps.report@gmx.net>, Takumi Takahashi <takumiiinn@gmail.com>
+References: <20211003175446.3076312-1-takumiiinn@gmail.com>
+ <20211006190922.5baf43b9@gmx.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20211006190922.5baf43b9@gmx.net>
+Subject: Re: [Buildroot] [PATCH 1/1] package/rpi-firmware: Support Device
+ Tree Overlay
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,34 +102,102 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Edgar Bonet <bonet@grenoble.cnrs.fr>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: buildroot@buildroot.org, Martin Bark <martin@barkynet.com>,
+ Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gV2VkLCAgNiBPY3QgMjAyMSAyMjozODoyMyArMDIwMAoiWWFubiBFLiBNT1JJTiIgPHlhbm4u
-bW9yaW4uMTk5OEBmcmVlLmZyPiB3cm90ZToKCj4gQ29tbWl0IGU2ZWUwN2Y0MWEyYiAocGFja2Fn
-ZS9weXRob24tZmxhc2stZXhwZWN0cy1qc29uOiBuZXcgcGFja2FnZSkKPiBhZGRlZCBhIG5vbi1m
-dW5jdGlvbmFsIHRlc3QgY2FzZSB0aGF0LCBhcyBub3RpY2VkIGJ5IEVkZ2FyLCBmYWlscyB3aXRo
-Ogo+IAo+ICAgICBBc3NlcnRpb25FcnJvcjogJyV7aHR0cF9jb2RlfScgIT0gJzIwMCcKPiAKPiBU
-aGF0J3MgYmVjYXVzZSB0aGUgJSBzaWduIGlzIHNlbGYtZXNjYXBlZCwgw6AtbGEgQywgaW4gdGhl
-IGZpcnN0IHBhcnQKPiBvZiB0aGUgY29tbWFuZCwgcHJvYmFibHkgdG8gYXZvaWQgaXRzIGJlaW5n
-ICUtZm9ybWF0dGVkLiBCdXQgb25seSB0aGUKPiBzZWNvbmQgcGFydCBvZiB0aGUgY29tbWFuZCBp
-cyAlLWZvcm1hdHRlZCwgc28gd2UgZG8gbm90IG5lZWQgdG8KPiBzZWxmLWVzY2FwZSAlIGluIHRo
-ZSBmaXJzdCBwYXJ0LgoKR2FhaCwgc2VlbWluZ2x5IGlubm9jZW50LWxvb2tpbmcgbGFzdCBtaW51
-dGUgKHVudGVzdGVkKSByZWZhY3RvcmluZyBpcwpBTFdBWVMgd3JvbmcuIFNvcnJ5IGFib3V0IHRo
-aXMgYW5kIHRoYW5rcyBmb3IgZml4aW5nIG15IGNyYXAuCgo+IEFkZGl0aW9uYWxseSwgc2luY2Ug
-ZWIzZWUzMDc4YTc2IChzdXBwb3J0L3Rlc3RpbmcvaW5mcmEvZW11bGF0b3IucHk6Cj4gcHJldmVu
-dCB0aGUgY29tbWFuZHMgZnJvbSB3cmFwcGluZyksIHdlIG5vIGxvbmdlciBuZWVkIHRvIHBsYXkg
-dHJpY2tzCj4gd2l0aCBjb21tYW5kcyB0aGF0IGFyZSB0b28gbG9uZyB0byBmaXQgb24gdGhlIGZp
-cnN0IGxpbmUgb2YgdGhlIHNoZWxsCj4gcHJvbXB0Lgo+IAo+IFNpZ25lZC1vZmYtYnk6IFlhbm4g
-RS4gTU9SSU4gPHlhbm4ubW9yaW4uMTk5OEBmcmVlLmZyPgo+IENjOiBUaG9tYXMgUGV0YXp6b25p
-IDx0aG9tYXMucGV0YXp6b25pQGJvb3RsaW4uY29tPgo+IENjOiBFZGdhciBCb25ldCA8Ym9uZXRA
-Z3Jlbm9ibGUuY25ycy5mcj4KCkxvb2tzIGdvb2Q6CgpSZXZpZXdlZC1ieTogVGhvbWFzIFBldGF6
-em9uaSA8dGhvbWFzLnBldGF6em9uaUBib290bGluLmNvbT4KClRob21hcwotLSAKVGhvbWFzIFBl
-dGF6em9uaSwgY28tb3duZXIgYW5kIENFTywgQm9vdGxpbgpFbWJlZGRlZCBMaW51eCBhbmQgS2Vy
-bmVsIGVuZ2luZWVyaW5nIGFuZCB0cmFpbmluZwpodHRwczovL2Jvb3RsaW4uY29tCl9fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5n
-IGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3Jn
-L21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+
+
+On 06/10/2021 19:09, Peter Seiderer wrote:
+> Hello Takumi,
+> 
+> thanks for suggested patch...., comment below:
+> 
+> On Mon,  4 Oct 2021 02:54:46 +0900, Takumi Takahashi <takumiiinn@gmail.com> wrote:
+> 
+>> Building the Raspberry Pi GitHub official kernel repository
+>> will generate a Device Tree Overlay Blob files under
+>> `$(LINUX_DIR)/arch/$(KERNEL_ARCH)/boot/dts/overlays`.
+>>
+>> This commit changes to install the Device Tree Overlay Blob file
+>> generated during kernel build under the following conditions:
+>>
+>> - `$(BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS)`
+>>    - `n`
+>> - `$(BR2_LINUX_KERNEL_DTB_OVERLAY_SUPPORT)`
+>>    - `y`
+>>
+>> Signed-off-by: Takumi Takahashi <takumiiinn@gmail.com>
+>> ---
+>>   package/rpi-firmware/rpi-firmware.mk | 10 ++++++++++
+>>   1 file changed, 10 insertions(+)
+>>
+>> diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+>> index 181650fa08..39962b3d70 100644
+>> --- a/package/rpi-firmware/rpi-firmware.mk
+>> +++ b/package/rpi-firmware/rpi-firmware.mk
+>> @@ -30,6 +30,16 @@ else
+>>   define RPI_FIRMWARE_INSTALL_DTB_OVERLAYS
+>>   	$(INSTALL) -d $(BINARIES_DIR)/rpi-firmware/overlays
+>>   endef
+>> +ifeq ($(BR2_LINUX_KERNEL_DTB_OVERLAY_SUPPORT),y)
+>> +# If you are using the official raspberry pi kernel, dtbo will be created under
+>> +# the overlays directory, so use that.
+>> +define RPI_FIRMWARE_INSTALL_KERNEL_DTB_OVERLAYS
+>> +	for dtbo in $(LINUX_DIR)/arch/$(KERNEL_ARCH)/boot/dts/overlays/*.dtbo; do \
+
+  It is possible to use an upstream kernel that doesn't have this, and enable 
+overlay support in the upstream kernel (i.e. using upstream overlays instead of 
+the RPi hacks). In that case, this will fail with something like '*.dtbo: no 
+such file or directory'.
+
+  To fix that, use a make loop instead of a shell loop. Something like (untested):
+
+	$(foreach dtbo,$(wildcard 
+$(LINUX_DIR)/arch/$(KERNEL_ARCH)/boot/dts/overlays/*.dtbo),\
+		$(INSTALL) -D -m 0644 ${dtbo} $(BINARIES_DIR)/rpi-firmware/overlays/$(notdir 
+$(dtbo))$(sep))
+
+  Note that you also don't need the 'exit 1' any more because they're all 
+separate commands.
+
+>> +		$(INSTALL) -D -m 0644 $${dtbo} $(BINARIES_DIR)/rpi-firmware/overlays/$${dtbo##*/} || exit 1; \
+>> +	done
+>> +endef
+>> +LINUX_POST_INSTALL_IMAGES_HOOKS += RPI_FIRMWARE_INSTALL_KERNEL_DTB_OVERLAYS
+>> +endif
+> 
+> I believe this is the wrong place to copy the linux-kernel generated overlays
+> (as they are independent of the rpi-firmware package), a better place would
+> be a BR2_ROOTFS_POST_BUILD_SCRIPT script...
+
+  Indeed, if this feature would be added anywhere, it would have to be in the 
+linux package, not in rpi-firmware. You'd need to add BR2_PACKAGE_RPI_FIRMWARE 
+to the condition as well.
+
+  I've marked the patch as Changes Requested in patchwork.
+
+  Regards,
+  Arnout
+
+
+> 
+> Regards,
+> Peter
+> 
+>>   endif
+>>
+>>   ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_INSTALL_VCDBG),y)
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+> 
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
