@@ -2,52 +2,52 @@ Return-Path: <SRS0=BIUF=O2=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AC28BC433F5
-	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 15:31:54 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D2284C433EF
+	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 15:32:05 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 5AE0F61027
-	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 15:31:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5AE0F61027
+	by mail.kernel.org (Postfix) with ESMTPS id 9F4416103E
+	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 15:32:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9F4416103E
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2CF3C84006;
-	Wed,  6 Oct 2021 15:31:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7C340404B3;
+	Wed,  6 Oct 2021 15:32:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qecGykRq0r-h; Wed,  6 Oct 2021 15:31:53 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id IQRSnRDgric7; Wed,  6 Oct 2021 15:32:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5F16683F87;
-	Wed,  6 Oct 2021 15:31:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CA70840892;
+	Wed,  6 Oct 2021 15:32:03 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8EE6F1BF947
- for <buildroot@lists.busybox.net>; Wed,  6 Oct 2021 15:31:18 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9F0231BF947
+ for <buildroot@lists.busybox.net>; Wed,  6 Oct 2021 15:31:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 34B184042A
+ by smtp2.osuosl.org (Postfix) with ESMTP id E9E58402C2
  for <buildroot@lists.busybox.net>; Wed,  6 Oct 2021 15:31:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SBomnI7P8X15 for <buildroot@lists.busybox.net>;
+ with ESMTP id Vfh6qkSRMKY9 for <buildroot@lists.busybox.net>;
  Wed,  6 Oct 2021 15:31:16 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1203A402C2
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0A331401FA
  for <buildroot@buildroot.org>; Wed,  6 Oct 2021 15:31:16 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id DC1D8923E0; Wed,  6 Oct 2021 15:28:39 +0000 (UTC)
+ id D3CAD923D2; Wed,  6 Oct 2021 15:28:39 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 6 Oct 2021 16:56:48 +0200
+Date: Wed, 6 Oct 2021 16:52:50 +0200
 X-Git-Refname: refs/heads/2021.05.x
-X-Git-Oldrev: 40d0133a148702c11bc7a76b412abeeed04b1edb
-X-Git-Newrev: 541dc3fafdd421c09a38a78bf3b4ab270e4d5c09
+X-Git-Oldrev: 13ffd648ed071cbbff3c5f50470fef0a8b57dcc7
+X-Git-Newrev: 40d0133a148702c11bc7a76b412abeeed04b1edb
 X-Patchwork-Hint: ignore
-Message-Id: <20211006152839.DC1D8923E0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.05.x] support/testing: don't
- fail on tests emitting invalid utf-8 sequences
+Message-Id: <20211006152839.D3CAD923D2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.05.x] package/python-urllib3:
+ bump to version 1.26.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,71 +65,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=541dc3fafdd421c09a38a78bf3b4ab270e4d5c09
+commit: https://git.buildroot.net/buildroot/commit/?id=40d0133a148702c11bc7a76b412abeeed04b1edb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
 
-When booting under EFI, grub2 will output a nice and shiny boot menu,
-using extended ASCII characters (in the [0x80..0xFF] range), namely
-CP437 [0], on the assumption that the VGA BIOS is a real one and has the
-corresponding (and only!) font, as is the case on real hardware.
-
-However, when run in our runtime test infrastructure, this triggers the
-infamous python UnicodeDecodeError exception:
-
-    Traceback (most recent call last):
-      [...]
-        emulator.login()
-      File "[...]/buildroot/support/testing/infra/emulator.py", line 89, in login
-        index = self.qemu.expect(["buildroot login:", pexpect.TIMEOUT],
-      File "/usr/lib/python3/dist-packages/pexpect/spawnbase.py", line 340, in expect
-        return self.expect_list(compiled_pattern_list,
-      File "/usr/lib/python3/dist-packages/pexpect/spawnbase.py", line 369, in expect_list
-        return exp.expect_loop(timeout)
-      File "/usr/lib/python3/dist-packages/pexpect/expect.py", line 111, in expect_loop
-        incoming = spawn.read_nonblocking(spawn.maxread, timeout)
-      File "/usr/lib/python3/dist-packages/pexpect/pty_spawn.py", line 485, in read_nonblocking
-        return super(spawn, self).read_nonblocking(size)
-      File "/usr/lib/python3/dist-packages/pexpect/spawnbase.py", line 178, in read_nonblocking
-        s = self._decoder.decode(s, final=False)
-      File "/usr/lib/python3.8/codecs.py", line 322, in decode
-        (result, consumed) = self._buffer_decode(data, self.errors, final)
-    UnicodeDecodeError: 'utf-8' codec can't decode byte 0xda in position 0: invalid continuation byte
-
-Grub2 is not wrong in emitting those chars, and basically we should not
-expect the packages we test to always emit correct UTF-8 sequences; at
-the very least, this should not cause the test infra to fail.
-
-We fix that by telling pexpect.spawn to "fix" such invalid sequences by
-replacing them with the suitable Unicode character, U+FFFD REPLACEMENT
-CHARACTER.
-
-[0] https://en.wikipedia.org/wiki/Code_page_437
-[1] https://docs.python.org/3/library/codecs.html#error-handlers
-
-Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
-[yann.morin.1998@free.fr:
-  - don't change encoding, use codec_errors
-  - rewrite commit log accordingly
-]
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit d6d7cbb8e047f86bdf626fec90f10e8590b7adf7)
+(cherry picked from commit dc0583bd34d330fcc2bbef2c8a1f0da7a3da4b1a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/testing/infra/emulator.py | 1 +
- 1 file changed, 1 insertion(+)
+ package/python-urllib3/python-urllib3.hash | 4 ++--
+ package/python-urllib3/python-urllib3.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/support/testing/infra/emulator.py b/support/testing/infra/emulator.py
-index 5611ec96e8..2412fe1cc9 100644
---- a/support/testing/infra/emulator.py
-+++ b/support/testing/infra/emulator.py
-@@ -77,6 +77,7 @@ class Emulator(object):
-         self.qemu = pexpect.spawn(qemu_cmd[0], qemu_cmd[1:],
-                                   timeout=5 * self.timeout_multiplier,
-                                   encoding='utf-8',
-+                                  codec_errors='replace',
-                                   env={"QEMU_AUDIO_DRV": "none"})
-         # We want only stdout into the log to avoid double echo
-         self.qemu.logfile_read = self.logfile
+diff --git a/package/python-urllib3/python-urllib3.hash b/package/python-urllib3/python-urllib3.hash
+index 288d986e7c..066bfb7288 100644
+--- a/package/python-urllib3/python-urllib3.hash
++++ b/package/python-urllib3/python-urllib3.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/urllib3/json
+-md5  3a88ec3bcb761ca23df2c3583949be37  urllib3-1.26.6.tar.gz
+-sha256  f57b4c16c62fa2760b7e3d97c35b255512fb6b59a259730f36ba32ce9f8e342f  urllib3-1.26.6.tar.gz
++md5  e0051a87a956e618a6bb514a07fa7773  urllib3-1.26.7.tar.gz
++sha256  4987c65554f7a2dbf30c18fd48778ef124af6fab771a377103da0585e2336ece  urllib3-1.26.7.tar.gz
+ # Locally computed sha256 checksums
+ sha256  c37bf186e27cf9dbe9619e55edfe3cea7b30091ceb3da63c7dacbe0e6d77907b  LICENSE.txt
+diff --git a/package/python-urllib3/python-urllib3.mk b/package/python-urllib3/python-urllib3.mk
+index 775986d516..a1d22e023a 100644
+--- a/package/python-urllib3/python-urllib3.mk
++++ b/package/python-urllib3/python-urllib3.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_URLLIB3_VERSION = 1.26.6
++PYTHON_URLLIB3_VERSION = 1.26.7
+ PYTHON_URLLIB3_SOURCE = urllib3-$(PYTHON_URLLIB3_VERSION).tar.gz
+-PYTHON_URLLIB3_SITE = https://files.pythonhosted.org/packages/4f/5a/597ef5911cb8919efe4d86206aa8b2658616d676a7088f0825ca08bd7cb8
++PYTHON_URLLIB3_SITE = https://files.pythonhosted.org/packages/80/be/3ee43b6c5757cabea19e75b8f46eaf05a2f5144107d7db48c7cf3a864f73
+ PYTHON_URLLIB3_LICENSE = MIT
+ PYTHON_URLLIB3_LICENSE_FILES = LICENSE.txt
+ PYTHON_URLLIB3_CPE_ID_VENDOR = python
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
