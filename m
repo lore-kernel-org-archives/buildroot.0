@@ -2,86 +2,81 @@ Return-Path: <SRS0=BIUF=O2=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E8176C433F5
-	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 06:20:39 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 19C91C433EF
+	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 06:23:50 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 6A279611C6
-	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 06:20:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6A279611C6
+	by mail.kernel.org (Postfix) with ESMTPS id AFE9A611C0
+	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 06:23:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org AFE9A611C0
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=unikie.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3BA8183F4F;
-	Wed,  6 Oct 2021 06:20:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 30AC8605C2;
+	Wed,  6 Oct 2021 06:23:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id p5L6tWI5VN6h; Wed,  6 Oct 2021 06:20:38 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id VA6CKd4HQpnf; Wed,  6 Oct 2021 06:23:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9CEB583E30;
-	Wed,  6 Oct 2021 06:20:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6D19E60E61;
+	Wed,  6 Oct 2021 06:23:47 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 47EFE1BF25F
- for <buildroot@lists.busybox.net>; Wed,  6 Oct 2021 06:20:36 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1DA891BF25F
+ for <buildroot@lists.busybox.net>; Wed,  6 Oct 2021 06:23:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3658960E61
- for <buildroot@lists.busybox.net>; Wed,  6 Oct 2021 06:20:36 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 094CE60E61
+ for <buildroot@lists.busybox.net>; Wed,  6 Oct 2021 06:23:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=unikie-com.20210112.gappssmtp.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8nYyjEoINmBy for <buildroot@lists.busybox.net>;
- Wed,  6 Oct 2021 06:20:35 +0000 (UTC)
+ with ESMTP id Fsh_DmTzLsKb for <buildroot@lists.busybox.net>;
+ Wed,  6 Oct 2021 06:23:44 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com
- [IPv6:2a00:1450:4864:20::12a])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 56B3E60E5F
- for <buildroot@buildroot.org>; Wed,  6 Oct 2021 06:20:35 +0000 (UTC)
-Received: by mail-lf1-x12a.google.com with SMTP id y26so5720089lfa.11
- for <buildroot@buildroot.org>; Tue, 05 Oct 2021 23:20:35 -0700 (PDT)
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com
+ [IPv6:2a00:1450:4864:20::52b])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E635960E5F
+ for <buildroot@buildroot.org>; Wed,  6 Oct 2021 06:23:43 +0000 (UTC)
+Received: by mail-ed1-x52b.google.com with SMTP id r18so5484348edv.12
+ for <buildroot@buildroot.org>; Tue, 05 Oct 2021 23:23:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=unikie-com.20210112.gappssmtp.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=YjfFYyYB1CGS2r/Szr7sUNdTriPyxuqoFWbqer/Q9C8=;
- b=u2RX2xhnmmjKSDP7eSA37wzB3zshXQDsK2oVEJtA93XAS2onUNEDdWIMRGmHpQ+U03
- U6X/+L020AT4Qt9PO33TN55jm8CAA0DrsSGfee7QMI4BoJgpYz2YxJwTpj9Iea+mrb5l
- 9pahA0elMG6lNdoCWSNf7OrmYdcXTzc4V+o6JW2n7YL3xEs+6MgOYXmlgEjoxkbcthWi
- 8ZycEsJ0lt+j3SVmAXbZ/OLegTWO/uZFvpn15MZfJoauc2s0OMh5UDYEu+SBOs+iKArw
- xCfOaidEOHRQ1y2QpBUlNgy4e9yoZJzopb6HdIeSRgU7FQHdUn+JeIF74HqYvsZc9MW1
- 7kLw==
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=jyFYxcpH6orpFd7wnu2rM4Wfe5EF396DMUWdGUJs7CM=;
+ b=eqn6QcE5N/Bg/m4oyY4SGHVY2AZI9FgwXRSUk+2SV2ASTBTEsVtmApMi5Ra7eYLUrq
+ p80rXaapRX9clKqX8Yc8RdDpqqDIq4IKhQCVjUek0cQamz53mmEStR4oCUH3f7jf9How
+ fwdw6GebmMtjVogFmJXovCh1J9dvPlkBVNF36SRYidhj8d5M+E74GunZ8N0Gw5dnJSxV
+ /zSrMe3E7VGM3YLhSN0xDzxnsY/2UXmro1v46CwRzwgs1Vs+5NnaBdcgnjKigjePIXqm
+ g71GdKgczIdZSelBPWwR1StcAS2HCyieeWai+wSPq0MyUqvZYS3/uUkCkQTdynncue2Q
+ 50RA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=YjfFYyYB1CGS2r/Szr7sUNdTriPyxuqoFWbqer/Q9C8=;
- b=I63CTUmnbNCyC8g4bkVscb9/GOjiNoW5+YvNqscW5yRRQsvnsfZDXKb/8bqqMF7c2I
- aG95Vp7PjUoT5D4suIBitlWbrKQIVoHC7tFXGIUyqCzw18pXypjIXgso+zf+dKoOhDpl
- OcQqaekiTYKEyV04THmp8Oqj537QtVlJXODgVByhOl6wV/1uME8lDs+G2U/bcBxDoBD+
- XSuLoeGJcTifYbsNyGjZmaqv18YYCfeEPy9RT5RFoomHk3XMtPj/HGb3dcP8K9IrvUTi
- d6+bS3QZwO0eobNU+W0jk8xtTKteubRs4Vt7EOySKbs9EOm2ze0rbU2k4GwZtit37sk0
- H5zA==
-X-Gm-Message-State: AOAM532H3p+1+6bNv53RJKfKNM9oi3MvwbdMNrsvEFPxA7nd23/e7pL0
- ze/ZGV4CT62Wp6a2CgLOEzqUfIqNiENfIrHF
-X-Google-Smtp-Source: ABdhPJybeOzTlouKZPN8ls0mjbfsB9lo2M4NosMSsTwPjZsPRwZrrkoiX+2qdkIpx8E/gZj2OLvtFg==
-X-Received: by 2002:a05:6512:3d26:: with SMTP id
- d38mr7712916lfv.474.1633501233244; 
- Tue, 05 Oct 2021 23:20:33 -0700 (PDT)
-Received: from Unikie-T14-Gen-2i.madriguera.foxhound.fi
- (88-113-104-240.elisa-laajakaista.fi. [88.113.104.240])
- by smtp.googlemail.com with ESMTPSA id w11sm1477352lji.108.2021.10.05.23.20.32
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 05 Oct 2021 23:20:32 -0700 (PDT)
-From: =?UTF-8?q?Jos=C3=A9=20Pekkarinen?= <jose.pekkarinen@unikie.com>
-To: buildroot@buildroot.org
-Date: Wed,  6 Oct 2021 09:20:31 +0300
-Message-Id: <20211006062032.4120-1-jose.pekkarinen@unikie.com>
-X-Mailer: git-send-email 2.25.1
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=jyFYxcpH6orpFd7wnu2rM4Wfe5EF396DMUWdGUJs7CM=;
+ b=2QDR/FpFI1MXFiS6FnP/5ScXp7ZlcqN0y6hh7KyinE5cJyCiSHxm9qQpgyn0uy8p73
+ TDfFWEptf26NVLnsOCjPfo3tg5Nl93BvnXngAYWCrhsM1nc0l1ywod5aMdAnCVNKXB9k
+ ZKAU85EBtV/GFq29ZuKrmdUKsSvkh6ZTwG3PKKuQG9S8caQFSzSgu4x2u+ivmeOvv/oQ
+ LUIwDd7++YFLernzJfZqbpff5GP/N51aDedCeQcFfs3Wt0TrKl4P4zYa0npaUPz4Hvvn
+ aWlODQGCxtvrvsdaptBQzj3kjL8VF6RmW9/wNOMsCJEu7WBHU/mSyTSIAgoQ31vRH7wU
+ 9xOQ==
+X-Gm-Message-State: AOAM533zVpHPCFSu6qJ4M1pYMtvIhHm5zo2d2iciD6pTf9tQC0X3SvCI
+ 9PCACMjP1h2p8SS6oHcPyJelBhYLjiGYjSmPR4s2Wg==
+X-Google-Smtp-Source: ABdhPJwMp2KzZyOYQ002qtgPPTuTz8c9W2yr+zHEnRb0JcXpqsTirbYesDQwxdh8dEw56GXcpdP/WT9qLE+Ta4VJXiM=
+X-Received: by 2002:a50:da0a:: with SMTP id z10mr31354026edj.298.1633501422139; 
+ Tue, 05 Oct 2021 23:23:42 -0700 (PDT)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/iptables: S35iptables script cleanups
+References: <20210915130620.3162787-1-jose.pekkarinen@unikie.com>
+ <87zgrnd1xu.fsf@dell.be.48ers.dk>
+ <CAJPV9MqO8ZLq9TUH7Oj_-JrxZpXjQeDZ3a+-sNg-nXFNbwwV7A@mail.gmail.com>
+ <87o883beeg.fsf@dell.be.48ers.dk>
+In-Reply-To: <87o883beeg.fsf@dell.be.48ers.dk>
+From: =?UTF-8?Q?Jos=C3=A9_Pekkarinen?= <jose.pekkarinen@unikie.com>
+Date: Wed, 6 Oct 2021 09:23:31 +0300
+Message-ID: <CAJPV9MoR2R-5wPShChCECaCfJSLRjc6Magobz7BNRMQ7sNtHwA@mail.gmail.com>
+To: Peter Korsgaard <peter@korsgaard.com>
+Subject: Re: [Buildroot] [PATCH v3] package/iptables: add init script
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,32 +88,110 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?UTF-8?q?Jos=C3=A9=20Pekkarinen?= <jose.pekkarinen@unikie.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============1909646256153284692=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-VGhpcyBwYXRjaCByZW1vdmVzIHVubmVlZGVkIHJlZGlyZWN0aW9ucyB3aGVuCmNhbGxpbmcgaXB0
-YWJsZXMtcmVzdG9yZSBhbmQgaXB0YWJsZXMtc2F2ZSwgYW5kCml0IGFkZHMgdGhlIHNhdmUgb3Bl
-cmF0aW9uIHRvIHRoZSB1c2FnZSBoZWxwLgoKU2lnbmVkLW9mZi1ieTogSm9zw6kgUGVra2FyaW5l
-biA8am9zZS5wZWtrYXJpbmVuQHVuaWtpZS5jb20+Ci0tLQogcGFja2FnZS9pcHRhYmxlcy9TMzVp
-cHRhYmxlcyB8IDYgKysrLS0tCiAxIGZpbGUgY2hhbmdlZCwgMyBpbnNlcnRpb25zKCspLCAzIGRl
-bGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL3BhY2thZ2UvaXB0YWJsZXMvUzM1aXB0YWJsZXMgYi9w
-YWNrYWdlL2lwdGFibGVzL1MzNWlwdGFibGVzCmluZGV4IGZmM2Y1MWEyYmEuLmEyZGUyOWQyMjIg
-MTAwNjQ0Ci0tLSBhL3BhY2thZ2UvaXB0YWJsZXMvUzM1aXB0YWJsZXMKKysrIGIvcGFja2FnZS9p
-cHRhYmxlcy9TMzVpcHRhYmxlcwpAQCAtNiw3ICs2LDcgQEAgSVBUQUJMRVNfQVJHUz0iIgogCiBz
-dGFydCgpIHsKIAlwcmludGYgJ1N0YXJ0aW5nICVzOiAnICIkREFFTU9OIgotCWlwdGFibGVzLXJl
-c3RvcmUgPCAvZXRjL2lwdGFibGVzLmNvbmYKKwlpcHRhYmxlcy1yZXN0b3JlIC9ldGMvaXB0YWJs
-ZXMuY29uZgogCXN0YXR1cz0kPwogCWlmIFsgIiRzdGF0dXMiIC1lcSAwIF07IHRoZW4KIAkJZWNo
-byAiT0siCkBAIC0zNiw3ICszNiw3IEBAIHJlc3RhcnQoKSB7CiAKIHNhdmUoKSB7CiAJcHJpbnRm
-ICdTYXZpbmcgJXM6ICcgIiREQUVNT04iCi0JaXB0YWJsZXMtc2F2ZSA+IC9ldGMvaXB0YWJsZXMu
-Y29uZgorCWlwdGFibGVzLXNhdmUgLWYgL2V0Yy9pcHRhYmxlcy5jb25mCiAJc3RhdHVzPSQ/CiAJ
-aWYgWyAiJHN0YXR1cyIgLWVxIDAgXTsgdGhlbgogCQllY2hvICJPSyIKQEAgLTUzLDYgKzUzLDYg
-QEAgY2FzZSAiJDEiIGluCiAJCSMgUmVzdGFydCwgc2luY2UgdGhlcmUgaXMgbm8gdHJ1ZSAicmVs
-b2FkIiBmZWF0dXJlLgogCQlyZXN0YXJ0OzsKIAkqKQotCQllY2hvICJVc2FnZTogJDAge3N0YXJ0
-fHN0b3B8cmVzdGFydHxyZWxvYWR9IgorCQllY2hvICJVc2FnZTogJDAge3N0YXJ0fHN0b3B8cmVz
-dGFydHxzYXZlfHJlbG9hZH0iCiAJCWV4aXQgMQogZXNhYwotLSAKMi4yNS4xCgpfX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBs
-aXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9t
-YWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+--===============1909646256153284692==
+Content-Type: multipart/alternative; boundary="00000000000001d33505cda9308c"
+
+--00000000000001d33505cda9308c
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+On Tue, Oct 5, 2021 at 7:54 PM Peter Korsgaard <peter@korsgaard.com> wrote:
+
+> >>>>> "Jos=C3=A9" =3D=3D Jos=C3=A9 Pekkarinen <jose.pekkarinen@unikie.com=
+> writes:
+>
+> Hi,
+>
+>  >> Any special reason for the redirect? iptables-save / restor accepts a
+>  >> filename argument.
+>  >>
+>
+>  > Not from my side, I just didn't notice. I can
+>
+>  > change it for you if you want.
+>
+> Yes, please.
+>
+>
+>  >> > +            echo "Usage: $0 {start|stop|restart|reload}"
+>  >>
+>  >> NIT: This doesn't document the save argument.
+>  >>
+>
+>  > Very true, please let me know and I'm happy to send a v3
+>
+>  > tomorrow with those stuff.
+>
+> Ehh, this was already v3 and it was applied, so you will need to send a
+> followup patch changing the script instead.
+>
+
+Just sent, thanks!
+
+
+Jos=C3=A9.
+
+--00000000000001d33505cda9308c
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div dir=3D"ltr"><br></div><br><div class=3D"gmail_quote">=
+<div dir=3D"ltr" class=3D"gmail_attr">On Tue, Oct 5, 2021 at 7:54 PM Peter =
+Korsgaard &lt;<a href=3D"mailto:peter@korsgaard.com">peter@korsgaard.com</a=
+>&gt; wrote:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px=
+ 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">&gt=
+;&gt;&gt;&gt;&gt; &quot;Jos=C3=A9&quot; =3D=3D Jos=C3=A9 Pekkarinen &lt;<a =
+href=3D"mailto:jose.pekkarinen@unikie.com" target=3D"_blank">jose.pekkarine=
+n@unikie.com</a>&gt; writes:<br>
+<br>
+Hi,<br>
+<br>
+=C2=A0&gt;&gt; Any special reason for the redirect? iptables-save / restor =
+accepts a<br>
+=C2=A0&gt;&gt; filename argument.<br>
+=C2=A0&gt;&gt; <br>
+<br>
+=C2=A0&gt; Not from my side, I just didn&#39;t notice. I can<br>
+<br>
+=C2=A0&gt; change it for you if you want.<br>
+<br>
+Yes, please.<br>
+<br>
+<br>
+=C2=A0&gt;&gt; &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 echo &quot;U=
+sage: $0 {start|stop|restart|reload}&quot;<br>
+=C2=A0&gt;&gt; <br>
+=C2=A0&gt;&gt; NIT: This doesn&#39;t document the save argument.<br>
+=C2=A0&gt;&gt; <br>
+<br>
+=C2=A0&gt; Very true, please let me know and I&#39;m happy to send a v3<br>
+<br>
+=C2=A0&gt; tomorrow with those stuff.<br>
+<br>
+Ehh, this was already v3 and it was applied, so you will need to send a<br>
+followup patch changing the script instead.<br></blockquote><div><br></div>=
+</div><blockquote style=3D"margin:0 0 0 40px;border:none;padding:0px"><div =
+class=3D"gmail_quote"><div>Just sent, thanks!=C2=A0</div></div></blockquote=
+><br><div dir=3D"ltr" class=3D"gmail_signature"><div dir=3D"ltr"><blockquot=
+e style=3D"margin:0px 0px 0px 40px;border:none;padding:0px">Jos=C3=A9.</blo=
+ckquote></div></div></div>
+
+--00000000000001d33505cda9308c--
+
+--===============1909646256153284692==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1909646256153284692==--
