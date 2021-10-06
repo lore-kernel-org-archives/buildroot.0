@@ -2,52 +2,52 @@ Return-Path: <SRS0=BIUF=O2=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 351EBC433F5
-	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 14:36:42 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 504DBC433EF
+	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 14:36:53 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id EB228610EA
-	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 14:36:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org EB228610EA
+	by mail.kernel.org (Postfix) with ESMTPS id 1CE23610C8
+	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 14:36:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1CE23610C8
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C8A2460EA1;
-	Wed,  6 Oct 2021 14:36:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id ECF0083FA6;
+	Wed,  6 Oct 2021 14:36:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id aMCv81P85t7p; Wed,  6 Oct 2021 14:36:41 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id qAVwOHnZZ_WZ; Wed,  6 Oct 2021 14:36:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 31CFA60EA9;
-	Wed,  6 Oct 2021 14:36:40 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5E3E11BF9B6
- for <buildroot@lists.busybox.net>; Wed,  6 Oct 2021 14:35:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6F72183F95;
+	Wed,  6 Oct 2021 14:36:51 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 363D31BF36B
+ for <buildroot@lists.busybox.net>; Wed,  6 Oct 2021 14:35:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DE22240100
- for <buildroot@lists.busybox.net>; Wed,  6 Oct 2021 14:35:25 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 16F4983F95
+ for <buildroot@lists.busybox.net>; Wed,  6 Oct 2021 14:35:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id O1OQ4kh9na6I for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KHBHt3_JhJ_7 for <buildroot@lists.busybox.net>;
  Wed,  6 Oct 2021 14:35:24 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8132F4041A
+ by smtp1.osuosl.org (Postfix) with ESMTP id 67B8783EF6
  for <buildroot@buildroot.org>; Wed,  6 Oct 2021 14:35:24 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 7A7E19229E; Wed,  6 Oct 2021 14:32:48 +0000 (UTC)
+ id 53EE19229A; Wed,  6 Oct 2021 14:32:48 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 6 Oct 2021 16:31:48 +0200
+Date: Wed, 6 Oct 2021 15:29:46 +0200
 X-Git-Refname: refs/heads/2021.05.x
-X-Git-Oldrev: 4651e4dcd6874cb579f308bf6c40551c94464f63
-X-Git-Newrev: d78dd82eb71d90a8688298088576999bf8df2328
+X-Git-Oldrev: 5c269f0e32ac8b32556229667678c358264d6c22
+X-Git-Newrev: 661768c0db2b59b3bcb9d8c34aaccfb659f316b0
 X-Patchwork-Hint: ignore
-Message-Id: <20211006143248.7A7E19229E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.05.x] package/refpolicy: make
- sure xmllint is used
+Message-Id: <20211006143248.53EE19229A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.05.x] package/docker-engine:
+ bump to version 20.10.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,68 +60,45 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============5278307119967566190=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5278307119967566190==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=d78dd82eb71d90a8688298088576999bf8df2328
+commit: https://git.buildroot.net/buildroot/commit/?id=661768c0db2b59b3bcb9d8c34aaccfb659f316b0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
 
-When parsing and adding modules the refpolicy build system checks their
-validity using xmllint. By default the host system version is used and
-if not found an error is displayed but the build is not stopped. This
-leads to interesting issues where modules are not added correctly to
-modules.conf[1] (other possible issues are likely).
-
-Fix this by adding a dependency on host-libxml2 and explicitly use the
-xmllint binary built by Buildroot.
-
-[1] https://lore.kernel.org/buildroot/20210830114531.2285178-1-jose.pekkarinen@unikie.com/
-
-Tested-by: José Pekkarinen <jose.pekkarinen@unikie.com>
-Signed-off-by: Antoine Tenart <atenart@kernel.org>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 5141cee10939c56da3741967c128c58eac190222)
+Signed-off-by: Christian Stewart <christian@paral.in>
+(cherry picked from commit fc7646565bd158a2d475f684f1bccb2a0f06d821)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/refpolicy/refpolicy.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/docker-engine/docker-engine.hash | 2 +-
+ package/docker-engine/docker-engine.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/refpolicy/refpolicy.mk b/package/refpolicy/refpolicy.mk
-index a42483dba2..7782a5be54 100644
---- a/package/refpolicy/refpolicy.mk
-+++ b/package/refpolicy/refpolicy.mk
-@@ -14,7 +14,8 @@ REFPOLICY_DEPENDENCIES = \
- 	host-policycoreutils \
- 	host-python3 \
- 	host-setools \
--	host-gawk
-+	host-gawk \
-+	host-libxml2
+diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
+index d07ca33307..07acb87864 100644
+--- a/package/docker-engine/docker-engine.hash
++++ b/package/docker-engine/docker-engine.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  b80142035de46904605fb7b8f18075cd94154f8c3d67ff346ea554d1e9d579b9  docker-engine-20.10.7.tar.gz
++sha256  2505d00032f5d40ead5ac779c2840303dcead04713c93ba974be4c19b3ab8d0a  docker-engine-20.10.8.tar.gz
+ sha256  7c87873291f289713ac5df48b1f2010eb6963752bbd6b530416ab99fc37914a8  LICENSE
+diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
+index 372717775b..7d338a5c0c 100644
+--- a/package/docker-engine/docker-engine.mk
++++ b/package/docker-engine/docker-engine.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_REFPOLICY_CUSTOM_GIT),y)
- REFPOLICY_VERSION = $(call qstrip,$(BR2_PACKAGE_REFPOLICY_CUSTOM_REPO_VERSION))
-@@ -30,6 +31,7 @@ endif
- # Cannot use multiple threads to build the reference policy
- REFPOLICY_MAKE = \
- 	PYTHON=$(HOST_DIR)/usr/bin/python3 \
-+	XMLLINT=$(LIBXML2_HOST_BINARY) \
- 	TEST_TOOLCHAIN=$(HOST_DIR) \
- 	$(TARGET_MAKE_ENV) \
- 	$(MAKE1)
-
---===============5278307119967566190==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-DOCKER_ENGINE_VERSION = 20.10.7
++DOCKER_ENGINE_VERSION = 20.10.8
+ DOCKER_ENGINE_SITE = $(call github,moby,moby,v$(DOCKER_ENGINE_VERSION))
+ 
+ DOCKER_ENGINE_LICENSE = Apache-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5278307119967566190==--
