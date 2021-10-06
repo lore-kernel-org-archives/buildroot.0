@@ -2,59 +2,52 @@ Return-Path: <SRS0=BIUF=O2=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C3C08C433EF
-	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 15:28:31 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 39478C433FE
+	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 15:28:43 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 84B6060FDC
-	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 15:28:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 84B6060FDC
+	by mail.kernel.org (Postfix) with ESMTPS id DCD0A61027
+	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 15:28:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org DCD0A61027
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 532C860629;
-	Wed,  6 Oct 2021 15:28:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A25BC403EB;
+	Wed,  6 Oct 2021 15:28:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wD9HDepEXSXa; Wed,  6 Oct 2021 15:28:30 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Ys77DdMrOhEu; Wed,  6 Oct 2021 15:28:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BA4C46064C;
-	Wed,  6 Oct 2021 15:28:29 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D1AA11BF947
- for <buildroot@lists.busybox.net>; Wed,  6 Oct 2021 15:28:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 040E2403BA;
+	Wed,  6 Oct 2021 15:28:41 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 072DD1BF947
+ for <buildroot@lists.busybox.net>; Wed,  6 Oct 2021 15:28:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C0B666064C
- for <buildroot@lists.busybox.net>; Wed,  6 Oct 2021 15:28:27 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id EAF194035A
+ for <buildroot@lists.busybox.net>; Wed,  6 Oct 2021 15:28:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aYGe9g1EbvFO for <buildroot@lists.busybox.net>;
- Wed,  6 Oct 2021 15:28:26 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0FAA860629
- for <buildroot@buildroot.org>; Wed,  6 Oct 2021 15:28:25 +0000 (UTC)
-Received: (Authenticated sender: peter@casa-korsgaard.com)
- by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id C29BD1BF206;
- Wed,  6 Oct 2021 15:28:23 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
- (envelope-from <peter@korsgaard.com>)
- id 1mY8qF-000220-3I; Wed, 06 Oct 2021 17:28:23 +0200
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rMth1U7mZOz0 for <buildroot@lists.busybox.net>;
+ Wed,  6 Oct 2021 15:28:36 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3A90E40333
+ for <buildroot@buildroot.org>; Wed,  6 Oct 2021 15:28:36 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 0DEDD92395; Wed,  6 Oct 2021 15:26:00 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20210927211837.1499743-1-fontaine.fabrice@gmail.com>
-Date: Wed, 06 Oct 2021 17:28:23 +0200
-In-Reply-To: <20210927211837.1499743-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Mon, 27 Sep 2021 23:18:37 +0200")
-Message-ID: <87tuhu41go.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/atftp: security bump to version
- 0.7.5
+To: buildroot@buildroot.org
+Date: Wed, 6 Oct 2021 16:53:02 +0200
+X-Git-Refname: refs/heads/2021.02.x
+X-Git-Oldrev: f04292036255a260e824764c2066a617ffa66d50
+X-Git-Newrev: 3b4681098bf6c59b3e14a713b7b5da5f1e14f92a
+X-Patchwork-Hint: ignore
+Message-Id: <20211006152600.0DEDD92395@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/python-urllib3:
+ bump to version 1.26.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,29 +59,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Ryan Barnett <ryan.barnett@collins.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=3b4681098bf6c59b3e14a713b7b5da5f1e14f92a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
- > - Fix CVE-2021-41054: tftpd_file.c in atftp through 0.7.4 has a buffer
- >   overflow because buffer-size handling does not properly consider the
- >   combination of data, OACK, and other options.
- > - Update hash of license file (license replaced with current version:
- >   https://sourceforge.net/p/atftp/code/ci/bf22ccaef34f5dcdbd48de8b0bea3ef97b9d3545)
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit dc0583bd34d330fcc2bbef2c8a1f0da7a3da4b1a)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/python-urllib3/python-urllib3.hash | 4 ++--
+ package/python-urllib3/python-urllib3.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
- > https://sourceforge.net/p/atftp/code/ci/v0.7.5/tree/Changelog
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Committed to 2021.02.x, 2021.05.x and 2021.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/python-urllib3/python-urllib3.hash b/package/python-urllib3/python-urllib3.hash
+index 288d986e7c..066bfb7288 100644
+--- a/package/python-urllib3/python-urllib3.hash
++++ b/package/python-urllib3/python-urllib3.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/urllib3/json
+-md5  3a88ec3bcb761ca23df2c3583949be37  urllib3-1.26.6.tar.gz
+-sha256  f57b4c16c62fa2760b7e3d97c35b255512fb6b59a259730f36ba32ce9f8e342f  urllib3-1.26.6.tar.gz
++md5  e0051a87a956e618a6bb514a07fa7773  urllib3-1.26.7.tar.gz
++sha256  4987c65554f7a2dbf30c18fd48778ef124af6fab771a377103da0585e2336ece  urllib3-1.26.7.tar.gz
+ # Locally computed sha256 checksums
+ sha256  c37bf186e27cf9dbe9619e55edfe3cea7b30091ceb3da63c7dacbe0e6d77907b  LICENSE.txt
+diff --git a/package/python-urllib3/python-urllib3.mk b/package/python-urllib3/python-urllib3.mk
+index 775986d516..a1d22e023a 100644
+--- a/package/python-urllib3/python-urllib3.mk
++++ b/package/python-urllib3/python-urllib3.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_URLLIB3_VERSION = 1.26.6
++PYTHON_URLLIB3_VERSION = 1.26.7
+ PYTHON_URLLIB3_SOURCE = urllib3-$(PYTHON_URLLIB3_VERSION).tar.gz
+-PYTHON_URLLIB3_SITE = https://files.pythonhosted.org/packages/4f/5a/597ef5911cb8919efe4d86206aa8b2658616d676a7088f0825ca08bd7cb8
++PYTHON_URLLIB3_SITE = https://files.pythonhosted.org/packages/80/be/3ee43b6c5757cabea19e75b8f46eaf05a2f5144107d7db48c7cf3a864f73
+ PYTHON_URLLIB3_LICENSE = MIT
+ PYTHON_URLLIB3_LICENSE_FILES = LICENSE.txt
+ PYTHON_URLLIB3_CPE_ID_VENDOR = python
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
