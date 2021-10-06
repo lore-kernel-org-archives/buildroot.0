@@ -2,78 +2,78 @@ Return-Path: <SRS0=BIUF=O2=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3ABF6C433EF
-	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 05:33:17 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 757DDC433F5
+	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 05:33:28 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 95BA761245
-	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 05:33:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 95BA761245
+	by mail.kernel.org (Postfix) with ESMTPS id 3F7356125F
+	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 05:33:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3F7356125F
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=lespocky.de
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5C87B83A9E;
-	Wed,  6 Oct 2021 05:33:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D2A814040B;
+	Wed,  6 Oct 2021 05:33:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KfQxz51u004b; Wed,  6 Oct 2021 05:33:15 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id pgeTmaIYwOkH; Wed,  6 Oct 2021 05:33:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9DEEF83A9C;
-	Wed,  6 Oct 2021 05:33:14 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 401D11BF869
+	by smtp4.osuosl.org (Postfix) with ESMTP id 30032403E0;
+	Wed,  6 Oct 2021 05:33:26 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 8EEE11BF869
  for <buildroot@lists.busybox.net>; Wed,  6 Oct 2021 05:32:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2DB35403EC
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8B73740428
  for <buildroot@lists.busybox.net>; Wed,  6 Oct 2021 05:32:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Q9bvNAKn5kH7 for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VCvSRDwKHA8j for <buildroot@lists.busybox.net>;
  Wed,  6 Oct 2021 05:32:47 +0000 (UTC)
-X-Greylist: delayed 00:05:07 by SQLgrey-1.8.0
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 667A240377
- for <buildroot@buildroot.org>; Wed,  6 Oct 2021 05:32:47 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E0CD340421
+ for <buildroot@buildroot.org>; Wed,  6 Oct 2021 05:32:46 +0000 (UTC)
 Received: from methusalix.internal.home.lespocky.de ([92.117.42.49]) by
- mrelayeu.kundenserver.de (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1M8yso-1mT1ed2cdS-0065Nr; Wed, 06 Oct 2021 07:27:33 +0200
+ mrelayeu.kundenserver.de (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1Mg6qO-1n0AY61pOA-00haR7; Wed, 06 Oct 2021 07:27:32 +0200
 Received: from lemmy.internal.home.lespocky.de ([192.168.243.175]
  helo=lemmy.home.lespocky.de)
  by methusalix.internal.home.lespocky.de with esmtpsa (TLS1.3) tls
  TLS_AES_256_GCM_SHA384 (Exim 4.94.2)
  (envelope-from <alex@home.lespocky.de>)
- id 1mXzSl-0005bm-E1; Wed, 06 Oct 2021 07:27:32 +0200
-Received: (nullmailer pid 7389 invoked by uid 2001);
+ id 1mXzSk-0005bg-At; Wed, 06 Oct 2021 07:27:31 +0200
+Received: (nullmailer pid 7393 invoked by uid 2001);
  Wed, 06 Oct 2021 05:27:28 -0000
 From: Alexander Dahl <post@lespocky.de>
 To: buildroot@buildroot.org
-Date: Wed,  6 Oct 2021 07:27:15 +0200
-Message-Id: <20211006052717.7328-2-post@lespocky.de>
+Date: Wed,  6 Oct 2021 07:27:17 +0200
+Message-Id: <20211006052717.7328-4-post@lespocky.de>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20211006052717.7328-1-post@lespocky.de>
 References: <20211006052717.7328-1-post@lespocky.de>
 MIME-Version: 1.0
-X-Scan-Signature: 065d172b6fd9f72e1e90181fa0439b73
-X-Provags-ID: V03:K1:9s5OfiM3+2fyoRmHwdMpmmf1emid4PmjaIJS+K/Hwg4j3EdgOKe
- 3TgeYiwu8892E9eqN1u9e8c2lX/GadllxDZcjixRbaktRR2orMXLbpwCKEh9Hy5C/1aZhku
- cKRcXE5LGd8sAXTxV0AMksKUaTzvNR2DjJg8ZdNLoL+9zt/5T83wsiOkvMHGONzEFTTTuaP
- 5lbPUjpWTlkkMxOyiAaMA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:i+HCIvDLgxQ=:noFLmfultD6VgbPn+tDqQf
- 0DeJ9V5/tke5cDpt4CvGomPhcfVH8bKoPBNzzSO2WuPOyqzf6OPWuj9WzyvRTUJ2En9asCrHA
- m2L0SPuQNDJc1kTpg1U1wGR2VeGORFagVcB+QXkfw2HX3cIGPcXVFdHkQmQTsBHQtQsIWNpqj
- 1NLcWvYJSpv3BNaiTnfDYqjFi781RtkUhvUc91/2ERUv3yaZRrIupgAkg+CwlgSOH0QKEUX2R
- bkg7V6IEKvZAVD/l/fU8ME4S2AYfDXsFkaeV+ykXegqNcS419Xw/J3kGqwLjqW7xqED0Xn6WZ
- qbM83H3ryZzkQbdNty79JhVSkair3UE6AKgcINAolaJOOeCcKVoo4mkC4177FpeU0f6jt9XUV
- 0JepD0aSctbTCN7UqenyOs4lKjltGzXYaM9BfmaifrHM6P0aCOcqo07qbNQo2tm9WnsklFDDf
- EgaqB6v6y9ZDx+2SihFH098WFm/oPL0QT0yaAYaT1O+eIbI5SraV1itQNiEEdR4bQ1aNW2B3H
- /ncRHijP7+Ti1aGVnH9Hand9QfDw6vMCChzuAz5EBwfqrvwgcDFZShkJe501ER1ZT0dZpI6SJ
- dl07z8VWWXAxgXCZZ5uV397IBo5PoXM9dsd+dcRGslEiLeQa0Zx9jLiZcvsjyW1gdfg9gmZ26
- OfwAIH4FTxVJI7Cu7UEIvppIb32dleHuxba4gC0oxfP1kVzEvyeMxgsUI38eR2T9A/cVkLUl4
- GUL4rx55H8rYCx99BDtS4AITgc73lYWz5x6a3g==
-Subject: [Buildroot] [PATCH 1/3] package/dfu-util: Update help text
+X-Scan-Signature: 2824e010e3240a148eb131b95b7d18ee
+X-Provags-ID: V03:K1:z/Ym5hh/rl8e5FaTIGBZJan5FT/zoNjOx54sdyGDm7lP8B3Y9Gz
+ lEyq8WR+PENKUQlB/fJ0riSbDqNnjIyOQVyEIc1NXQwNOjihJwvmBfH8HlqEzQa7KhWPlkD
+ G57nWMzPebnnMhQGSrK+dLgFZyXNeHO7l58Wyj1FBquewKp7xJ3fau/utah7nhM/E8F3oC9
+ dF9otcmPc30tERnVXMTPw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:5XtxxwLBTeY=:CuHtvyapaM6GGBD7E87KeM
+ vinYCG3aeygfgjymth/wabgVCMUidFaVRfp9TEdgVro1LsrOjl4LsUe9e/Dpt6K9tBHGK7MZf
+ 2Zb7PT4Z38m+7BOLreK7+QyLr+36iSVALNq+kf9s55flYnZYgYXHbJzuwNnL0Ltw42prcvHKK
+ ukiJNh3QqUkQbpsNtcyKG4Y+rMUNG5BOM4hEk15HWuORPNOPZCqCmeynUY9s8Di6S40C4ooUM
+ zXRXFFXbP/5h2YFpRYqPDumlWrJEMA/4/JsQbFFb7qe5OQlE5rVO9pkQjobHsSgcntbJKDs3o
+ /f0ZHknzQ2BfdnBzVp9fv5Kl6wA4pQea7Pn1Q7YzNT6p8rf/CVJuqa6r0lQrfaMjdwREkcwFP
+ HKKGz1aseDacT9oM5GH2uburwxweA9w2K97Q9LjZG90UqvzI/1K9VrAKoh20aTakEmQv5Dh/m
+ 0kf3XsbeVoZPURIG04WwdElnWq0MdTUSQizBNrNGBXOPV6iIlOyJDf8DcfnmfHtc2fqkVztXq
+ Yhg2KLISsNVdr2+yT/sbEH6/bP2IlNYt9oqnQdnuf0iZ9qeKcIfvD1PfHsB5ZexlrQ2KnAPgQ
+ xTBxG9SFxvoHYeHqrwnTfnDDB3Sp7IiOY5NWwC//fF3thfsgzURBeQUPzYpEoppPv5ampOuu8
+ ewHaZx3ROldGX2zK4gBTwmYC0N/wjDkFqoS323T1k621hKDmqknvIEUyzhkj5titdCX9FG/rW
+ er97ror+XuwH0E/JVPwiBdNKT2cD3VbjmPc9aQ==
+Subject: [Buildroot] [PATCH 3/3] package/dfu-util: bump version to 0.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,50 +91,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-DFU 1.1 specification is also supported.
+From the ChangeLog (see git history for full details):
+- Fix suffix check regression on Windows with Large File Support
+- Skip setting alternate interface when not needed
+- Only clamp transfer size on Linux
+- Quirk for GD32 leave request
+- Improve status and error messages and exit codes
+- dfuse: Process all alternate interfaces in a DfuSe file
+- dfuse-pack.py: Fix alternate settings if first is 0
 
+Link: https://lists.osmocom.org/pipermail/dfu-util/2021-September/000014.html
 Signed-off-by: Alexander Dahl <post@lespocky.de>
 ---
- package/dfu-util/Config.in      | 7 ++++---
- package/dfu-util/Config.in.host | 7 ++++---
- 2 files changed, 8 insertions(+), 6 deletions(-)
+ package/dfu-util/dfu-util.hash | 6 +++---
+ package/dfu-util/dfu-util.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/dfu-util/Config.in b/package/dfu-util/Config.in
-index 71c1a1687c..2eddbf0521 100644
---- a/package/dfu-util/Config.in
-+++ b/package/dfu-util/Config.in
-@@ -4,9 +4,10 @@ config BR2_PACKAGE_DFU_UTIL
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libusb
- 	select BR2_PACKAGE_LIBUSB
- 	help
--	  Dfu-util is the host side implementation of the DFU 1.0
--	  specification of the USB forum. DFU is intended to download
--	  and upload firmware to devices connected over USB.
-+	  Dfu-util is the host side implementation of the DFU 1.0 and
-+	  DFU 1.1 specification of the USB forum.
-+	  DFU is intended to download and upload firmware to devices
-+	  connected over USB.
+diff --git a/package/dfu-util/dfu-util.hash b/package/dfu-util/dfu-util.hash
+index a99e67565d..4ca28a26c9 100644
+--- a/package/dfu-util/dfu-util.hash
++++ b/package/dfu-util/dfu-util.hash
+@@ -1,6 +1,6 @@
+-# From http://dfu-util.sourceforge.net/releases/dfu-util-0.10.tar.gz.md5
+-md5  8cf55663703cdc6b40f377f999eb8d3d  dfu-util-0.10.tar.gz
++# From http://dfu-util.sourceforge.net/releases/dfu-util-0.11.tar.gz.md5
++md5  31c983543a1fe8f03260ca4d56ad4f43  dfu-util-0.11.tar.gz
  
- 	  http://dfu-util.sourceforge.net/
+ # Locally computed
+-sha256  a03dc58dfc79c056819c0544b2a5970537566460102b3d82cfb038c60e619b42  dfu-util-0.10.tar.gz
++sha256  b4b53ba21a82ef7e3d4c47df2952adf5fa494f499b6b0b57c58c5d04ae8ff19e  dfu-util-0.11.tar.gz
+ sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
+diff --git a/package/dfu-util/dfu-util.mk b/package/dfu-util/dfu-util.mk
+index 4c9c9662c6..638cb32f37 100644
+--- a/package/dfu-util/dfu-util.mk
++++ b/package/dfu-util/dfu-util.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-diff --git a/package/dfu-util/Config.in.host b/package/dfu-util/Config.in.host
-index 1bf9275f97..5ce0da0372 100644
---- a/package/dfu-util/Config.in.host
-+++ b/package/dfu-util/Config.in.host
-@@ -2,9 +2,10 @@ config BR2_PACKAGE_HOST_DFU_UTIL
- 	bool "host dfu-util"
- 	depends on BR2_HOST_GCC_AT_LEAST_4_9 # host-libusb
- 	help
--	  Dfu-util is the host side implementation of the DFU 1.0
--	  specification of the USB forum. DFU is intended to download
--	  and upload firmware to devices connected over USB.
-+	  Dfu-util is the host side implementation of the DFU 1.0 and
-+	  DFU 1.1 specification of the USB forum.
-+	  DFU is intended to download and upload firmware to devices
-+	  connected over USB.
- 
- 	  http://dfu-util.sourceforge.net/
- 
+-DFU_UTIL_VERSION = 0.10
++DFU_UTIL_VERSION = 0.11
+ DFU_UTIL_SITE = http://dfu-util.sourceforge.net/releases
+ DFU_UTIL_LICENSE = GPL-2.0+, LGPL-3.0
+ DFU_UTIL_LICENSE_FILES = COPYING
 -- 
 2.20.1
 
