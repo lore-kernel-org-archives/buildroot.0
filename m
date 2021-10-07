@@ -2,60 +2,85 @@ Return-Path: <SRS0=EluJ=O3=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AF820C433EF
-	for <buildroot@archiver.kernel.org>; Thu,  7 Oct 2021 12:44:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 59FF2C433EF
+	for <buildroot@archiver.kernel.org>; Thu,  7 Oct 2021 16:11:26 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id CC4DB60F92
-	for <buildroot@archiver.kernel.org>; Thu,  7 Oct 2021 12:44:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org CC4DB60F92
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
+	by mail.kernel.org (Postfix) with ESMTPS id A6C5961074
+	for <buildroot@archiver.kernel.org>; Thu,  7 Oct 2021 16:11:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A6C5961074
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 66826404A0;
-	Thu,  7 Oct 2021 12:44:00 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 414C1401D6;
+	Thu,  7 Oct 2021 16:11:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id t9kDb41XWv_K; Thu,  7 Oct 2021 12:43:59 +0000 (UTC)
+	with ESMTP id eugFABf7TzYH; Thu,  7 Oct 2021 16:11:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6F73C4049C;
-	Thu,  7 Oct 2021 12:43:58 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 69FB340196;
+	Thu,  7 Oct 2021 16:11:23 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C36BF1BF861
- for <buildroot@lists.busybox.net>; Thu,  7 Oct 2021 12:43:56 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 284941BF354
+ for <buildroot@lists.busybox.net>; Thu,  7 Oct 2021 16:11:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B20C660FA2
- for <buildroot@lists.busybox.net>; Thu,  7 Oct 2021 12:43:56 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2478760686
+ for <buildroot@lists.busybox.net>; Thu,  7 Oct 2021 16:11:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wy8AsxDajNQI for <buildroot@lists.busybox.net>;
- Thu,  7 Oct 2021 12:43:55 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 9F01D607E4
- for <buildroot@buildroot.org>; Thu,  7 Oct 2021 12:43:55 +0000 (UTC)
-Received: (Authenticated sender: kory.maincent@bootlin.com)
- by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 924701C0013;
- Thu,  7 Oct 2021 12:43:52 +0000 (UTC)
-Date: Thu, 7 Oct 2021 14:43:51 +0200
-From: =?UTF-8?B?S8O2cnk=?= Maincent <kory.maincent@bootlin.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Message-ID: <20211007144351.629d2de0@kmaincent-XPS-13-7390>
-In-Reply-To: <20211007095326.GA2814782@scaer>
-References: <20210923155726.87851-1-kory.maincent@bootlin.com>
- <20210923155726.87851-3-kory.maincent@bootlin.com>
- <20211006181104.GD2081069@scaer>
- <20211007102318.556f7fc2@kmaincent-XPS-13-7390>
- <20211007095326.GA2814782@scaer>
-Organization: bootlin
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+ with ESMTP id kSoSvCwM2mOP for <buildroot@lists.busybox.net>;
+ Thu,  7 Oct 2021 16:11:21 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
+ [IPv6:2a00:1450:4864:20::434])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D1DF160675
+ for <buildroot@buildroot.org>; Thu,  7 Oct 2021 16:11:20 +0000 (UTC)
+Received: by mail-wr1-x434.google.com with SMTP id v17so20672441wrv.9
+ for <buildroot@buildroot.org>; Thu, 07 Oct 2021 09:11:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=IkPBaxS+iOZn1c0jsTfxHLkTU2NVGwlxM0TdzOkmiFI=;
+ b=TNdUqymqckRl3idAXGYutIIwleal2BqCtp7OP9rTULTcoKIp0xVUaUFhdp7rOwbg/N
+ WsWQuRLJ7PmOwJ02DMGM7bJvln2DLCKBAsPq2JYDTPNkNnS2V9FWVlxxMnr7YwpjK272
+ 9yewKlP7q8EIwTAMftFzOxa4e3QE8MlWGPWIAkcm6OrC75GyUyCwhJEILJ5WyVUDTZly
+ rjDGC4JvpYBzr+80unsFEOA1GHgoI6TVylNYHhFto4hJem+oBmjwrm8YKOkTt8cRv6hN
+ YDjcIA9bzNAi4aqF5RizSuijv72NA0xUceHLHh4o3deqIgmY5HJgwrcXggYwULochczt
+ cYzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=IkPBaxS+iOZn1c0jsTfxHLkTU2NVGwlxM0TdzOkmiFI=;
+ b=fIpnOLKdVdv7cCe+xsw4zU/Eu5seNZHgYTXLw+N5RmMQCaW0WoRsrfQXUeszZ+T37s
+ WP0OsSZIy145DIbsEl7oyA7Zxgw0yxTGQmNMuMKyf8VN8AKObGA8WkdrfZ+d8+Ikhm7n
+ IWEsi+K3x5CBJHu0ltYlUBzZlGl6ZZOyPKoENFtdFhQMOYjmnKqt/yB0jgB/37zzmyJY
+ oTxVqKjMB6M0NkNVvYCN0yngiVBJPQ8AUnmMsjxD3dzpzY4wqxSGXNYBybE9F809N6N+
+ J0ZXF11UpU9lXqcIQLdtsNKDa8gSNE+Z/fur2nkyeJf3R/RKWvr8WeNwQtsTSWL21caE
+ TQaA==
+X-Gm-Message-State: AOAM532pbdygValbE9GWoEt+z19g04Qbz6Mc8gn2pTqb1SfMlixA+502
+ SydmI/OtlZojbE7pKMp24txGGawj578=
+X-Google-Smtp-Source: ABdhPJyK+14dpYwn0BzWIl3dDHzVhTBw4DISHGYdiG8MfoEjBUFLCQL2orCUDhItNqlvBrSmSBMg5Q==
+X-Received: by 2002:a1c:2543:: with SMTP id l64mr17391281wml.9.1633623078717; 
+ Thu, 07 Oct 2021 09:11:18 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-421-88.w2-10.abo.wanadoo.fr.
+ [2.10.246.88])
+ by smtp.gmail.com with ESMTPSA id c204sm9491490wme.11.2021.10.07.09.11.17
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 07 Oct 2021 09:11:17 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Thu,  7 Oct 2021 18:09:57 +0200
+Message-Id: <20211007160957.3469451-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v3 2/7] boot/grub2: add support to build
- multiple Grub2 configurations in the same build
+Subject: [Buildroot] [PATCH 1/1] package/python-decorator: python3 is also
+ needed for host
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -67,48 +92,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Adam Duskett <aduskett@gmail.com>, thomas.petazzoni@bootlin.com,
- buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Andrey Smirnov <andrew.smirnov@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gVGh1LCA3IE9jdCAyMDIxIDExOjUzOjI2ICswMjAwCiJZYW5uIEUuIE1PUklOIiA8eWFubi5t
-b3Jpbi4xOTk4QGZyZWUuZnI+IHdyb3RlOgoKPiBLw7ZyeSwgQWxsLAo+IAo+IE9uIDIwMjEtMTAt
-MDcgMTA6MjMgKzAyMDAsIEvDtnJ5IE1haW5jZW50IHNwYWtlIHRodXNseToKPiA+IE9uIFdlZCwg
-NiBPY3QgMjAyMSAyMDoxMTowNCArMDIwMAo+ID4gIllhbm4gRS4gTU9SSU4iIDx5YW5uLm1vcmlu
-LjE5OThAZnJlZS5mcj4gd3JvdGU6ICAKPiA+ID4gT24gMjAyMS0wOS0yMyAxNzo1NyArMDIwMCwg
-S29yeSBNYWluY2VudCBzcGFrZSB0aHVzbHk6Cj4gPiA+IFstLVNOSVAtLV0gIAo+ID4gPiA+IFdl
-IGNhbiBubyBsb25nZXIgdXNlIGF1dG90b29scy1wYWNrYWdlIGFzIGEgY29uc2VxdWVuY2Ugb2Yg
-dGhpcwo+ID4gPiA+IG11bHRpLWJ1aWxkLCBhbmQgd2UgaGF2ZSB0byByZXNvcnQgdG8gZ2VuZXJp
-Yy1wYWNrYWdlIGFuZCBhIHBhcnRpYWwKPiA+ID4gPiBkdXBsaWNhdGlvbiBvZiB0aGUgYXV0b3Rv
-b2xzLWluZnJhLiBHcnViMiB3YXMgYWxyZWFkeSB1c2luZyBjdXN0b20KPiA+ID4gPiBvcHRpb24g
-bGlrZSAtLXByZWZpeCBvciAtLWV4ZWMtcHJlZml4IHNvIHRoaXMgd29uJ3QgYWRkIG11Y2ggbW9y
-ZQo+ID4gPiA+IHdlaXJkbmVzcy4gICAgCj4gPiA+IEJ1dCB0aGlzIGhhZCBhbiB1bmZvcnR1bmF0
-ZSBzaWRlIGVmZmVjdDogdGhlIGdydWIyIHRvb2xzLCBsaWtlCj4gPiA+IGdydWItZWRpdGVudiwg
-ZW5hYmxlZCB3aXRoIEJSMl9UQVJHRVRfR1JVQjJfSU5TVEFMTF9UT09MUywgYXJlIG5vCj4gPiA+
-IGxvbmdlciBpbnN0YWxsZWQgaW4gdGhlIHRhcmdldCBub3cuICAKPiA+IERvaCwgZGlkbid0IHRo
-b3VnaHQgb2YgdGhhdCEgIAo+IAo+IE5laXRoZXIgZGlkIEkuLi4KPiAKPiBbLS1TTklQLS1dCj4g
-PiA+IENhcmUgdG8gbG9vayBpbnRvIHRoYXQsIHBsZWFzZT8gIAo+ID4gCj4gPiBtbWggdGhhdCdz
-IHRyaWNreSwgYmVjYXVzZSBpbiB0aGUgY2FzZSB3ZSB3YW50IHRvIHVzZSB0aGUgR3J1YiBtb2R1
-bGVzIGl0Cj4gPiBuZWVkIHRvIGJlIGdlbmVyYXRlZCBmb3IgZWFjaCBwbGF0Zm9ybXMuCj4gPiBG
-b3IgZXhhbXBsZSB3ZSBjYW4gZmFjZSBhIGNhc2Ugd2hlcmUgd2Ugd2lsbCBoYXZlIHRoZXNlIHRo
-cmVlIEdydWIgbW9kdWxlcwo+ID4gcmVwb3NpdG9yaWVzIGZvciBlYWNoIHBsYXRmb3JtOgo+ID4g
-dGFyZ2V0L2xpYi9ncnViL2kzODYtcGMvCj4gPiB0YXJnZXQvbGliL2dydWIvaTM4Ni1lZmkvCj4g
-PiB0YXJnZXQvbGliL2dydWIveDg2XzY0LWVmaS8KPiA+IAo+ID4gV2hhdCBhYm91dCBqdXN0IGFk
-ZGluZyB0aGUgIm1ha2UgaW5zdGFsbCIgY29tbWFuZCBpbiB0aGUgZm9yZWFjaCBsb29wPwo+ID4g
-VGhpcyB3aWxsIG92ZXJ3cml0ZSB0aGUgYmluYXJpZXMsIHRoZSBsb2NhbGUgYW5kIHRoZSAvZXRj
-IGNvbmZpZ3VyYXRpb25zIGZvcgo+ID4gZWFjaCAibWFrZSIgbG9vcCBidXQgd2Ugd2lsbCBoYXZl
-IGFsbCB0aGUgR3J1YiBtb2R1bGVzIHJlcG9zaXRvcmllcy4gSSBkb24ndAo+ID4gdGhpbmsgdGhl
-IG92ZXJ3cml0ZXMgd2lsbCBjYXVzZSBpc3N1ZXMgYmVjYXVzZSBpdCBpcyBqdXN0IHRvb2xzLiAg
-Cgo+IAo+IEJ5IHVzaW5nIC0td2l0aC1wbGF0Zm9ybT1ub25lIGluIHRoZSBtYWluIENPTkZfT1BU
-Uywgd2Ugc2hvdWxkIGJlIGFibGUKPiB0byBkaXNhYmxlIGJ1aWxkaW5nIGFueSBvZiB0aGUgImlt
-YWdlcyIsIGFuZCBqdXN0IGJ1aWxkIHRoZSB0b29scy4KPiAKPiBUb3RhbGx5IHVudGVzdGVkLCBv
-ZiBjb3Vyc2UuLi4KCkFzIEkgc2FpZCBpZiB3ZSBkbyB0aGF0IHdlIHdvbid0IGhhdmUgYWxsIHRo
-ZSBHcnViIG1vZHVsZXMgaW4gdGhlIHRhcmdldApkaXJlY3RvcnkuIEkgdGhpbmsgdGhlc2UgbW9k
-dWxlcyBhcmUgcXVpZXQgaW1wb3J0YW50LCBhbiB1c2VyIHRoYXQgd2FudHMgdG8gdXNlCmdydWIt
-bWtpbWFnZSB3aWxsIHN1cmVseSB1c2UgdGhlbSBmb3IgZXhhbXBsZS4gCgpSZWdhcmRzLAoKS8O2
-cnksCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWls
-ZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMu
-YnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+Commit 7bfe142e0d84400e386286347afd6e26f90b8aae forgot to set
+HOST_PYTHON_DECORATOR_NEEDS_HOST_PYTHON
+
+Fixes:
+ - http://autobuild.buildroot.org/results/d11433a8076798d6088f92716608ebbe1c6aee9c
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/python-decorator/python-decorator.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/python-decorator/python-decorator.mk b/package/python-decorator/python-decorator.mk
+index a61f045e2a..a7e338bdc0 100644
+--- a/package/python-decorator/python-decorator.mk
++++ b/package/python-decorator/python-decorator.mk
+@@ -12,6 +12,7 @@ PYTHON_DECORATOR_LICENSE_FILES = LICENSE.txt
+ PYTHON_DECORATOR_CPE_ID_VENDOR = python
+ PYTHON_DECORATOR_CPE_ID_PRODUCT = decorator
+ PYTHON_DECORATOR_SETUP_TYPE = setuptools
++HOST_PYTHON_DECORATOR_NEEDS_HOST_PYTHON = python3
+ 
+ $(eval $(python-package))
+ $(eval $(host-python-package))
+-- 
+2.33.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
