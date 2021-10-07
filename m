@@ -2,52 +2,71 @@ Return-Path: <SRS0=EluJ=O3=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 013C3C433EF
-	for <buildroot@archiver.kernel.org>; Thu,  7 Oct 2021 19:50:16 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B50AC433EF
+	for <buildroot@archiver.kernel.org>; Thu,  7 Oct 2021 20:04:03 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 81029610C8
-	for <buildroot@archiver.kernel.org>; Thu,  7 Oct 2021 19:50:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 81029610C8
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
+	by mail.kernel.org (Postfix) with ESMTPS id 6CDE5610A0
+	for <buildroot@archiver.kernel.org>; Thu,  7 Oct 2021 20:04:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6CDE5610A0
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=benettiengineering.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4E86340983;
-	Thu,  7 Oct 2021 19:50:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 07934840F9;
+	Thu,  7 Oct 2021 20:04:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dZ80s4jsI2RG; Thu,  7 Oct 2021 19:50:14 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id O1gmxlmnRHCO; Thu,  7 Oct 2021 20:04:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A0677408E6;
-	Thu,  7 Oct 2021 19:50:13 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 345621BF9C2
- for <buildroot@lists.busybox.net>; Thu,  7 Oct 2021 19:50:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 39CA0840DD;
+	Thu,  7 Oct 2021 20:04:00 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id EF0801BF29A
+ for <buildroot@lists.busybox.net>; Thu,  7 Oct 2021 20:03:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2F7574011D
- for <buildroot@lists.busybox.net>; Thu,  7 Oct 2021 19:50:01 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D7DEC40942
+ for <buildroot@lists.busybox.net>; Thu,  7 Oct 2021 20:03:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aTWtlc4a192t for <buildroot@lists.busybox.net>;
- Thu,  7 Oct 2021 19:50:00 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4480740104
- for <buildroot@buildroot.org>; Thu,  7 Oct 2021 19:50:00 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 57054934C3; Thu,  7 Oct 2021 19:47:21 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Thu, 7 Oct 2021 21:25:37 +0200
-X-Git-Refname: refs/heads/2021.08.x
-X-Git-Oldrev: 039a7c4f3c669a5e4155ec195cf42760708b506c
-X-Git-Newrev: 7c37b981091644827060b81da798b355f48d685c
-X-Patchwork-Hint: ignore
-Message-Id: <20211007194721.57054934C3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.08.x] package/php-gnupg: fix
- build with gcc 4.8
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=aruba.it
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7pBGS9vpeD-g for <buildroot@lists.busybox.net>;
+ Thu,  7 Oct 2021 20:03:56 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtpcmd12132.aruba.it (smtpcmd12132.aruba.it [62.149.156.132])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 86EC140921
+ for <buildroot@buildroot.org>; Thu,  7 Oct 2021 20:03:56 +0000 (UTC)
+Received: from [192.168.126.129] ([146.241.216.221])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id YZcQmyml3nxSqYZcQmfMlq; Thu, 07 Oct 2021 22:03:54 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+ t=1633637034; bh=Sqbvee6EkDU7UhARAg5xNtpdCtre0BEIuupsLTPla5g=;
+ h=Subject:To:From:Date:MIME-Version:Content-Type;
+ b=hPUpA+eVk/krP69sv9sL6RKvx2D8sDMXq7R7qNwtPU7eA36vUmFzTK+vtdmDYcwzK
+ GyCvzwF1qvOVZ22Oa3J6npzJ7jXjn10vJC1TpaMBCsqR5Kix6COFSD+aHZmMyIQcxF
+ NV76kDsvEhIsmb+YtFkwVDzflQ9TEFFDsiWTyBFp70xju1Xhjgq5/R0EjqrNDBh+2H
+ Bszs5rvlKZz/v8MmfJubXHVtZ0aaRQRNAARhegMI9INHMWdP8krTYmnV+vqda15Tb2
+ UDIUSKvQZKljZ/H3/M8x/hkwAAPUM4EtheSYMvHwYe/dYaUiXyyxFT1oyh5zcl05S1
+ 2mVW/SunudKRA==
+To: Kamel Bouhara <kamel.bouhara@bootlin.com>, buildroot@buildroot.org
+References: <20211007095147.688449-1-kamel.bouhara@bootlin.com>
+ <20211007095147.688449-4-kamel.bouhara@bootlin.com>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Message-ID: <fb02e3f3-fb83-9804-1daf-f87467aede87@benettiengineering.com>
+Date: Thu, 7 Oct 2021 22:03:54 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
+MIME-Version: 1.0
+In-Reply-To: <20211007095147.688449-4-kamel.bouhara@bootlin.com>
+Content-Language: en-US
+X-CMAE-Envelope: MS4wfL87TCJig/aVw65CrOhKk0jEbBHAmi4wAXqQisikj9Pt2WL648rzQMJKJf7z1wV5hPOTfH6JNR5Jfbu87eSE0h/Ws9Ix+n4xydF/ow3wWO/t2R6t4RDW
+ zgYqOYtCHxU4Est49lUaSQw67k8djcCh+kb/ig6iJHQDmEBx4WSiIzzghHNqP4aVJVwnsyYMzWyMnDylj1Uzpe5nzt4tvdFKkJFshXFLXh4k2NGHduJeMQFq
+ X4QrTfYJ9QzhmBBc3aDr/qUmGii/YeI6nrlQVlnR4FtjD7l+hHdGQniZFxqoMPsdtbtXwjBKu14HAJwtFEo8wlFAPJ5VxfhtmWRzY56jCFk=
+Subject: Re: [Buildroot] [PATCH v3 4/7] package/sunxi-mali-mainline: add
+ support for different outputs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,73 +78,161 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Cc: Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7c37b981091644827060b81da798b355f48d685c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.08.x
+Hi Kamel,
 
-Fix the following build failure with gcc 4.8 raised since bump of
-php-gnupg to version 1.5.0 in commit
-20ecd9c94222ef20b7804084acefb472b8e5deaf and
-https://github.com/bukka/phpc/commit/8b5b1e718fbb2ba57102d1e9d844938038df310c:
+On 10/7/21 11:51 AM, Kamel Bouhara wrote:
+> From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> 
+> Adds support for selecting one of the four display API supported: fbdev,
+> wayland, x11-dmabuf, x11-ump.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Signed-off-by: Kamel Bouhara <kamel.bouhara@bootlin.com>
+> ---
+> Changes v2 -> v3:
+>   - Moved gbm.pc install into patch 5/7
+> 
+>   package/sunxi-mali-mainline/Config.in         | 26 +++++++++++++++++
+>   .../sunxi-mali-mainline.mk                    | 28 +++++++++++++++++--
+>   2 files changed, 51 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/sunxi-mali-mainline/Config.in b/package/sunxi-mali-mainline/Config.in
+> index a2fb95bd79..31a9152407 100644
+> --- a/package/sunxi-mali-mainline/Config.in
+> +++ b/package/sunxi-mali-mainline/Config.in
+> @@ -17,6 +17,24 @@ config BR2_PACKAGE_PROVIDES_LIBEGL
+>   config BR2_PACKAGE_PROVIDES_LIBGLES
+>   	default "sunxi-mali-mainline"
+>   
+> +choice
+> +	prompt "Output"
+> +
+> +config BR2_PACKAGE_SUNXI_MALI_MAINLINE_OUTPUT_FBDEV
+> +	bool "fbdev"
+> +
+> +config BR2_PACKAGE_SUNXI_MALI_MAINLINE_OUTPUT_WAYLAND
+> +	bool "wayland"
+> +	depends on BR2_PACKAGE_WAYLAND
+> +
+> +config BR2_PACKAGE_SUNXI_MALI_MAINLINE_OUTPUT_X11_DMABUF
+> +	bool "x11 dma-buf"
 
-.libs/gnupg_keylistiterator.o: In function `_phpc_res_close':
-gnupg_keylistiterator.c:(.text+0x2d4): multiple definition of `_phpc_res_close'
+as done for "wayland" here ^^^ I would add "depends on BR2_PACKAGE_XORG7"
 
-Fixes:
- - http://autobuild.buildroot.org/results/d79/d79bc1b0f98d68eb8a7fe7d86af5ddcc75e42507/build-end.log
+> +
+> +config BR2_PACKAGE_SUNXI_MALI_MAINLINE_OUTPUT_X11_UMP
+> +	bool "x11 ump"
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 867521fed7cc0562aee2ff29ecd6cd257f128b07)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../0001-Remove-inlining-_phpc_res_close.patch     | 33 ++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+ditto
 
-diff --git a/package/php-gnupg/0001-Remove-inlining-_phpc_res_close.patch b/package/php-gnupg/0001-Remove-inlining-_phpc_res_close.patch
-new file mode 100644
-index 0000000000..9b94cb7e4f
---- /dev/null
-+++ b/package/php-gnupg/0001-Remove-inlining-_phpc_res_close.patch
-@@ -0,0 +1,33 @@
-+From 887b0899d7e7423baec691255c2d8b56bb348ecd Mon Sep 17 00:00:00 2001
-+From: Jakub Zelenka <bukka@php.net>
-+Date: Sun, 14 Mar 2021 18:52:21 +0000
-+Subject: [PATCH] Remove inlining _phpc_res_close
-+
-+[Retrieved from:
-+https://github.com/bukka/phpc/commit/887b0899d7e7423baec691255c2d8b56bb348ecd]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ phpc.h | 8 --------
-+ 1 file changed, 8 deletions(-)
-+
-+diff --git a/phpc/phpc.h b/phpc/phpc.h
-+index dc5887e..9206105 100644
-+--- a/phpc/phpc.h
-++++ b/phpc/phpc.h
-+@@ -945,16 +945,8 @@ typedef zend_resource * phpc_res_value_t;
-+ 	zend_fetch_resource2(Z_RES_P(_pz_res), _res_type_name, _res_type_1, _res_type_2)
-+ #define PHPC_RES_DELETE(_pz_res) \
-+ 	zend_list_delete(Z_RES_P(_pz_res))
-+-#if PHP_MAJOR_VERSION < 8
-+ #define PHPC_RES_CLOSE(_pz_res) \
-+ 	zend_list_close(Z_RES_P(_pz_res))
-+-#else
-+-inline int _phpc_res_close(zval *zres) {
-+-	zend_list_close(Z_RES_P(zres));
-+-	return SUCCESS;
-+-}
-+-#define PHPC_RES_CLOSE _phpc_res_close
-+-#endif
-+ 
-+ /* resource to zval */
-+ #define PHPC_RES_PZVAL(_res, _pzv) \
+> +
+> +endchoice
+> +
+>   choice
+>   	prompt "Version"
+>   	default BR2_PACKAGE_SUNXI_MALI_MAINLINE_R6P2
+> @@ -27,9 +45,17 @@ config BR2_PACKAGE_SUNXI_MALI_MAINLINE_R6P2
+>   	bool "r6p2"
+>   config BR2_PACKAGE_SUNXI_MALI_MAINLINE_R8P1
+>   	bool "r8p1"
+> +	depends on BR2_PACKAGE_SUNXI_MALI_MAINLINE_OUTPUT_FBDEV
+
+This is not enough because this way, when you select r8p1, you still can 
+see "x11 ump" and "x11 dma-buf". So I would invert the depends on by 
+removing the above one and adding the depends on 
+BR2_PACKAGE_SUNXI_MALI_MAINLINE_R6P2 to
+BR2_PACKAGE_SUNXI_MALI_MAINLINE_OUTPUT_WAYLAND/X11_DMABUF/X11_UMP
+
+Also I would invert the order of the 2 choices, first I would place the 
+Version to choose and then the Output, this way is more intuitive for me.
+
+And please, add me to Cc since I'm the maintainer on 
+sunxi-mali-mainline* in DEVELOPERS. As already pointed you on previous 
+e-mail, please use ./utils/get-developers script to obtain the already 
+ready git send-mail command.
+
+Thank you!
+
+Best regards
+-- 
+Giulio Benetti
+Benetti Engineering sas
+
+>   
+>   endchoice
+>   
+> +config BR2_PACKAGE_SUNXI_MALI_MAINLINE_OUTPUT
+> +	string
+> +	default "fbdev"		if BR2_PACKAGE_SUNXI_MALI_MAINLINE_OUTPUT_FBDEV
+> +	default "wayland"	if BR2_PACKAGE_SUNXI_MALI_MAINLINE_OUTPUT_WAYLAND
+> +	default "x11_dma_buf" 	if BR2_PACKAGE_SUNXI_MALI_MAINLINE_OUTPUT_X11_DMABUF
+> +	default "x11_ump"     	if BR2_PACKAGE_SUNXI_MALI_MAINLINE_OUTPUT_X11_UMP
+> +
+>   config BR2_PACKAGE_SUNXI_MALI_MAINLINE_REVISION
+>   	string
+>   	default "r6p2"	if BR2_PACKAGE_SUNXI_MALI_MAINLINE_R6P2
+> diff --git a/package/sunxi-mali-mainline/sunxi-mali-mainline.mk b/package/sunxi-mali-mainline/sunxi-mali-mainline.mk
+> index b46f572311..e058b5c3cd 100644
+> --- a/package/sunxi-mali-mainline/sunxi-mali-mainline.mk
+> +++ b/package/sunxi-mali-mainline/sunxi-mali-mainline.mk
+> @@ -21,22 +21,44 @@ else ifeq ($(BR2_aarch64),y)
+>   SUNXI_MALI_MAINLINE_ARCH=arm64
+>   endif
+>   
+> +SUNXI_MALI_MAINLINE_OUTPUT = $(call qstrip,$(BR2_PACKAGE_SUNXI_MALI_MAINLINE_OUTPUT))
+> +SUNXI_MALI_MAINLINE_LIB_SUBDIR = \
+> +	$(SUNXI_MALI_MAINLINE_REV)/$(SUNXI_MALI_MAINLINE_ARCH)/$(SUNXI_MALI_MAINLINE_OUTPUT)
+> +
+> +ifeq ($(BR2_PACKAGE_SUNXI_MALI_MAINLINE_OUTPUT_X11_DMABUF)$(BR2_PACKAGE_SUNXI_MALI_MAINLINE_OUTPUT_X11_UMP),y)
+> +SUNXI_MALI_MAINLINE_INCLUDE_SUBDIR = include/x11
+> +else
+> +SUNXI_MALI_MAINLINE_INCLUDE_SUBDIR = \
+> +	include/$(SUNXI_MALI_MAINLINE_OUTPUT)
+> +define SUNXI_MALI_MAINLINE_FIXUP_EGL_PC
+> +	$(SED) "s/Cflags: /Cflags: -DMESA_EGL_NO_X11_HEADERS /" \
+> +		$(STAGING_DIR)/usr/lib/pkgconfig/egl.pc
+> +endef
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_SUNXI_MALI_MAINLINE_OUTPUT_WAYLAND),y)
+> +SUNXI_MALI_MAINLINE_DEPENDENCIES += wayland
+> +endif
+> +
+> +# FIXME: install gbm.pc conditionally
+>   define SUNXI_MALI_MAINLINE_INSTALL_STAGING_CMDS
+>   	mkdir -p $(STAGING_DIR)/usr/lib $(STAGING_DIR)/usr/include
+>   
+> -	cp -rf $(@D)/$(SUNXI_MALI_MAINLINE_REV)/$(SUNXI_MALI_MAINLINE_ARCH)/fbdev/*.so* \
+> +	cp -rf $(@D)/$(SUNXI_MALI_MAINLINE_LIB_SUBDIR)/*.so* \
+>   		$(STAGING_DIR)/usr/lib/
+> -	cp -rf $(@D)/include/fbdev/* $(STAGING_DIR)/usr/include/
+> +	cp -rf $(@D)/$(SUNXI_MALI_MAINLINE_INCLUDE_SUBDIR)/* \
+> +		$(STAGING_DIR)/usr/include/
+>   
+>   	$(INSTALL) -D -m 0644 package/sunxi-mali-mainline/egl.pc \
+>   		$(STAGING_DIR)/usr/lib/pkgconfig/egl.pc
+>   	$(INSTALL) -D -m 0644 package/sunxi-mali-mainline/glesv2.pc \
+>   		$(STAGING_DIR)/usr/lib/pkgconfig/glesv2.pc
+> +	$(SUNXI_MALI_MAINLINE_FIXUP_EGL_PC)
+>   endef
+>   
+>   define SUNXI_MALI_MAINLINE_INSTALL_TARGET_CMDS
+>   	mkdir -p $(TARGET_DIR)/usr/lib
+> -	cp -rf $(@D)/$(SUNXI_MALI_MAINLINE_REV)/$(SUNXI_MALI_MAINLINE_ARCH)/fbdev/*.so* \
+> +	cp -rf $(@D)/$(SUNXI_MALI_MAINLINE_LIB_SUBDIR)/*.so* \
+>   		$(TARGET_DIR)/usr/lib/
+>   endef
+>   
+> 
+
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
