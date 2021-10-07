@@ -2,83 +2,85 @@ Return-Path: <SRS0=EluJ=O3=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 43A45C433EF
-	for <buildroot@archiver.kernel.org>; Thu,  7 Oct 2021 16:42:19 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 22014C433EF
+	for <buildroot@archiver.kernel.org>; Thu,  7 Oct 2021 18:05:30 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id AF00A6120D
-	for <buildroot@archiver.kernel.org>; Thu,  7 Oct 2021 16:42:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org AF00A6120D
+	by mail.kernel.org (Postfix) with ESMTPS id 6E93261175
+	for <buildroot@archiver.kernel.org>; Thu,  7 Oct 2021 18:05:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6E93261175
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 79B54401CF;
-	Thu,  7 Oct 2021 16:42:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 208F0607EB;
+	Thu,  7 Oct 2021 18:05:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9ySgAPoF-IKI; Thu,  7 Oct 2021 16:42:17 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id hgbegN7c_yOK; Thu,  7 Oct 2021 18:05:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8E0EB401D6;
-	Thu,  7 Oct 2021 16:42:16 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D01401BF354
- for <buildroot@lists.busybox.net>; Thu,  7 Oct 2021 16:42:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2B1AA60807;
+	Thu,  7 Oct 2021 18:05:26 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 8230F1BF870
+ for <buildroot@lists.busybox.net>; Thu,  7 Oct 2021 18:05:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BBA9B401D6
- for <buildroot@lists.busybox.net>; Thu,  7 Oct 2021 16:42:14 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7163640A59
+ for <buildroot@lists.busybox.net>; Thu,  7 Oct 2021 18:05:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id obW20NXR0buq for <buildroot@lists.busybox.net>;
- Thu,  7 Oct 2021 16:42:13 +0000 (UTC)
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7PdIMzbf3q_n for <buildroot@lists.busybox.net>;
+ Thu,  7 Oct 2021 18:05:23 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
- [IPv6:2a00:1450:4864:20::431])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6B880401CF
- for <buildroot@buildroot.org>; Thu,  7 Oct 2021 16:42:13 +0000 (UTC)
-Received: by mail-wr1-x431.google.com with SMTP id i12so8355654wrb.7
- for <buildroot@buildroot.org>; Thu, 07 Oct 2021 09:42:13 -0700 (PDT)
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com
+ [IPv6:2607:f8b0:4864:20::d2e])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A1B8A40A31
+ for <buildroot@buildroot.org>; Thu,  7 Oct 2021 18:05:23 +0000 (UTC)
+Received: by mail-io1-xd2e.google.com with SMTP id p68so7762160iof.6
+ for <buildroot@buildroot.org>; Thu, 07 Oct 2021 11:05:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=V2GiX4pUOz41RB5sBJKGAEqvy14vJthHBbBGMAm6NhQ=;
- b=SCvyomwahcJqGBzYBGmu7ccOlQ4X3QjY4gXU1kguzZUv7ne2SNZDqP7u4vNwsoXq//
- e7998FnmSBJDMZb/5BknP3/QRL3MZtpYZ7k7T4enXi29Su0j+vjQ1Wbn8she5upxQS7c
- YuKkP4jtLamDiflM2Vc4F1y0kGHZMA5XmooWyzQMnlY1dw+rqqJFAjn2uOFP3Odep81G
- xlvlUElw0ECMgP5i13pbb1JAiIzvoLXQU6sSFL9B7bS416F3Ikk04sOrtZwkjdXhc8xQ
- gsketXBHuj1mFZESCED5rqPjMIiqUiVZoPm6WCx7hBETKIS5l6P5jA6DmTK5BNAI9rla
- v6GQ==
+ bh=lQ53qD48FHHHHOtQG19CMfzc9rhOkp+LXLnDQtYGJVY=;
+ b=kbNk3pFtwudtyKYaP7DNMlHHp8cFSwMmCHIzQeCy2eNi+prEeexLkVypYH7bd5zbkI
+ o8C6/4z67Y9FpG3GdTfSBuTKH1rb/Ta9fXreL95PfIW+KYEpVXBH4W9ZcM7c5zRLITGO
+ cOL2Q8wbxwe1ImjdHM79ExK/y3/67G57utbDPKp41r8ZPRcIB6ka5L/NngOiYW8KwJ08
+ f7J64Qul56Sol6vOHaKEJ2sMmqav8Ox5hESp6PDFgbdcoG1zBBjY54CPsEDOjwZOy1vQ
+ xwPg1o8N8rcyP5RPwnTOEr5+zymN7adCHGegcKBTBj+y3GTA3yX+3j0BiaGqhMbOt5ts
+ 2KgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=V2GiX4pUOz41RB5sBJKGAEqvy14vJthHBbBGMAm6NhQ=;
- b=xZM2Rsfe7ZLo7WJGxcSNncKLTaAzd+IXWUjPvMODJanXXKAAVhUDbPK+hYHgCveZyO
- dsJcu+4rkJKghHAZYH/5JTfz8H1k/vOD5vqgjT7hMDrxWpBsoe1tzvbRffSflAwFOcTt
- PAxNyxZVMkJcrcp1nO08kyg/4yEw4R1tARHmUfqK/dNTZ+6+FT/GZxXr8/lhuK1EXmUQ
- yNVcMlwXJsSMTtycDhJ9DYISDThQ7Gg6TNUVpThltaMymwq4vyKFCoqqYkVk1tW8gxqB
- F+L2Pa8tMKVEHMRkuyBycdJRqf2ANS6G2Xsg7CwfbM3JNsmraq3WsmzNZbyw+xtce+U0
- rwig==
-X-Gm-Message-State: AOAM530cbmFN6rp9VtWT6bZfElAE9PeoswyxRsV8I3nczLl/xhMcQBlm
- hNe/cXF4GbAu1uGUfQPxWYkkhPxL3lM=
-X-Google-Smtp-Source: ABdhPJy3aorlrQmGL0m4cYOhyDLF8U68K56SThs+dLw4Ra1uBXTHuX3U8gryvmnkT4BWFdAUGgZP+Q==
-X-Received: by 2002:a1c:c905:: with SMTP id f5mr5758898wmb.148.1633624931240; 
- Thu, 07 Oct 2021 09:42:11 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-421-88.w2-10.abo.wanadoo.fr.
- [2.10.246.88])
- by smtp.gmail.com with ESMTPSA id 73sm63705wmb.40.2021.10.07.09.42.10
+ bh=lQ53qD48FHHHHOtQG19CMfzc9rhOkp+LXLnDQtYGJVY=;
+ b=oKwWlJiX5Sv8PF9rzi7OnoDvxML0lHkwJ8bEekICgR9e/mHKfq7YhIPim0ebUJSeP8
+ 8rKpT/S5mOkJ9d/fefACRnrqnag2my6IjqJAC47LTlUL5w3I5zEyhE2XGbY+Zk4UEuVT
+ 1aQr4yeKyXL6U4W6jFk1GdpahvDy7gPa3gSsvLh2CsUOYqX/gKnYnzz15zQ0ppKBjQfO
+ YLOjDlvcuJjzKDD5kYZzgzpAnIhnJGnBbji1snZMi3iQMtnXnJD9dxhuZZJYfUGC2jSh
+ 9wYjSxp4g926vQ0cPQwK+tYhlYtXKC5GzcmlvgaGOfiS6FTifO6d6DXhL/5oTGv4ZanN
+ qQGg==
+X-Gm-Message-State: AOAM5324s0PQIKhIruaA7w2wDs4zlIhASmCNwp6a9J1xRxAWXZji8Rm5
+ b4nQZ0CV85wkInqdtrDQvvSEEOTOvB8=
+X-Google-Smtp-Source: ABdhPJy6dTm/tSFxtLmWlZCa+IXznAZw/pXXdvunFTUuh5JEuOfZCnTItBo/WWwcMe2c4Qf6RkVHWg==
+X-Received: by 2002:a5d:9813:: with SMTP id a19mr4249348iol.74.1633629922647; 
+ Thu, 07 Oct 2021 11:05:22 -0700 (PDT)
+Received: from james-x399.localdomain (97-118-169-148.hlrn.qwest.net.
+ [97.118.169.148])
+ by smtp.gmail.com with ESMTPSA id v17sm25648ilh.67.2021.10.07.11.05.22
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 07 Oct 2021 09:42:10 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Thu, 07 Oct 2021 11:05:22 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu,  7 Oct 2021 18:41:12 +0200
-Message-Id: <20211007164112.3490293-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.33.0
+Date: Thu,  7 Oct 2021 12:05:20 -0600
+Message-Id: <20211007180520.3237005-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/boinc: fix build with autoconf >=
- 2.70
+Subject: [Buildroot] [PATCH 1/1] package/python-serial-asyncio: bump to
+ version 0.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,55 +92,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following build failure raised since bump of autoconf to version
-2.71 in commit ecd54b65c1f998a7ccd91f7c523e4ff38c4781da and
-http://git.savannah.gnu.org/gitweb/?p=autoconf.git;a=commit;h=ec90049dfcf4538750e61d675d885157fa5ca7f8:
+License hash change due to date update:
+https://github.com/pyserial/pyserial-asyncio/commit/0fbea23c7b445e6bbb7491511b3064fd5793ca0a
 
-checking for /home/buildroot/autobuild/instance-0/output-1/host/bin/mips-linux-gnu-gcc options needed to detect all undeclared functions... cannot detect
-configure: error: in `/home/buildroot/autobuild/instance-0/output-1/build/boinc-7.16.18':
-configure: error: cannot make /home/buildroot/autobuild/instance-0/output-1/host/bin/mips-linux-gnu-gcc report undeclared builtins
-
-This error raised because AC_CHECK_DECLS returns an error due to -mavx
-flag:
-
-mips-linux-gnu-gcc: error: unrecognized command line option '-mavx'
-
-To fix this build failure, hard code ac_cv_c_undeclared_builtin_options
-to 'none needed' as removing '-mavx' from CPPFLAGS will hinder the
-detection of xgetbv, xgetbv, __xgetbv, cpuid, _cpuid and __cpuid
-
-Fixes:
- - http://autobuild.buildroot.org/results/4b468a5d3bfbff9638316ca930ef791867774aef
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/boinc/boinc.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/python-serial-asyncio/python-serial-asyncio.hash | 6 +++---
+ package/python-serial-asyncio/python-serial-asyncio.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/boinc/boinc.mk b/package/boinc/boinc.mk
-index 079b065efd..317cad55b4 100644
---- a/package/boinc/boinc.mk
-+++ b/package/boinc/boinc.mk
-@@ -14,7 +14,9 @@ BOINC_CPE_ID_VENDOR = rom_walton
- BOINC_SELINUX_MODULES = boinc
- BOINC_DEPENDENCIES = host-pkgconf libcurl openssl
- BOINC_AUTORECONF = YES
--BOINC_CONF_ENV = ac_cv_path__libcurl_config=$(STAGING_DIR)/usr/bin/curl-config
-+BOINC_CONF_ENV = \
-+	ac_cv_c_undeclared_builtin_options='none needed' \
-+	ac_cv_path__libcurl_config=$(STAGING_DIR)/usr/bin/curl-config
- BOINC_CONF_OPTS = \
- 	--disable-apps \
- 	--disable-boinczip \
+diff --git a/package/python-serial-asyncio/python-serial-asyncio.hash b/package/python-serial-asyncio/python-serial-asyncio.hash
+index f5d1d9e485..ccbdda89be 100644
+--- a/package/python-serial-asyncio/python-serial-asyncio.hash
++++ b/package/python-serial-asyncio/python-serial-asyncio.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/pyserial-asyncio/json
+-md5  64d15bfb20982b2129b02070321f49f3  pyserial-asyncio-0.5.tar.gz
+-sha256  1641e5433a866eeaf6464b3ab88b741e7a89dd8cd0f851b3343b15f425138d33  pyserial-asyncio-0.5.tar.gz
++md5  409f32a35a3b530e6b2224e2a5b367da  pyserial-asyncio-0.6.tar.gz
++sha256  b6032923e05e9d75ec17a5af9a98429c46d2839adfaf80604d52e0faacd7a32f  pyserial-asyncio-0.6.tar.gz
+ # Locally computed sha256 checksums
+-sha256  ebc84abdbdec7f9fa6962612c110123897db47b79529d5ae41191ef584b88f2c  LICENSE.txt
++sha256  64f3e548f0300d43c5af90b667150a9c57a4307c0f75fe741f76d0419905224a  LICENSE.txt
+diff --git a/package/python-serial-asyncio/python-serial-asyncio.mk b/package/python-serial-asyncio/python-serial-asyncio.mk
+index bc95f2c44a..6ee215a81c 100644
+--- a/package/python-serial-asyncio/python-serial-asyncio.mk
++++ b/package/python-serial-asyncio/python-serial-asyncio.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_SERIAL_ASYNCIO_VERSION = 0.5
++PYTHON_SERIAL_ASYNCIO_VERSION = 0.6
+ PYTHON_SERIAL_ASYNCIO_SOURCE = pyserial-asyncio-$(PYTHON_SERIAL_ASYNCIO_VERSION).tar.gz
+-PYTHON_SERIAL_ASYNCIO_SITE = https://files.pythonhosted.org/packages/e1/97/8dd1bf656796668ed4bd86058c815b130303a00a7b70cf79758e4918814a
++PYTHON_SERIAL_ASYNCIO_SITE = https://files.pythonhosted.org/packages/4a/9a/8477699dcbc1882ea51dcff4d3c25aa3f2063ed8f7d7a849fd8f610506b6
+ PYTHON_SERIAL_ASYNCIO_LICENSE = BSD-3-Clause
+ PYTHON_SERIAL_ASYNCIO_LICENSE_FILES = LICENSE.txt
+ PYTHON_SERIAL_ASYNCIO_SETUP_TYPE = setuptools
 -- 
-2.33.0
+2.25.1
 
 _______________________________________________
 buildroot mailing list
