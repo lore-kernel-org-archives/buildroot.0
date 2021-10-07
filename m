@@ -2,51 +2,51 @@ Return-Path: <SRS0=EluJ=O3=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BAAF0C433F5
-	for <buildroot@archiver.kernel.org>; Thu,  7 Oct 2021 07:38:08 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D7A66C433F5
+	for <buildroot@archiver.kernel.org>; Thu,  7 Oct 2021 07:38:19 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 8320460F22
-	for <buildroot@archiver.kernel.org>; Thu,  7 Oct 2021 07:38:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8320460F22
+	by mail.kernel.org (Postfix) with ESMTPS id A5C7861139
+	for <buildroot@archiver.kernel.org>; Thu,  7 Oct 2021 07:38:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A5C7861139
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5AA27403A2;
-	Thu,  7 Oct 2021 07:38:08 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zH9UtjdEQ50s; Thu,  7 Oct 2021 07:38:06 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 20E2C400F6;
-	Thu,  7 Oct 2021 07:38:05 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 209B41BF48B
- for <buildroot@lists.busybox.net>; Thu,  7 Oct 2021 07:37:34 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 116324098E
- for <buildroot@lists.busybox.net>; Thu,  7 Oct 2021 07:37:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 600F640991;
+	Thu,  7 Oct 2021 07:38:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qFm1-cjchkmN for <buildroot@lists.busybox.net>;
- Thu,  7 Oct 2021 07:37:33 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 5HAlGl-XUFC1; Thu,  7 Oct 2021 07:38:18 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id B3D734098F;
+	Thu,  7 Oct 2021 07:38:17 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B90C51BF9C2
+ for <buildroot@lists.busybox.net>; Thu,  7 Oct 2021 07:37:38 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id A5B9383EE6
+ for <buildroot@lists.busybox.net>; Thu,  7 Oct 2021 07:37:38 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Pu9Eqz-lC_D5 for <buildroot@lists.busybox.net>;
+ Thu,  7 Oct 2021 07:37:37 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4B79D4098D
- for <buildroot@buildroot.org>; Thu,  7 Oct 2021 07:37:33 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id EB89583EE3
+ for <buildroot@buildroot.org>; Thu,  7 Oct 2021 07:37:37 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 8F43D92BCF; Thu,  7 Oct 2021 07:34:55 +0000 (UTC)
+ id 3A50F9348B; Thu,  7 Oct 2021 07:35:00 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 7 Oct 2021 08:22:15 +0200
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: e333589d345eac7a89652a2464be1559e797ed80
-X-Git-Newrev: b427b8e28883e7730e26687983cb76f0dc9f3270
+Date: Thu, 7 Oct 2021 08:22:03 +0200
+X-Git-Refname: refs/heads/2021.08.x
+X-Git-Oldrev: 3e14f15b2c522a0b7f209ea57b9c2660ed7077f5
+X-Git-Newrev: 427c299a843aef84e11ca5dc64e9235f8d1428dd
 X-Patchwork-Hint: ignore
-Message-Id: <20211007073455.8F43D92BCF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] support/kconfig: fix
+Message-Id: <20211007073500.3A50F9348B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.08.x] support/kconfig: fix
  compiler warnings
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -60,15 +60,15 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0723024196275050172=="
+Content-Type: multipart/mixed; boundary="===============3069747986007145001=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0723024196275050172==
+--===============3069747986007145001==
 Content-Type: text/plain
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b427b8e28883e7730e26687983cb76f0dc9f3270
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=427c299a843aef84e11ca5dc64e9235f8d1428dd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.08.x
 
 Compiling on Ubuntu 20.04 generates this:
 
@@ -135,7 +135,7 @@ index 18a8e52391..8665f5bb89 100644
  	struct expr *e;
  	struct file *file;
 
---===============0723024196275050172==
+--===============3069747986007145001==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -146,4 +146,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============0723024196275050172==--
+--===============3069747986007145001==--
