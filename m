@@ -1,86 +1,68 @@
-Return-Path: <SRS0=BIUF=O2=buildroot.org=buildroot-bounces@kernel.org>
+Return-Path: <SRS0=EluJ=O3=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DD5BBC433F5
-	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 23:44:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 83463C433F5
+	for <buildroot@archiver.kernel.org>; Thu,  7 Oct 2021 04:51:12 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 4C59A610E6
-	for <buildroot@archiver.kernel.org>; Wed,  6 Oct 2021 23:44:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4C59A610E6
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id 618DD611C1
+	for <buildroot@archiver.kernel.org>; Thu,  7 Oct 2021 04:51:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 618DD611C1
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=buildroot.org
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1F99740937;
-	Wed,  6 Oct 2021 23:44:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id ED04940967;
+	Thu,  7 Oct 2021 04:51:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id W6FT5qtLhiZk; Wed,  6 Oct 2021 23:44:58 +0000 (UTC)
+	with ESMTP id wv9VZLoQvOc2; Thu,  7 Oct 2021 04:51:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7567A40934;
-	Wed,  6 Oct 2021 23:44:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4DC184095A;
+	Thu,  7 Oct 2021 04:51:09 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3A0931BF30B
- for <buildroot@lists.busybox.net>; Wed,  6 Oct 2021 23:44:55 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 023791BF3D2
+ for <buildroot@lists.busybox.net>; Thu,  7 Oct 2021 04:51:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 34FF84019E
- for <buildroot@lists.busybox.net>; Wed,  6 Oct 2021 23:44:55 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E50304018A
+ for <buildroot@lists.busybox.net>; Thu,  7 Oct 2021 04:51:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
+ dkim=pass (2048-bit key) header.d=tkos.co.il
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mnuAWsuUHjKD for <buildroot@lists.busybox.net>;
- Wed,  6 Oct 2021 23:44:54 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com
- [IPv6:2607:f8b0:4864:20::d31])
- by smtp2.osuosl.org (Postfix) with ESMTPS id EBF9E400BB
- for <buildroot@buildroot.org>; Wed,  6 Oct 2021 23:44:53 +0000 (UTC)
-Received: by mail-io1-xd31.google.com with SMTP id h189so1874377iof.1
- for <buildroot@buildroot.org>; Wed, 06 Oct 2021 16:44:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=K+MVPxWZbeCtyCRtm3ATfNI0yj1uGx0up0wdJ5Dg9iY=;
- b=gnTxp7k5cRagghpnCe7uCQI45sRS0PmUf4d79bFsUtDWUcZoOXUO7ZwyfSrN53JKdv
- GJnZSBa9M5sQNjWHlrQFeV8jWY31RnG94A0IBMVtyUVONteqBIJnIEf2InjKZpfFiK5C
- KL84yoHc5+oUcw5pk+f47I8YkXEFmkY7l50Ud3CDX+uUOAzwhbVs8JyOyysWNTpslhYb
- Uq4BPKZaw2nMhiMxh6WfzgdMPOnPGStLiUxFNcZWGTmyG65wso46nu0te1w8YJnWgZZT
- 1wvdoekov+1s6BhpKzCrKA871kSUqyOwcD/naiqTDibcAeEWTio0IIMJZj5+98gxD1gi
- 9kDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=K+MVPxWZbeCtyCRtm3ATfNI0yj1uGx0up0wdJ5Dg9iY=;
- b=j7R3ThxXugj988X2LbL5GjUqxCF9LiGwB2S8I7cBFhsh1w/CW8L1g0LKu/OxOHCr/+
- EcAKyebl8yotyt9XXvvuP4MVBhTbS/tab4NTONfcSq28/3Y5evBiGjEqXc1mXkmVeFAe
- yhXPDO1kB8XyxFEn+05WUxOJGmyQ0LArcfdITZmZXS2CIeAR7jWN9WciQ5vFCKSyOVH4
- VThZMAhabDHaEtYRB02KRKq9dzCqT2T86UN6UCJ4v9WUz+ow5VURft4WDAVOcIDsBN/1
- SQkR/7z/UCjqBJEcAgnEknlrFDK0woW9yX4YIFaFMr1mMkW2AwhNypPycGvz7p/IdbmK
- X6xQ==
-X-Gm-Message-State: AOAM5309lufi3eTMqU5L+X4n31UOxQZsRLaxf5eSmMUMWH3XbzydPQya
- jAW4gTkUn9DO+B8dZTvIYJ4yf5PEN/E=
-X-Google-Smtp-Source: ABdhPJyPgHdEQThsfpCt3w4WS6EpxMfUNo7t/BJmVk+wgz7AtsMC2M0JbcZYe7IFdwONfc0lSsNJLQ==
-X-Received: by 2002:a5d:9493:: with SMTP id v19mr884998ioj.34.1633563892947;
- Wed, 06 Oct 2021 16:44:52 -0700 (PDT)
-Received: from james-x399.localdomain (97-118-169-148.hlrn.qwest.net.
- [97.118.169.148])
- by smtp.gmail.com with ESMTPSA id s8sm12814102ilt.47.2021.10.06.16.44.52
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 06 Oct 2021 16:44:52 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: buildroot@buildroot.org
-Date: Wed,  6 Oct 2021 17:44:50 -0600
-Message-Id: <20211006234450.3228049-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.25.1
+ with ESMTP id 9vUJiPLLsm1n for <buildroot@lists.busybox.net>;
+ Thu,  7 Oct 2021 04:51:03 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from mx.tkos.co.il (guitar.tcltek.co.il [192.115.133.116])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id EBD2B4035C
+ for <buildroot@buildroot.org>; Thu,  7 Oct 2021 04:51:02 +0000 (UTC)
+Received: from tarshish (unknown [10.0.8.2])
+ (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+ (No client certificate requested)
+ by mx.tkos.co.il (Postfix) with ESMTPS id C7D3B44073B;
+ Thu,  7 Oct 2021 07:50:15 +0300 (IDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tkos.co.il;
+ s=default; t=1633582216;
+ bh=fsNQeGOvvVtdN5G4k1wdRLHO8lSnWDJlfhoO6y9ClCE=;
+ h=References:From:To:Cc:Subject:Date:In-reply-to:From;
+ b=eZsJU9pq4eNsk5kOJo1Dx2z+7BAMD6tAH1ZrI0imiA4gffcwPRruXkPL5TC/JtMr2
+ cH/Tj8RkNDf9QfIb+9L7I4I60U9huSkjsOzEJKecd13wZY8WWYdmSSbj/t8EYKtdhK
+ DD16RKG6+lYugzvfdjkv5SUeijSj881i6g3q2fs9NZ9IR44A/tqJ9GFMMbQug19Zaz
+ nsncMgz22n88zB8+4sDpNeogYBxUNlvmGyTPvD2mjU9c4IOaKJJ2w+FsWn/G2GwI07
+ D4x/QYv2vOd/qAjpUG1uVDF5Al08gpPvBFk7sPb9JgY2IJGhu1jffZO1/EbNeY8kw0
+ XrPoQ1GMEpBsA==
+References: <20211006202045.3113262-1-fontaine.fabrice@gmail.com>
+User-agent: mu4e 1.6.6; emacs 27.1
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 07 Oct 2021 07:48:22 +0300
+In-reply-to: <20211006202045.3113262-1-fontaine.fabrice@gmail.com>
+Message-ID: <87ee8x5tfy.fsf@tarshish>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/python-greenlet: bump to version
- 1.1.2
+Subject: Re: [Buildroot] [PATCH 1/1] package/tpm2-tss: fix build with
+ autoconf >= 2.70
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,52 +74,109 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Asaf Kahlon <asafka7@gmail.com>
+From: Baruch Siach via buildroot <buildroot@buildroot.org>
+Reply-To: Baruch Siach <baruch@tkos.co.il>
+Cc: Yair Ben-Avraham <yairba@protonmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/python-greenlet/python-greenlet.hash | 4 ++--
- package/python-greenlet/python-greenlet.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Hi Fabrice,
 
-diff --git a/package/python-greenlet/python-greenlet.hash b/package/python-greenlet/python-greenlet.hash
-index ad216b0368..c1870c886d 100644
---- a/package/python-greenlet/python-greenlet.hash
-+++ b/package/python-greenlet/python-greenlet.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/greenlet/json
--md5  a3fbf41851a6b5e1e823e8c18905877c  greenlet-1.1.1.tar.gz
--sha256  c0f22774cd8294078bdf7392ac73cf00bfa1e5e0ed644bd064fdabc5f2a2f481  greenlet-1.1.1.tar.gz
-+md5  f424fbd9afeed575dd2ba5f0ac66e30b  greenlet-1.1.2.tar.gz
-+sha256  e30f5ea4ae2346e62cedde8794a56858a67b878dd79f7df76a0767e356b1744a  greenlet-1.1.2.tar.gz
- # Locally computed sha256 checksums
- sha256  769831d6e5dfaf2c20802faccff1fafb4c2025dd8f6253dfa47fcad59d4d0979  LICENSE
- sha256  e5ff3c23c110e494cd7d736c10fd96d462457bafeca310840db6527298c7d46b  LICENSE.PSF
-diff --git a/package/python-greenlet/python-greenlet.mk b/package/python-greenlet/python-greenlet.mk
-index e9feec5321..7b983ff0ef 100644
---- a/package/python-greenlet/python-greenlet.mk
-+++ b/package/python-greenlet/python-greenlet.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_GREENLET_VERSION = 1.1.1
-+PYTHON_GREENLET_VERSION = 1.1.2
- PYTHON_GREENLET_SOURCE = greenlet-$(PYTHON_GREENLET_VERSION).tar.gz
--PYTHON_GREENLET_SITE = https://files.pythonhosted.org/packages/72/7e/d8586068d47adba73afc085249712bd266cd7ffbf27d8bc260c33e9d6133
-+PYTHON_GREENLET_SITE = https://files.pythonhosted.org/packages/0c/10/754e21b5bea89d0e73f99d60c83754df7cc64db74f47d98ab187669ce341
- PYTHON_GREENLET_SETUP_TYPE = setuptools
- PYTHON_GREENLET_LICENSE = MIT, PSF-2.0
- PYTHON_GREENLET_LICENSE_FILES = LICENSE LICENSE.PSF
+On Wed, Oct 06 2021, Fabrice Fontaine wrote:
+
+> Fix the following build failure raised since bump of autoconf to version
+> 2.71 in commit ecd54b65c1f998a7ccd91f7c523e4ff38c4781da:
+>
+> ./configure: line 14636: syntax error near unexpected token `newline'
+> ./configure: line 14636: `    '''
+> package/pkg-generic.mk:273: recipe for target
+> '/home/buildroot/autobuild/instance-3/output-1/build/tpm2-tss-3.0.3/.stamp_configured'
+> failed
+>
+> It should be noted that this patch is included in version 3.1:
+> https://patchwork.ozlabs.org/project/buildroot/patch/RnUd7kxUKLWeLZSMoM1dFtpAD4Qfe3R-67gu27eAGtE6yrgC1oHzq1GwiOoE9Gmk6uZZ-c6k6LUVxdMqKhUro4_bM4zZKPhsbN5e9BV8SV4=@protonmail.com
+>
+> Fixes:
+>  - http://autobuild.buildroot.org/results/5d4ca70ebf30463aa7e8a96a90effa6282f57e21
+
+We have a pending bump to version 3.1.0 in patchwork that should include
+this fix:
+
+  http://patchwork.ozlabs.org/project/buildroot/patch/RnUd7kxUKLWeLZSMoM1dFtpAD4Qfe3R-67gu27eAGtE6yrgC1oHzq1GwiOoE9Gmk6uZZ-c6k6LUVxdMqKhUro4_bM4zZKPhsbN5e9BV8SV4=@protonmail.com/
+
+baruch
+
+>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  ...fix-compatibility-with-autoconf-2-70.patch | 48 +++++++++++++++++++
+>  1 file changed, 48 insertions(+)
+>  create mode 100644 package/tpm2-tss/0002-configure-ac-fix-compatibility-with-autoconf-2-70.patch
+>
+> diff --git
+> a/package/tpm2-tss/0002-configure-ac-fix-compatibility-with-autoconf-2-70.patch
+> b/package/tpm2-tss/0002-configure-ac-fix-compatibility-with-autoconf-2-70.patch
+> new file mode 100644
+> index 0000000000..f21aa179f8
+> --- /dev/null
+> +++ b/package/tpm2-tss/0002-configure-ac-fix-compatibility-with-autoconf-2-70.patch
+> @@ -0,0 +1,48 @@
+> +From 03cca78d24d716eec792f86f5b0bc69886fad981 Mon Sep 17 00:00:00 2001
+> +From: Patrick McCarty <patrick.mccarty@intel.com>
+> +Date: Fri, 18 Dec 2020 01:54:05 +0000
+> +Subject: [PATCH] configure.ac: fix compatibility with autoconf 2.70
+> +
+> +With autoconf 2.70, not quoting the second argument to one of the AS_IF
+> +macro expansions leads to generation of invalid shell code affecting the
+> +first nested ERROR_IF_NO_PROG expansion.
+> +
+> +The invalid shell code leads to an error resembling:
+> +
+> +  ./configure: line 18826: syntax error near unexpected token `newline'
+> +  ./configure: line 18826: `    '''
+> +
+> +Fix the issue by quoting the second argument to the affected AS_IF,
+> +similar to the quoting found elsewhere in configure.ac.
+> +
+> +Signed-off-by: Patrick McCarty <patrick.mccarty@intel.com>
+> +
+> +[Retrieved from:
+> +https://github.com/tpm2-software/tpm2-tss/commit/03cca78d24d716eec792f86f5b0bc69886fad981]
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +---
+> + configure.ac | 4 ++--
+> + 1 file changed, 2 insertions(+), 2 deletions(-)
+> +
+> +diff --git a/configure.ac b/configure.ac
+> +index ff59dd7ce..3049032bc 100755
+> +--- a/configure.ac
+> ++++ b/configure.ac
+> +@@ -285,7 +285,7 @@ AC_ARG_ENABLE([integration],
+> +         [build and execute integration tests])],,
+> +     [enable_integration=no])
+> + AS_IF([test "x$enable_integration" = "xyes"],
+> +-     AS_IF([test "$HOSTOS" = "Linux"],
+> ++     [AS_IF([test "$HOSTOS" = "Linux"],
+> +            [ERROR_IF_NO_PROG([ss])],
+> +            [ERROR_IF_NO_PROG([sockstat])])
+> +        ERROR_IF_NO_PROG([echo])
+> +@@ -335,7 +335,7 @@ AS_IF([test "x$enable_integration" = "xyes"],
+> +              [AC_MSG_ERROR([No simulator executable found in PATH for testing TCTI.])])
+> +        AC_SUBST([INTEGRATION_TCTI], [$integration_tcti])
+> +        AC_SUBST([INTEGRATION_ARGS], [$integration_args])
+> +-       AC_SUBST([ENABLE_INTEGRATION], [$enable_integration]))
+> ++       AC_SUBST([ENABLE_INTEGRATION], [$enable_integration])])
+> + AM_CONDITIONAL([ENABLE_INTEGRATION],[test "x$enable_integration" = "xyes"])
+> + #
+> + # sanitizer compiler flags
+
+
 -- 
-2.25.1
-
+                                                     ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch@tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
