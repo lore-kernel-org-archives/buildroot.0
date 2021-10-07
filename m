@@ -2,51 +2,59 @@ Return-Path: <SRS0=EluJ=O3=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AF1A8C433EF
-	for <buildroot@archiver.kernel.org>; Thu,  7 Oct 2021 20:17:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 638D8C433F5
+	for <buildroot@archiver.kernel.org>; Thu,  7 Oct 2021 20:20:49 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 55D8361108
-	for <buildroot@archiver.kernel.org>; Thu,  7 Oct 2021 20:17:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 55D8361108
+	by mail.kernel.org (Postfix) with ESMTPS id EE81F61139
+	for <buildroot@archiver.kernel.org>; Thu,  7 Oct 2021 20:20:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org EE81F61139
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 31A3F60FF0;
-	Thu,  7 Oct 2021 20:17:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BB9E360792;
+	Thu,  7 Oct 2021 20:20:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Zi23FQsMEpcC; Thu,  7 Oct 2021 20:17:11 +0000 (UTC)
+	with ESMTP id v9VWiQFVz8XL; Thu,  7 Oct 2021 20:20:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 95A2D60FF5;
-	Thu,  7 Oct 2021 20:17:10 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 79BAD1BF9C2
- for <buildroot@lists.busybox.net>; Thu,  7 Oct 2021 20:16:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2EFCD6071A;
+	Thu,  7 Oct 2021 20:20:47 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E575E1BF84C
+ for <buildroot@lists.busybox.net>; Thu,  7 Oct 2021 20:20:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6A12E843B9
- for <buildroot@lists.busybox.net>; Thu,  7 Oct 2021 20:16:57 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id D4AC4401AD
+ for <buildroot@lists.busybox.net>; Thu,  7 Oct 2021 20:20:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VUUNY0pXRoP0 for <buildroot@lists.busybox.net>;
- Thu,  7 Oct 2021 20:16:56 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id B7ED5842DC
- for <buildroot@buildroot.org>; Thu,  7 Oct 2021 20:16:56 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id C4F76934EC; Thu,  7 Oct 2021 20:14:17 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pKKGJxS7nLt3 for <buildroot@lists.busybox.net>;
+ Thu,  7 Oct 2021 20:20:45 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id BD98540161
+ for <buildroot@buildroot.org>; Thu,  7 Oct 2021 20:20:44 +0000 (UTC)
+Received: (Authenticated sender: peter@casa-korsgaard.com)
+ by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id E47EF20007;
+ Thu,  7 Oct 2021 20:20:42 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
+ (envelope-from <peter@korsgaard.com>)
+ id 1mYZsg-0002t9-BK; Thu, 07 Oct 2021 22:20:42 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Thu, 7 Oct 2021 22:16:34 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: bb465e2f62e9b74c59e23f307d999c4c546e5459
-X-Git-Newrev: 96464f756217cd6bf7a1e17078f3671c4478d2e5
-X-Patchwork-Hint: ignore
-Message-Id: <20211007201417.C4F76934EC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/apache: change project URL to https
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20211006154136.2243511-1-fontaine.fabrice@gmail.com>
+Date: Thu, 07 Oct 2021 22:20:42 +0200
+In-Reply-To: <20211006154136.2243511-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Wed, 6 Oct 2021 17:41:36 +0200")
+Message-ID: <87y274ziw5.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/supervisor: drop python-meld3
+ dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,34 +66,24 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=96464f756217cd6bf7a1e17078f3671c4478d2e5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/apache/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > python-meld3 is not a dependency since bump to version 4.1.0 in commit
+ > 5da3e1a3e6ccd3c0bfc7e3a9ebe0b14f903af518 and
+ > https://github.com/Supervisor/supervisor/commit/d09d843493eb77cb8c3df52e1f7e636ad0e5b4dd
 
-diff --git a/package/apache/Config.in b/package/apache/Config.in
-index 693ee20a1b..8b6a5bf7ea 100644
---- a/package/apache/Config.in
-+++ b/package/apache/Config.in
-@@ -13,7 +13,7 @@ config BR2_PACKAGE_APACHE
- 	  server that provides HTTP services in sync with the current
- 	  HTTP standards.
- 
--	  http://httpd.apache.org
-+	  https://httpd.apache.org
- 
- if BR2_PACKAGE_APACHE
- 
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
