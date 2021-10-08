@@ -2,67 +2,72 @@ Return-Path: <SRS0=JPVL=O4=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 01E4EC433EF
-	for <buildroot@archiver.kernel.org>; Fri,  8 Oct 2021 22:53:27 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A396C433F5
+	for <buildroot@archiver.kernel.org>; Fri,  8 Oct 2021 23:46:06 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 7AF3460E9C
-	for <buildroot@archiver.kernel.org>; Fri,  8 Oct 2021 22:53:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7AF3460E9C
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=benettiengineering.com
+	by mail.kernel.org (Postfix) with ESMTPS id 5096360F94
+	for <buildroot@archiver.kernel.org>; Fri,  8 Oct 2021 23:46:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5096360F94
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=buildroot.org
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0C80440714;
-	Fri,  8 Oct 2021 22:53:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DA36383C7F;
+	Fri,  8 Oct 2021 23:46:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vroPs_hXB2I6; Fri,  8 Oct 2021 22:53:25 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 0aHA_aeH95uR; Fri,  8 Oct 2021 23:46:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4FEA740712;
-	Fri,  8 Oct 2021 22:53:24 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2F7611BF333
- for <buildroot@lists.busybox.net>; Fri,  8 Oct 2021 22:53:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 249DB83C34;
+	Fri,  8 Oct 2021 23:46:03 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 58F611BF4E4
+ for <buildroot@lists.busybox.net>; Fri,  8 Oct 2021 23:46:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2B10340409
- for <buildroot@lists.busybox.net>; Fri,  8 Oct 2021 22:53:12 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4707783C34
+ for <buildroot@lists.busybox.net>; Fri,  8 Oct 2021 23:46:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=aruba.it
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Fjc_d4bhMtiR for <buildroot@lists.busybox.net>;
- Fri,  8 Oct 2021 22:53:11 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtpcmd03117.aruba.it (smtpcmd03117.aruba.it [62.149.158.117])
- by smtp2.osuosl.org (Postfix) with ESMTP id E017E401C7
- for <buildroot@buildroot.org>; Fri,  8 Oct 2021 22:53:10 +0000 (UTC)
-Received: from ubuntu.localdomain ([146.241.216.221])
- by Aruba Outgoing Smtp  with ESMTPSA
- id YycvmAKKuDee6YycvmxL1X; Sat, 09 Oct 2021 00:46:06 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1633733166; bh=dSn+RoK8OsX5kLSwINPd6f1p2w9xow/I0aXUbnXVVSM=;
- h=From:To:Subject:Date:MIME-Version;
- b=dG147s4pYJXAL4SRnob4Z9V9VeWKLR3JQeixCiP1nsdWzu4IZkI9b/tjg2JsIyoJ5
- I8nQJm9EXw11rf/CoN+JiumxeGM3v+iamx7/tLvKsa0uCFCDqipoM/oHEAA8mICyv2
- Goxkwbtg5xbuJFebKGx600j3ynzlvDaX7Ocga9oAs+fNsVDApHzgMUwnPfHE29arg9
- vLWjy0QFWLjiVdKjL1RBmnoEhYa3y/dR0bZiSBsgJwXzVrv+BbWPzOLoVtbm2gvy8L
- vzDUWbQ/yhMOMDhRivyIotHWmbS9TBD490lE6IJ1N2Cfafd2M9D2XdKGjNPwRcU0Sm
- L60V7ollFqdyw==
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id YTzVnqjxLy76 for <buildroot@lists.busybox.net>;
+ Fri,  8 Oct 2021 23:46:01 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com
+ [209.85.215.170])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 48AA383C28
+ for <buildroot@buildroot.org>; Fri,  8 Oct 2021 23:46:01 +0000 (UTC)
+Received: by mail-pg1-f170.google.com with SMTP id r2so4525965pgl.10
+ for <buildroot@buildroot.org>; Fri, 08 Oct 2021 16:46:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=QUNcimiyXSWy+9T5SCYqp034hlII9TxGkmZT1Rz5ESg=;
+ b=32bb2SfyiXO6iOCxUWm1bQMd4Ym7WojilRrBv6dVpAS9Ddz3AyWz3nHzw7Z6CB+X7Q
+ 6OVPm828nXpPFrKkBVcy7KlU7SklflSkDJvtN4Ej4SgcVfGmLd1JqXlLy3HmrkNv+IBr
+ B5wOyonqR7ijuIpCFm724DKyDwm0HjuGW9XdbWdV5YROwJYcxYQs0ddPYmurIMF7y8hh
+ CwlOkAPGeETcyJY9PW/eFxM8eN/DPZYy7qDred6xa17nxS+W3MzU6KvOEGBgT5k+frDw
+ JhfY7++QtTKOV55JnW1NOivxvdyVaDsCrQvsL7yMA+ZDMh5mZ7ldzSPKpOJGZ8YpVNdn
+ aOvg==
+X-Gm-Message-State: AOAM532YwplX61BbYL6cLJvptEeauI34Tii4HZ/XAcD/m+kufjQ3Vv/z
+ l7okkM/pTx8CD7DEbcAF6FRFRuGCYY9C/w==
+X-Google-Smtp-Source: ABdhPJwOuEKLP6bV/YjM4PgWdWxGG8blZDyBMRpHYlYW7FlQ4HVAUtVpQ3ewWHldy8eXOnbJ37V90A==
+X-Received: by 2002:a62:6411:0:b0:44c:bf9f:f584 with SMTP id
+ y17-20020a626411000000b0044cbf9ff584mr11735738pfb.29.1633736760235; 
+ Fri, 08 Oct 2021 16:46:00 -0700 (PDT)
+Received: from localhost.localdomain (ip68-111-8-11.sb.sd.cox.net.
+ [68.111.8.11])
+ by smtp.gmail.com with ESMTPSA id j6sm412563pgh.17.2021.10.08.16.45.59
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 08 Oct 2021 16:45:59 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Sat,  9 Oct 2021 00:46:04 +0200
-Message-Id: <20211008224605.884413-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.25.1
+Date: Fri,  8 Oct 2021 16:45:57 -0700
+Message-Id: <20211008234557.90956-1-christian@paral.in>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4wfPKRojRax+JXnuVmm/dXSTexTCrX8h+MBlHq8Lf4xH2YiW/hi9o44CPP+r4Bifq5YVltVyMWKd07B1WgZh/Ar2VEX0vSZ3a6e8o3fdob201Oz+9c1In3
- /DatHVtidwLilbS5+QejvEW3CHbm9nj43nskv1q29Lxx8Uqrdl8J7iej0JcEVhNzmosh9oEDiJZT9CALWwKN5aaUnPs+FK0wVWto2x6AG1TTJ18r1FO2hg3c
- 393enGVqlsA9aMVeHHpgWRL65lZWJOoVdG9haoqkyvMLLa6gKK2/EpuAtbpCwcazKUAofT7bhoxfgM2zKHYKFkqcmwZ6gec2iWmz8mLICM2xqXpeT33kG1sB
- tL10tVVnEIbu+tNMtJNwfDPdZIWaDnlmTU7uNq0BatX3QrqdJKQhyWW37i6juXyORT6hHrnSseISbtF7DwoK+CHhyEQQYw==
-Subject: [Buildroot] [PATCH 1/2] toolchain: introduce
- BR2_TOOLCHAIN_HAS_GCC_BUG_43744
+Subject: [Buildroot] [PATCH-NEXT v1 1/1] package/go: security bump to 1.17.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,53 +79,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
- Romain Naour <romain.naour@gmail.com>,
- Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Christian Stewart via buildroot <buildroot@buildroot.org>
+Reply-To: Christian Stewart <christian@paral.in>
+Cc: Christian Stewart <christian@paral.in>, Anisse Astier <anisse@astier.eu>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-gnuradio package fails to build for the SH4 architecture with optimization
-enabled with gcc 9.3.0:
-http://autobuild.buildroot.net/results/1db/1db6c59c98e3c09fa13277076ee2fbe7967f1f6b/    http://autobuild.buildroot.net/results/f57/f5742e7fb6e8142bcdb53b7f4f5e9c1bea3558cd/
-and I've tested it shows up with gcc 10.x and 11.x
+go1.17.1 (released 2021-09-09) includes a security fix to the archive/zip
+package, as well as bug fixes to the compiler, linker, the go command, and to
+the crypto/rand, embed, go/types, html/template, and net/http packages.
 
-I've commented it and supplied preprocessed file to reopen it since it was
-closed with gcc 4.x:
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=43744
+go1.17.2 (released 2021-10-07) includes a security fix to the linker and
+misc/wasm directory, as well as bug fixes to the compiler, the runtime, the go
+command, and to the time and text/template packages.
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+https://golang.org/doc/devel/release#go1.17.minor
+
+Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- toolchain/Config.in | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ package/go/go.hash | 2 +-
+ package/go/go.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index 8b01067105..cb03a56cd9 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -109,6 +109,16 @@ config BR2_TOOLCHAIN_SUPPORTS_VARIADIC_MI_THUNK
- 	depends on !BR2_or1k
- 	depends on !BR2_xtensa
+diff --git a/package/go/go.hash b/package/go/go.hash
+index d35d6ed572..f5e6492da7 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,3 +1,3 @@
+ # From https://golang.org/dl/
+-sha256  3a70e5055509f347c0fb831ca07a2bf3b531068f349b14a3c652e9b5b67beb5d  go1.17.src.tar.gz
++sha256  2255eb3e4e824dd7d5fcdc2e7f84534371c186312e546fb1086a34c17752f431  go1.17.2.src.tar.gz
+ sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index 09d9f60cd4..f8bea45c08 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=43744. This bug no
-+# reappeared on gcc 9.x and is still not fixed on gcc 11.x
-+config BR2_TOOLCHAIN_HAS_GCC_BUG_43744
-+	bool
-+	default y if BR2_sh4
-+	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_8 || \
-+		BR2_TOOLCHAIN_GCC_AT_LEAST_9 || \
-+		BR2_TOOLCHAIN_GCC_AT_LEAST_10 || \
-+		BR2_TOOLCHAIN_GCC_AT_LEAST_11
-+
- # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=63261. This bug no
- # longer exists in gcc 8.x.
- config BR2_TOOLCHAIN_HAS_GCC_BUG_63261
+-GO_VERSION = 1.17
++GO_VERSION = 1.17.2
+ GO_SITE = https://storage.googleapis.com/golang
+ GO_SOURCE = go$(GO_VERSION).src.tar.gz
+ 
 -- 
-2.25.1
+2.33.0
 
 _______________________________________________
 buildroot mailing list
