@@ -2,84 +2,78 @@ Return-Path: <SRS0=JPVL=O4=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 97E53C433EF
-	for <buildroot@archiver.kernel.org>; Fri,  8 Oct 2021 15:25:38 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9ADDFC433F5
+	for <buildroot@archiver.kernel.org>; Fri,  8 Oct 2021 16:59:02 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id E69D960F9C
-	for <buildroot@archiver.kernel.org>; Fri,  8 Oct 2021 15:25:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E69D960F9C
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id A418760F6D
+	for <buildroot@archiver.kernel.org>; Fri,  8 Oct 2021 16:59:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A418760F6D
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=lespocky.de
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8F06E409D4;
-	Fri,  8 Oct 2021 15:25:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4E6C460733;
+	Fri,  8 Oct 2021 16:59:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id e6lCrfulhgwu; Fri,  8 Oct 2021 15:25:36 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id NCHMEMhx_uFe; Fri,  8 Oct 2021 16:59:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4D2D4409AE;
-	Fri,  8 Oct 2021 15:25:35 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 865601BF4E4
- for <buildroot@lists.busybox.net>; Fri,  8 Oct 2021 15:25:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A9D7660788;
+	Fri,  8 Oct 2021 16:58:59 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 10A2F1BF489
+ for <buildroot@lists.busybox.net>; Fri,  8 Oct 2021 16:58:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 824CF83A92
- for <buildroot@lists.busybox.net>; Fri,  8 Oct 2021 15:25:34 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id EBF114052F
+ for <buildroot@lists.busybox.net>; Fri,  8 Oct 2021 16:58:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bDBESNG7q5Go for <buildroot@lists.busybox.net>;
- Fri,  8 Oct 2021 15:25:33 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
- [IPv6:2a00:1450:4864:20::42c])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 810C983A58
- for <buildroot@busybox.net>; Fri,  8 Oct 2021 15:25:33 +0000 (UTC)
-Received: by mail-wr1-x42c.google.com with SMTP id t8so31136853wri.1
- for <buildroot@busybox.net>; Fri, 08 Oct 2021 08:25:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=73kkdfTreyaagG4DkybUpE5s0DLtYmfk6qhftIvsCMY=;
- b=JDZ5UXSzVXAxu5zsY2iWbQQovfGI9o+IJXxMvwkHSaF09In0HJaX7peuy9lfO4er5r
- i0JQC06O+08EZ0AXTk6R8XkueMSGyY5mYfesejX2qyj+mKrWcesRFJ2DBGuEq5Ze2Rqm
- OxpFkqM599svOWYTNK6PTfOzyfifj+/jXVUgcGdLCdYlOH7Vt9hyxgreV4JORdBn19Vk
- mW67F5IfRaiZjCcnZrSk8aSKLnN7LAxnFMq2dWlgSzTTFmltGUiNC5vgi7QiT8Udi7dg
- h7bF33j2z+0nkiiT6vxtWrU4DlNqgpoNeTTdHbdthuCtQHRVftzYi8zatkpPkTtDioIw
- 8X0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=73kkdfTreyaagG4DkybUpE5s0DLtYmfk6qhftIvsCMY=;
- b=RYzzpMD2NX0tvHqQdS7PFadaj5lrNBbZ3EDTLLHrpkp/b9gRtTVBtTdNf9KAWYA5Kl
- u+3wjHQkhahsnxDvWKLzMwzYps0AbA+ug6StcwwxliKtYU/lkSyAf4R3mid0gcwWZSOM
- i9Vo50Rn46IhUFl5rBlA9/ZAgQlCtqcq0BPFfWCVUASYDwcawTkSqoSVR/CSWuIySvnC
- /w2i+detb892x81je9cAs8Tok4L+IFczQzOgSeSYjdfEcPs54uxuwoTf/CVd58/tzj9q
- GqvMtbWZ8Y/e6tGX8EfvoJV8jKtENYbb5MppfuDF4Wq1dPCk314Hcfoc3QutFLkFl6rC
- 2ACQ==
-X-Gm-Message-State: AOAM531u9y/JUFbG42EcYsaZKmtqdf3YIzu0XMBInca9K5Gr8RdvIo6D
- NhRYvCJlTmg7kXNv5jqVUWW7Crw+7hI=
-X-Google-Smtp-Source: ABdhPJxnRrQkaSqMYRLWkz7/jFAfwMVs9lZJgx5WMpRTVaC2hDSYDNxrJiH9YvFauM+5isIkWkSKPw==
-X-Received: by 2002:a1c:14b:: with SMTP id 72mr3990485wmb.158.1633706731766;
- Fri, 08 Oct 2021 08:25:31 -0700 (PDT)
-Received: from vm-user.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
- by smtp.gmail.com with ESMTPSA id l2sm2513689wrw.42.2021.10.08.08.25.30
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 08 Oct 2021 08:25:31 -0700 (PDT)
-From: Francois Perrad <fperrad@gmail.com>
-X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
-To: buildroot@busybox.net
-Date: Fri,  8 Oct 2021 17:25:21 +0200
-Message-Id: <20211008152522.1390875-1-francois.perrad@gadz.org>
-X-Mailer: git-send-email 2.30.2
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gib5ZBvQINlC for <buildroot@lists.busybox.net>;
+ Fri,  8 Oct 2021 16:58:56 +0000 (UTC)
+X-Greylist: delayed 00:05:05 by SQLgrey-1.8.0
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5EBA740192
+ for <buildroot@buildroot.org>; Fri,  8 Oct 2021 16:58:56 +0000 (UTC)
+Received: from methusalix.internal.home.lespocky.de ([92.117.61.127]) by
+ mrelayeu.kundenserver.de (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1N5n3t-1mp8Of29n9-017DQ3; Fri, 08 Oct 2021 18:53:46 +0200
+Received: from falbala.internal.home.lespocky.de ([192.168.243.94])
+ by methusalix.internal.home.lespocky.de with esmtpsa (TLS1.2) tls
+ TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 (Exim 4.94.2)
+ (envelope-from <post@lespocky.de>)
+ id 1mYt7v-00043j-BN; Fri, 08 Oct 2021 18:53:44 +0200
+Date: Fri, 8 Oct 2021 18:53:39 +0200
+From: Alexander Dahl <post@lespocky.de>
+To: "Walter, Stefan" <stefan.walter@iml.fraunhofer.de>
+Message-ID: <20211008165338.45kboyxbx6v33mvh@falbala.internal.home.lespocky.de>
+Mail-Followup-To: "Walter, Stefan" <stefan.walter@iml.fraunhofer.de>,
+ "buildroot@buildroot.org" <buildroot@buildroot.org>
+References: <DB6P194MB00220117F126EF57A84FB509B7B19@DB6P194MB0022.EURP194.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/luajit: back to mainline
+In-Reply-To: <DB6P194MB00220117F126EF57A84FB509B7B19@DB6P194MB0022.EURP194.PROD.OUTLOOK.COM>
+User-Agent: NeoMutt/20170113 (1.7.2)
+X-Scan-Signature: 9f5b2199e4483c1fbb1603fea470fc05
+X-Provags-ID: V03:K1:S8Aa1Mvb0H9B7Cr75bSqnDop/LiOZNr79wkn6GQ7afV4Ads0S11
+ ubxMIvhIIm7pVX33zX8H+FAJaa7/jhbSuuY9PDRrGpgr/kUksYf7iUO5ZBybTPGaDiewz6U
+ lvL9KxKEvLO7zfwmNCkIcE+A24QipOrfvkyzzfaV69TLtfx4x+c8LJOk8fyphQz4NEhfI9M
+ IbJEIxtmb3BBzHLzSh8Kw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:LD3Qocdh3Dc=:mH/z5e3JWI8xwwkiFwDjhm
+ 16YUdyjd63Wi6jzCp5/LRQG3Lcj3stWjRAp58XknFyq6Rv2WPSD6NjUCFMiGM3fRl56sMyc5N
+ wYszUG/bwTWD2k/6KSArA3kwRxegkrQ5DqFZW59tQ8doovmaodPQs0vflc5BzRW+J1Lf2CBj8
+ lx+Sp1aYaAhBelol6NuVZfsbh+iHR7Ltad8GxHN7I6erQ40BS0e6IdqFaOoP5+rjSmadVz+pd
+ aqkAH4k7VnSCLA/9CTPRUT4TyLPnlmsZlndEzdIcXufYsy9d1VEvgfivG/ud0XYsCtrH0OTAq
+ v7/zrgeRtfrofvhs6/dpGfB0C05El01F6yGp5klxXvmu63nnpPYoZFbhmQc33/d7ru+MTdlTD
+ LLoGOstdSBBidk7QcrFMZyw0VbbCTRtR/I7o725JQZ4iXVKF5zU0VoDQb7m9SZ3ffHrBx44bX
+ KJVV4pbqXHggmNYFURaXvpUYrqXfRcLDUtRA2BIG+mzZ8xn28uaAeRABlJPsZvuHoKQb8c0cn
+ t1AmtsDSxqIFa/GjgJvenNyAYBdWJquPdphioRrdNzELISB5MEgrw2FEp4jeJKmZspVTuuIBx
+ 4V30jDu25IOPhKB3wC7wjmy0v0WV6rtzGUHI34e4pDhxyLYlAgsI0OktrhwMdJzeAjOxersAz
+ TElw+CuCwlFbXRDYx/hNJcLGCHDyUeW8PABJwfS57F+mOuYsDY0MfoWHFEmA3GKZuKq3bEYaI
+ GYDsQOSRjQxaL24lprzNQDaIOOQBEvr1XdIFxQ==
+Subject: Re: [Buildroot] Boot process stuck at "GRUB loading.." since
+ 2021.02.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,65 +85,114 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>
+Content-Type: multipart/mixed; boundary="===============1251764113916889707=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-now, the moonjit fork is abandonned
-and Mike Pall resumed its activity on LuaJIT
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/luajit/Config.in   | 2 +-
- package/luajit/luajit.hash | 4 ++--
- package/luajit/luajit.mk   | 4 ++--
- 3 files changed, 5 insertions(+), 5 deletions(-)
+--===============1251764113916889707==
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="udxdiqs2tp4szk3t"
+Content-Disposition: inline
 
-diff --git a/package/luajit/Config.in b/package/luajit/Config.in
-index eb3eb0199..e4e124924 100644
---- a/package/luajit/Config.in
-+++ b/package/luajit/Config.in
-@@ -27,7 +27,7 @@ config BR2_PACKAGE_LUAJIT
- 	  ABI-compatible to the standard Lua interpreter and can be
- 	  deployed as a drop-in replacement.
- 
--	  https://github.com/moonjit/moonjit
-+	  https://luajit.org/luajit.html
- 
- if BR2_PACKAGE_LUAJIT
- 
-diff --git a/package/luajit/luajit.hash b/package/luajit/luajit.hash
-index 532ec0b29..1497ee9df 100644
---- a/package/luajit/luajit.hash
-+++ b/package/luajit/luajit.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256 c3de8e29aa617fc594c043f57636ab9ad71af2b4a3a513932b05f5cdaa4320b2  luajit-2.1.2.tar.gz
-+sha256  b1b19f92451a661ba1167ee0b259299616cb3a1cdaf5ab05d7ccffaffeb4a0fb  luajit-05f1984e1a862e4b3d3c3b370c773492e2edf84a.tar.gz
- 
- # Locally calculated
--sha256 aa64a7706ded773011b933f4230d7b35ba662598197f82ac2c7bca62abdaa4d7  COPYRIGHT
-+sha256  43fc251179d900f9948e51dd3cc93733d1219f2db060faaa0c8100ad054f54d8  COPYRIGHT
-diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
-index defa21dd3..fbbd8ebc7 100644
---- a/package/luajit/luajit.mk
-+++ b/package/luajit/luajit.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--LUAJIT_VERSION = 2.1.2
--LUAJIT_SITE = $(call github,moonjit,moonjit,$(LUAJIT_VERSION))
-+LUAJIT_VERSION = 05f1984e1a862e4b3d3c3b370c773492e2edf84a
-+LUAJIT_SITE = $(call github,LuaJIT,LuaJIT,$(LUAJIT_VERSION))
- LUAJIT_LICENSE = MIT
- LUAJIT_LICENSE_FILES = COPYRIGHT
- 
--- 
-2.30.2
+
+--udxdiqs2tp4szk3t
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hello Stefan
+
+On Thu, Oct 07, 2021 at 08:36:07PM +0000, Walter, Stefan wrote:
+> the following used to work until Buildroot 2021.02, i.e. the
+> resulting image booted normally. Ever since Buildroot 2021.02.1 and
+> up until 2021.02.5, the resulting image does not boot any more - the
+> boot process either gets stuck right after displaying "GRUB
+> loading..", or it reboots at that point, leading to an infinite boot
+> loop.
+
+Sounds like should try git bisect between 2021.02 and 2021.02.1 to
+identify the commit which broke your setup?
+
+Greets
+Alex
+
+> What I'm doing:
+>=20
+> 1. Run Buildroot to create a root partition image (my_defconfig attached).
+> 2. Create a GRUB image like this (grub_early.cfg attached):
+>=20
+> /path/to/buildroot-sdk/host/bin/grub-mkimage --config=3Dgrub_early.cfg --=
+directory=3D/path/to/buildroot-sdk/host/lib/grub/i386-pc -o ./genimage_inpu=
+t_tmp/grub_core.img --format=3Di386-pc --prefix=3D=3D/boot/grub biosdisk pa=
+rt_msdos ext2 normal linux configfile
+>=20
+> 3. Create a home partition image like this:
+>=20
+> MKE2FS_CONFIG=3D/path/to/buildroot-sdk/host/etc/mke2fs.conf /path/to/buil=
+droot-sdk/host/sbin/mke2fs -d home_partition_prep/home -j -L home -t ext3 -=
+U random -b 4096 ./genimage_input_tmp/home.ext3 25M
+>=20
+> 4. Create a disk image like this (genimage.cfg attached):
+>=20
+> /path/to/buildroot-sdk/host/bin/genimage --loglevel=3D1 --config=3Dgenima=
+ge.cfg --inputpath=3D./genimage_input_tmp --outputpath=3Dimages --rootpath=
+=3Dhome_partition_prep --tmppath=3D./genimage_tmp --tune2fs=3D/path/to/buil=
+droot-sdk/host/usr/sbin/tune2fs --e2fsck=3D/path/to/buildroot-sdk/host/usr/=
+sbin/e2fsck
+>=20
+> Does anyone have any idea what's going wrong here since 2021.02.1?
+>=20
+> Best regards,
+> Stefan
+
+
+
+
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+
+--=20
+/"\ ASCII RIBBON | =BBWith the first link, the chain is forged. The first
+\ / CAMPAIGN     | speech censured, the first thought forbidden, the
+ X  AGAINST      | first freedom denied, chains us all irrevocably.=AB
+/ \ HTML MAIL    | (Jean-Luc Picard, quoting Judge Aaron Satie)
+
+--udxdiqs2tp4szk3t
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEwo7muQJjlc+Prwj6NK3NAHIhXMYFAmFgd44ACgkQNK3NAHIh
+XMblfQ/9FrYwqNhYYLWuYSn696HJu+JPNrbQntIyHFZWyH9ir2+Xn5x/YgDV/5dx
+GtqktBuhrPndqgxKZV/uNblDCJLakZn0QizKs2+fby0ps1z5u3Z34qfslWulYU4V
+qu3A3/Dz8O3pP7l11SIL8SLwJ3wJc/tdSSLQ+5bX0mxtxmtBCmfJvIOxXiXr2iN2
+IlNfXY78rNvhfpxxq1C8FjO8lYtrO+1kyYvGgY3/okRiw6fdx6WWHBEUdj+i6XIi
+mKkRI3vFLyRkTKrPN9Xox23z3b3VcW+AUqWdJTafNZsz+5FpQCU0AlPd8OoJgfjP
+JV4oFvGVuI5wBehyzFXJRYKiVmsT162y/7dJLTH0s2gvGJ5p/+p0QF81DoEivaAl
+Q1BeFLekQeiSc1I1SMpKQ71elXiBLy1R55h8NSAM3LljY31i1j1n8bchjhtSQzsY
+40rWxrRuHUquFV8JFAW/MQFtch7HiH0Hmab0bRlkUBw4AVOI14ggeil4nlIs45zu
+B7sln8j9ViDVKvgYkUVvhB53CQ1Y3QahTK4ezmax/YLtPShp3BxwiAXLz4rc2Aym
+ar1Gx9tqg00sEoZ4nj5qxTtZ51oK2nBCEL2y5cWqrgmLtwVBGC7YBZdePfbf1ztA
+RdS3ut0kzn0aH07cRXvoPYvB4trq533EM4EIa3joLL5aINroNsk=
+=jbUM
+-----END PGP SIGNATURE-----
+
+--udxdiqs2tp4szk3t--
+
+--===============1251764113916889707==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1251764113916889707==--
