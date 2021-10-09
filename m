@@ -2,58 +2,51 @@ Return-Path: <SRS0=USZC=O5=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BABFEC433EF
-	for <buildroot@archiver.kernel.org>; Sat,  9 Oct 2021 10:22:33 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B0443C433F5
+	for <buildroot@archiver.kernel.org>; Sat,  9 Oct 2021 10:22:45 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 6937760F39
-	for <buildroot@archiver.kernel.org>; Sat,  9 Oct 2021 10:22:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6937760F39
+	by mail.kernel.org (Postfix) with ESMTPS id 7B85A60F4A
+	for <buildroot@archiver.kernel.org>; Sat,  9 Oct 2021 10:22:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7B85A60F4A
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 358284065F;
-	Sat,  9 Oct 2021 10:22:33 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 438A9400B5;
+	Sat,  9 Oct 2021 10:22:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qudJJ9qUgOln; Sat,  9 Oct 2021 10:22:32 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 04bEvRO6OBDn; Sat,  9 Oct 2021 10:22:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A819C403AF;
-	Sat,  9 Oct 2021 10:22:31 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3516A1BF391
- for <buildroot@lists.busybox.net>; Sat,  9 Oct 2021 10:22:29 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2D51340431;
+	Sat,  9 Oct 2021 10:22:43 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 64FCF1BF391
+ for <buildroot@lists.busybox.net>; Sat,  9 Oct 2021 10:22:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 30E7B60B92
- for <buildroot@lists.busybox.net>; Sat,  9 Oct 2021 10:22:29 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 53F2540431
+ for <buildroot@lists.busybox.net>; Sat,  9 Oct 2021 10:22:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id m_FSPeMvwRNH for <buildroot@lists.busybox.net>;
- Sat,  9 Oct 2021 10:22:28 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6867E60B89
- for <buildroot@buildroot.org>; Sat,  9 Oct 2021 10:22:28 +0000 (UTC)
-Received: (Authenticated sender: peter@casa-korsgaard.com)
- by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id B169E240002;
- Sat,  9 Oct 2021 10:22:26 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
- (envelope-from <peter@korsgaard.com>)
- id 1mZ9Uo-0003fZ-19; Sat, 09 Oct 2021 12:22:26 +0200
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VXXADS0F3ZWz for <buildroot@lists.busybox.net>;
+ Sat,  9 Oct 2021 10:22:39 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1FC8A400B5
+ for <buildroot@buildroot.org>; Sat,  9 Oct 2021 10:22:39 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 7B11793519; Sat,  9 Oct 2021 10:19:56 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Waldemar Brodkorb <wbx@openadk.org>
-References: <YV8+R2DNGs/T5x9O@waldemar-brodkorb.de>
-Date: Sat, 09 Oct 2021 12:22:26 +0200
-In-Reply-To: <YV8+R2DNGs/T5x9O@waldemar-brodkorb.de> (Waldemar Brodkorb's
- message of "Thu, 7 Oct 2021 20:36:55 +0200")
-Message-ID: <87wnmmv6ot.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/uclibc: update to 1.0.39
+To: buildroot@buildroot.org
+Date: Sat, 9 Oct 2021 12:17:48 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: e2a86fda084923bc589d04d4f563e80f993f021b
+X-Git-Newrev: 2c2c135e4f4c4d6994d4c6bf35d52edae99f5d25
+X-Patchwork-Hint: ignore
+Message-Id: <20211009101956.7B11793519@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/uclibc: update to 1.0.39
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,24 +58,144 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Waldemar" == Waldemar Brodkorb <wbx@openadk.org> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=2c2c135e4f4c4d6994d4c6bf35d52edae99f5d25
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...-PIE-PIC-builds-with-newer-gcc-binutils-w.patch | 91 ----------------------
+ package/uclibc/uclibc.hash                         |  4 +-
+ package/uclibc/uclibc.mk                           |  2 +-
+ 3 files changed, 3 insertions(+), 94 deletions(-)
 
-Committed, thanks.
-
-Your announcement mentions something about a DNS security issue, does
-this mean that this should also be backported to the stable branches?
-Is there an advisory or a CVE available?
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/uclibc/0001-powerpc-fix-PIE-PIC-builds-with-newer-gcc-binutils-w.patch b/package/uclibc/0001-powerpc-fix-PIE-PIC-builds-with-newer-gcc-binutils-w.patch
+deleted file mode 100644
+index 040699df83..0000000000
+--- a/package/uclibc/0001-powerpc-fix-PIE-PIC-builds-with-newer-gcc-binutils-w.patch
++++ /dev/null
+@@ -1,91 +0,0 @@
+-From 6c95eccff5eb43c8c3ad865d3b1316b7952cc58e Mon Sep 17 00:00:00 2001
+-From: Yann Sionneau <yann@sionneau.net>
+-Date: Fri, 28 May 2021 08:59:58 +0200
+-Subject: [PATCH] powerpc: fix PIE/PIC builds with newer gcc/binutils which use
+- secureplt by default
+-
+-This patch fixes segfault of all user space processes (including init, which caused a panic) on recent buildroot powerpc32 builds.
+-
+-The issue has been reported by Romain Naour in this thread: https://mailman.uclibc-ng.org/pipermail/devel/2021-May/002068.html
+-
+-Recent buildroot toolchain enables secure PLT in powerpc gcc.
+-The latter will then supply -msecure-plt to gas invocations by default.
+-Recent buildroot also enables PIE by default.
+-
+-For the secure PLT to work in PIC, the r30 register needs to point to the GOT.
+-Old "bss plt" was just a one-instruction-wide PLT slot, pointed-to by a R_PPC_JMP_SLOT relocation, which was written on-the-fly to contain a branch instruction to the correct address. It therefore had to stay writable+executable, which you generally want to avoid for security reasons.
+-New secure PLT only contains read-only code which loads the branch address from the writable GOT.
+-
+-Note: secure PLT without PIC does not need r30 to be set. Because offset between plt stub code and got is known at link-time. In this case the PLT entry looks like:
+-1009b3e0 <__uClibc_main@plt>:
+-1009b3e0:       3d 60 10 0e     lis     r11,4110
+-1009b3e4:       81 6b 03 74     lwz     r11,884(r11)
+-1009b3e8:       7d 69 03 a6     mtctr   r11
+-1009b3ec:       4e 80 04 20     bctr
+-
+-Whereas secure PLT with PIC - offset between plt and got is unknown at link-time - looks like this:
+-000af800 <00000000.plt_pic32.__uClibc_main>:
+-   af800:       81 7e 03 80     lwz     r11,896(r30)
+-   af804:       7d 69 03 a6     mtctr   r11
+-   af808:       4e 80 04 20     bctr
+-   af80c:       60 00 00 00     nop
+-
+-Upstream status: Pending:
+-https://mailman.uclibc-ng.org/pipermail/devel/2021-May/002091.html
+-
+-Signed-off-by: Yann Sionneau <yann@sionneau.net>
+-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+----
+- Rules.mak                         | 3 ++-
+- ldso/ldso/powerpc/dl-startup.h    | 3 +++
+- libc/sysdeps/linux/powerpc/crt1.S | 4 ++++
+- 3 files changed, 9 insertions(+), 1 deletion(-)
+-
+-diff --git a/Rules.mak b/Rules.mak
+-index 10f88b3de..60ac59b85 100644
+---- a/Rules.mak
+-+++ b/Rules.mak
+-@@ -477,9 +477,10 @@ ifeq ($(TARGET_ARCH),powerpc)
+- 	PICFLAG:=-fpic
+- 	PIEFLAG_NAME:=-fpie
+- 	PPC_HAS_REL16:=$(shell printf "\t.text\n\taddis 11,30,_GLOBAL_OFFSET_TABLE_-.@ha\n" | $(CC) -c -x assembler -o /dev/null -  2> /dev/null && echo -n y || echo -n n)
+-+	PPC_HAS_SECUREPLT:=$(shell $(CC) --verbose 2>&1 | grep -- --enable-secureplt > /dev/null && echo -n y || echo -n n)
+-+	CPU_CFLAGS-$(PPC_HAS_SECUREPLT) += -DPPC_HAS_SECUREPLT
+- 	CPU_CFLAGS-$(PPC_HAS_REL16)+= -DHAVE_ASM_PPC_REL16
+- 	CPU_CFLAGS-$(CONFIG_E500) += "-D__NO_MATH_INLINES"
+--
+- endif
+- 
+- ifeq ($(TARGET_ARCH),bfin)
+-diff --git a/ldso/ldso/powerpc/dl-startup.h b/ldso/ldso/powerpc/dl-startup.h
+-index 8b2a517e2..7749395eb 100644
+---- a/ldso/ldso/powerpc/dl-startup.h
+-+++ b/ldso/ldso/powerpc/dl-startup.h
+-@@ -25,6 +25,9 @@ __asm__(
+- #else
+-     "	bl	_GLOBAL_OFFSET_TABLE_-4@local\n" /*  Put our GOT pointer in r31, */
+-     "	mflr	31\n"
+-+#endif
+-+#ifdef PPC_HAS_SECUREPLT
+-+    "   mr      30,31\n"
+- #endif
+-     "	addi	1,1,16\n" /* Restore SP */
+-     "	lwz	7,_dl_skip_args@got(31)\n" /* load EA of _dl_skip_args */
+-diff --git a/libc/sysdeps/linux/powerpc/crt1.S b/libc/sysdeps/linux/powerpc/crt1.S
+-index 27bfc5a5a..3f5d056c0 100644
+---- a/libc/sysdeps/linux/powerpc/crt1.S
+-+++ b/libc/sysdeps/linux/powerpc/crt1.S
+-@@ -56,6 +56,10 @@ _start:
+- # else
+- 	bl	_GLOBAL_OFFSET_TABLE_-4@local
+- 	mflr	r31
+-+# endif
+-+	/* in PIC/PIE, plt stubs need r30 to point to the GOT if using secure-plt */
+-+# ifdef PPC_HAS_SECUREPLT
+-+	mr	30,31
+- # endif
+- #endif
+- 	/* Set up the small data pointer in r13.  */
+--- 
+-2.31.1
+-
+diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
+index 2935785f48..25bbabf2ea 100644
+--- a/package/uclibc/uclibc.hash
++++ b/package/uclibc/uclibc.hash
+@@ -1,4 +1,4 @@
+-# From https://downloads.uclibc-ng.org/releases/1.0.38/uClibc-ng-1.0.38.tar.xz.sha256
+-sha256  b1a3328330d2c94a2bec8c1436a8f15673f3a9b5895e155efc2e91d4e1882570  uClibc-ng-1.0.38.tar.xz
++# From https://downloads.uclibc-ng.org/releases/1.0.38/uClibc-ng-1.0.39.tar.xz.sha256
++sha256  cb089dfe14867a38f222d6428e85d0e1191dcbb66dd9b1a671484f6bc7c81920  uClibc-ng-1.0.39.tar.xz
+ # Locally calculated
+ sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING.LIB
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index 180ed9951e..87e283de2a 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-UCLIBC_VERSION = 1.0.38
++UCLIBC_VERSION = 1.0.39
+ UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
+ UCLIBC_SITE = https://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
+ UCLIBC_LICENSE = LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
