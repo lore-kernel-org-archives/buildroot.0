@@ -2,54 +2,51 @@ Return-Path: <SRS0=USZC=O5=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F37A9C433EF
-	for <buildroot@archiver.kernel.org>; Sat,  9 Oct 2021 20:45:04 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C1F8C433EF
+	for <buildroot@archiver.kernel.org>; Sat,  9 Oct 2021 20:45:16 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 6059360E0B
-	for <buildroot@archiver.kernel.org>; Sat,  9 Oct 2021 20:45:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6059360E0B
+	by mail.kernel.org (Postfix) with ESMTPS id ABFF260F44
+	for <buildroot@archiver.kernel.org>; Sat,  9 Oct 2021 20:45:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org ABFF260F44
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 283B06074B;
-	Sat,  9 Oct 2021 20:45:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7E9924056B;
+	Sat,  9 Oct 2021 20:45:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0Z5GIUxKRp80; Sat,  9 Oct 2021 20:45:03 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id NNWvWy7CvgyC; Sat,  9 Oct 2021 20:45:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 92BFB60626;
-	Sat,  9 Oct 2021 20:45:02 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C18C81BF3C6
- for <buildroot@lists.busybox.net>; Sat,  9 Oct 2021 20:44:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D7C324041B;
+	Sat,  9 Oct 2021 20:45:13 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 224791BF3C6
+ for <buildroot@lists.busybox.net>; Sat,  9 Oct 2021 20:45:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AD20D400BA
- for <buildroot@lists.busybox.net>; Sat,  9 Oct 2021 20:44:56 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 28F5E82F84
+ for <buildroot@lists.busybox.net>; Sat,  9 Oct 2021 20:45:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Ww-7wMWTq38c for <buildroot@lists.busybox.net>;
- Sat,  9 Oct 2021 20:44:55 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6C6CD40012
- for <buildroot@buildroot.org>; Sat,  9 Oct 2021 20:44:55 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay10.mail.gandi.net (Postfix) with ESMTPSA id 6D6F4240004;
- Sat,  9 Oct 2021 20:44:52 +0000 (UTC)
-Date: Sat, 9 Oct 2021 22:44:51 +0200
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XnhlZdnTKdOl for <buildroot@lists.busybox.net>;
+ Sat,  9 Oct 2021 20:45:09 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6AD2882FC9
+ for <buildroot@buildroot.org>; Sat,  9 Oct 2021 20:45:09 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id C767594C90; Sat,  9 Oct 2021 20:42:25 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Heiko Thiery <heiko.thiery@gmail.com>
-Message-ID: <20211009224451.2ab63d11@windsurf>
-In-Reply-To: <20211009082854.5203-1-heiko.thiery@gmail.com>
-References: <20211009082854.5203-1-heiko.thiery@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] boot/uboot: bump to version 2021.10
+To: buildroot@buildroot.org
+Date: Sat, 9 Oct 2021 22:45:04 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 3f4735052684eb81cfb227fb7386ad9e67896461
+X-Git-Newrev: 10c00b0e74fa93983bba9abdd008c3e9c0a3fc7a
+X-Patchwork-Hint: ignore
+Message-Id: <20211009204225.C767594C90@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libuev: bump version to v2.4.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -61,28 +58,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat,  9 Oct 2021 10:28:55 +0200
-Heiko Thiery <heiko.thiery@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=10c00b0e74fa93983bba9abdd008c3e9c0a3fc7a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-> ---
->  boot/uboot/Config.in  | 4 ++--
->  boot/uboot/uboot.hash | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+This update is critical for linking against GLIBC v2.34, due to the
+changes related to 64-bit time_t on 32-bit systems.  See ChangeLog
+for details:
 
-Applied to master, thanks.
+  https://github.com/troglobit/libuev/releases/tag/v2.4.0
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libuev/libuev.hash | 4 ++--
+ package/libuev/libuev.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/libuev/libuev.hash b/package/libuev/libuev.hash
+index d52d210d10..e5c9660a02 100644
+--- a/package/libuev/libuev.hash
++++ b/package/libuev/libuev.hash
+@@ -1,4 +1,4 @@
+-# From https://github.com/troglobit/libuev/releases/download/v2.3.2/libuev-2.3.2.tar.xz.sha256
+-sha256  af31ffe1058a2ff6c56fee26ec8749688704d297189b6a898380a601efefbec9  libuev-2.3.2.tar.xz
++# From https://github.com/troglobit/libuev/releases/download/v2.4.0/libuev-2.4.0.tar.xz.sha256
++sha256  31f1aa4f492ba4f6a5dd6b19968ae6a732968dc05cae6575930560b6cee1f5ef  libuev-2.4.0.tar.xz
+ # License files
+ sha256  694a734d9c1b46ae203314ed1c744a1acebd4fe5fc964b761703772546f0d3ab  LICENSE
+diff --git a/package/libuev/libuev.mk b/package/libuev/libuev.mk
+index 8a6759a2d7..a32381dcc5 100644
+--- a/package/libuev/libuev.mk
++++ b/package/libuev/libuev.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBUEV_VERSION = 2.3.2
++LIBUEV_VERSION = 2.4.0
+ LIBUEV_SOURCE = libuev-$(LIBUEV_VERSION).tar.xz
+ LIBUEV_SITE = https://github.com/troglobit/libuev/releases/download/v$(LIBUEV_VERSION)
+ LIBUEV_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
