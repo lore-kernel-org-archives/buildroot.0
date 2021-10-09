@@ -2,52 +2,52 @@ Return-Path: <SRS0=USZC=O5=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CFE20C433EF
-	for <buildroot@archiver.kernel.org>; Sat,  9 Oct 2021 12:05:10 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 90566C433EF
+	for <buildroot@archiver.kernel.org>; Sat,  9 Oct 2021 12:05:22 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 96D4C60F6F
-	for <buildroot@archiver.kernel.org>; Sat,  9 Oct 2021 12:05:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 96D4C60F6F
+	by mail.kernel.org (Postfix) with ESMTPS id 5AD1160F57
+	for <buildroot@archiver.kernel.org>; Sat,  9 Oct 2021 12:05:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5AD1160F57
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6831D40571;
-	Sat,  9 Oct 2021 12:05:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2882280E90;
+	Sat,  9 Oct 2021 12:05:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lMnAFqGXeYJh; Sat,  9 Oct 2021 12:05:09 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id pZikJUiKdSVB; Sat,  9 Oct 2021 12:05:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5AE304056D;
-	Sat,  9 Oct 2021 12:05:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9357881882;
+	Sat,  9 Oct 2021 12:05:20 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4B7EE1BF36A
- for <buildroot@lists.busybox.net>; Sat,  9 Oct 2021 12:03:06 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1807D1BF36A
+ for <buildroot@lists.busybox.net>; Sat,  9 Oct 2021 12:03:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 86D08607C0
+ by smtp3.osuosl.org (Postfix) with ESMTP id A8D0760B9B
  for <buildroot@lists.busybox.net>; Sat,  9 Oct 2021 12:03:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tdjwCwrvPe6M for <buildroot@lists.busybox.net>;
+ with ESMTP id NDw_KBNH0IgW for <buildroot@lists.busybox.net>;
  Sat,  9 Oct 2021 12:02:59 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5C22760BA3
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8F5AF60BA6
  for <buildroot@buildroot.org>; Sat,  9 Oct 2021 12:02:58 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 9D7569359A; Sat,  9 Oct 2021 12:00:15 +0000 (UTC)
+ id C3FDB9359C; Sat,  9 Oct 2021 12:00:15 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 9 Oct 2021 13:49:39 +0200
+Date: Sat, 9 Oct 2021 13:52:40 +0200
 X-Git-Refname: refs/heads/2021.08.x
-X-Git-Oldrev: 96b0bd7efb85c90b01e8745f45af68592b7311e0
-X-Git-Newrev: a52c0d9020bff57046c01c6132bcc6c3b16a6180
+X-Git-Oldrev: 9870581397af66dfb69d2c6f64c1482554b9b29c
+X-Git-Newrev: db7dd3830bf552149b33f81208bb5d26e87801af
 X-Patchwork-Hint: ignore
-Message-Id: <20211009120015.9D7569359A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.08.x] package/openssh: security
- bump to version 8.8p1
+Message-Id: <20211009120015.C3FDB9359C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.08.x] package/libressl: bump to
+ version 3.3.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,53 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a52c0d9020bff57046c01c6132bcc6c3b16a6180
+commit: https://git.buildroot.net/buildroot/commit/?id=db7dd3830bf552149b33f81208bb5d26e87801af
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.08.x
 
-Fix CVE-2021-41617: sshd in OpenSSH 6.2 through 8.x before 8.8, when
-certain non-default configurations are used, allows privilege escalation
-because supplemental groups are not initialized as expected. Helper
-programs for AuthorizedKeysCommand and AuthorizedPrincipalsCommand may
-run with privileges associated with group memberships of the sshd
-process, if the configuration specifies running the command as a
-different user.
+Bugfix release, fixing a stack overread issue:
+https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-3.3.5-relnotes.txt
 
-https://www.openssh.com/txt/release-8.8
-https://www.openssh.com/txt/release-8.7
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 29b6114acfefc5146410c722f9412a7ac31910c8)
+(cherry picked from commit ec87e249237ed0ece942c277e15fcfaa4901e2e9)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openssh/openssh.hash | 4 ++--
- package/openssh/openssh.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libressl/libressl.hash | 2 +-
+ package/libressl/libressl.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/openssh/openssh.hash b/package/openssh/openssh.hash
-index 0dcd725de5..aab3dba09c 100644
---- a/package/openssh/openssh.hash
-+++ b/package/openssh/openssh.hash
+diff --git a/package/libressl/libressl.hash b/package/libressl/libressl.hash
+index 45afd04dca..d046e89518 100644
+--- a/package/libressl/libressl.hash
++++ b/package/libressl/libressl.hash
 @@ -1,4 +1,4 @@
--# From https://www.openssh.com/txt/release-8.6 (base64 encoded)
--sha256  c3e6e4da1621762c850d03b47eed1e48dff4cc9608ddeb547202a234df8ed7ae  openssh-8.6p1.tar.gz
-+# From https://www.openssh.com/txt/release-8.8 (base64 encoded)
-+sha256  4590890ea9bb9ace4f71ae331785a3a5823232435161960ed5fc86588f331fe9  openssh-8.8p1.tar.gz
- # Locally calculated
- sha256  432abf7480fb31473a6706627212913fc70032e3fb71b90fecb28ae26a2d741d  LICENCE
-diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-index 61b2c97cf4..75c4a0128b 100644
---- a/package/openssh/openssh.mk
-+++ b/package/openssh/openssh.mk
+ # From https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/SHA256
+-sha256  bcce767a3fed252bfd1210f8a7e3505a2b54d3008f66e43d9b95e3f30c072931  libressl-3.3.4.tar.gz
++sha256  0a51393f0df1cf27e070054a2788a4d073339f363d79cd594076a1b4c48be9a5  libressl-3.3.5.tar.gz
+ # Locally computed
+ sha256  5c63613f008f16a9c0025c096bbd736cecf720494d121b5c5203e0ec6e5955b1  COPYING
+diff --git a/package/libressl/libressl.mk b/package/libressl/libressl.mk
+index f1847b18dd..268ded69af 100644
+--- a/package/libressl/libressl.mk
++++ b/package/libressl/libressl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OPENSSH_VERSION_MAJOR = 8.6
-+OPENSSH_VERSION_MAJOR = 8.8
- OPENSSH_VERSION_MINOR = p1
- OPENSSH_VERSION = $(OPENSSH_VERSION_MAJOR)$(OPENSSH_VERSION_MINOR)
- OPENSSH_CPE_ID_VERSION = $(OPENSSH_VERSION_MAJOR)
+-LIBRESSL_VERSION = 3.3.4
++LIBRESSL_VERSION = 3.3.5
+ LIBRESSL_SITE = https://ftp.openbsd.org/pub/OpenBSD/LibreSSL
+ LIBRESSL_LICENSE = ISC (new additions), OpenSSL or SSLeay (original OpenSSL code)
+ LIBRESSL_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
