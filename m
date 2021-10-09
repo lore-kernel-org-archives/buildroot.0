@@ -2,52 +2,52 @@ Return-Path: <SRS0=USZC=O5=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7116FC433EF
-	for <buildroot@archiver.kernel.org>; Sat,  9 Oct 2021 12:09:13 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B1477C433EF
+	for <buildroot@archiver.kernel.org>; Sat,  9 Oct 2021 12:09:25 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 3F6D960F57
-	for <buildroot@archiver.kernel.org>; Sat,  9 Oct 2021 12:09:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3F6D960F57
+	by mail.kernel.org (Postfix) with ESMTPS id 7ACD460F6F
+	for <buildroot@archiver.kernel.org>; Sat,  9 Oct 2021 12:09:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7ACD460F6F
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 124E340576;
-	Sat,  9 Oct 2021 12:09:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4A11460A70;
+	Sat,  9 Oct 2021 12:09:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id agL4p96XBfUp; Sat,  9 Oct 2021 12:09:12 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rOAPOXQmCzWb; Sat,  9 Oct 2021 12:09:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0104C40585;
-	Sat,  9 Oct 2021 12:09:10 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 052331BF36A
+	by smtp3.osuosl.org (Postfix) with ESMTP id 874F260A44;
+	Sat,  9 Oct 2021 12:09:23 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 114041BF95F
  for <buildroot@lists.busybox.net>; Sat,  9 Oct 2021 12:03:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E74ED40685
- for <buildroot@lists.busybox.net>; Sat,  9 Oct 2021 12:03:19 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1202B40431
+ for <buildroot@lists.busybox.net>; Sat,  9 Oct 2021 12:03:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1592ikCb8b9i for <buildroot@lists.busybox.net>;
- Sat,  9 Oct 2021 12:03:19 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HTmJtUs0F9MJ for <buildroot@lists.busybox.net>;
+ Sat,  9 Oct 2021 12:03:18 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 47CDC4068C
- for <buildroot@buildroot.org>; Sat,  9 Oct 2021 12:03:19 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id DF32440502
+ for <buildroot@buildroot.org>; Sat,  9 Oct 2021 12:03:18 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 80E84947C4; Sat,  9 Oct 2021 12:00:36 +0000 (UTC)
+ id 22750947C1; Sat,  9 Oct 2021 12:00:36 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 9 Oct 2021 13:52:03 +0200
+Date: Sat, 9 Oct 2021 13:45:57 +0200
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 9026d3d7a10969fe618935de2bc07db5816dc9b6
-X-Git-Newrev: 58d3fb9b41b416fbfd8c570da9d1150bcba2899f
+X-Git-Oldrev: d930e0f666ffac1c6b6036686eff140f11319130
+X-Git-Newrev: 598be3d0da2c54e45f186366a02e9c16274c0e35
 X-Patchwork-Hint: ignore
-Message-Id: <20211009120036.80E84947C4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/libcurl: fix
- build with wolfssl
+Message-Id: <20211009120036.22750947C1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/mesa3d: fix build
+ on m68k
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,39 +65,86 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=58d3fb9b41b416fbfd8c570da9d1150bcba2899f
+commit: https://git.buildroot.net/buildroot/commit/?id=598be3d0da2c54e45f186366a02e9c16274c0e35
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Select BR2_PACKAGE_WOLFSSL_ALL as suggested by upstream in
-https://github.com/curl/curl/issues/7745 to fix the following build
-failure raised since bump to version 7.79.1 in commit
-6d6842130b456499d3ff230a3b70cec756cbccd1:
+mesa3d uses very big switch statements, which causes the build to fail
+on m68k, beause the offsets there are only 16-bit.
 
-/home/giuliobenetti/autobuild/run/instance-3/output-1/host/lib/gcc/riscv64-buildroot-linux-uclibc/10.3.0/../../../../riscv64-buildroot-linux-uclibc/bin/ld: ../lib/.libs/libcurl.so: undefined reference to `wolfSSL_ERR_clear_error'
+We fix that by using -mlong-jump-table-offsets on m68k, to use 32-bit
+offsets for switch statements, but this is only available starting with
+gcc 7 [0] [1].
 
 Fixes:
- - http://autobuild.buildroot.org/results/2956c8fb91a16d2ab59fb1c7babec46a6c8399e5
+http://autobuild.buildroot.net/results/60c4653c2a93125edbdd0beb43cd47301643464a/
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 36ac5b0b0b6f90002e0dd684f345dda8d1dce096)
+Note: we have two packages that select mesa3d, but:
+    package/intel-mediadriver/
+        -> already depends on x86_64, so implies !m68k
+
+    package/x11r7/xdriver_xf86-video-imx-viv/
+        -> imx is an ARM, but xdriver_xf86-video-imx-viv is missing
+           a depends on BR2_arm (although the comments do have that
+           dependency). However, it depends on other imx related
+           packages, and they depend on either arm or aarch64, so
+           that implies !m68k.
+
+As such, we do not need to propagate that new dependency.
+
+[0] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=57583#c15
+[1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=57583#c16
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+[yann.morin.1998@free.fr:
+  - add comment
+  - reword commit log, add BZ references, add non-propagation notes
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 2fe3a8f81b0507260b76e0a2734671e763180e7a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libcurl/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/mesa3d/Config.in | 5 +++++
+ package/mesa3d/mesa3d.mk | 9 +++++++++
+ 2 files changed, 14 insertions(+)
 
-diff --git a/package/libcurl/Config.in b/package/libcurl/Config.in
-index 0674701e03..4baef84620 100644
---- a/package/libcurl/Config.in
-+++ b/package/libcurl/Config.in
-@@ -71,6 +71,7 @@ config BR2_PACKAGE_LIBCURL_MBEDTLS
- config BR2_PACKAGE_LIBCURL_WOLFSSL
- 	bool "WolfSSL"
- 	depends on BR2_PACKAGE_WOLFSSL
-+	select BR2_PACKAGE_WOLFSSL_ALL
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index 1104071e37..5816d1f79c 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -4,6 +4,7 @@ menuconfig BR2_PACKAGE_MESA3D
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_1
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
++	depends on !BR2_m68k || BR2_TOOLCHAIN_GCC_AT_LEAST_7 # m68k needs gcc >= 7.x
+ 	select BR2_PACKAGE_EXPAT
+ 	select BR2_PACKAGE_LIBDRM
+ 	select BR2_PACKAGE_WAYLAND_PROTOCOLS if BR2_PACKAGE_WAYLAND
+@@ -474,3 +475,7 @@ comment "mesa3d needs a toolchain w/ C++, NPTL, dynamic library"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
+ 		BR2_STATIC_LIBS
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_1
++
++comment "mesa3d needs a toolchain w/ gcc >= 7"
++	depends on BR2_m68k
++	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_7
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 36ea72f887..1461c3a7c3 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -261,4 +261,13 @@ else
+ MESA3D_CONF_OPTS += -Dzstd=disabled
+ endif
  
- config BR2_PACKAGE_LIBCURL_TLS_NONE
- 	bool "None"
++MESA3D_CFLAGS = $(TARGET_CFLAGS)
++
++# m68k needs 32-bit offsets in switch tables to build
++ifeq ($(BR2_m68k),y)
++MESA3D_CFLAGS += -mlong-jump-table-offsets
++endif
++
++MESA3D_CONF_OPTS += -DCMAKE_C_FLAGS="$(MESA3D_CFLAGS)"
++
+ $(eval $(meson-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
