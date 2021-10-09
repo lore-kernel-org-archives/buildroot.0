@@ -2,83 +2,60 @@ Return-Path: <SRS0=USZC=O5=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3AF24C433EF
-	for <buildroot@archiver.kernel.org>; Sat,  9 Oct 2021 08:29:09 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7CD18C433F5
+	for <buildroot@archiver.kernel.org>; Sat,  9 Oct 2021 08:35:48 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 8915360F8F
-	for <buildroot@archiver.kernel.org>; Sat,  9 Oct 2021 08:29:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8915360F8F
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id B1F4660EFE
+	for <buildroot@archiver.kernel.org>; Sat,  9 Oct 2021 08:35:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B1F4660EFE
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=t-online.de
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 37AE860B5D;
-	Sat,  9 Oct 2021 08:29:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7E6A440667;
+	Sat,  9 Oct 2021 08:35:47 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id qeaHJCDUtTn3; Sat,  9 Oct 2021 08:35:46 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id C4A3440661;
+	Sat,  9 Oct 2021 08:35:45 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 830581BF388
+ for <buildroot@lists.busybox.net>; Sat,  9 Oct 2021 08:35:43 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 720FC605FC
+ for <buildroot@lists.busybox.net>; Sat,  9 Oct 2021 08:35:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YsoDLOy4QCex; Sat,  9 Oct 2021 08:29:07 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A93A5605FC;
-	Sat,  9 Oct 2021 08:29:06 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4CEA91BF388
- for <buildroot@lists.busybox.net>; Sat,  9 Oct 2021 08:29:05 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3C2F64065C
- for <buildroot@lists.busybox.net>; Sat,  9 Oct 2021 08:29:05 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZdXaDM5YfY4n for <buildroot@lists.busybox.net>;
- Sat,  9 Oct 2021 08:29:04 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
- [IPv6:2a00:1450:4864:20::435])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7A0A24065A
- for <buildroot@buildroot.org>; Sat,  9 Oct 2021 08:29:04 +0000 (UTC)
-Received: by mail-wr1-x435.google.com with SMTP id t2so36849103wrb.8
- for <buildroot@buildroot.org>; Sat, 09 Oct 2021 01:29:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=rtZB9SFPOwesLXlXuWLDdP2OqKG5Weas2s+JHxplkOc=;
- b=BGkS8WwTnF5u6Bcj0GIkK8G5LqD7jYVPewrc5AGvfEnsQjIkTEbqqFlOvCXt2yx7mP
- q5j+GqN0lLFYS6Eo25XBmDoi/t8BSWrPUJ8dTkb8PWbKjoH7Q6t+KJsILO7NI9uE308u
- CmcvUpDBKg1Np+Qaq9uXo8Z1FBzqAI3fFiqptln99lhk03gwwBm6pTTIER85mR7XQGmV
- 4fnP9m9ontiFdL+71Qk0HPggpJqtRnUSinogA0G3OgC/8EjSARUrQ7IVoWldMz5eWPKG
- QvVDycSyKtcnZQvvPfaCglhRjIYSrL2X2POPx7m89drkW2xcNEBjDBER87j+rODZHdmg
- UcXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=rtZB9SFPOwesLXlXuWLDdP2OqKG5Weas2s+JHxplkOc=;
- b=ZFus8SUyhIX9AHOSw5Ba20gxTxaPMNSPshZl8DHcKyczOBaB0iW3yyy0CX6AIGdZWt
- gu4adDiEASv91kG/Tt++SoTpRnJ/o1zSui599/v414amLFLIUqBURobw5BUqsruP0wSb
- QE8AWpBfxo17xjmNxcRUYea+RzJxD3gKir2ByfUlBhFuEreYu00IdJe2GZGfCp3eCaem
- MtDgKMQtAR3cRK1eTwOmi4gLhZnUd8BWZAHI67BS2OjLLo+uTVZzlnryJkPQVtA4tQ+k
- Dh0i1R9AMK3Bs4GDd2gI319KoxDNgDTHjTA5LlGy8gVZibHh2yuVs+kS8hgF/Bo1ji8B
- pdAQ==
-X-Gm-Message-State: AOAM532m6ZqZUPJ2oLZ8fz9EmvrPU8kBG0J2qa6Pf74X3RJG7YnHmUPs
- rqbtz/yQNZ2wuuag0PhfikOr1rmuaawYog==
-X-Google-Smtp-Source: ABdhPJw4huIXo7ecXwd3alKrbR1L7PlXy2zvwcSISftamtnIXW64n5xwA7FTrUgObMewL4VQ1XqwHw==
-X-Received: by 2002:adf:a411:: with SMTP id d17mr9874390wra.393.1633768142536; 
- Sat, 09 Oct 2021 01:29:02 -0700 (PDT)
-Received: from t450s.fritz.box ([31.19.16.29])
- by smtp.gmail.com with ESMTPSA id a16sm1548497wrp.14.2021.10.09.01.29.01
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 09 Oct 2021 01:29:02 -0700 (PDT)
-From: Heiko Thiery <heiko.thiery@gmail.com>
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id oF5J5LnhVgr9 for <buildroot@lists.busybox.net>;
+ Sat,  9 Oct 2021 08:35:42 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from mailout07.t-online.de (mailout07.t-online.de [194.25.134.83])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D5725605F4
+ for <buildroot@buildroot.org>; Sat,  9 Oct 2021 08:35:41 +0000 (UTC)
+Received: from fwd79.dcpf.telekom.de (fwd79.aul.t-online.de [10.223.144.105])
+ by mailout07.t-online.de (Postfix) with SMTP id E726EF6C6
+ for <buildroot@buildroot.org>; Sat,  9 Oct 2021 10:34:09 +0200 (CEST)
+Received: from fli4l.lan.fli4l ([79.214.199.18]) by fwd79.t-online.de
+ with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
+ esmtp id 1mZ7o1-2BtSWP0; Sat, 9 Oct 2021 10:34:09 +0200
+Received: from bruckner.lan.fli4l ([192.168.1.1]:50298)
+ by fli4l.lan.fli4l with esmtp (Exim 4.95)
+ (envelope-from <bernd.kuhls@t-online.de>) id 1mZ7o1-0001N4-1g
+ for buildroot@buildroot.org; Sat, 09 Oct 2021 10:34:09 +0200
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Sat,  9 Oct 2021 10:28:55 +0200
-Message-Id: <20211009082854.5203-1-heiko.thiery@gmail.com>
-X-Mailer: git-send-email 2.20.1
+Date: Sat,  9 Oct 2021 10:34:09 +0200
+Message-Id: <20211009083409.590326-1-bernd.kuhls@t-online.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] boot/uboot: bump to version 2021.10
+X-TOI-EXPURGATEID: 150726::1633768449-0000146E-9143E375/0/0 CLEAN NORMAL
+X-TOI-MSGID: a46503ce-b1de-40c9-9663-a8f37ad939f5
+Subject: [Buildroot] [PATCH 1/1] package/kodi: bump version to 19.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,51 +67,115 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Heiko Thiery <heiko.thiery@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
----
- boot/uboot/Config.in  | 4 ++--
- boot/uboot/uboot.hash | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Removed patch 0002 which was applied upstream.
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index 1fc93a443f..a58f7b7572 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -41,7 +41,7 @@ choice
- 	  Select the specific U-Boot version you want to use
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ .../kodi-jsonschemabuilder.mk                 |  2 +-
+ .../kodi-texturepacker/kodi-texturepacker.mk  |  2 +-
+ .../kodi/0002-utils-include-fmt-xchar.h.patch | 34 -------------------
+ package/kodi/kodi.hash                        |  2 +-
+ package/kodi/kodi.mk                          |  2 +-
+ 5 files changed, 4 insertions(+), 38 deletions(-)
+ delete mode 100644 package/kodi/0002-utils-include-fmt-xchar.h.patch
+
+diff --git a/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
+index d57e9f2434..7b4df91efe 100644
+--- a/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
++++ b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
+@@ -6,7 +6,7 @@
  
- config BR2_TARGET_UBOOT_LATEST_VERSION
--	bool "2021.07"
-+	bool "2021.10"
+ # Not possible to directly refer to kodi variables, because of
+ # first/second expansion trickery...
+-KODI_JSONSCHEMABUILDER_VERSION = 19.1-Matrix
++KODI_JSONSCHEMABUILDER_VERSION = 19.2-Matrix
+ KODI_JSONSCHEMABUILDER_SITE = $(call github,xbmc,xbmc,$(KODI_JSONSCHEMABUILDER_VERSION))
+ KODI_JSONSCHEMABUILDER_SOURCE = kodi-$(KODI_JSONSCHEMABUILDER_VERSION).tar.gz
+ KODI_JSONSCHEMABUILDER_DL_SUBDIR = kodi
+diff --git a/package/kodi-texturepacker/kodi-texturepacker.mk b/package/kodi-texturepacker/kodi-texturepacker.mk
+index c50387e8d2..7d13c72cc6 100644
+--- a/package/kodi-texturepacker/kodi-texturepacker.mk
++++ b/package/kodi-texturepacker/kodi-texturepacker.mk
+@@ -6,7 +6,7 @@
  
- config BR2_TARGET_UBOOT_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -85,7 +85,7 @@ endif
+ # Not possible to directly refer to kodi variables, because of
+ # first/second expansion trickery...
+-KODI_TEXTUREPACKER_VERSION = 19.1-Matrix
++KODI_TEXTUREPACKER_VERSION = 19.2-Matrix
+ KODI_TEXTUREPACKER_SITE = $(call github,xbmc,xbmc,$(KODI_TEXTUREPACKER_VERSION))
+ KODI_TEXTUREPACKER_SOURCE = kodi-$(KODI_TEXTUREPACKER_VERSION).tar.gz
+ KODI_TEXTUREPACKER_DL_SUBDIR = kodi
+diff --git a/package/kodi/0002-utils-include-fmt-xchar.h.patch b/package/kodi/0002-utils-include-fmt-xchar.h.patch
+deleted file mode 100644
+index 70c88412e9..0000000000
+--- a/package/kodi/0002-utils-include-fmt-xchar.h.patch
++++ /dev/null
+@@ -1,34 +0,0 @@
+-From 18ff80a9c169fb969b75e2143d9f1f234b71a730 Mon Sep 17 00:00:00 2001
+-From: Craig Andrews <candrews@integralblue.com>
+-Date: Thu, 24 Jun 2021 20:41:11 -0400
+-Subject: [PATCH] [utils] include fmt/xchar.h
+-
+-fmt 8 moved wchar/custom char overloads to xchar.h, so for fmt 8 compatibility, xchar.h must be included
+-
+-See https://github.com/fmtlib/fmt/commit/76ee490468212f8705a1421b4c88f8f814b2d351
+-
+-Downloaded from upstream commit
+-https://github.com/xbmc/xbmc/commit/18ff80a9c169fb969b75e2143d9f1f234b71a730
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- xbmc/utils/StringUtils.h | 3 +++
+- 1 file changed, 3 insertions(+)
+-
+-diff --git a/xbmc/utils/StringUtils.h b/xbmc/utils/StringUtils.h
+-index ca6f82953d..2dc5c3f03a 100644
+---- a/xbmc/utils/StringUtils.h
+-+++ b/xbmc/utils/StringUtils.h
+-@@ -36,6 +36,9 @@
+- #if FMT_VERSION >= 40000
+- #include <fmt/printf.h>
+- #endif
+-+#if FMT_VERSION >= 80000
+-+#include <fmt/xchar.h>
+-+#endif
+- 
+- #include "XBDateTime.h"
+- #include "utils/params_check_macros.h"
+--- 
+-2.30.2
+-
+diff --git a/package/kodi/kodi.hash b/package/kodi/kodi.hash
+index c8562ce9ed..27b20aaac3 100644
+--- a/package/kodi/kodi.hash
++++ b/package/kodi/kodi.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  195a916a32057e259e6f42b49ba8f07cc6253460018851a52deb058ae938c58c  kodi-19.1-Matrix.tar.gz
++sha256  9830e68a2b6d6381e1dc03c1be119d9742fcdfff9824da1e4fe8c5c778f8f6ed  kodi-19.2-Matrix.tar.gz
+ sha256  38816f8373e243bc5950449b4f3b18938c4e1c59348e3411e23f31db4072e40d  kodi-libdvdcss-1.4.2-Leia-Beta-5.tar.gz
+ sha256  071e414e61b795f2ff9015b21a85fc009dde967f27780d23092643916538a57a  kodi-libdvdnav-6.0.0-Leia-Alpha-3.tar.gz
+ sha256  a30b6aa0aad0f2c505bc77948af2d5531a80b6e68112addb4c123fca24d5d3bf  kodi-libdvdread-6.0.0-Leia-Alpha-3.tar.gz
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index 627427f584..49174316fc 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -6,7 +6,7 @@
  
- config BR2_TARGET_UBOOT_VERSION
- 	string
--	default "2021.07"	if BR2_TARGET_UBOOT_LATEST_VERSION
-+	default "2021.10"	if BR2_TARGET_UBOOT_LATEST_VERSION
- 	default BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE \
- 		if BR2_TARGET_UBOOT_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_UBOOT_CUSTOM_TARBALL
-diff --git a/boot/uboot/uboot.hash b/boot/uboot/uboot.hash
-index 5a48926ebe..68259f69f2 100644
---- a/boot/uboot/uboot.hash
-+++ b/boot/uboot/uboot.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  312b7eeae44581d1362c3a3f02c28d806647756c82ba8c72241c7cdbe68ba77e  u-boot-2021.07.tar.bz2
-+sha256  cde723e19262e646f2670d25e5ec4b1b368490de950d4e26275a988c36df0bd4  u-boot-2021.10.tar.bz2
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  Licenses/gpl-2.0.txt
+ # When updating the version, please also update kodi-jsonschemabuilder
+ # and kodi-texturepacker
+-KODI_VERSION_MAJOR = 19.1
++KODI_VERSION_MAJOR = 19.2
+ KODI_VERSION_NAME = Matrix
+ KODI_VERSION = $(KODI_VERSION_MAJOR)-$(KODI_VERSION_NAME)
+ KODI_SITE = $(call github,xbmc,xbmc,$(KODI_VERSION))
 -- 
-2.20.1
+2.30.2
 
 _______________________________________________
 buildroot mailing list
