@@ -2,85 +2,87 @@ Return-Path: <SRS0=USZC=O5=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C23DC433F5
-	for <buildroot@archiver.kernel.org>; Sat,  9 Oct 2021 20:57:03 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A67FCC433F5
+	for <buildroot@archiver.kernel.org>; Sat,  9 Oct 2021 20:57:14 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2EF4860F9D
-	for <buildroot@archiver.kernel.org>; Sat,  9 Oct 2021 20:57:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2EF4860F9D
+	by mail.kernel.org (Postfix) with ESMTPS id 6E73960F5A
+	for <buildroot@archiver.kernel.org>; Sat,  9 Oct 2021 20:57:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6E73960F5A
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EB4FA8343E;
-	Sat,  9 Oct 2021 20:57:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 47E84406F1;
+	Sat,  9 Oct 2021 20:57:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mOn1dCQTn4IZ; Sat,  9 Oct 2021 20:57:02 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id QHvVo7Kf4N3T; Sat,  9 Oct 2021 20:57:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4515883419;
-	Sat,  9 Oct 2021 20:57:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A5CB240712;
+	Sat,  9 Oct 2021 20:57:12 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C0E2A1BF5A6
- for <buildroot@lists.busybox.net>; Sat,  9 Oct 2021 20:55:36 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 17CB31BF5A6
+ for <buildroot@lists.busybox.net>; Sat,  9 Oct 2021 20:55:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B105E827DE
- for <buildroot@lists.busybox.net>; Sat,  9 Oct 2021 20:55:36 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id CF115827DE
+ for <buildroot@lists.busybox.net>; Sat,  9 Oct 2021 20:55:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LxgFSRoxTqCm for <buildroot@lists.busybox.net>;
- Sat,  9 Oct 2021 20:55:36 +0000 (UTC)
+ with ESMTP id zymhL9NRP1-z for <buildroot@lists.busybox.net>;
+ Sat,  9 Oct 2021 20:55:37 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com
- [IPv6:2607:f8b0:4864:20::1036])
- by smtp1.osuosl.org (Postfix) with ESMTPS id EF0A9824D4
- for <buildroot@buildroot.org>; Sat,  9 Oct 2021 20:55:35 +0000 (UTC)
-Received: by mail-pj1-x1036.google.com with SMTP id
- nn3-20020a17090b38c300b001a03bb6c4ebso7929296pjb.1
- for <buildroot@buildroot.org>; Sat, 09 Oct 2021 13:55:35 -0700 (PDT)
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com
+ [IPv6:2607:f8b0:4864:20::1029])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0A9A58239A
+ for <buildroot@buildroot.org>; Sat,  9 Oct 2021 20:55:36 +0000 (UTC)
+Received: by mail-pj1-x1029.google.com with SMTP id
+ nn3-20020a17090b38c300b001a03bb6c4ebso7929305pjb.1
+ for <buildroot@buildroot.org>; Sat, 09 Oct 2021 13:55:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=b2U8d86TLRwuLtW5qCss/pjjsDlGOsSI7hcAff/5nE4=;
- b=HAJ/W4JXxxdovBOp/7fVgrPh0q5HQ80JxXfkKYxtnbibvUNODJ19CuRjOF/49bkKXB
- aFiBQi0MBGf1kaU3tnp9gf1PHsws0X3h9JNTcveJicg2HY0nfe9z0h8ZiqeGeXYFK/uM
- gKh6/ahjXPPXTadArOQKkIvYyNxvPR2wk1gj75MgavW8bwdtMcN262702NZg0Dct63F/
- pjgnZno03D4wDEFZVXJSyrpNGqkN4J0BpqJiQ816KXt45FTBIkLEN2a8Jua9Ts/0IkFS
- jIcAu136UaCNO0CczQfk7jl1FYIHulRWWbMR7EPiZNtOkPz7KayLbc4kdLYStGyRaqY4
- XxqQ==
+ bh=tSv6FZZPa/iTMhqlvc/UPCcd5x9KekW1mPo982wVdkg=;
+ b=CilZ9GDwTj5QIXLItWjGoaV5/uHNQ69yXH/J18ABiCx8iZutBZZsTuhkGIU4RWvad+
+ v6YsHGE3NbGK3CYSpcvqu41lB42ojNEjQDLHUa5p+JmxTu2AfwV4aEHzBUkbNX5VETsE
+ dCd66CYIn9+kUOPjZHLefcKT6CaHJuHD0x4xMXDKf6HPIeOxiwiu30t6nOyInx9WP2g7
+ He6aFW8YiMgbwQ5FNBIgJur75q1alJ7Z3E3WBc7Z1zVKIs5y+m99bRGkNR51AH3ROZdl
+ GI8y4tsHq92ToloEcJKzAQnyJnLB6omKlpI85RR6a+/hXJswKq2kepYCCiE61ggIUrU9
+ nU4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
  :references:mime-version:content-transfer-encoding;
- bh=b2U8d86TLRwuLtW5qCss/pjjsDlGOsSI7hcAff/5nE4=;
- b=3q5j4EjPnntqVB5laebri3srVeZ88FseXtwuA8uQqfL5OrMeYdPmKoqVu6jENL/qXY
- ZcKO8HCDj/1gKy5L/e2LcE76I1FNdB8naG3IjZtOCkwXFdNuvamLZdINjspD4Pn+HZEH
- uGeVC4kaOMTozXQuSOLwa73CV+ISSFtqvkq3fuOT0OHoiI05n0nvUusjZoxVjOPC7Fs0
- W4lZEC+iozaNtgo1i9V50fl4ZzHmmzqSk+0hWw2vcya5UZR8ZULd5ihoI3uSqdzXQaB7
- esAZM0760reX8v+f6k3pTMqtXNaraFAEUH0AK/3a9GajedbaKQ4J0RQ58aYNyR1rHGR9
- ex8Q==
-X-Gm-Message-State: AOAM530isVVHANOAmi3p0nTJRKoWeZhznFBI5k2IByxnKJegAYTm7+Bn
- LbEg86xCcCMclBq4PKMchaueZ+gipKGItw==
-X-Google-Smtp-Source: ABdhPJxZWpp7dByznEjlCd6PFHI5larrsHyAj/PaN3+7eV6sQPiz3MB7p+5B4CUuB2z6QhYh85Y66g==
-X-Received: by 2002:a17:90a:1a0a:: with SMTP id
- 10mr19881527pjk.85.1633812935289; 
- Sat, 09 Oct 2021 13:55:35 -0700 (PDT)
+ bh=tSv6FZZPa/iTMhqlvc/UPCcd5x9KekW1mPo982wVdkg=;
+ b=CenHYx3uNuq4gjy4ooQIu3sQMWxcsRiSZFGgjGDgM9ElBTR9su2QMZKxCZ8ERLSKky
+ 5JoIACBXgZWQAGC3bTCh1ivzNsT+UQGdhVbSL18Q/IBa7RdHHr2Vzj79hqwH0CRtflhP
+ tRa1CSBxZR3e2HRvbJA+GPvSvBGKQx5Kn0q78VN/CmaWENO2EeB0C2oEzdVXvb6fWuhs
+ ttFavFncewnw5WYpa/aE4ePOJB/c5DtWmA4/3QS5N1/+q1L2/zYyUs6EQq2hiuucYaix
+ XGL3kKp+BggsCUqNxoTzAMz69KoGhdCkmo0cP64yJJKn0OQT6U08Ob8PldzjB8dXOH8o
+ WeFg==
+X-Gm-Message-State: AOAM531g+jqPgohccGkA/iKHsVI/fBu2ZIEPW9hH+sCPZ1GbmNjpLwJn
+ Gyr2MwW7w0QD3mio/UYl4f0Bg64GVQQr3A==
+X-Google-Smtp-Source: ABdhPJyKaP1W8QTeN/UK53/feAaU3AGpvc9G0TAU1cV3PVuecmKonjFUGM8zh+KoLNHQmbrt2U3Kcw==
+X-Received: by 2002:a17:902:9a43:b0:13e:6386:d720 with SMTP id
+ x3-20020a1709029a4300b0013e6386d720mr16222537plv.29.1633812936308; 
+ Sat, 09 Oct 2021 13:55:36 -0700 (PDT)
 Received: from adam.rai.com ([47.149.13.137])
- by smtp.gmail.com with ESMTPSA id qe17sm3125765pjb.39.2021.10.09.13.55.34
+ by smtp.gmail.com with ESMTPSA id qe17sm3125765pjb.39.2021.10.09.13.55.35
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 09 Oct 2021 13:55:35 -0700 (PDT)
+ Sat, 09 Oct 2021 13:55:36 -0700 (PDT)
 From: Adam Duskett <aduskett@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat,  9 Oct 2021 13:55:11 -0700
-Message-Id: <20211009205523.3137859-9-aduskett@gmail.com>
+Date: Sat,  9 Oct 2021 13:55:12 -0700
+Message-Id: <20211009205523.3137859-10-aduskett@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211009205523.3137859-1-aduskett@gmail.com>
 References: <20211009205523.3137859-1-aduskett@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 08/20] package/python-lmdb: bump to version 1.2.1
+Subject: [Buildroot] [PATCH 09/20] package/python-dataclasses: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -104,40 +106,74 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+python-pydantic 1.8.2 depends on this package.
+
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
 ---
- package/python-lmdb/python-lmdb.hash | 4 ++--
- package/python-lmdb/python-lmdb.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/Config.in                                  |  1 +
+ package/python-dataclasses/Config.in               |  6 ++++++
+ package/python-dataclasses/python-dataclasses.hash |  5 +++++
+ package/python-dataclasses/python-dataclasses.mk   | 14 ++++++++++++++
+ 4 files changed, 26 insertions(+)
+ create mode 100644 package/python-dataclasses/Config.in
+ create mode 100644 package/python-dataclasses/python-dataclasses.hash
+ create mode 100644 package/python-dataclasses/python-dataclasses.mk
 
-diff --git a/package/python-lmdb/python-lmdb.hash b/package/python-lmdb/python-lmdb.hash
-index cb28536d3f..e7b8ae3455 100644
---- a/package/python-lmdb/python-lmdb.hash
-+++ b/package/python-lmdb/python-lmdb.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/lmdb/json
--md5	507049767b995c3c6a93b3bd97567c71  lmdb-0.99.tar.gz
--sha256	f9eb844aaaacc8a4bc175e1c1f8a8fb538c330e378fd9eb40e8708d4dca7dc89  lmdb-0.99.tar.gz
-+md5  b8f4a2cd1748e8a5f5e352d1cb3d4350  lmdb-1.2.1.tar.gz
-+sha256  5f76a90ebd08922acca11948779b5055f7a262687178e9e94f4e804b9f8465bc  lmdb-1.2.1.tar.gz
- # Locally computed sha256 checksums
- sha256	310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  LICENSE
-diff --git a/package/python-lmdb/python-lmdb.mk b/package/python-lmdb/python-lmdb.mk
-index bf98ba19c8..33c48cc8c7 100644
---- a/package/python-lmdb/python-lmdb.mk
-+++ b/package/python-lmdb/python-lmdb.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_LMDB_VERSION = 0.99
-+PYTHON_LMDB_VERSION = 1.2.1
- PYTHON_LMDB_SOURCE = lmdb-$(PYTHON_LMDB_VERSION).tar.gz
--PYTHON_LMDB_SITE = https://files.pythonhosted.org/packages/3b/66/aa6f3a3e338a3ca263575ce6f722c2fdcd21039a03b55c722e0ae0b216db
-+PYTHON_LMDB_SITE = https://files.pythonhosted.org/packages/2f/df/3aea5279753cb8ab0c96dec43106e24f388d4179d5224f6d3e652016c095
- PYTHON_LMDB_LICENSE = OLDAP-2.8
- PYTHON_LMDB_LICENSE_FILES = LICENSE
- PYTHON_LMDB_SETUP_TYPE = setuptools
+diff --git a/package/Config.in b/package/Config.in
+index 9fed0ab4cb..b4164734c6 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -969,6 +969,7 @@ menu "External python modules"
+ 	source "package/python-daemon/Config.in"
+ 	source "package/python-daemonize/Config.in"
+ 	source "package/python-daphne/Config.in"
++	source "package/python-dataclasses/Config.in"
+ 	source "package/python-dataproperty/Config.in"
+ 	source "package/python-dateutil/Config.in"
+ 	source "package/python-dbus-next/Config.in"
+diff --git a/package/python-dataclasses/Config.in b/package/python-dataclasses/Config.in
+new file mode 100644
+index 0000000000..dae4343d8a
+--- /dev/null
++++ b/package/python-dataclasses/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_DATACLASSES
++	bool "python-dataclasses"
++	help
++	  A backport of the dataclasses module for Python 3.6.
++
++	  https://github.com/ericvsmith/dataclasses
+diff --git a/package/python-dataclasses/python-dataclasses.hash b/package/python-dataclasses/python-dataclasses.hash
+new file mode 100644
+index 0000000000..2228cb5d39
+--- /dev/null
++++ b/package/python-dataclasses/python-dataclasses.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/dataclasses/json
++md5  c9a52e322ada1406bfde9ebe3cdbbcca  dataclasses-0.8.tar.gz
++sha256  8479067f342acf957dc82ec415d355ab5edb7e7646b90dc6e2fd1d96ad084c97  dataclasses-0.8.tar.gz
++# Locally computed sha256 checksums
++sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.txt
+diff --git a/package/python-dataclasses/python-dataclasses.mk b/package/python-dataclasses/python-dataclasses.mk
+new file mode 100644
+index 0000000000..a12bab2a0d
+--- /dev/null
++++ b/package/python-dataclasses/python-dataclasses.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-dataclasses
++#
++################################################################################
++
++PYTHON_DATACLASSES_VERSION = 0.8
++PYTHON_DATACLASSES_SOURCE = dataclasses-$(PYTHON_DATACLASSES_VERSION).tar.gz
++PYTHON_DATACLASSES_SITE = https://files.pythonhosted.org/packages/1f/12/7919c5d8b9c497f9180db15ea8ead6499812ea8264a6ae18766d93c59fe5
++PYTHON_DATACLASSES_SETUP_TYPE = setuptools
++PYTHON_DATACLASSES_LICENSE = Apache-2.0
++PYTHON_DATACLASSES_LICENSE_FILES = LICENSE.txt
++
++$(eval $(python-package))
 -- 
 2.30.2
 
