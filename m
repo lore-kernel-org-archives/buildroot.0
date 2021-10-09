@@ -2,52 +2,52 @@ Return-Path: <SRS0=USZC=O5=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 71A8CC433F5
-	for <buildroot@archiver.kernel.org>; Sat,  9 Oct 2021 12:07:51 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EE638C433EF
+	for <buildroot@archiver.kernel.org>; Sat,  9 Oct 2021 12:08:02 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 428FA60F57
-	for <buildroot@archiver.kernel.org>; Sat,  9 Oct 2021 12:07:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 428FA60F57
+	by mail.kernel.org (Postfix) with ESMTPS id AB05F60F5D
+	for <buildroot@archiver.kernel.org>; Sat,  9 Oct 2021 12:08:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org AB05F60F5D
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1F5CE60A65;
-	Sat,  9 Oct 2021 12:07:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7C7A94071E;
+	Sat,  9 Oct 2021 12:08:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vbjJzkP_srYQ; Sat,  9 Oct 2021 12:07:50 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id iZE304__OOKW; Sat,  9 Oct 2021 12:08:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 79C3D60A44;
-	Sat,  9 Oct 2021 12:07:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D2A69406CF;
+	Sat,  9 Oct 2021 12:08:00 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 034B71BF36A
- for <buildroot@lists.busybox.net>; Sat,  9 Oct 2021 12:03:14 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1B7341BF36A
+ for <buildroot@lists.busybox.net>; Sat,  9 Oct 2021 12:03:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B33F960B9B
- for <buildroot@lists.busybox.net>; Sat,  9 Oct 2021 12:03:08 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 27AC860A65
+ for <buildroot@lists.busybox.net>; Sat,  9 Oct 2021 12:03:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QbZroD7sEU5F for <buildroot@lists.busybox.net>;
- Sat,  9 Oct 2021 12:03:07 +0000 (UTC)
+ with ESMTP id CAkJHL62p_eV for <buildroot@lists.busybox.net>;
+ Sat,  9 Oct 2021 12:03:06 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2DA2560A65
- for <buildroot@buildroot.org>; Sat,  9 Oct 2021 12:03:07 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id F178C607C0
+ for <buildroot@buildroot.org>; Sat,  9 Oct 2021 12:03:06 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 66CA293614; Sat,  9 Oct 2021 12:00:24 +0000 (UTC)
+ id 35A7493616; Sat,  9 Oct 2021 12:00:24 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 9 Oct 2021 13:49:02 +0200
+Date: Sat, 9 Oct 2021 13:45:06 +0200
 X-Git-Refname: refs/heads/2021.05.x
-X-Git-Oldrev: 66071331635b39fdd6bb30b9ead823b7d91d3243
-X-Git-Newrev: 94962382b4323176aeda54c4475e37fe6936c1e1
+X-Git-Oldrev: dbbb102a0bc2dbf3175a0b3794df226bde9efa93
+X-Git-Newrev: 7fff3595f5a1a66d6b3f6ccb2f429a121d0c116f
 X-Patchwork-Hint: ignore
-Message-Id: <20211009120024.66CA293614@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.05.x] package/apache: security
- bump to version 2.4.51
+Message-Id: <20211009120024.35A7493616@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.05.x] package/mesa3d: fix build
+ on m68k
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,55 +65,86 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=94962382b4323176aeda54c4475e37fe6936c1e1
+commit: https://git.buildroot.net/buildroot/commit/?id=7fff3595f5a1a66d6b3f6ccb2f429a121d0c116f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
 
-Fixes CVE-2021-42013, for details see [1] and [2].
+mesa3d uses very big switch statements, which causes the build to fail
+on m68k, beause the offsets there are only 16-bit.
 
-Change download URL from http://archive.apache.org/dist/httpd to
-https://downloads.apache.org/httpd (seems more up to date).
+We fix that by using -mlong-jump-table-offsets on m68k, to use 32-bit
+offsets for switch statements, but this is only available starting with
+gcc 7 [0] [1].
 
-[1] https://downloads.apache.org/httpd/CHANGES_2.4.51
-[2] https://httpd.apache.org/security/vulnerabilities_24.html
+Fixes:
+http://autobuild.buildroot.net/results/60c4653c2a93125edbdd0beb43cd47301643464a/
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 7af7546f9acdefacac0e86e11c69e6e8cd3d2050)
+Note: we have two packages that select mesa3d, but:
+    package/intel-mediadriver/
+        -> already depends on x86_64, so implies !m68k
+
+    package/x11r7/xdriver_xf86-video-imx-viv/
+        -> imx is an ARM, but xdriver_xf86-video-imx-viv is missing
+           a depends on BR2_arm (although the comments do have that
+           dependency). However, it depends on other imx related
+           packages, and they depend on either arm or aarch64, so
+           that implies !m68k.
+
+As such, we do not need to propagate that new dependency.
+
+[0] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=57583#c15
+[1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=57583#c16
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+[yann.morin.1998@free.fr:
+  - add comment
+  - reword commit log, add BZ references, add non-propagation notes
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 2fe3a8f81b0507260b76e0a2734671e763180e7a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/apache/apache.hash | 6 +++---
- package/apache/apache.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/mesa3d/Config.in | 5 +++++
+ package/mesa3d/mesa3d.mk | 9 +++++++++
+ 2 files changed, 14 insertions(+)
 
-diff --git a/package/apache/apache.hash b/package/apache/apache.hash
-index abcb79f14d..138717c336 100644
---- a/package/apache/apache.hash
-+++ b/package/apache/apache.hash
-@@ -1,5 +1,5 @@
--# From https://archive.apache.org/dist/httpd/httpd-2.4.50.tar.bz2.{sha256,sha512}
--sha256  6a2817c070c606682eb53ed963511407d3c3d7a379cdf855971467b00fb3890f  httpd-2.4.50.tar.bz2
--sha512  b1afbaf44e503b822ff2b443881dcb44a93aa55d496f88ae399a2e7def05f78590f266a16da1f2c0aac88e463b76fba20843b1e20a102e76c8269de6fae3e158  httpd-2.4.50.tar.bz2
-+# From https://downloads.apache.org/httpd/httpd-2.4.51.tar.bz2.{sha256,sha512}
-+sha256  20e01d81fecf077690a4439e3969a9b22a09a8d43c525356e863407741b838f4  httpd-2.4.51.tar.bz2
-+sha512  9fb07c4b176f5c0485a143e2b1bb1085345ca9120b959974f68c37a8911a57894d2cb488b1b42fdf3102860b99e890204f5e9fa7ae3828b481119c563812cc66  httpd-2.4.51.tar.bz2
- # Locally computed
- sha256  47b8c2b6c3309282a99d4a3001575c790fead690cc14734628c4667d2bbffc43  LICENSE
-diff --git a/package/apache/apache.mk b/package/apache/apache.mk
-index 7a3a0ea6cc..d55f43148e 100644
---- a/package/apache/apache.mk
-+++ b/package/apache/apache.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index 9a5183915d..295a26cb6d 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -4,6 +4,7 @@ menuconfig BR2_PACKAGE_MESA3D
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_1
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
++	depends on !BR2_m68k || BR2_TOOLCHAIN_GCC_AT_LEAST_7 # m68k needs gcc >= 7.x
+ 	select BR2_PACKAGE_EXPAT
+ 	select BR2_PACKAGE_LIBDRM
+ 	select BR2_PACKAGE_WAYLAND_PROTOCOLS if BR2_PACKAGE_WAYLAND
+@@ -462,3 +463,7 @@ comment "mesa3d needs a toolchain w/ C++, NPTL, dynamic library"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
+ 		BR2_STATIC_LIBS
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_1
++
++comment "mesa3d needs a toolchain w/ gcc >= 7"
++	depends on BR2_m68k
++	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_7
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index ca44a66e54..ca8dac8959 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -260,4 +260,13 @@ else
+ MESA3D_CONF_OPTS += -Dzstd=disabled
+ endif
  
--APACHE_VERSION = 2.4.50
-+APACHE_VERSION = 2.4.51
- APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
--APACHE_SITE = http://archive.apache.org/dist/httpd
-+APACHE_SITE = https://downloads.apache.org/httpd
- APACHE_LICENSE = Apache-2.0
- APACHE_LICENSE_FILES = LICENSE
- APACHE_CPE_ID_VENDOR = apache
++MESA3D_CFLAGS = $(TARGET_CFLAGS)
++
++# m68k needs 32-bit offsets in switch tables to build
++ifeq ($(BR2_m68k),y)
++MESA3D_CFLAGS += -mlong-jump-table-offsets
++endif
++
++MESA3D_CONF_OPTS += -DCMAKE_C_FLAGS="$(MESA3D_CFLAGS)"
++
+ $(eval $(meson-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
