@@ -2,52 +2,52 @@ Return-Path: <SRS0=USZC=O5=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 616DFC433EF
-	for <buildroot@archiver.kernel.org>; Sat,  9 Oct 2021 12:07:08 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D49A8C433EF
+	for <buildroot@archiver.kernel.org>; Sat,  9 Oct 2021 12:07:19 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2CF6B60F5D
-	for <buildroot@archiver.kernel.org>; Sat,  9 Oct 2021 12:07:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2CF6B60F5D
+	by mail.kernel.org (Postfix) with ESMTPS id 9ED4F60F5D
+	for <buildroot@archiver.kernel.org>; Sat,  9 Oct 2021 12:07:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9ED4F60F5D
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F20EF82B84;
-	Sat,  9 Oct 2021 12:07:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 63B82402DC;
+	Sat,  9 Oct 2021 12:07:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yNWCVJzUlPDs; Sat,  9 Oct 2021 12:07:04 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id m7Euis8i_gVF; Sat,  9 Oct 2021 12:07:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7489483A54;
-	Sat,  9 Oct 2021 12:07:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 07D55404ED;
+	Sat,  9 Oct 2021 12:07:15 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3CA801BF36A
- for <buildroot@lists.busybox.net>; Sat,  9 Oct 2021 12:03:10 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 456531BF36A
+ for <buildroot@lists.busybox.net>; Sat,  9 Oct 2021 12:03:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D135960B9A
+ by smtp3.osuosl.org (Postfix) with ESMTP id E73A560A44
  for <buildroot@lists.busybox.net>; Sat,  9 Oct 2021 12:03:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4MWEo3SMnqlz for <buildroot@lists.busybox.net>;
+ with ESMTP id qIDehAYvJbJn for <buildroot@lists.busybox.net>;
  Sat,  9 Oct 2021 12:03:07 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 05EB860A44
- for <buildroot@buildroot.org>; Sat,  9 Oct 2021 12:03:06 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2D5D160A49
+ for <buildroot@buildroot.org>; Sat,  9 Oct 2021 12:03:07 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 3F49393613; Sat,  9 Oct 2021 12:00:24 +0000 (UTC)
+ id 70EC993613; Sat,  9 Oct 2021 12:00:24 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 9 Oct 2021 13:45:10 +0200
+Date: Sat, 9 Oct 2021 13:49:46 +0200
 X-Git-Refname: refs/heads/2021.05.x
-X-Git-Oldrev: 7fff3595f5a1a66d6b3f6ccb2f429a121d0c116f
-X-Git-Newrev: 8870f9513b8625695cf9ddd39a200f6d7dfe9dec
+X-Git-Oldrev: 94962382b4323176aeda54c4475e37fe6936c1e1
+X-Git-Newrev: 08908fb89101d0ae4a99bdc6006e0426e29dca73
 X-Patchwork-Hint: ignore
-Message-Id: <20211009120024.3F49393613@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.05.x] package/mesa3d: remove
- unnecessary passing of CFLAGS
+Message-Id: <20211009120024.70EC993613@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.05.x] package/openssh: security
+ bump to version 8.8p1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,40 +65,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8870f9513b8625695cf9ddd39a200f6d7dfe9dec
+commit: https://git.buildroot.net/buildroot/commit/?id=08908fb89101d0ae4a99bdc6006e0426e29dca73
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
 
-This package uses meson-package infrastracture, so we don't need to
-explicitly pass its additional CFLAGS to some variable. The only thing we
-need to pass them is to use MESA3D_CFLAGS, because in package/pkg-meson.mk
-we have:
-$(2)_CFLAGS ?= $$(TARGET_CFLAGS)
-that makes the work automatically, where $(2) is exactly the package name,
-though $(2)_CFLAGS expands to MESA3D_CFLAGS.
-So let's remove the MESA3D_CONF_OPTS += -DCMAKE_C_FLAGS="$(MESA3D_CFLAGS)"
-line that has been added by mistake.
+Fix CVE-2021-41617: sshd in OpenSSH 6.2 through 8.x before 8.8, when
+certain non-default configurations are used, allows privilege escalation
+because supplemental groups are not initialized as expected. Helper
+programs for AuthorizedKeysCommand and AuthorizedPrincipalsCommand may
+run with privileges associated with group memberships of the sshd
+process, if the configuration specifies running the command as a
+different user.
 
-Note: this doesn't fix any bug, but remove an unnecessary and ambiguos line
+https://www.openssh.com/txt/release-8.8
+https://www.openssh.com/txt/release-8.7
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 4383fde622fd56404e87b23eb07565dfcac13ed4)
+(cherry picked from commit 29b6114acfefc5146410c722f9412a7ac31910c8)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mesa3d/mesa3d.mk | 2 --
- 1 file changed, 2 deletions(-)
+ package/openssh/openssh.hash | 4 ++--
+ package/openssh/openssh.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index ca8dac8959..d60a288ae1 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -267,6 +267,4 @@ ifeq ($(BR2_m68k),y)
- MESA3D_CFLAGS += -mlong-jump-table-offsets
- endif
+diff --git a/package/openssh/openssh.hash b/package/openssh/openssh.hash
+index 0dcd725de5..aab3dba09c 100644
+--- a/package/openssh/openssh.hash
++++ b/package/openssh/openssh.hash
+@@ -1,4 +1,4 @@
+-# From https://www.openssh.com/txt/release-8.6 (base64 encoded)
+-sha256  c3e6e4da1621762c850d03b47eed1e48dff4cc9608ddeb547202a234df8ed7ae  openssh-8.6p1.tar.gz
++# From https://www.openssh.com/txt/release-8.8 (base64 encoded)
++sha256  4590890ea9bb9ace4f71ae331785a3a5823232435161960ed5fc86588f331fe9  openssh-8.8p1.tar.gz
+ # Locally calculated
+ sha256  432abf7480fb31473a6706627212913fc70032e3fb71b90fecb28ae26a2d741d  LICENCE
+diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
+index 61b2c97cf4..75c4a0128b 100644
+--- a/package/openssh/openssh.mk
++++ b/package/openssh/openssh.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--MESA3D_CONF_OPTS += -DCMAKE_C_FLAGS="$(MESA3D_CFLAGS)"
--
- $(eval $(meson-package))
+-OPENSSH_VERSION_MAJOR = 8.6
++OPENSSH_VERSION_MAJOR = 8.8
+ OPENSSH_VERSION_MINOR = p1
+ OPENSSH_VERSION = $(OPENSSH_VERSION_MAJOR)$(OPENSSH_VERSION_MINOR)
+ OPENSSH_CPE_ID_VERSION = $(OPENSSH_VERSION_MAJOR)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
