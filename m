@@ -2,86 +2,85 @@ Return-Path: <SRS0=USZC=O5=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A8F40C433F5
-	for <buildroot@archiver.kernel.org>; Sat,  9 Oct 2021 20:56:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D2942C433EF
+	for <buildroot@archiver.kernel.org>; Sat,  9 Oct 2021 20:56:17 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 4940B60F9C
-	for <buildroot@archiver.kernel.org>; Sat,  9 Oct 2021 20:56:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4940B60F9C
+	by mail.kernel.org (Postfix) with ESMTPS id 89DB860F9D
+	for <buildroot@archiver.kernel.org>; Sat,  9 Oct 2021 20:56:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 89DB860F9D
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E9CE84057C;
-	Sat,  9 Oct 2021 20:56:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 65A6F40307;
+	Sat,  9 Oct 2021 20:56:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 84YsUjmMn_GU; Sat,  9 Oct 2021 20:56:05 +0000 (UTC)
+	with ESMTP id ouYvv89I0HN2; Sat,  9 Oct 2021 20:56:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5681C40670;
-	Sat,  9 Oct 2021 20:56:04 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8FAA61BF5A6
+	by smtp4.osuosl.org (Postfix) with ESMTP id BBAAE4068C;
+	Sat,  9 Oct 2021 20:56:15 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id D1FE71BF5A6
  for <buildroot@lists.busybox.net>; Sat,  9 Oct 2021 20:55:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7F110824D4
+ by smtp4.osuosl.org (Postfix) with ESMTP id CE4F44058D
  for <buildroot@lists.busybox.net>; Sat,  9 Oct 2021 20:55:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Fj5FloJAzGwR for <buildroot@lists.busybox.net>;
- Sat,  9 Oct 2021 20:55:31 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6H37D4kV3JmO for <buildroot@lists.busybox.net>;
+ Sat,  9 Oct 2021 20:55:32 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com
- [IPv6:2607:f8b0:4864:20::52b])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A5B478239A
- for <buildroot@buildroot.org>; Sat,  9 Oct 2021 20:55:31 +0000 (UTC)
-Received: by mail-pg1-x52b.google.com with SMTP id r2so6769938pgl.10
- for <buildroot@buildroot.org>; Sat, 09 Oct 2021 13:55:31 -0700 (PDT)
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com
+ [IPv6:2607:f8b0:4864:20::632])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C1A2440627
+ for <buildroot@buildroot.org>; Sat,  9 Oct 2021 20:55:32 +0000 (UTC)
+Received: by mail-pl1-x632.google.com with SMTP id 21so2286149plo.13
+ for <buildroot@buildroot.org>; Sat, 09 Oct 2021 13:55:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=6CNHubw1/qezfHXfL78dhEevF7MrsfNImsuQlUoU3FQ=;
- b=TTFzrxhe4vfzLm7gb/oa4azpMyKGxKpx+K4PsaQfV9tLG+qtOTBws4A2KhSLq/hWVf
- q2jAnWG128g1gK9m7+MoXYCZBfJV4N8gku/yu4tNiqwMzm3aqB1SlArAYo+YBZVRoB3r
- MHrCHe2IhIsV/eB3rgV8WiC6FgeejCXD5kfMaUvuB4qydo4N4FPC/AXB+FfAxjB8tfd5
- LZpo/DMX2lRouX9m31v1FlssPiXth3gVaJSo7TovJHFuctUYHrgbKbErBG9h/1k7jLQO
- CgU+P6F3Bp6LnKZ64Uf/w9KHAtIB4mYqKV9uqP7id0wh/rLTTtx2mpD3zkRpYPswa4+9
- 9Yhg==
+ bh=m8BdQJLI7PdnDlC0PY58TbfQ7qxtHTD6JK7hpzenULg=;
+ b=joCdWkm4pW3S8oBxEk09IDVTo30DO7Fx8caTGOMMzuP6nM7YPiH2Hkh+u3zDEQ3pz0
+ 83Iinl3s4gopnvpcW+mCLiF73jxm4J6RvnlQWowNdxGs3RnquHNU5mp7EeN59yqDhTa4
+ vlvTDt4qZcXK9GRW6WgWaI61wBWnkq5SLUz5urvxH4qH2hDWg4PhE679srFl6Z6B84vq
+ k50H2AMZQaivSDNfurtd7cnsZw3dioplz4n7+iUYqth+a/xSLYAAqT13QQUvWK+t9OWs
+ IJUjwzbXB19sZK9sCnBDwIMy978XcFkNRKDBlxbpXL4sEBUIRS/cApVwN7flEEHEgFnN
+ udWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
  :references:mime-version:content-transfer-encoding;
- bh=6CNHubw1/qezfHXfL78dhEevF7MrsfNImsuQlUoU3FQ=;
- b=pdjkscm4vG9gPOfYfgC0TsmTjZLa++K6+Q2FVsfoVqZXFiKTNNAoRWshziKZJFXLfJ
- TQXbfXJQqxEFk3JU4X8M+uMnbuPc7Xj7QuAegdt0ehe7qKmpEeOnyt1kXOCjxscI6bIg
- J7S1unoUJ5z9aaRhH+krAS6xXK1zfZ4ayGzVyUjRjz5nt+X775kbzqiA47ZDhE3J4Tu8
- WU5fT9gKX6R07AzPVg8mz1Ynm5OvZUeFA89xfIZ2nnIV862jck3+RMdTJe2Qq6YDXcaO
- CdpCJL6VYUvm+8kfZt7CJYB7JDPai2dWL8ea3n0vF38n5P/beuC30irFpJR+qX7pijmA
- jE3A==
-X-Gm-Message-State: AOAM532eqLf1IXkiEQsRDRl6fXJhCxnN35nahz9KG5/hZaSObsVRlO29
- p9SxreVXKvjuCLj/5xQNXYag3qXJGQxS0w==
-X-Google-Smtp-Source: ABdhPJyPqeiC8gWDo3SLG+8b086TwciQPoB0UkKllxrtYthqZlhMibEOwNTRh2bAdUGn7ACfYh2MZQ==
-X-Received: by 2002:aa7:8116:0:b0:44b:e0d1:25e9 with SMTP id
- b22-20020aa78116000000b0044be0d125e9mr17240575pfi.53.1633812931007; 
- Sat, 09 Oct 2021 13:55:31 -0700 (PDT)
+ bh=m8BdQJLI7PdnDlC0PY58TbfQ7qxtHTD6JK7hpzenULg=;
+ b=M2m6SJdH5/LFPuBgYvMZf3b97L5LRFjyDp1igpT5JtC9oiWc9ItF8jnUp9RRSFGIZB
+ bM87ccsfeC/dvBBAWP7XnI4bHaIv+w8xFt1KB1N3PoYMmjN+tptJAgwkR/ApFNWIOEct
+ vMVvRdZoFve7WGvC1td3DuCE0C4KeE0/jfWvRh6bNksqhRkwgjPEMecK2sw7IKpUEGb0
+ jvVv6L4PB8t/SHH+j8oPiv3M8Qd1hwfoXjl6cjXIJg9aUJsOWfwG61+c7wsvuf3t12/m
+ vnt52MrKuUoPpchXHONc5Q9+PwQ/bZMoilRAhw7h7eoAP1tXuIsgrbRUlfB11OFaDZow
+ Exqw==
+X-Gm-Message-State: AOAM532OhaPtNN1ZeU1H1Unf0OwfVrWROzt+szHoHx8SwnHCndSzJYhm
+ NX1rHQU0CLI438guizzK7A2r32ADugrC6Q==
+X-Google-Smtp-Source: ABdhPJyS2WAZT1lYezA/6//pe3eftd+4cJiJRPgoHO1soxLu/EQomKuUz4ZQ0RYXT1HvulKrkbB/rA==
+X-Received: by 2002:a17:90a:a88a:: with SMTP id
+ h10mr20119422pjq.226.1633812932080; 
+ Sat, 09 Oct 2021 13:55:32 -0700 (PDT)
 Received: from adam.rai.com ([47.149.13.137])
- by smtp.gmail.com with ESMTPSA id qe17sm3125765pjb.39.2021.10.09.13.55.30
+ by smtp.gmail.com with ESMTPSA id qe17sm3125765pjb.39.2021.10.09.13.55.31
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 09 Oct 2021 13:55:30 -0700 (PDT)
+ Sat, 09 Oct 2021 13:55:31 -0700 (PDT)
 From: Adam Duskett <aduskett@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat,  9 Oct 2021 13:55:07 -0700
-Message-Id: <20211009205523.3137859-5-aduskett@gmail.com>
+Date: Sat,  9 Oct 2021 13:55:08 -0700
+Message-Id: <20211009205523.3137859-6-aduskett@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211009205523.3137859-1-aduskett@gmail.com>
 References: <20211009205523.3137859-1-aduskett@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 04/20] package/python-git: bump to version 3.1.24
+Subject: [Buildroot] [PATCH 05/20] package/python-gobject: bump to version
+ 3.42.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -105,34 +104,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Also change -Dpycairo=false to -Dpycairo=disabled as the option type has
+changed to a feature.
+
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
 ---
- package/python-git/python-git.hash | 2 +-
- package/python-git/python-git.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-gobject/python-gobject.hash | 4 ++--
+ package/python-gobject/python-gobject.mk   | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-git/python-git.hash b/package/python-git/python-git.hash
-index db3d743857..0c8c764bf3 100644
---- a/package/python-git/python-git.hash
-+++ b/package/python-git/python-git.hash
+diff --git a/package/python-gobject/python-gobject.hash b/package/python-gobject/python-gobject.hash
+index fd2235f201..100a05c74e 100644
+--- a/package/python-gobject/python-gobject.hash
++++ b/package/python-gobject/python-gobject.hash
 @@ -1,3 +1,3 @@
- # locally computed hashes
--sha256  78baf9fc223536e38a6e0d9241536fedaecf79bc000b3a05962257d83571fc5d  python-git-3.1.20.tar.gz
-+sha256  8282d0d1169a3a98546979bfae1524608670fadc4ca7636517aadd428e0cfbeb  python-git-3.1.24.tar.gz
- sha256  fd657ffc2cef63d25c78cab7808d414dd03a282e63893491fd11c32f98be67fb  LICENSE
-diff --git a/package/python-git/python-git.mk b/package/python-git/python-git.mk
-index 0e158434fd..9b2771ca07 100644
---- a/package/python-git/python-git.mk
-+++ b/package/python-git/python-git.mk
-@@ -4,7 +4,7 @@
+-# from http://ftp.gnome.org/pub/GNOME/sources/pygobject/3.36/pygobject-3.36.1.sha256sum
+-sha256  d1bf42802d1cec113b5adaa0e7bf7f3745b44521dc2163588d276d5cd61d718f  pygobject-3.36.1.tar.xz
++# from http://ftp.gnome.org/pub/GNOME/sources/pygobject/3.42/pygobject-3.42.0.sha256sum
++sha256  9b12616e32cfc792f9dc841d9c472a41a35b85ba67d3a6eb427e307a6fe4367b  pygobject-3.42.0.tar.xz
+ sha256  32434afcc8666ba060e111d715bfdb6c2d5dd8a35fa4d3ab8ad67d8f850d2f2b  COPYING
+diff --git a/package/python-gobject/python-gobject.mk b/package/python-gobject/python-gobject.mk
+index 0cada82fb7..b0a132d040 100644
+--- a/package/python-gobject/python-gobject.mk
++++ b/package/python-gobject/python-gobject.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--PYTHON_GIT_VERSION = 3.1.20
-+PYTHON_GIT_VERSION = 3.1.24
- PYTHON_GIT_SITE = $(call github,gitpython-developers,GitPython,$(PYTHON_GIT_VERSION))
- PYTHON_GIT_LICENSE = BSD-3-Clause
- PYTHON_GIT_LICENSE_FILES = LICENSE
+-PYTHON_GOBJECT_VERSION_MAJOR = 3.36
+-PYTHON_GOBJECT_VERSION = $(PYTHON_GOBJECT_VERSION_MAJOR).1
++PYTHON_GOBJECT_VERSION_MAJOR = 3.42
++PYTHON_GOBJECT_VERSION = $(PYTHON_GOBJECT_VERSION_MAJOR).0
+ PYTHON_GOBJECT_SOURCE = pygobject-$(PYTHON_GOBJECT_VERSION).tar.xz
+ PYTHON_GOBJECT_SITE = https://ftp.gnome.org/pub/gnome/sources/pygobject/$(PYTHON_GOBJECT_VERSION_MAJOR)
+ PYTHON_GOBJECT_LICENSE = LGPL-2.1+
+@@ -18,7 +18,7 @@ PYTHON_GOBJECT_DEPENDENCIES = \
+ 	python3
+ 
+ PYTHON_GOBJECT_CONF_OPTS += \
+-	-Dpycairo=false \
++	-Dpycairo=disabled \
+ 	-Dtests=false
+ 
+ # A sysconfigdata_name must be manually specified or the resulting .so
 -- 
 2.30.2
 
