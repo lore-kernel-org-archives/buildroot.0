@@ -2,58 +2,51 @@ Return-Path: <SRS0=USZC=O5=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C8DFDC433EF
-	for <buildroot@archiver.kernel.org>; Sat,  9 Oct 2021 10:33:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D6A0C433EF
+	for <buildroot@archiver.kernel.org>; Sat,  9 Oct 2021 10:33:50 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 861CA60F4F
-	for <buildroot@archiver.kernel.org>; Sat,  9 Oct 2021 10:33:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 861CA60F4F
+	by mail.kernel.org (Postfix) with ESMTPS id 27CC860F55
+	for <buildroot@archiver.kernel.org>; Sat,  9 Oct 2021 10:33:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 27CC860F55
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4D4F44050C;
-	Sat,  9 Oct 2021 10:33:37 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E94D640431;
+	Sat,  9 Oct 2021 10:33:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AtK5-g2X64qS; Sat,  9 Oct 2021 10:33:36 +0000 (UTC)
+	with ESMTP id twqHOrfQYqUV; Sat,  9 Oct 2021 10:33:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7DEEF40425;
-	Sat,  9 Oct 2021 10:33:35 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 972181BF391
- for <buildroot@lists.busybox.net>; Sat,  9 Oct 2021 10:33:33 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id ECAF240425;
+	Sat,  9 Oct 2021 10:33:47 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 6D3D31BF391
+ for <buildroot@lists.busybox.net>; Sat,  9 Oct 2021 10:33:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9486A40425
- for <buildroot@lists.busybox.net>; Sat,  9 Oct 2021 10:33:33 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6A65E60B53
+ for <buildroot@lists.busybox.net>; Sat,  9 Oct 2021 10:33:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id obSsTfnw4swY for <buildroot@lists.busybox.net>;
- Sat,  9 Oct 2021 10:33:33 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B1C1940422
- for <buildroot@buildroot.org>; Sat,  9 Oct 2021 10:33:32 +0000 (UTC)
-Received: (Authenticated sender: peter@casa-korsgaard.com)
- by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 08572FF806;
- Sat,  9 Oct 2021 10:33:30 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
- (envelope-from <peter@korsgaard.com>)
- id 1mZ9fW-00045L-Fb; Sat, 09 Oct 2021 12:33:30 +0200
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id iCFvII57mbEB for <buildroot@lists.busybox.net>;
+ Sat,  9 Oct 2021 10:33:37 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id B590B606E6
+ for <buildroot@buildroot.org>; Sat,  9 Oct 2021 10:33:37 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 1B5BF93586; Sat,  9 Oct 2021 10:30:55 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Peter Seiderer <ps.report@gmx.net>
-References: <20211005200644.8006-1-ps.report@gmx.net>
-Date: Sat, 09 Oct 2021 12:33:30 +0200
-In-Reply-To: <20211005200644.8006-1-ps.report@gmx.net> (Peter Seiderer's
- message of "Tue, 5 Oct 2021 22:06:44 +0200")
-Message-ID: <87o87yv66d.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v1] package/gst1-interpipe: bump version to
+To: buildroot@buildroot.org
+Date: Sat, 9 Oct 2021 12:33:13 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 2048405191cae83d3ba2ec4c1953e8c8e78df758
+X-Git-Newrev: 49381c4f599d09430b51dbd39465a801c28ea5b9
+X-Patchwork-Hint: ignore
+Message-Id: <20211009103055.1B5BF93586@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gst1-interpipe: bump version to
  1.1.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -66,25 +59,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=49381c4f599d09430b51dbd39465a801c28ea5b9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Changelog (for details see [1]):
- >   - Fix for memory corruption issue when listening to same node (#99)
+Changelog (for details see [1]):
 
- > [1] https://github.com/RidgeRun/gst-interpipe/releases/tag/1.1.6
+  - Fix for memory corruption issue when listening to same node (#99)
 
- > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+[1] https://github.com/RidgeRun/gst-interpipe/releases/tag/1.1.6
 
-Committed, thanks.
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/gstreamer1/gst1-interpipe/gst1-interpipe.hash | 2 +-
+ package/gstreamer1/gst1-interpipe/gst1-interpipe.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/gstreamer1/gst1-interpipe/gst1-interpipe.hash b/package/gstreamer1/gst1-interpipe/gst1-interpipe.hash
+index a84be7a085..b3fc8ef018 100644
+--- a/package/gstreamer1/gst1-interpipe/gst1-interpipe.hash
++++ b/package/gstreamer1/gst1-interpipe/gst1-interpipe.hash
+@@ -1,5 +1,5 @@
+ # locally computed hash
+-sha256  4543b2872ee5985679375aa4e588b2dcf8b8c4f61f106655989c89f4aab0d736  gst1-interpipe-1.1.5-br1.tar.gz
++sha256  00d3a91625f6cc5d263f35b9330b4ba6eb40781be2e823231e5b2be9281e1fb4  gst1-interpipe-1.1.6-br1.tar.gz
+ 
+ # Hashes for license files:
+ sha256  16d7caa6cabbfd0ca47e064a7b48cb446d013e84ca88c854d6470851752136d5  COPYING
+diff --git a/package/gstreamer1/gst1-interpipe/gst1-interpipe.mk b/package/gstreamer1/gst1-interpipe/gst1-interpipe.mk
+index 8d1da080a1..80e5b577f6 100644
+--- a/package/gstreamer1/gst1-interpipe/gst1-interpipe.mk
++++ b/package/gstreamer1/gst1-interpipe/gst1-interpipe.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GST1_INTERPIPE_VERSION = 1.1.5
++GST1_INTERPIPE_VERSION = 1.1.6
+ GST1_INTERPIPE_SITE = https://github.com/RidgeRun/gst-interpipe
+ GST1_INTERPIPE_SITE_METHOD = git
+ # fetch gst-interpipe/common sub module
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
