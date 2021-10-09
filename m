@@ -2,52 +2,52 @@ Return-Path: <SRS0=USZC=O5=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E37F3C433F5
-	for <buildroot@archiver.kernel.org>; Sat,  9 Oct 2021 20:47:17 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C564FC433EF
+	for <buildroot@archiver.kernel.org>; Sat,  9 Oct 2021 20:47:27 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 478EE60EFD
-	for <buildroot@archiver.kernel.org>; Sat,  9 Oct 2021 20:47:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 478EE60EFD
+	by mail.kernel.org (Postfix) with ESMTPS id 83D2160F44
+	for <buildroot@archiver.kernel.org>; Sat,  9 Oct 2021 20:47:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 83D2160F44
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EE87A4056B;
-	Sat,  9 Oct 2021 20:47:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 61C6A83224;
+	Sat,  9 Oct 2021 20:47:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xPof8TRXlpRk; Sat,  9 Oct 2021 20:47:15 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 2km2297tsjYg; Sat,  9 Oct 2021 20:47:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 61B924041B;
-	Sat,  9 Oct 2021 20:47:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CED53831DA;
+	Sat,  9 Oct 2021 20:47:25 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 94B101BF95F
- for <buildroot@lists.busybox.net>; Sat,  9 Oct 2021 20:47:01 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 22CE71BF3C6
+ for <buildroot@lists.busybox.net>; Sat,  9 Oct 2021 20:47:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 83E5960720
+ by smtp3.osuosl.org (Postfix) with ESMTP id 98CD460626
  for <buildroot@lists.busybox.net>; Sat,  9 Oct 2021 20:47:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id APqU48zuY080 for <buildroot@lists.busybox.net>;
+ with ESMTP id UPjCBA-7NUaF for <buildroot@lists.busybox.net>;
  Sat,  9 Oct 2021 20:47:00 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8B13760626
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9C3576075A
  for <buildroot@buildroot.org>; Sat,  9 Oct 2021 20:47:00 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id E92C894E7F; Sat,  9 Oct 2021 20:44:16 +0000 (UTC)
+ id 165F994E72; Sat,  9 Oct 2021 20:44:17 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sat, 9 Oct 2021 22:46:35 +0200
+Date: Sat, 9 Oct 2021 22:46:39 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ff0e0678560bee05f1ee7ec9c516586cc3c1b6da
-X-Git-Newrev: 9aaba203689cfe24aa102512d1326a44cc65af6c
+X-Git-Oldrev: 6c037932e02e4948212fc0d8c164b85812cb3f29
+X-Git-Newrev: a81b797f1cf3ad9451a5167fd067f053c470943e
 X-Patchwork-Hint: ignore
-Message-Id: <20211009204416.E92C894E7F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/rpi-firmware: bump version to
- 2ef3800
+Message-Id: <20211009204417.165F994E72@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/rpi-wifi-firmware: bump version to
+ 883b726
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,47 +65,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9aaba203689cfe24aa102512d1326a44cc65af6c
+commit: https://git.buildroot.net/buildroot/commit/?id=a81b797f1cf3ad9451a5167fd067f053c470943e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- bump version to 2ef3800 (past [1] which fixes the boot starvation
-  introduced by [2] as reported by Vincent Fazio <vfazio@xes-inc.com>
-  see [3] and [4])
-
-[1] https://github.com/raspberrypi/firmware/commit/b5257da58c0e652633592c6fce09a7f3b100a2eb
-[2] https://github.com/raspberrypi/firmware/commit/25e2b597ebfb2495eab4816a276758dcc6ea21f1
-[3] http://lists.busybox.net/pipermail/buildroot/2021-September/623659.html
-[4] http://lists.busybox.net/pipermail/buildroot/2021-September/624550.html
+Changelog:
+  - Update CYW43455 bluetooth firmware,
+    Second Spectra fix for CYW43455 (CVE-2020-10370)
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/rpi-firmware/rpi-firmware.hash | 2 +-
- package/rpi-firmware/rpi-firmware.mk   | 2 +-
+ package/rpi-wifi-firmware/rpi-wifi-firmware.hash | 2 +-
+ package/rpi-wifi-firmware/rpi-wifi-firmware.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/rpi-firmware/rpi-firmware.hash b/package/rpi-firmware/rpi-firmware.hash
-index 7127b2d824..0ff7a73a37 100644
---- a/package/rpi-firmware/rpi-firmware.hash
-+++ b/package/rpi-firmware/rpi-firmware.hash
+diff --git a/package/rpi-wifi-firmware/rpi-wifi-firmware.hash b/package/rpi-wifi-firmware/rpi-wifi-firmware.hash
+index 4db3e15c80..3bd62306eb 100644
+--- a/package/rpi-wifi-firmware/rpi-wifi-firmware.hash
++++ b/package/rpi-wifi-firmware/rpi-wifi-firmware.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256  5eaff5da660d6ecd74bb2c927d7a1ba84b5e5c5582f02e65aec058af2ffe50f4  rpi-firmware-33e09977ff3b02967d191801e3361224455acb9d.tar.gz
-+sha256  80af5efb51677edb7af6746a553dc2d8ad3f532ff44e4b7263f1e12d4bf72ffd  rpi-firmware-2ef3800b1b71c0e30c2a61ecad6e007ae96ea342.tar.gz
- sha256  c7283ff51f863d93a275c66e3b4cb08021a5dd4d8c1e7acc47d872fbe52d3d6b  boot/LICENCE.broadcom
-diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
-index 181650fa08..d74f7155c7 100644
---- a/package/rpi-firmware/rpi-firmware.mk
-+++ b/package/rpi-firmware/rpi-firmware.mk
+ # Locally calculated
+-sha256  ae665baa465a09dddf7f4bdec67e108a74b2a3787550cc9ee53c2bea9651f327  rpi-wifi-firmware-4c47758bed7cd547dff3618a1739dcf64b5a52a7.tar.gz
++sha256  0e7fcfe75a8990815a184dc55f8fdf5d0644d351a15a7aef865ff90ff4ca8eb4  rpi-wifi-firmware-883b72628de1d7efa45b421da0cbf175ac2374f8.tar.gz
+ sha256  b16056fc91b82a0e3e8de8f86c2dac98201aa9dc3cbd33e8d38f1b087fcec30d  LICENCE.broadcom_bcm43xx
+diff --git a/package/rpi-wifi-firmware/rpi-wifi-firmware.mk b/package/rpi-wifi-firmware/rpi-wifi-firmware.mk
+index a643c4df9c..28926ff4f0 100644
+--- a/package/rpi-wifi-firmware/rpi-wifi-firmware.mk
++++ b/package/rpi-wifi-firmware/rpi-wifi-firmware.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RPI_FIRMWARE_VERSION = 33e09977ff3b02967d191801e3361224455acb9d
-+RPI_FIRMWARE_VERSION = 2ef3800b1b71c0e30c2a61ecad6e007ae96ea342
- RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
- RPI_FIRMWARE_LICENSE = BSD-3-Clause
- RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
+-RPI_WIFI_FIRMWARE_VERSION = 4c47758bed7cd547dff3618a1739dcf64b5a52a7
++RPI_WIFI_FIRMWARE_VERSION = 883b72628de1d7efa45b421da0cbf175ac2374f8
+ RPI_WIFI_FIRMWARE_SITE = $(call github,LibreELEC,brcmfmac_sdio-firmware-rpi,$(RPI_WIFI_FIRMWARE_VERSION))
+ RPI_WIFI_FIRMWARE_LICENSE = PROPRIETARY
+ RPI_WIFI_FIRMWARE_LICENSE_FILES = LICENCE.broadcom_bcm43xx
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
