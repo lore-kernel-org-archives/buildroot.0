@@ -2,85 +2,85 @@ Return-Path: <SRS0=USZC=O5=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EAD1DC433F5
-	for <buildroot@archiver.kernel.org>; Sat,  9 Oct 2021 17:31:22 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A62FC433EF
+	for <buildroot@archiver.kernel.org>; Sat,  9 Oct 2021 17:38:10 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 4B3B860F57
-	for <buildroot@archiver.kernel.org>; Sat,  9 Oct 2021 17:31:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4B3B860F57
+	by mail.kernel.org (Postfix) with ESMTPS id 6175160E9B
+	for <buildroot@archiver.kernel.org>; Sat,  9 Oct 2021 17:38:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6175160E9B
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 142B54045D;
-	Sat,  9 Oct 2021 17:31:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 28611831A9;
+	Sat,  9 Oct 2021 17:38:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yrB_Lmse3LO2; Sat,  9 Oct 2021 17:31:21 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id J5k6wimWsPP2; Sat,  9 Oct 2021 17:38:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 706F340450;
-	Sat,  9 Oct 2021 17:31:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 75CA88321B;
+	Sat,  9 Oct 2021 17:38:07 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A50A21BF5F8
- for <buildroot@lists.busybox.net>; Sat,  9 Oct 2021 17:31:19 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 077AA1BF5F8
+ for <buildroot@lists.busybox.net>; Sat,  9 Oct 2021 17:38:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 92D4D4025B
- for <buildroot@lists.busybox.net>; Sat,  9 Oct 2021 17:31:19 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id DB7BD4025B
+ for <buildroot@lists.busybox.net>; Sat,  9 Oct 2021 17:38:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp2.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tlTKoKVM04Z7 for <buildroot@lists.busybox.net>;
- Sat,  9 Oct 2021 17:31:18 +0000 (UTC)
+ with ESMTP id DqzYHXPzfQdj for <buildroot@lists.busybox.net>;
+ Sat,  9 Oct 2021 17:38:04 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
- [IPv6:2a00:1450:4864:20::42e])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2B764400A8
- for <buildroot@buildroot.org>; Sat,  9 Oct 2021 17:31:18 +0000 (UTC)
-Received: by mail-wr1-x42e.google.com with SMTP id e3so6600445wrc.11
- for <buildroot@buildroot.org>; Sat, 09 Oct 2021 10:31:18 -0700 (PDT)
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
+ [IPv6:2a00:1450:4864:20::42d])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 94324400A8
+ for <buildroot@buildroot.org>; Sat,  9 Oct 2021 17:38:04 +0000 (UTC)
+Received: by mail-wr1-x42d.google.com with SMTP id o20so40107393wro.3
+ for <buildroot@buildroot.org>; Sat, 09 Oct 2021 10:38:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=DoCJ/Iwz1t3Lqw4ZcHeKvr1jyEq7q1wFiJUCmAtxbf0=;
- b=K5u88ewrIAZCji4Q/OgxA1GZQq4wOgwYzT8ElGT9prClbQBn3+S1sLJ0mJhK/2xh9j
- EN8nkrzaXJBiuF164pL/7her3hw9fsguB/aC3BaIPUVWuIxbSTmC4g/OWQ9LNDIbbTzJ
- gQnRO+c2WRLl4d1gfyWrLU72HT+rJFHNTF/M8sinyaqv0M8FUvU86pX8F6ADR1zKQJ2D
- hk9Z7pnclTEQ4FWswYywHqJRa95qdYWdykKoRGgIdcB6yFYxkXbjZwNOwyTm5sviSkl1
- b7RlkXAXpIXAQxOrUce6S6ltktjfnn4/cTcojwShyflLi/4ovFsNbwEmRn9G/5ymOYef
- K3lA==
+ bh=Ok7TjeT7bmohQ0fo0dxXAWAEw0JRotz3lXQ0b4+V5xA=;
+ b=aVnDNB+7+UrHYoK4K0sIk/2rsKXCPUK07Vl8ORBW7jSWz6UJFkgh9J0gYI4KqQphPq
+ voLNyMfL2EZWIG9O8fOrLRrPO4OcZsavKTKZXFV9zhQLW/ho/o/Umfbyk5XW3Ao7upZH
+ sz7riIM9cv8jf2nvKoAOwnXskVrMPlvUUo0Pl+hP+I8MirPBLrp89C75LKVJpsELyaic
+ W3Cv+gkuGXMTLr2OxXke+vt3smWwfXVtAUpzH6+QM8zF16+/SCpE/p5aXA6fkQsbsYSs
+ MGKCaQsezmB67EQqkWNdBVRL2r/R9qR7RflQv5sauxQKk1n7v0zWO0ZPVqo18SgmhKbT
+ R3yA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=DoCJ/Iwz1t3Lqw4ZcHeKvr1jyEq7q1wFiJUCmAtxbf0=;
- b=kBqafs2P4AmigjLNk86jJ3zhtKxKmCGLOXy+pDd5FAUYE0aHr1d+v0tlj8/Ncxft2n
- 2khR5u+EmL3C5I/VGn00le7Z///Ym4+Hkm8LcFX8b3CuRmVnGB6nCTafAUQo0nK4lBBf
- RAXqvYY9hVaSzOYLqbFQJcudCER1XBFFfV3CCeRD1Bsd0DozqsqfbrtaQEow8t8Ca6F4
- lymsRZC5G0iYJ46MgnKBOINhJ5tti5D7anEFgFa44HdlpCyI1VPsv59Iq0UG6GFv9yx7
- vzbfF/pjgbfO2k6EwvkNZ6R+cvmO2+Xc4D/aXlC1L/GEY6yWeW/ZLrMqiZWD94tL0O8N
- PmOQ==
-X-Gm-Message-State: AOAM533mWpy0bd2S6zbZuAT7CI17ljimZITE789PfBAAg4I8qV4z9dr9
- PDZLnpjIm1GdLFP6WGyL5X9APwoA/UA=
-X-Google-Smtp-Source: ABdhPJyYpNJGzsjNzIGgoC8VZu1J2gQ2N0qVwyPt7DmGEgR7rTx/U6UFJYMmZgaKZtoAbzRAsEqayQ==
-X-Received: by 2002:adf:f904:: with SMTP id b4mr12352841wrr.403.1633800676091; 
- Sat, 09 Oct 2021 10:31:16 -0700 (PDT)
+ bh=Ok7TjeT7bmohQ0fo0dxXAWAEw0JRotz3lXQ0b4+V5xA=;
+ b=uGTWFIGSUVt18q/FgqrB/q42iGV7b002MUjc8W2VFgAUy52lkwXuXZIjO22VZCoiaJ
+ CNPAV0mD+UTAnXfzrdYBAYm+OC0mNeko64gxT0zxQ3zsSyogbkBqq6HnwusNXGiLAofp
+ scuIbLAO+tloh9/4BPteC7qcpln0sFP+FU+KUSwpeZ6QvDTbV152sWvO6gsmXAobN4T4
+ zM8zV+YWyVRjfmS/4Y/Sg6GucIRPbpMpHV3efKxEuyoidwRXLEU3t2o2BgV1N3v5sOHV
+ o17l/RA2Ne1uLQ5K2MBURkDWX1miCCp2ywzfRlb209fs9Vq8rxo0jPXK+k3FKgyZG9fN
+ QOQg==
+X-Gm-Message-State: AOAM531S58+rmRHz0xLB+NVj+WIM0K+bGc4S123TgvJdXwZAOg6uYtl7
+ HrTGjU7JoljyziiugBnM/Oe5g0hThzo=
+X-Google-Smtp-Source: ABdhPJxsRmYqhcEiApV5Q+lSYLpTwmweAbApH8CmPc5FlgTSDWUcJDjlzlzZDVIZS/JYh3lKV6HrGA==
+X-Received: by 2002:a05:6000:15c6:: with SMTP id
+ y6mr12340468wry.382.1633801082566; 
+ Sat, 09 Oct 2021 10:38:02 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-1732-95.w86-253.abo.wanadoo.fr.
  [86.253.44.95])
- by smtp.gmail.com with ESMTPSA id 196sm2812200wme.20.2021.10.09.10.31.15
+ by smtp.gmail.com with ESMTPSA id z17sm2704480wml.24.2021.10.09.10.37.58
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 09 Oct 2021 10:31:15 -0700 (PDT)
+ Sat, 09 Oct 2021 10:37:59 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat,  9 Oct 2021 19:30:17 +0200
-Message-Id: <20211009173017.674627-1-fontaine.fabrice@gmail.com>
+Date: Sat,  9 Oct 2021 19:37:06 +0200
+Message-Id: <20211009173706.681928-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/oracle-mysql: fix build with
- autoconf >= 2.70
+Subject: [Buildroot] [PATCH 1/1] package/haproxy: bump to version 2.4.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,79 +98,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following build failure raised since bump of autoconf to version
-2.71 in commit ecd54b65c1f998a7ccd91f7c523e4ff38c4781da:
-
-autoheader: warning: missing template: CRAY_STACKSEG_END
-autoheader: warning: Use AC_DEFINE([CRAY_STACKSEG_END], [], [Description])
-autoreconf: error: /home/buildroot/autobuild/instance-2/output-1/host/bin/autoheader failed with exit status: 1
-package/pkg-generic.mk:273: recipe for target '/home/buildroot/autobuild/instance-2/output-1/build/oracle-mysql-5.1.73/.stamp_configured' failed
-
-Fixes:
- - http://autobuild.buildroot.org/results/e5329bcf166d46b2eb17f2bc727c0307bef5ed02
+https://www.mail-archive.com/haproxy@formilux.org/msg41239.html
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...-alloca.m4-Remove-obsolete-Cray-supp.patch | 50 +++++++++++++++++++
- 1 file changed, 50 insertions(+)
- create mode 100644 package/oracle-mysql/0011-config-ac-macros-alloca.m4-Remove-obsolete-Cray-supp.patch
+ package/haproxy/haproxy.hash | 4 ++--
+ package/haproxy/haproxy.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/oracle-mysql/0011-config-ac-macros-alloca.m4-Remove-obsolete-Cray-supp.patch b/package/oracle-mysql/0011-config-ac-macros-alloca.m4-Remove-obsolete-Cray-supp.patch
-new file mode 100644
-index 0000000000..f3dbde253c
---- /dev/null
-+++ b/package/oracle-mysql/0011-config-ac-macros-alloca.m4-Remove-obsolete-Cray-supp.patch
-@@ -0,0 +1,50 @@
-+From 0d8ab9b020870c62c216fca77e7f8bd3eeb710c3 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 9 Oct 2021 19:23:46 +0200
-+Subject: [PATCH] config/ac-macros/alloca.m4: Remove obsolete Cray support
-+
-+Remove obsolete Cray support to avoid the following build failure since
-+autoconf >= 2.70 and
-+http://git.savannah.gnu.org/gitweb/?p=autoconf.git;a=commit;h=15edf7fd8094fd14a89d9891dd72a9624762597a:
-+
-+autoheader: warning: missing template: CRAY_STACKSEG_END
-+autoheader: warning: Use AC_DEFINE([CRAY_STACKSEG_END], [], [Description])
-+autoreconf: error: /home/buildroot/autobuild/instance-2/output-1/host/bin/autoheader failed with exit status: 1
-+package/pkg-generic.mk:273: recipe for target '/home/buildroot/autobuild/instance-2/output-1/build/oracle-mysql-5.1.73/.stamp_configured' failed
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/e5329bcf166d46b2eb17f2bc727c0307bef5ed02
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ config/ac-macros/alloca.m4 | 14 --------------
-+ 1 file changed, 14 deletions(-)
-+
-+diff --git a/config/ac-macros/alloca.m4 b/config/ac-macros/alloca.m4
-+index 8c730dd671f..eecb8249573 100644
-+--- a/config/ac-macros/alloca.m4
-++++ b/config/ac-macros/alloca.m4
-+@@ -46,20 +46,6 @@ then
-+    ALLOCA=alloca.o
-+    AC_DEFINE(C_ALLOCA, 1)
-+  
-+- AC_CACHE_CHECK(whether alloca needs Cray hooks, ac_cv_os_cray,
-+- [AC_EGREP_CPP(webecray,
-+- [#if defined(CRAY) && ! defined(CRAY2)
-+- webecray
-+- #else
-+- wenotbecray
-+- #endif
-+- ], ac_cv_os_cray=yes, ac_cv_os_cray=no)])
-+- if test "$ac_cv_os_cray" = "yes"; then
-+- for ac_func in _getb67 GETB67 getb67; do
-+-   AC_CHECK_FUNC($ac_func, [AC_DEFINE_UNQUOTED(CRAY_STACKSEG_END, $ac_func)
-+-   break])
-+- done
-+- fi
-+  fi
-+  AC_SUBST(ALLOCA)dnl
-+ else
-+-- 
-+2.33.0
-+
+diff --git a/package/haproxy/haproxy.hash b/package/haproxy/haproxy.hash
+index 3ad5e4ebe8..2e39fb4aa5 100644
+--- a/package/haproxy/haproxy.hash
++++ b/package/haproxy/haproxy.hash
+@@ -1,5 +1,5 @@
+-# From: http://www.haproxy.org/download/2.4/src/haproxy-2.4.4.tar.gz.sha256
+-sha256  116b7329cebee5dab8ba47ad70feeabd0c91680d9ef68c28e41c34869920d1fe  haproxy-2.4.4.tar.gz
++# From: http://www.haproxy.org/download/2.4/src/haproxy-2.4.7.tar.gz.sha256
++sha256  52af97f72f22ffd8a7a995fafc696291d37818feda50a23caef7dc0622421845  haproxy-2.4.7.tar.gz
+ # Locally computed:
+ sha256  0717ca51fceaa25ac9e5ccc62e0c727dcf27796057201fb5fded56a25ff6ca28  LICENSE
+ sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  doc/lgpl.txt
+diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
+index d41ce50dc6..145a8a214c 100644
+--- a/package/haproxy/haproxy.mk
++++ b/package/haproxy/haproxy.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ HAPROXY_VERSION_MAJOR = 2.4
+-HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).4
++HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).7
+ HAPROXY_SITE = http://www.haproxy.org/download/$(HAPROXY_VERSION_MAJOR)/src
+ HAPROXY_LICENSE = GPL-2.0+ and LGPL-2.1+ with exceptions
+ HAPROXY_LICENSE_FILES = LICENSE doc/lgpl.txt doc/gpl.txt
 -- 
 2.33.0
 
