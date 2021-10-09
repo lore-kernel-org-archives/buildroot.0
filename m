@@ -2,52 +2,52 @@ Return-Path: <SRS0=USZC=O5=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 13A95C433EF
-	for <buildroot@archiver.kernel.org>; Sat,  9 Oct 2021 12:05:36 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3DEFEC433F5
+	for <buildroot@archiver.kernel.org>; Sat,  9 Oct 2021 12:05:45 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D478B60F5D
-	for <buildroot@archiver.kernel.org>; Sat,  9 Oct 2021 12:05:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D478B60F5D
+	by mail.kernel.org (Postfix) with ESMTPS id 0AC9F60F6F
+	for <buildroot@archiver.kernel.org>; Sat,  9 Oct 2021 12:05:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0AC9F60F6F
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AFB8760A70;
-	Sat,  9 Oct 2021 12:05:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DC38D81911;
+	Sat,  9 Oct 2021 12:05:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PDOcc86h-LCM; Sat,  9 Oct 2021 12:05:32 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id A_6CMkFyzLcO; Sat,  9 Oct 2021 12:05:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E031B60A44;
-	Sat,  9 Oct 2021 12:05:31 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B14131BF36A
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2D80F81865;
+	Sat,  9 Oct 2021 12:05:43 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C4AFD1BF95F
  for <buildroot@lists.busybox.net>; Sat,  9 Oct 2021 12:03:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A141640699
+ by smtp1.osuosl.org (Postfix) with ESMTP id B4358838F7
  for <buildroot@lists.busybox.net>; Sat,  9 Oct 2021 12:03:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jLve0Onm9cA7 for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dCr_2oxnWrdm for <buildroot@lists.busybox.net>;
  Sat,  9 Oct 2021 12:03:06 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id E713E40685
+ by smtp1.osuosl.org (Postfix) with ESMTP id E6830838D7
  for <buildroot@buildroot.org>; Sat,  9 Oct 2021 12:03:06 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 2BE6A93614; Sat,  9 Oct 2021 12:00:24 +0000 (UTC)
+ id 221B193613; Sat,  9 Oct 2021 12:00:24 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 9 Oct 2021 13:41:32 +0200
+Date: Sat, 9 Oct 2021 13:28:34 +0200
 X-Git-Refname: refs/heads/2021.05.x
-X-Git-Oldrev: 32e0357d302158bb9e3c657e067aa10e1fa24abe
-X-Git-Newrev: dbbb102a0bc2dbf3175a0b3794df226bde9efa93
+X-Git-Oldrev: 5a6d64f4131eee514a10b3a03c403c9861dfd7ca
+X-Git-Newrev: 32e0357d302158bb9e3c657e067aa10e1fa24abe
 X-Patchwork-Hint: ignore
-Message-Id: <20211009120024.2BE6A93614@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.05.x] package/php: security
- bump version to 7.4.24
+Message-Id: <20211009120024.221B193613@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.05.x]
+ support/testing/infra/emulator.py: prevent the commands from wrapping
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,43 +65,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dbbb102a0bc2dbf3175a0b3794df226bde9efa93
+commit: https://git.buildroot.net/buildroot/commit/?id=32e0357d302158bb9e3c657e067aa10e1fa24abe
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.05.x
 
-Changelog: https://www.php.net/ChangeLog-7.php#7.4.24
+Traditional VT-10x terminals (and their emulators) [0] have a "magic
+margins" feature that enables the last character position to be updated
+without scrolling the screen: whenever a character is printed on the
+last column, the cursor stays over the character, instead of moving to
+the next line.
 
-Fixes CVE-2021-21706: https://bugs.php.net/bug.php?id=81420
+The Busybox shell, ash, attempts to defeat this feature by printing
+CR,LF right after echoing a character to the last column.[1] This
+doesn't play well with emulator.py. The run() method of the Emulator
+class captures the output of the emulated system and assumes the first
+line it reads is the echo of the command, and all subsequent lines are
+the command's output. If the line made by the command + shell prompt is
+longer than 80 characters, then it is echoed as two or more lines, and
+all but the first one are mistaken for the command's output.
 
+We fix this by telling the emulated system that we are using an
+ultra-wide terminal with 29999 columns. Larger values would be ignored
+and replaced by the default, namely 80 columns.[2]
+
+[0] https://vt100.net/docs/vt100-ug/chapter3.html  -  DECAWM
+[1] https://git.busybox.net/busybox/tree/libbb/lineedit.c?h=1_34_0#n412
+[2] https://git.busybox.net/busybox/tree/libbb/xfuncs.c?h=1_34_0#n258
+
+Signed-off-by: Edgar Bonet <bonet@grenoble.cnrs.fr>
+Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Co-authored-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit eb3ee3078a76bb86428babb76d30eb6201814ccf)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ support/testing/infra/emulator.py | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index 28ac6c5d68..d82c81a703 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From https://www.php.net/downloads.php
--sha256  cea52313fcffe56343bcd3c66dbb23cd5507dc559cc2e3547cf8f5452e88a05d  php-7.4.23.tar.xz
-+sha256  ff7658ee2f6d8af05b48c21146af5f502e121def4e76e862df5ec9fa06e98734  php-7.4.24.tar.xz
+diff --git a/support/testing/infra/emulator.py b/support/testing/infra/emulator.py
+index 2412fe1cc9..8dbe813f34 100644
+--- a/support/testing/infra/emulator.py
++++ b/support/testing/infra/emulator.py
+@@ -101,6 +101,8 @@ class Emulator(object):
+         if index != 0:
+             raise SystemError("Cannot login")
+         self.run("dmesg -n 1")
++        # Prevent the shell from wrapping the commands at 80 columns.
++        self.run("stty columns 29999")
  
- # License file
- sha256  a188db807d711536f71e27b7d36879d63480f7994dc18adc08e624b3c5430fff  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 805030d88a..30c3ee9ca4 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PHP_VERSION = 7.4.23
-+PHP_VERSION = 7.4.24
- PHP_SITE = http://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+     # Run the given 'cmd' with a 'timeout' on the target
+     # return a tuple (output, exit_code)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
