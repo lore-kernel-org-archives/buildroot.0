@@ -2,59 +2,58 @@ Return-Path: <SRS0=USZC=O5=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9BCBEC433EF
-	for <buildroot@archiver.kernel.org>; Sat,  9 Oct 2021 11:48:46 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 66F62C433EF
+	for <buildroot@archiver.kernel.org>; Sat,  9 Oct 2021 11:49:28 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 5B17C60F38
-	for <buildroot@archiver.kernel.org>; Sat,  9 Oct 2021 11:48:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5B17C60F38
+	by mail.kernel.org (Postfix) with ESMTPS id 0961760F55
+	for <buildroot@archiver.kernel.org>; Sat,  9 Oct 2021 11:49:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0961760F55
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1F57960B92;
-	Sat,  9 Oct 2021 11:48:46 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C1D8B40567;
+	Sat,  9 Oct 2021 11:49:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fzauf1G8zuGP; Sat,  9 Oct 2021 11:48:45 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id qPkgFXsevGEu; Sat,  9 Oct 2021 11:49:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 82BA960B9B;
-	Sat,  9 Oct 2021 11:48:44 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 050F740431;
+	Sat,  9 Oct 2021 11:49:25 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 726061BF36E
- for <buildroot@lists.busybox.net>; Sat,  9 Oct 2021 11:48:43 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B27791BF36E
+ for <buildroot@lists.busybox.net>; Sat,  9 Oct 2021 11:49:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5FF4740431
- for <buildroot@lists.busybox.net>; Sat,  9 Oct 2021 11:48:43 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9FEE140431
+ for <buildroot@lists.busybox.net>; Sat,  9 Oct 2021 11:49:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sjRQWwi_hDiS for <buildroot@lists.busybox.net>;
- Sat,  9 Oct 2021 11:48:42 +0000 (UTC)
+ with ESMTP id ZYsk8hmSB1ki for <buildroot@lists.busybox.net>;
+ Sat,  9 Oct 2021 11:49:23 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 52D16403BA
- for <buildroot@buildroot.org>; Sat,  9 Oct 2021 11:48:42 +0000 (UTC)
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6E3FA403BA
+ for <buildroot@buildroot.org>; Sat,  9 Oct 2021 11:49:23 +0000 (UTC)
 Received: (Authenticated sender: peter@casa-korsgaard.com)
- by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 4D880FF806;
- Sat,  9 Oct 2021 11:48:39 +0000 (UTC)
+ by relay11.mail.gandi.net (Postfix) with ESMTPSA id 70202100003;
+ Sat,  9 Oct 2021 11:49:21 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
  (envelope-from <peter@korsgaard.com>)
- id 1mZAqE-0003iw-Kf; Sat, 09 Oct 2021 13:48:38 +0200
+ id 1mZAqu-0003nX-Pg; Sat, 09 Oct 2021 13:49:20 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20211006154136.2243511-1-fontaine.fabrice@gmail.com>
-Date: Sat, 09 Oct 2021 13:48:38 +0200
-In-Reply-To: <20211006154136.2243511-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Wed, 6 Oct 2021 17:41:36 +0200")
-Message-ID: <87tuhqto4p.fsf@dell.be.48ers.dk>
+To: Peter Seiderer <ps.report@gmx.net>
+References: <20211007212842.11468-1-ps.report@gmx.net>
+Date: Sat, 09 Oct 2021 13:49:20 +0200
+In-Reply-To: <20211007212842.11468-1-ps.report@gmx.net> (Peter Seiderer's
+ message of "Thu, 7 Oct 2021 23:28:42 +0200")
+Message-ID: <87pmseto3j.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/supervisor: drop python-meld3
- dependency
+Subject: Re: [Buildroot] [PATCH v1] package/apache: security bump to version
+ 2.4.51
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,19 +65,22 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
- > python-meld3 is not a dependency since bump to version 4.1.0 in commit
- > 5da3e1a3e6ccd3c0bfc7e3a9ebe0b14f903af518 and
- > https://github.com/Supervisor/supervisor/commit/d09d843493eb77cb8c3df52e1f7e636ad0e5b4dd
+ > Fixes CVE-2021-42013, for details see [1] and [2].
+ > Change download URL from http://archive.apache.org/dist/httpd to
+ > https://downloads.apache.org/httpd (seems more up to date).
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > [1] https://downloads.apache.org/httpd/CHANGES_2.4.51
+ > [2] https://httpd.apache.org/security/vulnerabilities_24.html
+
+ > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
 Committed to 2021.02.x, 2021.05.x and 2021.08.x, thanks.
 
