@@ -2,52 +2,59 @@ Return-Path: <SRS0=USZC=O5=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AF9ECC433EF
-	for <buildroot@archiver.kernel.org>; Sat,  9 Oct 2021 12:10:38 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E3EAC433F5
+	for <buildroot@archiver.kernel.org>; Sat,  9 Oct 2021 12:36:35 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 7A44660F5D
-	for <buildroot@archiver.kernel.org>; Sat,  9 Oct 2021 12:10:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7A44660F5D
+	by mail.kernel.org (Postfix) with ESMTPS id B64DB60FC1
+	for <buildroot@archiver.kernel.org>; Sat,  9 Oct 2021 12:36:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B64DB60FC1
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4E12C4057D;
-	Sat,  9 Oct 2021 12:10:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 563E083417;
+	Sat,  9 Oct 2021 12:36:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id G2GS-NoaY-Xl; Sat,  9 Oct 2021 12:10:37 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 5QCAiH6IAlJV; Sat,  9 Oct 2021 12:36:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2161340576;
-	Sat,  9 Oct 2021 12:10:36 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 115541BF36A
- for <buildroot@lists.busybox.net>; Sat,  9 Oct 2021 12:03:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6DDC2834E1;
+	Sat,  9 Oct 2021 12:36:32 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 00B8F1BF400
+ for <buildroot@lists.busybox.net>; Sat,  9 Oct 2021 12:36:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B010240431
- for <buildroot@lists.busybox.net>; Sat,  9 Oct 2021 12:03:21 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E116F834CB
+ for <buildroot@lists.busybox.net>; Sat,  9 Oct 2021 12:36:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RPTQ1TgL4j7w for <buildroot@lists.busybox.net>;
- Sat,  9 Oct 2021 12:03:20 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3B1A040577
- for <buildroot@buildroot.org>; Sat,  9 Oct 2021 12:03:19 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 6B73B947C3; Sat,  9 Oct 2021 12:00:36 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id IYw1rCSQbqc4 for <buildroot@lists.busybox.net>;
+ Sat,  9 Oct 2021 12:36:29 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A934583495
+ for <buildroot@buildroot.org>; Sat,  9 Oct 2021 12:36:28 +0000 (UTC)
+Received: (Authenticated sender: peter@casa-korsgaard.com)
+ by relay11.mail.gandi.net (Postfix) with ESMTPSA id 568E6100003;
+ Sat,  9 Oct 2021 12:36:25 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
+ (envelope-from <peter@korsgaard.com>)
+ id 1mZBaS-0004ci-M6; Sat, 09 Oct 2021 14:36:24 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sat, 9 Oct 2021 13:50:47 +0200
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: e19e8b9739ceca782f3cf73bed4c9a9577bd6b9b
-X-Git-Newrev: afc394537564be9da239e7544cd3112f818de519
-X-Patchwork-Hint: ignore
-Message-Id: <20211009120036.6B73B947C3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/wireless-regdb:
- bump version to 2021.08.28
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20211005064334.737168-1-fontaine.fabrice@gmail.com>
+ <87ee8uwlyl.fsf@dell.be.48ers.dk>
+Date: Sat, 09 Oct 2021 14:36:24 +0200
+In-Reply-To: <87ee8uwlyl.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
+ "Sat, 09 Oct 2021 12:07:14 +0200")
+Message-ID: <87wnmms7cn.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/2] package/net-tools: add
+ NET_TOOLS_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,59 +66,28 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=afc394537564be9da239e7544cd3112f818de519
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Changelog (since 2021.04.21):
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+ >> cpe:2.3:a:net-tools_project:net-tools is a valid CPE identifier for this
+ >> package:
 
-  47007d0 wireless-regdb: update regulatory database based on preceding changes
-  e983a25 Update regulatory rules for Ecuador (EC)
-  a0bcb88 wireless-regdb: Update regulatory rules for Norway (NO) on 6 and 60 GHz
-  cdf854d wireless-regdb: Update regulatory rules for Germany (DE) on 6GHz
-  a4468e8 wireless-regdb: update regulatory database based on preceding changes
-  86cba52 wireless-regdb: reduce bandwidth for 5730-5850 and 5850-5895 MHz in US
-  6fa2384 wireless-regdb: remove PTMP-ONLY from 5850-5895 MHz for US
-  9839e1e wireless-regdb: recent FCC report and order allows 5850-5895 immediately
-  42dfaf4 wireless-regdb: update 5725-5850 MHz rule for GB
+ >> https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Anet-tools_project%3Anet-tools
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 95f3fc514c30626fa02b457423231d16db416612)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/wireless-regdb/wireless-regdb.hash | 2 +-
- package/wireless-regdb/wireless-regdb.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ >> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-diff --git a/package/wireless-regdb/wireless-regdb.hash b/package/wireless-regdb/wireless-regdb.hash
-index d941fc3b1a..abe8f6b000 100644
---- a/package/wireless-regdb/wireless-regdb.hash
-+++ b/package/wireless-regdb/wireless-regdb.hash
-@@ -1,4 +1,4 @@
- # From https://www.kernel.org/pub/software/network/wireless-regdb/sha256sums.asc
--sha256  9e4c02b2a9710df4dbdb327c39612e8cbbae6495987afeddaebab28c1ea3d8fa  wireless-regdb-2021.04.21.tar.xz
-+sha256  cff370c410d1e6d316ae0a7fa8ac6278fdf1efca5d3d664aca7cfd2aafa54446  wireless-regdb-2021.08.28.tar.xz
- # Locally computed
- sha256  678b0df753c86198fc496d1f1033429bbd57f101472132ee7eaaf9f5e0a7fae1  LICENSE
-diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
-index 49a3824ce8..0db8c6f345 100644
---- a/package/wireless-regdb/wireless-regdb.mk
-+++ b/package/wireless-regdb/wireless-regdb.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WIRELESS_REGDB_VERSION = 2021.04.21
-+WIRELESS_REGDB_VERSION = 2021.08.28
- WIRELESS_REGDB_SOURCE = wireless-regdb-$(WIRELESS_REGDB_VERSION).tar.xz
- WIRELESS_REGDB_SITE = $(BR2_KERNEL_MIRROR)/software/network/wireless-regdb
- WIRELESS_REGDB_LICENSE = ISC
+ > Committed, thanks.
+
+Committed to 2021.02.x, 2021.05.x and 2021.08.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
