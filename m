@@ -2,52 +2,52 @@ Return-Path: <SRS0=USZC=O5=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 87F69C433EF
-	for <buildroot@archiver.kernel.org>; Sat,  9 Oct 2021 12:10:14 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5AE92C433EF
+	for <buildroot@archiver.kernel.org>; Sat,  9 Oct 2021 12:10:26 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 4C0BE60F57
-	for <buildroot@archiver.kernel.org>; Sat,  9 Oct 2021 12:10:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4C0BE60F57
+	by mail.kernel.org (Postfix) with ESMTPS id 1F32F60F5D
+	for <buildroot@archiver.kernel.org>; Sat,  9 Oct 2021 12:10:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1F32F60F5D
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2568C82BC8;
-	Sat,  9 Oct 2021 12:10:14 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E0EA44057C;
+	Sat,  9 Oct 2021 12:10:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lDCyf1ZkCBiU; Sat,  9 Oct 2021 12:10:13 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id JBhOkqGHVLYE; Sat,  9 Oct 2021 12:10:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 80FE9827D2;
-	Sat,  9 Oct 2021 12:10:12 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id EBEA540577;
+	Sat,  9 Oct 2021 12:10:23 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 539B51BF36A
- for <buildroot@lists.busybox.net>; Sat,  9 Oct 2021 12:03:25 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 115581BF36A
+ for <buildroot@lists.busybox.net>; Sat,  9 Oct 2021 12:03:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id F3BE440576
- for <buildroot@lists.busybox.net>; Sat,  9 Oct 2021 12:03:20 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 112AC40578
+ for <buildroot@lists.busybox.net>; Sat,  9 Oct 2021 12:03:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iBPoRB0_J_7L for <buildroot@lists.busybox.net>;
- Sat,  9 Oct 2021 12:03:20 +0000 (UTC)
+ with ESMTP id vB8knqDSBxlH for <buildroot@lists.busybox.net>;
+ Sat,  9 Oct 2021 12:03:19 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5C91340578
- for <buildroot@buildroot.org>; Sat,  9 Oct 2021 12:03:19 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E4ECF4056D
+ for <buildroot@buildroot.org>; Sat,  9 Oct 2021 12:03:18 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 76EE6947C1; Sat,  9 Oct 2021 12:00:36 +0000 (UTC)
+ id 37513947C1; Sat,  9 Oct 2021 12:00:36 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 9 Oct 2021 13:51:34 +0200
+Date: Sat, 9 Oct 2021 13:47:16 +0200
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: afc394537564be9da239e7544cd3112f818de519
-X-Git-Newrev: 9026d3d7a10969fe618935de2bc07db5816dc9b6
+X-Git-Oldrev: fa98ff21321e3a05579cc20d8fa6dd443175103b
+X-Git-Newrev: ddae54b6ffed39a201df95706a68cb585fcd65eb
 X-Patchwork-Hint: ignore
-Message-Id: <20211009120036.76EE6947C1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/squid: security
- bump to version 4.17
+Message-Id: <20211009120036.37513947C1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/apache: security
+ bump to version 2.4.50
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,64 +65,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9026d3d7a10969fe618935de2bc07db5816dc9b6
+commit: https://git.buildroot.net/buildroot/commit/?id=ddae54b6ffed39a201df95706a68cb585fcd65eb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Fixes the following security issue:
+Fixes CVE-2021-41524 and CVE-2021-41773, for details see [1] and [2].
 
-- SQUID-2020:12 Out-Of-Bounds memory access in WCCPv2
-  (CVE-2021-28116 aka ZDI-CAN-11610)
+[1] https://downloads.apache.org/httpd/CHANGES_2.4.50
+[2] https://httpd.apache.org/security/vulnerabilities_24.html
 
-  Due to an out of bounds memory access Squid is vulnerable to an
-  information leak vulnerability when processing WCCPv2 messages.
-
-  This problem allows a WCCPv2 sender to corrupt Squids list of
-  known WCCP routers and divert client traffic to attacker
-  controlled routers.
-
-  This attack is limited to Squid proxy with WCCPv2 enabled and
-  IP spoofing of a router IP address configured as trusted in
-  squid.conf.
-
-For more details, see the advisory:
-http://lists.squid-cache.org/pipermail/squid-announce/2021-October/000136.html
-
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 6263c1f9a9a03bd9b1ce4c2ac7426f22e4ec8c60)
+(cherry picked from commit bb465e2f62e9b74c59e23f307d999c4c546e5459)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/squid/squid.hash | 8 ++++----
- package/squid/squid.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/apache/apache.hash | 6 +++---
+ package/apache/apache.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/squid/squid.hash b/package/squid/squid.hash
-index 12a9e5d293..b1a8feb78e 100644
---- a/package/squid/squid.hash
-+++ b/package/squid/squid.hash
-@@ -1,6 +1,6 @@
--# From http://www.squid-cache.org/Versions/v4/squid-4.15.tar.xz.asc
--md5  a593de9dc888dfeca4f1f7db2cd7d3b9  squid-4.15.tar.xz
--sha1  60bda34ba39657e2d870c8c1d2acece8a69c3075  squid-4.15.tar.xz
-+# From http://www.squid-cache.org/Versions/v4/squid-4.17.tar.xz.asc
-+md5  47b94b2d27516f1764c9d5dc1b9645e5  squid-4.17.tar.xz
-+sha1  f6bd15fabbd67b53a831fe9f67de3279868036c1  squid-4.17.tar.xz
- # Locally calculated
--sha256  b693a4e5ab2811a8a854f60de0a62afbbf3a952bb1d047952c9ae01321f84a25  squid-4.15.tar.xz
-+sha256  cb928ac08c7c86b151b1c8f827abe1a84d83181a2a86e0d512286163e1e31418  squid-4.17.tar.xz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index b23a8d26ed..e525f2cd9f 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
+diff --git a/package/apache/apache.hash b/package/apache/apache.hash
+index 49efefebb9..abcb79f14d 100644
+--- a/package/apache/apache.hash
++++ b/package/apache/apache.hash
+@@ -1,5 +1,5 @@
+-# From http://archive.apache.org/dist/httpd/httpd-2.4.49.tar.bz2.{sha256,sha512}
+-sha256  65b965d6890ea90d9706595e4b7b9365b5060bec8ea723449480b4769974133b  httpd-2.4.49.tar.bz2
+-sha512  418e277232cf30a81d02b8554e31aaae6433bbea842bdb81e47a609469395cc4891183fb6ee02bd669edb2392c2007869b19da29f5998b8fd5c7d3142db310dd  httpd-2.4.49.tar.bz2
++# From https://archive.apache.org/dist/httpd/httpd-2.4.50.tar.bz2.{sha256,sha512}
++sha256  6a2817c070c606682eb53ed963511407d3c3d7a379cdf855971467b00fb3890f  httpd-2.4.50.tar.bz2
++sha512  b1afbaf44e503b822ff2b443881dcb44a93aa55d496f88ae399a2e7def05f78590f266a16da1f2c0aac88e463b76fba20843b1e20a102e76c8269de6fae3e158  httpd-2.4.50.tar.bz2
+ # Locally computed
+ sha256  47b8c2b6c3309282a99d4a3001575c790fead690cc14734628c4667d2bbffc43  LICENSE
+diff --git a/package/apache/apache.mk b/package/apache/apache.mk
+index 047a5ad446..7a3a0ea6cc 100644
+--- a/package/apache/apache.mk
++++ b/package/apache/apache.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SQUID_VERSION = 4.15
-+SQUID_VERSION = 4.17
- SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
- SQUID_SITE = http://www.squid-cache.org/Versions/v4
- SQUID_LICENSE = GPL-2.0+
+-APACHE_VERSION = 2.4.49
++APACHE_VERSION = 2.4.50
+ APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
+ APACHE_SITE = http://archive.apache.org/dist/httpd
+ APACHE_LICENSE = Apache-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
