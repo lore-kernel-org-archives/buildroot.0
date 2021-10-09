@@ -2,81 +2,87 @@ Return-Path: <SRS0=USZC=O5=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A84DC433F5
-	for <buildroot@archiver.kernel.org>; Sat,  9 Oct 2021 20:55:33 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 06E57C433EF
+	for <buildroot@archiver.kernel.org>; Sat,  9 Oct 2021 20:55:44 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 903E660F5A
-	for <buildroot@archiver.kernel.org>; Sat,  9 Oct 2021 20:55:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 903E660F5A
+	by mail.kernel.org (Postfix) with ESMTPS id B6D0F60F9C
+	for <buildroot@archiver.kernel.org>; Sat,  9 Oct 2021 20:55:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B6D0F60F9C
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3CA2940307;
-	Sat,  9 Oct 2021 20:55:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 90CAE6081F;
+	Sat,  9 Oct 2021 20:55:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JBl-7dDExFgO; Sat,  9 Oct 2021 20:55:31 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 57Zu4gt92Gvt; Sat,  9 Oct 2021 20:55:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 44FBD40577;
-	Sat,  9 Oct 2021 20:55:30 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D1EE61BF5A6
- for <buildroot@lists.busybox.net>; Sat,  9 Oct 2021 20:55:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EB00A607D5;
+	Sat,  9 Oct 2021 20:55:41 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 83E8E1BF5A6
+ for <buildroot@lists.busybox.net>; Sat,  9 Oct 2021 20:55:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C071D40577
- for <buildroot@lists.busybox.net>; Sat,  9 Oct 2021 20:55:28 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 71E60405F7
+ for <buildroot@lists.busybox.net>; Sat,  9 Oct 2021 20:55:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZBz_RKikmBFY for <buildroot@lists.busybox.net>;
- Sat,  9 Oct 2021 20:55:27 +0000 (UTC)
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DWWvzhaCR5Fn for <buildroot@lists.busybox.net>;
+ Sat,  9 Oct 2021 20:55:29 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com
- [IPv6:2607:f8b0:4864:20::430])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 93AF440307
- for <buildroot@buildroot.org>; Sat,  9 Oct 2021 20:55:27 +0000 (UTC)
-Received: by mail-pf1-x430.google.com with SMTP id y7so1639430pfg.8
- for <buildroot@buildroot.org>; Sat, 09 Oct 2021 13:55:27 -0700 (PDT)
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com
+ [IPv6:2607:f8b0:4864:20::102d])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8358240012
+ for <buildroot@buildroot.org>; Sat,  9 Oct 2021 20:55:29 +0000 (UTC)
+Received: by mail-pj1-x102d.google.com with SMTP id
+ pi19-20020a17090b1e5300b0019fdd3557d3so10380105pjb.5
+ for <buildroot@buildroot.org>; Sat, 09 Oct 2021 13:55:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=pAS6Vjv1cXVYNS8D1O5/t9plPwcdwuz2Mo5Ba3peskY=;
- b=Xwyu0xmbpy0RuNuTQ0UG+AFhWRwDYY3+iuxFLwVzb0rs/MK/gsOhqf3yyEWJzoVdp9
- D9DSC5pRSYpW4MtPb2CQlIWhntP/Q7zMiXZo0Kg2TvDFuD/V3N53n2Y9L2QW2nWsQ/tj
- z+CfdM/VlKdQVB2W8WSu0tde4nyU+c8BjMlPpbaFR6LC32xapjSQTq1/EYMw6TVPrL/2
- M/jhDD9OAe2FHGaM/VEAp3umxrsGLRLM+pGJMjyuOMj6Q6XvzXbRGT4t0Q88CMh5a/dZ
- UxKUXUy364o3SZuu6/4JZhhdgwe4q93pU/vYXHzxTfXMCXuds5uhLo93V/FCZjm1Rc+I
- AeNA==
+ h=from:to:cc:subject:date:message-id:in-reply-to:references
+ :mime-version:content-transfer-encoding;
+ bh=YJIqk3B9Z6cqQtOLXILDhZ9MZ82cZX1KZkRl74ml0U4=;
+ b=jmb5ND92MvQhX8vny50yE0s09ufUqwRSkxIWxRsWqe4y/OnqmYHaB0cHVdMmq9B2aU
+ eGP3zTm40LoCejuVOrcxoj64zaimxTUnquSiSyR2rEafVmi/YHNZoruaoIZGSjfouo0Z
+ 7QorfI29dOVeHHvdrvEXLk7F1Cy5y1h0b4ruy1GRoy+z/C3bW2PmlTtIqkKbnmTy/n7C
+ EX5njmRFso8dwMVW6S3/t7gjHpIlZYe0I2UuJoSesJPaNyHVzVVp68m7vLek0PDeUCka
+ fki7eAtqUQzZe6WlGjIQESLbpDQ5HIE1WxTJJ4qlqclwHvSbjb6J3LxjxoihT74ofRrA
+ Fjkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=pAS6Vjv1cXVYNS8D1O5/t9plPwcdwuz2Mo5Ba3peskY=;
- b=GcK6x/F+tguutWwl9yuGEDwLU0QH9CjXL/ksLJ3owkcv9nZrgWfuepzMoLCmwbmFtW
- XnxN5snZYfYJIs+UQhwU+pEGyiVYt48cPrBIyGxLibUt3uNWTp/tWj9wQ40KB5orX61s
- hxIiTdvlXdkS02IH2PbD8ybggA+Q6xPAMGpxirdmTcRxhZKUsVoduk/Hs1YlwtCeREQt
- OIoljxWsRSPd9XTwDEHSa2GJxxcopf98qjBE6G2zq3GUIGURkqEn/K+nvLCiM0p/DygI
- SXWeqk8Vrt450Q35u8mPZMUqIES5SbDX6+LkKy3PYTeeM02gLKjkT2shc8ebKEQKmHJ2
- cUMw==
-X-Gm-Message-State: AOAM533qaYsJtLtEfbLhOCl+9iG3YRwNobJVYbeL4Pipu9lOSvKLD3Ps
- af+ZTdzM3u2B/hhS24TmcdVsGk7cLNNCdg==
-X-Google-Smtp-Source: ABdhPJzi14aYfnzObUJkCwxeg+AA5TgPkAfImTXROqMwjvQFMdjYoDq2E62pb7BrxT6ZM/Uts7ms1g==
-X-Received: by 2002:a63:f145:: with SMTP id o5mr11224207pgk.273.1633812926754; 
- Sat, 09 Oct 2021 13:55:26 -0700 (PDT)
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+ :references:mime-version:content-transfer-encoding;
+ bh=YJIqk3B9Z6cqQtOLXILDhZ9MZ82cZX1KZkRl74ml0U4=;
+ b=10dphJWmFFqTSvm3LXoIxM+HpedlLR9ligbV32AWblTfVlDnpv6FVvt8jOzJLAt56V
+ 1LKPqVcIbSqvnOnwh3VH40StXGSnDeWqWhIWYHnRls2Bbu5pK8TSxZxyE1O8U5Lw44O5
+ EmapQBt3nIhFWIsYuz1hV04PO1rOqOpvIz+f/lB6UN4GNKpYwAmb4Aj4Nha+e2fw5z7D
+ bhCMMoBUu4B7mZFzpveAU1uwls89OItSU9ltmGC9L/BrbOdUKbcWiEO2WhGco45ILDr8
+ YC3QnqjwDJhK52Fsb28fpcgtZVwaxfRXAktmn+/Pvr8iAZcnnwDe97PJ6tW6ZddEOTsm
+ AHqw==
+X-Gm-Message-State: AOAM533GdEF+kNHifxIlxkBCSv/fj+uWZ1WVflFaGCm5l9EyWzaFPmSn
+ VfvYdMYF2abQ0sCnX1J3RwPIuLuOWclV4w==
+X-Google-Smtp-Source: ABdhPJyorRNyw0WrqXGAEwXVExl2ufOAr2zTX5uQ8n8p+xJyMDrqMMFRfakusHuNnYxM0SNzwNCUXQ==
+X-Received: by 2002:a17:90a:181:: with SMTP id
+ 1mr20261246pjc.214.1633812928872; 
+ Sat, 09 Oct 2021 13:55:28 -0700 (PDT)
 Received: from adam.rai.com ([47.149.13.137])
- by smtp.gmail.com with ESMTPSA id qe17sm3125765pjb.39.2021.10.09.13.55.25
+ by smtp.gmail.com with ESMTPSA id qe17sm3125765pjb.39.2021.10.09.13.55.27
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 09 Oct 2021 13:55:26 -0700 (PDT)
+ Sat, 09 Oct 2021 13:55:28 -0700 (PDT)
 From: Adam Duskett <aduskett@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat,  9 Oct 2021 13:55:03 -0700
-Message-Id: <20211009205523.3137859-1-aduskett@gmail.com>
+Date: Sat,  9 Oct 2021 13:55:05 -0700
+Message-Id: <20211009205523.3137859-3-aduskett@gmail.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20211009205523.3137859-1-aduskett@gmail.com>
+References: <20211009205523.3137859-1-aduskett@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 00/20] package/python3: bump to version 3.10
+Subject: [Buildroot] [PATCH 02/20] package/kmod: bump to version 29
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,171 +106,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-In the following patch series python3 (eventually) gets bumped to version 3.10
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+---
+ package/kmod/kmod.hash | 2 +-
+ package/kmod/kmod.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-- The first parts involve updating packages that are not compatible with 3.10.
-  Either by updating versions or adding patches.
-
-- Then I fix a typo in python-pathvalidate
-- Then I complain about python-setuptools and split add support for both
-  setuptools 48 (compatible with python2) and 58 (compatible with python3.10)
-- Finally I update python3 to 3.10
-
-This patch series has been tested against every python2 and python3 unit-test
-available in buildroot, including against https://patchwork.ozlabs.org/project/buildroot/patch/20211006203823.2740442-1-yann.morin.1998@free.fr/
-
-In addition, I also selected *EVERY* python module to ensure all of them at
-least build against python3.10, and everything passes.
-
-Finally, I ran a test-pkg -a on python3.10 to ensure that this didn't break any
-other platforms.
-
-Adam Duskett (20):
-  package/dbus-python: bump to version 1.2.18
-  package/kmod: bump to version 29
-  package/python-crossbar: bump to version 21.3.1
-  package/python-git: bump to version 3.1.24
-  package/python-gobject: bump to version 3.42.0
-  package/python-ipython: bump to version 7.28.0
-  package/python-libusb1: bump to version 2.0.1
-  package/python-lmdb: bump to version 1.2.1
-  package/python-dataclasses: new package
-  package/python-pydantic: bump to version 1.8.2
-  package/python-txtorcon: bump to version 21.1.0
-  package/python-watchdog: bump to version 2.1.6
-  package/util-linux: bump to version 2.37.2
-  package/python-certifi: add host variant
-  package/python-matplotlib: bump to version 3.4.3
-  package/python-numpy: bump to version 1.21.2
-  package/python-django-enumfields: bump to version 2.1.1
-  package/python-pyalsa: add
-    0001-fix-pytuple-set-item-usage-no-return-value.patch
-  package/python-setuptools: bump to version 58.2.0 and split python2
-    version
-  package/python3: bump to version 3.10
-
- package/Config.in                             |   1 +
- package/dbus-python/dbus-python.hash          |   2 +-
- package/dbus-python/dbus-python.mk            |   2 +-
- package/kmod/kmod.hash                        |   2 +-
- package/kmod/kmod.mk                          |   2 +-
- package/python-certifi/python-certifi.mk      |   1 +
- .../0002-Remove-idna-requirement.patch        |  10 +-
- package/python-crossbar/python-crossbar.hash  |   4 +-
- package/python-crossbar/python-crossbar.mk    |   4 +-
- package/python-dataclasses/Config.in          |   6 +
- .../python-dataclasses.hash                   |   5 +
- .../python-dataclasses/python-dataclasses.mk  |  14 ++
- .../python-django-enumfields.hash             |   6 +-
- .../python-django-enumfields.mk               |   4 +-
- package/python-git/python-git.hash            |   2 +-
- package/python-git/python-git.mk              |   2 +-
- package/python-gobject/python-gobject.hash    |   4 +-
- package/python-gobject/python-gobject.mk      |   6 +-
- package/python-ipython/python-ipython.hash    |   4 +-
- package/python-ipython/python-ipython.mk      |   4 +-
- package/python-libusb1/python-libusb1.hash    |   4 +-
- package/python-libusb1/python-libusb1.mk      |   4 +-
- package/python-lmdb/python-lmdb.hash          |   4 +-
- package/python-lmdb/python-lmdb.mk            |   4 +-
- .../0001-Fix-invalid-inclusion-headers.patch  |  29 ---
- ...st-11983-from-anntzer-builddepchecks.patch | 170 ------------------
- package/python-matplotlib/Config.in           |   2 +
- .../python-matplotlib/python-matplotlib.hash  |   2 +-
- .../python-matplotlib/python-matplotlib.mk    |  14 +-
- package/python-matplotlib/setup.cfg           |  10 ++
- package/python-numpy/python-numpy.hash        |  11 +-
- package/python-numpy/python-numpy.mk          |  16 +-
- ...tuple-set-item-usage-no-return-value.patch |  48 +++++
- package/python-pydantic/Config.in             |   2 +
- package/python-pydantic/python-pydantic.hash  |   6 +-
- package/python-pydantic/python-pydantic.mk    |   4 +-
- .../{ => 44.0.0}/0001-add-executable.patch    |   0
- .../{ => 44.0.0}/python-setuptools.hash       |   0
- .../58.2.0/0001-add-executable.patch          |  72 ++++++++
- .../58.2.0/python-setuptools.hash             |   4 +
- .../python-setuptools/python-setuptools.mk    |  13 +-
- package/python-txtorcon/python-txtorcon.hash  |   4 +-
- package/python-txtorcon/python-txtorcon.mk    |   4 +-
- package/python-watchdog/python-watchdog.hash  |  11 +-
- package/python-watchdog/python-watchdog.mk    |   4 +-
- .../0001-add-executable.patch                 |   2 +-
- .../python3-setuptools.hash                   |   2 +-
- .../python3-setuptools/python3-setuptools.mk  |  14 +-
- ...e-the-build-of-pyc-files-conditional.patch |   6 +-
- ...taddrinfo-configure-test-when-cross-.patch |   2 +-
- ...re-to-disable-the-build-of-certain-e.patch |  16 +-
- ...y-header-paths-for-cross-compilation.patch |  52 +++---
- ...ook-in-usr-lib-termcap-for-libraries.patch |   4 +-
- .../0006-Don-t-add-multiarch-paths.patch      |   2 +-
- .../0007-Abort-on-failed-module-build.patch   |   2 +-
- ...locale-and-set-to-default-when-addin.patch |   2 +-
- ...Add-importlib-fix-for-PEP-3147-issue.patch |   6 +-
- ...-disable-installation-of-test-module.patch | 117 ------------
- ...0013-Add-an-option-to-disable-pydoc.patch} |  49 ++---
- ...14-Add-an-option-to-disable-lib2to3.patch} |  83 ++++-----
- ...ption-to-disable-the-sqlite3-module.patch} |  46 ++---
- ...-an-option-to-disable-the-tk-module.patch} |  61 +++----
- ...option-to-disable-the-curses-module.patch} |  37 ++--
- ...0018-Add-an-option-to-disable-expat.patch} |  43 ++---
- ...Add-an-option-to-disable-CJK-codecs.patch} |   2 +-
- ...> 0020-Add-an-option-to-disable-NIS.patch} |   2 +-
- ...dd-an-option-to-disable-unicodedata.patch} |   2 +-
- ... 0022-Add-an-option-to-disable-IDLE.patch} |  51 +++---
- ...23-Add-an-option-to-disable-decimal.patch} |   6 +-
- ...n-to-disable-the-ossaudiodev-module.patch} |   2 +-
- ...n-option-to-disable-openssl-support.patch} |   6 +-
- ...tion-to-disable-the-readline-module.patch} |   6 +-
- ...o-disable-zlib-bzip2-and-xz-modules.patch} |   6 +-
- ...hon-config.sh-don-t-reassign-prefix.patch} |   4 +-
- ...Fix-cross-compiling-the-uuid-module.patch} |   2 +-
- ...dd-an-option-to-disable-uuid-module.patch} |   6 +-
- ...fix-building-on-older-distributions.patch} |   0
- ...p-CC-print-multiarch-output-for-mus.patch} |   2 +-
- ...on-to-disable-the-berkeleydb-module.patch} |   6 +-
- ...ng-doesn-t-set-errno-when-encryptio.patch} |   0
- ...eration-error-in-_ExecutorManagerTh.patch} |   0
- package/python3/python3.hash                  |   8 +-
- package/python3/python3.mk                    |   4 +-
- package/util-linux/util-linux.hash            |   4 +-
- package/util-linux/util-linux.mk              |   2 +-
- 85 files changed, 533 insertions(+), 661 deletions(-)
- create mode 100644 package/python-dataclasses/Config.in
- create mode 100644 package/python-dataclasses/python-dataclasses.hash
- create mode 100644 package/python-dataclasses/python-dataclasses.mk
- delete mode 100644 package/python-matplotlib/0001-Fix-invalid-inclusion-headers.patch
- delete mode 100644 package/python-matplotlib/0002-Merge-pull-request-11983-from-anntzer-builddepchecks.patch
- create mode 100644 package/python-matplotlib/setup.cfg
- create mode 100644 package/python-pyalsa/0001-fix-pytuple-set-item-usage-no-return-value.patch
- rename package/python-setuptools/{ => 44.0.0}/0001-add-executable.patch (100%)
- rename package/python-setuptools/{ => 44.0.0}/python-setuptools.hash (100%)
- create mode 100644 package/python-setuptools/58.2.0/0001-add-executable.patch
- create mode 100644 package/python-setuptools/58.2.0/python-setuptools.hash
- delete mode 100644 package/python3/0013-Add-an-option-to-disable-installation-of-test-module.patch
- rename package/python3/{0014-Add-an-option-to-disable-pydoc.patch => 0013-Add-an-option-to-disable-pydoc.patch} (74%)
- rename package/python3/{0015-Add-an-option-to-disable-lib2to3.patch => 0014-Add-an-option-to-disable-lib2to3.patch} (67%)
- rename package/python3/{0016-Add-option-to-disable-the-sqlite3-module.patch => 0015-Add-option-to-disable-the-sqlite3-module.patch} (63%)
- rename package/python3/{0017-Add-an-option-to-disable-the-tk-module.patch => 0016-Add-an-option-to-disable-the-tk-module.patch} (52%)
- rename package/python3/{0018-Add-an-option-to-disable-the-curses-module.patch => 0017-Add-an-option-to-disable-the-curses-module.patch} (64%)
- rename package/python3/{0019-Add-an-option-to-disable-expat.patch => 0018-Add-an-option-to-disable-expat.patch} (76%)
- rename package/python3/{0020-Add-an-option-to-disable-CJK-codecs.patch => 0019-Add-an-option-to-disable-CJK-codecs.patch} (94%)
- rename package/python3/{0021-Add-an-option-to-disable-NIS.patch => 0020-Add-an-option-to-disable-NIS.patch} (95%)
- rename package/python3/{0022-Add-an-option-to-disable-unicodedata.patch => 0021-Add-an-option-to-disable-unicodedata.patch} (95%)
- rename package/python3/{0023-Add-an-option-to-disable-IDLE.patch => 0022-Add-an-option-to-disable-IDLE.patch} (69%)
- rename package/python3/{0024-Add-an-option-to-disable-decimal.patch => 0023-Add-an-option-to-disable-decimal.patch} (95%)
- rename package/python3/{0025-Add-an-option-to-disable-the-ossaudiodev-module.patch => 0024-Add-an-option-to-disable-the-ossaudiodev-module.patch} (97%)
- rename package/python3/{0026-Add-an-option-to-disable-openssl-support.patch => 0025-Add-an-option-to-disable-openssl-support.patch} (89%)
- rename package/python3/{0027-Add-an-option-to-disable-the-readline-module.patch => 0026-Add-an-option-to-disable-the-readline-module.patch} (90%)
- rename package/python3/{0028-Add-options-to-disable-zlib-bzip2-and-xz-modules.patch => 0027-Add-options-to-disable-zlib-bzip2-and-xz-modules.patch} (92%)
- rename package/python3/{0029-python-config.sh-don-t-reassign-prefix.patch => 0028-python-config.sh-don-t-reassign-prefix.patch} (97%)
- rename package/python3/{0030-Fix-cross-compiling-the-uuid-module.patch => 0029-Fix-cross-compiling-the-uuid-module.patch} (96%)
- rename package/python3/{0031-Add-an-option-to-disable-uuid-module.patch => 0030-Add-an-option-to-disable-uuid-module.patch} (88%)
- rename package/python3/{0032-fix-building-on-older-distributions.patch => 0031-fix-building-on-older-distributions.patch} (100%)
- rename package/python3/{0033-configure.ac-fixup-CC-print-multiarch-output-for-mus.patch => 0032-configure.ac-fixup-CC-print-multiarch-output-for-mus.patch} (98%)
- rename package/python3/{0034-Add-an-option-to-disable-the-berkeleydb-module.patch => 0033-Add-an-option-to-disable-the-berkeleydb-module.patch} (88%)
- rename package/python3/{0035-lib-crypt-uClibc-ng-doesn-t-set-errno-when-encryptio.patch => 0034-lib-crypt-uClibc-ng-doesn-t-set-errno-when-encryptio.patch} (100%)
- rename package/python3/{0036-Fix-dictionary-iteration-error-in-_ExecutorManagerTh.patch => 0035-Fix-dictionary-iteration-error-in-_ExecutorManagerTh.patch} (100%)
-
+diff --git a/package/kmod/kmod.hash b/package/kmod/kmod.hash
+index f0bd436dc8..c68e41f1b6 100644
+--- a/package/kmod/kmod.hash
++++ b/package/kmod/kmod.hash
+@@ -1,5 +1,5 @@
+ # From https://www.kernel.org/pub/linux/utils/kernel/kmod/sha256sums.asc
+-sha256  3969fc0f13daa98084256337081c442f8749310089e48aa695c9b4dfe1b3a26c  kmod-28.tar.xz
++sha256  0b80eea7aa184ac6fd20cafa2a1fdf290ffecc70869a797079e2cc5c6225a52a  kmod-29.tar.xz
+ 
+ # Locally calculated
+ sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  libkmod/COPYING
+diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
+index 7c5d200b0f..c7f510ec0f 100644
+--- a/package/kmod/kmod.mk
++++ b/package/kmod/kmod.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KMOD_VERSION = 28
++KMOD_VERSION = 29
+ KMOD_SOURCE = kmod-$(KMOD_VERSION).tar.xz
+ KMOD_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kmod
+ KMOD_INSTALL_STAGING = YES
 -- 
 2.30.2
 
