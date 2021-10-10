@@ -2,77 +2,71 @@ Return-Path: <SRS0=K+5a=O6=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 34205C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 10 Oct 2021 09:00:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D754CC433F5
+	for <buildroot@archiver.kernel.org>; Sun, 10 Oct 2021 09:11:14 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 5BD4B60D07
-	for <buildroot@archiver.kernel.org>; Sun, 10 Oct 2021 09:00:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5BD4B60D07
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id 6265C61039
+	for <buildroot@archiver.kernel.org>; Sun, 10 Oct 2021 09:11:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6265C61039
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1B40760783;
-	Sun, 10 Oct 2021 09:00:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3417F607A6;
+	Sun, 10 Oct 2021 09:11:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YCFfFEQ2M5cM; Sun, 10 Oct 2021 09:00:39 +0000 (UTC)
+	with ESMTP id qoIq5khBT803; Sun, 10 Oct 2021 09:11:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 37B686079F;
-	Sun, 10 Oct 2021 09:00:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 90DCD60783;
+	Sun, 10 Oct 2021 09:11:12 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 541D81BF328
- for <buildroot@lists.busybox.net>; Sun, 10 Oct 2021 09:00:37 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 94E191BF476
+ for <buildroot@lists.busybox.net>; Sun, 10 Oct 2021 09:11:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 31D7D404C2
- for <buildroot@lists.busybox.net>; Sun, 10 Oct 2021 09:00:19 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9121F404D4
+ for <buildroot@lists.busybox.net>; Sun, 10 Oct 2021 09:11:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
+ dkim=pass (2048-bit key) header.d=free.fr
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5F0wHq4yhWIa for <buildroot@lists.busybox.net>;
- Sun, 10 Oct 2021 09:00:18 +0000 (UTC)
+ with ESMTP id nSZNNuv67YgK for <buildroot@lists.busybox.net>;
+ Sun, 10 Oct 2021 09:11:10 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com
- [IPv6:2607:f8b0:4864:20::132])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1008040470
- for <buildroot@buildroot.org>; Sun, 10 Oct 2021 09:00:17 +0000 (UTC)
-Received: by mail-il1-x132.google.com with SMTP id k3so6342722ilu.2
- for <buildroot@buildroot.org>; Sun, 10 Oct 2021 02:00:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:from:date:message-id:subject:to;
- bh=VYVgAitXv5sdlBCeDqv+j5i3FDnj2Gc6y/bLwWDn67k=;
- b=i1u3ihdyvFPd9UQSfbCTyfT3Kuf5RAsvL4Pi6rs+1njamgbsWmMj/K4kzCeKEoScDG
- ZH2pvJJfqtsOiAFd2lAJB3JTFSCq4yeYHAdDrNR/kGed5WZm/lz9myI468HPRQYuPRSe
- 5OGoaD2dsibeIQv9F1Zlq2OlFrNwzgI2vH8DAbJRi98d7BqjggStwauvlpWeY78Ieksg
- TmZYURLD36BJrri5HuJ069Grfjf3TOJ4pGHSPLr3NpTkf8YVTaVMdYe2EB3tc6CiZ1J7
- K27ZOShuV8iyUKHl3t+XsISbWg6ltRpkOsPWYj1ea/ZAomfDN9IBKKaSb11FIvST57yk
- t8OQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
- bh=VYVgAitXv5sdlBCeDqv+j5i3FDnj2Gc6y/bLwWDn67k=;
- b=npQs2gQwoS96rLjhU5jmV4VO1uSwD7r0TOtql59Q9YpGheRzYMijGyfui5yyODjm7A
- maCEkz3vq8fPrlAi5UlltPfRAVLT88sdNmGJGkESbBOqIVq85ABuJp8x4Rj4BjZOjLLt
- p+TrfBlUj9IkAIp3LNxcxQ0mRO/RdyPTsIrBpz2Vy/oIlPduF0S2srQ3XjG5ty9h06EA
- O+CMw8XVVKQTPSxqSmHHT7WICVSfvPafgcdLU9cLGvtYMVZYdvxABJzw8d5rhKGubYd/
- 3g5AyasajenkstwBM0q8U6qSAKb05bcJwAMXqtOa3jAv0aS2MDYic+KVoXGGsBlhugqc
- pB7g==
-X-Gm-Message-State: AOAM530V8lwVLlYbTohXdfhZzUoqGZi6DCai0dqi25u3QN5VilIVOKDr
- towLceUjD02OgdcbQz7dXKVCCNa3asq7LEb6pFRc2SOK/A==
-X-Google-Smtp-Source: ABdhPJwCrW20wauuQf8o4QkcCl93CpT2MRsMNgL3EMsmyFYkpAQr4Wn6/Wjz8JNXGOinzhP8F9F8m83fKtGCQKt1FeI=
-X-Received: by 2002:a05:6e02:1a27:: with SMTP id
- g7mr14680245ile.123.1633856416453; 
- Sun, 10 Oct 2021 02:00:16 -0700 (PDT)
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A8B3B404D0
+ for <buildroot@buildroot.org>; Sun, 10 Oct 2021 09:11:10 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:344b:acb:d887:4b62])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id A17DA780383;
+ Sun, 10 Oct 2021 11:10:59 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+ s=smtp-20201208; t=1633857067;
+ bh=LNCcVTW+4rxfKz1RSZnA4ZuVSVWXob+vvWne1vKXr7o=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=DN4bF4JPNhOHWAdgzMfeb+UNfDewcirPMkNnhQzlDElb+2sLtpbYChexucwzFaJBZ
+ y5FzOriWm/sbXRNseURHl5Yh7pCXFjSmwMCo7yrwzk1giPaHmHsEG6aVjYo/miX79O
+ OgpR9PFWSjgVK+eYI1wea5xrzPpSVg4Drxn5wdK5hf3qjxRMELQ/LuwQWXDf6i0PmM
+ xCgbY3jQOBnthLyNN1soPXfXqKx7SjiJS5WuPB5+FTApFhfrqFdKkcXuEOCmSdTBRk
+ W6kLxgKiJS1qHpKsGUw0laWMFhpAcy3Ws9BnScMmHccz0MbaiYsgkr6znxtsmKVJRG
+ rN1nkXJ0ZaKPA==
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sun, 10 Oct 2021 11:10:59 +0200
+Date: Sun, 10 Oct 2021 11:10:59 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Message-ID: <20211010091059.GK2081069@scaer>
+References: <20211009191646.1076266-1-thomas.petazzoni@bootlin.com>
+ <20211009191646.1076266-3-thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-From: =?UTF-8?Q?Esa=C3=AFe_Ledoux_NJONGSSI_KOUAM?= <kouamdoux@gmail.com>
-Date: Sun, 10 Oct 2021 09:58:52 +0200
-Message-ID: <CA+eej5MzpM30U7sMqba5gKQ3dG5FznZqd6roacphLhx6J-9auA@mail.gmail.com>
-To: buildroot@buildroot.org
-Subject: [Buildroot] error when i build buidroot
+Content-Disposition: inline
+In-Reply-To: <20211009191646.1076266-3-thomas.petazzoni@bootlin.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+Subject: Re: [Buildroot] [PATCH 2/5] package/gdb: add support for gdb 11.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,191 +78,75 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============1381020592327669258=="
+Cc: Michael Fischer <mf@go-sys.de>, Romain Naour <romain.naour@gmail.com>,
+ Buildroot List <buildroot@buildroot.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1381020592327669258==
-Content-Type: multipart/alternative; boundary="000000000000511a5605cdfbd7f1"
+Thomas, All,
 
---000000000000511a5605cdfbd7f1
-Content-Type: text/plain; charset="UTF-8"
+On 2021-10-09 21:16 +0200, Thomas Petazzoni spake thusly:
+> From: Michael Fischer <mf@go-sys.de>
+> Starting from version 11.x, gdb needs the gmp library.
+[--SNIP--]
+> diff --git a/package/gdb/Config.in b/package/gdb/Config.in
+> index 246748131e..d5ec5406fb 100644
+> --- a/package/gdb/Config.in
+> +++ b/package/gdb/Config.in
+> @@ -54,6 +54,7 @@ config BR2_PACKAGE_GDB_DEBUGGER
+>  	depends on BR2_USE_WCHAR
+>  	depends on !BR2_sh
+>  	depends on !BR2_csky
+> +	select BR2_PACKAGE_GMP
 
-Hey everybody ,
-It is my first time to use buildroot. I have read the manual and i want to
-use it for embedded linux projects .
-So i have :
-clone the project
-build  for qemu_x86_64 by typing "qemu_x86_64_defconfig"
-then type "make"
+This one looks a bit dubious...
 
-After that i have seen some error, i don't know how to solve it :
+If the host gdb is enabled, then the target gdb is the same version as
+the host version. So, this configuration:
 
-"rsync -a --ignore-times --exclude .svn --exclude .git --exclude .hg
---exclude .bzr --exclude CVS --chmod=u=rwX,go=rX --exclude .empty --exclude
-'*~' system/skeleton/
-/root/buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/"
+    BR2_PACKAGE_HOST_GDB=y
+    BR2_PACKAGE_GDB=y
+    BR2_GDB_VERSION_10=y
 
-So this command generate a lot of errors :
+will yield a configuration that will force the target gmp, even though
+the target gdb will not use it.
 
-rsync: [generator] failed to set permissions on
-"/root/buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/dev":
-Function not implemented (38)
-rsync: [generator] failed to set permissions on
-"/root/buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/etc":
-Function not implemented (38)
-rsync: [generator] failed to set permissions on
-"/root/buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/etc/profile.d":
-Function not implemented (38)
-rsync: [generator] failed to set permissions on
-"/root/buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/media":
-Function not implemented (38)
-rsync: [generator] failed to set permissions on
-"/root/buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/mnt":
-Function not implemented (38)
-rsync: [generator] failed to set permissions on
-"/root/buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/opt":
-Function not implemented (38)
-rsync: [generator] failed to set permissions on
-"/root/buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/proc":
-Function not implemented (38)
-rsync: [generator] failed to set permissions on
-"/root/buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/root":
-Function not implemented (38)
-rsync: [generator] failed to set permissions on
-"/root/buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/run":
-Function not implemented (38)
-rsync: [generator] failed to set permissions on
-"/root/buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/sys":
-Function not implemented (38)
-rsync: [generator] failed to set permissions on
-"/root/buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/tmp":
-Function not implemented (38)
-rsync: [generator] failed to set permissions on
-"/root/buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/usr/bin":
-Function not implemented (38)
-rsync: [generator] failed to set permissions on
-"/root/buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/usr/lib":
-Function not implemented (38)
-rsync: [generator] failed to set permissions on
-"/root/buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/usr/sbin":
-Function not implemented (38)
-rsync: [receiver] failed to set permissions on
-"/root/buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/etc/.group.nsk97w":
-Function not implemented (38)
-rsync: [receiver] failed to set permissions on
-"/root/buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/etc/.hosts.yBRyXu":
-Function not implemented (38)
-rsync: [receiver] failed to set permissions on
-"/root/buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/etc/.passwd.0Uncqt":
-Function not implemented (38)
-rsync: [receiver] failed to set permissions on
-"/root/buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/etc/.profile.0E8enu":
-Function not implemented (38)
-rsync: [receiver] failed to set permissions on
-"/root/buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/etc/.protocols.DJb4ew":
-Function not implemented (38)
-rsync: [receiver] failed to set permissions on
-"/root/buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/etc/.services.AO2ruv":
-Function not implemented (38)
-rsync: [receiver] failed to set permissions on
-"/root/buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/etc/.shadow.QE0FTt":
-Function not implemented (38)
-rsync: [receiver] failed to set permissions on
-"/root/buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/etc/profile.d/.umask.sh.IN0rhw":
-Function not implemented (38)
-rsync error: some files/attrs were not transferred (see previous errors)
-(code 23) at main.c(1333) [sender=3.2.3]
-make: *** [package/pkg-generic.mk:333 :
-/root/buildroot/output/build/skeleton-init-common/.stamp_staging_installed]
-Erreur 23
+Or did I miss something?
 
-Please how can i fix that ?? Because i have not seen something talk about
-how to avoid it
+I can fix that when applying:
 
---000000000000511a5605cdfbd7f1
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+    select BR2_PACKAGE_GMP if BR2_GDB_VERSION_11
 
-<div dir=3D"ltr"><div>Hey everybody ,</div><div>It is my first time to use =
-buildroot. I have read the manual and i want to use it for embedded linux p=
-rojects .</div><div>So i have : <br></div><div>clone the project</div><div>=
-build=C2=A0 for qemu_x86_64 by typing &quot;qemu_x86_64_defconfig&quot;</di=
-v><div>then type &quot;make&quot; <br></div><div><br></div><div>After that =
-i have seen some error, i don&#39;t know how to solve it :</div><div><br></=
-div><div>&quot;rsync -a --ignore-times --exclude .svn --exclude .git --excl=
-ude .hg --exclude .bzr --exclude CVS --chmod=3Du=3DrwX,go=3DrX --exclude .e=
-mpty --exclude &#39;*~&#39; system/skeleton/ /root/buildroot/output/host/x8=
-6_64-buildroot-linux-uclibc/sysroot/&quot;</div><div><br></div><div>So this=
- command generate a lot of errors : <br></div><div><br></div><div>rsync: [g=
-enerator] failed to set permissions on &quot;/root/buildroot/output/host/x8=
-6_64-buildroot-linux-uclibc/sysroot/dev&quot;: Function not implemented (38=
-)<br>rsync: [generator] failed to set permissions on &quot;/root/buildroot/=
-output/host/x86_64-buildroot-linux-uclibc/sysroot/etc&quot;: Function not i=
-mplemented (38)<br>rsync: [generator] failed to set permissions on &quot;/r=
-oot/buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/etc/profile=
-.d&quot;: Function not implemented (38)<br>rsync: [generator] failed to set=
- permissions on &quot;/root/buildroot/output/host/x86_64-buildroot-linux-uc=
-libc/sysroot/media&quot;: Function not implemented (38)<br>rsync: [generato=
-r] failed to set permissions on &quot;/root/buildroot/output/host/x86_64-bu=
-ildroot-linux-uclibc/sysroot/mnt&quot;: Function not implemented (38)<br>rs=
-ync: [generator] failed to set permissions on &quot;/root/buildroot/output/=
-host/x86_64-buildroot-linux-uclibc/sysroot/opt&quot;: Function not implemen=
-ted (38)<br>rsync: [generator] failed to set permissions on &quot;/root/bui=
-ldroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/proc&quot;: Functi=
-on not implemented (38)<br>rsync: [generator] failed to set permissions on =
-&quot;/root/buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/roo=
-t&quot;: Function not implemented (38)<br>rsync: [generator] failed to set =
-permissions on &quot;/root/buildroot/output/host/x86_64-buildroot-linux-ucl=
-ibc/sysroot/run&quot;: Function not implemented (38)<br>rsync: [generator] =
-failed to set permissions on &quot;/root/buildroot/output/host/x86_64-build=
-root-linux-uclibc/sysroot/sys&quot;: Function not implemented (38)<br>rsync=
-: [generator] failed to set permissions on &quot;/root/buildroot/output/hos=
-t/x86_64-buildroot-linux-uclibc/sysroot/tmp&quot;: Function not implemented=
- (38)<br>rsync: [generator] failed to set permissions on &quot;/root/buildr=
-oot/output/host/x86_64-buildroot-linux-uclibc/sysroot/usr/bin&quot;: Functi=
-on not implemented (38)<br>rsync: [generator] failed to set permissions on =
-&quot;/root/buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/usr=
-/lib&quot;: Function not implemented (38)<br>rsync: [generator] failed to s=
-et permissions on &quot;/root/buildroot/output/host/x86_64-buildroot-linux-=
-uclibc/sysroot/usr/sbin&quot;: Function not implemented (38)<br>rsync: [rec=
-eiver] failed to set permissions on &quot;/root/buildroot/output/host/x86_6=
-4-buildroot-linux-uclibc/sysroot/etc/.group.nsk97w&quot;: Function not impl=
-emented (38)<br>rsync: [receiver] failed to set permissions on &quot;/root/=
-buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/etc/.hosts.yBRy=
-Xu&quot;: Function not implemented (38)<br>rsync: [receiver] failed to set =
-permissions on &quot;/root/buildroot/output/host/x86_64-buildroot-linux-ucl=
-ibc/sysroot/etc/.passwd.0Uncqt&quot;: Function not implemented (38)<br>rsyn=
-c: [receiver] failed to set permissions on &quot;/root/buildroot/output/hos=
-t/x86_64-buildroot-linux-uclibc/sysroot/etc/.profile.0E8enu&quot;: Function=
- not implemented (38)<br>rsync: [receiver] failed to set permissions on &qu=
-ot;/root/buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/etc/.p=
-rotocols.DJb4ew&quot;: Function not implemented (38)<br>rsync: [receiver] f=
-ailed to set permissions on &quot;/root/buildroot/output/host/x86_64-buildr=
-oot-linux-uclibc/sysroot/etc/.services.AO2ruv&quot;: Function not implement=
-ed (38)<br>rsync: [receiver] failed to set permissions on &quot;/root/build=
-root/output/host/x86_64-buildroot-linux-uclibc/sysroot/etc/.shadow.QE0FTt&q=
-uot;: Function not implemented (38)<br>rsync: [receiver] failed to set perm=
-issions on &quot;/root/buildroot/output/host/x86_64-buildroot-linux-uclibc/=
-sysroot/etc/profile.d/.umask.sh.IN0rhw&quot;: Function not implemented (38)=
-<br>rsync error: some files/attrs were not transferred (see previous errors=
-) (code 23) at main.c(1333) [sender=3D3.2.3]<br>make: *** [package/<a href=
-=3D"http://pkg-generic.mk:333">pkg-generic.mk:333</a> : /root/buildroot/out=
-put/build/skeleton-init-common/.stamp_staging_installed] Erreur 23</div><di=
-v><br></div><div>Please how can i fix that ?? Because i have not seen somet=
-hing talk about how to avoid it<br></div><div><br></div></div>
+The reasoning is that, BR2_GDB_VERSION_11 can only be set when the host
+gdb is enabled.
 
---000000000000511a5605cdfbd7f1--
+So, if BR2_GDB_VERSION_11 is not set, either:
 
---===============1381020592327669258==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+  - the host gdb is not enabled, in which case the default for the
+    target gdb is 9.x (with next patch, 10.x), or
 
+  - the host gdb is enabled, and another version is selected.
+
+Thoughts?
+
+Of course, that will need some refinments when we introduce gdb 12.x (if
+it still needs gmp). But for now, introducing either
+BR2_PACKAGE_GDB_NEEDS_GMP of BR2_PACKAGE_GDB_11_X_or_later seemed a bit
+heavy-handed...
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============1381020592327669258==--
