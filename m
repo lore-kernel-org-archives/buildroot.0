@@ -2,56 +2,65 @@ Return-Path: <SRS0=K+5a=O6=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 14F72C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 10 Oct 2021 11:12:17 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D5183C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 10 Oct 2021 11:23:12 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 134C260F58
-	for <buildroot@archiver.kernel.org>; Sun, 10 Oct 2021 11:12:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 134C260F58
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=buildroot.org
+	by mail.kernel.org (Postfix) with ESMTPS id E34BC60F92
+	for <buildroot@archiver.kernel.org>; Sun, 10 Oct 2021 11:23:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E34BC60F92
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=igalia.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C0ECA40183;
-	Sun, 10 Oct 2021 11:12:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B1CE560841;
+	Sun, 10 Oct 2021 11:23:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id walTD4hvG-vv; Sun, 10 Oct 2021 11:12:14 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id KtZnwfHzXZod; Sun, 10 Oct 2021 11:23:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DC793400DF;
-	Sun, 10 Oct 2021 11:12:13 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2FCC31BF21A
- for <buildroot@lists.busybox.net>; Sun, 10 Oct 2021 11:12:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1882D6079D;
+	Sun, 10 Oct 2021 11:23:06 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C186F1BF21A
+ for <buildroot@lists.busybox.net>; Sun, 10 Oct 2021 11:23:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1DD99400DF
- for <buildroot@lists.busybox.net>; Sun, 10 Oct 2021 11:12:12 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id AF31C40522
+ for <buildroot@lists.busybox.net>; Sun, 10 Oct 2021 11:23:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Fi2G3ij8XeLT for <buildroot@lists.busybox.net>;
- Sun, 10 Oct 2021 11:12:10 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from mail.heine.tech (mail.heine.tech [IPv6:2a01:4f8:1c0c:5073::1])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C2689400DD
- for <buildroot@buildroot.org>; Sun, 10 Oct 2021 11:12:10 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id AFA7F1814B9; Sun, 10 Oct 2021 13:12:03 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=heine.tech; s=dkim;
- t=1633864325; h=from:subject:date:message-id:to:cc:mime-version:
- content-transfer-encoding; bh=ck8a8K4Rb4J7HNMFIP8vJrzbISLR4qIrg5kyIVOm5BY=;
- b=SRZzOJxjccbDhdW/S410y55IkzhbL1JGfGgJSvvsUeDsktoGTJdKSfGKoWxZvGI7DG26AL
- Ik7rhhPoMFlDsdpdXhUWZKV5PnrnrT5KkChfIcIxiY9Z02fk9ABW0Iaj5JTGFSWDTZgRcB
- F9B4D5W0xx9kyRtV+9TxzWdEBVub2hM=
-To: buildroot@buildroot.org
-Date: Sun, 10 Oct 2021 13:11:31 +0200
-Message-Id: <20211010111133.73045-1-buildroot@heine.tech>
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=igalia.com
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id A3AryRR75MtN for <buildroot@lists.busybox.net>;
+ Sun, 10 Oct 2021 11:23:03 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from fanzine.igalia.com (fanzine.igalia.com [178.60.130.6])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4A0F2404CA
+ for <buildroot@buildroot.org>; Sun, 10 Oct 2021 11:23:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+ s=20170329; 
+ h=Content-Type:MIME-Version:References:In-Reply-To:Subject:Cc:To:From:Message-ID:Date;
+ bh=e85fAElWCmon5XFliOc5OjC5zn5yGv8919QDkdG5cGQ=; 
+ b=axqfNzfTs5WZIxyU0i2eBCZ8echYcFXza1E5VEaTG9tEt0rIwErIirzOWwaZ30CqklhjaK0Qg62xlrobo/IU9JxxkdzSxVQG5kGnzuddpI7myU5GSeFImNpAGLjRJMtf8wfx6GOE9z37W+/CcCOb5PV8zJBwjiY/33zUZjJ49ukt9dM/C+vc7nPSpvi+p/I7r4mFTi7HYdzUT9EipwIW2Tkj3o2m398HxG2dhlgcn/nQKp8mjV+SCx+6IEmefmLeVSVaVPE4XwvxS2IfPcFjBZ4ZJphJ3wS/ToHrF4QjJ4aG2J3NodO2HZOgVS5joKkNIipmJM8UMJKE18iYgucr1A==;
+Received: from 42.232.60.213.dynamic.reverse-mundo-r.com ([213.60.232.42]
+ helo=momiji) by fanzine.igalia.com with esmtpsa 
+ (Cipher TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256) (Exim)
+ id 1mZWux-0004O5-9Q; Sun, 10 Oct 2021 13:22:59 +0200
+Received: from localhost (momiji [local])
+ by momiji (OpenSMTPD) with ESMTPA id a965eca6;
+ Sun, 10 Oct 2021 11:22:49 +0000 (UTC)
+Date: Sun, 10 Oct 2021 13:22:49 +0200
+Message-ID: <20211010132249.GB2046@momiji>
+From: Adrian Perez de Castro <aperez@igalia.com>
+To: Arnout Vandecappelle <arnout@mind.be>
+In-Reply-To: <6c16498a-c426-c0a3-f1e0-050a402291cd@mind.be>
+References: <20210924105340.3514180-1-james.hilliard1@gmail.com>
+ <6c16498a-c426-c0a3-f1e0-050a402291cd@mind.be>
 MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.2
-Subject: [Buildroot] [PATCH] package/json-for-modern-cpp: bump version to
- 3.10.3
+Subject: Re: [Buildroot] [PATCH 1/1] package/wpewebkit: add option to enable
+ media-stream
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,49 +72,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Michael Nosthoff via buildroot <buildroot@buildroot.org>
-Reply-To: Michael Nosthoff <buildroot@heine.tech>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============7602249951327986875=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This release fixes two more bug introduced in release 3.10.0: the extended diagnostics triggered
-assertions when used with update() or when inserting elements into arrays. All changes are
-backward-compatible.
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
----
- package/json-for-modern-cpp/json-for-modern-cpp.hash | 2 +-
- package/json-for-modern-cpp/json-for-modern-cpp.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+--===============7602249951327986875==
+Content-Type: multipart/signed; boundary="j53d2YGqJF7fPqEw"; micalg="pgp-sha1"; protocol="application/pgp-signature"
 
-diff --git a/package/json-for-modern-cpp/json-for-modern-cpp.hash b/package/json-for-modern-cpp/json-for-modern-cpp.hash
-index 068868c048..1a98971dbc 100644
---- a/package/json-for-modern-cpp/json-for-modern-cpp.hash
-+++ b/package/json-for-modern-cpp/json-for-modern-cpp.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  081ed0f9f89805c2d96335c3acfa993b39a0a5b4b4cef7edb68dd2210a13458c  json-3.10.2.tar.gz
-+sha256  e0d7c1b120cac47fa7f14a41d10a5d390f67d423d8e97b9d6834887285d6873c  json-3.10.3.tar.gz
- sha256  c983d69523377819db3c377b390d5644f5ec53bec9b7c4a0f1ed893bb743d045  LICENSE.MIT
-diff --git a/package/json-for-modern-cpp/json-for-modern-cpp.mk b/package/json-for-modern-cpp/json-for-modern-cpp.mk
-index 14843380ee..53cf17d2c6 100644
---- a/package/json-for-modern-cpp/json-for-modern-cpp.mk
-+++ b/package/json-for-modern-cpp/json-for-modern-cpp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--JSON_FOR_MODERN_CPP_VERSION = 3.10.2
-+JSON_FOR_MODERN_CPP_VERSION = 3.10.3
- JSON_FOR_MODERN_CPP_SOURCE = json-$(JSON_FOR_MODERN_CPP_VERSION).tar.gz
- JSON_FOR_MODERN_CPP_SITE = $(call github,nlohmann,json,v$(JSON_FOR_MODERN_CPP_VERSION))
- JSON_FOR_MODERN_CPP_LICENSE = MIT
--- 
-2.33.0
+
+--j53d2YGqJF7fPqEw
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: base64
+
+SGksCgpPbiBXZWQsIDA2IE9jdCAyMDIxIDIxOjEyOjM3ICswMjAwIEFybm91dCBWYW5kZWNhcHBl
+bGxlIDxhcm5vdXRAbWluZC5iZT4gd3JvdGU6CiAKPiBPbiAyNC8wOS8yMDIxIDEyOjUzLCBKYW1l
+cyBIaWxsaWFyZCB3cm90ZToKPiA+IFRoaXMgaGFzIGEgY29tcGlsZSB0aW1lIGRlcGVuZGVuY3kg
+b24gZ3N0MS1wbHVnaW5zLWJhZCBkdWUgdG8KPiA+IHRoZSBjb2RlY3BhcnNlcnMgZGVwZW5kZW5j
+eS4KPiA+IAo+ID4gU2lnbmVkLW9mZi1ieTogSmFtZXMgSGlsbGlhcmQgPGphbWVzLmhpbGxpYXJk
+MUBnbWFpbC5jb20+Cj4gCj4gICBBcHBsaWVkIHRvIG1hc3RlciwgdGhhbmtzLgo+IAo+ICAgQXMg
+SmFtZXMgbWVudGlvbmVkLCB0aGUgY3VycmVudCBzaXR1YXRpb24gYWxyZWFkeSBpcyB0aGF0IHdw
+ZXdlYmtpdCBpcyAKPiBjb21waWxlZCB3aXRob3V0IG1lZGlhc3RyZWFtIHN1cHBvcnQuIFNvIGFs
+dGhvdWdoIHRoaXMgaXMgbm90IGEgcGVyZmVjdCAKPiBzb2x1dGlvbiwgaXQncyBhdCBsZWFzdCBh
+IHN0ZXAgZm9yd2FyZC4KClJpZ2h0LCBJIHdhcyB1bmRlciB0aGUgKGVycm9uZW91cykgaW1wcmVz
+c2lvbiB0aGF0IHdlIHdlcmUgZW5hYmxpbmcKbWVkaWEtc3RyZWFtIGJ5IGRlZmF1bHQgaW4gdGhl
+IGJ1aWxkIHN5c3RlbS4gVHVybnMgb3V0LCB0aGF0IGlzIG9ubHkKdHJ1ZSBmb3IgZGV2ZWxvcGVy
+IGJ1aWxkcy0tSSBzaG91bGQgaGF2ZSBkb3VibGUgY2hlY2tlZCBpbnN0ZWFkIG9mCnJlbHlpbmcg
+b24gbXkgc2xlZXB5IGJyYWluIDpdCgpUaGFua3MgSmFtZXMgZm9yIHRoZSBwYXRjaCwgYW5kIEFy
+bm91dCBmb3IgbWVyZ2luZyBpdCEKCgpDaGVlcnMsCuKAlEFkcmnDoW4K
+
+--j53d2YGqJF7fPqEw
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRao7wzT9fjNp58d7KRxVnb5MkSOwUCYWLNCQAKCRCRxVnb5MkS
+O54/AJ9FLNmbiCzT45YibejtXyMHh6YGowCbBZkDo21yAVT4Ro2dG0NViXyZkaQ=
+=ZMgh
+-----END PGP SIGNATURE-----
+
+--j53d2YGqJF7fPqEw--
+
+--===============7602249951327986875==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============7602249951327986875==--
