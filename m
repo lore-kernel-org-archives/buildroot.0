@@ -2,83 +2,90 @@ Return-Path: <SRS0=K+5a=O6=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EDBF7C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 10 Oct 2021 17:23:44 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EC885C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 10 Oct 2021 17:27:10 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1775B60EB2
-	for <buildroot@archiver.kernel.org>; Sun, 10 Oct 2021 17:23:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1775B60EB2
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=yuriev.ru
+	by mail.kernel.org (Postfix) with ESMTPS id 71F9160EE7
+	for <buildroot@archiver.kernel.org>; Sun, 10 Oct 2021 17:27:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 71F9160EE7
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A0437400FD;
-	Sun, 10 Oct 2021 17:23:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0CB174042D;
+	Sun, 10 Oct 2021 17:27:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Kgue58h4atBV; Sun, 10 Oct 2021 17:23:42 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BA1C0400EE;
-	Sun, 10 Oct 2021 17:23:41 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D3A231BF3C2
- for <buildroot@lists.busybox.net>; Sun, 10 Oct 2021 17:23:39 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CA90E40235
- for <buildroot@lists.busybox.net>; Sun, 10 Oct 2021 17:23:39 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=yuriev-ru.20210112.gappssmtp.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tlqRK_dFngOB for <buildroot@lists.busybox.net>;
- Sun, 10 Oct 2021 17:23:39 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id EQ_8AIq5nXH2; Sun, 10 Oct 2021 17:27:09 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5C0DC40423;
+	Sun, 10 Oct 2021 17:27:08 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 237A21BF3C2
+ for <buildroot@lists.busybox.net>; Sun, 10 Oct 2021 17:27:07 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1347260669
+ for <buildroot@lists.busybox.net>; Sun, 10 Oct 2021 17:27:07 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wQL-kkqIK-TT for <buildroot@lists.busybox.net>;
+ Sun, 10 Oct 2021 17:27:06 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com
- [IPv6:2607:f8b0:4864:20::130])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E4DDF40229
- for <buildroot@buildroot.org>; Sun, 10 Oct 2021 17:23:38 +0000 (UTC)
-Received: by mail-il1-x130.google.com with SMTP id a8so3363728ilj.10
- for <buildroot@buildroot.org>; Sun, 10 Oct 2021 10:23:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=yuriev-ru.20210112.gappssmtp.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
- bh=jYKZMIhORoVLA/kt6CjwX+LOBWEWtTv3IPgJ4nmz7h0=;
- b=g5d5r7ZONVX70zeNGsyAS1yTQUarqpiAoHEtgjddnj7c4m2d2p2GTvdfQ6zRN+vg0K
- aee8STM9tGafjQIY6dgfgUKi72bFfF4q88aXaUeQDOkhhEYbQbjT1DUN2efpT6fVZ80T
- gJefos52oQ9V2AL7pPLUev2D6KFyoxeDiGZ1PWifuiXhhnJ6qgoxfFgkxyUpweOfNI7L
- 6xx7DmEHgz+/uzzv2TvaejiNj2YdyZ4lCpyCjmqeYBHoPlcIkSEmaD8Adg3VRNMOT3Z/
- ZEMv9TbzH1bn7RrctlE/QP4pJtIVCuKdpJFTuViFjLIObJcreH96uVC3MlYU1fE5hbnD
- 7ygA==
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com
+ [IPv6:2a00:1450:4864:20::12b])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 03CA4605B2
+ for <buildroot@buildroot.org>; Sun, 10 Oct 2021 17:27:05 +0000 (UTC)
+Received: by mail-lf1-x12b.google.com with SMTP id x27so63373102lfu.5
+ for <buildroot@buildroot.org>; Sun, 10 Oct 2021 10:27:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=to:cc:references:from:subject:message-id:date:user-agent
+ :mime-version:in-reply-to;
+ bh=NRWdo74pKg1RqPVm9CJr2MQbjyYuEWhDapWBcqABBbE=;
+ b=TVIjb4rfkjd3nQVmLkMDmJeqSIQO7Fs7HwZp8DuzQWDhqC0Lyn9sE+g+EF7c62zNtB
+ Id5PCyOOQ7hERvwzUxloRpPA3ZqhWkAp3vGFMt2Zlw5gDJT/OI9JX/9620ul3EkOMltm
+ xmDzd1OA6bhUeVjSAA19QaJlQqcDcU6AJn2Eg8wuZU2ML8sqk+UEeKJ/pmW4QjXUQ8J/
+ 1RIXFgJ/gZR6RCgzQdHCvn1zUDslmHqkkghiqO/OA25MTprUHlExj904kySmtQvg8Ead
+ U0ADnFXyivm9HhWtLddv5dHun5Sz15VFciMkWVQ+eTZ2dElgEOZCIcvc9+qsykNbkmfT
+ Hx8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to;
- bh=jYKZMIhORoVLA/kt6CjwX+LOBWEWtTv3IPgJ4nmz7h0=;
- b=jHSFjgPS7LRymkYs3FK9cRk9SQ/Shf6jO9MZxlzTN5uyOjToceNTdKzcNLgZnobM8S
- GuJVdg7u/m0gRZlfXZK0BWKpoW1S1DctBcUJh2suQWTiIkudcCaPnuof+A0qy37zzPY9
- IyMMJDgLxXKg1WiwfHhUgh0t9IcwW39H8IG0eoog64mpd64pjW79yJCKVsHWjLLSfMq+
- ADBOk1SDwLy46nHVaP1eiyW4vzzH1Zhs3gEcvVv/uBiTGkbFgWc0AMFwNAFmwi7tlrJq
- G6uYwqdnx7zACGEjt3liA5g754mVVmtQPOi1Cto9nuTCGR/kv/ZMLhIFMIVPLjUaIJmy
- P9XA==
-X-Gm-Message-State: AOAM530ahOsXwBXCQmjZczNidXyL99UH3+vJwzDO8qaJU+heTtkpdme5
- 33pNOtTZsS1eiuDwlxLSwpXIM/d/VLMPUOo1/KUIoIgCboRHlSO4
-X-Google-Smtp-Source: ABdhPJxETnLhJUYRupspIq8pjh06vSqYyltDYuFX0CdJJcXpEOux9401epJyUABYrUOAYm9nu7DHo85mBuCsQPmcZ9I=
-X-Received: by 2002:a05:6e02:1403:: with SMTP id
- n3mr16617511ilo.245.1633886617803; 
- Sun, 10 Oct 2021 10:23:37 -0700 (PDT)
+ h=x-gm-message-state:to:cc:references:from:subject:message-id:date
+ :user-agent:mime-version:in-reply-to;
+ bh=NRWdo74pKg1RqPVm9CJr2MQbjyYuEWhDapWBcqABBbE=;
+ b=DICE7rsF4myUCuyP3I80Sg3hjccoZryxajVcBaybXA2X5cwBcVNCJGTBh/wDSof1v4
+ dOWc9XgGCfq1S5B26FN+b3meavAS0xL+aNTTTzG0sJsMO3oUP4O7eoiYLBn1evb2vyY8
+ qcaYfv4DXY27LhrurwFmIYOX2u+vXVH8C89ODKiaLMHegQ1Cg37+vF1O/6RxRaZTRbSW
+ q+gvwSm/pQUkqLAe5K55pwHkLTGUtukYZrUZSt/nFEA9duvd1R9fPGFxqqSv7cJaaKn0
+ omwFdyBiECldvsZvSGMYVbuBATaSI9whBpQFc/iLn+g3bP79CLinF86EFaTV6UL91Qp4
+ AqMg==
+X-Gm-Message-State: AOAM530BNXdnolYN01hzLpmVyDpjv5ML28o2L5Saf2XgQpmbMklssNLm
+ kFAxXIvOEVkU0UbsLC8jgueKBWqGdHHb5A==
+X-Google-Smtp-Source: ABdhPJwWJbnRZeVQRayumFSNKBQ5jBAzMowKtAyQSqjEl9iFQq9La2cpAhlwfDpfMI3uQM492Sorww==
+X-Received: by 2002:a05:6512:12c6:: with SMTP id
+ p6mr21477232lfg.40.1633886823472; 
+ Sun, 10 Oct 2021 10:27:03 -0700 (PDT)
+Received: from [10.0.196.136] ([94.254.51.197])
+ by smtp.googlemail.com with ESMTPSA id q5sm507310lfg.52.2021.10.10.10.27.02
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sun, 10 Oct 2021 10:27:02 -0700 (PDT)
+To: =?UTF-8?Q?Esa=c3=afe_Ledoux_NJONGSSI_KOUAM?= <kouamdoux@gmail.com>,
+ Edgar Bonet <bonet@grenoble.cnrs.fr>
+References: <CA+eej5MzpM30U7sMqba5gKQ3dG5FznZqd6roacphLhx6J-9auA@mail.gmail.com>
+ <f04ffb9e-04d5-0167-8ec2-957a3d1973e6@grenoble.cnrs.fr>
+ <CA+eej5NPy3otW728B0+zrwJqVfJPEFhW_dYBKpKT=9XC9EdbOg@mail.gmail.com>
+From: Joachim Wiberg <troglobit@gmail.com>
+Message-ID: <1819f3c3-52db-7e21-8d42-f5c2ae434f33@gmail.com>
+Date: Sun, 10 Oct 2021 19:27:02 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-References: <20211010163934.3169734-1-leo@yuriev.ru>
-In-Reply-To: <20211010163934.3169734-1-leo@yuriev.ru>
-From: =?UTF-8?B?0JvQtdC+0L3QuNC0INCu0YDRjNC10LIgKExlb25pZCBZdXJpZXYp?=
- <leo@yuriev.ru>
-Date: Sun, 10 Oct 2021 20:23:01 +0300
-Message-ID: <CAO2+NUAyEud4cWLVY0DkPHciePGa7aEh9HeuzMX40mQnfEEL_A@mail.gmail.com>
-To: buildroot@buildroot.org
-Subject: Re: [Buildroot] [PATCH] package/libmdbx: bump version to 0.10.4
- (stable, bugfix release).
+In-Reply-To: <CA+eej5NPy3otW728B0+zrwJqVfJPEFhW_dYBKpKT=9XC9EdbOg@mail.gmail.com>
+Subject: Re: [Buildroot] error when i build buidroot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,50 +97,107 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============4334816681105406290=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-ChangeLog: https://github.com/erthink/libmdbx/releases/tag/v0.10.4
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--===============4334816681105406290==
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="cgwjmv9u2TksY9mCP5xJBMHMxPdqCJWcg"
 
-On Sun, Oct 10, 2021 at 7:39 PM Leonid Yuriev <leo@yuriev.ru> wrote:
->
-> This is stable bugfix release of libmdbx.
-> So it is reasonable to backport this patch to all applicable releases of buildroot.
-> ---
->  package/libmdbx/libmdbx.hash | 2 +-
->  package/libmdbx/libmdbx.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/package/libmdbx/libmdbx.hash b/package/libmdbx/libmdbx.hash
-> index 7cc835a96a..326cf57bb6 100644
-> --- a/package/libmdbx/libmdbx.hash
-> +++ b/package/libmdbx/libmdbx.hash
-> @@ -1,5 +1,5 @@
->  # Hashes from: https://github.com/erthink/libmdbx/releases/
-> -sha256  a8f2436c4d008886e044f568a22bda44329fb1c67f175d91a929ff8e2065340a  libmdbx-amalgamated-0.10.3.tar.gz
-> +sha256  e11d5339a1e1cc34407898933b62a208936fd761a2cc31e11244d581d1d2b5d0  libmdbx-amalgamated-0.10.4.tar.gz
->
->  # Locally calculated
->  sha256  310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  LICENSE
-> diff --git a/package/libmdbx/libmdbx.mk b/package/libmdbx/libmdbx.mk
-> index 76bd56dfd7..f38e4a533b 100644
-> --- a/package/libmdbx/libmdbx.mk
-> +++ b/package/libmdbx/libmdbx.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->
-> -LIBMDBX_VERSION = 0.10.3
-> +LIBMDBX_VERSION = 0.10.4
->  LIBMDBX_SOURCE = libmdbx-amalgamated-$(LIBMDBX_VERSION).tar.gz
->  LIBMDBX_SITE = https://github.com/erthink/libmdbx/releases/download/v$(LIBMDBX_VERSION)
->  LIBMDBX_SUPPORTS_IN_SOURCE_BUILD = NO
-> --
-> 2.33.0
->
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--cgwjmv9u2TksY9mCP5xJBMHMxPdqCJWcg
+Content-Type: multipart/mixed; boundary="i0YDwyK8WNr7z5la6W40sDpVDRYOgVuSZ";
+ protected-headers="v1"
+From: Joachim Wiberg <troglobit@gmail.com>
+To: =?UTF-8?Q?Esa=c3=afe_Ledoux_NJONGSSI_KOUAM?= <kouamdoux@gmail.com>,
+ Edgar Bonet <bonet@grenoble.cnrs.fr>
+Cc: buildroot@buildroot.org
+Message-ID: <1819f3c3-52db-7e21-8d42-f5c2ae434f33@gmail.com>
+Subject: Re: [Buildroot] error when i build buidroot
+References: <CA+eej5MzpM30U7sMqba5gKQ3dG5FznZqd6roacphLhx6J-9auA@mail.gmail.com>
+ <f04ffb9e-04d5-0167-8ec2-957a3d1973e6@grenoble.cnrs.fr>
+ <CA+eej5NPy3otW728B0+zrwJqVfJPEFhW_dYBKpKT=9XC9EdbOg@mail.gmail.com>
+In-Reply-To: <CA+eej5NPy3otW728B0+zrwJqVfJPEFhW_dYBKpKT=9XC9EdbOg@mail.gmail.com>
+
+--i0YDwyK8WNr7z5la6W40sDpVDRYOgVuSZ
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
+
+Hi!
+
+Kali Linux is a Debian derivative, so it should work fine as build host.
+I've not used it myself, but I'm installing it in a VM now to check the
+build steps to see if I can reproduce your problem.
+
+On 10/10/21 5:48 PM, Esa=C3=AFe Ledoux NJONGSSI KOUAM wrote:
+> Le=C2=A0dim. 10 oct. 2021 =C3=A0=C2=A014:01, Edgar Bonet <bonet@grenobl=
+e.cnrs.fr
+> <mailto:bonet@grenoble.cnrs.fr>> a =C3=A9crit=C2=A0:
+> > Esa=C3=AFe Ledoux Njongssi Kouam wrote:
+> > > build for qemu_x86_64 by typing "qemu_x86_64_defconfig"
+> > I guess you mean =E2=80=9Cmake qemu_x86_64_defconfig=E2=80=9D.
+> > > rsync [...] system/skeleton/ /root/buildroot/[...]
+> > You are doing this as root?
+> yes , i'm doing this as root
+
+I think you might want to browse through the manual again, in particular
+Chapter 4, https://buildroot.org/downloads/manual/manual.html:
+
+| Important: you can and should build everything as a normal user. There
+| is no need to be root to configure and use Buildroot. By running all
+| commands as a regular user, you protect your system against packages
+| behaving badly during compilation and installation.
+
+I'll retry the steps as a regular user in my efforts.
+
+> > > rsync: [generator] failed to set permissions on "[...]":
+> > > Function not implemented (38)
+> > This sounds like you are using a filesystem that doesn't support
+> > Unix-type permissions.[1] Is this the case? What kind of FS is this?
+> So the file system that i'm using is ext4
+
+Just to double-check, because "Function not implemented 38)" is really
+not expected on a build host with Ext4.  Did you mean the file system
+you configured for your Buildroot image, or your build system?
+
+Best regards
+ /Joachim
+
+
+--i0YDwyK8WNr7z5la6W40sDpVDRYOgVuSZ--
+
+--cgwjmv9u2TksY9mCP5xJBMHMxPdqCJWcg
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsB5BAABCAAjFiEE3gkxgy2/gzkZH7KyLCqwqW4MR1gFAmFjImYFAwAAAAAACgkQLCqwqW4MR1iT
+gQf/ZBgHavmdJFY10vDRxtd//o+/RCMXPT3U31hXbRegcG4v/D+1vmk8w14yJfkpSeBsdlIBVlWX
+u6kSbEUIui/SvBknt/f0FR0U6BvoieV6roEdrcRmsjj+oNhnOQ0tC2tRFzBX+4QS7YoQX9tlPuaE
+tgJzPFmHvvsQ4kLz+YVLkABo0k7V2yoJRTYb+IWF65xOBqqHxBA/g1+H2i+keZPlrKuUOpQeGzhs
+okQZqnefXYD7Rku0bWbOHtb9E7EV0spFKJ9zTQ8jGETqKCD67QCjyVFYROljH9oP6wXjjLHI2DCq
+qpH2rI2zDUPNaTZzFspIToL4aQCUsjYPGfokzKsWVg==
+=tJou
+-----END PGP SIGNATURE-----
+
+--cgwjmv9u2TksY9mCP5xJBMHMxPdqCJWcg--
+
+--===============4334816681105406290==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============4334816681105406290==--
