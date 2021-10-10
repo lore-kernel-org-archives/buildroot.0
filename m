@@ -2,86 +2,90 @@ Return-Path: <SRS0=K+5a=O6=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CD909C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 10 Oct 2021 19:51:06 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 99F31C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 10 Oct 2021 19:57:27 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 6190460EB2
-	for <buildroot@archiver.kernel.org>; Sun, 10 Oct 2021 19:51:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6190460EB2
+	by mail.kernel.org (Postfix) with ESMTPS id 27A5460F38
+	for <buildroot@archiver.kernel.org>; Sun, 10 Oct 2021 19:57:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 27A5460F38
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F0F54403E0;
-	Sun, 10 Oct 2021 19:51:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E49BC81D72;
+	Sun, 10 Oct 2021 19:57:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lpbEEpmh_fmi; Sun, 10 Oct 2021 19:51:05 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 582A4403DD;
-	Sun, 10 Oct 2021 19:51:04 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id EA4C01BF3BE
- for <buildroot@lists.busybox.net>; Sun, 10 Oct 2021 19:50:53 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E7B0A81D5A
- for <buildroot@lists.busybox.net>; Sun, 10 Oct 2021 19:50:53 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nXqsPF0Qnpmw for <buildroot@lists.busybox.net>;
- Sun, 10 Oct 2021 19:50:52 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 36Ikr5JulQ0B; Sun, 10 Oct 2021 19:57:26 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 39CC981DE0;
+	Sun, 10 Oct 2021 19:57:25 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 77FC91BF3BE
+ for <buildroot@lists.busybox.net>; Sun, 10 Oct 2021 19:57:23 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 605CB403DB
+ for <buildroot@lists.busybox.net>; Sun, 10 Oct 2021 19:57:23 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id MEzgCrlhBnxA for <buildroot@lists.busybox.net>;
+ Sun, 10 Oct 2021 19:57:22 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
- [IPv6:2a00:1450:4864:20::42c])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A42CA81D4F
- for <buildroot@buildroot.org>; Sun, 10 Oct 2021 19:50:52 +0000 (UTC)
-Received: by mail-wr1-x42c.google.com with SMTP id v17so48730941wrv.9
- for <buildroot@buildroot.org>; Sun, 10 Oct 2021 12:50:52 -0700 (PDT)
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com
+ [IPv6:2a00:1450:4864:20::131])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 143D54037F
+ for <buildroot@buildroot.org>; Sun, 10 Oct 2021 19:57:22 +0000 (UTC)
+Received: by mail-lf1-x131.google.com with SMTP id x27so64391449lfu.5
+ for <buildroot@buildroot.org>; Sun, 10 Oct 2021 12:57:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=Wp+UY38RmXpM766f9CuH+TCjw5i0l+Rb3gkz+elDei4=;
- b=bicjBDsTQ8deFRhuRMUfgC6fHy/zPizEKKWOycPhup2sxzNqgmIeJN62joxUbWZUBI
- kHFPrj0B9MaZzIyn58ajzXCIB2fRTaQpMT1N3t0kOSuNwVkcTl/0/etmRqTUWZRVC7mP
- JKnoxedQVHw2HjjhZCTmTovJOK5o/pmHiGOsbpwGYPygQqkowbnVkOpbdcLPcRQ3CRmN
- oLRPqxjBH4vUrsG69S4Z+1DtBZo6JzG0qa0Hdubd+2dPyqqvytJyJ1qfK3MIZd32pGvk
- L3v6cXEZHQYNfLQOkjUzi94Zy7QWjZy+AKIwpZYPuGqojMZuvnylg2gdSgvvUMlUnIar
- t/jA==
+ h=to:cc:references:from:subject:message-id:date:user-agent
+ :mime-version:in-reply-to;
+ bh=IcElzUVYgEdiW3koBs/0dTuHF8jAdm0aLtPJhYcA1zY=;
+ b=RMTYRZ4EQdcfAr2sLgyB56pCDzwn84mPMJILLw+E9Nan97VtimeTeCN9++GklxPlCI
+ yTadlNkQLeFdRw5Cv2+2EqqOS52s3NTdpQD4OY90sHww36TP/IeHBDQPJu1Bg789I5Ac
+ O77JZPETms+QsVmXtS3t1cAUEuWox1Ass5MNIudyr0PUK7JMk/EHplXLH3RjlsKNdhMR
+ zKRejeZX5z1Cr3bjUHhAG3Bf6+JhUmLb7Tg/CCvOit2wQBft2ub7eqSK7F7nRCRPuJBh
+ VQZDvtDjWtwhny+WmsE5Cy3FP5DwkwC8oUXyaDhEr/4oFUui8tG801ew37BAVEmJq5vq
+ 61mw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=Wp+UY38RmXpM766f9CuH+TCjw5i0l+Rb3gkz+elDei4=;
- b=l4Myn0eMCAkmoTAglM2nnTXaOXi8OH99EEweocQddhWgrhXENQidjKr7AZKLu2Yqop
- lirMWA7CVB5i4LeIv8RIdYVxqA9J3+KaP7ahEH3nQjRVVUwacAHl1vRKXimoVKP3lFOs
- sUD3yiq9hXQJrcb+e6DJpRRdKrzX2GdW0p7E4CfoOsv1YIpqlVdyBoxzDOWKJWPLRZG3
- E9A6uI2zcYYp72NILQgF2JKDULn9RDkLECSPkmSx33PYiVMP5e3j5yhtrMUpxSInz40M
- Cpn9z+7D2qPnXd55qU0D4vx5D19e3BaNUX4HUNli1l9GVlSOOvg58GjL+yJFSTJzkETJ
- E0rA==
-X-Gm-Message-State: AOAM531cQr4fJrPcoab24JfWXFI946ifvbns7gaeOa+kzwXY+D7IoJb2
- DduSV7ZJ4T3+IPohL16YeH+Gv7MeT3g=
-X-Google-Smtp-Source: ABdhPJzZDyoC7mGI0iDwjKufK31+dAxrMJUeWUOvdwNZWsdjZ24Tcx6ZtsPG7bpSuLHzW5es7ZaGLQ==
-X-Received: by 2002:adf:fb89:: with SMTP id a9mr19159474wrr.164.1633895450502; 
- Sun, 10 Oct 2021 12:50:50 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-1732-95.w86-253.abo.wanadoo.fr.
- [86.253.44.95])
- by smtp.gmail.com with ESMTPSA id l21sm5837284wmh.31.2021.10.10.12.50.49
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 10 Oct 2021 12:50:50 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Sun, 10 Oct 2021 21:49:37 +0200
-Message-Id: <20211010194937.1419893-2-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211010194937.1419893-1-fontaine.fabrice@gmail.com>
-References: <20211010194937.1419893-1-fontaine.fabrice@gmail.com>
+ h=x-gm-message-state:to:cc:references:from:subject:message-id:date
+ :user-agent:mime-version:in-reply-to;
+ bh=IcElzUVYgEdiW3koBs/0dTuHF8jAdm0aLtPJhYcA1zY=;
+ b=7poGEIcH2OnizTRLq1ESure+ThcM43U6u1ilJsZ6LdwUSa1hH/1rj4aEUOrjZkgZMw
+ KUgEsQaFJofjz7cUBTDyk7Zip5jTCNzT3wVLXCCGRTeHlDbJgE43WOApOGKnp4tuVxpk
+ l32gBKtSt85pJAw1yjlSIyS6t+nqbhkYy+qI2mU8N7r7Bb9lGDgvmMcwNKza3c93+Pht
+ 2JXYZglG2Grchh+ZTBTk2lAE6VFF+PU25KwwQkc4YPdpIul/omQjuocklPceO+JEdbAA
+ Z4YgnNFpji2m3srduZXtgtjxvpaF47rneUzB4M1tD5erQ9B4xE5JWcWmEOcqUIeqFANV
+ vEmQ==
+X-Gm-Message-State: AOAM530cRHNI/dm53xHPuydxJUynRcspfwKaEvrx9hMuHaIH+sg2XXLX
+ YaRtXb/wf4fOx/Sxip+H1vARP9l1X4+7+g==
+X-Google-Smtp-Source: ABdhPJx6Zw7vf7veP2zxkd3LIMqAXmocB80yHaWbutJ2G+Xj0pdDUOHqWtrP/6G0tlBDEpLJ/oRtUw==
+X-Received: by 2002:ac2:4d10:: with SMTP id r16mr22971038lfi.309.1633895839375; 
+ Sun, 10 Oct 2021 12:57:19 -0700 (PDT)
+Received: from [10.0.196.136] ([94.254.51.197])
+ by smtp.googlemail.com with ESMTPSA id a14sm479932lfi.281.2021.10.10.12.57.18
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sun, 10 Oct 2021 12:57:18 -0700 (PDT)
+To: =?UTF-8?Q?Esa=c3=afe_Ledoux_NJONGSSI_KOUAM?= <kouamdoux@gmail.com>
+References: <CA+eej5MzpM30U7sMqba5gKQ3dG5FznZqd6roacphLhx6J-9auA@mail.gmail.com>
+ <f04ffb9e-04d5-0167-8ec2-957a3d1973e6@grenoble.cnrs.fr>
+ <CA+eej5NPy3otW728B0+zrwJqVfJPEFhW_dYBKpKT=9XC9EdbOg@mail.gmail.com>
+ <1819f3c3-52db-7e21-8d42-f5c2ae434f33@gmail.com>
+ <CA+eej5ObHKKx4x=uOYRDF1npRR4kqnucWByTtNkbS40A+1y-GA@mail.gmail.com>
+From: Joachim Wiberg <troglobit@gmail.com>
+Message-ID: <fe8b5e30-6cb7-161d-6e6e-cdddadcbbe01@gmail.com>
+Date: Sun, 10 Oct 2021 21:57:18 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 2/2] package/knock: add knockd option
+In-Reply-To: <CA+eej5ObHKKx4x=uOYRDF1npRR4kqnucWByTtNkbS40A+1y-GA@mail.gmail.com>
+Subject: Re: [Buildroot] error when i build buidroot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,76 +97,114 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Michael Rommel <rommel@layer-7.net>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Edgar Bonet <bonet@grenoble.cnrs.fr>, buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============2041219503052816704=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add knockd option to make libpcap and MMU optional and enable it by
-default for backward compatibility
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--===============2041219503052816704==
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="4nt7AP6mpPfEgZWWVZndABm51uEVbLqpv"
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/knock/Config.in | 14 ++++++++++++--
- package/knock/knock.mk  |  9 +++++++--
- 2 files changed, 19 insertions(+), 4 deletions(-)
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--4nt7AP6mpPfEgZWWVZndABm51uEVbLqpv
+Content-Type: multipart/mixed; boundary="E5vzIQYrfg0ZwemkrybcSGshaMa6bCsay";
+ protected-headers="v1"
+From: Joachim Wiberg <troglobit@gmail.com>
+To: =?UTF-8?Q?Esa=c3=afe_Ledoux_NJONGSSI_KOUAM?= <kouamdoux@gmail.com>
+Cc: Edgar Bonet <bonet@grenoble.cnrs.fr>, buildroot@buildroot.org
+Message-ID: <fe8b5e30-6cb7-161d-6e6e-cdddadcbbe01@gmail.com>
+Subject: Re: [Buildroot] error when i build buidroot
+References: <CA+eej5MzpM30U7sMqba5gKQ3dG5FznZqd6roacphLhx6J-9auA@mail.gmail.com>
+ <f04ffb9e-04d5-0167-8ec2-957a3d1973e6@grenoble.cnrs.fr>
+ <CA+eej5NPy3otW728B0+zrwJqVfJPEFhW_dYBKpKT=9XC9EdbOg@mail.gmail.com>
+ <1819f3c3-52db-7e21-8d42-f5c2ae434f33@gmail.com>
+ <CA+eej5ObHKKx4x=uOYRDF1npRR4kqnucWByTtNkbS40A+1y-GA@mail.gmail.com>
+In-Reply-To: <CA+eej5ObHKKx4x=uOYRDF1npRR4kqnucWByTtNkbS40A+1y-GA@mail.gmail.com>
 
-diff --git a/package/knock/Config.in b/package/knock/Config.in
-index 0060ad07ce..5a4c00d9e8 100644
---- a/package/knock/Config.in
-+++ b/package/knock/Config.in
-@@ -1,7 +1,5 @@
- config BR2_PACKAGE_KNOCK
- 	bool "knock"
--	depends on BR2_USE_MMU # fork()
--	select BR2_PACKAGE_LIBPCAP
- 	help
- 	  A port knocking implementation.
- 	  Provides a daemon and a user application. Port knocking can be
-@@ -11,3 +9,15 @@ config BR2_PACKAGE_KNOCK
- 	  firewall.
- 
- 	  http://www.zeroflux.org/projects/knock
-+
-+if BR2_PACKAGE_KNOCK
-+
-+config BR2_PACKAGE_KNOCK_KNOCKD
-+	bool "knockd"
-+	default y
-+	depends on BR2_USE_MMU # fork()
-+	select BR2_PACKAGE_LIBPCAP
-+	help
-+	  Enable knockd
-+
-+endif
-diff --git a/package/knock/knock.mk b/package/knock/knock.mk
-index 02811540bf..8a909b2dc3 100644
---- a/package/knock/knock.mk
-+++ b/package/knock/knock.mk
-@@ -8,10 +8,15 @@ KNOCK_VERSION = 0.8
- KNOCK_SITE = http://www.zeroflux.org/proj/knock/files
- KNOCK_LICENSE = GPL-2.0+
- KNOCK_LICENSE_FILES = COPYING
--KNOCK_DEPENDENCIES = libpcap
- 
-+ifeq ($(BR2_PACKAGE_KNOCK_KNOCKD),y)
-+KNOCK_DEPENDENCIES = libpcap
-+KNOCK_CONF_OPTS += --enable-knockd
- ifeq ($(BR2_STATIC_LIBS),y)
--KNOCK_CONF_OPTS = LIBS="`$(STAGING_DIR)/usr/bin/pcap-config --static --additional-libs`"
-+KNOCK_CONF_OPTS += LIBS="`$(STAGING_DIR)/usr/bin/pcap-config --static --additional-libs`"
-+endif
-+else
-+KNOCK_CONF_OPTS += --disable-knockd
- endif
- 
- $(eval $(autotools-package))
--- 
-2.33.0
+--E5vzIQYrfg0ZwemkrybcSGshaMa6bCsay
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
+
+Hi,
+
+On 10/10/21 6:52 PM, Esa=C3=AFe Ledoux NJONGSSI KOUAM wrote:
+> no filesystem has been configured ...
+> I'm just trying the default configuration
+
+This is fine.  I think you've got something really wrong with your
+Kali Linux host system.
+
+> should i configure file system for my buildroot ??
+
+No, we mean the file system you are using for building Buildroot on,
+in your Kali Linux install.  The rsync error looks as if your disk
+partition is a non-native Linux file system, like FAT, which does
+not support the operations rsync tries to perform.
+
+How have you set up your Kali Linux?  Do you have the buildroot git
+sources checked out to your home directory or some other directory,
+perhaps shared with Windows?  If so, I'd definitely avoid that. You
+can check the filesystem of your build directory by comparing the
+output of
+
+   pwd
+
+with the output from
+
+   findmnt
+
+On my system I have ext4 in the FSTYPE column for my home directory,
+which is in the / TARGET.
+
+I finished my install of Kali in my own VM.  It crashed badly before
+I gave it enough disk (40 GiB) and RAM (4 GiB).  That's another thing
+that might have messed up your build tree.
+
+> the error persists even if i compile it as normal user
+
+Well that's good to know, at least it's consistent.  Just beware
+that if you reuse the same source tree, having switched to another
+user, a lot of files may still have root as the owner, which may
+give you other problems.  Either `sudo chown -R user:user .` from
+inside the Buildroot source tree, or check out a new tree.
+
+Best regards
+ /Joachim
+
+
+--E5vzIQYrfg0ZwemkrybcSGshaMa6bCsay--
+
+--4nt7AP6mpPfEgZWWVZndABm51uEVbLqpv
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsB5BAABCAAjFiEE3gkxgy2/gzkZH7KyLCqwqW4MR1gFAmFjRZ4FAwAAAAAACgkQLCqwqW4MR1iI
+pQf9GD7KLst9eeO1nRYoPcH6hJnsW8pGsnxJBICbRQrhyTbr9f8ayYaQe3WTZkbXD8EL9aH7gGs9
+JvBAVSM7xI2CWGvThfPhpQAT6L9DDt657Tm8mbUAwEmokN2PhPxmrEQv0X2rPXaJf1UGK42UYZqd
+dnYWmXTpoyCuuXTVmcnoHLIUJtEl7addXJKyu1trNehU0dI5urLBGfW7uxvSU0qcY7hQADC7MW/W
+pVj5oAX+6U9Obl/pSXugOexPkJOLtP5T4RvDevg0UdMrvpJaam1Z5mIv1Nd7FuG1crTBQ5M0nvwS
+0F7XdFvX5vs3beIs3JArbFPt6pLGDCPgUotZS/910Q==
+=xavx
+-----END PGP SIGNATURE-----
+
+--4nt7AP6mpPfEgZWWVZndABm51uEVbLqpv--
+
+--===============2041219503052816704==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============2041219503052816704==--
