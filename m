@@ -2,51 +2,52 @@ Return-Path: <SRS0=K+5a=O6=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B538BC433F5
-	for <buildroot@archiver.kernel.org>; Sun, 10 Oct 2021 10:02:25 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 58F1DC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 10 Oct 2021 10:03:51 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 3706760F46
-	for <buildroot@archiver.kernel.org>; Sun, 10 Oct 2021 10:02:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3706760F46
+	by mail.kernel.org (Postfix) with ESMTPS id B5D0360F92
+	for <buildroot@archiver.kernel.org>; Sun, 10 Oct 2021 10:03:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B5D0360F92
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6091540210;
-	Sun, 10 Oct 2021 10:02:24 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tssZBdg2d_BN; Sun, 10 Oct 2021 10:02:23 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3F88240299;
-	Sun, 10 Oct 2021 10:02:22 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 958321BF476
- for <buildroot@lists.busybox.net>; Sun, 10 Oct 2021 10:02:12 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 91FF782E19
- for <buildroot@lists.busybox.net>; Sun, 10 Oct 2021 10:02:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 84A7082E4C;
+	Sun, 10 Oct 2021 10:03:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MiRkh6KjDdin for <buildroot@lists.busybox.net>;
- Sun, 10 Oct 2021 10:02:11 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Yny7RgGQDeLs; Sun, 10 Oct 2021 10:03:49 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id D162D82F11;
+	Sun, 10 Oct 2021 10:03:48 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 5DAA61BF476
+ for <buildroot@lists.busybox.net>; Sun, 10 Oct 2021 10:03:47 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4DCB540276
+ for <buildroot@lists.busybox.net>; Sun, 10 Oct 2021 10:03:47 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gElRyxMTHDDB for <buildroot@lists.busybox.net>;
+ Sun, 10 Oct 2021 10:03:46 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id A856582E14
- for <buildroot@buildroot.org>; Sun, 10 Oct 2021 10:02:11 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8A91540274
+ for <buildroot@buildroot.org>; Sun, 10 Oct 2021 10:03:46 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id C2E5894E71; Sun, 10 Oct 2021 09:59:26 +0000 (UTC)
+ id A79A994EA8; Sun, 10 Oct 2021 10:01:01 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 10 Oct 2021 12:01:53 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 97f3ad7af3dd54a15a10aa35786e7fa08cf5e7b1
-X-Git-Newrev: e064f9bb5250a2bd89086ca56b45699ac45a1bad
+Date: Sun, 10 Oct 2021 10:18:34 +0200
+X-Git-Refname: refs/heads/2021.08.x
+X-Git-Oldrev: 6d93de9920326dea8b3ca38f8520ca20e25a292b
+X-Git-Newrev: b777ba4bea8839084443d34640a4dab7f53ac69f
 X-Patchwork-Hint: ignore
-Message-Id: <20211010095926.C2E5894E71@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/haproxy: bump to version 2.4.7
+Message-Id: <20211010100101.A79A994EA8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.08.x] DEVELOPERS: adopt
+ package/libite
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,43 +65,31 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e064f9bb5250a2bd89086ca56b45699ac45a1bad
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+commit: https://git.buildroot.net/buildroot/commit/?id=b777ba4bea8839084443d34640a4dab7f53ac69f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.08.x
 
-https://www.mail-archive.com/haproxy@formilux.org/msg41239.html
+Since I'm the upstream maintainer and we use it for $DAYJOB, I'll adopt.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 96db7735f7ade4ee68ee73157500b4b8b739f53d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/haproxy/haproxy.hash | 4 ++--
- package/haproxy/haproxy.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/haproxy/haproxy.hash b/package/haproxy/haproxy.hash
-index 3ad5e4ebe8..2e39fb4aa5 100644
---- a/package/haproxy/haproxy.hash
-+++ b/package/haproxy/haproxy.hash
-@@ -1,5 +1,5 @@
--# From: http://www.haproxy.org/download/2.4/src/haproxy-2.4.4.tar.gz.sha256
--sha256  116b7329cebee5dab8ba47ad70feeabd0c91680d9ef68c28e41c34869920d1fe  haproxy-2.4.4.tar.gz
-+# From: http://www.haproxy.org/download/2.4/src/haproxy-2.4.7.tar.gz.sha256
-+sha256  52af97f72f22ffd8a7a995fafc696291d37818feda50a23caef7dc0622421845  haproxy-2.4.7.tar.gz
- # Locally computed:
- sha256  0717ca51fceaa25ac9e5ccc62e0c727dcf27796057201fb5fded56a25ff6ca28  LICENSE
- sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  doc/lgpl.txt
-diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
-index 91cb71eb7c..0434c73348 100644
---- a/package/haproxy/haproxy.mk
-+++ b/package/haproxy/haproxy.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- HAPROXY_VERSION_MAJOR = 2.4
--HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).4
-+HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).7
- HAPROXY_SITE = http://www.haproxy.org/download/$(HAPROXY_VERSION_MAJOR)/src
- HAPROXY_LICENSE = GPL-2.0+ and LGPL-2.1+ with exceptions
- HAPROXY_LICENSE_FILES = LICENSE doc/lgpl.txt doc/gpl.txt
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 40abaf2438..c1b2685000 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1325,6 +1325,7 @@ F:	package/rtty/
+ N:	Joachim Wiberg <troglobit@gmail.com>
+ F:	configs/globalscale_espressobin_defconfig
+ F:	board/globalscale/espressobin/
++F:	package/libite/
+ F:	package/mg/
+ F:	package/netcalc/
+ F:	package/ssdp-responder/
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
