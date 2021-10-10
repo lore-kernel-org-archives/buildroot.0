@@ -2,82 +2,81 @@ Return-Path: <SRS0=K+5a=O6=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 47EF1C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 10 Oct 2021 16:51:09 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2DE69C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 10 Oct 2021 17:09:15 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D25516109E
-	for <buildroot@archiver.kernel.org>; Sun, 10 Oct 2021 16:51:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D25516109E
+	by mail.kernel.org (Postfix) with ESMTPS id 92F3560F4B
+	for <buildroot@archiver.kernel.org>; Sun, 10 Oct 2021 17:09:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 92F3560F4B
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7E05E826EA;
-	Sun, 10 Oct 2021 16:51:08 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2920D400DE;
+	Sun, 10 Oct 2021 17:09:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2ucES7HUD2fE; Sun, 10 Oct 2021 16:51:07 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 8K1KFiVIuKZk; Sun, 10 Oct 2021 17:09:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C7AD7817ED;
-	Sun, 10 Oct 2021 16:51:06 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 97F851BF424
- for <buildroot@lists.busybox.net>; Sun, 10 Oct 2021 16:51:05 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E8E4B400EE;
+	Sun, 10 Oct 2021 17:09:11 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 457271BF3C2
+ for <buildroot@lists.busybox.net>; Sun, 10 Oct 2021 17:09:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 947B86067D
- for <buildroot@lists.busybox.net>; Sun, 10 Oct 2021 16:51:05 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 412C0400EE
+ for <buildroot@lists.busybox.net>; Sun, 10 Oct 2021 17:09:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FGoeEz6YVQJy for <buildroot@lists.busybox.net>;
- Sun, 10 Oct 2021 16:51:04 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VMJJ9VFiE428 for <buildroot@lists.busybox.net>;
+ Sun, 10 Oct 2021 17:09:10 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com
- [IPv6:2607:f8b0:4864:20::d36])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B87CE6062B
- for <buildroot@buildroot.org>; Sun, 10 Oct 2021 16:51:04 +0000 (UTC)
-Received: by mail-io1-xd36.google.com with SMTP id 5so16951426iov.9
- for <buildroot@buildroot.org>; Sun, 10 Oct 2021 09:51:04 -0700 (PDT)
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com
+ [IPv6:2607:f8b0:4864:20::22e])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E04DD400DE
+ for <buildroot@buildroot.org>; Sun, 10 Oct 2021 17:09:09 +0000 (UTC)
+Received: by mail-oi1-x22e.google.com with SMTP id e63so703571oif.8
+ for <buildroot@buildroot.org>; Sun, 10 Oct 2021 10:09:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=LyqKjnIDOu5bBq4Kn86+B1VF//OuYsJOHqRkOxV3oxs=;
- b=W6RhrXqeYAkA+CmuLXMC8WgujXLWmbNCqWHvJnOAR94onV2w44k4hpWRcTVvxd9qcX
- tar/bxUt6noTsnhfTu+br3GWHIT2f7zVdskEok9zKndXjPYDp0RdvKKzEyED+14XMUei
- qMZsiTgGguxgxsrlGArePuSItmmYztt30pGFJaPzrH/kp+54zAGieFaNqDc8ZeWk0Z01
- n7pIazKVBME/Iv03yoqa4qgykoVnd6Tz+xGkZ1Cns/pFwQCLbACV+1Rj1QocQ7kJ9cMP
- OdbaFX4+jypDHG+A/uB6oixSoHgzE8laQcTnzQe/jYGZ4BGKr0v4VKJAv8AMThjSCmaM
- 50Bg==
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=LLON1O8etHiYXfOSWlCoIj1ujhgsPZO7IWzTt+axNXU=;
+ b=EOTYEk0i7mmLKvfvU4jQrdhuS7NI+Qp29Taiq/f/bU8sCpzqmj+/eCcRxQVcgeGJER
+ /JlUkuK2T7juQ7PPTbEkX3OjJ6iZTVgC+trYAfVy5JYw02rh7LOXtEi9MEyaPb5JVtoX
+ U5UIaSBbTTQZp9tmC/CFKM5RTcS6USM2wxPV3m8ZBOmmEZMoMSAMiCFTPmqe0IBBq6Fz
+ Clq57D3p+/PEsaHIFzScEx3Moin9wBfVDUwz9Dqcz6vsgVmuRppWgeYNaYyzlQ4w+/0Z
+ yjQYOKyR1nuXt/9AnUQc99PsYdSGEeeEAI1htHNMe1la/gXE94g/vzMHZ1t0LLTMGPAd
+ ezrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=LyqKjnIDOu5bBq4Kn86+B1VF//OuYsJOHqRkOxV3oxs=;
- b=kATgAlpk8mh/igx071tttQKeWiN68TTs0hGiN6+BsVDLtqyLFmn3zoGAskvx9ItysK
- PsYtBnG3Kamn0w44LQJVS7rbAgvjT1fcEMwCmxvuK+njaMOniEF08/XvjKLcv2QfULBW
- USTm/dXo3WPJNuh2zlJSWOVJI8ZHSvEH9oxYjGDaLuu23W0o4TVZsr1BcFcWo6QOZTye
- sxSUAfbUib8aLsvgDo7lxWXkZQitSm7Cqua60tQ2AczUF9dLBRx5Dr5jvpkB/1X66qEn
- MqM+jSTnbM8ycnolEzACvMj8fyZJ7BxGSJab76CvnloPIDfyISnJEdFW1JAefUdH43wo
- pl5w==
-X-Gm-Message-State: AOAM533JAhYDUW08ervAt4eZyRjqCJQC6zkB/j4N5tIGR4xc7PEIYUuF
- iBERvdxjPn0LUb0GvNs77RJEac0n83L+nBfw7gSgb+09Gw==
-X-Google-Smtp-Source: ABdhPJwNNo9/A3sfb/2bEbWK9UDGx9AGDy8uzUMegu4gGCwupbmjs+uBo1vE1fxRy1FNpPC5GMhGsI5WgXzG+e3NS+c=
-X-Received: by 2002:a6b:ee0d:: with SMTP id i13mr15831004ioh.166.1633884663785; 
- Sun, 10 Oct 2021 09:51:03 -0700 (PDT)
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=LLON1O8etHiYXfOSWlCoIj1ujhgsPZO7IWzTt+axNXU=;
+ b=MTWA3jnJQtTge4mA9JMVAkRpIWfZdbCSbDPVsX3beaZ+7eT3uGpMhE+54huzM7n+Os
+ uaxoN/0yWMUhWW7wiOc7Mi+aPNoaPk2y0H84irY76RqfuC+LZAWlb5zqUlT6OA3NOce+
+ /YMTOKqQG0vE93dxe/JY5FrwkyOyR6SYji5SSU9iu8PYbh5DDo4XP98CFg/Do0FKcc/9
+ LwuMi6Gg1uCr0Y1m9nmJ+K8Y9pqq4Yvop23bpJVghYixxlCXIqvuYMBuhafrSB/ZeBRJ
+ ZKtpqK8gWjlQ0NP4kbc/1zenuVktsQWXWbQ6TmjpH/ANhOMjRsHcEGIbm3e0fxE1if+3
+ itNw==
+X-Gm-Message-State: AOAM533Kcvce5y3p5dfUMDfkNqTaiNGw5tXgIIl2RIBgkanWz9OQWWvZ
+ CH3W7MRu0Srs+XxytxPtI6cPZ9JsGIgsVCr/
+X-Google-Smtp-Source: ABdhPJzbf3AC374fgXiEDT667bB2mJPdmMoW15d/pSN/Toklu3F3u7sONKSdVdLEp56Yv9CJf1DCnA==
+X-Received: by 2002:aca:a94c:: with SMTP id s73mr17163594oie.93.1633885748601; 
+ Sun, 10 Oct 2021 10:09:08 -0700 (PDT)
+Received: from localhost ([189.174.209.191])
+ by smtp.gmail.com with UTF8SMTPSA id y9sm1239394ote.39.2021.10.10.10.09.07
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sun, 10 Oct 2021 10:09:08 -0700 (PDT)
+From: Gleb Mazovetskiy <glex.spb@gmail.com>
+To: buildroot@buildroot.org
+Date: Sun, 10 Oct 2021 18:09:05 +0100
+Message-Id: <20211010170906.388594-1-glex.spb@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <CA+eej5MzpM30U7sMqba5gKQ3dG5FznZqd6roacphLhx6J-9auA@mail.gmail.com>
- <f04ffb9e-04d5-0167-8ec2-957a3d1973e6@grenoble.cnrs.fr>
- <CA+eej5NPy3otW728B0+zrwJqVfJPEFhW_dYBKpKT=9XC9EdbOg@mail.gmail.com>
- <CA+eej5MyhhGL8GxSxmqoaSB0JpJ_Mxic3SDsNGrTW_NovnH8bQ@mail.gmail.com>
-In-Reply-To: <CA+eej5MyhhGL8GxSxmqoaSB0JpJ_Mxic3SDsNGrTW_NovnH8bQ@mail.gmail.com>
-From: =?UTF-8?Q?Esa=C3=AFe_Ledoux_NJONGSSI_KOUAM?= <kouamdoux@gmail.com>
-Date: Sun, 10 Oct 2021 17:49:41 +0200
-Message-ID: <CA+eej5OgdkadyBZMkUs0mZ1dsovEXbn0eW_pW4gNjFmxCF0yag@mail.gmail.com>
-To: Edgar Bonet <bonet@grenoble.cnrs.fr>
-Subject: Re: [Buildroot] error when i build buidroot
+Subject: [Buildroot] [PATCH] package: add smpq and stormlib
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,143 +88,175 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============6744359179384537401=="
+Cc: Gleb Mazovetskiy <glex.spb@gmail.com>, Samuel Martin <s.martin49@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============6744359179384537401==
-Content-Type: multipart/alternative; boundary="000000000000fd2d5c05ce026a1a"
+SMPQ is a utility for working with Blizzard MPQ archives and StormLib is
+the library for doing this that it depends on.
 
---000000000000fd2d5c05ce026a1a
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+SMPQ/StormLib is a runtime and/or build-time dependency of several
+source ports / reimplementations of Blizzard games, such as DevilutionX.
 
-i have taged buildroot on stackoverflow :
-https://stackoverflow.com/questions/69420545/buildroot-build-system-errors
+These packages are already available in other distros, such as Debian.
 
-Le dim. 10 oct. 2021 =C3=A0 17:49, Esa=C3=AFe Ledoux NJONGSSI KOUAM <
-kouamdoux@gmail.com> a =C3=A9crit :
+Signed-off-by: Gleb Mazovetskiy <glex.spb@gmail.com>
+---
+ package/Config.in              |  2 ++
+ package/smpq/Config.in         | 11 ++++++++++
+ package/smpq/smpq.hash         |  3 +++
+ package/smpq/smpq.mk           | 37 ++++++++++++++++++++++++++++++++++
+ package/stormlib/Config.in     |  8 ++++++++
+ package/stormlib/stormlib.hash |  3 +++
+ package/stormlib/stormlib.mk   | 16 +++++++++++++++
+ 7 files changed, 80 insertions(+)
+ create mode 100644 package/smpq/Config.in
+ create mode 100644 package/smpq/smpq.hash
+ create mode 100644 package/smpq/smpq.mk
+ create mode 100644 package/stormlib/Config.in
+ create mode 100644 package/stormlib/stormlib.hash
+ create mode 100644 package/stormlib/stormlib.mk
 
-> i have taged buildroot on stackoverflow :
-> https://stackoverflow.com/questions/69420545/buildroot-build-system-error=
-s
->
-> Le dim. 10 oct. 2021 =C3=A0 17:48, Esa=C3=AFe Ledoux NJONGSSI KOUAM <
-> kouamdoux@gmail.com> a =C3=A9crit :
->
->> yes , i'm doing this as root
->>
->> So the file system that i'm using is ext4
->>
->> Le dim. 10 oct. 2021 =C3=A0 14:01, Edgar Bonet <bonet@grenoble.cnrs.fr> =
-a
->> =C3=A9crit :
->>
->>> Hello!
->>>
->>> Esa=C3=AFe Ledoux Njongssi Kouam wrote:
->>> > build for qemu_x86_64 by typing "qemu_x86_64_defconfig"
->>>
->>> I guess you mean =E2=80=9Cmake qemu_x86_64_defconfig=E2=80=9D.
->>>
->>> > rsync [...] system/skeleton/ /root/buildroot/[...]
->>>
->>> You are doing this as root?
->>>
->>> > rsync: [generator] failed to set permissions on "[...]":
->>> > Function not implemented (38)
->>>
->>> This sounds like you are using a filesystem that doesn't support
->>> Unix-type permissions.[1] Is this the case? What kind of FS is this?
->>> Could you try on a Unixish filesystem?
->>>
->>> Regards,
->>>
->>> Edgar Bonet.
->>>
->>> [1] https://unix.stackexchange.com/questions/12203
->>> _______________________________________________
->>> buildroot mailing list
->>> buildroot@buildroot.org
->>> https://lists.buildroot.org/mailman/listinfo/buildroot
->>>
->>
-
---000000000000fd2d5c05ce026a1a
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">i have taged buildroot on stackoverflow : <a href=3D"https=
-://stackoverflow.com/questions/69420545/buildroot-build-system-errors" targ=
-et=3D"_blank">https://stackoverflow.com/questions/69420545/buildroot-build-=
-system-errors</a></div><br><div class=3D"gmail_quote"><div dir=3D"ltr" clas=
-s=3D"gmail_attr">Le=C2=A0dim. 10 oct. 2021 =C3=A0=C2=A017:49, Esa=C3=AFe Le=
-doux NJONGSSI KOUAM &lt;<a href=3D"mailto:kouamdoux@gmail.com">kouamdoux@gm=
-ail.com</a>&gt; a =C3=A9crit=C2=A0:<br></div><blockquote class=3D"gmail_quo=
-te" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204=
-);padding-left:1ex"><div dir=3D"ltr">i have taged buildroot on stackoverflo=
-w : <a href=3D"https://stackoverflow.com/questions/69420545/buildroot-build=
--system-errors" target=3D"_blank">https://stackoverflow.com/questions/69420=
-545/buildroot-build-system-errors</a></div><br><div class=3D"gmail_quote"><=
-div dir=3D"ltr" class=3D"gmail_attr">Le=C2=A0dim. 10 oct. 2021 =C3=A0=C2=A0=
-17:48, Esa=C3=AFe Ledoux NJONGSSI KOUAM &lt;<a href=3D"mailto:kouamdoux@gma=
-il.com" target=3D"_blank">kouamdoux@gmail.com</a>&gt; a =C3=A9crit=C2=A0:<b=
-r></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex=
-;border-left:1px solid rgb(204,204,204);padding-left:1ex"><div dir=3D"ltr">=
-<div>yes , i&#39;m doing this as root</div><div><br></div><div>So the file =
-system that i&#39;m using is ext4<br></div></div><br><div class=3D"gmail_qu=
-ote"><div dir=3D"ltr" class=3D"gmail_attr">Le=C2=A0dim. 10 oct. 2021 =C3=A0=
-=C2=A014:01, Edgar Bonet &lt;<a href=3D"mailto:bonet@grenoble.cnrs.fr" targ=
-et=3D"_blank">bonet@grenoble.cnrs.fr</a>&gt; a =C3=A9crit=C2=A0:<br></div><=
-blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-l=
-eft:1px solid rgb(204,204,204);padding-left:1ex">Hello!<br>
-<br>
-Esa=C3=AFe Ledoux Njongssi Kouam wrote:<br>
-&gt; build for qemu_x86_64 by typing &quot;qemu_x86_64_defconfig&quot;<br>
-<br>
-I guess you mean =E2=80=9Cmake qemu_x86_64_defconfig=E2=80=9D.<br>
-<br>
-&gt; rsync [...] system/skeleton/ /root/buildroot/[...]<br>
-<br>
-You are doing this as root?<br>
-<br>
-&gt; rsync: [generator] failed to set permissions on &quot;[...]&quot;:<br>
-&gt; Function not implemented (38)<br>
-<br>
-This sounds like you are using a filesystem that doesn&#39;t support<br>
-Unix-type permissions.[1] Is this the case? What kind of FS is this?<br>
-Could you try on a Unixish filesystem?<br>
-<br>
-Regards,<br>
-<br>
-Edgar Bonet.<br>
-<br>
-[1] <a href=3D"https://unix.stackexchange.com/questions/12203" rel=3D"noref=
-errer" target=3D"_blank">https://unix.stackexchange.com/questions/12203</a>=
-<br>
-_______________________________________________<br>
-buildroot mailing list<br>
-<a href=3D"mailto:buildroot@buildroot.org" target=3D"_blank">buildroot@buil=
-droot.org</a><br>
-<a href=3D"https://lists.buildroot.org/mailman/listinfo/buildroot" rel=3D"n=
-oreferrer" target=3D"_blank">https://lists.buildroot.org/mailman/listinfo/b=
-uildroot</a><br>
-</blockquote></div>
-</blockquote></div>
-</blockquote></div>
-
---000000000000fd2d5c05ce026a1a--
-
---===============6744359179384537401==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/package/Config.in b/package/Config.in
+index 9fed0ab4cb..890a6be135 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -74,6 +74,7 @@ menu "Compressors and decompressors"
+ 	source "package/p7zip/Config.in"
+ 	source "package/pigz/Config.in"
+ 	source "package/pixz/Config.in"
++	source "package/smpq/Config.in"
+ 	source "package/unrar/Config.in"
+ 	source "package/unzip/Config.in"
+ 	source "package/xz/Config.in"
+@@ -1360,6 +1361,7 @@ menu "Compression and decompression"
+ 	source "package/lzo/Config.in"
+ 	source "package/minizip/Config.in"
+ 	source "package/snappy/Config.in"
++	source "package/stormlib/Config.in"
+ 	source "package/szip/Config.in"
+ 	source "package/zlib/Config.in"
+ 	source "package/zziplib/Config.in"
+diff --git a/package/smpq/Config.in b/package/smpq/Config.in
+new file mode 100644
+index 0000000000..589f5cf834
+--- /dev/null
++++ b/package/smpq/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_SMPQ
++	bool "smpq"
++	select BR2_PACKAGE_SMPQ
++	help
++	  StormLib MPQ archiving utility
++
++	  This utility manipulates Blizzard MPQ archives.
++	  It supports extracting, appending, renaming and deleting files
++	  in MPQ archives, and creating new MPQ archives.
++
++	  https://launchpad.net/smpq
+diff --git a/package/smpq/smpq.hash b/package/smpq/smpq.hash
+new file mode 100644
+index 0000000000..f14eaef49b
+--- /dev/null
++++ b/package/smpq/smpq.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  b5d2dc8a5de8629b71ee5d3612b6e84d88418b86c5cd39ba315e9eb0462f18cb  smpq_1.6.orig.tar.gz
++sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/smpq/smpq.mk b/package/smpq/smpq.mk
+new file mode 100644
+index 0000000000..6696c88f9c
+--- /dev/null
++++ b/package/smpq/smpq.mk
+@@ -0,0 +1,37 @@
++################################################################################
++#
++# smpq
++#
++################################################################################
++
++SMPQ_VERSION = 1.6
++SMPQ_SOURCE = smpq_$(SMPQ_VERSION).orig.tar.gz
++SMPQ_SITE = https://launchpad.net/smpq/trunk/$(SMPQ_VERSION)/+download
++SMPQ_DEPENDENCIES = stormlib
++HOST_SMPQ_DEPENDENCIES = host-stormlib
++SMPQ_LICENSE = GPL-3.0+
++SMPQ_LICENSE_FILES = LICENSE
++SMPQ_INSTALL_STAGING = YES
++SMPQ_CONF_OPTS += -DWITH_KDE=OFF
++HOST_SMPQ_CONF_OPTS += -DWITH_KDE=OFF
++
++# The StormLib version check in SMPQ CMake is broken. Disable it.
++define SMPQ_DISABLE_VERSION_CHECK
++	$(SED) 's/try_compile(CHECK.*/set(CHECK ON)/' $(@D)/CMakeLists.txt
++endef
++
++define SMPQ_DISABLE_MANUAL
++	$(SED) 's|if(NOT CMAKE_CROSSCOMPILING)|if(FALSE)|' $(@D)/CMakeLists.txt
++endef
++
++# StormLib is C++ and must be linked with a C++ linker (e.g. via g++ instead of gcc).
++define SMPQ_SET_LANG_TO_CXX
++	$(SED) '/^project/a file(GLOB_RECURSE CFILES "$${CMAKE_SOURCE_DIR}/*.c")\$(NEWLINE)
++SET_SOURCE_FILES_PROPERTIES($${CFILES} PROPERTIES LANGUAGE CXX)' $(@D)/CMakeLists.txt
++endef
++
++SMPQ_POST_PATCH_HOOKS += SMPQ_DISABLE_VERSION_CHECK SMPQ_DISABLE_MANUAL SMPQ_SET_LANG_TO_CXX
++HOST_SMPQ_POST_PATCH_HOOKS += SMPQ_DISABLE_VERSION_CHECK SMPQ_DISABLE_MANUAL SMPQ_SET_LANG_TO_CXX
++
++$(eval $(cmake-package))
++$(eval $(host-cmake-package))
+diff --git a/package/stormlib/Config.in b/package/stormlib/Config.in
+new file mode 100644
+index 0000000000..b2e4df3c62
+--- /dev/null
++++ b/package/stormlib/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_STORMLIB
++	bool "stormlib"
++	select BR2_PACKAGE_BZIP2
++	select BR2_PACKAGE_ZLIB
++	help
++	  StormLib is a library that reads and writes Blizzard MPQ archives.
++
++	  https://github.com/ladislav-zezula/StormLib
+diff --git a/package/stormlib/stormlib.hash b/package/stormlib/stormlib.hash
+new file mode 100644
+index 0000000000..dc5370b03d
+--- /dev/null
++++ b/package/stormlib/stormlib.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  53b8befda3855a922e57a27f78c36feba7e9a32804da4b6592a3670c4e9cec98  stormlib-5ab093b7a57b8779dff06a08fac19d46c40b3329.tar.gz
++sha256  50b128e6750ed9d887e7a5748a6021238bb2f3bf34a5dd2768c410d932069e35  LICENSE
+diff --git a/package/stormlib/stormlib.mk b/package/stormlib/stormlib.mk
+new file mode 100644
+index 0000000000..a2e58aa983
+--- /dev/null
++++ b/package/stormlib/stormlib.mk
+@@ -0,0 +1,16 @@
++################################################################################
++#
++# stormlib
++#
++################################################################################
++
++STORMLIB_VERSION = 5ab093b7a57b8779dff06a08fac19d46c40b3329
++STORMLIB_SITE = $(call github,ladislav-zezula,StormLib,$(STORMLIB_VERSION))
++STORMLIB_DEPENDENCIES = zlib bzip2
++HOST_STORMLIB_DEPENDENCIES = host-zlib host-bzip2
++STORMLIB_LICENSE = MIT
++STORMLIB_LICENSE_FILES = LICENSE
++STORMLIB_INSTALL_STAGING = YES
++
++$(eval $(cmake-package))
++$(eval $(host-cmake-package))
+-- 
+2.30.2
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============6744359179384537401==--
