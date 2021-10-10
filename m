@@ -2,83 +2,86 @@ Return-Path: <SRS0=K+5a=O6=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 041BFC433F5
-	for <buildroot@archiver.kernel.org>; Sun, 10 Oct 2021 15:50:07 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 89F85C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 10 Oct 2021 16:40:00 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 4D3A060F4B
-	for <buildroot@archiver.kernel.org>; Sun, 10 Oct 2021 15:50:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4D3A060F4B
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id 3B88B60F43
+	for <buildroot@archiver.kernel.org>; Sun, 10 Oct 2021 16:39:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3B88B60F43
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=yuriev.ru
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BB420400DE;
-	Sun, 10 Oct 2021 15:50:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D31278299D;
+	Sun, 10 Oct 2021 16:39:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id az-O_BSn_280; Sun, 10 Oct 2021 15:50:04 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id W1NJPmdakX1T; Sun, 10 Oct 2021 16:39:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6C3AE400F0;
-	Sun, 10 Oct 2021 15:50:03 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id EA6E71BF2F3
- for <buildroot@lists.busybox.net>; Sun, 10 Oct 2021 15:50:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 30D18827A0;
+	Sun, 10 Oct 2021 16:39:57 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B1C4F1BF424
+ for <buildroot@lists.busybox.net>; Sun, 10 Oct 2021 16:39:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D3346606B4
- for <buildroot@lists.busybox.net>; Sun, 10 Oct 2021 15:50:01 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id A00E8400F0
+ for <buildroot@lists.busybox.net>; Sun, 10 Oct 2021 16:39:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QcKK08JRJ77k for <buildroot@lists.busybox.net>;
- Sun, 10 Oct 2021 15:50:00 +0000 (UTC)
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=yuriev-ru.20210112.gappssmtp.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id at4QaFtL4pJB for <buildroot@lists.busybox.net>;
+ Sun, 10 Oct 2021 16:39:54 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com
- [IPv6:2a00:1450:4864:20::12d])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8AD2060679
- for <buildroot@buildroot.org>; Sun, 10 Oct 2021 15:50:00 +0000 (UTC)
-Received: by mail-lf1-x12d.google.com with SMTP id u18so62330820lfd.12
- for <buildroot@buildroot.org>; Sun, 10 Oct 2021 08:50:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com
+ [IPv6:2a00:1450:4864:20::142])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E403B400EF
+ for <buildroot@buildroot.org>; Sun, 10 Oct 2021 16:39:53 +0000 (UTC)
+Received: by mail-lf1-x142.google.com with SMTP id i24so61284645lfj.13
+ for <buildroot@buildroot.org>; Sun, 10 Oct 2021 09:39:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=yuriev-ru.20210112.gappssmtp.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=OUxYHbRXOD91F6hycXz6G4gelUgz6aVg+SG7S5wm/54=;
- b=ZSvtDAb9+WhPoar0C3hi3C5/33fcZhY0efIOi+9Y3hRqoUJOmqL74JEWd25poQM0sw
- Ld3VubH5WBw0SSfGB/jsNQE4JPPbsAiU28SsDWAKnuUGZct/T6dDr3xDC6mvo8kYt2e6
- xdPld/foqrNVJVUaJ2DK6J6fwkh7fxDeKfKXcFjoiJFrh6e082ZY6CqKS7qmGExLT6sS
- cl58scSfVZBKMzHsVLwRINSDSZZFJ/F22l9OW+8iBgOGRysf3t7Qo3dXee8PbENU4MbO
- 6tv3he7G3wMhIFYYAZsgDdz/ixDkTW8UACvfPg4JdxqimyTSv3CWKtAb4aUKxsDbV8u4
- enwg==
+ bh=caczfOUXmm5P+21B6wUYZheZaBYcAGli02v0fAj64Xs=;
+ b=78L910zIDyUtqsj8O2swnXHexO2UVrVDgPal6MGo+/rGHG5PC9Z9Lc2X837FaUbbWY
+ 8cPtn055jRCKJnyTMIJlKTzIsYd+XwEWhdO/4jYpDwbnZoDGo9mOYGjyDsE5TClSoGFx
+ WxuyEfAORJRQ7rrprkrGi2eGVsI10DVDPNWiJWouWmlbPOimvJJYPbEc5JC5mzXQxe9r
+ Y0519n8AE0PujGlvKFXSxOdKI0RNqsap+a2PSIn0sUJ61Vq0YE6I+8BMucmqWhkCS7KZ
+ FS27fjSf/vTvQudZ9WLi5A9neMrUvpK4pqZ4bn7sTUqyUoDNhUmGlaxmWCx7loA5cGSd
+ CtVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=OUxYHbRXOD91F6hycXz6G4gelUgz6aVg+SG7S5wm/54=;
- b=07ftgBms2rE67lUPhF5VohrXDrpXjpX8pP08x6bEL3fiypWV9bjEr63rPu2xFWFV9X
- gyRvDbnRhYotEYNJ2ViNCwFqLjvapceWo2gAw6kp9ZISfAeqmGPsfB88gU0ORWEXHCP8
- GJNKW0nxsBjUXTjDLB7n5ULpYOZXArWDMqMiAFQahBL5cZpMDu/HnAklvtE5O9B4wZia
- janJkw6WaQHEwlRHbgbm6zb7cOW7Ke+D4qqabVp+2fkdWbUQwThVu6xXoBnTm5DznKif
- OLzBTMxvENfdYOArG83Lsn0pnzFVHR9t5hjh4/fP9uezj+UbIrPVaqjWjkJVSrWcEbRE
- zUTA==
-X-Gm-Message-State: AOAM530aSMvihoH0WsCOq39WXrwPE5WT/V6kcl2X6u0mP2PVOnUoABKj
- yr76OtakAFG7maLc1LfRu++jZda4lh/dGrQq
-X-Google-Smtp-Source: ABdhPJy92+bt35wHrhCl7KdsRIXNOeVOhFLj29nRIfFz5K0DPGTL6vm8dZsYSgYVci3lHYTNAL2s/Q==
-X-Received: by 2002:a2e:868e:: with SMTP id l14mr8414570lji.230.1633880998015; 
- Sun, 10 Oct 2021 08:49:58 -0700 (PDT)
-Received: from localhost.localdomain ([94.254.51.197])
- by smtp.gmail.com with ESMTPSA id g7sm489170lfr.113.2021.10.10.08.49.57
+ bh=caczfOUXmm5P+21B6wUYZheZaBYcAGli02v0fAj64Xs=;
+ b=XnlRJvJMJmYXL1BaF8hCggbhV9pDJb8uU+rxcO6u3mYMLXZ7srh0QAoHKWk7giIgUJ
+ veMmkAz8CJerYA/BbjfoaK6zGsye1VJTwN5F8pFlVaRslbmaR9T1ffsXhKFAHxaDt7UE
+ jbKQmDiIucgsFsmFJxRj1B1JT816eQk//subdHbXveK0GPSN3TXF6DaQ4kjiM2+PBXxO
+ LGgfLAKyPhEGyI5VGY51/c2orZXElfVD3WAUYO6Iyh+sbljbeQq6Wn+1/4Njj+pQY2Hn
+ ozohUTwii3ghzhKHn+p/MUVvMN3fgLAzG6b60BcJfJ+WMreZ7WD2BX19ckBx2KN1meK4
+ ROiw==
+X-Gm-Message-State: AOAM532l0/radCytDYY25T0w9hNMKth7H0xvfbm5jWzEV+Z+xu/2gxwp
+ xa7x5y5UnXUPGSqZ6/YUXw0xaolXha1a4Igk
+X-Google-Smtp-Source: ABdhPJxln9DXnKiPVffkfXrZ+ALWLb3YaekuTY5HAL49YygRxFox/ofAPxMhaSO9StdE7yBVnQuRvQ==
+X-Received: by 2002:a05:6512:33af:: with SMTP id
+ i15mr14605565lfg.260.1633883990529; 
+ Sun, 10 Oct 2021 09:39:50 -0700 (PDT)
+Received: from ly-ThinkPad-X1-Carbon-2nd.ptsecurity.com ([188.170.194.45])
+ by smtp.gmail.com with ESMTPSA id o9sm614104ljh.9.2021.10.10.09.39.48
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 10 Oct 2021 08:49:57 -0700 (PDT)
-From: Joachim Wiberg <troglobit@gmail.com>
+ Sun, 10 Oct 2021 09:39:49 -0700 (PDT)
+From: Leonid Yuriev <leo@yuriev.ru>
 To: buildroot@buildroot.org
-Date: Sun, 10 Oct 2021 17:49:41 +0200
-Message-Id: <20211010154941.1093769-1-troglobit@gmail.com>
-X-Mailer: git-send-email 2.25.1
+Date: Sun, 10 Oct 2021 19:39:33 +0300
+Message-Id: <20211010163934.3169734-1-leo@yuriev.ru>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/watchdogd: new package
+Subject: [Buildroot] [PATCH] package/libmdbx: bump version to 0.10.4 (stable,
+ bugfix release).
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,272 +93,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Joachim Wiberg <troglobit@gmail.com>, =?UTF-8?q?Alejandro=20Gonz=C3=A1lez?=
- <alejandro.gonzalez.correo@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Leonid Yuriev <leo@yuriev.ru>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This patch adds support for watchdogd, a watchdog daemon with built-in
-process supervisor[1] as well as support for monitoring memory & file
-descriptor leaks, and CPU load average.  When a monitored resource
-reaches a high watermark, a warning message is logged and when critical
-level is reached, the cause is saved and the system is rebooted.  On
-reboot the reset cause can be retrieved to help locate the culprit.
-
-Support for SysV init script in this patch, and systemd unit file is
-installed from the one bundled with the package.  Both files supoort
-additional command line options in /etc/default/watchdogd.
-
-The Config.in is slightly big, but allows for disabling or adjusting
-the poll interval for each resource monitor.
-
-For more information, see https://github.com/troglobit/watchdogd
-
-[1]: processes must have their main loop instrumented for supervision.
-
-Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+This is stable bugfix release of libmdbx.
+So it is reasonable to backport this patch to all applicable releases of buildroot.
 ---
- DEVELOPERS                       |  1 +
- package/Config.in                |  1 +
- package/watchdogd/Config.in      | 69 ++++++++++++++++++++++++++++++++
- package/watchdogd/S01watchdogd   | 47 ++++++++++++++++++++++
- package/watchdogd/watchdogd.hash |  5 +++
- package/watchdogd/watchdogd.mk   | 55 +++++++++++++++++++++++++
- 6 files changed, 178 insertions(+)
- create mode 100644 package/watchdogd/Config.in
- create mode 100755 package/watchdogd/S01watchdogd
- create mode 100644 package/watchdogd/watchdogd.hash
- create mode 100644 package/watchdogd/watchdogd.mk
+ package/libmdbx/libmdbx.hash | 2 +-
+ package/libmdbx/libmdbx.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 7ebfc9234b..cf68b94685 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1335,6 +1335,7 @@ F:	package/mg/
- F:	package/netcalc/
- F:	package/ssdp-responder/
- F:	package/sysklogd/
-+F:	package/watchdogd/
+diff --git a/package/libmdbx/libmdbx.hash b/package/libmdbx/libmdbx.hash
+index 7cc835a96a..326cf57bb6 100644
+--- a/package/libmdbx/libmdbx.hash
++++ b/package/libmdbx/libmdbx.hash
+@@ -1,5 +1,5 @@
+ # Hashes from: https://github.com/erthink/libmdbx/releases/
+-sha256  a8f2436c4d008886e044f568a22bda44329fb1c67f175d91a929ff8e2065340a  libmdbx-amalgamated-0.10.3.tar.gz
++sha256  e11d5339a1e1cc34407898933b62a208936fd761a2cc31e11244d581d1d2b5d0  libmdbx-amalgamated-0.10.4.tar.gz
  
- N:	Joao Pinto <jpinto@synopsys.com>
- F:	board/synopsys/vdk/
-diff --git a/package/Config.in b/package/Config.in
-index 9fed0ab4cb..167a6339c1 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2540,6 +2540,7 @@ menu "System tools"
- 	source "package/unscd/Config.in"
- 	source "package/util-linux/Config.in"
- 	source "package/watchdog/Config.in"
-+	source "package/watchdogd/Config.in"
- 	source "package/xdg-dbus-proxy/Config.in"
- 	source "package/xen/Config.in"
- 	source "package/xvisor/Config.in"
-diff --git a/package/watchdogd/Config.in b/package/watchdogd/Config.in
-new file mode 100644
-index 0000000000..48abbac8fa
---- /dev/null
-+++ b/package/watchdogd/Config.in
-@@ -0,0 +1,69 @@
-+config BR2_PACKAGE_WATCHDOGD
-+	bool "watchdogd"
-+	depends on BR2_USE_MMU # fork()
-+	select BR2_PACKAGE_LIBCONFUSE
-+	select BR2_PACKAGE_LIBITE
-+	select BR2_PACKAGE_LIBUEV
-+	help
-+	  Extended version of uClinux-dist watchdogd.  Monitors loadavg,
-+	  file descriptors and memory leaks, and capable of supervising
-+	  your processes main loop using an instrumentation API.
-+
-+	  A reset reason is saved for power loss, CPU overload, or any
-+	  of the monitored conditions (above).	The full capabilities
-+	  are limited by the kernel watchdog driver, but even the basic
-+	  "softdog" driver is supported.  See /etc/watchdogd.conf for
-+	  details, and try watchdogctl for system status and available
-+	  commands.
-+
-+	  https://github.com/troglobit/watchdogd/
-+
-+if BR2_PACKAGE_WATCHDOGD
-+
-+config BR2_PACKAGE_WATCHDOGD_TEST_SUITE
-+	bool "Enable watchdogctl test cases"
-+	default y
-+	help
-+	  The watchdogctl program comes with a suite of tests built-in.
-+	  They can be used to verify correct operation of watchdogd and
-+	  the kernel watchdog driver.
-+
-+	  Default: enabled
-+
-+config BR2_PACKAGE_WATCHDOGD_GENERIC_POLL
-+	int "Generic script monitor poll interval (sec)"
-+	default "300"
-+	help
-+	  Poll interval for generic script monitor, in seconds.  A value
-+	  of zero (0) disables the monitor.
-+
-+	  Default: 300 seconds
-+
-+config BR2_PACKAGE_WATCHDOGD_LOADAVG_POLL
-+	int "CPU load average monitor poll interval (sec)"
-+	default "300"
-+	help
-+	  Poll interval for CPU load average monitor, in seconds.  A
-+	  value of zero (0) disables the monitor.
-+
-+	  Default: 300 seconds
-+
-+config BR2_PACKAGE_WATCHDOGD_FILENR_POLL
-+	int "File descriptor leak monitor poll interval (sec)"
-+	default "300"
-+	help
-+	  Poll interval for file descriptor leak monitor, in seconds.  A
-+	  value of zero (0) disables the monitor.
-+
-+	  Default: 300 seconds
-+
-+config BR2_PACKAGE_WATCHDOGD_MEMINFO_POLL
-+	int "Memory leak monitor poll interval (sec)"
-+	default "300"
-+	help
-+	  Poll interval for memory leak monitor, in seconds.  A value of
-+	  zero (0) disables the monitor.
-+
-+	  Default: 300 seconds
-+
-+endif
-diff --git a/package/watchdogd/S01watchdogd b/package/watchdogd/S01watchdogd
-new file mode 100755
-index 0000000000..df57b8ad7a
---- /dev/null
-+++ b/package/watchdogd/S01watchdogd
-@@ -0,0 +1,47 @@
-+#!/bin/sh
-+
-+DAEMON="watchdogd"
-+PIDFILE="/var/run/$DAEMON.pid"
-+
-+# shellcheck source=/dev/null
-+[ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
-+
-+cmd()
-+{
-+    start-stop-daemon -q -p "$PIDFILE" -x "/usr/sbin/$DAEMON" "$@"
-+    status=$?
-+    if [ $status -eq 0 ]; then
-+	echo "OK"
-+    else
-+	echo "FAIL"
-+    fi
-+    return $status
-+}
-+
-+case "$1" in
-+    start)
-+	printf 'Starting %s: ' "$DAEMON"
-+	# shellcheck disable=SC2086 # we need the word splitting
-+	cmd -S -- $SMCROUTED_ARGS
-+	;;
-+
-+    stop)
-+	printf 'Stopping %s: ' "$DAEMON"
-+	cmd -K
-+	;;
-+
-+    restart)
-+	$0 stop
-+	sleep 1
-+	$0 start
-+	;;
-+
-+    reload)
-+	printf 'Reloading %s: ' "$DAEMON"
-+	cmd -K -s HUP
-+	;;
-+
-+    *)
-+	echo "Usage: $0 {start|stop|restart|reload}"
-+	exit 1
-+esac
-diff --git a/package/watchdogd/watchdogd.hash b/package/watchdogd/watchdogd.hash
-new file mode 100644
-index 0000000000..7c1acf0820
---- /dev/null
-+++ b/package/watchdogd/watchdogd.hash
-@@ -0,0 +1,5 @@
-+# Upstream .sha256 from GitHub
-+sha256 f36fdea9b323534a704c4c23d9af8050480bca4bdad89cdb50d26fcac316d172  watchdogd-3.4.tar.gz
-+
-+# Locally calculated
-+sha256 fd685e20931174308c45a26418a7ce34d66704c4e4b92ab1d8299deb255cd676  LICENSE
-diff --git a/package/watchdogd/watchdogd.mk b/package/watchdogd/watchdogd.mk
-new file mode 100644
-index 0000000000..3ac297ee5a
---- /dev/null
-+++ b/package/watchdogd/watchdogd.mk
-@@ -0,0 +1,55 @@
-+################################################################################
-+#
-+# watchdogd
-+#
-+################################################################################
-+
-+WATCHDOGD_VERSION = 3.4
-+WATCHDOGD_SITE = https://github.com/troglobit/watchdogd/releases/download/$(WATCHDOGD_VERSION)
-+WATCHDOGD_LICENSE = ISC
-+WATCHDOGD_LICENSE_FILES = LICENSE
-+WATCHDOGD_CPE_ID_VENDOR = troglobit
-+WATCHDOGD_DEPENDENCIES = host-pkgconf libconfuse libite libuev
-+WATCHDOGD_CONF_OPTS = --disable-compat --disable-examples --disable-test-mode
-+
-+ifneq ($(BR2_PACKAGE_WATCHDOGD_TEST_SUITE),y)
-+WATCHDOGD_CONF_OPTS += --disable-builtin-tests
-+else
-+WATCHDOGD_CONF_OPTS += --enable-builtin-tests
-+endif
-+
-+ifeq ($(BR2_PACKAGE_WATCHDOGD_GENERIC_POLL),0)
-+WATCHDOGD_CONF_OPTS += --without-generic
-+else
-+WATCHDOGD_CONF_OPTS += --with-generic=$(BR2_PACKAGE_WATCHDOGD_GENERIC_POLL)
-+endif
-+
-+ifeq ($(BR2_PACKAGE_WATCHDOGD_LOADAVG_POLL),0)
-+WATCHDOGD_CONF_OPTS += --without-loadavg
-+else
-+WATCHDOGD_CONF_OPTS += --with-loadavg=$(BR2_PACKAGE_WATCHDOGD_LOADAVG_POLL)
-+endif
-+
-+ifeq ($(BR2_PACKAGE_WATCHDOGD_FILENR_POLL),0)
-+WATCHDOGD_CONF_OPTS += --without-filenr
-+else
-+WATCHDOGD_CONF_OPTS += --with-filenr=$(BR2_PACKAGE_WATCHDOGD_FILENR_POLL)
-+endif
-+
-+ifeq ($(BR2_PACKAGE_WATCHDOGD_MEMINFO_POLL),0)
-+WATCHDOGD_CONF_OPTS += --without-meminfo
-+else
-+WATCHDOGD_CONF_OPTS += --with-meminfo=$(BR2_PACKAGE_WATCHDOGD_MEMINFO_POLL)
-+endif
-+
-+define WATCHDOGD_INSTALL_INIT_SYSV
-+	$(INSTALL) -D -m 0755 package/watchdogd/S01watchdogd \
-+		$(TARGET_DIR)/etc/init.d/S01watchdogd
-+endef
-+
-+define WATCHDOGD_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 644 $(WATCHDOGD_PKGDIR)/watchdogd.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/watchdogd.service
-+endef
-+
-+$(eval $(autotools-package))
+ # Locally calculated
+ sha256  310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  LICENSE
+diff --git a/package/libmdbx/libmdbx.mk b/package/libmdbx/libmdbx.mk
+index 76bd56dfd7..f38e4a533b 100644
+--- a/package/libmdbx/libmdbx.mk
++++ b/package/libmdbx/libmdbx.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBMDBX_VERSION = 0.10.3
++LIBMDBX_VERSION = 0.10.4
+ LIBMDBX_SOURCE = libmdbx-amalgamated-$(LIBMDBX_VERSION).tar.gz
+ LIBMDBX_SITE = https://github.com/erthink/libmdbx/releases/download/v$(LIBMDBX_VERSION)
+ LIBMDBX_SUPPORTS_IN_SOURCE_BUILD = NO
 -- 
-2.25.1
+2.33.0
 
 _______________________________________________
 buildroot mailing list
