@@ -2,87 +2,77 @@ Return-Path: <SRS0=K+5a=O6=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E12CDC433F5
-	for <buildroot@archiver.kernel.org>; Sun, 10 Oct 2021 08:52:57 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 34205C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 10 Oct 2021 09:00:41 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id A33B960F4B
-	for <buildroot@archiver.kernel.org>; Sun, 10 Oct 2021 08:52:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A33B960F4B
+	by mail.kernel.org (Postfix) with ESMTPS id 5BD4B60D07
+	for <buildroot@archiver.kernel.org>; Sun, 10 Oct 2021 09:00:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5BD4B60D07
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 72E9D404CA;
-	Sun, 10 Oct 2021 08:52:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1B40760783;
+	Sun, 10 Oct 2021 09:00:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HakHizvPWSp5; Sun, 10 Oct 2021 08:52:56 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id YCFfFEQ2M5cM; Sun, 10 Oct 2021 09:00:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AF5AB404C5;
-	Sun, 10 Oct 2021 08:52:55 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2376F1BF285
- for <buildroot@lists.busybox.net>; Sun, 10 Oct 2021 08:52:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 37B686079F;
+	Sun, 10 Oct 2021 09:00:38 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 541D81BF328
+ for <buildroot@lists.busybox.net>; Sun, 10 Oct 2021 09:00:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1F8A3827C9
- for <buildroot@lists.busybox.net>; Sun, 10 Oct 2021 08:52:54 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 31D7D404C2
+ for <buildroot@lists.busybox.net>; Sun, 10 Oct 2021 09:00:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LNFOEUr0QqkT for <buildroot@lists.busybox.net>;
- Sun, 10 Oct 2021 08:52:53 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5F0wHq4yhWIa for <buildroot@lists.busybox.net>;
+ Sun, 10 Oct 2021 09:00:18 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com
- [IPv6:2a00:1450:4864:20::130])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D7D7382725
- for <buildroot@buildroot.org>; Sun, 10 Oct 2021 08:52:52 +0000 (UTC)
-Received: by mail-lf1-x130.google.com with SMTP id j5so59507893lfg.8
- for <buildroot@buildroot.org>; Sun, 10 Oct 2021 01:52:52 -0700 (PDT)
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com
+ [IPv6:2607:f8b0:4864:20::132])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1008040470
+ for <buildroot@buildroot.org>; Sun, 10 Oct 2021 09:00:17 +0000 (UTC)
+Received: by mail-il1-x132.google.com with SMTP id k3so6342722ilu.2
+ for <buildroot@buildroot.org>; Sun, 10 Oct 2021 02:00:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=to:cc:references:from:subject:message-id:date:user-agent
- :mime-version:in-reply-to;
- bh=fo30dEkvG3AAo4CAFs2iVQ7LsAYq7E6Sevi+MQWLssk=;
- b=pNfxT63XPo3PxyloU5vfL60XHv0ketjrOvszbdIEi7H6imssqlxLuz8BPdosT7q0AG
- u6qzdnwmc1Dstl7KWED0ZjM0F1uki2PTNqlIzOHjDLJVZ5y1YEdWj52jjD7oMZcORAfg
- pIgq6PLS3xHyku6pk9OhJ5PbhCMxNkDE3QIXTS0btkGujDfdLIWY7bV0lBJ8h8776Nnn
- rjyahK2SmPJyfyWNcyeak7rktn1TDhJ0/a8bI64QaVp9tjb9GW32yP0nzrIIW1kskmvS
- E2cTOcG1OMzVCFx89aksW0+H8z8EYwCus2LC+h5Y995plbCaWUKbL+0O8n15TqSXXa3z
- L9nA==
+ h=mime-version:from:date:message-id:subject:to;
+ bh=VYVgAitXv5sdlBCeDqv+j5i3FDnj2Gc6y/bLwWDn67k=;
+ b=i1u3ihdyvFPd9UQSfbCTyfT3Kuf5RAsvL4Pi6rs+1njamgbsWmMj/K4kzCeKEoScDG
+ ZH2pvJJfqtsOiAFd2lAJB3JTFSCq4yeYHAdDrNR/kGed5WZm/lz9myI468HPRQYuPRSe
+ 5OGoaD2dsibeIQv9F1Zlq2OlFrNwzgI2vH8DAbJRi98d7BqjggStwauvlpWeY78Ieksg
+ TmZYURLD36BJrri5HuJ069Grfjf3TOJ4pGHSPLr3NpTkf8YVTaVMdYe2EB3tc6CiZ1J7
+ K27ZOShuV8iyUKHl3t+XsISbWg6ltRpkOsPWYj1ea/ZAomfDN9IBKKaSb11FIvST57yk
+ t8OQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:to:cc:references:from:subject:message-id:date
- :user-agent:mime-version:in-reply-to;
- bh=fo30dEkvG3AAo4CAFs2iVQ7LsAYq7E6Sevi+MQWLssk=;
- b=p1akA6FAgHLS7EwJRU/97SVc0DV6b28v4udocpxzjh3YHT7EZmZJ71vFS9xKF5norJ
- 3mQ19zYlbkEtJSNqHyUUgmfhqF7mfS4SC135cHw062yTtao1HRlOJPECoKIHVY3JtEdE
- 1Low0Vh6VnCrY16bwc5wwwNPae6a832bWED54sA2jY23WcitRPwqrkFYlCEjalk0xDxo
- Pwu4qKDYJUeXRXF9w85yvGa0kc4afK9mC2rEsnEtGux0tWukWGJrvLE/2Sm6L8iyQDMU
- 9TFTIe+IbXsKeEMK47PsZEec4xsDuz0j7HHbZHtsyHVvlv/zf73f5+mlKUjgDeB1Fu4C
- 8MEA==
-X-Gm-Message-State: AOAM532gttBsIA8xn0PIMValkjU52la0qJOLThIxsNt1zQZq8ttlxydq
- bJJc/CswM6T7PGwYzCbNTrs=
-X-Google-Smtp-Source: ABdhPJzI/dYFOOFY+jhqvI3RYO/gm3hdCMlfsX5LOS2OEUXvODRwL9NLXZ8IBnGnZqv37ckTj/eAoQ==
-X-Received: by 2002:ac2:4f01:: with SMTP id k1mr21745725lfr.266.1633855970660; 
- Sun, 10 Oct 2021 01:52:50 -0700 (PDT)
-Received: from [10.0.196.136] ([94.254.51.197])
- by smtp.googlemail.com with ESMTPSA id a21sm487011lji.135.2021.10.10.01.52.50
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 10 Oct 2021 01:52:50 -0700 (PDT)
-To: Peter Korsgaard <peter@korsgaard.com>
-References: <20211009094144.130161-1-troglobit@gmail.com>
- <877dels2p4.fsf@dell.be.48ers.dk>
-From: Joachim Wiberg <troglobit@gmail.com>
-Message-ID: <43da32e2-6d83-ab1b-4b8e-1aa287e0e699@gmail.com>
-Date: Sun, 10 Oct 2021 10:52:49 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+ h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+ bh=VYVgAitXv5sdlBCeDqv+j5i3FDnj2Gc6y/bLwWDn67k=;
+ b=npQs2gQwoS96rLjhU5jmV4VO1uSwD7r0TOtql59Q9YpGheRzYMijGyfui5yyODjm7A
+ maCEkz3vq8fPrlAi5UlltPfRAVLT88sdNmGJGkESbBOqIVq85ABuJp8x4Rj4BjZOjLLt
+ p+TrfBlUj9IkAIp3LNxcxQ0mRO/RdyPTsIrBpz2Vy/oIlPduF0S2srQ3XjG5ty9h06EA
+ O+CMw8XVVKQTPSxqSmHHT7WICVSfvPafgcdLU9cLGvtYMVZYdvxABJzw8d5rhKGubYd/
+ 3g5AyasajenkstwBM0q8U6qSAKb05bcJwAMXqtOa3jAv0aS2MDYic+KVoXGGsBlhugqc
+ pB7g==
+X-Gm-Message-State: AOAM530V8lwVLlYbTohXdfhZzUoqGZi6DCai0dqi25u3QN5VilIVOKDr
+ towLceUjD02OgdcbQz7dXKVCCNa3asq7LEb6pFRc2SOK/A==
+X-Google-Smtp-Source: ABdhPJwCrW20wauuQf8o4QkcCl93CpT2MRsMNgL3EMsmyFYkpAQr4Wn6/Wjz8JNXGOinzhP8F9F8m83fKtGCQKt1FeI=
+X-Received: by 2002:a05:6e02:1a27:: with SMTP id
+ g7mr14680245ile.123.1633856416453; 
+ Sun, 10 Oct 2021 02:00:16 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <877dels2p4.fsf@dell.be.48ers.dk>
-Subject: Re: [Buildroot] [PATCH 1/1] package/libuev: bump version to v2.4.0
+From: =?UTF-8?Q?Esa=C3=AFe_Ledoux_NJONGSSI_KOUAM?= <kouamdoux@gmail.com>
+Date: Sun, 10 Oct 2021 09:58:52 +0200
+Message-ID: <CA+eej5MzpM30U7sMqba5gKQ3dG5FznZqd6roacphLhx6J-9auA@mail.gmail.com>
+To: buildroot@buildroot.org
+Subject: [Buildroot] error when i build buidroot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,95 +84,183 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Peter Seiderer <ps.report@gmx.net>, buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============5061545479321431454=="
+Content-Type: multipart/mixed; boundary="===============1381020592327669258=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---===============5061545479321431454==
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="LAtfnvE9mFU6ybceeY3aeqvkJXpSIgoH0"
+--===============1381020592327669258==
+Content-Type: multipart/alternative; boundary="000000000000511a5605cdfbd7f1"
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---LAtfnvE9mFU6ybceeY3aeqvkJXpSIgoH0
-Content-Type: multipart/mixed; boundary="CoUIWbrvjgOt7y6WXxUYmZBWNyznexBHR";
- protected-headers="v1"
-From: Joachim Wiberg <troglobit@gmail.com>
-To: Peter Korsgaard <peter@korsgaard.com>
-Cc: buildroot@buildroot.org, Peter Seiderer <ps.report@gmx.net>
-Message-ID: <43da32e2-6d83-ab1b-4b8e-1aa287e0e699@gmail.com>
-Subject: Re: [PATCH 1/1] package/libuev: bump version to v2.4.0
-References: <20211009094144.130161-1-troglobit@gmail.com>
- <877dels2p4.fsf@dell.be.48ers.dk>
-In-Reply-To: <877dels2p4.fsf@dell.be.48ers.dk>
+--000000000000511a5605cdfbd7f1
+Content-Type: text/plain; charset="UTF-8"
 
---CoUIWbrvjgOt7y6WXxUYmZBWNyznexBHR
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Hey everybody ,
+It is my first time to use buildroot. I have read the manual and i want to
+use it for embedded linux projects .
+So i have :
+clone the project
+build  for qemu_x86_64 by typing "qemu_x86_64_defconfig"
+then type "make"
+
+After that i have seen some error, i don't know how to solve it :
+
+"rsync -a --ignore-times --exclude .svn --exclude .git --exclude .hg
+--exclude .bzr --exclude CVS --chmod=u=rwX,go=rX --exclude .empty --exclude
+'*~' system/skeleton/
+/root/buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/"
+
+So this command generate a lot of errors :
+
+rsync: [generator] failed to set permissions on
+"/root/buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/dev":
+Function not implemented (38)
+rsync: [generator] failed to set permissions on
+"/root/buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/etc":
+Function not implemented (38)
+rsync: [generator] failed to set permissions on
+"/root/buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/etc/profile.d":
+Function not implemented (38)
+rsync: [generator] failed to set permissions on
+"/root/buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/media":
+Function not implemented (38)
+rsync: [generator] failed to set permissions on
+"/root/buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/mnt":
+Function not implemented (38)
+rsync: [generator] failed to set permissions on
+"/root/buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/opt":
+Function not implemented (38)
+rsync: [generator] failed to set permissions on
+"/root/buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/proc":
+Function not implemented (38)
+rsync: [generator] failed to set permissions on
+"/root/buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/root":
+Function not implemented (38)
+rsync: [generator] failed to set permissions on
+"/root/buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/run":
+Function not implemented (38)
+rsync: [generator] failed to set permissions on
+"/root/buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/sys":
+Function not implemented (38)
+rsync: [generator] failed to set permissions on
+"/root/buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/tmp":
+Function not implemented (38)
+rsync: [generator] failed to set permissions on
+"/root/buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/usr/bin":
+Function not implemented (38)
+rsync: [generator] failed to set permissions on
+"/root/buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/usr/lib":
+Function not implemented (38)
+rsync: [generator] failed to set permissions on
+"/root/buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/usr/sbin":
+Function not implemented (38)
+rsync: [receiver] failed to set permissions on
+"/root/buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/etc/.group.nsk97w":
+Function not implemented (38)
+rsync: [receiver] failed to set permissions on
+"/root/buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/etc/.hosts.yBRyXu":
+Function not implemented (38)
+rsync: [receiver] failed to set permissions on
+"/root/buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/etc/.passwd.0Uncqt":
+Function not implemented (38)
+rsync: [receiver] failed to set permissions on
+"/root/buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/etc/.profile.0E8enu":
+Function not implemented (38)
+rsync: [receiver] failed to set permissions on
+"/root/buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/etc/.protocols.DJb4ew":
+Function not implemented (38)
+rsync: [receiver] failed to set permissions on
+"/root/buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/etc/.services.AO2ruv":
+Function not implemented (38)
+rsync: [receiver] failed to set permissions on
+"/root/buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/etc/.shadow.QE0FTt":
+Function not implemented (38)
+rsync: [receiver] failed to set permissions on
+"/root/buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/etc/profile.d/.umask.sh.IN0rhw":
+Function not implemented (38)
+rsync error: some files/attrs were not transferred (see previous errors)
+(code 23) at main.c(1333) [sender=3.2.3]
+make: *** [package/pkg-generic.mk:333 :
+/root/buildroot/output/build/skeleton-init-common/.stamp_staging_installed]
+Erreur 23
+
+Please how can i fix that ?? Because i have not seen something talk about
+how to avoid it
+
+--000000000000511a5605cdfbd7f1
+Content-Type: text/html; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Peter!
+<div dir=3D"ltr"><div>Hey everybody ,</div><div>It is my first time to use =
+buildroot. I have read the manual and i want to use it for embedded linux p=
+rojects .</div><div>So i have : <br></div><div>clone the project</div><div>=
+build=C2=A0 for qemu_x86_64 by typing &quot;qemu_x86_64_defconfig&quot;</di=
+v><div>then type &quot;make&quot; <br></div><div><br></div><div>After that =
+i have seen some error, i don&#39;t know how to solve it :</div><div><br></=
+div><div>&quot;rsync -a --ignore-times --exclude .svn --exclude .git --excl=
+ude .hg --exclude .bzr --exclude CVS --chmod=3Du=3DrwX,go=3DrX --exclude .e=
+mpty --exclude &#39;*~&#39; system/skeleton/ /root/buildroot/output/host/x8=
+6_64-buildroot-linux-uclibc/sysroot/&quot;</div><div><br></div><div>So this=
+ command generate a lot of errors : <br></div><div><br></div><div>rsync: [g=
+enerator] failed to set permissions on &quot;/root/buildroot/output/host/x8=
+6_64-buildroot-linux-uclibc/sysroot/dev&quot;: Function not implemented (38=
+)<br>rsync: [generator] failed to set permissions on &quot;/root/buildroot/=
+output/host/x86_64-buildroot-linux-uclibc/sysroot/etc&quot;: Function not i=
+mplemented (38)<br>rsync: [generator] failed to set permissions on &quot;/r=
+oot/buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/etc/profile=
+.d&quot;: Function not implemented (38)<br>rsync: [generator] failed to set=
+ permissions on &quot;/root/buildroot/output/host/x86_64-buildroot-linux-uc=
+libc/sysroot/media&quot;: Function not implemented (38)<br>rsync: [generato=
+r] failed to set permissions on &quot;/root/buildroot/output/host/x86_64-bu=
+ildroot-linux-uclibc/sysroot/mnt&quot;: Function not implemented (38)<br>rs=
+ync: [generator] failed to set permissions on &quot;/root/buildroot/output/=
+host/x86_64-buildroot-linux-uclibc/sysroot/opt&quot;: Function not implemen=
+ted (38)<br>rsync: [generator] failed to set permissions on &quot;/root/bui=
+ldroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/proc&quot;: Functi=
+on not implemented (38)<br>rsync: [generator] failed to set permissions on =
+&quot;/root/buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/roo=
+t&quot;: Function not implemented (38)<br>rsync: [generator] failed to set =
+permissions on &quot;/root/buildroot/output/host/x86_64-buildroot-linux-ucl=
+ibc/sysroot/run&quot;: Function not implemented (38)<br>rsync: [generator] =
+failed to set permissions on &quot;/root/buildroot/output/host/x86_64-build=
+root-linux-uclibc/sysroot/sys&quot;: Function not implemented (38)<br>rsync=
+: [generator] failed to set permissions on &quot;/root/buildroot/output/hos=
+t/x86_64-buildroot-linux-uclibc/sysroot/tmp&quot;: Function not implemented=
+ (38)<br>rsync: [generator] failed to set permissions on &quot;/root/buildr=
+oot/output/host/x86_64-buildroot-linux-uclibc/sysroot/usr/bin&quot;: Functi=
+on not implemented (38)<br>rsync: [generator] failed to set permissions on =
+&quot;/root/buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/usr=
+/lib&quot;: Function not implemented (38)<br>rsync: [generator] failed to s=
+et permissions on &quot;/root/buildroot/output/host/x86_64-buildroot-linux-=
+uclibc/sysroot/usr/sbin&quot;: Function not implemented (38)<br>rsync: [rec=
+eiver] failed to set permissions on &quot;/root/buildroot/output/host/x86_6=
+4-buildroot-linux-uclibc/sysroot/etc/.group.nsk97w&quot;: Function not impl=
+emented (38)<br>rsync: [receiver] failed to set permissions on &quot;/root/=
+buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/etc/.hosts.yBRy=
+Xu&quot;: Function not implemented (38)<br>rsync: [receiver] failed to set =
+permissions on &quot;/root/buildroot/output/host/x86_64-buildroot-linux-ucl=
+ibc/sysroot/etc/.passwd.0Uncqt&quot;: Function not implemented (38)<br>rsyn=
+c: [receiver] failed to set permissions on &quot;/root/buildroot/output/hos=
+t/x86_64-buildroot-linux-uclibc/sysroot/etc/.profile.0E8enu&quot;: Function=
+ not implemented (38)<br>rsync: [receiver] failed to set permissions on &qu=
+ot;/root/buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/etc/.p=
+rotocols.DJb4ew&quot;: Function not implemented (38)<br>rsync: [receiver] f=
+ailed to set permissions on &quot;/root/buildroot/output/host/x86_64-buildr=
+oot-linux-uclibc/sysroot/etc/.services.AO2ruv&quot;: Function not implement=
+ed (38)<br>rsync: [receiver] failed to set permissions on &quot;/root/build=
+root/output/host/x86_64-buildroot-linux-uclibc/sysroot/etc/.shadow.QE0FTt&q=
+uot;: Function not implemented (38)<br>rsync: [receiver] failed to set perm=
+issions on &quot;/root/buildroot/output/host/x86_64-buildroot-linux-uclibc/=
+sysroot/etc/profile.d/.umask.sh.IN0rhw&quot;: Function not implemented (38)=
+<br>rsync error: some files/attrs were not transferred (see previous errors=
+) (code 23) at main.c(1333) [sender=3D3.2.3]<br>make: *** [package/<a href=
+=3D"http://pkg-generic.mk:333">pkg-generic.mk:333</a> : /root/buildroot/out=
+put/build/skeleton-init-common/.stamp_staging_installed] Erreur 23</div><di=
+v><br></div><div>Please how can i fix that ?? Because i have not seen somet=
+hing talk about how to avoid it<br></div><div><br></div></div>
 
-On 10/10/21 10:29 AM, Peter Korsgaard wrote:
->>>>>> "Joachim" =3D=3D Joachim Wiberg <troglobit@gmail.com> writes:
->  > This update is critical for linking against GLIBC v2.34, due to the
->  > changes related to 64-bit time_t on 32-bit systems.  See ChangeLog
->  > for details:
->  >   https://github.com/troglobit/libuev/releases/tag/v2.4.0
->  > Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
-> This presumably also affect musl, which moved to 64 bit time_t back in
-> 1.2.0. I don't see any autobuilder issues related to older libuev
-> versions (or uredir, as it probably only triggers when a dependency
-> tries to link with it)?
+--000000000000511a5605cdfbd7f1--
 
-The change is only related to GLIBC, which from v2.34 requires an
-additional build flag to enable 64-bit time_t.  The latest libuev
-release adds the following to the .pc file (and it's test suite):
-
-    -D_TIME_BITS=3D64 -D_FILE_OFFSET_BITS=3D64
-
-I don't think musl needs anything other than recompiling from source,
-which we do already.  At least from what I can see from this page:
-
-    https://musl.libc.org/time64.html
-
-> What about uclibc-ng, which still uses 32bit time_t?
-
-Absolute time in a future after 2038 on systems with 32-bit time_t is
-pretty much undefined.  Fortunately, most common use-cases with libuev
-involves periodic or oneshot (monotonic) timers that are relative to
-their individual start, which as far as I know are not affected.
-
-Best regards
- /Joachim
-
-
-
-
-
---CoUIWbrvjgOt7y6WXxUYmZBWNyznexBHR--
-
---LAtfnvE9mFU6ybceeY3aeqvkJXpSIgoH0
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEE3gkxgy2/gzkZH7KyLCqwqW4MR1gFAmFiqeEFAwAAAAAACgkQLCqwqW4MR1h9
-Uwf/Yeh7bbg/Np1WW7eO5fn1dXd49PlyybXqMtDILweNVv+XkpBhqiokOuf2opEpqYZxzlb+JTVG
-czabz/xd1uPDWT1EeWZTuKRUzZvbQ3P6T4O/mvKgtiTb1Sxc2jtMNK5iYbZiKEkNP2wgbmeZGcge
-zIzZr4AaDK00sDzSBYsY3R7ebp7WVfb7WI3GlgAMo4O6YjVNpsgwfBZazvf1CiszMljTDSZLjfxV
-P13EhaJrsYTisf52EXAsuxp5y3562krinxFaAw5gXHKgxkNv54TCFwQuNppLf6QxIZG4BvIkn/58
-8ISpmIeZnj862bpaafy3uirLdGHmzNQg7stOnMtjJw==
-=x8EJ
------END PGP SIGNATURE-----
-
---LAtfnvE9mFU6ybceeY3aeqvkJXpSIgoH0--
-
---===============5061545479321431454==
+--===============1381020592327669258==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -193,4 +271,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============5061545479321431454==--
+--===============1381020592327669258==--
