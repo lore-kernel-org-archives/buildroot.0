@@ -2,72 +2,83 @@ Return-Path: <SRS0=K+5a=O6=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A7CC9C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 10 Oct 2021 17:43:24 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EADDBC433F5
+	for <buildroot@archiver.kernel.org>; Sun, 10 Oct 2021 17:53:36 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 6D56F60F24
-	for <buildroot@archiver.kernel.org>; Sun, 10 Oct 2021 17:43:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6D56F60F24
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
+	by mail.kernel.org (Postfix) with ESMTPS id 729E360F22
+	for <buildroot@archiver.kernel.org>; Sun, 10 Oct 2021 17:53:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 729E360F22
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 44CE4606B4;
-	Sun, 10 Oct 2021 17:43:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 231F44022C;
+	Sun, 10 Oct 2021 17:53:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pLoay_iJVJyW; Sun, 10 Oct 2021 17:43:23 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6A2B760669;
-	Sun, 10 Oct 2021 17:43:22 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id AC87E1BF3C2
- for <buildroot@lists.busybox.net>; Sun, 10 Oct 2021 17:43:20 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A812640438
- for <buildroot@lists.busybox.net>; Sun, 10 Oct 2021 17:43:20 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uaZs5WVTffib for <buildroot@lists.busybox.net>;
- Sun, 10 Oct 2021 17:43:19 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id el5leefx_8gb; Sun, 10 Oct 2021 17:53:35 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 678F040140;
+	Sun, 10 Oct 2021 17:53:34 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 60E591BF3C2
+ for <buildroot@lists.busybox.net>; Sun, 10 Oct 2021 17:53:33 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4BB3C6065C
+ for <buildroot@lists.busybox.net>; Sun, 10 Oct 2021 17:53:33 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VjRJ3fRiODfT for <buildroot@lists.busybox.net>;
+ Sun, 10 Oct 2021 17:53:31 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A074A40437
- for <buildroot@buildroot.org>; Sun, 10 Oct 2021 17:43:19 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:74c0:e1ec:fabc:9152])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id 85C7219F4EA;
- Sun, 10 Oct 2021 19:43:09 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1633887797;
- bh=PD1ljbx9MPkQ31CUdTbpYqPEQInDlk7Lglbu/6HvTf4=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=uku9oW8jf/jonNQw7VBNbYZ7CTMZit7CrclA/i7WDA93+CKM0z+Huovboytk1UNns
- 2Z6fM/1PsPqTsKSc1am1s83yyGWCS1jPOd3EynR1qgfZihSWGcz7x/ihAjtDePo9SV
- IKuQ17AT8nXmXnPYyrLMPc4fcl+yO1vLgMShjqZ36hsNuKL6CkkDl0aSvXCw6OuLn6
- d1iuG+4WQYQNeh2WjC1IK3fk0MABmSAEcaDXYX8K2dU7iawK0LZtUyqMXnTwB2RysV
- t0X1LttUl0j6T67e297NBHMxvYTYWIXTyXRJEMxkiuU1aeNImylZrKmkRPGiCxL8Th
- Hsq8gP7aqLV8g==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 10 Oct 2021 19:43:09 +0200
-Date: Sun, 10 Oct 2021 19:43:09 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Message-ID: <20211010174309.GO2081069@scaer>
-References: <20211009191646.1076266-1-thomas.petazzoni@bootlin.com>
- <20211009191646.1076266-6-thomas.petazzoni@bootlin.com>
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com
+ [IPv6:2607:f8b0:4864:20::12c])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5118C6060A
+ for <buildroot@buildroot.org>; Sun, 10 Oct 2021 17:53:31 +0000 (UTC)
+Received: by mail-il1-x12c.google.com with SMTP id i11so14715434ila.12
+ for <buildroot@buildroot.org>; Sun, 10 Oct 2021 10:53:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=AHIKHAvZ0VM6JQeFv7sQS1A0kJmDNFxBoiqeguiVkwg=;
+ b=N2YLQJClzvYo7Gjkvv9AWa5Yep6BttlXhRs/EsAYVizSYvlHcmoAwFZQsdDHarrNfP
+ qh3M4MzM6seusSv9H7dSZn4XW70iV9RaqyzRX7anSAObbzoJKr1hHmgjB3uvXv7KI30A
+ YKmmVEkH5hgToWJ8ncTb4Hnypa2JVvZqndPFtKxSLGSoswv9dRX90XTnW3SFyqZq6uBH
+ ChRDhEpgkfuvHyOOzDx6rpp91ojuA8XLB/sNEbT3ej7uG4YxWNdYq6/vcyp4guxTGw3a
+ 5R65vHRUB/Hz/0G8dk9RSwKOuXXXlrQIpCXuVaCAypYWaTevp07AEBw0xHe8GuxBwMXW
+ tJpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=AHIKHAvZ0VM6JQeFv7sQS1A0kJmDNFxBoiqeguiVkwg=;
+ b=ckvo63Fttf+N8yuC3Pz2h1KBwyin/eGh3kv/c1QSKAb7GRtLPXMW9gFSNkeF5xW8ix
+ a/IA50pkYRLyH6pt8pK3/LRP6xkp5mgHg3OU4iWUbq/W7kXRwLHpBjNw3Gf9UDyhkhIT
+ H2Cd85qyCEkC508cLnEphNd3pgDSIuiNp0Jrb6t3lEGMZdcxgjlr5QBNbcijV+7dGHLs
+ YGeIZbuTjovfon/8RYzA1Jjm23TkLxy5Iz+0wN9N9U5dHbSHwSYLZLDOQrr4hRJcW+Ik
+ qR5Rf/cntAuMNi0W9iUpim2ZWA/uY6to0UR5D2IbQEQ195CD1P4Zm33CXill14kGSUQG
+ b6pQ==
+X-Gm-Message-State: AOAM530R5+iSP0//TEa0ol2M+dursR86k8G8CR2FnaQZj3QPAa4JPjti
+ VXVtlpCgmrybDBmlWSa8SspX0XS/rB1YSIR2Az2b83ZyXA==
+X-Google-Smtp-Source: ABdhPJyGdSowtP58OQIenNv9ducVlRFJFdMM4Jx07PjHrxB4aplW8KEH2vw2rTIkB/q3zGqcNtF89HOhEz3MdBOZ9aA=
+X-Received: by 2002:a05:6e02:1564:: with SMTP id
+ k4mr16755606ilu.269.1633888410388; 
+ Sun, 10 Oct 2021 10:53:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20211009191646.1076266-6-thomas.petazzoni@bootlin.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 5/5] support/testing: add suite of tests for
- gdb
+References: <CA+eej5MzpM30U7sMqba5gKQ3dG5FznZqd6roacphLhx6J-9auA@mail.gmail.com>
+ <f04ffb9e-04d5-0167-8ec2-957a3d1973e6@grenoble.cnrs.fr>
+ <CA+eej5NPy3otW728B0+zrwJqVfJPEFhW_dYBKpKT=9XC9EdbOg@mail.gmail.com>
+ <1819f3c3-52db-7e21-8d42-f5c2ae434f33@gmail.com>
+In-Reply-To: <1819f3c3-52db-7e21-8d42-f5c2ae434f33@gmail.com>
+From: =?UTF-8?Q?Esa=C3=AFe_Ledoux_NJONGSSI_KOUAM?= <kouamdoux@gmail.com>
+Date: Sun, 10 Oct 2021 18:52:05 +0200
+Message-ID: <CA+eej5ObHKKx4x=uOYRDF1npRR4kqnucWByTtNkbS40A+1y-GA@mail.gmail.com>
+To: Joachim Wiberg <troglobit@gmail.com>
+Subject: Re: [Buildroot] error when i build buidroot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,291 +90,145 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Michael Fischer <mf@go-sys.de>, Romain Naour <romain.naour@gmail.com>,
- Buildroot List <buildroot@buildroot.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Edgar Bonet <bonet@grenoble.cnrs.fr>, buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============7707048116564485389=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Thomas, All,
+--===============7707048116564485389==
+Content-Type: multipart/alternative; boundary="0000000000004dcafc05ce034a99"
 
-On 2021-10-09 21:16 +0200, Thomas Petazzoni spake thusly:
-> The list of tests is as follows:
-> 
-> TestGdbHostOnlyDefault: build just minimal host-gdb, default version
-> 
-> TestGdbHostOnlyAllFeatures: build host-gdb, default version, with all
-> features enabled (TUI, Python, simulator)
-> 
-> TestGdbserverOnly: build just target gdbserver, default version
-> 
-> TestGdbFullTarget: build just target gdb, default version
-> 
-> TestGdbHostOnly9x: build minimal host-gdb, 9.x version
-> 
-> TestGdbHostGdbserver9x: build minimal host-gdb 9.x + gdbserver
-> 
-> TestGdbHostGdbTarget9x: build minimal host-gdb 9.x + full gdb
-> 
-> TestGdbHostOnly11x: build minimal host-gdb, 11.x version
-> 
-> TestGdbHostGdbserver11x: build minimal host-gdb 11.x + gdbserver
-> 
-> TestGdbHostGdbTarget11x: build minimal host-gdb 11.x + gdb
-> 
-> TestGdbArc: build minimal host-gdb + gdb + gdbserver, for the special
-> ARC architecture version
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+--0000000000004dcafc05ce034a99
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Applied to master, thanks.
+no filesystem has been configured ...
+I'm just trying the default configuration
+should i configure file system for my buildroot ??
 
-Regards,
-Yann E. MORIN.
+Le dim. 10 oct. 2021 =C3=A0 19:27, Joachim Wiberg <troglobit@gmail.com> a =
+=C3=A9crit :
 
-> ---
->  support/testing/tests/package/test_gdb.py | 215 ++++++++++++++++++++++
->  1 file changed, 215 insertions(+)
->  create mode 100644 support/testing/tests/package/test_gdb.py
-> 
-> diff --git a/support/testing/tests/package/test_gdb.py b/support/testing/tests/package/test_gdb.py
-> new file mode 100644
-> index 0000000000..a7b0870644
-> --- /dev/null
-> +++ b/support/testing/tests/package/test_gdb.py
-> @@ -0,0 +1,215 @@
-> +import os
-> +import infra.basetest
-> +
-> +
-> +class BaseGdb(infra.basetest.BRTest):
-> +    def verify_host_gdb(self, prefix="arm-linux"):
-> +        cmd = ["host/bin/%s-gdb" % prefix, "--version"]
-> +        # We don't check the return value, as it automatically raises
-> +        # an exception if the command returns with a non-zero value
-> +        infra.run_cmd_on_host(self.builddir, cmd)
-> +
-> +    def boot(self):
-> +        img = os.path.join(self.builddir, "images", "rootfs.cpio")
-> +        self.emulator.boot(arch="armv5",
-> +                           kernel="builtin",
-> +                           options=["-initrd", img,
-> +                                    "-net", "nic",
-> +                                    "-net", "user"])
-> +        self.emulator.login()
-> +
-> +    def verify_gdbserver(self):
-> +        cmd = "gdbserver --version"
-> +        self.assertRunOk(cmd)
-> +
-> +    def verify_gdb(self):
-> +        cmd = "gdb --version"
-> +        self.assertRunOk(cmd)
-> +
-> +
-> +class TestGdbHostOnlyDefault(BaseGdb):
-> +    config = \
-> +        infra.basetest.MINIMAL_CONFIG + \
-> +        """
-> +        BR2_arm=y
-> +        BR2_TOOLCHAIN_EXTERNAL=y
-> +        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-> +        BR2_PACKAGE_HOST_GDB=y
-> +        """
-> +
-> +    def test_run(self):
-> +        self.verify_host_gdb()
-> +
-> +
-> +class TestGdbHostOnlyAllFeatures(BaseGdb):
-> +    config = \
-> +        infra.basetest.MINIMAL_CONFIG + \
-> +        """
-> +        BR2_arm=y
-> +        BR2_TOOLCHAIN_EXTERNAL=y
-> +        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-> +        BR2_PACKAGE_HOST_GDB=y
-> +        BR2_PACKAGE_HOST_GDB_TUI=y
-> +        BR2_PACKAGE_HOST_GDB_PYTHON3=y
-> +        BR2_PACKAGE_HOST_GDB_SIM=y
-> +        """
-> +
-> +    def test_run(self):
-> +        self.verify_host_gdb()
-> +
-> +
-> +class TestGdbserverOnly(BaseGdb):
-> +    config = \
-> +        """
-> +        BR2_arm=y
-> +        BR2_TOOLCHAIN_EXTERNAL=y
-> +        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-> +        BR2_PACKAGE_GDB=y
-> +        BR2_TARGET_ROOTFS_CPIO=y
-> +        # BR2_TARGET_ROOTFS_TAR is not set
-> +        """
-> +
-> +    def test_run(self):
-> +        self.boot()
-> +        self.verify_gdbserver()
-> +
-> +
-> +class TestGdbFullTarget(BaseGdb):
-> +    config = \
-> +        """
-> +        BR2_arm=y
-> +        BR2_TOOLCHAIN_EXTERNAL=y
-> +        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-> +        BR2_PACKAGE_GDB=y
-> +        BR2_PACKAGE_GDB_DEBUGGER=y
-> +        BR2_TARGET_ROOTFS_CPIO=y
-> +        # BR2_TARGET_ROOTFS_TAR is not set
-> +        """
-> +
-> +    def test_run(self):
-> +        self.boot()
-> +        self.verify_gdb()
-> +
-> +
-> +class TestGdbHostOnly9x(BaseGdb):
-> +    config = \
-> +        infra.basetest.MINIMAL_CONFIG + \
-> +        """
-> +        BR2_arm=y
-> +        BR2_TOOLCHAIN_EXTERNAL=y
-> +        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-> +        BR2_PACKAGE_HOST_GDB=y
-> +        BR2_GDB_VERSION_9_2=y
-> +        """
-> +
-> +    def test_run(self):
-> +        self.verify_host_gdb()
-> +
-> +
-> +class TestGdbHostGdbserver9x(BaseGdb):
-> +    config = \
-> +        """
-> +        BR2_arm=y
-> +        BR2_TOOLCHAIN_EXTERNAL=y
-> +        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-> +        BR2_PACKAGE_HOST_GDB=y
-> +        BR2_GDB_VERSION_9_2=y
-> +        BR2_PACKAGE_GDB=y
-> +        BR2_TARGET_ROOTFS_CPIO=y
-> +        # BR2_TARGET_ROOTFS_TAR is not set
-> +        """
-> +
-> +    def test_run(self):
-> +        self.verify_host_gdb()
-> +        self.boot()
-> +        self.verify_gdbserver()
-> +
-> +
-> +class TestGdbHostGdbTarget9x(BaseGdb):
-> +    config = \
-> +        """
-> +        BR2_arm=y
-> +        BR2_TOOLCHAIN_EXTERNAL=y
-> +        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-> +        BR2_PACKAGE_HOST_GDB=y
-> +        BR2_GDB_VERSION_9_2=y
-> +        BR2_PACKAGE_GDB=y
-> +        BR2_PACKAGE_GDB_DEBUGGER=y
-> +        BR2_TARGET_ROOTFS_CPIO=y
-> +        # BR2_TARGET_ROOTFS_TAR is not set
-> +        """
-> +
-> +    def test_run(self):
-> +        self.verify_host_gdb()
-> +        self.boot()
-> +        self.verify_gdb()
-> +
-> +
-> +class TestGdbHostOnly11x(BaseGdb):
-> +    config = \
-> +        infra.basetest.MINIMAL_CONFIG + \
-> +        """
-> +        BR2_arm=y
-> +        BR2_TOOLCHAIN_EXTERNAL=y
-> +        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-> +        BR2_PACKAGE_HOST_GDB=y
-> +        BR2_GDB_VERSION_11=y
-> +        """
-> +
-> +    def test_run(self):
-> +        self.verify_host_gdb()
-> +
-> +
-> +class TestGdbHostGdbserver11x(BaseGdb):
-> +    config = \
-> +        """
-> +        BR2_arm=y
-> +        BR2_TOOLCHAIN_EXTERNAL=y
-> +        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-> +        BR2_PACKAGE_HOST_GDB=y
-> +        BR2_GDB_VERSION_11=y
-> +        BR2_PACKAGE_GDB=y
-> +        BR2_TARGET_ROOTFS_CPIO=y
-> +        # BR2_TARGET_ROOTFS_TAR is not set
-> +        """
-> +
-> +    def test_run(self):
-> +        self.verify_host_gdb()
-> +        self.boot()
-> +        self.verify_gdbserver()
-> +
-> +
-> +class TestGdbHostGdbTarget11x(BaseGdb):
-> +    config = \
-> +        """
-> +        BR2_arm=y
-> +        BR2_TOOLCHAIN_EXTERNAL=y
-> +        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-> +        BR2_PACKAGE_HOST_GDB=y
-> +        BR2_GDB_VERSION_11=y
-> +        BR2_PACKAGE_GDB=y
-> +        BR2_PACKAGE_GDB_DEBUGGER=y
-> +        BR2_TARGET_ROOTFS_CPIO=y
-> +        # BR2_TARGET_ROOTFS_TAR is not set
-> +        """
-> +
-> +    def test_run(self):
-> +        self.verify_host_gdb()
-> +        self.boot()
-> +        self.verify_gdb()
-> +
-> +
-> +class TestGdbArc(BaseGdb):
-> +    config = \
-> +        """
-> +        BR2_arcle=y
-> +        BR2_archs4x_rel31=y
-> +        BR2_TOOLCHAIN_EXTERNAL=y
-> +        BR2_PACKAGE_HOST_GDB=y
-> +        BR2_PACKAGE_GDB=y
-> +        BR2_PACKAGE_GDB_SERVER=y
-> +        BR2_PACKAGE_GDB_DEBUGGER=y
-> +        """
-> +
-> +    def test_run(self):
-> +        self.verify_host_gdb("arc-linux")
-> -- 
-> 2.31.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+> Hi!
+>
+> Kali Linux is a Debian derivative, so it should work fine as build host.
+> I've not used it myself, but I'm installing it in a VM now to check the
+> build steps to see if I can reproduce your problem.
+>
+> On 10/10/21 5:48 PM, Esa=C3=AFe Ledoux NJONGSSI KOUAM wrote:
+> > Le dim. 10 oct. 2021 =C3=A0 14:01, Edgar Bonet <bonet@grenoble.cnrs.fr
+> > <mailto:bonet@grenoble.cnrs.fr>> a =C3=A9crit :
+> > > Esa=C3=AFe Ledoux Njongssi Kouam wrote:
+> > > > build for qemu_x86_64 by typing "qemu_x86_64_defconfig"
+> > > I guess you mean =E2=80=9Cmake qemu_x86_64_defconfig=E2=80=9D.
+> > > > rsync [...] system/skeleton/ /root/buildroot/[...]
+> > > You are doing this as root?
+> > yes , i'm doing this as root
+>
+> I think you might want to browse through the manual again, in particular
+> Chapter 4, https://buildroot.org/downloads/manual/manual.html:
+>
+> | Important: you can and should build everything as a normal user. There
+> | is no need to be root to configure and use Buildroot. By running all
+> | commands as a regular user, you protect your system against packages
+> | behaving badly during compilation and installation.
+>
+> I'll retry the steps as a regular user in my efforts.
+>
+> > > > rsync: [generator] failed to set permissions on "[...]":
+> > > > Function not implemented (38)
+> > > This sounds like you are using a filesystem that doesn't support
+> > > Unix-type permissions.[1] Is this the case? What kind of FS is this?
+> > So the file system that i'm using is ext4
+>
+> Just to double-check, because "Function not implemented 38)" is really
+> not expected on a build host with Ext4.  Did you mean the file system
+> you configured for your Buildroot image, or your build system?
+>
+> Best regards
+>  /Joachim
+>
+>
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+--0000000000004dcafc05ce034a99
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div>no filesystem has been configured ...</div><div>I&#39=
+;m just trying the default configuration<br></div><div>should i configure f=
+ile system for my buildroot ??<br></div></div><br><div class=3D"gmail_quote=
+"><div dir=3D"ltr" class=3D"gmail_attr">Le=C2=A0dim. 10 oct. 2021 =C3=A0=C2=
+=A019:27, Joachim Wiberg &lt;<a href=3D"mailto:troglobit@gmail.com">troglob=
+it@gmail.com</a>&gt; a =C3=A9crit=C2=A0:<br></div><blockquote class=3D"gmai=
+l_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,20=
+4,204);padding-left:1ex">Hi!<br>
+<br>
+Kali Linux is a Debian derivative, so it should work fine as build host.<br=
+>
+I&#39;ve not used it myself, but I&#39;m installing it in a VM now to check=
+ the<br>
+build steps to see if I can reproduce your problem.<br>
+<br>
+On 10/10/21 5:48 PM, Esa=C3=AFe Ledoux NJONGSSI KOUAM wrote:<br>
+&gt; Le=C2=A0dim. 10 oct. 2021 =C3=A0=C2=A014:01, Edgar Bonet &lt;<a href=
+=3D"mailto:bonet@grenoble.cnrs.fr" target=3D"_blank">bonet@grenoble.cnrs.fr=
+</a><br>
+&gt; &lt;mailto:<a href=3D"mailto:bonet@grenoble.cnrs.fr" target=3D"_blank"=
+>bonet@grenoble.cnrs.fr</a>&gt;&gt; a =C3=A9crit=C2=A0:<br>
+&gt; &gt; Esa=C3=AFe Ledoux Njongssi Kouam wrote:<br>
+&gt; &gt; &gt; build for qemu_x86_64 by typing &quot;qemu_x86_64_defconfig&=
+quot;<br>
+&gt; &gt; I guess you mean =E2=80=9Cmake qemu_x86_64_defconfig=E2=80=9D.<br=
+>
+&gt; &gt; &gt; rsync [...] system/skeleton/ /root/buildroot/[...]<br>
+&gt; &gt; You are doing this as root?<br>
+&gt; yes , i&#39;m doing this as root<br>
+<br>
+I think you might want to browse through the manual again, in particular<br=
+>
+Chapter 4, <a href=3D"https://buildroot.org/downloads/manual/manual.html" r=
+el=3D"noreferrer" target=3D"_blank">https://buildroot.org/downloads/manual/=
+manual.html</a>:<br>
+<br>
+| Important: you can and should build everything as a normal user. There<br=
+>
+| is no need to be root to configure and use Buildroot. By running all<br>
+| commands as a regular user, you protect your system against packages<br>
+| behaving badly during compilation and installation.<br>
+<br>
+I&#39;ll retry the steps as a regular user in my efforts.<br>
+<br>
+&gt; &gt; &gt; rsync: [generator] failed to set permissions on &quot;[...]&=
+quot;:<br>
+&gt; &gt; &gt; Function not implemented (38)<br>
+&gt; &gt; This sounds like you are using a filesystem that doesn&#39;t supp=
+ort<br>
+&gt; &gt; Unix-type permissions.[1] Is this the case? What kind of FS is th=
+is?<br>
+&gt; So the file system that i&#39;m using is ext4<br>
+<br>
+Just to double-check, because &quot;Function not implemented 38)&quot; is r=
+eally<br>
+not expected on a build host with Ext4.=C2=A0 Did you mean the file system<=
+br>
+you configured for your Buildroot image, or your build system?<br>
+<br>
+Best regards<br>
+=C2=A0/Joachim<br>
+<br>
+</blockquote></div>
+
+--0000000000004dcafc05ce034a99--
+
+--===============7707048116564485389==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============7707048116564485389==--
