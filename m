@@ -2,52 +2,61 @@ Return-Path: <SRS0=K+5a=O6=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 45308C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 10 Oct 2021 10:05:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C12EDC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 10 Oct 2021 10:05:33 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 12A6060F46
-	for <buildroot@archiver.kernel.org>; Sun, 10 Oct 2021 10:05:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 12A6060F46
+	by mail.kernel.org (Postfix) with ESMTPS id 8757460F9D
+	for <buildroot@archiver.kernel.org>; Sun, 10 Oct 2021 10:05:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8757460F9D
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D36B2607C1;
-	Sun, 10 Oct 2021 10:05:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 57DE4607F2;
+	Sun, 10 Oct 2021 10:05:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tOPT9JGy2TFw; Sun, 10 Oct 2021 10:05:21 +0000 (UTC)
+	with ESMTP id 5dFxGt29RaqV; Sun, 10 Oct 2021 10:05:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 45CB96078C;
-	Sun, 10 Oct 2021 10:05:20 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 134261BF28A
- for <buildroot@lists.busybox.net>; Sun, 10 Oct 2021 10:05:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9F62460841;
+	Sun, 10 Oct 2021 10:05:31 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 3ED041BF473
+ for <buildroot@lists.busybox.net>; Sun, 10 Oct 2021 10:05:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 038C6828B3
- for <buildroot@lists.busybox.net>; Sun, 10 Oct 2021 10:05:05 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3B8BF404C5
+ for <buildroot@lists.busybox.net>; Sun, 10 Oct 2021 10:05:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id obB5mO3SMsh0 for <buildroot@lists.busybox.net>;
- Sun, 10 Oct 2021 10:05:04 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3D62C827D9
- for <buildroot@buildroot.org>; Sun, 10 Oct 2021 10:05:04 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 542FE9519F; Sun, 10 Oct 2021 10:02:19 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id f2XzS9z33yo5 for <buildroot@lists.busybox.net>;
+ Sun, 10 Oct 2021 10:05:15 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 72E6A404B0
+ for <buildroot@buildroot.org>; Sun, 10 Oct 2021 10:05:15 +0000 (UTC)
+Received: (Authenticated sender: peter@casa-korsgaard.com)
+ by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 1C890FF802;
+ Sun, 10 Oct 2021 10:05:12 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
+ (envelope-from <peter@korsgaard.com>)
+ id 1mZVhg-00030x-9q; Sun, 10 Oct 2021 12:05:12 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sun, 10 Oct 2021 12:04:39 +0200
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: bdce5ff843bef21acdf3f1c54c8b124bcea3b6e6
-X-Git-Newrev: 31a3f734c97520795cc4d5cfe26b1fc06a5bb254
-X-Patchwork-Hint: ignore
-Message-Id: <20211010100219.542FE9519F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/gdb: append to
- dependencies in conditional
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+References: <20211009191646.1076266-1-thomas.petazzoni@bootlin.com>
+ <20211009191646.1076266-2-thomas.petazzoni@bootlin.com>
+ <20211010084923.GJ2081069@scaer>
+Date: Sun, 10 Oct 2021 12:05:12 +0200
+In-Reply-To: <20211010084923.GJ2081069@scaer> (Yann E. MORIN's message of
+ "Sun, 10 Oct 2021 10:49:23 +0200")
+Message-ID: <87v925qjon.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/5] package/gdb: append to dependencies in
+ conditional
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,58 +68,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Michael Fischer <mf@go-sys.de>, Romain Naour <romain.naour@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Buildroot List <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=31a3f734c97520795cc4d5cfe26b1fc06a5bb254
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Repeat after me: "Forcing the value of <pkg>_DEPENDENCIES inside a
-conditional is the root of all evil."
+ > Thomas, All,
+ > On 2021-10-09 21:16 +0200, Thomas Petazzoni spake thusly:
+ >> Repeat after me: "Forcing the value of <pkg>_DEPENDENCIES inside a
+ >> conditional is the root of all evil."
+ >> 
+ >> Repeat after me: "Forcing the value of <pkg>_DEPENDENCIES inside a
+ >> conditional is the root of all evil."
+ >> 
+ >> Repeat after me: "Forcing the value of <pkg>_DEPENDENCIES inside a
+ >> conditional is the root of all evil."
+ >> 
+ >> Repeat after me: "Forcing the value of <pkg>_DEPENDENCIES inside a
+ >> conditional is the root of all evil."
 
-Repeat after me: "Forcing the value of <pkg>_DEPENDENCIES inside a
-conditional is the root of all evil."
+ > Forcing the value of <pkg>_DEPENDENCIES inside a conditional is the root
+ > of all evil.
 
-Repeat after me: "Forcing the value of <pkg>_DEPENDENCIES inside a
-conditional is the root of all evil."
+;)
 
-Repeat after me: "Forcing the value of <pkg>_DEPENDENCIES inside a
-conditional is the root of all evil."
+Committed to 2021.02.x, 2021.05.x and 2021.08.x, thanks.
 
-Enough? :-)
-
-Due to this mistake, any other GDB_DEPENDENCIES defined before this
-assignment were lost. For example, the host-flex host-bison added
-inside the GDB_FROM_GIT==y condition were ignored if
-BR2_PACKAGE_GDB_DEBUGGER.
-
-Fixes the build of all ARC configurations that have
-BR2_PACKAGE_GDB_DEBUGGER enabled.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 97f3ad7af3dd54a15a10aa35786e7fa08cf5e7b1)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/gdb/gdb.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
-index 17e10e8b16..e69dabd757 100644
---- a/package/gdb/gdb.mk
-+++ b/package/gdb/gdb.mk
-@@ -156,7 +156,7 @@ ifeq ($(BR2_PACKAGE_GDB_DEBUGGER),y)
- GDB_CONF_OPTS += \
- 	--enable-gdb \
- 	--with-curses
--GDB_DEPENDENCIES = ncurses \
-+GDB_DEPENDENCIES += ncurses \
- 	$(if $(BR2_PACKAGE_LIBICONV),libiconv)
- else
- GDB_CONF_OPTS += \
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
