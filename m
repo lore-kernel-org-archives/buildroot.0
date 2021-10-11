@@ -2,92 +2,82 @@ Return-Path: <SRS0=49zi=O7=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5FA19C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 11 Oct 2021 21:23:38 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7DB21C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 11 Oct 2021 22:00:42 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 21C1960F0F
-	for <buildroot@archiver.kernel.org>; Mon, 11 Oct 2021 21:23:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 21C1960F0F
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
+	by mail.kernel.org (Postfix) with ESMTPS id E9E6D60F21
+	for <buildroot@archiver.kernel.org>; Mon, 11 Oct 2021 22:00:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E9E6D60F21
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EDB7A81854;
-	Mon, 11 Oct 2021 21:23:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 998B940404;
+	Mon, 11 Oct 2021 22:00:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id J7H4x3LLSRqa; Mon, 11 Oct 2021 21:23:37 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id mAIjf5GJ1M6n; Mon, 11 Oct 2021 22:00:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4DF948183D;
-	Mon, 11 Oct 2021 21:23:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 051C5403F0;
+	Mon, 11 Oct 2021 22:00:40 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id BEC291BF865
- for <buildroot@lists.busybox.net>; Mon, 11 Oct 2021 21:22:05 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 026E91BF865
+ for <buildroot@lists.busybox.net>; Mon, 11 Oct 2021 22:00:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id ABB47404DC
- for <buildroot@lists.busybox.net>; Mon, 11 Oct 2021 21:22:05 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E5716403F0
+ for <buildroot@lists.busybox.net>; Mon, 11 Oct 2021 22:00:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aysvGlK4szHc for <buildroot@lists.busybox.net>;
- Mon, 11 Oct 2021 21:22:04 +0000 (UTC)
+ with ESMTP id wShZBwaG17AW for <buildroot@lists.busybox.net>;
+ Mon, 11 Oct 2021 22:00:36 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com
- [IPv6:2a00:1450:4864:20::529])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6B2C0404E1
- for <buildroot@buildroot.org>; Mon, 11 Oct 2021 21:22:04 +0000 (UTC)
-Received: by mail-ed1-x529.google.com with SMTP id z20so72612502edc.13
- for <buildroot@buildroot.org>; Mon, 11 Oct 2021 14:22:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=CLXMHevCeG2XDjpfWIo9NDYjBJYNVGKGwDPqdpTAS7A=;
- b=NUhtcm1tZAhAGgwVDUDhVj/MGA+W5yyG0wbIAouiZOP2PGxPINT8U+nb72/G9VezLY
- c6/nl1dWTPQWJNkUWwoJ2+YVfmu8OiHgAG5zlnpM82t01PoQyZGVVEsQUU0P5FVJDzCX
- 93z8m7YspY58EzbjBAiRPtcILglxuBEIPzx/+qetLAus8NF/1XRqCEBAnAt7M1oIx4MX
- sBfFSZChL4ad4i/P0jFiiaiJcCb8h9T2VnZwkSju+ChhDr48Lxk2PhyzLYxBc9ic3n+k
- h4drlf1n4lawOSTDqDlT4NFEY1HL1HQzVqZ9sM3lJP3iDOMQ+ZxSWgmKjXyZG/xrCnkE
- d2bQ==
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
+ [IPv6:2a00:1450:4864:20::431])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id AB95B403C8
+ for <buildroot@buildroot.org>; Mon, 11 Oct 2021 22:00:36 +0000 (UTC)
+Received: by mail-wr1-x431.google.com with SMTP id k7so60334562wrd.13
+ for <buildroot@buildroot.org>; Mon, 11 Oct 2021 15:00:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=/2q2xLUB+sBLlcs1uDMYYtgM6ZZrjNc/zagh4EtmmRc=;
+ b=QanqyIz18Dw8chAsGjXT3/6eGum6e2CydI0l1AZsiZUB9K7HPnsIRJdlaZJGuQLCSY
+ nN055N8VMeZAkT7nl7raI+pTzTDy1IN6kPFoe5zpf5RjcxBP+fG3pSIAyzFofAix6Hmo
+ V04hGlr12l9Uu24/hvgijeFy4V0nzUawlVueMxWpy8jvrbpp2v7J6+kzb72/qstqkfLG
+ hteFtnv7yRPbJL4f94yboSoQHfbPtBb+ldaemjHNxGAXceb+kcaY7v3byMuQdc64fmyl
+ 9a623X46TULTrGO8uFD3bTHcEC/lSQVIRtBB7SLbOi/2PzWJIoh+nxOK2XfYqfJ6EaXd
+ CXPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:references:from:organization:in-reply-to
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=CLXMHevCeG2XDjpfWIo9NDYjBJYNVGKGwDPqdpTAS7A=;
- b=ZEpb7LlJyUktwkFDZeCKf9B0OPLtKxDqJ3/b1SAbYUYgOQDc9t22sSASTiuNSO6OMt
- DeISBPHJMniG18FCkLz0pSL685H8hZlkK4e8cOYzgzh9SypC73iTDIPkwI9+RdysCic2
- 4ZjETa5F8ACkRbT12kqqtvs5kaAQ+A5n4OS1bnf+cLeCgaLm0l7Mwmo/yErL+KOHHriI
- Sn4VR1wYUR/+oFXOMVLmRAsOdNfs8BgL0GGpriqFOPedz+l/zI74lyytoNSKXSXoyNAr
- xr+4Z7Luc1LKO3M6NGTe6HvbmPdxDurZSoOg/2BZkfRcStNe42qKXcyCq8RS/qiY2rLF
- LuvA==
-X-Gm-Message-State: AOAM533vjGcHz5pkhox30mRFa1wbUMZ1CJnNfokZBpw6S4UNO9RKY8At
- 0PNcRWTd1OBsaK8E6BmxWmKKz7pXCe9eq1Ey
-X-Google-Smtp-Source: ABdhPJxPwMtNYacnNO8v3H8F+vJky1QXXVMu0YuGGHmW9rHQRqVa3rWMMiu90bcoz48sIhBPnO1lMg==
-X-Received: by 2002:a17:906:3fc1:: with SMTP id
- k1mr28844184ejj.44.1633987322700; 
- Mon, 11 Oct 2021 14:22:02 -0700 (PDT)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
- (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id r3sm4735691edo.59.2021.10.11.14.22.02
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 11 Oct 2021 14:22:02 -0700 (PDT)
-Message-ID: <d5196f18-4196-3c6f-9e9b-02bde19aa398@mind.be>
-Date: Mon, 11 Oct 2021 23:22:01 +0200
+ bh=/2q2xLUB+sBLlcs1uDMYYtgM6ZZrjNc/zagh4EtmmRc=;
+ b=2T/DrUrXqMWFZtaPGWjjKJZO+CdlyLsK7ky+5A5qaO6cSvzMYKkGvfklZ5xkxQ3Z3V
+ uniiYRTkOry5MfxM83gEQUifm+xfg8jfXl4fBDt343ITRL8lXbUF3yyUCQu+zDZCBFYq
+ gJsGLUQt1CG+bwhb4TIbM/VgqX/9uUmUoRjSSqz4OxmETqmv5kH/C8F3MoGkWB+KrDbd
+ EyPrjC0Y2BSuNO8DwkA2Y7RHFIILNruIEDlvpPpeJ89YlDnoXMwdhlelbikRAtqAeXev
+ sjtPvIknS5XXlA+e7VUszdOEDe1d2bcYgRMuXHnAhhLd0cgydFcnhtbglZAvAA16IvRd
+ zDeg==
+X-Gm-Message-State: AOAM530+YqybAStgYZomAtDmEgBmDtAOcHmxBFK7ZxGgYwKeU2N/P964
+ Z5pcckkcWRQJTzQ+LMTUNFlet5iPfdI=
+X-Google-Smtp-Source: ABdhPJwHaILEuLVJpTIKatyxoI7ObK2wpjgq/01fsZ/vY0zR2eEnVrSq7KLx2DTGox5VYdm/zBNZng==
+X-Received: by 2002:a1c:808e:: with SMTP id b136mr1674988wmd.178.1633989634748; 
+ Mon, 11 Oct 2021 15:00:34 -0700 (PDT)
+Received: from dell5510.suse.de (gw1.ms-free.net. [185.243.124.10])
+ by smtp.gmail.com with ESMTPSA id g25sm9214992wrc.88.2021.10.11.15.00.33
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 11 Oct 2021 15:00:34 -0700 (PDT)
+From: Petr Vorel <petr.vorel@gmail.com>
+To: buildroot@buildroot.org
+Date: Tue, 12 Oct 2021 00:00:22 +0200
+Message-Id: <20211011220025.7998-1-petr.vorel@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.1.0
-Content-Language: en-GB
-To: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
-References: <20211003091955.792415-1-bernd.kuhls@t-online.de>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <20211003091955.792415-1-bernd.kuhls@t-online.de>
-Subject: Re: [Buildroot] [PATCH 1/1] package/xmrig: bump version to 6.15.1
+Subject: [Buildroot] [RFC PATCH 0/3] make: support: use `command -v' instead
+ of `which' *second try*
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,50 +89,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Markus Mayer <mmayer@broadcom.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Hi all,
+
+this is a second attempt to introduce command -v.
+
+Changes v1->v2:
+* reproduced original issue and fixed by not relying to
+  $(shell command -v ...) but shell with:
+  $(shell $(SHELL) -c "command -v ...").
+* quote variables
+
+Tested only with make defconfig && make help >/dev/null
 
 
-On 03/10/2021 11:19, Bernd Kuhls wrote:
-> Changelog: https://github.com/xmrig/xmrig/blob/master/CHANGELOG.md
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Petr Vorel (3):
+  make: support: use `command -v' instead of `which'
+  make: Drop `type -p ...' fallback
+  support/dependencies: don't check for `which'
 
-  Applied to master, thanks.
+ Makefile                                      | 22 +++++++++----------
+ package/Makefile.in                           |  8 +++----
+ support/dependencies/check-host-bison-flex.mk |  4 ++--
+ support/dependencies/check-host-cmake.sh      |  2 +-
+ support/dependencies/check-host-gzip.sh       |  2 +-
+ support/dependencies/check-host-lzip.sh       |  4 ++--
+ support/dependencies/check-host-python3.sh    |  2 +-
+ support/dependencies/check-host-tar.sh        |  4 ++--
+ support/dependencies/check-host-xzcat.sh      |  4 ++--
+ support/dependencies/dependencies.sh          | 18 +++++++--------
+ .../pkg-toolchain-external.mk                 |  2 +-
+ 11 files changed, 35 insertions(+), 37 deletions(-)
 
-  Regards,
-  Arnout
+-- 
+2.33.0
 
-> ---
->   package/xmrig/xmrig.hash | 2 +-
->   package/xmrig/xmrig.mk   | 2 +-
->   2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/xmrig/xmrig.hash b/package/xmrig/xmrig.hash
-> index ebe6fe5726..fcc7cd456d 100644
-> --- a/package/xmrig/xmrig.hash
-> +++ b/package/xmrig/xmrig.hash
-> @@ -1,3 +1,3 @@
->   # Locally calculated
-> -sha256  155ce4b921839525f03ff7fe3ce9d6ecddf4f2a32cae1b0b83b3808c9db39880  xmrig-6.15.0.tar.gz
-> +sha256  4191299f9556556401fe3a1008e11784146ba53fdbbff6ad74ae19c4dd03d2b8  xmrig-6.15.1.tar.gz
->   sha256  589ed823e9a84c56feb95ac58e7cf384626b9cbf4fda2a907bc36e103de1bad2  LICENSE
-> diff --git a/package/xmrig/xmrig.mk b/package/xmrig/xmrig.mk
-> index 16471682ca..45bfe71236 100644
-> --- a/package/xmrig/xmrig.mk
-> +++ b/package/xmrig/xmrig.mk
-> @@ -4,7 +4,7 @@
->   #
->   ################################################################################
->   
-> -XMRIG_VERSION = 6.15.0
-> +XMRIG_VERSION = 6.15.1
->   XMRIG_SITE = $(call github,xmrig,xmrig,v$(XMRIG_VERSION))
->   XMRIG_LICENSE = GPL-3.0+
->   XMRIG_LICENSE_FILES = LICENSE
-> 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
