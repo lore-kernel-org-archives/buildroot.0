@@ -2,55 +2,91 @@ Return-Path: <SRS0=49zi=O7=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D1F72C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 11 Oct 2021 20:25:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 66642C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 11 Oct 2021 20:36:03 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1CCEB60F14
-	for <buildroot@archiver.kernel.org>; Mon, 11 Oct 2021 20:25:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1CCEB60F14
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
+	by mail.kernel.org (Postfix) with ESMTPS id 8CC2F60273
+	for <buildroot@archiver.kernel.org>; Mon, 11 Oct 2021 20:36:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8CC2F60273
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BA85581776;
-	Mon, 11 Oct 2021 20:25:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 32FCF80F35;
+	Mon, 11 Oct 2021 20:36:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id stQ4h3aFS9bZ; Mon, 11 Oct 2021 20:25:44 +0000 (UTC)
+	with ESMTP id 7DjicuH5DFTz; Mon, 11 Oct 2021 20:36:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 17D1C816F5;
-	Mon, 11 Oct 2021 20:25:44 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C3CD61BF279
- for <buildroot@lists.busybox.net>; Mon, 11 Oct 2021 20:25:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8109D80F26;
+	Mon, 11 Oct 2021 20:36:00 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C97331BF279
+ for <buildroot@lists.busybox.net>; Mon, 11 Oct 2021 20:35:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C05F9816F5
- for <buildroot@lists.busybox.net>; Mon, 11 Oct 2021 20:25:42 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C52FC40478
+ for <buildroot@lists.busybox.net>; Mon, 11 Oct 2021 20:35:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PVt5eXQpUjz9 for <buildroot@lists.busybox.net>;
- Mon, 11 Oct 2021 20:25:41 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 91604814B8
- for <buildroot@buildroot.org>; Mon, 11 Oct 2021 20:25:41 +0000 (UTC)
-Received: (Authenticated sender: peter@casa-korsgaard.com)
- by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id 97CAE1BF205
- for <buildroot@buildroot.org>; Mon, 11 Oct 2021 20:25:38 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
- (envelope-from <peter@korsgaard.com>) id 1ma1rd-0004EX-V9
- for buildroot@buildroot.org; Mon, 11 Oct 2021 22:25:37 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Mon, 11 Oct 2021 22:25:37 +0200
-Message-ID: <875yu3pav2.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Rp07rtYdkdyD for <buildroot@lists.busybox.net>;
+ Mon, 11 Oct 2021 20:35:57 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com
+ [IPv6:2a00:1450:4864:20::532])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5C98D4036F
+ for <buildroot@buildroot.org>; Mon, 11 Oct 2021 20:35:57 +0000 (UTC)
+Received: by mail-ed1-x532.google.com with SMTP id w14so20586415edv.11
+ for <buildroot@buildroot.org>; Mon, 11 Oct 2021 13:35:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :references:from:organization:in-reply-to:content-transfer-encoding;
+ bh=jf+sEP/P6Ep6H/WdYgkJHmFX1eOsbdHgU1YOiwQ42fA=;
+ b=Pq/IbVndGGV/N8/aNw2VaIkXUDQYeMbYK9kKNxX/zTSaATCEZA15JiTm59I8/2ZENi
+ HMYNC9auEpK3Si3XBxilHDpKZKT9rHPNgVihnci6Q6phYWrST4zxvuWMYgCqZ3VmDFc8
+ Fl6K2HB5c7zCRAdF0fONxbmuk3Lh/OCJKf3es4iTt4JsgE/C9HPs+uY0yTH6vObmsCdY
+ DEQ+ImRZoBJRTySU5/DHSW6RlNJi6EapG4eW8OdmuGya6FvTzqPhUb2MmXaI8HSZOW7j
+ eTdsj7c+obXPc3rpsRBJeniWaEAItkUbP5HXtRDbx7QUiVKqPGmI10GAkCF75N8r7+fV
+ zZgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=jf+sEP/P6Ep6H/WdYgkJHmFX1eOsbdHgU1YOiwQ42fA=;
+ b=WekgtJpx+uyJN4RUOPIq0epyrxNHcWH52zcneQ4xdaPWVg/mRyLK7C6bullvZ7y063
+ uzxTFfLTLOv2RdqKdGdJS7sKaOVXCMA3lI9umjlSjoHTHQ1AjsbjvXXj3fDRaBlBqsJg
+ 9PBBfqhvBvPnYpSHFShCEJo9jSqiIMgKP4sSzuX8rRL6Z2hcbebMhuE3c8U54rAs5QMQ
+ l5lOt67qhdunxvvLbshqsg5XPaOW2OaoSWyxUbO6ivV8ihUBCoISuoiiV4ko8jRV6CFI
+ ZmjTs/K4/wvUcpMPO+ZLGf+tLAhMyWcE/EzUDf/SbWW80vpcAMHyd4s4WEYQuemwCVsM
+ fgtw==
+X-Gm-Message-State: AOAM533BkQGC2vfflvpHL6XJEtVDLWgKNgTMKkBcbUZJeuhSyKYGw7Qb
+ 73zcZVe+0kRpm+uHbMJW+XqN55hmwi+ZryT8
+X-Google-Smtp-Source: ABdhPJzk7W1cK+SivxiiC3j09k/wGxMnSBODHhLSehDVA0R0MJrse/wzp/PbUXAhTDZVy8qOHk9S8w==
+X-Received: by 2002:aa7:c948:: with SMTP id h8mr45187492edt.380.1633984555460; 
+ Mon, 11 Oct 2021 13:35:55 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id m15sm1722593edd.5.2021.10.11.13.35.54
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Mon, 11 Oct 2021 13:35:54 -0700 (PDT)
+Message-ID: <cc8e2b1a-9111-4ef7-2341-354e79f098f4@mind.be>
+Date: Mon, 11 Oct 2021 22:35:54 +0200
 MIME-Version: 1.0
-Subject: [Buildroot] Buildroot 2021.02.6 released
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.1.0
+Content-Language: en-GB
+To: Charles Hardin <ckhardin@gmail.com>, buildroot@buildroot.org
+References: <CAN=fXj2_ph7V-0yj2CfMe_S1cZK+_oacpXOE_CQ=WeeNyfwwYg@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <CAN=fXj2_ph7V-0yj2CfMe_S1cZK+_oacpXOE_CQ=WeeNyfwwYg@mail.gmail.com>
+Subject: Re: [Buildroot] Host aarch64 external toolchain support?
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,56 +98,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGksCgpCdWlsZHJvb3QgaXMgYSBzaW1wbGUgdG9vbCBmb3IgY3JlYXRpbmcgY29tcGxldGUgZW1i
-ZWRkZWQgTGludXggc3lzdGVtcwooaHR0cDovL2J1aWxkcm9vdC5vcmcpLgoKQnVpbGRyb290IDIw
-MjEuMDIuNiBpcyByZWxlYXNlZCAtIEdvIGRvd25sb2FkIGl0IGF0OgoKaHR0cDovL2J1aWxkcm9v
-dC5vcmcvZG93bmxvYWRzL2J1aWxkcm9vdC0yMDIxLjAyLjYudGFyLmd6CgpvcgoKaHR0cDovL2J1
-aWxkcm9vdC5vcmcvZG93bmxvYWRzL2J1aWxkcm9vdC0yMDIxLjAyLjYudGFyLmJ6MgoKT3IgZ2V0
-IGl0IGZyb20gR2l0OgoKZ2l0Oi8vZ2l0LmJ1aWxkcm9vdC5vcmcvYnVpbGRyb290CgpCdWlsZHJv
-b3QgMjAyMS4wMi42IGlzIGEgYnVnZml4IHJlbGVhc2Ugb24gdGhlIGN1cnJlbnQgbG9uZyB0ZXJt
-CnJlbGVhc2UsIGZpeGluZyBhIG51bWJlciBvZiBpbXBvcnRhbnQgLyBzZWN1cml0eSByZWxhdGVk
-IGlzc3VlcwpkaXNjb3ZlcmVkIHNpbmNlIHRoZSAyMDIxLjAyLjUgcmVsZWFzZS4KCi0gU2VjdXJp
-dHkgZml4ZXMgZm9yIGFwYWNoZSwgYXRmdHAsIGJpbmQsIGJvdGFuLCBjcnlwdG9wcCwKICBkb2Nr
-ZXItY29udGFpbmVyZCwgZmV0Y2htYWlsLCBnaG9zdHNjcmlwdCwgZ28sIGxpYmN1cmwsIGxpYmty
-YjUsCiAgbGlic25kZmlsZSwgbGlieWFuZywgbHlueCwgbm9kZWpzLCBudGZzLTNnLCBvcGVuamRr
-LCBvcGVuamRrLWJpbiwKICBvcGVuc3NoLCBwaHAsIHB5dGhvbi1waXAsIHJlZGlzLCBzcXVpZCwg
-dWNsaWJjLCB4ZW4KCi0gRml4ZXMgZm9yIGRvd25sb2FkL2NvbXBpbGF0aW9uL3J1bnRpbWUvbGlj
-ZW5zZSBpc3N1ZXMgaW4gYWxzYS1saWIsCiAgYXJtLXRydXN0ZWQtZmlybXdhcmUsIGRhc2gsIGRj
-M2RkLCBkb2NrZXItY2xpLCBkb2NrZXItZW5naW5lLCBkb3ZlY290LAogIGVybGFuZywgZ2RiLCBn
-c3Qtb214LCBnc3QxLWRldnRvb2xzLCBnc3QxLWludGVycGlwZSwgZ3N0MS1saWJhdiwKICBnc3Qx
-LXBsdWdpbnMtYmFkLCBnc3QxLXBsdWdpbnMtYmFzZSwgZ3N0MS1wbHVnaW5zLWdvb2QsCiAgZ3N0
-MS1wbHVnaW5zLXVnbHksIGdzdDEtcHl0aG9uLCBnc3QxLXJ0c3Atc2VydmVyLCBnc3QxLXZhYXBp
-LAogIGdzdHJlYW1lcjEsIGdzdHJlYW1lcjEtZWRpdGluZy1zZXJ2aWNlcywga29kaS1wdnItb2N0
-b25ldCwgbGlicmVzc2wsCiAgbHhjLCBtZXNhM2QsIG1pY3JvcHl0aG9uLCBtaW5pY29tLCBtb25v
-LCBtdHIsIG12LWRkci1tYXJ2ZWxsLAogIG5ldC10b29scywgbm1hcCwgb3BlbmxkYXAsIHB5dGhv
-bi1haW9jb25zb2xlLCBweXRob24tY2ZmaSwKICBweXRob24tZGF0ZXV0aWwsIHB5dGhvbi1kamFu
-Z28sIHB5dGhvbi10ZXh0dGFibGUsIHB5dGhvbi11cmxsaWIzLAogIHB5dGhvbi13ZWJvYiwgcXQ1
-bG9jYXRpb24sIHJlZnBvbGljeSwgcmlwZ3JlcCwgcnVuYywgc2lzcG1jdGwsCiAgc3Ryb25nc3dh
-biwgc3VwZXJ2aXNvciwgc3lzbGludXgsIHRpbnljYm9yLCB0cmFjZS1jbWQsIHVib290LXRvb2xz
-LAogIHdhdmVtb24sIHdpcmVsZXNzLXJlZ2RiLCB4c2VydmVyX3hvcmctc2VydmVyCgpGb3IgbW9y
-ZSBkZXRhaWxzLCBzZWUgdGhlIENIQU5HRVMgZmlsZToKCmh0dHBzOi8vZ2l0LmJ1aWxkcm9vdC5u
-ZXQvYnVpbGRyb290L3BsYWluL0NIQU5HRVM/aWQ9MjAyMS4wMi42CgpVc2VycyBvZiB0aGUgYWZm
-ZWN0ZWQgcGFja2FnZXMgYXJlIHN0cm9uZ2x5IGVuY291cmFnZWQgdG8gdXBncmFkZS4KCk1hbnkg
-dGhhbmtzIHRvIGFsbCB0aGUgcGVvcGxlIGNvbnRyaWJ1dGluZyB0byB0aGlzIHJlbGVhc2U6Cgpn
-aXQgc2hvcnRsb2cgLXNuIDIwMjEuMDIuNS4uCiAgICAyMyAgRmFicmljZSBGb250YWluZQogICAg
-MTkgIFBldGVyIFNlaWRlcmVyCiAgICAxNyAgUGV0ZXIgS29yc2dhYXJkCiAgICAxMSAgUm9tYWlu
-IE5hb3VyCiAgICAgNiAgR2l1bGlvIEJlbmV0dGkKICAgICA1ICBBc2FmIEthaGxvbgogICAgIDUg
-IENocmlzdGlhbiBTdGV3YXJ0IHZpYSBidWlsZHJvb3QKICAgICAzICBZYW5uIEUuIE1PUklOCiAg
-ICAgMiAgQWRhbSBEdXNrZXR0CiAgICAgMiAgRWRnYXIgQm9uZXQKICAgICAyICBGcmFuY29pcyBQ
-ZXJyYWQKICAgICAyICBJbGxpYSBCaXRrb3YKICAgICAyICBQZXRyIFZvcmVsCiAgICAgMSAgQW50
-b2luZSBUZW5hcnQKICAgICAxICBCYXJ1Y2ggU2lhY2gKICAgICAxICBCZXJuZCBLdWhscwogICAg
-IDEgIENocmlzIFBhY2toYW0KICAgICAxICBIZWlrbyBUaGllcnkKICAgICAxICBKYW1lcyBIaWxs
-aWFyZAogICAgIDEgIEpvYWNoaW0gV2liZXJnCiAgICAgMSAgS29yeSBNYWluY2VudAogICAgIDEg
-IE1hcnRpbiBFbHNodWJlcgogICAgIDEgIE1pY2hhZWwgTm9zdGhvZmYKICAgICAxICBOaWNvbGFz
-IENhdmFsbGFyaQogICAgIDEgIFF1ZW50aW4gU2NodWx6CiAgICAgMSAgUmFwaGHDq2wgTcOpbG90
-dGUKICAgICAxICBTYW0gVm9zcwogICAgIDEgIFRob21hcyBEZSBTY2hhbXBoZWxlaXJlCiAgICAg
-MSAgVGhvbWFzIFBldGF6em9uaQogICAgIDEgIFRpdG91YW4gQ2hyaXN0b3BoZQogICAgIDEgIFdh
-bGRlbWFyIEJyb2Rrb3JiCgotLSAKQnllLCBQZXRlciBLb3JzZ2FhcmQKX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApi
-dWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1h
-bi9saXN0aW5mby9idWlsZHJvb3QK
+
+
+On 11/10/2021 20:16, Charles Hardin wrote:
+> Just checking to see if this support is already being considered in next or a 
+> new revision, it seems that all of the external toolchains are based on HOSTARCH 
+> x86_64 at this moment.
+> 
+> We have some server arms for the buildfarm and likely will have some people 
+> building on Apple M1 chips as well - which means we are going to need prebuilt 
+> toolchains for multiple hostarchs.
+> 
+> So, it would seem that the flow should be to make sdk on the both x86_64 and 
+> aarch64 HOSTARCHs and then push the tarballs up. However, the 
+> BR2_TOOLCHAIN_EXTERNAL_CUSTOM options seem to provide only a single download 
+> path without a selection on BR2_HOSTARCH or a conditional.
+
+  You can use make variables in the config string. So you can set the URL to e.g.
+
+"https://example.com/toolchain/toolchain_$(HOSTARCH)_$(ARCH)-gnu-linux.tar.xz"
+
+If you have no control over the name, you can even put conditionals there, but 
+then it quickly becomes complicated. Like
+
+toolchain_$(if $(find aarch64,$(HOSTARCH)),arm64,amd64).tar.xz
+
+
+  If you can think of a way to support this better at kconfig level, ideas (and 
+patches) ar definitely welcome!
+
+  Regards,
+  Arnout
+
+> 
+> Is this the incorrect approach to use? or what has worked for people dealing 
+> with this already?
+> 
+> Thanks in advance,
+> Charles
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+> 
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
