@@ -2,93 +2,86 @@ Return-Path: <SRS0=49zi=O7=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D3B4BC433EF
-	for <buildroot@archiver.kernel.org>; Mon, 11 Oct 2021 21:22:38 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4FB12C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 11 Oct 2021 21:22:50 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 8F16860F0F
-	for <buildroot@archiver.kernel.org>; Mon, 11 Oct 2021 21:22:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8F16860F0F
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
+	by mail.kernel.org (Postfix) with ESMTPS id E633C60F3A
+	for <buildroot@archiver.kernel.org>; Mon, 11 Oct 2021 21:22:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E633C60F3A
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 606D1404FB;
-	Mon, 11 Oct 2021 21:22:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B797C81842;
+	Mon, 11 Oct 2021 21:22:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rmcWBNb4uvPs; Mon, 11 Oct 2021 21:22:37 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id EHoKzLlUFWAn; Mon, 11 Oct 2021 21:22:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AB07C404FE;
-	Mon, 11 Oct 2021 21:22:36 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id EAECC1BF865
- for <buildroot@lists.busybox.net>; Mon, 11 Oct 2021 21:21:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 29B8681839;
+	Mon, 11 Oct 2021 21:22:48 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 9F9AE1BF865
+ for <buildroot@lists.busybox.net>; Mon, 11 Oct 2021 21:21:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E66DD4037E
- for <buildroot@lists.busybox.net>; Mon, 11 Oct 2021 21:21:13 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8E9BB404DA
+ for <buildroot@lists.busybox.net>; Mon, 11 Oct 2021 21:21:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NJa4PaE1Ec8I for <buildroot@lists.busybox.net>;
- Mon, 11 Oct 2021 21:21:12 +0000 (UTC)
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zeKh_7Wv5DXT for <buildroot@lists.busybox.net>;
+ Mon, 11 Oct 2021 21:21:44 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com
- [IPv6:2a00:1450:4864:20::52d])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B813640375
- for <buildroot@buildroot.org>; Mon, 11 Oct 2021 21:21:12 +0000 (UTC)
-Received: by mail-ed1-x52d.google.com with SMTP id a25so56871796edx.8
- for <buildroot@buildroot.org>; Mon, 11 Oct 2021 14:21:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=C6+iC3ugLNT+jxaohe1Bp4vk7vJbvy/Ojzr9SYts/ts=;
- b=fqxfn9bm/uTF0L7mQnU+P8FPcrmiverqtYKszKiNx1NqBDHJ+pySC2jNbiVo5kVqVS
- 7mUT1sgH2KgntIKB91wlM3bL/G+QcQfiLfzB81NUElukr1VuFqMjLSHgeaZWA/hYOV7R
- aHaOxTxekfi5vC/ZoJAwbfKihf8HD+pnskrfaGc6FLoukk3xB215ZzVMlyUwB21Ru590
- k5CXiiQtiixCmPWAvNa1Aa+u9/yoHuB6Y1durIwaK61KggRXv88LYnpnpvDw8S8Dm4Hp
- zMeb5/hTf7TU+5/DylMBOyc5Ut0TbYoCx+Uc5vghuOImaRj5bWiwo0Xn4yAlxgFaLJn5
- ivhg==
+Received: from mail-oo1-xc35.google.com (mail-oo1-xc35.google.com
+ [IPv6:2607:f8b0:4864:20::c35])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E6CFC404CB
+ for <buildroot@buildroot.org>; Mon, 11 Oct 2021 21:21:43 +0000 (UTC)
+Received: by mail-oo1-xc35.google.com with SMTP id
+ s4-20020a4aad44000000b002b6aa5b6999so4223577oon.2
+ for <buildroot@buildroot.org>; Mon, 11 Oct 2021 14:21:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:in-reply-to:references
+ :mime-version:content-transfer-encoding;
+ bh=eBCTZM9OCqBdozXFWBub+Bf2CTKPXCLQWFwOno/oKZA=;
+ b=pKtqwZOU2aulPLCVHFt6gEe+8XgpygJ8W9keRKiOt+j6mPaFA+7xGORkC4F/VMpDz0
+ 2i8uaAkSQiQBAvWvCXcy1ICbfrlSJjPGoKGdbqH2Eukv0biRj3yNhO06ACe6VvYKa3TG
+ mjfkGjAbGaoW+ZxTIOOs+q3s0Ce/FjamVByQ1mS0Sez8D2vZZlC7OXA9SBwcHgjqlDBh
+ aXfKR4ArPSqX6bWuyBXv6X/NxmDYUAhw2phBeNXbHMdU7JsjBWLoSTkQRM4unLeXgLdU
+ 3i92bWgQ44gXBqoaJRLyUkftjGuwjrvP3bklDBYT8lsQVTOqwWBfCcFetE0ndALDyra6
+ jD3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=C6+iC3ugLNT+jxaohe1Bp4vk7vJbvy/Ojzr9SYts/ts=;
- b=06sKz+xThFPB4Ay3+tmQfwZy0cKgWWAcn/mxUZJ+gCdcZRD5klUMkCoPWM00LWJT6X
- QB39DecahBiWvAb5PzGqzrRkujIEykTBRIGA28dk+es2L4M6F3O7rR1rPV2eYRzrvpRg
- M55X8+FlakcDBbi1StFlmnhXx8OJemM4QuKxsaO3Wth3g6Yx8izKb6yngUPA+1lzXmE3
- whEpP/BDshlZ68ybMRZe1npSR9M9Co04dPZ7GOTcy3nMf7Ben+ygFSEWfjECOEp8BEq1
- Kxq+rF8CGIhxqij4GDMgjIHs5SXTLdkUGA4QZ+JwiiaPOXC27pebarIQTFJp9Cdycn0a
- GiQg==
-X-Gm-Message-State: AOAM533oWcZQ6WIQjKKtovLRt7ItbWqDtsfFXOfC8vWTRD2rKTYtRwex
- N8SrSK4gE9w8TcWwY+yNR5oOeh0idyV0JPDk
-X-Google-Smtp-Source: ABdhPJxdolaqRpPLHqX4evlZPvfX/gHOWJrXTrCyN+SqZv9pp8gxZz3Swj7wCiHLgBH5QV2pV4XMBw==
-X-Received: by 2002:a17:906:6c8:: with SMTP id
- v8mr28662709ejb.428.1633987271023; 
- Mon, 11 Oct 2021 14:21:11 -0700 (PDT)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
- (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id t20sm3990055ejc.105.2021.10.11.14.21.10
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+ :references:mime-version:content-transfer-encoding;
+ bh=eBCTZM9OCqBdozXFWBub+Bf2CTKPXCLQWFwOno/oKZA=;
+ b=3NHnZqEvuh4QSLyRyW/lSQ1gz+1BCzhaK3LUlPClSJEgK+upJKYS8B1L1pYXm7b/ix
+ GeYNsz5n9YFvh8CM8IWqOfzpbHLVwJXA6Wd+chANwqG/HxMOe8aCQzWUvKL+OwqfAbAN
+ 0Nvc74K6JoyRkXzhGEVxLbsap/xRZQgxvcTn603qrDEayY+AljGedsDo2tZtqGhSpAiq
+ 69Jz5bQ6Eop542ei8TIbjsadqgxb38vYzFlSEeffKtII39bpAh/Udx7MeBkMFD+YObvo
+ 9949NNrh54R/O3ykHkgScVxG863qMD916wnuhjeFW5iDFIc7nJ3sY6JSEIH3EECBpI7J
+ 48Rw==
+X-Gm-Message-State: AOAM530u4xfx0phx8koRf0VuoqULFFEQUlKS4f8t8Q+lJlS5skOnBDYG
+ z5MGi5FCiN9Wzf7ggzUrLlZvBFljmbntyL6I
+X-Google-Smtp-Source: ABdhPJxw/mGbhYU3hy388hKtyX7bjeFkNMmQ5kUKGxANG2EEiCAdOWJxPPMiYww6sWbrPM8NJl8jWw==
+X-Received: by 2002:a4a:c18d:: with SMTP id w13mr20942694oop.15.1633987302719; 
+ Mon, 11 Oct 2021 14:21:42 -0700 (PDT)
+Received: from localhost ([189.174.209.191])
+ by smtp.gmail.com with UTF8SMTPSA id e29sm1770588oow.1.2021.10.11.14.21.41
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 11 Oct 2021 14:21:10 -0700 (PDT)
-Message-ID: <4d1f4847-175e-54ea-8e06-748e7e901007@mind.be>
-Date: Mon, 11 Oct 2021 23:21:10 +0200
+ Mon, 11 Oct 2021 14:21:42 -0700 (PDT)
+From: Gleb Mazovetskiy <glex.spb@gmail.com>
+To: buildroot@buildroot.org
+Date: Mon, 11 Oct 2021 22:21:23 +0100
+Message-Id: <20211011212125.402086-1-glex.spb@gmail.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20211011210241.396390-1-glex.spb@gmail.com>
+References: <20211011210241.396390-1-glex.spb@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.1.0
-Content-Language: en-GB
-To: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
-References: <20211003085637.535029-1-bernd.kuhls@t-online.de>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <20211003085637.535029-1-bernd.kuhls@t-online.de>
-Subject: Re: [Buildroot] [PATCH 1/1] package/boinc: bump version to 7.18.1
+Subject: [Buildroot] [PATCH v4 0/2] package: add smpq and StormLib
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,55 +93,61 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Gleb Mazovetskiy <glex.spb@gmail.com>, yann.morin.1998@free.fr
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+SMPQ is a utility for working with Blizzard MPQ archives and StormLib is
+the library for doing this that it depends on.
 
+SMPQ/StormLib is a runtime and/or build-time dependency of several
+source ports / reimplementations of Blizzard games, such as DevilutionX.
 
-On 03/10/2021 10:56, Bernd Kuhls wrote:
-> Release notes: https://boinc.berkeley.edu/wiki/Release_Notes
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+These packages are already available in other distros, such as Debian.
 
-  Applied to master, thanks.
+Changes v3 -> v4 (Suggested by Yann E. MORIN):
 
-  Regards,
-  Arnout
+  - Split into two patches: one per package.
 
-> ---
->   package/boinc/boinc.hash | 2 +-
->   package/boinc/boinc.mk   | 4 ++--
->   2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/boinc/boinc.hash b/package/boinc/boinc.hash
-> index 981d9141ea..35e59ce415 100644
-> --- a/package/boinc/boinc.hash
-> +++ b/package/boinc/boinc.hash
-> @@ -1,4 +1,4 @@
->   # Locally computed:
-> -sha256  e66fe2e2a804687c1fef2a0d2819d634dc24c9af1cb371c71ac468352f7a562a  boinc-7.16.18.tar.gz
-> +sha256  274388d9c49e488b6c8502ffc6eb605d5ceae391fb0c2fc56dbb0254d0ceb27e  boinc-7.18.1.tar.gz
->   sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
->   sha256  a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c  COPYING.LESSER
-> diff --git a/package/boinc/boinc.mk b/package/boinc/boinc.mk
-> index 079b065efd..12394ae924 100644
-> --- a/package/boinc/boinc.mk
-> +++ b/package/boinc/boinc.mk
-> @@ -4,8 +4,8 @@
->   #
->   ################################################################################
->   
-> -BOINC_VERSION_MAJOR = 7.16
-> -BOINC_VERSION = $(BOINC_VERSION_MAJOR).18
-> +BOINC_VERSION_MAJOR = 7.18
-> +BOINC_VERSION = $(BOINC_VERSION_MAJOR).1
->   BOINC_SITE = \
->   	$(call github,BOINC,boinc,client_release/$(BOINC_VERSION_MAJOR)/$(BOINC_VERSION))
->   BOINC_LICENSE = LGPL-3.0+
-> 
+Changes v2 -> v3:
+
+  - Added missing patch files.
+
+Changes v1 -> v2 (Suggested by Yann E. MORIN):
+
+  - Converted sed substitutions to patch files.
+  - Re-ordered mk variables per the suggested order.
+
+Gleb Mazovetskiy (2):
+  package: add stormlib
+  package: add smpq
+
+ package/Config.in                             |  2 +
+ .../smpq/0001-CMake-Set-language-to-C.patch   | 29 +++++++++++++++
+ .../0002-CMake-Disable-version-check.patch    | 32 ++++++++++++++++
+ ...0003-CMake-Disable-manual-generation.patch | 37 +++++++++++++++++++
+ package/smpq/Config.in                        | 11 ++++++
+ package/smpq/smpq.hash                        |  3 ++
+ package/smpq/smpq.mk                          | 19 ++++++++++
+ package/stormlib/Config.in                    |  8 ++++
+ package/stormlib/stormlib.hash                |  3 ++
+ package/stormlib/stormlib.mk                  | 16 ++++++++
+ 10 files changed, 160 insertions(+)
+ create mode 100644 package/smpq/0001-CMake-Set-language-to-C.patch
+ create mode 100644 package/smpq/0002-CMake-Disable-version-check.patch
+ create mode 100644 package/smpq/0003-CMake-Disable-manual-generation.patch
+ create mode 100644 package/smpq/Config.in
+ create mode 100644 package/smpq/smpq.hash
+ create mode 100644 package/smpq/smpq.mk
+ create mode 100644 package/stormlib/Config.in
+ create mode 100644 package/stormlib/stormlib.hash
+ create mode 100644 package/stormlib/stormlib.mk
+
+-- 
+2.30.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
