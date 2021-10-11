@@ -2,52 +2,84 @@ Return-Path: <SRS0=49zi=O7=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E0673C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 11 Oct 2021 11:08:22 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 78353C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 11 Oct 2021 11:22:21 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D24C860EB1
-	for <buildroot@archiver.kernel.org>; Mon, 11 Oct 2021 11:08:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D24C860EB1
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
+	by mail.kernel.org (Postfix) with ESMTPS id F3CA860EB1
+	for <buildroot@archiver.kernel.org>; Mon, 11 Oct 2021 11:22:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org F3CA860EB1
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 99B0881A92;
-	Mon, 11 Oct 2021 11:08:21 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A9B33400A4;
+	Mon, 11 Oct 2021 11:22:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hZ-p-4nDUmLR; Mon, 11 Oct 2021 11:08:20 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id oUdSF5JkafYJ; Mon, 11 Oct 2021 11:22:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CDABC818CA;
-	Mon, 11 Oct 2021 11:08:19 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9FBA31BF20B
- for <buildroot@lists.busybox.net>; Mon, 11 Oct 2021 11:08:18 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 891EA402D5;
+	Mon, 11 Oct 2021 11:22:18 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 97EE91BF20B
+ for <buildroot@lists.busybox.net>; Mon, 11 Oct 2021 11:22:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9873D818CA
- for <buildroot@lists.busybox.net>; Mon, 11 Oct 2021 11:08:18 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 925E24043A
+ for <buildroot@lists.busybox.net>; Mon, 11 Oct 2021 11:22:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QJeZocadqKjq for <buildroot@lists.busybox.net>;
- Mon, 11 Oct 2021 11:08:17 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 010DB818B5
- for <buildroot@buildroot.org>; Mon, 11 Oct 2021 11:08:16 +0000 (UTC)
-Received: (Authenticated sender: herve.codina@bootlin.com)
- by relay3-d.mail.gandi.net (Postfix) with ESMTPA id 3D90A60018;
- Mon, 11 Oct 2021 11:08:13 +0000 (UTC)
-From: Herve Codina <herve.codina@bootlin.com>
-To: buildroot@buildroot.org
-Date: Mon, 11 Oct 2021 13:07:56 +0200
-Message-Id: <20211011110756.510878-1-herve.codina@bootlin.com>
-X-Mailer: git-send-email 2.31.1
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OdkZETWXKx57 for <buildroot@lists.busybox.net>;
+ Mon, 11 Oct 2021 11:22:15 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com
+ [IPv6:2607:f8b0:4864:20::129])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9039140437
+ for <buildroot@buildroot.org>; Mon, 11 Oct 2021 11:22:15 +0000 (UTC)
+Received: by mail-il1-x129.google.com with SMTP id h10so10750556ilq.3
+ for <buildroot@buildroot.org>; Mon, 11 Oct 2021 04:22:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=jh4Fe9NkWlPYfNu3uxPBG3Xo35PVG+LgPmpu8NhYQuI=;
+ b=AIAjNiLI0at97qWWnEnkFeiwfvBlCMB/myGLoJnRO2pHH8xmSa8hv18DowM/+0UpoG
+ /7JyxhshQR3nVms078cRdrrnJ5wZYCNmoPal/DwDHyVilAhaW+JFJgn4lyonfWpWvKJ2
+ zmr2BNrmz1Nyu9iITo4Iq4Rwpq4NHo2qlcxcisu2k6R1hJGEuDb0Cb64M0tdtDg28UTd
+ 60yiKX2rjiRQoV7zAEVnaUHUBIS1151Nsvo0SU9khX3/hY3Ta27VxF73v3aof0w0PALn
+ F8gq1//76D/8EMB9jTNtovOyyqjegnEjvalcCzRog50mzKcCZBo1IKbkrv1PTU7/9ikr
+ uwEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=jh4Fe9NkWlPYfNu3uxPBG3Xo35PVG+LgPmpu8NhYQuI=;
+ b=DgyWcxPTJO5RWnEmzd2yY+qbGPKpwdek6u/i7AFq+M/e0Q7x0Au9V358my+e87K+V0
+ aeAMc7bGeLyxDZ+3ERYeu8gPGvxD44b8FyRCJ+hbAzWEnycLC1gE+K+BVGr8wgKExhGa
+ ortNJdQxpGDThs4IbTf8I42/0rrsuNkvpEj3W1WYM5lmm+uLFz/nlU+GQZms/+pP96EA
+ ocUinJB1EEK4J/MqVhd5ediClc4qMU22ftwFi4e8Giy/Lbjm5HCTDeLMB+9bHVmlvClx
+ bD23E/Z3+D5TxqAHiqCVkAubBMXCpNNmte8h0EPoTrYBLzo/04Bmurc9WSRUyzDzHShF
+ BIBg==
+X-Gm-Message-State: AOAM531iBJ2/wNixB6Kt/CpzyL9A6A2PI5C5LTe6HGSRiPqdc4/lRXUh
+ KMuO00F/Il2psL4Mhq5cqUMAW70MRe8NLIs7/w==
+X-Google-Smtp-Source: ABdhPJwIa5K7m5hIZfRmaMiIlwQLKK5dAAu0TWWOn/CRyqaWg1GL+J5NfmccEUY3OajQtYPgqKBE00nWXCxpgRD6Kmo=
+X-Received: by 2002:a92:d847:: with SMTP id h7mr8005258ilq.130.1633951334683; 
+ Mon, 11 Oct 2021 04:22:14 -0700 (PDT)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/php-apcu: new package
+References: <CA+eej5MzpM30U7sMqba5gKQ3dG5FznZqd6roacphLhx6J-9auA@mail.gmail.com>
+ <f04ffb9e-04d5-0167-8ec2-957a3d1973e6@grenoble.cnrs.fr>
+ <CA+eej5NPy3otW728B0+zrwJqVfJPEFhW_dYBKpKT=9XC9EdbOg@mail.gmail.com>
+ <1819f3c3-52db-7e21-8d42-f5c2ae434f33@gmail.com>
+ <CA+eej5ObHKKx4x=uOYRDF1npRR4kqnucWByTtNkbS40A+1y-GA@mail.gmail.com>
+ <fe8b5e30-6cb7-161d-6e6e-cdddadcbbe01@gmail.com>
+In-Reply-To: <fe8b5e30-6cb7-161d-6e6e-cdddadcbbe01@gmail.com>
+From: =?UTF-8?Q?Esa=C3=AFe_Ledoux_NJONGSSI_KOUAM?= <kouamdoux@gmail.com>
+Date: Mon, 11 Oct 2021 12:20:51 +0200
+Message-ID: <CA+eej5M-SbCseCpknXdMboR7Lz+A94BNHMBZd2WJkcbDD6pZAg@mail.gmail.com>
+To: Joachim Wiberg <troglobit@gmail.com>
+Subject: Re: [Buildroot] error when i build buidroot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,115 +91,160 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
- Herve Codina <herve.codina@bootlin.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Edgar Bonet <bonet@grenoble.cnrs.fr>, buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============0583547173592427361=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-QVBDdSBpcyBhbiBpbi1tZW1vcnkga2V5LXZhbHVlIHN0b3JlIGZvciBQSFAuCktleXMgYXJlIG9m
-IHR5cGUgc3RyaW5nIGFuZCB2YWx1ZXMgY2FuIGJlIGFueSBQSFAgdmFyaWFibGVzLgpBUEN1IG9u
-bHkgc3VwcG9ydHMgdXNlcmxhbmQgY2FjaGluZyBvZiB2YXJpYWJsZXMKCmh0dHBzOi8vcGVjbC5w
-aHAubmV0L3BhY2thZ2UvQVBDVQoKQmFzZWQgb24gaW5pdGlhbCB3b3JrIGZyb20gTmljb2xhcyBD
-YXJyaWVyIDxuaWNvbGFzLmNhcnJpZXJAb3JvbGlhLmNvbT4KClNpZ25lZC1vZmYtYnk6IEhlcnZl
-IENvZGluYSA8aGVydmUuY29kaW5hQGJvb3RsaW4uY29tPgotLS0KIERFVkVMT1BFUlMgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICA2ICsrKysKIHBhY2thZ2UvQ29uZmlnLmlu
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAxICsKIHBhY2thZ2UvcGhwLWFwY3UvQ29u
-ZmlnLmluICAgICAgICAgICAgICAgICAgICB8ICA2ICsrKysKIHBhY2thZ2UvcGhwLWFwY3UvcGhw
-LWFwY3UuaGFzaCAgICAgICAgICAgICAgICB8ICAyICsrCiBwYWNrYWdlL3BocC1hcGN1L3BocC1h
-cGN1Lm1rICAgICAgICAgICAgICAgICAgfCAyNSArKysrKysrKysrKysrCiAuLi4vdGVzdGluZy90
-ZXN0cy9wYWNrYWdlL3Rlc3RfcGhwX2FwY3UucHkgICAgfCAzNSArKysrKysrKysrKysrKysrKysr
-CiA2IGZpbGVzIGNoYW5nZWQsIDc1IGluc2VydGlvbnMoKykKIGNyZWF0ZSBtb2RlIDEwMDY0NCBw
-YWNrYWdlL3BocC1hcGN1L0NvbmZpZy5pbgogY3JlYXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvcGhw
-LWFwY3UvcGhwLWFwY3UuaGFzaAogY3JlYXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvcGhwLWFwY3Uv
-cGhwLWFwY3UubWsKIGNyZWF0ZSBtb2RlIDEwMDY0NCBzdXBwb3J0L3Rlc3RpbmcvdGVzdHMvcGFj
-a2FnZS90ZXN0X3BocF9hcGN1LnB5CgpkaWZmIC0tZ2l0IGEvREVWRUxPUEVSUyBiL0RFVkVMT1BF
-UlMKaW5kZXggN2ViZmM5MjM0Yi4uNmExNmRjYzgyNCAxMDA2NDQKLS0tIGEvREVWRUxPUEVSUwor
-KysgYi9ERVZFTE9QRVJTCkBAIC0xMTQ5LDYgKzExNDksMTAgQEAgRjoJcGFja2FnZS9zeXNyZXBv
-LwogTjoJSGVucmlxdWUgQ2FtYXJnbyA8aGVucmlxdWVAaGVucmlxdWVjYW1hcmdvLmNvbT4KIEY6
-CXBhY2thZ2UvanNvbi1nbGliLwogCitOOglIZXJ2w6kgQ29kaW5hIDxoZXJ2ZS5jb2RpbmFAYm9v
-dGxpbi5jb20+CitGOglwYWNrYWdlL3BocC1hcGN1LworRjoJc3VwcG9ydC90ZXN0aW5nL3Rlc3Rz
-L3BhY2thZ2UvdGVzdF9waHBfYXBjdS5weQorCiBOOglIaXJvc2hpIEthd2FzaGltYSA8a2VpLWtA
-Y2EyLnNvLW5ldC5uZS5qcD4KIEY6CXBhY2thZ2UvZ2F1Y2hlLwogRjoJcGFja2FnZS9nbXJlbmRl
-ci1yZXN1cnJlY3QvCkBAIC0xOTgyLDYgKzE5ODYsNyBAQCBGOgljb25maWdzL2dhbGlsZW9fZGVm
-Y29uZmlnCiAKIE46CU5pY29sYXMgQ2FycmllciA8bmljb2xhcy5jYXJyaWVyQG9yb2xpYS5jb20+
-CiBGOglwYWNrYWdlL2JtYXAtdG9vbHMvCitGOglwYWNrYWdlL3BocC1hcGN1LwogRjoJcGFja2Fn
-ZS9waHAteGRlYnVnLwogRjoJcGFja2FnZS9weXRob24tYXVnZWFzLwogRjoJcGFja2FnZS9weXRo
-b24tZmxhc2stZXhwZWN0cy1qc29uLwpAQCAtMTk5MSw2ICsxOTk2LDcgQEAgRjoJc3VwcG9ydC90
-ZXN0aW5nL3Rlc3RzL3BhY2thZ2Uvc2FtcGxlX3B5dGhvbl9hdWdlYXMucHkKIEY6CXN1cHBvcnQv
-dGVzdGluZy90ZXN0cy9wYWNrYWdlL3NhbXBsZV9weXRob25fZmxhc2tfZXhwZWN0c19qc29uLnB5
-CiBGOglzdXBwb3J0L3Rlc3RpbmcvdGVzdHMvcGFja2FnZS9zYW1wbGVfcHl0aG9uX2dpdC5weQog
-RjoJc3VwcG9ydC90ZXN0aW5nL3Rlc3RzL3BhY2thZ2UvdGVzdF9ibWFwX3Rvb2xzLnB5CitGOglz
-dXBwb3J0L3Rlc3RpbmcvdGVzdHMvcGFja2FnZS90ZXN0X3BocF9hcGN1LnB5CiBGOglzdXBwb3J0
-L3Rlc3RpbmcvdGVzdHMvcGFja2FnZS90ZXN0X3B5dGhvbl9hdWdlYXMucHkKIEY6CXN1cHBvcnQv
-dGVzdGluZy90ZXN0cy9wYWNrYWdlL3Rlc3RfcHl0aG9uX2ZsYXNrX2V4cGVjdHNfanNvbi5weQog
-RjoJc3VwcG9ydC90ZXN0aW5nL3Rlc3RzL3BhY2thZ2UvdGVzdF9weXRob25fZ2l0LnB5CmRpZmYg
-LS1naXQgYS9wYWNrYWdlL0NvbmZpZy5pbiBiL3BhY2thZ2UvQ29uZmlnLmluCmluZGV4IDlmZWQw
-YWI0Y2IuLmYwNDFmZTQzYmYgMTAwNjQ0Ci0tLSBhL3BhY2thZ2UvQ29uZmlnLmluCisrKyBiL3Bh
-Y2thZ2UvQ29uZmlnLmluCkBAIC04NjIsNiArODYyLDcgQEAgaWYgQlIyX1BBQ0tBR0VfUEhQCiBp
-ZiAhQlIyX1NUQVRJQ19MSUJTCiBtZW51ICJFeHRlcm5hbCBwaHAgZXh0ZW5zaW9ucyIKIAlzb3Vy
-Y2UgInBhY2thZ2UvcGhwLWFtcXAvQ29uZmlnLmluIgorCXNvdXJjZSAicGFja2FnZS9waHAtYXBj
-dS9Db25maWcuaW4iCiAJc291cmNlICJwYWNrYWdlL3BocC1nZW9pcC9Db25maWcuaW4iCiAJc291
-cmNlICJwYWNrYWdlL3BocC1nbnVwZy9Db25maWcuaW4iCiAJc291cmNlICJwYWNrYWdlL3BocC1p
-bWFnaWNrL0NvbmZpZy5pbiIKZGlmZiAtLWdpdCBhL3BhY2thZ2UvcGhwLWFwY3UvQ29uZmlnLmlu
-IGIvcGFja2FnZS9waHAtYXBjdS9Db25maWcuaW4KbmV3IGZpbGUgbW9kZSAxMDA2NDQKaW5kZXgg
-MDAwMDAwMDAwMC4uNjMzODk4MDIyMgotLS0gL2Rldi9udWxsCisrKyBiL3BhY2thZ2UvcGhwLWFw
-Y3UvQ29uZmlnLmluCkBAIC0wLDAgKzEsNiBAQAorY29uZmlnIEJSMl9QQUNLQUdFX1BIUF9BUENV
-CisJYm9vbCAicGhwLWFwY3UiCisJaGVscAorCSAgQVBDdSBpcyBhbiBpbi1tZW1vcnkga2V5LXZh
-bHVlIHN0b3JlIGZvciBQSFAuCisKKwkgIGh0dHBzOi8vcGVjbC5waHAubmV0L3BhY2thZ2UvQVBD
-dQpkaWZmIC0tZ2l0IGEvcGFja2FnZS9waHAtYXBjdS9waHAtYXBjdS5oYXNoIGIvcGFja2FnZS9w
-aHAtYXBjdS9waHAtYXBjdS5oYXNoCm5ldyBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4IDAwMDAwMDAw
-MDAuLjhiMjg2ZDVhZTMKLS0tIC9kZXYvbnVsbAorKysgYi9wYWNrYWdlL3BocC1hcGN1L3BocC1h
-cGN1Lmhhc2gKQEAgLTAsMCArMSwyIEBACitzaGEyNTYgYjk5ZDQwZmFmZWMwNmY0ZDEzMmZjZWU1
-M2U3NTI2ZGRiZmMxZDA0MWVhNmUwNGUxNzM4OWRmYWQyOGY5YzM5MCAgYXBjdS01LjEuMjAudGd6
-CitzaGEyNTYgYzQ4NzYxYzY0NWM2ZmE0MmI1N2FmMGU2NWQ4OTMyMTdkYzY5YmNkOGQ4NzlhY2U3
-NGQ2YWJiZjFjNWY3M2E4ZiAgTElDRU5TRQpkaWZmIC0tZ2l0IGEvcGFja2FnZS9waHAtYXBjdS9w
-aHAtYXBjdS5tayBiL3BhY2thZ2UvcGhwLWFwY3UvcGhwLWFwY3UubWsKbmV3IGZpbGUgbW9kZSAx
-MDA2NDQKaW5kZXggMDAwMDAwMDAwMC4uY2U1OTYxMWQ4ZgotLS0gL2Rldi9udWxsCisrKyBiL3Bh
-Y2thZ2UvcGhwLWFwY3UvcGhwLWFwY3UubWsKQEAgLTAsMCArMSwyNSBAQAorIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMKKyMKKyMgcGhwLWFwY3UKKyMKKyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCisK
-K1BIUF9BUENVX1ZFUlNJT04gPSA1LjEuMjAKK1BIUF9BUENVX1NJVEUgPSBodHRwOi8vcGVjbC5w
-aHAubmV0L2dldAorUEhQX0FQQ1VfU09VUkNFID0gYXBjdS0kKFBIUF9BUENVX1ZFUlNJT04pLnRn
-egorUEhQX0FQQ1VfTElDRU5TRSA9IFBIUC0zLjAxCitQSFBfQVBDVV9MSUNFTlNFX0ZJTEVTID0g
-TElDRU5TRQorUEhQX0FQQ1VfREVQRU5ERU5DSUVTID0gcGhwIGhvc3QtYXV0b2NvbmYKKworUEhQ
-X0FQQ1VfQ09ORl9PUFRTID0gXAorCS0td2l0aC1waHAtY29uZmlnPSQoU1RBR0lOR19ESVIpL3Vz
-ci9iaW4vcGhwLWNvbmZpZworCitkZWZpbmUgUEhQX0FQQ1VfUEhQSVpFCisJKGNkICQoQEQpOyBc
-CisJCVBIUF9BVVRPQ09ORj0kKEhPU1RfRElSKS91c3IvYmluL2F1dG9jb25mIFwKKwkJUEhQX0FV
-VE9IRUFERVI9JChIT1NUX0RJUikvdXNyL2Jpbi9hdXRvaGVhZGVyIFwKKwkJJChTVEFHSU5HX0RJ
-UikvdXNyL2Jpbi9waHBpemUpCitlbmRlZgorUEhQX0FQQ1VfUFJFX0NPTkZJR1VSRV9IT09LUyAr
-PSBQSFBfQVBDVV9QSFBJWkUKKworJChldmFsICQoYXV0b3Rvb2xzLXBhY2thZ2UpKQpkaWZmIC0t
-Z2l0IGEvc3VwcG9ydC90ZXN0aW5nL3Rlc3RzL3BhY2thZ2UvdGVzdF9waHBfYXBjdS5weSBiL3N1
-cHBvcnQvdGVzdGluZy90ZXN0cy9wYWNrYWdlL3Rlc3RfcGhwX2FwY3UucHkKbmV3IGZpbGUgbW9k
-ZSAxMDA2NDQKaW5kZXggMDAwMDAwMDAwMC4uN2MxNDlhNWU0NwotLS0gL2Rldi9udWxsCisrKyBi
-L3N1cHBvcnQvdGVzdGluZy90ZXN0cy9wYWNrYWdlL3Rlc3RfcGhwX2FwY3UucHkKQEAgLTAsMCAr
-MSwzNSBAQAoraW1wb3J0IG9zCisKK2ltcG9ydCBpbmZyYS5iYXNldGVzdAorCisKK2NsYXNzIFRl
-c3RQaHBBcGN1KGluZnJhLmJhc2V0ZXN0LkJSVGVzdCk6CisgICAgY29uZmlnID0gaW5mcmEuYmFz
-ZXRlc3QuQkFTSUNfVE9PTENIQUlOX0NPTkZJRyArIFwKKyAgICAgICAgIiIiCisgICAgICAgIEJS
-Ml9QQUNLQUdFX1BIUD15CisgICAgICAgIEJSMl9QQUNLQUdFX1BIUF9TQVBJX0NMST15CisgICAg
-ICAgIEJSMl9QQUNLQUdFX1BIUF9BUENVPXkKKyAgICAgICAgQlIyX1RBUkdFVF9ST09URlNfQ1BJ
-Tz15CisgICAgICAgICMgQlIyX1RBUkdFVF9ST09URlNfVEFSIGlzIG5vdCBzZXQKKyAgICAgICAg
-IiIiCisKKyAgICBkZWYgdGVzdF9ydW4oc2VsZik6CisgICAgICAgIGltZyA9IG9zLnBhdGguam9p
-bihzZWxmLmJ1aWxkZGlyLCAiaW1hZ2VzIiwgInJvb3Rmcy5jcGlvIikKKyAgICAgICAgc2VsZi5l
-bXVsYXRvci5ib290KGFyY2g9ImFybXY1IiwKKyAgICAgICAgICAgICAgICAgICAgICAgICAgIGtl
-cm5lbD0iYnVpbHRpbiIsCisgICAgICAgICAgICAgICAgICAgICAgICAgICBvcHRpb25zPVsiLWlu
-aXRyZCIsIGltZ10pCisgICAgICAgIHNlbGYuZW11bGF0b3IubG9naW4oKQorCisgICAgICAgIHNl
-bGYuYXNzZXJ0UnVuT2soIm1rZGlyIC9ldGMvcGhwLmQiKQorICAgICAgICBzZWxmLmFzc2VydFJ1
-bk9rKCJlY2hvICdleHRlbnNpb249YXBjdS5zbycgPiAvZXRjL3BocC5kL2FwY3UuaW5pIikKKyAg
-ICAgICAgIyBlbmFibGVfY2xpIGVuYWJsZXMgQVBDIGZvciB0aGUgQ0xJIHZlcnNpb24gb2YgUEhQ
-LCB3aGljaCBpcyB3aGF0IHdlCisgICAgICAgICMgdXNlIGluIHRoaXMgdGVzdCBjYXNlLgorICAg
-ICAgICBzZWxmLmFzc2VydFJ1bk9rKCJlY2hvICdhcGMuZW5hYmxlX2NsaT0xJyA+PiAvZXRjL3Bo
-cC5kL2FwY3UuaW5pIikKKworICAgICAgICBvdXRwdXQsIGV4aXRfY29kZSA9IHNlbGYuZW11bGF0
-b3IucnVuKCJwaHAgLS1yaSBhcGN1IHwgc2VkICcvXiQvZCciKQorICAgICAgICBzZWxmLmFzc2Vy
-dEVxdWFsKGV4aXRfY29kZSwgMCkKKyAgICAgICAgc2VsZi5hc3NlcnRFcXVhbChvdXRwdXRbMF0s
-ICJhcGN1IikKKyAgICAgICAgc2VsZi5hc3NlcnRFcXVhbChvdXRwdXRbMV0sICJBUEN1IFN1cHBv
-cnQgPT4gRW5hYmxlZCIpCisgICAgICAgICMgRG8gbm90IGNoZWNrIHRoZSB2ZXJzaW9uIHZhbHVl
-IGluIG9yZGVyIHRvIGF2b2lkIGEgdGVzdCBmYWlsdXJlIHdoZW4KKyAgICAgICAgIyBidW1waW5n
-IHBhY2thZ2UgdmVyc2lvbi4KKyAgICAgICAgc2VsZi5hc3NlcnRFcXVhbChvdXRwdXRbMl1bMDox
-MV0sICJWZXJzaW9uID0+ICIpCi0tIAoyLjMxLjEKCl9fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1
-aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8v
-YnVpbGRyb290Cg==
+--===============0583547173592427361==
+Content-Type: multipart/alternative; boundary="000000000000e2588305ce11f070"
+
+--000000000000e2588305ce11f070
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+i have tried
+git clone git://git.buildroot.net/buildroot
+make qemu_x86_64_defconfig
+make
+
+i have type it on Documents folder that has ext4 file system
+
+
+still now i have the same error
+
+Le dim. 10 oct. 2021 =C3=A0 21:57, Joachim Wiberg <troglobit@gmail.com> a =
+=C3=A9crit :
+
+> Hi,
+>
+> On 10/10/21 6:52 PM, Esa=C3=AFe Ledoux NJONGSSI KOUAM wrote:
+> > no filesystem has been configured ...
+> > I'm just trying the default configuration
+>
+> This is fine.  I think you've got something really wrong with your
+> Kali Linux host system.
+>
+> > should i configure file system for my buildroot ??
+>
+> No, we mean the file system you are using for building Buildroot on,
+> in your Kali Linux install.  The rsync error looks as if your disk
+> partition is a non-native Linux file system, like FAT, which does
+> not support the operations rsync tries to perform.
+>
+> How have you set up your Kali Linux?  Do you have the buildroot git
+> sources checked out to your home directory or some other directory,
+> perhaps shared with Windows?  If so, I'd definitely avoid that. You
+> can check the filesystem of your build directory by comparing the
+> output of
+>
+>    pwd
+>
+> with the output from
+>
+>    findmnt
+>
+> On my system I have ext4 in the FSTYPE column for my home directory,
+> which is in the / TARGET.
+>
+> I finished my install of Kali in my own VM.  It crashed badly before
+> I gave it enough disk (40 GiB) and RAM (4 GiB).  That's another thing
+> that might have messed up your build tree.
+>
+> > the error persists even if i compile it as normal user
+>
+> Well that's good to know, at least it's consistent.  Just beware
+> that if you reuse the same source tree, having switched to another
+> user, a lot of files may still have root as the owner, which may
+> give you other problems.  Either `sudo chown -R user:user .` from
+> inside the Buildroot source tree, or check out a new tree.
+>
+> Best regards
+>  /Joachim
+>
+>
+
+--000000000000e2588305ce11f070
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div>i have tried</div><div> git clone git://<a href=3D"ht=
+tp://git.buildroot.net/buildroot">git.buildroot.net/buildroot</a></div><div=
+>make <span class=3D"gmail-im">qemu_x86_64_defconfig</span></div><div><span=
+ class=3D"gmail-im">make</span></div><div><span class=3D"gmail-im"><br></sp=
+an></div><div><span class=3D"gmail-im">i have type it on Documents folder t=
+hat has ext4 file system<br></span></div><div><span class=3D"gmail-im"><br>=
+</span></div><div><span class=3D"gmail-im"><br></span></div><div><span clas=
+s=3D"gmail-im">still now i have the same error<br></span></div></div><br><d=
+iv class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">Le=C2=A0dim.=
+ 10 oct. 2021 =C3=A0=C2=A021:57, Joachim Wiberg &lt;<a href=3D"mailto:trogl=
+obit@gmail.com">troglobit@gmail.com</a>&gt; a =C3=A9crit=C2=A0:<br></div><b=
+lockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-le=
+ft:1px solid rgb(204,204,204);padding-left:1ex">Hi,<br>
+<br>
+On 10/10/21 6:52 PM, Esa=C3=AFe Ledoux NJONGSSI KOUAM wrote:<br>
+&gt; no filesystem has been configured ...<br>
+&gt; I&#39;m just trying the default configuration<br>
+<br>
+This is fine.=C2=A0 I think you&#39;ve got something really wrong with your=
+<br>
+Kali Linux host system.<br>
+<br>
+&gt; should i configure file system for my buildroot ??<br>
+<br>
+No, we mean the file system you are using for building Buildroot on,<br>
+in your Kali Linux install.=C2=A0 The rsync error looks as if your disk<br>
+partition is a non-native Linux file system, like FAT, which does<br>
+not support the operations rsync tries to perform.<br>
+<br>
+How have you set up your Kali Linux?=C2=A0 Do you have the buildroot git<br=
+>
+sources checked out to your home directory or some other directory,<br>
+perhaps shared with Windows?=C2=A0 If so, I&#39;d definitely avoid that. Yo=
+u<br>
+can check the filesystem of your build directory by comparing the<br>
+output of<br>
+<br>
+=C2=A0 =C2=A0pwd<br>
+<br>
+with the output from<br>
+<br>
+=C2=A0 =C2=A0findmnt<br>
+<br>
+On my system I have ext4 in the FSTYPE column for my home directory,<br>
+which is in the / TARGET.<br>
+<br>
+I finished my install of Kali in my own VM.=C2=A0 It crashed badly before<b=
+r>
+I gave it enough disk (40 GiB) and RAM (4 GiB).=C2=A0 That&#39;s another th=
+ing<br>
+that might have messed up your build tree.<br>
+<br>
+&gt; the error persists even if i compile it as normal user<br>
+<br>
+Well that&#39;s good to know, at least it&#39;s consistent.=C2=A0 Just bewa=
+re<br>
+that if you reuse the same source tree, having switched to another<br>
+user, a lot of files may still have root as the owner, which may<br>
+give you other problems.=C2=A0 Either `sudo chown -R user:user .` from<br>
+inside the Buildroot source tree, or check out a new tree.<br>
+<br>
+Best regards<br>
+=C2=A0/Joachim<br>
+<br>
+</blockquote></div>
+
+--000000000000e2588305ce11f070--
+
+--===============0583547173592427361==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============0583547173592427361==--
