@@ -2,85 +2,83 @@ Return-Path: <SRS0=49zi=O7=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 170EBC433EF
-	for <buildroot@archiver.kernel.org>; Mon, 11 Oct 2021 07:17:15 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BEB9BC433EF
+	for <buildroot@archiver.kernel.org>; Mon, 11 Oct 2021 07:27:04 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 842C360EBB
-	for <buildroot@archiver.kernel.org>; Mon, 11 Oct 2021 07:17:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 842C360EBB
+	by mail.kernel.org (Postfix) with ESMTPS id 33B4D60698
+	for <buildroot@archiver.kernel.org>; Mon, 11 Oct 2021 07:27:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 33B4D60698
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4D4EB81B4D;
-	Mon, 11 Oct 2021 07:17:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0006260751;
+	Mon, 11 Oct 2021 07:27:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id aveBcqCQKGtR; Mon, 11 Oct 2021 07:17:13 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B020A81B10;
-	Mon, 11 Oct 2021 07:17:12 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 179271BF29D
- for <buildroot@lists.busybox.net>; Mon, 11 Oct 2021 07:17:11 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0766860787
- for <buildroot@lists.busybox.net>; Mon, 11 Oct 2021 07:17:11 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id y4doUV0DRiEK for <buildroot@lists.busybox.net>;
- Mon, 11 Oct 2021 07:17:09 +0000 (UTC)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ycG-StaW-cOi; Mon, 11 Oct 2021 07:27:03 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5022560723;
+	Mon, 11 Oct 2021 07:27:02 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id AA6FB1BF29D
+ for <buildroot@lists.busybox.net>; Mon, 11 Oct 2021 07:27:01 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9923280EF9
+ for <buildroot@lists.busybox.net>; Mon, 11 Oct 2021 07:27:01 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WQRBc-tU6Zai for <buildroot@lists.busybox.net>;
+ Mon, 11 Oct 2021 07:27:00 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com
- [IPv6:2a00:1450:4864:20::129])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D6BE06073C
- for <buildroot@buildroot.org>; Mon, 11 Oct 2021 07:17:08 +0000 (UTC)
-Received: by mail-lf1-x129.google.com with SMTP id n8so67249510lfk.6
- for <buildroot@buildroot.org>; Mon, 11 Oct 2021 00:17:08 -0700 (PDT)
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com
+ [IPv6:2a00:1450:4864:20::52c])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id BF66D80E9D
+ for <buildroot@buildroot.org>; Mon, 11 Oct 2021 07:27:00 +0000 (UTC)
+Received: by mail-ed1-x52c.google.com with SMTP id a25so48124568edx.8
+ for <buildroot@buildroot.org>; Mon, 11 Oct 2021 00:27:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=QFQ0xEjiRd4Zj+lkyWq0rA9Kk6KBOJklXJrceZ8L2yc=;
- b=WmhaTum5/nhWc1dxkkoSpYLgfby+cgHIoeqQAOPo/D8TyVVdV3wtTfnRmHe0Qs4MYo
- wKXzGRyRcBQji3X+Up+m4PdefiRfYAg8pNbVhj+YYDHdJ1ncYGGJ5cttbf5Mm+SkDdtN
- 1LCrlCtW8XculMOBkQJl87TYuOXZwYxhP7zV3OWPoBaQPJrTm6stu5jsUot49RtC9Qlj
- 3wRB0DuYG6BuDvsGviJqmPOg+6cBCbgR6iT2g5SyrUJcJRVB3BzKx+DBby3KDqfJc1m4
- NLWY1inEC0ifWy6XD6yc2/FCdFcxfqb3t6Bup4NCVhBfliBqbLuqnJYOhBtE8Uc6c+Z2
- ssVQ==
+ bh=HnFq5xExR5Wn/4JWA+2CZ7SR9Q8f9VNLx09BpSagIs0=;
+ b=k0DMkZ2gU6xLosM5Zt9LZK9Vme8dJ5LzktD4PsTt2SlK+FDRFVweba6Egvy8/AJJQC
+ EUttep4bICfUQ5PpGMpzfVNs+SNBuk/91SAx45x/cTO91JCKIouevp4TUy1b1xpHJc/3
+ nt78Sa0tSgMHpYJ4xnnJGsMVNJjXzWepZdgF5csddNB8L21WUFj/WZlOOwsCUP5ByDUB
+ +I/F9QGuux/AVVC1nehDw//MXFBiNnetNfXPrTalrPY0lDDcw5EOqcq5Vq3Hl/rf6aOy
+ Vjh4yaVX2an9DTWZX3VWqTSdxzhSPSJ2rOkkpHKqHhPwEyD3qo4Dslcuf04nOLjqqvwy
+ 3Tuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=QFQ0xEjiRd4Zj+lkyWq0rA9Kk6KBOJklXJrceZ8L2yc=;
- b=voj2yMjcLkJm5YgEBPB8hyiiKUzvvvY7zwj+nFpryyD+xnVrFOlhDee9wzovrO3a2r
- kwy2bs0nte/mTeUiAKNorEl4M2CQ3nepe20x2byswiZ3fnbrSbgkKDeTd1+qF3fSv5O2
- S1qRLggamDbHBpcp6nDRKjEoq/4l4YfyPm0wiMzWanPdSl0NoPQ9MsdUDdk5dbN9uar6
- 8qgctRxwhCIeYki9BwmMK/Qu+eyPZDDN73LGmHYIuqnyNUKJ0+r+cMdGvc739y2CSRhI
- MxH7FMy+xDPuZhunH7QkxrnxAj7iMdJQ8KWEJmfVgmW8TbSl972fhkGpq8AltGKbO3vo
- UbAw==
-X-Gm-Message-State: AOAM531jD545wgJQONXi8P1BlvZYcZd4KYKt/G2lHXL5o8gCsRH7D1h4
- 6Evyb+Ggcp3qMSC/fTy8qXmimN6klFc=
-X-Google-Smtp-Source: ABdhPJwzlvxsrZJDkbo7asRw53f2DblAfauGNuDiK/SY6CbBDt9R9b4thCH4BN2p0PgVHJx4L5kRTw==
-X-Received: by 2002:a05:6512:3503:: with SMTP id
- h3mr25487859lfs.513.1633936626397; 
- Mon, 11 Oct 2021 00:17:06 -0700 (PDT)
-Received: from localhost.localdomain (82-209-154-112.cust.bredband2.com.
- [82.209.154.112])
- by smtp.gmail.com with ESMTPSA id m27sm179249lfo.48.2021.10.11.00.17.05
+ bh=HnFq5xExR5Wn/4JWA+2CZ7SR9Q8f9VNLx09BpSagIs0=;
+ b=Kp1M0YjwjWo9yqY6ua8I5wNPAIQS5mrFZTfOK4dx7uAutwsW+tYZMNVxlVJh3Azbeo
+ QiLVdYtv7067HHpMBk2sJJoJY0ZrfXOE/Ac4BdJwRueiJf/Z70LRMxLebER3101I1zIB
+ JXsOXbMWUjFh8sT7Tfd0GVHbMfdSSKrsuDDA6gNumGJyoE3cyGHz4LvBCxfRAGmTt3md
+ exMS/zQKRHLPebSm83oLwQ2Q8Roia/k6Z51Wzn8NEESGN6G997Sy4U4VtQEPueN2M8bp
+ uEJefwsNEU35rbay3SxqX5od+Oj2UKvR0pBSOcZ4bgtuQO43lUQUAbzGLsezDmazjvyG
+ 2W1A==
+X-Gm-Message-State: AOAM532SRBMHtG8z4uUBqoFuF++RsDUvROT7viFMd8ejbps20zZZl07D
+ ZsVOD3dL3HZDsFHGiOvZMovStOUW2hg=
+X-Google-Smtp-Source: ABdhPJydIm8W2sbDGynYJv551rVycYIyJcBtHqCZymE2uB0IIrsutlO3OqLgMku9sdsTC5N7YgCZJA==
+X-Received: by 2002:a50:8d85:: with SMTP id r5mr38772328edh.312.1633937218973; 
+ Mon, 11 Oct 2021 00:26:58 -0700 (PDT)
+Received: from smartron.home ([2a02:a03f:63d3:7700:47c:f3ae:fe47:54e6])
+ by smtp.gmail.com with ESMTPSA id a1sm3690489edu.43.2021.10.11.00.26.58
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 11 Oct 2021 00:17:05 -0700 (PDT)
-From: Marcus Folkesson <marcus.folkesson@gmail.com>
+ Mon, 11 Oct 2021 00:26:58 -0700 (PDT)
+From: Titouan Christophe <titouanchristophe@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 11 Oct 2021 09:17:01 +0200
-Message-Id: <20211011071701.1720447-1-marcus.folkesson@gmail.com>
+Date: Mon, 11 Oct 2021 09:27:41 +0200
+Message-Id: <20211011072741.577768-1-titouanchristophe@gmail.com>
 X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/libostree: bump to version 2021.5
+Subject: [Buildroot] [PATCH 1/1] package/redis: security bump to v6.2.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,40 +90,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Marcus Folkesson <marcus.folkesson@gmail.com>
+Cc: Titouan Christophe <titouanchristophe@gmail.com>,
+ Daniel Price <daniel.price@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+This fixes CVE-2021-32672
+
+Signed-off-by: Titouan Christophe <titouanchristophe@gmail.com>
 ---
- package/libostree/libostree.hash | 2 +-
- package/libostree/libostree.mk   | 2 +-
+ package/redis/redis.hash | 2 +-
+ package/redis/redis.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libostree/libostree.hash b/package/libostree/libostree.hash
-index f281e1593c..1f8a02994e 100644
---- a/package/libostree/libostree.hash
-+++ b/package/libostree/libostree.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/redis/redis.hash b/package/redis/redis.hash
+index 3d207fa4c1..74a9392a63 100644
+--- a/package/redis/redis.hash
++++ b/package/redis/redis.hash
+@@ -1,5 +1,5 @@
+ # From https://github.com/redis/redis-hashes/blob/master/README
+-sha256  4b9a75709a1b74b3785e20a6c158cab94cf52298aa381eea947a678a60d551ae  redis-6.2.5.tar.gz
++sha256  5b2b8b7a50111ef395bf1c1d5be11e6e167ac018125055daa8b5c2317ae131ab  redis-6.2.6.tar.gz
+ 
  # Locally calculated
--sha256  db5ce01a1606af3466ec77236700f53a63ce20e4984a549d0eaba3f66a3d9361  libostree-2021.4.tar.xz
-+sha256  b45a32ded72c9fb6d2ab508adeae0306e4e2bb348db152f3d1b3708375829e1f  libostree-2021.5.tar.xz
- sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
-diff --git a/package/libostree/libostree.mk b/package/libostree/libostree.mk
-index b202b54d85..4f79885d20 100644
---- a/package/libostree/libostree.mk
-+++ b/package/libostree/libostree.mk
+ sha256  97f0a15b7bbae580d2609dad2e11f1956ae167be296ab60f4691ab9c30ee9828  COPYING
+diff --git a/package/redis/redis.mk b/package/redis/redis.mk
+index a260dcf719..f3c030d68c 100644
+--- a/package/redis/redis.mk
++++ b/package/redis/redis.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBOSTREE_VERSION = 2021.4
-+LIBOSTREE_VERSION = 2021.5
- LIBOSTREE_SOURCE = libostree-$(LIBOSTREE_VERSION).tar.xz
- LIBOSTREE_SITE = https://github.com/ostreedev/ostree/releases/download/v$(LIBOSTREE_VERSION)
- 
+-REDIS_VERSION = 6.2.5
++REDIS_VERSION = 6.2.6
+ REDIS_SITE = http://download.redis.io/releases
+ REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
+ REDIS_LICENSE_FILES = COPYING
 -- 
 2.33.0
 
