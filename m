@@ -2,52 +2,52 @@ Return-Path: <SRS0=Fi0H=PA=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B2B02C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 12 Oct 2021 20:39:17 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 344B8C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 12 Oct 2021 20:39:29 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 739F0610A2
-	for <buildroot@archiver.kernel.org>; Tue, 12 Oct 2021 20:39:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 739F0610A2
+	by mail.kernel.org (Postfix) with ESMTPS id CA1BA610A2
+	for <buildroot@archiver.kernel.org>; Tue, 12 Oct 2021 20:39:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org CA1BA610A2
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 47A4D80D10;
-	Tue, 12 Oct 2021 20:39:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8E9A4607D1;
+	Tue, 12 Oct 2021 20:39:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QDkAJVrF1iSa; Tue, 12 Oct 2021 20:39:16 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id cfTQI8juOCW7; Tue, 12 Oct 2021 20:39:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A187D80CD2;
-	Tue, 12 Oct 2021 20:39:15 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2C6F91BF5A0
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0732160BF0;
+	Tue, 12 Oct 2021 20:39:26 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A420D1BF5A0
  for <buildroot@lists.busybox.net>; Tue, 12 Oct 2021 20:37:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7F7D34011D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5D63A60BB1
  for <buildroot@lists.busybox.net>; Tue, 12 Oct 2021 20:37:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IVfgdw_TbdSV for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LbsgjJSqdLu1 for <buildroot@lists.busybox.net>;
  Tue, 12 Oct 2021 20:37:37 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A262940104
+ by smtp3.osuosl.org (Postfix) with ESMTP id B6A6E606C0
  for <buildroot@buildroot.org>; Tue, 12 Oct 2021 20:37:37 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 23FA49553D; Tue, 12 Oct 2021 20:34:47 +0000 (UTC)
+ id 3D96F9553C; Tue, 12 Oct 2021 20:34:47 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Tue, 12 Oct 2021 22:23:30 +0200
+Date: Tue, 12 Oct 2021 22:23:36 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 55d1195a301d09a70bd1f768c571769916100393
-X-Git-Newrev: dcc990f5ad02bf7595483b0941c2087343b55847
+X-Git-Oldrev: 6e814dea4cc38d79fb2b15001b4f662c344400ac
+X-Git-Newrev: e2001df212861d7ce0cc39f215bf5a4d2931122a
 X-Patchwork-Hint: ignore
-Message-Id: <20211012203447.23FA49553D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-flask-wtf: bump to version
- 0.15.1
+Message-Id: <20211012203447.3D96F9553C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-humanize: bump to version
+ 3.11.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,67 +65,63 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dcc990f5ad02bf7595483b0941c2087343b55847
+commit: https://git.buildroot.net/buildroot/commit/?id=e2001df212861d7ce0cc39f215bf5a4d2931122a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 * The package doesn't support python2 anymore.
-* Update URL in Config.in
+* Take also sha256 from pypi.
+* License was updated with a year bump.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/python-flask-wtf/Config.in             | 3 ++-
- package/python-flask-wtf/python-flask-wtf.hash | 9 ++++-----
- package/python-flask-wtf/python-flask-wtf.mk   | 4 ++--
- 3 files changed, 8 insertions(+), 8 deletions(-)
+ package/python-humanize/Config.in            |  1 +
+ package/python-humanize/python-humanize.hash | 10 +++++-----
+ package/python-humanize/python-humanize.mk   |  4 ++--
+ 3 files changed, 8 insertions(+), 7 deletions(-)
 
-diff --git a/package/python-flask-wtf/Config.in b/package/python-flask-wtf/Config.in
-index bb15489956..18329d0776 100644
---- a/package/python-flask-wtf/Config.in
-+++ b/package/python-flask-wtf/Config.in
-@@ -1,9 +1,10 @@
- config BR2_PACKAGE_PYTHON_FLASK_WTF
- 	bool "python-flask-wtf"
+diff --git a/package/python-humanize/Config.in b/package/python-humanize/Config.in
+index f4f4e67b65..ec63be9b35 100644
+--- a/package/python-humanize/Config.in
++++ b/package/python-humanize/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_PYTHON_HUMANIZE
+ 	bool "python-humanize"
 +	depends on BR2_PACKAGE_PYTHON3
- 	select BR2_PACKAGE_PYTHON_FLASK # runtime
- 	select BR2_PACKAGE_PYTHON_ITSDANGEROUS # runtime
- 	select BR2_PACKAGE_PYTHON_WTFORMS # runtime
  	help
- 	  Simple integration of Flask and WTForms.
- 
--	  https://github.com/lepture/flask-wtf
-+	  https://github.com/wtforms/flask-wtf
-diff --git a/package/python-flask-wtf/python-flask-wtf.hash b/package/python-flask-wtf/python-flask-wtf.hash
-index cff3661824..848d6d7783 100644
---- a/package/python-flask-wtf/python-flask-wtf.hash
-+++ b/package/python-flask-wtf/python-flask-wtf.hash
-@@ -1,6 +1,5 @@
--# From https://pypi.org/project/Flask-WTF/#copy-hash-modal-d090dbe5-8665-4c96-a565-57134e470a60
--md5  1b60b7dd1245b0d0173c21123717af61  Flask-WTF-0.14.3.tar.gz
--sha256  d417e3a0008b5ba583da1763e4db0f55a1269d9dd91dcc3eb3c026d3c5dbd720  Flask-WTF-0.14.3.tar.gz
--
--# License files
-+# md5, sha256 from https://pypi.org/pypi/flask-wtf/json
-+md5  920a5a476ecfb751952b5048cc05fcf8  Flask-WTF-0.15.1.tar.gz
-+sha256  ff177185f891302dc253437fe63081e7a46a4e99aca61dfe086fb23e54fff2dc  Flask-WTF-0.15.1.tar.gz
+ 	  Python humanize package contains various common humanization
+ 	  utilities, like turning a number into a fuzzy human readable
+diff --git a/package/python-humanize/python-humanize.hash b/package/python-humanize/python-humanize.hash
+index 47b5f70c9a..9b2559ab11 100644
+--- a/package/python-humanize/python-humanize.hash
++++ b/package/python-humanize/python-humanize.hash
+@@ -1,5 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/humanize/json
+-md5	e8473d9dc1b220911cac2edd53b1d973  humanize-0.5.1.tar.gz
+-# Locally computed
+-sha256	a43f57115831ac7c70de098e6ac46ac13be00d69abbf60bdcac251344785bb19  humanize-0.5.1.tar.gz
+-sha256  2ee89d331213b5886ae5416ead178694ac0eb13bb79c83bf92287f95d3597377  LICENCE
++# md5, sha256 from https://pypi.org/pypi/humanize/json
++md5  04f5b334283e1f7f0dfeccf7d5a4b880  humanize-3.11.0.tar.gz
++sha256  4160cdc63fcd0daac27d2e1e218a31bb396fc3fe5712d153675d89432a03778f  humanize-3.11.0.tar.gz
 +# Locally computed sha256 checksums
- sha256  a075f8d98acfdb05dd98716242b9e2c1b3ab98722926b3c4cf6c916ac14e8350  LICENSE
-diff --git a/package/python-flask-wtf/python-flask-wtf.mk b/package/python-flask-wtf/python-flask-wtf.mk
-index a334e3c052..e2078103f5 100644
---- a/package/python-flask-wtf/python-flask-wtf.mk
-+++ b/package/python-flask-wtf/python-flask-wtf.mk
++sha256  8ba6c18112a431400ad3c743f70670079b302545d98884fc2f28a91c383a0380  LICENCE
+diff --git a/package/python-humanize/python-humanize.mk b/package/python-humanize/python-humanize.mk
+index 60ec82bd48..ea5454d6cc 100644
+--- a/package/python-humanize/python-humanize.mk
++++ b/package/python-humanize/python-humanize.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_FLASK_WTF_VERSION = 0.14.3
-+PYTHON_FLASK_WTF_VERSION = 0.15.1
- PYTHON_FLASK_WTF_SOURCE = Flask-WTF-$(PYTHON_FLASK_WTF_VERSION).tar.gz
--PYTHON_FLASK_WTF_SITE = https://files.pythonhosted.org/packages/2e/f4/3d9e1905ffad67e20ef4f5963d711e8e29ab9439120d7ffec3d2922020e3
-+PYTHON_FLASK_WTF_SITE = https://files.pythonhosted.org/packages/9c/b5/4b48cece7b31aac2beab115330c2978ef4deee3aeb0dd1037c9b7a71b8c3
- PYTHON_FLASK_WTF_LICENSE = BSD-3-Clause
- PYTHON_FLASK_WTF_LICENSE_FILES = LICENSE
- PYTHON_FLASK_WTF_SETUP_TYPE = setuptools
+-PYTHON_HUMANIZE_VERSION = 0.5.1
++PYTHON_HUMANIZE_VERSION = 3.11.0
+ PYTHON_HUMANIZE_SOURCE = humanize-$(PYTHON_HUMANIZE_VERSION).tar.gz
+-PYTHON_HUMANIZE_SITE = https://pypi.python.org/packages/8c/e0/e512e4ac6d091fc990bbe13f9e0378f34cf6eecd1c6c268c9e598dcf5bb9
++PYTHON_HUMANIZE_SITE = https://files.pythonhosted.org/packages/a6/d0/e06993724937f2aab3e7085d137d453968aaac0f74661ef9c90528a79d61
+ PYTHON_HUMANIZE_SETUP_TYPE = setuptools
+ PYTHON_HUMANIZE_LICENSE = MIT
+ PYTHON_HUMANIZE_LICENSE_FILES = LICENCE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
