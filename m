@@ -2,93 +2,93 @@ Return-Path: <SRS0=Fi0H=PA=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 55EF6C433F5
-	for <buildroot@archiver.kernel.org>; Tue, 12 Oct 2021 20:34:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A2B40C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 12 Oct 2021 20:35:30 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9861760E09
-	for <buildroot@archiver.kernel.org>; Tue, 12 Oct 2021 20:34:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9861760E09
+	by mail.kernel.org (Postfix) with ESMTPS id 1C106610A2
+	for <buildroot@archiver.kernel.org>; Tue, 12 Oct 2021 20:35:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1C106610A2
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 762CC406E8;
-	Tue, 12 Oct 2021 20:34:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E58F640751;
+	Tue, 12 Oct 2021 20:35:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0DmlUgXRXKA4; Tue, 12 Oct 2021 20:34:11 +0000 (UTC)
+	with ESMTP id qFYSZKbUSWRn; Tue, 12 Oct 2021 20:35:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D313F40703;
-	Tue, 12 Oct 2021 20:34:10 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9374A1BF5A0
- for <buildroot@lists.busybox.net>; Tue, 12 Oct 2021 20:34:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 45C9C40704;
+	Tue, 12 Oct 2021 20:35:28 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id E2B7D1BF5A0
+ for <buildroot@lists.busybox.net>; Tue, 12 Oct 2021 20:35:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8148A4011D
- for <buildroot@lists.busybox.net>; Tue, 12 Oct 2021 20:34:09 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D085281B8A
+ for <buildroot@lists.busybox.net>; Tue, 12 Oct 2021 20:35:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yb24cz9DMq7W for <buildroot@lists.busybox.net>;
- Tue, 12 Oct 2021 20:34:08 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id NXavvvUsZBbL for <buildroot@lists.busybox.net>;
+ Tue, 12 Oct 2021 20:35:25 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com
- [IPv6:2a00:1450:4864:20::530])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1DC50400CE
- for <buildroot@buildroot.org>; Tue, 12 Oct 2021 20:34:07 +0000 (UTC)
-Received: by mail-ed1-x530.google.com with SMTP id d9so1079520edh.5
- for <buildroot@buildroot.org>; Tue, 12 Oct 2021 13:34:07 -0700 (PDT)
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com
+ [IPv6:2a00:1450:4864:20::535])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9868A8175E
+ for <buildroot@buildroot.org>; Tue, 12 Oct 2021 20:35:25 +0000 (UTC)
+Received: by mail-ed1-x535.google.com with SMTP id d3so1132271edp.3
+ for <buildroot@buildroot.org>; Tue, 12 Oct 2021 13:35:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
+ :references:from:cc:organization:in-reply-to
  :content-transfer-encoding;
- bh=KXyEk97wWRYlUcJvJxYs5BIdCLujqnyUjE3niiVFp3w=;
- b=cZ37xBK+Rm5T4hvIwzm5TZOHPZLIqsW3ALlZHQ8YM0LrAd30Mqubd9cyvwItk2KH5p
- GYoNbYwnT784X6EfpPM1AQ09rknEGNch3LPTA+oQzaWeXraeFhHZEMfIWCsf1lkEl1Ee
- CKNyOkYAIxdxBgPzmT/IKgHbcHCNFXYzPb5Y7bxYhQtYTwOrAIJ8d5XeCS36ef/g1pdi
- 7v3VuxZdbW9piWDMuoPQ9/49GVyPaln4lEVlnoSGK6Z9IpEVqu5b/rdrAL/tYpl+IBRc
- 6Yempg05CZUryCecUQ3Kg5Ipld1AsFOriL4EeIkpgx8hbhZH4UsXYO4ZcJy81yVGbLHD
- 5+9g==
+ bh=3nqcAiZuKBItFpV0aYsAFJD8aC3kjPGgs7ombB9I4iE=;
+ b=Dzte0ntbGTmGfPfP4fgGcVr5l5cv3Hwu7GmpkMxxXT78weyGrGAueHHecU9ahuJnrZ
+ bVmcbqE7jtYeY8b/ooKYFKE6KdkjD2UnWGwftQ3ScGgvS9fF2CiHhHRi2d/A4bzwytq8
+ xy+9Pu1BqUMg+oG3KwnRUdsPZq5zF0s8aZhGeKN+pnFTTF1zPslhz3u+HccwrLde/UdB
+ 8ldxoSm+fbsoCTvhrlFNGsnvHFtz37yDrNsuqV5+ywzHxzNmaBUxqxcwmRjD1j2La215
+ ic/QO17ayX/un0rdBEdRAyHLg8Pf+/RRalxnIptQgjfrYhNv7HUdZtpdRnGCw5ng9j4/
+ aDKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
+ :content-language:to:references:from:cc:organization:in-reply-to
  :content-transfer-encoding;
- bh=KXyEk97wWRYlUcJvJxYs5BIdCLujqnyUjE3niiVFp3w=;
- b=QnUyd29x1LRQW3meVBu3tD9Co/oijhkdLSkwDnTv7GcEWyAMFYVRjgSb/OLXfofaV9
- XqFe7rVF+TDX3A79pVjvZNKVncWGEw0Y1oTwzn14mm/061E90PBOOofE05FWHlRS7R8R
- CPV8VLCWefB+QJ6UOZowkB5WZeMY3hcEslJvXojiyuRypDyuMpx2Vi9tQ93UOADpYIJn
- LB2F4ba/DT8dHf2YieHQGUX/9/VPGGoEUcXfBXNiOjL0OnE19Ce7gQAKIJAxQLlf9hkp
- kTF0+YZiJxQI36xx7g3pp6PY1G9isxcYk1dcBLK14qyeHP38zcLALMH/P3FEM0Drl/Oy
- jOLQ==
-X-Gm-Message-State: AOAM532O2l8gOu6yWVbX79e4d+Y8ylen6xKuwcQXQWek96slCWe84sPG
- XjK2/JeYyR0KP+3rGSR82yMKxw==
-X-Google-Smtp-Source: ABdhPJxPk6t8T4ZPMBHKn/ZWq6DHFjyPwIW33/Gx1HSOIjl9Fx6dpBKs+TR/0RfyB3gVKsb4dKpKDg==
-X-Received: by 2002:a50:d8c2:: with SMTP id y2mr2868383edj.360.1634070846318; 
- Tue, 12 Oct 2021 13:34:06 -0700 (PDT)
+ bh=3nqcAiZuKBItFpV0aYsAFJD8aC3kjPGgs7ombB9I4iE=;
+ b=IhkfQSa5U7pKN6048YGUB08FuDaC8k75BfNNH8KQAfInIxFb8pn8QmCgDFMSLRAoEt
+ fNV1DCvd7GALdKmFakD2Rs793B1rInMQrNXbxEqUlvj647qXHL1LGtxzLvgciO/T8bZZ
+ 2ERlYCvs+E2RFdyO2FsrUuhBznhMxUUHS1DVajMrdSpZmg7/eBNMgbcF5v2SJPnHPVyt
+ 4Qz9sdci1jckNuOILtuo+6Eupmd6qoVBehHwqZwKBk0g04KCOu9LL7z6fM3HyKA9w7mJ
+ jj0cMfjxYzaFDC/mAbizmgV4FUXX8kwwgUcjtFqgdKKnZF0KEIrdHU0WkuI9hbiFOD3K
+ X6HQ==
+X-Gm-Message-State: AOAM530VbOQIzUFP6yuttGjn3M5TzYQ6AVRMsHCbzhuGCRUkhiBWwOpn
+ ZgW3UAs4W94g1PnS9BeYVxJiH2RG2WHtBkYY
+X-Google-Smtp-Source: ABdhPJzkh1FbuGiNLS9p304sfvuaRI3GlvTXSWh0FF+GpywtMkq7v6ZnA19kB4z7eJxK1AYKVoJuTA==
+X-Received: by 2002:a17:907:3f15:: with SMTP id
+ hq21mr698619ejc.440.1634070923521; 
+ Tue, 12 Oct 2021 13:35:23 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id 6sm5451561ejx.82.2021.10.12.13.34.05
+ by smtp.gmail.com with ESMTPSA id n16sm6400705eda.93.2021.10.12.13.35.22
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 12 Oct 2021 13:34:05 -0700 (PDT)
-Message-ID: <c26e8dac-4399-fa3e-1776-a0ae6c541ed0@mind.be>
-Date: Tue, 12 Oct 2021 22:34:05 +0200
+ Tue, 12 Oct 2021 13:35:23 -0700 (PDT)
+Message-ID: <cc3fe11f-d3dc-0179-89e8-0b7dc64e4541@mind.be>
+Date: Tue, 12 Oct 2021 22:35:21 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.1.0
 Content-Language: en-GB
-To: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
-References: <20211004171341.19564-1-asafka7@gmail.com>
+To: Petr Vorel <petr.vorel@gmail.com>, buildroot@buildroot.org
+References: <20211004174912.4736-1-petr.vorel@gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20211004171341.19564-1-asafka7@gmail.com>
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-filelock: bump to
- version 3.3.0
+In-Reply-To: <20211004174912.4736-1-petr.vorel@gmail.com>
+Subject: Re: [Buildroot] [RFC PATCH 1/1] package/links: bump version to 2.25
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,7 +100,6 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -108,62 +107,56 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 04/10/2021 19:13, Asaf Kahlon wrote:
-> The package doesn't support python2 anymore.
-> 
-> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+On 04/10/2021 19:49, Petr Vorel wrote:
+> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 
-
-  All 4 applied to master, thanks.
+  Applied to master, thanks.
 
   Regards,
   Arnout
 
 > ---
->   package/python-filelock/Config.in            | 1 +
->   package/python-filelock/python-filelock.hash | 4 ++--
->   package/python-filelock/python-filelock.mk   | 4 ++--
->   3 files changed, 5 insertions(+), 4 deletions(-)
+> Petr,
 > 
-> diff --git a/package/python-filelock/Config.in b/package/python-filelock/Config.in
-> index 57ec039400..bda4582ac1 100644
-> --- a/package/python-filelock/Config.in
-> +++ b/package/python-filelock/Config.in
-> @@ -1,5 +1,6 @@
->   config BR2_PACKAGE_PYTHON_FILELOCK
->   	bool "python-filelock"
-> +	depends on BR2_PACKAGE_PYTHON3
->   	help
->   	  A platform independent file lock.
->   
-> diff --git a/package/python-filelock/python-filelock.hash b/package/python-filelock/python-filelock.hash
-> index d50d2d561c..d7cc864668 100644
-> --- a/package/python-filelock/python-filelock.hash
-> +++ b/package/python-filelock/python-filelock.hash
-> @@ -1,5 +1,5 @@
->   # md5, sha256 from https://pypi.org/pypi/filelock/json
-> -md5  c1fe6d9a7433a7ca6ce4f36e273317d1  filelock-3.0.12.tar.gz
-> -sha256  18d82244ee114f543149c66a6e0c14e9c4f8a1044b5cdaadd0f82159d6a6ff59  filelock-3.0.12.tar.gz
-> +md5  f8458b5235a9e439fd512dc08947f6b2  filelock-3.3.0.tar.gz
-> +sha256  8c7eab13dc442dc249e95158bcc12dec724465919bdc9831fdbf0660f03d1785  filelock-3.3.0.tar.gz
->   # Locally computed sha256 checksums
->   sha256  88d9b4eb60579c191ec391ca04c16130572d7eedc4a86daa58bf28c6e14c9bcd  LICENSE
-> diff --git a/package/python-filelock/python-filelock.mk b/package/python-filelock/python-filelock.mk
-> index 35b3374d29..00c32b2caa 100644
-> --- a/package/python-filelock/python-filelock.mk
-> +++ b/package/python-filelock/python-filelock.mk
-> @@ -4,9 +4,9 @@
+> from Changelog [1] it fixed DST Root CA X3 Expiration [2] => IMHO worth
+> to backport to stable releases.
+> 
+> 	Delete the expired Let's encrypt certificate from the builtin
+> 	certificate store
+> 
+> 
+> 	Set the flag X509_V_FLAG_TRUSTED_FIRST, so that Let's encrypt works
+> 	with openssl-1.0.2
+> 
+> [1] http://links.twibright.com/download/ChangeLog
+> [2] https://letsencrypt.org/docs/dst-root-ca-x3-expiration-september-2021/
+> 
+>   package/links/links.hash | 2 +-
+>   package/links/links.mk   | 2 +-
+>   2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/links/links.hash b/package/links/links.hash
+> index 6dbb9d13c0..0f8cd32937 100644
+> --- a/package/links/links.hash
+> +++ b/package/links/links.hash
+> @@ -1,3 +1,3 @@
+>   # Locally calculated
+> -sha256  9b12f5ba2d068306d7ff7385b520cdcafdc0e55c87eec877abb0e78288525430  links-2.24.tar.bz2
+> +sha256  2dd78508698e8279ef4f09a3a2a21e9595040113402da6c553974414fb49dd2c  links-2.25.tar.bz2
+>   sha256  92deeb70791366630095d4e0714fe37d6e2bd5db0e6ef498ebb8de328f45b253  COPYING
+> diff --git a/package/links/links.mk b/package/links/links.mk
+> index 5f075a70da..1f1a7a9189 100644
+> --- a/package/links/links.mk
+> +++ b/package/links/links.mk
+> @@ -4,7 +4,7 @@
 >   #
 >   ################################################################################
 >   
-> -PYTHON_FILELOCK_VERSION = 3.0.12
-> +PYTHON_FILELOCK_VERSION = 3.3.0
->   PYTHON_FILELOCK_SOURCE = filelock-$(PYTHON_FILELOCK_VERSION).tar.gz
-> -PYTHON_FILELOCK_SITE = https://files.pythonhosted.org/packages/14/ec/6ee2168387ce0154632f856d5cc5592328e9cf93127c5c9aeca92c8c16cb
-> +PYTHON_FILELOCK_SITE = https://files.pythonhosted.org/packages/fd/6e/665a6cb363bee26e40954ee812e4e733fd7cafd84c06e0c7c2357641abd6
->   PYTHON_FILELOCK_SETUP_TYPE = setuptools
->   PYTHON_FILELOCK_LICENSE = Public Domain
->   PYTHON_FILELOCK_LICENSE_FILES = LICENSE
+> -LINKS_VERSION = 2.24
+> +LINKS_VERSION = 2.25
+>   LINKS_SOURCE = links-$(LINKS_VERSION).tar.bz2
+>   LINKS_SITE = http://links.twibright.com/download
+>   LINKS_DEPENDENCIES = host-pkgconf
 > 
 _______________________________________________
 buildroot mailing list
