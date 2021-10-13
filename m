@@ -2,92 +2,94 @@ Return-Path: <SRS0=94yL=PB=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A1819C433F5
-	for <buildroot@archiver.kernel.org>; Wed, 13 Oct 2021 19:58:14 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 64FBFC433EF
+	for <buildroot@archiver.kernel.org>; Wed, 13 Oct 2021 19:58:38 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 6C45261165
-	for <buildroot@archiver.kernel.org>; Wed, 13 Oct 2021 19:58:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6C45261165
+	by mail.kernel.org (Postfix) with ESMTPS id 239CC611CA
+	for <buildroot@archiver.kernel.org>; Wed, 13 Oct 2021 19:58:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 239CC611CA
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 185F74053E;
-	Wed, 13 Oct 2021 19:58:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F22F360B04;
+	Wed, 13 Oct 2021 19:58:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AOqHY1pVbPFV; Wed, 13 Oct 2021 19:58:13 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Nq3FEszAuEWf; Wed, 13 Oct 2021 19:58:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1A4A440219;
-	Wed, 13 Oct 2021 19:58:12 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id BE5271BF2F0
- for <buildroot@lists.busybox.net>; Wed, 13 Oct 2021 19:58:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5CAD760AE1;
+	Wed, 13 Oct 2021 19:58:36 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 6DCC51BF2F0
+ for <buildroot@lists.busybox.net>; Wed, 13 Oct 2021 19:58:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AC6EF40219
- for <buildroot@lists.busybox.net>; Wed, 13 Oct 2021 19:58:10 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6A7F7401DA
+ for <buildroot@lists.busybox.net>; Wed, 13 Oct 2021 19:58:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id d5DmMOstdxIg for <buildroot@lists.busybox.net>;
- Wed, 13 Oct 2021 19:58:09 +0000 (UTC)
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hSucUy-kwQHc for <buildroot@lists.busybox.net>;
+ Wed, 13 Oct 2021 19:58:34 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com
- [IPv6:2a00:1450:4864:20::533])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 71A1740155
- for <buildroot@buildroot.org>; Wed, 13 Oct 2021 19:58:09 +0000 (UTC)
-Received: by mail-ed1-x533.google.com with SMTP id d9so14801792edh.5
- for <buildroot@buildroot.org>; Wed, 13 Oct 2021 12:58:09 -0700 (PDT)
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com
+ [IPv6:2a00:1450:4864:20::52e])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 72475401C9
+ for <buildroot@buildroot.org>; Wed, 13 Oct 2021 19:58:34 +0000 (UTC)
+Received: by mail-ed1-x52e.google.com with SMTP id p13so15218280edw.0
+ for <buildroot@buildroot.org>; Wed, 13 Oct 2021 12:58:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=5bScQVhYd2pOXR/N131MJ0viOfT2zOYc/ANu/ckD6EU=;
- b=bq0ePEWyPqLO+EJ0yn6EKbpFnS2xLk7BDPHqHWSGgOtl4MQ5Tlbdv7Askp0DliTf83
- 6lZnLMkkPk8/0BPD0qJ1XLpJwAwicY0utJqUW7skURcGzAXPAAzI5BljYUl1Wgu5ffhe
- zKD2eQzOLK4xmXCVM2BhdVhFgtyRhrbQ9R8DlznnFtG+BT5YoYUUPjhF0Chab9zGHkz+
- UwoDdvTdoRDXP8Vaza3gTtvAxgkk8E5AMu9mMDTgwcScEjmif+ePj01rXoLt4htU3o2G
- EW4hnsVuwp5Mo0z+6xIYkPIDeYdAKmnD0kP0WqvT3c7jR/GQIUVzVSnMYcbVjIG2+iCu
- BBLw==
+ bh=bHpXvWzLCHcF5STKlANEznuxK/8z333p0GE51Xzxq+c=;
+ b=QBXEaPI8rMZKd1PQhFi7etiCP239panfiqwbA5PG2GBKi9f3z2yVICL00mBpUSAarg
+ +r/s+h/cfNlEdO/dVO/mikjv86thmz79HYzcKRCxHabsQSHyh2+GOLbOz3NnY6iAJZIc
+ qclhJ+ZBFepTuBmIg+nnM7R4UrDcw5cj8fMipj+02RmS9TtKoA3PGWcu3cPzqAvU+ur8
+ 979/Sp4UHJ7sX7d8KcUcp3qdkskN2IYXSUuTWc+JMnr/Y80ahHW58j/NNI+zw3RLMHdJ
+ L2dbgl0ykzsIe4PMCFifeVnTX/cZ08LczsHimiCd9PKv4UB/z7T0XfHMJ547WCNWrQSz
+ F20Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=5bScQVhYd2pOXR/N131MJ0viOfT2zOYc/ANu/ckD6EU=;
- b=uAww6pvOHvaOH8q7f+qmArvwaav+ynVMGE4J8xrd41eKX4g+fyLzT+UXy5E5Nkgd+l
- kJ9yH9DBDO+lBjiR3ax49mIz6GekjdgHChPJ5mdJCPcWVAgGpSMgkprgOmNpgEZdOTac
- ZsTN98zGu6xGxddqSBXjRyEvNvI+B9B2TSP0v5ur+7657tKO9869AyTeAPUT7wSgKYod
- rzjSOe6hoYufwhsgxXqhyDnLe0Lhzfz0djX3ub9WV9xcTaux3/KNCe2kr6LestjwDbyR
- FDIEikrJvjDk7e6x3qyE8YVth7+AigpVudFzmdRCrnSBC8kLZHfMRWzlrzLeFFoVUFoj
- CNoA==
-X-Gm-Message-State: AOAM532ACv356UQcVjnz9f1cNwC0z/Dww6dsNHJODpLinkwWOAa5u20l
- JtBnhOav1pAtZ64rDof6MZTFSA==
-X-Google-Smtp-Source: ABdhPJy8JM6KU/SRi6kcZmAoQoBxOgRk1ADPuZbPbFvfm8V8P1oFje0ngwYkWBNMzF8fhpIATWXvfQ==
-X-Received: by 2002:a05:6402:1547:: with SMTP id
- p7mr2046155edx.371.1634155087652; 
- Wed, 13 Oct 2021 12:58:07 -0700 (PDT)
+ bh=bHpXvWzLCHcF5STKlANEznuxK/8z333p0GE51Xzxq+c=;
+ b=k2B1VURwdsO7RFlOVQXl/DgdHSssNXeyyOpIub7k5dWjqFc0jd1YaRSycNx6FLiYsJ
+ 33KRmzJe2IuatcuqD0RdDetuth7v8q+GgJpozCdrEX4vpIUMo0MVG4HvAdShd7mLtKRf
+ bEEv9aV23xYLkRpIs29v0DXEE6mZMcIUPVsavBJvlsMUz11ReDV32ncaraK/l6Ke0NgU
+ 9UF5BYZxSSoWn9KXlBeeVtOBAYwXZc2aPGVa9+H082KZKcrQ0g4swkOZbpLY3TAFe/xJ
+ X6g1Hm2N2QhXThFNG9nP8H2lugQCr5eSUaoaPgKpxDY8ht3vjlwcoHfjjxQpTzaPWqG2
+ ytpQ==
+X-Gm-Message-State: AOAM5324cdMJPQDagvHmI8AUBfzRL9FTBtESbW7dIv5oQx8IWSW6Sb71
+ ioRJslP1kugxmBf+1sba76MV2Gww6KJ/Aw16
+X-Google-Smtp-Source: ABdhPJxTPlLYshypV9mFAexPFc6hLc2zE7cAh2ZjjikM8t7gKI/dCqpVyovWSEdty2a5CseRE/IjpA==
+X-Received: by 2002:a05:6402:50d4:: with SMTP id
+ h20mr2101531edb.112.1634155112547; 
+ Wed, 13 Oct 2021 12:58:32 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id m9sm409049edl.66.2021.10.13.12.58.07
+ by smtp.gmail.com with ESMTPSA id b2sm340885ejj.124.2021.10.13.12.58.31
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 13 Oct 2021 12:58:07 -0700 (PDT)
-Message-ID: <0113cad0-a460-15cb-4586-4427db519d74@mind.be>
-Date: Wed, 13 Oct 2021 21:58:06 +0200
+ Wed, 13 Oct 2021 12:58:32 -0700 (PDT)
+Message-ID: <6accf9fc-0058-0ee1-70d9-4423a4dd5586@mind.be>
+Date: Wed, 13 Oct 2021 21:58:31 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.1.0
 Content-Language: en-GB
 To: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
-References: <20211007180520.3237005-1-james.hilliard1@gmail.com>
+References: <20211007181148.3238157-1-james.hilliard1@gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20211007180520.3237005-1-james.hilliard1@gmail.com>
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-serial-asyncio: bump to
- version 0.6
+In-Reply-To: <20211007181148.3238157-1-james.hilliard1@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-u-msgpack: bump to
+ version 2.7.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -108,9 +110,9 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 07/10/2021 20:05, James Hilliard wrote:
+On 07/10/2021 20:11, James Hilliard wrote:
 > License hash change due to date update:
-> https://github.com/pyserial/pyserial-asyncio/commit/0fbea23c7b445e6bbb7491511b3064fd5793ca0a
+> https://github.com/vsergeev/u-msgpack-python/commit/8599cae6bc970effe069e3ed955af1c64dab9106
 > 
 > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
@@ -120,39 +122,40 @@ On 07/10/2021 20:05, James Hilliard wrote:
   Arnout
 
 > ---
->   package/python-serial-asyncio/python-serial-asyncio.hash | 6 +++---
->   package/python-serial-asyncio/python-serial-asyncio.mk   | 4 ++--
->   2 files changed, 5 insertions(+), 5 deletions(-)
+>   package/python-u-msgpack/python-u-msgpack.hash | 8 ++++----
+>   package/python-u-msgpack/python-u-msgpack.mk   | 4 ++--
+>   2 files changed, 6 insertions(+), 6 deletions(-)
 > 
-> diff --git a/package/python-serial-asyncio/python-serial-asyncio.hash b/package/python-serial-asyncio/python-serial-asyncio.hash
-> index f5d1d9e485..ccbdda89be 100644
-> --- a/package/python-serial-asyncio/python-serial-asyncio.hash
-> +++ b/package/python-serial-asyncio/python-serial-asyncio.hash
+> diff --git a/package/python-u-msgpack/python-u-msgpack.hash b/package/python-u-msgpack/python-u-msgpack.hash
+> index 70c67c7283..0891783985 100644
+> --- a/package/python-u-msgpack/python-u-msgpack.hash
+> +++ b/package/python-u-msgpack/python-u-msgpack.hash
 > @@ -1,5 +1,5 @@
->   # md5, sha256 from https://pypi.org/pypi/pyserial-asyncio/json
-> -md5  64d15bfb20982b2129b02070321f49f3  pyserial-asyncio-0.5.tar.gz
-> -sha256  1641e5433a866eeaf6464b3ab88b741e7a89dd8cd0f851b3343b15f425138d33  pyserial-asyncio-0.5.tar.gz
-> +md5  409f32a35a3b530e6b2224e2a5b367da  pyserial-asyncio-0.6.tar.gz
-> +sha256  b6032923e05e9d75ec17a5af9a98429c46d2839adfaf80604d52e0faacd7a32f  pyserial-asyncio-0.6.tar.gz
->   # Locally computed sha256 checksums
-> -sha256  ebc84abdbdec7f9fa6962612c110123897db47b79529d5ae41191ef584b88f2c  LICENSE.txt
-> +sha256  64f3e548f0300d43c5af90b667150a9c57a4307c0f75fe741f76d0419905224a  LICENSE.txt
-> diff --git a/package/python-serial-asyncio/python-serial-asyncio.mk b/package/python-serial-asyncio/python-serial-asyncio.mk
-> index bc95f2c44a..6ee215a81c 100644
-> --- a/package/python-serial-asyncio/python-serial-asyncio.mk
-> +++ b/package/python-serial-asyncio/python-serial-asyncio.mk
+>   # md5, sha256 from https://pypi.org/pypi/u-msgpack-python/json
+> -md5	bbeedd924f3d8c8ee90611914b3594e6  u-msgpack-python-2.5.2.tar.gz
+> -sha256	09c85a8af77376034396681e76bf30c249a4fd8e5ebb239f8a468d3655f210d0  u-msgpack-python-2.5.2.tar.gz
+> -# Locally computed sha256
+> -sha256	0603a3e697a80b13640e3023bb534727f683ada5c4b0b0149d001ec5272d64f4  LICENSE
+> +md5  8691cea6bc7b44bce6e2115260a54323  u-msgpack-python-2.7.1.tar.gz
+> +sha256  b7e7d433cab77171a4c752875d91836f3040306bab5063fb6dbe11f64ea69551  u-msgpack-python-2.7.1.tar.gz
+> +# Locally computed sha256 checksums
+> +sha256  268ae7b7efbf67cd7bc0a9efea844fcf448d03f9cc6b8c79e8fe311815985030  LICENSE
+> diff --git a/package/python-u-msgpack/python-u-msgpack.mk b/package/python-u-msgpack/python-u-msgpack.mk
+> index 6d98e55221..e0a3b3f297 100644
+> --- a/package/python-u-msgpack/python-u-msgpack.mk
+> +++ b/package/python-u-msgpack/python-u-msgpack.mk
 > @@ -4,9 +4,9 @@
 >   #
 >   ################################################################################
 >   
-> -PYTHON_SERIAL_ASYNCIO_VERSION = 0.5
-> +PYTHON_SERIAL_ASYNCIO_VERSION = 0.6
->   PYTHON_SERIAL_ASYNCIO_SOURCE = pyserial-asyncio-$(PYTHON_SERIAL_ASYNCIO_VERSION).tar.gz
-> -PYTHON_SERIAL_ASYNCIO_SITE = https://files.pythonhosted.org/packages/e1/97/8dd1bf656796668ed4bd86058c815b130303a00a7b70cf79758e4918814a
-> +PYTHON_SERIAL_ASYNCIO_SITE = https://files.pythonhosted.org/packages/4a/9a/8477699dcbc1882ea51dcff4d3c25aa3f2063ed8f7d7a849fd8f610506b6
->   PYTHON_SERIAL_ASYNCIO_LICENSE = BSD-3-Clause
->   PYTHON_SERIAL_ASYNCIO_LICENSE_FILES = LICENSE.txt
->   PYTHON_SERIAL_ASYNCIO_SETUP_TYPE = setuptools
+> -PYTHON_U_MSGPACK_VERSION = 2.5.2
+> +PYTHON_U_MSGPACK_VERSION = 2.7.1
+>   PYTHON_U_MSGPACK_SOURCE = u-msgpack-python-$(PYTHON_U_MSGPACK_VERSION).tar.gz
+> -PYTHON_U_MSGPACK_SITE = https://files.pythonhosted.org/packages/75/c4/d9404382d0f7d9be27b5d13498d033a4faa83f325b3893e1c29a0faa83b9
+> +PYTHON_U_MSGPACK_SITE = https://files.pythonhosted.org/packages/62/94/a4f485b628310534d377b3e7cb6f85b8066dc823dbff0e4421fb4227fb7e
+>   PYTHON_U_MSGPACK_SETUP_TYPE = setuptools
+>   PYTHON_U_MSGPACK_LICENSE = MIT
+>   PYTHON_U_MSGPACK_LICENSE_FILES = LICENSE
 > 
 _______________________________________________
 buildroot mailing list
