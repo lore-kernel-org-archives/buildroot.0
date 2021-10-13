@@ -2,69 +2,69 @@ Return-Path: <SRS0=94yL=PB=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A36BC433EF
-	for <buildroot@archiver.kernel.org>; Wed, 13 Oct 2021 11:29:31 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B31AC433F5
+	for <buildroot@archiver.kernel.org>; Wed, 13 Oct 2021 11:33:28 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 4DFB460D07
-	for <buildroot@archiver.kernel.org>; Wed, 13 Oct 2021 11:29:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4DFB460D07
+	by mail.kernel.org (Postfix) with ESMTPS id 9298661056
+	for <buildroot@archiver.kernel.org>; Wed, 13 Oct 2021 11:33:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9298661056
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DF72840445;
-	Wed, 13 Oct 2021 11:29:29 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4FE1D40247;
+	Wed, 13 Oct 2021 11:33:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WpvqRMN71i58; Wed, 13 Oct 2021 11:29:28 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id OAFtDyDILwMd; Wed, 13 Oct 2021 11:33:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 959BB40697;
-	Wed, 13 Oct 2021 11:29:27 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 175571BF3F9
- for <buildroot@lists.busybox.net>; Wed, 13 Oct 2021 11:29:26 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 35B5C404B5;
+	Wed, 13 Oct 2021 11:33:24 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 243671BF3F9
+ for <buildroot@lists.busybox.net>; Wed, 13 Oct 2021 11:33:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0320040697
- for <buildroot@lists.busybox.net>; Wed, 13 Oct 2021 11:29:26 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0F178404B5
+ for <buildroot@lists.busybox.net>; Wed, 13 Oct 2021 11:33:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VyTUCinohR_N for <buildroot@lists.busybox.net>;
- Wed, 13 Oct 2021 11:29:24 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id EoTUrbteZtxx for <buildroot@lists.busybox.net>;
+ Wed, 13 Oct 2021 11:33:21 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com
- [IPv6:2607:f8b0:4864:20::d33])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 736BA40445
- for <buildroot@buildroot.org>; Wed, 13 Oct 2021 11:29:24 +0000 (UTC)
-Received: by mail-io1-xd33.google.com with SMTP id x1so2474069iof.7
- for <buildroot@buildroot.org>; Wed, 13 Oct 2021 04:29:24 -0700 (PDT)
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com
+ [IPv6:2607:f8b0:4864:20::d2a])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 02EF940247
+ for <buildroot@buildroot.org>; Wed, 13 Oct 2021 11:33:20 +0000 (UTC)
+Received: by mail-io1-xd2a.google.com with SMTP id q205so2477834iod.8
+ for <buildroot@buildroot.org>; Wed, 13 Oct 2021 04:33:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=ytWA5pp3WnJDuhEfhnDbQsy3qGZt2XRB9v5nUYFOhrc=;
- b=YZqrEZYYXWYuV9ZLx4o8Y0d9PiV9EW3uEmvz4F9Yor0iBTs+NmNMI4gu/oO7TmQdLS
- AB2+DKfmMEpwFJ5k01La9cltVGrJhWVBKmxh1iRZr8fZPy+r3nKBy3jerE/74tt24Byp
- nfVQaWa+9SAwFvL93w4OU5IHksSzdANO4TxEgEOXXsN+Gg+EyJ0OrlGQOKjJLSBU7peM
- WdazxunvWAWEZRKKwIW5UXIVAkDm3gArHWDn9fGMuM1AKAan4X8YnxeWktD1JrLX2dtN
- pvQVfsCddfx1vbYYvOMXJRnMlJlzZEUwjrm0M7vVfRm3GJCI7OfcB93AC5u7cb+0l1/S
- yFOA==
+ :cc; bh=K7B+ZGORAsYWAD31rQyItXHYlfiR+/tod9PXtUM/qm8=;
+ b=CmMHGZx5cm04JXEJNixV+opi4YkbVSOyB2rMYyY/bzKZvBPJDiytugGVXDrvtgo0sw
+ pjCtqQT6SIiALDIlHC6fmmfRgRe8UFMwjWsf176aFZV1NfFA2ZeA+WmombpwPlfwcfjA
+ BuBd8ofmMNxOoKcPZrnRPxO4i7JDGB5B0rWr0B4j4XIgZiFgUPR0hMbSHwNfoBKMlLtZ
+ 8Gt8YRtWB14CC0OeTOcL9fXxNZjNnO++flFiEw9Qyhi9OyPnxmWIP17rxWE7adb1lBOs
+ OBqLnF+0vhs7mNXDnpE2c1TbqqCom1DDfZBzZNX/wjBZt8LoWpnODVm44TWY5fvvwcLp
+ 8xWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:mime-version:references:in-reply-to:from:date
  :message-id:subject:to:cc;
- bh=ytWA5pp3WnJDuhEfhnDbQsy3qGZt2XRB9v5nUYFOhrc=;
- b=LW74mc73FczJIy31k0C3IHiL0S4NcqWt6HtiIkB2R1FIL5YL1JsbJVCDGQfchVMVOk
- MsatsFNycEM/GLFXEk4EL48Qoxe2eCKsrmcZXbmpB8TTvPb5dRPDQnoOShCeE14PjufH
- mMnUzB8QoOIauy6A943l29UlQHTjS0I837paAYAEDk7WMLoFA8XD4QzFCw2tCyKBNNhn
- oZYhqSG1+vLev5aXVpvpkwRSSnzLN7L5C5xemtbPBjgKkE9h1TxGGmvQvjO5OPz8tEHj
- DKWL8WETaAwXEevOHadJvsPlLe18u6IKj9KBetcAYZ8mri8p0fMYjbQZu9IVweisqYte
- 7ZdQ==
-X-Gm-Message-State: AOAM531tVlO3OtHnQFsp2Z0msu89kRaINOXWW+akfpG0Bb7k7Q071Eqa
- 52LtIxJzDcsJw0x4WcOh2QeHacp5qsYbTYNM+w==
-X-Google-Smtp-Source: ABdhPJzkiBPKlRagICsr+nJjNQgoqynBgZdM4kABTTsebNIhjqcw2O4s84Qhx0/Ac5IY9KALfJ7+YdEyRzQo6q9CeEo=
-X-Received: by 2002:a6b:ee0d:: with SMTP id i13mr28802741ioh.166.1634124563545; 
- Wed, 13 Oct 2021 04:29:23 -0700 (PDT)
+ bh=K7B+ZGORAsYWAD31rQyItXHYlfiR+/tod9PXtUM/qm8=;
+ b=Qoh/nBkwMof7DPFrxt+Q2GjG2YVHf1w3IrqlXKm4scAvmWJweof3h7FYA36Lzkolev
+ N7MeEZz5gw0YjcBbqyKUWFZoJGGB2FzfkVQAQrRybpsSLo1JtdfxZ8JLKQgy9u77kiAU
+ PZcuamqQt0j/1/3oUfpY6AFB5eRVjlQ2zOEUh0lK4IgdTwhhEN1oiGMbIm2lzfio8Owg
+ Gh5PQY4vOw7nBQiUlIo+gF9RLvE/YD5Bva2te3H7ztHRrEvtmGVCudz/CwdnwL+5Un7+
+ bjq8gC2y+JsoCLEht7eRB8TaafpO08hnXYGviXBEeV1XX8BZWwIMF46NLq5hrsdL/MAq
+ fmsQ==
+X-Gm-Message-State: AOAM530kqzaAP/onUXenf2Qn8LKJbmj2MM5EF9wfATf+ZRYTs/OmGhrZ
+ HedYm5XAAhYjfCujwS3mtx+XxXtzR7CHv5EH6w==
+X-Google-Smtp-Source: ABdhPJyZVyokeSyLPaed+fLubVFXc0kFZ0aJHrN7f40dlaUo8EqZ8/IOEwtVnMEeKSuL6v1XPT2xA0nU89l/Kzp0OoM=
+X-Received: by 2002:a02:2b08:: with SMTP id h8mr28476922jaa.137.1634124800114; 
+ Wed, 13 Oct 2021 04:33:20 -0700 (PDT)
 MIME-Version: 1.0
 References: <CA+eej5MzpM30U7sMqba5gKQ3dG5FznZqd6roacphLhx6J-9auA@mail.gmail.com>
  <f04ffb9e-04d5-0167-8ec2-957a3d1973e6@grenoble.cnrs.fr>
@@ -80,10 +80,11 @@ References: <CA+eej5MzpM30U7sMqba5gKQ3dG5FznZqd6roacphLhx6J-9auA@mail.gmail.com>
  <CA+eej5NKcWV6n_sM19Px+NP4EoqSDmUqw2W3DdTDGGKQRSqZ5Q@mail.gmail.com>
  <20211012225224.23525d4f@gmx.net>
  <b1aa1e5e-18b1-11b6-0f8d-14982d25ad3b@mind.be>
-In-Reply-To: <b1aa1e5e-18b1-11b6-0f8d-14982d25ad3b@mind.be>
+ <CA+eej5OCBy1brQFnRMQjMqu8DrPtrTgVPRpTT8hKxXTwz5uvNQ@mail.gmail.com>
+In-Reply-To: <CA+eej5OCBy1brQFnRMQjMqu8DrPtrTgVPRpTT8hKxXTwz5uvNQ@mail.gmail.com>
 From: =?UTF-8?Q?Esa=C3=AFe_Ledoux_NJONGSSI_KOUAM?= <kouamdoux@gmail.com>
-Date: Wed, 13 Oct 2021 12:34:14 +0200
-Message-ID: <CA+eej5OCBy1brQFnRMQjMqu8DrPtrTgVPRpTT8hKxXTwz5uvNQ@mail.gmail.com>
+Date: Wed, 13 Oct 2021 12:38:11 +0200
+Message-ID: <CA+eej5Py5=BfZzMuZS8ARZ5K24xBjGTrpu0iANh7hX9AjK6NQA@mail.gmail.com>
 To: Arnout Vandecappelle <arnout@mind.be>
 Subject: Re: [Buildroot] error when i build buidroot
 X-BeenThere: buildroot@buildroot.org
@@ -99,351 +100,367 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: Joachim Wiberg <troglobit@gmail.com>, Peter Seiderer <ps.report@gmx.net>,
  Edgar Bonet <bonet@grenoble.cnrs.fr>, buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============5905305400263402410=="
+Content-Type: multipart/mixed; boundary="===============2944543786144010070=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5905305400263402410==
-Content-Type: multipart/alternative; boundary="00000000000021018405ce3a4644"
+--===============2944543786144010070==
+Content-Type: multipart/alternative; boundary="0000000000003ac26005ce3a544f"
 
---00000000000021018405ce3a4644
+--0000000000003ac26005ce3a544f
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-> Can confirm the error with qemu_x86_64_defconfig, bumping the
-> kernel version from 5.10.7 to 5.10.72 (latest 5.10.x) solves
-> the problem here...
+so i should modify which mk file ??
 
-i think i should modify some .mk file too even if i bumping this version to
-the latest kernel version file
+Le mer. 13 oct. 2021 =C3=A0 12:34, Esa=C3=AFe Ledoux NJONGSSI KOUAM <
+kouamdoux@gmail.com> a =C3=A9crit :
 
-Le mar. 12 oct. 2021 =C3=A0 22:58, Arnout Vandecappelle <arnout@mind.be> a
-=C3=A9crit :
-
->
->
-> On 12/10/2021 22:52, Peter Seiderer wrote:
-> > Hello Esa=C3=AFe,
-> >
-> > On Tue, 12 Oct 2021 19:41:11 +0200, Esa=C3=AFe Ledoux NJONGSSI KOUAM <
-> kouamdoux@gmail.com> wrote:
-> >
-> >> Another problem occur ,
-> >> Linux 5-10 building generate compilation errors
-> >>
-> >> i have a lot of error :(
-> >>
-> >> arch/x86/entry/thunk_64.o: warning: objtool: missing symbol table
-> >> make[3]: *** [scripts/Makefile.build:360 : arch/x86/entry/thunk_64.o]
-> >> Erreur 1
-> >> make[3]: *** Suppression du fichier =C2=AB arch/x86/entry/thunk_64.o =
-=C2=BB
-> >> make[2]: *** [scripts/Makefile.build:496 : arch/x86/entry] Erreur 2
-> >>
-> >>    CC      arch/x86/mm/cpu_entry_area.o
-> >>    CC      arch/x86/mm/maccess.o
-> >>    CC      arch/x86/mm/pkeys.o
-> >>    CC      arch/x86/mm/kaslr.o
-> >>    CC      arch/x86/mm/pti.o
-> >>    AR      arch/x86/mm/built-in.a
-> >> make[1]: *** [Makefile:1805 : arch/x86] Erreur 2
-> >> make[1]: *** Attente des t=C3=A2ches non termin=C3=A9es....
-> >> make[1] : on quitte le r=C3=A9pertoire
-> >> =C2=AB /home/ledoux/Documents/buildroot/output/build/linux-5.10.7 =C2=
-=BB
-> >> make: *** [package/pkg-generic.mk:294 :
-> >> /home/ledoux/Documents/buildroot/output/build/linux-5.10.7/.stamp_buil=
-t]
-> >> Erreur 2
-> >
 > > Can confirm the error with qemu_x86_64_defconfig, bumping the
 > > kernel version from 5.10.7 to 5.10.72 (latest 5.10.x) solves
 > > the problem here...
 >
->   I head just confirmed the same thing :-)
+> i think i should modify some .mk file too even if i bumping this version
+> to the latest kernel version file
 >
->   Regards,
->   Arnout
+> Le mar. 12 oct. 2021 =C3=A0 22:58, Arnout Vandecappelle <arnout@mind.be> =
+a
+> =C3=A9crit :
 >
-> >
-> > Regards,
-> > Peter
-> >
-> >>
-> >> definitely, I don't know what to do.
-> >> I'm afraid to solve this problem and run into others.
-> >>
-> >>
-> >>
-> >> Le mar. 12 oct. 2021 =C3=A0 15:01, Esa=C3=AFe Ledoux NJONGSSI KOUAM <
-> >> kouamdoux@gmail.com> a =C3=A9crit :
-> >>
-> >>> i have seen something , ...
-> >>> It is working very well , because the problem was rsync version , so =
-i
-> >>> have take the better version
-> >>> https://github.com/WayneD/rsync/blob/master/INSTALL.md , ...
-> >>> thank you for all
-> >>>
-> >>> Le mar. 12 oct. 2021 =C3=A0 14:41, Esa=C3=AFe Ledoux NJONGSSI KOUAM <
-> >>> kouamdoux@gmail.com> a =C3=A9crit :
-> >>>
-> >>>>> in the buildroot directory. If that gives an error, there is really
-> >>>> something
-> >>>>> wrong with your OS.
-> >>>>
-> >>>> i'm trying to reinstall rsync , i hope that something will be fine
-> until
-> >>>> the end
-> >>>>
-> >>>> Le mar. 12 oct. 2021 =C3=A0 13:00, Esa=C3=AFe Ledoux NJONGSSI KOUAM =
+>>
+>>
+>> On 12/10/2021 22:52, Peter Seiderer wrote:
+>> > Hello Esa=C3=AFe,
+>> >
+>> > On Tue, 12 Oct 2021 19:41:11 +0200, Esa=C3=AFe Ledoux NJONGSSI KOUAM <
+>> kouamdoux@gmail.com> wrote:
+>> >
+>> >> Another problem occur ,
+>> >> Linux 5-10 building generate compilation errors
+>> >>
+>> >> i have a lot of error :(
+>> >>
+>> >> arch/x86/entry/thunk_64.o: warning: objtool: missing symbol table
+>> >> make[3]: *** [scripts/Makefile.build:360 : arch/x86/entry/thunk_64.o]
+>> >> Erreur 1
+>> >> make[3]: *** Suppression du fichier =C2=AB arch/x86/entry/thunk_64.o =
+=C2=BB
+>> >> make[2]: *** [scripts/Makefile.build:496 : arch/x86/entry] Erreur 2
+>> >>
+>> >>    CC      arch/x86/mm/cpu_entry_area.o
+>> >>    CC      arch/x86/mm/maccess.o
+>> >>    CC      arch/x86/mm/pkeys.o
+>> >>    CC      arch/x86/mm/kaslr.o
+>> >>    CC      arch/x86/mm/pti.o
+>> >>    AR      arch/x86/mm/built-in.a
+>> >> make[1]: *** [Makefile:1805 : arch/x86] Erreur 2
+>> >> make[1]: *** Attente des t=C3=A2ches non termin=C3=A9es....
+>> >> make[1] : on quitte le r=C3=A9pertoire
+>> >> =C2=AB /home/ledoux/Documents/buildroot/output/build/linux-5.10.7 =C2=
+=BB
+>> >> make: *** [package/pkg-generic.mk:294 :
+>> >>
+>> /home/ledoux/Documents/buildroot/output/build/linux-5.10.7/.stamp_built]
+>> >> Erreur 2
+>> >
+>> > Can confirm the error with qemu_x86_64_defconfig, bumping the
+>> > kernel version from 5.10.7 to 5.10.72 (latest 5.10.x) solves
+>> > the problem here...
+>>
+>>   I head just confirmed the same thing :-)
+>>
+>>   Regards,
+>>   Arnout
+>>
+>> >
+>> > Regards,
+>> > Peter
+>> >
+>> >>
+>> >> definitely, I don't know what to do.
+>> >> I'm afraid to solve this problem and run into others.
+>> >>
+>> >>
+>> >>
+>> >> Le mar. 12 oct. 2021 =C3=A0 15:01, Esa=C3=AFe Ledoux NJONGSSI KOUAM <
+>> >> kouamdoux@gmail.com> a =C3=A9crit :
+>> >>
+>> >>> i have seen something , ...
+>> >>> It is working very well , because the problem was rsync version , so=
+ i
+>> >>> have take the better version
+>> >>> https://github.com/WayneD/rsync/blob/master/INSTALL.md , ...
+>> >>> thank you for all
+>> >>>
+>> >>> Le mar. 12 oct. 2021 =C3=A0 14:41, Esa=C3=AFe Ledoux NJONGSSI KOUAM =
 <
-> >>>> kouamdoux@gmail.com> a =C3=A9crit :
-> >>>>
-> >>>>>    > As Joachim asked, can you provide the output of
-> >>>>>
-> >>>>>    >    pwd
-> >>>>>
-> >>>>>> and
-> >>>>>
-> >>>>>    >    findmnt
-> >>>>>
-> >>>>> ledoux@kali:~/Documents/buildroot$ pwd
-> >>>>> /home/ledoux/Documents/buildroot
-> >>>>> ledoux@kali:~/Documents/buildroot$ findmnt
-> >>>>> TARGET                         SOURCE      FSTYPE  OPTIONS
-> >>>>> /                              /dev/sda10  ext4
-> >>>>>   rw,relatime,errors=3Dremount-ro
-> >>>>> =E2=94=9C=E2=94=80/sys                         sysfs       sysfs
-> >>>>> rw,nosuid,nodev,noexec,relati
-> >>>>> =E2=94=82 =E2=94=9C=E2=94=80/sys/kernel/security       securityfs  =
-securit
-> >>>>> rw,nosuid,nodev,noexec,relati
-> >>>>> =E2=94=82 =E2=94=9C=E2=94=80/sys/fs/cgroup             cgroup2     =
-cgroup2
-> >>>>> rw,nosuid,nodev,noexec,relati
-> >>>>> =E2=94=82 =E2=94=9C=E2=94=80/sys/fs/pstore             pstore      =
-pstore
-> >>>>>   rw,nosuid,nodev,noexec,relati
-> >>>>> =E2=94=82 =E2=94=9C=E2=94=80/sys/firmware/efi/efivars  efivarfs    =
-efivarf
-> >>>>> rw,nosuid,nodev,noexec,relati
-> >>>>> =E2=94=82 =E2=94=9C=E2=94=80/sys/fs/bpf                none        =
-bpf
-> >>>>> rw,nosuid,nodev,noexec,relati
-> >>>>> =E2=94=82 =E2=94=9C=E2=94=80/sys/kernel/tracing        tracefs     =
-tracefs
-> >>>>> rw,nosuid,nodev,noexec,relati
-> >>>>> =E2=94=82 =E2=94=9C=E2=94=80/sys/kernel/debug          debugfs     =
-debugfs
-> >>>>> rw,nosuid,nodev,noexec,relati
-> >>>>> =E2=94=82 =E2=94=9C=E2=94=80/sys/kernel/config         configfs    =
-configf
-> >>>>> rw,nosuid,nodev,noexec,relati
-> >>>>> =E2=94=82 =E2=94=94=E2=94=80/sys/fs/fuse/connections   fusectl     =
-fusectl
-> >>>>> rw,nosuid,nodev,noexec,relati
-> >>>>> =E2=94=9C=E2=94=80/proc                        proc        proc
-> >>>>>   rw,nosuid,nodev,noexec,relati
-> >>>>> =E2=94=82 =E2=94=94=E2=94=80/proc/sys/fs/binfmt_misc   systemd-1   =
-autofs
-> >>>>>   rw,relatime,fd=3D29,pgrp=3D1,time
-> >>>>> =E2=94=82   =E2=94=94=E2=94=80/proc/sys/fs/binfmt_misc binfmt_misc =
-binfmt_
-> >>>>> rw,nosuid,nodev,noexec,relati
-> >>>>> =E2=94=9C=E2=94=80/dev                         udev        devtmpf
-> >>>>> rw,nosuid,relatime,size=3D17018
-> >>>>> =E2=94=82 =E2=94=9C=E2=94=80/dev/pts                   devpts      =
-devpts
-> >>>>>   rw,nosuid,noexec,relatime,gid
-> >>>>> =E2=94=82 =E2=94=9C=E2=94=80/dev/shm                   tmpfs       =
-tmpfs   rw,nosuid,nodev
-> >>>>> =E2=94=82 =E2=94=9C=E2=94=80/dev/hugepages             hugetlbfs   =
-hugetlb
-> >>>>> rw,relatime,pagesize=3D2M
-> >>>>> =E2=94=82 =E2=94=94=E2=94=80/dev/mqueue                mqueue      =
-mqueue
-> >>>>>   rw,nosuid,nodev,noexec,relati
-> >>>>> =E2=94=9C=E2=94=80/run                         tmpfs       tmpfs
-> >>>>> rw,nosuid,nodev,noexec,relati
-> >>>>> =E2=94=82 =E2=94=9C=E2=94=80/run/lock                  tmpfs       =
-tmpfs
-> >>>>> rw,nosuid,nodev,noexec,relati
-> >>>>> =E2=94=82 =E2=94=9C=E2=94=80/run/rpc_pipefs            sunrpc      =
-rpc_pip rw,relatime
-> >>>>> =E2=94=82 =E2=94=94=E2=94=80/run/user/1000             tmpfs       =
-tmpfs
-> >>>>> rw,nosuid,nodev,relatime,size
-> >>>>> =E2=94=82   =E2=94=94=E2=94=80/run/user/1000/doc       portal      =
-fuse.po
-> >>>>> rw,nosuid,nodev,relatime,user
-> >>>>> =E2=94=9C=E2=94=80/tmp                         /dev/sda9   ext4    =
-rw,relatime
-> >>>>> =E2=94=9C=E2=94=80/var                         /dev/sda7   ext4    =
-rw,relatime
-> >>>>> =E2=94=9C=E2=94=80/home                        /dev/sda11  ext4    =
-rw,relatime
-> >>>>> =E2=94=9C=E2=94=80/boot/efi                    /dev/sda2   vfat
-> >>>>>   rw,relatime,fmask=3D0077,dmask=3D
-> >>>>> =E2=94=94=E2=94=80/media/ledoux/Data           /dev/sda6   fuseblk
-> >>>>> rw,nosuid,nodev,relatime,user
-> >>>>>
-> >>>>>
-> >>>>>
-> >>>>> Le lun. 11 oct. 2021 =C3=A0 22:25, Arnout Vandecappelle <arnout@min=
-d.be>
-> a
-> >>>>> =C3=A9crit :
-> >>>>>
-> >>>>>>    Hi Esaie,
-> >>>>>>
-> >>>>>>    Please don't top-post, but reply inline like I do below. Note
-> that
-> >>>>>> this
-> >>>>>> requires configuring your mailer to quote replies properly (i.e.
-> put >
-> >>>>>> markers
-> >>>>>> in front of each line).
-> >>>>>>
-> >>>>>>
-> >>>>>> On 11/10/2021 12:20, Esa=C3=AFe Ledoux NJONGSSI KOUAM wrote:
-> >>>>>>> i have tried
-> >>>>>>> git clone git://git.buildroot.net/buildroot <
-> >>>>>> http://git.buildroot.net/buildroot>
-> >>>>>>> make qemu_x86_64_defconfig
-> >>>>>>> make
-> >>>>>>>
-> >>>>>>> i have type it on Documents folder that has ext4 file system
-> >>>>>>
-> >>>>>>    As Joachim asked, can you provide the output of
-> >>>>>>
-> >>>>>>       pwd
-> >>>>>>
-> >>>>>> and
-> >>>>>>
-> >>>>>>       findmnt
-> >>>>>>
-> >>>>>> so we can see if the filesystem really is ext4, or it has some wei=
-rd
-> >>>>>> mount
-> >>>>>> option, or anything else that could explain the issue?
-> >>>>>>
-> >>>>>>    You can also try:
-> >>>>>>
-> >>>>>>       touch foo
-> >>>>>>       chmod 666 foo
-> >>>>>>
-> >>>>>> in the buildroot directory. If that gives an error, there is reall=
+>> >>> kouamdoux@gmail.com> a =C3=A9crit :
+>> >>>
+>> >>>>> in the buildroot directory. If that gives an error, there is reall=
 y
-> >>>>>> something
-> >>>>>> wrong with your OS.
-> >>>>>>
-> >>>>>>    Regards,
-> >>>>>>    Arnout
-> >>>>>>
-> >>>>>>>
-> >>>>>>>
-> >>>>>>> still now i have the same error
-> >>>>>>>
-> >>>>>>> Le dim. 10 oct. 2021 =C3=A0 21:57, Joachim Wiberg <troglobit@gmai=
-l.com
-> >>>>>>> <mailto:troglobit@gmail.com>> a =C3=A9crit :
-> >>>>>>>
-> >>>>>>>      Hi,
-> >>>>>>>
-> >>>>>>>      On 10/10/21 6:52 PM, Esa=C3=AFe Ledoux NJONGSSI KOUAM wrote:
-> >>>>>>>       > no filesystem has been configured ...
-> >>>>>>>       > I'm just trying the default configuration
-> >>>>>>>
-> >>>>>>>      This is fine.  I think you've got something really wrong wit=
+>> >>>> something
+>> >>>>> wrong with your OS.
+>> >>>>
+>> >>>> i'm trying to reinstall rsync , i hope that something will be fine
+>> until
+>> >>>> the end
+>> >>>>
+>> >>>> Le mar. 12 oct. 2021 =C3=A0 13:00, Esa=C3=AFe Ledoux NJONGSSI KOUAM=
+ <
+>> >>>> kouamdoux@gmail.com> a =C3=A9crit :
+>> >>>>
+>> >>>>>    > As Joachim asked, can you provide the output of
+>> >>>>>
+>> >>>>>    >    pwd
+>> >>>>>
+>> >>>>>> and
+>> >>>>>
+>> >>>>>    >    findmnt
+>> >>>>>
+>> >>>>> ledoux@kali:~/Documents/buildroot$ pwd
+>> >>>>> /home/ledoux/Documents/buildroot
+>> >>>>> ledoux@kali:~/Documents/buildroot$ findmnt
+>> >>>>> TARGET                         SOURCE      FSTYPE  OPTIONS
+>> >>>>> /                              /dev/sda10  ext4
+>> >>>>>   rw,relatime,errors=3Dremount-ro
+>> >>>>> =E2=94=9C=E2=94=80/sys                         sysfs       sysfs
+>> >>>>> rw,nosuid,nodev,noexec,relati
+>> >>>>> =E2=94=82 =E2=94=9C=E2=94=80/sys/kernel/security       securityfs =
+ securit
+>> >>>>> rw,nosuid,nodev,noexec,relati
+>> >>>>> =E2=94=82 =E2=94=9C=E2=94=80/sys/fs/cgroup             cgroup2    =
+ cgroup2
+>> >>>>> rw,nosuid,nodev,noexec,relati
+>> >>>>> =E2=94=82 =E2=94=9C=E2=94=80/sys/fs/pstore             pstore     =
+ pstore
+>> >>>>>   rw,nosuid,nodev,noexec,relati
+>> >>>>> =E2=94=82 =E2=94=9C=E2=94=80/sys/firmware/efi/efivars  efivarfs   =
+ efivarf
+>> >>>>> rw,nosuid,nodev,noexec,relati
+>> >>>>> =E2=94=82 =E2=94=9C=E2=94=80/sys/fs/bpf                none       =
+ bpf
+>> >>>>> rw,nosuid,nodev,noexec,relati
+>> >>>>> =E2=94=82 =E2=94=9C=E2=94=80/sys/kernel/tracing        tracefs    =
+ tracefs
+>> >>>>> rw,nosuid,nodev,noexec,relati
+>> >>>>> =E2=94=82 =E2=94=9C=E2=94=80/sys/kernel/debug          debugfs    =
+ debugfs
+>> >>>>> rw,nosuid,nodev,noexec,relati
+>> >>>>> =E2=94=82 =E2=94=9C=E2=94=80/sys/kernel/config         configfs   =
+ configf
+>> >>>>> rw,nosuid,nodev,noexec,relati
+>> >>>>> =E2=94=82 =E2=94=94=E2=94=80/sys/fs/fuse/connections   fusectl    =
+ fusectl
+>> >>>>> rw,nosuid,nodev,noexec,relati
+>> >>>>> =E2=94=9C=E2=94=80/proc                        proc        proc
+>> >>>>>   rw,nosuid,nodev,noexec,relati
+>> >>>>> =E2=94=82 =E2=94=94=E2=94=80/proc/sys/fs/binfmt_misc   systemd-1  =
+ autofs
+>> >>>>>   rw,relatime,fd=3D29,pgrp=3D1,time
+>> >>>>> =E2=94=82   =E2=94=94=E2=94=80/proc/sys/fs/binfmt_misc binfmt_misc=
+ binfmt_
+>> >>>>> rw,nosuid,nodev,noexec,relati
+>> >>>>> =E2=94=9C=E2=94=80/dev                         udev        devtmpf
+>> >>>>> rw,nosuid,relatime,size=3D17018
+>> >>>>> =E2=94=82 =E2=94=9C=E2=94=80/dev/pts                   devpts     =
+ devpts
+>> >>>>>   rw,nosuid,noexec,relatime,gid
+>> >>>>> =E2=94=82 =E2=94=9C=E2=94=80/dev/shm                   tmpfs      =
+ tmpfs   rw,nosuid,nodev
+>> >>>>> =E2=94=82 =E2=94=9C=E2=94=80/dev/hugepages             hugetlbfs  =
+ hugetlb
+>> >>>>> rw,relatime,pagesize=3D2M
+>> >>>>> =E2=94=82 =E2=94=94=E2=94=80/dev/mqueue                mqueue     =
+ mqueue
+>> >>>>>   rw,nosuid,nodev,noexec,relati
+>> >>>>> =E2=94=9C=E2=94=80/run                         tmpfs       tmpfs
+>> >>>>> rw,nosuid,nodev,noexec,relati
+>> >>>>> =E2=94=82 =E2=94=9C=E2=94=80/run/lock                  tmpfs      =
+ tmpfs
+>> >>>>> rw,nosuid,nodev,noexec,relati
+>> >>>>> =E2=94=82 =E2=94=9C=E2=94=80/run/rpc_pipefs            sunrpc     =
+ rpc_pip rw,relatime
+>> >>>>> =E2=94=82 =E2=94=94=E2=94=80/run/user/1000             tmpfs      =
+ tmpfs
+>> >>>>> rw,nosuid,nodev,relatime,size
+>> >>>>> =E2=94=82   =E2=94=94=E2=94=80/run/user/1000/doc       portal     =
+ fuse.po
+>> >>>>> rw,nosuid,nodev,relatime,user
+>> >>>>> =E2=94=9C=E2=94=80/tmp                         /dev/sda9   ext4   =
+ rw,relatime
+>> >>>>> =E2=94=9C=E2=94=80/var                         /dev/sda7   ext4   =
+ rw,relatime
+>> >>>>> =E2=94=9C=E2=94=80/home                        /dev/sda11  ext4   =
+ rw,relatime
+>> >>>>> =E2=94=9C=E2=94=80/boot/efi                    /dev/sda2   vfat
+>> >>>>>   rw,relatime,fmask=3D0077,dmask=3D
+>> >>>>> =E2=94=94=E2=94=80/media/ledoux/Data           /dev/sda6   fuseblk
+>> >>>>> rw,nosuid,nodev,relatime,user
+>> >>>>>
+>> >>>>>
+>> >>>>>
+>> >>>>> Le lun. 11 oct. 2021 =C3=A0 22:25, Arnout Vandecappelle <arnout@mi=
+nd.be>
+>> a
+>> >>>>> =C3=A9crit :
+>> >>>>>
+>> >>>>>>    Hi Esaie,
+>> >>>>>>
+>> >>>>>>    Please don't top-post, but reply inline like I do below. Note
+>> that
+>> >>>>>> this
+>> >>>>>> requires configuring your mailer to quote replies properly (i.e.
+>> put >
+>> >>>>>> markers
+>> >>>>>> in front of each line).
+>> >>>>>>
+>> >>>>>>
+>> >>>>>> On 11/10/2021 12:20, Esa=C3=AFe Ledoux NJONGSSI KOUAM wrote:
+>> >>>>>>> i have tried
+>> >>>>>>> git clone git://git.buildroot.net/buildroot <
+>> >>>>>> http://git.buildroot.net/buildroot>
+>> >>>>>>> make qemu_x86_64_defconfig
+>> >>>>>>> make
+>> >>>>>>>
+>> >>>>>>> i have type it on Documents folder that has ext4 file system
+>> >>>>>>
+>> >>>>>>    As Joachim asked, can you provide the output of
+>> >>>>>>
+>> >>>>>>       pwd
+>> >>>>>>
+>> >>>>>> and
+>> >>>>>>
+>> >>>>>>       findmnt
+>> >>>>>>
+>> >>>>>> so we can see if the filesystem really is ext4, or it has some
+>> weird
+>> >>>>>> mount
+>> >>>>>> option, or anything else that could explain the issue?
+>> >>>>>>
+>> >>>>>>    You can also try:
+>> >>>>>>
+>> >>>>>>       touch foo
+>> >>>>>>       chmod 666 foo
+>> >>>>>>
+>> >>>>>> in the buildroot directory. If that gives an error, there is real=
+ly
+>> >>>>>> something
+>> >>>>>> wrong with your OS.
+>> >>>>>>
+>> >>>>>>    Regards,
+>> >>>>>>    Arnout
+>> >>>>>>
+>> >>>>>>>
+>> >>>>>>>
+>> >>>>>>> still now i have the same error
+>> >>>>>>>
+>> >>>>>>> Le dim. 10 oct. 2021 =C3=A0 21:57, Joachim Wiberg <troglobit@gma=
+il.com
+>> >>>>>>> <mailto:troglobit@gmail.com>> a =C3=A9crit :
+>> >>>>>>>
+>> >>>>>>>      Hi,
+>> >>>>>>>
+>> >>>>>>>      On 10/10/21 6:52 PM, Esa=C3=AFe Ledoux NJONGSSI KOUAM wrote=
+:
+>> >>>>>>>       > no filesystem has been configured ...
+>> >>>>>>>       > I'm just trying the default configuration
+>> >>>>>>>
+>> >>>>>>>      This is fine.  I think you've got something really wrong
+>> with your
+>> >>>>>>>      Kali Linux host system.
+>> >>>>>>>
+>> >>>>>>>       > should i configure file system for my buildroot ??
+>> >>>>>>>
+>> >>>>>>>      No, we mean the file system you are using for building
+>> Buildroot
+>> >>>>>> on,
+>> >>>>>>>      in your Kali Linux install.  The rsync error looks as if
+>> your disk
+>> >>>>>>>      partition is a non-native Linux file system, like FAT, whic=
 h
-> your
-> >>>>>>>      Kali Linux host system.
-> >>>>>>>
-> >>>>>>>       > should i configure file system for my buildroot ??
-> >>>>>>>
-> >>>>>>>      No, we mean the file system you are using for building
-> Buildroot
-> >>>>>> on,
-> >>>>>>>      in your Kali Linux install.  The rsync error looks as if you=
-r
-> disk
-> >>>>>>>      partition is a non-native Linux file system, like FAT, which
-> does
-> >>>>>>>      not support the operations rsync tries to perform.
-> >>>>>>>
-> >>>>>>>      How have you set up your Kali Linux?  Do you have the
-> buildroot
-> >>>>>> git
-> >>>>>>>      sources checked out to your home directory or some other
-> >>>>>> directory,
-> >>>>>>>      perhaps shared with Windows?  If so, I'd definitely avoid
-> that.
-> >>>>>> You
-> >>>>>>>      can check the filesystem of your build directory by comparin=
-g
-> the
-> >>>>>>>      output of
-> >>>>>>>
-> >>>>>>>          pwd
-> >>>>>>>
-> >>>>>>>      with the output from
-> >>>>>>>
-> >>>>>>>          findmnt
-> >>>>>>>
-> >>>>>>>      On my system I have ext4 in the FSTYPE column for my home
-> >>>>>> directory,
-> >>>>>>>      which is in the / TARGET.
-> >>>>>>>
-> >>>>>>>      I finished my install of Kali in my own VM.  It crashed badl=
-y
-> >>>>>> before
-> >>>>>>>      I gave it enough disk (40 GiB) and RAM (4 GiB).  That's
-> another
-> >>>>>> thing
-> >>>>>>>      that might have messed up your build tree.
-> >>>>>>>
-> >>>>>>>       > the error persists even if i compile it as normal user
-> >>>>>>>
-> >>>>>>>      Well that's good to know, at least it's consistent.  Just
-> beware
-> >>>>>>>      that if you reuse the same source tree, having switched to
-> another
-> >>>>>>>      user, a lot of files may still have root as the owner, which
-> may
-> >>>>>>>      give you other problems.  Either `sudo chown -R user:user .`
-> from
-> >>>>>>>      inside the Buildroot source tree, or check out a new tree.
-> >>>>>>>
-> >>>>>>>      Best regards
-> >>>>>>>        /Joachim
-> >>>>>>>
-> >>>>>>>
-> >>>>>>> _______________________________________________
-> >>>>>>> buildroot mailing list
-> >>>>>>> buildroot@buildroot.org
-> >>>>>>> https://lists.buildroot.org/mailman/listinfo/buildroot
-> >>>>>>>
-> >>>>>>
-> >>>>>
-> >
+>> does
+>> >>>>>>>      not support the operations rsync tries to perform.
+>> >>>>>>>
+>> >>>>>>>      How have you set up your Kali Linux?  Do you have the
+>> buildroot
+>> >>>>>> git
+>> >>>>>>>      sources checked out to your home directory or some other
+>> >>>>>> directory,
+>> >>>>>>>      perhaps shared with Windows?  If so, I'd definitely avoid
+>> that.
+>> >>>>>> You
+>> >>>>>>>      can check the filesystem of your build directory by
+>> comparing the
+>> >>>>>>>      output of
+>> >>>>>>>
+>> >>>>>>>          pwd
+>> >>>>>>>
+>> >>>>>>>      with the output from
+>> >>>>>>>
+>> >>>>>>>          findmnt
+>> >>>>>>>
+>> >>>>>>>      On my system I have ext4 in the FSTYPE column for my home
+>> >>>>>> directory,
+>> >>>>>>>      which is in the / TARGET.
+>> >>>>>>>
+>> >>>>>>>      I finished my install of Kali in my own VM.  It crashed bad=
+ly
+>> >>>>>> before
+>> >>>>>>>      I gave it enough disk (40 GiB) and RAM (4 GiB).  That's
+>> another
+>> >>>>>> thing
+>> >>>>>>>      that might have messed up your build tree.
+>> >>>>>>>
+>> >>>>>>>       > the error persists even if i compile it as normal user
+>> >>>>>>>
+>> >>>>>>>      Well that's good to know, at least it's consistent.  Just
+>> beware
+>> >>>>>>>      that if you reuse the same source tree, having switched to
+>> another
+>> >>>>>>>      user, a lot of files may still have root as the owner, whic=
+h
+>> may
+>> >>>>>>>      give you other problems.  Either `sudo chown -R user:user .=
+`
+>> from
+>> >>>>>>>      inside the Buildroot source tree, or check out a new tree.
+>> >>>>>>>
+>> >>>>>>>      Best regards
+>> >>>>>>>        /Joachim
+>> >>>>>>>
+>> >>>>>>>
+>> >>>>>>> _______________________________________________
+>> >>>>>>> buildroot mailing list
+>> >>>>>>> buildroot@buildroot.org
+>> >>>>>>> https://lists.buildroot.org/mailman/listinfo/buildroot
+>> >>>>>>>
+>> >>>>>>
+>> >>>>>
+>> >
+>>
 >
 
---00000000000021018405ce3a4644
+--0000000000003ac26005ce3a544f
 Content-Type: text/html; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-<div dir=3D"ltr">&gt; Can confirm the error with qemu_x86_64_defconfig, bum=
-ping the<br>
+<div dir=3D"ltr"><div>so i should modify which mk file ??</div></div><br><d=
+iv class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">Le=C2=A0mer.=
+ 13 oct. 2021 =C3=A0=C2=A012:34, Esa=C3=AFe Ledoux NJONGSSI KOUAM &lt;<a hr=
+ef=3D"mailto:kouamdoux@gmail.com">kouamdoux@gmail.com</a>&gt; a =C3=A9crit=
+=C2=A0:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px =
+0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex"><div dir=
+=3D"ltr">&gt; Can confirm the error with qemu_x86_64_defconfig, bumping the=
+<br>
 &gt; kernel version from 5.10.7 to 5.10.72 (latest 5.10.x) solves<br><div>
 &gt; the problem here...</div><div><br></div><div>i think i should modify s=
 ome .mk file too even if i bumping this version to the latest kernel versio=
 n file<br></div></div><br><div class=3D"gmail_quote"><div dir=3D"ltr" class=
 =3D"gmail_attr">Le=C2=A0mar. 12 oct. 2021 =C3=A0=C2=A022:58, Arnout Vandeca=
-ppelle &lt;<a href=3D"mailto:arnout@mind.be">arnout@mind.be</a>&gt; a =C3=
-=A9crit=C2=A0:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0=
-px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex"><=
-br>
+ppelle &lt;<a href=3D"mailto:arnout@mind.be" target=3D"_blank">arnout@mind.=
+be</a>&gt; a =C3=A9crit=C2=A0:<br></div><blockquote class=3D"gmail_quote" s=
+tyle=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);pad=
+ding-left:1ex"><br>
 <br>
 On 12/10/2021 22:52, Peter Seiderer wrote:<br>
 &gt; Hello Esa=C3=AFe,<br>
@@ -814,10 +831,11 @@ ldroot.org/mailman/listinfo/buildroot</a><br>
 &gt;&gt;&gt;&gt;&gt;=C2=A0 =C2=A0<br>
 &gt; <br>
 </blockquote></div>
+</blockquote></div>
 
---00000000000021018405ce3a4644--
+--0000000000003ac26005ce3a544f--
 
---===============5905305400263402410==
+--===============2944543786144010070==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -828,4 +846,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============5905305400263402410==--
+--===============2944543786144010070==--
