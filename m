@@ -2,51 +2,51 @@ Return-Path: <SRS0=94yL=PB=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1FDD3C433F5
-	for <buildroot@archiver.kernel.org>; Wed, 13 Oct 2021 20:01:56 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6EB28C433F5
+	for <buildroot@archiver.kernel.org>; Wed, 13 Oct 2021 20:02:07 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id DEFA760D07
-	for <buildroot@archiver.kernel.org>; Wed, 13 Oct 2021 20:01:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org DEFA760D07
+	by mail.kernel.org (Postfix) with ESMTPS id 34D1D60C4B
+	for <buildroot@archiver.kernel.org>; Wed, 13 Oct 2021 20:02:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 34D1D60C4B
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B70E860D70;
-	Wed, 13 Oct 2021 20:01:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0ABF081D73;
+	Wed, 13 Oct 2021 20:02:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gizTGZ6z8St7; Wed, 13 Oct 2021 20:01:54 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 1pEC8tDbjMmp; Wed, 13 Oct 2021 20:02:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 17C2860B0E;
-	Wed, 13 Oct 2021 20:01:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4EA4681BC6;
+	Wed, 13 Oct 2021 20:02:05 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7E7CE1BF2F0
- for <buildroot@lists.busybox.net>; Wed, 13 Oct 2021 20:00:26 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 466E21BF2F0
+ for <buildroot@lists.busybox.net>; Wed, 13 Oct 2021 20:00:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 629A760D70
- for <buildroot@lists.busybox.net>; Wed, 13 Oct 2021 20:00:21 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 28B9560605
+ for <buildroot@lists.busybox.net>; Wed, 13 Oct 2021 20:00:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vtYaAXLj5PCe for <buildroot@lists.busybox.net>;
+ with ESMTP id jbFydQobHNTg for <buildroot@lists.busybox.net>;
  Wed, 13 Oct 2021 20:00:20 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8D66660B0E
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2A24660B04
  for <buildroot@buildroot.org>; Wed, 13 Oct 2021 20:00:20 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id C8D2C95BC8; Wed, 13 Oct 2021 19:57:27 +0000 (UTC)
+ id 670C695B2C; Wed, 13 Oct 2021 19:57:27 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Wed, 13 Oct 2021 21:54:03 +0200
+Date: Wed, 13 Oct 2021 21:47:17 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7e439c0f370dc4a54c6bdb0d8c9cd95b56332c87
-X-Git-Newrev: fa9edee7d248d581d0ada991db836f968aca3259
+X-Git-Oldrev: 66235c5da48e6dafaac42e454c9df700bb0eed90
+X-Git-Newrev: 16b76aefe20d0dfad178a3ef55a6e7586b25302a
 X-Patchwork-Hint: ignore
-Message-Id: <20211013195727.C8D2C95BC8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-ujson: bump to version 4.2.0
+Message-Id: <20211013195727.670C695B2C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/nitrogen*: bump u-boot revision
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,44 +64,120 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fa9edee7d248d581d0ada991db836f968aca3259
+commit: https://git.buildroot.net/buildroot/commit/?id=16b76aefe20d0dfad178a3ef55a6e7586b25302a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+- To latest v2020.10 rev (f2c92d83)
+
+Signed-off-by: Chris Dimich <chris.dimich@boundarydevices.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/python-ujson/python-ujson.hash | 4 ++--
- package/python-ujson/python-ujson.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ configs/nitrogen6sx_defconfig | 4 ++--
+ configs/nitrogen6x_defconfig  | 4 ++--
+ configs/nitrogen7_defconfig   | 4 ++--
+ configs/nitrogen8m_defconfig  | 2 +-
+ configs/nitrogen8mm_defconfig | 2 +-
+ configs/nitrogen8mn_defconfig | 2 +-
+ configs/nitrogen8mp_defconfig | 2 +-
+ 7 files changed, 10 insertions(+), 10 deletions(-)
 
-diff --git a/package/python-ujson/python-ujson.hash b/package/python-ujson/python-ujson.hash
-index 8dd52fd6fa..fc897c381b 100644
---- a/package/python-ujson/python-ujson.hash
-+++ b/package/python-ujson/python-ujson.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/ujson/json
--md5  f8223127259c6a1f7d0e750fc88d19fd  ujson-4.1.0.tar.gz
--sha256  22b63ec4409f0d2f2c4c9d5aa331997e02470b7a15a3233f3cc32f2f9b92d58c  ujson-4.1.0.tar.gz
-+md5  9a90e2e9f1d465c2121b8d10f837f53a  ujson-4.2.0.tar.gz
-+sha256  fffe509f556861c7343c6cba57ed05fe7bcf4b48a934a5b946ccb45428cf8883  ujson-4.2.0.tar.gz
- # Locally computed sha256 checksums
- sha256  6a00a8f8b4050303368b694147bde1aed9c96bdff869c181dbbf3ccb784a1501  LICENSE.txt
-diff --git a/package/python-ujson/python-ujson.mk b/package/python-ujson/python-ujson.mk
-index 88e220b1a7..68781c6170 100644
---- a/package/python-ujson/python-ujson.mk
-+++ b/package/python-ujson/python-ujson.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_UJSON_VERSION = 4.1.0
-+PYTHON_UJSON_VERSION = 4.2.0
- PYTHON_UJSON_SOURCE = ujson-$(PYTHON_UJSON_VERSION).tar.gz
--PYTHON_UJSON_SITE = https://files.pythonhosted.org/packages/2c/8d/63b4afe82d646a606cef838855a6110c7a3a012622e656bd29fb2d15f1d1
-+PYTHON_UJSON_SITE = https://files.pythonhosted.org/packages/df/69/e8f615e1a779e2d2d23d29d56dc55bbb1db2a828f0ef36d10bc697d63968
- PYTHON_UJSON_SETUP_TYPE = setuptools
- PYTHON_UJSON_LICENSE = BSD-3-Clause
- PYTHON_UJSON_LICENSE_FILES = LICENSE.txt
+diff --git a/configs/nitrogen6sx_defconfig b/configs/nitrogen6sx_defconfig
+index 317bf192af..3c2fe0cc7b 100644
+--- a/configs/nitrogen6sx_defconfig
++++ b/configs/nitrogen6sx_defconfig
+@@ -24,8 +24,8 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+-# Last version of branch boundary-v2020.10
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/e05b6d68.tar.gz"
++# Latest revision of branch boundary-imx_v2020.10
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/f2c92d83.tar.gz"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen6sx"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+diff --git a/configs/nitrogen6x_defconfig b/configs/nitrogen6x_defconfig
+index b3d97c52e9..9e1d3ae1bc 100644
+--- a/configs/nitrogen6x_defconfig
++++ b/configs/nitrogen6x_defconfig
+@@ -23,8 +23,8 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+-# Last version of branch boundary-v2020.10
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/e05b6d68.tar.gz"
++# Latest revision of branch boundary-imx_v2020.10
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/f2c92d83.tar.gz"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen6q"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+diff --git a/configs/nitrogen7_defconfig b/configs/nitrogen7_defconfig
+index 7656fe20d9..0dbced86e9 100644
+--- a/configs/nitrogen7_defconfig
++++ b/configs/nitrogen7_defconfig
+@@ -23,8 +23,8 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+-# Last version of branch boundary-v2020.10
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/e05b6d68.tar.gz"
++# Latest revision of branch boundary-imx_v2020.10
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/f2c92d83.tar.gz"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen7"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+diff --git a/configs/nitrogen8m_defconfig b/configs/nitrogen8m_defconfig
+index 9e0e0983ee..a41e5f04d8 100644
+--- a/configs/nitrogen8m_defconfig
++++ b/configs/nitrogen8m_defconfig
+@@ -39,7 +39,7 @@ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen8m"
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+ # Latest revision of branch boundary-imx_v2020.10
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/e05b6d68.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/f2c92d83.tar.gz"
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+diff --git a/configs/nitrogen8mm_defconfig b/configs/nitrogen8mm_defconfig
+index db5ccef156..a635f8012b 100644
+--- a/configs/nitrogen8mm_defconfig
++++ b/configs/nitrogen8mm_defconfig
+@@ -39,7 +39,7 @@ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen8mm_2g"
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+ # Latest revision of branch boundary-imx_v2020.10
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/e05b6d68.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/f2c92d83.tar.gz"
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+diff --git a/configs/nitrogen8mn_defconfig b/configs/nitrogen8mn_defconfig
+index 95a2a45780..5c2101441d 100644
+--- a/configs/nitrogen8mn_defconfig
++++ b/configs/nitrogen8mn_defconfig
+@@ -39,7 +39,7 @@ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen8_nano_8mn1gr0"
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+ # Latest revision of branch boundary-imx_v2020.10
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/e05b6d68.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/f2c92d83.tar.gz"
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+diff --git a/configs/nitrogen8mp_defconfig b/configs/nitrogen8mp_defconfig
+index 53933b6b8d..3c52c526ab 100644
+--- a/configs/nitrogen8mp_defconfig
++++ b/configs/nitrogen8mp_defconfig
+@@ -39,7 +39,7 @@ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen8mp_2gr0"
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+ # Latest revision of branch boundary-imx_v2020.10
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/e05b6d68.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/f2c92d83.tar.gz"
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
