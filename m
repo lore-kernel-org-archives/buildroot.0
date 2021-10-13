@@ -2,51 +2,92 @@ Return-Path: <SRS0=94yL=PB=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 47BCEC433F5
-	for <buildroot@archiver.kernel.org>; Wed, 13 Oct 2021 18:12:52 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 30F90C433EF
+	for <buildroot@archiver.kernel.org>; Wed, 13 Oct 2021 18:24:28 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1126E610CE
-	for <buildroot@archiver.kernel.org>; Wed, 13 Oct 2021 18:12:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1126E610CE
+	by mail.kernel.org (Postfix) with ESMTPS id B9B3561165
+	for <buildroot@archiver.kernel.org>; Wed, 13 Oct 2021 18:24:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B9B3561165
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E1D1C60BAE;
-	Wed, 13 Oct 2021 18:12:51 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4CF8940155;
+	Wed, 13 Oct 2021 18:24:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mtxaOyYXPkBX; Wed, 13 Oct 2021 18:12:50 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id LgEDy10agMuh; Wed, 13 Oct 2021 18:24:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F25ED60C2F;
-	Wed, 13 Oct 2021 18:12:49 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5D1714021F;
+	Wed, 13 Oct 2021 18:24:25 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9A5141BF9C2
- for <buildroot@lists.busybox.net>; Wed, 13 Oct 2021 18:12:24 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 758561BF38C
+ for <buildroot@lists.busybox.net>; Wed, 13 Oct 2021 18:24:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8969B60C33
- for <buildroot@lists.busybox.net>; Wed, 13 Oct 2021 18:12:24 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6585D60ADA
+ for <buildroot@lists.busybox.net>; Wed, 13 Oct 2021 18:24:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IKOTvezRNGuj for <buildroot@lists.busybox.net>;
- Wed, 13 Oct 2021 18:12:23 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9A9E460BAE
- for <buildroot@buildroot.org>; Wed, 13 Oct 2021 18:12:23 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 0C3E195608; Wed, 13 Oct 2021 18:09:30 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-To: buildroot@buildroot.org
-Date: Wed, 13 Oct 2021 20:07:51 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c6aac6ebdbbd3873110a9e19de1957e49cb9344e
-X-Git-Newrev: ddc6f1199a1b53af60698c2f01ef2e47a17463a7
-X-Patchwork-Hint: ignore
-Message-Id: <20211013180931.0C3E195608@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libdbi-drivers: new package
+ with ESMTP id cNVGrTMKDf68 for <buildroot@lists.busybox.net>;
+ Wed, 13 Oct 2021 18:24:23 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com
+ [IPv6:2a00:1450:4864:20::52f])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7127360ADF
+ for <buildroot@buildroot.org>; Wed, 13 Oct 2021 18:24:23 +0000 (UTC)
+Received: by mail-ed1-x52f.google.com with SMTP id g8so13940710edt.7
+ for <buildroot@buildroot.org>; Wed, 13 Oct 2021 11:24:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :references:from:organization:in-reply-to:content-transfer-encoding;
+ bh=Jsuy6vHhWygIc/CwU5YeCuTMt/DDDYKvp+U7Otv1t3Y=;
+ b=L0Nhtoel1VTqYVjUOHfdGopuAI48yGfs0lKMEbTjGxt5f4910uqOkz7QNmI11EVbk/
+ MMqoNhWvPMWOVoEdWBwTxerllEr9RNK0Wjk5zvMh4u7UCDxuS25T+Nh3BNESj/lfxpBV
+ maMckKTvMpqBDoqSS2/fJ1M9CdXz9RFDgCuPOK/aP5VjWUOTu3PVeASbEP+y5+pTdHcI
+ fuHVYP2t4xYS2u5xKOWZCq30/eD1mPCc5g6wvMOaCd2MsdSzQnhtTjmQJIEiwPXrjqg4
+ B+f2+FvZgGg0zAECxYYLbmu5Qm9A8gfZ6BbszmipB/hPsRUES9YR0yHXyoH+SvrZScq9
+ 4ukg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=Jsuy6vHhWygIc/CwU5YeCuTMt/DDDYKvp+U7Otv1t3Y=;
+ b=j6e0LUaZ2jxDV94zBzzu/w5YGcSy0Lv8AkkkCj3OUF1jkOIx8TSRY+aLdBXpnPtFL0
+ /zZ0qFsx7C5FFJFd4q0c421tPngl+wEVv26fW6ybrpus5c5sejV/CaT1Euy9NCM3/qfz
+ Si15x/ZqJ9woKKcf+cJTlwbqo8Aj2NNdLfTtXI2zVEG3DY1aUeYizReR46V+cOAIwyNZ
+ gCFI16PSzAiGit6izUsj1se8eNXjFoVEn8T9mlpG7L6TjlbEoFraw54NUfHeO7dvRQfI
+ PSK5SCd4SNzFAe6eFlCKgoHutEi0lv3XBbN9KNqOmSvrVtsBqxnKF92D2YbLpcRGxUO+
+ JAew==
+X-Gm-Message-State: AOAM532EkWDFBQh0yDFYNkTKrkD7PHijvv7vsOVQFy2DFRTj2gltgpEr
+ s6WG+a4md5kGD46EvZkmEvJiug==
+X-Google-Smtp-Source: ABdhPJxH/jYn/jmqB7ibVo+TxY3yYF98HWsF+NK9Ay4OcnAoFz67iSECOZ28Gqt5Et4fZ5PN3Z8eUg==
+X-Received: by 2002:a17:906:1510:: with SMTP id
+ b16mr1002361ejd.332.1634149461713; 
+ Wed, 13 Oct 2021 11:24:21 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id u23sm275417edq.36.2021.10.13.11.24.21
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 13 Oct 2021 11:24:21 -0700 (PDT)
+Message-ID: <7a7d8323-fb62-65f1-b60b-dcbf56776f03@mind.be>
+Date: Wed, 13 Oct 2021 20:24:20 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.1.0
+Content-Language: en-GB
+To: Peter Seiderer <ps.report@gmx.net>, buildroot@buildroot.org
+References: <20211005202232.32172-1-ps.report@gmx.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20211005202232.32172-1-ps.report@gmx.net>
+Subject: Re: [Buildroot] [PATCH v1] package/log4cplus: bump version to 2.0.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,207 +99,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2350514077156691486=="
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============2350514077156691486==
-Content-Type: text/plain
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ddc6f1199a1b53af60698c2f01ef2e47a17463a7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The libdbi-drivers project provides the database-specific drivers
-for the libdbi framework
+On 05/10/2021 22:22, Peter Seiderer wrote:
+> For details see [1].
+> 
+> [1] https://github.com/log4cplus/log4cplus/releases/tag/REL_2_0_7
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
-http://libdbi-drivers.sourceforge.net/
+  Applied to master, thanks.
 
-Based on initial work from Nicolas Carrier <nicolas.carrier@orolia.com>
+  Regards,
+  Arnout
 
-Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- DEVELOPERS                                         |  2 +
- package/Config.in                                  |  1 +
- ...YSQL_CONFIG-variable-instead-of-mysql_con.patch | 47 +++++++++++++++++++++
- package/libdbi-drivers/Config.in                   |  8 ++++
- package/libdbi-drivers/libdbi-drivers.hash         |  3 ++
- package/libdbi-drivers/libdbi-drivers.mk           | 48 ++++++++++++++++++++++
- 6 files changed, 109 insertions(+)
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index edf15041d7..d5929685ab 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1152,6 +1152,7 @@ F:	package/json-glib/
- N:	Hervé Codina <herve.codina@bootlin.com>
- F:	package/dtbocfg/
- F:	package/libdbi/
-+F:	package/libdbi-drivers/
- F:	package/lua-augeas/
- F:	support/testing/tests/package/test_dtbocfg.py
- F:	support/testing/tests/package/test_lua_augeas.py
-@@ -1990,6 +1991,7 @@ F:	configs/galileo_defconfig
- N:	Nicolas Carrier <nicolas.carrier@orolia.com>
- F:	package/bmap-tools/
- F:	package/libdbi/
-+F:	package/libdbi-drivers/
- F:	package/lua-augeas/
- F:	package/php-xdebug/
- F:	package/python-augeas/
-diff --git a/package/Config.in b/package/Config.in
-index 51a837cdf6..b391177785 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1416,6 +1416,7 @@ menu "Database"
- 	source "package/kompexsqlite/Config.in"
- 	source "package/leveldb/Config.in"
- 	source "package/libdbi/Config.in"
-+	source "package/libdbi-drivers/Config.in"
- 	source "package/libgit2/Config.in"
- 	source "package/libmdbx/Config.in"
- 	source "package/libodb/Config.in"
-diff --git a/package/libdbi-drivers/0001-build-Use-MYSQL_CONFIG-variable-instead-of-mysql_con.patch b/package/libdbi-drivers/0001-build-Use-MYSQL_CONFIG-variable-instead-of-mysql_con.patch
-new file mode 100644
-index 0000000000..66e99c430f
---- /dev/null
-+++ b/package/libdbi-drivers/0001-build-Use-MYSQL_CONFIG-variable-instead-of-mysql_con.patch
-@@ -0,0 +1,47 @@
-+From bc966656d8598a6d87c901a67ecdb91c436f4939 Mon Sep 17 00:00:00 2001
-+From: Herve Codina <herve.codina@bootlin.com>
-+Date: Wed, 29 Sep 2021 15:08:33 +0200
-+Subject: [PATCH] build: Use MYSQL_CONFIG variable instead of
-+ 'mysql_config'
-+
-+The MYSQL_CONFIG variable is used to check 'mysql_config' prog.
-+This variable can be override by the user but was not used for
-+retrieving MYSQL_INCLUDE, MYSQL_LIBS, ...
-+
-+This commit replaces the hardcoded usage of 'mysql_config' by
-+the use of MYSQL_CONFIG variable.
-+
-+This lead to 'MYSQL_CONFIG=/some/where/mysql_config ./configure'
-+command to work properly.
-+
-+Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-+---
-+ acinclude.m4 | 6 +++---
-+ 1 file changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/acinclude.m4 b/acinclude.m4
-+index e99318f..9dd2b0f 100644
-+--- a/acinclude.m4
-++++ b/acinclude.m4
-+@@ -116,15 +116,15 @@ if test "$ac_mysql" = "yes"; then
-+ 	fi
-+ 
-+ 	if test "$ac_mysql_incdir" = "no"; then
-+-		MYSQL_INCLUDE=`mysql_config --include`
-++		MYSQL_INCLUDE=`$MYSQL_CONFIG --include`
-+ 	else
-+ 		MYSQL_INCLUDE=-I$ac_mysql_incdir
-+ 	fi
-+ 	if test "$ac_mysql_libdir" = "no"; then
-+ 	   	if test "$ac_mysql_threadsafe" = "YES"; then
-+-			MYSQL_LIBS=`mysql_config --libs_r`
-++			MYSQL_LIBS=`$MYSQL_CONFIG --libs_r`
-+ 		else
-+-			MYSQL_LIBS=`mysql_config --libs`
-++			MYSQL_LIBS=`$MYSQL_CONFIG --libs`
-+ 		fi
-+ 	else
-+ 	   	if test "$ac_mysql_threadsafe" = "YES"; then
-+-- 
-+2.31.1
-+
-diff --git a/package/libdbi-drivers/Config.in b/package/libdbi-drivers/Config.in
-new file mode 100644
-index 0000000000..087e6aaf0e
---- /dev/null
-+++ b/package/libdbi-drivers/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_LIBDBI_DRIVERS
-+	bool "libdbi-drivers"
-+	select BR2_PACKAGE_LIBDBI
-+	help
-+	  The libdbi-drivers project provides the
-+	  database-specific drivers for the libdbi framework.
-+
-+	  http://libdbi-drivers.sourceforge.net
-diff --git a/package/libdbi-drivers/libdbi-drivers.hash b/package/libdbi-drivers/libdbi-drivers.hash
-new file mode 100644
-index 0000000000..f6110c2a11
---- /dev/null
-+++ b/package/libdbi-drivers/libdbi-drivers.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  0237c8006cefd6873f0b43d9676b14d5674270adf5e7501cd0e3423ff5b41549  libdbi-drivers-7a8e24ec1cf763226f4be31ba1018d888d4989f3-br1.tar.gz
-+sha256  5bbcbb737e60fe9deba08ecbd00920cfcc3403ba2e534c64fdeea49d6bb87509  COPYING
-diff --git a/package/libdbi-drivers/libdbi-drivers.mk b/package/libdbi-drivers/libdbi-drivers.mk
-new file mode 100644
-index 0000000000..78d1c61515
---- /dev/null
-+++ b/package/libdbi-drivers/libdbi-drivers.mk
-@@ -0,0 +1,48 @@
-+################################################################################
-+#
-+# libdbi-drivers
-+#
-+################################################################################
-+
-+LIBDBI_DRIVERS_VERSION = 7a8e24ec1cf763226f4be31ba1018d888d4989f3
-+LIBDBI_DRIVERS_SITE = https://git.code.sf.net/p/libdbi-drivers/libdbi-drivers
-+LIBDBI_DRIVERS_SITE_METHOD = git
-+LIBDBI_DRIVERS_LICENSE = LGPL-2.1+
-+LIBDBI_DRIVERS_LICENSE_FILES = COPYING
-+LIBDBI_DRIVERS_INSTALL_STAGING = YES
-+LIBDBI_DRIVERS_DEPENDENCIES = libdbi host-pkgconf
-+LIBDBI_DRIVERS_AUTORECONF = YES
-+
-+LIBDBI_DRIVERS_CONF_OPTS = --with-dbi-libdir=$(STAGING_DIR)/usr/lib
-+
-+ifeq ($(BR2_PACKAGE_MYSQL),y)
-+LIBDBI_DRIVERS_DEPENDENCIES += mysql
-+LIBDBI_DRIVERS_CONF_OPTS += --with-mysql
-+LIBDBI_DRIVERS_CONF_ENV += MYSQL_CONFIG="$(STAGING_DIR)/usr/bin/mysql_config"
-+else
-+LIBDBI_DRIVERS_CONF_OPTS += --without-mysql
-+endif
-+
-+ifeq ($(BR2_PACKAGE_POSTGRESQL),y)
-+LIBDBI_DRIVERS_DEPENDENCIES += postgresql
-+LIBDBI_DRIVERS_CONF_OPTS += --with-pgsql
-+else
-+LIBDBI_DRIVERS_CONF_OPTS += --without-pgsql
-+endif
-+
-+LIBDBI_DRIVERS_CONF_OPTS += --without-sqlite
-+ifeq ($(BR2_PACKAGE_SQLITE),y)
-+LIBDBI_DRIVERS_DEPENDENCIES += sqlite
-+LIBDBI_DRIVERS_CONF_OPTS += --with-sqlite3
-+else
-+LIBDBI_DRIVERS_CONF_OPTS += --without-sqlite3
-+endif
-+
-+LIBDBI_DRIVERS_CONF_OPTS += --without-msql 	# MiniSQL
-+LIBDBI_DRIVERS_CONF_OPTS += --without-oracle	# Oracle OCI
-+LIBDBI_DRIVERS_CONF_OPTS += --without-firebird	# Firebird/Interbase
-+LIBDBI_DRIVERS_CONF_OPTS += --without-freetds	# Freetds
-+LIBDBI_DRIVERS_CONF_OPTS += --without-ingres	# Ingres
-+LIBDBI_DRIVERS_CONF_OPTS += --without-db2	# IBM DB2
-+
-+$(eval $(autotools-package))
-
---===============2350514077156691486==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+> ---
+>   package/log4cplus/log4cplus.hash | 2 +-
+>   package/log4cplus/log4cplus.mk   | 2 +-
+>   2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/log4cplus/log4cplus.hash b/package/log4cplus/log4cplus.hash
+> index 28e5b204c7..a668eca37a 100644
+> --- a/package/log4cplus/log4cplus.hash
+> +++ b/package/log4cplus/log4cplus.hash
+> @@ -1,3 +1,3 @@
+>   # Locally computed:
+> -sha256  73519a5e47c40cf375aa6cd28a703b01908b5dcd3f4cb4290db2fef237c8180c  log4cplus-2.0.6.tar.xz
+> +sha256  8f74a0a5920ba044b24e2ebeb0f1e5e36d85d5c23ed48d9fe328882b16130db8  log4cplus-2.0.7.tar.xz
+>   sha256  91d7e42ff80e74c4c94e5ad353375fa0358cd0abbf43f5fe957097cdbd4e2c4d  LICENSE
+> diff --git a/package/log4cplus/log4cplus.mk b/package/log4cplus/log4cplus.mk
+> index 8b62fb8f92..56a85025cb 100644
+> --- a/package/log4cplus/log4cplus.mk
+> +++ b/package/log4cplus/log4cplus.mk
+> @@ -4,7 +4,7 @@
+>   #
+>   ################################################################################
+>   
+> -LOG4CPLUS_VERSION = 2.0.6
+> +LOG4CPLUS_VERSION = 2.0.7
+>   LOG4CPLUS_SOURCE = log4cplus-$(LOG4CPLUS_VERSION).tar.xz
+>   LOG4CPLUS_SITE = http://downloads.sourceforge.net/project/log4cplus/log4cplus-stable/$(LOG4CPLUS_VERSION)
+>   LOG4CPLUS_LICENSE = Apache-2.0, BSD-2-Clause, BSD-like (threadpool)
+> 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============2350514077156691486==--
