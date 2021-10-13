@@ -2,59 +2,55 @@ Return-Path: <SRS0=94yL=PB=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 76320C433F5
-	for <buildroot@archiver.kernel.org>; Wed, 13 Oct 2021 11:48:50 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 84802C433EF
+	for <buildroot@archiver.kernel.org>; Wed, 13 Oct 2021 12:35:05 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 7E0FA610C9
-	for <buildroot@archiver.kernel.org>; Wed, 13 Oct 2021 11:48:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7E0FA610C9
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
+	by mail.kernel.org (Postfix) with ESMTPS id DF3D7610C8
+	for <buildroot@archiver.kernel.org>; Wed, 13 Oct 2021 12:35:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org DF3D7610C8
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4DC4C827AA;
-	Wed, 13 Oct 2021 11:48:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7C5D8608EE;
+	Wed, 13 Oct 2021 12:35:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jd_qjAH1Pc4A; Wed, 13 Oct 2021 11:48:48 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ju8imw6HzpnK; Wed, 13 Oct 2021 12:35:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AD01482784;
-	Wed, 13 Oct 2021 11:48:47 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id DFCD51BF3F9
- for <buildroot@lists.busybox.net>; Wed, 13 Oct 2021 11:48:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E70766074F;
+	Wed, 13 Oct 2021 12:35:02 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B9C1E1BF3BF
+ for <buildroot@lists.busybox.net>; Wed, 13 Oct 2021 12:35:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DC09282784
- for <buildroot@lists.busybox.net>; Wed, 13 Oct 2021 11:48:45 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A891A606FA
+ for <buildroot@lists.busybox.net>; Wed, 13 Oct 2021 12:35:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bSFuocj9N0W3 for <buildroot@lists.busybox.net>;
- Wed, 13 Oct 2021 11:48:45 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B10C181DA3
- for <buildroot@buildroot.org>; Wed, 13 Oct 2021 11:48:44 +0000 (UTC)
-Received: (Authenticated sender: peter@casa-korsgaard.com)
- by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 3A9C6E0007;
- Wed, 13 Oct 2021 11:48:40 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
- (envelope-from <peter@korsgaard.com>)
- id 1mackS-0006f1-IO; Wed, 13 Oct 2021 13:48:40 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-References: <20211013114615.24559-1-peter@korsgaard.com>
-Date: Wed, 13 Oct 2021 13:48:40 +0200
-In-Reply-To: <20211013114615.24559-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Wed, 13 Oct 2021 13:46:14 +0200")
-Message-ID: <87wnmhno13.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3BHNoQnl99rD for <buildroot@lists.busybox.net>;
+ Wed, 13 Oct 2021 12:35:00 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7850860594
+ for <buildroot@buildroot.org>; Wed, 13 Oct 2021 12:35:00 +0000 (UTC)
+Received: (Authenticated sender: herve.codina@bootlin.com)
+ by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 70651FF812;
+ Wed, 13 Oct 2021 12:34:58 +0000 (UTC)
+Date: Wed, 13 Oct 2021 14:34:57 +0200
+From: Herve Codina <herve.codina@bootlin.com>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20211013143457.635601d9@bootlin.com>
+In-Reply-To: <20211013070105.1857677-1-fontaine.fabrice@gmail.com>
+References: <20211013070105.1857677-1-fontaine.fabrice@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/systemd: security bump to version
- 247.9
+Subject: Re: [Buildroot] [PATCH 1/1] package/dtbocfg: depends on kernel
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,35 +62,33 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Norbert Lange <nolange79@gmail.com>,
- "Yann E. MORIN" <yann.morin.1998@free.fr>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
-
- > Fixes the following security issues:
- > - CVE-2020-13529: An exploitable denial-of-service vulnerability exists in
- >   Systemd 245.  A specially crafted DHCP FORCERENEW packet can cause a
- >   server running the DHCP client to be vulnerable to a DHCP ACK spoofing
- >   attack.  An attacker can forge a pair of FORCERENEW and DCHP ACK packets
- >   to reconfigure the server.
- >   https://talosintelligence.com/vulnerability_reports/TALOS-2020-1142
-
- > - CVE-2021-33910: Denial of Service (Stack Exhaustion) in systemd (PID 1)
- >   https://blog.qualys.com/vulnerabilities-threat-research/2021/07/20/cve-2021-33910-denial-of-service-stack-exhaustion-in-systemd-pid-1
-
- > Update hash of README for a change of IRC network:
- > -        #systemd on irc.freenode.org
- > +        #systemd on irc.libera.chat
-
-Ups, this should naturally be marked as a 2021.02.x patch, will resend.
-
--- 
-Bye, Peter Korsgaard
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGksCgpPbiBXZWQsIDEzIE9jdCAyMDIxIDA5OjAxOjA1ICswMjAwCkZhYnJpY2UgRm9udGFpbmUg
+PGZvbnRhaW5lLmZhYnJpY2VAZ21haWwuY29tPiB3cm90ZToKCj4gRml4IHRoZSBmb2xsb3dpbmcg
+YnVpbGQgZmFpbHVyZSByYWlzZWQgc2luY2UgdGhlIGFkZGl0aW9uIG9mIHRoZSBwYWNrYWdlCj4g
+aW4gY29tbWl0IDlmYzdiNDlhYjE5M2RhNTViMGE3MmQyN2I1ZTBlYTMzMjQ1YjRkZjA6Cj4gCj4g
+TWFrZWZpbGU6NTg3OiAqKiogbGludXggaXMgaW4gdGhlIGRlcGVuZGVuY3kgY2hhaW4gb2YgZHRi
+b2NmZyB0aGF0IGhhcyBhZGRlZCBpdCB0byBpdHMgX0RFUEVOREVOQ0lFUyB2YXJpYWJsZSB3aXRo
+b3V0IHNlbGVjdGluZyBpdCBvciBkZXBlbmRpbmcgb24gaXQgZnJvbSBDb25maWcuaW4uICBTdG9w
+Lgo+IAo+IEZpeGVzOgo+ICAtIGh0dHA6Ly9hdXRvYnVpbGQuYnVpbGRyb290Lm9yZy9yZXN1bHRz
+LzQ0OWE3MzFjMGExMzk0YzI4ZjUxOWUzNDFlYTE0NWNiNDJhZjAxMmQKPiAKPiBTaWduZWQtb2Zm
+LWJ5OiBGYWJyaWNlIEZvbnRhaW5lIDxmb250YWluZS5mYWJyaWNlQGdtYWlsLmNvbT4KPiAtLS0K
+PiAgcGFja2FnZS9kdGJvY2ZnL0NvbmZpZy5pbiB8IDEgKwo+ICAxIGZpbGUgY2hhbmdlZCwgMSBp
+bnNlcnRpb24oKykKPiAKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9kdGJvY2ZnL0NvbmZpZy5pbiBi
+L3BhY2thZ2UvZHRib2NmZy9Db25maWcuaW4KPiBpbmRleCBjMWU4MzE4ZTVjLi44NjJkYzBjY2M1
+IDEwMDY0NAo+IC0tLSBhL3BhY2thZ2UvZHRib2NmZy9Db25maWcuaW4KPiArKysgYi9wYWNrYWdl
+L2R0Ym9jZmcvQ29uZmlnLmluCj4gQEAgLTEsNSArMSw2IEBACj4gIGNvbmZpZyBCUjJfUEFDS0FH
+RV9EVEJPQ0ZHCj4gIAlib29sICJkdGJvY2ZnIgo+ICsJZGVwZW5kcyBvbiBCUjJfTElOVVhfS0VS
+TkVMCj4gIAloZWxwCj4gIAkgIGR0Ym9jZmcsIHdoaWNoIHN0YW5kcyBmb3IgRGV2aWNlIFRyZWUg
+QmxvYiBPdmVybGF5Cj4gIAkgIENvbmZpZ3VyYXRpb24gRmlsZSBTeXN0ZW0sIHdhcyBkZXZlbG9w
+ZWQgdG8gc2VydmUKClllcyBpbmRlZWQuIEkgbWlzc2VkIHRoaXMgb25lLgoKQWNrZWQtYnk6IEhl
+cnZlIENvZGluYSA8aGVydmUuY29kaW5hQGJvb3RsaW4uY29tPgoKSGVydsOpCgotLSAKSGVydsOp
+IENvZGluYSwgQm9vdGxpbgpFbWJlZGRlZCBMaW51eCBhbmQgS2VybmVsIGVuZ2luZWVyaW5nCmh0
+dHBzOi8vYm9vdGxpbi5jb20KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpo
+dHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
