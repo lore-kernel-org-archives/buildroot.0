@@ -2,52 +2,51 @@ Return-Path: <SRS0=94yL=PB=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 79CC7C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 13 Oct 2021 18:29:18 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 77A7AC433EF
+	for <buildroot@archiver.kernel.org>; Wed, 13 Oct 2021 18:29:30 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 398F4610A2
-	for <buildroot@archiver.kernel.org>; Wed, 13 Oct 2021 18:29:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 398F4610A2
+	by mail.kernel.org (Postfix) with ESMTPS id 1C40860C49
+	for <buildroot@archiver.kernel.org>; Wed, 13 Oct 2021 18:29:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1C40860C49
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 14B1181045;
-	Wed, 13 Oct 2021 18:29:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E972040753;
+	Wed, 13 Oct 2021 18:29:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VMCFR37eogu9; Wed, 13 Oct 2021 18:29:17 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id wFMtbsZ9YNoi; Wed, 13 Oct 2021 18:29:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6942580F30;
-	Wed, 13 Oct 2021 18:29:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4B7044075A;
+	Wed, 13 Oct 2021 18:29:28 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 92C1D1BF38C
- for <buildroot@lists.busybox.net>; Wed, 13 Oct 2021 18:27:41 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A30801BF38C
+ for <buildroot@lists.busybox.net>; Wed, 13 Oct 2021 18:27:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6F78960D50
- for <buildroot@lists.busybox.net>; Wed, 13 Oct 2021 18:27:38 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6E6E360D56
+ for <buildroot@lists.busybox.net>; Wed, 13 Oct 2021 18:27:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xHPUydQ8UlIl for <buildroot@lists.busybox.net>;
+ with ESMTP id lC68IM9FtSRM for <buildroot@lists.busybox.net>;
  Wed, 13 Oct 2021 18:27:37 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9B47560D5D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7166C60C2F
  for <buildroot@buildroot.org>; Wed, 13 Oct 2021 18:27:37 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 18514958EB; Wed, 13 Oct 2021 18:24:45 +0000 (UTC)
+ id E2BEE958EB; Wed, 13 Oct 2021 18:24:44 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Wed, 13 Oct 2021 20:14:58 +0200
+Date: Wed, 13 Oct 2021 20:14:48 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1868145c55345b5bc923f027abc7c8bb985e2a14
-X-Git-Newrev: 7633915abb0e86599cbadbf88caef9b9884bb8fa
+X-Git-Oldrev: efef1974c566b229bd8341a9e8cd3b4feeeb3e6c
+X-Git-Newrev: 34a544cf9fbe65b9f90b805bf140d2cd21018cc2
 X-Patchwork-Hint: ignore
-Message-Id: <20211013182445.18514958EB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/openocd: fix build with autoconf
- >= 2.70
+Message-Id: <20211013182444.E2BEE958EB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/dfu-util: bump version to 0.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,63 +64,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7633915abb0e86599cbadbf88caef9b9884bb8fa
+commit: https://git.buildroot.net/buildroot/commit/?id=34a544cf9fbe65b9f90b805bf140d2cd21018cc2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix the following build failure raised since bump of autoconf to version
-2.71 in commit ecd54b65c1f998a7ccd91f7c523e4ff38c4781da and
-http://git.savannah.gnu.org/gitweb/?p=autoconf.git;a=commit;h=aba75f6d4a9c875a9d5d90a07c6b3678db66a4bf:
+From the ChangeLog (see git history for full details):
+- Fix suffix check regression on Windows with Large File Support
+- Skip setting alternate interface when not needed
+- Only clamp transfer size on Linux
+- Quirk for GD32 leave request
+- Improve status and error messages and exit codes
+- dfuse: Process all alternate interfaces in a DfuSe file
+- dfuse-pack.py: Fix alternate settings if first is 0
 
->>> openocd 0.11.0 Autoreconfiguring
-autoreconf: error: configure.ac: AC_INIT not found; not an autoconf script?
-
-Fixes:
- - http://autobuild.buildroot.org/results/5fb7aa28703aff61ba850eac11bd35c8804528ae
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Link: https://lists.osmocom.org/pipermail/dfu-util/2021-September/000014.html
+Signed-off-by: Alexander Dahl <post@lespocky.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- ...gure.ac-fix-autoreconf-with-autoconf-2.70.patch | 32 ++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
+ package/dfu-util/dfu-util.hash | 6 +++---
+ package/dfu-util/dfu-util.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/openocd/0002-configure.ac-fix-autoreconf-with-autoconf-2.70.patch b/package/openocd/0002-configure.ac-fix-autoreconf-with-autoconf-2.70.patch
-new file mode 100644
-index 0000000000..ecb716b6fa
---- /dev/null
-+++ b/package/openocd/0002-configure.ac-fix-autoreconf-with-autoconf-2.70.patch
-@@ -0,0 +1,32 @@
-+From 3106d16bbc45de52bc0a8b638a84aa9d7c9abc46 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Wed, 6 Oct 2021 17:43:16 +0200
-+Subject: [PATCH] configure.ac: fix autoreconf with autoconf >= 2.70
-+
-+Fix the following build failure raised with openocd and autoconf >= 2.70
-+due to
-+http://git.savannah.gnu.org/gitweb/?p=autoconf.git;a=commit;h=aba75f6d4a9c875a9d5d90a07c6b3678db66a4bf:
-+
-+>>> openocd 0.11.0 Autoreconfiguring
-+autoreconf: error: configure.ac: AC_INIT not found; not an autoconf script?
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/5fb7aa28703aff61ba850eac11bd35c8804528ae
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/msteveb/jimtcl/pull/209]
-+---
-+ configure.ac | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/jimtcl/configure.ac b/jimtcl/configure.ac
-+index b70b5d8..8c45114 100644
-+--- a/jimtcl/configure.ac
-++++ b/jimtcl/configure.ac
-+@@ -1 +1,3 @@
-+ # Dummy configure.ac to make automake happy
-++AC_INIT([jimtcl], [0.80])
-++AC_OUTPUT
-+-- 
-+2.33.0
-+
+diff --git a/package/dfu-util/dfu-util.hash b/package/dfu-util/dfu-util.hash
+index a99e67565d..4ca28a26c9 100644
+--- a/package/dfu-util/dfu-util.hash
++++ b/package/dfu-util/dfu-util.hash
+@@ -1,6 +1,6 @@
+-# From http://dfu-util.sourceforge.net/releases/dfu-util-0.10.tar.gz.md5
+-md5  8cf55663703cdc6b40f377f999eb8d3d  dfu-util-0.10.tar.gz
++# From http://dfu-util.sourceforge.net/releases/dfu-util-0.11.tar.gz.md5
++md5  31c983543a1fe8f03260ca4d56ad4f43  dfu-util-0.11.tar.gz
+ 
+ # Locally computed
+-sha256  a03dc58dfc79c056819c0544b2a5970537566460102b3d82cfb038c60e619b42  dfu-util-0.10.tar.gz
++sha256  b4b53ba21a82ef7e3d4c47df2952adf5fa494f499b6b0b57c58c5d04ae8ff19e  dfu-util-0.11.tar.gz
+ sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
+diff --git a/package/dfu-util/dfu-util.mk b/package/dfu-util/dfu-util.mk
+index 4c9c9662c6..638cb32f37 100644
+--- a/package/dfu-util/dfu-util.mk
++++ b/package/dfu-util/dfu-util.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DFU_UTIL_VERSION = 0.10
++DFU_UTIL_VERSION = 0.11
+ DFU_UTIL_SITE = http://dfu-util.sourceforge.net/releases
+ DFU_UTIL_LICENSE = GPL-2.0+, LGPL-3.0
+ DFU_UTIL_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
