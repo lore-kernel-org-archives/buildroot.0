@@ -2,87 +2,86 @@ Return-Path: <SRS0=enEc=PC=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DAFFBC433EF
-	for <buildroot@archiver.kernel.org>; Thu, 14 Oct 2021 23:00:07 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D70DC433EF
+	for <buildroot@archiver.kernel.org>; Thu, 14 Oct 2021 23:00:19 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 82CF461090
-	for <buildroot@archiver.kernel.org>; Thu, 14 Oct 2021 23:00:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 82CF461090
+	by mail.kernel.org (Postfix) with ESMTPS id C7A8461090
+	for <buildroot@archiver.kernel.org>; Thu, 14 Oct 2021 23:00:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C7A8461090
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 59C2083267;
-	Thu, 14 Oct 2021 23:00:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 990B640687;
+	Thu, 14 Oct 2021 23:00:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Z4orVtrHG8jD; Thu, 14 Oct 2021 23:00:06 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id r_y6jTy05I_H; Thu, 14 Oct 2021 23:00:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 49FE5831A7;
-	Thu, 14 Oct 2021 23:00:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0C9B740613;
+	Thu, 14 Oct 2021 23:00:17 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1DA291BF37B
- for <buildroot@lists.busybox.net>; Thu, 14 Oct 2021 22:59:00 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7855F1BF37B
+ for <buildroot@lists.busybox.net>; Thu, 14 Oct 2021 22:59:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1777540105
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7D97240105
  for <buildroot@lists.busybox.net>; Thu, 14 Oct 2021 22:59:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp2.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Ob8uJ2qDkbvH for <buildroot@lists.busybox.net>;
- Thu, 14 Oct 2021 22:58:58 +0000 (UTC)
+ with ESMTP id HFx-Tm_jZr0g for <buildroot@lists.busybox.net>;
+ Thu, 14 Oct 2021 22:58:59 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com
- [IPv6:2607:f8b0:4864:20::52c])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 8079740018
- for <buildroot@buildroot.org>; Thu, 14 Oct 2021 22:58:58 +0000 (UTC)
-Received: by mail-pg1-x52c.google.com with SMTP id s136so3623830pgs.4
- for <buildroot@buildroot.org>; Thu, 14 Oct 2021 15:58:58 -0700 (PDT)
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com
+ [IPv6:2607:f8b0:4864:20::42a])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 76B1E400F1
+ for <buildroot@buildroot.org>; Thu, 14 Oct 2021 22:58:59 +0000 (UTC)
+Received: by mail-pf1-x42a.google.com with SMTP id m14so6734788pfc.9
+ for <buildroot@buildroot.org>; Thu, 14 Oct 2021 15:58:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=efqnP/J0R6GqUAATBGgMgRFkjT52dMvbN7mfvLmFZFw=;
- b=Ik28fZfUdY9mfgCbjwLpa/1z9mRlmI/Dko7GzPO6yzuLg3sFxYPChSSaJGOhdLW2vU
- VZUi56Gmg5kxVS+gCgX16PXZEEdYOgjFRMGicHsCSaH5wfK4nr4Q6kt4IcBoMC1O6BoM
- BBiYkI9hRVflC/2faQ/f6NPPLeAf7QRrZBKk3u6KI9trGvlZVSdDmMV+ejjtZJ0w7phX
- qrxhFes8NTFseO3jA+KdcQpl207f7D3mrV7Pc+Qdik0ahP+g4pBS6ThA6y/3dkm4KZOq
- p3O5biAKGP8WnM/Wex8W8pOYQ/hUHodQGgWbV3tK74Ce9ORblp2YOvpC6dYAD/h25Egz
- G7HA==
+ bh=AGCipIiYwWPLkVp49/xRhn//I0WBPhcYmmaxEe0BPMg=;
+ b=kuH3XXJhM1ncCM4TB9OFcXnDvxytmnD3PiomMrlS+WQNmhx7+njUUojKgB7/l1Ye8J
+ jcVPcnDTD5+ESIsrxT0GyCqsutUyEJfXcfBmVf6pFyLD/3DYEARwjbdShGu0vxdyVAGY
+ dbya49gwf90u/ooe85l4HHXNrkaaF0wrayuP7M+l5FNFtIaogH1m6j1hTkoWpL4EHX8y
+ IFARvGyDT0LgDU397bJ3hJTXsZu3sDvs5eNIQaaFECE5w56TcRS4LJE27w7Im+l2yNNm
+ YJP17LpFM5PrMxGH/95j/9EabQpLcfRwmumOijWJhaaJCLiCMTxiL9vij+J8o4ZEt3eD
+ IQ6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
  :references:mime-version:content-transfer-encoding;
- bh=efqnP/J0R6GqUAATBGgMgRFkjT52dMvbN7mfvLmFZFw=;
- b=HBxPsUhUmeUvngLNsd6y4Sunp6klBSwK+OKxQOa0TdOkm0qnMzsLSbWdbYO36YCuSh
- Gk8pBNfWtPm7hGTVcqjB5GB2eNVojwsQ+mDnoFeuIRjoySQ9RjM3kbAikLOPFjfuXl61
- EzESjjUZ4T78tp2Vj68S/nRyTiI79epx6xmknHNz4ipeTd08eXsv++xAZfNlTcG3y5bf
- 6I/GsUwLJWeWdZFD+pYfDGkPox1F18MNRgYc8kSTZj/ZIRNFUrp3cvI2fJUsHaV2EAGk
- xMpgw+jfLqbm2V748UYRpToVK9001FYz5MOEaY4lV+kT61z90ysdXQp+k4ZuQHKZkD2a
- osYA==
-X-Gm-Message-State: AOAM532bsRL9gE+/wovpsJrkRoxYHxmvQ6/G4ccGYwlahm1w9rzz+NPp
- RWV7ohqSjyF7TpZjuvayG60etcxGUZI=
-X-Google-Smtp-Source: ABdhPJy/81T2G00aQFgc4EKn7TjbvE1b0B/NNtFzCSvkvKAWuqRkNwjCm1KP4Ah+PM1O9lUbODB6aw==
-X-Received: by 2002:a62:3387:0:b0:44d:7ec:906a with SMTP id
- z129-20020a623387000000b0044d07ec906amr8279402pfz.69.1634252337669; 
- Thu, 14 Oct 2021 15:58:57 -0700 (PDT)
+ bh=AGCipIiYwWPLkVp49/xRhn//I0WBPhcYmmaxEe0BPMg=;
+ b=0mpG0oRTWXPyUh4l+PeiA/C2NkpFxec0ETu+/mIgdUo+EemilBu8mzTQTvcBrt0qTN
+ WgCk+MrwCMGXnqlMPo4HT5C8PRoKDOwU0Nh+QvwmXmbm9ytX06wjHVvs3Ns8xmrPEzJn
+ gWfM2NYnYoJ0QqXWr9fCaShuOtXbOm6CnP58t9BPP/eHkgAp6cC87/5vpQHZnDnqmVs/
+ x9qiLJh4T8VxFlaIeQyuiTtsfNCivwltGw/EBmld9sFAfS/dGVfRgEdRYQYe+n9ZH+hi
+ 19ERcj6z9Jk3EdbGyTku2oU/liLC1IDOGgwl2UXCZ2oRM2IzOnGzcS4w62Vs3cZZ+K+O
+ gqJw==
+X-Gm-Message-State: AOAM5325KVVq71zpLUyTJpTVSug7rykODgIWYMZ/zJK2uM1MyCyhFdde
+ BCxho1vN+VfYzwervjZRKlK7UyTs8So=
+X-Google-Smtp-Source: ABdhPJxV1ntaLjCYBKLIl5K+AqXHeaMONyxWCK1eesc6gMhm+C0o7lXvLOM3gBWcfx1hIVdlQEjH7Q==
+X-Received: by 2002:a63:cd57:: with SMTP id a23mr6380350pgj.320.1634252338703; 
+ Thu, 14 Oct 2021 15:58:58 -0700 (PDT)
 Received: from adam.rai.com ([47.149.13.137])
- by smtp.gmail.com with ESMTPSA id w19sm10171319pjy.9.2021.10.14.15.58.56
+ by smtp.gmail.com with ESMTPSA id w19sm10171319pjy.9.2021.10.14.15.58.57
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 14 Oct 2021 15:58:57 -0700 (PDT)
+ Thu, 14 Oct 2021 15:58:58 -0700 (PDT)
 From: Adam Duskett <aduskett@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu, 14 Oct 2021 15:58:44 -0700
-Message-Id: <20211014225849.832479-7-aduskett@gmail.com>
+Date: Thu, 14 Oct 2021 15:58:45 -0700
+Message-Id: <20211014225849.832479-8-aduskett@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211014225849.832479-1-aduskett@gmail.com>
 References: <20211014225849.832479-1-aduskett@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2 06/11] package/python-matplotlib: bump to
- version 3.4.3
+Subject: [Buildroot] [PATCH v2 07/11] package/python-numpy: bump to version
+ 1.21.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,319 +102,62 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- Remove upstreamed patches
-- Add BR2_PACKAGE_PYTHON_CERTIFI and BR2_PACKAGE_QHULL as dependencies
-- Add a new file: setup.cfg. This file is needed to force matplotlib to use
-  the system-provided freetype and qhull, and to disable lto.
-  The setup.cfg file is copied to the source directory before configuring.
-
-LTO must be disabled or else compile errors such as:
-"Relocation R_AARCH64_ADR_PREL_PG_HI21 against symbol `_ZSt3hexRSt8ios_base'
-which may bind externally can not be used when making a shared object;
-recompile with -fPIC"
+Update license file information as well.
 
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
 ---
- .../0001-Fix-invalid-inclusion-headers.patch  |  29 ---
- ...st-11983-from-anntzer-builddepchecks.patch | 170 ------------------
- package/python-matplotlib/Config.in           |   2 +
- .../python-matplotlib/python-matplotlib.hash  |   2 +-
- .../python-matplotlib/python-matplotlib.mk    |  14 +-
- package/python-matplotlib/setup.cfg           |  10 ++
- 6 files changed, 23 insertions(+), 204 deletions(-)
- delete mode 100644 package/python-matplotlib/0001-Fix-invalid-inclusion-headers.patch
- delete mode 100644 package/python-matplotlib/0002-Merge-pull-request-11983-from-anntzer-builddepchecks.patch
- create mode 100644 package/python-matplotlib/setup.cfg
+ package/python-numpy/python-numpy.hash | 11 +++++------
+ package/python-numpy/python-numpy.mk   | 16 +++++++++-------
+ 2 files changed, 14 insertions(+), 13 deletions(-)
 
-diff --git a/package/python-matplotlib/0001-Fix-invalid-inclusion-headers.patch b/package/python-matplotlib/0001-Fix-invalid-inclusion-headers.patch
-deleted file mode 100644
-index b10bfb326f..0000000000
---- a/package/python-matplotlib/0001-Fix-invalid-inclusion-headers.patch
-+++ /dev/null
-@@ -1,29 +0,0 @@
--From b0232c3cf1051749dd1e2bd0ec7c5c0a3a008d2f Mon Sep 17 00:00:00 2001
--From: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
--Date: Thu, 9 May 2019 15:06:36 +0200
--Subject: [PATCH] Fix invalid inclusion headers
--
--By default, matplotlib includes headers from host
--machine which breaks the build process.
--
--Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-----
-- python-matplotlib-3.0.3/setupext.py | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/setupext.py b/setupext.py
--index fc82d5d..eb978d2 100644
----- a/setupext.py
--+++ b/setupext.py
--@@ -267,7 +267,7 @@ def get_base_dirs():
--         'gnu0': ['/usr'],
--         'aix5': ['/usr/local'],
--         }
---    return basedir_map.get(sys.platform, ['/usr/local', '/usr'])
--+    return basedir_map.get(sys.platform, [])
-- 
-- 
-- def get_include_dirs():
---- 
--2.7.4
--
-diff --git a/package/python-matplotlib/0002-Merge-pull-request-11983-from-anntzer-builddepchecks.patch b/package/python-matplotlib/0002-Merge-pull-request-11983-from-anntzer-builddepchecks.patch
-deleted file mode 100644
-index b3a22acbb4..0000000000
---- a/package/python-matplotlib/0002-Merge-pull-request-11983-from-anntzer-builddepchecks.patch
-+++ /dev/null
-@@ -1,170 +0,0 @@
--From 923ce72409f184bd8e8c61b196260891036ba87e Mon Sep 17 00:00:00 2001
--From: Antony Lee <anntzer.lee@gmail.com>
--Date: Thu, 30 Aug 2018 15:27:55 +0200
--Subject: [PATCH] Simplify version checks for freetype and libpng.
--
--Currently, setupext.py replicates a lot of work done by the compiler to
--check whether header files are present, and whether freetype and libpng
--have sufficiently recent versions.
--
--Instead, we can just add a small stub source file at the top of the
--extension sources which just tries to include the header and checks the
--version macros.  If the header is not found, compilation will
--immediately abort with `foo.h: No such file or directory`; if the
--version is too old, we can emit an appropriate error message (`#pragma
--message` is supported by all major compilers and allows expanding of
--macros in the error message).
--
--[Retrieved from:
--https://github.com/matplotlib/matplotlib/commit/d1060a885309ec7ac19ca912d3011a5eb1673bd5]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- setupext.py              | 83 +++++-----------------------------------
-- src/checkdep_freetype2.c | 13 +++++++
-- src/checkdep_libpng.c    |  5 +++
-- 3 files changed, 28 insertions(+), 73 deletions(-)
-- create mode 100644 src/checkdep_freetype2.c
-- create mode 100644 src/checkdep_libpng.c
--
--diff --git a/setupext.py b/setupext.py
--index d5f4b81f562..a5163e39288 100644
----- a/setupext.py
--+++ b/setupext.py
--@@ -814,6 +814,13 @@ def add_flags(self, ext, add_sources=True):
--                                for x in agg_sources)
-- 
-- 
--+# For FreeType2 and libpng, we add a separate checkdep_foo.c source to at the
--+# top of the extension sources.  This file is compiled first and immediately
--+# aborts the compilation either with "foo.h: No such file or directory" if the
--+# header is not found, or an appropriate error message if the header indicates
--+# a too-old version.
--+
--+
-- class FreeType(SetupPackage):
--     name = "freetype"
--     pkg_names = {
--@@ -825,59 +832,8 @@ class FreeType(SetupPackage):
--         "windows_url": "http://gnuwin32.sourceforge.net/packages/freetype.htm"
--         }
-- 
---    def check(self):
---        if options.get('local_freetype'):
---            return "Using local version for testing"
---
---        if sys.platform == 'win32':
---            try:
---                check_include_file(get_include_dirs(), 'ft2build.h', 'freetype')
---            except CheckFailed:
---                check_include_file(get_include_dirs(), os.path.join('freetype2', 'ft2build.h'), 'freetype')
---            return 'Using unknown version found on system.'
---
---        status, output = subprocess.getstatusoutput(
---            "freetype-config --ftversion")
---        if status == 0:
---            version = output
---        else:
---            version = None
---
---        # Early versions of freetype grep badly inside freetype-config,
---        # so catch those cases. (tested with 2.5.3).
---        if version is None or 'No such file or directory\ngrep:' in version:
---            version = self.version_from_header()
---
---        # pkg_config returns the libtool version rather than the
---        # freetype version so we need to explicitly pass the version
---        # to _check_for_pkg_config
---        return self._check_for_pkg_config(
---            'freetype2', 'ft2build.h',
---            min_version='2.3', version=version)
---
---    def version_from_header(self):
---        version = 'unknown'
---        ext = self.get_extension()
---        if ext is None:
---            return version
---        # Return the first version found in the include dirs.
---        for include_dir in ext.include_dirs:
---            header_fname = os.path.join(include_dir, 'freetype.h')
---            if os.path.exists(header_fname):
---                major, minor, patch = 0, 0, 0
---                with open(header_fname, 'r') as fh:
---                    for line in fh:
---                        if line.startswith('#define FREETYPE_'):
---                            value = line.rsplit(' ', 1)[1].strip()
---                            if 'MAJOR' in line:
---                                major = value
---                            elif 'MINOR' in line:
---                                minor = value
---                            else:
---                                patch = value
---                return '.'.join([major, minor, patch])
---
--     def add_flags(self, ext):
--+        ext.sources.insert(0, 'src/checkdep_freetype2.c')
--         if options.get('local_freetype'):
--             src_path = os.path.join(
--                 'build', 'freetype-{0}'.format(LOCAL_FREETYPE_VERSION))
--@@ -1058,30 +1014,11 @@ class Png(SetupPackage):
--         "windows_url": "http://gnuwin32.sourceforge.net/packages/libpng.htm"
--         }
-- 
---    def check(self):
---        if sys.platform == 'win32':
---            check_include_file(get_include_dirs(), 'png.h', 'png')
---            return 'Using unknown version found on system.'
---
---        status, output = subprocess.getstatusoutput("libpng-config --version")
---        if status == 0:
---            version = output
---        else:
---            version = None
---
---        try:
---            return self._check_for_pkg_config(
---                'libpng', 'png.h',
---                min_version='1.2', version=version)
---        except CheckFailed as e:
---            if has_include_file(get_include_dirs(), 'png.h'):
---                return str(e) + ' Using unknown version found on system.'
---            raise
---
--     def get_extension(self):
--         sources = [
--+            'src/checkdep_libpng.c',
--             'src/_png.cpp',
---            'src/mplutils.cpp'
--+            'src/mplutils.cpp',
--             ]
--         ext = make_extension('matplotlib._png', sources)
--         pkg_config.setup_extension(
--diff --git a/src/checkdep_freetype2.c b/src/checkdep_freetype2.c
--new file mode 100644
--index 00000000000..bf9a8c94e38
----- /dev/null
--+++ b/src/checkdep_freetype2.c
--@@ -0,0 +1,13 @@
--+#include <ft2build.h>
--+#include FT_FREETYPE_H
--+
--+#define XSTR(x) STR(x)
--+#define STR(x) #x
--+
--+#pragma message("Compiling with FreeType version " \
--+  XSTR(FREETYPE_MAJOR) "." XSTR(FREETYPE_MINOR) "." XSTR(FREETYPE_PATCH) ".")
--+#if FREETYPE_MAJOR << 16 + FREETYPE_MINOR << 8 + FREETYPE_PATCH < 0x020300
--+    #error "FreeType version 2.3 or higher is required." \
--+      "Consider setting the MPLLOCALFREETYPE environment variable to 1."
--+  #error
--+#endif
--diff --git a/src/checkdep_libpng.c b/src/checkdep_libpng.c
--new file mode 100644
--index 00000000000..5ebe5cbe4d7
----- /dev/null
--+++ b/src/checkdep_libpng.c
--@@ -0,0 +1,5 @@
--+#include <png.h>
--+#pragma message("Compiling with libpng version " PNG_LIBPNG_VER_STRING ".")
--+#if PNG_LIBPNG_VER < 10200
--+  #error "libpng version 1.2 or higher is required."
--+#endif
-diff --git a/package/python-matplotlib/Config.in b/package/python-matplotlib/Config.in
-index afc090856f..f38618d709 100644
---- a/package/python-matplotlib/Config.in
-+++ b/package/python-matplotlib/Config.in
-@@ -6,6 +6,7 @@ config BR2_PACKAGE_PYTHON_MATPLOTLIB
- 	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL # python-numpy
- 	select BR2_PACKAGE_FREETYPE # runtime
- 	select BR2_PACKAGE_LIBPNG # runtime
-+	select BR2_PACKAGE_PYTHON_CERTIFI
- 	select BR2_PACKAGE_PYTHON_CYCLER
- 	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
- 	select BR2_PACKAGE_PYTHON_DATEUTIL # runtime
-@@ -13,6 +14,7 @@ config BR2_PACKAGE_PYTHON_MATPLOTLIB
- 	select BR2_PACKAGE_PYTHON_NUMPY # runtime
- 	select BR2_PACKAGE_PYTHON_PYPARSING # runtime
- 	select BR2_PACKAGE_PYTHON3_ZLIB # runtime
-+	select BR2_PACKAGE_QHULL
- 	select BR2_PACKAGE_ZLIB # runtime
- 	help
- 	  Matplotlib strives to produce publication quality 2D
-diff --git a/package/python-matplotlib/python-matplotlib.hash b/package/python-matplotlib/python-matplotlib.hash
-index ccb22eefa5..81e83ac0de 100644
---- a/package/python-matplotlib/python-matplotlib.hash
-+++ b/package/python-matplotlib/python-matplotlib.hash
-@@ -1,4 +1,4 @@
- # sha256 from https://pypi.org/project/matplotlib/#files
--sha256	e1d33589e32f482d0a7d1957bf473d43341115d40d33f578dad44432e47df7b7  matplotlib-3.0.3.tar.gz
-+sha256	fc4f526dfdb31c9bd6b8ca06bf9fab663ca12f3ec9cdf4496fb44bc680140318  matplotlib-3.4.3.tar.gz
- # Locally computed sha256 checksums
- sha256	5a1a81ea301728c8bba2933da832c0cd62229daf20893a024ab3d53244468dbc  LICENSE/LICENSE
-diff --git a/package/python-matplotlib/python-matplotlib.mk b/package/python-matplotlib/python-matplotlib.mk
-index 8d00ac8a07..2f55dd5d5d 100644
---- a/package/python-matplotlib/python-matplotlib.mk
-+++ b/package/python-matplotlib/python-matplotlib.mk
-@@ -4,17 +4,23 @@
+diff --git a/package/python-numpy/python-numpy.hash b/package/python-numpy/python-numpy.hash
+index ff9d02643c..7c111f7bc8 100644
+--- a/package/python-numpy/python-numpy.hash
++++ b/package/python-numpy/python-numpy.hash
+@@ -1,9 +1,8 @@
+-# Copied from https://github.com/numpy/numpy/releases/tag/v1.18.1
+-sha256  da204ce460aa4247e595b7c7189d2fb2ed5f796bc03197055de01dac61d0125e	numpy-1.18.2.tar.gz
++# Copied from https://github.com/numpy/numpy/releases/tag/v1.21.2
++sha256  76af194fbc117934ec5bbe2ff15177adbd05aeed23f18ee209ed88edcd777e05  numpy-1.21.2.tar.gz
+ # License files, locally calculated
+-sha256  ad81d0c21843ba6ce6fe5fa3eaacb61120be70cd798c52f63df3f4c12a843f0c	LICENSE.txt
+-sha256  d3045980e80a6b39f98586c24bc7f39a7625b4b9f08ce72e367d12814743d047	numpy/core/src/multiarray/dragon4.c
+-sha256  426a5a484480f57a295db48c2c04f47bb3274752dd82a7fd6541dfa2cb90f641	doc/sphinxext/LICENSE.txt
+-sha256	154a8706fa0fdeff1073bf6239c4ecf51f562ab107066eef839dade1a45c824c	doc/scipy-sphinx-theme/LICENSE.txt
++sha256  bc1b0af15cdc9415ea26c5f1df352c226ac86425ec0fb9ab38d111018bf1c6f2  LICENSE.txt
++sha256  2be6947e0432ecf7950ee8fe38681316749dd06d1de17c9ec4de6d2f55adb3a1  numpy/core/src/multiarray/dragon4.c
++sha256  fbc539f47d0cf83bc61378080fb873d5c14630126cacbfe754035c3926daa5ec  numpy/core/include/numpy/libdivide/LICENSE.txt
+ sha256  a14cc25e10d40a3aa705b7de2fb764a6535d8ee9b2db4e1724900585457dfd55	numpy/linalg/lapack_lite/LICENSE.txt
+ sha256  badf51c7e3e7de9c7630bd069780f5c197b846ef7660b342a1e58d5553592d8e	tools/npy_tempita/license.txt
+diff --git a/package/python-numpy/python-numpy.mk b/package/python-numpy/python-numpy.mk
+index 72c6e0c981..ae72b87db0 100644
+--- a/package/python-numpy/python-numpy.mk
++++ b/package/python-numpy/python-numpy.mk
+@@ -4,15 +4,17 @@
  #
  ################################################################################
  
--PYTHON_MATPLOTLIB_VERSION = 3.0.3
-+PYTHON_MATPLOTLIB_VERSION = 3.4.3
- PYTHON_MATPLOTLIB_SOURCE = matplotlib-$(PYTHON_MATPLOTLIB_VERSION).tar.gz
--PYTHON_MATPLOTLIB_SITE = https://files.pythonhosted.org/packages/26/04/8b381d5b166508cc258632b225adbafec49bbe69aa9a4fa1f1b461428313
-+PYTHON_MATPLOTLIB_SITE = https://files.pythonhosted.org/packages/21/37/197e68df384ff694f78d687a49ad39f96c67b8d75718bc61503e1676b617
- PYTHON_MATPLOTLIB_LICENSE = Python-2.0
- PYTHON_MATPLOTLIB_LICENSE_FILES = LICENSE/LICENSE
--PYTHON_MATPLOTLIB_DEPENDENCIES = host-pkgconf freetype host-python-numpy \
--	libpng python-cycler
-+PYTHON_MATPLOTLIB_DEPENDENCIES = \
-+	host-pkgconf freetype host-python-numpy \
-+	libpng python-cycler host-python-certifi qhull
- PYTHON_MATPLOTLIB_SETUP_TYPE = setuptools
- 
- ifeq ($(BR2_PACKAGE_PYTHON_MATPLOTLIB_QT),y)
- PYTHON_MATPLOTLIB_DEPENDENCIES += python-pyqt5
- endif
- 
-+define PYTHON_MATPLOTLIB_COPY_SETUP_CFG
-+	cp $(PYTHON_MATPLOTLIB_PKGDIR)/setup.cfg $(@D)/setup.cfg
-+endef
-+PYTHON_MATPLOTLIB_PRE_CONFIGURE_HOOKS += PYTHON_MATPLOTLIB_COPY_SETUP_CFG
+-PYTHON_NUMPY_VERSION = 1.18.2
++PYTHON_NUMPY_VERSION = 1.21.2
+ PYTHON_NUMPY_SOURCE = numpy-$(PYTHON_NUMPY_VERSION).tar.gz
+ PYTHON_NUMPY_SITE = https://github.com/numpy/numpy/releases/download/v$(PYTHON_NUMPY_VERSION)
+-PYTHON_NUMPY_LICENSE = BSD-3-Clause, BSD-2-Clause, PSF, Apache-2.0, MIT, Zlib
+-PYTHON_NUMPY_LICENSE_FILES = LICENSE.txt doc/sphinxext/LICENSE.txt \
+-			doc/scipy-sphinx-theme/LICENSE.txt \
+-			numpy/linalg/lapack_lite/LICENSE.txt \
+-			tools/npy_tempita/license.txt \
+-			numpy/core/src/multiarray/dragon4.c
++PYTHON_NUMPY_LICENSE = BSD-3-Clause, MIT, Zlib
++PYTHON_NUMPY_LICENSE_FILES = \
++	LICENSE.txt \
++	numpy/core/src/multiarray/dragon4.c \
++	numpy/core/include/numpy/libdivide/LICENSE.txt \
++	numpy/linalg/lapack_lite/LICENSE.txt \
++	tools/npy_tempita/license.txt
 +
- $(eval $(python-package))
-diff --git a/package/python-matplotlib/setup.cfg b/package/python-matplotlib/setup.cfg
-new file mode 100644
-index 0000000000..4bda0d4376
---- /dev/null
-+++ b/package/python-matplotlib/setup.cfg
-@@ -0,0 +1,10 @@
-+[libs]
-+# Disable LTO to prevent the following error:
-+# Relocation R_AARCH64_ADR_PREL_PG_HI21 against symbol `_ZSt3hexRSt8ios_base'
-+# which may bind externally can not be used when making a shared object;
-+# recompile with -fPIC
-+enable_lto = False
-+
-+# Freetype and qhull are provided by Buildroot
-+system_freetype = True
-+system_qhull = True
+ PYTHON_NUMPY_SETUP_TYPE = setuptools
+ PYTHON_NUMPY_DEPENDENCIES = host-python-cython
+ HOST_PYTHON_NUMPY_DEPENDENCIES = host-python-cython
 -- 
 2.30.2
 
