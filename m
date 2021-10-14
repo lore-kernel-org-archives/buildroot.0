@@ -2,92 +2,82 @@ Return-Path: <SRS0=enEc=PC=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 71DDBC433EF
-	for <buildroot@archiver.kernel.org>; Thu, 14 Oct 2021 21:00:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E94F5C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 14 Oct 2021 21:00:49 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D742F61056
-	for <buildroot@archiver.kernel.org>; Thu, 14 Oct 2021 21:00:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D742F61056
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
+	by mail.kernel.org (Postfix) with ESMTPS id 9F73E61151
+	for <buildroot@archiver.kernel.org>; Thu, 14 Oct 2021 21:00:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9F73E61151
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 86C66406FC;
-	Thu, 14 Oct 2021 21:00:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 74C8B406F1;
+	Thu, 14 Oct 2021 21:00:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mf1o4pbiBOmy; Thu, 14 Oct 2021 21:00:09 +0000 (UTC)
+	with ESMTP id wN02RqREYhY2; Thu, 14 Oct 2021 21:00:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D1C4040477;
-	Thu, 14 Oct 2021 21:00:08 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C77B61BF343
- for <buildroot@lists.busybox.net>; Thu, 14 Oct 2021 21:00:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 56CFE406FC;
+	Thu, 14 Oct 2021 21:00:47 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 5521C1BF343
+ for <buildroot@lists.busybox.net>; Thu, 14 Oct 2021 21:00:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B724A825D3
- for <buildroot@lists.busybox.net>; Thu, 14 Oct 2021 21:00:07 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 43DC160BAF
+ for <buildroot@lists.busybox.net>; Thu, 14 Oct 2021 21:00:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mtJ6hl9PKTkT for <buildroot@lists.busybox.net>;
- Thu, 14 Oct 2021 21:00:06 +0000 (UTC)
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Mw3ydOpS6zzS for <buildroot@lists.busybox.net>;
+ Thu, 14 Oct 2021 21:00:44 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com
- [IPv6:2a00:1450:4864:20::535])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7B9FD82430
- for <buildroot@buildroot.org>; Thu, 14 Oct 2021 21:00:06 +0000 (UTC)
-Received: by mail-ed1-x535.google.com with SMTP id i20so28539893edj.10
- for <buildroot@buildroot.org>; Thu, 14 Oct 2021 14:00:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=cVLNMeeGQDq9oOVrZlh+vJN+jNI4/cCZ89Ry4BPAGZQ=;
- b=M3SDcqLtHoVDRALba7oE7wmRbCcC9VdbIpFOQo9NxuZW6lzijbB0iwz2Y1PYgH4SJY
- TMnpMYe5vh3wsdrs6sTutwOvEkxtybooQ/B/bez7v7Np9yRArMs4eIAkJHk73Nyami59
- j86o0TXWzGSLklBPgiG0NgLgs046HlTCDzwDw/2Z45TspK44+ZasZPn/5drlucYfL5eV
- MBBrUaLe/GzgYNHC1SnQfSB1j6kAdrx9qQC2iIEJQbgAYZutDcuRaBw3hNpkAljzNKm/
- DBCJRtcSOPCxDAubVaqxxbohlFq1N2NXqlVOLzo2Fl5ahmYdChHJj4A+MEumyQYRi3hV
- sguA==
+Received: from mail-oo1-xc34.google.com (mail-oo1-xc34.google.com
+ [IPv6:2607:f8b0:4864:20::c34])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D3D606083E
+ for <buildroot@buildroot.org>; Thu, 14 Oct 2021 21:00:43 +0000 (UTC)
+Received: by mail-oo1-xc34.google.com with SMTP id
+ r1-20020a4a9641000000b002b6b55007bfso2320169ooi.3
+ for <buildroot@buildroot.org>; Thu, 14 Oct 2021 14:00:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=J/aLNjl+qUzyeKpA+kPRdmUgizz+yjnDT83Cw6LF6N4=;
+ b=LCAseVWkBh07Ha+qMrv2+AvVonQT/ta6LIJ6F6W+gs2ajilshbf1i5mSVKLzZFUr7z
+ DPjPnwBXQkCb7dapoxmYFFN5AYhwqJbYwBcvmU7G0CBHprYO/ZvxAzuZdCOD32j5mqgN
+ GP7OaS4raEcZhifJUxxGgKUuIfEfCI9+fefbsT9B64bpH6r3BoBbk6Gck7e2JIsVQP/5
+ yaZx64rgPVPl76Z1AHib4e/ccBZAFy3jXfTuVLKCRxI+aoOiEpPqx57MRPcnxnKkkUTO
+ lGyobtKrI4WnmFcDs2RuI+R3/P11HeRYNhuGTwiBNRJ3+F8puqNlxqkoHUtr1vieIx+G
+ L6aw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=cVLNMeeGQDq9oOVrZlh+vJN+jNI4/cCZ89Ry4BPAGZQ=;
- b=pR23wN5DkihpHyEYDGZ4B4J+TehTYnjAlJU9bqVvgxzXsNYy4MqWoZo3kr/R0W73q0
- uO6o9QsKjsSmn9rb+lFMmMcyMR3HdS0JfJMRitZMpdaUk+RHW7yw0hNDY5ujni4vaP2D
- uhvGX23NRtGlOK6nbNCoC5IDkeu6EtDjxoBWT+lvhD+bH0VuG0SxBF4UFsYfDrOrTOqY
- R13DS/jc1YSP+Vt+CULykCy723ikZ8+KIHjveWzEJuH+zH/g0DVrswEFm0jpH3F/i2Z4
- gdAv/pXiY5g2UfkshSLqwiO/V4gVSG926SQGK2w721bvHBZ+nqKdvRiSivWVUPzasiiv
- 4Uuw==
-X-Gm-Message-State: AOAM533D07YRKYVZ4oTbC+Vqs6UJb2itlRv7qRJ9aUxgRfkAiquLFOON
- nfwW8n4qtZalNdS4QdcEscOEeFVVuLlE2S3a
-X-Google-Smtp-Source: ABdhPJxbzPR9NosNpReFnxWQXTCuIonIQ2/e2K9zVMC3FiyUStaWHBD7qyiPqmkr0GljR783kVvuRQ==
-X-Received: by 2002:a17:906:7ac9:: with SMTP id
- k9mr1623145ejo.411.1634245204428; 
- Thu, 14 Oct 2021 14:00:04 -0700 (PDT)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
- (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id q23sm2955285ejr.0.2021.10.14.14.00.03
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Thu, 14 Oct 2021 14:00:04 -0700 (PDT)
-Message-ID: <d61e2474-fd34-c1a8-3fb6-88556eec9e60@mind.be>
-Date: Thu, 14 Oct 2021 23:00:03 +0200
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=J/aLNjl+qUzyeKpA+kPRdmUgizz+yjnDT83Cw6LF6N4=;
+ b=b1E7ejYUa111OCM0EDLcD3SGDqjKl6zRqC0fHzqRoPOLWjkZq897frFDP0ez7jNL7e
+ DZaTOO5hn+xeBiyChC8GhjI3XetI48kvpnZCIrGtBKPVKGMVGXbgZhBCfHATtL4WyWu8
+ guhM/qirtPWO4mJRiApHPDPKwne3ad0/vECY2kOIfWz012pb9UQbb02d3RqNoU5er0Uc
+ 0m5EC0HTzgc+MZihvhHR/a2uOx4cu6EhAA8DiMB1CAqh5Su9BKOVHBLulGGKfKSt+QLA
+ muHjjPXdYzDZufY/9PwJYX627qvEMPS7Zhr8iZthfFB+5xX4uQfywTHZHwH4BXZjIVCk
+ WwhA==
+X-Gm-Message-State: AOAM532XldvekUBvtY5JZJpRx7I8qrIQwANI1YNpanYdEyWxfFClfx7s
+ y3SXAeiD/OS3wMaD6TVmZjCPPgRqQYu/W25W8pw=
+X-Google-Smtp-Source: ABdhPJzQOFdGRc82ElS0ijnywiHUFBAAM3cEqmJRr0SqXEvXtaQmVGfzZYGv/5+vljWszV5lchC0c7hIYOaQoWVvHQE=
+X-Received: by 2002:a4a:ea54:: with SMTP id j20mr6001997ooe.22.1634245242596; 
+ Thu, 14 Oct 2021 14:00:42 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.1.0
-Content-Language: en-GB
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-References: <20211008212859.141323-1-fontaine.fabrice@gmail.com>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <20211008212859.141323-1-fontaine.fabrice@gmail.com>
-Subject: Re: [Buildroot] [PATCH 1/1] package/jhead: bump to version 3.06.0.1
+References: <20211007193121.3775311-1-james.hilliard1@gmail.com>
+ <0c6ae527-348c-58dd-72ff-d4dfd5863b74@mind.be>
+In-Reply-To: <0c6ae527-348c-58dd-72ff-d4dfd5863b74@mind.be>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Thu, 14 Oct 2021 15:00:31 -0600
+Message-ID: <CADvTj4r5JmveVPdzCRQK5EOD7w6rmKLp52fTYWw2pQYd9KLXaw@mail.gmail.com>
+To: Arnout Vandecappelle <arnout@mind.be>
+Subject: Re: [Buildroot] [PATCH 1/2] package/python-markupsafe: bump to
+ version 2.0.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,57 +89,311 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Grzegorz Blach <grzegorz@blach.pl>,
+ Kieran Bingham <kieran.bingham@ideasonboard.com>,
+ Asaf Kahlon <asafka7@gmail.com>, "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Peter Seiderer <ps.report@gmx.net>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ buildroot <buildroot@buildroot.org>, Lionel Flandrin <lionel@svkt.org>,
+ Matt Weber <matthew.weber@collins.com>, Norbert Lange <nolange79@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+On Thu, Oct 14, 2021 at 2:37 PM Arnout Vandecappelle <arnout@mind.be> wrote:
+>
+>   Hi James,
+>
+>   Quote a few changes needed I'm afraid...
+>
+> On 07/10/2021 21:31, James Hilliard wrote:
+> > Drop python2 support.
+> >
+> > Remove python3-markupsafe host build as python2 host builds for
+> > markupsafe are not supported, python3 host builds are moved to
+> > python-markupsafe.
+> >
+> > Propagate reverse python3 dependency.
+> >
+> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> > ---
+> >   package/python-flask-babel/Config.in             |  1 +
+> >   package/python-flask-cors/Config.in              |  1 +
+> >   package/python-flask-expects-json/Config.in      |  1 +
+> >   package/python-flask-jsonrpc/Config.in           |  1 +
+> >   package/python-flask-login/Config.in             |  1 +
+> >   package/python-flask-sqlalchemy/Config.in        |  1 +
+> >   package/python-flask-wtf/Config.in               |  1 +
+> >   package/python-flask/Config.in                   |  1 +
+> >   package/python-jinja2/Config.in                  |  1 +
+> >   package/python-markupsafe/Config.in              |  1 +
+> >   package/python-markupsafe/python-markupsafe.hash |  9 +++++----
+> >   package/python-markupsafe/python-markupsafe.mk   |  7 ++++---
+> >   package/python-wtforms/Config.in                 |  1 +
+> >   package/python3-jinja2/python3-jinja2.mk         |  2 +-
+> >   .../python3-markupsafe/python3-markupsafe.hash   |  1 -
+> >   package/python3-markupsafe/python3-markupsafe.mk | 16 ----------------
+> >   16 files changed, 21 insertions(+), 25 deletions(-)
+> >   delete mode 120000 package/python3-markupsafe/python3-markupsafe.hash
+> >   delete mode 100644 package/python3-markupsafe/python3-markupsafe.mk
+> >
+> > diff --git a/package/python-flask-babel/Config.in b/package/python-flask-babel/Config.in
+> > index 272d9ef1c1..52f05f1e6a 100644
+> > --- a/package/python-flask-babel/Config.in
+> > +++ b/package/python-flask-babel/Config.in
+> > @@ -1,5 +1,6 @@
+> >   config BR2_PACKAGE_PYTHON_FLASK_BABEL
+> >       bool "python-flask-babel"
+> > +     depends on BR2_PACKAGE_PYTHON3
+>
+>   We normally put a comment behind it to say where it comes from, if the package
+> itself doesn't directly depend on python3.
 
+Well it's due to markupsafe and jinja2 being moved to python3 only so figured
+would be a bit verbose, also didn't bother since we are preparing to
+drop python2
+support entirely.
 
-On 08/10/2021 23:28, Fabrice Fontaine wrote:
-> - Update site to get latest version
-> - Update hash of readme.txt (changes not related to license)
-> 
-> https://github.com/Matthias-Wandel/jhead/releases/tag/3.06.0.1
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>
+> >       select BR2_PACKAGE_PYTHON_FLASK # runtime
+> >       select BR2_PACKAGE_PYTHON_BABEL # runtime
+> >       select BR2_PACKAGE_PYTHON_JINJA2 # runtime
+> > diff --git a/package/python-flask-cors/Config.in b/package/python-flask-cors/Config.in
+> > index e2e84797f9..f34f77e5b0 100644
+> > --- a/package/python-flask-cors/Config.in
+> > +++ b/package/python-flask-cors/Config.in
+> > @@ -1,5 +1,6 @@
+> >   config BR2_PACKAGE_PYTHON_FLASK_CORS
+> >       bool "python-flask-cors"
+> > +     depends on BR2_PACKAGE_PYTHON3
+> >       select BR2_PACKAGE_PYTHON_FLASK # runtime
+> >       select BR2_PACKAGE_PYTHON_SIX # runtime
+>
+>   You should check if six is really needed if it's python3 only (some packages
+> drop the dependency on six if it's python3 anyway). Just check if any match of
+> `import .*six' is conditional or not.
 
-  Applied to master, thanks.
+It does appear to be still needed as it's an unconditional import:
+https://github.com/corydolphin/flask-cors/blob/3.0.10/flask_cors/core.py#L19
 
-  Regards,
-  Arnout
+>
+>
+> >       help
+> > diff --git a/package/python-flask-expects-json/Config.in b/package/python-flask-expects-json/Config.in
+> > index 901234762e..efe4c248d3 100644
+> > --- a/package/python-flask-expects-json/Config.in
+> > +++ b/package/python-flask-expects-json/Config.in
+> > @@ -1,5 +1,6 @@
+> >   config BR2_PACKAGE_PYTHON_FLASK_EXPECTS_JSON
+> >       bool "python-flask-expects-json"
+> > +     depends on BR2_PACKAGE_PYTHON3
+> >       select BR2_PACKAGE_PYTHON_FLASK # runtime
+> >       select BR2_PACKAGE_PYTHON_JSONSCHEMA # runtime
+> >       help
+> > diff --git a/package/python-flask-jsonrpc/Config.in b/package/python-flask-jsonrpc/Config.in
+> > index c8ecd854b3..4bc13f9bcb 100644
+> > --- a/package/python-flask-jsonrpc/Config.in
+> > +++ b/package/python-flask-jsonrpc/Config.in
+> > @@ -1,5 +1,6 @@
+> >   config BR2_PACKAGE_PYTHON_FLASK_JSONRPC
+> >       bool "python-flask-jsonrpc"
+> > +     depends on BR2_PACKAGE_PYTHON3
+> >       # runtime dependency
+> >       select BR2_PACKAGE_PYTHON_FLASK
+> >       help
+> > diff --git a/package/python-flask-login/Config.in b/package/python-flask-login/Config.in
+> > index 88c413e2a2..00fa58d783 100644
+> > --- a/package/python-flask-login/Config.in
+> > +++ b/package/python-flask-login/Config.in
+> > @@ -1,5 +1,6 @@
+> >   config BR2_PACKAGE_PYTHON_FLASK_LOGIN
+> >       bool "python-flask-login"
+> > +     depends on BR2_PACKAGE_PYTHON3
+> >       # runtime dependency
+> >       select BR2_PACKAGE_PYTHON_FLASK
+> >       help
+> > diff --git a/package/python-flask-sqlalchemy/Config.in b/package/python-flask-sqlalchemy/Config.in
+> > index fa4a035110..e96bd7078c 100644
+> > --- a/package/python-flask-sqlalchemy/Config.in
+> > +++ b/package/python-flask-sqlalchemy/Config.in
+> > @@ -1,5 +1,6 @@
+> >   config BR2_PACKAGE_PYTHON_FLASK_SQLALCHEMY
+> >       bool "python-flask-sqlalchemy"
+> > +     depends on BR2_PACKAGE_PYTHON3
+> >       select BR2_PACKAGE_PYTHON_FLASK # runtime
+> >       select BR2_PACKAGE_PYTHON_SQLALCHEMY # runtime
+> >       help
+> > diff --git a/package/python-flask-wtf/Config.in b/package/python-flask-wtf/Config.in
+> > index bb15489956..022ea89265 100644
+> > --- a/package/python-flask-wtf/Config.in
+> > +++ b/package/python-flask-wtf/Config.in
+> > @@ -1,5 +1,6 @@
+> >   config BR2_PACKAGE_PYTHON_FLASK_WTF
+> >       bool "python-flask-wtf"
+> > +     depends on BR2_PACKAGE_PYTHON3
+> >       select BR2_PACKAGE_PYTHON_FLASK # runtime
+> >       select BR2_PACKAGE_PYTHON_ITSDANGEROUS # runtime
+> >       select BR2_PACKAGE_PYTHON_WTFORMS # runtime
+> > diff --git a/package/python-flask/Config.in b/package/python-flask/Config.in
+> > index 0e5b64ce59..56bfe10f01 100644
+> > --- a/package/python-flask/Config.in
+> > +++ b/package/python-flask/Config.in
+> > @@ -1,5 +1,6 @@
+> >   config BR2_PACKAGE_PYTHON_FLASK
+> >       bool "python-flask"
+> > +     depends on BR2_PACKAGE_PYTHON3
+> >       select BR2_PACKAGE_PYTHON_CLICK # runtime
+> >       select BR2_PACKAGE_PYTHON_JINJA2 # runtime
+> >       select BR2_PACKAGE_PYTHON_WERKZEUG # runtime
+> > diff --git a/package/python-jinja2/Config.in b/package/python-jinja2/Config.in
+> > index 5b99df75b8..27f6b1a7dd 100644
+> > --- a/package/python-jinja2/Config.in
+> > +++ b/package/python-jinja2/Config.in
+> > @@ -1,5 +1,6 @@
+> >   config BR2_PACKAGE_PYTHON_JINJA2
+> >       bool "python-jinja2"
+> > +     depends on BR2_PACKAGE_PYTHON3
+> >       select BR2_PACKAGE_PYTHON_MARKUPSAFE # runtime
+> >       select BR2_PACKAGE_PYTHON_UNICODEDATA if BR2_PACKAGE_PYTHON
+>
+>   This should be removed. There are a bunch of those in various packages.
 
-> ---
->   package/jhead/jhead.hash | 4 ++--
->   package/jhead/jhead.mk   | 4 ++--
->   2 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/jhead/jhead.hash b/package/jhead/jhead.hash
-> index ffe75381b3..bd9c8560d5 100644
-> --- a/package/jhead/jhead.hash
-> +++ b/package/jhead/jhead.hash
-> @@ -1,3 +1,3 @@
->   # Locally calculated from download (no sig, hash)
-> -sha256  ef89bbcf4f6c25ed88088cf242a47a6aedfff4f08cc7dc205bf3e2c0f10a03c9  jhead-3.04.tar.gz
-> -sha256  46c870a208305489eea862ec8b05b030ba1f06d99195f660dc0ba541cc38d82b  readme.txt
-> +sha256  5c5258c3d7a840bf831e22174e4a24cb1de3baf442f7cb73d5ab31b4ae0b0058  jhead-3.06.0.1.tar.gz
-> +sha256  8b709512c737fc0c1e1024800b9a44c54d14ab02132c636a66c3ac66955c3e95  readme.txt
-> diff --git a/package/jhead/jhead.mk b/package/jhead/jhead.mk
-> index 49cb03da61..a206e2fe34 100644
-> --- a/package/jhead/jhead.mk
-> +++ b/package/jhead/jhead.mk
-> @@ -4,8 +4,8 @@
->   #
->   ################################################################################
->   
-> -JHEAD_VERSION = 3.04
-> -JHEAD_SITE = http://www.sentex.net/~mwandel/jhead
-> +JHEAD_VERSION = 3.06.0.1
-> +JHEAD_SITE = $(call github,Matthias-Wandel,jhead,$(JHEAD_VERSION))
->   JHEAD_LICENSE = Public Domain
->   JHEAD_LICENSE_FILES = readme.txt
->   JHEAD_CPE_ID_VENDOR = jhead_project
-> 
+It's removed here:
+https://patchwork.ozlabs.org/project/buildroot/patch/20211007193121.3775311-2-james.hilliard1@gmail.com/
+
+>
+> >       select BR2_PACKAGE_PYTHON3_UNICODEDATA if BR2_PACKAGE_PYTHON3
+>
+>   The condition part of this one should also be removed.
+>
+>
+>   python-jinja2 has a host variant. Making it python3-only means you also have
+> to set HOST_PYTHON_JINJA2_NEEDS_HOST_PYTHON = python3
+>
+> (there may be others as well)
+>
+> > diff --git a/package/python-markupsafe/Config.in b/package/python-markupsafe/Config.in
+> > index 48421e0a32..cd7cb2d8e9 100644
+> > --- a/package/python-markupsafe/Config.in
+> > +++ b/package/python-markupsafe/Config.in
+> > @@ -1,5 +1,6 @@
+> >   config BR2_PACKAGE_PYTHON_MARKUPSAFE
+> >       bool "python-markupsafe"
+> > +     depends on BR2_PACKAGE_PYTHON3
+> >       help
+> >         MarkupSafe implements a XML/HTML/XHTML Markup safe string
+> >         for Python.
+> > diff --git a/package/python-markupsafe/python-markupsafe.hash b/package/python-markupsafe/python-markupsafe.hash
+> > index df07662a86..520bb405fb 100644
+> > --- a/package/python-markupsafe/python-markupsafe.hash
+> > +++ b/package/python-markupsafe/python-markupsafe.hash
+> > @@ -1,4 +1,5 @@
+> > -# md5 from https://pypi.python.org/pypi/markupsafe/json, sha256 locally computed
+> > -md5  43fd756864fe42063068e092e220c57b  MarkupSafe-1.1.1.tar.gz
+> > -sha256       29872e92839765e546828bb7754a68c418d927cd064fd4708fab9fe9c8bb116b  MarkupSafe-1.1.1.tar.gz
+> > -sha256       489a8e1108509ed98a37bb983e11e0f7e1d31f0bd8f99a79c8448e7ff37d07ea  LICENSE.rst
+> > +# md5, sha256 from https://pypi.org/pypi/markupsafe/json
+> > +md5  892e0fefa3c488387e5cc0cad2daa523  MarkupSafe-2.0.1.tar.gz
+> > +sha256  594c67807fb16238b30c44bdf74f36c02cdf22d1c8cda91ef8a0ed8dabf5620a  MarkupSafe-2.0.1.tar.gz
+> > +# Locally computed sha256 checksums
+> > +sha256  489a8e1108509ed98a37bb983e11e0f7e1d31f0bd8f99a79c8448e7ff37d07ea  LICENSE.rst
+> > diff --git a/package/python-markupsafe/python-markupsafe.mk b/package/python-markupsafe/python-markupsafe.mk
+> > index f067d94f34..14a8d06dfe 100644
+> > --- a/package/python-markupsafe/python-markupsafe.mk
+> > +++ b/package/python-markupsafe/python-markupsafe.mk
+> > @@ -4,13 +4,14 @@
+> >   #
+> >   ################################################################################
+> >
+> > -# Please keep in sync with package/python3-markupsafe/python3-markupsafe.mk
+> > -PYTHON_MARKUPSAFE_VERSION = 1.1.1
+> > +PYTHON_MARKUPSAFE_VERSION = 2.0.1
+> >   PYTHON_MARKUPSAFE_SOURCE = MarkupSafe-$(PYTHON_MARKUPSAFE_VERSION).tar.gz
+> > -PYTHON_MARKUPSAFE_SITE = https://files.pythonhosted.org/packages/b9/2e/64db92e53b86efccfaea71321f597fa2e1b2bd3853d8ce658568f7a13094
+> > +PYTHON_MARKUPSAFE_SITE = https://files.pythonhosted.org/packages/bf/10/ff66fea6d1788c458663a84d88787bae15d45daa16f6b3ef33322a51fc7e
+> >   PYTHON_MARKUPSAFE_SETUP_TYPE = setuptools
+> >   PYTHON_MARKUPSAFE_LICENSE = BSD-3-Clause
+> >   PYTHON_MARKUPSAFE_LICENSE_FILES = LICENSE.rst
+> >
+> > +HOST_PYTHON_MARKUPSAFE_NEEDS_HOST_PYTHON = python3
+>
+>   Yes, like this :-)
+>
+> > +
+> >   $(eval $(python-package))
+> >   $(eval $(host-python-package))
+> > diff --git a/package/python-wtforms/Config.in b/package/python-wtforms/Config.in
+> > index 33a17d3d37..0cc136fc13 100644
+> > --- a/package/python-wtforms/Config.in
+> > +++ b/package/python-wtforms/Config.in
+> > @@ -1,5 +1,6 @@
+> >   config BR2_PACKAGE_PYTHON_WTFORMS
+> >       bool "python-wtforms"
+> > +     depends on BR2_PACKAGE_PYTHON3
+> >       select BR2_PACKAGE_PYTHON_MARKUPSAFE # runtime
+> >       help
+> >         A flexible forms validation and rendering library for
+> > diff --git a/package/python3-jinja2/python3-jinja2.mk b/package/python3-jinja2/python3-jinja2.mk
+> > index 5d29e1d889..41081db04a 100644
+> > --- a/package/python3-jinja2/python3-jinja2.mk
+> > +++ b/package/python3-jinja2/python3-jinja2.mk
+> > @@ -15,6 +15,6 @@ PYTHON3_JINJA2_CPE_ID_PRODUCT = jinja2
+> >
+> >   HOST_PYTHON3_JINJA2_NEEDS_HOST_PYTHON = python3
+> >   # In host build, setup.py tries to download markupsafe if it is not installed
+> > -HOST_PYTHON3_JINJA2_DEPENDENCIES = host-python3-markupsafe
+> > +HOST_PYTHON3_JINJA2_DEPENDENCIES = host-python-markupsafe
+>
+>   Since python-jinja2 became python3-only, this package can be removed entirely.
+
+Which I did here:
+https://patchwork.ozlabs.org/project/buildroot/patch/20211007193121.3775311-2-james.hilliard1@gmail.com/
+
+Should I not be splitting up changes like this in a series?
+
+I tried to keep most of the python-jinja2 changes in the second patch, it was
+intended that they be reviewed/applied at the same time.
+
+>
+>
+>   Regards,
+>   Arnout
+>
+>
+> >
+> >   $(eval $(host-python-package))
+> > diff --git a/package/python3-markupsafe/python3-markupsafe.hash b/package/python3-markupsafe/python3-markupsafe.hash
+> > deleted file mode 120000
+> > index 947cfa12d7..0000000000
+> > --- a/package/python3-markupsafe/python3-markupsafe.hash
+> > +++ /dev/null
+> > @@ -1 +0,0 @@
+> > -../python-markupsafe/python-markupsafe.hash
+> > \ No newline at end of file
+> > diff --git a/package/python3-markupsafe/python3-markupsafe.mk b/package/python3-markupsafe/python3-markupsafe.mk
+> > deleted file mode 100644
+> > index 58f6e67b64..0000000000
+> > --- a/package/python3-markupsafe/python3-markupsafe.mk
+> > +++ /dev/null
+> > @@ -1,16 +0,0 @@
+> > -################################################################################
+> > -#
+> > -# python3-markupsafe
+> > -#
+> > -################################################################################
+> > -
+> > -PYTHON3_MARKUPSAFE_VERSION = 1.1.1
+> > -PYTHON3_MARKUPSAFE_SOURCE = MarkupSafe-$(PYTHON3_MARKUPSAFE_VERSION).tar.gz
+> > -PYTHON3_MARKUPSAFE_SITE = https://files.pythonhosted.org/packages/b9/2e/64db92e53b86efccfaea71321f597fa2e1b2bd3853d8ce658568f7a13094
+> > -PYTHON3_MARKUPSAFE_SETUP_TYPE = setuptools
+> > -PYTHON3_MARKUPSAFE_LICENSE = BSD-3-Clause
+> > -PYTHON3_MARKUPSAFE_LICENSE_FILES = LICENSE.rst
+> > -
+> > -HOST_PYTHON3_MARKUPSAFE_NEEDS_HOST_PYTHON = python3
+> > -
+> > -$(eval $(host-python-package))
+> >
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
