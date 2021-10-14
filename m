@@ -2,87 +2,86 @@ Return-Path: <SRS0=enEc=PC=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7AFA1C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 14 Oct 2021 23:00:31 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F27FC433EF
+	for <buildroot@archiver.kernel.org>; Thu, 14 Oct 2021 23:00:42 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 3ABD46101D
-	for <buildroot@archiver.kernel.org>; Thu, 14 Oct 2021 23:00:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3ABD46101D
+	by mail.kernel.org (Postfix) with ESMTPS id C81B56101D
+	for <buildroot@archiver.kernel.org>; Thu, 14 Oct 2021 23:00:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C81B56101D
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 05D4783267;
-	Thu, 14 Oct 2021 23:00:31 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 95D334014C;
+	Thu, 14 Oct 2021 23:00:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fNoRlsv_ZRIR; Thu, 14 Oct 2021 23:00:29 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id DhfOMmT1R4Lp; Thu, 14 Oct 2021 23:00:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7472683336;
-	Thu, 14 Oct 2021 23:00:28 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 205521BF292
+	by smtp2.osuosl.org (Postfix) with ESMTP id D6EEA400F1;
+	Thu, 14 Oct 2021 23:00:39 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 895DE1BF292
  for <buildroot@lists.busybox.net>; Thu, 14 Oct 2021 22:59:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0F2C1606A9
- for <buildroot@lists.busybox.net>; Thu, 14 Oct 2021 22:59:02 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 66BB8400F1
+ for <buildroot@lists.busybox.net>; Thu, 14 Oct 2021 22:59:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TcgG_sq4Nwag for <buildroot@lists.busybox.net>;
- Thu, 14 Oct 2021 22:59:01 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id O_m_jTxDQa-m for <buildroot@lists.busybox.net>;
+ Thu, 14 Oct 2021 22:59:00 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com
- [IPv6:2607:f8b0:4864:20::634])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 49C736067A
- for <buildroot@buildroot.org>; Thu, 14 Oct 2021 22:59:01 +0000 (UTC)
-Received: by mail-pl1-x634.google.com with SMTP id l6so5159752plh.9
- for <buildroot@buildroot.org>; Thu, 14 Oct 2021 15:59:01 -0700 (PDT)
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com
+ [IPv6:2607:f8b0:4864:20::1031])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6E2E640018
+ for <buildroot@buildroot.org>; Thu, 14 Oct 2021 22:59:00 +0000 (UTC)
+Received: by mail-pj1-x1031.google.com with SMTP id
+ pi19-20020a17090b1e5300b0019fdd3557d3so5872585pjb.5
+ for <buildroot@buildroot.org>; Thu, 14 Oct 2021 15:59:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=n+duvzd4dIUxZf0lRnqWRmv55MkiANQk+NTep1hcex0=;
- b=kAVIqXcnxy49FZ7V+4zDCu1Fff8XijORbH7f1MFt4hRkEE/n21OAWwSbV5NbCbEVs8
- 08RyHZoiv/LDoGtwGBELR9UvCwGyFSiRsHia2Nyq6ZdhTyaD5b164A7YExabbxN0Yam/
- Ul6CseG3qJ0/oPfWclx+OH9cnycs3/OZmNdN3rs5xTqAaPCae639aTRbTI68UYxwivLy
- +2tj0MdDGCLpVRGkRyy1PpWrQ+OcI0nQmVc86YwYU9al3LqTrIjaGUJ57kIdjtLqjQB/
- IbtaO76WajVkkpsABW42aa1laz6QuX9omjShZk5LV6vpeVVM7vrmr7WohBoREO09Ttxz
- s13Q==
+ bh=YcDkUxVU3N2ixSD844e7R1sZZEFWSCIQNEAQN8+oEBk=;
+ b=mJGviIZKgoXA4lYjjOkSMO2s+nPqJf7SWHupjDz84D4nnNvMDJrvh9yhbdCH2B9+fH
+ ZRCpAaTG6qe2mkJ2YQ2MTdwV2H1Zb5l7jUZ4xvm6xT+YoQ4VKqX9nq5dnmQntle4nEeH
+ 3x4In3y/v+h5J7Ki7c6C5WhTG8+TOpJDXf5F4rjHEwNAZJSHEssKJgT9yPHOqJ/gE3l6
+ mRadLyGdFnL8rL+1wl6juAc+E94Y5atkQGSlk/qvkbgmFIIhbVt3TtWhThOlO1Iw1X/4
+ gFMvfGfx4tD4qsnOQg3Nw1fq2s3irRjS00LvFaK66gRm5uipfDyXJ8lHvOQYuo9VtD3C
+ UU/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
  :references:mime-version:content-transfer-encoding;
- bh=n+duvzd4dIUxZf0lRnqWRmv55MkiANQk+NTep1hcex0=;
- b=jNDf4EUtk0zk+OOreJFRmffCKpRw1B6230J9xx9BNCil7Gr8jqmg9/iBbuKjxlmYEu
- Y8EL86blsAPcrS7FybgSdDNCvDz1VylCwHFWBCO0T6KXL8532YuDtzauK80A6s05TGpN
- /kmfNHbDehf2MxHFSDQF3bmwPndoRr9g0oI4Jgn7ZQaAXfh/gQmZMW/Noj+EJU/zAXSg
- uFhfK0HSL9OA6bnqu8ept+voOXI/xQhH+4yd9fikclPWCJduCySIWEFDQM5Gf8z9CGrS
- VS0gGlDCamApFNvfD6QoKEp0EuD9CVZrN2lVlG+sQCoVIj5Q1FydXc+XXnWyZi9toqut
- aNew==
-X-Gm-Message-State: AOAM531x+v9G5jnar6r4lzNafkhI7lQvgyQ4DK6ZlvehLU85oD3nVHpu
- hyA9YV4yEorczlh9TqElw1UB9Z2rpHc=
-X-Google-Smtp-Source: ABdhPJx34QZvsWfc+Zbaiof1w39bRabw7s16Btb5iJxWI4p8n6cE8UIW+bGvFlAGSQZFCdL6jmTFOQ==
-X-Received: by 2002:a17:90b:1b0b:: with SMTP id
- nu11mr9011073pjb.103.1634252340643; 
- Thu, 14 Oct 2021 15:59:00 -0700 (PDT)
+ bh=YcDkUxVU3N2ixSD844e7R1sZZEFWSCIQNEAQN8+oEBk=;
+ b=rwijRILqKnngoGe+9kCsHKhAbg5cnDhjVvDbCnybebHNmQ6jpgheaAGMi3K0dC9p4W
+ sjZD8x14G6F4qJlRY8CBY5oJK5QiwAcpe3fj1G1ZYXEnkXqzYFVFB3zN/mUp2/PSxPGz
+ nJnr2NO6mmsQLdFgGYZ1RN0pZcfpGma6+I+I11hRT0DSIoPcpKodFTKx/wJr9xXJrc8o
+ OQN9bOgCuvGfaBJ6sI5TzRNGxqMQF+Yj0xI9asWqfcEUVHf4kTeeFyIJ2pA6adVtVVRf
+ 6y/DC9eqjSUH46AzG28aXBi/mLW1GyPx9B40jTPQkHthkDlI5jfa0X9C6yO4wAk/f3PY
+ zl2Q==
+X-Gm-Message-State: AOAM531E8Rm8/wrEndZr3PsVsC1tQzgQND6uCSWX+TWfjRFiA96uu4IO
+ 2UEQ03lu5cij7f+u7FZzz9GpsgcYaI0=
+X-Google-Smtp-Source: ABdhPJzvFf2k+i3wGTQFtwpuA4kavz4B0APXzuwhXsxNTHqMHnmaocca8R/nLzu5ama67aUFj0J6AA==
+X-Received: by 2002:a17:902:e846:b0:13f:551b:ba23 with SMTP id
+ t6-20020a170902e84600b0013f551bba23mr7492136plg.77.1634252339707; 
+ Thu, 14 Oct 2021 15:58:59 -0700 (PDT)
 Received: from adam.rai.com ([47.149.13.137])
- by smtp.gmail.com with ESMTPSA id w19sm10171319pjy.9.2021.10.14.15.58.59
+ by smtp.gmail.com with ESMTPSA id w19sm10171319pjy.9.2021.10.14.15.58.58
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 14 Oct 2021 15:59:00 -0700 (PDT)
+ Thu, 14 Oct 2021 15:58:59 -0700 (PDT)
 From: Adam Duskett <aduskett@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu, 14 Oct 2021 15:58:47 -0700
-Message-Id: <20211014225849.832479-10-aduskett@gmail.com>
+Date: Thu, 14 Oct 2021 15:58:46 -0700
+Message-Id: <20211014225849.832479-9-aduskett@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211014225849.832479-1-aduskett@gmail.com>
 References: <20211014225849.832479-1-aduskett@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2 09/11] package/python-django-enumfields: bump
- to version
+Subject: [Buildroot] [PATCH v2 08/11] package/python-pyalsa: add
+ 0001-fix-pytuple-set-item-usage-no-return-value.patch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,41 +102,69 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+This patch is a backport of commit 5ea2f8709b4d091700750661231f8a3ddce0fc7c and
+fixes compatibility with python 3.10.
+
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
 ---
- .../python-django-enumfields/python-django-enumfields.hash  | 6 +++---
- .../python-django-enumfields/python-django-enumfields.mk    | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ ...tuple-set-item-usage-no-return-value.patch | 48 +++++++++++++++++++
+ 1 file changed, 48 insertions(+)
+ create mode 100644 package/python-pyalsa/0001-fix-pytuple-set-item-usage-no-return-value.patch
 
-diff --git a/package/python-django-enumfields/python-django-enumfields.hash b/package/python-django-enumfields/python-django-enumfields.hash
-index 84eb028e65..352fa8d907 100644
---- a/package/python-django-enumfields/python-django-enumfields.hash
-+++ b/package/python-django-enumfields/python-django-enumfields.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/django-enumfields/json
--md5	c9725a2c31ca2949d111815742335279  django-enumfields-1.0.0.tar.gz
--sha256	5b0e2dd5973337717ca6bd5a7d9e167e6ae01203c160d4761b88837c4678f219  django-enumfields-1.0.0.tar.gz
-+md5	 e06bcaecd583ee40e30d556bfcbf0d66  django-enumfields-2.1.1.tar.gz
-+sha256  f64841732a9c343f5071220e0abcf5f51c9472c06e3c33d7c6a7ec27b6087561  django-enumfields-2.1.1.tar.gz
- # Locally computed sha256 checksums
--sha256	5548de8c163dc57bd0a4f5772f1509f2c04f1390251c98ebf060c9d52a223f57  LICENSE
-+sha256  75b9c8c2514f22d66070ffc975c4d3132de01e0cc7b3a9662731bcb46cd2a042  LICENSE
-diff --git a/package/python-django-enumfields/python-django-enumfields.mk b/package/python-django-enumfields/python-django-enumfields.mk
-index 0121bd1173..20abb5bf6a 100644
---- a/package/python-django-enumfields/python-django-enumfields.mk
-+++ b/package/python-django-enumfields/python-django-enumfields.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_DJANGO_ENUMFIELDS_VERSION = 1.0.0
-+PYTHON_DJANGO_ENUMFIELDS_VERSION = 2.1.1
- PYTHON_DJANGO_ENUMFIELDS_SOURCE = django-enumfields-$(PYTHON_DJANGO_ENUMFIELDS_VERSION).tar.gz
--PYTHON_DJANGO_ENUMFIELDS_SITE = https://files.pythonhosted.org/packages/b7/56/3f4e8d8ef6d5577a1b75b3cfae6dff819afd030e3a519a326ec7a7a0b74f
-+PYTHON_DJANGO_ENUMFIELDS_SITE = https://files.pythonhosted.org/packages/24/a8/aaf2b5ddb697c9bcab53c32cfebe11e536502e07c30646b4756e7214b685
- PYTHON_DJANGO_ENUMFIELDS_SETUP_TYPE = setuptools
- PYTHON_DJANGO_ENUMFIELDS_LICENSE = MIT
- PYTHON_DJANGO_ENUMFIELDS_LICENSE_FILES = LICENSE
+diff --git a/package/python-pyalsa/0001-fix-pytuple-set-item-usage-no-return-value.patch b/package/python-pyalsa/0001-fix-pytuple-set-item-usage-no-return-value.patch
+new file mode 100644
+index 0000000000..d3db1ed2e0
+--- /dev/null
++++ b/package/python-pyalsa/0001-fix-pytuple-set-item-usage-no-return-value.patch
+@@ -0,0 +1,48 @@
++From 5ea2f8709b4d091700750661231f8a3ddce0fc7c Mon Sep 17 00:00:00 2001
++From: Jaroslav Kysela <perex@perex.cz>
++Date: Thu, 10 Dec 2020 16:00:50 +0100
++Subject: [PATCH] Fix PyTuple_SET_ITEM() usage - no return value
++
++As noted in bpo-30459 (link bellow) the PyTuple_SET_ITEM() macro
++has not a return value. Let's make code compatible with python 3.10.
++
++Link: https://bugs.python.org/issue30459
++BugLink: https://github.com/alsa-project/alsa-python/issues/2
++From upstream-commit: 5ea2f8709b4d091700750661231f8a3ddce0fc7c
++Signed-off-by: Jaroslav Kysela <perex@perex.cz>
++Signed-off-by: Adam Duskett <aduskett@gmail.com>
++---
++ pyalsa/alsahcontrol.c | 4 ++--
++ pyalsa/alsamixer.c    | 4 ++--
++ 2 files changed, 4 insertions(+), 4 deletions(-)
++
++diff --git a/pyalsa/alsahcontrol.c b/pyalsa/alsahcontrol.c
++index ebee1b7..7c9321f 100644
++--- a/pyalsa/alsahcontrol.c
+++++ b/pyalsa/alsahcontrol.c
++@@ -1543,8 +1543,8 @@ static int element_callback(snd_hctl_elem_t *elem, unsigned int mask)
++ 
++ 	t = PyTuple_New(2);
++ 	if (t) {
++-		if (PyTuple_SET_ITEM(t, 0, (PyObject *)pyhelem))
++-			Py_INCREF(pyhelem);
+++		PyTuple_SET_ITEM(t, 0, (PyObject *)pyhelem);
+++		Py_INCREF(pyhelem);
++ 		PyTuple_SET_ITEM(t, 1, PyInt_FromLong(mask));
++ 		r = PyObject_CallObject(o, t);
++ 		Py_DECREF(t);
++diff --git a/pyalsa/alsamixer.c b/pyalsa/alsamixer.c
++index 39d7387..91fe198 100644
++--- a/pyalsa/alsamixer.c
+++++ b/pyalsa/alsamixer.c
++@@ -1348,8 +1348,8 @@ static int element_callback(snd_mixer_elem_t *elem, unsigned int mask)
++ 
++ 	t = PyTuple_New(2);
++ 	if (t) {
++-		if (PyTuple_SET_ITEM(t, 0, (PyObject *)pyelem))
++-			Py_INCREF(pyelem);
+++		PyTuple_SET_ITEM(t, 0, (PyObject *)pyelem);
+++		Py_INCREF(pyelem);
++ 		PyTuple_SET_ITEM(t, 1, PyInt_FromLong(mask));
++ 		r = PyObject_CallObject(o, t);
++ 		Py_DECREF(t);
 -- 
 2.30.2
 
