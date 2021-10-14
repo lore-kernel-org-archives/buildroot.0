@@ -2,86 +2,87 @@ Return-Path: <SRS0=enEc=PC=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B7751C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 14 Oct 2021 22:59:32 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 42943C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 14 Oct 2021 22:59:45 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 3227D61053
-	for <buildroot@archiver.kernel.org>; Thu, 14 Oct 2021 22:59:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3227D61053
+	by mail.kernel.org (Postfix) with ESMTPS id 2A98F61090
+	for <buildroot@archiver.kernel.org>; Thu, 14 Oct 2021 22:59:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2A98F61090
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 002724014C;
-	Thu, 14 Oct 2021 22:59:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 00B3A606A9;
+	Thu, 14 Oct 2021 22:59:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mAbQw48IAn1p; Thu, 14 Oct 2021 22:59:30 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id uAKBGOErxE2J; Thu, 14 Oct 2021 22:59:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 18CB2400F1;
-	Thu, 14 Oct 2021 22:59:30 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0BFC81BF37B
- for <buildroot@lists.busybox.net>; Thu, 14 Oct 2021 22:58:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 50C956067F;
+	Thu, 14 Oct 2021 22:59:42 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 2192F1BF37B
+ for <buildroot@lists.busybox.net>; Thu, 14 Oct 2021 22:58:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 08F3B83183
- for <buildroot@lists.busybox.net>; Thu, 14 Oct 2021 22:58:56 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 119C840589
+ for <buildroot@lists.busybox.net>; Thu, 14 Oct 2021 22:58:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id j0Iajg483omJ for <buildroot@lists.busybox.net>;
- Thu, 14 Oct 2021 22:58:55 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZiA7qrrYeWaL for <buildroot@lists.busybox.net>;
+ Thu, 14 Oct 2021 22:58:56 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com
- [IPv6:2607:f8b0:4864:20::42b])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 52B7C8322E
- for <buildroot@buildroot.org>; Thu, 14 Oct 2021 22:58:55 +0000 (UTC)
-Received: by mail-pf1-x42b.google.com with SMTP id q19so6762519pfl.4
- for <buildroot@buildroot.org>; Thu, 14 Oct 2021 15:58:55 -0700 (PDT)
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com
+ [IPv6:2607:f8b0:4864:20::42c])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5A0C540581
+ for <buildroot@buildroot.org>; Thu, 14 Oct 2021 22:58:56 +0000 (UTC)
+Received: by mail-pf1-x42c.google.com with SMTP id o133so6742248pfg.7
+ for <buildroot@buildroot.org>; Thu, 14 Oct 2021 15:58:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=aOFjhS2cMhtvsM80OCTKtmEp/NLU+85uJQAkKGWsJtU=;
- b=qwZkiM0Pb9p9yJnp3590arEDcPC0vMEQ+V17uTphux4PmDruwH6ylxQiTC7lk7Y+ll
- pX+CDZJohVjBPalaDylpw+oINTrd1zNAxj+SaqM3boX5WL0310Ht6kMXOudKyy2BwP7v
- m2jEVQKep9fL3C/6cGZBHFgsYA9Kj9fzGrMEEKz0fEximOeJfeGX1hIXnWEhbQdht4Qm
- IxftMUH66x/mK2s87glbaUgyUNp/CQrWxrg3NNH3cPgdfOjYGQnrp8Sh9iAXy0a+Qekn
- wT7gqzh+XQagap11mvTBEP8ifccTbVhGzFJadgqflSVGWksRCXPj6vxzOlmM2O9Dbryh
- wiaw==
+ bh=En0KmrppT23qEN37qHwykE7axgiUxNg1oAtpbvcPvas=;
+ b=OpnlpPfgKQFkDTzFf1XkH2XRNISJyPiSUZy0m33xmpldC9vq77RuUq74dS4FMO4O7z
+ dwGQExSmQW5js+mjiUgQwnQzpd0GerOjJpi9kLePbjANfPV0zpAWnsxKD8owxA/jAnVt
+ 7OiyxeYzZbdxpzGu3pzJLPEzN48jK1YBUGZfydJ3w9axPBsa8qQ2KM0iyzf4J5RjIZ9P
+ ON43el31ItgwU28Qu0xfudPBwrMMCADUTKD9/Qrxl7+PE4wA2dU0J0iuqAxeAjaIw8Mx
+ ZOEzey2zboTXJtLqJv0cqpK+hIhLYrIwlytJ8yA4TajajM3VvPxuhkeEZgShNWUs+2Kn
+ BDvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
  :references:mime-version:content-transfer-encoding;
- bh=aOFjhS2cMhtvsM80OCTKtmEp/NLU+85uJQAkKGWsJtU=;
- b=MUuRHtXkGx5wbBvkCBzVoVl5nLuZJbG+3itBENC8uj8Qc+D8ofh1s1C//Pp/V+tUic
- QyFt++jIC9gB6ZmSjioRaQVdr5Xw/OYONz3V/NcZrngrXQRjA4l25wsq0d0D5W1yqc8g
- TJwGeAhOQD59Z24D2oEDbyBidrBsGbw4QbqY2vC3AkkSW6CBKXUN0d+d6CP/DjLtSfNe
- WDsnQxEEmpwulb2rLFD/aVPzMJw6R2wuruBOvDorN2DeQ83dZsReWzB7paZc4qV+972h
- lL+vK8LEADvw+LGSCLueEObUBF2k+94OxrdIKS8yZra6LpoJfnyanmeDo1X4FewIYdT0
- +nNQ==
-X-Gm-Message-State: AOAM532N6tsY4rCL7aSZSAjj1vCH5kVqXgY0bguwzMtnNxJ7i8Wuh3mi
- KD8PRDLJvm2KzKt7KexkxDx4rn/nX4c=
-X-Google-Smtp-Source: ABdhPJxJaWf3XEBNanFohuKrzzFYl2vs5Sj639qdn37iYLreqZSYOqTPrOeQvYWOyZLwvGvr6dXQ5w==
-X-Received: by 2002:a63:1a1b:: with SMTP id a27mr6376365pga.220.1634252334645; 
- Thu, 14 Oct 2021 15:58:54 -0700 (PDT)
+ bh=En0KmrppT23qEN37qHwykE7axgiUxNg1oAtpbvcPvas=;
+ b=wDqikxhcoJmf8R0YIkH3t4nvsTczlctzwuQIH/aRiiys+kwWUBCewcSJve5marW8NK
+ HdDwlTRfxD7MRzL8NMDADdtUf71b8+yOYbnv8PX19ra0AG5PeTEtNrzLbDsFRrQmfCVi
+ OJvnEQli6jHP1u3qKixSIuEvqtKw4Dz58QD0Rx4rrv3kyxkcVvj+ruq0a9A+ADsUTl2N
+ sqXFfzeBU1+LAiX2QYSJGAwnqvIY45O4Drn4fjoIGscd7HCHeg685sWyly1SqQ6qwxOq
+ +b/6WKg2xNp7d6Bwe3GWkpWHnIyIiY2CQ1bBvA+SWjfdaXeQlzw7zTcVkmF8CznU/m9G
+ 306A==
+X-Gm-Message-State: AOAM530HHr6ZCjBMOCpmpKTu04cBslFd2jINOqrQOLQ269nsAgUUtSnt
+ fiW7AvP/Qs6aHL4W6N9xnyjOMwCCOd8=
+X-Google-Smtp-Source: ABdhPJzh8IYlgZDB6Vj+Rf/4kPuNxoPS/ptqqovuzrPDa67KBDDGKuBgj4QoVcwoxbp2kCQXqmu4iQ==
+X-Received: by 2002:a05:6a00:248a:b0:44c:ecc5:a165 with SMTP id
+ c10-20020a056a00248a00b0044cecc5a165mr7649561pfv.43.1634252335641; 
+ Thu, 14 Oct 2021 15:58:55 -0700 (PDT)
 Received: from adam.rai.com ([47.149.13.137])
- by smtp.gmail.com with ESMTPSA id w19sm10171319pjy.9.2021.10.14.15.58.53
+ by smtp.gmail.com with ESMTPSA id w19sm10171319pjy.9.2021.10.14.15.58.54
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 14 Oct 2021 15:58:54 -0700 (PDT)
+ Thu, 14 Oct 2021 15:58:55 -0700 (PDT)
 From: Adam Duskett <aduskett@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu, 14 Oct 2021 15:58:41 -0700
-Message-Id: <20211014225849.832479-4-aduskett@gmail.com>
+Date: Thu, 14 Oct 2021 15:58:42 -0700
+Message-Id: <20211014225849.832479-5-aduskett@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211014225849.832479-1-aduskett@gmail.com>
 References: <20211014225849.832479-1-aduskett@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2 03/11] package/python-txtorcon: bump to
- version 21.1.0
+Subject: [Buildroot] [PATCH v2 04/11] package/python-watchdog: bump to
+ version 2.1.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -104,38 +105,43 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
 ---
- package/python-txtorcon/python-txtorcon.hash | 4 ++--
- package/python-txtorcon/python-txtorcon.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-watchdog/python-watchdog.hash | 11 +++++------
+ package/python-watchdog/python-watchdog.mk   |  4 ++--
+ 2 files changed, 7 insertions(+), 8 deletions(-)
 
-diff --git a/package/python-txtorcon/python-txtorcon.hash b/package/python-txtorcon/python-txtorcon.hash
-index 803933f1e6..af542c7f2e 100644
---- a/package/python-txtorcon/python-txtorcon.hash
-+++ b/package/python-txtorcon/python-txtorcon.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/txtorcon/json
--md5	fb323f9874298a8145dbe8d43c387932  txtorcon-19.1.0.tar.gz
--sha256	25d8e52c3eac45bb90ff958ca7cdd7674fb3284e3a50826a58ab7b9578b15ea5  txtorcon-19.1.0.tar.gz
-+md5  dbb53821a3ce3e921e09c5de4f722fdb  txtorcon-21.1.0.tar.gz
-+sha256  aebf0b9ec6c69a029f6b61fd534e785692e28fdcd2fd003ce3cc132b9393b7d6  txtorcon-21.1.0.tar.gz
- # Locally computed sha256 checksums
- sha256	3ada1c32ef38c23d96d7f4e8f4a226c527f51e0202883c7543b06f9cc5228a2b  LICENSE
-diff --git a/package/python-txtorcon/python-txtorcon.mk b/package/python-txtorcon/python-txtorcon.mk
-index 4df400c3e7..b8414d96d0 100644
---- a/package/python-txtorcon/python-txtorcon.mk
-+++ b/package/python-txtorcon/python-txtorcon.mk
+diff --git a/package/python-watchdog/python-watchdog.hash b/package/python-watchdog/python-watchdog.hash
+index 701c7991a5..3b633f9156 100644
+--- a/package/python-watchdog/python-watchdog.hash
++++ b/package/python-watchdog/python-watchdog.hash
+@@ -1,7 +1,6 @@
+-# md5, sha256 from https://pypi.python.org/pypi/watchdog/json
+-md5	7cdc103f607e72fc32c206301a72d1b2  watchdog-0.9.0.tar.gz
+-sha256	965f658d0732de3188211932aeb0bb457587f04f63ab4c1e33eab878e9de961d  watchdog-0.9.0.tar.gz
+-
+-# Hash for license files
+-sha256  14e636faf5889138a1bb7a8498ccbb0266aee31d2dc475201a10448e56ed3d96  COPYING
++# md5, sha256 from https://pypi.org/pypi/watchdog/json
++md5  6aac660b0f3358c63658806a0579b832  watchdog-2.1.6.tar.gz
++sha256  a36e75df6c767cbf46f61a91c70b3ba71811dfa0aca4a324d9407a06a8b7a2e7  watchdog-2.1.6.tar.gz
++# Locally computed sha256 checksums
++sha256  02c8760f988a76e92a9d6cb525456a86f7b0fd1953870dd491de5955cb974d41  COPYING
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/python-watchdog/python-watchdog.mk b/package/python-watchdog/python-watchdog.mk
+index 44929a65ac..2dafef97e1 100644
+--- a/package/python-watchdog/python-watchdog.mk
++++ b/package/python-watchdog/python-watchdog.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_TXTORCON_VERSION = 19.1.0
-+PYTHON_TXTORCON_VERSION = 21.1.0
- PYTHON_TXTORCON_SOURCE = txtorcon-$(PYTHON_TXTORCON_VERSION).tar.gz
--PYTHON_TXTORCON_SITE = https://files.pythonhosted.org/packages/8c/26/d5b2fba4ffbcb23957ff2cee4d7d0a2d667372b9eb04807058bd561c8e8f
-+PYTHON_TXTORCON_SITE = https://files.pythonhosted.org/packages/eb/43/2426009377cef519c53bdc8969590cb100e9fd745846859963c881c6d176
- PYTHON_TXTORCON_SETUP_TYPE = setuptools
- PYTHON_TXTORCON_LICENSE = MIT
- PYTHON_TXTORCON_LICENSE_FILES = LICENSE
+-PYTHON_WATCHDOG_VERSION = 0.9.0
++PYTHON_WATCHDOG_VERSION = 2.1.6
+ PYTHON_WATCHDOG_SOURCE = watchdog-$(PYTHON_WATCHDOG_VERSION).tar.gz
+-PYTHON_WATCHDOG_SITE = https://pypi.python.org/packages/bb/e3/5a55d48a29300160779f0a0d2776d17c1b762a2039b36de528b093b87d5b
++PYTHON_WATCHDOG_SITE = https://files.pythonhosted.org/packages/e8/a8/fc4edd7d768361b00ea850e5310211d157df6b5a1db6148dd434e787d898
+ PYTHON_WATCHDOG_SETUP_TYPE = setuptools
+ PYTHON_WATCHDOG_LICENSE = Apache-2.0
+ PYTHON_WATCHDOG_LICENSE_FILES = LICENSE COPYING
 -- 
 2.30.2
 
