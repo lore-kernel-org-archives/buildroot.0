@@ -2,95 +2,91 @@ Return-Path: <SRS0=enEc=PC=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 11A17C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 14 Oct 2021 21:03:17 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 08360C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 14 Oct 2021 21:04:30 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id A9B136109E
-	for <buildroot@archiver.kernel.org>; Thu, 14 Oct 2021 21:03:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A9B136109E
+	by mail.kernel.org (Postfix) with ESMTPS id BB70761053
+	for <buildroot@archiver.kernel.org>; Thu, 14 Oct 2021 21:04:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org BB70761053
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 70E1460BC9;
-	Thu, 14 Oct 2021 21:03:16 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 78AC84012A;
+	Thu, 14 Oct 2021 21:04:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tMWpskBIyoXS; Thu, 14 Oct 2021 21:03:15 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id JuOGpx4Hbg9M; Thu, 14 Oct 2021 21:04:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BCA1760BBD;
-	Thu, 14 Oct 2021 21:03:14 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5EC421BF343
- for <buildroot@lists.busybox.net>; Thu, 14 Oct 2021 21:03:13 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 911864014E;
+	Thu, 14 Oct 2021 21:04:27 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 038E01BF33A
+ for <buildroot@lists.busybox.net>; Thu, 14 Oct 2021 21:04:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5B8F683A99
- for <buildroot@lists.busybox.net>; Thu, 14 Oct 2021 21:03:13 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E55694014E
+ for <buildroot@lists.busybox.net>; Thu, 14 Oct 2021 21:04:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3qJD6-bwk1Zj for <buildroot@lists.busybox.net>;
- Thu, 14 Oct 2021 21:03:12 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id brv4b3NwYWfr for <buildroot@lists.busybox.net>;
+ Thu, 14 Oct 2021 21:04:23 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com
- [IPv6:2a00:1450:4864:20::533])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8FEFF83AB0
- for <buildroot@buildroot.org>; Thu, 14 Oct 2021 21:03:12 +0000 (UTC)
-Received: by mail-ed1-x533.google.com with SMTP id i20so28570428edj.10
- for <buildroot@buildroot.org>; Thu, 14 Oct 2021 14:03:12 -0700 (PDT)
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com
+ [IPv6:2a00:1450:4864:20::52c])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E48234012A
+ for <buildroot@buildroot.org>; Thu, 14 Oct 2021 21:04:22 +0000 (UTC)
+Received: by mail-ed1-x52c.google.com with SMTP id r18so29436468edv.12
+ for <buildroot@buildroot.org>; Thu, 14 Oct 2021 14:04:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=G0yA5cb+2sL4BcwTpGr3oo39n1RP2IyN6nj4l2RvXrY=;
- b=WQd+/OP3vSXtJ4VGkspIf7K4Z5PLqCmAG209CTxmTEZ97mq1ZIxm4+BJWZCu1aL41f
- /wMy4203BiHTJi9trU850QrjvXXxnhYxa1JdR1yDokMvuKbHQaJqoIudKEWfXND62z9t
- TlsDK0wJSBiOXNmpYJQ2Ytwl9lzUT4/aq/8k1VzBPapBPnaV681lmKQ9RfVBpPxzOygT
- 363oIv1NEazOG9nRKbweWc6UOWlsNT2JIjoJI62mdgyk76xp/2PVnDEscuZQwYl3jwZD
- Vofu58kn5WcN7bNgx7AM7TVcKrZiEX7eAaQJyljiiaTjZ4Ern/zlHG9qSJkz3OYM/CFq
- L5aw==
+ :references:from:organization:in-reply-to:content-transfer-encoding;
+ bh=WLgdSMT16ADWV/KeG7xNtumseFW/rxyrW26snYR3Cqg=;
+ b=Gwt1GVzpVjqvNbTa/frwzpHajI6flBC1U/QTXbbFXr+ni0aeWsQVkiveGI358HftQX
+ /UFmc+LdKoyLrofH8FzwVSowAHiHeOeHwgqZTPmcoIzIZkiZO/8ryBdjERJDKdKCqqpr
+ ZBQsugy+ptUJFE6C+6xfjk6MYO+KJb9rzqsF+GZTD6Xhe5jecBox4crhdJAxwKv1+9VM
+ yQTiiKk656mUcRrNO8H+2iznRaZrmXYXAJo829DzmrBk9RnZpkM4WBSxW5T4Ccvu4D/0
+ bODYx8dRogWjN+oNtLVQZi1fXQA/xvMEsZGUe7mdkfgbHb1JlBftF78onMyi8yz3Fomb
+ WoUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
+ :content-language:to:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=G0yA5cb+2sL4BcwTpGr3oo39n1RP2IyN6nj4l2RvXrY=;
- b=M+pyuHg38oZBK0coIetZv6fEK5x8jteaiNsoE2SaVIUQNt+byZT3faHjInlum6my/0
- xE9DImbpCMLhesrq9I3wPhInk4a/AWXYqZS0mA7sFz+xd8IRM41eJmLGTOyVygGs7k9o
- BsA85qPXiHKCCdPGOCfZB6k4azzlCEMUh+owaDO8sRwzYciTMoYaTrLZljtmQBQsI4Eb
- cHbhYwuRMjDJEcEJ/MHQ9uQ0wqy2Nsl3HPksZIjtZns//0XWZw8qRp+FfneVBsRHqny6
- 8NZZ4Xsnvx60eLPYAkiExPyPpnvN2ZKVAIKy9TfAU7pzS6rR2b406T53sS8UVEzMLFqq
- YVRw==
-X-Gm-Message-State: AOAM531h3OmjmCcMBYuBJ6Q9LEOClsNzJmt6Nz6Xmey2Y4s1/PZH8qZh
- 3aKeOBb5xKYO3VBPLr5T/r7pxw==
-X-Google-Smtp-Source: ABdhPJwnscqvTZrhX/moQuPSnEqG380QXLpEKaTHMNdBtnnG7y3QkW275rBZI2HxAd7jlFue7+2LgA==
-X-Received: by 2002:a17:906:c7d0:: with SMTP id
- dc16mr1653465ejb.555.1634245390795; 
- Thu, 14 Oct 2021 14:03:10 -0700 (PDT)
+ bh=WLgdSMT16ADWV/KeG7xNtumseFW/rxyrW26snYR3Cqg=;
+ b=nGrvMLjy+I9tMED1N0/nctYTBwnx6lK2dx72M1iGvKRtQmz2Ax9WJsQaKOtY+H/xo5
+ 2prIxW3XAHbeiFj6mqjDS8CCDSz9ZwW1T6M1Ih9N90ZHrV0x/5dskSqfnOQpwx6a/pnt
+ nyJByw6EuqRZ3j4hVYhvv7ymjMe1pHjnltFMcfg4xHafVHmUAdmFtgdoqY05i5sl73ai
+ Sz6WAi0K7BSiG0wQUBU6T9YPHDz6uE8SzuAh2RCvr/oVYYxyB6MFDaGYBKNGFmf7R7wG
+ +ZhHxutO7zYv4EeBE9KoLu0uD/gZblcPLKPTKoBB8nlsKSvTa15QPHpdzVHGCrYwaMi2
+ LimQ==
+X-Gm-Message-State: AOAM533EaMxLzB20JCTx4NzK8Ao2Ilx7ilv2DBNCd2F5vQg8gKakJOEG
+ +F6n+owcAqcR03vTnki3sis4eGH19lOuCexr
+X-Google-Smtp-Source: ABdhPJywlXEtb8sXK7IQf7u1tZ/mrf2JBTs2CpGFEqKKQMZytZh7K/lj/Evvenz2vWotjqoFYOLuuw==
+X-Received: by 2002:a05:6402:49a:: with SMTP id
+ k26mr12304326edv.279.1634245461100; 
+ Thu, 14 Oct 2021 14:04:21 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id n16sm2977512eda.93.2021.10.14.14.03.10
+ by smtp.gmail.com with ESMTPSA id k15sm2669259eje.37.2021.10.14.14.04.20
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Thu, 14 Oct 2021 14:03:10 -0700 (PDT)
-Message-ID: <ff7f85f0-9f45-7370-9810-d652e38b1cf7@mind.be>
-Date: Thu, 14 Oct 2021 23:03:09 +0200
+ Thu, 14 Oct 2021 14:04:20 -0700 (PDT)
+Message-ID: <ae63fa88-9c3a-1d97-6470-2710a779e547@mind.be>
+Date: Thu, 14 Oct 2021 23:04:20 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.1.0
 Content-Language: en-GB
-To: Adam Duskett <aduskett@gmail.com>, buildroot@buildroot.org
-References: <20211009002727.972605-1-aduskett@gmail.com>
- <20211009002727.972605-2-aduskett@gmail.com>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+References: <20211009173017.674627-1-fontaine.fabrice@gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20211009002727.972605-2-aduskett@gmail.com>
-Subject: Re: [Buildroot] [PATCH v4 1/2] package/python3: Add bzip2 option to
- host
+In-Reply-To: <20211009173017.674627-1-fontaine.fabrice@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package/oracle-mysql: fix build with
+ autoconf >= 2.70
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,9 +98,6 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Daniel Price <daniel.price@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
- Martin Bark <martin@barkynet.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -112,60 +105,92 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 09/10/2021 02:27, Adam Duskett wrote:
-> The bzip2 module is needed to build the host variant of NodeJS 14.
+On 09/10/2021 19:30, Fabrice Fontaine wrote:
+> Fix the following build failure raised since bump of autoconf to version
+> 2.71 in commit ecd54b65c1f998a7ccd91f7c523e4ff38c4781da:
 > 
-> Signed-off-by: Adam Duskett <aduskett@gmail.com>
+> autoheader: warning: missing template: CRAY_STACKSEG_END
+> autoheader: warning: Use AC_DEFINE([CRAY_STACKSEG_END], [], [Description])
+> autoreconf: error: /home/buildroot/autobuild/instance-2/output-1/host/bin/autoheader failed with exit status: 1
+> package/pkg-generic.mk:273: recipe for target '/home/buildroot/autobuild/instance-2/output-1/build/oracle-mysql-5.1.73/.stamp_configured' failed
+> 
+> Fixes:
+>   - http://autobuild.buildroot.org/results/e5329bcf166d46b2eb17f2bc727c0307bef5ed02
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->   package/python3/Config.in.host | 6 ++++++
->   package/python3/python3.mk     | 6 ++++++
->   2 files changed, 12 insertions(+)
+>   ...-alloca.m4-Remove-obsolete-Cray-supp.patch | 50 +++++++++++++++++++
+>   1 file changed, 50 insertions(+)
+>   create mode 100644 package/oracle-mysql/0011-config-ac-macros-alloca.m4-Remove-obsolete-Cray-supp.patch
 > 
-> diff --git a/package/python3/Config.in.host b/package/python3/Config.in.host
-> index 70b5dacdde..65a8df0754 100644
-> --- a/package/python3/Config.in.host
-> +++ b/package/python3/Config.in.host
-> @@ -7,6 +7,12 @@ config BR2_PACKAGE_HOST_PYTHON3
->   
->   if BR2_PACKAGE_HOST_PYTHON3
->   
-> +config BR2_PACKAGE_HOST_PYTHON3_BZIP2
-> +	bool "bzip2"
-> +	select BR2_PACKAGE_HOST_BZIP2
+> diff --git a/package/oracle-mysql/0011-config-ac-macros-alloca.m4-Remove-obsolete-Cray-supp.patch b/package/oracle-mysql/0011-config-ac-macros-alloca.m4-Remove-obsolete-Cray-supp.patch
+> new file mode 100644
+> index 0000000000..f3dbde253c
+> --- /dev/null
+> +++ b/package/oracle-mysql/0011-config-ac-macros-alloca.m4-Remove-obsolete-Cray-supp.patch
+> @@ -0,0 +1,50 @@
+> +From 0d8ab9b020870c62c216fca77e7f8bd3eeb710c3 Mon Sep 17 00:00:00 2001
+> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +Date: Sat, 9 Oct 2021 19:23:46 +0200
+> +Subject: [PATCH] config/ac-macros/alloca.m4: Remove obsolete Cray support
+> +
+> +Remove obsolete Cray support to avoid the following build failure since
+> +autoconf >= 2.70 and
+> +http://git.savannah.gnu.org/gitweb/?p=autoconf.git;a=commit;h=15edf7fd8094fd14a89d9891dd72a9624762597a:
+> +
+> +autoheader: warning: missing template: CRAY_STACKSEG_END
+> +autoheader: warning: Use AC_DEFINE([CRAY_STACKSEG_END], [], [Description])
+> +autoreconf: error: /home/buildroot/autobuild/instance-2/output-1/host/bin/autoheader failed with exit status: 1
+> +package/pkg-generic.mk:273: recipe for target '/home/buildroot/autobuild/instance-2/output-1/build/oracle-mysql-5.1.73/.stamp_configured' failed
+> +
+> +Fixes:
+> + - http://autobuild.buildroot.org/results/e5329bcf166d46b2eb17f2bc727c0307bef5ed02
+> +
 
-  This option doesn't exist. I removed it.
+  I added:
+
+Upstream: switched to CMake a very long time ago, so not sent upstream
+
 
   Applied to master, thanks.
-
-  Sorry, the nodejs bump was a bit to big to include in the low-hanging-fruit 
-apply, so that's for later.
 
   Regards,
   Arnout
 
-> +	help
-> +	  bz2 module for host Python3.
+
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +---
+> + config/ac-macros/alloca.m4 | 14 --------------
+> + 1 file changed, 14 deletions(-)
 > +
->   config BR2_PACKAGE_HOST_PYTHON3_SSL
->   	bool "ssl"
->   	select BR2_PACKAGE_HOST_OPENSSL
-> diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-> index 3e88bc0ff4..779f6dcb6c 100644
-> --- a/package/python3/python3.mk
-> +++ b/package/python3/python3.mk
-> @@ -43,6 +43,12 @@ PYTHON3_DEPENDENCIES = host-python3 libffi
->   
->   HOST_PYTHON3_DEPENDENCIES = host-autoconf-archive host-expat host-zlib host-libffi
->   
-> +ifeq ($(BR2_PACKAGE_HOST_PYTHON3_BZIP2),y)
-> +HOST_PYTHON3_DEPENDENCIES += host-bzip2
-> +else
-> +HOST_PYTHON3_CONF_OPTS += --disable-bzip2
-> +endif
+> +diff --git a/config/ac-macros/alloca.m4 b/config/ac-macros/alloca.m4
+> +index 8c730dd671f..eecb8249573 100644
+> +--- a/config/ac-macros/alloca.m4
+> ++++ b/config/ac-macros/alloca.m4
+> +@@ -46,20 +46,6 @@ then
+> +    ALLOCA=alloca.o
+> +    AC_DEFINE(C_ALLOCA, 1)
 > +
->   ifeq ($(BR2_PACKAGE_HOST_PYTHON3_SSL),y)
->   HOST_PYTHON3_DEPENDENCIES += host-openssl
->   else
+> +- AC_CACHE_CHECK(whether alloca needs Cray hooks, ac_cv_os_cray,
+> +- [AC_EGREP_CPP(webecray,
+> +- [#if defined(CRAY) && ! defined(CRAY2)
+> +- webecray
+> +- #else
+> +- wenotbecray
+> +- #endif
+> +- ], ac_cv_os_cray=yes, ac_cv_os_cray=no)])
+> +- if test "$ac_cv_os_cray" = "yes"; then
+> +- for ac_func in _getb67 GETB67 getb67; do
+> +-   AC_CHECK_FUNC($ac_func, [AC_DEFINE_UNQUOTED(CRAY_STACKSEG_END, $ac_func)
+> +-   break])
+> +- done
+> +- fi
+> +  fi
+> +  AC_SUBST(ALLOCA)dnl
+> + else
+> +--
+> +2.33.0
+> +
 > 
 _______________________________________________
 buildroot mailing list
