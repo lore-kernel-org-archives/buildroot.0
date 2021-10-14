@@ -2,51 +2,51 @@ Return-Path: <SRS0=enEc=PC=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 09792C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 14 Oct 2021 21:42:47 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8FC81C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 14 Oct 2021 21:42:58 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B28DD6105A
-	for <buildroot@archiver.kernel.org>; Thu, 14 Oct 2021 21:42:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B28DD6105A
+	by mail.kernel.org (Postfix) with ESMTPS id 4FF4E6105A
+	for <buildroot@archiver.kernel.org>; Thu, 14 Oct 2021 21:42:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4FF4E6105A
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 822A560755;
-	Thu, 14 Oct 2021 21:42:46 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 216E940371;
+	Thu, 14 Oct 2021 21:42:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wFTTeVjxu4cV; Thu, 14 Oct 2021 21:42:45 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 6Dic7OyZv_Tm; Thu, 14 Oct 2021 21:42:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E8992606FF;
-	Thu, 14 Oct 2021 21:42:44 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id BA24E1BF576
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5468A4012D;
+	Thu, 14 Oct 2021 21:42:56 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C9D271BF9B9
  for <buildroot@lists.busybox.net>; Thu, 14 Oct 2021 21:42:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A90CD405BE
+ by smtp1.osuosl.org (Postfix) with ESMTP id C3CAF83231
  for <buildroot@lists.busybox.net>; Thu, 14 Oct 2021 21:42:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GbffKzkC4TMJ for <buildroot@lists.busybox.net>;
- Thu, 14 Oct 2021 21:42:41 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mnkqflizUb5x for <buildroot@lists.busybox.net>;
+ Thu, 14 Oct 2021 21:42:42 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id EB4C140581
- for <buildroot@buildroot.org>; Thu, 14 Oct 2021 21:42:41 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0A1A181AEF
+ for <buildroot@buildroot.org>; Thu, 14 Oct 2021 21:42:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id B49CB94EB7; Thu, 14 Oct 2021 21:39:46 +0000 (UTC)
+ id C812994EB7; Thu, 14 Oct 2021 21:39:46 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
 Date: Thu, 14 Oct 2021 23:12:37 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d1c0d89df1e16d43af0651360b68948a8d40be26
-X-Git-Newrev: 0eb61e6ee3f37dd727d91590e16da2ab4308fc5f
+X-Git-Oldrev: 33ece2446e25e20929d1c7eefa9f3244a3b79a92
+X-Git-Newrev: 16bae982b0bedf776d9f5b7b47469eac1ec039bf
 X-Patchwork-Hint: ignore
-Message-Id: <20211014213946.B49CB94EB7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/kmod: bump to version 29
+Message-Id: <20211014213946.C812994EB7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-git: bump to version 3.1.24
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,40 +64,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0eb61e6ee3f37dd727d91590e16da2ab4308fc5f
+commit: https://git.buildroot.net/buildroot/commit/?id=16bae982b0bedf776d9f5b7b47469eac1ec039bf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/kmod/kmod.hash | 2 +-
- package/kmod/kmod.mk   | 2 +-
+ package/python-git/python-git.hash | 2 +-
+ package/python-git/python-git.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kmod/kmod.hash b/package/kmod/kmod.hash
-index f0bd436dc8..c68e41f1b6 100644
---- a/package/kmod/kmod.hash
-+++ b/package/kmod/kmod.hash
-@@ -1,5 +1,5 @@
- # From https://www.kernel.org/pub/linux/utils/kernel/kmod/sha256sums.asc
--sha256  3969fc0f13daa98084256337081c442f8749310089e48aa695c9b4dfe1b3a26c  kmod-28.tar.xz
-+sha256  0b80eea7aa184ac6fd20cafa2a1fdf290ffecc70869a797079e2cc5c6225a52a  kmod-29.tar.xz
- 
- # Locally calculated
- sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  libkmod/COPYING
-diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
-index 7c5d200b0f..c7f510ec0f 100644
---- a/package/kmod/kmod.mk
-+++ b/package/kmod/kmod.mk
+diff --git a/package/python-git/python-git.hash b/package/python-git/python-git.hash
+index db3d743857..0c8c764bf3 100644
+--- a/package/python-git/python-git.hash
++++ b/package/python-git/python-git.hash
+@@ -1,3 +1,3 @@
+ # locally computed hashes
+-sha256  78baf9fc223536e38a6e0d9241536fedaecf79bc000b3a05962257d83571fc5d  python-git-3.1.20.tar.gz
++sha256  8282d0d1169a3a98546979bfae1524608670fadc4ca7636517aadd428e0cfbeb  python-git-3.1.24.tar.gz
+ sha256  fd657ffc2cef63d25c78cab7808d414dd03a282e63893491fd11c32f98be67fb  LICENSE
+diff --git a/package/python-git/python-git.mk b/package/python-git/python-git.mk
+index 0e158434fd..9b2771ca07 100644
+--- a/package/python-git/python-git.mk
++++ b/package/python-git/python-git.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KMOD_VERSION = 28
-+KMOD_VERSION = 29
- KMOD_SOURCE = kmod-$(KMOD_VERSION).tar.xz
- KMOD_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kmod
- KMOD_INSTALL_STAGING = YES
+-PYTHON_GIT_VERSION = 3.1.20
++PYTHON_GIT_VERSION = 3.1.24
+ PYTHON_GIT_SITE = $(call github,gitpython-developers,GitPython,$(PYTHON_GIT_VERSION))
+ PYTHON_GIT_LICENSE = BSD-3-Clause
+ PYTHON_GIT_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
