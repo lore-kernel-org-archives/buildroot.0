@@ -2,90 +2,90 @@ Return-Path: <SRS0=enEc=PC=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 10533C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 14 Oct 2021 21:41:26 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E616C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 14 Oct 2021 21:41:40 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id CDC9B60524
-	for <buildroot@archiver.kernel.org>; Thu, 14 Oct 2021 21:41:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org CDC9B60524
+	by mail.kernel.org (Postfix) with ESMTPS id 9C75861041
+	for <buildroot@archiver.kernel.org>; Thu, 14 Oct 2021 21:41:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9C75861041
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7429140255;
-	Thu, 14 Oct 2021 21:41:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6DB1760755;
+	Thu, 14 Oct 2021 21:41:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id S0s3jwt9aIQz; Thu, 14 Oct 2021 21:41:24 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id wkRNh1d4F8ER; Thu, 14 Oct 2021 21:41:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9EEE940114;
-	Thu, 14 Oct 2021 21:41:23 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C42411BF576
- for <buildroot@lists.busybox.net>; Thu, 14 Oct 2021 21:41:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DCF0F606FF;
+	Thu, 14 Oct 2021 21:41:37 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id DB2F51BF9B9
+ for <buildroot@lists.busybox.net>; Thu, 14 Oct 2021 21:41:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B365540114
- for <buildroot@lists.busybox.net>; Thu, 14 Oct 2021 21:41:22 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id CA028606FF
+ for <buildroot@lists.busybox.net>; Thu, 14 Oct 2021 21:41:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id co3fG4pS_ekn for <buildroot@lists.busybox.net>;
- Thu, 14 Oct 2021 21:41:22 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id z3tGVnAD6gh7 for <buildroot@lists.busybox.net>;
+ Thu, 14 Oct 2021 21:41:36 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com
- [IPv6:2a00:1450:4864:20::532])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D1DE9400D9
- for <buildroot@buildroot.org>; Thu, 14 Oct 2021 21:41:21 +0000 (UTC)
-Received: by mail-ed1-x532.google.com with SMTP id z20so29925068edc.13
- for <buildroot@buildroot.org>; Thu, 14 Oct 2021 14:41:21 -0700 (PDT)
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com
+ [IPv6:2a00:1450:4864:20::530])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D386A605DA
+ for <buildroot@buildroot.org>; Thu, 14 Oct 2021 21:41:35 +0000 (UTC)
+Received: by mail-ed1-x530.google.com with SMTP id a25so29785383edx.8
+ for <buildroot@buildroot.org>; Thu, 14 Oct 2021 14:41:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=sbG2CIQREf52LbX185fOgWllek+YDrTdOx+tQB5r6PY=;
- b=TSD4DY5RVXapuaB6DQNKupy3iN+1Faa+H2Vbw+2mgxE57yjJJdkrQQ0NlVsZr4Gv8i
- cLo9QK3q2VyHgmoYwJzwWpW62tTdOdJXBUGPRwl7+qH9HGxc5evi9hqg14v2ngxvM2mN
- Xk62QSNiJYswIfpW21m6fzuUn5okPlObqlhSpuO3/JAmE0yJVPysULASZIhczP9YhhrJ
- ggtaatUKuZit0JYcf0YRfSmTQi2VVdQgdEzyg2snwGeXXsv+MFofJ8STJ7C7DVdYZ8jn
- jCqlnQ/hcGeVEpMwo64epI+tEfzis4aRA6UMqUTJZN3rFqASeSMp58kPoh5I2cE+lonq
- ntOg==
+ bh=wIjgrjvdMtumH7R8g2p4Iars1jgQ44kWggQ2kjUWFSs=;
+ b=GWs595BN7uVOL9xEClI8kitY7KcY0K//N/aYBTO130S/Tsd+EoQqRbiuWSwQ2H9RD6
+ /WyS9u0ApP69aN0bSK/24DyqyDmihwdIpxCD6fdqmHlZNP/48WTtXAkGKoz9n3dS0L+K
+ umWjn0BNkT2tbMHvm/S/OUuLB5SMlFWbymlGyp21Zb1W+VQS7yM1eOejwg7ZwTRgvk+u
+ 1LKDNlqEiSN1ve3MMYSVbJPVXy8DxspZMiOwwuYyq5jRIB0R59TY59mpnVn84TbpHYEV
+ xbYcmOf4Uuh2xxmv+In0wrUGGoywG1Lz3O+fY+8o0/yRqtjaaEBf+EtF0rCAJAC2KugO
+ f85A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=sbG2CIQREf52LbX185fOgWllek+YDrTdOx+tQB5r6PY=;
- b=GghglvPKOxhQc8BU410qNfx5re9r9ChlHl6zSM1LDxXHvGW/G2kbUNEgrniRYr56TC
- Csb7287eAT3iXz7pHVt0bCFUEY7YXTKRzWIhpbIBm1G/HK2y6ROOwDNGKugqo0vGHYDA
- piOKqPpkjTYaUZR3JQ+QJSqjngyX2JBexhu3vkDET7P/gTkyZGqnZqLvnrqqwK1k1TEn
- KouQpLJubTDnFDKA6Z/cks03XC2+gWAADqOztFXX2H5/QKo1baFm9ehOe3IxCluYes87
- +3Fqivd9iRTupmPxRy66ac0KAG1+87iANlmuFFncHO8w2n0ek3kb4TN3XE1JnserFjUg
- j3Hg==
-X-Gm-Message-State: AOAM5309I+V7zA4qBn6BUqJMTbQGBbw3Fx2Un+WIk3Tv+RHFqRrlBO9g
- zl5JoX2XbUEsImT+0xhX8q/bEA==
-X-Google-Smtp-Source: ABdhPJxtRBxFGGFzeJ5PkDe6GOHHHHGyzRedLQocctRQOWdhsb0UImQ4gbDHyy2iKKQ8ZhkDwSBvnw==
-X-Received: by 2002:a17:906:4fc7:: with SMTP id
- i7mr1947232ejw.236.1634247679922; 
- Thu, 14 Oct 2021 14:41:19 -0700 (PDT)
+ bh=wIjgrjvdMtumH7R8g2p4Iars1jgQ44kWggQ2kjUWFSs=;
+ b=l2YoW4IqAay2gIZccK9FzmbKEyiWM8VW6+uBdmdcFqKhmHkjqOsgRg5xx3BhIL1q19
+ CyJKpwukmlbXXLUoXVqrjRizGEq9A4N98Ri5LARltI4OgwSvWkPnwnNx5uVmql3tbbrv
+ +jvogsCIbWg36+88EgiXTjS/2le9U1NXYGoibnz9PPm1WAH0eZsRERSqOK06q0publLV
+ nBhUoNAvFYw52bX0pvArnk9udAnKBftREE1h/Rv60cYSkQLROz1gqA74OJbyNIUiCQ6Y
+ p2ePk4oOMNrCp6/j69GPXZbJ1+/iTF/v1QVarSz4EXQjGzRdf4q0ISa88FT4FETCO0rt
+ uA0Q==
+X-Gm-Message-State: AOAM531IlF8CnBUIxi8ebrlCaxuUH4pv+qfz8HPF3Q8UARX28Bn9va5y
+ tZ36P6rdFwwM9FHbbj0l/JT7D4MIdU7N6nsV
+X-Google-Smtp-Source: ABdhPJzQ4PIe/2lX/D2rJVGr0va/BcXlh6FHjPfhfUhHt0UIjsl+goWIG0vauz+M/GXo/ZjbEWsvfw==
+X-Received: by 2002:a17:907:6d87:: with SMTP id
+ sb7mr1739298ejc.254.1634247694014; 
+ Thu, 14 Oct 2021 14:41:34 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id y30sm3002706ejk.74.2021.10.14.14.41.19
+ by smtp.gmail.com with ESMTPSA id f12sm2180160ejl.5.2021.10.14.14.41.33
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Thu, 14 Oct 2021 14:41:19 -0700 (PDT)
-Message-ID: <621e79ee-3986-855c-6e4c-38f5b1de2484@mind.be>
-Date: Thu, 14 Oct 2021 23:41:18 +0200
+ Thu, 14 Oct 2021 14:41:33 -0700 (PDT)
+Message-ID: <2c2e59f5-0060-4bc5-810d-df04715b0b3e@mind.be>
+Date: Thu, 14 Oct 2021 23:41:33 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.1.0
 Content-Language: en-GB
 To: Gilles Talis <gilles.talis@gmail.com>, buildroot@buildroot.org
-References: <20211010094224.109154-1-gilles.talis@gmail.com>
+References: <20211010101510.128202-1-gilles.talis@gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20211010094224.109154-1-gilles.talis@gmail.com>
-Subject: Re: [Buildroot] [PATCH 1/2] package/libosip2: bump to version 5.2.1
+In-Reply-To: <20211010101510.128202-1-gilles.talis@gmail.com>
+Subject: Re: [Buildroot] [PATCH] package/ncdu: bump to version 1.16
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -104,43 +104,44 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 10/10/2021 11:42, Gilles Talis wrote:
+On 10/10/2021 12:15, Gilles Talis wrote:
 > Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 
-  Both applied to master, thanks.
+  Applied to master, thanks.
 
   Regards,
   Arnout
 
 > ---
->   package/libosip2/libosip2.hash | 2 +-
->   package/libosip2/libosip2.mk   | 2 +-
->   2 files changed, 2 insertions(+), 2 deletions(-)
+>   package/ncdu/ncdu.hash | 4 ++--
+>   package/ncdu/ncdu.mk   | 2 +-
+>   2 files changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/libosip2/libosip2.hash b/package/libosip2/libosip2.hash
-> index 400158cd7f..7a08bf26a7 100644
-> --- a/package/libosip2/libosip2.hash
-> +++ b/package/libosip2/libosip2.hash
+> diff --git a/package/ncdu/ncdu.hash b/package/ncdu/ncdu.hash
+> index be2b6e0788..c2d367f15a 100644
+> --- a/package/ncdu/ncdu.hash
+> +++ b/package/ncdu/ncdu.hash
 > @@ -1,5 +1,5 @@
->   # Locally calculated after checking pgp signature
-> -sha256  4fb48b2ea568bb41c6244b0df2bb7175849ca93e84be53ceb268fdf9351bb375  libosip2-5.2.0.tar.gz
-> +sha256  ee3784bc8e7774f56ecd0e2ca6e3e11d38b373435115baf1f1aa0ca0bfd02bf2  libosip2-5.2.1.tar.gz
+>   # From https://dev.yorhel.nl/ncdu
+> -sha256  b02ddc4dbf1db139cc6fbbe2f54a282770380f0ca5c17089855eab52a9ea3fb0  ncdu-1.15.1.tar.gz
+> +sha256  2b915752a183fae014b5e5b1f0a135b4b408de7488c716e325217c2513980fd4  ncdu-1.16.tar.gz
 >   
->   # Hash for license file:
->   sha256  8d9e95ed0e48df46dc758eb0d86df611f771eab4eed94bebb77dca87f1c897de  COPYING
-> diff --git a/package/libosip2/libosip2.mk b/package/libosip2/libosip2.mk
-> index b86a72479e..967602b426 100644
-> --- a/package/libosip2/libosip2.mk
-> +++ b/package/libosip2/libosip2.mk
+>   # computed locally
+> -sha256  978f49428f21714c973706030c0ef09983cc1e2889a1b7b521dbf8860870cf05  COPYING
+> +sha256  e9ed7095eee84ad6804450495738277b539da0c0b2006f50faf8e6e67a0a15aa  COPYING
+> diff --git a/package/ncdu/ncdu.mk b/package/ncdu/ncdu.mk
+> index 532f145b20..59fa8deb25 100644
+> --- a/package/ncdu/ncdu.mk
+> +++ b/package/ncdu/ncdu.mk
 > @@ -4,7 +4,7 @@
 >   #
 >   ################################################################################
 >   
-> -LIBOSIP2_VERSION = 5.2.0
-> +LIBOSIP2_VERSION = 5.2.1
->   LIBOSIP2_SITE = $(BR2_GNU_MIRROR)/osip
->   LIBOSIP2_INSTALL_STAGING = YES
->   LIBOSIP2_LICENSE = LGPL-2.1+
+> -NCDU_VERSION = 1.15.1
+> +NCDU_VERSION = 1.16
+>   NCDU_SITE = http://dev.yorhel.nl/download
+>   
+>   NCDU_DEPENDENCIES = ncurses
 > 
 _______________________________________________
 buildroot mailing list
