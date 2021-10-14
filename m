@@ -2,90 +2,93 @@ Return-Path: <SRS0=enEc=PC=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E616C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 14 Oct 2021 21:41:40 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 94FACC433EF
+	for <buildroot@archiver.kernel.org>; Thu, 14 Oct 2021 21:41:55 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9C75861041
-	for <buildroot@archiver.kernel.org>; Thu, 14 Oct 2021 21:41:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9C75861041
+	by mail.kernel.org (Postfix) with ESMTPS id 5A38460E97
+	for <buildroot@archiver.kernel.org>; Thu, 14 Oct 2021 21:41:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5A38460E97
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6DB1760755;
-	Thu, 14 Oct 2021 21:41:39 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2A702400D9;
+	Thu, 14 Oct 2021 21:41:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wkRNh1d4F8ER; Thu, 14 Oct 2021 21:41:38 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id EeQJ_uhP1xtL; Thu, 14 Oct 2021 21:41:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DCF0F606FF;
-	Thu, 14 Oct 2021 21:41:37 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id DB2F51BF9B9
- for <buildroot@lists.busybox.net>; Thu, 14 Oct 2021 21:41:36 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 475C440114;
+	Thu, 14 Oct 2021 21:41:53 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 156F51BF576
+ for <buildroot@lists.busybox.net>; Thu, 14 Oct 2021 21:41:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CA028606FF
- for <buildroot@lists.busybox.net>; Thu, 14 Oct 2021 21:41:36 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 04650405BE
+ for <buildroot@lists.busybox.net>; Thu, 14 Oct 2021 21:41:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id z3tGVnAD6gh7 for <buildroot@lists.busybox.net>;
- Thu, 14 Oct 2021 21:41:36 +0000 (UTC)
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id cClBVnsxfKaM for <buildroot@lists.busybox.net>;
+ Thu, 14 Oct 2021 21:41:51 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com
- [IPv6:2a00:1450:4864:20::530])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D386A605DA
- for <buildroot@buildroot.org>; Thu, 14 Oct 2021 21:41:35 +0000 (UTC)
-Received: by mail-ed1-x530.google.com with SMTP id a25so29785383edx.8
- for <buildroot@buildroot.org>; Thu, 14 Oct 2021 14:41:35 -0700 (PDT)
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com
+ [IPv6:2a00:1450:4864:20::52d])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4D14F40581
+ for <buildroot@buildroot.org>; Thu, 14 Oct 2021 21:41:51 +0000 (UTC)
+Received: by mail-ed1-x52d.google.com with SMTP id g10so29817252edj.1
+ for <buildroot@buildroot.org>; Thu, 14 Oct 2021 14:41:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=wIjgrjvdMtumH7R8g2p4Iars1jgQ44kWggQ2kjUWFSs=;
- b=GWs595BN7uVOL9xEClI8kitY7KcY0K//N/aYBTO130S/Tsd+EoQqRbiuWSwQ2H9RD6
- /WyS9u0ApP69aN0bSK/24DyqyDmihwdIpxCD6fdqmHlZNP/48WTtXAkGKoz9n3dS0L+K
- umWjn0BNkT2tbMHvm/S/OUuLB5SMlFWbymlGyp21Zb1W+VQS7yM1eOejwg7ZwTRgvk+u
- 1LKDNlqEiSN1ve3MMYSVbJPVXy8DxspZMiOwwuYyq5jRIB0R59TY59mpnVn84TbpHYEV
- xbYcmOf4Uuh2xxmv+In0wrUGGoywG1Lz3O+fY+8o0/yRqtjaaEBf+EtF0rCAJAC2KugO
- f85A==
+ bh=wiNPfns/asbYxFskeoy2Kf9v3vKFjHeK7vQNBUmYh/k=;
+ b=Ye2YXC/Ym8RaWnVwm7SPVybYl0fORDpjqDDoWjcOfIh0dro2f6yUaJa370Pp8ppBW9
+ 2DdlSGaPQ7LC8dip8l3gIILX7Q0th8uPxAliwpLE0zPvzEGqXJ0rGh+Il9ru48FwvLxG
+ m+KgK6g6cxylx3N3+wt4y1oegu3DYH9hUBrXzIsuLsrGy0verxK+YnEHzTCjepQdtuZM
+ zLnc9u29s1HNlqVW3n5uOuKQJ1E30K5Y3OtKvb1n4Bj5qrmBOAAhMdivFFcuJheNPfpi
+ BTnzSMHCCjDR4eo86en2W6OAn6gejCQURhpVkwYrsxvrX0N/vG00aEwDIUiLKhn8Nb88
+ NjBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=wIjgrjvdMtumH7R8g2p4Iars1jgQ44kWggQ2kjUWFSs=;
- b=l2YoW4IqAay2gIZccK9FzmbKEyiWM8VW6+uBdmdcFqKhmHkjqOsgRg5xx3BhIL1q19
- CyJKpwukmlbXXLUoXVqrjRizGEq9A4N98Ri5LARltI4OgwSvWkPnwnNx5uVmql3tbbrv
- +jvogsCIbWg36+88EgiXTjS/2le9U1NXYGoibnz9PPm1WAH0eZsRERSqOK06q0publLV
- nBhUoNAvFYw52bX0pvArnk9udAnKBftREE1h/Rv60cYSkQLROz1gqA74OJbyNIUiCQ6Y
- p2ePk4oOMNrCp6/j69GPXZbJ1+/iTF/v1QVarSz4EXQjGzRdf4q0ISa88FT4FETCO0rt
- uA0Q==
-X-Gm-Message-State: AOAM531IlF8CnBUIxi8ebrlCaxuUH4pv+qfz8HPF3Q8UARX28Bn9va5y
- tZ36P6rdFwwM9FHbbj0l/JT7D4MIdU7N6nsV
-X-Google-Smtp-Source: ABdhPJzQ4PIe/2lX/D2rJVGr0va/BcXlh6FHjPfhfUhHt0UIjsl+goWIG0vauz+M/GXo/ZjbEWsvfw==
-X-Received: by 2002:a17:907:6d87:: with SMTP id
- sb7mr1739298ejc.254.1634247694014; 
- Thu, 14 Oct 2021 14:41:34 -0700 (PDT)
+ bh=wiNPfns/asbYxFskeoy2Kf9v3vKFjHeK7vQNBUmYh/k=;
+ b=k+/ywbMrs/JY47274O99A3Kpp+8CyDQ9BiS47L9gFRBuuut9j/IcAj3u7/Tq7NAsAe
+ PO13SJFVo3yj9tFegSUz1MWHvC2foixZ9om20bCGWChigO6SIGWbhG3Wd8FsDHPQaBlQ
+ bPTMiKK9suca0KLaFp6QF9uA+XcChP7CJ1o24HSY07QOT5BCi1JtWMHK+U/vxShzy0ej
+ 3lomv2OGr0G8FMNTcbwnyAwIfY07egkKe7dXOQdhzb6fFniHtyQSOocK0rl/7U382vo2
+ r24X5BJLcKYl/6t75HXDcUmWCzk30DuKiK/AnzD/3130bEOU0cEzYVNTq9T7QmJAo8yX
+ fvPA==
+X-Gm-Message-State: AOAM531tnAAh8qtnzNzcdD+rzPkDL6jPLwKzg2k3I5sAncHY4RBcjuC1
+ iANTrQorum3Zr0lOcrxF8w2fyRzEHuc+Sg==
+X-Google-Smtp-Source: ABdhPJyg6vXWMuy9oHyE+Uzm/zQuJV9tdEhuwkT6GYJd2C9ylYzfJ6HTbTwUKHV+wFM1r7GX+WBA4Q==
+X-Received: by 2002:a05:6402:5186:: with SMTP id
+ q6mr12193884edd.340.1634247709521; 
+ Thu, 14 Oct 2021 14:41:49 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id f12sm2180160ejl.5.2021.10.14.14.41.33
+ by smtp.gmail.com with ESMTPSA id b2sm2857028ejz.119.2021.10.14.14.41.48
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Thu, 14 Oct 2021 14:41:33 -0700 (PDT)
-Message-ID: <2c2e59f5-0060-4bc5-810d-df04715b0b3e@mind.be>
-Date: Thu, 14 Oct 2021 23:41:33 +0200
+ Thu, 14 Oct 2021 14:41:49 -0700 (PDT)
+Message-ID: <5b7ea2da-bdcf-187d-435d-7b20f474ab89@mind.be>
+Date: Thu, 14 Oct 2021 23:41:48 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.1.0
 Content-Language: en-GB
-To: Gilles Talis <gilles.talis@gmail.com>, buildroot@buildroot.org
-References: <20211010101510.128202-1-gilles.talis@gmail.com>
+To: Michael Nosthoff <buildroot@heine.tech>, buildroot@buildroot.org
+References: <20211010111133.73045-1-buildroot@heine.tech>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20211010101510.128202-1-gilles.talis@gmail.com>
-Subject: Re: [Buildroot] [PATCH] package/ncdu: bump to version 1.16
+In-Reply-To: <20211010111133.73045-1-buildroot@heine.tech>
+Subject: Re: [Buildroot] [PATCH] package/json-for-modern-cpp: bump version
+ to 3.10.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -104,8 +107,12 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 10/10/2021 12:15, Gilles Talis wrote:
-> Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+On 10/10/2021 13:11, Michael Nosthoff via buildroot wrote:
+> This release fixes two more bug introduced in release 3.10.0: the extended diagnostics triggered
+> assertions when used with update() or when inserting elements into arrays. All changes are
+> backward-compatible.
+> 
+> Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 
   Applied to master, thanks.
 
@@ -113,35 +120,32 @@ On 10/10/2021 12:15, Gilles Talis wrote:
   Arnout
 
 > ---
->   package/ncdu/ncdu.hash | 4 ++--
->   package/ncdu/ncdu.mk   | 2 +-
->   2 files changed, 3 insertions(+), 3 deletions(-)
+>   package/json-for-modern-cpp/json-for-modern-cpp.hash | 2 +-
+>   package/json-for-modern-cpp/json-for-modern-cpp.mk   | 2 +-
+>   2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/ncdu/ncdu.hash b/package/ncdu/ncdu.hash
-> index be2b6e0788..c2d367f15a 100644
-> --- a/package/ncdu/ncdu.hash
-> +++ b/package/ncdu/ncdu.hash
-> @@ -1,5 +1,5 @@
->   # From https://dev.yorhel.nl/ncdu
-> -sha256  b02ddc4dbf1db139cc6fbbe2f54a282770380f0ca5c17089855eab52a9ea3fb0  ncdu-1.15.1.tar.gz
-> +sha256  2b915752a183fae014b5e5b1f0a135b4b408de7488c716e325217c2513980fd4  ncdu-1.16.tar.gz
->   
->   # computed locally
-> -sha256  978f49428f21714c973706030c0ef09983cc1e2889a1b7b521dbf8860870cf05  COPYING
-> +sha256  e9ed7095eee84ad6804450495738277b539da0c0b2006f50faf8e6e67a0a15aa  COPYING
-> diff --git a/package/ncdu/ncdu.mk b/package/ncdu/ncdu.mk
-> index 532f145b20..59fa8deb25 100644
-> --- a/package/ncdu/ncdu.mk
-> +++ b/package/ncdu/ncdu.mk
+> diff --git a/package/json-for-modern-cpp/json-for-modern-cpp.hash b/package/json-for-modern-cpp/json-for-modern-cpp.hash
+> index 068868c048..1a98971dbc 100644
+> --- a/package/json-for-modern-cpp/json-for-modern-cpp.hash
+> +++ b/package/json-for-modern-cpp/json-for-modern-cpp.hash
+> @@ -1,3 +1,3 @@
+>   # Locally computed
+> -sha256  081ed0f9f89805c2d96335c3acfa993b39a0a5b4b4cef7edb68dd2210a13458c  json-3.10.2.tar.gz
+> +sha256  e0d7c1b120cac47fa7f14a41d10a5d390f67d423d8e97b9d6834887285d6873c  json-3.10.3.tar.gz
+>   sha256  c983d69523377819db3c377b390d5644f5ec53bec9b7c4a0f1ed893bb743d045  LICENSE.MIT
+> diff --git a/package/json-for-modern-cpp/json-for-modern-cpp.mk b/package/json-for-modern-cpp/json-for-modern-cpp.mk
+> index 14843380ee..53cf17d2c6 100644
+> --- a/package/json-for-modern-cpp/json-for-modern-cpp.mk
+> +++ b/package/json-for-modern-cpp/json-for-modern-cpp.mk
 > @@ -4,7 +4,7 @@
 >   #
 >   ################################################################################
 >   
-> -NCDU_VERSION = 1.15.1
-> +NCDU_VERSION = 1.16
->   NCDU_SITE = http://dev.yorhel.nl/download
->   
->   NCDU_DEPENDENCIES = ncurses
+> -JSON_FOR_MODERN_CPP_VERSION = 3.10.2
+> +JSON_FOR_MODERN_CPP_VERSION = 3.10.3
+>   JSON_FOR_MODERN_CPP_SOURCE = json-$(JSON_FOR_MODERN_CPP_VERSION).tar.gz
+>   JSON_FOR_MODERN_CPP_SITE = $(call github,nlohmann,json,v$(JSON_FOR_MODERN_CPP_VERSION))
+>   JSON_FOR_MODERN_CPP_LICENSE = MIT
 > 
 _______________________________________________
 buildroot mailing list
