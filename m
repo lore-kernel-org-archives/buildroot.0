@@ -2,78 +2,83 @@ Return-Path: <SRS0=enEc=PC=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8EB5BC433F5
-	for <buildroot@archiver.kernel.org>; Thu, 14 Oct 2021 20:02:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D7665C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 14 Oct 2021 20:07:00 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id C02966105A
-	for <buildroot@archiver.kernel.org>; Thu, 14 Oct 2021 20:02:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C02966105A
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
+	by mail.kernel.org (Postfix) with ESMTPS id 8C1A1610EA
+	for <buildroot@archiver.kernel.org>; Thu, 14 Oct 2021 20:07:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8C1A1610EA
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmx.net
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6842660638;
-	Thu, 14 Oct 2021 20:02:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 25D4F6072A;
+	Thu, 14 Oct 2021 20:07:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id x3p5HKzRZKR2; Thu, 14 Oct 2021 20:02:23 +0000 (UTC)
+	with ESMTP id 1LSNofuyFRhh; Thu, 14 Oct 2021 20:06:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A723D60B97;
-	Thu, 14 Oct 2021 20:02:22 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C1CBA1BF3F9
- for <buildroot@lists.busybox.net>; Thu, 14 Oct 2021 20:02:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 977C2606FF;
+	Thu, 14 Oct 2021 20:06:58 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id AF6BE1BF599
+ for <buildroot@lists.busybox.net>; Thu, 14 Oct 2021 20:06:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AFF9C40125
- for <buildroot@lists.busybox.net>; Thu, 14 Oct 2021 20:02:20 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9DC3A40513
+ for <buildroot@lists.busybox.net>; Thu, 14 Oct 2021 20:06:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9vnPtyQNIdFE for <buildroot@lists.busybox.net>;
- Thu, 14 Oct 2021 20:02:19 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp2.osuosl.org (Postfix) with ESMTPS id DCF55401C9
- for <buildroot@buildroot.org>; Thu, 14 Oct 2021 20:02:18 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:cd49:1327:25a7:1fb2])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id 92ADB5FF88;
- Thu, 14 Oct 2021 22:02:07 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1634241736;
- bh=u6tXp6rWG1BdHH9mST+ZIQyjo4orYQW/8AUQYR1+NHY=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=NEIiv+oIrDSVBx8XASdhqPd8AlyzNqgBpGCSRThVXM+LAlJnqv5k4c6tigbedGhxt
- V+wkjCNno3MoTeO744X6egKzMz7sv3pYACEyYazfTegNQCoOtCG4Z+aG0LOjHfr6WE
- bGWGTYLkyk/EEAU/85sS6fuMsCECzzepzJDdz8QVgmFlwU0zwkfHqi54SodMZRNnYO
- ZAQNuxVKMBzr9ONwaPIK5ekMdVPqJ/mOxEj6Flq9tx4oWBk5A0PXA2h99tgZYGDpna
- OqA339xi8KRX54xdXs1ypHFiTfijQLFa2JK2zaMf8DEY8e69GS73lnt5SJx2EUJein
- aZqXZKbAGRXng==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Thu, 14 Oct 2021 22:02:07 +0200
-Date: Thu, 14 Oct 2021 22:02:07 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: =?utf-8?B?S8O2cnk=?= Maincent <kory.maincent@bootlin.com>
-Message-ID: <20211014200207.GC368016@scaer>
-References: <20210923155726.87851-1-kory.maincent@bootlin.com>
- <20210923155726.87851-3-kory.maincent@bootlin.com>
- <20211006181104.GD2081069@scaer>
- <20211007102318.556f7fc2@kmaincent-XPS-13-7390>
- <20211007095326.GA2814782@scaer>
- <20211007144351.629d2de0@kmaincent-XPS-13-7390>
- <20211007162931.GH2081069@scaer>
- <20211011122736.3b0df127@kmaincent-XPS-13-7390>
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (1024-bit key) header.d=gmx.net
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id e-4IivmpzbIb for <buildroot@lists.busybox.net>;
+ Thu, 14 Oct 2021 20:06:56 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 00A1D404E6
+ for <buildroot@buildroot.org>; Thu, 14 Oct 2021 20:06:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+ s=badeba3b8450; t=1634242013;
+ bh=AcNNI6S2HKdCXwe/dl227biUJwbzDxCF6QQ9PWXFe8w=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+ b=TIzt3ZTbEFQFtUWPiOCimWan0hIDIpkdz6u7jh1AeeJVCMZYZ5Rv16CCSJGmLdBw3
+ JUWlcl7Dc92PwnW5mQ3Q1YFk1snOFm200uH+DJKRD5KsR5kMJeOgZ/s8+8Oc4w1cpM
+ IRI6XvuCHoA6ihvbamBFJv2rpmQnzAz0POz92bkk=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from localhost.fritz.box ([62.216.209.156]) by mail.gmx.net
+ (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
+ 1MKsnP-1mIk6L3CTl-00LCdp; Thu, 14 Oct 2021 22:06:52 +0200
+From: Peter Seiderer <ps.report@gmx.net>
+To: buildroot@buildroot.org
+Date: Thu, 14 Oct 2021 22:06:52 +0200
+Message-Id: <20211014200652.25988-1-ps.report@gmx.net>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20211011122736.3b0df127@kmaincent-XPS-13-7390>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH v3 2/7] boot/grub2: add support to build
- multiple Grub2 configurations in the same build
+X-Provags-ID: V03:K1:Qw6dAaKBhmGY7Yo1zItg7jtT0vidFR0mg81DxLgzzjilxY1FJ3E
+ tiC9k22InzZ5Ce1HORDvaqnZr9VybFBJ9GmadviZgKU6wmgX4WwuhEdwHhIYOFuaCHGyvSG
+ jw5fO5wF1MxwdMUywarnvZSUlh9EDIhAUe/DxGnBqqfrAQ1rs+GpC0CIi7J832+YKVc0h1r
+ Zp2Hcwzj+010OtW3wriTA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:aE9UAFXDJUo=:YwvSpEhptlU2WAPf9A4/tb
+ /junRgf3AVeQhPYaj2RFj2VtxioYD2XEAEQEszqV+61/vKLcbI0PQpkTDXAL7nSSzjSZs/8bx
+ WiBqyGg8owiZeB44/RNfe3j0qQP1MDE+04vHivPa3iT1v6nGDQRXpqkZaSjiiFz1QoiijqZZH
+ cYIKPuX5JyowopXfVrr4wmMTa7Tq4rnRW29K1RlWWEX+SIGWVol4P3feA8BgPbkFXWygfJHM3
+ N9JEnK5itOO4UXrYdcf7cgmu4Fx+udvrieCnehRQKpbdPeCS87PObi6q0OBdEVHx7qHxbUx3b
+ l6nspA7OZrWoupDk1aAFtJnNz9g6N/V52sdbDwtGe0vMwQJVQmBz0qWSeRDRYNUb3SZV/y0Qe
+ gjwuNY3fxxrOv/q6VXE+EcM6WcbA8Nt9ZzS92SOFE55FYN82kN3gA9SJ8hpV4udxZw5kk8OtP
+ 6cTNUicPB1EQesOMqOXOWIRyZBt411PEo49g2OVOZdgOUh6/GSCUaQfA1Zr0IPvrloKcIWcFP
+ RhjN57c6EuKIhxJYMAx3nziMCTSp6Efn2/8DdGjT8CMgtRGY/g8Mr5JfQf3WR4x1sjZk+J5mR
+ jiU0ZJ/hXylE8PvLxDcODQLW0uHwTCoAo/8RNNVfNjNW9cmfzt1X7DWv9pFUHnEvGg9gQpp9P
+ Dfkg7Z9lPYkk2kOD9c7BAEXQVjrWTLXzfD+vyX3c89csXeONeq2LoHsZyRdN0VLUNyArS1T1+
+ Wd473sjqf5f0RoN1fts0bontDWB360PJJNim16fFXKDRkohElZIX+wRs08tfJ0q5n0FSqc7D3
+ ZH6+Tg3Em5ZXsVJudX6PdVwV8fBbvX9gc9CAHvoHnoe5ufVQyGT7slFUe/AwA14H2jewfbXaX
+ FlzI4AhWSMIz+j+NGDZsoH9H1agvu8sVtb8d8ozSVbNyjM85c1JHBFFnTPhnO6D+6EaGTCVGS
+ 12fpG3pz365n5VuYB1WRFTp2ucZWMjn5aKwNuzx8g1np4KD5mOjGhdNUe1pO9nSPY2Vwsj5Uo
+ 0pBNibu0QqgkSultFMga21rNBCAPKmqvt+Hj6bsVfJtoaW5F6DG0PGlPc7iCyWDdPBe+uTZlW
+ PsA/6Tmt7dch8E=
+Subject: [Buildroot] [PATCH v1] package/qemu: disable doc generation for
+ host build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,108 +90,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Adam Duskett <aduskett@gmail.com>, thomas.petazzoni@bootlin.com,
- buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Romain Naour <romain.naour@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-S8O2cnksIEFsbCwKClNvcnJ5IGZvciBteSBsYXRlIHJlcGx5LCBJJ3ZlIGJlZW4gcHJldHR5IGJ1
-c3kgaGVyZS4uLgoKT24gMjAyMS0xMC0xMSAxMjoyNyArMDIwMCwgS8O2cnkgTWFpbmNlbnQgc3Bh
-a2UgdGh1c2x5Ogo+IE9uIFRodSwgNyBPY3QgMjAyMSAxODoyOTozMSArMDIwMAo+ICJZYW5uIEUu
-IE1PUklOIiA8eWFubi5tb3Jpbi4xOTk4QGZyZWUuZnI+IHdyb3RlOgo+ID4gT24gMjAyMS0xMC0w
-NyAxNDo0MyArMDIwMCwgS8O2cnkgTWFpbmNlbnQgc3Bha2UgdGh1c2x5Ogo+ID4gPiBPbiBUaHUs
-IDcgT2N0IDIwMjEgMTE6NTM6MjYgKzAyMDAKPiA+ID4gIllhbm4gRS4gTU9SSU4iIDx5YW5uLm1v
-cmluLjE5OThAZnJlZS5mcj4gd3JvdGU6ICAKPiA+IFstLVNOSVAtLV0KPiAKPiA+IEluIHRoaXMg
-Y2FzZSwgdGhpcyBzaG91bGQgbm90IGJlIHRvbyBjb21wbGV4IGVpdGhlcjsgd2UganVzdCBuZWVk
-IGEKPiA+IHBvc3QtaW1hZ2UgaG9vayB0aGF0IGNvcGllcyBhbGwgbW9kdWxlcyBpbnRvIFRBUkdF
-VF9ESVIsIGxpa2U6Cj4gCj4gSXMgc29tZXRoaW5nIGxpa2UgdGhlIGZvbGxvd2luZyBjb2RlIHNl
-ZW1zIG9rYXkgZm9yIHlvdS4KPiBJIHVzZSB0ZW1wb3JhcnkgaW5zdGFsbC0kKHR1cGxlKSBmb2xk
-ZXIgZm9yIHRoZSBkaWZmZXJlbnQgcGxhdGZvcm1zLgo+IFdlIG5lZWQgdG8gZG8gdGhlIENPTkZJ
-R1VSRV9DTURfUFRGIGFzIGEgUFJFX0NPTkZJR1VSRV9IT09LIGJlY2F1c2UgdGhlCj4gQ09ORklH
-VVJFX0NNRFMgZnJvbSBhdXRvdG9vbHMgaXMgY29uZmlndXJpbmcgaW5zaWRlIHRoZSBHUlVCMl9T
-UkNESVIgZm9sZGVyLgo+IFRoZW4gaWYgdGhlIC4vY29uZmlndXJlIGhhcyBiZWVuIHJ1biBpbiB0
-aGUgR1JVQjJfU1JDRElSIEkgY2FuIG5vdCBydW4gb3RoZXIKPiBjb25maWd1cmUgY29tbWFuZCB3
-aXRob3V0IHJlY2VpdmUgdGhpcyBlcnJvciBtZXNzYWdlOgo+ICAgY29uZmlndXJlOiBlcnJvcjog
-c291cmNlIGRpcmVjdG9yeSBhbHJlYWR5IGNvbmZpZ3VyZWQ7IHJ1biAibWFrZSBkaXN0Y2xlYW4i
-Cj4gICB0aGVyZSBmaXJzdAoKQXJnLCBJIGhhZG4ndCB0aG91Z2h0IGFib3V0IHRoaXMuLi4KCj4g
-VG8gZm9sbG93IHRoZSBsb2dpYyBJIG1vdmUgYWxsIHRoZSAqX0NNRFNfUFRGIGFzIFBSRV8qX0hP
-T0suCj4gSSBoYXZlIHRlc3RlZCBpdCBhbmQgaXQgc2VlbXMgZnVuY3Rpb25pbmcuCgpCdXQgSSdt
-IGFmcmFpZCBpdCBpcyBnb2luZyB0byBmYWlsIGlmIHlvdSB0cnkgdG8gcmVjb25maWd1cmUgdGhl
-IHRoaW5nLApsaWtlOgoKICAgICQgbWFrZSBncnViMi1yZWNvbmZpZ3VyZQoKU28sIGluIHRoZSBl
-bmQsIHlvdXIgb3JpZ2luYWwgcHJvcG9zYWwsIHRvIGluc3RhbGwgZWFjaCBhbmQgZXZlcnkgdHVw
-bGVzCmludG8gdGFyZ2V0LywgaXMgcHJvYmFibHkgdGhlIGJlc3Qgb3B0aW9uIHdlIGhhdmUsIGFu
-ZCBpdCBjYW4gYmUgYXMKc2ltcGxlIGFzIHNvbWV0aGluZyBsaWtlOgoKICAgIGRpZmYgLS1naXQg
-YS9ib290L2dydWIyL2dydWIyLm1rIGIvYm9vdC9ncnViMi9ncnViMi5tawogICAgaW5kZXggZTAx
-ZWJiMmVkYi4uYTE4Njk2YjZjYyAxMDA2NDQKICAgIC0tLSBhL2Jvb3QvZ3J1YjIvZ3J1YjIubWsK
-ICAgICsrKyBiL2Jvb3QvZ3J1YjIvZ3J1YjIubWsKICAgIEBAIC0xOTUsNSArMTk1LDEzIEBAIGRl
-ZmluZSBHUlVCMl9JTlNUQUxMX0lNQUdFU19DTURTCiAgICAgICAgKQogICAgIGVuZGVmCiAgICAg
-CiAgICAraWZlcSAoJChCUjJfVEFSR0VUX0dSVUIyX0lOU1RBTExfVE9PTFMpLHkpCiAgICArZGVm
-aW5lIEdSVUIyX0lOU1RBTExfVEFSR0VUX0NNRFMKICAgICsJJChmb3JlYWNoIHR1cGxlLCAkKEdS
-VUIyX1RVUExFUy15KSwgXAogICAgKwkJJChUQVJHRVRfTUFLRV9FTlYpICQoTUFLRSkgLUMgJChA
-RCkvYnVpbGQtJCh0dXBsZSkgREVTVERJUj0kKFRBUkdFVF9ESVIpIGluc3RhbGwKICAgICsJKQog
-ICAgK2VuZGVmCiAgICArZW5kaWYKICAgICsKICAgICAkKGV2YWwgJChnZW5lcmljLXBhY2thZ2Up
-KQogICAgICQoZXZhbCAkKGhvc3QtYXV0b3Rvb2xzLXBhY2thZ2UpKQoKWWVzLCB0aGlzIHdpbGwg
-aW5kZWVkIGluc3RhbGwgdGhlIHNhbWUgdG9vbHMgbW9yZSB0aGFuIG9uY2UsIGJ1dCB0aGlzIGlz
-Cm5vdCBhIHByb2JsZW06IGl0IGlzIF9ub3RfIGEgY2FzZSBvZiBhIHBhY2thZ2Ugb3ZlcndyaXRp
-bmcgZmlsZXMgZnJvbQphbm90aGVyIHBhY2thZ2UsIGJ1dCBvdmVyd3JpdGluZyBpdHMgb3duIGZp
-bGVzLCBzbyB3ZSBkb24ndCBjYXJlLgoKVGVzdC1idWlsdCB3aXRoOgoKICAgIEJSMl94ODZfcGVu
-dGl1bTQ9eQogICAgQlIyX1RPT0xDSEFJTl9FWFRFUk5BTD15CiAgICBCUjJfVEFSR0VUX0dSVUIy
-PXkKICAgIEJSMl9UQVJHRVRfR1JVQjJfSTM4Nl9QQz15CiAgICBCUjJfVEFSR0VUX0dSVUIyX0kz
-ODZfRUZJPXkKICAgIEJSMl9UQVJHRVRfR1JVQjJfSU5TVEFMTF9UT09MUz15CgpTaWRlIG5vdGUs
-IHVucmVsYXRlZCB0byB0aGlzIGlzc3VlOiB3ZSBoYXZlIGEgcGFyYWxsZWwgYnVpbGQgaXNzdWUg
-d2l0aApncnViMjoKCiAgICAyMDIxLTEwLTE0IDIxOjQ1OjUyIGNkIC4gJiYgL2Jpbi9zaCAuL2Nv
-bmZpZy5zdGF0dXMgY29uZmlnLXV0aWwuaAogICAgMjAyMS0xMC0xNCAyMTo0NTo1MiBjb25maWcu
-c3RhdHVzOiBjcmVhdGluZyBjb25maWctdXRpbC5oCiAgICAyMDIxLTEwLTE0IDIxOjQ1OjUyIGJp
-c29uIC1kIC1wIGdydWJfc2NyaXB0X3l5IC1iIGdydWJfc2NyaXB0IC4uL2dydWItY29yZS9zY3Jp
-cHQvcGFyc2VyLnkKICAgIDIwMjEtMTAtMTQgMjE6NDU6NTIgLi4vZ3J1Yi1jb3JlL3NjcmlwdC9w
-YXJzZXIueTo5Mi4xLTEyOiB3YXJuaW5nOiBkZXByZWNhdGVkIGRpcmVjdGl2ZTog4oCYJXB1cmUt
-cGFyc2Vy4oCZLCB1c2Ug4oCYJWRlZmluZSBhcGkucHVyZeKAmSBbLVdkZXByZWNhdGVkXQogICAg
-MjAyMS0xMC0xNCAyMTo0NTo1MiAgICA5MiB8ICVwdXJlLXBhcnNlcgogICAgMjAyMS0xMC0xNCAy
-MTo0NTo1MiAgICAgICB8IF5+fn5+fn5+fn5+fgogICAgMjAyMS0xMC0xNCAyMTo0NTo1MiAgICAg
-ICB8ICVkZWZpbmUgYXBpLnB1cmUKICAgIDIwMjEtMTAtMTQgMjE6NDU6NTIgLi4vZ3J1Yi1jb3Jl
-L3NjcmlwdC9wYXJzZXIueTogd2FybmluZzogZml4LWl0cyBjYW4gYmUgYXBwbGllZC4gIFJlcnVu
-IHdpdGggb3B0aW9uICctLXVwZGF0ZScuIFstV290aGVyXQogICAgMjAyMS0xMC0xNCAyMTo0NTo1
-MiAvaG9tZS95bW9yaW4vZGV2L2J1aWxkcm9vdC9PL2hvc3QvYmluL2k2ODYtbGludXgtZ2NjIC1F
-IC1ESEFWRV9DT05GSUdfSCAtSS4gLUkuLiAgLVdhbGwgLVcgLURHUlVCX1VUSUw9MSAtRF9GSUxF
-X09GRlNFVF9CSVRTPTY0IC1JLi9pbmNsdWRlIC1ER1JVQl9GSUxFPSJ1dGlsL2dydWItZnN0ZXN0
-LmMiIC1JLiAtSS4uIC1JLiAtSS4uIC1JLi4vaW5jbHVkZSAtSS4vaW5jbHVkZSAtSS4uL2dydWIt
-Y29yZS9saWIvbGliZ2NyeXB0LWdydWIvc3JjLyAtSS4vZ3J1Yi1jb3JlL2xpYi9nbnVsaWIgLUku
-Li9ncnViLWNvcmUvbGliL2dudWxpYiAgLURfTEFSR0VGSUxFX1NPVVJDRSAtRF9MQVJHRUZJTEU2
-NF9TT1VSQ0UgLURfRklMRV9PRkZTRVRfQklUUz02NCAtT3MgLWZuby1zdGFjay1wcm90ZWN0b3Ig
-LURfRklMRV9PRkZTRVRfQklUUz02NCAgIC1EJ0dSVUJfTU9EX0lOSVQoeCk9QE1BUktFUkB4QCcg
-Li4vdXRpbC9ncnViLWZzdGVzdC5jIC4uL2dydWItY29yZS9rZXJuL2VtdS9ob3N0ZnMuYyAuLi8g
-Z3J1Yi1jb3JlL2Rpc2svaG9zdC5jIC4uL2dydWItY29yZS9vc2RlcC9pbml0LmMgPiBncnViX2Zz
-dGVzdC5wcCB8fCAocm0gLWYgZ3J1Yl9mc3Rlc3QucHA7IGV4aXQgMSkKICAgIDIwMjEtMTAtMTQg
-MjE6NDU6NTIgLi4vZ3J1Yi1jb3JlL2tlcm4vZW11L2hvc3Rmcy5jOjIwOjEwOiBmYXRhbCBlcnJv
-cjogY29uZmlnLXV0aWwuaDogTm8gc3VjaCBmaWxlIG9yIGRpcmVjdG9yeQogICAgMjAyMS0xMC0x
-NCAyMTo0NTo1MiAgICAyMCB8ICNpbmNsdWRlIDxjb25maWctdXRpbC5oPgogICAgMjAyMS0xMC0x
-NCAyMTo0NTo1MiAgICAgICB8ICAgICAgICAgIF5+fn5+fn5+fn5+fn5+fgogICAgMjAyMS0xMC0x
-NCAyMTo0NTo1MiBjb21waWxhdGlvbiB0ZXJtaW5hdGVkLgogICAgMjAyMS0xMC0xNCAyMTo0NTo1
-MiBtYWtlWzJdOiAqKiogW01ha2VmaWxlOjEzMTA3OiBncnViX2ZzdGVzdC5wcF0gRXJyb3IgMQog
-ICAgMjAyMS0xMC0xNCAyMTo0NTo1MiBtYWtlWzJdOiAqKiogV2FpdGluZyBmb3IgdW5maW5pc2hl
-ZCBqb2JzLi4uLgoKQW5kIHJlLXN0YXJ0aW5nIHRoZSBidWlsZCBzdWNjZWVkcy4KCkJ1dCBqdXN0
-IGxvb2tpbmcgYXQgaG93IGNvbmZpZy11dGlsLmggaXMgYWN0dWFsbHkgY3JlYXRlZCAoaW4gTWFr
-ZWZpbGUuaW4pCm1ha2VzIG1lIGNyeToKCiAgIDMzODkgY29uZmlnLXV0aWwuaDogc3RhbXAtaDEK
-ICAgMzM5MCAgICAgQHRlc3QgLWYgJEAgfHwgcm0gLWYgc3RhbXAtaDEKICAgMzM5MSAgICAgQHRl
-c3QgLWYgJEAgfHwgJChNQUtFKSAkKEFNX01BS0VGTEFHUykgc3RhbXAtaDEKICAgMzM5MgogICAz
-MzkzIHN0YW1wLWgxOiAkKHNyY2RpcikvY29uZmlnLXV0aWwuaC5pbiAkKHRvcF9idWlsZGRpcikv
-Y29uZmlnLnN0YXR1cwogICAzMzk0ICAgICBAcm0gLWYgc3RhbXAtaDEKICAgMzM5NSAgICAgY2Qg
-JCh0b3BfYnVpbGRkaXIpICYmICQoU0hFTEwpIC4vY29uZmlnLnN0YXR1cyBjb25maWctdXRpbC5o
-CgpXaGFhYT8KCkJ1dCBmb3J0dW5hdGVseSwgaXQgbG9va3MgbGllayBpdCBpcyBmaXhlZCB3aXRo
-IHVwc3RyZWFtIGNvbW1pdAo0MmY0MDU0ZmFmM2MgKE1ha2VmaWxlOiBNYWtlIGxpYmdydWIucHAg
-ZGVwZW5kIG9uIGNvbmZpZy11dGlsLmgpLgoKQ291bGQgeW91IGxvb2sgaW50byBib3RoIHRoZSB0
-b29scyBhbmQgdGhlIGJhY2twb3J0IG9mIHRoZSBjb21taXQ/CgpSZWdhcmRzLApZYW5uIEUuIE1P
-UklOLgoKLS0gCi4tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0t
-LS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLS0uCnwgIFlhbm4gRS4gTU9SSU4gIHwgUmVh
-bC1UaW1lIEVtYmVkZGVkIHwgLyJcIEFTQ0lJIFJJQkJPTiB8IEVyaWNzJyBjb25zcGlyYWN5OiB8
-CnwgKzMzIDY2MiAzNzYgMDU2IHwgU29mdHdhcmUgIERlc2lnbmVyIHwgXCAvIENBTVBBSUdOICAg
-ICB8ICBfX18gICAgICAgICAgICAgICB8CnwgKzMzIDU2MSAwOTkgNDI3IGAtLS0tLS0tLS0tLS0u
-LS0tLS0tLTogIFggIEFHQUlOU1QgICAgICB8ICBcZS8gIFRoZXJlIGlzIG5vICB8CnwgaHR0cDov
-L3ltb3Jpbi5pcy1hLWdlZWsub3JnLyB8IF8vKlxfIHwgLyBcIEhUTUwgTUFJTCAgICB8ICAgdiAg
-IGNvbnNwaXJhY3kuICB8CictLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS1eLS0tLS0tLV4t
-LS0tLS0tLS0tLS0tLS0tLS1eLS0tLS0tLS0tLS0tLS0tLS0tLS0nCl9fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVp
-bGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4v
-bGlzdGluZm8vYnVpbGRyb290Cg==
+- disable doc generation (via sphinx) for host build
+
+Reduces host-qemu build time from (on a system with sphinx installed):
+
+	real    2m5,522s
+	user    9m41,292s
+	sys     1m9,732s
+
+to:
+	real	1m9,183s
+	user	8m40,131s
+	sys	1m9,533s
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/qemu/qemu.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index 520618cd55..69949cfd7b 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -354,6 +354,7 @@ define HOST_QEMU_CONFIGURE_CMDS
+ 		--disable-bzip2 \
+ 		--disable-containers \
+ 		--disable-curl \
++		--disable-docs \
+ 		--disable-libssh \
+ 		--disable-linux-io-uring \
+ 		--disable-sdl \
+-- 
+2.33.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
