@@ -2,51 +2,51 @@ Return-Path: <SRS0=enEc=PC=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2DD46C433FE
-	for <buildroot@archiver.kernel.org>; Thu, 14 Oct 2021 21:10:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 209FEC433EF
+	for <buildroot@archiver.kernel.org>; Thu, 14 Oct 2021 21:10:14 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id E6374610CB
-	for <buildroot@archiver.kernel.org>; Thu, 14 Oct 2021 21:10:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E6374610CB
+	by mail.kernel.org (Postfix) with ESMTPS id DEE046109E
+	for <buildroot@archiver.kernel.org>; Thu, 14 Oct 2021 21:10:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org DEE046109E
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B252940466;
-	Thu, 14 Oct 2021 21:10:00 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6D8324058C;
+	Thu, 14 Oct 2021 21:10:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3DdWsJRC6RwI; Thu, 14 Oct 2021 21:09:59 +0000 (UTC)
+	with ESMTP id 6Q3XFZ7FpYER; Thu, 14 Oct 2021 21:10:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E2ADD400D9;
-	Thu, 14 Oct 2021 21:09:58 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 61BA540571;
+	Thu, 14 Oct 2021 21:10:11 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 431FD1BF576
- for <buildroot@lists.busybox.net>; Thu, 14 Oct 2021 21:08:40 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2398F1BF9D1
+ for <buildroot@lists.busybox.net>; Thu, 14 Oct 2021 21:08:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7F59F40139
- for <buildroot@lists.busybox.net>; Thu, 14 Oct 2021 21:08:38 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 10B57401AF
+ for <buildroot@lists.busybox.net>; Thu, 14 Oct 2021 21:08:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lSA48J8yqL5C for <buildroot@lists.busybox.net>;
+ with ESMTP id LVQmkNBbw-om for <buildroot@lists.busybox.net>;
  Thu, 14 Oct 2021 21:08:36 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id F081C4016F
+ by smtp4.osuosl.org (Postfix) with ESMTP id E3DE840154
  for <buildroot@buildroot.org>; Thu, 14 Oct 2021 21:08:36 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id C95DC94EA3; Thu, 14 Oct 2021 21:05:41 +0000 (UTC)
+ id BC8C994EAD; Thu, 14 Oct 2021 21:05:41 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Thu, 14 Oct 2021 22:43:52 +0200
+Date: Thu, 14 Oct 2021 22:43:49 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e9bd451a627521cb614aba0018408e030a5e06cb
-X-Git-Newrev: 8276645532e82ee860831b1dd25a2541a53c2269
+X-Git-Oldrev: 950445c90d0b169285c10ff6d2de02e737a98c9c
+X-Git-Newrev: e9bd451a627521cb614aba0018408e030a5e06cb
 X-Patchwork-Hint: ignore
-Message-Id: <20211014210541.C95DC94EA3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/jhead: bump to version 3.06.0.1
+Message-Id: <20211014210541.BC8C994EAD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libgphoto2: bump to version 2.5.27
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,46 +64,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8276645532e82ee860831b1dd25a2541a53c2269
+commit: https://git.buildroot.net/buildroot/commit/?id=e9bd451a627521cb614aba0018408e030a5e06cb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Update site to get latest version
-- Update hash of readme.txt (changes not related to license)
-
-https://github.com/Matthias-Wandel/jhead/releases/tag/3.06.0.1
+https://github.com/gphoto/libgphoto2/releases/tag/v2.5.27
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/jhead/jhead.hash | 4 ++--
- package/jhead/jhead.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/libgphoto2/libgphoto2.hash | 5 +----
+ package/libgphoto2/libgphoto2.mk   | 8 +++-----
+ 2 files changed, 4 insertions(+), 9 deletions(-)
 
-diff --git a/package/jhead/jhead.hash b/package/jhead/jhead.hash
-index ffe75381b3..bd9c8560d5 100644
---- a/package/jhead/jhead.hash
-+++ b/package/jhead/jhead.hash
-@@ -1,3 +1,3 @@
- # Locally calculated from download (no sig, hash)
--sha256  ef89bbcf4f6c25ed88088cf242a47a6aedfff4f08cc7dc205bf3e2c0f10a03c9  jhead-3.04.tar.gz
--sha256  46c870a208305489eea862ec8b05b030ba1f06d99195f660dc0ba541cc38d82b  readme.txt
-+sha256  5c5258c3d7a840bf831e22174e4a24cb1de3baf442f7cb73d5ab31b4ae0b0058  jhead-3.06.0.1.tar.gz
-+sha256  8b709512c737fc0c1e1024800b9a44c54d14ab02132c636a66c3ac66955c3e95  readme.txt
-diff --git a/package/jhead/jhead.mk b/package/jhead/jhead.mk
-index 49cb03da61..a206e2fe34 100644
---- a/package/jhead/jhead.mk
-+++ b/package/jhead/jhead.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/libgphoto2/libgphoto2.hash b/package/libgphoto2/libgphoto2.hash
+index e405735c8b..af52b47dc8 100644
+--- a/package/libgphoto2/libgphoto2.hash
++++ b/package/libgphoto2/libgphoto2.hash
+@@ -1,6 +1,3 @@
+-# https://sourceforge.net/projects/gphoto/files/libgphoto/2.5.26/
+-sha1  38373ef7f76e90492ffca309094487fb1474f3fe  libgphoto2-2.5.26.tar.bz2
+-
+ # Locally calculated hash
+-sha256  7740fea3cbb78489071cdfec06c07fab528e69e27ac82734eae6a73eaeeabcd4  libgphoto2-2.5.26.tar.bz2
++sha256  a7253bd18c6ef65352150ac36a668f883a5ad2634eb6455b3ca9aa6ac98d0073  libgphoto2-2.5.27.tar.xz
+ sha256  ebc385a0b1d477be5177ed6d9129557aa59a3ad0f26ebe7dd97ee942a0fb68ee  COPYING
+diff --git a/package/libgphoto2/libgphoto2.mk b/package/libgphoto2/libgphoto2.mk
+index 1d42ba862f..c1d5352c00 100644
+--- a/package/libgphoto2/libgphoto2.mk
++++ b/package/libgphoto2/libgphoto2.mk
+@@ -4,11 +4,9 @@
  #
  ################################################################################
  
--JHEAD_VERSION = 3.04
--JHEAD_SITE = http://www.sentex.net/~mwandel/jhead
-+JHEAD_VERSION = 3.06.0.1
-+JHEAD_SITE = $(call github,Matthias-Wandel,jhead,$(JHEAD_VERSION))
- JHEAD_LICENSE = Public Domain
- JHEAD_LICENSE_FILES = readme.txt
- JHEAD_CPE_ID_VENDOR = jhead_project
+-LIBGPHOTO2_VERSION = 2.5.26
+-LIBGPHOTO2_SOURCE = libgphoto2-$(LIBGPHOTO2_VERSION).tar.bz2
+-# Project is maintained on github but github tarball doesn't have
+-# configure, so use tarballs from SourceForge
+-LIBGPHOTO2_SITE = https://downloads.sourceforge.net/project/gphoto/libgphoto/$(LIBGPHOTO2_VERSION)
++LIBGPHOTO2_VERSION = 2.5.27
++LIBGPHOTO2_SOURCE = libgphoto2-$(LIBGPHOTO2_VERSION).tar.xz
++LIBGPHOTO2_SITE = https://github.com/gphoto/libgphoto2/releases/download/v$(LIBGPHOTO2_VERSION)
+ LIBGPHOTO2_LICENSE = LGPL-2.1+, GPL-2.0 (adc65), GPL-2.0+ (some camlibs), \
+ 	LGPL-2.0 (sipix), LGPL-3.0+ (pentax), BSD-3-Clause (ax203/tinyjpeg)
+ # There is a single license file for the LGPL-2.1, no license files
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
