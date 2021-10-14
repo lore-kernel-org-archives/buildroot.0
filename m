@@ -2,90 +2,94 @@ Return-Path: <SRS0=enEc=PC=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2468BC433F5
-	for <buildroot@archiver.kernel.org>; Thu, 14 Oct 2021 20:49:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 977EDC433EF
+	for <buildroot@archiver.kernel.org>; Thu, 14 Oct 2021 20:59:17 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D228F60F9E
-	for <buildroot@archiver.kernel.org>; Thu, 14 Oct 2021 20:49:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D228F60F9E
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id 0D01260F9E
+	for <buildroot@archiver.kernel.org>; Thu, 14 Oct 2021 20:59:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0D01260F9E
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 894714029E;
-	Thu, 14 Oct 2021 20:49:09 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id AD8C74012A;
+	Thu, 14 Oct 2021 20:59:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Hwrrlwxaaq6B; Thu, 14 Oct 2021 20:49:08 +0000 (UTC)
+	with ESMTP id dMC7-7L35O_2; Thu, 14 Oct 2021 20:59:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 61D5440587;
-	Thu, 14 Oct 2021 20:49:07 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6F94E4014E;
+	Thu, 14 Oct 2021 20:59:14 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 23BAB1BF343
- for <buildroot@lists.busybox.net>; Thu, 14 Oct 2021 20:49:06 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9321F1BF292
+ for <buildroot@lists.busybox.net>; Thu, 14 Oct 2021 20:59:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1306583A98
- for <buildroot@lists.busybox.net>; Thu, 14 Oct 2021 20:49:06 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 84EC781973
+ for <buildroot@lists.busybox.net>; Thu, 14 Oct 2021 20:59:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
+ dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bSB0oQ4e5l8Y for <buildroot@lists.busybox.net>;
- Thu, 14 Oct 2021 20:49:05 +0000 (UTC)
+ with ESMTP id p6S4EFbzdnMA for <buildroot@lists.busybox.net>;
+ Thu, 14 Oct 2021 20:59:11 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-oo1-xc2d.google.com (mail-oo1-xc2d.google.com
- [IPv6:2607:f8b0:4864:20::c2d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0F2B283A97
- for <buildroot@buildroot.org>; Thu, 14 Oct 2021 20:49:04 +0000 (UTC)
-Received: by mail-oo1-xc2d.google.com with SMTP id
- w10-20020a4a274a000000b002b6e972caa1so2287099oow.11
- for <buildroot@buildroot.org>; Thu, 14 Oct 2021 13:49:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc:content-transfer-encoding;
- bh=VT1InFPzDWrdx3qTuVZANRTu9WdDJyrNac9fDL3CWTU=;
- b=Ipo4d9NHa/0qmsgesxXX0vIL+4QdnhSUTE44epqG9or5Kp/GAjJiMdG3Tr7cR7yPlt
- Tnf+TNY/1tt28si/ka4j4dDfb4K4ynQArUnStuAxpZSbHp/LSVaVrnPR7qIli29oQzfL
- C4oLvr3o0kQgU8pllGhlKmM4HqRh2zmB7kzsPhApwbAJRWEjlBADrJNrioVHhEMfgjhE
- z+3ff3IJiu/fPmOWjn6ZyvxmcXpgb0+aWEl9QA/o81OYwvigr82r7mF29H2snmSycLrB
- iI00gAhAL+g7/S/1Aw01ZlPxVPBlmmSwFzwa7ARIz3lfPk500JqRKLNFbFh3xKFoT9S+
- P/8g==
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com
+ [IPv6:2a00:1450:4864:20::531])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4600B818C4
+ for <buildroot@buildroot.org>; Thu, 14 Oct 2021 20:59:11 +0000 (UTC)
+Received: by mail-ed1-x531.google.com with SMTP id w14so29192464edv.11
+ for <buildroot@buildroot.org>; Thu, 14 Oct 2021 13:59:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=MWm8036935ORJSUuGGgGRAncUlRL/kbOLYh2p0UCZQw=;
+ b=Dsf+Gl1Ce7HT1aMJ5H/lbRontOKJlbrdhUd62erESrwCoFWV8OI39l9bxsWdFhKeU7
+ EQ3UGMsCYrijud4S0eaXtnVR7SSFHRUhTrNmiEbU8DdnsV9J6kgFZB8g51lKil6rBSvJ
+ fUTCGhD7o4qo4/5Wg8/AFLALProvOupXfJHKR7GgV5isvjgeE7ndOP1+C4r3jeo1fzGq
+ yUhubY4K/smAK7zrB0WblBhFcci7KAjGdxh9rKFLSrqTWbH1QWsomR1ydhZWyY75Qd4m
+ gw/PNG/Vw6Z/CZ9GDfNPL6o9vJO6kvZDXKiWWFRbH5WSE1TWsgHLG1mZtNeRpc5lf5Ao
+ qBsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc:content-transfer-encoding;
- bh=VT1InFPzDWrdx3qTuVZANRTu9WdDJyrNac9fDL3CWTU=;
- b=vAjYXGKSMVA0rbVXr9dS+EclXaR3wGE968iVIeFBepnZzak9FRHCZMOrwJP12N7uCq
- /J3fZnsjwdFrK4OZRtZIclffZ1zJQ7OjtijwflE0MT6z1WSRVTQO0bp1VWb4cjLHZWk9
- jev8wZWEcgU0jJC8jZ60rGA3fyHQCvoKTnCn3j1zA9SRQEfsfeCxHMWhYecjYG/3OUKE
- 1EimqD088i1lPqEGfjwRK+WfvWIDgtc7UU+VwRwHWFFcP0zrgDFdKfPslv6eXSIeWUh8
- 8280uT3rB8Fxb7lDD4+5U/033tskwqGBpB/556eovmu+hj0mNOcDnsZ+XAb1xWr6JtG8
- aFyw==
-X-Gm-Message-State: AOAM533BTFP0rZaCl35qk+c9ckqM755bPWRFxnmigjh4AdjDQlsCn1KD
- fwKOrazt60bE14QXJxM58s3Og6uyEfxFT/pAVfY=
-X-Google-Smtp-Source: ABdhPJxQkKytLTNt/e9H0RDr+dLJSsQhB9A/koAOLPBnuu9ftwTQQ48SPz6Ks66TngCDj+7m9V1wGA9QR2KEgMb64Lk=
-X-Received: by 2002:a4a:de94:: with SMTP id v20mr6056912oou.77.1634244543962; 
- Thu, 14 Oct 2021 13:49:03 -0700 (PDT)
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=MWm8036935ORJSUuGGgGRAncUlRL/kbOLYh2p0UCZQw=;
+ b=x7IwarxolRYbxN5Txx1ZAxZlID3YQQVt+MW5h7ETQZHcdouEQCA1lDfd7KjH9yKdmO
+ VhH6RB1xsSRq2iTA75t7LDoaw0wLsH7mYWOquv2EsIwVHjMpk9Cd6PkyJmc1h+lJosPx
+ Wuozo2LjD45qJOkAqjLolp7tvhKDWW9N2jCvlwQXrHz2rJodVioLY3kBIGRjoc1SSm3S
+ fitlcLGOfbmzGJ4zlJZOmKuYJINnC+dZeei0gcgwGxhAUkWgp4dUpb3ZojCOsTf0TgYw
+ Fmj1s66tAPAx2F1ZIIoA+Ee6kqEDYFnPdJcvMg8rf9cHHF6fWYb6/TIXA6fekTm61Sn+
+ WdtA==
+X-Gm-Message-State: AOAM532L+QC54adcaepqrNeTFK7YLQ8Txlsea2W75B+Dli5NDMHC5J3K
+ LJ5z/i1ZiWk4K/t1oUHjjeJoGA==
+X-Google-Smtp-Source: ABdhPJzyNKnCpmQUSnGx/hk1m6JW4zjLxH0OVD6sf8B7zCBXpdAlnW9FB7hfyiPZbX0Qninivxrbwg==
+X-Received: by 2002:a17:907:c0c:: with SMTP id
+ ga12mr1588246ejc.111.1634245149323; 
+ Thu, 14 Oct 2021 13:59:09 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id b2sm3073546edv.73.2021.10.14.13.59.08
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Thu, 14 Oct 2021 13:59:08 -0700 (PDT)
+Message-ID: <c43f6e23-0733-5424-83c9-44a37a9efc15@mind.be>
+Date: Thu, 14 Oct 2021 22:59:08 +0200
 MIME-Version: 1.0
-References: <20210923155726.87851-1-kory.maincent@bootlin.com>
- <20210923155726.87851-3-kory.maincent@bootlin.com>
- <20211006181104.GD2081069@scaer>
- <20211007102318.556f7fc2@kmaincent-XPS-13-7390>
- <20211007095326.GA2814782@scaer>
- <20211007144351.629d2de0@kmaincent-XPS-13-7390>
- <20211007162931.GH2081069@scaer>
- <20211011122736.3b0df127@kmaincent-XPS-13-7390>
- <20211014200207.GC368016@scaer>
-In-Reply-To: <20211014200207.GC368016@scaer>
-From: Adam Duskett <aduskett@gmail.com>
-Date: Thu, 14 Oct 2021 13:48:52 -0700
-Message-ID: <CAFSsvmrU1Dq26d9OR3yykX63GESouh37k7EQiCv7WoXVhUAYgg@mail.gmail.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Subject: Re: [Buildroot] [PATCH v3 2/7] boot/grub2: add support to build
- multiple Grub2 configurations in the same build
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.1.0
+Content-Language: en-GB
+To: Peter Seiderer <ps.report@gmx.net>, buildroot@buildroot.org
+References: <20211007211003.5168-1-ps.report@gmx.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20211007211003.5168-1-ps.report@gmx.net>
+Subject: Re: [Buildroot] [PATCH v1] package/linux-firmware: bump version to
+ 20210919
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,116 +101,137 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?UTF-8?Q?K=C3=B6ry_Maincent?= <kory.maincent@bootlin.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- buildroot <buildroot@buildroot.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG87CgpPbiBUaHUsIE9jdCAxNCwgMjAyMSBhdCAxOjAyIFBNIFlhbm4gRS4gTU9SSU4gPHlh
-bm4ubW9yaW4uMTk5OEBmcmVlLmZyPiB3cm90ZToKPgo+IEvDtnJ5LCBBbGwsCj4KPiBTb3JyeSBm
-b3IgbXkgbGF0ZSByZXBseSwgSSd2ZSBiZWVuIHByZXR0eSBidXN5IGhlcmUuLi4KPgo+IE9uIDIw
-MjEtMTAtMTEgMTI6MjcgKzAyMDAsIEvDtnJ5IE1haW5jZW50IHNwYWtlIHRodXNseToKPiA+IE9u
-IFRodSwgNyBPY3QgMjAyMSAxODoyOTozMSArMDIwMAo+ID4gIllhbm4gRS4gTU9SSU4iIDx5YW5u
-Lm1vcmluLjE5OThAZnJlZS5mcj4gd3JvdGU6Cj4gPiA+IE9uIDIwMjEtMTAtMDcgMTQ6NDMgKzAy
-MDAsIEvDtnJ5IE1haW5jZW50IHNwYWtlIHRodXNseToKPiA+ID4gPiBPbiBUaHUsIDcgT2N0IDIw
-MjEgMTE6NTM6MjYgKzAyMDAKPiA+ID4gPiAiWWFubiBFLiBNT1JJTiIgPHlhbm4ubW9yaW4uMTk5
-OEBmcmVlLmZyPiB3cm90ZToKPiA+ID4gWy0tU05JUC0tXQo+ID4KPiA+ID4gSW4gdGhpcyBjYXNl
-LCB0aGlzIHNob3VsZCBub3QgYmUgdG9vIGNvbXBsZXggZWl0aGVyOyB3ZSBqdXN0IG5lZWQgYQo+
-ID4gPiBwb3N0LWltYWdlIGhvb2sgdGhhdCBjb3BpZXMgYWxsIG1vZHVsZXMgaW50byBUQVJHRVRf
-RElSLCBsaWtlOgo+ID4KPiA+IElzIHNvbWV0aGluZyBsaWtlIHRoZSBmb2xsb3dpbmcgY29kZSBz
-ZWVtcyBva2F5IGZvciB5b3UuCj4gPiBJIHVzZSB0ZW1wb3JhcnkgaW5zdGFsbC0kKHR1cGxlKSBm
-b2xkZXIgZm9yIHRoZSBkaWZmZXJlbnQgcGxhdGZvcm1zLgo+ID4gV2UgbmVlZCB0byBkbyB0aGUg
-Q09ORklHVVJFX0NNRF9QVEYgYXMgYSBQUkVfQ09ORklHVVJFX0hPT0sgYmVjYXVzZSB0aGUKPiA+
-IENPTkZJR1VSRV9DTURTIGZyb20gYXV0b3Rvb2xzIGlzIGNvbmZpZ3VyaW5nIGluc2lkZSB0aGUg
-R1JVQjJfU1JDRElSIGZvbGRlci4KPiA+IFRoZW4gaWYgdGhlIC4vY29uZmlndXJlIGhhcyBiZWVu
-IHJ1biBpbiB0aGUgR1JVQjJfU1JDRElSIEkgY2FuIG5vdCBydW4gb3RoZXIKPiA+IGNvbmZpZ3Vy
-ZSBjb21tYW5kIHdpdGhvdXQgcmVjZWl2ZSB0aGlzIGVycm9yIG1lc3NhZ2U6Cj4gPiAgIGNvbmZp
-Z3VyZTogZXJyb3I6IHNvdXJjZSBkaXJlY3RvcnkgYWxyZWFkeSBjb25maWd1cmVkOyBydW4gIm1h
-a2UgZGlzdGNsZWFuIgo+ID4gICB0aGVyZSBmaXJzdAo+Cj4gQXJnLCBJIGhhZG4ndCB0aG91Z2h0
-IGFib3V0IHRoaXMuLi4KPgo+ID4gVG8gZm9sbG93IHRoZSBsb2dpYyBJIG1vdmUgYWxsIHRoZSAq
-X0NNRFNfUFRGIGFzIFBSRV8qX0hPT0suCj4gPiBJIGhhdmUgdGVzdGVkIGl0IGFuZCBpdCBzZWVt
-cyBmdW5jdGlvbmluZy4KPgo+IEJ1dCBJJ20gYWZyYWlkIGl0IGlzIGdvaW5nIHRvIGZhaWwgaWYg
-eW91IHRyeSB0byByZWNvbmZpZ3VyZSB0aGUgdGhpbmcsCj4gbGlrZToKPgo+ICAgICAkIG1ha2Ug
-Z3J1YjItcmVjb25maWd1cmUKPgo+IFNvLCBpbiB0aGUgZW5kLCB5b3VyIG9yaWdpbmFsIHByb3Bv
-c2FsLCB0byBpbnN0YWxsIGVhY2ggYW5kIGV2ZXJ5IHR1cGxlcwo+IGludG8gdGFyZ2V0LywgaXMg
-cHJvYmFibHkgdGhlIGJlc3Qgb3B0aW9uIHdlIGhhdmUsIGFuZCBpdCBjYW4gYmUgYXMKPiBzaW1w
-bGUgYXMgc29tZXRoaW5nIGxpa2U6Cj4KPiAgICAgZGlmZiAtLWdpdCBhL2Jvb3QvZ3J1YjIvZ3J1
-YjIubWsgYi9ib290L2dydWIyL2dydWIyLm1rCj4gICAgIGluZGV4IGUwMWViYjJlZGIuLmExODY5
-NmI2Y2MgMTAwNjQ0Cj4gICAgIC0tLSBhL2Jvb3QvZ3J1YjIvZ3J1YjIubWsKPiAgICAgKysrIGIv
-Ym9vdC9ncnViMi9ncnViMi5tawo+ICAgICBAQCAtMTk1LDUgKzE5NSwxMyBAQCBkZWZpbmUgR1JV
-QjJfSU5TVEFMTF9JTUFHRVNfQ01EUwo+ICAgICAgICAgKQo+ICAgICAgZW5kZWYKPgo+ICAgICAr
-aWZlcSAoJChCUjJfVEFSR0VUX0dSVUIyX0lOU1RBTExfVE9PTFMpLHkpCj4gICAgICtkZWZpbmUg
-R1JVQjJfSU5TVEFMTF9UQVJHRVRfQ01EUwo+ICAgICArICAgJChmb3JlYWNoIHR1cGxlLCAkKEdS
-VUIyX1RVUExFUy15KSwgXAo+ICAgICArICAgICAgICAgICAkKFRBUkdFVF9NQUtFX0VOVikgJChN
-QUtFKSAtQyAkKEBEKS9idWlsZC0kKHR1cGxlKSBERVNURElSPSQoVEFSR0VUX0RJUikgaW5zdGFs
-bAo+ICAgICArICAgKQo+ICAgICArZW5kZWYKPiAgICAgK2VuZGlmCj4gICAgICsKPiAgICAgICQo
-ZXZhbCAkKGdlbmVyaWMtcGFja2FnZSkpCj4gICAgICAkKGV2YWwgJChob3N0LWF1dG90b29scy1w
-YWNrYWdlKSkKPgpUaGlzIGluZGVlZCB3b3JrcyBwcm9wZXJseSEKVGVzdGVkLWJ5OiBBZGFtIER1
-c2tldHQgPGFkdXNrZXR0QGdtYWlsLmNvbT4KPiBZZXMsIHRoaXMgd2lsbCBpbmRlZWQgaW5zdGFs
-bCB0aGUgc2FtZSB0b29scyBtb3JlIHRoYW4gb25jZSwgYnV0IHRoaXMgaXMKPiBub3QgYSBwcm9i
-bGVtOiBpdCBpcyBfbm90XyBhIGNhc2Ugb2YgYSBwYWNrYWdlIG92ZXJ3cml0aW5nIGZpbGVzIGZy
-b20KPiBhbm90aGVyIHBhY2thZ2UsIGJ1dCBvdmVyd3JpdGluZyBpdHMgb3duIGZpbGVzLCBzbyB3
-ZSBkb24ndCBjYXJlLgo+Cj4gVGVzdC1idWlsdCB3aXRoOgo+Cj4gICAgIEJSMl94ODZfcGVudGl1
-bTQ9eQo+ICAgICBCUjJfVE9PTENIQUlOX0VYVEVSTkFMPXkKPiAgICAgQlIyX1RBUkdFVF9HUlVC
-Mj15Cj4gICAgIEJSMl9UQVJHRVRfR1JVQjJfSTM4Nl9QQz15Cj4gICAgIEJSMl9UQVJHRVRfR1JV
-QjJfSTM4Nl9FRkk9eQo+ICAgICBCUjJfVEFSR0VUX0dSVUIyX0lOU1RBTExfVE9PTFM9eQo+Cj4g
-U2lkZSBub3RlLCB1bnJlbGF0ZWQgdG8gdGhpcyBpc3N1ZTogd2UgaGF2ZSBhIHBhcmFsbGVsIGJ1
-aWxkIGlzc3VlIHdpdGgKPiBncnViMjoKPgo+ICAgICAyMDIxLTEwLTE0IDIxOjQ1OjUyIGNkIC4g
-JiYgL2Jpbi9zaCAuL2NvbmZpZy5zdGF0dXMgY29uZmlnLXV0aWwuaAo+ICAgICAyMDIxLTEwLTE0
-IDIxOjQ1OjUyIGNvbmZpZy5zdGF0dXM6IGNyZWF0aW5nIGNvbmZpZy11dGlsLmgKPiAgICAgMjAy
-MS0xMC0xNCAyMTo0NTo1MiBiaXNvbiAtZCAtcCBncnViX3NjcmlwdF95eSAtYiBncnViX3Njcmlw
-dCAuLi9ncnViLWNvcmUvc2NyaXB0L3BhcnNlci55Cj4gICAgIDIwMjEtMTAtMTQgMjE6NDU6NTIg
-Li4vZ3J1Yi1jb3JlL3NjcmlwdC9wYXJzZXIueTo5Mi4xLTEyOiB3YXJuaW5nOiBkZXByZWNhdGVk
-IGRpcmVjdGl2ZTog4oCYJXB1cmUtcGFyc2Vy4oCZLCB1c2Ug4oCYJWRlZmluZSBhcGkucHVyZeKA
-mSBbLVdkZXByZWNhdGVkXQo+ICAgICAyMDIxLTEwLTE0IDIxOjQ1OjUyICAgIDkyIHwgJXB1cmUt
-cGFyc2VyCj4gICAgIDIwMjEtMTAtMTQgMjE6NDU6NTIgICAgICAgfCBefn5+fn5+fn5+fn4KPiAg
-ICAgMjAyMS0xMC0xNCAyMTo0NTo1MiAgICAgICB8ICVkZWZpbmUgYXBpLnB1cmUKPiAgICAgMjAy
-MS0xMC0xNCAyMTo0NTo1MiAuLi9ncnViLWNvcmUvc2NyaXB0L3BhcnNlci55OiB3YXJuaW5nOiBm
-aXgtaXRzIGNhbiBiZSBhcHBsaWVkLiAgUmVydW4gd2l0aCBvcHRpb24gJy0tdXBkYXRlJy4gWy1X
-b3RoZXJdCj4gICAgIDIwMjEtMTAtMTQgMjE6NDU6NTIgL2hvbWUveW1vcmluL2Rldi9idWlsZHJv
-b3QvTy9ob3N0L2Jpbi9pNjg2LWxpbnV4LWdjYyAtRSAtREhBVkVfQ09ORklHX0ggLUkuIC1JLi4g
-IC1XYWxsIC1XIC1ER1JVQl9VVElMPTEgLURfRklMRV9PRkZTRVRfQklUUz02NCAtSS4vaW5jbHVk
-ZSAtREdSVUJfRklMRT0idXRpbC9ncnViLWZzdGVzdC5jIiAtSS4gLUkuLiAtSS4gLUkuLiAtSS4u
-L2luY2x1ZGUgLUkuL2luY2x1ZGUgLUkuLi9ncnViLWNvcmUvbGliL2xpYmdjcnlwdC1ncnViL3Ny
-Yy8gLUkuL2dydWItY29yZS9saWIvZ251bGliIC1JLi4vZ3J1Yi1jb3JlL2xpYi9nbnVsaWIgIC1E
-X0xBUkdFRklMRV9TT1VSQ0UgLURfTEFSR0VGSUxFNjRfU09VUkNFIC1EX0ZJTEVfT0ZGU0VUX0JJ
-VFM9NjQgLU9zIC1mbm8tc3RhY2stcHJvdGVjdG9yIC1EX0ZJTEVfT0ZGU0VUX0JJVFM9NjQgICAt
-RCdHUlVCX01PRF9JTklUKHgpPUBNQVJLRVJAeEAnIC4uL3V0aWwvZ3J1Yi1mc3Rlc3QuYyAuLi9n
-cnViLWNvcmUva2Vybi9lbXUvaG9zdGZzLmMgLi4vIGdydWItY29yZS9kaXNrL2hvc3QuYyAuLi9n
-cnViLWNvcmUvb3NkZXAvaW5pdC5jID4gZ3J1Yl9mc3Rlc3QucHAgfHwgKHJtIC1mIGdydWJfZnN0
-ZXN0LnBwOyBleGl0IDEpCj4gICAgIDIwMjEtMTAtMTQgMjE6NDU6NTIgLi4vZ3J1Yi1jb3JlL2tl
-cm4vZW11L2hvc3Rmcy5jOjIwOjEwOiBmYXRhbCBlcnJvcjogY29uZmlnLXV0aWwuaDogTm8gc3Vj
-aCBmaWxlIG9yIGRpcmVjdG9yeQo+ICAgICAyMDIxLTEwLTE0IDIxOjQ1OjUyICAgIDIwIHwgI2lu
-Y2x1ZGUgPGNvbmZpZy11dGlsLmg+Cj4gICAgIDIwMjEtMTAtMTQgMjE6NDU6NTIgICAgICAgfCAg
-ICAgICAgICBefn5+fn5+fn5+fn5+fn4KPiAgICAgMjAyMS0xMC0xNCAyMTo0NTo1MiBjb21waWxh
-dGlvbiB0ZXJtaW5hdGVkLgo+ICAgICAyMDIxLTEwLTE0IDIxOjQ1OjUyIG1ha2VbMl06ICoqKiBb
-TWFrZWZpbGU6MTMxMDc6IGdydWJfZnN0ZXN0LnBwXSBFcnJvciAxCj4gICAgIDIwMjEtMTAtMTQg
-MjE6NDU6NTIgbWFrZVsyXTogKioqIFdhaXRpbmcgZm9yIHVuZmluaXNoZWQgam9icy4uLi4KPgo+
-IEFuZCByZS1zdGFydGluZyB0aGUgYnVpbGQgc3VjY2VlZHMuCj4KPiBCdXQganVzdCBsb29raW5n
-IGF0IGhvdyBjb25maWctdXRpbC5oIGlzIGFjdHVhbGx5IGNyZWF0ZWQgKGluIE1ha2VmaWxlLmlu
-KQo+IG1ha2VzIG1lIGNyeToKPgo+ICAgIDMzODkgY29uZmlnLXV0aWwuaDogc3RhbXAtaDEKPiAg
-ICAzMzkwICAgICBAdGVzdCAtZiAkQCB8fCBybSAtZiBzdGFtcC1oMQo+ICAgIDMzOTEgICAgIEB0
-ZXN0IC1mICRAIHx8ICQoTUFLRSkgJChBTV9NQUtFRkxBR1MpIHN0YW1wLWgxCj4gICAgMzM5Mgo+
-ICAgIDMzOTMgc3RhbXAtaDE6ICQoc3JjZGlyKS9jb25maWctdXRpbC5oLmluICQodG9wX2J1aWxk
-ZGlyKS9jb25maWcuc3RhdHVzCj4gICAgMzM5NCAgICAgQHJtIC1mIHN0YW1wLWgxCj4gICAgMzM5
-NSAgICAgY2QgJCh0b3BfYnVpbGRkaXIpICYmICQoU0hFTEwpIC4vY29uZmlnLnN0YXR1cyBjb25m
-aWctdXRpbC5oCj4KPiBXaGFhYT8KPgo+IEJ1dCBmb3J0dW5hdGVseSwgaXQgbG9va3MgbGllayBp
-dCBpcyBmaXhlZCB3aXRoIHVwc3RyZWFtIGNvbW1pdAo+IDQyZjQwNTRmYWYzYyAoTWFrZWZpbGU6
-IE1ha2UgbGliZ3J1Yi5wcCBkZXBlbmQgb24gY29uZmlnLXV0aWwuaCkuCj4KPiBDb3VsZCB5b3Ug
-bG9vayBpbnRvIGJvdGggdGhlIHRvb2xzIGFuZCB0aGUgYmFja3BvcnQgb2YgdGhlIGNvbW1pdD8K
-Pgo+IFJlZ2FyZHMsCj4gWWFubiBFLiBNT1JJTi4KPgo+IC0tCj4gLi0tLS0tLS0tLS0tLS0tLS0t
-Li0tLS0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0t
-LS0tLS4KPiB8ICBZYW5uIEUuIE1PUklOICB8IFJlYWwtVGltZSBFbWJlZGRlZCB8IC8iXCBBU0NJ
-SSBSSUJCT04gfCBFcmljcycgY29uc3BpcmFjeTogfAo+IHwgKzMzIDY2MiAzNzYgMDU2IHwgU29m
-dHdhcmUgIERlc2lnbmVyIHwgXCAvIENBTVBBSUdOICAgICB8ICBfX18gICAgICAgICAgICAgICB8
-Cj4gfCArMzMgNTYxIDA5OSA0MjcgYC0tLS0tLS0tLS0tLS4tLS0tLS0tOiAgWCAgQUdBSU5TVCAg
-ICAgIHwgIFxlLyAgVGhlcmUgaXMgbm8gIHwKPiB8IGh0dHA6Ly95bW9yaW4uaXMtYS1nZWVrLm9y
-Zy8gfCBfLypcXyB8IC8gXCBIVE1MIE1BSUwgICAgfCAgIHYgICBjb25zcGlyYWN5LiAgfAo+ICct
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS1eLS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0tLS1e
-LS0tLS0tLS0tLS0tLS0tLS0tLS0nCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5v
-cmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290
-Cg==
+
+
+On 07/10/2021 23:10, Peter Seiderer wrote:
+> - update hash of WHENCE file
+> 
+> - update hash of LICENCE.iwlwifi_firmware (copyrigth year update, see [1])
+> 
+> - update RTL_81XX entries (remove rtlwifi/rtl8192eefw.bin see [2]) and
+>    convert to one entry per line format (easier to parse and update)
+> 
+> - update RTL_87XX entries (remove rtlwifi/rtl8723bs_ap_wowlan.bin,
+>    rtlwifi/rtl8723bs_nic.bin and rtlwifi/rtl8723bs_wowlan.bin see [3]) and
+>    convert to one entry per line format (easier to parse and update)
+> 
+> [1] https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/commit/?id=5de082d4d0f2db7722c9e6f5c9cff1fefd8073be
+> [2] https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/commit/?id=b986edd80647b68af068ebaaa1323d2b046c5435
+> [3] https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/commit/?id=0ba5d686a93830c236d6a682560cd6b47b3e30fa
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+
+  Applied to master, thanks.
+
+  Regards,
+  Arnout
+
+> ---
+>   package/linux-firmware/linux-firmware.hash |  6 ++--
+>   package/linux-firmware/linux-firmware.mk   | 40 ++++++++++++++--------
+>   2 files changed, 28 insertions(+), 18 deletions(-)
+> 
+> diff --git a/package/linux-firmware/linux-firmware.hash b/package/linux-firmware/linux-firmware.hash
+> index 41a17b021e..d8edb37628 100644
+> --- a/package/linux-firmware/linux-firmware.hash
+> +++ b/package/linux-firmware/linux-firmware.hash
+> @@ -1,5 +1,5 @@
+>   # From https://mirrors.edge.kernel.org/pub/linux/kernel/firmware/sha256sums.asc
+> -sha256  2aa6ae8b9808408f9811ac38f00c188e53e984a2b3990254f6c9c02c1ab13417  linux-firmware-20210511.tar.xz
+> +sha256  2fb22a5d7d23bf1f5800ab8152b39a00a445fbf4923de5a01b59d3f6253f0a9f  linux-firmware-20210919.tar.xz
+>   
+>   # Hash for license files
+>   sha256  8116433f4004fc0c24d72b3d9e497808b724aa0e5e1cd63fc1bf66b715b1e2e9  LICENCE.Abilis
+> @@ -14,7 +14,7 @@ sha256  a5777f9e80aca0603b0648454de996168b1c530322550ccda94d6d78bcf6c061  LICENC
+>   sha256  60fbc9cccb455e1a3306c97db942d6f24fa93664be61d54c497637e6d0e2ae83  LICENCE.fw_sst_0f28
+>   sha256  5181b0b51efc79d5acb2c9bb92042878fdbad97a92114d4ab5e32e2b5b52fce4  LICENCE.ibt_firmware
+>   sha256  0e0c11073ba3c832097da38e0905da36b8a3526f219407977b13b71c6675be7d  LICENCE.it913x
+> -sha256  e295020afd7597dc1b3bbe50a84a7e432d9cb92bc053c1c5e657b50d2517627b  LICENCE.iwlwifi_firmware
+> +sha256  16d5040c7cf851fc693b7542e20870935b99802533ea1bfd231c377a2305e5c5  LICENCE.iwlwifi_firmware
+>   sha256  0fc67bd715b3395f3f2af464781910e9e69c4ba23da304352229b42dc9e986c3  LICENCE.microchip
+>   sha256  2051d5bf0755a0668f8c3d9a0d1c41d4b8cc411aba70f720fda71ae9e3b4d25c  LICENCE.qat_firmware
+>   sha256  4071a11d878dbc0ac6d9e71203d03b151638f9d7a8bc47a54c3cb964100d5822  LICENCE.qla2xxx
+> @@ -32,6 +32,6 @@ sha256  8542aeabf2761935122d693561e16766ce1bcc2b0d003204f9040b7d6d929f2e  LICENS
+>   sha256  be904cd28cb292b80cdb6cf412ab0d9159d431671e987ad433c1f62e0988a9bc  LICENSE.qcom
+>   sha256  fc6223d4bfe9f2f9e2eddc44b9fe5721d0caf49f01cb08d602906add686d8c6f  LICENSE.radeon
+>   sha256  2bdd2e716f05d9737d3f9a20f9a3a3c0caee0e866100ddb0673f1178e42f92b9  LICENSE.sdma_firmware
+> -sha256  dcc87a24f18d46a73985e68c378ec6d7e7fd4083eb4d4f3130a34fe3f75aff6f  WHENCE
+> +sha256  a06edfd3649df6b0cbac8304d6d53f661963381f1231fd02da259806763d4162  WHENCE
+>   sha256  fa43e1b9a13b341a07adca9dbe73d0f9072d7966fdfe811c01f0dd2872d7309a  qcom/NOTICE.txt
+>   sha256  bef9c828e84f21e7835b4de7daf954a327e1ff777871b58e116039b684c0d604  LICENCE.e100
+> diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+> index f29d9cf65d..ff793c9218 100644
+> --- a/package/linux-firmware/linux-firmware.mk
+> +++ b/package/linux-firmware/linux-firmware.mk
+> @@ -4,7 +4,7 @@
+>   #
+>   ################################################################################
+>   
+> -LINUX_FIRMWARE_VERSION = 20210511
+> +LINUX_FIRMWARE_VERSION = 20210919
+>   LINUX_FIRMWARE_SOURCE = linux-firmware-$(LINUX_FIRMWARE_VERSION).tar.xz
+>   LINUX_FIRMWARE_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/firmware
+>   LINUX_FIRMWARE_INSTALL_IMAGES = YES
+> @@ -107,27 +107,37 @@ endif
+>   # rtl81xx
+>   ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_RTL_81XX),y)
+>   LINUX_FIRMWARE_FILES += \
+> -	rtlwifi/rtl8192cfw.bin rtlwifi/rtl8192cfwU.bin \
+> -	rtlwifi/rtl8192cfwU_B.bin rtlwifi/rtl8192cufw.bin \
+> -	rtlwifi/rtl8192defw.bin rtlwifi/rtl8192sefw.bin \
+> -	rtlwifi/rtl8188efw.bin rtlwifi/rtl8188eufw.bin \
+> +	rtlwifi/rtl8192cfw.bin \
+> +	rtlwifi/rtl8192cfwU.bin \
+> +	rtlwifi/rtl8192cfwU_B.bin \
+> +	rtlwifi/rtl8192cufw.bin \
+> +	rtlwifi/rtl8192defw.bin \
+> +	rtlwifi/rtl8192sefw.bin \
+> +	rtlwifi/rtl8188efw.bin \
+> +	rtlwifi/rtl8188eufw.bin \
+>   	rtlwifi/rtl8192cufw_A.bin \
+> -	rtlwifi/rtl8192cufw_B.bin rtlwifi/rtl8192cufw_TMSC.bin \
+> -	rtlwifi/rtl8192eefw.bin rtlwifi/rtl8192eu_ap_wowlan.bin \
+> -	rtlwifi/rtl8192eu_nic.bin rtlwifi/rtl8192eu_wowlan.bin
+> +	rtlwifi/rtl8192cufw_B.bin \
+> +	rtlwifi/rtl8192cufw_TMSC.bin \
+> +	rtlwifi/rtl8192eu_ap_wowlan.bin \
+> +	rtlwifi/rtl8192eu_nic.bin \
+> +	rtlwifi/rtl8192eu_wowlan.bin
+>   LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.rtlwifi_firmware.txt
+>   endif
+>   
+>   # rtl87xx
+>   ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_RTL_87XX),y)
+>   LINUX_FIRMWARE_FILES += \
+> -	rtlwifi/rtl8712u.bin rtlwifi/rtl8723fw.bin \
+> -	rtlwifi/rtl8723fw_B.bin rtlwifi/rtl8723befw.bin \
+> -	rtlwifi/rtl8723aufw_A.bin rtlwifi/rtl8723aufw_B.bin \
+> -	rtlwifi/rtl8723aufw_B_NoBT.bin rtlwifi/rtl8723befw.bin \
+> -	rtlwifi/rtl8723bs_ap_wowlan.bin rtlwifi/rtl8723bs_bt.bin \
+> -	rtlwifi/rtl8723bs_nic.bin rtlwifi/rtl8723bs_wowlan.bin \
+> -	rtlwifi/rtl8723bu_ap_wowlan.bin rtlwifi/rtl8723bu_nic.bin \
+> +	rtlwifi/rtl8712u.bin \
+> +	rtlwifi/rtl8723fw.bin \
+> +	rtlwifi/rtl8723fw_B.bin \
+> +	rtlwifi/rtl8723befw.bin \
+> +	rtlwifi/rtl8723aufw_A.bin \
+> +	rtlwifi/rtl8723aufw_B.bin \
+> +	rtlwifi/rtl8723aufw_B_NoBT.bin \
+> +	rtlwifi/rtl8723befw.bin \
+> +	rtlwifi/rtl8723bs_bt.bin \
+> +	rtlwifi/rtl8723bu_ap_wowlan.bin \
+> +	rtlwifi/rtl8723bu_nic.bin \
+>   	rtlwifi/rtl8723bu_wowlan.bin
+>   LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.rtlwifi_firmware.txt
+>   endif
+> 
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
