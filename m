@@ -2,77 +2,95 @@ Return-Path: <SRS0=enEc=PC=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CD654C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 14 Oct 2021 21:02:34 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 11A17C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 14 Oct 2021 21:03:17 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 71E8B60F23
-	for <buildroot@archiver.kernel.org>; Thu, 14 Oct 2021 21:02:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 71E8B60F23
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
+	by mail.kernel.org (Postfix) with ESMTPS id A9B136109E
+	for <buildroot@archiver.kernel.org>; Thu, 14 Oct 2021 21:03:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A9B136109E
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 042594012A;
-	Thu, 14 Oct 2021 21:02:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 70E1460BC9;
+	Thu, 14 Oct 2021 21:03:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EbtEQv2UZ20M; Thu, 14 Oct 2021 21:02:32 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id tMWpskBIyoXS; Thu, 14 Oct 2021 21:03:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E410A4014E;
-	Thu, 14 Oct 2021 21:02:31 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 993441BF343
- for <buildroot@lists.busybox.net>; Thu, 14 Oct 2021 21:02:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BCA1760BBD;
+	Thu, 14 Oct 2021 21:03:14 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 5EC421BF343
+ for <buildroot@lists.busybox.net>; Thu, 14 Oct 2021 21:03:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 93F274014E
- for <buildroot@lists.busybox.net>; Thu, 14 Oct 2021 21:02:30 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5B8F683A99
+ for <buildroot@lists.busybox.net>; Thu, 14 Oct 2021 21:03:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id R7mZpeyuAIZ8 for <buildroot@lists.busybox.net>;
- Thu, 14 Oct 2021 21:02:29 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3DC8A4012A
- for <buildroot@buildroot.org>; Thu, 14 Oct 2021 21:02:29 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:cd49:1327:25a7:1fb2])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id 486055FF27;
- Thu, 14 Oct 2021 23:02:18 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1634245346;
- bh=tmXPjupp0Dbsmhi8dYko65uET3fj1uAlzhslnkHCVBw=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=gPCyZQAGCVV6xg7jM0EPQ3qKK4BRG7H/Rn9W4QwgjDPH5SEZhnYOhNAhIKivEO8nc
- mC/UxcyNBlIgBeSUDm/7fzllo5YBk+1D0NJTUnKxtqKT+3MTNAuAz6AMPINbSaRsNv
- dihv+rpRJbYcWPzwK4OG57bVude7D3EwAh3v6ofYDeWg0v+rRzKEk5pvMzyfj4xf/Y
- uxxsakkrc/RDKNTocVkwO9mwro+vqfn1CBgh7QM2obrqzvM+bTbT+ONEactZUNACJS
- rr+O8wMqxlwaiS1/dCY1EBUlJ5t/qrxG53b7TRugWJqptrEhhZBnksgV5iEjE0JGjS
- 4Q+rtzOnwUUlA==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Thu, 14 Oct 2021 23:02:17 +0200
-Date: Thu, 14 Oct 2021 23:02:17 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: =?utf-8?B?S8O2cnk=?= Maincent <kory.maincent@bootlin.com>
-Message-ID: <20211014210217.GE368016@scaer>
-References: <20210923155726.87851-1-kory.maincent@bootlin.com>
- <20210923155726.87851-3-kory.maincent@bootlin.com>
- <20211006181104.GD2081069@scaer>
- <20211007102318.556f7fc2@kmaincent-XPS-13-7390>
- <20211007095326.GA2814782@scaer>
- <20211007144351.629d2de0@kmaincent-XPS-13-7390>
- <20211007162931.GH2081069@scaer>
- <20211011122736.3b0df127@kmaincent-XPS-13-7390>
- <20211014200207.GC368016@scaer>
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3qJD6-bwk1Zj for <buildroot@lists.busybox.net>;
+ Thu, 14 Oct 2021 21:03:12 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com
+ [IPv6:2a00:1450:4864:20::533])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8FEFF83AB0
+ for <buildroot@buildroot.org>; Thu, 14 Oct 2021 21:03:12 +0000 (UTC)
+Received: by mail-ed1-x533.google.com with SMTP id i20so28570428edj.10
+ for <buildroot@buildroot.org>; Thu, 14 Oct 2021 14:03:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=G0yA5cb+2sL4BcwTpGr3oo39n1RP2IyN6nj4l2RvXrY=;
+ b=WQd+/OP3vSXtJ4VGkspIf7K4Z5PLqCmAG209CTxmTEZ97mq1ZIxm4+BJWZCu1aL41f
+ /wMy4203BiHTJi9trU850QrjvXXxnhYxa1JdR1yDokMvuKbHQaJqoIudKEWfXND62z9t
+ TlsDK0wJSBiOXNmpYJQ2Ytwl9lzUT4/aq/8k1VzBPapBPnaV681lmKQ9RfVBpPxzOygT
+ 363oIv1NEazOG9nRKbweWc6UOWlsNT2JIjoJI62mdgyk76xp/2PVnDEscuZQwYl3jwZD
+ Vofu58kn5WcN7bNgx7AM7TVcKrZiEX7eAaQJyljiiaTjZ4Ern/zlHG9qSJkz3OYM/CFq
+ L5aw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=G0yA5cb+2sL4BcwTpGr3oo39n1RP2IyN6nj4l2RvXrY=;
+ b=M+pyuHg38oZBK0coIetZv6fEK5x8jteaiNsoE2SaVIUQNt+byZT3faHjInlum6my/0
+ xE9DImbpCMLhesrq9I3wPhInk4a/AWXYqZS0mA7sFz+xd8IRM41eJmLGTOyVygGs7k9o
+ BsA85qPXiHKCCdPGOCfZB6k4azzlCEMUh+owaDO8sRwzYciTMoYaTrLZljtmQBQsI4Eb
+ cHbhYwuRMjDJEcEJ/MHQ9uQ0wqy2Nsl3HPksZIjtZns//0XWZw8qRp+FfneVBsRHqny6
+ 8NZZ4Xsnvx60eLPYAkiExPyPpnvN2ZKVAIKy9TfAU7pzS6rR2b406T53sS8UVEzMLFqq
+ YVRw==
+X-Gm-Message-State: AOAM531h3OmjmCcMBYuBJ6Q9LEOClsNzJmt6Nz6Xmey2Y4s1/PZH8qZh
+ 3aKeOBb5xKYO3VBPLr5T/r7pxw==
+X-Google-Smtp-Source: ABdhPJwnscqvTZrhX/moQuPSnEqG380QXLpEKaTHMNdBtnnG7y3QkW275rBZI2HxAd7jlFue7+2LgA==
+X-Received: by 2002:a17:906:c7d0:: with SMTP id
+ dc16mr1653465ejb.555.1634245390795; 
+ Thu, 14 Oct 2021 14:03:10 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id n16sm2977512eda.93.2021.10.14.14.03.10
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Thu, 14 Oct 2021 14:03:10 -0700 (PDT)
+Message-ID: <ff7f85f0-9f45-7370-9810-d652e38b1cf7@mind.be>
+Date: Thu, 14 Oct 2021 23:03:09 +0200
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20211014200207.GC368016@scaer>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH v3 2/7] boot/grub2: add support to build
- multiple Grub2 configurations in the same build
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.1.0
+Content-Language: en-GB
+To: Adam Duskett <aduskett@gmail.com>, buildroot@buildroot.org
+References: <20211009002727.972605-1-aduskett@gmail.com>
+ <20211009002727.972605-2-aduskett@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20211009002727.972605-2-aduskett@gmail.com>
+Subject: Re: [Buildroot] [PATCH v4 1/2] package/python3: Add bzip2 option to
+ host
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,79 +102,72 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: thomas.petazzoni@bootlin.com, Adam Duskett <aduskett@gmail.com>,
- buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Daniel Price <daniel.price@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
+ Martin Bark <martin@barkynet.com>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-S8O2cnksIEFsbCwKCk9uIDIwMjEtMTAtMTQgMjI6MDIgKzAyMDAsIFlhbm4gRS4gTU9SSU4gc3Bh
-a2UgdGh1c2x5Ogo+IFNvLCBpbiB0aGUgZW5kLCB5b3VyIG9yaWdpbmFsIHByb3Bvc2FsLCB0byBp
-bnN0YWxsIGVhY2ggYW5kIGV2ZXJ5IHR1cGxlcwo+IGludG8gdGFyZ2V0LywgaXMgcHJvYmFibHkg
-dGhlIGJlc3Qgb3B0aW9uIHdlIGhhdmUsIFsuLi5dCgpBZGRpdGlvbmFsbHksIHRvIHRlc3Qgd2hh
-dCB3YXMgZmFpbGluZywgSSBoYWQgaW5zdHJ1bWVudGVkIHRoZSBidWlsZAp3aXRoIHRoZSBmb2xs
-b3dpbmcgcGF0Y2ggKG5vdGUgdGhhdCBpdCBtaXhlcyBmaXhlcywgbGlrZSBubyBzZW1pLWNvbG9u
-cwpidXQgc2VwYXJhdGUgbGluZXMsIG9yIHVzaW5nICYmIG5vdCBzaW1lLWNvbG9uLCB3aXRoIHRo
-ZSBhY3R1YWwgY2FsbHMKdG8gTUVTU0FHRSk6CgogICAgZGlmZiAtLWdpdCBhL2Jvb3QvZ3J1YjIv
-Z3J1YjIubWsgYi9ib290L2dydWIyL2dydWIyLm1rCiAgICBpbmRleCBlMDFlYmIyZWRiLi41NDAw
-NTM4ODM3IDEwMDY0NAogICAgLS0tIGEvYm9vdC9ncnViMi9ncnViMi5tawogICAgKysrIGIvYm9v
-dC9ncnViMi9ncnViMi5tawogICAgQEAgLTE0OSw4ICsxNDksOSBAQCBIT1NUX0dSVUIyX0NPTkZf
-T1BUUyA9IFwKICAgICAKICAgICBkZWZpbmUgR1JVQjJfQ09ORklHVVJFX0NNRFMKICAgICAJJChm
-b3JlYWNoIHR1cGxlLCAkKEdSVUIyX1RVUExFUy15KSwgXAogICAgLQkJbWtkaXIgLXAgJChARCkv
-YnVpbGQtJCh0dXBsZSkgOyBcCiAgICAtCQljZCAkKEBEKS9idWlsZC0kKHR1cGxlKSA7IFwKICAg
-ICsJCUAkKGNhbGwgTUVTU0FHRSxDb25maWd1cmluZyAkKHR1cGxlKSkKICAgICsJCW1rZGlyIC1w
-ICQoQEQpL2J1aWxkLSQodHVwbGUpCiAgICArCQljZCAkKEBEKS9idWlsZC0kKHR1cGxlKSAmJiBc
-CiAgICAgCQkkKFRBUkdFVF9DT05GSUdVUkVfT1BUUykgXAogICAgIAkJCQkkKFRBUkdFVF9DT05G
-SUdVUkVfQVJHUykgXAogICAgIAkJJChHUlVCMl9DT05GX0VOVikgXAogICAgQEAgLTE3MiwxMyAr
-MTczLDE1IEBAIGVuZGVmCiAgICAgCiAgICAgZGVmaW5lIEdSVUIyX0JVSUxEX0NNRFMKICAgICAJ
-JChmb3JlYWNoIHR1cGxlLCAkKEdSVUIyX1RVUExFUy15KSwgXAogICAgKwkJQCQoY2FsbCBNRVNT
-QUdFLEJ1aWxkaW5nICQodHVwbGUpKQogICAgIAkJJChUQVJHRVRfTUFLRV9FTlYpICQoTUFLRSkg
-LUMgJChARCkvYnVpbGQtJCh0dXBsZSkKICAgICAJKQogICAgIGVuZGVmCiAgICAgCiAgICAgZGVm
-aW5lIEdSVUIyX0lOU1RBTExfSU1BR0VTX0NNRFMKICAgICAJJChmb3JlYWNoIHR1cGxlLCAkKEdS
-VUIyX1RVUExFUy15KSwgXAogICAgLQkJbWtkaXIgLXAgJChkaXIgJChHUlVCMl9JTUFHRV8kKHR1
-cGxlKSkpIDsgXAogICAgKwkJQCQoY2FsbCBNRVNTQUdFLEluc3RhbGxpbmcgJCh0dXBsZSkgdG8g
-aW1hZ2VzIGRpcmVjdG9yeSkKICAgICsJCW1rZGlyIC1wICQoZGlyICQoR1JVQjJfSU1BR0VfJCh0
-dXBsZSkpKQogICAgIAkJJChIT1NUX0RJUikvdXNyL2Jpbi9ncnViLW1raW1hZ2UgXAogICAgIAkJ
-CS1kICQoQEQpL2J1aWxkLSQodHVwbGUpL2dydWItY29yZS8gXAogICAgIAkJCS1PICQodHVwbGUp
-IFwKICAgIEBAIC0xODYsMTIgKzE4OSwxMiBAQCBkZWZpbmUgR1JVQjJfSU5TVEFMTF9JTUFHRVNf
-Q01EUwogICAgIAkJCS1wICIkKEdSVUIyX1BSRUZJWF8kKHR1cGxlKSkiIFwKICAgICAJCQkkKGlm
-ICQoR1JVQjJfQlVJTFRJTl9DT05GSUdfJCh0dXBsZSkpLCBcCiAgICAgCQkJCS1jICQoR1JVQjJf
-QlVJTFRJTl9DT05GSUdfJCh0dXBsZSkpKSBcCiAgICAtCQkJCSQoR1JVQjJfQlVJTFRJTl9NT0RV
-TEVTXyQodHVwbGUpKSA7IFwKICAgIC0JCSQoSU5TVEFMTCkgLUQgLW0gMDY0NCBib290L2dydWIy
-L2dydWIuY2ZnICQoR1JVQjJfQ0ZHXyQodHVwbGUpKSA7IFwKICAgICsJCQkJJChHUlVCMl9CVUlM
-VElOX01PRFVMRVNfJCh0dXBsZSkpCiAgICArCQkkKElOU1RBTEwpIC1EIC1tIDA2NDQgYm9vdC9n
-cnViMi9ncnViLmNmZyAkKEdSVUIyX0NGR18kKHR1cGxlKSkKICAgICAJCSQoaWYgJChmaW5kc3Ry
-aW5nICQoR1JVQjJfUExBVEZPUk1fJCh0dXBsZSkpLCBwYyksIFwKICAgICAJCQljYXQgJChIT1NU
-X0RJUikvbGliL2dydWIvJCh0dXBsZSkvY2Rib290LmltZyAkKEdSVUIyX0lNQUdFXyQodHVwbGUp
-KSA+IFwKICAgIC0JCQkJJChCSU5BUklFU19ESVIpL2dydWItZWx0b3JpdG8uaW1nIDsgXAogICAg
-LQkJKSBcCiAgICArCQkJCSQoQklOQVJJRVNfRElSKS9ncnViLWVsdG9yaXRvLmltZyBcCiAgICAr
-CQkpCiAgICAgCSkKICAgICBlbmRlZgogICAgIAoKVGhhdCB3YXksIGl0IGlzIGVhc2llciB0byBz
-ZWUgd2hhdCBpcyBnb2luZyBvbiwgYW5kIHRoZSBvdXRwdXQgd2hlbgpmaWx0ZXJlZCB3aXRoIGJy
-bWFrZSwgbG9va3MgbmljZSA7LSkKCjIwMjEtMTAtMTQgMjI6NTI6MzYgPj4+IGdydWIyIDIuMDQg
-RXh0cmFjdGluZwoyMDIxLTEwLTE0IDIyOjUyOjM2ID4+PiBncnViMiAyLjA0IFBhdGNoaW5nCjIw
-MjEtMTAtMTQgMjI6NTI6MzkgPj4+IGdydWIyIDIuMDQgQ29uZmlndXJpbmcKMjAyMS0xMC0xNCAy
-Mjo1MjozOSA+Pj4gZ3J1YjIgMi4wNCBDb25maWd1cmluZyBpMzg2LXBjCjIwMjEtMTAtMTQgMjI6
-NTI6NTYgPj4+IGdydWIyIDIuMDQgQ29uZmlndXJpbmcgaTM4Ni1lZmkKMjAyMS0xMC0xNCAyMjo1
-MzoxMyA+Pj4gZ3J1YjIgMi4wNCBCdWlsZGluZwoyMDIxLTEwLTE0IDIyOjUzOjEzID4+PiBncnVi
-MiAyLjA0IEJ1aWxkaW5nIGkzODYtcGMKMjAyMS0xMC0xNCAyMjo1Mzo1MSA+Pj4gZ3J1YjIgMi4w
-NCBCdWlsZGluZyBpMzg2LWVmaQoyMDIxLTEwLTE0IDIyOjU0OjI4ID4+PiBncnViMiAyLjA0IElu
-c3RhbGxpbmcgdG8gdGFyZ2V0CjIwMjEtMTAtMTQgMjI6NTQ6MjggPj4+IGdydWIyIDIuMDQgSW5z
-dGFsbGluZyBpMzg2LXBjIHRvIHRhcmdldAoyMDIxLTEwLTE0IDIyOjU0OjMxID4+PiBncnViMiAy
-LjA0IEluc3RhbGxpbmcgaTM4Ni1lZmkgdG8gdGFyZ2V0CjIwMjEtMTAtMTQgMjI6NTQ6MzQgPj4+
-IGdydWIyIDIuMDQgSW5zdGFsbGluZyB0byBpbWFnZXMgZGlyZWN0b3J5CjIwMjEtMTAtMTQgMjI6
-NTQ6MzQgPj4+IGdydWIyIDIuMDQgSW5zdGFsbGluZyBpMzg2LXBjIHRvIGltYWdlcyBkaXJlY3Rv
-cnkKMjAyMS0xMC0xNCAyMjo1NDozNCA+Pj4gZ3J1YjIgMi4wNCBJbnN0YWxsaW5nIGkzODYtZWZp
-IHRvIGltYWdlcyBkaXJlY3RvcnkKClJlZ2FyZHMsCllhbm4gRS4gTU9SSU4uCgotLSAKLi0tLS0t
-LS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS4tLS0t
-LS0tLS0tLS0tLS0tLS0tLS4KfCAgWWFubiBFLiBNT1JJTiAgfCBSZWFsLVRpbWUgRW1iZWRkZWQg
-fCAvIlwgQVNDSUkgUklCQk9OIHwgRXJpY3MnIGNvbnNwaXJhY3k6IHwKfCArMzMgNjYyIDM3NiAw
-NTYgfCBTb2Z0d2FyZSAgRGVzaWduZXIgfCBcIC8gQ0FNUEFJR04gICAgIHwgIF9fXyAgICAgICAg
-ICAgICAgIHwKfCArMzMgNTYxIDA5OSA0MjcgYC0tLS0tLS0tLS0tLS4tLS0tLS0tOiAgWCAgQUdB
-SU5TVCAgICAgIHwgIFxlLyAgVGhlcmUgaXMgbm8gIHwKfCBodHRwOi8veW1vcmluLmlzLWEtZ2Vl
-ay5vcmcvIHwgXy8qXF8gfCAvIFwgSFRNTCBNQUlMICAgIHwgICB2ICAgY29uc3BpcmFjeS4gIHwK
-Jy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0tXi0tLS0tLS0tLS0tLS0tLS0t
-LV4tLS0tLS0tLS0tLS0tLS0tLS0tLScKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290
-Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJv
-b3QK
+
+
+On 09/10/2021 02:27, Adam Duskett wrote:
+> The bzip2 module is needed to build the host variant of NodeJS 14.
+> 
+> Signed-off-by: Adam Duskett <aduskett@gmail.com>
+> ---
+>   package/python3/Config.in.host | 6 ++++++
+>   package/python3/python3.mk     | 6 ++++++
+>   2 files changed, 12 insertions(+)
+> 
+> diff --git a/package/python3/Config.in.host b/package/python3/Config.in.host
+> index 70b5dacdde..65a8df0754 100644
+> --- a/package/python3/Config.in.host
+> +++ b/package/python3/Config.in.host
+> @@ -7,6 +7,12 @@ config BR2_PACKAGE_HOST_PYTHON3
+>   
+>   if BR2_PACKAGE_HOST_PYTHON3
+>   
+> +config BR2_PACKAGE_HOST_PYTHON3_BZIP2
+> +	bool "bzip2"
+> +	select BR2_PACKAGE_HOST_BZIP2
+
+  This option doesn't exist. I removed it.
+
+  Applied to master, thanks.
+
+  Sorry, the nodejs bump was a bit to big to include in the low-hanging-fruit 
+apply, so that's for later.
+
+  Regards,
+  Arnout
+
+> +	help
+> +	  bz2 module for host Python3.
+> +
+>   config BR2_PACKAGE_HOST_PYTHON3_SSL
+>   	bool "ssl"
+>   	select BR2_PACKAGE_HOST_OPENSSL
+> diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+> index 3e88bc0ff4..779f6dcb6c 100644
+> --- a/package/python3/python3.mk
+> +++ b/package/python3/python3.mk
+> @@ -43,6 +43,12 @@ PYTHON3_DEPENDENCIES = host-python3 libffi
+>   
+>   HOST_PYTHON3_DEPENDENCIES = host-autoconf-archive host-expat host-zlib host-libffi
+>   
+> +ifeq ($(BR2_PACKAGE_HOST_PYTHON3_BZIP2),y)
+> +HOST_PYTHON3_DEPENDENCIES += host-bzip2
+> +else
+> +HOST_PYTHON3_CONF_OPTS += --disable-bzip2
+> +endif
+> +
+>   ifeq ($(BR2_PACKAGE_HOST_PYTHON3_SSL),y)
+>   HOST_PYTHON3_DEPENDENCIES += host-openssl
+>   else
+> 
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
