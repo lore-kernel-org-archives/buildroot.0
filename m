@@ -2,94 +2,92 @@ Return-Path: <SRS0=lKTV=PD=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A5B30C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 15 Oct 2021 20:46:26 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 041FCC433EF
+	for <buildroot@archiver.kernel.org>; Fri, 15 Oct 2021 20:47:44 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id BA3FD611C3
-	for <buildroot@archiver.kernel.org>; Fri, 15 Oct 2021 20:46:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org BA3FD611C3
+	by mail.kernel.org (Postfix) with ESMTPS id 6B10860F39
+	for <buildroot@archiver.kernel.org>; Fri, 15 Oct 2021 20:47:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6B10860F39
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 804AE407C5;
-	Fri, 15 Oct 2021 20:46:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 353BD60EF1;
+	Fri, 15 Oct 2021 20:47:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yH7X1s5u-6pK; Fri, 15 Oct 2021 20:46:22 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id G7ZX3ne9V0p4; Fri, 15 Oct 2021 20:47:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CD1C4407FC;
-	Fri, 15 Oct 2021 20:46:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8CB6E60BC3;
+	Fri, 15 Oct 2021 20:47:41 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B68B31BF2CC
- for <buildroot@lists.busybox.net>; Fri, 15 Oct 2021 20:46:20 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id CD5741BF2CC
+ for <buildroot@lists.busybox.net>; Fri, 15 Oct 2021 20:47:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A59B060BC3
- for <buildroot@lists.busybox.net>; Fri, 15 Oct 2021 20:46:20 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id BCA5860BC3
+ for <buildroot@lists.busybox.net>; Fri, 15 Oct 2021 20:47:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id K1IAWXhGd1ki for <buildroot@lists.busybox.net>;
- Fri, 15 Oct 2021 20:46:18 +0000 (UTC)
+ with ESMTP id fPdD5jH8dgwh for <buildroot@lists.busybox.net>;
+ Fri, 15 Oct 2021 20:47:38 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com
- [IPv6:2a00:1450:4864:20::531])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A5E3A60B2F
- for <buildroot@buildroot.org>; Fri, 15 Oct 2021 20:46:17 +0000 (UTC)
-Received: by mail-ed1-x531.google.com with SMTP id d9so42474142edh.5
- for <buildroot@buildroot.org>; Fri, 15 Oct 2021 13:46:17 -0700 (PDT)
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com
+ [IPv6:2a00:1450:4864:20::533])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9C63F60B2F
+ for <buildroot@buildroot.org>; Fri, 15 Oct 2021 20:47:38 +0000 (UTC)
+Received: by mail-ed1-x533.google.com with SMTP id ec8so42846951edb.6
+ for <buildroot@buildroot.org>; Fri, 15 Oct 2021 13:47:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=ng8MC4ps9eLwpexviJYaekyOzHNJuk7CBUULvJ5yvU0=;
- b=Cn4bv+auHlTDH7RMNsTw27/DKp24tHUnhjodnyN5aq8nXxT9UeQeg0yYroo4iaKIJN
- xNzzMlcOhuh+s7RAgEKPD2HEllHnjj0tHqIA9GvYr4I0ts5r9PgrVOGpZOcr2L1C/JSs
- SSpnPCE/iU2yAQm8N/vJJ+KYQXwXiMXHrtPdgwTIjZJ30Pn2QYGoclol3P4s3r5QXsKf
- fyz5HmtYRrgrrTxRXTqfeycLKFrw8OwJPq7Xv9GOXuUQBDmyBdYp5yO/6agEVQO3p/sR
- ltgHFv/mfZUWQFMYxbCii8nnAS6WKk6NWAQYQqr7+GMtrRiT7olcC2Jle5MXFL2gKdq+
- qvZg==
+ bh=LTK8saPSV5Zq3F8XEtGPRjTUpGqv2ZL4sSz7c5h/bNg=;
+ b=EpJ2ePPMJhhdVTlLB9VLzJ82iFVLjGKOXQqLvrZbAu9oXZxyzBADYhlrCUKFBSnMci
+ q5QriztWRot3DSnoUukEFjW7SAa8TCzdSo1y8fD6gh5aionxfJIxEVy/7Fii5mTNosTl
+ IBRUvMd4bfwMlb0rwt7CTjnBHXxLDCuweFcQ/hR9h8GxMU368KYvZCxyQbJtIG3k8nSp
+ K2TR++/lvaTWypX53q9E3dd7CMLza25IDjykRvu1Rv/gSBkcq6h7rhRaqS8+OcieSVDT
+ Nohy/AW2ZOO/bnc7YwtnpKEfMgRXHGOTT/oqGblHUT/0Pegf8jlB523fSIugfDeotmwR
+ r9/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=ng8MC4ps9eLwpexviJYaekyOzHNJuk7CBUULvJ5yvU0=;
- b=2HQWHMq5WY90eOK6l8+US4C5XyYETkRB441M5uMOk9zBSOLwWvk6+hKaiGJwmvF02E
- hsnWIZ06CiXFkhpAh2Tmq+TDc1Q6IxT/vEda1JmPBX0/7Sbzu6wt7kr0mcsJM3hMH9RH
- rQMfjgWJgb0cb6zXFZTV4NT8am0uIgHcUKoGVwLKeKKgAUfTJnSEJlH/YR/5zVWMDZhP
- tiYHSIlK8s0HYXXdwe24LeHTgx3eUbVA6kW7ECJbE+y8VRikT6GvFkaCsNld+3f34pr/
- /kyuRTt64aceQHrivfz6ZXQOENYx20CZ3il6Ev2zQpomRLCkxsduzuFr5McPzukj1WUy
- NBlQ==
-X-Gm-Message-State: AOAM530hVvRJDoRT4LWdIPCukcS13TSQE2gpeogHbNCO8B513nSCss/3
- 2RsMyer+ZAm0ry9MDbnnqwe/aU0bpdjZIA==
-X-Google-Smtp-Source: ABdhPJxyN7Hlk3W4J7y3MZemMwJmO2E2o7QmSTCRlwvqpzpA5/Kv2CMVaPGF7M2sTyFEq1aPGhFuxA==
-X-Received: by 2002:a05:6402:90c:: with SMTP id
- g12mr20566303edz.139.1634330775585; 
- Fri, 15 Oct 2021 13:46:15 -0700 (PDT)
+ bh=LTK8saPSV5Zq3F8XEtGPRjTUpGqv2ZL4sSz7c5h/bNg=;
+ b=zDIsR+Mb9Y4vvJHnf0PuclDlf+HAw94GoXi3bXacJpc1kiISpHvtrM6VwYwWEO0bud
+ ZVrXaqDk8XuAAY68EC6gSK+OB3cOzahXVIV7BQG0ttIGlOIeguPnvQM6syYSONIzyN2W
+ fqw3l5jL39z7VzYiTGnVjddntyLLLWn5DenU/0afJshdmZETkAIgT/pUqW4RvFgAAdzt
+ SzcTBxArQC56aT2DC3CvSjJf3+nokWVwCR+TD/sLEUVP4Qj9nliRgY2of/9uZkhRkIuR
+ kgKwEnCJjad5MZZOVEIA1rC8h4erkGI9R7bryLexLgxPnwP9Qr/1sSF6iFZhugs3aBb1
+ 4ovg==
+X-Gm-Message-State: AOAM531SBmAijt7p1HYNvkEN1M7L78FYXnJSYlvLxrspX0KILd1h4Y7P
+ sIl/ZgTB3WFYQNvbQIvqVwpJXg==
+X-Google-Smtp-Source: ABdhPJxsk8OJGAwAbN1bgk+jHM/Iau2am8dMhHKhI/C89F2AjTM8HMB5WtDhr1+8KTuOv3xITeiNMg==
+X-Received: by 2002:a17:906:3cb:: with SMTP id
+ c11mr10050199eja.404.1634330856873; 
+ Fri, 15 Oct 2021 13:47:36 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id t18sm5829763edd.18.2021.10.15.13.46.14
+ by smtp.gmail.com with ESMTPSA id d22sm5100201ejj.47.2021.10.15.13.47.35
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Fri, 15 Oct 2021 13:46:15 -0700 (PDT)
-Message-ID: <aae83846-90cd-2807-b62a-0a78aa1b2c76@mind.be>
-Date: Fri, 15 Oct 2021 22:46:14 +0200
+ Fri, 15 Oct 2021 13:47:36 -0700 (PDT)
+Message-ID: <fa0de507-3043-a8e7-0292-da2761b361d9@mind.be>
+Date: Fri, 15 Oct 2021 22:47:35 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.1.0
 Content-Language: en-GB
-To: =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
- buildroot@buildroot.org, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20211005154651.32676-1-zajec5@gmail.com>
+To: Kory Maincent <kory.maincent@bootlin.com>, buildroot@buildroot.org
+References: <20211007093101.1643900-1-kory.maincent@bootlin.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20211005154651.32676-1-zajec5@gmail.com>
-Subject: Re: [Buildroot] [PATCH V3] package/firmware-utils: add package
+In-Reply-To: <20211007093101.1643900-1-kory.maincent@bootlin.com>
+Subject: Re: [Buildroot] [PATCH] package/psplash: add support to psplash
+ personalized png image
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,136 +99,75 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Cc: phil.eichinger@gmail.com, thomas.petazzoni@bootlin.com
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-CgpPbiAwNS8xMC8yMDIxIDE3OjQ2LCBSYWZhxYIgTWnFgmVja2kgd3JvdGU6Cj4gRnJvbTogUmFm
-YcWCIE1pxYJlY2tpIDxyYWZhbEBtaWxlY2tpLnBsPgo+IAo+IFRoaXMgcGFja2FnZSBwcm92aWRl
-cyBhIHNldCBvZiB0b29scyBvcmlnaW5hbGx5IGRldmVsb3BlZCBmb3IgdGhlCj4gT3BlbldydCBw
-cm9qZWN0LiBUaGV5IGFsbG93IHdvcmtpbmcgd2l0aCB2YXJpb3VzIGZpcm13YXJlIGZvcm1hdHMg
-dGhhdAo+IGFyZSByZXF1aXJlZCBmb3IgZmxhc2hpbmcgbmV3IGltYWdlcyBvbiBlbWJlZGRlZCBk
-ZXZpY2VzLgo+IAo+IE9uZSBvZiB0b29scyAobWtoaWxpbmtmdykgZGVwZW5kcyBvbiBPcGVuU1NM
-IGFuZCBkb2Vzbid0IHN1cHBvcnQgYW55Cj4gb3RoZXIgU1NMIGxpYnJhcnkgKGxpa2Ugd29sZlNT
-TCkgZGlyZWN0bHkuIEl0IGNhbiBiZSB1c2VkIHdpdGggd29sZlNTTAo+IHVzaW5nIGl0cyBjb21w
-YXRpYmlsaXR5IGxheWVyIHRob3VnaC4KPiAKPiBTaWduZWQtb2ZmLWJ5OiBSYWZhxYIgTWnFgmVj
-a2kgPHJhZmFsQG1pbGVja2kucGw+CgogIEkgYWRkZWQgYSBjb21tZW50IGFib3V0IHRoZSBtaXNz
-aW5nIGxpY2Vuc2UgZmlsZXMgYW5kIGFwcGxpZWQgdG8gbWFzdGVyLCB0aGFua3MuCgoKICBSZWdh
-cmRzLAogIEFybm91dAoKPiAtLS0KPiBWMjogVXBkYXRlIHRvIHRoZSBsYXRlc3QgdmVyc2lvbiBl
-Mzg1MzE0OWZiMTgKPiAgICAgIEZpeCBjaGVjay1wYWNrYWdlIHdhcm5pbmdzCj4gICAgICBBZGQg
-RklSTVdBUkVfVVRJTFNfTElDRU5TRQo+IFYzOiBVcGRhdGUgdG8gdGhlIGxhdGVzdCB2ZXJzaW9u
-IDJmNzBmZWRjOTJiZAo+ICAgICAgQWRkIEJSMl9QQUNLQUdFX0ZJUk1XQVJFX1VUSUxTIHNlbGVj
-dC1zCj4gICAgICBGaXggKl9ERVBFTkRFTkNJRVMKPiAtLS0KPiAgIERFVkVMT1BFUlMgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAzICsrCj4gICBwYWNrYWdlL0NvbmZpZy5pbiAg
-ICAgICAgICAgICAgICAgICAgICAgICAgfCAgMSArCj4gICBwYWNrYWdlL0NvbmZpZy5pbi5ob3N0
-ICAgICAgICAgICAgICAgICAgICAgfCAgMSArCj4gICBwYWNrYWdlL2Zpcm13YXJlLXV0aWxzL0Nv
-bmZpZy5pbiAgICAgICAgICAgfCAxNSArKysrKysrKysrCj4gICBwYWNrYWdlL2Zpcm13YXJlLXV0
-aWxzL0NvbmZpZy5pbi5ob3N0ICAgICAgfCAxMiArKysrKysrKwo+ICAgcGFja2FnZS9maXJtd2Fy
-ZS11dGlscy9maXJtd2FyZS11dGlscy5oYXNoIHwgIDIgKysKPiAgIHBhY2thZ2UvZmlybXdhcmUt
-dXRpbHMvZmlybXdhcmUtdXRpbHMubWsgICB8IDM1ICsrKysrKysrKysrKysrKysrKysrKysKPiAg
-IDcgZmlsZXMgY2hhbmdlZCwgNjkgaW5zZXJ0aW9ucygrKQo+ICAgY3JlYXRlIG1vZGUgMTAwNjQ0
-IHBhY2thZ2UvZmlybXdhcmUtdXRpbHMvQ29uZmlnLmluCj4gICBjcmVhdGUgbW9kZSAxMDA2NDQg
-cGFja2FnZS9maXJtd2FyZS11dGlscy9Db25maWcuaW4uaG9zdAo+ICAgY3JlYXRlIG1vZGUgMTAw
-NjQ0IHBhY2thZ2UvZmlybXdhcmUtdXRpbHMvZmlybXdhcmUtdXRpbHMuaGFzaAo+ICAgY3JlYXRl
-IG1vZGUgMTAwNjQ0IHBhY2thZ2UvZmlybXdhcmUtdXRpbHMvZmlybXdhcmUtdXRpbHMubWsKPiAK
-PiBkaWZmIC0tZ2l0IGEvREVWRUxPUEVSUyBiL0RFVkVMT1BFUlMKPiBpbmRleCAxNTQ3ZmYxMjNi
-Li4yMmIyODQzMDJkIDEwMDY0NAo+IC0tLSBhL0RFVkVMT1BFUlMKPiArKysgYi9ERVZFTE9QRVJT
-Cj4gQEAgLTIyNTcsNiArMjI1Nyw5IEBAIE46CVJhZmFsIFN1c3ogPHJhZmFsLnN1c3pAZ21haWwu
-Y29tPgo+ICAgRjoJYm9hcmQvYXZuZXQvczZseDlfbWljcm9ib2FyZC8KPiAgIEY6CWNvbmZpZ3Mv
-czZseDlfbWljcm9ib2FyZF9kZWZjb25maWcKPiAgIAo+ICtOOglSYWZhxYIgTWnFgmVja2kgPHJh
-ZmFsQG1pbGVja2kucGw+Cj4gK0Y6CXBhY2thZ2UvZmlybXdhcmUtdXRpbHMvCj4gKwo+ICAgTjoJ
-UmFodWwgQmVkYXJrYXIgPHJhaHVsYmVkYXJrYXI4OUBnbWFpbC5jb20+Cj4gICBGOglwYWNrYWdl
-L2N4eHRlc3QvCj4gICBGOglwYWNrYWdlL2dmbGFncy8KPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9D
-b25maWcuaW4gYi9wYWNrYWdlL0NvbmZpZy5pbgo+IGluZGV4IDA0NmMwNGU5OTQuLjY2NTc4MTFh
-OGMgMTAwNjQ0Cj4gLS0tIGEvcGFja2FnZS9Db25maWcuaW4KPiArKysgYi9wYWNrYWdlL0NvbmZp
-Zy5pbgo+IEBAIC0yMTIsNiArMjEyLDcgQEAgbWVudSAiRmlsZXN5c3RlbSBhbmQgZmxhc2ggdXRp
-bGl0aWVzIgo+ICAgCXNvdXJjZSAicGFja2FnZS9leGZhdC11dGlscy9Db25maWcuaW4iCj4gICAJ
-c291cmNlICJwYWNrYWdlL2V4ZmF0cHJvZ3MvQ29uZmlnLmluIgo+ICAgCXNvdXJjZSAicGFja2Fn
-ZS9mMmZzLXRvb2xzL0NvbmZpZy5pbiIKPiArCXNvdXJjZSAicGFja2FnZS9maXJtd2FyZS11dGls
-cy9Db25maWcuaW4iCj4gICAJc291cmNlICJwYWNrYWdlL2ZsYXNoYmVuY2gvQ29uZmlnLmluIgo+
-ICAgCXNvdXJjZSAicGFja2FnZS9mc2NyeXB0Y3RsL0NvbmZpZy5pbiIKPiAgIAlzb3VyY2UgInBh
-Y2thZ2UvZnVzZS1vdmVybGF5ZnMvQ29uZmlnLmluIgo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL0Nv
-bmZpZy5pbi5ob3N0IGIvcGFja2FnZS9Db25maWcuaW4uaG9zdAo+IGluZGV4IDhkNDQzZWEyNTUu
-LjBlYzZmZjBhYWQgMTAwNjQ0Cj4gLS0tIGEvcGFja2FnZS9Db25maWcuaW4uaG9zdAo+ICsrKyBi
-L3BhY2thZ2UvQ29uZmlnLmluLmhvc3QKPiBAQCAtMjgsNiArMjgsNyBAQCBtZW51ICJIb3N0IHV0
-aWxpdGllcyIKPiAgIAlzb3VyY2UgInBhY2thZ2UvZjJmcy10b29scy9Db25maWcuaW4uaG9zdCIK
-PiAgIAlzb3VyY2UgInBhY2thZ2UvZmFrZXRpbWUvQ29uZmlnLmluLmhvc3QiCj4gICAJc291cmNl
-ICJwYWNrYWdlL2ZhdGNhdC9Db25maWcuaW4uaG9zdCIKPiArCXNvdXJjZSAicGFja2FnZS9maXJt
-d2FyZS11dGlscy9Db25maWcuaW4uaG9zdCIKPiAgIAlzb3VyY2UgInBhY2thZ2UvZnd1cC9Db25m
-aWcuaW4uaG9zdCIKPiAgIAlzb3VyY2UgInBhY2thZ2UvZ2VuZXh0MmZzL0NvbmZpZy5pbi5ob3N0
-Igo+ICAgCXNvdXJjZSAicGFja2FnZS9nZW5pbWFnZS9Db25maWcuaW4uaG9zdCIKPiBkaWZmIC0t
-Z2l0IGEvcGFja2FnZS9maXJtd2FyZS11dGlscy9Db25maWcuaW4gYi9wYWNrYWdlL2Zpcm13YXJl
-LXV0aWxzL0NvbmZpZy5pbgo+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4gaW5kZXggMDAwMDAwMDAw
-MC4uOWU0NzI2M2Q3Mwo+IC0tLSAvZGV2L251bGwKPiArKysgYi9wYWNrYWdlL2Zpcm13YXJlLXV0
-aWxzL0NvbmZpZy5pbgo+IEBAIC0wLDAgKzEsMTUgQEAKPiArY29uZmlnIEJSMl9QQUNLQUdFX0ZJ
-Uk1XQVJFX1VUSUxTCj4gKwlib29sICJmaXJtd2FyZS11dGlscyIKPiArCXNlbGVjdCBCUjJfUEFD
-S0FHRV9PUEVOU1NMCj4gKwlzZWxlY3QgQlIyX1BBQ0tBR0VfWkxJQgo+ICsJaGVscAo+ICsJICBG
-aXJtd2FyZSB1dGlscyBhcmUgdG9vbHMgdGhhdCBjYW4gYmUgdXNlZCBmb3IgbWFuYWdpbmcKPiAr
-CSAgcGxhdGZvcm0gLyBkZXZpY2UgLyB2ZW5kb3Igc3BlY2lmaWMgZmlybXdhcmUgaW1hZ2VzLiBE
-ZXBlbmRpbmcKPiArCSAgb24gYSBzcGVjaWZpYyB0b29sIGl0IG1heSBiZSBwb3NzaWJsZSB0byBy
-ZWFkIGluZm9ybWF0aW9uLAo+ICsJICBleHRyYWN0IGRhdGEsIG1vZGlmeSBvciBidWlsZCBhbiBp
-bWFnZSBmcm9tIGEgc2NyYXRjaC4KPiArCj4gKwkgIEEgY29tbW9uIHRhcmdldCB1c2FnZSBvZiBm
-aXJtd2FyZSB1dGlscyBpcyB0byB1cGdyYWRlIGtlcm5lbAo+ICsJICBhbmQgLyBvciByb290ZnMu
-IERlcGVuZGluZyBvbiBkZXZpY2UgaXQgbWF5IGJlIHJlcXVpcmVkIHRvCj4gKwkgIGV4dHJhY3Qg
-YSBwYXJ0IG9mIGZpcm13YXJlIGltYWdlIGFuZCBmbGFzaCBpdC4KPiArCj4gKwkgIGh0dHBzOi8v
-Z2l0Lm9wZW53cnQub3JnLz9wPXByb2plY3QvZmlybXdhcmUtdXRpbHMuZ2l0O2E9c3VtbWFyeQo+
-IGRpZmYgLS1naXQgYS9wYWNrYWdlL2Zpcm13YXJlLXV0aWxzL0NvbmZpZy5pbi5ob3N0IGIvcGFj
-a2FnZS9maXJtd2FyZS11dGlscy9Db25maWcuaW4uaG9zdAo+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0
-Cj4gaW5kZXggMDAwMDAwMDAwMC4uNGFhZWMwNTAwMQo+IC0tLSAvZGV2L251bGwKPiArKysgYi9w
-YWNrYWdlL2Zpcm13YXJlLXV0aWxzL0NvbmZpZy5pbi5ob3N0Cj4gQEAgLTAsMCArMSwxMiBAQAo+
-ICtjb25maWcgQlIyX1BBQ0tBR0VfSE9TVF9GSVJNV0FSRV9VVElMUwo+ICsJYm9vbCAiaG9zdCBm
-aXJtd2FyZS11dGlscyIKPiArCWhlbHAKPiArCSAgRmlybXdhcmUgdXRpbHMgYXJlIHRvb2xzIHRo
-YXQgY2FuIGJlIHVzZWQgZm9yIG1hbmFnaW5nCj4gKwkgIHBsYXRmb3JtIC8gZGV2aWNlIC8gdmVu
-ZG9yIHNwZWNpZmljIGZpcm13YXJlIGltYWdlcy4gRGVwZW5kaW5nCj4gKwkgIG9uIGEgc3BlY2lm
-aWMgdG9vbCBpdCBtYXkgYmUgcG9zc2libGUgdG8gcmVhZCBpbmZvcm1hdGlvbiwKPiArCSAgZXh0
-cmFjdCBkYXRhLCBtb2RpZnkgb3IgYnVpbGQgYW4gaW1hZ2UgZnJvbSBhIHNjcmF0Y2guCj4gKwo+
-ICsJICBBIGNvbW1vbiBob3N0IHVzYWdlIG9mIGZpcm13YXJlIHV0aWxzIGlzIHRvIGJ1aWxkIGEg
-Ym9vdGxvYWRlcgo+ICsJICBzdXBwb3J0ZWQgaW1hZ2UuCj4gKwo+ICsJICBodHRwczovL2dpdC5v
-cGVud3J0Lm9yZy8/cD1wcm9qZWN0L2Zpcm13YXJlLXV0aWxzLmdpdDthPXN1bW1hcnkKPiBkaWZm
-IC0tZ2l0IGEvcGFja2FnZS9maXJtd2FyZS11dGlscy9maXJtd2FyZS11dGlscy5oYXNoIGIvcGFj
-a2FnZS9maXJtd2FyZS11dGlscy9maXJtd2FyZS11dGlscy5oYXNoCj4gbmV3IGZpbGUgbW9kZSAx
-MDA2NDQKPiBpbmRleCAwMDAwMDAwMDAwLi4xNTJiMDc1M2MxCj4gLS0tIC9kZXYvbnVsbAo+ICsr
-KyBiL3BhY2thZ2UvZmlybXdhcmUtdXRpbHMvZmlybXdhcmUtdXRpbHMuaGFzaAo+IEBAIC0wLDAg
-KzEsMiBAQAo+ICsjIExvY2FsbHkgY2FsY3VsYXRlZAo+ICtzaGEyNTYgIDU3Yjk1ZGFjNmIwMTFm
-NGM3NzNkNmU2NjFmN2ViNWIyYzk5MjA3OTkwMWY4NzYxMGQxZWQxNmFhYWNiMjI1NDIgIGZpcm13
-YXJlLXV0aWxzLTJmNzBmZWRjOTJiZDA4ZjllMTgyZmNjMzg4Njg4ZjM2MzEwYTU5N2QtYnIxLnRh
-ci5nego+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2Zpcm13YXJlLXV0aWxzL2Zpcm13YXJlLXV0aWxz
-Lm1rIGIvcGFja2FnZS9maXJtd2FyZS11dGlscy9maXJtd2FyZS11dGlscy5tawo+IG5ldyBmaWxl
-IG1vZGUgMTAwNjQ0Cj4gaW5kZXggMDAwMDAwMDAwMC4uM2RhYmIyZWE2OQo+IC0tLSAvZGV2L251
-bGwKPiArKysgYi9wYWNrYWdlL2Zpcm13YXJlLXV0aWxzL2Zpcm13YXJlLXV0aWxzLm1rCj4gQEAg
-LTAsMCArMSwzNSBAQAo+ICsjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIwo+ICsjCj4gKyMgZmlybXdh
-cmUtdXRpbHMKPiArIwo+ICsjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIwo+ICsKPiArRklSTVdBUkVf
-VVRJTFNfVkVSU0lPTiA9IDJmNzBmZWRjOTJiZDA4ZjllMTgyZmNjMzg4Njg4ZjM2MzEwYTU5N2QK
-PiArRklSTVdBUkVfVVRJTFNfU0lURSA9IGdpdDovL2dpdC5vcGVud3J0Lm9yZy9wcm9qZWN0L2Zp
-cm13YXJlLXV0aWxzLmdpdAo+ICtGSVJNV0FSRV9VVElMU19MSUNFTlNFID0gXAo+ICsJQlNELTIt
-Q2xhdXNlICh0cGxpbmstc2FmZWxvYWRlciksIFwKPiArCUJTRC0zLUNsYXVzZSAoc2VhbWEpLCBc
-Cj4gKwlHUEwtMi4wIChhZGRfaGVhZGVyLCBiY21hbGdvLCBidWZmYWxvLWVuYywgYnVmZmFsby1s
-aWIsIGJ1ZmZhbG8tdGFnLCBcCj4gKwkJIGJ1ZmZhbG8tdGZ0cCwgZGdmaXJtd2FyZSwgZG5zMzEz
-LWhlYWRlciwgZWRpbWF4X2Z3X2hlYWRlciwgXAo+ICsJCSBmaXgtdS1tZWRpYS1oZWFkZXIsIGhj
-c21ha2VpbWFnZSwgbWticm5jbWRsaW5lLCBta2JybmltZywgXAo+ICsJCSBta2J1ZmZhbG9pbWcs
-IG1rY2FtZW9mdywgbWtjYXNmdywgbWtkYXBpbWcsIG1rZGFwaW1nMiwgXAo+ICsJCSBta2RocGlt
-ZywgbWtkbmlpbWcsIG1raGlsaW5rZncsIG1rbWVyYWtpZnctb2xkLCBta21lcmFraWZ3LCBcCj4g
-KwkJIG1rcGxhbmV4ZncsIG1rcG9yYXlmdywgbWtyYXNpbWFnZSwgbWtydG41NnVpbWcsIG1rc2Vu
-YW9mdywgXAo+ICsJCSBta3NlcmNvbW1mdywgbWt0aXRhbmltZywgbWt0cGxpbmtmdy1saWIsIG1r
-dHBsaW5rZncsIFwKPiArCQkgbWt0cGxpbmtmdzIsIG1rd3JnZ2ltZywgbWt3cmdpbWcsIG1remNm
-dywgbWt6eW5mdywgXAo+ICsJCSBta3p5eGVsemxkZncgb3NicmlkZ2UtY3JjLCBwYzFjcnlwdCwg
-c3JlYzJiaW4sIHRyeDJlZGlwcywgXAo+ICsJCSB1aW1hZ2VfcGFkaGRyLCB3cnQ0MDBuLCB6eWlt
-YWdlLCB6eXRyeCksIFwKPiArCUdQTC0yLjArIChhZGRwYXR0ZXJuLCBhc3VzdHJ4LCBiY200OTA4
-YXN1cywgYmNtNDkwOGtlcm5lbCwgZGduMzUwMHN1bSwgXAo+ICsJCSAgZW5jb2RlX2NyYywgamNn
-aW1hZ2UsIGx6bWEyZXZhLCBtYWtlYW1pdGJpbiwgbWtjaGtpbWcsIFwKPiArCQkgIG1rY3N5c2lt
-ZywgbWtkbGlua2Z3LWxpYiwgbWtkbGlua2Z3LCBta2VkaW1heGltZywgbWtmd2ltYWdlLCBcCj4g
-KwkJICBta2Z3aW1hZ2UyLCBta2hlYWRlcl9nZW10ZWssIG1rbXlsb2Z3LCBtb3Rvcm9sYS1iaW4s
-IFwKPiArCQkgIG5lYy1lbmMsIG9zZWFtYSwgb3RyeCwgcHRnZW4sIHNpZ25fZGxpbmtfcnUsIHNw
-dzMwM3YsIHRyeCwgXAo+ICsJCSAgdWltYWdlX3NnZWhkciwgeGlhb21pZncsIHhvcmltYWdlLCB6
-eXhiY20pLCBcCj4gKwlHUEwtMi4wIE9SIEdQTC0zLjAgKG5hbmRfZWNjKSwgXAo+ICsJR1BMLTIu
-MCsgT1IgTUlUIChseGxmdyksIFwKPiArCVVOS05PV04gKGltYWdldGFnLCB0cngydXNyKQo+ICtG
-SVJNV0FSRV9VVElMU19ERVBFTkRFTkNJRVMgPSBvcGVuc3NsIHpsaWIKPiArSE9TVF9GSVJNV0FS
-RV9VVElMU19ERVBFTkRFTkNJRVMgPSBob3N0LW9wZW5zc2wgaG9zdC16bGliCj4gKwo+ICskKGV2
-YWwgJChjbWFrZS1wYWNrYWdlKSkKPiArJChldmFsICQoaG9zdC1jbWFrZS1wYWNrYWdlKSkKPiAK
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290
-IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxk
-cm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+
+
+On 07/10/2021 11:31, Kory Maincent wrote:
+> Add an configuration to use personalized png image. If the configuration is
+> empty we keep the psplash default image.
+> 
+> Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
+> ---
+>   package/psplash/Config.in  | 10 ++++++++++
+>   package/psplash/psplash.mk |  8 ++++++++
+>   2 files changed, 18 insertions(+)
+> 
+> diff --git a/package/psplash/Config.in b/package/psplash/Config.in
+> index 5053ebacf7..da99b264e0 100644
+> --- a/package/psplash/Config.in
+> +++ b/package/psplash/Config.in
+> @@ -27,5 +27,15 @@ config BR2_PACKAGE_PSPLASH
+>   
+>   	  http://git.yoctoproject.org/cgit/cgit.cgi/psplash/
+>   
+> +if BR2_PACKAGE_PSPLASH
+> +
+> +config BR2_PACKAGE_PSPLASH_IMAGE
+> +	string "psplash image"
+> +	help
+> +	  Use a personalized png image as boot splash.
+> +	  Let it empty if you want to keep the psplash default image.
+> +
+> +endif
+> +
+>   comment "psplash needs a toolchain w/ wchar"
+>   	depends on !BR2_USE_WCHAR
+> diff --git a/package/psplash/psplash.mk b/package/psplash/psplash.mk
+> index a0f01869b4..882c17704a 100644
+> --- a/package/psplash/psplash.mk
+> +++ b/package/psplash/psplash.mk
+> @@ -18,6 +18,14 @@ else
+>   PSPLASH_CONF_OPTS += --without-systemd
+>   endif
+>   
+> +PSPLASH_IMAGE = $(call qstrip,$(BR2_PACKAGE_PSPLASH_IMAGE))
+> +
+> +define PSPLASH_COPY_IMAGE
+> +	$(if $(PSPLASH_IMAGE),cp $(PSPLASH_IMAGE) $(@D)/base-images/psplash-poky.png)
+
+  I changed this into
+
+ifneq ($(PSPLASH_IMAGE),)
+
+around the whole thing, and applied to master, thanks.
+
+  Regards,
+  Arnout
+
+> +endef
+> +
+> +PSPLASH_POST_EXTRACT_HOOKS += PSPLASH_COPY_IMAGE
+> +
+>   define PSPLASH_INSTALL_INIT_SYSTEMD
+>   	$(INSTALL) -D -m 644 package/psplash/psplash-start.service \
+>   		$(TARGET_DIR)/usr/lib/systemd/system/psplash-start.service
+> 
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
