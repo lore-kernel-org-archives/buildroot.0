@@ -2,84 +2,87 @@ Return-Path: <SRS0=lKTV=PD=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D2988C433F5
-	for <buildroot@archiver.kernel.org>; Fri, 15 Oct 2021 20:08:58 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4752BC433EF
+	for <buildroot@archiver.kernel.org>; Fri, 15 Oct 2021 20:10:28 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 3823C61184
-	for <buildroot@archiver.kernel.org>; Fri, 15 Oct 2021 20:08:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3823C61184
+	by mail.kernel.org (Postfix) with ESMTPS id D4C9861053
+	for <buildroot@archiver.kernel.org>; Fri, 15 Oct 2021 20:10:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D4C9861053
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D0CA480BAE;
-	Fri, 15 Oct 2021 20:08:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A79DE60EEA;
+	Fri, 15 Oct 2021 20:10:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Q-h0xn1OH73q; Fri, 15 Oct 2021 20:08:57 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5122C80AFE;
-	Fri, 15 Oct 2021 20:08:56 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 60C0C1BF2CC
- for <buildroot@lists.busybox.net>; Fri, 15 Oct 2021 20:08:55 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5CA0660668
- for <buildroot@lists.busybox.net>; Fri, 15 Oct 2021 20:08:55 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BHf-U6i-OJBQ for <buildroot@lists.busybox.net>;
- Fri, 15 Oct 2021 20:08:51 +0000 (UTC)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id X3_OugStQX2H; Fri, 15 Oct 2021 20:10:26 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id F286660692;
+	Fri, 15 Oct 2021 20:10:25 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C47BF1BF2CC
+ for <buildroot@lists.busybox.net>; Fri, 15 Oct 2021 20:10:24 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id B30D94049E
+ for <buildroot@lists.busybox.net>; Fri, 15 Oct 2021 20:10:24 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Y79JkUIhj_UB for <buildroot@lists.busybox.net>;
+ Fri, 15 Oct 2021 20:10:23 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
- [IPv6:2a00:1450:4864:20::433])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B46C2605A7
- for <buildroot@buildroot.org>; Fri, 15 Oct 2021 20:08:51 +0000 (UTC)
-Received: by mail-wr1-x433.google.com with SMTP id e12so28348301wra.4
- for <buildroot@buildroot.org>; Fri, 15 Oct 2021 13:08:51 -0700 (PDT)
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
+ [IPv6:2a00:1450:4864:20::32c])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B42354049C
+ for <buildroot@buildroot.org>; Fri, 15 Oct 2021 20:10:23 +0000 (UTC)
+Received: by mail-wm1-x32c.google.com with SMTP id
+ n40-20020a05600c3ba800b0030da2439b21so3906006wms.0
+ for <buildroot@buildroot.org>; Fri, 15 Oct 2021 13:10:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=C5XGJh4Sxkoqt3K6DT2dn5lILJv0zNCRKVuENfO8OiU=;
- b=iLNv8GEc3yad6trzZXRfZkoHFfaReythlfEu+m5jj42otruKfMQ+o+HDa6S9nrHDaM
- a2Y0Q/rRQHa52S1vs53QVadkegPYDbBY5kjiWnVqeewaBKDDyC2IlolQXrhDz+7xMtXQ
- hknZP8veK1fWgdlLCv/dIQEN/vIrz/MtGHzW3zZau0LZVuwG0C2lupdjj2YhjXtr5EQ3
- +PUqWeNTgSObGAP8Xe1HUpjh60Z5vNQdE2lmblc/TH/sGwIIIV/eK0aS9XzFtdamWx6+
- HpqBzyU0aGA9bJjQRxEQQQ+Iqy0mZYNgfwELW7ocNuo+EA/G9113CaEywq1tAMaIanuC
- 68tA==
+ h=date:from:to:cc:subject:message-id:reply-to:references:mime-version
+ :content-disposition:in-reply-to;
+ bh=uqcc0ysowmWAmL1pT69sDGprxbpxYHK4FGQV5mdfK+4=;
+ b=QFAA6fCMYfD8LvjaL6PnLVEdc2k5naQ5FAGEvyiWldYj1uH3xtQuaY19HK/kr7o8wW
+ jXOqQ0FHWcHESwfXN4sgNnKVhiTLqgKBu84DkXC0I2fPyGYf/vRuzOzRm3prg72STQrv
+ f/c5PTc9cBUDIpiszJWnCv/jI1ofQRr0nenjZG8LkNwXdS3Wtij+oZHyXH4efYRAloyg
+ rmmLqQmNWMG9szrsj/Y3ZviDfLoHJ2q+BU6r5QrfQk9Ttu7yk82+gjl2p4c3eO54Q3nP
+ sZHSHScrB1vhioqcgUWoXxMKLutFZx9nPelsEC+mbuIjo/SZ4TwNVDD8k1pfp4zfNUZ3
+ Ageg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=C5XGJh4Sxkoqt3K6DT2dn5lILJv0zNCRKVuENfO8OiU=;
- b=rkzJ806vQmVfG9ErZPi8LZozirk+l1GV/NVYyutQd85R93BwMaKR1K04ZzpPzZqUSC
- 6pdjpR0E4+3BbqH85Z6L0rHiEyKY2KVaP6KDl5K9nNG4NE0pfPMBlgD0u7yHFV5uG3AM
- zDzwUPm9nCKf7OUAIrF85iLw3HvkTg0YOOtjbhlD5txQ7CHYsUcOU1zaURKCkHmDz7A1
- nivEzdOBTk0t226oB57zdE0j5Q37V0MonHqwshh6uJteK0o+NVHWNUwlXJ9gkVoljpVe
- FvOr6Y5iJTGZU5bLhZ2p1owUjbYnAAYYX638S1aeihH6q1cHfoN7IxcXjHkrJ9HqsHNU
- FSpw==
-X-Gm-Message-State: AOAM5329gZgAQY9vK+kIwSlBFgpAIPqpw9ucJiv3uCpeBTzPeB8uegPr
- Ve9HWNWnzynJyQGIcNl23l1DtbyS7IM=
-X-Google-Smtp-Source: ABdhPJwzFfmoT6yWhrLd0CuYEkWUG6dGgkPfKy30woE9DyjqQohyGvRdt6EUmxziGwvyKLrrfVoHTQ==
-X-Received: by 2002:adf:a413:: with SMTP id d19mr17193033wra.246.1634328529537; 
- Fri, 15 Oct 2021 13:08:49 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-1732-95.w86-253.abo.wanadoo.fr.
- [86.253.44.95])
- by smtp.gmail.com with ESMTPSA id z79sm5528537wmc.17.2021.10.15.13.08.48
+ h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
+ :references:mime-version:content-disposition:in-reply-to;
+ bh=uqcc0ysowmWAmL1pT69sDGprxbpxYHK4FGQV5mdfK+4=;
+ b=sjpk6dZifwdWxw4GA9uMT8rWla3fGF8i62gcW+SyEgygv/XxZXC+bK/Yo+8mO3x1+R
+ dJczkkg6OHxqzDSVIoQAHNG41mcAqpHESj4+EQJw/6L6zL+gasPgTQk1F3ziRAS2utnS
+ A1C5QvkCqzFD71Rs2yPmfQ5dAcscaIEfoyn1qjBM4+QAbtEm+RpZQaRmLQscBfXsSp4g
+ gjFXDlGn4ghfLyOtxz2bVHp+IT5lpCHqIMBeoEh7Y6NX8W5NVBzq6TQqcoAgdKhWGY3r
+ AtuwM8VlTF4fJSg1GZvCTY367jungf8PFKWNeFw3zJ8ulImDShfd5KEh8yIavAjOvlHb
+ n+5Q==
+X-Gm-Message-State: AOAM530xEb3a9zbDUXZYzkxYww93Yfhw/1Ycu26fImXyURKlGcubQnSU
+ 3qWRrROowWjern3wvL8Hzyc=
+X-Google-Smtp-Source: ABdhPJz+49BWQclfydFCeAHoXFL9OgIfZ2ewzKguZqiuI5EKCIshZhgtIfEa1bbNwNV4bviBOTbgcg==
+X-Received: by 2002:a7b:c359:: with SMTP id l25mr28196598wmj.84.1634328621648; 
+ Fri, 15 Oct 2021 13:10:21 -0700 (PDT)
+Received: from pevik (gw1.ms-free.net. [185.243.124.10])
+ by smtp.gmail.com with ESMTPSA id j206sm8656181wmj.23.2021.10.15.13.10.20
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 15 Oct 2021 13:08:48 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Fri, 15 Oct 2021 22:07:41 +0200
-Message-Id: <20211015200741.1648668-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.33.0
+ Fri, 15 Oct 2021 13:10:21 -0700 (PDT)
+Date: Fri, 15 Oct 2021 22:10:18 +0200
+From: Petr Vorel <petr.vorel@gmail.com>
+To: Richard Palethorpe <rpalethorpe@suse.com>
+Message-ID: <YWngKpIr2Rr3Qz6l@pevik>
+References: <20211015110135.15960-1-rpalethorpe@suse.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/cryptsetup: bump to version 2.3.6
+Content-Disposition: inline
+In-Reply-To: <20211015110135.15960-1-rpalethorpe@suse.com>
+Subject: Re: [Buildroot] [PATCH] package/ltp-testsuite: Add Open POSIX and
+ realtime test suite opts
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,51 +94,95 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Reply-To: Petr Vorel <petr.vorel@gmail.com>
+Cc: io@richiejp.com, Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Stable bug-fix release with minor extensions.
+Hi Richie,
 
-All users of cryptsetup 2.x and later should upgrade to this version.
 
-https://gitlab.com/cryptsetup/cryptsetup/-/blob/v2.3.6/docs/v2.3.5-ReleaseNotes
-https://gitlab.com/cryptsetup/cryptsetup/-/blob/v2.3.6/docs/v2.3.6-ReleaseNotes
+[ Cc Arnout, Peter and Thomas in case they push your patch through pending line ]
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/cryptsetup/cryptsetup.hash | 2 +-
- package/cryptsetup/cryptsetup.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> During LTP and/or kernel development it's very rare that I want the
+> Open POSIX and the realtime tests. Open POSIX in particular takes
+> considerable time to build. So this adds the option of disabling them.
 
-diff --git a/package/cryptsetup/cryptsetup.hash b/package/cryptsetup/cryptsetup.hash
-index 3b58345611..0aa3f79df7 100644
---- a/package/cryptsetup/cryptsetup.hash
-+++ b/package/cryptsetup/cryptsetup.hash
-@@ -1,4 +1,4 @@
- # From https://www.kernel.org/pub/linux/utils/cryptsetup/v2.3/sha256sums.asc
--sha256  9d16eebb96b53b514778e813019b8dd15fea9fec5aafde9fae5febf59df83773  cryptsetup-2.3.4.tar.xz
-+sha256  b296b7a21ea576c2b180611ccb19d06aec8dddaedf7c704b0c6a81210c25635f  cryptsetup-2.3.6.tar.xz
- sha256  45670cce8b6a0ddd66c8016cd8ccef6cd71f35717cbacc7f1e895b3855207b33  COPYING
- sha256  8c33cc37871654ec7ed87e6fbb896c8cf33ef5ef05b1611a5aed857596ffafa5  COPYING.LGPL
-diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
-index b816dc2f22..3cf6c8a301 100644
---- a/package/cryptsetup/cryptsetup.mk
-+++ b/package/cryptsetup/cryptsetup.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- CRYPTSETUP_VERSION_MAJOR = 2.3
--CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).4
-+CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).6
- CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.xz
- CRYPTSETUP_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/cryptsetup/v$(CRYPTSETUP_VERSION_MAJOR)
- CRYPTSETUP_DEPENDENCIES = \
--- 
-2.33.0
+> They default to on so as not to break existing test automation.
 
+Thanks a lot, I always wanted to do this.
+
+Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
+
+I don't see you patch in patchwork [1], nor in lore [2].
+Have you registered to buildroot ML?
+
+Kind regards,
+Petr
+
+[1] https://patchwork.ozlabs.org/project/buildroot/list/?series=&submitter=&state=*&q=ltp&archive=&delegate=
+[2] https://lore.kernel.org/buildroot/?q=rpalethorpe%40suse.com
+
+> Signed-off-by: Richard Palethorpe <rpalethorpe@suse.com>
+> Cc: io@richiejp.com
+> ---
+>  package/ltp-testsuite/Config.in        | 16 ++++++++++++++++
+>  package/ltp-testsuite/ltp-testsuite.mk | 10 +++++++---
+>  2 files changed, 23 insertions(+), 3 deletions(-)
+
+> diff --git a/package/ltp-testsuite/Config.in b/package/ltp-testsuite/Config.in
+> index 32e1b6ad76..272c2ede37 100644
+> --- a/package/ltp-testsuite/Config.in
+> +++ b/package/ltp-testsuite/Config.in
+> @@ -20,6 +20,22 @@ config BR2_PACKAGE_LTP_TESTSUITE
+
+>  	  http://linux-test-project.github.io
+
+> +if BR2_PACKAGE_LTP_TESTSUITE
+> +
+> +config BR2_PACKAGE_LTP_TESTSUITE_OPEN_POSIX
+> +	bool "Open POSIX testsuite"
+> +	default y
+> +	help
+> +	  Test suite for POSIX compliance. Included with the LTP.
+> +
+> +config BR2_PACKAGE_LTP_TESTSUITE_REALTIME
+> +	bool "Realtime testsuite"
+> +	default y
+> +	help
+> +	  Test suite for realtime kernels. Included with the LTP.
+> +
+> +endif
+> +
+>  comment "ltp-testsuite needs a toolchain w/ NPTL"
+>  	depends on BR2_PACKAGE_LTP_TESTSUITE_ARCH_SUPPORTS
+>  	depends on BR2_USE_MMU
+> diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
+> index 3d8fe3b78c..93d951fe1a 100644
+> --- a/package/ltp-testsuite/ltp-testsuite.mk
+> +++ b/package/ltp-testsuite/ltp-testsuite.mk
+> @@ -11,9 +11,13 @@ LTP_TESTSUITE_SITE = https://github.com/linux-test-project/ltp/releases/download
+>  LTP_TESTSUITE_LICENSE = GPL-2.0, GPL-2.0+
+>  LTP_TESTSUITE_LICENSE_FILES = COPYING
+
+> -LTP_TESTSUITE_CONF_OPTS += \
+> -	--with-realtime-testsuite --with-open-posix-testsuite \
+> -	--disable-metadata
+nit: Maybe add blank line here for readability.
+> +LTP_TESTSUITE_CONF_OPTS += --disable-metadata
+> +ifeq ($(BR2_PACKAGE_LTP_TESTSUITE_OPEN_POSIX),y)
+> +LTP_TESTSUITE_CONF_OPTS += --with-open-posix-testsuite
+> +endif
+And also here.
+> +ifeq ($(BR2_PACKAGE_LTP_TESTSUITE_REALTIME),y)
+> +LTP_TESTSUITE_CONF_OPTS += --with-realtime-testsuite
+> +endif
+
+>  ifeq ($(BR2_LINUX_KERNEL),y)
+>  LTP_TESTSUITE_DEPENDENCIES += linux
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
