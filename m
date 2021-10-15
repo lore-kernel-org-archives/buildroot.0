@@ -2,61 +2,61 @@ Return-Path: <SRS0=lKTV=PD=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 602EFC433F5
-	for <buildroot@archiver.kernel.org>; Fri, 15 Oct 2021 15:28:16 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DA868C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 15 Oct 2021 15:29:23 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B4B4A60F41
-	for <buildroot@archiver.kernel.org>; Fri, 15 Oct 2021 15:28:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B4B4A60F41
+	by mail.kernel.org (Postfix) with ESMTPS id 3749C60F6F
+	for <buildroot@archiver.kernel.org>; Fri, 15 Oct 2021 15:29:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3749C60F6F
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=t-online.de
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5DB8660BC3;
-	Fri, 15 Oct 2021 15:28:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D610940822;
+	Fri, 15 Oct 2021 15:29:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id eG4PS4U7_FRd; Fri, 15 Oct 2021 15:28:14 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 1UEMNj6SJNmp; Fri, 15 Oct 2021 15:29:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B62A660EED;
-	Fri, 15 Oct 2021 15:28:13 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4B7ED1BF378
- for <buildroot@lists.busybox.net>; Fri, 15 Oct 2021 15:28:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3FA6D404D1;
+	Fri, 15 Oct 2021 15:29:21 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A0EBC1BF378
+ for <buildroot@lists.busybox.net>; Fri, 15 Oct 2021 15:29:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 232EB60F09
- for <buildroot@lists.busybox.net>; Fri, 15 Oct 2021 15:28:11 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9CB2D4059F
+ for <buildroot@lists.busybox.net>; Fri, 15 Oct 2021 15:29:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QVvUG76PBiT8 for <buildroot@lists.busybox.net>;
- Fri, 15 Oct 2021 15:28:10 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id BmFb3yQAb48b for <buildroot@lists.busybox.net>;
+ Fri, 15 Oct 2021 15:29:18 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mailout04.t-online.de (mailout04.t-online.de [194.25.134.18])
- by smtp3.osuosl.org (Postfix) with ESMTPS id CBE9060EFB
- for <buildroot@buildroot.org>; Fri, 15 Oct 2021 15:28:09 +0000 (UTC)
-Received: from fwd70.dcpf.telekom.de (fwd70.aul.t-online.de [10.223.144.96])
- by mailout04.t-online.de (Postfix) with SMTP id EA6426EF1
- for <buildroot@buildroot.org>; Fri, 15 Oct 2021 17:26:45 +0200 (CEST)
-Received: from fli4l.lan.fli4l ([79.214.199.253]) by fwd70.t-online.de
+Received: from mailout06.t-online.de (mailout06.t-online.de [194.25.134.19])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9CC0F400BB
+ for <buildroot@buildroot.org>; Fri, 15 Oct 2021 15:29:18 +0000 (UTC)
+Received: from fwd80.dcpf.telekom.de (fwd80.aul.t-online.de [10.223.144.106])
+ by mailout06.t-online.de (Postfix) with SMTP id F41AE1EA2B;
+ Fri, 15 Oct 2021 17:29:15 +0200 (CEST)
+Received: from fli4l.lan.fli4l ([79.214.199.253]) by fwd80.t-online.de
  with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1mbP6b-4ayAOf0; Fri, 15 Oct 2021 17:26:45 +0200
-Received: from bruckner.lan.fli4l ([192.168.1.1]:35126)
+ esmtp id 1mbP91-0BkQYT0; Fri, 15 Oct 2021 17:29:15 +0200
+Received: from bruckner.lan.fli4l ([192.168.1.1]:35128)
  by fli4l.lan.fli4l with esmtp (Exim 4.95)
- (envelope-from <bernd.kuhls@t-online.de>) id 1mbP6a-0003B6-K8
- for buildroot@buildroot.org; Fri, 15 Oct 2021 17:26:44 +0200
+ (envelope-from <bernd.kuhls@t-online.de>) id 1mbP91-0003bV-C6;
+ Fri, 15 Oct 2021 17:29:15 +0200
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Fri, 15 Oct 2021 17:26:44 +0200
-Message-Id: <20211015152644.1008907-1-bernd.kuhls@t-online.de>
+Date: Fri, 15 Oct 2021 17:29:15 +0200
+Message-Id: <20211015152915.1018670-1-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1634311605-00001432-40329163/0/0 CLEAN NORMAL
-X-TOI-MSGID: 44db53e0-b0c1-45c9-975d-9cbceab2f5a1
-Subject: [Buildroot] [PATCH 1/1] package/libhdhomerun: bump version to
- 20210624
+X-TOI-EXPURGATEID: 150726::1634311755-000010D9-6A5ED527/0/0 CLEAN NORMAL
+X-TOI-MSGID: a93fa1a4-5cf9-4e63-b949-e0c5cc30dec3
+Subject: [Buildroot] [PATCH 1/1] package/intel-mediasdk: bump version to
+ 21.3.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,42 +68,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Louis-Paul Cordier <lpdev@cordier.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changelog:
-https://www.silicondust.com/support/downloads/software-changelog/
+Release notes:
+https://github.com/Intel-Media-SDK/MediaSDK/releases/tag/intel-mediasdk-21.3.5
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libhdhomerun/libhdhomerun.hash | 2 +-
- package/libhdhomerun/libhdhomerun.mk   | 2 +-
+ package/intel-mediasdk/intel-mediasdk.hash | 2 +-
+ package/intel-mediasdk/intel-mediasdk.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libhdhomerun/libhdhomerun.hash b/package/libhdhomerun/libhdhomerun.hash
-index 8abce42eb9..66edd6a0d3 100644
---- a/package/libhdhomerun/libhdhomerun.hash
-+++ b/package/libhdhomerun/libhdhomerun.hash
+diff --git a/package/intel-mediasdk/intel-mediasdk.hash b/package/intel-mediasdk/intel-mediasdk.hash
+index 0108f56e77..8143867995 100644
+--- a/package/intel-mediasdk/intel-mediasdk.hash
++++ b/package/intel-mediasdk/intel-mediasdk.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  b996389aa6f124a6d9dc1e75ec749e86d06102e2b3e7359d57163d4cc6e633f8  libhdhomerun_20210224.tgz
-+sha256  deaf463bbcc3eefa72f97199efb6213f7b0e2c8e91f1b3d2cbf52056a8715d15  libhdhomerun_20210624.tgz
- sha256  9b872a8a070b8ad329c4bd380fb1bf0000f564c75023ec8e1e6803f15364b9e9  LICENSE
-diff --git a/package/libhdhomerun/libhdhomerun.mk b/package/libhdhomerun/libhdhomerun.mk
-index eaa60a062a..4bc584e622 100644
---- a/package/libhdhomerun/libhdhomerun.mk
-+++ b/package/libhdhomerun/libhdhomerun.mk
+-sha256  593ec057ba619e55af8c0b1fcd265a567f2846748ad6aedcc0838425c0339163  intel-mediasdk-21.3.3.tar.gz
++sha256  3f13869298d3946d7d91e58846e274ef62cd5af2473f59f36b57b2c27ebfd87c  intel-mediasdk-21.3.5.tar.gz
+ sha256  dfd67773578903698f9ff4a61eb8f2d84810cbecd56f3f3cee8c649f813b6ea6  LICENSE
+diff --git a/package/intel-mediasdk/intel-mediasdk.mk b/package/intel-mediasdk/intel-mediasdk.mk
+index 5475a0e8b1..a0492412e8 100644
+--- a/package/intel-mediasdk/intel-mediasdk.mk
++++ b/package/intel-mediasdk/intel-mediasdk.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBHDHOMERUN_VERSION = 20210224
-+LIBHDHOMERUN_VERSION = 20210624
- LIBHDHOMERUN_SOURCE = libhdhomerun_$(LIBHDHOMERUN_VERSION).tgz
- LIBHDHOMERUN_SITE = http://download.silicondust.com/hdhomerun
- LIBHDHOMERUN_LICENSE = LGPL-2.1+
+-INTEL_MEDIASDK_VERSION = 21.3.3
++INTEL_MEDIASDK_VERSION = 21.3.5
+ INTEL_MEDIASDK_SITE = http://github.com/Intel-Media-SDK/MediaSDK/archive
+ INTEL_MEDIASDK_LICENSE = MIT
+ INTEL_MEDIASDK_LICENSE_FILES = LICENSE
 -- 
 2.30.2
 
