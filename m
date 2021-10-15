@@ -2,86 +2,93 @@ Return-Path: <SRS0=lKTV=PD=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CF2A6C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 15 Oct 2021 18:32:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D8D4FC433FE
+	for <buildroot@archiver.kernel.org>; Fri, 15 Oct 2021 19:24:06 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id EEA1A61037
-	for <buildroot@archiver.kernel.org>; Fri, 15 Oct 2021 18:32:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org EEA1A61037
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id DE09661181
+	for <buildroot@archiver.kernel.org>; Fri, 15 Oct 2021 19:24:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org DE09661181
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 83963606A0;
-	Fri, 15 Oct 2021 18:32:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6A02560726;
+	Fri, 15 Oct 2021 19:24:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CKhtKBGFM6fH; Fri, 15 Oct 2021 18:32:29 +0000 (UTC)
+	with ESMTP id 58-bFuekDiHK; Fri, 15 Oct 2021 19:24:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4428F60BC3;
-	Fri, 15 Oct 2021 18:32:28 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 86CBA1BF8A8
- for <buildroot@lists.busybox.net>; Fri, 15 Oct 2021 18:32:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D2D7860BC3;
+	Fri, 15 Oct 2021 19:24:03 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id CFD2A1BF41F
+ for <buildroot@lists.busybox.net>; Fri, 15 Oct 2021 19:24:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7D44A4085A
- for <buildroot@lists.busybox.net>; Fri, 15 Oct 2021 18:32:26 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id BB84983AF0
+ for <buildroot@lists.busybox.net>; Fri, 15 Oct 2021 19:24:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yojc369l3Ipc for <buildroot@lists.busybox.net>;
- Fri, 15 Oct 2021 18:32:24 +0000 (UTC)
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id QVpFm35J3KKs for <buildroot@lists.busybox.net>;
+ Fri, 15 Oct 2021 19:24:01 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
- [IPv6:2a00:1450:4864:20::42a])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6A5FC40854
- for <buildroot@buildroot.org>; Fri, 15 Oct 2021 18:32:24 +0000 (UTC)
-Received: by mail-wr1-x42a.google.com with SMTP id r7so27992522wrc.10
- for <buildroot@buildroot.org>; Fri, 15 Oct 2021 11:32:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=XyR+PeahGJEeIC4KQn5g5okfBHSENL3GhaZFTGiO5zY=;
- b=EUTh/U4yrFHYkR5TRFd56qQlQK2Jc9r3wHqspS02j1ylNEQSvbe4ObdJhFtfPEaKUC
- wAl69D9DNvVfVcUPswT15Gqr6kG+1HsGhO8rF1RBr5r0Q+XDf7L42jQ3k/Kf8qLYfttA
- NXs7DIZ0J5B3X1r1Tx6unk/JmA/9Z41rN74fc9YTHQB5kPnMjRwGFkOmSSvRCdECckEJ
- YClIHrl4RQsEQzq8mmX/6QEAWQv48M3w36sB2pPxpwnL+3fCZv8cvj07VcLGTOpuz8dC
- qzYZcFWN5sbt73Jjoe9wkfO0h7BATllFUDlH1rH++hJYbs8BBv/1umIJvaSOnI6IydgF
- JsFA==
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com
+ [IPv6:2a00:1450:4864:20::535])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id BF10A83AE8
+ for <buildroot@buildroot.org>; Fri, 15 Oct 2021 19:24:00 +0000 (UTC)
+Received: by mail-ed1-x535.google.com with SMTP id ec8so42129699edb.6
+ for <buildroot@buildroot.org>; Fri, 15 Oct 2021 12:24:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :references:from:organization:in-reply-to:content-transfer-encoding;
+ bh=+I7xYfNetT2EQ/LbJWp30dmP6rjico4XV9DNVKpMrxI=;
+ b=IuV/fg+UbxoTKch1VKKMxvZQzqqSyNq4Bs9tBpassWA7jZUQuh5HV/4FUUXguL/EqH
+ JWxhLLjrwBrQnEnNzc0LTlhGHwdc24/qnxmGRvNLiyfKZ11f2tKvm4PWq/AoJBpmNXTU
+ jWy3ht33UfecJeKhE0KCMyqzMM67EZ/XG72IuESU2F6WVnzfPZskwPQIfQUKNPJTFf1E
+ Jsqz7MYg/BLEfK8341SxOLJ+8olrIOqq5gaWM1onNLVEczz0/nGFWgs4/FVLH7AjdhZ3
+ CAKXvIhTA6WN+ablXzn/4X4fEw8Ckq2ZI5ot5A4gRC7YcE27p635VlbWDvsgJ4LPrxfu
+ QBug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=XyR+PeahGJEeIC4KQn5g5okfBHSENL3GhaZFTGiO5zY=;
- b=LPzHSNFCLNbMzPG5jhVg3Li90nBg2t/5MWb3yFhuJqRl68YZq9cEhkB9DnQ5xmpIG2
- NXVeTC2c7N7mN8dvaf0p8aKJYzE2ife2I6PjknPJVZ+smx75Qc3Q0ttxlMk4m2Zqf9Gw
- tkCfY8seBoloASVuk7cpq82EIQQZ61qM7jzkk2ZJXmSbxLI/2g/WH9fRuqq8rx5uUE/a
- ojDkThWd9FEa+VY9f9QCiEGGJtgAnL4wDzkAxC/4rBQy0Aop+V4aH0RfDbD4CR53+Ncg
- VBMywhY53yd/2+V9xnqbsLsKWEb9e/q1Gng1FXcE93uAExeyCweD9+BNcYFYRC4hxJpO
- Wyiw==
-X-Gm-Message-State: AOAM533cKpNtTI6tQNOU8N9D8eAkn+nMSAD5ENa5ew+ujgrKI1DWgjNn
- cry6FzPGTx4AwMsy1HOEdKyL6/YP4+U=
-X-Google-Smtp-Source: ABdhPJz33BO+CI/UPNXpN2V8fvM3KCEJz7fI75YVUTah6E7Fv1yUyfyD/SmMnm6qdSMW8b+nTAidXg==
-X-Received: by 2002:a05:6000:1567:: with SMTP id
- 7mr16546323wrz.408.1634322742146; 
- Fri, 15 Oct 2021 11:32:22 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-1732-95.w86-253.abo.wanadoo.fr.
- [86.253.44.95])
- by smtp.gmail.com with ESMTPSA id u5sm5617737wrg.57.2021.10.15.11.32.21
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 15 Oct 2021 11:32:21 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Fri, 15 Oct 2021 20:31:13 +0200
-Message-Id: <20211015183113.1149243-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.33.0
+ bh=+I7xYfNetT2EQ/LbJWp30dmP6rjico4XV9DNVKpMrxI=;
+ b=hZFPv8aevMNN1Gr1Wi/0j8ZtBuBN1VjwDl7hAcFaBi4SFrvFU98hpHWmHlaM7AgTJk
+ CFqC+65sKUn//s8AMelaPWmeGUVWEIAmnnaoY2VG50zVgXM/EcOE6Gr07YGLc0gYuBW9
+ BJOeuVOuqOunb2C4HoriHhoAz03Ylpg3UmXk4vigylX2Y0Y/pIrfCjCQHUqGUv3q3eOy
+ KRY7GxoWrbxnjDMtsDl4baOS3v8UWX00sXc5RC7lj5QAmHQ6vZqnKFKneg+ovfIQ0+df
+ uiQQi6c8vVzJpFFbEpj9J27d6QoAvNri+n0r/HLMhGdnhQ1MuCnLCctmB5vzXWipfeCs
+ Swaw==
+X-Gm-Message-State: AOAM53160lcomHRhm6GrKn0sB+JZBQ8Z2v/9LnrcNvxNiZT/5lbWfHzj
+ Ox6KBOFHNG6u+VaDLiFX+lxWlw==
+X-Google-Smtp-Source: ABdhPJy1vR2Bi7c98O9NQB3lxHPCb2SOiFFXCyuNuZdQvt/nz0QvmSoF10fXl2DA/UOt73GS/ZMbAQ==
+X-Received: by 2002:a05:6402:694:: with SMTP id
+ f20mr20422323edy.100.1634325838781; 
+ Fri, 15 Oct 2021 12:23:58 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id v13sm5613019ede.79.2021.10.15.12.23.58
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Fri, 15 Oct 2021 12:23:58 -0700 (PDT)
+Message-ID: <df7940c6-50e3-319e-42d3-602426b5effa@mind.be>
+Date: Fri, 15 Oct 2021 21:23:57 +0200
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/libcamera: raspberrypi depends on
- arm or aarch64
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.1.0
+Content-Language: en-GB
+To: William Tambe <tambewilliam@gmail.com>, buildroot@buildroot.org
+References: <CAF8i9mOWDB9MSrgipQWH8bHzQf4bc=m+t=dTwdGrSb7SASF2Ew@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <CAF8i9mOWDB9MSrgipQWH8bHzQf4bc=m+t=dTwdGrSb7SASF2Ew@mail.gmail.com>
+Subject: Re: [Buildroot] git failing to build: zlib.h: No such file or
+ directory
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,51 +100,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Kieran Bingham <kieran.bingham@ideasonboard.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add a dependency on arm or aarch64 for
-BR2_PACKAGE_LIBCAMERA_PIPELINE_RASPBERRYPI to avoid the following build
-failure with one powerpc64 toolchain since commit
-c09f126f570355b8ec134724b453300a4811339c
-as suggested by upstream in
-https://lists.libcamera.org/pipermail/libcamera-devel/2021-October/025796.html:
 
-In file included from ../include/libcamera/base/log.h:10,
-                 from ../src/ipa/raspberrypi/raspberrypi.cpp:18:
-../src/ipa/raspberrypi/raspberrypi.cpp:64:53:   in 'constexpr' expansion of 'std::chrono::operator/<long double, std::ratio<1>, double>(std::literals::chrono_literals::operator""s(1.0e+0l), 3.0e+1)'
-/home/buildroot/autobuild/instance-2/output-1/host/opt/ext-toolchain/powerpc64-buildroot-linux-gnu/include/c++/9.3.0/chrono:502:32: error: '(1.0e+0l / 3.0e+1)' is not a constant expression
-  502 |  return __cd(__cd(__d).count() / __s);
-../src/ipa/raspberrypi/raspberrypi.cpp:73:56:   in 'constexpr' expansion of 'std::chrono::operator/<long double, std::ratio<1>, double>(std::literals::chrono_literals::operator""s(1.0e+0l), 6.0e+1)'
-/home/buildroot/autobuild/instance-2/output-1/host/opt/ext-toolchain/powerpc64-buildroot-linux-gnu/include/c++/9.3.0/chrono:502:32: error: '(1.0e+0l / 6.0e+1)' is not a constant expression
 
-Fixes:
- - http://autobuild.buildroot.org/results/49caebe7ef7e3d63de49e78d5d6839dd0aedf10c
+On 15/10/2021 18:28, William Tambe wrote:
+> Hi,
+> 
+> I am not able to build git on BuildRoot 2021.08.1; it complains about
+> not finding zlib.h despite the header existing at
+> target/usr/include/zlib.h .
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libcamera/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+  Whether it's in target doesn't matter, it has to be in the staging directory, 
+i.e. host/pu32-buildroot-linux-gnu/sysroot/usr/include/zlib.h
 
-diff --git a/package/libcamera/Config.in b/package/libcamera/Config.in
-index 92c17df849..c510e34924 100644
---- a/package/libcamera/Config.in
-+++ b/package/libcamera/Config.in
-@@ -40,6 +40,7 @@ config BR2_PACKAGE_LIBCAMERA_PIPELINE_IPU3
- 
- config BR2_PACKAGE_LIBCAMERA_PIPELINE_RASPBERRYPI
- 	bool "raspberrypi pipeline"
-+	depends on BR2_arm || BR2_aarch64
- 	depends on BR2_USE_WCHAR # boost (already enforced for gnutls)
- 	select BR2_PACKAGE_BOOST
- 	select BR2_PACKAGE_LIBCAMERA_HAS_PIPELINE
--- 
-2.33.0
+  If it's not there: can you reproduce this with a clean build?
 
+  Also, we have no architecture called "pu32", so you must be using a fork of 
+buildroot.
+
+  To debug this further, run the failing command manually and add -v to the gcc 
+command line:
+
+cd /home/tambewilliam/Documents/buildroot-build/build/git-2.31.1/
+/home/tambewilliam/Documents/buildroot-build/host/bin/pu32-elf-gcc -v -o 
+fuzz-pack-idx.o -c -MF ./.depend/fuzz-pack-idx.o.d -MQ fuzz-pack-idx.o -MMD -MP 
+  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 
+-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os -g0 
+-static -I. -DHAVE_SYSINFO -DGIT_HOST_CPU="\"x86_64\"" -DHAVE_ALLOCA_H -DNO_CURL 
+-DNO_OPENSSL -DNO_GETTEXT -DNO_DEFLATE_BOUND -DSHA1_DC 
+-DSHA1DC_NO_STANDARD_INCLUDES -DSHA1DC_INIT_SAFE_HASH_DEFAULT=0 
+-DSHA1DC_CUSTOM_INCLUDE_SHA1_C="\"cache.h\"" 
+-DSHA1DC_CUSTOM_INCLUDE_UBC_CHECK_C="\"git-compat-util.h\"" -DSHA256_BLK 
+-lpthread -DHAVE_PATHS_H -DHAVE_STRINGS_H -DHAVE_DEV_TTY -DHAVE_CLOCK_GETTIME 
+-DHAVE_CLOCK_MONOTONIC -DHAVE_GETDELIM 
+'-DPROCFS_EXECUTABLE_PATH="/proc/self/exe"'  -DSNPRINTF_RETURNS_BOGUS 
+-DFREAD_READS_DIRECTORIES -DNO_STRLCPY -DSHELL_PATH='"/bin/sh"' 
+-DPAGER_ENV='"LESS=FRX LV=-c"'  fuzz-pack-idx.c
+
+This will give you a list of all the include paths that are used, so you can 
+check that the one containing zlib.h is there.
+
+
+  Regards,
+  Arnout
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
