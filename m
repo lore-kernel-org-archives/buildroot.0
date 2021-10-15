@@ -2,61 +2,60 @@ Return-Path: <SRS0=lKTV=PD=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DA868C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 15 Oct 2021 15:29:23 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 39428C433F5
+	for <buildroot@archiver.kernel.org>; Fri, 15 Oct 2021 15:35:08 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 3749C60F6F
-	for <buildroot@archiver.kernel.org>; Fri, 15 Oct 2021 15:29:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3749C60F6F
+	by mail.kernel.org (Postfix) with ESMTPS id 61B4661037
+	for <buildroot@archiver.kernel.org>; Fri, 15 Oct 2021 15:35:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 61B4661037
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=t-online.de
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D610940822;
-	Fri, 15 Oct 2021 15:29:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2D72581518;
+	Fri, 15 Oct 2021 15:35:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1UEMNj6SJNmp; Fri, 15 Oct 2021 15:29:22 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id geEBddr_FI2L; Fri, 15 Oct 2021 15:35:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3FA6D404D1;
-	Fri, 15 Oct 2021 15:29:21 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A0EBC1BF378
- for <buildroot@lists.busybox.net>; Fri, 15 Oct 2021 15:29:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8FEC180C97;
+	Fri, 15 Oct 2021 15:35:05 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id DEE7F1BF378
+ for <buildroot@lists.busybox.net>; Fri, 15 Oct 2021 15:35:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9CB2D4059F
- for <buildroot@lists.busybox.net>; Fri, 15 Oct 2021 15:29:19 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id CE40B6075E
+ for <buildroot@lists.busybox.net>; Fri, 15 Oct 2021 15:35:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BmFb3yQAb48b for <buildroot@lists.busybox.net>;
- Fri, 15 Oct 2021 15:29:18 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jb1czPepp248 for <buildroot@lists.busybox.net>;
+ Fri, 15 Oct 2021 15:35:03 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mailout06.t-online.de (mailout06.t-online.de [194.25.134.19])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 9CC0F400BB
- for <buildroot@buildroot.org>; Fri, 15 Oct 2021 15:29:18 +0000 (UTC)
-Received: from fwd80.dcpf.telekom.de (fwd80.aul.t-online.de [10.223.144.106])
- by mailout06.t-online.de (Postfix) with SMTP id F41AE1EA2B;
- Fri, 15 Oct 2021 17:29:15 +0200 (CEST)
-Received: from fli4l.lan.fli4l ([79.214.199.253]) by fwd80.t-online.de
+Received: from mailout03.t-online.de (mailout03.t-online.de [194.25.134.81])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id DEEF460726
+ for <buildroot@buildroot.org>; Fri, 15 Oct 2021 15:35:02 +0000 (UTC)
+Received: from fwd81.dcpf.telekom.de (fwd81.aul.t-online.de [10.223.144.107])
+ by mailout03.t-online.de (Postfix) with SMTP id 4110D46B5;
+ Fri, 15 Oct 2021 17:32:27 +0200 (CEST)
+Received: from fli4l.lan.fli4l ([79.214.199.253]) by fwd81.t-online.de
  with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1mbP91-0BkQYT0; Fri, 15 Oct 2021 17:29:15 +0200
-Received: from bruckner.lan.fli4l ([192.168.1.1]:35128)
+ esmtp id 1mbPC6-39i98T0; Fri, 15 Oct 2021 17:32:26 +0200
+Received: from bruckner.lan.fli4l ([192.168.1.1]:35130)
  by fli4l.lan.fli4l with esmtp (Exim 4.95)
- (envelope-from <bernd.kuhls@t-online.de>) id 1mbP91-0003bV-C6;
- Fri, 15 Oct 2021 17:29:15 +0200
+ (envelope-from <bernd.kuhls@t-online.de>) id 1mbPC5-00048S-HL;
+ Fri, 15 Oct 2021 17:32:25 +0200
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Fri, 15 Oct 2021 17:29:15 +0200
-Message-Id: <20211015152915.1018670-1-bernd.kuhls@t-online.de>
+Date: Fri, 15 Oct 2021 17:32:25 +0200
+Message-Id: <20211015153225.1023067-1-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1634311755-000010D9-6A5ED527/0/0 CLEAN NORMAL
-X-TOI-MSGID: a93fa1a4-5cf9-4e63-b949-e0c5cc30dec3
-Subject: [Buildroot] [PATCH 1/1] package/intel-mediasdk: bump version to
- 21.3.5
+X-TOI-EXPURGATEID: 150726::1634311946-00001460-31443532/0/0 CLEAN NORMAL
+X-TOI-MSGID: 92171cbe-3226-4fa7-b87c-ebf31bbe0a59
+Subject: [Buildroot] [PATCH 1/1] package/libvpx: bump version to 1.11.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,43 +67,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Louis-Paul Cordier <lpdev@cordier.org>
+Cc: Spenser Gilliland <spenser@gillilanding.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://github.com/Intel-Media-SDK/MediaSDK/releases/tag/intel-mediasdk-21.3.5
+Changelog:
+https://github.com/webmproject/libvpx/blob/master/CHANGELOG
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/intel-mediasdk/intel-mediasdk.hash | 2 +-
- package/intel-mediasdk/intel-mediasdk.mk   | 2 +-
+ package/libvpx/libvpx.hash | 2 +-
+ package/libvpx/libvpx.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/intel-mediasdk/intel-mediasdk.hash b/package/intel-mediasdk/intel-mediasdk.hash
-index 0108f56e77..8143867995 100644
---- a/package/intel-mediasdk/intel-mediasdk.hash
-+++ b/package/intel-mediasdk/intel-mediasdk.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  593ec057ba619e55af8c0b1fcd265a567f2846748ad6aedcc0838425c0339163  intel-mediasdk-21.3.3.tar.gz
-+sha256  3f13869298d3946d7d91e58846e274ef62cd5af2473f59f36b57b2c27ebfd87c  intel-mediasdk-21.3.5.tar.gz
- sha256  dfd67773578903698f9ff4a61eb8f2d84810cbecd56f3f3cee8c649f813b6ea6  LICENSE
-diff --git a/package/intel-mediasdk/intel-mediasdk.mk b/package/intel-mediasdk/intel-mediasdk.mk
-index 5475a0e8b1..a0492412e8 100644
---- a/package/intel-mediasdk/intel-mediasdk.mk
-+++ b/package/intel-mediasdk/intel-mediasdk.mk
+diff --git a/package/libvpx/libvpx.hash b/package/libvpx/libvpx.hash
+index 5b9568837c..4e9bd91dee 100644
+--- a/package/libvpx/libvpx.hash
++++ b/package/libvpx/libvpx.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+-sha256  85803ccbdbdd7a3b03d930187cb055f1353596969c1f92ebec2db839fa4f834a  libvpx-1.10.0.tar.gz
++sha256  965e51c91ad9851e2337aebcc0f517440c637c506f3a03948062e3d5ea129a83  libvpx-1.11.0.tar.gz
+ sha256  8267348d5af1262c11d1a08de2f5afc77457755f1ac658627dd9acf71011d615  LICENSE
+ sha256  cc3273e0694ea5896145e0677699b53471b03ea43021ddc50e7923fbb9f5023c  PATENTS
+diff --git a/package/libvpx/libvpx.mk b/package/libvpx/libvpx.mk
+index 6ad558bc99..ece1ad2cb8 100644
+--- a/package/libvpx/libvpx.mk
++++ b/package/libvpx/libvpx.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--INTEL_MEDIASDK_VERSION = 21.3.3
-+INTEL_MEDIASDK_VERSION = 21.3.5
- INTEL_MEDIASDK_SITE = http://github.com/Intel-Media-SDK/MediaSDK/archive
- INTEL_MEDIASDK_LICENSE = MIT
- INTEL_MEDIASDK_LICENSE_FILES = LICENSE
+-LIBVPX_VERSION = 1.10.0
++LIBVPX_VERSION = 1.11.0
+ LIBVPX_SITE = $(call github,webmproject,libvpx,v$(LIBVPX_VERSION))
+ LIBVPX_LICENSE = BSD-3-Clause
+ LIBVPX_LICENSE_FILES = LICENSE PATENTS
 -- 
 2.30.2
 
