@@ -2,86 +2,94 @@ Return-Path: <SRS0=lKTV=PD=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 99971C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 15 Oct 2021 19:58:33 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1DD38C433F5
+	for <buildroot@archiver.kernel.org>; Fri, 15 Oct 2021 20:03:23 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 20B5461164
-	for <buildroot@archiver.kernel.org>; Fri, 15 Oct 2021 19:58:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 20B5461164
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id 6829C61164
+	for <buildroot@archiver.kernel.org>; Fri, 15 Oct 2021 20:03:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6829C61164
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D7D9A40801;
-	Fri, 15 Oct 2021 19:58:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2FCD060EF6;
+	Fri, 15 Oct 2021 20:03:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mJZzQsW7LNdc; Fri, 15 Oct 2021 19:58:32 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2B2034078F;
-	Fri, 15 Oct 2021 19:58:31 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A2A421BF41F
- for <buildroot@lists.busybox.net>; Fri, 15 Oct 2021 19:58:29 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9165760EEA
- for <buildroot@lists.busybox.net>; Fri, 15 Oct 2021 19:58:29 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xnjMkSlHc4ZT for <buildroot@lists.busybox.net>;
- Fri, 15 Oct 2021 19:58:28 +0000 (UTC)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id wAJnxE4IyXNw; Fri, 15 Oct 2021 20:03:21 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6F3EC60EF7;
+	Fri, 15 Oct 2021 20:03:20 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 479081BF41F
+ for <buildroot@lists.busybox.net>; Fri, 15 Oct 2021 20:03:18 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 402BC83B1C
+ for <buildroot@lists.busybox.net>; Fri, 15 Oct 2021 20:03:18 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3K_AjR160p95 for <buildroot@lists.busybox.net>;
+ Fri, 15 Oct 2021 20:03:17 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
- [IPv6:2a00:1450:4864:20::333])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 9A43960C1F
- for <buildroot@buildroot.org>; Fri, 15 Oct 2021 19:58:28 +0000 (UTC)
-Received: by mail-wm1-x333.google.com with SMTP id
- b189-20020a1c1bc6000000b0030da052dd4fso3155783wmb.3
- for <buildroot@buildroot.org>; Fri, 15 Oct 2021 12:58:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com
+ [IPv6:2a00:1450:4864:20::531])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2986A83211
+ for <buildroot@buildroot.org>; Fri, 15 Oct 2021 20:03:17 +0000 (UTC)
+Received: by mail-ed1-x531.google.com with SMTP id ec8so42476130edb.6
+ for <buildroot@buildroot.org>; Fri, 15 Oct 2021 13:03:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=gi6Dw+rGvlOKnnAsaP3vjuNVYEfyrKLyV+umRKN4Rxw=;
- b=eIdvh7xBK69uLcTZYhuzXZ3yBnFpwDJA2j1CLbe7LaKPeslcPK9Fa17yTBxZG3PVpK
- sCVR6DZTRjZYhqHnvU4l84h/ldeR7I8oWvzwjhpiI2RBLDb3ZUbK8WfIJAJduoFc2ZbN
- 8CRiVIpI1+2Xv2VtFhHtAASMuMbUYg+We8TIjcbPVy6bYb3hHTGphD4nx4FK+o0gV1wo
- /eh4yE5zmmywwQjTKd8lGDYLo0j5UI3pH3Olsbzc+8lzBzBOCLWvyTDFLToxfh3Idr3Y
- 58NtkDiUZDL/ldODiAuFknV4xaLQnaABkj5Nn884zoJFsIf8hPJ90A7pclWvlZYAUpgK
- bFkw==
+ bh=O8xp86MX05O/tsWL5Ig56Oe9/lP9eEp3F7AGaM6WDOY=;
+ b=W8M7XMFg/9a4gThoBq3mzsZw93XGyMsVHgegPXecRalscS4Q+6uZSBen1GTlinJ5Rv
+ u1O05/UYEAHX+xky/XtwkZN382PKdlacf64GxCiaKL21Fgh8VfYO4FsDvI+hyASQjZOQ
+ zALoX/ApjzzQ8uo3JyNx1CHPZRSDkzPkG+aAt0h/FZYf9IIw2V0fZQofWb601L3tuQZ5
+ pZtLmPFgUO3VNFE1lyqwd8c23kh2EZZRtTadSPpx8m5KgMLTlf5kdF5yhZpNw3UycgfG
+ gi5qxKmIU4HihpQRagYwGvbs6a38akF2I1GxzIAlyBu+neshIFCfKTpCWWRv6ToToPfZ
+ L3UQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=gi6Dw+rGvlOKnnAsaP3vjuNVYEfyrKLyV+umRKN4Rxw=;
- b=c5NI+p+cwFgKkdXIYJLsHjQ9vHz6gbyMBmj8pQ1nok74Wi+ANJdFLHzHi7wlVMpzgc
- bF6EkQy8jU9oxrjOonwIsEsd1E4DzEJOvfPjfDnSphn4DigE3RNa/XE46bRNIPxx1335
- UdFude+vsLtdZN8HbTVOPrkte5yIeTjAWzzQmqm0w+DH5WTY2hhx/VQaQRsk7oLHK6It
- KSJ+cqd33oAUcZMaVFGxaRVGfuxG2P2y3skAmE0wXjp34UMjPa5A3FMWJmiKur4mTb/1
- 2YOunfvxbnsR4wOwFBwofYnZiSfd5pDFG8LUibzpinnc4aYodZDUx5YfWJIe9tvQoev1
- AgNA==
-X-Gm-Message-State: AOAM532ycuHe4QmhVHiYPrAysNmOD8RzxLepRC+6VQieUa/qlwi7bas9
- lT3W9WUj61+WpzceOPUuxpA1wtrK0Yw=
-X-Google-Smtp-Source: ABdhPJzCDa2qa08jZ1nAJo7SKko9wNtLwf76g31ESkMNfzMVCQKl3NPrd4/m8hcdhZtWpQ0VouritA==
-X-Received: by 2002:a05:600c:a42:: with SMTP id
- c2mr12042548wmq.154.1634327906653; 
- Fri, 15 Oct 2021 12:58:26 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-1732-95.w86-253.abo.wanadoo.fr.
- [86.253.44.95])
- by smtp.gmail.com with ESMTPSA id s14sm5600697wro.76.2021.10.15.12.58.26
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 15 Oct 2021 12:58:26 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Fri, 15 Oct 2021 21:57:12 +0200
-Message-Id: <20211015195712.1548108-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.33.0
+ bh=O8xp86MX05O/tsWL5Ig56Oe9/lP9eEp3F7AGaM6WDOY=;
+ b=yAgDGmMjOuPVHPX4+7PnRXfAHWZbaXSCwc7bXVXbFm9DBVpwfWxmSnRTUPlVKHJExk
+ SFJWtoNlcdR0mL8iYp2hPH5CImnWXwDpgQmj+pGSidCli4hdk7cdmjkKTnyqjKHm/wIl
+ YDCqumLS4iEs9MkhMLsiGokAT44O3MhF7fMZi7rF94AKlAQ20lk5zmxT0a6v9mXiZ4Nq
+ mvv/4KYUHcV+kIB7vxiC2nJg31g/nqunnwk1JvON6RnjAwmyutnK6vpAlokQE6Xn5dzp
+ ix2YiNNwA1xmSHLLbXQ1grTe6cDAPOhXgRR+WwgGAzmKYdMoxxjxs0zBc/DxiZwdZ8qK
+ 0New==
+X-Gm-Message-State: AOAM532B2uQqFplfMTR6AUHEg3rQBkvQejUZYykURXbh2HaDLEyYizYc
+ 9GddEqUNKMF/+HAkK6QWjW+H9g==
+X-Google-Smtp-Source: ABdhPJxQiLUWnPcMGk8X8UhKJ27c/dGCBJfHoE6XuKSn2VA6uLMIeFxPRLLoQtnAQOL0IA17/+JW2A==
+X-Received: by 2002:a05:6402:90c:: with SMTP id
+ g12mr20687771edz.198.1634328195299; 
+ Fri, 15 Oct 2021 13:03:15 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id g23sm5289864edt.1.2021.10.15.13.03.14
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Fri, 15 Oct 2021 13:03:14 -0700 (PDT)
+Message-ID: <570f2af3-90b2-5e47-0926-3a829629ad48@mind.be>
+Date: Fri, 15 Oct 2021 22:03:13 +0200
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/cloop: bump to version 3.14.1.3
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.1.0
+Content-Language: en-GB
+To: Kory Maincent <kory.maincent@bootlin.com>, buildroot@buildroot.org
+References: <20211004132740.34050-1-kory.maincent@bootlin.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20211004132740.34050-1-kory.maincent@bootlin.com>
+Subject: Re: [Buildroot] [PATCH] boot/edk2: add support to build 32bit edk2
+ when using x86_64 architecture
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,55 +101,120 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
+Cc: yann.morin.1998@free.fr, thomas.petazzoni@bootlin.com
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Update indentation in hash file (two spaces)
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/cloop/cloop.hash | 8 ++++----
- package/cloop/cloop.mk   | 4 ++--
- 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/cloop/cloop.hash b/package/cloop/cloop.hash
-index 7af1a9594d..eb922764bb 100644
---- a/package/cloop/cloop.hash
-+++ b/package/cloop/cloop.hash
-@@ -1,6 +1,6 @@
--# From http://snapshot.debian.org/archive/debian/20150503T155713Z/pool/main/c/cloop/cloop_3.14.1.2.dsc
--sha256	ac344225b3a5c4ddbb0d4b20cd4874798b51427b707b53e2ee9fbdada7497c95	cloop_3.14.1.2.tar.xz
-+# From http://snapshot.debian.org/archive/debian/20200419T152225Z/pool/main/c/cloop/cloop_3.14.1.3.dsc
-+sha256  e3079e70f9edae8ed1ac64694af08f6c7dc710ca65a56e4770dcb1325a293193  cloop_3.14.1.3.tar.xz
- 
- # Hash for license files
--sha256	91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad	advancecomp-1.15/COPYING
--sha256	1b1f89e94e131e259b9e334565c5c3500d4b8aa755b75c3f145ddcdff3b89124	README
-+sha256  91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad  advancecomp-1.15/COPYING
-+sha256  1b1f89e94e131e259b9e334565c5c3500d4b8aa755b75c3f145ddcdff3b89124  README
-diff --git a/package/cloop/cloop.mk b/package/cloop/cloop.mk
-index 046d98c862..f3c4954ead 100644
---- a/package/cloop/cloop.mk
-+++ b/package/cloop/cloop.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--CLOOP_VERSION = 3.14.1.2
-+CLOOP_VERSION = 3.14.1.3
- CLOOP_SOURCE = cloop_$(CLOOP_VERSION).tar.xz
--CLOOP_SITE = http://snapshot.debian.org/archive/debian/20150503T155713Z/pool/main/c/cloop
-+CLOOP_SITE = http://snapshot.debian.org/archive/debian/20200419T152225Z/pool/main/c/cloop
- CLOOP_LICENSE = GPL-2.0 (module), GPL-2.0+ (advancecomp)
- CLOOP_LICENSE_FILES = README advancecomp-1.15/COPYING
- 
--- 
-2.33.0
+On 04/10/2021 15:27, Kory Maincent wrote:
+> Add BR2_TARGET_EDK2_PLATFORM_OVMF_I386 for x86_64 architecture.
+> Update the management of EDK2_ARCH to follow the edk2 platform type in
+> place of BR2 architecture.
+> 
+> Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
 
+  Applied to master, thanks.
+
+  Regards,
+  Arnout
+
+> ---
+>   boot/edk2/Config.in |  2 +-
+>   boot/edk2/edk2.mk   | 16 ++++++++--------
+>   2 files changed, 9 insertions(+), 9 deletions(-)
+> 
+> diff --git a/boot/edk2/Config.in b/boot/edk2/Config.in
+> index 8e548cfc67..df723122ee 100644
+> --- a/boot/edk2/Config.in
+> +++ b/boot/edk2/Config.in
+> @@ -25,7 +25,7 @@ choice
+>   
+>   config BR2_TARGET_EDK2_PLATFORM_OVMF_I386
+>   	bool "i386"
+> -	depends on BR2_i386
+> +	depends on BR2_i386 || BR2_x86_64
+>   	help
+>   	  Platform configuration for a generic i386 target.
+>   	  This platform will boot from flash address 0x0.
+> diff --git a/boot/edk2/edk2.mk b/boot/edk2/edk2.mk
+> index ab3cdad464..2b12de53cb 100644
+> --- a/boot/edk2/edk2.mk
+> +++ b/boot/edk2/edk2.mk
+> @@ -14,14 +14,6 @@ EDK2_DEPENDENCIES = edk2-platforms host-python3 host-acpica host-util-linux
+>   EDK2_INSTALL_TARGET = NO
+>   EDK2_INSTALL_IMAGES = YES
+>   
+> -ifeq ($(BR2_i386),y)
+> -EDK2_ARCH = IA32
+> -else ifeq ($(BR2_x86_64),y)
+> -EDK2_ARCH = X64
+> -else ifeq ($(BR2_aarch64),y)
+> -EDK2_ARCH = AARCH64
+> -endif
+> -
+>   ifeq ($(BR2_ENABLE_DEBUG),y)
+>   EDK2_BUILD_TYPE = DEBUG
+>   else
+> @@ -58,33 +50,39 @@ EDK2_BUILD_PACKAGES = $(@D)/Build/Buildroot
+>   EDK2_PACKAGES_PATH = $(@D):$(EDK2_BUILD_PACKAGES):$(STAGING_DIR)/usr/share/edk2-platforms
+>   
+>   ifeq ($(BR2_TARGET_EDK2_PLATFORM_OVMF_I386),y)
+> +EDK2_ARCH = IA32
+>   EDK2_DEPENDENCIES += host-nasm
+>   EDK2_PACKAGE_NAME = OvmfPkg
+>   EDK2_PLATFORM_NAME = OvmfPkgIa32
+>   EDK2_BUILD_DIR = OvmfIa32
+>   
+>   else ifeq ($(BR2_TARGET_EDK2_PLATFORM_OVMF_X64),y)
+> +EDK2_ARCH = X64
+>   EDK2_DEPENDENCIES += host-nasm
+>   EDK2_PACKAGE_NAME = OvmfPkg
+>   EDK2_PLATFORM_NAME = OvmfPkgX64
+>   EDK2_BUILD_DIR = OvmfX64
+>   
+>   else ifeq ($(BR2_TARGET_EDK2_PLATFORM_ARM_VIRT_QEMU),y)
+> +EDK2_ARCH = AARCH64
+>   EDK2_PACKAGE_NAME = ArmVirtPkg
+>   EDK2_PLATFORM_NAME = ArmVirtQemu
+>   EDK2_BUILD_DIR = $(EDK2_PLATFORM_NAME)-$(EDK2_ARCH)
+>   
+>   else ifeq ($(BR2_TARGET_EDK2_PLATFORM_ARM_VIRT_QEMU_KERNEL),y)
+> +EDK2_ARCH = AARCH64
+>   EDK2_PACKAGE_NAME = ArmVirtPkg
+>   EDK2_PLATFORM_NAME = ArmVirtQemuKernel
+>   EDK2_BUILD_DIR = $(EDK2_PLATFORM_NAME)-$(EDK2_ARCH)
+>   
+>   else ifeq ($(BR2_TARGET_EDK2_PLATFORM_ARM_VEXPRESS_FVP_AARCH64),y)
+> +EDK2_ARCH = AARCH64
+>   EDK2_PACKAGE_NAME = Platform/ARM/VExpressPkg
+>   EDK2_PLATFORM_NAME = ArmVExpress-FVP-AArch64
+>   EDK2_BUILD_DIR = $(EDK2_PLATFORM_NAME)
+>   
+>   else ifeq ($(BR2_TARGET_EDK2_PLATFORM_SOCIONEXT_DEVELOPERBOX),y)
+> +EDK2_ARCH = AARCH64
+>   EDK2_DEPENDENCIES += host-dtc arm-trusted-firmware
+>   EDK2_PACKAGE_NAME = Platform/Socionext/DeveloperBox
+>   EDK2_PLATFORM_NAME = DeveloperBox
+> @@ -103,6 +101,7 @@ define EDK2_PRE_BUILD_SOCIONEXT_DEVELOPERBOX
+>   endef
+>   
+>   else ifeq ($(BR2_TARGET_EDK2_PLATFORM_SOLIDRUN_ARMADA80X0MCBIN),y)
+> +EDK2_ARCH = AARCH64
+>   EDK2_DEPENDENCIES += host-dtc arm-trusted-firmware
+>   EDK2_PACKAGE_NAME = Platform/SolidRun/Armada80x0McBin
+>   EDK2_PLATFORM_NAME = Armada80x0McBin
+> @@ -111,6 +110,7 @@ EDK2_BUILD_ENV += DTC_PREFIX=$(HOST_DIR)/bin/
+>   EDK2_BUILD_OPTS += -D INCLUDE_TFTP_COMMAND
+>   
+>   else ifeq ($(BR2_TARGET_EDK2_PLATFORM_QEMU_SBSA),y)
+> +EDK2_ARCH = AARCH64
+>   EDK2_DEPENDENCIES += arm-trusted-firmware
+>   EDK2_PACKAGE_NAME = Platform/Qemu/SbsaQemu
+>   EDK2_PLATFORM_NAME = SbsaQemu
+> 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
