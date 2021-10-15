@@ -2,86 +2,92 @@ Return-Path: <SRS0=lKTV=PD=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E4B5AC433EF
-	for <buildroot@archiver.kernel.org>; Fri, 15 Oct 2021 19:41:12 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D5B79C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 15 Oct 2021 19:51:10 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 793BE60FE3
-	for <buildroot@archiver.kernel.org>; Fri, 15 Oct 2021 19:41:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 793BE60FE3
+	by mail.kernel.org (Postfix) with ESMTPS id 68F14611C1
+	for <buildroot@archiver.kernel.org>; Fri, 15 Oct 2021 19:51:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 68F14611C1
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 424EA83B01;
-	Fri, 15 Oct 2021 19:41:12 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2F042400DE;
+	Fri, 15 Oct 2021 19:51:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VeHALwXEa0V5; Fri, 15 Oct 2021 19:41:11 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id GWcOHBb0ajcr; Fri, 15 Oct 2021 19:51:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8D2AD839D8;
-	Fri, 15 Oct 2021 19:41:10 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1F0691BF41F
- for <buildroot@lists.busybox.net>; Fri, 15 Oct 2021 19:40:37 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 427214011F;
+	Fri, 15 Oct 2021 19:51:08 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 7E47E1BF41F
+ for <buildroot@lists.busybox.net>; Fri, 15 Oct 2021 19:51:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0EEE460726
- for <buildroot@lists.busybox.net>; Fri, 15 Oct 2021 19:40:37 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6C5CF82D7C
+ for <buildroot@lists.busybox.net>; Fri, 15 Oct 2021 19:51:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id T227E1dg4HH5 for <buildroot@lists.busybox.net>;
- Fri, 15 Oct 2021 19:40:36 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6rmVcPFvz9Zk for <buildroot@lists.busybox.net>;
+ Fri, 15 Oct 2021 19:51:05 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
- [IPv6:2a00:1450:4864:20::42a])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E99DA605E5
- for <buildroot@buildroot.org>; Fri, 15 Oct 2021 19:40:35 +0000 (UTC)
-Received: by mail-wr1-x42a.google.com with SMTP id v17so28155271wrv.9
- for <buildroot@buildroot.org>; Fri, 15 Oct 2021 12:40:35 -0700 (PDT)
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
+ [IPv6:2a00:1450:4864:20::32a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7C6CF82A72
+ for <buildroot@buildroot.org>; Fri, 15 Oct 2021 19:51:05 +0000 (UTC)
+Received: by mail-wm1-x32a.google.com with SMTP id
+ 67-20020a1c1946000000b0030d4c90fa87so3142526wmz.2
+ for <buildroot@buildroot.org>; Fri, 15 Oct 2021 12:51:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=KN10GBF0RFFujynjGbiSAQhZGPJXA8GkczWBmc8SqA0=;
- b=fhtrv6qOHSBXhDph/HYGN8OREzgw44FZA52Vr4QvQVXG+qv4LYv7rAybefB2tqirdN
- zX23PuBSgMO/AgiyohlJJtxHK+194DsWLzOt+FfiC4Xp5hrlobVxCMLTBRJ4kdss9YSU
- R8MrmrMKq84SZjU1+6pW/jgWLCfP6a4A/ytScE8DZbRZD6gGFejEkLnyeiEeMbsT9pFZ
- 2pcjpzjCwVnNZkrYU9ciBkm4mnHrsajiUtnmh7G1LHauatW76zNUqRKISWgZW/ougsz4
- iywLkkGWWhEabWfvMSFFl/LEl93iv8sCkQsdqq4MHK44qBhz0CbQO5t2g8E8Fek4m/TS
- t1gA==
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:in-reply-to:content-transfer-encoding;
+ bh=iE4eVfIAMVi7i+OhLiLcn5Yi6+uzLf+fDUWx7+yBZCg=;
+ b=Ki3mQrHkM2oVagGunEnN3bODyZPd8BsOdKh4LfIlhSAF0cApT9YULvqifwbPsqTkU1
+ m0mLzTinAVPHRrpaJhxT6tCGX7vx/R4X+gL9V1AAdTiCkzmWhJ6QUywkCozRKnTLBw+3
+ YtOycPhw+Xwkxv4R4mSrVDL2gh5y+yhM+vyNvADtwM6QM7p65wr/YS54S10F36t2TH+r
+ pvAPIrz+jWFi+XVnTTryWV3LuowcngnLlA3VP8kIoJS329Krxy/RpsyReCMTjvoumpGn
+ nNqE2VIwq/3v+7QPCjvi9KflL/y4CdjlF0o96T9eSMGxbOHf4K0g8pQe8Pa3yyprcqt1
+ eNlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=KN10GBF0RFFujynjGbiSAQhZGPJXA8GkczWBmc8SqA0=;
- b=VZLpbAGoyMtEqiVTRstnPdweV2DtcEB+Fw98cTNIwYBsVBrhaTwX2nUj6Ky030LFIK
- bIVZcM+Ab6IGU5ddW8ae3tywkTp2/7ChGK7larF0GNj7GG4dVEHnbucsHlkNMNkZKYjQ
- OP/oD8s4hKCSKniHMQvqlh3DTVagxU08GIt7ZTTBRoTjqJzCf+2XomavqUV/8agWoqQU
- Md05Y+oJXXUJA7kHJQClyz2//54zvgZiEFmw+5FjMptkiAwcC5pXBwUS33KYHWzxRnAN
- 6uQJMsw9ok4pIXJEcQhRq01dN69WTBjv+x0lNhz4c5c5QJdgoVBG6smeEJ6JI1Xn0G/u
- Jdqw==
-X-Gm-Message-State: AOAM533C8j7OId+HLCB7MLdfTsjGsYs1cYi2CEHAbeTvo434dgle3sWQ
- V7UVuOg6LC+1AM1QUppKJitOXOc24+U=
-X-Google-Smtp-Source: ABdhPJxgf9Wu/5xyp+RWIy2nl0xQv5HudM8WJx/buvyjljN2cJJpngH808sjdurmJPftbVc43YZDNQ==
-X-Received: by 2002:adf:f190:: with SMTP id h16mr4453589wro.250.1634326833906; 
- Fri, 15 Oct 2021 12:40:33 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-1732-95.w86-253.abo.wanadoo.fr.
- [86.253.44.95])
- by smtp.gmail.com with ESMTPSA id x21sm11223829wmc.14.2021.10.15.12.40.33
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 15 Oct 2021 12:40:33 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Fri, 15 Oct 2021 21:39:01 +0200
-Message-Id: <20211015193901.1543587-4-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211015193901.1543587-1-fontaine.fabrice@gmail.com>
-References: <20211015193901.1543587-1-fontaine.fabrice@gmail.com>
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:in-reply-to
+ :content-transfer-encoding;
+ bh=iE4eVfIAMVi7i+OhLiLcn5Yi6+uzLf+fDUWx7+yBZCg=;
+ b=Pg3bV5atqKjj7sqslv1ki+7P+V4DojBysyNW3T9KPqqHLeUKHXpy4hyHf14DP8Az3j
+ PXpEg8CahEYX9xQVRjjGuXD8VzZSFN7WM2DLQj1jZq2iV0bv56tPpXIPQovJMkDCft7K
+ QqO+icS0tq1dUdqrgNzPsv4h9QufOYyn0gZyLajFUK1VD5JIyjyXCOeYxjf4PZjlewHB
+ ryzdz7wb7CnuDevrBrn21jHzkfLFMjnVx5/mCRcRdnKgRto79hFdu2BAY8Rk9jSNv6IV
+ sEMnQHxwcFGfBeYRiswtOIOoxotT0AayViBRzhJfDl7AiH7RykrD5MhUSpko6LpN3+pb
+ TdUg==
+X-Gm-Message-State: AOAM533HYE7xDQ3fEefODv0fnIhqqh7AhhDWRSGYkqSbtxG+BJPkjTiK
+ rfqPF/perfwS7sM0OOtDLCI=
+X-Google-Smtp-Source: ABdhPJziocGeqkbCQ+IGVp9rVlL+8m1AAclYu8HLx2ZZdyuftAPaY3v6u907feBv+vLtMYvTi2MufA==
+X-Received: by 2002:a7b:c393:: with SMTP id s19mr14843728wmj.13.1634327463553; 
+ Fri, 15 Oct 2021 12:51:03 -0700 (PDT)
+Received: from ?IPV6:2a01:cb05:8f8a:1800:3dbe:e9ee:d79e:b521?
+ (2a01cb058f8a18003dbee9eed79eb521.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:8f8a:1800:3dbe:e9ee:d79e:b521])
+ by smtp.gmail.com with ESMTPSA id v13sm5901187wrs.53.2021.10.15.12.51.02
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Fri, 15 Oct 2021 12:51:03 -0700 (PDT)
+Message-ID: <dcd5309e-d65a-f348-c3d4-b7bc6e91beb9@gmail.com>
+Date: Fri, 15 Oct 2021 21:51:01 +0200
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 4/4] package/python-ujson: fix xtensa build
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.1.0
+Content-Language: en-US
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20211003124027.343390-1-romain.naour@gmail.com>
+ <20211003162237.7949d437@windsurf>
+From: Romain Naour <romain.naour@gmail.com>
+In-Reply-To: <20211003162237.7949d437@windsurf>
+Subject: Re: [Buildroot] [PATCH 1/5] configs: remove qemu_csky defconfigs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,139 +99,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Mauro Condarelli <mc5686@mclink.it>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Asaf Kahlon <asafka7@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Guo Ren <ren_guo@c-sky.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the follownig build failure on xtensa since bump to version 4.1.0 in
-commit a47f332a20bf3f79ef4903c8ddd2b7917217e354 and
-https://github.com/ultrajson/ultrajson/commit/eb7d894f225bb89d269188ba6ec559b914a71b8a:
-
-In file included from ./deps/double-conversion/double-conversion/bignum-dtoa.h:31,
-                 from ./deps/double-conversion/double-conversion/bignum-dtoa.cc:30:
-./deps/double-conversion/double-conversion/utils.h:92:2: error: #error Target architecture was not detected as supported by Double-Conversion.
-   92 | #error Target architecture was not detected as supported by Double-Conversion.
-      |  ^~~~~
-
-Fixes:
- - http://autobuild.buildroot.org/results/c75157538d7784809d935aefcb166e89c137c9b7
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...4-Pseiderer-add-nios2-and-xtensa-001.patch | 95 +++++++++++++++++++
- 1 file changed, 95 insertions(+)
- create mode 100644 package/python-ujson/0004-Pseiderer-add-nios2-and-xtensa-001.patch
-
-diff --git a/package/python-ujson/0004-Pseiderer-add-nios2-and-xtensa-001.patch b/package/python-ujson/0004-Pseiderer-add-nios2-and-xtensa-001.patch
-new file mode 100644
-index 0000000000..8648f93c1a
---- /dev/null
-+++ b/package/python-ujson/0004-Pseiderer-add-nios2-and-xtensa-001.patch
-@@ -0,0 +1,95 @@
-+From a54561be5588ac9b16d3c20760b9b554168bb8aa Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <pseiderer@users.noreply.github.com>
-+Date: Thu, 31 Oct 2019 21:26:27 +0100
-+Subject: [PATCH] Pseiderer/add nios2 and xtensa 001 (#119)
-+
-+* double-conversion: enable for nios2
-+
-+Nios2 supports double conversion, tested using qemu:
-+
-+./main || echo "correct"
-+correct
-+uname -a
-+Linux buildroot 4.19.16 #4 Sat Aug 3 14:46:48 CEST 2019 nios2 GNU/Linux
-+
-+Solves build error
-+
-+In file included from double-conversion.h:42:0,
-+                 from number_decimalquantity.cpp:19:
-+double-conversion-utils.h:119:2: error: #error Target architecture was not detected as supported by Double-Conversion.
-+ #error Target architecture was not detected as supported by Double-Conversion.
-+
-+detected by buildroot autobuilders:
-+http://autobuild.buildroot.net/results/91e/91eaec34708d91f8a05af189243be0b7cabce31b/
-+
-+Patch sent upstream: https://github.com/unicode-org/icu/pull/725
-+Bug report: https://unicode-org.atlassian.net/browse/ICU-20751
-+
-+[Bernd: Fixed path]
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+[Added Changelog entry]
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+
-+* double-conversion: enable for xtensa
-+
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+
-+[Retrieved (dand backported) from:
-+https://github.com/google/double-conversion/commit/a54561be5588ac9b16d3c20760b9b554168bb8aa]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+Note:
-+
-+Double-conversion tested with:
-+
-+        $ cat div.c
-+double Div_double(double x, double y) { return x / y; }
-+
-+        $ cat main.c
-+double Div_double(double x, double y);
-+
-+int main(int argc, char** argv) {
-+  double result = Div_double(89255.0, 1e22);
-+  if (result == 89255e-22) {
-+    printf("correct result %e\n", result);
-+    return 1;
-+  } else {
-+    printf("wrong result %e\n", result);
-+    return 0;
-+  }
-+}
-+
-+Tested for xtensa (using qemu_xtensa_lx60_defconfig plus BR2_PACKAGE_HOST_QEMU_LINUX_USER_MODE):
-+
-+        $ ./host/bin/xtensa-buildroot-linux-uclibc-gcc -c div.c
-+        $ ./host/bin/xtensa-buildroot-linux-uclibc-gcc -c main.c
-+        $ ./host/bin/xtensa-buildroot-linux-uclibc-gcc -o main main.o div.o
-+
-+        $ ./host/bin/qemu-xtensa -L staging main
-+correct result 8.925500e-18
-+---
-+ Changelog                 | 4 ++++
-+ double-conversion/utils.h | 3 ++-
-+ 2 files changed, 6 insertions(+), 1 deletion(-)
-+
-+diff --git a/deps/double-conversion/double-conversion/utils.h b/deps/double-conversion/double-conversion/utils.h
-+index 221467f..98ec28b 100644
-+--- a/deps/double-conversion/double-conversion/utils.h
-++++ b/deps/double-conversion/double-conversion/utils.h
-+@@ -94,6 +94,7 @@ int main(int argc, char** argv) {
-+     defined(__ARMEL__) || defined(__avr32__) || defined(_M_ARM) || defined(_M_ARM64) || \
-+     defined(__hppa__) || defined(__ia64__) || \
-+     defined(__mips__) || \
-++    defined(__nios2__) || \
-+     defined(__powerpc__) || defined(__ppc__) || defined(__ppc64__) || \
-+     defined(_POWER) || defined(_ARCH_PPC) || defined(_ARCH_PPC64) || \
-+     defined(__sparc__) || defined(__sparc) || defined(__s390__) || \
-+@@ -102,7 +103,7 @@ int main(int argc, char** argv) {
-+     defined(__AARCH64EL__) || defined(__aarch64__) || defined(__AARCH64EB__) || \
-+     defined(__riscv) || defined(__e2k__) || \
-+     defined(__or1k__) || defined(__arc__) || \
-+-    defined(__microblaze__)
-++    defined(__microblaze__) || defined(__XTENSA__)
-+ #define DOUBLE_CONVERSION_CORRECT_DOUBLE_OPERATIONS 1
-+ #elif defined(__mc68000__)
-+ #undef DOUBLE_CONVERSION_CORRECT_DOUBLE_OPERATIONS
--- 
-2.33.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gVGhvbWFzLCBBbGwsCgpMZSAwMy8xMC8yMDIxIMOgIDE2OjIyLCBUaG9tYXMgUGV0YXp6
+b25pIGEgw6ljcml0wqA6Cj4gSGVsbG8gUm9tYWluLAo+IAo+IE9uIFN1biwgIDMgT2N0IDIwMjEg
+MTQ6NDA6MjMgKzAyMDAKPiBSb21haW4gTmFvdXIgPHJvbWFpbi5uYW91ckBnbWFpbC5jb20+IHdy
+b3RlOgo+IAo+PiBXZSBhcmUgZ29pbmcgdG8gcmVtb3ZlIHRoZSBnY2MgZm9yayBmb3IgY3NreSBz
+aW5jZSBpdCBkb2Vzbid0IGJ1aWxkCj4+IHdpdGggdGhlIGxhdGVzdCBjb21waWxlcnMgKGdjYyA4
+LCAxMCwgMTEgdGVzdGVkKSBbMV0uCj4+Cj4+IFJlbW92aW5nIHRoZXNlcyBkZWZjb25maWdzIGFu
+ZCB0aGUgY3NreSBnY2MgZm9yayBoYXMgYmVjb21lIHVuYXZvaWRhYmxlCj4+IHNpbmNlIHRoZSBC
+dWlsZHJvb3QgRG9ja2VyIGltYWdlIHVzZWQgYnkgdGhlIGdpdGxhYiBDSSB3aWxsIHN3aXRjaCBz
+b29uCj4+IHRvIERlYmlhbiBidWxsc2V5ZSBzb29uIFsyXS4KPj4KPj4gVGhlIGNrc3kgZ2NjIGZv
+cmsgYmFzZWQgb24gZ2NjIDYgaGFzIG5vdCBiZWVuIHVwZGF0ZWQgc2luY2UgaXQgaGFzIGJlZW4K
+Pj4gYWRkZWQgdG8gQnVpbGRyb290IFszXS4gU2luY2UgdGhlbiwgY3NreSBoYXMgYmVlbiBhZGRl
+ZCB0byBiaW51dGlscyBhbmQKPj4gZ2NjIGJ1dCB1c2luZyB0aGUgbGF0ZXN0IHVwc3RyZWFtIHZl
+cnNpb24gKGJpbnV0aWxzIDIuMzcgYW5kIGdjYyAxMSkgaXMKPj4gbm90IHlldCBwb3NzaWJsZSBk
+dWUgdG8gYnVpbGQgaXNzdWUgd2l0aCBnbGliYyAyLjM0IFs0XS4KPj4KPj4gTW9yZW92ZXIsIHFl
+bXVfY3NreSBkZWZjb25maWdzIHdhcyB0byBiZSB1c2VkIHdpdGggdGhlIGNza3kgcWVtdSBmb3Jr
+Cj4+IChiYXNlZCBvbiBRZW11IDMueCkgYWRkZWQgYnkgY29tbWl0IFs1XSBhbmQgcmVtb3ZlZCBi
+eSBjb21taXQgWzZdLgo+PiBTaW5jZSB0aGVuIGl0J3Mgbm90IHBvc3NpYmxlIHRvIGRvIGEgcnVu
+dGltZSB0ZXN0IHdpdGggdGhlc2VzCj4+IGRlZmNvbmZpZ3MuCj4+Cj4+IFRoZXNlcyBkZWZjb25m
+aWdzIGNhbiBiZSBhZGRlZCBiYWNrIGxhdGVyIGlmIHRoZSBjc2t5IHRvb2xjaGFpbiBzdXBwb3J0
+Cj4+IGlzIGZpeGVkIGFuZCBjc2t5IHN1cHBvcnRlZCBieSB1cHN0cmVhbSBRZW11Lgo+Pgo+PiBb
+MV0gaHR0cDovL2xpc3RzLmJ1c3lib3gubmV0L3BpcGVybWFpbC9idWlsZHJvb3QvMjAyMS1BdWd1
+c3QvNjIxNTA0Lmh0bWwKPj4gWzJdIDcxYjgzMjI3MTI4YmU2MmMxNjkzMTNlODViYjhmMzM5Zjk3
+N2FkNjcKPj4gWzNdIDc4NzNhNWJkNWViYmViMTY3NDI5M2RhZTZiMDZiNTBmMGExZjIxODQKPj4g
+WzRdIGh0dHA6Ly9saXN0cy5idXN5Ym94Lm5ldC9waXBlcm1haWwvYnVpbGRyb290LzIwMjEtT2N0
+b2Jlci82MjQ1OTYuaHRtbAo+PiBbNV0gZjgxNmU1YjI3NmYxZWYxNTg0MGJlYzY2NjdmMWU4MjE5
+NzE3YWI3ZAo+PiBbNl0gNThhZjlhNzBjYzBmMTk1MTE2ZGVkYjNmZDBlMmNhNWI0ZmVjOWU3MAo+
+Pgo+PiBTaWduZWQtb2ZmLWJ5OiBSb21haW4gTmFvdXIgPHJvbWFpbi5uYW91ckBnbWFpbC5jb20+
+Cj4+IENjOiBHdW8gUmVuIDxyZW5fZ3VvQGMtc2t5LmNvbT4KPj4gQ2M6IFRob21hcyBQZXRhenpv
+bmkgPHRob21hcy5wZXRhenpvbmlAYm9vdGxpbi5jb20+Cj4gCj4gSSBhZ3JlZSB3aXRoIHRoZSBw
+YXRjaCBzZXJpZXMuIFdoYXQgSSBwcm9wb3NlIGlzIHRvIHdhaXQgbWF5YmUgNC01IGRheXMKPiB0
+byBzZWUgaWYgdGhlcmUgaXMgYSByZWFjdGlvbiBvciBzb21lIGZlZWRiYWNrIGZyb20gR3VvIFJl
+bi4gQW5kIGlmCj4gdGhlcmUncyBubyBmZWVkYmFjaywgd2UgYXBwbHkgaW4gNC01IGRheXMuCgpJ
+IGhhZCBhIHJlcGx5IGZyb20gR3VvLCB3ZSBjYW4gbW92ZSBmb3J3YXJkIGFuZCBtZXJnZSB0aGlz
+IHNlcmllczoKCmh0dHA6Ly9saXN0cy5idXN5Ym94Lm5ldC9waXBlcm1haWwvYnVpbGRyb290LzIw
+MjEtT2N0b2Jlci82MjQ4NjYuaHRtbAoKQmVzdCByZWdhcmRzLApSb21haW4KCj4gCj4gQmVzdCBy
+ZWdhcmRzLAo+IAo+IFRob21hcwo+IAoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290
+Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJv
+b3QK
