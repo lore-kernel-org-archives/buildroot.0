@@ -2,80 +2,80 @@ Return-Path: <SRS0=a1j9=PE=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A7DEC433F5
-	for <buildroot@archiver.kernel.org>; Sat, 16 Oct 2021 21:54:57 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 803BCC433EF
+	for <buildroot@archiver.kernel.org>; Sat, 16 Oct 2021 21:56:13 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 436946108E
-	for <buildroot@archiver.kernel.org>; Sat, 16 Oct 2021 21:54:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 436946108E
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmx.net
+	by mail.kernel.org (Postfix) with ESMTPS id D1E8D61101
+	for <buildroot@archiver.kernel.org>; Sat, 16 Oct 2021 21:56:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D1E8D61101
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=lechnology.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 784D1400C1;
-	Sat, 16 Oct 2021 21:54:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9578C607A3;
+	Sat, 16 Oct 2021 21:56:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 455DTsSHOHwa; Sat, 16 Oct 2021 21:54:55 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id FhpENVCpLgIi; Sat, 16 Oct 2021 21:56:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 61704402BF;
-	Sat, 16 Oct 2021 21:54:54 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 652BA1BF2B1
- for <buildroot@lists.busybox.net>; Sat, 16 Oct 2021 21:54:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 01D3060705;
+	Sat, 16 Oct 2021 21:56:11 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C258C1BF2B1
+ for <buildroot@lists.busybox.net>; Sat, 16 Oct 2021 21:56:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4284440243
- for <buildroot@lists.busybox.net>; Sat, 16 Oct 2021 21:54:07 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B1C3D403B7
+ for <buildroot@lists.busybox.net>; Sat, 16 Oct 2021 21:56:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1uNmEXtcETTP for <buildroot@lists.busybox.net>;
- Sat, 16 Oct 2021 21:54:04 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 543A1400C1
- for <buildroot@buildroot.org>; Sat, 16 Oct 2021 21:54:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
- s=badeba3b8450; t=1634421241;
- bh=fDzLYYQFrpJhgRv6I99wNZweqKuhq3yBDENv+vqDRZQ=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
- b=eSD8f6Z+B/aA0KX1OXRRNggw8mXFMTt2o14TxI07jDMy3ZJczP0E0AKs3p4L3b+F0
- xH+b0mhY37WBBiotMkeYzatDtkPqtg4D/p7bUVHalxxCVfZfptt3kMZdlWJJYL+uab
- S5LfSwUTXt04uUsAeDUgAbJ1umyo3T3fHLutJnyA=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from localhost.fritz.box ([62.216.209.201]) by mail.gmx.net
- (mrgmx005 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 1M89Gj-1mfSOJ3itf-005LSN; Sat, 16 Oct 2021 23:54:00 +0200
-From: Peter Seiderer <ps.report@gmx.net>
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=lechnology.com
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id w8vWbapKeHg3 for <buildroot@lists.busybox.net>;
+ Sat, 16 Oct 2021 21:56:05 +0000 (UTC)
+X-Greylist: delayed 00:19:06 by SQLgrey-1.8.0
+Received: from vern.gendns.com (vern.gendns.com [98.142.107.122])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3D8DE40390
+ for <buildroot@buildroot.org>; Sat, 16 Oct 2021 21:56:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+ d=lechnology.com; s=default; h=Content-Transfer-Encoding:MIME-Version:
+ Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+ Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+ :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+ List-Subscribe:List-Post:List-Owner:List-Archive;
+ bh=lztirQQ/unz6S59esvuRoecQ0n+D3hfAk4aJrKyJupk=; b=DWodCFgwlJ4HeVHBltNMdihzQq
+ k0gyCxK/exTotCs3uRIPKJi7x7qeC0jQstCgQOgTvFV8XIeZG2F5he7DYrf9qKfX11iWHHSNlu3G/
+ emzyTRnQfiakEQhHov7CUCygIJ/DJzy30/GZJ8p/C6YnGECF6aYK61e1MmckxiyYmJHOMm7hNCvr8
+ tQHHt7SunoH9R4amFJNw7HAa25be4BCmLGe57Wx3N9EtIEFYEFq/hx4Qiv4H1TSKuEFTXTl0wxEmK
+ sOlsbQfohjQene+PDubUkpT3CUARNvyq7btFnfyXMd+2LYhmQ9odcOuiskORyG3sDREz2xxijFmQj
+ CkXIzSAw==;
+Received: from 108-198-5-147.lightspeed.okcbok.sbcglobal.net
+ ([108.198.5.147]:36016 helo=freyr.lechnology.com)
+ by vern.gendns.com with esmtpsa (TLS1.2) tls
+ TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 (Exim 4.94.2)
+ (envelope-from <david@lechnology.com>)
+ id 1mbrMN-00020S-D4; Sat, 16 Oct 2021 17:36:57 -0400
+From: David Lechner <david@lechnology.com>
 To: buildroot@buildroot.org
-Date: Sat, 16 Oct 2021 23:53:56 +0200
-Message-Id: <20211016215400.31415-1-ps.report@gmx.net>
-X-Mailer: git-send-email 2.33.0
+Date: Sat, 16 Oct 2021 16:36:26 -0500
+Message-Id: <20211016213626.3264701-1-david@lechnology.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:oFhnVnXROUEcgs5SRXjHTmwuMtt66iJYC0Ot04DUKM5srf5rHFT
- m4kPT/B7tsARiyEohWuVWfSmYJbXflQLQRjF6yV1ZP9SwW51DNJ7kzOL+K1k0i/nUXAXq+p
- Ez0D8ozzrDl5YAC7x63yy6XRLIwgw4q8SoyZdYn7JslpEagUQh4iV7JMNStNEPZ6qtnKtNO
- jC91VFgztguSE4y8j9b0g==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:KqVKAJ9l3po=:Gp01vvfv484tIQCxJCYQU7
- d/kVMWDDR6pbvyWxmykhlisCRwxkpW8JHdQDbT9tNFoqcaj0d6RdkaeMdbFx758sUg/SE3aTs
- umX6JhmZbr44agUl+3LQ4Y/aBt0avzCWBGGta4PVB2MUY4VyfAbCxm/Yp18hFMoMymMjr007T
- WmcvrgeSEg4q2Y6kdbn2fDRuR9M1rfE4ZdkC+DeMeUnGNmius/S2LHeraQ5jjonRDzhtbhukt
- TtgwHPzjxQb358nbHcx/YULcg7knQsYSEmAixbRNHg8+SKZNckhbQWSEai6oyPnMggTN9lZ+K
- NhmIDnzs81U07K/7UJeoEVyXvB05ijV3+m2XR9gtuL1fnSyWm0wqwTUYmxQH0g9ieWIVnovni
- nw7s92auy+tsShrxmUbNRn2koxikvG5GrrBsbII8jyacqUzaRINT3fInUpV5PvEi7nVcyy9iD
- LgZ5ECyrMaKjaXkyY9M3TsFOerYtZPvwf5lGH/eOAvZQ9kCPMTxtk4cWxgSdUyQcVReBVwidZ
- eco/YexDnz/RuzHDaEfHoUJhTy4LF0tAPic/8WrYV93iBJriB95coIvkuWnn6d6M2AGSfYAgq
- AEbK3zJBQIkphMlU9GPdgFlfeh5L7PKiGTNH9ANwAglgStxvKm1E51HeiE6h1ZqgyHd6ALO+l
- IaYwUDnO0iM+klnaEtRQUAkZZ+ZTPFhadktaAOerNk6DQmAgyxx9p/oldHfeu9Y5zZDosGwDN
- GMHIDmXUHv7/LD5DhuDhRTsR/2uQPsoRue5+9tZeruYaSmZylUGHvZme2WYQfeiKvAAYh3R1M
- MbqHqUG/fb5gH/iteWjUNN/5Ww1X/6yJrJ7A5hVirBMKGkOs0VhQf1bCAtwobAWCuKDBETH66
- QxmmnZjpquN+2nAOMQ757hYz4EGjAkPwM1aG+skt1j+oxk+8ApQxkHc4Zr/LLZZrKXn013qNn
- 40if/LtcBCDbX0q8oFeUqa4Xljsd4K9xs0qh+AhisMnrHWn5ZD17okrF1tiprxzTGAnmAKBVV
- EuZzaC0bTFaqWEYJn1zoBtLScp3iZw6ojnn7A6/5cK9VRC0xGWNr4NYPaVj/YVY+J5zIjstha
- W4Db8qsI1BVx9M=
-Subject: [Buildroot] [PATCH v1 1/5] package/libubox: bump version to d716ac4
+X-AntiAbuse: This header was added to track abuse,
+ please include it with any abuse report
+X-AntiAbuse: Primary Hostname - vern.gendns.com
+X-AntiAbuse: Original Domain - buildroot.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lechnology.com
+X-Get-Message-Sender-Via: vern.gendns.com: authenticated_id:
+ davidmain+lechnology.com/only user confirmed/virtual account not confirmed
+X-Authenticated-Sender: vern.gendns.com: davidmain@lechnology.com
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+Subject: [Buildroot] [PATCH] configs/lego_ev3: update to U-Boot 2021.07
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,50 +87,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Sergio Prado <sergio.prado@e-labworks.com>,
- Samuel Martin <s.martin49@gmail.com>
+Cc: David Lechner <david@lechnology.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changelog:
+Buildroot CI has been failing due to 404 error on older U-Boot. Updating
+the U-Boot version should fix it and it doesn't hurt to use the latest
+U-Boot anyway.
 
-  - a0dbcf8 tests: add blob-buffer overflow test
-  - b36a3a9 blob: fix exceeding maximum buffer length
-  - b8abed7 utils.h: add fallthrough macro
-  - b14c468 json_script: fix unannotated fall-through warning
-  - d716ac4 list.h: add a few missing iterator macros
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: David Lechner <david@lechnology.com>
 ---
- package/libubox/libubox.hash | 2 +-
- package/libubox/libubox.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ configs/lego_ev3_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libubox/libubox.hash b/package/libubox/libubox.hash
-index 94a071d80d..2775427485 100644
---- a/package/libubox/libubox.hash
-+++ b/package/libubox/libubox.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  c6bac8baa7525b2d35eb22edeb5722c098370794d00e8859ef1a0bdfd8716151  libubox-551d75b5662cccd0466b990d58136bdf799a804d-br1.tar.gz
-+sha256  54f65299439dab4be8f203588bcefd9b60052ae87d12c6d012f6278a2a111b4e  libubox-d716ac4bc4236031d4c3cc1ed362b502e20e3787-br1.tar.gz
-diff --git a/package/libubox/libubox.mk b/package/libubox/libubox.mk
-index 20da5c2ec2..90ba57a883 100644
---- a/package/libubox/libubox.mk
-+++ b/package/libubox/libubox.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/configs/lego_ev3_defconfig b/configs/lego_ev3_defconfig
+index b4a1000036..555a63e36c 100644
+--- a/configs/lego_ev3_defconfig
++++ b/configs/lego_ev3_defconfig
+@@ -43,7 +43,7 @@ BR2_TARGET_ROOTFS_SQUASHFS4_XZ=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.11"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.07"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="legoev3"
  
--LIBUBOX_VERSION = 551d75b5662cccd0466b990d58136bdf799a804d
-+LIBUBOX_VERSION = d716ac4bc4236031d4c3cc1ed362b502e20e3787
- LIBUBOX_SITE = https://git.openwrt.org/project/libubox.git
- LIBUBOX_SITE_METHOD = git
- LIBUBOX_LICENSE = ISC, BSD-3-Clause
+ # host
 -- 
-2.33.0
+2.25.1
 
 _______________________________________________
 buildroot mailing list
