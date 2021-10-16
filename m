@@ -2,84 +2,51 @@ Return-Path: <SRS0=a1j9=PE=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B7C02C433F5
-	for <buildroot@archiver.kernel.org>; Sat, 16 Oct 2021 10:38:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EF27AC433F5
+	for <buildroot@archiver.kernel.org>; Sat, 16 Oct 2021 11:48:51 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 6761660F46
-	for <buildroot@archiver.kernel.org>; Sat, 16 Oct 2021 10:38:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6761660F46
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id 34A0E6115C
+	for <buildroot@archiver.kernel.org>; Sat, 16 Oct 2021 11:48:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 34A0E6115C
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2A5AC80C65;
-	Sat, 16 Oct 2021 10:38:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C133E83984;
+	Sat, 16 Oct 2021 11:48:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tb0Xagnehwos; Sat, 16 Oct 2021 10:38:29 +0000 (UTC)
+	with ESMTP id lSSb_GLRebfL; Sat, 16 Oct 2021 11:48:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 45E8580C8B;
-	Sat, 16 Oct 2021 10:38:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9A6D583896;
+	Sat, 16 Oct 2021 11:48:47 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 449A11BF870
- for <buildroot@lists.busybox.net>; Sat, 16 Oct 2021 10:38:26 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9E6DE1BF866
+ for <buildroot@lists.busybox.net>; Sat, 16 Oct 2021 11:48:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 32A3B40227
- for <buildroot@lists.busybox.net>; Sat, 16 Oct 2021 10:38:26 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8CCDA401CE
+ for <buildroot@lists.busybox.net>; Sat, 16 Oct 2021 11:48:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tqaqxz1Dk0UA for <buildroot@lists.busybox.net>;
- Sat, 16 Oct 2021 10:38:24 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
- [IPv6:2a00:1450:4864:20::429])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 854D840010
- for <buildroot@buildroot.org>; Sat, 16 Oct 2021 10:38:24 +0000 (UTC)
-Received: by mail-wr1-x429.google.com with SMTP id r7so30914568wrc.10
- for <buildroot@buildroot.org>; Sat, 16 Oct 2021 03:38:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=6yMRHzsa/82mV8WLybwEuWC2Sp6b/mRyClRdkaay3BA=;
- b=DgM5gGElJfa4sHkBfw6DtGyAoKP/Ydf10AOgJK6Iq47/wbJQvbig2QlbkqVfogTXJu
- WQR5kc6d7t2/lQ0vb6OTN5+tG6bsNmjZvrgI6+HJz8OIgsi8Gb8SqU9mphcZsZ+SSPA6
- U4ezdRDCYe1rygtHi2CMmjyFMqolyd+IIBZyYz/CECdOsj1QUF4GFP5XPZwMZXjP4Xwg
- 6t+9u0jzagSoZKFIylMsQx+eRlcHIzp5cSuAu3Tm0gEp/BziTxIfV9xyYdhfVXeaSwFg
- lP8/YffoNAEeI2BygZ0UBd0pQjFVDBoJWh8lEiuVUlkMolZ8/W+NkbufH3AwnbjAcgor
- 79PA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=6yMRHzsa/82mV8WLybwEuWC2Sp6b/mRyClRdkaay3BA=;
- b=sSjy5Gj93HqzW3tsD1d7cAITLp0k3c94tdlB+ahFXqldWzbZLdQLAWU+mTKWRo+PM8
- WA4hvRwcCSKmNGGpQqcxL/CyKEla30yk82JqxZejv8zrOEqVUqCLEzyLpxl3j3oULCER
- PdyoE/yehh10GIQvB1BT6K/QVznhXZa4SssN47q48ynyfn7uYrlfYhcnmc8YrR+6KevJ
- puxn1oEuOD3mvy3ZmQu+qBni6iJYK8RPMLFQtksJADxeg5hDY202vN2nAX132CardgdR
- 1T37CkI0Zqzl4TGJzQCNmBGLupGahdfG+UqNWlh0IY9t6HwCboHaPvLesJEbuuMACPSM
- tY+Q==
-X-Gm-Message-State: AOAM533tQlxseb/rR8MdhSIoWf55bMH6QHFHue8f0mND2dxQLaRLguek
- I9yYqHQ/mtjOyoWiJ/Of5RUsLS1CTd8=
-X-Google-Smtp-Source: ABdhPJysuaLGk8k3LcXL37i9xDooDXMylKGLFblAV8KRDpARB8E1eQLgz596wMLVTghdCWtpncxHIw==
-X-Received: by 2002:adf:bb88:: with SMTP id q8mr20866008wrg.390.1634380702471; 
- Sat, 16 Oct 2021 03:38:22 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-1732-95.w86-253.abo.wanadoo.fr.
- [86.253.44.95])
- by smtp.gmail.com with ESMTPSA id t11sm7191047wrz.65.2021.10.16.03.38.21
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 16 Oct 2021 03:38:21 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ with ESMTP id P5rYKpHC5C5I for <buildroot@lists.busybox.net>;
+ Sat, 16 Oct 2021 11:48:45 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3AB9740017
+ for <buildroot@buildroot.org>; Sat, 16 Oct 2021 11:48:45 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id 5399795C7B; Sat, 16 Oct 2021 11:45:46 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 16 Oct 2021 12:37:11 +0200
-Message-Id: <20211016103711.2732298-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.33.0
-MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/liblockfile: bump to version 1.17
+Date: Sat, 16 Oct 2021 13:47:47 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 5dfe70377006b5b1031879ce69644c767049bd31
+X-Git-Newrev: 84be5d6cf061cbe260810e096654bb674f93b51f
+X-Patchwork-Hint: ignore
+Message-Id: <20211016114546.5399795C7B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/liblockfile: bump to version 1.17
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,16 +58,19 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+commit: https://git.buildroot.net/buildroot/commit/?id=84be5d6cf061cbe260810e096654bb674f93b51f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
 - MMU is mandatory since version 1.11 and
   https://github.com/miquels/liblockfile/commit/09b8935abac7417870d6fbb2db8c4f1c7c35f4b6
 - DESTDIR must be used since version 1.10 and
-  https://github.com/miquels/liblockfile/commit/d7fe38363feb6e0c7413b4edc79f478ea8d0a237
+  https://github.com/miquels/liblockfile/commit/e35f9eabcbba224ecc70b145d5d2a2d81064c195
   so drop custom commands (LIBLOCKFILE_INSTALL_{STAGING,TARGET}_CMDS)
   and replace patch by an upstreamable one
 - Update hash of COPYRIGHT and add licenses/{GPL-2,LGPL-2} to license
@@ -108,17 +78,16 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
   https://github.com/miquels/liblockfile/commit/40f8d8092bbb88177d810131c1b1f96ad0ec0bf7
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- ...01-Makefile.in-fix-cross-compilation.patch | 82 +++++++++++++++++++
- package/liblockfile/0001-install.patch        | 16 ----
- package/liblockfile/Config.in                 |  1 +
- package/liblockfile/liblockfile.hash          | 10 ++-
- package/liblockfile/liblockfile.mk            | 21 ++---
- package/lockfile-progs/Config.in              |  1 +
- package/usbmount/Config.in                    |  2 +
+ .../0001-Makefile.in-fix-cross-compilation.patch   | 82 ++++++++++++++++++++++
+ package/liblockfile/0001-install.patch             | 16 -----
+ package/liblockfile/Config.in                      |  1 +
+ package/liblockfile/liblockfile.hash               | 10 +--
+ package/liblockfile/liblockfile.mk                 | 21 ++----
+ package/lockfile-progs/Config.in                   |  1 +
+ package/usbmount/Config.in                         |  2 +
  7 files changed, 98 insertions(+), 35 deletions(-)
- create mode 100644 package/liblockfile/0001-Makefile.in-fix-cross-compilation.patch
- delete mode 100644 package/liblockfile/0001-install.patch
 
 diff --git a/package/liblockfile/0001-Makefile.in-fix-cross-compilation.patch b/package/liblockfile/0001-Makefile.in-fix-cross-compilation.patch
 new file mode 100644
@@ -322,9 +291,6 @@ index 8ce0ce7613..7760356b7c 100644
  comment "usbmount requires udev to be enabled"
 +	depends on BR2_USE_MMU
  	depends on !BR2_PACKAGE_HAS_UDEV
--- 
-2.33.0
-
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
