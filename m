@@ -2,60 +2,79 @@ Return-Path: <SRS0=a1j9=PE=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A0680C433F5
-	for <buildroot@archiver.kernel.org>; Sat, 16 Oct 2021 15:18:23 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D2F01C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 16 Oct 2021 15:21:25 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id EDD0C611C3
-	for <buildroot@archiver.kernel.org>; Sat, 16 Oct 2021 15:18:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org EDD0C611C3
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=cfl.rr.com
+	by mail.kernel.org (Postfix) with ESMTPS id 3022F6120A
+	for <buildroot@archiver.kernel.org>; Sat, 16 Oct 2021 15:21:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3022F6120A
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8FB0583518;
-	Sat, 16 Oct 2021 15:18:22 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C6BD3400C9;
+	Sat, 16 Oct 2021 15:21:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Boh1vtSpD5zT; Sat, 16 Oct 2021 15:18:21 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Ev_B-cKinzlx; Sat, 16 Oct 2021 15:21:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CB1FD834EF;
-	Sat, 16 Oct 2021 15:18:20 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D37551BF3D2
- for <buildroot@lists.busybox.net>; Sat, 16 Oct 2021 15:18:18 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A295D4021A;
+	Sat, 16 Oct 2021 15:21:22 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 9EB8D1BF3D2
+ for <buildroot@lists.busybox.net>; Sat, 16 Oct 2021 15:21:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C3459834EF
- for <buildroot@lists.busybox.net>; Sat, 16 Oct 2021 15:18:18 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8E683605E3
+ for <buildroot@lists.busybox.net>; Sat, 16 Oct 2021 15:21:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TmpPk8-r30OB for <buildroot@lists.busybox.net>;
- Sat, 16 Oct 2021 15:18:17 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from p-impout007.msg.pkvw.co.charter.net
- (p-impout007aa.msg.pkvw.co.charter.net [47.43.26.138])
- by smtp1.osuosl.org (Postfix) with ESMTPS id CCEC3834B9
- for <buildroot@buildroot.org>; Sat, 16 Oct 2021 15:18:17 +0000 (UTC)
-Received: from JohnDesktop ([68.204.142.231]) by cmsmtp with ESMTP
- id blRwmjacAx0SOblRwml0mv; Sat, 16 Oct 2021 15:18:16 +0000
-X-Authority-Analysis: v=2.4 cv=O6T8ADxW c=1 sm=1 tr=0 ts=616aed39
- a=2gSu1OBQ6d18tulzamKkMg==:117 a=2gSu1OBQ6d18tulzamKkMg==:17
- a=DAwyPP_o2Byb1YXLmDAA:9 a=dWvhHfqE0GC_yHGo_iwA:9 a=CjuIK1q_8ugA:10
- a=yMhMjlubAAAA:8 a=SSmOFEACAAAA:8 a=eAYQlikSwPgIX5rFEZMA:9 a=gKO2Hq4RSVkA:10
- a=UiCQ7L4-1S4A:10 a=hTZeC7Yk6K0A:10 a=frz4AuCg-hUA:10
-From: "John" <joblacker@cfl.rr.com>
-To: <buildroot@buildroot.org>
-Date: Sat, 16 Oct 2021 11:18:19 -0400
-Message-ID: <00bc01d7c2a1$0da32d80$28e98880$@cfl.rr.com>
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id AwUIGO-z-DcI for <buildroot@lists.busybox.net>;
+ Sat, 16 Oct 2021 15:21:19 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com
+ [IPv6:2607:f8b0:4864:20::d2b])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 88CFE605D6
+ for <buildroot@buildroot.org>; Sat, 16 Oct 2021 15:21:19 +0000 (UTC)
+Received: by mail-io1-xd2b.google.com with SMTP id e144so11205666iof.3
+ for <buildroot@buildroot.org>; Sat, 16 Oct 2021 08:21:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
+ bh=OB5l5Xg7BGl4Mdw5M+JAxaS7Lk4rNprM8qRdC4TLVn8=;
+ b=qvZ5hUVC+Iz3qTYSxZGu2C42YYiPujtE+fhkyqE0Dlv35uEXQhlxyRSCgzkCUwOy05
+ B2AHHWwADhAVE2dqvuOq9xMqi+B2jHaNC5Z8D0OVEaaRkMSO8zof7YxYMT0BuPEl1q2Q
+ VSpuOeb6aM2IAA/nMmZr7FX5Ji+4qgSRFYqcVeRhGgJTVwV7pnGGWbBfc1bcn9R0tv5M
+ nKEhBiFbOtYY7IWYxXIZkGBPm7Wj+aMFRVEJvxZl0KzO6rVnjvBHGUZRgrQgA3DTeiKW
+ RcAEaA4CODOlPUczBxyUMFmiNeKjgFMMa6bWWJz3T0yMqWlVdDIewLWZA3VHAvkpAMO8
+ ogFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to;
+ bh=OB5l5Xg7BGl4Mdw5M+JAxaS7Lk4rNprM8qRdC4TLVn8=;
+ b=DLeoP90xVP5xzf5rjAWF5lCROMhBeD6MvL5fqWI6LXTfYnBCGTx70R67oYmTLPPQr9
+ fnKRbxfl9eTDF8GkVLWd0Xw2p4zfrRbMPdm4EJRNfB8Ai81ZCPCtPy2gHSBtoqmQGsz+
+ ZqSxDOKRjZoi9uiXJixiGwot+LSuH+obSMb3KTgUPWtq7wHozmiaLh4+xtH2gMjjQD8E
+ IlqB+xaVJ5BPHpSlT0fvgUugBrtDFV/ZTEyeHKgZP+OjKqiEVh5ijkYVfVD5aW6bW07h
+ pUDP53U2dXNN/fITana5Z/0sPAsUSZ0vOtC1tqWnLaNxWBoR0DgltcFX16vBYaexp6uv
+ LxMA==
+X-Gm-Message-State: AOAM531WSXf2iNLxRMXN2gzSPv3uhhHZR4grkdWgpwCErqGLepcpGg98
+ 88qLT81y23wNvdwWbLajYFOV6Kae5DmxXQJsr4WV/ZrmYXRZ
+X-Google-Smtp-Source: ABdhPJwrhlaGf7eDz/RyLFMYuWaG0CXmN1T9t41v9+74qrWeViQgxUmQ62+grXaH87L/AvLu9mX+BWUntezjPHQH4Vc=
+X-Received: by 2002:a02:cc8c:: with SMTP id s12mr12475101jap.0.1634397678397; 
+ Sat, 16 Oct 2021 08:21:18 -0700 (PDT)
 MIME-Version: 1.0
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AdfCoQSx9PPUVI3GRo+HcUooneQehQ==
-Content-Language: en-us
-X-CMAE-Envelope: MS4xfLJZ0HvEmYWMeiu2Wl7jx5U56ZBLVVvWPfFwaXMMnncbJGjZpz8Cn3PHkZrESGIO0x0BTVc/ni/Vfu8+5P5SovexDaz3/3ORQ9a4Ya64l0L/qmNWbrNJ
- IQmKHfp7u/58j2imepk5iVvtVSKPqIay0io93/wDmSFlXKNksp08lslNza0ujzfufPPqZPi8H5vOog==
-Subject: [Buildroot] Error performing Make with External Toolchain
+References: <CA+eej5MX+5kes-LBQkjRVTFiEBm9N4TO5qyecu01vkT98fCYwg@mail.gmail.com>
+In-Reply-To: <CA+eej5MX+5kes-LBQkjRVTFiEBm9N4TO5qyecu01vkT98fCYwg@mail.gmail.com>
+From: =?UTF-8?Q?Esa=C3=AFe_Ledoux_NJONGSSI_KOUAM?= <kouamdoux@gmail.com>
+Date: Sat, 16 Oct 2021 19:21:13 +0200
+Message-ID: <CA+eej5PnUzNDcRr7VviHOzLsHbWfVWLkSRJQYG1Dvao70CJEPg@mail.gmail.com>
+To: buildroot@buildroot.org
+Subject: Re: [Buildroot] how can i implement my kernel module and debug it
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -67,217 +86,212 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Reply-To: joblacker@cfl.rr.com
-Content-Type: multipart/mixed; boundary="===============0639865065664595392=="
+Content-Type: multipart/mixed; boundary="===============1542884672883891910=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This is a multipart message in MIME format.
+--===============1542884672883891910==
+Content-Type: multipart/alternative; boundary="0000000000000aea1c05ce79dd28"
 
---===============0639865065664595392==
-Content-Type: multipart/alternative;
-	boundary="----=_NextPart_000_00BD_01D7C27F.869202B0"
-Content-Language: en-us
-
-This is a multipart message in MIME format.
-
-------=_NextPart_000_00BD_01D7C27F.869202B0
-Content-Type: text/plain;
-	charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-
-TWIMC:
-
-I've been trying to get BUILDROOT to successfully "make" for several days to
-no avail.  I'm trying to use the latest crosstool-NG toolchain,  so I've
-specified 
-
-an external toolchain.  I've selected the latest version of BUILDROOT and
-the latest kernel headers.  I've selected glibc/eglibc and support for SSP,
-strong SSP
-
-and C++ support.  The first attempt I had the option for ulibc selected
-along with RPC and ran into an error, so I unselected RPC and changed to
-glibc/eglibc and
-
-here's my "make" output:
-
- 
-
->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 
-
-jb@jb-VirtualBox-dev:~/GitHub/buildroot$ make
-
-/usr/bin/make -j1 O=/home/jb/GitHub/buildroot/output HOSTCC="/usr/bin/gcc"
-HOSTCXX="/usr/bin/g++" syncconfig
-
->>> toolchain-external-custom  Configuring
-
->>> toolchain-external-custom  Building
-
-/usr/bin/gcc -O2 -I/home/jb/GitHub/buildroot/output/host/include
--DBR_CPU='"cortex-a53"' -DBR_ABI='"aapcs-linux"' -DBR_FPU='"neon-vfpv4"'
--DBR_FLOAT_ABI='"hard"' -DBR_MODE='"arm"' -DBR_CROSS_PATH_SUFFIX='""'
--DBR_CROSS_PATH_ABS='"/home/jb/workspace/toolchains/armv8-rpi3-linux-gnueabi
-hf/bin"' -DBR_SYSROOT='"arm-buildroot-linux-gnueabihf/sysroot"'
--DBR_ADDITIONAL_CFLAGS='"-fstack-protector-strong",' -DBR2_PIC_PIE
--DBR2_RELRO_FULL -s -Wl,--hash-style=both toolchain/toolchain-wrapper.c -o
-/home/jb/GitHub/buildroot/output/build/toolchain-external-custom/toolchain-w
-rapper
-
->>> toolchain-external-custom  Installing to staging directory
-
-/usr/bin/install -D -m 0755
-/home/jb/GitHub/buildroot/output/build/toolchain-external-custom/toolchain-w
-rapper /home/jb/GitHub/buildroot/output/host/bin/toolchain-wrapper
-
-ln: failed to create symbolic link
-'/home/jb/GitHub/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot
-/usr/lib': No such file or directory
-
-make[1]: *** [package/pkg-generic.mk:309:
-/home/jb/GitHub/buildroot/output/build/toolchain-external-custom/.stamp_stag
-ing_installed] Error 1
-
-make: *** [Makefile:84: _all] Error 2
-
-<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< 
-
- 
-
-I checked for the presence of the .sysroot/usr/lib directory noted in the
-error and it does not exist, all I have is a "lib" directory.  If I try to
-issue a ls lib I get an error:
-
-"ls: cannot access 'lib': Too many levels of symbolic links"
-
- 
-
-Not being familiar with the BUILDROOT process, I'm at a loss regarding what
-to do and need help.
-
- 
-
-Thank you.
-
-John Blacker
-
- 
-
-
-------=_NextPart_000_00BD_01D7C27F.869202B0
-Content-Type: text/html;
-	charset="us-ascii"
+--0000000000000aea1c05ce79dd28
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-<html xmlns:v=3D"urn:schemas-microsoft-com:vml" =
-xmlns:o=3D"urn:schemas-microsoft-com:office:office" =
-xmlns:w=3D"urn:schemas-microsoft-com:office:word" =
-xmlns:m=3D"http://schemas.microsoft.com/office/2004/12/omml" =
-xmlns=3D"http://www.w3.org/TR/REC-html40"><head><META =
-HTTP-EQUIV=3D"Content-Type" CONTENT=3D"text/html; =
-charset=3Dus-ascii"><meta name=3DGenerator content=3D"Microsoft Word 15 =
-(filtered medium)"><style><!--
-/* Font Definitions */
-@font-face
-	{font-family:"Cambria Math";
-	panose-1:2 4 5 3 5 4 6 3 2 4;}
-@font-face
-	{font-family:Calibri;
-	panose-1:2 15 5 2 2 2 4 3 2 4;}
-/* Style Definitions */
-p.MsoNormal, li.MsoNormal, div.MsoNormal
-	{margin:0in;
-	font-size:11.0pt;
-	font-family:"Calibri",sans-serif;}
-span.EmailStyle17
-	{mso-style-type:personal-compose;
-	font-family:"Calibri",sans-serif;
-	color:windowtext;}
-.MsoChpDefault
-	{mso-style-type:export-only;
-	font-family:"Calibri",sans-serif;}
-@page WordSection1
-	{size:8.5in 11.0in;
-	margin:1.0in 1.0in 1.0in 1.0in;}
-div.WordSection1
-	{page:WordSection1;}
---></style><!--[if gte mso 9]><xml>
-<o:shapedefaults v:ext=3D"edit" spidmax=3D"1026" />
-</xml><![endif]--><!--[if gte mso 9]><xml>
-<o:shapelayout v:ext=3D"edit">
-<o:idmap v:ext=3D"edit" data=3D"1" />
-</o:shapelayout></xml><![endif]--></head><body lang=3DEN-US =
-link=3D"#0563C1" vlink=3D"#954F72" style=3D'word-wrap:break-word'><div =
-class=3DWordSection1><p class=3DMsoNormal><u>TWIMC:<o:p></o:p></u></p><p =
-class=3DMsoNormal>I&#8217;ve been trying to get BUILDROOT to =
-successfully &#8220;make&#8221; for several days to no avail.&nbsp; =
-I&#8217;m trying to use the latest crosstool-NG toolchain,&nbsp; so =
-I&#8217;ve specified <o:p></o:p></p><p class=3DMsoNormal>an external =
-toolchain.&nbsp; I&#8217;ve selected the latest version of BUILDROOT and =
-the latest kernel headers.&nbsp; I&#8217;ve selected glibc/eglibc and =
-support for SSP, strong SSP<o:p></o:p></p><p class=3DMsoNormal>and C++ =
-support.&nbsp; The first attempt I had the option for ulibc selected =
-along with RPC and ran into an error, so I unselected RPC and changed to =
-glibc/eglibc and<o:p></o:p></p><p class=3DMsoNormal>here&#8217;s my =
-&#8220;make&#8221; output:<o:p></o:p></p><p =
-class=3DMsoNormal><o:p>&nbsp;</o:p></p><p =
-class=3DMsoNormal>&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt=
-;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;=
-&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&=
-gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;<o:p>&nbsp;</o:p></p><=
-p class=3DMsoNormal>jb@jb-VirtualBox-dev:~/GitHub/buildroot$ =
-make<o:p></o:p></p><p class=3DMsoNormal>/usr/bin/make -j1 =
-O=3D/home/jb/GitHub/buildroot/output HOSTCC=3D&quot;/usr/bin/gcc&quot; =
-HOSTCXX=3D&quot;/usr/bin/g++&quot; syncconfig<o:p></o:p></p><p =
-class=3DMsoNormal>&gt;&gt;&gt; toolchain-external-custom&nbsp; =
-Configuring<o:p></o:p></p><p class=3DMsoNormal>&gt;&gt;&gt; =
-toolchain-external-custom&nbsp; Building<o:p></o:p></p><p =
-class=3DMsoNormal>/usr/bin/gcc -O2 =
--I/home/jb/GitHub/buildroot/output/host/include =
--DBR_CPU=3D'&quot;cortex-a53&quot;' -DBR_ABI=3D'&quot;aapcs-linux&quot;' =
--DBR_FPU=3D'&quot;neon-vfpv4&quot;' -DBR_FLOAT_ABI=3D'&quot;hard&quot;' =
--DBR_MODE=3D'&quot;arm&quot;' -DBR_CROSS_PATH_SUFFIX=3D'&quot;&quot;' =
--DBR_CROSS_PATH_ABS=3D'&quot;/home/jb/workspace/toolchains/armv8-rpi3-lin=
-ux-gnueabihf/bin&quot;' =
--DBR_SYSROOT=3D'&quot;arm-buildroot-linux-gnueabihf/sysroot&quot;' =
--DBR_ADDITIONAL_CFLAGS=3D'&quot;-fstack-protector-strong&quot;,' =
--DBR2_PIC_PIE -DBR2_RELRO_FULL -s -Wl,--hash-style=3Dboth =
-toolchain/toolchain-wrapper.c -o =
-/home/jb/GitHub/buildroot/output/build/toolchain-external-custom/toolchai=
-n-wrapper<o:p></o:p></p><p class=3DMsoNormal>&gt;&gt;&gt; =
-toolchain-external-custom&nbsp; Installing to staging =
-directory<o:p></o:p></p><p class=3DMsoNormal>/usr/bin/install -D -m 0755 =
-/home/jb/GitHub/buildroot/output/build/toolchain-external-custom/toolchai=
-n-wrapper =
-/home/jb/GitHub/buildroot/output/host/bin/toolchain-wrapper<o:p></o:p></p=
-><p class=3DMsoNormal>ln: failed to create symbolic link =
-'/home/jb/GitHub/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysr=
-oot/usr/lib': No such file or directory<o:p></o:p></p><p =
-class=3DMsoNormal>make[1]: *** [package/pkg-generic.mk:309: =
-/home/jb/GitHub/buildroot/output/build/toolchain-external-custom/.stamp_s=
-taging_installed] Error 1<o:p></o:p></p><p class=3DMsoNormal>make: *** =
-[Makefile:84: _all] Error 2<o:p></o:p></p><p =
-class=3DMsoNormal>&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt=
-;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;=
-&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&=
-lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;<o:p>&nbsp;</o:p></p><=
-p class=3DMsoNormal><o:p>&nbsp;</o:p></p><p class=3DMsoNormal>I checked =
-for the presence of the &#8230;sysroot/usr/lib directory noted in the =
-error and it does not exist, all I have is a &#8220;lib&#8221; =
-directory.&nbsp; If I try to issue a ls lib I get an =
-error:<o:p></o:p></p><p class=3DMsoNormal>&#8220;ls: cannot access =
-&#8216;lib&#8217;: Too many levels of symbolic =
-links&#8221;<o:p></o:p></p><p class=3DMsoNormal><o:p>&nbsp;</o:p></p><p =
-class=3DMsoNormal>Not being familiar with the BUILDROOT process, =
-I&#8217;m at a loss regarding what to do and need help.<o:p></o:p></p><p =
-class=3DMsoNormal><o:p>&nbsp;</o:p></p><p class=3DMsoNormal>Thank =
-you.<o:p></o:p></p><p class=3DMsoNormal>John Blacker<o:p></o:p></p><p =
-class=3DMsoNormal><o:p>&nbsp;</o:p></p></div></body></html>
-------=_NextPart_000_00BD_01D7C27F.869202B0--
+In another way , i have seen some kernel modules infrastructure with
 
+git grep "(kernel-module)" -- package/
 
---===============0639865065664595392==
+, but i don't know how to load each kernel module and trace it or debug it =
+.
+
+How it is possible ??
+
+Le sam. 16 oct. 2021 =C3=A0 18:57, Esa=C3=AFe Ledoux NJONGSSI KOUAM <
+kouamdoux@gmail.com> a =C3=A9crit :
+
+> Hi everyone .
+> Sorry for the inconvenience , ...
+>
+> I want to know how to load my kernel module, run it see these traces usin=
+g
+> dmesg and debug it.
+>
+> So , i have read this part of the  (manual
+> <https://buildroot.org/downloads/manual/manual.html#_infrastructure_for_p=
+ackages_building_kernel_modules>)
+> , but i don't know how to use it :
+>
+> | What you may have noticed is that, unlike other package infrastructures=
+,
+> we | explicitly invoke a second infrastructure. This allows a package to
+> build a kernel | module, but also, if needed, use any one of other packag=
+e
+> infrastructures to | build normal userland components (libraries,
+> executables=E2=80=A6). Using the kernel-module infrastructure on its own =
+is not
+> sufficient; another package infrastructure *must* be used.
+>
+> but in my way , i have try something :
+>
+> - Config.in
+>
+> config BR2_PACKAGE_KERNEL_MODULE
+>         bool "kernel_module"
+>         depends on BR2_LINUX_KERNEL
+>         help
+>                 Linux Kernel Module Cheat.
+>
+> - external.mk
+>
+> KERNEL_MODULE_VERSION =3D 1.0
+> KERNEL_MODULE_SITE =3D $(BR2_EXTERNAL_KERNEL_MODULE_PATH)
+> KERNEL_MODULE_SITE_METHOD =3D local
+> $(eval $(kernel-module))
+> $(eval $(generic-package))
+>
+> - Makefile
+>
+> obj-m +=3D $(addsuffix .o, $(notdir $(basename $(wildcard $(BR2_EXTERNAL_=
+KERNEL_MODULE_PATH)/*.c))))
+> ccflags-y :=3D -DDEBUG -g -std=3Dgnu99 -Wno-declaration-after-statement
+>
+> .PHONY: all clean
+>
+> all:
+>     $(MAKE) -C '$(LINUX_DIR)' M=3D'$(PWD)' modules
+>
+> clean:
+>     $(MAKE) -C '$(LINUX_DIR)' M=3D'$(PWD)' clean
+>
+> - hello.c
+>
+> #include <linux/module.h>#include <linux/kernel.h>
+>
+> MODULE_LICENSE("GPL");
+> static int myinit(void)
+> {
+>     printk(KERN_INFO "hello init\n");
+>     return 0;
+> }
+> static void myexit(void)
+> {
+>     printk(KERN_INFO "hello exit\n");
+> }
+>
+> module_init(myinit)
+> module_exit(myexit)
+>
+> And in the terminal :
+>
+> make BR2_EXTERNAL=3D"$(pwd)/../kernel_module" qemu_x86_64_defconfig
+> echo 'BR2_PACKAGE_KERNEL_MODULE=3Dy' >> .config
+> make BR2_JLEVEL=3D"$(($(nproc) - 2))" all
+> qemu-system-x86_64 -M pc -kernel output/images/bzImage -drive file=3Doutp=
+ut/images/rootfs.ext2,if=3Dvirtio,format=3Draw -append root=3D/dev/vda -net=
+ nic,model=3Dvirtio -net user
+>
+>
+> On qemu :
+>
+> modprobe hello
+> modprobe: module hello not found in modules.dep
+>
+> how can i solve it ??
+>
+> please i need your help
+>
+>
+>
+
+--0000000000000aea1c05ce79dd28
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div>In another way , i have seen some kernel modules infr=
+astructure with <br><pre class=3D"gmail-lang-c gmail-s-code-block"><code cl=
+ass=3D"gmail-hljs gmail-language-c">git grep <span class=3D"gmail-hljs-stri=
+ng">&quot;(kernel-module)&quot;</span> -- package/</code></pre> , but i don=
+&#39;t know how to load each kernel module and trace it or debug it .</div>=
+<div><br></div><div>How it is possible ??<br></div></div><br><div class=3D"=
+gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">Le=C2=A0sam. 16 oct. 202=
+1 =C3=A0=C2=A018:57, Esa=C3=AFe Ledoux NJONGSSI KOUAM &lt;<a href=3D"mailto=
+:kouamdoux@gmail.com">kouamdoux@gmail.com</a>&gt; a =C3=A9crit=C2=A0:<br></=
+div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;bor=
+der-left:1px solid rgb(204,204,204);padding-left:1ex"><div dir=3D"ltr">Hi e=
+veryone .<br>Sorry for the inconvenience , ...<br><br><div>I want to know h=
+ow to load my kernel module, run it see these traces using dmesg and debug =
+it.</div><div><br></div><div>So , i have read this part of the=C2=A0 (<a hr=
+ef=3D"https://buildroot.org/downloads/manual/manual.html#_infrastructure_fo=
+r_packages_building_kernel_modules" target=3D"_blank">manual</a>) , but i d=
+on&#39;t know how to use it :</div><div><br></div><div>| What you may have =
+noticed is that, unlike other package infrastructures,
+we | explicitly invoke a second infrastructure. This allows a package to
+build a kernel | module, but also, if needed, use any one of other package
+infrastructures to | build normal userland components (libraries,
+executables=E2=80=A6). Using the <code>kernel-module</code> infrastructure =
+on its own is
+not sufficient; another package infrastructure <span><strong>must</strong><=
+/span> be used.</div><div><br></div><div>but in my way , i have try somethi=
+ng : <br></div><div><br></div><div>- Config.in</div><div><pre><code>config =
+BR2_PACKAGE_KERNEL_MODULE
+        <span>bool</span> <span>&quot;kernel_module&quot;</span>
+        depends on BR2_LINUX_KERNEL
+        help
+                Linux Kernel Module Cheat.</code></pre></div><div>- <a href=
+=3D"http://external.mk" target=3D"_blank">external.mk</a></div><div><br></d=
+iv><div><pre><code>KERNEL_MODULE_VERSION =3D <span>1.0</span>
+KERNEL_MODULE_SITE =3D $(BR2_EXTERNAL_KERNEL_MODULE_PATH)
+KERNEL_MODULE_SITE_METHOD =3D local
+$(eval $(kernel-module))
+$(eval $(generic-package))<br><br>- Makefile<br><br><code>obj-m +=3D $(adds=
+uffix .o, $(notdir $(basename $(wildcard $(BR2_EXTERNAL_KERNEL_MODULE_PATH)=
+<span>/*.c))))
+ccflags-y :=3D -DDEBUG -g -std=3Dgnu99 -Wno-declaration-after-statement
+
+.PHONY: all clean
+
+all:
+    $(MAKE) -C &#39;$(LINUX_DIR)&#39; M=3D&#39;$(PWD)&#39; modules
+
+clean:
+    $(MAKE) -C &#39;$(LINUX_DIR)&#39; M=3D&#39;$(PWD)&#39; clean<br><br>- h=
+ello.c<br><br><code><span>#<span>include</span> <span>&lt;linux/module.h&gt=
+;</span></span>
+<span>#<span>include</span> <span>&lt;linux/kernel.h&gt;</span></span>
+
+MODULE_LICENSE(<span>&quot;GPL&quot;</span>);
+
+<span>static</span> <span>int</span> <span>myinit</span><span>(<span>void</=
+span>)</span>
+{
+    printk(KERN_INFO <span>&quot;hello init\n&quot;</span>);
+    <span>return</span> <span>0</span>;
+}
+
+<span>static</span> <span>void</span> <span>myexit</span><span>(<span>void<=
+/span>)</span>
+{
+    printk(KERN_INFO <span>&quot;hello exit\n&quot;</span>);
+}
+
+module_init(myinit)
+module_exit(myexit)<br><br><code>And in the terminal : </code></code></span=
+></code></code></pre></div><div><pre><code>make BR2_EXTERNAL=3D<span>&quot;=
+$(pwd)/../kernel_module&quot;</span> qemu_x86_64_defconfig
+echo <span>&#39;BR2_PACKAGE_KERNEL_MODULE=3Dy&#39;</span> &gt;&gt; .config
+make BR2_JLEVEL=3D<span>&quot;$(($(nproc) - 2))&quot;</span> all
+qemu-system-x86_64 -M pc -kernel output/images/bzImage -drive file=3Doutput=
+/images/rootfs.ext2,<span>if</span>=3Dvirtio,format=3Draw -append root=3D/d=
+ev/vda -net nic,model=3Dvirtio -net user<br><br><br></code></pre><pre><code=
+>On qemu :<br></code></pre><pre><code>modprobe hello<br>modprobe: module he=
+llo not found in modules.dep<br><br></code></pre><pre><code>how can i solve=
+ it ??<br></code></pre><pre><code>please i need your help<br></code></pre><=
+pre><code><br></code></pre></div></div>
+</blockquote></div>
+
+--0000000000000aea1c05ce79dd28--
+
+--===============1542884672883891910==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -288,5 +302,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============0639865065664595392==--
-
+--===============1542884672883891910==--
