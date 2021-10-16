@@ -2,70 +2,70 @@ Return-Path: <SRS0=a1j9=PE=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 11EB3C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 16 Oct 2021 08:32:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C1F3C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 16 Oct 2021 08:32:34 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id CA87161250
-	for <buildroot@archiver.kernel.org>; Sat, 16 Oct 2021 08:32:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org CA87161250
+	by mail.kernel.org (Postfix) with ESMTPS id 558B461261
+	for <buildroot@archiver.kernel.org>; Sat, 16 Oct 2021 08:32:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 558B461261
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A35F8606CF;
-	Sat, 16 Oct 2021 08:32:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 331F0606E2;
+	Sat, 16 Oct 2021 08:32:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KLxb_URXrEtF; Sat, 16 Oct 2021 08:32:21 +0000 (UTC)
+	with ESMTP id l6CmYIfNsd2P; Sat, 16 Oct 2021 08:32:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 129486068B;
-	Sat, 16 Oct 2021 08:32:21 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id EBBAF1BF873
- for <buildroot@lists.busybox.net>; Sat, 16 Oct 2021 08:31:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7850B60794;
+	Sat, 16 Oct 2021 08:32:32 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 2713D1BF873
+ for <buildroot@lists.busybox.net>; Sat, 16 Oct 2021 08:32:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E8F9A4082E
- for <buildroot@lists.busybox.net>; Sat, 16 Oct 2021 08:31:08 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 173A483B80
+ for <buildroot@lists.busybox.net>; Sat, 16 Oct 2021 08:32:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=free.fr
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yUBTBTCm9g2D for <buildroot@lists.busybox.net>;
- Sat, 16 Oct 2021 08:31:08 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp4.osuosl.org (Postfix) with ESMTPS id DD9F44050B
- for <buildroot@buildroot.org>; Sat, 16 Oct 2021 08:31:07 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ySUHMlXdop_e for <buildroot@lists.busybox.net>;
+ Sat, 16 Oct 2021 08:31:59 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3F83583B7A
+ for <buildroot@buildroot.org>; Sat, 16 Oct 2021 08:31:59 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b51:cb00:ae:6c95:da51:607e])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id 956F2780357;
- Sat, 16 Oct 2021 10:30:59 +0200 (CEST)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id AC6B57802D7;
+ Sat, 16 Oct 2021 10:31:53 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1634373065;
- bh=lJYSpE7uW0JcfwktGglnHcpqfRkeEQ8OugKWUbwixys=;
+ s=smtp-20201208; t=1634373117;
+ bh=SKDgVd2v905vsofUblpCYQH4LY5tZqliDJNu+OpnEhY=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=H6oBTaTHZtvtvIkKs31oQ4UFim/uHou9rrRU3+OAIRAqKjCQEp5OidKc9EtC6EVtr
- y3QFM+VoCgiMl9k/XGNh4IDKImajgXpCR5iKwE32Cf2hJAlp+KgyTPLgcDa/LZAyak
- IFX746mMxgUHnVIDHX6HRfFQe5Jabm3OSMBp0ZmmJ3r+UNaonAWghKaxqJYIzCCIuU
- OjFknMkBJ3r0iY+SjVtd1ZqnVK7rPX6r1rKts0ZV6mwejr0KUXMdKxVLWJughKQzDO
- qFUWmCFK3WdGMS0dj7H5R58ytnibORSyl5r2bcMa/j58m35TpWNiNdCYcWezfvw3L1
- 8jgqFT3QswODw==
+ b=AXJcUjmy/3WJz4VtLSw0fJew3RPiKXiBZ/CbLtNETlz2SXeGT25OBG1ItjXwXOoEs
+ 92Kl3vZtWgivvY5fzcKCsc4oMxW7v248whmiC8r2k2M0oy//TxBcIzr8Xawopuh+08
+ XD+RKAsppT29jdwKZYQQxpjH0MGOWonudo/Jk+JDvOe+wfGJlJdrFUHwH9OoH9ycY2
+ VDi9i4NxpXji58xVF2xp/KjGT9leBprSUtHM63l3Yc43CHlc/lNKub1F7PGi9N802c
+ IE2cYUtE3yWg8ZPzZQXebGj1i/ERdyRXkCCuj2OpXw7QEHjfufEZ9idOppTqvqErAg
+ QJttdWwz7VMdg==
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 16 Oct 2021 10:30:59 +0200
-Date: Sat, 16 Oct 2021 10:30:59 +0200
+ Sat, 16 Oct 2021 10:31:53 +0200
+Date: Sat, 16 Oct 2021 10:31:53 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20211016083059.GJ4165837@scaer>
-References: <20211015195712.1548108-1-fontaine.fabrice@gmail.com>
+To: Bernd Kuhls <bernd.kuhls@t-online.de>
+Message-ID: <20211016083153.GK4165837@scaer>
+References: <20211015153947.1371324-1-bernd.kuhls@t-online.de>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20211015195712.1548108-1-fontaine.fabrice@gmail.com>
+In-Reply-To: <20211015153947.1371324-1-bernd.kuhls@t-online.de>
 User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 1/1] package/cloop: bump to version 3.14.1.3
+Subject: Re: [Buildroot] [PATCH 1/1] package/samba4: bump version to 4.14.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,18 +77,19 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fabrice, All,
+Bernd, All,
 
-On 2021-10-15 21:57 +0200, Fabrice Fontaine spake thusly:
-> Update indentation in hash file (two spaces)
+On 2021-10-15 17:39 +0200, Bernd Kuhls spake thusly:
+> Release notes:
+> https://www.samba.org/samba/history/samba-4.14.8.html
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
 Applied to master, thanks.
 
@@ -96,43 +97,36 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/cloop/cloop.hash | 8 ++++----
->  package/cloop/cloop.mk   | 4 ++--
->  2 files changed, 6 insertions(+), 6 deletions(-)
+>  package/samba4/samba4.hash | 4 ++--
+>  package/samba4/samba4.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/cloop/cloop.hash b/package/cloop/cloop.hash
-> index 7af1a9594d..eb922764bb 100644
-> --- a/package/cloop/cloop.hash
-> +++ b/package/cloop/cloop.hash
-> @@ -1,6 +1,6 @@
-> -# From http://snapshot.debian.org/archive/debian/20150503T155713Z/pool/main/c/cloop/cloop_3.14.1.2.dsc
-> -sha256	ac344225b3a5c4ddbb0d4b20cd4874798b51427b707b53e2ee9fbdada7497c95	cloop_3.14.1.2.tar.xz
-> +# From http://snapshot.debian.org/archive/debian/20200419T152225Z/pool/main/c/cloop/cloop_3.14.1.3.dsc
-> +sha256  e3079e70f9edae8ed1ac64694af08f6c7dc710ca65a56e4770dcb1325a293193  cloop_3.14.1.3.tar.xz
->  
->  # Hash for license files
-> -sha256	91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad	advancecomp-1.15/COPYING
-> -sha256	1b1f89e94e131e259b9e334565c5c3500d4b8aa755b75c3f145ddcdff3b89124	README
-> +sha256  91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad  advancecomp-1.15/COPYING
-> +sha256  1b1f89e94e131e259b9e334565c5c3500d4b8aa755b75c3f145ddcdff3b89124  README
-> diff --git a/package/cloop/cloop.mk b/package/cloop/cloop.mk
-> index 046d98c862..f3c4954ead 100644
-> --- a/package/cloop/cloop.mk
-> +++ b/package/cloop/cloop.mk
-> @@ -4,9 +4,9 @@
+> diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+> index 5fb0760366..f33b61e262 100644
+> --- a/package/samba4/samba4.hash
+> +++ b/package/samba4/samba4.hash
+> @@ -1,4 +1,4 @@
+>  # Locally calculated after checking pgp signature
+> -# https://download.samba.org/pub/samba/stable/samba-4.14.7.tar.asc
+> -sha256  6f50353f9602aa20245eb18ceb00e7e5ec793df0974aebd5254c38f16d8f1906  samba-4.14.7.tar.gz
+> +# https://download.samba.org/pub/samba/stable/samba-4.14.8.tar.asc
+> +sha256  c936b782c2aced8cd7299c13bec67c495fd4affdb217a6ed6150f4fd6d770fde  samba-4.14.8.tar.gz
+>  sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+> diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+> index 3df80afd6b..3faeb88e09 100644
+> --- a/package/samba4/samba4.mk
+> +++ b/package/samba4/samba4.mk
+> @@ -4,7 +4,7 @@
 >  #
 >  ################################################################################
 >  
-> -CLOOP_VERSION = 3.14.1.2
-> +CLOOP_VERSION = 3.14.1.3
->  CLOOP_SOURCE = cloop_$(CLOOP_VERSION).tar.xz
-> -CLOOP_SITE = http://snapshot.debian.org/archive/debian/20150503T155713Z/pool/main/c/cloop
-> +CLOOP_SITE = http://snapshot.debian.org/archive/debian/20200419T152225Z/pool/main/c/cloop
->  CLOOP_LICENSE = GPL-2.0 (module), GPL-2.0+ (advancecomp)
->  CLOOP_LICENSE_FILES = README advancecomp-1.15/COPYING
->  
+> -SAMBA4_VERSION = 4.14.7
+> +SAMBA4_VERSION = 4.14.8
+>  SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+>  SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+>  SAMBA4_INSTALL_STAGING = YES
 > -- 
-> 2.33.0
+> 2.30.2
 > 
 > _______________________________________________
 > buildroot mailing list
