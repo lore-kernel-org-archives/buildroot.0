@@ -2,82 +2,82 @@ Return-Path: <SRS0=a1j9=PE=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 484DCC433F5
-	for <buildroot@archiver.kernel.org>; Sat, 16 Oct 2021 21:54:22 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 04B1DC433EF
+	for <buildroot@archiver.kernel.org>; Sat, 16 Oct 2021 21:54:33 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 97495608FE
-	for <buildroot@archiver.kernel.org>; Sat, 16 Oct 2021 21:54:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 97495608FE
+	by mail.kernel.org (Postfix) with ESMTPS id 82E616108E
+	for <buildroot@archiver.kernel.org>; Sat, 16 Oct 2021 21:54:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 82E616108E
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmx.net
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 36974605F4;
-	Sat, 16 Oct 2021 21:54:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 527014033D;
+	Sat, 16 Oct 2021 21:54:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ojWkVxt8xe-a; Sat, 16 Oct 2021 21:54:20 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Wbcm9mqxcBUN; Sat, 16 Oct 2021 21:54:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 84CEF60087;
-	Sat, 16 Oct 2021 21:54:19 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 682001BF95F
+	by smtp4.osuosl.org (Postfix) with ESMTP id C439740325;
+	Sat, 16 Oct 2021 21:54:30 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 729DC1BF962
  for <buildroot@lists.busybox.net>; Sat, 16 Oct 2021 21:54:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 585E660087
+ by smtp4.osuosl.org (Postfix) with ESMTP id 61DCC40325
  for <buildroot@lists.busybox.net>; Sat, 16 Oct 2021 21:54:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 58_fAdic1mIW for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OjjeNQhTc6IY for <buildroot@lists.busybox.net>;
  Sat, 16 Oct 2021 21:54:05 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
- by smtp3.osuosl.org (Postfix) with ESMTPS id EF5716001B
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9953A4031C
  for <buildroot@buildroot.org>; Sat, 16 Oct 2021 21:54:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
  s=badeba3b8450; t=1634421242;
- bh=9PfOg+/ZHQfCNaZckSRRDFzGdYxyHUOI0bOscVPlTX4=;
+ bh=JLBg1Ah3+ldmCY6w4fj9+16qHjRhsBLjpfxTzoGrPfU=;
  h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
- b=hnhMTfnAnL6NQpVe+8nockqVa2uw3BfifC2yblNvcgU08lWYMd/O1ngTNPVzxaHFP
- xFQrQYlajSui/Mps2yfZHTMrlglHwsaYD72feFv2kwosfYq36kL7CNzWkB8ODxByyZ
- PbFPDZIORdtij3dblsK8iSdlGllkrYJ1U0WeKohc=
+ b=glKzXxOW6rAem3FbkLh66NFxwt4MpyfOf9Xo5h05vbA+tJQpiG4Osn+4pOwBrkazj
+ 8PuWDCBYU/G/0f7KHheSQMrycI86AEskMGR5IsCdYT3X9s1O9Z6tr2EfKf6SL8CvbP
+ d11gLIj4wzeY0w+wQaVRzwvgNReGSt9WnEUsSTSI=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
 Received: from localhost.fritz.box ([62.216.209.201]) by mail.gmx.net
  (mrgmx005 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 1MeU4s-1nCIqE0YOi-00aXoS; Sat, 16 Oct 2021 23:54:02 +0200
+ 1M7sHo-1mfjVT3ZAo-0054LC; Sat, 16 Oct 2021 23:54:01 +0200
 From: Peter Seiderer <ps.report@gmx.net>
 To: buildroot@buildroot.org
-Date: Sat, 16 Oct 2021 23:54:00 +0200
-Message-Id: <20211016215400.31415-5-ps.report@gmx.net>
+Date: Sat, 16 Oct 2021 23:53:59 +0200
+Message-Id: <20211016215400.31415-4-ps.report@gmx.net>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20211016215400.31415-1-ps.report@gmx.net>
 References: <20211016215400.31415-1-ps.report@gmx.net>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:/MyxaUIx7VV8CTcQJ7B+UHvVvKohOYKR0aFD+9cSayr2HrKpuhM
- qzMlrpCc+5V4ThYq83s8kr58V8kU33hY/Aj++co76o26sYpxAzbWbISiLlheBIdTrioVR3c
- Rk+LMS+E1dW+vxgnfiiwZWXqnhsd5oO9p+AprRy0J/FtRLWFqL/6x61ou5HErdbnSGeyzyr
- pKrn7sc/qqdymPB0F3dvw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:raY/OrLaz4M=:9MLiaiAfDWY+GliZ+32OUR
- OX4+pSpSpsJW77VIwb9nuV9VNU+DO4OqVDJR2YQq6bZ8aepffctE9w7MSKfajRQW8+yOCBNwW
- Q8tVIQQS7aF9Tp0gec9OMsPOS4NkaC3uQJU2IeCqWjQzavdMaEH6AwAp6np6MV7+5q24oZpVl
- Xw5wI6K1om5CpJcij9MjFHdrbTRdnoesEHyWzrwP20JSZ4m3CJ5dl28A/gnHpE+wakomyibIn
- A1KE8WS+7cnklygBCcSvRhcamedSsD5XrjCdQimAmqAmx9P6S56XZKaD+p3TlaYETCnNaTarI
- Vqjn+g4KCM2hn4dZftJOE0084W9jenNAK7nBrCtOu9ZZ8RLyQNTELYm0vlc0sVlTGMpK1ti0i
- bhwqA8ruX5bnqBV9JwV281EU9Y9Tes9uFl04ozNfpMkHHxVvAVoj9kuFrMOx5JeJZAZD/bGBG
- n3ogSraxQk1+hOw53Nc86JeT5+7U2IzWcaTmuPYilZqgwGuOw2Uv+G4962yxjgqzXD7kxrBUC
- twRxf0SuJDH0TtCwH6zLJUupFxrVNzghifQyMs8l0S86Mh5vsQ/TdBjo0lgQV2PLXLoaL4qp8
- x5pfX7eTHfxDTm8tR4DivbcJ1E6DOJ01QFfk1vfYUyQRJKeree0497hIFuCSCOExhOFhBmMZl
- cwlFpKKKnRR/xy7XyMvh56dehS8Q2NMrq5XAwLk38HG7QFWGeUrr84/n9LwjahzPKrc/h+67d
- X4qBKWmrktQRynvmJZ3tY0TzcaKKCKsMLPXQIcYfMwG4kYcsWOXvaRS2CWSjWmw0ZCJvHUeAK
- Oa3Dnxz5Spq58E2A1qLy8BhT/FvQFcuglTlt6Wm3noROERlTxzQ9pgsZnSF3fCdl5wUF3HbHp
- F97N0uxlO5Dxk9JCXZiIa+Md4t+PSQuvSLCv7NcItlN5aNZ/24x35L5OPAW8DIA10fkibzqfC
- nNcY6xLJmPkqdndg57mgnHvP3TQUuavI0vo0ozi3TUdhqAjdeLSVN517ZaJVRsDqub7VC4AjO
- 0wo7HJftA+KFgNf+QubktxZf8xfmAn38VC4JKDycaonG0KkmKxB7oP32tppOQx9bmZF0O4a35
- Hi400oLGd+0ABk=
-Subject: [Buildroot] [PATCH v1 5/5] package/uqmi: new package
+X-Provags-ID: V03:K1:MG6Fe6uyU5SkbOFjXW6Rams6VHpM8SLrSl1jGCu6prxYyLpOn1s
+ mDhmVX5ybCB9Cn6GqwncmNfg3Gox0mVCNb9LEygoj0+m5zXVlmaWL513LMbsHWciLhFkccC
+ 03UGdvvhsKA2ad6THaOmwKtplo12oRNnYLBkTOylN/6IOyaDEWccbgMjDP1mt5jQ23goebz
+ JtBNRGyEGx1rxqKg3YYOA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:crW1+nf/3HQ=:5Yz5yn8ZlExXEI0unh8TWN
+ bjtAPuG0yE+KaBwcn32GcbokXDSZHDRYtuS4um2YdZlP0Fop95tPXVSQuB5F6oq1o6dPOMnOp
+ bOKdWB32r1vS3rXWhflybVFAxvTB9APf4E+ClodOMWX2tT8+VfmAn5S/BpcmqJz8gkHcrYmi1
+ rK4uIIP7QLKFqeI4XVdJMIAzHdtejfiIR/jqc7wRWBcZyL7nExb46UtZsxsgNotlh7qQXE6g7
+ Dav+XbZtNe9Xf6jbUYhOfUSkG8ujnqj77PALsnVIZDcye/egCShGHS/NATd7KNaKtJr9vbqls
+ EAaf6ZCZP/XSyeo/8koYpGx5ZMnzh622vEs8cr1+6T9fELzpbACEYOrVIR8r5UXtsav5T2OD8
+ VVMEIUoiw5Hd5dNmrfi5Aem4KFYCiuGTIzMplDwdZtP83DtzO+zOPaH99uDyFvMotspBTqJXF
+ ZEoutU4iI4CL8HksyXQqftcMbBMJVEW5QYQU9QEFzRG9hzJ6kYwBPg/cOU5z0NmcvlD1Lud84
+ WpeIeJEOv4l6N73cwSxhLWAfLUg5YpOolm/Ct77m+p0M26OMJwaqM9k94K2UzKynARpZ+sL+E
+ 5zF2A+4qjtrTYKyB9utBQJ+yJaShWBCO3oS7c+D3HQTgV+S4PZQ7nl0y0Djix0gKiNsJCE0nu
+ 3yuC/4dp1UJlOJYYpdwqMum9CgFjC+Ex+rGKi7Cd33Ry3Ejogp1lnO0PzjZasUyjLhCVtoB89
+ cusNFPVJFzkMvm+ZHcEVBn91iF5Ao4KX4G90Vc09z5a1fkMeLmudiN3JvlT/WWTF1+SKnRTFs
+ wZS5gnL4y3zf3yYOohGeYDZBl9KeOLcSCN/bz70sEd0JmT8ZVZTrNBU2lnpJPAZ7dBe78o/BE
+ LlC5SfY+QiU6DuivaHDaI/Vf0uTNPgdo0HkPni/ZP9NPHJ3azW53x9WsrLdI71puJj2paVeWd
+ qtWodNHPn/Wr9OXQAfy6QhSgKqcvkHuWmE/Bvue8sx9bL8hKBxI8KzWIDyt2GpgJu7N94i65/
+ bY4XO3qsa7sMjvGEnPNgaLxJIAfhsUx1waZT1Vzm1BNlmCLilYmiHc90biLC3M1ex8TgFSrFM
+ ZWPPyxonWf/qBY=
+Subject: [Buildroot] [PATCH v1 4/5] package/uhttpd: bump version to 15346de
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,92 +96,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Changelog:
+
+  - 15346de client: Always close connection with request body in case of error
+
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- DEVELOPERS             |  1 +
- package/Config.in      |  1 +
- package/uqmi/Config.in | 14 ++++++++++++++
- package/uqmi/uqmi.hash |  3 +++
- package/uqmi/uqmi.mk   | 15 +++++++++++++++
- 5 files changed, 34 insertions(+)
- create mode 100644 package/uqmi/Config.in
- create mode 100644 package/uqmi/uqmi.hash
- create mode 100644 package/uqmi/uqmi.mk
+ package/uhttpd/uhttpd.hash | 2 +-
+ package/uhttpd/uhttpd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 19f6d95270..09b7258cb7 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2176,6 +2176,7 @@ F:	package/racehound/
- F:	package/redir/
- F:	package/rtl8812au-aircrack-ng/
- F:	package/uredir/
-+F:	package/uqmi/
- F:	package/wayland-utils/
+diff --git a/package/uhttpd/uhttpd.hash b/package/uhttpd/uhttpd.hash
+index 6f8b4a60f8..1e37b2b251 100644
+--- a/package/uhttpd/uhttpd.hash
++++ b/package/uhttpd/uhttpd.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  8a537a377c8dc1abda147a1e3feb3fe3e3633a9d30e4e37d378cc6309dace2f0  uhttpd-f53a63999784bcb7dc513e221f3f25dd3de2f35e-br1.tar.gz
++sha256  9ae10aaf6642b214e0a4ca47d6fd9693ac4b88d61e7d6446f0f0feb3a28ca510  uhttpd-15346de8d3ba422002496526ee24c62a3601ab8c-br1.tar.gz
+ sha256  ce1803f83f776cc88661e303fede0e5ff52faf1d9f74508fadbecf7705b4c84d  uhttpd.h
+diff --git a/package/uhttpd/uhttpd.mk b/package/uhttpd/uhttpd.mk
+index 355a266d6b..ba8e13ccb8 100644
+--- a/package/uhttpd/uhttpd.mk
++++ b/package/uhttpd/uhttpd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- N:	Peter Thompson <peter.macleod.thompson@gmail.com>
-diff --git a/package/Config.in b/package/Config.in
-index 48f365d773..92026e85c2 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2343,6 +2343,7 @@ endif
- 	source "package/uhttpd/Config.in"
- 	source "package/ulogd/Config.in"
- 	source "package/unbound/Config.in"
-+	source "package/uqmi/Config.in"
- 	source "package/uredir/Config.in"
- 	source "package/ushare/Config.in"
- 	source "package/ussp-push/Config.in"
-diff --git a/package/uqmi/Config.in b/package/uqmi/Config.in
-new file mode 100644
-index 0000000000..47b19e04d4
---- /dev/null
-+++ b/package/uqmi/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_UQMI
-+	bool "uqmi"
-+	depends on !BR2_STATIC_LIBS # libubox
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # json-c
-+	select BR2_PACKAGE_JSON_C
-+	select BR2_PACKAGE_LIBUBOX
-+	help
-+	  This command line tool originates from the OpenWrt project
-+	  to configure LTE modem in QMI mode for WAN connection.
-+
-+	  https://git.openwrt.org/project/uqmi.git
-+
-+comment "uqmi needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
-diff --git a/package/uqmi/uqmi.hash b/package/uqmi/uqmi.hash
-new file mode 100644
-index 0000000000..2db5d330e2
---- /dev/null
-+++ b/package/uqmi/uqmi.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  aae6a72791da8f58012303ba3bfeeb613e74597cbebfb9e7c2d9125e6f256799  uqmi-0a19b5b77140465c29e2afa7d611fe93abc9672f-br1.tar.gz
-+sha256  a69bf44dbff15d727578d2069a654d60e9034c5e2cc3e199a012e72afef6c259  main.c
-diff --git a/package/uqmi/uqmi.mk b/package/uqmi/uqmi.mk
-new file mode 100644
-index 0000000000..02544f5637
---- /dev/null
-+++ b/package/uqmi/uqmi.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# uqmi
-+#
-+################################################################################
-+
-+UQMI_VERSION = 0a19b5b77140465c29e2afa7d611fe93abc9672f
-+UQMI_SITE = https://git.openwrt.org/project/uqmi.git
-+UQMI_SITE_METHOD = git
-+UQMI_LICENSE = LGPL-2.0+
-+UQMI_LICENSE_FILES = main.c
-+UQMI_INSTALL_STAGING = YES
-+UQMI_DEPENDENCIES = json-c libubox
-+
-+$(eval $(cmake-package))
+-UHTTPD_VERSION = f53a63999784bcb7dc513e221f3f25dd3de2f35e
++UHTTPD_VERSION = 15346de8d3ba422002496526ee24c62a3601ab8c
+ UHTTPD_SITE = https://git.openwrt.org/project/uhttpd.git
+ UHTTPD_SITE_METHOD = git
+ UHTTPD_LICENSE = ISC
 -- 
 2.33.0
 
