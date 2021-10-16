@@ -2,61 +2,86 @@ Return-Path: <SRS0=a1j9=PE=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E61DC433F5
-	for <buildroot@archiver.kernel.org>; Sat, 16 Oct 2021 08:58:11 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E2FBC433EF
+	for <buildroot@archiver.kernel.org>; Sat, 16 Oct 2021 09:34:05 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 4FFD860FF2
-	for <buildroot@archiver.kernel.org>; Sat, 16 Oct 2021 08:58:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4FFD860FF2
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
+	by mail.kernel.org (Postfix) with ESMTPS id EAD126105A
+	for <buildroot@archiver.kernel.org>; Sat, 16 Oct 2021 09:34:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org EAD126105A
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DAD1983518;
-	Sat, 16 Oct 2021 08:58:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8BB87403CB;
+	Sat, 16 Oct 2021 09:34:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zS1Ii0FG7ouN; Sat, 16 Oct 2021 08:58:09 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id cZPhyXLIGEDe; Sat, 16 Oct 2021 09:34:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3811783267;
-	Sat, 16 Oct 2021 08:58:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DB71540327;
+	Sat, 16 Oct 2021 09:34:02 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4B2001BF873
- for <buildroot@lists.busybox.net>; Sat, 16 Oct 2021 08:58:06 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id CA3C21BF309
+ for <buildroot@lists.busybox.net>; Sat, 16 Oct 2021 09:34:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3B3E783267
- for <buildroot@lists.busybox.net>; Sat, 16 Oct 2021 08:58:06 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B95A8838ED
+ for <buildroot@lists.busybox.net>; Sat, 16 Oct 2021 09:34:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1zrgf1HcWtUr for <buildroot@lists.busybox.net>;
- Sat, 16 Oct 2021 08:58:05 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 16B1B8316A
- for <buildroot@buildroot.org>; Sat, 16 Oct 2021 08:58:04 +0000 (UTC)
-Received: (Authenticated sender: peter@casa-korsgaard.com)
- by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id B0CCD1C0005;
- Sat, 16 Oct 2021 08:58:01 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
- (envelope-from <peter@korsgaard.com>)
- id 1mbfVw-0000y5-JK; Sat, 16 Oct 2021 10:58:00 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20211016084136.2475297-1-fontaine.fabrice@gmail.com>
- <87fst1nyr3.fsf@dell.be.48ers.dk>
- <CAPi7W80qKoytyqrvZoQhWY16qq5kt=XgkxKOwrE-DSGH37YZdA@mail.gmail.com>
-Date: Sat, 16 Oct 2021 10:58:00 +0200
-In-Reply-To: <CAPi7W80qKoytyqrvZoQhWY16qq5kt=XgkxKOwrE-DSGH37YZdA@mail.gmail.com>
- (Fabrice Fontaine's message of "Sat, 16 Oct 2021 10:51:31 +0200")
-Message-ID: <87bl3pny7b.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+ with ESMTP id I7Bw9PCEBG4B for <buildroot@lists.busybox.net>;
+ Sat, 16 Oct 2021 09:34:00 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
+ [IPv6:2a00:1450:4864:20::334])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 441DC8386F
+ for <buildroot@buildroot.org>; Sat, 16 Oct 2021 09:34:00 +0000 (UTC)
+Received: by mail-wm1-x334.google.com with SMTP id
+ 67-20020a1c1946000000b0030d4c90fa87so4049770wmz.2
+ for <buildroot@buildroot.org>; Sat, 16 Oct 2021 02:34:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=ippDMEGdJOhU+tC3CkE1NerT+k3Tfu8zOWr/aaxEftM=;
+ b=L4woP8sfWJ3f9/qXnza5hE0CFdo+8hf4fTyAmXxhy4KYgWo9TYp47sehErDXBPVF7l
+ Qnc5CUDa/8vN19xy6Cl59uDbV1nrMkprggbLP1jPkq8e365jGGq+ro1wywcSB0M90Kna
+ pBXAV+8zU1FCxhXLkW2lP6OWbxCCf0g9llFYLSFy1t7KKgUFML4ymy/tRh4fro6EHBYQ
+ bZxj5/hnFiZwQy/WaGv9JzeYHLSKcf5c4Ru6c5mjzdB0BJgxxe7mMLAAYi12LDfIlPbC
+ /daEWpO1RV4VxVi2YB+pmuZE0dG9gycglhqpamzwH0MEQ50JSuHsJzD+Z1kj+MzL2XOz
+ zRDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=ippDMEGdJOhU+tC3CkE1NerT+k3Tfu8zOWr/aaxEftM=;
+ b=AFXqVwomMZJWdXmoWZ5S6nz0ElMOcjjjXNzzXPojdt8bwCC2BsiB3jl3c6EwX2lgD0
+ YbpevOPQVvBs2CkCREXaWMIf7Heg4Vo6Tq679jhYtHqCFOdps75kL9FeXU2gUD2QGIcr
+ nulyJcqqloY9+ntfHuNCShOPMkxX0rSLrMrkw5UTHGn1oIrsC7kkgJfNLDEOW8E79Ymf
+ feP2DaBbIsBZad7a+VvyybI7MrkliC2OjdzxeG64oEfVVZyx5KFyrootfpzvYpeHDIG5
+ qFEOMNMd7dKH9QtCE1xf/86fNhuQgSTM4+4KLP5uWBhiLm1aWkyqD3+1xNf8gtyFAIzd
+ 7u5A==
+X-Gm-Message-State: AOAM531roLVjVCzmGJtLYizo1SlERZJmT1wwk1mfsl1zKuWU2+9QPM0z
+ We+qA92MOaxX7HR9bJpSJuF+r6m6amM=
+X-Google-Smtp-Source: ABdhPJwz1uhA2u2mhYM0iRnWCvg9O2vMZQZIec59drCaqGkYV4rbcaO2OFxZH6VT+0EdnoruOA40EA==
+X-Received: by 2002:a1c:27c3:: with SMTP id
+ n186mr17734159wmn.192.1634376838055; 
+ Sat, 16 Oct 2021 02:33:58 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-1732-95.w86-253.abo.wanadoo.fr.
+ [86.253.44.95])
+ by smtp.gmail.com with ESMTPSA id d9sm7023037wrm.96.2021.10.16.02.33.57
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 16 Oct 2021 02:33:57 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sat, 16 Oct 2021 11:32:33 +0200
+Message-Id: <20211016093234.2477835-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/wireguard-linux-compat: add
- missing comment about kernel dependency
+Subject: [Buildroot] [PATCH v2,1/2] package/knock: bump to version 0.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,36 +93,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Buildroot Mailing List <buildroot@buildroot.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Michael Rommel <rommel@layer-7.net>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Pj4+Pj4gIkZhYnJpY2UiID09IEZhYnJpY2UgRm9udGFpbmUgPGZvbnRhaW5lLmZhYnJpY2VAZ21h
-aWwuY29tPiB3cml0ZXM6CgogPiBMZSBzYW0uIDE2IG9jdC4gMjAyMSDDoCAxMDo0NiwgUGV0ZXIg
-S29yc2dhYXJkIDxwZXRlckBrb3JzZ2FhcmQuY29tPiBhIMOpY3JpdCA6CiA+PiAKID4+ID4+Pj4+
-ICJGYWJyaWNlIiA9PSBGYWJyaWNlIEZvbnRhaW5lIDxmb250YWluZS5mYWJyaWNlQGdtYWlsLmNv
-bT4gd3JpdGVzOgogPj4gCiA+PiA+IEFkZCBhIGNvbW1lbnQgd2hlbiBrZXJuZWwgaXMgbm90IGVu
-YWJsZWQgKG1pc3Npbmcgc2luY2UgdGhlIGFkZGl0aW9uIG9mCiA+PiA+IHRoZSBwYWNrYWdlIGlu
-IGNvbW1pdCBkZTU5MWM1YzNhOTNhNDBkMDQ5YTMyYmQ3OWMzMGNjNjZkYWY1ZmIyKQogPj4gCiA+
-PiA+IFNpZ25lZC1vZmYtYnk6IEZhYnJpY2UgRm9udGFpbmUgPGZvbnRhaW5lLmZhYnJpY2VAZ21h
-aWwuY29tPgogPj4gPiAtLS0KID4+ID4gIHBhY2thZ2Uvd2lyZWd1YXJkLWxpbnV4LWNvbXBhdC9D
-b25maWcuaW4gfCAzICsrKwogPj4gPiAgMSBmaWxlIGNoYW5nZWQsIDMgaW5zZXJ0aW9ucygrKQog
-Pj4gCiA+PiA+IGRpZmYgLS1naXQgYS9wYWNrYWdlL3dpcmVndWFyZC1saW51eC1jb21wYXQvQ29u
-ZmlnLmluCiA+PiA+IGIvcGFja2FnZS93aXJlZ3VhcmQtbGludXgtY29tcGF0L0NvbmZpZy5pbgog
-Pj4gPiBpbmRleCA1YTMyM2EzNWU1Li40ZThlOTViZGMzIDEwMDY0NAogPj4gPiAtLS0gYS9wYWNr
-YWdlL3dpcmVndWFyZC1saW51eC1jb21wYXQvQ29uZmlnLmluCiA+PiA+ICsrKyBiL3BhY2thZ2Uv
-d2lyZWd1YXJkLWxpbnV4LWNvbXBhdC9Db25maWcuaW4KID4+ID4gQEAgLTIxLDYgKzIxLDkgQEAg
-Y29uZmlnIEJSMl9QQUNLQUdFX1dJUkVHVUFSRF9MSU5VWF9DT01QQVQKID4+IAogPj4gPiAgICAg
-ICAgaHR0cHM6Ly93d3cud2lyZWd1YXJkLmNvbQogPj4gCiA+PiA+ICtjb21tZW50ICJ3aXJlZ3Vh
-cmQtbGludXgtY29tcGF0IG5lZWRzIGEgTGludXgga2VybmVsIHRvIGJlIGJ1aWx0IgogPj4gPiAr
-ICAgIGRlcGVuZHMgb24gIUJSMl9MSU5VWF9LRVJORUwKID4+IAogPj4gSXMgdGhpcyByZWFsbHkg
-YSBzZW5zaWJsZSBjb21tZW50PyBJIHdvdWxkIGltYWdpbmUgdGhhdCBuZWVkaW5nIGEgTGludXgK
-ID4+IGtlcm5lbCBpcyBhbiBvYnZpb3VzIHJlcXVpcmVtZW50IGZvciBhIGtlcm5lbCBkcml2ZXI/
-CiA+IFdlIGhhdmUgdGhpcyBjb21tZW50IGZvciBvdGhlciBkcml2ZXJzIHN1Y2ggYXMgZGFoZGkt
-bGludXggYW5kIHhyODE5LXhyYWRpby4KID4gU28gSSB0aGluayB3ZSBzaG91bGQgYmUgY29uc2lz
-dGVudCBpbiBhbGwgcGFja2FnZXMuCgpPaywgSSdsbCB0YWtlIGNhcmUgb2YgaXQuCgotLSAKQnll
-LCBQZXRlciBLb3JzZ2FhcmQKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpo
-dHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+https://github.com/jvinet/knock/blob/v0.8/ChangeLog
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+Changes v1 -> v2 (after review of Yann E. Morin):
+ - Don't use official tarball as it is a complete git working copy
+
+ package/knock/knock.hash | 2 +-
+ package/knock/knock.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/knock/knock.hash b/package/knock/knock.hash
+index 0b9a0918fc..fb8d9aef78 100644
+--- a/package/knock/knock.hash
++++ b/package/knock/knock.hash
+@@ -1,3 +1,3 @@
+ # locally computed hash
+-sha256  940a8de61b4b3530560805c3b9310a077c28c99173c2ccb07ff96720b0e93c58  knock-258a27e5a47809f97c2b9f2751a88c2f94aae891.tar.gz
++sha256  7a82c276ca1540faa7f5bb25010f4a59d45323a31c44a30fbe4a6e484dd18b1a  knock-0.8.tar.gz
+ sha256  d747e19206e41702e40822dd91d37cbf40edd86f364ea416d667a0e3013f7189  COPYING
+diff --git a/package/knock/knock.mk b/package/knock/knock.mk
+index 55f5bfdf36..2cfa738074 100644
+--- a/package/knock/knock.mk
++++ b/package/knock/knock.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-KNOCK_VERSION = 258a27e5a47809f97c2b9f2751a88c2f94aae891
+-KNOCK_SITE = $(call github,jvinet,knock,$(KNOCK_VERSION))
++KNOCK_VERSION = 0.8
++KNOCK_SITE = $(call github,jvinet,knock,v$(KNOCK_VERSION))
+ KNOCK_AUTORECONF = YES
+ KNOCK_LICENSE = GPL-2.0+
+ KNOCK_LICENSE_FILES = COPYING
+-- 
+2.33.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
