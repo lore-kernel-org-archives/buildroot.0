@@ -2,51 +2,51 @@ Return-Path: <SRS0=a1j9=PE=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D3FBC433F5
-	for <buildroot@archiver.kernel.org>; Sat, 16 Oct 2021 08:29:51 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D021DC433F5
+	for <buildroot@archiver.kernel.org>; Sat, 16 Oct 2021 08:30:02 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id F0B3461250
-	for <buildroot@archiver.kernel.org>; Sat, 16 Oct 2021 08:29:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org F0B3461250
+	by mail.kernel.org (Postfix) with ESMTPS id 5D69460F93
+	for <buildroot@archiver.kernel.org>; Sat, 16 Oct 2021 08:30:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5D69460F93
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 94FC1404D1;
-	Sat, 16 Oct 2021 08:29:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 26DC583B80;
+	Sat, 16 Oct 2021 08:30:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ccM1sF8UusPo; Sat, 16 Oct 2021 08:29:49 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Q02e6jgKPEl6; Sat, 16 Oct 2021 08:30:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 12703404C1;
-	Sat, 16 Oct 2021 08:29:49 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 96CBD1BF873
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7A1C183B63;
+	Sat, 16 Oct 2021 08:30:00 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 9B4A81BF95E
  for <buildroot@lists.busybox.net>; Sat, 16 Oct 2021 08:29:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 93E80404D1
+ by smtp1.osuosl.org (Postfix) with ESMTP id 94FE883B63
  for <buildroot@lists.busybox.net>; Sat, 16 Oct 2021 08:29:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id i53VJhMtZOqb for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Od92PbtAGoja for <buildroot@lists.busybox.net>;
  Sat, 16 Oct 2021 08:29:45 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id DF05840486
+ by smtp1.osuosl.org (Postfix) with ESMTP id E579E83B62
  for <buildroot@buildroot.org>; Sat, 16 Oct 2021 08:29:45 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 503E495C59; Sat, 16 Oct 2021 08:26:47 +0000 (UTC)
+ id 598B295C5A; Sat, 16 Oct 2021 08:26:47 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 16 Oct 2021 10:25:57 +0200
+Date: Sat, 16 Oct 2021 10:25:59 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 613953f8217bf5b27489e0a939147ef7c74c3f7a
-X-Git-Newrev: dbd66de708ac232b386ca20f59c9afc76e145fad
+X-Git-Oldrev: dbd66de708ac232b386ca20f59c9afc76e145fad
+X-Git-Newrev: d6eb905376d0af595b01aa8007cac1d4de7175b7
 X-Patchwork-Hint: ignore
-Message-Id: <20211016082647.503E495C59@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/cloop: bump to version 3.14.1.3
+Message-Id: <20211016082647.598B295C5A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/cryptsetup: bump to version 2.3.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,49 +64,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dbd66de708ac232b386ca20f59c9afc76e145fad
+commit: https://git.buildroot.net/buildroot/commit/?id=d6eb905376d0af595b01aa8007cac1d4de7175b7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update indentation in hash file (two spaces)
+Stable bug-fix release with minor extensions.
+
+All users of cryptsetup 2.x and later should upgrade to this version.
+
+https://gitlab.com/cryptsetup/cryptsetup/-/blob/v2.3.6/docs/v2.3.5-ReleaseNotes
+https://gitlab.com/cryptsetup/cryptsetup/-/blob/v2.3.6/docs/v2.3.6-ReleaseNotes
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/cloop/cloop.hash | 8 ++++----
- package/cloop/cloop.mk   | 4 ++--
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/cryptsetup/cryptsetup.hash | 2 +-
+ package/cryptsetup/cryptsetup.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/cloop/cloop.hash b/package/cloop/cloop.hash
-index 7af1a9594d..eb922764bb 100644
---- a/package/cloop/cloop.hash
-+++ b/package/cloop/cloop.hash
-@@ -1,6 +1,6 @@
--# From http://snapshot.debian.org/archive/debian/20150503T155713Z/pool/main/c/cloop/cloop_3.14.1.2.dsc
--sha256	ac344225b3a5c4ddbb0d4b20cd4874798b51427b707b53e2ee9fbdada7497c95	cloop_3.14.1.2.tar.xz
-+# From http://snapshot.debian.org/archive/debian/20200419T152225Z/pool/main/c/cloop/cloop_3.14.1.3.dsc
-+sha256  e3079e70f9edae8ed1ac64694af08f6c7dc710ca65a56e4770dcb1325a293193  cloop_3.14.1.3.tar.xz
- 
- # Hash for license files
--sha256	91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad	advancecomp-1.15/COPYING
--sha256	1b1f89e94e131e259b9e334565c5c3500d4b8aa755b75c3f145ddcdff3b89124	README
-+sha256  91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad  advancecomp-1.15/COPYING
-+sha256  1b1f89e94e131e259b9e334565c5c3500d4b8aa755b75c3f145ddcdff3b89124  README
-diff --git a/package/cloop/cloop.mk b/package/cloop/cloop.mk
-index 046d98c862..f3c4954ead 100644
---- a/package/cloop/cloop.mk
-+++ b/package/cloop/cloop.mk
-@@ -4,9 +4,9 @@
- #
+diff --git a/package/cryptsetup/cryptsetup.hash b/package/cryptsetup/cryptsetup.hash
+index 3b58345611..0aa3f79df7 100644
+--- a/package/cryptsetup/cryptsetup.hash
++++ b/package/cryptsetup/cryptsetup.hash
+@@ -1,4 +1,4 @@
+ # From https://www.kernel.org/pub/linux/utils/cryptsetup/v2.3/sha256sums.asc
+-sha256  9d16eebb96b53b514778e813019b8dd15fea9fec5aafde9fae5febf59df83773  cryptsetup-2.3.4.tar.xz
++sha256  b296b7a21ea576c2b180611ccb19d06aec8dddaedf7c704b0c6a81210c25635f  cryptsetup-2.3.6.tar.xz
+ sha256  45670cce8b6a0ddd66c8016cd8ccef6cd71f35717cbacc7f1e895b3855207b33  COPYING
+ sha256  8c33cc37871654ec7ed87e6fbb896c8cf33ef5ef05b1611a5aed857596ffafa5  COPYING.LGPL
+diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
+index b816dc2f22..3cf6c8a301 100644
+--- a/package/cryptsetup/cryptsetup.mk
++++ b/package/cryptsetup/cryptsetup.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--CLOOP_VERSION = 3.14.1.2
-+CLOOP_VERSION = 3.14.1.3
- CLOOP_SOURCE = cloop_$(CLOOP_VERSION).tar.xz
--CLOOP_SITE = http://snapshot.debian.org/archive/debian/20150503T155713Z/pool/main/c/cloop
-+CLOOP_SITE = http://snapshot.debian.org/archive/debian/20200419T152225Z/pool/main/c/cloop
- CLOOP_LICENSE = GPL-2.0 (module), GPL-2.0+ (advancecomp)
- CLOOP_LICENSE_FILES = README advancecomp-1.15/COPYING
- 
+ CRYPTSETUP_VERSION_MAJOR = 2.3
+-CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).4
++CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).6
+ CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.xz
+ CRYPTSETUP_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/cryptsetup/v$(CRYPTSETUP_VERSION_MAJOR)
+ CRYPTSETUP_DEPENDENCIES = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
