@@ -2,92 +2,92 @@ Return-Path: <SRS0=OlWD=PF=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B567C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 17 Oct 2021 09:21:45 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 64F5CC433F5
+	for <buildroot@archiver.kernel.org>; Sun, 17 Oct 2021 09:33:00 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 74E8161054
-	for <buildroot@archiver.kernel.org>; Sun, 17 Oct 2021 09:21:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 74E8161054
+	by mail.kernel.org (Postfix) with ESMTPS id C115460F8F
+	for <buildroot@archiver.kernel.org>; Sun, 17 Oct 2021 09:32:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C115460F8F
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=buildroot.org
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 35EDB40368;
-	Sun, 17 Oct 2021 09:21:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8E09B82A26;
+	Sun, 17 Oct 2021 09:32:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PP5dDFDQTSHc; Sun, 17 Oct 2021 09:21:42 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ANH1g3eyx2Yo; Sun, 17 Oct 2021 09:32:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9AC5640364;
-	Sun, 17 Oct 2021 09:21:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C76C082A2E;
+	Sun, 17 Oct 2021 09:32:57 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id CFDFF1BF3CD
- for <buildroot@lists.busybox.net>; Sun, 17 Oct 2021 09:21:40 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D5D101BF3CD
+ for <buildroot@lists.busybox.net>; Sun, 17 Oct 2021 09:32:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BEADA6076C
- for <buildroot@lists.busybox.net>; Sun, 17 Oct 2021 09:21:40 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id CF80960794
+ for <buildroot@lists.busybox.net>; Sun, 17 Oct 2021 09:32:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp3.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=aol.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KKqtPntWVcIR for <buildroot@lists.busybox.net>;
- Sun, 17 Oct 2021 09:21:40 +0000 (UTC)
+ with ESMTP id G0ayIesoVmVy for <buildroot@lists.busybox.net>;
+ Sun, 17 Oct 2021 09:32:56 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from sonic301-31.consmr.mail.ne1.yahoo.com
- (sonic301-31.consmr.mail.ne1.yahoo.com [66.163.184.200])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2A4B360689
- for <buildroot@buildroot.org>; Sun, 17 Oct 2021 09:21:40 +0000 (UTC)
+Received: from sonic315-22.consmr.mail.ne1.yahoo.com
+ (sonic315-22.consmr.mail.ne1.yahoo.com [66.163.190.148])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2B2C76077D
+ for <buildroot@uclibc.org>; Sun, 17 Oct 2021 09:32:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aol.com; s=a2048;
- t=1634462499; bh=wtDabjIIIvHshHxiC1rJM9Bk0Ayi4G/mRwTXHRmpA64=;
+ t=1634463175; bh=S3hXK533fXCTYtofCC6pO2UHfxT8lilDl1kwkuSbCpw=;
  h=Date:From:Reply-To:To:Subject:References:From:Subject:Reply-To;
- b=WdYSilssMNrANFcBHycnA2cbTViTot3uxJvB0xWpYZzq62LS7Gdn4FHsPiK2Du95N4w5A64GJm6n+uuepPrQ6yEsAyhs87U/9XVycyLwDwWwUQ+wus5lR2G76dXr2WNpftKnJSEsgcMtyLw2CpfxsV/oJNHqStf3VukccR9IAD7EkeXhventRcaO0hkAi0njN+zPVNtElYMHzrbz2AasIZProdVeXyJm9XuqahW9CPiB5Luvn2IPnCRASdVAw7BWne6nIsuP4fBzfeBvwI5o2yMsWslZ344HJH6OdzqZA0tEP7b3CdMY6WuEBu0AbdBIFgfMq274H/uIE8zv8aJgYw==
+ b=lfNwP1K4gjuD6CMQ/2wZZNngBb5nQ5JmOIqp3kTupy/XvtZ8vaJxHcE2vkCUJ2I2VxUUzXV7CcwrnJKKOTEp5UABcMO6RLBJVTim+9TJnbxIuT67hGwZWlUUMSvLmZ0n6a1lXu0qJ42q5NWsnp6JLAKeAKvTcI6cmyZVGUng4xtWjaf9ZM7FkUM6021svV0wbt5O1aLxxgW/JBbx4+ZtxVRqRx8twpTYX7PtVy2J3X8hHGgKamUJlp5LlTpE7+x/hOPCFIV6c8z6mc/REN9OJvL1XIMX845lkrqORDLHaSDlnsZ9I8STeAiib/ZOZapYs9MaP15+QRsx5ACfTLVt6g==
 X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048;
- t=1634462499; bh=pnxdFHpXIdkljy7+FphL3J3WV7sQfbXAG7VCOWzEOcX=;
+ t=1634463175; bh=QfP9nLQpGp/t0XJdJM/76wMWgv9sQs4PjSll4j6BuDx=;
  h=X-Sonic-MF:Date:From:To:Subject:From:Subject;
- b=dgM/Eg14ldyecHQ/4ZS2MLvKfSQezcamxsiSCr9b/K67GB+Nu0J2vjgm90MEh0Kcrjt2qF+xgnrJk8puDt0EmV/Qsb7l/+dS/XONXICL2WQiYbvA4GWQCGwuQ9y/n7RnOdvaLvR997YKcTGo4Uh3Y4MR8Ke+kvb5yf0vl9eNW/xEryA4gQX8QIO0xEZPvsHXHzb6JTUHWQ1RLz663F7Tb9z1ghpGrXQOWWfXXU1sAAbndeMZoT2vD6xqGS6MpFumn27urSSia+UCw1aSJTlv/UWR9k6o4slMxX061SKpZR8Bb+D5xSQuyT7rI5OQvf5/1BHaLmrlmZeEdqsQ4lgFQA==
-X-YMail-OSG: _pavW_gVM1nCFCBUykMCxNRgMB7g2KGfx50Se4kno1tQPLZjz.ZUmkrqvvGFGCB
- x8LXJNbR6FdGl.bmLzr3jX3Ttkd3noZM56aI7m9deaAFSH16NKqf3JeU0BKNWMdcScJ0EnjCKOXf
- vDRNOinjm4_EC5b.YxPH8bewhlt2sSGlXf67Sr5fBK0IKCQjkLaQan.xZzgK07c6LzuvmZwA2skC
- 94RTiNvRYxSgaGAlOv2pSsF0EhB1wKuMd2fNZY0c8NF2CT4lDSEw0tVZDANTfo65HfPaKvUCV.T2
- h_7.xup9cZ7MK90taxrzEVavkU_p_SX_Pt.5JBp6BdCeDxymMzvSv8W2RCS2RUs9a4qDTS6NzCeV
- z.wF3Uc6mEXaPbshD.XwNp3BnaZHsqPHwl7v4oAk2bZmr6If3.2YxT.QmGIK0ST1dTJOhd_RvBk8
- 9n.4DhiC4eeXcEPk.eB44WTipoLtOYTi0t06jlRJWTlu3Wb0BTtlg_s7NZ8TBBup_Tu.ivT8tiWM
- eUIqOHb7783rh85mRQjQ9zHgctU_oUsIG.vSpLbp0tfiPggfJmgK5hYmXth_YlVmzF0R_62CN.Q9
- Z_44RIxSdCIISKlQqAPN.eFGlV3aH6fQ5V4yhcbXKTucEnQhE2NHa83GVSnCYPhhT.Nf8_ECAIvF
- 0v7f0HtXF8sWrdr1OYpO6lC07hvoTAQ4HClhjGatmW5m7HsC6ss1YBqrpZV6DpmiAWV2egMfNCPI
- CAAyNardXmDZ78xTAuq0CmjsJUlAaqO5CXNVtREQURygheB91gy0ic7x.Gc9gc7C0l4V1UkyuAma
- AlCrx5Liv5xPy2lT8dABkcqmK6zqdZV8z_RuDa.huaJzn46z0XWLTmxcwWtijWhXA0Ml_QIY_O74
- gAOR53E5O7PdatKNoj7hR1lxHHmcjlhJYqMLZ1_iEvdtS_j3C.W6tsigAExMiPuugyWeogWhDSVy
- wrM0LmuilX_L8Q4CWlQcIXW7_N9xb19kyW6jAJw3Efhw9l6kFM789Ov_l2m7JwsiJ9dq3ljoDhVI
- vjzpZKAD1vSSg0daR_96FuhT.j9YgxOKw_nTJ48rmAF36TjKwk_JLjiIDi0GOjjnMx0f_9Tj0b2U
- QHhu_cS15saPT8j1ONuja97.4mXMPp06wqoFpsg3XbPAlCu.gRzvPkTgoWwr1DsBw32.Lb9o2rZI
- PTmm_scywdBQyYYG7aE5r1XqB1XZnXTv0EALuo0LXBmUAsLeH.dIXySYC6HZXwQHO2BU9GCzgO2n
- j0InUrrAqdA2TipP.PRXryGOLRG2dbz39ggF4I.UYFmmXr0n920c1LmyyB0_12JaisVoaC9DIVVo
- xqeBDwKFkhc9mL7CYzNiPKpECi9GMMyE2eU83czkuurhKzgZwr_bp7.D6dA0IJYVSPXTCQbLKpCZ
- di0yWo99nb_WCVHyVsv1v8yUIRdMW9Pde4_N3Fg2dh1V0Hrj5t4EEiaG5reH3M5wl.m_xztlovn_
- XF70Y8.BYK2nFtbRWdU2g1Z4UMaErhmkAKiT_gA2qHbiMe4C1c59k71z6nZKLDEO_EiuVYCoiHIu
- ZkLuiR0HJGRdklBJiHm6PadsGBjEJMob2SiaZ13qMUjCdUith.U7yhnmLBgQAZLFD6sFFEhBX6eC
- iGzIKOQxMOq7ld8yMhJpIZAEL1Bt5YHvzIA_SPo0PFfEIXx.Rwbpy68_G2IWc9k2wIkkLLatC.bu
- jM1KMsPYjcw43drg4DkqaKrdDRWrEozswpOjYjBNcX0.rz9eaWOh2lylQqPWtJpd3jYGjfu19RLa
- CkuGhATY14Si1FAXwJVehYJnmyJW_8lhqdiluDLtN6oMywLyX6_bGhNgI51Y_52KxUwfPEAZkH0w
- wikkDtf9gEADrVtPBkcF4WOMVyM6gvV0lVrOBycQ8Xra.D.3f2cCxoK9IMDvFk29cOsoUZyOzAs8
- 5Jp5gHSWVKOS1n73ktTMOk9VYjZxeV6vzmBlXlpaGi9HkQDBmZ0Ep7TathmLD1GgfWN3Ps7ZBJ1.
- ZEk3qXQT8AfDGb1iYvPkDcwUZ_v4VrhtXQ2SkcEP21fMc9n_iz1C3UA90L9.ko7OjWPlMC30ski1
- HKk9UD4ZvJRAkwJh9Rpp04II3ZxPGNN_njFQD_mQSYgo19ujcA2GVPAA1IPHHP_.gDyoKIBRKD_m
- ok073ODvqhUP.2rXgO1nM2jYI1DxHWyK.9iBw93Lu.k8hUQ--
+ b=TdjAubYYzzhEAVuzWLCTYGS1DAtqtneQauLEfQKT2CnjTCHNkqQPIK/sAfjujYpTdkGCbWhB6CPXEu3W1bvQyWOOhdT+4ACmbGpBpN+pwZ95r+O88WHFno/QlFldafaJudEd5z1KJhfHZa9ii4HJUOP1PVbo+jz/1BxSs2lltGCM7Tq/MMfa5v9DlxLzw2B2ih9YAWYOG/vX+hoa31QBteYhQysD3WmrpiCnOlFPUke1uasQk3FKjEKRbShVBexoBEuU5u3Pil/JKT8tQbMKLIiGWNzgah/ZYuFXa8tAGY3IkWylpZXMVH213bYwaO/VhdevoKL+kMcVbPvdeUnl4A==
+X-YMail-OSG: xOnURDIVM1kRGhwY1aKGUIjAQC706xpw1um5TRyxXOAakaGUV0h9lqxEw9usIaO
+ dQH9PNXltnWNrB3u.otLylkTexLT2UFAtOirf12yXh1iM8pK6XVWu45lXED.b97Ddos7vcA3tymO
+ Sp7sRkSM5u_pNL.ptB5DjHXknB3uFhGOc7yUOe4AI0Neq4MHuim.SA2zDxcl8YHPmsGjnPEADSz3
+ l4xTleVy6qEgt4AbRngwjGSoBVOD1IUqExGTBkTkhhHVGpx3PiLvNwbkwF_TFTHTxB4HvMhjtcN9
+ .M65LwbJVENL8GwlwprqhJmFlmkEdSc5ozN82P9kqLHVqkHPLnWe0iOln3qZKK0eHV8U3TnXzplb
+ YcSFy5Mj.kMMiQTL50g6od6qZj4gZgUQg39iLmJb31L_Dk7mhg1SG0vyAEDxqpt.zok4YFM03yM6
+ H8SuCDsjxTfb9j4QO4LCNlwcSd6uLmnPue_Uq82Tqhs5dqNcHP6S1MHyPNsmX0t5LONUL_qSJbHu
+ 0pwWVa4RvTnmte4wasYhDhEim.1_sKAn_7MZjSYgaDfphhMubXkhmdPvaR1jrwocZVnSAZPR_UB1
+ wDG4WrfK_KieM1vY4JpxkFx0Cbm66ACuQPSLf9RFW5N2iygydVjKGBOQEnl4JVG6Rg2f.91ISW67
+ WyNc_UMY5AXrF2v8nc5mQSfF3Uzv76Ya1cNQhcjjl6hK6AYr5m8JAfHFdxgUXwcgPutprOIF6jTz
+ O0IilPWKnwP8UBGwEUyeroY2dVI1nqA0L.MdRJt5w9OrIXX83VOQnrzNyssDgwmbkuh._WTLX._y
+ BYYtwTmLvQ6r5xvrxZXsP_jh363BTqghQztuO.Xf1or.jK78p6VHF2FJyPDJUJs4p4BP4s7oNyfV
+ PBie74Gc6rKDKcqEFc1OJs2PbsSQvtz.Y9WxfVnnBviVakYqmB3KEUPELzvOwdCWN3XK7IRefQL_
+ 2CBAqVVGuiF_uuqC_pytxldwj.5aEYvMdpVsF4seN1Upbf8GJJ19hLVXoHWkX_5dbBNFOD8fAaF7
+ fxjYLuegAWPtaVIR.0TkkP44.phyBux8owbRUeyYioJKCORB7g3hn5XA3yRuqhSyBNWYiNW.791.
+ pl4PrxgToFiTN1P0LhYy9Yr3JR5dIIB7RktGCcso2rrb7Zq67xR5L5kjytjm.HG2iaQJel3qqA5W
+ czJWVbdvsv5_0eOdjSjPMvQhLKbipSxax6_lKb4xcRfLfvhFpUqojDpbKdlIqMIQOj0YvSiu95NF
+ NYzdjbpVXZITMd1asAuqQnkmHGzzY0eVvsMwe8j84cChOYMQDnHWqUs_rHzmpiobiCD6hTdpJ37m
+ I22G_wn7SQeL0DUZGfHbB1MfQGDRaowJqawC8lfByp_.n_A6CHHUonppdF3seUxQPW_jkTln8Xxe
+ B6KG5oJ1nsT_jsDyw0tTj6qt0xK.tbVD15j3AacmFEnpu2XQY.TvGtAM_hczZKJGUrjW8KPOM.2h
+ e4BpqPVubnyj6MQ2n1AYKPIHxEWaIgoojtoCdeNP1Eyw.dP7kJ6NrlSHalMoJa6x7lhexKhidsVY
+ Ft_cUdl39RflZWS1PhTPYf.eQocfvHWVcK6GxMUpSZe.ZKwqQnh8PPhRmogGeo18odzXPV7rjL70
+ ebZ.EcxrJ_HbIeXbSRn1U_rWUiq75IpscLksoLCaLWsxq0hUT4lCvFoqBWf8wEdPKjPSfAckRv1j
+ MnWnT8WK_Mw8LUm3U_zBE8tugJVwTS4RVL19ZHHNNlEF4ANLGXBH7uXrO5JYQuauYo.KgnxBOeOl
+ yGhA3Jx4sbmoL3Eqn4xRdyfFPtxgkSLU528oliXTE.bbSCwcCardaAmTRdxMEY5xu_ZUbuxLfgJU
+ zP72WEpz8qjOZN2XneOk9SLtND8VWpl61EzWDZXNU81WqnfY1Zd_9NO87_1TrnwRu4.2OLvOGL13
+ fOvdGuf9WC4_CvpnUgnK7yROJG_ga0D0r9ELxZaJhx7vlT1ujwCx339THMtD4tyPHNGrsrwn7We_
+ 8Tq57mpowj0Qlvu.hJSwwp_jFleHiYlTPSiRe9n5sXOvAMDk9UWTLp2As6dWLv1Bbbs4G9df7OJ8
+ fectE6ToCugxA3VruNyG0VZlpU8VCZDihJ9kOziCnqsLjtkVb2Yur3giVDwPHo4L11QXHHtHK6Tl
+ 4TiuW6BfUKcso_AJl.klcRJrHovfIfdgMu4PLLNzU38eZ
 X-Sonic-MF: <xiangyu.chen@aol.com>
 Received: from sonic.gate.mail.ne1.yahoo.com by
- sonic301.consmr.mail.ne1.yahoo.com with HTTP; Sun, 17 Oct 2021 09:21:39 +0000
-Date: Sun, 17 Oct 2021 09:21:34 +0000 (UTC)
-To: "buildroot@buildroot.org" <buildroot@buildroot.org>
-Message-ID: <810116346.3867627.1634462494722@mail.yahoo.com>
+ sonic315.consmr.mail.ne1.yahoo.com with HTTP; Sun, 17 Oct 2021 09:32:55 +0000
+Date: Sun, 17 Oct 2021 09:12:47 +0000 (UTC)
+To: "buildroot@uclibc.org" <buildroot@uclibc.org>
+Message-ID: <1553939413.3863322.1634461967644@mail.yahoo.com>
 MIME-Version: 1.0
 Content-Type: multipart/mixed; 
- boundary="----=_Part_3867626_2121339250.1634462494721"
-References: <810116346.3867627.1634462494722.ref@mail.yahoo.com>
+ boundary="----=_Part_3863321_1784582202.1634461967644"
+References: <1553939413.3863322.1634461967644.ref@mail.yahoo.com>
 X-Mailer: WebService/1.1.19116 aolwebmail
 Subject: [Buildroot] [PATCH] boot/at91bootstrap3: add svn repository method
 X-BeenThere: buildroot@buildroot.org
@@ -106,11 +106,11 @@ Reply-To: Xiangyu Chen <xiangyu.chen@aol.com>
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-------=_Part_3867626_2121339250.1634462494721
+------=_Part_3863321_1784582202.1634461967644
 Content-Type: multipart/alternative; 
-	boundary="----=_Part_3867625_1783800515.1634462494720"
+	boundary="----=_Part_3863320_1092007306.1634461967642"
 
-------=_Part_3867625_1783800515.1634462494720
+------=_Part_3863320_1092007306.1634461967642
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
@@ -125,56 +125,56 @@ email(xiangyu.chen@aol.com).
 Thanks!
 
 Br,Xiangyu
-------=_Part_3867625_1783800515.1634462494720
+------=_Part_3863320_1092007306.1634461967642
 Content-Type: text/html; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 
 <div style="color:black;font: 10pt Arial, Helvetica, sans-serif;">
-<div style="font-size: 13.3333px;">Dear buildroot maintainer:</div>
+<div>Dear buildroot maintainer:</div>
 
-<div style="font-size: 13.3333px;"><br>
+<div><br>
 </div>
 
-<div style="font-size: 13.3333px;">&nbsp;Since more and more traditional companies are starting using buildroot&nbsp;</div>
+<div>&nbsp;Since more and more traditional companies are starting using buildroot&nbsp;</div>
 
-<div style="font-size: 13.3333px;">&nbsp;with AT91SAMx chipset as their product firmware, much of them are still&nbsp;</div>
+<div>&nbsp;with AT91SAMx chipset as their product firmware, much of them are still&nbsp;</div>
 
-<div style="font-size: 13.3333px;">&nbsp;using SVN as their version control system. So add svn repository method&nbsp;</div>
+<div>&nbsp;using SVN as their version control system. So add svn repository method&nbsp;</div>
 
-<div style="font-size: 13.3333px;">&nbsp;to AT91bootstrap3 package.</div>
+<div>&nbsp;to AT91bootstrap3 package.</div>
 
-<div style="font-size: 13.3333px;"><br>
+<div><br>
 </div>
 
-<div style="font-size: 13.3333px;">It's a milestone to me that i from a parasite to a buildroot contributor, if&nbsp;</div>
+<div>It's a milestone to me that i from a parasite to a buildroot contributor, if&nbsp;</div>
 
-<div style="font-size: 13.3333px;"><span style="background-color: transparent; font-size: 10pt;">there is any incorrect in this patch, feel free to tell me via&nbsp;</span><span style="background-color: transparent; font-size: 10pt;">email(<a href="mailto:xiangyu.chen@aol.com" rel="noopener noreferrer" style="text-decoration-line: underline; color: blue;">xiangyu.chen@aol.com</a>).</span></div>
+<div><span style="background-color: transparent; font-size: 10pt;">there is any incorrect in this patch, feel free to tell me via&nbsp;</span><span style="background-color: transparent; font-size: 10pt;">email(xiangyu.chen@aol.com).</span></div>
 
-<div style="font-size: 13.3333px;"><br>
+<div><br>
 </div>
 
-<div style="font-size: 13.3333px;">Thanks!</div>
+<div>Thanks!</div>
 
-<div style="font-size: 13.3333px;"><span style="background-color: transparent; font-size: 10pt;"><br>
+<div><span style="background-color: transparent; font-size: 10pt;"><br>
 </span></div>
 
-<div style="font-size: 13.3333px;"><span style="background-color: transparent; font-size: 10pt;"><br>
+<div><span style="background-color: transparent; font-size: 10pt;"><br>
 </span></div>
 
-<div style="font-size: 13.3333px;"><span style="background-color: transparent; font-size: 10pt;">Br,</span></div>
+<div><span style="background-color: transparent; font-size: 10pt;">Br,</span></div>
 
-<div style="font-size: 13.3333px;">Xiangyu</div>
+<div>Xiangyu</div>
 </div>
 
-------=_Part_3867625_1783800515.1634462494720--
+------=_Part_3863320_1092007306.1634461967642--
 
-------=_Part_3867626_2121339250.1634462494721
+------=_Part_3863321_1784582202.1634461967644
 Content-Type: application/octet-stream
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment;
  filename="=?utf-8?B?MDAwMS1ib290LWF0OTFib290c3RyYXAzLWFkZC1zdm4tcmVwb3NpdG9yeS1tZXRob2QucGF0Y2g=?="
-Content-ID: <QBM4N4xL7dkUr4RCaGw9>
+Content-ID: <8s2QAJI5frk5Z6bv1cLJ>
 
 RnJvbSBkZmQ2NGY3NDBiMzQ2ZDYwODVhM2Q1YWYxMzRiZDhmNDRjODRiMDg1IE1vbiBTZXAgMTcg
 MDA6MDA6MDAgMjAwMQpGcm9tOiBDSEVOIFhpYW5neXUgPHhpYW5neXUuY2hlbkBhb2wuY29tPgpE
@@ -233,7 +233,7 @@ VFJBUDNfU09VUkNFKQogZWxzZQogQVQ5MUJPT1RTVFJBUDNfU0lURSA9ICQoY2FsbCBnaXRodWIs
 bGludXg0c2FtLGF0OTFib290c3RyYXAsJChBVDkxQk9PVFNUUkFQM19WRVJTSU9OKSkKIGVuZGlm
 Ci0tIAoyLjI2LjIKCg==
 
-------=_Part_3867626_2121339250.1634462494721
+------=_Part_3863321_1784582202.1634461967644
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -244,4 +244,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
-------=_Part_3867626_2121339250.1634462494721--
+------=_Part_3863321_1784582202.1634461967644--
