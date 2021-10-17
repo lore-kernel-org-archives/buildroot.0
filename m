@@ -2,85 +2,52 @@ Return-Path: <SRS0=OlWD=PF=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E9A1C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 17 Oct 2021 20:07:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5BD85C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 17 Oct 2021 20:15:23 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id C9B8A60EE5
-	for <buildroot@archiver.kernel.org>; Sun, 17 Oct 2021 20:07:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C9B8A60EE5
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id D735560EE5
+	for <buildroot@archiver.kernel.org>; Sun, 17 Oct 2021 20:15:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D735560EE5
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8D452402EC;
-	Sun, 17 Oct 2021 20:07:39 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A143240160;
+	Sun, 17 Oct 2021 20:15:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UgwcrmPquthk; Sun, 17 Oct 2021 20:07:38 +0000 (UTC)
+	with ESMTP id 4pocrmLON7Fr; Sun, 17 Oct 2021 20:15:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B4B9D4020A;
-	Sun, 17 Oct 2021 20:07:37 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A885A1BF593
- for <buildroot@lists.busybox.net>; Sun, 17 Oct 2021 20:07:35 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id AFAFD4017C;
+	Sun, 17 Oct 2021 20:15:20 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 5E55C1BF593
+ for <buildroot@lists.busybox.net>; Sun, 17 Oct 2021 20:15:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9646081024
- for <buildroot@lists.busybox.net>; Sun, 17 Oct 2021 20:07:35 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 587C4606E7
+ for <buildroot@lists.busybox.net>; Sun, 17 Oct 2021 20:15:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rQ-Sic7cuLgI for <buildroot@lists.busybox.net>;
- Sun, 17 Oct 2021 20:07:34 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
- [IPv6:2a00:1450:4864:20::436])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B6A5B80E66
- for <buildroot@buildroot.org>; Sun, 17 Oct 2021 20:07:34 +0000 (UTC)
-Received: by mail-wr1-x436.google.com with SMTP id k7so37130805wrd.13
- for <buildroot@buildroot.org>; Sun, 17 Oct 2021 13:07:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=ItHooWEDV6m/sgNRRdxDmI0zeG1yQIBzi50TMGfnhDA=;
- b=Zb0rf0RQMz0xVbYUmlIeFL7gYpaV6qQP9MQ+ix0G1DSOHpMAyAMkF47ISpKjMOOibv
- g2aylNYRMJBn1vGX415DkDMkWlBn1SMkytPnbteyspqJSKEm6ZTJOdTN56lnB7/rjH4g
- MujZhZI/7L39rQWpeDHtubUKAXeaYWWKEGAQEailsFPEl6juB742F8QZDnwOpv2Mckvz
- Ubjqog8HTmlgQmsF47yvZxmXW+NEj7LmkJbR38KA+4A1047chaKdfdrpTlLVfz9Ck3ye
- 7ZhgZWmH3oON3B7Eh3v/7kir4JUREKVooaRCZVIz5t3o7LizOV4lrURPD6KOX4hmOHth
- Ny0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=ItHooWEDV6m/sgNRRdxDmI0zeG1yQIBzi50TMGfnhDA=;
- b=AarX8l/lQO6eWh1TUDGy6eC+XCgnUpurFHrPB+H+yvviG5+5cck52zGU1F/+J3FLJB
- e/LwGn/pCRoH5O6i32iSqzjH4x6p8B6GCgdBqIYcK29MePiFwdLbHEQIgd7tPKxxR+/3
- U1AdVL1S39oKknEqn+gABC6s6pFnZocqSsnZABHJPV5EqWWriFT0ILPLmWaFBH4q1H+U
- jJvjb+QOlt0OVzsw2n8BFX6JsMMsV08eD/Wl/J1lX98+6QM68cxjgQbReJGEOkuax1Kq
- yCIsrpT6oq8PqKSuCY/ujiJ6ILAW9MENYIN+E5WQtXI+Sy3gHbCVLY6lHsFmonbRQjdt
- EqWg==
-X-Gm-Message-State: AOAM531LPAtJsRvaqguX+CsghSjvuO4VhdOZV4jRE5RDRpvo+Lp8Xfjj
- 6Gl+zIIqkssbfxk0aLOcezayydfEHUk=
-X-Google-Smtp-Source: ABdhPJxf40oJhLHYJDUw2gkpnapztUW80Yh4aMuyC/10ys5d5jFBBaqRfqBl8ONOllIEwR9sV10NSw==
-X-Received: by 2002:a05:6000:1549:: with SMTP id
- 9mr30629371wry.274.1634501252734; 
- Sun, 17 Oct 2021 13:07:32 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-1732-95.w86-253.abo.wanadoo.fr.
- [86.253.44.95])
- by smtp.gmail.com with ESMTPSA id o7sm11036759wme.9.2021.10.17.13.07.31
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 17 Oct 2021 13:07:32 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bEDa0f5a2xYl for <buildroot@lists.busybox.net>;
+ Sun, 17 Oct 2021 20:15:18 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 83B04606DA
+ for <buildroot@buildroot.org>; Sun, 17 Oct 2021 20:15:18 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id 806BA822C3; Sun, 17 Oct 2021 20:12:16 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 17 Oct 2021 22:05:58 +0200
-Message-Id: <20211017200558.1409403-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.33.0
-MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/python3: fix bzip2 build
+Date: Sun, 17 Oct 2021 22:12:13 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 689b9ac439ab7b507c8982b6102bddf59d03efbf
+X-Git-Newrev: b900a6335737a95199af05744b6dd5d68800b486
+X-Patchwork-Hint: ignore
+Message-Id: <20211017201216.806BA822C3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/rpi-firmware: add option for the
+ debug set of start/fixup boot files
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,43 +59,69 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Asaf Kahlon <asafka7@gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following build failure raised since commit
-21a56f9edbca8dd8b19567be6be2b32e44ebb860 which wrongly removed
-the select on BR2_PACKAGE_BZIP2 from BR2_PACKAGE_PYTHON3_BZIP2:
+commit: https://git.buildroot.net/buildroot/commit/?id=b900a6335737a95199af05744b6dd5d68800b486
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Makefile:587: *** bzip2 is in the dependency chain of python3 that has added it to its _DEPENDENCIES variable without selecting it or depending on it from Config.in.  Stop.
+Add option for the debug set of start/fixup boot files.
 
-Fixes:
- - http://autobuild.buildroot.org/results/041a2f9c536fce1a1acf6da0464855e4f1e1604f
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python3/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/rpi-firmware/Config.in       | 10 ++++++++++
+ package/rpi-firmware/rpi-firmware.mk |  4 +++-
+ 2 files changed, 13 insertions(+), 1 deletion(-)
 
-diff --git a/package/python3/Config.in b/package/python3/Config.in
-index 18b6d6367b..efc4dbb3d4 100644
---- a/package/python3/Config.in
-+++ b/package/python3/Config.in
-@@ -54,6 +54,7 @@ config BR2_PACKAGE_PYTHON3_BERKELEYDB
+diff --git a/package/rpi-firmware/Config.in b/package/rpi-firmware/Config.in
+index 9e401829c6..f9fc0b0e5e 100644
+--- a/package/rpi-firmware/Config.in
++++ b/package/rpi-firmware/Config.in
+@@ -35,6 +35,11 @@ config BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI_CD
+ 	  The cut-down set of files for versions Zero/1/2/3 (only
+ 	  features required to boot a Linux kernel).
  
- config BR2_PACKAGE_PYTHON3_BZIP2
- 	bool "bz2 module"
-+	select BR2_PACKAGE_BZIP2
++config BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI_DB
++	bool "rpi 0/1/2/3 (debug)"
++	help
++	  The debug set of files for versions Zero/1/2/3.
++
+ config BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4
+ 	bool "rpi 4 (default)"
  	help
- 	  bzip2 module for Python3
+@@ -53,6 +58,11 @@ config BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4_CD
+ 	  The cut-down set of files for versions 4 (only features
+ 	  required to boot a Linux kernel).
  
--- 
-2.33.0
-
++config BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4_DB
++	bool "rpi 4 (debug)"
++	help
++	  The debug set of files for versions 4.
++
+ config BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE
+ 	string "Path to a file stored as boot/config.txt"
+ 	help
+diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+index 84b8cd735a..ed49ded49e 100644
+--- a/package/rpi-firmware/rpi-firmware.mk
++++ b/package/rpi-firmware/rpi-firmware.mk
+@@ -15,9 +15,11 @@ RPI_FIRMWARE_FILES = \
+ 	$(if $(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI), start.elf fixup.dat) \
+ 	$(if $(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI_X), startx.elf fixupx.dat) \
+ 	$(if $(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI_CD), start_cd.elf fixup_cd.dat) \
++	$(if $(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI_DB), start_db.elf fixup_db.dat) \
+ 	$(if $(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4), start4.elf fixup4.dat) \
+ 	$(if $(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4_X), start4x.elf fixup4x.dat) \
+-	$(if $(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4_CD), start4cd.elf fixup4cd.dat)
++	$(if $(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4_CD), start4cd.elf fixup4cd.dat) \
++	$(if $(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4_DB), start4db.elf fixup4db.dat)
+ 
+ define RPI_FIRMWARE_INSTALL_BIN
+ 	$(foreach f,$(RPI_FIRMWARE_FILES), \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
