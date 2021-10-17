@@ -2,52 +2,52 @@ Return-Path: <SRS0=OlWD=PF=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 94D5BC433F5
-	for <buildroot@archiver.kernel.org>; Sun, 17 Oct 2021 19:53:07 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9726BC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 17 Oct 2021 19:53:19 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 5362A61151
-	for <buildroot@archiver.kernel.org>; Sun, 17 Oct 2021 19:53:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5362A61151
+	by mail.kernel.org (Postfix) with ESMTPS id 34D26610C7
+	for <buildroot@archiver.kernel.org>; Sun, 17 Oct 2021 19:53:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 34D26610C7
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2096040160;
-	Sun, 17 Oct 2021 19:53:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0E4F34021F;
+	Sun, 17 Oct 2021 19:53:19 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id YrvUZziVcNFR; Sun, 17 Oct 2021 19:53:18 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5F945401FC;
+	Sun, 17 Oct 2021 19:53:17 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C42DD1BF59C
+ for <buildroot@lists.busybox.net>; Sun, 17 Oct 2021 19:52:31 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id ABC8640160
+ for <buildroot@lists.busybox.net>; Sun, 17 Oct 2021 19:52:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 141IJ5aBiGey; Sun, 17 Oct 2021 19:53:06 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4291A4017C;
-	Sun, 17 Oct 2021 19:53:05 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id ABC911BF976
- for <buildroot@lists.busybox.net>; Sun, 17 Oct 2021 19:52:30 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A9033814A1
- for <buildroot@lists.busybox.net>; Sun, 17 Oct 2021 19:52:30 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jfY2gjKaRVCv for <buildroot@lists.busybox.net>;
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZqthbG6eyhDM for <buildroot@lists.busybox.net>;
  Sun, 17 Oct 2021 19:52:28 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id E2141814BA
+ by smtp2.osuosl.org (Postfix) with ESMTP id D7CAF4017C
  for <buildroot@buildroot.org>; Sun, 17 Oct 2021 19:52:28 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id E742E95DA6; Sun, 17 Oct 2021 19:49:26 +0000 (UTC)
+ id DE20995DA5; Sun, 17 Oct 2021 19:49:26 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 17 Oct 2021 21:47:04 +0200
+Date: Sun, 17 Oct 2021 21:47:02 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d8447c38f53f98e1df4a209e9f70e54f8b60f36e
-X-Git-Newrev: e11c3cbe26a945497524aba7dade42bd1efbadd0
+X-Git-Oldrev: 1ab2dd6aa5cf5170aee0bc761d05c387b8c69040
+X-Git-Newrev: d8447c38f53f98e1df4a209e9f70e54f8b60f36e
 X-Patchwork-Hint: ignore
-Message-Id: <20211017194926.E742E95DA6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/testing: test_ubi: allow to boot
- several times using the same ubi image.
+Message-Id: <20211017194926.DE20995DA5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/testing: update logical eraseblock
+ and physical eraseblock size for qemu >= 2.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,68 +65,76 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e11c3cbe26a945497524aba7dade42bd1efbadd0
+commit: https://git.buildroot.net/buildroot/commit/?id=d8447c38f53f98e1df4a209e9f70e54f8b60f36e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since the ubi/ubifs test has been introduced, it's not possible to
-boot the same ubi image twice [1]:
+The current ubi/ubifs test (test_ubi.py) rely on a Qemu bug present in
+2.8.0 that was fixed in Qemu 2.9.0 [1]. The ubi/ubifs settings is
+updated to run with Qemu >= 2.9.0 using the new multiple chip handling.
 
-"TODO: if you boot Qemu twice on the same UBI image, it fails to
-attach the image the second time, with "ubi0 error:
-ubi_read_volume_table: the layout volume was not found"."
+If needed, the old behavior can be enabled using the pflash01 property
+"old-multiple-chip-handling" [2].
 
-For some reason, the kernel corrupt the ubi image if the ubifs
-rootfs is mounted with write access. Use a custom config file
-to mount the rootfs readonly (vol_type=static). Doing so requires
-to add the flash size (vol_size=64MiB).
+The issue was not detected until now since we are sill using an old
+qemu (2.8 from Debian stretch) for testing in gitlab (using the
+Buildroot Docker image used by gitlab-ci.yml).
 
-At least it allows to boot several times the same ubi image.
+First the logical eraseblock size (LEB) must be updated to the value
+0x3ff80 reported by the kernel when using qemu >= 2.9.0.
 
-[1] bf4a6490e4ee70f0a46e588602995ba34e6c872a
+  UBIFS (ubi0:0): Mounting in unauthenticated mode
+  UBIFS error (ubi0:0 pid 1): ubifs_read_superblock: LEB size mismatch: 524160 in superblock, 262016 real
+  UBIFS error (ubi0:0 pid 1): ubifs_read_superblock: bad superblock, error 1
+
+But the system is still failing to boot:
+
+ UBIFS error (ubi0:0 pid 1): ubifs_scan: garbage
+ UBIFS error (ubi0:0 pid 1): ubifs_recover_master_node: failed to recover master node
+
+ubifs is reading garbage since Qemu >= 2.9.0 report a sector
+length per device divided by the number of devices (see commit [1]).
+
+The kernel detect two flash devices (dmesg):
+
+  Concatenating MTD devices:
+  (0): "40000000.flash"
+  (1): "40000000.flash"
+  into device "40000000.flash"
+
+Divide the physical eraseblock (PEB) size by two.
+
+Tested with qemu 2.9.0, 5.1.0.
+
+Fixes:
+https://gitlab.com/kubu93/buildroot/-/jobs/1543100932
+
+[1] https://git.qemu.org/?p=qemu.git;a=commitdiff;h=feb0b1aa11f14ee71660aba46b46387d1f923c9e
+[2] http://lists.busybox.net/pipermail/buildroot/2021-September/622069.html
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- support/testing/tests/fs/test_ubi.py                            | 9 ++++-----
- support/testing/tests/fs/test_ubi/ubinize_qemu_pflash_cfi01.cfg | 8 ++++++++
- 2 files changed, 12 insertions(+), 5 deletions(-)
+ support/testing/tests/fs/test_ubi.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/support/testing/tests/fs/test_ubi.py b/support/testing/tests/fs/test_ubi.py
-index 7c687c1982..564a436d42 100644
+index eeb55b1d59..7c687c1982 100644
 --- a/support/testing/tests/fs/test_ubi.py
 +++ b/support/testing/tests/fs/test_ubi.py
-@@ -13,12 +13,11 @@ class TestUbi(infra.basetest.BRTest):
+@@ -8,10 +8,10 @@ class TestUbi(infra.basetest.BRTest):
+     config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
+         """
+         BR2_TARGET_ROOTFS_UBIFS=y
+-        BR2_TARGET_ROOTFS_UBIFS_LEBSIZE=0x7ff80
++        BR2_TARGET_ROOTFS_UBIFS_LEBSIZE=0x3ff80
+         BR2_TARGET_ROOTFS_UBIFS_MINIOSIZE=0x1
          BR2_TARGET_ROOTFS_UBI=y
-         BR2_TARGET_ROOTFS_UBI_PEBSIZE=0x40000
+-        BR2_TARGET_ROOTFS_UBI_PEBSIZE=0x80000
++        BR2_TARGET_ROOTFS_UBI_PEBSIZE=0x40000
          BR2_TARGET_ROOTFS_UBI_SUBSIZE=1
--        """
-+        BR2_TARGET_ROOTFS_UBI_USE_CUSTOM_CONFIG=y
-+        BR2_TARGET_ROOTFS_UBI_CUSTOM_CONFIG_FILE="{}"
-+        """.format(
-+              infra.filepath("tests/fs/test_ubi/ubinize_qemu_pflash_cfi01.cfg"))
+         """
  
--    # TODO: if you boot Qemu twice on the same UBI image, it fails to
--    # attach the image the second time, with "ubi0 error:
--    # ubi_read_volume_table: the layout volume was not found".
--    # To be investigated.
-     def test_run(self):
-         img = os.path.join(self.builddir, "images", "rootfs.ubi")
-         out = infra.run_cmd_on_host(self.builddir, ["file", img])
-diff --git a/support/testing/tests/fs/test_ubi/ubinize_qemu_pflash_cfi01.cfg b/support/testing/tests/fs/test_ubi/ubinize_qemu_pflash_cfi01.cfg
-new file mode 100644
-index 0000000000..52dd5f0007
---- /dev/null
-+++ b/support/testing/tests/fs/test_ubi/ubinize_qemu_pflash_cfi01.cfg
-@@ -0,0 +1,8 @@
-+[ubifs]
-+mode=ubi
-+vol_id=0
-+vol_type=static
-+vol_name=rootfs
-+vol_alignment=1
-+vol_size=64MiB
-+image=BR2_ROOTFS_UBIFS_PATH
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
