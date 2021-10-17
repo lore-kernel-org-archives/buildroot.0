@@ -2,70 +2,83 @@ Return-Path: <SRS0=OlWD=PF=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B72A0C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 17 Oct 2021 16:38:05 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 66BE2C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 17 Oct 2021 16:57:09 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2D33B60E08
-	for <buildroot@archiver.kernel.org>; Sun, 17 Oct 2021 16:38:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2D33B60E08
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=buildroot.org
+	by mail.kernel.org (Postfix) with ESMTPS id BE0F760F93
+	for <buildroot@archiver.kernel.org>; Sun, 17 Oct 2021 16:57:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org BE0F760F93
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0534D81971;
-	Sun, 17 Oct 2021 16:38:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5FFD4402F2;
+	Sun, 17 Oct 2021 16:57:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Zykl_Q0wjBvC; Sun, 17 Oct 2021 16:38:04 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ncrLlWldb1CS; Sun, 17 Oct 2021 16:57:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5A1B6819F6;
-	Sun, 17 Oct 2021 16:38:03 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 26F8E1BF404
- for <buildroot@lists.busybox.net>; Sun, 17 Oct 2021 16:37:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A614B402EA;
+	Sun, 17 Oct 2021 16:57:06 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id D70391BF404
+ for <buildroot@lists.busybox.net>; Sun, 17 Oct 2021 16:57:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 23A6F605DE
- for <buildroot@lists.busybox.net>; Sun, 17 Oct 2021 16:37:47 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C4AEA402EA
+ for <buildroot@lists.busybox.net>; Sun, 17 Oct 2021 16:57:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=libero.it
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tvnoL4yQ5QQN for <buildroot@lists.busybox.net>;
- Sun, 17 Oct 2021 16:37:46 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from libero.it (smtp-32.italiaonline.it [213.209.10.32])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C3263605E2
- for <buildroot@buildroot.org>; Sun, 17 Oct 2021 16:37:45 +0000 (UTC)
-Received: from passgat-Modern-14-A10M.homenet.telecomitalia.it
- ([79.24.103.190]) by smtp-32.iol.local with ESMTPA
- id c92DmY5ZpPvRTc92RmEzYd; Sun, 17 Oct 2021 18:29:31 +0200
-x-libjamoibt: 1601
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=libero.it; s=s2021;
- t=1634488171; bh=Ft8LJyIL4kQCCyEsz0ax/5cwVHo3u7Tf6icgBojGDjI=;
- h=From;
- b=ztm0kTuoCdpQVpTBBfNvxvcqJN0UuB6/5VNASP+JZRCOiVS/nzQ7UMH/vIdLCljxa
- lpXZAlwAeEJFtz3DCi8+BAzEYtp5iiw94rGUG+qEg+kBMuyA7u/g455WQljod6HAx0
- ce9EQmc6NYdXF9ph3+uQZSHoQbn36gb1sx9oLkvWql/44KchqvUz2YB4ElaKYe2Fnf
- xOrr1TBaNaHZoGSfyvAyzBzA/3PEcQsR3two0sSI5XsWCbvC/d/s9lecIFhkyDtnjK
- YSwyQXSTWR5I9NAW5paS5uE6yVhxqv0IdTZZLKKJWfzDQtPXY8IR9fPIYFFVEnjZdG
- 1/bqxjhI87tgw==
-X-CNFS-Analysis: v=2.4 cv=NqgUz+RJ c=1 sm=1 tr=0 ts=616c4f6b cx=a_exe
- a=YGFxGp/Nwp6jLtVyvvsm7Q==:117 a=YGFxGp/Nwp6jLtVyvvsm7Q==:17
- a=ebg_UmrbKguA3I-y1BgA:9
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id tTn4J6Y8BDzg for <buildroot@lists.busybox.net>;
+ Sun, 17 Oct 2021 16:57:02 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com
+ [IPv6:2a00:1450:4864:20::22d])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C95AE402E9
+ for <buildroot@buildroot.org>; Sun, 17 Oct 2021 16:57:01 +0000 (UTC)
+Received: by mail-lj1-x22d.google.com with SMTP id n7so4380500ljp.5
+ for <buildroot@buildroot.org>; Sun, 17 Oct 2021 09:57:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=B3PjUsgJVb8kkiG58M5wQGMK+tWLO/EyAJ8k9Uudvq8=;
+ b=QPvW74//kcwUtkVWI7l4HJ7NO2Fa0VNbdb8j9RnJjmo+DBQOshaytbfcSfMBOWhYWz
+ r95Z25GuUsEFI0anmzduOgBreYfCXUv+naVmYt8B0zCGioK0vZvgMv21Mf1mlR0quv5o
+ 7OTvWK+hSZtEYm+OGUd+77cGCRO9MHSWlU59U7nfZqL42WLMhtSAjNDlYVINo3+aWHLP
+ AvhWt2iPo3q6lbv9zXk4qK/90DB7WxLAWzeb4GTVHRnbZ2DBzjzAfEoQhb7hvb0sh5TJ
+ U6WW1M9Wy0q1U7n3Tp9Au5OuP2Efyw070a+quHgXsR4tK2hyu+HH8rm5Obxv6qMJp14x
+ iZbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=B3PjUsgJVb8kkiG58M5wQGMK+tWLO/EyAJ8k9Uudvq8=;
+ b=S5I+TaMaHDENUFhxc+lz+UNTID1RYx5hnAtNg3BBFDpkdBZ+lSyG6IDO5NnCmcTFSh
+ k5uCtXUFYa6TlP11a0q+z1Ha7yPxoGPcC6RHJ2iIsHw6zEhtDEnfE25Z3ezmiyP28S0M
+ 7z3OYKVi8135qykvdy19Yb6obDJMaiFMkIbRGY5rP/kTenryx7F9a7DXcnj2plDyf0cr
+ ncqVoDv8HA55wSwAnHHVnh4R72fFd8C3ClCK/Op1HlpwmDMA0RRF9oJq+e51har3deWx
+ QwbMhODaEtQZhGJKp5tpMRIPjoueth9J8FOBdz3RZtTWvTxZU+p6dTo3sX+JIgBB4boU
+ 1xuQ==
+X-Gm-Message-State: AOAM532oFbqsGwOHd8DicIaELtGnZ/MJto9QWV+U+Y1ctUXQkTKdqHCt
+ rz78xG390Z9h/w2ME/F42UxVsLf//6Fx8Q==
+X-Google-Smtp-Source: ABdhPJxeT30IcD7BYCJEgXYk5mrv/XAH8lC6GGBU+IkFwtDFjj+Yal5TJpD8IXhhCBWqED39tcrTbA==
+X-Received: by 2002:a05:651c:2128:: with SMTP id
+ a40mr17979732ljq.148.1634489819329; 
+ Sun, 17 Oct 2021 09:56:59 -0700 (PDT)
+Received: from localhost.localdomain ([94.254.51.203])
+ by smtp.gmail.com with ESMTPSA id p15sm1188616lfe.1.2021.10.17.09.56.58
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 17 Oct 2021 09:56:58 -0700 (PDT)
+From: Joachim Wiberg <troglobit@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 17 Oct 2021 18:28:39 +0200
-Message-Id: <20211017162839.20278-3-dariobin@libero.it>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20211017162839.20278-1-dariobin@libero.it>
-References: <20211017162839.20278-1-dariobin@libero.it>
-X-CMAE-Envelope: MS4xfHmrInGLXimijs0uw8mRS5eTEbmyCFv8flCokkFHAHXjUvXMaU8hJorFrjkMs7L6+Tv2gj+E1lrNb4BW1nRHUSBt+VWZe/kmZybtcWP8rXcrPpASDo0m
- pNDU9a05x1ChwS+Kqy2PA+gd195IN988gSDrhCxgRUC8ELtzOcscrHAScSRPLKyr89T6RrnUaXKrEEar+H1TEnoVd0Xp1zmWLh2ncEOSUf8LJcpshw4nEhvI
- ChK7cvTOM5Bpik+1C9IqyWZk8fb9ZGqjWxWRUWTFUklXA3hQU+MiO/rUJCQ12LDJVFkEDucqdcxPW3Zjj8iiY55DK4z/4ZGX7aVTxSqsEZg=
-Subject: [Buildroot] [PATCH 2/2] configs/stm32f469_disco: add framebuffer
- test application
+Date: Sun, 17 Oct 2021 18:56:46 +0200
+Message-Id: <20211017165646.3286083-1-troglobit@gmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH 1/1] package/mg: bump version to v3.5,
+ drop backported patch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,42 +90,94 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Dario Binacchi via buildroot <buildroot@buildroot.org>
-Reply-To: Dario Binacchi <dariobin@libero.it>
-Cc: Christophe Priouzeau <christophe.priouzeau@foss.st.com>,
- Dario Binacchi <dariobin@libero.it>
-MIME-Version: 1.0
+Cc: Joachim Wiberg <troglobit@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-It's a test suite for Linux framebuffer. You can run, for example,
-fb-test-rect that displays random rectangles on the screen. But first,
-you need to enable the framebuffer:
+ - Drop backported patch for GCC 10 build problem, part of release
+ - Use upstream sha256 instead of locally computed
 
-~ # echo 0 0 > /sys/class/graphics/fb0/pan
-~ # fb-test-rect
-
-Signed-off-by: Dario Binacchi <dariobin@libero.it>
+Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
 ---
- configs/stm32f469_disco_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ ...0001-src-def.h-fix-build-with-gcc-10.patch | 38 -------------------
+ package/mg/mg.hash                            |  5 +--
+ package/mg/mg.mk                              |  2 +-
+ 3 files changed, 3 insertions(+), 42 deletions(-)
+ delete mode 100644 package/mg/0001-src-def.h-fix-build-with-gcc-10.patch
 
-diff --git a/configs/stm32f469_disco_defconfig b/configs/stm32f469_disco_defconfig
-index 438d32150c..47dbc108a7 100644
---- a/configs/stm32f469_disco_defconfig
-+++ b/configs/stm32f469_disco_defconfig
-@@ -14,6 +14,7 @@ BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="zImage"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="stm32f469-disco"
- BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-minimal.config"
-+BR2_PACKAGE_FB_TEST_APP=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_SIZE="32M"
- # BR2_TARGET_ROOTFS_TAR is not set
+diff --git a/package/mg/0001-src-def.h-fix-build-with-gcc-10.patch b/package/mg/0001-src-def.h-fix-build-with-gcc-10.patch
+deleted file mode 100644
+index d88e2f44f0..0000000000
+--- a/package/mg/0001-src-def.h-fix-build-with-gcc-10.patch
++++ /dev/null
+@@ -1,38 +0,0 @@
+-From 29c83c917bd4f5d0c37ff0ab5da1a85762bd5530 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sat, 5 Sep 2020 14:50:20 +0200
+-Subject: [PATCH] src/def.h: fix build with gcc 10
+-
+-Define hlp as extern to avoid the following build failure with gcc 10
+-(which defaults to -fno-common):
+-
+-  CCLD     mg
+-/home/buildroot/autobuild/run/instance-1/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: mg-bell.o:(.bss+0x0): multiple definition of `hlp'; mg-basic.o:(.bss+0x0): first defined here
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/aacc02abf41e120e0d0b22faa38642e6d149d73f
+-
+-[backport of upstream 29c83c917bd4f5d0c37ff0ab5da1a85762bd5530]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[yann.morin.1998@free.fr: backport actual patch after MR was accepted]
+-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+----
+- src/def.h | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/src/def.h b/src/def.h
+-index e4c049c..cd59725 100644
+---- a/src/def.h
+-+++ b/src/def.h
+-@@ -650,7 +650,7 @@ int		 excline(char *);
+- char		*skipwhite(char *);
+- 
+- /* help.c X */
+--const char	*hlp;
+-+extern const char	*hlp;
+- int		 desckey(int, int);
+- int		 wallchart(int, int);
+- int		 help_help(int, int);
+--- 
+-2.28.0
+-
+diff --git a/package/mg/mg.hash b/package/mg/mg.hash
+index 758a5232d4..9257daf5ac 100644
+--- a/package/mg/mg.hash
++++ b/package/mg/mg.hash
+@@ -1,5 +1,4 @@
+-# From https://github.com/troglobit/mg/releases/tag/v3.4
+-md5 6b79855d54770bcb23e5457ebde8296c  mg-3.4.tar.gz
++# From https://github.com/troglobit/mg/releases/tag/v3.5
++sha256 a906eab9370c0f24a5fa25923561ad933b74ad339d0b2851d2067badf0d7e4ce  mg-3.5.tar.gz
+ # Locally computed:
+-sha256 1a620cf5b2dd4b00006d6c929ac8e2a70eeab5f807a0d6e5334b878aa182b713  mg-3.4.tar.gz
+ sha256 7e12e5df4bae12cb21581ba157ced20e1986a0508dd10d0e8a4ab9a4cf94e85c  UNLICENSE
+diff --git a/package/mg/mg.mk b/package/mg/mg.mk
+index e3b79da006..bb3f59a14d 100644
+--- a/package/mg/mg.mk
++++ b/package/mg/mg.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MG_VERSION = 3.4
++MG_VERSION = 3.5
+ MG_SITE = https://github.com/troglobit/mg/releases/download/v$(MG_VERSION)
+ MG_LICENSE = Public Domain
+ MG_LICENSE_FILES = UNLICENSE
 -- 
-2.17.1
+2.25.1
 
 _______________________________________________
 buildroot mailing list
