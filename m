@@ -2,78 +2,76 @@ Return-Path: <SRS0=OlWD=PF=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F277EC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 17 Oct 2021 11:28:02 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C24FC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 17 Oct 2021 12:35:51 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 4EDFC61247
-	for <buildroot@archiver.kernel.org>; Sun, 17 Oct 2021 11:28:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4EDFC61247
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id 03A426125F
+	for <buildroot@archiver.kernel.org>; Sun, 17 Oct 2021 12:35:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 03A426125F
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=lespocky.de
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 15B12606BD;
-	Sun, 17 Oct 2021 11:28:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 91E9A40266;
+	Sun, 17 Oct 2021 12:35:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lBMDn8oGOBqN; Sun, 17 Oct 2021 11:28:00 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id TWDGkQXqQi7n; Sun, 17 Oct 2021 12:35:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 10B2B60851;
-	Sun, 17 Oct 2021 11:28:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 396B44026D;
+	Sun, 17 Oct 2021 12:35:48 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6F6821BF5AD
- for <buildroot@lists.busybox.net>; Sun, 17 Oct 2021 11:27:59 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4DAC11BF295
+ for <buildroot@lists.busybox.net>; Sun, 17 Oct 2021 12:35:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6477B60851
- for <buildroot@lists.busybox.net>; Sun, 17 Oct 2021 11:27:59 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3CDA9606F1
+ for <buildroot@lists.busybox.net>; Sun, 17 Oct 2021 12:35:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yUuv6RZQL-2B for <buildroot@lists.busybox.net>;
- Sun, 17 Oct 2021 11:27:58 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ua1-x933.google.com (mail-ua1-x933.google.com
- [IPv6:2607:f8b0:4864:20::933])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0092E606BD
- for <buildroot@buildroot.org>; Sun, 17 Oct 2021 11:27:57 +0000 (UTC)
-Received: by mail-ua1-x933.google.com with SMTP id r17so2452513uaf.8
- for <buildroot@buildroot.org>; Sun, 17 Oct 2021 04:27:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=OMpDLqeXAtHWVXk+p0uAHseo1w0Bx6O1CYf52nr9wyQ=;
- b=F8HRCyl6Dk/sMlRhmhZdlQKOLO9yvsdGIp1BMU2KMzzyJ9lJqJUU7Cl2nalBsbGKwS
- ux1cBN6aF7S0gE1UWhw+fwkLi/A6xF2xoYsWaR5/Xth64F6ddg7GDeGLk8a7loXaUn5b
- 6nFAiie4i/j6QKoJ+PDRz+b4QKxLIo7Vqy83XeCCVoxlKnWPCsqARoaRmN2+TErtHfFK
- ZUmO+ztepBfvqZ4rO7725+/YRuLhrT8zUTl0QpYJ8jdk9dYtVt9MVZsk9oBA9QYHC7du
- 6GAach07mkiNRcp1QztYsuiPa9v6lQxxkaiGFwJZl1KXMXe52t2JnBwkoaIhMG5WzQqB
- 3b0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=OMpDLqeXAtHWVXk+p0uAHseo1w0Bx6O1CYf52nr9wyQ=;
- b=sq9D7bI5B0t1bsLg4zCUtLc0FIyDuPlaMsmTdgjt5HoftIQFcW8B/WHKZBvGEuAYk1
- 80D/YMqUtEO65Bdi0TX53D7zaNjPII0VSqWej4qtQrKQleKgQOmyfCIlH74EbFU8OWPz
- TBl5N+0uDqeddNp0vX6g9onRkgsFbI4fvThRrX5VN940NdAoyHz6bFh4IZWYJP9BKHNd
- qZr4F/TCfNJA2CPDcix2awMJEBYCVpmwS6GkzcW24vPhWkKXBlS2aMaBWGts1MnQU0J9
- 6dUBza41dCSgQxY/Id9UMu0CHd6rqcAjVveYLoTvTPZK6JDSwy6F3GW9OQvcSYRc2Ip6
- TgaQ==
-X-Gm-Message-State: AOAM530+xKxCyybPaBK+BrtBimJhbZlCREb3SA45nIA6PFl2yTzQhKu6
- g9oUIqAVQhZpmuHYKGHth7cb2H+NGkHfolgcSGpiqsrIqLA=
-X-Google-Smtp-Source: ABdhPJz83/SQ2Xz9l7lA2V6tJbmy/wC23+zPUxVHiuuKrAdQ5Y+K05kMbNW7/ikJ/nxfKTZSZXAAzh5E2pu9+aOCr2c=
-X-Received: by 2002:a67:d996:: with SMTP id u22mr23276502vsj.12.1634470076882; 
- Sun, 17 Oct 2021 04:27:56 -0700 (PDT)
+ with ESMTP id F3lhsAbzE6nZ for <buildroot@lists.busybox.net>;
+ Sun, 17 Oct 2021 12:35:44 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A154B606E3
+ for <buildroot@buildroot.org>; Sun, 17 Oct 2021 12:35:42 +0000 (UTC)
+Received: from methusalix.internal.home.lespocky.de ([92.117.58.44]) by
+ mrelayeu.kundenserver.de (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1MFsd7-1mVEAX1NKJ-00HQfF; Sun, 17 Oct 2021 14:35:30 +0200
+Received: from lemmy.internal.home.lespocky.de ([192.168.243.175]
+ helo=lemmy.home.lespocky.de)
+ by methusalix.internal.home.lespocky.de with esmtpsa (TLS1.3) tls
+ TLS_AES_256_GCM_SHA384 (Exim 4.94.2)
+ (envelope-from <alex@home.lespocky.de>)
+ id 1mc5Nu-00081b-Tv; Sun, 17 Oct 2021 14:35:28 +0200
+Received: (nullmailer pid 8323 invoked by uid 2001);
+ Sun, 17 Oct 2021 12:35:26 -0000
+From: Alexander Dahl <post@lespocky.de>
+To: buildroot@buildroot.org
+Date: Sun, 17 Oct 2021 14:35:01 +0200
+Message-Id: <20211017123501.8253-1-post@lespocky.de>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-References: <20211015083830.1971193-1-jose.pekkarinen@unikie.com>
- <CAKcgs2zBHeE_G-LA6dsCRZpLvx6Ox9mf6s_d347cZO+fJZbfxA@mail.gmail.com>
-In-Reply-To: <CAKcgs2zBHeE_G-LA6dsCRZpLvx6Ox9mf6s_d347cZO+fJZbfxA@mail.gmail.com>
-From: Gilles Talis <gilles.talis@gmail.com>
-Date: Sun, 17 Oct 2021 13:27:45 +0200
-Message-ID: <CAKcgs2xDOJCJZF_-_=hYp_7JsATUOiqXpeZ+=+DTPkJeWV1=uQ@mail.gmail.com>
-To: =?UTF-8?Q?Jos=C3=A9_Pekkarinen?= <jose.pekkarinen@unikie.com>
-Subject: Re: [Buildroot] [PATCH] package/softhsm2: new package
+X-Scan-Signature: b1b544abd64ee95e912de87c31e3e05c
+X-Provags-ID: V03:K1:94FUfGgPPKT0mFCL39LKjzJFwzKDvwLgBx25KQ8gRLUGsTXWXOc
+ i+gai1GJ5ewLvhgJKABWtWcC77IqMZ82kK3ZdPfS9vl7776O9WRe9m0Q9S8HnwTT0VmmcV4
+ 2cGCG5RRNG/fE9h96YqQFZBNzYBuP8YYATHK+s468A7hPdk15Qqmd4JmHsKSxfjxZkWd0jF
+ sw9jCGyycs/ttq5FmSmrA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:mnkQYpXmgJA=:1QctUuLd8Eu6E2c37da0mk
+ vmIxWq+HiI+8P4yIgkfOssWtFNe4mmeub5izCyXPTbmczbyE651WddTkz0L0R6OeDfh3v5fFV
+ TGvuklurlreVkEsR7tC5yMbE4KWg7L826AF7O0yGPrPFpUmcMOXkiis1GW3K2yfoeFHDBDFJ7
+ +X+zegsvzvoX9tlNLolt/w06HqHpoGv2WMvDxJRTBwa/CSsSkc4XawJKP+molq4uWnryddz59
+ NVab5aXVC7CjqwKbe/6xS6njQh05dR5P2n2/qJv1fshGGSCIxYoyzGfog6IWhsLL+47ld5kRv
+ nvTDOCspIQLg9ZdZlbZMnTbufgsveaRYPFZwBWffuuppAfkpMbrtMdmWLpOlg2wOomb/05pRG
+ SzrvKgKiknACdQcWG+n1HuzTuCW/FCtOf/1scTqqaQTmT4SDLLItwES5JcjObaEpmpFOP/394
+ hg8VI8hWKd2FKh2PUbk4IpN47/yW2F5jKNIuGmhAHK05ro6uuoz7NgX6lNIIGMBjLDLbnpRTt
+ LIhAOswQv7Bq/P0hOCWasALN0Jvo/L+um6YY5zuWKHIWatmAc1urzlEFSnlK0LEFetIzzu9y0
+ Z1YiQJgWeFwuPSQV8z97v6HxrohbpzncJnL6hQQHhztABBvJW3wxc56swXNhNPZM0q/Fm8nF1
+ Fc6HFUgMSvDVn7uVwb2+8eA4uJi9rPjdkSqokkTLvkvfy2yh+rx8zD+Wf3HY5M2amvctjutpk
+ 579VQLruXENjGWfcjPntXq4/zuzdeRgU8jvuQR9Nr/a/IaOHpO1/0Muw4jg=
+Subject: [Buildroot] [PATCH] package/putty: bump version to 0.76
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,389 +83,526 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot <buildroot@buildroot.org>
-Content-Type: multipart/mixed; boundary="===============0555923115458007591=="
+Cc: Alexander Dahl <post@lespocky.de>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0555923115458007591==
-Content-Type: multipart/alternative; boundary="0000000000005420f805ce8ab803"
+Patch 0002 fixing CVE-2021-36367 gone upstream, part of the 0.76
+release.
 
---0000000000005420f805ce8ab803
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Link: https://www.chiark.greenend.org.uk/~sgtatham/putty/changes.html
+Link: https://lists.tartarus.org/pipermail/putty-announce/2021/000032.html
+Signed-off-by: Alexander Dahl <post@lespocky.de>
+---
+ ...o-reject-trivial-success-of-userauth.patch | 448 ------------------
+ package/putty/putty.hash                      |  10 +-
+ package/putty/putty.mk                        |   5 +-
+ 3 files changed, 6 insertions(+), 457 deletions(-)
+ delete mode 100644 package/putty/0002-New-option-to-reject-trivial-success-of-userauth.patch
 
-Hi Jos=C3=A9,
+diff --git a/package/putty/0002-New-option-to-reject-trivial-success-of-userauth.patch b/package/putty/0002-New-option-to-reject-trivial-success-of-userauth.patch
+deleted file mode 100644
+index 83b93a346c..0000000000
+--- a/package/putty/0002-New-option-to-reject-trivial-success-of-userauth.patch
++++ /dev/null
+@@ -1,448 +0,0 @@
+-From 1dc5659aa62848f0aeb5de7bd3839fecc7debefa Mon Sep 17 00:00:00 2001
+-From: Simon Tatham <anakin@pobox.com>
+-Date: Sat, 19 Jun 2021 15:39:15 +0100
+-Subject: [PATCH] New option to reject 'trivial' success of userauth.
+-
+-Suggested by Manfred Kaiser, who also wrote most of this patch
+-(although outlying parts, like documentation and SSH-1 support, are by
+-me).
+-
+-This is a second line of defence against the kind of spoofing attacks
+-in which a malicious or compromised SSH server rushes the client
+-through the userauth phase of SSH without actually requiring any auth
+-inputs (passwords or signatures or whatever), and then at the start of
+-the connection phase it presents something like a spoof prompt,
+-intended to be taken for part of userauth by the user but in fact with
+-some more sinister purpose.
+-
+-Our existing line of defence against this is the trust sigil system,
+-and as far as I know, that's still working. This option allows a bit of
+-extra defence in depth: if you don't expect your SSH server to
+-trivially accept authentication in the first place, then enabling this
+-option will cause PuTTY to disconnect if it unexpectedly does so,
+-without the user having to spot the presence or absence of a fiddly
+-little sigil anywhere.
+-
+-Several types of authentication count as 'trivial'. The obvious one is
+-the SSH-2 "none" method, which clients always try first so that the
+-failure message will tell them what else they can try, and which a
+-server can instead accept in order to authenticate you unconditionally.
+-But there are two other ways to do it that we know of: one is to run
+-keyboard-interactive authentication and send an empty INFO_REQUEST
+-packet containing no actual prompts for the user, and another even
+-weirder one is to send USERAUTH_SUCCESS in response to the user's
+-preliminary *offer* of a public key (instead of sending the usual PK_OK
+-to request an actual signature from the key).
+-
+-This new option detects all of those, by clearing the 'is_trivial_auth'
+-flag only when we send some kind of substantive authentication response
+-(be it a password, a k-i prompt response, a signature, or a GSSAPI
+-token). So even if there's a further path through the userauth maze we
+-haven't spotted, that somehow avoids sending anything substantive, this
+-strategy should still pick it up.
+-
+-(cherry picked from commit 5f5c710cf3704737e24ffceb2c918e412a2a674f)
+-
+-[Retrieved from:
+-https://git.tartarus.org/?p=simon/putty.git;a=commit;h=1dc5659aa62848f0aeb5de7bd3839fecc7debefa]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- cmdline.c          |  8 ++++++++
+- config.c           |  4 ++++
+- doc/config.but     | 43 +++++++++++++++++++++++++++++++++++++++++++
+- pscp.c             |  2 ++
+- psftp.c            |  2 ++
+- putty.h            |  1 +
+- settings.c         |  2 ++
+- ssh.c              |  4 +++-
+- ssh1login.c        | 14 +++++++++++++-
+- ssh2userauth.c     | 20 ++++++++++++++++----
+- sshppl.h           |  2 +-
+- unix/uxplink.c     |  2 ++
+- windows/winhelp.h  |  1 +
+- windows/winplink.c |  2 ++
+- 14 files changed, 100 insertions(+), 7 deletions(-)
+-
+-diff --git a/cmdline.c b/cmdline.c
+-index 7ea5cacc..62d65e19 100644
+---- a/cmdline.c
+-+++ b/cmdline.c
+-@@ -598,6 +598,14 @@ int cmdline_process_param(const char *p, char *value,
+-         SAVEABLE(0);
+-         conf_set_bool(conf, CONF_tryagent, false);
+-     }
+-+
+-+    if (!strcmp(p, "-no-trivial-auth")) {
+-+        RETURN(1);
+-+        UNAVAILABLE_IN(TOOLTYPE_NONNETWORK);
+-+        SAVEABLE(0);
+-+        conf_set_bool(conf, CONF_ssh_no_trivial_userauth, true);
+-+    }
+-+
+-     if (!strcmp(p, "-share")) {
+-         RETURN(1);
+-         UNAVAILABLE_IN(TOOLTYPE_NONNETWORK);
+-diff --git a/config.c b/config.c
+-index ca808511..b8348530 100644
+---- a/config.c
+-+++ b/config.c
+-@@ -2772,6 +2772,10 @@ void setup_config_box(struct controlbox *b, bool midsession,
+-                           HELPCTX(ssh_auth_bypass),
+-                           conf_checkbox_handler,
+-                           I(CONF_ssh_no_userauth));
+-+            ctrl_checkbox(s, "Disconnect if authentication succeeds trivially",
+-+                          'n', HELPCTX(ssh_no_trivial_userauth),
+-+                          conf_checkbox_handler,
+-+                          I(CONF_ssh_no_trivial_userauth));
+- 
+-             s = ctrl_getset(b, "Connection/SSH/Auth", "methods",
+-                             "Authentication methods");
+-diff --git a/doc/config.but b/doc/config.but
+-index a00ae476..77313282 100644
+---- a/doc/config.but
+-+++ b/doc/config.but
+-@@ -2623,6 +2623,49 @@ interact with them.)
+- This option only affects SSH-2 connections. SSH-1 connections always
+- require an authentication step.
+- 
+-+\S{config-ssh-notrivialauth} \q{Disconnect if authentication succeeds
+-+trivially}
+-+
+-+This option causes PuTTY to abandon an SSH session and disconnect from
+-+the server, if the server accepted authentication without ever having
+-+asked for any kind of password or signature or token.
+-+
+-+This might be used as a security measure. There are some forms of
+-+attack against an SSH client user which work by terminating the SSH
+-+authentication stage early, and then doing something in the main part
+-+of the SSH session which \e{looks} like part of the authentication,
+-+but isn't really.
+-+
+-+For example, instead of demanding a signature from your public key,
+-+for which PuTTY would ask for your key's passphrase, a compromised or
+-+malicious server might allow you to log in with no signature or
+-+password at all, and then print a message that \e{imitates} PuTTY's
+-+request for your passphrase, in the hope that you would type it in.
+-+(In fact, the passphrase for your public key should not be sent to any
+-+server.)
+-+
+-+PuTTY's main defence against attacks of this type is the \q{trust
+-+sigil} system: messages in the PuTTY window that are truly originated
+-+by PuTTY itself are shown next to a small copy of the PuTTY icon,
+-+which the server cannot fake when it tries to imitate the same message
+-+using terminal output.
+-+
+-+However, if you think you might be at risk of this kind of thing
+-+anyway (if you don't watch closely for the trust sigils, or if you
+-+think you're at extra risk of one of your servers being malicious),
+-+then you could enable this option as an extra defence. Then, if the
+-+server tries any of these attacks involving letting you through the
+-+authentication stage, PuTTY will disconnect from the server before it
+-+can send a follow-up fake prompt or other type of attack.
+-+
+-+On the other hand, some servers \e{legitimately} let you through the
+-+SSH authentication phase trivially, either because they are genuinely
+-+public, or because the important authentication step happens during
+-+the terminal session. (An example might be an SSH server that connects
+-+you directly to the terminal login prompt of a legacy mainframe.) So
+-+enabling this option might cause some kinds of session to stop
+-+working. It's up to you.
+-+
+- \S{config-ssh-tryagent} \q{Attempt authentication using Pageant}
+- 
+- If this option is enabled, then PuTTY will look for Pageant (the SSH
+-diff --git a/pscp.c b/pscp.c
+-index 0bfda92d..a11d1e18 100644
+---- a/pscp.c
+-+++ b/pscp.c
+-@@ -2203,6 +2203,8 @@ static void usage(void)
+-     printf("  -i key    private key file for user authentication\n");
+-     printf("  -noagent  disable use of Pageant\n");
+-     printf("  -agent    enable use of Pageant\n");
+-+    printf("  -no-trivial-auth\n");
+-+    printf("            disconnect if SSH authentication succeeds trivially\n");
+-     printf("  -hostkey keyid\n");
+-     printf("            manually specify a host key (may be repeated)\n");
+-     printf("  -batch    disable all interactive prompts\n");
+-diff --git a/psftp.c b/psftp.c
+-index 40cb73f5..c4b5374b 100644
+---- a/psftp.c
+-+++ b/psftp.c
+-@@ -2538,6 +2538,8 @@ static void usage(void)
+-     printf("  -i key    private key file for user authentication\n");
+-     printf("  -noagent  disable use of Pageant\n");
+-     printf("  -agent    enable use of Pageant\n");
+-+    printf("  -no-trivial-auth\n");
+-+    printf("            disconnect if SSH authentication succeeds trivially\n");
+-     printf("  -hostkey keyid\n");
+-     printf("            manually specify a host key (may be repeated)\n");
+-     printf("  -batch    disable all interactive prompts\n");
+-diff --git a/putty.h b/putty.h
+-index ef6f7a37..7789f217 100644
+---- a/putty.h
+-+++ b/putty.h
+-@@ -1428,6 +1428,7 @@ NORETURN void cleanup_exit(int);
+-     X(INT, NONE, sshprot) \
+-     X(BOOL, NONE, ssh2_des_cbc) /* "des-cbc" unrecommended SSH-2 cipher */ \
+-     X(BOOL, NONE, ssh_no_userauth) /* bypass "ssh-userauth" (SSH-2 only) */ \
+-+    X(BOOL, NONE, ssh_no_trivial_userauth) /* disable trivial types of auth */ \
+-     X(BOOL, NONE, ssh_show_banner) /* show USERAUTH_BANNERs (SSH-2 only) */ \
+-     X(BOOL, NONE, try_tis_auth) \
+-     X(BOOL, NONE, try_ki_auth) \
+-diff --git a/settings.c b/settings.c
+-index 547af0dc..32a53c54 100644
+---- a/settings.c
+-+++ b/settings.c
+-@@ -609,6 +609,7 @@ void save_open_settings(settings_w *sesskey, Conf *conf)
+- #endif
+-     write_setting_s(sesskey, "RekeyBytes", conf_get_str(conf, CONF_ssh_rekey_data));
+-     write_setting_b(sesskey, "SshNoAuth", conf_get_bool(conf, CONF_ssh_no_userauth));
+-+    write_setting_b(sesskey, "SshNoTrivialAuth", conf_get_bool(conf, CONF_ssh_no_trivial_userauth));
+-     write_setting_b(sesskey, "SshBanner", conf_get_bool(conf, CONF_ssh_show_banner));
+-     write_setting_b(sesskey, "AuthTIS", conf_get_bool(conf, CONF_try_tis_auth));
+-     write_setting_b(sesskey, "AuthKI", conf_get_bool(conf, CONF_try_ki_auth));
+-@@ -1025,6 +1026,7 @@ void load_open_settings(settings_r *sesskey, Conf *conf)
+-     gpps(sesskey, "LogHost", "", conf, CONF_loghost);
+-     gppb(sesskey, "SSH2DES", false, conf, CONF_ssh2_des_cbc);
+-     gppb(sesskey, "SshNoAuth", false, conf, CONF_ssh_no_userauth);
+-+    gppb(sesskey, "SshNoTrivialAuth", false, conf, CONF_ssh_no_trivial_userauth);
+-     gppb(sesskey, "SshBanner", true, conf, CONF_ssh_show_banner);
+-     gppb(sesskey, "AuthTIS", false, conf, CONF_try_tis_auth);
+-     gppb(sesskey, "AuthKI", true, conf, CONF_try_ki_auth);
+-diff --git a/ssh.c b/ssh.c
+-index 00a516ea..91e7e869 100644
+---- a/ssh.c
+-+++ b/ssh.c
+-@@ -254,7 +254,9 @@ static void ssh_got_ssh_version(struct ssh_version_receiver *rcv,
+-                     connection_layer, ssh->savedhost, ssh->fullhostname,
+-                     conf_get_filename(ssh->conf, CONF_keyfile),
+-                     conf_get_bool(ssh->conf, CONF_ssh_show_banner),
+--                    conf_get_bool(ssh->conf, CONF_tryagent), username,
+-+                    conf_get_bool(ssh->conf, CONF_tryagent),
+-+                    conf_get_bool(ssh->conf, CONF_ssh_no_trivial_userauth),
+-+                    username,
+-                     conf_get_bool(ssh->conf, CONF_change_username),
+-                     conf_get_bool(ssh->conf, CONF_try_ki_auth),
+- #ifndef NO_GSSAPI
+-diff --git a/ssh1login.c b/ssh1login.c
+-index 8486cbf0..519838d7 100644
+---- a/ssh1login.c
+-+++ b/ssh1login.c
+-@@ -27,7 +27,7 @@ struct ssh1_login_state {
+- 
+-     char *savedhost;
+-     int savedport;
+--    bool try_agent_auth;
+-+    bool try_agent_auth, is_trivial_auth;
+- 
+-     int remote_protoflags;
+-     int local_protoflags;
+-@@ -105,6 +105,8 @@ PacketProtocolLayer *ssh1_login_new(
+-     s->savedhost = dupstr(host);
+-     s->savedport = port;
+-     s->successor_layer = successor_layer;
+-+    s->is_trivial_auth = true;
+-+
+-     return &s->ppl;
+- }
+- 
+-@@ -645,6 +647,7 @@ static void ssh1_login_process_queue(PacketProtocolLayer *ppl)
+-                                 s->ppl.bpp, SSH1_CMSG_AUTH_RSA_RESPONSE);
+-                             put_data(pkt, ret + 5, 16);
+-                             pq_push(s->ppl.out_pq, pkt);
+-+                            s->is_trivial_auth = false;
+-                             crMaybeWaitUntilV(
+-                                 (pktin = ssh1_login_pop(s))
+-                                 != NULL);
+-@@ -814,6 +817,7 @@ static void ssh1_login_process_queue(PacketProtocolLayer *ppl)
+-                         s->ppl.bpp, SSH1_CMSG_AUTH_RSA_RESPONSE);
+-                     put_data(pkt, buffer, 16);
+-                     pq_push(s->ppl.out_pq, pkt);
+-+                    s->is_trivial_auth = false;
+- 
+-                     mp_free(challenge);
+-                     mp_free(response);
+-@@ -1105,6 +1109,7 @@ static void ssh1_login_process_queue(PacketProtocolLayer *ppl)
+-             put_stringz(pkt, prompt_get_result_ref(s->cur_prompt->prompts[0]));
+-             pq_push(s->ppl.out_pq, pkt);
+-         }
+-+        s->is_trivial_auth = false;
+-         ppl_logevent("Sent password");
+-         free_prompts(s->cur_prompt);
+-         s->cur_prompt = NULL;
+-@@ -1121,6 +1126,13 @@ static void ssh1_login_process_queue(PacketProtocolLayer *ppl)
+-         }
+-     }
+- 
+-+    if (conf_get_bool(s->conf, CONF_ssh_no_trivial_userauth) &&
+-+        s->is_trivial_auth) {
+-+        ssh_proto_error(s->ppl.ssh, "Authentication was trivial! "
+-+                        "Abandoning session as specified in configuration.");
+-+        return;
+-+    }
+-+
+-     ppl_logevent("Authentication successful");
+- 
+-     if (conf_get_bool(s->conf, CONF_compression)) {
+-diff --git a/ssh2userauth.c b/ssh2userauth.c
+-index 01243baf..451d5abe 100644
+---- a/ssh2userauth.c
+-+++ b/ssh2userauth.c
+-@@ -28,7 +28,7 @@ struct ssh2_userauth_state {
+- 
+-     PacketProtocolLayer *transport_layer, *successor_layer;
+-     Filename *keyfile;
+--    bool show_banner, tryagent, change_username;
+-+    bool show_banner, tryagent, notrivialauth, change_username;
+-     char *hostname, *fullhostname;
+-     char *default_username;
+-     bool try_ki_auth, try_gssapi_auth, try_gssapi_kex_auth, gssapi_fwd;
+-@@ -82,6 +82,7 @@ struct ssh2_userauth_state {
+-     int len;
+-     PktOut *pktout;
+-     bool want_user_input;
+-+    bool is_trivial_auth;
+- 
+-     agent_pending_query *auth_agent_query;
+-     bufchain banner;
+-@@ -134,7 +135,7 @@ static const PacketProtocolLayerVtable ssh2_userauth_vtable = {
+- PacketProtocolLayer *ssh2_userauth_new(
+-     PacketProtocolLayer *successor_layer,
+-     const char *hostname, const char *fullhostname,
+--    Filename *keyfile, bool show_banner, bool tryagent,
+-+    Filename *keyfile, bool show_banner, bool tryagent, bool notrivialauth,
+-     const char *default_username, bool change_username,
+-     bool try_ki_auth, bool try_gssapi_auth, bool try_gssapi_kex_auth,
+-     bool gssapi_fwd, struct ssh_connection_shared_gss_state *shgss)
+-@@ -149,6 +150,7 @@ PacketProtocolLayer *ssh2_userauth_new(
+-     s->keyfile = filename_copy(keyfile);
+-     s->show_banner = show_banner;
+-     s->tryagent = tryagent;
+-+    s->notrivialauth = notrivialauth;
+-     s->default_username = dupstr(default_username);
+-     s->change_username = change_username;
+-     s->try_ki_auth = try_ki_auth;
+-@@ -157,6 +159,7 @@ PacketProtocolLayer *ssh2_userauth_new(
+-     s->gssapi_fwd = gssapi_fwd;
+-     s->shgss = shgss;
+-     s->last_methods_string = strbuf_new();
+-+    s->is_trivial_auth = true;
+-     bufchain_init(&s->banner);
+-     bufchain_sink_init(&s->banner_bs, &s->banner);
+- 
+-@@ -818,6 +821,7 @@ static void ssh2_userauth_process_queue(PacketProtocolLayer *ppl)
+-                                 sigblob);
+-                             pq_push(s->ppl.out_pq, s->pktout);
+-                             s->type = AUTH_TYPE_PUBLICKEY;
+-+                            s->is_trivial_auth = false;
+-                         } else {
+-                             ppl_logevent("Pageant refused signing request");
+-                             ppl_printf("Pageant failed to "
+-@@ -1038,6 +1042,7 @@ static void ssh2_userauth_process_queue(PacketProtocolLayer *ppl)
+-                     ssh_key_free(key->key);
+-                     sfree(key->comment);
+-                     sfree(key);
+-+                    s->is_trivial_auth = false;
+-                 }
+- 
+- #ifndef NO_GSSAPI
+-@@ -1169,6 +1174,7 @@ static void ssh2_userauth_process_queue(PacketProtocolLayer *ppl)
+-                      * no longer says CONTINUE_NEEDED
+-                      */
+-                     if (s->gss_sndtok.length != 0) {
+-+                        s->is_trivial_auth = false;
+-                         s->pktout =
+-                             ssh_bpp_new_pktout(
+-                                 s->ppl.bpp, SSH2_MSG_USERAUTH_GSSAPI_TOKEN);
+-@@ -1288,7 +1294,6 @@ static void ssh2_userauth_process_queue(PacketProtocolLayer *ppl)
+-                  * Loop while the server continues to send INFO_REQUESTs.
+-                  */
+-                 while (pktin->type == SSH2_MSG_USERAUTH_INFO_REQUEST) {
+--
+-                     ptrlen name, inst;
+-                     strbuf *sb;
+- 
+-@@ -1308,6 +1313,7 @@ static void ssh2_userauth_process_queue(PacketProtocolLayer *ppl)
+-                      */
+-                     s->num_prompts = get_uint32(pktin);
+-                     for (uint32_t i = 0; i < s->num_prompts; i++) {
+-+                        s->is_trivial_auth = false;
+-                         ptrlen prompt = get_string(pktin);
+-                         bool echo = get_bool(pktin);
+- 
+-@@ -1472,7 +1478,7 @@ static void ssh2_userauth_process_queue(PacketProtocolLayer *ppl)
+-                 pq_push_front(s->ppl.in_pq, pktin);
+- 
+-             } else if (s->can_passwd) {
+--
+-+                s->is_trivial_auth = false;
+-                 /*
+-                  * Plain old password authentication.
+-                  */
+-@@ -1731,6 +1737,12 @@ static void ssh2_userauth_process_queue(PacketProtocolLayer *ppl)
+-     }
+- 
+-   userauth_success:
+-+    if (s->notrivialauth && s->is_trivial_auth) {
+-+        ssh_proto_error(s->ppl.ssh, "Authentication was trivial! "
+-+                        "Abandoning session as specified in configuration.");
+-+        return;
+-+    }
+-+
+-     /*
+-      * We've just received USERAUTH_SUCCESS, and we haven't sent
+-      * any packets since. Signal the transport layer to consider
+-diff --git a/sshppl.h b/sshppl.h
+-index b339d67c..2c1dbf42 100644
+---- a/sshppl.h
+-+++ b/sshppl.h
+-@@ -116,7 +116,7 @@ PacketProtocolLayer *ssh2_transport_new(
+- PacketProtocolLayer *ssh2_userauth_new(
+-     PacketProtocolLayer *successor_layer,
+-     const char *hostname, const char *fullhostname,
+--    Filename *keyfile, bool show_banner, bool tryagent,
+-+    Filename *keyfile, bool show_banner, bool tryagent, bool notrivialauth,
+-     const char *default_username, bool change_username,
+-     bool try_ki_auth,
+-     bool try_gssapi_auth, bool try_gssapi_kex_auth,
+-diff --git a/unix/uxplink.c b/unix/uxplink.c
+-index 3e2a9b6b..240783f4 100644
+---- a/unix/uxplink.c
+-+++ b/unix/uxplink.c
+-@@ -527,6 +527,8 @@ static void usage(void)
+-     printf("  -i key    private key file for user authentication\n");
+-     printf("  -noagent  disable use of Pageant\n");
+-     printf("  -agent    enable use of Pageant\n");
+-+    printf("  -no-trivial-auth\n");
+-+    printf("            disconnect if SSH authentication succeeds trivially\n");
+-     printf("  -noshare  disable use of connection sharing\n");
+-     printf("  -share    enable use of connection sharing\n");
+-     printf("  -hostkey keyid\n");
+-diff --git a/windows/winhelp.h b/windows/winhelp.h
+-index ae5a7a7f..9011df45 100644
+---- a/windows/winhelp.h
+-+++ b/windows/winhelp.h
+-@@ -111,6 +111,7 @@
+- #define WINHELP_CTX_ssh_kex_repeat "config-ssh-kex-rekey"
+- #define WINHELP_CTX_ssh_kex_manual_hostkeys "config-ssh-kex-manual-hostkeys"
+- #define WINHELP_CTX_ssh_auth_bypass "config-ssh-noauth"
+-+#define WINHELP_CTX_ssh_no_trivial_userauth "config-ssh-notrivialauth"
+- #define WINHELP_CTX_ssh_auth_banner "config-ssh-banner"
+- #define WINHELP_CTX_ssh_auth_privkey "config-ssh-privkey"
+- #define WINHELP_CTX_ssh_auth_agentfwd "config-ssh-agentfwd"
+-diff --git a/windows/winplink.c b/windows/winplink.c
+-index 9bda0712..58d43e6d 100644
+---- a/windows/winplink.c
+-+++ b/windows/winplink.c
+-@@ -149,6 +149,8 @@ static void usage(void)
+-     printf("  -i key    private key file for user authentication\n");
+-     printf("  -noagent  disable use of Pageant\n");
+-     printf("  -agent    enable use of Pageant\n");
+-+    printf("  -no-trivial-auth\n");
+-+    printf("            disconnect if SSH authentication succeeds trivially\n");
+-     printf("  -noshare  disable use of connection sharing\n");
+-     printf("  -share    enable use of connection sharing\n");
+-     printf("  -hostkey keyid\n");
+--- 
+-2.20.1
+-
+diff --git a/package/putty/putty.hash b/package/putty/putty.hash
+index 8974aaac5e..861d45cb76 100644
+--- a/package/putty/putty.hash
++++ b/package/putty/putty.hash
+@@ -1,8 +1,8 @@
+-# Hashes from: http://the.earth.li/~sgtatham/putty/0.75/{md5,sha1,sha256,sha512}sums
+-md5  fae57a9ab209f303cc9e9f83eecaa27c  putty-0.75.tar.gz
+-sha1  cdb976811a35eed67c5a2c588908b08edf6e3e1d  putty-0.75.tar.gz
+-sha256  d3173b037eddbe9349abe978101277b4ba9f9959e25dedd44f87e7b85cc8f9f5  putty-0.75.tar.gz
+-sha512  3dbc15485008a98daf60236061253e66b94a6e5da123fc84c5f0ac006c84e17c70fe748987677775e3b54a12297eb826cccf70a4fc039b633bc2d512938b3028  putty-0.75.tar.gz
++# Hashes from: http://the.earth.li/~sgtatham/putty/0.76/{md5,sha1,sha256,sha512}sums
++md5  9d22f8c56c1eaa1c0af3098438f25908  putty-0.76.tar.gz
++sha1  de09f50aee330eb05ad0cb81b970d0cc8e5c9b25  putty-0.76.tar.gz
++sha256  547cd97a8daa87ef71037fab0773bceb54a8abccb2f825a49ef8eba5e045713f  putty-0.76.tar.gz
++sha512  4576b359593928c6eba923f2d7b66ac0f2cf00e0c217cdbbb124471c3b35feb090e623847bfc507a4ef106cb3067aac47419e241b11dd8bf4ae554061fa93c25  putty-0.76.tar.gz
+ 
+ # Locally calculated
+ sha256  3f3e870dd3d0867d79370b1d433602c60bb91b59de04e5d8f2a149b788530d53  LICENCE
+diff --git a/package/putty/putty.mk b/package/putty/putty.mk
+index a1c588a382..e57a78be96 100644
+--- a/package/putty/putty.mk
++++ b/package/putty/putty.mk
+@@ -4,16 +4,13 @@
+ #
+ ################################################################################
+ 
+-PUTTY_VERSION = 0.75
++PUTTY_VERSION = 0.76
+ PUTTY_SITE = http://the.earth.li/~sgtatham/putty/$(PUTTY_VERSION)
+ PUTTY_LICENSE = MIT
+ PUTTY_LICENSE_FILES = LICENCE
+ PUTTY_CPE_ID_VENDOR = putty
+ PUTTY_CONF_OPTS = --disable-gtktest
+ 
+-# 0002-New-option-to-reject-trivial-success-of-userauth.patch
+-PUTTY_IGNORE_CVES += CVE-2021-36367
+-
+ ifeq ($(BR2_PACKAGE_LIBGTK2),y)
+ PUTTY_CONF_OPTS += --with-gtk=2
+ PUTTY_DEPENDENCIES += libgtk2
 
-Le dim. 17 oct. 2021 =C3=A0 13:13, Gilles Talis <gilles.talis@gmail.com> a
-=C3=A9crit :
-
-> Hi Jos=C3=A9,
->
-> Le ven. 15 oct. 2021 =C3=A0 10:39, Jos=C3=A9 Pekkarinen <jose.pekkarinen@=
-unikie.com>
-> a =C3=A9crit :
->
->> The patch adds a basic config file and a basic
->> recipe to build softhsm2.
->>
->> Signed-off-by: Jos=C3=A9 Pekkarinen <jose.pekkarinen@unikie.com>
->>
-> Thanks for your contribution.
->
->
->> ---
->>  package/softhsm2/Config.in   |  8 ++++++++
->>  package/softhsm2/softhsm2.mk | 15 +++++++++++++++
->>  2 files changed, 23 insertions(+)
->>  create mode 100644 package/softhsm2/Config.in
->>  create mode 100644 package/softhsm2/softhsm2.mk
->
-> You miss a few things here:
-> 1)  an entry to the package/Config,in file that provides a link to your
-> package, thus a way to find it and select it. In your case, it would go
-> under "Security" menu.
-> 2) a file that contains the hash sum of the package and its license file.
-> 3) an entry to the DEVELOPERS file with your name and package.
->
->
->> diff --git a/package/softhsm2/Config.in b/package/softhsm2/Config.in
->> new file mode 100644
->> index 0000000000..10c9f0e557
->> --- /dev/null
->> +++ b/package/softhsm2/Config.in
->> @@ -0,0 +1,8 @@
->> +config BR2_PACKAGE_SOFTHSM2
->> +       bool "softhsm2"
->>
-> what's a bit confusing is that the package name is SoftHSM on the
-> opendnssec website, but called SoftHSM version 2 on github. I assume we
-> could go for SoftHSM2
->
->
->> +       depends on BR2_PACKAGE_LIBOPENSSL
->>
-> Even though the package has openssl as a dependency, "select
-> BR2_PACKAGE_LIBOPENSSL" is more appropriate here. It means that openssl
-> will be automatically selected when softhsm2 is selected. "depends on"
-> means that your package will not appear in the list if openssl is not
-> already slected.
-> By the way, it seems like botan is a potential crypto library dependency.
-> If you want to give the user the choice between the crypto libraries to
-> use, please have a look at package/libcurl/Config.in in the "choice"
-> section.
->
->
->> +       select BR2_PACKAGE_LIBTOOL
->>
-> libtool does not need to be selected. buildroot build system will take
-> care of installing it for you.
->
->
->> +       help
->> +               SoftHSM is an implementation of a cryptographic store
->> accessible through a PKCS\#11 interface. You can use it to explore PKCS\=
-#11
->> without having a Hardware Security Module.
->>
-> The help text should be indented with one tab and two spaces, lines shoul=
-d
-> be wrapped to fit 72 columns, where tab counts for 8, so 62 characters in
-> the text itself. You don't need the "\" before the #11
->
->
->> +
->> +               https://github.com/opendnssec/SoftHSMv2
->
-> It seems like https://www.opendnssec.org/softhsm/ is the actual SoftHSM
-> home page.
->
->
->> diff --git a/package/softhsm2/softhsm2.mk b/package/softhsm2/softhsm2.mk
->> new file mode 100644
->> index 0000000000..4496d70c3d
->> --- /dev/null
->> +++ b/package/softhsm2/softhsm2.mk
->> @@ -0,0 +1,15 @@
->>
->> +#######################################################################=
-#########
->> +#
->> +# softhsm2
->> +#
->>
->> +#######################################################################=
-#########
->> +
->> +SOFTHSM2_VERSION =3D 2.6.1
->> +SOFTHSM2_SITE =3D $(call github,opendnssec,SoftHSMv2,$(SOFTHSM2_VERSION=
-))
->>
-> The home page provides a tarball in (
-> https://www.opendnssec.org/2020/04/1602/). We prefer to work with already
-> packaged tarballs.
->
-> +SOFTHSM2_LICENSE =3D GPL-2
->>
-> It is actually BSD-2-Clause
->
-> +SOFTHSM2_LICENSE_FILES =3D LICENSE
->> +SOFTHSM2_DEPENDENCIES =3D libtool openssl
->>
-> As mentioned above, you do not need to mention libtool as a dependency.
->
-> +SOFTHSM2_AUTORECONF =3D YES
->> +SOFTHSM2_INSTALL_TARGET =3D YES
->>
-> It seems like SoftHSM also provides a library. In that case, you will nee=
-d
-> a SOFTHSM2_INSTALL_STAGING =3D YES as well.
->
->
->> +
->> +$(eval $(autotools-package))
->> --
->> 2.25.1
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot@buildroot.org
->> https://lists.buildroot.org/mailman/listinfo/buildroot
->
-> Can you please review my comments and send a second version?
-> When in doubt, please consult the documentation:
-> https://buildroot.org/downloads/manual/manual.html#adding-packages
->
-> I would also recommend you run the following utilities to verify that you=
-r
-> patch is correct:
-> 1) check-package (
-> https://buildroot.org/downloads/manual/manual.html#check-package) to
-> check the coding style of added files
-> 2) test-pkg (chapter 18.24.3 of the buildroot documentation) to check if
-> your package can build in various configurations.
->
-> Thanks
-> Gilles.
->
-I forgot to mention that your package is written in C++ 11, which means
-that it has a dependency on the C++ library.
-You will need to indicate this in the Config.in file of your package as
-follows:
-depends on BR2_INSTALL_LIBSTDCPP
-depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
-
-You will also need a comment in case the dependencies are not met. The
-following file provides a reference: package/restclient-cpp/Config.in
-
-thanks
-Gilles
-
---0000000000005420f805ce8ab803
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div dir=3D"ltr"><div class=3D"gmail_default" style=3D"fon=
-t-family:arial,sans-serif;font-size:small">Hi Jos=C3=A9,<br></div></div><br=
-><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">Le=C2=A0d=
-im. 17 oct. 2021 =C3=A0=C2=A013:13, Gilles Talis &lt;<a href=3D"mailto:gill=
-es.talis@gmail.com">gilles.talis@gmail.com</a>&gt; a =C3=A9crit=C2=A0:<br><=
-/div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;bo=
-rder-left:1px solid rgb(204,204,204);padding-left:1ex"><div dir=3D"ltr"><di=
-v dir=3D"ltr"><div style=3D"font-family:arial,sans-serif;font-size:small">H=
-i Jos=C3=A9,<br></div></div><br><div class=3D"gmail_quote"><div dir=3D"ltr"=
- class=3D"gmail_attr">Le=C2=A0ven. 15 oct. 2021 =C3=A0=C2=A010:39, Jos=C3=
-=A9 Pekkarinen &lt;<a href=3D"mailto:jose.pekkarinen@unikie.com" target=3D"=
-_blank">jose.pekkarinen@unikie.com</a>&gt; a =C3=A9crit=C2=A0:<br></div><bl=
-ockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-lef=
-t:1px solid rgb(204,204,204);padding-left:1ex">The patch adds a basic confi=
-g file and a basic<br>
-recipe to build softhsm2.<br>
-<br>
-Signed-off-by: Jos=C3=A9 Pekkarinen &lt;<a href=3D"mailto:jose.pekkarinen@u=
-nikie.com" target=3D"_blank">jose.pekkarinen@unikie.com</a>&gt;<br></blockq=
-uote><div><div style=3D"font-family:arial,sans-serif;font-size:small">Thank=
-s for your contribution.</div></div><div>=C2=A0</div><blockquote class=3D"g=
-mail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204=
-,204,204);padding-left:1ex">
----<br>
-=C2=A0package/softhsm2/Config.in=C2=A0 =C2=A0|=C2=A0 8 ++++++++<br>
-=C2=A0package/softhsm2/<a href=3D"http://softhsm2.mk" rel=3D"noreferrer" ta=
-rget=3D"_blank">softhsm2.mk</a> | 15 +++++++++++++++<br>
-=C2=A02 files changed, 23 insertions(+)<br>
-=C2=A0create mode 100644 package/softhsm2/Config.in<br>
-=C2=A0create mode 100644 package/softhsm2/<a href=3D"http://softhsm2.mk" re=
-l=3D"noreferrer" target=3D"_blank">softhsm2.mk</a></blockquote><div><div st=
-yle=3D"font-family:arial,sans-serif;font-size:small">You miss a few things =
-here:</div><div style=3D"font-family:arial,sans-serif;font-size:small">1)=
-=C2=A0 an entry to the package/Config,in file that provides a link to your =
-package, thus a way to find it and select it. In your case, it would go und=
-er &quot;Security&quot; menu.</div><div style=3D"font-family:arial,sans-ser=
-if;font-size:small">2) a file that contains the hash sum of the package and=
- its license file.<br></div><div style=3D"font-family:arial,sans-serif;font=
--size:small">3) an entry to the DEVELOPERS file with your name and package.=
-<br></div></div><div>=C2=A0<br></div><blockquote class=3D"gmail_quote" styl=
-e=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);paddin=
-g-left:1ex">
-diff --git a/package/softhsm2/Config.in b/package/softhsm2/Config.in<br>
-new file mode 100644<br>
-index 0000000000..10c9f0e557<br>
---- /dev/null<br>
-+++ b/package/softhsm2/Config.in<br>
-@@ -0,0 +1,8 @@<br>
-+config BR2_PACKAGE_SOFTHSM2<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0bool &quot;softhsm2&quot;<br></blockquote><div>=
-<div style=3D"font-family:arial,sans-serif;font-size:small">what&#39;s a bi=
-t confusing is that the package name is SoftHSM on the opendnssec website, =
-but called SoftHSM version 2 on github. I assume we could go for SoftHSM2</=
-div>=C2=A0</div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0=
-px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0depends on BR2_PACKAGE_LIBOPENSSL<br></blockquo=
-te><div><div style=3D"font-family:arial,sans-serif;font-size:small">Even th=
-ough the package has openssl as a dependency, &quot;select BR2_PACKAGE_LIBO=
-PENSSL&quot; is more appropriate here. It means that openssl will be automa=
-tically selected when softhsm2 is selected. &quot;depends on&quot; means th=
-at your package will not appear in the list if openssl is not already slect=
-ed.</div><div style=3D"font-family:arial,sans-serif;font-size:small">By the=
- way, it seems like botan is a potential crypto library dependency. If you =
-want to give the user the choice between the crypto libraries to use, pleas=
-e have a look at package/libcurl/Config.in in the &quot;choice&quot; sectio=
-n.<br></div></div><div>=C2=A0</div><blockquote class=3D"gmail_quote" style=
-=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding=
--left:1ex">
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0select BR2_PACKAGE_LIBTOOL<br></blockquote><div=
-><div style=3D"font-family:arial,sans-serif;font-size:small">libtool does n=
-ot need to be selected. buildroot build system will take care of installing=
- it for you.</div></div><div>=C2=A0</div><blockquote class=3D"gmail_quote" =
-style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);pa=
-dding-left:1ex">
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0help<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0SoftHSM is an imple=
-mentation of a cryptographic store accessible through a PKCS\#11 interface.=
- You can use it to explore PKCS\#11 without having a Hardware Security Modu=
-le.<br></blockquote><div><div style=3D"font-family:arial,sans-serif;font-si=
-ze:small">The help text should be indented with one tab and two spaces, lin=
-es should
-be wrapped to fit 72 columns, where tab counts for 8, so 62 characters
-in the text itself. You don&#39;t need the &quot;\&quot; before the #11<br>=
-</div></div><div>=C2=A0</div><blockquote class=3D"gmail_quote" style=3D"mar=
-gin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1=
-ex">
-+<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0<a href=3D"https://=
-github.com/opendnssec/SoftHSMv2" rel=3D"noreferrer" target=3D"_blank">https=
-://github.com/opendnssec/SoftHSMv2</a></blockquote><div><div style=3D"font-=
-family:arial,sans-serif;font-size:small">It seems like <a href=3D"https://w=
-ww.opendnssec.org/softhsm/" target=3D"_blank">https://www.opendnssec.org/so=
-fthsm/</a> is the actual SoftHSM home page.</div><br></div><blockquote clas=
-s=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid r=
-gb(204,204,204);padding-left:1ex"><br>
-diff --git a/package/softhsm2/<a href=3D"http://softhsm2.mk" rel=3D"norefer=
-rer" target=3D"_blank">softhsm2.mk</a> b/package/softhsm2/<a href=3D"http:/=
-/softhsm2.mk" rel=3D"noreferrer" target=3D"_blank">softhsm2.mk</a><br>
-new file mode 100644<br>
-index 0000000000..4496d70c3d<br>
---- /dev/null<br>
-+++ b/package/softhsm2/<a href=3D"http://softhsm2.mk" rel=3D"noreferrer" ta=
-rget=3D"_blank">softhsm2.mk</a><br>
-@@ -0,0 +1,15 @@<br>
-+##########################################################################=
-######<br>
-+#<br>
-+# softhsm2<br>
-+#<br>
-+##########################################################################=
-######<br>
-+<br>
-+SOFTHSM2_VERSION =3D 2.6.1<br>
-+SOFTHSM2_SITE =3D $(call github,opendnssec,SoftHSMv2,$(SOFTHSM2_VERSION))<=
-br></blockquote><div><div style=3D"font-family:arial,sans-serif;font-size:s=
-mall">The home page provides a tarball in (<a href=3D"https://www.opendnsse=
-c.org/2020/04/1602/" target=3D"_blank">https://www.opendnssec.org/2020/04/1=
-602/</a>). We prefer to work with already packaged tarballs.</div><br></div=
-><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border=
--left:1px solid rgb(204,204,204);padding-left:1ex">
-+SOFTHSM2_LICENSE =3D GPL-2<br></blockquote><div><div style=3D"font-family:=
-arial,sans-serif;font-size:small">It is actually BSD-2-Clause</div><br></di=
-v><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;borde=
-r-left:1px solid rgb(204,204,204);padding-left:1ex">
-+SOFTHSM2_LICENSE_FILES =3D LICENSE<br>
-+SOFTHSM2_DEPENDENCIES =3D libtool openssl<br></blockquote><div><div style=
-=3D"font-family:arial,sans-serif;font-size:small">As mentioned above, you d=
-o not need to mention libtool as a dependency.</div><br></div><blockquote c=
-lass=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px soli=
-d rgb(204,204,204);padding-left:1ex">
-+SOFTHSM2_AUTORECONF =3D YES<br>
-+SOFTHSM2_INSTALL_TARGET =3D YES<br></blockquote><div><div style=3D"font-fa=
-mily:arial,sans-serif;font-size:small">It seems like SoftHSM also provides =
-a library. In that case, you will need a SOFTHSM2_INSTALL_STAGING =3D YES a=
-s well.</div></div><div>=C2=A0</div><blockquote class=3D"gmail_quote" style=
-=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding=
--left:1ex">
-+<br>
-+$(eval $(autotools-package))<br>
--- <br>
-2.25.1<br>
-<br>
-_______________________________________________<br>
-buildroot mailing list<br>
-<a href=3D"mailto:buildroot@buildroot.org" target=3D"_blank">buildroot@buil=
-droot.org</a><br>
-<a href=3D"https://lists.buildroot.org/mailman/listinfo/buildroot" rel=3D"n=
-oreferrer" target=3D"_blank">https://lists.buildroot.org/mailman/listinfo/b=
-uildroot</a></blockquote><div><div style=3D"font-family:arial,sans-serif;fo=
-nt-size:small"></div><div style=3D"font-family:arial,sans-serif;font-size:s=
-mall">Can you please review my comments and send a second version?</div><di=
-v style=3D"font-family:arial,sans-serif;font-size:small">When in doubt, ple=
-ase consult the documentation: <a href=3D"https://buildroot.org/downloads/m=
-anual/manual.html#adding-packages" target=3D"_blank">https://buildroot.org/=
-downloads/manual/manual.html#adding-packages</a></div><div style=3D"font-fa=
-mily:arial,sans-serif;font-size:small"><br></div><div style=3D"font-family:=
-arial,sans-serif;font-size:small">I would also recommend you run the follow=
-ing utilities to verify that your patch is correct:<br></div><div style=3D"=
-font-family:arial,sans-serif;font-size:small">1) check-package (<a href=3D"=
-https://buildroot.org/downloads/manual/manual.html#check-package" target=3D=
-"_blank">https://buildroot.org/downloads/manual/manual.html#check-package</=
-a>) to check the coding style of added files</div><div style=3D"font-family=
-:arial,sans-serif;font-size:small">2) test-pkg (chapter 18.24.3 of the buil=
-droot documentation) to check if your package can build in various configur=
-ations.</div><div style=3D"font-family:arial,sans-serif;font-size:small"><b=
-r></div><div style=3D"font-family:arial,sans-serif;font-size:small">Thanks<=
-/div><div style=3D"font-family:arial,sans-serif;font-size:small">Gilles.</d=
-iv></div></div></div></blockquote><div><span class=3D"gmail_default" style=
-=3D"font-family:arial,sans-serif;font-size:small">I forgot to mention that =
-your package is written in C++ 11, which means that it has a dependency on =
-</span><span class=3D"gmail_default" style=3D"font-family:arial,sans-serif;=
-font-size:small">the C++ library.</span></div><div><span class=3D"gmail_def=
-ault" style=3D"font-family:arial,sans-serif;font-size:small">You will need =
-to indicate this in the Config.in file of your package as follows:</span></=
-div><div><span class=3D"gmail_default" style=3D"font-family:arial,sans-seri=
-f;font-size:small">depends on BR2_INSTALL_LIBSTDCPP</span></div><div><span =
-class=3D"gmail_default" style=3D"font-family:arial,sans-serif;font-size:sma=
-ll">depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11</span></div><div><spa=
-n class=3D"gmail_default" style=3D"font-family:arial,sans-serif;font-size:s=
-mall"><br></span></div><div><span class=3D"gmail_default" style=3D"font-fam=
-ily:arial,sans-serif;font-size:small">You will also need a comment in case =
-the dependencies are not met. The following file provides a reference: pack=
-age/restclient-cpp/Config.in</span></div><div><span class=3D"gmail_default"=
- style=3D"font-family:arial,sans-serif;font-size:small"><br></span></div><d=
-iv><span class=3D"gmail_default" style=3D"font-family:arial,sans-serif;font=
--size:small">thanks</span></div><div><span class=3D"gmail_default" style=3D=
-"font-family:arial,sans-serif;font-size:small">Gilles<br></span></div><div>=
-<span class=3D"gmail_default" style=3D"font-family:arial,sans-serif;font-si=
-ze:small"></span></div></div></div>
-
---0000000000005420f805ce8ab803--
-
---===============0555923115458007591==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+base-commit: 55ae6b59d48dd75f4e432b63e5b8a4655b76305c
+-- 
+2.20.1
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============0555923115458007591==--
