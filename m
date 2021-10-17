@@ -2,76 +2,92 @@ Return-Path: <SRS0=OlWD=PF=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C4F7AC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 17 Oct 2021 15:25:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ACFB8C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 17 Oct 2021 15:31:42 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id E3D3A610A3
-	for <buildroot@archiver.kernel.org>; Sun, 17 Oct 2021 15:25:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E3D3A610A3
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=lespocky.de
+	by mail.kernel.org (Postfix) with ESMTPS id 110A9610E5
+	for <buildroot@archiver.kernel.org>; Sun, 17 Oct 2021 15:31:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 110A9610E5
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A299440305;
-	Sun, 17 Oct 2021 15:25:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CCBAE40311;
+	Sun, 17 Oct 2021 15:31:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IGuyQ1kChtaV; Sun, 17 Oct 2021 15:25:35 +0000 (UTC)
+	with ESMTP id a5npYrAkCtUU; Sun, 17 Oct 2021 15:31:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 185BC402E2;
-	Sun, 17 Oct 2021 15:25:35 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DBC4C1BF2F4
- for <buildroot@lists.busybox.net>; Sun, 17 Oct 2021 15:25:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 28FA0402B7;
+	Sun, 17 Oct 2021 15:31:40 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 442A81BF2F4
+ for <buildroot@lists.busybox.net>; Sun, 17 Oct 2021 15:31:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CB313402E2
- for <buildroot@lists.busybox.net>; Sun, 17 Oct 2021 15:25:33 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 324D881D02
+ for <buildroot@lists.busybox.net>; Sun, 17 Oct 2021 15:31:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LBFkmTlS9vrq for <buildroot@lists.busybox.net>;
- Sun, 17 Oct 2021 15:25:32 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C574E4028A
- for <buildroot@buildroot.org>; Sun, 17 Oct 2021 15:25:31 +0000 (UTC)
-Received: from methusalix.internal.home.lespocky.de ([92.117.58.44]) by
- mrelayeu.kundenserver.de (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1Mati7-1nA6L80Wvz-00cNXJ; Sun, 17 Oct 2021 17:25:17 +0200
-Received: from lemmy.internal.home.lespocky.de ([192.168.243.175]
- helo=lemmy.home.lespocky.de)
- by methusalix.internal.home.lespocky.de with esmtpsa (TLS1.3) tls
- TLS_AES_256_GCM_SHA384 (Exim 4.94.2)
- (envelope-from <alex@home.lespocky.de>)
- id 1mc82D-000270-VI; Sun, 17 Oct 2021 17:25:15 +0200
-Received: (nullmailer pid 32183 invoked by uid 2001);
- Sun, 17 Oct 2021 15:25:13 -0000
-From: Alexander Dahl <post@lespocky.de>
-To: buildroot@buildroot.org
-Date: Sun, 17 Oct 2021 17:25:11 +0200
-Message-Id: <20211017152511.32136-1-post@lespocky.de>
-X-Mailer: git-send-email 2.20.1
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HSsdZaedXmIk for <buildroot@lists.busybox.net>;
+ Sun, 17 Oct 2021 15:31:38 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com
+ [IPv6:2a00:1450:4864:20::532])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D09C181CE9
+ for <buildroot@buildroot.org>; Sun, 17 Oct 2021 15:31:37 +0000 (UTC)
+Received: by mail-ed1-x532.google.com with SMTP id a25so60352811edx.8
+ for <buildroot@buildroot.org>; Sun, 17 Oct 2021 08:31:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :references:from:organization:in-reply-to:content-transfer-encoding;
+ bh=2lWGYxi0/ga0KD3girDb7oDRraLReSIxrgqu2FIq6gU=;
+ b=aFlVV7wWLST3H14WOB6fbVaKdP03SUG9F2oPE4Qz1B/NyKfDgRXzhr/cKmNOglyhFg
+ 3SHR1CE9vIyezInEcRPOv+7IHZl84tDXN0mE25X48zqmAoxwvd1r5MnxOeAeIi1Sw9HU
+ pNX6fdRD0txlJgKaiNz1jT+Al3AGg4VviPzEAH8y46AXCAMlrwCjEddNr0u5gNAqmPmz
+ btBa9NpkQa/Y3leb3hlSIlQ/FmWl1FAsdRMUH4WIKGXbnNek5VZfjVphFAk9VqFRkdsW
+ gy8JvbgNU1F/qRSa3koxSLWg+USvHlZWaDcPBxfEUKXxyuLWx05a8hBDxWxOPqN9/Ue8
+ j0Bw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=2lWGYxi0/ga0KD3girDb7oDRraLReSIxrgqu2FIq6gU=;
+ b=CMnxvoHEQSzAUdnYL/gFP4CiK7fsR76KRNrhpw2wK+WyLzcjN98gbhKd2TIfHIIaov
+ t7yrSz8VDTH10ucHaAOyxL8j2+IIcLlV+f5OvyxsueflXSVs/VHwaBYnXtJyhSgxpPxK
+ vrRQzi2k86cLMrYVD1+OLxuubPu4XvjjHx2mo0oFRzy+t8IeXzl/okUVR7yd0WebQBc1
+ cRoAUBH8uYdcpTuliJQW+CHDRMJmphscm5jBZJpPSCl33RdJroFRppcXiV6ZjWPTQHEi
+ fRKWKKlYCNrpbaWVGGiv8IMsj+GUICsM3TRI1WNpu2kjTi5b7ErOQ5L+JZ4q2dBX5Amj
+ DfTg==
+X-Gm-Message-State: AOAM530+gf+DLWQLPL7PHC9S3WDSyqet40xlDBm+x7p/sbW7qzi5xsiy
+ YFa/76skySh1huwKmgiIcARcyQ==
+X-Google-Smtp-Source: ABdhPJxPFSYdkXMWW4wWhp9oS04TcWnwJeJabvrFVxmA3QQ+PK1H0KR4bPvOR4QbDOPRqb2FFw1szQ==
+X-Received: by 2002:a17:906:1d41:: with SMTP id
+ o1mr23614954ejh.232.1634484695848; 
+ Sun, 17 Oct 2021 08:31:35 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id d1sm8255638edk.11.2021.10.17.08.31.35
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sun, 17 Oct 2021 08:31:35 -0700 (PDT)
+Message-ID: <38990ac3-bc82-ffb7-0d19-270cd1f4f4ff@mind.be>
+Date: Sun, 17 Oct 2021 17:31:34 +0200
 MIME-Version: 1.0
-X-Scan-Signature: 57fe0bff746948a1c00c1c012c955907
-X-Provags-ID: V03:K1:1BE3hGAMdxmJ6tqiRlsGl/Hl5MM19VunTty+DYFwpOQlXXa6d8i
- ScN4GpitQJUN59WQvMTQLY0ESa0zfkiOkgpVEeUXYW3W4asE3gvA7wYPMXXjud7W52IYooS
- TgQZ5tc7gJzCg1y3pj8qeen0cNYuHiaWU1q8XL9XcwYrrfN818Udz9lP6i+7litHoH5anwo
- 9KzeckQ/iOIFHesCf/7eA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:2imUf94Wvmc=:W7LM41dsAU/WSCBQc12YOc
- tVuqibp/y34zUhj5QmMz7SqM8iTeDTR3T8+F6WWRt18cGeGPXAwc8qfsvBgSsA844GRk7SFbE
- hCzqZJXUlQOeo7mdYZlQBdcOCFOhCK2ydmCIrSqMFT+wKjMhYuei2t08h15YeTI8ZVPEPwIfk
- BEH2bCrsEA42raJ2+3AKz6h8G3mefUhS3MIx+8XbfoWVH40APSmoDVjcHlJwW4kAR35n5toYM
- +HMLxtS7KMvIDXBrTKfdefUR5H9m+R3XZKLv/c/UWTYMihEroaXaPv9o+Fw0x+YogNxSL7SxW
- JV3f3bx8giHkRrpuYIVDdrIEOLaLUoUFkuzUvxeWWBEnIoBGdFmuggZmWRUOSXyf4t8OxQEsk
- 2lOnN+aV1s6dZZNS01kfE5pMGYp3549oZViTu0ip/9uX3AubSxfQBwx/IRZ0M0N+bw/ez1oTd
- VnrV8AIYP09CDigPrVWho4pfEQyBVBLBe5EpbVJTWl1BtdHgJyeV2xp8XeeyCQc3yEtOLg7/y
- LtHFgHXONUpjuQhbE6oIstU7LApJA6IpVQxWzN1Cgk1aKY0IDw1ibFTHGjXMTTYR0SrPZaf2b
- 0ie3MALMq+dJOlM6zrO0pVtduKzpnEI6cQeIrDHemuyPgJyZN9dYoKAEuWZGLXhFAsxrvjBYz
- VZYQyjb0AMTvlVEVziYBzen4kl7eGaSG7DsgyfWGhHpozPcs+4EaRcEOKx9yfb9dtE9Xi/Ok4
- cSYEbE+xKxyjOIklODXQL3lsIztxoZ8P0/bcjQ==
-Subject: [Buildroot] [PATCH] package/fastd: bump version to 22
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.1.0
+Content-Language: en-GB
+To: hello rabit <hello.rabit12345@gmail.com>, buildroot@buildroot.org
+References: <CA+hB-jRy--iZhTqK-bDeM4wuNfVbs7dCnpTPAL8bmpOgbjPv=Q@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <CA+hB-jRy--iZhTqK-bDeM4wuNfVbs7dCnpTPAL8bmpOgbjPv=Q@mail.gmail.com>
+Subject: Re: [Buildroot] MakeFile Error
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,94 +99,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Alexander Dahl <post@lespocky.de>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-There's a new feature to offload L2TP to the Linux kernel, which depends
-on libmnl.  A new menu option was introduced for that.
-
-It's possible to link an internal version of libmnl
-statically for smaller binary size on constraint targets, but this was
-not added to the buildroot package for complexity reasons (both build
-and licensing).
-
-The COPYING file gained an additional paragraph for internal libmnl
-which does not apply, because internal libmnl is not used in the
-package.
-
-Link: https://fastd.readthedocs.io/en/latest/releases/v22.html
-Signed-off-by: Alexander Dahl <post@lespocky.de>
----
- package/fastd/Config.in  | 8 ++++++++
- package/fastd/fastd.hash | 4 ++--
- package/fastd/fastd.mk   | 9 ++++++++-
- 3 files changed, 18 insertions(+), 3 deletions(-)
-
-diff --git a/package/fastd/Config.in b/package/fastd/Config.in
-index 5319d68503..0214786470 100644
---- a/package/fastd/Config.in
-+++ b/package/fastd/Config.in
-@@ -21,6 +21,14 @@ config BR2_PACKAGE_FASTD_STATUS_SOCKET
- 	help
- 	  Enable support for a socket to get fastd's status.
- 
-+config BR2_PACKAGE_FASTD_OFFLOAD_L2TP
-+	bool "l2tp offload support"
-+	default y
-+	select BR2_PACKAGE_LIBMNL
-+	help
-+	  L2TP can be offloaded to the Linux kernel, significantly
-+	  increasing throughput.
-+
- endif
- 
- comment "fastd needs a toolchain w/ threads, dynamic library"
-diff --git a/package/fastd/fastd.hash b/package/fastd/fastd.hash
-index b59085e0ee..5f7f966533 100644
---- a/package/fastd/fastd.hash
-+++ b/package/fastd/fastd.hash
-@@ -1,3 +1,3 @@
- # computed locally
--sha256  942f33bcd794bcb8e19da4c30c875bdfd4d0f1c24ec4dcdf51237791bbfb0d4c  fastd-21.tar.xz
--sha256  1f5acece57466eac89108f934a196be09b7676fa2d637e78d6657ee1a7d644ac  COPYRIGHT
-+sha256  19750b88705d66811b7c21b672537909c19ae6b21350688cbd1a3a54d08a8951  fastd-22.tar.xz
-+sha256  adf08b42f1b890b89e998360a864cb4f8441a0a57c9e95e2ce1bfdfc24c49976  COPYRIGHT
-diff --git a/package/fastd/fastd.mk b/package/fastd/fastd.mk
-index c1db1cc472..5cd6a909c3 100644
---- a/package/fastd/fastd.mk
-+++ b/package/fastd/fastd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FASTD_VERSION = 21
-+FASTD_VERSION = 22
- FASTD_SITE = https://github.com/NeoRaider/fastd/releases/download/v$(FASTD_VERSION)
- FASTD_SOURCE = fastd-$(FASTD_VERSION).tar.xz
- FASTD_LICENSE = BSD-2-Clause
-@@ -33,6 +33,13 @@ else
- FASTD_CONF_OPTS += -Dstatus_socket=disabled
- endif
- 
-+ifeq ($(BR2_PACKAGE_FASTD_OFFLOAD_L2TP),y)
-+FASTD_CONF_OPTS += -Doffload_l2tp=enabled -Dlibmnl_builtin=false
-+FASTD_DEPENDENCIES += libmnl
-+else
-+FASTD_CONF_OPTS += -Doffload_l2tp=disabled
-+endif
-+
- ifeq ($(BR2_INIT_SYSTEMD),y)
- FASTD_CONF_OPTS += -Dsystemd=enabled
- else
-
-base-commit: 55ae6b59d48dd75f4e432b63e5b8a4655b76305c
--- 
-2.20.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+ICBIaSBIZWxsbywKCk9uIDE3LzEwLzIwMjEgMTY6MzMsIGhlbGxvIHJhYml0IHdyb3RlOgo+IEhl
+bGxvLAo+IAo+IEkganVzdCBtZXJnZWQgbXkgcmVtb3RlIG9yaWdpbiB3aXRoIGJ1aWxkcm9vdCB1
+cHN0cmVhbSBhbmQgYWZ0ZXIgdGhhdCBJIGFtIG5vdCAKPiBhYmxlIHRvIHdvcmsgd2l0aCBteSBi
+dWlsZHJvb3QgcHJvamVjdC4gUGxlYXNlIHJlZmVyIHRoZSBmb2xsb3dpbmdzOgo+IAo+IF9Db21t
+YW5kOl8gKm1ha2UgTz0uLi88ZGlyZWN0b3J5PiB4eXpfZGVmY29uZmlnKgo+IF9FcnJvcjpfICpN
+YWtlZmlsZTo5NTogKioqIG1pc3Npbmcgc2VwYXJhdG9yLsKgIFN0b3AuKgo+ICptYWtlOiAqKiog
+W01ha2VmaWxlOjg0OiBfYWxsXSBFcnJvciAyKgo+ICoKPiAqCj4gX1BhcnQgb2bCoCBteSBNYWtl
+ZmlsZTpfCj4gKjgwICQoTUFLRUNNREdPQUxTKTogX2FsbAo+ICDCoCA4MSDCoCDCoCDCoCDCoCBA
+Ogo+ICDCoCA4Mgo+ICDCoCA4MyBfYWxsOgo+ICDCoCA4NCDCoCDCoCDCoCDCoCBAdW1hc2sgJChS
+RVFfVU1BU0spICYmIFwKPiAgwqAgODUgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgJChNQUtFKSAt
+QyAkKENBTk9OSUNBTF9DVVJESVIpIC0tbm8tcHJpbnQtZGlyZWN0b3J5IFwKPiAgwqAgODYgwqAg
+wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgJChNQUtFQ01ER09BTFMpICQoRVhUUkFN
+QUtFQVJHUykKPiAgwqAgODcKPiAgwqAgODggZWxzZSAjIHVtYXNrIC8gJChDVVJESVIpIC8gJChP
+KQo+ICDCoCA4OQo+ICDCoCA5MCAjIFRoaXMgaXMgb3VyIGRlZmF1bHQgcnVsZSwgc28gbXVzdCBj
+b21lIGZpcnN0Cj4gIMKgIDkxIGFsbDoqCj4gKjkyIC5QSE9OWTogYWxsCj4gIMKgIDkzCj4gIMKg
+IDk0ICMgU2V0IGFuZCBleHBvcnQgdGhlIHZlcnNpb24gc3RyaW5nCj4gIMKgIDk1IDw8PDw8PDwg
+SEVBRAo+ICDCoCA5NiBleHBvcnQgQlIyX1ZFUlNJT04gOj0gMjAyMC4wOC4xCj4gIMKgIDk3ICMg
+QWN0dWFsIHRpbWUgdGhlIHJlbGVhc2UgaXMgY3V0IChmb3IgcmVwcm9kdWNpYmxlIGJ1aWxkcykK
+PiAgwqAgOTggQlIyX1ZFUlNJT05fRVBPQ0ggPSAxNjAyNTA3MDAwCj4gIMKgIDk5ID09PT09PT0K
+PiAgwqAxMDAgZXhwb3J0IEJSMl9WRVJTSU9OIDo9IDIwMjEuMTEtZ2l0Cj4gIMKgMTAxICMgQWN0
+dWFsIHRpbWUgdGhlIHJlbGVhc2UgaXMgY3V0IChmb3IgcmVwcm9kdWNpYmxlIGJ1aWxkcykKPiAg
+wqAxMDIgQlIyX1ZFUlNJT05fRVBPQ0ggPSAxNjMwNzQ5MDAwCj4gIMKgMTAzID4+Pj4+Pj4gdXBz
+dHJlYW0vbWFzdGVyCgogIFRoaXMgaXMgYSBtZXJnZSBjb25mbGljdC4gWW91IGF0dGVtcHRlZCB0
+byBtZXJnZSB0aGUgbWFzdGVyIGJyYW5jaCB3aXRoIHRoZSAKMjAyMC4wOC4xIHRhZy4KCiAgSWYg
+eW91IGhhdmVuJ3QgbWFkZSBhbnkgY2hhbmdlcyB5b3Vyc2VsZiwgeW91IGNhbiBqdXN0IGRvICJn
+aXQgcmVzZXQgLS1oYXJkIApvcmlnaW4vbWFzdGVyIi4KCiAgSWYgeW91IGRpZCBtYWtlIGNoYW5n
+ZXMgdGhhdCB5b3Ugd2FudCB0byBrZWVwLCB5b3UgaGF2ZSB0byByZXNvbHZlIHRoZSBtZXJnZSAK
+Y29uZmxpY3RzLiBJZiB5b3UgaGF2ZW4ndCB5ZXQgY29tbWl0dGVkIHRoZSBjb25mbGljdHMsIHlv
+dSBjYW4gc2ltcGx5IGRvICJnaXQgCnN0YXR1cyIgdG8gc2VlIHdoaWNoIGZpbGVzIGhhdmUgY29u
+ZmxpY3RzLCB0aGVuIGVkaXQgdGhlbSBhbmQgcmVzb2x2ZSB0aGUgCmNvbmZsaXRzLCBhbmQgZmlu
+YWxseSAiZ2l0IGFkZCAtdTsgZ2l0IGNvbW1pdCIuIEJ1dCBpZiB5b3Ugd2FudCB0byBkbyB0aGlz
+LCB5b3UgCnByb2JhYmx5IG5lZWQgdG8gZG8gYSBiaXQgb2YgZ2l0IHRyYWluaW5nLgoKCgo+IEZ1
+cnRoZXJtb3JlLCBJIHRyaWVkIHRvIHJlZ2lzdGVyIG15c2VsZiB3aXRoIE9GVEMgdG8gYWNjZXNz
+IHRoZSBJUkMgY2hhbm5lbC4gQnV0IAo+IEkgY291bGQgbm90IGZpZ3VyZcKgb3V0IGhvdyB0byBy
+ZWdpc3Rlci4KCiAgaHR0cHM6Ly93d3cub2Z0Yy5uZXQvU2VydmljZXMvCgoKICBSZWdhcmRzLAog
+IEFybm91dAoKCj4gCj4gSSB2ZXJ5IGtpbmRseSByZXF1ZXN0IHlvdSB0byBwcm92aWRlIG1lIHdp
+dGggdGhlIHJlcXVpcmVkIHN1cHBvcnQgKEkgYW0gbm90IGFuIAo+IGV4cGVydCBhbmQgc3RpbGwg
+bGVhcm5pbmcpIGFuZMKgd2lzaCB5b3XCoGEgZ3JlYXQgZGF5IGFoZWFkIQo+IAo+IFRoYW5rc8Kg
+YW5kIFJlZ2FyZHMuCj4gCj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX18KPiBidWlsZHJvb3QgbWFpbGluZyBsaXN0Cj4gYnVpbGRyb290QGJ1aWxkcm9vdC5v
+cmcKPiBodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJv
+b3QKPiAKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVp
+bGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3Rz
+LmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
