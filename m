@@ -2,84 +2,88 @@ Return-Path: <SRS0=OlWD=PF=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 77264C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 17 Oct 2021 13:01:08 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3DAAEC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 17 Oct 2021 13:01:20 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id A7FF360F93
-	for <buildroot@archiver.kernel.org>; Sun, 17 Oct 2021 13:01:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A7FF360F93
+	by mail.kernel.org (Postfix) with ESMTPS id 9149460FDC
+	for <buildroot@archiver.kernel.org>; Sun, 17 Oct 2021 13:01:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9149460FDC
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 40B8D81BC2;
-	Sun, 17 Oct 2021 13:01:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3FF29605D3;
+	Sun, 17 Oct 2021 13:01:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WjMv7vL338xX; Sun, 17 Oct 2021 13:01:06 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id fEmYUReAnx2t; Sun, 17 Oct 2021 13:01:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 91A2381D5F;
-	Sun, 17 Oct 2021 13:01:05 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 38DF31BF2B1
+	by smtp3.osuosl.org (Postfix) with ESMTP id 583976066D;
+	Sun, 17 Oct 2021 13:01:17 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 63F731BF976
  for <buildroot@lists.busybox.net>; Sun, 17 Oct 2021 13:01:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 24C0740153
+ by smtp4.osuosl.org (Postfix) with ESMTP id 607084034A
  for <buildroot@lists.busybox.net>; Sun, 17 Oct 2021 13:01:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VRusGsvt9ut0 for <buildroot@lists.busybox.net>;
- Sun, 17 Oct 2021 13:01:00 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id YgLVsLgeEgyl for <buildroot@lists.busybox.net>;
+ Sun, 17 Oct 2021 13:01:02 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
- [IPv6:2a00:1450:4864:20::42d])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A42F9400F6
- for <buildroot@buildroot.org>; Sun, 17 Oct 2021 13:01:00 +0000 (UTC)
-Received: by mail-wr1-x42d.google.com with SMTP id e3so35658667wrc.11
- for <buildroot@buildroot.org>; Sun, 17 Oct 2021 06:01:00 -0700 (PDT)
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
+ [IPv6:2a00:1450:4864:20::32f])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 277D540345
+ for <buildroot@buildroot.org>; Sun, 17 Oct 2021 13:01:02 +0000 (UTC)
+Received: by mail-wm1-x32f.google.com with SMTP id
+ j10-20020a1c230a000000b0030d523b6693so7610834wmj.2
+ for <buildroot@buildroot.org>; Sun, 17 Oct 2021 06:01:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=sn4Kf0XKOmPsEaKeUHG3QnIVnBmXrL2jOJugSyppBgM=;
- b=ONG/PcMMpX8HTPbpguDptlWK8nvLKDQUYA9zjL8OkTg6DHs8u9S6rQPlP9Rjk6eEl5
- 9vSKziFbgJR0QBvekhpfjnBgAvwTtnXxLPsIJnr4B3jiLHzED3fs0KYq73ekZVO1jLJc
- y9gY33srmPt3LFc7KOV8XCmA3vHoPDeN5O6FKqDrA6IjjC8HABg/lxf5X76Bvb6zyHlO
- rsR9wslGRJV5lXaMeGhBc52oXZL0sLdwqOjaQ0DX1cP05BKVGpaWeFGh7Th3Z10JXZCg
- 1TfAc7NbXnxD4SC+AoKO8VBeVuYtIT1eMJb7AotGa5oT3mhqwVRSjx5HCK8LI6fdzwrU
- PDwg==
+ h=from:to:cc:subject:date:message-id:in-reply-to:references
+ :mime-version:content-transfer-encoding;
+ bh=x9kktq3/fJVR+WP4u4wjrLKEyOcWIO0OW+AuHU66Bio=;
+ b=ovB+s6UamLW9E0WYFxdqXhLk5AO5P51Aeik4OuJ4uFW09EMpt8X3JdndVVQ8ySCz5y
+ aRAB5JMkkDQoi1ddGn0lH7IBc8zCrJbZZ7yyiXvgNGFQhDz+nRX1NbbORzZ2ixkWXHh6
+ 5lAn831tWGKTmY1WohKXP6eG6tflnit4KXr8iRt6A+M+E/0UmtWQcPtNqL+AUZJJFZz9
+ kP2OrAOTTur4miwsjBGtjxHp0/qQ2LunpV9EK4hiCnzl6zovaEAKiM0yK0o6lDTeflGD
+ Nrqu5RXVTtQ5Lt+M9Ql+R3C4V+sUJG2yNq2N+a7OJRQfuLU7lPKYd0miDfN+23kosHM0
+ wHaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=sn4Kf0XKOmPsEaKeUHG3QnIVnBmXrL2jOJugSyppBgM=;
- b=WLIQcFzLi8Ec9G9PZYw6Ndhrzmv6v1iqKf0ybjenmUbsfJpw+IQqSjrd1nXFI31X+p
- 8QsbuTsYG8Z/9fib1H4eDFUmHU7MwhXXRlpy+2W7r0ssDrnJTvg/WYhUK9cNtl/sOt0x
- BZvMxjXgsWzxLcYOlR2DTaf1uavz+92HzlOGs0+V5cjt6oSUDdIaTNSOuqcipq4IaUGI
- wzmCHwdVD0S9I8rzGop0hk6niuNWD+CtwhpsR8vL7eegvto40qel0PqtfeyxFQE+nMOr
- 3s9fqYxv0q+Dl7AmO72xvS2CqgPez/rz/g9BXNamHBC4maiatCK+RqR5D18Hd8TsTHKD
- Nl0A==
-X-Gm-Message-State: AOAM53102t2rLIxZGemI3I1tWyHxt5YBYQ7B36BADWzLD9rtEqbpSg5x
- r/cv0eVJuTBnDXFpfO2B0Bhm6RsDVY0=
-X-Google-Smtp-Source: ABdhPJzWimNjF42Bp1NQAQKtJTnCBHlCYa9BFtehJIvI42iStHClHiASHfJ6QjPFHZO13hoCKaKOUw==
-X-Received: by 2002:adf:e9c8:: with SMTP id l8mr27925404wrn.188.1634475658390; 
- Sun, 17 Oct 2021 06:00:58 -0700 (PDT)
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+ :references:mime-version:content-transfer-encoding;
+ bh=x9kktq3/fJVR+WP4u4wjrLKEyOcWIO0OW+AuHU66Bio=;
+ b=HrGvS2msG7SfuVAJEiAvEWhV2ijT4dA0rAq1sJPtxT5rSNw4h+oPrTzRt8PmAdPdj9
+ WU1C0zseN+tCrCfHDcQQw6CNj4r7bPVq2SyMGjb9PzzKYH7xHDEqT7j55r7sxxTc2bKs
+ 8ZCYWUbVFkJmGlmz1LyTNR0ywDYpotE2r7fdBja0g3f+MVPVfpkefLAeW5HDNt3VFebm
+ u/J+D1jUrA4GmgqYiBtgkoFCg2QV3ggQs4USISFPAgXZYLzvysF0knUvBFQdgIErrQJq
+ tdhX84AcDdkzyr9jx8tOrnwXocEOP7nGvnK7kFVFrce2PVsC+/Bh/gP3r7Wz7CRNDtmZ
+ h4gA==
+X-Gm-Message-State: AOAM533X+ws8UMC1dK4CUVQ15minQ0Uyh5Z4bhjEaCGvSAmeF99VyLiP
+ kW1AnC21FZ2tmW9zec+3JqZxVVdYV6M=
+X-Google-Smtp-Source: ABdhPJyXLDPj+3iLjxPKs5LHEw+5vlBnpZ7NgoMlHVdB200hjRWetolZpvLyLitLVMUs7jJA70IoNg==
+X-Received: by 2002:a05:600c:4f48:: with SMTP id
+ m8mr38330505wmq.5.1634475660131; 
+ Sun, 17 Oct 2021 06:01:00 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-1732-95.w86-253.abo.wanadoo.fr.
  [86.253.44.95])
- by smtp.gmail.com with ESMTPSA id l2sm9781671wrw.42.2021.10.17.06.00.57
+ by smtp.gmail.com with ESMTPSA id l2sm9781671wrw.42.2021.10.17.06.00.59
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 17 Oct 2021 06:00:57 -0700 (PDT)
+ Sun, 17 Oct 2021 06:00:59 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 17 Oct 2021 14:59:38 +0200
-Message-Id: <20211017125939.1007483-1-fontaine.fabrice@gmail.com>
+Date: Sun, 17 Oct 2021 14:59:39 +0200
+Message-Id: <20211017125939.1007483-2-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.33.0
+In-Reply-To: <20211017125939.1007483-1-fontaine.fabrice@gmail.com>
+References: <20211017125939.1007483-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v4,1/2] package/libpcap: add host variant
+Subject: [Buildroot] [PATCH v4,2/2] package/zeek: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,44 +103,221 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-host-libpcap is needed to build host-zeek
+The Zeek Network Security Monitor
+
+Zeek is a powerful network analysis framework that is much different
+from the typical IDS you may know. (Zeek is the new name for the
+long-established Bro system.)
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libpcap/libpcap.mk | 9 +++++++++
- 1 file changed, 9 insertions(+)
+Changes v3 -> v4:
+ - Bump to latest version (4.1.1) and drop patch (already in version)
+ - python 2 support dropped since
+   https://github.com/zeek/zeek/commit/eeec219a66ed89235093fb63753d6baf6c21de78
+ - BSD-3-Clause added since
+   https://github.com/zeek/zeek/commit/d070709c573fc01a40735a6c921a9095988306cc
 
-diff --git a/package/libpcap/libpcap.mk b/package/libpcap/libpcap.mk
-index 1e02ec56e0..21422b2c0a 100644
---- a/package/libpcap/libpcap.mk
-+++ b/package/libpcap/libpcap.mk
-@@ -11,6 +11,7 @@ LIBPCAP_LICENSE_FILES = LICENSE
- LIBPCAP_CPE_ID_VENDOR = tcpdump
- LIBPCAP_INSTALL_STAGING = YES
- LIBPCAP_DEPENDENCIES = host-flex host-bison host-pkgconf
-+HOST_LIBPCAP_DEPENDENCIES = host-flex host-bison host-pkgconf
+Changes v2 -> v3 (after review of Thomas Petazzoni):
+ - Bump to version 3.2.2 (security fixes)
+ - Add host-zeek dependencies
+ - Install bifcl and binpac to HOST_DIR
+
+Changes v1 -> v2:
+ - Bump to version 3.2.0
+ - Drop second and third patches (already in version)
+ - Update ZEEK_SITE
+ - Update indentation in hash file (two spaces)
+ - Update third party licences
+
+ DEVELOPERS             |  1 +
+ package/Config.in      |  1 +
+ package/zeek/Config.in | 43 +++++++++++++++++++++
+ package/zeek/zeek.hash |  6 +++
+ package/zeek/zeek.mk   | 87 ++++++++++++++++++++++++++++++++++++++++++
+ 5 files changed, 138 insertions(+)
+ create mode 100644 package/zeek/Config.in
+ create mode 100644 package/zeek/zeek.hash
+ create mode 100644 package/zeek/zeek.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 19f6d95270..30383af538 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -919,6 +919,7 @@ F:	package/tinycbor/
+ F:	package/tinydtls/
+ F:	package/tinymembench/
+ F:	package/whois/
++F:	package/zeek/
  
- # ac_cv_prog_cc_c99 is required for BR2_USE_WCHAR=n because the C99 test
- # provided by autoconf relies on wchar_t.
-@@ -23,6 +24,13 @@ LIBPCAP_CONF_OPTS = --disable-yydebug --with-pcap=linux --without-dag \
- 	--without-dpdk
- # Disable dbus to break recursive dependencies
- LIBPCAP_CONF_OPTS += --disable-dbus
-+HOST_LIBPCAP_CONF_OPTS = \
-+	--disable-bluetooth \
-+	--disable-dbus \
-+	--disable-yydebug \
-+	--with-pcap=linux \
-+	--without-dag \
-+	--without-libnl
- LIBPCAP_CONFIG_SCRIPTS = pcap-config
+ N:	Fabrice Goucem <fabrice.goucem@oss.nxp.com>
+ F:	board/freescale/imx6ullevk/
+diff --git a/package/Config.in b/package/Config.in
+index 48f365d773..93f42cb74e 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2366,6 +2366,7 @@ endif
+ 	source "package/xinetd/Config.in"
+ 	source "package/xl2tp/Config.in"
+ 	source "package/xtables-addons/Config.in"
++	source "package/zeek/Config.in"
+ 	source "package/znc/Config.in"
  
- # Omit -rpath from pcap-config output
-@@ -50,3 +58,4 @@ LIBPCAP_CFLAGS += -fPIC
- endif
- 
- $(eval $(autotools-package))
-+$(eval $(host-autotools-package))
+ endmenu
+diff --git a/package/zeek/Config.in b/package/zeek/Config.in
+new file mode 100644
+index 0000000000..e474251aeb
+--- /dev/null
++++ b/package/zeek/Config.in
+@@ -0,0 +1,43 @@
++config BR2_PACKAGE_ZEEK
++	bool "zeek"
++	depends on BR2_USE_MMU # fork()
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on !BR2_STATIC_LIBS
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_USE_WCHAR
++	select BR2_PACKAGE_LIBPCAP
++	select BR2_PACKAGE_MUSL_FTS if !BR2_TOOLCHAIN_USES_GLIBC
++	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_ZLIB
++	help
++	  The Zeek Network Security Monitor
++
++	  Zeek is a powerful network analysis framework that is much
++	  different from the typical IDS you may know. (Zeek is the new
++	  name for the long-established Bro system.)
++
++	  https://www.zeek.org
++
++if BR2_PACKAGE_ZEEK
++
++config BR2_PACKAGE_ZEEK_ZEEKCTL
++	bool "zeekctl"
++	depends on BR2_PACKAGE_PYTHON3
++	select BR2_PACKAGE_BASH # runtime
++	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # bash
++	select BR2_PACKAGE_PYTHON3_CURSES
++	select BR2_PACKAGE_PYTHON3_HASHLIB
++	select BR2_PACKAGE_PYTHON3_SQLITE
++	select BR2_PACKAGE_PYTHON3_ZLIB
++	help
++	  Tool for managing Zeek deployments
++
++comment "zeekctl tools needs python3"
++	depends on !BR2_PACKAGE_PYTHON3
++
++endif
++
++comment "zeek needs a toolchain w/ C++, wchar, threads, dynamic library"
++	depends on BR2_USE_MMU
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
++		!BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+diff --git a/package/zeek/zeek.hash b/package/zeek/zeek.hash
+new file mode 100644
+index 0000000000..05e57b5024
+--- /dev/null
++++ b/package/zeek/zeek.hash
+@@ -0,0 +1,6 @@
++# Locally computed:
++sha256  8c0afc999a8dd1c1f677a5cf818479b99c2d527e679e1ef99fb1b03f989c0373  zeek-4.1.1.tar.gz
++
++# Hash for license files:
++sha256  b2817e2fb935805ec9fc0e90c6b971efd810d9aedfc646bc5fcb535221e0266a  COPYING
++sha256  1a451eca7b3826a7df62991ba90dd6d23ff03d28c2eefb7f8c4f8b1eac97a61b  COPYING.3rdparty
+diff --git a/package/zeek/zeek.mk b/package/zeek/zeek.mk
+new file mode 100644
+index 0000000000..b2900f4090
+--- /dev/null
++++ b/package/zeek/zeek.mk
+@@ -0,0 +1,87 @@
++################################################################################
++#
++# zeek
++#
++################################################################################
++
++ZEEK_VERSION = 4.1.1
++ZEEK_SITE = https://download.zeek.org
++ZEEK_LICENSE = \
++	BSD-3-Clause (zeek, C++ Actor Framework, ConvertUTF.c, CardinalityCounter.cc, pybind11), \
++	Public Domain (sqlite), \
++	MIT (doctest, libkqueue, RapidJSON, tsl-ordered-map, bro_inet_ntop.c), \
++	LGPL-3.0+ (Multifast Project), \
++	BSD-2-Clause (event.h), \
++	BSD-3-Clause (in_cksum.cc) \
++	BSD-4-Clause (Patricia.c, strsep.c, bsd-getopt-long.c), \
++	Apache-2.0 (highwayhash, folly), \
++	MPL-2.0 (mozilla-ca-list.zeek)
++ZEEK_LICENSE_FILES = COPYING COPYING.3rdparty
++ZEEK_SUPPORTS_IN_SOURCE_BUILD = NO
++ZEEK_DEPENDENCIES = \
++	host-bison \
++	host-flex \
++	host-pkgconf \
++	$(if $(BR2_PACKAGE_PYTHON3),host-python3) \
++	host-zeek \
++	$(if $(BR2_PACKAGE_LIBKRB5),libkrb5) \
++	$(if $(BR2_PACKAGE_LIBMAXMINDDB),libmaxminddb) \
++	libpcap \
++	openssl \
++	$(if $(BR2_PACKAGE_ROCKSDB),rocksdb) \
++	zlib
++HOST_ZEEK_DEPENDENCIES = \
++	host-bison host-flex host-pkgconf host-libpcap host-openssl host-zlib
++
++ZEEK_CONF_OPTS = \
++	-DBIFCL_EXE_PATH=$(HOST_DIR)/bin/bifcl \
++	-DBINPAC_EXE_PATH=$(HOST_DIR)/bin/binpac \
++	-DBROKER_DISABLE_DOCS=ON \
++	-DBROKER_DISABLE_TESTS=ON \
++	-DINSTALL_AUX_TOOLS=ON \
++	-DZEEK_ETC_INSTALL_DIR=/etc
++
++define ZEEK_FIX_PYTHON_PATH
++	$(SED) 's,@PYTHON_EXECUTABLE@,/usr/bin/python,' \
++		$(@D)/auxil/zeekctl/ZeekControl/ssh_runner.py
++endef
++
++ZEEK_POST_INSTALL_TARGET_HOOKS += ZEEK_FIX_PYTHON_PATH
++
++ifeq ($(BR2_PACKAGE_JEMALLOC),y)
++ZEEK_DEPENDENCIES += jemalloc
++ZEEK_CONF_OPTS += -DENABLE_JEMALLOC=ON
++else
++ZEEK_CONF_OPTS += -DENABLE_JEMALLOC=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_ZEEK_ZEEKCTL),y)
++ZEEK_DEPENDENCIES += \
++	host-swig \
++	$(if $(BR2_PACKAGE_PYTHON3),python3)
++ZEEK_CONF_OPTS += \
++	-DDISABLE_PYTHON_BINDINGS=OFF \
++	-DINSTALL_ZEEKCTL=ON \
++	-DPY_MOD_INSTALL_DIR=/usr/lib/zeekctl
++else
++ZEEK_CONF_OPTS += \
++	-DDISABLE_PYTHON_BINDINGS=ON \
++	-DINSTALL_ZEEKCTL=OFF
++endif
++
++ifneq ($(BR2_TOOLCHAIN_USES_GLIBC),y)
++ZEEK_DEPENDENCIES += musl-fts
++ZEEK_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-lfts
++endif
++
++HOST_ZEEK_MAKE_OPTS = binpac bifcl
++
++define HOST_ZEEK_INSTALL_CMDS
++	$(INSTALL) -D -m 0755 $(HOST_ZEEK_BUILDDIR)/auxil/bifcl/bifcl \
++		$(HOST_DIR)/bin/bifcl
++	$(INSTALL) -D -m 0755 $(HOST_ZEEK_BUILDDIR)/auxil/binpac/src/binpac \
++		$(HOST_DIR)/bin/binpac
++endef
++
++$(eval $(cmake-package))
++$(eval $(host-cmake-package))
 -- 
 2.33.0
 
