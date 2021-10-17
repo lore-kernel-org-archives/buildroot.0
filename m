@@ -2,95 +2,76 @@ Return-Path: <SRS0=OlWD=PF=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0EEB7C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 17 Oct 2021 15:20:16 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C4F7AC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 17 Oct 2021 15:25:37 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id C998F60F48
-	for <buildroot@archiver.kernel.org>; Sun, 17 Oct 2021 15:20:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C998F60F48
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
+	by mail.kernel.org (Postfix) with ESMTPS id E3D3A610A3
+	for <buildroot@archiver.kernel.org>; Sun, 17 Oct 2021 15:25:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E3D3A610A3
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=lespocky.de
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 682BA81774;
-	Sun, 17 Oct 2021 15:20:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A299440305;
+	Sun, 17 Oct 2021 15:25:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mmYeBd5t8-j5; Sun, 17 Oct 2021 15:20:13 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id IGuyQ1kChtaV; Sun, 17 Oct 2021 15:25:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BAEC181779;
-	Sun, 17 Oct 2021 15:20:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 185BC402E2;
+	Sun, 17 Oct 2021 15:25:35 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 35AEA1BF2F4
- for <buildroot@lists.busybox.net>; Sun, 17 Oct 2021 15:20:11 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id DBC4C1BF2F4
+ for <buildroot@lists.busybox.net>; Sun, 17 Oct 2021 15:25:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 32730402C8
- for <buildroot@lists.busybox.net>; Sun, 17 Oct 2021 15:20:11 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id CB313402E2
+ for <buildroot@lists.busybox.net>; Sun, 17 Oct 2021 15:25:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qbpYrflPiyih for <buildroot@lists.busybox.net>;
- Sun, 17 Oct 2021 15:20:10 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com
- [IPv6:2a00:1450:4864:20::534])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1A70C402C5
- for <buildroot@buildroot.org>; Sun, 17 Oct 2021 15:20:09 +0000 (UTC)
-Received: by mail-ed1-x534.google.com with SMTP id w14so59982281edv.11
- for <buildroot@buildroot.org>; Sun, 17 Oct 2021 08:20:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=zDvNHWlkhVRikxYnFLW66hdGdB1Cu+s7OqUQ+sVZeIE=;
- b=SZ0RbSm/ignCNYh52juEYTYOckYCKI+gKVmla0xW86I9EE2eYFcDH+iJAGCaHFFapW
- 8qXZGqVkQN5uCdYU1PB3QmV1+PYOc9o/7DrY10llV5nP2QhN0sFBpuGhsuJLb6MO6iLz
- 8jma5QBpTNBVguZoInfZL7hTa4RLu6XnwxIaaVeyLQ8tzinmi7iia2ox76Z2i1IHbcAT
- UY2tZD8fNEp3LegTeJzWTZ+vNDP0MzqS2tvFmv9DhWw5OLfjm3pVbh3Ax1vRSljSbJ3b
- Lhi3cqHtkWVUSUhbZHF8yTwUscv0R2ZGCDkdA5A9+NOhdlzjDYKjrUrqlk1lx2SaaUPS
- sgRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=zDvNHWlkhVRikxYnFLW66hdGdB1Cu+s7OqUQ+sVZeIE=;
- b=p9b2dKVyWLs0NyEUTrl2VMo9aqrOHy0sXboWDadSM9Vj3lnfnt/MoL0zQmssVXIwI1
- e5R714yVF0quUTCvJG81kpqw3u79eFypQHpqqKEfum1bzdXFQDDdh1FP4q66OABd/X6v
- B5l1wzVNNCxwZrgkECrfJLKMTVBopCbjNz2UVd+GHwbIBz803upcuVipl/b/hzCAWr3q
- xF2dXb7HE07aOs70zOOrZSlv/SJF7t2ttxD9Rbsf6GvnEFXPc+km1nnkiKpBxtpgWBBJ
- MTtApE8h4hzF6eIV8DN/h0ulxb4FX/Jlt5YjMAk4hiaEnObBvPMtx0rw0/CpXTG5HIP2
- /BMQ==
-X-Gm-Message-State: AOAM530yRTdwzVgkFF+n/qIwq5u5cCtci8suTnfHO7zh5Om1KY3LXN3x
- MjO2yEaxfJUQUxWsrOai3Gwdqw==
-X-Google-Smtp-Source: ABdhPJzcCcnMJTUnlidzqdlZdW1NzwE5RXX1mOpTdjIdBs1Wa0gUTUhcK78ar0IBlZlEvMcj4Yra8g==
-X-Received: by 2002:a05:6402:399:: with SMTP id
- o25mr5145223edv.275.1634484008100; 
- Sun, 17 Oct 2021 08:20:08 -0700 (PDT)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
- (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id gt35sm872646ejc.105.2021.10.17.08.20.07
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 17 Oct 2021 08:20:07 -0700 (PDT)
-Message-ID: <2c48779f-ad8f-b98c-99d5-ccd428863e3a@mind.be>
-Date: Sun, 17 Oct 2021 17:20:07 +0200
+ with ESMTP id LBFkmTlS9vrq for <buildroot@lists.busybox.net>;
+ Sun, 17 Oct 2021 15:25:32 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C574E4028A
+ for <buildroot@buildroot.org>; Sun, 17 Oct 2021 15:25:31 +0000 (UTC)
+Received: from methusalix.internal.home.lespocky.de ([92.117.58.44]) by
+ mrelayeu.kundenserver.de (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1Mati7-1nA6L80Wvz-00cNXJ; Sun, 17 Oct 2021 17:25:17 +0200
+Received: from lemmy.internal.home.lespocky.de ([192.168.243.175]
+ helo=lemmy.home.lespocky.de)
+ by methusalix.internal.home.lespocky.de with esmtpsa (TLS1.3) tls
+ TLS_AES_256_GCM_SHA384 (Exim 4.94.2)
+ (envelope-from <alex@home.lespocky.de>)
+ id 1mc82D-000270-VI; Sun, 17 Oct 2021 17:25:15 +0200
+Received: (nullmailer pid 32183 invoked by uid 2001);
+ Sun, 17 Oct 2021 15:25:13 -0000
+From: Alexander Dahl <post@lespocky.de>
+To: buildroot@buildroot.org
+Date: Sun, 17 Oct 2021 17:25:11 +0200
+Message-Id: <20211017152511.32136-1-post@lespocky.de>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.1.0
-Content-Language: en-GB
-To: Gilles Talis <gilles.talis@gmail.com>,
- =?UTF-8?Q?Jos=c3=a9_Pekkarinen?= <jose.pekkarinen@unikie.com>
-References: <20211015083830.1971193-1-jose.pekkarinen@unikie.com>
- <CAKcgs2zBHeE_G-LA6dsCRZpLvx6Ox9mf6s_d347cZO+fJZbfxA@mail.gmail.com>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <CAKcgs2zBHeE_G-LA6dsCRZpLvx6Ox9mf6s_d347cZO+fJZbfxA@mail.gmail.com>
-Subject: Re: [Buildroot] [PATCH] package/softhsm2: new package
+X-Scan-Signature: 57fe0bff746948a1c00c1c012c955907
+X-Provags-ID: V03:K1:1BE3hGAMdxmJ6tqiRlsGl/Hl5MM19VunTty+DYFwpOQlXXa6d8i
+ ScN4GpitQJUN59WQvMTQLY0ESa0zfkiOkgpVEeUXYW3W4asE3gvA7wYPMXXjud7W52IYooS
+ TgQZ5tc7gJzCg1y3pj8qeen0cNYuHiaWU1q8XL9XcwYrrfN818Udz9lP6i+7litHoH5anwo
+ 9KzeckQ/iOIFHesCf/7eA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:2imUf94Wvmc=:W7LM41dsAU/WSCBQc12YOc
+ tVuqibp/y34zUhj5QmMz7SqM8iTeDTR3T8+F6WWRt18cGeGPXAwc8qfsvBgSsA844GRk7SFbE
+ hCzqZJXUlQOeo7mdYZlQBdcOCFOhCK2ydmCIrSqMFT+wKjMhYuei2t08h15YeTI8ZVPEPwIfk
+ BEH2bCrsEA42raJ2+3AKz6h8G3mefUhS3MIx+8XbfoWVH40APSmoDVjcHlJwW4kAR35n5toYM
+ +HMLxtS7KMvIDXBrTKfdefUR5H9m+R3XZKLv/c/UWTYMihEroaXaPv9o+Fw0x+YogNxSL7SxW
+ JV3f3bx8giHkRrpuYIVDdrIEOLaLUoUFkuzUvxeWWBEnIoBGdFmuggZmWRUOSXyf4t8OxQEsk
+ 2lOnN+aV1s6dZZNS01kfE5pMGYp3549oZViTu0ip/9uX3AubSxfQBwx/IRZ0M0N+bw/ez1oTd
+ VnrV8AIYP09CDigPrVWho4pfEQyBVBLBe5EpbVJTWl1BtdHgJyeV2xp8XeeyCQc3yEtOLg7/y
+ LtHFgHXONUpjuQhbE6oIstU7LApJA6IpVQxWzN1Cgk1aKY0IDw1ibFTHGjXMTTYR0SrPZaf2b
+ 0ie3MALMq+dJOlM6zrO0pVtduKzpnEI6cQeIrDHemuyPgJyZN9dYoKAEuWZGLXhFAsxrvjBYz
+ VZYQyjb0AMTvlVEVziYBzen4kl7eGaSG7DsgyfWGhHpozPcs+4EaRcEOKx9yfb9dtE9Xi/Ok4
+ cSYEbE+xKxyjOIklODXQL3lsIztxoZ8P0/bcjQ==
+Subject: [Buildroot] [PATCH] package/fastd: bump version to 22
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,39 +83,94 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot <buildroot@buildroot.org>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Cc: Alexander Dahl <post@lespocky.de>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-CgpPbiAxNy8xMC8yMDIxIDEzOjEzLCBHaWxsZXMgVGFsaXMgd3JvdGU6Cj4gSGkgSm9zw6ksCj4g
-Cj4gTGUgdmVuLiAxNSBvY3QuIDIwMjEgw6AgMTA6MzksIEpvc8OpIFBla2thcmluZW4gPGpvc2Uu
-cGVra2FyaW5lbkB1bmlraWUuY29tPgo+IGEgw6ljcml0IDoKPiAKCltzbmlwXQo+PiArICAgICAg
-IGRlcGVuZHMgb24gQlIyX1BBQ0tBR0VfTElCT1BFTlNTTAo+Pgo+IEV2ZW4gdGhvdWdoIHRoZSBw
-YWNrYWdlIGhhcyBvcGVuc3NsIGFzIGEgZGVwZW5kZW5jeSwgInNlbGVjdAo+IEJSMl9QQUNLQUdF
-X0xJQk9QRU5TU0wiIGlzIG1vcmUgYXBwcm9wcmlhdGUgaGVyZS4gSXQgbWVhbnMgdGhhdCBvcGVu
-c3NsCj4gd2lsbCBiZSBhdXRvbWF0aWNhbGx5IHNlbGVjdGVkIHdoZW4gc29mdGhzbTIgaXMgc2Vs
-ZWN0ZWQuICJkZXBlbmRzIG9uIgo+IG1lYW5zIHRoYXQgeW91ciBwYWNrYWdlIHdpbGwgbm90IGFw
-cGVhciBpbiB0aGUgbGlzdCBpZiBvcGVuc3NsIGlzIG5vdAo+IGFscmVhZHkgc2xlY3RlZC4KCiAg
-WW91IGNhbid0IHNlbGVjdCBsaWJvcGVuc3NsIHRob3VnaC4KCiAgSW5zdGVhZCwgZWl0aGVyOgoK
-LSBpdCB3b3JrcyB3aXRoIGxpYnJlc3NsIGFzIHdlbGwsIGFuZCB5b3Ugc2VsZWN0IEJSMl9QQUNL
-QUdFX09QRU5TU0w7IG9yCi0gaXQgZG9lc24ndCB3b3JrIHdpdGggbGlicmVzc2wsIGFuZCB5b3Ug
-ZG86CgogICAgICAgICBzZWxlY3QgQlIyX1BBQ0tBR0VfT1BFTlNTTAogICAgICAgICBzZWxlY3Qg
-QlIyX1BBQ0tBR0VfT1BFTlNTTF9GT1JDRV9MSUJPUEVOU1NMCgoKPiBCeSB0aGUgd2F5LCBpdCBz
-ZWVtcyBsaWtlIGJvdGFuIGlzIGEgcG90ZW50aWFsIGNyeXB0byBsaWJyYXJ5IGRlcGVuZGVuY3ku
-Cj4gSWYgeW91IHdhbnQgdG8gZ2l2ZSB0aGUgdXNlciB0aGUgY2hvaWNlIGJldHdlZW4gdGhlIGNy
-eXB0byBsaWJyYXJpZXMgdG8KPiB1c2UsIHBsZWFzZSBoYXZlIGEgbG9vayBhdCBwYWNrYWdlL2xp
-YmN1cmwvQ29uZmlnLmluIGluIHRoZSAiY2hvaWNlIgo+IHNlY3Rpb24uCgogIFdlIHVzdWFsbHkg
-dHJ5IHRvIGRvIGl0IGF1dG9tYXRpY2FsbHksIGxpa2U6CgoJc2VsZWN0IEJSMl9QQUNLQUdFX09Q
-RU5TU0wgaWYgIUJSMl9QQUNLQUdFX0JPVEFOCgooYW5kIHRoZW4gY29uZGl0aW9uYWxseSB1c2Ug
-b3BlbnNzbCBvciBib3RhbiBpbiB0aGUgLm1rIGZpbGUpLgoKCj4+ICsgICAgICAgc2VsZWN0IEJS
-Ml9QQUNLQUdFX0xJQlRPT0wKPj4KPiBsaWJ0b29sIGRvZXMgbm90IG5lZWQgdG8gYmUgc2VsZWN0
-ZWQuIGJ1aWxkcm9vdCBidWlsZCBzeXN0ZW0gd2lsbCB0YWtlIGNhcmUKPiBvZiBpbnN0YWxsaW5n
-IGl0IGZvciB5b3UuCgogIGhvc3QtbGlidG9vbCBkb2Vzbid0IG5lZWQgdG8gYmUgc2VsZWN0ZWQu
-IFRhcmdldCBsaWJ0b29sLCBob3dldmVyLCBpcyBuZXZlciAKYWRkZWQgYXV0b21hdGljYWxseS4g
-VGhhdCBzYWlkLCBpdCdzIHVubGlrZWx5IHlvdSBhY3R1YWxseSBuZWVkIGl0IG9uIHRoZSB0YXJn
-ZXQgCi0gYmFzaWNhbGx5IGlmIGl0IGxpbmtzIHdpdGggbGlibHRkbC4KCgoKICBSZWdhcmRzLAog
-IEFybm91dAoKW3NuaXBdCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0
-cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+There's a new feature to offload L2TP to the Linux kernel, which depends
+on libmnl.  A new menu option was introduced for that.
+
+It's possible to link an internal version of libmnl
+statically for smaller binary size on constraint targets, but this was
+not added to the buildroot package for complexity reasons (both build
+and licensing).
+
+The COPYING file gained an additional paragraph for internal libmnl
+which does not apply, because internal libmnl is not used in the
+package.
+
+Link: https://fastd.readthedocs.io/en/latest/releases/v22.html
+Signed-off-by: Alexander Dahl <post@lespocky.de>
+---
+ package/fastd/Config.in  | 8 ++++++++
+ package/fastd/fastd.hash | 4 ++--
+ package/fastd/fastd.mk   | 9 ++++++++-
+ 3 files changed, 18 insertions(+), 3 deletions(-)
+
+diff --git a/package/fastd/Config.in b/package/fastd/Config.in
+index 5319d68503..0214786470 100644
+--- a/package/fastd/Config.in
++++ b/package/fastd/Config.in
+@@ -21,6 +21,14 @@ config BR2_PACKAGE_FASTD_STATUS_SOCKET
+ 	help
+ 	  Enable support for a socket to get fastd's status.
+ 
++config BR2_PACKAGE_FASTD_OFFLOAD_L2TP
++	bool "l2tp offload support"
++	default y
++	select BR2_PACKAGE_LIBMNL
++	help
++	  L2TP can be offloaded to the Linux kernel, significantly
++	  increasing throughput.
++
+ endif
+ 
+ comment "fastd needs a toolchain w/ threads, dynamic library"
+diff --git a/package/fastd/fastd.hash b/package/fastd/fastd.hash
+index b59085e0ee..5f7f966533 100644
+--- a/package/fastd/fastd.hash
++++ b/package/fastd/fastd.hash
+@@ -1,3 +1,3 @@
+ # computed locally
+-sha256  942f33bcd794bcb8e19da4c30c875bdfd4d0f1c24ec4dcdf51237791bbfb0d4c  fastd-21.tar.xz
+-sha256  1f5acece57466eac89108f934a196be09b7676fa2d637e78d6657ee1a7d644ac  COPYRIGHT
++sha256  19750b88705d66811b7c21b672537909c19ae6b21350688cbd1a3a54d08a8951  fastd-22.tar.xz
++sha256  adf08b42f1b890b89e998360a864cb4f8441a0a57c9e95e2ce1bfdfc24c49976  COPYRIGHT
+diff --git a/package/fastd/fastd.mk b/package/fastd/fastd.mk
+index c1db1cc472..5cd6a909c3 100644
+--- a/package/fastd/fastd.mk
++++ b/package/fastd/fastd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FASTD_VERSION = 21
++FASTD_VERSION = 22
+ FASTD_SITE = https://github.com/NeoRaider/fastd/releases/download/v$(FASTD_VERSION)
+ FASTD_SOURCE = fastd-$(FASTD_VERSION).tar.xz
+ FASTD_LICENSE = BSD-2-Clause
+@@ -33,6 +33,13 @@ else
+ FASTD_CONF_OPTS += -Dstatus_socket=disabled
+ endif
+ 
++ifeq ($(BR2_PACKAGE_FASTD_OFFLOAD_L2TP),y)
++FASTD_CONF_OPTS += -Doffload_l2tp=enabled -Dlibmnl_builtin=false
++FASTD_DEPENDENCIES += libmnl
++else
++FASTD_CONF_OPTS += -Doffload_l2tp=disabled
++endif
++
+ ifeq ($(BR2_INIT_SYSTEMD),y)
+ FASTD_CONF_OPTS += -Dsystemd=enabled
+ else
+
+base-commit: 55ae6b59d48dd75f4e432b63e5b8a4655b76305c
+-- 
+2.20.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
