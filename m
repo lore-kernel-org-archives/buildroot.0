@@ -2,72 +2,72 @@ Return-Path: <SRS0=OlWD=PF=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 05346C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 17 Oct 2021 19:50:11 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BF7A3C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 17 Oct 2021 19:50:25 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 695A26108F
-	for <buildroot@archiver.kernel.org>; Sun, 17 Oct 2021 19:50:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 695A26108F
+	by mail.kernel.org (Postfix) with ESMTPS id 31241610A0
+	for <buildroot@archiver.kernel.org>; Sun, 17 Oct 2021 19:50:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 31241610A0
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 26E1C40160;
-	Sun, 17 Oct 2021 19:50:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EDCC460655;
+	Sun, 17 Oct 2021 19:50:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Gi3ZfhVUJcir; Sun, 17 Oct 2021 19:50:09 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3FB004020A;
-	Sun, 17 Oct 2021 19:50:08 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C4EB61BF59C
- for <buildroot@lists.busybox.net>; Sun, 17 Oct 2021 19:50:05 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B444C606DA
- for <buildroot@lists.busybox.net>; Sun, 17 Oct 2021 19:50:05 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Rz5w5-ksLvPP for <buildroot@lists.busybox.net>;
- Sun, 17 Oct 2021 19:50:04 +0000 (UTC)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id xlcR3sz9kpFS; Sun, 17 Oct 2021 19:50:24 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 414E560684;
+	Sun, 17 Oct 2021 19:50:23 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0228B1BF97A
+ for <buildroot@lists.busybox.net>; Sun, 17 Oct 2021 19:50:22 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id B74328104C
+ for <buildroot@lists.busybox.net>; Sun, 17 Oct 2021 19:50:21 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=free.fr
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2ZPTBmLBM7Yq for <buildroot@lists.busybox.net>;
+ Sun, 17 Oct 2021 19:50:19 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
 Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7C9E160684
- for <buildroot@buildroot.org>; Sun, 17 Oct 2021 19:50:04 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id EA25B8103B
+ for <buildroot@buildroot.org>; Sun, 17 Oct 2021 19:50:18 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b51:cb00:4430:5ced:ec21:1036])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id 8509378031A;
- Sun, 17 Oct 2021 21:49:58 +0200 (CEST)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id 643F878031A;
+ Sun, 17 Oct 2021 21:50:13 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1634500202;
- bh=dFLSp2faSYqXfy+TzqHGsxxyPyVbw844bAhrHWISaH0=;
+ s=smtp-20201208; t=1634500217;
+ bh=iRQTKUwna4J3S9D8uGkgYa+RKeSk7/egBUDIqe8cdeU=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=kciHjkSnmCDPHvUCTUXyo62pkrI2gKZz80XWU14pcHJR6rZrItu+yHndy1j2G5VsE
- FfzVzKpfyjt/vBVOsAZRraWyXYJ/mlC6arkDCMHQm+mNsomW37eoblYIOD4mGb8zDZ
- aMRpdrSnFRYzIz2eRK3J+CNNKMHB2NUc7qlXUiV25V5oORD0p/ScQSNDuNagBu7Sa5
- CjbnE7KS0tlISt0VUBu1JDXanw5nkiTDitmsEPmNYy1vdScwEMNYv76pc/3bjR0E7W
- 0BBedM/G/Lg1wd/yvU0hb1ZsXQ5I9UqpGqw8tEJiiyTsI+93DyaVMubrWrvcZ11Ny1
- PJsB/hkkTY6EA==
+ b=lNhViRl02hsEnGE0jFwWDqFMjRaFSpZg1ETP0/s+Wv01uT3DjbopMH8Lrgu5lElUS
+ HVm7IOKReSsCwIh7BRl1lh3BmKmkq0gqM0vKFzeMKffqjxVPsnE3rHLorg95hPnXUK
+ yPGfk6vWL82SjdiSkfkLDWKgSyVnycUh7r94MpuwfWUV15MMVk972qGbmXqZXpAzs8
+ IptzMJYakR128czTCTn1VL3VZTAntiIbt0MuGjyZCVGkA5+Cr+8baqArRLLrZPRuvu
+ GpPl/xo5g9u0sgdWy1f9UtWAh+xfLNCrXo1PAU3h0vjmnhNHjfvrGapqjOQa5gwVb1
+ 8kVIK3iPg64cw==
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 17 Oct 2021 21:49:58 +0200
-Date: Sun, 17 Oct 2021 21:49:58 +0200
+ Sun, 17 Oct 2021 21:50:13 +0200
+Date: Sun, 17 Oct 2021 21:50:13 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: Romain Naour <romain.naour@gmail.com>
-Message-ID: <20211017194958.GJ2400@scaer>
+Message-ID: <20211017195013.GK2400@scaer>
 References: <20210912140658.253602-1-romain.naour@gmail.com>
- <20210912141140.253778-11-romain.naour@gmail.com>
+ <20210912141140.253778-12-romain.naour@gmail.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20210912141140.253778-11-romain.naour@gmail.com>
+In-Reply-To: <20210912141140.253778-12-romain.naour@gmail.com>
 User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 13/16] support/testing: test_ubi: reduce the
- rootfs.ubi size to 64M to match the Qemu emulated flash device
+Subject: Re: [Buildroot] [PATCH 14/16] support/testing: test_ubi: add image
+ format on the qemu command line
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -88,15 +88,11 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 Romain, All,
 
 On 2021-09-12 16:11 +0200, Romain Naour spake thusly:
-> The size of the cfi flash device emulated by Qemu is 64M not 128M [1].
-> Since Qemu >= 4.0, the size of the device must match the size of the block backend [2].
+> Adding the Image format on the Qemu command line avoid this warning:
 > 
-> Fixes:
-> 
->   qemu-system-arm: device requires 67108864 bytes, block backend provides 134217728 bytes
-> 
-> [1] https://git.qemu.org/?p=qemu.git;a=blob;f=hw/arm/vexpress.c;h=58481c07629aedb09864dcc72757ff7947e733bb;hb=f9baca549e44791be0dd98de15add3d8452a8af0#l50
-> [2] https://git.qemu.org/?p=qemu.git;a=commitdiff;h=06f1521795207359a395996c253c306f4ab7586e
+> "WARNING: Image format was not specified for 'output/TestUbi/images/rootfs.ubi' and probing guessed raw.
+>          Automatically detecting the format is dangerous for raw images, write operations on block 0 will be restricted.
+>          Specify the 'raw' format explicitly to remove the restrictions."
 > 
 > Signed-off-by: Romain Naour <romain.naour@gmail.com>
 
@@ -110,18 +106,18 @@ Yann E. MORIN.
 >  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
 > diff --git a/support/testing/tests/fs/test_ubi.py b/support/testing/tests/fs/test_ubi.py
-> index 7321f83da9..8148e5f336 100644
+> index 8148e5f336..eeb55b1d59 100644
 > --- a/support/testing/tests/fs/test_ubi.py
 > +++ b/support/testing/tests/fs/test_ubi.py
-> @@ -25,7 +25,7 @@ class TestUbi(infra.basetest.BRTest):
->          out = out.splitlines()
->          self.assertIn("UBI image, version 1", out[0])
->  
-> -        subprocess.call(["truncate", "-s 128M", img])
-> +        subprocess.call(["truncate", "-s 64M", img])
->  
->          self.emulator.boot(arch="armv7",
->                             kernel="builtin",
+> @@ -32,7 +32,7 @@ class TestUbi(infra.basetest.BRTest):
+>                             kernel_cmdline=["root=ubi0:rootfs",
+>                                             "ubi.mtd=0",
+>                                             "rootfstype=ubifs"],
+> -                           options=["-drive", "file={},if=pflash".format(img)])
+> +                           options=["-drive", "file={},if=pflash,format=raw".format(img)])
+>          self.emulator.login()
+>          cmd = "mount | grep 'ubi0:rootfs on / type ubifs'"
+>          _, exit_code = self.emulator.run(cmd)
 > -- 
 > 2.31.1
 > 
