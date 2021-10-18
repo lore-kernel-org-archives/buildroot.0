@@ -2,52 +2,72 @@ Return-Path: <SRS0=Qe4W=PG=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A5D99C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 18 Oct 2021 20:32:14 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C4C00C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 18 Oct 2021 20:32:26 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 3148160EE2
-	for <buildroot@archiver.kernel.org>; Mon, 18 Oct 2021 20:32:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3148160EE2
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
+	by mail.kernel.org (Postfix) with ESMTPS id 2DBC3608FB
+	for <buildroot@archiver.kernel.org>; Mon, 18 Oct 2021 20:32:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2DBC3608FB
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=eccles.dev
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 716C34048D;
-	Mon, 18 Oct 2021 20:32:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E7E1682AF8;
+	Mon, 18 Oct 2021 20:32:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wtnu4CxQNmFt; Mon, 18 Oct 2021 20:32:12 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id iz85Whkt4I1v; Mon, 18 Oct 2021 20:32:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 34CEF4048E;
-	Mon, 18 Oct 2021 20:32:11 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 13AA21BF27A
- for <buildroot@lists.busybox.net>; Mon, 18 Oct 2021 20:31:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4992B82ADD;
+	Mon, 18 Oct 2021 20:32:24 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1771C1BF27A
+ for <buildroot@lists.busybox.net>; Mon, 18 Oct 2021 20:32:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0398B404E4
- for <buildroot@lists.busybox.net>; Mon, 18 Oct 2021 20:31:57 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 14AA282ADD
+ for <buildroot@lists.busybox.net>; Mon, 18 Oct 2021 20:32:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KgOLTJNUtIZ1 for <buildroot@lists.busybox.net>;
- Mon, 18 Oct 2021 20:31:56 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 22959404EE
- for <buildroot@buildroot.org>; Mon, 18 Oct 2021 20:31:56 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id BF6498799D; Mon, 18 Oct 2021 20:28:51 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hkLJFb4qlHA6 for <buildroot@lists.busybox.net>;
+ Mon, 18 Oct 2021 20:32:20 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com
+ [209.85.215.174])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7B1E482ACD
+ for <buildroot@buildroot.org>; Mon, 18 Oct 2021 20:32:20 +0000 (UTC)
+Received: by mail-pg1-f174.google.com with SMTP id 75so17334173pga.3
+ for <buildroot@buildroot.org>; Mon, 18 Oct 2021 13:32:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=hVouPLC3jUK9gFvU3FpDZNMLrWeVbLe6TsbL9yZTkUM=;
+ b=kyYxAMr12ii7fpDsTiEmCmzupfiM+UWNc2Jc1gvr8uceV3+JRM/YnVF1Lf7fOvcvc7
+ 9VXPAK3USNkBFg5yOU2GbQ4TdOBnT8cN03mLCA45qVm3R9dOAuaG0ALbh79CNUxV1VAj
+ ALGoHv4HsH699+gIYq8uHaxpI+8Lodqul1SmDLjMnwuWStTiSIIUFtIdUstp0uGUJdDa
+ ZfXRITOHKi+spcA9S65rhrM948GtAVKG4M6NvHBrctMbarOY0Ge4yZlAjI4FzP76YXSu
+ d3UDQd4Jfq7AC+0bOKgf2skBJk9xYLNcl3Y8/vef4S6TminYX4/J/fNcSRedrE0q1J3T
+ vi5Q==
+X-Gm-Message-State: AOAM530rOh4nW8EQtKkgqEyNQHrAmYwBTtDMeExL/tog7B2qYchTLf4H
+ h7wWUmRgSHmKBjEwz9uJh+lJ5RHD0g==
+X-Google-Smtp-Source: ABdhPJxVeLdyHq+kUHvySUh617Y/G1zY2T0ZgyRho0M+pzm3kNmMYR3bKHGlVSt7pR312QgpID0ltw==
+X-Received: by 2002:a63:7a4a:: with SMTP id j10mr24777385pgn.284.1634589139666; 
+ Mon, 18 Oct 2021 13:32:19 -0700 (PDT)
+Received: from CTWS96.BCI.LOCAL ([50.224.150.182])
+ by smtp.googlemail.com with ESMTPSA id oa1sm304026pjb.6.2021.10.18.13.32.18
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 18 Oct 2021 13:32:19 -0700 (PDT)
+From: Will Eccles <will@eccles.dev>
 To: buildroot@buildroot.org
-Date: Mon, 18 Oct 2021 22:31:11 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1217817ac20bad1d62ef9322084f6268a9084a87
-X-Git-Newrev: d721c95b8b28e549d19d11d7b530fdd71cb0a54c
-X-Patchwork-Hint: ignore
-Message-Id: <20211018202851.BF6498799D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support: fix flake8 error E741 ambiguous
- variable name
+Date: Mon, 18 Oct 2021 16:30:37 -0400
+Message-Id: <20211018203038.32453-1-will@eccles.dev>
+X-Mailer: git-send-email 2.33.1
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH] package/openssh: reset umask when init script
+ exits
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,124 +79,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Will Eccles <will@eccles.dev>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d721c95b8b28e549d19d11d7b530fdd71cb0a54c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+S50sshd updates umask to 077, but does not reset it when it exits. This
+results in the root user's umask being configured incorrectly (assuming
+a default of 022 or otherwise). This patch adds a trap to reset umask
+when the script exits. This is convenient on systems where, for example,
+configs such as /etc/profile may not be sourced by the root user. It may
+also prevent issues with other init scripts which may inherit this umask
+unintentionally, leading to improper permissions elsewhere in the
+system.
 
-A recent update of flake8 in CI introduced a new check E741. It
-basically checks that variables are at least 3 characters long. Up to
-now, however, we have used shorter names in some places - all of them
-turn out to be "l" for a line of text.
-
-Replace all those "l" variables with "line".
-
-Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/1687009829
-partially:
-support/scripts/boot-qemu-image.py:47:21: E741 ambiguous variable name 'l'
-support/scripts/check-dotconfig.py:20:38: E741 ambiguous variable name 'l'
-support/scripts/size-stats:76:13: E741 ambiguous variable name 'l'
-support/testing/tests/core/test_bad_arch.py:17:32: E741 ambiguous variable name 'l'
-support/testing/tests/package/test_python_treq.py:10:30: E741 ambiguous variable name 'l'
-support/testing/tests/toolchain/test_external.py:30:42: E741 ambiguous variable name 'l'
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Will Eccles <will@eccles.dev>
 ---
- support/scripts/boot-qemu-image.py                | 6 +++---
- support/scripts/check-dotconfig.py                | 2 +-
- support/scripts/size-stats                        | 4 ++--
- support/testing/tests/core/test_bad_arch.py       | 2 +-
- support/testing/tests/package/test_python_treq.py | 2 +-
- support/testing/tests/toolchain/test_external.py  | 2 +-
- 6 files changed, 9 insertions(+), 9 deletions(-)
+Backport to: 2021.02.6, 2021.08.1
+(These are the releases on buildroot.org as of this writing, but as far
+as I can tell, even releases as far back as 2012 have the same problem.)
+---
+ package/openssh/S50sshd | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/support/scripts/boot-qemu-image.py b/support/scripts/boot-qemu-image.py
-index 0d4ad825fc..fba1533bb7 100755
---- a/support/scripts/boot-qemu-image.py
-+++ b/support/scripts/boot-qemu-image.py
-@@ -43,9 +43,9 @@ def main():
-         # In this case, spawn above will succeed at starting the wrapper
-         # start-qemu.sh, but that one will fail (exit with 127) in such
-         # a situation.
--        exit = [int(l.split(' ')[1])
--                for l in e.value.splitlines()
--                if l.startswith('exitstatus: ')]
-+        exit = [int(line.split(' ')[1])
-+                for line in e.value.splitlines()
-+                if line.startswith('exitstatus: ')]
-         if len(exit) and exit[0] == 127:
-             print('qemu-start.sh could not find the qemu binary')
-             sys.exit(0)
-diff --git a/support/scripts/check-dotconfig.py b/support/scripts/check-dotconfig.py
-index f9a416b743..54fd6ae91e 100755
---- a/support/scripts/check-dotconfig.py
-+++ b/support/scripts/check-dotconfig.py
-@@ -17,7 +17,7 @@ def main():
+diff --git a/package/openssh/S50sshd b/package/openssh/S50sshd
+index 22da41d1ca..94cf4c14e8 100644
+--- a/package/openssh/S50sshd
++++ b/package/openssh/S50sshd
+@@ -6,6 +6,8 @@
+ # Make sure the ssh-keygen progam exists
+ [ -f /usr/bin/ssh-keygen ] || exit 0
  
-     # strip() to get rid of trailing \n
-     with open(configfile) as configf:
--        configlines = [l.strip() for l in configf.readlines()]
-+        configlines = [line.strip() for line in configf.readlines()]
++# Reset uname at exit
++trap "uname $(uname)" EXIT
+ umask 077
  
-     defconfiglines = []
-     with open(defconfig) as defconfigf:
-diff --git a/support/scripts/size-stats b/support/scripts/size-stats
-index bf3d12a9b7..e4389e99b5 100755
---- a/support/scripts/size-stats
-+++ b/support/scripts/size-stats
-@@ -73,8 +73,8 @@ def add_file(filesdict, relpath, abspath, pkg):
- def build_package_dict(builddir):
-     filesdict = {}
-     with open(os.path.join(builddir, "build", "packages-file-list.txt")) as f:
--        for l in f.readlines():
--            pkg, fpath = l.split(",", 1)
-+        for line in f.readlines():
-+            pkg, fpath = line.split(",", 1)
-             # remove the initial './' in each file path
-             fpath = fpath.strip()[2:]
-             fullpath = os.path.join(builddir, "target", fpath)
-diff --git a/support/testing/tests/core/test_bad_arch.py b/support/testing/tests/core/test_bad_arch.py
-index 316231e28e..c96a7152af 100644
---- a/support/testing/tests/core/test_bad_arch.py
-+++ b/support/testing/tests/core/test_bad_arch.py
-@@ -14,5 +14,5 @@ class DetectBadArchTest(infra.basetest.BRConfigTest):
-         if logf_path:
-             s = 'ERROR: architecture for "/usr/bin/foo" is'
-             with open(logf_path, "r") as f:
--                lines = [l for l in f.readlines() if l.startswith(s)]
-+                lines = [line for line in f.readlines() if line.startswith(s)]
-             self.assertEqual(len(lines), 1)
-diff --git a/support/testing/tests/package/test_python_treq.py b/support/testing/tests/package/test_python_treq.py
-index d7a23829ea..307c9932b2 100644
---- a/support/testing/tests/package/test_python_treq.py
-+++ b/support/testing/tests/package/test_python_treq.py
-@@ -7,7 +7,7 @@ class TestPythonTreq(TestPythonPackageBase):
-     def run_sample_scripts(self):
-         cmd = self.interpreter + " sample_python_treq.py"
-         output, exit_code = self.emulator.run(cmd, timeout=20)
--        refuse_msgs = [1 for l in output if "Connection refused" in l]
-+        refuse_msgs = [1 for line in output if "Connection refused" in line]
-         self.assertGreater(sum(refuse_msgs), 0)
-         self.assertEqual(exit_code, 0)
- 
-diff --git a/support/testing/tests/toolchain/test_external.py b/support/testing/tests/toolchain/test_external.py
-index db62a84391..d22f38cedc 100644
---- a/support/testing/tests/toolchain/test_external.py
-+++ b/support/testing/tests/toolchain/test_external.py
-@@ -27,7 +27,7 @@ class TestExternalToolchain(infra.basetest.BRTest):
-             self.assertFalse(has_broken_links(path))
- 
-         with open(os.path.join(self.builddir, ".config"), 'r') as configf:
--            configlines = [l.strip() for l in configf.readlines()]
-+            configlines = [line.strip() for line in configf.readlines()]
- 
-         if "BR2_BINFMT_ELF=y" in configlines:
-             interp = infra.get_elf_prog_interpreter(self.builddir,
+ start() {
+-- 
+2.33.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
