@@ -2,89 +2,84 @@ Return-Path: <SRS0=Qe4W=PG=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 473E2C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 18 Oct 2021 11:20:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D1694C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 18 Oct 2021 12:19:15 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id C5D2260F57
-	for <buildroot@archiver.kernel.org>; Mon, 18 Oct 2021 11:20:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C5D2260F57
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=foss.st.com
+	by mail.kernel.org (Postfix) with ESMTPS id 61A9160FDA
+	for <buildroot@archiver.kernel.org>; Mon, 18 Oct 2021 12:19:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 61A9160FDA
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6B11E404EB;
-	Mon, 18 Oct 2021 11:20:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 37BD34034C;
+	Mon, 18 Oct 2021 12:19:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id P2Hw8v3OFyLY; Mon, 18 Oct 2021 11:20:52 +0000 (UTC)
+	with ESMTP id 5uXF_4AiJuoq; Mon, 18 Oct 2021 12:19:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C8C63404E4;
-	Mon, 18 Oct 2021 11:20:51 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 257FD1BF3A8
- for <buildroot@lists.busybox.net>; Mon, 18 Oct 2021 11:20:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 863AA402BD;
+	Mon, 18 Oct 2021 12:19:13 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 4E8761BF27C
+ for <buildroot@lists.busybox.net>; Mon, 18 Oct 2021 12:19:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 20DCA403ED
- for <buildroot@lists.busybox.net>; Mon, 18 Oct 2021 11:20:50 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4B2826089E
+ for <buildroot@lists.busybox.net>; Mon, 18 Oct 2021 12:19:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=foss.st.com
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kv5sgQBQrV9l for <buildroot@lists.busybox.net>;
- Mon, 18 Oct 2021 11:20:47 +0000 (UTC)
-X-Greylist: delayed 00:14:06 by SQLgrey-1.8.0
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com
- [91.207.212.93])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 040CD400D0
- for <buildroot@buildroot.org>; Mon, 18 Oct 2021 11:20:46 +0000 (UTC)
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
- by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 19I9fiRd030428; 
- Mon, 18 Oct 2021 13:06:39 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com;
- h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=TJE+6iwCqTjQDNlZTeWejhsYfhhr6569lzVABIjI36Q=;
- b=BN6IsRGf0Dn5oszo8LW9hzJHSctYC3r7aqcfKJezpQxic+CiiXL9ykT5MCPUuNLF6tdH
- 8KY9Jlnq43gYy+FlTB+5WjKS6fPqaIhqlzeFR0pobtBYM95bWjekKDPEEKS0yMfnb692
- IPKnsAAga0+O5LyzDO3O2vJdFawe7oB48dc2u4Nx5YsZTUju6Lkzu468akkaZrhuU1UJ
- f4EVAvq5oQ8m4TuOWC6PymwRYrE/gJeGyEUh6+Wzg7P8ENU7VhrKKJYUR4uG4m7hgTPR
- Vn5tXuksCt+ebIzgkSo9nurQy7CZMrA82BqlJdqPb1JwT8WMrw5f9iPBLi82GoCdOP9f xg== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
- by mx07-00178001.pphosted.com with ESMTP id 3bs6h2rfw3-1
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
- Mon, 18 Oct 2021 13:06:39 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
- by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id AC624100034;
- Mon, 18 Oct 2021 13:06:33 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
- by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id A536521B530;
- Mon, 18 Oct 2021 13:06:33 +0200 (CEST)
-Received: from lmecxl0909.lme.st.com (10.75.127.45) by SFHDAG2NODE2.st.com
- (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Mon, 18 Oct
- 2021 13:06:33 +0200
-To: Dario Binacchi <dariobin@libero.it>, <buildroot@buildroot.org>
-References: <20211017162839.20278-1-dariobin@libero.it>
- <20211017162839.20278-3-dariobin@libero.it>
-From: Christophe Priouzeau <christophe.priouzeau@foss.st.com>
-Message-ID: <8a33166b-a475-e906-6bf1-71eb8eff1ee2@foss.st.com>
-Date: Mon, 18 Oct 2021 13:06:32 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8xtKJKDF5qkA for <buildroot@lists.busybox.net>;
+ Mon, 18 Oct 2021 12:19:11 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
+ [IPv6:2a00:1450:4864:20::434])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 43E4A60811
+ for <buildroot@buildroot.org>; Mon, 18 Oct 2021 12:19:11 +0000 (UTC)
+Received: by mail-wr1-x434.google.com with SMTP id k7so40823818wrd.13
+ for <buildroot@buildroot.org>; Mon, 18 Oct 2021 05:19:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=JiiWeBQSVxwo06/XEzITWWn1+JTdlFdgxe9Mk5VHb9I=;
+ b=SmpnpOFEOIwg+Rd9BrrN0MvwytMYqfddKkCMph5mEnkh/E1eY1q6yNdBTPK5lGmJ9P
+ Tonr58JWFCpyTVIQzmxA5gKK2KZfl9NrXDgu7y9YcQ4HFBYcxacoMauummpIHTMIF9hu
+ zJSgmMd1KpAEjERq+809q1iGOQCX1ZcDna+cl+j457dQ64UvYiu/OkT+uC6FpJ3JnQSU
+ UAFGCHNeq5jk+4BIUJfuARFACatoPFL8O/AmIQY+vFFoFaBzPGYmysqwhcs+DWw24fQy
+ XD5R0VB1jVQelAm7WOhKjtcqdS/JUZkH7T8JOEK8583h+YMzBvqukB/X/8l6bU48To5l
+ ptTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=JiiWeBQSVxwo06/XEzITWWn1+JTdlFdgxe9Mk5VHb9I=;
+ b=i6xm3qn9vETgV2xYE/heLgZbbcAvSO3fnN0DwoIt6sIVWmeRN6/Z5bQ/I6/0YWRHAR
+ i+CBesZHNfzD/V4YqTcWJrTsjpxUoHRWJ/wWXckyCvKykpS6Biy/2Bm3hXEd5c9D982O
+ mOGuR/SV+uaTpOh/xMLYd3gdi2xvRhhxRlclmY1aAyWb4zyYx0pc5LrqYgNujIBdfzsz
+ +CVBaqITkhbtHmDrDMmc6GF6uv1NCsSq33L9v1gcP4a5eFmld5KbdTHGjPCr111EhvaG
+ kJzk7wHvKHCI4Z61vs5WYp9c2i0JQ6QwsHyOPZlyZYuHyrt0HHMloqKAO8NqkdDz3z+M
+ qO7A==
+X-Gm-Message-State: AOAM530N/yeqUi93CIbCQk3eWeSU1gHZk3JBkRwp5hOqHvigLJQINJ9B
+ s1z+xM8Gp/7T+6jzxog/RSavHipArcc=
+X-Google-Smtp-Source: ABdhPJxIeID9VhWn87eDoUPQItrIDnDqemALxJCivhxbuf64SHAJ0Ud5IdSRPo9Wz2DGRc6VguIgYA==
+X-Received: by 2002:adf:bb8d:: with SMTP id q13mr35878165wrg.327.1634559548983; 
+ Mon, 18 Oct 2021 05:19:08 -0700 (PDT)
+Received: from shrek.dav.id (lmontsouris-659-1-42-116.w92-154.abo.wanadoo.fr.
+ [92.154.77.116])
+ by smtp.gmail.com with ESMTPSA id j15sm12470451wrr.8.2021.10.18.05.19.08
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 18 Oct 2021 05:19:08 -0700 (PDT)
+From: Johan Oudinet <johan.oudinet@gmail.com>
+To: buildroot@buildroot.org
+Date: Mon, 18 Oct 2021 14:19:00 +0200
+Message-Id: <20211018121900.455863-1-johan.oudinet@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <20211017162839.20278-3-dariobin@libero.it>
-Content-Language: en-GB
-X-Originating-IP: [10.75.127.45]
-X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-10-18_03,2021-10-14_02,2020-04-07_01
-Subject: Re: [Buildroot] [PATCH 2/2] configs/stm32f469_disco: add
- framebuffer test application
+Subject: [Buildroot] [PATCH] package/vis-network: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,47 +91,99 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Johan Oudinet <johan.oudinet@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Acked-by: Christophe Priouzeau <christophe.priouzeau@foss.st.com>
+Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+---
+ DEVELOPERS                           |  1 +
+ package/Config.in                    |  1 +
+ package/vis-network/Config.in        |  7 +++++++
+ package/vis-network/vis-network.hash |  4 ++++
+ package/vis-network/vis-network.mk   | 19 +++++++++++++++++++
+ 5 files changed, 32 insertions(+)
+ create mode 100644 package/vis-network/Config.in
+ create mode 100644 package/vis-network/vis-network.hash
+ create mode 100644 package/vis-network/vis-network.mk
 
-On 10/17/21 6:28 PM, Dario Binacchi wrote:
-> It's a test suite for Linux framebuffer. You can run, for example,
-> fb-test-rect that displays random rectangles on the screen. But first,
-> you need to enable the framebuffer:
-> 
-> ~ # echo 0 0 > /sys/class/graphics/fb0/pan
-> ~ # fb-test-rect
-> 
-> Signed-off-by: Dario Binacchi <dariobin@libero.it>
-> ---
->   configs/stm32f469_disco_defconfig | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/configs/stm32f469_disco_defconfig b/configs/stm32f469_disco_defconfig
-> index 438d32150c..47dbc108a7 100644
-> --- a/configs/stm32f469_disco_defconfig
-> +++ b/configs/stm32f469_disco_defconfig
-> @@ -14,6 +14,7 @@ BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="zImage"
->   BR2_LINUX_KERNEL_DTS_SUPPORT=y
->   BR2_LINUX_KERNEL_INTREE_DTS_NAME="stm32f469-disco"
->   BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-minimal.config"
-> +BR2_PACKAGE_FB_TEST_APP=y
->   BR2_TARGET_ROOTFS_EXT2=y
->   BR2_TARGET_ROOTFS_EXT2_SIZE="32M"
->   # BR2_TARGET_ROOTFS_TAR is not set
-> 
-
-
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 19f6d95270..ebbc960711 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1392,6 +1392,7 @@ F:	package/erlang-p1-yconf/
+ F:	package/erlang-p1-zlib/
+ F:	package/nginx-dav-ext/
+ F:	package/vuejs/
++F:	package/vis-network/
+ 
+ N:	John Stile <johns@msli.com>
+ F:	package/dhcpcd/
+diff --git a/package/Config.in b/package/Config.in
+index 48f365d773..d33cedc665 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1648,6 +1648,7 @@ endif
+ 	source "package/jszip/Config.in"
+ 	source "package/openlayers/Config.in"
+ 	source "package/popperjs/Config.in"
++	source "package/vis-network/Config.in"
+ 	source "package/vuejs/Config.in"
+ if BR2_PACKAGE_VUEJS
+ comment "External Vue.js plugins"
+diff --git a/package/vis-network/Config.in b/package/vis-network/Config.in
+new file mode 100644
+index 0000000000..39e8ac54c5
+--- /dev/null
++++ b/package/vis-network/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_VIS_NETWORK
++	bool "vis-network"
++	help
++	  Display dynamic, automatically organised, customizable network
++	  views. Network uses HTML canvas for rendering.
++
++	  http://visjs.github.io/vis-network/
+diff --git a/package/vis-network/vis-network.hash b/package/vis-network/vis-network.hash
+new file mode 100644
+index 0000000000..56f141f5f7
+--- /dev/null
++++ b/package/vis-network/vis-network.hash
+@@ -0,0 +1,4 @@
++# Locally computed
++sha256  a9f7325cbe28147318476c63f09c1d5c894d2239bfa4b4dd2dfb3dbebb0705d3  vis-network-9.1.0.tgz
++sha256  1509904280a272780fd69c04b858f512cf216f8e3464a0dd98d8f34416feced9  LICENSE-APACHE-2.0
++sha256  1f65085e54c036645082257618db2c7b787e68c3b02485e214ecd09e0834ee8f  LICENSE-MIT
+diff --git a/package/vis-network/vis-network.mk b/package/vis-network/vis-network.mk
+new file mode 100644
+index 0000000000..13e8e013be
+--- /dev/null
++++ b/package/vis-network/vis-network.mk
+@@ -0,0 +1,19 @@
++################################################################################
++#
++# vis-network
++#
++################################################################################
++
++VIS_NETWORK_VERSION = 9.1.0
++VIS_NETWORK_SOURCE = vis-network-$(VIS_NETWORK_VERSION).tgz
++VIS_NETWORK_SITE = https://registry.npmjs.org/vis-network/-
++VIS_NETWORK_LICENSE = Apache-2.0, MIT
++VIS_NETWORK_LICENSE_FILES = LICENSE-APACHE-2.0 LICENSE-MIT
++
++# Install .min.js as .js
++define VIS_NETWORK_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 644 -D $(@D)/dist/vis-network.min.js \
++		$(TARGET_DIR)/var/www/vis-network.js
++endef
++
++$(eval $(generic-package))
 -- 
-Best regards / Cordialement,
+2.25.1
 
-Christophe Priouzeau | Tel: +33 244027320
-STMicroelectronics
-ST online: www.st.com<http://www.st.com/>
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
