@@ -2,51 +2,55 @@ Return-Path: <SRS0=Qe4W=PG=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CC464C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 18 Oct 2021 19:20:36 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E5F5CC433F5
+	for <buildroot@archiver.kernel.org>; Mon, 18 Oct 2021 19:20:48 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 5023560C4C
-	for <buildroot@archiver.kernel.org>; Mon, 18 Oct 2021 19:20:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5023560C4C
+	by mail.kernel.org (Postfix) with ESMTPS id 3FAF86103D
+	for <buildroot@archiver.kernel.org>; Mon, 18 Oct 2021 19:20:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3FAF86103D
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1C942402A2;
-	Mon, 18 Oct 2021 19:20:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1732860817;
+	Mon, 18 Oct 2021 19:20:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id S-nvZNB2WcCy; Mon, 18 Oct 2021 19:20:35 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id B1YRevVC0fAs; Mon, 18 Oct 2021 19:20:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 30BBB4021F;
-	Mon, 18 Oct 2021 19:20:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8227A60654;
+	Mon, 18 Oct 2021 19:20:46 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 340281BF319
- for <buildroot@lists.busybox.net>; Mon, 18 Oct 2021 19:16:14 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 269171BF319
+ for <buildroot@lists.busybox.net>; Mon, 18 Oct 2021 19:16:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 304C3608E9
- for <buildroot@lists.busybox.net>; Mon, 18 Oct 2021 19:16:14 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 225E160625
+ for <buildroot@lists.busybox.net>; Mon, 18 Oct 2021 19:16:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LPlTgDpobnbX for <buildroot@lists.busybox.net>;
- Mon, 18 Oct 2021 19:16:11 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 76C70607C4
- for <buildroot@buildroot.org>; Mon, 18 Oct 2021 19:16:09 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 43B1587431; Mon, 18 Oct 2021 19:13:05 +0000 (UTC)
+ with ESMTP id OdS1J_d2X-td for <buildroot@lists.busybox.net>;
+ Mon, 18 Oct 2021 19:16:46 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0F986605CB
+ for <buildroot@buildroot.org>; Mon, 18 Oct 2021 19:16:41 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 5750024000E;
+ Mon, 18 Oct 2021 19:16:36 +0000 (UTC)
+Date: Mon, 18 Oct 2021 21:16:35 +0200
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: buildroot@buildroot.org
-Date: Mon, 18 Oct 2021 21:15:57 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d92f86849a75813e88f2a98a5294738d6806be9f
-X-Git-Newrev: 513508de0b15853cb484c16412ffac9926c4cc8c
-X-Patchwork-Hint: ignore
-Message-Id: <20211018191305.43B1587431@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] DEVELOPERS: remove qemu_cksy
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20211018211635.526e0fd2@windsurf>
+In-Reply-To: <20211018162109.1500021-1-fontaine.fabrice@gmail.com>
+References: <20211018162109.1500021-1-fontaine.fabrice@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] DEVELOPERS: remove qemu_cksy
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,38 +62,30 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=513508de0b15853cb484c16412ffac9926c4cc8c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, 18 Oct 2021 18:21:09 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Commit b36c4e594c658d49d19bf388b7fd4a912b6fde42 forgot to remove
-board/qemu/csky abd configs/qemu_csky* from DEVELOPERS file
+> Commit b36c4e594c658d49d19bf388b7fd4a912b6fde42 forgot to remove
+> board/qemu/csky abd configs/qemu_csky* from DEVELOPERS file
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  DEVELOPERS | 2 --
+>  1 file changed, 2 deletions(-)
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS | 2 --
- 1 file changed, 2 deletions(-)
+Applied to master, thanks.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 19f6d95270..871df1e7bb 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1105,9 +1105,7 @@ F:	package/reaver/
- N:	Guo Ren <ren_guo@c-sky.com>
- F:	arch/Config.in.csky
- F:	board/csky/
--F:	board/qemu/csky
- F:	configs/csky_*
--F:	configs/qemu_csky*
- 
- N:	Gustavo Heinz <gustavo@gsthnz.com>
- F:	package/python-m2crypto/
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
