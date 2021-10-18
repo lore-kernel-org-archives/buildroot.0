@@ -2,72 +2,71 @@ Return-Path: <SRS0=Qe4W=PG=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C4C00C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 18 Oct 2021 20:32:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7120EC433EF
+	for <buildroot@archiver.kernel.org>; Mon, 18 Oct 2021 20:33:37 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2DBC3608FB
-	for <buildroot@archiver.kernel.org>; Mon, 18 Oct 2021 20:32:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2DBC3608FB
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=eccles.dev
+	by mail.kernel.org (Postfix) with ESMTPS id 2AC5560EE2
+	for <buildroot@archiver.kernel.org>; Mon, 18 Oct 2021 20:33:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2AC5560EE2
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E7E1682AF8;
-	Mon, 18 Oct 2021 20:32:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BA43782B1E;
+	Mon, 18 Oct 2021 20:33:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id iz85Whkt4I1v; Mon, 18 Oct 2021 20:32:25 +0000 (UTC)
+	with ESMTP id caYhzhHU1Xkc; Mon, 18 Oct 2021 20:33:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4992B82ADD;
-	Mon, 18 Oct 2021 20:32:24 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1771C1BF27A
- for <buildroot@lists.busybox.net>; Mon, 18 Oct 2021 20:32:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1E18382ADD;
+	Mon, 18 Oct 2021 20:33:35 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D63871BF27A
+ for <buildroot@lists.busybox.net>; Mon, 18 Oct 2021 20:33:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 14AA282ADD
- for <buildroot@lists.busybox.net>; Mon, 18 Oct 2021 20:32:21 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C62786078A
+ for <buildroot@lists.busybox.net>; Mon, 18 Oct 2021 20:33:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hkLJFb4qlHA6 for <buildroot@lists.busybox.net>;
- Mon, 18 Oct 2021 20:32:20 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com
- [209.85.215.174])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7B1E482ACD
- for <buildroot@buildroot.org>; Mon, 18 Oct 2021 20:32:20 +0000 (UTC)
-Received: by mail-pg1-f174.google.com with SMTP id 75so17334173pga.3
- for <buildroot@buildroot.org>; Mon, 18 Oct 2021 13:32:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=hVouPLC3jUK9gFvU3FpDZNMLrWeVbLe6TsbL9yZTkUM=;
- b=kyYxAMr12ii7fpDsTiEmCmzupfiM+UWNc2Jc1gvr8uceV3+JRM/YnVF1Lf7fOvcvc7
- 9VXPAK3USNkBFg5yOU2GbQ4TdOBnT8cN03mLCA45qVm3R9dOAuaG0ALbh79CNUxV1VAj
- ALGoHv4HsH699+gIYq8uHaxpI+8Lodqul1SmDLjMnwuWStTiSIIUFtIdUstp0uGUJdDa
- ZfXRITOHKi+spcA9S65rhrM948GtAVKG4M6NvHBrctMbarOY0Ge4yZlAjI4FzP76YXSu
- d3UDQd4Jfq7AC+0bOKgf2skBJk9xYLNcl3Y8/vef4S6TminYX4/J/fNcSRedrE0q1J3T
- vi5Q==
-X-Gm-Message-State: AOAM530rOh4nW8EQtKkgqEyNQHrAmYwBTtDMeExL/tog7B2qYchTLf4H
- h7wWUmRgSHmKBjEwz9uJh+lJ5RHD0g==
-X-Google-Smtp-Source: ABdhPJxVeLdyHq+kUHvySUh617Y/G1zY2T0ZgyRho0M+pzm3kNmMYR3bKHGlVSt7pR312QgpID0ltw==
-X-Received: by 2002:a63:7a4a:: with SMTP id j10mr24777385pgn.284.1634589139666; 
- Mon, 18 Oct 2021 13:32:19 -0700 (PDT)
-Received: from CTWS96.BCI.LOCAL ([50.224.150.182])
- by smtp.googlemail.com with ESMTPSA id oa1sm304026pjb.6.2021.10.18.13.32.18
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 18 Oct 2021 13:32:19 -0700 (PDT)
-From: Will Eccles <will@eccles.dev>
-To: buildroot@buildroot.org
-Date: Mon, 18 Oct 2021 16:30:37 -0400
-Message-Id: <20211018203038.32453-1-will@eccles.dev>
-X-Mailer: git-send-email 2.33.1
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=free.fr
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 38l6iGNvrnTn for <buildroot@lists.busybox.net>;
+ Mon, 18 Oct 2021 20:33:33 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D72ED6074F
+ for <buildroot@buildroot.org>; Mon, 18 Oct 2021 20:33:32 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:c87d:8477:c454:3318])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPSA id C72DF20039E;
+ Mon, 18 Oct 2021 22:33:26 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+ s=smtp-20201208; t=1634589210;
+ bh=mrWjWpdwRkyLzw6zkJNzEaWzPQp0mOJigjQ0yKY1MXA=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=C6897zK0QpTP9+6IGYcxeIYaj7oQjiR2CPKCdOdtMmJQQXY9sP/iotwqEwCoWlhX3
+ LdHLFdU0GaHp0ELVggYYV8TESRPuoLwaE/bXVl8xmBYc0RAn5ekCvf78tmMVPl2qwh
+ CLZJBLv58RJZcwM3wElV6xdKch0VOcRIjvuF79OJ1e21+vZruxzFJsl1hrlVbfKwrP
+ aUrNfrPumMzCx3Y9hn41FaTgRtWtcOUdl44oDLCSE0KVgY3n2csRNWavHKqL+IGNLr
+ C9Dnyx2DUzWCdkirOrM0lhSmaaktiH9Y/YDixMth2cWRhjI8NuydHCuQ8e3bCxmB3R
+ 6st4O1WNQ/Wyw==
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Mon, 18 Oct 2021 22:33:26 +0200
+Date: Mon, 18 Oct 2021 22:33:26 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
+Message-ID: <20211018203326.GU2400@scaer>
+References: <20211018195822.2263226-1-arnout@mind.be>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/openssh: reset umask when init script
- exits
+Content-Disposition: inline
+In-Reply-To: <20211018195822.2263226-1-arnout@mind.be>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+Subject: Re: [Buildroot] [PATCH 1/2] tests: sample_python_dbus_next: ignore
+ F821 flake8 error
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,46 +78,68 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Will Eccles <will@eccles.dev>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-S50sshd updates umask to 077, but does not reset it when it exits. This
-results in the root user's umask being configured incorrectly (assuming
-a default of 022 or otherwise). This patch adds a trap to reset umask
-when the script exits. This is convenient on systems where, for example,
-configs such as /etc/profile may not be sourced by the root user. It may
-also prevent issues with other init scripts which may inherit this umask
-unintentionally, leading to improper permissions elsewhere in the
-system.
+Arnout, All,
 
-Signed-off-by: Will Eccles <will@eccles.dev>
----
-Backport to: 2021.02.6, 2021.08.1
-(These are the releases on buildroot.org as of this writing, but as far
-as I can tell, even releases as far back as 2012 have the same problem.)
----
- package/openssh/S50sshd | 2 ++
- 1 file changed, 2 insertions(+)
+On 2021-10-18 21:58 +0200, Arnout Vandecappelle (Essensium/Mind) spake thusly:
+> The dbus-next package uses the Python type annotation for dbus types. This is
+> not compatible with the python typing assumption that flake8 makes.
+> 
+> Exclude F821 from this line.
+> 
+> Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/1687009829
+> partially:
+> support/testing/tests/package/sample_python_dbus_next.py:17:36: F821 undefined name 's'
+> support/testing/tests/package/sample_python_dbus_next.py:17:48: F821 undefined name 's'
+> support/testing/tests/package/sample_python_dbus_next.py:17:56: F821 undefined name 's'
+> 
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-diff --git a/package/openssh/S50sshd b/package/openssh/S50sshd
-index 22da41d1ca..94cf4c14e8 100644
---- a/package/openssh/S50sshd
-+++ b/package/openssh/S50sshd
-@@ -6,6 +6,8 @@
- # Make sure the ssh-keygen progam exists
- [ -f /usr/bin/ssh-keygen ] || exit 0
- 
-+# Reset uname at exit
-+trap "uname $(uname)" EXIT
- umask 077
- 
- start() {
+You beat me to it, but I still managed to put my little touch: I've
+changed the title to:  support/testing: ...
+
+Applied to master, thanks.
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  support/testing/tests/package/sample_python_dbus_next.py | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/support/testing/tests/package/sample_python_dbus_next.py b/support/testing/tests/package/sample_python_dbus_next.py
+> index 1fcb76f45a..710bfa8c04 100644
+> --- a/support/testing/tests/package/sample_python_dbus_next.py
+> +++ b/support/testing/tests/package/sample_python_dbus_next.py
+> @@ -14,7 +14,7 @@ class SampleInterface(ServiceInterface):
+>          pass
+>  
+>      @method()
+> -    def ConcatStrings(self, what1: 's', what2: 's') -> 's':
+> +    def ConcatStrings(self, what1: 's', what2: 's') -> 's':  # noqa: F821
+>          return what1 + what2
+>  
+>  
+> -- 
+> 2.31.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
 -- 
-2.33.1
-
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
