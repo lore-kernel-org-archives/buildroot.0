@@ -2,52 +2,52 @@ Return-Path: <SRS0=Qe4W=PG=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 86271C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 18 Oct 2021 13:25:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A348AC433F5
+	for <buildroot@archiver.kernel.org>; Mon, 18 Oct 2021 15:22:46 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id AE2D76128A
-	for <buildroot@archiver.kernel.org>; Mon, 18 Oct 2021 13:25:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org AE2D76128A
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
+	by mail.kernel.org (Postfix) with ESMTPS id 9DE5460F0F
+	for <buildroot@archiver.kernel.org>; Mon, 18 Oct 2021 15:22:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9DE5460F0F
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 75DF0403D1;
-	Mon, 18 Oct 2021 13:25:57 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3BEED40163;
+	Mon, 18 Oct 2021 15:22:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dWLjYXOaMf7j; Mon, 18 Oct 2021 13:25:56 +0000 (UTC)
+	with ESMTP id vx5WPnI6BGK3; Mon, 18 Oct 2021 15:22:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7E3384040D;
-	Mon, 18 Oct 2021 13:25:55 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B2F7F1BF337
- for <buildroot@lists.busybox.net>; Mon, 18 Oct 2021 13:25:53 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 307B840424;
+	Mon, 18 Oct 2021 15:22:43 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id F12A51BF317
+ for <buildroot@lists.busybox.net>; Mon, 18 Oct 2021 15:22:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A1BF7405C6
- for <buildroot@lists.busybox.net>; Mon, 18 Oct 2021 13:25:53 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id DF41A60814
+ for <buildroot@lists.busybox.net>; Mon, 18 Oct 2021 15:22:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id t08XEpgM2oj9 for <buildroot@lists.busybox.net>;
- Mon, 18 Oct 2021 13:25:52 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 034E44055D
- for <buildroot@buildroot.org>; Mon, 18 Oct 2021 13:25:51 +0000 (UTC)
-Received: (Authenticated sender: herve.codina@bootlin.com)
- by relay1-d.mail.gandi.net (Postfix) with ESMTPA id 0C5BF24000B;
- Mon, 18 Oct 2021 13:25:47 +0000 (UTC)
-From: Herve Codina <herve.codina@bootlin.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id sCTaOlhGQ93x for <buildroot@lists.busybox.net>;
+ Mon, 18 Oct 2021 15:22:40 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1FDCB6064F
+ for <buildroot@buildroot.org>; Mon, 18 Oct 2021 15:22:40 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 3FB3A86F06; Mon, 18 Oct 2021 15:19:36 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 18 Oct 2021 15:25:31 +0200
-Message-Id: <20211018132532.814742-1-herve.codina@bootlin.com>
-X-Mailer: git-send-email 2.31.1
-MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/modsecurity2: new package
+Date: Mon, 18 Oct 2021 17:22:17 +0200
+X-Git-Refname: refs/heads/2021.02.x
+X-Git-Oldrev: bcfaf7d573aadad1df585781fc027b9d4e05ac3c
+X-Git-Newrev: dceae741b0e194219a511102f15fea6378aefc78
+X-Patchwork-Hint: ignore
+Message-Id: <20211018151936.3FB3A86F06@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] {linux,
+ linux-headers}: bump 4.{4, 9, 14, 19}.x / 5.{4, 10, 13, 14}.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,146 +59,83 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Tom Marcuzzi <tom.marcuzzi@orolia.com>,
- Herve Codina <herve.codina@bootlin.com>,
- Matthew Weber <matthew.weber@collins.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The modsecurity2 package provides an Apache module implementing
-a web application firewall (WAF) module.
+commit: https://git.buildroot.net/buildroot/commit/?id=dceae741b0e194219a511102f15fea6378aefc78
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Based on initial work from Tom Marcuzzi <tom.marcuzzi@orolia.com>
-and Nicolas Carrier <nicolas.carrier@orolia.com>
-
-modsecurity2 will be superseeded sooner or later by modsecurity v3
-ie. libmodsecurity [1] and its Apache connector [2]. libmodsecurity
-is already supported in Buildroot with its Nginx connector.
-According to the Apache connector web page and the discussion [3],
-the Apache connector is not ready for production use.
-
-  [1] https://github.com/SpiderLabs/ModSecurity
-  [2] https://github.com/SpiderLabs/ModSecurity-apache
-  [3] https://github.com/SpiderLabs/ModSecurity-apache/issues/80
-
-The best we can do now is to still use modsecurity2 (v2.9.x) for
-Apache:
-  https://github.com/SpiderLabs/ModSecurity/tree/v2/master
-
-Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit d538f3c7a7af876c48315f46a868852bd364a7b1)
+[Peter: drop 5.14.x/5.14.x bump]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
-A previous version was submitted but never merged:
-  https://lore.kernel.org/buildroot/20191121172845.25958-1-tom.marcuzzi@orolia.com/
-The patch was marked "superseeded" probably wrongly with the
-introduction of modsecurity v3 (libmodsecurity and its Nginx
-connector)
+ linux/Config.in                      |  2 +-
+ linux/linux.hash                     | 12 ++++++------
+ package/linux-headers/Config.in.host | 12 ++++++------
+ 3 files changed, 13 insertions(+), 13 deletions(-)
 
- DEVELOPERS                             |  2 ++
- package/Config.in                      |  5 +++++
- package/modsecurity2/Config.in         | 12 ++++++++++++
- package/modsecurity2/modsecurity2.hash |  3 +++
- package/modsecurity2/modsecurity2.mk   | 21 +++++++++++++++++++++
- 5 files changed, 43 insertions(+)
- create mode 100644 package/modsecurity2/Config.in
- create mode 100644 package/modsecurity2/modsecurity2.hash
- create mode 100644 package/modsecurity2/modsecurity2.mk
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 19f6d95270..9a41236705 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1150,6 +1150,7 @@ F:	package/dtbocfg/
- F:	package/libdbi/
- F:	package/libdbi-drivers/
- F:	package/lua-augeas/
-+F:	package/modsecurity2/
- F:	support/testing/tests/package/test_dtbocfg.py
- F:	support/testing/tests/package/test_lua_augeas.py
+diff --git a/linux/Config.in b/linux/Config.in
+index ac279aaeeb..3cdad2f5cf 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -125,7 +125,7 @@ endif
  
-@@ -1991,6 +1992,7 @@ F:	package/bmap-tools/
- F:	package/libdbi/
- F:	package/libdbi-drivers/
- F:	package/lua-augeas/
-+F:	package/modsecurity2/
- F:	package/php-xdebug/
- F:	package/python-augeas/
- F:	package/python-flask-expects-json/
-diff --git a/package/Config.in b/package/Config.in
-index 48f365d773..230a976b6b 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2097,6 +2097,11 @@ menu "Networking applications"
- 	source "package/aircrack-ng/Config.in"
- 	source "package/aoetools/Config.in"
- 	source "package/apache/Config.in"
-+if BR2_PACKAGE_APACHE
-+menu "External Apache modules"
-+	source "package/modsecurity2/Config.in"
-+endmenu
-+endif
- 	source "package/argus/Config.in"
- 	source "package/arp-scan/Config.in"
- 	source "package/arptables/Config.in"
-diff --git a/package/modsecurity2/Config.in b/package/modsecurity2/Config.in
-new file mode 100644
-index 0000000000..703cb682b3
---- /dev/null
-+++ b/package/modsecurity2/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_MODSECURITY2
-+	bool "modsecurity2"
-+	depends on BR2_PACKAGE_APACHE
-+	select BR2_PACKAGE_LIBXML2
-+	help
-+	  ModSecurity is an open source, cross-platform web application
-+	  firewall (WAF) module. Known as the "Swiss Army Knife" of
-+	  WAFs, it enables web application defenders to gain visibility
-+	  into HTTP(S) traffic and provides a power rules language and
-+	  API to implement advanced protections.
-+
-+	  https://github.com/SpiderLabs/ModSecurity
-diff --git a/package/modsecurity2/modsecurity2.hash b/package/modsecurity2/modsecurity2.hash
-new file mode 100644
-index 0000000000..1501b5642e
---- /dev/null
-+++ b/package/modsecurity2/modsecurity2.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  686695c650449a338757711254ea78c67dedb1d258e03e5c8686f869388fff8c  modsecurity2-2.9.4.tar.gz
-+sha256  2c564f5a67e49e74c80e5a7dcacd1904e7408f1fd6a95218b38c04f012d94cb9  LICENSE
-diff --git a/package/modsecurity2/modsecurity2.mk b/package/modsecurity2/modsecurity2.mk
-new file mode 100644
-index 0000000000..b9a5a93057
---- /dev/null
-+++ b/package/modsecurity2/modsecurity2.mk
-@@ -0,0 +1,21 @@
-+################################################################################
-+#
-+# modsecurity2
-+#
-+################################################################################
-+
-+MODSECURITY2_VERSION = 2.9.4
-+MODSECURITY2_SITE = $(call github,SpiderLabs,ModSecurity,v$(MODSECURITY2_VERSION))
-+MODSECURITY2_LICENSE = Apache-2.0
-+MODSECURITY2_LICENSE_FILES = LICENSE
-+MODSECURITY2_INSTALL_STAGING = YES
-+MODSECURITY2_DEPENDENCIES = apache libxml2
-+MODSECURITY2_AUTORECONF = YES
-+
-+MODSECURITY2_CONF_OPTS += --with-pcre=$(STAGING_DIR)/usr/bin/pcre-config \
-+	--with-libxml=$(STAGING_DIR)/usr \
-+	--with-apr=$(STAGING_DIR)/usr/bin/apr-1-config \
-+	--with-apu=$(STAGING_DIR)/usr/bin/apu-1-config \
-+	--with-apxs=$(STAGING_DIR)/usr/bin/apxs
-+
-+$(eval $(autotools-package))
--- 
-2.31.1
-
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "5.10.64" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "5.10.72" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "4.19.198-cip54" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "4.19.198-cip54-rt21" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 1d514eff79..4f95b2505a 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,11 +1,11 @@
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+-sha256  3eb84bd24a2de2b4749314e34597c02401c5d6831b055ed5224adb405c35e30a  linux-5.10.64.tar.xz
+-sha256  5cf7782ec2e91417edf0d5e6555da6d556962c8985e33ba9e7dadba5cbdc68f9  linux-5.4.145.tar.xz
++sha256  b4d635afe7646ac6a6617c738e747ba0a6006675cd9735d18f672f8b1fba4c7c  linux-5.10.72.tar.xz
++sha256  8044c7134c5eed21af9662f1c5399a5d8781b5bc2d8979e9ad06b4435a0a5ed5  linux-5.4.152.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+-sha256  02252f0002e65306f6765089e8bb51f621f4eaea974348c31991b0c508243bb5  linux-4.4.283.tar.xz
+-sha256  67727389771a858406f773b4db62d7d3248209e26120df47507ea4a8898d2e15  linux-4.9.282.tar.xz
+-sha256  9c5612ef428441b7c85cf211a455c06ce695b81a9a40c064d0ea424dd08bef3a  linux-4.14.246.tar.xz
+-sha256  b7eb776f408b3ea71c97dde4888cc4549edf925a18cd158e7c9681d6ffa684c0  linux-4.19.206.tar.xz
++sha256  870952aad348bed600a07ec24b23890e96f496bbc10e67033dbefa5fbf1f1c09  linux-4.4.288.tar.xz
++sha256  e2a2fdfca4eadf10716260779a510bf5e0f19c6ee0a223724c74d636c815a645  linux-4.9.286.tar.xz
++sha256  a4b43db9fd94a7c50d4f7e42d5264b1449ff41730f84a1323b8e4754fb336e7d  linux-4.14.250.tar.xz
++sha256  9ba722594a5a5444df19510925df7b6b76cbf20ab4dc54e57f1c3e4da4116133  linux-4.19.210.tar.xz
+ # Locally computed
+ sha256  e6fc0a999a180ad272b08ff71cbc67f2d3fdc6773d4a8069aefb8781b8e07821  linux-cip-4.19.198-cip54.tar.gz
+ sha256  449668d678e458ddaf30f944b7ca7f5ce6ea6664f57d43ea4eb90b176e03b9cb  linux-cip-4.19.198-cip54-rt21.tar.gz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 4ca942ecad..d39428be37 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -346,12 +346,12 @@ endchoice
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "4.4.283"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.282"	if BR2_KERNEL_HEADERS_4_9
+-	default "4.14.246"	if BR2_KERNEL_HEADERS_4_14
+-	default "4.19.206"	if BR2_KERNEL_HEADERS_4_19
+-	default "5.4.145"	if BR2_KERNEL_HEADERS_5_4
+-	default "5.10.64"	if BR2_KERNEL_HEADERS_5_10
++	default "4.4.288"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.286"	if BR2_KERNEL_HEADERS_4_9
++	default "4.14.250"	if BR2_KERNEL_HEADERS_4_14
++	default "4.19.210"	if BR2_KERNEL_HEADERS_4_19
++	default "5.4.152"	if BR2_KERNEL_HEADERS_5_4
++	default "5.10.72"	if BR2_KERNEL_HEADERS_5_10
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
