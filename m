@@ -2,90 +2,91 @@ Return-Path: <SRS0=Qe4W=PG=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 661BFC433F5
-	for <buildroot@archiver.kernel.org>; Mon, 18 Oct 2021 04:29:04 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6DC96C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 18 Oct 2021 04:29:29 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 218AA61278
-	for <buildroot@archiver.kernel.org>; Mon, 18 Oct 2021 04:29:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 218AA61278
+	by mail.kernel.org (Postfix) with ESMTPS id C4C94610C7
+	for <buildroot@archiver.kernel.org>; Mon, 18 Oct 2021 04:29:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C4C94610C7
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=buildroot.org
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BA2D7608B3;
-	Mon, 18 Oct 2021 04:29:02 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 83C2140385;
+	Mon, 18 Oct 2021 04:29:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id INUxhw1Knvvl; Mon, 18 Oct 2021 04:29:02 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1B1DE608B0;
-	Mon, 18 Oct 2021 04:29:01 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id ECFA11BF2C5
- for <buildroot@lists.busybox.net>; Mon, 18 Oct 2021 04:28:58 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DA1E440385
- for <buildroot@lists.busybox.net>; Mon, 18 Oct 2021 04:28:58 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=paral.in
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id z3QLg4O163NM for <buildroot@lists.busybox.net>;
- Mon, 18 Oct 2021 04:28:58 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 2B0iULrTy2sF; Mon, 18 Oct 2021 04:29:27 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id A4D064038C;
+	Mon, 18 Oct 2021 04:29:26 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 6689A1BF2C5
+ for <buildroot@lists.busybox.net>; Mon, 18 Oct 2021 04:29:25 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 53396403C1
+ for <buildroot@lists.busybox.net>; Mon, 18 Oct 2021 04:29:25 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=paral.in
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7EuaPTavipMl for <buildroot@lists.busybox.net>;
+ Mon, 18 Oct 2021 04:29:24 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ua1-x92f.google.com (mail-ua1-x92f.google.com
- [IPv6:2607:f8b0:4864:20::92f])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 019BD401FC
- for <buildroot@buildroot.org>; Mon, 18 Oct 2021 04:28:57 +0000 (UTC)
-Received: by mail-ua1-x92f.google.com with SMTP id i15so2635431uap.0
- for <buildroot@buildroot.org>; Sun, 17 Oct 2021 21:28:57 -0700 (PDT)
+Received: from mail-ua1-x934.google.com (mail-ua1-x934.google.com
+ [IPv6:2607:f8b0:4864:20::934])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A3655403B8
+ for <buildroot@buildroot.org>; Mon, 18 Oct 2021 04:29:24 +0000 (UTC)
+Received: by mail-ua1-x934.google.com with SMTP id u5so4512179uao.13
+ for <buildroot@buildroot.org>; Sun, 17 Oct 2021 21:29:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=paral.in; s=google;
  h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=EceacZzav5+syOKwzFCLrHUC4wrjH7js1pBXcJTUycY=;
- b=G9+Tp+erW33Av9Qo3lqUP8h2zAZgnDK7m6NyMT16KVn3PAP3irGIHJ+ibAGYX56av/
- hTORBMV/X51b8LARo33qLU8oIIu1j7/z9U4EiK2hmLwgmNpoQYACBGCvRzjZZMlUp0aC
- nGY591fBe/q5Q64jkPhxpUQJuzut3Z6O0N8sBm0m52HCV5sYmNwE+xxSaN+bAzbpG5j0
- roKQWdHkKk+aZ+TGVcYWC83M+zjzgc9uSJRAgtKkvoQVfJ31mUlVN1yWrjdXKd6h6X9i
- M1Bcl+gPREecXHHnAsLxNrLJRRMsysZu9XtzbtXQg/xk7oLPY6UUxYMa8W5gtixaYfEF
- ijsg==
+ :cc:content-transfer-encoding;
+ bh=F9gwHcSZw49BUAelU1/1YJB3hkAlyq9WpzA5dPJ8aho=;
+ b=FSyJMijDiLvrdk39PAvJTldKXhdOc3uWVQbvT0IpoYRmFTnVWHrjXE9E5kVWEXTLVi
+ BKy9KoiKgoslDlyTQjWN9JBpjFT8DRGCEAuB9WMSkP4TAstlHqh3xVLK3+HHfoUJxYxA
+ iakruI1epOpXeB3hZ1hzTJegUAmD8woH3/yC8WxHN0pruL88SxxpMUSk3pyVtQDDG1DI
+ 0TNJQAJ7Wpj3ETIZcjUWC/u+MwmXUx/jVbyEt/cBedc5zbwM8mJG23LxqorCAY4duuBT
+ MowdytH+sUBd2CfeKqjucd08vurwDn92zyvcK54A0hQiPAH968F+BE8Z6lVE8GPbTg8g
+ kscA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=EceacZzav5+syOKwzFCLrHUC4wrjH7js1pBXcJTUycY=;
- b=0zSBskkMN70O9aTZoiw96gzq5hKlYlFgBTwS9N4QtUXNvqe3YdQp4AaRLWUz9GqIk5
- BYwN94SnfrY0GDIVodUOMrIf4ilmQQab0PghEqCIO50go1dfk3UvguzbDLAJEdio7mxN
- g2zCFaUGW1u33E/gCym4PngsR02UX176XuNwJMgWNtwpv+G8BHyJDlPdsCI/ETyyG9A2
- aatCr2Mqf5Tm0VBH7Mj7/dI+L7Dm4hts9gdyVwKs9oGKHRH9l2UTuRyV26iGO6KRypz/
- H2qyktUxTe+9tqptYNg5L5JC/Qw7XqwSz4mQIk4MTFBDM1skfF+p0ky61yKihTc847rc
- a8mQ==
-X-Gm-Message-State: AOAM533DLvfDNTr7c34pbPZOUA/VE1ZGA/FHwWf2RZdmLudf3hUapkLo
- lkf3/R1HPMhUoX9mHs1AFzMwb5Cosxnw3g==
-X-Google-Smtp-Source: ABdhPJzLH/3VXPwnQOlRgJJ8yxSlc9B+MzZKuFbJ45YkajmIbZFB8o+7iH8TE7JeN4er6D9HxdGW3A==
-X-Received: by 2002:a05:6102:38ce:: with SMTP id
- k14mr7233071vst.6.1634531336358; 
- Sun, 17 Oct 2021 21:28:56 -0700 (PDT)
-Received: from mail-ua1-f52.google.com (mail-ua1-f52.google.com.
- [209.85.222.52])
- by smtp.gmail.com with ESMTPSA id q200sm8238219vka.18.2021.10.17.21.28.55
+ :message-id:subject:to:cc:content-transfer-encoding;
+ bh=F9gwHcSZw49BUAelU1/1YJB3hkAlyq9WpzA5dPJ8aho=;
+ b=28gXz7br/OGCJYSWeqUUwewktMC85XESk2axcmULj5iP7m/kXAH+ZfIZ3tT5cppxqz
+ A7JHEAJUO6os+LtSue18q2ulw+6EeQBToIIoTnW3wDP3GV7cr5A3c4JnBsFIr5fl3QKl
+ uMVwIFU0LLe7W8eaZV96qB/Hh9L5V9FKVBzonsSM06BBpNXFWIbQVFknuNWb/wEk89dE
+ MAz4P/LBHA2/PErO3h/otKuyNlpEa4BrKS2vqKFANsk8oeebVYtLxAwpdclILi5pEL2E
+ cae1ICcPIo+x3em616pRsuPTf04m+t9+LAtX2RRx/U4v6AqLNqD2PKXiMvLLMOyIr/5n
+ z/yA==
+X-Gm-Message-State: AOAM533AYGkrEF4vkJ49LvLaYxJ/VIayfYuXaQSH/eGQw+v4HlhoGpo/
+ Ql0KuSuoBjpj8muzyCP5kVgNTkegJKEqLw==
+X-Google-Smtp-Source: ABdhPJwOarPGUZPWW+i7SvsnuhU6g7li8hojmWUtucWUcVWLJs8lolwfWzzcQCC2wqdxgtt0/RE0Ig==
+X-Received: by 2002:ab0:381:: with SMTP id 1mr23489387uau.23.1634531362991;
+ Sun, 17 Oct 2021 21:29:22 -0700 (PDT)
+Received: from mail-ua1-f50.google.com (mail-ua1-f50.google.com.
+ [209.85.222.50])
+ by smtp.gmail.com with ESMTPSA id c5sm8093492vsl.30.2021.10.17.21.29.22
  for <buildroot@buildroot.org>
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 17 Oct 2021 21:28:55 -0700 (PDT)
-Received: by mail-ua1-f52.google.com with SMTP id u5so4510980uao.13
- for <buildroot@buildroot.org>; Sun, 17 Oct 2021 21:28:55 -0700 (PDT)
-X-Received: by 2002:a9f:23d0:: with SMTP id 74mr23004015uao.131.1634531335059; 
- Sun, 17 Oct 2021 21:28:55 -0700 (PDT)
+ Sun, 17 Oct 2021 21:29:22 -0700 (PDT)
+Received: by mail-ua1-f50.google.com with SMTP id a17so3957146uax.12
+ for <buildroot@buildroot.org>; Sun, 17 Oct 2021 21:29:22 -0700 (PDT)
+X-Received: by 2002:a67:2f0d:: with SMTP id v13mr25341131vsv.18.1634531362272; 
+ Sun, 17 Oct 2021 21:29:22 -0700 (PDT)
 MIME-Version: 1.0
 References: <20211015125944.10587-1-peter@korsgaard.com>
-In-Reply-To: <20211015125944.10587-1-peter@korsgaard.com>
-Date: Sun, 17 Oct 2021 21:28:43 -0700
-X-Gmail-Original-Message-ID: <CA+h8R2oSqdJLkx1Uxmipv7aG98OXLDLQ7XzbSHxdecLHksarYg@mail.gmail.com>
-Message-ID: <CA+h8R2oSqdJLkx1Uxmipv7aG98OXLDLQ7XzbSHxdecLHksarYg@mail.gmail.com>
+ <20211015125944.10587-2-peter@korsgaard.com>
+In-Reply-To: <20211015125944.10587-2-peter@korsgaard.com>
+Date: Sun, 17 Oct 2021 21:29:11 -0700
+X-Gmail-Original-Message-ID: <CA+h8R2oDWAxmNj5PtGLL1BhnNx6YFd8dJmCSTAPLQNe=EkOB-w@mail.gmail.com>
+Message-ID: <CA+h8R2oDWAxmNj5PtGLL1BhnNx6YFd8dJmCSTAPLQNe=EkOB-w@mail.gmail.com>
 To: Peter Korsgaard <peter@korsgaard.com>
-Subject: Re: [Buildroot] [PATCH 1/2] package/docker-cli: security bump to
+Subject: Re: [Buildroot] [PATCH 2/2] package/docker-engine: security bump to
  version 20.10.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -102,31 +103,34 @@ From: Christian Stewart via buildroot <buildroot@buildroot.org>
 Reply-To: Christian Stewart <christian@paral.in>
 Cc: Christian Stewart <christian@paral.in>,
  Buildroot Mailing List <buildroot@buildroot.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Reviewed-by: Christian Stewart <christian@paral.in>
-
-On Fri, Oct 15, 2021 at 5:59 AM Peter Korsgaard <peter@korsgaard.com> wrote:
->
-> Fixes the following security issue:
->
-> - CVE-2021-41092: Ensure default auth config has address field set, to
->   prevent credentials being sent to the default registry.
->
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Thanks,
-Christian
-
-> +++ b/package/docker-cli/docker-cli.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated
-> -sha256  cde34bbefd70fa27b44dfa904c40db84b89abf237e5267dcd08603b459a89253  docker-cli-20.10.8.tar.gz
-> +sha256  d91010813824070dd2380013c8f343e61e6dda170f7853f024bda39b432b64ba  docker-cli-20.10.9.tar.gz
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+UmV2aWV3ZWQtYnk6IENocmlzdGlhbiBTdGV3YXJ0IDxjaHJpc3RpYW5AcGFyYWwuaW4+CgpPbiBG
+cmksIE9jdCAxNSwgMjAyMSBhdCA1OjU5IEFNIFBldGVyIEtvcnNnYWFyZCA8cGV0ZXJAa29yc2dh
+YXJkLmNvbT4gd3JvdGU6Cj4KPiBGaXhlcyB0aGUgZm9sbG93aW5nIHNlY3VyaXR5IGlzc3VlczoK
+Pgo+IC0gQ1ZFLTIwMjEtNDEwODk6ICBDcmVhdGUgcGFyZW50IGRpcmVjdG9yaWVzIGluc2lkZSBh
+IGNocm9vdCBkdXJpbmcgZG9ja2VyCj4gICBjcCB0byBwcmV2ZW50IGEgc3BlY2lhbGx5IGNyYWZ0
+ZWQgY29udGFpbmVyIGZyb20gY2hhbmdpbmcgcGVybWlzc2lvbnMgb2YKPiAgIGV4aXN0aW5nIGZp
+bGVzIGluIHRoZSBob3N04oCZcyBmaWxlc3lzdGVtLgo+Cj4gLSBDVkUtMjAyMS00MTA5MTogTG9j
+ayBkb3duIGZpbGUgcGVybWlzc2lvbnMgdG8gcHJldmVudCB1bnByaXZpbGVnZWQgdXNlcnMKPiAg
+IGZyb20gZGlzY292ZXJpbmcgYW5kIGV4ZWN1dGluZyBwcm9ncmFtcyBpbiAvdmFyL2xpYi9kb2Nr
+ZXIuCj4KPiBTaWduZWQtb2ZmLWJ5OiBQZXRlciBLb3JzZ2FhcmQgPHBldGVyQGtvcnNnYWFyZC5j
+b20+Cj4gLS0tCj4gIHBhY2thZ2UvZG9ja2VyLWVuZ2luZS9kb2NrZXItZW5naW5lLmhhc2ggfCAy
+ICstCj4gIHBhY2thZ2UvZG9ja2VyLWVuZ2luZS9kb2NrZXItZW5naW5lLm1rICAgfCAyICstCj4g
+IDIgZmlsZXMgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspLCAyIGRlbGV0aW9ucygtKQo+Cj4gZGlm
+ZiAtLWdpdCBhL3BhY2thZ2UvZG9ja2VyLWVuZ2luZS9kb2NrZXItZW5naW5lLmhhc2ggYi9wYWNr
+YWdlL2RvY2tlci1lbmdpbmUvZG9ja2VyLWVuZ2luZS5oYXNoCj4gaW5kZXggMDdhY2I4Nzg2NC4u
+NWUxNTg0Mjg1OSAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL2RvY2tlci1lbmdpbmUvZG9ja2VyLWVu
+Z2luZS5oYXNoCj4gKysrIGIvcGFja2FnZS9kb2NrZXItZW5naW5lL2RvY2tlci1lbmdpbmUuaGFz
+aAo+IEBAIC0xLDMgKzEsMyBAQAo+ICAjIExvY2FsbHkgY2FsY3VsYXRlZAo+IC1zaGEyNTYgIDI1
+MDVkMDAwMzJmNWQ0MGVhZDVhYzc3OWMyODQwMzAzZGNlYWQwNDcxM2M5M2JhOTc0YmU0YzE5YjNh
+YjhkMGEgIGRvY2tlci1lbmdpbmUtMjAuMTAuOC50YXIuZ3oKPiArc2hhMjU2ICAzNTllODg1NGQw
+ZDUxYmM4ODRkNDM0ZjE4MmY2NGNhNjJmMjVmYmJlN2I5YzZhMzM2ZWIwOWYyMTJmZThjYzlhICBk
+b2NrZXItZW5naW5lLTIwLjEwLjkudGFyLmd6Cj4gIHNoYTI1NiAgN2M4Nzg3MzI5MWYyODk3MTNh
+YzVkZjQ4YjFmMjAxMGViNjk2Mzc1MmJiZDZiNTMwNDE2YWI5OWZjMzc5MTRhOCAgTElDRU5TRQoK
+VGhhbmtzLApDaHJpc3RpYW4KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpo
+dHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
