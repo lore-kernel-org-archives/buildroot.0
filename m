@@ -2,57 +2,52 @@ Return-Path: <SRS0=Qe4W=PG=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 12601C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 18 Oct 2021 07:32:21 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AA419C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 18 Oct 2021 08:27:35 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1D33860FDC
-	for <buildroot@archiver.kernel.org>; Mon, 18 Oct 2021 07:32:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1D33860FDC
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
+	by mail.kernel.org (Postfix) with ESMTPS id 9EC6C60FDA
+	for <buildroot@archiver.kernel.org>; Mon, 18 Oct 2021 08:27:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9EC6C60FDA
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B44C74012C;
-	Mon, 18 Oct 2021 07:32:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 61E9A4044C;
+	Mon, 18 Oct 2021 08:27:34 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id sE46kzQbJCK8; Mon, 18 Oct 2021 08:27:33 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id C39CE4043A;
+	Mon, 18 Oct 2021 08:27:32 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E6B1E1BF2F6
+ for <buildroot@lists.busybox.net>; Mon, 18 Oct 2021 08:27:30 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id D448E402BB
+ for <buildroot@lists.busybox.net>; Mon, 18 Oct 2021 08:27:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NF-ON_GmpC5O; Mon, 18 Oct 2021 07:32:18 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AA894402BB;
-	Mon, 18 Oct 2021 07:32:17 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3D70C1BF337
- for <buildroot@lists.busybox.net>; Mon, 18 Oct 2021 07:32:16 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2B35582EA2
- for <buildroot@lists.busybox.net>; Mon, 18 Oct 2021 07:32:16 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lAmAgD_EeFO2 for <buildroot@lists.busybox.net>;
- Mon, 18 Oct 2021 07:32:15 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A987981BD9
- for <buildroot@buildroot.org>; Mon, 18 Oct 2021 07:32:14 +0000 (UTC)
-Received: (Authenticated sender: kamel.bouhara@bootlin.com)
- by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id C294E6000A;
- Mon, 18 Oct 2021 07:32:10 +0000 (UTC)
-Date: Mon, 18 Oct 2021 09:32:09 +0200
-From: Kamel Bouhara <kamel.bouhara@bootlin.com>
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <YW0i+TR+1jGOoS4X@kb-xps>
-References: <20211007095147.688449-1-kamel.bouhara@bootlin.com>
- <20211007095147.688449-5-kamel.bouhara@bootlin.com>
- <04333d8b-411c-97a4-8872-e2200e2833ab@benettiengineering.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <04333d8b-411c-97a4-8872-e2200e2833ab@benettiengineering.com>
-Subject: Re: [Buildroot] [PATCH v3 5/7] package/sunxi-mali-mainline:
- provides libgbm
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7PSnLavQVcQy for <buildroot@lists.busybox.net>;
+ Mon, 18 Oct 2021 08:27:29 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id B9BDF40119
+ for <buildroot@buildroot.org>; Mon, 18 Oct 2021 08:27:29 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 87485864D1; Mon, 18 Oct 2021 08:24:26 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Mon, 18 Oct 2021 10:19:03 +0200
+X-Git-Refname: refs/heads/2021.02.x
+X-Git-Oldrev: 55c5b57b0293fbae90d1ab93e25573f5c90c1f6c
+X-Git-Newrev: d538cef26a1f2f8980c9eb1c2c84a1c99e9e35b9
+X-Patchwork-Hint: ignore
+Message-Id: <20211018082426.87485864D1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/audit: Fix type
+ output on log folder creation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,125 +59,65 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============0895867276864440858=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu, Oct 07, 2021 at 10:23:24PM +0200, Giulio Benetti wrote:
-> Hi Kamel,
->
+--===============0895867276864440858==
+Content-Type: text/plain
 
-Hi Giulio,
+commit: https://git.buildroot.net/buildroot/commit/?id=d538cef26a1f2f8980c9eb1c2c84a1c99e9e35b9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-> On 10/7/21 11:51 AM, Kamel Bouhara wrote:
-> > Registers the package as a libgbm provider.
-> >
-> > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> > Signed-off-by: Kamel Bouhara <kamel.bouhara@bootlin.com>
-> > ---
-> > Changes v1 -> v2:
-> >   - Fixed gbm features are provided only when wayland is set
-> > Changes v1 -> v2:
-> >   - Fixed gbm features selected only when wayland is set
-> >
-> >   package/sunxi-mali-mainline/Config.in              |  5 +++++
-> >   package/sunxi-mali-mainline/gbm.pc                 | 12 ++++++++++++
-> >   package/sunxi-mali-mainline/sunxi-mali-mainline.mk |  3 +++
-> >   3 files changed, 20 insertions(+)
-> >   create mode 100644 package/sunxi-mali-mainline/gbm.pc
-> >
-> > diff --git a/package/sunxi-mali-mainline/Config.in b/package/sunxi-mali-mainline/Config.in
-> > index 31a9152407..10534f263b 100644
-> > --- a/package/sunxi-mali-mainline/Config.in
-> > +++ b/package/sunxi-mali-mainline/Config.in
-> > @@ -14,6 +14,9 @@ if BR2_PACKAGE_SUNXI_MALI_MAINLINE
-> >   config BR2_PACKAGE_PROVIDES_LIBEGL
-> >   	default "sunxi-mali-mainline"
-> > +config BR2_PACKAGE_PROVIDES_LIBGBM
-> > +	default "sunxi-mali-mainline" if BR2_PACKAGE_SUNXI_MALI_MAINLINE_OUTPUT_WAYLAND
-> > +
-> >   config BR2_PACKAGE_PROVIDES_LIBGLES
-> >   	default "sunxi-mali-mainline"
-> > @@ -26,6 +29,8 @@ config BR2_PACKAGE_SUNXI_MALI_MAINLINE_OUTPUT_FBDEV
-> >   config BR2_PACKAGE_SUNXI_MALI_MAINLINE_OUTPUT_WAYLAND
-> >   	bool "wayland"
-> >   	depends on BR2_PACKAGE_WAYLAND
-> > +	select BR2_PACKAGE_LIBGBM_HAS_FEATURE_DMA_BUF
-> > +	select BR2_PACKAGE_HAS_LIBGBM
-> >   config BR2_PACKAGE_SUNXI_MALI_MAINLINE_OUTPUT_X11_DMABUF
-> >   	bool "x11 dma-buf"
-> > diff --git a/package/sunxi-mali-mainline/gbm.pc b/package/sunxi-mali-mainline/gbm.pc
-> > new file mode 100644
-> > index 0000000000..593cfa0aba
-> > --- /dev/null
-> > +++ b/package/sunxi-mali-mainline/gbm.pc
-> > @@ -0,0 +1,12 @@
-> > +prefix=/usr
-> > +exec_prefix=/usr
-> > +libdir=${exec_prefix}/lib
-> > +includedir=${prefix}/include
-> > +
-> > +Name: gbm
-> > +Description: ARM Mali implementation of gbm
-> > +Requires.private:
-> > +Version: 1.0
-> > +Libs: -L${libdir} -lgbm
-> > +Libs.private:
-> > +Cflags: -I${includedir}
-> > diff --git a/package/sunxi-mali-mainline/sunxi-mali-mainline.mk b/package/sunxi-mali-mainline/sunxi-mali-mainline.mk
-> > index e058b5c3cd..8a76b46aba 100644
-> > --- a/package/sunxi-mali-mainline/sunxi-mali-mainline.mk
-> > +++ b/package/sunxi-mali-mainline/sunxi-mali-mainline.mk
-> > @@ -38,6 +38,7 @@ endif
-> >   ifeq ($(BR2_PACKAGE_SUNXI_MALI_MAINLINE_OUTPUT_WAYLAND),y)
-> >   SUNXI_MALI_MAINLINE_DEPENDENCIES += wayland
-> > +SUNXI_MALI_MAINLINE_PROVIDES += libgbm
-> >   endif
-> >   # FIXME: install gbm.pc conditionally
-> > @@ -53,6 +54,8 @@ define SUNXI_MALI_MAINLINE_INSTALL_STAGING_CMDS
-> >   		$(STAGING_DIR)/usr/lib/pkgconfig/egl.pc
-> >   	$(INSTALL) -D -m 0644 package/sunxi-mali-mainline/glesv2.pc \
-> >   		$(STAGING_DIR)/usr/lib/pkgconfig/glesv2.pc
-> > +	$(INSTALL) -D -m 0644 package/sunxi-mali-mainline/gbm.pc \
-> > +		$(STAGING_DIR)/usr/lib/pkgconfig/gbm.pc
->
-> As pointed by # FIXME above you need to make the install of gbm.pc
-> conditional to BR2_PACKAGE_HAS_LIBGBM, something like:
->
-> ifeq ($(BR2_PACKAGE_HAS_LIBGBM),y)
-> define SUNXI_MALI_MAINLINE_INSTALL_GBM_PC
-> 	$(INSTALL) -D -m 0644 package/sunxi-mali-mainline/gbm.pc \
-> 		$(STAGING_DIR)/usr/lib/pkgconfig/gbm.pc
-> endef
-> endif
->
-> and then call $(SUNXI_MALI_MAINLINE_INSTALL_GBM_PC) in place of the actual
-> install, like $(SUNXI_MALI_MAINLINE_FIXUP_EGL_PC).
->
+Testing buildroot 2021.05 I observed that after first
+boot I was having the following folders:
 
-Ack, thanks !
+/context:
+/system_u:object_r:auditd_log_t
 
-Regards,
+The root of this problem turned to be a difference in the
+output of $(selabel_lookup -b file -k /var/log/audit) called
+by S02auditd that from this version on looks like:
 
-Kamel
+$ selabel_lookup -b file -k /var/log/audit
+Default context: system_u:object_r:auditd_log_t
 
-> Best regards
-> --
-> Giulio Benetti
-> Benetti Engineering sas
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+This patch will cut it to retrieve the type piece only. Unfortunately,
+audit has no options to create machine-readable output that is
+guaranteed not to change, so that's the best we can do.
 
---
-Kamel Bouhara, Bootlin
-Embedded Linux and kernel engineering
-https://bootlin.com
+Signed-off-by: José Pekkarinen <jose.pekkarinen@unikie.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit e47832c8609ef88b949c5a93ed1810cece7342d1)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/audit/S02auditd | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/audit/S02auditd b/package/audit/S02auditd
+index 0eef881cee..dd3dc22d6d 100644
+--- a/package/audit/S02auditd
++++ b/package/audit/S02auditd
+@@ -20,7 +20,7 @@ start(){
+ 	# the directory with SELinux permissions if possible
+ 	command -v selabel_lookup >/dev/null 2>&1
+ 	if [ $? = 0 ]; then
+-		mkdir -p /var/log/audit -Z `selabel_lookup -b file -k /var/log/audit`
++		mkdir -p /var/log/audit -Z `selabel_lookup -b file -k /var/log/audit | cut -d ' ' -f 3`
+ 	else
+ 		mkdir -p /var/log/audit
+ 	fi
+
+--===============0895867276864440858==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============0895867276864440858==--
