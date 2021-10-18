@@ -2,55 +2,72 @@ Return-Path: <SRS0=Qe4W=PG=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B3F9EC433EF
-	for <buildroot@archiver.kernel.org>; Mon, 18 Oct 2021 20:14:23 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A83BC433EF
+	for <buildroot@archiver.kernel.org>; Mon, 18 Oct 2021 20:18:26 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 77E1C6115A
-	for <buildroot@archiver.kernel.org>; Mon, 18 Oct 2021 20:14:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 77E1C6115A
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
+	by mail.kernel.org (Postfix) with ESMTPS id 9119560F9E
+	for <buildroot@archiver.kernel.org>; Mon, 18 Oct 2021 20:18:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9119560F9E
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4CA9860746;
-	Mon, 18 Oct 2021 20:14:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4345F4050D;
+	Mon, 18 Oct 2021 20:18:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hgKUKIZqukdU; Mon, 18 Oct 2021 20:14:22 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id IHPaWAzdxlNi; Mon, 18 Oct 2021 20:18:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B020160654;
-	Mon, 18 Oct 2021 20:14:21 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 12A6E1BF27A
- for <buildroot@lists.busybox.net>; Mon, 18 Oct 2021 20:14:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BA913404D7;
+	Mon, 18 Oct 2021 20:18:23 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5EF391BF27A
+ for <buildroot@lists.busybox.net>; Mon, 18 Oct 2021 20:18:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0276760654
- for <buildroot@lists.busybox.net>; Mon, 18 Oct 2021 20:14:20 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4E09C401CA
+ for <buildroot@lists.busybox.net>; Mon, 18 Oct 2021 20:18:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eieR26yelLoe for <buildroot@lists.busybox.net>;
- Mon, 18 Oct 2021 20:14:19 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D894C6064F
- for <buildroot@buildroot.org>; Mon, 18 Oct 2021 20:14:18 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay10.mail.gandi.net (Postfix) with ESMTPSA id 86AE6240009;
- Mon, 18 Oct 2021 20:14:16 +0000 (UTC)
-Date: Mon, 18 Oct 2021 22:14:15 +0200
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <20211018221415.60dc705a@windsurf>
-In-Reply-To: <20211014215455.2444205-1-giulio.benetti@benettiengineering.com>
-References: <20211014215455.2444205-1-giulio.benetti@benettiengineering.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=free.fr
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id de5wDt9r2Mdj for <buildroot@lists.busybox.net>;
+ Mon, 18 Oct 2021 20:18:19 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 79C3240164
+ for <buildroot@buildroot.org>; Mon, 18 Oct 2021 20:18:19 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:c87d:8477:c454:3318])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPSA id 729282003DC;
+ Mon, 18 Oct 2021 22:18:08 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+ s=smtp-20201208; t=1634588296;
+ bh=Y66vXd3yapCH12wQFGMZwq4Nhl1o9sUcFvpsTqK4fM8=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=ml89QfO5gToaahxP7zvF8qJx0nVaEOSpV8gY6cx5dyRYHoC+JPZanb9gDrmXKFYrq
+ +3x4/JGWPpZSB2MhaM2hWEu71jnHl743Tzrv4ne6dFy7fR2IYWa/7sljGOHGNu4YGj
+ hr56oPm5BBKIfXowUkE7aczFCNu60gkg9pA7GVlFgtyHnBALw34kgedl4fTw1btmXf
+ Qh/qIhoHiL5uVvLPrkmEqJ8bkaRyGZTUimfMzU9IvJKUGjDDEofbTe44fL0IxEZZay
+ 7HgoM8Fd/GBZomxcKkUvH0dnFFW4kEtu0wlV2sp5M6808bFl6ccltTanazncJpH6oB
+ Xh6CHKH1aZljQ==
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Mon, 18 Oct 2021 22:18:08 +0200
+Date: Mon, 18 Oct 2021 22:18:08 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Message-ID: <20211018201808.GT2400@scaer>
+References: <20211016093234.2477835-1-fontaine.fabrice@gmail.com>
+ <20211016093234.2477835-2-fontaine.fabrice@gmail.com>
+ <20211018220427.5971bba1@windsurf>
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/2] package/erlang-jiffy: fix build failure
- due to lack of -fPIC
+Content-Disposition: inline
+In-Reply-To: <20211018220427.5971bba1@windsurf>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+Subject: Re: [Buildroot] [PATCH v2,2/2] package/knock: add knockd option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,46 +79,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Will Newton <will.newton@gmail.com>, Johan Oudinet <johan.oudinet@gmail.com>,
- buildroot@buildroot.org
+Cc: Michael Rommel <rommel@layer-7.net>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Giulio,
+Thomas, All,
 
-On Thu, 14 Oct 2021 23:54:53 +0200
-Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+On 2021-10-18 22:04 +0200, Thomas Petazzoni spake thusly:
+> On Sat, 16 Oct 2021 11:32:34 +0200
+> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+> > +ifeq ($(BR2_PACKAGE_KNOCK_KNOCKD),y)
+> > +KNOCK_DEPENDENCIES = libpcap
+> From commit 97f3ad7af3dd54a15a10aa35786e7fa08cf5e7b1:
+>     Repeat after me: "Forcing the value of <pkg>_DEPENDENCIES inside a
+>     conditional is the root of all evil."
+> Care to repeat after me ? :-)
 
-> Package erlang-jiffy needs to be linked with -fPIC otherwise it throws
-> linker error:
-> ```
-> failed with return code 1 and the following output:
-> /home/giuliobenetti/br_reproduce/60296a48210e7ffc6bc9fa50ee586441a8957e85/output/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-musl/9.3.0/../../../../x86_64-buildroot-linux-musl/bin/ld: /tmp/jiffy.so.FCaOXC.ltrans1.ltrans.o: relocation R_X86_64_PC32 against symbol `dec_destroy' can not be used when making a shared object;
-> recompile with -fPIC
-> ```
-> 
-> This is architecture indipendent, so let's add -fPIC flag to LDFLAGS in any
-> case.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/602/60296a48210e7ffc6bc9fa50ee586441a8957e85/
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+OK, I missed that in my review of v1...
+/me hides in shame...
 
-Thanks! However, did you review the discussion at:
+But seriously though: why is that not caught by check-package?
 
-  https://lore.kernel.org/buildroot/20201224101440.3427472-1-fontaine.fabrice@gmail.com/
+Because it is not actually an override: the variable is not yet set
+there, so it is valid to unconditionally set it.
 
-Especially the feedback from Arnout around the end of the thread?
+check-package should probably recognise that the variable is
+<FOO>_DEPENDENCIES and consider that conditional assignment should
+still be forbidden in that case.
 
-Thomas
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
