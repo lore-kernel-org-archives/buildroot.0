@@ -2,52 +2,71 @@ Return-Path: <SRS0=Qe4W=PG=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 423F5C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 18 Oct 2021 15:22:59 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3CAE7C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 18 Oct 2021 15:34:10 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 80CE060F0F
-	for <buildroot@archiver.kernel.org>; Mon, 18 Oct 2021 15:22:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 80CE060F0F
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
+	by mail.kernel.org (Postfix) with ESMTPS id 97BBA610C7
+	for <buildroot@archiver.kernel.org>; Mon, 18 Oct 2021 15:34:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 97BBA610C7
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 09ADB40427;
-	Mon, 18 Oct 2021 15:22:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 65ADC81046;
+	Mon, 18 Oct 2021 15:34:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YrM1i92U8Hg9; Mon, 18 Oct 2021 15:22:57 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 7JMbWXtg3gGN; Mon, 18 Oct 2021 15:34:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C6F274044A;
-	Mon, 18 Oct 2021 15:22:55 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 729021BF317
- for <buildroot@lists.busybox.net>; Mon, 18 Oct 2021 15:22:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 95F6880AB6;
+	Mon, 18 Oct 2021 15:34:07 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 810971BF317
+ for <buildroot@lists.busybox.net>; Mon, 18 Oct 2021 15:34:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 621E260814
- for <buildroot@lists.busybox.net>; Mon, 18 Oct 2021 15:22:45 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 706A683B92
+ for <buildroot@lists.busybox.net>; Mon, 18 Oct 2021 15:34:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pR8O5kSUEhOF for <buildroot@lists.busybox.net>;
- Mon, 18 Oct 2021 15:22:44 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9C2736064F
- for <buildroot@buildroot.org>; Mon, 18 Oct 2021 15:22:44 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id C104C86F7A; Mon, 18 Oct 2021 15:19:40 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Mon, 18 Oct 2021 17:19:30 +0200
-X-Git-Refname: refs/heads/2021.08.x
-X-Git-Oldrev: adfb78c55a211326c49606c327312c651fa58ba8
-X-Git-Newrev: a1cad3edd8087a1ebeebd7e3bf5cd23bbc486e2a
-X-Patchwork-Hint: ignore
-Message-Id: <20211018151940.C104C86F7A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.08.x] {linux,
- linux-headers}: bump 4.{4, 9, 14, 19}.x / 5.{4, 10, 13, 14}.x series
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6QdqpfplQyHe for <buildroot@lists.busybox.net>;
+ Mon, 18 Oct 2021 15:34:04 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id DC2B282F11
+ for <buildroot@buildroot.org>; Mon, 18 Oct 2021 15:34:03 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:c87d:8477:c454:3318])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPSA id 9973D2003D3;
+ Mon, 18 Oct 2021 17:33:54 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+ s=smtp-20201208; t=1634571240;
+ bh=MBYigWIcHdMQ3jeM0xlCYuo466A4qAyrJFU6hVpHi30=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=KyJl4yGRaWb0vP1z2NeoliXQQ/2NyJeDGBgXDO3Eq5tSEbZRLNUATqgAtcrVs/O/J
+ TiabmtCi5acBZkNbNHZPzc/HhQ/YurfGmGcd2ZKL5w5eC+cGGYmeuom6nDQw2JD4zd
+ FP0jOAiBOvBA9SBO8a7RYKplZRl21v7XJjUe9j3WvT6Vw9eXnz+SL+LHFeEGZWPoIj
+ 2vUUuUXNyedG5eSs0iUIaIPaC55w/beNcxzazPbFHm5D+72cuF7pWY/OYTFqZtiwDo
+ XITPmya48fFrs+sO0dDmENe63YSSJPzir/nSOWIQaVUul8Eyx0j5qDyl4456bjQdFX
+ x9zfrASwv0LWg==
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Mon, 18 Oct 2021 17:33:54 +0200
+Date: Mon, 18 Oct 2021 17:33:54 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: "Weber,
+ Matthew L                            Collins" <Matthew.Weber@collins.com>
+Message-ID: <20211018153354.GS2400@scaer>
+References: <20211015215003.181073-1-paul@crapouillou.net>
+ <20211016080238.GD4165837@scaer>
+ <SN5P110MB048022947C6AD67D5341B4A6F2BC9@SN5P110MB0480.NAMP110.PROD.OUTLOOK.COM>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <SN5P110MB048022947C6AD67D5341B4A6F2BC9@SN5P110MB0480.NAMP110.PROD.OUTLOOK.COM>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+Subject: Re: [Buildroot] [External] Re: [PATCH] package/lightning: stop spam!
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,91 +78,80 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Paul Cercueil <paul@crapouillou.net>,
+ "buildroot@buildroot.org" <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a1cad3edd8087a1ebeebd7e3bf5cd23bbc486e2a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.08.x
+Matthew, All,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit d538f3c7a7af876c48315f46a868852bd364a7b1)
-[Peter: drop 5.14.x bump]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- linux/Config.in                      |  2 +-
- linux/linux.hash                     | 14 +++++++-------
- package/linux-headers/Config.in.host | 14 +++++++-------
- 3 files changed, 15 insertions(+), 15 deletions(-)
+On 2021-10-18 13:21 +0000, Weber, Matthew L                            Collins spake thusly:
+> > From: Yann E. MORIN <yann.morin.1998@free.fr>
+> > Matt: is there a process to update the NIST CPE DB? Can we add that in the
+> > manual, even just as an URL?
+> Thomas and I had started this elinux page covering adding/updating a CVE or CPE.
+> https://www.elinux.org/Buildroot:Security_Vulnerability_Management
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 2a1e51729f..078ef56cc4 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -125,7 +125,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "5.13.16" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "5.13.19" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "4.19.198-cip54" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "4.19.198-cip54-rt21" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 9132f3da52..a5aba2e71c 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,14 +1,14 @@
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256  495989174c16ae15817798f9e0722dfd782d7d2c78283b519ecc60f2d87e51d2  linux-5.13.16.tar.xz
-+sha256  e877ec724e917c967603225c7e5dc21b6e0f34998c7d086cab8c50324363ab7b  linux-5.13.19.tar.xz
- sha256  e9381cd3525a02f5b895f74147e2440be443ecd45484c6c64075046bc6f94c73  linux-5.12.19.tar.xz
- sha256  11027c6114eb916edbcc37897226fb6263b2931911d2d5093550473ce1a57600  linux-5.11.22.tar.xz
--sha256  3eb84bd24a2de2b4749314e34597c02401c5d6831b055ed5224adb405c35e30a  linux-5.10.64.tar.xz
--sha256  5cf7782ec2e91417edf0d5e6555da6d556962c8985e33ba9e7dadba5cbdc68f9  linux-5.4.145.tar.xz
-+sha256  b4d635afe7646ac6a6617c738e747ba0a6006675cd9735d18f672f8b1fba4c7c  linux-5.10.72.tar.xz
-+sha256  8044c7134c5eed21af9662f1c5399a5d8781b5bc2d8979e9ad06b4435a0a5ed5  linux-5.4.152.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
--sha256  02252f0002e65306f6765089e8bb51f621f4eaea974348c31991b0c508243bb5  linux-4.4.283.tar.xz
--sha256  67727389771a858406f773b4db62d7d3248209e26120df47507ea4a8898d2e15  linux-4.9.282.tar.xz
--sha256  9c5612ef428441b7c85cf211a455c06ce695b81a9a40c064d0ea424dd08bef3a  linux-4.14.246.tar.xz
--sha256  b7eb776f408b3ea71c97dde4888cc4549edf925a18cd158e7c9681d6ffa684c0  linux-4.19.206.tar.xz
-+sha256  870952aad348bed600a07ec24b23890e96f496bbc10e67033dbefa5fbf1f1c09  linux-4.4.288.tar.xz
-+sha256  e2a2fdfca4eadf10716260779a510bf5e0f19c6ee0a223724c74d636c815a645  linux-4.9.286.tar.xz
-+sha256  a4b43db9fd94a7c50d4f7e42d5264b1449ff41730f84a1323b8e4754fb336e7d  linux-4.14.250.tar.xz
-+sha256  9ba722594a5a5444df19510925df7b6b76cbf20ab4dc54e57f1c3e4da4116133  linux-4.19.210.tar.xz
- # Locally computed
- sha256  e6fc0a999a180ad272b08ff71cbc67f2d3fdc6773d4a8069aefb8781b8e07821  linux-cip-4.19.198-cip54.tar.gz
- sha256  449668d678e458ddaf30f944b7ca7f5ce6ea6664f57d43ea4eb90b176e03b9cb  linux-cip-4.19.198-cip54-rt21.tar.gz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 40dd114e01..2b20a48176 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -370,15 +370,15 @@ endchoice
- 
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "4.4.283"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.282"	if BR2_KERNEL_HEADERS_4_9
--	default "4.14.246"	if BR2_KERNEL_HEADERS_4_14
--	default "4.19.206"	if BR2_KERNEL_HEADERS_4_19
--	default "5.4.145"	if BR2_KERNEL_HEADERS_5_4
--	default "5.10.64"	if BR2_KERNEL_HEADERS_5_10
-+	default "4.4.288"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.286"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.14.250"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.19.210"	if BR2_KERNEL_HEADERS_4_19
-+	default "5.4.152"	if BR2_KERNEL_HEADERS_5_4
-+	default "5.10.72"	if BR2_KERNEL_HEADERS_5_10
- 	default "5.11.22"	if BR2_KERNEL_HEADERS_5_11
- 	default "5.12.19"	if BR2_KERNEL_HEADERS_5_12
--	default "5.13.16"	if BR2_KERNEL_HEADERS_5_13
-+	default "5.13.19"	if BR2_KERNEL_HEADERS_5_13
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+Ah, great! :-)
+
+> So in this case, I think we need to submit an entry for the GNU
+> lightning package (cpe:2.3:a:gnu:lightning:2.1.3:*:*:*:*:*:*:*) as
+> there isn't a CPE. [...] I've emailed the XML [1] to NIST to make
+> this update.
+
+So if I follow correctly, GNU lightning did not exist in the NIST CPE.
+I tried to look for it yesterday, and it turned up mothing.
+
+But now, in addition to the one version you submitted (as per your XML,
+below), there are a bunch of results, from version 1.0 up to and
+including 2.1.3:
+
+    https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe:2.3:a:gnu:lightning
+
+They were all added on 2021-10-18, so am I wrong in understanding that
+your submission triggered some (automated/manual) scanning of the
+upstream repo to generate all those entries?
+
+> Once that's added, then this .mk can set "LIGHTNING_CPE_ID_VENDOR =
+> gnu" so the CVE filter is clear for this package (right now it is
+> free txt based and that's why you've picked up the server CVE).
+
+Patch pending to be sent; pkg-stats still reports "CPE version unknown
+in CPE database", although the website does include 2.1.3...
+
+Thanks ! :-)
+
+Regards,
+Yann E. MORIN.
+
+> Regards,
+> Matt
+> 
+> 
+> 
+> [1]
+> <?xml version="1.0" encoding="utf-8"?>
+> <cpe-list xmlns="http://cpe.mitre.org/dictionary/2.0" xmlns:config="http://scap.nist.gov/schema/configuration/0.1" xmlns:cpe-23="http://scap.nist.gov/schema/cpe-extension/2.3" xmlns:meta="http://scap.nist.gov/schema/cpe-dictionary-metadata/0.2" xmlns:ns6="http://scap.nist.gov/schema/scap-core/0.1" xmlns:scap-core="http://scap.nist.gov/schema/scap-core/0.3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://scap.nist.gov/schema/cpe-extension/2.3 https://scap.nist.gov/schema/cpe/2.3/cpe-dictionary-extension_2.3.xsd http://cpe.mitre.org/dictionary/2.0 https://scap.nist.gov/schema/cpe/2.3/cpe-dictionary_2.3.xsd http://scap.nist.gov/schema/cpe-dictionary-metadata/0.2 https://scap.nist.gov/schema/cpe/2.1/cpe-dictionary-metadata_0.2.xsd http://scap.nist.gov/schema/scap-core/0.3 https://scap.nist.gov/schema/nvd/scap-core_0.3.xsd http://scap.nist.gov/schema/configuration/0.1 https://scap.nist.gov/schema/nvd/configuration_0.1.xsd http://scap.nist.gov/schema/scap
+ -core/0.1 https://scap.nist.gov/schema/nvd/scap-core_0.1.xsd">
+>         <cpe-item name="cpe:/a:gnu:lightning:2.1.3">
+>                 <title xml:lang="en-US">GNU Lightning Project 2.1.3</title>
+>                 <references>
+>                         <reference href="http://git.savannah.gnu.org/cgit/lightning.git">VERSION</reference>
+>                         <reference href="https://www.gnu.org/software/lightning/">PRODUCT</reference>
+>                 </references>
+>                 <cpe-23:cpe23-item name="cpe:2.3:a:gnu:lightning:2.1.3:*:*:*:*:*:*:*"/>
+>         </cpe-item>
+> </cpe-list>
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
