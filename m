@@ -2,51 +2,51 @@ Return-Path: <SRS0=Qe4W=PG=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A348AC433F5
-	for <buildroot@archiver.kernel.org>; Mon, 18 Oct 2021 15:22:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 423F5C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 18 Oct 2021 15:22:59 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9DE5460F0F
-	for <buildroot@archiver.kernel.org>; Mon, 18 Oct 2021 15:22:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9DE5460F0F
+	by mail.kernel.org (Postfix) with ESMTPS id 80CE060F0F
+	for <buildroot@archiver.kernel.org>; Mon, 18 Oct 2021 15:22:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 80CE060F0F
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3BEED40163;
-	Mon, 18 Oct 2021 15:22:45 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 09ADB40427;
+	Mon, 18 Oct 2021 15:22:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vx5WPnI6BGK3; Mon, 18 Oct 2021 15:22:44 +0000 (UTC)
+	with ESMTP id YrM1i92U8Hg9; Mon, 18 Oct 2021 15:22:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 307B840424;
-	Mon, 18 Oct 2021 15:22:43 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C6F274044A;
+	Mon, 18 Oct 2021 15:22:55 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id F12A51BF317
- for <buildroot@lists.busybox.net>; Mon, 18 Oct 2021 15:22:40 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 729021BF317
+ for <buildroot@lists.busybox.net>; Mon, 18 Oct 2021 15:22:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DF41A60814
- for <buildroot@lists.busybox.net>; Mon, 18 Oct 2021 15:22:40 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 621E260814
+ for <buildroot@lists.busybox.net>; Mon, 18 Oct 2021 15:22:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sCTaOlhGQ93x for <buildroot@lists.busybox.net>;
- Mon, 18 Oct 2021 15:22:40 +0000 (UTC)
+ with ESMTP id pR8O5kSUEhOF for <buildroot@lists.busybox.net>;
+ Mon, 18 Oct 2021 15:22:44 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1FDCB6064F
- for <buildroot@buildroot.org>; Mon, 18 Oct 2021 15:22:40 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9C2736064F
+ for <buildroot@buildroot.org>; Mon, 18 Oct 2021 15:22:44 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 3FB3A86F06; Mon, 18 Oct 2021 15:19:36 +0000 (UTC)
+ id C104C86F7A; Mon, 18 Oct 2021 15:19:40 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 18 Oct 2021 17:22:17 +0200
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: bcfaf7d573aadad1df585781fc027b9d4e05ac3c
-X-Git-Newrev: dceae741b0e194219a511102f15fea6378aefc78
+Date: Mon, 18 Oct 2021 17:19:30 +0200
+X-Git-Refname: refs/heads/2021.08.x
+X-Git-Oldrev: adfb78c55a211326c49606c327312c651fa58ba8
+X-Git-Newrev: a1cad3edd8087a1ebeebd7e3bf5cd23bbc486e2a
 X-Patchwork-Hint: ignore
-Message-Id: <20211018151936.3FB3A86F06@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] {linux,
+Message-Id: <20211018151940.C104C86F7A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.08.x] {linux,
  linux-headers}: bump 4.{4, 9, 14, 19}.x / 5.{4, 10, 13, 14}.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -65,38 +65,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dceae741b0e194219a511102f15fea6378aefc78
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=a1cad3edd8087a1ebeebd7e3bf5cd23bbc486e2a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.08.x
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 (cherry picked from commit d538f3c7a7af876c48315f46a868852bd364a7b1)
-[Peter: drop 5.14.x/5.14.x bump]
+[Peter: drop 5.14.x bump]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
  linux/Config.in                      |  2 +-
- linux/linux.hash                     | 12 ++++++------
- package/linux-headers/Config.in.host | 12 ++++++------
- 3 files changed, 13 insertions(+), 13 deletions(-)
+ linux/linux.hash                     | 14 +++++++-------
+ package/linux-headers/Config.in.host | 14 +++++++-------
+ 3 files changed, 15 insertions(+), 15 deletions(-)
 
 diff --git a/linux/Config.in b/linux/Config.in
-index ac279aaeeb..3cdad2f5cf 100644
+index 2a1e51729f..078ef56cc4 100644
 --- a/linux/Config.in
 +++ b/linux/Config.in
 @@ -125,7 +125,7 @@ endif
  
  config BR2_LINUX_KERNEL_VERSION
  	string
--	default "5.10.64" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "5.10.72" if BR2_LINUX_KERNEL_LATEST_VERSION
+-	default "5.13.16" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "5.13.19" if BR2_LINUX_KERNEL_LATEST_VERSION
  	default "4.19.198-cip54" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
  	default "4.19.198-cip54-rt21" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
  	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
 diff --git a/linux/linux.hash b/linux/linux.hash
-index 1d514eff79..4f95b2505a 100644
+index 9132f3da52..a5aba2e71c 100644
 --- a/linux/linux.hash
 +++ b/linux/linux.hash
-@@ -1,11 +1,11 @@
+@@ -1,14 +1,14 @@
  # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+-sha256  495989174c16ae15817798f9e0722dfd782d7d2c78283b519ecc60f2d87e51d2  linux-5.13.16.tar.xz
++sha256  e877ec724e917c967603225c7e5dc21b6e0f34998c7d086cab8c50324363ab7b  linux-5.13.19.tar.xz
+ sha256  e9381cd3525a02f5b895f74147e2440be443ecd45484c6c64075046bc6f94c73  linux-5.12.19.tar.xz
+ sha256  11027c6114eb916edbcc37897226fb6263b2931911d2d5093550473ce1a57600  linux-5.11.22.tar.xz
 -sha256  3eb84bd24a2de2b4749314e34597c02401c5d6831b055ed5224adb405c35e30a  linux-5.10.64.tar.xz
 -sha256  5cf7782ec2e91417edf0d5e6555da6d556962c8985e33ba9e7dadba5cbdc68f9  linux-5.4.145.tar.xz
 +sha256  b4d635afe7646ac6a6617c738e747ba0a6006675cd9735d18f672f8b1fba4c7c  linux-5.10.72.tar.xz
@@ -114,10 +118,10 @@ index 1d514eff79..4f95b2505a 100644
  sha256  e6fc0a999a180ad272b08ff71cbc67f2d3fdc6773d4a8069aefb8781b8e07821  linux-cip-4.19.198-cip54.tar.gz
  sha256  449668d678e458ddaf30f944b7ca7f5ce6ea6664f57d43ea4eb90b176e03b9cb  linux-cip-4.19.198-cip54-rt21.tar.gz
 diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 4ca942ecad..d39428be37 100644
+index 40dd114e01..2b20a48176 100644
 --- a/package/linux-headers/Config.in.host
 +++ b/package/linux-headers/Config.in.host
-@@ -346,12 +346,12 @@ endchoice
+@@ -370,15 +370,15 @@ endchoice
  
  config BR2_DEFAULT_KERNEL_HEADERS
  	string
@@ -133,6 +137,10 @@ index 4ca942ecad..d39428be37 100644
 +	default "4.19.210"	if BR2_KERNEL_HEADERS_4_19
 +	default "5.4.152"	if BR2_KERNEL_HEADERS_5_4
 +	default "5.10.72"	if BR2_KERNEL_HEADERS_5_10
+ 	default "5.11.22"	if BR2_KERNEL_HEADERS_5_11
+ 	default "5.12.19"	if BR2_KERNEL_HEADERS_5_12
+-	default "5.13.16"	if BR2_KERNEL_HEADERS_5_13
++	default "5.13.19"	if BR2_KERNEL_HEADERS_5_13
  	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
  	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
  	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
