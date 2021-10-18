@@ -2,52 +2,51 @@ Return-Path: <SRS0=Qe4W=PG=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 71E7BC433F5
-	for <buildroot@archiver.kernel.org>; Mon, 18 Oct 2021 19:21:58 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4084DC433F5
+	for <buildroot@archiver.kernel.org>; Mon, 18 Oct 2021 19:22:10 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1115161074
-	for <buildroot@archiver.kernel.org>; Mon, 18 Oct 2021 19:21:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1115161074
+	by mail.kernel.org (Postfix) with ESMTPS id F2F866103D
+	for <buildroot@archiver.kernel.org>; Mon, 18 Oct 2021 19:22:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org F2F866103D
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E119183145;
-	Mon, 18 Oct 2021 19:21:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B720360B0D;
+	Mon, 18 Oct 2021 19:22:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ME0qOHfLL7Tv; Mon, 18 Oct 2021 19:21:57 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id DBBgApZtT-Mb; Mon, 18 Oct 2021 19:22:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2F879818C4;
-	Mon, 18 Oct 2021 19:21:56 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 10B8A1BF319
+	by smtp3.osuosl.org (Postfix) with ESMTP id 03DD960AEC;
+	Mon, 18 Oct 2021 19:22:07 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 23F1F1BF97A
  for <buildroot@lists.busybox.net>; Mon, 18 Oct 2021 19:19:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0D4AE4017C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1BC654021F
  for <buildroot@lists.busybox.net>; Mon, 18 Oct 2021 19:19:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pZYok7pM9B17 for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JioCmVlGJ2vV for <buildroot@lists.busybox.net>;
  Mon, 18 Oct 2021 19:19:00 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 54843401B2
+ by smtp2.osuosl.org (Postfix) with ESMTP id 432D3400EF
  for <buildroot@buildroot.org>; Mon, 18 Oct 2021 19:18:58 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 1EF58874D8; Mon, 18 Oct 2021 19:15:54 +0000 (UTC)
+ id 14A398742D; Mon, 18 Oct 2021 19:15:54 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Mon, 18 Oct 2021 21:18:49 +0200
+Date: Mon, 18 Oct 2021 21:16:31 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 08925bdcbae9214542ec8da119874e00f837ee0b
-X-Git-Newrev: 9e092ba253414479c48a283517a2bd66abb6a8bf
+X-Git-Oldrev: 6d7a36e08c0983e92b9e7ba42f49bf8dc945c16a
+X-Git-Newrev: 08925bdcbae9214542ec8da119874e00f837ee0b
 X-Patchwork-Hint: ignore
-Message-Id: <20211018191554.1EF58874D8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/hiredis: security bump to version
- 1.0.2
+Message-Id: <20211018191554.14A398742D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/bcm2835: bump version to 1.70
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,49 +64,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9e092ba253414479c48a283517a2bd66abb6a8bf
+commit: https://git.buildroot.net/buildroot/commit/?id=08925bdcbae9214542ec8da119874e00f837ee0b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix CVE-2021-32765: Hiredis is a minimalistic C client library for the
-Redis database. In affected versions Hiredis is vulnurable to integer
-overflow if provided maliciously crafted or corrupted `RESP` `mult-bulk`
-protocol data. When parsing `multi-bulk` (array-like) replies, hiredis
-fails to check if `count * sizeof(redisReply*)` can be represented in
-`SIZE_MAX`. If it can not, and the `calloc()` call doesn't itself make
-this check, it would result in a short allocation and subsequent buffer
-overflow.
+Changelog (since 1.68):
 
-https://github.com/redis/hiredis/blob/v1.0.2/CHANGELOG.md
+  - 1.69, 2021-03-30 Added link to Ada bindings by Tama McGlinn.
+    Fixed problem with undefined off_t on some compilers.
+  - 1.70, Patch to ensure compilation with gcc -std=c99, as reported by
+    John Blaiklock. Fix some inconsistencies in version numbers.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/hiredis/hiredis.hash | 2 +-
- package/hiredis/hiredis.mk   | 2 +-
+ package/bcm2835/bcm2835.hash | 2 +-
+ package/bcm2835/bcm2835.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/hiredis/hiredis.hash b/package/hiredis/hiredis.hash
-index fc01d1f60d..a45cf68f99 100644
---- a/package/hiredis/hiredis.hash
-+++ b/package/hiredis/hiredis.hash
+diff --git a/package/bcm2835/bcm2835.hash b/package/bcm2835/bcm2835.hash
+index e366f19038..c9f7acfd01 100644
+--- a/package/bcm2835/bcm2835.hash
++++ b/package/bcm2835/bcm2835.hash
 @@ -1,3 +1,3 @@
  # Locally computed:
--sha256  2a0b5fe5119ec973a0c1966bfc4bd7ed39dbce1cb6d749064af9121fe971936f  hiredis-1.0.0.tar.gz
-+sha256  e0ab696e2f07deb4252dda45b703d09854e53b9703c7d52182ce5a22616c3819  hiredis-1.0.2.tar.gz
- sha256  dca05ce8fc87a8261783b4aed0deef8becc9350b6aa770bc714d0c1833b896eb  COPYING
-diff --git a/package/hiredis/hiredis.mk b/package/hiredis/hiredis.mk
-index f340fb8a4d..a571951fa3 100644
---- a/package/hiredis/hiredis.mk
-+++ b/package/hiredis/hiredis.mk
-@@ -5,7 +5,7 @@
+-sha256  b7eda59fd7bc3cb97fdac14e8455e86ddad75006d69270358ac8d00108e369a9  bcm2835-1.68.tar.gz
++sha256  c062a8a1cf1dc1ba1ca3978451d2f668b66f7ce5548200a0f4a8bb2117b1b2c9  bcm2835-1.70.tar.gz
+ sha256  8b1ba204bb69a0ade2bfcf65ef294a920f6bb361b317dba43c7ef29d96332b9b  COPYING
+diff --git a/package/bcm2835/bcm2835.mk b/package/bcm2835/bcm2835.mk
+index 1ddd035818..e9d7256f19 100644
+--- a/package/bcm2835/bcm2835.mk
++++ b/package/bcm2835/bcm2835.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- HIREDIS_VERSION_MAJOR = 1.0
--HIREDIS_VERSION = $(HIREDIS_VERSION_MAJOR).0
-+HIREDIS_VERSION = $(HIREDIS_VERSION_MAJOR).2
- HIREDIS_SITE = $(call github,redis,hiredis,v$(HIREDIS_VERSION))
- HIREDIS_LICENSE = BSD-3-Clause
- HIREDIS_LICENSE_FILES = COPYING
+-BCM2835_VERSION = 1.68
++BCM2835_VERSION = 1.70
+ BCM2835_SITE = http://www.airspayce.com/mikem/bcm2835
+ BCM2835_LICENSE = GPL-3.0
+ BCM2835_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
