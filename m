@@ -2,82 +2,96 @@ Return-Path: <SRS0=TKET=PH=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B4EAC433EF
-	for <buildroot@archiver.kernel.org>; Tue, 19 Oct 2021 12:34:35 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 04040C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 19 Oct 2021 12:45:43 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 5DF3A61260
-	for <buildroot@archiver.kernel.org>; Tue, 19 Oct 2021 12:34:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5DF3A61260
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id 247266128B
+	for <buildroot@archiver.kernel.org>; Tue, 19 Oct 2021 12:45:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 247266128B
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D1620403A8;
-	Tue, 19 Oct 2021 12:34:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BA3A560B65;
+	Tue, 19 Oct 2021 12:45:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GlOfQ2Utok1p; Tue, 19 Oct 2021 12:34:32 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 9bvq9-64M-t3; Tue, 19 Oct 2021 12:45:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BC4CC404DE;
-	Tue, 19 Oct 2021 12:34:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 27D4F60BC1;
+	Tue, 19 Oct 2021 12:45:40 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E8E401BF376
- for <buildroot@lists.busybox.net>; Tue, 19 Oct 2021 12:34:29 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6D2E01BF578
+ for <buildroot@lists.busybox.net>; Tue, 19 Oct 2021 12:45:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D7F8983592
- for <buildroot@lists.busybox.net>; Tue, 19 Oct 2021 12:34:29 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5C51283BF8
+ for <buildroot@lists.busybox.net>; Tue, 19 Oct 2021 12:45:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
+ dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PVyriBwOnW3I for <buildroot@lists.busybox.net>;
- Tue, 19 Oct 2021 12:34:28 +0000 (UTC)
+ with ESMTP id 5lYNDy_GAeud for <buildroot@lists.busybox.net>;
+ Tue, 19 Oct 2021 12:45:37 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com
- [IPv6:2607:f8b0:4864:20::12f])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C3B3583546
- for <buildroot@buildroot.org>; Tue, 19 Oct 2021 12:34:28 +0000 (UTC)
-Received: by mail-il1-x12f.google.com with SMTP id j3so400433ilr.6
- for <buildroot@buildroot.org>; Tue, 19 Oct 2021 05:34:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=dtq3GZUkzdPYV56R2E1X8zXwfyOZMohsgkCQsn3mokI=;
- b=q00McP2kuK+5XXZO7nzQGMX/jAIfv0qEs6Rm5NdTuaBluCvc3Pp0f+cwRV5MypXed2
- lNfTkNJXsuJJDdbMJKrxE6noWFwUvJ9zWUN6IJdCUzUbj/DKYQWFOWJShgFvT7evAUtM
- SPOuLMMHS97IdrDqvOLcnAJkAMdLRjd5wVdxqqHW6ZOq3Hbk/FcHrUnrbHCC6aZM3Nei
- v7seDmtSqu4r6Y2lh3psmPq1ZdyQmbLlZovWhkgp7KyQzQGe7+/OnPkFI11BqQaDLeMd
- uLwQ7rhydS6Pmc/VwBrtCsfKSgdRTLQxt6EPoaEfPMI73NTVbnghvLLeRirVWfZakBis
- XiLw==
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com
+ [IPv6:2a00:1450:4864:20::534])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8A96983B3C
+ for <buildroot@buildroot.org>; Tue, 19 Oct 2021 12:45:37 +0000 (UTC)
+Received: by mail-ed1-x534.google.com with SMTP id g10so12348953edj.1
+ for <buildroot@buildroot.org>; Tue, 19 Oct 2021 05:45:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=RWCsWPB2WclGpJjq3yTKflqEeBR4PXJ2xbgfHoBtxmY=;
+ b=aBTu07WY/DNjWrOE8qupG6dSnZtIpTYnZwtVIOB9kn+K1//i0u1+zZPWi6WdIJ+G4Q
+ kWkBX0nMgXfjvZMFQGpDyf+5H3lJTcyR6tSl4cWeEFVwOzJc9dS/9ESmmD7/5uJhikVm
+ lsjFifuNDMZ8V2cYPGHzpcJLILt1z19UfLa0CheakmMqQzvHvE5CyOWg99dXgxtJuDhU
+ KWAOlsAvqI7qL5lZa/kiMGoDl+OafqEyuGgwxY30dHMzfi6IU0iEuGHQeotIf/7/NbkH
+ az6Th/OMmUICY8mLRihb9DBZ3SjM3fxV6je66iG36hR42NP2DMqrJvK4wN1bOWJNHG3Q
+ zb4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=dtq3GZUkzdPYV56R2E1X8zXwfyOZMohsgkCQsn3mokI=;
- b=EaiV/+lMCdmeyff48ExvjMR2Ltxim9FOoJ46/lfOhWeNpDni55a764XSm9NsQ9roid
- UAgLZ2G8QG+a06R9SLc5RG+HRbR1vR2YUKO5vatlDQ8ZbSE6lLdqJ06aO4kJr++hPv09
- 75fn0n5e0rZejJ5m75PeIydvTfVUXo6WeIbqbX7gEmu5TOt4GV6pzadeLfZgq++3wAiR
- dEz1l0rdmHhmuuayGnzQUDzXOtjUB9kePyM/Dp23tvaAcmah+nTHkk/7+ZtTKz4j4tiK
- TbsNu3VlWX2cTkvOkrurYwsFiu4EVjolY5c72l0HYrXVf7frSwXCTkugNZaXpPZBsiD0
- a8+A==
-X-Gm-Message-State: AOAM533EoTe/i9gZsg73HjPfWmU6Uk6Kt5wzXtV+tIpHh9gMRAiGj3nS
- +AeQuS+u8MW5DfWiKSQ8YB+Ev02PB3BHL8uE/QMidd5pi6f+
-X-Google-Smtp-Source: ABdhPJyRoC/tM+4Bp/z59Tv7eIjrb2oXrgHaMLTHcgdAFy8WqxgaBZnDi0ytNLAj508AMFno3TPn/BKrl1itGZ5r4Uw=
-X-Received: by 2002:a05:6e02:1a2d:: with SMTP id
- g13mr17957677ile.123.1634646867626; 
- Tue, 19 Oct 2021 05:34:27 -0700 (PDT)
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=RWCsWPB2WclGpJjq3yTKflqEeBR4PXJ2xbgfHoBtxmY=;
+ b=NV4cMvsFJ1Gs0lwAPdSaCPVJIjzRZ4dVEpsZMiI3sVu5eFfQ9dw6gD3901XxIGeRHr
+ sjmIJmodVelULIS49Drm9noBrBvQq3uNcOgbrjyYFom0aLImUJqVL6qZdhmKkWr8502S
+ /+ZlnB1i1eidV6ST8eha5bQh+AsmdAU+xjYXTod2XwBDmHaPd3Z9lpTpimW+gydKyHZN
+ VH7i6+Zqdmr86ZTmSi9XkWZfmnMmERNlwIO1kDTKK4dFNvuEp05tRtRY1F7SBts10dhN
+ xmktjOzDPOch5d3doV6A/kWmwALt9v/xeWDsvlQlp/lJDwpwVn48KHFfPHsXGulpWFES
+ JCiw==
+X-Gm-Message-State: AOAM532uSynaLLLCl3FdOU01lD+8evxXsysOt/iyGVdUyRcjYLgEiLlB
+ 401uoL3J/xQLmHwaLcWkpM90dA==
+X-Google-Smtp-Source: ABdhPJzu8zF8TtvFadJtVReVD+eTc3fBL0NjKw65PVj1ekGN5wwEWaoIsc4kuecPglsdnH6rhy9E9Q==
+X-Received: by 2002:a05:6402:4311:: with SMTP id
+ m17mr53295484edc.368.1634647534953; 
+ Tue, 19 Oct 2021 05:45:34 -0700 (PDT)
+Received: from [10.1.0.154] (ip-188-118-3-185.reverse.destiny.be.
+ [188.118.3.185])
+ by smtp.gmail.com with ESMTPSA id s12sm3796360edj.82.2021.10.19.05.45.34
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Tue, 19 Oct 2021 05:45:34 -0700 (PDT)
+Message-ID: <c5b8e982-85a3-f01d-ac9b-714aa98c9be3@mind.be>
+Date: Tue, 19 Oct 2021 14:45:34 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.1.0
+Content-Language: en-GB
+To: =?UTF-8?Q?Esa=c3=afe_Ledoux_NJONGSSI_KOUAM?= <kouamdoux@gmail.com>,
+ Andreas Ziegler <br015@umbiko.net>
 References: <mailman.16364.1634462006.241441.buildroot@buildroot.org>
  <1641d5624553f991bb7abf9808e6bf99@umbiko.net>
  <CA+eej5PtS6iCJ+W1b6W0mZXk-fQJcB1hhr20_D7cE=fja8NzTw@mail.gmail.com>
  <3f8142a1afd59acc55e141f2d8a95e66@umbiko.net>
-In-Reply-To: <3f8142a1afd59acc55e141f2d8a95e66@umbiko.net>
-From: =?UTF-8?Q?Esa=C3=AFe_Ledoux_NJONGSSI_KOUAM?= <kouamdoux@gmail.com>
-Date: Tue, 19 Oct 2021 16:34:19 +0200
-Message-ID: <CA+eej5N4SBtyNcs-hUEsviA4X6wAk-XvqzmxkCVpiizzupm4FQ@mail.gmail.com>
-To: Andreas Ziegler <br015@umbiko.net>
+ <CA+eej5N4SBtyNcs-hUEsviA4X6wAk-XvqzmxkCVpiizzupm4FQ@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <CA+eej5N4SBtyNcs-hUEsviA4X6wAk-XvqzmxkCVpiizzupm4FQ@mail.gmail.com>
 Subject: Re: [Buildroot] how can i implement my kernel module and debug it
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -91,192 +105,18 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============2675427818040448673=="
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============2675427818040448673==
-Content-Type: multipart/alternative; boundary="000000000000e0cec405ceb3e1f7"
-
---000000000000e0cec405ceb3e1f7
-Content-Type: text/plain; charset="UTF-8"
-
-so i have develop my kernel module and it is working very well.
-
-there is my folder :
-
-hello.c :
-
-#include <linux/module.h>    // included for all kernel modules
-#include <linux/kernel.h>    // included for KERN_INFO
-#include <linux/init.h>      // included for __init and __exit macros
-
-MODULE_LICENSE("GPL");
-MODULE_AUTHOR("Lakshmanan");
-MODULE_DESCRIPTION("A Simple Hello World module");
-
-static int __init hello_init(void)
-{
-    printk(KERN_INFO "Hello world!\n");
-    return 0;    // Non-zero return means that the module couldn't be
-loaded.
-}
-
-static void __exit hello_cleanup(void)
-{
-    printk(KERN_INFO "Cleaning up module.\n");
-}
-
-module_init(hello_init);
-module_exit(hello_cleanup);
-
-> Makefile :
-
-obj-m += helloKernelModule.o
-all:
-make -C /lib/modules/$(shell uname -r)/build M=$(PWD) modules
-
-clean:
-make -C /lib/modules/$(shell uname -r)/build M=$(PWD) clean
-
-when i run make , it generate some files like hello.o , hello.ko , ...
-
-> integrate the package into Buildroot (see comments below)
-
-But , i'm not understanding very well when you said i integrate the package
-on buildroot. Is it only the Makefile and the hello.c code or Makefile ,
-hello.c code ,  hello.o , hello.ko , ... ?
-
-> check if the package builds correctly within Buildroot and gets
-deployed to target/lib/modules
-
-Okay , i have put the project on one folder kernel_module_test in buildroot
-tree
-
-external.desc :
-
-name: BR2_PACKAGE_KERNEL_MODULE_TEST
-
-external.mk :
-
-include $(sort $(wildcard $(BR2_EXTERNAL_KERNEL_MODULE_TEST_PATH)/*/*.mk))
-
-Config.in :
-
-config BR2_PACKAGE_KERNEL_MODULE_TEST
-        bool "kernel_module_test"
-        depends on BR2_LINUX_KERNEL
-        help
-                Linux Kernel Module Cheat.
-
-kernel_module_test.mk :
-
-KERNEL_MODULE_VERSION = 1.0
-KERNEL_MODULE_SITE =
-$(BR2_EXTERNAL_KERNEL_MODULE_TEST_PATH)/kernel_module_test
-KERNEL_MODULE_SITE_METHOD = local
-$(eval $(kernel_module_test))
-$(eval $(generic-package))
-
-As you can see , i want to use a BR2_EXTERNAL directory structure.
-
-So i have make it by typing :
-
-/buildroot# make BR2_EXTERNAL=kernel_module_test menuconfig
-
-Go ahead into External Options , and fortunatly , i have see my package
-inside, .. so i have saved it and exit.
-
-After that i have type make.
-
- i have seen my package on output/build , looks like kernel_module_test
-folder that contains some files.
-
-Finaly , i have seen some files on
-output/target/lib/modules/${BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE} but not
-my module.
-
-So i think that it means that my modules/package was not loaded and i can't
-exploit it.
-
-please where i have mistaken ??
-
---000000000000e0cec405ceb3e1f7
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div>so i have develop my kernel module and it is working =
-very well.</div><div><br></div><div>there is my folder :</div><div><br></di=
-v><div>hello.c :</div><div><br></div><div>#include &lt;linux/module.h&gt; =
-=C2=A0 =C2=A0// included for all kernel modules<br>#include &lt;linux/kerne=
-l.h&gt; =C2=A0 =C2=A0// included for KERN_INFO<br>#include &lt;linux/init.h=
-&gt; =C2=A0 =C2=A0 =C2=A0// included for __init and __exit macros<br><br><f=
-ont size=3D"1"><span style=3D"font-family:arial narrow,sans-serif">MODULE_L=
-ICENSE(&quot;GPL&quot;);<br>MODULE_AUTHOR(&quot;Lakshmanan&quot;);<br>MODUL=
-E_DESCRIPTION(&quot;A Simple Hello World module&quot;);<br><br>static int _=
-_init hello_init(void)<br>{<br>=C2=A0 =C2=A0 printk(KERN_INFO &quot;Hello w=
-orld!\n&quot;);<br>=C2=A0 =C2=A0 return 0; =C2=A0 =C2=A0// Non-zero return =
-means that the module couldn&#39;t be loaded.<br>}<br><br>static void __exi=
-t hello_cleanup(void)<br>{<br>=C2=A0 =C2=A0 printk(KERN_INFO &quot;Cleaning=
- up module.\n&quot;);<br>}<br><br>module_init(hello_init);<br>module_exit(h=
-ello_cleanup);</span></font></div><div><br></div><div>&gt; Makefile : <br><=
-/div><div><br></div><div><font size=3D"1"><span style=3D"font-family:arial =
-narrow,sans-serif">obj-m +=3D helloKernelModule.o<br>all:<br>	make -C /lib/=
-modules/$(shell uname -r)/build M=3D$(PWD) modules<br><br>clean:<br>	make -=
-C /lib/modules/$(shell uname -r)/build M=3D$(PWD) clean</span></font></div>=
-<div><br></div><div>when i run make , it generate some files like hello.o ,=
- hello.ko , ...</div><div><br></div><div>&gt; integrate the package into Bu=
-ildroot (see comments below)</div><div><br></div><div>But , i&#39;m not und=
-erstanding very well when you said i integrate the package on buildroot. Is=
- it only the Makefile and the hello.c code or Makefile , hello.c code ,=C2=
-=A0 hello.o , hello.ko , ... ?<br></div><div><br></div><div>&gt; check if t=
-he package builds correctly within Buildroot and gets <br>
-deployed to target/lib/modules</div><div><br></div><div>Okay , i have put t=
-he project on one folder kernel_module_test in buildroot tree<br></div><div=
-><br></div><div>external.desc :</div><div><br></div><div><font size=3D"1"><=
-span style=3D"font-family:arial narrow,sans-serif">name: BR2_PACKAGE_KERNEL=
-_MODULE_TEST</span></font></div><div><br></div><div><a href=3D"http://exter=
-nal.mk">external.mk</a> :</div><div><br></div><div><font size=3D"1"><span s=
-tyle=3D"font-family:arial narrow,sans-serif">include $(sort $(wildcard $(BR=
-2_EXTERNAL_KERNEL_MODULE_TEST_PATH)/*/*.mk))</span></font></div><div><br></=
-div><div>Config.in :</div><div><br></div><div><font size=3D"1"><span style=
-=3D"font-family:arial narrow,sans-serif">config BR2_PACKAGE_KERNEL_MODULE_T=
-EST<br>=C2=A0 =C2=A0 =C2=A0 =C2=A0 bool &quot;kernel_module_test&quot;<br>=
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 depends on BR2_LINUX_KERNEL<br>=C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 help<br>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 Linux Kernel Module Cheat.</span></font></div><div><br></div><div><a hr=
-ef=3D"http://kernel_module_test.mk">kernel_module_test.mk</a> :</div><div><=
-font size=3D"1"><span style=3D"font-family:arial narrow,sans-serif"><br></s=
-pan></font></div><div><font size=3D"1"><span style=3D"font-family:arial nar=
-row,sans-serif">KERNEL_MODULE_VERSION =3D 1.0<br>KERNEL_MODULE_SITE =3D $(B=
-R2_EXTERNAL_KERNEL_MODULE_TEST_PATH)/kernel_module_test<br>KERNEL_MODULE_SI=
-TE_METHOD =3D local<br>$(eval $(kernel_module_test))<br>$(eval $(generic-pa=
-ckage))</span></font></div><div><br></div><div>As you can see , i want to u=
-se a BR2_EXTERNAL directory structure.</div><div><br></div><div>So i have m=
-ake it by typing :</div><div><br></div><div><pre class=3D"gmail-screen">/bu=
-ildroot# make BR2_EXTERNAL=3Dkernel_module_test menuconfig</pre></div><div>=
-Go ahead into External Options , and fortunatly , i have see my package ins=
-ide, .. so i have saved it and exit.</div><div><br></div><div>After that i =
-have type <font size=3D"1"><span style=3D"font-family:arial narrow,sans-ser=
-if">make</span></font>.</div><div><br></div><div>=C2=A0i have seen my packa=
-ge on output/build , looks like kernel_module_test folder that contains som=
-e files.</div><div><br></div><div><div>Finaly , i have seen some files on o=
-utput/target/lib/modules/${BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE} but not m=
-y module.<br></div><div><br></div><div>So i think that it means that my mod=
-ules/package was not loaded and i can&#39;t exploit it.</div><div><br></div=
-><div>please where i have mistaken ??<br></div></div></div>
-
---000000000000e0cec405ceb3e1f7--
-
---===============2675427818040448673==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============2675427818040448673==--
+CgpPbiAxOS8xMC8yMDIxIDE2OjM0LCBFc2HDr2UgTGVkb3V4IE5KT05HU1NJIEtPVUFNIHdyb3Rl
+Ogpbc25pcF0KPiBrZXJuZWxfbW9kdWxlX3Rlc3QubWsgPGh0dHA6Ly9rZXJuZWxfbW9kdWxlX3Rl
+c3QubWs+IDoKPiAKPiBLRVJORUxfTU9EVUxFX1ZFUlNJT04gPSAxLjAKPiBLRVJORUxfTU9EVUxF
+X1NJVEUgPSAkKEJSMl9FWFRFUk5BTF9LRVJORUxfTU9EVUxFX1RFU1RfUEFUSCkva2VybmVsX21v
+ZHVsZV90ZXN0Cj4gS0VSTkVMX01PRFVMRV9TSVRFX01FVEhPRCA9IGxvY2FsCj4gJChldmFsICQo
+a2VybmVsX21vZHVsZV90ZXN0KSkKClRoaXMgc2hvdWxkIGJlIGtlcm5lbC1tb2R1bGUsIG5vdCBr
+ZXJuZWxfbW9kdWxlX3Rlc3QuCgogIFJlZ2FyZHMsCiAgQXJub3V0Cgo+ICQoZXZhbCAkKGdlbmVy
+aWMtcGFja2FnZSkpCltzbmlwXQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3Jn
+Cmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
