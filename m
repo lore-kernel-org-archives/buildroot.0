@@ -2,81 +2,82 @@ Return-Path: <SRS0=TKET=PH=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E09FCC433EF
-	for <buildroot@archiver.kernel.org>; Tue, 19 Oct 2021 21:29:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E332C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 19 Oct 2021 21:37:49 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 434746101A
-	for <buildroot@archiver.kernel.org>; Tue, 19 Oct 2021 21:29:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 434746101A
+	by mail.kernel.org (Postfix) with ESMTPS id 803B760F57
+	for <buildroot@archiver.kernel.org>; Tue, 19 Oct 2021 21:37:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 803B760F57
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C408E4014E;
-	Tue, 19 Oct 2021 21:29:55 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 44ACC400BA;
+	Tue, 19 Oct 2021 21:37:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yFu6KaN0BSeN; Tue, 19 Oct 2021 21:29:54 +0000 (UTC)
+	with ESMTP id 7EyBq0Bwgmwp; Tue, 19 Oct 2021 21:37:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D5752403D4;
-	Tue, 19 Oct 2021 21:29:53 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B1E441BF361
- for <buildroot@lists.busybox.net>; Tue, 19 Oct 2021 21:29:51 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D07FA4023A;
+	Tue, 19 Oct 2021 21:37:45 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6AB9A1BF361
+ for <buildroot@lists.busybox.net>; Tue, 19 Oct 2021 21:37:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AE44E831CA
- for <buildroot@lists.busybox.net>; Tue, 19 Oct 2021 21:29:51 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4B14E400BA
+ for <buildroot@lists.busybox.net>; Tue, 19 Oct 2021 21:37:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5Us0TzGQnhSO for <buildroot@lists.busybox.net>;
- Tue, 19 Oct 2021 21:29:50 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OvTzLbNGH6Ct for <buildroot@lists.busybox.net>;
+ Tue, 19 Oct 2021 21:37:43 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com
- [IPv6:2a00:1450:4864:20::231])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 883E4831A2
- for <buildroot@buildroot.org>; Tue, 19 Oct 2021 21:29:50 +0000 (UTC)
-Received: by mail-lj1-x231.google.com with SMTP id o11so8623517ljg.10
- for <buildroot@buildroot.org>; Tue, 19 Oct 2021 14:29:49 -0700 (PDT)
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
+ [IPv6:2a00:1450:4864:20::331])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id EF9B54014E
+ for <buildroot@buildroot.org>; Tue, 19 Oct 2021 21:37:42 +0000 (UTC)
+Received: by mail-wm1-x331.google.com with SMTP id v127so14589014wme.5
+ for <buildroot@buildroot.org>; Tue, 19 Oct 2021 14:37:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc:content-transfer-encoding;
- bh=p7lNRr3j4ScbsjNUaV9+ojQ4XC9Xz8Iuv+J4ipDa2TQ=;
- b=lkfp3uM9r0lPHuvbzzLc1BKzGnryA/FCAAsY80jm0fiK7poA6mz1tZbchUhiqp+yNH
- ZTI+thMCsgKSz7EoIVundDhygWfhi0c7fEb1Qaba0UYSQ96Kr9OHliTUVF+K1YUmmlHw
- ldWq5zpshwhbFXWuOpXiOw1T12s7XeisgWNlZCDia+H11EFRtii5ZkhoYQbq55wtT/Qe
- ozI7aFai27biGa0Zsn0vuOqvrz+bhWzmmKrtextpSZUSLQ9AWlPv0sUa7iXeMEbIWe7X
- vlDV5y6fUCF7dyN/eEDELfaIPTd0yqeboH3jxpHeOS5hG3mGcpHbZhlM+oykUpOO6jWf
- wXlg==
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=/iGyZgVfrK3jl+B7ChERTG2Hc7DlS6FOGpZltTwUfMs=;
+ b=XCJ75bG+4DHb83bBJrbuQV8RTa4PCuhIa37hbBzzxNXbcWWNzpCBPvnxEN7gi1UVgY
+ jE5VE+hrp06MJim8+r/6GpZig5v1/YxNZwrZgIeD8pt7/muqc5lUJUdNOj3pbkkbaWoU
+ 3hOJPyIS/vyGh/BP1NRcw7soqffFRziS39b9FnjTCbj8fojpmwGDMiClLiDca58HUXNj
+ PPWVZFrh7w5TEmb2ydeAmOnZBL9U1lJXUGZGkUYKIH+FUyXaYtqJKZj9aDXix+edslk1
+ gvwcrHSNy65No+jMXbw3zSCNPQVJeSY9tKY+GuFGl/3xhSzjTm92FrZTqbAaudjUxygQ
+ qlbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc:content-transfer-encoding;
- bh=p7lNRr3j4ScbsjNUaV9+ojQ4XC9Xz8Iuv+J4ipDa2TQ=;
- b=wgiKSmVfzg4CLoC3vzgcKhxFpNo/Z0z0mgbSm5ZDDnIQ1UJF4sUXcQ4+rGNm8UJfVm
- bHhrb2RCB7MPflz6PG0YopO0cX3/312fetSqqv63dNqYmNyGtlohhxP9QZkxgq0Xaa56
- HbI7SYz9SQxHGd+a1XVBF+SFtXwmlWlhpOvD3/ms+eJYchMvKzXsog/77f8p2JLjBBqU
- TjqexfSrmOWPB2enuC8pj9B8XvExtS5SOUdbSHQib5zA+55OZS4sivd38/uSUZPfZREt
- 0OIYlcb/VjGjntdZraZClqSfmv4jet8qQXOYdGdS/KXrbo9V+naK+QaHtW6dssKZ4d0j
- 0G4A==
-X-Gm-Message-State: AOAM5321FFVhcVNyVWUUA0qvJ7laC8vhW4Lc5YaD7Ocrsw2MRnDoXahl
- T/FPIFjGZmu+IcmQjLVAPHZdhwq7VMqmqJgWnjZ1JfauSrE=
-X-Google-Smtp-Source: ABdhPJxSc6Ij3UQs1ikPaxJyGYwljMwUk0sKqopSAwEWffXHCkYeFAKVga3ZJHAftljn0NMw+Wcad/1JCpKGSM9KYTQ=
-X-Received: by 2002:a2e:b611:: with SMTP id r17mr8967063ljn.336.1634678988010; 
- Tue, 19 Oct 2021 14:29:48 -0700 (PDT)
-MIME-Version: 1.0
-References: <20211013065446.1857356-1-fontaine.fabrice@gmail.com>
- <20211018223458.6d52ee5e@windsurf>
-In-Reply-To: <20211018223458.6d52ee5e@windsurf>
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=/iGyZgVfrK3jl+B7ChERTG2Hc7DlS6FOGpZltTwUfMs=;
+ b=1nkD3bVsWqz8c8PLRgDsGU0bwdeO4swhfmcoWdAsRkO6a7r80Em0ttuu1fV4DLCnwQ
+ a+nFrEPYtgksQ+xigmSa+xoOH3K2PseU1LU9iwtMS1SpJpZhKd5EKgZ0LM2YL71wv9BC
+ xvbSfoShN+7nNvBvUYiYHsyBlvFbh/Cfkt50w/4mdDBxQtdVzYlvl0JCnSKOvvHSnbcZ
+ UjrJdTw8ojHjWZKa97sC8AHzhK6wUyloJ7JlX+0UNur0WyU+AIbIEWpTmZfYz+Q5WGgA
+ YAZ0X++W/XzKxSeQiwkVEIyTUzCfxuVpdK0RthYmamnifTh7wAoOLR/yLPuRg8UR3ZFw
+ sXIg==
+X-Gm-Message-State: AOAM531Uwep6kJEgoui+/hMYQ/RVUfQ3mElgLwvN5tkVTwSv4CmzIiVr
+ BMuKardv6XcIfXl8wDRs864sfTXVYXM=
+X-Google-Smtp-Source: ABdhPJyg1DShrn0M+oS1x6C6DbhVa0oYXGMCWGmHzObSwmsaZfReWTLWY4zyib0Yf78g7PIb0paOaw==
+X-Received: by 2002:adf:a31d:: with SMTP id c29mr45895617wrb.381.1634679460759; 
+ Tue, 19 Oct 2021 14:37:40 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-1732-95.w86-253.abo.wanadoo.fr.
+ [86.253.44.95])
+ by smtp.gmail.com with ESMTPSA id 3sm276283wms.5.2021.10.19.14.37.39
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 19 Oct 2021 14:37:40 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 19 Oct 2021 23:28:23 +0200
-Message-ID: <CAPi7W83t+A1eip2Ewr7pTwm+PZmUgTWq_MOuaH5UswHtbPSjiQ@mail.gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [Buildroot] [PATCH 1/1] package/tpm2-tss: needs host-acl
+To: buildroot@buildroot.org
+Date: Tue, 19 Oct 2021 23:36:21 +0200
+Message-Id: <20211019213621.423111-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.33.0
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH 1/1] package/irssi: bump to version 1.2.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -88,50 +89,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Buildroot Mailing List <buildroot@buildroot.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Rodrigo Rebello <rprebello@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-TGUgbHVuLiAxOCBvY3QuIDIwMjEgw6AgMjI6MzUsIFRob21hcyBQZXRhenpvbmkKPHRob21hcy5w
-ZXRhenpvbmlAYm9vdGxpbi5jb20+IGEgw6ljcml0IDoKPgo+IE9uIFdlZCwgMTMgT2N0IDIwMjEg
-MDg6NTQ6NDYgKzAyMDAKPiBGYWJyaWNlIEZvbnRhaW5lIDxmb250YWluZS5mYWJyaWNlQGdtYWls
-LmNvbT4gd3JvdGU6Cj4KPiA+IEFkZCBob3N0LWFjbCBtYW5kYXRvcnkgZGVwZW5kZW5jeSBmb3Ig
-c2V0ZmFjbCB0byBhdm9pZCB0aGUgZm9sbG93aW5nCj4gPiBidWlsZCBmYWlsdXJlIHNpbmNlIGJ1
-bXAgdG8gdmVyc2lvbiAzLjEuMCBpbiBjb21taXQKPiA+IDQ3MGUyZTliYzUyMTExODQ0MzFmYmM4
-NjgzNTlhOWQ2OTVlNjI0ZjQgYW5kCj4gPiBodHRwczovL2dpdGh1Yi5jb20vdHBtMi1zb2Z0d2Fy
-ZS90cG0yLXRzcy9jb21taXQvOWQ0MmY0ZGJkZTZhOTQ3MjRlOTVkNTdjMzMzY2RhNzcxMWRkYTU3
-YzoKPgo+IFNvIHRoaXMgY29tbWl0IGFkZHM6Cj4KPiAjIENoZWNrIGFsbCB0b29scyB1c2VkIGJ5
-IG1ha2UgaW5zdGFsbAo+IEFTX0lGKFt0ZXN0ICIkSE9TVE9TIiA9ICJMaW51eCJdLAo+ICAgICAg
-IFtFUlJPUl9JRl9OT19QUk9HKFtncm91cGFkZF0pCj4gICAgICAgIEVSUk9SX0lGX05PX1BST0co
-W3VzZXJhZGRdKQo+ICAgICAgICBFUlJPUl9JRl9OT19QUk9HKFtpZF0pCj4gICAgICAgIEVSUk9S
-X0lGX05PX1BST0coW2Nob3duXSkKPiAgICAgICAgRVJST1JfSUZfTk9fUFJPRyhbY2htb2RdKQo+
-ICAgICAgICBFUlJPUl9JRl9OT19QUk9HKFtta2Rpcl0pCj4gICAgICAgIEVSUk9SX0lGX05PX1BS
-T0coW3NldGZhY2xdKV0pCj4KPiBCdXQgaW4gdGhlIGNvbnRleHQgb2YgQnVpbGRyb290LCB1c2lu
-ZyBncm91cGFkZCwgdXNlcmFkZCwgY2hvd24sIGNobW9kLAo+IHNldGZhY2wgYXQgaW5zdGFsbCB0
-aW1lIGNhbm5vdCB3b3JrLCBzaW5jZSB3ZSdyZSBub3QgZG9pbmcgIm1ha2UKPiBpbnN0YWxsIiBh
-cyByb290Lgo+Cj4gU28gYXJlIHdlIHN1cmUgdGhhdCBhZGRpbmcgaG9zdC1hY2wgYXMgYSBkZXBl
-bmRlbmN5IHRvIGdldCBhIGhvc3QKPiB2YXJpYW50IG9mIHNldGZhY2wgaXMgcmVhbGx5IHRoZSBn
-b29kIHNvbHV0aW9uPwo+Cj4gSG93IGlzIGl0IGhhbmRsZWQgZm9yIGdyb3VwYWRkL3VzZXJhZGQv
-Y2hvd24vY2htb2QgdG9kYXkgPwpncm91cGFkZC91c2VyYWRkL2Nob3duL2NobW9kIGFyZSBjYWxs
-ZWQgc2luY2UgdmVyc2lvbiAzLjAuMCBhbmQKaHR0cHM6Ly9naXRodWIuY29tL3RwbTItc29mdHdh
-cmUvdHBtMi10c3MvY29tbWl0L2QwMWMyNGU2Y2IwOTVlMThjNWUyOWFmNGEzMDE4MDEwYjMyMzBh
-NmQKCnNldGZhY2wgaXMgY2FsbGVkIHNpbmNlIHZlcnNpb24gMy4wLjAgYW5kCmh0dHBzOi8vZ2l0
-aHViLmNvbS90cG0yLXNvZnR3YXJlL3RwbTItdHNzL2NvbW1pdC84MTFlNDUxYzk0MjU0NDk2MzM4
-ZDM2NzgzY2RhNDRhNzcyOWIwODVhCgpCdXQgbW9yZSBpbXBvcnRhbnRseSwgYWxsIHRob3NlIGZ1
-bmN0aW9ucyBhcmUgbm90IGV2ZW4gdXNlZCBvbiBhCnRhcmdldCB3aXRob3V0IHN5c3RlbWQgYW5k
-IGEgaG9zdCB3aXRoCnN5c3RlbWQte3N5c3VzZXJzLHRtcGZpbGVzfSBiZWNhdXNlIHRwbTItdHNz
-IHRyeSB0byBpbnN0YWxsIGZpbGVzIGluCiQoVEFSR0VUX0RJUikvZXRjL3tzeXN1c2Vycyx0bXBm
-aWxlc30uZCB3aGljaCBkb24ndCBldmVuIGV4aXN0IGlmCkJSMl9JTklUX1NZU1RFTUQgaXMgbm90
-IHNldC4KRXZlbiBpZiBCUjJfSU5JVF9TWVNURU1EIGlzIHNldCwgdGhlIHBhdGggaXMgd3Jvbmcg
-YXMgaXQgc2hvdWxkIGJlCmluc3RhbGxlZCBpbiAkKFRBUkdFVF9ESVIpL3Vzci9saWIve3N5c3Vz
-ZXJzLHRtcGZpbGVzfS5kCgpUbyBjb25jbHVkZSwgSSB3b3VsZCBzYXkgdGhhdCBpbnN0YWxsIG9m
-IHRwbTItdHNzIGlzIHBhcnRpYWxseSBicm9rZW4Kc2luY2UgYXQgbGVhc3QgYnVtcCB0byB2ZXJz
-aW9uIDMuMC4wIGluIGNvbW1pdAo4OWYzZDkwZTI0YmIyNGI3MGZjNGEzN2JmOGNmZjYxODY2NzI0
-NzVjLgo+Cj4gVGhvbWFzCj4gLS0KPiBUaG9tYXMgUGV0YXp6b25pLCBjby1vd25lciBhbmQgQ0VP
-LCBCb290bGluCj4gRW1iZWRkZWQgTGludXggYW5kIEtlcm5lbCBlbmdpbmVlcmluZyBhbmQgdHJh
-aW5pbmcKPiBodHRwczovL2Jvb3RsaW4uY29tCkJlc3QgUmVnYXJkcywKCkZhYnJpY2UKX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxp
-bmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5v
-cmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+Update indentation in hash file (two spaces)
+
+https://irssi.org/NEWS/#v1-2-3
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/irssi/irssi.hash | 4 ++--
+ package/irssi/irssi.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/irssi/irssi.hash b/package/irssi/irssi.hash
+index 6a91e16487..05555250a7 100644
+--- a/package/irssi/irssi.hash
++++ b/package/irssi/irssi.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-sha256	414fdee2ffaeb90a55f141b7fb3899608631dc891e2bc1f5e91ca31f1a621101  irssi-1.0.8.tar.xz
++sha256  a647bfefed14d2221fa77b6edac594934dc672c4a560417b1abcbbc6b88d769f  irssi-1.2.3.tar.xz
+ # Locally calculated
+-sha256	a1a27cb2ecee8d5378fbb3562f577104a445d6d66fee89286e16758305e63e2b  COPYING
++sha256  a1a27cb2ecee8d5378fbb3562f577104a445d6d66fee89286e16758305e63e2b  COPYING
+diff --git a/package/irssi/irssi.mk b/package/irssi/irssi.mk
+index c64690c59b..da71622a04 100644
+--- a/package/irssi/irssi.mk
++++ b/package/irssi/irssi.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IRSSI_VERSION = 1.0.8
++IRSSI_VERSION = 1.2.3
+ IRSSI_SOURCE = irssi-$(IRSSI_VERSION).tar.xz
+ # Do not use the github helper here. The generated tarball is *NOT* the
+ # same as the one uploaded by upstream for the release.
+-- 
+2.33.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
