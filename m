@@ -2,66 +2,93 @@ Return-Path: <SRS0=TKET=PH=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 625B2C433F5
-	for <buildroot@archiver.kernel.org>; Tue, 19 Oct 2021 17:59:41 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1AD77C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 19 Oct 2021 19:01:37 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 944506136A
-	for <buildroot@archiver.kernel.org>; Tue, 19 Oct 2021 17:59:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 944506136A
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=benettiengineering.com
+	by mail.kernel.org (Postfix) with ESMTPS id E15D46128B
+	for <buildroot@archiver.kernel.org>; Tue, 19 Oct 2021 19:01:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E15D46128B
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4028783323;
-	Tue, 19 Oct 2021 17:59:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7CFCC6065F;
+	Tue, 19 Oct 2021 19:01:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vi_KWLiF-3kd; Tue, 19 Oct 2021 17:59:39 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3AFC9834BB;
-	Tue, 19 Oct 2021 17:59:38 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 596C01BF27A
- for <buildroot@lists.busybox.net>; Tue, 19 Oct 2021 17:59:36 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3C58F606EC
- for <buildroot@lists.busybox.net>; Tue, 19 Oct 2021 17:59:36 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=aruba.it
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7xTBC2gdsW7N for <buildroot@lists.busybox.net>;
- Tue, 19 Oct 2021 17:59:34 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtpcmd0641.aruba.it (smtpcmd0641.aruba.it [62.149.156.41])
- by smtp3.osuosl.org (Postfix) with ESMTP id 48D506062E
- for <buildroot@buildroot.org>; Tue, 19 Oct 2021 17:59:34 +0000 (UTC)
-Received: from smtpclient.apple ([151.46.26.97])
- by Aruba Outgoing Smtp  with ESMTPA
- id ctOemIwjoxC2nctOemNFDS; Tue, 19 Oct 2021 19:59:32 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1634666372; bh=N1U6FUoCAxkvlXPRxOlHQgMGwrUGD/kBvz02x+1A30E=;
- h=Content-Type:From:Mime-Version:Subject:Date:To;
- b=bKME4nRcj+510XB1iNvrIhQ88a2GsUrZ9F/8U9prX8RaRI/W0weQFFLQIdt74a//+
- kZmRdCxxZTXMRzakOUyJ1tWfKVD5CLPU9evTIQlSfhlO2Er42lq5d/+tqVKyBO69x0
- CJduhml+Uu3OquZX+yxa2T/DE6ybgkjrjqxBpVWqiMP/tJklRYA6PENn5gT1d4mGGM
- IV6Cfvjucvde8rInUZzsjIJhrh8doIxxv5zJW9AOEh7CAGSvgWRPP11on2mfdcbS31
- xGPh+rKIO/FB6AkWcLnmbx1zfZkVhe3GHpgQYYXasMDVLnKIxnfF2SVmGkHAtD/v4T
- 0Xykkm08l9ndA==
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Mime-Version: 1.0 (1.0)
-Date: Tue, 19 Oct 2021 19:59:31 +0200
-Message-Id: <3ABFFAEE-644C-4CB8-8B04-1F28AD3CBFC1@benettiengineering.com>
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id dzO_HW8m3UAO; Tue, 19 Oct 2021 19:01:34 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id D476E60683;
+	Tue, 19 Oct 2021 19:01:33 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B439D1BF4D8
+ for <buildroot@lists.busybox.net>; Tue, 19 Oct 2021 19:01:31 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id A3722401FA
+ for <buildroot@lists.busybox.net>; Tue, 19 Oct 2021 19:01:31 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id t4ODaGVsBToJ for <buildroot@lists.busybox.net>;
+ Tue, 19 Oct 2021 19:01:28 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com
+ [IPv6:2a00:1450:4864:20::52b])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8CC594017B
+ for <buildroot@buildroot.org>; Tue, 19 Oct 2021 19:01:28 +0000 (UTC)
+Received: by mail-ed1-x52b.google.com with SMTP id a25so16453910edx.8
+ for <buildroot@buildroot.org>; Tue, 19 Oct 2021 12:01:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=ktAOA8ywSA8PlwwoNkoc9/l0cNz18As0FBdifxo8KL4=;
+ b=Gl6SAuN3hldHxQr/7sEpzybgRjovKbc6DvvPEY/AedAxr5fH/5ogA3qhvvh/L/nPFT
+ uexIK5ZXeNG+4V3RMAwqkDV+bRfB9ThDvA51N0Lp5yJfgAvC5azJk+5w/FJmVzGUfVOQ
+ F45AKKS6rRoahD5csBddF7wWOKq9V3+dsimaMOVn7ynlBQyeqR7v5o0rhYJ7X1fUJuAE
+ UCAL+j+eFbt4O3aeRh8dB0//5VBMRugETJoW9A9qsMgefp1C6Hde8XAl14C5soqkGekd
+ 5Ib3H6v6AS/ZgNBTIKAkaRYTCn/owYm9zXiXXjj90frc5R/tRetNQm1n4iDAt0opOgxA
+ ynzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=ktAOA8ywSA8PlwwoNkoc9/l0cNz18As0FBdifxo8KL4=;
+ b=EvlrjtZ65gljhUJvaPTEQhbW46i+w+SXqPdwo4quHud3UM2yP7h6p/s9R4f0eFJr7c
+ YMEO3QSfSu+abC/6bQud0Qh1v3TyqoCNfD39Qz4pQXQ/30ZIFWJvmysH0gpuHTVxdaMg
+ EZPSP+jA/yuR6EZ1je95ca0WgrXkWy4OIQpkiy52Pq34y7xPiWHWFRGs4T6ru/oQQ0MT
+ +xiQvTzLxjLk8GkGHqrmNrO6WEC+tCbM370JFpGD1n3T9R21w4O6RtfOvJKdiOsMpYdl
+ 7sElDegRUarzxSvEWurkQRXTQA43gEvQU4vURfPGlvaXKDDbNziaJrBzRgRCDXG4LiFH
+ 9PfA==
+X-Gm-Message-State: AOAM5329kFtA1Bw2+ssth818lAPV8eVVyVnYqYlC2HR4jWn4XFIJ0yrN
+ gfie5CxSNbGUX5cwM/ATmXeN7g==
+X-Google-Smtp-Source: ABdhPJwyORj4sXtx7WDmRoMLVpmOtLhdUIcM4oDfWZyvs5k5vtlBBlMI5oxXap07aG0+ZcZ3gQrkMQ==
+X-Received: by 2002:a17:907:987b:: with SMTP id
+ ko27mr39949126ejc.130.1634670086591; 
+ Tue, 19 Oct 2021 12:01:26 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id v9sm10447762ejw.22.2021.10.19.12.01.25
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Tue, 19 Oct 2021 12:01:26 -0700 (PDT)
+Message-ID: <3b977617-5e9a-c874-6355-72fe81f8da38@mind.be>
+Date: Tue, 19 Oct 2021 21:01:25 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.1.0
+Content-Language: en-GB
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
 References: <A62E77A0-E4CC-409B-A64B-0B0AADAFB933@benettiengineering.com>
-In-Reply-To: <A62E77A0-E4CC-409B-A64B-0B0AADAFB933@benettiengineering.com>
-To: Arnout Vandecappelle <arnout@mind.be>
-X-Mailer: iPhone Mail (18H17)
-X-CMAE-Envelope: MS4wfApp2jetspJJgFQsNXzfRP+/zjz9ny3ER6ub7HlJs33u2g5+TVGNq4FEBf6IZwTGiI6+a2fluwy5wyREi8Ky0uP76Fxh/Y9lPFmUP3wFCQzbKF/klmHq
- rbts6AITP7CExbNDkh0sju7ZtxEbs89Kkw5vkBmk4d8ub5OApl9n997AVrWfwRj1KAgojsQ+KmRwlCvK5EzxJdiWIYb5yQQS6/TmDplYaNMbdUZrlRv5IbBq
- 3YQHjjJL7rVKJLx7FC1p8w==
+ <3ABFFAEE-644C-4CB8-8B04-1F28AD3CBFC1@benettiengineering.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <3ABFFAEE-644C-4CB8-8B04-1F28AD3CBFC1@benettiengineering.com>
 Subject: Re: [Buildroot] [PATCH 1/1] package/libnss: fix parallel build
  failure
 X-BeenThere: buildroot@buildroot.org
@@ -76,314 +103,74 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: Joseph Kogut <joseph.kogut@gmail.com>, buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============8457142091995047504=="
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-
---===============8457142091995047504==
-Content-Type: multipart/alternative; boundary=Apple-Mail-EF1FCB04-00B7-433D-AA1B-5C868B3CDA3E
-Content-Transfer-Encoding: 7bit
-
-
---Apple-Mail-EF1FCB04-00B7-433D-AA1B-5C868B3CDA3E
-Content-Type: text/plain;
-	charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-
-Or=E2=80=A6
-
-> Il giorno 19 ott 2021, alle ore 19:40, Giulio Benetti <giulio.benetti@bene=
-ttiengineering.com> ha scritto:
->=20
-> =EF=BB=BFHi Arnout,
->=20
->>> Il giorno 6 ott 2021, alle ore 21:20, Arnout Vandecappelle <arnout@mind.=
-be> ha scritto:
->>>=20
->> =EF=BB=BF
->>=20
->>> On 22/09/2021 01:59, Giulio Benetti wrote:
->>> As explained in the patch itself(pending here[1]), I couldn't reproduce
->>> the failure but it seems to be right. Basically I'm making not parallel
->>> every 'nsinstall -R' command that is where it fails.
->>> [1]: https://bugzilla.mozilla.org/show_bug.cgi?id=3D1731911
->>> Fixes:
->>> http://autobuild.buildroot.net/results/a895ed7aa48edc5cd9ac8bbbd689433a9=
-8c9c057/
->>> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
->>> ---
->>>  ...31911-Fix-nsinstall-parallel-failure.patch | 34 +++++++++++++++++++
->>>  1 file changed, 34 insertions(+)
->>>  create mode 100644 package/libnss/0001-Bug-1731911-Fix-nsinstall-parall=
-el-failure.patch
->>> diff --git a/package/libnss/0001-Bug-1731911-Fix-nsinstall-parallel-fail=
-ure.patch b/package/libnss/0001-Bug-1731911-Fix-nsinstall-parallel-failure.p=
-atch
->>> new file mode 100644
->>> index 0000000000..7ac340f1ca
->>> --- /dev/null
->>> +++ b/package/libnss/0001-Bug-1731911-Fix-nsinstall-parallel-failure.pat=
-ch
->>> @@ -0,0 +1,34 @@
->>> +=46rom 7ba4d627212507f876dc112e89c68e82e1c50188 Mon Sep 17 00:00:00 200=
-1
->>> +From: Giulio Benetti <giulio.benetti@benettiengineering.com>
->>> +Date: Wed, 22 Sep 2021 01:40:31 +0200
->>> +Subject: [PATCH] Bug 1731911 - Fix nsinstall parallel failure
->>> +
->>> +Fix nsinstall race condition when building using Makefile with parallel=
-
->>> +options on. I've end up making $(1) recipe in copy_varlist_into_dir_RUL=
-E
->>> +.NOTPARALLEL. I can't test it that much since it's very very rare, but
->>> +it seems to be the correct way. This way every copy_varlist_into_dir_RU=
-LE
->>> +called should occur not parallel and I think that this is acceptable
->>> +since it only create symlinks that takes very few. Further improving is=
-
->>> +possible of course.
->>> +
->>> +Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
->>> +---
->>> + nss/coreconf/rules.mk | 2 ++
->>> + 1 file changed, 2 insertions(+)
->>> +
->>> +diff --git a/nss/coreconf/rules.mk b/nss/coreconf/rules.mk
->>> +index dc72e9cef..a341b8385 100644
->>> +--- a/nss/coreconf/rules.mk
->>> ++++ b/nss/coreconf/rules.mk
->>> +@@ -377,6 +377,8 @@ $(3)/%: %
->>> +    $$(INSTALL) -m 444 $$^ $(3)
->>> +
->>> + $(1): $$(addprefix $(3)/,$$($(2))) | $(3)/d
->>> ++
->>> ++.NOTPARALLEL: $(1)
->>=20
->> This doesn't make a whole lot of sense: .NOTPARALLEL is something that ap=
-plies to the Makefile as a whole, not to one specific target. I haven't look=
-ed in any depth in the libnss build system, but unless it builds recursively=
-, adding this is exactly equivalent to adding
->>=20
->> .NOTPARALLEL:
->=20
-> As I=E2=80=99ve tested it=E2=80=99s not like this.
->=20
-> I read this from [1]:
-> =E2=80=98=E2=80=99=E2=80=99
-> .NOTPARALLEL
-> If .NOTPARALLEL is mentioned as a target, then this invocation of make wil=
-l be run serially, even if the =E2=80=98-j=E2=80=99 option is given. Any rec=
-ursively invoked make command will still run recipes in parallel (unless its=
- makefile also contains this target). Any prerequisites on this target are i=
-gnored.
->=20
-> =E2=80=98=E2=80=99=E2=80=99
->=20
-> They talk about target and it is what I experience.
-> It=E2=80=99s a bit ambiguous honestly. In the past I=E2=80=99ve also
-> experienced it on a big Makefile where I had .bmp files to be converted wi=
-th xxd and that gave parallel problems. So I=E2=80=99ve tagged it like:
->=20
-> .NOTPARALLEL: %.bmp
->=20
-> and that solved the problem.
-
-=E2=80=A6it is because in both cases they are called recursively.
-
-Giulio
-
->=20
-> Also they have just upstreamed the patch [2], so
-> we can test if it works committing this patch or
-> by bumping next version.
->=20
-> Then it=E2=80=99s up to you :-)
->=20
-> Best regards
-> Giulio Benetti
-> Benetti Engineering sas
->=20
-> [1]: https://www.gnu.org/software/make/manual/html_node/Special-Targets.ht=
-ml
-> [2]: https://bugzilla.mozilla.org/show_bug.cgi?id=3D1731911
->=20
->>=20
->> anywhere in the Makefiles. This is BTW what we do in Buildroot.
->>=20
->> And in the end, that's the same as calling $(MAKE1) from Buildroot, so pa=
-tching is not really needed.
->>=20
->> If you want to be a little smarter, you will have to manually "unroll" th=
-e dependency, like:
->>=20
->> $(1): | $(3)/d
->>    $$(foreach tgt,$(2),$(MAKE) $(3)/$$($(tgt)))
->>=20
->> (chances are I made some major mistake in this thing).
->>=20
->> Or if it does build recursively, you can probably conditionally add .NOTP=
-ARALLEL in some smart way.
->>=20
->> Anyway, I've marked this patch as Changed Requested.
->>=20
->> Regards,
->> Arnout
->>=20
->>=20
->>> + endif
->>> + else
->>> + $(1):
->>> +--
->>> +2.25.1
->>> +
-
---Apple-Mail-EF1FCB04-00B7-433D-AA1B-5C868B3CDA3E
-Content-Type: text/html;
-	charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-
-<html><head><meta http-equiv=3D"content-type" content=3D"text/html; charset=3D=
-utf-8"></head><body dir=3D"auto">Or=E2=80=A6<br><div dir=3D"ltr"><br><blockq=
-uote type=3D"cite">Il giorno 19 ott 2021, alle ore 19:40, Giulio Benetti &lt=
-;giulio.benetti@benettiengineering.com&gt; ha scritto:<br><br></blockquote><=
-/div><blockquote type=3D"cite"><div dir=3D"ltr">=EF=BB=BF<meta http-equiv=3D=
-"content-type" content=3D"text/html; charset=3Dutf-8">Hi Arnout,<br><div dir=
-=3D"ltr"><br><blockquote type=3D"cite">Il giorno 6 ott 2021, alle ore 21:20,=
- Arnout Vandecappelle &lt;arnout@mind.be&gt; ha scritto:<br><br></blockquote=
-></div><blockquote type=3D"cite"><div dir=3D"ltr">=EF=BB=BF<span></span><br>=
-<span></span><br><span>On 22/09/2021 01:59, Giulio Benetti wrote:</span><br>=
-<blockquote type=3D"cite"><span>As explained in the patch itself(pending her=
-e[1]), I couldn't reproduce</span><br></blockquote><blockquote type=3D"cite"=
-><span>the failure but it seems to be right. Basically I'm making not parall=
-el</span><br></blockquote><blockquote type=3D"cite"><span>every 'nsinstall -=
-R' command that is where it fails.</span><br></blockquote><blockquote type=3D=
-"cite"><span>[1]: https://bugzilla.mozilla.org/show_bug.cgi?id=3D1731911</sp=
-an><br></blockquote><blockquote type=3D"cite"><span>Fixes:</span><br></block=
-quote><blockquote type=3D"cite"><span>http://autobuild.buildroot.net/results=
-/a895ed7aa48edc5cd9ac8bbbd689433a98c9c057/</span><br></blockquote><blockquot=
-e type=3D"cite"><span>Signed-off-by: Giulio Benetti &lt;giulio.benetti@benet=
-tiengineering.com&gt;</span><br></blockquote><blockquote type=3D"cite"><span=
->---</span><br></blockquote><blockquote type=3D"cite"><span> &nbsp;...31911-=
-Fix-nsinstall-parallel-failure.patch | 34 +++++++++++++++++++</span><br></bl=
-ockquote><blockquote type=3D"cite"><span> &nbsp;1 file changed, 34 insertion=
-s(+)</span><br></blockquote><blockquote type=3D"cite"><span> &nbsp;create mo=
-de 100644 package/libnss/0001-Bug-1731911-Fix-nsinstall-parallel-failure.pat=
-ch</span><br></blockquote><blockquote type=3D"cite"><span>diff --git a/packa=
-ge/libnss/0001-Bug-1731911-Fix-nsinstall-parallel-failure.patch b/package/li=
-bnss/0001-Bug-1731911-Fix-nsinstall-parallel-failure.patch</span><br></block=
-quote><blockquote type=3D"cite"><span>new file mode 100644</span><br></block=
-quote><blockquote type=3D"cite"><span>index 0000000000..7ac340f1ca</span><br=
-></blockquote><blockquote type=3D"cite"><span>--- /dev/null</span><br></bloc=
-kquote><blockquote type=3D"cite"><span>+++ b/package/libnss/0001-Bug-1731911=
--Fix-nsinstall-parallel-failure.patch</span><br></blockquote><blockquote typ=
-e=3D"cite"><span>@@ -0,0 +1,34 @@</span><br></blockquote><blockquote type=3D=
-"cite"><span>+=46rom 7ba4d627212507f876dc112e89c68e82e1c50188 Mon Sep 17 00:=
-00:00 2001</span><br></blockquote><blockquote type=3D"cite"><span>+From: Giu=
-lio Benetti &lt;giulio.benetti@benettiengineering.com&gt;</span><br></blockq=
-uote><blockquote type=3D"cite"><span>+Date: Wed, 22 Sep 2021 01:40:31 +0200<=
-/span><br></blockquote><blockquote type=3D"cite"><span>+Subject: [PATCH] Bug=
- 1731911 - Fix nsinstall parallel failure</span><br></blockquote><blockquote=
- type=3D"cite"><span>+</span><br></blockquote><blockquote type=3D"cite"><spa=
-n>+Fix nsinstall race condition when building using Makefile with parallel</=
-span><br></blockquote><blockquote type=3D"cite"><span>+options on. I've end u=
-p making $(1) recipe in copy_varlist_into_dir_RULE</span><br></blockquote><b=
-lockquote type=3D"cite"><span>+.NOTPARALLEL. I can't test it that much since=
- it's very very rare, but</span><br></blockquote><blockquote type=3D"cite"><=
-span>+it seems to be the correct way. This way every copy_varlist_into_dir_R=
-ULE</span><br></blockquote><blockquote type=3D"cite"><span>+called should oc=
-cur not parallel and I think that this is acceptable</span><br></blockquote>=
-<blockquote type=3D"cite"><span>+since it only create symlinks that takes ve=
-ry few. Further improving is</span><br></blockquote><blockquote type=3D"cite=
-"><span>+possible of course.</span><br></blockquote><blockquote type=3D"cite=
-"><span>+</span><br></blockquote><blockquote type=3D"cite"><span>+Signed-off=
--by: Giulio Benetti &lt;giulio.benetti@benettiengineering.com&gt;</span><br>=
-</blockquote><blockquote type=3D"cite"><span>+---</span><br></blockquote><bl=
-ockquote type=3D"cite"><span>+ nss/coreconf/rules.mk | 2 ++</span><br></bloc=
-kquote><blockquote type=3D"cite"><span>+ 1 file changed, 2 insertions(+)</sp=
-an><br></blockquote><blockquote type=3D"cite"><span>+</span><br></blockquote=
-><blockquote type=3D"cite"><span>+diff --git a/nss/coreconf/rules.mk b/nss/c=
-oreconf/rules.mk</span><br></blockquote><blockquote type=3D"cite"><span>+ind=
-ex dc72e9cef..a341b8385 100644</span><br></blockquote><blockquote type=3D"ci=
-te"><span>+--- a/nss/coreconf/rules.mk</span><br></blockquote><blockquote ty=
-pe=3D"cite"><span>++++ b/nss/coreconf/rules.mk</span><br></blockquote><block=
-quote type=3D"cite"><span>+@@ -377,6 +377,8 @@ $(3)/%: %</span><br></blockqu=
-ote><blockquote type=3D"cite"><span>+  &nbsp; &nbsp;$$(INSTALL) -m 444 $$^ $=
-(3)</span><br></blockquote><blockquote type=3D"cite"><span>+</span><br></blo=
-ckquote><blockquote type=3D"cite"><span>+ $(1): $$(addprefix $(3)/,$$($(2)))=
- | $(3)/d</span><br></blockquote><blockquote type=3D"cite"><span>++</span><b=
-r></blockquote><blockquote type=3D"cite"><span>++.NOTPARALLEL: $(1)</span><b=
-r></blockquote><span></span><br><span> This doesn't make a whole lot of sens=
-e: .NOTPARALLEL is something that applies to the Makefile as a whole, not to=
- one specific target. I haven't looked in any depth in the libnss build syst=
-em, but unless it builds recursively, adding this is exactly equivalent to a=
-dding</span><br><span></span><br><span>.NOTPARALLEL:</span><br></div></block=
-quote><div><br></div><div>As I=E2=80=99ve tested it=E2=80=99s not like this.=
-</div><div><br></div><div>I read this from [1]:</div><div>=E2=80=98=E2=80=99=
-=E2=80=99</div><div><dt style=3D"font-size: 16px; -webkit-text-size-adjust: a=
-uto; margin: 0.5em 0px; padding: 0px; line-height: 1.5em; font-weight: bold;=
- color: rgb(34, 34, 34);"><code style=3D"margin: 0px; padding: 0px; font-sty=
-le: inherit; font-weight: inherit; line-height: 1.5em;">.NOTPARALLEL</code><=
-/dt><dd style=3D"font-size: 16px; -webkit-text-size-adjust: auto; margin: 0.=
-5em 21.59375px 1em; padding: 0px; line-height: 1.5em; caret-color: rgb(0, 0,=
- 0); color: rgb(0, 0, 0);"><span id=3D"index-parallel-execution_002c-overrid=
-ing"></span><p style=3D"margin: 0.5em 0px; padding: 0px; line-height: 1.5em;=
-">If&nbsp;<code style=3D"margin: 0px; padding: 0px; font-style: inherit; lin=
-e-height: 1.5em;">.NOTPARALLEL</code>&nbsp;is mentioned as a target, then th=
-is invocation of&nbsp;<code style=3D"margin: 0px; padding: 0px; font-style: i=
-nherit; line-height: 1.5em;">make</code>&nbsp;will be run serially, even if t=
-he =E2=80=98<samp>-j</samp>=E2=80=99 option is given. Any recursively invoke=
-d&nbsp;<code style=3D"margin: 0px; padding: 0px; font-style: inherit; line-h=
-eight: 1.5em;">make</code>&nbsp;command will still run recipes in parallel (=
-unless its makefile also contains this target). Any prerequisites on this ta=
-rget are ignored.</p></dd></div><div>=E2=80=98=E2=80=99=E2=80=99</div><div><=
-br></div><div>They talk about target and it is what I experience.</div><div>=
-It=E2=80=99s a bit ambiguous honestly. In the past I=E2=80=99ve also</div><d=
-iv>experienced it on a big Makefile where I had .bmp files to be converted w=
-ith xxd and that gave parallel problems. So I=E2=80=99ve tagged it like:</di=
-v><div><br></div><div>.NOTPARALLEL: %.bmp</div><div><br></div><div>and that s=
-olved the problem.</div></div></blockquote><div><br></div><div>=E2=80=A6it i=
-s because in both cases they are called recursively.</div><div><br></div><di=
-v>Giulio</div><br><blockquote type=3D"cite"><div dir=3D"ltr"><div><br></div>=
-<div>Also they have just upstreamed the patch [2], so</div><div>we can test i=
-f it works committing this patch or</div><div>by bumping next version.</div>=
-<div><br></div><div>Then it=E2=80=99s up to you :-)</div><div><br></div><div=
->Best regards</div><div>Giulio Benetti</div><div>Benetti Engineering sas</di=
-v><div><br></div><div>[1]:&nbsp;<a href=3D"https://www.gnu.org/software/make=
-/manual/html_node/Special-Targets.html">https://www.gnu.org/software/make/ma=
-nual/html_node/Special-Targets.html</a></div><div>[2]:&nbsp;<a href=3D"https=
-://bugzilla.mozilla.org/show_bug.cgi?id=3D1731911">https://bugzilla.mozilla.=
-org/show_bug.cgi?id=3D1731911</a></div><br><blockquote type=3D"cite"><div di=
-r=3D"ltr"><span></span><br><span>anywhere in the Makefiles. This is BTW what=
- we do in Buildroot.</span><br><span></span><br><span> And in the end, that'=
-s the same as calling $(MAKE1) from Buildroot, so patching is not really nee=
-ded.</span><br><span></span><br><span> If you want to be a little smarter, y=
-ou will have to manually "unroll" the dependency, like:</span><br><span></sp=
-an><br><span>$(1): | $(3)/d</span><br><span> &nbsp; &nbsp;$$(foreach tgt,$(2=
-),$(MAKE) $(3)/$$($(tgt)))</span><br><span></span><br><span>(chances are I m=
-ade some major mistake in this thing).</span><br><span></span><br><span> Or i=
-f it does build recursively, you can probably conditionally add .NOTPARALLEL=
- in some smart way.</span><br><span></span><br><span> Anyway, I've marked th=
-is patch as Changed Requested.</span><br><span></span><br><span> Regards,</s=
-pan><br><span> Arnout</span><br><span></span><br><span></span><br><blockquot=
-e type=3D"cite"><span>+ endif</span><br></blockquote><blockquote type=3D"cit=
-e"><span>+ else</span><br></blockquote><blockquote type=3D"cite"><span>+ $(1=
-):</span><br></blockquote><blockquote type=3D"cite"><span>+--</span><br></bl=
-ockquote><blockquote type=3D"cite"><span>+2.25.1</span><br></blockquote><blo=
-ckquote type=3D"cite"><span>+</span><br></blockquote></div></blockquote></di=
-v></blockquote></body></html>=
-
---Apple-Mail-EF1FCB04-00B7-433D-AA1B-5C868B3CDA3E--
-
---===============8457142091995047504==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8457142091995047504==--
+CgpPbiAxOS8xMC8yMDIxIDE5OjU5LCBHaXVsaW8gQmVuZXR0aSB3cm90ZToKPiBPcuKApgo+IAo+
+PiBJbCBnaW9ybm8gMTkgb3R0IDIwMjEsIGFsbGUgb3JlIDE5OjQwLCBHaXVsaW8gQmVuZXR0aSAK
+Pj4gPGdpdWxpby5iZW5ldHRpQGJlbmV0dGllbmdpbmVlcmluZy5jb20+IGhhIHNjcml0dG86Cj4+
+Cj4+IO+7v0hpIEFybm91dCwKPj4KPj4+IElsIGdpb3JubyA2IG90dCAyMDIxLCBhbGxlIG9yZSAy
+MToyMCwgQXJub3V0IFZhbmRlY2FwcGVsbGUgPGFybm91dEBtaW5kLmJlPiAKPj4+IGhhIHNjcml0
+dG86Cj4+Pgo+Pj4g77u/Cj4+Pgo+Pj4gT24gMjIvMDkvMjAyMSAwMTo1OSwgR2l1bGlvIEJlbmV0
+dGkgd3JvdGU6Cgpbc25pcF0KPj4+PiArKy5OT1RQQVJBTExFTDogJCgxKQo+Pj4KPj4+IFRoaXMg
+ZG9lc24ndCBtYWtlIGEgd2hvbGUgbG90IG9mIHNlbnNlOiAuTk9UUEFSQUxMRUwgaXMgc29tZXRo
+aW5nIHRoYXQgCj4+PiBhcHBsaWVzIHRvIHRoZSBNYWtlZmlsZSBhcyBhIHdob2xlLCBub3QgdG8g
+b25lIHNwZWNpZmljIHRhcmdldC4gSSBoYXZlbid0IAo+Pj4gbG9va2VkIGluIGFueSBkZXB0aCBp
+biB0aGUgbGlibnNzIGJ1aWxkIHN5c3RlbSwgYnV0IHVubGVzcyBpdCBidWlsZHMgCj4+PiByZWN1
+cnNpdmVseSwgYWRkaW5nIHRoaXMgaXMgZXhhY3RseSBlcXVpdmFsZW50IHRvIGFkZGluZwo+Pj4K
+Pj4+IC5OT1RQQVJBTExFTDoKPj4KPj4gQXMgSeKAmXZlIHRlc3RlZCBpdOKAmXMgbm90IGxpa2Ug
+dGhpcy4KPj4KPj4gSSByZWFkIHRoaXMgZnJvbSBbMV06Cj4+IOKAmOKAmeKAmQo+PiB8Lk5PVFBB
+UkFMTEVMfAo+Pgo+PiAgICAgSWYgfC5OT1RQQVJBTExFTHzCoGlzIG1lbnRpb25lZCBhcyBhIHRh
+cmdldCwgdGhlbiB0aGlzIGludm9jYXRpb24gb2YKPj4gICAgIHxtYWtlfMKgd2lsbCBiZSBydW4g
+c2VyaWFsbHksIGV2ZW4gaWYgdGhlIOKAmC1q4oCZIG9wdGlvbiBpcyBnaXZlbi4gQW55Cj4+ICAg
+ICByZWN1cnNpdmVseSBpbnZva2VkIHxtYWtlfMKgY29tbWFuZCB3aWxsIHN0aWxsIHJ1biByZWNp
+cGVzIGluIHBhcmFsbGVsCj4+ICAgICAodW5sZXNzIGl0cyBtYWtlZmlsZSBhbHNvIGNvbnRhaW5z
+IHRoaXMgdGFyZ2V0KS4gQW55IHByZXJlcXVpc2l0ZXMgb24gdGhpcwo+PiAgICAgdGFyZ2V0IGFy
+ZSBpZ25vcmVkLgo+Pgo+PiDigJjigJnigJkKPj4KPj4gVGhleSB0YWxrIGFib3V0IHRhcmdldCBh
+bmQgaXQgaXMgd2hhdCBJIGV4cGVyaWVuY2UuCj4+IEl04oCZcyBhIGJpdCBhbWJpZ3VvdXMgaG9u
+ZXN0bHkuIAoKInRhcmdldCIgaXMgdGhlIHRoaW5nIG9uIHRoZSBsZWZ0LWhhbmQgc2lkZSBvZiBh
+IGNvbG9uLiBTbyBpbgoKLk5PVFBBUkFMTEVMOiAlLmJtcAoKdGhlIHRhcmdldCBpcyAuTk9UUEFS
+QUxMRUwuIE15IHBvaW50IGlzIHRoYXQgdGhlIHRoaW5nIG9uIHRoZSByaWdodC1oYW5kIHNpZGUg
+b2YgCnRoZSBjb2xvbiBpcyBpZ25vcmVkLiBJdCBtYWtlcyBubyBkaWZmZXJlbmNlIGF0IGFsbCBp
+ZiB5b3UgcHV0ICUuYm1wIHRoZXJlLCBvciAKYmxhYmxhYmxhIC0gd2hlbiB5b3UgdXNlIHRoYXQg
+TWFrZWZpbGUsIHRoZSAtaiBvcHRpb24gd2lsbCBiZSBpZ25vcmVkLgoKU28gd2hhdCB5b3UncmUg
+ZG9pbmcgaXMgdGhhdCB5b3UgbWFrZSB0aGUgd2hvbGUgdGhpbmcgbm90IHJ1biBpbiBwYXJhbGxl
+bCwgbm90IApqdXN0IHRoZSBidWlsZCBvZiB3aGF0ZXZlciB5b3UgcHV0IG9uIHRoZSByaWdodC1o
+YW5kIHNpZGUuCgoKPj4gSW4gdGhlIHBhc3QgSeKAmXZlIGFsc28KPj4gZXhwZXJpZW5jZWQgaXQg
+b24gYSBiaWcgTWFrZWZpbGUgd2hlcmUgSSBoYWQgLmJtcCBmaWxlcyB0byBiZSBjb252ZXJ0ZWQg
+d2l0aCAKPj4geHhkIGFuZCB0aGF0IGdhdmUgcGFyYWxsZWwgcHJvYmxlbXMuIFNvIEnigJl2ZSB0
+YWdnZWQgaXQgbGlrZToKPj4KPj4gLk5PVFBBUkFMTEVMOiAlLmJtcAo+Pgo+PiBhbmQgdGhhdCBz
+b2x2ZWQgdGhlIHByb2JsZW0uCj4gCj4g4oCmaXQgaXMgYmVjYXVzZSBpbiBib3RoIGNhc2VzIHRo
+ZXkgYXJlIGNhbGxlZCByZWN1cnNpdmVseS4KCiAgQmVjYXVzZSBpdCBpcyBjYWxsZWQgcmVjdXJz
+aXZlbHksIHRoZSBoaWdoZXItbGV2ZWwgbWFrZSBpbnZvY2F0aW9ucyBhcmUgaW5kZWVkIApzdGls
+bCBydW4gaW4gcGFyYWxsZWwuCgogIFRoZXJlZm9yZSwgaW5kZWVkLCBpdCBkb2VzIG1ha2Ugc2Vu
+c2UgdG8gcHV0IGl0IGluc2lkZSB0aGUgbWFjcm8uCgogIEJ1dCBpdCBkb2Vzbid0IG1ha2Ugc2Vu
+c2UgdG8gYWRkIGEgcmlnaHQtaGFuZCBzaWRlLgoKICBBbnl3YXksIHNpbmNlIGl0J3MgYmVlbiBh
+cHBsaWVkIHVwc3RyZWFtLCB3ZSBjYW4ganVzdCBpZ25vcmUgdGhlIGlzc3VlLgoKICBSZWdhcmRz
+LAogIEFybm91dAoKCj4gCj4gR2l1bGlvCj4gCj4+Cj4+IEFsc28gdGhleSBoYXZlIGp1c3QgdXBz
+dHJlYW1lZCB0aGUgcGF0Y2ggWzJdLCBzbwo+PiB3ZSBjYW4gdGVzdCBpZiBpdCB3b3JrcyBjb21t
+aXR0aW5nIHRoaXMgcGF0Y2ggb3IKPj4gYnkgYnVtcGluZyBuZXh0IHZlcnNpb24uCj4+Cj4+IFRo
+ZW4gaXTigJlzIHVwIHRvIHlvdSA6LSkKPj4KPj4gQmVzdCByZWdhcmRzCj4+IEdpdWxpbyBCZW5l
+dHRpCj4+IEJlbmV0dGkgRW5naW5lZXJpbmcgc2FzCj4+Cj4+IFsxXTogaHR0cHM6Ly93d3cuZ251
+Lm9yZy9zb2Z0d2FyZS9tYWtlL21hbnVhbC9odG1sX25vZGUvU3BlY2lhbC1UYXJnZXRzLmh0bWwg
+Cj4+IDxodHRwczovL3d3dy5nbnUub3JnL3NvZnR3YXJlL21ha2UvbWFudWFsL2h0bWxfbm9kZS9T
+cGVjaWFsLVRhcmdldHMuaHRtbD4KPj4gWzJdOiBodHRwczovL2J1Z3ppbGxhLm1vemlsbGEub3Jn
+L3Nob3dfYnVnLmNnaT9pZD0xNzMxOTExIAo+PiA8aHR0cHM6Ly9idWd6aWxsYS5tb3ppbGxhLm9y
+Zy9zaG93X2J1Zy5jZ2k/aWQ9MTczMTkxMT4KPj4KPj4+Cj4+PiBhbnl3aGVyZSBpbiB0aGUgTWFr
+ZWZpbGVzLiBUaGlzIGlzIEJUVyB3aGF0IHdlIGRvIGluIEJ1aWxkcm9vdC4KPj4+Cj4+PiBBbmQg
+aW4gdGhlIGVuZCwgdGhhdCdzIHRoZSBzYW1lIGFzIGNhbGxpbmcgJChNQUtFMSkgZnJvbSBCdWls
+ZHJvb3QsIHNvIAo+Pj4gcGF0Y2hpbmcgaXMgbm90IHJlYWxseSBuZWVkZWQuCj4+Pgo+Pj4gSWYg
+eW91IHdhbnQgdG8gYmUgYSBsaXR0bGUgc21hcnRlciwgeW91IHdpbGwgaGF2ZSB0byBtYW51YWxs
+eSAidW5yb2xsIiB0aGUgCj4+PiBkZXBlbmRlbmN5LCBsaWtlOgo+Pj4KPj4+ICQoMSk6IHwgJCgz
+KS9kCj4+PiDCoCDCoCQkKGZvcmVhY2ggdGd0LCQoMiksJChNQUtFKSAkKDMpLyQkKCQodGd0KSkp
+Cj4+Pgo+Pj4gKGNoYW5jZXMgYXJlIEkgbWFkZSBzb21lIG1ham9yIG1pc3Rha2UgaW4gdGhpcyB0
+aGluZykuCj4+Pgo+Pj4gT3IgaWYgaXQgZG9lcyBidWlsZCByZWN1cnNpdmVseSwgeW91IGNhbiBw
+cm9iYWJseSBjb25kaXRpb25hbGx5IGFkZCAKPj4+IC5OT1RQQVJBTExFTCBpbiBzb21lIHNtYXJ0
+IHdheS4KPj4+Cj4+PiBBbnl3YXksIEkndmUgbWFya2VkIHRoaXMgcGF0Y2ggYXMgQ2hhbmdlZCBS
+ZXF1ZXN0ZWQuCj4+Pgo+Pj4gUmVnYXJkcywKPj4+IEFybm91dAo+Pj4KPj4+Cj4+Pj4gKyBlbmRp
+Zgo+Pj4+ICsgZWxzZQo+Pj4+ICsgJCgxKToKPj4+PiArLS0KPj4+PiArMi4yNS4xCj4+Pj4gKwpf
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3Qg
+bWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRy
+b290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
