@@ -2,92 +2,81 @@ Return-Path: <SRS0=TKET=PH=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0716EC433EF
-	for <buildroot@archiver.kernel.org>; Tue, 19 Oct 2021 21:03:04 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E09FCC433EF
+	for <buildroot@archiver.kernel.org>; Tue, 19 Oct 2021 21:29:56 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9061560FC2
-	for <buildroot@archiver.kernel.org>; Tue, 19 Oct 2021 21:03:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9061560FC2
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmx.net
+	by mail.kernel.org (Postfix) with ESMTPS id 434746101A
+	for <buildroot@archiver.kernel.org>; Tue, 19 Oct 2021 21:29:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 434746101A
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 263F1836F0;
-	Tue, 19 Oct 2021 21:03:03 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C408E4014E;
+	Tue, 19 Oct 2021 21:29:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Q0KiDsy0rneh; Tue, 19 Oct 2021 21:03:02 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id yFu6KaN0BSeN; Tue, 19 Oct 2021 21:29:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 57F56836C3;
-	Tue, 19 Oct 2021 21:03:01 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9D28E1BF328
- for <buildroot@lists.busybox.net>; Tue, 19 Oct 2021 21:02:59 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D5752403D4;
+	Tue, 19 Oct 2021 21:29:53 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B1E441BF361
+ for <buildroot@lists.busybox.net>; Tue, 19 Oct 2021 21:29:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 850774061D
- for <buildroot@lists.busybox.net>; Tue, 19 Oct 2021 21:02:59 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id AE44E831CA
+ for <buildroot@lists.busybox.net>; Tue, 19 Oct 2021 21:29:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=gmx.net
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ol-4FgmLLQbi for <buildroot@lists.busybox.net>;
- Tue, 19 Oct 2021 21:02:58 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2C220405E9
- for <buildroot@buildroot.org>; Tue, 19 Oct 2021 21:02:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
- s=badeba3b8450; t=1634677374;
- bh=BAm2+EAWBQtDFE0R7BrYTWsu+RiHhqisT8tXzmZM6Qo=;
- h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
- b=GJft7NOiezMJrlZd2PnwJ7KLtPYlWMP4hCMXiiCkUesfzErW+cCEsCIn1+srCavcz
- fBD6bXEuWtt6C0B/b7o5bs10krTY+pVSQ97aSxox9njxnzdX6sjisv9atQToh0gflX
- HrLMq4qcjMfsBZ3IbMZkQY7CzR/V17D6GTIbdAP4=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from localhost ([62.216.209.185]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MO9zH-1mNKFA3wy1-00OUNf; Tue, 19
- Oct 2021 23:02:54 +0200
-Date: Tue, 19 Oct 2021 23:02:52 +0200
-From: Peter Seiderer <ps.report@gmx.net>
-To: "Walter, Stefan" <stefan.walter@iml.fraunhofer.de>
-Message-ID: <20211019230252.324bbb61@gmx.net>
-In-Reply-To: <AM0P194MB0706FB2963323BD5D657815EB7BD9@AM0P194MB0706.EURP194.PROD.OUTLOOK.COM>
-References: <DB6P194MB00220117F126EF57A84FB509B7B19@DB6P194MB0022.EURP194.PROD.OUTLOOK.COM>
- <20211007235019.51751a53@gmx.net>
- <DB6P194MB0022286BBE77E2174FE40B87B7B29@DB6P194MB0022.EURP194.PROD.OUTLOOK.COM>
- <20211008192555.6dbd67d2@gmx.net>
- <DB6P194MB0022742E4E1B12DFEAC7FD24B7B59@DB6P194MB0022.EURP194.PROD.OUTLOOK.COM>
- <DB6P194MB0022C662CECD3D29EB4BA064B7B59@DB6P194MB0022.EURP194.PROD.OUTLOOK.COM>
- <20211019002255.165e5e00@gmx.net>
- <AM0P194MB0706FB2963323BD5D657815EB7BD9@AM0P194MB0706.EURP194.PROD.OUTLOOK.COM>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-suse-linux-gnu)
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5Us0TzGQnhSO for <buildroot@lists.busybox.net>;
+ Tue, 19 Oct 2021 21:29:50 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com
+ [IPv6:2a00:1450:4864:20::231])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 883E4831A2
+ for <buildroot@buildroot.org>; Tue, 19 Oct 2021 21:29:50 +0000 (UTC)
+Received: by mail-lj1-x231.google.com with SMTP id o11so8623517ljg.10
+ for <buildroot@buildroot.org>; Tue, 19 Oct 2021 14:29:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc:content-transfer-encoding;
+ bh=p7lNRr3j4ScbsjNUaV9+ojQ4XC9Xz8Iuv+J4ipDa2TQ=;
+ b=lkfp3uM9r0lPHuvbzzLc1BKzGnryA/FCAAsY80jm0fiK7poA6mz1tZbchUhiqp+yNH
+ ZTI+thMCsgKSz7EoIVundDhygWfhi0c7fEb1Qaba0UYSQ96Kr9OHliTUVF+K1YUmmlHw
+ ldWq5zpshwhbFXWuOpXiOw1T12s7XeisgWNlZCDia+H11EFRtii5ZkhoYQbq55wtT/Qe
+ ozI7aFai27biGa0Zsn0vuOqvrz+bhWzmmKrtextpSZUSLQ9AWlPv0sUa7iXeMEbIWe7X
+ vlDV5y6fUCF7dyN/eEDELfaIPTd0yqeboH3jxpHeOS5hG3mGcpHbZhlM+oykUpOO6jWf
+ wXlg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc:content-transfer-encoding;
+ bh=p7lNRr3j4ScbsjNUaV9+ojQ4XC9Xz8Iuv+J4ipDa2TQ=;
+ b=wgiKSmVfzg4CLoC3vzgcKhxFpNo/Z0z0mgbSm5ZDDnIQ1UJF4sUXcQ4+rGNm8UJfVm
+ bHhrb2RCB7MPflz6PG0YopO0cX3/312fetSqqv63dNqYmNyGtlohhxP9QZkxgq0Xaa56
+ HbI7SYz9SQxHGd+a1XVBF+SFtXwmlWlhpOvD3/ms+eJYchMvKzXsog/77f8p2JLjBBqU
+ TjqexfSrmOWPB2enuC8pj9B8XvExtS5SOUdbSHQib5zA+55OZS4sivd38/uSUZPfZREt
+ 0OIYlcb/VjGjntdZraZClqSfmv4jet8qQXOYdGdS/KXrbo9V+naK+QaHtW6dssKZ4d0j
+ 0G4A==
+X-Gm-Message-State: AOAM5321FFVhcVNyVWUUA0qvJ7laC8vhW4Lc5YaD7Ocrsw2MRnDoXahl
+ T/FPIFjGZmu+IcmQjLVAPHZdhwq7VMqmqJgWnjZ1JfauSrE=
+X-Google-Smtp-Source: ABdhPJxSc6Ij3UQs1ikPaxJyGYwljMwUk0sKqopSAwEWffXHCkYeFAKVga3ZJHAftljn0NMw+Wcad/1JCpKGSM9KYTQ=
+X-Received: by 2002:a2e:b611:: with SMTP id r17mr8967063ljn.336.1634678988010; 
+ Tue, 19 Oct 2021 14:29:48 -0700 (PDT)
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:aV5UCVtCKCLJgK68bk98GBBSTvWXllaDQlR0DHJkSeyWTXNuxK/
- zwOe5z/r1hXIVekvtn1G+MZmc4KQ73//wiMenhL0zYqLujyPSG3bl2JUCTydEg9OzbONHNr
- KH0bgib+hiXLaJHQU/JJXNPnruK+mpnfuCbNzbqlyuniTA/LO7oBjzI9B8eFKJVfjcouQBB
- hYUisdAkLUdIXQtBCFQiw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:mJh+SAlmw8w=:/4Aok9aw5YJbQjJwDHu3//
- AGEoJlySkgc4d+FdvSc/ap1VkZGfDyQLutOuCXrCAV7LfFvAHnzoWN/J587vlWNsQNspKCZHn
- 0fsNMR2tVG05N8AynlMTTFtdK/jAWFHXnZ6u6M1H9rw2X1z5lO1y0Yr+MzfzmH6cgO72T0ySR
- xgRZxWAFjHx//6/na/x//pu1qRIlD+fpZ7g1FXK7ndsGBxQ895KmwrdzhOSSX/g5KNxJWwGe/
- x1BbtCwl7/mz0y9fgfM9kYHcYyAhZwSjSq2aZThng2uGbdQik0Kq/xJuNfZzqeti4qTtXH5Ch
- gb+bbfRYP+e4afvR5Is3MiadhqCTq5Mg6BAI5oM7F7yAdBxxVc/Yg2KkNw2beuEnbnT1evtxB
- UmJiswYVcgHXJntWxACzTqLvL6XgWd46/jOEbDQ1OpfqvDFz97NSR1Jmy5lBfWNlD67S2BZUd
- wHSwbpvXcgJFxVyIAV0bxwO14ognR+jDBro9nmnC+IR0PvEQlqDJYBOiAX/JVv8tDD6o9+F3K
- LraQ6n/0YhiYk7Pk1ZVjVtovpRQVV3pR2xnQXDI9w5esZ81bNKWF5KT7h9EJ4PswNhgflAUJj
- oRoGI2Ij7v+3tPVhdn+qH5Sbo+GZuyitWn0tk6rcOGzgH+OA1NT+SPA3JJCgqeIq5F8nZbcKf
- rkQ9gvrkS56zsuG1oHoKfsOR1OnGY1CZEf+FsEmxIDUBx5OxJHK9RFYO7Jw3dWZcgeJ24t8eG
- GUtl+ReDFtbDed2ZbueJpQy4Qqig0Ppjdzr6a02e9F5vIR0vpYT6F1Y/eUi73649N82vNqMOn
- dRrbUq7FEuq34p0eCl3CsVm0DLnDJiCnySEljRr1BLdFcRnd75VEhVSvYgTqe9JuX4/RB2AuS
- mTzuyiEHra0MDmmmP7TokxG+Y6VUl7sIZQ2nEeiV73NKe+Vjcybki4DOY7/w60x/vLTteVDkT
- L7mpJwkbB2cSHib3A2HH1gOlDYQy3OyI9TJV87lLLBuw2IBi+b7Ue15eoNOLtNn0gVinMRYvN
- C1TL9MCNiue6lHS4SIBMCEl5HemafhceXni2MgyhUj9UgEq8QUHObT4hkxgCjvV+PmR7aPrV9
- lDDZRQ/Wg//W4k=
-Subject: Re: [Buildroot] Boot process stuck at "GRUB loading.." since
- 2021.02.1
+References: <20211013065446.1857356-1-fontaine.fabrice@gmail.com>
+ <20211018223458.6d52ee5e@windsurf>
+In-Reply-To: <20211018223458.6d52ee5e@windsurf>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 19 Oct 2021 23:28:23 +0200
+Message-ID: <CAPi7W83t+A1eip2Ewr7pTwm+PZmUgTWq_MOuaH5UswHtbPSjiQ@mail.gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package/tpm2-tss: needs host-acl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,78 +88,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Buildroot Mailing List <buildroot@buildroot.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Stefan,
-
-On Tue, 19 Oct 2021 15:17:23 +0000, "Walter, Stefan" <stefan.walter@iml.fraunhofer.de> wrote:
-
-> Hi Peter,
->
-> > Can you try instead of your original
-> >
-> > /path/to/buildroot-sdk/host/bin/grub-mkimage \
-> > 	--config=grub_early.cfg \
-> > 	--directory=/path/to/buildroot-sdk/host/lib/grub/i386-pc \
-> > 	-o ./genimage_input_tmp/grub_core.img \
-> > 	--format=i386-pc \
-> > 	--prefix==/boot/grub \
-> > 	biosdisk part_msdos ext2 normal linux configfile
-> >
-> > the following one (makes the difference here for me with the qemu test):
-> >
-> > /path/to/buildroot-sdk/host/bin/grub-mkimage \
-> > 	--config=grub_early.cfg \
-> > 	--directory=/path/to/buildroot-sdk/build/grub2-2.04/build-i386-
-> > pc/grub-core \
-> > 	-o ./genimage_input_tmp/grub_core.img \
-> > 	--format=i386-pc \
-> > 	--prefix==/boot/grub \
-> > 	biosdisk part_msdos ext2 normal linux configfile
-> >
-> > Note the --directory change from the '.../host/lib/grub/i386-pc' (installed)
-> > directory to '.../build/grub2-2.04/build-i386-pc/grub-core' build directory (as
-> > the original buildroot
-> > grub2 install step uses to create images/grub.img...
->
-> there is no directory build/grub2-2.04/build-i386-pc, but there is a build/grub2.204/grub-core, which I assume you meant.
-
-Yes, your are right...
-
->  I tried with that directory, and indeed, the resulting image boots.
-
-Thanks for testing (and for providing your command lines from your build)...
-
-The host-grub2 modules build can be fixed by the following patch:
-
---- a/boot/grub2/grub2.mk
-+++ b/boot/grub2/grub2.mk
-@@ -125,7 +125,9 @@ GRUB2_TUPLES-$(BR2_TARGET_GRUB2_ARM64_EFI) += arm64-efi
- # use the cross compile variant to ensure grub2 builds
-
- HOST_GRUB2_CONF_ENV = \
--       CPP="$(HOSTCC) -E"
-+       CPP="$(HOSTCC) -E" \
-+       CFLAGS="$(HOST_CFLAGS) -Os" \
-+       CPPFLAGS="$(HOST_CPPFLAGS) -Os"
-
- GRUB2_CONF_ENV = \
-        CPP="$(TARGET_CC) -E" \
-
-Regards,
-Peter
-
->
-> Thank you for your help so far! I'll reference this in the issue at https://bugs.busybox.net/show_bug.cgi?id=14281.
->
-> Best regards,
-> Stefan
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+TGUgbHVuLiAxOCBvY3QuIDIwMjEgw6AgMjI6MzUsIFRob21hcyBQZXRhenpvbmkKPHRob21hcy5w
+ZXRhenpvbmlAYm9vdGxpbi5jb20+IGEgw6ljcml0IDoKPgo+IE9uIFdlZCwgMTMgT2N0IDIwMjEg
+MDg6NTQ6NDYgKzAyMDAKPiBGYWJyaWNlIEZvbnRhaW5lIDxmb250YWluZS5mYWJyaWNlQGdtYWls
+LmNvbT4gd3JvdGU6Cj4KPiA+IEFkZCBob3N0LWFjbCBtYW5kYXRvcnkgZGVwZW5kZW5jeSBmb3Ig
+c2V0ZmFjbCB0byBhdm9pZCB0aGUgZm9sbG93aW5nCj4gPiBidWlsZCBmYWlsdXJlIHNpbmNlIGJ1
+bXAgdG8gdmVyc2lvbiAzLjEuMCBpbiBjb21taXQKPiA+IDQ3MGUyZTliYzUyMTExODQ0MzFmYmM4
+NjgzNTlhOWQ2OTVlNjI0ZjQgYW5kCj4gPiBodHRwczovL2dpdGh1Yi5jb20vdHBtMi1zb2Z0d2Fy
+ZS90cG0yLXRzcy9jb21taXQvOWQ0MmY0ZGJkZTZhOTQ3MjRlOTVkNTdjMzMzY2RhNzcxMWRkYTU3
+YzoKPgo+IFNvIHRoaXMgY29tbWl0IGFkZHM6Cj4KPiAjIENoZWNrIGFsbCB0b29scyB1c2VkIGJ5
+IG1ha2UgaW5zdGFsbAo+IEFTX0lGKFt0ZXN0ICIkSE9TVE9TIiA9ICJMaW51eCJdLAo+ICAgICAg
+IFtFUlJPUl9JRl9OT19QUk9HKFtncm91cGFkZF0pCj4gICAgICAgIEVSUk9SX0lGX05PX1BST0co
+W3VzZXJhZGRdKQo+ICAgICAgICBFUlJPUl9JRl9OT19QUk9HKFtpZF0pCj4gICAgICAgIEVSUk9S
+X0lGX05PX1BST0coW2Nob3duXSkKPiAgICAgICAgRVJST1JfSUZfTk9fUFJPRyhbY2htb2RdKQo+
+ICAgICAgICBFUlJPUl9JRl9OT19QUk9HKFtta2Rpcl0pCj4gICAgICAgIEVSUk9SX0lGX05PX1BS
+T0coW3NldGZhY2xdKV0pCj4KPiBCdXQgaW4gdGhlIGNvbnRleHQgb2YgQnVpbGRyb290LCB1c2lu
+ZyBncm91cGFkZCwgdXNlcmFkZCwgY2hvd24sIGNobW9kLAo+IHNldGZhY2wgYXQgaW5zdGFsbCB0
+aW1lIGNhbm5vdCB3b3JrLCBzaW5jZSB3ZSdyZSBub3QgZG9pbmcgIm1ha2UKPiBpbnN0YWxsIiBh
+cyByb290Lgo+Cj4gU28gYXJlIHdlIHN1cmUgdGhhdCBhZGRpbmcgaG9zdC1hY2wgYXMgYSBkZXBl
+bmRlbmN5IHRvIGdldCBhIGhvc3QKPiB2YXJpYW50IG9mIHNldGZhY2wgaXMgcmVhbGx5IHRoZSBn
+b29kIHNvbHV0aW9uPwo+Cj4gSG93IGlzIGl0IGhhbmRsZWQgZm9yIGdyb3VwYWRkL3VzZXJhZGQv
+Y2hvd24vY2htb2QgdG9kYXkgPwpncm91cGFkZC91c2VyYWRkL2Nob3duL2NobW9kIGFyZSBjYWxs
+ZWQgc2luY2UgdmVyc2lvbiAzLjAuMCBhbmQKaHR0cHM6Ly9naXRodWIuY29tL3RwbTItc29mdHdh
+cmUvdHBtMi10c3MvY29tbWl0L2QwMWMyNGU2Y2IwOTVlMThjNWUyOWFmNGEzMDE4MDEwYjMyMzBh
+NmQKCnNldGZhY2wgaXMgY2FsbGVkIHNpbmNlIHZlcnNpb24gMy4wLjAgYW5kCmh0dHBzOi8vZ2l0
+aHViLmNvbS90cG0yLXNvZnR3YXJlL3RwbTItdHNzL2NvbW1pdC84MTFlNDUxYzk0MjU0NDk2MzM4
+ZDM2NzgzY2RhNDRhNzcyOWIwODVhCgpCdXQgbW9yZSBpbXBvcnRhbnRseSwgYWxsIHRob3NlIGZ1
+bmN0aW9ucyBhcmUgbm90IGV2ZW4gdXNlZCBvbiBhCnRhcmdldCB3aXRob3V0IHN5c3RlbWQgYW5k
+IGEgaG9zdCB3aXRoCnN5c3RlbWQte3N5c3VzZXJzLHRtcGZpbGVzfSBiZWNhdXNlIHRwbTItdHNz
+IHRyeSB0byBpbnN0YWxsIGZpbGVzIGluCiQoVEFSR0VUX0RJUikvZXRjL3tzeXN1c2Vycyx0bXBm
+aWxlc30uZCB3aGljaCBkb24ndCBldmVuIGV4aXN0IGlmCkJSMl9JTklUX1NZU1RFTUQgaXMgbm90
+IHNldC4KRXZlbiBpZiBCUjJfSU5JVF9TWVNURU1EIGlzIHNldCwgdGhlIHBhdGggaXMgd3Jvbmcg
+YXMgaXQgc2hvdWxkIGJlCmluc3RhbGxlZCBpbiAkKFRBUkdFVF9ESVIpL3Vzci9saWIve3N5c3Vz
+ZXJzLHRtcGZpbGVzfS5kCgpUbyBjb25jbHVkZSwgSSB3b3VsZCBzYXkgdGhhdCBpbnN0YWxsIG9m
+IHRwbTItdHNzIGlzIHBhcnRpYWxseSBicm9rZW4Kc2luY2UgYXQgbGVhc3QgYnVtcCB0byB2ZXJz
+aW9uIDMuMC4wIGluIGNvbW1pdAo4OWYzZDkwZTI0YmIyNGI3MGZjNGEzN2JmOGNmZjYxODY2NzI0
+NzVjLgo+Cj4gVGhvbWFzCj4gLS0KPiBUaG9tYXMgUGV0YXp6b25pLCBjby1vd25lciBhbmQgQ0VP
+LCBCb290bGluCj4gRW1iZWRkZWQgTGludXggYW5kIEtlcm5lbCBlbmdpbmVlcmluZyBhbmQgdHJh
+aW5pbmcKPiBodHRwczovL2Jvb3RsaW4uY29tCkJlc3QgUmVnYXJkcywKCkZhYnJpY2UKX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxp
+bmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5v
+cmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
