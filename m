@@ -2,81 +2,82 @@ Return-Path: <SRS0=oNq7=PI=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B3934C433F5
-	for <buildroot@archiver.kernel.org>; Wed, 20 Oct 2021 11:23:01 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 26067C433F5
+	for <buildroot@archiver.kernel.org>; Wed, 20 Oct 2021 11:36:51 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id CDD0661057
-	for <buildroot@archiver.kernel.org>; Wed, 20 Oct 2021 11:23:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org CDD0661057
+	by mail.kernel.org (Postfix) with ESMTPS id A589061361
+	for <buildroot@archiver.kernel.org>; Wed, 20 Oct 2021 11:36:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A589061361
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmx.de
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 79A8B60C15;
-	Wed, 20 Oct 2021 11:23:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 538124072A;
+	Wed, 20 Oct 2021 11:36:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qhEiGb36axKz; Wed, 20 Oct 2021 11:22:59 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 2vnxeNgVxrO3; Wed, 20 Oct 2021 11:36:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E163D6080D;
-	Wed, 20 Oct 2021 11:22:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B1DC040724;
+	Wed, 20 Oct 2021 11:36:48 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 955211BF955
- for <buildroot@lists.busybox.net>; Wed, 20 Oct 2021 11:22:57 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id DDE2A1BF955
+ for <buildroot@lists.busybox.net>; Wed, 20 Oct 2021 11:36:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8338240385
- for <buildroot@lists.busybox.net>; Wed, 20 Oct 2021 11:22:57 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id D9CDD401AF
+ for <buildroot@lists.busybox.net>; Wed, 20 Oct 2021 11:36:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp2.osuosl.org (amavisd-new);
  dkim=pass (1024-bit key) header.d=gmx.net
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id X5I3lumxXmQV for <buildroot@lists.busybox.net>;
- Wed, 20 Oct 2021 11:22:56 +0000 (UTC)
+ with ESMTP id W5UeCgs73WJS for <buildroot@lists.busybox.net>;
+ Wed, 20 Oct 2021 11:36:46 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 67556401AF
- for <buildroot@buildroot.org>; Wed, 20 Oct 2021 11:22:56 +0000 (UTC)
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9115940235
+ for <buildroot@buildroot.org>; Wed, 20 Oct 2021 11:36:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
- s=badeba3b8450; t=1634728973;
- bh=m5qgpSRcJhbmIQya+CfjU4r20FT7LcTGhCmaV+z2wto=;
+ s=badeba3b8450; t=1634729803;
+ bh=OYDRYg9wyZF1uYHz+zcknat0skLNapMujiTxr6v6INQ=;
  h=X-UI-Sender-Class:From:To:Subject:Date;
- b=Jrl5PzAXnHzqV48QRCNQY/5zEJ3/XzqWOyhcerq/0RB9RlE1eZtksyvBydbapoVxl
- 0kpclqrluuG4aB3IhhZFFdpr8XdNweymGFHl/Ui0iMmdIHrPMWAn9+TPsfPa+AHj5v
- PN90rNDN9i2lixHS2Z2bKdA69z1Jz9deV77kX02o=
+ b=G8eYtRe4C4Si09bIvtsYjpAV4F5gHjuCmLUOA8W6rgCCiBbtnOvT/0BAWQNKgOSlq
+ UQCyNlgmrZyEfH9AXMZ5nO5VfrESIAjjsQ6FgAdpOaF35DINZOxl+TnUI2vRDSEiOM
+ Okrtd2lhzlggv+GBSYzR2CWhrdjxOckRXTLvFZGU=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
 Received: from [217.231.235.79] ([217.231.235.79]) by web-mail.gmx.net
  (3c-app-gmx-bap28.server.lan [172.19.172.98]) (via HTTP); Wed, 20 Oct 2021
- 13:22:53 +0200
+ 13:36:43 +0200
 MIME-Version: 1.0
-Message-ID: <trinity-072a3cc2-e02b-45ac-9f17-5037678caabf-1634728973216@3c-app-gmx-bap28>
+Message-ID: <trinity-007290bc-de5f-4ff6-86dc-7caa998c06c5-1634729803292@3c-app-gmx-bap28>
 From: Steve <sleepy_dog@gmx.de>
 To: buildroot@buildroot.org
-Date: Wed, 20 Oct 2021 13:22:53 +0200
+Date: Wed, 20 Oct 2021 13:36:43 +0200
 Importance: normal
 Sensitivity: Normal
 X-Priority: 3
-X-Provags-ID: V03:K1:3lEYY0mFDj+L56MQzMMkVssGTuvQVqa8vjzXs4m3fEYttMx+QwvpI2JPKThQUyC8ajWwD
- yXeupz/m8gq8k3aSxKVBdq3CH5DuPkBiMdK8Lpu8QxCxqGQBM5BcIBaOdOBwfRd7Y0XTt4LM1nBZ
- m+5avHIdcxxrYDYTpghE17oLaqvI5CDeijvDzvDzYERZDcUvRjkSA3QLZ87EV7e1PObyyijUxdg3
- BKgXjIWt+KuVadCMxTGaH6ugFJj0H0h/tdBhDND9bU7eahYSlO2DA56nGsjzT9D5s9QkYOQaqvuc
- 2U=
-X-UI-Out-Filterresults: notjunk:1;V03:K0:awaz357r5Gg=:O7Z1iw767KnggFLHxzx9OQ
- UTmQeHoMATAfqJd4jBpf8O+ObRi8vvE86GkWq+/4eTHuI23PVw90nMHHkeBUY6/wQZalkMidy
- DJ+/zEoeNq8pWlIOeIDe3j/Y2OiUkJGjCumrr+bEbnGICR96SZ0/UYYLrjpMDyux2XVt0Df0p
- bN2UFmuVHKd9Kt4t40vPs9q67qOnr5zXwI+jF0kNBgBlzokBivq0Gc0ktzP/edkaoXKv98Rof
- e7p56pYnZ7l3FOApt2RjoNCI/tYk+SDf3ky2CaGYIrUsOHhnPsQ7ZPjzGPWDb7c1M7ORMAAhA
- Oi0kbDAaaALtVm6IB8EFsDtMsE65Ql5Peu3PPFohHoJxrbog5wLjOT8HRFVQm0g6DaWMRs9DM
- vhzwim13cJ0Ad4hYeiJ/HZZc5gwgFyXwkgFpvbz1HdCH+m3qZtlNWbFPFNlmnKToHVDbUb0B+
- CL1oQfPZT7eZkaYysqF3K3BHNrgn+d3i9iXf5s1qtd+40FYb7G8V+GePmAt6EJ5dCb4go7K/o
- 8uy7F8pRtjYpFDNVzKNQtGR0dNeiTReJ5SgK/nyy0hkPGGAQuxMjH0ZXOUxrrwknsvmkvKSzO
- q9HlbWKialPb9mZWPax0bUWtZe0meVGWkbp4ZXKKvKJG+gQL7zmFFL3dqz8OG3oukI1E0+Sob
- Gc8JxzGL082YFWjEnXuzzMlxffBO4nGArvU6IbjVPpiwGoWDJDrf1DAcS12f1QeTFDxuS1sND
- kG/gfwkQmKj6YVhpOrVvBFjFD0gRUU3ko0Pl+u5Obt+WrHRRJ8MZ6I3YWzmA5kCFVFRtUbt4A
- 4GaTWOK
-Subject: [Buildroot] htop - "No btime in /proc/stat: Success"
+X-Provags-ID: V03:K1:BxOpInUKcjMsytu8LrS/FXGIqRtwN8HP7N8eoaByhMbKlByit2Qaop+lkk4kq3NRHfKDJ
+ KXexCUOnymSFTPnvvrIBkUGZpv71kARpMxGl92URgxb7TiJelmqEcO2JIIsYWwN1r3XGpTbSOfPu
+ jBgX+A+Vx2LUWGjLwTkLnWuE1k8HVyZbo97zIx/+zXyuQk8n8VWS804w80QMi0hB5BPbwRsTlTAM
+ 5CIJUKT6Rv7l+q9U7OqEXUO9AoT7f7LiB8Q4/PsrlNawvhCJOYPgQJMLeBpIdYj8CH3bI5XJzRud
+ pM=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:l97HpmLq9G4=:dKUOWD8MlSVMt8DmbXXBF0
+ zTO0rH6ybhG1P7uDqS9plTLcBqLZpJHRYZ4tXvKbFoor1MX91fs9BsZUmWDm95Q6OnlhAyhjr
+ puYCHjIm10ET4L6MvbNKlp+RgoKxMIKvLSAoN8tMzAqupd4AXJ1PvnkKsPWaqNz1vKTLiSW72
+ lyh/idFMSAyTo+WDOio6p7/ipo2E+VILOyZD/ShII8HFf9j2/VSmwiHJufrwkMVFaB0kxMaFR
+ ZmVIHuahN5k9g0x/4CTtOtv8T4mm1bUADnFCSHeKUP2qRO74ODLjjsoN2vZnjIwgCva6qmqSw
+ yfJMQkhEp+88OWmyn2ELIxb7dhLlkvI6rQn7W7RCKukhPmhKCRGQCRwlXy+356i/LRa9pudZg
+ rtJdZ3MZa4CfzaTKOLbIdQ2J9xEuc9W2PxCPr37OGtmtoWpNSLxCVdzrMPBIPWyDO09deO4U0
+ L/xckqC7alUTZ3hYxUVPeflywc4nugUG/R4GER+upF2+AuNqVf7AGqTXU5YLYj657hqmAnisT
+ 7xCnzuam3bgEXOKLX4fJSfIAx0nvbvsmginEPyf3fMS7wbRqUKb7AtlHUT+HVkLmgib+bzT9x
+ lS0EiQ1VK43QmGz+PDZYgN88XVzFawg7/7G+jBUTdtmoIbkf9IzeBBl0Dtw8ZJNeAl17N2ZIb
+ fqnrgfrr4KrGo2VtjXtvAE/QVjQw6UL5ZMQd5dAgFMf1gsMqVF0uF/hSQMemaviyo4WztZdgH
+ mK/Br4hLsPkt9JrA9+HjAa5/L6IGQrS39EOGXw2xo/Dc/SxNrBzDmWGfeGLyGnJxFhzic/P1s
+ D6kqvgo
+Subject: [Buildroot] openssh - kernel messages upon connection attempts
+ (always ending with "connection reset" at the other end)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -88,29 +89,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============4118250920458274133=="
+Content-Type: multipart/mixed; boundary="===============4265258478113643162=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4118250920458274133==
+--===============4265258478113643162==
 Content-Type: text/html; charset=UTF-8
 
-<html><head></head><body><div style="font-family: Verdana;font-size: 12.0px;"><div style="font-family: Verdana;font-size: 12.0px;">
-<div>Hello,</div>
+<html><head></head><body><div style="font-family: Verdana;font-size: 12.0px;"><div>Hello all,</div>
 
-<div>&nbsp;</div>
+<div><br/>
+I recently downloaded buildroot and used the default config for RasperryPi3, altered to add openssh, among a couple other things.</div>
 
-<div>a Linux image built with a recently downloaded buildroot, starting with the defconfig for RaspberryPi3 and adding some things (htop if it wasn&#39;t already, nano, openssh, openvpn; also the linux-menuconfig was altered, concerning USB driver stuff).<br/>
+<div>(no idea whether that matters, I am using a USB connection from the raspi running g_cdc driver (ethernet + serial gadget), and am trying to ssh into it from the USB host computer the raspi is plugged into)<br/>
 <br/>
-When, in menuconfig, I search with / for htop, it shows that htop and all dependencies are met (all positive dependencies are [=y] and the one negative (static libs) is [=n].<br/>
-But when I call htop on the running system, I only get the line given in the topic.<br/>
-&nbsp;</div>
+I have found that root ssh&#39;ing into the machine is off by default. So I altered the sshd_config to, for now, say yes to PermitRootLogin. (I&#39;ll look into how to add a non-root user later - but this here *should* normally work, right? UNless something is broken)<br/>
+Still, on the computer that tries to SSH into the buildroot raspi, I get &quot;connection reset&quot; immediately.<br/>
+<br/>
+There is a kernel message for each such attempt:<br/>
+&nbsp; &quot;audit: type=1326 audit (time...) auid=... uid=1000 gid=1000 ses=... pid=... comm=&quot;sshd&quot; exe=&quot;/usr/sbin/sshd&quot; sig=31 arch=40000028 syscall=413 compat=0 ip=... code=0x0&quot;<br/>
+<br/>
+(the dots replace numbers I guess are pointless to type)</div>
 
-<div>What could be the problem?<br/>
-&nbsp;</div>
-</div></div></body></html>
+<div><br/>
+I searched a bit around and found threads in forums with similar seeming problems but somewhat different numbers in the message, claims of some problem with this stuff and libc6 and linux versions prior to 5.1, well if I &quot;uname -a&quot; here, it says &quot;5.10.46-v7&quot;, I guess that one should not have *that* problem, unless it has nothing to do with that.<br/>
+<br/>
+Any ideas?<br/>
+&nbsp;</div></div></body></html>
 
---===============4118250920458274133==
+--===============4265258478113643162==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -121,4 +128,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============4118250920458274133==--
+--===============4265258478113643162==--
