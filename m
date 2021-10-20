@@ -2,88 +2,84 @@ Return-Path: <SRS0=oNq7=PI=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7ECF9C433F5
-	for <buildroot@archiver.kernel.org>; Wed, 20 Oct 2021 18:11:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4887CC433F5
+	for <buildroot@archiver.kernel.org>; Wed, 20 Oct 2021 19:05:58 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id E51B36128B
-	for <buildroot@archiver.kernel.org>; Wed, 20 Oct 2021 18:11:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E51B36128B
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmx.net
+	by mail.kernel.org (Postfix) with ESMTPS id B9694611B0
+	for <buildroot@archiver.kernel.org>; Wed, 20 Oct 2021 19:05:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B9694611B0
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7CF076067A;
-	Wed, 20 Oct 2021 18:11:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5ECC860B18;
+	Wed, 20 Oct 2021 19:05:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PRzvs31J2rSQ; Wed, 20 Oct 2021 18:11:03 +0000 (UTC)
+	with ESMTP id UoknmXrb8vmX; Wed, 20 Oct 2021 19:05:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BA79D60B3B;
-	Wed, 20 Oct 2021 18:11:02 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DC9E01BF584
- for <buildroot@lists.busybox.net>; Wed, 20 Oct 2021 18:11:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D0DD86084F;
+	Wed, 20 Oct 2021 19:05:55 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id DA9321BF3F3
+ for <buildroot@lists.busybox.net>; Wed, 20 Oct 2021 19:05:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CB4E540775
- for <buildroot@lists.busybox.net>; Wed, 20 Oct 2021 18:11:00 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id CA1048354B
+ for <buildroot@lists.busybox.net>; Wed, 20 Oct 2021 19:05:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=gmx.net
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Ca9zDgA9DeIi for <buildroot@lists.busybox.net>;
- Wed, 20 Oct 2021 18:10:58 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 376E0404C1
- for <buildroot@buildroot.org>; Wed, 20 Oct 2021 18:10:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
- s=badeba3b8450; t=1634753455;
- bh=Ze33UcsLM4JZMjdtZlxG/XukC9DxyfMLEp5CgJHanws=;
- h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
- b=aFAFQ0cE4UgLfE+Hl3RfxFwOEx9/NGRgO8ho2Vl/pFe+dEEQaBDzjXElnwCmc8E2v
- lE4GnUYfaL+CeB2ERCwZ81d1ilx4EM5yh++ywJfvxgp7d+UbPnM63+RCExqnmdaQ5+
- aGdu5v9VcsInO07gtxUExGgH8AdBMujq7fVYMRCY=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from localhost ([62.216.209.182]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MQ5rO-1mHApa3ELQ-00M4mr; Wed, 20
- Oct 2021 20:10:54 +0200
-Date: Wed, 20 Oct 2021 20:10:53 +0200
-From: Peter Seiderer <ps.report@gmx.net>
-To: Steve <sleepy_dog@gmx.de>
-Message-ID: <20211020201053.0a88c199@gmx.net>
-In-Reply-To: <trinity-37320d19-a174-46c4-9f92-823a8454c4d5-1634734547955@3c-app-gmx-bap28>
-References: <trinity-072a3cc2-e02b-45ac-9f17-5037678caabf-1634728973216@3c-app-gmx-bap28>
- <107f4e64-9a30-0b86-48fc-769cf12976b8@mind.be>
- <trinity-925a029f-87a5-4638-b533-9c4c46e363cc-1634732988358@3c-app-gmx-bap28>
- <52787ac7-f1cc-1c34-f8b3-03cda8a7d458@mind.be>
- <trinity-37320d19-a174-46c4-9f92-823a8454c4d5-1634734547955@3c-app-gmx-bap28>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-suse-linux-gnu)
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hfmL2bN_rxXG for <buildroot@lists.busybox.net>;
+ Wed, 20 Oct 2021 19:05:54 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
+ [IPv6:2a00:1450:4864:20::42c])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id CE280834FE
+ for <buildroot@buildroot.org>; Wed, 20 Oct 2021 19:05:53 +0000 (UTC)
+Received: by mail-wr1-x42c.google.com with SMTP id m22so420694wrb.0
+ for <buildroot@buildroot.org>; Wed, 20 Oct 2021 12:05:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=LwGkh4/lGpf926p1E2oKGh9Dt5N8sUN1e+DDDyibyG0=;
+ b=Tw44uy5IqHCoIRiXOcLp397xQNNq8U/yE7Mb4BDDYs1+NFmhxn/CUi9B+yzqb/i+1M
+ P2sZ5VZBeWcv7T9tdQUTa+8BKfUo9bKJDUfGJoDIbNOUQd+bDs0z/ts4Ydxki1VavQjw
+ tGkBcvkddV7ymTUUI2wUiBY7McqGC1+cGLfdYZzpqu8PS49wo80OzvcXSn/LyKoVXipW
+ RRPkfVaC1vUGAyKEMAdgaD/QF1kiAdBdBiiWfI4GGCQ+QDhjYaQNygAEl0IGDwjKDVoo
+ PzWrs2mR602rBEx4AUxOeRO4XIaHl0wc3PG72mCUKSXqXzJGqlYZtZP2i+rn4Svp03j2
+ UxAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=LwGkh4/lGpf926p1E2oKGh9Dt5N8sUN1e+DDDyibyG0=;
+ b=SnMvLyTbqznpTE7ToRHHO4xkTmfAnDc4jsipeVLty79qyvZuwARr3Duwd8NxlmvTfw
+ VWg7BXk4d9uOHQSoQTirCGgWDUWHbPpMWwu1PlgjYHpwnlIYHjgTF6+GE7Yhkrn39xdU
+ S2VZQPyYcDJ3hCWTr2MP9m7II8M1oviOvcAbNt3dsHqWo2ogTojHKnk8UGn63ftRsr+S
+ Ew9t6WOKsqMME20MjX+04fDrVxbtGXPPHihO/t/pMvhPSZ1XkWjxwzyRQnorXERQiga0
+ UvYjjF6WdRoUyPvKGuhkKt0crTyoQrRObfrcyeCl8FIpEGQjeusfz5GHF/+wvfwJSX9Z
+ I/Cw==
+X-Gm-Message-State: AOAM531k0KbxHmNF+i4Ks/1cE+QToS3ryLisSxbXqyseT1SxocRzMQ7X
+ i+lpmJ7rcZ3u8gtc0xo4kkaoZeH98fc=
+X-Google-Smtp-Source: ABdhPJx2Vwu7pbgAqeZZgpL/F/UrgWvpLkDdAZcAFwfMBA0ZYnafMBHU2nIK6EQ88hgx5lnh4iDSWg==
+X-Received: by 2002:adf:bb08:: with SMTP id r8mr1275810wrg.247.1634756751564; 
+ Wed, 20 Oct 2021 12:05:51 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-1732-95.w86-253.abo.wanadoo.fr.
+ [86.253.44.95])
+ by smtp.gmail.com with ESMTPSA id l2sm6441705wmi.1.2021.10.20.12.05.51
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 20 Oct 2021 12:05:51 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Wed, 20 Oct 2021 21:04:23 +0200
+Message-Id: <20211020190423.3547893-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:zt7gutOWSc091TmhQvRfC0TBq/28pr9Hnehw2l6JFKgpUx58X8t
- 3z6dJCwl+lO2zyZhFSO3xQWkQhCx/5cl8BXraKstyzY+5JpKZZgA/PFA5795KGvcs+sYRge
- JxgKU7iSWUT/6jhFudjYVCpfchW+lkXRy1IB8nPSorvTHYaV66HEwfSKTXWmimCka3seotA
- cbEA4uuwlgcCPX4TreVNg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:JVeURayR2yY=:D+GV9gS8QeoCCJ7amgOGZG
- NzhT3uoCzOZ8IqYLmFia3VBMo07QstObrbCfioLQcrO3fChwsdjPtakGLAKmGpimzgdJNErrI
- 1166O42KrWmcccgdk5ItaA++v/QDA+/r/tSVITSDGNbOy8uxonb/0+bjWw27RfYHfO+3OYTVh
- Mt9nFAwkgMLfkij9mE0uRm28VPoygyNL//3gDL2PpztjFOAnsIiV5F17nTuG9D41Ph+Ghpbno
- MoMYEnuOqbBSJDjs796HOCtwv+d30OuEYoRiv6BDngehJCU5uQ9N28PQxSFIDgtmn0PSgy7J3
- Rq39M97mfnK+eQtM1CFBKFhEnPqD7rXIk5bVFWEHCl12h955ftWq7JzrdaH+o+2O8T73dD21r
- 5VOCFo7f4t7LoB49X4XroI8AL4C53aEsGFcxXx/V9iC25vI8+ezExaT3j61M3gVazisB03jnW
- he62S8nRLF/wPsVUx9YPml4caBBnuicfQqAw4CtLTT3Zg1hQ0V0RdAvoi4dFqgjFqBpddUSsb
- qAcoTNldnqn2gjtCHhmtfSoIx9UO4C4goWD/3CWMLXgA4qUXLD/X1FEwRIbYpp5BiPMf/Cic9
- TyVsDn5xUWYDuRo+2/lKcuW3yG6kKLmRkR4axk19zM1E/ZVAjOJK76evWQxQCDpkTd0MZ+aBp
- sqKm0Fh53D/8Zrah9hHvuZfHs6cwN5l+5AGDHq6GaSnT4CcYTDGL6ANjkYO7IioOWvFpgOg6h
- jQIxMDoSwPS30/axm8AMJfyaQGXy6LhJp7ZtnEUvRyE8bgBIgweTPLi+jwc0cLU8WcY++08dR
- JizGuHk43Mfuv83SFobSMFFqtibbh3IFiQo606CIZHk2N0bDPe/hMeyWcU0j/SMXFKCV4F7gc
- qUxdFgd9VeLPIxm+J+0ietA50D1YXJ3tsXHcdkvHxI/gCrzj1t68YOQYRQ2oWNXI0a1KeyA7F
- 4G+/6G6RUihJO+2jTTax0an0qcX2J+NMK8PCby6c1CsRmlTYVXySeZ3Aljmng2GN5vgerPBpR
- tNCqD95T6f63YVqcI0qOt7FWFlHRvJLmAvwPPrtlDILgn3ZyMhmfrTYHRCuGIxT3ev/QPsBQ9
- Fwm63psdTEARdM=
-Subject: Re: [Buildroot] htop - "No btime in /proc/stat: Success"
+Subject: [Buildroot] [PATCH 1/1] package/libcamera: disable compliance tool
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,75 +91,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Kieran Bingham <kieran.bingham@ideasonboard.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gU3RldmUsIEFybm91dCwKCk9uIFdlZCwgMjAgT2N0IDIwMjEgMTQ6NTU6NDcgKzAyMDAs
-IFN0ZXZlIDxzbGVlcHlfZG9nQGdteC5kZT4gd3JvdGU6Cgo+IMKgCj4gPsKgSSBkb24ndCB1bmRl
-cnN0YW5kIGhvdyBidGltZSBjYW4gYmUgMCB0aG91Z2guIElzIHRoZSB1cHRpbWUgKGluIC9wcm9j
-L3VwdGltZSkgYWxzbyAwPwoKTW9zdCBSYXNwYmVycnkgUGkncyBhcmUgZGVsaXZlcmVkIHdpdGhv
-dXQgUlRDIGFuZCAvcHJvYy9zdGF0IGJ0aW1lIGlzIHNldCB0bwonLi4udGhlIHRpbWUgcmVhZCBv
-ZmYgdGhlIFJUQy4gVGhpcyBpcyByZXByZXNlbnRlZCBpbiBVbml4IHRpbWUgKGFrYSBQT1NJWCB0
-aW1lCm9yIEVwb2NoIHRpbWUpLicgKHNlZSBbMV0pIGFuZCBzbyB3aWxsIGFsd2F5cyBiZSAnMCcg
-KHVudGlsIHlvdSBjaGFuZ2UgdGhlCmRhdGUgcGVyIGNtZGxpbmUgb3IgbnRwKS4uLgoKVGhlIGh0
-b3AgbWlzbGVhZGluZyBlcnJvciBtZXNzYWdlIGlzIGZpeGVkIHVwc3RyZWFtIGJ5IFsyXSBhbmQg
-dGhlIGN1cnJlbnQgdmVyc2lvbgp1c2VkIG9uIGJ1aWxkcm9vdCBnaXQgbWFzdGVyIChodG9wLTMu
-MS4xKSBhbHJlYWR5IGNvbnRhaW5zIHRoZSBmaXguLi4KClJlZ2FyZHMsClBldGVyCgpbMV0gaHR0
-cHM6Ly9zdXBwb3J0LmN1bXVsdXNuZXR3b3Jrcy5jb20vaGMvZW4tdXMvYXJ0aWNsZXMvMjA0MzY0
-ODg3LUVycm9yLU1lc3NhZ2UtU2Vlbi1taXNzaW5nLWJ0aW1lLWluLXByb2Mtc3RhdC0KWzJdIGh0
-dHBzOi8vZ2l0aHViLmNvbS9odG9wLWRldi9odG9wL2NvbW1pdC83NDMzYmY0YjE4Mjc4MDgwZmIy
-YWMyMmM1ODI4NDkwODgzMDY2NTcwCgo+IMKgCj4gTm8sIGl0J3Mgbm93ICIxMTAxNC41OCAyMjg5
-Mi4wOSIKPiDCoAo+IFZvbjrCoCJBcm5vdXQgVmFuZGVjYXBwZWxsZSIgPGFybm91dEBtaW5kLmJl
-Pgo+IAo+IE9uIDIwLzEwLzIwMjEgMTQ6MjksIFN0ZXZlIHdyb3RlOgo+ID4gPiBJcyAvcHJvYyBt
-b3VudGVkPwo+ID4gaWYgIm1vdW50IiBvdXRwdXR0aW5nIGEgbGluZSwgYW1vbmcgb3RoZXJzLCBz
-YXlpbmcgInByb2Mgb24gL3Byb2MgdHlwZSBwcm9jCj4gPiAocncscmVsYXRpbWUpIiBtZWFucyB0
-aGF0LCB0aGVuIHllcwo+ID4KPiA+ID4gV2hhdCBpcyB0aGUgY29udGVudHMgb2YgL3Byb2Mvc3Rh
-dD8KPiA+Cj4gPiAjIGNhdCAvcHJvYy9zdGF0Cj4gPiBjcHUgwqA3NSAwIDkxNyAzNjMxNDc0IDQ3
-IDAgNCAwIDAgMAo+ID4gY3B1MCAyNiAwIDMzNiA5MDc4NzIgMSAwIDIgMCAwIDAKPiA+IGNwdTEg
-MjMgMCA1MzYgOTA3MjQxIDE3IDAgMCAwIDAgMAo+ID4gY3B1MiAxOSAwIDIyIDkwODI0MiA3IDAg
-MCAwIDAgMAo+ID4gY3B1MyA3IDAgMjMgOTA4MTE3IDIxIDAgMiAwIDAgMAo+ID4gaW50ciAxMjM1
-NTYgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAxNjkgMjI3NSAwIDMgMCAw
-IDAgMCAwIDAgMCAwIDAKPiA+IDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDYw
-IDEgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDY0NCAwIDAgMCAwCj4gPiAwIDAgMCAwIDU1
-MyAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAw
-IDAgMCAwIDAgMCAwCj4gPiAwIDAgMCAyNTcgNDUwNDYgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAg
-MCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwCj4gPiAwIDAgMCAwIDAgMCAw
-IDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAg
-MCAwIDAgMCAwCj4gPiAwIDAgMCAwIDAgMCAwIDAgNzQ1NDggMCAwIDAKPiA+IGN0eHQgMTg0Nzgx
-Cj4gPiBidGltZSAwCj4gCj4gQWgsIHNvIGJ0aW1lIGlzIHRoZXJlLCBidXQgaXQncyB6ZXJvLCBh
-bmQgaHRvcCBhcHBhcmVudGx5IGRvZXNuJ3QgbGlrZSB0aGF0Lgo+IAo+IEkgZG9uJ3QgdW5kZXJz
-dGFuZCBob3cgYnRpbWUgY2FuIGJlIDAgdGhvdWdoLiBJcyB0aGUgdXB0aW1lIChpbiAvcHJvYy91
-cHRpbWUpCj4gYWxzbyAwPwo+IAo+IAo+IFJlZ2FyZHMsCj4gQXJub3V0Cj4gCj4gCj4gPiBwcm9j
-ZXNzZXMgMTg0Cj4gPiBwcm9jc19ydW5uaW5nIDEKPiA+IHByb2NzX2Jsb2NrZWQgMAo+ID4gc29m
-dGlycSAxNTY2NTcgMCA3MDYxOSAzMyA1MzUgNTUzIDAgMTAzNTEgNzIyMDYgMCAyMzYwCj4gPiAq
-Vm9uOirCoCJBcm5vdXQgVmFuZGVjYXBwZWxsZSIgPGFybm91dEBtaW5kLmJlPgo+ID4KPiA+IE9u
-IDIwLzEwLzIwMjEgMTM6MjIsIFN0ZXZlIHdyb3RlOgo+ID4gPiBIZWxsbywKPiA+ID4gYSBMaW51
-eCBpbWFnZSBidWlsdCB3aXRoIGEgcmVjZW50bHkgZG93bmxvYWRlZCBidWlsZHJvb3QsIHN0YXJ0
-aW5nIHdpdGggdGhlCj4gPiA+IGRlZmNvbmZpZyBmb3IgUmFzcGJlcnJ5UGkzIGFuZCBhZGRpbmcg
-c29tZSB0aGluZ3MgKGh0b3AgaWYgaXQgd2Fzbid0IGFscmVhZHksCj4gPiA+IG5hbm8sIG9wZW5z
-c2gsIG9wZW52cG47IGFsc28gdGhlIGxpbnV4LW1lbnVjb25maWcgd2FzIGFsdGVyZWQsIGNvbmNl
-cm5pbmcgVVNCCj4gPiA+IGRyaXZlciBzdHVmZikuCj4gPiA+Cj4gPiA+IFdoZW4sIGluIG1lbnVj
-b25maWcsIEkgc2VhcmNoIHdpdGggLyBmb3IgaHRvcCwgaXQgc2hvd3MgdGhhdCBodG9wIGFuZCBh
-bGwKPiA+ID4gZGVwZW5kZW5jaWVzIGFyZSBtZXQgKGFsbCBwb3NpdGl2ZSBkZXBlbmRlbmNpZXMg
-YXJlIFs9eV0gYW5kIHRoZSBvbmUgbmVnYXRpdmUKPiA+ID4gKHN0YXRpYyBsaWJzKSBpcyBbPW5d
-Lgo+ID4gPiBCdXQgd2hlbiBJIGNhbGwgaHRvcCBvbiB0aGUgcnVubmluZyBzeXN0ZW0sIEkgb25s
-eSBnZXQgdGhlIGxpbmUgZ2l2ZW4gaW4gdGhlCj4gPiB0b3BpYy4KPiA+ID4gV2hhdCBjb3VsZCBi
-ZSB0aGUgcHJvYmxlbT8KPiA+Cj4gPiBUaGlzIGlzIHNxdWFyZWx5IGluIHRoZSAidGhpcyBzaG91
-bGRuJ3QgaGFwcGVuIiBkb21haW4uLi4KPiA+Cj4gPiBJcyAvcHJvYyBtb3VudGVkPwo+ID4KPiA+
-IFdoYXQgaXMgdGhlIGNvbnRlbnRzIG9mIC9wcm9jL3N0YXQ/Cj4gPgo+ID4KPiA+IFJlZ2FyZHMs
-Cj4gPiBBcm5vdXQKPiA+Cj4gPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fXwo+ID4gYnVpbGRyb290IG1haWxpbmcgbGlzdAo+ID4gYnVpbGRyb290QGJ1aWxk
-cm9vdC5vcmcKPiA+IGh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZv
-L2J1aWxkcm9vdAo+ID4gPGh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3Rp
-bmZvL2J1aWxkcm9vdD4KPiA+Cj4gPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fXwo+ID4gYnVpbGRyb290IG1haWxpbmcgbGlzdAo+ID4gYnVpbGRyb290QGJ1
-aWxkcm9vdC5vcmcKPiA+IGh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3Rp
-bmZvL2J1aWxkcm9vdAo+ID4KPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fXwo+IGJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKPiBidWlsZHJvb3RAYnVpbGRyb290
-Lm9yZwo+IGh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxk
-cm9vdAo+IAoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18K
-YnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xp
-c3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+Disable compliance tool to fix the following build failure
+raised since commit e1d37ab0a7b2b8735e69c070519978d2898d2e79 and
+https://git.linuxtv.org/libcamera.git/commit/?id=02bc1108578e8b8eb68fa7d9ae3eeea558723931:
+
+/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-1/output-1/host/lib/gcc/arm-buildroot-linux-uclibcgnueabi/10.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: cannot find -lgtest
+
+Fixes:
+ - http://autobuild.buildroot.org/results/e1bb8aa1de310f3d27b74ec7d8748d170ad444e2
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libcamera/libcamera.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/libcamera/libcamera.mk b/package/libcamera/libcamera.mk
+index 8ab95fb42a..638c9ac553 100644
+--- a/package/libcamera/libcamera.mk
++++ b/package/libcamera/libcamera.mk
+@@ -17,6 +17,7 @@ LIBCAMERA_DEPENDENCIES = \
+ LIBCAMERA_CONF_OPTS = \
+ 	-Dandroid=disabled \
+ 	-Ddocumentation=disabled \
++	-Dlc-compliance=disabled \
+ 	-Dtest=false \
+ 	-Dwerror=false
+ LIBCAMERA_INSTALL_STAGING = YES
+-- 
+2.33.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
