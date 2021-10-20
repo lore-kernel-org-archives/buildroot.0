@@ -2,84 +2,83 @@ Return-Path: <SRS0=oNq7=PI=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4887CC433F5
-	for <buildroot@archiver.kernel.org>; Wed, 20 Oct 2021 19:05:58 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2DFAAC433F5
+	for <buildroot@archiver.kernel.org>; Wed, 20 Oct 2021 19:23:29 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B9694611B0
-	for <buildroot@archiver.kernel.org>; Wed, 20 Oct 2021 19:05:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B9694611B0
+	by mail.kernel.org (Postfix) with ESMTPS id 935F2611CB
+	for <buildroot@archiver.kernel.org>; Wed, 20 Oct 2021 19:23:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 935F2611CB
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5ECC860B18;
-	Wed, 20 Oct 2021 19:05:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4A47C405E4;
+	Wed, 20 Oct 2021 19:23:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UoknmXrb8vmX; Wed, 20 Oct 2021 19:05:56 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ocXSOzWBhy1n; Wed, 20 Oct 2021 19:23:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D0DD86084F;
-	Wed, 20 Oct 2021 19:05:55 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id DA9321BF3F3
- for <buildroot@lists.busybox.net>; Wed, 20 Oct 2021 19:05:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AA14E404AC;
+	Wed, 20 Oct 2021 19:23:26 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 77C281BF3F3
+ for <buildroot@lists.busybox.net>; Wed, 20 Oct 2021 19:23:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CA1048354B
- for <buildroot@lists.busybox.net>; Wed, 20 Oct 2021 19:05:54 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 58A95404AC
+ for <buildroot@lists.busybox.net>; Wed, 20 Oct 2021 19:23:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hfmL2bN_rxXG for <buildroot@lists.busybox.net>;
- Wed, 20 Oct 2021 19:05:54 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OcF9V4YvQWXP for <buildroot@lists.busybox.net>;
+ Wed, 20 Oct 2021 19:23:24 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
- [IPv6:2a00:1450:4864:20::42c])
- by smtp1.osuosl.org (Postfix) with ESMTPS id CE280834FE
- for <buildroot@buildroot.org>; Wed, 20 Oct 2021 19:05:53 +0000 (UTC)
-Received: by mail-wr1-x42c.google.com with SMTP id m22so420694wrb.0
- for <buildroot@buildroot.org>; Wed, 20 Oct 2021 12:05:53 -0700 (PDT)
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
+ [IPv6:2a00:1450:4864:20::32c])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 617D2404AA
+ for <buildroot@buildroot.org>; Wed, 20 Oct 2021 19:23:24 +0000 (UTC)
+Received: by mail-wm1-x32c.google.com with SMTP id
+ o24-20020a05600c511800b0030d9da600aeso12022952wms.4
+ for <buildroot@buildroot.org>; Wed, 20 Oct 2021 12:23:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=LwGkh4/lGpf926p1E2oKGh9Dt5N8sUN1e+DDDyibyG0=;
- b=Tw44uy5IqHCoIRiXOcLp397xQNNq8U/yE7Mb4BDDYs1+NFmhxn/CUi9B+yzqb/i+1M
- P2sZ5VZBeWcv7T9tdQUTa+8BKfUo9bKJDUfGJoDIbNOUQd+bDs0z/ts4Ydxki1VavQjw
- tGkBcvkddV7ymTUUI2wUiBY7McqGC1+cGLfdYZzpqu8PS49wo80OzvcXSn/LyKoVXipW
- RRPkfVaC1vUGAyKEMAdgaD/QF1kiAdBdBiiWfI4GGCQ+QDhjYaQNygAEl0IGDwjKDVoo
- PzWrs2mR602rBEx4AUxOeRO4XIaHl0wc3PG72mCUKSXqXzJGqlYZtZP2i+rn4Svp03j2
- UxAA==
+ bh=KDLSQ9kzxNeJ+k6Ll0IaWXoBwiTBEbk/wLpCmQbILec=;
+ b=WEgEAjvfnjInJhnEvAwsLALNzNazQyfTVuAexXZaPjXVINX4H9+0QmY7rYv2kt/Q9/
+ idBQv2EMPu030HnC3A6lcZsvqxM4zlx4dSuUMpU2reL6Nf2CrvPzkvE5rXEetYfqfFqA
+ wGtYEJGZMXzo2hb9YsAhKDYOc48wvmYZzA/Z3RPsRtTAgSX1gPIWanaEQBN6DfMcc+6B
+ aeIHU7rHLjYjl2PfIqZo8B0c67vaU4MyOlzoicG+DeguC0wcTcbtNlQGMLhAeVl2fjkr
+ MpjdcDDKaaIUpNRR4q0mujMqgIPOyF2x/03foZAb6wIszLyuX8m9+uAjOJdtYhVUlRG2
+ sbhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=LwGkh4/lGpf926p1E2oKGh9Dt5N8sUN1e+DDDyibyG0=;
- b=SnMvLyTbqznpTE7ToRHHO4xkTmfAnDc4jsipeVLty79qyvZuwARr3Duwd8NxlmvTfw
- VWg7BXk4d9uOHQSoQTirCGgWDUWHbPpMWwu1PlgjYHpwnlIYHjgTF6+GE7Yhkrn39xdU
- S2VZQPyYcDJ3hCWTr2MP9m7II8M1oviOvcAbNt3dsHqWo2ogTojHKnk8UGn63ftRsr+S
- Ew9t6WOKsqMME20MjX+04fDrVxbtGXPPHihO/t/pMvhPSZ1XkWjxwzyRQnorXERQiga0
- UvYjjF6WdRoUyPvKGuhkKt0crTyoQrRObfrcyeCl8FIpEGQjeusfz5GHF/+wvfwJSX9Z
- I/Cw==
-X-Gm-Message-State: AOAM531k0KbxHmNF+i4Ks/1cE+QToS3ryLisSxbXqyseT1SxocRzMQ7X
- i+lpmJ7rcZ3u8gtc0xo4kkaoZeH98fc=
-X-Google-Smtp-Source: ABdhPJx2Vwu7pbgAqeZZgpL/F/UrgWvpLkDdAZcAFwfMBA0ZYnafMBHU2nIK6EQ88hgx5lnh4iDSWg==
-X-Received: by 2002:adf:bb08:: with SMTP id r8mr1275810wrg.247.1634756751564; 
- Wed, 20 Oct 2021 12:05:51 -0700 (PDT)
+ bh=KDLSQ9kzxNeJ+k6Ll0IaWXoBwiTBEbk/wLpCmQbILec=;
+ b=dvIZb3icipGzMJGJmmoNy/gvFSeZvbKkeDAsJecxB06K5yX94aCFjTEHV1x/634hi0
+ /0sN5HIveXtL9G5zpzjlC2kUFbrkyKmZ2j1C9oxG+BA45YhASIX6P0NCKx7Hj6NwnGCe
+ 7PUmGIo5bcO0qzKXqspKG5qMHOf78l+p9WUjcDNPkGg25agxayGCasgaRgAK3EnC4iVy
+ IE7UFuQ2WRQW3cjLbK77FVM7hcjS7whXGUmqNuIhfiOqNy9b2xB7HQD+gKt4XMqeu/gl
+ 9VrhfsBl0cf864Ib3fNZXdHUXhssI+IxeH/PDdrIg3VcRMAf4qUDD38UOxYZTfydUr/b
+ WXnQ==
+X-Gm-Message-State: AOAM530bODdDffMXFJ4TfZHEDbroNPH9Ttf7kVuDj2jvU/rreLE4ujrK
+ c3ypA7+CLHP7woa3aQdtIGrJVOyAhPs=
+X-Google-Smtp-Source: ABdhPJxsUspLDOtE4BLhYnIDABNanriClvEi/g/PZMTK/soTHCtpveDdK7fWDkVG7M6UY7/iZQXEBg==
+X-Received: by 2002:a1c:f615:: with SMTP id w21mr1304195wmc.16.1634757802200; 
+ Wed, 20 Oct 2021 12:23:22 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-1732-95.w86-253.abo.wanadoo.fr.
  [86.253.44.95])
- by smtp.gmail.com with ESMTPSA id l2sm6441705wmi.1.2021.10.20.12.05.51
+ by smtp.gmail.com with ESMTPSA id n68sm5741351wmn.13.2021.10.20.12.23.21
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 20 Oct 2021 12:05:51 -0700 (PDT)
+ Wed, 20 Oct 2021 12:23:21 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 20 Oct 2021 21:04:23 +0200
-Message-Id: <20211020190423.3547893-1-fontaine.fabrice@gmail.com>
+Date: Wed, 20 Oct 2021 21:21:47 +0200
+Message-Id: <20211020192147.3626317-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/libcamera: disable compliance tool
+Subject: [Buildroot] [PATCH 1/1] package/sudo: bump to version 1.9.8p2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,39 +90,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Kieran Bingham <kieran.bingham@ideasonboard.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Disable compliance tool to fix the following build failure
-raised since commit e1d37ab0a7b2b8735e69c070519978d2898d2e79 and
-https://git.linuxtv.org/libcamera.git/commit/?id=02bc1108578e8b8eb68fa7d9ae3eeea558723931:
+Update hash of license file due to removal of trailing whitespaces:
+https://github.com/sudo-project/sudo/commit/bf7d20b482edea8c4f2f945a27f51c7eaf6aa203
 
-/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-1/output-1/host/lib/gcc/arm-buildroot-linux-uclibcgnueabi/10.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: cannot find -lgtest
-
-Fixes:
- - http://autobuild.buildroot.org/results/e1bb8aa1de310f3d27b74ec7d8748d170ad444e2
+https://www.sudo.ws/stable.html#1.9.8p2
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libcamera/libcamera.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/sudo/sudo.hash | 4 ++--
+ package/sudo/sudo.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libcamera/libcamera.mk b/package/libcamera/libcamera.mk
-index 8ab95fb42a..638c9ac553 100644
---- a/package/libcamera/libcamera.mk
-+++ b/package/libcamera/libcamera.mk
-@@ -17,6 +17,7 @@ LIBCAMERA_DEPENDENCIES = \
- LIBCAMERA_CONF_OPTS = \
- 	-Dandroid=disabled \
- 	-Ddocumentation=disabled \
-+	-Dlc-compliance=disabled \
- 	-Dtest=false \
- 	-Dwerror=false
- LIBCAMERA_INSTALL_STAGING = YES
+diff --git a/package/sudo/sudo.hash b/package/sudo/sudo.hash
+index ee30b32265..1b494af69c 100644
+--- a/package/sudo/sudo.hash
++++ b/package/sudo/sudo.hash
+@@ -1,4 +1,4 @@
+ # From: http://www.sudo.ws/download.html
+-sha256  539e2ef43c8a55026697fb0474ab6a925a11206b5aa58710cb42a0e1c81f0978  sudo-1.9.5p2.tar.gz
++sha256  9e3b8b8da7def43b6e60c257abe80467205670fd0f7c081de1423c414b680f2d  sudo-1.9.8p2.tar.gz
+ # Locally calculated
+-sha256  505c5955c373514e2533a24a8346f44038e29cba874f5ca83beb171a7409089f  doc/LICENSE
++sha256  b678438594f04a7070a5fd125f7edffc871e13234baad318690b647bfc60705d  doc/LICENSE
+diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
+index df09161957..f2c074e55f 100644
+--- a/package/sudo/sudo.mk
++++ b/package/sudo/sudo.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SUDO_VERSION_MAJOR = 1.9.5
++SUDO_VERSION_MAJOR = 1.9.8
+ SUDO_VERSION_MINOR = p2
+ SUDO_VERSION = $(SUDO_VERSION_MAJOR)$(SUDO_VERSION_MINOR)
+ SUDO_SITE = https://www.sudo.ws/sudo/dist
 -- 
 2.33.0
 
