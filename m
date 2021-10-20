@@ -2,85 +2,86 @@ Return-Path: <SRS0=oNq7=PI=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8BDEFC433F5
-	for <buildroot@archiver.kernel.org>; Wed, 20 Oct 2021 16:31:15 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B681C433EF
+	for <buildroot@archiver.kernel.org>; Wed, 20 Oct 2021 16:34:19 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id CD0F161260
-	for <buildroot@archiver.kernel.org>; Wed, 20 Oct 2021 16:31:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org CD0F161260
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmx.net
+	by mail.kernel.org (Postfix) with ESMTPS id ADA7461374
+	for <buildroot@archiver.kernel.org>; Wed, 20 Oct 2021 16:34:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org ADA7461374
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6EBDA83AA5;
-	Wed, 20 Oct 2021 16:31:14 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6CA0E40583;
+	Wed, 20 Oct 2021 16:34:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JFZFmcjaZGFt; Wed, 20 Oct 2021 16:31:13 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CC77583AAD;
-	Wed, 20 Oct 2021 16:31:12 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 25B631BF372
- for <buildroot@lists.busybox.net>; Wed, 20 Oct 2021 16:31:11 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 139AE40577
- for <buildroot@lists.busybox.net>; Wed, 20 Oct 2021 16:31:11 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=gmx.net
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cIkSMP7G4WmL for <buildroot@lists.busybox.net>;
- Wed, 20 Oct 2021 16:31:10 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
- by smtp2.osuosl.org (Postfix) with ESMTPS id CA7544011B
- for <buildroot@buildroot.org>; Wed, 20 Oct 2021 16:31:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
- s=badeba3b8450; t=1634747460;
- bh=C8POfC97OOw0cWCA+z/C5VpwYOEHl5MBFTe40rUMQVI=;
- h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
- b=TXCYxbtq8aaOtApdm33JmeP+pX6sq/Wh1YyRVG6o+lefUA1GrzUFvtghiHbl6usGz
- I7V2Bj+IKeJd56RUe+FdomHF3+NcOp2WmWdSVA4MEvHAkKwUvrtL6+u163W9hzolIB
- G4ImMIVgqSv7hZMOfyhENkGCLZQPUOOoArVjb3Bw=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from localhost ([62.216.209.182]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MjjCF-1n6q9n0qr5-00lE82; Wed, 20
- Oct 2021 18:31:00 +0200
-Date: Wed, 20 Oct 2021 18:30:58 +0200
-From: Peter Seiderer <ps.report@gmx.net>
-To: Grzegorz Blach <grzegorz@blach.pl>
-Message-ID: <20211020183058.13830eea@gmx.net>
-In-Reply-To: <20211020120327.5768-1-grzegorz@blach.pl>
-References: <20211020120327.5768-1-grzegorz@blach.pl>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-suse-linux-gnu)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 0OIVNB6GlEZb; Wed, 20 Oct 2021 16:34:17 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9D5584057C;
+	Wed, 20 Oct 2021 16:34:16 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0BF791BF372
+ for <buildroot@lists.busybox.net>; Wed, 20 Oct 2021 16:34:15 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id EA0F280ED2
+ for <buildroot@lists.busybox.net>; Wed, 20 Oct 2021 16:34:14 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id uYbQWwtmDK7K for <buildroot@lists.busybox.net>;
+ Wed, 20 Oct 2021 16:34:14 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
+ [IPv6:2a00:1450:4864:20::335])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 06494801E8
+ for <buildroot@buildroot.org>; Wed, 20 Oct 2021 16:34:13 +0000 (UTC)
+Received: by mail-wm1-x335.google.com with SMTP id
+ u8-20020a05600c440800b0030d90076dabso5575861wmn.1
+ for <buildroot@buildroot.org>; Wed, 20 Oct 2021 09:34:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=OtUhyQUFeVXf7I2MNQ6Aa/uDX6N3U6DQSSe305ZA/YQ=;
+ b=qYSQXp1lVsmj2NPD3ax5OX6etm0889/lZZ3WQOwe/7zqlNAsgw5RjIs05/72vKnrPf
+ iKD6phBIFNQWyZ32wYYeAIsksKoj6nWL0QogCTWGAUctVqhg502WWPRiA0ocGC1wqZ39
+ wLZ4YHv60OfP5AIH6v54zip0QEaS6ewfXUxm8RHa9o0miaw6eyh3gvHegT2Ok2vfFvPJ
+ jTbC5aWHsrLQYpG59317LOylGTYoxzf9HcVokeLhoZKzvjDY50iGEznvozmNh89a8krn
+ wNdZsGRFpQHxBQAiaToVgUWUqzhCDGXhztj7lZcn15zkAVAaKBpK3uccij31zJz4yg0g
+ +bNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=OtUhyQUFeVXf7I2MNQ6Aa/uDX6N3U6DQSSe305ZA/YQ=;
+ b=CREMVKNONTUiq3e0UGqlkWBnUaK7HsnpgbrxE+0lb4SIdMuQJulzfyqi1JHxDhh+/m
+ 5C7y4Qzxij2GiL1EHHgSaEwAkxU2bXDMPkPq0IfqhcP2NH3CF0tAgDyTfVVRLpZAyuc4
+ sxbYePys5m6bBbiKRxZvBx0ABm80vAywvjLcPHhopxd7iZ5MK9D2waotUcDV3fqW/Gw3
+ CIyBE+Au3VzBayDTgFpez2LS2uLW7ILqMSEd8qO6SUlM+auGzx1wJEN+JYlUiRvCl8lJ
+ QKxBt4nHOiewQXYtdHPQWpG886xtMznTetyuLD4ozb5vwV/wp1wSRYvHMUJhSgt2ks/a
+ RQZw==
+X-Gm-Message-State: AOAM532l1KKWhcRpdL7UEzsn6Bl/810wSbyAVC1RP472iGyQEu/fR0Ph
+ 5DYimQE/4/1sOfVE8zcnFSZnOyUDTKc=
+X-Google-Smtp-Source: ABdhPJw78S66+0jMB0bpuIFkPr9SI0Lq+5rTINO8bnMoSWzD0jA1I6QeWfcnOvdjgrDei/9JgiA0OQ==
+X-Received: by 2002:adf:aad4:: with SMTP id i20mr326200wrc.402.1634747651882; 
+ Wed, 20 Oct 2021 09:34:11 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-1732-95.w86-253.abo.wanadoo.fr.
+ [86.253.44.95])
+ by smtp.gmail.com with ESMTPSA id t14sm2395385wrr.75.2021.10.20.09.34.10
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 20 Oct 2021 09:34:11 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Wed, 20 Oct 2021 18:32:37 +0200
+Message-Id: <20211020163237.2695154-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:f+pXBJ+jSG1D2riiQyOTxGzBREkdw781LnW+ccWK7o21Htk8i2P
- jhYOIq5uPcT35vnrDrJqP0J9+WIIUB68YFWutPEkb/nGBhXcLeLEnhafgjsiHZH4C65yYkC
- f/HMI01LNRtkawrPhCGtnUlG3b+WwoR4saw9ai7vLN40tAQZamwAJ7uXvtEsK5MsigRXHa6
- 900McYsKOaSDAfAklFxjg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:x0Q3vblORsk=:f+AqjETUFMPzkmxtLlKaYl
- 1JimIgz7sC3XfzeEy0LiISSSlYlsZ3anR3lda29CxoQWYwYHO+iXoY0RZuFs51dQPFFJ0Lq6k
- +h6NvFZf6QIW3TJuU7lbTxI4idJ4hBv4uLNSSVYuXB89EYNNhIz63u4qV8rVlFxT5aRV+auh6
- w9dABmj07odqSReXqW84MHVgc/KMDIWTOQYclfwmiaYd6IA1z9bpuODUO4zjiw4b0A7rtJ83I
- /MIm4pusdYHSDCkWW54Odlkd7cBY5RbXDMMbBocblwYKckRHc5ctY+OpQAxMoEqDU1fW0ulxa
- UhuX85tdAMcN2+HT49D1NF5rS6Ch5OPGm+FgZxaSSCxz41F0KhLHQrUiap0xDhZsTDEL451R1
- 5xTwRnZtobFGQQ8MQTe/sS+Z23cM7jd3HP58hy+yGLlAz+Paayuj06j0OOTo39T27UECo7udi
- Vw1F+WARACE8knb29VUHnO4+GHEma9++p6zj3QZppP6uqgAajKulC2V54EKGjphSGSLQCeYoQ
- oo6fhGEn123iyEOmAOSBnMmt22IzeVYq7PrxYACtShTdrOvd2OAK0/CtZdTh9EtQCYLmPDEZ/
- +1SibXWOmgurP1MUhlJkkHIwyA58IPJ7oSyAzUt6Q6uZkxx1KKJcOQQgRY7ckm6yljVnjHDvl
- J2Hx9brhXrisCrDNG8baR5RSBBVc9Sw6D14Qmbnq7ih12oDfP//wxio7P3HSIRCHdZlWyVlnY
- mMd7HImdXmfrvtLmRRV4CnEnDJJyijp3xi7/YRIR/UA67IWCIdYX9se9yVwJ6z6OakS/BAB7Q
- tZcnzuD7/6omr4mIK0jzBURK25hrqBacaFUSYyEskAAbpkFlrY77U3Q9p1qF8KtHGHRZBdCcR
- hZR7AQ5Tn3zRM2HW4W483NsQ4hY3dwsctf2y2cY0AH3/taEO78vNYh1fq30q8actnV5ZAUz0T
- lJaa1a9LwMCuT3+3Wvks1DyO6DEh2ilAprpH3GlKJgZvsRkZfTi+5K2XfGJ/Vnus7rGMxs7Et
- 8dvssrQ8YifneeIhMErCDzwRHWGj8f22KdKE4i+YvizABrWzq06Pm2zqB8/+y5+OmDqAgEw5/
- hAIluyFJkfxpsM=
-Subject: Re: [Buildroot] [PATCH] package/rpi-firmware: Fix config.txt
- installation
+Subject: [Buildroot] [PATCH 1/1] package/python-sentry-sdk: drop httpx.py
+ for python 2.x to fix pycompile issue
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,49 +93,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Martin Bark <martin@barkynet.com>,
- Mahyar Koshkouei <mahyar.koshkouei@gmail.com>, buildroot@buildroot.org
+Cc: Joseph Kogut <joseph.kogut@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Grzegorz,
+Drop httpx.py to fix the following build failure with python 2.x raised
+since bump to version 1.4.3 in commit
+fd684ab9f38ad908013d09fe7e46cebfada4406c and
+https://github.com/getsentry/sentry-python/commit/e2d0893824481c9a5dd3141872d90d0888c4c5f8:
 
-On Wed, 20 Oct 2021 14:03:24 +0200, Grzegorz Blach <grzegorz@blach.pl> wrote:
+error:   File "/usr/lib/python2.7/site-packages/sentry_sdk/integrations/httpx.py", line 69
+    async def send(self, request, **kwargs):
+            ^
 
-> Variable PACKAGE_RPI_FIRMWARE_CONFIG_FILE is always undefined,
-> so RPI_FIRMWARE_CONFIG_FILE should be used instead.
->
-> Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
-> ---
->  package/rpi-firmware/rpi-firmware.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
-> index 8a6a435f63..0929d6af1e 100644
-> --- a/package/rpi-firmware/rpi-firmware.mk
-> +++ b/package/rpi-firmware/rpi-firmware.mk
-> @@ -28,9 +28,9 @@ define RPI_FIRMWARE_INSTALL_BIN
->  endef
->
->  RPI_FIRMWARE_CONFIG_FILE = $(call qstrip,$(BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE))
-> -ifneq ($(PACKAGE_RPI_FIRMWARE_CONFIG_FILE),)
-> +ifneq ($(RPI_FIRMWARE_CONFIG_FILE),)
->  define RPI_FIRMWARE_INSTALL_CONFIG
-> -	$(INSTALL) -D -m 0644 $(PACKAGE_RPI_FIRMWARE_CONFIG_FILE) \
-> +	$(INSTALL) -D -m 0644 $(RPI_FIRMWARE_CONFIG_FILE) \
->  		$(BINARIES_DIR)/rpi-firmware/config.txt
->  endef
->  endif
+Fixes:
+ - http://autobuild.buildroot.org/results/fd651abb3bc2fa33c861238acf1c4ad49fdac160
 
-Thanks for spotting (and fixing) this...
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/python-sentry-sdk/python-sentry-sdk.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
-
-Regards,
-Peter
+diff --git a/package/python-sentry-sdk/python-sentry-sdk.mk b/package/python-sentry-sdk/python-sentry-sdk.mk
+index 5ccd2aff5c..556f03e137 100644
+--- a/package/python-sentry-sdk/python-sentry-sdk.mk
++++ b/package/python-sentry-sdk/python-sentry-sdk.mk
+@@ -15,7 +15,7 @@ ifeq ($(BR2_PACKAGE_PYTHON),y)
+ # only needed/valid for python 3.x
+ define PYTHON_SENTRY_SDK_RM_PY3_FILES
+ 	rm -f $(addprefix $(TARGET_DIR)/usr/lib/python*/site-packages/sentry_sdk/integrations/,\
+-		aiohttp.py asgi.py django/asgi.py sanic.py tornado.py)
++		aiohttp.py asgi.py django/asgi.py httpx.py sanic.py tornado.py)
+ endef
+ 
+ PYTHON_SENTRY_SDK_POST_INSTALL_TARGET_HOOKS += PYTHON_SENTRY_SDK_RM_PY3_FILES
+-- 
+2.33.0
 
 _______________________________________________
 buildroot mailing list
