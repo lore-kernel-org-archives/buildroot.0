@@ -2,83 +2,88 @@ Return-Path: <SRS0=oNq7=PI=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 04AD3C433F5
-	for <buildroot@archiver.kernel.org>; Wed, 20 Oct 2021 17:30:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 93687C433F5
+	for <buildroot@archiver.kernel.org>; Wed, 20 Oct 2021 17:31:35 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 6DF4D60FE8
-	for <buildroot@archiver.kernel.org>; Wed, 20 Oct 2021 17:30:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6DF4D60FE8
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id 01EE260FE8
+	for <buildroot@archiver.kernel.org>; Wed, 20 Oct 2021 17:31:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 01EE260FE8
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmx.de
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3A0754076F;
-	Wed, 20 Oct 2021 17:30:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 99CB44077D;
+	Wed, 20 Oct 2021 17:31:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5too3UkJjtSn; Wed, 20 Oct 2021 17:30:55 +0000 (UTC)
+	with ESMTP id kVUPGDgqqyWz; Wed, 20 Oct 2021 17:31:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7C13440757;
-	Wed, 20 Oct 2021 17:30:54 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1CA701BF94D
- for <buildroot@lists.busybox.net>; Wed, 20 Oct 2021 17:30:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 27E1440757;
+	Wed, 20 Oct 2021 17:31:33 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id C0FBD1BF94D
+ for <buildroot@lists.busybox.net>; Wed, 20 Oct 2021 17:31:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0CA9E40757
- for <buildroot@lists.busybox.net>; Wed, 20 Oct 2021 17:30:53 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B069C608E2
+ for <buildroot@lists.busybox.net>; Wed, 20 Oct 2021 17:31:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4IX7EZI46EBK for <buildroot@lists.busybox.net>;
- Wed, 20 Oct 2021 17:30:52 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
- [IPv6:2a00:1450:4864:20::431])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E904740628
- for <buildroot@buildroot.org>; Wed, 20 Oct 2021 17:30:51 +0000 (UTC)
-Received: by mail-wr1-x431.google.com with SMTP id u18so8126wrg.5
- for <buildroot@buildroot.org>; Wed, 20 Oct 2021 10:30:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=9ErPYAuPevsCd1c/pz1P831W/ChU/Q10Fd1DtLcU5Nk=;
- b=aOBaTFy6Kh15KLt3X8KDIv8G31tfnOEbxQZq2QzTWU6DykX7X+iDXhPQ9sTjDsLxzZ
- Rg4CEHEAFFbeMZ57wJNmSEPEbqWmjwXoYhJ13mZj0B+4S656JPTdBQPuhj/VqRPi7Ci1
- Tdf1A5EAyZ0RiW/QVy0XrbD4BL13KFCviYMKDOA38zxUD6BqjM/1NAHKl5+jPsaxo0Ul
- SLpu24Rue0dMchpc4A5YP+CP6ysfGmDmO4zJASU96xnWeXfk1nzOwF8ZKQykiLTY/x5c
- 0JUVq2lbXk497GVveUIZmN2CwXTMdTTYffGJf/wjk0meiZ8S4rUbakcnpGIZSeq36ZXD
- blJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=9ErPYAuPevsCd1c/pz1P831W/ChU/Q10Fd1DtLcU5Nk=;
- b=KoOXmSq43aVNHs8FWZtcLnc6k0VFdv9O2IntY0WsHzCMYE0ouMxeVkSq2nZNDIUSuv
- z37FOI7BR5KblqDywG/9b7f9tIrPZb/qK6siFimqu5jMWTfLgNUVs0Kgr3Rv9llYqkOq
- EVaJcy3OlQ8R/zvmvgPs6ByGeajVUPdfy0P0d7culaM/XD9eV+ySH7860QIQGjU8rg1J
- B3ufyEYbJnxW97u1/7vHmMNwtO1VE6meNu/mGm3f94PkxILDnf2OeRAy4V9itrpIA1R0
- kFn1HLtx9zuCGfOduTm98Sbqys3zWE7Z6GiXa9u6nnYG2pilBFHmzKFdKaruNknocQGY
- 2/uw==
-X-Gm-Message-State: AOAM5313Sv1UY+cpa7d5mNoiE6NGv9+60rWD6vsUiUIeA9n7ZFTbBPv5
- YbloDyzuV2lnvBCWqtE3ciCbBKwx1Y8=
-X-Google-Smtp-Source: ABdhPJyqTwi4z5WsD2SL3p/euY5QCbWDxh1OFk/Kmd9GhWOpSg2gJuTaVKg2KgB9IZCXd/io+EuNkA==
-X-Received: by 2002:adf:9147:: with SMTP id j65mr678484wrj.163.1634751049878; 
- Wed, 20 Oct 2021 10:30:49 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-1732-95.w86-253.abo.wanadoo.fr.
- [86.253.44.95])
- by smtp.gmail.com with ESMTPSA id i8sm2510084wrv.47.2021.10.20.10.30.48
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 20 Oct 2021 10:30:48 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Wed, 20 Oct 2021 19:29:17 +0200
-Message-Id: <20211020172917.3136578-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.33.0
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (1024-bit key) header.d=gmx.net
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Gk0_N99BC2Z9 for <buildroot@lists.busybox.net>;
+ Wed, 20 Oct 2021 17:31:29 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 577FB6084F
+ for <buildroot@buildroot.org>; Wed, 20 Oct 2021 17:31:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+ s=badeba3b8450; t=1634751087;
+ bh=xHKMwnScHOmGhJuEnNbXkRjr7vqFfyY33FX/6VWjTGI=;
+ h=X-UI-Sender-Class:From:To:Subject:Date:In-Reply-To:References;
+ b=jt3zSZxL6bXb0dnB2OzXHcOUAsUWribIx3YFduICdNQ1AYEvNAQIzK/a34yIaFiua
+ mN9RlY7ljNrAmqV+/oCiPFZZcnJlAnrcXA2DTZ1v9QcAg407ND1LmNRyrXR6zTdPWP
+ KqiZjNh8ctEGjpsB0nadCynKOmAZws2C/rMT5q24=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [217.231.235.79] ([217.231.235.79]) by web-mail.gmx.net
+ (3c-app-gmx-bs04.server.lan [172.19.170.53]) (via HTTP); Wed, 20 Oct 2021
+ 19:31:27 +0200
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/pipewire: fix media-session without
- alsa
+Message-ID: <trinity-32102c61-d17b-4389-b079-2deaf932e799-1634751087143@3c-app-gmx-bs04>
+From: Steve <sleepy_dog@gmx.de>
+To: buildroot@buildroot.org
+Date: Wed, 20 Oct 2021 19:31:27 +0200
+Importance: normal
+Sensitivity: Normal
+In-Reply-To: <20211020185435.48c2eddb@gmx.net>
+References: <trinity-007290bc-de5f-4ff6-86dc-7caa998c06c5-1634729803292@3c-app-gmx-bap28>
+ <e9c4ad82-8cdd-9c17-6d77-8ebf2449fb37@mind.be>
+ <trinity-09b27e65-87f1-4757-866e-d1edf67f30e9-1634737088797@3c-app-gmx-bap28>
+ <20211020185304.60af9ff8@gmx.net> <20211020185435.48c2eddb@gmx.net>
+X-UI-Message-Type: mail
+X-Priority: 3
+X-Provags-ID: V03:K1:RmODBr97vXn/YKTS6DhFZ6XjJTzowPGPkYa9L/pl8CfWk7ww5wZuZuFprqxD6z4jNJzy5
+ /d+JR+/jJpD62NKQUfl+RUG0y41kg4od2DCuPrnoDiQn0J1pELcSF8LQ+p/C3OKlwE0eNcC0r6h2
+ VF/GhmJZphiUPvr8B8pv5ucNxIB+1ZTRZvSV5GT1lSyBE2PkSDZeHSucU+I88w3jb6f0UFKuXMHv
+ BNESGPhg6iIU5qCa7VVJ/qCyu0ZWFVgn7+BmiLFEutU02MOQJlhMpCuReuE6zt8KwR1jsv9N+euR
+ Dk=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:MIG1iVUHTco=:sfP6Skvx6rzxBvwDemL32X
+ zBtd/QRt3hSt2P15YMmmeIzWg5La/2gnTvAxbZFP/VKapmDFalwGVJjEyM8N/mL2x1wf13Zs8
+ H31PIWLfoVQrJJvAPKsEa77a0MSwheOb+j++vJirHPeg4GAmXtC9UuL1k3EK++riIwRMtrpaY
+ MNtDakMmOKXJb7AKgnEyqPK1GDL5qMklurXYmcM14SwcjyHW2DHKHnaaBIYCRMF3rV1b5BB2g
+ ulMWJs4XKD+nKwgabuOPkdK2XvJKAn6l1U63CQnunu8cMTc1G8+kMX7PtVQmumW5Fiwt3kr85
+ vVf7ndQbeJ02f7VsxvNOPHTe2/je6u8/GqzJGJ0O0Jmswc8+f8IrvlR0v78R2F2vqF6SEJej0
+ KQNVoyOpGsbUT0KYaQK9keRcbYoesCsmDw80NoSVRS5wL4NZsfNII3jKIyRJOsdgoH2TLQJ6h
+ fuTCMeIJ5RA7J7E/DMtYJdjoNT/OLLoQNuTZGKRusoeb6ibkkuF+KByEm+kpewBlTjDq74JG3
+ orvdXl2Slx5yMIZZUkRN+K1Y1Q7ITTXxzMYpa43NBfUfmOa0jdIIWAwEUXOsyfWWJ/UdlT8lJ
+ kZbLCNkjH9n1+ixgSkNibOSiS4L60aK5VS7VvdwUNHdlNNo0h7gh5SsQAmufKkEPo1p8ngCKQ
+ Zp6Dym2/AVCixZNH9CisNfnpl+85xjWhskv0bQSJ1oDx3+nBKPVYzRU301O0YkLhUVyrPHx2P
+ Dlw01HBTpP2kset3jETGonm7LCXJoXAkpgjvyTQIlVKgs8nDKi4H131asr0yapGdoeSNnSzHJ
+ o/KJYnw
+Subject: Re: [Buildroot] openssh - kernel messages upon connection attempts
+ (always ending with "connection reset" at the other end)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,82 +95,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============6880960873377924282=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following build failure of media-session without alsa raised
-since bump to version 0.3.38 in commit
-22cccbd771b859f4a127e28575b360daf36cb4f7 and
-https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/e46a30562ff21d70215d0efc77496a9d7f587542:
+--===============6880960873377924282==
+Content-Type: text/html; charset=UTF-8
 
-/home/giuliobenetti/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/xtensa-buildroot-linux-uclibc/9.3.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld: src/media-session/pipewire-media-session.p/alsa-endpoint.c.o: in function `spa_pod_builder_add':
-alsa-endpoint.c:(.text+0x11e4): undefined reference to `snd_card_get_name'
+<html><head></head><body><div style="font-family: Verdana;font-size: 12.0px;"><div>&nbsp;</div>
 
-Fixes:
- - http://autobuild.buildroot.org/results/dbc2971f5bb89fc10334d14d6f349cfae2d069d3
+<div>
+<div>thanks for that!</div>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...dia-session-meson.build-add-alsa_dep.patch | 42 +++++++++++++++++++
- 1 file changed, 42 insertions(+)
- create mode 100644 package/pipewire/0002-src-media-session-meson.build-add-alsa_dep.patch
+<div>&nbsp;</div>
 
-diff --git a/package/pipewire/0002-src-media-session-meson.build-add-alsa_dep.patch b/package/pipewire/0002-src-media-session-meson.build-add-alsa_dep.patch
-new file mode 100644
-index 0000000000..d911bb2940
---- /dev/null
-+++ b/package/pipewire/0002-src-media-session-meson.build-add-alsa_dep.patch
-@@ -0,0 +1,42 @@
-+From c643b6abbbebe8a0b8992b4403aab854e476673d Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Wed, 20 Oct 2021 19:24:50 +0200
-+Subject: [PATCH] src/media-session/meson.build: add alsa_dep
-+
-+Fix the following build failure of media-session raised since version
-+0.3.38 and
-+https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/e46a30562ff21d70215d0efc77496a9d7f587542
-+with -Dalsa=disabled because alsa_dep is overrwritten to false by
-+spa/meson.build:
-+
-+/home/giuliobenetti/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/xtensa-buildroot-linux-uclibc/9.3.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld: src/media-session/pipewire-media-session.p/alsa-endpoint.c.o: in function `spa_pod_builder_add':
-+alsa-endpoint.c:(.text+0x11e4): undefined reference to `snd_card_get_name'
-+
-+This patch is not upstreamable as media-session moved to its own
-+project:
-+https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/1bced6b2ef300acce23c0daaeb8f4fc14095f330
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/dbc2971f5bb89fc10334d14d6f349cfae2d069d3
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: not upstreamable (media-session moved to its own
-+project)]
-+---
-+ src/media-session/meson.build | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/media-session/meson.build b/src/media-session/meson.build
-+index ff83f34fc..549b58288 100644
-+--- a/src/media-session/meson.build
-++++ b/src/media-session/meson.build
-+@@ -1,5 +1,6 @@
-+ media_session_sources = []
-+ if get_option('session-managers').contains('media-session')
-++  alsa_dep = dependency('alsa', version : '>=1.1.7', required: get_option('pipewire-alsa'))
-+   sm_logind_src = []
-+   sm_logind_dep = []
-+   if systemd.found() and systemd_dep.found()
-+-- 
-+2.33.0
-+
--- 
-2.33.0
+<div>I don&#39;t like the options I am seeing, but it is what it is :)</div>
+
+<div>&nbsp;</div>
+
+<div>&nbsp;
+<div style="margin: 10.0px 5.0px 5.0px 10.0px;padding: 10.0px 0 10.0px 10.0px;border-left: 2.0px solid rgb(195,217,229);">
+<div style="margin: 0 0 10.0px 0;"><b>Von:</b>&nbsp;&quot;Peter Seiderer&quot; &lt;ps.report@gmx.net&gt;<br/>
+&nbsp;</div>
+
+<div>Hallo Steve,<br/>
+<br/>
+&gt;<br/>
+&gt; This is maybe a known feature/bug of the combination of openssh and (some) external<br/>
+&gt; toolchains, see [1] for discussion, patch/hack to avoid the problem and/or<br/>
+&gt; the hint to use another/internal toolchain..., or use dropbear instead of openssh...<br/>
+&gt;<br/>
+&gt; Regards,<br/>
+&gt; Peter<br/>
+&gt;<br/>
+<br/>
+And the missing link:<br/>
+<br/>
+[1] <a href="https://bugs.busybox.net/show_bug.cgi?id=13671" target="_blank">https://bugs.busybox.net/show_bug.cgi?id=13671</a><br/>
+<br/>
+Regards,<br/>
+Peter</div>
+</div>
+</div>
+</div></div></body></html>
+
+--===============6880960873377924282==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============6880960873377924282==--
