@@ -2,96 +2,82 @@ Return-Path: <SRS0=oNq7=PI=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 88FD5C433F5
-	for <buildroot@archiver.kernel.org>; Wed, 20 Oct 2021 12:08:30 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 91F9DC433F5
+	for <buildroot@archiver.kernel.org>; Wed, 20 Oct 2021 12:10:28 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2590D611C6
-	for <buildroot@archiver.kernel.org>; Wed, 20 Oct 2021 12:08:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2590D611C6
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
+	by mail.kernel.org (Postfix) with ESMTPS id 4141461074
+	for <buildroot@archiver.kernel.org>; Wed, 20 Oct 2021 12:10:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4141461074
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=unikie.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EAE6880AEF;
-	Wed, 20 Oct 2021 12:08:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0E65660761;
+	Wed, 20 Oct 2021 12:10:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VMylEdKmlxdp; Wed, 20 Oct 2021 12:08:29 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id oi_zgb3XXge7; Wed, 20 Oct 2021 12:10:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 25E7B80BD3;
-	Wed, 20 Oct 2021 12:08:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 16EA660784;
+	Wed, 20 Oct 2021 12:10:26 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id BEB481BF951
- for <buildroot@lists.busybox.net>; Wed, 20 Oct 2021 12:08:25 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4ACAD1BF951
+ for <buildroot@lists.busybox.net>; Wed, 20 Oct 2021 12:10:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B9EA54055F
- for <buildroot@lists.busybox.net>; Wed, 20 Oct 2021 12:08:25 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 39E624055F
+ for <buildroot@lists.busybox.net>; Wed, 20 Oct 2021 12:10:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
+ dkim=pass (2048-bit key) header.d=unikie-com.20210112.gappssmtp.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FayOzJ1Her_j for <buildroot@lists.busybox.net>;
- Wed, 20 Oct 2021 12:08:22 +0000 (UTC)
+ with ESMTP id RtRxr1FtsMsS for <buildroot@lists.busybox.net>;
+ Wed, 20 Oct 2021 12:10:22 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com
- [IPv6:2a00:1450:4864:20::530])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A0084401AF
- for <buildroot@buildroot.org>; Wed, 20 Oct 2021 12:08:21 +0000 (UTC)
-Received: by mail-ed1-x530.google.com with SMTP id 5so24658876edw.7
- for <buildroot@buildroot.org>; Wed, 20 Oct 2021 05:08:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=mtQm6ZlWD0vgW1ULi1NE4rnlu0LPeFVwA2/zdW6mzWA=;
- b=AC31I9n25k0KvIXy9KatDW32qtQPxwJSgkjHWeiY91uhNxg7NWmLucS/WijxfNMgw7
- NkMVrrhcFmGsMzl0a6RBr/FrWtUjJGtV39RoI+1UWYkGUz66wGlFYZWJg680HlstTIk6
- Xtkt9A7mdTIZ4/V/aMj4pWeWg1DNzdLHjtUeqZdJEI0sFq6AlMlFhp3WCpFxwxMZCety
- +LZXvu5jaAVv39qgNRtRzKvNQmR/xlOlYzxhI+xzP4ivhjWT8hoSr7IvNhlBLhkku+hH
- VuiDedOJOeDAEcaH5yNeSEWsykq1VU5DnBmUvDmfkB8sd8sAhV90tjKN9eIL3rl6OOeX
- WzoA==
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com
+ [IPv6:2a00:1450:4864:20::536])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 352BC4055E
+ for <buildroot@buildroot.org>; Wed, 20 Oct 2021 12:10:22 +0000 (UTC)
+Received: by mail-ed1-x536.google.com with SMTP id r4so18366176edi.5
+ for <buildroot@buildroot.org>; Wed, 20 Oct 2021 05:10:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=unikie-com.20210112.gappssmtp.com; s=20210112;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=bE2DGYBnjxGN7KFvSkO0tEYKMNW5APnFjAxzLG3aBB0=;
+ b=EZ5izRFXvlmFnGn6Ypp4Xjuv57K7ixHDU6TG+kG7S8KwxEL1FxM085bh9J8GL4g1fl
+ 6EIdrRDJS/xKKfn5AJi9P4V6AOcgxNTj4KIl+iK5nHtflBUDgaUvuXqeymemeTDhGpPe
+ gXhIYIv8YVwWqL/k7mqSEj/z42b77ozaqVSCDkLAlG6GxOostmu0NeiHvhau7m4G/l3j
+ pt3q56CqbIKC2mOYjXU28Dp57QYhvVpRP5SJGkUEYiQ0YARadnLlrgNoj3FDUIC549Ix
+ iIYuKZRuWPKs5b8t/wfuqyf3Ma8EFAY1JZOoDFqRYbRHYd3JjoowdAxzAxM8HJL1yL5F
+ rWnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=mtQm6ZlWD0vgW1ULi1NE4rnlu0LPeFVwA2/zdW6mzWA=;
- b=hkjLVTq3x+Ol3bNssjZwoX6kS6e4X7wkGiX75KGQXPy7ANE+5yRSstqGDbkiOCxFAb
- 6aDrS2URFm4tz8M3WML6uPxmMxbpveTCNm1unYU2JLjjjRN4HYKz9E5xbWRneeG4orhf
- FBi1pDJj62M7BDnmtxfV7EYa86y23KX1E9ZxGHe/Tt0tMnUR/HbBF5KBzsX5/bOcfujY
- CpzIJaSSOUbPCxcqY/kFAjFAnRFzL5DtATIMi8KfVBbici+bZgrMHkXUGWmCQ+WO1UvF
- deAMPuZr45MtmvhpeDQYZji9KLxD0iHGt7xPyUa7qDsP2dJwRocfREqwl8tAP6VHv/TU
- HRSw==
-X-Gm-Message-State: AOAM531DjJp+0bYdSYdrQYcFtLqjKGvysF5evQXK6Eium4j5CcfZECkC
- cVMVFEg0GzPUg3Bo5/F+1c3chX3ypB861xdb
-X-Google-Smtp-Source: ABdhPJwJ/neGgj79DrQAR7LKkP0UpRREFJcaED8XV4Uxa0ysLTzhDwkgLX9Ewjn/DkEWJx0r4a+/Og==
-X-Received: by 2002:a17:906:9546:: with SMTP id
- g6mr44718550ejy.448.1634731696199; 
- Wed, 20 Oct 2021 05:08:16 -0700 (PDT)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
- (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id z19sm966209ejw.44.2021.10.20.05.08.15
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 20 Oct 2021 05:08:15 -0700 (PDT)
-Message-ID: <02a0cab6-1ed5-a940-d4f3-371dc281bc41@mind.be>
-Date: Wed, 20 Oct 2021 14:08:15 +0200
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=bE2DGYBnjxGN7KFvSkO0tEYKMNW5APnFjAxzLG3aBB0=;
+ b=JL/XQ1mZu5jT2Z9VBedAo2B4AcgqjzoyFavia0po6CroQ0DzcCknWWgndt2wMCb9H4
+ r1XBcdMieIcCfbCpChXHeYIxqvkBqn4FIkOT/+snBA0deqDTf3Hy6zJvKN3GZtcvFnM5
+ Ptk6XLs+yJwrywKRk050yDL2ELqMfdlU3ZV0G8o/tcHh/EbD+Eh2+sckPfD9vKR5gsrJ
+ npva4YUBZ5zerznF5udvV0KdFoBY+TzOzob8+Kbk7ueyihJmo4Dp17uAqCnCv8XZBXVP
+ Ngo/xeAoG0S50wLPz5xtaqINLA5wjtQAGI1oS8rOdpBPTfDnpI+VJA7TgGIMLYwnlZHq
+ azTQ==
+X-Gm-Message-State: AOAM533BlcKraFfwnPNt12tYh5p2ORQF0kHYcGoJPVXP4PC6VebUvQ/N
+ cSuUT7yPjSJrARhxyeiU9G0WUqZMwVFMjgfc9bvsd8/bhKgY8hu+y3SbhA==
+X-Google-Smtp-Source: ABdhPJxz3DWaW6PmQ4QGaBkXX9BKumSJMuzjqIAVrRQuPzHvAla2EoyY5RbY7IPKY2Gmwbvq5xNZ57AYUOtRqeGKQMQ=
+X-Received: by 2002:a17:906:3784:: with SMTP id
+ n4mr45826316ejc.129.1634731818211; 
+ Wed, 20 Oct 2021 05:10:18 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.1.0
-Content-Language: en-GB
-To: Will Eccles <will@eccles.dev>
-References: <20211018203038.32453-1-will@eccles.dev>
- <13c3735c-9fd1-abfd-1b06-1d7ccf2425ff@mind.be>
- <CA+K4yGmg=EYwLTd4_FXnmTihRbdgCBXPntbph2Ghe-_38NByBg@mail.gmail.com>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <CA+K4yGmg=EYwLTd4_FXnmTihRbdgCBXPntbph2Ghe-_38NByBg@mail.gmail.com>
-Subject: Re: [Buildroot] [PATCH] package/openssh: reset umask when init
- script exits
+References: <20211008110345.1901311-1-jose.pekkarinen@unikie.com>
+ <dc50460f-e7cb-8863-9319-4904742ca2c8@mind.be>
+In-Reply-To: <dc50460f-e7cb-8863-9319-4904742ca2c8@mind.be>
+From: =?UTF-8?Q?Jos=C3=A9_Pekkarinen?= <jose.pekkarinen@unikie.com>
+Date: Wed, 20 Oct 2021 15:10:07 +0300
+Message-ID: <CAJPV9MopDAbp6FiYLOXTsQVjdDdCzb5=O0GmYx7zBcMq0Sz40g@mail.gmail.com>
+To: Arnout Vandecappelle <arnout@mind.be>
+Subject: Re: [Buildroot] [PATCH] package/opensc: add package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -104,108 +90,325 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: buildroot@buildroot.org
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Content-Type: multipart/mixed; boundary="===============3874288715480995500=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-CgpPbiAxOS8xMC8yMDIxIDIzOjQyLCBXaWxsIEVjY2xlcyB3cm90ZToKPiBIaSBBcm5vdXQsCj4g
-Cj4gSW50ZXJlc3RpbmdseSwgSSBoYXZlIHRlc3RlZCB0aGlzIGluIGEgZmV3IGRpZmZlcmVudCB3
-YXlzIGFuZCBhY2hpZXZlZCBkaWZmZXJlbnQgCj4gcmVzdWx0cyBlYWNoIHRpbWUuIEkgYWdyZWUg
-d2l0aCB5b3UgdGhhdCB0aGUgcGF0Y2ggZG9lcyBub3QgbWFrZSBtdWNoIHNlbnNlLCBidXQgCj4g
-b24gdGhlIHN5c3RlbSBJIHdyb3RlIGl0IG9uIChvciByYXRoZXIsIHRoZSBzeXN0ZW0gSSBvcmln
-aW5hbGx5IHRlc3RlZCB0aGUgZml4IAo+IG9uLCB3aGljaCB3YXMgb3RoZXJ3aXNlIHVubW9kaWZp
-ZWQpLCBpdCBzZWVtZWQgdG8gZml4IHRoZSBwcm9ibGVtLiBUaGUgZXhhY3QgCj4gc3RlcHMgSSBm
-b2xsb3dlZCB0byB0ZXN0IHRoaXMgd2VyZToKPiAKPiAxLiBCdWlsZCB0aGUgc3lzdGVtIGltYWdl
-IChvZiBjb3Vyc2UpCj4gMi4gTG9naW4gYXMgcm9vdCBhbmQgdGVzdCB0aGF0IHRoZSB1bmFtZSB2
-YWx1ZSB3YXMgMDc3IChubyBjb25maWcgZmlsZXMgd2VyZSAKPiBzb3VyY2VkIGJ5IHRoZSBzaGVs
-bCwgYXMgbm9uZSB3ZXJlIGluc3RhbGxlZCBvbiB0aGUgc3lzdGVtKQo+IDMuIEFwcGx5IHRoaXMg
-cGF0Y2ggdG8gdGhlIFM1MHNzaGQgZmlsZSBhbmQgcmVib290IChub3RoaW5nIGVsc2Ugd2FzIGNo
-YW5nZWQgCj4gdGhhdCBJJ20gYXdhcmUgb2Y7IEkgd2FzIGxvZ2dlZCBpbiBmb3IgYWxsIG9mIDEg
-bWludXRlIHRvIG1ha2UgdGhlIGNoYW5nZSBhbmQgCj4gcmVib290KQo+IDQuIExvZ2luIGFzIHJv
-b3QgYWdhaW4gYW5kIHRlc3QgdGhhdCB0aGUgdW5hbWUgdmFsdWUgd2FzIG5vdyAwMjIgKGFzIEkg
-ZXhwZWN0ZWQgCj4gaXQgdG8gYmUpCj4gCgogIEhtLCB0aGlzIHJlbWluZHMgbWU6IEkgYmVsaWV2
-ZSB0aGF0IGJ1c3lib3ggYXNoIGRvZXMgc29tZXRoaW5nIHNtYXJ0IHRvIApleGVjdXRlIHNoZWxs
-IHNjcmlwdHMuIElJUkMsIGl0IGZvcmsoKXMgYnV0IGRvZXNuJ3QgZXhlYygpLCBpbnN0ZWFkIGRp
-cmVjdGx5IApqdW1waW5nIHRvIHRoZSBpbnRlcnByZXRlci4KCiAgVGhhdCBkb2Vzbid0IGFjdHVh
-bGx5IGV4cGxhaW4gdGhlIGJlaGF2aW91ciB5b3Ugb2JzZXJ2ZWQsIGJlY2F1c2UgaXQgc2hvdWxk
-IApzdGlsbCBub3QgcHJvcGFnYXRlIHRoZSB1bWFzayB0byB0aGUgcGFyZW50IHByb2Nlc3MuLi4g
-QW5kIGl0IGRlZmluaXRlbHkgZG9lc24ndCAKZXhwbGFpbiBob3cgdGhhdCBiZWhhdmlvdXIgY291
-bGQgc3VkZGVubHkgZGlzYXBwZWFyLi4uCgogIFJlZ2FyZHMsCiAgQXJub3V0CgoKPiBJIGhhdmUg
-bm8gaWRlYSBob3cgdGhpcyBwYXRjaCB3b3VsZCBmaXggdGhlIGlzc3VlLCBhbmQgSSBhZ3JlZSB0
-aGF0IGl0IG1ha2VzIG5vIAo+IHNlbnNlLCBidXQgZXZlbiBpbiBhIHNtYWxsIHRlc3QgSSBoYWQg
-ZG9uZSBvbiB0aGUgaG9zdCBzeXN0ZW0gSSBoYWQgYWNoaWV2ZWQgCj4gcmVzdWx0cyB3aGljaCBh
-cHBlYXJlZCB0byBhZ3JlZSB3aXRoIHRoaXMgcGF0Y2guIE9uIGEgbmV3IHN5c3RlbSAoYnVpbHQg
-bWludXRlcyAKPiBhZ28pLCBJIGNhbm5vdCByZXByb2R1Y2UgdGhlIGV4YWN0IHNhbWUgc3RlcHMg
-SSB0b29rIGFib3ZlLCB3aGljaCBpcyBxdWl0ZSAKPiBwdXp6bGluZywgYXMgbm90aGluZyBoYXMg
-Y2hhbmdlZCAoYXNpZGUgZnJvbSBhIHNpbmdsZSBkZXZpY2UgdHJlZSBvdmVybGF5IEkgCj4gYWRk
-ZWQsIHdoaWNoIHNob3VsZCBoYXZlIG5vIHJlbGV2YW5jZSBoZXJlIGF0IGFsbCkuCj4gCj4gID4g
-QW5kIHdoZW4geW91IHNvdXJjZSB0aGUgc2NyaXB0LCB0aGUgdHJhcCBkb2Vzbid0IGV2ZW4gdHJp
-Z2dlciBhdCB0aGUgZW5kIG9mCj4gID4gdGhlIHNjcmlwdCwgc28gdGhpcyBwYXRjaCBkb2Vzbid0
-IGFjdHVhbGx5IHJlc2V0IHRoZSB1bWFzay4KPiAKPiBJIHdyb3RlIHRoZSBzY3JpcHQgdW5kZXIg
-dGhlIGFzc3VtcHRpb24gdGhhdCBpdCB3YXMgbmV2ZXIgc291cmNlZCwgc28gSSBkaWRuJ3QgCj4g
-ZXZlbiBjb25zaWRlciB0aGlzLiBUaGUgZmlsZSBzaG91bGRuJ3QgZXZlciBiZSBzb3VyY2VkIGFz
-IGl0IGRvZXNuJ3QgZW5kIGluIC5zaCAKPiBhbnl3YXkuCj4gCj4gSSBhbSB3aWxsaW5nIHRvIGFj
-Y2VwdCB0aGF0IEkgaGFkIHNvbWUgc29ydCBvZiBncmVtbGluIG9uIHRoZSBvcmlnaW5hbCBzeXN0
-ZW0gSSAKPiB0ZXN0ZWQgdGhpcyBvbi4gSSBjYW4ndCBzZWVtIHRvIHJlcHJvZHVjZSBpdCBvbiBh
-IG5ld2x5LWdlbmVyYXRlZCBpbWFnZSB3aGlsZSAKPiBmb2xsb3dpbmcgcHJlY2lzZWx5IHRoZSBz
-YW1lIHN0ZXBzIEkgZGlkIGFib3ZlLiBIb3dldmVyLCB0aGlzIG9ubHkgcmFpc2VzIG1vcmUgCj4g
-cXVlc3Rpb25zIGZvciBtZSB0byBpbnZlc3RpZ2F0ZSwgYXMgSSBoYXZlIG5vIGNsdWUgd2hhdCBl
-bHNlIGNvdWxkIGhhdmUgY2F1c2VkIAo+IHRoZSBiZWhhdmlvciBJIHNhdyBvbiB0aGUgb3JpZ2lu
-YWwgc3lzdGVtLiBJIGFkbWl0IEkgZGlkbid0IHJlYWxseSB0aGluayB0b28gCj4gaGFyZCBhYm91
-dCB3aHkgaXQgd291bGQgd29yayB0aGlzIHdheSwgSSBqdXN0IHNvcnQgb2YgYWNjZXB0ZWQgaXQg
-YW5kIG1vdmVkIG9uLiAKPiBXaWxsIGludmVzdGlnYXRlIGZ1cnRoZXIgYW5kIHNlZSBpZiBJIGNh
-biByZXByb2R1Y2UgaXQgYWdhaW4uCj4gCj4gWW91cnMsCj4gV2lsbCBFY2NsZXMKPiAKPiBPbiBU
-dWUsIE9jdCAxOSwgMjAyMSBhdCA0OjI1IFBNIEFybm91dCBWYW5kZWNhcHBlbGxlIDxhcm5vdXRA
-bWluZC5iZSAKPiA8bWFpbHRvOmFybm91dEBtaW5kLmJlPj4gd3JvdGU6Cj4gCj4gICAgICDCoCBI
-aSBXaWxsLAo+IAo+ICAgICBPbiAxOC8xMC8yMDIxIDIyOjMwLCBXaWxsIEVjY2xlcyB3cm90ZToK
-PiAgICAgID4gUzUwc3NoZCB1cGRhdGVzIHVtYXNrIHRvIDA3NywgYnV0IGRvZXMgbm90IHJlc2V0
-IGl0IHdoZW4gaXQgZXhpdHMuIFRoaXMKPiAgICAgID4gcmVzdWx0cyBpbiB0aGUgcm9vdCB1c2Vy
-J3MgdW1hc2sgYmVpbmcgY29uZmlndXJlZCBpbmNvcnJlY3RseSAoYXNzdW1pbmcKPiAgICAgID4g
-YSBkZWZhdWx0IG9mIDAyMiBvciBvdGhlcndpc2UpLgo+IAo+ICAgICAgwqAgQ2FuIHlvdSBleHBs
-YWluIGluIHdoaWNoIGNvbnRleHQgdGhpcyBoYXBwZW5zPwo+IAo+ICAgICAgwqAgTm9ybWFsbHkg
-dGhpcyBzY3JpcHQgaXMgZXhlY3V0ZWQgYnkgL2V0Yy9pbml0LmQvcmNTLCB3aGljaCBjb250YWlu
-cyB0aGlzCj4gICAgIGNvZGU6Cj4gCj4gICAgICDCoCDCoCDCoCBjYXNlICIkaSIgaW4KPiAgICAg
-IMKgIMKgIMKgIMKgIMKgKi5zaCkKPiAgICAgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIyBTb3VyY2Ug
-c2hlbGwgc2NyaXB0IGZvciBzcGVlZC4KPiAgICAgIMKgIMKgIMKgIMKgIMKgIMKgIMKgKAo+ICAg
-ICAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqB0cmFwIC0gSU5UIFFVSVQgVFNUUAo+ICAgICAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqBzZXQgc3RhcnQKPiAgICAgIMKgIMKgIMKgIMKgIMKg
-IMKgIMKgIMKgIMKgLiAkaQo+ICAgICAgwqAgwqAgwqAgwqAgwqAgwqAgwqApCj4gICAgICDCoCDC
-oCDCoCDCoCDCoCDCoCDCoDs7Cj4gICAgICDCoCDCoCDCoCDCoCDCoCopCj4gICAgICDCoCDCoCDC
-oCDCoCDCoCDCoCDCoCMgTm8gc2ggZXh0ZW5zaW9uLCBzbyBmb3JrIHN1YnByb2Nlc3MuCj4gICAg
-ICDCoCDCoCDCoCDCoCDCoCDCoCDCoCRpIHN0YXJ0Cj4gICAgICDCoCDCoCDCoCDCoCDCoCDCoCDC
-oDs7Cj4gCj4gICAgICDCoCBTaW5jZSB0aGUgc2NyaXB0IGRvZXNuJ3QgZW5kIHdpdGggLnNoLCBp
-dCB3aWxsIGZvcmssIHNvIHRoZSB1bWFzayBkb2Vzbid0Cj4gICAgICJzdGljayIuCj4gCj4gICAg
-ICDCoCBTYW1lIHdoZW4geW91IGV4ZWN1dGUgdGhlIHNjcmlwdCBpbnRlcmFjdGl2ZWx5OiB0aGUg
-dW1hc2sgaXNuJ3QgaW5oZXJpdGVkIGJ5Cj4gICAgIHRoZSBwYXJlbnQgc2hlbGwuCj4gCj4gICAg
-ICDCoCBBbmQgd2hlbiB5b3Ugc291cmNlIHRoZSBzY3JpcHQsIHRoZSB0cmFwIGRvZXNuJ3QgZXZl
-biB0cmlnZ2VyIGF0IHRoZSBlbmQgb2YKPiAgICAgdGhlIHNjcmlwdCwgc28gdGhpcyBwYXRjaCBk
-b2Vzbid0IGFjdHVhbGx5IHJlc2V0IHRoZSB1bWFzay4KPiAKPiAKPiAgICAgIMKgIFNvIEkgZG9u
-J3QgdW5kZXJzdGFuZCBob3cgaXQncyBwb3NzaWJsZSB0aGF0IHRoaXMgcGF0Y2ggZml4ZXMgeW91
-ciBwcm9ibGVtLgo+IAo+IAo+ICAgICAgwqAgUmVnYXJkcywKPiAgICAgIMKgIEFybm91dAo+IAo+
-IAo+ICAgICAgPiBUaGlzIHBhdGNoIGFkZHMgYSB0cmFwIHRvIHJlc2V0IHVtYXNrCj4gICAgICA+
-IHdoZW4gdGhlIHNjcmlwdCBleGl0cy4gVGhpcyBpcyBjb252ZW5pZW50IG9uIHN5c3RlbXMgd2hl
-cmUsIGZvciBleGFtcGxlLAo+ICAgICAgPiBjb25maWdzIHN1Y2ggYXMgL2V0Yy9wcm9maWxlIG1h
-eSBub3QgYmUgc291cmNlZCBieSB0aGUgcm9vdCB1c2VyLiBJdCBtYXkKPiAgICAgID4gYWxzbyBw
-cmV2ZW50IGlzc3VlcyB3aXRoIG90aGVyIGluaXQgc2NyaXB0cyB3aGljaCBtYXkgaW5oZXJpdCB0
-aGlzIHVtYXNrCj4gICAgICA+IHVuaW50ZW50aW9uYWxseSwgbGVhZGluZyB0byBpbXByb3BlciBw
-ZXJtaXNzaW9ucyBlbHNld2hlcmUgaW4gdGhlCj4gICAgICA+IHN5c3RlbS4KPiAgICAgID4KPiAg
-ICAgID4gU2lnbmVkLW9mZi1ieTogV2lsbCBFY2NsZXMgPHdpbGxAZWNjbGVzLmRldiA8bWFpbHRv
-OndpbGxAZWNjbGVzLmRldj4+Cj4gICAgICA+IC0tLQo+ICAgICAgPiBCYWNrcG9ydCB0bzogMjAy
-MS4wMi42LCAyMDIxLjA4LjEKPiAgICAgID4gKFRoZXNlIGFyZSB0aGUgcmVsZWFzZXMgb24gYnVp
-bGRyb290Lm9yZyA8aHR0cDovL2J1aWxkcm9vdC5vcmc+IGFzIG9mCj4gICAgIHRoaXMgd3JpdGlu
-ZywgYnV0IGFzIGZhcgo+ICAgICAgPiBhcyBJIGNhbiB0ZWxsLCBldmVuIHJlbGVhc2VzIGFzIGZh
-ciBiYWNrIGFzIDIwMTIgaGF2ZSB0aGUgc2FtZSBwcm9ibGVtLikKPiAgICAgID4gLS0tCj4gICAg
-ICA+wqAgwqBwYWNrYWdlL29wZW5zc2gvUzUwc3NoZCB8IDIgKysKPiAgICAgID7CoCDCoDEgZmls
-ZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKykKPiAgICAgID4KPiAgICAgID4gZGlmZiAtLWdpdCBh
-L3BhY2thZ2Uvb3BlbnNzaC9TNTBzc2hkIGIvcGFja2FnZS9vcGVuc3NoL1M1MHNzaGQKPiAgICAg
-ID4gaW5kZXggMjJkYTQxZDFjYS4uOTRjZjRjMTRlOCAxMDA2NDQKPiAgICAgID4gLS0tIGEvcGFj
-a2FnZS9vcGVuc3NoL1M1MHNzaGQKPiAgICAgID4gKysrIGIvcGFja2FnZS9vcGVuc3NoL1M1MHNz
-aGQKPiAgICAgID4gQEAgLTYsNiArNiw4IEBACj4gICAgICA+wqAgwqAjIE1ha2Ugc3VyZSB0aGUg
-c3NoLWtleWdlbiBwcm9nYW0gZXhpc3RzCj4gICAgICA+wqAgwqBbIC1mIC91c3IvYmluL3NzaC1r
-ZXlnZW4gXSB8fCBleGl0IDAKPiAgICAgID4KPiAgICAgID4gKyMgUmVzZXQgdW5hbWUgYXQgZXhp
-dAo+ICAgICAgPiArdHJhcCAidW5hbWUgJCh1bmFtZSkiIEVYSVQKPiAgICAgID7CoCDCoHVtYXNr
-IDA3Nwo+ICAgICAgPgo+ICAgICAgPsKgIMKgc3RhcnQoKSB7Cj4gICAgICA+Cj4gCl9fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5n
-IGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3Jn
-L21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+--===============3874288715480995500==
+Content-Type: multipart/alternative; boundary="00000000000053f61b05cec7a9bd"
+
+--00000000000053f61b05cec7a9bd
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+On Sun, Oct 17, 2021 at 7:18 PM Arnout Vandecappelle <arnout@mind.be> wrote=
+:
+
+>   Hi Jose=CC=81,
+>
+>   Same comments on this patch as what Gilles gave on the softhsm2 one.
+>
+> On 08/10/2021 13:03, Jos=C3=A9 Pekkarinen wrote:
+> > The following patch will add a recipe to
+> > install opensc in final images.
+> >
+> > Signed-off-by: Jos=C3=A9 Pekkarinen <jose.pekkarinen@unikie.com>
+> > ---
+> >   package/opensc/Config.in |  7 +++++++
+> >   package/opensc/opensc.mk | 15 +++++++++++++++
+>
+>   You need to add it to package/Config.in, you need to add a hash file,
+> and
+> preferably also add yourself to DEVELOPERS for this package.
+>
+>   It's also convenient if you put the two packages together in a series,
+> because
+> the DEVELOPERS and package/Config.in are likely to cause conflicts.
+>
+> >   2 files changed, 22 insertions(+)
+> >   create mode 100644 package/opensc/Config.in
+> >   create mode 100644 package/opensc/opensc.mk
+> >
+> > diff --git a/package/opensc/Config.in b/package/opensc/Config.in
+> > new file mode 100644
+> > index 0000000000..abd26a9b08
+> > --- /dev/null
+> > +++ b/package/opensc/Config.in
+> > @@ -0,0 +1,7 @@
+> > +config BR2_PACKAGE_OPENSC
+> > +     bool "opensc"
+> > +     depends on BR2_PACKAGE_LIBOPENSSL && BR2_PACKAGE_PCSC_LITE
+> > +     help
+> > +             OpenSC provides a set of libraries and utilities to work
+> with smart cards.
+>
+>   Indentation + wrapping. Please use utils/check-package to verify.
+>
+> > +
+> > +             https://github.com/OpenSC/OpenSC.git
+>
+>   The URL shouldn't have a .git part. That said, a better location is
+> https://github.com/OpenSC/OpenSC/wiki
+>
+>
+> > diff --git a/package/opensc/opensc.mk b/package/opensc/opensc.mk
+> > new file mode 100644
+> > index 0000000000..7741dac2a5
+> > --- /dev/null
+> > +++ b/package/opensc/opensc.mk
+> > @@ -0,0 +1,15 @@
+> >
+> +########################################################################=
+########
+> > +#
+> > +# opensc
+> > +#
+> >
+> +########################################################################=
+########
+> > +
+> > +OPENSC_VERSION =3D 0.22.0
+> > +OPENSC_SITE =3D $(call github,OpenSC,OpenSC,$(OPENSC_VERSION))
+>
+>   There's an uploaded tarball at
+>
+> https://github.com/OpenSC/OpenSC/releases/download/0.22.0/opensc-0.22.0.t=
+ar.gz
+>
+> > +OPENSC_LICENSE =3D GPL-2
+>
+>   I haven't checked in detail, but it seems to be LGPL-2.1+
+>
+> > +OPENSC_LICENSE_FILES =3D LICENSE
+>
+>   This file doesn't even exist.
+>
+> > +OPENSC_DEPENDENCIES =3D openssl pcsc-lite
+> > +OPENSC_AUTORECONF =3D YES
+>
+>   You need to add a comment why this is needed. It probably isn't with th=
+e
+> uploaded tarball.
+>
+> > +OPENSC_INSTALL_TARGET =3D YES
+>
+>   This is unnecessary (default). _INSTALL_STAGING, on the other hand, *is=
+*
+> necessary.
+>
+> > +
+> > +$(eval $(autotools-package))
+> >
+>
+
+Hi,
+
+Thanks for the help and guidance, while reading the
+
+v2 of the patch I find the following warning I don't quite understand,
+and I don't find any relevant docs over the net, would you mind to
+elaborate what could it mean the following warning from check-package:
+
+$ ./utils/check-package package/opensc/*
+package/opensc/opensc.mk:8: remove default value of _SOURCE variable (
+http://nightly.buildroot.org/#generic-package-reference)
+25 lines processed
+1 warnings generated
+
+while the package looks like this:
+
+$ cat package/opensc/opensc.mk
+###########################################################################=
+#####
+
+#
+# opensc
+#
+###########################################################################=
+#####
+
+
+OPENSC_VERSION =3D 0.22.0
+OPENSC_SOURCE =3D opensc-$(OPENSC_VERSION).tar.gz
+OPENSC_SITE =3D
+https://github.com/OpenSC/OpenSC/releases/download/$(OPENSC_VERSION)/
+OPENSC_LICENSE =3D LGPL-2.1+
+OPENSC_LICENSE_FILES =3D COPYING
+OPENSC_DEPENDENCIES =3D openssl pcsc-lite
+OPENSC_INSTALL_STAGING =3D YES
+
+$(eval $(autotools-package))
+
+Thanks!
+
+Jos=C3=A9.
+
+--00000000000053f61b05cec7a9bd
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div dir=3D"ltr"><br></div><br><div class=3D"gmail_quote">=
+<div dir=3D"ltr" class=3D"gmail_attr">On Sun, Oct 17, 2021 at 7:18 PM Arnou=
+t Vandecappelle &lt;<a href=3D"mailto:arnout@mind.be">arnout@mind.be</a>&gt=
+; wrote:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px=
+ 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">=C2=A0 =
+Hi Jose=CC=81,<br>
+<br>
+=C2=A0 Same comments on this patch as what Gilles gave on the softhsm2 one.=
+<br>
+<br>
+On 08/10/2021 13:03, Jos=C3=A9 Pekkarinen wrote:<br>
+&gt; The following patch will add a recipe to<br>
+&gt; install opensc in final images.<br>
+&gt; <br>
+&gt; Signed-off-by: Jos=C3=A9 Pekkarinen &lt;<a href=3D"mailto:jose.pekkari=
+nen@unikie.com" target=3D"_blank">jose.pekkarinen@unikie.com</a>&gt;<br>
+&gt; ---<br>
+&gt;=C2=A0 =C2=A0package/opensc/Config.in |=C2=A0 7 +++++++<br>
+&gt;=C2=A0 =C2=A0package/opensc/<a href=3D"http://opensc.mk" rel=3D"norefer=
+rer" target=3D"_blank">opensc.mk</a> | 15 +++++++++++++++<br>
+<br>
+=C2=A0 You need to add it to package/Config.in, you need to add a hash file=
+, and <br>
+preferably also add yourself to DEVELOPERS for this package.<br>
+<br>
+=C2=A0 It&#39;s also convenient if you put the two packages together in a s=
+eries, because <br>
+the DEVELOPERS and package/Config.in are likely to cause conflicts.<br>
+<br>
+&gt;=C2=A0 =C2=A02 files changed, 22 insertions(+)<br>
+&gt;=C2=A0 =C2=A0create mode 100644 package/opensc/Config.in<br>
+&gt;=C2=A0 =C2=A0create mode 100644 package/opensc/<a href=3D"http://opensc=
+.mk" rel=3D"noreferrer" target=3D"_blank">opensc.mk</a><br>
+&gt; <br>
+&gt; diff --git a/package/opensc/Config.in b/package/opensc/Config.in<br>
+&gt; new file mode 100644<br>
+&gt; index 0000000000..abd26a9b08<br>
+&gt; --- /dev/null<br>
+&gt; +++ b/package/opensc/Config.in<br>
+&gt; @@ -0,0 +1,7 @@<br>
+&gt; +config BR2_PACKAGE_OPENSC<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0bool &quot;opensc&quot;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0depends on BR2_PACKAGE_LIBOPENSSL &amp;&amp; BR2_=
+PACKAGE_PCSC_LITE<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0help<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0OpenSC provides a set=
+ of libraries and utilities to work with smart cards.<br>
+<br>
+=C2=A0 Indentation + wrapping. Please use utils/check-package to verify.<br=
+>
+<br>
+&gt; +<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0<a href=3D"https://gi=
+thub.com/OpenSC/OpenSC.git" rel=3D"noreferrer" target=3D"_blank">https://gi=
+thub.com/OpenSC/OpenSC.git</a><br>
+<br>
+=C2=A0 The URL shouldn&#39;t have a .git part. That said, a better location=
+ is <br>
+<a href=3D"https://github.com/OpenSC/OpenSC/wiki" rel=3D"noreferrer" target=
+=3D"_blank">https://github.com/OpenSC/OpenSC/wiki</a><br>
+<br>
+<br>
+&gt; diff --git a/package/opensc/<a href=3D"http://opensc.mk" rel=3D"norefe=
+rrer" target=3D"_blank">opensc.mk</a> b/package/opensc/<a href=3D"http://op=
+ensc.mk" rel=3D"noreferrer" target=3D"_blank">opensc.mk</a><br>
+&gt; new file mode 100644<br>
+&gt; index 0000000000..7741dac2a5<br>
+&gt; --- /dev/null<br>
+&gt; +++ b/package/opensc/<a href=3D"http://opensc.mk" rel=3D"noreferrer" t=
+arget=3D"_blank">opensc.mk</a><br>
+&gt; @@ -0,0 +1,15 @@<br>
+&gt; +#####################################################################=
+###########<br>
+&gt; +#<br>
+&gt; +# opensc<br>
+&gt; +#<br>
+&gt; +#####################################################################=
+###########<br>
+&gt; +<br>
+&gt; +OPENSC_VERSION =3D 0.22.0<br>
+&gt; +OPENSC_SITE =3D $(call github,OpenSC,OpenSC,$(OPENSC_VERSION))<br>
+<br>
+=C2=A0 There&#39;s an uploaded tarball at<br>
+<a href=3D"https://github.com/OpenSC/OpenSC/releases/download/0.22.0/opensc=
+-0.22.0.tar.gz" rel=3D"noreferrer" target=3D"_blank">https://github.com/Ope=
+nSC/OpenSC/releases/download/0.22.0/opensc-0.22.0.tar.gz</a><br>
+<br>
+&gt; +OPENSC_LICENSE =3D GPL-2<br>
+<br>
+=C2=A0 I haven&#39;t checked in detail, but it seems to be LGPL-2.1+<br>
+<br>
+&gt; +OPENSC_LICENSE_FILES =3D LICENSE<br>
+<br>
+=C2=A0 This file doesn&#39;t even exist.<br>
+<br>
+&gt; +OPENSC_DEPENDENCIES =3D openssl pcsc-lite<br>
+&gt; +OPENSC_AUTORECONF =3D YES<br>
+<br>
+=C2=A0 You need to add a comment why this is needed. It probably isn&#39;t =
+with the <br>
+uploaded tarball.<br>
+<br>
+&gt; +OPENSC_INSTALL_TARGET =3D YES<br>
+<br>
+=C2=A0 This is unnecessary (default). _INSTALL_STAGING, on the other hand, =
+*is* <br>
+necessary.<br>
+<br>
+&gt; +<br>
+&gt; +$(eval $(autotools-package))<br>
+&gt; <br>
+</blockquote></div><div><br></div><blockquote style=3D"margin:0 0 0 40px;bo=
+rder:none;padding:0px">Hi,<br><br>Thanks for the help and guidance, while r=
+eading the<br></blockquote>v2 of the patch I find the following warning I d=
+on&#39;t quite understand,<div>and I don&#39;t find any relevant docs over =
+the net, would you mind to</div><div>elaborate what could it mean the follo=
+wing warning from check-package:</div><div><br></div>$ ./utils/check-packag=
+e package/opensc/*<br>package/opensc/<a href=3D"http://opensc.mk:8">opensc.=
+mk:8</a>: remove default value of _SOURCE variable (<a href=3D"http://night=
+ly.buildroot.org/#generic-package-reference">http://nightly.buildroot.org/#=
+generic-package-reference</a>)<br>25 lines processed<br>1 warnings generate=
+d<div><br></div><blockquote style=3D"margin:0 0 0 40px;border:none;padding:=
+0px"><div>while the package looks like this:</div><div><br></div></blockquo=
+te><div><div><span style=3D"font-family:monospace"><span style=3D"color:rgb=
+(0,0,0)">$ cat package/opensc/<a href=3D"http://opensc.mk">opensc.mk</a> =
+=C2=A0</span><br>##########################################################=
+######################
+<br>#
+<br># opensc
+<br>#
+<br>#######################################################################=
+#########
+<br>
+<br>OPENSC_VERSION =3D 0.22.0
+<br>OPENSC_SOURCE =3D opensc-$(OPENSC_VERSION).tar.gz
+<br>OPENSC_SITE =3D <a href=3D"https://github.com/OpenSC/OpenSC/releases/do=
+wnload/$(OPENSC_VERSION)/">https://github.com/OpenSC/OpenSC/releases/downlo=
+ad/$(OPENSC_VERSION)/</a>
+<br>OPENSC_LICENSE =3D LGPL-2.1+
+<br>OPENSC_LICENSE_FILES =3D COPYING
+<br>OPENSC_DEPENDENCIES =3D openssl pcsc-lite
+<br>OPENSC_INSTALL_STAGING =3D YES
+<br>
+<br>$(eval $(autotools-package))</span></div><div><span style=3D"font-famil=
+y:monospace"><br></span></div></div><blockquote style=3D"margin:0 0 0 40px;=
+border:none;padding:0px"><div><div><span style=3D"font-family:monospace">Th=
+anks!</span></div></div><div><span style=3D"font-family:monospace"><br></sp=
+an></div></blockquote><div><div><div dir=3D"ltr" class=3D"gmail_signature">=
+<div dir=3D"ltr"><blockquote style=3D"margin:0px 0px 0px 40px;border:none;p=
+adding:0px">Jos=C3=A9.</blockquote></div></div></div></div></div>
+
+--00000000000053f61b05cec7a9bd--
+
+--===============3874288715480995500==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============3874288715480995500==--
