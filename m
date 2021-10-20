@@ -2,85 +2,83 @@ Return-Path: <SRS0=oNq7=PI=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 513A2C433F5
-	for <buildroot@archiver.kernel.org>; Wed, 20 Oct 2021 16:56:27 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 04AD3C433F5
+	for <buildroot@archiver.kernel.org>; Wed, 20 Oct 2021 17:30:57 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id BED3D60FE8
-	for <buildroot@archiver.kernel.org>; Wed, 20 Oct 2021 16:56:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org BED3D60FE8
+	by mail.kernel.org (Postfix) with ESMTPS id 6DF4D60FE8
+	for <buildroot@archiver.kernel.org>; Wed, 20 Oct 2021 17:30:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6DF4D60FE8
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 92976826BB;
-	Wed, 20 Oct 2021 16:56:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3A0754076F;
+	Wed, 20 Oct 2021 17:30:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id m1yIypUQc5uh; Wed, 20 Oct 2021 16:56:25 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 5too3UkJjtSn; Wed, 20 Oct 2021 17:30:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EC68C83B65;
-	Wed, 20 Oct 2021 16:56:24 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 021471BF3C6
- for <buildroot@lists.busybox.net>; Wed, 20 Oct 2021 16:56:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7C13440757;
+	Wed, 20 Oct 2021 17:30:54 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1CA701BF94D
+ for <buildroot@lists.busybox.net>; Wed, 20 Oct 2021 17:30:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9964A83A92
- for <buildroot@lists.busybox.net>; Wed, 20 Oct 2021 16:56:11 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0CA9E40757
+ for <buildroot@lists.busybox.net>; Wed, 20 Oct 2021 17:30:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SDJFzZG4wfUZ for <buildroot@lists.busybox.net>;
- Wed, 20 Oct 2021 16:56:11 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4IX7EZI46EBK for <buildroot@lists.busybox.net>;
+ Wed, 20 Oct 2021 17:30:52 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
- [IPv6:2a00:1450:4864:20::32e])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 00C4483A98
- for <buildroot@buildroot.org>; Wed, 20 Oct 2021 16:56:10 +0000 (UTC)
-Received: by mail-wm1-x32e.google.com with SMTP id
- 77-20020a1c0450000000b0030da2439b21so3341019wme.0
- for <buildroot@buildroot.org>; Wed, 20 Oct 2021 09:56:10 -0700 (PDT)
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
+ [IPv6:2a00:1450:4864:20::431])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E904740628
+ for <buildroot@buildroot.org>; Wed, 20 Oct 2021 17:30:51 +0000 (UTC)
+Received: by mail-wr1-x431.google.com with SMTP id u18so8126wrg.5
+ for <buildroot@buildroot.org>; Wed, 20 Oct 2021 10:30:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=/UACaNJvaWyzhUL3wMhLzsj9AhV359SABpDCVGNqDeQ=;
- b=egUOfOAM1+LnYe7bCfwd/IrZUT0DrQCopc5JPY2hguJ2Jdi2uQ3m8EJVFVgxpmZjXR
- A4DVs+8dc8sWyO3nbCnRqRJAds70yMpcudXdQ/LMzi0OqLUyRTxdrNScMzWA46evTZUw
- mchsc+RCGfLSyHklHsylE8crVz7jiJgNEEpOliSnj/J9LHKU46HxTG64UT2IXg/Yf2SV
- ulE6h0VTMzaXruX6PG63dTiI3+byqSG6P3dXlEsyHd113ZOrm1M29BGqw1FjMAvEGhRB
- 4+9hET3FOdJXsyF9t0zmV2Otpn9TqhrB/PoCfaxvULAAKOwws7blchRakN6jKWFL/272
- XsIg==
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=9ErPYAuPevsCd1c/pz1P831W/ChU/Q10Fd1DtLcU5Nk=;
+ b=aOBaTFy6Kh15KLt3X8KDIv8G31tfnOEbxQZq2QzTWU6DykX7X+iDXhPQ9sTjDsLxzZ
+ Rg4CEHEAFFbeMZ57wJNmSEPEbqWmjwXoYhJ13mZj0B+4S656JPTdBQPuhj/VqRPi7Ci1
+ Tdf1A5EAyZ0RiW/QVy0XrbD4BL13KFCviYMKDOA38zxUD6BqjM/1NAHKl5+jPsaxo0Ul
+ SLpu24Rue0dMchpc4A5YP+CP6ysfGmDmO4zJASU96xnWeXfk1nzOwF8ZKQykiLTY/x5c
+ 0JUVq2lbXk497GVveUIZmN2CwXTMdTTYffGJf/wjk0meiZ8S4rUbakcnpGIZSeq36ZXD
+ blJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=/UACaNJvaWyzhUL3wMhLzsj9AhV359SABpDCVGNqDeQ=;
- b=OnX4X8mR21bR8v84pVbwRVsxTqNHH2rEZvTiNKu5f08sl3YlJkzo38atQN3nB+Jf9N
- yN4L+PZKpBNeGcntW0vI2ODwdRhMS2FsfdlM+LSCgoPt5V9k/8A2yjlgOA+5b9Zakirf
- IeM50IILYMyAkXKF1DbVb3/Cdy2NmD1c38P/fALP6sTRXC4qKF3sR5+AVDzjsdotMfy3
- LmcCpy0d0I7l6lqyYqEWx1bEiVHP8rEdoO3oh7V4knUlINLkZM2LwmlAtKaxW6vxZIxJ
- 5WFi1X4gdHX3fRC4zbLT4vZp3vd2jS4dGUpjJCViaEOHGVlrfJhxKPe82JuEw1mm21bE
- V7nw==
-X-Gm-Message-State: AOAM533+OjeiXxG2IrZFnThfIVlL/S6sb8tRXWi3lYVXeFKtCvT/U7Fo
- Mp/SU1ERsYsW7bhkpbL0MZk3KIPwDYc=
-X-Google-Smtp-Source: ABdhPJzMfDF/qIAtbDHkq1wGTgmVjAuY16M5VNfCqYI4Jlo103CpFq+XPGBQV/VCCe67Tr7PWt6/wQ==
-X-Received: by 2002:a1c:7302:: with SMTP id d2mr14830255wmb.92.1634748968906; 
- Wed, 20 Oct 2021 09:56:08 -0700 (PDT)
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=9ErPYAuPevsCd1c/pz1P831W/ChU/Q10Fd1DtLcU5Nk=;
+ b=KoOXmSq43aVNHs8FWZtcLnc6k0VFdv9O2IntY0WsHzCMYE0ouMxeVkSq2nZNDIUSuv
+ z37FOI7BR5KblqDywG/9b7f9tIrPZb/qK6siFimqu5jMWTfLgNUVs0Kgr3Rv9llYqkOq
+ EVaJcy3OlQ8R/zvmvgPs6ByGeajVUPdfy0P0d7culaM/XD9eV+ySH7860QIQGjU8rg1J
+ B3ufyEYbJnxW97u1/7vHmMNwtO1VE6meNu/mGm3f94PkxILDnf2OeRAy4V9itrpIA1R0
+ kFn1HLtx9zuCGfOduTm98Sbqys3zWE7Z6GiXa9u6nnYG2pilBFHmzKFdKaruNknocQGY
+ 2/uw==
+X-Gm-Message-State: AOAM5313Sv1UY+cpa7d5mNoiE6NGv9+60rWD6vsUiUIeA9n7ZFTbBPv5
+ YbloDyzuV2lnvBCWqtE3ciCbBKwx1Y8=
+X-Google-Smtp-Source: ABdhPJyqTwi4z5WsD2SL3p/euY5QCbWDxh1OFk/Kmd9GhWOpSg2gJuTaVKg2KgB9IZCXd/io+EuNkA==
+X-Received: by 2002:adf:9147:: with SMTP id j65mr678484wrj.163.1634751049878; 
+ Wed, 20 Oct 2021 10:30:49 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-1732-95.w86-253.abo.wanadoo.fr.
  [86.253.44.95])
- by smtp.gmail.com with ESMTPSA id t14sm2439921wrr.75.2021.10.20.09.56.08
+ by smtp.gmail.com with ESMTPSA id i8sm2510084wrv.47.2021.10.20.10.30.48
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 20 Oct 2021 09:56:08 -0700 (PDT)
+ Wed, 20 Oct 2021 10:30:48 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 20 Oct 2021 18:54:46 +0200
-Message-Id: <20211020165446.2754391-2-fontaine.fabrice@gmail.com>
+Date: Wed, 20 Oct 2021 19:29:17 +0200
+Message-Id: <20211020172917.3136578-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211020165446.2754391-1-fontaine.fabrice@gmail.com>
-References: <20211020165446.2754391-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 2/2] package/ipcalc: add geoip support
+Subject: [Buildroot] [PATCH 1/1] package/pipewire: fix media-session without
+ alsa
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,36 +90,78 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Derrick Lyndon Pallas <derrick@meter.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Fix the following build failure of media-session without alsa raised
+since bump to version 0.3.38 in commit
+22cccbd771b859f4a127e28575b360daf36cb4f7 and
+https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/e46a30562ff21d70215d0efc77496a9d7f587542:
+
+/home/giuliobenetti/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/xtensa-buildroot-linux-uclibc/9.3.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld: src/media-session/pipewire-media-session.p/alsa-endpoint.c.o: in function `spa_pod_builder_add':
+alsa-endpoint.c:(.text+0x11e4): undefined reference to `snd_card_get_name'
+
+Fixes:
+ - http://autobuild.buildroot.org/results/dbc2971f5bb89fc10334d14d6f349cfae2d069d3
+
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/ipcalc/ipcalc.mk | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ ...dia-session-meson.build-add-alsa_dep.patch | 42 +++++++++++++++++++
+ 1 file changed, 42 insertions(+)
+ create mode 100644 package/pipewire/0002-src-media-session-meson.build-add-alsa_dep.patch
 
-diff --git a/package/ipcalc/ipcalc.mk b/package/ipcalc/ipcalc.mk
-index 145b6904b9..8a43200456 100644
---- a/package/ipcalc/ipcalc.mk
-+++ b/package/ipcalc/ipcalc.mk
-@@ -10,7 +10,12 @@ IPCALC_SOURCE = ipcalc-$(IPCALC_VERSION).tar.bz2
- IPCALC_LICENSE = GPL-2.0+
- IPCALC_LICENSE_FILES = COPYING
- 
--IPCALC_CONF_OPTS = -Duse_geoip=disabled
-+ifeq ($(BR2_PACKAGE_GEOIP),y)
-+IPCALC_CONF_OPTS += -Duse_geoip=enabled
-+IPCALC_DEPENDENCIES += host-pkgconf geoip
-+else
-+IPCALC_CONF_OPTS += -Duse_geoip=disabled
-+endif
- 
- ifeq ($(BR2_PACKAGE_LIBMAXMINDDB),y)
- IPCALC_CONF_OPTS += -Duse_maxminddb=enabled
+diff --git a/package/pipewire/0002-src-media-session-meson.build-add-alsa_dep.patch b/package/pipewire/0002-src-media-session-meson.build-add-alsa_dep.patch
+new file mode 100644
+index 0000000000..d911bb2940
+--- /dev/null
++++ b/package/pipewire/0002-src-media-session-meson.build-add-alsa_dep.patch
+@@ -0,0 +1,42 @@
++From c643b6abbbebe8a0b8992b4403aab854e476673d Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Wed, 20 Oct 2021 19:24:50 +0200
++Subject: [PATCH] src/media-session/meson.build: add alsa_dep
++
++Fix the following build failure of media-session raised since version
++0.3.38 and
++https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/e46a30562ff21d70215d0efc77496a9d7f587542
++with -Dalsa=disabled because alsa_dep is overrwritten to false by
++spa/meson.build:
++
++/home/giuliobenetti/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/xtensa-buildroot-linux-uclibc/9.3.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld: src/media-session/pipewire-media-session.p/alsa-endpoint.c.o: in function `spa_pod_builder_add':
++alsa-endpoint.c:(.text+0x11e4): undefined reference to `snd_card_get_name'
++
++This patch is not upstreamable as media-session moved to its own
++project:
++https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/1bced6b2ef300acce23c0daaeb8f4fc14095f330
++
++Fixes:
++ - http://autobuild.buildroot.org/results/dbc2971f5bb89fc10334d14d6f349cfae2d069d3
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: not upstreamable (media-session moved to its own
++project)]
++---
++ src/media-session/meson.build | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/src/media-session/meson.build b/src/media-session/meson.build
++index ff83f34fc..549b58288 100644
++--- a/src/media-session/meson.build
+++++ b/src/media-session/meson.build
++@@ -1,5 +1,6 @@
++ media_session_sources = []
++ if get_option('session-managers').contains('media-session')
+++  alsa_dep = dependency('alsa', version : '>=1.1.7', required: get_option('pipewire-alsa'))
++   sm_logind_src = []
++   sm_logind_dep = []
++   if systemd.found() and systemd_dep.found()
++-- 
++2.33.0
++
 -- 
 2.33.0
 
