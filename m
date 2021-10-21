@@ -2,55 +2,86 @@ Return-Path: <SRS0=A6xV=PJ=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6DB61C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 21 Oct 2021 16:09:09 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 805EEC433F5
+	for <buildroot@archiver.kernel.org>; Thu, 21 Oct 2021 16:29:51 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 8FA96611CB
-	for <buildroot@archiver.kernel.org>; Thu, 21 Oct 2021 16:09:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8FA96611CB
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
+	by mail.kernel.org (Postfix) with ESMTPS id EFAD7613A3
+	for <buildroot@archiver.kernel.org>; Thu, 21 Oct 2021 16:29:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org EFAD7613A3
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6DF2C606E5;
-	Thu, 21 Oct 2021 16:09:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BD5E240789;
+	Thu, 21 Oct 2021 16:29:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rynCjKG1eaCF; Thu, 21 Oct 2021 16:09:07 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id GPuoLaT0TG6G; Thu, 21 Oct 2021 16:29:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C273D6060E;
-	Thu, 21 Oct 2021 16:09:06 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 094E31BF20B
- for <buildroot@lists.busybox.net>; Thu, 21 Oct 2021 16:09:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 413B04064D;
+	Thu, 21 Oct 2021 16:29:49 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id AA0DD1BF20B
+ for <buildroot@lists.busybox.net>; Thu, 21 Oct 2021 16:29:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EA0BF4072A
- for <buildroot@lists.busybox.net>; Thu, 21 Oct 2021 16:09:04 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 93C1583C75
+ for <buildroot@lists.busybox.net>; Thu, 21 Oct 2021 16:29:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uPDUEIwSauAf for <buildroot@lists.busybox.net>;
- Thu, 21 Oct 2021 16:09:03 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 9582840017
- for <buildroot@buildroot.org>; Thu, 21 Oct 2021 16:09:03 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay10.mail.gandi.net (Postfix) with ESMTPSA id BB1FA240009;
- Thu, 21 Oct 2021 16:08:59 +0000 (UTC)
-Date: Thu, 21 Oct 2021 18:08:59 +0200
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Kory Maincent <kory.maincent@bootlin.com>
-Message-ID: <20211021180859.356b1a97@windsurf>
-In-Reply-To: <20211021160612.475456-1-kory.maincent@bootlin.com>
-References: <20211021160612.475456-1-kory.maincent@bootlin.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id UCuoCXLQ2RVU for <buildroot@lists.busybox.net>;
+ Thu, 21 Oct 2021 16:29:47 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com
+ [IPv6:2a00:1450:4864:20::536])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id EB63883C69
+ for <buildroot@buildroot.org>; Thu, 21 Oct 2021 16:29:46 +0000 (UTC)
+Received: by mail-ed1-x536.google.com with SMTP id w19so1628158edd.2
+ for <buildroot@buildroot.org>; Thu, 21 Oct 2021 09:29:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=date:from:to:cc:subject:message-id:reply-to:references:mime-version
+ :content-disposition:in-reply-to;
+ bh=LGdnAJ88JKNX8R1HDtvA3zelb4NVBlUnsbqrMAf/YTc=;
+ b=E16Ygu6LFFYMFe/v2Ewbvy51IeOKdvfRY8Sbsb/odekl8C9EB0pYYjcAoztA68yxOj
+ k6BTCPHOxPegzne08AhyThND/bgy+Jb+UF5Y4JeEy6kodODtqfki7nM/sOXWhxcPvNnT
+ tciFy1ZDEeaH5yGugH9hMT5Ag9AodRj+7Q6nstJxW/8vKozj6KIKzQbeoAv/YlOseXUq
+ FaIjbLp1pog0KaVUnFnnAxEX9D3+pDKkV/esV3kap2Ee4LOoGW2fpKRIXlE5l/AOMHdH
+ 6+YV34zfpG+vVFw+Vf+XcCDEcM64d6CAx/rRrEvxJC8VJe8+90nL1u/ECmHlo7OR0RYE
+ sEtw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
+ :references:mime-version:content-disposition:in-reply-to;
+ bh=LGdnAJ88JKNX8R1HDtvA3zelb4NVBlUnsbqrMAf/YTc=;
+ b=GkxRcovlbA3Essxff/LPVW9wgbH7zuYV3Ua4cBzSFIsevDhR2yMgr+ZtLjUapIKEuy
+ eeU9P/20CrV63EOIQh151pO74XLaKftLkl1uIkmk1EWDboX/y67J4WFMBQQoj5piMINY
+ T885NkriJBwjFU9+GgS3AzwpcTiR12o1mHxBw6NP0IbMIrQtDvmWjLU/JL4t5CrbGabk
+ OJvym9FN9DYwc3Gk6ENlSX4Idxf3DBqOi+ANZJVdyk+eeq4gbNS7RGTar0hNB8rhNOgv
+ vVc+1G7goApqEyhxSmZoKh4octr0h/hgHnxqjp+4tnnA0KC6oqIH1iESzaQKexXX+20p
+ 9yLA==
+X-Gm-Message-State: AOAM530zMAP86oFlx9ff6saXOk5YYbQMg3v7ti3KvPlm8yMdqLuar9c2
+ Z6b3sM7w48P6CNZNfvQHMjcWwkiL2K8=
+X-Google-Smtp-Source: ABdhPJxuZkec/mSXe11e8IsfYvLrkIdA54rd3yFc8j9aHNN0jwtyZJS/XmFKTsMw7ovJP5+pJjdzLg==
+X-Received: by 2002:a50:da06:: with SMTP id z6mr9077756edj.355.1634833785215; 
+ Thu, 21 Oct 2021 09:29:45 -0700 (PDT)
+Received: from pevik (gw1.ms-free.net. [185.243.124.10])
+ by smtp.gmail.com with ESMTPSA id he37sm1370072ejc.113.2021.10.21.09.29.44
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 21 Oct 2021 09:29:44 -0700 (PDT)
+Date: Thu, 21 Oct 2021 18:29:33 +0200
+From: Petr Vorel <petr.vorel@gmail.com>
+To: Richard Palethorpe <rpalethorpe@suse.com>
+Message-ID: <YXGVbUWKSxVtUz4+@pevik>
+References: <20211021112358.8769-1-rpalethorpe@suse.com>
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] boot/grub2/grub2.mk: Fix the installation
- of target tools
+Content-Disposition: inline
+In-Reply-To: <20211021112358.8769-1-rpalethorpe@suse.com>
+Subject: Re: [Buildroot] [PATCH] package/ltp-testsuite: Add Open POSIX and
+ realtime test suite opts
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,39 +93,22 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: yann.morin.1998@free.fr, aduskett@gmail.com, buildroot@buildroot.org
+Reply-To: Petr Vorel <petr.vorel@gmail.com>
+Cc: io@richiejp.com, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu, 21 Oct 2021 18:06:12 +0200
-Kory Maincent <kory.maincent@bootlin.com> wrote:
+Hi Richie, all,
 
-> The tools was not installed anymore since we move from autotools to
-> generic-package. This patch fixes their installation.
-> 
-> We have decided to implement the install tool process by running the "make
-> install" command for each tuples. This allows to have all different
-> platforms Grub modules installed in the target. The drawback is the
-> overwrite of Grub2 binaries tools during each "make install" command. This
-> drawback is not really important as it happens in the same package. This is
-> the best option to avoid unnecessary and more complexity to this package.
-> 
-> Yann adds also mixes fixes, like no semi-colons but separate lines, or
-> using && not sime-colon, and the calls to MESSAGE to explicit the different
-> step of the parallel build.
+as I wrote to the first post (which didn't landed to ML):
+Thanks a lot, I always wanted to do this.
 
-Yann will ask to have these in a separate patch, I'm pretty sure (as I
-would request the same).
+Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+Kind regards,
+Petr
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
