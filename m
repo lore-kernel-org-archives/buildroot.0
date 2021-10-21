@@ -2,67 +2,87 @@ Return-Path: <SRS0=A6xV=PJ=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C1933C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 21 Oct 2021 16:30:42 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A019CC433F5
+	for <buildroot@archiver.kernel.org>; Thu, 21 Oct 2021 16:57:31 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 382FE613A3
-	for <buildroot@archiver.kernel.org>; Thu, 21 Oct 2021 16:30:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 382FE613A3
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
+	by mail.kernel.org (Postfix) with ESMTPS id EF2CA610FF
+	for <buildroot@archiver.kernel.org>; Thu, 21 Oct 2021 16:57:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org EF2CA610FF
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0270F83C87;
-	Thu, 21 Oct 2021 16:30:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B194260F1C;
+	Thu, 21 Oct 2021 16:57:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ql0JfHlCgni3; Thu, 21 Oct 2021 16:30:41 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 38BB983C75;
-	Thu, 21 Oct 2021 16:30:40 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 288861BF20B
- for <buildroot@lists.busybox.net>; Thu, 21 Oct 2021 16:30:39 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1812F606ED
- for <buildroot@lists.busybox.net>; Thu, 21 Oct 2021 16:30:39 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=ideasonboard.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zqQb012rhnI5 for <buildroot@lists.busybox.net>;
- Thu, 21 Oct 2021 16:30:37 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com
- [213.167.242.64])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C807D605C2
- for <buildroot@buildroot.org>; Thu, 21 Oct 2021 16:30:37 +0000 (UTC)
-Received: from pendragon.ideasonboard.com
- (cpc89244-aztw30-2-0-cust3082.18-1.cable.virginm.net [86.31.172.11])
- by perceval.ideasonboard.com (Postfix) with ESMTPSA id 857338B6;
- Thu, 21 Oct 2021 18:30:34 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
- s=mail; t=1634833834;
- bh=a8EwgCmJd/o9bp4zrcoXRa7Zn11Phnvjgg/UHxwzOIY=;
- h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
- b=T77RsV68VFNvHc8Kx8ukq4hx8RG/rJD2TtLvhesHYi7kUhTsMGsTYA0uRO2JNB36r
- VbNpvQ3Tg3UCmge7+Mr05XYotaVWc867ePDNZK11cuMRbHeDfD6tYJkiIQlkME4FNM
- NDn2bo+vK8iRuxVerQLeV1OONzcfx0LXlAagQ5Q4=
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id F_K5Q60G8X9Y; Thu, 21 Oct 2021 16:57:30 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 27754606ED;
+	Thu, 21 Oct 2021 16:57:29 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E8B231BF20B
+ for <buildroot@lists.busybox.net>; Thu, 21 Oct 2021 16:57:27 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id D70F540735
+ for <buildroot@lists.busybox.net>; Thu, 21 Oct 2021 16:57:27 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id BZHPBbFkh3xR for <buildroot@lists.busybox.net>;
+ Thu, 21 Oct 2021 16:57:23 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
+ [IPv6:2a00:1450:4864:20::32d])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C724B40733
+ for <buildroot@buildroot.org>; Thu, 21 Oct 2021 16:57:23 +0000 (UTC)
+Received: by mail-wm1-x32d.google.com with SMTP id
+ 193-20020a1c01ca000000b00327775075f7so358321wmb.5
+ for <buildroot@buildroot.org>; Thu, 21 Oct 2021 09:57:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=cpTfBw+JyfHISk8ugeW4GEzRr2xJHurA3qDjHRizMnA=;
+ b=qDZ4rFLAXJBZgIHGb305CqRUJkOUXPy8JkrKCIH2eATISRA6alDDz+EH66hojY6xsB
+ BO+BNZh+Gfsc4fxILKlrrwVCXIablUJhh6PLWnjALo4Da5OqW0OOkco8fEcGgIZ8Y2Zt
+ Aes6SIIdU4AJckGz+7Njx7LpKfLo7nRPFakeLcWRmRXU2veVKppmkMv09/FgqckTbOdY
+ nWgxNkISllphfG0IroE1xErpRaNs8o9LXjrkE4y1Wh70Qwt6gPd+mZ7PvLwCdhy1x705
+ d/htmPgSBTcOJLxPFpygBJWWayf1Ty46Y523i2HDppZLTOVieH3N1rL3gDrbQIemwb/B
+ TIhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=cpTfBw+JyfHISk8ugeW4GEzRr2xJHurA3qDjHRizMnA=;
+ b=H8vnXMjVSv2lqk2bbuWfGbcQX27LFdPIfxvZ6qoMMNZ7vVd1TtQP0MEi17A6TykgeK
+ coZGiS8V/CflMmL0ZsEmDTrsjyVgSWsDEbAc1+kmbAiNTQC20nl5p+b+tP8qZAwxO717
+ DAEg2oWTRCbeJUX21X7VqLDx5vRf1N2ZEHn6eJ9UEnu5xahlJMwUD4lTlCRidDKsmKFN
+ D47x7ZuHERA36SSRoPCmxQyUgkXAMZqu2ND+ioN2ETWCJdMn5p1Snl8bAPMk9ijfGj1M
+ FevNRLhtP+bd4KTlZTdKR2S0t8AouFOZf/+DCScuAhsiMufaPXrMvh1KaS8tf27rugYa
+ QEkA==
+X-Gm-Message-State: AOAM531c/9LbZ76YjPtFvuB1NyLCsp6wUYRNtencryecO37bWkZK9Ba/
+ xuWmDSsJNsIQTnLk/IlSOpG5lhdq+Yg=
+X-Google-Smtp-Source: ABdhPJwR9O8fab8GOuPshYz68juy+uRcruUzzhtNhXLkSYXAqigVYIPYHuOFq97V+K6370iFYVoWrg==
+X-Received: by 2002:a05:600c:354a:: with SMTP id
+ i10mr21793042wmq.70.1634835441699; 
+ Thu, 21 Oct 2021 09:57:21 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-1732-95.w86-253.abo.wanadoo.fr.
+ [86.253.44.95])
+ by smtp.gmail.com with ESMTPSA id m14sm6809725wms.25.2021.10.21.09.57.21
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 21 Oct 2021 09:57:21 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Thu, 21 Oct 2021 18:55:32 +0200
+Message-Id: <20211021165532.147323-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-In-Reply-To: <CAPi7W83vxd8_KX=UCxVNZoKYxODXnKkTxUmu3saKJYStK9JLdw@mail.gmail.com>
-References: <20211020190423.3547893-1-fontaine.fabrice@gmail.com>
- <163480816021.2663858.13418966210945898355@Monstersaurus>
- <CAPi7W83vxd8_KX=UCxVNZoKYxODXnKkTxUmu3saKJYStK9JLdw@mail.gmail.com>
-From: Kieran Bingham <kieran.bingham@ideasonboard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 21 Oct 2021 17:30:31 +0100
-Message-ID: <163483383168.4018488.6875581227372699361@Monstersaurus>
-User-Agent: alot/0.9.1
-Subject: Re: [Buildroot] [PATCH 1/1] package/libcamera: disable compliance
- tool
+Subject: [Buildroot] [PATCH 1/1] package/freerdp: security bump to version
+ 2.4.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,69 +94,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Buildroot Mailing List <buildroot@buildroot.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-UXVvdGluZyBGYWJyaWNlIEZvbnRhaW5lICgyMDIxLTEwLTIxIDE3OjA1OjUxKQo+IEhpIEtpZXJh
-biwKPiAKPiBMZSBqZXUuIDIxIG9jdC4gMjAyMSDDoCAxMToyMiwgS2llcmFuIEJpbmdoYW0KPiA8
-a2llcmFuLmJpbmdoYW1AaWRlYXNvbmJvYXJkLmNvbT4gYSDDqWNyaXQgOgo+ID4KPiA+IEhpIEZh
-YnJpY2UsCj4gPgo+ID4gUXVvdGluZyBGYWJyaWNlIEZvbnRhaW5lICgyMDIxLTEwLTIwIDIwOjA0
-OjIzKQo+ID4gPiBEaXNhYmxlIGNvbXBsaWFuY2UgdG9vbCB0byBmaXggdGhlIGZvbGxvd2luZyBi
-dWlsZCBmYWlsdXJlCj4gPiA+IHJhaXNlZCBzaW5jZSBjb21taXQgZTFkMzdhYjBhN2IyYjg3MzVl
-NjljMDcwNTE5OTc4ZDI4OThkMmU3OSBhbmQKPiA+ID4gaHR0cHM6Ly9naXQubGludXh0di5vcmcv
-bGliY2FtZXJhLmdpdC9jb21taXQvP2lkPTAyYmMxMTA4NTc4ZThiOGViNjhmYTdkOWFlM2VlZWE1
-NTg3MjM5MzE6Cj4gPiA+Cj4gPiA+IC91c3IvbGZzL2hkZF92MS9yYy1idWlsZHJvb3QtdGVzdC9z
-Y3JpcHRzL2luc3RhbmNlLTEvb3V0cHV0LTEvaG9zdC9saWIvZ2NjL2FybS1idWlsZHJvb3QtbGlu
-dXgtdWNsaWJjZ251ZWFiaS8xMC4zLjAvLi4vLi4vLi4vLi4vYXJtLWJ1aWxkcm9vdC1saW51eC11
-Y2xpYmNnbnVlYWJpL2Jpbi9sZDogY2Fubm90IGZpbmQgLWxndGVzdAo+ID4gPgo+ID4gPiBGaXhl
-czoKPiA+ID4gIC0gaHR0cDovL2F1dG9idWlsZC5idWlsZHJvb3Qub3JnL3Jlc3VsdHMvZTFiYjhh
-YTFkZTMxMGYzZDI3Yjc0ZWM3ZDg3NDhkMTcwYWQ0NDRlMgo+ID4gPgo+ID4KPiA+IEFueSBpZGVh
-IHdoeSB3ZSdyZSBmYWlsaW5nIHRvIGZpbmQgZ3Rlc3Q/Cj4gTm9wZSwgSSBkaWRuJ3QgdGFrZSB0
-aW1lIHRvIGZpbmQgb3V0IHdoeSB0aGlzIGlzIGZhaWxpbmcgYXMgSSB0aGluawo+IHRoYXQgbGMt
-Y29tcGxpYW5jZSBpcyBqdXN0IG5vdCBuZWVkZWQgaW4gdGhlIGNvbnRleHQgb2YgYnVpbGRyb290
-IChhcwo+IGd0ZXN0IGlzIG5vdCBpbnN0YWxsZWQgb24gdGFyZ2V0KS4KPiA+Cj4gPiBPdXIgbWVz
-b24uYnVpbGQgZm9yIHNyYy9sYy1jb21wbGlhbmNlIGNvbnRhaW5zIHRoZSBmb2xsb3dpbmc6Cj4g
-Pgo+ID4gIiIiCj4gPiAjIFNQRFgtTGljZW5zZS1JZGVudGlmaWVyOiBDQzAtMS4wCj4gPgo+ID4g
-bGliZXZlbnQgPSBkZXBlbmRlbmN5KCdsaWJldmVudF9wdGhyZWFkcycsIHJlcXVpcmVkIDogZ2V0
-X29wdGlvbignbGMtY29tcGxpYW5jZScpKQo+ID4gbGliZ3Rlc3QgPSBkZXBlbmRlbmN5KCdndGVz
-dCcsIHJlcXVpcmVkIDogZ2V0X29wdGlvbignbGMtY29tcGxpYW5jZScpKQo+ID4KPiA+IGlmIG5v
-dCAobGliZXZlbnQuZm91bmQoKSBhbmQgbGliZ3Rlc3QuZm91bmQoKSkKPiA+ICAgICBsY19jb21w
-bGlhbmNlX2VuYWJsZWQgPSBmYWxzZQo+ID4gICAgIHN1YmRpcl9kb25lKCkKPiA+IGVuZGlmCj4g
-Pgo+ID4gbGNfY29tcGxpYW5jZV9lbmFibGVkID0gdHJ1ZQo+ID4gIiIiCj4gPgo+ID4gV2hpY2gg
-aW1wbGllcyB0aGF0IGxpYmd0ZXN0IHdhcyBmb3VuZCBkdXJpbmcgdGhlIGNvbmZpZ3VyYXRpb24g
-cGhhc2UsCj4gPiBidXQgbm90IGR1cmluZyB0aGUgbGlua2luZyBwaGFzZS4uLi4KPiA+Cj4gPiBJ
-cyBsaWJndGVzdCBidWlsdCBhcyBwYXJ0IG9mIHRoaXMgYnVpbGQgY29uZmlndXJhdGlvbj8gSWYg
-aXQgaXMgLSBJJ2QKPiA+IGV4cGVjdCBsYy1jb21wbGlhbmNlIHRvIGdldCBidWlsdCBhZ2FpbnN0
-IGl0LiBJZiBub3QgLSB0aGVuIGl0IHdvdWxkCj4gPiBhdXRvbWF0aWNhbGx5IGJlIGRpc2FibGVk
-IGJ5IG91ciBidWlsZC4uLgo+IFllcywgaXQgaXMgYnVpbHQgYW5kIGZvdW5kIGJ5IG1lc29uIG90
-aGVyd2lzZSBsYy1jb21wbGlhbmNlIHdvbid0IGJlCj4gYnVpbHQgYnV0IGZvciBhbiB1bmtub3du
-IHJlYXNvbiwgdGhlIGxpbmsgc3RlcCBmYWlscy4KCllvdSd2ZSBtZW50aW9uZWQgYWJvdmUgdGhh
-dCBndGVzdCB3b24ndCBiZSBpbnN0YWxsZWQgb24gdGhlIHRhcmdldC4uLiBTbwouLiBJIHdvdWxk
-IGV4cGVjdCB0aGF0IG1lYW5zIGl0IGlzbid0IGluIHRoZSB0YXJnZXQgc3lzcm9vdCwgYW5kIGNh
-bid0CmJlIGxpbmtlZCBhZ2FpbnN0LgoKU28gaXQgc2VlbXMgdGhhdCBmb3Igc29tZSByZWFzb24g
-bWVzb24gZmluZHMgYSBob3N0IHBhY2thZ2UgaW5zdGVhZCBvZiBhCnRhcmdldCBwYWNrYWdlPwoK
-RG8gd2UgaGF2ZSBhIHdheSB0byBkaWZmZXJlbnRpYXRlIHRoZXNlIGluIGJ1aWxkcm9vdD8KCkkn
-bSBub3Qgc3VyZSBpZiB0aGVyZSdzIHNvbWUgYnVpbGRyb290IHdpemFyZHJ5IHRoYXQgd291bGQg
-bWFrZQpsaWJjYW1lcmEncyBjb25maWd1cmUgcGhhc2Ugc2VlIG9ubHkgdGhlIHBhY2thZ2VzIHRo
-YXQgYXJlIGluc3RhbGxlZCBvbgp0aGUgdGFyZ2V0IHdoZW4gYmVpbmcgYnVpbHQsIGJ1dCBpZiBi
-dWlsZHJvb3QgZG9lc24ndCBzdXBwb3J0IGluc3RhbGxpbmcKZ3Rlc3QgYXQgYWxsIC0gdGhlbiBp
-bmRlZWQgdGhlcmUgaXNuJ3QgYW55IHBvaW50IHN1cHBvcnRpbmcKbGMtY29tcGxpYW5jZSB3aGlj
-aCByZXF1aXJlcyBpdC4KCgo+ID4KPiA+Cj4gPiA+IFNpZ25lZC1vZmYtYnk6IEZhYnJpY2UgRm9u
-dGFpbmUgPGZvbnRhaW5lLmZhYnJpY2VAZ21haWwuY29tPgo+ID4gPiAtLS0KPiA+ID4gIHBhY2th
-Z2UvbGliY2FtZXJhL2xpYmNhbWVyYS5tayB8IDEgKwo+ID4gPiAgMSBmaWxlIGNoYW5nZWQsIDEg
-aW5zZXJ0aW9uKCspCj4gPiA+Cj4gPiA+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2xpYmNhbWVyYS9s
-aWJjYW1lcmEubWsgYi9wYWNrYWdlL2xpYmNhbWVyYS9saWJjYW1lcmEubWsKPiA+ID4gaW5kZXgg
-OGFiOTVmYjQyYS4uNjM4YzlhYzU1MyAxMDA2NDQKPiA+ID4gLS0tIGEvcGFja2FnZS9saWJjYW1l
-cmEvbGliY2FtZXJhLm1rCj4gPiA+ICsrKyBiL3BhY2thZ2UvbGliY2FtZXJhL2xpYmNhbWVyYS5t
-awo+ID4gPiBAQCAtMTcsNiArMTcsNyBAQCBMSUJDQU1FUkFfREVQRU5ERU5DSUVTID0gXAo+ID4g
-PiAgTElCQ0FNRVJBX0NPTkZfT1BUUyA9IFwKPiA+ID4gICAgICAgICAtRGFuZHJvaWQ9ZGlzYWJs
-ZWQgXAo+ID4gPiAgICAgICAgIC1EZG9jdW1lbnRhdGlvbj1kaXNhYmxlZCBcCj4gPiA+ICsgICAg
-ICAgLURsYy1jb21wbGlhbmNlPWRpc2FibGVkIFwKPiA+ID4gICAgICAgICAtRHRlc3Q9ZmFsc2Ug
-XAo+ID4gPiAgICAgICAgIC1Ed2Vycm9yPWZhbHNlCj4gPiA+ICBMSUJDQU1FUkFfSU5TVEFMTF9T
-VEFHSU5HID0gWUVTCj4gPiA+IC0tCj4gPiA+IDIuMzMuMAo+ID4gPgo+IEJlc3QgUmVnYXJkcywK
-PiAKPiBGYWJyaWNlCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6
-Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+- Fix CVE-2021-41159: Improper client input validation for gateway
+  connections allows to overwrite memory
+- Fix CVE-2021-41160: Improper region checks in all clients allow out of
+  bound write to memory
+
+https://github.com/FreeRDP/FreeRDP/releases/tag/2.4.1
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/freerdp/freerdp.hash | 4 ++--
+ package/freerdp/freerdp.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/freerdp/freerdp.hash b/package/freerdp/freerdp.hash
+index a6cc16c9ad..637e57e8b0 100644
+--- a/package/freerdp/freerdp.hash
++++ b/package/freerdp/freerdp.hash
+@@ -1,5 +1,5 @@
+-# From https://pub.freerdp.com/releases/freerdp-2.4.0.tar.gz.sha256
+-sha256  10ec9b06d74182b354ae288c8e621d94c0fb189b0c3b14a59867ab4c414c08b5  freerdp-2.4.0.tar.gz
++# From https://pub.freerdp.com/releases/freerdp-2.4.1.tar.gz.sha256
++sha256  ef75c87926643a0d0041f6556e343ac037380d4260c64885e7cdd20da0147edf  freerdp-2.4.1.tar.gz
+ 
+ # Locally calculated
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
+index 1ff6feeaa7..40a3904024 100644
+--- a/package/freerdp/freerdp.mk
++++ b/package/freerdp/freerdp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FREERDP_VERSION = 2.4.0
++FREERDP_VERSION = 2.4.1
+ FREERDP_SITE = https://pub.freerdp.com/releases
+ FREERDP_DEPENDENCIES = libglib2 openssl zlib
+ FREERDP_LICENSE = Apache-2.0
+-- 
+2.33.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
