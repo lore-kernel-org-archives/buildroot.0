@@ -2,71 +2,97 @@ Return-Path: <SRS0=A6xV=PJ=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8DB58C433FE
-	for <buildroot@archiver.kernel.org>; Thu, 21 Oct 2021 18:09:17 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4AC52C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 21 Oct 2021 18:43:20 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2858061B00
-	for <buildroot@archiver.kernel.org>; Thu, 21 Oct 2021 18:09:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2858061B00
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
+	by mail.kernel.org (Postfix) with ESMTPS id B4BD261221
+	for <buildroot@archiver.kernel.org>; Thu, 21 Oct 2021 18:43:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B4BD261221
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CC12F40674;
-	Thu, 21 Oct 2021 18:09:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7205083D2C;
+	Thu, 21 Oct 2021 18:43:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BHOGsT1Pqsxb; Thu, 21 Oct 2021 18:09:16 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ghTxkXGRyK_x; Thu, 21 Oct 2021 18:43:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1A94640537;
-	Thu, 21 Oct 2021 18:09:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B790283D43;
+	Thu, 21 Oct 2021 18:43:17 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 48B751BF8B4
- for <buildroot@lists.busybox.net>; Thu, 21 Oct 2021 18:09:13 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C97FE1BF8B4
+ for <buildroot@lists.busybox.net>; Thu, 21 Oct 2021 18:43:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 37E2A606E5
- for <buildroot@lists.busybox.net>; Thu, 21 Oct 2021 18:09:13 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C293160F38
+ for <buildroot@lists.busybox.net>; Thu, 21 Oct 2021 18:43:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
+ dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MHd-jKtzVy08 for <buildroot@lists.busybox.net>;
- Thu, 21 Oct 2021 18:09:12 +0000 (UTC)
+ with ESMTP id czuMtTrW5wdZ for <buildroot@lists.busybox.net>;
+ Thu, 21 Oct 2021 18:43:12 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3CA5560585
- for <buildroot@buildroot.org>; Thu, 21 Oct 2021 18:09:12 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:e8e5:5688:10fe:8b80])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id 81BF2780340;
- Thu, 21 Oct 2021 20:09:02 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1634839750;
- bh=jn0dsT+pFds7/iUQY8ZC6kT8M9c+XCD5eD8MxTUsJ6E=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=i8/g3YgPdfit+lcC0pbFG7REMfoo8RFK4apsut+ZhfiFmBq8qrAjOTPl6LS+x6nxy
- HLkWBTrDMIjXNE/wi/cl39cGR4ZL8HBtJ2NB2zQ1QPoa5++75QsBHncqJrC54hdBiQ
- 5BWzlhLsV6+AAx3BgDypbA2P07J+qGfwrR84OXo3l80TuOojhWto7xYUi8phWduBqa
- 6VX0PJvMS2UD6R+cBBsWKthRnDWJHJkFzXPjPMAYY86yxfteKsZDivRBvKyBKYGepH
- +Uf7QGJqzpLrvSKNYcFE79lrVHw4mOhMtTUzLdX0rFtrnUxe9V2wl96rCI56dzeBol
- uWf3bQzKXC4TA==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Thu, 21 Oct 2021 20:09:02 +0200
-Date: Thu, 21 Oct 2021 20:09:02 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Kory Maincent <kory.maincent@bootlin.com>
-Message-ID: <20211021180902.GF2400@scaer>
-References: <20211021160612.475456-1-kory.maincent@bootlin.com>
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com
+ [IPv6:2a00:1450:4864:20::535])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D0592606ED
+ for <buildroot@buildroot.org>; Thu, 21 Oct 2021 18:43:11 +0000 (UTC)
+Received: by mail-ed1-x535.google.com with SMTP id g10so4519659edj.1
+ for <buildroot@buildroot.org>; Thu, 21 Oct 2021 11:43:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=g4Tg+M10GKLau5R4cO3qkVPl146XXho08SOJ2BB9NVc=;
+ b=OltuWOZBP0p7ZH8B8L4WgH662GMnM/TyEnmk6b2cXSJGlt4U74LLQ1IqFOGInw52A9
+ IGU8FZwN1ZzpUrFLdyr0mtyJnImJTNuGuRQClfCSLOQNm7H31TRR1NP6au9lb8kgpu7V
+ eGVoj1VEd80nuaNrz8oF2kyj7zQNDIhGRCYAcZmHO21vBWs4hku4YAitQtrYXNuNuwHH
+ M4PX/V+22hMcDhxjszRTS9SXfYTfbow2qw1EB+vO5XadV/jgBBT0+By5i65UuWfXX46q
+ vIfk86yDvw+LaAEthuf3w2RvjZC8wMynoM15EX73ZGn1xty75p/m3FKuVvgqtYs0IWlL
+ 5t5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=g4Tg+M10GKLau5R4cO3qkVPl146XXho08SOJ2BB9NVc=;
+ b=50rZZQEgGah0qXP9N8gQrx6y6DdUP9r01EUnsykspCW4yqbM68SjojB/q6lRRVCX5z
+ PNk/SwlISGl2wr5aUvvlbhfn26P5ekshnr+iTnGiClKVTeNXwPYmKcaTotndh2upYG0B
+ Y8D/9Mh3MQKqUvsv+EvInk2LIg7FBpv91urwi+Ec/iWI0rDCpVMPJDbUhsvf6qOaXj01
+ PLhzBy9rMDKUUQKm4iDiL6FwLZKk5ocEtSjnuWEDjpGsaoFjAa0tycQefyTSYFmVey2R
+ AuL3JoyQWyOKma4VyZQeHbchS2F12dBB7NkwmVkLoXdQUYpfNrSCbioQKqREwYbIG+Aq
+ IJTA==
+X-Gm-Message-State: AOAM5317MTIrU+9/cZgmKyofUtneb51XrpEh5tWB1nkiNbt4Ohn4fc0G
+ 23LMjpuWeGFTSNpIHcDMhdViBQ==
+X-Google-Smtp-Source: ABdhPJxkyOl25lqnvyoPSXYdHxBbib8K5okhy402YHta8Pnu80oXjwi2mijZuEPuRXB4GbXH34dzuQ==
+X-Received: by 2002:a05:6402:2712:: with SMTP id
+ y18mr10493578edd.392.1634841789897; 
+ Thu, 21 Oct 2021 11:43:09 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id p10sm3262055edj.91.2021.10.21.11.43.08
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Thu, 21 Oct 2021 11:43:09 -0700 (PDT)
+Message-ID: <88c82aa8-d532-eeb1-bc77-796eafa0d06e@mind.be>
+Date: Thu, 21 Oct 2021 20:43:07 +0200
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20211021160612.475456-1-kory.maincent@bootlin.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH] boot/grub2/grub2.mk: Fix the installation
- of target tools
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.1.0
+Content-Language: en-GB
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20211016093234.2477835-1-fontaine.fabrice@gmail.com>
+ <20211016093234.2477835-2-fontaine.fabrice@gmail.com>
+ <20211018220427.5971bba1@windsurf> <20211018201808.GT2400@scaer>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20211018201808.GT2400@scaer>
+Subject: [Buildroot] conditional assigment check in check-package [was: Re:
+ [PATCH v2, 2/2] package/knock: add knockd option]
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,126 +104,88 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: aduskett@gmail.com, thomas.petazzoni@bootlin.com, buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
+Cc: Michael Rommel <rommel@layer-7.net>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 2021-10-21 18:06 +0200, Kory Maincent spake thusly:
-> The tools was not installed anymore since we move from autotools to
-            were
-> generic-package. This patch fixes their installation.
+
+
+On 18/10/2021 22:18, Yann E. MORIN wrote:
+> Thomas, All,
 > 
-> We have decided to implement the install tool process by running the "make
-> install" command for each tuples. This allows to have all different
-                            tuple ('each' is a singular)
-
-> platforms Grub modules installed in the target. The drawback is the
-> overwrite of Grub2 binaries tools during each "make install" command. This
-> drawback is not really important as it happens in the same package. This is
-s/not really/absolutely not/  ;-)
-
-> the best option to avoid unnecessary and more complexity to this package.
-
-Yes, agreed.
-
-> Yann adds also mixes fixes, like no semi-colons but separate lines, or
-                 misc
-> using && not sime-colon, and the calls to MESSAGE to explicit the different
-               semi
-
-Yeah, another guy doing typoes like I do! I like that! :-)
-
-> step of the parallel build.
+> On 2021-10-18 22:04 +0200, Thomas Petazzoni spake thusly:
+>> On Sat, 16 Oct 2021 11:32:34 +0200
+>> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+>>> +ifeq ($(BR2_PACKAGE_KNOCK_KNOCKD),y)
+>>> +KNOCK_DEPENDENCIES = libpcap
+>>  From commit 97f3ad7af3dd54a15a10aa35786e7fa08cf5e7b1:
+>>      Repeat after me: "Forcing the value of <pkg>_DEPENDENCIES inside a
+>>      conditional is the root of all evil."
+>> Care to repeat after me ? :-)
 > 
-> Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Tested-by: Adam Duskett <aduskett@gmail.com>
-
-As Thomas already replied, this should be done in separate patches:
-  - fix the tools installation
-  - remove the unnecessary \-continuations
-  - adding the MESSAGES calls
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  boot/grub2/grub2.mk | 24 ++++++++++++++++++------
->  1 file changed, 18 insertions(+), 6 deletions(-)
+> OK, I missed that in my review of v1...
+> /me hides in shame...
 > 
-> diff --git a/boot/grub2/grub2.mk b/boot/grub2/grub2.mk
-> index e01ebb2edb..19047d02f7 100644
-> --- a/boot/grub2/grub2.mk
-> +++ b/boot/grub2/grub2.mk
-> @@ -149,8 +149,9 @@ HOST_GRUB2_CONF_OPTS = \
->  
->  define GRUB2_CONFIGURE_CMDS
->  	$(foreach tuple, $(GRUB2_TUPLES-y), \
-> -		mkdir -p $(@D)/build-$(tuple) ; \
-> -		cd $(@D)/build-$(tuple) ; \
-> +		@$(call MESSAGE,Configuring $(tuple))
-> +		mkdir -p $(@D)/build-$(tuple)
-> +		cd $(@D)/build-$(tuple) && \
->  		$(TARGET_CONFIGURE_OPTS) \
->  		$(TARGET_CONFIGURE_ARGS) \
->  		$(GRUB2_CONF_ENV) \
-> @@ -172,13 +173,15 @@ endef
->  
->  define GRUB2_BUILD_CMDS
->  	$(foreach tuple, $(GRUB2_TUPLES-y), \
-> +		@$(call MESSAGE,Building $(tuple))
->  		$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/build-$(tuple)
->  	)
->  endef
->  
->  define GRUB2_INSTALL_IMAGES_CMDS
->  	$(foreach tuple, $(GRUB2_TUPLES-y), \
-> -		mkdir -p $(dir $(GRUB2_IMAGE_$(tuple))) ; \
-> +		@$(call MESSAGE,Installing $(tuple) to images directory)
-> +		mkdir -p $(dir $(GRUB2_IMAGE_$(tuple)))
->  		$(HOST_DIR)/usr/bin/grub-mkimage \
->  			-d $(@D)/build-$(tuple)/grub-core/ \
->  			-O $(tuple) \
-> @@ -186,14 +189,23 @@ define GRUB2_INSTALL_IMAGES_CMDS
->  			-p "$(GRUB2_PREFIX_$(tuple))" \
->  			$(if $(GRUB2_BUILTIN_CONFIG_$(tuple)), \
->  				-c $(GRUB2_BUILTIN_CONFIG_$(tuple))) \
-> -			$(GRUB2_BUILTIN_MODULES_$(tuple)) ; \
-> -		$(INSTALL) -D -m 0644 boot/grub2/grub.cfg $(GRUB2_CFG_$(tuple)) ; \
-> +			$(GRUB2_BUILTIN_MODULES_$(tuple))
-> +		$(INSTALL) -D -m 0644 boot/grub2/grub.cfg $(GRUB2_CFG_$(tuple))
->  		$(if $(findstring $(GRUB2_PLATFORM_$(tuple)), pc), \
->  			cat $(HOST_DIR)/lib/grub/$(tuple)/cdboot.img $(GRUB2_IMAGE_$(tuple)) > \
-> -				$(BINARIES_DIR)/grub-eltorito.img ; \
-> +				$(BINARIES_DIR)/grub-eltorito.img
->  		) \
->  	)
->  endef
->  
-> +ifeq ($(BR2_TARGET_GRUB2_INSTALL_TOOLS),y)
-> +define GRUB2_INSTALL_TARGET_CMDS
-> +	$(foreach tuple, $(GRUB2_TUPLES-y), \
-> +		@$(call MESSAGE,Installing $(tuple) to target directory)
-> +		$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/build-$(tuple) DESTDIR=$(TARGET_DIR) install
-> +	)
-> +endef
-> +endif
-> +
->  $(eval $(generic-package))
->  $(eval $(host-autotools-package))
-> -- 
-> 2.25.1
+> But seriously though: why is that not caught by check-package?
 > 
+> Because it is not actually an override: the variable is not yet set
+> there, so it is valid to unconditionally set it.
+> 
+> check-package should probably recognise that the variable is
+> <FOO>_DEPENDENCIES and consider that conditional assignment should
+> still be forbidden in that case.
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+  I had a look at this, and it is not entirely trivial to test for in check-package.
+
+  Basically, this is allowed:
+
+ifeq(...)
+FOO_VAR = ...
+endif
+... $(FOO_VAR) ... # Empty if condition not true
+
+  And this as well:
+
+ifeq(...)
+FOO_VAR = ...
+else
+FOO_VAR = ...
+endif
+
+  But this is not:
+
+ifeq(...)
+FOO_VAR = ...
+endif
+
+ifeq(...)
+FOO_VAR = ...
+endif
+
+
+  So basically:
+- after a variable is assigned, it can't be assigned to any more in the same 
+conditional branch;
+- it can be assigned to again in the else branch (including else ifeq constructs);
+- it can not be assigned to any more after the endif.
+
+  In addition, conditions can be nested...
+
+  The only way I can think of implementing this is by keeping a stack of 
+conditionally assigned variables. In the else branch, the top of the stack is 
+saved en empties. At the endif, the top of the stack is popped, merged with the 
+saved one, and merged into the new top of the stack.
+
+  Wow, by writing it down, I almost implemented it :-) Let's see if I can still 
+find the time to actually do it tonight...
+
+
+  Regards,
+  Arnout
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
