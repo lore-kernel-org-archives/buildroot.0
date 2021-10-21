@@ -2,72 +2,95 @@ Return-Path: <SRS0=A6xV=PJ=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D73F3C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 21 Oct 2021 20:12:55 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 68B4BC433F5
+	for <buildroot@archiver.kernel.org>; Thu, 21 Oct 2021 20:25:24 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 7706861359
-	for <buildroot@archiver.kernel.org>; Thu, 21 Oct 2021 20:12:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7706861359
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
+	by mail.kernel.org (Postfix) with ESMTPS id B3E2E60F9F
+	for <buildroot@archiver.kernel.org>; Thu, 21 Oct 2021 20:25:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B3E2E60F9F
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 43BFC83D5B;
-	Thu, 21 Oct 2021 20:12:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6109F40301;
+	Thu, 21 Oct 2021 20:25:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZbTcAIadepmA; Thu, 21 Oct 2021 20:12:54 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Z-OYS2c7hc4s; Thu, 21 Oct 2021 20:25:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9FE0183D52;
-	Thu, 21 Oct 2021 20:12:53 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 40C871BF318
- for <buildroot@lists.busybox.net>; Thu, 21 Oct 2021 20:12:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id ACCD540391;
+	Thu, 21 Oct 2021 20:25:21 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 7BA891BF318
+ for <buildroot@lists.busybox.net>; Thu, 21 Oct 2021 20:25:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2F8EA60731
- for <buildroot@lists.busybox.net>; Thu, 21 Oct 2021 20:12:52 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 78CE683B69
+ for <buildroot@lists.busybox.net>; Thu, 21 Oct 2021 20:25:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2OMiIcLTjA6y for <buildroot@lists.busybox.net>;
- Thu, 21 Oct 2021 20:12:51 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
- by smtp3.osuosl.org (Postfix) with ESMTPS id DC8766068D
- for <buildroot@buildroot.org>; Thu, 21 Oct 2021 20:12:50 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:e8e5:5688:10fe:8b80])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id 2F1C2780326;
- Thu, 21 Oct 2021 22:12:37 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1634847167;
- bh=Bnp+5kCE25JxqJdayCfA0TYhSUzFWxKvwwzpOSzhGN8=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=c4Aoety6mbZ3q2mIFjZyvAoNy0rmUZ+S5DGxwxyLT9gYDdWDt0X5WzMJEBCPE+1NL
- XDEEGF0VthvZ+a90caSxZLZpyXQFl5qFOmql5/xhPpFMQW5B1zsyVcKqHao1n3iMYY
- vLw3RcNVuIzT3I6UoaLWdoWAf1NT9KtK/coh03DP2ZFGwegf99B/Oibiv0yv3GIEad
- /LRGgu9acT47G/8HQOZBWLYap8KoUJEMkm/jMleqoIzu+EQahXaEy/NiegcMn1GGpf
- /oqMHCyzjUEYgXdtGl/9LIXDrldfi53GTTm1IaIpH3ga7mRcyHfYBqYkT3AUWo1sHd
- 2VUu5B0tRoRqA==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Thu, 21 Oct 2021 22:12:36 +0200
-Date: Thu, 21 Oct 2021 22:12:36 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Arnout Vandecappelle <arnout@mind.be>
-Message-ID: <20211021201236.GG2400@scaer>
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id nlooq4u0n0B5 for <buildroot@lists.busybox.net>;
+ Thu, 21 Oct 2021 20:25:19 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com
+ [IPv6:2a00:1450:4864:20::52b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5BF0E83B68
+ for <buildroot@buildroot.org>; Thu, 21 Oct 2021 20:25:19 +0000 (UTC)
+Received: by mail-ed1-x52b.google.com with SMTP id ec8so2827525edb.6
+ for <buildroot@buildroot.org>; Thu, 21 Oct 2021 13:25:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=i5FgqMl4qjqk3PHu1J1LhcJzIF4BA1RKVNb63tECKF0=;
+ b=VlVJpcdrTW0LQKi2KGS9cxa24UzV/15YS6LLbQGynnJA2E13/laeLuwYwdLg7BIfgz
+ BfzqN36e4xSMxITI1pjY7apUhiwqsH4dhD+LS2gmwuE1WnMB8Og1ju0TS4C9sHSpmbtk
+ dW/ANLQHf2xm01QfqyQI9ZKHw14e9b+kd5Qz6TJxs6fo97Kxmrowd8Hs7pU09nfiWpPx
+ CybaGjoMif/e8SuKbmiyZnAkJYD24uAcPcUfi6p9reZ19F2u7qFeAN4tG3Ij7MLLWpUN
+ 3ChZTSeibc1xTGBGQf4PF9gp9ZCuUAba2LGS9IoXqfk1QFE2Bd6dOjPLXKk+u/6bmpTm
+ 36cQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=i5FgqMl4qjqk3PHu1J1LhcJzIF4BA1RKVNb63tECKF0=;
+ b=QEWLwnXJrfD1wkRkgws/O2bh5FeIljnjYztzlByc8EI25Ap1Cu4qUa1pwykvJeyqZL
+ sTmS7548VhP3VFMLVQp45tQJfHH7V0LgtM8B/u+WJomcSKLoJJERcoKJh+BhylpNAYdo
+ aqE24F/LxD10TPivne3hJ7U6FgQV2jbNBabyK/X9NcqcdX+grktKQtRgHREGsQCWrV0f
+ OGzlZI4Z8bBvYlrFkTYJEUOrY/sK3lOEKbEAKA+uZ0hjg/zB6cJOXL2NzBnzjECuqXVD
+ n9q/olr0DeUAu6tMGnCvMmgiG2YcWb+nOwFHS5iqIAMMGSXahPWY8eeRZP4OiS49QvW+
+ YikQ==
+X-Gm-Message-State: AOAM53309lVHaOJJLSKJxnelC45Nvuxoxed6tJs5f1Odlwue51iCHjN5
+ DB9+O0C2443F6JTOFXIvN94F1w==
+X-Google-Smtp-Source: ABdhPJxdOl1Snjs8DJyn2lhNwp6g+OqDeImgZImcwcHiPlUrd0Lw5i18gKI5SeNo71ANTl1HjgXwaA==
+X-Received: by 2002:a17:906:a1da:: with SMTP id
+ bx26mr10033397ejb.558.1634847917253; 
+ Thu, 21 Oct 2021 13:25:17 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id u23sm3380625edr.97.2021.10.21.13.25.16
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Thu, 21 Oct 2021 13:25:16 -0700 (PDT)
+Message-ID: <f0ed3181-5ef3-d561-4e5d-384ae735fb08@mind.be>
+Date: Thu, 21 Oct 2021 22:25:16 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.1.0
+Content-Language: en-GB
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
 References: <20211016093234.2477835-1-fontaine.fabrice@gmail.com>
  <20211016093234.2477835-2-fontaine.fabrice@gmail.com>
  <20211018220427.5971bba1@windsurf> <20211018201808.GT2400@scaer>
- <88c82aa8-d532-eeb1-bc77-796eafa0d06e@mind.be>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <88c82aa8-d532-eeb1-bc77-796eafa0d06e@mind.be>
-User-Agent: Mutt/1.5.22 (2013-10-16)
+ <88c82aa8-d532-eeb1-bc77-796eafa0d06e@mind.be> <20211021201236.GG2400@scaer>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20211021201236.GG2400@scaer>
 Subject: Re: [Buildroot] conditional assigment check in check-package [was:
  Re: [PATCH v2, 2/2] package/knock: add knockd option]
 X-BeenThere: buildroot@buildroot.org
@@ -84,123 +107,124 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 Cc: Michael Rommel <rommel@layer-7.net>,
  Fabrice Fontaine <fontaine.fabrice@gmail.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Arnout, All,
 
-On 2021-10-21 20:43 +0200, Arnout Vandecappelle spake thusly:
-> On 18/10/2021 22:18, Yann E. MORIN wrote:
-> >Thomas, All,
-> >On 2021-10-18 22:04 +0200, Thomas Petazzoni spake thusly:
-> >>On Sat, 16 Oct 2021 11:32:34 +0200
-> >>Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
-> >>>+ifeq ($(BR2_PACKAGE_KNOCK_KNOCKD),y)
-> >>>+KNOCK_DEPENDENCIES = libpcap
-> >> From commit 97f3ad7af3dd54a15a10aa35786e7fa08cf5e7b1:
-> >>     Repeat after me: "Forcing the value of <pkg>_DEPENDENCIES inside a
-> >>     conditional is the root of all evil."
-> >>Care to repeat after me ? :-)
-> >
-> >OK, I missed that in my review of v1...
-> >/me hides in shame...
-> >
-> >But seriously though: why is that not caught by check-package?
-> >
-> >Because it is not actually an override: the variable is not yet set
-> >there, so it is valid to unconditionally set it.
-> >
-> >check-package should probably recognise that the variable is
-> ><FOO>_DEPENDENCIES and consider that conditional assignment should
-> >still be forbidden in that case.
-> 
->  I had a look at this, and it is not entirely trivial to test for in check-package.
-> 
->  Basically, this is allowed:
-> 
-> ifeq(...)
-> FOO_VAR = ...
-> endif
-> ... $(FOO_VAR) ... # Empty if condition not true
-> 
->  And this as well:
-> 
-> ifeq(...)
-> FOO_VAR = ...
-> else
-> FOO_VAR = ...
-> endif
-> 
->  But this is not:
-> 
-> ifeq(...)
-> FOO_VAR = ...
-> endif
-> 
-> ifeq(...)
-> FOO_VAR = ...
-> endif
-> 
-> 
->  So basically:
-> - after a variable is assigned, it can't be assigned to any more in the same
-> conditional branch;
-> - it can be assigned to again in the else branch (including else ifeq constructs);
-> - it can not be assigned to any more after the endif.
-> 
->  In addition, conditions can be nested...
-> 
->  The only way I can think of implementing this is by keeping a stack of
-> conditionally assigned variables. In the else branch, the top of the stack
-> is saved en empties. At the endif, the top of the stack is popped, merged
-> with the saved one, and merged into the new top of the stack.
-> 
->  Wow, by writing it down, I almost implemented it :-) Let's see if I can
-> still find the time to actually do it tonight...
 
-Sorry, but I think I got lost somewhere...
+On 21/10/2021 22:12, Yann E. MORIN wrote:
+> Arnout, All,
+> 
+> On 2021-10-21 20:43 +0200, Arnout Vandecappelle spake thusly:
+>> On 18/10/2021 22:18, Yann E. MORIN wrote:
+>>> Thomas, All,
+>>> On 2021-10-18 22:04 +0200, Thomas Petazzoni spake thusly:
+>>>> On Sat, 16 Oct 2021 11:32:34 +0200
+>>>> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+>>>>> +ifeq ($(BR2_PACKAGE_KNOCK_KNOCKD),y)
+>>>>> +KNOCK_DEPENDENCIES = libpcap
+>>>>  From commit 97f3ad7af3dd54a15a10aa35786e7fa08cf5e7b1:
+>>>>      Repeat after me: "Forcing the value of <pkg>_DEPENDENCIES inside a
+>>>>      conditional is the root of all evil."
+>>>> Care to repeat after me ? :-)
+>>>
+>>> OK, I missed that in my review of v1...
+>>> /me hides in shame...
+>>>
+>>> But seriously though: why is that not caught by check-package?
+>>>
+>>> Because it is not actually an override: the variable is not yet set
+>>> there, so it is valid to unconditionally set it.
+>>>
+>>> check-package should probably recognise that the variable is
+>>> <FOO>_DEPENDENCIES and consider that conditional assignment should
+>>> still be forbidden in that case.
+>>
+>>   I had a look at this, and it is not entirely trivial to test for in check-package.
+>>
+>>   Basically, this is allowed:
+>>
+>> ifeq(...)
+>> FOO_VAR = ...
+>> endif
+>> ... $(FOO_VAR) ... # Empty if condition not true
+>>
+>>   And this as well:
+>>
+>> ifeq(...)
+>> FOO_VAR = ...
+>> else
+>> FOO_VAR = ...
+>> endif
+>>
+>>   But this is not:
+>>
+>> ifeq(...)
+>> FOO_VAR = ...
+>> endif
+>>
+>> ifeq(...)
+>> FOO_VAR = ...
+>> endif
+>>
+>>
+>>   So basically:
+>> - after a variable is assigned, it can't be assigned to any more in the same
+>> conditional branch;
+>> - it can be assigned to again in the else branch (including else ifeq constructs);
+>> - it can not be assigned to any more after the endif.
+>>
+>>   In addition, conditions can be nested...
+>>
+>>   The only way I can think of implementing this is by keeping a stack of
+>> conditionally assigned variables. In the else branch, the top of the stack
+>> is saved en empties. At the endif, the top of the stack is popped, merged
+>> with the saved one, and merged into the new top of the stack.
+>>
+>>   Wow, by writing it down, I almost implemented it :-) Let's see if I can
+>> still find the time to actually do it tonight...
+> 
+> Sorry, but I think I got lost somewhere...
+> 
+> Currently, check-package does not whine for:
+> 
+>      ifeq(...)
+>      FOO_VAR = ...
+>      endif
+> 
+> but it does whine for:
+> 
+>      FOO_VAR = ...
+>      ifeq(...)
+>      FOO_VAR = ...
+>      endif
+> 
+> And these two behaviours are, I think, correct.
+> 
+> What I am arguing, is that FOO_DEPENDENCIES should be treated specially,
+> where check-package should whine for:
+> 
+>      ifeq(...)
+>      FOO_DEPENDENCIES = ...
+>      endif
+> 
+> as well as for:
+> 
+>      FOO_DEPENDENCIES = ...
+>      ifeq(...)
+>      FOO_DEPENDENCIES = ...
+>      endif
 
-Currently, check-package does not whine for:
+  Yeah, special-casing DEPENDENCIES is definitely an option.
 
-    ifeq(...)
-    FOO_VAR = ...
-    endif
+  My "wanted behaviour" was for other variables which can have the same problem. 
+Probably doesn't happen very often though.
 
-but it does whine for:
+  Regards,
+  Arnout
 
-    FOO_VAR = ...
-    ifeq(...)
-    FOO_VAR = ...
-    endif
-
-And these two behaviours are, I think, correct.
-
-What I am arguing, is that FOO_DEPENDENCIES should be treated specially,
-where check-package should whine for:
-
-    ifeq(...)
-    FOO_DEPENDENCIES = ...
-    endif
-
-as well as for:
-
-    FOO_DEPENDENCIES = ...
-    ifeq(...)
-    FOO_DEPENDENCIES = ...
-    endif
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
