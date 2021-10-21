@@ -2,68 +2,57 @@ Return-Path: <SRS0=A6xV=PJ=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F95CC433EF
-	for <buildroot@archiver.kernel.org>; Thu, 21 Oct 2021 12:01:05 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 49D18C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 21 Oct 2021 14:32:33 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 8C2DE60F9E
-	for <buildroot@archiver.kernel.org>; Thu, 21 Oct 2021 12:01:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8C2DE60F9E
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=busybox.net
+	by mail.kernel.org (Postfix) with ESMTPS id 63B5360F0F
+	for <buildroot@archiver.kernel.org>; Thu, 21 Oct 2021 14:32:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 63B5360F0F
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3EAB360F04;
-	Thu, 21 Oct 2021 12:01:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0F45E40854;
+	Thu, 21 Oct 2021 14:32:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NhUCTg5k_doW; Thu, 21 Oct 2021 12:01:03 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id tYzM2LuNgAUT; Thu, 21 Oct 2021 14:32:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BC56C60EFC;
-	Thu, 21 Oct 2021 12:01:02 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4B8CD1BF3C2
- for <buildroot@lists.busybox.net>; Thu, 21 Oct 2021 12:01:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 695784084D;
+	Thu, 21 Oct 2021 14:32:30 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D6CF11BF30E
+ for <buildroot@lists.busybox.net>; Thu, 21 Oct 2021 14:32:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3A3BA83A8F
- for <buildroot@lists.busybox.net>; Thu, 21 Oct 2021 12:01:01 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id D2F73406D6
+ for <buildroot@lists.busybox.net>; Thu, 21 Oct 2021 14:32:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CSLw6HSBhruP for <buildroot@lists.busybox.net>;
- Thu, 21 Oct 2021 12:01:00 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id A4F638104C
- for <buildroot@uclibc.org>; Thu, 21 Oct 2021 12:01:00 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 2AB4D881F9; Thu, 21 Oct 2021 11:57:50 +0000 (UTC)
-From: bugzilla@busybox.net
-To: buildroot@uclibc.org
-Date: Thu, 21 Oct 2021 12:01:00 +0000
-X-Bugzilla-Reason: CC
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: buildroot
-X-Bugzilla-Component: Other
-X-Bugzilla-Version: unspecified
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: abcfy2@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P5
-X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
-X-Bugzilla-Target-Milestone: ---
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-14266-163-MiFGmAQ6OX@https.bugs.busybox.net/>
-In-Reply-To: <bug-14266-163@https.bugs.busybox.net/>
-References: <bug-14266-163@https.bugs.busybox.net/>
-X-Bugzilla-URL: https://bugs.busybox.net/
-Auto-Submitted: auto-generated
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id n1ebpFS17ouO for <buildroot@lists.busybox.net>;
+ Thu, 21 Oct 2021 14:32:27 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8D4154022A
+ for <buildroot@buildroot.org>; Thu, 21 Oct 2021 14:32:27 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by relay11.mail.gandi.net (Postfix) with ESMTPSA id C579710000E;
+ Thu, 21 Oct 2021 14:32:23 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
+ (envelope-from <peter@korsgaard.com>)
+ id 1mdZ7H-0002WX-55; Thu, 21 Oct 2021 16:32:23 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+References: <20211004201737.1976547-1-yann.morin.1998@free.fr>
+Date: Thu, 21 Oct 2021 16:32:23 +0200
+In-Reply-To: <20211004201737.1976547-1-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Mon, 4 Oct 2021 22:17:37 +0200")
+Message-ID: <877de678js.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: [Buildroot] [Bug 14266] Would you please add 7za build?
+Subject: Re: [Buildroot] [PATCH] package/edk2-platforms: fix installation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,19 +64,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Kory Maincent <kory.maincent@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://bugs.busybox.net/show_bug.cgi?id=14266
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
---- Comment #2 from Feng Yu <abcfy2@gmail.com> ---
-Thanks. Waiting patch merged.
+ > There are currently three issues with the installation step:
+ >  1. it does not ensure the parent destination directory exists before
+ >     copying into it, so if /usr/share has not been created in the
+ >     dependency chain of edk2-platforms, the installation fails, which
+ >     may very well happen easily as edk2-plaforms has nothing in its
+ >     dependency chain (except the toolchain et al.);
+
+ >  2. all our dot-stampfiles and .files-list are also copied, as well as
+ >     the Readme, license files, and maintainers file. All of those are
+ >     useless on the target (and the .files-list introduce
+ >     non-reproduciiblity);
+
+ >  3. of a lesser importance, the construct to install, and specifically
+ >     to reinstall, does not match what we usually do in Buildroot
+ >     (removal of the directory to copy).
+
+ > We fix all three in one fell swoop:
+
+ >  1. create the destination directory if needed;
+ >  2. copy just the directories with the actual platform descriptions
+
+ > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+ > Cc: Dick Olsson <hi@senzilla.io>
+ > Cc: Kory Maincent <kory.maincent@bootlin.com>
+
+Committed to 2021.08.x, thanks.
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
