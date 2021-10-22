@@ -2,63 +2,63 @@ Return-Path: <SRS0=MwHx=PK=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CAE1BC433EF
-	for <buildroot@archiver.kernel.org>; Fri, 22 Oct 2021 09:24:40 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 36959C433F5
+	for <buildroot@archiver.kernel.org>; Fri, 22 Oct 2021 09:48:35 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9FC6861108
-	for <buildroot@archiver.kernel.org>; Fri, 22 Oct 2021 09:24:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9FC6861108
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=igalia.com
+	by mail.kernel.org (Postfix) with ESMTPS id 6CA73610EA
+	for <buildroot@archiver.kernel.org>; Fri, 22 Oct 2021 09:48:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6CA73610EA
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 414A240187;
-	Fri, 22 Oct 2021 09:24:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id ACC1783B14;
+	Fri, 22 Oct 2021 09:48:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 024UwVQB5Kv6; Fri, 22 Oct 2021 09:24:38 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 53D1240211;
-	Fri, 22 Oct 2021 09:24:37 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 50FA51BF86B
- for <buildroot@lists.busybox.net>; Fri, 22 Oct 2021 09:24:36 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4D99580C6D
- for <buildroot@lists.busybox.net>; Fri, 22 Oct 2021 09:24:36 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=igalia.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GpLyDtNgTyS6 for <buildroot@lists.busybox.net>;
- Fri, 22 Oct 2021 09:24:34 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id OkHQgDh4HXFA; Fri, 22 Oct 2021 09:48:33 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 15EEB83AFC;
+	Fri, 22 Oct 2021 09:48:32 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A02DC1BF86B
+ for <buildroot@lists.busybox.net>; Fri, 22 Oct 2021 09:48:30 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9B3B24019E
+ for <buildroot@lists.busybox.net>; Fri, 22 Oct 2021 09:48:30 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id F26vR_APUYdu for <buildroot@lists.busybox.net>;
+ Fri, 22 Oct 2021 09:48:28 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from fanzine.igalia.com (fanzine.igalia.com [178.60.130.6])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0AFA180C41
- for <buildroot@buildroot.org>; Fri, 22 Oct 2021 09:24:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
- s=20170329; 
- h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:To:From;
- bh=pqfzno0TJolpO+8Kg1w9/O4TD9UeNrCsszplJLZ7e2Y=; 
- b=bTjkhZTmvo5aVVLa26fCiN8Uxer0K2KUlsOoImUSjf9J7iTzu4nnSihHFRM6wkJC7e+J61kFxa0Q1Meyf2XDWK4LinbLGat7MLB0gR6gKnrMHYUCj70HBlOBTwFB4sdeuYTX6BaRjKEGSoqR5BcX1fp89orBr0mFjSNq5dvuqOSxc30EiSiEqsfC3rCCulZROJxkYILfD4lxTbCwr7onqVwH6d6UNm7jKWeMctyKxRi3ZowwlY7aJEIbnWRKf0cTyWYnXwq42zuRBrhL0bu/wlMbfJSaYvVWXn5LfhyuCsmIo7mln0vwSNKnY3rpBKfuaNKbb4GYiTIMvOENEKjwEQ==;
-Received: from 91-153-34-142.elisa-laajakaista.fi ([91.153.34.142] helo=kodama)
- by fanzine.igalia.com with esmtpsa 
- (Cipher TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256) (Exim)
- id 1mdqmr-0006N3-Bs
- for <buildroot@buildroot.org>; Fri, 22 Oct 2021 11:24:29 +0200
-Received: from localhost (kodama [local])
- by kodama (OpenSMTPD) with ESMTPA id be4897b1
- for <buildroot@buildroot.org>; Fri, 22 Oct 2021 09:19:34 +0000 (UTC)
-From: Adrian Perez de Castro <aperez@igalia.com>
-To: buildroot@buildroot.org
-Date: Fri, 22 Oct 2021 12:19:34 +0300
-Message-Id: <20211022091934.534382-1-aperez@igalia.com>
-X-Mailer: git-send-email 2.33.1
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6CBFA40172
+ for <buildroot@buildroot.org>; Fri, 22 Oct 2021 09:48:28 +0000 (UTC)
+Received: (Authenticated sender: kory.maincent@bootlin.com)
+ by relay10.mail.gandi.net (Postfix) with ESMTPSA id 4513724000F;
+ Fri, 22 Oct 2021 09:48:25 +0000 (UTC)
+Date: Fri, 22 Oct 2021 11:48:24 +0200
+From: =?UTF-8?B?S8O2cnk=?= Maincent <kory.maincent@bootlin.com>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Message-ID: <20211022114824.4e9ae29f@kmaincent-XPS-13-7390>
+In-Reply-To: <20211021175901.GE2400@scaer>
+References: <DB6P194MB00220117F126EF57A84FB509B7B19@DB6P194MB0022.EURP194.PROD.OUTLOOK.COM>
+ <20211007235019.51751a53@gmx.net>
+ <DB6P194MB0022286BBE77E2174FE40B87B7B29@DB6P194MB0022.EURP194.PROD.OUTLOOK.COM>
+ <20211008192555.6dbd67d2@gmx.net>
+ <DB6P194MB0022742E4E1B12DFEAC7FD24B7B59@DB6P194MB0022.EURP194.PROD.OUTLOOK.COM>
+ <DB6P194MB0022C662CECD3D29EB4BA064B7B59@DB6P194MB0022.EURP194.PROD.OUTLOOK.COM>
+ <20211019002255.165e5e00@gmx.net>
+ <AM0P194MB0706FB2963323BD5D657815EB7BD9@AM0P194MB0706.EURP194.PROD.OUTLOOK.COM>
+ <20211019230252.324bbb61@gmx.net> <20211021175901.GE2400@scaer>
+Organization: bootlin
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/seatd: bump to version 0.6.3
+Subject: Re: [Buildroot] Boot process stuck at "GRUB loading.." since
+ 2021.02.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,52 +70,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Peter Seiderer <ps.report@gmx.net>, "Walter,
+ Stefan" <stefan.walter@iml.fraunhofer.de>,
+ "buildroot@buildroot.org" <buildroot@buildroot.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Update seatd to version 0.6.3, which fixes a crash when used along
-libinput 1.19.
-
-Release notes:
-
-  https://git.sr.ht/~kennylevinsen/seatd/refs/0.6.3
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
----
- package/seatd/seatd.hash | 2 +-
- package/seatd/seatd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/seatd/seatd.hash b/package/seatd/seatd.hash
-index 980c0faded..18f65d3aeb 100644
---- a/package/seatd/seatd.hash
-+++ b/package/seatd/seatd.hash
-@@ -1,5 +1,5 @@
- # Calculated locally
--sha256  1e2745ea39266de40d5beb24011782da95468b81ecfa410dd0db5ff75c665727  0.6.2.tar.gz
-+sha256  5226850c163b485aebe71da0d3f4941761637e146a5c9393cb40c52617ad84a8  0.6.3.tar.gz
- 
- # License files
- sha256  282a494803d666616bd726e0279636b5f6a31387ae19a707459074050f2600d3  LICENSE
-diff --git a/package/seatd/seatd.mk b/package/seatd/seatd.mk
-index 98eea650dd..27d3155b2b 100644
---- a/package/seatd/seatd.mk
-+++ b/package/seatd/seatd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SEATD_VERSION = 0.6.2
-+SEATD_VERSION = 0.6.3
- SEATD_SOURCE = $(SEATD_VERSION).tar.gz
- SEATD_SITE = https://git.sr.ht/~kennylevinsen/seatd/archive
- SEATD_LICENSE = MIT
--- 
-2.33.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+WWFubiwgUGV0ZXIsIFN0ZWZhbiwgYWxsCgpPbiBUaHUsIDIxIE9jdCAyMDIxIDE5OjU5OjAxICsw
+MjAwCiJZYW5uIEUuIE1PUklOIiA8eWFubi5tb3Jpbi4xOTk4QGZyZWUuZnI+IHdyb3RlOgoKPiA+
+IDxzdGVmYW4ud2FsdGVyQGltbC5mcmF1bmhvZmVyLmRlPiB3cm90ZTogVGhlIGhvc3QtZ3J1YjIg
+bW9kdWxlcyBidWlsZCBjYW4KPiA+IGJlIGZpeGVkIGJ5IHRoZSBmb2xsb3dpbmcgcGF0Y2g6Cj4g
+PiAKPiA+IC0tLSBhL2Jvb3QvZ3J1YjIvZ3J1YjIubWsKPiA+ICsrKyBiL2Jvb3QvZ3J1YjIvZ3J1
+YjIubWsKPiA+IEBAIC0xMjUsNyArMTI1LDkgQEAgR1JVQjJfVFVQTEVTLSQoQlIyX1RBUkdFVF9H
+UlVCMl9BUk02NF9FRkkpICs9IGFybTY0LWVmaQo+ID4gICMgdXNlIHRoZSBjcm9zcyBjb21waWxl
+IHZhcmlhbnQgdG8gZW5zdXJlIGdydWIyIGJ1aWxkcwo+ID4gCj4gPiAgSE9TVF9HUlVCMl9DT05G
+X0VOViA9IFwKPiA+IC0gICAgICAgQ1BQPSIkKEhPU1RDQykgLUUiCj4gPiArICAgICAgIENQUD0i
+JChIT1NUQ0MpIC1FIiBcCj4gPiArICAgICAgIENGTEFHUz0iJChIT1NUX0NGTEFHUykgLU9zIiBc
+Cj4gPiArICAgICAgIENQUEZMQUdTPSIkKEhPU1RfQ1BQRkxBR1MpIC1PcyIgIAo+IAo+IFN1cmUs
+IGJ1dCB3aHkgZG8gd2UgZXZlbiBuZWVkIHRvIGJ1aWxkIHRoZSBtb2R1bGVzIGluIHRoZSBob3N0
+IHZlcnNpb24KPiB0byBiZWdpbiB3aXRoPwoKSSBhZ3JlZS4gVGhpcyBwYXRjaCBzZWVtcyBub3Qg
+cmVsZXZhbnQuIFdlIGJ1aWxkIGhvc3QtZ3J1YjIgb25seSBmb3IgdGhlCmJpbmFyaWVzLiBTdGVm
+YW4gc2hvdWxkIHVzZSB0aGUgdGFyZ2V0IG1vZHVsZXMgZGlyZWN0b3J5IGFuZCBub3QgdGhlIG9u
+ZQpmcm9tIHRoZSBob3N0LgoKPiBXZSBzaG91bGQgcHJvYmFibHkgYnVpbGQgdGhlIGhvc3QgdmVy
+c2lvbiB3aXRoIC0td2l0aC1wbGF0Zm9ybT1ub25lIEkKPiB0aGluay4KPiAKPiBZZXMsIHdlIGRv
+IGN1cnJlbnRseSB1c2UgY2Rib290LmltZyBmcm9tIHRoZSBob3N0LCBidXQgdGhhdCBpcyBwcm9i
+YWJseQo+IGEgbWlzdGFrZSBhbmQgYSByZW1uYW50IGZvciBsb25nIGFnby4uLiBJbnN0ZWFkLCBJ
+IHRoaW5rIHdlIHNob3VsZCBvbmx5Cj4gdXNlZCBtb2R1bGVzIGZyb20gdGhlIHRhcmdldCBidWls
+ZC4KCkkgd2lsbCBhZGQgdGhlIG5vbmUgcGxhdGZvcm0gYW5kIHRoZSByaWdodCBjZGJvb3QuaW1n
+IHBhdGggaW50byBteSB2MiBncnViIHBhdGNoCnNlcmllcy4KClJlZ2FyZHMsCkvDtnJ5Cl9fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWls
+aW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qu
+b3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
