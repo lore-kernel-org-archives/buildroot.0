@@ -2,52 +2,52 @@ Return-Path: <SRS0=MwHx=PK=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 471E9C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 22 Oct 2021 18:49:55 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B3AD4C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 22 Oct 2021 18:50:06 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id DCB926103E
-	for <buildroot@archiver.kernel.org>; Fri, 22 Oct 2021 18:49:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org DCB926103E
+	by mail.kernel.org (Postfix) with ESMTPS id 786546103E
+	for <buildroot@archiver.kernel.org>; Fri, 22 Oct 2021 18:50:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 786546103E
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9E1814019B;
-	Fri, 22 Oct 2021 18:49:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 413F460F5F;
+	Fri, 22 Oct 2021 18:50:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cf0vnsDL24ar; Fri, 22 Oct 2021 18:49:53 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id CKdGyWJiTOkQ; Fri, 22 Oct 2021 18:50:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0500740886;
-	Fri, 22 Oct 2021 18:49:52 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 41FE41C1127
+	by smtp3.osuosl.org (Postfix) with ESMTP id A413B60636;
+	Fri, 22 Oct 2021 18:50:04 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 430671C1135
  for <buildroot@lists.busybox.net>; Fri, 22 Oct 2021 18:49:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3ACEC80EAD
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3EA8F4019B
  for <buildroot@lists.busybox.net>; Fri, 22 Oct 2021 18:49:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kh9MwhV_GO5w for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id llgiQ_pP2bOP for <buildroot@lists.busybox.net>;
  Fri, 22 Oct 2021 18:49:39 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7CB4680EAC
+ by smtp4.osuosl.org (Postfix) with ESMTP id 693A44018A
  for <buildroot@buildroot.org>; Fri, 22 Oct 2021 18:49:39 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 05672873D0; Fri, 22 Oct 2021 18:46:26 +0000 (UTC)
+ id E4DF5873D0; Fri, 22 Oct 2021 18:46:25 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 22 Oct 2021 20:42:44 +0200
+Date: Fri, 22 Oct 2021 20:34:50 +0200
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: cad006e8100c8083996be892002c67c8f2b34e81
-X-Git-Newrev: fa110027d06cb3f0f4758931fc34b075fa8665b2
+X-Git-Oldrev: 46f435ec11a5750b3fc16c4f8311dea8401fd3b7
+X-Git-Newrev: 80ac968124c0b690ce09fd66df7a9d28611954c2
 X-Patchwork-Hint: ignore
-Message-Id: <20211022184626.05672873D0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/wf111: add
- missing comment about kernel dependency
+Message-Id: <20211022184625.E4DF5873D0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/samba4: bump
+ version to 4.14.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,35 +65,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fa110027d06cb3f0f4758931fc34b075fa8665b2
+commit: https://git.buildroot.net/buildroot/commit/?id=80ac968124c0b690ce09fd66df7a9d28611954c2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Add a comment when kernel is not enabled (missing since the addition of
-the package in commit 5b13fc05b37386e64b9f46515b57b5887ee357d9)
+Release notes:
+https://www.samba.org/samba/history/samba-4.14.8.html
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit b5a48f3584e39e05041666009b43075607daea24)
+(cherry picked from commit 85c58e201b58e912105cd0ede7cae776423a3a9b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wf111/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/samba4/samba4.hash | 4 ++--
+ package/samba4/samba4.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/wf111/Config.in b/package/wf111/Config.in
-index 8dd20a7cc5..bb4b1a5d03 100644
---- a/package/wf111/Config.in
-+++ b/package/wf111/Config.in
-@@ -19,6 +19,10 @@ config BR2_PACKAGE_WF111
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index 5fb0760366..f33b61e262 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://download.samba.org/pub/samba/stable/samba-4.14.7.tar.asc
+-sha256  6f50353f9602aa20245eb18ceb00e7e5ec793df0974aebd5254c38f16d8f1906  samba-4.14.7.tar.gz
++# https://download.samba.org/pub/samba/stable/samba-4.14.8.tar.asc
++sha256  c936b782c2aced8cd7299c13bec67c495fd4affdb217a6ed6150f4fd6d770fde  samba-4.14.8.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index d350574e5a..5876d7f446 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 	  https://www.silabs.com/wireless/wi-fi/bluegiga-legacy-modules/device.wf111
- 
-+comment "wf111 needs a Linux kernel to be built"
-+	depends on !BR2_LINUX_KERNEL
-+	depends on BR2_ARM_CPU_ARMV5 || BR2_ARM_CPU_ARMV7A || BR2_i386
-+
- comment "wf111 needs a glibc toolchain"
- 	depends on BR2_LINUX_KERNEL
- 	depends on BR2_ARM_CPU_ARMV5 || BR2_ARM_CPU_ARMV7A || BR2_i386
+-SAMBA4_VERSION = 4.14.7
++SAMBA4_VERSION = 4.14.8
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
