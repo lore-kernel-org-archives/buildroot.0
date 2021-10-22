@@ -2,52 +2,52 @@ Return-Path: <SRS0=MwHx=PK=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E12D2C433F5
-	for <buildroot@archiver.kernel.org>; Fri, 22 Oct 2021 18:50:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B42EAC433F5
+	for <buildroot@archiver.kernel.org>; Fri, 22 Oct 2021 18:50:41 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 7EE0D6103D
-	for <buildroot@archiver.kernel.org>; Fri, 22 Oct 2021 18:50:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7EE0D6103D
+	by mail.kernel.org (Postfix) with ESMTPS id 67AC06103E
+	for <buildroot@archiver.kernel.org>; Fri, 22 Oct 2021 18:50:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 67AC06103E
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 56BD360F63;
-	Fri, 22 Oct 2021 18:50:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0703660F70;
+	Fri, 22 Oct 2021 18:50:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 16wyv06Xz6qi; Fri, 22 Oct 2021 18:50:28 +0000 (UTC)
+	with ESMTP id PIJTQanuegsQ; Fri, 22 Oct 2021 18:50:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C5FF160F5F;
-	Fri, 22 Oct 2021 18:50:27 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3BF6B1BF29D
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4E5C860F6E;
+	Fri, 22 Oct 2021 18:50:39 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 553D21C1127
  for <buildroot@lists.busybox.net>; Fri, 22 Oct 2021 18:49:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 390AF60640
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4071E4069F
  for <buildroot@lists.busybox.net>; Fri, 22 Oct 2021 18:49:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id h2nLb1dUELP0 for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bj5IJRLAXqPc for <buildroot@lists.busybox.net>;
  Fri, 22 Oct 2021 18:49:53 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8038E60619
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8B00B4019B
  for <buildroot@buildroot.org>; Fri, 22 Oct 2021 18:49:53 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 0AC11884A4; Fri, 22 Oct 2021 18:46:40 +0000 (UTC)
+ id 15A8D884A5; Fri, 22 Oct 2021 18:46:40 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 22 Oct 2021 20:42:11 +0200
+Date: Fri, 22 Oct 2021 20:42:49 +0200
 X-Git-Refname: refs/heads/2021.08.x
-X-Git-Oldrev: 372cc4e9f1c4befdc0e855fc7204f23d939e0800
-X-Git-Newrev: 789a012d435ee8a775bad1d3ab258a5e3462acb2
+X-Git-Oldrev: 789a012d435ee8a775bad1d3ab258a5e3462acb2
+X-Git-Newrev: 13d499c3b01aaceecf6f3536c9683cf03bad8b4d
 X-Patchwork-Hint: ignore
-Message-Id: <20211022184640.0AC11884A4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.08.x]
- package/wireguard-linux-compat: add missing comment about kernel dependency
+Message-Id: <20211022184640.15A8D884A5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.08.x] package/wf111: add
+ missing comment about kernel dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,34 +65,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=789a012d435ee8a775bad1d3ab258a5e3462acb2
+commit: https://git.buildroot.net/buildroot/commit/?id=13d499c3b01aaceecf6f3536c9683cf03bad8b4d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.08.x
 
 Add a comment when kernel is not enabled (missing since the addition of
-the package in commit de591c5c3a93a40d049a32bd79c30cc66daf5fb2)
+the package in commit 5b13fc05b37386e64b9f46515b57b5887ee357d9)
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 5eedd33368eedc22bbc542e870af677d0b3da834)
+(cherry picked from commit b5a48f3584e39e05041666009b43075607daea24)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wireguard-linux-compat/Config.in | 3 +++
- 1 file changed, 3 insertions(+)
+ package/wf111/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/wireguard-linux-compat/Config.in b/package/wireguard-linux-compat/Config.in
-index 5a323a35e5..4e8e95bdc3 100644
---- a/package/wireguard-linux-compat/Config.in
-+++ b/package/wireguard-linux-compat/Config.in
-@@ -21,6 +21,9 @@ config BR2_PACKAGE_WIREGUARD_LINUX_COMPAT
+diff --git a/package/wf111/Config.in b/package/wf111/Config.in
+index 8dd20a7cc5..bb4b1a5d03 100644
+--- a/package/wf111/Config.in
++++ b/package/wf111/Config.in
+@@ -19,6 +19,10 @@ config BR2_PACKAGE_WF111
  
- 	  https://www.wireguard.com
+ 	  https://www.silabs.com/wireless/wi-fi/bluegiga-legacy-modules/device.wf111
  
-+comment "wireguard-linux-compat needs a Linux kernel to be built"
++comment "wf111 needs a Linux kernel to be built"
 +	depends on !BR2_LINUX_KERNEL
++	depends on BR2_ARM_CPU_ARMV5 || BR2_ARM_CPU_ARMV7A || BR2_i386
 +
- comment "wireguard-linux-compat needs a toolchain w/ headers >= 3.10"
+ comment "wf111 needs a glibc toolchain"
  	depends on BR2_LINUX_KERNEL
- 	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
+ 	depends on BR2_ARM_CPU_ARMV5 || BR2_ARM_CPU_ARMV7A || BR2_i386
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
