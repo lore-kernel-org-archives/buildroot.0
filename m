@@ -2,60 +2,52 @@ Return-Path: <SRS0=MwHx=PK=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C5717C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 22 Oct 2021 18:48:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 950D7C433F5
+	for <buildroot@archiver.kernel.org>; Fri, 22 Oct 2021 18:49:43 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 8087A60F93
-	for <buildroot@archiver.kernel.org>; Fri, 22 Oct 2021 18:48:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8087A60F93
+	by mail.kernel.org (Postfix) with ESMTPS id 37F8C60FE7
+	for <buildroot@archiver.kernel.org>; Fri, 22 Oct 2021 18:49:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 37F8C60FE7
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 57E4A80BE2;
-	Fri, 22 Oct 2021 18:48:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 17C6C80ED8;
+	Fri, 22 Oct 2021 18:49:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id t-QJ0zuSD9Xt; Fri, 22 Oct 2021 18:48:54 +0000 (UTC)
+	with ESMTP id mJiAiyTve4YA; Fri, 22 Oct 2021 18:49:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C3DD380BC8;
-	Fri, 22 Oct 2021 18:48:53 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 55B3B1BF29D
- for <buildroot@lists.busybox.net>; Fri, 22 Oct 2021 18:48:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 688B280EAD;
+	Fri, 22 Oct 2021 18:49:41 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 217CE1BF29D
+ for <buildroot@lists.busybox.net>; Fri, 22 Oct 2021 18:49:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 425C880C77
- for <buildroot@lists.busybox.net>; Fri, 22 Oct 2021 18:48:48 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1E0F560636
+ for <buildroot@lists.busybox.net>; Fri, 22 Oct 2021 18:49:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hZBgaXzq4BW2 for <buildroot@lists.busybox.net>;
- Fri, 22 Oct 2021 18:48:47 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0072280BC8
- for <buildroot@buildroot.org>; Fri, 22 Oct 2021 18:48:46 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 65D5B1C0003;
- Fri, 22 Oct 2021 18:48:43 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
- (envelope-from <peter@korsgaard.com>)
- id 1mdzas-0003Ry-HG; Fri, 22 Oct 2021 20:48:42 +0200
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kYarVN2UoFda for <buildroot@lists.busybox.net>;
+ Fri, 22 Oct 2021 18:49:39 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6A2D760619
+ for <buildroot@buildroot.org>; Fri, 22 Oct 2021 18:49:39 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id DAD518847F; Fri, 22 Oct 2021 18:46:25 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Bernd Kuhls <bernd.kuhls@t-online.de>
-References: <20211012203136.16834-1-bernd.kuhls@t-online.de>
- <20211012203136.16834-2-bernd.kuhls@t-online.de>
-Date: Fri, 22 Oct 2021 20:48:42 +0200
-In-Reply-To: <20211012203136.16834-2-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Tue, 12 Oct 2021 22:31:35 +0200")
-Message-ID: <87o87g520l.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 2/3] package/libva-utils: bump version to
- 2.13.0
+To: buildroot@buildroot.org
+Date: Fri, 22 Oct 2021 20:30:35 +0200
+X-Git-Refname: refs/heads/2021.02.x
+X-Git-Oldrev: 241a7c6fe7b962cbd0c9946eadbf667ef6b8d56c
+X-Git-Newrev: 46f435ec11a5750b3fc16c4f8311dea8401fd3b7
+X-Patchwork-Hint: ignore
+Message-Id: <20211022184625.DAD518847F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/cryptsetup: bump
+ to version 2.3.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -67,21 +59,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Louis-Paul Cordier <lpdev@cordier.org>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=46f435ec11a5750b3fc16c4f8311dea8401fd3b7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
- > Release notes: https://github.com/intel/libva-utils/blob/master/NEWS
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Stable bug-fix release with minor extensions.
 
-Committed to 2021.08.x, thanks.
+All users of cryptsetup 2.x and later should upgrade to this version.
 
--- 
-Bye, Peter Korsgaard
+https://gitlab.com/cryptsetup/cryptsetup/-/blob/v2.3.6/docs/v2.3.5-ReleaseNotes
+https://gitlab.com/cryptsetup/cryptsetup/-/blob/v2.3.6/docs/v2.3.6-ReleaseNotes
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit d6eb905376d0af595b01aa8007cac1d4de7175b7)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/cryptsetup/cryptsetup.hash | 2 +-
+ package/cryptsetup/cryptsetup.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/cryptsetup/cryptsetup.hash b/package/cryptsetup/cryptsetup.hash
+index 3b58345611..0aa3f79df7 100644
+--- a/package/cryptsetup/cryptsetup.hash
++++ b/package/cryptsetup/cryptsetup.hash
+@@ -1,4 +1,4 @@
+ # From https://www.kernel.org/pub/linux/utils/cryptsetup/v2.3/sha256sums.asc
+-sha256  9d16eebb96b53b514778e813019b8dd15fea9fec5aafde9fae5febf59df83773  cryptsetup-2.3.4.tar.xz
++sha256  b296b7a21ea576c2b180611ccb19d06aec8dddaedf7c704b0c6a81210c25635f  cryptsetup-2.3.6.tar.xz
+ sha256  45670cce8b6a0ddd66c8016cd8ccef6cd71f35717cbacc7f1e895b3855207b33  COPYING
+ sha256  8c33cc37871654ec7ed87e6fbb896c8cf33ef5ef05b1611a5aed857596ffafa5  COPYING.LGPL
+diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
+index b816dc2f22..3cf6c8a301 100644
+--- a/package/cryptsetup/cryptsetup.mk
++++ b/package/cryptsetup/cryptsetup.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ CRYPTSETUP_VERSION_MAJOR = 2.3
+-CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).4
++CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).6
+ CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.xz
+ CRYPTSETUP_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/cryptsetup/v$(CRYPTSETUP_VERSION_MAJOR)
+ CRYPTSETUP_DEPENDENCIES = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
