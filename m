@@ -2,51 +2,84 @@ Return-Path: <SRS0=MwHx=PK=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C3A8C4332F
-	for <buildroot@archiver.kernel.org>; Fri, 22 Oct 2021 05:58:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E8915C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 22 Oct 2021 06:14:48 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 8CB17610A8
-	for <buildroot@archiver.kernel.org>; Fri, 22 Oct 2021 05:58:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8CB17610A8
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
+	by mail.kernel.org (Postfix) with ESMTPS id 50241610CB
+	for <buildroot@archiver.kernel.org>; Fri, 22 Oct 2021 06:14:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 50241610CB
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 276A083A42;
-	Fri, 22 Oct 2021 05:58:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 203F7832B3;
+	Fri, 22 Oct 2021 06:14:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Kw7cNmB1rmk6; Fri, 22 Oct 2021 05:58:36 +0000 (UTC)
+	with ESMTP id u_K8YDNSq3X7; Fri, 22 Oct 2021 06:14:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3029483A44;
-	Fri, 22 Oct 2021 05:58:35 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 67FFD1BF3D6
- for <buildroot@lists.busybox.net>; Fri, 22 Oct 2021 05:58:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4BA2181CA0;
+	Fri, 22 Oct 2021 06:14:46 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id A2E561BF681
+ for <buildroot@lists.busybox.net>; Fri, 22 Oct 2021 06:14:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4541960665
- for <buildroot@lists.busybox.net>; Fri, 22 Oct 2021 05:58:33 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8CB0E4085D
+ for <buildroot@lists.busybox.net>; Fri, 22 Oct 2021 06:14:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pZgYSLIRstC5 for <buildroot@lists.busybox.net>;
- Fri, 22 Oct 2021 05:58:31 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0174660676
- for <buildroot@buildroot.org>; Fri, 22 Oct 2021 05:58:30 +0000 (UTC)
-Received: (Authenticated sender: bot@bootlin.com)
- by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 053BCFF804
- for <buildroot@buildroot.org>; Fri, 22 Oct 2021 05:58:27 +0000 (UTC)
-MIME-Version: 1.0
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rgGG4HTapUtH for <buildroot@lists.busybox.net>;
+ Fri, 22 Oct 2021 06:14:43 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
+ [IPv6:2a00:1450:4864:20::330])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 392EE4083C
+ for <buildroot@buildroot.org>; Fri, 22 Oct 2021 06:14:43 +0000 (UTC)
+Received: by mail-wm1-x330.google.com with SMTP id m42so1785841wms.2
+ for <buildroot@buildroot.org>; Thu, 21 Oct 2021 23:14:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=RpC6QtHSzFMX5+qbuh7TlnVvfCY/pl1W6mqV10Z+C3c=;
+ b=cqMfiSxjbkV+8UmcMOpnV/3OaWFX5b/LGH4JsaeomyM3Vb8lU660u5mGDvtOydhf2r
+ f6InitX4+IjvSpR3rGuuwiSrD88xtQK7MgoxnlkwoVWpWpLcm1FMseAsKLMJ1vrJNd0W
+ E/u6mgPzybN/P4y2ln2NoXch45bbiBamMZ2EBcWM/phpcd0dBs6UIu6ESkkCy9WCXRXZ
+ pDQNNbGKg2bpuPDh5hqchdEEvjlVIRhB5h4LBvk+f3RW0wTjn5X/vUALTHKKxDaHGMEr
+ T/qzmL/XBDV3/g1QLrhm7qCTQi2RdgluCWDyHE5YtRyBHtNHMCtjfXKQeMF8WnoTwHhS
+ thIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=RpC6QtHSzFMX5+qbuh7TlnVvfCY/pl1W6mqV10Z+C3c=;
+ b=EapEaxs3Un7k0HNBTVq+GojFBIDY7yJHjPeRcji0JNOlr283Ri81po7Tb2wGL54crE
+ 5TM2ktJlWCIn14q4CPIFN2MDNFp3Ho1OYDYCqfQFR7njdOgVqhBdhvZxQEMuYEqjr7jy
+ y1FK07J4VyATsIMe0cHeOgk2OxJ2/HLF2rbRzOyJz4iFzCaQiO353r8nMlqSpVmpX50h
+ 2EqNk4Vmnr3giG5V7Gk34DXToPZxIwT9ArbGh09bFpxk0ZKnkJGTGto/fWxDwFUqc6s8
+ 074cSX4wEfAWs/Fol5d2WS+lIElOpY6gJZuvUG3NTTrkMSRfg738wqLmNb3SX7IK5v6/
+ Hl9Q==
+X-Gm-Message-State: AOAM533GsIwNSmF2s0M8EiBd3kp675wml5QCv09cKfU5zoN12F6NlYpt
+ PpEx7/QzNvLDnbpIgqavef4JfFXIXDE=
+X-Google-Smtp-Source: ABdhPJwZbYcEWhFrwzbr7MfuA23nhG9emE06pSos/dI0cn2cAZ4nG+GWoYJ7aLETtVZ3vqduf6cd0A==
+X-Received: by 2002:a7b:c744:: with SMTP id w4mr26709493wmk.51.1634883281094; 
+ Thu, 21 Oct 2021 23:14:41 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-1732-95.w86-253.abo.wanadoo.fr.
+ [86.253.44.95])
+ by smtp.gmail.com with ESMTPSA id w26sm6895471wmk.34.2021.10.21.23.14.39
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 21 Oct 2021 23:14:40 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 22 Oct 2021 05:58:27 -0000
-Message-Id: <20211022055833.4541960665@smtp3.osuosl.org>
-Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2021-10-21
+Date: Fri, 22 Oct 2021 08:13:13 +0200
+Message-Id: <20211022061313.474808-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.33.0
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH 1/1] package/gstreamer1/gstd: fix static build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,170 +91,128 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+Fix the following static build failure raised since the addition of the
+package in commit 02ea01ea22e94ef353a638bf16f62f6e3ed1208e:
 
-Autobuild statistics for 2021-10-21
-===================================
+/home/buildroot/autobuild/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/i586-buildroot-linux-musl/9.3.0/../../../../i586-buildroot-linux-musl/bin/ld: /home/buildroot/autobuild/instance-1/output-1/host/i586-buildroot-linux-musl/sysroot/usr/lib/libreadline.a(display.o): in function `_rl_move_cursor_relative':
+display.c:(.text+0xbb5): undefined reference to `tputs'
 
-      branch |  OK | NOK | TIM | TOT |
-  2021.02.x  | 34  |  9  |  0  | 43  |
-  2021.08.x  | 27  |  1  |  0  | 28  |
-    master   | 65  | 70  |  0  | 135 |
+Fixes:
+ - http://autobuild.buildroot.org/results/77c/77c10947ddc749c54c7c233e3143f5cdf1edc73d/build-end.log
 
-Classification of failures by reason for master
------------------------------------------------
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...use-dependency-function-for-readline.patch | 51 +++++++++++++++++++
+ ...-use-library-instead-of-both_librari.patch | 33 ++++++++++++
+ 2 files changed, 84 insertions(+)
+ create mode 100644 package/gstreamer1/gstd/0006-meson.build-use-dependency-function-for-readline.patch
+ create mode 100644 package/gstreamer1/gstd/0007-gstd-meson.build-use-library-instead-of-both_librari.patch
 
-                tpm2-tss-3.1.0 | 13
-                  boinc-7.18.1 | 8 
-              tinydtls-0.9-rc1 | 7 
-               host-qemu-6.1.0 | 6 
-libdbi-88b8477d57153b9f736d... | 6 
-             transmission-3.00 | 5 
-             python-pip-21.2.4 | 4 
-              host-erlang-22.2 | 3 
-                  zeromq-4.3.4 | 3 
-                    qemu-6.1.0 | 2 
-                    bird-2.0.8 | 1 
-             bluez5_utils-5.61 | 1 
-               capnproto-0.8.0 | 1 
-                   gstd-0.13.0 | 1 
-                harfbuzz-3.0.0 | 1 
-           host-sg3_utils-1.45 | 1 
-            lttng-tools-2.12.3 | 1 
-                 mesa3d-21.1.8 | 1 
-          python-libusb1-2.0.1 | 1 
-rpi-firmware-2ef3800b1b71c0... | 1 
-              strongswan-5.9.1 | 1 
-                       unknown | 1 
-             util-linux-2.37.2 | 1 
-
-
-Detail of failures for master
------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-  nds32le    |           bird-2.0.8           | NOK | http://autobuild.buildroot.net/results/bc4d43b4be73a77bb50ac2d2582486423ced2a4c |     
-   nios2     |       bluez5_utils-5.61        | NOK | http://autobuild.buildroot.net/results/b0ddea71d181274af752396fcaed091b3d59f550 |     
-  powerpc    |          boinc-7.18.1          | NOK | http://autobuild.buildroot.net/results/8cbe0caab09a1a9b2bb94fabec41e59d703d1350 |     
-  riscv64    |          boinc-7.18.1          | NOK | http://autobuild.buildroot.net/results/319fcb562f7f582a9256bdaebc71629d5cf6cfc1 |     
-  riscv64    |          boinc-7.18.1          | NOK | http://autobuild.buildroot.net/results/547807a8d0aad9683be88ee966e414d9ef8accb2 |     
-    or1k     |          boinc-7.18.1          | NOK | http://autobuild.buildroot.net/results/8cff5d6afea06944a121bd08ca5577ba6b0b48b8 |     
-    arm      |          boinc-7.18.1          | NOK | http://autobuild.buildroot.net/results/949a1ea6ad3cb86a865dfc928c689d75cd35f81c |     
-    arm      |          boinc-7.18.1          | NOK | http://autobuild.buildroot.net/results/474f09b2feb055cd04a61d19596be4d5e0bb29bf |     
-    arm      |          boinc-7.18.1          | NOK | http://autobuild.buildroot.net/results/925bdc95c910b8a7301a783596d637ffc07a1ae2 |     
-    or1k     |          boinc-7.18.1          | NOK | http://autobuild.buildroot.net/results/a238228b3b7d16bc58d96f1ceac415ef83c2018e |     
-  riscv64    |        capnproto-0.8.0         | NOK | http://autobuild.buildroot.net/results/f8ae2b36fe97cbbf0a22097c6f848cd7aa357746 |     
-    i586     |          gstd-0.13.0           | NOK | http://autobuild.buildroot.net/results/77c10947ddc749c54c7c233e3143f5cdf1edc73d |     
-  riscv32    |         harfbuzz-3.0.0         | NOK | http://autobuild.buildroot.net/results/2c6a4470542af574f9407fa5867f0408ec2b4880 |     
-  aarch64    |        host-erlang-22.2        | NOK | http://autobuild.buildroot.net/results/5171b93aed2598e39346d4dfe9016124e4a7267f |     
-    arm      |        host-erlang-22.2        | NOK | http://autobuild.buildroot.net/results/4070285680607a09e6890c920e30c6b4b60e6a8f |     
-   mipsel    |        host-erlang-22.2        | NOK | http://autobuild.buildroot.net/results/4656a0a7f4f2e5c7d3630b86107ce6e965b54546 |     
-   s390x     |        host-qemu-6.1.0         | NOK | http://autobuild.buildroot.net/results/42318db7fd9403473b64c40b71d5c9201639411a |     
-    mips     |        host-qemu-6.1.0         | NOK | http://autobuild.buildroot.net/results/2e622c4cbbda2c314c05feda7da14fc8ca7095e8 |     
-    arm      |        host-qemu-6.1.0         | NOK | http://autobuild.buildroot.net/results/e87e9d385dd40aa419265ea38a9ddfbff2da8bdc |     
-    mips     |        host-qemu-6.1.0         | NOK | http://autobuild.buildroot.net/results/a992239e17c5ab70ec080e8a0acbc2e61dc96d4e |     
-   x86_64    |        host-qemu-6.1.0         | NOK | http://autobuild.buildroot.net/results/650c214661a32f5f4b9fcaabcc0c4e48abdcccc2 |     
-    arm      |        host-qemu-6.1.0         | NOK | http://autobuild.buildroot.net/results/1c378ec720d1a3f2378274ed501f8a770bc8abee |     
-  aarch64    |      host-sg3_utils-1.45       | NOK | http://autobuild.buildroot.net/results/9c3af5feaa4079fb4c818d9d87d1e5a5750f3878 |     
-    m68k     | libdbi-88b8477d57153b9f736d... | NOK | http://autobuild.buildroot.net/results/4403ba823d3e1df29123af58540bcd5493f3225d |     
-    arm      | libdbi-88b8477d57153b9f736d... | NOK | http://autobuild.buildroot.net/results/770cf3fafe2dbe67c9061774428f067e95064c46 |     
-    arm      | libdbi-88b8477d57153b9f736d... | NOK | http://autobuild.buildroot.net/results/6d573a814d21c0b0cc79435ab72aba42726e830f |     
-    m68k     | libdbi-88b8477d57153b9f736d... | NOK | http://autobuild.buildroot.net/results/0707b93479152e28a2d64ca9a6e03a8dc4dd8e40 |     
-    arm      | libdbi-88b8477d57153b9f736d... | NOK | http://autobuild.buildroot.net/results/d5d0ebbbba6bb4b7dc8d2cd2b11c2e607ecbf758 |     
-    arm      | libdbi-88b8477d57153b9f736d... | NOK | http://autobuild.buildroot.net/results/73d5510eb1eed7fd2ea3a47627a53e63344957e8 |     
-    arm      |       lttng-tools-2.12.3       | NOK | http://autobuild.buildroot.net/results/9e38a719eab58ea533ffee3407f24cd2d8ae0097 |     
-  mips64el   |         mesa3d-21.1.8          | NOK | http://autobuild.buildroot.net/results/21ab716fc98a6b8d0dbf6c5580e63e4d9f37c5d3 |     
-    arm      |      python-libusb1-2.0.1      | NOK | http://autobuild.buildroot.net/results/12f56251c1a21bea899fa7d1429137b0b2a7d13a |     
-    sh4      |       python-pip-21.2.4        | NOK | http://autobuild.buildroot.net/results/c5b18d1c222a2f03e559fb50ab52854a9f23507a |     
-   x86_64    |       python-pip-21.2.4        | NOK | http://autobuild.buildroot.net/results/c591a1e7e8320ba494d2ab15999a2ca9a5d2d79c |     
-   nios2     |       python-pip-21.2.4        | NOK | http://autobuild.buildroot.net/results/8469a8ce9b587cd6341d68deef3ca985d966f2ac |     
-  aarch64    |       python-pip-21.2.4        | NOK | http://autobuild.buildroot.net/results/310e24d8a0f2e5a0a13fb2d64605c2b3ca8141d7 |     
-    arm      |           qemu-6.1.0           | NOK | http://autobuild.buildroot.net/results/df447bd963e62e06b28d7230da744616ae55b194 |     
-    arm      |           qemu-6.1.0           | NOK | http://autobuild.buildroot.net/results/be24433a429fda681fb66698160132c1c99bc53b |     
-    arm      | rpi-firmware-2ef3800b1b71c0... | NOK | http://autobuild.buildroot.net/results/88b2137ea81c4944cbded11fa68adcbca02e83d0 |     
-  aarch64    |        strongswan-5.9.1        | NOK | http://autobuild.buildroot.net/results/4e0bbce08f23c3caa621203bb863d3610ced0d51 |     
-   sparc     |        tinydtls-0.9-rc1        | NOK | http://autobuild.buildroot.net/results/c3cbff0c32d56ad35bcebb9dff14183b6d463e66 |     
-   xtensa    |        tinydtls-0.9-rc1        | NOK | http://autobuild.buildroot.net/results/59ad2905e753310c743da2aa58ab5837177c4429 |     
-  aarch64    |        tinydtls-0.9-rc1        | NOK | http://autobuild.buildroot.net/results/f34656afe34f38a5a2faa7923ff5148f8529fff9 |     
-  sparc64    |        tinydtls-0.9-rc1        | NOK | http://autobuild.buildroot.net/results/d453cdb4a6e3afa3df2a5bd9fd2a980058a0a339 |     
-   s390x     |        tinydtls-0.9-rc1        | NOK | http://autobuild.buildroot.net/results/96e18b9f4de747feb9b093fecddc684258313dae |     
-  powerpc    |        tinydtls-0.9-rc1        | NOK | http://autobuild.buildroot.net/results/5cfec6afa7529f85daaa6a771da668dfebb5f1f7 |     
-    arm      |        tinydtls-0.9-rc1        | NOK | http://autobuild.buildroot.net/results/c518bb8d21b3158887bfdb5c49b6e3796730a65f |     
-    arm      |         tpm2-tss-3.1.0         | NOK | http://autobuild.buildroot.net/results/f50886b4d1e38457fdd9dcf0fea92f1117a59d90 | ORPH
-    arc      |         tpm2-tss-3.1.0         | NOK | http://autobuild.buildroot.net/results/b5269ff62cbc97ffefae2c640a424eb84d0a3391 | ORPH
-   nios2     |         tpm2-tss-3.1.0         | NOK | http://autobuild.buildroot.net/results/ea16add4d11ffb025db12d06087af61682b9f61b | ORPH
-  sparc64    |         tpm2-tss-3.1.0         | NOK | http://autobuild.buildroot.net/results/de5c37e388690bee8a775fec8f8b39dca112250d | ORPH
-  aarch64    |         tpm2-tss-3.1.0         | NOK | http://autobuild.buildroot.net/results/2cc5b4ef155b198735f0cfde66bf1e06afc54603 | ORPH
-  riscv64    |         tpm2-tss-3.1.0         | NOK | http://autobuild.buildroot.net/results/0d949b9d8768c86a93aa9dfe3fe91f60a68ce238 | ORPH
-   mipsel    |         tpm2-tss-3.1.0         | NOK | http://autobuild.buildroot.net/results/7f767d9df57c58ef38dd67b420615b4a3401de77 | ORPH
-  powerpc    |         tpm2-tss-3.1.0         | NOK | http://autobuild.buildroot.net/results/bd21d13ac43cc88b99c0c99033bb665cc4a307cc | ORPH
-   x86_64    |         tpm2-tss-3.1.0         | NOK | http://autobuild.buildroot.net/results/f5453510e39130e503c8f85384d8642777118c0c | ORPH
-   x86_64    |         tpm2-tss-3.1.0         | NOK | http://autobuild.buildroot.net/results/5d4afa389524c665a2dcfdf58b1af40e98898b41 | ORPH
-    arm      |         tpm2-tss-3.1.0         | NOK | http://autobuild.buildroot.net/results/19f27323dc34005df96ff8bdabd5ecf2177f4869 | ORPH
-  sparc64    |         tpm2-tss-3.1.0         | NOK | http://autobuild.buildroot.net/results/dbc269918110cac170c1b49db52fa5c1edc42059 | ORPH
-  mips64el   |         tpm2-tss-3.1.0         | NOK | http://autobuild.buildroot.net/results/ba154c31a9a3172e7c06e11a56bab74f60126831 | ORPH
-   xtensa    |       transmission-3.00        | NOK | http://autobuild.buildroot.net/results/f9b31fe94e2380283b4687406a2e142b61579657 |     
-    arm      |       transmission-3.00        | NOK | http://autobuild.buildroot.net/results/650f5102a9ddfee27ff84b4256ef3e6647f0fb65 |     
-   x86_64    |       transmission-3.00        | NOK | http://autobuild.buildroot.net/results/12cb7bc8850832cce2ba71ef8ccfa334aff90eaf |     
-    arm      |       transmission-3.00        | NOK | http://autobuild.buildroot.net/results/66f73aa14948d5ff620fe29599a34c4ee77db026 |     
-   s390x     |       transmission-3.00        | NOK | http://autobuild.buildroot.net/results/e3a9aed206ae8199ae23f5d3545ac58760115cf3 |     
-   s390x     |            unknown             | NOK | http://autobuild.buildroot.net/results/6cfd78d958c0f1ed4f0d5a0f4e1a9d6c046fa0b6 |     
-    arm      |       util-linux-2.37.2        | NOK | http://autobuild.buildroot.net/results/9fe26ab98c93b67f937293f28625843da7ccb77f | ORPH
-    or1k     |          zeromq-4.3.4          | NOK | http://autobuild.buildroot.net/results/604b8a21d6552f36534e798ac627524851587983 |     
-    or1k     |          zeromq-4.3.4          | NOK | http://autobuild.buildroot.net/results/14156090bcd7afb8a462c8e4356d122995546e24 |     
-    or1k     |          zeromq-4.3.4          | NOK | http://autobuild.buildroot.net/results/cbeb50d4b043e7fbdd1a33f26ff9620211f1f34f |     
-
-
-Classification of failures by reason for 2021.02.x
---------------------------------------------------
-
-        host-sentry-cli-1.57.0 | 4 
-monkey-f54856ce250c4e257354... | 1 
-               openldap-2.4.59 | 1 
-                    rauc-1.5.1 | 1 
-              syslog-ng-3.30.1 | 1 
-                       unknown | 1 
-
-
-Detail of failures for 2021.02.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-    arm      |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/8a827cf204dcaa623200bd85edcc767aef3b1a00 |     
-powerpc64le  |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/a4eb0c8200e6dbb1852bd678e8b2898f4bf99727 |     
-microblazeel |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/f36c0d4d57a05f371ebd2d2dfcd22d5040a8fb2d |     
-  mips64el   |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/026803d1fdbabd85083adb2dca9364fc4926f7e9 |     
-  powerpc    | monkey-f54856ce250c4e257354... | NOK | http://autobuild.buildroot.net/results/453015ec87bd187e3de3427205f93110198b7b05 |     
-  riscv32    |        openldap-2.4.59         | NOK | http://autobuild.buildroot.net/results/0cb838eb389e1456c367fcea02fc7ab09ee06a6b |     
-  riscv32    |           rauc-1.5.1           | NOK | http://autobuild.buildroot.net/results/625338b0b497c8a2f675452dbea75c5e71eb61a1 |     
-  riscv64    |        syslog-ng-3.30.1        | NOK | http://autobuild.buildroot.net/results/7f455810f24ce8c579525c6c6ecaad19683001a8 |     
-    arm      |            unknown             | NOK | http://autobuild.buildroot.net/results/92425bd7f0f1a15f5cfe352b8923a2de623274dd |     
-
-
-Classification of failures by reason for 2021.08.x
---------------------------------------------------
-
-               pipewire-0.3.32 | 1 
-
-
-Detail of failures for 2021.08.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-   x86_64    |        pipewire-0.3.32         | NOK | http://autobuild.buildroot.net/results/84dd9f765f5e723ba34974d6ed2ed0ce67fb8595 |     
-
-
-
+diff --git a/package/gstreamer1/gstd/0006-meson.build-use-dependency-function-for-readline.patch b/package/gstreamer1/gstd/0006-meson.build-use-dependency-function-for-readline.patch
+new file mode 100644
+index 0000000000..60ffc6a90a
+--- /dev/null
++++ b/package/gstreamer1/gstd/0006-meson.build-use-dependency-function-for-readline.patch
+@@ -0,0 +1,51 @@
++From 80ab24d439594bad4365b0395759a57ab0760c6f Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 22 Oct 2021 07:33:04 +0200
++Subject: [PATCH] meson.build: use dependency function for readline
++
++Use meson dependency function to find readline instead of
++cc.find_library. This function will retrieve readline pkg-config file
++which is available since version 7 (released 5 years ago) and
++https://git.savannah.gnu.org/cgit/readline.git/commit/readline.pc.in?id=d49a9082c0e15bba8cd3d8cc0a994409cf823cac.
++readline.pc sets tinfo in Requires.Private which will avoid the
++following static build failure:
++
++/home/buildroot/autobuild/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/i586-buildroot-linux-musl/9.3.0/../../../../i586-buildroot-linux-musl/bin/ld: /home/buildroot/autobuild/instance-1/output-1/host/i586-buildroot-linux-musl/sysroot/usr/lib/libreadline.a(display.o): in function `_rl_move_cursor_relative':
++display.c:(.text+0xbb5): undefined reference to `tputs'
++
++Fixes:
++ - http://autobuild.buildroot.org/results/77c10947ddc749c54c7c233e3143f5cdf1edc73d
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/RidgeRun/gstd-1.x/pull/261]
++---
++ meson.build | 6 ++----
++ 1 file changed, 2 insertions(+), 4 deletions(-)
++
++diff --git a/meson.build b/meson.build
++index a0af2e2..8edd7aa 100644
++--- a/meson.build
+++++ b/meson.build
++@@ -30,8 +30,8 @@ systemd_required = get_option('enable-systemd').enabled()
++ systemd_dep = dependency('systemd', required : systemd_required, version : '>=232')
++ 
++ cc = meson.get_compiler('c')
++-readline = cc.find_library('readline', required: true)
++-if readline.found()
+++readline_dep = dependency('readline')
+++if readline_dep.found()
++   add_project_arguments('-DHAVE_LIBREADLINE', language: 'c')
++   add_project_arguments('-DHAVE_READLINE_HISTORY', language: 'c')
++   # Add arguments to the compiler command line. 
++@@ -46,8 +46,6 @@ if readline.found()
++   else
++     add_project_arguments('-DHAVE_HISTORY_H', language: 'c')
++   endif
++-  
++-  readline_dep = readline
++ endif
++ 
++ ## Dependencies
++-- 
++2.33.0
++
+diff --git a/package/gstreamer1/gstd/0007-gstd-meson.build-use-library-instead-of-both_librari.patch b/package/gstreamer1/gstd/0007-gstd-meson.build-use-library-instead-of-both_librari.patch
+new file mode 100644
+index 0000000000..258c53fd46
+--- /dev/null
++++ b/package/gstreamer1/gstd/0007-gstd-meson.build-use-library-instead-of-both_librari.patch
+@@ -0,0 +1,33 @@
++From b30122ef45516b4fc5ce75a36117ef05aa84d944 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 22 Oct 2021 08:00:44 +0200
++Subject: [PATCH] gstd/meson.build: use library instead of both_libraries
++
++Use meson library function instead of both_libraries to avoid the
++following static build failure which is raised because there is no way
++to specify that a static library must be used in declare_dependency:
++
++/home/fabrice/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/i586-buildroot-linux-musl/9.3.0/../../../../i586-buildroot-linux-musl/bin/ld: attempted static link of dynamic object `gstd/libgstd-core.so.0.13.0'
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ gstd/meson.build | 3 +--
++ 1 file changed, 1 insertion(+), 2 deletions(-)
++
++diff --git a/gstd/meson.build b/gstd/meson.build
++index b81a686..5c59add 100644
++--- a/gstd/meson.build
+++++ b/gstd/meson.build
++@@ -116,8 +116,7 @@ libgstd_header_files = [
++   'gstd_unix.h'
++ ]
++ 
++-# Create a static library used to create gstd daemon and also is used for tests
++-gstd_lib = both_libraries('gstd-core',
+++gstd_lib = library('gstd-core',
++   libgstd_src_files,
++   c_args : gst_c_args,
++   version : gstd_version,
++-- 
++2.33.0
++
 -- 
-http://autobuild.buildroot.net
+2.33.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
