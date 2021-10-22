@@ -2,52 +2,52 @@ Return-Path: <SRS0=MwHx=PK=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 814C5C433F5
-	for <buildroot@archiver.kernel.org>; Fri, 22 Oct 2021 18:50:53 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D7C6FC433F5
+	for <buildroot@archiver.kernel.org>; Fri, 22 Oct 2021 18:51:05 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 4D13E6103E
-	for <buildroot@archiver.kernel.org>; Fri, 22 Oct 2021 18:50:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4D13E6103E
+	by mail.kernel.org (Postfix) with ESMTPS id 856F66103E
+	for <buildroot@archiver.kernel.org>; Fri, 22 Oct 2021 18:51:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 856F66103E
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0EA5C4023E;
-	Fri, 22 Oct 2021 18:50:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 61D6680ED8;
+	Fri, 22 Oct 2021 18:51:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SyD3E6Sltasr; Fri, 22 Oct 2021 18:50:52 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id q2k0_oY4dyq3; Fri, 22 Oct 2021 18:51:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 15E43401C1;
-	Fri, 22 Oct 2021 18:50:51 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7368C1C1135
- for <buildroot@lists.busybox.net>; Fri, 22 Oct 2021 18:49:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BCCB780EAD;
+	Fri, 22 Oct 2021 18:51:03 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 8F53A1BF29D
+ for <buildroot@lists.busybox.net>; Fri, 22 Oct 2021 18:49:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6155E4023E
- for <buildroot@lists.busybox.net>; Fri, 22 Oct 2021 18:49:54 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8C2974069F
+ for <buildroot@lists.busybox.net>; Fri, 22 Oct 2021 18:49:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uy47XMUrYGSN for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id QZKyk7XGSOkm for <buildroot@lists.busybox.net>;
  Fri, 22 Oct 2021 18:49:53 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6DD6E400F5
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9D5AC40520
  for <buildroot@buildroot.org>; Fri, 22 Oct 2021 18:49:53 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id EBD44884A4; Fri, 22 Oct 2021 18:46:39 +0000 (UTC)
+ id 28642884A5; Fri, 22 Oct 2021 18:46:40 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 22 Oct 2021 20:30:27 +0200
+Date: Fri, 22 Oct 2021 20:48:06 +0200
 X-Git-Refname: refs/heads/2021.08.x
-X-Git-Oldrev: b8bc852f63a71f977a4eadd67e30d0a1242fc982
-X-Git-Newrev: da9b4f5fe555e3f57446c70fd7b2439f10a560b1
+X-Git-Oldrev: 0bfff7d2446b917a1342a02973a402b9f2f82e0f
+X-Git-Newrev: 5bf02b7755cfd27f404fb81f3a1b9e6dd36458f5
 X-Patchwork-Hint: ignore
-Message-Id: <20211022184639.EBD44884A4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.08.x] package/cryptsetup: bump
- to version 2.3.6
+Message-Id: <20211022184640.28642884A5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.08.x] package/libva-utils: bump
+ version to 2.13.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,48 +65,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=da9b4f5fe555e3f57446c70fd7b2439f10a560b1
+commit: https://git.buildroot.net/buildroot/commit/?id=5bf02b7755cfd27f404fb81f3a1b9e6dd36458f5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.08.x
 
-Stable bug-fix release with minor extensions.
+Release notes: https://github.com/intel/libva-utils/blob/master/NEWS
 
-All users of cryptsetup 2.x and later should upgrade to this version.
-
-https://gitlab.com/cryptsetup/cryptsetup/-/blob/v2.3.6/docs/v2.3.5-ReleaseNotes
-https://gitlab.com/cryptsetup/cryptsetup/-/blob/v2.3.6/docs/v2.3.6-ReleaseNotes
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit d6eb905376d0af595b01aa8007cac1d4de7175b7)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit eb6e35e304b00cdf4b0cb2ecef26cae11b88d181)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/cryptsetup/cryptsetup.hash | 2 +-
- package/cryptsetup/cryptsetup.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libva-utils/libva-utils.hash | 6 +++---
+ package/libva-utils/libva-utils.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/cryptsetup/cryptsetup.hash b/package/cryptsetup/cryptsetup.hash
-index 3b58345611..0aa3f79df7 100644
---- a/package/cryptsetup/cryptsetup.hash
-+++ b/package/cryptsetup/cryptsetup.hash
-@@ -1,4 +1,4 @@
- # From https://www.kernel.org/pub/linux/utils/cryptsetup/v2.3/sha256sums.asc
--sha256  9d16eebb96b53b514778e813019b8dd15fea9fec5aafde9fae5febf59df83773  cryptsetup-2.3.4.tar.xz
-+sha256  b296b7a21ea576c2b180611ccb19d06aec8dddaedf7c704b0c6a81210c25635f  cryptsetup-2.3.6.tar.xz
- sha256  45670cce8b6a0ddd66c8016cd8ccef6cd71f35717cbacc7f1e895b3855207b33  COPYING
- sha256  8c33cc37871654ec7ed87e6fbb896c8cf33ef5ef05b1611a5aed857596ffafa5  COPYING.LGPL
-diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
-index b816dc2f22..3cf6c8a301 100644
---- a/package/cryptsetup/cryptsetup.mk
-+++ b/package/cryptsetup/cryptsetup.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/libva-utils/libva-utils.hash b/package/libva-utils/libva-utils.hash
+index 967c350373..18a078dc1c 100644
+--- a/package/libva-utils/libva-utils.hash
++++ b/package/libva-utils/libva-utils.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/intel/libva-utils/releases/download/2.12.0/libva-utils-2.12.0.tar.bz2.sha1sum
+-sha1  734ad8d4e39bf90b5670224272489f1745024ae2  libva-utils-2.12.0.tar.bz2
++# From https://github.com/intel/libva-utils/releases/download/2.13.0/libva-utils-2.13.0.tar.bz2.sha1sum
++sha1  7ab945cf232387f762891f9e4f7a6cb41e0766e8  libva-utils-2.13.0.tar.bz2
+ # Locally computed
+-sha256  bbe49e68fbdf379acc769e4c1680a76be3e2b48020ca320edafaf7235b62cc44  libva-utils-2.12.0.tar.bz2
++sha256  db3ae0bd63c2a3f6ef498450c29ffc99c387ce611e1eb5db6a8da1f88845d612  libva-utils-2.13.0.tar.bz2
+ sha256  c6220c9f87832c27abcb8a32eafdd2823e13ce146b3ea63d5deae2a76798ef50  COPYING
+diff --git a/package/libva-utils/libva-utils.mk b/package/libva-utils/libva-utils.mk
+index c75091c7c7..e6e31df8bd 100644
+--- a/package/libva-utils/libva-utils.mk
++++ b/package/libva-utils/libva-utils.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- CRYPTSETUP_VERSION_MAJOR = 2.3
--CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).4
-+CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).6
- CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.xz
- CRYPTSETUP_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/cryptsetup/v$(CRYPTSETUP_VERSION_MAJOR)
- CRYPTSETUP_DEPENDENCIES = \
+-LIBVA_UTILS_VERSION = 2.12.0
++LIBVA_UTILS_VERSION = 2.13.0
+ LIBVA_UTILS_SOURCE = libva-utils-$(LIBVA_UTILS_VERSION).tar.bz2
+ LIBVA_UTILS_SITE = https://github.com/intel/libva-utils/releases/download/$(LIBVA_UTILS_VERSION)
+ LIBVA_UTILS_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
