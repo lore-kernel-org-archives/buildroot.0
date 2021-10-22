@@ -2,59 +2,58 @@ Return-Path: <SRS0=MwHx=PK=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 445F4C433F5
-	for <buildroot@archiver.kernel.org>; Fri, 22 Oct 2021 18:42:41 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E6B25C433F5
+	for <buildroot@archiver.kernel.org>; Fri, 22 Oct 2021 18:43:11 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id CD69A6103D
-	for <buildroot@archiver.kernel.org>; Fri, 22 Oct 2021 18:42:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org CD69A6103D
+	by mail.kernel.org (Postfix) with ESMTPS id 47DBB6103D
+	for <buildroot@archiver.kernel.org>; Fri, 22 Oct 2021 18:43:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 47DBB6103D
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 885D9402D9;
-	Fri, 22 Oct 2021 18:42:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E02A783BAC;
+	Fri, 22 Oct 2021 18:43:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xhiS2RKt7a1x; Fri, 22 Oct 2021 18:42:39 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id NrsnsOg-6ZFo; Fri, 22 Oct 2021 18:43:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C536A4023E;
-	Fri, 22 Oct 2021 18:42:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 588D883BB4;
+	Fri, 22 Oct 2021 18:43:09 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 998C31BF29D
- for <buildroot@lists.busybox.net>; Fri, 22 Oct 2021 18:42:37 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 413441BF29D
+ for <buildroot@lists.busybox.net>; Fri, 22 Oct 2021 18:43:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9535F4023E
- for <buildroot@lists.busybox.net>; Fri, 22 Oct 2021 18:42:37 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7AECC4023E
+ for <buildroot@lists.busybox.net>; Fri, 22 Oct 2021 18:43:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pu0BCM0O4dny for <buildroot@lists.busybox.net>;
- Fri, 22 Oct 2021 18:42:36 +0000 (UTC)
+ with ESMTP id 3X74uHIzhvC0 for <buildroot@lists.busybox.net>;
+ Fri, 22 Oct 2021 18:43:06 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5852E400F5
- for <buildroot@buildroot.org>; Fri, 22 Oct 2021 18:42:36 +0000 (UTC)
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9669B400F5
+ for <buildroot@buildroot.org>; Fri, 22 Oct 2021 18:43:06 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id E19CA20004;
- Fri, 22 Oct 2021 18:42:33 +0000 (UTC)
+ by relay11.mail.gandi.net (Postfix) with ESMTPSA id B9F43100006;
+ Fri, 22 Oct 2021 18:43:04 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
  (envelope-from <peter@korsgaard.com>)
- id 1mdzUv-0003Ej-63; Fri, 22 Oct 2021 20:42:33 +0200
+ id 1mdzVQ-0003HF-1I; Fri, 22 Oct 2021 20:43:04 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20211016084136.2475297-1-fontaine.fabrice@gmail.com>
-Date: Fri, 22 Oct 2021 20:42:33 +0200
-In-Reply-To: <20211016084136.2475297-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 16 Oct 2021 10:41:36 +0200")
-Message-ID: <875yto6gva.fsf@dell.be.48ers.dk>
+References: <20211016084223.2475372-1-fontaine.fabrice@gmail.com>
+Date: Fri, 22 Oct 2021 20:43:04 +0200
+In-Reply-To: <20211016084223.2475372-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 16 Oct 2021 10:42:23 +0200")
+Message-ID: <871r4c6guf.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/wireguard-linux-compat: add
- missing comment about kernel dependency
+Subject: Re: [Buildroot] [PATCH 1/1] package/wf111: add missing comment
+ about kernel dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,7 +74,7 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
  > Add a comment when kernel is not enabled (missing since the addition of
- > the package in commit de591c5c3a93a40d049a32bd79c30cc66daf5fb2)
+ > the package in commit 5b13fc05b37386e64b9f46515b57b5887ee357d9)
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
