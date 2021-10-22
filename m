@@ -2,52 +2,52 @@ Return-Path: <SRS0=MwHx=PK=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 950D7C433F5
-	for <buildroot@archiver.kernel.org>; Fri, 22 Oct 2021 18:49:43 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 471E9C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 22 Oct 2021 18:49:55 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 37F8C60FE7
-	for <buildroot@archiver.kernel.org>; Fri, 22 Oct 2021 18:49:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 37F8C60FE7
+	by mail.kernel.org (Postfix) with ESMTPS id DCB926103E
+	for <buildroot@archiver.kernel.org>; Fri, 22 Oct 2021 18:49:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org DCB926103E
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 17C6C80ED8;
-	Fri, 22 Oct 2021 18:49:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9E1814019B;
+	Fri, 22 Oct 2021 18:49:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mJiAiyTve4YA; Fri, 22 Oct 2021 18:49:42 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id cf0vnsDL24ar; Fri, 22 Oct 2021 18:49:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 688B280EAD;
-	Fri, 22 Oct 2021 18:49:41 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 217CE1BF29D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0500740886;
+	Fri, 22 Oct 2021 18:49:52 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 41FE41C1127
  for <buildroot@lists.busybox.net>; Fri, 22 Oct 2021 18:49:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1E0F560636
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3ACEC80EAD
  for <buildroot@lists.busybox.net>; Fri, 22 Oct 2021 18:49:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kYarVN2UoFda for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kh9MwhV_GO5w for <buildroot@lists.busybox.net>;
  Fri, 22 Oct 2021 18:49:39 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6A2D760619
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7CB4680EAC
  for <buildroot@buildroot.org>; Fri, 22 Oct 2021 18:49:39 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id DAD518847F; Fri, 22 Oct 2021 18:46:25 +0000 (UTC)
+ id 05672873D0; Fri, 22 Oct 2021 18:46:26 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 22 Oct 2021 20:30:35 +0200
+Date: Fri, 22 Oct 2021 20:42:44 +0200
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 241a7c6fe7b962cbd0c9946eadbf667ef6b8d56c
-X-Git-Newrev: 46f435ec11a5750b3fc16c4f8311dea8401fd3b7
+X-Git-Oldrev: cad006e8100c8083996be892002c67c8f2b34e81
+X-Git-Newrev: fa110027d06cb3f0f4758931fc34b075fa8665b2
 X-Patchwork-Hint: ignore
-Message-Id: <20211022184625.DAD518847F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/cryptsetup: bump
- to version 2.3.6
+Message-Id: <20211022184626.05672873D0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/wf111: add
+ missing comment about kernel dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,48 +65,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=46f435ec11a5750b3fc16c4f8311dea8401fd3b7
+commit: https://git.buildroot.net/buildroot/commit/?id=fa110027d06cb3f0f4758931fc34b075fa8665b2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Stable bug-fix release with minor extensions.
-
-All users of cryptsetup 2.x and later should upgrade to this version.
-
-https://gitlab.com/cryptsetup/cryptsetup/-/blob/v2.3.6/docs/v2.3.5-ReleaseNotes
-https://gitlab.com/cryptsetup/cryptsetup/-/blob/v2.3.6/docs/v2.3.6-ReleaseNotes
+Add a comment when kernel is not enabled (missing since the addition of
+the package in commit 5b13fc05b37386e64b9f46515b57b5887ee357d9)
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit d6eb905376d0af595b01aa8007cac1d4de7175b7)
+(cherry picked from commit b5a48f3584e39e05041666009b43075607daea24)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/cryptsetup/cryptsetup.hash | 2 +-
- package/cryptsetup/cryptsetup.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/wf111/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/cryptsetup/cryptsetup.hash b/package/cryptsetup/cryptsetup.hash
-index 3b58345611..0aa3f79df7 100644
---- a/package/cryptsetup/cryptsetup.hash
-+++ b/package/cryptsetup/cryptsetup.hash
-@@ -1,4 +1,4 @@
- # From https://www.kernel.org/pub/linux/utils/cryptsetup/v2.3/sha256sums.asc
--sha256  9d16eebb96b53b514778e813019b8dd15fea9fec5aafde9fae5febf59df83773  cryptsetup-2.3.4.tar.xz
-+sha256  b296b7a21ea576c2b180611ccb19d06aec8dddaedf7c704b0c6a81210c25635f  cryptsetup-2.3.6.tar.xz
- sha256  45670cce8b6a0ddd66c8016cd8ccef6cd71f35717cbacc7f1e895b3855207b33  COPYING
- sha256  8c33cc37871654ec7ed87e6fbb896c8cf33ef5ef05b1611a5aed857596ffafa5  COPYING.LGPL
-diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
-index b816dc2f22..3cf6c8a301 100644
---- a/package/cryptsetup/cryptsetup.mk
-+++ b/package/cryptsetup/cryptsetup.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/wf111/Config.in b/package/wf111/Config.in
+index 8dd20a7cc5..bb4b1a5d03 100644
+--- a/package/wf111/Config.in
++++ b/package/wf111/Config.in
+@@ -19,6 +19,10 @@ config BR2_PACKAGE_WF111
  
- CRYPTSETUP_VERSION_MAJOR = 2.3
--CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).4
-+CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).6
- CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.xz
- CRYPTSETUP_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/cryptsetup/v$(CRYPTSETUP_VERSION_MAJOR)
- CRYPTSETUP_DEPENDENCIES = \
+ 	  https://www.silabs.com/wireless/wi-fi/bluegiga-legacy-modules/device.wf111
+ 
++comment "wf111 needs a Linux kernel to be built"
++	depends on !BR2_LINUX_KERNEL
++	depends on BR2_ARM_CPU_ARMV5 || BR2_ARM_CPU_ARMV7A || BR2_i386
++
+ comment "wf111 needs a glibc toolchain"
+ 	depends on BR2_LINUX_KERNEL
+ 	depends on BR2_ARM_CPU_ARMV5 || BR2_ARM_CPU_ARMV7A || BR2_i386
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
