@@ -2,59 +2,59 @@ Return-Path: <SRS0=MwHx=PK=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EBB29C4167E
-	for <buildroot@archiver.kernel.org>; Fri, 22 Oct 2021 18:37:18 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 445F4C433F5
+	for <buildroot@archiver.kernel.org>; Fri, 22 Oct 2021 18:42:41 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 65A3E60E8C
-	for <buildroot@archiver.kernel.org>; Fri, 22 Oct 2021 18:37:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 65A3E60E8C
+	by mail.kernel.org (Postfix) with ESMTPS id CD69A6103D
+	for <buildroot@archiver.kernel.org>; Fri, 22 Oct 2021 18:42:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org CD69A6103D
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0EEA583196;
-	Fri, 22 Oct 2021 18:37:18 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 885D9402D9;
+	Fri, 22 Oct 2021 18:42:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id iLc1sj5cXWca; Fri, 22 Oct 2021 18:37:17 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id xhiS2RKt7a1x; Fri, 22 Oct 2021 18:42:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 86F9E835EF;
-	Fri, 22 Oct 2021 18:37:16 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 23ADF1BF29D
- for <buildroot@lists.busybox.net>; Fri, 22 Oct 2021 18:37:15 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C536A4023E;
+	Fri, 22 Oct 2021 18:42:38 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 998C31BF29D
+ for <buildroot@lists.busybox.net>; Fri, 22 Oct 2021 18:42:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 128CF60636
- for <buildroot@lists.busybox.net>; Fri, 22 Oct 2021 18:37:15 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9535F4023E
+ for <buildroot@lists.busybox.net>; Fri, 22 Oct 2021 18:42:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fyanEaWIQ_Kh for <buildroot@lists.busybox.net>;
- Fri, 22 Oct 2021 18:37:13 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pu0BCM0O4dny for <buildroot@lists.busybox.net>;
+ Fri, 22 Oct 2021 18:42:36 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 46BA460F74
- for <buildroot@buildroot.org>; Fri, 22 Oct 2021 18:37:09 +0000 (UTC)
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5852E400F5
+ for <buildroot@buildroot.org>; Fri, 22 Oct 2021 18:42:36 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id C3A7F240006;
- Fri, 22 Oct 2021 18:37:06 +0000 (UTC)
+ by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id E19CA20004;
+ Fri, 22 Oct 2021 18:42:33 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
  (envelope-from <peter@korsgaard.com>)
- id 1mdzPd-00033v-PF; Fri, 22 Oct 2021 20:37:05 +0200
+ id 1mdzUv-0003Ej-63; Fri, 22 Oct 2021 20:42:33 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Peter Seiderer <ps.report@gmx.net>
-References: <20211014220011.17230-1-ps.report@gmx.net>
- <20211014220011.17230-3-ps.report@gmx.net>
-Date: Fri, 22 Oct 2021 20:37:05 +0200
-In-Reply-To: <20211014220011.17230-3-ps.report@gmx.net> (Peter Seiderer's
- message of "Fri, 15 Oct 2021 00:00:11 +0200")
-Message-ID: <87a6j06h4e.fsf@dell.be.48ers.dk>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20211016084136.2475297-1-fontaine.fabrice@gmail.com>
+Date: Fri, 22 Oct 2021 20:42:33 +0200
+In-Reply-To: <20211016084136.2475297-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 16 Oct 2021 10:41:36 +0200")
+Message-ID: <875yto6gva.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v1 3/3] package/nftables: disable debug build
+Subject: Re: [Buildroot] [PATCH 1/1] package/wireguard-linux-compat: add
+ missing comment about kernel dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,27 +72,14 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
- > ---
- >  package/nftables/nftables.mk | 2 +-
- >  1 file changed, 1 insertion(+), 1 deletion(-)
+ > Add a comment when kernel is not enabled (missing since the addition of
+ > the package in commit de591c5c3a93a40d049a32bd79c30cc66daf5fb2)
 
- > diff --git a/package/nftables/nftables.mk b/package/nftables/nftables.mk
- > index 6a27975a53..2409eb0571 100644
- > --- a/package/nftables/nftables.mk
- > +++ b/package/nftables/nftables.mk
- > @@ -10,7 +10,7 @@ NFTABLES_SITE = https://www.netfilter.org/projects/nftables/files
- >  NFTABLES_DEPENDENCIES = libmnl libnftnl host-pkgconf $(TARGET_NLS_DEPENDENCIES)
- >  NFTABLES_LICENSE = GPL-2.0
- >  NFTABLES_LICENSE_FILES = COPYING
- > -NFTABLES_CONF_OPTS = --disable-man-doc --disable-pdf-doc
- > +NFTABLES_CONF_OPTS = --disable-debug --disable-man-doc --disable-pdf-doc
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Is this only for v1.0.0 or something that should be backported to the
-stable branches? You have put this after the bump of nftables in
-the series, but have not explicitly stated anything about it.
+Committed to 2021.02.x and 2021.08.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
