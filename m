@@ -1,84 +1,84 @@
-Return-Path: <SRS0=MwHx=PK=buildroot.org=buildroot-bounces@kernel.org>
+Return-Path: <SRS0=6sxh=PL=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DEE1DC433F5
-	for <buildroot@archiver.kernel.org>; Fri, 22 Oct 2021 22:20:54 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D9CDDC433EF
+	for <buildroot@archiver.kernel.org>; Sat, 23 Oct 2021 04:31:33 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 5C037610A4
-	for <buildroot@archiver.kernel.org>; Fri, 22 Oct 2021 22:20:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5C037610A4
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmx.net
+	by mail.kernel.org (Postfix) with ESMTPS id EFF1760FBF
+	for <buildroot@archiver.kernel.org>; Sat, 23 Oct 2021 04:31:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org EFF1760FBF
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2F41A80E92;
-	Fri, 22 Oct 2021 22:20:54 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7DC0B4031D;
+	Sat, 23 Oct 2021 04:31:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id s4hqEfqN_nn8; Fri, 22 Oct 2021 22:20:53 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id L8IOtYHHSdbA; Sat, 23 Oct 2021 04:31:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A44D880E4C;
-	Fri, 22 Oct 2021 22:20:52 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2090C1BF3BF
- for <buildroot@lists.busybox.net>; Fri, 22 Oct 2021 22:20:40 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9BD32402F0;
+	Sat, 23 Oct 2021 04:31:30 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A5C3A1BF28C
+ for <buildroot@lists.busybox.net>; Sat, 23 Oct 2021 04:31:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1016A60608
- for <buildroot@lists.busybox.net>; Fri, 22 Oct 2021 22:20:40 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id A107C402F0
+ for <buildroot@lists.busybox.net>; Sat, 23 Oct 2021 04:31:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=gmx.net
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YRBAoNE8bWoi for <buildroot@lists.busybox.net>;
- Fri, 22 Oct 2021 22:20:38 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 40882605C8
- for <buildroot@buildroot.org>; Fri, 22 Oct 2021 22:20:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
- s=badeba3b8450; t=1634941234;
- bh=7ycR7tXJXHioe8WIG4WCSWHD1HqPPg5zJ/QuhUm1DNA=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
- b=Ujhn0kqgaweMSl+3buC5o36L7NM25nKTyyhkwDwvZNxt+9achZsf4lsh5ZmMKwwi4
- vx39EukHB0+9N6wjdIjIotCcFRwVmE0xIvQJ53zgi4NJ4El85H+2SPlPoqOg0MkCve
- HwQb3IALQi+51eeQwgb9C3C83eUXaFKqBc/B94IQ=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from localhost.fritz.box ([62.216.209.153]) by mail.gmx.net
- (mrgmx105 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1MGyxX-1mPyGP1Sqp-00E3lj; Sat, 23 Oct 2021 00:20:34 +0200
-From: Peter Seiderer <ps.report@gmx.net>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id V2Bva9Ro5PS1 for <buildroot@lists.busybox.net>;
+ Sat, 23 Oct 2021 04:31:27 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com
+ [IPv6:2607:f8b0:4864:20::d2f])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 62BEB40132
+ for <buildroot@buildroot.org>; Sat, 23 Oct 2021 04:31:27 +0000 (UTC)
+Received: by mail-io1-xd2f.google.com with SMTP id o184so7935102iof.6
+ for <buildroot@buildroot.org>; Fri, 22 Oct 2021 21:31:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=uZQu+CB1liww/Q7zHYoGgQ3Lc1qsMiyldwS87FEkpLA=;
+ b=DBagoz+ACD0y82tpOFBPb+8Yds2S4biG0MfIqrh4bJskCQShp1P4rVhgvEfa7n9vmW
+ DxXKPpjsISk/M6UpBPdVVA/18d73Apagtnqnd71rCs5cDuNAVAWsuvV6+BD81f6G+dwN
+ MVTQnKawoLhvSRH1UZIEss+g2nDKEStQdf+KCnnr3gYrbrZDfEGwGO1npXU7QxgsYyr3
+ SVMXChG8STcNvn7/GX06i15O229A3S+erBBJ+c/WdzdNgS/WFgv8r3rRjGh94QZVrql1
+ zGuv/B7t3FrIJvvGyOJGbrcftjw+hWe3A5qpAr8aYn5PElgGWziNSXr5+6j/K5OQ5FI6
+ Uerg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=uZQu+CB1liww/Q7zHYoGgQ3Lc1qsMiyldwS87FEkpLA=;
+ b=u+r8vBIPJRkYWfeAl+jGAeBkKSxnYUp7+DyBNvadd4Zmc92kQCo4XjtRunjAKpeStb
+ R7Iu3FJXCVpPgaLPxjxV6h4Mm6GbSwoKrvfWyzbjZfoZNg8LrX2n5scRrkC6j5L60LWf
+ gbAOrdxXRhqlTNTYkpHPds9nK0zJNATALtBr/e133j39bB4/NEdCk02Sz3Dwo6nKFjGP
+ hnpP75PM58EQEHdLw/51+U0GuTR96m960H6Y2SzfChzj7VwtudCrrMcItNZkd+XxJ4tl
+ eK/oGqHxYCmTLG9EhUNKdccHNZIEy4746tJ/asH4k/tDWz42KiYaW/MgEdeAbX4dbgy4
+ fDbQ==
+X-Gm-Message-State: AOAM532TUGlU5j5gnsGQrLsAIqgdQqgXesVaBn3I1XUEw6Q5dyTX4cNj
+ SBMVF4XSX4KVwwSEoYjq1PH6MgijwV0=
+X-Google-Smtp-Source: ABdhPJwrZLdpjtPcx187tEKhYEAy57GwzL16n+gO4Kp6WzeU3At+3gGOmUUo4lSt/fc78Gl58LlsOg==
+X-Received: by 2002:a05:6638:3723:: with SMTP id
+ k35mr2466860jav.104.1634963486109; 
+ Fri, 22 Oct 2021 21:31:26 -0700 (PDT)
+Received: from james-x399.localdomain (71-218-115-49.hlrn.qwest.net.
+ [71.218.115.49])
+ by smtp.gmail.com with ESMTPSA id x5sm5032348ioh.23.2021.10.22.21.31.25
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 22 Oct 2021 21:31:25 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 23 Oct 2021 00:20:32 +0200
-Message-Id: <20211022222033.8862-1-ps.report@gmx.net>
-X-Mailer: git-send-email 2.33.1
+Date: Fri, 22 Oct 2021 22:31:14 -0600
+Message-Id: <20211023043114.3208095-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:/Km2ARgl5Gu8nMVTR02nIYwUfY6yVVn0Ml5jToOLOk6eAr8t6be
- 7VRROK79BLyZNZ17zCF4VovBiHF5I6nmft0z6i8HsPxW1lCvQP/dDrjB3Ng0LMdwE+aAzc5
- 3vTYHXQxdO9z81z0gBWKIkX4wiTncJKTNfSS0WokVC/Vasl31OE8i26RiBMf+obUlCjjXSe
- l4s8j0H2xxjWkzLvsAXcg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:w42HJCahRtY=:1mISXnSLNEROCFbL5EySnx
- fQWkbudspXWqrlXJgz97APLbhmOAOL3qElfBfZh9f7UwFgDQqTY9PUAb99L0Lq43X28TMySix
- 3ILh5OX4W7SwJm9cXKYb0t5M3epcOMI0kgoPSfvVQHabDZbH+FKOUYpjWx98kzRind6PQJdvg
- wB+RjoMVrlfim2ksxRhUub4otsR/UeqaiUNGIdWQLWev2OdUxJHZIDnbOVsMaS334WeEhniQN
- 8jU49xBseFa+L2M6F734HCFJiS9oCFUaLE1yVYas0ujJhTbxEkBtk2uDUvVzHVeMBdpTSCxdx
- cBv0kAyPgD5MUPNf+Vw5Lo0MxSJS5Siwr22X74tO/W90NrgU7K++Wrnx1OT2LCx6Kqcpk4VtS
- f28MouIjGVEc92al0gS3He+IfhYZ7UZYKNFyiTEJkpahfKV2wGyko1wWhptNB0ixdHYxJWBko
- MA3VRe98boFSs6jovNxLKIfkde1ttq/MjW/9FFvPof4yB1NNTYoZldlXbtvMajV025OhjCoZv
- 64PctjUnpjEIloEN7YXCpLpBNWS5zEekmszqqjXz11rEpHmZyFxeyleDIDeWwbU9tPscxjpAu
- ziH89sw8VOy34hD9678pstOdzPNz9CcuOP65xx/9xwa2aVBQ8ADn5qUBDbmvrGUFkbDTmBsyJ
- F6UHWVS/AogGlSD0UD75WpchgwPv/E/N5TVHci7g5N+ohc3xM4KFr7IWcNzimicr4eahPJBkI
- bUtbZuMp8eOExoT4yOUGlTTarZa2LCyi5LnBTx1cZQ4np5bgGiP8iiVqdnHpP3GNtWenhYvFJ
- DMYjNQSqripeOE7heZsqx7GhBWuG6KvPni1RzRXPO8hmqK5cRD1sxtOOuJ2sxhl6K0Q9GvNMD
- EVXy6cuBPFMiwrVQHxpSY007OTAlGUR/4rOy1rSEv4C7BYHWb5X7L98VUTP2b/ph21IyZQ/b1
- xB1Z54JNgELp23B7rtXtilITMxJBfe46uA10l/vFr0+b6WI0LszMnN5EbfeJxAgpk/1IQvh88
- 3d6MOkGZ7q2//PHFCmEeSsg2Wu5Utn4a7MTT1ZHJepRUuV572VgYuXFsdnBVnATR7NTgHZ9n0
- dheM+5FA5BwsWg=
-Subject: [Buildroot] [PATCH v1 1/2] package/python3-cffi: bump version to
- 1.14.6
+Subject: [Buildroot] [PATCH 1/1] package/gpsd: bump to version 3.23.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,45 +90,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Martin Bark <martin@barkynet.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Asaf Kahlon <asafka7@gmail.com>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
+ Robert Hancock <robert.hancock@calian.com>,
+ James Hilliard <james.hilliard1@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- the last version bump of package/python-cffi (790c10d) ignored
-  the comment 'Please keep in sync with package/python3-cffi/python3-cffi.mk',
-  so catch up now
-
 Fixes:
+https://us-cert.cisa.gov/ncas/current-activity/2021/10/21/gps-daemon-gpsd-rollover-bug
 
-  ERROR: No hash found for cffi-1.14.2.tar.gz
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python3-cffi/python3-cffi.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/gpsd/gpsd.hash | 4 ++--
+ package/gpsd/gpsd.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python3-cffi/python3-cffi.mk b/package/python3-cffi/python3-cffi.mk
-index 7541e71b73..52ea3b3fbf 100644
---- a/package/python3-cffi/python3-cffi.mk
-+++ b/package/python3-cffi/python3-cffi.mk
-@@ -5,9 +5,9 @@
+diff --git a/package/gpsd/gpsd.hash b/package/gpsd/gpsd.hash
+index b91ab16e18..6d93e7b553 100644
+--- a/package/gpsd/gpsd.hash
++++ b/package/gpsd/gpsd.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	65504c3af8d3b0cce3c07405b8815d7730d2d2be2da7d28d275f1a9c57c6fe91	gpsd-3.21.tar.gz
+-sha256	fdf339997bbca9eaf507476b82fbcac608fc39a3d89b86b51e16db4c9f933716	COPYING
++sha256  0b991ce9a46538c4ea450f7a8ee428ff44fb4f8d665fddf2ffe40fe0ae9a6c09  gpsd-3.23.1.tar.gz
++sha256  fdf339997bbca9eaf507476b82fbcac608fc39a3d89b86b51e16db4c9f933716  COPYING
+diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
+index 45f6d35ef8..ff924c49e0 100644
+--- a/package/gpsd/gpsd.mk
++++ b/package/gpsd/gpsd.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- # Please keep in sync with package/python-cffi/python-cffi.mk
--PYTHON3_CFFI_VERSION = 1.14.2
-+PYTHON3_CFFI_VERSION = 1.14.6
- PYTHON3_CFFI_SOURCE = cffi-$(PYTHON3_CFFI_VERSION).tar.gz
--PYTHON3_CFFI_SITE = https://files.pythonhosted.org/packages/f7/09/88bbe20b76ca76be052c366fe77aa5e3cd6e5f932766e5597fecdd95b2a8
-+PYTHON3_CFFI_SITE = https://files.pythonhosted.org/packages/2e/92/87bb61538d7e60da8a7ec247dc048f7671afe17016cd0008b3b710012804
- PYTHON3_CFFI_SETUP_TYPE = setuptools
- PYTHON3_CFFI_LICENSE = MIT
- PYTHON3_CFFI_LICENSE_FILES = LICENSE
+-GPSD_VERSION = 3.21
++GPSD_VERSION = 3.23.1
+ GPSD_SITE = http://download-mirror.savannah.gnu.org/releases/gpsd
+ GPSD_LICENSE = BSD-2-Clause
+ GPSD_LICENSE_FILES = COPYING
 -- 
-2.33.1
+2.25.1
 
 _______________________________________________
 buildroot mailing list
