@@ -2,86 +2,83 @@ Return-Path: <SRS0=WrHH=PM=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CCEEBC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 24 Oct 2021 07:12:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2FA0C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 24 Oct 2021 08:08:11 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id F18B460E0C
-	for <buildroot@archiver.kernel.org>; Sun, 24 Oct 2021 07:12:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org F18B460E0C
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id 2112A60EBB
+	for <buildroot@archiver.kernel.org>; Sun, 24 Oct 2021 08:08:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2112A60EBB
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9038140357;
-	Sun, 24 Oct 2021 07:12:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id ACD5A40333;
+	Sun, 24 Oct 2021 08:08:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kzseKfydW7K0; Sun, 24 Oct 2021 07:12:23 +0000 (UTC)
+	with ESMTP id sT_VCBTqnRPi; Sun, 24 Oct 2021 08:08:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DE71240346;
-	Sun, 24 Oct 2021 07:12:22 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C59591BF574
- for <buildroot@lists.busybox.net>; Sun, 24 Oct 2021 07:12:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CDF6F4033F;
+	Sun, 24 Oct 2021 08:08:08 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 393221BF37B
+ for <buildroot@lists.busybox.net>; Sun, 24 Oct 2021 08:08:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id ADD5B6069C
- for <buildroot@lists.busybox.net>; Sun, 24 Oct 2021 07:12:21 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 27C0880FF8
+ for <buildroot@lists.busybox.net>; Sun, 24 Oct 2021 08:08:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aP6oYhhtGQoT for <buildroot@lists.busybox.net>;
- Sun, 24 Oct 2021 07:12:19 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rfvDBih43W_X for <buildroot@lists.busybox.net>;
+ Sun, 24 Oct 2021 08:08:06 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
- [IPv6:2a00:1450:4864:20::32f])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8CBEF6061D
- for <buildroot@buildroot.org>; Sun, 24 Oct 2021 07:12:19 +0000 (UTC)
-Received: by mail-wm1-x32f.google.com with SMTP id
- o4-20020a1c7504000000b0032cab7473caso1617497wmc.1
- for <buildroot@buildroot.org>; Sun, 24 Oct 2021 00:12:19 -0700 (PDT)
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
+ [IPv6:2a00:1450:4864:20::434])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id DFCC880FF4
+ for <buildroot@buildroot.org>; Sun, 24 Oct 2021 08:08:05 +0000 (UTC)
+Received: by mail-wr1-x434.google.com with SMTP id d3so2312330wrh.8
+ for <buildroot@buildroot.org>; Sun, 24 Oct 2021 01:08:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
+ h=sender:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=CJyF8d6brJulfvkb4J9wtWyjZB0JgSz/Z0vV4hgZw1U=;
- b=R3GiaphFb3qFLxVu1u/4fjXMwXAKPIAlIo1tDmBPokN7H9hjp90DVzRV0tlo3OpyD+
- lnet63MSJiwxPidRzBMvAOizoM7TXqcm9xhaptDZoqp2XMcMGkFshx+ZjEIo6kF1+04B
- Hm4rsWat2nEsholjdUJ3CDFuDtRbIMravF/QwXtyI4y1ydqTYCJ84xIMbDoYtO1JbNzG
- JTw4c454TOhrTLz41wveEBJQ4f1sGjPcCAhbuT0t/QJ7zLqE/V7Z9FwARP9hsSS/G2ik
- bhpqE9cfemKaaHjDbosZQnmNe3jwHHfXX39VBlSPjpoE/ON8UQ8C+iPZRhXHgdNkP37e
- QNDw==
+ bh=Yr31kQRQe8nQzEFaNqnj7tP9Wuh5vFOX7TxsM93Q+jg=;
+ b=cVUIp3so+uQNugRzWUkkPQ/3ZszMQualoYBa5iQhNErUz2jVthcjVxwvf6BEyG2Kxg
+ MzQFd04+ittncIXWbvOsdofditf09WB1dDPPS0XzlXH5ZdKnrfjuzyB/lJKG8wYvDxhv
+ gC2dkN44rmzKwAr9A2F0HaU2k30o/d7kcLJhmsPhbc4CJzkXbvusXj55ybT2rdHLwILL
+ 8lZ8vetWsm8C9Se7RsFysEiTBoHXQUA8aod7SJ3KiV76bPBMW6TF+hhzS3eCagFKUcbE
+ qsz03WaF6MYHnFx9tJrWL0Q69+RX5pmCnvgC0G9AiePfwUR+UNBdWkCrb/EU7sGzn4pt
+ D2gA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=CJyF8d6brJulfvkb4J9wtWyjZB0JgSz/Z0vV4hgZw1U=;
- b=MYLcx/9kgFLHcL0nNcyAmW2quh2r5KynL/3pcLQQUyMZnhHrkmcptcFNSxWi65PS/3
- MnyyN8DsbODEzpoU42+8EyHfZSIgoc7EGQE/nOhEDoFWprZYcdm8T1sYekjSYuNmf1Tq
- lybIkPYogJlAO3TjKu2yEAHwXNW0W6Yq3xOKGjBJq8vWmdGyA2kvt9i5vgMZYmGVVfT6
- SxaJA17Yt65Z4YLphLEJdQcdap3QbF9cgJHlpc36OglhYqgoJMvbW0lM19X+fFalsxHJ
- BvkFNTiVFd9T+077A/Bnxv34VWwZJSFTUDfDZ0oHhr56x9gkgy4D4eX9c0B9WhcK10XM
- OB8g==
-X-Gm-Message-State: AOAM5301xKfFRHTIjiGT1LmbeQ+hlXvNHYxzVKUhsMk6Z648HkFlPtbA
- JM5Z3rFAdHPrGJXrF2cJD9QUVPGZYMY=
-X-Google-Smtp-Source: ABdhPJyn6woX6h2MvNDn1CK96Rh5BL0CZlQwqGnz+gk4NN0FhN7hgiKzZbCwrLxJQNXtYW6kgdY/fw==
-X-Received: by 2002:a05:600c:378d:: with SMTP id
- o13mr35812935wmr.41.1635059537492; 
- Sun, 24 Oct 2021 00:12:17 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-1732-95.w86-253.abo.wanadoo.fr.
- [86.253.44.95])
- by smtp.gmail.com with ESMTPSA id a2sm12682317wru.82.2021.10.24.00.12.16
+ h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+ :mime-version:content-transfer-encoding;
+ bh=Yr31kQRQe8nQzEFaNqnj7tP9Wuh5vFOX7TxsM93Q+jg=;
+ b=nUacoa4PYLaavGyucgo34Z3HZmpFe3XPnsMk50xw+JKFGNwaDsHKdesjua7t82QhbO
+ QUn50QsnEqDWO0eB3kTNlaGmxJ3e57eyCpWEMHTMzgYj5NkWwTWujcKkbt544Ov52SuL
+ Hd9aRf2U+V3asuf7zYW5/2FN82baNq/Dwbe0kDrXE9uH6DXhYO/OE2xPhOK8ZIaipwm1
+ KG9Ff2sUpas4KQxkdYIOXevXMTyUszIi3ApuvJqVKTlTc81+dCi6utkfS3q5iIDRXDrJ
+ te0iJyuGb3Ub24MY75DrvMjeZeDnb2mWfQnpIhEx4FXTDg7ECxndkWCtFRfrgd6lgzLl
+ vzKg==
+X-Gm-Message-State: AOAM5320DTxpdikTbgrzjjvPCUmSzqt1vwc78DEuLuMER53B9dKhAIcP
+ Y8ONc5lvVGXTt49xV5qur48EO/Lv6KY=
+X-Google-Smtp-Source: ABdhPJwWPiNkKveqBOqc7lAksCDRnVQDoXgh1m6o81PCzuh+s2bNo2A9Sc1QfdKSeYMO/31TXNyMRw==
+X-Received: by 2002:a5d:4e81:: with SMTP id e1mr13017735wru.242.1635062883965; 
+ Sun, 24 Oct 2021 01:08:03 -0700 (PDT)
+Received: from scaer.home ([2a01:cb19:8b51:cb00:8cf8:eeb7:8c5b:1909])
+ by smtp.gmail.com with ESMTPSA id 3sm12652933wms.5.2021.10.24.01.08.02
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 24 Oct 2021 00:12:17 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Sun, 24 Oct 2021 01:08:03 -0700 (PDT)
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 24 Oct 2021 09:10:47 +0200
-Message-Id: <20211024071047.2241497-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.33.0
+Date: Sun, 24 Oct 2021 10:07:59 +0200
+Message-Id: <20211024080759.291660-1-yann.morin.1998@free.fr>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/motion: bump to version 4.4.0
+Subject: [Buildroot] [PATCH] boot/grub2: backport parallel-build fix
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,54 +90,104 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Kory Maincent <kory.maincent@bootlin.com>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Use LICENSE file added with
-https://github.com/Motion-Project/motion/commit/34091a770c679da79f5be58f392020a8514521ee
-instead of doc/COPYING removed with
-https://github.com/Motion-Project/motion/commit/13d8fdc37c6ea42ef9c49ddc594e2b96d43cd36f
+There seems to still be a similar parallel build issue, but with this
+patch applied, it occurs much less frequently: from a 1/3rf failure
+rate, I am now experiencing failures under the 1/10th mark.
 
-https://github.com/Motion-Project/motion/releases/tag/release-4.4.0
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Kory Maincent <kory.maincent@bootlin.com>
 ---
- package/motion/motion.hash | 4 ++--
- package/motion/motion.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ ...e-libgrub.pp-depend-on-config-util.h.patch | 66 +++++++++++++++++++
+ 1 file changed, 66 insertions(+)
+ create mode 100644 boot/grub2/0150-Makefile-Make-libgrub.pp-depend-on-config-util.h.patch
 
-diff --git a/package/motion/motion.hash b/package/motion/motion.hash
-index 96ab1c4338..085ac90449 100644
---- a/package/motion/motion.hash
-+++ b/package/motion/motion.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  dafa4264b2d8e4778f8be5871f09b6c0ec710d5a836182c583469c18db944d70  motion-4.3.2.tar.gz
--sha256  91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad  doc/COPYING
-+sha256  3fb0d14fff8a8a143716223b5d2d55c0f52b11badf13a2e485b98bae3cf1b572  motion-4.4.0.tar.gz
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-diff --git a/package/motion/motion.mk b/package/motion/motion.mk
-index 29b70fd85f..dae812b9a4 100644
---- a/package/motion/motion.mk
-+++ b/package/motion/motion.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--MOTION_VERSION = 4.3.2
-+MOTION_VERSION = 4.4.0
- MOTION_SITE = $(call github,Motion-Project,motion,release-$(MOTION_VERSION))
- MOTION_LICENSE = GPL-2.0
--MOTION_LICENSE_FILES = doc/COPYING
-+MOTION_LICENSE_FILES = LICENSE
- MOTION_DEPENDENCIES = host-pkgconf jpeg libmicrohttpd $(TARGET_NLS_DEPENDENCIES)
- # From git
- MOTION_AUTORECONF = YES
+diff --git a/boot/grub2/0150-Makefile-Make-libgrub.pp-depend-on-config-util.h.patch b/boot/grub2/0150-Makefile-Make-libgrub.pp-depend-on-config-util.h.patch
+new file mode 100644
+index 0000000000..129e814982
+--- /dev/null
++++ b/boot/grub2/0150-Makefile-Make-libgrub.pp-depend-on-config-util.h.patch
+@@ -0,0 +1,66 @@
++From 42f4054faf3c7f2cd2cab5b43e63f9d97d81f7a1 Mon Sep 17 00:00:00 2001
++From: Peter Jones <pjones@redhat.com>
++Date: Wed, 4 Mar 2020 12:58:42 +0100
++Subject: [PATCH 150/150] Makefile: Make libgrub.pp depend on config-util.h
++
++If you build with "make -j48" a lot, sometimes you see:
++
++gcc -E -DHAVE_CONFIG_H -I. -I..  -Wall -W -DGRUB_UTIL=1 -D_FILE_OFFSET_BITS=64 -I./include -DGRUB_FILE=\"grub_script.tab.h\" -I. -I.. -I. -I.. -I../include -I./include -I../grub-core/lib/libgcrypt-grub/src/  -I../grub-core/lib/minilzo -I../grub-core/lib/xzembed -DMINILZO_HAVE_CONFIG_H -Wall -W -DGRUB_UTIL=1 -D_FILE_OFFSET_BITS=64 -I./include -DGRUB_FILE=\"grub_script.tab.h\" -I. -I.. -I. -I.. -I../include -I./include -I../grub-core/lib/libgcrypt-grub/src/  -I./grub-core/gnulib -I../grub-core/gnulib -I/builddir/build/BUILD/grub-2.02/grub-aarch64-efi-2.02 -D_FILE_OFFSET_BITS=64 \
++  -D'GRUB_MOD_INIT(x)=@MARKER@x@' grub_script.tab.h grub_script.yy.h ../grub-core/commands/blocklist.c ../grub-core/commands/macbless.c ../grub-core/commands/xnu_uuid.c ../grub-core/commands/testload.c ../grub-core/commands/ls.c ../grub-core/disk/dmraid_nvidia.c ../grub-core/disk/loopback.c ../grub-core/disk/lvm.c ../grub-core/disk/mdraid_linux.c ../grub-core/disk/mdraid_linux_be.c ../grub-core/disk/mdraid1x_linux.c ../grub-core/disk/raid5_recover.c ../grub-core/disk/raid6_recover.c ../grub-core/font/font.c ../grub-core/gfxmenu/font.c ../grub-core/normal/charset.c ../grub-core/video/fb/fbblit.c ../grub-core/video/fb/fbutil.c ../grub-core/video/fb/fbfill.c ../grub-core/video/fb/video_fb.c ../grub-core/video/video.c ../grub-core/video/capture.c ../grub-core/video/colors.c ../grub-core/unidata.c ../grub-core/io/bufio.c ../grub-core/fs/affs.c ../grub-core/fs/afs.c ../grub-core/fs/bfs.c ../grub-core/fs/btrfs.c ../grub-core/fs/cbfs.c ../grub-core/fs/cpio.c ../grub-core/fs/cpio_be.c ../gru
+ b-core/fs/odc.c ../grub-core/fs/newc.c ../grub-core/fs/ext2.c ../grub-core/fs/fat.c ../grub-core/fs/exfat.c ../grub-core/fs/fshelp.c ../grub-core/fs/hfs.c ../grub-core/fs/hfsplus.c ../grub-core/fs/hfspluscomp.c ../grub-core/fs/iso9660.c ../grub-core/fs/jfs.c ../grub-core/fs/minix.c ../grub-core/fs/minix2.c ../grub-core/fs/minix3.c ../grub-core/fs/minix_be.c ../grub-core/fs/minix2_be.c ../grub-core/fs/minix3_be.c ../grub-core/fs/nilfs2.c ../grub-core/fs/ntfs.c ../grub-core/fs/ntfscomp.c ../grub-core/fs/reiserfs.c ../grub-core/fs/romfs.c ../grub-core/fs/sfs.c ../grub-core/fs/squash4.c ../grub-core/fs/tar.c ../grub-core/fs/udf.c ../grub-core/fs/ufs2.c ../grub-core/fs/ufs.c ../grub-core/fs/ufs_be.c ../grub-core/fs/xfs.c ../grub-core/fs/zfs/zfscrypt.c ../grub-core/fs/zfs/zfs.c ../grub-core/fs/zfs/zfsinfo.c ../grub-core/fs/zfs/zfs_lzjb.c ../grub-core/fs/zfs/zfs_lz4.c ../grub-core/fs/zfs/zfs_sha256.c ../grub-core/fs/zfs/zfs_fletcher.c ../grub-core/lib/envblk.c ../grub-core/lib/hexdump.c ..
+ /grub-core/lib/LzFind.c ../grub-core/lib/LzmaEnc.c ../grub-core/lib/crc.c ../grub-core/lib/adler32.c ../grub-core/lib/crc64.c ../grub-core/normal/datetime.c ../grub-core/normal/misc.c ../grub-core/partmap/acorn.c ../grub-core/partmap/amiga.c ../grub-core/partmap/apple.c ../grub-core/partmap/sun.c ../grub-core/partmap/plan.c ../grub-core/partmap/dvh.c ../grub-core/partmap/sunpc.c ../grub-core/partmap/bsdlabel.c ../grub-core/partmap/dfly.c ../grub-core/script/function.c ../grub-core/script/lexer.c ../grub-core/script/main.c ../grub-core/script/script.c ../grub-core/script/argv.c ../grub-core/io/gzio.c ../grub-core/io/xzio.c ../grub-core/io/lzopio.c ../grub-core/kern/ia64/dl_helper.c ../grub-core/kern/arm/dl_helper.c ../grub-core/kern/arm64/dl_helper.c ../grub-core/lib/minilzo/minilzo.c ../grub-core/lib/xzembed/xz_dec_bcj.c ../grub-core/lib/xzembed/xz_dec_lzma2.c ../grub-core/lib/xzembed/xz_dec_stream.c ../util/misc.c ../grub-core/kern/command.c ../grub-core/kern/device.c ../grub-core/
+ kern/disk.c ../grub-core/lib/disk.c ../util/getroot.c ../grub-core/osdep/unix/getroot.c ../grub-core/osdep/getroot.c ../grub-core/osdep/devmapper/getroot.c ../grub-core/osdep/relpath.c ../grub-core/kern/emu/hostdisk.c ../grub-core/osdep/devmapper/hostdisk.c ../grub-core/osdep/hostdisk.c ../grub-core/osdep/unix/hostdisk.c ../grub-core/osdep/exec.c ../grub-core/osdep/sleep.c ../grub-core/osdep/password.c ../grub-core/kern/emu/misc.c ../grub-core/kern/emu/mm.c ../grub-core/kern/env.c ../grub-core/kern/err.c ../grub-core/kern/file.c ../grub-core/kern/fs.c ../grub-core/kern/list.c ../grub-core/kern/misc.c ../grub-core/kern/partition.c ../grub-core/lib/crypto.c ../grub-core/disk/luks.c ../grub-core/disk/geli.c ../grub-core/disk/cryptodisk.c ../grub-core/disk/AFSplitter.c ../grub-core/lib/pbkdf2.c ../grub-core/commands/extcmd.c ../grub-core/lib/arg.c ../grub-core/disk/ldm.c ../grub-core/disk/diskfilter.c ../grub-core/partmap/gpt.c ../grub-core/partmap/msdos.c ../grub-core/fs/proc.c ../grub
+ -core/fs/archelp.c > libgrub.pp || (rm -f libgrub.pp; exit 1)
++rm -f stamp-h1
++touch ../config-util.h.in
++cd . && /bin/sh ./config.status config-util.h
++config.status: creating config-util.h
++In file included from ../include/grub/mm.h:25:0,
++                 from ../include/grub/disk.h:29,
++                 from ../include/grub/file.h:26,
++                 from ../grub-core/fs/btrfs.c:21:
++./config.h:38:10: fatal error: ./config-util.h: No such file or directory
++ #include <config-util.h>
++          ^~~~~~~~~~~~~~~
++compilation terminated.
++make: *** [Makefile:13098: libgrub.pp] Error 1
++
++This is because libgrub.pp is built with -DGRUB_UTIL=1, which means
++it'll try to include config-util.h, but a parallel make is actually
++building that file.  I think.
++
++Signed-off-by: Peter Jones <pjones@redhat.com>
++Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
++Reviewed-by: Daniel Kiper <daniel.kiper@oracle.com>
++---
++ Makefile.am | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/Makefile.am b/Makefile.am
++index 1f4bb9b8c..bf9c1ba64 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -37,7 +37,7 @@ grub_script.yy.c: grub_script.yy.h
++ CLEANFILES += grub_script.yy.c grub_script.yy.h
++ 
++ # For libgrub.a
++-libgrub.pp: grub_script.tab.h grub_script.yy.h $(libgrubmods_a_SOURCES) $(libgrubkern_a_SOURCES)
+++libgrub.pp: config-util.h grub_script.tab.h grub_script.yy.h $(libgrubmods_a_SOURCES) $(libgrubkern_a_SOURCES)
++ 	$(CPP) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libgrubmods_a_CPPFLAGS) $(libgrubkern_a_CPPFLAGS) $(CPPFLAGS) \
++ 	  -D'GRUB_MOD_INIT(x)=@MARKER@x@' $^ > $@ || (rm -f $@; exit 1)
++ CLEANFILES += libgrub.pp
++-- 
++2.25.1
++
++diff --git a/Makefile.in b/Makefile.in
++index 1f4bb9b8c..bf9c1ba64 100644
++--- a/Makefile.in
+++++ b/Makefile.in
++@@ -37,7 +37,7 @@ grub_script.yy.c: grub_script.yy.h
++ CLEANFILES += grub_script.yy.c grub_script.yy.h
++ 
++ # For libgrub.a
++-libgrub.pp: grub_script.tab.h grub_script.yy.h $(libgrubmods_a_SOURCES) $(libgrubkern_a_SOURCES)
+++libgrub.pp: config-util.h grub_script.tab.h grub_script.yy.h $(libgrubmods_a_SOURCES) $(libgrubkern_a_SOURCES)
++ 	$(CPP) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libgrubmods_a_CPPFLAGS) $(libgrubkern_a_CPPFLAGS) $(CPPFLAGS) \
++ 	  -D'GRUB_MOD_INIT(x)=@MARKER@x@' $^ > $@ || (rm -f $@; exit 1)
++ CLEANFILES += libgrub.pp
++-- 
++2.25.1
++
 -- 
-2.33.0
+2.25.1
 
 _______________________________________________
 buildroot mailing list
