@@ -2,51 +2,84 @@ Return-Path: <SRS0=WrHH=PM=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 22244C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 24 Oct 2021 14:18:11 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A9D1C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 24 Oct 2021 14:29:55 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B340060524
-	for <buildroot@archiver.kernel.org>; Sun, 24 Oct 2021 14:18:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B340060524
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
+	by mail.kernel.org (Postfix) with ESMTPS id DA09F60FDA
+	for <buildroot@archiver.kernel.org>; Sun, 24 Oct 2021 14:29:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org DA09F60FDA
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8F0E680F1E;
-	Sun, 24 Oct 2021 14:18:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A02E940301;
+	Sun, 24 Oct 2021 14:29:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nTQoYEOmSgtI; Sun, 24 Oct 2021 14:18:09 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id nK5WOg0eQvWy; Sun, 24 Oct 2021 14:29:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CC21980F41;
-	Sun, 24 Oct 2021 14:18:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 112B7402FF;
+	Sun, 24 Oct 2021 14:29:53 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6979F1BF47D
- for <buildroot@lists.busybox.net>; Sun, 24 Oct 2021 14:17:39 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D20601BF47D
+ for <buildroot@lists.busybox.net>; Sun, 24 Oct 2021 14:29:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 57A7A4026B
- for <buildroot@lists.busybox.net>; Sun, 24 Oct 2021 14:17:39 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id C6DE740275
+ for <buildroot@lists.busybox.net>; Sun, 24 Oct 2021 14:29:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id t_Waooyo6IPP for <buildroot@lists.busybox.net>;
- Sun, 24 Oct 2021 14:17:38 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6754D40251
- for <buildroot@buildroot.org>; Sun, 24 Oct 2021 14:17:38 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id AB8AF8864C; Sun, 24 Oct 2021 14:14:20 +0000 (UTC)
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ with ESMTP id Wrl_8GyeNkMH for <buildroot@lists.busybox.net>;
+ Sun, 24 Oct 2021 14:29:50 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com
+ [IPv6:2a00:1450:4864:20::52c])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 52E1A400DD
+ for <buildroot@buildroot.org>; Sun, 24 Oct 2021 14:29:50 +0000 (UTC)
+Received: by mail-ed1-x52c.google.com with SMTP id u13so7280636edy.10
+ for <buildroot@buildroot.org>; Sun, 24 Oct 2021 07:29:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=sD96SFADYMJUzqSxr7Qo4hCnYBOD7x9N0HxaZTtMulw=;
+ b=bzBYqx4mdY+bvBkhr6F82AYpDWyhDX9WxUqWB20+cTfrJe7/lGp8Bmb+Fr48yJ8suM
+ 5/Ndgq8FoTEHtA6Il5khtQVPc9mFVTz0/Kmo0+KsBpAkwTNe5nqjNtDCIah7+Lnran/T
+ bP9kjvQKsGX7wHNgJi1uU3uKCMByD43+pFlxjFopTjUfN12Pwh1Lkt6rAAudmD6LkA9I
+ 4elWxh32GsARolKkQjI9EFnjWUcDjh/uj/5EfBKu2W64dhzxIq1it/Rn+24PKQVK/piQ
+ l8YZ8HTPT2MZfYepxHnCgWrCg6Egub/sM8dgMKtYmT/4dNZn/qDBaBb4X5i3lcioWyp4
+ AwOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=sD96SFADYMJUzqSxr7Qo4hCnYBOD7x9N0HxaZTtMulw=;
+ b=HEqbjV9o+3zWDhv2RaEQsEIcGMrbE+7/alNBMvw6TdGPA39DcU3I7AWvTDBPO1MPIc
+ tA/IAgF9GErIVG4SYesRkbwmMDWHJw7/z/9afPnv7UUAjc5+rIrjRdinWLm4ec1rY/XP
+ 1s8BPh2DxhJ1AWTwfEZlk6r/UdRGEoCtzLd9FWE6rP6gq29Eb+w7wTCORBpOj1ixqfra
+ tWxme5aaOtQLLVSt+NlOO+0m7pLaueC6T+LSsAIKPXqEL8gzLlbXVylVpgprnyL2jcL2
+ 2JmIF4/lOXFEFCffU5hCDYvgDQSfAOJCIMv1AKem/o7eVWjKungYFP/f4Rpv2TCdcCpW
+ pC0w==
+X-Gm-Message-State: AOAM531awxT26AwWUxHShoYi46PJEE67dRZeM2aAgYRAJmc6fD6jK/vF
+ 4mzQ+XDscqFAeOPuFJqqr8pzAJIh6lfxw+V4
+X-Google-Smtp-Source: ABdhPJzz3mJh+cRzmSzMRzqiZEeNTv4Qq9KBMvQ6i7gDBh8uiiA3khClZTdbafSRQsFVubzyJf6P5g==
+X-Received: by 2002:a17:906:646:: with SMTP id
+ t6mr14990590ejb.197.1635085788339; 
+ Sun, 24 Oct 2021 07:29:48 -0700 (PDT)
+Received: from localhost.localdomain ([109.130.26.5])
+ by smtp.gmail.com with ESMTPSA id p23sm7833135edw.94.2021.10.24.07.29.47
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 24 Oct 2021 07:29:48 -0700 (PDT)
+From: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
 To: buildroot@buildroot.org
-Date: Sun, 24 Oct 2021 16:17:25 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: dda28acbe50d896ef49c941b73eca6949f74875a
-X-Git-Newrev: 7bd4ecc56d1328f8a6b9efc91ed339bdfc0514b6
-X-Patchwork-Hint: ignore
-Message-Id: <20211024141420.AB8AF8864C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/irssi: bump to version 1.2.3
+Date: Sun, 24 Oct 2021 16:28:36 +0200
+Message-Id: <20211024142838.1474013-1-raphael.melotte@mind.be>
+X-Mailer: git-send-email 2.33.0
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH 1/1] support: test_python_rsa: increase timeout
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,51 +91,27 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>,
+ Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7bd4ecc56d1328f8a6b9efc91ed339bdfc0514b6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Update indentation in hash file (two spaces)
-
-https://irssi.org/NEWS/#v1-2-3
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/irssi/irssi.hash | 4 ++--
- package/irssi/irssi.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/irssi/irssi.hash b/package/irssi/irssi.hash
-index 6a91e16487..05555250a7 100644
---- a/package/irssi/irssi.hash
-+++ b/package/irssi/irssi.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256	414fdee2ffaeb90a55f141b7fb3899608631dc891e2bc1f5e91ca31f1a621101  irssi-1.0.8.tar.xz
-+sha256  a647bfefed14d2221fa77b6edac594934dc672c4a560417b1abcbbc6b88d769f  irssi-1.2.3.tar.xz
- # Locally calculated
--sha256	a1a27cb2ecee8d5378fbb3562f577104a445d6d66fee89286e16758305e63e2b  COPYING
-+sha256  a1a27cb2ecee8d5378fbb3562f577104a445d6d66fee89286e16758305e63e2b  COPYING
-diff --git a/package/irssi/irssi.mk b/package/irssi/irssi.mk
-index c64690c59b..da71622a04 100644
---- a/package/irssi/irssi.mk
-+++ b/package/irssi/irssi.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IRSSI_VERSION = 1.0.8
-+IRSSI_VERSION = 1.2.3
- IRSSI_SOURCE = irssi-$(IRSSI_VERSION).tar.xz
- # Do not use the github helper here. The generated tarball is *NOT* the
- # same as the one uploaded by upstream for the release.
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+T24gc29tZSBkZXZlbG9wZXJzIG1hY2hpbmVzLCB0aGUgZGVmYXVsdCB0aW1lb3V0ICg1IHNlY29u
+ZHMpIGlzIG5vdAplbm91Z2ggZm9yIHRoZSB0ZXN0IHRvIHN1Y2NlZWQuCgpJbmNyZWFzZSBpdCB0
+byAyMCBzZWNvbmRzLCB0byBsZXQgbW9yZSB0aW1lIGZvciB0aGUgcnNhIGtleXMgdG8gYmUKZ2Vu
+ZXJhdGVkLgoKU2lnbmVkLW9mZi1ieTogUmFwaGHDq2wgTcOpbG90dGUgPHJhcGhhZWwubWVsb3R0
+ZUBtaW5kLmJlPgotLS0KIHN1cHBvcnQvdGVzdGluZy90ZXN0cy9wYWNrYWdlL3Rlc3RfcHl0aG9u
+X3JzYS5weSB8IDEgKwogMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspCgpkaWZmIC0tZ2l0
+IGEvc3VwcG9ydC90ZXN0aW5nL3Rlc3RzL3BhY2thZ2UvdGVzdF9weXRob25fcnNhLnB5IGIvc3Vw
+cG9ydC90ZXN0aW5nL3Rlc3RzL3BhY2thZ2UvdGVzdF9weXRob25fcnNhLnB5CmluZGV4IGU2M2Q2
+M2UxZGUuLjVkZGZiNTEzMTQgMTAwNjQ0Ci0tLSBhL3N1cHBvcnQvdGVzdGluZy90ZXN0cy9wYWNr
+YWdlL3Rlc3RfcHl0aG9uX3JzYS5weQorKysgYi9zdXBwb3J0L3Rlc3RpbmcvdGVzdHMvcGFja2Fn
+ZS90ZXN0X3B5dGhvbl9yc2EucHkKQEAgLTksMyArOSw0IEBAIGNsYXNzIFRlc3RQeXRob25QeTNS
+U0EoVGVzdFB5dGhvblBhY2thZ2VCYXNlKToKICAgICAgICAgQlIyX1BBQ0tBR0VfUFlUSE9OX1JT
+QT15CiAgICAgICAgICIiIgogICAgIHNhbXBsZV9zY3JpcHRzID0gWyJ0ZXN0cy9wYWNrYWdlL3Nh
+bXBsZV9weXRob25fcnNhLnB5Il0KKyAgICB0aW1lb3V0ID0gMjAKLS0gCjIuMzMuMAoKX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxp
+bmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5v
+cmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
