@@ -2,52 +2,54 @@ Return-Path: <SRS0=WrHH=PM=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 52504C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 24 Oct 2021 14:09:04 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 00267C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 24 Oct 2021 14:09:48 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1DA40604E9
-	for <buildroot@archiver.kernel.org>; Sun, 24 Oct 2021 14:09:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1DA40604E9
+	by mail.kernel.org (Postfix) with ESMTPS id B33CA60F45
+	for <buildroot@archiver.kernel.org>; Sun, 24 Oct 2021 14:09:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B33CA60F45
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EA3DA40192;
-	Sun, 24 Oct 2021 14:09:03 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SpBxle8ZZ-NC; Sun, 24 Oct 2021 14:09:03 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 53A79401A6;
-	Sun, 24 Oct 2021 14:09:02 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id BCAC11BF47D
- for <buildroot@lists.busybox.net>; Sun, 24 Oct 2021 14:08:02 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 99D166081C
- for <buildroot@lists.busybox.net>; Sun, 24 Oct 2021 14:08:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 843876081C;
+	Sun, 24 Oct 2021 14:09:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lht0JqlKVngi for <buildroot@lists.busybox.net>;
- Sun, 24 Oct 2021 14:07:59 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id E1C03607E6
- for <buildroot@buildroot.org>; Sun, 24 Oct 2021 14:07:59 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 36EC688617; Sun, 24 Oct 2021 14:04:42 +0000 (UTC)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id gKh_WC1H6xD3; Sun, 24 Oct 2021 14:09:47 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id EA54B606A7;
+	Sun, 24 Oct 2021 14:09:46 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 8A2F61BF47D
+ for <buildroot@lists.busybox.net>; Sun, 24 Oct 2021 14:09:45 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 79F26401A6
+ for <buildroot@lists.busybox.net>; Sun, 24 Oct 2021 14:09:45 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Hex8obi8fEkp for <buildroot@lists.busybox.net>;
+ Sun, 24 Oct 2021 14:09:44 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7485A40192
+ for <buildroot@buildroot.org>; Sun, 24 Oct 2021 14:09:44 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by relay10.mail.gandi.net (Postfix) with ESMTPSA id A5AD1240004;
+ Sun, 24 Oct 2021 14:09:41 +0000 (UTC)
+Date: Sun, 24 Oct 2021 16:09:40 +0200
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: buildroot@buildroot.org
-Date: Sun, 24 Oct 2021 16:07:39 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2ab45cd6e1bdb3e2e5fee9c99b328b08b3edc2ad
-X-Git-Newrev: e071b7f3b3ab07fa6b856e13b58d34105c013b7d
-X-Patchwork-Hint: ignore
-Message-Id: <20211024140442.36EC688617@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/olimex_a20_olinuxino_lime: bump to
- Linux kernel 5.14.13 and u-boot 2021.10
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Message-ID: <20211024160940.4d4b6706@windsurf>
+In-Reply-To: <20211021220023.68288-1-giulio.benetti@benettiengineering.com>
+References: <20211021220023.68288-1-giulio.benetti@benettiengineering.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 0/8] Olimex boards u-boot/linux update
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,56 +61,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Luca Ceresoli <luca@lucaceresoli.net>, Leon Anavi <leon.anavi@konsulko.com>,
+ Jagan Teki <jagan@amarulasolutions.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e071b7f3b3ab07fa6b856e13b58d34105c013b7d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Giulio,
 
-Bump to Linux kernel 5.14.13 and u-boot 2021.10.
+On Fri, 22 Oct 2021 00:00:15 +0200
+Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- configs/olimex_a20_olinuxino_lime_defconfig | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+> Giulio Benetti (8):
+>   configs/olimex_a10_olinuxino: bump to Linux kernel 5.14.13 and u-boot
+>     2021.10
+>   configs/olimex_a10_olinuxino: use FPU NEON strategy
+>   configs/olimex_a13_olinuxino: bump to Linux kernel 5.14.13 and u-boot
+>     2021.10
+>   configs/olimex_a13_olinuxino: use FPU NEON strategy
+>   configs/olimex_a20_olinuxino_lime2: bump to Linux kernel 5.14.13 and
+>     u-boot 2021.10
+>   configs/olimex_a20_olinuxino_lime: bump to Linux kernel 5.14.13 and
+>     u-boot 2021.10
+>   configs/olimex_a20_olinuxino_micro: bump to Linux kernel 5.14.13 and
+>     u-boot 2021.10
+>   configs/olimex_a33_olinuxino: bump to Linux kernel 5.14.13 and u-boot
+>     2021.10
 
-diff --git a/configs/olimex_a20_olinuxino_lime_defconfig b/configs/olimex_a20_olinuxino_lime_defconfig
-index 4f410cab90..fb095c8b7b 100644
---- a/configs/olimex_a20_olinuxino_lime_defconfig
-+++ b/configs/olimex_a20_olinuxino_lime_defconfig
-@@ -4,8 +4,8 @@ BR2_cortex_a7=y
- BR2_ARM_EABIHF=y
- BR2_ARM_FPU_NEON_VFPV4=y
- 
--# Linux headers same as kernel, a 5.10 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
-+# Linux headers same as kernel, a 5.14 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_14=y
- 
- # Toolchain
- # glibc is needed for sunxi-mali-mainline-package.
-@@ -23,7 +23,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.48"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.14.13"
- BR2_LINUX_KERNEL_USE_DEFCONFIG=y
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -44,7 +44,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.07"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.10"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino-Lime"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
+I have applied all the patches bumping U-Boot/Linux, I hope that you
+were able to test them on real hardware. Make sure to monitor the next
+Gitlab CI build results to see if there's any new build failure.
+
+However, for the two patches enabling NEON as the FPU, I marked them as
+rejected. Indeed, using NEON as the FPU is not always a good idea, as
+it explained in the Config.in.help text:
+
+          This option allows to use the NEON SIMD unit, as available
+          in some ARMv7 processors, as a floating-point unit. It
+          should however be noted that using NEON for floating point
+          operations doesn't provide a complete compatibility with the
+          IEEE 754.
+
+Best regards,
+
+Thomas Petazzoni
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
