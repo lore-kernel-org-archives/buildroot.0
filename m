@@ -2,71 +2,84 @@ Return-Path: <SRS0=WrHH=PM=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 354C0C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 24 Oct 2021 08:45:49 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6FA34C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 24 Oct 2021 11:36:47 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 8D92E60F6F
-	for <buildroot@archiver.kernel.org>; Sun, 24 Oct 2021 08:45:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8D92E60F6F
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
+	by mail.kernel.org (Postfix) with ESMTPS id 8D53C60D43
+	for <buildroot@archiver.kernel.org>; Sun, 24 Oct 2021 11:36:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8D53C60D43
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 241936058A;
-	Sun, 24 Oct 2021 08:45:48 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1D5D340135;
+	Sun, 24 Oct 2021 11:36:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EsBJ9KKUyO9G; Sun, 24 Oct 2021 08:45:47 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id kbcv9jtEmoqg; Sun, 24 Oct 2021 11:36:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2C68E605FB;
-	Sun, 24 Oct 2021 08:45:46 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4C5691BF37B
- for <buildroot@lists.busybox.net>; Sun, 24 Oct 2021 08:45:45 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DA2BA401FB;
+	Sun, 24 Oct 2021 11:36:43 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 4DAA31BF406
+ for <buildroot@lists.busybox.net>; Sun, 24 Oct 2021 11:36:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3C00280E98
- for <buildroot@lists.busybox.net>; Sun, 24 Oct 2021 08:45:45 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3AF8B40300
+ for <buildroot@lists.busybox.net>; Sun, 24 Oct 2021 11:36:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Ovgsdoe7PTmp for <buildroot@lists.busybox.net>;
- Sun, 24 Oct 2021 08:45:43 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
- by smtp1.osuosl.org (Postfix) with ESMTPS id AF28A80E8D
- for <buildroot@buildroot.org>; Sun, 24 Oct 2021 08:45:43 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:8cf8:eeb7:8c5b:1909])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id 2737A780373;
- Sun, 24 Oct 2021 10:45:31 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1635065140;
- bh=NNKBlVLFk+K/Sy4lpBCWoC//uE9mlfNneu4RjHwy/DA=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=gO0BCDVl+PpMHoYZQli5ZKvfKMfop98x23tEik7I9y1EkNKMeIT006NZ2JUmr60+z
- 3Tum0J6o0uQwIrBJe/RpBGBv8PTDjSIMWtO6JEKMMO4xNmR099a4hXk15KwMIlTR0Y
- 21k0TsYbdkyp6aZ0chUlRu8NwQRwZqRhLRP8QcqZzNEJo+jiPkH/4nu418saknMqJa
- hibu8FcYfXPSMRQvCwWS0bFZwku3YvVU5ttELwkH4WSpHwUmPxRGk8UYpUjRK5RFpq
- 6pwadHC0rdFbuD8EEzZmsCfVrKwl6UFjCEmGAl4r8Ut3ZxHG8bSaO0eRmb1ExA7u1g
- nh1ho2x3XPeRw==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 24 Oct 2021 10:45:31 +0200
-Date: Sun, 24 Oct 2021 10:45:31 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Alexey Lukyanchuk <skif@skif-web.ru>
-Message-ID: <20211024084531.GM2400@scaer>
-References: <20200309095540.15448-1-skif@skif-web.ru>
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dpyZTv5X7-CQ for <buildroot@lists.busybox.net>;
+ Sun, 24 Oct 2021 11:36:41 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com
+ [IPv6:2a00:1450:4864:20::52a])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1CED8402FF
+ for <buildroot@buildroot.org>; Sun, 24 Oct 2021 11:36:40 +0000 (UTC)
+Received: by mail-ed1-x52a.google.com with SMTP id w19so15459752edd.2
+ for <buildroot@buildroot.org>; Sun, 24 Oct 2021 04:36:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=qnVmVd/STV9PD7vN5i7ppd1KHLrlDg6MWq3Z6qDC3j4=;
+ b=TOwZ3wZvKEud5LkYcT0yGEslvAEEzTNueie5JqWBvztcxKbEhCvrmtET0SIeRzdmqa
+ aLtwJbxXJT94ktinwYbxoVSyTk4vwebTrgjddeBjy9P7wtMOzFZViglQMK3wJcuP/lYd
+ L/sSzycNHPqvMKYxkr5I21qIJYAlQMazb2ymwOg/ct6MkhV6wV9Nr/jLblrMVx6l2gWQ
+ gRPR3XV3ZwClR2MTTbZADK3DSolzSPCsDlaYLsB+sVPV/s24IADVHctqp2XXPRWptE+W
+ +L09d9Zp1aLfapREJizMDjv+uJXhcKAXTmg5WGoKQt87A0I9safM+lkrRRWoYvTDiYsc
+ a3Bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=qnVmVd/STV9PD7vN5i7ppd1KHLrlDg6MWq3Z6qDC3j4=;
+ b=lGfh5ojK6NBpFs9OZ6lh11ALNHAuyFodRGeYbcv2ESxcDnMNMVEkksE8I9EsSN9jSf
+ UKOM+qBpO8cFyu+wO2mlO8pBrJcprOrv0Bzj/+4O4Ror05uQjFn4LZbVCJJ0oVn2CpwH
+ DjlLowmuSG+8vmU6kOYbhprEVK2nbMfSYFxTm2bF5Yfy3DMkYAKjKo8lr1x3ehfJxuM2
+ DlBKJrVZbEG9ECS2HPPClEHmxxaPzrq4YcBR/WK07rPVCdiTVwMAOCBYlLH/KArW6J/u
+ fVXeSJ2LPs67z8exUc1rCwBx0kKzJGRoe2r1n7Xp0SiEWi8l8L4iRQz+XoRGDw/+0kfI
+ SQBw==
+X-Gm-Message-State: AOAM533itK6Bx2ELBYwll9JQ7TYXxLzbJtC0VDpTI32dQjLEk9WgHzwT
+ 4LO0EDzaRtyoNpbh1SBoO968v+8nfWg=
+X-Google-Smtp-Source: ABdhPJz5KyVkdWQPGdmjBNnVx75ksTsUUAnAEibFhYRdaYCh1CdmOwM1hazFouC81mtche3UOR5Ktw==
+X-Received: by 2002:a17:906:a182:: with SMTP id
+ s2mr14435336ejy.176.1635075398901; 
+ Sun, 24 Oct 2021 04:36:38 -0700 (PDT)
+Received: from localhost.localdomain (138.23.87.79.rev.sfr.net. [79.87.23.138])
+ by smtp.gmail.com with ESMTPSA id n23sm2989719edr.58.2021.10.24.04.36.38
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 24 Oct 2021 04:36:38 -0700 (PDT)
+From: Gilles Talis <gilles.talis@gmail.com>
+To: buildroot@buildroot.org
+Date: Sun, 24 Oct 2021 13:36:26 +0200
+Message-Id: <20211024113626.88663-1-gilles.talis@gmail.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20200309095540.15448-1-skif@skif-web.ru>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 1/1] boot/grub2: add '--memdisk' option to
- grub-makeimage
+Subject: [Buildroot] [PATCH v2] package/hawktracer: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,125 +91,148 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Kory Maincent <kory.maincent@bootlin.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Gilles Talis <gilles.talis@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-QWxleGV5LCBBbGwsCgpUaGFuayB5b3UgZm9yIHlvdXIgY29udHJpYnV0aW9uLiBJIGFtIHNvIHNv
-cnJ5IHRoYXQgd2UgZGlkIG5vdCBsb29rIGF0CnlvdXIgcGF0Y2ggZWFybGllci4gUmVjZW50IGV2
-b2x1dGlvbnMgKGJ5IEvDtnJ5LCBhZGRlZCBpbiBDYykgaW4gZ3J1YgpoYWQgbWUgZGlnIG91dCB0
-aGUgb2xkIHBhdGNoZXMgd2Ugc3RpbGwgaGFkIHBlbmRpbmcgYWJvdXQgZ3J1Yi4gU28gaWYKeW91
-IGFyZSBzdGlsbCBpbnRlcmVzdGVkLCBoZXJlIGlzIGEgcmV2aWV3IG9mIHlvdXIgcGF0Y2guCgpP
-biAyMDIwLTAzLTA5IDEyOjU1ICswMzAwLCBBbGV4ZXkgTHVreWFuY2h1ayBzcGFrZSB0aHVzbHk6
-Cj4gVGhlIG1lbWRpc2sgaXMgYSB2aXJ0dWFsIGRpc2sgZGV2aWNlIHZpZXdlZCBieSBncnViLgo+
-IE1lbWRpc2sgY2FuIHN0b3JlIHNvbWUgZmlsZXMocGljdHVyZXMsIGdwZyBrZXkgZm9yIHZlcmlm
-eSBtb2R1bGUsZXRjKSwgZ3J1YiBtb2R1bGVzLCBpbnRvIGEgY29yZS5pbWcuCgpDb21taXQgbG9n
-IHNob3VsZCBiZSB3cmFwcGVkIGF0IDcyIGNoYXJzLCBhcyBpcyBzdGFuZGFyZCBwcmFjdGljZSB3
-aXRoCmdpdC4gSSBjYW4gZml4IHRoYXQgd2hlbiBhcHBseWluZywgdGhvdWdoLgoKPiBJbiBVRUZJ
-IHBsYXRmb3JtLCBncnViLW1raW1hZ2UgZG9lcyBub3QgcG9zZSBhIGxpbWl0IG9uIHRoZSBzaXpl
-IG9mIG1lbWRpc2suCgpEb2VzIHRoYXQgbWVhbiB0aGVyZSBpcyBhIGxpbWl0IHdoZW4gYm9vdGlu
-ZyBpbiBsZWdhY3kgQklPUz8gV2hhdCBpcwp0aGF0IGxpbWl0PyBTaG91bGQgd2UgZW5mb3JjZS92
-YWxpZGF0ZSBpdCB3aGVuIGJ1aWxkaW5nIHRoZSBncnViIGltYWdlPwoKPiBJdCdzIGdvb2Qgc29s
-dXRpb24gZm9yIHNlY3VyZS1ib290IG9yIGVtYmVkZGVkIHN5c3RlbXMKClNvLCBJIHdhcyBhIGJp
-dCBjdXJpb3VzIGFib3V0IG1lbWRpc2ssIGFuZCBob3cgb25lIHdhcyBzdXBwb3NlZCB0byB1c2UK
-aXQuIEJ1dCBhcyBbMF0gcHV0cyBpdCwgdGhpcyBmZWF0dXJlcyBzb3JlbHkgbGFja3MgZG9jdW1l
-bnRhdGlvbi4gSSB3YXMKb25seSBhYmxlIHRvIGZpbmQgYSBxdWljayByZWZlcmVuY2UgdG8gbWVt
-ZGlzayBpbiB0aGUgbWFudWFsIFsxXSB3aGVuCmRlYWxpbmcgYWJvdXQgdGhlIG5hbWluZyBvZiBk
-ZXZpY2VzLiBBbmQgYXMgdXN1YWwsIFN0YWNrT3ZlcmZsb3cgdG8gdGhlCnJlc2N1ZSBbMl0uIEFu
-ZCB0aGVuIGFub3RoZXIgZXhhbXBsZSB0byBzZXR1cCBMVUtTIG9uIERlYmlhbiBbM10uCgpJdCBt
-aWdodCBiZSBhIGdvb2QgaWRlYSB0byBhZGQgdGhvc2UgNCByZWZlcmVuY2VzIHRvIHRoZSBjb21t
-aXQgbG9nIChvcgp0aGUgaGVscCB0ZXh0IHRvbywgbWF5YmUpOgoKWzBdIGh0dHBzOi8vcGhpcDE2
-MTEuZGUvYmxvZy9hZGRpbmctYW5kLXVzaW5nLWZpbGVzLXRvLWZyb20tdGhlLWdydWItbWVtZGlz
-ay1ncnViLXN0YW5kYWxvbmUvClsxXSBodHRwczovL3d3dy5nbnUub3JnL3NvZnR3YXJlL2dydWIv
-bWFudWFsL2dydWIvZ3J1Yi5odG1sI0RldmljZS1zeW50YXgKWzJdIGh0dHBzOi8vdW5peC5zdGFj
-a2V4Y2hhbmdlLmNvbS9xdWVzdGlvbnMvMjUzNjU3L2FjdHVhbC11c2FnZS1vZi1ncnViLW1raW1h
-Z2UtY29uZmlnLzI3MzMzNCMyNzMzMzQKWzNdIGh0dHBzOi8vY3J5cHRzZXR1cC10ZWFtLnBhZ2Vz
-LmRlYmlhbi5uZXQvY3J5cHRzZXR1cC9lbmNyeXB0ZWQtYm9vdC5odG1sCgo+IFNpZ25lZC1vZmYt
-Ynk6IEFsZXhleSBMdWt5YW5jaHVrIDxza2lmQHNraWYtd2ViLnJ1Pgo+IC0tLQo+ICBib290L2dy
-dWIyL0NvbmZpZy5pbiB8ICA2ICsrKysrKwo+ICBib290L2dydWIyL2dydWIyLm1rICB8IDExICsr
-KysrKysrKysrCj4gIDIgZmlsZXMgY2hhbmdlZCwgMTcgaW5zZXJ0aW9ucygrKQo+IAo+IGRpZmYg
-LS1naXQgYS9ib290L2dydWIyL0NvbmZpZy5pbiBiL2Jvb3QvZ3J1YjIvQ29uZmlnLmluCj4gaW5k
-ZXggZTQ1MTMzOTk5ZS4uNmVlMmYzNTFkOSAxMDA2NDQKPiAtLS0gYS9ib290L2dydWIyL0NvbmZp
-Zy5pbgo+ICsrKyBiL2Jvb3QvZ3J1YjIvQ29uZmlnLmluCj4gQEAgLTEwNyw2ICsxMDcsMTIgQEAg
-Y29uZmlnIEJSMl9UQVJHRVRfR1JVQjJfQlVJTFRJTl9DT05GSUcKPiAgCSAgZGV2aWNlIGFuZCBv
-dGhlciBjb25maWd1cmF0aW9uIHBhcmFtZXRlcnMsIGJ1dCBob3dldmVyIG1lbnUKPiAgCSAgZW50
-cmllcyBjYW5ub3QgYmUgZGVzY3JpYmVkIGluIHRoaXMgZW1iZWRkZWQgY29uZmlndXJhdGlvbi4K
-PiAgCj4gK2NvbmZpZyBCUjJfVEFSR0VUX0dSVUIyX01FTURJU0tfRElSCj4gKwlzdHJpbmcgIm1l
-bWRpc2siCj4gKwloZWxwCj4gKwkgIFBhdGggdG8gZGlyZWN0b3J5IHRoYXQgd2lsbCBiZSBhIG1l
-bWRpc2sgKC1tIG9wdGlvbiBpbiAKPiArCSAgZ3J1YjItbWtpbWFnZSkKCkl0IHdvdWxkIGJlIG5p
-Y2UgdG8gaGF2ZSBqdXN0IGEgbGl0dGxlIGJsdXJiIG9uIGhvdyB0byB1c2UgZmlsZXMgZnJvbSBh
-Cm1lbWRpc2s7IG1heWJlIHNvbWV0aGluZyBsaWtlIChpZiBJIHVuZGVyc3Rvb2QgYWxsIHRoZSBh
-Ym92ZSByZWZlcmVuY2VzCmNvcnJlY3RseSk6CgogICAgRm9yIGEgZmlsZSBCUjJfVEFSR0VUX0dS
-VUIyX01FTURJU0tfRElSL2Jvb3QvZ3J1Yi9mb28sIGl0IGNhbgogICAgYmUgYWNjZXNzZWQgZnJv
-bSBncnViIHdpdGg6IChtZW1kaXNrKS9mb28KClNvLCB0byBhdm9pZCBhbnkgY29uZnVzaW9uIG9y
-IHJ1bnRpbWUgaXNzdWUsIG1heWJlIHdlIHNob3VsZCBlbmZvcmNlCnRoYXQgYWxsIGZpbGVzIGFy
-ZSBpbiBCUjJfVEFSR0VUX0dSVUIyX01FTURJU0tfRElSL2Jvb3QvZ3J1Yi8gKHNlZQpiZWxvdyBb
-NF0pLgoKPiAgY29uZmlnIEJSMl9UQVJHRVRfR1JVQjJfSU5TVEFMTF9UT09MUwo+ICAJYm9vbCAi
-aW5zdGFsbCB0b29scyIKPiAgCWhlbHAKPiBkaWZmIC0tZ2l0IGEvYm9vdC9ncnViMi9ncnViMi5t
-ayBiL2Jvb3QvZ3J1YjIvZ3J1YjIubWsKPiBpbmRleCBhMjAyNTI1ZDcxLi4wNjI3YzY4NTdmIDEw
-MDY0NAo+IC0tLSBhL2Jvb3QvZ3J1YjIvZ3J1YjIubWsKPiArKysgYi9ib290L2dydWIyL2dydWIy
-Lm1rCj4gQEAgLTIyLDYgKzIyLDcgQEAgZW5kaWYKPiAgR1JVQjJfQlVJTFRJTl9NT0RVTEVTID0g
-JChjYWxsIHFzdHJpcCwkKEJSMl9UQVJHRVRfR1JVQjJfQlVJTFRJTl9NT0RVTEVTKSkKPiAgR1JV
-QjJfQlVJTFRJTl9DT05GSUcgPSAkKGNhbGwgcXN0cmlwLCQoQlIyX1RBUkdFVF9HUlVCMl9CVUlM
-VElOX0NPTkZJRykpCj4gIEdSVUIyX0JPT1RfUEFSVElUSU9OID0gJChjYWxsIHFzdHJpcCwkKEJS
-Ml9UQVJHRVRfR1JVQjJfQk9PVF9QQVJUSVRJT04pKQo+ICtHUlVCMl9NRU1ESVNLX0RJUiA9ICQo
-Y2FsbCBxc3RyaXAsJChCUjJfVEFSR0VUX0dSVUIyX01FTURJU0tfRElSKSkKPiAgCj4gIGlmZXEg
-KCQoQlIyX1RBUkdFVF9HUlVCMl9JMzg2X1BDKSx5KQo+ICBHUlVCMl9JTUFHRSA9ICQoQklOQVJJ
-RVNfRElSKS9ncnViLmltZwo+IEBAIC04Nyw2ICs4OCwxNSBAQCBHUlVCMl9DT05GX0VOViA9IFwK
-PiAgCVRBUkdFVF9PQkpDT1BZPSIkKFRBUkdFVF9PQkpDT1BZKSIgXAo+ICAJVEFSR0VUX1NUUklQ
-PSIkKFRBUkdFVF9DUk9TUylzdHJpcCIKPiAgCj4gK2lmbmVxICgkKEdSVUIyX01FTURJU0tfRElS
-KSwpCj4gK0dSVUIyX1BPU1RfQlVJTERfSE9PS1MgKz0gR1JVQjJfTUFLRV9NRU1ESVNLCj4gK2Rl
-ZmluZSBHUlVCMl9NQUtFX01FTURJU0sKPiArCW1rZGlyIC1wICQoQEQpL2dydWIyX21lbWRpc2sK
-PiArCWNwIC1hICQoR1JVQjJfTUVNRElTS19ESVIpLyogJChARCkvZ3J1YjJfbWVtZGlzay8KPiAr
-CXRhciAtY3ZmICQoQEQpL21lbWRpc2sudGFyIC1DICQoQEQpL2dydWIyX21lbWRpc2svIC4KCls0
-XSBoZXJlIHdlIHdvdWxkIGVuZm9yY2UgdGhlIHByZWZpeDoKCiAgICBta2RpciAtcCAkKEBEKS9n
-cnViMl9tZW1kaXNrL2Jvb3QvZ3J1YgogICAgY3AgLWEgJChHUlVCMl9NRU1ESVNLX0RJUikvKiAk
-KEBEKS9ncnViMl9tZW1kaXNrL2Jvb3QvZ3J1Yi8KICAgIHRhciAtY3ZmICQoQEQpL21lbWRpc2su
-dGFyIC1DICQoQEQpL2dydWIyX21lbWRpc2svIC4KCihpZiB3ZSBkbyB0aGF0LCB0aGVuIHdlIG11
-c3QgYWxzbyBwcm9wYWdhdGUgdGhhdCB0b3AgdGhlIGhlbHAgdGV4dCkuCgpBZGRpdGlvbmFsbHks
-IGdlbmVyYXRpbmcgYSB0YXJiYWxsIGxpa2UgdGhhdCBpcyBub3QgcmVwcm9kdWNpYmxlOyB3ZSBk
-bwpoYXZlIGEgdGFyIGhlbHBlciB0aGF0IGdlbmVyYXRlcyByZXByb2R1Y2libGUgYXJjaGl2ZXMs
-IGJ1dCBpdCBpcyBhCnNoZWxsIGZ1bmN0aW9uIFs1XS4uLiBNYXliZSB3ZSBzaG91bGQgbWFrZSB0
-aGF0IGFuIGFjdHVhbCB0YXIgd3JhcHBlci4uLgpCdXQgdGhlIG1lbWRpc2sgdW5kb2N1bWVudGF0
-aW9uIHNwZWFrcyBhYm91dCAiR05VIHRhciBmb3JtYXQiLCBzbyBub3QKc3VyZSBvdXIgcmVwcm9k
-dWNpYmxlIGFyY2hpdmVzIHdvdWxkIGJlIHVzYWJsZS4uLgoKQWxzbywgdGhpcyByZXF1aXJlcyB0
-aGF0IGJvdGggdGhlICdtZW1kaXNrJyBhbmQgJ3RhcmZzJyBtb2R1bGVzIGJlIGJ1aWx0CmludG8g
-dGhlIGdydWIgaW1hZ2UuIE1heWJlIHdlIHNob3VsZCB2YWxpZGF0ZSB0aGF0IHRoZXkgYXJlIGlu
-IHRoZSBsaXN0PwpPciB0aGF0IHdlIHNob3VsZCBqdXN0IGFwcGVuZCB0aGVtIGlmIG5vdD8KCls1
-XSBodHRwczovL2dpdC5idWlsZHJvb3Qub3JnL2J1aWxkcm9vdC90cmVlL3N1cHBvcnQvZG93bmxv
-YWQvaGVscGVycwoKPiArZW5kZWYKPiArZW5kaWYKPiArCj4gIEdSVUIyX0NPTkZfT1BUUyA9IFwK
-PiAgCS0tdGFyZ2V0PSQoR1JVQjJfVEFSR0VUKSBcCj4gIAktLXdpdGgtcGxhdGZvcm09JChHUlVC
-Ml9QTEFURk9STSkgXAo+IEBAIC0xMjEsNiArMTMxLDcgQEAgZGVmaW5lIEdSVUIyX0lOU1RBTExf
-SU1BR0VTX0NNRFMKPiAgCQktTyAkKEdSVUIyX1RVUExFKSBcCj4gIAkJLW8gJChHUlVCMl9JTUFH
-RSkgXAo+ICAJCS1wICIkKEdSVUIyX1BSRUZJWCkiIFwKPiArCQkkKGlmICQoQlIyX1RBUkdFVF9H
-UlVCMl9NRU1ESVNLX0RJUiksLW0gJChARCkvbWVtZGlzay50YXIpIFwKCkJSMl9UQVJHRVRfR1JV
-QjJfTUVNRElTS19ESVIgaXMgYSBLY29uZmlnIHN0cmluZywgc28gaXQgaXMKZG91YmxlLXF1b3Rl
-ZCwgc28gaXQgaXMgbmV2ZXIgZW1wdHkgZm9yIG1ha2UuIFNvIHRoZSB0ZXN0IHNob3VsZCBiZQph
-Z2FpbnN0IEdSVUIyX01FTURJU0tfRElSLCBsaWtlIHlvdSBkaWQgYSBmZXcgbGluZXMgYmVmb3Jl
-LgoKSG93ZXZlciwgYXMgcGVyIGdydWItbWtpbWFnZSBtYW5wYWdlLCB0aGlzIG92ZXJyaWRlcyBh
-bnkgcHJldmlvdXMgLXAKb3B0aW9uIChidXQgbGF0ZXIgLXAgb3B0aW9ucyBjYW4gYWdhaW4gb3Zl
-cnJpZGUgaXQpLiBOb3Qgc3VyZSBob3cgdGhhdAp3b3VsZCB3b3JrIHdpdGggb3VyIHBhc3Npbmcg
-b2YgLXAsIGp1c3QgYmVmb3JlLi4uCgpBbnl3YXksIHRoaXMgbG9va3MgbGlrZSBhIHZlcnkgaW50
-ZXJlc3RpbmcgZmVhdHVyZSB3aGljaCB3ZSB3b3VsZCBsaWtlCnRvIHN1cHBvcnQgaW4gQnVpbGRy
-b290IChJIGtub3cgb2Ygc29tZSBwZW9wbGUgdGhhdCB3b3VsZCBsaWtlIHRvIGhhdmUKaXQgdG8g
-ZGlzcGxheSBhIHNwbGFzaHNjcmVlbiwgZm9yIGV4YW1wbGUpLgoKQWdhaW4sIHNvcnJ5IGZvciB0
-aGUgZGVsYXkgaXQgdG9vayB1cyB0byBsb29rIGF0IHlvdXIgcGF0Y2gsIGJ1dCBhcyB5b3UKY2Fu
-IHNlZSwgdGhlcmUgaXMgcXVpdGUgc29tZSBmb29kIG9uIHRoZSB0YWJsZToKICAgIGh0dHBzOi8v
-cGF0Y2h3b3JrLm96bGFicy5vcmcvcHJvamVjdC9idWlsZHJvb3QvbGlzdC8KClJlZ2FyZHMsCllh
-bm4gRS4gTU9SSU4uCgo+ICAJCSQoaWYgJChHUlVCMl9CVUlMVElOX0NPTkZJRyksLWMgJChHUlVC
-Ml9CVUlMVElOX0NPTkZJRykpIFwKPiAgCQkkKEdSVUIyX0JVSUxUSU5fTU9EVUxFUykKPiAgCW1r
-ZGlyIC1wICQoZGlyICQoR1JVQjJfQ0ZHKSkKCi0tIAouLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0t
-LS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS0tLgp8
-ICBZYW5uIEUuIE1PUklOICB8IFJlYWwtVGltZSBFbWJlZGRlZCB8IC8iXCBBU0NJSSBSSUJCT04g
-fCBFcmljcycgY29uc3BpcmFjeTogfAp8ICszMyA2NjIgMzc2IDA1NiB8IFNvZnR3YXJlICBEZXNp
-Z25lciB8IFwgLyBDQU1QQUlHTiAgICAgfCAgX19fICAgICAgICAgICAgICAgfAp8ICszMyA1NjEg
-MDk5IDQyNyBgLS0tLS0tLS0tLS0tLi0tLS0tLS06ICBYICBBR0FJTlNUICAgICAgfCAgXGUvICBU
-aGVyZSBpcyBubyAgfAp8IGh0dHA6Ly95bW9yaW4uaXMtYS1nZWVrLm9yZy8gfCBfLypcXyB8IC8g
-XCBIVE1MIE1BSUwgICAgfCAgIHYgICBjb25zcGlyYWN5LiAgfAonLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tXi0tLS0tLS1eLS0tLS0tLS0tLS0tLS0tLS0tXi0tLS0tLS0tLS0tLS0tLS0t
-LS0tJwpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWls
-ZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMu
-YnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+HawkTracer is a highly portable, low-overhead, configurable profiling tool
+
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+---
+Changes v1 -> v2:
+- Added C++ support (Heiko Thiery's review)
+- Bumped to latest upstream revision
+---
+ DEVELOPERS                         |  1 +
+ package/Config.in                  |  1 +
+ package/hawktracer/Config.in       | 25 +++++++++++++++++
+ package/hawktracer/hawktracer.hash |  3 ++
+ package/hawktracer/hawktracer.mk   | 44 ++++++++++++++++++++++++++++++
+ 5 files changed, 74 insertions(+)
+ create mode 100644 package/hawktracer/Config.in
+ create mode 100644 package/hawktracer/hawktracer.hash
+ create mode 100644 package/hawktracer/hawktracer.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index f864f7ef47..4abda3685c 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1036,6 +1036,7 @@ F:	configs/freescale_imx8mmevk_defconfig
+ F:	package/cctz/
+ F:	package/faad2/
+ F:	package/fdk-aac/
++F:	package/hawktracer/
+ F:	package/httping/
+ F:	package/iozone/
+ F:	package/leptonica/
+diff --git a/package/Config.in b/package/Config.in
+index d40eb9dabc..dc7bbf52b8 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1694,6 +1694,7 @@ endmenu
+ 
+ menu "Logging"
+ 	source "package/glog/Config.in"
++	source "package/hawktracer/Config.in"
+ 	source "package/liblog4c-localtime/Config.in"
+ 	source "package/liblogging/Config.in"
+ 	source "package/log4cplus/Config.in"
+diff --git a/package/hawktracer/Config.in b/package/hawktracer/Config.in
+new file mode 100644
+index 0000000000..456c2867bf
+--- /dev/null
++++ b/package/hawktracer/Config.in
+@@ -0,0 +1,25 @@
++config BR2_PACKAGE_HAWKTRACER
++	bool "hawktracer"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
++	help
++	  HawkTracer is a highly portable, low-overhead, configurable
++	  profiling tool built in Amazon Video for getting performance
++	  metrics from low-end devices.
++
++	  https://www.hawktracer.org/
++
++if BR2_PACKAGE_HAWKTRACER
++
++config BR2_PACKAGE_HAWKTRACER_TCP_LISTENER
++	bool "Enable hawktracer TCP listener"
++	default y
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++
++comment "Hawktracer TCP listener feature needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
++
++endif
++
++comment "hawktracer needs a toolchain w/ C++, gcc >= 4.8"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+diff --git a/package/hawktracer/hawktracer.hash b/package/hawktracer/hawktracer.hash
+new file mode 100644
+index 0000000000..87aa67c4b6
+--- /dev/null
++++ b/package/hawktracer/hawktracer.hash
+@@ -0,0 +1,3 @@
++# Computed locally
++sha256  b6c7fdfbe8178bc7ba49ef840ec18a92d1488ad73ac9f64d2a09042410ad3ef4  hawktracer-e53b07bc812c4cfe8f6253ddb48ac43de8fa74a8.tar.gz
++sha256  2f377333e64ad08ad3afec8ed6c2c96ced2a6d7d67443eb2784a931bb7b3fd59  LICENSE
+diff --git a/package/hawktracer/hawktracer.mk b/package/hawktracer/hawktracer.mk
+new file mode 100644
+index 0000000000..f4654b2274
+--- /dev/null
++++ b/package/hawktracer/hawktracer.mk
+@@ -0,0 +1,44 @@
++################################################################################
++#
++# hawktracer
++#
++################################################################################
++
++HAWKTRACER_VERSION = e53b07bc812c4cfe8f6253ddb48ac43de8fa74a8
++HAWKTRACER_SITE = $(call github,amzn,hawktracer,$(HAWKTRACER_VERSION))
++HAWKTRACER_LICENSE = MIT
++HAWKTRACER_LICENSE_FILES = LICENSE
++HAWKTRACER_INSTALL_STAGING = YES
++
++HAWKTRACER_CONF_OPTS = \
++	-DENABLE_ASAN=OFF \
++	-DENABLE_TESTS=OFF \
++	-DENABLE_CODE_COVERAGE=OFF \
++	-DENABLE_BENCHMARKS=OFF \
++	-DENABLE_DOC=OFF \
++	-DENABLE_PYTHON_BINDINGS=OFF \
++	-DENABLE_MAINTAINER_MODE=OFF \
++	-DENABLE_RELEASE_MODE=OFF \
++	-DENABLE_CLIENT=OFF \
++	-DENABLE_EXAMPLES=OFF
++
++ifeq ($(BR2_STATIC_LIBS),y)
++HAWKTRACER_CONF_OPTS += -DBUILD_STATIC_LIB=ON
++else
++HAWKTRACER_CONF_OPTS += -DBUILD_STATIC_LIB=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_HAWKTRACER_TCP_LISTENER),y)
++HAWKTRACER_CONF_OPTS += -DENABLE_TCP_LISTENER=ON
++else
++HAWKTRACER_CONF_OPTS += -DENABLE_TCP_LISTENER=OFF
++endif
++
++# Enable threads support if supported by toolchain
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
++HAWKTRACER_CONF_OPTS += -DENABLE_THREADS=ON
++else
++HAWKTRACER_CONF_OPTS += -DENABLE_THREADS=OFF
++endif
++
++$(eval $(cmake-package))
+-- 
+2.27.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
