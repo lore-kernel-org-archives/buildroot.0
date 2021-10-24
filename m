@@ -2,77 +2,71 @@ Return-Path: <SRS0=WrHH=PM=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B3343C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 24 Oct 2021 08:39:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 354C0C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 24 Oct 2021 08:45:49 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 15BE160F46
-	for <buildroot@archiver.kernel.org>; Sun, 24 Oct 2021 08:39:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 15BE160F46
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id 8D92E60F6F
+	for <buildroot@archiver.kernel.org>; Sun, 24 Oct 2021 08:45:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8D92E60F6F
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B8846605A7;
-	Sun, 24 Oct 2021 08:39:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 241936058A;
+	Sun, 24 Oct 2021 08:45:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fJU_rRhy7Wqd; Sun, 24 Oct 2021 08:39:09 +0000 (UTC)
+	with ESMTP id EsBJ9KKUyO9G; Sun, 24 Oct 2021 08:45:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9DB2F605BE;
-	Sun, 24 Oct 2021 08:39:08 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B79641BF37B
- for <buildroot@lists.busybox.net>; Sun, 24 Oct 2021 08:39:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2C68E605FB;
+	Sun, 24 Oct 2021 08:45:46 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 4C5691BF37B
+ for <buildroot@lists.busybox.net>; Sun, 24 Oct 2021 08:45:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A73C6605BE
- for <buildroot@lists.busybox.net>; Sun, 24 Oct 2021 08:39:06 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3C00280E98
+ for <buildroot@lists.busybox.net>; Sun, 24 Oct 2021 08:45:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id q5AyeRBC35OE for <buildroot@lists.busybox.net>;
- Sun, 24 Oct 2021 08:39:05 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ua1-x936.google.com (mail-ua1-x936.google.com
- [IPv6:2607:f8b0:4864:20::936])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3FCAB605A7
- for <buildroot@buildroot.org>; Sun, 24 Oct 2021 08:39:05 +0000 (UTC)
-Received: by mail-ua1-x936.google.com with SMTP id b4so3897807uaq.9
- for <buildroot@buildroot.org>; Sun, 24 Oct 2021 01:39:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=VkfdHDkKE1VLDEEQ47BJ1g9zfOTBNpcjBCWefdgHWEo=;
- b=VdiqoB/rtADaQkX0HT7KBiBQQn7lgkAbV1JhejxncPwnQjHXF9k61sGyy8u42WVyUT
- cIcJDdZPmXhR3Pt7o3jDVKASLfZStUqOa+1Rz35Lotagbe9cXPy3QdmUmATLFAqpaRIK
- WoZPQjIeP6lfpUCuPBZBduAwto2O+NqqIJ6AG2vjTsfS8dBPV0wEi3pN5HrJ905nbW85
- fzjlT1wa9ftWaZ9/KV6NwNbeWk5SWbUdiDWvH1NuHnM8kpKh6Of7noT0VwsZLPjrE1T3
- ssICTiSufuYqYso1pc79Ux5O70Mvh9q8EX416Dg3Y+sDYtey6bAXs+0ELxr5Jy9+sQkx
- f9hA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=VkfdHDkKE1VLDEEQ47BJ1g9zfOTBNpcjBCWefdgHWEo=;
- b=afLV6N9AZNlGVXkcFLCP4hDlbJHRKqj7Gc9zD5QSqyv53z0IK7o0kjCXyhs6AHJ/ou
- sd5X2xWhR5fdC3e4eIcDOv1XcCKz5Vjf9CUQ/DPg4W5CfE0dXIlreSTwDqjwRgeneQvJ
- FLoiACqBcViwego/tkCmK7wZwPr77XvTARziTioOnYwUzUOAtdE5aDI7CUAOQ8l7PRtM
- t20vIGShr+LLbdTg4lWn5AcD/H2sJL+8qCBhrzU4V40AeumCaN7rzyWbvyie4p5vywtf
- XOb3b30oHWLGdB0iO7E39Zc3RV4HLaHJnUvTHFi/Db3JlJEEkr2Y3PrPtMcLCQ3ymWtI
- zgzg==
-X-Gm-Message-State: AOAM533OTLrmtSnjukTr3p/Nw6pqFjUT3/6ZSgwGEx2qPBL6mUjFSFne
- Ql0ivV6TV8bfFVDaz4V1A76G6uVwnNO2YhBSlJk=
-X-Google-Smtp-Source: ABdhPJyNqaXwq/HKTPtv4PeA6hKjPqtFGiSl34zXighsraHu7fOZCBdrj2V7VmOBxLRdURqqWqR9IVQfGaIDw/RY9/E=
-X-Received: by 2002:a67:26c2:: with SMTP id m185mr9484543vsm.2.1635064743670; 
- Sun, 24 Oct 2021 01:39:03 -0700 (PDT)
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=free.fr
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Ovgsdoe7PTmp for <buildroot@lists.busybox.net>;
+ Sun, 24 Oct 2021 08:45:43 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id AF28A80E8D
+ for <buildroot@buildroot.org>; Sun, 24 Oct 2021 08:45:43 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:8cf8:eeb7:8c5b:1909])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id 2737A780373;
+ Sun, 24 Oct 2021 10:45:31 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+ s=smtp-20201208; t=1635065140;
+ bh=NNKBlVLFk+K/Sy4lpBCWoC//uE9mlfNneu4RjHwy/DA=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=gO0BCDVl+PpMHoYZQli5ZKvfKMfop98x23tEik7I9y1EkNKMeIT006NZ2JUmr60+z
+ 3Tum0J6o0uQwIrBJe/RpBGBv8PTDjSIMWtO6JEKMMO4xNmR099a4hXk15KwMIlTR0Y
+ 21k0TsYbdkyp6aZ0chUlRu8NwQRwZqRhLRP8QcqZzNEJo+jiPkH/4nu418saknMqJa
+ hibu8FcYfXPSMRQvCwWS0bFZwku3YvVU5ttELwkH4WSpHwUmPxRGk8UYpUjRK5RFpq
+ 6pwadHC0rdFbuD8EEzZmsCfVrKwl6UFjCEmGAl4r8Ut3ZxHG8bSaO0eRmb1ExA7u1g
+ nh1ho2x3XPeRw==
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sun, 24 Oct 2021 10:45:31 +0200
+Date: Sun, 24 Oct 2021 10:45:31 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Alexey Lukyanchuk <skif@skif-web.ru>
+Message-ID: <20211024084531.GM2400@scaer>
+References: <20200309095540.15448-1-skif@skif-web.ru>
 MIME-Version: 1.0
-References: <20211019080458.308969-1-jose.pekkarinen@unikie.com>
-In-Reply-To: <20211019080458.308969-1-jose.pekkarinen@unikie.com>
-From: Gilles Talis <gilles.talis@gmail.com>
-Date: Sun, 24 Oct 2021 10:38:52 +0200
-Message-ID: <CAKcgs2yyKVhG6t=kuQtwyvsVpHMjjz73PLkF8mTH6qBc7BMVyw@mail.gmail.com>
-To: =?UTF-8?Q?Jos=C3=A9_Pekkarinen?= <jose.pekkarinen@unikie.com>
-Subject: Re: [Buildroot] [PATCH v2] package/softhsm2: new package
+Content-Disposition: inline
+In-Reply-To: <20200309095540.15448-1-skif@skif-web.ru>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+Subject: Re: [Buildroot] [PATCH 1/1] boot/grub2: add '--memdisk' option to
+ grub-makeimage
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,428 +78,125 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot <buildroot@buildroot.org>
-Content-Type: multipart/mixed; boundary="===============0437561735679142192=="
+Cc: Kory Maincent <kory.maincent@bootlin.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0437561735679142192==
-Content-Type: multipart/alternative; boundary="0000000000003b35c105cf152de2"
-
---0000000000003b35c105cf152de2
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-Hi Jos=C3=A9,
-
-Le mar. 19 oct. 2021 =C3=A0 10:05, Jos=C3=A9 Pekkarinen <jose.pekkarinen@un=
-ikie.com>
-a =C3=A9crit :
-
-> This patch adds a package for softhsm2.
->
-> Signed-off-by: Jos=C3=A9 Pekkarinen <jose.pekkarinen@unikie.com>
-> ---
-> [ v1 -> v2 ]
->   - Added hash file and license information
->   - Moved recipe to use tarball
->   - Provided support to build against different ssl libraries
->   - Fixed toolchain dependencies and ssl select
->   - Referenced the package in package/Config.in
->   - Added myself as developer
->
-thanks for this update. There are still a few things to fix in your patch.
-
-
->  DEVELOPERS                     |  3 +++
->  package/Config.in              |  1 +
->  package/softhsm2/Config.in     | 35 ++++++++++++++++++++++++++++++++++
->  package/softhsm2/softhsm2.hash |  4 ++++
->  package/softhsm2/softhsm2.mk   | 16 ++++++++++++++++
->  5 files changed, 59 insertions(+)
->  create mode 100644 package/softhsm2/Config.in
->  create mode 100644 package/softhsm2/softhsm2.hash
->  create mode 100644 package/softhsm2/softhsm2.mk
->
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index f6c39516b5..83d20d56cc 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -2927,3 +2927,6 @@ F:        package/qjson/
->  F:     package/quazip/
->  F:     package/shapelib/
->  F:     package/tinc/
-> +
-> +N:     Jos=C3=A9 Pekkarinen <jose.pekkarinen@unikie.com>
-> +F:     package/softhsm2/
-> diff --git a/package/Config.in b/package/Config.in
-> index 7971726875..4f9cd38a97 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -2019,6 +2019,7 @@ menu "Security"
->         source "package/libsemanage/Config.in"
->         source "package/libsepol/Config.in"
->         source "package/safeclib/Config.in"
-> +       source "package/softhsm2/Config.in"
->  endmenu
->
->  menu "Text and terminal handling"
-> diff --git a/package/softhsm2/Config.in b/package/softhsm2/Config.in
-> new file mode 100644
-> index 0000000000..e4ca75de12
-> --- /dev/null
-> +++ b/package/softhsm2/Config.in
-> @@ -0,0 +1,35 @@
-> +config BR2_PACKAGE_SOFTHSM2
-> +       bool "softhsm2"
-> +       depends on BR2_INSTALL_LIBSTDCPP
-> +       depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
-> +       depends on !BR2_STATIC_LIBS # dlopen()
-> +       select BR2_PACKAGE_OPENSSL
-> +       select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
->
-I know I somewhat confused you in my first review :-) But did you check
-whether your package could work with libressl. If it does, you do not need
-the select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL.
-Please refer to Arnout's comment on the first version of your patch.
-
-+       help
-> +         SoftHSM is an implementation of a cryptographic store
-> +         accessible through a PKCS#11 interface. You can use it
-> +         to explore PKCS#11 without having a Hardware Security
-> +         Module.
-> +
-> +               https://www.opendnssec.org/softhsm
-
-The upstream url should have the same indentation as the help text above.
-Please make sure you run the "./utils/check-package" utility before pushing
-your patch.
-
-
->
-> +
-> +choice
-> +       prompt "SSL/TLS library to use"
-> +
-> +config BR2_PACKAGE_SOFTHSM2_OPENSSL
-> +       bool "OpenSSL"
-> +       depends on BR2_PACKAGE_OPENSSL
-> +       select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES if BR2_PACKAGE_LIBOPENSS=
-L
-> +
-> +config BR2_PACKAGE_SOFTHSM2_BEARSSL
-> +       bool "BearSSL"
-> +       depends on BR2_PACKAGE_BEARSSL
-> +
-> +config BR2_PACKAGE_SOFTHSM2_WOLFSSL
-> +       bool "WolfSSL"
-> +       depends on BR2_PACKAGE_WOLFSSL
-> +       select BR2_PACKAGE_WOLFSSL_ALL
-> +
-> +endchoice
->
-This is not required. You can get rid of the choice menu, as you are not
-interested in supporting botan.
-
-+
-> +comment "softhsm2 needs a toolchain with dynamic library"
->
-a few comments there:
-1) this should appear conditionally so you should mention the dependencies.
-Please refer to other packages that have the same type of constraints.
-2) you should mention the CPP and C++11 requirements ("sofhsm2 needs a
-toolchain w/ C++, gcc >=3D 4.8 and dynamic library support")
-
-
-> diff --git a/package/softhsm2/softhsm2.hash
-> b/package/softhsm2/softhsm2.hash
-> new file mode 100644
-> index 0000000000..a33e0d7e6f
-> --- /dev/null
-> +++ b/package/softhsm2/softhsm2.hash
-> @@ -0,0 +1,4 @@
-> +# From https://www.opendnssec.org/2020/04/1602/
-> +sha256 61249473054bcd1811519ef9a989a880a7bdcc36d317c9c25457fc614df475f2
-> softhsm-2.6.1.tar.gz
-> +# Locally computed
-> +sha256 230cab7102816e99f7ce03ef476352fcad09d742fcbc6580d44393db6280b64c
-> LICENSE
->
-the correct indentation is
-sha256 <2 spaces> sha256sum <2 spaces> package/license
-
-diff --git a/package/softhsm2/softhsm2.mk b/package/softhsm2/softhsm2.mk
-> new file mode 100644
-> index 0000000000..4b47def3bf
-> --- /dev/null
-> +++ b/package/softhsm2/softhsm2.mk
-> @@ -0,0 +1,16 @@
->
-> +########################################################################=
-########
-> +#
-> +# softhsm2
-> +#
->
-> +########################################################################=
-########
-> +
-> +SOFTHSM2_VERSION =3D 2.6.1
-> +SOFTHSM2_SOURCE =3D softhsm-$(SOFTHSM2_VERSION).tar.gz
->
-This is not required as it is the default
-
-
-> +SOFTHSM2_SITE =3D https://dist.opendnssec.org/source
-> +SOFTHSM2_LICENSE =3D BSD-2-Clause
-> +SOFTHSM2_LICENSE_FILES =3D LICENSE
-> +SOFTHSM2_DEPENDENCIES =3D openssl
-> +SOFTHSM2_AUTORECONF =3D YES
->
-you should explain why it is required, e.g. "no configure script provided"
-
-+SOFTHSM2_INSTALL_STAGING =3D YES
-> +
-> +$(eval $(autotools-package))
-> --
-> 2.25.1
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
->
-
---0000000000003b35c105cf152de2
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div dir=3D"ltr"><div class=3D"gmail_default" style=3D"fon=
-t-family:arial,sans-serif;font-size:small">Hi Jos=C3=A9,<br></div></div><br=
-><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">Le=C2=A0m=
-ar. 19 oct. 2021 =C3=A0=C2=A010:05, Jos=C3=A9 Pekkarinen &lt;<a href=3D"mai=
-lto:jose.pekkarinen@unikie.com">jose.pekkarinen@unikie.com</a>&gt; a =C3=A9=
-crit=C2=A0:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px =
-0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">This=
- patch adds a package for softhsm2.<br>
-<br>
-Signed-off-by: Jos=C3=A9 Pekkarinen &lt;<a href=3D"mailto:jose.pekkarinen@u=
-nikie.com" target=3D"_blank">jose.pekkarinen@unikie.com</a>&gt;<br>
----<br>
-[ v1 -&gt; v2 ]<br>
-=C2=A0 - Added hash file and license information<br>
-=C2=A0 - Moved recipe to use tarball<br>
-=C2=A0 - Provided support to build against different ssl libraries<br>
-=C2=A0 - Fixed toolchain dependencies and ssl select<br>
-=C2=A0 - Referenced the package in package/Config.in<br>
-=C2=A0 - Added myself as developer<br></blockquote><div><div style=3D"font-=
-family:arial,sans-serif;font-size:small" class=3D"gmail_default">thanks for=
- this update. There are still a few things to fix in your patch.</div><br><=
-/div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;bo=
-rder-left:1px solid rgb(204,204,204);padding-left:1ex">
-<br>
-=C2=A0DEVELOPERS=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0|=C2=A0 3 +++<br>
-=C2=A0package/Config.in=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 |=
-=C2=A0 1 +<br>
-=C2=A0package/softhsm2/Config.in=C2=A0 =C2=A0 =C2=A0| 35 ++++++++++++++++++=
-++++++++++++++++<br>
-=C2=A0package/softhsm2/softhsm2.hash |=C2=A0 4 ++++<br>
-=C2=A0package/softhsm2/<a href=3D"http://softhsm2.mk" rel=3D"noreferrer" ta=
-rget=3D"_blank">softhsm2.mk</a>=C2=A0 =C2=A0| 16 ++++++++++++++++<br>
-=C2=A05 files changed, 59 insertions(+)<br>
-=C2=A0create mode 100644 package/softhsm2/Config.in<br>
-=C2=A0create mode 100644 package/softhsm2/softhsm2.hash<br>
-=C2=A0create mode 100644 package/softhsm2/<a href=3D"http://softhsm2.mk" re=
-l=3D"noreferrer" target=3D"_blank">softhsm2.mk</a><br>
-<br>
-diff --git a/DEVELOPERS b/DEVELOPERS<br>
-index f6c39516b5..83d20d56cc 100644<br>
---- a/DEVELOPERS<br>
-+++ b/DEVELOPERS<br>
-@@ -2927,3 +2927,6 @@ F:=C2=A0 =C2=A0 =C2=A0 =C2=A0 package/qjson/<br>
-=C2=A0F:=C2=A0 =C2=A0 =C2=A0package/quazip/<br>
-=C2=A0F:=C2=A0 =C2=A0 =C2=A0package/shapelib/<br>
-=C2=A0F:=C2=A0 =C2=A0 =C2=A0package/tinc/<br>
-+<br>
-+N:=C2=A0 =C2=A0 =C2=A0Jos=C3=A9 Pekkarinen &lt;<a href=3D"mailto:jose.pekk=
-arinen@unikie.com" target=3D"_blank">jose.pekkarinen@unikie.com</a>&gt;<br>
-+F:=C2=A0 =C2=A0 =C2=A0package/softhsm2/<br>
-diff --git a/package/Config.in b/package/Config.in<br>
-index 7971726875..4f9cd38a97 100644<br>
---- a/package/Config.in<br>
-+++ b/package/Config.in<br>
-@@ -2019,6 +2019,7 @@ menu &quot;Security&quot;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 source &quot;package/libsemanage/Config.in&quot=
-;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 source &quot;package/libsepol/Config.in&quot;<b=
-r>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 source &quot;package/safeclib/Config.in&quot;<b=
-r>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0source &quot;package/softhsm2/Config.in&quot;<b=
-r>
-=C2=A0endmenu<br>
-<br>
-=C2=A0menu &quot;Text and terminal handling&quot;<br>
-diff --git a/package/softhsm2/Config.in b/package/softhsm2/Config.in<br>
-new file mode 100644<br>
-index 0000000000..e4ca75de12<br>
---- /dev/null<br>
-+++ b/package/softhsm2/Config.in<br>
-@@ -0,0 +1,35 @@<br>
-+config BR2_PACKAGE_SOFTHSM2<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0bool &quot;softhsm2&quot;<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0depends on BR2_INSTALL_LIBSTDCPP<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++=
-11<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0depends on !BR2_STATIC_LIBS # dlopen()<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0select <span class=3D"gmail_default" style=3D"f=
-ont-family:arial,sans-serif;font-size:small"></span>BR2_PACKAGE_OPENSSL<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0<span class=3D"gmail_default" style=3D"font-fam=
-ily:arial,sans-serif;font-size:small"></span>select BR2_PACKAGE_OPENSSL_FOR=
-CE_LIBOPENSSL<br></blockquote><div><div style=3D"font-family:arial,sans-ser=
-if;font-size:small" class=3D"gmail_default">I know I somewhat confused you =
-in my first review :-) But did you check whether your package could work wi=
-th libressl. If it does, you do not need the <span class=3D"gmail_default" =
-style=3D"font-family:arial,sans-serif;font-size:small"></span>select BR2_PA=
-CKAGE_OPENSSL_FORCE_LIBOPENSSL.</div><div style=3D"font-family:arial,sans-s=
-erif;font-size:small" class=3D"gmail_default">Please refer to Arnout&#39;s =
-comment on the first version of your patch.<br></div><br></div><blockquote =
-class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px sol=
-id rgb(204,204,204);padding-left:1ex">
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0help<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0SoftHSM is an implementation of a crypto=
-graphic store<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0accessible through a PKCS#11 interface. =
-You can use it<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0to explore PKCS#11 without having a Hard=
-ware Security<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Module.<br>
-+<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0<a href=3D"https://=
-www.opendnssec.org/softhsm" rel=3D"noreferrer" target=3D"_blank">https://ww=
-w.opendnssec.org/softhsm</a></blockquote><div><div style=3D"font-family:ari=
-al,sans-serif;font-size:small" class=3D"gmail_default">The upstream url sho=
-uld have the same indentation as the help text above. Please make sure you =
-run the &quot;./utils/check-package&quot; utility before pushing your patch=
-.</div></div><div>=C2=A0</div><blockquote class=3D"gmail_quote" style=3D"ma=
-rgin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:=
-1ex"><br>
-+<br>
-+choice<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0prompt &quot;SSL/TLS library to use&quot;<br>
-+<br>
-+config BR2_PACKAGE_SOFTHSM2_OPENSSL<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0bool &quot;OpenSSL&quot;<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0depends on BR2_PACKAGE_OPENSSL<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES if BR2=
-_PACKAGE_LIBOPENSSL<br>
-+<br>
-+config BR2_PACKAGE_SOFTHSM2_BEARSSL<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0bool &quot;BearSSL&quot;<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0depends on BR2_PACKAGE_BEARSSL<br>
-+<br>
-+config BR2_PACKAGE_SOFTHSM2_WOLFSSL<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0bool &quot;WolfSSL&quot;<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0depends on BR2_PACKAGE_WOLFSSL<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0select BR2_PACKAGE_WOLFSSL_ALL<br>
-+<br>
-+endchoice<br></blockquote><div><div style=3D"font-family:arial,sans-serif;=
-font-size:small" class=3D"gmail_default">This is not required. You can get =
-rid of the choice menu, as you are not interested in supporting botan.<br><=
-/div><br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0p=
-x 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">
-+<br>
-+comment &quot;softhsm2 needs a toolchain with dynamic library&quot;<br></b=
-lockquote><div><div style=3D"font-family:arial,sans-serif;font-size:small" =
-class=3D"gmail_default">a few comments there:<br></div><div style=3D"font-f=
-amily:arial,sans-serif;font-size:small" class=3D"gmail_default">1) this sho=
-uld appear conditionally so you should mention the dependencies. Please ref=
-er to other packages that have the same type of constraints.<br></div><div =
-style=3D"font-family:arial,sans-serif;font-size:small" class=3D"gmail_defau=
-lt">2) you should mention the CPP and C++11 requirements (&quot;sofhsm2 nee=
-ds a toolchain w/ C++, gcc &gt;=3D 4.8 and dynamic library support&quot;)<b=
-r></div></div><div>=C2=A0</div><blockquote class=3D"gmail_quote" style=3D"m=
-argin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left=
-:1ex">
-diff --git a/package/softhsm2/softhsm2.hash b/package/softhsm2/softhsm2.has=
-h<br>
-new file mode 100644<br>
-index 0000000000..a33e0d7e6f<br>
---- /dev/null<br>
-+++ b/package/softhsm2/softhsm2.hash<br>
-@@ -0,0 +1,4 @@<br>
-+# From <a href=3D"https://www.opendnssec.org/2020/04/1602/" rel=3D"norefer=
-rer" target=3D"_blank">https://www.opendnssec.org/2020/04/1602/</a><br>
-+sha256 61249473054bcd1811519ef9a989a880a7bdcc36d317c9c25457fc614df475f2 so=
-fthsm-2.6.1.tar.gz<br>
-+# Locally computed<br>
-+sha256 230cab7102816e99f7ce03ef476352fcad09d742fcbc6580d44393db6280b64c LI=
-CENSE<br></blockquote><div><div style=3D"font-family:arial,sans-serif;font-=
-size:small" class=3D"gmail_default">the correct indentation is</div><div st=
-yle=3D"font-family:arial,sans-serif;font-size:small" class=3D"gmail_default=
-">sha256 &lt;2 spaces&gt; sha256sum &lt;2 spaces&gt; package/license</div><=
-br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8e=
-x;border-left:1px solid rgb(204,204,204);padding-left:1ex">
-diff --git a/package/softhsm2/<a href=3D"http://softhsm2.mk" rel=3D"norefer=
-rer" target=3D"_blank">softhsm2.mk</a> b/package/softhsm2/<a href=3D"http:/=
-/softhsm2.mk" rel=3D"noreferrer" target=3D"_blank">softhsm2.mk</a><br>
-new file mode 100644<br>
-index 0000000000..4b47def3bf<br>
---- /dev/null<br>
-+++ b/package/softhsm2/<a href=3D"http://softhsm2.mk" rel=3D"noreferrer" ta=
-rget=3D"_blank">softhsm2.mk</a><br>
-@@ -0,0 +1,16 @@<br>
-+##########################################################################=
-######<br>
-+#<br>
-+# softhsm2<br>
-+#<br>
-+##########################################################################=
-######<br>
-+<br>
-+SOFTHSM2_VERSION =3D 2.6.1<br>
-+SOFTHSM2_SOURCE =3D softhsm-$(SOFTHSM2_VERSION).tar.gz<br></blockquote><di=
-v><div style=3D"font-family:arial,sans-serif;font-size:small" class=3D"gmai=
-l_default">This is not required as it is the default</div></div><div>=C2=A0=
-</div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;b=
-order-left:1px solid rgb(204,204,204);padding-left:1ex">
-+SOFTHSM2_SITE =3D <a href=3D"https://dist.opendnssec.org/source" rel=3D"no=
-referrer" target=3D"_blank">https://dist.opendnssec.org/source</a><br>
-+SOFTHSM2_LICENSE =3D BSD-2-Clause<br>
-+SOFTHSM2_LICENSE_FILES =3D LICENSE<br>
-+SOFTHSM2_DEPENDENCIES =3D openssl<br>
-+SOFTHSM2_AUTORECONF =3D YES<br></blockquote><div><div style=3D"font-family=
-:arial,sans-serif;font-size:small" class=3D"gmail_default">you should expla=
-in why it is required, e.g. &quot;no configure script provided&quot;</div><=
-br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8e=
-x;border-left:1px solid rgb(204,204,204);padding-left:1ex">
-+SOFTHSM2_INSTALL_STAGING =3D YES<br>
-+<br>
-+$(eval $(autotools-package))<br>
--- <br>
-2.25.1<br>
-<br>
-_______________________________________________<br>
-buildroot mailing list<br>
-<a href=3D"mailto:buildroot@buildroot.org" target=3D"_blank">buildroot@buil=
-droot.org</a><br>
-<a href=3D"https://lists.buildroot.org/mailman/listinfo/buildroot" rel=3D"n=
-oreferrer" target=3D"_blank">https://lists.buildroot.org/mailman/listinfo/b=
-uildroot</a><br>
-</blockquote></div></div>
-
---0000000000003b35c105cf152de2--
-
---===============0437561735679142192==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============0437561735679142192==--
+QWxleGV5LCBBbGwsCgpUaGFuayB5b3UgZm9yIHlvdXIgY29udHJpYnV0aW9uLiBJIGFtIHNvIHNv
+cnJ5IHRoYXQgd2UgZGlkIG5vdCBsb29rIGF0CnlvdXIgcGF0Y2ggZWFybGllci4gUmVjZW50IGV2
+b2x1dGlvbnMgKGJ5IEvDtnJ5LCBhZGRlZCBpbiBDYykgaW4gZ3J1YgpoYWQgbWUgZGlnIG91dCB0
+aGUgb2xkIHBhdGNoZXMgd2Ugc3RpbGwgaGFkIHBlbmRpbmcgYWJvdXQgZ3J1Yi4gU28gaWYKeW91
+IGFyZSBzdGlsbCBpbnRlcmVzdGVkLCBoZXJlIGlzIGEgcmV2aWV3IG9mIHlvdXIgcGF0Y2guCgpP
+biAyMDIwLTAzLTA5IDEyOjU1ICswMzAwLCBBbGV4ZXkgTHVreWFuY2h1ayBzcGFrZSB0aHVzbHk6
+Cj4gVGhlIG1lbWRpc2sgaXMgYSB2aXJ0dWFsIGRpc2sgZGV2aWNlIHZpZXdlZCBieSBncnViLgo+
+IE1lbWRpc2sgY2FuIHN0b3JlIHNvbWUgZmlsZXMocGljdHVyZXMsIGdwZyBrZXkgZm9yIHZlcmlm
+eSBtb2R1bGUsZXRjKSwgZ3J1YiBtb2R1bGVzLCBpbnRvIGEgY29yZS5pbWcuCgpDb21taXQgbG9n
+IHNob3VsZCBiZSB3cmFwcGVkIGF0IDcyIGNoYXJzLCBhcyBpcyBzdGFuZGFyZCBwcmFjdGljZSB3
+aXRoCmdpdC4gSSBjYW4gZml4IHRoYXQgd2hlbiBhcHBseWluZywgdGhvdWdoLgoKPiBJbiBVRUZJ
+IHBsYXRmb3JtLCBncnViLW1raW1hZ2UgZG9lcyBub3QgcG9zZSBhIGxpbWl0IG9uIHRoZSBzaXpl
+IG9mIG1lbWRpc2suCgpEb2VzIHRoYXQgbWVhbiB0aGVyZSBpcyBhIGxpbWl0IHdoZW4gYm9vdGlu
+ZyBpbiBsZWdhY3kgQklPUz8gV2hhdCBpcwp0aGF0IGxpbWl0PyBTaG91bGQgd2UgZW5mb3JjZS92
+YWxpZGF0ZSBpdCB3aGVuIGJ1aWxkaW5nIHRoZSBncnViIGltYWdlPwoKPiBJdCdzIGdvb2Qgc29s
+dXRpb24gZm9yIHNlY3VyZS1ib290IG9yIGVtYmVkZGVkIHN5c3RlbXMKClNvLCBJIHdhcyBhIGJp
+dCBjdXJpb3VzIGFib3V0IG1lbWRpc2ssIGFuZCBob3cgb25lIHdhcyBzdXBwb3NlZCB0byB1c2UK
+aXQuIEJ1dCBhcyBbMF0gcHV0cyBpdCwgdGhpcyBmZWF0dXJlcyBzb3JlbHkgbGFja3MgZG9jdW1l
+bnRhdGlvbi4gSSB3YXMKb25seSBhYmxlIHRvIGZpbmQgYSBxdWljayByZWZlcmVuY2UgdG8gbWVt
+ZGlzayBpbiB0aGUgbWFudWFsIFsxXSB3aGVuCmRlYWxpbmcgYWJvdXQgdGhlIG5hbWluZyBvZiBk
+ZXZpY2VzLiBBbmQgYXMgdXN1YWwsIFN0YWNrT3ZlcmZsb3cgdG8gdGhlCnJlc2N1ZSBbMl0uIEFu
+ZCB0aGVuIGFub3RoZXIgZXhhbXBsZSB0byBzZXR1cCBMVUtTIG9uIERlYmlhbiBbM10uCgpJdCBt
+aWdodCBiZSBhIGdvb2QgaWRlYSB0byBhZGQgdGhvc2UgNCByZWZlcmVuY2VzIHRvIHRoZSBjb21t
+aXQgbG9nIChvcgp0aGUgaGVscCB0ZXh0IHRvbywgbWF5YmUpOgoKWzBdIGh0dHBzOi8vcGhpcDE2
+MTEuZGUvYmxvZy9hZGRpbmctYW5kLXVzaW5nLWZpbGVzLXRvLWZyb20tdGhlLWdydWItbWVtZGlz
+ay1ncnViLXN0YW5kYWxvbmUvClsxXSBodHRwczovL3d3dy5nbnUub3JnL3NvZnR3YXJlL2dydWIv
+bWFudWFsL2dydWIvZ3J1Yi5odG1sI0RldmljZS1zeW50YXgKWzJdIGh0dHBzOi8vdW5peC5zdGFj
+a2V4Y2hhbmdlLmNvbS9xdWVzdGlvbnMvMjUzNjU3L2FjdHVhbC11c2FnZS1vZi1ncnViLW1raW1h
+Z2UtY29uZmlnLzI3MzMzNCMyNzMzMzQKWzNdIGh0dHBzOi8vY3J5cHRzZXR1cC10ZWFtLnBhZ2Vz
+LmRlYmlhbi5uZXQvY3J5cHRzZXR1cC9lbmNyeXB0ZWQtYm9vdC5odG1sCgo+IFNpZ25lZC1vZmYt
+Ynk6IEFsZXhleSBMdWt5YW5jaHVrIDxza2lmQHNraWYtd2ViLnJ1Pgo+IC0tLQo+ICBib290L2dy
+dWIyL0NvbmZpZy5pbiB8ICA2ICsrKysrKwo+ICBib290L2dydWIyL2dydWIyLm1rICB8IDExICsr
+KysrKysrKysrCj4gIDIgZmlsZXMgY2hhbmdlZCwgMTcgaW5zZXJ0aW9ucygrKQo+IAo+IGRpZmYg
+LS1naXQgYS9ib290L2dydWIyL0NvbmZpZy5pbiBiL2Jvb3QvZ3J1YjIvQ29uZmlnLmluCj4gaW5k
+ZXggZTQ1MTMzOTk5ZS4uNmVlMmYzNTFkOSAxMDA2NDQKPiAtLS0gYS9ib290L2dydWIyL0NvbmZp
+Zy5pbgo+ICsrKyBiL2Jvb3QvZ3J1YjIvQ29uZmlnLmluCj4gQEAgLTEwNyw2ICsxMDcsMTIgQEAg
+Y29uZmlnIEJSMl9UQVJHRVRfR1JVQjJfQlVJTFRJTl9DT05GSUcKPiAgCSAgZGV2aWNlIGFuZCBv
+dGhlciBjb25maWd1cmF0aW9uIHBhcmFtZXRlcnMsIGJ1dCBob3dldmVyIG1lbnUKPiAgCSAgZW50
+cmllcyBjYW5ub3QgYmUgZGVzY3JpYmVkIGluIHRoaXMgZW1iZWRkZWQgY29uZmlndXJhdGlvbi4K
+PiAgCj4gK2NvbmZpZyBCUjJfVEFSR0VUX0dSVUIyX01FTURJU0tfRElSCj4gKwlzdHJpbmcgIm1l
+bWRpc2siCj4gKwloZWxwCj4gKwkgIFBhdGggdG8gZGlyZWN0b3J5IHRoYXQgd2lsbCBiZSBhIG1l
+bWRpc2sgKC1tIG9wdGlvbiBpbiAKPiArCSAgZ3J1YjItbWtpbWFnZSkKCkl0IHdvdWxkIGJlIG5p
+Y2UgdG8gaGF2ZSBqdXN0IGEgbGl0dGxlIGJsdXJiIG9uIGhvdyB0byB1c2UgZmlsZXMgZnJvbSBh
+Cm1lbWRpc2s7IG1heWJlIHNvbWV0aGluZyBsaWtlIChpZiBJIHVuZGVyc3Rvb2QgYWxsIHRoZSBh
+Ym92ZSByZWZlcmVuY2VzCmNvcnJlY3RseSk6CgogICAgRm9yIGEgZmlsZSBCUjJfVEFSR0VUX0dS
+VUIyX01FTURJU0tfRElSL2Jvb3QvZ3J1Yi9mb28sIGl0IGNhbgogICAgYmUgYWNjZXNzZWQgZnJv
+bSBncnViIHdpdGg6IChtZW1kaXNrKS9mb28KClNvLCB0byBhdm9pZCBhbnkgY29uZnVzaW9uIG9y
+IHJ1bnRpbWUgaXNzdWUsIG1heWJlIHdlIHNob3VsZCBlbmZvcmNlCnRoYXQgYWxsIGZpbGVzIGFy
+ZSBpbiBCUjJfVEFSR0VUX0dSVUIyX01FTURJU0tfRElSL2Jvb3QvZ3J1Yi8gKHNlZQpiZWxvdyBb
+NF0pLgoKPiAgY29uZmlnIEJSMl9UQVJHRVRfR1JVQjJfSU5TVEFMTF9UT09MUwo+ICAJYm9vbCAi
+aW5zdGFsbCB0b29scyIKPiAgCWhlbHAKPiBkaWZmIC0tZ2l0IGEvYm9vdC9ncnViMi9ncnViMi5t
+ayBiL2Jvb3QvZ3J1YjIvZ3J1YjIubWsKPiBpbmRleCBhMjAyNTI1ZDcxLi4wNjI3YzY4NTdmIDEw
+MDY0NAo+IC0tLSBhL2Jvb3QvZ3J1YjIvZ3J1YjIubWsKPiArKysgYi9ib290L2dydWIyL2dydWIy
+Lm1rCj4gQEAgLTIyLDYgKzIyLDcgQEAgZW5kaWYKPiAgR1JVQjJfQlVJTFRJTl9NT0RVTEVTID0g
+JChjYWxsIHFzdHJpcCwkKEJSMl9UQVJHRVRfR1JVQjJfQlVJTFRJTl9NT0RVTEVTKSkKPiAgR1JV
+QjJfQlVJTFRJTl9DT05GSUcgPSAkKGNhbGwgcXN0cmlwLCQoQlIyX1RBUkdFVF9HUlVCMl9CVUlM
+VElOX0NPTkZJRykpCj4gIEdSVUIyX0JPT1RfUEFSVElUSU9OID0gJChjYWxsIHFzdHJpcCwkKEJS
+Ml9UQVJHRVRfR1JVQjJfQk9PVF9QQVJUSVRJT04pKQo+ICtHUlVCMl9NRU1ESVNLX0RJUiA9ICQo
+Y2FsbCBxc3RyaXAsJChCUjJfVEFSR0VUX0dSVUIyX01FTURJU0tfRElSKSkKPiAgCj4gIGlmZXEg
+KCQoQlIyX1RBUkdFVF9HUlVCMl9JMzg2X1BDKSx5KQo+ICBHUlVCMl9JTUFHRSA9ICQoQklOQVJJ
+RVNfRElSKS9ncnViLmltZwo+IEBAIC04Nyw2ICs4OCwxNSBAQCBHUlVCMl9DT05GX0VOViA9IFwK
+PiAgCVRBUkdFVF9PQkpDT1BZPSIkKFRBUkdFVF9PQkpDT1BZKSIgXAo+ICAJVEFSR0VUX1NUUklQ
+PSIkKFRBUkdFVF9DUk9TUylzdHJpcCIKPiAgCj4gK2lmbmVxICgkKEdSVUIyX01FTURJU0tfRElS
+KSwpCj4gK0dSVUIyX1BPU1RfQlVJTERfSE9PS1MgKz0gR1JVQjJfTUFLRV9NRU1ESVNLCj4gK2Rl
+ZmluZSBHUlVCMl9NQUtFX01FTURJU0sKPiArCW1rZGlyIC1wICQoQEQpL2dydWIyX21lbWRpc2sK
+PiArCWNwIC1hICQoR1JVQjJfTUVNRElTS19ESVIpLyogJChARCkvZ3J1YjJfbWVtZGlzay8KPiAr
+CXRhciAtY3ZmICQoQEQpL21lbWRpc2sudGFyIC1DICQoQEQpL2dydWIyX21lbWRpc2svIC4KCls0
+XSBoZXJlIHdlIHdvdWxkIGVuZm9yY2UgdGhlIHByZWZpeDoKCiAgICBta2RpciAtcCAkKEBEKS9n
+cnViMl9tZW1kaXNrL2Jvb3QvZ3J1YgogICAgY3AgLWEgJChHUlVCMl9NRU1ESVNLX0RJUikvKiAk
+KEBEKS9ncnViMl9tZW1kaXNrL2Jvb3QvZ3J1Yi8KICAgIHRhciAtY3ZmICQoQEQpL21lbWRpc2su
+dGFyIC1DICQoQEQpL2dydWIyX21lbWRpc2svIC4KCihpZiB3ZSBkbyB0aGF0LCB0aGVuIHdlIG11
+c3QgYWxzbyBwcm9wYWdhdGUgdGhhdCB0b3AgdGhlIGhlbHAgdGV4dCkuCgpBZGRpdGlvbmFsbHks
+IGdlbmVyYXRpbmcgYSB0YXJiYWxsIGxpa2UgdGhhdCBpcyBub3QgcmVwcm9kdWNpYmxlOyB3ZSBk
+bwpoYXZlIGEgdGFyIGhlbHBlciB0aGF0IGdlbmVyYXRlcyByZXByb2R1Y2libGUgYXJjaGl2ZXMs
+IGJ1dCBpdCBpcyBhCnNoZWxsIGZ1bmN0aW9uIFs1XS4uLiBNYXliZSB3ZSBzaG91bGQgbWFrZSB0
+aGF0IGFuIGFjdHVhbCB0YXIgd3JhcHBlci4uLgpCdXQgdGhlIG1lbWRpc2sgdW5kb2N1bWVudGF0
+aW9uIHNwZWFrcyBhYm91dCAiR05VIHRhciBmb3JtYXQiLCBzbyBub3QKc3VyZSBvdXIgcmVwcm9k
+dWNpYmxlIGFyY2hpdmVzIHdvdWxkIGJlIHVzYWJsZS4uLgoKQWxzbywgdGhpcyByZXF1aXJlcyB0
+aGF0IGJvdGggdGhlICdtZW1kaXNrJyBhbmQgJ3RhcmZzJyBtb2R1bGVzIGJlIGJ1aWx0CmludG8g
+dGhlIGdydWIgaW1hZ2UuIE1heWJlIHdlIHNob3VsZCB2YWxpZGF0ZSB0aGF0IHRoZXkgYXJlIGlu
+IHRoZSBsaXN0PwpPciB0aGF0IHdlIHNob3VsZCBqdXN0IGFwcGVuZCB0aGVtIGlmIG5vdD8KCls1
+XSBodHRwczovL2dpdC5idWlsZHJvb3Qub3JnL2J1aWxkcm9vdC90cmVlL3N1cHBvcnQvZG93bmxv
+YWQvaGVscGVycwoKPiArZW5kZWYKPiArZW5kaWYKPiArCj4gIEdSVUIyX0NPTkZfT1BUUyA9IFwK
+PiAgCS0tdGFyZ2V0PSQoR1JVQjJfVEFSR0VUKSBcCj4gIAktLXdpdGgtcGxhdGZvcm09JChHUlVC
+Ml9QTEFURk9STSkgXAo+IEBAIC0xMjEsNiArMTMxLDcgQEAgZGVmaW5lIEdSVUIyX0lOU1RBTExf
+SU1BR0VTX0NNRFMKPiAgCQktTyAkKEdSVUIyX1RVUExFKSBcCj4gIAkJLW8gJChHUlVCMl9JTUFH
+RSkgXAo+ICAJCS1wICIkKEdSVUIyX1BSRUZJWCkiIFwKPiArCQkkKGlmICQoQlIyX1RBUkdFVF9H
+UlVCMl9NRU1ESVNLX0RJUiksLW0gJChARCkvbWVtZGlzay50YXIpIFwKCkJSMl9UQVJHRVRfR1JV
+QjJfTUVNRElTS19ESVIgaXMgYSBLY29uZmlnIHN0cmluZywgc28gaXQgaXMKZG91YmxlLXF1b3Rl
+ZCwgc28gaXQgaXMgbmV2ZXIgZW1wdHkgZm9yIG1ha2UuIFNvIHRoZSB0ZXN0IHNob3VsZCBiZQph
+Z2FpbnN0IEdSVUIyX01FTURJU0tfRElSLCBsaWtlIHlvdSBkaWQgYSBmZXcgbGluZXMgYmVmb3Jl
+LgoKSG93ZXZlciwgYXMgcGVyIGdydWItbWtpbWFnZSBtYW5wYWdlLCB0aGlzIG92ZXJyaWRlcyBh
+bnkgcHJldmlvdXMgLXAKb3B0aW9uIChidXQgbGF0ZXIgLXAgb3B0aW9ucyBjYW4gYWdhaW4gb3Zl
+cnJpZGUgaXQpLiBOb3Qgc3VyZSBob3cgdGhhdAp3b3VsZCB3b3JrIHdpdGggb3VyIHBhc3Npbmcg
+b2YgLXAsIGp1c3QgYmVmb3JlLi4uCgpBbnl3YXksIHRoaXMgbG9va3MgbGlrZSBhIHZlcnkgaW50
+ZXJlc3RpbmcgZmVhdHVyZSB3aGljaCB3ZSB3b3VsZCBsaWtlCnRvIHN1cHBvcnQgaW4gQnVpbGRy
+b290IChJIGtub3cgb2Ygc29tZSBwZW9wbGUgdGhhdCB3b3VsZCBsaWtlIHRvIGhhdmUKaXQgdG8g
+ZGlzcGxheSBhIHNwbGFzaHNjcmVlbiwgZm9yIGV4YW1wbGUpLgoKQWdhaW4sIHNvcnJ5IGZvciB0
+aGUgZGVsYXkgaXQgdG9vayB1cyB0byBsb29rIGF0IHlvdXIgcGF0Y2gsIGJ1dCBhcyB5b3UKY2Fu
+IHNlZSwgdGhlcmUgaXMgcXVpdGUgc29tZSBmb29kIG9uIHRoZSB0YWJsZToKICAgIGh0dHBzOi8v
+cGF0Y2h3b3JrLm96bGFicy5vcmcvcHJvamVjdC9idWlsZHJvb3QvbGlzdC8KClJlZ2FyZHMsCllh
+bm4gRS4gTU9SSU4uCgo+ICAJCSQoaWYgJChHUlVCMl9CVUlMVElOX0NPTkZJRyksLWMgJChHUlVC
+Ml9CVUlMVElOX0NPTkZJRykpIFwKPiAgCQkkKEdSVUIyX0JVSUxUSU5fTU9EVUxFUykKPiAgCW1r
+ZGlyIC1wICQoZGlyICQoR1JVQjJfQ0ZHKSkKCi0tIAouLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0t
+LS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS0tLgp8
+ICBZYW5uIEUuIE1PUklOICB8IFJlYWwtVGltZSBFbWJlZGRlZCB8IC8iXCBBU0NJSSBSSUJCT04g
+fCBFcmljcycgY29uc3BpcmFjeTogfAp8ICszMyA2NjIgMzc2IDA1NiB8IFNvZnR3YXJlICBEZXNp
+Z25lciB8IFwgLyBDQU1QQUlHTiAgICAgfCAgX19fICAgICAgICAgICAgICAgfAp8ICszMyA1NjEg
+MDk5IDQyNyBgLS0tLS0tLS0tLS0tLi0tLS0tLS06ICBYICBBR0FJTlNUICAgICAgfCAgXGUvICBU
+aGVyZSBpcyBubyAgfAp8IGh0dHA6Ly95bW9yaW4uaXMtYS1nZWVrLm9yZy8gfCBfLypcXyB8IC8g
+XCBIVE1MIE1BSUwgICAgfCAgIHYgICBjb25zcGlyYWN5LiAgfAonLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tXi0tLS0tLS1eLS0tLS0tLS0tLS0tLS0tLS0tXi0tLS0tLS0tLS0tLS0tLS0t
+LS0tJwpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWls
+ZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMu
+YnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
