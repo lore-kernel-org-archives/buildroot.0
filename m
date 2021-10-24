@@ -2,87 +2,76 @@ Return-Path: <SRS0=WrHH=PM=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 00025C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 24 Oct 2021 18:14:16 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1CBE7C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 24 Oct 2021 18:28:37 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 95DCB60F6F
-	for <buildroot@archiver.kernel.org>; Sun, 24 Oct 2021 18:14:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 95DCB60F6F
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
+	by mail.kernel.org (Postfix) with ESMTPS id CDADC601FA
+	for <buildroot@archiver.kernel.org>; Sun, 24 Oct 2021 18:28:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org CDADC601FA
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6DC6D40221;
-	Sun, 24 Oct 2021 18:14:16 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 97379400DD;
+	Sun, 24 Oct 2021 18:28:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id E2b90j_VA0Sg; Sun, 24 Oct 2021 18:14:15 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id pI_QgrDVVYRB; Sun, 24 Oct 2021 18:28:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BBCC240211;
-	Sun, 24 Oct 2021 18:14:14 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1B4BA1BF420
- for <buildroot@lists.busybox.net>; Sun, 24 Oct 2021 18:13:52 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9289D401BE;
+	Sun, 24 Oct 2021 18:28:34 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E31201BF420
+ for <buildroot@lists.busybox.net>; Sun, 24 Oct 2021 18:28:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8587080DC8
- for <buildroot@lists.busybox.net>; Sun, 24 Oct 2021 18:13:51 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id CE3EF6063A
+ for <buildroot@lists.busybox.net>; Sun, 24 Oct 2021 18:28:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id B_ahKwPXRP8t for <buildroot@lists.busybox.net>;
- Sun, 24 Oct 2021 18:13:50 +0000 (UTC)
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0EeBDJ2EC49u for <buildroot@lists.busybox.net>;
+ Sun, 24 Oct 2021 18:28:31 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com
- [IPv6:2a00:1450:4864:20::52f])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5359D80EE2
- for <buildroot@buildroot.org>; Sun, 24 Oct 2021 18:13:50 +0000 (UTC)
-Received: by mail-ed1-x52f.google.com with SMTP id l13so12317358edi.8
- for <buildroot@buildroot.org>; Sun, 24 Oct 2021 11:13:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=AuHDJ6YcfqvEO3cES4w32eCa/mr/o2E5k5WYdMEsImA=;
- b=UZ+tEPn5VFPcioyxqTn3Kcoq8UWTLQMnrXTpCWspzg3/Ht506ryBC2FNb+7hJuIChG
- ZK6BwYhh2WPxkV6EgzEueUbiigRp1h3SzAM7bSzqV7WVNl5atntrFUZJlh7SuwdDlE2y
- w9lyMRofc3R5MYijdBrGAA1Ph9WBcQTtu7818w5K2BRtDpzFHoD1cTInQNL0EuH1ibS1
- dnSEnjXZ/L51sozhZbBitLLCg+8zBg+ylIFIZUP6GCJlOyePQOl8RatRgOLNCSTRAjgb
- hC+g7sKxg7y7ZWzFlsnNsZ0oGrW15mHgOC+S79ss1ClougGEpSQdaGDn8jwdoxNpM7Po
- 09FQ==
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com
+ [IPv6:2a00:1450:4864:20::22d])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 929D660617
+ for <buildroot@buildroot.org>; Sun, 24 Oct 2021 18:28:31 +0000 (UTC)
+Received: by mail-lj1-x22d.google.com with SMTP id n7so5273831ljp.5
+ for <buildroot@buildroot.org>; Sun, 24 Oct 2021 11:28:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=mime-version:from:date:message-id:subject:to;
+ bh=XALAD0h+MTVFoFFPla1bcJiJARAfENb3riVx9KkSh0U=;
+ b=JtbYXQefuR4dJkMiS79Zyf3+bkYY3iPreXWW6RFZjvx8Rxumsvg2iw1546a+QiyN8F
+ CmJic6vqjBUQyhYhCNuts4MI88/mOUmiuXPWqMNNZrfCp8haZrvDSnBtamw0aUh0/ZtL
+ 6EDLSFOsBj3hxsSEwDy4G5OoMnNESvQfc4+0abE38pZAQCRyiRelhX7TBnm1RjirXJ5k
+ XD+lsbQQ4qu0dvE8RiMHVoyHn+ICxBQC4yPERovwEF2C/UUQvwOH/UeVCYuk8gS67SGo
+ 6mIQ0FMWFI02NA4GEchRcI3C5tExJpoz2nZzpVSqnHcJ+eabpEt4zybvduksn2MdQmRW
+ gAiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=AuHDJ6YcfqvEO3cES4w32eCa/mr/o2E5k5WYdMEsImA=;
- b=3oH3go3LbV1GzFaD+ZslRnxBaSG27R+aD5/qTNbw9HgtEI62+PjQ72cbQcbbPIzgmM
- CuIrSZ/MzXzP8pkhuiwzoISsgNtYl75RATXyBg9UyXpFVlguRm/k0ArT2419UgZtRvcs
- yJqmTbua4ZzSZawQTgycQBsrnc5GUfgbaAGcH3WusLHnJ31FR6LMlGvSuSLGqxr6I+DE
- AfZ5mnB4RmnOW2J0S43CHyS/5NUezMbjB92NQcwMwE+9tFSWY+1RKDBwFAhK0NGIHYHr
- s+Jtb8asePsW1XpHTjfKcgh14iA+Cg/ASFOpdlSJ5NGMioF28rviiwxYNhKy8VATj5In
- CdjQ==
-X-Gm-Message-State: AOAM533ef3cZxD8Wyl7Jq/hGMWn5ysxspuWm2bfRbnWdywK/8HUSqEcf
- kvrbfI+pO/wqsq7E1ZZBdnPXcTjjQ7Hy8YPH
-X-Google-Smtp-Source: ABdhPJz1It4eE5jU3QUjeNn6j3u1XyvBgYnpl0aJebnGD26uwruGsx9x8hrWFdjly12LdwFyEUn/Wg==
-X-Received: by 2002:a17:907:1dc8:: with SMTP id
- og8mr16938752ejc.133.1635099228516; 
- Sun, 24 Oct 2021 11:13:48 -0700 (PDT)
-Received: from localhost.localdomain (5.26-130-109.adsl-dyn.isp.belgacom.be.
- [109.130.26.5])
- by smtp.gmail.com with ESMTPSA id v15sm7555367edi.89.2021.10.24.11.13.48
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 24 Oct 2021 11:13:48 -0700 (PDT)
-From: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
-To: buildroot@buildroot.org
-Date: Sun, 24 Oct 2021 20:12:20 +0200
-Message-Id: <20211024181221.2608908-5-raphael.melotte@mind.be>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211024181221.2608908-1-raphael.melotte@mind.be>
-References: <20211024181221.2608908-1-raphael.melotte@mind.be>
+ h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+ bh=XALAD0h+MTVFoFFPla1bcJiJARAfENb3riVx9KkSh0U=;
+ b=2xPbMwyj/blfyYTNhB7xsxc+VMnlSym0j4zzLjrI3VR0hP32MTYDJOmSqFw5N98eXu
+ J/OJvtCJwUfcVS23vFFO/jVFiMfMP6N76gWu4ic4OxWPfKFIyRDqoSzDbyx3EMcCnUw0
+ gdRMaGWmSyRbfWtmgYcXIDhI9znlMLf4MUKqnGNuPxZSbIr/GVmNMadq5s28ysFj+9hu
+ UZiP5X1RTSqia0xLS1OYTBZr61j3ijUVsoEIEwfKAA3h1C8hP7iRFc0xa0FxyAQGU4hZ
+ 2QLHxW+Vsr6+QQLrXrvKWnaKsqBxASzheqZlK4biXjkB+jT49SCLFIWU8v37S5KkaoaU
+ UFnw==
+X-Gm-Message-State: AOAM531nQk6WNcqN+PxmzIBQib3Q4a+pdCcJoqXhctIeWBXkkUAwhz7O
+ u0OCu08opwxF1ch5s0oe2IzC+eWuFxJV7G/WbdKgCFUS4uA=
+X-Google-Smtp-Source: ABdhPJzeczHQted//5hHLG6fYbyTcLHuyS3Ep8IgGbX3f9zOW4TKGHrEV9FQG/JUSogMf/crMZWJBKZSShH5Hkl0eTo=
+X-Received: by 2002:a2e:b6cc:: with SMTP id m12mr13451994ljo.297.1635100109244; 
+ Sun, 24 Oct 2021 11:28:29 -0700 (PDT)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 5/5] package/python-boto3: bump to 1.19.2
+From: Alassane <alassaneg@gmail.com>
+Date: Sun, 24 Oct 2021 20:28:16 +0200
+Message-ID: <CAJ2YAHurtC2D047qVGQ89q2q0+WG0DOOx48V2mDA0S8swfMRKg@mail.gmail.com>
+To: buildroot@buildroot.org
+Subject: [Buildroot] Issue compiling the library linux_libnfc-nci (from NXP)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,46 +83,165 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Asaf Kahlon <asafka7@gmail.com>,
- =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============4255369337647559157=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-V2hpbGUgYXQgaXQsIHJlbW92ZSB0aGUgbWQ1IGhhc2ggYXMgdGhlcmUgaXMgYWxyZWFkeSBhIHNo
-YTI1NiBoYXNoLgoKU2lnbmVkLW9mZi1ieTogUmFwaGHDq2wgTcOpbG90dGUgPHJhcGhhZWwubWVs
-b3R0ZUBtaW5kLmJlPgotLS0KIHBhY2thZ2UvcHl0aG9uLWJvdG8zL3B5dGhvbi1ib3RvMy5oYXNo
-IHwgNSArKy0tLQogcGFja2FnZS9weXRob24tYm90bzMvcHl0aG9uLWJvdG8zLm1rICAgfCA0ICsr
-LS0KIDIgZmlsZXMgY2hhbmdlZCwgNCBpbnNlcnRpb25zKCspLCA1IGRlbGV0aW9ucygtKQoKZGlm
-ZiAtLWdpdCBhL3BhY2thZ2UvcHl0aG9uLWJvdG8zL3B5dGhvbi1ib3RvMy5oYXNoIGIvcGFja2Fn
-ZS9weXRob24tYm90bzMvcHl0aG9uLWJvdG8zLmhhc2gKaW5kZXggZTRkOTI0ZTc4Ni4uMzU4ZmFi
-ZDM5YiAxMDA2NDQKLS0tIGEvcGFja2FnZS9weXRob24tYm90bzMvcHl0aG9uLWJvdG8zLmhhc2gK
-KysrIGIvcGFja2FnZS9weXRob24tYm90bzMvcHl0aG9uLWJvdG8zLmhhc2gKQEAgLTEsNSArMSw0
-IEBACi0jIG1kNSwgc2hhMjU2IGZyb20gaHR0cHM6Ly9weXBpLm9yZy9weXBpL2JvdG8zL2pzb24K
-LW1kNSAgMGYzN2IwNTRiOWMxNGZlMDVhODE5NGY4NWIxMjI5MTggIGJvdG8zLTEuMTguNDgudGFy
-Lmd6Ci1zaGEyNTYgIDdiNDViMjI0NDQyYzQ3OWRlNGJjNmU2ZTljYjA1NTdiNjQyZmM3YTc3ZWRj
-ODcwMmUzOTNjY2FhMmUwYWExMjggIGJvdG8zLTEuMTguNDgudGFyLmd6CisjIHNoYTI1NiBmcm9t
-IGh0dHBzOi8vcHlwaS5vcmcvcHlwaS9ib3RvMy9qc29uCitzaGEyNTYgIDExYTYwMzUwNjAyMzBl
-OTIzMjdkNGYxMGZlZjZiYzQ0MTg4YjJjZDY4NTA0MDEyYmMyNWVkNjJhYzMxZDY3MGIgIGJvdG8z
-LTEuMTkuMi50YXIuZ3oKICMgTG9jYWxseSBjb21wdXRlZCBzaGEyNTYgY2hlY2tzdW1zCiBzaGEy
-NTYgIDBkNTQyZTBjODgwNGUzOWFhN2YzN2ViMDBkYTVhNzYyMTQ5ZGM2ODJkNzgyOTQ1MTI4N2Ux
-MWI5MzhlOTQ1OTQgIExJQ0VOU0UKZGlmZiAtLWdpdCBhL3BhY2thZ2UvcHl0aG9uLWJvdG8zL3B5
-dGhvbi1ib3RvMy5tayBiL3BhY2thZ2UvcHl0aG9uLWJvdG8zL3B5dGhvbi1ib3RvMy5tawppbmRl
-eCBkMWUwMWRlODU1Li44ZTEwYWE0ODJkIDEwMDY0NAotLS0gYS9wYWNrYWdlL3B5dGhvbi1ib3Rv
-My9weXRob24tYm90bzMubWsKKysrIGIvcGFja2FnZS9weXRob24tYm90bzMvcHl0aG9uLWJvdG8z
-Lm1rCkBAIC00LDkgKzQsOSBAQAogIwogIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMKIAotUFlUSE9O
-X0JPVE8zX1ZFUlNJT04gPSAxLjE4LjQ4CitQWVRIT05fQk9UTzNfVkVSU0lPTiA9IDEuMTkuMgog
-UFlUSE9OX0JPVE8zX1NPVVJDRSA9IGJvdG8zLSQoUFlUSE9OX0JPVE8zX1ZFUlNJT04pLnRhci5n
-egotUFlUSE9OX0JPVE8zX1NJVEUgPSBodHRwczovL2ZpbGVzLnB5dGhvbmhvc3RlZC5vcmcvcGFj
-a2FnZXMvZDQvMWUvN2Q2YmYxYjkyMTk5MTIxZWM1YzAyMDg2ODQwMmI5MGJhMWE0ZmVmNjk0MWFh
-ZmFmZjk3MGE2NjRkODNhCitQWVRIT05fQk9UTzNfU0lURSA9IGh0dHBzOi8vZmlsZXMucHl0aG9u
-aG9zdGVkLm9yZy9wYWNrYWdlcy9lYy80NS9kMTJmOWMwOWI1YzRkYWQ4YmNiMDk4ZGZhZTVlOWUx
-MjUzZWQ2NDA4ZWZiYmQ5YTNlNjBiZmY1NWI4MjQKIFBZVEhPTl9CT1RPM19TRVRVUF9UWVBFID0g
-c2V0dXB0b29scwogUFlUSE9OX0JPVE8zX0xJQ0VOU0UgPSBBcGFjaGUtMi4wCiBQWVRIT05fQk9U
-TzNfTElDRU5TRV9GSUxFUyA9IExJQ0VOU0UKLS0gCjIuMzMuMAoKX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWls
-ZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9s
-aXN0aW5mby9idWlsZHJvb3QK
+--===============4255369337647559157==
+Content-Type: multipart/alternative; boundary="0000000000002f0cd805cf1d69cc"
+
+--0000000000002f0cd805cf1d69cc
+Content-Type: text/plain; charset="UTF-8"
+
+Hello,
+
+I'm trying to add the following package to buildroot and trying to compile
+it : linux_libnfc-nci (https://github.com/NXPNFCLinux/linux_libnfc-nci).
+It was supposed not too be complicated but i'm actually struggling with
+that. the "configure" file is missing from the linux repository. To get the
+"configure" file, we must run the "bootstrap.sh" script, which is in the
+git repository, and contains the following commands:
+
+mkdir -p m4
+aclocal
+autoheader
+libtoolize
+automake --add-missing
+autoreconf -fi
+rm -Rf autom4te.cache
+I'm able to install this library on my host but i'm not able and even able
+to manually cross compile it but it doesn't work when trying to
+cross-compile it through buildroot (as a package), because of this
+"configure" file missing (the error i have is : "/bin/bash: ./configure: No
+such file or directory").
+Does anyone know how can i generate this "configure" file using buildroot?
+is it possible to run the "boostrap" with a specific line in the ".mk" file?
+Can i manually run the "bootstrap.sh" script and copy the "configure" file
+in the package build folder? is this a good method?
+
+I hope this is clear and that someone will be able to help with that.
+
+Kind regards
+
+Thank you
+
+--0000000000002f0cd805cf1d69cc
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Hello,<div><br></div><div>I&#39;m trying to add the follow=
+ing package to buildroot and trying to compile it :=C2=A0<span style=3D"fon=
+t-weight:600;background-color:rgb(246,248,250);color:rgb(36,41,47);font-fam=
+ily:-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,Helvetica,Arial,s=
+ans-serif,&quot;Apple Color Emoji&quot;,&quot;Segoe UI Emoji&quot;;font-siz=
+e:20px">linux_libnfc-nci (</span><a href=3D"https://github.com/NXPNFCLinux/=
+linux_libnfc-nci">https://github.com/NXPNFCLinux/linux_libnfc-nci</a>).</di=
+v><div>It was supposed not too be complicated but i&#39;m actually struggli=
+ng with that. the &quot;configure&quot; file is missing from the linux repo=
+sitory. To get the &quot;configure&quot; file, we must run the &quot;bootst=
+rap.sh&quot; script, which is in the git repository, and contains=C2=A0the =
+following commands:</div><div><br></div><table class=3D"gmail-highlight gma=
+il-tab-size gmail-js-file-line-container" style=3D"border-spacing:0px;borde=
+r-collapse:collapse;color:rgb(36,41,47);font-family:-apple-system,BlinkMacS=
+ystemFont,&quot;Segoe UI&quot;,Helvetica,Arial,sans-serif,&quot;Apple Color=
+ Emoji&quot;,&quot;Segoe UI Emoji&quot;;font-size:14px"><tbody style=3D"box=
+-sizing:border-box"><tr style=3D"box-sizing:border-box"><td id=3D"gmail-L3"=
+ class=3D"gmail-blob-num gmail-js-line-number" style=3D"box-sizing:border-b=
+ox;padding:0px 10px;width:50px;min-width:50px;font-family:ui-monospace,SFMo=
+no-Regular,&quot;SF Mono&quot;,Menlo,Consolas,&quot;Liberation Mono&quot;,m=
+onospace;font-size:12px;line-height:20px;text-align:right;white-space:nowra=
+p;vertical-align:top"></td><td id=3D"gmail-LC3" class=3D"gmail-blob-code gm=
+ail-blob-code-inner gmail-js-file-line" style=3D"box-sizing:border-box;padd=
+ing:0px 10px;line-height:20px;vertical-align:top;overflow:visible;font-fami=
+ly:ui-monospace,SFMono-Regular,&quot;SF Mono&quot;,Menlo,Consolas,&quot;Lib=
+eration Mono&quot;,monospace;font-size:12px;white-space:pre">mkdir -p m4</t=
+d></tr><tr style=3D"box-sizing:border-box;background-color:transparent"><td=
+ id=3D"gmail-L4" class=3D"gmail-blob-num gmail-js-line-number" style=3D"box=
+-sizing:border-box;padding:0px 10px;width:50px;min-width:50px;font-family:u=
+i-monospace,SFMono-Regular,&quot;SF Mono&quot;,Menlo,Consolas,&quot;Liberat=
+ion Mono&quot;,monospace;font-size:12px;line-height:20px;text-align:right;w=
+hite-space:nowrap;vertical-align:top"></td><td id=3D"gmail-LC4" class=3D"gm=
+ail-blob-code gmail-blob-code-inner gmail-js-file-line" style=3D"box-sizing=
+:border-box;padding:0px 10px;line-height:20px;vertical-align:top;overflow:v=
+isible;font-family:ui-monospace,SFMono-Regular,&quot;SF Mono&quot;,Menlo,Co=
+nsolas,&quot;Liberation Mono&quot;,monospace;font-size:12px;white-space:pre=
+">aclocal</td></tr><tr style=3D"box-sizing:border-box"><td id=3D"gmail-L5" =
+class=3D"gmail-blob-num gmail-js-line-number" style=3D"box-sizing:border-bo=
+x;padding:0px 10px;width:50px;min-width:50px;font-family:ui-monospace,SFMon=
+o-Regular,&quot;SF Mono&quot;,Menlo,Consolas,&quot;Liberation Mono&quot;,mo=
+nospace;font-size:12px;line-height:20px;text-align:right;white-space:nowrap=
+;vertical-align:top"></td><td id=3D"gmail-LC5" class=3D"gmail-blob-code gma=
+il-blob-code-inner gmail-js-file-line" style=3D"box-sizing:border-box;paddi=
+ng:0px 10px;line-height:20px;vertical-align:top;overflow:visible;font-famil=
+y:ui-monospace,SFMono-Regular,&quot;SF Mono&quot;,Menlo,Consolas,&quot;Libe=
+ration Mono&quot;,monospace;font-size:12px;white-space:pre">autoheader</td>=
+</tr><tr style=3D"box-sizing:border-box;background-color:transparent"><td i=
+d=3D"gmail-L6" class=3D"gmail-blob-num gmail-js-line-number" style=3D"box-s=
+izing:border-box;padding:0px 10px;width:50px;min-width:50px;font-family:ui-=
+monospace,SFMono-Regular,&quot;SF Mono&quot;,Menlo,Consolas,&quot;Liberatio=
+n Mono&quot;,monospace;font-size:12px;line-height:20px;text-align:right;whi=
+te-space:nowrap;vertical-align:top"></td><td id=3D"gmail-LC6" class=3D"gmai=
+l-blob-code gmail-blob-code-inner gmail-js-file-line" style=3D"box-sizing:b=
+order-box;padding:0px 10px;line-height:20px;vertical-align:top;overflow:vis=
+ible;font-family:ui-monospace,SFMono-Regular,&quot;SF Mono&quot;,Menlo,Cons=
+olas,&quot;Liberation Mono&quot;,monospace;font-size:12px;white-space:pre">=
+libtoolize</td></tr><tr style=3D"box-sizing:border-box"><td id=3D"gmail-L7"=
+ class=3D"gmail-blob-num gmail-js-line-number" style=3D"box-sizing:border-b=
+ox;padding:0px 10px;width:50px;min-width:50px;font-family:ui-monospace,SFMo=
+no-Regular,&quot;SF Mono&quot;,Menlo,Consolas,&quot;Liberation Mono&quot;,m=
+onospace;font-size:12px;line-height:20px;text-align:right;white-space:nowra=
+p;vertical-align:top"></td><td id=3D"gmail-LC7" class=3D"gmail-blob-code gm=
+ail-blob-code-inner gmail-js-file-line" style=3D"box-sizing:border-box;padd=
+ing:0px 10px;line-height:20px;vertical-align:top;overflow:visible;font-fami=
+ly:ui-monospace,SFMono-Regular,&quot;SF Mono&quot;,Menlo,Consolas,&quot;Lib=
+eration Mono&quot;,monospace;font-size:12px;white-space:pre">automake --add=
+-missing</td></tr><tr style=3D"box-sizing:border-box;background-color:trans=
+parent"><td id=3D"gmail-L8" class=3D"gmail-blob-num gmail-js-line-number" s=
+tyle=3D"box-sizing:border-box;padding:0px 10px;width:50px;min-width:50px;fo=
+nt-family:ui-monospace,SFMono-Regular,&quot;SF Mono&quot;,Menlo,Consolas,&q=
+uot;Liberation Mono&quot;,monospace;font-size:12px;line-height:20px;text-al=
+ign:right;white-space:nowrap;vertical-align:top"></td><td id=3D"gmail-LC8" =
+class=3D"gmail-blob-code gmail-blob-code-inner gmail-js-file-line" style=3D=
+"box-sizing:border-box;padding:0px 10px;line-height:20px;vertical-align:top=
+;overflow:visible;font-family:ui-monospace,SFMono-Regular,&quot;SF Mono&quo=
+t;,Menlo,Consolas,&quot;Liberation Mono&quot;,monospace;font-size:12px;whit=
+e-space:pre">autoreconf -fi</td></tr><tr style=3D"box-sizing:border-box"><t=
+d id=3D"gmail-L9" class=3D"gmail-blob-num gmail-js-line-number" style=3D"bo=
+x-sizing:border-box;padding:0px 10px;width:50px;min-width:50px;font-family:=
+ui-monospace,SFMono-Regular,&quot;SF Mono&quot;,Menlo,Consolas,&quot;Libera=
+tion Mono&quot;,monospace;font-size:12px;line-height:20px;text-align:right;=
+white-space:nowrap;vertical-align:top"></td><td id=3D"gmail-LC9" class=3D"g=
+mail-blob-code gmail-blob-code-inner gmail-js-file-line" style=3D"box-sizin=
+g:border-box;padding:0px 10px;line-height:20px;vertical-align:top;overflow:=
+visible;font-family:ui-monospace,SFMono-Regular,&quot;SF Mono&quot;,Menlo,C=
+onsolas,&quot;Liberation Mono&quot;,monospace;font-size:12px;white-space:pr=
+e">rm -Rf autom4te.cache</td></tr></tbody></table><br><div>I&#39;m able to =
+install this library on my host but i&#39;m not able and even able to manua=
+lly cross compile it but it doesn&#39;t work when trying to cross-compile i=
+t through buildroot (as a package), because of this &quot;configure&quot; f=
+ile missing (the error i have is : &quot;/bin/bash: ./configure: No such fi=
+le or directory&quot;).</div><div>Does anyone know how can i generate this =
+&quot;configure&quot; file using buildroot? is it possible to run the &quot=
+;boostrap&quot; with a specific line in the &quot;.mk&quot; file?</div><div=
+>Can i manually run the &quot;bootstrap.sh&quot; script and copy the &quot;=
+configure&quot; file in the package build folder? is this a good method?</d=
+iv><div><br></div><div>I hope this is clear and that someone will be able t=
+o help with that.</div><div><br></div><div>Kind regards</div><div><br></div=
+><div>Thank you</div><img src=3D"https://mail-info-ext.com/pixel/qhHHw3dVJn=
+VvhoTUJCT1?rid=3DqhHHw3dVJnVvhoTUJCT1" width=3D"1" height=3D"1" border=3D"0=
+"></div>
+
+--0000000000002f0cd805cf1d69cc--
+
+--===============4255369337647559157==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============4255369337647559157==--
