@@ -2,54 +2,52 @@ Return-Path: <SRS0=WrHH=PM=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 00267C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 24 Oct 2021 14:09:48 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D0677C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 24 Oct 2021 14:12:58 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B33CA60F45
-	for <buildroot@archiver.kernel.org>; Sun, 24 Oct 2021 14:09:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B33CA60F45
+	by mail.kernel.org (Postfix) with ESMTPS id 827A360E98
+	for <buildroot@archiver.kernel.org>; Sun, 24 Oct 2021 14:12:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 827A360E98
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 843876081C;
-	Sun, 24 Oct 2021 14:09:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4CAED80F38;
+	Sun, 24 Oct 2021 14:12:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gKh_WC1H6xD3; Sun, 24 Oct 2021 14:09:47 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ipSf5r8D4iSX; Sun, 24 Oct 2021 14:12:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EA54B606A7;
-	Sun, 24 Oct 2021 14:09:46 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8A2F61BF47D
- for <buildroot@lists.busybox.net>; Sun, 24 Oct 2021 14:09:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AC10380F30;
+	Sun, 24 Oct 2021 14:12:56 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 729451BF47D
+ for <buildroot@lists.busybox.net>; Sun, 24 Oct 2021 14:12:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 79F26401A6
- for <buildroot@lists.busybox.net>; Sun, 24 Oct 2021 14:09:45 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6FC5E80F30
+ for <buildroot@lists.busybox.net>; Sun, 24 Oct 2021 14:12:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Hex8obi8fEkp for <buildroot@lists.busybox.net>;
- Sun, 24 Oct 2021 14:09:44 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7485A40192
- for <buildroot@buildroot.org>; Sun, 24 Oct 2021 14:09:44 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay10.mail.gandi.net (Postfix) with ESMTPSA id A5AD1240004;
- Sun, 24 Oct 2021 14:09:41 +0000 (UTC)
-Date: Sun, 24 Oct 2021 16:09:40 +0200
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id BtMsaZ15JY63 for <buildroot@lists.busybox.net>;
+ Sun, 24 Oct 2021 14:12:54 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id B82F480F2D
+ for <buildroot@buildroot.org>; Sun, 24 Oct 2021 14:12:54 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 08D3B8861A; Sun, 24 Oct 2021 14:09:37 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <20211024160940.4d4b6706@windsurf>
-In-Reply-To: <20211021220023.68288-1-giulio.benetti@benettiengineering.com>
-References: <20211021220023.68288-1-giulio.benetti@benettiengineering.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 0/8] Olimex boards u-boot/linux update
+To: buildroot@buildroot.org
+Date: Sun, 24 Oct 2021 16:12:43 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 86b77153b23fcf6b2bcb19a552cbe302c89a6171
+X-Git-Newrev: b3b4e270d15cf846cfef80421932b5f5892f2374
+X-Patchwork-Hint: ignore
+Message-Id: <20211024140937.08D3B8861A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] .gitlab-ci.yml: use the Docker image from
+ gitlab registry
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -61,55 +59,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Luca Ceresoli <luca@lucaceresoli.net>, Leon Anavi <leon.anavi@konsulko.com>,
- Jagan Teki <jagan@amarulasolutions.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Giulio,
+commit: https://git.buildroot.net/buildroot/commit/?id=b3b4e270d15cf846cfef80421932b5f5892f2374
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 22 Oct 2021 00:00:15 +0200
-Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+From [1]:
+"In November 2020, Docker introduced rate limits on pull requests from
+Docker Hub [2]. If your GitLab CI/CD configuration uses an image from
+Docker Hub, each time a job runs, it may count as a pull request."
 
-> Giulio Benetti (8):
->   configs/olimex_a10_olinuxino: bump to Linux kernel 5.14.13 and u-boot
->     2021.10
->   configs/olimex_a10_olinuxino: use FPU NEON strategy
->   configs/olimex_a13_olinuxino: bump to Linux kernel 5.14.13 and u-boot
->     2021.10
->   configs/olimex_a13_olinuxino: use FPU NEON strategy
->   configs/olimex_a20_olinuxino_lime2: bump to Linux kernel 5.14.13 and
->     u-boot 2021.10
->   configs/olimex_a20_olinuxino_lime: bump to Linux kernel 5.14.13 and
->     u-boot 2021.10
->   configs/olimex_a20_olinuxino_micro: bump to Linux kernel 5.14.13 and
->     u-boot 2021.10
->   configs/olimex_a33_olinuxino: bump to Linux kernel 5.14.13 and u-boot
->     2021.10
+Since then, some jobs in our gitlab-ci fail when this rate limits is
+reached [3].
 
-I have applied all the patches bumping U-Boot/Linux, I hope that you
-were able to test them on real hardware. Make sure to monitor the next
-Gitlab CI build results to see if there's any new build failure.
+To avoid this rate limit, move our Docker image from dockerhub to the
+registry provided by gitlab. Keeping the image from dockerhub would be
+possible by using dependency proxy [4] but the gitlab registry is good
+enough.
 
-However, for the two patches enabling NEON as the FPU, I marked them as
-rejected. Indeed, using NEON as the FPU is not always a good idea, as
-it explained in the Config.in.help text:
+Tested on gitlab:
+https://gitlab.com/kubu93/buildroot/-/jobs/1694863584
 
-          This option allows to use the NEON SIMD unit, as available
-          in some ARMv7 processors, as a floating-point unit. It
-          should however be noted that using NEON for floating point
-          operations doesn't provide a complete compatibility with the
-          IEEE 754.
+[1] https://docs.gitlab.com/ee/user/packages/container_registry/index.html
+[2] https://docs.docker.com/docker-hub/download-rate-limit/
+[3] https://gitlab.com/buildroot.org/buildroot/-/jobs/1687590417
+[4] https://docs.gitlab.com/ee/user/packages/dependency_proxy
 
-Best regards,
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .gitlab-ci.yml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas Petazzoni
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index 150b8eac1a..dc45744a81 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -1,7 +1,7 @@
+ # Configuration for Gitlab-CI.
+ # Builds appear on https://gitlab.com/buildroot.org/buildroot/pipelines
+ 
+-image: buildroot/base:20210922.2200
++image: $CI_REGISTRY/buildroot.org/buildroot/base:20210922.2200
+ 
+ stages:
+   - generate-gitlab-ci
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
