@@ -2,93 +2,51 @@ Return-Path: <SRS0=F6DF=PN=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A88B6C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 25 Oct 2021 18:56:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B163C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 25 Oct 2021 18:56:30 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 533D060F6F
-	for <buildroot@archiver.kernel.org>; Mon, 25 Oct 2021 18:56:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 533D060F6F
+	by mail.kernel.org (Postfix) with ESMTPS id F297E60FDC
+	for <buildroot@archiver.kernel.org>; Mon, 25 Oct 2021 18:56:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org F297E60FDC
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2A32580F0E;
-	Mon, 25 Oct 2021 18:56:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C715280F02;
+	Mon, 25 Oct 2021 18:56:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id O6JQxl8vSepp; Mon, 25 Oct 2021 18:56:17 +0000 (UTC)
+	with ESMTP id PZrkumzTo4T5; Mon, 25 Oct 2021 18:56:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 96F0A80F02;
-	Mon, 25 Oct 2021 18:56:16 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E39281BF3F7
- for <buildroot@lists.busybox.net>; Mon, 25 Oct 2021 18:56:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1837880F24;
+	Mon, 25 Oct 2021 18:56:28 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id BA1B11BF3F7
+ for <buildroot@lists.busybox.net>; Mon, 25 Oct 2021 18:56:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E04004046C
- for <buildroot@lists.busybox.net>; Mon, 25 Oct 2021 18:56:14 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B686B80EFE
+ for <buildroot@lists.busybox.net>; Mon, 25 Oct 2021 18:56:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4eViufHx8k6F for <buildroot@lists.busybox.net>;
- Mon, 25 Oct 2021 18:56:14 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com
- [IPv6:2a00:1450:4864:20::52b])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 31248403DF
- for <buildroot@buildroot.org>; Mon, 25 Oct 2021 18:56:14 +0000 (UTC)
-Received: by mail-ed1-x52b.google.com with SMTP id l13so3197851edi.8
- for <buildroot@buildroot.org>; Mon, 25 Oct 2021 11:56:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=v+pcqDA6RqmfkfVP4fGPpqkDS1bWH3B6WMUKXAX2D0A=;
- b=CV8cL2ia9Pyg7LFJkhJ2NOi4w5qDpQw9ZgOgfXDRVhL3AVrb8ct3u7RGWfdxRg0a8u
- /xivD9aQUIMppGDCSraE46Y89s/mG65K8Gh7BcHy6CQUt0wxOrqgqZLPVlyKlnaPP5N6
- /oQODZfZ+l5EWLeObCg86fztewZiNG3v3vmYW9wOd6JkQHW/Khgj0mXtxhNiNtwSMESe
- kHewtieTaUyG59/Yti2MnS/0Y/FpdTfeKyBZpp/YFn9TQB9N0dqdY0w5dYZGYtnMQfwY
- xo7EGcjiTLM7QCglvopOOQCCLBaVtG1Vaqm12+DSJzeRCM8u8LHwqYAad1NLizI0gvV5
- fcCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=v+pcqDA6RqmfkfVP4fGPpqkDS1bWH3B6WMUKXAX2D0A=;
- b=lXslv/EOYk1iHZ31uN+u/wRQHooG40zLuoEskQd7KdWtJqfHDoSnUicprRKnS7aKIT
- Y5YTCX3tltuwyLOUV8UK3+BzztdI/u0p2UbXiaBt0UNDgkxEszdIj9ZDUPWtVUeZ9TGH
- I5hoLL98/x7gfFfsuu4dBrRoUUoueETRPodL7h0BlcTLnnEC/4t4KhYxDCfwspEJDgqq
- 3eAjnvHvbZfanxkjUa5FJ/jLMHMaY5Z/VHl28AULh8fFqbQNHQhaldyLcFUl0lJhSrDc
- zIFewSJQ17BzxKK+A9TEM18YYx9NmiZMDUflp1S0reU0gNRNqDPtz20VJgVXVmC5Gr4G
- 7wmA==
-X-Gm-Message-State: AOAM533J6ymu0y1key0YtDXlMdf/lj1s2K2iO5fQ1kGJ2yUPpM7vuI1s
- otMRIaqeB/dm0lhXUCQocOGhETpIfyLJjuAU
-X-Google-Smtp-Source: ABdhPJzLpnfXXskvx0ihVStkQdjgkVDIWLvKjZiOB8lLYO9VqmGVANUmVbjn0nhoi5T61wUhY6qr7Q==
-X-Received: by 2002:aa7:de83:: with SMTP id j3mr29408076edv.312.1635188170202; 
- Mon, 25 Oct 2021 11:56:10 -0700 (PDT)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
- (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id j15sm9668105edl.34.2021.10.25.11.56.09
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 25 Oct 2021 11:56:09 -0700 (PDT)
-Message-ID: <3690e2c7-27b0-7a45-1cea-e17d062d1fdb@mind.be>
-Date: Mon, 25 Oct 2021 20:56:09 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Content-Language: en-GB
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- buildroot@buildroot.org
-References: <20211014204607.2433581-1-giulio.benetti@benettiengineering.com>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <20211014204607.2433581-1-giulio.benetti@benettiengineering.com>
-Subject: Re: [Buildroot] [PATCH] DEVELOPERS: add Giulio Benetti to
- amarula_rk3288_defconfig and asus_rk3288_defconfig
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id YLv0ernnjUhb for <buildroot@lists.busybox.net>;
+ Mon, 25 Oct 2021 18:56:26 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0BD7F80F25
+ for <buildroot@buildroot.org>; Mon, 25 Oct 2021 18:56:26 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4052)
+ id 80E0F887AA; Mon, 25 Oct 2021 18:53:05 +0000 (UTC)
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+To: buildroot@buildroot.org
+Date: Mon, 25 Oct 2021 20:53:45 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 50da37281fa02d64bb1e35da1186770756960a1d
+X-Git-Newrev: 0692fb12f8c0bcfa16b0b71cb3d7827d05f48ba4
+X-Patchwork-Hint: ignore
+Message-Id: <20211025185305.80E0F887AA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-urwid: fix typo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,41 +58,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+commit: https://git.buildroot.net/buildroot/commit/?id=0692fb12f8c0bcfa16b0b71cb3d7827d05f48ba4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Fix the following build failure raised since commit
+1c10095945b2b9a0168e2a8f98a5c6a396b2c0cd:
 
-On 14/10/2021 22:46, Giulio Benetti wrote:
-> Add Giulio Benetti to amarula_rk3288_defconfig and asus_rk3288_defconfig.
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+WARNING: unmet direct dependencies detected for BR2_PACKAGE_PYTHON_URWID
+  Depends on [n]: (BR2_PACKAGE_PYTHON [=n] || BR2_PACKAGE_PYTHON3 [=y]) && BR2_PACAKGE_PYTHON3
+  Selected by [y]:
+  - BR2_PACKAGE_PYTHON_CONFIGSHELL_FB [=y] && (BR2_PACKAGE_PYTHON [=n] || BR2_PACKAGE_PYTHON3 [=y]) && BR2_PACKAGE_PYTHON3 [=y]
 
-  Applied to master, thanks.
+Fixes:
+ - No autobuilder failures
 
-  Regards,
-  Arnout
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/python-urwid/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> ---
->   DEVELOPERS | 2 ++
->   1 file changed, 2 insertions(+)
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 9950dd5d8c..4a0917d208 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -1054,6 +1054,8 @@ F:	package/webp/
->   F:	package/xapian/
->   
->   N:	Giulio Benetti <giulio.benetti@benettiengineering.com>
-> +F:	configs/amarula_vyasa_rk3288_defconfig
-> +F:	configs/asus_tinker_rk3288_defconfig
->   F:	package/at/
->   F:	package/binutils/
->   F:	package/erlang-jiffy/
-> 
+diff --git a/package/python-urwid/Config.in b/package/python-urwid/Config.in
+index 8fd2cac694..c141e8c0bd 100644
+--- a/package/python-urwid/Config.in
++++ b/package/python-urwid/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_PYTHON_URWID
+ 	bool "python-urwid"
+-	depends on BR2_PACAKGE_PYTHON3
++	depends on BR2_PACKAGE_PYTHON3
+ 	help
+ 	  Urwid is a console user interface library for Python
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
