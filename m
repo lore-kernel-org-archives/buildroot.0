@@ -2,85 +2,84 @@ Return-Path: <SRS0=F6DF=PN=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B57EC433EF
-	for <buildroot@archiver.kernel.org>; Mon, 25 Oct 2021 09:17:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 46498C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 25 Oct 2021 09:23:44 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id F313760E75
-	for <buildroot@archiver.kernel.org>; Mon, 25 Oct 2021 09:17:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org F313760E75
+	by mail.kernel.org (Postfix) with ESMTPS id D401160F92
+	for <buildroot@archiver.kernel.org>; Mon, 25 Oct 2021 09:23:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D401160F92
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B12A3403A9;
-	Mon, 25 Oct 2021 09:17:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9236740146;
+	Mon, 25 Oct 2021 09:23:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hMSIh3YWVSXd; Mon, 25 Oct 2021 09:17:05 +0000 (UTC)
+	with ESMTP id SfetCLLgV5SY; Mon, 25 Oct 2021 09:23:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EEC8A40271;
-	Mon, 25 Oct 2021 09:17:04 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D04101BF38A
- for <buildroot@lists.busybox.net>; Mon, 25 Oct 2021 09:17:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 12BA440132;
+	Mon, 25 Oct 2021 09:23:42 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 2AD391BF38A
+ for <buildroot@lists.busybox.net>; Mon, 25 Oct 2021 09:23:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CC34640271
- for <buildroot@lists.busybox.net>; Mon, 25 Oct 2021 09:17:03 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 195206083B
+ for <buildroot@lists.busybox.net>; Mon, 25 Oct 2021 09:23:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id spGv76_hAXel for <buildroot@lists.busybox.net>;
- Mon, 25 Oct 2021 09:17:02 +0000 (UTC)
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RkPc55NbTwv7 for <buildroot@lists.busybox.net>;
+ Mon, 25 Oct 2021 09:23:39 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
- [IPv6:2a00:1450:4864:20::335])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6DD73401FF
- for <buildroot@buildroot.org>; Mon, 25 Oct 2021 09:17:02 +0000 (UTC)
-Received: by mail-wm1-x335.google.com with SMTP id
- o4-20020a1c7504000000b0032cab7473caso3225640wmc.1
- for <buildroot@buildroot.org>; Mon, 25 Oct 2021 02:17:02 -0700 (PDT)
+Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com
+ [IPv6:2a00:1450:4864:20::542])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 79B3E60737
+ for <buildroot@buildroot.org>; Mon, 25 Oct 2021 09:23:39 +0000 (UTC)
+Received: by mail-ed1-x542.google.com with SMTP id n1so13673177edd.0
+ for <buildroot@buildroot.org>; Mon, 25 Oct 2021 02:23:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=n59ZpNoVaw5gHa3nzmNF0Y2C5jnhq7JfLb6uU6KB7IU=;
- b=iY09VVNl2JcQZlMduWPEOslqXzmdbVTQzBSWNjpOLlG5dTFs0oYzhmvxnpUCq8dVrP
- Xa7CgiZn9PtO06M0p+gN0UYwkmyzuSIY1BIMY0hKgZixMBbUn0I48AGsAdDAY78CM0/T
- tCIS5q17lp8hBzxpfl23TVT7nY2OnvmXe9C4uOBtrVVSxJ5nsTo3Hs4PrNVV1/+XlxLA
- 31EDtyLwP8gzHlG3RFLDXp3rxa0yfYNQmzpFBjriz5PbDKHjklJNT014PR4UfHyJFVt6
- AazdzUp4aS5xr5slKzr1AhoCfsmYUHMk47qBkJEPP81XFrPyyvf/ZA0nIBr5qnmYfGa3
- 2rdQ==
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=NXTplUkmjwGBQ4zKrC4ztfgEDv3VeSP6EOEPsuG+DMM=;
+ b=fTElW+w/SpAmaUhEtXiHIMh1qJhB4IZRi+znKD76QwQxIpBLYwzBrepVwlFQ1ZL/5s
+ dUsk/LnfJ+45hszoRpL2nHk2AnUTiB8qG1iVJFJlfBUcB9tperckCnIO/aZgznqMEbx0
+ usBZ2PX3x8rKUA8jWoxL3S8rE6IQxLQ84CmKMTIkTdNM6YvvYyGAWrnKvzd+GVeJaLYB
+ LpZPE/i2nogwy1R6VFTKrVkSLSf0MXzuErowt4eL36fe22JPppGO5/MuqYRG4nnATQew
+ vEnEwRBHhZQezd//PUC1xWPDlaBH0an6aQC06eN8GCZgDtqaNjougQUYys+ZcWQEn+VG
+ Wqjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=n59ZpNoVaw5gHa3nzmNF0Y2C5jnhq7JfLb6uU6KB7IU=;
- b=XaDwaoruT5a2fFlWf0y8NdCJXS2CBXHFFB3YBcaIFvep6prgIF+IbxNTH5XH9Tw0lc
- oXgcIJuGvrjscixHLG7kN9dMd6kcKjUXrA8Q2nTY797VckLdSLtGIy23P+lPfNOXQXrC
- trAUUn3RB56i7w//6eeff6V8+Crs3Bw7VuF6nNBpvdmO4Bf2gEfsgcSed8Lm+BhDvTpM
- oOIr8ZHMCOE7IQPzuT4VaEJ503D/t/5SrQJ+3X0ecMDmFxGugQRZzIpXAleIlG6qivkD
- +yF+STWDcdZO+NUKFhd5q4vnWz2+1CbXDT4szgwAiCAHxKT0Po6gpF/29uHf1dGL8geG
- wQaw==
-X-Gm-Message-State: AOAM5314KNPe5+PQ2vF2XZBfq31llnrZMOBRek72r08qpIvLqOoKGBOZ
- nw4Ivy5PmmeyjCwz2x5+sZWSSWZXXwk=
-X-Google-Smtp-Source: ABdhPJz24MwUcZ9d1tY0Mm5OFH4oJKTm5K7hBJU2VpBCM119ONBQIjzOUOwEJosZmDW8sj4bAegxmg==
-X-Received: by 2002:a7b:c413:: with SMTP id k19mr12343950wmi.142.1635153420184; 
- Mon, 25 Oct 2021 02:17:00 -0700 (PDT)
-Received: from shrek.dav.id (lmontsouris-659-1-42-116.w92-154.abo.wanadoo.fr.
- [92.154.77.116])
- by smtp.gmail.com with ESMTPSA id 12sm6569985wmk.34.2021.10.25.02.16.59
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=NXTplUkmjwGBQ4zKrC4ztfgEDv3VeSP6EOEPsuG+DMM=;
+ b=wQAJiRDDxkgEM/6UmUAZXgNvgSLjt+FmTUW5cqMm6aMIgrtdkpko6cnwzwv7foTypd
+ 8lzIMK3vTLFFudxuWwLj8Fzx30fgI/sEq6JPvxO4dg2Ohshv1Y/FBuMrre9w+q0I9+/I
+ wWKuPsougRHWFgExDuo9TavBYAtnp6Q4uhI3qsrLLxLjy5uQ0j3cm13ODpqH8O1J0HrN
+ kT16TtWPQbY+sHcDyN4rHOU6esODaljQyCm1XCJNGubQwlACaYSSgsrIKXZzvYRsFQH7
+ CmwQQmvvsKPtf9Q+aZmEH2RBnpdrPPK6EkLk0CSPcBEXB8sKmVTC3houGeljZT4Ksy7n
+ tPlA==
+X-Gm-Message-State: AOAM5308A6JhAsTIRcYv9bQIA77eW6as1zx0UxKbUbWQ+1vcPw9CWvyI
+ Oyv7xwyTf8iTVbSyXVzLlVDei952Up1UAWbKVkO4Sn8=
+X-Google-Smtp-Source: ABdhPJwe3gXe/sn2Zyxpv7i8rkDIpcnYIxtDYb0HK+nCn6XJsOHCE1RE9Lo8gFygytW3emo95utgXA==
+X-Received: by 2002:a05:6402:51c9:: with SMTP id
+ r9mr24938212edd.48.1635153817267; 
+ Mon, 25 Oct 2021 02:23:37 -0700 (PDT)
+Received: from a64box.vcn09230954.oraclevcn.com ([193.123.60.7])
+ by smtp.gmail.com with ESMTPSA id e13sm7061320eje.95.2021.10.25.02.23.36
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 25 Oct 2021 02:16:59 -0700 (PDT)
-From: Johan Oudinet <johan.oudinet@gmail.com>
+ Mon, 25 Oct 2021 02:23:36 -0700 (PDT)
+From: Urja Rannikko <urjaman@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 25 Oct 2021 11:16:38 +0200
-Message-Id: <20211025091638.4769-1-johan.oudinet@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211018121900.455863-1-johan.oudinet@gmail.com>
-References: <20211018121900.455863-1-johan.oudinet@gmail.com>
+Date: Mon, 25 Oct 2021 12:23:31 +0300
+Message-Id: <20211025092331.1990927-1-urjaman@gmail.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2] package/vis-network: new package
+Subject: [Buildroot] [PATCH] syslinux: define OBJCOPY and AS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,103 +91,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Johan Oudinet <johan.oudinet@gmail.com>
+Cc: Urja Rannikko <urjaman@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
----
-Changes v1 -> v2:
-  - install CSS file
----
- DEVELOPERS                           |  1 +
- package/Config.in                    |  1 +
- package/vis-network/Config.in        |  7 +++++++
- package/vis-network/vis-network.hash |  4 ++++
- package/vis-network/vis-network.mk   | 21 +++++++++++++++++++++
- 5 files changed, 34 insertions(+)
- create mode 100644 package/vis-network/Config.in
- create mode 100644 package/vis-network/vis-network.hash
- create mode 100644 package/vis-network/vis-network.mk
+This fixes build on an ARM64 host (and i assume also
+other non-x86).
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index f864f7ef47..1d1b6757e3 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1390,6 +1390,7 @@ F:	package/erlang-p1-yconf/
- F:	package/erlang-p1-zlib/
- F:	package/nginx-dav-ext/
- F:	package/vuejs/
-+F:	package/vis-network/
- 
- N:	John Stile <johns@msli.com>
- F:	package/dhcpcd/
-diff --git a/package/Config.in b/package/Config.in
-index d40eb9dabc..6e4807aded 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1650,6 +1650,7 @@ endif
- 	source "package/jszip/Config.in"
- 	source "package/openlayers/Config.in"
- 	source "package/popperjs/Config.in"
-+	source "package/vis-network/Config.in"
- 	source "package/vuejs/Config.in"
- if BR2_PACKAGE_VUEJS
- comment "External Vue.js plugins"
-diff --git a/package/vis-network/Config.in b/package/vis-network/Config.in
-new file mode 100644
-index 0000000000..39e8ac54c5
---- /dev/null
-+++ b/package/vis-network/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_VIS_NETWORK
-+	bool "vis-network"
-+	help
-+	  Display dynamic, automatically organised, customizable network
-+	  views. Network uses HTML canvas for rendering.
-+
-+	  http://visjs.github.io/vis-network/
-diff --git a/package/vis-network/vis-network.hash b/package/vis-network/vis-network.hash
-new file mode 100644
-index 0000000000..56f141f5f7
---- /dev/null
-+++ b/package/vis-network/vis-network.hash
-@@ -0,0 +1,4 @@
-+# Locally computed
-+sha256  a9f7325cbe28147318476c63f09c1d5c894d2239bfa4b4dd2dfb3dbebb0705d3  vis-network-9.1.0.tgz
-+sha256  1509904280a272780fd69c04b858f512cf216f8e3464a0dd98d8f34416feced9  LICENSE-APACHE-2.0
-+sha256  1f65085e54c036645082257618db2c7b787e68c3b02485e214ecd09e0834ee8f  LICENSE-MIT
-diff --git a/package/vis-network/vis-network.mk b/package/vis-network/vis-network.mk
-new file mode 100644
-index 0000000000..349ba1bf26
---- /dev/null
-+++ b/package/vis-network/vis-network.mk
-@@ -0,0 +1,21 @@
-+################################################################################
-+#
-+# vis-network
-+#
-+################################################################################
-+
-+VIS_NETWORK_VERSION = 9.1.0
-+VIS_NETWORK_SOURCE = vis-network-$(VIS_NETWORK_VERSION).tgz
-+VIS_NETWORK_SITE = https://registry.npmjs.org/vis-network/-
-+VIS_NETWORK_LICENSE = Apache-2.0, MIT
-+VIS_NETWORK_LICENSE_FILES = LICENSE-APACHE-2.0 LICENSE-MIT
-+
-+# Install .min.js and .min.css as .js and .css, respectively.
-+define VIS_NETWORK_INSTALL_TARGET_CMDS
-+	$(INSTALL) -m 644 -D $(@D)/dist/vis-network.min.js \
-+		$(TARGET_DIR)/var/www/vis-network.js
-+	$(INSTALL) -m 644 -D $(@D)/dist/dist/vis-network.min.css \
-+		$(TARGET_DIR)/var/www/vis-network.css
-+endef
-+
-+$(eval $(generic-package))
+Signed-off-by: Urja Rannikko <urjaman@gmail.com>
+---
+ boot/syslinux/syslinux.mk | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/boot/syslinux/syslinux.mk b/boot/syslinux/syslinux.mk
+index 0643f85a99..2df415fcfd 100644
+--- a/boot/syslinux/syslinux.mk
++++ b/boot/syslinux/syslinux.mk
+@@ -60,6 +60,8 @@ define SYSLINUX_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE1) \
+ 		CC="$(TARGET_CC)" \
+ 		LD="$(TARGET_LD)" \
++		OBJCOPY="$(TARGET_OBJCOPY)" \
++		AS="$(TARGET_AS)" \
+ 		NASM="$(HOST_DIR)/bin/nasm" \
+ 		CC_FOR_BUILD="$(HOSTCC)" \
+ 		CFLAGS_FOR_BUILD="$(HOST_CFLAGS)" \
 -- 
-2.25.1
+2.33.1
 
 _______________________________________________
 buildroot mailing list
