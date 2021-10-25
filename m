@@ -2,86 +2,85 @@ Return-Path: <SRS0=F6DF=PN=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1BD76C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 25 Oct 2021 19:28:29 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0441EC433F5
+	for <buildroot@archiver.kernel.org>; Mon, 25 Oct 2021 19:28:52 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id ABA0061154
-	for <buildroot@archiver.kernel.org>; Mon, 25 Oct 2021 19:28:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org ABA0061154
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
+	by mail.kernel.org (Postfix) with ESMTPS id BE81E61165
+	for <buildroot@archiver.kernel.org>; Mon, 25 Oct 2021 19:28:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org BE81E61165
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmx.net
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 786B040288;
-	Mon, 25 Oct 2021 19:28:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8685B6089A;
+	Mon, 25 Oct 2021 19:28:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QUKZbr4vWclo; Mon, 25 Oct 2021 19:28:27 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id XSZURcGDZG1E; Mon, 25 Oct 2021 19:28:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A4CEA403C6;
-	Mon, 25 Oct 2021 19:28:26 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4A9B21BF34B
- for <buildroot@lists.busybox.net>; Mon, 25 Oct 2021 19:28:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 099E460895;
+	Mon, 25 Oct 2021 19:28:50 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 7F8BA1BF34B
+ for <buildroot@lists.busybox.net>; Mon, 25 Oct 2021 19:28:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 35765401F7
- for <buildroot@lists.busybox.net>; Mon, 25 Oct 2021 19:28:25 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6DEFA403D8
+ for <buildroot@lists.busybox.net>; Mon, 25 Oct 2021 19:28:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5ye0Dq9g-tAx for <buildroot@lists.busybox.net>;
- Mon, 25 Oct 2021 19:28:24 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com
- [IPv6:2a00:1450:4864:20::52f])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 59ED9401E4
- for <buildroot@buildroot.org>; Mon, 25 Oct 2021 19:28:24 +0000 (UTC)
-Received: by mail-ed1-x52f.google.com with SMTP id r4so3520935edi.5
- for <buildroot@buildroot.org>; Mon, 25 Oct 2021 12:28:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=kmp59nNsYmAjAwjZCtVPk5innJ1DDvJtyd6sQWsEMDo=;
- b=Vkgu1LTljJiQsVF6BcijmKb39QmUcx2EG/nE9jRj/OLIFbrrt8dXMeVYC83dMhdkAQ
- lqIcfccyogPmKCko0N08kL9i3P93rnIfzHDmiy9wkj7ywZatMVmQxpWnGb3DQ1YE4uz6
- xgEHkB8So6CWIXKpReDkbEoLIDQ4YyMfixSZ/bhPeFD0n/VLGu3ucZDBqMKPwO3vM/Qi
- stkazKB8c7uHrxJx1APH18JoU7hPoaOyGWUyyPj8LVnDcgKAFzn1RY9siNvXOwe8gFlW
- dXEHGuHPH9ePmMIulrylxCAeixzWdLdKqkZO8C9OtdgG0OPWAB3PANAzk+83Is7h6lu7
- wOiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=kmp59nNsYmAjAwjZCtVPk5innJ1DDvJtyd6sQWsEMDo=;
- b=KAqJAh1pA1r47xZoKJXIFDVSRoXQNPP/+6Q4amkVaeiXFm6tvwQlVg6x75qin+x4Ha
- JsHSdflZ03vA9oxVjJmcFkrpH/mWMmU81nu3MTNbx0JZupRchn85bg/xyZERWjcmuhKj
- xdGRAfSFZjVwAQHxM9uezZ/cvwaMPQHEeQ9FH+tZ0k1gNR1FmB79hH4mfqS5ZuFro8Lm
- 9MXMuNIMpQVDsVTmS7tXKfw+Vn9o+qKz2/Ug6wOsyEweR73yHXveToxxHJ4jpttx1YpO
- 5PfeCY0VExiRdKqjyy8gfs98Hxp9C9dEk6bfsi473I1BkYPcLVT285ErUi79COM0Xs5d
- WMtA==
-X-Gm-Message-State: AOAM5319pSCLg1Jc6SDlc/fFxPdRogR3g2VAtgneUxHhSR7x99JH0bry
- WXKJ/gSaags4+j3OsGXPBfrYMSW7ULVbPVI2
-X-Google-Smtp-Source: ABdhPJxVYGGUxy6SCdJjycFzj5zLOlG5d0lHEkI+P5gy8yX64h7Hxb8ehsStWAWdyYHbHwNfbaW9Lw==
-X-Received: by 2002:a05:6402:510c:: with SMTP id
- m12mr29441944edd.33.1635190101910; 
- Mon, 25 Oct 2021 12:28:21 -0700 (PDT)
-Received: from localhost.localdomain
- (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id gn30sm1409737ejc.105.2021.10.25.12.28.21
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 25 Oct 2021 12:28:21 -0700 (PDT)
-From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
-To: buildroot@buildroot.org
-Date: Mon, 25 Oct 2021 21:28:13 +0200
-Message-Id: <20211025192813.159336-1-arnout@mind.be>
-X-Mailer: git-send-email 2.31.1
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (1024-bit key) header.d=gmx.net
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Kw_7X62gXQkZ for <buildroot@lists.busybox.net>;
+ Mon, 25 Oct 2021 19:28:47 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id AC44F403C6
+ for <buildroot@buildroot.org>; Mon, 25 Oct 2021 19:28:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+ s=badeba3b8450; t=1635190123;
+ bh=wxHb1SbpMzD20nDy6r35G2/XV04oU9NeoUuCGg83FDM=;
+ h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
+ b=EO2HjLCWsRq4q5fcn13+6ztcnZUAZ1WQ/RD6/AlzbZrDmB/zi/TlBPolukev64j7p
+ mfMYTxr2vNS4iZbsYDVsSLbxgDp3PcDw54hSGmXrl434tJPKtR0Io7+b/bnrOnoQzV
+ qScLW0s9KPBH6wflWNRfkYZ2K/bvKiIilTUi4v7I=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from localhost ([62.216.209.232]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MnakX-1n4HRm2Nkr-00jXz3; Mon, 25
+ Oct 2021 21:28:43 +0200
+Date: Mon, 25 Oct 2021 21:28:42 +0200
+From: Peter Seiderer <ps.report@gmx.net>
+To: James Hilliard <james.hilliard1@gmail.com>
+Message-ID: <20211025212842.6a0d2f97@gmx.net>
+In-Reply-To: <20211025082809.3967881-1-james.hilliard1@gmail.com>
+References: <20211025082809.3967881-1-james.hilliard1@gmail.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] Makefile: include *.patch in check-package
+X-Provags-ID: V03:K1:rbajTnftf0TnFAzHVQ1OB2lMy+ukeeo3bNPA9hM2/PexdMjYpBI
+ CAkENbxmC2LHG/usCpG304T97+LQXDD2Ob6FB778i6u2B9J7S5K5tlFZySMQKwFCn7y/Q8I
+ BqXSUh9p7VLghHDL5uGWk3G2nYSphmY5S2va/DuIYQ6hFwEqD966K4Zz1NTx4sMdCuF2Ci5
+ P16C3qrFI3nLlYYwHzRBQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:25y1G6FK0TQ=:/Zw7KONtIBCV9qorYn/ikt
+ GrcS373LTzwZVHUU/J4x1LY2ua2r6RUWXrRCOdTkOX+ILdeiTQht5glNFNwb+htBB0/iGFcaQ
+ CNjPV4AsGV7gEpfFw/A4wWeBwkrwwUFBOBpl51w5KrQnYWNNsWu5tVHm/2MNK6GkazCreSPIL
+ fykvN9fchpcjgzWUMFU7/A6k9ec5NmtowSMBtL5q7/yAX12hNg8oA4H2p2CY4ZVwVXEridLN6
+ V+WbrFv/N5SqVW7EhIVe7H7si0dVOUxSV+RtY5qLWHciMlcgoSUefWlJcahrjYKKYu6PA4oX0
+ H39/XfHSfX0G2bqNX5UUK2pxlDU14ntlR9SbsVqaoe/5fwPhiRWJJSaOv+DfWamVjTWMqyRFu
+ A3VinlaIqIZ5fDk6fuCTc7CSCPKGV5tM7/rj7zXc1o4bYTFaH65AaioI0wcqPjJ6GZTKNR6Qw
+ oeSjYLCfdfUdfZaPspeymw9ewQziBbat+wONIzB5jwmALfJF5kr+Y9fF1tSY8aYHs1hUTj1op
+ 1ZpcitqKY9G0Q2rINBfHrJF0J/viUB3QDDGcdVj8I+6WKDFt3ggORv9+udXkszV7kSfkH/ZVy
+ lhBhOU8gW7nU8YlihpF2zNdO9RLEBvc0VM4dE0sbY/sKfdTbVXPhFkQrxXnO3ljmOW+xT7wuZ
+ eZs0ifjsqWYw0yPYKh0a1v7uDlNdSt4jISFDoZVOO/Z7xiW3f1UPR/5Sk1W/ewY/cNerB58Cn
+ 0khm+rRctuY70BWa7jN87CDpq9+LdvxSUkAdZ+bHguCj92vktXWnAXVkyhypNxcaGNHpNruPi
+ jP/x+BUnM6KP98Q8HBEjVVEeHIyn5X0UuyDmPjqDkOZzpmNMnEXa+LKlx0QtvKFF8edvbwhln
+ 78iA1Z1d4JQSwYYIdltF/We9LVRKwLjO3mfcf3lT5BpaovxUk+XT8EheOXZEkUOyDCGDK2i21
+ PFW16DJLfJgZS62RRONgc5ckdY/f4yyRyNGbd1WanlIBCAeRQNEIAm2OIC5VHWZ1VF1NTfQ8Y
+ 9csQgLLMsTcrNzNVmvtpUnRurectnXkdSx8B1WcDFx2XxR9PNIaEYZH5nTxqMyTMWg8hroBKf
+ B7lYC8vElm3/4w=
+Subject: Re: [Buildroot] [PATCH 1/1] package/gstreamer1/gst1-plugins-ugly:
+ remove examples option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,41 +92,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Since a long time, we have a check-package check for patches. Make sure
-that this check runs in 'make check-package', by including *.patch in
-the find expression.
+Hello James,
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
-DO NOT APPLY!
+On Mon, 25 Oct 2021 02:28:09 -0600, James Hilliard <james.hilliard1@gmail.com> wrote:
 
-At the moment, this causes about 100 check-package failures due to PATCH
-1/1 and missing SoBs. We first need to fix all those, but I don't have
-the time/energy for it at the moment.
----
- Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> Fixes:
+> output/build/gst1-plugins-ugly-1.18.5/meson.build:1:0: ERROR: Unknown options: "examples"
 
-diff --git a/Makefile b/Makefile
-index c960b53a6d..c2f9f19b0f 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1224,7 +1224,7 @@ check-flake8:
- 	| xargs -- python3 -m flake8 --statistics
- 
- check-package:
--	find $(TOPDIR) -type f \( -name '*.mk' -o -name '*.hash' -o -name 'Config.*' \) \
-+	find $(TOPDIR) -type f \( -name '*.mk' -o -name '*.hash' -o -name 'Config.*' -o -name '*.patch' \) \
- 		-exec ./utils/check-package {} +
- 
- include docs/manual/manual.mk
--- 
-2.31.1
+Same comment as for the package/gstreamer1/gst1-plugins-bad patch...
+
+Otherwise (and thanks for fixing):
+
+Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+
+Regars,
+Peter
+
+>
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk | 1 -
+>  1 file changed, 1 deletion(-)
+>
+> diff --git a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
+> index b3dc765d07..a25110264e 100644
+> --- a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
+> +++ b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
+> @@ -14,7 +14,6 @@ GST1_PLUGINS_UGLY_LICENSE = LGPL-2.1+
+>  GST1_PLUGINS_UGLY_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
+>
+>  GST1_PLUGINS_UGLY_CONF_OPTS += \
+> -	-Dexamples=disabled \
+>  	-Dtests=disabled \
+>  	-Ddoc=disabled
+>
 
 _______________________________________________
 buildroot mailing list
