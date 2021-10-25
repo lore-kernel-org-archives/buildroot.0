@@ -2,52 +2,52 @@ Return-Path: <SRS0=F6DF=PN=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 27043C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 25 Oct 2021 19:16:58 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D35FC433FE
+	for <buildroot@archiver.kernel.org>; Mon, 25 Oct 2021 19:17:10 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id E1F496103C
-	for <buildroot@archiver.kernel.org>; Mon, 25 Oct 2021 19:16:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E1F496103C
+	by mail.kernel.org (Postfix) with ESMTPS id E675C610C7
+	for <buildroot@archiver.kernel.org>; Mon, 25 Oct 2021 19:17:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E675C610C7
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AF4B480F2C;
-	Mon, 25 Oct 2021 19:16:57 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9FADF40288;
+	Mon, 25 Oct 2021 19:17:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id s_hA5ERmbVfV; Mon, 25 Oct 2021 19:16:56 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id iwCSll_vDOSM; Mon, 25 Oct 2021 19:17:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 06BDE80D6E;
-	Mon, 25 Oct 2021 19:16:56 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 593921BF97C
+	by smtp2.osuosl.org (Postfix) with ESMTP id A5B17403C6;
+	Mon, 25 Oct 2021 19:17:07 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 625A21BF983
  for <buildroot@lists.busybox.net>; Mon, 25 Oct 2021 19:16:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 484F180D6E
+ by smtp3.osuosl.org (Postfix) with ESMTP id 519A060892
  for <buildroot@lists.busybox.net>; Mon, 25 Oct 2021 19:16:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VnVO4CCyTUPQ for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Xv6xJl1wpDol for <buildroot@lists.busybox.net>;
  Mon, 25 Oct 2021 19:16:42 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 920F480D3A
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8DE6060774
  for <buildroot@buildroot.org>; Mon, 25 Oct 2021 19:16:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 0BF68887EA; Mon, 25 Oct 2021 19:13:22 +0000 (UTC)
+ id 16C54887EB; Mon, 25 Oct 2021 19:13:22 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Mon, 25 Oct 2021 21:09:25 +0200
+Date: Mon, 25 Oct 2021 21:11:46 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 59bc401fa4af5664cc84e172c39467030710051f
-X-Git-Newrev: 8db775229b033f25661433fbc7c59d66ec2798b7
+X-Git-Oldrev: 8db775229b033f25661433fbc7c59d66ec2798b7
+X-Git-Newrev: a1f7597b4dcd60e8373040739d7abbc0f45dd5f5
 X-Patchwork-Hint: ignore
-Message-Id: <20211025191322.0BF68887EA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-txtorcon: bump to version
- 21.1.0
+Message-Id: <20211025191322.16C54887EB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-watchdog: bump to version
+ 2.1.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,44 +65,51 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8db775229b033f25661433fbc7c59d66ec2798b7
+commit: https://git.buildroot.net/buildroot/commit/?id=a1f7597b4dcd60e8373040739d7abbc0f45dd5f5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+COPYING got "and contributors" added to authors.
 
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/python-txtorcon/python-txtorcon.hash | 4 ++--
- package/python-txtorcon/python-txtorcon.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-watchdog/python-watchdog.hash | 11 +++++------
+ package/python-watchdog/python-watchdog.mk   |  4 ++--
+ 2 files changed, 7 insertions(+), 8 deletions(-)
 
-diff --git a/package/python-txtorcon/python-txtorcon.hash b/package/python-txtorcon/python-txtorcon.hash
-index 803933f1e6..af542c7f2e 100644
---- a/package/python-txtorcon/python-txtorcon.hash
-+++ b/package/python-txtorcon/python-txtorcon.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/txtorcon/json
--md5	fb323f9874298a8145dbe8d43c387932  txtorcon-19.1.0.tar.gz
--sha256	25d8e52c3eac45bb90ff958ca7cdd7674fb3284e3a50826a58ab7b9578b15ea5  txtorcon-19.1.0.tar.gz
-+md5  dbb53821a3ce3e921e09c5de4f722fdb  txtorcon-21.1.0.tar.gz
-+sha256  aebf0b9ec6c69a029f6b61fd534e785692e28fdcd2fd003ce3cc132b9393b7d6  txtorcon-21.1.0.tar.gz
- # Locally computed sha256 checksums
- sha256	3ada1c32ef38c23d96d7f4e8f4a226c527f51e0202883c7543b06f9cc5228a2b  LICENSE
-diff --git a/package/python-txtorcon/python-txtorcon.mk b/package/python-txtorcon/python-txtorcon.mk
-index 4df400c3e7..b8414d96d0 100644
---- a/package/python-txtorcon/python-txtorcon.mk
-+++ b/package/python-txtorcon/python-txtorcon.mk
+diff --git a/package/python-watchdog/python-watchdog.hash b/package/python-watchdog/python-watchdog.hash
+index 701c7991a5..3b633f9156 100644
+--- a/package/python-watchdog/python-watchdog.hash
++++ b/package/python-watchdog/python-watchdog.hash
+@@ -1,7 +1,6 @@
+-# md5, sha256 from https://pypi.python.org/pypi/watchdog/json
+-md5	7cdc103f607e72fc32c206301a72d1b2  watchdog-0.9.0.tar.gz
+-sha256	965f658d0732de3188211932aeb0bb457587f04f63ab4c1e33eab878e9de961d  watchdog-0.9.0.tar.gz
+-
+-# Hash for license files
+-sha256  14e636faf5889138a1bb7a8498ccbb0266aee31d2dc475201a10448e56ed3d96  COPYING
++# md5, sha256 from https://pypi.org/pypi/watchdog/json
++md5  6aac660b0f3358c63658806a0579b832  watchdog-2.1.6.tar.gz
++sha256  a36e75df6c767cbf46f61a91c70b3ba71811dfa0aca4a324d9407a06a8b7a2e7  watchdog-2.1.6.tar.gz
++# Locally computed sha256 checksums
++sha256  02c8760f988a76e92a9d6cb525456a86f7b0fd1953870dd491de5955cb974d41  COPYING
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/python-watchdog/python-watchdog.mk b/package/python-watchdog/python-watchdog.mk
+index 44929a65ac..2dafef97e1 100644
+--- a/package/python-watchdog/python-watchdog.mk
++++ b/package/python-watchdog/python-watchdog.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_TXTORCON_VERSION = 19.1.0
-+PYTHON_TXTORCON_VERSION = 21.1.0
- PYTHON_TXTORCON_SOURCE = txtorcon-$(PYTHON_TXTORCON_VERSION).tar.gz
--PYTHON_TXTORCON_SITE = https://files.pythonhosted.org/packages/8c/26/d5b2fba4ffbcb23957ff2cee4d7d0a2d667372b9eb04807058bd561c8e8f
-+PYTHON_TXTORCON_SITE = https://files.pythonhosted.org/packages/eb/43/2426009377cef519c53bdc8969590cb100e9fd745846859963c881c6d176
- PYTHON_TXTORCON_SETUP_TYPE = setuptools
- PYTHON_TXTORCON_LICENSE = MIT
- PYTHON_TXTORCON_LICENSE_FILES = LICENSE
+-PYTHON_WATCHDOG_VERSION = 0.9.0
++PYTHON_WATCHDOG_VERSION = 2.1.6
+ PYTHON_WATCHDOG_SOURCE = watchdog-$(PYTHON_WATCHDOG_VERSION).tar.gz
+-PYTHON_WATCHDOG_SITE = https://pypi.python.org/packages/bb/e3/5a55d48a29300160779f0a0d2776d17c1b762a2039b36de528b093b87d5b
++PYTHON_WATCHDOG_SITE = https://files.pythonhosted.org/packages/e8/a8/fc4edd7d768361b00ea850e5310211d157df6b5a1db6148dd434e787d898
+ PYTHON_WATCHDOG_SETUP_TYPE = setuptools
+ PYTHON_WATCHDOG_LICENSE = Apache-2.0
+ PYTHON_WATCHDOG_LICENSE_FILES = LICENSE COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
