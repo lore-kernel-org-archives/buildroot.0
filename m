@@ -2,52 +2,52 @@ Return-Path: <SRS0=F6DF=PN=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DD6D5C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 25 Oct 2021 19:02:59 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E6F03C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 25 Oct 2021 19:03:11 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9982D6103C
-	for <buildroot@archiver.kernel.org>; Mon, 25 Oct 2021 19:02:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9982D6103C
+	by mail.kernel.org (Postfix) with ESMTPS id B2E7F60FE8
+	for <buildroot@archiver.kernel.org>; Mon, 25 Oct 2021 19:03:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B2E7F60FE8
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6BF7E80F2D;
-	Mon, 25 Oct 2021 19:02:59 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6LACVmLpb-Uu; Mon, 25 Oct 2021 19:02:58 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BCDB780F26;
-	Mon, 25 Oct 2021 19:02:57 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 466C61BF97C
- for <buildroot@lists.busybox.net>; Mon, 25 Oct 2021 19:02:26 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 35463403D2
- for <buildroot@lists.busybox.net>; Mon, 25 Oct 2021 19:02:26 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7ED52403CB;
+	Mon, 25 Oct 2021 19:03:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Yvys8a32L419 for <buildroot@lists.busybox.net>;
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id hBZHR_VY0Ydy; Mon, 25 Oct 2021 19:03:10 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 80DFF403C6;
+	Mon, 25 Oct 2021 19:03:09 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 214271BF3F7
+ for <buildroot@lists.busybox.net>; Mon, 25 Oct 2021 19:02:27 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4914C80F25
+ for <buildroot@lists.busybox.net>; Mon, 25 Oct 2021 19:02:26 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id g3hEaeHHuOfk for <buildroot@lists.busybox.net>;
  Mon, 25 Oct 2021 19:02:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 65AFB403BA
+ by smtp1.osuosl.org (Postfix) with ESMTP id 75B9F80F26
  for <buildroot@buildroot.org>; Mon, 25 Oct 2021 19:02:25 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id D5185887AF; Mon, 25 Oct 2021 18:59:04 +0000 (UTC)
+ id E9439887B7; Mon, 25 Oct 2021 18:59:04 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 25 Oct 2021 20:51:36 +0200
+Date: Mon, 25 Oct 2021 20:53:59 +0200
 X-Git-Refname: refs/heads/2021.08.x
-X-Git-Oldrev: c495217f73de5e9686164b9b7d23e1d425d94087
-X-Git-Newrev: 53bab991863104b77afeb6d0991d7540a74d4af7
+X-Git-Oldrev: 23017276ccb0f7305107331001e99830a72a87bd
+X-Git-Newrev: f3cce2e3d288ee6478f148e06a62a8576ef451b9
 X-Patchwork-Hint: ignore
-Message-Id: <20211025185904.D5185887AF@busybox.osuosl.org>
+Message-Id: <20211025185904.E9439887B7@busybox.osuosl.org>
 Subject: [Buildroot] [git commit branch/2021.08.x]
- support/scripts/pkg-stats: prefers stable version from
+ support/scripts/pkg-stats: use the new 'stable_versions' field of
  release-monitoring.org
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -66,33 +66,76 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=53bab991863104b77afeb6d0991d7540a74d4af7
+commit: https://git.buildroot.net/buildroot/commit/?id=f3cce2e3d288ee6478f148e06a62a8576ef451b9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.08.x
 
-For example with libpng: 1.6.37 instead of 1.7.0beta89
+The pkg-stats script queries release-monitoring.org to find the latest
+upstream versions of our packages. However, up until recently,
+release-monitoring.org had no notion of stable
+vs. development/release-candidate versions, so for some packages the
+"latest" version was in fact a development/release-candidate version
+that we didn't want to package in Buildroot.
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-[yann.morin.1998@free.fr: coalesce into a single line]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit f7b0e086053644b29ec29fa775b7f0ffa0ba408a)
+However, in recent time, release-monitoring.org has gained support for
+differentiating stable vs. development releases of upstream
+projects. See for example
+https://release-monitoring.org/project/10024/ for the glib library,
+which has a number of versions marked "Pre-release".
+
+The JSON blurb returned by release-monitoring.org has 3 relevant
+fields:
+
+ - "version", which we are using currently, which is a string
+   containing the reference of the latest version, including
+   pre-release.
+
+ - "versions", which is an array of strings listing all versions,
+   pre-release or not.
+
+ - "stable_versions", which is an array of string listing only
+   non-pre-release versions. It is ordered newest first to oldest
+   last.
+
+So, this commit changes from using 'version' to using
+'stable_versions[0]'.
+
+As an example, before this change, pkg-stats reports that nfs-utils
+needs to be bumped to 2.5.5rc3, while after this patch, it reports
+that nfs-utils is already at 2.5.4, and that this is the latest stable
+version (modulo an issue where Buildroot has 2.5.4 and
+release-monitoring.org has 2-5-4, this will be addressed separately).
+
+Note that part of this change was already done in commit f7b0e0860, but
+it was incomplete.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit 11efcb39b2904512d429a328c7ec3c99246f94f7)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/scripts/pkg-stats | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ support/scripts/pkg-stats | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index cc91d13167..d5bd130de3 100755
+index 12f2cc2019..65ffa05f17 100755
 --- a/support/scripts/pkg-stats
 +++ b/support/scripts/pkg-stats
-@@ -484,7 +484,7 @@ async def check_package_get_latest_version_by_distro(session, pkg, retry=True):
-                 return False
+@@ -507,13 +507,13 @@ async def check_package_get_latest_version_by_guess(session, pkg, retry=True):
  
              data = await resp.json()
--            version = data['version'] if 'version' in data else None
-+            version = data['stable_versions'][0] if 'stable_versions' in data else data['version'] if 'version' in data else None
-             check_package_latest_version_set_status(pkg,
-                                                     RM_API_STATUS_FOUND_BY_DISTRO,
-                                                     version,
+             # filter projects that have the right name and a version defined
+-            projects = [p for p in data['projects'] if p['name'] == pkg.name and 'version' in p]
++            projects = [p for p in data['projects'] if p['name'] == pkg.name and 'stable_versions' in p]
+             projects.sort(key=lambda x: x['id'])
+ 
+             if len(projects) > 0:
+                 check_package_latest_version_set_status(pkg,
+                                                         RM_API_STATUS_FOUND_BY_PATTERN,
+-                                                        projects[0]['version'],
++                                                        projects[0]['stable_versions'][0],
+                                                         projects[0]['id'])
+                 return True
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
