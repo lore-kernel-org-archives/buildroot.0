@@ -2,85 +2,82 @@ Return-Path: <SRS0=F6DF=PN=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 657C5C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 25 Oct 2021 02:42:56 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C9518C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 25 Oct 2021 05:47:58 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 040E160E09
-	for <buildroot@archiver.kernel.org>; Mon, 25 Oct 2021 02:42:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 040E160E09
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id EABD660F92
+	for <buildroot@archiver.kernel.org>; Mon, 25 Oct 2021 05:47:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org EABD660F92
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=unikie.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BA7D640322;
-	Mon, 25 Oct 2021 02:42:55 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id AE9164023A;
+	Mon, 25 Oct 2021 05:47:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JL6FYhJ56xZ5; Mon, 25 Oct 2021 02:42:54 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 7H15pEuuaL25; Mon, 25 Oct 2021 05:47:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D42A54032E;
-	Mon, 25 Oct 2021 02:42:53 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 68D021BF378
- for <buildroot@lists.busybox.net>; Mon, 25 Oct 2021 02:42:43 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5BBFF40344;
+	Mon, 25 Oct 2021 05:47:55 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 5EC231BF3FB
+ for <buildroot@lists.busybox.net>; Mon, 25 Oct 2021 05:47:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 652584032E
- for <buildroot@lists.busybox.net>; Mon, 25 Oct 2021 02:42:43 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 49DB280E4D
+ for <buildroot@lists.busybox.net>; Mon, 25 Oct 2021 05:47:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bOXbavojOZcy for <buildroot@lists.busybox.net>;
- Mon, 25 Oct 2021 02:42:42 +0000 (UTC)
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=unikie-com.20210112.gappssmtp.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Le8GP4PfZt-J for <buildroot@lists.busybox.net>;
+ Mon, 25 Oct 2021 05:47:53 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-il1-x129.google.com (mail-il1-x129.google.com
- [IPv6:2607:f8b0:4864:20::129])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4EB8640322
- for <buildroot@buildroot.org>; Mon, 25 Oct 2021 02:42:42 +0000 (UTC)
-Received: by mail-il1-x129.google.com with SMTP id i6so11190829ila.12
- for <buildroot@buildroot.org>; Sun, 24 Oct 2021 19:42:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=FuI4gP7/W8l+50myOE9xfjGQT0C1g4WSKBLv/Rjnlt4=;
- b=U+rLX2wLtBoKXplhrpgu0BJ+vRDq0CBlEu+Iqfo4cXlyUjWO+DdK8a94wNWFx2Y/D9
- y3k6qkYtjhUz2NS5BmxC9BAckLS0N35DmcBrEK4gv7RXWZ+PK32HpOg8BBJ/GwA0uCGj
- K7uLmtoFqt3OReq6690LSwFSAkqEjCrihZhxrHwDCZzR1jwpDo7MrXmvSUGjH4UDim7T
- Q+2bomVwqHKsqy4d8LJq1nrC7AHxfkiHZPokU8vOggHTRk8ZiPjM1JrsII94An00CwoN
- dSM/TxFl4exmKecF7QjspLgEnEmDsslSDwWV/yX7l04ZKNyPWaFuNNhiunSrqoUEHy9p
- XCnQ==
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com
+ [IPv6:2a00:1450:4864:20::533])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8A34380DFC
+ for <buildroot@buildroot.org>; Mon, 25 Oct 2021 05:47:52 +0000 (UTC)
+Received: by mail-ed1-x533.google.com with SMTP id l13so17398742edi.8
+ for <buildroot@buildroot.org>; Sun, 24 Oct 2021 22:47:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=unikie-com.20210112.gappssmtp.com; s=20210112;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=ZMKo301dHcynFMEHC7jjs879r+yhrZz0hwpXF09sWVU=;
+ b=cd6mnkdkRCMVXbl3gFG4X/rxazmEJLuzhgltkFAd9E2PHxyWfLPq8EfWzkisoRIxCq
+ cNlFW0MleAPie5sbNuOPpCxs+QJb0AiFd8lPa3ohA8nEAfoRCNZM33lariKwoFoNV9a+
+ 7c/vbsK1ybGuk5zWpQGsEKsezDGtNLwdNR7Eh/3gHTA7chpDcQd6vNJTiJW7BaiPcPxH
+ KMF0XmXHVVDIzIFD3j5p2k4/u/Zbvcd5MiZQvizgFg7xPOphM3+Fpy58kWfkje1qaOOz
+ D+qFuVX7FXj6AgZrAtFAOtsfXYMdK5x9HiCw72SxubzvkFlX15lDAa6qXCV/Av7ZrvhS
+ P3CQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=FuI4gP7/W8l+50myOE9xfjGQT0C1g4WSKBLv/Rjnlt4=;
- b=nB8ByKeVwnaB1hnJjTO8FEMAH9vPNMAxOcRI/mZbINcSqpXi/SdSwU/2U4YVUTNnBK
- w5DrdSKiR18fMYmjxYf8+zXhyKWPgfKbZ8ppYE595M6u1aPFRvpRWOWSAnZlxjkt/q9z
- LYjqCqmQgjfGvbExBX/fJYW8SV8VPMNYj9qy4d6IX1PSwwVRTMXLrz2XUWh9MkP59tPb
- o34P6NJCBGwzM/rMJJkUjxGYNf224jgpjLxLmn3I1CGRFOuxqJ3MUuOFUKajNpjrdILX
- +BS85QDBzrSrfZKEOPFqtQeNuIm7XyHr4ejlLcp2NtbflPgOlcNbYbGgv1mJX5OSElSy
- Omeg==
-X-Gm-Message-State: AOAM532eStCp8Ir59B1uze5nGk69gwmENRInH5dHoJ8ZnJBfm/jTm8s4
- 9PRm04mh/1pGsCJYWVSPmOofotv0NF8=
-X-Google-Smtp-Source: ABdhPJxlDMxhTpAQM8990qj6RwUEFzHEt+qmUH5opa8pa+ZZdpi3uZKIyM7/4RTKhSgsxNc8yOiwJw==
-X-Received: by 2002:a92:c26e:: with SMTP id h14mr6966508ild.33.1635129761072; 
- Sun, 24 Oct 2021 19:42:41 -0700 (PDT)
-Received: from james-x399.localdomain (71-218-115-49.hlrn.qwest.net.
- [71.218.115.49])
- by smtp.gmail.com with ESMTPSA id k7sm2256431iob.7.2021.10.24.19.42.40
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 24 Oct 2021 19:42:40 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: buildroot@buildroot.org
-Date: Sun, 24 Oct 2021 20:42:33 -0600
-Message-Id: <20211025024233.2153770-2-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211025024233.2153770-1-james.hilliard1@gmail.com>
-References: <20211025024233.2153770-1-james.hilliard1@gmail.com>
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=ZMKo301dHcynFMEHC7jjs879r+yhrZz0hwpXF09sWVU=;
+ b=t23bGDWKHozLbanWKh0dGh596KudU2KSWgIwQLp2eBxHfPoA0llun8ybsLuepwjdkb
+ r4nwT2Yue9vNKFDa7YSt3Gg6liBLg1SpRXy+fIy9Zld1eJG3FkoUOSVYdEyz3D8fmlNi
+ 7Bna/Uf3L9OTiPypDD9NT+JrN1zDse/ltr9BKcW2NCTAUnMj6pTc/e5zFOL/02BwpZLq
+ 2JxEM3agBDYVjKVwYlAJ5fI+BDe2kc+y76QAgqJovh3lbMSvla5r8XOXztw09GiKZL/G
+ DpWO1JT+HkIoZZbRRWYvGnbG8vtrvoSNaRYQcuI1nSkyBd97Jm8AkXgcLnb413k9GFUM
+ s4WA==
+X-Gm-Message-State: AOAM5331xU3tt8pjzm6s2mLY4Xeocqx9+SuWsaPw05OEaYWYfnPUuEuj
+ H4eErANmgGtxQ8bgkwrTi/a2cTDLHI+o4FSqRJ2rlA==
+X-Google-Smtp-Source: ABdhPJxek9iHIykx2D9m9Sme8zdxLIyumY/bD6XWN4yVRpODRI35PzL38TxM3zXnYWIxQ4Og80X8K3YpWGfZNfuNn1g=
+X-Received: by 2002:a17:906:6403:: with SMTP id
+ d3mr19117333ejm.37.1635140870491; 
+ Sun, 24 Oct 2021 22:47:50 -0700 (PDT)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 2/2] package/python-requests: bump to version
- 2.26.0
+References: <20211019080458.308969-1-jose.pekkarinen@unikie.com>
+ <CAKcgs2yyKVhG6t=kuQtwyvsVpHMjjz73PLkF8mTH6qBc7BMVyw@mail.gmail.com>
+In-Reply-To: <CAKcgs2yyKVhG6t=kuQtwyvsVpHMjjz73PLkF8mTH6qBc7BMVyw@mail.gmail.com>
+From: =?UTF-8?Q?Jos=C3=A9_Pekkarinen?= <jose.pekkarinen@unikie.com>
+Date: Mon, 25 Oct 2021 08:47:39 +0300
+Message-ID: <CAJPV9MpOm4ucv7vdvqtzQ1+VnTAPrLs4giU33c+mbF5sX9QKqQ@mail.gmail.com>
+To: Gilles Talis <gilles.talis@gmail.com>
+Subject: Re: [Buildroot] [PATCH v2] package/softhsm2: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,166 +89,503 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>,
- Asaf Kahlon <asafka7@gmail.com>, James Hilliard <james.hilliard1@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: buildroot <buildroot@buildroot.org>
+Content-Type: multipart/mixed; boundary="===============1813555495261583430=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-UmVtb3ZlIHB5dGhvbjMtcmVxdWVzdHMgaG9zdCBwYWNrYWdlIGFuZCBjb21iaW5lIHdpdGggcHl0
-aG9uLXJlcXVlc3RzLgoKTWFrZSBwYWNrYWdlcyBkZXBlbmRpbmcgb24gaG9zdC1weXRob24zLXJl
-cXVlc3RzIGRlcGVuZCBvbgpob3N0LXB5dGhvbi1yZXF1ZXN0cyBpbnN0ZWFkLgoKRHJvcCBpZG5h
-IHBhdGNoIHRoYXQgaXMgbm93IHVwc3RyZWFtLgoKU2lnbmVkLW9mZi1ieTogSmFtZXMgSGlsbGlh
-cmQgPGphbWVzLmhpbGxpYXJkMUBnbWFpbC5jb20+Ci0tLQogcGFja2FnZS9tb25nb2RiL21vbmdv
-ZGIubWsgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIC4uLm5hLTMueC10by1iZS1pbnN0YWxs
-ZWQtb24tUHl0aG9uLTMueC5wYXRjaCB8IDMzIC0tLS0tLS0tLS0tLS0tLS0tLS0KIHBhY2thZ2Uv
-cHl0aG9uLXJlcXVlc3RzL0NvbmZpZy5pbiAgICAgICAgICAgICB8ICAyICstCiBwYWNrYWdlL3B5
-dGhvbi1yZXF1ZXN0cy9weXRob24tcmVxdWVzdHMuaGFzaCAgfCAgNCArLS0KIHBhY2thZ2UvcHl0
-aG9uLXJlcXVlc3RzL3B5dGhvbi1yZXF1ZXN0cy5tayAgICB8ICA3ICsrLS0KIC4uLm5hLTMueC10
-by1iZS1pbnN0YWxsZWQtb24tUHl0aG9uLTMueC5wYXRjaCB8IDMzIC0tLS0tLS0tLS0tLS0tLS0t
-LS0KIC4uLi9weXRob24zLXJlcXVlc3RzL3B5dGhvbjMtcmVxdWVzdHMuaGFzaCAgICB8ICAxIC0K
-IHBhY2thZ2UvcHl0aG9uMy1yZXF1ZXN0cy9weXRob24zLXJlcXVlc3RzLm1rICB8IDE5IC0tLS0t
-LS0tLS0tCiBwYWNrYWdlL3VoZC91aGQubWsgICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAg
-MiArLQogOSBmaWxlcyBjaGFuZ2VkLCA5IGluc2VydGlvbnMoKyksIDk0IGRlbGV0aW9ucygtKQog
-ZGVsZXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvcHl0aG9uLXJlcXVlc3RzLzAwMDEtQWxsb3ctaWRu
-YS0zLngtdG8tYmUtaW5zdGFsbGVkLW9uLVB5dGhvbi0zLngucGF0Y2gKIGRlbGV0ZSBtb2RlIDEw
-MDY0NCBwYWNrYWdlL3B5dGhvbjMtcmVxdWVzdHMvMDAwMS1BbGxvdy1pZG5hLTMueC10by1iZS1p
-bnN0YWxsZWQtb24tUHl0aG9uLTMueC5wYXRjaAogZGVsZXRlIG1vZGUgMTIwMDAwIHBhY2thZ2Uv
-cHl0aG9uMy1yZXF1ZXN0cy9weXRob24zLXJlcXVlc3RzLmhhc2gKIGRlbGV0ZSBtb2RlIDEwMDY0
-NCBwYWNrYWdlL3B5dGhvbjMtcmVxdWVzdHMvcHl0aG9uMy1yZXF1ZXN0cy5tawoKZGlmZiAtLWdp
-dCBhL3BhY2thZ2UvbW9uZ29kYi9tb25nb2RiLm1rIGIvcGFja2FnZS9tb25nb2RiL21vbmdvZGIu
-bWsKaW5kZXggNmEyMmFjZDEyYS4uZWRlMDNlNDRkNiAxMDA2NDQKLS0tIGEvcGFja2FnZS9tb25n
-b2RiL21vbmdvZGIubWsKKysrIGIvcGFja2FnZS9tb25nb2RiL21vbmdvZGIubWsKQEAgLTIwLDcg
-KzIwLDcgQEAgTU9OR09EQl9ERVBFTkRFTkNJRVMgPSBcCiAJaG9zdC1weXRob24zLXBzdXRpbCBc
-CiAJaG9zdC1weXRob24zLXB5eWFtbCBcCiAJaG9zdC1weXRob24zLXJlZ2V4IFwKLQlob3N0LXB5
-dGhvbjMtcmVxdWVzdHMgXAorCWhvc3QtcHl0aG9uLXJlcXVlc3RzIFwKIAlob3N0LXNjb25zIFwK
-IAlwY3JlIFwKIAlzbmFwcHkgXApkaWZmIC0tZ2l0IGEvcGFja2FnZS9weXRob24tcmVxdWVzdHMv
-MDAwMS1BbGxvdy1pZG5hLTMueC10by1iZS1pbnN0YWxsZWQtb24tUHl0aG9uLTMueC5wYXRjaCBi
-L3BhY2thZ2UvcHl0aG9uLXJlcXVlc3RzLzAwMDEtQWxsb3ctaWRuYS0zLngtdG8tYmUtaW5zdGFs
-bGVkLW9uLVB5dGhvbi0zLngucGF0Y2gKZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4IGVh
-OWFkMTVkZjIuLjAwMDAwMDAwMDAKLS0tIGEvcGFja2FnZS9weXRob24tcmVxdWVzdHMvMDAwMS1B
-bGxvdy1pZG5hLTMueC10by1iZS1pbnN0YWxsZWQtb24tUHl0aG9uLTMueC5wYXRjaAorKysgL2Rl
-di9udWxsCkBAIC0xLDMzICswLDAgQEAKLUZyb20gZDc0N2M0NzUzNDg0YWE5YjkwYTA5NGQ2YmY3
-ZWM0NWU1YWNmYjYyMyBNb24gU2VwIDE3IDAwOjAwOjAwIDIwMDEKLUZyb206IE5hb3IgTGl2bmUg
-PG5hb3JsaXZuZUBnbWFpbC5jb20+Ci1EYXRlOiBXZWQsIDcgSnVsIDIwMjEgMTY6MjU6MjAgKzAz
-MDAKLVN1YmplY3Q6IFtQQVRDSF0gQWxsb3cgaWRuYSAzLnggdG8gYmUgaW5zdGFsbGVkIG9uIFB5
-dGhvbiAzLngKLU1JTUUtVmVyc2lvbjogMS4wCi1Db250ZW50LVR5cGU6IHRleHQvcGxhaW47IGNo
-YXJzZXQ9VVRGLTgKLUNvbnRlbnQtVHJhbnNmZXItRW5jb2Rpbmc6IDhiaXQKLQotQ28tYXV0aG9y
-ZWQtYnk6IE1pY2thw6tsIFNjaG9lbnRnZW4gPGNvbnRhY3RAdGlnZXItMjIyLmZyPgotQ28tYXV0
-aG9yZWQtYnk6IFNldGggTWljaGFlbCBMYXJzb24gPHNldGhtaWNoYWVsbGFyc29uQGdtYWlsLmNv
-bT4KLShjaGVycnkgcGlja2VkIGZyb20gY29tbWl0IDMzY2Y5NjVmNzI3MWFiNDk3OGVkNTUxNzU0
-ZGIzNzg2NWM0MDg1ZGIpCi1TaWduZWQtb2ZmLWJ5OiBSb21haW4gTmFvdXIgPHJvbWFpbi5uYW91
-ckBnbWFpbC5jb20+Ci0tLS0KLSBzZXR1cC5weSB8IDMgKystCi0gMSBmaWxlIGNoYW5nZWQsIDIg
-aW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQotCi1kaWZmIC0tZ2l0IGEvc2V0dXAucHkgYi9z
-ZXR1cC5weQotaW5kZXggN2JhNGIyYTIuLjgzZDc4NjY1IDEwMDc1NQotLS0tIGEvc2V0dXAucHkK
-LSsrKyBiL3NldHVwLnB5Ci1AQCAtNDMsNyArNDMsOCBAQCBwYWNrYWdlcyA9IFsncmVxdWVzdHMn
-XQotIAotIHJlcXVpcmVzID0gWwotICAgICAnY2hhcmRldD49My4wLjIsPDUnLAotLSAgICAnaWRu
-YT49Mi41LDwzJywKLSsgICAgJ2lkbmE+PTIuNSw8MzsgcHl0aG9uX3ZlcnNpb24gPCAiMyInLAot
-KyAgICAnaWRuYT49Mi41LDw0OyBweXRob25fdmVyc2lvbiA+PSAiMyInLAotICAgICAndXJsbGli
-Mz49MS4yMS4xLDwxLjI3JywKLSAgICAgJ2NlcnRpZmk+PTIwMTcuNC4xNycKLSAKLS0tIAotMi4z
-MS4xCi0KZGlmZiAtLWdpdCBhL3BhY2thZ2UvcHl0aG9uLXJlcXVlc3RzL0NvbmZpZy5pbiBiL3Bh
-Y2thZ2UvcHl0aG9uLXJlcXVlc3RzL0NvbmZpZy5pbgppbmRleCBjNzk4MTU2NjEzLi45YjA0YzA3
-ZmM5IDEwMDY0NAotLS0gYS9wYWNrYWdlL3B5dGhvbi1yZXF1ZXN0cy9Db25maWcuaW4KKysrIGIv
-cGFja2FnZS9weXRob24tcmVxdWVzdHMvQ29uZmlnLmluCkBAIC0yLDcgKzIsNyBAQCBjb25maWcg
-QlIyX1BBQ0tBR0VfUFlUSE9OX1JFUVVFU1RTCiAJYm9vbCAicHl0aG9uLXJlcXVlc3RzIgogCWRl
-cGVuZHMgb24gQlIyX1BBQ0tBR0VfUFlUSE9OMyAjIHB5dGhvbi1pZG5hCiAJc2VsZWN0IEJSMl9Q
-QUNLQUdFX1BZVEhPTl9DRVJUSUZJICMgcnVudGltZQotCXNlbGVjdCBCUjJfUEFDS0FHRV9QWVRI
-T05fQ0hBUkRFVCAjIHJ1bnRpbWUKKwlzZWxlY3QgQlIyX1BBQ0tBR0VfUFlUSE9OX0NIQVJTRVRf
-Tk9STUFMSVpFUiAjIHJ1bnRpbWUKIAlzZWxlY3QgQlIyX1BBQ0tBR0VfUFlUSE9OX0lETkEgIyBy
-dW50aW1lCiAJc2VsZWN0IEJSMl9QQUNLQUdFX1BZVEhPTl9VUkxMSUIzICMgcnVudGltZQogCXNl
-bGVjdCBCUjJfUEFDS0FHRV9QWVRIT04zX1NTTCAjIHJ1bnRpbWUKZGlmZiAtLWdpdCBhL3BhY2th
-Z2UvcHl0aG9uLXJlcXVlc3RzL3B5dGhvbi1yZXF1ZXN0cy5oYXNoIGIvcGFja2FnZS9weXRob24t
-cmVxdWVzdHMvcHl0aG9uLXJlcXVlc3RzLmhhc2gKaW5kZXggZTA3YzdiZjVjYy4uNTM1MDNhMzY2
-OCAxMDA2NDQKLS0tIGEvcGFja2FnZS9weXRob24tcmVxdWVzdHMvcHl0aG9uLXJlcXVlc3RzLmhh
-c2gKKysrIGIvcGFja2FnZS9weXRob24tcmVxdWVzdHMvcHl0aG9uLXJlcXVlc3RzLmhhc2gKQEAg
-LTEsNSArMSw1IEBACiAjIG1kNSwgc2hhMjU2IGZyb20gaHR0cHM6Ly9weXBpLm9yZy9weXBpL3Jl
-cXVlc3RzL2pzb24KLW1kNSAgNTE0ZDZmN2ViYTc3YWRhMGI4Yzk4ZWM3ODE4ODI4ZGIgIHJlcXVl
-c3RzLTIuMjUuMS50YXIuZ3oKLXNoYTI1NiAgMjc5NzNkZDRhOTA0YTRmMTNiMjYzYTE5Yzg2NmMx
-M2I5MmEzOWVkMWM5NjQ2NTVmMDI1ZjNmOGQzZDc1YjgwNCAgcmVxdWVzdHMtMi4yNS4xLnRhci5n
-egorbWQ1ICA4Yzc0NTk0OWFkM2U5YWU4M2Q5OTI3ZmVkMjEzZGI4YSAgcmVxdWVzdHMtMi4yNi4w
-LnRhci5negorc2hhMjU2ICBiOGFhNThmOGNmNzkzZmZkODc4MmQzZDhjYjE5ZTY2ZWYzNmY3YWJh
-NDM1M2VlYzg1OWU3NDY3OGIwMWIwN2E3ICByZXF1ZXN0cy0yLjI2LjAudGFyLmd6CiAjIExvY2Fs
-bHkgY29tcHV0ZWQgc2hhMjU2IGNoZWNrc3Vtcwogc2hhMjU2ICAwOWU4YTliY2VjODA2NzEwNDY1
-MmMxNjg2ODVhYjA5MzFlNzg2OGY5YzgyODRiNjZmNWFlNmVkYWU1ZjExMzBiICBMSUNFTlNFCmRp
-ZmYgLS1naXQgYS9wYWNrYWdlL3B5dGhvbi1yZXF1ZXN0cy9weXRob24tcmVxdWVzdHMubWsgYi9w
-YWNrYWdlL3B5dGhvbi1yZXF1ZXN0cy9weXRob24tcmVxdWVzdHMubWsKaW5kZXggNWQwZjU0NWZm
-Yi4uNDc0ZDIwMzNhYyAxMDA2NDQKLS0tIGEvcGFja2FnZS9weXRob24tcmVxdWVzdHMvcHl0aG9u
-LXJlcXVlc3RzLm1rCisrKyBiL3BhY2thZ2UvcHl0aG9uLXJlcXVlc3RzL3B5dGhvbi1yZXF1ZXN0
-cy5tawpAQCAtNCwxNCArNCwxNSBAQAogIwogIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMKIAotIyBQ
-bGVhc2Uga2VlcCBpbiBzeW5jIHdpdGggcGFja2FnZS9weXRob24zLXJlcXVlc3RzL3B5dGhvbjMt
-cmVxdWVzdHMubWsKLVBZVEhPTl9SRVFVRVNUU19WRVJTSU9OID0gMi4yNS4xCitQWVRIT05fUkVR
-VUVTVFNfVkVSU0lPTiA9IDIuMjYuMAogUFlUSE9OX1JFUVVFU1RTX1NPVVJDRSA9IHJlcXVlc3Rz
-LSQoUFlUSE9OX1JFUVVFU1RTX1ZFUlNJT04pLnRhci5negotUFlUSE9OX1JFUVVFU1RTX1NJVEUg
-PSBodHRwczovL2ZpbGVzLnB5dGhvbmhvc3RlZC5vcmcvcGFja2FnZXMvNmIvNDcvYzE0YWJjMDg0
-MzJhYjIyZGMxOGI5ODkyMjUyZWZhZjAwNWFiNDQwNjZkZTg3MWU3MmEzOGQ2YWY0NjRiCitQWVRI
-T05fUkVRVUVTVFNfU0lURSA9IGh0dHBzOi8vZmlsZXMucHl0aG9uaG9zdGVkLm9yZy9wYWNrYWdl
-cy9lNy8wMS8zNTY5ZTBiNTM1ZmIyZTRhNmMzODRiZGJlZDAwYzU1YjlkNzhiNTA4NGUwZmI3ZjRk
-MGJmNTIzZDc2NzAKIFBZVEhPTl9SRVFVRVNUU19TRVRVUF9UWVBFID0gc2V0dXB0b29scwogUFlU
-SE9OX1JFUVVFU1RTX0xJQ0VOU0UgPSBBcGFjaGUtMi4wCiBQWVRIT05fUkVRVUVTVFNfTElDRU5T
-RV9GSUxFUyA9IExJQ0VOU0UKIFBZVEhPTl9SRVFVRVNUU19DUEVfSURfVkVORE9SID0gcHl0aG9u
-CiBQWVRIT05fUkVRVUVTVFNfQ1BFX0lEX1BST0RVQ1QgPSByZXF1ZXN0cworSE9TVF9QWVRIT05f
-UkVRVUVTVFNfTkVFRFNfSE9TVF9QWVRIT04gPSBweXRob24zCiAKICQoZXZhbCAkKHB5dGhvbi1w
-YWNrYWdlKSkKKyQoZXZhbCAkKGhvc3QtcHl0aG9uLXBhY2thZ2UpKQpkaWZmIC0tZ2l0IGEvcGFj
-a2FnZS9weXRob24zLXJlcXVlc3RzLzAwMDEtQWxsb3ctaWRuYS0zLngtdG8tYmUtaW5zdGFsbGVk
-LW9uLVB5dGhvbi0zLngucGF0Y2ggYi9wYWNrYWdlL3B5dGhvbjMtcmVxdWVzdHMvMDAwMS1BbGxv
-dy1pZG5hLTMueC10by1iZS1pbnN0YWxsZWQtb24tUHl0aG9uLTMueC5wYXRjaApkZWxldGVkIGZp
-bGUgbW9kZSAxMDA2NDQKaW5kZXggZWE5YWQxNWRmMi4uMDAwMDAwMDAwMAotLS0gYS9wYWNrYWdl
-L3B5dGhvbjMtcmVxdWVzdHMvMDAwMS1BbGxvdy1pZG5hLTMueC10by1iZS1pbnN0YWxsZWQtb24t
-UHl0aG9uLTMueC5wYXRjaAorKysgL2Rldi9udWxsCkBAIC0xLDMzICswLDAgQEAKLUZyb20gZDc0
-N2M0NzUzNDg0YWE5YjkwYTA5NGQ2YmY3ZWM0NWU1YWNmYjYyMyBNb24gU2VwIDE3IDAwOjAwOjAw
-IDIwMDEKLUZyb206IE5hb3IgTGl2bmUgPG5hb3JsaXZuZUBnbWFpbC5jb20+Ci1EYXRlOiBXZWQs
-IDcgSnVsIDIwMjEgMTY6MjU6MjAgKzAzMDAKLVN1YmplY3Q6IFtQQVRDSF0gQWxsb3cgaWRuYSAz
-LnggdG8gYmUgaW5zdGFsbGVkIG9uIFB5dGhvbiAzLngKLU1JTUUtVmVyc2lvbjogMS4wCi1Db250
-ZW50LVR5cGU6IHRleHQvcGxhaW47IGNoYXJzZXQ9VVRGLTgKLUNvbnRlbnQtVHJhbnNmZXItRW5j
-b2Rpbmc6IDhiaXQKLQotQ28tYXV0aG9yZWQtYnk6IE1pY2thw6tsIFNjaG9lbnRnZW4gPGNvbnRh
-Y3RAdGlnZXItMjIyLmZyPgotQ28tYXV0aG9yZWQtYnk6IFNldGggTWljaGFlbCBMYXJzb24gPHNl
-dGhtaWNoYWVsbGFyc29uQGdtYWlsLmNvbT4KLShjaGVycnkgcGlja2VkIGZyb20gY29tbWl0IDMz
-Y2Y5NjVmNzI3MWFiNDk3OGVkNTUxNzU0ZGIzNzg2NWM0MDg1ZGIpCi1TaWduZWQtb2ZmLWJ5OiBS
-b21haW4gTmFvdXIgPHJvbWFpbi5uYW91ckBnbWFpbC5jb20+Ci0tLS0KLSBzZXR1cC5weSB8IDMg
-KystCi0gMSBmaWxlIGNoYW5nZWQsIDIgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQotCi1k
-aWZmIC0tZ2l0IGEvc2V0dXAucHkgYi9zZXR1cC5weQotaW5kZXggN2JhNGIyYTIuLjgzZDc4NjY1
-IDEwMDc1NQotLS0tIGEvc2V0dXAucHkKLSsrKyBiL3NldHVwLnB5Ci1AQCAtNDMsNyArNDMsOCBA
-QCBwYWNrYWdlcyA9IFsncmVxdWVzdHMnXQotIAotIHJlcXVpcmVzID0gWwotICAgICAnY2hhcmRl
-dD49My4wLjIsPDUnLAotLSAgICAnaWRuYT49Mi41LDwzJywKLSsgICAgJ2lkbmE+PTIuNSw8Mzsg
-cHl0aG9uX3ZlcnNpb24gPCAiMyInLAotKyAgICAnaWRuYT49Mi41LDw0OyBweXRob25fdmVyc2lv
-biA+PSAiMyInLAotICAgICAndXJsbGliMz49MS4yMS4xLDwxLjI3JywKLSAgICAgJ2NlcnRpZmk+
-PTIwMTcuNC4xNycKLSAKLS0tIAotMi4zMS4xCi0KZGlmZiAtLWdpdCBhL3BhY2thZ2UvcHl0aG9u
-My1yZXF1ZXN0cy9weXRob24zLXJlcXVlc3RzLmhhc2ggYi9wYWNrYWdlL3B5dGhvbjMtcmVxdWVz
-dHMvcHl0aG9uMy1yZXF1ZXN0cy5oYXNoCmRlbGV0ZWQgZmlsZSBtb2RlIDEyMDAwMAppbmRleCAx
-OWUxODJkNGE2Li4wMDAwMDAwMDAwCi0tLSBhL3BhY2thZ2UvcHl0aG9uMy1yZXF1ZXN0cy9weXRo
-b24zLXJlcXVlc3RzLmhhc2gKKysrIC9kZXYvbnVsbApAQCAtMSArMCwwIEBACi0uLi9weXRob24t
-cmVxdWVzdHMvcHl0aG9uLXJlcXVlc3RzLmhhc2gKXCBObyBuZXdsaW5lIGF0IGVuZCBvZiBmaWxl
-CmRpZmYgLS1naXQgYS9wYWNrYWdlL3B5dGhvbjMtcmVxdWVzdHMvcHl0aG9uMy1yZXF1ZXN0cy5t
-ayBiL3BhY2thZ2UvcHl0aG9uMy1yZXF1ZXN0cy9weXRob24zLXJlcXVlc3RzLm1rCmRlbGV0ZWQg
-ZmlsZSBtb2RlIDEwMDY0NAppbmRleCBkYmIzZjIxNDkwLi4wMDAwMDAwMDAwCi0tLSBhL3BhY2th
-Z2UvcHl0aG9uMy1yZXF1ZXN0cy9weXRob24zLXJlcXVlc3RzLm1rCisrKyAvZGV2L251bGwKQEAg
-LTEsMTkgKzAsMCBAQAotIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMKLSMKLSMgcHl0aG9uMy1yZXF1
-ZXN0cwotIwotIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMKLQotIyBQbGVhc2Uga2VlcCBpbiBzeW5j
-IHdpdGggcGFja2FnZS9weXRob24tcmVxdWVzdHMvcHl0aG9uLXJlcXVlc3RzLm1rCi1QWVRIT04z
-X1JFUVVFU1RTX1ZFUlNJT04gPSAyLjI1LjEKLVBZVEhPTjNfUkVRVUVTVFNfU09VUkNFID0gcmVx
-dWVzdHMtJChQWVRIT04zX1JFUVVFU1RTX1ZFUlNJT04pLnRhci5negotUFlUSE9OM19SRVFVRVNU
-U19TSVRFID0gaHR0cHM6Ly9maWxlcy5weXRob25ob3N0ZWQub3JnL3BhY2thZ2VzLzZiLzQ3L2Mx
-NGFiYzA4NDMyYWIyMmRjMThiOTg5MjI1MmVmYWYwMDVhYjQ0MDY2ZGU4NzFlNzJhMzhkNmFmNDY0
-YgotUFlUSE9OM19SRVFVRVNUU19TRVRVUF9UWVBFID0gc2V0dXB0b29scwotUFlUSE9OM19SRVFV
-RVNUU19MSUNFTlNFID0gQXBhY2hlLTIuMAotUFlUSE9OM19SRVFVRVNUU19MSUNFTlNFX0ZJTEVT
-ID0gTElDRU5TRQotUFlUSE9OM19SRVFVRVNUU19DUEVfSURfVkVORE9SID0gcHl0aG9uCi1QWVRI
-T04zX1JFUVVFU1RTX0NQRV9JRF9QUk9EVUNUID0gcmVxdWVzdHMKLUhPU1RfUFlUSE9OM19SRVFV
-RVNUU19ETF9TVUJESVIgPSBweXRob24tcmVxdWVzdHMKLUhPU1RfUFlUSE9OM19SRVFVRVNUU19O
-RUVEU19IT1NUX1BZVEhPTiA9IHB5dGhvbjMKLQotJChldmFsICQoaG9zdC1weXRob24tcGFja2Fn
-ZSkpCmRpZmYgLS1naXQgYS9wYWNrYWdlL3VoZC91aGQubWsgYi9wYWNrYWdlL3VoZC91aGQubWsK
-aW5kZXggYTgwMDFkZmQ3NC4uMTI1ZWIwNTEyMSAxMDA2NDQKLS0tIGEvcGFja2FnZS91aGQvdWhk
-Lm1rCisrKyBiL3BhY2thZ2UvdWhkL3VoZC5tawpAQCAtMTExLDcgKzExMSw3IEBAIFVIRF9DT05G
-X09QVFMgKz0gLURFTkFCTEVfUkZOT0M9T0ZGCiBlbmRpZgogCiBpZmVxICgkKEJSMl9QQUNLQUdF
-X1VIRF9QWVRIT04pLHkpCi1VSERfREVQRU5ERU5DSUVTICs9IGhvc3QtcHl0aG9uLW51bXB5IGhv
-c3QtcHl0aG9uMy1yZXF1ZXN0cyBcCitVSERfREVQRU5ERU5DSUVTICs9IGhvc3QtcHl0aG9uLW51
-bXB5IGhvc3QtcHl0aG9uLXJlcXVlc3RzIFwKIAlweXRob24tbnVtcHkgcHl0aG9uLXJlcXVlc3Rz
-CiBVSERfQ09ORl9PUFRTICs9IC1ERU5BQkxFX1BZVEhPTl9BUEk9T04KIGVsc2UKLS0gCjIuMjUu
-MQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRy
-b290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1
-aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+--===============1813555495261583430==
+Content-Type: multipart/alternative; boundary="000000000000be696a05cf26e669"
+
+--000000000000be696a05cf26e669
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+On Sun, Oct 24, 2021 at 11:39 AM Gilles Talis <gilles.talis@gmail.com>
+wrote:
+
+> Hi Jos=C3=A9,
+>
+> Le mar. 19 oct. 2021 =C3=A0 10:05, Jos=C3=A9 Pekkarinen <jose.pekkarinen@=
+unikie.com>
+> a =C3=A9crit :
+>
+>> This patch adds a package for softhsm2.
+>>
+>> Signed-off-by: Jos=C3=A9 Pekkarinen <jose.pekkarinen@unikie.com>
+>> ---
+>> [ v1 -> v2 ]
+>>   - Added hash file and license information
+>>   - Moved recipe to use tarball
+>>   - Provided support to build against different ssl libraries
+>>   - Fixed toolchain dependencies and ssl select
+>>   - Referenced the package in package/Config.in
+>>   - Added myself as developer
+>>
+> thanks for this update. There are still a few things to fix in your patch=
+.
+>
+
+Hi,
+
+No problem, I'll get to them.
+
+
+
+>
+>>  DEVELOPERS                     |  3 +++
+>>  package/Config.in              |  1 +
+>>  package/softhsm2/Config.in     | 35 ++++++++++++++++++++++++++++++++++
+>>  package/softhsm2/softhsm2.hash |  4 ++++
+>>  package/softhsm2/softhsm2.mk   | 16 ++++++++++++++++
+>>  5 files changed, 59 insertions(+)
+>>  create mode 100644 package/softhsm2/Config.in
+>>  create mode 100644 package/softhsm2/softhsm2.hash
+>>  create mode 100644 package/softhsm2/softhsm2.mk
+>>
+>> diff --git a/DEVELOPERS b/DEVELOPERS
+>> index f6c39516b5..83d20d56cc 100644
+>> --- a/DEVELOPERS
+>> +++ b/DEVELOPERS
+>> @@ -2927,3 +2927,6 @@ F:        package/qjson/
+>>  F:     package/quazip/
+>>  F:     package/shapelib/
+>>  F:     package/tinc/
+>> +
+>> +N:     Jos=C3=A9 Pekkarinen <jose.pekkarinen@unikie.com>
+>> +F:     package/softhsm2/
+>> diff --git a/package/Config.in b/package/Config.in
+>> index 7971726875..4f9cd38a97 100644
+>> --- a/package/Config.in
+>> +++ b/package/Config.in
+>> @@ -2019,6 +2019,7 @@ menu "Security"
+>>         source "package/libsemanage/Config.in"
+>>         source "package/libsepol/Config.in"
+>>         source "package/safeclib/Config.in"
+>> +       source "package/softhsm2/Config.in"
+>>  endmenu
+>>
+>>  menu "Text and terminal handling"
+>> diff --git a/package/softhsm2/Config.in b/package/softhsm2/Config.in
+>> new file mode 100644
+>> index 0000000000..e4ca75de12
+>> --- /dev/null
+>> +++ b/package/softhsm2/Config.in
+>> @@ -0,0 +1,35 @@
+>> +config BR2_PACKAGE_SOFTHSM2
+>> +       bool "softhsm2"
+>> +       depends on BR2_INSTALL_LIBSTDCPP
+>> +       depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
+>> +       depends on !BR2_STATIC_LIBS # dlopen()
+>> +       select BR2_PACKAGE_OPENSSL
+>> +       select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
+>>
+> I know I somewhat confused you in my first review :-) But did you check
+> whether your package could work with libressl. If it does, you do not nee=
+d
+> the select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL.
+> Please refer to Arnout's comment on the first version of your patch.
+>
+
+Is this something I can quickly test by changing the
+
+config snippet in test-pkg?
+
+
+> +       help
+>> +         SoftHSM is an implementation of a cryptographic store
+>> +         accessible through a PKCS#11 interface. You can use it
+>> +         to explore PKCS#11 without having a Hardware Security
+>> +         Module.
+>> +
+>> +               https://www.opendnssec.org/softhsm
+>
+> The upstream url should have the same indentation as the help text above.
+> Please make sure you run the "./utils/check-package" utility before pushi=
+ng
+> your patch.
+>
+
+Well, sorry, but I did, this is the output of the
+
+patch before correcting the indentation:
+
+$ ./utils/check-package package/softhsm2/*
+55 lines processed
+0 warnings generated
+
+
+>
+>> +
+>> +choice
+>> +       prompt "SSL/TLS library to use"
+>> +
+>> +config BR2_PACKAGE_SOFTHSM2_OPENSSL
+>> +       bool "OpenSSL"
+>> +       depends on BR2_PACKAGE_OPENSSL
+>> +       select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES if BR2_PACKAGE_LIBOPENS=
+SL
+>> +
+>> +config BR2_PACKAGE_SOFTHSM2_BEARSSL
+>> +       bool "BearSSL"
+>> +       depends on BR2_PACKAGE_BEARSSL
+>> +
+>> +config BR2_PACKAGE_SOFTHSM2_WOLFSSL
+>> +       bool "WolfSSL"
+>> +       depends on BR2_PACKAGE_WOLFSSL
+>> +       select BR2_PACKAGE_WOLFSSL_ALL
+>> +
+>> +endchoice
+>>
+> This is not required. You can get rid of the choice menu, as you are not
+> interested in supporting botan.
+>
+
+Alright, removing.
+
+
++
+>> +comment "softhsm2 needs a toolchain with dynamic library"
+>>
+> a few comments there:
+> 1) this should appear conditionally so you should mention the
+> dependencies. Please refer to other packages that have the same type of
+> constraints.
+> 2) you should mention the CPP and C++11 requirements ("sofhsm2 needs a
+> toolchain w/ C++, gcc >=3D 4.8 and dynamic library support")
+>
+>
+>> diff --git a/package/softhsm2/softhsm2.hash
+>> b/package/softhsm2/softhsm2.hash
+>> new file mode 100644
+>> index 0000000000..a33e0d7e6f
+>> --- /dev/null
+>> +++ b/package/softhsm2/softhsm2.hash
+>> @@ -0,0 +1,4 @@
+>> +# From https://www.opendnssec.org/2020/04/1602/
+>> +sha256 61249473054bcd1811519ef9a989a880a7bdcc36d317c9c25457fc614df475f2
+>> softhsm-2.6.1.tar.gz
+>> +# Locally computed
+>> +sha256 230cab7102816e99f7ce03ef476352fcad09d742fcbc6580d44393db6280b64c
+>> LICENSE
+>>
+> the correct indentation is
+> sha256 <2 spaces> sha256sum <2 spaces> package/license
+>
+
+Ack.
+
+
+
+> diff --git a/package/softhsm2/softhsm2.mk b/package/softhsm2/softhsm2.mk
+>> new file mode 100644
+>> index 0000000000..4b47def3bf
+>> --- /dev/null
+>> +++ b/package/softhsm2/softhsm2.mk
+>> @@ -0,0 +1,16 @@
+>>
+>> +#######################################################################=
+#########
+>> +#
+>> +# softhsm2
+>> +#
+>>
+>> +#######################################################################=
+#########
+>> +
+>> +SOFTHSM2_VERSION =3D 2.6.1
+>> +SOFTHSM2_SOURCE =3D softhsm-$(SOFTHSM2_VERSION).tar.gz
+>>
+> This is not required as it is the default
+>
+
+Ack.
+
+
+
+> +SOFTHSM2_SITE =3D https://dist.opendnssec.org/source
+>> +SOFTHSM2_LICENSE =3D BSD-2-Clause
+>> +SOFTHSM2_LICENSE_FILES =3D LICENSE
+>> +SOFTHSM2_DEPENDENCIES =3D openssl
+>> +SOFTHSM2_AUTORECONF =3D YES
+>>
+> you should explain why it is required, e.g. "no configure script provided=
+"
+>
+
+Hum... I thought I removed this because of previous comments,
+
+I'll recheck this out.
+
+Thanks!
+
+
+Jos=C3=A9.
+
+--000000000000be696a05cf26e669
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div dir=3D"ltr"><br></div><br><div class=3D"gmail_quote">=
+<div dir=3D"ltr" class=3D"gmail_attr">On Sun, Oct 24, 2021 at 11:39 AM Gill=
+es Talis &lt;<a href=3D"mailto:gilles.talis@gmail.com">gilles.talis@gmail.c=
+om</a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote" style=3D"margi=
+n:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex=
+"><div dir=3D"ltr"><div dir=3D"ltr"><div style=3D"font-family:arial,sans-se=
+rif;font-size:small">Hi Jos=C3=A9,<br></div></div><br><div class=3D"gmail_q=
+uote"><div dir=3D"ltr" class=3D"gmail_attr">Le=C2=A0mar. 19 oct. 2021 =C3=
+=A0=C2=A010:05, Jos=C3=A9 Pekkarinen &lt;<a href=3D"mailto:jose.pekkarinen@=
+unikie.com" target=3D"_blank">jose.pekkarinen@unikie.com</a>&gt; a =C3=A9cr=
+it=C2=A0:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0p=
+x 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">This p=
+atch adds a package for softhsm2.<br>
+<br>
+Signed-off-by: Jos=C3=A9 Pekkarinen &lt;<a href=3D"mailto:jose.pekkarinen@u=
+nikie.com" target=3D"_blank">jose.pekkarinen@unikie.com</a>&gt;<br>
+---<br>
+[ v1 -&gt; v2 ]<br>
+=C2=A0 - Added hash file and license information<br>
+=C2=A0 - Moved recipe to use tarball<br>
+=C2=A0 - Provided support to build against different ssl libraries<br>
+=C2=A0 - Fixed toolchain dependencies and ssl select<br>
+=C2=A0 - Referenced the package in package/Config.in<br>
+=C2=A0 - Added myself as developer<br></blockquote><div><div style=3D"font-=
+family:arial,sans-serif;font-size:small">thanks for this update. There are =
+still a few things to fix in your patch.</div></div></div></div></blockquot=
+e><div><br></div></div><blockquote style=3D"margin:0 0 0 40px;border:none;p=
+adding:0px"><div class=3D"gmail_quote"><div>Hi,</div><div><br></div></div><=
+/blockquote><blockquote style=3D"margin:0 0 0 40px;border:none;padding:0px"=
+><div class=3D"gmail_quote"><div>No problem, I&#39;ll get to them.</div></d=
+iv></blockquote><div class=3D"gmail_quote"><div>=C2=A0</div><blockquote cla=
+ss=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid =
+rgb(204,204,204);padding-left:1ex"><div dir=3D"ltr"><div class=3D"gmail_quo=
+te"><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;bor=
+der-left:1px solid rgb(204,204,204);padding-left:1ex">
+<br>
+=C2=A0DEVELOPERS=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0|=C2=A0 3 +++<br>
+=C2=A0package/Config.in=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 |=
+=C2=A0 1 +<br>
+=C2=A0package/softhsm2/Config.in=C2=A0 =C2=A0 =C2=A0| 35 ++++++++++++++++++=
+++++++++++++++++<br>
+=C2=A0package/softhsm2/softhsm2.hash |=C2=A0 4 ++++<br>
+=C2=A0package/softhsm2/<a href=3D"http://softhsm2.mk" rel=3D"noreferrer" ta=
+rget=3D"_blank">softhsm2.mk</a>=C2=A0 =C2=A0| 16 ++++++++++++++++<br>
+=C2=A05 files changed, 59 insertions(+)<br>
+=C2=A0create mode 100644 package/softhsm2/Config.in<br>
+=C2=A0create mode 100644 package/softhsm2/softhsm2.hash<br>
+=C2=A0create mode 100644 package/softhsm2/<a href=3D"http://softhsm2.mk" re=
+l=3D"noreferrer" target=3D"_blank">softhsm2.mk</a><br>
+<br>
+diff --git a/DEVELOPERS b/DEVELOPERS<br>
+index f6c39516b5..83d20d56cc 100644<br>
+--- a/DEVELOPERS<br>
++++ b/DEVELOPERS<br>
+@@ -2927,3 +2927,6 @@ F:=C2=A0 =C2=A0 =C2=A0 =C2=A0 package/qjson/<br>
+=C2=A0F:=C2=A0 =C2=A0 =C2=A0package/quazip/<br>
+=C2=A0F:=C2=A0 =C2=A0 =C2=A0package/shapelib/<br>
+=C2=A0F:=C2=A0 =C2=A0 =C2=A0package/tinc/<br>
++<br>
++N:=C2=A0 =C2=A0 =C2=A0Jos=C3=A9 Pekkarinen &lt;<a href=3D"mailto:jose.pekk=
+arinen@unikie.com" target=3D"_blank">jose.pekkarinen@unikie.com</a>&gt;<br>
++F:=C2=A0 =C2=A0 =C2=A0package/softhsm2/<br>
+diff --git a/package/Config.in b/package/Config.in<br>
+index 7971726875..4f9cd38a97 100644<br>
+--- a/package/Config.in<br>
++++ b/package/Config.in<br>
+@@ -2019,6 +2019,7 @@ menu &quot;Security&quot;<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 source &quot;package/libsemanage/Config.in&quot=
+;<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 source &quot;package/libsepol/Config.in&quot;<b=
+r>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 source &quot;package/safeclib/Config.in&quot;<b=
+r>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0source &quot;package/softhsm2/Config.in&quot;<b=
+r>
+=C2=A0endmenu<br>
+<br>
+=C2=A0menu &quot;Text and terminal handling&quot;<br>
+diff --git a/package/softhsm2/Config.in b/package/softhsm2/Config.in<br>
+new file mode 100644<br>
+index 0000000000..e4ca75de12<br>
+--- /dev/null<br>
++++ b/package/softhsm2/Config.in<br>
+@@ -0,0 +1,35 @@<br>
++config BR2_PACKAGE_SOFTHSM2<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0bool &quot;softhsm2&quot;<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0depends on BR2_INSTALL_LIBSTDCPP<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++=
+11<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0depends on !BR2_STATIC_LIBS # dlopen()<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0select <span class=3D"gmail_default" style=3D"f=
+ont-family:arial,sans-serif;font-size:small"></span>BR2_PACKAGE_OPENSSL<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0<span class=3D"gmail_default" style=3D"font-fam=
+ily:arial,sans-serif;font-size:small"></span>select BR2_PACKAGE_OPENSSL_FOR=
+CE_LIBOPENSSL<br></blockquote><div><div style=3D"font-family:arial,sans-ser=
+if;font-size:small">I know I somewhat confused you in my first review :-) B=
+ut did you check whether your package could work with libressl. If it does,=
+ you do not need the <span class=3D"gmail_default" style=3D"font-family:ari=
+al,sans-serif;font-size:small"></span>select BR2_PACKAGE_OPENSSL_FORCE_LIBO=
+PENSSL.</div><div style=3D"font-family:arial,sans-serif;font-size:small">Pl=
+ease refer to Arnout&#39;s comment on the first version of your patch.<br><=
+/div></div></div></div></blockquote><div><br></div></div><blockquote style=
+=3D"margin:0 0 0 40px;border:none;padding:0px"><div class=3D"gmail_quote"><=
+div>Is this something I can quickly test by changing the</div></div></block=
+quote>config snippet in test-pkg?<br><div class=3D"gmail_quote"><div>=C2=A0=
+</div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;b=
+order-left:1px solid rgb(204,204,204);padding-left:1ex"><div dir=3D"ltr"><d=
+iv class=3D"gmail_quote"><blockquote class=3D"gmail_quote" style=3D"margin:=
+0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">
++=C2=A0 =C2=A0 =C2=A0 =C2=A0help<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0SoftHSM is an implementation of a crypto=
+graphic store<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0accessible through a PKCS#11 interface. =
+You can use it<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0to explore PKCS#11 without having a Hard=
+ware Security<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Module.<br>
++<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0<a href=3D"https://=
+www.opendnssec.org/softhsm" rel=3D"noreferrer" target=3D"_blank">https://ww=
+w.opendnssec.org/softhsm</a></blockquote><div><div style=3D"font-family:ari=
+al,sans-serif;font-size:small">The upstream url should have the same indent=
+ation as the help text above. Please make sure you run the &quot;./utils/ch=
+eck-package&quot; utility before pushing your patch.</div></div></div></div=
+></blockquote><div><br></div></div><blockquote style=3D"margin:0 0 0 40px;b=
+order:none;padding:0px"><div class=3D"gmail_quote"><div>Well, sorry, but I =
+did, this is the output of the</div></div></blockquote>patch before correct=
+ing the indentation:<div><br></div><div><span style=3D"font-family:monospac=
+e"><span style=3D"color:rgb(0,0,0)">$ ./utils/check-package package/softhsm=
+2/*
+</span><br>55 lines processed
+<br>0 warnings generated<br></span><div class=3D"gmail_quote"><div>=C2=A0=
+=C2=A0</div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0=
+.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex"><div dir=3D"l=
+tr"><div class=3D"gmail_quote"><blockquote class=3D"gmail_quote" style=3D"m=
+argin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left=
+:1ex"><br>
++<br>
++choice<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0prompt &quot;SSL/TLS library to use&quot;<br>
++<br>
++config BR2_PACKAGE_SOFTHSM2_OPENSSL<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0bool &quot;OpenSSL&quot;<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0depends on BR2_PACKAGE_OPENSSL<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES if BR2=
+_PACKAGE_LIBOPENSSL<br>
++<br>
++config BR2_PACKAGE_SOFTHSM2_BEARSSL<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0bool &quot;BearSSL&quot;<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0depends on BR2_PACKAGE_BEARSSL<br>
++<br>
++config BR2_PACKAGE_SOFTHSM2_WOLFSSL<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0bool &quot;WolfSSL&quot;<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0depends on BR2_PACKAGE_WOLFSSL<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0select BR2_PACKAGE_WOLFSSL_ALL<br>
++<br>
++endchoice<br></blockquote><div><div style=3D"font-family:arial,sans-serif;=
+font-size:small">This is not required. You can get rid of the choice menu, =
+as you are not interested in supporting botan.<br></div></div></div></div><=
+/blockquote><div><br></div></div></div><blockquote style=3D"margin:0 0 0 40=
+px;border:none;padding:0px"><div><div class=3D"gmail_quote"><div>Alright, r=
+emoving.=C2=A0</div></div></div></blockquote><div><div class=3D"gmail_quote=
+"><div><br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px =
+0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex"><div dir=
+=3D"ltr"><div class=3D"gmail_quote"><blockquote class=3D"gmail_quote" style=
+=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding=
+-left:1ex">
++<br>
++comment &quot;softhsm2 needs a toolchain with dynamic library&quot;<br></b=
+lockquote><div><div style=3D"font-family:arial,sans-serif;font-size:small">=
+a few comments there:<br></div><div style=3D"font-family:arial,sans-serif;f=
+ont-size:small">1) this should appear conditionally so you should mention t=
+he dependencies. Please refer to other packages that have the same type of =
+constraints.<br></div><div style=3D"font-family:arial,sans-serif;font-size:=
+small">2) you should mention the CPP and C++11 requirements (&quot;sofhsm2 =
+needs a toolchain w/ C++, gcc &gt;=3D 4.8 and dynamic library support&quot;=
+)<br></div></div><div>=C2=A0</div><blockquote class=3D"gmail_quote" style=
+=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding=
+-left:1ex">
+diff --git a/package/softhsm2/softhsm2.hash b/package/softhsm2/softhsm2.has=
+h<br>
+new file mode 100644<br>
+index 0000000000..a33e0d7e6f<br>
+--- /dev/null<br>
++++ b/package/softhsm2/softhsm2.hash<br>
+@@ -0,0 +1,4 @@<br>
++# From <a href=3D"https://www.opendnssec.org/2020/04/1602/" rel=3D"norefer=
+rer" target=3D"_blank">https://www.opendnssec.org/2020/04/1602/</a><br>
++sha256 61249473054bcd1811519ef9a989a880a7bdcc36d317c9c25457fc614df475f2 so=
+fthsm-2.6.1.tar.gz<br>
++# Locally computed<br>
++sha256 230cab7102816e99f7ce03ef476352fcad09d742fcbc6580d44393db6280b64c LI=
+CENSE<br></blockquote><div><div style=3D"font-family:arial,sans-serif;font-=
+size:small">the correct indentation is</div><div style=3D"font-family:arial=
+,sans-serif;font-size:small">sha256 &lt;2 spaces&gt; sha256sum &lt;2 spaces=
+&gt; package/license</div></div></div></div></blockquote><div><br></div></d=
+iv></div><blockquote style=3D"margin:0 0 0 40px;border:none;padding:0px"><d=
+iv><div class=3D"gmail_quote"><div>Ack.</div></div></div></blockquote><div>=
+<div class=3D"gmail_quote"><div>=C2=A0</div><blockquote class=3D"gmail_quot=
+e" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204)=
+;padding-left:1ex"><div dir=3D"ltr"><div class=3D"gmail_quote"><blockquote =
+class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px sol=
+id rgb(204,204,204);padding-left:1ex">
+diff --git a/package/softhsm2/<a href=3D"http://softhsm2.mk" rel=3D"norefer=
+rer" target=3D"_blank">softhsm2.mk</a> b/package/softhsm2/<a href=3D"http:/=
+/softhsm2.mk" rel=3D"noreferrer" target=3D"_blank">softhsm2.mk</a><br>
+new file mode 100644<br>
+index 0000000000..4b47def3bf<br>
+--- /dev/null<br>
++++ b/package/softhsm2/<a href=3D"http://softhsm2.mk" rel=3D"noreferrer" ta=
+rget=3D"_blank">softhsm2.mk</a><br>
+@@ -0,0 +1,16 @@<br>
++##########################################################################=
+######<br>
++#<br>
++# softhsm2<br>
++#<br>
++##########################################################################=
+######<br>
++<br>
++SOFTHSM2_VERSION =3D 2.6.1<br>
++SOFTHSM2_SOURCE =3D softhsm-$(SOFTHSM2_VERSION).tar.gz<br></blockquote><di=
+v><div style=3D"font-family:arial,sans-serif;font-size:small">This is not r=
+equired as it is the default</div></div></div></div></blockquote><div><br><=
+/div></div></div><blockquote style=3D"margin:0 0 0 40px;border:none;padding=
+:0px"><div><div class=3D"gmail_quote"><div>Ack.=C2=A0</div></div></div></bl=
+ockquote><div><div class=3D"gmail_quote"><div>=C2=A0</div><blockquote class=
+=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rg=
+b(204,204,204);padding-left:1ex"><div dir=3D"ltr"><div class=3D"gmail_quote=
+"><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;borde=
+r-left:1px solid rgb(204,204,204);padding-left:1ex">
++SOFTHSM2_SITE =3D <a href=3D"https://dist.opendnssec.org/source" rel=3D"no=
+referrer" target=3D"_blank">https://dist.opendnssec.org/source</a><br>
++SOFTHSM2_LICENSE =3D BSD-2-Clause<br>
++SOFTHSM2_LICENSE_FILES =3D LICENSE<br>
++SOFTHSM2_DEPENDENCIES =3D openssl<br>
++SOFTHSM2_AUTORECONF =3D YES<br></blockquote><div><div style=3D"font-family=
+:arial,sans-serif;font-size:small">you should explain why it is required, e=
+.g. &quot;no configure script provided&quot;</div></div></div></div></block=
+quote><div><br></div></div></div><blockquote style=3D"margin:0 0 0 40px;bor=
+der:none;padding:0px"><div><div class=3D"gmail_quote"><div>Hum... I thought=
+ I removed this because of previous comments,</div></div></div></blockquote=
+>I&#39;ll recheck this out.<div><br></div><div><blockquote style=3D"margin:=
+0 0 0 40px;border:none;padding:0px"><div>Thanks!</div></blockquote><div><di=
+v><br></div><div dir=3D"ltr" class=3D"gmail_signature"><div dir=3D"ltr"><bl=
+ockquote style=3D"margin:0px 0px 0px 40px;border:none;padding:0px">Jos=C3=
+=A9.</blockquote></div></div></div></div></div>
+
+--000000000000be696a05cf26e669--
+
+--===============1813555495261583430==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1813555495261583430==--
