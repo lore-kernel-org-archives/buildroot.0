@@ -2,93 +2,84 @@ Return-Path: <SRS0=F6DF=PN=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EEBBCC433EF
-	for <buildroot@archiver.kernel.org>; Mon, 25 Oct 2021 20:20:52 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A566CC433EF
+	for <buildroot@archiver.kernel.org>; Mon, 25 Oct 2021 20:21:04 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B708360C4A
-	for <buildroot@archiver.kernel.org>; Mon, 25 Oct 2021 20:20:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B708360C4A
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
+	by mail.kernel.org (Postfix) with ESMTPS id 6BB1560E52
+	for <buildroot@archiver.kernel.org>; Mon, 25 Oct 2021 20:21:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6BB1560E52
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8938E608B3;
-	Mon, 25 Oct 2021 20:20:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3929240237;
+	Mon, 25 Oct 2021 20:21:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3XhQ-_EavoZI; Mon, 25 Oct 2021 20:20:51 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E78136089F;
-	Mon, 25 Oct 2021 20:20:50 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 34A651BF870
- for <buildroot@lists.busybox.net>; Mon, 25 Oct 2021 20:19:56 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3032A40237
- for <buildroot@lists.busybox.net>; Mon, 25 Oct 2021 20:19:56 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PpuZF6mbpJyB for <buildroot@lists.busybox.net>;
- Mon, 25 Oct 2021 20:19:55 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id MJA4EdCEg_fW; Mon, 25 Oct 2021 20:21:03 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6AC134041B;
+	Mon, 25 Oct 2021 20:21:02 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id BFB851BF870
+ for <buildroot@lists.busybox.net>; Mon, 25 Oct 2021 20:20:06 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id AED3E60807
+ for <buildroot@lists.busybox.net>; Mon, 25 Oct 2021 20:20:06 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id n_KxkwarGn3v for <buildroot@lists.busybox.net>;
+ Mon, 25 Oct 2021 20:20:05 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com
- [IPv6:2a00:1450:4864:20::52d])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 43DA54021D
- for <buildroot@buildroot.org>; Mon, 25 Oct 2021 20:19:55 +0000 (UTC)
-Received: by mail-ed1-x52d.google.com with SMTP id a26so4288223edy.11
- for <buildroot@buildroot.org>; Mon, 25 Oct 2021 13:19:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com
+ [IPv6:2607:f8b0:4864:20::102a])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id BF513605A6
+ for <buildroot@buildroot.org>; Mon, 25 Oct 2021 20:20:05 +0000 (UTC)
+Received: by mail-pj1-x102a.google.com with SMTP id gn3so9187839pjb.0
+ for <buildroot@buildroot.org>; Mon, 25 Oct 2021 13:20:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=KYe2qsjXVw0A9R4heKxE3QIKrEFD1/+5b79l8DLghcg=;
- b=guDdPoULWXom+wYWxbtFQ3KT4XLOP7sqnXiX05yKpLj1y6gsFRirj3wJNp7mmfFdxd
- CWmydtqAYOlBItK9fzkYNOkzbdyG5FrVW6X9yeBqDL7pbStfHKZquovZKnwl+gq9+7h7
- EuTGtU226Atfn8kIK42MjDXKZ2DH5BbqJM8Gprcm90s/mo6GGvpqOa2Gcw2vsahNnszK
- Z4Y6UT6a70u8kTuXMSvspZjMe3YvTLPzbiiGfPjdCIf948JGvMRFJllD9h/vHSPNT/Ky
- 3B+4F9MYQ3OFqFM7deQqNTFmuB25MB0xy1L5SixftapHYP3mTWCYf2nl9HQKI7h9vaRC
- Mk+A==
+ bh=Cg3sFZDrhtm5GvMC3Q9b+gzl9dLVntfgvY2Z0RNB84k=;
+ b=FB1UgPnHok1GRZ6WRRz+V6s9Q1SIuWI9xm/F0VxnvYMH/3UReBk9HQKoaY4daopFme
+ k3mxkd3C20/8So1JV8TlsTe226hAgluWTm0x2+1dNZkKqL11aDsitYPaDWwHPZiH2qCQ
+ CBSIOfSC65xdfE4c+1Il01h6xjnHqVgCK/xqxQc3qgoguL74RqzrqxJFAIUYPklXPj/i
+ j1GzrAuuUfvZ85XkUom8/cKmx9CPMzpRSED7kF5perMYX6gEcLSwHNmcCT65NKqbXVsE
+ U89VNUG8JpiDouZi1AQJu1FGKKHf7S+WbRkC0bwjl8a+U7pfeBO9nj1q21DDvFPo/AFk
+ 0sFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=KYe2qsjXVw0A9R4heKxE3QIKrEFD1/+5b79l8DLghcg=;
- b=wBKBUHbTPJpE9g3l5TmLH+jjAYvkjKDbAhbRmrriIrnwfVM84k95xsZ+dp9c3S0ton
- WeYy3GTT8/sDjaDuXaXO+tE1kcbc1bNstO+RVIrg9+iH4ZR8aL1U1j08VwJ0M8twH4qO
- DnBKCs27Q/Z0Mzd3cEqHlN3BKVPdWXgOiSy0EF2fhwZY6AkxaKqLqiRI3VB2uEjlaq/U
- QyYC4ze+eBJM6FVoMkn+XC2eat0nW+75Q0l5yKbtEVUhooeDYypYkY/cdJ/o/nRNzDsi
- pD9cONmiE6Hh8Bvv/PvK7k+2FYfDRRgQrHWXYc+1haQYJXjSHMAHi/I4IWYDnb89gR1a
- 3Jlw==
-X-Gm-Message-State: AOAM533PQip2dGBB+oH9YB5V4KAKP666KRN+Fm3lyx1BOTe+wmyGgPtz
- Ah4zBbI6pMgmfjrLn4EyGbhogrvzAJP6hQUS
-X-Google-Smtp-Source: ABdhPJz3CYBNU1P3SwLxVH0NwdBYJ9gv2TtP/iaDwaN272GozgqX0zJCmcuHm4F7ZYNGiFVJ/rm+jA==
-X-Received: by 2002:a17:907:1112:: with SMTP id
- qu18mr19805978ejb.339.1635193192501; 
- Mon, 25 Oct 2021 13:19:52 -0700 (PDT)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
- (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id y22sm10374302edc.76.2021.10.25.13.19.51
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 25 Oct 2021 13:19:52 -0700 (PDT)
-Message-ID: <6ea1c190-a20e-9be2-09c6-3e050174c090@mind.be>
-Date: Mon, 25 Oct 2021 22:19:51 +0200
+ bh=Cg3sFZDrhtm5GvMC3Q9b+gzl9dLVntfgvY2Z0RNB84k=;
+ b=BrEi0AZO5aipjy1sNWmd468TfW7muDqjwc+m74TSTXQDSrl92CZtaw/sfHDAf0DwCC
+ R2UlwnUKLLdB8mcUwDnjBbLP+0ZQW459rrMxP6/PiSheyO0+UGK5CWJmT+2XcpLv9feX
+ cV315zMQfokQurXbWBehVJ3v2k7QqDuYGEcjOWsoBcH7MQZKlLkx0IaNHjp1uRyPw3XB
+ 6OV0huUgt1zINqdO0t3NTYgxgAVK9ACZK0jeWmlRIJIpfcyq+ORo6LDzJ+mew3+otUiU
+ zUKPRiHFP53LccD5Ctz+AfP9aRqgMUmagUsAxCKORd+GRgOXC7bAfPHtD9jCRPLD+Bxv
+ eIcQ==
+X-Gm-Message-State: AOAM532jQ9sgdgohV62NNvVEUnv7B/SQr40mrGar5scC0lBk8u7jSJFa
+ gEJG/DKlZWgxErKc5QaIHLMeZ/EVPY0=
+X-Google-Smtp-Source: ABdhPJxHxzwJy7451oxwnxKaSp0w67IH+LS6N7YaNDQFgFX1sry7PoBcde6ySunpG3/f+fsozu/Uig==
+X-Received: by 2002:a17:90b:1812:: with SMTP id
+ lw18mr4228997pjb.9.1635193204932; 
+ Mon, 25 Oct 2021 13:20:04 -0700 (PDT)
+Received: from adam.. ([47.149.13.137])
+ by smtp.gmail.com with ESMTPSA id h19sm22852583pfv.81.2021.10.25.13.20.04
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 25 Oct 2021 13:20:04 -0700 (PDT)
+From: Adam Duskett <aduskett@gmail.com>
+To: buildroot@buildroot.org
+Date: Mon, 25 Oct 2021 13:20:02 -0700
+Message-Id: <20211025202002.589440-1-aduskett@gmail.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Content-Language: en-GB
-To: Adam Duskett <aduskett@gmail.com>, buildroot@buildroot.org
-References: <20211025200049.381077-1-aduskett@gmail.com>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <20211025200049.381077-1-aduskett@gmail.com>
-Subject: Re: [Buildroot] [PATCH 1/1] package/qemu: bump host gcc
+Subject: [Buildroot] [PATCH v2 1/1] package/qemu: bump host gcc
  requirements: propagate to all reverse dependencies
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -101,53 +92,165 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>, Martin Bark <martin@barkynet.com>,
- Daniel Price <daniel.price@gmail.com>, Anisse Astier <anisse@astier.eu>
+Cc: Daniel Price <daniel.price@gmail.com>, Grzegorz Blach <grzegorz@blach.pl>,
+ Anisse Astier <anisse@astier.eu>, Asaf Kahlon <asafka7@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Romain Naour <romain.naour@gmail.com>, Martin Bark <martin@barkynet.com>,
+ Adam Duskett <aduskett@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+qemu now requires gcc >= 7.5, however, as there is no BR2_HOST_GCC_AT_LEAST_7_5,
+set the host gcc requirements to 8.
 
+In addition:
+  - Add a missing comment in package/qemu/Config.in.host explaining the host gcc
+    requirements if host gcc < 8.
 
-On 25/10/2021 22:00, Adam Duskett wrote:
-> qemu now requires gcc >= 7.5, however, as there is no BR2_HOST_GCC_AT_LEAST_7_5,
-> set the host gcc requirements to 8.
-> 
-> In addition:
->    - Propagate the host gcc dependency to gobject-introspection as it was missing
->      to begin with.
->    - Propagate the host gcc dependency to nodejs
->    - Add a missing comment in package/qemu/Config.in.host explaining the host gcc
->      requirements if host gcc < 8.
-> 
-> Fixes:
-> http://autobuild.buildroot.org/results/32b7fee1f8cda2290fd4bd8ac9fe78bacb25b652
-> 
-> Signed-off-by: Adam Duskett <aduskett@gmail.com>
-> ---
->   package/gobject-introspection/Config.in | 3 ++-
->   package/nodejs/Config.in                | 6 +++---
->   package/qemu/Config.in.host             | 7 ++++++-
->   3 files changed, 11 insertions(+), 5 deletions(-)
-> 
-> diff --git a/package/gobject-introspection/Config.in b/package/gobject-introspection/Config.in
-> index bacf44363c..15b6bc3bfa 100644
-> --- a/package/gobject-introspection/Config.in
-> +++ b/package/gobject-introspection/Config.in
-> @@ -13,6 +13,7 @@ config BR2_PACKAGE_GOBJECT_INTROSPECTION
->   	# compile errors with locale.c. As such, require 4.9 until this
->   	# can be verified.
->   	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-> +	depends on BR2_HOST_GCC_AT_LEAST_8 # qemu
+Fixes:
+http://autobuild.buildroot.org/results/32b7fee1f8cda2290fd4bd8ac9fe78bacb25b652
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+---
+changes v1 -> v2:
+  - rebase against commit 17358061ad2b58d3eb96ea8c5631e235a484ac87
 
-  Ha, Yann just applied [1] so this will need to be refreshed...
+ package/gobject-introspection/Config.in | 6 +++---
+ package/nodejs/Config.in                | 6 +++---
+ package/python-bluezero/Config.in       | 6 +++---
+ package/python-gobject/Config.in        | 6 +++---
+ package/qemu/Config.in.host             | 7 ++++++-
+ 5 files changed, 18 insertions(+), 13 deletions(-)
 
-  Regards,
-  Arnout
-
-[1] 
-https://patchwork.ozlabs.org/project/buildroot/patch/20211019052531.1604264-1-fontaine.fabrice@gmail.com/
+diff --git a/package/gobject-introspection/Config.in b/package/gobject-introspection/Config.in
+index c631c84755..42250eb776 100644
+--- a/package/gobject-introspection/Config.in
++++ b/package/gobject-introspection/Config.in
+@@ -13,7 +13,7 @@ config BR2_PACKAGE_GOBJECT_INTROSPECTION
+ 	# compile errors with locale.c. As such, require 4.9 until this
+ 	# can be verified.
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+-	depends on BR2_HOST_GCC_AT_LEAST_7 # host-qemu
++	depends on BR2_HOST_GCC_AT_LEAST_8 # host-qemu
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC
+ 	# gobject-introspection does not require python3 to run on the
+ 	# target; however, because the tools run in a qemu wrapper, a
+@@ -42,9 +42,9 @@ comment "gobject-introspection needs python3"
+ 	depends on !BR2_PACKAGE_PYTHON3
+ 	depends on BR2_PACKAGE_GOBJECT_INTROSPECTION_ARCH_SUPPORTS
+ 
+-comment "gobject-introspection needs a glibc toolchain, gcc >= 4.9, host gcc >= 7"
++comment "gobject-introspection needs a glibc toolchain, gcc >= 4.9, host gcc >= 8"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_PACKAGE_GOBJECT_INTROSPECTION_ARCH_SUPPORTS
+ 	depends on !BR2_TOOLCHAIN_USES_GLIBC || \
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
+-		!BR2_HOST_GCC_AT_LEAST_7
++		!BR2_HOST_GCC_AT_LEAST_8
+diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
+index 771f735e97..99c76bc3de 100644
+--- a/package/nodejs/Config.in
++++ b/package/nodejs/Config.in
+@@ -8,18 +8,18 @@ config BR2_PACKAGE_NODEJS_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on BR2_PACKAGE_QEMU_ARCH_SUPPORTS_TARGET
+ 
+-comment "nodejs needs a toolchain w/ C++, dynamic library, NPTL, gcc >= 7, wchar"
++comment "nodejs needs a toolchain w/ C++, dynamic library, NPTL, gcc >= 7, wchar, host gcc >= 8"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_PACKAGE_NODEJS_ARCH_SUPPORTS
+ 	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
+-		!BR2_HOST_GCC_AT_LEAST_7 || !BR2_TOOLCHAIN_GCC_AT_LEAST_7 || !BR2_USE_WCHAR
++		!BR2_HOST_GCC_AT_LEAST_8 || !BR2_TOOLCHAIN_GCC_AT_LEAST_7 || !BR2_USE_WCHAR
+ 
+ config BR2_PACKAGE_NODEJS
+ 	bool "nodejs"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # libuv
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_PACKAGE_NODEJS_ARCH_SUPPORTS
+-	depends on BR2_HOST_GCC_AT_LEAST_7
++	depends on BR2_HOST_GCC_AT_LEAST_8 # qemu
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7
+ 	depends on BR2_USE_WCHAR
+ 	# uses fork()
+diff --git a/package/python-bluezero/Config.in b/package/python-bluezero/Config.in
+index 3d40b1e275..d617b96d67 100644
+--- a/package/python-bluezero/Config.in
++++ b/package/python-bluezero/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_PYTHON_BLUEZERO
+ 	bool "python-bluezero"
+ 	depends on BR2_PACKAGE_GOBJECT_INTROSPECTION_ARCH_SUPPORTS # python-gobject -> gobject-introspection
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # python-gobject -> gobject-introspection
+-	depends on BR2_HOST_GCC_AT_LEAST_7 # python-gobject -> gobject-introspection -> host-qemu
++	depends on BR2_HOST_GCC_AT_LEAST_8 # python-gobject -> gobject-introspection -> host-qemu
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC # python-gobject -> gobject-introspection
+ 	depends on BR2_PACKAGE_PYTHON3
+ 	select BR2_PACKAGE_DBUS # runtime
+@@ -13,9 +13,9 @@ config BR2_PACKAGE_PYTHON_BLUEZERO
+ 
+ 	  https://github.com/ukBaz/python-bluezero
+ 
+-comment "python-bluezero needs a glibc toolchain, gcc >= 4.9, host gcc >= 7"
++comment "python-bluezero needs a glibc toolchain, gcc >= 4.9, host gcc >= 8"
+ 	depends on BR2_PACKAGE_PYTHON3
+ 	depends on BR2_PACKAGE_GOBJECT_INTROSPECTION_ARCH_SUPPORTS
+ 	depends on !BR2_TOOLCHAIN_USES_GLIBC || \
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
+-		!BR2_HOST_GCC_AT_LEAST_7
++		!BR2_HOST_GCC_AT_LEAST_8
+diff --git a/package/python-gobject/Config.in b/package/python-gobject/Config.in
+index 910f990026..efc781a1ff 100644
+--- a/package/python-gobject/Config.in
++++ b/package/python-gobject/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_PYTHON_GOBJECT
+ 	depends on BR2_USE_MMU # libglib2, gobject-introspection
+ 	depends on BR2_PACKAGE_GOBJECT_INTROSPECTION_ARCH_SUPPORTS # gobject-introspection
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # gobject-introspection
+-	depends on BR2_HOST_GCC_AT_LEAST_7 # gobject-introspection -> host-qemu
++	depends on BR2_HOST_GCC_AT_LEAST_8 # gobject-introspection -> host-qemu
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC # gobject-introspection
+ 	depends on BR2_PACKAGE_PYTHON3 # gobject-introspection
+ 	select BR2_PACKAGE_GOBJECT_INTROSPECTION
+@@ -13,9 +13,9 @@ config BR2_PACKAGE_PYTHON_GOBJECT
+ 
+ 	  https://wiki.gnome.org/action/show/Projects/PyGObject
+ 
+-comment "python-gobject needs a glibc toolchain, gcc >= 4.9, host gcc >= 7"
++comment "python-gobject needs a glibc toolchain, gcc >= 4.9, host gcc >= 8"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_PACKAGE_GOBJECT_INTROSPECTION_ARCH_SUPPORTS
+ 	depends on !BR2_TOOLCHAIN_USES_GLIBC || \
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
+-		!BR2_HOST_GCC_AT_LEAST_7
++		!BR2_HOST_GCC_AT_LEAST_8
+diff --git a/package/qemu/Config.in.host b/package/qemu/Config.in.host
+index a5b38c081b..df5d921125 100644
+--- a/package/qemu/Config.in.host
++++ b/package/qemu/Config.in.host
+@@ -37,7 +37,7 @@ config BR2_PACKAGE_HOST_QEMU_USER_ARCH_SUPPORTS
+ config BR2_PACKAGE_HOST_QEMU
+ 	bool "host qemu"
+ 	depends on BR2_PACKAGE_HOST_QEMU_SYSTEM_ARCH_SUPPORTS || BR2_PACKAGE_HOST_QEMU_USER_ARCH_SUPPORTS
+-	depends on BR2_HOST_GCC_AT_LEAST_7
++	depends on BR2_HOST_GCC_AT_LEAST_8
+ 	select BR2_PACKAGE_HOST_QEMU_LINUX_USER_MODE \
+ 		if !BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE && BR2_PACKAGE_HOST_QEMU_USER_ARCH_SUPPORTS
+ 	select BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE \
+@@ -50,6 +50,11 @@ config BR2_PACKAGE_HOST_QEMU
+ 
+ 	  http://www.qemu.org
+ 
++comment "host-qemu needs a host gcc >= 8"
++	depends on BR2_PACKAGE_HOST_QEMU_SYSTEM_ARCH_SUPPORTS || \
++		BR2_PACKAGE_HOST_QEMU_USER_ARCH_SUPPORT
++	depends on !BR2_HOST_GCC_AT_LEAST_8
++
+ if BR2_PACKAGE_HOST_QEMU
+ 
+ comment "Emulators selection"
+-- 
+2.32.0
 
 _______________________________________________
 buildroot mailing list
