@@ -2,52 +2,52 @@ Return-Path: <SRS0=F6DF=PN=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D35FC433FE
-	for <buildroot@archiver.kernel.org>; Mon, 25 Oct 2021 19:17:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D2B7C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 25 Oct 2021 19:17:23 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id E675C610C7
-	for <buildroot@archiver.kernel.org>; Mon, 25 Oct 2021 19:17:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E675C610C7
+	by mail.kernel.org (Postfix) with ESMTPS id 9A9FF610A8
+	for <buildroot@archiver.kernel.org>; Mon, 25 Oct 2021 19:17:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9A9FF610A8
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9FADF40288;
-	Mon, 25 Oct 2021 19:17:09 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 65A93403D1;
+	Mon, 25 Oct 2021 19:17:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id iwCSll_vDOSM; Mon, 25 Oct 2021 19:17:08 +0000 (UTC)
+	with ESMTP id a0kZeUCTQqOd; Mon, 25 Oct 2021 19:17:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A5B17403C6;
-	Mon, 25 Oct 2021 19:17:07 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 625A21BF983
+	by smtp2.osuosl.org (Postfix) with ESMTP id 390B6403D5;
+	Mon, 25 Oct 2021 19:17:20 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 7722A1BF309
  for <buildroot@lists.busybox.net>; Mon, 25 Oct 2021 19:16:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 519A060892
+ by smtp2.osuosl.org (Postfix) with ESMTP id 731E2403C6
  for <buildroot@lists.busybox.net>; Mon, 25 Oct 2021 19:16:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Xv6xJl1wpDol for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vzugF-PpARF9 for <buildroot@lists.busybox.net>;
  Mon, 25 Oct 2021 19:16:42 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8DE6060774
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7D9F440288
  for <buildroot@buildroot.org>; Mon, 25 Oct 2021 19:16:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 16C54887EB; Mon, 25 Oct 2021 19:13:22 +0000 (UTC)
+ id EA00D887EB; Mon, 25 Oct 2021 19:13:21 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Mon, 25 Oct 2021 21:11:46 +0200
+Date: Mon, 25 Oct 2021 20:58:27 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8db775229b033f25661433fbc7c59d66ec2798b7
-X-Git-Newrev: a1f7597b4dcd60e8373040739d7abbc0f45dd5f5
+X-Git-Oldrev: f36483126e38d097041a17d4e0e916c19d8651ae
+X-Git-Newrev: 1ebc5415e12a5c6936d7ce217de43f7d910ee025
 X-Patchwork-Hint: ignore
-Message-Id: <20211025191322.16C54887EB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-watchdog: bump to version
- 2.1.6
+Message-Id: <20211025191321.EA00D887EB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/micropython: depends on
+ host-python3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,51 +65,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a1f7597b4dcd60e8373040739d7abbc0f45dd5f5
+commit: https://git.buildroot.net/buildroot/commit/?id=1ebc5415e12a5c6936d7ce217de43f7d910ee025
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-COPYING got "and contributors" added to authors.
+Replace BR2_PYTHON3_HOST_DEPENDENCY by host-python3 to avoid the
+following build failure raised since bump to version 1.17 in commit
+32b2a03745785afeb496979aa3c0f654bc6063ce:
 
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
+Traceback (most recent call last):
+  File "../py/makeversionhdr.py", line 117, in <module>
+    make_version_header(sys.argv[1])
+  File "../py/makeversionhdr.py", line 79, in make_version_header
+    info = get_version_info_from_docs_conf()
+  File "../py/makeversionhdr.py", line 67, in get_version_info_from_docs_conf
+    for line in f:
+  File "/usr/lib/python3.5/encodings/ascii.py", line 26, in decode
+    return codecs.ascii_decode(input, self.errors)[0]
+UnicodeDecodeError: 'ascii' codec can't decode byte 0xc2 in position 2154: ordinal not in range(128)
+
+Indeed, this build failure is not reproduced by host-python3 (in version
+3.9.7) so it is probably an issue with python 3.5 (which is 6-years old).
+
+Fixes:
+ - http://autobuild.buildroot.org/results/96f7b81f5d14715b0b6673a8016a31e9e1552d0b
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Reviewed-by: Chris Packham <judge.packham@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/python-watchdog/python-watchdog.hash | 11 +++++------
- package/python-watchdog/python-watchdog.mk   |  4 ++--
- 2 files changed, 7 insertions(+), 8 deletions(-)
+ package/micropython/micropython.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/python-watchdog/python-watchdog.hash b/package/python-watchdog/python-watchdog.hash
-index 701c7991a5..3b633f9156 100644
---- a/package/python-watchdog/python-watchdog.hash
-+++ b/package/python-watchdog/python-watchdog.hash
-@@ -1,7 +1,6 @@
--# md5, sha256 from https://pypi.python.org/pypi/watchdog/json
--md5	7cdc103f607e72fc32c206301a72d1b2  watchdog-0.9.0.tar.gz
--sha256	965f658d0732de3188211932aeb0bb457587f04f63ab4c1e33eab878e9de961d  watchdog-0.9.0.tar.gz
--
--# Hash for license files
--sha256  14e636faf5889138a1bb7a8498ccbb0266aee31d2dc475201a10448e56ed3d96  COPYING
-+# md5, sha256 from https://pypi.org/pypi/watchdog/json
-+md5  6aac660b0f3358c63658806a0579b832  watchdog-2.1.6.tar.gz
-+sha256  a36e75df6c767cbf46f61a91c70b3ba71811dfa0aca4a324d9407a06a8b7a2e7  watchdog-2.1.6.tar.gz
-+# Locally computed sha256 checksums
-+sha256  02c8760f988a76e92a9d6cb525456a86f7b0fd1953870dd491de5955cb974d41  COPYING
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/python-watchdog/python-watchdog.mk b/package/python-watchdog/python-watchdog.mk
-index 44929a65ac..2dafef97e1 100644
---- a/package/python-watchdog/python-watchdog.mk
-+++ b/package/python-watchdog/python-watchdog.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/package/micropython/micropython.mk b/package/micropython/micropython.mk
+index 3d69e152e5..c49ca23449 100644
+--- a/package/micropython/micropython.mk
++++ b/package/micropython/micropython.mk
+@@ -11,7 +11,7 @@ MICROPYTHON_SITE = $(call github,micropython,micropython,v$(MICROPYTHON_VERSION)
+ # and most of the copied code is not used in the unix build.
+ MICROPYTHON_LICENSE = MIT, BSD-1-clause, BSD-3-clause, Zlib
+ MICROPYTHON_LICENSE_FILES = LICENSE
+-MICROPYTHON_DEPENDENCIES = host-pkgconf libffi $(BR2_PYTHON3_HOST_DEPENDENCY)
++MICROPYTHON_DEPENDENCIES = host-pkgconf libffi host-python3
  
--PYTHON_WATCHDOG_VERSION = 0.9.0
-+PYTHON_WATCHDOG_VERSION = 2.1.6
- PYTHON_WATCHDOG_SOURCE = watchdog-$(PYTHON_WATCHDOG_VERSION).tar.gz
--PYTHON_WATCHDOG_SITE = https://pypi.python.org/packages/bb/e3/5a55d48a29300160779f0a0d2776d17c1b762a2039b36de528b093b87d5b
-+PYTHON_WATCHDOG_SITE = https://files.pythonhosted.org/packages/e8/a8/fc4edd7d768361b00ea850e5310211d157df6b5a1db6148dd434e787d898
- PYTHON_WATCHDOG_SETUP_TYPE = setuptools
- PYTHON_WATCHDOG_LICENSE = Apache-2.0
- PYTHON_WATCHDOG_LICENSE_FILES = LICENSE COPYING
+ # Set GIT_DIR so package won't use buildroot's version number
+ MICROPYTHON_MAKE_ENV = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
