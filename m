@@ -2,71 +2,85 @@ Return-Path: <SRS0=F6DF=PN=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B5F4AC433EF
-	for <buildroot@archiver.kernel.org>; Mon, 25 Oct 2021 18:59:37 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 107A2C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 25 Oct 2021 19:01:37 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 063D26103C
-	for <buildroot@archiver.kernel.org>; Mon, 25 Oct 2021 18:59:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 063D26103C
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=benettiengineering.com
+	by mail.kernel.org (Postfix) with ESMTPS id C8EA060230
+	for <buildroot@archiver.kernel.org>; Mon, 25 Oct 2021 19:01:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C8EA060230
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D082A80CAA;
-	Mon, 25 Oct 2021 18:59:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 948B36088B;
+	Mon, 25 Oct 2021 19:01:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MPzN08V37uVI; Mon, 25 Oct 2021 18:59:36 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3C24180C1E;
-	Mon, 25 Oct 2021 18:59:35 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id EFEC81BF20D
- for <buildroot@lists.busybox.net>; Mon, 25 Oct 2021 18:59:32 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E006F60847
- for <buildroot@lists.busybox.net>; Mon, 25 Oct 2021 18:59:32 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=aruba.it
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lGwJrUQonVNM for <buildroot@lists.busybox.net>;
- Mon, 25 Oct 2021 18:59:29 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtpcmd01-g.aruba.it (smtpcmd01-g.aruba.it [62.149.158.217])
- by smtp3.osuosl.org (Postfix) with ESMTP id D2D3460737
- for <buildroot@buildroot.org>; Mon, 25 Oct 2021 18:59:28 +0000 (UTC)
-Received: from [192.168.153.129] ([146.241.216.221])
- by Aruba Outgoing Smtp  with ESMTPSA
- id f5BumpXa0qi9if5BumuAOS; Mon, 25 Oct 2021 20:59:26 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1635188366; bh=Ms8OAqtOqu9qhclvHShwk5I4X4aEzYliMjWofW13Cok=;
- h=Subject:To:From:Date:MIME-Version:Content-Type;
- b=YXtQDXgbcjlQfGKq/1OaHAbMClVujXSsS1ih5VkRYMbDndQCuHOAsrlHsjDX10DvB
- dVT1ygCyFDz6IfJ9NpAPwE+N1IClaYzp56K2p8gD54IkRhHfSMWlCEVDATXXdyIUt5
- b6UlEakY26sTVpxpbNslEUz39CEIi4fKj1TteWHQIJh2hpiANxgbO8QG/A5q8JmnZX
- wVT4WNIxl6sR1sqqKSWjN6elNLj8BvmPhRj70P2DYZdzrgDgL2a2lnw1c+qPpgUov+
- NZNUZwJSmOPzsQLbBLnhdOwvJWLFNhbCfJNgvHvx6qDDYSZrM+z/m7WBKPsyuVkOQV
- Wd2alOOjzDvqQ==
-To: Arnout Vandecappelle <arnout@mind.be>, buildroot@buildroot.org
-References: <20211010224220.1111960-1-giulio.benetti@benettiengineering.com>
- <782a9bea-cf76-3123-a700-761749f2d34a@mind.be>
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <9d1fad97-2d56-6fc0-a1d0-1f113cbe2e9b@benettiengineering.com>
-Date: Mon, 25 Oct 2021 20:59:26 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ueJBD-Y2RqEu; Mon, 25 Oct 2021 19:01:34 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id F2AC060847;
+	Mon, 25 Oct 2021 19:01:33 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0E11E1BF3F7
+ for <buildroot@lists.busybox.net>; Mon, 25 Oct 2021 19:01:33 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id F116280F25
+ for <buildroot@lists.busybox.net>; Mon, 25 Oct 2021 19:01:32 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id MapKcDkPKfq6 for <buildroot@lists.busybox.net>;
+ Mon, 25 Oct 2021 19:01:31 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com
+ [IPv6:2a00:1450:4864:20::533])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A9C7180F24
+ for <buildroot@busybox.net>; Mon, 25 Oct 2021 19:01:31 +0000 (UTC)
+Received: by mail-ed1-x533.google.com with SMTP id w15so3276524edc.9
+ for <buildroot@busybox.net>; Mon, 25 Oct 2021 12:01:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=vOPWSBj0u8RAOOupVzmYlXTG+VybMvmCokz936puW7g=;
+ b=Rs41VamgsBM+DIuSg90ASzqLkKZbkXmTPpfEkO7ZRTuUCy2x/V5RCF2viqwrvDoPrQ
+ 4mP5PmrP0dcH2MIOaNLmTxLXJi4WBv3vLpnewBxJwwZAcXN85pWXGy1AZ08fmpZzjnwZ
+ 4TL5hXXNkTjMRR9cSM4EomhqAcUBc0+3LbHTR3zgEQ+IIkqbk2lVAHOmC9BYFEdTB7r6
+ /FfIl+YgCbZFD1cNwkrJ777vcCK29zwPTHuUdhHTYlcIWEU5gz6dJZIOOXbsvmdniG3t
+ DoRpYJMwtiGhMjDX5XqL1EtcZHzKPwMHNdh/rNloBqR+Fsl66miRI3E1iIU3ptm72el8
+ W9mQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=vOPWSBj0u8RAOOupVzmYlXTG+VybMvmCokz936puW7g=;
+ b=mS2Mu/Nhm2wbI2AzviD9mEt1SIyFOHCvXMpUyQcHzNdieDR2R/oyfPs76Xg1bjaf3L
+ 0dNXYM/8R18LazYkHbsuTUULA5eFSGBPr4tPuICgg00u476ro+2yId5xTSI/q+iFlj2n
+ 4ZDAe/iw1XvY/k0DEujBXwRhkr/JPj/t3z7Wty79nu36lz2TjEgFy7zYPYpRCqEeCOyk
+ xU5JZ47uSynQQ1382CNuAg7fZMzNSdi6Qji9aYgdtzhlUQnfJA17jnW5m8dbnwfAtS0C
+ 4RvlktNA1SwlwZCO8dbLqyMnzeeu5U2oq6y0yP0SCFiPj3xnU2DlD51ShCra5/xr9w/3
+ LqaQ==
+X-Gm-Message-State: AOAM533GugmEVFf4LP3r5BO8uty6l7HU6Lwm2j+G5OEikrBd2VApzbJH
+ 7BhNqOkKaCixI6AtxuwLpmwRAdpQFNQ=
+X-Google-Smtp-Source: ABdhPJzXTFwBsFiY20bqTZBL/rIDxobwxh0r/3TAYe++ZW0QRMAylnkcycPYwLXs5dUjTP17fK6kpA==
+X-Received: by 2002:a17:907:2d20:: with SMTP id
+ gs32mr13476615ejc.472.1635188489304; 
+ Mon, 25 Oct 2021 12:01:29 -0700 (PDT)
+Received: from vm-user.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
+ by smtp.gmail.com with ESMTPSA id kw5sm7908817ejc.110.2021.10.25.12.01.28
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 25 Oct 2021 12:01:29 -0700 (PDT)
+From: Francois Perrad <fperrad@gmail.com>
+X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
+To: buildroot@busybox.net
+Date: Mon, 25 Oct 2021 21:01:19 +0200
+Message-Id: <20211025190119.1273651-1-francois.perrad@gadz.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-In-Reply-To: <782a9bea-cf76-3123-a700-761749f2d34a@mind.be>
-Content-Language: en-US
-X-CMAE-Envelope: MS4wfDS41jWDFaR1vd0ojOhwJATwtnxOYXE0R0bNOB1/Ea3+mbBcTAIJ18/vyUdMiGLo+YMSZqNSZjVvIdQMZ1QEqEiv3AFv+NjjBdo8YfM4mYonfBvdscCs
- o9ymI8M7Alf5sKV/X1/lfI44nUmw0X1+Pici8W68gk6C+QUqSTAWkyLnbGOK9p5h47iobky5STbLpO1pOb2hxxoqW++WSQRKb3WyXUNNprvqZ+emuW++FEHt
- TgBZLgq5DZ8Lwb0FsrC0xi/iGpR1414UlnQb8L1766rjfjoXfGcR4xszccWm4vIn
-Subject: Re: [Buildroot] [PATCH] package/gqrx: add missing reverse
- dependency for gnuradio
+Subject: [Buildroot] [PATCH] package/gdbm: bump to version 1.22
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,68 +92,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 10/25/21 8:54 PM, Arnout Vandecappelle wrote:
-> 
-> 
-> On 11/10/2021 00:42, Giulio Benetti wrote:
->> gnuradio suffers from gcc bug 43744 but gqrx that depends on it doesn't
->> take into account the gcc bug. So let's add it as:
->> 'depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_43744 # gnuradio'
->>
->> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
->> ---
->>    package/gqrx/Config.in | 4 +++-
->>    1 file changed, 3 insertions(+), 1 deletion(-)
->>
->> diff --git a/package/gqrx/Config.in b/package/gqrx/Config.in
->> index 60942c36c8..9faa50603e 100644
->> --- a/package/gqrx/Config.in
->> +++ b/package/gqrx/Config.in
->> @@ -8,7 +8,8 @@ comment "gqrx needs a toolchain w/ C++, threads, wchar, dynamic library"
->>    comment "gqrx needs qt5"
->>    	depends on !BR2_PACKAGE_QT5
->>    
->> -comment "gqrx needs a toolchain not affected by GCC bug 64735"
->> +comment "gqrx needs a toolchain not affected by GCC bug 43744 and 64735"
->> +	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_43744 # gnuradio
->>    	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-> 
->    This should have been an or instead of an and.
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/gdbm/gdbm.hash | 6 +++---
+ package/gdbm/gdbm.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Aah, yes, sorry and thank you for fixing
-
-Best regards
+diff --git a/package/gdbm/gdbm.hash b/package/gdbm/gdbm.hash
+index f68a16e2f..59f9ea62d 100644
+--- a/package/gdbm/gdbm.hash
++++ b/package/gdbm/gdbm.hash
+@@ -1,6 +1,6 @@
+ # From https://www.gnu.org.ua/software/gdbm/download.html
+-md5  a285c6e2dfed78668664c0555a7d202b  gdbm-1.21.tar.gz
+-sha1  f6eec6113f04a4b5fd2c1cfead10e7d65c8f3d89  gdbm-1.21.tar.gz
++md5  0bbd38f12656e4728e2f7c4708aec014  gdbm-1.22.tar.gz
++sha1  c45cc0178cbf41828369b07749d41778741703bd  gdbm-1.22.tar.gz
+ # Locally computed
+-sha256  b0b7dbdefd798de7ddccdd8edf6693a30494f7789777838042991ef107339cc2  gdbm-1.21.tar.gz
++sha256  f366c823a6724af313b6bbe975b2809f9a157e5f6a43612a72949138d161d762  gdbm-1.22.tar.gz
+ sha256  690d762f2e8e149ab1e2d6a409a3853b6151a2533b2382fae549a176d6bedecf  COPYING
+diff --git a/package/gdbm/gdbm.mk b/package/gdbm/gdbm.mk
+index 3c52d1254..52624f580 100644
+--- a/package/gdbm/gdbm.mk
++++ b/package/gdbm/gdbm.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GDBM_VERSION = 1.21
++GDBM_VERSION = 1.22
+ GDBM_SITE = $(BR2_GNU_MIRROR)/gdbm
+ GDBM_LICENSE = GPL-3.0+
+ GDBM_LICENSE_FILES = COPYING
 -- 
-Giulio Benetti
-Benetti Engineering sas
-
->    Committed with that fixed, thanks.
-> 
->    Regards,
->    Arnout
-> 
->>    
->>    config BR2_PACKAGE_GQRX
->> @@ -21,6 +22,7 @@ config BR2_PACKAGE_GQRX
->>    	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC
->>    	depends on BR2_PACKAGE_QT5
->>    	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # gnuradio -> boost-atomic
->> +	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_43744 # gnuradio
->>    	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # gnuradio
->>    	select BR2_PACKAGE_BOOST
->>    	select BR2_PACKAGE_BOOST_PROGRAM_OPTIONS
->>
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-> 
+2.30.2
 
 _______________________________________________
 buildroot mailing list
