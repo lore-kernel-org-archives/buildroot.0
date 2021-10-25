@@ -2,51 +2,51 @@ Return-Path: <SRS0=F6DF=PN=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 306ADC433F5
-	for <buildroot@archiver.kernel.org>; Mon, 25 Oct 2021 11:21:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 33884C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 25 Oct 2021 11:26:39 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 53C9860F9D
-	for <buildroot@archiver.kernel.org>; Mon, 25 Oct 2021 11:21:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 53C9860F9D
+	by mail.kernel.org (Postfix) with ESMTPS id 79F3E60551
+	for <buildroot@archiver.kernel.org>; Mon, 25 Oct 2021 11:26:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 79F3E60551
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DD1C580D75;
-	Mon, 25 Oct 2021 11:21:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4967980DDD;
+	Mon, 25 Oct 2021 11:26:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id INqU_qcmYzRD; Mon, 25 Oct 2021 11:21:13 +0000 (UTC)
+	with ESMTP id Gzhr0u-jD_3f; Mon, 25 Oct 2021 11:26:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 554EB80D77;
-	Mon, 25 Oct 2021 11:21:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BC2DE80DA0;
+	Mon, 25 Oct 2021 11:26:36 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4F1CD1BF37A
- for <buildroot@lists.busybox.net>; Mon, 25 Oct 2021 11:21:11 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 57F891BF37A
+ for <buildroot@lists.busybox.net>; Mon, 25 Oct 2021 11:26:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4BA2B60737
- for <buildroot@lists.busybox.net>; Mon, 25 Oct 2021 11:21:11 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 54E7360782
+ for <buildroot@lists.busybox.net>; Mon, 25 Oct 2021 11:26:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id h9M70Aeu67SC for <buildroot@lists.busybox.net>;
- Mon, 25 Oct 2021 11:21:10 +0000 (UTC)
+ with ESMTP id uTrdBHA1pHQi for <buildroot@lists.busybox.net>;
+ Mon, 25 Oct 2021 11:26:34 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9D9A260697
- for <buildroot@buildroot.org>; Mon, 25 Oct 2021 11:21:10 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B0BE660766
+ for <buildroot@buildroot.org>; Mon, 25 Oct 2021 11:26:34 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id D0D9D88709; Mon, 25 Oct 2021 11:17:50 +0000 (UTC)
+ id E37688870D; Mon, 25 Oct 2021 11:23:14 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 25 Oct 2021 13:20:05 +0200
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 0915854bd6a93d8724e926150dde329dbbafd01a
-X-Git-Newrev: 03149de8ff93ca2483b7e79642442c17ab63479c
+Date: Mon, 25 Oct 2021 13:20:00 +0200
+X-Git-Refname: refs/heads/2021.08.x
+X-Git-Oldrev: bff688055394117502784cf60b4499a8fdab8373
+X-Git-Newrev: 377b1b8218991253f174c6911a9883e272320e2b
 X-Patchwork-Hint: ignore
-Message-Id: <20211025111750.D0D9D88709@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x]
+Message-Id: <20211025112314.E37688870D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.08.x]
  package/sunxi-mali-mainline-driver: update help section to make it work on
  Linux >= 4.20
 X-BeenThere: buildroot@buildroot.org
@@ -66,8 +66,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=03149de8ff93ca2483b7e79642442c17ab63479c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=377b1b8218991253f174c6911a9883e272320e2b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.08.x
 
 On Linux version >= 4.20 in order to have mali working we need to pass
 drm_kms_helper.drm_leak_fbdev_smem=1 and at least
