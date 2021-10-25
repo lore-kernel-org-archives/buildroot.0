@@ -2,86 +2,59 @@ Return-Path: <SRS0=F6DF=PN=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 22989C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 25 Oct 2021 08:43:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2786FC433F5
+	for <buildroot@archiver.kernel.org>; Mon, 25 Oct 2021 08:48:57 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D795E60C49
-	for <buildroot@archiver.kernel.org>; Mon, 25 Oct 2021 08:43:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D795E60C49
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id 5140860EE9
+	for <buildroot@archiver.kernel.org>; Mon, 25 Oct 2021 08:48:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5140860EE9
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 81E4380DCC;
-	Mon, 25 Oct 2021 08:43:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1FD2B80DCF;
+	Mon, 25 Oct 2021 08:48:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XTXbWvKZqV2P; Mon, 25 Oct 2021 08:43:28 +0000 (UTC)
+	with ESMTP id RU-eBpmWdQhq; Mon, 25 Oct 2021 08:48:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 099E380DCE;
-	Mon, 25 Oct 2021 08:43:27 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 97AC41BF3AA
- for <buildroot@lists.busybox.net>; Mon, 25 Oct 2021 08:43:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 77FAD80DCC;
+	Mon, 25 Oct 2021 08:48:54 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 48DDC1BF3AA
+ for <buildroot@lists.busybox.net>; Mon, 25 Oct 2021 08:48:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9272540368
- for <buildroot@lists.busybox.net>; Mon, 25 Oct 2021 08:43:26 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 388AC60729
+ for <buildroot@lists.busybox.net>; Mon, 25 Oct 2021 08:48:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gwwFjtjANPo3 for <buildroot@lists.busybox.net>;
- Mon, 25 Oct 2021 08:43:25 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-il1-x129.google.com (mail-il1-x129.google.com
- [IPv6:2607:f8b0:4864:20::129])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D8BFD40160
- for <buildroot@buildroot.org>; Mon, 25 Oct 2021 08:43:25 +0000 (UTC)
-Received: by mail-il1-x129.google.com with SMTP id 3so9494940ilq.7
- for <buildroot@buildroot.org>; Mon, 25 Oct 2021 01:43:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=UXOSbX+vIFn0vtvSRVchCr7BeEecDoDRQvSUCJ8v5J4=;
- b=qNHa8EZSDBllZtP+XtjcVs+Lf3zjf3ZuNJ7fWlaMC5bMACdxFa5zXiHPrVzkKrtvha
- l1mrjlNwBYJS37ymSWy2YuelzGQzgjQpeapKlX8Z/qFJT+z/fcwAGk/yWM/BKFSx+P85
- 8CqVtsyoHkRs5O3KJ/uwdIveMdJ6nEym4EfkuoFrstsE5Dy8NDy99cmq8CHRgvkziXdX
- y/T6EN5j4nrNzbsIxFO+sVgYm5ofhlFG6NNky1fUi7p8vdRKRe+yFIgd731Vn7clXjlw
- F6Uv425IkP3QpYrmbZ94ViiarpCRg6yKqrf0PYJHNts9Niofm7XbCglW8QSKDufRCzlm
- 95yg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=UXOSbX+vIFn0vtvSRVchCr7BeEecDoDRQvSUCJ8v5J4=;
- b=5Nao2Jmfr3wd50Zo4+cdBW2lTinfe2g1OkWxHWJj9SkUou3EX26EVG11UCLxusKJFs
- MqPP5V1hR6yASajLWTa0bk1IbEYMbElKHeBLJVWU9DmCJUmW3BKUCW5PQl9tf8x76tkx
- KkYNKESml9oxfexnfUToXbO/OCrHdzmJd2T04m89guNxCuWgrqgGF6q5A/NhalnTZBBh
- za24GKSNgNKanqpMQDZLTplgFCJyrU9xlXoSlGDVsTDGlIq683xIs9dLyn/NRtSZsMCV
- Ld/wVvKrzDkgOV2OGV50i9n53eAo+bdeuLmOy5lQhBDKF1zSQKppq7QnYGrPMw24movh
- HJHg==
-X-Gm-Message-State: AOAM531p1NgwTqW++1inbG6RkYvv2wV7dDlPoLJAdq0BL8hJBoXlkHj6
- UvmY+vYf0v7L2QEZXfOBUd3ZVwvTAxc=
-X-Google-Smtp-Source: ABdhPJzHJejWknApDhKtb812NwGltRVpDDhLXL3Beka1WndoAutXqKQwlPkWsZnYX5gN2xOzhcJZZg==
-X-Received: by 2002:a05:6e02:20e7:: with SMTP id
- q7mr9659066ilv.254.1635151404910; 
- Mon, 25 Oct 2021 01:43:24 -0700 (PDT)
-Received: from james-x399.localdomain (71-218-115-49.hlrn.qwest.net.
- [71.218.115.49])
- by smtp.gmail.com with ESMTPSA id b10sm9084446iow.34.2021.10.25.01.43.24
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 25 Oct 2021 01:43:24 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: buildroot@buildroot.org
-Date: Mon, 25 Oct 2021 02:43:10 -0600
-Message-Id: <20211025084310.4055707-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.25.1
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8Lubxt_GtHn4 for <buildroot@lists.busybox.net>;
+ Mon, 25 Oct 2021 08:48:52 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id AEC126064C
+ for <buildroot@buildroot.org>; Mon, 25 Oct 2021 08:48:51 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 74DE91C001A;
+ Mon, 25 Oct 2021 08:48:48 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
+ (envelope-from <peter@korsgaard.com>)
+ id 1mevex-0003qk-Lv; Mon, 25 Oct 2021 10:48:47 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Yann E. MORIN <yann.morin.1998@free.fr>
+References: <20211017194926.C86A095DA6@busybox.osuosl.org>
+Date: Mon, 25 Oct 2021 10:48:47 +0200
+In-Reply-To: <20211017194926.C86A095DA6@busybox.osuosl.org> (Yann E. MORIN's
+ message of "Sun, 17 Oct 2021 21:46:57 +0200")
+Message-ID: <87mtmxxzf4.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/weston: remove launcher-libseat
- meson option
+Subject: Re: [Buildroot] [git commit] support/testing: test_ubi: reduce the
+ rootfs.ubi size to 64M to match the Qemu emulated flash device
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,45 +66,34 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This option only exists in main and is not in a release.
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Fixes:
-output/build/weston-9.0.0/meson.build:1:0: ERROR: Unknown options: "launcher-libseat"
+ > commit: https://git.buildroot.net/buildroot/commit/?id=6f9e83f5f74da4c8f9a210fb586542eba08c4080
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/weston/weston.mk | 7 -------
- 1 file changed, 7 deletions(-)
+ > The size of the cfi flash device emulated by Qemu is 64M not 128M [1].
+ > Since Qemu >= 4.0, the size of the device must match the size of the block backend [2].
 
-diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index 69ee11d23c..6dd5439291 100644
---- a/package/weston/weston.mk
-+++ b/package/weston/weston.mk
-@@ -26,13 +26,6 @@ else
- WESTON_CONF_OPTS += -Dsimple-clients=
- endif
- 
--ifeq ($(BR2_PACKAGE_SEATD),y)
--WESTON_CONF_OPTS += -Dlauncher-libseat=true
--WESTON_DEPENDENCIES += seatd
--else
--WESTON_CONF_OPTS += -Dlauncher-libseat=false
--endif
--
- ifeq ($(BR2_PACKAGE_DBUS)$(BR2_PACKAGE_SYSTEMD),yy)
- WESTON_CONF_OPTS += -Dlauncher-logind=true
- WESTON_DEPENDENCIES += dbus systemd
+ > Fixes:
+
+ >   qemu-system-arm: device requires 67108864 bytes, block backend provides 134217728 bytes
+
+ > [1] https://git.qemu.org/?p=qemu.git;a=blob;f=hw/arm/vexpress.c;h=58481c07629aedb09864dcc72757ff7947e733bb;hb=f9baca549e44791be0dd98de15add3d8452a8af0#l50
+ > [2] https://git.qemu.org/?p=qemu.git;a=commitdiff;h=06f1521795207359a395996c253c306f4ab7586e
+
+ > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+ > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+
+Committed to 2021.02.x and 2021.08.x, thanks.
+
 -- 
-2.25.1
-
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
