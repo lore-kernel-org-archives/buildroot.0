@@ -2,94 +2,91 @@ Return-Path: <SRS0=F6DF=PN=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 83C31C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 25 Oct 2021 20:17:11 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E74EC433F5
+	for <buildroot@archiver.kernel.org>; Mon, 25 Oct 2021 20:17:24 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 47D4860C49
-	for <buildroot@archiver.kernel.org>; Mon, 25 Oct 2021 20:17:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 47D4860C49
+	by mail.kernel.org (Postfix) with ESMTPS id 0BFAB60555
+	for <buildroot@archiver.kernel.org>; Mon, 25 Oct 2021 20:17:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0BFAB60555
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1C7DF80D37;
-	Mon, 25 Oct 2021 20:17:11 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D2DBB4014B;
+	Mon, 25 Oct 2021 20:17:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZFaoM6MErLzn; Mon, 25 Oct 2021 20:17:10 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id GooO8HDmFOBn; Mon, 25 Oct 2021 20:17:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5AF6C80D55;
-	Mon, 25 Oct 2021 20:17:09 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B65511BF870
- for <buildroot@lists.busybox.net>; Mon, 25 Oct 2021 20:17:07 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id F2CC2403CB;
+	Mon, 25 Oct 2021 20:17:21 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 9E2901BF870
+ for <buildroot@lists.busybox.net>; Mon, 25 Oct 2021 20:17:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A4F8E4041B
- for <buildroot@lists.busybox.net>; Mon, 25 Oct 2021 20:17:07 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 98C04403CB
+ for <buildroot@lists.busybox.net>; Mon, 25 Oct 2021 20:17:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6A95UoS_61sI for <buildroot@lists.busybox.net>;
- Mon, 25 Oct 2021 20:17:06 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WyaVTto4jGA2 for <buildroot@lists.busybox.net>;
+ Mon, 25 Oct 2021 20:17:19 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com
- [IPv6:2a00:1450:4864:20::52b])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A21804040C
- for <buildroot@buildroot.org>; Mon, 25 Oct 2021 20:17:06 +0000 (UTC)
-Received: by mail-ed1-x52b.google.com with SMTP id j10so4424359eds.12
- for <buildroot@buildroot.org>; Mon, 25 Oct 2021 13:17:06 -0700 (PDT)
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com
+ [IPv6:2a00:1450:4864:20::52a])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1BD464014B
+ for <buildroot@buildroot.org>; Mon, 25 Oct 2021 20:17:19 +0000 (UTC)
+Received: by mail-ed1-x52a.google.com with SMTP id z20so4379404edc.13
+ for <buildroot@buildroot.org>; Mon, 25 Oct 2021 13:17:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=kmf0hmpTq8ZvZQ2x3ViONkVP2VpS1iqUvsEVHnMCLLQ=;
- b=D7u2UgA6YVx78+PzbgOEX2Lzilgzy+vL7gcy3FYuzvys4B817vrfaPkMssDVQ43pGp
- jeWUm1jnYLsMOX03DldaQMTFvDVye9lpOGcUJirLbKPT392i6if7FrmwUpOJhxxWDL6x
- Ey+5P4g5/xbsBT5siRGMoYAjHiAs/S309hy7VKZ9YfENG3Hb5Y0WUVoJ/7n/uKTqEiWy
- sAoMGH61cF+AMygRg7RjzmrNYAAE69iN2GMGKNtZU4KEtxbG48FdhW/wKAx6XjvQmxDD
- B41HjBjnfVbLy+rwA3pZhaf8xrCGmZvZHlu+nUvnqpWCjjZZ+xVaOCAvBW+WDxRYvMbb
- bdeA==
+ bh=jMP0a8hyrUj//8cV9rgOGdN67diQGFhj8jvQ2KDSsv8=;
+ b=F7EAa0hCLugZeKsEn+7Lmfb/jG/HfEkWRGB1SKRkEMButrYymp/YNhgbhV4VsMDDCP
+ 1icRkLwHO5w6gAnPIZM/vRh6l5+vxLF6UofrGY6RwqqnIMtyd+GZwFUjEa3wR3v7AQgv
+ H9rhr4QzQRNGYA/TAsJVay6Jdu4tRb2cBc4a7IgSlj83x9k6C1kzQ/tHwTxBgJQQ4For
+ P/h2uFxxbQgS43+jhqITRHFs9eLgLQEQ+l3z8eBgbYA5mEISobm5q6upS57J9JOHuNNi
+ ii3HZrchsJdARw7UtKQD7FLrNQYKLA4ogiWQ4bwcmBSkNTVqRuPhAJ5gBuXgBM+Pi5/5
+ MNCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=kmf0hmpTq8ZvZQ2x3ViONkVP2VpS1iqUvsEVHnMCLLQ=;
- b=AwjGHZP55ihq4pUzLLcwDZl1BzR2HorEm9sJHQS0DN3YGqPuMNMnWZ8FSQQfGLpBfh
- 9c4OJGphxhmuXGPKow56JYV+OMHrYkOxw84CucLBH6T6infaMheDhdT/VhUgbD+19h6o
- hXn9UTSBxK8tImgX64Wzm5uIRl1S6N3ggeiSaUaGn4QlOjZcWSEx8swUtc7bi5HM0VmP
- ced33GDznqKqHtxqWOiQHS4vHkTuxDA7Z8KkzmrN3xZAoDotZED+6ZHTdJJxJqA7Gpry
- p1CThQ5BA5pVbiuEkwX6JfLpLsx8FQbFvIK9b6dwdOGHxRSGglV+JKsAwBHBoKaqvp+m
- ZbnA==
-X-Gm-Message-State: AOAM530OFJ5tDl7BVGkUUHSYsODGEaGvesETNhXvLUM8WgZy5oc/OXOb
- 6tR0lTtCYVdRqJdPBbM+V00zfg==
-X-Google-Smtp-Source: ABdhPJwo1fitFacApBcrx5HvVq6jMKx90zLBZpyXyDERcv5FlEd03zdCU2yVU9gtIz9CtC8ZXHBD3g==
-X-Received: by 2002:a05:6402:5114:: with SMTP id
- m20mr29017418edd.256.1635193024871; 
- Mon, 25 Oct 2021 13:17:04 -0700 (PDT)
+ bh=jMP0a8hyrUj//8cV9rgOGdN67diQGFhj8jvQ2KDSsv8=;
+ b=Taix6+MEhf/yXI7nvLHb4txHOvrRUu0pwnpMZnBqrmaUHV/t9iklaeadoursrJYrop
+ lV0O0/iMzLpi5SUmGwFK3NHiDFFTlSwXzIiVAj0Aos0P1EQvrg316apXGv14t4HnEv4s
+ n4Gu9DwdVokCIoqa+3omA3jTnZ02sE4e1Wy4AyViELCOjb7jGeAGabJMHcvKFqpDNYxc
+ QfR/UoKG1IbJhscX5lLlMJdBFNEPHohHNFjsgiaLVx71AV2K0kdip8bx/ofwbflis7yT
+ 8aO1OmkNaitSMVX+rAzISIXKPBCexyP62sNxKz1zOGesnxvzw2pYpC1SyeurLgx9lG3w
+ 7ilg==
+X-Gm-Message-State: AOAM532JAHqUuS3KDhRXVg3I3/sN55SHQDAgFURRR7L4X2F97o7bb8Wf
+ ycOWnhUPe+UDxDOFYeRf9lpliIw4eib6b9As
+X-Google-Smtp-Source: ABdhPJzBYMT0hWj8TfNxFZhm9IX6tBY++WQ0flWMgAEdWIdMzD3qdHivuyxy4vniv7107AngITAaMQ==
+X-Received: by 2002:a17:906:c186:: with SMTP id
+ g6mr24594554ejz.259.1635193037329; 
+ Mon, 25 Oct 2021 13:17:17 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id r3sm8232505ejr.79.2021.10.25.13.17.04
+ by smtp.gmail.com with ESMTPSA id sh36sm31028ejc.113.2021.10.25.13.17.16
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 25 Oct 2021 13:17:04 -0700 (PDT)
-Message-ID: <03c51ace-a9f9-98e8-4f53-770923db995d@mind.be>
-Date: Mon, 25 Oct 2021 22:17:03 +0200
+ Mon, 25 Oct 2021 13:17:16 -0700 (PDT)
+Message-ID: <332b550f-2068-78f3-ed95-87d9ad544709@mind.be>
+Date: Mon, 25 Oct 2021 22:17:16 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.2.0
 Content-Language: en-GB
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-References: <20211018215407.1515240-1-fontaine.fabrice@gmail.com>
+References: <20211018215527.1515324-1-fontaine.fabrice@gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20211018215407.1515240-1-fontaine.fabrice@gmail.com>
-Subject: Re: [Buildroot] [PATCH 1/1] package/sloci-image: bump to version
- 0.1.2
+In-Reply-To: <20211018215527.1515324-1-fontaine.fabrice@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package/supertux: bump to version 0.6.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,9 +98,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Jens Rosenboom <j.rosenboom@x-ion.de>,
- Sergio Prado <sergio.prado@e-labworks.com>,
- Matt Weber <matthew.weber@collins.com>
+Cc: Romain Naour <romain.naour@gmail.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -111,12 +106,12 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 18/10/2021 23:54, Fabrice Fontaine wrote:
+On 18/10/2021 23:55, Fabrice Fontaine wrote:
 > - Drop patches (already in version)
-> - Update hash of LICENSE (year updated with
->    https://github.com/jirutka/sloci-image/commit/ab128a4a1f12321d39188de38f81652b5852e35c)
+> - Update hash of data/AUTHORS and add CC-BY-SA-4.0 license:
+>    https://github.com/SuperTux/supertux/commit/ca4ff139cac360ade7dbe78746b17c854243a5e6
 > 
-> https://github.com/jirutka/sloci-image/compare/v0.1.1...v0.1.2
+> https://github.com/SuperTux/supertux/blob/v0.6.2/NEWS.md
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
@@ -126,127 +121,163 @@ On 18/10/2021 23:54, Fabrice Fontaine wrote:
   Arnout
 
 > ---
->   ...-from-the-contents-of-working-folder.patch | 37 ------------------
->   ...002-oci_arch-fix-arch-arm64-argument.patch | 39 -------------------
->   package/sloci-image/sloci-image.hash          |  4 +-
->   package/sloci-image/sloci-image.mk            |  2 +-
->   4 files changed, 3 insertions(+), 79 deletions(-)
->   delete mode 100644 package/sloci-image/0001-create-OCI-tar-from-the-contents-of-working-folder.patch
->   delete mode 100644 package/sloci-image/0002-oci_arch-fix-arch-arm64-argument.patch
+>   .../supertux/0001-Fix-build-on-PowerPC.patch  | 81 -------------------
+>   .../0002-Fix-build-with-boost-1-73.patch      | 25 ------
+>   package/supertux/supertux.hash                |  4 +-
+>   package/supertux/supertux.mk                  |  4 +-
+>   4 files changed, 4 insertions(+), 110 deletions(-)
+>   delete mode 100644 package/supertux/0001-Fix-build-on-PowerPC.patch
+>   delete mode 100644 package/supertux/0002-Fix-build-with-boost-1-73.patch
 > 
-> diff --git a/package/sloci-image/0001-create-OCI-tar-from-the-contents-of-working-folder.patch b/package/sloci-image/0001-create-OCI-tar-from-the-contents-of-working-folder.patch
+> diff --git a/package/supertux/0001-Fix-build-on-PowerPC.patch b/package/supertux/0001-Fix-build-on-PowerPC.patch
 > deleted file mode 100644
-> index 3d048e3843..0000000000
-> --- a/package/sloci-image/0001-create-OCI-tar-from-the-contents-of-working-folder.patch
+> index e40abac6b0..0000000000
+> --- a/package/supertux/0001-Fix-build-on-PowerPC.patch
 > +++ /dev/null
-> @@ -1,37 +0,0 @@
-> -From 66c73c2ba3057634f19f37d3cfbbe752638c9f9f Mon Sep 17 00:00:00 2001
-> -From: Matthew Weber <matthew.weber@collins.com>
-> -Date: Fri, 27 Aug 2021 12:24:19 -0500
-> -Subject: [PATCH] create OCI tar from the contents of working folder
+> @@ -1,81 +0,0 @@
+> -From cfcd478fe69ca1b3923f388a349a4f67ac2c03aa Mon Sep 17 00:00:00 2001
+> -From: Shawn Anastasio <shawn@anastas.io>
+> -Date: Sun, 3 Feb 2019 13:22:57 -0600
+> -Subject: [PATCH] Fix build on PowerPC
 > -
-> -When testing with containerd, it was found that the tarfile
-> -created with sloci can't import because the contents are inside
-> -a folder.  Looking around online, it seems that the an oci tar
-> -should container the blob/index.json/oci-layout in the . of the
-> -tarfile.
+> -On PowerPC-based architectures, SDL includes the altivec.h header
+> -for SIMD intrinsics. Unfortunately, altivec.h defines some types which
+> -conflict with C++ types like bool and std::vector. This commit adds
+> -a wrapper for altivec.h which resolves these conflicts and allows
+> -supertux to build and run.
 > -
-> -Upstream: https://github.com/jirutka/sloci-image/pull/3
+> -Tested on a ppc64le workstation.
 > -
-> -Refs:
-> -https://snyk.io/blog/container-image-formats/
-> -https://github.com/opencontainers/image-spec/blob/main/image-layout.md
-> -
-> -Signed-off-by: Matthew Weber <matthew.weber@collins.com>
+> -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> -[Retrieved from:
+> -https://github.com/SuperTux/supertux/pull/1056/commits/cfcd478fe69ca1b3923f388a349a4f67ac2c03aa]
 > ----
-> - sloci-image | 2 +-
-> - 1 file changed, 1 insertion(+), 1 deletion(-)
+> - CMakeLists.txt    | 15 ++++++++++++++-
+> - src/ppc/altivec.h |  6 ++++++
+> - 2 files changed, 20 insertions(+), 1 deletion(-)
+> - create mode 100644 src/ppc/altivec.h
 > -
-> -diff --git a/sloci-image b/sloci-image
-> -index 90dba26..7f3c775 100755
-> ---- a/sloci-image
-> -+++ b/sloci-image
-> -@@ -425,6 +425,6 @@ if [ "$OUT_TYPE" = tar ]; then
-> - 	file_name="$IMAGE_NAME-$CFG_REF_NAME-$CFG_ARCH"
-> - 	file_name="$file_name${CFG_ARCH_VARIANT:+"-$CFG_ARCH_VARIANT"}-$CFG_OS.oci-image"
+> -diff --git a/CMakeLists.txt b/CMakeLists.txt
+> -index 70b9673b50..b9b6ea3ea6 100644
+> ---- a/CMakeLists.txt
+> -+++ b/CMakeLists.txt
+> -@@ -376,6 +376,11 @@ endif()
 > -
-> --	tar ${DEBUG:+-v} -cf "$file_name.tar" "$IMAGE_NAME"
-> -+	tar ${DEBUG:+-v} -cf "$file_name.tar" -C "$IMAGE_NAME" .
-> - 	rm -Rf "$IMAGE_NAME"
-> - fi
-> ---
-> -2.17.1
+> - include(ConfigureChecks)
 > -
-> diff --git a/package/sloci-image/0002-oci_arch-fix-arch-arm64-argument.patch b/package/sloci-image/0002-oci_arch-fix-arch-arm64-argument.patch
+> -+# Include altivec wrapper on ppc
+> -+if(CMAKE_SYSTEM_PROCESSOR MATCHES "^ppc.*")
+> -+  include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/ppc)
+> -+endif()
+> -+
+> -
+> - ## Also build external/squirrel
+> -
+> -@@ -420,6 +425,13 @@ if(NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/external/tinygettext/CMakeLists.txt)
+> -   message(FATAL_ERROR "tinygettext submodule is not checked out or ${CMAKE_CURRENT_SOURCE_DIR}/external/tinygettext/CMakeLists.txt is missing")
+> - endif()
+> -
+> -+# Include altivec wrapper on ppc
+> -+if(CMAKE_SYSTEM_PROCESSOR MATCHES "^ppc.*")
+> -+  set(TINYGETTEXT_CXX_FLAGS "-isystem ${CMAKE_CURRENT_SOURCE_DIR}/src/ppc ${CMAKE_CXX_FLAGS}")
+> -+else()
+> -+  set(TINYGETTEXT_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+> -+endif()
+> -+
+> - set(TINYGETTEXT_PREFIX ${CMAKE_BINARY_DIR}/tinygettext/)
+> - ExternalProject_Add(tinygettext
+> -   SOURCE_DIR "${CMAKE_SOURCE_DIR}/external/tinygettext/"
+> -@@ -428,7 +440,7 @@ ExternalProject_Add(tinygettext
+> -   -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
+> -   -DCMAKE_C_FLAGS=${CMAKE_C_FLAGS}
+> -   -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
+> --  -DCMAKE_CXX_FLAGS=${CMAKE_CXX_FLAGS}
+> -+  -DCMAKE_CXX_FLAGS=${TINYGETTEXT_CXX_FLAGS}
+> -   -DBUILD_SHARED_LIBS=OFF
+> -   -DHAVE_SDL=ON
+> -   -DVCPKG_BUILD=${VCPKG_BUILD}
+> -@@ -443,6 +455,7 @@ set_target_properties(tinygettext_lib PROPERTIES IMPORTED_LOCATION "${TINYGETTEX
+> -
+> - include_directories(SYSTEM ${TINYGETTEXT_PREFIX}/include)
+> -
+> -+
+> - ## external/SDL_ttf with patches
+> - find_package(Freetype REQUIRED)
+> - find_package(RAQM)
+> -diff --git a/src/ppc/altivec.h b/src/ppc/altivec.h
+> -new file mode 100644
+> -index 0000000000..7ede8246ed
+> ---- /dev/null
+> -+++ b/src/ppc/altivec.h
+> -@@ -0,0 +1,6 @@
+> -+#include_next <altivec.h>
+> -+
+> -+// The altivec headers redefine vector and bool which conflict
+> -+// with C++'s bool type and std::vector. Undefine them here.
+> -+#undef vector
+> -+#undef bool
+> diff --git a/package/supertux/0002-Fix-build-with-boost-1-73.patch b/package/supertux/0002-Fix-build-with-boost-1-73.patch
 > deleted file mode 100644
-> index 27c4ab8c16..0000000000
-> --- a/package/sloci-image/0002-oci_arch-fix-arch-arm64-argument.patch
+> index 000e5abcab..0000000000
+> --- a/package/supertux/0002-Fix-build-with-boost-1-73.patch
 > +++ /dev/null
-> @@ -1,39 +0,0 @@
-> -From 67b16c65cdf0f654275802d6d12451a81a4d2796 Mon Sep 17 00:00:00 2001
-> -From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
-> -Date: Sat, 11 Sep 2021 14:37:20 +0200
-> -Subject: [PATCH] oci_arch: fix "--arch arm64" argument
+> @@ -1,25 +0,0 @@
+> -From 4221d54385b69d6c40eff2c67bc6bad7ed165a44 Mon Sep 17 00:00:00 2001
+> -From: Lars Wendler <polynomial-c@gentoo.org>
+> -Date: Sat, 9 May 2020 03:04:02 +0200
+> -Subject: [PATCH] Fix build with boost-1.73
 > -
-> -The --arch argument presumably should take the appropriate GOARCH-type
-> -string. The oci_arch() function does some conversion on it, which is
-> -needed because without --arch the architecture is taken from "uname -m",
-> -which yields something different than a GOARCH-type string.
-> -
-> -However, oci_arch() converts arm* into arm, which is wrong for arm64.
-> -Since arm64 is a proper GOARCH-type string, it shouldn't be converted at
-> -all.
-> -
-> -Upate the case statement to convert arm64 to arm64 (i.e., do nothing).
-> -Since the arm64 match comes before arm*, it takes precedence.
-> -
-> -Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> -Upstream: https://github.com/jirutka/sloci-image/pull/4
+> -[Retrieved from:
+> -https://github.com/SuperTux/supertux/commit/4221d54385b69d6c40eff2c67bc6bad7ed165a44]
+> -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ----
-> - sloci-image | 2 +-
-> - 1 file changed, 1 insertion(+), 1 deletion(-)
+> - src/editor/object_settings.hpp | 2 ++
+> - 1 file changed, 2 insertions(+)
 > -
-> -diff --git a/sloci-image b/sloci-image
-> -index 7f3c775..6844023 100755
-> ---- a/sloci-image
-> -+++ b/sloci-image
-> -@@ -214,7 +214,7 @@ oci_arch() {
-> - 	case "$1" in
-> - 		x86_64) echo amd64;;
-> - 		x86) echo 386;;
-> --		aarch64) echo arm64;;
-> -+		aarch64|arm64) echo arm64;;
-> - 		arm*) echo arm;;
-> - 		*) echo "$1";;
-> - 	esac
-> ---
-> -2.31.1
+> -diff --git a/src/editor/object_settings.hpp b/src/editor/object_settings.hpp
+> -index bc9049a94e..15b77b1e46 100644
+> ---- a/src/editor/object_settings.hpp
+> -+++ b/src/editor/object_settings.hpp
+> -@@ -22,6 +22,8 @@
 > -
-> diff --git a/package/sloci-image/sloci-image.hash b/package/sloci-image/sloci-image.hash
-> index 117f0ba6e0..ea1368e422 100644
-> --- a/package/sloci-image/sloci-image.hash
-> +++ b/package/sloci-image/sloci-image.hash
-> @@ -1,5 +1,5 @@
->   # Locally computed
-> -sha256  56fbc335c193eccc3992f0a723c6dabe762f6d4854fc52059be074bdf5060d9e  sloci-image-0.1.1.tar.gz
-> +sha256  4c5baee9a4915ca88e3a54befa1ccb8616be20208070cf54ac366c195647da79  sloci-image-0.1.2.tar.gz
->   
->   # Hash for license files:
-> -sha256  8ea53673b084576813fc40cd63817c5a1619438942b5e6c30dac1d10707c27e4  LICENSE
-> +sha256  4c86c21e003875b85b4b9299156f8cec72c8e8e1abf5aa1f2d3c4dc665a3bea0  LICENSE
-> diff --git a/package/sloci-image/sloci-image.mk b/package/sloci-image/sloci-image.mk
-> index 232127bfa2..7361c49de4 100644
-> --- a/package/sloci-image/sloci-image.mk
-> +++ b/package/sloci-image/sloci-image.mk
-> @@ -4,7 +4,7 @@
+> - #include "editor/object_option.hpp"
+> -
+> -+#include <algorithm>
+> -+
+> - class Color;
+> - enum class Direction;
+> - enum class WalkMode;
+> diff --git a/package/supertux/supertux.hash b/package/supertux/supertux.hash
+> index 2b3ca799d7..a6a515f912 100644
+> --- a/package/supertux/supertux.hash
+> +++ b/package/supertux/supertux.hash
+> @@ -1,4 +1,4 @@
+>   # Locally calculated
+> -sha256  c4c3e5fa6f90e87b8c5ad6b22a179e9a9839bf997e7f219e22bbcd1c97223ac0  SuperTux-v0.6.0-Source.tar.gz
+> +sha256  26a9e56ea2d284148849f3239177d777dda5b675a10ab2d76ee65854c91ff598  SuperTux-v0.6.2-Source.tar.gz
+>   sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE.txt
+> -sha256  35c61f69239ff2f55fe0fa5dee5bad6bff311a07c47fa049552e0973a47c07bb  data/AUTHORS
+> +sha256  09645215102c1013a1ef8c16a30bacdb9a78924ca064372290405fabd3e7074d  data/AUTHORS
+> diff --git a/package/supertux/supertux.mk b/package/supertux/supertux.mk
+> index e4a4630918..3587aefe3a 100644
+> --- a/package/supertux/supertux.mk
+> +++ b/package/supertux/supertux.mk
+> @@ -4,13 +4,13 @@
 >   #
 >   ################################################################################
 >   
-> -SLOCI_IMAGE_VERSION = 0.1.1
-> +SLOCI_IMAGE_VERSION = 0.1.2
->   SLOCI_IMAGE_SITE = $(call github,jirutka,sloci-image,v$(SLOCI_IMAGE_VERSION))
+> -SUPERTUX_VERSION = 0.6.0
+> +SUPERTUX_VERSION = 0.6.2
+>   SUPERTUX_SITE = https://github.com/SuperTux/supertux/releases/download/v$(SUPERTUX_VERSION)
+>   SUPERTUX_SOURCE = SuperTux-v$(SUPERTUX_VERSION)-Source.tar.gz
 >   
->   SLOCI_IMAGE_LICENSE = MIT
+>   # Supertux itself is GPL-3.0+, but it bundles a few libraries with different
+>   # licenses (sexp-cpp, squirrel, tinygettext) which are linked statically.
+> -SUPERTUX_LICENSE = GPL-3.0+ (code), CC-BY-SA-2.0, CC-BY-SA-3.0, GPL-2.0+ (images music sounds)
+> +SUPERTUX_LICENSE = GPL-3.0+ (code), CC-BY-SA-2.0, CC-BY-SA-3.0, CC-BY-SA-4.0, GPL-2.0+ (images music sounds)
+>   SUPERTUX_LICENSE_FILES = LICENSE.txt data/AUTHORS
+>   
+>   # Use bundled squirrel, tinygettext sexp-cpp packages which are hardcoded in
 > 
 _______________________________________________
 buildroot mailing list
