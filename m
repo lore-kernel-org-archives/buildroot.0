@@ -2,99 +2,99 @@ Return-Path: <SRS0=F6DF=PN=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E9D42C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 25 Oct 2021 02:32:03 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 052A3C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 25 Oct 2021 02:32:19 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 00EFD61029
-	for <buildroot@archiver.kernel.org>; Mon, 25 Oct 2021 02:32:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 00EFD61029
+	by mail.kernel.org (Postfix) with ESMTPS id 2005B61002
+	for <buildroot@archiver.kernel.org>; Mon, 25 Oct 2021 02:32:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2005B61002
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=buildroot.org
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9B3F640144;
-	Mon, 25 Oct 2021 02:32:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E32C140368;
+	Mon, 25 Oct 2021 02:32:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id afGCK2G3WrOM; Mon, 25 Oct 2021 02:32:01 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id o4QYQwSyXNG9; Mon, 25 Oct 2021 02:32:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BAF724010A;
-	Mon, 25 Oct 2021 02:32:00 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2B09B1BF378
- for <buildroot@lists.busybox.net>; Mon, 25 Oct 2021 02:31:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 362E640322;
+	Mon, 25 Oct 2021 02:32:16 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 649671BF378
+ for <buildroot@lists.busybox.net>; Mon, 25 Oct 2021 02:32:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 12F4D4010A
- for <buildroot@lists.busybox.net>; Mon, 25 Oct 2021 02:31:59 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 616EE80E34
+ for <buildroot@lists.busybox.net>; Mon, 25 Oct 2021 02:32:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SDp2R8Tqh0PT for <buildroot@lists.busybox.net>;
- Mon, 25 Oct 2021 02:31:58 +0000 (UTC)
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=aol.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZDg4KNB36xIM for <buildroot@lists.busybox.net>;
+ Mon, 25 Oct 2021 02:32:13 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
 Received: from sonic301-30.consmr.mail.ne1.yahoo.com
  (sonic301-30.consmr.mail.ne1.yahoo.com [66.163.184.199])
- by smtp2.osuosl.org (Postfix) with ESMTPS id DBC38400F1
- for <buildroot@buildroot.org>; Mon, 25 Oct 2021 02:31:57 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B1F2780E31
+ for <buildroot@buildroot.org>; Mon, 25 Oct 2021 02:32:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aol.com; s=a2048;
- t=1635129116; bh=nFFAJ7g37Ww5UDo02ASzPy4foxGN/oq0CxvokWZzztk=;
+ t=1635129132; bh=4wBn3RB5qhuig9+yqpAp1IgllzcR0pBlZ00exWhRoho=;
  h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject:Reply-To;
- b=dDQjihFuRE6LRoiV4fYHM3/gpIuGu0MXF8eTZlWIVR42lmTpsOjErZ4fqmoB5WkV7mJpgVVP293qTSpxf10fURUSTY4sGLUVRnMxlwBMJEoNF+BVOvcEoYXV5z9uFnwIGXp7CMJZXdkh+ZlcLCdJZLix8H1tMLO2rg2pbsUYLRcutF7KvlW93kMo1JkrMPsyotUjQG6IGaJjzJ1TYrdGECY0/9Jit3ppbeMEIFCK2XnRf7aRmf2dkUX4ilBLwdxhTVhN+KLCPx52r5LHXhWP+WkyGdVE1gT3f8gwcN5U+71/l6WhZHQ42gQKzPLs3kzMib/u19d0bSn/aGG+rjupNQ==
+ b=jSM90DohLoFEdOOk0wCR3MQUjZ3ihsTFd5WEv/7kmwJx10rSxFmDid6swJT3JbxPqvMPj7yij9Zx+nXOz0DiZUwkqq/WBGCwlEwuTSVB/9/yyG6lSBwy6aC9vBvLDchjj7/8REwKprONyxJaOlEVlk3t1z8i6pOpz4g0NayYlh/fAOJSzoISPqTdWuOqRKHrI6+haQWIjAJXC4yNw75U0oGAxBLlIH4I0VxVa/C6L8dz5nLHl7FDQDkNk7o5GdJidyT9cT089F48E83+C6rxSW524S7mTm3NWse/9ogOKKg2GsVCZa385C5yJRirke2FX13BOApDFlTtmcGNNN2wNA==
 X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048;
- t=1635129116; bh=mMvgp0engl0dANmHv8vHKDixP7GBUgw/HYXP9X/KIZ9=;
+ t=1635129132; bh=O301ioNrLYvIUVMX/xITp0Y0UlxLHTouLBG/cxUemGb=;
  h=X-Sonic-MF:From:To:Subject:Date:From:Subject;
- b=nCx89NOka5xy7evwVTZHqSoSp3KkPbP2kD8JLjQxCDeP9uPDXYsNxe0MCEjd6dabLYJpl4hLd4YcQMeTWYMTn+O8sMsbf0VLcw6POSLcECAONFtEro6wwKKTgEZo2R6EsaDivIddMuXd8onSePAHmVlwBH9eCjnP6J4zFls/S0mphhpYwyvA1YdArDZT7Zuq/Q+Bxt1ufvHeKF4an2lki2WheUFYtyYELzxU1i/OYgx7Q87wJUJLWVhNz746T7TW7pAzpdtNLK28xaiQqgWFXkur3meafkA5+zehZyzeac+RdzbyFTrbVXMpHcHZi7U73ejXQjRwESfsKyt6/vNcWA==
-X-YMail-OSG: u.lSX50VM1loaE0iBVmRhSK9qzDisTF6upmJnIrnjjOS4PU7oKWoz_OOlE14V07
- 1e8RAimsPi3HIAyQsgxAWZVYJBLhbmjx8xb5Vwsx5zzsZGjNkkjhMlp9DvjwmSUPtn5i0hNTKqav
- GIyrMlJfp8FmMI1CFknl9.TtK2nZ.4SELfH_Z8tpdwwhu5KZI44xRLdL6BQijGxnwyiRs.iQIPzC
- cGgTmE9yw4s_PfDmPMv7IfPPdJLsFUPBxLjpdpYqhJH2TZ28VCqESNGsNSM8dWIubWrvWvj3ziYR
- 2SN_471OlHLksdJf1EMBPlc3bv3IX4ZMfVnvGqt.X8PYDGBlQIF9ZTqlYlszXD1KB8FHseFg6uui
- zQhH8Nz8RpKUZJ1G3JR7R5o3HHsDJeO6RNLY0J7gIuA9rBQnFDBAyRQuIhAvj3ZjwB3amaxca_OI
- qCrHvjam2836.9AfeSWrr5lSSU9Hh_fE5zcA1FUqefm.VLLBoMWmepzPqNqf3uoQMuxdW8cODlPs
- UTnbnbuWoL3O1EE2_N.50JEic8Ubn2Wp.pv857uYH1J.X6bpO.F4XE56MbTcA06EAXafXQ4fjRc5
- Y8C9oPNWDcRZHbVviQzuXHcGL_Kcin9Shd96xq0vLzfFwSAYHuIQmm6NNEWtltIYL_D82e_aIy_m
- NUH0Fyh7cYzveZTiQ2qQ1qP1FdjisxgKTtCAxzfvNXV6xRayj_cSI4yKtlKM.6ji.YbDhmWkjVdi
- 2GVtPca2C6S85.jhUzzGoY2b7PiBm9NCmDxl83TFPqfjpzo9sgfBKcpySiqlTeiaa1m0gxjXVY2j
- bwlfqCyUflzD7aiqF_ZLDCxrcP11fWlcpDFJthgXcTg.hPS.28X04mUNChRrccotmesy6cnhkLjk
- VLD1_tcURSkd3Z0tk.5bSekYMAQGnye9QDeT6gj3.PNKGjaIgka051NkCpkY5S3V6KzZfZiesnJ0
- 0h8F9luuIeNj9oQDLFB7W8pv_S3eyaGzl_5vdSPCUFecB4eA5FZZmVLMGCmFqrHeXJ6Yxa0rHixM
- G27k14QRZBl5_6tiajUaoGZJCVLSMzM7esC9cvf0wRQo1hEut0Yl3ptTQ8ko7CjdPSyG6SQ5LSYt
- 56e_Ubr_jD1nLEnJiZpAaFVnn2xRQb5Pp.H.hti5TPnb_JBlGNnwslUTHoSHTxiElsi9i_4h.xsA
- EAuNiJWgTD2v3feZrF4CwGK.UmTQ3NvGa5l7CErIoW.KkPQox0Xx5khpNPxBRViXu.nvW64xItxF
- TKWrB5FDdbOsEbFzdesMs.2XO0HvE1wBvTkkGkvVD6qViRDRnVwIVcGOk8O3YVZXxQ8dOT9Yj3a1
- WpsXgnNfYicwvYMdwNwUr1gknlMS3OkIdIxqmx4QFAcgd5l0qh4yXxQ9jrE16U4KxZDbW7knzwxb
- RFDmrnZLKBrQARBlfnwmUR6Fa_gTmwzW2aiMLjC0BFWVNbmX6Ot2vR3qY5EgXHFe3AVQL1gpuBmp
- 9PrzXVMHUDsZE9oNEr2MV2cw2sWTIYf_uexJgEj3qJzvhZcz2T_uA7yYADQ6juw_UEWerEaj8emw
- IayUD_LB3jkRUXlCzA93wmbGsNXvDj0mU7z2iFMyooR99v54sRU6h0rG_y4.PL5bhxJpqPrhO_XW
- UzoVy0rlCSI7ytjObyeOdzTP5GruIPDFYKRRxU1DRSyMmyn8m4liYeEpMh8FlKR6Px2a_UrE435g
- aT3C2IUEUb2h1NJKO202D9GyFwk8i9sxgd4DBmyZZNvNi7h7Xr8bYv0sNgpLP6WezuIj8uChOZEj
- ioU8qGfSDgWjf7TnwXQ2f6d14.1GDQ75Q3kSDTl2GSf4wc6a6xvkdgi9LbsJ0ZLC.I8GP_mnhRcQ
- Vl1CB44WQwDI8dYq6Zqy8AyRtRN10XKA9gpCgRHSJN1hY_aIZ0.vV8nCh2RyPCFHfuDOYxBXVlAg
- lDW5pSxAz.IvV9LPre6Da9t0bxgGnV1BhCcpSKzwtk.5Mv4QMFOvDVM_vY4RZGmTER13qersuP5B
- 4fBrdOU5ORbvBjVBwDqGUhIAE.7Ya753IVskowfYZ6qE.Mm3TlvjEeNsIVMJfduF9Fww1nEtveX.
- sQhAFTn4QV7hTA.fF_dfSUANi71cdE4LuXnS.n18bOBgMooPjFcT7LyebBig48LIlxKkFOVQPI08
- UBktXQ5aYsMgXoVIIaE.qi0N_zWI87MXyhLzZTXG.aY1HV6VumDGOtwN4qmWgTgvqDoW7qxLZk4r
- pC.O25e9vvmBE24jrzA6n9RJGttJShOc7YvgCxHoG5I0YezdrVbFYh_V_TJp4Ug0PzSz9otqEIuS
- ugR1.khSJi.x4PGG5kxhQSH0-
+ b=koespfs9hUGHBiM/QtzfIUxdCJbwLQIJ1qh/OFjzYN91Xw4b5BQQrzYkqe6U/pNt12lqgzx8+4vd5YMfgndRMcWMLjfOjrebBJFtzksnfpocH3eKBPhMBRdaZh1wdXRKo8Eq0u5ZSRPeHZ/bug+gIFrPx6HdcCr6DlMQ+GJVms/T+SbfDrbgAbDxCTdWOUdurUgKzIO47MJQSAc0b/65RMrVrQb7+xmmK2Er6LfxH6q6rOw/PNYRXcCItyuuEJNBsWsWxXk1xIwJUfbmw+3pDAFyq5DPwyz1RPIHTk/mRffOErRHhbGQNuVvGowP8RqH6XGleuXblq/PNevOggvSIw==
+X-YMail-OSG: UoKfAeoVM1nrc4bF.TflFUGeWqHMkpGXnaZ14brhz2MfnRi08YU78pKHVww3gM6
+ xv50udXcQC3_gV_qi3_K7giEtpDNPATqVPPUlWmpwSmu5hZBmnB2qgwR5rVm.5OEOccdI2budv24
+ CgF5g9uz.vfW_gpV.lU9PQgRcb82cvPhmF.vhZHp3RvTVxnymjvaSYxiz5UO3Mh1z5kEXqC_XRNM
+ pzeZ5Y1lpNQGIqihK.BmgamX8yz7Emr5NmqDA5QZM_QDADS9oaFoxEgc0NKy87DPsnkCWND3YSsE
+ BM.sVgfHTBpSKvMXP.TDHs2DAHKIW8AucgBXpiwqPSPKdXmqL0TTo_EJG18yp8Zq3sgx4vmUvIqA
+ svDe0NKOQlAUnuGs6aBZxy6SASK1JKQGAieFBat2zfrXKFSDpZph4cg5DsZioAzIuJSwO9Jb9JBu
+ 9Twn8NkAWq5ZG9w0VAh5VdLG21vLiWKjFf6vtX.NWAKIkcmmXJwgAlgjO7zGgOI0MIOQrTNMYibx
+ tU9DhWqfBr1ssGqlCvsxd1KXNKkKHLGfTUeg4uQPSCrU7cQ9v6p1AN4VOdU4A57O0H2AD2cO8cUh
+ XicW0Xk9oJ1EGSUkVK.CxP.eexAlaB1379eG1WsrOf1y2jX.6F0dUTmU2E1tqXbLTh_11y0BW0hx
+ A3OWO4w_mR_AFmg0zoKY_bay9aSMWI4vdwhqlQzkScWdApzxStA3zAqkdVNLUnA9950COUxnPKF5
+ 3DbQvZo2_ICMEzfPX7SgU1llQshE8UMm7mPqFFkIcSZezjzvoExBCfOEYiTtRi.ip_JofnEp8Uyg
+ sYmMMJM.RxuQ4TWBG1ojeo_yUurHQyddxU2RpwjYXca3mveaAoy_Dw3HSh1CkkwYVMmIQUe3Pu9p
+ R47Q5YFOyMQblKFLCvvN6s1jO.UMO2djux1MKHwmrDSOCz4sIn6cMu_hryWyMKNWBs6QcLkzx2bN
+ kPMO2BZdIuTjHHzNimMtv9tsXzSejcrH6ylyaXSCTqLARI2XzrxsvNOoxASucZuMvf3cxnq5CWyj
+ alzxoDVa2R7nZ467_EBqx4GfndOZWqKIoadtpkY7Ek23UC3sofojr.gLnIFQL5.735zoKyS2dEXj
+ 5_ch.34vdy5nmiky4c7UxZyogJE2o14tuN57Xz9CDZGER2ryKzb93XUftTyC8rvzpHn8bClCzwB_
+ l0pL0IWIQsqG84Qe0r.5VFJwSSdpQNE_Ho51F_QF.q52ngOKTVhcBoCkdTm_FYMuJTpDQIXwPr6y
+ DDx7YJVXZ48eXvhScffW7bsijHd0HtlFqdDv9orBzzFyYIegjpvS1FsYq5UqtzTg9iR4g0S0qE5j
+ l3wRvDgaXwyDOkhoGlA8mg8vm_o_fUTBQNv05M.RG7.Ecj_Q3IosS8OBnl77Tgzz84q9UwZm.bsx
+ 7Wrg6WekhljwbE0zftZeJX.1zEibQsDMvTadqz3Zdg3s3O91AJHyJ0.GvezwX5PjQ2DLDbrLArjl
+ SkEIvBE7Shrv72LN3M.C_jH9HHNz89B2a3LrASHAyBc0Ve8UI2O_L5iTZgTjfORuFFKk_dTTvVyW
+ nZneqio9D.oPX7xCktWU.lKCuPQNMW39E1s8E5EQwOYjh_sJBJzZsM2teOPnR8sEH0emCwW4NozT
+ uNQDNwLboYxWKBiP2t9OcGfRZYehZOhCJ8zxXpUXdF1Ji1vtpH2RH0lOUPMJ08rSUNt6TPajBoQ7
+ kfQrYA2T5ZgCY4m.yeuBGtWQNPl6gq_AFxZco3Qw5IA.DjEQTylgpg1USpyTHP3lOScpFHTpbPuA
+ iVa.BJVcFIbOeT2NsnndkJ3bLN1gVQTR5e_eyOolsWFKEcd4rfcjzcLwPYptDGokEnxKI9Kf_n_u
+ M.UCu0.ieXgdbptd2LyyaAx4AqQ.OB.ezgMyKd68vEH2net69ktyvlU3HElMxWbP6gGnEz4jWjrk
+ CUpOt6cLrcQ0MzokZOjBbd05uT77qYCbs27a6aGfvLcY7.GY10bYWkLFgB8ifi1veq1ug8Fau8Hg
+ rKF6aLt8i22EzAwtcgjPl7B2g9s0vMYM9RGJx6arGiiKS41IOWS4nurVdFlddtpd8DU.yUylhro8
+ 2OlaYJs8J2zZDEAjFFveKfJeF2manlob1TnUMOt1h66D9.XQOUx4.JhtJycNOMhAW_jyZ2sU1zwt
+ DP4lTMfWWDAmwfntsG7OPSncvqR7RhM0I.P4QNjBxKXe11juFZ_yTrP6ExaEx6ZQj59cKcGIH.we
+ iDA--
 X-Sonic-MF: <xiangyu.chen@aol.com>
 Received: from sonic.gate.mail.ne1.yahoo.com by
- sonic301.consmr.mail.ne1.yahoo.com with HTTP; Mon, 25 Oct 2021 02:31:56 +0000
+ sonic301.consmr.mail.ne1.yahoo.com with HTTP; Mon, 25 Oct 2021 02:32:12 +0000
 Received: by kubenode538.mail-prod1.omega.gq1.yahoo.com (VZM Hermes SMTP
  Server) with ESMTPA ID 8431685fae607a09bfd078d560945454; 
- Mon, 25 Oct 2021 02:21:53 +0000 (UTC)
+ Mon, 25 Oct 2021 02:22:08 +0000 (UTC)
 To: buildroot@buildroot.org,
 	thomas.petazzoni@bootlin.com
-Date: Mon, 25 Oct 2021 10:21:45 +0800
-Message-Id: <20211025022146.2556-1-xiangyu.chen@aol.com>
+Date: Mon, 25 Oct 2021 10:21:46 +0800
+Message-Id: <20211025022146.2556-2-xiangyu.chen@aol.com>
 X-Mailer: git-send-email 2.13.1
-In-Reply-To: <[Buildroot] [PATCH] boot/at91bootstrap3: add svn repository
- method>
+In-Reply-To: <20211025022146.2556-1-xiangyu.chen@aol.com>
 References: <[Buildroot] [PATCH] boot/at91bootstrap3: add svn repository
- method>
+ method> <20211025022146.2556-1-xiangyu.chen@aol.com>
 Subject: [Buildroot] [PATCH 1/1] [PATCH v2 1/1] boot/at91bootstrap3: add svn
- repository
+ repository method
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -108,43 +108,85 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: CHEN Xiangyu via buildroot <buildroot@buildroot.org>
 Reply-To: CHEN Xiangyu <xiangyu.chen@aol.com>
-Cc: spdawson@gmail.com
+Cc: CHEN Xiangyu <xiangyu.chen@aol.com>, spdawson@gmail.com
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Thomas and all,
-	Sorry for the stupid mistake in before thread's patch, I copied the changes from a svn branch to git branch and missing the "AT91BOOTSTRAP3_SITE" config.
-	Now I re-submitted a v2 patch, the changes as below:
+Since more and more traditional companies are starting using buildroot
+with AT91SAM9x chipset as their product firmware, much of them are still
+using SVN as their version control system. So add svn repository method
+to AT91bootstrap3 package.
 
-	v0 --> v1 : applied Thomas's comment, fix the AT91BOOTSTRAM3_SITE missing.
+Signed-off-by: CHEN Xiangyu <xiangyu.chen@aol.com>
+---
+ boot/at91bootstrap3/Config.in         | 12 +++++++++---
+ boot/at91bootstrap3/at91bootstrap3.mk |  4 ++++
+ 2 files changed, 13 insertions(+), 3 deletions(-)
 
-	Testing done in my local setup with private SVN server, log as below:
-	chenxy@linux-0qql:/raw/swap/buildroot-master> make at91bootstrap3-rebuild
-	rm -f /raw/swap/buildroot-master/output/build/at91bootstrap3-r1193/.stamp_installed
-	....
-	rm -f /raw/swap/buildroot-master/output/build/at91bootstrap3-r1193/.stamp_built
-	>>> at91bootstrap3 r1193 Downloading
-	svn --non-interactive export --ignore-keywords 'https://myprivate.svn.com/at91bootstrap-3.10.0@r1193' 'at91bootstrap3-r1193'
-	A    at91bootstrap3-r1193
-	A    at91bootstrap3-r1193/.dir-locals.el
-	.....
-	A    at91bootstrap3-r1193/toplevel_cpp.mk
-	r1193 done.
-	>>> at91bootstrap3 r1193 Extracting
-	gzip -d -c /raw/buildroot-at91/dl/at91bootstrap3/at91bootstrap3-r1193-br2.tar.gz | tar --strip-components=1 -C /raw/swap/buildroot-master/output/build/at91bootstrap3-r1193   -xf -
-	>>> at91bootstrap3 r1193 Patching
-	make[1]: Entering directory '/raw/swap/buildroot-master/output/build/at91bootstrap3-r1193'
-	......
-	Size of sam9x60ek-nandflashboot-uboot-3.10.0.bin is 17316 bytes
-	[Succeeded] It's OK to fit into SRAM area
-	[Attention] The space left for stack is 48220 bytes
-	make[1]: Leaving directory '/raw/swap/buildroot-master/output/build/at91bootstrap3-r1193'
-	>>> at91bootstrap3 r1193 Installing to images directory
-
-	The final could be found under ouput/images directory, everything looks ok
+diff --git a/boot/at91bootstrap3/Config.in b/boot/at91bootstrap3/Config.in
+index 650d3a23c8..b3e18fce7c 100644
+--- a/boot/at91bootstrap3/Config.in
++++ b/boot/at91bootstrap3/Config.in
+@@ -30,6 +30,12 @@ config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
+ 	  This option allows Buildroot to get the AT91 Bootstrap 3
+ 	  source code from a Git repository.
+ 
++config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_SVN
++	bool "Custom SVN repository"
++	help
++	  This option allows Buildroot to get the AT91 Bootstrap 3
++	  source code from a Subversion repository
++
+ config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL
+ 	bool "Custom tarball"
+ 
+@@ -39,7 +45,7 @@ config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION
+ 	string "URL of custom AT91Bootstrap tarball"
+ 	depends on BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL
+ 
+-if BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
++if BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT || BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_SVN
+ 
+ config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL
+ 	string "URL of custom repository"
+@@ -47,7 +53,7 @@ config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL
+ config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION
+ 	string "Custom repository version"
+ 	help
+-	  Revision to use in the typical format used by Git
++	  Revision to use in the typical format used by Git or SVN
+ 	  E.G. a sha id, a tag, branch, ..
+ 
+ endif
+@@ -57,7 +63,7 @@ config BR2_TARGET_AT91BOOTSTRAP3_VERSION
+ 	default "v4.0.0" if BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
+ 	default "v3.10.3" if BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION_3X
+ 	default BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION \
+-		if BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
++		if BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT || BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_SVN
+ 	default "custom"	if BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL
+ 
+ config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_PATCH_DIR
+diff --git a/boot/at91bootstrap3/at91bootstrap3.mk b/boot/at91bootstrap3/at91bootstrap3.mk
+index 1e2a3a44b0..4bbe7cc718 100644
+--- a/boot/at91bootstrap3/at91bootstrap3.mk
++++ b/boot/at91bootstrap3/at91bootstrap3.mk
+@@ -15,6 +15,10 @@ else ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT),y)
+ AT91BOOTSTRAP3_SITE = $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL))
+ AT91BOOTSTRAP3_SITE_METHOD = git
+ BR_NO_CHECK_HASH_FOR += $(AT91BOOTSTRAP3_SOURCE)
++else ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_SVN),y)
++AT91BOOTSTRAP3_SITE = $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL))
++AT91BOOTSTRAP3_SITE_METHOD = svn
++BR_NO_CHECK_HASH_FOR += $(AT91BOOTSTRAP3_SOURCE)
+ else
+ AT91BOOTSTRAP3_SITE = $(call github,linux4sam,at91bootstrap,$(AT91BOOTSTRAP3_VERSION))
+ endif
+-- 
+2.13.1
 
 _______________________________________________
 buildroot mailing list
