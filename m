@@ -2,52 +2,52 @@ Return-Path: <SRS0=F6DF=PN=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 79C46C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 25 Oct 2021 11:44:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3649BC4332F
+	for <buildroot@archiver.kernel.org>; Mon, 25 Oct 2021 11:44:25 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 160F861002
-	for <buildroot@archiver.kernel.org>; Mon, 25 Oct 2021 11:44:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 160F861002
+	by mail.kernel.org (Postfix) with ESMTPS id C69EA61039
+	for <buildroot@archiver.kernel.org>; Mon, 25 Oct 2021 11:44:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C69EA61039
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E5C0680C56;
-	Mon, 25 Oct 2021 11:44:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A141480DAC;
+	Mon, 25 Oct 2021 11:44:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5m9hkzPXOKDV; Mon, 25 Oct 2021 11:44:12 +0000 (UTC)
+	with ESMTP id zmT5NPYHO70m; Mon, 25 Oct 2021 11:44:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 13ECB80BF3;
-	Mon, 25 Oct 2021 11:44:11 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id DE9601BF97C
- for <buildroot@lists.busybox.net>; Mon, 25 Oct 2021 11:43:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C539A80D8B;
+	Mon, 25 Oct 2021 11:44:22 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 400CC1BF37A
+ for <buildroot@lists.busybox.net>; Mon, 25 Oct 2021 11:43:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CE40380DFA
- for <buildroot@lists.busybox.net>; Mon, 25 Oct 2021 11:43:41 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 383DE4037A
+ for <buildroot@lists.busybox.net>; Mon, 25 Oct 2021 11:43:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cejHMnRLT0lx for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id tluNkNQWu7OK for <buildroot@lists.busybox.net>;
  Mon, 25 Oct 2021 11:43:41 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2327480DF6
+ by smtp2.osuosl.org (Postfix) with ESMTP id 105734037E
  for <buildroot@buildroot.org>; Mon, 25 Oct 2021 11:43:41 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 4DC858872B; Mon, 25 Oct 2021 11:40:21 +0000 (UTC)
+ id 39D4288727; Mon, 25 Oct 2021 11:40:21 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 25 Oct 2021 13:42:54 +0200
+Date: Mon, 25 Oct 2021 13:29:36 +0200
 X-Git-Refname: refs/heads/2021.08.x
-X-Git-Oldrev: 54df8caf0d69f3b12afc4322735af80366db2e81
-X-Git-Newrev: a5227c746d0e8021a7ab111f049704929e8ebc09
+X-Git-Oldrev: 377b1b8218991253f174c6911a9883e272320e2b
+X-Git-Newrev: d842eb2d6308c7371f179daa3b3fca4dcf8446b6
 X-Patchwork-Hint: ignore
-Message-Id: <20211025114021.4DC858872B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.08.x] package/docker-engine:
- security bump to version 20.10.9
+Message-Id: <20211025114021.39D4288727@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.08.x] package/gnupg2: bump
+ version to 2.2.32
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,67 +60,116 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8414807321459679014=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8414807321459679014==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=a5227c746d0e8021a7ab111f049704929e8ebc09
+commit: https://git.buildroot.net/buildroot/commit/?id=d842eb2d6308c7371f179daa3b3fca4dcf8446b6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.08.x
 
-Fixes the following security issues:
+- removed 0001-dirmngr-Fix-build-with--disable-ldap.patch
+  (from upstream [1])
 
-- CVE-2021-41089:  Create parent directories inside a chroot during docker
-  cp to prevent a specially crafted container from changing permissions of
-  existing files in the host’s filesystem.
+- fix/update signature check key hash
 
-- CVE-2021-41091: Lock down file permissions to prevent unprivileged users
-  from discovering and executing programs in /var/lib/docker.
+For details (since 2.2.28) see [2], [3], [4] and [5].
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Reviewed-by: Christian Stewart <christian@paral.in>
+[1] https://git.gnupg.org/cgi-bin/gitweb.cgi?p=gnupg.git;a=commit;h=c6900f5723b4edc899aaea267ed599b5ad724142
+[2] https://lists.gnupg.org/pipermail/gnupg-announce/2021q3/000461.html
+[3] https://lists.gnupg.org/pipermail/gnupg-announce/2021q3/000463.html
+[4] https://lists.gnupg.org/pipermail/gnupg-announce/2021q3/000464.html
+[5] https://lists.gnupg.org/pipermail/gnupg-announce/2021q4/000465.html
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit ce45136df09657998e8069844e91190504fddebe)
+(cherry picked from commit 1f654d357c0743d69731975d60fa414014dacf55)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/docker-engine/docker-engine.hash | 2 +-
- package/docker-engine/docker-engine.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...0001-dirmngr-Fix-build-with--disable-ldap.patch | 43 ----------------------
+ package/gnupg2/gnupg2.hash                         |  8 ++--
+ package/gnupg2/gnupg2.mk                           |  2 +-
+ 3 files changed, 5 insertions(+), 48 deletions(-)
 
-diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
-index 07acb87864..5e15842859 100644
---- a/package/docker-engine/docker-engine.hash
-+++ b/package/docker-engine/docker-engine.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  2505d00032f5d40ead5ac779c2840303dcead04713c93ba974be4c19b3ab8d0a  docker-engine-20.10.8.tar.gz
-+sha256  359e8854d0d51bc884d434f182f64ca62f25fbbe7b9c6a336eb09f212fe8cc9a  docker-engine-20.10.9.tar.gz
- sha256  7c87873291f289713ac5df48b1f2010eb6963752bbd6b530416ab99fc37914a8  LICENSE
-diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-index 7d338a5c0c..84366d9334 100644
---- a/package/docker-engine/docker-engine.mk
-+++ b/package/docker-engine/docker-engine.mk
+diff --git a/package/gnupg2/0001-dirmngr-Fix-build-with--disable-ldap.patch b/package/gnupg2/0001-dirmngr-Fix-build-with--disable-ldap.patch
+deleted file mode 100644
+index fbdd7fa4a7..0000000000
+--- a/package/gnupg2/0001-dirmngr-Fix-build-with--disable-ldap.patch
++++ /dev/null
+@@ -1,43 +0,0 @@
+-From c6900f5723b4edc899aaea267ed599b5ad724142 Mon Sep 17 00:00:00 2001
+-From: NIIBE Yutaka <gniibe@fsij.org>
+-Date: Fri, 11 Jun 2021 10:30:02 +0900
+-Subject: [PATCH] dirmngr: Fix build with --disable-ldap.
+-
+-* dirmngr/dirmngr.c (parse_rereadable_options) [USE_LDAP]:
+-Conditionalize.
+-
+---
+-
+-Reported-by: Phil Pennock
+-Signed-off-by: NIIBE Yutaka <gniibe@fsij.org>
+-(cherry picked from commit c8b2162c0e7eb42b74811b7ed225fa0f56be4083)
+-[Retrieved from:
+-https://git.gnupg.org/cgi-bin/gitweb.cgi?p=gnupg.git;a=commit;h=c6900f5723b4edc899aaea267ed599b5ad724142]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- dirmngr/dirmngr.c | 2 ++
+- 1 file changed, 2 insertions(+)
+-
+-diff --git a/dirmngr/dirmngr.c b/dirmngr/dirmngr.c
+-index 915e0e601..330983f3f 100644
+---- a/dirmngr/dirmngr.c
+-+++ b/dirmngr/dirmngr.c
+-@@ -770,6 +770,7 @@ parse_rereadable_options (gpgrt_argparse_t *pargs, int reread)
+-     case oRecursiveResolver: enable_recursive_resolver (1); break;
+- 
+-     case oLDAPServer:
+-+#if USE_LDAP
+-       {
+-         ldap_server_t server;
+-         char *p;
+-@@ -791,6 +792,7 @@ parse_rereadable_options (gpgrt_argparse_t *pargs, int reread)
+-             opt.ldapservers = server;
+-           }
+-       }
+-+#endif
+-       break;
+- 
+-     case oKeyServer:
+--- 
+-2.11.0
+-
+diff --git a/package/gnupg2/gnupg2.hash b/package/gnupg2/gnupg2.hash
+index 023ec9bb1e..caf5dcc883 100644
+--- a/package/gnupg2/gnupg2.hash
++++ b/package/gnupg2/gnupg2.hash
+@@ -1,7 +1,7 @@
+ # From https://lists.gnupg.org/pipermail/gnupg-announce/2021q2/000460.html
+-sha1  5f92b7b32d594cf21ea2b48cdaa2e460daccd6e3 gnupg-2.2.28.tar.bz2
++sha1  81684626720c91060ae9920936c768df9fc8b2f6  gnupg-2.2.32.tar.bz2
+ # Calculated based on the hash above and signature
+-# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.28.tar.bz2.sig
+-# using key D8692123C4065DEA5E0F3AB5249B39D24F25E3B6
+-sha256  6ff891fc7583a9c3fb9f097ee0d1de0a12469d4b53997e7ba5064950637dfaec  gnupg-2.2.28.tar.bz2
++# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.32.tar.bz2.sig
++# using key 6DAA6E64A76D2840571B4902528897B826403ADA
++sha256  b2571b35f82c63e7d278aa6a1add0d73453dc14d3f0854be490c844fca7e0614  gnupg-2.2.32.tar.bz2
+ sha256  bc2d6664f6276fa0a72d57633b3ae68dc7dcb677b71018bf08c8e93e509f1357  COPYING
+diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
+index 6bd957683b..32c22b8257 100644
+--- a/package/gnupg2/gnupg2.mk
++++ b/package/gnupg2/gnupg2.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DOCKER_ENGINE_VERSION = 20.10.8
-+DOCKER_ENGINE_VERSION = 20.10.9
- DOCKER_ENGINE_SITE = $(call github,moby,moby,v$(DOCKER_ENGINE_VERSION))
- 
- DOCKER_ENGINE_LICENSE = Apache-2.0
-
---===============8414807321459679014==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-GNUPG2_VERSION = 2.2.28
++GNUPG2_VERSION = 2.2.32
+ GNUPG2_SOURCE = gnupg-$(GNUPG2_VERSION).tar.bz2
+ GNUPG2_SITE = https://gnupg.org/ftp/gcrypt/gnupg
+ GNUPG2_LICENSE = GPL-3.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8414807321459679014==--
