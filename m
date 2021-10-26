@@ -2,51 +2,51 @@ Return-Path: <SRS0=o+05=PO=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A70DC433F5
-	for <buildroot@archiver.kernel.org>; Tue, 26 Oct 2021 19:39:22 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A55FC433F5
+	for <buildroot@archiver.kernel.org>; Tue, 26 Oct 2021 19:39:34 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 44B756103C
-	for <buildroot@archiver.kernel.org>; Tue, 26 Oct 2021 19:39:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 44B756103C
+	by mail.kernel.org (Postfix) with ESMTPS id E9BD761078
+	for <buildroot@archiver.kernel.org>; Tue, 26 Oct 2021 19:39:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E9BD761078
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 230DA80C18;
-	Tue, 26 Oct 2021 19:39:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BBBD94018E;
+	Tue, 26 Oct 2021 19:39:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6Lze0r4f73J5; Tue, 26 Oct 2021 19:39:21 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id yUdBjTkS5Aru; Tue, 26 Oct 2021 19:39:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 946D080BB2;
-	Tue, 26 Oct 2021 19:39:20 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 43BA21BF9B2
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0AABC40135;
+	Tue, 26 Oct 2021 19:39:32 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id DBF8E1BF3CD
  for <buildroot@lists.busybox.net>; Tue, 26 Oct 2021 19:38:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2D1694011F
- for <buildroot@lists.busybox.net>; Tue, 26 Oct 2021 19:38:09 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9A6FA6067F
+ for <buildroot@lists.busybox.net>; Tue, 26 Oct 2021 19:38:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1TX8myshPVYN for <buildroot@lists.busybox.net>;
- Tue, 26 Oct 2021 19:38:08 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id NrHlSb455z5V for <buildroot@lists.busybox.net>;
+ Tue, 26 Oct 2021 19:38:07 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 340CE4022A
- for <buildroot@buildroot.org>; Tue, 26 Oct 2021 19:38:08 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E38BE607AE
+ for <buildroot@buildroot.org>; Tue, 26 Oct 2021 19:38:07 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 47C1E88F06; Tue, 26 Oct 2021 19:34:45 +0000 (UTC)
+ id 0499C88F07; Tue, 26 Oct 2021 19:34:45 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
 Date: Tue, 26 Oct 2021 21:34:26 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5c85c59721a4d98d84b699b4204fc5e38483a9b9
-X-Git-Newrev: 0cdbe8b70152d498973d97b37b3418e933b27b6e
+X-Git-Oldrev: 0514ced833ae082a8d4eea39afa43af5bcc17f0b
+X-Git-Newrev: b1fe3050f26618d5050f69db9427f5ac9e3151a3
 X-Patchwork-Hint: ignore
-Message-Id: <20211026193445.47C1E88F06@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-yarl: bump to version 1.7.0
+Message-Id: <20211026193445.0499C88F07@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kodi: bump version to 19.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,48 +64,68 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0cdbe8b70152d498973d97b37b3418e933b27b6e
+commit: https://git.buildroot.net/buildroot/commit/?id=b1fe3050f26618d5050f69db9427f5ac9e3151a3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-License hash change due to removal of full license text:
-https://github.com/aio-libs/yarl/commit/94faa90c3c3e6d8ac519fa4b6bee154bc090e34b
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/python-yarl/python-yarl.hash | 6 +++---
- package/python-yarl/python-yarl.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk | 2 +-
+ package/kodi-texturepacker/kodi-texturepacker.mk         | 2 +-
+ package/kodi/kodi.hash                                   | 2 +-
+ package/kodi/kodi.mk                                     | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-yarl/python-yarl.hash b/package/python-yarl/python-yarl.hash
-index 783702c74b..e488ee6939 100644
---- a/package/python-yarl/python-yarl.hash
-+++ b/package/python-yarl/python-yarl.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/yarl/json
--md5  3b6f2da3db8c645a9440375fd6a414eb  yarl-1.6.3.tar.gz
--sha256  8a9066529240171b68893d60dca86a763eae2139dd42f42106b03cf4b426bf10  yarl-1.6.3.tar.gz
-+md5  624ac1cd36abe92dc437fa97209c5c68  yarl-1.7.0.tar.gz
-+sha256  8e7ebaf62e19c2feb097ffb7c94deb0f0c9fab52590784c8cd679d30ab009162  yarl-1.7.0.tar.gz
- # Locally computed sha256 checksums
--sha256  14c0820503ceef15e814a89b037d9efc066870087018294b6ae0f27163872cc5  LICENSE
-+sha256  56d6ac6c8105c0a51304c21db060e361af9a8ea0af9a75c239c28b5d13693838  LICENSE
-diff --git a/package/python-yarl/python-yarl.mk b/package/python-yarl/python-yarl.mk
-index 32ec477064..8a1a3bbca0 100644
---- a/package/python-yarl/python-yarl.mk
-+++ b/package/python-yarl/python-yarl.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
+index 7b4df91efe..81fc2bb9f1 100644
+--- a/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
++++ b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
+@@ -6,7 +6,7 @@
  
--PYTHON_YARL_VERSION = 1.6.3
-+PYTHON_YARL_VERSION = 1.7.0
- PYTHON_YARL_SOURCE = yarl-$(PYTHON_YARL_VERSION).tar.gz
--PYTHON_YARL_SITE = https://files.pythonhosted.org/packages/97/e7/af7219a0fe240e8ef6bb555341a63c43045c21ab0392b4435e754b716fa1
-+PYTHON_YARL_SITE = https://files.pythonhosted.org/packages/7f/5c/a4ce6d4f46413afe49734bf901939105f4ce7fcfbcf87d0777cc39501060
- PYTHON_YARL_LICENSE = Apache-2.0
- PYTHON_YARL_LICENSE_FILES = LICENSE
- PYTHON_YARL_SETUP_TYPE = setuptools
+ # Not possible to directly refer to kodi variables, because of
+ # first/second expansion trickery...
+-KODI_JSONSCHEMABUILDER_VERSION = 19.2-Matrix
++KODI_JSONSCHEMABUILDER_VERSION = 19.3-Matrix
+ KODI_JSONSCHEMABUILDER_SITE = $(call github,xbmc,xbmc,$(KODI_JSONSCHEMABUILDER_VERSION))
+ KODI_JSONSCHEMABUILDER_SOURCE = kodi-$(KODI_JSONSCHEMABUILDER_VERSION).tar.gz
+ KODI_JSONSCHEMABUILDER_DL_SUBDIR = kodi
+diff --git a/package/kodi-texturepacker/kodi-texturepacker.mk b/package/kodi-texturepacker/kodi-texturepacker.mk
+index 7d13c72cc6..2ebcd7d8de 100644
+--- a/package/kodi-texturepacker/kodi-texturepacker.mk
++++ b/package/kodi-texturepacker/kodi-texturepacker.mk
+@@ -6,7 +6,7 @@
+ 
+ # Not possible to directly refer to kodi variables, because of
+ # first/second expansion trickery...
+-KODI_TEXTUREPACKER_VERSION = 19.2-Matrix
++KODI_TEXTUREPACKER_VERSION = 19.3-Matrix
+ KODI_TEXTUREPACKER_SITE = $(call github,xbmc,xbmc,$(KODI_TEXTUREPACKER_VERSION))
+ KODI_TEXTUREPACKER_SOURCE = kodi-$(KODI_TEXTUREPACKER_VERSION).tar.gz
+ KODI_TEXTUREPACKER_DL_SUBDIR = kodi
+diff --git a/package/kodi/kodi.hash b/package/kodi/kodi.hash
+index e51ebaff0a..7f96af385a 100644
+--- a/package/kodi/kodi.hash
++++ b/package/kodi/kodi.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  e8f5e50767ddd1b8f0399016dcf5ba762315c16c0568cb06e659c493376f99d5  kodi-19.2-Matrix.tar.gz
++sha256  440f47e475dd8a48e0a6d41349e83b74890f3fbe8275d3e401d3c50f5b9ea09b  kodi-19.3-Matrix.tar.gz
+ sha256  38816f8373e243bc5950449b4f3b18938c4e1c59348e3411e23f31db4072e40d  kodi-libdvdcss-1.4.2-Leia-Beta-5.tar.gz
+ sha256  071e414e61b795f2ff9015b21a85fc009dde967f27780d23092643916538a57a  kodi-libdvdnav-6.0.0-Leia-Alpha-3.tar.gz
+ sha256  a30b6aa0aad0f2c505bc77948af2d5531a80b6e68112addb4c123fca24d5d3bf  kodi-libdvdread-6.0.0-Leia-Alpha-3.tar.gz
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index 13f066a13d..934cce6de2 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -6,7 +6,7 @@
+ 
+ # When updating the version, please also update kodi-jsonschemabuilder
+ # and kodi-texturepacker
+-KODI_VERSION_MAJOR = 19.2
++KODI_VERSION_MAJOR = 19.3
+ KODI_VERSION_NAME = Matrix
+ KODI_VERSION = $(KODI_VERSION_MAJOR)-$(KODI_VERSION_NAME)
+ KODI_SITE = $(call github,xbmc,xbmc,$(KODI_VERSION))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
