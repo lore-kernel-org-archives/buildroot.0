@@ -2,84 +2,84 @@ Return-Path: <SRS0=o+05=PO=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C1CD0C433F5
-	for <buildroot@archiver.kernel.org>; Tue, 26 Oct 2021 19:55:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 08DF8C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 26 Oct 2021 19:58:04 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 78D8460F39
-	for <buildroot@archiver.kernel.org>; Tue, 26 Oct 2021 19:55:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 78D8460F39
+	by mail.kernel.org (Postfix) with ESMTPS id CA4D960F39
+	for <buildroot@archiver.kernel.org>; Tue, 26 Oct 2021 19:58:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org CA4D960F39
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4FE6540533;
-	Tue, 26 Oct 2021 19:55:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 94981400D2;
+	Tue, 26 Oct 2021 19:58:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9l5fqxgN7439; Tue, 26 Oct 2021 19:55:32 +0000 (UTC)
+	with ESMTP id gvwitgAafWVp; Tue, 26 Oct 2021 19:58:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 594B740535;
-	Tue, 26 Oct 2021 19:55:31 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 970A61BF3CD
- for <buildroot@lists.busybox.net>; Tue, 26 Oct 2021 19:55:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A8E76400E0;
+	Tue, 26 Oct 2021 19:58:01 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 68CDC1BF3CD
+ for <buildroot@lists.busybox.net>; Tue, 26 Oct 2021 19:57:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 86040606AF
- for <buildroot@lists.busybox.net>; Tue, 26 Oct 2021 19:55:29 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 643434024F
+ for <buildroot@lists.busybox.net>; Tue, 26 Oct 2021 19:57:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AtzI85HH4TqO for <buildroot@lists.busybox.net>;
- Tue, 26 Oct 2021 19:55:28 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id MmxX45kfhA4p for <buildroot@lists.busybox.net>;
+ Tue, 26 Oct 2021 19:57:58 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
- [IPv6:2a00:1450:4864:20::436])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 33C6560680
- for <buildroot@buildroot.org>; Tue, 26 Oct 2021 19:55:28 +0000 (UTC)
-Received: by mail-wr1-x436.google.com with SMTP id e12so233270wra.4
- for <buildroot@buildroot.org>; Tue, 26 Oct 2021 12:55:28 -0700 (PDT)
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
+ [IPv6:2a00:1450:4864:20::429])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B0C304011F
+ for <buildroot@buildroot.org>; Tue, 26 Oct 2021 19:57:57 +0000 (UTC)
+Received: by mail-wr1-x429.google.com with SMTP id s19so260386wra.2
+ for <buildroot@buildroot.org>; Tue, 26 Oct 2021 12:57:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=Cg/M26l0U8NejXoPnKX9INbg/ULhgrODEUyIxfQDTZo=;
- b=XHqndhSsBVMiAPJzOourzOkv5uZB3cYV5EjagwCr+NMxvaFa1ba6HU5r48E/3h+cbv
- 9azrQQCOhW07pne2xL6fUCfole31Q5OPux8QMxtMFLDatkngSKnXX8OfOgS5R50G5ya7
- 06L7RshRlPdNcD2ZQVmz2Mvzz+Bwe8NE9y5WYIFkynJMtNpDOUBPVonlmGgMUMgNHPsV
- 0GukK0vm5AIelXUrgj9f0+/GFCtuqwuL5b1IZb4j4DF2n5AUbcR+LWWSPh92502VfZu6
- KTBg5QhDPjTuA7yUmad84tZpar+jAQQJUXAYa9YN6XfThtgiQnX2Ac5Utg2wQEUL0Eq4
- MGZw==
+ bh=klz1m4rX2dMGMWLfOhdY3+ci/ORAb1UwFZj4YEHSvYc=;
+ b=PYeSyGl9waAGj5vyReXPDUMz88pIqOWXjWF4yXmNoRwGAliloA/oQT7O+nTpv4iKav
+ o6OUkk3BIzALkzcIHx1Wqvotdr1kmlxp+c9UQCabXT1RPkx5Iz5cEMbvNSZpMvhUdfte
+ ucnW1nN1JLrrWzxMrIxzQdkPEvdl05y9Lt0uTEFt3qKXY0JcdhNW76byQ/NLcnq+IWTx
+ KQE2C2GZrKIEEkrS1fAGCxqbTaAxR1Jg9oiARIAs6vwt3t1VbiM/0k1kjRpeICo7w2uT
+ RUs9FpdL37GJLYuEC+bFLnHhrm/H5TO5zWLmZHTIhQ44kAs8XH22EsY3ciYV1yk8rnYs
+ sdUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=Cg/M26l0U8NejXoPnKX9INbg/ULhgrODEUyIxfQDTZo=;
- b=HR6vcpjxEbprXftMMVIIiCg1dB2Gp0+LT0o+JYJ8fkm+oOq0w61njkupIZfbamFgPC
- X3F7YUH+U9gdqZNM6jJM9LoRFhgZ29MA4Ln4Zg5ZDWGm98ELhkQU0Ev1AgRgzUHyqryY
- l8RXlupKEUkMaaWH3CEiWU63S2gpcReMzuJmBP+sisudP/E3vmIYPsyGIL71QzhJmKpr
- 7eZxtX7kmTgA8E7SAZd2jiTxR2vX+0z3WY03dTvwACJFmqcsjq4wocFM9GRECjtmBuXB
- Bw9Q4/QB9Fy/SGJQW8vcb0g+5P4LUUH1NfOXVnDQiGQSjoVtq6+zvcgHaRRDGpkCUvmx
- mi7A==
-X-Gm-Message-State: AOAM530bKlizFgG7cWAjd4EmsMOjBII+yP4SxsT2ltNAPlu3aPcawO/I
- pB/M5J9ht4UwLNz6oxPJvMTaZ0OeNUU=
-X-Google-Smtp-Source: ABdhPJznSgIyWG2lCinAehISl0IdA5f4Ix2Kx1DKxSZzt/BMbzYjorfmUruw0UNMRdwRwmwoYlqQHg==
-X-Received: by 2002:a5d:6c65:: with SMTP id r5mr34412148wrz.26.1635278126129; 
- Tue, 26 Oct 2021 12:55:26 -0700 (PDT)
+ bh=klz1m4rX2dMGMWLfOhdY3+ci/ORAb1UwFZj4YEHSvYc=;
+ b=Ga8+w6uJjm2yQGy/7tt71aY0/bpWhL6xZWimyO9+B3CeOeWAongMUBqqrt/pt3O3bC
+ jhjyS+Z6VKM7Kydfg4aMw8q9Atg3xgJK8WDqCT9f9Ry2F89LKCt8cRah8kc4op9hFsQe
+ b/hzfTC15e7Ai7ogEC3wUbeKwqS6pvzRaiid7ZqFvr1vHwTkCFYPy27sPUw6rQLnuQbZ
+ WRkyEHDO5jYth2KIcwNkVX9AqZ2UHmh9kTevVwznp9NOAS475X14FJzy7FLe4hndxV0M
+ U9ii0s1/F8M7a3ilwlWPkcBivdWbzV0d4QquHZ9oUMQVDw00qJMdO4So/DhuTg7b7sxJ
+ MUMA==
+X-Gm-Message-State: AOAM530Kx2rSiYbHISxmz6GMiH/UF60G0z+CCEBXr4Ib6rT7Uu6K8C8y
+ UZoInJcSohE5bSJXoIYwa7wxw1kveHA=
+X-Google-Smtp-Source: ABdhPJzjQ0NTutdeirHkrFFnELDuCOexNlsYY14BnVkqi+8k0nY/4cg43sg5EVFZgoqkq0k3VO7/0A==
+X-Received: by 2002:adf:d1c2:: with SMTP id b2mr35170178wrd.73.1635278275722; 
+ Tue, 26 Oct 2021 12:57:55 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-1732-95.w86-253.abo.wanadoo.fr.
  [86.253.44.95])
- by smtp.gmail.com with ESMTPSA id j20sm1344404wmp.27.2021.10.26.12.55.25
+ by smtp.gmail.com with ESMTPSA id i14sm1388175wmb.48.2021.10.26.12.57.55
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 26 Oct 2021 12:55:25 -0700 (PDT)
+ Tue, 26 Oct 2021 12:57:55 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 26 Oct 2021 21:53:53 +0200
-Message-Id: <20211026195353.4055090-1-fontaine.fabrice@gmail.com>
+Date: Tue, 26 Oct 2021 21:56:01 +0200
+Message-Id: <20211026195601.4056614-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/log4cxx: needs boost or C++17
+Subject: [Buildroot] [PATCH 1/1] package/libmediaart: bump to version 1.9.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,274 +91,282 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-log4cxx needs boost or C++17 since bump to version 0.12.0 in
-commit 83a0e8dea203dc37c6c207a36b3f46160578dcc2 (see
-https://github.com/apache/logging-log4cxx/commit/2ab3b78b9aa36524287764a129fa6ad96e89ca02):
+- Switch to meson-package
+- Drop BR2_PACKAGE_LIBMEDIAART_BACKEND_NONE which is not supported
+  anymore
+- Update indentation in hash file (two spaces)
 
-In file included from /home/buildroot/autobuild/instance-3/output-1/build/log4cxx-0.12.0/src/main/cpp/action.cpp:18:0:
-/home/buildroot/autobuild/instance-3/output-1/build/log4cxx-0.12.0/src/main/include/log4cxx/rolling/action.h:51:8: error: 'mutex' in namespace 'std' does not name a type
-   std::mutex mutex;
-        ^
-
-Fixes:
- - http://autobuild.buildroot.org/results/71e/71eb8c4f69a2505242b3224bd79f4a96eb3b68a4/build-end.log
+https://gitlab.gnome.org/GNOME/libmediaart/-/blob/1.9.5/NEWS
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/log4cxx/0001-LOGCXX-528.patch | 189 ++++++++++++++++++++++++++
- package/log4cxx/Config.in             |  14 ++
- package/log4cxx/log4cxx.mk            |   4 +
- 3 files changed, 207 insertions(+)
- create mode 100644 package/log4cxx/0001-LOGCXX-528.patch
+ Config.in.legacy                              |  7 ++
+ .../0001-meson-add-introspection-option.patch | 87 +++++++++++++++++++
+ .../0002-meson-add-unit_tests-option.patch    | 48 ++++++++++
+ package/libmediaart/Config.in                 |  8 +-
+ package/libmediaart/libmediaart.hash          |  6 +-
+ package/libmediaart/libmediaart.mk            | 25 ++----
+ 6 files changed, 155 insertions(+), 26 deletions(-)
+ create mode 100644 package/libmediaart/0001-meson-add-introspection-option.patch
+ create mode 100644 package/libmediaart/0002-meson-add-unit_tests-option.patch
 
-diff --git a/package/log4cxx/0001-LOGCXX-528.patch b/package/log4cxx/0001-LOGCXX-528.patch
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 23c3ee29ee..481747a85e 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,13 @@ endif
+ 
+ comment "Legacy options removed in 2021.11"
+ 
++config BR2_PACKAGE_LIBMEDIAART_BACKEND_NONE
++	bool "libmediaart 'none' backend removed"
++	select BR2_LEGACY
++	help
++	  'none' backend has been removed from libmediaart since version
++	  1.9.5.
++
+ config BR2_BINUTILS_VERSION_CSKY
+ 	bool "binutils csky version removed"
+ 	select BR2_LEGACY
+diff --git a/package/libmediaart/0001-meson-add-introspection-option.patch b/package/libmediaart/0001-meson-add-introspection-option.patch
 new file mode 100644
-index 0000000000..d1d3189024
+index 0000000000..2b849040fe
 --- /dev/null
-+++ b/package/log4cxx/0001-LOGCXX-528.patch
-@@ -0,0 +1,189 @@
-+From 249dd85494a430d95fd69d89f42b02fd950cda51 Mon Sep 17 00:00:00 2001
-+From: Robert Middleton <rm5248@users.noreply.github.com>
-+Date: Thu, 22 Jul 2021 15:27:50 -0700
-+Subject: [PATCH] LOGCXX-528 (#66)
++++ b/package/libmediaart/0001-meson-add-introspection-option.patch
+@@ -0,0 +1,87 @@
++From ee7d8736af172cd5ad71a0bd511c39daf401e3f6 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Tue, 5 Oct 2021 23:35:26 +0200
++Subject: [PATCH] meson: add introspection option
 +
-+Fixes for checking that C++11 is available.  Fix for older compilers.
++Add introspection option
 +
-+[Retrieved from:
-+https://github.com/apache/logging-log4cxx/commit/249dd85494a430d95fd69d89f42b02fd950cda51]
++Fix #3
++
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status:
++https://gitlab.gnome.org/GNOME/libmediaart/-/merge_requests/14]
 +---
-+ CMakeLists.txt                                | 10 +++++++++
-+ src/cmake/boost-fallback/boost-fallback.cmake | 21 ++++++++++---------
-+ src/main/cpp/hierarchy.cpp                    |  4 ++--
-+ src/main/include/CMakeLists.txt               |  2 +-
-+ .../log4cxx/helpers/appenderattachableimpl.h  |  1 +
-+ .../include/log4cxx/helpers/aprinitializer.h  |  1 +
-+ src/main/include/log4cxx/helpers/loglog.h     |  1 +
-+ .../include/log4cxx/helpers/serversocket.h    |  1 +
-+ src/main/include/log4cxx/level.h              |  1 +
-+ src/main/include/log4cxx/rolling/action.h     |  1 +
-+ 10 files changed, 30 insertions(+), 13 deletions(-)
++ libmediaart/meson.build | 42 +++++++++++++++++++++--------------------
++ meson_options.txt       |  2 ++
++ 2 files changed, 24 insertions(+), 20 deletions(-)
 +
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index e5b44ef1a..9c6e63902 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -41,6 +41,9 @@ if( NOT "${CMAKE_CXX_STANDARD}")
-+     set(CMAKE_CXX_STANDARD 17)
-+ endif()
++diff --git a/libmediaart/meson.build b/libmediaart/meson.build
++index 56e00ab..2f44e63 100644
++--- a/libmediaart/meson.build
+++++ b/libmediaart/meson.build
++@@ -41,28 +41,30 @@ libmediaart = shared_library(
++   install: true,
++ )
 + 
-++# Don't allow for compiler-specific extensions
-++set(CMAKE_CXX_EXTENSIONS OFF)
-++
-+ # Building
-+ add_subdirectory(src)
++-gir_args = [
++-  '--quiet',
++-  '-DLIBMEDIAART_COMPILATION',
++-]
+++if get_option('introspection')
+++  gir_args = [
+++    '--quiet',
+++    '-DLIBMEDIAART_COMPILATION',
+++  ]
 + 
-+@@ -185,6 +188,13 @@ if(APACHE_MAINTAINER)
-+ 	)
-+ endif()
-+ 
-++#
-++# Check for any fatal configuration errors
-++#
-++if( "${SHARED_MUTEX_IMPL}" STREQUAL "NONE" )
-++    message( FATAL_ERROR "No shared_mutex implementation found.  Requires Boost or C++17" )
-++endif()
-++
-+ #
-+ # Output configuration information
-+ # Similar to APR CMake configuration
-+diff --git a/src/cmake/boost-fallback/boost-fallback.cmake b/src/cmake/boost-fallback/boost-fallback.cmake
-+index a8d7d441b..8285b0b99 100644
-+--- a/src/cmake/boost-fallback/boost-fallback.cmake
-++++ b/src/cmake/boost-fallback/boost-fallback.cmake
-+@@ -56,16 +56,17 @@ try_compile(STD_ATOMIC_FOUND "${CMAKE_BINARY_DIR}/boost-fallback-compile-tests"
-+     "${CMAKE_CURRENT_LIST_DIR}/test-stdatomic.cpp")
-+ 
-+ find_package(Boost COMPONENTS thread)
-+-try_compile(Boost_SHARED_PTR_FOUND "${CMAKE_BINARY_DIR}/boost-fallback-compile-tests"
-+-    "${CMAKE_CURRENT_LIST_DIR}/test-boostsharedptr.cpp")
-+-try_compile(Boost_MUTEX_FOUND "${CMAKE_BINARY_DIR}/boost-fallback-compile-tests"
-+-    "${CMAKE_CURRENT_LIST_DIR}/test-boostmutex.cpp")
-+-try_compile(Boost_SHARED_MUTEX_FOUND "${CMAKE_BINARY_DIR}/boost-fallback-compile-tests"
-+-    "${CMAKE_CURRENT_LIST_DIR}/test-boostsharedmutex.cpp"
-+-    LINK_LIBRARIES Threads::Threads
++-libmediaart_gir_and_typelib = gnome.generate_gir(libmediaart,
++-  sources: libmediaart_sources + libmediaart_introspection_sources + libmediaart_public_headers,
++-  nsversion: libmediaart_api_version,
++-  namespace: 'MediaArt',
++-  identifier_prefix: 'MediaArt',
++-  symbol_prefix: 'media_art',
++-  includes: ['Gio-2.0', 'GObject-2.0'],
++-  header: 'libmediaart/mediaart.h',
++-  export_packages: 'libmediaart-' + libmediaart_api_version,
++-  extra_args: gir_args,
++-  install: true
 +-)
-+-try_compile(Boost_ATOMIC_FOUND "${CMAKE_BINARY_DIR}/boost-fallback-compile-tests"
-+-    "${CMAKE_CURRENT_LIST_DIR}/test-boostatomic.cpp")
-++if( ${Boost_FOUND} )
-++    try_compile(Boost_SHARED_PTR_FOUND "${CMAKE_BINARY_DIR}/boost-fallback-compile-tests"
-++        "${CMAKE_CURRENT_LIST_DIR}/test-boostsharedptr.cpp")
-++    try_compile(Boost_MUTEX_FOUND "${CMAKE_BINARY_DIR}/boost-fallback-compile-tests"
-++        "${CMAKE_CURRENT_LIST_DIR}/test-boostmutex.cpp")
-++    try_compile(Boost_SHARED_MUTEX_FOUND "${CMAKE_BINARY_DIR}/boost-fallback-compile-tests"
-++        "${CMAKE_CURRENT_LIST_DIR}/test-boostsharedmutex.cpp"
-++        LINK_LIBRARIES Threads::Threads Boost::thread)
-++    try_compile(Boost_ATOMIC_FOUND "${CMAKE_BINARY_DIR}/boost-fallback-compile-tests"
-++        "${CMAKE_CURRENT_LIST_DIR}/test-boostatomic.cpp")
-++endif( ${Boost_FOUND} )
+++  libmediaart_gir_and_typelib = gnome.generate_gir(libmediaart,
+++    sources: libmediaart_sources + libmediaart_introspection_sources + libmediaart_public_headers,
+++    nsversion: libmediaart_api_version,
+++    namespace: 'MediaArt',
+++    identifier_prefix: 'MediaArt',
+++    symbol_prefix: 'media_art',
+++    includes: ['Gio-2.0', 'GObject-2.0'],
+++    header: 'libmediaart/mediaart.h',
+++    export_packages: 'libmediaart-' + libmediaart_api_version,
+++    extra_args: gir_args,
+++    install: true
+++  )
 + 
-+ # Link the target with the appropriate boost libraries(if required)
-+ function(boostfallback_link target)
-+diff --git a/src/main/cpp/hierarchy.cpp b/src/main/cpp/hierarchy.cpp
-+index 4f5174448..c70d39dbb 100644
-+--- a/src/main/cpp/hierarchy.cpp
-++++ b/src/main/cpp/hierarchy.cpp
-+@@ -223,7 +223,7 @@ LoggerPtr Hierarchy::getLogger(const LogString& name,
-+ 	else
-+ 	{
-+ 		LoggerPtr logger(factory->makeNewLoggerInstance(pool, name));
-+-		logger->setHierarchy(weak_from_this());
-++		logger->setHierarchy(shared_from_this());
-+ 		loggers->insert(LoggerMap::value_type(name, logger));
++-libmediaart_vapi = gnome.generate_vapi('libmediaart-' + libmediaart_api_version,
++-  sources: libmediaart_gir_and_typelib[0],
++-  packages: 'gio-2.0',
++-  install: true)
+++  libmediaart_vapi = gnome.generate_vapi('libmediaart-' + libmediaart_api_version,
+++    sources: libmediaart_gir_and_typelib[0],
+++    packages: 'gio-2.0',
+++    install: true)
+++endif
 + 
-+ 		ProvisionNodeMap::iterator it2 = provisionNodes->find(name);
-+@@ -423,6 +423,6 @@ void Hierarchy::configureRoot(){
-+ 	// LOGCXX-322 we need to turn the repositroy into a weak_ptr, and we
-+ 	// can't use weak_from_this() in the constructor.
-+ 	if( !root->getLoggerRepository().lock() ){
-+-		root->setHierarchy(weak_from_this());
-++		root->setHierarchy(shared_from_this());
-+ 	}
-+ }
-+diff --git a/src/main/include/CMakeLists.txt b/src/main/include/CMakeLists.txt
-+index 8183660a5..584941c97 100644
-+--- a/src/main/include/CMakeLists.txt
-++++ b/src/main/include/CMakeLists.txt
-+@@ -133,7 +133,7 @@ if( ${STD_SHARED_MUTEX_FOUND} )
-+ elseif( ${Boost_SHARED_MUTEX_FOUND} )
-+     set( SHARED_MUTEX_IMPL "boost::shared_mutex" )
-+ else()
-+-    set( SMART_PTR_IMPL "NONE" )
-++    set( SHARED_MUTEX_IMPL "NONE" )
-+ endif()
-+ 
-+ if( ${STD_ATOMIC_FOUND} )
-+diff --git a/src/main/include/log4cxx/helpers/appenderattachableimpl.h b/src/main/include/log4cxx/helpers/appenderattachableimpl.h
-+index 40e77d93c..b80b5aade 100644
-+--- a/src/main/include/log4cxx/helpers/appenderattachableimpl.h
-++++ b/src/main/include/log4cxx/helpers/appenderattachableimpl.h
-+@@ -28,6 +28,7 @@
-+ #include <log4cxx/helpers/object.h>
-+ #include <log4cxx/helpers/pool.h>
-+ #include <log4cxx/log4cxx.h>
-++#include <mutex>
-+ 
-+ namespace log4cxx
-+ {
-+diff --git a/src/main/include/log4cxx/helpers/aprinitializer.h b/src/main/include/log4cxx/helpers/aprinitializer.h
-+index 6f3f55070..fccd18e0f 100644
-+--- a/src/main/include/log4cxx/helpers/aprinitializer.h
-++++ b/src/main/include/log4cxx/helpers/aprinitializer.h
-+@@ -30,6 +30,7 @@ extern "C" {
-+ }
-+ 
-+ #include <apr_time.h>
-++#include <mutex>
-+ 
-+ namespace log4cxx
-+ {
-+diff --git a/src/main/include/log4cxx/helpers/loglog.h b/src/main/include/log4cxx/helpers/loglog.h
-+index d54785ddc..a4c92416a 100644
-+--- a/src/main/include/log4cxx/helpers/loglog.h
-++++ b/src/main/include/log4cxx/helpers/loglog.h
-+@@ -20,6 +20,7 @@
-+ 
-+ #include <log4cxx/logstring.h>
-+ #include <exception>
-++#include <mutex>
-+ 
-+ namespace log4cxx
-+ {
-+diff --git a/src/main/include/log4cxx/helpers/serversocket.h b/src/main/include/log4cxx/helpers/serversocket.h
-+index e6e6d475e..7da75b969 100644
-+--- a/src/main/include/log4cxx/helpers/serversocket.h
-++++ b/src/main/include/log4cxx/helpers/serversocket.h
-+@@ -19,6 +19,7 @@
-+ #define _LOG4CXX_HELPERS_SERVER_SOCKET_H
-+ 
-+ #include <log4cxx/helpers/socket.h>
-++#include <mutex>
-+ 
-+ namespace log4cxx
-+ {
-+diff --git a/src/main/include/log4cxx/level.h b/src/main/include/log4cxx/level.h
-+index 4ca4bf28c..7848c902a 100644
-+--- a/src/main/include/log4cxx/level.h
-++++ b/src/main/include/log4cxx/level.h
-+@@ -22,6 +22,7 @@
-+ #include <log4cxx/logstring.h>
-+ #include <limits.h>
-+ #include <log4cxx/helpers/object.h>
-++#include <mutex>
-+ 
-+ #if defined(_MSC_VER)
-+ 	#pragma warning ( push )
-+diff --git a/src/main/include/log4cxx/rolling/action.h b/src/main/include/log4cxx/rolling/action.h
-+index 0e8d55f36..fc4497813 100644
-+--- a/src/main/include/log4cxx/rolling/action.h
-++++ b/src/main/include/log4cxx/rolling/action.h
-+@@ -21,6 +21,7 @@
-+ #include <log4cxx/portability.h>
-+ #include <log4cxx/helpers/object.h>
-+ #include <log4cxx/helpers/pool.h>
-++#include <mutex>
-+ 
-+ namespace log4cxx
-+ {
-diff --git a/package/log4cxx/Config.in b/package/log4cxx/Config.in
-index bf739a43ca..6f1956f829 100644
---- a/package/log4cxx/Config.in
-+++ b/package/log4cxx/Config.in
-@@ -5,8 +5,14 @@ config BR2_PACKAGE_LOG4CXX
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU # apr
-+	depends on BR2_USE_WCHAR || BR2_TOOLCHAIN_GCC_AT_LEAST_7 # boost
-+	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS || BR2_TOOLCHAIN_GCC_AT_LEAST_7 # boost-thread
-+	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 || BR2_TOOLCHAIN_GCC_AT_LEAST_7 # boost-thread
- 	select BR2_PACKAGE_APR
- 	select BR2_PACKAGE_APR_UTIL
-+	select BR2_PACKAGE_BOOST if !BR2_TOOLCHAIN_GCC_AT_LEAST_7
-+	select BR2_PACKAGE_BOOST_ATOMIC if !BR2_TOOLCHAIN_GCC_AT_LEAST_7
-+	select BR2_PACKAGE_BOOST_THREAD if !BR2_TOOLCHAIN_GCC_AT_LEAST_7
- 	help
- 	  Apache log4cxx is a logging framework for C++ patterned
- 	  after Apache log4j.
-@@ -17,3 +23,11 @@ comment "log4cxx needs a toolchain w/ C++, threads, dynamic library"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
- 		BR2_STATIC_LIBS
- 	depends on BR2_USE_MMU
++ libmediaart_dep = declare_dependency(
++   link_with: libmediaart,
++diff --git a/meson_options.txt b/meson_options.txt
++index 3ef49ba..b8c51b1 100644
++--- a/meson_options.txt
+++++ b/meson_options.txt
++@@ -1,5 +1,7 @@
++ option('image_library', type: 'combo', choices: ['auto', 'gdk-pixbuf', 'qt4', 'qt5'],
++        description: 'Which image processing backend to use')
+++option('introspection', type : 'boolean', value : 'true',
+++       description : 'Enable / disable the GObject-Introspection integration')
++ option('gtk_doc',
++   type: 'boolean',
++   value: 'false',
++-- 
++2.33.0
 +
-+comment "log4cxx needs a toolchain w/ wchar or gcc >= 7"
-+	depends on !(BR2_USE_WCHAR || BR2_TOOLCHAIN_GCC_AT_LEAST_7)
-+	depends on BR2_USE_MMU
+diff --git a/package/libmediaart/0002-meson-add-unit_tests-option.patch b/package/libmediaart/0002-meson-add-unit_tests-option.patch
+new file mode 100644
+index 0000000000..3519ff1984
+--- /dev/null
++++ b/package/libmediaart/0002-meson-add-unit_tests-option.patch
+@@ -0,0 +1,48 @@
++From 01d94777d9d1906750db0e27e2e7b8f228ae4343 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 9 Oct 2021 23:45:53 +0200
++Subject: [PATCH] meson: add unit_tests option
 +
-+comment "log4cxx needs a toolchain not affected by GCC bug 64735"
-+	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_7
-+	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-diff --git a/package/log4cxx/log4cxx.mk b/package/log4cxx/log4cxx.mk
-index 8a7ca8ef17..e799b0fb16 100644
---- a/package/log4cxx/log4cxx.mk
-+++ b/package/log4cxx/log4cxx.mk
-@@ -17,6 +17,10 @@ LOG4CXX_CONF_OPTS = \
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status:  not sent yet (waiting feedback on first patch)]
++---
++ meson_options.txt |  2 ++
++ tests/meson.build | 14 ++++++++------
++ 2 files changed, 10 insertions(+), 6 deletions(-)
++
++diff --git a/meson_options.txt b/meson_options.txt
++index b8c51b1..1172f93 100644
++--- a/meson_options.txt
+++++ b/meson_options.txt
++@@ -2,6 +2,8 @@ option('image_library', type: 'combo', choices: ['auto', 'gdk-pixbuf', 'qt4', 'q
++        description: 'Which image processing backend to use')
++ option('introspection', type : 'boolean', value : 'true',
++        description : 'Enable / disable the GObject-Introspection integration')
+++option('unit_tests', type : 'boolean', value : 'true',
+++       description : 'Enable / disable unit tests')
++ option('gtk_doc',
++   type: 'boolean',
++   value: 'false',
++diff --git a/tests/meson.build b/tests/meson.build
++index 28834c0..02c96a1 100644
++--- a/tests/meson.build
+++++ b/tests/meson.build
++@@ -1,7 +1,9 @@
++-mediaart_test = executable('mediaart-test',
++-  'mediaarttest.c',
++-  dependencies: libmediaart_dep,
++-)
+++if get_option('unit_tests')
+++  mediaart_test = executable('mediaart-test',
+++    'mediaarttest.c',
+++    dependencies: libmediaart_dep,
+++  )
++ 
++-test('mediaart', mediaart_test,
++-     env: 'G_TEST_SRCDIR=' + meson.current_source_dir())
+++  test('mediaart', mediaart_test,
+++       env: 'G_TEST_SRCDIR=' + meson.current_source_dir())
+++endif
++-- 
++2.33.0
++
+diff --git a/package/libmediaart/Config.in b/package/libmediaart/Config.in
+index c11d6f49d9..d7973444ae 100644
+--- a/package/libmediaart/Config.in
++++ b/package/libmediaart/Config.in
+@@ -18,13 +18,7 @@ if BR2_PACKAGE_LIBMEDIAART
  
- LOG4CXX_DEPENDENCIES = apr apr-util
+ choice
+ 	prompt "media art backend"
+-	default BR2_PACKAGE_LIBMEDIAART_BACKEND_NONE
+-
+-config BR2_PACKAGE_LIBMEDIAART_BACKEND_NONE
+-	bool "none"
+-	help
+-	  With no backend, libmediaart will not be able to process MP3
+-	  album art.
++	default BR2_PACKAGE_LIBMEDIAART_BACKEND_GDK_PIXBUF
  
-+ifeq ($(BR2_PACKAGE_BOOST),y)
-+LOG4CXX_DEPENDENCIES += boost
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBESMTP),y)
- LOG4CXX_DEPENDENCIES += libesmtp
+ config BR2_PACKAGE_LIBMEDIAART_BACKEND_GDK_PIXBUF
+ 	bool "gdk-pixbuf"
+diff --git a/package/libmediaart/libmediaart.hash b/package/libmediaart/libmediaart.hash
+index d51c056223..d7115b20d4 100644
+--- a/package/libmediaart/libmediaart.hash
++++ b/package/libmediaart/libmediaart.hash
+@@ -1,5 +1,5 @@
+-# Hash from: http://ftp.gnome.org/pub/gnome/sources/libmediaart/1.9/libmediaart-1.9.4.sha256sum:
+-sha256	a57be017257e4815389afe4f58fdacb6a50e74fd185452b23a652ee56b04813d	libmediaart-1.9.4.tar.xz
++# Hash from: http://ftp.gnome.org/pub/gnome/sources/libmediaart/1.9/libmediaart-1.9.5.sha256sum:
++sha256  07def5a42c482ae71d3e1f77a4d0fdc337f74226059a65284d6d5a241f0e9cd6  libmediaart-1.9.5.tar.xz
+ 
+ # Locally computed:
+-sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	COPYING.LESSER
++sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LESSER
+diff --git a/package/libmediaart/libmediaart.mk b/package/libmediaart/libmediaart.mk
+index 0d110a43e5..b4c09d85e1 100644
+--- a/package/libmediaart/libmediaart.mk
++++ b/package/libmediaart/libmediaart.mk
+@@ -5,39 +5,32 @@
+ ################################################################################
+ 
+ LIBMEDIAART_VERSION_MAJOR = 1.9
+-LIBMEDIAART_VERSION = $(LIBMEDIAART_VERSION_MAJOR).4
++LIBMEDIAART_VERSION = $(LIBMEDIAART_VERSION_MAJOR).5
+ LIBMEDIAART_SOURCE = libmediaart-$(LIBMEDIAART_VERSION).tar.xz
+ LIBMEDIAART_SITE = \
+ 	http://ftp.gnome.org/pub/gnome/sources/libmediaart/$(LIBMEDIAART_VERSION_MAJOR)
+ LIBMEDIAART_LICENSE = LGPL-2.1+
+ LIBMEDIAART_LICENSE_FILES = COPYING.LESSER
+ LIBMEDIAART_INSTALL_STAGING = YES
+-LIBMEDIAART_DEPENDENCIES = libglib2
+-LIBMEDIAART_CONF_OPTS = --disable-unit-tests
++LIBMEDIAART_DEPENDENCIES = libglib2 $(TARGET_NLS_DEPENDENCIES)
++LIBMEDIAART_CONF_OPTS = -Dunit_tests=false
++LIBMEDIAART_LDFLAGS = $(TARGET_NLS_LIBS)
+ 
+ ifeq ($(BR2_PACKAGE_LIBMEDIAART_BACKEND_GDK_PIXBUF),y)
+ LIBMEDIAART_DEPENDENCIES += gdk-pixbuf
+-LIBMEDIAART_CONF_OPTS += \
+-	--enable-gdkpixbuf \
+-	--disable-qt
++LIBMEDIAART_CONF_OPTS += -Dimage_library=gdk-pixbuf
+ else ifeq ($(BR2_PACKAGE_LIBMEDIAART_BACKEND_QT),y)
+ # qt5 needs c++11 (since qt-5.7)
+ LIBMEDIAART_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11"
+ LIBMEDIAART_DEPENDENCIES += qt5base
+-LIBMEDIAART_CONF_OPTS += \
+-	--disable-gdkpixbuf \
+-	--enable-qt
+-else ifeq ($(BR2_PACKAGE_LIBMEDIAART_BACKEND_NONE),y)
+-LIBMEDIAART_CONF_OPTS += \
+-	--disable-gdkpixbuf \
+-	--disable-qt
++LIBMEDIAART_CONF_OPTS += -Dimage_library=qt5
  endif
+ 
+ ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
+-LIBMEDIAART_CONF_OPTS += --enable-introspection
++LIBMEDIAART_CONF_OPTS += -Dintrospection=true
+ LIBMEDIAART_DEPENDENCIES += gobject-introspection
+ else
+-LIBMEDIAART_CONF_OPTS += --disable-introspection
++LIBMEDIAART_CONF_OPTS += -Dintrospection=false
+ endif
+ 
+-$(eval $(autotools-package))
++$(eval $(meson-package))
 -- 
 2.33.0
 
