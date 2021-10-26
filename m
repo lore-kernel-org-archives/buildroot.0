@@ -2,59 +2,52 @@ Return-Path: <SRS0=o+05=PO=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CFD71C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 26 Oct 2021 12:12:45 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 65785C4332F
+	for <buildroot@archiver.kernel.org>; Tue, 26 Oct 2021 12:12:57 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 5951A6115C
-	for <buildroot@archiver.kernel.org>; Tue, 26 Oct 2021 12:12:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5951A6115C
+	by mail.kernel.org (Postfix) with ESMTPS id AA3D261156
+	for <buildroot@archiver.kernel.org>; Tue, 26 Oct 2021 12:12:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org AA3D261156
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0EB328174C;
-	Tue, 26 Oct 2021 12:12:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7E0104012E;
+	Tue, 26 Oct 2021 12:12:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5eyF45ajqfx0; Tue, 26 Oct 2021 12:12:44 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id H1dpAdEhKqre; Tue, 26 Oct 2021 12:12:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7995080F01;
-	Tue, 26 Oct 2021 12:12:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E092D400B5;
+	Tue, 26 Oct 2021 12:12:54 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9D25F1BF38D
- for <buildroot@lists.busybox.net>; Tue, 26 Oct 2021 12:12:41 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 91E371BF38D
+ for <buildroot@lists.busybox.net>; Tue, 26 Oct 2021 12:12:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9A67580F01
- for <buildroot@lists.busybox.net>; Tue, 26 Oct 2021 12:12:41 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8DD2480EDD
+ for <buildroot@lists.busybox.net>; Tue, 26 Oct 2021 12:12:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5pc_Gd8vfeUG for <buildroot@lists.busybox.net>;
- Tue, 26 Oct 2021 12:12:40 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 98C778169B
- for <buildroot@buildroot.org>; Tue, 26 Oct 2021 12:12:40 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 8718B24000C;
- Tue, 26 Oct 2021 12:12:38 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
- (envelope-from <peter@korsgaard.com>)
- id 1mfLJm-00060Y-1x; Tue, 26 Oct 2021 14:12:38 +0200
+ with ESMTP id 1GAh4isrjMm6 for <buildroot@lists.busybox.net>;
+ Tue, 26 Oct 2021 12:12:46 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 14B5680F01
+ for <buildroot@buildroot.org>; Tue, 26 Oct 2021 12:12:46 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id D7C2E88D40; Tue, 26 Oct 2021 12:09:23 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: =?utf-8?Q?Rapha=C3=ABl_M=C3=A9lotte?= <raphael.melotte@mind.be>
-References: <20211024135929.1385089-1-raphael.melotte@mind.be>
-Date: Tue, 26 Oct 2021 14:12:37 +0200
-In-Reply-To: <20211024135929.1385089-1-raphael.melotte@mind.be>
- (=?utf-8?Q?=22Rapha=C3=ABl=09M=C3=A9lotte=22's?= message of "Sun, 24 Oct
- 2021 15:59:29 +0200")
-Message-ID: <871r48ugqy.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] docs: contribute: fix typo
+To: buildroot@buildroot.org
+Date: Tue, 26 Oct 2021 14:12:25 +0200
+X-Git-Refname: refs/heads/2021.08.x
+X-Git-Oldrev: 9666c3f942265665ffee3ee0a16c061900f14721
+X-Git-Newrev: 567d261721eed843f72f87f44e18295623b9f36a
+X-Patchwork-Hint: ignore
+Message-Id: <20211026120923.D7C2E88D40@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.08.x]
+ docs/manual/contribute.txt: fix typo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,17 +59,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
- buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============1125659819657628812=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Pj4+Pj4gIlJhcGhhw6tsIiA9PSBSYXBoYcOrbCBNw6lsb3R0ZSA8cmFwaGFlbC5tZWxvdHRlQG1p
-bmQuYmU+IHdyaXRlczoKCiA+IFNpZ25lZC1vZmYtYnk6IFJhcGhhw6tsIE3DqWxvdHRlIDxyYXBo
-YWVsLm1lbG90dGVAbWluZC5iZT4KCkNvbW1pdHRlZCB0byAyMDIxLjAyLnggYW5kIDIwMjEuMDgu
-eCwgdGhhbmtzLgoKLS0gCkJ5ZSwgUGV0ZXIgS29yc2dhYXJkCl9fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRy
-b290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlz
-dGluZm8vYnVpbGRyb290Cg==
+--===============1125659819657628812==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=567d261721eed843f72f87f44e18295623b9f36a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.08.x
+
+Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 226d5b3b95c1c54449c31358c888640281d45a33)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ docs/manual/contribute.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
+index 14ecdbd66c..e58e75d96d 100644
+--- a/docs/manual/contribute.txt
++++ b/docs/manual/contribute.txt
+@@ -610,7 +610,7 @@ be the maintainer of that test case.
+ Within the Buildroot repository, the testing framework is organized at the
+ top level in +support/testing/+ by folders of +conf+, +infra+ and +tests+.
+ All the test cases live under the +test+ folder and are organized in various
+-folders representing the catagory of test.
++folders representing the category of test.
+ 
+ Lets walk through an example.
+ 
+
+--===============1125659819657628812==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1125659819657628812==--
