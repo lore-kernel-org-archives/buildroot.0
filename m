@@ -2,92 +2,92 @@ Return-Path: <SRS0=o+05=PO=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 479F2C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 26 Oct 2021 19:35:12 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 48419C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 26 Oct 2021 19:35:30 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D80D660F56
-	for <buildroot@archiver.kernel.org>; Tue, 26 Oct 2021 19:35:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D80D660F56
+	by mail.kernel.org (Postfix) with ESMTPS id 125D860F56
+	for <buildroot@archiver.kernel.org>; Tue, 26 Oct 2021 19:35:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 125D860F56
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A472840130;
-	Tue, 26 Oct 2021 19:35:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CBAAC60AC9;
+	Tue, 26 Oct 2021 19:35:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kK_mrUOMsFpL; Tue, 26 Oct 2021 19:35:10 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id MOiij2Bl2_eL; Tue, 26 Oct 2021 19:35:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B2E8F40275;
-	Tue, 26 Oct 2021 19:35:09 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id EFF671BF3CD
- for <buildroot@lists.busybox.net>; Tue, 26 Oct 2021 19:35:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3774B607AE;
+	Tue, 26 Oct 2021 19:35:28 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B1A8F1BF3CD
+ for <buildroot@lists.busybox.net>; Tue, 26 Oct 2021 19:35:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id ECD7380D52
- for <buildroot@lists.busybox.net>; Tue, 26 Oct 2021 19:35:08 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9E63C607AE
+ for <buildroot@lists.busybox.net>; Tue, 26 Oct 2021 19:35:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QD7jbQQcH1Oq for <buildroot@lists.busybox.net>;
- Tue, 26 Oct 2021 19:35:08 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dfOOnbZ-Rs4E for <buildroot@lists.busybox.net>;
+ Tue, 26 Oct 2021 19:35:25 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com
- [IPv6:2a00:1450:4864:20::52b])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D1D4680D26
- for <buildroot@buildroot.org>; Tue, 26 Oct 2021 19:35:07 +0000 (UTC)
-Received: by mail-ed1-x52b.google.com with SMTP id y12so929593eda.4
- for <buildroot@buildroot.org>; Tue, 26 Oct 2021 12:35:07 -0700 (PDT)
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com
+ [IPv6:2a00:1450:4864:20::52d])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 8C43A6067F
+ for <buildroot@buildroot.org>; Tue, 26 Oct 2021 19:35:25 +0000 (UTC)
+Received: by mail-ed1-x52d.google.com with SMTP id s1so945919edd.3
+ for <buildroot@buildroot.org>; Tue, 26 Oct 2021 12:35:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
- :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=59HDKxFh8nqS3oIFtufZdSo8J/jdc0+WbERF/Z0tpxU=;
- b=QEzSbpckMhVcNdHF+4jlUcXq4RaZhg5botMmy1FMjOHBJ5OBqsN9hURA45RGjGB8sh
- Bv8VP5haE2sIG9c/sRW8EBLwNb1m0UQ9rJCNFEFjNuNJ8uAazCG90NcYYCQL274Abf7t
- 9q1v0JDrkZlW5BbqTnpoTBHvaFjBnawbO7LU4/LKo8u5v1fCFQZ7wKn8AtVD0xulAJ8s
- zKOMwUR4JEbX10UJkzQ/FppUvo1MOk9CsLKA3GlfsAXxV4/pnCIvOFV10KnoOZ+evTPq
- kTl2CmUg8GbgHlSqOsHV1nqlv3c61B3TINe5nf2NqOzWI6AKA51jVRDZq96svBGAZZm1
- mmxg==
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=JszZnb5Rut3Hs77q/FlxLRqvh35Cqoerans24YNs7Jk=;
+ b=NKqpFMPmtfPUYHbwh+8kZxcio8JAOoATnK0xhPwbyZ4ZrQQmzJDuUyTE8ymT1x+wvy
+ ExDDRHfcxvoxjdYrkvldaegGnGyH/56GoQIgZoSTNPkNZD9gNLsfD5gGbz4O/58zDD2n
+ UbIGCYVjEqlPW1i5eY+is4vCcXVTdrJi3+EHhz+rA6yUSWTm4dCnSc5+BQ3nzP/sS3rP
+ 1EUXfb2Bh7yqgBNTWA9reu9Ht0MVNuk1e9im+DnfQ18r8Ko34rgI1HnalQydPxRm8d5r
+ 78LOAHK++FR9XZLVtw6vGPG7qOh6/fuvBp6DaqT0P6eR01cemDUXgZbRBh9PUDNIDz6T
+ mZpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:references:from:organization:in-reply-to
+ :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=59HDKxFh8nqS3oIFtufZdSo8J/jdc0+WbERF/Z0tpxU=;
- b=DDFt27/KG4RJNEcNDiQjjbwIUr45fXCTfXCeoQR22DLlVduIw9DtbcPvmqsmmgbA4Z
- 4/oOieX7wJWhzv/+qfEEdayp/4HUI0kNU63P/JMo6EGLavkNUFJcb7Li5nA7BaK0GbsY
- K/7NYsVZwr667NMHVebogBmAxllaGFI9eCWVJHSgFmrjzdD0ZMPx6aIuDpXkVXc+2GkI
- TJSiYZN0NwbP/qyr1lU7fA9xjQzsJCV9H5An5ifStwb1A7xAWPzOYQ6ZsdfHeOalF4Ei
- g1Ce10SBLx/kE9lL+wUhtl/sqhbkjXuRiFHimWzZyo7Dyvc3sknTfWsmRHrkmIiitZ8t
- O7fA==
-X-Gm-Message-State: AOAM530yUqVOdxTox0l5zT7T3KstMC50DepOv5RJSgz55PUfYZq2ay+o
- XKrtpM2HSn1PDpy/14lpS17ZzSe81nic6g==
-X-Google-Smtp-Source: ABdhPJyN5Z1EuroOv6vnaGTn9DropS2oV6MmPRfp/ge3oOJ9Ojntq5vOqDO0qingUfjMjXuvfiabPQ==
-X-Received: by 2002:a05:6402:5190:: with SMTP id
- q16mr37546281edd.228.1635276906185; 
- Tue, 26 Oct 2021 12:35:06 -0700 (PDT)
+ bh=JszZnb5Rut3Hs77q/FlxLRqvh35Cqoerans24YNs7Jk=;
+ b=FlNbvCMA2GFIgOvyVyOGTgqHnHp3MloYL62VnmX2ki3KUEijuY8GYeIeTJ3QDiX6ay
+ rCAPD2lTy7R9GJP+JwsvfFOPZLwOLX91MYR3MD+uWLq2Ne0t2aW5arzTwZ58JgjoDZGg
+ XO+d1tu9jshjPsFCnXt6gdgE/1TpHsSp4ptkKMG8wIgb8HCFvA5gqIlEu+1Zptm/i0Fg
+ rsbD4p5ov8gZeFziCF2ktpP+N069IHKl4cjorHLTchJRnesYEIJgqOC2QcpLuJINWMLO
+ D+O2/zznR6EN+n3mlO3qxpPScb86L6xRGGz/9H0Upcq41GtI4fadZhx8n9+kWdCeggN3
+ JXTQ==
+X-Gm-Message-State: AOAM530SozyzcN9S77t7FZB91HSxITNdu74G6krTyNUJ6kjpsWMTl0Xt
+ r0wLuCioVp+9jbtgx7hDB3KkUrrLlTRl9g==
+X-Google-Smtp-Source: ABdhPJzBHslM3d8JxtghJfgBE/8Fo4WpaekWylVymoQvlz69EYoC2dGpO2+Ad7Tr/uwEJEVSg+v07g==
+X-Received: by 2002:a17:907:6da4:: with SMTP id
+ sb36mr14879929ejc.490.1635276923875; 
+ Tue, 26 Oct 2021 12:35:23 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id bd18sm1058edb.58.2021.10.26.12.35.05
+ by smtp.gmail.com with ESMTPSA id y26sm4464565edv.88.2021.10.26.12.35.23
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 26 Oct 2021 12:35:05 -0700 (PDT)
-Message-ID: <aa4a6634-48fd-ea5a-0855-a3eb7140876f@mind.be>
-Date: Tue, 26 Oct 2021 21:35:05 +0200
+ Tue, 26 Oct 2021 12:35:23 -0700 (PDT)
+Message-ID: <e047a26b-ca74-afc8-f8ad-cdb76eda988e@mind.be>
+Date: Tue, 26 Oct 2021 21:35:23 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.2.0
 Content-Language: en-GB
-To: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
-References: <20211024165303.15342-1-bernd.kuhls@t-online.de>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+References: <20211024215438.3551045-1-fontaine.fabrice@gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20211024165303.15342-1-bernd.kuhls@t-online.de>
-Subject: Re: [Buildroot] [PATCH 1/1] package/kodi: bump version to 19.3
+In-Reply-To: <20211024215438.3551045-1-fontaine.fabrice@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package/strongswan: security bump to
+ version 5.9.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,6 +99,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: =?UTF-8?B?SsOpcsO0bWUgUG91aWxsZXI=?= <jezz@sysmic.org>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -106,8 +107,21 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 24/10/2021 18:53, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+On 24/10/2021 23:54, Fabrice Fontaine wrote:
+> - Fixed a denial-of-service vulnerability in the gmp plugin that was
+>    caused by an integer overflow when processing RSASSA-PSS signatures
+>    with very large salt lengths. This vulnerability has been registered
+>    as CVE-2021-41990.
+> - Fixed a denial-of-service vulnerability in the in-memory certificate
+>    cache if certificates are replaced and a very large random value
+>    caused an integer overflow. This vulnerability has been registered as
+>    CVE-2021-41991.
+> 
+> https://www.strongswan.org/blog/2021/10/18/strongswan-vulnerability-(cve-2021-41991).html
+> 
+> https://github.com/strongswan/strongswan/blob/5.9.4/NEWS
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
   Applied to master, thanks.
 
@@ -115,62 +129,38 @@ On 24/10/2021 18:53, Bernd Kuhls wrote:
   Arnout
 
 > ---
->   package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk | 2 +-
->   package/kodi-texturepacker/kodi-texturepacker.mk         | 2 +-
->   package/kodi/kodi.hash                                   | 2 +-
->   package/kodi/kodi.mk                                     | 2 +-
->   4 files changed, 4 insertions(+), 4 deletions(-)
+>   package/strongswan/strongswan.hash | 6 +++---
+>   package/strongswan/strongswan.mk   | 2 +-
+>   2 files changed, 4 insertions(+), 4 deletions(-)
 > 
-> diff --git a/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
-> index 7b4df91efe..81fc2bb9f1 100644
-> --- a/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
-> +++ b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
-> @@ -6,7 +6,7 @@
+> diff --git a/package/strongswan/strongswan.hash b/package/strongswan/strongswan.hash
+> index a19b311458..69b3547f91 100644
+> --- a/package/strongswan/strongswan.hash
+> +++ b/package/strongswan/strongswan.hash
+> @@ -1,7 +1,7 @@
+> -# From http://download.strongswan.org/strongswan-5.9.1.tar.bz2.md5
+> -md5  1f4db969d072e120dc12d1c116a0f658  strongswan-5.9.1.tar.bz2
+> +# From http://download.strongswan.org/strongswan-5.9.4.tar.bz2.md5
+> +md5  9c387eb77f0159fdefbcf7e81c905c35  strongswan-5.9.4.tar.bz2
+>   # Calculated based on the hash above
+> -sha256  a337c9fb63d973b8440827755c784031648bf423b7114a04918b0b00fd42cafb  strongswan-5.9.1.tar.bz2
+> +sha256  45fdf1a4c2af086d8ff5b76fd7b21d3b6f0890f365f83bf4c9a75dda26887518  strongswan-5.9.4.tar.bz2
+>   # Locally calculated
+>   sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+>   sha256  2292e21797754548dccdef9eef6aee7584e552fbd890fa914e1de8d3577d23f0  LICENSE
+> diff --git a/package/strongswan/strongswan.mk b/package/strongswan/strongswan.mk
+> index 2967682767..850bb7326e 100644
+> --- a/package/strongswan/strongswan.mk
+> +++ b/package/strongswan/strongswan.mk
+> @@ -4,7 +4,7 @@
+>   #
+>   ################################################################################
 >   
->   # Not possible to directly refer to kodi variables, because of
->   # first/second expansion trickery...
-> -KODI_JSONSCHEMABUILDER_VERSION = 19.2-Matrix
-> +KODI_JSONSCHEMABUILDER_VERSION = 19.3-Matrix
->   KODI_JSONSCHEMABUILDER_SITE = $(call github,xbmc,xbmc,$(KODI_JSONSCHEMABUILDER_VERSION))
->   KODI_JSONSCHEMABUILDER_SOURCE = kodi-$(KODI_JSONSCHEMABUILDER_VERSION).tar.gz
->   KODI_JSONSCHEMABUILDER_DL_SUBDIR = kodi
-> diff --git a/package/kodi-texturepacker/kodi-texturepacker.mk b/package/kodi-texturepacker/kodi-texturepacker.mk
-> index 7d13c72cc6..2ebcd7d8de 100644
-> --- a/package/kodi-texturepacker/kodi-texturepacker.mk
-> +++ b/package/kodi-texturepacker/kodi-texturepacker.mk
-> @@ -6,7 +6,7 @@
->   
->   # Not possible to directly refer to kodi variables, because of
->   # first/second expansion trickery...
-> -KODI_TEXTUREPACKER_VERSION = 19.2-Matrix
-> +KODI_TEXTUREPACKER_VERSION = 19.3-Matrix
->   KODI_TEXTUREPACKER_SITE = $(call github,xbmc,xbmc,$(KODI_TEXTUREPACKER_VERSION))
->   KODI_TEXTUREPACKER_SOURCE = kodi-$(KODI_TEXTUREPACKER_VERSION).tar.gz
->   KODI_TEXTUREPACKER_DL_SUBDIR = kodi
-> diff --git a/package/kodi/kodi.hash b/package/kodi/kodi.hash
-> index e51ebaff0a..7f96af385a 100644
-> --- a/package/kodi/kodi.hash
-> +++ b/package/kodi/kodi.hash
-> @@ -1,5 +1,5 @@
->   # Locally computed
-> -sha256  e8f5e50767ddd1b8f0399016dcf5ba762315c16c0568cb06e659c493376f99d5  kodi-19.2-Matrix.tar.gz
-> +sha256  440f47e475dd8a48e0a6d41349e83b74890f3fbe8275d3e401d3c50f5b9ea09b  kodi-19.3-Matrix.tar.gz
->   sha256  38816f8373e243bc5950449b4f3b18938c4e1c59348e3411e23f31db4072e40d  kodi-libdvdcss-1.4.2-Leia-Beta-5.tar.gz
->   sha256  071e414e61b795f2ff9015b21a85fc009dde967f27780d23092643916538a57a  kodi-libdvdnav-6.0.0-Leia-Alpha-3.tar.gz
->   sha256  a30b6aa0aad0f2c505bc77948af2d5531a80b6e68112addb4c123fca24d5d3bf  kodi-libdvdread-6.0.0-Leia-Alpha-3.tar.gz
-> diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-> index 49174316fc..3c314533f4 100644
-> --- a/package/kodi/kodi.mk
-> +++ b/package/kodi/kodi.mk
-> @@ -6,7 +6,7 @@
->   
->   # When updating the version, please also update kodi-jsonschemabuilder
->   # and kodi-texturepacker
-> -KODI_VERSION_MAJOR = 19.2
-> +KODI_VERSION_MAJOR = 19.3
->   KODI_VERSION_NAME = Matrix
->   KODI_VERSION = $(KODI_VERSION_MAJOR)-$(KODI_VERSION_NAME)
->   KODI_SITE = $(call github,xbmc,xbmc,$(KODI_VERSION))
+> -STRONGSWAN_VERSION = 5.9.1
+> +STRONGSWAN_VERSION = 5.9.4
+>   STRONGSWAN_SOURCE = strongswan-$(STRONGSWAN_VERSION).tar.bz2
+>   STRONGSWAN_SITE = http://download.strongswan.org
+>   STRONGSWAN_LICENSE = GPL-2.0+
 > 
 _______________________________________________
 buildroot mailing list
