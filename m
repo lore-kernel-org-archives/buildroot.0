@@ -2,51 +2,58 @@ Return-Path: <SRS0=o+05=PO=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 83C8FC433F5
-	for <buildroot@archiver.kernel.org>; Tue, 26 Oct 2021 18:43:40 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D2303C433FE
+	for <buildroot@archiver.kernel.org>; Tue, 26 Oct 2021 18:44:30 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 48E0861078
-	for <buildroot@archiver.kernel.org>; Tue, 26 Oct 2021 18:43:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 48E0861078
+	by mail.kernel.org (Postfix) with ESMTPS id A194261078
+	for <buildroot@archiver.kernel.org>; Tue, 26 Oct 2021 18:44:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A194261078
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 10D564011F;
-	Tue, 26 Oct 2021 18:43:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6FB1180E74;
+	Tue, 26 Oct 2021 18:44:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id K0-0VCJrXENq; Tue, 26 Oct 2021 18:43:39 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id xqhQi9QqZYrG; Tue, 26 Oct 2021 18:44:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2B42F4021A;
-	Tue, 26 Oct 2021 18:43:38 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 950DF1BF20F
- for <buildroot@lists.busybox.net>; Tue, 26 Oct 2021 18:43:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CB1B780D99;
+	Tue, 26 Oct 2021 18:44:28 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 872571BF20F
+ for <buildroot@lists.busybox.net>; Tue, 26 Oct 2021 18:44:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7E7C34030C
- for <buildroot@lists.busybox.net>; Tue, 26 Oct 2021 18:43:36 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 75CC580DE3
+ for <buildroot@lists.busybox.net>; Tue, 26 Oct 2021 18:44:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PHeruhAWVWbj for <buildroot@lists.busybox.net>;
- Tue, 26 Oct 2021 18:43:35 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B7BA44017F
- for <buildroot@buildroot.org>; Tue, 26 Oct 2021 18:43:35 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id DEE6088EDA; Tue, 26 Oct 2021 18:40:12 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5P3PqT02SLt3 for <buildroot@lists.busybox.net>;
+ Tue, 26 Oct 2021 18:44:26 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4572280D99
+ for <buildroot@buildroot.org>; Tue, 26 Oct 2021 18:44:26 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by relay11.mail.gandi.net (Postfix) with ESMTPSA id 70A3B100005;
+ Tue, 26 Oct 2021 18:44:24 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
+ (envelope-from <peter@korsgaard.com>)
+ id 1mfRQt-0000b5-ND; Tue, 26 Oct 2021 20:44:23 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Tue, 26 Oct 2021 20:43:09 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3332c143c0675818beeebf1be6880dc282527519
-X-Git-Newrev: afdd74d2fbb0461b7b8cba9ea9a0268eae1662aa
-X-Patchwork-Hint: ignore
-Message-Id: <20211026184012.DEE6088EDA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/php:security bump version to 8.0.12
+To: Bernd Kuhls <bernd.kuhls@t-online.de>
+References: <20211024170107.21410-1-bernd.kuhls@t-online.de>
+Date: Tue, 26 Oct 2021 20:44:23 +0200
+In-Reply-To: <20211024170107.21410-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sun, 24 Oct 2021 19:01:07 +0200")
+Message-ID: <87zgqvr5h4.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/php:security bump version to
+ 8.0.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,53 +65,30 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=afdd74d2fbb0461b7b8cba9ea9a0268eae1662aa
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-Changelog:
-https://www.php.net/ChangeLog-8.php#8.0.12
+ > Changelog:
+ > https://www.php.net/ChangeLog-8.php#8.0.12
 
-Fixes CVE-2021-21703: http://bugs.php.net/81026
+ > Fixes CVE-2021-21703: http://bugs.php.net/81026
 
-For details, see https://www.ambionics.io/blog/php-fpm-local-root
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+I've added a link to the description of the exploit and committed,
+thanks:
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index a74ade473d..64ea95b9ba 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From https://www.php.net/downloads.php
--sha256  e3e5f764ae57b31eb65244a45512f0b22d7bef05f2052b23989c053901552e16  php-8.0.11.tar.xz
-+sha256  a501017b3b0fd3023223ea25d98e87369b782f8a82310c4033d7ea6a989fea0a  php-8.0.12.tar.xz
- 
- # License file
- sha256  a188db807d711536f71e27b7d36879d63480f7994dc18adc08e624b3c5430fff  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 8885759f04..b7cd356282 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PHP_VERSION = 8.0.11
-+PHP_VERSION = 8.0.12
- PHP_SITE = https://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+https://www.ambionics.io/blog/php-fpm-local-root
+
+I'll bump 2021.02.x to 7.4.25, which contains the same fix.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
