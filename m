@@ -2,52 +2,51 @@ Return-Path: <SRS0=o+05=PO=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F1E5C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 26 Oct 2021 20:02:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 567FFC433EF
+	for <buildroot@archiver.kernel.org>; Tue, 26 Oct 2021 20:02:59 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 30C1E60F9B
-	for <buildroot@archiver.kernel.org>; Tue, 26 Oct 2021 20:02:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 30C1E60F9B
+	by mail.kernel.org (Postfix) with ESMTPS id 253F060C40
+	for <buildroot@archiver.kernel.org>; Tue, 26 Oct 2021 20:02:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 253F060C40
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F3D6D60AD5;
-	Tue, 26 Oct 2021 20:02:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EBFC460ADC;
+	Tue, 26 Oct 2021 20:02:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dtj8Vmod6zYc; Tue, 26 Oct 2021 20:02:46 +0000 (UTC)
+	with ESMTP id kLhOxU2fFaq4; Tue, 26 Oct 2021 20:02:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 48562606AF;
-	Tue, 26 Oct 2021 20:02:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 33C13607AE;
+	Tue, 26 Oct 2021 20:02:57 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 464B81BF20D
- for <buildroot@lists.busybox.net>; Tue, 26 Oct 2021 20:02:09 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 563CA1BF20D
+ for <buildroot@lists.busybox.net>; Tue, 26 Oct 2021 20:02:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8AA544011F
+ by smtp2.osuosl.org (Postfix) with ESMTP id B72D9400ED
  for <buildroot@lists.busybox.net>; Tue, 26 Oct 2021 20:02:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NVePIxrzVgeC for <buildroot@lists.busybox.net>;
+ with ESMTP id ttRQTNg0W_L6 for <buildroot@lists.busybox.net>;
  Tue, 26 Oct 2021 20:02:07 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8D28A400ED
+ by smtp2.osuosl.org (Postfix) with ESMTP id BCB9440406
  for <buildroot@buildroot.org>; Tue, 26 Oct 2021 20:02:07 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 93D5C88F3D; Tue, 26 Oct 2021 19:58:44 +0000 (UTC)
+ id D237988F3D; Tue, 26 Oct 2021 19:58:44 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Tue, 26 Oct 2021 21:48:31 +0200
+Date: Tue, 26 Oct 2021 21:59:26 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a98cfa16b21c4ce18b8f33423ae6dec424a07092
-X-Git-Newrev: 9aa735f64a245bb3369cfd7e29db875733a9d437
+X-Git-Oldrev: 15a7be2c121c73f99dd699b108d817593dc86f7e
+X-Git-Newrev: 53873b6daecd2a97740833cae7c5b4cdb185a6b2
 X-Patchwork-Hint: ignore
-Message-Id: <20211026195844.93D5C88F3D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/ltp-testsuite: Add Open POSIX and
- realtime test suite opts
+Message-Id: <20211026195844.D237988F3D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/softhsm2: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,81 +59,119 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============5703224037037328046=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9aa735f64a245bb3369cfd7e29db875733a9d437
+--===============5703224037037328046==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=53873b6daecd2a97740833cae7c5b4cdb185a6b2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-During LTP and/or kernel development it's very rare that I want the
-Open POSIX and the realtime tests. Open POSIX in particular takes
-considerable time to build. So this adds the option of disabling them.
+The patch adds a package for softhsm2.
 
-They default to on so as not to break existing test automation.
-
-Signed-off-by: Richard Palethorpe <rpalethorpe@suse.com>
-Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
-Cc: io@richiejp.com
-Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: José Pekkarinen <jose.pekkarinen@unikie.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/ltp-testsuite/Config.in        | 16 ++++++++++++++++
- package/ltp-testsuite/ltp-testsuite.mk | 12 +++++++++---
- 2 files changed, 25 insertions(+), 3 deletions(-)
+ DEVELOPERS                     |  3 +++
+ package/Config.in              |  1 +
+ package/softhsm2/Config.in     | 18 ++++++++++++++++++
+ package/softhsm2/softhsm2.hash |  4 ++++
+ package/softhsm2/softhsm2.mk   | 15 +++++++++++++++
+ 5 files changed, 41 insertions(+)
 
-diff --git a/package/ltp-testsuite/Config.in b/package/ltp-testsuite/Config.in
-index 32e1b6ad76..272c2ede37 100644
---- a/package/ltp-testsuite/Config.in
-+++ b/package/ltp-testsuite/Config.in
-@@ -20,6 +20,22 @@ config BR2_PACKAGE_LTP_TESTSUITE
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 771519fd9b..82577d4a95 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1443,6 +1443,9 @@ N:	José Luis Salvador Rufo <salvador.joseluis@gmail.com>
+ F:	package/zfs/
+ F:	support/testing/tests/package/test_zfs.py
  
- 	  http://linux-test-project.github.io
- 
-+if BR2_PACKAGE_LTP_TESTSUITE
++N:	José Pekkarinen <jose.pekkarinen@unikie.com>
++F:	package/softhsm2/
 +
-+config BR2_PACKAGE_LTP_TESTSUITE_OPEN_POSIX
-+	bool "Open POSIX testsuite"
-+	default y
+ N:	Joseph Kogut <joseph.kogut@gmail.com>
+ F:	package/at-spi2-atk/
+ F:	package/at-spi2-core/
+diff --git a/package/Config.in b/package/Config.in
+index d40eb9dabc..56276df55c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2021,6 +2021,7 @@ menu "Security"
+ 	source "package/libsemanage/Config.in"
+ 	source "package/libsepol/Config.in"
+ 	source "package/safeclib/Config.in"
++	source "package/softhsm2/Config.in"
+ endmenu
+ 
+ menu "Text and terminal handling"
+diff --git a/package/softhsm2/Config.in b/package/softhsm2/Config.in
+new file mode 100644
+index 0000000000..5d84997c07
+--- /dev/null
++++ b/package/softhsm2/Config.in
+@@ -0,0 +1,18 @@
++config BR2_PACKAGE_SOFTHSM2
++	bool "softhsm2"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
++	depends on !BR2_STATIC_LIBS # dlopen()
++	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
 +	help
-+	  Test suite for POSIX compliance. Included with the LTP.
++	  SoftHSM is an implementation of a cryptographic store
++	  accessible through a PKCS#11 interface. You can use it
++	  to explore PKCS#11 without having a Hardware Security
++	  Module.
 +
-+config BR2_PACKAGE_LTP_TESTSUITE_REALTIME
-+	bool "Realtime testsuite"
-+	default y
-+	help
-+	  Test suite for realtime kernels. Included with the LTP.
++	  https://www.opendnssec.org/softhsm
 +
-+endif
++comment "sofhsm2 needs a toolchain w/ C++, gcc >= 4.8 and dynamic library support"
++	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+diff --git a/package/softhsm2/softhsm2.hash b/package/softhsm2/softhsm2.hash
+new file mode 100644
+index 0000000000..f59f0bf028
+--- /dev/null
++++ b/package/softhsm2/softhsm2.hash
+@@ -0,0 +1,4 @@
++# From https://www.opendnssec.org/2020/04/1602/
++sha256  61249473054bcd1811519ef9a989a880a7bdcc36d317c9c25457fc614df475f2  softhsm-2.6.1.tar.gz
++# Locally computed
++sha256  230cab7102816e99f7ce03ef476352fcad09d742fcbc6580d44393db6280b64c  LICENSE
+diff --git a/package/softhsm2/softhsm2.mk b/package/softhsm2/softhsm2.mk
+new file mode 100644
+index 0000000000..c418e3648e
+--- /dev/null
++++ b/package/softhsm2/softhsm2.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# softhsm2
++#
++################################################################################
 +
- comment "ltp-testsuite needs a toolchain w/ NPTL"
- 	depends on BR2_PACKAGE_LTP_TESTSUITE_ARCH_SUPPORTS
- 	depends on BR2_USE_MMU
-diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
-index 3d8fe3b78c..cc6d3c63b6 100644
---- a/package/ltp-testsuite/ltp-testsuite.mk
-+++ b/package/ltp-testsuite/ltp-testsuite.mk
-@@ -11,9 +11,15 @@ LTP_TESTSUITE_SITE = https://github.com/linux-test-project/ltp/releases/download
- LTP_TESTSUITE_LICENSE = GPL-2.0, GPL-2.0+
- LTP_TESTSUITE_LICENSE_FILES = COPYING
- 
--LTP_TESTSUITE_CONF_OPTS += \
--	--with-realtime-testsuite --with-open-posix-testsuite \
--	--disable-metadata
-+LTP_TESTSUITE_CONF_OPTS += --disable-metadata
++SOFTHSM2_VERSION = 2.6.1
++SOFTHSM2_SOURCE = softhsm-$(SOFTHSM2_VERSION).tar.gz
++SOFTHSM2_SITE = https://dist.opendnssec.org/source
++SOFTHSM2_LICENSE = BSD-2-Clause
++SOFTHSM2_LICENSE_FILES = LICENSE
++SOFTHSM2_DEPENDENCIES = openssl
++SOFTHSM2_INSTALL_STAGING = YES
 +
-+ifeq ($(BR2_PACKAGE_LTP_TESTSUITE_OPEN_POSIX),y)
-+LTP_TESTSUITE_CONF_OPTS += --with-open-posix-testsuite
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LTP_TESTSUITE_REALTIME),y)
-+LTP_TESTSUITE_CONF_OPTS += --with-realtime-testsuite
-+endif
- 
- ifeq ($(BR2_LINUX_KERNEL),y)
- LTP_TESTSUITE_DEPENDENCIES += linux
++$(eval $(autotools-package))
+
+--===============5703224037037328046==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============5703224037037328046==--
