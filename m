@@ -2,52 +2,51 @@ Return-Path: <SRS0=o+05=PO=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 932D0C433F5
-	for <buildroot@archiver.kernel.org>; Tue, 26 Oct 2021 19:39:10 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A70DC433F5
+	for <buildroot@archiver.kernel.org>; Tue, 26 Oct 2021 19:39:22 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 5737760F39
-	for <buildroot@archiver.kernel.org>; Tue, 26 Oct 2021 19:39:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5737760F39
+	by mail.kernel.org (Postfix) with ESMTPS id 44B756103C
+	for <buildroot@archiver.kernel.org>; Tue, 26 Oct 2021 19:39:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 44B756103C
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 28D98403F9;
-	Tue, 26 Oct 2021 19:39:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 230DA80C18;
+	Tue, 26 Oct 2021 19:39:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rb7Wx09f9gJx; Tue, 26 Oct 2021 19:39:09 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 6Lze0r4f73J5; Tue, 26 Oct 2021 19:39:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4C94540130;
-	Tue, 26 Oct 2021 19:39:08 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2150E1BF3CD
+	by smtp1.osuosl.org (Postfix) with ESMTP id 946D080BB2;
+	Tue, 26 Oct 2021 19:39:20 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 43BA21BF9B2
  for <buildroot@lists.busybox.net>; Tue, 26 Oct 2021 19:38:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C74C540560
- for <buildroot@lists.busybox.net>; Tue, 26 Oct 2021 19:38:08 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2D1694011F
+ for <buildroot@lists.busybox.net>; Tue, 26 Oct 2021 19:38:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id q39OV5TRTo0m for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1TX8myshPVYN for <buildroot@lists.busybox.net>;
  Tue, 26 Oct 2021 19:38:08 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 130DB40548
+ by smtp2.osuosl.org (Postfix) with ESMTP id 340CE4022A
  for <buildroot@buildroot.org>; Tue, 26 Oct 2021 19:38:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 2928688F04; Tue, 26 Oct 2021 19:34:45 +0000 (UTC)
+ id 47C1E88F06; Tue, 26 Oct 2021 19:34:45 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
 Date: Tue, 26 Oct 2021 21:34:26 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f0f5c90244cf4b6feed603821b45f25a54cf3f12
-X-Git-Newrev: 95706cefe5a59642fa682158f74a5671242c5273
+X-Git-Oldrev: 5c85c59721a4d98d84b699b4204fc5e38483a9b9
+X-Git-Newrev: 0cdbe8b70152d498973d97b37b3418e933b27b6e
 X-Patchwork-Hint: ignore
-Message-Id: <20211026193445.2928688F04@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-aiozipkin: bump to version
- 1.1.1
+Message-Id: <20211026193445.47C1E88F06@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-yarl: bump to version 1.7.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,44 +64,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=95706cefe5a59642fa682158f74a5671242c5273
+commit: https://git.buildroot.net/buildroot/commit/?id=0cdbe8b70152d498973d97b37b3418e933b27b6e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+License hash change due to removal of full license text:
+https://github.com/aio-libs/yarl/commit/94faa90c3c3e6d8ac519fa4b6bee154bc090e34b
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/python-aiozipkin/python-aiozipkin.hash | 4 ++--
- package/python-aiozipkin/python-aiozipkin.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-yarl/python-yarl.hash | 6 +++---
+ package/python-yarl/python-yarl.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-aiozipkin/python-aiozipkin.hash b/package/python-aiozipkin/python-aiozipkin.hash
-index 356d83786f..d1563b20bc 100644
---- a/package/python-aiozipkin/python-aiozipkin.hash
-+++ b/package/python-aiozipkin/python-aiozipkin.hash
+diff --git a/package/python-yarl/python-yarl.hash b/package/python-yarl/python-yarl.hash
+index 783702c74b..e488ee6939 100644
+--- a/package/python-yarl/python-yarl.hash
++++ b/package/python-yarl/python-yarl.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/aiozipkin/json
--md5  0e98374ea561e4e4e589ffabc0ba6471  aiozipkin-1.1.0.tar.gz
--sha256  bf46a065f87ba51eeb49fed756e285c7faa560f89e0c7ad4bc891d5ae4b5364d  aiozipkin-1.1.0.tar.gz
-+md5  0fea8a200ab2a94fe9a2340a8cbf8512  aiozipkin-1.1.1.tar.gz
-+sha256  9b82619d9ef309e72627a81ab3fda0c9b83e530844cf59f2e9a011e9a2a1293f  aiozipkin-1.1.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/yarl/json
+-md5  3b6f2da3db8c645a9440375fd6a414eb  yarl-1.6.3.tar.gz
+-sha256  8a9066529240171b68893d60dca86a763eae2139dd42f42106b03cf4b426bf10  yarl-1.6.3.tar.gz
++md5  624ac1cd36abe92dc437fa97209c5c68  yarl-1.7.0.tar.gz
++sha256  8e7ebaf62e19c2feb097ffb7c94deb0f0c9fab52590784c8cd679d30ab009162  yarl-1.7.0.tar.gz
  # Locally computed sha256 checksums
- sha256  98397c300949e0cc1ddc68b0e48e67b10f2d0a4ffada4903d891a1315fe04156  LICENSE
-diff --git a/package/python-aiozipkin/python-aiozipkin.mk b/package/python-aiozipkin/python-aiozipkin.mk
-index 37812f2752..06ea9ef1a4 100644
---- a/package/python-aiozipkin/python-aiozipkin.mk
-+++ b/package/python-aiozipkin/python-aiozipkin.mk
+-sha256  14c0820503ceef15e814a89b037d9efc066870087018294b6ae0f27163872cc5  LICENSE
++sha256  56d6ac6c8105c0a51304c21db060e361af9a8ea0af9a75c239c28b5d13693838  LICENSE
+diff --git a/package/python-yarl/python-yarl.mk b/package/python-yarl/python-yarl.mk
+index 32ec477064..8a1a3bbca0 100644
+--- a/package/python-yarl/python-yarl.mk
++++ b/package/python-yarl/python-yarl.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_AIOZIPKIN_VERSION = 1.1.0
-+PYTHON_AIOZIPKIN_VERSION = 1.1.1
- PYTHON_AIOZIPKIN_SOURCE = aiozipkin-$(PYTHON_AIOZIPKIN_VERSION).tar.gz
--PYTHON_AIOZIPKIN_SITE = https://files.pythonhosted.org/packages/0a/46/5f328fb8163163f0d4401a1c07585cdf567e56305cb12ce54c9bb62e3f74
-+PYTHON_AIOZIPKIN_SITE = https://files.pythonhosted.org/packages/f2/fe/26a60a7c9e91c968eac5dacab2948ed931a676880a6878695ff281c72b8f
- PYTHON_AIOZIPKIN_SETUP_TYPE = setuptools
- PYTHON_AIOZIPKIN_LICENSE = Apache-2.0
- PYTHON_AIOZIPKIN_LICENSE_FILES = LICENSE
+-PYTHON_YARL_VERSION = 1.6.3
++PYTHON_YARL_VERSION = 1.7.0
+ PYTHON_YARL_SOURCE = yarl-$(PYTHON_YARL_VERSION).tar.gz
+-PYTHON_YARL_SITE = https://files.pythonhosted.org/packages/97/e7/af7219a0fe240e8ef6bb555341a63c43045c21ab0392b4435e754b716fa1
++PYTHON_YARL_SITE = https://files.pythonhosted.org/packages/7f/5c/a4ce6d4f46413afe49734bf901939105f4ce7fcfbcf87d0777cc39501060
+ PYTHON_YARL_LICENSE = Apache-2.0
+ PYTHON_YARL_LICENSE_FILES = LICENSE
+ PYTHON_YARL_SETUP_TYPE = setuptools
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
