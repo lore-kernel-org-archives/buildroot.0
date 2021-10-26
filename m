@@ -2,84 +2,84 @@ Return-Path: <SRS0=o+05=PO=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E7CFC433EF
-	for <buildroot@archiver.kernel.org>; Tue, 26 Oct 2021 16:47:14 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 23684C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 26 Oct 2021 16:50:54 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D7FB660295
-	for <buildroot@archiver.kernel.org>; Tue, 26 Oct 2021 16:47:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D7FB660295
+	by mail.kernel.org (Postfix) with ESMTPS id B43CC6108B
+	for <buildroot@archiver.kernel.org>; Tue, 26 Oct 2021 16:50:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B43CC6108B
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 74542400BE;
-	Tue, 26 Oct 2021 16:47:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 52D04404F2;
+	Tue, 26 Oct 2021 16:50:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CtsxxOEW0nOg; Tue, 26 Oct 2021 16:47:12 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 0LNHRqODZXhb; Tue, 26 Oct 2021 16:50:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8D7E640176;
-	Tue, 26 Oct 2021 16:47:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B4255404EE;
+	Tue, 26 Oct 2021 16:50:51 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 869691BF4D5
- for <buildroot@lists.busybox.net>; Tue, 26 Oct 2021 16:47:10 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6C5721BF4D5
+ for <buildroot@lists.busybox.net>; Tue, 26 Oct 2021 16:50:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 830726068B
- for <buildroot@lists.busybox.net>; Tue, 26 Oct 2021 16:47:10 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5BDB3606CF
+ for <buildroot@lists.busybox.net>; Tue, 26 Oct 2021 16:50:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp3.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OG8SlJGJhBsR for <buildroot@lists.busybox.net>;
- Tue, 26 Oct 2021 16:47:09 +0000 (UTC)
+ with ESMTP id 3vKRzAn9XVjp for <buildroot@lists.busybox.net>;
+ Tue, 26 Oct 2021 16:50:49 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
 Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
  [IPv6:2a00:1450:4864:20::42f])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 9A7CD60628
- for <buildroot@buildroot.org>; Tue, 26 Oct 2021 16:47:09 +0000 (UTC)
-Received: by mail-wr1-x42f.google.com with SMTP id v17so19104647wrv.9
- for <buildroot@buildroot.org>; Tue, 26 Oct 2021 09:47:09 -0700 (PDT)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7B17D60697
+ for <buildroot@buildroot.org>; Tue, 26 Oct 2021 16:50:49 +0000 (UTC)
+Received: by mail-wr1-x42f.google.com with SMTP id k7so15783734wrd.13
+ for <buildroot@buildroot.org>; Tue, 26 Oct 2021 09:50:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=v2fnSwK509aWx5Xp8ZmNLkVQQjEmk5wLe+a3dtipk34=;
- b=S7Z6sPI6z4EcT+xEVADI3MmA9ZqO1ylMB4Rm8qBCqznJyZtZOfCmbfWD5i40lO0mtK
- I2zGZSLGReeY0ZeQHrMoKEr1qcJyTWhNCsxTnGdzixni/zJm0gBRVgzttWpDorBg82kY
- GfJLsCDT3pLi0iUiNoQg2Wq6vflGpDR19huWk+5JucWP8SN0Cus6svk5qxbYl3ZkPNhS
- OkWQpOZ1nOdXUdin6t1MXvWmnlK3eVrplQJevdsrLeYw3Xi91pU+DqBYsUAxu04PlueP
- tON/1HMz+EGOcYzh60K6xZr866QG9JHFs4hR8D6a+WZJi0EAwuwVACet/JfJQlX1qxdZ
- SS7w==
+ bh=OczNpMaPy+YBDVaU49WBfu2xcqO5KAUtX6cR2tUDfwQ=;
+ b=M0lplIhbfwRUNjWmUYHNfdnr3CSeg4xteLIdMTrjTs0s0O3TFGmE2G76Z/bnsXSdzn
+ rnqQaScD2kP+p7baSIhP2nuIHCb/FSM8DlibJ7FsXso0SinMKo0KDWdonFDe46pd8euH
+ zaZEUUZ1UNUmuBcJFFKyydCqD93FZX7ARsaPRDTL3RbhK72g/j4EdQJ+WsatCJ2EFxy1
+ 7le624LCT0ERcywj+555or2Si/WlrL77Ribbas74ieK1fKmKBul14zrz1kzB8V7uFzEj
+ y4JzrL/4X3m91duogHR0AUzfX5FnD5Tsf9f09V5gWCVfL0aw6JHc64gJy0oCczjMIned
+ 9Fyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=v2fnSwK509aWx5Xp8ZmNLkVQQjEmk5wLe+a3dtipk34=;
- b=mZpvqNt/l9oT++hq0VxtL8rSxG0e2mIDWwecpItWuKJoPAQnO+6fA9y+tyeborzkl/
- a1V6lQ8ZrsMd5mHRP+Ra5JhmlJOu/xpkpQPDmgTrlc0YCyslEa24MxxfsF0mKllASSaE
- 5lWrs5+snqXlNunOFOWyPX4SIU10HMxeXvtFm/U2J1AiEh7kbk6vmPllDgghOxWpkbui
- +x1PVt6zF+77AW1MVUMsbrjAw84o7Zlj2hSVS+SNz2PW0paz96srJ+cTe2rqUG/k0i/J
- VaQhDNEU1b4DW8ZKEFjZgOa9+PKqC7pq+uVXBLrPoV/+8SkU2ccDTMMXFSzwkqrAOCQK
- 23RQ==
-X-Gm-Message-State: AOAM533L2JnPDalMcriRD7S5N9qofrcs3zaRXFScZ1IKcBohMiYlczzZ
- 9pcvFveTRVXdOqf5tFuTmuSfPYmkqfE=
-X-Google-Smtp-Source: ABdhPJz/yH4mbIacrJ6ILHQPKZNL3KtRS67r0YCaIizwY/dM/iH3GDju5cYU2LaA9JR9rJIlHuWINw==
-X-Received: by 2002:a5d:4ec9:: with SMTP id s9mr34174173wrv.225.1635266827645; 
- Tue, 26 Oct 2021 09:47:07 -0700 (PDT)
+ bh=OczNpMaPy+YBDVaU49WBfu2xcqO5KAUtX6cR2tUDfwQ=;
+ b=nC+rGM3YRWL4EzWy7n9B1oMXcVtAEnOxTgOxyFB6Q0ymgDZu2xlk8MJ1pWOs/Of6zS
+ sBxgXv35M1CGbW1fOxtzPlz3s6UzdwPtiNCu1qDfaHfaHdJIeTF+QmJCHKtHL2anqTPs
+ J8bERv9F6SYcFRIshd7Yin8MTNR0Tb/Ru8nkFnhEdeX3KCjdZ1ouxyEWTl1c1pa3ZuKu
+ lA/1S+DlD0wIa3zaxCAsis7Mmr0w368Akq/hy49csDiI/xP4vV2jkXHjhPGc5x3oeNA9
+ AQhKAcAtNE9qeHpneRdsZIOzS6HglKG7dE+Ufe7/ip3U3NyIC7E2Un5C7w2hfv3p1knF
+ UVZQ==
+X-Gm-Message-State: AOAM530sLIbRsB4bCVUzKYPjSfsO9Cy/yn7XR2Pkgn9FCnWil0sctAp+
+ 5+3kh/XzPO/mQcfCZkJz9kmxCh5CJaA=
+X-Google-Smtp-Source: ABdhPJyC0yZQJF8qy/Y8ndHkVo6B7HkoCKtTGixAg6aOwdSuri+LI0oYjUUxjyuEW1/bgcx5KEDfBw==
+X-Received: by 2002:a5d:6acc:: with SMTP id u12mr23234101wrw.256.1635267047425; 
+ Tue, 26 Oct 2021 09:50:47 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-1732-95.w86-253.abo.wanadoo.fr.
  [86.253.44.95])
- by smtp.gmail.com with ESMTPSA id r11sm7805957wrt.42.2021.10.26.09.47.06
+ by smtp.gmail.com with ESMTPSA id k17sm19312378wrq.7.2021.10.26.09.50.46
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 26 Oct 2021 09:47:06 -0700 (PDT)
+ Tue, 26 Oct 2021 09:50:46 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 26 Oct 2021 18:45:34 +0200
-Message-Id: <20211026164534.4014337-1-fontaine.fabrice@gmail.com>
+Date: Tue, 26 Oct 2021 18:49:15 +0200
+Message-Id: <20211026164915.4020648-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/lighttpd: fix build on musl
+Subject: [Buildroot] [PATCH 1/1] package/vnstat: bump to version 2.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,81 +91,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Matt Weber <matthew.weber@collins.com>,
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
+ Rodrigo Rebello <rprebello@gmail.com>,
  Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following build failure on musl raised since bump to version
-1.4.60 in commit d62b7f54f00291a50274409fb5510527fd725ffe:
-
-In file included from buffer.h:404,
-                 from array.h:5,
-                 from array.c:3:
-ck.h:24:14: error: expected ';' before 'typedef'
-   24 | __BEGIN_DECLS
-      |              ^
-      |              ;
-......
-   29 | typedef size_t rsize_t;
-      | ~~~~~~~
-
-Fixes:
- - http://autobuild.buildroot.org/results/0d56a44449e89773499051b35f21ec83bfab4ca6
+https://github.com/vergoh/vnstat/releases/tag/v2.8
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...-__BEGIN_DECLS-__END_DECLS-if-needed.patch | 39 +++++++++++++++++++
- 1 file changed, 39 insertions(+)
- create mode 100644 package/lighttpd/0002-core-define-__BEGIN_DECLS-__END_DECLS-if-needed.patch
+ package/vnstat/vnstat.hash | 2 +-
+ package/vnstat/vnstat.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/lighttpd/0002-core-define-__BEGIN_DECLS-__END_DECLS-if-needed.patch b/package/lighttpd/0002-core-define-__BEGIN_DECLS-__END_DECLS-if-needed.patch
-new file mode 100644
-index 0000000000..cd64f18794
---- /dev/null
-+++ b/package/lighttpd/0002-core-define-__BEGIN_DECLS-__END_DECLS-if-needed.patch
-@@ -0,0 +1,39 @@
-+From cf4dfbe15ef8ead3a7eda974af7d804d447f00db Mon Sep 17 00:00:00 2001
-+From: Glenn Strauss <gstrauss@gluelogic.com>
-+Date: Mon, 4 Oct 2021 09:51:22 -0400
-+Subject: [PATCH] [core] define __BEGIN_DECLS, __END_DECLS if needed
-+
-+[Retrieved from:
-+https://github.com/lighttpd/lighttpd1.4/commit/cf4dfbe15ef8ead3a7eda974af7d804d447f00db]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ src/first.h | 16 ++++++++++++++++
-+ 1 file changed, 16 insertions(+)
-+
-+diff --git a/src/first.h b/src/first.h
-+index df747ba46..9d0428ae6 100644
-+--- a/src/first.h
-++++ b/src/first.h
-+@@ -39,6 +39,22 @@
-+ #include <sys/types.h>
-+ #include <stddef.h>
-+ 
-++#ifndef __BEGIN_DECLS
-++#ifdef __cplusplus
-++#define __BEGIN_DECLS extern "C" {
-++#else
-++#define __BEGIN_DECLS
-++#endif
-++#endif
-++
-++#ifndef __END_DECLS
-++#ifdef __cplusplus
-++#define __END_DECLS }
-++#else
-++#define __END_DECLS
-++#endif
-++#endif
-++
-+ #if defined HAVE_STDINT_H
-+ # include <stdint.h>
-+ #elif defined HAVE_INTTYPES_H
+diff --git a/package/vnstat/vnstat.hash b/package/vnstat/vnstat.hash
+index 0f269039b1..191dc4ec0b 100644
+--- a/package/vnstat/vnstat.hash
++++ b/package/vnstat/vnstat.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  4c28a1d8bc03c2b6e7ab96c876e07dd8ea174b7cad73b7190ecb2b9501e83e9e  vnstat-2.7.tar.gz
++sha256  03f858a7abf6bd85bb8cd595f3541fc3bd31f8f400ec092ef3034825ccb77c25  vnstat-2.8.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/vnstat/vnstat.mk b/package/vnstat/vnstat.mk
+index 7f5ff67b82..91f0233f56 100644
+--- a/package/vnstat/vnstat.mk
++++ b/package/vnstat/vnstat.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-VNSTAT_VERSION = 2.7
++VNSTAT_VERSION = 2.8
+ VNSTAT_SITE = http://humdi.net/vnstat
+ VNSTAT_LICENSE = GPL-2.0
+ VNSTAT_LICENSE_FILES = COPYING
 -- 
 2.33.0
 
