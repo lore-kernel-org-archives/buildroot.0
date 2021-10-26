@@ -2,82 +2,84 @@ Return-Path: <SRS0=o+05=PO=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 401B0C433F5
-	for <buildroot@archiver.kernel.org>; Tue, 26 Oct 2021 22:20:04 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CDF26C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 26 Oct 2021 22:22:23 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 8D2D261002
-	for <buildroot@archiver.kernel.org>; Tue, 26 Oct 2021 22:20:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8D2D261002
+	by mail.kernel.org (Postfix) with ESMTPS id 2094D60E76
+	for <buildroot@archiver.kernel.org>; Tue, 26 Oct 2021 22:22:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2094D60E76
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3276280DF8;
-	Tue, 26 Oct 2021 22:20:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DB1A060778;
+	Tue, 26 Oct 2021 22:22:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jWoO1SVST84b; Tue, 26 Oct 2021 22:20:02 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id cfW-51HFZSI3; Tue, 26 Oct 2021 22:22:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7FBC280CFC;
-	Tue, 26 Oct 2021 22:20:01 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9060F1BF304
- for <buildroot@lists.busybox.net>; Tue, 26 Oct 2021 22:19:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 396A560726;
+	Tue, 26 Oct 2021 22:22:21 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 977F41BF304
+ for <buildroot@lists.busybox.net>; Tue, 26 Oct 2021 22:22:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8D76580CFA
- for <buildroot@lists.busybox.net>; Tue, 26 Oct 2021 22:19:59 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8644040428
+ for <buildroot@lists.busybox.net>; Tue, 26 Oct 2021 22:22:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NwH97Tb4_90X for <buildroot@lists.busybox.net>;
- Tue, 26 Oct 2021 22:19:58 +0000 (UTC)
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Tbu3pmPW9QGH for <buildroot@lists.busybox.net>;
+ Tue, 26 Oct 2021 22:22:15 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
- [IPv6:2a00:1450:4864:20::42f])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B22C780CF9
- for <buildroot@buildroot.org>; Tue, 26 Oct 2021 22:19:58 +0000 (UTC)
-Received: by mail-wr1-x42f.google.com with SMTP id e4so726359wrc.7
- for <buildroot@buildroot.org>; Tue, 26 Oct 2021 15:19:58 -0700 (PDT)
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com
+ [IPv6:2607:f8b0:4864:20::d30])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B1E54400ED
+ for <buildroot@buildroot.org>; Tue, 26 Oct 2021 22:22:15 +0000 (UTC)
+Received: by mail-io1-xd30.google.com with SMTP id m184so1288247iof.1
+ for <buildroot@buildroot.org>; Tue, 26 Oct 2021 15:22:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=HEBw9qeyTEMz3jhid99BUZ0GUXCwRtp/9tQ54J4C6Dc=;
- b=Ebs0yy65Ib9iyxzSKF4AxcQaUHuqn418XI8uYZzj6ANWzUX8beAcENz8ANfQjzRrzt
- /Ap9V89h6nU2khZi5Cjg3PoMjwysAhC0kKqgEe92kIK5i1kxas9BsOUmlQFEhz8/xoUo
- t/D1vM2FGsgUC4D04Gp85RI3Da7t4oOEGqtNwlyoTVrLzaaMY7vaYJtbiypUo269ckMY
- nwk/188oMCy3YaY3d9ZU839jQ63B/n7aG4sskClawiwlnQ3CvD1UaRVY8r92JAWPINqT
- oPL20QYRDFgTs5J6cSyCR5JrlDSdrqcvpKtQc3j1TtBJN+acSjrtXiW1fgzL87OJMCA/
- T1zA==
+ bh=FgB5nNHTeR3/rPXDceu9c3tpe7rnhsBEkqdYj7QyvWU=;
+ b=d23OLilSvAF7QW1XNGF82ZBe+31WNs+J7aSonDu1xbY+/wftY4QtUcJqY0FAHfZ+LC
+ EN4VadJ9Lt7Omj80xD68WBvUO6Lip62sRbgNAAwdAth3VGSqvs7lXu24VsmBLqI0p7CC
+ pzRvTL8txV2xdVxi4Ax+4i3UFVGS4tR27/RKGXblOfo/GtKPAcUY4ZLx00sxzsXcWrqR
+ h56X28bzxqGRdcF6nwm2ZWE8wPcbiFoEEyuCbDjeLm/PJ0705O8pGOe5D4E+mfjbJv8e
+ wKZihjCRrZMOVWTUTViNeljmuYO4qDCi6jod/+TUD87GWcrL2cpeK1Wi21KsQyLo2sBR
+ 8Hvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=HEBw9qeyTEMz3jhid99BUZ0GUXCwRtp/9tQ54J4C6Dc=;
- b=sxOP9rPnom6y6Lo/gdllw0gbN1DrnXPLxE1MRXKRlu1E9f5AwcFP5A/ypbJTiA909m
- w3J1XoAqRH5/Zexk5QE1/EsxsASlIW85ETLosaeHwCz/ZUNNS8pHeQyE9vp8naD91u14
- tjOml6Hb3aWFz6USN6EeZ8kdyEqHTlWlfmHnLkXYSjaHSE/luU+fKgNRoNbk2E6LWm9q
- 0j6doN7T4yA9a7VlewVOrDnyOlfvowg1lkTAbjIrat/vWA5orc9o9wNqAirca9o/Ehpp
- GibwlztlUUJgo5XTYJbJVj67W5y6DFW57x1nWv2vOfMy8kJlQ2lX0q1etezCvwrlzIhX
- 5KOw==
-X-Gm-Message-State: AOAM532oj2C+l/nFMurx+04us/mBeisnBnHy1TMSsJZcesd7ChZcnVVq
- HYvVMgt5Zi73MvZR8DV/8GNV2PvDYbw=
-X-Google-Smtp-Source: ABdhPJwYEZkclw7kLOUX/COnuFspaU4cD4dF4jZfxyqSgxw7ECbRB2M4EC566oqLpZvxgEtt/Ro1Eg==
-X-Received: by 2002:adf:ca09:: with SMTP id o9mr34613979wrh.303.1635286796760; 
- Tue, 26 Oct 2021 15:19:56 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-1732-95.w86-253.abo.wanadoo.fr.
- [86.253.44.95])
- by smtp.gmail.com with ESMTPSA id o11sm29142359wry.0.2021.10.26.15.19.56
+ bh=FgB5nNHTeR3/rPXDceu9c3tpe7rnhsBEkqdYj7QyvWU=;
+ b=FiZO8tJ2JdOd1KfeTNIlbXNvVEfC75B4NNdZ2XORxiaRO6EexyNPrYGSnQaHfkeYMf
+ vxdS0fYpmWKWtHZsQPwi8ud0MZTNau+NF6Gl6Lg5FH+y2MmpoHnFTJbNuK69tpqfzzSZ
+ NKCtVbStL9eCoEitbg8r3/0KNPvylClwUP0ELwrIgzrQeYsQXzfYmL1jLHXDwVDxqJ6u
+ MtsgtaHf8Tk1VfhYiwjnaB3HrRwiRtAaYwoGRgorL+Sm74ibapI/ZXTNdWbICZuqm4QB
+ josmErWlOhgWZ+du5CXBxI6ma5yVZn3iWWZODjhn5kzEKnUjSSx8f01Ft0s4Yw5eoAGx
+ NawQ==
+X-Gm-Message-State: AOAM532sRyM4Ewp+auElWhyQI8NGvrMQxhJUBPt8OXD3yzy0Hfc4YIq4
+ AHJM9nfoWNeUG9ihNIe4Sa9eLraCqMM=
+X-Google-Smtp-Source: ABdhPJzhUJ14b+CdK4brvalgB+wCtKgE4jvmaigYdUFOnnizq1OFztRwhhmz+4AdVauAhz97ZNMrlA==
+X-Received: by 2002:a02:b11e:: with SMTP id r30mr12435836jah.109.1635286934588; 
+ Tue, 26 Oct 2021 15:22:14 -0700 (PDT)
+Received: from james-x399.localdomain (71-218-115-49.hlrn.qwest.net.
+ [71.218.115.49])
+ by smtp.gmail.com with ESMTPSA id l5sm11333243iln.50.2021.10.26.15.22.14
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 26 Oct 2021 15:19:56 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Tue, 26 Oct 2021 15:22:14 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 27 Oct 2021 00:18:19 +0200
-Message-Id: <20211026221819.4191432-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.33.0
+Date: Tue, 26 Oct 2021 16:22:12 -0600
+Message-Id: <20211026222212.130034-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/python-pyndiff: needs python3
+Subject: [Buildroot] [PATCH 1/1] package/pipewire: bump to version 0.3.39
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,44 +91,118 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Asaf Kahlon <asafka7@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-python3 is needed since the addition of the package in commit
-1665e0a79b617b4e6315ac5989e9ffa66eb0310f to avoid the following build
-failure:
+Drop arm fix patch that is now upstream.
 
-error:   File "/usr/lib/python2.7/site-packages/pyndiff/core.py", line 48
-    nmap_service_name = f"{service_name} {service_product} {service_version} {service_extrainfo}".replace(
-                                                                                                ^
-SyntaxError: invalid syntax
+Dbus is now an optional dependency for pipewire.
 
-Fixes:
- - http://autobuild.buildroot.org/results/9f283774ca2c89540753bbd62fdbddb1f9d4e392
+Add pipewire-v4l2 config option.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-pyndiff/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ .../0001-cpu-fix-compilation-on-ARM.patch     | 28 -------------------
+ package/pipewire/pipewire.hash                |  2 +-
+ package/pipewire/pipewire.mk                  | 15 +++++++---
+ 3 files changed, 12 insertions(+), 33 deletions(-)
+ delete mode 100644 package/pipewire/0001-cpu-fix-compilation-on-ARM.patch
 
-diff --git a/package/python-pyndiff/Config.in b/package/python-pyndiff/Config.in
-index 58ca35ba97..cd13056d79 100644
---- a/package/python-pyndiff/Config.in
-+++ b/package/python-pyndiff/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_PYNDIFF
- 	bool "python-pyndiff"
-+	depends on BR2_PACKAGE_PYTHON3
- 	select BR2_PACKAGE_PYTHON_XMLJSON # runtime
- 	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
- 	help
+diff --git a/package/pipewire/0001-cpu-fix-compilation-on-ARM.patch b/package/pipewire/0001-cpu-fix-compilation-on-ARM.patch
+deleted file mode 100644
+index 445cab08bd..0000000000
+--- a/package/pipewire/0001-cpu-fix-compilation-on-ARM.patch
++++ /dev/null
+@@ -1,28 +0,0 @@
+-From f8817b439433798bd7217dc4ae72197887b0fc96 Mon Sep 17 00:00:00 2001
+-From: Wim Taymans <wtaymans@redhat.com>
+-Date: Thu, 30 Sep 2021 11:12:27 +0200
+-Subject: [PATCH] cpu: fix compilation on ARM
+-
+-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+-[james.hilliard1@gmail.com: backport from upstream commit
+-f8817b439433798bd7217dc4ae72197887b0fc96]
+----
+- spa/plugins/support/cpu-arm.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/spa/plugins/support/cpu-arm.c b/spa/plugins/support/cpu-arm.c
+-index d80b8ad87..de07ebf41 100644
+---- a/spa/plugins/support/cpu-arm.c
+-+++ b/spa/plugins/support/cpu-arm.c
+-@@ -80,7 +80,7 @@ arm_init(struct impl *impl)
+- 	int arch;
+- 
+- 	if (!(cpuinfo = get_cpuinfo())) {
+--		spa_log_warn(impl->log, NAME " %p: Can't read cpuinfo", impl);
+-+		spa_log_warn(impl->log, "%p: Can't read cpuinfo", impl);
+- 		return 1;
+- 	}
+- 
+--- 
+-2.25.1
+-
+diff --git a/package/pipewire/pipewire.hash b/package/pipewire/pipewire.hash
+index 879cfa41cb..7894939b0d 100644
+--- a/package/pipewire/pipewire.hash
++++ b/package/pipewire/pipewire.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  f4ae272e8d3fa3ff6a6ba2a465d1f951405b08fd31bbb82c27bb7cf55e113ba1  pipewire-0.3.38.tar.bz2
++sha256  fafcde675b264485883df1f3bf7e08f36fd1d661ecc092dcec6fd35a059c2aff  pipewire-0.3.39.tar.bz2
+ sha256  8909c319a7e27dbb33a15b9035f89ab3b7b2f6a12f8bcddc755206a8db1ada44  COPYING
+ sha256  be4be5d77424833edf31f53fc1f1cecb6996b9e2d747d9e6fb8f878362ebc92b  LICENSE
+diff --git a/package/pipewire/pipewire.mk b/package/pipewire/pipewire.mk
+index 272cd046aa..f376f3c276 100644
+--- a/package/pipewire/pipewire.mk
++++ b/package/pipewire/pipewire.mk
+@@ -4,13 +4,13 @@
+ #
+ ################################################################################
+ 
+-PIPEWIRE_VERSION = 0.3.38
++PIPEWIRE_VERSION = 0.3.39
+ PIPEWIRE_SOURCE = pipewire-$(PIPEWIRE_VERSION).tar.bz2
+ PIPEWIRE_SITE = https://gitlab.freedesktop.org/pipewire/pipewire/-/archive/$(PIPEWIRE_VERSION)
+ PIPEWIRE_LICENSE = MIT, LGPL-2.1+ (libspa-alsa), GPL-2.0 (libjackserver)
+ PIPEWIRE_LICENSE_FILES = COPYING LICENSE
+ PIPEWIRE_INSTALL_STAGING = YES
+-PIPEWIRE_DEPENDENCIES = host-pkgconf dbus $(TARGET_NLS_DEPENDENCIES)
++PIPEWIRE_DEPENDENCIES = host-pkgconf $(TARGET_NLS_DEPENDENCIES)
+ 
+ PIPEWIRE_CONF_OPTS += \
+ 	-Ddocs=disabled \
+@@ -28,6 +28,13 @@ PIPEWIRE_CONF_OPTS += \
+ 	-Dvideotestsrc=enabled \
+ 	-Dvolume=enabled
+ 
++ifeq ($(BR2_PACKAGE_DBUS),y)
++PIPEWIRE_CONF_OPTS += -Ddbus=enabled
++PIPEWIRE_DEPENDENCIES += dbus
++else
++PIPEWIRE_CONF_OPTS += -Ddbus=disabled
++endif
++
+ ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
+ PIPEWIRE_CONF_OPTS += -Dudev=enabled
+ PIPEWIRE_DEPENDENCIES += udev
+@@ -106,9 +113,9 @@ PIPEWIRE_DEPENDENCIES += ncurses
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_PIPEWIRE_V4L2),y)
+-PIPEWIRE_CONF_OPTS += -Dv4l2=enabled
++PIPEWIRE_CONF_OPTS += -Dpipewire-v4l2=enabled -Dv4l2=enabled
+ else
+-PIPEWIRE_CONF_OPTS += -Dv4l2=disabled
++PIPEWIRE_CONF_OPTS += -Dpipewire-v4l2=disabled -Dv4l2=disabled
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBCAMERA)$(BR2_PACKAGE_LIBDRM)$(BR2_PACKAGE_HAS_UDEV),yyy)
 -- 
-2.33.0
+2.25.1
 
 _______________________________________________
 buildroot mailing list
