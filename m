@@ -2,51 +2,51 @@ Return-Path: <SRS0=x9kH=PP=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AC476C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 27 Oct 2021 10:22:28 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2CA14C433EF
+	for <buildroot@archiver.kernel.org>; Wed, 27 Oct 2021 10:22:40 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 4FA7660EBD
-	for <buildroot@archiver.kernel.org>; Wed, 27 Oct 2021 10:22:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4FA7660EBD
+	by mail.kernel.org (Postfix) with ESMTPS id ED65F604DA
+	for <buildroot@archiver.kernel.org>; Wed, 27 Oct 2021 10:22:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org ED65F604DA
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2266E60ADF;
-	Wed, 27 Oct 2021 10:22:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C73AE818D0;
+	Wed, 27 Oct 2021 10:22:39 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 80boYsY9BFQL; Wed, 27 Oct 2021 10:22:39 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2A0A380E56;
+	Wed, 27 Oct 2021 10:22:38 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 107F01BF2F4
+ for <buildroot@lists.busybox.net>; Wed, 27 Oct 2021 10:22:20 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 000E360ADF
+ for <buildroot@lists.busybox.net>; Wed, 27 Oct 2021 10:22:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dS0_8YeraxZa; Wed, 27 Oct 2021 10:22:27 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8779E60717;
-	Wed, 27 Oct 2021 10:22:26 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0752C1BF2F4
- for <buildroot@lists.busybox.net>; Wed, 27 Oct 2021 10:22:16 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EA7D5402B7
- for <buildroot@lists.busybox.net>; Wed, 27 Oct 2021 10:22:15 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LIJQmelc7dVt for <buildroot@lists.busybox.net>;
- Wed, 27 Oct 2021 10:22:15 +0000 (UTC)
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rVO0WwdLHHU6 for <buildroot@lists.busybox.net>;
+ Wed, 27 Oct 2021 10:22:19 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 00B2F4019F
- for <buildroot@buildroot.org>; Wed, 27 Oct 2021 10:22:14 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 405E5606E5
+ for <buildroot@buildroot.org>; Wed, 27 Oct 2021 10:22:19 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 9830188FAE; Wed, 27 Oct 2021 10:18:50 +0000 (UTC)
+ id DE8E588FB1; Wed, 27 Oct 2021 10:18:54 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 27 Oct 2021 12:21:55 +0200
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: f1c27c259b8520cffffc6d0f7a53e11a86bd9527
-X-Git-Newrev: 8244ce10ed6ce7de1f180c687784ccfdac07cfe0
+Date: Wed, 27 Oct 2021 12:21:32 +0200
+X-Git-Refname: refs/heads/2021.08.x
+X-Git-Oldrev: aefbe5cc683c0f7d445e51069da6974b481d1dd8
+X-Git-Newrev: 4eea95a98980373633c603520b3966b40345171f
 X-Patchwork-Hint: ignore
-Message-Id: <20211027101850.9830188FAE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/strongswan:
+Message-Id: <20211027101854.DE8E588FB1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.08.x] package/strongswan:
  security bump to version 5.9.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -65,8 +65,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8244ce10ed6ce7de1f180c687784ccfdac07cfe0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=4eea95a98980373633c603520b3966b40345171f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.08.x
 
 - Fixed a denial-of-service vulnerability in the gmp plugin that was
   caused by an integer overflow when processing RSASSA-PSS signatures
