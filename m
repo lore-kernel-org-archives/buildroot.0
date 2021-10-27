@@ -2,51 +2,51 @@ Return-Path: <SRS0=x9kH=PP=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BDDA5C433F5
-	for <buildroot@archiver.kernel.org>; Wed, 27 Oct 2021 20:16:06 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A41BBC433F5
+	for <buildroot@archiver.kernel.org>; Wed, 27 Oct 2021 20:16:18 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 5AAE16103C
-	for <buildroot@archiver.kernel.org>; Wed, 27 Oct 2021 20:16:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5AAE16103C
+	by mail.kernel.org (Postfix) with ESMTPS id 483E56103C
+	for <buildroot@archiver.kernel.org>; Wed, 27 Oct 2021 20:16:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 483E56103C
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3840F81DCA;
-	Wed, 27 Oct 2021 20:16:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1E120607AF;
+	Wed, 27 Oct 2021 20:16:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id aHvFv0DkUG16; Wed, 27 Oct 2021 20:16:05 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id oNHcw3PXwm5n; Wed, 27 Oct 2021 20:16:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3B53C81DA0;
-	Wed, 27 Oct 2021 20:16:04 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id EF4031BF9C2
- for <buildroot@lists.busybox.net>; Wed, 27 Oct 2021 20:15:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 09A2960B20;
+	Wed, 27 Oct 2021 20:16:15 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 4CE9E1BF3D4
+ for <buildroot@lists.busybox.net>; Wed, 27 Oct 2021 20:15:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DF03C4058A
- for <buildroot@lists.busybox.net>; Wed, 27 Oct 2021 20:15:48 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3C04760B23
+ for <buildroot@lists.busybox.net>; Wed, 27 Oct 2021 20:15:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id alwxhb8pDPCn for <buildroot@lists.busybox.net>;
- Wed, 27 Oct 2021 20:15:47 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jiiPg7BnH1k9 for <buildroot@lists.busybox.net>;
+ Wed, 27 Oct 2021 20:15:48 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id EAB4940586
- for <buildroot@buildroot.org>; Wed, 27 Oct 2021 20:15:47 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 09F3B60B20
+ for <buildroot@buildroot.org>; Wed, 27 Oct 2021 20:15:48 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 9B89088FEE; Wed, 27 Oct 2021 20:12:22 +0000 (UTC)
+ id B276A88FEE; Wed, 27 Oct 2021 20:12:22 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Wed, 27 Oct 2021 22:10:37 +0200
+Date: Wed, 27 Oct 2021 22:10:38 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a9dc2de5511039f983c87598fb90b9df1a14cd89
-X-Git-Newrev: e694cc0a25906a7ca40ab95fd862940930500699
+X-Git-Oldrev: eedbd6f97d51a0049ec512de26541465403ab06f
+X-Git-Newrev: 7f9ad0ed7fd87435cc5aaf58ae23ff7a5dc40b1d
 X-Patchwork-Hint: ignore
-Message-Id: <20211027201222.9B89088FEE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/watchdogd: new package
+Message-Id: <20211027201222.B276A88FEE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/php-pecl-dbus: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,257 +59,389 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============5278473003594316374=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e694cc0a25906a7ca40ab95fd862940930500699
+--===============5278473003594316374==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=7f9ad0ed7fd87435cc5aaf58ae23ff7a5dc40b1d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch adds support for watchdogd, a watchdog daemon with built-in
-process supervisor[1] as well as support for monitoring memory & file
-descriptor leaks, and CPU load average.  When a monitored resource
-reaches a high watermark, a warning message is logged and when critical
-level is reached, the cause is saved and the system is rebooted.  On
-reboot the reset cause can be retrieved to help locate the culprit.
+The php-pecl-dbus package provides a PHP extension for interaction
+with D-Bus busses.
 
-Support for SysV init script in this patch, and systemd unit file is
-installed from the one bundled with the package.  Both files supoort
-additional command line options in /etc/default/watchdogd.
+https://github.com/derickr/pecl-dbus
 
-The Config.in is slightly big, but allows for disabling or adjusting
-the poll interval for each resource monitor.
+Based on initial work from Nicolas Carrier <nicolas.carrier@orolia.com>
 
-For more information, see https://github.com/troglobit/watchdogd
-
-[1]: processes must have their main loop instrumented for supervision.
-
-Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+Signed-off-by: Herve Codina <herve.codina@bootlin.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- DEVELOPERS                       |  1 +
- package/Config.in                |  1 +
- package/watchdogd/Config.in      | 58 ++++++++++++++++++++++++++++++++++++++++
- package/watchdogd/S01watchdogd   | 47 ++++++++++++++++++++++++++++++++
- package/watchdogd/watchdogd.hash |  5 ++++
- package/watchdogd/watchdogd.mk   | 55 +++++++++++++++++++++++++++++++++++++
- 6 files changed, 167 insertions(+)
+ DEVELOPERS                                         |   6 +
+ package/Config.in                                  |   1 +
+ package/php-pecl-dbus/0001-php8-compat.patch       | 158 +++++++++++++++++++++
+ ...atibility-with-php8-call_user_function_ex.patch |  32 +++++
+ package/php-pecl-dbus/Config.in                    |  15 ++
+ package/php-pecl-dbus/php-pecl-dbus.hash           |   3 +
+ package/php-pecl-dbus/php-pecl-dbus.mk             |  24 ++++
+ .../testing/tests/package/test_php_pecl_dbus.py    |  32 +++++
+ 8 files changed, 271 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 82577d4a95..5869971058 100644
+index 5869971058..d2320bc184 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1342,6 +1342,7 @@ F:	package/mg/
- F:	package/netcalc/
- F:	package/ssdp-responder/
- F:	package/sysklogd/
-+F:	package/watchdogd/
+@@ -1154,6 +1154,10 @@ F:	package/lua-augeas/
+ F:	support/testing/tests/package/test_dtbocfg.py
+ F:	support/testing/tests/package/test_lua_augeas.py
  
- N:	Joao Pinto <jpinto@synopsys.com>
- F:	board/synopsys/vdk/
++N:	Hervé Codina <herve.codina@bootlin.com>
++F:	package/php-pecl-dbus/
++F:	support/testing/tests/package/test_php_pecl_dbus.py
++
+ N:	Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
+ F:	package/gauche/
+ F:	package/gmrender-resurrect/
+@@ -1996,6 +2000,7 @@ F:	package/bmap-tools/
+ F:	package/libdbi/
+ F:	package/libdbi-drivers/
+ F:	package/lua-augeas/
++F:	package/php-pecl-dbus/
+ F:	package/php-xdebug/
+ F:	package/python-augeas/
+ F:	package/python-flask-expects-json/
+@@ -2006,6 +2011,7 @@ F:	support/testing/tests/package/sample_python_augeas.py
+ F:	support/testing/tests/package/sample_python_flask_expects_json.py
+ F:	support/testing/tests/package/sample_python_git.py
+ F:	support/testing/tests/package/test_bmap_tools.py
++F:	support/testing/tests/package/test_php_pecl_dbus.py
+ F:	support/testing/tests/package/test_python_augeas.py
+ F:	support/testing/tests/package/test_python_flask_expects_json.py
+ F:	support/testing/tests/package/test_python_git.py
 diff --git a/package/Config.in b/package/Config.in
-index 56276df55c..c153285bb1 100644
+index c153285bb1..5dd654a140 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -2549,6 +2549,7 @@ menu "System tools"
- 	source "package/unscd/Config.in"
- 	source "package/util-linux/Config.in"
- 	source "package/watchdog/Config.in"
-+	source "package/watchdogd/Config.in"
- 	source "package/xdg-dbus-proxy/Config.in"
- 	source "package/xen/Config.in"
- 	source "package/xvisor/Config.in"
-diff --git a/package/watchdogd/Config.in b/package/watchdogd/Config.in
+@@ -869,6 +869,7 @@ menu "External php extensions"
+ 	source "package/php-gnupg/Config.in"
+ 	source "package/php-imagick/Config.in"
+ 	source "package/php-memcached/Config.in"
++	source "package/php-pecl-dbus/Config.in"
+ 	source "package/php-ssh2/Config.in"
+ 	source "package/php-xdebug/Config.in"
+ 	source "package/php-yaml/Config.in"
+diff --git a/package/php-pecl-dbus/0001-php8-compat.patch b/package/php-pecl-dbus/0001-php8-compat.patch
 new file mode 100644
-index 0000000000..ca5933848d
+index 0000000000..acca6e1d49
 --- /dev/null
-+++ b/package/watchdogd/Config.in
-@@ -0,0 +1,58 @@
-+config BR2_PACKAGE_WATCHDOGD
-+	bool "watchdogd"
-+	depends on BR2_USE_MMU # fork()
-+	select BR2_PACKAGE_LIBCONFUSE
-+	select BR2_PACKAGE_LIBITE
-+	select BR2_PACKAGE_LIBUEV
-+	help
-+	  Extended version of uClinux-dist watchdogd.  Monitors loadavg,
-+	  file descriptors and memory leaks, and capable of supervising
-+	  your processes main loop using an instrumentation API.
++++ b/package/php-pecl-dbus/0001-php8-compat.patch
+@@ -0,0 +1,158 @@
++From 7fde4dd4d26d2a4b7957a1010c6ea9e4b940fc62 Mon Sep 17 00:00:00 2001
++From: Stefan Saraev <stefan@saraev.ca>
++Date: Mon, 18 Jan 2021 23:22:52 +0200
++Subject: [PATCH] php8 compat
 +
-+	  A reset reason is saved for power loss, CPU overload, or any
-+	  of the monitored conditions (above).	The full capabilities
-+	  are limited by the kernel watchdog driver, but even the basic
-+	  "softdog" driver is supported.  See /etc/watchdogd.conf for
-+	  details, and try watchdogctl for system status and available
-+	  commands.
++Upstream: https://github.com/derickr/pecl-dbus/pull/8
++Signed-off-by: Herve Codina <herve.codina@bootlin.com>
++---
++ dbus.c     | 55 ++++++++++++++++++++++++++++++------------------------
++ php_dbus.h | 10 ++++++++++
++ 2 files changed, 41 insertions(+), 24 deletions(-)
 +
-+	  https://github.com/troglobit/watchdogd/
++diff --git a/dbus.c b/dbus.c
++index 9fde647..a98e2ea 100644
++--- a/dbus.c
+++++ b/dbus.c
++@@ -38,6 +38,9 @@
++ #define Z_ADDREF_P(z) ((z)->refcount++)
++ #endif
++ 
+++ZEND_BEGIN_ARG_INFO_EX(arginfo_void, 0, 0, 0)
+++ZEND_END_ARG_INFO()
+++
++ /* {{{ arginfo */
++ ZEND_BEGIN_ARG_INFO_EX(arginfo_dbus_object___call, 0, 0, 2)
++ 	ZEND_ARG_INFO(0, function_name)
++@@ -46,44 +49,44 @@ ZEND_END_ARG_INFO()
++ /* }}} */
++ 
++ const zend_function_entry dbus_funcs_dbus[] = {
++-	PHP_ME(Dbus, __construct, NULL, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
++-	PHP_ME(Dbus, addWatch,    NULL, ZEND_ACC_PUBLIC)
++-	PHP_ME(Dbus, waitLoop,    NULL, ZEND_ACC_PUBLIC)
++-	PHP_ME(Dbus, requestName, NULL, ZEND_ACC_PUBLIC)
++-	PHP_ME(Dbus, registerObject, NULL, ZEND_ACC_PUBLIC)
++-	PHP_ME(Dbus, createProxy, NULL, ZEND_ACC_PUBLIC)
+++	PHP_ME(Dbus, __construct, arginfo_void, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
+++	PHP_ME(Dbus, addWatch,    arginfo_void, ZEND_ACC_PUBLIC)
+++	PHP_ME(Dbus, waitLoop,    arginfo_void, ZEND_ACC_PUBLIC)
+++	PHP_ME(Dbus, requestName, arginfo_void, ZEND_ACC_PUBLIC)
+++	PHP_ME(Dbus, registerObject, arginfo_void, ZEND_ACC_PUBLIC)
+++	PHP_ME(Dbus, createProxy, arginfo_void, ZEND_ACC_PUBLIC)
++ 	PHP_FE_END
++ };
++ 
++ const zend_function_entry dbus_funcs_dbus_object[] = {
++-	PHP_ME(DbusObject, __construct, NULL, ZEND_ACC_CTOR|ZEND_ACC_PRIVATE)
+++	PHP_ME(DbusObject, __construct, arginfo_void, ZEND_ACC_CTOR|ZEND_ACC_PRIVATE)
++ 	PHP_ME(DbusObject, __call,      arginfo_dbus_object___call, ZEND_ACC_PUBLIC)
++ 	PHP_FE_END
++ };
++ 
++ const zend_function_entry dbus_funcs_dbus_signal[] = {
++-	PHP_ME(DbusSignal, __construct, NULL, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
++-	PHP_ME(DbusSignal, matches,     NULL, ZEND_ACC_PUBLIC)
++-	PHP_ME(DbusSignal, getData,     NULL, ZEND_ACC_PUBLIC)
++-	PHP_ME(DbusSignal, send,        NULL, ZEND_ACC_PUBLIC)
+++	PHP_ME(DbusSignal, __construct, arginfo_void, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
+++	PHP_ME(DbusSignal, matches,     arginfo_void, ZEND_ACC_PUBLIC)
+++	PHP_ME(DbusSignal, getData,     arginfo_void, ZEND_ACC_PUBLIC)
+++	PHP_ME(DbusSignal, send,        arginfo_void, ZEND_ACC_PUBLIC)
++ 	PHP_FE_END
++ };
++ 
++ const zend_function_entry dbus_funcs_dbus_array[] = {
++-	PHP_ME(DbusArray, __construct, NULL, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
++-	PHP_ME(DbusArray, getData,     NULL, ZEND_ACC_PUBLIC)
+++	PHP_ME(DbusArray, __construct, arginfo_void, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
+++	PHP_ME(DbusArray, getData,     arginfo_void, ZEND_ACC_PUBLIC)
++ 	PHP_FE_END
++ };
++ 
++ const zend_function_entry dbus_funcs_dbus_dict[] = {
++-	PHP_ME(DbusDict, __construct, NULL, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
++-	PHP_ME(DbusDict, getData,     NULL, ZEND_ACC_PUBLIC)
+++	PHP_ME(DbusDict, __construct, arginfo_void, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
+++	PHP_ME(DbusDict, getData,     arginfo_void, ZEND_ACC_PUBLIC)
++ 	PHP_FE_END
++ };
++ 
++ #define PHP_DBUS_INT_WRAPPER_DEF(s,t) \
++ 	const zend_function_entry dbus_funcs_dbus_##s[] = { \
++-		PHP_ME(Dbus##t, __construct, NULL, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC) \
+++		PHP_ME(Dbus##t, __construct, arginfo_void, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC) \
++ 		PHP_FE_END \
++ 	};
++ 
++@@ -98,26 +101,26 @@ PHP_DBUS_INT_WRAPPER_DEF(uint64,UInt64);
++ PHP_DBUS_INT_WRAPPER_DEF(double, Double);
++ 
++ const zend_function_entry dbus_funcs_dbus_variant[] = {
++-	PHP_ME(DbusVariant, __construct, NULL, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
++-	PHP_ME(DbusVariant, getData,     NULL, ZEND_ACC_PUBLIC)
+++	PHP_ME(DbusVariant, __construct, arginfo_void, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
+++	PHP_ME(DbusVariant, getData,     arginfo_void, ZEND_ACC_PUBLIC)
++ 	PHP_FE_END
++ };
++ 
++ const zend_function_entry dbus_funcs_dbus_set[] = {
++-	PHP_ME(DbusSet, __construct, NULL, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
++-	PHP_ME(DbusSet, getData,     NULL, ZEND_ACC_PUBLIC)
+++	PHP_ME(DbusSet, __construct, arginfo_void, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
+++	PHP_ME(DbusSet, getData,     arginfo_void, ZEND_ACC_PUBLIC)
++ 	PHP_FE_END
++ };
++ 
++ const zend_function_entry dbus_funcs_dbus_struct[] = {
++-	PHP_ME(DbusStruct, __construct, NULL, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
++-	PHP_ME(DbusStruct, getData,     NULL, ZEND_ACC_PUBLIC)
+++	PHP_ME(DbusStruct, __construct, arginfo_void, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
+++	PHP_ME(DbusStruct, getData,     arginfo_void, ZEND_ACC_PUBLIC)
++ 	PHP_FE_END
++ };
++ 
++ const zend_function_entry dbus_funcs_dbus_object_path[] = {
++-	PHP_ME(DbusObjectPath, __construct, NULL, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
++-	PHP_ME(DbusObjectPath, getData,     NULL, ZEND_ACC_PUBLIC)
+++	PHP_ME(DbusObjectPath, __construct, arginfo_void, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
+++	PHP_ME(DbusObjectPath, getData,     arginfo_void, ZEND_ACC_PUBLIC)
++ 	PHP_FE_END
++ };
++ 
++@@ -405,7 +408,11 @@ static void dbus_register_classes(TSRMLS_D)
++ 	dbus_ce_dbus = zend_register_internal_class_ex(&ce_dbus, NULL);
++ 	memcpy(&dbus_object_handlers_dbus, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
++ 	dbus_object_handlers_dbus.clone_obj = dbus_object_clone_dbus;
+++#if PHP_VERSION_ID < 80000
++ 	dbus_object_handlers_dbus.compare_objects = dbus_object_compare_dbus;
+++#else
+++	dbus_object_handlers_dbus.compare = dbus_object_compare_dbus;
+++#endif
++ 
++ 	zend_declare_class_constant_long(dbus_ce_dbus, "BYTE", sizeof("BYTE")-1, DBUS_TYPE_BYTE TSRMLS_CC);
++ 	zend_declare_class_constant_long(dbus_ce_dbus, "BOOLEAN", sizeof("BOOLEAN")-1, DBUS_TYPE_BOOLEAN TSRMLS_CC);
++diff --git a/php_dbus.h b/php_dbus.h
++index 8817544..1f0f551 100644
++--- a/php_dbus.h
+++++ b/php_dbus.h
++@@ -25,6 +25,16 @@
++ #include "config.h"
++ #endif
++ 
+++#if PHP_VERSION_ID >= 80000
+++#ifndef TSRMLS_D
+++#define TSRMLS_D void
+++#define TSRMLS_DC
+++#define TSRMLS_C
+++#define TSRMLS_CC
+++#define TSRMLS_FETCH()
+++#endif
+++#endif /* PHP_VERSION_ID >= 80000 */
+++
++ #include "Zend/zend_hash.h"
++ 
++ #define PHP_DBUS_VERSION "0.2.0"
++-- 
++2.31.1
 +
-+if BR2_PACKAGE_WATCHDOGD
-+
-+config BR2_PACKAGE_WATCHDOGD_TEST_SUITE
-+	bool "Enable watchdogctl test cases"
-+	help
-+	  The watchdogctl program comes with a suite of tests built-in.
-+	  They can be used to verify correct operation of watchdogd and
-+	  the kernel watchdog driver.
-+
-+config BR2_PACKAGE_WATCHDOGD_GENERIC_POLL
-+	int "Generic script monitor poll interval (sec)"
-+	default "300"
-+	help
-+	  Poll interval for generic script monitor, in seconds.  A value
-+	  of zero (0) disables the monitor.
-+
-+config BR2_PACKAGE_WATCHDOGD_LOADAVG_POLL
-+	int "CPU load average monitor poll interval (sec)"
-+	default "300"
-+	help
-+	  Poll interval for CPU load average monitor, in seconds.  A
-+	  value of zero (0) disables the monitor.
-+
-+config BR2_PACKAGE_WATCHDOGD_FILENR_POLL
-+	int "File descriptor leak monitor poll interval (sec)"
-+	default "300"
-+	help
-+	  Poll interval for file descriptor leak monitor, in seconds.  A
-+	  value of zero (0) disables the monitor.
-+
-+config BR2_PACKAGE_WATCHDOGD_MEMINFO_POLL
-+	int "Memory leak monitor poll interval (sec)"
-+	default "300"
-+	help
-+	  Poll interval for memory leak monitor, in seconds.  A value of
-+	  zero (0) disables the monitor.
-+
-+endif
-diff --git a/package/watchdogd/S01watchdogd b/package/watchdogd/S01watchdogd
-new file mode 100755
-index 0000000000..df57b8ad7a
---- /dev/null
-+++ b/package/watchdogd/S01watchdogd
-@@ -0,0 +1,47 @@
-+#!/bin/sh
-+
-+DAEMON="watchdogd"
-+PIDFILE="/var/run/$DAEMON.pid"
-+
-+# shellcheck source=/dev/null
-+[ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
-+
-+cmd()
-+{
-+    start-stop-daemon -q -p "$PIDFILE" -x "/usr/sbin/$DAEMON" "$@"
-+    status=$?
-+    if [ $status -eq 0 ]; then
-+	echo "OK"
-+    else
-+	echo "FAIL"
-+    fi
-+    return $status
-+}
-+
-+case "$1" in
-+    start)
-+	printf 'Starting %s: ' "$DAEMON"
-+	# shellcheck disable=SC2086 # we need the word splitting
-+	cmd -S -- $SMCROUTED_ARGS
-+	;;
-+
-+    stop)
-+	printf 'Stopping %s: ' "$DAEMON"
-+	cmd -K
-+	;;
-+
-+    restart)
-+	$0 stop
-+	sleep 1
-+	$0 start
-+	;;
-+
-+    reload)
-+	printf 'Reloading %s: ' "$DAEMON"
-+	cmd -K -s HUP
-+	;;
-+
-+    *)
-+	echo "Usage: $0 {start|stop|restart|reload}"
-+	exit 1
-+esac
-diff --git a/package/watchdogd/watchdogd.hash b/package/watchdogd/watchdogd.hash
+diff --git a/package/php-pecl-dbus/0002-Fix-compatibility-with-php8-call_user_function_ex.patch b/package/php-pecl-dbus/0002-Fix-compatibility-with-php8-call_user_function_ex.patch
 new file mode 100644
-index 0000000000..7c1acf0820
+index 0000000000..5babce94b4
 --- /dev/null
-+++ b/package/watchdogd/watchdogd.hash
-@@ -0,0 +1,5 @@
-+# Upstream .sha256 from GitHub
-+sha256 f36fdea9b323534a704c4c23d9af8050480bca4bdad89cdb50d26fcac316d172  watchdogd-3.4.tar.gz
++++ b/package/php-pecl-dbus/0002-Fix-compatibility-with-php8-call_user_function_ex.patch
+@@ -0,0 +1,32 @@
++From 8cf66c4b5dd657ca14552b27a42901db0a5e9280 Mon Sep 17 00:00:00 2001
++From: Herve Codina <herve.codina@bootlin.com>
++Date: Mon, 4 Oct 2021 17:13:45 +0200
++Subject: [PATCH] Fix compatibility with php8 - call_user_function_ex
 +
-+# Locally calculated
-+sha256 fd685e20931174308c45a26418a7ce34d66704c4e4b92ab1d8299deb255cd676  LICENSE
-diff --git a/package/watchdogd/watchdogd.mk b/package/watchdogd/watchdogd.mk
++This patch fixes compatibility with php8 replacing
++call_user_function_ex by call_user_function.
++
++Upstream: https://github.com/derickr/pecl-dbus/pull/8
++Signed-off-by: Herve Codina <herve.codina@bootlin.com>
++---
++ dbus.c | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/dbus.c b/dbus.c
++index a98e2ea..6fa9897 100644
++--- a/dbus.c
+++++ b/dbus.c
++@@ -1015,8 +1015,8 @@ php_dbus_do_method_call(php_dbus_obj *dbus,
++ 		method_args = safe_emalloc(sizeof(zval *), num_elems, 0);
++ 	}
++ 
++-	if (call_user_function_ex(EG(function_table), object, &callback, &retval,
++-				              num_elems, method_args, 0, NULL) == SUCCESS) {
+++	if (call_user_function(EG(function_table), object, &callback, &retval,
+++				              num_elems, method_args) == SUCCESS) {
++ 		if (!Z_ISUNDEF(retval)) {
++ 			reply = dbus_message_new_method_return(msg);
++ 			php_dbus_append_parameters(reply, &retval, NULL,
++-- 
++2.31.1
++
+diff --git a/package/php-pecl-dbus/Config.in b/package/php-pecl-dbus/Config.in
 new file mode 100644
-index 0000000000..34b17aa169
+index 0000000000..56c70143a5
 --- /dev/null
-+++ b/package/watchdogd/watchdogd.mk
-@@ -0,0 +1,55 @@
++++ b/package/php-pecl-dbus/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_PHP_PECL_DBUS
++	bool "php-pecl-dbus"
++	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
++	depends on BR2_USE_MMU # dbus
++	select BR2_PACKAGE_DBUS
++	select BR2_PACKAGE_LIBXML2
++	select BR2_PACKAGE_PHP_EXT_LIBXML2 # Runtime dependency
++	help
++	  PHP extension for interaction with D-Bus busses.
++
++	  https://github.com/derickr/pecl-dbus
++
++comment "php-pecl-dbus needs a toolchain w/ threads"
++	depends on BR2_USE_MMU
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/php-pecl-dbus/php-pecl-dbus.hash b/package/php-pecl-dbus/php-pecl-dbus.hash
+new file mode 100644
+index 0000000000..f8c5aa5037
+--- /dev/null
++++ b/package/php-pecl-dbus/php-pecl-dbus.hash
+@@ -0,0 +1,3 @@
++# Locally calculated:
++sha256 c48761c645c6fa42b57af0e65d893217dc69bcd8d879ace74d6abbf1c5f73a8f  php-pecl-dbus-315d17558c7614d02e923d898231e51c86a25789.tar.gz
++sha256 ecc8b74820c32fb82ddee80446205408585d75d1632ac959fb3cdf8eaf3877b5  LICENSE
+diff --git a/package/php-pecl-dbus/php-pecl-dbus.mk b/package/php-pecl-dbus/php-pecl-dbus.mk
+new file mode 100644
+index 0000000000..456d662554
+--- /dev/null
++++ b/package/php-pecl-dbus/php-pecl-dbus.mk
+@@ -0,0 +1,24 @@
 +################################################################################
 +#
-+# watchdogd
++# php-pecl-dbus
 +#
 +################################################################################
 +
-+WATCHDOGD_VERSION = 3.4
-+WATCHDOGD_SITE = https://github.com/troglobit/watchdogd/releases/download/$(WATCHDOGD_VERSION)
-+WATCHDOGD_LICENSE = ISC
-+WATCHDOGD_LICENSE_FILES = LICENSE
-+WATCHDOGD_CPE_ID_VENDOR = troglobit
-+WATCHDOGD_DEPENDENCIES = host-pkgconf libconfuse libite libuev
-+WATCHDOGD_CONF_OPTS = --disable-compat --disable-examples --disable-test-mode
++PHP_PECL_DBUS_VERSION = 315d17558c7614d02e923d898231e51c86a25789
++PHP_PECL_DBUS_SITE = $(call github,derickr,pecl-dbus,$(PHP_PECL_DBUS_VERSION))
++PHP_PECL_DBUS_LICENSE = PHP-3.01
++PHP_PECL_DBUS_LICENSE_FILES = LICENSE
++PHP_PECL_DBUS_DEPENDENCIES = php dbus libxml2 host-autoconf host-pkgconf
 +
-+ifneq ($(BR2_PACKAGE_WATCHDOGD_TEST_SUITE),y)
-+WATCHDOGD_CONF_OPTS += --disable-builtin-tests
-+else
-+WATCHDOGD_CONF_OPTS += --enable-builtin-tests
-+endif
++PHP_PECL_DBUS_CONF_OPTS = \
++	--with-php-config=$(STAGING_DIR)/usr/bin/php-config
 +
-+ifeq ($(BR2_PACKAGE_WATCHDOGD_GENERIC_POLL),0)
-+WATCHDOGD_CONF_OPTS += --without-generic
-+else
-+WATCHDOGD_CONF_OPTS += --with-generic=$(BR2_PACKAGE_WATCHDOGD_GENERIC_POLL)
-+endif
-+
-+ifeq ($(BR2_PACKAGE_WATCHDOGD_LOADAVG_POLL),0)
-+WATCHDOGD_CONF_OPTS += --without-loadavg
-+else
-+WATCHDOGD_CONF_OPTS += --with-loadavg=$(BR2_PACKAGE_WATCHDOGD_LOADAVG_POLL)
-+endif
-+
-+ifeq ($(BR2_PACKAGE_WATCHDOGD_FILENR_POLL),0)
-+WATCHDOGD_CONF_OPTS += --without-filenr
-+else
-+WATCHDOGD_CONF_OPTS += --with-filenr=$(BR2_PACKAGE_WATCHDOGD_FILENR_POLL)
-+endif
-+
-+ifeq ($(BR2_PACKAGE_WATCHDOGD_MEMINFO_POLL),0)
-+WATCHDOGD_CONF_OPTS += --without-meminfo
-+else
-+WATCHDOGD_CONF_OPTS += --with-meminfo=$(BR2_PACKAGE_WATCHDOGD_MEMINFO_POLL)
-+endif
-+
-+define WATCHDOGD_INSTALL_INIT_SYSV
-+	$(INSTALL) -D -m 0755 package/watchdogd/S01watchdogd \
-+		$(TARGET_DIR)/etc/init.d/S01watchdogd
++define PHP_PECL_DBUS_PHPIZE
++	(cd $(@D); \
++		PHP_AUTOCONF=$(HOST_DIR)/usr/bin/autoconf \
++		PHP_AUTOHEADER=$(HOST_DIR)/usr/bin/autoheader \
++		$(STAGING_DIR)/usr/bin/phpize)
 +endef
-+
-+define WATCHDOGD_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 644 $(WATCHDOGD_SRCDIR)/watchdogd.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/watchdogd.service
-+endef
++PHP_PECL_DBUS_PRE_CONFIGURE_HOOKS += PHP_PECL_DBUS_PHPIZE
 +
 +$(eval $(autotools-package))
+diff --git a/support/testing/tests/package/test_php_pecl_dbus.py b/support/testing/tests/package/test_php_pecl_dbus.py
+new file mode 100644
+index 0000000000..65f34dfbb7
+--- /dev/null
++++ b/support/testing/tests/package/test_php_pecl_dbus.py
+@@ -0,0 +1,32 @@
++import os
++
++import infra.basetest
++
++
++class TestPhpPeclDbus(infra.basetest.BRTest):
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++        """
++        BR2_PACKAGE_PHP=y
++        BR2_PACKAGE_PHP_SAPI_CLI=y
++        BR2_PACKAGE_PHP_PECL_DBUS=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++
++    def test_run(self):
++        img = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv5",
++                           kernel="builtin",
++                           options=["-initrd", img])
++        self.emulator.login()
++
++        self.assertRunOk("mkdir /etc/php.d")
++        self.assertRunOk("echo 'extension=dbus.so'> /etc/php.d/dbus.ini")
++
++        output, exit_code = self.emulator.run("php --ri dbus | sed '/^$/d'")
++        self.assertEqual(exit_code, 0)
++        self.assertEqual(output[0], "dbus")
++        self.assertEqual(output[1], "Dbus support => enabled")
++        # Do not check the version value in order to avoid test failure when
++        # bumping package version
++        self.assertEqual(output[2][0:11], "Version => ")
+
+--===============5278473003594316374==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============5278473003594316374==--
