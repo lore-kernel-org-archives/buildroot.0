@@ -2,51 +2,94 @@ Return-Path: <SRS0=x9kH=PP=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A41BBC433F5
-	for <buildroot@archiver.kernel.org>; Wed, 27 Oct 2021 20:16:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D4E0C433EF
+	for <buildroot@archiver.kernel.org>; Wed, 27 Oct 2021 20:29:03 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 483E56103C
-	for <buildroot@archiver.kernel.org>; Wed, 27 Oct 2021 20:16:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 483E56103C
+	by mail.kernel.org (Postfix) with ESMTPS id 1C1CD60C40
+	for <buildroot@archiver.kernel.org>; Wed, 27 Oct 2021 20:29:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1C1CD60C40
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1E120607AF;
-	Wed, 27 Oct 2021 20:16:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E71C3605E9;
+	Wed, 27 Oct 2021 20:29:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oNHcw3PXwm5n; Wed, 27 Oct 2021 20:16:16 +0000 (UTC)
+	with ESMTP id 5iaLyeMjP-R8; Wed, 27 Oct 2021 20:29:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 09A2960B20;
-	Wed, 27 Oct 2021 20:16:15 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4CE9E1BF3D4
- for <buildroot@lists.busybox.net>; Wed, 27 Oct 2021 20:15:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 41A9D607AF;
+	Wed, 27 Oct 2021 20:29:01 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 6D06B1BF3EB
+ for <buildroot@lists.busybox.net>; Wed, 27 Oct 2021 20:28:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3C04760B23
- for <buildroot@lists.busybox.net>; Wed, 27 Oct 2021 20:15:49 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 69D2140219
+ for <buildroot@lists.busybox.net>; Wed, 27 Oct 2021 20:28:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jiiPg7BnH1k9 for <buildroot@lists.busybox.net>;
- Wed, 27 Oct 2021 20:15:48 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 09F3B60B20
- for <buildroot@buildroot.org>; Wed, 27 Oct 2021 20:15:48 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id B276A88FEE; Wed, 27 Oct 2021 20:12:22 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-To: buildroot@buildroot.org
-Date: Wed, 27 Oct 2021 22:10:38 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: eedbd6f97d51a0049ec512de26541465403ab06f
-X-Git-Newrev: 7f9ad0ed7fd87435cc5aaf58ae23ff7a5dc40b1d
-X-Patchwork-Hint: ignore
-Message-Id: <20211027201222.B276A88FEE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/php-pecl-dbus: new package
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zBqwW2wyszzF for <buildroot@lists.busybox.net>;
+ Wed, 27 Oct 2021 20:28:58 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com
+ [IPv6:2a00:1450:4864:20::52a])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 523BA40207
+ for <buildroot@buildroot.org>; Wed, 27 Oct 2021 20:28:58 +0000 (UTC)
+Received: by mail-ed1-x52a.google.com with SMTP id g10so15195742edj.1
+ for <buildroot@buildroot.org>; Wed, 27 Oct 2021 13:28:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=t2ujk/gqT6VClILc38ZN5PG8QLZwP7KYdqh2U2+f1tk=;
+ b=bGtnJrqFyxp+WKbXsfCFuWwLEWlVzJuuX4BjpsoigRHx6iHP2np3AVMeivwIDUn303
+ j3g1WRchBHTLHC5bnr60Ha9l4cyKWnthRH8L3m0M8AQf29/XU0YJOxQ9N75Efg5+8aea
+ 4D6emtW1RGx68byiAyomvn6CyZkgfiw9Zkt079teV2F4DjqWrZG0rqvGV/OdFNcQnJ2p
+ J0IJk4ZgL1mLbTvDJtuPVMOvwt+8Ag2EA4w4tFFsXE+IN9u10D5nQhLUuNFCbFNlDuSk
+ bSH0SjODwTv4ea19zm7TaVg5aXtZJbBSBxY4vPsRkOUohw2Vq5T8m475jKZds5daqb3V
+ FIgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=t2ujk/gqT6VClILc38ZN5PG8QLZwP7KYdqh2U2+f1tk=;
+ b=ppw8S8k04zD06Sy0Wat1Z6mDbhQ4b2Fx/mEzMzr4wl6CBf0GfcMHU5YaRH0Zbs0ZXF
+ QGLjphXLy2PEQ7Br1OML7tmEUpCj4a6kZZyqQHIIcfppJ+0jtIbn79/XSWD2lFffRWD7
+ 3CWtKGXbw+N4NlbnIk8flaaFaf0I0JxgCkb/R6JkoDkenU7UUbzsdDcbmybErYD83myH
+ iKxbjR/Tz/+mR2f/MABNLNfoHiev+hikjTA88urFhkDZdalblKst4/tL5oFXYOk+eCIL
+ am9t0Nm8MLUdCdQeVUJwrpcFnbdW4G4eU8z5yKWQsfY1D3PvSDdLo2MxVzKBlNW4U+/o
+ zt6A==
+X-Gm-Message-State: AOAM531yWzREPQ5MIXS/TR4ZogkAsqe3iozAPue11QvUIqnTpYOWqG6J
+ OkmrQN5rd4EPXyvwLYtl4KUIqw==
+X-Google-Smtp-Source: ABdhPJxiCZa/95WqqW96F2kviseZ23Cag+NLxGJZ7pHeTy4gYMUYmlIxjO72LAb1VsYE+8mKJk4jOw==
+X-Received: by 2002:a17:907:c0e:: with SMTP id
+ ga14mr31650097ejc.297.1635366536453; 
+ Wed, 27 Oct 2021 13:28:56 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id n1sm541349edf.45.2021.10.27.13.28.55
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 27 Oct 2021 13:28:56 -0700 (PDT)
+Message-ID: <e8298ff7-b2ef-0cfb-8039-3631fd3f612f@mind.be>
+Date: Wed, 27 Oct 2021 22:28:54 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Content-Language: en-GB
+To: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
+References: <20211025024233.2153770-1-james.hilliard1@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20211025024233.2153770-1-james.hilliard1@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/2] package/python-charset-normalizer: new
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,390 +101,94 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============5278473003594316374=="
+Cc: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Asaf Kahlon <asafka7@gmail.com>, Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5278473003594316374==
-Content-Type: text/plain
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7f9ad0ed7fd87435cc5aaf58ae23ff7a5dc40b1d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The php-pecl-dbus package provides a PHP extension for interaction
-with D-Bus busses.
+On 25/10/2021 04:42, James Hilliard wrote:
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>   package/Config.in                                  |  1 +
+>   package/python-charset-normalizer/Config.in        |  8 ++++++++
+>   .../python-charset-normalizer.hash                 |  5 +++++
+>   .../python-charset-normalizer.mk                   | 14 ++++++++++++++
+>   4 files changed, 28 insertions(+)
+>   create mode 100644 package/python-charset-normalizer/Config.in
+>   create mode 100644 package/python-charset-normalizer/python-charset-normalizer.hash
+>   create mode 100644 package/python-charset-normalizer/python-charset-normalizer.mk
 
-https://github.com/derickr/pecl-dbus
+  I've taken the liberty of adding this to your set in DEVELOPERS as well, and 
+applied both to master, thanks.
 
-Based on initial work from Nicolas Carrier <nicolas.carrier@orolia.com>
+  Regards,
+  Arnout
 
-Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- DEVELOPERS                                         |   6 +
- package/Config.in                                  |   1 +
- package/php-pecl-dbus/0001-php8-compat.patch       | 158 +++++++++++++++++++++
- ...atibility-with-php8-call_user_function_ex.patch |  32 +++++
- package/php-pecl-dbus/Config.in                    |  15 ++
- package/php-pecl-dbus/php-pecl-dbus.hash           |   3 +
- package/php-pecl-dbus/php-pecl-dbus.mk             |  24 ++++
- .../testing/tests/package/test_php_pecl_dbus.py    |  32 +++++
- 8 files changed, 271 insertions(+)
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 5869971058..d2320bc184 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1154,6 +1154,10 @@ F:	package/lua-augeas/
- F:	support/testing/tests/package/test_dtbocfg.py
- F:	support/testing/tests/package/test_lua_augeas.py
- 
-+N:	Hervé Codina <herve.codina@bootlin.com>
-+F:	package/php-pecl-dbus/
-+F:	support/testing/tests/package/test_php_pecl_dbus.py
-+
- N:	Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
- F:	package/gauche/
- F:	package/gmrender-resurrect/
-@@ -1996,6 +2000,7 @@ F:	package/bmap-tools/
- F:	package/libdbi/
- F:	package/libdbi-drivers/
- F:	package/lua-augeas/
-+F:	package/php-pecl-dbus/
- F:	package/php-xdebug/
- F:	package/python-augeas/
- F:	package/python-flask-expects-json/
-@@ -2006,6 +2011,7 @@ F:	support/testing/tests/package/sample_python_augeas.py
- F:	support/testing/tests/package/sample_python_flask_expects_json.py
- F:	support/testing/tests/package/sample_python_git.py
- F:	support/testing/tests/package/test_bmap_tools.py
-+F:	support/testing/tests/package/test_php_pecl_dbus.py
- F:	support/testing/tests/package/test_python_augeas.py
- F:	support/testing/tests/package/test_python_flask_expects_json.py
- F:	support/testing/tests/package/test_python_git.py
-diff --git a/package/Config.in b/package/Config.in
-index c153285bb1..5dd654a140 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -869,6 +869,7 @@ menu "External php extensions"
- 	source "package/php-gnupg/Config.in"
- 	source "package/php-imagick/Config.in"
- 	source "package/php-memcached/Config.in"
-+	source "package/php-pecl-dbus/Config.in"
- 	source "package/php-ssh2/Config.in"
- 	source "package/php-xdebug/Config.in"
- 	source "package/php-yaml/Config.in"
-diff --git a/package/php-pecl-dbus/0001-php8-compat.patch b/package/php-pecl-dbus/0001-php8-compat.patch
-new file mode 100644
-index 0000000000..acca6e1d49
---- /dev/null
-+++ b/package/php-pecl-dbus/0001-php8-compat.patch
-@@ -0,0 +1,158 @@
-+From 7fde4dd4d26d2a4b7957a1010c6ea9e4b940fc62 Mon Sep 17 00:00:00 2001
-+From: Stefan Saraev <stefan@saraev.ca>
-+Date: Mon, 18 Jan 2021 23:22:52 +0200
-+Subject: [PATCH] php8 compat
-+
-+Upstream: https://github.com/derickr/pecl-dbus/pull/8
-+Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-+---
-+ dbus.c     | 55 ++++++++++++++++++++++++++++++------------------------
-+ php_dbus.h | 10 ++++++++++
-+ 2 files changed, 41 insertions(+), 24 deletions(-)
-+
-+diff --git a/dbus.c b/dbus.c
-+index 9fde647..a98e2ea 100644
-+--- a/dbus.c
-++++ b/dbus.c
-+@@ -38,6 +38,9 @@
-+ #define Z_ADDREF_P(z) ((z)->refcount++)
-+ #endif
-+ 
-++ZEND_BEGIN_ARG_INFO_EX(arginfo_void, 0, 0, 0)
-++ZEND_END_ARG_INFO()
-++
-+ /* {{{ arginfo */
-+ ZEND_BEGIN_ARG_INFO_EX(arginfo_dbus_object___call, 0, 0, 2)
-+ 	ZEND_ARG_INFO(0, function_name)
-+@@ -46,44 +49,44 @@ ZEND_END_ARG_INFO()
-+ /* }}} */
-+ 
-+ const zend_function_entry dbus_funcs_dbus[] = {
-+-	PHP_ME(Dbus, __construct, NULL, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
-+-	PHP_ME(Dbus, addWatch,    NULL, ZEND_ACC_PUBLIC)
-+-	PHP_ME(Dbus, waitLoop,    NULL, ZEND_ACC_PUBLIC)
-+-	PHP_ME(Dbus, requestName, NULL, ZEND_ACC_PUBLIC)
-+-	PHP_ME(Dbus, registerObject, NULL, ZEND_ACC_PUBLIC)
-+-	PHP_ME(Dbus, createProxy, NULL, ZEND_ACC_PUBLIC)
-++	PHP_ME(Dbus, __construct, arginfo_void, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
-++	PHP_ME(Dbus, addWatch,    arginfo_void, ZEND_ACC_PUBLIC)
-++	PHP_ME(Dbus, waitLoop,    arginfo_void, ZEND_ACC_PUBLIC)
-++	PHP_ME(Dbus, requestName, arginfo_void, ZEND_ACC_PUBLIC)
-++	PHP_ME(Dbus, registerObject, arginfo_void, ZEND_ACC_PUBLIC)
-++	PHP_ME(Dbus, createProxy, arginfo_void, ZEND_ACC_PUBLIC)
-+ 	PHP_FE_END
-+ };
-+ 
-+ const zend_function_entry dbus_funcs_dbus_object[] = {
-+-	PHP_ME(DbusObject, __construct, NULL, ZEND_ACC_CTOR|ZEND_ACC_PRIVATE)
-++	PHP_ME(DbusObject, __construct, arginfo_void, ZEND_ACC_CTOR|ZEND_ACC_PRIVATE)
-+ 	PHP_ME(DbusObject, __call,      arginfo_dbus_object___call, ZEND_ACC_PUBLIC)
-+ 	PHP_FE_END
-+ };
-+ 
-+ const zend_function_entry dbus_funcs_dbus_signal[] = {
-+-	PHP_ME(DbusSignal, __construct, NULL, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
-+-	PHP_ME(DbusSignal, matches,     NULL, ZEND_ACC_PUBLIC)
-+-	PHP_ME(DbusSignal, getData,     NULL, ZEND_ACC_PUBLIC)
-+-	PHP_ME(DbusSignal, send,        NULL, ZEND_ACC_PUBLIC)
-++	PHP_ME(DbusSignal, __construct, arginfo_void, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
-++	PHP_ME(DbusSignal, matches,     arginfo_void, ZEND_ACC_PUBLIC)
-++	PHP_ME(DbusSignal, getData,     arginfo_void, ZEND_ACC_PUBLIC)
-++	PHP_ME(DbusSignal, send,        arginfo_void, ZEND_ACC_PUBLIC)
-+ 	PHP_FE_END
-+ };
-+ 
-+ const zend_function_entry dbus_funcs_dbus_array[] = {
-+-	PHP_ME(DbusArray, __construct, NULL, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
-+-	PHP_ME(DbusArray, getData,     NULL, ZEND_ACC_PUBLIC)
-++	PHP_ME(DbusArray, __construct, arginfo_void, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
-++	PHP_ME(DbusArray, getData,     arginfo_void, ZEND_ACC_PUBLIC)
-+ 	PHP_FE_END
-+ };
-+ 
-+ const zend_function_entry dbus_funcs_dbus_dict[] = {
-+-	PHP_ME(DbusDict, __construct, NULL, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
-+-	PHP_ME(DbusDict, getData,     NULL, ZEND_ACC_PUBLIC)
-++	PHP_ME(DbusDict, __construct, arginfo_void, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
-++	PHP_ME(DbusDict, getData,     arginfo_void, ZEND_ACC_PUBLIC)
-+ 	PHP_FE_END
-+ };
-+ 
-+ #define PHP_DBUS_INT_WRAPPER_DEF(s,t) \
-+ 	const zend_function_entry dbus_funcs_dbus_##s[] = { \
-+-		PHP_ME(Dbus##t, __construct, NULL, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC) \
-++		PHP_ME(Dbus##t, __construct, arginfo_void, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC) \
-+ 		PHP_FE_END \
-+ 	};
-+ 
-+@@ -98,26 +101,26 @@ PHP_DBUS_INT_WRAPPER_DEF(uint64,UInt64);
-+ PHP_DBUS_INT_WRAPPER_DEF(double, Double);
-+ 
-+ const zend_function_entry dbus_funcs_dbus_variant[] = {
-+-	PHP_ME(DbusVariant, __construct, NULL, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
-+-	PHP_ME(DbusVariant, getData,     NULL, ZEND_ACC_PUBLIC)
-++	PHP_ME(DbusVariant, __construct, arginfo_void, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
-++	PHP_ME(DbusVariant, getData,     arginfo_void, ZEND_ACC_PUBLIC)
-+ 	PHP_FE_END
-+ };
-+ 
-+ const zend_function_entry dbus_funcs_dbus_set[] = {
-+-	PHP_ME(DbusSet, __construct, NULL, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
-+-	PHP_ME(DbusSet, getData,     NULL, ZEND_ACC_PUBLIC)
-++	PHP_ME(DbusSet, __construct, arginfo_void, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
-++	PHP_ME(DbusSet, getData,     arginfo_void, ZEND_ACC_PUBLIC)
-+ 	PHP_FE_END
-+ };
-+ 
-+ const zend_function_entry dbus_funcs_dbus_struct[] = {
-+-	PHP_ME(DbusStruct, __construct, NULL, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
-+-	PHP_ME(DbusStruct, getData,     NULL, ZEND_ACC_PUBLIC)
-++	PHP_ME(DbusStruct, __construct, arginfo_void, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
-++	PHP_ME(DbusStruct, getData,     arginfo_void, ZEND_ACC_PUBLIC)
-+ 	PHP_FE_END
-+ };
-+ 
-+ const zend_function_entry dbus_funcs_dbus_object_path[] = {
-+-	PHP_ME(DbusObjectPath, __construct, NULL, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
-+-	PHP_ME(DbusObjectPath, getData,     NULL, ZEND_ACC_PUBLIC)
-++	PHP_ME(DbusObjectPath, __construct, arginfo_void, ZEND_ACC_CTOR|ZEND_ACC_PUBLIC)
-++	PHP_ME(DbusObjectPath, getData,     arginfo_void, ZEND_ACC_PUBLIC)
-+ 	PHP_FE_END
-+ };
-+ 
-+@@ -405,7 +408,11 @@ static void dbus_register_classes(TSRMLS_D)
-+ 	dbus_ce_dbus = zend_register_internal_class_ex(&ce_dbus, NULL);
-+ 	memcpy(&dbus_object_handlers_dbus, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
-+ 	dbus_object_handlers_dbus.clone_obj = dbus_object_clone_dbus;
-++#if PHP_VERSION_ID < 80000
-+ 	dbus_object_handlers_dbus.compare_objects = dbus_object_compare_dbus;
-++#else
-++	dbus_object_handlers_dbus.compare = dbus_object_compare_dbus;
-++#endif
-+ 
-+ 	zend_declare_class_constant_long(dbus_ce_dbus, "BYTE", sizeof("BYTE")-1, DBUS_TYPE_BYTE TSRMLS_CC);
-+ 	zend_declare_class_constant_long(dbus_ce_dbus, "BOOLEAN", sizeof("BOOLEAN")-1, DBUS_TYPE_BOOLEAN TSRMLS_CC);
-+diff --git a/php_dbus.h b/php_dbus.h
-+index 8817544..1f0f551 100644
-+--- a/php_dbus.h
-++++ b/php_dbus.h
-+@@ -25,6 +25,16 @@
-+ #include "config.h"
-+ #endif
-+ 
-++#if PHP_VERSION_ID >= 80000
-++#ifndef TSRMLS_D
-++#define TSRMLS_D void
-++#define TSRMLS_DC
-++#define TSRMLS_C
-++#define TSRMLS_CC
-++#define TSRMLS_FETCH()
-++#endif
-++#endif /* PHP_VERSION_ID >= 80000 */
-++
-+ #include "Zend/zend_hash.h"
-+ 
-+ #define PHP_DBUS_VERSION "0.2.0"
-+-- 
-+2.31.1
-+
-diff --git a/package/php-pecl-dbus/0002-Fix-compatibility-with-php8-call_user_function_ex.patch b/package/php-pecl-dbus/0002-Fix-compatibility-with-php8-call_user_function_ex.patch
-new file mode 100644
-index 0000000000..5babce94b4
---- /dev/null
-+++ b/package/php-pecl-dbus/0002-Fix-compatibility-with-php8-call_user_function_ex.patch
-@@ -0,0 +1,32 @@
-+From 8cf66c4b5dd657ca14552b27a42901db0a5e9280 Mon Sep 17 00:00:00 2001
-+From: Herve Codina <herve.codina@bootlin.com>
-+Date: Mon, 4 Oct 2021 17:13:45 +0200
-+Subject: [PATCH] Fix compatibility with php8 - call_user_function_ex
-+
-+This patch fixes compatibility with php8 replacing
-+call_user_function_ex by call_user_function.
-+
-+Upstream: https://github.com/derickr/pecl-dbus/pull/8
-+Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-+---
-+ dbus.c | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/dbus.c b/dbus.c
-+index a98e2ea..6fa9897 100644
-+--- a/dbus.c
-++++ b/dbus.c
-+@@ -1015,8 +1015,8 @@ php_dbus_do_method_call(php_dbus_obj *dbus,
-+ 		method_args = safe_emalloc(sizeof(zval *), num_elems, 0);
-+ 	}
-+ 
-+-	if (call_user_function_ex(EG(function_table), object, &callback, &retval,
-+-				              num_elems, method_args, 0, NULL) == SUCCESS) {
-++	if (call_user_function(EG(function_table), object, &callback, &retval,
-++				              num_elems, method_args) == SUCCESS) {
-+ 		if (!Z_ISUNDEF(retval)) {
-+ 			reply = dbus_message_new_method_return(msg);
-+ 			php_dbus_append_parameters(reply, &retval, NULL,
-+-- 
-+2.31.1
-+
-diff --git a/package/php-pecl-dbus/Config.in b/package/php-pecl-dbus/Config.in
-new file mode 100644
-index 0000000000..56c70143a5
---- /dev/null
-+++ b/package/php-pecl-dbus/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_PHP_PECL_DBUS
-+	bool "php-pecl-dbus"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
-+	depends on BR2_USE_MMU # dbus
-+	select BR2_PACKAGE_DBUS
-+	select BR2_PACKAGE_LIBXML2
-+	select BR2_PACKAGE_PHP_EXT_LIBXML2 # Runtime dependency
-+	help
-+	  PHP extension for interaction with D-Bus busses.
-+
-+	  https://github.com/derickr/pecl-dbus
-+
-+comment "php-pecl-dbus needs a toolchain w/ threads"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/php-pecl-dbus/php-pecl-dbus.hash b/package/php-pecl-dbus/php-pecl-dbus.hash
-new file mode 100644
-index 0000000000..f8c5aa5037
---- /dev/null
-+++ b/package/php-pecl-dbus/php-pecl-dbus.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated:
-+sha256 c48761c645c6fa42b57af0e65d893217dc69bcd8d879ace74d6abbf1c5f73a8f  php-pecl-dbus-315d17558c7614d02e923d898231e51c86a25789.tar.gz
-+sha256 ecc8b74820c32fb82ddee80446205408585d75d1632ac959fb3cdf8eaf3877b5  LICENSE
-diff --git a/package/php-pecl-dbus/php-pecl-dbus.mk b/package/php-pecl-dbus/php-pecl-dbus.mk
-new file mode 100644
-index 0000000000..456d662554
---- /dev/null
-+++ b/package/php-pecl-dbus/php-pecl-dbus.mk
-@@ -0,0 +1,24 @@
-+################################################################################
-+#
-+# php-pecl-dbus
-+#
-+################################################################################
-+
-+PHP_PECL_DBUS_VERSION = 315d17558c7614d02e923d898231e51c86a25789
-+PHP_PECL_DBUS_SITE = $(call github,derickr,pecl-dbus,$(PHP_PECL_DBUS_VERSION))
-+PHP_PECL_DBUS_LICENSE = PHP-3.01
-+PHP_PECL_DBUS_LICENSE_FILES = LICENSE
-+PHP_PECL_DBUS_DEPENDENCIES = php dbus libxml2 host-autoconf host-pkgconf
-+
-+PHP_PECL_DBUS_CONF_OPTS = \
-+	--with-php-config=$(STAGING_DIR)/usr/bin/php-config
-+
-+define PHP_PECL_DBUS_PHPIZE
-+	(cd $(@D); \
-+		PHP_AUTOCONF=$(HOST_DIR)/usr/bin/autoconf \
-+		PHP_AUTOHEADER=$(HOST_DIR)/usr/bin/autoheader \
-+		$(STAGING_DIR)/usr/bin/phpize)
-+endef
-+PHP_PECL_DBUS_PRE_CONFIGURE_HOOKS += PHP_PECL_DBUS_PHPIZE
-+
-+$(eval $(autotools-package))
-diff --git a/support/testing/tests/package/test_php_pecl_dbus.py b/support/testing/tests/package/test_php_pecl_dbus.py
-new file mode 100644
-index 0000000000..65f34dfbb7
---- /dev/null
-+++ b/support/testing/tests/package/test_php_pecl_dbus.py
-@@ -0,0 +1,32 @@
-+import os
-+
-+import infra.basetest
-+
-+
-+class TestPhpPeclDbus(infra.basetest.BRTest):
-+    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-+        """
-+        BR2_PACKAGE_PHP=y
-+        BR2_PACKAGE_PHP_SAPI_CLI=y
-+        BR2_PACKAGE_PHP_PECL_DBUS=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+
-+    def test_run(self):
-+        img = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(arch="armv5",
-+                           kernel="builtin",
-+                           options=["-initrd", img])
-+        self.emulator.login()
-+
-+        self.assertRunOk("mkdir /etc/php.d")
-+        self.assertRunOk("echo 'extension=dbus.so'> /etc/php.d/dbus.ini")
-+
-+        output, exit_code = self.emulator.run("php --ri dbus | sed '/^$/d'")
-+        self.assertEqual(exit_code, 0)
-+        self.assertEqual(output[0], "dbus")
-+        self.assertEqual(output[1], "Dbus support => enabled")
-+        # Do not check the version value in order to avoid test failure when
-+        # bumping package version
-+        self.assertEqual(output[2][0:11], "Version => ")
-
---===============5278473003594316374==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+> 
+> diff --git a/package/Config.in b/package/Config.in
+> index d40eb9dabc..e23feb49aa 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -950,6 +950,7 @@ menu "External python modules"
+>   	source "package/python-channels-redis/Config.in"
+>   	source "package/python-characteristic/Config.in"
+>   	source "package/python-chardet/Config.in"
+> +	source "package/python-charset-normalizer/Config.in"
+>   	source "package/python-cheetah/Config.in"
+>   	source "package/python-cheroot/Config.in"
+>   	source "package/python-cherrypy/Config.in"
+> diff --git a/package/python-charset-normalizer/Config.in b/package/python-charset-normalizer/Config.in
+> new file mode 100644
+> index 0000000000..c4c40fc99b
+> --- /dev/null
+> +++ b/package/python-charset-normalizer/Config.in
+> @@ -0,0 +1,8 @@
+> +config BR2_PACKAGE_PYTHON_CHARSET_NORMALIZER
+> +	bool "python-charset-normalizer"
+> +	depends on BR2_PACKAGE_PYTHON3
+> +	help
+> +	  The Real First Universal Charset Detector. Open, modern and
+> +	  actively maintained alternative to Chardet.
+> +
+> +	  https://github.com/ousret/charset_normalizer
+> diff --git a/package/python-charset-normalizer/python-charset-normalizer.hash b/package/python-charset-normalizer/python-charset-normalizer.hash
+> new file mode 100644
+> index 0000000000..f506fa85ed
+> --- /dev/null
+> +++ b/package/python-charset-normalizer/python-charset-normalizer.hash
+> @@ -0,0 +1,5 @@
+> +# md5, sha256 from https://pypi.org/pypi/charset-normalizer/json
+> +md5  b28e4463613ff3911d5a2dc62b96233f  charset-normalizer-2.0.7.tar.gz
+> +sha256  e019de665e2bcf9c2b64e2e5aa025fa991da8720daa3c1138cadd2fd1856aed0  charset-normalizer-2.0.7.tar.gz
+> +# Locally computed sha256 checksums
+> +sha256  eb31a0c5a4fb09b8a4e32055d25c1e5f9c358a2752fef3cd720213d1ccfee241  LICENSE
+> diff --git a/package/python-charset-normalizer/python-charset-normalizer.mk b/package/python-charset-normalizer/python-charset-normalizer.mk
+> new file mode 100644
+> index 0000000000..e1b805fbfb
+> --- /dev/null
+> +++ b/package/python-charset-normalizer/python-charset-normalizer.mk
+> @@ -0,0 +1,14 @@
+> +################################################################################
+> +#
+> +# python-charset-normalizer
+> +#
+> +################################################################################
+> +
+> +PYTHON_CHARSET_NORMALIZER_VERSION = 2.0.7
+> +PYTHON_CHARSET_NORMALIZER_SOURCE = charset-normalizer-$(PYTHON_CHARSET_NORMALIZER_VERSION).tar.gz
+> +PYTHON_CHARSET_NORMALIZER_SITE = https://files.pythonhosted.org/packages/9f/c5/334c019f92c26e59637bb42bd14a190428874b2b2de75a355da394cf16c1
+> +PYTHON_CHARSET_NORMALIZER_SETUP_TYPE = setuptools
+> +PYTHON_CHARSET_NORMALIZER_LICENSE = MIT
+> +PYTHON_CHARSET_NORMALIZER_LICENSE_FILES = LICENSE
+> +
+> +$(eval $(python-package))
+> 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5278473003594316374==--
