@@ -2,91 +2,94 @@ Return-Path: <SRS0=x9kH=PP=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E1AA9C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 27 Oct 2021 20:15:19 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 76DB4C433F5
+	for <buildroot@archiver.kernel.org>; Wed, 27 Oct 2021 20:15:38 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 5CFFF610A0
-	for <buildroot@archiver.kernel.org>; Wed, 27 Oct 2021 20:15:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5CFFF610A0
+	by mail.kernel.org (Postfix) with ESMTPS id 1E3BD610A6
+	for <buildroot@archiver.kernel.org>; Wed, 27 Oct 2021 20:15:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1E3BD610A6
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3412B80EDD;
-	Wed, 27 Oct 2021 20:15:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E19594058B;
+	Wed, 27 Oct 2021 20:15:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6kxvHJPzTzTL; Wed, 27 Oct 2021 20:15:18 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id nnSNix-pwUvq; Wed, 27 Oct 2021 20:15:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8D59880D13;
-	Wed, 27 Oct 2021 20:15:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 503944058A;
+	Wed, 27 Oct 2021 20:15:36 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2236B1BF3D4
- for <buildroot@lists.busybox.net>; Wed, 27 Oct 2021 20:15:16 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 806211BF3D4
+ for <buildroot@lists.busybox.net>; Wed, 27 Oct 2021 20:15:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1F6BB80D13
- for <buildroot@lists.busybox.net>; Wed, 27 Oct 2021 20:15:16 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 707F981D4F
+ for <buildroot@lists.busybox.net>; Wed, 27 Oct 2021 20:15:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id F-mqLopj0A-o for <buildroot@lists.busybox.net>;
- Wed, 27 Oct 2021 20:15:15 +0000 (UTC)
+ with ESMTP id pKUv4qTD40dQ for <buildroot@lists.busybox.net>;
+ Wed, 27 Oct 2021 20:15:34 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com
- [IPv6:2a00:1450:4864:20::52b])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3226480CF2
- for <buildroot@buildroot.org>; Wed, 27 Oct 2021 20:15:15 +0000 (UTC)
-Received: by mail-ed1-x52b.google.com with SMTP id w15so15321887edc.9
- for <buildroot@buildroot.org>; Wed, 27 Oct 2021 13:15:15 -0700 (PDT)
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com
+ [IPv6:2a00:1450:4864:20::535])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8727C80D13
+ for <buildroot@buildroot.org>; Wed, 27 Oct 2021 20:15:34 +0000 (UTC)
+Received: by mail-ed1-x535.google.com with SMTP id h7so15703945ede.8
+ for <buildroot@buildroot.org>; Wed, 27 Oct 2021 13:15:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=h1sIpvuQV+VrL6PBlU/RQto/si6+2Axhbh6Xoi95X+s=;
- b=Pr1pP14SC5qhFs4dszCMQjv3wYinq1N9d/spZEB4Pc8m5Hjf8azR/Ti8sdn/W17yEq
- mzCedUfMPBzlJr2UDJAlQecZh8yerhys1vWV6s2oHa7z9ndoruiUtB6rI1HLpozRV/GS
- tXzjLNF82IeddTTMO2/uvmd2yrZGhGYXZsUWFQdXCixdnGlrrkHgqNw81eacElZKfDbV
- SBh0FyFkFHf0aTsKKNl4LSSpO1/K/MWwKQkrEgyl8Y5cGBmPolp8tOX43gj+mATRiD29
- Io4UGYLnhmHEm5hsBSNGH+KZbToSpvKe0sdiZt1lRjLFkZa2q5/TH2e4DfdV7n8oXJGG
- ax+w==
+ bh=2jqI/taOL6wwu8e5TMbxBkm+I+3culLmogNF+dwe9n0=;
+ b=hgk3HD3yiAZO5DOB1MQCS1d2v3RjHyM8UgHzaam7b1qHCSdvX9IKJRIJaAq4Ua/Ig7
+ H8SOVYKfr3mJLGAPxqnHtr0SVKXbE2kXYW3fUt73K6fnWRfp5XkaKYsL5zEyBjZgajD8
+ 93IJa8YYBilb3HSgK9W89aqf378YyW8fqfwQPraihWfU3NxztsLdPw65aXYNiPQUN9yi
+ jKaq80ubqSlHoIbSQsjvUcng8xi2h65t+pwX2yajQ8Y+c9rsj1nhXbjvLxUP+X4Hj+Eg
+ Urthket+bcMoBE1D0wtO42eMiiyLhoYZ13dODi4b67HnRFHPK9GqFrKi2uIUfQmN3VZN
+ BUAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=h1sIpvuQV+VrL6PBlU/RQto/si6+2Axhbh6Xoi95X+s=;
- b=XUpBI+ZeEjQ30azXQv93JIgEMmYZYz+WZLgeJq1sWD7v9byFG5tpbMADV4BvuzhCNk
- fi0tuTau+J+VCiGsB3HMwhOK6iunyoSzBm2b2PWswCh9NjssmfHNXfY+v4oNziHxWX/E
- EN7EQb5FoI9ekr31pPTEsohVQurnQf39Zoz5aPTB5YdHxuxYP/FDC/c2YSf2pG4bc9KM
- TAz7Fm53WJEzgxewfrs1EYuW4yfisA59FRbdN5tUPyqiJ0lbv1WdPndwQMQkNnjuMKfU
- GGPSDnvFFyfFjLae4q/bikeULMze0CDEhXQ2LvWIBwkz3X+t6kU8lP636tCKcU4k9Hdq
- M2kQ==
-X-Gm-Message-State: AOAM531CPwE7gj+ZngeVvu5k64/7PmK6R+/CGn59sDL8TzJP5lAjlG7N
- wl1qORhtq6WdCyzDPds8/SYwtg==
-X-Google-Smtp-Source: ABdhPJwpq8GDOioTo3iAgMfFePlFGD6Cq3XLpTdrDk6YNjUYEqmUOLJ0RZLEMiYFgmiA4E+WiLVTUQ==
-X-Received: by 2002:a05:6402:5255:: with SMTP id
- t21mr46228649edd.103.1635365713424; 
- Wed, 27 Oct 2021 13:15:13 -0700 (PDT)
+ bh=2jqI/taOL6wwu8e5TMbxBkm+I+3culLmogNF+dwe9n0=;
+ b=J7ZG+3hk656cQk/hTS/K8kw1oba4oVuesr7TCOu6efCaO9sweUwMqb0GfDMmvUkRGU
+ 8sEGZiTnv40YcUuDxEtjdJ5GzG4R0TrxlCv4wxnxZdGq7Mwejl+4Po81JH/xFhKmNs6d
+ /TQ+ra9tkVoBXofGiIOKLoWu2Zx0ZIAkqe7Dlq08kratvLPzGapAxyP57HKpgehWa6Fj
+ m9MGFMshBei3vpzWI4GhdXSfPpnhVMKTtEidhBMKiFg+OToHtmpDzjy9tjVhbB0bW7WC
+ 4R4oofHN8etthWHv2XjP2mRnYVJIQ9YAB5R+dx82TyvFkJfHJa0TJ+UinhoRWgz3meua
+ uFHw==
+X-Gm-Message-State: AOAM533m5UJNZo+jYCYz8zUP3qePyr5aUXmig7UGO+mjQQ7Wn04xHYnM
+ 5CxlkvsnOZAv4dCaaIgIkgcfOlfT5ijq0A==
+X-Google-Smtp-Source: ABdhPJw+3zMCFMsDSnkmOoqhQezi7b8wpRNE9Vtwczi8MTJAHik2eiut2X2KrLrWF7+G8y+nG15qqQ==
+X-Received: by 2002:a17:906:9241:: with SMTP id
+ c1mr42972975ejx.125.1635365732817; 
+ Wed, 27 Oct 2021 13:15:32 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id p3sm426676ejy.94.2021.10.27.13.15.12
+ by smtp.gmail.com with ESMTPSA id hb12sm450396ejc.6.2021.10.27.13.15.31
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 27 Oct 2021 13:15:12 -0700 (PDT)
-Message-ID: <2cd7c47c-a4f5-686d-4936-f6f1bdf1fd71@mind.be>
-Date: Wed, 27 Oct 2021 22:15:11 +0200
+ Wed, 27 Oct 2021 13:15:32 -0700 (PDT)
+Message-ID: <661aa442-0d48-7a52-ca05-afebcfe605cc@mind.be>
+Date: Wed, 27 Oct 2021 22:15:31 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.2.0
 Content-Language: en-GB
-To: Herve Codina <herve.codina@bootlin.com>, buildroot@buildroot.org
-References: <20211011085449.285731-1-herve.codina@bootlin.com>
+To: Ismael Luceno <ismael@iodev.co.uk>, buildroot@buildroot.org
+References: <20211010191936.15090-1-ismael@iodev.co.uk>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20211011085449.285731-1-herve.codina@bootlin.com>
-Subject: Re: [Buildroot] [PATCH v2 1/1] package/php-pecl-dbus: new package
+In-Reply-To: <20211010191936.15090-1-ismael@iodev.co.uk>
+Subject: Re: [Buildroot] [RESEND PATCH] package/x11r7/xserver_xorg-server:
+ Add support for Xephyr
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,7 +101,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
@@ -107,46 +110,52 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 11/10/2021 10:54, Herve Codina wrote:
-> The php-pecl-dbus package provides a PHP extension for interaction
-> with D-Bus busses.
-> 
-> https://github.com/derickr/pecl-dbus
-> 
-> Based on initial work from Nicolas Carrier <nicolas.carrier@orolia.com>
-> 
-> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+On 10/10/2021 21:19, Ismael Luceno wrote:
+> Signed-off-by: Ismael Luceno <ismael@iodev.co.uk>
 
   Applied to master, thanks.
-
-[snip]
-> diff --git a/package/php-pecl-dbus/0001-php8-compat.patch b/package/php-pecl-dbus/0001-php8-compat.patch
-> new file mode 100644
-> index 0000000000..bef9a1fa05
-> --- /dev/null
-> +++ b/package/php-pecl-dbus/0001-php8-compat.patch
-> @@ -0,0 +1,161 @@
-> +From 7fde4dd4d26d2a4b7957a1010c6ea9e4b940fc62 Mon Sep 17 00:00:00 2001
-> +From: Stefan Saraev <stefan@saraev.ca>
-> +Date: Mon, 18 Jan 2021 23:22:52 +0200
-> +Subject: [PATCH] php8 compat
-> +
-> +This patch was retrieved from the pending upstream pull request
-> +done by Stefan Saraev.
-> +https://github.com/derickr/pecl-dbus/pull/8
-
-  That's a bit verbose, I replaced it with a simple:
-
-Upstream: https://github.com/derickr/pecl-dbus/pull/8
-
-  I also added that upstream reference to the other patch.
-
-
 
   Regards,
   Arnout
 
-[snip]
+> ---
+>   package/x11r7/xserver_xorg-server/Config.in              | 5 +++++
+>   package/x11r7/xserver_xorg-server/xserver_xorg-server.mk | 2 +-
+>   2 files changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
+> index 4dc15435a8aa..7f37f2f1acd4 100644
+> --- a/package/x11r7/xserver_xorg-server/Config.in
+> +++ b/package/x11r7/xserver_xorg-server/Config.in
+> @@ -82,4 +82,9 @@ config BR2_PACKAGE_XSERVER_XORG_SERVER_XVFB
+>   	help
+>   	  Virtual frame buffer X server.
+>   
+> +config BR2_PACKAGE_XSERVER_XORG_SERVER_XEPHYR
+> +	bool "Xephyr server"
+> +	help
+> +	  Xephyr nested X server; successor to Xnest.
+> +
+>   endif
+> diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+> index 2d276f90d56b..6d0876f1fdbe 100644
+> --- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+> +++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+> @@ -47,12 +47,12 @@ XSERVER_XORG_SERVER_CONF_OPTS = \
+>   	--disable-config-hal \
+>   	--enable-record \
+>   	--disable-xnest \
+> -	--disable-xephyr \
+>   	--disable-dmx \
+>   	--disable-unit-tests \
+>   	--with-builder-addr=buildroot@buildroot.org \
+>   	CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/pixman-1 -O2" \
+>   	--with-fontrootdir=/usr/share/fonts/X11/ \
+> +	--$(if $(BR2_PACKAGE_XSERVER_XORG_SERVER_XEPHYR),en,dis)able-xephyr \
+>   	--$(if $(BR2_PACKAGE_XSERVER_XORG_SERVER_XVFB),en,dis)able-xvfb
+>   
+>   ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+> 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
