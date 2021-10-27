@@ -2,84 +2,87 @@ Return-Path: <SRS0=x9kH=PP=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 07D29C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 27 Oct 2021 19:18:43 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B46B5C433EF
+	for <buildroot@archiver.kernel.org>; Wed, 27 Oct 2021 19:23:34 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 7E76E6103C
-	for <buildroot@archiver.kernel.org>; Wed, 27 Oct 2021 19:18:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7E76E6103C
+	by mail.kernel.org (Postfix) with ESMTPS id 75CDC60F5A
+	for <buildroot@archiver.kernel.org>; Wed, 27 Oct 2021 19:23:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 75CDC60F5A
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 247C580CBC;
-	Wed, 27 Oct 2021 19:18:42 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 242D440423;
+	Wed, 27 Oct 2021 19:23:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xDIk-F8P2eB5; Wed, 27 Oct 2021 19:18:40 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id HhxD-ZGBFy9A; Wed, 27 Oct 2021 19:23:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A7FEA80CAB;
-	Wed, 27 Oct 2021 19:18:39 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5E7AF4015E;
+	Wed, 27 Oct 2021 19:23:32 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2073F1BF333
- for <buildroot@lists.busybox.net>; Wed, 27 Oct 2021 19:18:38 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E67BA1BF333
+ for <buildroot@lists.busybox.net>; Wed, 27 Oct 2021 19:23:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0FC0A60612
- for <buildroot@lists.busybox.net>; Wed, 27 Oct 2021 19:18:38 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id CA9B76063B
+ for <buildroot@lists.busybox.net>; Wed, 27 Oct 2021 19:23:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp3.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id c65Z3nR-kCAh for <buildroot@lists.busybox.net>;
- Wed, 27 Oct 2021 19:18:36 +0000 (UTC)
+ with ESMTP id pbS52BLT8bjU for <buildroot@lists.busybox.net>;
+ Wed, 27 Oct 2021 19:23:30 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
- [IPv6:2a00:1450:4864:20::42f])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C06AA605E9
- for <buildroot@buildroot.org>; Wed, 27 Oct 2021 19:18:35 +0000 (UTC)
-Received: by mail-wr1-x42f.google.com with SMTP id k7so5848292wrd.13
- for <buildroot@buildroot.org>; Wed, 27 Oct 2021 12:18:35 -0700 (PDT)
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
+ [IPv6:2a00:1450:4864:20::32a])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E1936605EF
+ for <buildroot@buildroot.org>; Wed, 27 Oct 2021 19:23:29 +0000 (UTC)
+Received: by mail-wm1-x32a.google.com with SMTP id
+ y205-20020a1c7dd6000000b0032cc8c2800fso6289976wmc.4
+ for <buildroot@buildroot.org>; Wed, 27 Oct 2021 12:23:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=uZJH4ws+bLq7QYHN46dgzWq0Oc44r2zpmA3HWvjWfZk=;
- b=hQIaRwJEExmVth9E3Vq/Rz217lZMg1SYL8y8+SbXjOCsqXGSjXATk+773DAHm74Y1X
- u7pIZUgqwhEjXSnxMJ01sQ/bcnsbpJhm9XzqLmF+OIVDkN2Qzjfp63FY5ZvqD/wJwbYu
- aJ0xGtl0v4dVx5tgWdVBiMLyB4lnqCagYEnjV2l6PzyaFC2zQfE6kzGkio/3SCv8FyM9
- Gw8ECXOtXKC61qux2FSjy9ZNiB/ldizwkPGfEolfqAZT0zqNjaaeo8Ta4MjXYqwes5xU
- YEH5/pO8oSRUgNheq1yDFUcEogW7eA9pCrk1bbtMpT7HtDYVrTC1TSIzey5hMVer0w4u
- tINA==
+ bh=5yOUdo/TW95lknRFoPaQFw7qnI8nIPsImEdjJHeXf/4=;
+ b=bczqrs0J3vDHYkl6LuVtKp+jwNq8pcJQ4zlALrAtiyfvSfwqO54R3Eybxmvp/DkJbN
+ 8z8V5qfytPj+drOXnPAJXijL8Yw8DEmrUg/+pqPzdeylc3oSxfHcqN56tTgZH4trfMnv
+ ZnojGe9WLI6O3BqLt8bV11TvlQT88vgwmH/xO8auJzskZo3ghnHAenOyAusl+8D51HxD
+ h/XI+P8Z/oSFNXySSFxS4tLqKN2T3Rtn3W+TXgTvgKjh51TX+WNjtEYoDEcuABiSDuv3
+ NCHbUim4swkN4t/Zbx8fduWANOHmF9vC3deHazFtvQcy7ZR5p8bFSzbHgFzymrlyN/Qd
+ eu2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=uZJH4ws+bLq7QYHN46dgzWq0Oc44r2zpmA3HWvjWfZk=;
- b=LKuuux2+rxdQWu3e1j2s14XKG9Z5U042UguiRzH1JskAzj6JvXkPuvNoOTDAN532o4
- UIScwOciYKQmx+u1Rnm9u+ANpdS6Pba/0qCXwaGxZQuvqOUMC+FNAJx+MPKd/lWdZZPz
- DgJS1hd8KyRN9afEJooOYNfZi8ScwQzX9OPImLm1sm2YkNEFOe1hJfqzX66wHDDOMhz3
- eE1AFySttXh0P7rSP66rPrBHsYXJxan5UHE99atT3a5LrHDmcE+of06/dsiPEO28j3sh
- srP3xU8F/0MK4SgQD71U6CKxOxtD60pQW1VxSm2WH0mlTYNh9QuyUzxAhu5x425cSbXp
- /MIQ==
-X-Gm-Message-State: AOAM532BpHbl4QN74ZXvZdgJXup/TY08CK+qSNITf3Ig3d3W6U8pUNCG
- Fw8tDi3OuJH9fNQcHp8XOvINcTQZYPc=
-X-Google-Smtp-Source: ABdhPJz2bxpPTNLNKB1QMoxr4oPm28Orh3VuKQMLDUat6ha1799+XiCMkT8lykA4kbKOq5SAUVaaKg==
-X-Received: by 2002:adf:c00d:: with SMTP id z13mr41804490wre.299.1635362313340; 
- Wed, 27 Oct 2021 12:18:33 -0700 (PDT)
+ bh=5yOUdo/TW95lknRFoPaQFw7qnI8nIPsImEdjJHeXf/4=;
+ b=hg8gS7w7zKbhJzsWqcR9pgP5HUSe0ZFkOt6b8baNIgiZNgBrwb2skoatM/vD3zB2M+
+ F9tftOTM+lJhqkD3LTyTyIrGxf40vs+I1WFsQHVugQktHsSNNqZIGko/3IeDVc7w7XID
+ Grtd5SCPKeGhVEo0IMdxnj4SYbFVHuqly81u5OkUj25hey2k1QZxGRoBeyKdVhXAw1EP
+ 2TKee5tP1VNISE6h3CiRKjPxfpXclHZkWpYsMLeB4/xeZ7KYwvm1/r0WzfSu+QzPk1aO
+ 6w+MjuEBWU7Mg0hOxyOPfcia9vLXQArMQEVqcxRE1RYD50hhs/lXc8XPOEFR1iFMh7Eb
+ qKsQ==
+X-Gm-Message-State: AOAM532VY2df7KrQQPRmjqDMGPbUITcsXrZtq9UtH9duF0t6E9hXamoJ
+ YlaRu2o2qOPAxLgphAKXB+Tmq6yutmU=
+X-Google-Smtp-Source: ABdhPJx2GKK/w5c3ep8M9A/51PNYSnBFwamK7Dcuk887fefVt3ze1VTTECjWuei4ydDCuSLKmfqpLA==
+X-Received: by 2002:a05:600c:5117:: with SMTP id
+ o23mr7548860wms.81.1635362607915; 
+ Wed, 27 Oct 2021 12:23:27 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-1732-95.w86-253.abo.wanadoo.fr.
  [86.253.44.95])
- by smtp.gmail.com with ESMTPSA id n15sm5630707wmq.3.2021.10.27.12.18.32
+ by smtp.gmail.com with ESMTPSA id c7sm742966wrp.51.2021.10.27.12.23.27
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 27 Oct 2021 12:18:33 -0700 (PDT)
+ Wed, 27 Oct 2021 12:23:27 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 27 Oct 2021 21:16:59 +0200
-Message-Id: <20211027191659.414739-1-fontaine.fabrice@gmail.com>
+Date: Wed, 27 Oct 2021 21:21:53 +0200
+Message-Id: <20211027192153.415049-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/dhcpcd: bump to version 9.4.1
+Subject: [Buildroot] [PATCH 1/1] package/rpi-firmware: fix
+ BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI_X
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,605 +94,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: John Stile <johns@msli.com>, Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Martin Bark <martin@barkynet.com>,
+ Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- Drop all patches (already in version)
-- Update hash of LICENSE file (update in year:
-  https://github.com/NetworkConfiguration/dhcpcd/commit/5ab0a4e2abc49448f1a7b10de86c6f4acb51d53d)
+Fix the following build failure raised since the rework of boot/config
+file handling in commit 689b9ac439ab7b507c8982b6102bddf59d03efbf (fix
+made in b8c8fcee7a38558a7247ef772ac9d93ff87bd943 was incomplete):
 
-https://roy.marples.name/projects/posts/dhcpcd-9-4-1_released
+/usr/bin/install: cannot stat '/home/buildroot/autobuild/instance-0/output-1/build/rpi-firmware-2ef3800b1b71c0e30c2a61ecad6e007ae96ea342/boot/fixupx.dat': No such file or directory
+
+Fixes:
+ - http://autobuild.buildroot.org/results/c91224af44327a301f87f239a73721173b81ce16
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...sep-linux.c-add-support-for-nds32-21.patch | 45 --------------
- ...ep-linux.c-add-support-for-xtensa-22.patch | 42 -------------
- ...inux-Add-support-for-NDS32BE-SECCOMP.patch | 31 ----------
- package/dhcpcd/0004-Typo-with-prior.patch     | 27 --------
- ...sep-linux.c-add-support-for-nios2-23.patch | 42 -------------
- ...inux.c-add-support-for-microblaze-24.patch | 42 -------------
- ...rivsep-linux.c-add-support-for-sh-25.patch | 54 ----------------
- ...-privsep-linux-fix-build-on-sparc-26.patch | 45 --------------
- ...vsep-linux.c-add-support-for-or1k-27.patch | 41 ------------
- ...ivsep-linux.c-add-support-for-arc-28.patch | 62 -------------------
- ...privsep-linux.c-add-support-for-m68k.patch | 37 -----------
- package/dhcpcd/dhcpcd.hash                    |  6 +-
- package/dhcpcd/dhcpcd.mk                      |  2 +-
- 13 files changed, 4 insertions(+), 472 deletions(-)
- delete mode 100644 package/dhcpcd/0001-src-privsep-linux.c-add-support-for-nds32-21.patch
- delete mode 100644 package/dhcpcd/0002-src-privsep-linux.c-add-support-for-xtensa-22.patch
- delete mode 100644 package/dhcpcd/0003-Linux-Add-support-for-NDS32BE-SECCOMP.patch
- delete mode 100644 package/dhcpcd/0004-Typo-with-prior.patch
- delete mode 100644 package/dhcpcd/0005-src-privsep-linux.c-add-support-for-nios2-23.patch
- delete mode 100644 package/dhcpcd/0006-src-privsep-linux.c-add-support-for-microblaze-24.patch
- delete mode 100644 package/dhcpcd/0007-src-privsep-linux.c-add-support-for-sh-25.patch
- delete mode 100644 package/dhcpcd/0008-src-privsep-linux-fix-build-on-sparc-26.patch
- delete mode 100644 package/dhcpcd/0009-src-privsep-linux.c-add-support-for-or1k-27.patch
- delete mode 100644 package/dhcpcd/0010-src-privsep-linux.c-add-support-for-arc-28.patch
- delete mode 100644 package/dhcpcd/0011-src-privsep-linux.c-add-support-for-m68k.patch
+ package/rpi-firmware/rpi-firmware.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/dhcpcd/0001-src-privsep-linux.c-add-support-for-nds32-21.patch b/package/dhcpcd/0001-src-privsep-linux.c-add-support-for-nds32-21.patch
-deleted file mode 100644
-index 5d28fca516..0000000000
---- a/package/dhcpcd/0001-src-privsep-linux.c-add-support-for-nds32-21.patch
-+++ /dev/null
-@@ -1,45 +0,0 @@
--From 92dc3bd959681cf65d4a3466c89233cf0411b693 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sat, 30 Jan 2021 12:10:08 +0100
--Subject: [PATCH] src/privsep-linux.c: add support for nds32 (#21)
--
--Fix the following build failure:
--
--privsep-linux.c:206:4: error: #error "Platform does not support seccomp filter yet"
-- #  error "Platform does not support seccomp filter yet"
--    ^~~~~
--In file included from privsep-linux.c:36:
--privsep-linux.c:213:38: error: 'SECCOMP_AUDIT_ARCH' undeclared here (not in a function); did you mean 'SECCOMP_ALLOW_ARG'?
--  BPF_JUMP(BPF_JMP + BPF_JEQ + BPF_K, SECCOMP_AUDIT_ARCH, 1, 0),
--                                      ^~~~~~~~~~~~~~~~~~
--
--It should be noted that AUDIT_ARCH_NDS32 is only defined since kernel
--5.2 and
--https://github.com/torvalds/linux/commit/fa562447e154334523daa44c0b60625d71a345f5
--
--Fixes:
-- - http://autobuild.buildroot.org/results/af8ba07ea0c12ab8cd24d528ef98db05521f3d36
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--(cherry picked from commit 3848e7204f23bb78eb42dcde4898c70aca67d58d)
--Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-----
-- src/privsep-linux.c | 2 ++
-- 1 file changed, 2 insertions(+)
--
--diff --git a/src/privsep-linux.c b/src/privsep-linux.c
--index d31d720d..8716032c 100644
----- a/src/privsep-linux.c
--+++ b/src/privsep-linux.c
--@@ -182,6 +182,8 @@ ps_root_sendnetlink(struct dhcpcd_ctx *ctx, int protocol, struct msghdr *msg)
-- #  else
-- #    define SECCOMP_AUDIT_ARCH AUDIT_ARCH_MIPS
-- #  endif
--+#elif defined(__nds32__)
--+#  define SECCOMP_AUDIT_ARCH AUDIT_ARCH_NDS32
-- #elif defined(__powerpc64__)
-- #  define SECCOMP_AUDIT_ARCH AUDIT_ARCH_PPC64
-- #elif defined(__powerpc__)
---- 
--2.29.2
--
-diff --git a/package/dhcpcd/0002-src-privsep-linux.c-add-support-for-xtensa-22.patch b/package/dhcpcd/0002-src-privsep-linux.c-add-support-for-xtensa-22.patch
-deleted file mode 100644
-index f1789b13f1..0000000000
---- a/package/dhcpcd/0002-src-privsep-linux.c-add-support-for-xtensa-22.patch
-+++ /dev/null
-@@ -1,42 +0,0 @@
--From 1a77d82b0020ff4c71ffe55262676c3403978bd5 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sun, 31 Jan 2021 03:35:10 +0100
--Subject: [PATCH]  src/privsep-linux.c: add support for xtensa (#22)
--
--Fix the following build failure:
--
--privsep-linux.c:206:4: error: #error "Platform does not support seccomp filter yet"
-- #  error "Platform does not support seccomp filter yet"
--    ^~~~~
--In file included from privsep-linux.c:36:
--privsep-linux.c:213:38: error: 'SECCOMP_AUDIT_ARCH' undeclared here (not in a function); did you mean 'SECCOMP_ALLOW_ARG'?
--  BPF_JUMP(BPF_JMP + BPF_JEQ + BPF_K, SECCOMP_AUDIT_ARCH, 1, 0),
--                                      ^~~~~~~~~~~~~~~~~~
--
--It should be noted that AUDIT_ARCH_XTENSA is only defined since kernel
--5.0 and
--https://github.com/torvalds/linux/commit/98c3115a4ec56f03056efd9295e0fcb4c5c57a85
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--(cherry picked from commit 19c3d9209a834e02918a17e011afd9da3e5be38d)
--Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-----
-- src/privsep-linux.c | 2 ++
-- 1 file changed, 2 insertions(+)
--
--diff --git a/src/privsep-linux.c b/src/privsep-linux.c
--index 8716032c..f1b33f91 100644
----- a/src/privsep-linux.c
--+++ b/src/privsep-linux.c
--@@ -204,6 +204,8 @@ ps_root_sendnetlink(struct dhcpcd_ctx *ctx, int protocol, struct msghdr *msg)
-- #  else
-- #    define AUDIT_ARCH_SPARC
-- #  endif
--+#elif defined(__xtensa__)
--+#  define SECCOMP_AUDIT_ARCH AUDIT_ARCH_XTENSA
-- #else
-- #  error "Platform does not support seccomp filter yet"
-- #endif
---- 
--2.29.2
--
-diff --git a/package/dhcpcd/0003-Linux-Add-support-for-NDS32BE-SECCOMP.patch b/package/dhcpcd/0003-Linux-Add-support-for-NDS32BE-SECCOMP.patch
-deleted file mode 100644
-index de95268849..0000000000
---- a/package/dhcpcd/0003-Linux-Add-support-for-NDS32BE-SECCOMP.patch
-+++ /dev/null
-@@ -1,31 +0,0 @@
--From 4d2ef61b8b4abcb446699b9d3c29b422f2cf9826 Mon Sep 17 00:00:00 2001
--From: Roy Marples <roy@marples.name>
--Date: Sun, 31 Jan 2021 07:37:03 +0000
--Subject: [PATCH] Linux: Add support for NDS32BE SECCOMP
--
--(cherry picked from commit 8253ef16e11db8b52af1ed8021cd2517046165d6)
--Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-----
-- src/privsep-linux.c | 6 +++++-
-- 1 file changed, 5 insertions(+), 1 deletion(-)
--
--diff --git a/src/privsep-linux.c b/src/privsep-linux.c
--index f1b33f91..04950ed2 100644
----- a/src/privsep-linux.c
--+++ b/src/privsep-linux.c
--@@ -183,7 +183,11 @@ ps_root_sendnetlink(struct dhcpcd_ctx *ctx, int protocol, struct msghdr *msg)
-- #    define SECCOMP_AUDIT_ARCH AUDIT_ARCH_MIPS
-- #  endif
-- #elif defined(__nds32__)
---#  define SECCOMP_AUDIT_ARCH AUDIT_ARCH_NDS32
--+#  if (BYTE_ORDER == LITTLE_ENDIAN)
--+#    define SECCOMP_AUDIT_ARCH AUDIT_ARCH_NDS32
--+#ele
--+#    define SECCOMP_AUDIT_ARCH AUDIT_ARCH_NDS32BE
--+#endif
-- #elif defined(__powerpc64__)
-- #  define SECCOMP_AUDIT_ARCH AUDIT_ARCH_PPC64
-- #elif defined(__powerpc__)
---- 
--2.29.2
--
-diff --git a/package/dhcpcd/0004-Typo-with-prior.patch b/package/dhcpcd/0004-Typo-with-prior.patch
-deleted file mode 100644
-index 9c98895713..0000000000
---- a/package/dhcpcd/0004-Typo-with-prior.patch
-+++ /dev/null
-@@ -1,27 +0,0 @@
--From 59f67be640881eaf56cc30c304362af00523ff5d Mon Sep 17 00:00:00 2001
--From: Roy Marples <roy@marples.name>
--Date: Sun, 31 Jan 2021 10:08:11 +0000
--Subject: [PATCH] Typo with prior
--
--(cherry picked from commit d8d7f68001db3f084dfbb6e5b8ea4491088b55ba)
--Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-----
-- src/privsep-linux.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/src/privsep-linux.c b/src/privsep-linux.c
--index 04950ed2..1660447c 100644
----- a/src/privsep-linux.c
--+++ b/src/privsep-linux.c
--@@ -185,7 +185,7 @@ ps_root_sendnetlink(struct dhcpcd_ctx *ctx, int protocol, struct msghdr *msg)
-- #elif defined(__nds32__)
-- #  if (BYTE_ORDER == LITTLE_ENDIAN)
-- #    define SECCOMP_AUDIT_ARCH AUDIT_ARCH_NDS32
---#ele
--+#else
-- #    define SECCOMP_AUDIT_ARCH AUDIT_ARCH_NDS32BE
-- #endif
-- #elif defined(__powerpc64__)
---- 
--2.29.2
--
-diff --git a/package/dhcpcd/0005-src-privsep-linux.c-add-support-for-nios2-23.patch b/package/dhcpcd/0005-src-privsep-linux.c-add-support-for-nios2-23.patch
-deleted file mode 100644
-index ac1ef071a1..0000000000
---- a/package/dhcpcd/0005-src-privsep-linux.c-add-support-for-nios2-23.patch
-+++ /dev/null
-@@ -1,42 +0,0 @@
--From 24ca5bdd409dd811a088bc702a2b6f99ea05ad19 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sun, 31 Jan 2021 11:12:21 +0100
--Subject: [PATCH]  src/privsep-linux.c: add support for nios2 (#23)
--
--Fix the following build failure:
--
--privsep-linux.c:206:4: error: #error "Platform does not support seccomp filter yet"
-- #  error "Platform does not support seccomp filter yet"
--    ^~~~~
--In file included from privsep-linux.c:36:
--privsep-linux.c:213:38: error: 'SECCOMP_AUDIT_ARCH' undeclared here (not in a function); did you mean 'SECCOMP_ALLOW_ARG'?
--  BPF_JUMP(BPF_JMP + BPF_JEQ + BPF_K, SECCOMP_AUDIT_ARCH, 1, 0),
--                                      ^~~~~~~~~~~~~~~~~~
--
--It should be noted that AUDIT_ARCH_NIOS2 is only defined since kernel
--5.2 and
--https://github.com/torvalds/linux/commit/1660aac45e5b49a5ace29fb5b73254617533fcbd
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--(cherry picked from commit d670866ce008c21cbf6d5b20c4d4af6460ec35d2)
--Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-----
-- src/privsep-linux.c | 2 ++
-- 1 file changed, 2 insertions(+)
--
--diff --git a/src/privsep-linux.c b/src/privsep-linux.c
--index 1660447c..e374c068 100644
----- a/src/privsep-linux.c
--+++ b/src/privsep-linux.c
--@@ -188,6 +188,8 @@ ps_root_sendnetlink(struct dhcpcd_ctx *ctx, int protocol, struct msghdr *msg)
-- #else
-- #    define SECCOMP_AUDIT_ARCH AUDIT_ARCH_NDS32BE
-- #endif
--+#elif defined(__nios2__)
--+#  define SECCOMP_AUDIT_ARCH AUDIT_ARCH_NIOS2
-- #elif defined(__powerpc64__)
-- #  define SECCOMP_AUDIT_ARCH AUDIT_ARCH_PPC64
-- #elif defined(__powerpc__)
---- 
--2.29.2
--
-diff --git a/package/dhcpcd/0006-src-privsep-linux.c-add-support-for-microblaze-24.patch b/package/dhcpcd/0006-src-privsep-linux.c-add-support-for-microblaze-24.patch
-deleted file mode 100644
-index 245faed476..0000000000
---- a/package/dhcpcd/0006-src-privsep-linux.c-add-support-for-microblaze-24.patch
-+++ /dev/null
-@@ -1,42 +0,0 @@
--From 89a2f250ed978950aecf4854d1cee16f57946759 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sun, 31 Jan 2021 21:57:40 +0100
--Subject: [PATCH]  src/privsep-linux.c: add support for microblaze (#24)
--
--Fix the following build failure:
--
--privsep-linux.c:206:4: error: #error "Platform does not support seccomp filter yet"
-- #  error "Platform does not support seccomp filter yet"
--    ^~~~~
--In file included from privsep-linux.c:36:
--privsep-linux.c:213:38: error: 'SECCOMP_AUDIT_ARCH' undeclared here (not in a function); did you mean 'SECCOMP_ALLOW_ARG'?
--  BPF_JUMP(BPF_JMP + BPF_JEQ + BPF_K, SECCOMP_AUDIT_ARCH, 1, 0),
--                                      ^~~~~~~~~~~~~~~~~~
--
--It should be noted that AUDIT_ARCH_MICROBLAZE is only defined since
--kernel 3.18 and
--https://github.com/torvalds/linux/commit/ce5d112827e5c2e9864323d0efd7ec2a62c6dce0
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--(cherry picked from commit e3a40586dbb584774d0a17bc277e69cb500cfa38)
--Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-----
-- src/privsep-linux.c | 2 ++
-- 1 file changed, 2 insertions(+)
--
--diff --git a/src/privsep-linux.c b/src/privsep-linux.c
--index e374c068..a861a836 100644
----- a/src/privsep-linux.c
--+++ b/src/privsep-linux.c
--@@ -170,6 +170,8 @@ ps_root_sendnetlink(struct dhcpcd_ctx *ctx, int protocol, struct msghdr *msg)
-- #  endif
-- #elif defined(__ia64__)
-- #  define SECCOMP_AUDIT_ARCH AUDIT_ARCH_IA64
--+#elif defined(__microblaze__)
--+#  define SECCOMP_AUDIT_ARCH AUDIT_ARCH_MICROBLAZE
-- #elif defined(__mips__)
-- #  if defined(__MIPSEL__)
-- #    if defined(__LP64__)
---- 
--2.29.2
--
-diff --git a/package/dhcpcd/0007-src-privsep-linux.c-add-support-for-sh-25.patch b/package/dhcpcd/0007-src-privsep-linux.c-add-support-for-sh-25.patch
-deleted file mode 100644
-index b9c023805e..0000000000
---- a/package/dhcpcd/0007-src-privsep-linux.c-add-support-for-sh-25.patch
-+++ /dev/null
-@@ -1,54 +0,0 @@
--From 10acecc0583b7301cb539ba6875618956fa3d13b Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Fri, 5 Feb 2021 09:05:54 +0100
--Subject: [PATCH] src/privsep-linux.c: add support for sh (#25)
--
--Fix the following build failure:
--
--privsep-linux.c:206:4: error: #error "Platform does not support seccomp filter yet"
-- #  error "Platform does not support seccomp filter yet"
--    ^~~~~
--In file included from privsep-linux.c:36:
--privsep-linux.c:213:38: error: 'SECCOMP_AUDIT_ARCH' undeclared here (not in a function); did you mean 'SECCOMP_ALLOW_ARG'?
--  BPF_JUMP(BPF_JMP + BPF_JEQ + BPF_K, SECCOMP_AUDIT_ARCH, 1, 0),
--                                      ^~~~~~~~~~~~~~~~~~
--
--It should be noted that AUDIT_ARCH_{SH,SHEL,SH64,SHEL64} are defined at
--least since kernel 3.7 and
--https://github.com/torvalds/linux/commit/607ca46e97a1b6594b29647d98a32d545c24bdff
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--(cherry picked from commit 166491c2953546a677073694036f43a65fc25063)
--Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-----
-- src/privsep-linux.c | 14 ++++++++++++++
-- 1 file changed, 14 insertions(+)
--
--diff --git a/src/privsep-linux.c b/src/privsep-linux.c
--index a861a836..428ea4b0 100644
----- a/src/privsep-linux.c
--+++ b/src/privsep-linux.c
--@@ -206,6 +206,20 @@ ps_root_sendnetlink(struct dhcpcd_ctx *ctx, int protocol, struct msghdr *msg)
-- #  define SECCOMP_AUDIT_ARCH AUDIT_ARCH_S390X
-- #elif defined(__s390__)
-- #  define SECCOMP_AUDIT_ARCH AUDIT_ARCH_S390
--+#elif defined(__sh__)
--+#  if defined(__LP64__)
--+#    if (BYTE_ORDER == LITTLE_ENDIAN)
--+#      define SECCOMP_AUDIT_ARCH AUDIT_ARCH_SHEL64
--+#    else
--+#      define SECCOMP_AUDIT_ARCH AUDIT_ARCH_SH64
--+#    endif
--+#  else
--+#    if (BYTE_ORDER == LITTLE_ENDIAN)
--+#      define SECCOMP_AUDIT_ARCH AUDIT_ARCH_SHEL
--+#    else
--+#      define SECCOMP_AUDIT_ARCH AUDIT_ARCH_SH
--+#    endif
--+#  endif
-- #elif defined(__sparc__)
-- #  if defined(__arch64__)
-- #    define AUDIT_ARCH_SPARC64
---- 
--2.29.2
--
-diff --git a/package/dhcpcd/0008-src-privsep-linux-fix-build-on-sparc-26.patch b/package/dhcpcd/0008-src-privsep-linux-fix-build-on-sparc-26.patch
-deleted file mode 100644
-index 06199228ce..0000000000
---- a/package/dhcpcd/0008-src-privsep-linux-fix-build-on-sparc-26.patch
-+++ /dev/null
-@@ -1,45 +0,0 @@
--From be36eccb1ae53422f2aa9b42f257baeb21bd8be7 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Fri, 5 Feb 2021 09:25:12 +0100
--Subject: [PATCH] src/privsep-linux: fix build on sparc (#26)
--
--Fix the following build failure:
--
--privsep-linux.c:203: warning: "AUDIT_ARCH_SPARC64" redefined
--  203 | #    define AUDIT_ARCH_SPARC64
--      |
--In file included from privsep-linux.c:35:
--/srv/storage/autobuild/run/instance-0/output-1/host/sparc64-buildroot-linux-gnu/sysroot/usr/include/linux/audit.h:392: note: this is the location of the previous definition
--  392 | #define AUDIT_ARCH_SPARC64 (EM_SPARCV9|__AUDIT_ARCH_64BIT)
--      |
--In file included from privsep-linux.c:36:
--privsep-linux.c:215:38: error: 'SECCOMP_AUDIT_ARCH' undeclared here (not in a function); did you mean 'SECCOMP_ALLOW_ARG'?
--  215 |  BPF_JUMP(BPF_JMP + BPF_JEQ + BPF_K, SECCOMP_AUDIT_ARCH, 1, 0),
--      |                                      ^~~~~~~~~~~~~~~~~~
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--(cherry picked from commit dcfd7a23f002793a855156255e81662ef84064d3)
--Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-----
-- src/privsep-linux.c | 4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/src/privsep-linux.c b/src/privsep-linux.c
--index 428ea4b0..8093740a 100644
----- a/src/privsep-linux.c
--+++ b/src/privsep-linux.c
--@@ -222,9 +222,9 @@ ps_root_sendnetlink(struct dhcpcd_ctx *ctx, int protocol, struct msghdr *msg)
-- #  endif
-- #elif defined(__sparc__)
-- #  if defined(__arch64__)
---#    define AUDIT_ARCH_SPARC64
--+#    define SECCOMP_AUDIT_ARCH AUDIT_ARCH_SPARC64
-- #  else
---#    define AUDIT_ARCH_SPARC
--+#    define SECCOMP_AUDIT_ARCH AUDIT_ARCH_SPARC
-- #  endif
-- #elif defined(__xtensa__)
-- #  define SECCOMP_AUDIT_ARCH AUDIT_ARCH_XTENSA
---- 
--2.29.2
--
-diff --git a/package/dhcpcd/0009-src-privsep-linux.c-add-support-for-or1k-27.patch b/package/dhcpcd/0009-src-privsep-linux.c-add-support-for-or1k-27.patch
-deleted file mode 100644
-index 3756cac7e9..0000000000
---- a/package/dhcpcd/0009-src-privsep-linux.c-add-support-for-or1k-27.patch
-+++ /dev/null
-@@ -1,41 +0,0 @@
--From 617e3a44137cbba55afae24f6754580916bb770b Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sun, 7 Feb 2021 09:43:14 +0100
--Subject: [PATCH] src/privsep-linux.c: add support for or1k (#27)
--
--Fix the following build failure:
--
--privsep-linux.c:206:4: error: #error "Platform does not support seccomp filter yet"
-- #  error "Platform does not support seccomp filter yet"
--    ^~~~~
--In file included from privsep-linux.c:36:
--privsep-linux.c:213:38: error: 'SECCOMP_AUDIT_ARCH' undeclared here (not in a function); did you mean 'SECCOMP_ALLOW_ARG'?
--  BPF_JUMP(BPF_JMP + BPF_JEQ + BPF_K, SECCOMP_AUDIT_ARCH, 1, 0),
--                                      ^~~~~~~~~~~~~~~~~~
--
--It should be noted that AUDIT_ARCH_OPENRISC is defined since kernel 3.7:
--https://github.com/torvalds/linux/commit/e2bebb4ae6d9ac4ffc524db67f7ecb205a173f77
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--(cherry picked from commit f3f7332001d5d5722239f6b7279f32923e4eedd0)
--Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-----
-- src/privsep-linux.c | 2 ++
-- 1 file changed, 2 insertions(+)
--
--diff --git a/src/privsep-linux.c b/src/privsep-linux.c
--index 8093740a..58df5c30 100644
----- a/src/privsep-linux.c
--+++ b/src/privsep-linux.c
--@@ -192,6 +192,8 @@ ps_root_sendnetlink(struct dhcpcd_ctx *ctx, int protocol, struct msghdr *msg)
-- #endif
-- #elif defined(__nios2__)
-- #  define SECCOMP_AUDIT_ARCH AUDIT_ARCH_NIOS2
--+#elif defined(__or1k__)
--+#  define SECCOMP_AUDIT_ARCH AUDIT_ARCH_OPENRISC
-- #elif defined(__powerpc64__)
-- #  define SECCOMP_AUDIT_ARCH AUDIT_ARCH_PPC64
-- #elif defined(__powerpc__)
---- 
--2.29.2
--
-diff --git a/package/dhcpcd/0010-src-privsep-linux.c-add-support-for-arc-28.patch b/package/dhcpcd/0010-src-privsep-linux.c-add-support-for-arc-28.patch
-deleted file mode 100644
-index b7b3e153eb..0000000000
---- a/package/dhcpcd/0010-src-privsep-linux.c-add-support-for-arc-28.patch
-+++ /dev/null
-@@ -1,62 +0,0 @@
--From 1b6b6329daf70e29221f341ef1946717f158ec8a Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Mon, 8 Feb 2021 07:23:54 +0100
--Subject: [PATCH] src/privsep-linux.c: add support for arc (#28)
--
--Fix the following build failure:
--
--privsep-linux.c:206:4: error: #error "Platform does not support seccomp filter yet"
-- #  error "Platform does not support seccomp filter yet"
--    ^~~~~
--In file included from privsep-linux.c:36:
--privsep-linux.c:213:38: error: 'SECCOMP_AUDIT_ARCH' undeclared here (not in a function); did you mean 'SECCOMP_ALLOW_ARG'?
--  BPF_JUMP(BPF_JMP + BPF_JEQ + BPF_K, SECCOMP_AUDIT_ARCH, 1, 0),
--                                      ^~~~~~~~~~~~~~~~~~
--
--It should be noted that AUDIT_ARCH_{ARCOMPACT,ARCV2} is only defined
--since kernel 5.2 and
--https://github.com/torvalds/linux/commit/67f2a8a29311841ba6ab9b0e2d1b8f1e9978cd84
--
--Detection of arc compact and arc v2 have been "copy/pasted" from
--https://github.com/wbx-github/uclibc-ng/commit/afab56958f1cbb47b831ee3ebff231dfbae74af2
--
--Fixes:
-- - http://autobuild.buildroot.org/results/d29083700a80dd647621eed06faeeae03f0587d3
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--(cherry picked from commit 82386110e67cf75c224e9817fce55e6b0f143266)
--Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-----
-- src/privsep-linux.c | 16 ++++++++++++++++
-- 1 file changed, 16 insertions(+)
--
--diff --git a/src/privsep-linux.c b/src/privsep-linux.c
--index 58df5c30..fc269a5c 100644
----- a/src/privsep-linux.c
--+++ b/src/privsep-linux.c
--@@ -149,6 +149,22 @@ ps_root_sendnetlink(struct dhcpcd_ctx *ctx, int protocol, struct msghdr *msg)
-- #  define SECCOMP_AUDIT_ARCH AUDIT_ARCH_I386
-- #elif defined(__x86_64__)
-- #  define SECCOMP_AUDIT_ARCH AUDIT_ARCH_X86_64
--+#elif defined(__arc__)
--+#  if defined(__A7__)
--+#    if (BYTE_ORDER == LITTLE_ENDIAN)
--+#      define SECCOMP_AUDIT_ARCH AUDIT_ARCH_ARCOMPACT
--+#    else
--+#      define SECCOMP_AUDIT_ARCH AUDIT_ARCH_ARCOMPACTBE
--+#    endif
--+#  elif defined(__HS__)
--+#    if (BYTE_ORDER == LITTLE_ENDIAN)
--+#      define SECCOMP_AUDIT_ARCH AUDIT_ARCH_ARCV2
--+#    else
--+#      define SECCOMP_AUDIT_ARCH AUDIT_ARCH_ARCV2BE
--+#    endif
--+#  else
--+#    error "Platform does not support seccomp filter yet"
--+#  endif
-- #elif defined(__arm__)
-- #  ifndef EM_ARM
-- #    define EM_ARM 40
---- 
--2.29.2
--
-diff --git a/package/dhcpcd/0011-src-privsep-linux.c-add-support-for-m68k.patch b/package/dhcpcd/0011-src-privsep-linux.c-add-support-for-m68k.patch
-deleted file mode 100644
-index 8fe80d4266..0000000000
---- a/package/dhcpcd/0011-src-privsep-linux.c-add-support-for-m68k.patch
-+++ /dev/null
-@@ -1,37 +0,0 @@
--From f7721a6728bfd786604474df051f463a12dd0335 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Fri, 5 Mar 2021 12:22:13 +0100
--Subject: [PATCH] src/privsep-linux.c: add support for m68k
--
--Fix the following build failure:
--
--privsep-linux.c:206:4: error: #error "Platform does not support seccomp filter yet"
-- #  error "Platform does not support seccomp filter yet"
--    ^~~~~
--In file included from privsep-linux.c:36:
--privsep-linux.c:213:38: error: 'SECCOMP_AUDIT_ARCH' undeclared here (not in a function); did you mean 'SECCOMP_ALLOW_ARG'?
--  BPF_JUMP(BPF_JMP + BPF_JEQ + BPF_K, SECCOMP_AUDIT_ARCH, 1, 0),
--                                      ^~~~~~~~~~~~~~~~~~
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/rsmarples/dhcpcd/pull/29]
-----
-- src/privsep-linux.c | 2 ++
-- 1 file changed, 2 insertions(+)
--
--diff --git a/src/privsep-linux.c b/src/privsep-linux.c
--index 21d41a9a..7dc92083 100644
----- a/src/privsep-linux.c
--+++ b/src/privsep-linux.c
--@@ -188,6 +188,8 @@ ps_root_sendnetlink(struct dhcpcd_ctx *ctx, int protocol, struct msghdr *msg)
-- #  define SECCOMP_AUDIT_ARCH AUDIT_ARCH_IA64
-- #elif defined(__microblaze__)
-- #  define SECCOMP_AUDIT_ARCH AUDIT_ARCH_MICROBLAZE
--+#elif defined(__m68k__)
--+#  define SECCOMP_AUDIT_ARCH AUDIT_ARCH_M68K
-- #elif defined(__mips__)
-- #  if defined(__MIPSEL__)
-- #    if defined(__LP64__)
---- 
--2.30.0
--
-diff --git a/package/dhcpcd/dhcpcd.hash b/package/dhcpcd/dhcpcd.hash
-index 413f5c842b..532fbd467e 100644
---- a/package/dhcpcd/dhcpcd.hash
-+++ b/package/dhcpcd/dhcpcd.hash
-@@ -1,4 +1,4 @@
--# sha256 from ftp://roy.marples.name/pub/dhcpcd/dhcpcd-9.4.0.tar.xz.distinfo
--sha256  41a69297f380bf15ee8f94f73154f8c2bca7157a087c0d5aca8de000ba1d4513  dhcpcd-9.4.0.tar.xz
-+# sha256 from ftp://roy.marples.name/pub/dhcpcd/dhcpcd-9.4.1.tar.xz.distinfo
-+sha256  819357634efed1ea5cf44ec01b24d3d3f8852fec8b4249925dcc5667c54e376c  dhcpcd-9.4.1.tar.xz
- # Locally calculated
--sha256  9cce1077bad23544349788ec750ec6e5aee106fc437fd6b5d73c0d8510426578  LICENSE
-+sha256  4f21ce186859516dcab9b3197f3e9533a9bd1b87932015c87f539af4a48cd592  LICENSE
-diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
-index e598d8939d..922d289b26 100644
---- a/package/dhcpcd/dhcpcd.mk
-+++ b/package/dhcpcd/dhcpcd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DHCPCD_VERSION = 9.4.0
-+DHCPCD_VERSION = 9.4.1
- DHCPCD_SOURCE = dhcpcd-$(DHCPCD_VERSION).tar.xz
- DHCPCD_SITE = http://roy.marples.name/downloads/dhcpcd
- DHCPCD_DEPENDENCIES = host-pkgconf
+diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+index 9d73d5300c..3a4741a0ff 100644
+--- a/package/rpi-firmware/rpi-firmware.mk
++++ b/package/rpi-firmware/rpi-firmware.mk
+@@ -13,7 +13,7 @@ RPI_FIRMWARE_INSTALL_IMAGES = YES
+ RPI_FIRMWARE_FILES = \
+ 	$(if $(BR2_PACKAGE_RPI_FIRMWARE_BOOTCODE_BIN), bootcode.bin) \
+ 	$(if $(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI), start.elf fixup.dat) \
+-	$(if $(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI_X), start_x.elf fixupx.dat) \
++	$(if $(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI_X), start_x.elf fixup_x.dat) \
+ 	$(if $(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI_CD), start_cd.elf fixup_cd.dat) \
+ 	$(if $(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI_DB), start_db.elf fixup_db.dat) \
+ 	$(if $(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4), start4.elf fixup4.dat) \
 -- 
 2.33.0
 
