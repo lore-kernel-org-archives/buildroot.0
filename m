@@ -2,81 +2,60 @@ Return-Path: <SRS0=x9kH=PP=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EC3ABC433F5
-	for <buildroot@archiver.kernel.org>; Wed, 27 Oct 2021 12:49:41 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D09FC433F5
+	for <buildroot@archiver.kernel.org>; Wed, 27 Oct 2021 13:37:28 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id A2B5D6109D
-	for <buildroot@archiver.kernel.org>; Wed, 27 Oct 2021 12:49:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A2B5D6109D
-Authentication-Results: mail.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=googlemail.com
+	by mail.kernel.org (Postfix) with ESMTPS id 4E85660C51
+	for <buildroot@archiver.kernel.org>; Wed, 27 Oct 2021 13:37:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4E85660C51
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6ABE3404DE;
-	Wed, 27 Oct 2021 12:49:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CC50281A27;
+	Wed, 27 Oct 2021 13:37:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gSer1VRAYz8H; Wed, 27 Oct 2021 12:49:40 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id xN6CGwurfvhR; Wed, 27 Oct 2021 13:37:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E8C8540225;
-	Wed, 27 Oct 2021 12:49:39 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E0DA01BF368
- for <buildroot@lists.busybox.net>; Wed, 27 Oct 2021 12:49:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3F0E981A16;
+	Wed, 27 Oct 2021 13:37:25 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id ACB7B1BF4DD
+ for <buildroot@lists.busybox.net>; Wed, 27 Oct 2021 13:37:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CFC4C4019F
- for <buildroot@lists.busybox.net>; Wed, 27 Oct 2021 12:49:38 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9C533607AF
+ for <buildroot@lists.busybox.net>; Wed, 27 Oct 2021 13:37:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=googlemail.com
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zaf1T28vERTc for <buildroot@lists.busybox.net>;
- Wed, 27 Oct 2021 12:49:37 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com
- [IPv6:2a00:1450:4864:20::529])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 588E6400BD
- for <buildroot@buildroot.org>; Wed, 27 Oct 2021 12:49:37 +0000 (UTC)
-Received: by mail-ed1-x529.google.com with SMTP id g10so10153391edj.1
- for <buildroot@buildroot.org>; Wed, 27 Oct 2021 05:49:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=googlemail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=5bjeThecFzaY9caWaOfzuLT1DWeBNVOL6+cFAPflLzo=;
- b=FMV1pmWQgqKeB2+qtXoQy1kQCXeenOPfJXeSjEmvwkTp4c2iFvDpSkaN3wDy/7fbaL
- yPYp6llIAq0opRXWPS85+nA424ObUF0FiSnZl9qEexUcJeitkEcrigzylZgXz6S10I0A
- lT3uV9Ay8DlrzGdVKn37W3Hed6eXOoPu0/IXGeSYhD3sho/0825K3BBk55QtREVgrGTf
- aLxQTshH/5dotngnnQr7HAWYLZcfStnDlgj1pfVJE9TlgOPrOmcj5+trmF3zSZ7dNNw8
- cAecRDkoUol57enmMTXbs4pwcCEiwM8p/op0n7+l0FawTGn8vV3GnuVFIJx4vVdIJdmc
- CNcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=5bjeThecFzaY9caWaOfzuLT1DWeBNVOL6+cFAPflLzo=;
- b=a6PLoibv+gFzQKAcKyLy43p+Qo1MKufKFv1GgdD+TpgkE8sm+whA9SBUyQJpKcB7IU
- yPHQlK0NLf0Ws8GP6Vt1KX1v59J7GbNnSmdPLYalmaKyoCSJ44/3LFuKfJ4xB5WGwt+h
- 1tFNWbph81bn+Y76msEeZtDRv6RfNIIFpEg2XqLj2JdbRINv1lSSNM0ITquphJq8EiAv
- BE0dVWx+65f8SHOWvJlzbiAZ7MHDr6bIaf54v24bMD694xv00yppBQBLyA4LOvlMMBXY
- hrgPuRcqq41bQuEerwAiJU/JzS25YwGmOaZaElVkR1qEBtpNNaSbqBa5wrtd/z7dc8Gw
- 37vw==
-X-Gm-Message-State: AOAM533ApyOqd+HXwRJQMNMcyGwxSuv3qy60om38TCGfM3QzpfpNzgQr
- 4camHDZETyXCZ2Eg/sGL+pgWcABn0HYWKxAl9+I=
-X-Google-Smtp-Source: ABdhPJyTfejsU+Bm6TvmkpoZhD/Q7edUPWuRkXjRAr5N+CmGDm7vIJMy4FlvChZUJvE7cUS05HnStBywmYZtS5rDilE=
-X-Received: by 2002:a17:906:8478:: with SMTP id
- hx24mr38647713ejc.67.1635338972474; 
- Wed, 27 Oct 2021 05:49:32 -0700 (PDT)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id eHRvM1uCf7Fu for <buildroot@lists.busybox.net>;
+ Wed, 27 Oct 2021 13:37:22 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 77F2A60661
+ for <buildroot@buildroot.org>; Wed, 27 Oct 2021 13:37:22 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id D4C14240009;
+ Wed, 27 Oct 2021 13:37:18 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
+ (envelope-from <peter@korsgaard.com>)
+ id 1mfj7F-0000w6-VG; Wed, 27 Oct 2021 15:37:17 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Damien Le Moal <damien.lemoal@wdc.com>
+References: <20211026071728.954356-1-damien.lemoal@wdc.com>
+ <20211026071728.954356-2-damien.lemoal@wdc.com>
+Date: Wed, 27 Oct 2021 15:37:17 +0200
+In-Reply-To: <20211026071728.954356-2-damien.lemoal@wdc.com> (Damien Le Moal's
+ message of "Tue, 26 Oct 2021 16:17:19 +0900")
+Message-ID: <87tuh2pp0y.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-References: <20211025064938.2279526-1-james.hilliard1@gmail.com>
-In-Reply-To: <20211025064938.2279526-1-james.hilliard1@gmail.com>
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Wed, 27 Oct 2021 14:49:19 +0200
-Message-ID: <CAGm1_kte4RY7McVzFVRfUQ86=GiCG_cQjFaneowib7mTSkgicQ@mail.gmail.com>
-To: James Hilliard <james.hilliard1@gmail.com>
-Subject: Re: [Buildroot] [PATCH 1/1] package/meson: bump to version 0.60.0
+Subject: Re: [Buildroot] [PATCH v5 01/10] package: Makefile.in: fix elf2flt
+ invocation options
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -88,61 +67,28 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+Cc: Alistair Francis <alistair@alistair23.me>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
  buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi all,
+>>>>> "Damien" == Damien Le Moal <damien.lemoal@wdc.com> writes:
 
-On Mon, Oct 25, 2021 at 8:50 AM James Hilliard
-<james.hilliard1@gmail.com> wrote:
->
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+ > When BR2_BINFMT_FLAT_ONE is selected, elf2flt must be invoked with the
+ > "-r" option to ensure that a single contiguous binary image is created,
+ > regardless of the architecture default image format implemented by
+ > elf2flt.
 
-Tested-by: Yegor Yefremov <yegorslists@googlemail.com>
+ > Signed-off-by: Damien Le Moal <damien.lemoal@wdc.com>
 
-Best regards,
-Yegor
+Committed, thanks.
 
-> ---
->  package/meson/meson.hash | 4 ++--
->  package/meson/meson.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/package/meson/meson.hash b/package/meson/meson.hash
-> index f3cfe66072..0702a7685a 100644
-> --- a/package/meson/meson.hash
-> +++ b/package/meson/meson.hash
-> @@ -1,4 +1,4 @@
->  # Locally calculated after checking pgp signature
-> -# https://github.com/mesonbuild/meson/releases/download/0.59.2/meson-0.59.2.tar.gz.asc
-> -sha256  13dee549a7ba758b7e33ce7719f28d1d337a98d10d378a4779ccc996f5a2fc49  meson-0.59.2.tar.gz
-> +# https://github.com/mesonbuild/meson/releases/download/0.60.0/meson-0.60.0.tar.gz.asc
-> +sha256  080d68b685e9a0d9c9bb475457e097b49e1d1a6f750abc971428a8d2e1b12d47  meson-0.60.0.tar.gz
->  sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  COPYING
-> diff --git a/package/meson/meson.mk b/package/meson/meson.mk
-> index bd03a7cd67..0f989ac8a1 100644
-> --- a/package/meson/meson.mk
-> +++ b/package/meson/meson.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->
-> -MESON_VERSION = 0.59.2
-> +MESON_VERSION = 0.60.0
->  MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
->  MESON_LICENSE = Apache-2.0
->  MESON_LICENSE_FILES = COPYING
-> --
-> 2.25.1
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
