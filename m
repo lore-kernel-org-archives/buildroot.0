@@ -1,85 +1,83 @@
-Return-Path: <SRS0=o+05=PO=buildroot.org=buildroot-bounces@kernel.org>
+Return-Path: <SRS0=x9kH=PP=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CDF26C433F5
-	for <buildroot@archiver.kernel.org>; Tue, 26 Oct 2021 22:22:23 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BDECCC433EF
+	for <buildroot@archiver.kernel.org>; Wed, 27 Oct 2021 03:27:18 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2094D60E76
-	for <buildroot@archiver.kernel.org>; Tue, 26 Oct 2021 22:22:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2094D60E76
+	by mail.kernel.org (Postfix) with ESMTPS id 1B9F160E8C
+	for <buildroot@archiver.kernel.org>; Wed, 27 Oct 2021 03:27:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1B9F160E8C
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DB1A060778;
-	Tue, 26 Oct 2021 22:22:22 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A04F2400D2;
+	Wed, 27 Oct 2021 03:27:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cfW-51HFZSI3; Tue, 26 Oct 2021 22:22:22 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 396A560726;
-	Tue, 26 Oct 2021 22:22:21 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 977F41BF304
- for <buildroot@lists.busybox.net>; Tue, 26 Oct 2021 22:22:19 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8644040428
- for <buildroot@lists.busybox.net>; Tue, 26 Oct 2021 22:22:19 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Tbu3pmPW9QGH for <buildroot@lists.busybox.net>;
- Tue, 26 Oct 2021 22:22:15 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id CYT6pD5dGmTu; Wed, 27 Oct 2021 03:27:16 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id ED72E400CF;
+	Wed, 27 Oct 2021 03:27:15 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1940D1BF32D
+ for <buildroot@lists.busybox.net>; Wed, 27 Oct 2021 03:27:14 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1566F403AF
+ for <buildroot@lists.busybox.net>; Wed, 27 Oct 2021 03:27:14 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8ruSAi12zVuR for <buildroot@lists.busybox.net>;
+ Wed, 27 Oct 2021 03:27:13 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
 Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com
  [IPv6:2607:f8b0:4864:20::d30])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B1E54400ED
- for <buildroot@buildroot.org>; Tue, 26 Oct 2021 22:22:15 +0000 (UTC)
-Received: by mail-io1-xd30.google.com with SMTP id m184so1288247iof.1
- for <buildroot@buildroot.org>; Tue, 26 Oct 2021 15:22:15 -0700 (PDT)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 41910403AB
+ for <buildroot@buildroot.org>; Wed, 27 Oct 2021 03:27:13 +0000 (UTC)
+Received: by mail-io1-xd30.google.com with SMTP id d63so1966332iof.4
+ for <buildroot@buildroot.org>; Tue, 26 Oct 2021 20:27:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=FgB5nNHTeR3/rPXDceu9c3tpe7rnhsBEkqdYj7QyvWU=;
- b=d23OLilSvAF7QW1XNGF82ZBe+31WNs+J7aSonDu1xbY+/wftY4QtUcJqY0FAHfZ+LC
- EN4VadJ9Lt7Omj80xD68WBvUO6Lip62sRbgNAAwdAth3VGSqvs7lXu24VsmBLqI0p7CC
- pzRvTL8txV2xdVxi4Ax+4i3UFVGS4tR27/RKGXblOfo/GtKPAcUY4ZLx00sxzsXcWrqR
- h56X28bzxqGRdcF6nwm2ZWE8wPcbiFoEEyuCbDjeLm/PJ0705O8pGOe5D4E+mfjbJv8e
- wKZihjCRrZMOVWTUTViNeljmuYO4qDCi6jod/+TUD87GWcrL2cpeK1Wi21KsQyLo2sBR
- 8Hvw==
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=brOKF2mA6/ZaJc342k27n4GjpPKIGFRwsJourANnXm0=;
+ b=XUQOrCHnvdR4FRnX0CdGO+Yk8aHV5txMcdf1N1QJT+hz/3Iw4qMQibmZnTbqe9ybdF
+ hq7zYy/mkbPmitJLGBAOtcQdyHPoaovS+jdfVkRTld/IxvkaqvQO52/rzSbZsrJy0hVI
+ QRS0xoyB78bZ92IA3Vpn0TjnySAFpU3C8rnY/YiRNP9fI67t5pbF28BXThg5OGLrDpwE
+ 6fAXcESa0s6sP5DhX6ZpWIONmd3Uf3ccIS6EpD1HZeg2U2oJxgCU0RcG540tiSuD9ryY
+ wALfbUmv9+0ugf5YA3RQphaq5C2/Z89J96Lh1r1BcBuEBw2qMZRi3Z5E1L2YGpqqNgt+
+ 8i2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=FgB5nNHTeR3/rPXDceu9c3tpe7rnhsBEkqdYj7QyvWU=;
- b=FiZO8tJ2JdOd1KfeTNIlbXNvVEfC75B4NNdZ2XORxiaRO6EexyNPrYGSnQaHfkeYMf
- vxdS0fYpmWKWtHZsQPwi8ud0MZTNau+NF6Gl6Lg5FH+y2MmpoHnFTJbNuK69tpqfzzSZ
- NKCtVbStL9eCoEitbg8r3/0KNPvylClwUP0ELwrIgzrQeYsQXzfYmL1jLHXDwVDxqJ6u
- MtsgtaHf8Tk1VfhYiwjnaB3HrRwiRtAaYwoGRgorL+Sm74ibapI/ZXTNdWbICZuqm4QB
- josmErWlOhgWZ+du5CXBxI6ma5yVZn3iWWZODjhn5kzEKnUjSSx8f01Ft0s4Yw5eoAGx
- NawQ==
-X-Gm-Message-State: AOAM532sRyM4Ewp+auElWhyQI8NGvrMQxhJUBPt8OXD3yzy0Hfc4YIq4
- AHJM9nfoWNeUG9ihNIe4Sa9eLraCqMM=
-X-Google-Smtp-Source: ABdhPJzhUJ14b+CdK4brvalgB+wCtKgE4jvmaigYdUFOnnizq1OFztRwhhmz+4AdVauAhz97ZNMrlA==
-X-Received: by 2002:a02:b11e:: with SMTP id r30mr12435836jah.109.1635286934588; 
- Tue, 26 Oct 2021 15:22:14 -0700 (PDT)
-Received: from james-x399.localdomain (71-218-115-49.hlrn.qwest.net.
- [71.218.115.49])
- by smtp.gmail.com with ESMTPSA id l5sm11333243iln.50.2021.10.26.15.22.14
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 26 Oct 2021 15:22:14 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: buildroot@buildroot.org
-Date: Tue, 26 Oct 2021 16:22:12 -0600
-Message-Id: <20211026222212.130034-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.25.1
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=brOKF2mA6/ZaJc342k27n4GjpPKIGFRwsJourANnXm0=;
+ b=4MNKIYNzhe1KLzy8vBYcl1rlqugQCx83cYtDh6mSPBg+Do60iXuU+EpgNw7s9+tRop
+ nav8mjPhTog6bwqpRpHghGEmbK5y/Rk487p/aJ50NxP9maqcN6fDuoS7qCLu4PnKrsjF
+ kxAgewaouX9vpg2Cx8Y4g+C/h6r6w75o80KOXL/7+Z/uCHdh1UnY0cg3HWps5mKKbUr/
+ oHRrTR8bhMWbWL+VuOW7Qc3EwGcsmt8C8qMKuoU2DWv2yiAzoyJDIwtQVx1DWQeq1/K7
+ KJL3iQymagXsR4RKK8+WB4vlpYUFSkTebNDvF6f6jMFgS3HKPmiSyhB+mX4ZXN3ubAZ5
+ gXJg==
+X-Gm-Message-State: AOAM531naGxyU8r74XkoROhzE8goq2e6tJYPnzySGpV/531voxjH3qVK
+ hM2EF3qV+eTioKmEL7Bo1u8JWNyJHnWRcrGCYcU=
+X-Google-Smtp-Source: ABdhPJx6YHSxIELNXMImmJjGkLHUN/1kQRY4IO0f7DehMNXktGhOw4UzBEtNSi9s0KdCI6hvAO6JLMAR5rOZtPnN4sQ=
+X-Received: by 2002:a05:6638:2581:: with SMTP id
+ s1mr18078653jat.35.1635305231848; 
+ Tue, 26 Oct 2021 20:27:11 -0700 (PDT)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/pipewire: bump to version 0.3.39
+References: <20211026071728.954356-1-damien.lemoal@wdc.com>
+ <20211026071728.954356-4-damien.lemoal@wdc.com>
+In-Reply-To: <20211026071728.954356-4-damien.lemoal@wdc.com>
+From: Alistair Francis <alistair23@gmail.com>
+Date: Wed, 27 Oct 2021 13:26:46 +1000
+Message-ID: <CAKmqyKNsp-sptsCb0mH_fw=wP0B1Qnjo8D4MY8Kp=549Wf4P3g@mail.gmail.com>
+To: Damien Le Moal <damien.lemoal@wdc.com>
+Subject: Re: [Buildroot] [PATCH v5 03/10] package/Makefile.in: Fix NOMMU
+ RISC-V 64-bits toolchain base name
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,119 +89,61 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>
+Cc: Alistair Francis <alistair@alistair23.me>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Drop arm fix patch that is now upstream.
+On Tue, Oct 26, 2021 at 5:25 PM Damien Le Moal <damien.lemoal@wdc.com> wrote:
+>
+> From: Christoph Hellwig <hch@lst.de>
+>
+> Using *-uclinux-* seems like an only partially followed convention.
+> And at least RISC-V 64-bits gcc does not know about uclinux tuples.
+> So switch back to the normal "linux" one for now.
+>
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+>
+> [Damien]
+> * Make the change conditional on BR2_RISCV_64 being "y".
+>
+> Signed-off-by: Damien Le Moal <damien.lemoal@wdc.com>
 
-Dbus is now an optional dependency for pipewire.
+Acked-by: Alistair Francis <alistair.francis@wdc.com>
 
-Add pipewire-v4l2 config option.
+Alistair
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- .../0001-cpu-fix-compilation-on-ARM.patch     | 28 -------------------
- package/pipewire/pipewire.hash                |  2 +-
- package/pipewire/pipewire.mk                  | 15 +++++++---
- 3 files changed, 12 insertions(+), 33 deletions(-)
- delete mode 100644 package/pipewire/0001-cpu-fix-compilation-on-ARM.patch
-
-diff --git a/package/pipewire/0001-cpu-fix-compilation-on-ARM.patch b/package/pipewire/0001-cpu-fix-compilation-on-ARM.patch
-deleted file mode 100644
-index 445cab08bd..0000000000
---- a/package/pipewire/0001-cpu-fix-compilation-on-ARM.patch
-+++ /dev/null
-@@ -1,28 +0,0 @@
--From f8817b439433798bd7217dc4ae72197887b0fc96 Mon Sep 17 00:00:00 2001
--From: Wim Taymans <wtaymans@redhat.com>
--Date: Thu, 30 Sep 2021 11:12:27 +0200
--Subject: [PATCH] cpu: fix compilation on ARM
--
--Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
--[james.hilliard1@gmail.com: backport from upstream commit
--f8817b439433798bd7217dc4ae72197887b0fc96]
-----
-- spa/plugins/support/cpu-arm.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/spa/plugins/support/cpu-arm.c b/spa/plugins/support/cpu-arm.c
--index d80b8ad87..de07ebf41 100644
----- a/spa/plugins/support/cpu-arm.c
--+++ b/spa/plugins/support/cpu-arm.c
--@@ -80,7 +80,7 @@ arm_init(struct impl *impl)
-- 	int arch;
-- 
-- 	if (!(cpuinfo = get_cpuinfo())) {
---		spa_log_warn(impl->log, NAME " %p: Can't read cpuinfo", impl);
--+		spa_log_warn(impl->log, "%p: Can't read cpuinfo", impl);
-- 		return 1;
-- 	}
-- 
---- 
--2.25.1
--
-diff --git a/package/pipewire/pipewire.hash b/package/pipewire/pipewire.hash
-index 879cfa41cb..7894939b0d 100644
---- a/package/pipewire/pipewire.hash
-+++ b/package/pipewire/pipewire.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  f4ae272e8d3fa3ff6a6ba2a465d1f951405b08fd31bbb82c27bb7cf55e113ba1  pipewire-0.3.38.tar.bz2
-+sha256  fafcde675b264485883df1f3bf7e08f36fd1d661ecc092dcec6fd35a059c2aff  pipewire-0.3.39.tar.bz2
- sha256  8909c319a7e27dbb33a15b9035f89ab3b7b2f6a12f8bcddc755206a8db1ada44  COPYING
- sha256  be4be5d77424833edf31f53fc1f1cecb6996b9e2d747d9e6fb8f878362ebc92b  LICENSE
-diff --git a/package/pipewire/pipewire.mk b/package/pipewire/pipewire.mk
-index 272cd046aa..f376f3c276 100644
---- a/package/pipewire/pipewire.mk
-+++ b/package/pipewire/pipewire.mk
-@@ -4,13 +4,13 @@
- #
- ################################################################################
- 
--PIPEWIRE_VERSION = 0.3.38
-+PIPEWIRE_VERSION = 0.3.39
- PIPEWIRE_SOURCE = pipewire-$(PIPEWIRE_VERSION).tar.bz2
- PIPEWIRE_SITE = https://gitlab.freedesktop.org/pipewire/pipewire/-/archive/$(PIPEWIRE_VERSION)
- PIPEWIRE_LICENSE = MIT, LGPL-2.1+ (libspa-alsa), GPL-2.0 (libjackserver)
- PIPEWIRE_LICENSE_FILES = COPYING LICENSE
- PIPEWIRE_INSTALL_STAGING = YES
--PIPEWIRE_DEPENDENCIES = host-pkgconf dbus $(TARGET_NLS_DEPENDENCIES)
-+PIPEWIRE_DEPENDENCIES = host-pkgconf $(TARGET_NLS_DEPENDENCIES)
- 
- PIPEWIRE_CONF_OPTS += \
- 	-Ddocs=disabled \
-@@ -28,6 +28,13 @@ PIPEWIRE_CONF_OPTS += \
- 	-Dvideotestsrc=enabled \
- 	-Dvolume=enabled
- 
-+ifeq ($(BR2_PACKAGE_DBUS),y)
-+PIPEWIRE_CONF_OPTS += -Ddbus=enabled
-+PIPEWIRE_DEPENDENCIES += dbus
-+else
-+PIPEWIRE_CONF_OPTS += -Ddbus=disabled
-+endif
-+
- ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
- PIPEWIRE_CONF_OPTS += -Dudev=enabled
- PIPEWIRE_DEPENDENCIES += udev
-@@ -106,9 +113,9 @@ PIPEWIRE_DEPENDENCIES += ncurses
- endif
- 
- ifeq ($(BR2_PACKAGE_PIPEWIRE_V4L2),y)
--PIPEWIRE_CONF_OPTS += -Dv4l2=enabled
-+PIPEWIRE_CONF_OPTS += -Dpipewire-v4l2=enabled -Dv4l2=enabled
- else
--PIPEWIRE_CONF_OPTS += -Dv4l2=disabled
-+PIPEWIRE_CONF_OPTS += -Dpipewire-v4l2=disabled -Dv4l2=disabled
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBCAMERA)$(BR2_PACKAGE_LIBDRM)$(BR2_PACKAGE_HAS_UDEV),yyy)
--- 
-2.25.1
-
+> ---
+>  package/Makefile.in | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+>
+> diff --git a/package/Makefile.in b/package/Makefile.in
+> index 04347d2d84..dae7a859fd 100644
+> --- a/package/Makefile.in
+> +++ b/package/Makefile.in
+> @@ -39,8 +39,9 @@ endif
+>  # Compute GNU_TARGET_NAME
+>  GNU_TARGET_NAME = $(ARCH)-$(TARGET_VENDOR)-$(TARGET_OS)-$(LIBC)$(ABI)
+>
+> -# FLAT binary format needs uclinux
+> -ifeq ($(BR2_BINFMT_FLAT),y)
+> +# FLAT binary format needs uclinux, except RISC-V 64-bits which needs
+> +# the regular linux name.
+> +ifeq ($(BR2_BINFMT_FLAT):$(BR2_RISCV_64),y:)
+>  TARGET_OS = uclinux
+>  else
+>  TARGET_OS = linux
+> --
+> 2.31.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
