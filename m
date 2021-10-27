@@ -2,51 +2,51 @@ Return-Path: <SRS0=x9kH=PP=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4AED3C433F5
-	for <buildroot@archiver.kernel.org>; Wed, 27 Oct 2021 10:07:44 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A2D48C433EF
+	for <buildroot@archiver.kernel.org>; Wed, 27 Oct 2021 10:09:02 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B9CBC60E05
-	for <buildroot@archiver.kernel.org>; Wed, 27 Oct 2021 10:07:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B9CBC60E05
+	by mail.kernel.org (Postfix) with ESMTPS id 693EC60E05
+	for <buildroot@archiver.kernel.org>; Wed, 27 Oct 2021 10:09:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 693EC60E05
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 64636818D0;
-	Wed, 27 Oct 2021 10:07:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 387B3403DF;
+	Wed, 27 Oct 2021 10:09:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TAoE9KlQdTfo; Wed, 27 Oct 2021 10:07:42 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id pHucKcmdjDLF; Wed, 27 Oct 2021 10:09:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C44C0818C4;
-	Wed, 27 Oct 2021 10:07:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 71904402A8;
+	Wed, 27 Oct 2021 10:09:00 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 80CBF1BF2F4
- for <buildroot@lists.busybox.net>; Wed, 27 Oct 2021 10:07:40 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id DA7AF1BF2F4
+ for <buildroot@lists.busybox.net>; Wed, 27 Oct 2021 10:08:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6F7EF6064E
- for <buildroot@lists.busybox.net>; Wed, 27 Oct 2021 10:07:40 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C999F6064E
+ for <buildroot@lists.busybox.net>; Wed, 27 Oct 2021 10:08:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id z7f5-hYUzGwd for <buildroot@lists.busybox.net>;
- Wed, 27 Oct 2021 10:07:39 +0000 (UTC)
+ with ESMTP id YwlZ3iLK5L9h for <buildroot@lists.busybox.net>;
+ Wed, 27 Oct 2021 10:08:58 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id B3FB2605F2
- for <buildroot@buildroot.org>; Wed, 27 Oct 2021 10:07:39 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1B92F60620
+ for <buildroot@buildroot.org>; Wed, 27 Oct 2021 10:08:58 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 651E888FA1; Wed, 27 Oct 2021 10:04:15 +0000 (UTC)
+ id BEFD988FA4; Wed, 27 Oct 2021 10:05:33 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 27 Oct 2021 12:07:36 +0200
-X-Git-Refname: refs/heads/2021.08.x
-X-Git-Oldrev: cec899184287eb5857f87899bfa20dc770796ab4
-X-Git-Newrev: 20ce8f444983c8c5d9f66c2dbd46339153a329a2
+Date: Wed, 27 Oct 2021 12:08:53 +0200
+X-Git-Refname: refs/heads/2021.02.x
+X-Git-Oldrev: d1cc179f4fd9430add45d5c8acc5f60270ca0ba3
+X-Git-Newrev: f1c27c259b8520cffffc6d0f7a53e11a86bd9527
 X-Patchwork-Hint: ignore
-Message-Id: <20211027100415.651E888FA1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.08.x] package/lrzip: security
+Message-Id: <20211027100533.BEFD988FA4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/lrzip: security
  bump to version 0.641
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -65,8 +65,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=20ce8f444983c8c5d9f66c2dbd46339153a329a2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=f1c27c259b8520cffffc6d0f7a53e11a86bd9527
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
 - Fix CVE-2021-27347: Use after free in lzma_decompress_buf function in
   stream.c in Irzip 0.631 allows attackers to cause Denial of Service
