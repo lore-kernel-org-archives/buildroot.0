@@ -2,85 +2,67 @@ Return-Path: <SRS0=x9kH=PP=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 88153C4332F
-	for <buildroot@archiver.kernel.org>; Wed, 27 Oct 2021 07:38:59 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 93419C433F5
+	for <buildroot@archiver.kernel.org>; Wed, 27 Oct 2021 09:13:55 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2D1B5610A4
-	for <buildroot@archiver.kernel.org>; Wed, 27 Oct 2021 07:38:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2D1B5610A4
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id 956E061056
+	for <buildroot@archiver.kernel.org>; Wed, 27 Oct 2021 09:13:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 956E061056
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=armadeus.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D80FF400CC;
-	Wed, 27 Oct 2021 07:38:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 43DEF80CFB;
+	Wed, 27 Oct 2021 09:13:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2HwKVjyHb7GH; Wed, 27 Oct 2021 07:38:58 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 12856400E6;
-	Wed, 27 Oct 2021 07:38:57 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B01CB1BF580
- for <buildroot@lists.busybox.net>; Wed, 27 Oct 2021 07:38:54 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A06CF80BA4
- for <buildroot@lists.busybox.net>; Wed, 27 Oct 2021 07:38:54 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uTSl0Sy_eITq for <buildroot@lists.busybox.net>;
- Wed, 27 Oct 2021 07:38:53 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com
- [IPv6:2a00:1450:4864:20::534])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B0EB180B94
- for <buildroot@busybox.net>; Wed, 27 Oct 2021 07:38:53 +0000 (UTC)
-Received: by mail-ed1-x534.google.com with SMTP id g8so6918225edb.2
- for <buildroot@busybox.net>; Wed, 27 Oct 2021 00:38:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=q1uTiqYsV0zgIqSY3N+XfNk3bG9ywUykt59xxe/XSPc=;
- b=VfGdMXXLSJXhNeZu93xQaXP7UzoDFDYqrikfC8NI4PTHxvkB37qX747DcCRefZIUBB
- +rpXnOThVvnb+7Egf6p0qMajG3GR8Ug2FJQOzU0SINos2PSX5ypXHIIgtoR2HXmNSkyz
- y1MMXWOOcdhI52Na2KDTFVDalIVFTAT7PAWR88brnAlAO8/AMK9wlB8Kli2JJkHF49zm
- EU6jikJuWgDWIoWQcv4ymHMec+C89yUpjhjlG4oqPfekmjG4M2vGIzyaYIBhSw1gkzSf
- GjhsWhTW1lsqAu9kRmm0KguxTR3YwVWVozOM5ex1t3Fk9g/PEtfxKY6/NgbzS9Ttyzn8
- Q9tw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=q1uTiqYsV0zgIqSY3N+XfNk3bG9ywUykt59xxe/XSPc=;
- b=ilHlJDgHCej6qbO0tmjNRurJz45C6W8v2W1/PGRxyD4rVa7oi9B9snSWqLPL/thYbw
- KJPxnndlgi+666eb8jNQNVrbkccjqEmw8KXSZDpt4fc2HSjl0dRNVYtX31Vc6GDBWiyc
- GYZYF+Bki96VwUc5SmQxv0rLl5wlnJnMtQ6722x0pryB6wb/8yjkSKLqD5WMYJfeaBZ5
- yJWThGFd/mC+L4HVtSAH520bJiEOdQ/XT6b3egwRwdU04lAzKKEAsG4QhKj5VJa0jGGP
- ua0oJOic8MqOk6BJSb0buG/dDIRoJgiVC6BQqfwBWSVrAfiyuEGg01a0ev+jfXazukAs
- TArg==
-X-Gm-Message-State: AOAM532R2+h4Itml8Y5VfMDdfhxIE42Q21CIG6JeeXSZxeq8mccnVjvY
- lm/WWewpu/Pyj7+CduJyPmQ6CAJV5f4=
-X-Google-Smtp-Source: ABdhPJwgbsW7aXW3NgY/7aSjBl6lDCXEjnmndkX08nRqAvdmSfYh5OtXkH3USaBLcjGw3IdS/NcOHg==
-X-Received: by 2002:a17:906:5017:: with SMTP id
- s23mr8838952ejj.546.1635320331989; 
- Wed, 27 Oct 2021 00:38:51 -0700 (PDT)
-Received: from vm-user.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
- by smtp.gmail.com with ESMTPSA id s12sm12091405edj.82.2021.10.27.00.38.51
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 27 Oct 2021 00:38:51 -0700 (PDT)
-From: Francois Perrad <fperrad@gmail.com>
-X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
-To: buildroot@busybox.net
-Date: Wed, 27 Oct 2021 09:38:45 +0200
-Message-Id: <20211027073845.1345702-1-francois.perrad@gadz.org>
-X-Mailer: git-send-email 2.30.2
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id sCXg1Fbn3cdP; Wed, 27 Oct 2021 09:13:53 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id A1A4780C6E;
+	Wed, 27 Oct 2021 09:13:52 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 66FF71BF5B5
+ for <buildroot@lists.busybox.net>; Wed, 27 Oct 2021 09:13:50 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 559376060F
+ for <buildroot@lists.busybox.net>; Wed, 27 Oct 2021 09:13:50 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2wplsoZYUoce for <buildroot@lists.busybox.net>;
+ Wed, 27 Oct 2021 09:13:48 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from 17.mo582.mail-out.ovh.net (17.mo582.mail-out.ovh.net
+ [46.105.36.150])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 29175605D4
+ for <buildroot@buildroot.org>; Wed, 27 Oct 2021 09:13:48 +0000 (UTC)
+Received: from player797.ha.ovh.net (unknown [10.110.115.67])
+ by mo582.mail-out.ovh.net (Postfix) with ESMTP id 983DF23192
+ for <buildroot@buildroot.org>; Wed, 27 Oct 2021 08:36:09 +0000 (UTC)
+Received: from armadeus.com (lfbn-str-1-222-18.w86-243.abo.wanadoo.fr
+ [86.243.182.18])
+ (Authenticated sender: sebastien.szymanski@armadeus.com)
+ by player797.ha.ovh.net (Postfix) with ESMTPSA id B0EE61F979D17;
+ Wed, 27 Oct 2021 08:36:05 +0000 (UTC)
+Authentication-Results: garm.ovh; auth=pass
+ (GARM-97G002dd284f95-c06c-40f5-831a-072a80f1771e,
+ 2DC2F88F4F03E9DE538956C85056AC2B22471AB1)
+ smtp.auth=sebastien.szymanski@armadeus.com
+X-OVh-ClientIp: 86.243.182.18
+From: =?UTF-8?q?S=C3=A9bastien=20Szymanski?= <sebastien.szymanski@armadeus.com>
+To: buildroot@buildroot.org
+Date: Wed, 27 Oct 2021 10:35:02 +0200
+Message-Id: <20211027083502.5530-1-sebastien.szymanski@armadeus.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/moarvm: bump to 2021.10
+X-Ovh-Tracer-Id: 1114640907831995371
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvtddrvdegtddgtdegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvufffkffogggtgfesthekredtredtjeenucfhrhhomhepuforsggrshhtihgvnhcuufiihihmrghnshhkihcuoehsvggsrghsthhivghnrdhsiiihmhgrnhhskhhisegrrhhmrgguvghushdrtghomheqnecuggftrfgrthhtvghrnhephfdtudelleehteejffetkeehvdeuudevhfefhfduheetieegueehjeffudejueevnecuffhomhgrihhnpehusghunhhtuhdrtghomhdpghhithhhuhgsrdgtohhmnecukfhppedtrddtrddtrddtpdekiedrvdegfedrudekvddrudeknecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpqdhouhhtpdhhvghlohepphhlrgihvghrjeeljedrhhgrrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpehsvggsrghsthhivghnrdhsiiihmhgrnhhskhhisegrrhhmrgguvghushdrtghomhdprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhg
+Subject: [Buildroot] [PATCH v2 1/1] package/stress-ng: bump to version
+ 0.13.05
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,43 +74,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Romain Naour <romain.naour@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/moarvm/moarvm.hash | 2 +-
- package/moarvm/moarvm.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/moarvm/moarvm.hash b/package/moarvm/moarvm.hash
-index 44c54e35b..01e3ee4ae 100644
---- a/package/moarvm/moarvm.hash
-+++ b/package/moarvm/moarvm.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  2300a921d504c9d33f111cbe08097d0011bfb06000c018b8d4353d97966772a7  MoarVM-2021.06.tar.gz
-+sha256  7f3487a70e8b77be0e4e2f12b14c49f6a01d0378e0940c86958c9016c495ad75  MoarVM-2021.10.tar.gz
- sha256  c53c6b96081b0a5b9b2fb4d0133d55c20e5e00e4c127ade62f03434ee7b3d2de  Artistic2.txt
-diff --git a/package/moarvm/moarvm.mk b/package/moarvm/moarvm.mk
-index 17b2a234e..99e26c73c 100644
---- a/package/moarvm/moarvm.mk
-+++ b/package/moarvm/moarvm.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MOARVM_VERSION = 2021.06
-+MOARVM_VERSION = 2021.10
- MOARVM_SITE = http://moarvm.com/releases
- MOARVM_SOURCE = MoarVM-$(MOARVM_VERSION).tar.gz
- MOARVM_LICENSE = Artistic-2.0
--- 
-2.30.2
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+VGhlIHByb2plY3QgVVJMIHJldHVybnMgNDA0IGVycm9yIGJlY2F1c2U6CgpRdW90aW5nIENvbGlu
+ZyBLaW5nOgoiVW5mb3J0dW5hdGVseSB3aGVuIEkgbGVmdCBDYW5vbmljYWwgbGFzdCB3ZWVrIHRo
+ZXkgcmVtb3ZlZCBteSB0YXJiYWxscyIKClNvIHVzZSBnaXRodWIgYW5kIHVwZGF0ZSBoYXNoLgoK
+U2lnbmVkLW9mZi1ieTogU8OpYmFzdGllbiBTenltYW5za2kgPHNlYmFzdGllbi5zenltYW5za2lA
+YXJtYWRldXMuY29tPgotLS0KCkNoYW5nZXMgZm9yIHYyOgogLSBmaXggdGFyYmFsbCBuYW1lIGlu
+IC5oYXNoIGZpbGUKCiBwYWNrYWdlL3N0cmVzcy1uZy9Db25maWcuaW4gICAgICB8IDIgKy0KIHBh
+Y2thZ2Uvc3RyZXNzLW5nL3N0cmVzcy1uZy5oYXNoIHwgMiArLQogcGFja2FnZS9zdHJlc3Mtbmcv
+c3RyZXNzLW5nLm1rICAgfCA1ICsrLS0tCiAzIGZpbGVzIGNoYW5nZWQsIDQgaW5zZXJ0aW9ucygr
+KSwgNSBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9wYWNrYWdlL3N0cmVzcy1uZy9Db25maWcu
+aW4gYi9wYWNrYWdlL3N0cmVzcy1uZy9Db25maWcuaW4KaW5kZXggNjRiNDczYjc1Yy4uODM5Y2Ji
+MWNjMCAxMDA2NDQKLS0tIGEvcGFja2FnZS9zdHJlc3MtbmcvQ29uZmlnLmluCisrKyBiL3BhY2th
+Z2Uvc3RyZXNzLW5nL0NvbmZpZy5pbgpAQCAtMTIsNyArMTIsNyBAQCBjb25maWcgQlIyX1BBQ0tB
+R0VfU1RSRVNTX05HCiAJICBzdWJzeXN0ZW1zIG9mIGEgY29tcHV0ZXIgYXMgd2VsbCBhcyB0aGUg
+dmFyaW91cyBvcGVyYXRpbmcKIAkgIHN5c3RlbSBrZXJuZWwgaW50ZXJmYWNlcy4KIAotCSAgaHR0
+cDovL2tlcm5lbC51YnVudHUuY29tL35ja2luZy9zdHJlc3MtbmcvCisJICBodHRwczovL2dpdGh1
+Yi5jb20vQ29saW5JYW5LaW5nL3N0cmVzcy1uZwogCiBjb21tZW50ICJzdHJlc3MtbmcgbmVlZHMg
+YSB0b29sY2hhaW4gdy8gaGVhZGVycyA+PSAzLjMiCiAJZGVwZW5kcyBvbiAhQlIyX25pb3MyICYm
+ICFCUjJfYXJjCmRpZmYgLS1naXQgYS9wYWNrYWdlL3N0cmVzcy1uZy9zdHJlc3MtbmcuaGFzaCBi
+L3BhY2thZ2Uvc3RyZXNzLW5nL3N0cmVzcy1uZy5oYXNoCmluZGV4IGYzZWI3NmZhODIuLjJlM2Y5
+OTg3NjkgMTAwNjQ0Ci0tLSBhL3BhY2thZ2Uvc3RyZXNzLW5nL3N0cmVzcy1uZy5oYXNoCisrKyBi
+L3BhY2thZ2Uvc3RyZXNzLW5nL3N0cmVzcy1uZy5oYXNoCkBAIC0xLDMgKzEsMyBAQAogIyBMb2Nh
+bGx5IGNhbGN1bGF0ZWQKLXNoYTI1NiAgZjM3ZjczOWU0ZDE1MzQzMzYwYTQ3OTgwYjY3ZGM4YjJh
+NmJmM2Q0ZDNlZjcyN2Q1NWUyZGQ5OWEwYjY0ZjllYSAgc3RyZXNzLW5nLTAuMTMuMDEudGFyLnh6
+CitzaGEyNTYgIDNkZTQ5ZTExMDA4NjY2MzRmNTQ5ZTk5YzE2NDQyODNkMGNkZTgxN2I4NDRhNjlk
+Y2Y3ZjgwYWZhMjIyN2QzNTAgIHN0cmVzcy1uZy0wLjEzLjA1LnRhci5negogc2hhMjU2ICA4MTc3
+Zjk3NTEzMjEzNTI2ZGYyY2Y2MTg0ZDhmZjk4NmM2NzVhZmI1MTRkNGU2OGE0MDQwMTA1MjFiODgw
+NjQzICBDT1BZSU5HCmRpZmYgLS1naXQgYS9wYWNrYWdlL3N0cmVzcy1uZy9zdHJlc3MtbmcubWsg
+Yi9wYWNrYWdlL3N0cmVzcy1uZy9zdHJlc3MtbmcubWsKaW5kZXggZTBiMzg1ZTc1Ni4uMGIyMjg3
+YzdmYiAxMDA2NDQKLS0tIGEvcGFja2FnZS9zdHJlc3Mtbmcvc3RyZXNzLW5nLm1rCisrKyBiL3Bh
+Y2thZ2Uvc3RyZXNzLW5nL3N0cmVzcy1uZy5tawpAQCAtNCw5ICs0LDggQEAKICMKICMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjCiAKLVNUUkVTU19OR19WRVJTSU9OID0gMC4xMy4wMQotU1RSRVNTX05H
+X1NPVVJDRSA9IHN0cmVzcy1uZy0kKFNUUkVTU19OR19WRVJTSU9OKS50YXIueHoKLVNUUkVTU19O
+R19TSVRFID0gaHR0cHM6Ly9rZXJuZWwudWJ1bnR1LmNvbS9+Y2tpbmcvdGFyYmFsbHMvc3RyZXNz
+LW5nCitTVFJFU1NfTkdfVkVSU0lPTiA9IDAuMTMuMDUKK1NUUkVTU19OR19TSVRFID0gJChjYWxs
+IGdpdGh1YixDb2xpbklhbktpbmcsc3RyZXNzLW5nLFYkKFNUUkVTU19OR19WRVJTSU9OKSkKIFNU
+UkVTU19OR19MSUNFTlNFID0gR1BMLTIuMCsKIFNUUkVTU19OR19MSUNFTlNFX0ZJTEVTID0gQ09Q
+WUlORwogCi0tIAoyLjMyLjAKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcK
+aHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
