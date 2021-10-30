@@ -2,75 +2,84 @@ Return-Path: <SRS0=xEd5=PS=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D2FDC433F5
-	for <buildroot@archiver.kernel.org>; Sat, 30 Oct 2021 21:37:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 57A2EC433F5
+	for <buildroot@archiver.kernel.org>; Sat, 30 Oct 2021 21:48:11 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2081860E8B
-	for <buildroot@archiver.kernel.org>; Sat, 30 Oct 2021 21:37:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2081860E8B
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=openest.io
+	by mail.kernel.org (Postfix) with ESMTPS id D294660E54
+	for <buildroot@archiver.kernel.org>; Sat, 30 Oct 2021 21:48:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D294660E54
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E58BB401EA;
-	Sat, 30 Oct 2021 21:37:00 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 90CD8401FF;
+	Sat, 30 Oct 2021 21:48:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LY7Z-vB1mPek; Sat, 30 Oct 2021 21:36:59 +0000 (UTC)
+	with ESMTP id qTs3cKog37Wm; Sat, 30 Oct 2021 21:48:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CEADA401FF;
-	Sat, 30 Oct 2021 21:36:58 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 972E740201;
+	Sat, 30 Oct 2021 21:48:08 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 307921BF23C
- for <buildroot@lists.busybox.net>; Sat, 30 Oct 2021 21:36:34 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id F20301BF23C
+ for <buildroot@lists.busybox.net>; Sat, 30 Oct 2021 21:48:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 202C780D35
- for <buildroot@lists.busybox.net>; Sat, 30 Oct 2021 21:36:34 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E59E980D35
+ for <buildroot@lists.busybox.net>; Sat, 30 Oct 2021 21:48:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lsZqiBGSvTyx for <buildroot@lists.busybox.net>;
- Sat, 30 Oct 2021 21:36:33 +0000 (UTC)
+ with ESMTP id C1h0EP7Jsddg for <buildroot@lists.busybox.net>;
+ Sat, 30 Oct 2021 21:48:06 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com
- [209.85.221.41])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2500480D34
- for <buildroot@buildroot.org>; Sat, 30 Oct 2021 21:36:33 +0000 (UTC)
-Received: by mail-wr1-f41.google.com with SMTP id v17so22186947wrv.9
- for <buildroot@buildroot.org>; Sat, 30 Oct 2021 14:36:32 -0700 (PDT)
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
+ [IPv6:2a00:1450:4864:20::429])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B52A980D34
+ for <buildroot@buildroot.org>; Sat, 30 Oct 2021 21:48:06 +0000 (UTC)
+Received: by mail-wr1-x429.google.com with SMTP id d13so22224621wrf.11
+ for <buildroot@buildroot.org>; Sat, 30 Oct 2021 14:48:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=0bMR3RoIXiiwuCg9NHgh4RQBTzv/GUxEUDLgAvUrlKI=;
+ b=lkt6eS6RsyydBho0XvqYpdw4YK6dRENuMP89/T1CDFHMmgRpgxH5v3e0Bxf/j+XA9c
+ AcG+ZE95JvtkYdS310alGRtivdPU9GNiQcozP41+qPWQEs7FbOiTQVFe1k6lVFfz1xnz
+ 82f8jniofxgGtydqZk+H982DPQLZg5bt4n0q4Ct19IfyiXfyqTFn01NcDD1E1dL3LrQ+
+ GIVJZssIust10gNt0utIUX/Iclm3Vm2iumtWMwKNObLdE4aWd0i0vK/DlSBYlbhJT6s3
+ MGxE2nu4C4cK+uiYL9hQ5K7GTnxm2KzsH8zNHzlWOIWj4nE/Jxor6DSkUp2dLcVOMqLw
+ MhiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=6emVCS23x6BEadyXbLaVcXvhIiATtCd2s8gNYVeiP0A=;
- b=lQd4LfTdBQTbN5p3oMiFklIhXZpwWK/460SZVLIH/VO6hl9o6hEQM8C53IWAORJj5p
- IsOR6XgDPpbJMJ0lTwedNWRdtQqPBs5gH8dDQnO7JKeY3xI44l2oqtQcLEsamu+Akpet
- 0q4cdhbWH9sgw5QsDwC3Vm3GP24GZNl7BsVMG2w13QZh/S0gy/e5UwgKFodMM1UceWcl
- xusiPSeeCnt8+62qNaE96w/wmDEsPTc1kZrkbZfGL4Zo+nP4bGdXYqHT9g9IheEDFJ3b
- fmbq+EetDj6yhPfvx9jrZEoGNUU0qqNnJnzbxmkiTiWFoNjdIyqOReH1i/WPSnkTG/Ee
- yJGw==
-X-Gm-Message-State: AOAM5338VMjGqi/gCgKppEKUxNUoP4ZPCGrQ5P0HOB4mBj34DZi8ex5d
- L4ffDydK8zWjkioTqPmzWt6hnJcy9y4=
-X-Google-Smtp-Source: ABdhPJxEB92J5cEEr+lyPeVAvZ78nVjw8YTQepT1TBC55d5Y5vxrr1WipLrXOtfbTr5xm73EG5rgzA==
-X-Received: by 2002:a05:6000:18ce:: with SMTP id
- w14mr25248111wrq.230.1635629791045; 
- Sat, 30 Oct 2021 14:36:31 -0700 (PDT)
-Received: from alderan.numericable.fr (249.164.25.93.rev.sfr.net.
- [93.25.164.249])
- by smtp.gmail.com with ESMTPSA id m34sm7830766wms.25.2021.10.30.14.36.30
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=0bMR3RoIXiiwuCg9NHgh4RQBTzv/GUxEUDLgAvUrlKI=;
+ b=aq09K9aQxDNL7wvu8zR6BPORUMSGWRUYcC9hoYQtkUJPEh7PzF7f7KNwkq0NOHSeWc
+ qevSjq81lxofN7SFhb9AYr8q9RUsZJPZgcxFzEfgrwg/9ClZCIYlpQhrjARW+1eXaHBn
+ dboyrvPHqYMplaKaGyeXfcZZsv6RbxK4WLUgc4K7JtOAiZJpTYAnYMzHtYbIWqELEUxd
+ BUGeDKNO+fL5XZH4BXz6EGo1Ni+L4BC5+qZnmSaxF4SlehVcotacBoDJZCQO499oGvoN
+ ybk/2/IFoSd5GxETheBZX9fpx6m+QVMnoJ41Z/coZ6av7PWzIKiogyMyIIe0e1S/fGqX
+ 1XWQ==
+X-Gm-Message-State: AOAM530yk4qKeAYkFBEd80nK73eVX3P/fOlnvTRpHlynHtAzsQ4lG9EE
+ 1jeak77w79ZgBbPM03A1thvVi4cvedE=
+X-Google-Smtp-Source: ABdhPJxTgZV7oSw+46VOzVcUsPNRGYt4CeF6JNtnjxKA5hGwrdNVfa7zDSVLDuIIgjnaz6RUlKjeJw==
+X-Received: by 2002:adf:e8c1:: with SMTP id k1mr15758196wrn.257.1635630484650; 
+ Sat, 30 Oct 2021 14:48:04 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-1732-95.w86-253.abo.wanadoo.fr.
+ [86.253.44.95])
+ by smtp.gmail.com with ESMTPSA id i3sm12073488wmq.18.2021.10.30.14.48.03
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 30 Oct 2021 14:36:30 -0700 (PDT)
-From: Julien Grossholtz <julien.grossholtz@openest.io>
+ Sat, 30 Oct 2021 14:48:04 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 30 Oct 2021 23:36:00 +0200
-Message-Id: <20211030213600.3445223-3-julien.grossholtz@openest.io>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20211030213600.3445223-1-julien.grossholtz@openest.io>
-References: <20211030213600.3445223-1-julien.grossholtz@openest.io>
+Date: Sat, 30 Oct 2021 23:46:22 +0200
+Message-Id: <20211030214622.2154510-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 2/2] board/raspberrypi: add Raspberry Pi Zero 2 W
+Subject: [Buildroot] [PATCH 1/1] package/nano: fix build with uclibc < 1.0.35
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,184 +91,88 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Peter Seiderer <ps.report@gmx.net>, Martin Bark <martin@barkynet.com>,
- Julien Grossholtz <julien.grossholtz@openest.io>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The Raspberry-Pi Zero 2 W is an affordable single board computer. It is
-a more powerful drop-in replacement for the Raspberry Pi Zero W.
+Build of nano with uclibc < 1.0.35 is broken since bump to version 5.9
+in commit 3e62e9b14b2656f813c20ec6aaee99e3a85601c7:
 
-The board incorporates an Raspberry-Pi RP3A0 system-in-package (SiP) with
-a Broadcom BCM2710A1 and 512MB LPDDR2 SDRAM. The CPU is a quad-core 1Ghz
-64-bit Arm Cortex-A53. As for other Raspberry-Pis it also provides
-2.4GHz 802.11 b/g/n Wifi, Bluetooth 4.2 and BLE.
+In file included from ./sys/random.h:40,
+                 from getrandom.c:22:
+/home/giuliobenetti/autobuild/run/instance-3/output-1/host/x86_64-buildroot-linux-uclibc/sysroot/usr/include/sys/random.h:27:35: error: unknown type name 'size_t'
+   27 | extern int getrandom(void *__buf, size_t count, unsigned int flags)
+      |                                   ^~~~~~
+/home/giuliobenetti/autobuild/run/instance-3/output-1/host/x86_64-buildroot-linux-uclibc/sysroot/usr/include/sys/random.h:8:1: note: 'size_t' is defined in header '<stddef.h>'; did you forget to '#include <stddef.h>'?
+    7 | #include <features.h>
+  +++ |+#include <stddef.h>
+    8 |
 
-The BCM2710 cpu is similar to the Raspberry-Pi 3, it uses the same
-kernel configuration as the Raspberry-Pi 3.
+Fixes:
+ - http://autobuild.buildroot.org/results/1932c524aa6b6a3337a0fc21b44adaac60972d30
 
-Signed-off-by: Julien Grossholtz <julien.grossholtz@openest.io>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- board/raspberrypi/config_zero2w.txt           | 29 +++++++++++++++
- .../genimage-raspberrypizero2w.cfg            | 31 ++++++++++++++++
- board/raspberrypi/readme.txt                  |  5 +++
- board/raspberrypizero2w                       |  1 +
- configs/raspberrypizero2w_defconfig           | 36 +++++++++++++++++++
- 5 files changed, 102 insertions(+)
- create mode 100644 board/raspberrypi/config_zero2w.txt
- create mode 100644 board/raspberrypi/genimage-raspberrypizero2w.cfg
- create mode 120000 board/raspberrypizero2w
- create mode 100644 configs/raspberrypizero2w_defconfig
+ ...andom.c-fix-build-with-uclibc-1.0.35.patch | 46 +++++++++++++++++++
+ 1 file changed, 46 insertions(+)
+ create mode 100644 package/nano/0001-lib-getrandom.c-fix-build-with-uclibc-1.0.35.patch
 
-diff --git a/board/raspberrypi/config_zero2w.txt b/board/raspberrypi/config_zero2w.txt
+diff --git a/package/nano/0001-lib-getrandom.c-fix-build-with-uclibc-1.0.35.patch b/package/nano/0001-lib-getrandom.c-fix-build-with-uclibc-1.0.35.patch
 new file mode 100644
-index 0000000000..9e6b7f5ccf
+index 0000000000..f67f6d34bb
 --- /dev/null
-+++ b/board/raspberrypi/config_zero2w.txt
-@@ -0,0 +1,29 @@
-+# Please note that this is only a sample, we recommend you to change it to fit
-+# your needs.
-+# You should override this file using BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE.
-+# See http://buildroot.org/manual.html#rootfs-custom
-+# and http://elinux.org/RPiconfig for a description of config.txt syntax
++++ b/package/nano/0001-lib-getrandom.c-fix-build-with-uclibc-1.0.35.patch
+@@ -0,0 +1,46 @@
++From a0594387565e1e6b4a8a8ba04ad13b135cc1f0b5 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Thu, 1 Apr 2021 07:49:46 +0200
++Subject: [PATCH] lib/getrandom.c: fix build with uclibc < 1.0.35
 +
-+start_file=start.elf
-+fixup_file=fixup.dat
++Fix the following build failure with uclibc < 1.0.35 which is raised
++since the addition of getrandom module in
++https://git.savannah.gnu.org/cgit/gnulib.git/commit/?id=682cc4e678aceff32dea2a84b6e5147bdf5a20a7:
 +
-+kernel=zImage
++In file included from ./sys/random.h:40,
++                 from getrandom.c:22:
++/home/fabrice/buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/usr/include/sys/random.h:27:35: error: unknown type name 'size_t'
++   27 | extern int getrandom(void *__buf, size_t count, unsigned int flags)
++      |                                   ^~~~~~
++/home/fabrice/buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/usr/include/sys/random.h:8:1: note: 'size_t' is defined in header '<stddef.h>'; did you forget to '#include <stddef.h>'?
++    7 | #include <features.h>
++  +++ |+#include <stddef.h>
++    8 |
 +
-+# To use an external initramfs file
-+#initramfs rootfs.cpio.gz
++This patch is not upstreamable as it is only a workaround for
++uclibc < 1.0.35, upstream uclibc has been patched with
++https://github.com/wbx-github/uclibc-ng/commit/00972c02c2b6e0a95d5def4a71bdfb188e091782
 +
-+# Disable overscan assuming the display supports displaying the full resolution
-+# If the text shown on the screen disappears off the edge, comment this out
-+disable_overscan=1
++Fixes:
++ - http://autobuild.buildroot.org/results/1932c524aa6b6a3337a0fc21b44adaac60972d30
 +
-+# How much memory in MB to assign to the GPU on Pi models having
-+# 256, 512 or 1024 MB total memory
-+gpu_mem_256=100
-+gpu_mem_512=100
-+gpu_mem_1024=100
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ lib/getrandom.c | 1 +
++ 1 file changed, 1 insertion(+)
 +
-+# fixes rpi (3B, 3B+, 3A+, 4B ,zero W and zero 2) ttyAMA0 serial console
-+dtoverlay=miniuart-bt
++diff --git a/lib/getrandom.c b/lib/getrandom.c
++index 41212fb32..0ad3f9648 100644
++--- a/lib/getrandom.c
+++++ b/lib/getrandom.c
++@@ -19,6 +19,7 @@
++ 
++ #include <config.h>
++ 
+++#include <stddef.h>
++ #include <sys/random.h>
++ 
++ #include <errno.h>
++-- 
++2.30.2
 +
-+# enable autoprobing of Bluetooth driver without need of hciattach/btattach
-+dtoverlay=krnbt=on
-diff --git a/board/raspberrypi/genimage-raspberrypizero2w.cfg b/board/raspberrypi/genimage-raspberrypizero2w.cfg
-new file mode 100644
-index 0000000000..7d7987d900
---- /dev/null
-+++ b/board/raspberrypi/genimage-raspberrypizero2w.cfg
-@@ -0,0 +1,31 @@
-+image boot.vfat {
-+  vfat {
-+    files = {
-+      "bcm2710-rpi-zero-2.dtb",
-+      "rpi-firmware/bootcode.bin",
-+      "rpi-firmware/cmdline.txt",
-+      "rpi-firmware/config.txt",
-+      "rpi-firmware/fixup.dat",
-+      "rpi-firmware/start.elf",
-+      "rpi-firmware/overlays",
-+      "zImage"
-+    }
-+  }
-+  size = 32M
-+}
-+
-+image sdcard.img {
-+  hdimage {
-+  }
-+
-+  partition boot {
-+    partition-type = 0xC
-+    bootable = "true"
-+    image = "boot.vfat"
-+  }
-+
-+  partition rootfs {
-+    partition-type = 0x83
-+    image = "rootfs.ext4"
-+  }
-+}
-diff --git a/board/raspberrypi/readme.txt b/board/raspberrypi/readme.txt
-index 98c44d80a1..8f0d3144eb 100644
---- a/board/raspberrypi/readme.txt
-+++ b/board/raspberrypi/readme.txt
-@@ -28,6 +28,10 @@ For model Zero (model A+ in smaller form factor):
- 
-   $ make raspberrypi0_defconfig
- 
-+For model Zero 2 W (model B3 in smaller form factor):
-+
-+  $ make raspberrypizero2w_defconfig
-+
- For model 2 B:
- 
-   $ make raspberrypi2_defconfig
-@@ -76,6 +80,7 @@ After building, you should obtain this tree:
-     output/images/
-     +-- bcm2708-rpi-b.dtb           [1]
-     +-- bcm2708-rpi-b-plus.dtb      [1]
-+    +-- bcm2710-rpi-zero-2.dtb      [1]
-     +-- bcm2709-rpi-2-b.dtb         [1]
-     +-- bcm2710-rpi-3-b.dtb         [1]
-     +-- bcm2710-rpi-3-b-plus.dtb    [1]
-diff --git a/board/raspberrypizero2w b/board/raspberrypizero2w
-new file mode 120000
-index 0000000000..fcdafc81ed
---- /dev/null
-+++ b/board/raspberrypizero2w
-@@ -0,0 +1 @@
-+raspberrypi
-\ No newline at end of file
-diff --git a/configs/raspberrypizero2w_defconfig b/configs/raspberrypizero2w_defconfig
-new file mode 100644
-index 0000000000..451b037fa3
---- /dev/null
-+++ b/configs/raspberrypizero2w_defconfig
-@@ -0,0 +1,36 @@
-+BR2_arm=y
-+BR2_cortex_a53=y
-+BR2_ARM_FPU_NEON_VFPV4=y
-+
-+# Linux headers same as kernel, 5.10 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
-+
-+BR2_TOOLCHAIN_BUILDROOT_CXX=y
-+
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,581049d718caf95f5feb00607ac748d5841cf27c)/linux-581049d718caf95f5feb00607ac748d5841cf27c.tar.gz"
-+BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
-+
-+# Build the DTB from the kernel sources
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2710-rpi-zero-2"
-+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+
-+BR2_PACKAGE_RPI_FIRMWARE=y
-+BR2_PACKAGE_RPI_FIRMWARE_BOOTCODE_BIN=y
-+BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI=y
-+BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE="board/raspberrypizero2w/config_zero2w.txt"
-+
-+# MicroSD images generation tools
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
-+
-+# Filesystem / image
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
-+# BR2_TARGET_ROOTFS_TAR is not set
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypizero2w/post-build.sh"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypizero2w/post-image.sh"
 -- 
-2.31.1
+2.33.0
 
 _______________________________________________
 buildroot mailing list
