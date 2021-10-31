@@ -2,100 +2,51 @@ Return-Path: <SRS0=Itk9=PT=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 85241C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 31 Oct 2021 05:39:39 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D9AF6C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 31 Oct 2021 07:03:17 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B974D60FC4
-	for <buildroot@archiver.kernel.org>; Sun, 31 Oct 2021 05:39:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B974D60FC4
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=hotmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id 1A8AA60E8C
+	for <buildroot@archiver.kernel.org>; Sun, 31 Oct 2021 07:03:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1A8AA60E8C
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5506680CD9;
-	Sun, 31 Oct 2021 05:39:38 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id AA71C40106;
+	Sun, 31 Oct 2021 07:03:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bU_HcTVonxcq; Sun, 31 Oct 2021 05:39:37 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3rSd38rrf2Gc; Sun, 31 Oct 2021 07:03:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BB5C580CC5;
-	Sun, 31 Oct 2021 05:39:36 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 90ECB1BF312
- for <buildroot@lists.busybox.net>; Sun, 31 Oct 2021 05:39:35 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 524C840167;
+	Sun, 31 Oct 2021 07:03:14 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 8FF5B1BF322
+ for <buildroot@lists.busybox.net>; Sun, 31 Oct 2021 07:03:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8D73840130
- for <buildroot@lists.busybox.net>; Sun, 31 Oct 2021 05:39:35 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 766FD40167
+ for <buildroot@lists.busybox.net>; Sun, 31 Oct 2021 07:03:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=hotmail.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hdSLqvw81BS6 for <buildroot@lists.busybox.net>;
- Sun, 31 Oct 2021 05:39:34 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from AUS01-ME3-obe.outbound.protection.outlook.com
- (mail-me3aus01olkn2082b.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:7004::82b])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A33514012A
- for <buildroot@buildroot.org>; Sun, 31 Oct 2021 05:39:34 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WXwzUw5S/GpJYs99R4T5EbdBVxq6dO+ukmY818D3IbwIPTiUPA3HKIWX4nTHY/7qiJtUTtF0grx3ulJykmNNZ2tEmlgBOXSdJl5aLr9rF2jy/iquz8gGrpBR4Bepnvh7XlzfK20K0yFs1KpOAxVhHynizjpwpGtEpmyJLdJjaq927cvC75Zcv/rp64NcvJbPMXqio20LAqUUTSe/kcdjpVjPhAT27fAA3xqs06nxAMvqMRY6K2OS/KOduecAl63Ah4lzsLfPVGYsVcVxSqAjOAFAaUlXX0LGqC5EiRypEosykAksnuAVZ+/WTUSlLlLcO5BuDIqD/PDS1z2v8SiMaw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=PoIM7krxtmYO176P9zT5bzXJ02SrN0JsxMOe/bFmZbg=;
- b=EgYz52VKsuxVo7+PhLp6GIT1mbUdIKJYW2MyIBGBMb4TVkuWmOxz6wnz9BFQ5N19/8dPLehoql0FXSk5ae/d3EKL6BA3DSf8wr/VIRqKX6X+7TsKBfPlDQnO7UQZkVae7zINjgUtwEdc51+W4aO3AZiFGGLr8LmntWvcnoceufFAImcGu9WUOtQWRmTmBAFrMpuvTyAv30hXUyIceto4oxrIiHUGwpRnK4FykWJohwf2bI6n/rDWOn3Pt1OkshzE9ardJInKJup1mSG87o03EuKJ4GBcUH6BMs9R88N/vUr8WY2BmqB4nJU8aM2RGMYdJA4GW4QnOOKRo/xr9JqCGg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PoIM7krxtmYO176P9zT5bzXJ02SrN0JsxMOe/bFmZbg=;
- b=G7bDAK+87x71yUJGYpfS+S4bK0dNIEv+zZYY4lsX+fZk+LiIA1sZ/sKYpB5yPCH4/P8MHn1ZuC9AEznEGZJ5Qt+uC9UvDfRyoOojbAWBpfTFCSe1AJnIBQbxAaE6q9Rbe1L4dnAiMSqLmYShS9+GisNLLiXU8Si0SBDsmBffOhO+v9Fi9OhFdfgTdiWAJSUcWBFtmAsaqvbpgnpXZ9ox/KV/K75DB/8iWUGB/IOlElVkdUl+cDYuGaVBT5Vv/GTXpZGjFeo5eNnMKi0rr2G3hdqMYC3YhomQymN7Y6DvOu04MPWCxOukGdEFVJcXq+KU8/81An5a6k/t9MuhsNMlrw==
-Received: from SY4P282MB3014.AUSP282.PROD.OUTLOOK.COM (2603:10c6:10:161::6) by
- SY7P282MB3721.AUSP282.PROD.OUTLOOK.COM (2603:10c6:10:1e0::8) with
- Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4649.15; Sun, 31 Oct 2021 05:39:27 +0000
-Received: from SY4P282MB3014.AUSP282.PROD.OUTLOOK.COM
- ([fe80::c5b7:4ae0:ae51:3a23]) by SY4P282MB3014.AUSP282.PROD.OUTLOOK.COM
- ([fe80::c5b7:4ae0:ae51:3a23%4]) with mapi id 15.20.4649.018; Sun, 31 Oct 2021
- 05:39:27 +0000
-From: Bassem Fahmy <t_fahmy_bassem@hotmail.com>
-To: "buildroot@buildroot.org" <buildroot@buildroot.org>
-Thread-Topic: autoconf Makefile in sub-directory
-Thread-Index: AQHXzhmIUZuXCKSNZUucmeWHDquJlg==
-Date: Sun, 31 Oct 2021 05:39:27 +0000
-Message-ID: <SY4P282MB30149F3F7DB7C987B84AE139CB899@SY4P282MB3014.AUSP282.PROD.OUTLOOK.COM>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-suggested_attachment_session_id: 91704edf-38b0-f31c-7e1e-b0921a0e27b2
-x-ms-exchange-messagesentrepresentingtype: 1
-x-tmn: [lT6PzkV6hv+JeHsvBIBmxaguRMQTfTuwxdU0q3vZw00x0eG0iswO9YeI50GKiRSqSm1HeQ1QNDQ=]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 27d1a706-2169-4986-78e6-08d99c30cdb3
-x-ms-traffictypediagnostic: SY7P282MB3721:
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: SWD7BMshI8LFoxv8fC8obXe+LFi6JjwBHxI4BfDqxGGBo0OBTs11IvAaWH+GjTsluOWvDZlo7G5jPZ7b8UufA0qOoiFe1GjVs+jRu+OdiUeC+UsS4SJnoQnnLIVoLxap9+PUjUJh6xeLoWDssS8i+iqZSMYrCQclT3Nfgv0ObeHy6YZJwwsl14xogk0DzAtfMFw5eUp1PNnC4tlctTrxz5N2Y8+hW2IAOm/gx0xmrUg/dy464vpE2EKLOZx4o5t9tDDOVER1HZVBMDnxFQ9clB1NC3eVHAKV69ARuVE3Uz7OuvQIrUHr3sQ6jMQNSgxF6QU63T4QgEgW3ZtdRm5BHWmWlzKwdavTnn3AiJltOYffNDZSxcRxpmnUk2WkBpj0C3P5ytZXtJup9hptFFmYvR4BIRLm/nYSF8b3RvoluVWCDqOnoejRSB8rA3rTukLUqTCOf6nyO25A0Sy8nm0laAJrTz1f6AW7AWsFXCuOVS01rwEDt0CZhuq6qSrnPwP9th4lcuy7mm0WSmY34xOWAO6opngo5/NNpLDaV1tiywU=
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: aR2mbjzewIr30oMqYqpxkwbl3bDRfpD/RP2QzveiqlognKF9liVtGWr/fQwSMPpYeZOglEuTaG2Vpb9DcwZxGCA1KmOVc2wQJogXQffFQvdIDLjMkETC/qQ1wHesvGb++bt7qv+WUJPA7OwRlxyY33SZ32LUQwglfHXI8L1voXDtRFwoXJvbpFKUR7jFNzqGtYqbm8WFdxLBQT+iR9IMKEyGdvrQPzWtmSnuFLawoyCCy23aSXN+dKDp2bZhCSVWQ+Jr7IkRUGv1bmcdkxOgTWXSvfWGxQKSrRmBYUkDpYaaXpqUwJB5N1fEdX4Km2cElI63dSK0hWb7++1oKSkLcsnahe8clQ0sXSpT91JFwxP0RN2qA0/7VoMSDmD13Y5VwWzDuicXX84YXSioDp+opTTO+anVzbN/XhytqIa9RkgJF9Q8zQZfdCCUzUn09zLUKkdKmrebUZoc7DyQ6E31izdeEXSQeCtll4psYzjbfrgw1nvj0ZGiyITRh8FYMjHZqazCHhLQ5wrklDVjQMgTsFiqCuryiznYXblIOESePwRKANoQXfjlEVrdDIBPqwJ1BAZWXpC8R2aWoNPN2QNvx43IOcs/7CgYvZtIVwuqlIF17iEQ3pRk4bTqQ5kDsv76SaQ9bW2N2YdglrFFwkbTw7LEAGlz/Huj91qO1pjPnJVi3p2emsAIK1m1wDWfpt81Fgil1S0DC2cGYdrQ3IbzujR+qiilxt/3jvCoKlMRgqfKGkwB1f/jdj1j9uVutxlgIKXy/aVAuE+8JP4xGlRDXw==
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id iGzL3roxxi_4 for <buildroot@lists.busybox.net>;
+ Sun, 31 Oct 2021 07:03:10 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id EDE2140106
+ for <buildroot@buildroot.org>; Sun, 31 Oct 2021 07:03:09 +0000 (UTC)
+Received: (Authenticated sender: bot@bootlin.com)
+ by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 53956FF80D
+ for <buildroot@buildroot.org>; Sun, 31 Oct 2021 07:03:06 +0000 (UTC)
 MIME-Version: 1.0
-X-OriginatorOrg: sct-15-20-3174-20-msonline-outlook-8dac2.templateTenant
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SY4P282MB3014.AUSP282.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: 27d1a706-2169-4986-78e6-08d99c30cdb3
-X-MS-Exchange-CrossTenant-originalarrivaltime: 31 Oct 2021 05:39:27.2682 (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SY7P282MB3721
-Subject: [Buildroot] autoconf Makefile in sub-directory
+To: buildroot@buildroot.org
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 31 Oct 2021 07:03:06 -0000
+Message-Id: <20211031070312.766FD40167@smtp2.osuosl.org>
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2021-10-30
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -107,49 +58,209 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi All,
+Hello,
 
-I have been given a package that is built using autoconf tools. The
-package builds fine under native compilation.=A0 The package however
-produces the main Makefile under a linux subdirectory
+Autobuild statistics for 2021-10-30
+===================================
 
-CFLAGS=3D"$CFLAGS
--I/home/bassem/projects/morse_buildroot/output/host/arm-buildroot-linux-gnu=
-eabihf/sysroot/usr/include/libnl3"
-AC_CONFIG_FILES([linux/Makefile
-])
-;;
+      branch |  OK | NOK | TIM | TOT |
+  2021.02.x  | 34  | 11  |  0  | 45  |
+  2021.08.x  | 27  |  4  |  0  | 31  |
+    master   | 43  | 99  |  0  | 142 |
 
-Adding an autoconf package in buildroot, buildroot can pass the
-configure step, however Make target is failing:
+Classification of failures by reason for master
+-----------------------------------------------
 
-PATH=3D"/home/bassem/projects/morse_buildroot/output/host/bin:/home/bassem/=
-projects/morse_buildroot/output/host/sbin:/home/bassem/.local/bin:/usr/loca=
-l/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/g=
-ames:/snap/bin:/home/bassem/tools/riscv64-unknown-elf-gcc-8.2.0-2019.02.0-x=
-86_64-linux-ubuntu14/bin:/home/bassem/tools/riscv-openocd-0.10.0-2018.12.0-=
-x86_64-linux-ubuntu14/bin:/home/bassem/tools"
-=A0/usr/bin/make -j9 -C
-/home/bassem/projects/morse_buildroot/output/build/dpp-custom/linux -C
-/home/bassem/projects/morse_buildroot/output/build/dpp-custom/
-make[2]: *** No targets specified and no makefile found.=A0 Stop.
+      ca-certificates-20211016 | 36
+                  boinc-7.18.1 | 14
+                tpm2-tss-3.1.0 | 14
+              host-erlang-22.2 | 6 
+              tinydtls-0.9-rc1 | 6 
+         python-watchdog-2.1.6 | 3 
+                softhsm2-2.6.1 | 2 
+             transmission-3.00 | 2 
+                       unknown | 2 
+                  vim-8.2.3565 | 2 
+                    bird-2.0.8 | 1 
+firmware-utils-86739f2b3ae9... | 1 
+           host-mono-6.12.0.90 | 1 
+libdbi-88b8477d57153b9f736d... | 1 
+                 mesa3d-21.1.8 | 1 
+                      nano-5.9 | 1 
+                  ndisc6-1.0.5 | 1 
+                    qemu-6.1.0 | 1 
+          refpolicy-2.20210908 | 1 
+                 samba4-4.14.8 | 1 
+               target-finalize | 1 
+                  zeromq-4.3.4 | 1 
 
-As you could see in the log, buildroot is sticking to the PKG_SRC_DIR
-as the makefile source.
 
-Trying to use LIBFOO_MAKE_OPTS (forcing -C xxxx) didn't work either.
+Detail of failures for master
+-----------------------------
 
-Any clue how can I fix this?
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+  mips64el   |           bird-2.0.8           | NOK | http://autobuild.buildroot.net/results/65859436871c42e5a2d2c98cb43683f22fa9047e |     
+  aarch64    |          boinc-7.18.1          | NOK | http://autobuild.buildroot.net/results/97436de51a5cf05104c7fe6cb16812b1fde11ef7 |     
+  riscv64    |          boinc-7.18.1          | NOK | http://autobuild.buildroot.net/results/2a06d79bc96603c98376d332e656fbd3e9ad305e |     
+  powerpc    |          boinc-7.18.1          | NOK | http://autobuild.buildroot.net/results/f4b94405224101e22d7045dc3db41ed673e98358 |     
+    arm      |          boinc-7.18.1          | NOK | http://autobuild.buildroot.net/results/79b6de43222a571457b8f60e9bce8b5af95dc9c0 |     
+    mips     |          boinc-7.18.1          | NOK | http://autobuild.buildroot.net/results/94d18636ec1175f4d98f36af4be6456cd152bc3f |     
+  powerpc    |          boinc-7.18.1          | NOK | http://autobuild.buildroot.net/results/e959472688098b0f5ba52d787a2be6ed5e107669 |     
+  mips64el   |          boinc-7.18.1          | NOK | http://autobuild.buildroot.net/results/11dac37f095c9f21796368627365bf9b06a7ab7a |     
+  mips64el   |          boinc-7.18.1          | NOK | http://autobuild.buildroot.net/results/3be57261895e02b6e5144e32cf96e07656dc2573 |     
+   sparc     |          boinc-7.18.1          | NOK | http://autobuild.buildroot.net/results/0d028854844ffb77d97056e1269fa99ff8e041e8 |     
+    arc      |          boinc-7.18.1          | NOK | http://autobuild.buildroot.net/results/b34a3257fe63dc2c8b7d43db023139d1130d113e |     
+microblazeel |          boinc-7.18.1          | NOK | http://autobuild.buildroot.net/results/7ae2c3471093fafa61779816a71891d3716b9d46 |     
+   mipsel    |          boinc-7.18.1          | NOK | http://autobuild.buildroot.net/results/02ba87e05db277f546ce86d978032303b6134170 |     
+    mips     |          boinc-7.18.1          | NOK | http://autobuild.buildroot.net/results/c810bed9377599278904844af3e374f6774491a5 |     
+    arc      |          boinc-7.18.1          | NOK | http://autobuild.buildroot.net/results/e6300e20ad5d57ffa2b4b2b041bf6a6d1b17b651 |     
+    arm      |    ca-certificates-20211016    | NOK | http://autobuild.buildroot.net/results/0d06754b0e74f3a0ac40e7581bcad92c83a4fa18 |     
+    arc      |    ca-certificates-20211016    | NOK | http://autobuild.buildroot.net/results/177d42fda557cc0aaa9b95715ec44c84a4f9b70b |     
+    arm      |    ca-certificates-20211016    | NOK | http://autobuild.buildroot.net/results/d4b86002e823d4efa92d78cf0a16fc27c9769df9 |     
+  riscv64    |    ca-certificates-20211016    | NOK | http://autobuild.buildroot.net/results/82aeef99e84ae0304535d19bbf539eb1a3edb7c5 |     
+  riscv32    |    ca-certificates-20211016    | NOK | http://autobuild.buildroot.net/results/8ed5bdeebf5045f4a436c8b3a24aa1b11b0a5635 |     
+    m68k     |    ca-certificates-20211016    | NOK | http://autobuild.buildroot.net/results/9019dfe04e3090404fab06d963120a006a8b1611 |     
+    arm      |    ca-certificates-20211016    | NOK | http://autobuild.buildroot.net/results/5aeff6c086dc28fd24b900ef52fe22a176a787c6 |     
+    arm      |    ca-certificates-20211016    | NOK | http://autobuild.buildroot.net/results/c012e1c85a5de8a94083293abc5f40fe1ef7d791 |     
+  riscv32    |    ca-certificates-20211016    | NOK | http://autobuild.buildroot.net/results/019d81401e6beed2be6228d4a8c787d4d6bf4139 |     
+  powerpc    |    ca-certificates-20211016    | NOK | http://autobuild.buildroot.net/results/b48e528278043952c2eab8a15420a779a84c88d9 |     
+  sparc64    |    ca-certificates-20211016    | NOK | http://autobuild.buildroot.net/results/c2f5cb9658baf9005e008ffc066898b9be38d65a |     
+    arm      |    ca-certificates-20211016    | NOK | http://autobuild.buildroot.net/results/b203c2f7377f5109743ee94c4f89043c98f54043 |     
+   nios2     |    ca-certificates-20211016    | NOK | http://autobuild.buildroot.net/results/fce1b7a7c65518cf6974e81a6b7f2a21b78bbd67 |     
+   x86_64    |    ca-certificates-20211016    | NOK | http://autobuild.buildroot.net/results/0f26abe026f01e1f1efe2aeb121aa0b12f950ddf |     
+    i586     |    ca-certificates-20211016    | NOK | http://autobuild.buildroot.net/results/3c8c18a377560f0a5dd9030a96569c96cf3ca4db |     
+    i686     |    ca-certificates-20211016    | NOK | http://autobuild.buildroot.net/results/e7fd848806e119baa59b96caf1c783711361282b |     
+    i586     |    ca-certificates-20211016    | NOK | http://autobuild.buildroot.net/results/934a953450f1d2774516cb4070edbbf15a6dcf8a |     
+microblazeel |    ca-certificates-20211016    | NOK | http://autobuild.buildroot.net/results/bc014de105e97ca7364c79e61eb31a2f096e6703 |     
+   xtensa    |    ca-certificates-20211016    | NOK | http://autobuild.buildroot.net/results/67a36cc4ffcd10732c304726ddaf75c563e84748 |     
+    arm      |    ca-certificates-20211016    | NOK | http://autobuild.buildroot.net/results/92b8e07e87d80d590fcfddc3d26221ee6cdea94a |     
+    mips     |    ca-certificates-20211016    | NOK | http://autobuild.buildroot.net/results/7cd813f3dd225fbb8f7d9f77f2a476a19ebf85dc |     
+    arc      |    ca-certificates-20211016    | NOK | http://autobuild.buildroot.net/results/d94ecc96b14a747f325f112aa68d60df43422851 |     
+   x86_64    |    ca-certificates-20211016    | NOK | http://autobuild.buildroot.net/results/22b0b24c2925fa7cb1f179270522283b527058a0 |     
+    arm      |    ca-certificates-20211016    | NOK | http://autobuild.buildroot.net/results/859c8ef58d563185501c16eb7714669d50b8eb0d |     
+microblazeel |    ca-certificates-20211016    | NOK | http://autobuild.buildroot.net/results/b0d7038d6e5f49ea99c6ef72afc58e3a1bd07613 |     
+    i686     |    ca-certificates-20211016    | NOK | http://autobuild.buildroot.net/results/ab828e9547b0f10b6daf80afb33b04d5c3f44603 |     
+    arm      |    ca-certificates-20211016    | NOK | http://autobuild.buildroot.net/results/65d7084f325ece120c3dd8ff426ea3828fc45764 |     
+  riscv32    |    ca-certificates-20211016    | NOK | http://autobuild.buildroot.net/results/6f9c8593cf616684470ad02dd201b7ae8aa085df |     
+   x86_64    |    ca-certificates-20211016    | NOK | http://autobuild.buildroot.net/results/49fd56dabaf12e16939f767306bd90c3ff6a8fed |     
+  mips64el   |    ca-certificates-20211016    | NOK | http://autobuild.buildroot.net/results/e15f62fc697cf9d3a26559207290bbb649b50230 |     
+    m68k     |    ca-certificates-20211016    | NOK | http://autobuild.buildroot.net/results/ee5943c04652a5ee9ac77eb7d561221fa77aa274 |     
+    arm      |    ca-certificates-20211016    | NOK | http://autobuild.buildroot.net/results/16fc236bb12e324bf5e763a299fb18805be91191 |     
+    arm      |    ca-certificates-20211016    | NOK | http://autobuild.buildroot.net/results/6600e62ea23a0aca5ee01b659d8dbb5cf90899c2 |     
+  powerpc    |    ca-certificates-20211016    | NOK | http://autobuild.buildroot.net/results/43ef5382fb436232c5d63b1314807a2277440e71 |     
+  sparc64    |    ca-certificates-20211016    | NOK | http://autobuild.buildroot.net/results/7764384b8c499244843a5cc5c0ff371257b0724d |     
+  mips64el   |    ca-certificates-20211016    | NOK | http://autobuild.buildroot.net/results/040fe72d2d1fcdbe2fbee43f85a059bc9d359076 |     
+   xtensa    | firmware-utils-86739f2b3ae9... | NOK | http://autobuild.buildroot.net/results/e301d1ee356a2d62772ceab32b7fa83274d7a7b4 |     
+   x86_64    |        host-erlang-22.2        | NOK | http://autobuild.buildroot.net/results/b8958e3a0e6fdce2e7e543ede7599b1974b4c4f4 |     
+    arm      |        host-erlang-22.2        | NOK | http://autobuild.buildroot.net/results/5aa5cc96513fd9ec4ac2614fbdef5499a6a6d952 |     
+    arm      |        host-erlang-22.2        | NOK | http://autobuild.buildroot.net/results/fe9b968ea344e800248127855f4607e3219513ea |     
+   x86_64    |        host-erlang-22.2        | NOK | http://autobuild.buildroot.net/results/ccb09c42e69bbfbe41d68aa713d36a1f4fdc3269 |     
+    arm      |        host-erlang-22.2        | NOK | http://autobuild.buildroot.net/results/d3e129ec910352e23f3d1cf2ba9573dafdeec3d4 |     
+   x86_64    |        host-erlang-22.2        | NOK | http://autobuild.buildroot.net/results/4733828617a73616179946942743e2d8b5478479 |     
+   x86_64    |      host-mono-6.12.0.90       | NOK | http://autobuild.buildroot.net/results/3dea58e23191bec9029ebb731ffcd5b86f031116 |     
+    arm      | libdbi-88b8477d57153b9f736d... | NOK | http://autobuild.buildroot.net/results/a2b3301453ba1965de8d3e4c690e98b29f555d22 |     
+    arm      |         mesa3d-21.1.8          | NOK | http://autobuild.buildroot.net/results/110dfb4f9b592894a2f4c2e4abed2c82941ceae2 |     
+   x86_64    |            nano-5.9            | NOK | http://autobuild.buildroot.net/results/1932c524aa6b6a3337a0fc21b44adaac60972d30 | ORPH
+    arm      |          ndisc6-1.0.5          | NOK | http://autobuild.buildroot.net/results/5f1f6dce75ccf6fd462fa1ae0118cd4de3b0af6a | ORPH
+   sparc     |     python-watchdog-2.1.6      | NOK | http://autobuild.buildroot.net/results/213534584aff11b7731600f98fe9f625a503aa63 |     
+   xtensa    |     python-watchdog-2.1.6      | NOK | http://autobuild.buildroot.net/results/337e68d3b671e45221965f31154a66f9719201c9 |     
+  aarch64    |     python-watchdog-2.1.6      | NOK | http://autobuild.buildroot.net/results/0f268ef81c5ea3f648e6927f50a73065c21a2447 |     
+    arm      |           qemu-6.1.0           | NOK | http://autobuild.buildroot.net/results/3439a0ec0f74d1873110e1b248b63ab9740f9561 |     
+    arm      |      refpolicy-2.20210908      | NOK | http://autobuild.buildroot.net/results/778736b3d0ed7c0413106a2e0a2b8107ec07beaf |     
+    arm      |         samba4-4.14.8          | NOK | http://autobuild.buildroot.net/results/ad759ee0329aea04e17cf56eabec7e8d66f951a0 |     
+  powerpc    |         softhsm2-2.6.1         | NOK | http://autobuild.buildroot.net/results/d8273f22b366e6b8729d5f1b87f9007996c4dca4 |     
+powerpc64le  |         softhsm2-2.6.1         | NOK | http://autobuild.buildroot.net/results/bff6c0d53fa16e6e65e978bbba883ced12e2cace |     
+    arm      |        target-finalize         | NOK | http://autobuild.buildroot.net/results/c97959914c782286d837d3bb7513cf8d80e7fb74 |     
+    arc      |        tinydtls-0.9-rc1        | NOK | http://autobuild.buildroot.net/results/38535d739151c1eee4a557578582102dd671b60d |     
+    arm      |        tinydtls-0.9-rc1        | NOK | http://autobuild.buildroot.net/results/168eab259d0bd9dd8f5175f65fdfe3a245493eea |     
+microblazeel |        tinydtls-0.9-rc1        | NOK | http://autobuild.buildroot.net/results/9e1ae6413022ebad38b1735896cd274165ddc3be |     
+    sh4      |        tinydtls-0.9-rc1        | NOK | http://autobuild.buildroot.net/results/7449a1cf5ac7d1ea46f62f10365cfd36321d466e |     
+    m68k     |        tinydtls-0.9-rc1        | NOK | http://autobuild.buildroot.net/results/af9f8b3bdf798c88f29b919b926edbc3472a3d8d |     
+  powerpc    |        tinydtls-0.9-rc1        | NOK | http://autobuild.buildroot.net/results/2fc005efc78b6354d2b770176bc8bf8081d22375 |     
+    arc      |         tpm2-tss-3.1.0         | NOK | http://autobuild.buildroot.net/results/d16de6ca5ee89271f5cdcde38dcb9b7f3b0b6e42 | ORPH
+    arm      |         tpm2-tss-3.1.0         | NOK | http://autobuild.buildroot.net/results/4f255c31c15c0448a4cbf670550aa2ca4a751cec | ORPH
+   sparc     |         tpm2-tss-3.1.0         | NOK | http://autobuild.buildroot.net/results/0c25113d78c135f814ad2a71e7b1350cb4b18ed4 | ORPH
+    arm      |         tpm2-tss-3.1.0         | NOK | http://autobuild.buildroot.net/results/b784870c23bf71ea9f2c416c1b4724305c185830 | ORPH
+    arm      |         tpm2-tss-3.1.0         | NOK | http://autobuild.buildroot.net/results/1d092968ff33a25eaba21447a4b30effac5956d4 | ORPH
+    arm      |         tpm2-tss-3.1.0         | NOK | http://autobuild.buildroot.net/results/d6b8d89492ccf1822687ecc544eaca96c34b8faf | ORPH
+  mips64el   |         tpm2-tss-3.1.0         | NOK | http://autobuild.buildroot.net/results/c8dfdefe83f8e8b8b5c281170a4ef5eded514750 | ORPH
+microblazeel |         tpm2-tss-3.1.0         | NOK | http://autobuild.buildroot.net/results/dddf152169329c75f63aa50a7151afe91a2de943 | ORPH
+   xtensa    |         tpm2-tss-3.1.0         | NOK | http://autobuild.buildroot.net/results/6f1c6b27e81b25d0ac496d53e2e8579e7875ecb8 | ORPH
+  powerpc    |         tpm2-tss-3.1.0         | NOK | http://autobuild.buildroot.net/results/bfb482520bec73a0c8c9df6145cd4afaec0eaa05 | ORPH
+  aarch64    |         tpm2-tss-3.1.0         | NOK | http://autobuild.buildroot.net/results/320610a473646a236cb93e7efaec7c182bd52bed | ORPH
+  aarch64    |         tpm2-tss-3.1.0         | NOK | http://autobuild.buildroot.net/results/8d8391b32016157c9355d9f8abe989918ba4d105 | ORPH
+ powerpc64   |         tpm2-tss-3.1.0         | NOK | http://autobuild.buildroot.net/results/d479fffc70ccfe5ba65490d071f98bbba77cc4f1 | ORPH
+    i586     |         tpm2-tss-3.1.0         | NOK | http://autobuild.buildroot.net/results/fed637a1a3265c2565d3b49d57b99e272e35572b | ORPH
+  powerpc    |       transmission-3.00        | NOK | http://autobuild.buildroot.net/results/aecc0214a11036fe320d53e5fe01742856ce35a0 |     
+    arm      |       transmission-3.00        | NOK | http://autobuild.buildroot.net/results/1337532c969560303a35ad0ddcc973b14dec7dcb |     
+    or1k     |            unknown             | NOK | http://autobuild.buildroot.net/results/493b3fe019551c4f0ca0b37c233d724b5c4ed04d |     
+    arm      |            unknown             | NOK | http://autobuild.buildroot.net/results/7f1c6b5dcf6fb56dacdfe85d3caec8b501ec2f59 |     
+   x86_64    |          vim-8.2.3565          | NOK | http://autobuild.buildroot.net/results/0be1f4e5bea77b984baeacef4cf4377381b4cfd5 | ORPH
+    arc      |          vim-8.2.3565          | NOK | http://autobuild.buildroot.net/results/ff9c9bf8b46a25bdf15dce47567666340d915ddf | ORPH
+    or1k     |          zeromq-4.3.4          | NOK | http://autobuild.buildroot.net/results/50af923ec0c2332db4521023d173178aa0e4d465 |     
 
-Regards,
-Bassem
 
-Sent from Outlook
+Classification of failures by reason for 2021.02.x
+--------------------------------------------------
+
+        host-sentry-cli-1.57.0 | 2 
+                  vim-8.2.3565 | 2 
+                       gdb-9.2 | 1 
+  gobject-introspection-1.64.1 | 1 
+                   mutt-1.14.7 | 1 
+                    olsr-0.9.8 | 1 
+                 openal-1.20.1 | 1 
+                oprofile-1.4.0 | 1 
+                rocksdb-6.13.3 | 1 
+
+
+Detail of failures for 2021.02.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+   xtensa    |            gdb-9.2             | NOK | http://autobuild.buildroot.net/results/e66916ffba58749b1ca3869538ae9ce2ac47718d | ORPH
+   x86_64    |  gobject-introspection-1.64.1  | NOK | http://autobuild.buildroot.net/results/77024a290ec6fe82690b121a46a85f6579f0eebd | ORPH
+microblazeel |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/36b6c603f9c3fc322984ea76b6dfc1170e93bc0d |     
+  riscv64    |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/efb10e2a6c97d6316c179ae29fe045ff76fca680 |     
+   sparc     |          mutt-1.14.7           | NOK | http://autobuild.buildroot.net/results/9d90534b8329f8f0142979963649bfba7c6ec288 |     
+   x86_64    |           olsr-0.9.8           | NOK | http://autobuild.buildroot.net/results/4ae918e1fd11b258e79c956135df1667f38c79e2 | ORPH
+    or1k     |         openal-1.20.1          | NOK | http://autobuild.buildroot.net/results/daed05a4edf69604b4093209b6826945d863983a |     
+    arm      |         oprofile-1.4.0         | NOK | http://autobuild.buildroot.net/results/b801a157a9e080a5ec2d05aa2592298a7faa253f |     
+  powerpc    |         rocksdb-6.13.3         | NOK | http://autobuild.buildroot.net/results/395a17cfcb5ca8a042c33a6983645b2ee6e8aa30 |     
+    arc      |          vim-8.2.3565          | NOK | http://autobuild.buildroot.net/results/8a2e54ad11d875c6ec3115329ee75936f90fd586 | ORPH
+    arm      |          vim-8.2.3565          | NOK | http://autobuild.buildroot.net/results/792e67a3da26b74b4c2ff09e0eddc1695a5b6be0 | ORPH
+
+
+Classification of failures by reason for 2021.08.x
+--------------------------------------------------
+
+               libtheora-1.1.1 | 1 
+                    olsr-0.9.8 | 1 
+                       unknown | 1 
+                  vim-8.2.3565 | 1 
+
+
+Detail of failures for 2021.08.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+    or1k     |        libtheora-1.1.1         | NOK | http://autobuild.buildroot.net/results/401822d56a81e24116d42391eb1fb5f6ae556e38 | ORPH
+  powerpc    |           olsr-0.9.8           | NOK | http://autobuild.buildroot.net/results/0256120b198f5f0e770b6d0b71fee4b2029991f9 | ORPH
+  mips64el   |            unknown             | NOK | http://autobuild.buildroot.net/results/bedd91444011d82a7d8aecbdefdd5acd76219ba2 |     
+    m68k     |          vim-8.2.3565          | NOK | http://autobuild.buildroot.net/results/8928785e14cf34cf75a2c89a3d29d1a5942e9cc2 | ORPH
+
+
+
+-- 
+http://autobuild.buildroot.net
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
