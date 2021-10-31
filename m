@@ -2,55 +2,52 @@ Return-Path: <SRS0=Itk9=PT=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 546AEC433F5
-	for <buildroot@archiver.kernel.org>; Sun, 31 Oct 2021 17:30:42 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4521EC433F5
+	for <buildroot@archiver.kernel.org>; Sun, 31 Oct 2021 17:40:20 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id C778E60F70
-	for <buildroot@archiver.kernel.org>; Sun, 31 Oct 2021 17:30:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C778E60F70
+	by mail.kernel.org (Postfix) with ESMTPS id 7C9B260FC1
+	for <buildroot@archiver.kernel.org>; Sun, 31 Oct 2021 17:40:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7C9B260FC1
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 81F0F607E2;
-	Sun, 31 Oct 2021 17:30:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 34A4540190;
+	Sun, 31 Oct 2021 17:40:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id H8vLYhsBN1iz; Sun, 31 Oct 2021 17:30:40 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id uSaqK2sDDw9R; Sun, 31 Oct 2021 17:40:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E4488607B1;
-	Sun, 31 Oct 2021 17:30:39 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2961F1BF39F
- for <buildroot@lists.busybox.net>; Sun, 31 Oct 2021 17:30:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 89C274017E;
+	Sun, 31 Oct 2021 17:40:17 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 625E31BF39F
+ for <buildroot@lists.busybox.net>; Sun, 31 Oct 2021 17:40:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1949E607B1
- for <buildroot@lists.busybox.net>; Sun, 31 Oct 2021 17:30:38 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5F3DF80C56
+ for <buildroot@lists.busybox.net>; Sun, 31 Oct 2021 17:40:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id z_jUWtO4oHFi for <buildroot@lists.busybox.net>;
- Sun, 31 Oct 2021 17:30:37 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2F2C66067D
- for <buildroot@buildroot.org>; Sun, 31 Oct 2021 17:30:36 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay12.mail.gandi.net (Postfix) with ESMTPSA id 4400020000A;
- Sun, 31 Oct 2021 17:30:35 +0000 (UTC)
-Date: Sun, 31 Oct 2021 18:29:59 +0100
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id iCWSDni5tjoH for <buildroot@lists.busybox.net>;
+ Sun, 31 Oct 2021 17:40:15 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id BF8A680BCE
+ for <buildroot@buildroot.org>; Sun, 31 Oct 2021 17:40:15 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 6EC0D890F3; Sun, 31 Oct 2021 17:36:41 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Peter Korsgaard <peter@korsgaard.com>
-Message-ID: <20211031182959.7bacc08e@windsurf>
-In-Reply-To: <20211030214931.20139-1-peter@korsgaard.com>
-References: <20211030214931.20139-1-peter@korsgaard.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/2] configs/openblocks_a6_defconfig: bump
- linux kernel to 4.14.253
+To: buildroot@buildroot.org
+Date: Sun, 31 Oct 2021 18:35:09 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: dfd18cc4c2c44a91bfa713507135b86fa62387b8
+X-Git-Newrev: 813713ef488528bb4b7a2d36327ce33e9c372abb
+X-Patchwork-Hint: ignore
+Message-Id: <20211031173641.6EC0D890F3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/olimex_a13_olinuxino: uboot
+ 2021.10 needs openssl, pylibfdt and python3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,37 +59,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, 30 Oct 2021 23:49:29 +0200
-Peter Korsgaard <peter@korsgaard.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=813713ef488528bb4b7a2d36327ce33e9c372abb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Fixes https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=88f7a6aa7fb9aa5076b65489146045dac865f1d3
-> 
-> To correct a build breakage after the move to a gcc 10.x based host
-> compiler, as the updated kernel contains a fix for:
-> 
-> HOSTLD  scripts/dtc/dtc
-> /usr/bin/ld: scripts/dtc/dtc-parser.tab.o:(.bss+0x10): multiple definition of `yylloc'; scripts/dtc/dtc-lexer.lex.o:(.bss+0x0): first defined here
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=88f7a6aa7fb9aa5076b65489146045dac865f1d3
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  configs/openblocks_a6_defconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Uboot 2021.10 needs openssl, pylibfdt and python3 so enable them.
 
-Series applied, thanks!
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/1723730015
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ configs/olimex_a13_olinuxino_defconfig | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/configs/olimex_a13_olinuxino_defconfig b/configs/olimex_a13_olinuxino_defconfig
+index 14cec97d49..6d25d7d0a1 100644
+--- a/configs/olimex_a13_olinuxino_defconfig
++++ b/configs/olimex_a13_olinuxino_defconfig
+@@ -18,6 +18,9 @@ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.10"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A13-OLinuXino"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
++BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
++BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+ BR2_TARGET_UBOOT_FORMAT_BIN=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
