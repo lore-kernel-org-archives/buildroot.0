@@ -2,69 +2,84 @@ Return-Path: <SRS0=Itk9=PT=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 17FD1C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 31 Oct 2021 21:33:23 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4EEB0C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 31 Oct 2021 22:42:19 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 7874961038
-	for <buildroot@archiver.kernel.org>; Sun, 31 Oct 2021 21:33:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7874961038
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
+	by mail.kernel.org (Postfix) with ESMTPS id A4A3560EE9
+	for <buildroot@archiver.kernel.org>; Sun, 31 Oct 2021 22:42:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A4A3560EE9
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 09DFF40151;
-	Sun, 31 Oct 2021 21:33:22 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3C22E401BB;
+	Sun, 31 Oct 2021 22:42:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SZBVpjAUnUmb; Sun, 31 Oct 2021 21:33:21 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id DOr-jHGMSLdE; Sun, 31 Oct 2021 22:42:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 54C29400DD;
-	Sun, 31 Oct 2021 21:33:20 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 136151BF2C2
- for <buildroot@lists.busybox.net>; Sun, 31 Oct 2021 21:33:18 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 46CB340100;
+	Sun, 31 Oct 2021 22:42:16 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 63D1A1BF2F6
+ for <buildroot@lists.busybox.net>; Sun, 31 Oct 2021 22:42:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 02423400DD
- for <buildroot@lists.busybox.net>; Sun, 31 Oct 2021 21:33:18 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4B83F40100
+ for <buildroot@lists.busybox.net>; Sun, 31 Oct 2021 22:42:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gJ00R9yutgza for <buildroot@lists.busybox.net>;
- Sun, 31 Oct 2021 21:33:16 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Q07h-G8bq-nI for <buildroot@lists.busybox.net>;
+ Sun, 31 Oct 2021 22:42:13 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9CABB400D1
- for <buildroot@buildroot.org>; Sun, 31 Oct 2021 21:33:16 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:6de6:4790:fdb7:6436])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 62D62B00535;
- Sun, 31 Oct 2021 22:33:05 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1635715993;
- bh=wITirpTHj9jYaew/uW3Jkh+4SP13VVPKrH7szK00/4Y=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=Q7QdpMktTQ8JLnwRdTWYW+QVuXi4KHlUpMhPqkUW/M9LRutTGsebqzepxaP6ude08
- puzm4HBRioLXgaepSJHJQHgok4p9JUrX4n8azARrcJLJ9EiGB65bTlUDMn7nKypdej
- 39LwCgw2vxfPl/NkHU/JMvP52JQ9YUT+3nIIfcoMEtYQHaLNQtsrxNhOeLKzjESr0P
- sr0rxJF7v0s9XksP0Bxs+vSH1dcoNNFBrWT3QX2g1Rw8MofbuaVQAntreiTAJ6fRqF
- g+vIwdMf0mFEC9foHmuWrlDQIDyeinCiLQTWYEiResXisQovAL/JXQkRdiaM13odhh
- Nbmk2KAEthrTQ==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 31 Oct 2021 22:33:04 +0100
-Date: Sun, 31 Oct 2021 22:33:04 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20211031213304.GY2400@scaer>
-References: <20211027192153.415049-1-fontaine.fabrice@gmail.com>
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
+ [IPv6:2a00:1450:4864:20::32f])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3B532400EB
+ for <buildroot@buildroot.org>; Sun, 31 Oct 2021 22:42:13 +0000 (UTC)
+Received: by mail-wm1-x32f.google.com with SMTP id b71so720370wmd.2
+ for <buildroot@buildroot.org>; Sun, 31 Oct 2021 15:42:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=jcsfJwC0Noe2AzGseBstAE66LWdsLDLj1GoNmGxC2d8=;
+ b=N4y1X+KDRbqrFsC0mFqUOlspEZ1Io2cU36UXeItJdX92wTfufsVsxntlmfw1bdPrmm
+ 5iR4n1ORJpdDpSB0LMJ8IlXteANL0FPQoEf3SKxdAJkUQIH0eJKmOoo2waK+lPlNloK6
+ YEm0NIx+v2V0rzjTHrfKfBga6HXPLG7n9ARykw8DidHOkz8ElPKWfAFavAOhdbUvUuvb
+ z7Hc/uAz2gTpgOe9D2NdH/3g5rloBsVX5SPU5ns+EoUy3nJO882lTt+GeLbH7yumv96V
+ Zsg6vz8Z9MzLU3cYjULxoMRXB5FpbyL4LlqcRLbpty5/dmDRbdsonemxywEIgE33CuZL
+ qVew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=jcsfJwC0Noe2AzGseBstAE66LWdsLDLj1GoNmGxC2d8=;
+ b=Ko6F07fKbcKoZPCWtVmxGhOxMI124pdXUwnChC5nReirFdZpOfMncu/0zg7n8yDH/B
+ vUcN9Kt9Zum7ScM3jbPdvSTTcEmDPAzYPBCTtYQ1uA7K2nOlKS8XGsvL3R5rnfmiLx+W
+ viQNgGgb2BA9jxekl9r5GnQzP/CEPiuJZTQ+BL2LUtYHLURgBqM4nA8Nf7SFRr7zsozI
+ 2R5CeL/AhkcPKPQE+3MJ8jDn3aAkHQZ1zfTcI0tjjkZT3gUufVv2me6ZzFTW4tfDHR4y
+ WcQTACZWk18lBSANKyDUBTOkgMYVNmP5xIJ+bxJYVuyfYSfVwHq7FVvyxJpp8VGkQVol
+ gqHw==
+X-Gm-Message-State: AOAM532tuWj6eLJRNTiYk4wh0j96vHDxnnmmF73reaa9dDrxa1xcg4GZ
+ SUS7dpWpuGkmyMGeOJoUSFYkR2e+qsY=
+X-Google-Smtp-Source: ABdhPJwfhZVNRK+T3RiXZtN4F7fHflfTuuViiXnvkPDrBIGDUsk6Zt11WKrJn2V7PnxXVbLR344uDQ==
+X-Received: by 2002:a7b:c4c4:: with SMTP id g4mr26827137wmk.93.1635720131357; 
+ Sun, 31 Oct 2021 15:42:11 -0700 (PDT)
+Received: from atlas.home
+ (2a01cb058f8a18003dbee9eed79eb521.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:8f8a:1800:3dbe:e9ee:d79e:b521])
+ by smtp.gmail.com with ESMTPSA id f15sm2645377wrt.26.2021.10.31.15.42.10
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 31 Oct 2021 15:42:10 -0700 (PDT)
+From: Romain Naour <romain.naour@gmail.com>
+To: buildroot@buildroot.org
+Date: Sun, 31 Oct 2021 23:42:07 +0100
+Message-Id: <20211031224207.1385633-1-romain.naour@gmail.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20211027192153.415049-1-fontaine.fabrice@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 1/1] package/rpi-firmware: fix
- BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI_X
+Subject: [Buildroot] [PATCH] package/refpolicy: enable refpolicy's xdg
+ module when systemd is enabled
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,64 +91,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Martin Bark <martin@barkynet.com>,
- Mahyar Koshkouei <mahyar.koshkouei@gmail.com>, buildroot@buildroot.org
+Cc: Romain Naour <romain.naour@gmail.com>, Antoine Tenart <atenart@kernel.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fabrice, All,
+policy/modules/system/systemd.te requires xdg module enabled [1]
+otherwise refpolicy fail to build:
 
-On 2021-10-27 21:21 +0200, Fabrice Fontaine spake thusly:
-> Fix the following build failure raised since the rework of boot/config
-> file handling in commit 689b9ac439ab7b507c8982b6102bddf59d03efbf (fix
-> made in b8c8fcee7a38558a7247ef772ac9d93ff87bd943 was incomplete):
-> 
-> /usr/bin/install: cannot stat '/home/buildroot/autobuild/instance-0/output-1/build/rpi-firmware-2ef3800b1b71c0e30c2a61ecad6e007ae96ea342/boot/fixupx.dat': No such file or directory
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/c91224af44327a301f87f239a73721173b81ce16
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+policy/modules/system/systemd.te:288:ERROR 'attribute xdg_config_type is not declared' at token ';' on line 508447:
 
-Applied to master, thanks.
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/1710552468
+https://gitlab.com/buildroot.org/buildroot/-/jobs/1710552470
 
-Regards,
-Yann E. MORIN.
+[1] https://github.com/SELinuxProject/refpolicy/blob/RELEASE_2_20210908/policy/modules/system/systemd.te#L288
 
-> ---
->  package/rpi-firmware/rpi-firmware.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
-> index 9d73d5300c..3a4741a0ff 100644
-> --- a/package/rpi-firmware/rpi-firmware.mk
-> +++ b/package/rpi-firmware/rpi-firmware.mk
-> @@ -13,7 +13,7 @@ RPI_FIRMWARE_INSTALL_IMAGES = YES
->  RPI_FIRMWARE_FILES = \
->  	$(if $(BR2_PACKAGE_RPI_FIRMWARE_BOOTCODE_BIN), bootcode.bin) \
->  	$(if $(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI), start.elf fixup.dat) \
-> -	$(if $(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI_X), start_x.elf fixupx.dat) \
-> +	$(if $(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI_X), start_x.elf fixup_x.dat) \
->  	$(if $(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI_CD), start_cd.elf fixup_cd.dat) \
->  	$(if $(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI_DB), start_db.elf fixup_db.dat) \
->  	$(if $(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4), start4.elf fixup4.dat) \
-> -- 
-> 2.33.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Antoine Tenart <atenart@kernel.org>
+---
+ package/refpolicy/refpolicy.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
+diff --git a/package/refpolicy/refpolicy.mk b/package/refpolicy/refpolicy.mk
+index 975c3b584c..b1d101e311 100644
+--- a/package/refpolicy/refpolicy.mk
++++ b/package/refpolicy/refpolicy.mk
+@@ -69,6 +69,7 @@ REFPOLICY_MODULES = \
+ 	sysnetwork \
+ 	unconfined \
+ 	userdomain \
++	$(if $(BR2_PACKAGE_SYSTEMD),xdg) \
+ 	$(PACKAGES_SELINUX_MODULES) \
+ 	$(call qstrip,$(BR2_REFPOLICY_EXTRA_MODULES)) \
+ 	$(foreach d,$(REFPOLICY_EXTRA_MODULES_DIRS),\
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.31.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
