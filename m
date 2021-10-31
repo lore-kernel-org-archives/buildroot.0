@@ -2,55 +2,51 @@ Return-Path: <SRS0=Itk9=PT=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CB862C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 31 Oct 2021 14:29:06 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 475E4C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 31 Oct 2021 17:27:50 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id DE07E60D07
-	for <buildroot@archiver.kernel.org>; Sun, 31 Oct 2021 14:29:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org DE07E60D07
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
+	by mail.kernel.org (Postfix) with ESMTPS id 13F8860F70
+	for <buildroot@archiver.kernel.org>; Sun, 31 Oct 2021 17:27:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 13F8860F70
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 76F8680CDC;
-	Sun, 31 Oct 2021 14:29:05 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 93BC84021C;
+	Sun, 31 Oct 2021 17:27:48 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Y6Uy23NQnRYs; Sun, 31 Oct 2021 17:27:47 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id A195540210;
+	Sun, 31 Oct 2021 17:27:46 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id BA7EC1BF39F
+ for <buildroot@lists.busybox.net>; Sun, 31 Oct 2021 17:27:45 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id B732A80CDE
+ for <buildroot@lists.busybox.net>; Sun, 31 Oct 2021 17:27:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IBZA_A3Hqmpq; Sun, 31 Oct 2021 14:29:04 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CFF0680CA6;
-	Sun, 31 Oct 2021 14:29:03 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 251631BF2B8
- for <buildroot@lists.busybox.net>; Sun, 31 Oct 2021 14:29:02 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 14992606E9
- for <buildroot@lists.busybox.net>; Sun, 31 Oct 2021 14:29:02 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Scfmq6AUhd1m for <buildroot@lists.busybox.net>;
- Sun, 31 Oct 2021 14:29:00 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 60EBF606B9
- for <buildroot@buildroot.org>; Sun, 31 Oct 2021 14:28:59 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 3CCF11C0003;
- Sun, 31 Oct 2021 14:28:55 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
- (envelope-from <peko@dell.be.48ers.dk>)
- id 1mhBpP-0006yt-9C; Sun, 31 Oct 2021 15:28:55 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PszAapD0Wc-a for <buildroot@lists.busybox.net>;
+ Sun, 31 Oct 2021 17:27:44 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9CFDD80CDD
+ for <buildroot@buildroot.org>; Sun, 31 Oct 2021 17:27:44 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 4F2C2890AD; Sun, 31 Oct 2021 17:24:10 +0000 (UTC)
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sun, 31 Oct 2021 15:28:51 +0100
-Message-Id: <20211031142852.26786-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.20.1
-MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] configs/beagleboneai_defconfig: bump linux
+Date: Sun, 31 Oct 2021 18:27:39 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: bcde80febd2f0455ba5c34f8aa870fc8133749ae
+X-Git-Newrev: 7f5655e791586b2dfb0c211a1a7dd0c6c9d6a403
+X-Patchwork-Hint: ignore
+Message-Id: <20211031172410.4F2C2890AD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/beagleboneai_defconfig: bump linux
  kernel to 4.14.108-ti-r143
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,10 +59,14 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
+
+commit: https://git.buildroot.net/buildroot/commit/?id=7f5655e791586b2dfb0c211a1a7dd0c6c9d6a403
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Fixes https://gitlab.com/buildroot.org/buildroot/-/jobs/1723729814
 
@@ -81,6 +81,7 @@ https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=88f7
 https://github.com/beagleboard/linux/commit/9112902588d09c323b0a1d8011c67ef052c50f79
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
  configs/beagleboneai_defconfig | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
@@ -98,9 +99,6 @@ index eb23cdf69a..745bb0794a 100644
  BR2_LINUX_KERNEL_DEFCONFIG="bb.org"
  BR2_LINUX_KERNEL_DTS_SUPPORT=y
  BR2_LINUX_KERNEL_INTREE_DTS_NAME="am5729-beagleboneai"
--- 
-2.20.1
-
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
