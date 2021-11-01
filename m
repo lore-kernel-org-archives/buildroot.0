@@ -2,69 +2,69 @@ Return-Path: <SRS0=b2+E=PU=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 70AE1C433EF
-	for <buildroot@archiver.kernel.org>; Mon,  1 Nov 2021 18:54:44 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 517FEC433EF
+	for <buildroot@archiver.kernel.org>; Mon,  1 Nov 2021 18:30:59 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2989E60F24
-	for <buildroot@archiver.kernel.org>; Mon,  1 Nov 2021 18:54:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2989E60F24
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=walle.cc
+	by mail.kernel.org (Postfix) with ESMTPS id 9F54260F24
+	for <buildroot@archiver.kernel.org>; Mon,  1 Nov 2021 18:30:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9F54260F24
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=busybox.net
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EBD4F401FB;
-	Mon,  1 Nov 2021 18:54:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6589A605D5;
+	Mon,  1 Nov 2021 18:30:58 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id SxY4ve-WF8ke; Mon,  1 Nov 2021 18:30:57 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id B8D0C605DB;
+	Mon,  1 Nov 2021 18:30:56 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 31F9D1BF2FD
+ for <buildroot@lists.busybox.net>; Mon,  1 Nov 2021 18:30:55 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 21C9840240
+ for <buildroot@lists.busybox.net>; Mon,  1 Nov 2021 18:30:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9-pSldbdxzMF; Mon,  1 Nov 2021 18:54:43 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5CC51401E9;
-	Mon,  1 Nov 2021 18:54:42 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4B4D11BF2FD
- for <buildroot@lists.busybox.net>; Mon,  1 Nov 2021 18:54:30 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 397FE80B53
- for <buildroot@lists.busybox.net>; Mon,  1 Nov 2021 18:54:29 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=walle.cc
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YEhx2ZIk9p4P for <buildroot@lists.busybox.net>;
- Mon,  1 Nov 2021 18:54:28 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from ssl.serverraum.org (ssl.serverraum.org
- [IPv6:2a01:4f8:151:8464::1:2])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9C5B280B89
- for <buildroot@buildroot.org>; Mon,  1 Nov 2021 18:54:28 +0000 (UTC)
-Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest
- SHA256) (No client certificate requested)
- by ssl.serverraum.org (Postfix) with ESMTPSA id EFC3D223EA;
- Mon,  1 Nov 2021 19:54:25 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc;
- s=mail2016061301; t=1635792866;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=LGyYvvmI2XxW/O6CucA8KXaWgvMKQz27qoN3iRFjfjo=;
- b=LzARjjYpPtqocS7e2aFzCh2AdtEvH8bD6Fp9mHGf+yQ6zNJmnbOS43mdrPqbajRi5YlXPK
- IwEr3/DCZkhOyB0e7FMfT3Z4kp5QytWajDISt0cC9Y6QTLBSzo7VfvDijA6yS6528TLXW4
- Y/FGgkY2GKpZEaB8xc9wtZOTN0Wig/M=
-From: Michael Walle <michael@walle.cc>
-To: buildroot@buildroot.org
-Date: Mon,  1 Nov 2021 19:54:20 +0100
-Message-Id: <20211101185420.2338601-2-michael@walle.cc>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20211101185420.2338601-1-michael@walle.cc>
-References: <20211101185420.2338601-1-michael@walle.cc>
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id G0lUWEmEaZBY for <buildroot@lists.busybox.net>;
+ Mon,  1 Nov 2021 18:30:54 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 502BB4023D
+ for <buildroot@uclibc.org>; Mon,  1 Nov 2021 18:30:54 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 81)
+ id 9005887499; Mon,  1 Nov 2021 18:27:17 +0000 (UTC)
+From: bugzilla@busybox.net
+To: buildroot@uclibc.org
+Date: Mon, 01 Nov 2021 18:30:53 +0000
+X-Bugzilla-Reason: CC
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: buildroot
+X-Bugzilla-Component: Other
+X-Bugzilla-Version: unspecified
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: blocker
+X-Bugzilla-Who: ingineru_de_sistem@yahoo.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P5
+X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
+X-Bugzilla-Target-Milestone: ---
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
+ op_sys bug_status bug_severity priority component assigned_to reporter cc
+ target_milestone
+Message-ID: <bug-14311-163@https.bugs.busybox.net/>
+X-Bugzilla-URL: https://bugs.busybox.net/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 2/2] configs/kontron_smarc_sal28: use kernel 5.15
+Subject: [Buildroot] [Bug 14311] New: Cannot compile dahdi (part of
+ Asterisk) for x86 (P1mmx).
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,44 +76,116 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
- Romain Naour <romain.naour@gmail.com>, Michael Walle <michael@walle.cc>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Michael Walle <michael@walle.cc>
----
- configs/kontron_smarc_sal28_defconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+https://bugs.busybox.net/show_bug.cgi?id=14311
 
-diff --git a/configs/kontron_smarc_sal28_defconfig b/configs/kontron_smarc_sal28_defconfig
-index 716e1b658a..ce8f8323ae 100644
---- a/configs/kontron_smarc_sal28_defconfig
-+++ b/configs/kontron_smarc_sal28_defconfig
-@@ -1,6 +1,6 @@
- BR2_aarch64=y
- BR2_cortex_a72=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_14=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
- BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
- BR2_ROOTFS_OVERLAY="board/kontron/smarc-sal28/rootfs_overlay"
-@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c $(BINARIES_DIR)/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.14"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/fsl-ls1028a-kontron-sl28 freescale/fsl-ls1028a-kontron-sl28-var2 freescale/fsl-ls1028a-kontron-sl28-var3-ads2 freescale/fsl-ls1028a-kontron-sl28-var4 freescale/fsl-ls1028a-kontron-kbox-a-230-ls"
+            Bug ID: 14311
+           Summary: Cannot compile dahdi (part of Asterisk) for x86
+                    (P1mmx).
+           Product: buildroot
+           Version: unspecified
+          Hardware: PC
+                OS: Linux
+            Status: NEW
+          Severity: blocker
+          Priority: P5
+         Component: Other
+          Assignee: unassigned@buildroot.uclibc.org
+          Reporter: ingineru_de_sistem@yahoo.com
+                CC: buildroot@uclibc.org
+  Target Milestone: ---
+
+Tried to compile Asterisk for x86 (got an old PC which is the only one which I
+can use for some older ZAPtel cards that need PCI without express).
+
+1st bug got this - 
+In file included from
+/home/qa/buildroot/output/build/dahdi-linux-3.0.0/drivers/dahdi/wctdm24xxp/base.c:73:
+/home/qa/buildroot/output/build/dahdi-linux-3.0.0/include/dahdi/kernel.h:71:10:
+fatal error: linux/pci-aspm.h: No such file or directory
+   71 | #include <linux/pci-aspm.h>
+      |          ^~~~~~~~~~~~~~~~~~
+compilation terminated.
+
+Found a possible solution at
+https://community.asterisk.org/t/dahdi-fails-fatal-error-linux-pci-aspm-h-no-such-file-or-directory/83561
+, applied 
+git clone -b next git://git.asterisk.org/dahdi/linux dahdi-linux 
+on top of the one that buildroot downloaded, got past that point but now I get
+this one:
+
+ERROR: modpost: "__divmoddi4"
+[/home/qa/buildroot/output/build/dahdi-linux-3.0.0/drivers/dahdi/xpp/xpp.ko]
+undefined!
+ERROR: modpost: "__divdi3"
+[/home/qa/buildroot/output/build/dahdi-linux-3.0.0/drivers/dahdi/xpp/xpp.ko]
+undefined!
+ERROR: modpost: "_binary_dahdi_fw_oct6114_032_bin_start"
+[/home/qa/buildroot/output/build/dahdi-linux-3.0.0/drivers/dahdi/wcaxx.ko]
+undefined!
+ERROR: modpost: "_binary_dahdi_fw_oct6114_032_bin_size"
+[/home/qa/buildroot/output/build/dahdi-linux-3.0.0/drivers/dahdi/wcaxx.ko]
+undefined!
+ERROR: modpost: "_binary_dahdi_fw_oct6114_128_bin_start"
+[/home/qa/buildroot/output/build/dahdi-linux-3.0.0/drivers/dahdi/wcte43x.ko]
+undefined!
+ERROR: modpost: "_binary_dahdi_fw_oct6114_064_bin_start"
+[/home/qa/buildroot/output/build/dahdi-linux-3.0.0/drivers/dahdi/wcte43x.ko]
+undefined!
+ERROR: modpost: "_binary_dahdi_fw_oct6114_128_bin_size"
+[/home/qa/buildroot/output/build/dahdi-linux-3.0.0/drivers/dahdi/wcte43x.ko]
+undefined!
+ERROR: modpost: "_binary_dahdi_fw_oct6114_064_bin_size"
+[/home/qa/buildroot/output/build/dahdi-linux-3.0.0/drivers/dahdi/wcte43x.ko]
+undefined!
+ERROR: modpost: "_binary_dahdi_fw_oct6114_032_bin_start"
+[/home/qa/buildroot/output/build/dahdi-linux-3.0.0/drivers/dahdi/wcte13xp.ko]
+undefined!
+ERROR: modpost: "_binary_dahdi_fw_oct6114_032_bin_size"
+[/home/qa/buildroot/output/build/dahdi-linux-3.0.0/drivers/dahdi/wcte13xp.ko]
+undefined!
+make[3]: *** [scripts/Makefile.modpost:150:
+/home/qa/buildroot/output/build/dahdi-linux-3.0.0/drivers/dahdi/Module.symvers]
+Error 1
+make[3]: *** Deleting file
+'/home/qa/buildroot/output/build/dahdi-linux-3.0.0/drivers/dahdi/Module.symvers'
+make[2]: *** [Makefile:1773: modules] Error 2
+make[1]: *** [package/pkg-generic.mk:295:
+/home/qa/buildroot/output/build/dahdi-linux-3.0.0/.stamp_built] Error 2
+make: *** [Makefile:84: _all] Error 2
+
+Not sure if the patch for the first error provoked the next or what.
+
+Please advise.
+
+Question 2) Can one selectively only compile the Asterisk HW drivers for the
+current plaform and a selection of boards ? (i.e. don't try pci express or x64
+stuff when compiling for x86_32 nor the Octasic boards since all I have and
+need are some old Zaptel PCI boards, including a T1000P compatible - aka
+ancient Intel WinModem)
+
+
+
+P.S. there was a trivial error before that point:
+--2021-10-29 15:34:29--  http://sources.buildroot.net/m4-1.4.19.tar.xz
+Resolving sources.buildroot.net (sources.buildroot.net)... 172.67.72.56,
+104.26.1.37, 104.26.0.37, ...
+Connecting to sources.buildroot.net (sources.buildroot.net)|172.67.72.56|:80...
+connected.
+HTTP request sent, awaiting response... 404 Not Found
+2021-10-29 15:34:29 ERROR 404: Not Found.
+
+which I solved by using 1.4.18 instead which did exist on your server. No
+biggie there, just reporting it in case anyone needs the report. Feel free to
+ignore this one. The dahdi part is important.
+
 -- 
-2.30.2
-
+You are receiving this mail because:
+You are on the CC list for the bug.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
