@@ -2,65 +2,85 @@ Return-Path: <SRS0=b2+E=PU=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ADD3BC433EF
-	for <buildroot@archiver.kernel.org>; Mon,  1 Nov 2021 10:12:28 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8FA5BC433F5
+	for <buildroot@archiver.kernel.org>; Mon,  1 Nov 2021 11:16:57 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id BE13B60E9B
-	for <buildroot@archiver.kernel.org>; Mon,  1 Nov 2021 10:12:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org BE13B60E9B
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=go-sys.de
+	by mail.kernel.org (Postfix) with ESMTPS id 06D05610CC
+	for <buildroot@archiver.kernel.org>; Mon,  1 Nov 2021 11:16:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 06D05610CC
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5F0B880CE1;
-	Mon,  1 Nov 2021 10:12:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CD83060662;
+	Mon,  1 Nov 2021 11:16:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id stUt-ESGu7sd; Mon,  1 Nov 2021 10:12:26 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id FxKhfGC_CYIF; Mon,  1 Nov 2021 11:16:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B637D80C71;
-	Mon,  1 Nov 2021 10:12:25 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 038AD1BF3A9
- for <buildroot@lists.busybox.net>; Mon,  1 Nov 2021 10:12:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2766C60613;
+	Mon,  1 Nov 2021 11:16:55 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 74F4B1BF299
+ for <buildroot@lists.busybox.net>; Mon,  1 Nov 2021 11:16:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0044780C71
- for <buildroot@lists.busybox.net>; Mon,  1 Nov 2021 10:12:25 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 622E44013F
+ for <buildroot@lists.busybox.net>; Mon,  1 Nov 2021 11:16:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id r5-5a0aBMRCX for <buildroot@lists.busybox.net>;
- Mon,  1 Nov 2021 10:12:23 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtprelay04.ispgateway.de (smtprelay04.ispgateway.de
- [80.67.18.16])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B01E180C5A
- for <buildroot@busybox.net>; Mon,  1 Nov 2021 10:12:23 +0000 (UTC)
-Received: from [84.191.225.2] (helo=exchange.go-sys.de)
- by smtprelay04.ispgateway.de with esmtpsa (TLS1.2) tls
- TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384 (Exim 4.94.2)
- (envelope-from <mf@go-sys.de>)
- id 1mhUI9-0006E7-Fk; Mon, 01 Nov 2021 11:11:49 +0100
-Received: from exchange.go-sys.local (192.168.1.17) by exchange.go-sys.local
- (192.168.1.17) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id 15.1.2106.2; Mon, 1 Nov
- 2021 11:12:19 +0100
-Received: from go-sys.de (192.168.1.112) by exchange.go-sys.de (192.168.1.17)
- with Microsoft SMTP Server id 15.1.2106.2 via Frontend Transport;
- Mon, 1 Nov 2021 11:12:19 +0100
-From: Michael Fischer <mf@go-sys.de>
-To: <buildroot@busybox.net>
-Date: Mon, 1 Nov 2021 11:12:17 +0100
-Message-ID: <20211101101217.23328-1-mf@go-sys.de>
-X-Mailer: git-send-email 2.20.1
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pkksI5bDpoWV for <buildroot@lists.busybox.net>;
+ Mon,  1 Nov 2021 11:16:53 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com
+ [IPv6:2607:f8b0:4864:20::d2c])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 2F04340131
+ for <buildroot@buildroot.org>; Mon,  1 Nov 2021 11:16:53 +0000 (UTC)
+Received: by mail-io1-xd2c.google.com with SMTP id z144so19914396iof.0
+ for <buildroot@buildroot.org>; Mon, 01 Nov 2021 04:16:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=iwFpuu88MK1bAdmUTAxlDSY2w502hxzdksAjQXDZS2g=;
+ b=bbKip8v0q8xvfHlYJX2GD+AaOoHwQZ8lnN3vKecUqr9XuQSMNodVbaZ+9S6piqjcbR
+ mtSfMXdJ67Aw0BfD82J3NwrsmfbBo6bnXBnSbjtCXeRIo4dOPhpr1pTPNvqGaQ0ypNxM
+ wYii1mZo6Pe9GlKD95uBMtUtC/whAKRGXraXhDzRqOoA1ef12L7CNPlU4Dz1JssBiTrE
+ 3Me0Mn2Z7+M2jcQK1yIbaRDTmy/iXkfvd+6qMUP6mU1kgj/3xYymrIptfoCEI/gmxrWN
+ J4VPkIiaFyYIAB2Kee1JBwObxwdA207gbOw2pPYM9X86omBoemZkO6yrsTGGmRzVMf3r
+ XFHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=iwFpuu88MK1bAdmUTAxlDSY2w502hxzdksAjQXDZS2g=;
+ b=BzwIZEAorsiH+8HHObVJ9hZGiDei0e+BY8JeOG84ZnMF1eWzf/wqjSpDo6x75sezUo
+ 6rYheoJyybC+5FLMIWSDTnQElN+Rf4/jFUGmPe7lP/vx3LT7Dk4QllPkCF5ZVrwnUdYR
+ 16j+4ErSfM0lwV4xJtrdsXDfePjwxvO26WvS0EQ2ozHBrPIjhtf9+konQHK5FReF80L6
+ +yLdjWtk0rsMgQcU0IL/jyYh0Y5QFoDUwJ4WggHMgXb3np4y4dLNbpds7nkVGQer1vZt
+ 7eD6zm7AT2zs45+rQdyWup3a7dZfZSibbpdv5OOgT+eYAXD+inpZSbGXLvoQGo1IC0EY
+ EGjw==
+X-Gm-Message-State: AOAM532qnherVWrCIeYpQmRB9Clo6mo3husIwCKCPgLLi9VMzBAik33y
+ BCs7oI58xJYRAEcIypR2sHgj3Cx9uZM=
+X-Google-Smtp-Source: ABdhPJyzoztaXDUJhBDeUgQYTM6c1CX5RdAIft13tW9aeZJsnLt9YoTx1EHV6IupmdjhQs4cObJdzA==
+X-Received: by 2002:a5d:8487:: with SMTP id t7mr19772022iom.100.1635765412128; 
+ Mon, 01 Nov 2021 04:16:52 -0700 (PDT)
+Received: from james-x399.localdomain (71-218-115-49.hlrn.qwest.net.
+ [71.218.115.49])
+ by smtp.gmail.com with ESMTPSA id o10sm1977166ioa.26.2021.11.01.04.16.51
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 01 Nov 2021 04:16:51 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
+To: buildroot@buildroot.org
+Date: Mon,  1 Nov 2021 05:16:49 -0600
+Message-Id: <20211101111649.2741772-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-C2ProcessedOrg: 77b28032-c882-4527-ad15-de6c89cb71cd
-X-CrossPremisesHeadersFilteredBySendConnector: exchange.go-sys.local
-X-OrganizationHeadersPreserved: exchange.go-sys.local
-X-Df-Sender: c21hcnRob3N0QGdvLXN5cy5kZQ==
-Subject: [Buildroot] [PATCH 1/1] package/busybox: bump version to 1.34.1
+Subject: [Buildroot] [PATCH 1/1] package/python-async-timeout: bump to
+ version 4.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,94 +92,67 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Michael Fischer <mf@go-sys.de>, Denys Vlasenko <vda.linux@googlemail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-patch 0003: already applied upstream
+License hash change due to removal of full license text:
+https://github.com/aio-libs/async-timeout/commit/63e781b8745cca5bcf4d3ec1cd9a7a19e988a6d0
 
-Signed-off-by: Michael Fischer <mf@go-sys.de>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- ...003-udhcp-fix-build-breakage-on-MIPS.patch | 39 -------------------
- package/busybox/busybox.hash                  |  4 +-
- package/busybox/busybox.mk                    |  2 +-
- 3 files changed, 3 insertions(+), 42 deletions(-)
- delete mode 100644 package/busybox/0003-udhcp-fix-build-breakage-on-MIPS.patch
+ package/python-async-timeout/Config.in                 | 1 +
+ package/python-async-timeout/python-async-timeout.hash | 8 ++++----
+ package/python-async-timeout/python-async-timeout.mk   | 4 ++--
+ 3 files changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/package/busybox/0003-udhcp-fix-build-breakage-on-MIPS.patch b/package/busybox/0003-udhcp-fix-build-breakage-on-MIPS.patch
-deleted file mode 100644
-index d54d45da43..0000000000
---- a/package/busybox/0003-udhcp-fix-build-breakage-on-MIPS.patch
-+++ /dev/null
-@@ -1,39 +0,0 @@
--From 56824284b749e5b9d568b75d5c5bc471b1814d46 Mon Sep 17 00:00:00 2001
--From: Denys Vlasenko <vda.linux@googlemail.com>
--Date: Fri, 20 Aug 2021 13:33:50 +0200
--Subject: [PATCH] udhcp: fix build breakage on MIPS
--
--Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
--Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-----
--upstream status: 00adcdb64 ("udhcp: fix build breakage on MIPS")
--
-- networking/udhcp/common.h | 12 ------------
-- 1 file changed, 12 deletions(-)
--
--diff --git a/networking/udhcp/common.h b/networking/udhcp/common.h
--index 8c678dd32..ca778dab8 100644
----- a/networking/udhcp/common.h
--+++ b/networking/udhcp/common.h
--@@ -304,18 +304,6 @@ void udhcp_dump_packet(struct dhcp_packet *packet) FAST_FUNC;
-- # define log3s(msg) ((void)0)
-- #endif
--
---#if defined(__mips__)
---/*
--- * The 'simple' message functions have a negative impact on the size of the
--- * DHCP code when compiled for MIPS, so don't use them in this case.
--- */
---#define bb_simple_info_msg bb_info_msg
---#define bb_simple_error_msg bb_error_msg
---#define bb_simple_perror_msg_and_die bb_perror_msg_and_die
---#undef log1s
---#define log1s log1
---#endif
---
-- /*** Other shared functions ***/
--
-- /* 2nd param is "uint32_t*" */
----
--2.33.0
--
-diff --git a/package/busybox/busybox.hash b/package/busybox/busybox.hash
-index 4782f68819..1f34651d7b 100644
---- a/package/busybox/busybox.hash
-+++ b/package/busybox/busybox.hash
+diff --git a/package/python-async-timeout/Config.in b/package/python-async-timeout/Config.in
+index 659a0fdeca..27cfe51f7b 100644
+--- a/package/python-async-timeout/Config.in
++++ b/package/python-async-timeout/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_PYTHON_ASYNC_TIMEOUT
+ 	bool "python-async-timeout"
+ 	depends on BR2_PACKAGE_PYTHON3
++	select BR2_PACKAGE_PYTHON_TYPING_EXTENSIONS # runtime
+ 	help
+ 	  asyncio-compatible timeout context manager.
+ 
+diff --git a/package/python-async-timeout/python-async-timeout.hash b/package/python-async-timeout/python-async-timeout.hash
+index f99e1daddb..1a64c3a77d 100644
+--- a/package/python-async-timeout/python-async-timeout.hash
++++ b/package/python-async-timeout/python-async-timeout.hash
 @@ -1,5 +1,5 @@
--# From https://busybox.net/downloads/busybox-1.34.0.tar.bz2.sha256
--sha256  ec8d1615edb045b83b81966604759c4d4ac921434ab4011da604f629c06074ce  busybox-1.34.0.tar.bz2
-+# From https://busybox.net/downloads/busybox-1.34.1.tar.bz2.sha256
-+sha256  415fbd89e5344c96acf449d94a6f956dbed62e18e835fc83e064db33a34bd549  busybox-1.34.1.tar.bz2
- # Locally computed
- sha256  bbfc9843646d483c334664f651c208b9839626891d8f17604db2146962f43548  LICENSE
- sha256  b5a136ed67798e51fe2e0ca0b2a21cb01b904ff0c9f7d563a6292e276607e58f  archival/libarchive/bz/LICENSE
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 08b5c55c50..3523cf21d0 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -4,7 +4,7 @@
+-# md5, sha256 from https://pypi.python.org/pypi/async_timeout/json
+-md5	305c4fa529f2485c403d0dbe14390175  async-timeout-3.0.1.tar.gz
+-sha256	0c3c816a028d47f659d6ff5c745cb2acf1f966da1fe5c19c77a70282b25f4c5f  async-timeout-3.0.1.tar.gz
++# md5, sha256 from https://pypi.org/pypi/async-timeout/json
++md5  2871f3853060ac7e76e6278b85dfb3c9  async-timeout-4.0.0.tar.gz
++sha256  7d87a4e8adba8ededb52e579ce6bc8276985888913620c935094c2276fd83382  async-timeout-4.0.0.tar.gz
+ # Locally computed sha256 checksums
+-sha256	b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1  LICENSE
++sha256  e18d7bb8f513e2c46bb585c94b585bd30720dd3ccb21ddb0786f72d16658f92c  LICENSE
+diff --git a/package/python-async-timeout/python-async-timeout.mk b/package/python-async-timeout/python-async-timeout.mk
+index 093adc5c19..1d2c716fa9 100644
+--- a/package/python-async-timeout/python-async-timeout.mk
++++ b/package/python-async-timeout/python-async-timeout.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--BUSYBOX_VERSION = 1.34.0
-+BUSYBOX_VERSION = 1.34.1
- BUSYBOX_SITE = https://www.busybox.net/downloads
- BUSYBOX_SOURCE = busybox-$(BUSYBOX_VERSION).tar.bz2
- BUSYBOX_LICENSE = GPL-2.0, bzip2-1.0.4
+-PYTHON_ASYNC_TIMEOUT_VERSION = 3.0.1
++PYTHON_ASYNC_TIMEOUT_VERSION = 4.0.0
+ PYTHON_ASYNC_TIMEOUT_SOURCE = async-timeout-$(PYTHON_ASYNC_TIMEOUT_VERSION).tar.gz
+-PYTHON_ASYNC_TIMEOUT_SITE = https://files.pythonhosted.org/packages/a1/78/aae1545aba6e87e23ecab8d212b58bb70e72164b67eb090b81bb17ad38e3
++PYTHON_ASYNC_TIMEOUT_SITE = https://files.pythonhosted.org/packages/28/0c/1cd218ea84964f0740a3ab6152dfa99661174abdd8e4053e06c0285ac42a
+ PYTHON_ASYNC_TIMEOUT_LICENSE = Apache-2.0
+ PYTHON_ASYNC_TIMEOUT_LICENSE_FILES = LICENSE
+ PYTHON_ASYNC_TIMEOUT_SETUP_TYPE = setuptools
 -- 
-2.20.1
+2.25.1
 
 _______________________________________________
 buildroot mailing list
