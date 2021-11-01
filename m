@@ -2,85 +2,87 @@ Return-Path: <SRS0=b2+E=PU=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8FA5BC433F5
-	for <buildroot@archiver.kernel.org>; Mon,  1 Nov 2021 11:16:57 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AB681C433F5
+	for <buildroot@archiver.kernel.org>; Mon,  1 Nov 2021 13:34:10 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 06D05610CC
-	for <buildroot@archiver.kernel.org>; Mon,  1 Nov 2021 11:16:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 06D05610CC
+	by mail.kernel.org (Postfix) with ESMTPS id ED0A060F42
+	for <buildroot@archiver.kernel.org>; Mon,  1 Nov 2021 13:34:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org ED0A060F42
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CD83060662;
-	Mon,  1 Nov 2021 11:16:56 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 716B240131;
+	Mon,  1 Nov 2021 13:34:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FxKhfGC_CYIF; Mon,  1 Nov 2021 11:16:56 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2766C60613;
-	Mon,  1 Nov 2021 11:16:55 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 74F4B1BF299
- for <buildroot@lists.busybox.net>; Mon,  1 Nov 2021 11:16:54 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 622E44013F
- for <buildroot@lists.busybox.net>; Mon,  1 Nov 2021 11:16:54 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pkksI5bDpoWV for <buildroot@lists.busybox.net>;
- Mon,  1 Nov 2021 11:16:53 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Y-d4sJAPu4BS; Mon,  1 Nov 2021 13:34:08 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 74F0D401CC;
+	Mon,  1 Nov 2021 13:34:07 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 8A5A11BF29C
+ for <buildroot@lists.busybox.net>; Mon,  1 Nov 2021 13:34:05 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 86FEF401C8
+ for <buildroot@lists.busybox.net>; Mon,  1 Nov 2021 13:34:05 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9x9vRsm712Ds for <buildroot@lists.busybox.net>;
+ Mon,  1 Nov 2021 13:34:04 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com
- [IPv6:2607:f8b0:4864:20::d2c])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2F04340131
- for <buildroot@buildroot.org>; Mon,  1 Nov 2021 11:16:53 +0000 (UTC)
-Received: by mail-io1-xd2c.google.com with SMTP id z144so19914396iof.0
- for <buildroot@buildroot.org>; Mon, 01 Nov 2021 04:16:53 -0700 (PDT)
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
+ [IPv6:2a00:1450:4864:20::329])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7CDA8401C0
+ for <buildroot@buildroot.org>; Mon,  1 Nov 2021 13:34:04 +0000 (UTC)
+Received: by mail-wm1-x329.google.com with SMTP id
+ b184-20020a1c1bc1000000b0033140bf8dd5so5574136wmb.5
+ for <buildroot@buildroot.org>; Mon, 01 Nov 2021 06:34:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=iwFpuu88MK1bAdmUTAxlDSY2w502hxzdksAjQXDZS2g=;
- b=bbKip8v0q8xvfHlYJX2GD+AaOoHwQZ8lnN3vKecUqr9XuQSMNodVbaZ+9S6piqjcbR
- mtSfMXdJ67Aw0BfD82J3NwrsmfbBo6bnXBnSbjtCXeRIo4dOPhpr1pTPNvqGaQ0ypNxM
- wYii1mZo6Pe9GlKD95uBMtUtC/whAKRGXraXhDzRqOoA1ef12L7CNPlU4Dz1JssBiTrE
- 3Me0Mn2Z7+M2jcQK1yIbaRDTmy/iXkfvd+6qMUP6mU1kgj/3xYymrIptfoCEI/gmxrWN
- J4VPkIiaFyYIAB2Kee1JBwObxwdA207gbOw2pPYM9X86omBoemZkO6yrsTGGmRzVMf3r
- XFHQ==
+ bh=NER7VRlVuw0MF5lrqQLx+h19lkVCBf/QhwkTd+nCDXI=;
+ b=ED5lCljGBx5vCqTqK0GTB8aE9alnDEmq4P+jlePThi3OKtMdWBQoOojK+ObyEi3f46
+ v87rIGOq1e2zK5FhD1kW8UvwotudS+yBKIaiWXsUrVEAD2hmef9e3zF4kqHmmzNcPLJ6
+ ReoQwqX+BDrS7CcrCvgxoS/I3ockIpsxuotnC5+t6SIoRvaCGLQyI8HOCWK+pUI4xDaX
+ W7fDu657me2WVbegW/pfajCddtn+QkoTlb1ZWGp0ygSdV6Ti4lrn6tGGB0DjmWhrRQ/+
+ 1QKWYlrK8/qKHtjL2sMaC938HUSCWCDFB2/vqtxjALtxjMHDlBq9gv6MeLpHBWh4bWGy
+ Ac9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=iwFpuu88MK1bAdmUTAxlDSY2w502hxzdksAjQXDZS2g=;
- b=BzwIZEAorsiH+8HHObVJ9hZGiDei0e+BY8JeOG84ZnMF1eWzf/wqjSpDo6x75sezUo
- 6rYheoJyybC+5FLMIWSDTnQElN+Rf4/jFUGmPe7lP/vx3LT7Dk4QllPkCF5ZVrwnUdYR
- 16j+4ErSfM0lwV4xJtrdsXDfePjwxvO26WvS0EQ2ozHBrPIjhtf9+konQHK5FReF80L6
- +yLdjWtk0rsMgQcU0IL/jyYh0Y5QFoDUwJ4WggHMgXb3np4y4dLNbpds7nkVGQer1vZt
- 7eD6zm7AT2zs45+rQdyWup3a7dZfZSibbpdv5OOgT+eYAXD+inpZSbGXLvoQGo1IC0EY
- EGjw==
-X-Gm-Message-State: AOAM532qnherVWrCIeYpQmRB9Clo6mo3husIwCKCPgLLi9VMzBAik33y
- BCs7oI58xJYRAEcIypR2sHgj3Cx9uZM=
-X-Google-Smtp-Source: ABdhPJyzoztaXDUJhBDeUgQYTM6c1CX5RdAIft13tW9aeZJsnLt9YoTx1EHV6IupmdjhQs4cObJdzA==
-X-Received: by 2002:a5d:8487:: with SMTP id t7mr19772022iom.100.1635765412128; 
- Mon, 01 Nov 2021 04:16:52 -0700 (PDT)
-Received: from james-x399.localdomain (71-218-115-49.hlrn.qwest.net.
- [71.218.115.49])
- by smtp.gmail.com with ESMTPSA id o10sm1977166ioa.26.2021.11.01.04.16.51
+ bh=NER7VRlVuw0MF5lrqQLx+h19lkVCBf/QhwkTd+nCDXI=;
+ b=jglCy8rzLRprBzrg3TsmcF9jdcn648iJGw3zg8lTmB1h4HMeFFAc3fOoodEWHAy6jH
+ Tplgu+aHIGOgyl/rKGhIKHN84Otr4FT6APAuTjUaA95w30tGajMJgH/HSOQ+0HWP1OVL
+ QbZQPcoc9miy4XNcHqPBLeSPzMwfNzrtJ+/UL1HhVflGLpSza5/yvumTJxy7nhP8TpEw
+ 7mEgOwIkFXDUeg4mi7Lf5suNzi+6XSWO2f+7a1JvgvqNr6hqwQ1svjMz660U/aJkCrpE
+ xq+nYmHEHiNFpdhFU3qGL7utHSfMQ9iYxWuZIw3c99MjxF1juWg/h60YdzNfU4hH9UzP
+ oY1w==
+X-Gm-Message-State: AOAM533NiETn9zyNro13OvFRR6omdSV+MJOyvXbGXZB5vDL1pL/j/+6K
+ tkCkIqkHyE9m89AW7onOM/VAP9t+LDw=
+X-Google-Smtp-Source: ABdhPJwh3dhNsHj25HTgwfGTfE5gJgEOXwray7584VU6lC75h5kSNkzhwpcDRB5mPXPOmV4aEB2Uaw==
+X-Received: by 2002:a1c:9814:: with SMTP id a20mr11454147wme.18.1635773642592; 
+ Mon, 01 Nov 2021 06:34:02 -0700 (PDT)
+Received: from atlas.home
+ (2a01cb058f8a18003dbee9eed79eb521.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:8f8a:1800:3dbe:e9ee:d79e:b521])
+ by smtp.gmail.com with ESMTPSA id j8sm7477074wrh.16.2021.11.01.06.34.01
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 01 Nov 2021 04:16:51 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
+ Mon, 01 Nov 2021 06:34:02 -0700 (PDT)
+From: Romain Naour <romain.naour@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon,  1 Nov 2021 05:16:49 -0600
-Message-Id: <20211101111649.2741772-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.25.1
+Date: Mon,  1 Nov 2021 14:33:59 +0100
+Message-Id: <20211101133359.2228115-1-romain.naour@gmail.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/python-async-timeout: bump to
- version 4.0.0
+Subject: [Buildroot] [PATCH] package/ca-certificates: add missing
+ host-python3-six dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,67 +94,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Romain Naour <romain.naour@gmail.com>, Martin Bark <martin@barkynet.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-License hash change due to removal of full license text:
-https://github.com/aio-libs/async-timeout/commit/63e781b8745cca5bcf4d3ec1cd9a7a19e988a6d0
+ca-certificates use some python scripts during the build step that
+requires python-six for host-python3.
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+python3 certdata2pem.py
+Traceback (most recent call last):
+  File "/builds/buildroot.org/buildroot/test-output/TestDockerCompose/build/ca-certificates-20211016/mozilla/certdata2pem.py", line 31, in <module>
+    from cryptography import x509
+  File "/builds/buildroot.org/buildroot/test-output/TestDockerCompose/host/lib/python3.9/site-packages/cryptography/x509/__init__.py", line 7, in <module>
+    from cryptography.x509 import certificate_transparency
+  File "/builds/buildroot.org/buildroot/test-output/TestDockerCompose/host/lib/python3.9/site-packages/cryptography/x509/certificate_transparency.py", line 10, in <module>
+    import six
+ModuleNotFoundError: No module named 'six'
+
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/1734417711
+http://autobuild.buildroot.net/results/d14/d145f997cc6db17a8eab14d9ced8fa35332c4969/build-end.log
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Martin Bark <martin@barkynet.com>
 ---
- package/python-async-timeout/Config.in                 | 1 +
- package/python-async-timeout/python-async-timeout.hash | 8 ++++----
- package/python-async-timeout/python-async-timeout.mk   | 4 ++--
- 3 files changed, 7 insertions(+), 6 deletions(-)
+ package/ca-certificates/ca-certificates.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/python-async-timeout/Config.in b/package/python-async-timeout/Config.in
-index 659a0fdeca..27cfe51f7b 100644
---- a/package/python-async-timeout/Config.in
-+++ b/package/python-async-timeout/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_PYTHON_ASYNC_TIMEOUT
- 	bool "python-async-timeout"
- 	depends on BR2_PACKAGE_PYTHON3
-+	select BR2_PACKAGE_PYTHON_TYPING_EXTENSIONS # runtime
- 	help
- 	  asyncio-compatible timeout context manager.
+diff --git a/package/ca-certificates/ca-certificates.mk b/package/ca-certificates/ca-certificates.mk
+index eb75d23f44..e21ac5d907 100644
+--- a/package/ca-certificates/ca-certificates.mk
++++ b/package/ca-certificates/ca-certificates.mk
+@@ -7,7 +7,7 @@
+ CA_CERTIFICATES_VERSION = 20211016
+ CA_CERTIFICATES_SOURCE = ca-certificates_$(CA_CERTIFICATES_VERSION).tar.xz
+ CA_CERTIFICATES_SITE = https://snapshot.debian.org/archive/debian/20211022T144903Z/pool/main/c/ca-certificates
+-CA_CERTIFICATES_DEPENDENCIES = host-openssl host-python3 host-python-cryptography
++CA_CERTIFICATES_DEPENDENCIES = host-openssl host-python3 host-python3-six host-python-cryptography
+ CA_CERTIFICATES_LICENSE = GPL-2.0+ (script), MPL-2.0 (data)
+ CA_CERTIFICATES_LICENSE_FILES = debian/copyright
  
-diff --git a/package/python-async-timeout/python-async-timeout.hash b/package/python-async-timeout/python-async-timeout.hash
-index f99e1daddb..1a64c3a77d 100644
---- a/package/python-async-timeout/python-async-timeout.hash
-+++ b/package/python-async-timeout/python-async-timeout.hash
-@@ -1,5 +1,5 @@
--# md5, sha256 from https://pypi.python.org/pypi/async_timeout/json
--md5	305c4fa529f2485c403d0dbe14390175  async-timeout-3.0.1.tar.gz
--sha256	0c3c816a028d47f659d6ff5c745cb2acf1f966da1fe5c19c77a70282b25f4c5f  async-timeout-3.0.1.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/async-timeout/json
-+md5  2871f3853060ac7e76e6278b85dfb3c9  async-timeout-4.0.0.tar.gz
-+sha256  7d87a4e8adba8ededb52e579ce6bc8276985888913620c935094c2276fd83382  async-timeout-4.0.0.tar.gz
- # Locally computed sha256 checksums
--sha256	b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1  LICENSE
-+sha256  e18d7bb8f513e2c46bb585c94b585bd30720dd3ccb21ddb0786f72d16658f92c  LICENSE
-diff --git a/package/python-async-timeout/python-async-timeout.mk b/package/python-async-timeout/python-async-timeout.mk
-index 093adc5c19..1d2c716fa9 100644
---- a/package/python-async-timeout/python-async-timeout.mk
-+++ b/package/python-async-timeout/python-async-timeout.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_ASYNC_TIMEOUT_VERSION = 3.0.1
-+PYTHON_ASYNC_TIMEOUT_VERSION = 4.0.0
- PYTHON_ASYNC_TIMEOUT_SOURCE = async-timeout-$(PYTHON_ASYNC_TIMEOUT_VERSION).tar.gz
--PYTHON_ASYNC_TIMEOUT_SITE = https://files.pythonhosted.org/packages/a1/78/aae1545aba6e87e23ecab8d212b58bb70e72164b67eb090b81bb17ad38e3
-+PYTHON_ASYNC_TIMEOUT_SITE = https://files.pythonhosted.org/packages/28/0c/1cd218ea84964f0740a3ab6152dfa99661174abdd8e4053e06c0285ac42a
- PYTHON_ASYNC_TIMEOUT_LICENSE = Apache-2.0
- PYTHON_ASYNC_TIMEOUT_LICENSE_FILES = LICENSE
- PYTHON_ASYNC_TIMEOUT_SETUP_TYPE = setuptools
 -- 
-2.25.1
+2.31.1
 
 _______________________________________________
 buildroot mailing list
